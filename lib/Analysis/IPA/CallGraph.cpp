@@ -15,7 +15,8 @@
 #include "llvm37/Support/Debug.h"
 #include "llvm37/Support/raw_ostream.h"
 #include "dxc/HLSL/HLModule.h" // HLSL Change
-using namespace llvm37;
+
+namespace llvm37 {
 
 //===----------------------------------------------------------------------===//
 // Implementations of the CallGraph class methods.
@@ -269,9 +270,6 @@ bool CallGraphWrapperPass::runOnModule(Module &M) {
   return false;
 }
 
-INITIALIZE_PASS(CallGraphWrapperPass, "basiccg", "CallGraph Construction",
-                false, true)
-
 char CallGraphWrapperPass::ID = 0;
 
 void CallGraphWrapperPass::releaseMemory() { G.reset(); }
@@ -289,3 +287,9 @@ void CallGraphWrapperPass::print(raw_ostream &OS, const Module *) const {
 #if !defined(NDEBUG) || defined(LLVM37_ENABLE_DUMP)
 void CallGraphWrapperPass::dump() const { print(dbgs(), nullptr); }
 #endif
+
+}
+
+using namespace  llvm37;
+INITIALIZE_PASS(CallGraphWrapperPass, "basiccg", "CallGraph Construction",
+                false, true)

@@ -153,7 +153,3 @@ void llvm37::EnablePrettyStackTrace() {
   (void)HandlerRegistered;
 #endif
 }
-
-void LLVMEnablePrettyStackTrace() {
-  EnablePrettyStackTrace();
-}

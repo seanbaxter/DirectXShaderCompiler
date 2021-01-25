@@ -15,7 +15,7 @@
 
 #include "llvm37/Target/TargetLowering.h"
 
-using namespace llvm37;
+namespace llvm37 {
 
 //===----------------------------------------------------------------------===//
 //  TargetTransformInfo Helpers
@@ -31,4 +31,5 @@ TargetLoweringBase::getTypeLegalizationCost(const DataLayout &DL,
   EVT MTy = getValueType(DL, Ty);
   unsigned Cost = 1;
   return std::make_pair(Cost, MTy.getSimpleVT());
+}
 }

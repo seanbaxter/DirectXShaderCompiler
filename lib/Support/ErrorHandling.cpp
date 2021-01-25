@@ -141,15 +141,6 @@ static void bindingsErrorHandler(void *user_data, const std::string& reason,
   handler(reason.c_str());
 }
 
-void LLVMInstallFatalErrorHandler(LLVMFatalErrorHandler Handler) {
-  install_fatal_error_handler(bindingsErrorHandler,
-                              LLVM37_EXTENSION reinterpret_cast<void *>(Handler));
-}
-
-void LLVMResetFatalErrorHandler() {
-  remove_fatal_error_handler();
-}
-
 #ifdef LLVM37_ON_WIN32
 
 #include <winerror.h>

@@ -176,6 +176,8 @@ void* DynamicLibrary::SearchForAddressOfSymbol(const char *symbolName) {
 // C API.
 //===----------------------------------------------------------------------===//
 
+namespace llvm37 {
+
 LLVMBool LLVMLoadLibraryPermanently(const char* Filename) {
   return llvm37::sys::DynamicLibrary::LoadLibraryPermanently(Filename);
 }
@@ -188,3 +190,4 @@ void LLVMAddSymbol(const char *symbolName, void *symbolValue) {
   return llvm37::sys::DynamicLibrary::AddSymbol(symbolName, symbolValue);
 }
 
+}
