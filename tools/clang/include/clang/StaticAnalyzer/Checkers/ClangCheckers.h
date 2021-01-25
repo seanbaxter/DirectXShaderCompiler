@@ -7,8 +7,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_STATICANALYZER_CHECKERS_CLANGCHECKERS_H
-#define LLVM_CLANG_STATICANALYZER_CHECKERS_CLANGCHECKERS_H
+#ifndef LLVM37_CLANG_STATICANALYZER_CHECKERS_CLANGCHECKERS_H
+#define LLVM37_CLANG_STATICANALYZER_CHECKERS_CLANGCHECKERS_H
 
 namespace clang {
 namespace ento {

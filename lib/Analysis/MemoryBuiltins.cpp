@@ -12,22 +12,22 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Analysis/MemoryBuiltins.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/Analysis/TargetLibraryInfo.h"
-#include "llvm/Analysis/ValueTracking.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/GlobalVariable.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/Intrinsics.h"
-#include "llvm/IR/Metadata.h"
-#include "llvm/IR/Module.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/MathExtras.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Transforms/Utils/Local.h"
-using namespace llvm;
+#include "llvm37/Analysis/MemoryBuiltins.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/Analysis/TargetLibraryInfo.h"
+#include "llvm37/Analysis/ValueTracking.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/IR/GlobalVariable.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/Intrinsics.h"
+#include "llvm37/IR/Metadata.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/MathExtras.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Transforms/Utils/Local.h"
+using namespace llvm37;
 
 #define DEBUG_TYPE "memory-builtins"
 
@@ -148,14 +148,14 @@ static bool hasNoAliasAttr(const Value *V, bool LookThroughBitCast) {
 /// \brief Tests if a value is a call or invoke to a library function that
 /// allocates or reallocates memory (either malloc, calloc, realloc, or strdup
 /// like).
-bool llvm::isAllocationFn(const Value *V, const TargetLibraryInfo *TLI,
+bool llvm37::isAllocationFn(const Value *V, const TargetLibraryInfo *TLI,
                           bool LookThroughBitCast) {
   return getAllocationData(V, AnyAlloc, TLI, LookThroughBitCast);
 }
 
 /// \brief Tests if a value is a call or invoke to a function that returns a
 /// NoAlias pointer (including malloc/calloc/realloc/strdup-like functions).
-bool llvm::isNoAliasFn(const Value *V, const TargetLibraryInfo *TLI,
+bool llvm37::isNoAliasFn(const Value *V, const TargetLibraryInfo *TLI,
                        bool LookThroughBitCast) {
   // it's safe to consider realloc as noalias since accessing the original
   // pointer is undefined behavior
@@ -165,35 +165,35 @@ bool llvm::isNoAliasFn(const Value *V, const TargetLibraryInfo *TLI,
 
 /// \brief Tests if a value is a call or invoke to a library function that
 /// allocates uninitialized memory (such as malloc).
-bool llvm::isMallocLikeFn(const Value *V, const TargetLibraryInfo *TLI,
+bool llvm37::isMallocLikeFn(const Value *V, const TargetLibraryInfo *TLI,
                           bool LookThroughBitCast) {
   return getAllocationData(V, MallocLike, TLI, LookThroughBitCast);
 }
 
 /// \brief Tests if a value is a call or invoke to a library function that
 /// allocates zero-filled memory (such as calloc).
-bool llvm::isCallocLikeFn(const Value *V, const TargetLibraryInfo *TLI,
+bool llvm37::isCallocLikeFn(const Value *V, const TargetLibraryInfo *TLI,
                           bool LookThroughBitCast) {
   return getAllocationData(V, CallocLike, TLI, LookThroughBitCast);
 }
 
 /// \brief Tests if a value is a call or invoke to a library function that
 /// allocates memory (either malloc, calloc, or strdup like).
-bool llvm::isAllocLikeFn(const Value *V, const TargetLibraryInfo *TLI,
+bool llvm37::isAllocLikeFn(const Value *V, const TargetLibraryInfo *TLI,
                          bool LookThroughBitCast) {
   return getAllocationData(V, AllocLike, TLI, LookThroughBitCast);
 }
 
 /// \brief Tests if a value is a call or invoke to a library function that
 /// reallocates memory (such as realloc).
-bool llvm::isReallocLikeFn(const Value *V, const TargetLibraryInfo *TLI,
+bool llvm37::isReallocLikeFn(const Value *V, const TargetLibraryInfo *TLI,
                            bool LookThroughBitCast) {
   return getAllocationData(V, ReallocLike, TLI, LookThroughBitCast);
 }
 
 /// \brief Tests if a value is a call or invoke to a library function that
 /// allocates memory and never returns null (such as operator new).
-bool llvm::isOperatorNewLikeFn(const Value *V, const TargetLibraryInfo *TLI,
+bool llvm37::isOperatorNewLikeFn(const Value *V, const TargetLibraryInfo *TLI,
                                bool LookThroughBitCast) {
   return getAllocationData(V, OpNewLike, TLI, LookThroughBitCast);
 }
@@ -201,7 +201,7 @@ bool llvm::isOperatorNewLikeFn(const Value *V, const TargetLibraryInfo *TLI,
 /// extractMallocCall - Returns the corresponding CallInst if the instruction
 /// is a malloc call.  Since CallInst::CreateMalloc() only creates calls, we
 /// ignore InvokeInst here.
-const CallInst *llvm::extractMallocCall(const Value *I,
+const CallInst *llvm37::extractMallocCall(const Value *I,
                                         const TargetLibraryInfo *TLI) {
   return isMallocLikeFn(I, TLI) ? dyn_cast<CallInst>(I) : nullptr;
 }
@@ -237,7 +237,7 @@ static Value *computeArraySize(const CallInst *CI, const DataLayout &DL,
 ///   0: PointerType is the calls' return type.
 ///   1: PointerType is the bitcast's result type.
 ///  >1: Unique PointerType cannot be determined, return NULL.
-PointerType *llvm::getMallocType(const CallInst *CI,
+PointerType *llvm37::getMallocType(const CallInst *CI,
                                  const TargetLibraryInfo *TLI) {
   assert(isMallocLikeFn(CI, TLI) && "getMallocType and not malloc call");
 
@@ -269,7 +269,7 @@ PointerType *llvm::getMallocType(const CallInst *CI,
 ///   0: PointerType is the malloc calls' return type.
 ///   1: PointerType is the bitcast's result type.
 ///  >1: Unique PointerType cannot be determined, return NULL.
-Type *llvm::getMallocAllocatedType(const CallInst *CI,
+Type *llvm37::getMallocAllocatedType(const CallInst *CI,
                                    const TargetLibraryInfo *TLI) {
   PointerType *PT = getMallocType(CI, TLI);
   return PT ? PT->getElementType() : nullptr;
@@ -280,7 +280,7 @@ Type *llvm::getMallocAllocatedType(const CallInst *CI,
 /// then return that multiple.  For non-array mallocs, the multiple is
 /// constant 1.  Otherwise, return NULL for mallocs whose array size cannot be
 /// determined.
-Value *llvm::getMallocArraySize(CallInst *CI, const DataLayout &DL,
+Value *llvm37::getMallocArraySize(CallInst *CI, const DataLayout &DL,
                                 const TargetLibraryInfo *TLI,
                                 bool LookThroughSExt) {
   assert(isMallocLikeFn(CI, TLI) && "getMallocArraySize and not malloc call");
@@ -290,14 +290,14 @@ Value *llvm::getMallocArraySize(CallInst *CI, const DataLayout &DL,
 
 /// extractCallocCall - Returns the corresponding CallInst if the instruction
 /// is a calloc call.
-const CallInst *llvm::extractCallocCall(const Value *I,
+const CallInst *llvm37::extractCallocCall(const Value *I,
                                         const TargetLibraryInfo *TLI) {
   return isCallocLikeFn(I, TLI) ? cast<CallInst>(I) : nullptr;
 }
 
 
 /// isFreeCall - Returns non-null if the value is a call to the builtin free()
-const CallInst *llvm::isFreeCall(const Value *I, const TargetLibraryInfo *TLI) {
+const CallInst *llvm37::isFreeCall(const Value *I, const TargetLibraryInfo *TLI) {
   const CallInst *CI = dyn_cast<CallInst>(I);
   if (!CI || isa<IntrinsicInst>(CI))
     return nullptr;
@@ -350,7 +350,7 @@ const CallInst *llvm::isFreeCall(const Value *I, const TargetLibraryInfo *TLI) {
 /// object size in Size if successful, and false otherwise.
 /// If RoundToAlign is true, then Size is rounded up to the aligment of allocas,
 /// byval arguments, and global variables.
-bool llvm::getObjectSize(const Value *Ptr, uint64_t &Size, const DataLayout &DL,
+bool llvm37::getObjectSize(const Value *Ptr, uint64_t &Size, const DataLayout &DL,
                          const TargetLibraryInfo *TLI, bool RoundToAlign) {
   ObjectSizeOffsetVisitor Visitor(DL, TLI, Ptr->getContext(), RoundToAlign);
   SizeOffsetType Data = Visitor.compute(const_cast<Value*>(Ptr));

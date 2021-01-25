@@ -27,18 +27,18 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Bitcode/BitstreamReader.h"
-#include "llvm/ADT/Optional.h"
-#include "llvm/Bitcode/LLVMBitCodes.h"
-#include "llvm/Bitcode/ReaderWriter.h"
-#include "llvm/IR/Verifier.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/Format.h"
-#include "llvm/Support/ManagedStatic.h"
-#include "llvm/Support/MemoryBuffer.h"
-#include "llvm/Support/PrettyStackTrace.h"
-#include "llvm/Support/Signals.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/Bitcode/BitstreamReader.h"
+#include "llvm37/ADT/Optional.h"
+#include "llvm37/Bitcode/LLVMBitCodes.h"
+#include "llvm37/Bitcode/ReaderWriter.h"
+#include "llvm37/IR/Verifier.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/Format.h"
+#include "llvm37/Support/ManagedStatic.h"
+#include "llvm37/Support/MemoryBuffer.h"
+#include "llvm37/Support/PrettyStackTrace.h"
+#include "llvm37/Support/Signals.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <algorithm>
 #include <cctype>
 #include <map>
@@ -46,10 +46,10 @@
 // HLSL Change Starts
 #include "dxc/Support/Global.h"
 #include "dxc/Support/WinIncludes.h"
-#include "llvm/Support/FileSystem.h"
-#include "llvm/Support/MSFileSystem.h"
+#include "llvm37/Support/FileSystem.h"
+#include "llvm37/Support/MSFileSystem.h"
 // HLSL Change Ends
-using namespace llvm;
+using namespace llvm37;
 
 static cl::opt<std::string>
   InputFilename(cl::Positional, cl::desc("<input bitcode>"), cl::init("-"));
@@ -722,10 +722,10 @@ static int AnalyzeBitcode() {
 int __cdecl main(int argc, char **argv) {
   // HLSL Change Starts
 #if 1
-  llvm::sys::fs::MSFileSystem* msfPtr;
+  llvm37::sys::fs::MSFileSystem* msfPtr;
   if (FAILED(CreateMSFileSystemForDisk(&msfPtr))) return 1;
-  std::unique_ptr<llvm::sys::fs::MSFileSystem> msf(msfPtr);
-  llvm::sys::fs::AutoPerThreadSystem pts(msf.get());
+  std::unique_ptr<llvm37::sys::fs::MSFileSystem> msf(msfPtr);
+  llvm37::sys::fs::AutoPerThreadSystem pts(msf.get());
 #else
   // Print a stack trace if we signal out.
   sys::PrintStackTraceOnErrorSignal();

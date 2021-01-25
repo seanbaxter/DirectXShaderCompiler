@@ -12,15 +12,15 @@
 ///
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_LEX_PPCALLBACKS_H
-#define LLVM_CLANG_LEX_PPCALLBACKS_H
+#ifndef LLVM37_CLANG_LEX_PPCALLBACKS_H
+#define LLVM37_CLANG_LEX_PPCALLBACKS_H
 
 #include "clang/Basic/DiagnosticIDs.h"
 #include "clang/Basic/SourceLocation.h"
 #include "clang/Lex/DirectoryLookup.h"
 #include "clang/Lex/ModuleLoader.h"
 #include "clang/Lex/Pragma.h"
-#include "llvm/ADT/StringRef.h"
+#include "llvm37/ADT/StringRef.h"
 #include <string>
 
 namespace clang {

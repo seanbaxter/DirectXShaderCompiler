@@ -12,22 +12,22 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_LIB_CODEGEN_ANTIDEPBREAKER_H
-#define LLVM_LIB_CODEGEN_ANTIDEPBREAKER_H
+#ifndef LLVM37_LIB_CODEGEN_ANTIDEPBREAKER_H
+#define LLVM37_LIB_CODEGEN_ANTIDEPBREAKER_H
 
-#include "llvm/CodeGen/MachineBasicBlock.h"
-#include "llvm/CodeGen/MachineFrameInfo.h"
-#include "llvm/CodeGen/MachineFunction.h"
-#include "llvm/CodeGen/MachineRegisterInfo.h"
-#include "llvm/CodeGen/ScheduleDAG.h"
-#include "llvm/Target/TargetRegisterInfo.h"
+#include "llvm37/CodeGen/MachineBasicBlock.h"
+#include "llvm37/CodeGen/MachineFrameInfo.h"
+#include "llvm37/CodeGen/MachineFunction.h"
+#include "llvm37/CodeGen/MachineRegisterInfo.h"
+#include "llvm37/CodeGen/ScheduleDAG.h"
+#include "llvm37/Target/TargetRegisterInfo.h"
 #include <vector>
 
-namespace llvm {
+namespace llvm37 {
 
 /// This class works in conjunction with the post-RA scheduler to rename
 /// registers to break register anti-dependencies (WAR hazards).
-class LLVM_LIBRARY_VISIBILITY AntiDepBreaker {
+class LLVM37_LIBRARY_VISIBILITY AntiDepBreaker {
 public:
   typedef std::vector<std::pair<MachineInstr *, MachineInstr *> > 
     DbgValueVector;

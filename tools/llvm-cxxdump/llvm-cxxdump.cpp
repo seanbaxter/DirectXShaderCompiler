@@ -13,26 +13,26 @@
 
 #include "llvm-cxxdump.h"
 #include "Error.h"
-#include "llvm/ADT/ArrayRef.h"
-#include "llvm/Object/Archive.h"
-#include "llvm/Object/ObjectFile.h"
-#include "llvm/Object/SymbolSize.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/Endian.h"
-#include "llvm/Support/FileSystem.h"
-#include "llvm/Support/ManagedStatic.h"
-#include "llvm/Support/PrettyStackTrace.h"
-#include "llvm/Support/Signals.h"
-#include "llvm/Support/TargetRegistry.h"
-#include "llvm/Support/TargetSelect.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/ArrayRef.h"
+#include "llvm37/Object/Archive.h"
+#include "llvm37/Object/ObjectFile.h"
+#include "llvm37/Object/SymbolSize.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/Endian.h"
+#include "llvm37/Support/FileSystem.h"
+#include "llvm37/Support/ManagedStatic.h"
+#include "llvm37/Support/PrettyStackTrace.h"
+#include "llvm37/Support/Signals.h"
+#include "llvm37/Support/TargetRegistry.h"
+#include "llvm37/Support/TargetSelect.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <map>
 #include <string>
 #include <system_error>
 
-using namespace llvm;
-using namespace llvm::object;
-using namespace llvm::support;
+using namespace llvm37;
+using namespace llvm37::object;
+using namespace llvm37::support;
 
 namespace opts {
 cl::list<std::string> InputFilenames(cl::Positional,
@@ -42,7 +42,7 @@ cl::list<std::string> InputFilenames(cl::Positional,
 
 static int ReturnValue = EXIT_SUCCESS;
 
-namespace llvm {
+namespace llvm37 {
 
 static bool error(std::error_code EC) {
   if (!EC)
@@ -54,7 +54,7 @@ static bool error(std::error_code EC) {
   return true;
 }
 
-} // namespace llvm
+} // namespace llvm37
 
 static void reportError(StringRef Input, StringRef Message) {
   if (Input == "-")
@@ -555,7 +555,7 @@ int main(int argc, const char *argv[]) {
   llvm_shutdown_obj Y;
 
   // Initialize targets.
-  llvm::InitializeAllTargetInfos();
+  llvm37::InitializeAllTargetInfos();
 
   // Register the target printer for --version.
   cl::AddExtraVersionPrinter(TargetRegistry::printRegisteredTargetsForVersion);

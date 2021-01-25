@@ -11,13 +11,13 @@
 
 #include "llvm-pdbdump.h"
 
-#include "llvm/Support/Regex.h"
+#include "llvm37/Support/Regex.h"
 
 #include <algorithm>
 
-using namespace llvm;
+using namespace llvm37;
 
-LinePrinter::LinePrinter(int Indent, llvm::raw_ostream &Stream)
+LinePrinter::LinePrinter(int Indent, llvm37::raw_ostream &Stream)
     : OS(Stream), IndentSpaces(Indent), CurrentIndent(0) {
   SetFilters(TypeFilters, opts::ExcludeTypes.begin(), opts::ExcludeTypes.end());
   SetFilters(SymbolFilters, opts::ExcludeSymbols.begin(),
@@ -37,7 +37,7 @@ void LinePrinter::NewLine() {
   OS.indent(CurrentIndent);
 }
 
-bool LinePrinter::IsTypeExcluded(llvm::StringRef TypeName) {
+bool LinePrinter::IsTypeExcluded(llvm37::StringRef TypeName) {
   if (TypeName.empty())
     return false;
 
@@ -48,7 +48,7 @@ bool LinePrinter::IsTypeExcluded(llvm::StringRef TypeName) {
   return false;
 }
 
-bool LinePrinter::IsSymbolExcluded(llvm::StringRef SymbolName) {
+bool LinePrinter::IsSymbolExcluded(llvm37::StringRef SymbolName) {
   if (SymbolName.empty())
     return false;
 
@@ -59,7 +59,7 @@ bool LinePrinter::IsSymbolExcluded(llvm::StringRef SymbolName) {
   return false;
 }
 
-bool LinePrinter::IsCompilandExcluded(llvm::StringRef CompilandName) {
+bool LinePrinter::IsCompilandExcluded(llvm37::StringRef CompilandName) {
   if (CompilandName.empty())
     return false;
 

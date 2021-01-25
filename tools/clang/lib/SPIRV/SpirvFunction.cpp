@@ -16,7 +16,7 @@ namespace clang {
 namespace spirv {
 
 SpirvFunction::SpirvFunction(QualType returnType, SourceLocation loc,
-                             llvm::StringRef name, bool isPrecise,
+                             llvm37::StringRef name, bool isPrecise,
                              bool isNoInline)
     : functionId(0), astReturnType(returnType), returnType(nullptr),
       fnType(nullptr), relaxedPrecision(false), precise(isPrecise),

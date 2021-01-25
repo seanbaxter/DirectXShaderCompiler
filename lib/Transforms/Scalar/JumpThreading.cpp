@@ -11,32 +11,32 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Transforms/Scalar.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/DenseSet.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/SmallPtrSet.h"
-#include "llvm/ADT/SmallSet.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/Analysis/CFG.h"
-#include "llvm/Analysis/ConstantFolding.h"
-#include "llvm/Analysis/InstructionSimplify.h"
-#include "llvm/Analysis/LazyValueInfo.h"
-#include "llvm/Analysis/Loads.h"
-#include "llvm/Analysis/TargetLibraryInfo.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Metadata.h"
-#include "llvm/IR/ValueHandle.h"
-#include "llvm/Pass.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Transforms/Utils/BasicBlockUtils.h"
-#include "llvm/Transforms/Utils/Local.h"
-#include "llvm/Transforms/Utils/SSAUpdater.h"
-using namespace llvm;
+#include "llvm37/Transforms/Scalar.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/DenseSet.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/SmallPtrSet.h"
+#include "llvm37/ADT/SmallSet.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/Analysis/CFG.h"
+#include "llvm37/Analysis/ConstantFolding.h"
+#include "llvm37/Analysis/InstructionSimplify.h"
+#include "llvm37/Analysis/LazyValueInfo.h"
+#include "llvm37/Analysis/Loads.h"
+#include "llvm37/Analysis/TargetLibraryInfo.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/Metadata.h"
+#include "llvm37/IR/ValueHandle.h"
+#include "llvm37/Pass.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Transforms/Utils/BasicBlockUtils.h"
+#include "llvm37/Transforms/Utils/Local.h"
+#include "llvm37/Transforms/Utils/SSAUpdater.h"
+using namespace llvm37;
 
 #define DEBUG_TYPE "jump-threading"
 
@@ -153,7 +153,7 @@ INITIALIZE_PASS_END(JumpThreading, "jump-threading",
                 "Jump Threading", false, false)
 
 // Public interface to the Jump Threading pass
-FunctionPass *llvm::createJumpThreadingPass(int Threshold) { return new JumpThreading(Threshold); }
+FunctionPass *llvm37::createJumpThreadingPass(int Threshold) { return new JumpThreading(Threshold); }
 
 /// runOnFunction - Top level algorithm.
 ///

@@ -13,11 +13,11 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Analysis/LibCallSemantics.h"
-#include "llvm/ADT/StringMap.h"
-#include "llvm/ADT/StringSwitch.h"
-#include "llvm/IR/Function.h"
-using namespace llvm;
+#include "llvm37/Analysis/LibCallSemantics.h"
+#include "llvm37/ADT/StringMap.h"
+#include "llvm37/ADT/StringSwitch.h"
+#include "llvm37/IR/Function.h"
+using namespace llvm37;
 
 /// This impl pointer in ~LibCallInfo is actually a StringMap.  This
 /// helper does the cast.
@@ -64,7 +64,7 @@ LibCallInfo::getFunctionInfo(const Function *F) const {
 
 /// See if the given exception handling personality function is one that we
 /// understand.  If so, return a description of it; otherwise return Unknown.
-EHPersonality llvm::classifyEHPersonality(const Value *Pers) {
+EHPersonality llvm37::classifyEHPersonality(const Value *Pers) {
   const Function *F = dyn_cast<Function>(Pers->stripPointerCasts());
   if (!F)
     return EHPersonality::Unknown;
@@ -80,7 +80,7 @@ EHPersonality llvm::classifyEHPersonality(const Value *Pers) {
     .Default(EHPersonality::Unknown);
 }
 
-bool llvm::canSimplifyInvokeNoUnwind(const Function *F) {
+bool llvm37::canSimplifyInvokeNoUnwind(const Function *F) {
   EHPersonality Personality = classifyEHPersonality(F->getPersonalityFn());
   // We can't simplify any invokes to nounwind functions if the personality
   // function wants to catch asynch exceptions.  The nounwind attribute only

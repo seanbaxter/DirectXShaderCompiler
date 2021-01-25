@@ -15,20 +15,20 @@
 #include "AsmWriterInst.h"
 #include "CodeGenTarget.h"
 #include "SequenceToOffsetTable.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/ADT/StringExtras.h"
-#include "llvm/ADT/Twine.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/Format.h"
-#include "llvm/Support/MathExtras.h"
-#include "llvm/TableGen/Error.h"
-#include "llvm/TableGen/Record.h"
-#include "llvm/TableGen/TableGenBackend.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/ADT/StringExtras.h"
+#include "llvm37/ADT/Twine.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/Format.h"
+#include "llvm37/Support/MathExtras.h"
+#include "llvm37/TableGen/Error.h"
+#include "llvm37/TableGen/Record.h"
+#include "llvm37/TableGen/TableGenBackend.h"
 #include <algorithm>
 #include <cassert>
 #include <map>
 #include <vector>
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "asm-writer-emitter"
 
@@ -840,14 +840,14 @@ void AsmWriterEmitter::EmitPrintAliasInstruction(raw_ostream &O) {
         NumMIOps += Operand.getMINumOperands();
 
       std::string Cond;
-      Cond = std::string("MI->getNumOperands() == ") + llvm::utostr(NumMIOps);
+      Cond = std::string("MI->getNumOperands() == ") + llvm37::utostr(NumMIOps);
       IAP->addCond(Cond);
 
       bool CantHandle = false;
 
       unsigned MIOpNum = 0;
       for (unsigned i = 0, e = LastOpNo; i != e; ++i) {
-        std::string Op = "MI->getOperand(" + llvm::utostr(MIOpNum) + ")";
+        std::string Op = "MI->getOperand(" + llvm37::utostr(MIOpNum) + ")";
 
         const CodeGenInstAlias::ResultOperand &RO = CGA->ResultOperands[i];
 
@@ -887,7 +887,7 @@ void AsmWriterEmitter::EmitPrintAliasInstruction(raw_ostream &O) {
                                     ".contains(" + Op + ".getReg())";
             } else {
               Cond = Op + ".getReg() == MI->getOperand(" +
-                llvm::utostr(IAP->getOpIndex(ROName)) + ").getReg()";
+                llvm37::utostr(IAP->getOpIndex(ROName)) + ").getReg()";
             }
           } else {
             // Assume all printable operands are desired for now. This can be
@@ -905,7 +905,7 @@ void AsmWriterEmitter::EmitPrintAliasInstruction(raw_ostream &O) {
                 break; // No conditions on this operand at all
             }
             Cond = Target.getName() + ClassName + "ValidateMCOperand(" +
-                   Op + ", " + llvm::utostr(Entry) + ")";
+                   Op + ", " + llvm37::utostr(Entry) + ")";
           }
           // for all subcases of ResultOperand::K_Record:
           IAP->addCond(Cond);
@@ -917,7 +917,7 @@ void AsmWriterEmitter::EmitPrintAliasInstruction(raw_ostream &O) {
           IAP->addCond(Op + ".isImm()");
 
           Cond = Op + ".getImm() == "
-            + llvm::utostr(CGA->ResultOperands[i].getImm());
+            + llvm37::utostr(CGA->ResultOperands[i].getImm());
           IAP->addCond(Cond);
           break;
         }
@@ -1125,7 +1125,7 @@ void AsmWriterEmitter::run(raw_ostream &O) {
 }
 
 
-namespace llvm {
+namespace llvm37 {
 
 void EmitAsmWriter(RecordKeeper &RK, raw_ostream &OS) {
   emitSourceFileHeader("Assembly Writer Source Fragment", OS);

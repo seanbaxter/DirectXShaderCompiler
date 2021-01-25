@@ -12,8 +12,8 @@
 ///
 //===-------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_AST_ASTFWD_H
-#define LLVM_CLANG_AST_ASTFWD_H
+#ifndef LLVM37_CLANG_AST_ASTFWD_H
+#define LLVM37_CLANG_AST_ASTFWD_H
 
 namespace clang {
 

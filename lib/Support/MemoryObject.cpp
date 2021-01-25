@@ -7,8 +7,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Support/MemoryObject.h"
-using namespace llvm;
+#include "llvm37/Support/MemoryObject.h"
+using namespace llvm37;
   
 MemoryObject::~MemoryObject() {
 }

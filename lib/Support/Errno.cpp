@@ -11,9 +11,9 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Support/Errno.h"
-#include "llvm/Config/config.h"     // Get autoconf configuration settings
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/Support/Errno.h"
+#include "llvm37/Config/config.h"     // Get autoconf configuration settings
+#include "llvm37/Support/raw_ostream.h"
 #include <string.h>
 
 #if HAVE_ERRNO_H
@@ -25,7 +25,7 @@
 //===          independent code.
 //===----------------------------------------------------------------------===//
 
-namespace llvm {
+namespace llvm37 {
 namespace sys {
 
 #if HAVE_ERRNO_H
@@ -73,4 +73,4 @@ std::string StrError(int errnum) {
 }
 
 }  // namespace sys
-}  // namespace llvm
+}  // namespace llvm37

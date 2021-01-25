@@ -41,24 +41,24 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Transforms/Scalar.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/Analysis/AliasAnalysis.h"
-#include "llvm/Analysis/LoopPass.h"
-#include "llvm/Analysis/ScalarEvolutionExpander.h"
-#include "llvm/Analysis/ScalarEvolutionExpressions.h"
-#include "llvm/Analysis/TargetLibraryInfo.h"
-#include "llvm/Analysis/TargetTransformInfo.h"
-#include "llvm/Analysis/ValueTracking.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/Dominators.h"
-#include "llvm/IR/IRBuilder.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/IR/Module.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Transforms/Utils/Local.h"
-using namespace llvm;
+#include "llvm37/Transforms/Scalar.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/Analysis/AliasAnalysis.h"
+#include "llvm37/Analysis/LoopPass.h"
+#include "llvm37/Analysis/ScalarEvolutionExpander.h"
+#include "llvm37/Analysis/ScalarEvolutionExpressions.h"
+#include "llvm37/Analysis/TargetLibraryInfo.h"
+#include "llvm37/Analysis/TargetTransformInfo.h"
+#include "llvm37/Analysis/ValueTracking.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/IR/Dominators.h"
+#include "llvm37/IR/IRBuilder.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Transforms/Utils/Local.h"
+using namespace llvm37;
 
 #define DEBUG_TYPE "loop-idiom"
 
@@ -225,7 +225,7 @@ INITIALIZE_PASS_DEPENDENCY(TargetTransformInfoWrapperPass)
 INITIALIZE_PASS_END(LoopIdiomRecognize, "loop-idiom", "Recognize loop idioms",
                     false, false)
 
-Pass *llvm::createLoopIdiomPass() { return new LoopIdiomRecognize(); }
+Pass *llvm37::createLoopIdiomPass() { return new LoopIdiomRecognize(); }
 
 /// deleteDeadInstruction - Delete this instruction.  Before we do, go through
 /// and zero out all the operands of this instruction.  If any of them become

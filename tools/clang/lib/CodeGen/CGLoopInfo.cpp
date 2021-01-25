@@ -10,13 +10,13 @@
 #include "CGLoopInfo.h"
 #include "clang/AST/Attr.h"
 #include "clang/Sema/LoopHint.h"
-#include "llvm/IR/BasicBlock.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/InstrTypes.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/Metadata.h"
+#include "llvm37/IR/BasicBlock.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/InstrTypes.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/Metadata.h"
 using namespace clang::CodeGen;
-using namespace llvm;
+using namespace llvm37;
 
 static MDNode *createMetadata(LLVMContext &Ctx, const LoopAttributes &Attrs) {
 

@@ -28,8 +28,8 @@
 #endif
 #include "dxc/Test/HlslTestUtils.h"
 
-#include "llvm/Support/raw_os_ostream.h"
-#include "llvm/ADT/STLExtras.h"
+#include "llvm37/Support/raw_os_ostream.h"
+#include "llvm37/ADT/STLExtras.h"
 #include "dxc/Support/Global.h"
 #include "dxc/Support/dxcapi.use.h"
 #include "dxc/Support/HLSLOptions.h"
@@ -85,8 +85,8 @@ public:
                                         bool shouldFail = false,
                                         bool shouldMessage = false) {
     std::string errorString;
-    llvm::raw_string_ostream errorStream(errorString);
-    std::unique_ptr<DxcOpts> opts = llvm::make_unique<DxcOpts>();
+    llvm37::raw_string_ostream errorStream(errorString);
+    std::unique_ptr<DxcOpts> opts = llvm37::make_unique<DxcOpts>();
     int result = ReadDxcOpts(getHlslOptTable(), flagsToInclude, mainArgs,
                              *(opts.get()), errorStream);
     EXPECT_EQ(shouldFail, result != 0);
@@ -97,8 +97,8 @@ public:
                                         unsigned flagsToInclude,
       const char *expectErrorMsg) {
     std::string errorString;
-    llvm::raw_string_ostream errorStream(errorString);
-    std::unique_ptr<DxcOpts> opts = llvm::make_unique<DxcOpts>();
+    llvm37::raw_string_ostream errorStream(errorString);
+    std::unique_ptr<DxcOpts> opts = llvm37::make_unique<DxcOpts>();
     int result = ReadDxcOpts(getHlslOptTable(), flagsToInclude, mainArgs,
                              *(opts.get()), errorStream);
     EXPECT_EQ(result, 1);
@@ -295,9 +295,9 @@ TEST_F(OptionsTest, ConvertWhenFailThenThrow) {
 TEST_F(OptionsTest, CopyOptionsWhenSingleThenOK) {
   const char *ArgsNoDefines[] = {"/T",   "ps_6_0",    "/E",
                                  "main", "hlsl.hlsl", "-unknown"};
-  const llvm::opt::OptTable *table = getHlslOptTable();
+  const llvm37::opt::OptTable *table = getHlslOptTable();
   unsigned missingIndex = 0, missingArgCount = 0;
-  llvm::opt::InputArgList args =
+  llvm37::opt::InputArgList args =
       table->ParseArgs(ArgsNoDefines, missingIndex, missingArgCount, DxcFlags);
   std::vector<std::wstring> outArgs;
   CopyArgsToWStrings(args, DxcFlags, outArgs);

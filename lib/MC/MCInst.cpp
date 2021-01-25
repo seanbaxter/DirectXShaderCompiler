@@ -7,13 +7,13 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/MC/MCInst.h"
-#include "llvm/MC/MCExpr.h"
-#include "llvm/MC/MCInstPrinter.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/MC/MCInst.h"
+#include "llvm37/MC/MCExpr.h"
+#include "llvm37/MC/MCInstPrinter.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/raw_ostream.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 void MCOperand::print(raw_ostream &OS) const {
   OS << "<MCOperand ";
@@ -32,7 +32,7 @@ void MCOperand::print(raw_ostream &OS) const {
   OS << ">";
 }
 
-#if !defined(NDEBUG) || defined(LLVM_ENABLE_DUMP)
+#if !defined(NDEBUG) || defined(LLVM37_ENABLE_DUMP)
 void MCOperand::dump() const {
   print(dbgs());
   dbgs() << "\n";
@@ -63,7 +63,7 @@ void MCInst::dump_pretty(raw_ostream &OS, const MCInstPrinter *Printer,
   OS << ">";
 }
 
-#if !defined(NDEBUG) || defined(LLVM_ENABLE_DUMP)
+#if !defined(NDEBUG) || defined(LLVM37_ENABLE_DUMP)
 void MCInst::dump() const {
   print(dbgs());
   dbgs() << "\n";

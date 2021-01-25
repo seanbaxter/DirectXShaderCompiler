@@ -11,8 +11,8 @@
 //  containing a serialized representation of a translation unit.
 //
 //===----------------------------------------------------------------------===//
-#ifndef LLVM_CLANG_SERIALIZATION_ASTWRITER_H
-#define LLVM_CLANG_SERIALIZATION_ASTWRITER_H
+#ifndef LLVM37_CLANG_SERIALIZATION_ASTWRITER_H
+#define LLVM37_CLANG_SERIALIZATION_ASTWRITER_H
 
 #include "clang/AST/ASTMutationListener.h"
 #include "clang/AST/Decl.h"
@@ -22,18 +22,18 @@
 #include "clang/Sema/SemaConsumer.h"
 #include "clang/Serialization/ASTBitCodes.h"
 #include "clang/Serialization/ASTDeserializationListener.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/DenseSet.h"
-#include "llvm/ADT/MapVector.h"
-#include "llvm/ADT/SetVector.h"
-#include "llvm/ADT/SmallPtrSet.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/Bitcode/BitstreamWriter.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/DenseSet.h"
+#include "llvm37/ADT/MapVector.h"
+#include "llvm37/ADT/SetVector.h"
+#include "llvm37/ADT/SmallPtrSet.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/Bitcode/BitstreamWriter.h"
 #include <map>
 #include <queue>
 #include <vector>
 
-namespace llvm {
+namespace llvm37 {
   class APFloat;
   class APInt;
   class BitstreamWriter;
@@ -97,12 +97,12 @@ private:
   /// allow for the const/volatile qualifiers.
   ///
   /// Keys in the map never have const/volatile qualifiers.
-  typedef llvm::DenseMap<QualType, serialization::TypeIdx,
+  typedef llvm37::DenseMap<QualType, serialization::TypeIdx,
                          serialization::UnsafeQualTypeDenseMapInfo>
     TypeIdxMap;
 
   /// \brief The bitstream writer used to emit this precompiled header.
-  llvm::BitstreamWriter &Stream;
+  llvm37::BitstreamWriter &Stream;
 
   /// \brief The ASTContext we're writing.
   ASTContext *Context;
@@ -132,7 +132,7 @@ private:
 
   /// \brief Mapping from input file entries to the index into the
   /// offset table where information about that input file is stored.
-  llvm::DenseMap<const FileEntry *, uint32_t> InputFileIDs;
+  llvm37::DenseMap<const FileEntry *, uint32_t> InputFileIDs;
 
   /// \brief Stores a declaration or a type to be written to the AST file.
   class DeclOrType {
@@ -173,7 +173,7 @@ private:
   /// The ID numbers of declarations are consecutive (in order of
   /// discovery) and start at 2. 1 is reserved for the translation
   /// unit, while 0 is reserved for NULL.
-  llvm::DenseMap<const Decl *, serialization::DeclID> DeclIDs;
+  llvm37::DenseMap<const Decl *, serialization::DeclID> DeclIDs;
 
   /// \brief Offset of each declaration in the bitstream, indexed by
   /// the declaration's ID.
@@ -188,7 +188,7 @@ private:
     /// indicates the index that this particular vector has in the global one.
     unsigned FirstDeclIndex;
   };
-  typedef llvm::DenseMap<FileID, DeclIDInFileInfo *> FileDeclIDsTy;
+  typedef llvm37::DenseMap<FileID, DeclIDInFileInfo *> FileDeclIDsTy;
 
   /// \brief Map from file SLocEntries to info about the file-level declarations
   /// that it contains.
@@ -229,7 +229,7 @@ private:
   /// The ID numbers for identifiers are consecutive (in order of
   /// discovery), starting at 1. An ID of zero refers to a NULL
   /// IdentifierInfo.
-  llvm::MapVector<const IdentifierInfo *, serialization::IdentID> IdentifierIDs;
+  llvm37::MapVector<const IdentifierInfo *, serialization::IdentID> IdentifierIDs;
 
   /// \brief The first ID number we can use for our own macros.
   serialization::MacroID FirstMacroID;
@@ -238,7 +238,7 @@ private:
   serialization::MacroID NextMacroID;
 
   /// \brief Map that provides the ID numbers of each macro.
-  llvm::DenseMap<MacroInfo *, serialization::MacroID> MacroIDs;
+  llvm37::DenseMap<MacroInfo *, serialization::MacroID> MacroIDs;
 
   struct MacroInfoToEmitData {
     const IdentifierInfo *Name;
@@ -248,17 +248,17 @@ private:
   /// \brief The macro infos to emit.
   std::vector<MacroInfoToEmitData> MacroInfosToEmit;
 
-  llvm::DenseMap<const IdentifierInfo *, uint64_t> IdentMacroDirectivesOffsetMap;
+  llvm37::DenseMap<const IdentifierInfo *, uint64_t> IdentMacroDirectivesOffsetMap;
 
   /// @name FlushStmt Caches
   /// @{
 
   /// \brief Set of parent Stmts for the currently serializing sub-stmt.
-  llvm::DenseSet<Stmt *> ParentStmts;
+  llvm37::DenseSet<Stmt *> ParentStmts;
 
   /// \brief Offsets of sub-stmts already serialized. The offset points
   /// just after the stmt record.
-  llvm::DenseMap<Stmt *, uint64_t> SubStmtEntries;
+  llvm37::DenseMap<Stmt *, uint64_t> SubStmtEntries;
 
   /// @}
 
@@ -279,7 +279,7 @@ private:
   serialization::SelectorID NextSelectorID;
 
   /// \brief Map that provides the ID numbers of each Selector.
-  llvm::MapVector<Selector, serialization::SelectorID> SelectorIDs;
+  llvm37::MapVector<Selector, serialization::SelectorID> SelectorIDs;
 
   /// \brief Offset of each selector within the method pool/selector
   /// table, indexed by the Selector ID (-1).
@@ -287,12 +287,12 @@ private:
 
   /// \brief Mapping from macro definitions (as they occur in the preprocessing
   /// record) to the macro IDs.
-  llvm::DenseMap<const MacroDefinitionRecord *,
+  llvm37::DenseMap<const MacroDefinitionRecord *,
                  serialization::PreprocessedEntityID> MacroDefinitions;
 
   /// \brief Cache of indices of anonymous declarations within their lexical
   /// contexts.
-  llvm::DenseMap<const Decl *, unsigned> AnonymousDeclarationNumbers;
+  llvm37::DenseMap<const Decl *, unsigned> AnonymousDeclarationNumbers;
 
   /// An update to a Decl.
   class DeclUpdate {
@@ -333,12 +333,12 @@ private:
   };
 
   typedef SmallVector<DeclUpdate, 1> UpdateRecord;
-  typedef llvm::MapVector<const Decl *, UpdateRecord> DeclUpdateMap;
+  typedef llvm37::MapVector<const Decl *, UpdateRecord> DeclUpdateMap;
   /// \brief Mapping from declarations that came from a chained PCH to the
   /// record containing modifications to them.
   DeclUpdateMap DeclUpdates;
 
-  typedef llvm::DenseMap<Decl *, Decl *> FirstLatestDeclMap;
+  typedef llvm37::DenseMap<Decl *, Decl *> FirstLatestDeclMap;
   /// \brief Map of first declarations from a chained PCH that point to the
   /// most recent declarations in another PCH.
   FirstLatestDeclMap FirstLatestDecls;
@@ -363,19 +363,19 @@ private:
   /// if its primary namespace comes from the chain. If it does, we add the
   /// primary to this set, so that we can write out lexical content updates for
   /// it.
-  llvm::SmallSetVector<const DeclContext *, 16> UpdatedDeclContexts;
+  llvm37::SmallSetVector<const DeclContext *, 16> UpdatedDeclContexts;
 
   /// \brief Keeps track of visible decls that were added in DeclContexts
   /// coming from another AST file.
   SmallVector<const Decl *, 16> UpdatingVisibleDecls;
 
-  typedef llvm::SmallSetVector<const Decl *, 16> DeclsToRewriteTy;
+  typedef llvm37::SmallSetVector<const Decl *, 16> DeclsToRewriteTy;
   /// \brief Decls that will be replaced in the current dependent AST file.
   DeclsToRewriteTy DeclsToRewrite;
 
   /// \brief The set of Objective-C class that have categories we
   /// should serialize.
-  llvm::SetVector<ObjCInterfaceDecl *> ObjCClassesWithCategories;
+  llvm37::SetVector<ObjCInterfaceDecl *> ObjCClassesWithCategories;
                     
   struct ReplacedDeclInfo {
     serialization::DeclID ID;
@@ -398,7 +398,7 @@ private:
                  
   /// \brief The set of declarations that may have redeclaration chains that
   /// need to be serialized.
-  llvm::SmallVector<const Decl *, 16> Redeclarations;
+  llvm37::SmallVector<const Decl *, 16> Redeclarations;
                                       
   /// \brief Statements that we've encountered while serializing a
   /// declaration or type.
@@ -409,7 +409,7 @@ private:
   SmallVector<Stmt *, 16> *CollectedStmts;
 
   /// \brief Mapping from SwitchCase statements to IDs.
-  llvm::DenseMap<SwitchCase *, unsigned> SwitchCaseIDs;
+  llvm37::DenseMap<SwitchCase *, unsigned> SwitchCaseIDs;
 
   /// \brief The number of statements written to the AST file.
   unsigned NumStatements;
@@ -483,15 +483,15 @@ private:
 
   /// \brief A mapping from each known submodule to its ID number, which will
   /// be a positive integer.
-  llvm::DenseMap<Module *, unsigned> SubmoduleIDs;
+  llvm37::DenseMap<Module *, unsigned> SubmoduleIDs;
                     
   /// \brief Retrieve or create a submodule ID for this module.
   unsigned getSubmoduleID(Module *Mod);
                     
   /// \brief Write the given subexpression to the bitstream.
   void WriteSubStmt(Stmt *S,
-                    llvm::DenseMap<Stmt *, uint64_t> &SubStmtEntries,
-                    llvm::DenseSet<Stmt *> &ParentStmts);
+                    llvm37::DenseMap<Stmt *, uint64_t> &SubStmtEntries,
+                    llvm37::DenseSet<Stmt *> &ParentStmts);
 
   void WriteBlockInfoBlock();
   void WriteControlBlock(Preprocessor &PP, ASTContext &Context,
@@ -520,7 +520,7 @@ private:
   bool isLookupResultEntirelyExternal(StoredDeclsList &Result, DeclContext *DC);
 
   uint32_t GenerateNameLookupTable(const DeclContext *DC,
-                                   llvm::SmallVectorImpl<char> &LookupTable);
+                                   llvm37::SmallVectorImpl<char> &LookupTable);
   uint64_t WriteDeclContextLexicalBlock(ASTContext &Context, DeclContext *DC);
   uint64_t WriteDeclContextVisibleBlock(ASTContext &Context, DeclContext *DC);
   void WriteTypeDeclOffsets();
@@ -569,7 +569,7 @@ private:
 public:
   /// \brief Create a new precompiled header writer that outputs to
   /// the given bitstream.
-  ASTWriter(llvm::BitstreamWriter &Stream);
+  ASTWriter(llvm37::BitstreamWriter &Stream);
   ~ASTWriter() override;
 
   const LangOptions &getLangOpts() const;
@@ -600,13 +600,13 @@ public:
   void AddSourceRange(SourceRange Range, RecordDataImpl &Record);
 
   /// \brief Emit an integral value.
-  void AddAPInt(const llvm::APInt &Value, RecordDataImpl &Record);
+  void AddAPInt(const llvm37::APInt &Value, RecordDataImpl &Record);
 
   /// \brief Emit a signed integral value.
-  void AddAPSInt(const llvm::APSInt &Value, RecordDataImpl &Record);
+  void AddAPSInt(const llvm37::APSInt &Value, RecordDataImpl &Record);
 
   /// \brief Emit a floating-point value.
-  void AddAPFloat(const llvm::APFloat &Value, RecordDataImpl &Record);
+  void AddAPFloat(const llvm37::APFloat &Value, RecordDataImpl &Record);
 
   /// \brief Emit a reference to an identifier.
   void AddIdentifierRef(const IdentifierInfo *II, RecordDataImpl &Record);
@@ -879,7 +879,7 @@ class PCHGenerator : public SemaConsumer {
   std::string isysroot;
   Sema *SemaPtr;
   std::shared_ptr<PCHBuffer> Buffer;
-  llvm::BitstreamWriter Stream;
+  llvm37::BitstreamWriter Stream;
   ASTWriter Writer;
   bool AllowASTWithErrors;
 

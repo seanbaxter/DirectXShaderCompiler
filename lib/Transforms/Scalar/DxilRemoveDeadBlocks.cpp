@@ -9,21 +9,21 @@
 //                                                                           //
 ///////////////////////////////////////////////////////////////////////////////
 
-#include "llvm/Pass.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/Instruction.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/CFG.h"
-#include "llvm/Transforms/Scalar.h"
-#include "llvm/Analysis/DxilValueCache.h"
+#include "llvm37/Pass.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/Instruction.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/CFG.h"
+#include "llvm37/Transforms/Scalar.h"
+#include "llvm37/Analysis/DxilValueCache.h"
 
 #include "dxc/DXIL/DxilMetadataHelper.h"
 #include "dxc/DXIL/DxilUtil.h"
 
 #include <unordered_set>
 
-using namespace llvm;
+using namespace llvm37;
 
 static void RemoveIncomingValueFrom(BasicBlock *SuccBB, BasicBlock *BB) {
   for (auto inst_it = SuccBB->begin(); inst_it != SuccBB->end();) {
@@ -195,7 +195,7 @@ struct DxilRemoveDeadBlocks : public FunctionPass {
 
 char DxilRemoveDeadBlocks::ID;
 
-Pass *llvm::createDxilRemoveDeadBlocksPass() {
+Pass *llvm37::createDxilRemoveDeadBlocksPass() {
   return new DxilRemoveDeadBlocks();
 }
 

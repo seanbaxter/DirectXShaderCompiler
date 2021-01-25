@@ -7,9 +7,9 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/DebugInfo/PDB/DIA/DIALineNumber.h"
+#include "llvm37/DebugInfo/PDB/DIA/DIALineNumber.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 DIALineNumber::DIALineNumber(CComPtr<IDiaLineNumber> DiaLineNumber)
     : LineNumber(DiaLineNumber) {}

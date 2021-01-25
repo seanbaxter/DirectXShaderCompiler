@@ -1,5 +1,5 @@
-set( LLVM_LINK_COMPONENTS
-  ${LLVM_TARGETS_TO_BUILD}
+set( LLVM37_LINK_COMPONENTS
+  ${LLVM37_TARGETS_TO_BUILD}
   Analysis
 #  CodeGen # HLSL Change
   Core
@@ -22,9 +22,9 @@ set( LLVM_LINK_COMPONENTS
 option(CLANG_PLUGIN_SUPPORT "Build clang with plugin support" ON)
 
 # Support plugins. This must be before add_clang_executable as it reads
-# LLVM_NO_DEAD_STRIP.
+# LLVM37_NO_DEAD_STRIP.
 if(CLANG_PLUGIN_SUPPORT)
-  set(LLVM_NO_DEAD_STRIP 1)
+  set(LLVM37_NO_DEAD_STRIP 1)
 endif()
 
 add_clang_executable(clang
@@ -66,23 +66,23 @@ if(UNIX)
   set(clang_binary "clang${CMAKE_EXECUTABLE_SUFFIX}")
 else()
   set(CLANGXX_LINK_OR_COPY copy)
-  set(clang_binary "${LLVM_RUNTIME_OUTPUT_INTDIR}/clang${CMAKE_EXECUTABLE_SUFFIX}")
+  set(clang_binary "${LLVM37_RUNTIME_OUTPUT_INTDIR}/clang${CMAKE_EXECUTABLE_SUFFIX}")
 endif()
 
 # Create the clang++ symlink in the build directory.
-set(clang_pp "${LLVM_RUNTIME_OUTPUT_INTDIR}/clang++${CMAKE_EXECUTABLE_SUFFIX}")
+set(clang_pp "${LLVM37_RUNTIME_OUTPUT_INTDIR}/clang++${CMAKE_EXECUTABLE_SUFFIX}")
 add_custom_command(TARGET clang POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E ${CLANGXX_LINK_OR_COPY} "${clang_binary}" "${clang_pp}"
-    WORKING_DIRECTORY "${LLVM_RUNTIME_OUTPUT_INTDIR}")
+    WORKING_DIRECTORY "${LLVM37_RUNTIME_OUTPUT_INTDIR}")
 
 set_property(DIRECTORY APPEND
   PROPERTY ADDITIONAL_MAKE_CLEAN_FILES ${clang_pp})
 
 # Create the clang-cl symlink in the build directory.
-set(clang_cl "${LLVM_RUNTIME_OUTPUT_INTDIR}/clang-cl${CMAKE_EXECUTABLE_SUFFIX}")
+set(clang_cl "${LLVM37_RUNTIME_OUTPUT_INTDIR}/clang-cl${CMAKE_EXECUTABLE_SUFFIX}")
 add_custom_command(TARGET clang POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E ${CLANGXX_LINK_OR_COPY} "${clang_binary}" "${clang_cl}"
-    WORKING_DIRECTORY "${LLVM_RUNTIME_OUTPUT_INTDIR}")
+    WORKING_DIRECTORY "${LLVM37_RUNTIME_OUTPUT_INTDIR}")
 
 set_property(DIRECTORY APPEND
   PROPERTY ADDITIONAL_MAKE_CLEAN_FILES ${clang_cl})
@@ -108,9 +108,9 @@ if (APPLE)
 
   set(TOOL_INFO_UTI "${CLANG_VENDOR_UTI}")
   set(TOOL_INFO_VERSION "${CLANG_VERSION}")
-  if (LLVM_SUBMIT_VERSION)
+  if (LLVM37_SUBMIT_VERSION)
     set(TOOL_INFO_BUILD_VERSION
-      "${LLVM_SUBMIT_VERSION}.${LLVM_SUBMIT_SUBVERSION}")
+      "${LLVM37_SUBMIT_VERSION}.${LLVM37_SUBMIT_SUBVERSION}")
   endif()
   
   set(TOOL_INFO_PLIST_OUT "${CMAKE_CURRENT_BINARY_DIR}/${TOOL_INFO_PLIST}")

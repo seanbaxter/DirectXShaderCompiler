@@ -17,8 +17,8 @@
 #include "clang/AST/ASTDiagnostic.h"
 #include "clang/Basic/AllDiagnostics.h"
 #include "clang/Basic/Diagnostic.h"
-#include "llvm/ADT/StringMap.h"
-#include "llvm/Support/Format.h"
+#include "llvm37/ADT/StringMap.h"
+#include "llvm37/Support/Format.h"
 
 DEF_DIAGTOOL("list-warnings",
              "List warnings and their corresponding flags",
@@ -29,17 +29,17 @@ using namespace diagtool;
 
 namespace {
 struct Entry {
-  llvm::StringRef DiagName;
-  llvm::StringRef Flag;
+  llvm37::StringRef DiagName;
+  llvm37::StringRef Flag;
   
-  Entry(llvm::StringRef diagN, llvm::StringRef flag)
+  Entry(llvm37::StringRef diagN, llvm37::StringRef flag)
     : DiagName(diagN), Flag(flag) {}
   
   bool operator<(const Entry &x) const { return DiagName < x.DiagName; }
 };
 }
 
-static void printEntries(std::vector<Entry> &entries, llvm::raw_ostream &out) {
+static void printEntries(std::vector<Entry> &entries, llvm37::raw_ostream &out) {
   for (std::vector<Entry>::iterator it = entries.begin(), ei = entries.end();
        it != ei; ++it) {
     out << "  " << it->DiagName;
@@ -49,9 +49,9 @@ static void printEntries(std::vector<Entry> &entries, llvm::raw_ostream &out) {
   }
 }
 
-int ListWarnings::run(unsigned int argc, char **argv, llvm::raw_ostream &out) {
+int ListWarnings::run(unsigned int argc, char **argv, llvm37::raw_ostream &out) {
   std::vector<Entry> Flagged, Unflagged;
-  llvm::StringMap<std::vector<unsigned> > flagHistogram;
+  llvm37::StringMap<std::vector<unsigned> > flagHistogram;
   
   ArrayRef<DiagnosticRecord> AllDiagnostics = getBuiltinDiagnosticsByName();
 
@@ -89,14 +89,14 @@ int ListWarnings::run(unsigned int argc, char **argv, llvm::raw_ostream &out) {
     / (Flagged.size() + Unflagged.size()) * 100.0;
   
   out << "  Percentage of warnings with flags: " 
-      << llvm::format("%.4g",percentFlagged) << "%\n";
+      << llvm37::format("%.4g",percentFlagged) << "%\n";
   
   out << "  Number of unique flags: "
       << flagHistogram.size() << '\n';
   
   double avgDiagsPerFlag = (double) Flagged.size() / flagHistogram.size();
   out << "  Average number of diagnostics per flag: "
-      << llvm::format("%.4g", avgDiagsPerFlag) << '\n';
+      << llvm37::format("%.4g", avgDiagsPerFlag) << '\n';
 
   out << "  Number in -Wpedantic (not covered by other -W flags): "
       << flagHistogram["pedantic"].size() << '\n';

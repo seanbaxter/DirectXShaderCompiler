@@ -11,12 +11,12 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Object/IRObjectFile.h"
-#include "llvm/Object/ObjectFile.h"
-#include "llvm/Object/SymbolicFile.h"
-#include "llvm/Support/MemoryBuffer.h"
+#include "llvm37/Object/IRObjectFile.h"
+#include "llvm37/Object/ObjectFile.h"
+#include "llvm37/Object/SymbolicFile.h"
+#include "llvm37/Support/MemoryBuffer.h"
 
-using namespace llvm;
+using namespace llvm37;
 using namespace object;
 
 SymbolicFile::SymbolicFile(unsigned int Type, MemoryBufferRef Source)

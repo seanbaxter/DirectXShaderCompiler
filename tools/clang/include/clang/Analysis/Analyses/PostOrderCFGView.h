@@ -11,15 +11,15 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_ANALYSIS_ANALYSES_POSTORDERCFGVIEW_H
-#define LLVM_CLANG_ANALYSIS_ANALYSES_POSTORDERCFGVIEW_H
+#ifndef LLVM37_CLANG_ANALYSIS_ANALYSES_POSTORDERCFGVIEW_H
+#define LLVM37_CLANG_ANALYSIS_ANALYSES_POSTORDERCFGVIEW_H
 
 #include <vector>
 //#include <algorithm>
 
-#include "llvm/ADT/PostOrderIterator.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/BitVector.h"
+#include "llvm37/ADT/PostOrderIterator.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/BitVector.h"
 
 #include "clang/Analysis/AnalysisContext.h"
 #include "clang/Analysis/CFG.h"
@@ -32,11 +32,11 @@ public:
   /// \brief Implements a set of CFGBlocks using a BitVector.
   ///
   /// This class contains a minimal interface, primarily dictated by the SetType
-  /// template parameter of the llvm::po_iterator template, as used with
+  /// template parameter of the llvm37::po_iterator template, as used with
   /// external storage. We also use this set to keep track of which CFGBlocks we
   /// visit during the analysis.
   class CFGBlockSet {
-    llvm::BitVector VisitedBlockIDs;
+    llvm37::BitVector VisitedBlockIDs;
   public:
     // po_iterator requires this iterator, but the only interface needed is the
     // value_type typedef.
@@ -47,7 +47,7 @@ public:
 
     /// \brief Set the bit associated with a particular CFGBlock.
     /// This is the important method for the SetType template parameter.
-    std::pair<llvm::NoneType, bool> insert(const CFGBlock *Block) {
+    std::pair<llvm37::NoneType, bool> insert(const CFGBlock *Block) {
       // Note that insert() is called by po_iterator, which doesn't check to
       // make sure that Block is non-null.  Moreover, the CFGBlock iterator will
       // occasionally hand out null pointers for pruned edges, so we catch those
@@ -69,10 +69,10 @@ public:
   };
 
 private:
-  typedef llvm::po_iterator<const CFG*, CFGBlockSet, true>  po_iterator;
+  typedef llvm37::po_iterator<const CFG*, CFGBlockSet, true>  po_iterator;
   std::vector<const CFGBlock*> Blocks;
 
-  typedef llvm::DenseMap<const CFGBlock *, unsigned> BlockOrderTy;
+  typedef llvm37::DenseMap<const CFGBlock *, unsigned> BlockOrderTy;
   BlockOrderTy BlockOrder;
 
 public:

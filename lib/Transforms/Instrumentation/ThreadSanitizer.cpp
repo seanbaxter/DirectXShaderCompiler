@@ -19,31 +19,31 @@
 // The rest is handled by the run-time library.
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Transforms/Instrumentation.h"
-#include "llvm/ADT/SmallSet.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/ADT/StringExtras.h"
-#include "llvm/Analysis/CaptureTracking.h"
-#include "llvm/Analysis/ValueTracking.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/IRBuilder.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/IR/Intrinsics.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Metadata.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/Type.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/MathExtras.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Transforms/Utils/BasicBlockUtils.h"
-#include "llvm/Transforms/Utils/ModuleUtils.h"
+#include "llvm37/Transforms/Instrumentation.h"
+#include "llvm37/ADT/SmallSet.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/ADT/StringExtras.h"
+#include "llvm37/Analysis/CaptureTracking.h"
+#include "llvm37/Analysis/ValueTracking.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/IRBuilder.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/IR/Intrinsics.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/Metadata.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/Type.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/MathExtras.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Transforms/Utils/BasicBlockUtils.h"
+#include "llvm37/Transforms/Utils/ModuleUtils.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "tsan"
 
@@ -129,7 +129,7 @@ const char *ThreadSanitizer::getPassName() const {
   return "ThreadSanitizer";
 }
 
-FunctionPass *llvm::createThreadSanitizerPass() {
+FunctionPass *llvm37::createThreadSanitizerPass() {
   return new ThreadSanitizer();
 }
 

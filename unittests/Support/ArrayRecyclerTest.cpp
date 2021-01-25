@@ -7,12 +7,12 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Support/ArrayRecycler.h"
-#include "llvm/Support/Allocator.h"
+#include "llvm37/Support/ArrayRecycler.h"
+#include "llvm37/Support/Allocator.h"
 #include "gtest/gtest.h"
 #include <cstdlib>
 
-using namespace llvm;
+using namespace llvm37;
 
 namespace {
 

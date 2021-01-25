@@ -12,11 +12,11 @@
 //===----------------------------------------------------------------------===//
 
 #include "InstCombineInternal.h"
-#include "llvm/Analysis/ConstantFolding.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/PatternMatch.h"
-#include "llvm/Analysis/TargetLibraryInfo.h"
-using namespace llvm;
+#include "llvm37/Analysis/ConstantFolding.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/IR/PatternMatch.h"
+#include "llvm37/Analysis/TargetLibraryInfo.h"
+using namespace llvm37;
 using namespace PatternMatch;
 
 #define DEBUG_TYPE "instcombine"

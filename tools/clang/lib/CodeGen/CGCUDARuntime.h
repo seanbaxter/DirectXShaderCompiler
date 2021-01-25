@@ -13,10 +13,10 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_LIB_CODEGEN_CGCUDARUNTIME_H
-#define LLVM_CLANG_LIB_CODEGEN_CGCUDARUNTIME_H
+#ifndef LLVM37_CLANG_LIB_CODEGEN_CGCUDARUNTIME_H
+#define LLVM37_CLANG_LIB_CODEGEN_CGCUDARUNTIME_H
 
-namespace llvm {
+namespace llvm37 {
 class Function;
 }
 
@@ -49,11 +49,11 @@ public:
 
   /// Constructs and returns a module initialization function or nullptr if it's
   /// not needed. Must be called after all kernels have been emitted.
-  virtual llvm::Function *makeModuleCtorFunction() = 0;
+  virtual llvm37::Function *makeModuleCtorFunction() = 0;
 
   /// Returns a module cleanup function or nullptr if it's not needed.
   /// Must be called after ModuleCtorFunction
-  virtual llvm::Function *makeModuleDtorFunction() = 0;
+  virtual llvm37::Function *makeModuleDtorFunction() = 0;
 };
 
 /// Creates an instance of a CUDA runtime class.

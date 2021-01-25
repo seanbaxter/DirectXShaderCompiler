@@ -7,21 +7,21 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_LIB_CODEGEN_ASMPRINTER_DWARFFILE_H
-#define LLVM_LIB_CODEGEN_ASMPRINTER_DWARFFILE_H
+#ifndef LLVM37_LIB_CODEGEN_ASMPRINTER_DWARFFILE_H
+#define LLVM37_LIB_CODEGEN_ASMPRINTER_DWARFFILE_H
 
 #include "AddressPool.h"
 #include "DwarfStringPool.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/FoldingSet.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/ADT/StringMap.h"
-#include "llvm/Support/Allocator.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/FoldingSet.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/ADT/StringMap.h"
+#include "llvm37/Support/Allocator.h"
 #include <memory>
 #include <string>
 #include <vector>
 
-namespace llvm {
+namespace llvm37 {
 class AsmPrinter;
 class DbgVariable;
 class DwarfUnit;

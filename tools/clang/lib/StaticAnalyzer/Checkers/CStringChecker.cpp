@@ -20,10 +20,10 @@
 #include "clang/StaticAnalyzer/Core/CheckerManager.h"
 #include "clang/StaticAnalyzer/Core/PathSensitive/CheckerContext.h"
 #include "clang/StaticAnalyzer/Core/PathSensitive/ProgramStateTrait.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/ADT/StringSwitch.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/ADT/StringSwitch.h"
+#include "llvm37/Support/raw_ostream.h"
 
 using namespace clang;
 using namespace ento;
@@ -239,13 +239,13 @@ ProgramStateRef CStringChecker::checkNonNull(CheckerContext &C,
           "Null pointer argument in call to byte string function"));
 
     SmallString<80> buf;
-    llvm::raw_svector_ostream os(buf);
+    llvm37::raw_svector_ostream os(buf);
     assert(CurrentFunctionDescription);
     os << "Null pointer argument in call to " << CurrentFunctionDescription;
 
     // Generate a report for this bug.
     BuiltinBug *BT = static_cast<BuiltinBug*>(BT_Null.get());
-    auto report = llvm::make_unique<BugReport>(*BT, os.str(), N);
+    auto report = llvm37::make_unique<BugReport>(*BT, os.str(), N);
 
     report->addRange(S->getSourceRange());
     bugreporter::trackNullOrUndefValue(N, S, *report);
@@ -306,17 +306,17 @@ ProgramStateRef CStringChecker::CheckLocation(CheckerContext &C,
     // Generate a report for this bug.
     std::unique_ptr<BugReport> report;
     if (warningMsg) {
-      report = llvm::make_unique<BugReport>(*BT, warningMsg, N);
+      report = llvm37::make_unique<BugReport>(*BT, warningMsg, N);
     } else {
       assert(CurrentFunctionDescription);
       assert(CurrentFunctionDescription[0] != '\0');
 
       SmallString<80> buf;
-      llvm::raw_svector_ostream os(buf);
+      llvm37::raw_svector_ostream os(buf);
       os << toUppercase(CurrentFunctionDescription[0])
          << &CurrentFunctionDescription[1]
          << " accesses out-of-bound array element";
-      report = llvm::make_unique<BugReport>(*BT, os.str(), N);
+      report = llvm37::make_unique<BugReport>(*BT, os.str(), N);
     }
 
     // FIXME: It would be nice to eventually make this diagnostic more clear,
@@ -534,7 +534,7 @@ void CStringChecker::emitOverlapBug(CheckerContext &C, ProgramStateRef state,
                                  categories::UnixAPI, "Improper arguments"));
 
   // Generate a report for this bug.
-  auto report = llvm::make_unique<BugReport>(
+  auto report = llvm37::make_unique<BugReport>(
       *BT_Overlap, "Arguments must not be overlapping buffers", N);
   report->addRange(First->getSourceRange());
   report->addRange(Second->getSourceRange());
@@ -558,7 +558,7 @@ ProgramStateRef CStringChecker::checkAdditionOverflow(CheckerContext &C,
   BasicValueFactory &BVF = svalBuilder.getBasicValueFactory();
 
   QualType sizeTy = svalBuilder.getContext().getSizeType();
-  const llvm::APSInt &maxValInt = BVF.getMaxValue(sizeTy);
+  const llvm37::APSInt &maxValInt = BVF.getMaxValue(sizeTy);
   NonLoc maxVal = svalBuilder.makeIntVal(maxValInt);
 
   SVal maxMinusRight;
@@ -603,7 +603,7 @@ ProgramStateRef CStringChecker::checkAdditionOverflow(CheckerContext &C,
 
       // Generate a report for this bug.
       C.emitReport(
-          llvm::make_unique<BugReport>(*BT_AdditionOverflow, warning, N));
+          llvm37::make_unique<BugReport>(*BT_AdditionOverflow, warning, N));
 
       return nullptr;
     }
@@ -679,9 +679,9 @@ SVal CStringChecker::getCStringLengthForRegion(CheckerContext &C,
     if (Optional<NonLoc> strLn = strLength.getAs<NonLoc>()) {
       // In case of unbounded calls strlen etc bound the range to SIZE_MAX/4
       BasicValueFactory &BVF = svalBuilder.getBasicValueFactory();
-      const llvm::APSInt &maxValInt = BVF.getMaxValue(sizeTy);
-      llvm::APSInt fourInt = APSIntType(maxValInt).getValue(4);
-      const llvm::APSInt *maxLengthInt = BVF.evalAPSInt(BO_Div, maxValInt,
+      const llvm37::APSInt &maxValInt = BVF.getMaxValue(sizeTy);
+      llvm37::APSInt fourInt = APSIntType(maxValInt).getValue(4);
+      const llvm37::APSInt *maxLengthInt = BVF.evalAPSInt(BO_Div, maxValInt,
                                                         fourInt);
       NonLoc maxLength = svalBuilder.makeIntVal(*maxLengthInt);
       SVal evalLength = svalBuilder.evalBinOpNN(state, BO_LE, *strLn,
@@ -713,14 +713,14 @@ SVal CStringChecker::getCStringLength(CheckerContext &C, ProgramStateRef &state,
               "Argument is not a null-terminated string."));
 
         SmallString<120> buf;
-        llvm::raw_svector_ostream os(buf);
+        llvm37::raw_svector_ostream os(buf);
         assert(CurrentFunctionDescription);
         os << "Argument to " << CurrentFunctionDescription
            << " is the address of the label '" << Label->getLabel()->getName()
            << "', which is not a null-terminated string";
 
         // Generate a report for this bug.
-        auto report = llvm::make_unique<BugReport>(*BT_NotCString, os.str(), N);
+        auto report = llvm37::make_unique<BugReport>(*BT_NotCString, os.str(), N);
 
         report->addRange(Ex->getSourceRange());
         C.emitReport(std::move(report));        
@@ -773,7 +773,7 @@ SVal CStringChecker::getCStringLength(CheckerContext &C, ProgramStateRef &state,
             "Argument is not a null-terminated string."));
 
       SmallString<120> buf;
-      llvm::raw_svector_ostream os(buf);
+      llvm37::raw_svector_ostream os(buf);
 
       assert(CurrentFunctionDescription);
       os << "Argument to " << CurrentFunctionDescription << " is ";
@@ -784,7 +784,7 @@ SVal CStringChecker::getCStringLength(CheckerContext &C, ProgramStateRef &state,
         os << "not a null-terminated string";
 
       // Generate a report for this bug.
-      auto report = llvm::make_unique<BugReport>(*BT_NotCString, os.str(), N);
+      auto report = llvm37::make_unique<BugReport>(*BT_NotCString, os.str(), N);
 
       report->addRange(Ex->getSourceRange());
       C.emitReport(std::move(report));        
@@ -1760,7 +1760,7 @@ void CStringChecker::evalStrcmpCommon(CheckerContext &C, const CallExpr *CE,
       SVal lenVal = state->getSVal(lenExpr, LCtx);
 
       // If the length is known, we can get the right substrings.
-      if (const llvm::APSInt *len = svalBuilder.getKnownValue(state, lenVal)) {
+      if (const llvm37::APSInt *len = svalBuilder.getKnownValue(state, lenVal)) {
         // Create substrings of each to compare the prefix.
         s1StrRef = s1StrRef.substr(0, (size_t)len->getZExtValue());
         s2StrRef = s2StrRef.substr(0, (size_t)len->getZExtValue());
@@ -1985,8 +1985,8 @@ CStringChecker::checkRegionChanges(ProgramStateRef state,
   if (Entries.isEmpty())
     return state;
 
-  llvm::SmallPtrSet<const MemRegion *, 8> Invalidated;
-  llvm::SmallPtrSet<const MemRegion *, 32> SuperRegions;
+  llvm37::SmallPtrSet<const MemRegion *, 8> Invalidated;
+  llvm37::SmallPtrSet<const MemRegion *, 32> SuperRegions;
 
   // First build sets for the changed regions and their super-regions.
   for (ArrayRef<const MemRegion *>::iterator

@@ -13,15 +13,15 @@
 
 #include "clang/Basic/OpenMPKinds.h"
 #include "clang/Basic/IdentifierTable.h"
-#include "llvm/ADT/StringRef.h"
-#include "llvm/ADT/StringSwitch.h"
-#include "llvm/Support/ErrorHandling.h"
+#include "llvm37/ADT/StringRef.h"
+#include "llvm37/ADT/StringSwitch.h"
+#include "llvm37/Support/ErrorHandling.h"
 #include <cassert>
 
 using namespace clang;
 
 OpenMPDirectiveKind clang::getOpenMPDirectiveKind(StringRef Str) {
-  return llvm::StringSwitch<OpenMPDirectiveKind>(Str)
+  return llvm37::StringSwitch<OpenMPDirectiveKind>(Str)
 #define OPENMP_DIRECTIVE(Name) .Case(#Name, OMPD_##Name)
 #define OPENMP_DIRECTIVE_EXT(Name, Str) .Case(Str, OMPD_##Name)
 #include "clang/Basic/OpenMPKinds.def"
@@ -52,7 +52,7 @@ OpenMPClauseKind clang::getOpenMPClauseKind(StringRef Str) {
   // directive.
   if (Str == "flush")
     return OMPC_unknown;
-  return llvm::StringSwitch<OpenMPClauseKind>(Str)
+  return llvm37::StringSwitch<OpenMPClauseKind>(Str)
 #define OPENMP_CLAUSE(Name, Class) .Case(#Name, OMPC_##Name)
 #include "clang/Basic/OpenMPKinds.def"
       .Default(OMPC_unknown);
@@ -77,22 +77,22 @@ unsigned clang::getOpenMPSimpleClauseType(OpenMPClauseKind Kind,
                                           StringRef Str) {
   switch (Kind) {
   case OMPC_default:
-    return llvm::StringSwitch<OpenMPDefaultClauseKind>(Str)
+    return llvm37::StringSwitch<OpenMPDefaultClauseKind>(Str)
 #define OPENMP_DEFAULT_KIND(Name) .Case(#Name, OMPC_DEFAULT_##Name)
 #include "clang/Basic/OpenMPKinds.def"
         .Default(OMPC_DEFAULT_unknown);
   case OMPC_proc_bind:
-    return llvm::StringSwitch<OpenMPProcBindClauseKind>(Str)
+    return llvm37::StringSwitch<OpenMPProcBindClauseKind>(Str)
 #define OPENMP_PROC_BIND_KIND(Name) .Case(#Name, OMPC_PROC_BIND_##Name)
 #include "clang/Basic/OpenMPKinds.def"
         .Default(OMPC_PROC_BIND_unknown);
   case OMPC_schedule:
-    return llvm::StringSwitch<OpenMPScheduleClauseKind>(Str)
+    return llvm37::StringSwitch<OpenMPScheduleClauseKind>(Str)
 #define OPENMP_SCHEDULE_KIND(Name) .Case(#Name, OMPC_SCHEDULE_##Name)
 #include "clang/Basic/OpenMPKinds.def"
         .Default(OMPC_SCHEDULE_unknown);
   case OMPC_depend:
-    return llvm::StringSwitch<OpenMPDependClauseKind>(Str)
+    return llvm37::StringSwitch<OpenMPDependClauseKind>(Str)
 #define OPENMP_DEPEND_KIND(Name) .Case(#Name, OMPC_DEPEND_##Name)
 #include "clang/Basic/OpenMPKinds.def"
         .Default(OMPC_DEPEND_unknown);

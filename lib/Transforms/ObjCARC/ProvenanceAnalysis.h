@@ -22,12 +22,12 @@
 ///
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_LIB_TRANSFORMS_OBJCARC_PROVENANCEANALYSIS_H
-#define LLVM_LIB_TRANSFORMS_OBJCARC_PROVENANCEANALYSIS_H
+#ifndef LLVM37_LIB_TRANSFORMS_OBJCARC_PROVENANCEANALYSIS_H
+#define LLVM37_LIB_TRANSFORMS_OBJCARC_PROVENANCEANALYSIS_H
 
-#include "llvm/ADT/DenseMap.h"
+#include "llvm37/ADT/DenseMap.h"
 
-namespace llvm {
+namespace llvm37 {
   class Value;
   class AliasAnalysis;
   class DataLayout;
@@ -35,7 +35,7 @@ namespace llvm {
   class SelectInst;
 }
 
-namespace llvm {
+namespace llvm37 {
 namespace objcarc {
 
 /// \brief This is similar to BasicAliasAnalysis, and it uses many of the same
@@ -76,6 +76,6 @@ public:
 };
 
 } // end namespace objcarc
-} // end namespace llvm
+} // end namespace llvm37
 
 #endif

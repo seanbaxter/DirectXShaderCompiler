@@ -25,11 +25,11 @@
 #include "clang/Sema/Lookup.h"
 #include "clang/Sema/Scope.h"
 #include "clang/Sema/ScopeInfo.h"
-#include "llvm/ADT/SmallString.h"
+#include "llvm37/ADT/SmallString.h"
 
 using namespace clang;
 using namespace sema;
-using llvm::makeArrayRef;
+using llvm37::makeArrayRef;
 
 // HLSL Change Starts
 // No ObjC parse/sema support, so simply skip all of this compilation.
@@ -398,7 +398,7 @@ ExprResult Sema::ParseObjCStringLiteral(SourceLocation *AtLocs,
     const ConstantArrayType *CAT = Context.getAsConstantArrayType(S->getType());
     assert(CAT && "String literal not of constant array type!");
     QualType StrTy = Context.getConstantArrayType(
-        CAT->getElementType(), llvm::APInt(32, StrBuf.size() + 1),
+        CAT->getElementType(), llvm37::APInt(32, StrBuf.size() + 1),
         CAT->getSizeModifier(), CAT->getIndexTypeCVRQualifiers());
     S = StringLiteral::Create(Context, StrBuf, StringLiteral::Ascii,
                               /*Pascal=*/false, StrTy, &StrLocs[0],
@@ -1288,7 +1288,7 @@ ExprResult Sema::BuildObjCDictionaryLiteral(SourceRange SR,
             ObjCProtocolDecl *PQ[] = {NSCopyingPDecl};
             QIDNSCopying = 
               Context.getObjCObjectType(Context.ObjCBuiltinIdTy, { },
-                                        llvm::makeArrayRef(
+                                        llvm37::makeArrayRef(
                                           (ObjCProtocolDecl**) PQ,
                                           1),
                                         false);
@@ -1403,7 +1403,7 @@ ExprResult Sema::BuildObjCEncodeExpression(SourceLocation AtLoc,
     // A C++ string literal has a const-qualified element type (C++ 2.13.4p1).
     if (getLangOpts().CPlusPlus || getLangOpts().ConstStrings)
       StrTy.addConst();
-    StrTy = Context.getConstantArrayType(StrTy, llvm::APInt(32, Str.size()+1),
+    StrTy = Context.getConstantArrayType(StrTy, llvm37::APInt(32, Str.size()+1),
                                          ArrayType::Normal, 0);
   }
 
@@ -2211,7 +2211,7 @@ HandleExprPropertyRefExpr(const ObjCObjectPointerType *OPT,
   if (TypoCorrection Corrected =
           CorrectTypo(DeclarationNameInfo(MemberName, MemberLoc),
                       LookupOrdinaryName, nullptr, nullptr,
-                      llvm::make_unique<DeclFilterCCC<ObjCPropertyDecl>>(),
+                      llvm37::make_unique<DeclFilterCCC<ObjCPropertyDecl>>(),
                       CTK_ErrorRecovery, IFace, false, OPT)) {
     diagnoseTypo(Corrected, PDiag(diag::err_property_not_found_suggest)
                               << MemberName << QualType(OPT, 0));
@@ -2437,7 +2437,7 @@ Sema::ObjCMessageKind Sema::getObjCMessageKind(Scope *S,
 
   if (TypoCorrection Corrected = CorrectTypo(
           Result.getLookupNameInfo(), Result.getLookupKind(), S, nullptr,
-          llvm::make_unique<ObjCInterfaceOrSuperCCC>(getCurMethodDecl()),
+          llvm37::make_unique<ObjCInterfaceOrSuperCCC>(getCurMethodDecl()),
           CTK_ErrorRecovery, nullptr, false, nullptr, false)) {
     if (Corrected.isKeyword()) {
       // If we've found the keyword "super" (the only keyword that would be

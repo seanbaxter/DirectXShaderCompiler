@@ -16,8 +16,8 @@
 #include "clang/Frontend/FrontendActions.h"
 #include "clang/Tooling/CompilationDatabase.h"
 #include "clang/Tooling/Tooling.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/Config/llvm-config.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/Config/llvm-config.h"
 #include "gtest/gtest.h"
 #include <algorithm>
 #include <string>
@@ -62,7 +62,7 @@ class FindTopLevelDeclConsumer : public clang::ASTConsumer {
 TEST(runToolOnCode, FindsNoTopLevelDeclOnEmptyCode) {
   bool FoundTopLevelDecl = false;
   EXPECT_TRUE(
-      runToolOnCode(new TestAction(llvm::make_unique<FindTopLevelDeclConsumer>(
+      runToolOnCode(new TestAction(llvm37::make_unique<FindTopLevelDeclConsumer>(
                         &FoundTopLevelDecl)),
                     ""));
   EXPECT_FALSE(FoundTopLevelDecl);
@@ -102,14 +102,14 @@ bool FindClassDeclX(ASTUnit *AST) {
 TEST(runToolOnCode, FindsClassDecl) {
   bool FoundClassDeclX = false;
   EXPECT_TRUE(
-      runToolOnCode(new TestAction(llvm::make_unique<FindClassDeclXConsumer>(
+      runToolOnCode(new TestAction(llvm37::make_unique<FindClassDeclXConsumer>(
                         &FoundClassDeclX)),
                     "class X;"));
   EXPECT_TRUE(FoundClassDeclX);
 
   FoundClassDeclX = false;
   EXPECT_TRUE(
-      runToolOnCode(new TestAction(llvm::make_unique<FindClassDeclXConsumer>(
+      runToolOnCode(new TestAction(llvm37::make_unique<FindClassDeclXConsumer>(
                         &FoundClassDeclX)),
                     "class Y;"));
   EXPECT_FALSE(FoundClassDeclX);
@@ -134,7 +134,7 @@ TEST(newFrontendActionFactory, CreatesFrontendActionFactoryFromType) {
 
 struct IndependentFrontendActionCreator {
   std::unique_ptr<ASTConsumer> newASTConsumer() {
-    return llvm::make_unique<FindTopLevelDeclConsumer>(nullptr);
+    return llvm37::make_unique<FindTopLevelDeclConsumer>(nullptr);
   }
 };
 
@@ -191,14 +191,14 @@ struct VerifyEndCallback : public SourceFileCallbacks {
   }
   void handleEndSource() override { ++EndCalled; }
   std::unique_ptr<ASTConsumer> newASTConsumer() {
-    return llvm::make_unique<FindTopLevelDeclConsumer>(&Matched);
+    return llvm37::make_unique<FindTopLevelDeclConsumer>(&Matched);
   }
   unsigned BeginCalled;
   unsigned EndCalled;
   bool Matched;
 };
 
-#if !defined(LLVM_ON_WIN32)
+#if !defined(LLVM37_ON_WIN32)
 TEST(newFrontendActionFactory, InjectsSourceFileCallbacks) {
   VerifyEndCallback EndCallback;
 
@@ -233,7 +233,7 @@ struct SkipBodyAction : public clang::ASTFrontendAction {
   std::unique_ptr<ASTConsumer> CreateASTConsumer(CompilerInstance &Compiler,
                                                  StringRef) override {
     Compiler.getFrontendOpts().SkipFunctionBodies = true;
-    return llvm::make_unique<SkipBodyConsumer>();
+    return llvm37::make_unique<SkipBodyConsumer>();
   }
 };
 
@@ -245,9 +245,9 @@ TEST(runToolOnCode, TestSkipFunctionBody) {
 }
 
 TEST(runToolOnCodeWithArgs, TestNoDepFile) {
-  llvm::SmallString<32> DepFilePath;
+  llvm37::SmallString<32> DepFilePath;
   ASSERT_FALSE(
-      llvm::sys::fs::createTemporaryFile("depfile", "d", DepFilePath));
+      llvm37::sys::fs::createTemporaryFile("depfile", "d", DepFilePath));
   std::vector<std::string> Args;
   Args.push_back("-MMD");
   Args.push_back("-MT");
@@ -255,8 +255,8 @@ TEST(runToolOnCodeWithArgs, TestNoDepFile) {
   Args.push_back("-MF");
   Args.push_back(DepFilePath.str());
   EXPECT_TRUE(runToolOnCodeWithArgs(new SkipBodyAction, "", Args));
-  EXPECT_FALSE(llvm::sys::fs::exists(DepFilePath.str()));
-  EXPECT_FALSE(llvm::sys::fs::remove(DepFilePath.str()));
+  EXPECT_FALSE(llvm37::sys::fs::exists(DepFilePath.str()));
+  EXPECT_FALSE(llvm37::sys::fs::remove(DepFilePath.str()));
 }
 
 TEST(ClangToolTest, ArgumentAdjusters) {
@@ -291,7 +291,7 @@ TEST(ClangToolTest, ArgumentAdjusters) {
   EXPECT_FALSE(Found);
 }
 
-#ifndef LLVM_ON_WIN32
+#ifndef LLVM37_ON_WIN32
 TEST(ClangToolTest, BuildASTs) {
   FixedCompilationDatabase Compilations("/", std::vector<std::string>());
 

@@ -58,21 +58,21 @@
 //===----------------------------------------------------------------------===//
 
 #define DEBUG_TYPE "symbol-rewriter"
-#include "llvm/CodeGen/Passes.h"
-#include "llvm/Pass.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/IR/LegacyPassManager.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/MemoryBuffer.h"
-#include "llvm/Support/Regex.h"
-#include "llvm/Support/SourceMgr.h"
-#include "llvm/Support/YAMLParser.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Transforms/IPO/PassManagerBuilder.h"
-#include "llvm/Transforms/Utils/SymbolRewriter.h"
+#include "llvm37/CodeGen/Passes.h"
+#include "llvm37/Pass.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/IR/LegacyPassManager.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/MemoryBuffer.h"
+#include "llvm37/Support/Regex.h"
+#include "llvm37/Support/SourceMgr.h"
+#include "llvm37/Support/YAMLParser.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Transforms/IPO/PassManagerBuilder.h"
+#include "llvm37/Transforms/Utils/SymbolRewriter.h"
 
-using namespace llvm;
+using namespace llvm37;
 using namespace SymbolRewriter;
 
 #if 0 // HLSL Change Starts - option pending
@@ -97,7 +97,7 @@ static void rewriteComdat(Module &M, GlobalObject *GO,
 
 namespace {
 template <RewriteDescriptor::Type DT, typename ValueType,
-          ValueType *(llvm::Module::*Get)(StringRef) const>
+          ValueType *(llvm37::Module::*Get)(StringRef) const>
 class ExplicitRewriteDescriptor : public RewriteDescriptor {
 public:
   const std::string Source;
@@ -115,7 +115,7 @@ public:
 };
 
 template <RewriteDescriptor::Type DT, typename ValueType,
-          ValueType *(llvm::Module::*Get)(StringRef) const>
+          ValueType *(llvm37::Module::*Get)(StringRef) const>
 bool ExplicitRewriteDescriptor<DT, ValueType, Get>::performOnModule(Module &M) {
   bool Changed = false;
   if (ValueType *S = (M.*Get)(Source)) {
@@ -133,9 +133,9 @@ bool ExplicitRewriteDescriptor<DT, ValueType, Get>::performOnModule(Module &M) {
 }
 
 template <RewriteDescriptor::Type DT, typename ValueType,
-          ValueType *(llvm::Module::*Get)(StringRef) const,
+          ValueType *(llvm37::Module::*Get)(StringRef) const,
           iterator_range<typename iplist<ValueType>::iterator>
-          (llvm::Module::*Iterator)()>
+          (llvm37::Module::*Iterator)()>
 class PatternRewriteDescriptor : public RewriteDescriptor {
 public:
   const std::string Pattern;
@@ -152,9 +152,9 @@ public:
 };
 
 template <RewriteDescriptor::Type DT, typename ValueType,
-          ValueType *(llvm::Module::*Get)(StringRef) const,
+          ValueType *(llvm37::Module::*Get)(StringRef) const,
           iterator_range<typename iplist<ValueType>::iterator>
-          (llvm::Module::*Iterator)()>
+          (llvm37::Module::*Iterator)()>
 bool PatternRewriteDescriptor<DT, ValueType, Get, Iterator>::
 performOnModule(Module &M) {
   bool Changed = false;
@@ -186,30 +186,30 @@ performOnModule(Module &M) {
 /// source function name and target function name of the transformation are
 /// explicitly spelt out.
 typedef ExplicitRewriteDescriptor<RewriteDescriptor::Type::Function,
-                                  llvm::Function, &llvm::Module::getFunction>
+                                  llvm37::Function, &llvm37::Module::getFunction>
     ExplicitRewriteFunctionDescriptor;
 
 /// Represents a rewrite for an explicitly named (global variable) symbol.  Both
 /// the source variable name and target variable name are spelt out.  This
 /// applies only to module level variables.
 typedef ExplicitRewriteDescriptor<RewriteDescriptor::Type::GlobalVariable,
-                                  llvm::GlobalVariable,
-                                  &llvm::Module::getGlobalVariable>
+                                  llvm37::GlobalVariable,
+                                  &llvm37::Module::getGlobalVariable>
     ExplicitRewriteGlobalVariableDescriptor;
 
 /// Represents a rewrite for an explicitly named global alias.  Both the source
 /// and target name are explicitly spelt out.
 typedef ExplicitRewriteDescriptor<RewriteDescriptor::Type::NamedAlias,
-                                  llvm::GlobalAlias,
-                                  &llvm::Module::getNamedAlias>
+                                  llvm37::GlobalAlias,
+                                  &llvm37::Module::getNamedAlias>
     ExplicitRewriteNamedAliasDescriptor;
 
 /// Represents a rewrite for a regular expression based pattern for functions.
 /// A pattern for the function name is provided and a transformation for that
 /// pattern to determine the target function name create the rewrite rule.
 typedef PatternRewriteDescriptor<RewriteDescriptor::Type::Function,
-                                 llvm::Function, &llvm::Module::getFunction,
-                                 &llvm::Module::functions>
+                                 llvm37::Function, &llvm37::Module::getFunction,
+                                 &llvm37::Module::functions>
     PatternRewriteFunctionDescriptor;
 
 /// Represents a rewrite for a global variable based upon a matching pattern.
@@ -217,18 +217,18 @@ typedef PatternRewriteDescriptor<RewriteDescriptor::Type::Function,
 /// described in the transformation pattern for the target.  Applies only to
 /// module level variables.
 typedef PatternRewriteDescriptor<RewriteDescriptor::Type::GlobalVariable,
-                                 llvm::GlobalVariable,
-                                 &llvm::Module::getGlobalVariable,
-                                 &llvm::Module::globals>
+                                 llvm37::GlobalVariable,
+                                 &llvm37::Module::getGlobalVariable,
+                                 &llvm37::Module::globals>
     PatternRewriteGlobalVariableDescriptor;
 
 /// PatternRewriteNamedAliasDescriptor - represents a rewrite for global
 /// aliases which match a given pattern.  The provided transformation will be
 /// applied to each of the matching names.
 typedef PatternRewriteDescriptor<RewriteDescriptor::Type::NamedAlias,
-                                 llvm::GlobalAlias,
-                                 &llvm::Module::getNamedAlias,
-                                 &llvm::Module::aliases>
+                                 llvm37::GlobalAlias,
+                                 &llvm37::Module::getNamedAlias,
+                                 &llvm37::Module::aliases>
     PatternRewriteNamedAliasDescriptor;
 } // namespace
 
@@ -545,9 +545,9 @@ void RewriteSymbols::loadAndParseMapFiles() {
 INITIALIZE_PASS(RewriteSymbols, "rewrite-symbols", "Rewrite Symbols", false,
                 false)
 
-ModulePass *llvm::createRewriteSymbolsPass() { return new RewriteSymbols(); }
+ModulePass *llvm37::createRewriteSymbolsPass() { return new RewriteSymbols(); }
 
 ModulePass *
-llvm::createRewriteSymbolsPass(SymbolRewriter::RewriteDescriptorList &DL) {
+llvm37::createRewriteSymbolsPass(SymbolRewriter::RewriteDescriptorList &DL) {
   return new RewriteSymbols(DL);
 }

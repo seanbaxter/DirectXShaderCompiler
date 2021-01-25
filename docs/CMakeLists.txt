@@ -1,19 +1,19 @@
 
 if (DOXYGEN_FOUND)
-if (LLVM_ENABLE_DOXYGEN)
-  set(abs_top_srcdir ${LLVM_MAIN_SRC_DIR})
-  set(abs_top_builddir ${LLVM_BINARY_DIR})
+if (LLVM37_ENABLE_DOXYGEN)
+  set(abs_top_srcdir ${LLVM37_MAIN_SRC_DIR})
+  set(abs_top_builddir ${LLVM37_BINARY_DIR})
   
   if (HAVE_DOT)
-    set(DOT ${LLVM_PATH_DOT})
+    set(DOT ${LLVM37_PATH_DOT})
   endif()
 
-  if (LLVM_DOXYGEN_EXTERNAL_SEARCH)
+  if (LLVM37_DOXYGEN_EXTERNAL_SEARCH)
     set(enable_searchengine "YES")
-    set(searchengine_url "${LLVM_DOXYGEN_SEARCHENGINE_URL}")
+    set(searchengine_url "${LLVM37_DOXYGEN_SEARCHENGINE_URL}")
     set(enable_server_based_search "YES")
     set(enable_external_search "YES")
-    set(extra_search_mappings "${LLVM_DOXYGEN_SEARCH_MAPPINGS}")
+    set(extra_search_mappings "${LLVM37_DOXYGEN_SEARCH_MAPPINGS}")
   else()
     set(enable_searchengine "NO")
     set(searchengine_url "")
@@ -23,29 +23,29 @@ if (LLVM_ENABLE_DOXYGEN)
   endif()
   
   # If asked, configure doxygen for the creation of a Qt Compressed Help file.
-  option(LLVM_ENABLE_DOXYGEN_QT_HELP
+  option(LLVM37_ENABLE_DOXYGEN_QT_HELP
     "Generate a Qt Compressed Help file." OFF)
-  if (LLVM_ENABLE_DOXYGEN_QT_HELP)
-    set(LLVM_DOXYGEN_QCH_FILENAME "org.llvm.qch" CACHE STRING
+  if (LLVM37_ENABLE_DOXYGEN_QT_HELP)
+    set(LLVM37_DOXYGEN_QCH_FILENAME "org.llvm.qch" CACHE STRING
       "Filename of the Qt Compressed help file")
-    set(LLVM_DOXYGEN_QHP_NAMESPACE "org.llvm" CACHE STRING 
+    set(LLVM37_DOXYGEN_QHP_NAMESPACE "org.llvm" CACHE STRING 
       "Namespace under which the intermediate Qt Help Project file lives")
-    set(LLVM_DOXYGEN_QHP_CUST_FILTER_NAME "${PACKAGE_STRING}" CACHE STRING
+    set(LLVM37_DOXYGEN_QHP_CUST_FILTER_NAME "${PACKAGE_STRING}" CACHE STRING
       "See http://qt-project.org/doc/qt-4.8/qthelpproject.html#custom-filters")
-    set(LLVM_DOXYGEN_QHP_CUST_FILTER_ATTRS "${PACKAGE_NAME},${PACKAGE_VERSION}" CACHE STRING
+    set(LLVM37_DOXYGEN_QHP_CUST_FILTER_ATTRS "${PACKAGE_NAME},${PACKAGE_VERSION}" CACHE STRING
       "See http://qt-project.org/doc/qt-4.8/qthelpproject.html#filter-attributes")
-    find_program(LLVM_DOXYGEN_QHELPGENERATOR_PATH qhelpgenerator 
+    find_program(LLVM37_DOXYGEN_QHELPGENERATOR_PATH qhelpgenerator 
       DOC "Path to the qhelpgenerator binary")
-    if (NOT LLVM_DOXYGEN_QHELPGENERATOR_PATH)
+    if (NOT LLVM37_DOXYGEN_QHELPGENERATOR_PATH)
       message(FATAL_ERROR "Failed to find qhelpgenerator binary")
     endif()
 
     set(llvm_doxygen_generate_qhp "YES")
-    set(llvm_doxygen_qch_filename "${LLVM_DOXYGEN_QCH_FILENAME}")
-    set(llvm_doxygen_qhp_namespace "${LLVM_DOXYGEN_QHP_NAMESPACE}")
-    set(llvm_doxygen_qhelpgenerator_path "${LLVM_DOXYGEN_QHELPGENERATOR_PATH}")
-    set(llvm_doxygen_qhp_cust_filter_name "${LLVM_DOXYGEN_QHP_CUST_FILTER_NAME}")
-    set(llvm_doxygen_qhp_cust_filter_attrs "${LLVM_DOXYGEN_QHP_CUST_FILTER_ATTRS}")
+    set(llvm_doxygen_qch_filename "${LLVM37_DOXYGEN_QCH_FILENAME}")
+    set(llvm_doxygen_qhp_namespace "${LLVM37_DOXYGEN_QHP_NAMESPACE}")
+    set(llvm_doxygen_qhelpgenerator_path "${LLVM37_DOXYGEN_QHELPGENERATOR_PATH}")
+    set(llvm_doxygen_qhp_cust_filter_name "${LLVM37_DOXYGEN_QHP_CUST_FILTER_NAME}")
+    set(llvm_doxygen_qhp_cust_filter_attrs "${LLVM37_DOXYGEN_QHP_CUST_FILTER_ATTRS}")
 
   else()
     set(llvm_doxygen_generate_qhp "NO")
@@ -56,9 +56,9 @@ if (LLVM_ENABLE_DOXYGEN)
     set(llvm_doxygen_qhp_cust_filter_attrs "")
   endif()
   
-  option(LLVM_DOXYGEN_SVG
+  option(LLVM37_DOXYGEN_SVG
     "Use svg instead of png files for doxygen graphs." OFF)
-  if (LLVM_DOXYGEN_SVG)
+  if (LLVM37_DOXYGEN_SVG)
     set(DOT_IMAGE_FORMAT "svg")
   else()
     set(DOT_IMAGE_FORMAT "png")
@@ -88,18 +88,18 @@ if (LLVM_ENABLE_DOXYGEN)
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
     COMMENT "Generating llvm doxygen documentation." VERBATIM)
 
-  if (LLVM_BUILD_DOCS)
+  if (LLVM37_BUILD_DOCS)
     add_dependencies(doxygen doxygen-llvm)
   endif()
 
-  if (NOT LLVM_INSTALL_TOOLCHAIN_ONLY)
+  if (NOT LLVM37_INSTALL_TOOLCHAIN_ONLY)
     install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/doxygen/html
       DESTINATION docs/html)
   endif()
 endif()
 endif()
 
-if (LLVM_ENABLE_SPHINX)
+if (LLVM37_ENABLE_SPHINX)
   if (SPHINX_FOUND)
     include(AddSphinxTarget)
     if (${SPHINX_OUTPUT_HTML})
@@ -114,7 +114,7 @@ if (LLVM_ENABLE_SPHINX)
   endif()
 endif()
 
-list(FIND LLVM_BINDINGS_LIST ocaml uses_ocaml)
+list(FIND LLVM37_BINDINGS_LIST ocaml uses_ocaml)
 if( NOT uses_ocaml LESS 0 )
   set(doc_targets
         ocaml_llvm
@@ -133,7 +133,7 @@ if( NOT uses_ocaml LESS 0 )
         ocaml_llvm_vectorize
       )
 
-  foreach(llvm_target ${LLVM_TARGETS_TO_BUILD})
+  foreach(llvm_target ${LLVM37_TARGETS_TO_BUILD})
     list(APPEND doc_targets ocaml_llvm_${llvm_target})
   endforeach()
 
@@ -151,7 +151,7 @@ if( NOT uses_ocaml LESS 0 )
 
   add_dependencies(ocaml_doc ${doc_targets})
 
-  if (NOT LLVM_INSTALL_TOOLCHAIN_ONLY)
+  if (NOT LLVM37_INSTALL_TOOLCHAIN_ONLY)
     install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/ocamldoc/html
       DESTINATION docs/ocaml/html)
   endif()

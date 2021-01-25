@@ -12,8 +12,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_SERIALIZATION_ASTDESERIALIZATIONLISTENER_H
-#define LLVM_CLANG_SERIALIZATION_ASTDESERIALIZATIONLISTENER_H
+#ifndef LLVM37_CLANG_SERIALIZATION_ASTDESERIALIZATIONLISTENER_H
+#define LLVM37_CLANG_SERIALIZATION_ASTDESERIALIZATIONLISTENER_H
 
 #include "clang/Basic/IdentifierTable.h"
 #include "clang/Serialization/ASTBitCodes.h"

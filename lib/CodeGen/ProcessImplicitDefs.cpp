@@ -7,18 +7,18 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/ADT/SetVector.h"
-#include "llvm/Analysis/AliasAnalysis.h"
-#include "llvm/CodeGen/MachineFunctionPass.h"
-#include "llvm/CodeGen/MachineInstr.h"
-#include "llvm/CodeGen/MachineRegisterInfo.h"
-#include "llvm/CodeGen/Passes.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Target/TargetInstrInfo.h"
-#include "llvm/Target/TargetSubtargetInfo.h"
+#include "llvm37/ADT/SetVector.h"
+#include "llvm37/Analysis/AliasAnalysis.h"
+#include "llvm37/CodeGen/MachineFunctionPass.h"
+#include "llvm37/CodeGen/MachineInstr.h"
+#include "llvm37/CodeGen/MachineRegisterInfo.h"
+#include "llvm37/CodeGen/Passes.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Target/TargetInstrInfo.h"
+#include "llvm37/Target/TargetSubtargetInfo.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "processimplicitdefs"
 
@@ -49,7 +49,7 @@ public:
 } // end anonymous namespace
 
 char ProcessImplicitDefs::ID = 0;
-char &llvm::ProcessImplicitDefsID = ProcessImplicitDefs::ID;
+char &llvm37::ProcessImplicitDefsID = ProcessImplicitDefs::ID;
 
 INITIALIZE_PASS_BEGIN(ProcessImplicitDefs, "processimpdefs",
                 "Process Implicit Definitions", false, false)

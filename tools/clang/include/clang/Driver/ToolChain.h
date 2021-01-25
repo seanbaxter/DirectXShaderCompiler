@@ -7,21 +7,21 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_DRIVER_TOOLCHAIN_H
-#define LLVM_CLANG_DRIVER_TOOLCHAIN_H
+#ifndef LLVM37_CLANG_DRIVER_TOOLCHAIN_H
+#define LLVM37_CLANG_DRIVER_TOOLCHAIN_H
 
 #include "clang/Basic/Sanitizers.h"
 #include "clang/Driver/Action.h"
 #include "clang/Driver/Multilib.h"
 #include "clang/Driver/Types.h"
 #include "clang/Driver/Util.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/ADT/Triple.h"
-#include "llvm/Support/Path.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/ADT/Triple.h"
+#include "llvm37/Support/Path.h"
 #include <memory>
 #include <string>
 
-namespace llvm {
+namespace llvm37 {
 namespace opt {
   class ArgList;
   class DerivedArgList;
@@ -63,10 +63,10 @@ public:
 
 private:
   const Driver &D;
-  const llvm::Triple Triple;
-  const llvm::opt::ArgList &Args;
+  const llvm37::Triple Triple;
+  const llvm37::opt::ArgList &Args;
   // We need to initialize CachedRTTIArg before CachedRTTIMode
-  const llvm::opt::Arg *const CachedRTTIArg;
+  const llvm37::opt::Arg *const CachedRTTIArg;
   const RTTIMode CachedRTTIMode;
 
   /// The list of toolchain specific path prefixes to search for
@@ -90,8 +90,8 @@ private:
 protected:
   MultilibSet Multilibs;
 
-  ToolChain(const Driver &D, const llvm::Triple &T,
-            const llvm::opt::ArgList &Args);
+  ToolChain(const Driver &D, const llvm37::Triple &T,
+            const llvm37::opt::ArgList &Args);
 
   virtual Tool *buildAssembler() const;
   virtual Tool *buildLinker() const;
@@ -99,18 +99,18 @@ protected:
 
   /// \name Utilities for implementing subclasses.
   ///@{
-  static void addSystemInclude(const llvm::opt::ArgList &DriverArgs,
-                               llvm::opt::ArgStringList &CC1Args,
+  static void addSystemInclude(const llvm37::opt::ArgList &DriverArgs,
+                               llvm37::opt::ArgStringList &CC1Args,
                                const Twine &Path);
-  static void addExternCSystemInclude(const llvm::opt::ArgList &DriverArgs,
-                                      llvm::opt::ArgStringList &CC1Args,
+  static void addExternCSystemInclude(const llvm37::opt::ArgList &DriverArgs,
+                                      llvm37::opt::ArgStringList &CC1Args,
                                       const Twine &Path);
   static void
-      addExternCSystemIncludeIfExists(const llvm::opt::ArgList &DriverArgs,
-                                      llvm::opt::ArgStringList &CC1Args,
+      addExternCSystemIncludeIfExists(const llvm37::opt::ArgList &DriverArgs,
+                                      llvm37::opt::ArgStringList &CC1Args,
                                       const Twine &Path);
-  static void addSystemIncludes(const llvm::opt::ArgList &DriverArgs,
-                                llvm::opt::ArgStringList &CC1Args,
+  static void addSystemIncludes(const llvm37::opt::ArgList &DriverArgs,
+                                llvm37::opt::ArgStringList &CC1Args,
                                 ArrayRef<StringRef> Paths);
   ///@}
 
@@ -120,9 +120,9 @@ public:
   // Accessors
 
   const Driver &getDriver() const;
-  const llvm::Triple &getTriple() const { return Triple; }
+  const llvm37::Triple &getTriple() const { return Triple; }
 
-  llvm::Triple::ArchType getArch() const { return Triple.getArch(); }
+  llvm37::Triple::ArchType getArch() const { return Triple.getArch(); }
   StringRef getArchName() const { return Triple.getArchName(); }
   StringRef getPlatform() const { return Triple.getVendorName(); }
   StringRef getOS() const { return Triple.getOSName(); }
@@ -146,7 +146,7 @@ public:
   const SanitizerArgs& getSanitizerArgs() const;
 
   // Returns the Arg * that explicitly turned on/off rtti, or nullptr.
-  const llvm::opt::Arg *getRTTIArg() const { return CachedRTTIArg; }
+  const llvm37::opt::Arg *getRTTIArg() const { return CachedRTTIArg; }
 
   // Returns the RTTIMode for the toolchain with the current arguments.
   RTTIMode getRTTIMode() const { return CachedRTTIMode; }
@@ -158,8 +158,8 @@ public:
   /// specific translations are needed.
   ///
   /// \param BoundArch - The bound architecture name, or 0.
-  virtual llvm::opt::DerivedArgList *
-  TranslateArgs(const llvm::opt::DerivedArgList &Args,
+  virtual llvm37::opt::DerivedArgList *
+  TranslateArgs(const llvm37::opt::DerivedArgList &Args,
                 const char *BoundArch) const {
     return nullptr;
   }
@@ -277,7 +277,7 @@ public:
   /// ComputeLLVMTriple - Return the LLVM target triple to use, after taking
   /// command line arguments into account.
   virtual std::string
-  ComputeLLVMTriple(const llvm::opt::ArgList &Args,
+  ComputeLLVMTriple(const llvm37::opt::ArgList &Args,
                     types::ID InputType = types::TY_INVALID) const;
 
   /// ComputeEffectiveClangTriple - Return the Clang triple to use for this
@@ -286,7 +286,7 @@ public:
   /// sets the deployment target) determines the version in the triple passed to
   /// Clang.
   virtual std::string ComputeEffectiveClangTriple(
-      const llvm::opt::ArgList &Args,
+      const llvm37::opt::ArgList &Args,
       types::ID InputType = types::TY_INVALID) const;
 
   /// getDefaultObjCRuntime - Return the default Objective-C runtime
@@ -307,48 +307,48 @@ public:
   /// This routine is responsible for adding the necessary cc1 arguments to
   /// include headers from standard system header directories.
   virtual void
-  AddClangSystemIncludeArgs(const llvm::opt::ArgList &DriverArgs,
-                            llvm::opt::ArgStringList &CC1Args) const;
+  AddClangSystemIncludeArgs(const llvm37::opt::ArgList &DriverArgs,
+                            llvm37::opt::ArgStringList &CC1Args) const;
 
   /// \brief Add options that need to be passed to cc1 for this target.
-  virtual void addClangTargetOptions(const llvm::opt::ArgList &DriverArgs,
-                                     llvm::opt::ArgStringList &CC1Args) const;
+  virtual void addClangTargetOptions(const llvm37::opt::ArgList &DriverArgs,
+                                     llvm37::opt::ArgStringList &CC1Args) const;
 
   /// \brief Add warning options that need to be passed to cc1 for this target.
-  virtual void addClangWarningOptions(llvm::opt::ArgStringList &CC1Args) const;
+  virtual void addClangWarningOptions(llvm37::opt::ArgStringList &CC1Args) const;
 
   // GetRuntimeLibType - Determine the runtime library type to use with the
   // given compilation arguments.
   virtual RuntimeLibType
-  GetRuntimeLibType(const llvm::opt::ArgList &Args) const;
+  GetRuntimeLibType(const llvm37::opt::ArgList &Args) const;
 
   // GetCXXStdlibType - Determine the C++ standard library type to use with the
   // given compilation arguments.
-  virtual CXXStdlibType GetCXXStdlibType(const llvm::opt::ArgList &Args) const;
+  virtual CXXStdlibType GetCXXStdlibType(const llvm37::opt::ArgList &Args) const;
 
   /// AddClangCXXStdlibIncludeArgs - Add the clang -cc1 level arguments to set
   /// the include paths to use for the given C++ standard library type.
   virtual void
-  AddClangCXXStdlibIncludeArgs(const llvm::opt::ArgList &DriverArgs,
-                               llvm::opt::ArgStringList &CC1Args) const;
+  AddClangCXXStdlibIncludeArgs(const llvm37::opt::ArgList &DriverArgs,
+                               llvm37::opt::ArgStringList &CC1Args) const;
 
   /// AddCXXStdlibLibArgs - Add the system specific linker arguments to use
   /// for the given C++ standard library type.
-  virtual void AddCXXStdlibLibArgs(const llvm::opt::ArgList &Args,
-                                   llvm::opt::ArgStringList &CmdArgs) const;
+  virtual void AddCXXStdlibLibArgs(const llvm37::opt::ArgList &Args,
+                                   llvm37::opt::ArgStringList &CmdArgs) const;
 
   /// AddCCKextLibArgs - Add the system specific linker arguments to use
   /// for kernel extensions (Darwin-specific).
-  virtual void AddCCKextLibArgs(const llvm::opt::ArgList &Args,
-                                llvm::opt::ArgStringList &CmdArgs) const;
+  virtual void AddCCKextLibArgs(const llvm37::opt::ArgList &Args,
+                                llvm37::opt::ArgStringList &CmdArgs) const;
 
   /// AddFastMathRuntimeIfAvailable - If a runtime library exists that sets
   /// global flags for unsafe floating point math, add it and return true.
   ///
   /// This checks for presence of the -Ofast, -ffast-math or -funsafe-math flags.
   virtual bool
-  AddFastMathRuntimeIfAvailable(const llvm::opt::ArgList &Args,
-                                llvm::opt::ArgStringList &CmdArgs) const;
+  AddFastMathRuntimeIfAvailable(const llvm37::opt::ArgList &Args,
+                                llvm37::opt::ArgStringList &CmdArgs) const;
 
   /// \brief Return sanitizers which are available in this toolchain.
   virtual SanitizerMask getSupportedSanitizers() const;

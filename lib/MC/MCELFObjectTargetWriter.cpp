@@ -7,12 +7,12 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/MC/MCELFObjectWriter.h"
-#include "llvm/MC/MCExpr.h"
-#include "llvm/MC/MCValue.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/MC/MCELFObjectWriter.h"
+#include "llvm37/MC/MCExpr.h"
+#include "llvm37/MC/MCValue.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 MCELFObjectTargetWriter::MCELFObjectTargetWriter(bool Is64Bit_,
                                                  uint8_t OSABI_,

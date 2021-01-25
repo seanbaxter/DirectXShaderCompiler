@@ -7,13 +7,13 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/DebugInfo/PDB/IPDBSourceFile.h"
+#include "llvm37/DebugInfo/PDB/IPDBSourceFile.h"
 
-#include "llvm/DebugInfo/PDB/PDBExtras.h"
-#include "llvm/Support/Format.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/DebugInfo/PDB/PDBExtras.h"
+#include "llvm37/Support/Format.h"
+#include "llvm37/Support/raw_ostream.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 IPDBSourceFile::~IPDBSourceFile() {}
 

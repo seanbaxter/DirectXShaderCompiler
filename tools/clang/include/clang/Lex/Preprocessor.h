@@ -12,8 +12,8 @@
 ///
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_LEX_PREPROCESSOR_H
-#define LLVM_CLANG_LEX_PREPROCESSOR_H
+#ifndef LLVM37_CLANG_LEX_PREPROCESSOR_H
+#define LLVM37_CLANG_LEX_PREPROCESSOR_H
 
 #include "clang/Basic/Builtins.h"
 #include "clang/Basic/Diagnostic.h"
@@ -26,19 +26,19 @@
 #include "clang/Lex/PTHLexer.h"
 #include "clang/Lex/PTHManager.h"
 #include "clang/Lex/TokenLexer.h"
-#include "llvm/ADT/ArrayRef.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/IntrusiveRefCntPtr.h"
-#include "llvm/ADT/SmallPtrSet.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/ADT/TinyPtrVector.h"
-#include "llvm/Support/Allocator.h"
+#include "llvm37/ADT/ArrayRef.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/IntrusiveRefCntPtr.h"
+#include "llvm37/ADT/SmallPtrSet.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/ADT/TinyPtrVector.h"
+#include "llvm37/Support/Allocator.h"
 #include <memory>
 #include <vector>
 
-#include "llvm/Support/OacrIgnoreCond.h" // HLSL Change - options change some lexical rules (tokens, identifier chars, others)
+#include "llvm37/Support/OacrIgnoreCond.h" // HLSL Change - options change some lexical rules (tokens, identifier chars, others)
 
-namespace llvm {
+namespace llvm37 {
   template<unsigned InternalLen> class SmallString;
 }
 
@@ -116,7 +116,7 @@ class Preprocessor : public RefCountedBase<Preprocessor> {
 
   /// A BumpPtrAllocator object used to quickly allocate and release
   /// objects internal to the Preprocessor.
-  llvm::BumpPtrAllocator BP;
+  llvm37::BumpPtrAllocator BP;
 
   /// Identifiers for builtin macros and other builtins.
   IdentifierInfo *Ident__LINE__, *Ident__FILE__;   // __LINE__, __FILE__
@@ -378,19 +378,19 @@ class Preprocessor : public RefCountedBase<Preprocessor> {
     /// The most recent macro directive for this identifier.
     MacroDirective *MD;
     /// The active module macros for this identifier.
-    llvm::TinyPtrVector<ModuleMacro*> ActiveModuleMacros;
+    llvm37::TinyPtrVector<ModuleMacro*> ActiveModuleMacros;
     /// The generation number at which we last updated ActiveModuleMacros.
     /// \see Preprocessor::VisibleModules.
     unsigned ActiveModuleMacrosGeneration;
     /// Whether this macro name is ambiguous.
     bool IsAmbiguous;
     /// The module macros that are overridden by this macro.
-    llvm::TinyPtrVector<ModuleMacro*> OverriddenMacros;
+    llvm37::TinyPtrVector<ModuleMacro*> OverriddenMacros;
   };
 
   /// The state of a macro for an identifier.
   class MacroState {
-    mutable llvm::PointerUnion<MacroDirective *, ModuleMacroInfo *> State;
+    mutable llvm37::PointerUnion<MacroDirective *, ModuleMacroInfo *> State;
 
     ModuleMacroInfo *getModuleInfo(Preprocessor &PP,
                                    const IdentifierInfo *II) const {
@@ -418,10 +418,10 @@ class Preprocessor : public RefCountedBase<Preprocessor> {
   public:
     MacroState() : MacroState(nullptr) {}
     MacroState(MacroDirective *MD) : State(MD) {}
-    MacroState(MacroState &&O) LLVM_NOEXCEPT : State(O.State) {
+    MacroState(MacroState &&O) LLVM37_NOEXCEPT : State(O.State) {
       O.State = (MacroDirective *)nullptr;
     }
-    MacroState &operator=(MacroState &&O) LLVM_NOEXCEPT {
+    MacroState &operator=(MacroState &&O) LLVM37_NOEXCEPT {
       auto S = O.State;
       O.State = (MacroDirective *)nullptr;
       State = S;
@@ -499,7 +499,7 @@ class Preprocessor : public RefCountedBase<Preprocessor> {
   /// the reverse order (the latest one is in the head of the list).
   ///
   /// This mapping lives within the \p CurSubmoduleState.
-  typedef llvm::DenseMap<const IdentifierInfo *, MacroState> MacroMap;
+  typedef llvm37::DenseMap<const IdentifierInfo *, MacroState> MacroMap;
 
   friend class ASTReader;
 
@@ -540,11 +540,11 @@ class Preprocessor : public RefCountedBase<Preprocessor> {
   SubmoduleState *CurSubmoduleState;
 
   /// The set of known macros exported from modules.
-  llvm::FoldingSet<ModuleMacro> ModuleMacros;
+  llvm37::FoldingSet<ModuleMacro> ModuleMacros;
 
   /// The list of module macros, for each identifier, that are not overridden by
   /// any other module macro.
-  llvm::DenseMap<const IdentifierInfo *, llvm::TinyPtrVector<ModuleMacro*>>
+  llvm37::DenseMap<const IdentifierInfo *, llvm37::TinyPtrVector<ModuleMacro*>>
       LeafModuleMacros;
 
   /// \brief Macros that we want to warn because they are not used at the end
@@ -556,7 +556,7 @@ class Preprocessor : public RefCountedBase<Preprocessor> {
   /// just so that we can report that they are unused, we just warn using
   /// the SourceLocations of this set (that will be filled by the ASTReader).
   /// We are using SmallPtrSet instead of a vector for faster removal.
-  typedef llvm::SmallPtrSet<SourceLocation, 32> WarnUnusedMacroLocsTy;
+  typedef llvm37::SmallPtrSet<SourceLocation, 32> WarnUnusedMacroLocsTy;
   WarnUnusedMacroLocsTy WarnUnusedMacroLocs;
 
   /// \brief A "freelist" of MacroArg objects that can be
@@ -566,7 +566,7 @@ class Preprocessor : public RefCountedBase<Preprocessor> {
 
   /// For each IdentifierInfo used in a \#pragma push_macro directive,
   /// we keep a MacroInfo stack used to restore the previous macro value.
-  llvm::DenseMap<IdentifierInfo*, std::vector<MacroInfo*> > PragmaPushMacroInfo;
+  llvm37::DenseMap<IdentifierInfo*, std::vector<MacroInfo*> > PragmaPushMacroInfo;
 
   // Various statistics we track for performance analysis.
   unsigned NumDirectives, NumDefined, NumUndefined, NumPragma;
@@ -688,7 +688,7 @@ public:
   const IdentifierTable &getIdentifierTable() const { return Identifiers; }
   SelectorTable &getSelectorTable() { return Selectors; }
   Builtin::Context &getBuiltinInfo() { return BuiltinInfo; }
-  llvm::BumpPtrAllocator &getPreprocessorAllocator() { return BP; }
+  llvm37::BumpPtrAllocator &getPreprocessorAllocator() { return BP; }
 
   void setPTHManager(PTHManager* pm);
 
@@ -774,7 +774,7 @@ public:
   PPCallbacks *getPPCallbacks() const { return Callbacks.get(); }
   void addPPCallbacks(std::unique_ptr<PPCallbacks> C) {
     if (Callbacks)
-      C = llvm::make_unique<PPChainedCallbacks>(std::move(C),
+      C = llvm37::make_unique<PPChainedCallbacks>(std::move(C),
                                                 std::move(Callbacks));
     Callbacks = std::move(C);
   }
@@ -899,9 +899,9 @@ public:
   typedef MacroMap::const_iterator macro_iterator;
   macro_iterator macro_begin(bool IncludeExternalMacros = true) const;
   macro_iterator macro_end(bool IncludeExternalMacros = true) const;
-  llvm::iterator_range<macro_iterator>
+  llvm37::iterator_range<macro_iterator>
   macros(bool IncludeExternalMacros = true) const {
-    return llvm::make_range(macro_begin(IncludeExternalMacros),
+    return llvm37::make_range(macro_begin(IncludeExternalMacros),
                             macro_end(IncludeExternalMacros));
   }
   /// \}
@@ -1497,7 +1497,7 @@ public:
   IdentifierInfo *LookUpIdentifierInfo(Token &Identifier) const;
 
 private:
-  llvm::DenseMap<IdentifierInfo*,unsigned> PoisonReasons;
+  llvm37::DenseMap<IdentifierInfo*,unsigned> PoisonReasons;
 
 public:
 

@@ -12,10 +12,10 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_LIB_CODEGEN_MIRPRINTER_H
-#define LLVM_LIB_CODEGEN_MIRPRINTER_H
+#ifndef LLVM37_LIB_CODEGEN_MIRPRINTER_H
+#define LLVM37_LIB_CODEGEN_MIRPRINTER_H
 
-namespace llvm {
+namespace llvm37 {
 
 class MachineFunction;
 class Module;
@@ -28,6 +28,6 @@ void printMIR(raw_ostream &OS, const Module &M);
 /// output stream.
 void printMIR(raw_ostream &OS, const MachineFunction &MF);
 
-} // end namespace llvm
+} // end namespace llvm37
 
 #endif

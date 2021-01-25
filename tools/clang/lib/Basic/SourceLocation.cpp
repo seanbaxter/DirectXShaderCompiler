@@ -14,8 +14,8 @@
 #include "clang/Basic/SourceLocation.h"
 #include "clang/Basic/PrettyStackTrace.h"
 #include "clang/Basic/SourceManager.h"
-#include "llvm/Support/MemoryBuffer.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/Support/MemoryBuffer.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <cstdio>
 using namespace clang;
 
@@ -61,16 +61,16 @@ void SourceLocation::print(raw_ostream &OS, const SourceManager &SM)const{
   OS << '>';
 }
 
-LLVM_DUMP_METHOD std::string
+LLVM37_DUMP_METHOD std::string
 SourceLocation::printToString(const SourceManager &SM) const {
   std::string S;
-  llvm::raw_string_ostream OS(S);
+  llvm37::raw_string_ostream OS(S);
   print(OS, SM);
   return OS.str();
 }
 
-LLVM_DUMP_METHOD void SourceLocation::dump(const SourceManager &SM) const {
-  print(llvm::errs(), SM);
+LLVM37_DUMP_METHOD void SourceLocation::dump(const SourceManager &SM) const {
+  print(llvm37::errs(), SM);
 }
 
 //===----------------------------------------------------------------------===//
@@ -123,7 +123,7 @@ bool FullSourceLoc::isBeforeInTranslationUnitThan(SourceLocation Loc) const {
   return SrcMgr->isBeforeInTranslationUnit(*this, Loc);
 }
 
-LLVM_DUMP_METHOD void FullSourceLoc::dump() const {
+LLVM37_DUMP_METHOD void FullSourceLoc::dump() const {
   SourceLocation::dump(*SrcMgr);
 }
 

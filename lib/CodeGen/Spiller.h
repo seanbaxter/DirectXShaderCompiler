@@ -7,10 +7,10 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_LIB_CODEGEN_SPILLER_H
-#define LLVM_LIB_CODEGEN_SPILLER_H
+#ifndef LLVM37_LIB_CODEGEN_SPILLER_H
+#define LLVM37_LIB_CODEGEN_SPILLER_H
 
-namespace llvm {
+namespace llvm37 {
 
   class LiveRangeEdit;
   class MachineFunction;

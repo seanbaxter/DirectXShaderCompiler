@@ -21,7 +21,7 @@ def VerifyIncludes(filename, lines):
   lint = []
 
   include_gtest_re = re.compile(r'^#include "gtest/(.*)"')
-  include_llvm_re = re.compile(r'^#include "llvm/(.*)"')
+  include_llvm_re = re.compile(r'^#include "llvm37/(.*)"')
   include_support_re = re.compile(r'^#include "(Support/.*)"')
   include_config_re = re.compile(r'^#include "(Config/.*)"')
   include_system_re = re.compile(r'^#include <(.*)>')

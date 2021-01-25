@@ -11,8 +11,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/CodeGen/GCMetadataPrinter.h"
-using namespace llvm;
+#include "llvm37/CodeGen/GCMetadataPrinter.h"
+using namespace llvm37;
 
 GCMetadataPrinter::GCMetadataPrinter() {}
 

@@ -47,7 +47,7 @@
 ------------------------------------------------------------------------ */
 
 
-#include "llvm/Support/ConvertUTF.h"
+#include "llvm37/Support/ConvertUTF.h"
 #ifdef CVTUTF_DEBUG
 #include <stdio.h>
 #endif

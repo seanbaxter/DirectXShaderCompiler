@@ -17,8 +17,8 @@
 #include "clang/AST/StmtVisitor.h"
 #include "clang/StaticAnalyzer/Core/BugReporter/BugReporter.h"
 #include "clang/StaticAnalyzer/Core/Checker.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/Support/raw_ostream.h"
 
 using namespace clang;
 using namespace ento;
@@ -259,7 +259,7 @@ void ASTFieldVisitor::Visit(FieldDecl *D) {
 
 void ASTFieldVisitor::ReportError(QualType T) {
   SmallString<1024> buf;
-  llvm::raw_svector_ostream os(buf);
+  llvm37::raw_svector_ostream os(buf);
 
   os << "AST class '" << Root->getName() << "' has a field '"
      << FieldChain.front()->getName() << "' that allocates heap memory";

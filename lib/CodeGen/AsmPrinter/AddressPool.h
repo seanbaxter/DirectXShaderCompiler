@@ -7,12 +7,12 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_LIB_CODEGEN_ASMPRINTER_ADDRESSPOOL_H
-#define LLVM_LIB_CODEGEN_ASMPRINTER_ADDRESSPOOL_H
+#ifndef LLVM37_LIB_CODEGEN_ASMPRINTER_ADDRESSPOOL_H
+#define LLVM37_LIB_CODEGEN_ASMPRINTER_ADDRESSPOOL_H
 
-#include "llvm/ADT/DenseMap.h"
+#include "llvm37/ADT/DenseMap.h"
 
-namespace llvm {
+namespace llvm37 {
 class MCSection;
 class MCSymbol;
 class AsmPrinter;

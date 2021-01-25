@@ -14,15 +14,15 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_LIB_MC_MCDISASSEMBLER_DISASSEMBLER_H
-#define LLVM_LIB_MC_MCDISASSEMBLER_DISASSEMBLER_H
+#ifndef LLVM37_LIB_MC_MCDISASSEMBLER_DISASSEMBLER_H
+#define LLVM37_LIB_MC_MCDISASSEMBLER_DISASSEMBLER_H
 
 #include "llvm-c/Disassembler.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <string>
 
-namespace llvm {
+namespace llvm37 {
 class MCContext;
 class MCAsmInfo;
 class MCDisassembler;
@@ -55,23 +55,23 @@ private:
   // LLVMDisasmInstruction().
   //
   // The LLVM target corresponding to the disassembler.
-  // FIXME: using std::unique_ptr<const llvm::Target> causes a malloc error
+  // FIXME: using std::unique_ptr<const llvm37::Target> causes a malloc error
   //        when this LLVMDisasmContext is deleted.
   const Target *TheTarget;
   // The assembly information for the target architecture.
-  std::unique_ptr<const llvm::MCAsmInfo> MAI;
+  std::unique_ptr<const llvm37::MCAsmInfo> MAI;
   // The register information for the target architecture.
-  std::unique_ptr<const llvm::MCRegisterInfo> MRI;
+  std::unique_ptr<const llvm37::MCRegisterInfo> MRI;
   // The subtarget information for the target architecture.
-  std::unique_ptr<const llvm::MCSubtargetInfo> MSI;
+  std::unique_ptr<const llvm37::MCSubtargetInfo> MSI;
   // The instruction information for the target architecture.
-  std::unique_ptr<const llvm::MCInstrInfo> MII;
+  std::unique_ptr<const llvm37::MCInstrInfo> MII;
   // The assembly context for creating symbols and MCExprs.
-  std::unique_ptr<const llvm::MCContext> Ctx;
+  std::unique_ptr<const llvm37::MCContext> Ctx;
   // The disassembler for the target architecture.
-  std::unique_ptr<const llvm::MCDisassembler> DisAsm;
+  std::unique_ptr<const llvm37::MCDisassembler> DisAsm;
   // The instruction printer for the target architecture.
-  std::unique_ptr<llvm::MCInstPrinter> IP;
+  std::unique_ptr<llvm37::MCInstPrinter> IP;
   // The options used to set up the disassembler.
   uint64_t Options;
   // The CPU string.
@@ -89,7 +89,7 @@ public:
                     const MCRegisterInfo *mRI,
                     const MCSubtargetInfo *mSI,
                     const MCInstrInfo *mII,
-                    llvm::MCContext *ctx, const MCDisassembler *disAsm,
+                    llvm37::MCContext *ctx, const MCDisassembler *disAsm,
                     MCInstPrinter *iP) : TripleName(tripleName),
                     DisInfo(disInfo), TagType(tagType), GetOpInfo(getOpInfo),
                     SymbolLookUp(symbolLookUp), TheTarget(theTarget),
@@ -124,6 +124,6 @@ public:
   void setCPU(const char *CPU) { this->CPU = CPU; }
 };
 
-} // namespace llvm
+} // namespace llvm37
 
 #endif

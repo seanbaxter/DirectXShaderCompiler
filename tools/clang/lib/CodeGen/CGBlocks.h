@@ -11,8 +11,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_LIB_CODEGEN_CGBLOCKS_H
-#define LLVM_CLANG_LIB_CODEGEN_CGBLOCKS_H
+#ifndef LLVM37_CLANG_LIB_CODEGEN_CGBLOCKS_H
+#define LLVM37_CLANG_LIB_CODEGEN_CGBLOCKS_H
 
 #include "CGBuilder.h"
 #include "CGCall.h"
@@ -25,9 +25,9 @@
 #include "clang/AST/ExprObjC.h"
 #include "clang/AST/Type.h"
 #include "clang/Basic/TargetInfo.h"
-#include "llvm/IR/Module.h"
+#include "llvm37/IR/Module.h"
 
-namespace llvm {
+namespace llvm37 {
 class Module;
 class Constant;
 class Function;
@@ -157,9 +157,9 @@ public:
     bool isIndex() const { return (Data & 1) != 0; }
     bool isConstant() const { return !isIndex(); }
     unsigned getIndex() const { assert(isIndex()); return Data >> 1; }
-    llvm::Value *getConstant() const {
+    llvm37::Value *getConstant() const {
       assert(isConstant());
-      return reinterpret_cast<llvm::Value*>(Data);
+      return reinterpret_cast<llvm37::Value*>(Data);
     }
     EHScopeStack::stable_iterator getCleanup() const {
       assert(isIndex());
@@ -176,7 +176,7 @@ public:
       return v;
     }
 
-    static Capture makeConstant(llvm::Value *value) {
+    static Capture makeConstant(llvm37::Value *value) {
       Capture v;
       v.Data = reinterpret_cast<uintptr_t>(value);
       return v;
@@ -203,10 +203,10 @@ public:
   bool HasCapturedVariableLayout : 1;
 
   /// The mapping of allocated indexes within the block.
-  llvm::DenseMap<const VarDecl*, Capture> Captures;  
+  llvm37::DenseMap<const VarDecl*, Capture> Captures;  
 
-  llvm::AllocaInst *Address;
-  llvm::StructType *StructureType;
+  llvm37::AllocaInst *Address;
+  llvm37::StructType *StructureType;
   const BlockDecl *Block;
   const BlockExpr *BlockExpression;
   CharUnits BlockSize;
@@ -222,7 +222,7 @@ public:
 
   /// An instruction which dominates the full-expression that the
   /// block is inside.
-  llvm::Instruction *DominatingIP;
+  llvm37::Instruction *DominatingIP;
 
   /// The next block in the block-info chain.  Invalid if this block
   /// info is not part of the CGF's block-info chain, which is true
@@ -234,7 +234,7 @@ public:
     return const_cast<CGBlockInfo*>(this)->getCapture(var);
   }
   Capture &getCapture(const VarDecl *var) {
-    llvm::DenseMap<const VarDecl*, Capture>::iterator
+    llvm37::DenseMap<const VarDecl*, Capture>::iterator
       it = Captures.find(var);
     assert(it != Captures.end() && "no entry for variable!");
     return it->second;

@@ -63,15 +63,15 @@ void f() {
 }
 
 // Test case from http://llvm.org/bugs/show_bug.cgi?id=10318
-namespace llvm {
+namespace llvm37 {
  template <typename T> class GraphWriter {}; // expected-note 3{{declared here}}
 }
 
 struct S {};
 void bar() {
- GraphWriter<S> x; //expected-error{{no template named 'GraphWriter'; did you mean 'llvm::GraphWriter'?}}
- (void)new llvm::GraphWriter; // expected-error {{use of class template 'llvm::GraphWriter' requires template arguments}}
- (void)new llvm::Graphwriter<S>; // expected-error {{no template named 'Graphwriter' in namespace 'llvm'; did you mean 'GraphWriter'?}}
+ GraphWriter<S> x; //expected-error{{no template named 'GraphWriter'; did you mean 'llvm37::GraphWriter'?}}
+ (void)new llvm37::GraphWriter; // expected-error {{use of class template 'llvm37::GraphWriter' requires template arguments}}
+ (void)new llvm37::Graphwriter<S>; // expected-error {{no template named 'Graphwriter' in namespace 'llvm'; did you mean 'GraphWriter'?}}
 }
 
 // If namespace prefixes and character edits have the same weight, correcting

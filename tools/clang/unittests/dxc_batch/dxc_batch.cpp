@@ -28,10 +28,10 @@
 #include "dxc/dxcapi.h"
 #include "dxc/dxcapi.internal.h"
 #include "dxc/dxctools.h"
-#include "llvm/Option/ArgList.h"
-#include "llvm/Option/OptTable.h"
-#include "llvm/Support/MemoryBuffer.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/Option/ArgList.h"
+#include "llvm37/Option/OptTable.h"
+#include "llvm37/Support/MemoryBuffer.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <algorithm>
 #include <chrono>
 #include <comdef.h>
@@ -39,10 +39,10 @@
 #include <unordered_map>
 #include <ios>
 
-#include "llvm/Support//MSFileSystem.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/FileSystem.h"
-#include "llvm/Support/Path.h"
+#include "llvm37/Support//MSFileSystem.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/FileSystem.h"
+#include "llvm37/Support/Path.h"
 
 inline bool wcseq(LPCWSTR a, LPCWSTR b) {
   return (a == nullptr && b == nullptr) ||
@@ -51,8 +51,8 @@ inline bool wcseq(LPCWSTR a, LPCWSTR b) {
 inline bool wcsieq(LPCWSTR a, LPCWSTR b) { return _wcsicmp(a, b) == 0; }
 
 using namespace dxc;
-using namespace llvm;
-using namespace llvm::opt;
+using namespace llvm37;
+using namespace llvm37::opt;
 using namespace hlsl::options;
 
 extern HRESULT WINAPI DxilD3DCompile2(
@@ -75,7 +75,7 @@ private:
   void UpdatePart(IDxcBlob *pBlob, IDxcBlob **ppResult);
   bool UpdatePartRequired();
   void WriteHeader(IDxcBlobEncoding *pDisassembly, IDxcBlob *pCode,
-                   llvm::Twine &pVariableName, LPCWSTR pPath);
+                   llvm37::Twine &pVariableName, LPCWSTR pPath);
   HRESULT ReadFileIntoPartContent(hlsl::DxilFourCC fourCC, LPCWSTR fileName,
                                   IDxcBlob **ppResult);
 
@@ -86,14 +86,14 @@ public:
   DxcContext(DxcOpts &Opts, DxcDllSupport &dxcSupport)
       : m_Opts(Opts), m_dxcSupport(dxcSupport) {}
 
-  int Compile(llvm::StringRef path, bool bLibLink);
+  int Compile(llvm37::StringRef path, bool bLibLink);
   int DumpBinary();
   void Preprocess();
 };
 
 static void PrintHlslException(const ::hlsl::Exception &hlslException,
-                               llvm::StringRef stage,
-                               llvm::raw_string_ostream &errorStream) {
+                               llvm37::StringRef stage,
+                               llvm37::raw_string_ostream &errorStream) {
   errorStream << stage << " failed\n";
   try {
     errorStream << hlslException.what();
@@ -120,12 +120,12 @@ static void PrintHlslException(const ::hlsl::Exception &hlslException,
   }
 }
 
-static int Compile(llvm::StringRef command, DxcDllSupport &dxcSupport,
-                   llvm::StringRef path, bool bLinkLib,
+static int Compile(llvm37::StringRef command, DxcDllSupport &dxcSupport,
+                   llvm37::StringRef path, bool bLinkLib,
                    std::string &errorString) {
-                   //llvm::raw_string_ostream &errorStream) {
+                   //llvm37::raw_string_ostream &errorStream) {
   const OptTable *optionTable = getHlslOptTable();
-  llvm::SmallVector<llvm::StringRef, 4> args;
+  llvm37::SmallVector<llvm37::StringRef, 4> args;
   command.split(args, " ", /*MaxSplit*/-1, /*KeepEmpty*/false);
   if (!path.empty()) {
     args.emplace_back("-I");
@@ -134,7 +134,7 @@ static int Compile(llvm::StringRef command, DxcDllSupport &dxcSupport,
 
   MainArgs argStrings(args);
   DxcOpts dxcOpts;
-  llvm::raw_string_ostream errorStream(errorString);
+  llvm37::raw_string_ostream errorStream(errorString);
 
   int retVal =
       ReadDxcOpts(optionTable, DxcFlags, argStrings, dxcOpts, errorStream);
@@ -171,12 +171,12 @@ static int Compile(llvm::StringRef command, DxcDllSupport &dxcSupport,
   return retVal;
 }
 
-static void WriteBlobToFile(_In_opt_ IDxcBlob *pBlob, llvm::StringRef FName, UINT32 defaultTextCodePage) {
+static void WriteBlobToFile(_In_opt_ IDxcBlob *pBlob, llvm37::StringRef FName, UINT32 defaultTextCodePage) {
   ::dxc::WriteBlobToFile(pBlob, StringRefUtf16(FName), defaultTextCodePage);
 }
 
 static void WritePartToFile(IDxcBlob *pBlob, hlsl::DxilFourCC CC,
-                            llvm::StringRef FName) {
+                            llvm37::StringRef FName) {
   const hlsl::DxilContainerHeader *pContainer = hlsl::IsDxilContainerLike(
       pBlob->GetBufferPointer(), pBlob->GetBufferSize());
   if (!pContainer) {
@@ -291,8 +291,8 @@ int DxcContext::ActOnBlob(IDxcBlob *pBlob, IDxcBlob *pDebugBlob,
   }
 
   if (!m_Opts.OutputHeader.empty()) {
-    llvm::Twine varName = m_Opts.VariableName.empty()
-                              ? llvm::Twine("g_", m_Opts.EntryPoint)
+    llvm37::Twine varName = m_Opts.VariableName.empty()
+                              ? llvm37::Twine("g_", m_Opts.EntryPoint)
                               : m_Opts.VariableName;
     WriteHeader(pDisassembleResult, pBlob, varName,
                 StringRefUtf16(m_Opts.OutputHeader));
@@ -558,7 +558,7 @@ public:
   }
 };
 
-int DxcContext::Compile(llvm::StringRef path, bool bLibLink) {
+int DxcContext::Compile(llvm37::StringRef path, bool bLibLink) {
   CComPtr<IDxcCompiler> pCompiler;
   CComPtr<IDxcOperationResult> pCompileResult;
   CComPtr<IDxcBlob> pDebugBlob;
@@ -588,19 +588,19 @@ int DxcContext::Compile(llvm::StringRef path, bool bLibLink) {
       ReadFileIntoBlob(m_dxcSupport, StringRefUtf16(m_Opts.InputFile),
                        &pSource);
     } else {
-      llvm::sys::fs::MSFileSystem *msfPtr;
+      llvm37::sys::fs::MSFileSystem *msfPtr;
       IFT(CreateMSFileSystemForDisk(&msfPtr));
-      std::unique_ptr<::llvm::sys::fs::MSFileSystem> msf(msfPtr);
+      std::unique_ptr<::llvm37::sys::fs::MSFileSystem> msf(msfPtr);
 
-      ::llvm::sys::fs::AutoPerThreadSystem pts(msf.get());
+      ::llvm37::sys::fs::AutoPerThreadSystem pts(msf.get());
       IFTLLVM(pts.error_code());
 
-      if (llvm::sys::fs::exists(m_Opts.InputFile)) {
+      if (llvm37::sys::fs::exists(m_Opts.InputFile)) {
         ReadFileIntoBlob(m_dxcSupport, StringRefUtf16(m_Opts.InputFile),
                          &pSource);
       } else {
         SmallString<128> pathStr(path.begin(), path.end());
-        llvm::sys::path::append(pathStr, m_Opts.InputFile.begin(),
+        llvm37::sys::path::append(pathStr, m_Opts.InputFile.begin(),
                                 m_Opts.InputFile.end());
         ReadFileIntoBlob(m_dxcSupport, StringRefUtf16(pathStr.str().str()),
                          &pSource);
@@ -612,7 +612,7 @@ int DxcContext::Compile(llvm::StringRef path, bool bLibLink) {
     IFT(pLibrary->CreateIncludeHandler(&pIncludeHandler));
 
     // Upgrade profile to 6.0 version from minimum recognized shader model
-    llvm::StringRef TargetProfile = m_Opts.TargetProfile;
+    llvm37::StringRef TargetProfile = m_Opts.TargetProfile;
     const hlsl::ShaderModel *SM =
         hlsl::ShaderModel::GetByName(m_Opts.TargetProfile.str().c_str());
     if (SM->IsValid() && SM->GetMajor() < 6) {
@@ -701,7 +701,7 @@ static void WriteString(HANDLE hFile, _In_z_ LPCSTR value, LPCWSTR pFileName) {
 }
 
 void DxcContext::WriteHeader(IDxcBlobEncoding *pDisassembly, IDxcBlob *pCode,
-                             llvm::Twine &pVariableName, LPCWSTR pFileName) {
+                             llvm37::Twine &pVariableName, LPCWSTR pFileName) {
   CHandle file(CreateFileW(pFileName, GENERIC_WRITE, FILE_SHARE_READ, nullptr,
                            CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, nullptr));
   if (file == INVALID_HANDLE_VALUE) {
@@ -710,7 +710,7 @@ void DxcContext::WriteHeader(IDxcBlobEncoding *pDisassembly, IDxcBlob *pCode,
 
   {
     std::string s;
-    llvm::raw_string_ostream OS(s);
+    llvm37::raw_string_ostream OS(s);
     // Note: with \r\n line endings, writing the disassembly could be a simple
     // WriteBlobToHandle with a prior and following WriteString for #ifs
     OS << "#if 0\r\n";
@@ -729,7 +729,7 @@ void DxcContext::WriteHeader(IDxcBlobEncoding *pDisassembly, IDxcBlob *pCode,
 
   {
     std::string s;
-    llvm::raw_string_ostream OS(s);
+    llvm37::raw_string_ostream OS(s);
     OS << "\r\nconst unsigned char " << pVariableName << "[] = {";
     const uint8_t *pBytes = (const uint8_t *)pCode->GetBufferPointer();
     size_t len = pCode->GetBufferSize();
@@ -768,13 +768,13 @@ int DxcBatchContext::BatchCompile(bool bMultiThread, bool bLibLink) {
   // tmp_Opts = m_Opts;
   m_Opts.InputFile;
   SmallString<128> path(m_Opts.InputFile.begin(), m_Opts.InputFile.end());
-  llvm::sys::path::remove_filename(path);
+  llvm37::sys::path::remove_filename(path);
 
   CComPtr<IDxcBlobEncoding> pSource;
   ReadFileIntoBlob(m_dxcSupport, StringRefUtf16(m_Opts.InputFile), &pSource);
-  llvm::StringRef source((char *)pSource->GetBufferPointer(),
+  llvm37::StringRef source((char *)pSource->GetBufferPointer(),
                          pSource->GetBufferSize());
-  llvm::SmallVector<llvm::StringRef, 4> commands;
+  llvm37::SmallVector<llvm37::StringRef, 4> commands;
   source.split(commands, "\n", /*MaxSplit*/-1, /*KeepEmpty*/false);
 
   if (bMultiThread) {
@@ -788,7 +788,7 @@ int DxcBatchContext::BatchCompile(bool bMultiThread, bool bLibLink) {
 
     for (unsigned i = 0; i < commands.size(); i++) {
       // trim to remove /r if exist.
-      llvm::StringRef command = commands[i].trim();
+      llvm37::StringRef command = commands[i].trim();
       if (command.empty())
         continue;
       if (command.startswith("//"))
@@ -813,7 +813,7 @@ int DxcBatchContext::BatchCompile(bool bMultiThread, bool bLibLink) {
       }
     }
   } else {
-    for (llvm::StringRef command : commands) {
+    for (llvm37::StringRef command : commands) {
       // trim to remove /r if exist.
       command = command.trim();
       if (command.empty())
@@ -837,9 +837,9 @@ int DxcBatchContext::BatchCompile(bool bMultiThread, bool bLibLink) {
 int __cdecl wmain(int argc, const wchar_t **argv_) {
   const char *pStage = "Initialization";
   int retVal = 0;
-  if (llvm::sys::fs::SetupPerThreadFileSystem())
+  if (llvm37::sys::fs::SetupPerThreadFileSystem())
     return 1;
-  llvm::sys::fs::AutoCleanupPerThreadFileSystem auto_cleanup_fs;
+  llvm37::sys::fs::AutoCleanupPerThreadFileSystem auto_cleanup_fs;
   try {
     auto t_start = std::chrono::high_resolution_clock::now();
 
@@ -857,7 +857,7 @@ int __cdecl wmain(int argc, const wchar_t **argv_) {
     // Parse command line options.
     const OptTable *optionTable = getHlslOptTable();
     MainArgs argStrings(argc, argv_);
-    llvm::ArrayRef<const char *> tmpArgStrings = argStrings.getArrayRef();
+    llvm37::ArrayRef<const char *> tmpArgStrings = argStrings.getArrayRef();
     std::vector<std::string> args(tmpArgStrings.begin(), tmpArgStrings.end());
     // Add target to avoid fail.
     args.emplace_back("-T");
@@ -883,7 +883,7 @@ int __cdecl wmain(int argc, const wchar_t **argv_) {
     // Read options and check errors.
     {
       std::string errorString;
-      llvm::raw_string_ostream errorStream(errorString);
+      llvm37::raw_string_ostream errorStream(errorString);
       int optResult = ReadDxcOpts(optionTable, DxcFlags, batchArgStrings,
                                   dxcOpts, errorStream);
       // TODO: validate unused option for dxc_bach.
@@ -899,7 +899,7 @@ int __cdecl wmain(int argc, const wchar_t **argv_) {
     // Handle help request, which overrides any other processing.
     if (dxcOpts.ShowHelp) {
       std::string helpString;
-      llvm::raw_string_ostream helpStream(helpString);
+      llvm37::raw_string_ostream helpStream(helpString);
       optionTable->PrintHelp(helpStream, "dxc_batch.exe", "HLSL Compiler", "");
       helpStream << "multi-thread";
       helpStream.flush();
@@ -910,7 +910,7 @@ int __cdecl wmain(int argc, const wchar_t **argv_) {
     // Setup a helper DLL.
     {
       std::string dllErrorString;
-      llvm::raw_string_ostream dllErrorStream(dllErrorString);
+      llvm37::raw_string_ostream dllErrorStream(dllErrorString);
       int dllResult = SetupDxcDllSupport(dxcOpts, dxcSupport, dllErrorStream);
       dllErrorStream.flush();
       if (dllErrorString.size()) {
@@ -933,7 +933,7 @@ int __cdecl wmain(int argc, const wchar_t **argv_) {
     }
   } catch (const ::hlsl::Exception &hlslException) {
     std::string errorString;
-    llvm::raw_string_ostream errorStream(errorString);
+    llvm37::raw_string_ostream errorStream(errorString);
     PrintHlslException(hlslException, pStage, errorStream);
     errorStream.flush();
     fprintf(stderr, "dxc_batch failed : %s", errorString.c_str());

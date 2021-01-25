@@ -11,10 +11,10 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_LIB_ASMPARSER_LLTOKEN_H
-#define LLVM_LIB_ASMPARSER_LLTOKEN_H
+#ifndef LLVM37_LIB_ASMPARSER_LLTOKEN_H
+#define LLVM37_LIB_ASMPARSER_LLTOKEN_H
 
-namespace llvm {
+namespace llvm37 {
 namespace lltok {
   enum Kind {
     // Markers
@@ -217,6 +217,6 @@ namespace lltok {
     APSInt // APSInt
   };
 } // end namespace lltok
-} // end namespace llvm
+} // end namespace llvm37
 
 #endif

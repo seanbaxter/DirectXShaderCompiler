@@ -12,23 +12,23 @@
 //
 //===---------------------------------------------------------------------===//
 
-#include "llvm/CodeGen/Passes.h"
-#include "llvm/Analysis/Passes.h"
-#include "llvm/CodeGen/MachineFunctionPass.h"
-#include "llvm/CodeGen/RegAllocRegistry.h"
-#include "llvm/IR/IRPrintingPasses.h"
-#include "llvm/IR/LegacyPassManager.h"
-#include "llvm/IR/Verifier.h"
-#include "llvm/MC/MCAsmInfo.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Transforms/Instrumentation.h"
-#include "llvm/Transforms/Scalar.h"
-#include "llvm/Transforms/Utils/SymbolRewriter.h"
+#include "llvm37/CodeGen/Passes.h"
+#include "llvm37/Analysis/Passes.h"
+#include "llvm37/CodeGen/MachineFunctionPass.h"
+#include "llvm37/CodeGen/RegAllocRegistry.h"
+#include "llvm37/IR/IRPrintingPasses.h"
+#include "llvm37/IR/LegacyPassManager.h"
+#include "llvm37/IR/Verifier.h"
+#include "llvm37/MC/MCAsmInfo.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Transforms/Instrumentation.h"
+#include "llvm37/Transforms/Scalar.h"
+#include "llvm37/Transforms/Utils/SymbolRewriter.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 static cl::opt<bool> DisablePostRA("disable-post-ra", cl::Hidden,
     cl::desc("Disable Post Regalloc"));
@@ -188,7 +188,7 @@ char TargetPassConfig::ID = 0;
 char TargetPassConfig::EarlyTailDuplicateID = 0;
 char TargetPassConfig::PostRAMachineLICMID = 0;
 
-namespace llvm {
+namespace llvm37 {
 class PassConfigImpl {
 public:
   // List of passes explicitly substituted by this target. Normally this is
@@ -204,7 +204,7 @@ public:
   /// is inserted after each instance of the first one.
   SmallVector<std::pair<AnalysisID, IdentifyingPassPtr>, 4> InsertedPasses;
 };
-} // namespace llvm
+} // namespace llvm37
 
 // Out of line virtual method.
 TargetPassConfig::~TargetPassConfig() {

@@ -10,23 +10,23 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include "DxilConvPasses/ScopeNestedCFG.h"
-#include "llvm/Analysis/ReducibilityAnalysis.h"
+#include "llvm37/Analysis/ReducibilityAnalysis.h"
 #include "dxc/Support/Global.h"
 
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Pass.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/IRBuilder.h"
-#include "llvm/IR/LegacyPassManager.h"
-#include "llvm/IR/CFG.h"
-#include "llvm/Analysis/CFG.h"
-#include "llvm/Analysis/LoopPass.h"
-#include "llvm/Transforms/Utils/Cloning.h"
-#include "llvm/Transforms/Scalar.h"
-#include "llvm/ADT/BitVector.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Pass.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/IRBuilder.h"
+#include "llvm37/IR/LegacyPassManager.h"
+#include "llvm37/IR/CFG.h"
+#include "llvm37/Analysis/CFG.h"
+#include "llvm37/Analysis/LoopPass.h"
+#include "llvm37/Transforms/Utils/Cloning.h"
+#include "llvm37/Transforms/Scalar.h"
+#include "llvm37/ADT/BitVector.h"
 
 #include <vector>
 #include <unordered_map>
@@ -34,7 +34,7 @@
 #include <set>
 #include <algorithm>
 
-using namespace llvm;
+using namespace llvm37;
 using std::unique_ptr;
 using std::shared_ptr;
 using std::pair;
@@ -1863,7 +1863,7 @@ INITIALIZE_PASS_DEPENDENCY(ReducibilityAnalysis)
 INITIALIZE_PASS_DEPENDENCY(LoopInfoWrapperPass)
 INITIALIZE_PASS_END(ScopeNestedCFG, "scopenested", "Scope-nested CFG transformation", false, false)
 
-namespace llvm {
+namespace llvm37 {
 
 FunctionPass *createScopeNestedCFGPass() {
   return new ScopeNestedCFG();

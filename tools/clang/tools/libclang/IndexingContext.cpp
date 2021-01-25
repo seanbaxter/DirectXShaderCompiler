@@ -802,7 +802,7 @@ bool IndexingContext::markEntityOccurrenceInFile(const NamedDecl *D,
   if (!FE)
     return true;
   RefFileOccurrence RefOccur(FE, D);
-  std::pair<llvm::DenseSet<RefFileOccurrence>::iterator, bool>
+  std::pair<llvm37::DenseSet<RefFileOccurrence>::iterator, bool>
   res = RefFileOccurrences.insert(RefOccur);
   if (!res.second)
     return true; // already in map.
@@ -1101,7 +1101,7 @@ void IndexingContext::getEntityInfo(const NamedDecl *D,
   } else {
     SmallString<256> StrBuf;
     {
-      llvm::raw_svector_ostream OS(StrBuf);
+      llvm37::raw_svector_ostream OS(StrBuf);
       D->printName(OS);
     }
     EntityInfo.name = SA.copyCStr(StrBuf.str());

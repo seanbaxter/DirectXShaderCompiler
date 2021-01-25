@@ -33,7 +33,7 @@ class TemplateArgumentLocTraverser
 public:
   bool TraverseTemplateArgumentLoc(const TemplateArgumentLoc &ArgLoc) {
     std::string ArgStr;
-    llvm::raw_string_ostream Stream(ArgStr);
+    llvm37::raw_string_ostream Stream(ArgStr);
     const TemplateArgument &Arg = ArgLoc.getArgument();
 
     Arg.print(Context->getPrintingPolicy(), Stream);

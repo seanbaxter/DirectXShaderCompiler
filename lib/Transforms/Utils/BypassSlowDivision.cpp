@@ -15,13 +15,13 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Transforms/Utils/BypassSlowDivision.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/IRBuilder.h"
-#include "llvm/IR/Instructions.h"
+#include "llvm37/Transforms/Utils/BypassSlowDivision.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/IRBuilder.h"
+#include "llvm37/IR/Instructions.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "bypass-slow-division"
 
@@ -44,7 +44,7 @@ namespace {
   };
 }
 
-namespace llvm {
+namespace llvm37 {
   template<>
   struct DenseMapInfo<DivOpInfo> {
     static bool isEqual(const DivOpInfo &Val1, const DivOpInfo &Val2) {
@@ -220,7 +220,7 @@ static bool reuseOrInsertFastDiv(Function &F,
 
 // bypassSlowDivision - This optimization identifies DIV instructions that can
 // be profitably bypassed and carried out with a shorter, faster divide.
-bool llvm::bypassSlowDivision(Function &F,
+bool llvm37::bypassSlowDivision(Function &F,
                               Function::iterator &I,
                               const DenseMap<unsigned int, unsigned int> &BypassWidths) {
   DivCacheTy DivCache;

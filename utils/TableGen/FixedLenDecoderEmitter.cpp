@@ -13,24 +13,24 @@
 //===----------------------------------------------------------------------===//
 
 #include "CodeGenTarget.h"
-#include "llvm/ADT/APInt.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/ADT/StringExtras.h"
-#include "llvm/ADT/StringRef.h"
-#include "llvm/ADT/Twine.h"
-#include "llvm/MC/MCFixedLenDisassembler.h"
-#include "llvm/Support/DataTypes.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/FormattedStream.h"
-#include "llvm/Support/LEB128.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/TableGen/Error.h"
-#include "llvm/TableGen/Record.h"
+#include "llvm37/ADT/APInt.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/ADT/StringExtras.h"
+#include "llvm37/ADT/StringRef.h"
+#include "llvm37/ADT/Twine.h"
+#include "llvm37/MC/MCFixedLenDisassembler.h"
+#include "llvm37/Support/DataTypes.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/FormattedStream.h"
+#include "llvm37/Support/LEB128.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/TableGen/Error.h"
+#include "llvm37/TableGen/Record.h"
 #include <map>
 #include <string>
 #include <vector>
 
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "decoder-emitter"
 
@@ -548,7 +548,7 @@ void Filter::recurse() {
     // Delegates to an inferior filter chooser for further processing on this
     // group of instructions whose segment values are variable.
     FilterChooserMap.insert(
-        std::make_pair(-1U, llvm::make_unique<FilterChooser>(
+        std::make_pair(-1U, llvm37::make_unique<FilterChooser>(
                                 Owner->AllInstructions, VariableInstructions,
                                 Owner->Operands, BitValueArray, *Owner)));
   }
@@ -575,7 +575,7 @@ void Filter::recurse() {
     // Delegates to an inferior filter chooser for further processing on this
     // category of instructions.
     FilterChooserMap.insert(std::make_pair(
-        Inst.first, llvm::make_unique<FilterChooser>(
+        Inst.first, llvm37::make_unique<FilterChooser>(
                                 Owner->AllInstructions, Inst.second,
                                 Owner->Operands, BitValueArray, *Owner)));
   }
@@ -2131,14 +2131,14 @@ static void emitDecodeInstruction(formatted_raw_ostream &OS) {
 // Emits disassembler code for instruction decoding.
 void FixedLenDecoderEmitter::run(raw_ostream &o) {
   formatted_raw_ostream OS(o);
-  OS << "#include \"llvm/MC/MCInst.h\"\n";
-  OS << "#include \"llvm/Support/Debug.h\"\n";
-  OS << "#include \"llvm/Support/DataTypes.h\"\n";
-  OS << "#include \"llvm/Support/LEB128.h\"\n";
-  OS << "#include \"llvm/Support/raw_ostream.h\"\n";
+  OS << "#include \"llvm37/MC/MCInst.h\"\n";
+  OS << "#include \"llvm37/Support/Debug.h\"\n";
+  OS << "#include \"llvm37/Support/DataTypes.h\"\n";
+  OS << "#include \"llvm37/Support/LEB128.h\"\n";
+  OS << "#include \"llvm37/Support/raw_ostream.h\"\n";
   OS << "#include <assert.h>\n";
   OS << '\n';
-  OS << "namespace llvm {\n\n";
+  OS << "namespace llvm37 {\n\n";
 
   emitFieldFromInstruction(OS);
 
@@ -2210,7 +2210,7 @@ void FixedLenDecoderEmitter::run(raw_ostream &o) {
   OS << "\n} // End llvm namespace\n";
 }
 
-namespace llvm {
+namespace llvm37 {
 
 void EmitFixedLenDecoder(RecordKeeper &RK, raw_ostream &OS,
                          std::string PredicateNamespace,

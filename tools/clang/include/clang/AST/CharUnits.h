@@ -11,12 +11,12 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_AST_CHARUNITS_H
-#define LLVM_CLANG_AST_CHARUNITS_H
+#ifndef LLVM37_CLANG_AST_CHARUNITS_H
+#define LLVM37_CLANG_AST_CHARUNITS_H
 
-#include "llvm/ADT/DenseMapInfo.h"
-#include "llvm/Support/DataTypes.h"
-#include "llvm/Support/MathExtras.h"
+#include "llvm37/ADT/DenseMapInfo.h"
+#include "llvm37/Support/DataTypes.h"
+#include "llvm37/Support/MathExtras.h"
 
 namespace clang {
 
@@ -166,14 +166,14 @@ namespace clang {
       /// greater than or equal to this quantity and is a multiple of \p Align.
       /// Align must be non-zero.
       CharUnits RoundUpToAlignment(const CharUnits &Align) const {
-        return CharUnits(llvm::RoundUpToAlignment(Quantity, 
+        return CharUnits(llvm37::RoundUpToAlignment(Quantity, 
                                                   Align.Quantity));
       }
 
       /// Given that this is a non-zero alignment value, what is the
       /// alignment at the given offset?
       CharUnits alignmentAtOffset(CharUnits offset) {
-        return CharUnits(llvm::MinAlign(Quantity, offset.Quantity));
+        return CharUnits(llvm37::MinAlign(Quantity, offset.Quantity));
       }
 
 
@@ -185,7 +185,7 @@ inline clang::CharUnits operator* (clang::CharUnits::QuantityType Scale,
   return CU * Scale;
 }
 
-namespace llvm {
+namespace llvm37 {
 
 template<> struct DenseMapInfo<clang::CharUnits> {
   static clang::CharUnits getEmptyKey() {
@@ -217,6 +217,6 @@ template <> struct isPodLike<clang::CharUnits> {
   static const bool value = true;
 };
   
-} // end namespace llvm
+} // end namespace llvm37
 
-#endif // LLVM_CLANG_AST_CHARUNITS_H
+#endif // LLVM37_CLANG_AST_CHARUNITS_H

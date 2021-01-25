@@ -10,8 +10,8 @@
 //  This file defines the DeclVisitor interface.
 //
 //===----------------------------------------------------------------------===//
-#ifndef LLVM_CLANG_AST_DECLVISITOR_H
-#define LLVM_CLANG_AST_DECLVISITOR_H
+#ifndef LLVM37_CLANG_AST_DECLVISITOR_H
+#define LLVM37_CLANG_AST_DECLVISITOR_H
 
 #include "clang/AST/Decl.h"
 #include "clang/AST/DeclCXX.h"
@@ -76,4 +76,4 @@ class ConstDeclVisitor
 
 }  // end namespace clang
 
-#endif // LLVM_CLANG_AST_DECLVISITOR_H
+#endif // LLVM37_CLANG_AST_DECLVISITOR_H

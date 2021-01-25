@@ -7,19 +7,19 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_FRONTEND_FRONTENDPLUGINREGISTRY_H
-#define LLVM_CLANG_FRONTEND_FRONTENDPLUGINREGISTRY_H
+#ifndef LLVM37_CLANG_FRONTEND_FRONTENDPLUGINREGISTRY_H
+#define LLVM37_CLANG_FRONTEND_FRONTENDPLUGINREGISTRY_H
 
 #include "clang/Frontend/FrontendAction.h"
-#include "llvm/Support/Registry.h"
+#include "llvm37/Support/Registry.h"
 
 // Instantiated in FrontendAction.cpp.
-extern template class llvm::Registry<clang::PluginASTAction>;
+extern template class llvm37::Registry<clang::PluginASTAction>;
 
 namespace clang {
 
 /// The frontend plugin registry.
-typedef llvm::Registry<PluginASTAction> FrontendPluginRegistry;
+typedef llvm37::Registry<PluginASTAction> FrontendPluginRegistry;
 
 } // end namespace clang
 

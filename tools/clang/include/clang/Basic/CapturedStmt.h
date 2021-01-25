@@ -8,8 +8,8 @@
 //===----------------------------------------------------------------------===//
 
 
-#ifndef LLVM_CLANG_BASIC_CAPTUREDSTMT_H
-#define LLVM_CLANG_BASIC_CAPTUREDSTMT_H
+#ifndef LLVM37_CLANG_BASIC_CAPTUREDSTMT_H
+#define LLVM37_CLANG_BASIC_CAPTUREDSTMT_H
 
 namespace clang {
 
@@ -21,4 +21,4 @@ enum CapturedRegionKind {
 
 } // end namespace clang
 
-#endif // LLVM_CLANG_BASIC_CAPTUREDSTMT_H
+#endif // LLVM37_CLANG_BASIC_CAPTUREDSTMT_H

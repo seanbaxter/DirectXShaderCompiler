@@ -12,13 +12,13 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_LIB_CODEGEN_SELECTIONDAG_SCHEDULEDAGSDNODES_H
-#define LLVM_LIB_CODEGEN_SELECTIONDAG_SCHEDULEDAGSDNODES_H
+#ifndef LLVM37_LIB_CODEGEN_SELECTIONDAG_SCHEDULEDAGSDNODES_H
+#define LLVM37_LIB_CODEGEN_SELECTIONDAG_SCHEDULEDAGSDNODES_H
 
-#include "llvm/CodeGen/MachineBasicBlock.h"
-#include "llvm/CodeGen/ScheduleDAG.h"
+#include "llvm37/CodeGen/MachineBasicBlock.h"
+#include "llvm37/CodeGen/ScheduleDAG.h"
 
-namespace llvm {
+namespace llvm37 {
   /// ScheduleDAGSDNodes - A ScheduleDAG for scheduling SDNode-based DAGs.
   ///
   /// Edges between SUnits are initially based on edges in the SelectionDAG,

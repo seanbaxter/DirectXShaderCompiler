@@ -12,30 +12,30 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/CodeGen/MachineScheduler.h"
-#include "llvm/ADT/PriorityQueue.h"
-#include "llvm/Analysis/AliasAnalysis.h"
-#include "llvm/CodeGen/LiveIntervalAnalysis.h"
-#include "llvm/CodeGen/MachineDominators.h"
-#include "llvm/CodeGen/MachineLoopInfo.h"
-#include "llvm/CodeGen/MachineRegisterInfo.h"
-#include "llvm/CodeGen/Passes.h"
-#include "llvm/CodeGen/RegisterClassInfo.h"
-#include "llvm/CodeGen/ScheduleDFS.h"
-#include "llvm/CodeGen/ScheduleHazardRecognizer.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/GraphWriter.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Target/TargetInstrInfo.h"
+#include "llvm37/CodeGen/MachineScheduler.h"
+#include "llvm37/ADT/PriorityQueue.h"
+#include "llvm37/Analysis/AliasAnalysis.h"
+#include "llvm37/CodeGen/LiveIntervalAnalysis.h"
+#include "llvm37/CodeGen/MachineDominators.h"
+#include "llvm37/CodeGen/MachineLoopInfo.h"
+#include "llvm37/CodeGen/MachineRegisterInfo.h"
+#include "llvm37/CodeGen/Passes.h"
+#include "llvm37/CodeGen/RegisterClassInfo.h"
+#include "llvm37/CodeGen/ScheduleDFS.h"
+#include "llvm37/CodeGen/ScheduleHazardRecognizer.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/GraphWriter.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Target/TargetInstrInfo.h"
 #include <queue>
 
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "misched"
 
-namespace llvm {
+namespace llvm37 {
 cl::opt<bool> ForceTopDown("misched-topdown", cl::Hidden,
                            cl::desc("Force top-down list scheduling"));
 cl::opt<bool> ForceBottomUp("misched-bottomup", cl::Hidden,
@@ -142,7 +142,7 @@ protected:
 
 char MachineScheduler::ID = 0;
 
-char &llvm::MachineSchedulerID = MachineScheduler::ID;
+char &llvm37::MachineSchedulerID = MachineScheduler::ID;
 
 INITIALIZE_PASS_BEGIN(MachineScheduler, "machine-scheduler",
                       "Machine Instruction Scheduler", false, false)
@@ -172,7 +172,7 @@ void MachineScheduler::getAnalysisUsage(AnalysisUsage &AU) const {
 
 char PostMachineScheduler::ID = 0;
 
-char &llvm::PostMachineSchedulerID = PostMachineScheduler::ID;
+char &llvm37::PostMachineSchedulerID = PostMachineScheduler::ID;
 
 INITIALIZE_PASS(PostMachineScheduler, "postmisched",
                 "PostRA Machine Instruction Scheduler", false, false)
@@ -497,7 +497,7 @@ void MachineSchedulerBase::print(raw_ostream &O, const Module* m) const {
   // unimplemented
 }
 
-LLVM_DUMP_METHOD
+LLVM37_DUMP_METHOD
 void ReadyQueue::dump() {
   dbgs() << Name << ": ";
   for (unsigned i = 0, e = Queue.size(); i < e; ++i)
@@ -821,7 +821,7 @@ void ScheduleDAGMI::placeDebugValues() {
   FirstDbgValue = nullptr;
 }
 
-#if !defined(NDEBUG) || defined(LLVM_ENABLE_DUMP)
+#if !defined(NDEBUG) || defined(LLVM37_ENABLE_DUMP)
 void ScheduleDAGMI::dumpSchedule() const {
   for (MachineBasicBlock::iterator MI = begin(), ME = end(); MI != ME; ++MI) {
     if (SUnit *SU = getSUnit(&(*MI)))
@@ -3235,7 +3235,7 @@ static MachineSchedRegistry ShufflerRegistry(
 //===----------------------------------------------------------------------===//
 
 #ifndef NDEBUG
-namespace llvm {
+namespace llvm37 {
 
 template<> struct GraphTraits<
   ScheduleDAGMI*> : public GraphTraits<ScheduleDAG*> {};
@@ -3302,7 +3302,7 @@ struct DOTGraphTraits<ScheduleDAGMI*> : public DefaultDOTGraphTraits {
     return Str;
   }
 };
-} // namespace llvm
+} // namespace llvm37
 #endif // NDEBUG
 
 /// viewGraph - Pop up a ghostview window with the reachable parts of the DAG

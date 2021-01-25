@@ -11,11 +11,11 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_ANALYSIS_DOMAINSPECIFIC_COCOACONVENTIONS_H
-#define LLVM_CLANG_ANALYSIS_DOMAINSPECIFIC_COCOACONVENTIONS_H
+#ifndef LLVM37_CLANG_ANALYSIS_DOMAINSPECIFIC_COCOACONVENTIONS_H
+#define LLVM37_CLANG_ANALYSIS_DOMAINSPECIFIC_COCOACONVENTIONS_H
 
 #include "clang/Basic/LLVM.h"
-#include "llvm/ADT/StringRef.h"
+#include "llvm37/ADT/StringRef.h"
 
 namespace clang {
 class FunctionDecl;

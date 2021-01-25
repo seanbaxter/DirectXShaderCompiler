@@ -21,14 +21,14 @@
 #include "dxillib.h"
 #include "dxcutil.h"
 
-#include "llvm/Support/FileSystem.h"
-#include "llvm/Support/MemoryBuffer.h"
-#include "llvm/IRReader/IRReader.h"
-#include "llvm/Bitcode/ReaderWriter.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/Support/SourceMgr.h"
+#include "llvm37/Support/FileSystem.h"
+#include "llvm37/Support/MemoryBuffer.h"
+#include "llvm37/IRReader/IRReader.h"
+#include "llvm37/Bitcode/ReaderWriter.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/Support/SourceMgr.h"
 
-using namespace llvm;
+using namespace llvm37;
 using namespace hlsl;
 
 // This declaration is used for the locally-linked validator.
@@ -75,10 +75,10 @@ HRESULT STDMETHODCALLTYPE DxcAssembler::AssembleToContainer(
   HRESULT hr = S_OK;
   DxcThreadMalloc TM(m_pMalloc);
   try {
-    ::llvm::sys::fs::MSFileSystem *msfPtr;
+    ::llvm37::sys::fs::MSFileSystem *msfPtr;
     IFT(CreateMSFileSystemForDisk(&msfPtr));
-    std::unique_ptr<::llvm::sys::fs::MSFileSystem> msf(msfPtr);
-    ::llvm::sys::fs::AutoPerThreadSystem pts(msf.get());
+    std::unique_ptr<::llvm37::sys::fs::MSFileSystem> msf(msfPtr);
+    ::llvm37::sys::fs::AutoPerThreadSystem pts(msf.get());
 
     // Setup input buffer.
     // The ir parsing requires the buffer to be null terminated. We deal with

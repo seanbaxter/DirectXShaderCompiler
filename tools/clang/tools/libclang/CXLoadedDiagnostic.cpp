@@ -18,20 +18,20 @@
 #include "clang/Basic/LLVM.h"
 #include "clang/Frontend/SerializedDiagnosticReader.h"
 #include "clang/Frontend/SerializedDiagnostics.h"
-#include "llvm/ADT/Optional.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/StringRef.h"
-#include "llvm/ADT/Twine.h"
-#include "llvm/Bitcode/BitstreamReader.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/MemoryBuffer.h"
+#include "llvm37/ADT/Optional.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/StringRef.h"
+#include "llvm37/ADT/Twine.h"
+#include "llvm37/Bitcode/BitstreamReader.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/MemoryBuffer.h"
 using namespace clang;
 
 //===----------------------------------------------------------------------===//
 // Extend CXDiagnosticSetImpl which contains strings for diagnostics.
 //===----------------------------------------------------------------------===//
 
-typedef llvm::DenseMap<unsigned, const char *> Strings;
+typedef llvm37::DenseMap<unsigned, const char *> Strings;
 
 namespace {
 class CXLoadedDiagnosticSetImpl : public CXDiagnosticSetImpl {
@@ -39,14 +39,14 @@ public:
   CXLoadedDiagnosticSetImpl() : CXDiagnosticSetImpl(true), FakeFiles(FO) {}
   ~CXLoadedDiagnosticSetImpl() override {}
 
-  llvm::BumpPtrAllocator Alloc;
+  llvm37::BumpPtrAllocator Alloc;
   Strings Categories;
   Strings WarningFlags;
   Strings FileNames;
   
   FileSystemOptions FO;
   FileManager FakeFiles;
-  llvm::DenseMap<unsigned, const FileEntry *> Files;
+  llvm37::DenseMap<unsigned, const FileEntry *> Files;
 
   /// \brief Copy the string into our own allocator.
   const char *copyString(StringRef Blob) {
@@ -192,7 +192,7 @@ class DiagLoader : serialized_diags::SerializedDiagnosticReader {
   std::unique_ptr<CXLoadedDiagnosticSetImpl> TopDiags;
   SmallVector<std::unique_ptr<CXLoadedDiagnostic>, 8> CurrentDiags;
 
-  std::error_code reportBad(enum CXLoadDiag_Error code, llvm::StringRef err) {
+  std::error_code reportBad(enum CXLoadDiag_Error code, llvm37::StringRef err) {
     if (error)
       *error = code;
     if (errorString)
@@ -200,7 +200,7 @@ class DiagLoader : serialized_diags::SerializedDiagnosticReader {
     return serialized_diags::SDError::HandlerFailed;
   }
   
-  std::error_code reportInvalidFile(llvm::StringRef err) {
+  std::error_code reportInvalidFile(llvm37::StringRef err) {
     return reportBad(CXLoadDiag_InvalidFile, err);
   }
 
@@ -249,7 +249,7 @@ public:
 }
 
 CXDiagnosticSet DiagLoader::load(const char *file) {
-  TopDiags = llvm::make_unique<CXLoadedDiagnosticSetImpl>();
+  TopDiags = llvm37::make_unique<CXLoadedDiagnosticSetImpl>();
 
   std::error_code EC = readDiagnostics(file);
   if (EC) {
@@ -308,7 +308,7 @@ DiagLoader::readRange(const serialized_diags::Location &SDStart,
 }
 
 std::error_code DiagLoader::visitStartOfDiagnostic() {
-  CurrentDiags.push_back(llvm::make_unique<CXLoadedDiagnostic>());
+  CurrentDiags.push_back(llvm37::make_unique<CXLoadedDiagnostic>());
   return std::error_code();
 }
 

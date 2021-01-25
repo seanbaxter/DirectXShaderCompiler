@@ -7,11 +7,11 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Support/DataExtractor.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/Host.h"
-#include "llvm/Support/SwapByteOrder.h"
-using namespace llvm;
+#include "llvm37/Support/DataExtractor.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/Host.h"
+#include "llvm37/Support/SwapByteOrder.h"
+using namespace llvm37;
 
 template <typename T>
 static T getU(uint32_t *offset_ptr, const DataExtractor *de,

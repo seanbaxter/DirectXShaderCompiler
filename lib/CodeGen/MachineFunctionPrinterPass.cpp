@@ -11,14 +11,14 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/CodeGen/Passes.h"
-#include "llvm/CodeGen/MachineFunction.h"
-#include "llvm/CodeGen/MachineFunctionPass.h"
-#include "llvm/CodeGen/SlotIndexes.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/CodeGen/Passes.h"
+#include "llvm37/CodeGen/MachineFunction.h"
+#include "llvm37/CodeGen/MachineFunctionPass.h"
+#include "llvm37/CodeGen/SlotIndexes.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/raw_ostream.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 namespace {
 /// MachineFunctionPrinterPass - This is a pass to dump the IR of a
@@ -51,11 +51,11 @@ struct MachineFunctionPrinterPass : public MachineFunctionPass {
 char MachineFunctionPrinterPass::ID = 0;
 }
 
-char &llvm::MachineFunctionPrinterPassID = MachineFunctionPrinterPass::ID;
+char &llvm37::MachineFunctionPrinterPassID = MachineFunctionPrinterPass::ID;
 INITIALIZE_PASS(MachineFunctionPrinterPass, "machineinstr-printer",
                 "Machine Function Printer", false, false)
 
-namespace llvm {
+namespace llvm37 {
 /// Returns a newly-created MachineFunction Printer pass. The
 /// default banner is empty.
 ///

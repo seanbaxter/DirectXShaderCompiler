@@ -7,13 +7,13 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/IR/MDBuilder.h"
-#include "llvm/IR/IRBuilder.h"
-#include "llvm/IR/Metadata.h"
-#include "llvm/IR/Operator.h"
+#include "llvm37/IR/MDBuilder.h"
+#include "llvm37/IR/IRBuilder.h"
+#include "llvm37/IR/Metadata.h"
+#include "llvm37/IR/Operator.h"
 #include "gtest/gtest.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 namespace {
 

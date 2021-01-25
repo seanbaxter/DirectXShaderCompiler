@@ -7,10 +7,10 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/ADT/APSInt.h"
+#include "llvm37/ADT/APSInt.h"
 #include "gtest/gtest.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 namespace {
 

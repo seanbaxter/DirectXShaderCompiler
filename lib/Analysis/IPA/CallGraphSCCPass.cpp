@@ -15,19 +15,19 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Analysis/CallGraphSCCPass.h"
-#include "llvm/ADT/SCCIterator.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/Analysis/CallGraph.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/LegacyPassManagers.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/Timer.h"
-#include "llvm/Support/raw_ostream.h"
-using namespace llvm;
+#include "llvm37/Analysis/CallGraphSCCPass.h"
+#include "llvm37/ADT/SCCIterator.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/Analysis/CallGraph.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/LegacyPassManagers.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/Timer.h"
+#include "llvm37/Support/raw_ostream.h"
+using namespace llvm37;
 
 #define DEBUG_TYPE "cgscc-passmgr"
 

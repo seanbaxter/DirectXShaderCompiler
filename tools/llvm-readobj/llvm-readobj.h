@@ -7,13 +7,13 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_TOOLS_LLVM_READOBJ_LLVM_READOBJ_H
-#define LLVM_TOOLS_LLVM_READOBJ_LLVM_READOBJ_H
+#ifndef LLVM37_TOOLS_LLVM37_READOBJ_LLVM37_READOBJ_H
+#define LLVM37_TOOLS_LLVM37_READOBJ_LLVM37_READOBJ_H
 
-#include "llvm/Support/CommandLine.h"
+#include "llvm37/Support/CommandLine.h"
 #include <string>
 
-namespace llvm {
+namespace llvm37 {
   namespace object {
     class RelocationRef;
   }
@@ -22,27 +22,27 @@ namespace llvm {
   bool error(std::error_code ec);
   bool relocAddressLess(object::RelocationRef A,
                         object::RelocationRef B);
-} // namespace llvm
+} // namespace llvm37
 
 namespace opts {
-  extern llvm::cl::list<std::string> InputFilenames;
-  extern llvm::cl::opt<bool> FileHeaders;
-  extern llvm::cl::opt<bool> Sections;
-  extern llvm::cl::opt<bool> SectionRelocations;
-  extern llvm::cl::opt<bool> SectionSymbols;
-  extern llvm::cl::opt<bool> SectionData;
-  extern llvm::cl::opt<bool> Relocations;
-  extern llvm::cl::opt<bool> Symbols;
-  extern llvm::cl::opt<bool> DynamicSymbols;
-  extern llvm::cl::opt<bool> UnwindInfo;
-  extern llvm::cl::opt<bool> ExpandRelocs;
-  extern llvm::cl::opt<bool> CodeView;
-  extern llvm::cl::opt<bool> CodeViewSubsectionBytes;
-  extern llvm::cl::opt<bool> ARMAttributes;
-  extern llvm::cl::opt<bool> MipsPLTGOT;
+  extern llvm37::cl::list<std::string> InputFilenames;
+  extern llvm37::cl::opt<bool> FileHeaders;
+  extern llvm37::cl::opt<bool> Sections;
+  extern llvm37::cl::opt<bool> SectionRelocations;
+  extern llvm37::cl::opt<bool> SectionSymbols;
+  extern llvm37::cl::opt<bool> SectionData;
+  extern llvm37::cl::opt<bool> Relocations;
+  extern llvm37::cl::opt<bool> Symbols;
+  extern llvm37::cl::opt<bool> DynamicSymbols;
+  extern llvm37::cl::opt<bool> UnwindInfo;
+  extern llvm37::cl::opt<bool> ExpandRelocs;
+  extern llvm37::cl::opt<bool> CodeView;
+  extern llvm37::cl::opt<bool> CodeViewSubsectionBytes;
+  extern llvm37::cl::opt<bool> ARMAttributes;
+  extern llvm37::cl::opt<bool> MipsPLTGOT;
 } // namespace opts
 
-#define LLVM_READOBJ_ENUM_ENT(ns, enum) \
+#define LLVM37_READOBJ_ENUM_ENT(ns, enum) \
   { #enum, ns::enum }
 
 #endif

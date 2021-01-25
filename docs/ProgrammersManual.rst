@@ -417,7 +417,7 @@ Then you can run your pass like this:
 
 Of course, in practice, you should only set ``DEBUG_TYPE`` at the top of a file,
 to specify the debug type for the entire module (if you do this before you
-``#include "llvm/Support/Debug.h"``, you don't have to insert the ugly
+``#include "llvm37/Support/Debug.h"``, you don't have to insert the ugly
 ``#undef``'s).  Also, you should use names more meaningful than "foo" and "bar",
 because there is no system in place to ensure that names do not conflict.  If
 two different modules use the same string, they will all be turned on when the
@@ -635,10 +635,10 @@ needs.  Pick the first in this section that will do what you want.
 llvm/ADT/ArrayRef.h
 ^^^^^^^^^^^^^^^^^^^
 
-The ``llvm::ArrayRef`` class is the preferred class to use in an interface that
+The ``llvm37::ArrayRef`` class is the preferred class to use in an interface that
 accepts a sequential list of elements in memory and just reads from them.  By
 taking an ``ArrayRef``, the API can be passed a fixed size array, an
-``std::vector``, an ``llvm::SmallVector`` and anything else that is contiguous
+``std::vector``, an ``llvm37::SmallVector`` and anything else that is contiguous
 in memory.
 
 .. _dss_fixedarrays:
@@ -1268,7 +1268,7 @@ faster.
 
 ``SetVector`` is an adapter class that defaults to using ``std::vector`` and a
 size 16 ``SmallSet`` for the underlying containers, so it is quite expensive.
-However, ``"llvm/ADT/SetVector.h"`` also provides a ``SmallSetVector`` class,
+However, ``"llvm37/ADT/SetVector.h"`` also provides a ``SmallSetVector`` class,
 which defaults to using a ``SmallVector`` and ``SmallSet`` of a specified size.
 If you use this, and if your sets are dynamically smaller than ``N``, you will
 save a lot of heap traffic.
@@ -1660,7 +1660,7 @@ how to dump all instructions in a function to the standard error stream:
 
 .. code-block:: c++
 
-  #include "llvm/IR/InstIterator.h"
+  #include "llvm37/IR/InstIterator.h"
 
   // F is a pointer to a Function instance
   for (inst_iterator I = inst_begin(F), E = inst_end(F); I != E; ++I)
@@ -1737,7 +1737,7 @@ following code, where ``B`` is a ``BasicBlock``, from compiling:
 
 .. code-block:: c++
 
-  llvm::SmallVector<llvm::Instruction *, 16>(B->begin(), B->end());
+  llvm37::SmallVector<llvm37::Instruction *, 16>(B->begin(), B->end());
 
 Because of this, these implicit conversions may be removed some day, and
 ``operator*`` changed to return a pointer instead of a reference.
@@ -1868,12 +1868,12 @@ Iterating over predecessors & successors of blocks
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Iterating over the predecessors and successors of a block is quite easy with the
-routines defined in ``"llvm/IR/CFG.h"``.  Just use code like this to
+routines defined in ``"llvm37/IR/CFG.h"``.  Just use code like this to
 iterate over all predecessors of BB:
 
 .. code-block:: c++
 
-  #include "llvm/Support/CFG.h"
+  #include "llvm37/Support/CFG.h"
   BasicBlock *BB = ...;
 
   for (pred_iterator PI = pred_begin(BB), E = pred_end(BB); PI != E; ++PI) {
@@ -2145,7 +2145,7 @@ statically, you can use ``TypeBuilder<...>::get()``, defined in
 ``llvm/Support/TypeBuilder.h``, to retrieve them.  ``TypeBuilder`` has two forms
 depending on whether you're building types for cross-compilation or native
 library use.  ``TypeBuilder<T, true>`` requires that ``T`` be independent of the
-host environment, meaning that it's built out of types from the ``llvm::types``
+host environment, meaning that it's built out of types from the ``llvm37::types``
 (`doxygen <http://llvm.org/doxygen/namespacellvm_1_1types.html>`__) namespace
 and pointers, functions, arrays, etc. built of those.  ``TypeBuilder<T, false>``
 additionally allows native C types whose size may depend on the host compiler.
@@ -2573,22 +2573,22 @@ ABI Breaking Checks
 -------------------
 
 Checks and asserts that alter the LLVM C++ ABI are predicated on the
-preprocessor symbol `LLVM_ENABLE_ABI_BREAKING_CHECKS` -- LLVM
-libraries built with `LLVM_ENABLE_ABI_BREAKING_CHECKS` are not ABI
+preprocessor symbol `LLVM37_ENABLE_ABI_BREAKING_CHECKS` -- LLVM
+libraries built with `LLVM37_ENABLE_ABI_BREAKING_CHECKS` are not ABI
 compatible LLVM libraries built without it defined.  By default,
-turning on assertions also turns on `LLVM_ENABLE_ABI_BREAKING_CHECKS`
+turning on assertions also turns on `LLVM37_ENABLE_ABI_BREAKING_CHECKS`
 so a default +Asserts build is not ABI compatible with a
 default -Asserts build.  Clients that want ABI compatibility
 between +Asserts and -Asserts builds should use the CMake or autoconf
-build systems to set `LLVM_ENABLE_ABI_BREAKING_CHECKS` independently
-of `LLVM_ENABLE_ASSERTIONS`.
+build systems to set `LLVM37_ENABLE_ABI_BREAKING_CHECKS` independently
+of `LLVM37_ENABLE_ASSERTIONS`.
 
 .. _coreclasses:
 
 The Core LLVM Class Hierarchy Reference
 =======================================
 
-``#include "llvm/IR/Type.h"``
+``#include "llvm37/IR/Type.h"``
 
 header source: `Type.h <http://llvm.org/doxygen/Type_8h-source.html>`_
 
@@ -2692,7 +2692,7 @@ Important Derived Types
 The ``Module`` class
 --------------------
 
-``#include "llvm/IR/Module.h"``
+``#include "llvm37/IR/Module.h"``
 
 header source: `Module.h <http://llvm.org/doxygen/Module_8h-source.html>`_
 
@@ -2779,7 +2779,7 @@ Important Public Members of the ``Module`` class
 The ``Value`` class
 -------------------
 
-``#include "llvm/IR/Value.h"``
+``#include "llvm37/IR/Value.h"``
 
 header source: `Value.h <http://llvm.org/doxygen/Value_8h-source.html>`_
 
@@ -2870,7 +2870,7 @@ Important Public Members of the ``Value`` class
 The ``User`` class
 ------------------
 
-``#include "llvm/IR/User.h"``
+``#include "llvm37/IR/User.h"``
 
 header source: `User.h <http://llvm.org/doxygen/User_8h-source.html>`_
 
@@ -2916,7 +2916,7 @@ interface and through an iterator based interface.
 The ``Instruction`` class
 -------------------------
 
-``#include "llvm/IR/Instruction.h"``
+``#include "llvm37/IR/Instruction.h"``
 
 header source: `Instruction.h
 <http://llvm.org/doxygen/Instruction_8h-source.html>`_
@@ -3064,7 +3064,7 @@ Important Subclasses of Constant
 The ``GlobalValue`` class
 -------------------------
 
-``#include "llvm/IR/GlobalValue.h"``
+``#include "llvm37/IR/GlobalValue.h"``
 
 header source: `GlobalValue.h
 <http://llvm.org/doxygen/GlobalValue_8h-source.html>`_
@@ -3123,7 +3123,7 @@ Important Public Members of the ``GlobalValue`` class
 The ``Function`` class
 ----------------------
 
-``#include "llvm/IR/Function.h"``
+``#include "llvm37/IR/Function.h"``
 
 header source: `Function.h <http://llvm.org/doxygen/Function_8h-source.html>`_
 
@@ -3231,7 +3231,7 @@ Important Public Members of the ``Function``
 The ``GlobalVariable`` class
 ----------------------------
 
-``#include "llvm/IR/GlobalVariable.h"``
+``#include "llvm37/IR/GlobalVariable.h"``
 
 header source: `GlobalVariable.h
 <http://llvm.org/doxygen/GlobalVariable_8h-source.html>`_
@@ -3289,7 +3289,7 @@ Important Public Members of the ``GlobalVariable`` class
 The ``BasicBlock`` class
 ------------------------
 
-``#include "llvm/IR/BasicBlock.h"``
+``#include "llvm37/IR/BasicBlock.h"``
 
 header source: `BasicBlock.h
 <http://llvm.org/doxygen/BasicBlock_8h-source.html>`_

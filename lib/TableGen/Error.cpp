@@ -12,13 +12,13 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/TableGen/Error.h"
-#include "llvm/ADT/Twine.h"
-#include "llvm/Support/Signals.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/TableGen/Error.h"
+#include "llvm37/ADT/Twine.h"
+#include "llvm37/Support/Signals.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <cstdlib>
 
-namespace llvm {
+namespace llvm37 {
 
 SourceMgr SrcMgr;
 unsigned ErrorsPrinted = 0;
@@ -77,4 +77,4 @@ void PrintFatalError(ArrayRef<SMLoc> ErrorLoc, const Twine &Msg) {
   std::exit(1);
 }
 
-} // end namespace llvm
+} // end namespace llvm37

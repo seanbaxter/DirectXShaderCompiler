@@ -7,10 +7,10 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/DebugInfo/PDB/PDBSymDumper.h"
-#include "llvm/Support/ErrorHandling.h"
+#include "llvm37/DebugInfo/PDB/PDBSymDumper.h"
+#include "llvm37/Support/ErrorHandling.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 #define PDB_SYMDUMP_UNREACHABLE(Type)                                          \
   if (RequireImpl)                                                             \

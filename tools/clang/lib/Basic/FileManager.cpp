@@ -20,12 +20,12 @@
 #include "clang/Basic/FileManager.h"
 #include "clang/Basic/FileSystemStatCache.h"
 #include "clang/Frontend/PCHContainerOperations.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/Config/llvm-config.h"
-#include "llvm/Support/FileSystem.h"
-#include "llvm/Support/MemoryBuffer.h"
-#include "llvm/Support/Path.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/Config/llvm-config.h"
+#include "llvm37/Support/FileSystem.h"
+#include "llvm37/Support/MemoryBuffer.h"
+#include "llvm37/Support/Path.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <map>
 #include <set>
 #include <string>
@@ -112,10 +112,10 @@ static const DirectoryEntry *getDirectoryFromFile(FileManager &FileMgr,
   if (Filename.empty())
     return nullptr;
 
-  if (llvm::sys::path::is_separator(Filename[Filename.size() - 1]))
+  if (llvm37::sys::path::is_separator(Filename[Filename.size() - 1]))
     return nullptr; // If Filename is a directory.
 
-  StringRef DirName = llvm::sys::path::parent_path(Filename);
+  StringRef DirName = llvm37::sys::path::parent_path(Filename);
   // Use the current directory if file has no path component.
   if (DirName.empty())
     DirName = ".";
@@ -126,7 +126,7 @@ static const DirectoryEntry *getDirectoryFromFile(FileManager &FileMgr,
 /// Add all ancestors of the given path (pointing to either a file or
 /// a directory) as virtual directories.
 void FileManager::addAncestorsAsVirtualDirs(StringRef Path) {
-  StringRef DirName = llvm::sys::path::parent_path(Path);
+  StringRef DirName = llvm37::sys::path::parent_path(Path);
   if (DirName.empty())
     return;
 
@@ -156,15 +156,15 @@ const DirectoryEntry *FileManager::getDirectory(StringRef DirName,
   // At least, on Win32 MSVCRT, stat() cannot strip trailing '/'.
   // (though it can strip '\\')
   if (DirName.size() > 1 &&
-      DirName != llvm::sys::path::root_path(DirName) &&
-      llvm::sys::path::is_separator(DirName.back()))
+      DirName != llvm37::sys::path::root_path(DirName) &&
+      llvm37::sys::path::is_separator(DirName.back()))
     DirName = DirName.substr(0, DirName.size()-1);
-#ifdef LLVM_ON_WIN32
+#ifdef LLVM37_ON_WIN32
   // Fixing a problem with "clang C:test.c" on Windows.
   // Stat("C:") does not recognize "C:" as a valid directory
   std::string DirNameStr;
   if (DirName.size() > 1 && DirName.back() == ':' &&
-      DirName.equals_lower(llvm::sys::path::root_name(DirName))) {
+      DirName.equals_lower(llvm37::sys::path::root_name(DirName))) {
     DirNameStr = DirName.str() + '.';
     DirName = DirNameStr;
   }
@@ -408,15 +408,15 @@ void FileManager::FixupRelativePath(SmallVectorImpl<char> &path) const {
   StringRef pathRef(path.data(), path.size());
 
   if (FileSystemOpts.WorkingDir.empty() 
-      || llvm::sys::path::is_absolute(pathRef))
+      || llvm37::sys::path::is_absolute(pathRef))
     return;
 
   SmallString<128> NewPath(FileSystemOpts.WorkingDir);
-  llvm::sys::path::append(NewPath, pathRef);
+  llvm37::sys::path::append(NewPath, pathRef);
   path = NewPath;
 }
 
-llvm::ErrorOr<std::unique_ptr<llvm::MemoryBuffer>>
+llvm37::ErrorOr<std::unique_ptr<llvm37::MemoryBuffer>>
 FileManager::getBufferForFile(const FileEntry *Entry, bool isVolatile,
                               bool ShouldCloseOpenFile) {
   uint64_t FileSize = Entry->getSize();
@@ -450,7 +450,7 @@ FileManager::getBufferForFile(const FileEntry *Entry, bool isVolatile,
                               /*RequiresNullTerminator=*/true, isVolatile);
 }
 
-llvm::ErrorOr<std::unique_ptr<llvm::MemoryBuffer>>
+llvm37::ErrorOr<std::unique_ptr<llvm37::MemoryBuffer>>
 FileManager::getBufferForFile(StringRef Filename) {
   if (FileSystemOpts.WorkingDir.empty())
     return FS->getBufferForFile(Filename);
@@ -484,7 +484,7 @@ bool FileManager::getNoncachedStatValue(StringRef Path,
   SmallString<128> FilePath(Path);
   FixupRelativePath(FilePath);
 
-  llvm::ErrorOr<vfs::Status> S = FS->status(FilePath.c_str());
+  llvm37::ErrorOr<vfs::Status> S = FS->status(FilePath.c_str());
   if (!S)
     return true;
   Result = *S;
@@ -509,7 +509,7 @@ void FileManager::GetUniqueIDMapping(
   UIDToFiles.resize(NextFileUID);
   
   // Map file entries
-  for (llvm::StringMap<FileEntry*, llvm::BumpPtrAllocator>::const_iterator
+  for (llvm37::StringMap<FileEntry*, llvm37::BumpPtrAllocator>::const_iterator
          FE = SeenFileEntries.begin(), FEEnd = SeenFileEntries.end();
        FE != FEEnd; ++FE)
     if (FE->getValue() && FE->getValue() != NON_EXISTENT_FILE)
@@ -531,9 +531,9 @@ void FileManager::modifyFileEntry(FileEntry *File,
 
 /// Remove '.' path components from the given absolute path.
 /// \return \c true if any changes were made.
-// FIXME: Move this to llvm::sys::path.
+// FIXME: Move this to llvm37::sys::path.
 bool FileManager::removeDotPaths(SmallVectorImpl<char> &Path) {
-  using namespace llvm::sys;
+  using namespace llvm37::sys;
 
   SmallVector<StringRef, 16> ComponentStack;
   StringRef P(Path.data(), Path.size());
@@ -541,7 +541,7 @@ bool FileManager::removeDotPaths(SmallVectorImpl<char> &Path) {
   // Skip the root path, then look for traversal in the components.
   StringRef Rel = path::relative_path(P);
   bool AnyDots = false;
-  for (StringRef C : llvm::make_range(path::begin(Rel), path::end(Rel))) {
+  for (StringRef C : llvm37::make_range(path::begin(Rel), path::end(Rel))) {
     if (C == ".") {
       AnyDots = true;
       continue;
@@ -561,15 +561,15 @@ bool FileManager::removeDotPaths(SmallVectorImpl<char> &Path) {
 }
 
 StringRef FileManager::getCanonicalName(const DirectoryEntry *Dir) {
-  // FIXME: use llvm::sys::fs::canonical() when it gets implemented
-  llvm::DenseMap<const DirectoryEntry *, llvm::StringRef>::iterator Known
+  // FIXME: use llvm37::sys::fs::canonical() when it gets implemented
+  llvm37::DenseMap<const DirectoryEntry *, llvm37::StringRef>::iterator Known
     = CanonicalDirNames.find(Dir);
   if (Known != CanonicalDirNames.end())
     return Known->second;
 
   StringRef CanonicalName(Dir->getName());
 
-#ifdef LLVM_ON_UNIX
+#ifdef LLVM37_ON_UNIX
   char CanonicalNameBuf[PATH_MAX];
   if (realpath(Dir->getName(), CanonicalNameBuf)) {
     unsigned Len = strlen(CanonicalNameBuf);
@@ -579,8 +579,8 @@ StringRef FileManager::getCanonicalName(const DirectoryEntry *Dir) {
   }
 #else
   SmallString<256> CanonicalNameBuf(CanonicalName);
-  llvm::sys::fs::make_absolute(CanonicalNameBuf);
-  llvm::sys::path::native(CanonicalNameBuf);
+  llvm37::sys::fs::make_absolute(CanonicalNameBuf);
+  llvm37::sys::path::native(CanonicalNameBuf);
   removeDotPaths(CanonicalNameBuf);
 #endif
 
@@ -589,17 +589,17 @@ StringRef FileManager::getCanonicalName(const DirectoryEntry *Dir) {
 }
 
 void FileManager::PrintStats() const {
-  llvm::errs() << "\n*** File Manager Stats:\n";
-  llvm::errs() << UniqueRealFiles.size() << " real files found, "
+  llvm37::errs() << "\n*** File Manager Stats:\n";
+  llvm37::errs() << UniqueRealFiles.size() << " real files found, "
                << UniqueRealDirs.size() << " real dirs found.\n";
-  llvm::errs() << VirtualFileEntries.size() << " virtual files found, "
+  llvm37::errs() << VirtualFileEntries.size() << " virtual files found, "
                << VirtualDirectoryEntries.size() << " virtual dirs found.\n";
-  llvm::errs() << NumDirLookups << " dir lookups, "
+  llvm37::errs() << NumDirLookups << " dir lookups, "
                << NumDirCacheMisses << " dir cache misses.\n";
-  llvm::errs() << NumFileLookups << " file lookups, "
+  llvm37::errs() << NumFileLookups << " file lookups, "
                << NumFileCacheMisses << " file cache misses.\n";
 
-  //llvm::errs() << PagesMapped << BytesOfPagesMapped << FSLookups;
+  //llvm37::errs() << PagesMapped << BytesOfPagesMapped << FSLookups;
 }
 
 // Virtual destructors for abstract base classes that need live in Basic.

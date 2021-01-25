@@ -7,17 +7,17 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/MC/MCWin64EH.h"
-#include "llvm/ADT/Twine.h"
-#include "llvm/MC/MCContext.h"
-#include "llvm/MC/MCExpr.h"
-#include "llvm/MC/MCObjectFileInfo.h"
-#include "llvm/MC/MCSectionCOFF.h"
-#include "llvm/MC/MCStreamer.h"
-#include "llvm/MC/MCSymbol.h"
-#include "llvm/Support/Win64EH.h"
+#include "llvm37/MC/MCWin64EH.h"
+#include "llvm37/ADT/Twine.h"
+#include "llvm37/MC/MCContext.h"
+#include "llvm37/MC/MCExpr.h"
+#include "llvm37/MC/MCObjectFileInfo.h"
+#include "llvm37/MC/MCSectionCOFF.h"
+#include "llvm37/MC/MCStreamer.h"
+#include "llvm37/MC/MCSymbol.h"
+#include "llvm37/Support/Win64EH.h"
 
-namespace llvm {
+namespace llvm37 {
 
 // NOTE: All relocations generated here are 4-byte image-relative.
 
@@ -245,8 +245,8 @@ void UnwindEmitter::EmitUnwindInfo(MCStreamer &Streamer,
   MCSection *xdataSect = getXDataSection(info->Function, context);
   Streamer.SwitchSection(xdataSect);
 
-  llvm::EmitUnwindInfo(Streamer, info);
+  llvm37::EmitUnwindInfo(Streamer, info);
 }
 }
-} // End of namespace llvm
+} // End of namespace llvm37
 

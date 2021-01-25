@@ -13,11 +13,11 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_ANALYSIS_ANALYSES_CFGREACHABILITYANALYSIS_H
-#define LLVM_CLANG_ANALYSIS_ANALYSES_CFGREACHABILITYANALYSIS_H
+#ifndef LLVM37_CLANG_ANALYSIS_ANALYSES_CFGREACHABILITYANALYSIS_H
+#define LLVM37_CLANG_ANALYSIS_ANALYSES_CFGREACHABILITYANALYSIS_H
 
-#include "llvm/ADT/BitVector.h"
-#include "llvm/ADT/DenseMap.h"
+#include "llvm37/ADT/BitVector.h"
+#include "llvm37/ADT/DenseMap.h"
 
 namespace clang {
 
@@ -30,8 +30,8 @@ class CFGBlock;
 // from the destination node and cache the results to prevent work
 // duplication.
 class CFGReverseBlockReachabilityAnalysis {
-  typedef llvm::BitVector ReachableSet;
-  typedef llvm::DenseMap<unsigned, ReachableSet> ReachableMap;
+  typedef llvm37::BitVector ReachableSet;
+  typedef llvm37::DenseMap<unsigned, ReachableSet> ReachableMap;
   ReachableSet analyzed;
   ReachableMap reachable;
 public:

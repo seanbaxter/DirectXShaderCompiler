@@ -18,8 +18,8 @@
 #include "CXSourceLocation.h"
 #include "CXString.h"
 #include "CXTranslationUnit.h"
-#include "llvm/Support/Compiler.h"
-#include "llvm/Support/Format.h"
+#include "llvm37/Support/Compiler.h"
+#include "llvm37/Support/Format.h"
 
 using namespace clang;
 using namespace clang::cxindex;
@@ -131,14 +131,14 @@ CXSourceLocation clang_getLocation(CXTranslationUnit TU,
   if (line == 0 || column == 0)
     return clang_getNullLocation();
   
-  LogRef Log = Logger::make(LLVM_FUNCTION_NAME);
+  LogRef Log = Logger::make(LLVM37_FUNCTION_NAME);
   ASTUnit *CXXUnit = cxtu::getASTUnit(TU);
   ASTUnit::ConcurrencyCheck Check(*CXXUnit);
   const FileEntry *File = static_cast<const FileEntry *>(file);
   SourceLocation SLoc = CXXUnit->getLocation(File, line, column);
   if (SLoc.isInvalid()) {
     if (Log)
-      *Log << llvm::format("(\"%s\", %d, %d) = invalid",
+      *Log << llvm37::format("(\"%s\", %d, %d) = invalid",
                            File->getName(), line, column);
     return clang_getNullLocation();
   }
@@ -146,7 +146,7 @@ CXSourceLocation clang_getLocation(CXTranslationUnit TU,
   CXSourceLocation CXLoc =
       cxloc::translateSourceLocation(CXXUnit->getASTContext(), SLoc);
   if (Log)
-    *Log << llvm::format("(\"%s\", %d, %d) = ", File->getName(), line, column)
+    *Log << llvm37::format("(\"%s\", %d, %d) = ", File->getName(), line, column)
          << CXLoc;
   
   return CXLoc;

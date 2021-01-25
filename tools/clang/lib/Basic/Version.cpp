@@ -14,7 +14,7 @@
 #include "clang/Basic/Version.h"
 #include "clang/Basic/LLVM.h"
 #include "clang/Config/config.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <cstdlib>
 #include <cstring>
 
@@ -62,16 +62,16 @@ std::string getLLVMRepositoryPath() {
 #ifdef HLSL_FIXED_VER // HLSL Change Starts
   return std::string();
 #else
-#ifdef LLVM_REPOSITORY
-  StringRef URL(LLVM_REPOSITORY);
+#ifdef LLVM37_REPOSITORY
+  StringRef URL(LLVM37_REPOSITORY);
 #else
   StringRef URL("");
 #endif
 
   // Trim path prefix off, assuming path came from standard llvm path.
-  // Leave "llvm/" prefix to distinguish the following llvm revision from the
+  // Leave "llvm37/" prefix to distinguish the following llvm revision from the
   // clang revision.
-  size_t Start = URL.find("llvm/");
+  size_t Start = URL.find("llvm37/");
   if (Start != StringRef::npos)
     URL = URL.substr(Start);
 
@@ -95,8 +95,8 @@ std::string getLLVMRevision() {
 #ifdef HLSL_FIXED_VER // HLSL Change Starts
   return std::string();
 #else
-#ifdef LLVM_REVISION
-  return LLVM_REVISION;
+#ifdef LLVM37_REVISION
+  return LLVM37_REVISION;
 #else
   return "";
 #endif
@@ -108,7 +108,7 @@ std::string getClangFullRepositoryVersion() {
   return std::string();
 #else
   std::string buf;
-  llvm::raw_string_ostream OS(buf);
+  llvm37::raw_string_ostream OS(buf);
   std::string Path = getClangRepositoryPath();
   std::string Revision = getClangRevision();
   if (!Path.empty() || !Revision.empty()) {
@@ -146,7 +146,7 @@ std::string getClangToolFullVersion(StringRef ToolName) {
   return std::string(HLSL_FIXED_VER);
 #else
   std::string buf;
-  llvm::raw_string_ostream OS(buf);
+  llvm37::raw_string_ostream OS(buf);
 #ifdef CLANG_VENDOR
   OS << CLANG_VENDOR;
 #endif
@@ -171,7 +171,7 @@ std::string getClangFullCPPVersion() {
   // The version string we report in __VERSION__ is just a compacted version of
   // the one we report on the command line.
   std::string buf;
-  llvm::raw_string_ostream OS(buf);
+  llvm37::raw_string_ostream OS(buf);
 #ifdef CLANG_VENDOR
   OS << CLANG_VENDOR;
 #endif

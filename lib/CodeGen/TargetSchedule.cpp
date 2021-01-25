@@ -12,14 +12,14 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/CodeGen/TargetSchedule.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Target/TargetInstrInfo.h"
-#include "llvm/Target/TargetRegisterInfo.h"
-#include "llvm/Target/TargetSubtargetInfo.h"
+#include "llvm37/CodeGen/TargetSchedule.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Target/TargetInstrInfo.h"
+#include "llvm37/Target/TargetRegisterInfo.h"
+#include "llvm37/Target/TargetSubtargetInfo.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 static cl::opt<bool> EnableSchedModel("schedmodel", cl::Hidden, cl::init(true),
   cl::desc("Use TargetSchedModel for latency lookup"));

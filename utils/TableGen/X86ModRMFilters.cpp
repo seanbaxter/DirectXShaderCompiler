@@ -9,7 +9,7 @@
 
 #include "X86ModRMFilters.h"
 
-using namespace llvm::X86Disassembler;
+using namespace llvm37::X86Disassembler;
 
 void ModRMFilter::anchor() { }
 

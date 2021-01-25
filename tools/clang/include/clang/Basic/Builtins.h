@@ -13,8 +13,8 @@
 ///
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_BASIC_BUILTINS_H
-#define LLVM_CLANG_BASIC_BUILTINS_H
+#ifndef LLVM37_CLANG_BASIC_BUILTINS_H
+#define LLVM37_CLANG_BASIC_BUILTINS_H
 
 #include "clang/Basic/LLVM.h"
 #include <cstring>

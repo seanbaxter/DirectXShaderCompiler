@@ -10,7 +10,7 @@
 #include "clang/Basic/CharInfo.h"
 #include "gtest/gtest.h"
 
-using namespace llvm;
+using namespace llvm37;
 using namespace clang;
 
 // Check that the CharInfo table has been constructed reasonably.

@@ -12,19 +12,19 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/ADT/StringSet.h"
-#include "llvm/CodeGen/CommandFlags.h"
-#include "llvm/LTO/LTOCodeGenerator.h"
-#include "llvm/LTO/LTOModule.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/FileSystem.h"
-#include "llvm/Support/ManagedStatic.h"
-#include "llvm/Support/PrettyStackTrace.h"
-#include "llvm/Support/Signals.h"
-#include "llvm/Support/TargetSelect.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/StringSet.h"
+#include "llvm37/CodeGen/CommandFlags.h"
+#include "llvm37/LTO/LTOCodeGenerator.h"
+#include "llvm37/LTO/LTOModule.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/FileSystem.h"
+#include "llvm37/Support/ManagedStatic.h"
+#include "llvm37/Support/PrettyStackTrace.h"
+#include "llvm37/Support/Signals.h"
+#include "llvm37/Support/TargetSelect.h"
+#include "llvm37/Support/raw_ostream.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 static cl::opt<char>
 OptLevel("O",
@@ -191,7 +191,7 @@ int __cdecl main(int argc, char **argv) { // HLSL Change - __cdecl
   CodeGen.setDebugInfo(LTO_DEBUG_MODEL_DWARF);
   CodeGen.setTargetOptions(Options);
 
-  llvm::StringSet<llvm::MallocAllocator> DSOSymbolsSet;
+  llvm37::StringSet<llvm37::MallocAllocator> DSOSymbolsSet;
   for (unsigned i = 0; i < DSOSymbols.size(); ++i)
     DSOSymbolsSet.insert(DSOSymbols[i]);
 

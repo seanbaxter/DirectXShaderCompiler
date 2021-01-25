@@ -13,7 +13,7 @@
 namespace clang {
 namespace spirv {
 
-SpirvBasicBlock::SpirvBasicBlock(llvm::StringRef name)
+SpirvBasicBlock::SpirvBasicBlock(llvm37::StringRef name)
     : labelId(0), labelName(name), mergeTarget(nullptr),
       continueTarget(nullptr), debugScope(nullptr) {}
 
@@ -30,7 +30,7 @@ bool SpirvBasicBlock::hasTerminator() const {
 }
 
 bool SpirvBasicBlock::invokeVisitor(Visitor *visitor,
-                                    llvm::ArrayRef<SpirvVariable *> vars,
+                                    llvm37::ArrayRef<SpirvVariable *> vars,
                                     bool reverseOrder) {
   if (!visitor->visit(this, Visitor::Phase::Init))
     return false;

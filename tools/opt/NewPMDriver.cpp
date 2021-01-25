@@ -14,29 +14,29 @@
 //===----------------------------------------------------------------------===//
 
 #include "NewPMDriver.h"
-#include "llvm/ADT/StringRef.h"
-#include "llvm/Analysis/CGSCCPassManager.h"
-#include "llvm/Bitcode/BitcodeWriterPass.h"
-#include "llvm/IR/Dominators.h"
-#include "llvm/IR/IRPrintingPasses.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/PassManager.h"
-#include "llvm/IR/Verifier.h"
-#include "llvm/Passes/PassBuilder.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/ToolOutputFile.h"
-#include "llvm/Target/TargetMachine.h"
+#include "llvm37/ADT/StringRef.h"
+#include "llvm37/Analysis/CGSCCPassManager.h"
+#include "llvm37/Bitcode/BitcodeWriterPass.h"
+#include "llvm37/IR/Dominators.h"
+#include "llvm37/IR/IRPrintingPasses.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/PassManager.h"
+#include "llvm37/IR/Verifier.h"
+#include "llvm37/Passes/PassBuilder.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/ToolOutputFile.h"
+#include "llvm37/Target/TargetMachine.h"
 
-using namespace llvm;
+using namespace llvm37;
 using namespace opt_tool;
 
 static cl::opt<bool>
     DebugPM("debug-pass-manager", cl::Hidden,
             cl::desc("Print pass management debugging information"));
 
-bool llvm::runPassPipeline(StringRef Arg0, LLVMContext &Context, Module &M,
+bool llvm37::runPassPipeline(StringRef Arg0, LLVMContext &Context, Module &M,
                            TargetMachine *TM, tool_output_file *Out,
                            StringRef PassPipeline, OutputKind OK,
                            VerifierKind VK,

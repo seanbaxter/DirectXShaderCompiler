@@ -14,15 +14,15 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Transforms/Scalar.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Module.h"
-#include "llvm/Pass.h"
-#include "llvm/Support/CommandLine.h"
-using namespace llvm;
+#include "llvm37/Transforms/Scalar.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/Pass.h"
+#include "llvm37/Support/CommandLine.h"
+using namespace llvm37;
 
 #define DEBUG_TYPE "lowerinvoke"
 
@@ -44,10 +44,10 @@ INITIALIZE_PASS(LowerInvoke, "lowerinvoke",
                 "Lower invoke and unwind, for unwindless code generators",
                 false, false)
 
-char &llvm::LowerInvokePassID = LowerInvoke::ID;
+char &llvm37::LowerInvokePassID = LowerInvoke::ID;
 
 // Public Interface To the LowerInvoke pass.
-FunctionPass *llvm::createLowerInvokePass() {
+FunctionPass *llvm37::createLowerInvokePass() {
   return new LowerInvoke();
 }
 

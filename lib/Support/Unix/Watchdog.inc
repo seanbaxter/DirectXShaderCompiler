@@ -15,7 +15,7 @@
 #include <unistd.h>
 #endif
 
-namespace llvm {
+namespace llvm37 {
   namespace sys {
     Watchdog::Watchdog(unsigned int seconds) {
 #ifdef HAVE_UNISTD_H

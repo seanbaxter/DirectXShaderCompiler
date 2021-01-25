@@ -11,10 +11,10 @@
 set -o nounset
 set -o errexit
 
-readonly LLVM_PROJECT_SVN="http://llvm.org/svn/llvm-project"
+readonly LLVM37_PROJECT_SVN="http://llvm.org/svn/llvm-project"
 
 getLatestRevisionFromSVN() {
-  svn info ${LLVM_PROJECT_SVN} | egrep ^Revision | sed 's/^Revision: //'
+  svn info ${LLVM37_PROJECT_SVN} | egrep ^Revision | sed 's/^Revision: //'
 }
 
 readonly REV="${1:-$(getLatestRevisionFromSVN)}"
@@ -23,7 +23,7 @@ createTarballFromSVN() {
   local module=$1
   local log="${module}.log"
   echo "Running: svn export -r ${REV} ${module}; log in ${log}"
-  svn -q export -r ${REV} ${LLVM_PROJECT_SVN}/${module}/trunk \
+  svn -q export -r ${REV} ${LLVM37_PROJECT_SVN}/${module}/trunk \
       ${module} > ${log} 2>&1
 
   # Create "module-revision.tar.bz2" packages from the SVN checkout dirs.

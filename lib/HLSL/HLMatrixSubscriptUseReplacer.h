@@ -8,17 +8,17 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #pragma once
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/IR/IRBuilder.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/IR/IRBuilder.h"
 #include <vector>
 
-namespace llvm {
+namespace llvm37 {
 class Value;
 class AllocaInst;
 class CallInst;
 class Instruction;
 class Function;
-} // namespace llvm
+} // namespace llvm37
 
 namespace hlsl {
 // Implements recursive replacement of a matrix subscript's uses,
@@ -30,39 +30,39 @@ namespace hlsl {
 class HLMatrixSubscriptUseReplacer {
 public:
   // The constructor does everything
-  HLMatrixSubscriptUseReplacer(llvm::CallInst* Call, llvm::Value *LoweredPtr, llvm::Value *TempLoweredMatrix,
-    llvm::SmallVectorImpl<llvm::Value*> &ElemIndices, bool AllowLoweredPtrGEPs,
-    std::vector<llvm::Instruction*> &DeadInsts);
+  HLMatrixSubscriptUseReplacer(llvm37::CallInst* Call, llvm37::Value *LoweredPtr, llvm37::Value *TempLoweredMatrix,
+    llvm37::SmallVectorImpl<llvm37::Value*> &ElemIndices, bool AllowLoweredPtrGEPs,
+    std::vector<llvm37::Instruction*> &DeadInsts);
 
 private:
-  void replaceUses(llvm::Instruction* PtrInst, llvm::Value* SubIdxVal);
-  llvm::Value *tryGetScalarIndex(llvm::Value *SubIdxVal, llvm::IRBuilder<> &Builder);
-  void cacheLoweredMatrix(bool ForDynamicIndexing, llvm::IRBuilder<> &Builder);
-  llvm::Value *loadElem(llvm::Value *Idx, llvm::IRBuilder<> &Builder);
-  void storeElem(llvm::Value *Idx, llvm::Value *Elem, llvm::IRBuilder<> &Builder);
-  llvm::Value *loadVector(llvm::IRBuilder<> &Builder);
-  void storeVector(llvm::Value *Vec, llvm::IRBuilder<> &Builder);
-  void flushLoweredMatrix(llvm::IRBuilder<> &Builder);
+  void replaceUses(llvm37::Instruction* PtrInst, llvm37::Value* SubIdxVal);
+  llvm37::Value *tryGetScalarIndex(llvm37::Value *SubIdxVal, llvm37::IRBuilder<> &Builder);
+  void cacheLoweredMatrix(bool ForDynamicIndexing, llvm37::IRBuilder<> &Builder);
+  llvm37::Value *loadElem(llvm37::Value *Idx, llvm37::IRBuilder<> &Builder);
+  void storeElem(llvm37::Value *Idx, llvm37::Value *Elem, llvm37::IRBuilder<> &Builder);
+  llvm37::Value *loadVector(llvm37::IRBuilder<> &Builder);
+  void storeVector(llvm37::Value *Vec, llvm37::IRBuilder<> &Builder);
+  void flushLoweredMatrix(llvm37::IRBuilder<> &Builder);
 
 private:
-  llvm::Value *LoweredPtr;
-  llvm::SmallVectorImpl<llvm::Value*> &ElemIndices;
-  std::vector<llvm::Instruction*> &DeadInsts;
+  llvm37::Value *LoweredPtr;
+  llvm37::SmallVectorImpl<llvm37::Value*> &ElemIndices;
+  std::vector<llvm37::Instruction*> &DeadInsts;
   bool AllowLoweredPtrGEPs = false;
   bool HasScalarResult = false;
   bool HasDynamicElemIndex = false;
-  llvm::Type *LoweredTy = nullptr;
+  llvm37::Type *LoweredTy = nullptr;
 
   // The entire lowered matrix as loaded from LoweredPtr,
   // nullptr if we copied it to a temporary array.
-  llvm::Value *TempLoweredMatrix = nullptr;
+  llvm37::Value *TempLoweredMatrix = nullptr;
 
   // We allocate this if the level 1 indices are not all constants,
   // so we can dynamically index the lowered matrix vector.
-  llvm::AllocaInst *LazyTempElemArrayAlloca = nullptr;
+  llvm37::AllocaInst *LazyTempElemArrayAlloca = nullptr;
 
   // We'll allocate this lazily if we have a dynamic level 2 index (mat[0][i]),
   // so we can dynamically index the level 1 indices.
-  llvm::AllocaInst *LazyTempElemIndicesArrayAlloca = nullptr;
+  llvm37::AllocaInst *LazyTempElemIndicesArrayAlloca = nullptr;
 };
 } // namespace hlsl

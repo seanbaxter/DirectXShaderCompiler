@@ -20,8 +20,8 @@
 #include "clang/Edit/Commit.h"
 #include "clang/Edit/EditsReceiver.h"
 #include "clang/Frontend/FrontendDiagnostic.h"
-#include "llvm/Support/Path.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/Support/Path.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <cstdio>
 #include <memory>
 
@@ -93,11 +93,11 @@ bool FixItRewriter::WriteFixedFiles(
     int fd;
     std::string Filename = FixItOpts->RewriteFilename(Entry->getName(), fd);
     std::error_code EC;
-    std::unique_ptr<llvm::raw_fd_ostream> OS;
+    std::unique_ptr<llvm37::raw_fd_ostream> OS;
     if (fd != -1) {
-      OS.reset(new llvm::raw_fd_ostream(fd, /*shouldClose=*/true));
+      OS.reset(new llvm37::raw_fd_ostream(fd, /*shouldClose=*/true));
     } else {
-      OS.reset(new llvm::raw_fd_ostream(Filename, EC, llvm::sys::fs::F_None));
+      OS.reset(new llvm37::raw_fd_ostream(Filename, EC, llvm37::sys::fs::F_None));
     }
     if (EC) {
       Diags.Report(clang::diag::err_fe_unable_to_open_output) << Filename

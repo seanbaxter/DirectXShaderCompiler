@@ -8,18 +8,18 @@
 //===----------------------------------------------------------------------===//
 
 #include "SyntaxHighlighting.h"
-#include "llvm/ADT/ArrayRef.h"
-#include "llvm/ADT/StringRef.h"
-#include "llvm/DebugInfo/DWARF/DWARFCompileUnit.h"
-#include "llvm/DebugInfo/DWARF/DWARFContext.h"
-#include "llvm/DebugInfo/DWARF/DWARFFormValue.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/Dwarf.h"
-#include "llvm/Support/Format.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/ArrayRef.h"
+#include "llvm37/ADT/StringRef.h"
+#include "llvm37/DebugInfo/DWARF/DWARFCompileUnit.h"
+#include "llvm37/DebugInfo/DWARF/DWARFContext.h"
+#include "llvm37/DebugInfo/DWARF/DWARFFormValue.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/Dwarf.h"
+#include "llvm37/Support/Format.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <cassert>
 #include <climits>
-using namespace llvm;
+using namespace llvm37;
 using namespace dwarf;
 using namespace syntax;
 

@@ -8,10 +8,10 @@
 //===----------------------------------------------------------------------===//
 
 #include "gtest/gtest.h"
-#include "llvm/ADT/DAGDeltaAlgorithm.h"
+#include "llvm37/ADT/DAGDeltaAlgorithm.h"
 #include <algorithm>
 #include <cstdarg>
-using namespace llvm;
+using namespace llvm37;
 
 namespace {
 

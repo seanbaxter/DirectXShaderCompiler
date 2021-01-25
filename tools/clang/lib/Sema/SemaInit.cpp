@@ -22,10 +22,10 @@
 #include "clang/Sema/Lookup.h"
 #include "clang/Sema/SemaInternal.h"
 #include "clang/Sema/SemaHLSL.h" // HLSL Change
-#include "llvm/ADT/APInt.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/APInt.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <map>
 using namespace clang;
 
@@ -157,7 +157,7 @@ static void CheckStringInit(Expr *Str, QualType &DeclT, const ArrayType *AT,
   if (const IncompleteArrayType *IAT = dyn_cast<IncompleteArrayType>(AT)) {
     // C99 6.7.8p14. We have an array of character type with unknown size
     // being initialized to a string literal.
-    llvm::APInt ConstVal(32, StrLength);
+    llvm37::APInt ConstVal(32, StrLength);
     // Return a new array type (C99 6.7.8p22).
     DeclT = S.Context.getConstantArrayType(IAT->getElementType(),
                                            ConstVal,
@@ -238,7 +238,7 @@ class InitListChecker {
   const InitializationKind &Kind; // HLSL Change: provide access to the initialization kind
   bool hadError;
   bool VerifyOnly; // no diagnostics, no structure building
-  llvm::DenseMap<InitListExpr *, InitListExpr *> SyntacticToSemantic;
+  llvm37::DenseMap<InitListExpr *, InitListExpr *> SyntacticToSemantic;
   InitListExpr *FullyStructuredList;
 
   void CheckImplicitInitList(const InitializedEntity &Entity,
@@ -289,7 +289,7 @@ class InitListChecker {
                              bool TopLevelObject = false);
   void CheckArrayType(const InitializedEntity &Entity,
                       InitListExpr *IList, QualType &DeclType,
-                      llvm::APSInt elementIndex,
+                      llvm37::APSInt elementIndex,
                       bool SubobjectIsDesignatorContext, unsigned &Index,
                       InitListExpr *StructuredList,
                       unsigned &StructuredIndex);
@@ -298,7 +298,7 @@ class InitListChecker {
                                   unsigned DesigIdx,
                                   QualType &CurrentObjectType,
                                   RecordDecl::field_iterator *NextField,
-                                  llvm::APSInt *NextElementIndex,
+                                  llvm37::APSInt *NextElementIndex,
                                   unsigned &Index,
                                   InitListExpr *StructuredList,
                                   unsigned &StructuredIndex,
@@ -430,7 +430,7 @@ ExprResult InitListChecker::PerformEmptyInit(Sema &SemaRef,
           IsInStd = true;
       }
 
-      if (IsInStd && llvm::StringSwitch<bool>(R->getName()) 
+      if (IsInStd && llvm37::StringSwitch<bool>(R->getName()) 
               .Cases("basic_string", "deque", "forward_list", true)
               .Cases("list", "map", "multimap", "multiset", true)
               .Cases("priority_queue", "queue", "set", "stack", true)
@@ -997,7 +997,7 @@ void InitListChecker::CheckListElementTypes(const InitializedEntity &Entity,
                           StructuredList, StructuredIndex,
                           TopLevelObject);
   } else if (DeclType->isArrayType()) {
-    llvm::APSInt Zero(
+    llvm37::APSInt Zero(
                     SemaRef.Context.getTypeSize(SemaRef.Context.getSizeType()),
                     false);
     CheckArrayType(Entity, IList, DeclType, Zero,
@@ -1519,7 +1519,7 @@ void InitListChecker::CheckVectorType(const InitializedEntity &Entity,
 
 void InitListChecker::CheckArrayType(const InitializedEntity &Entity,
                                      InitListExpr *IList, QualType &DeclType,
-                                     llvm::APSInt elementIndex,
+                                     llvm37::APSInt elementIndex,
                                      bool SubobjectIsDesignatorContext,
                                      unsigned &Index,
                                      InitListExpr *StructuredList,
@@ -1560,7 +1560,7 @@ void InitListChecker::CheckArrayType(const InitializedEntity &Entity,
   }
 
   // We might know the maximum number of elements in advance.
-  llvm::APSInt maxElements(elementIndex.getBitWidth(),
+  llvm37::APSInt maxElements(elementIndex.getBitWidth(),
                            elementIndex.isUnsigned());
   bool maxElementsKnown = false;
   if (const ConstantArrayType *CAT = dyn_cast<ConstantArrayType>(arrayType)) {
@@ -1625,7 +1625,7 @@ void InitListChecker::CheckArrayType(const InitializedEntity &Entity,
   if (!hadError && DeclType->isIncompleteArrayType() && !VerifyOnly) {
     // If this is an incomplete array type, the actual type needs to
     // be calculated here.
-    llvm::APSInt Zero(maxElements.getBitWidth(), maxElements.isUnsigned());
+    llvm37::APSInt Zero(maxElements.getBitWidth(), maxElements.isUnsigned());
     if (maxElements == Zero) {
       // Sizing an array implicitly to zero is not allowed by ISO C,
       // but is supported by GNU.
@@ -1977,7 +1977,7 @@ InitListChecker::CheckDesignatedInitializer(const InitializedEntity &Entity,
                                             unsigned DesigIdx,
                                             QualType &CurrentObjectType,
                                           RecordDecl::field_iterator *NextField,
-                                            llvm::APSInt *NextElementIndex,
+                                            llvm37::APSInt *NextElementIndex,
                                             unsigned &Index,
                                             InitListExpr *StructuredList,
                                             unsigned &StructuredIndex,
@@ -2138,7 +2138,7 @@ InitListChecker::CheckDesignatedInitializer(const InitializedEntity &Entity,
         if (TypoCorrection Corrected = SemaRef.CorrectTypo(
                 DeclarationNameInfo(FieldName, D->getFieldLoc()),
                 Sema::LookupMemberName, /*Scope=*/nullptr, /*SS=*/nullptr,
-                llvm::make_unique<FieldInitializerValidatorCCC>(RT->getDecl()),
+                llvm37::make_unique<FieldInitializerValidatorCCC>(RT->getDecl()),
                 Sema::CTK_ErrorRecovery, RT->getDecl())) {
           SemaRef.diagnoseTypo(
               Corrected,
@@ -2348,7 +2348,7 @@ InitListChecker::CheckDesignatedInitializer(const InitializedEntity &Entity,
   }
 
   Expr *IndexExpr = nullptr;
-  llvm::APSInt DesignatedStartIndex, DesignatedEndIndex;
+  llvm37::APSInt DesignatedStartIndex, DesignatedEndIndex;
   if (D->isArrayDesignator()) {
     IndexExpr = DIE->getArrayIndex(*D);
     DesignatedStartIndex = IndexExpr->EvaluateKnownConstInt(SemaRef.Context);
@@ -2373,7 +2373,7 @@ InitListChecker::CheckDesignatedInitializer(const InitializedEntity &Entity,
   }
 
   if (isa<ConstantArrayType>(AT)) {
-    llvm::APSInt MaxElements(cast<ConstantArrayType>(AT)->getSize(), false);
+    llvm37::APSInt MaxElements(cast<ConstantArrayType>(AT)->getSize(), false);
     DesignatedStartIndex
       = DesignatedStartIndex.extOrTrunc(MaxElements.getBitWidth());
     DesignatedStartIndex.setIsUnsigned(MaxElements.isUnsigned());
@@ -2425,7 +2425,7 @@ InitListChecker::CheckDesignatedInitializer(const InitializedEntity &Entity,
       // Build a literal for each character in the string, and put them into
       // the init list.
       for (unsigned i = 0, e = StrLen; i != e; ++i) {
-        llvm::APInt CodeUnit(PromotedCharTyWidth, SL->getCodeUnit(i));
+        llvm37::APInt CodeUnit(PromotedCharTyWidth, SL->getCodeUnit(i));
         Expr *Init = new (Context) IntegerLiteral(
             Context, CodeUnit, PromotedCharTy, SubExpr->getExprLoc());
         if (CharTy != PromotedCharTy)
@@ -2447,7 +2447,7 @@ InitListChecker::CheckDesignatedInitializer(const InitializedEntity &Entity,
       // Build a literal for each character in the string, and put them into
       // the init list.
       for (unsigned i = 0, e = StrLen; i != e; ++i) {
-        llvm::APInt CodeUnit(PromotedCharTyWidth, Str[i]);
+        llvm37::APInt CodeUnit(PromotedCharTyWidth, Str[i]);
         Expr *Init = new (Context) IntegerLiteral(
             Context, CodeUnit, PromotedCharTy, SubExpr->getExprLoc());
         if (CharTy != PromotedCharTy)
@@ -2661,7 +2661,7 @@ void InitListChecker::UpdateStructuredListElement(InitListExpr *StructuredList,
 /// added, on success.  If everything went okay, Value will receive the
 /// value of the constant expression.
 static ExprResult
-CheckArrayDesignatorExpr(Sema &S, Expr *Index, llvm::APSInt &Value) {
+CheckArrayDesignatorExpr(Sema &S, Expr *Index, llvm37::APSInt &Value) {
   SourceLocation Loc = Index->getLocStart();
 
   // Make sure this is an integer constant expression.
@@ -2698,7 +2698,7 @@ ExprResult Sema::ActOnDesignatedInitializer(Designation &Desig,
 
     case Designator::ArrayDesignator: {
       Expr *Index = static_cast<Expr *>(D.getArrayIndex());
-      llvm::APSInt IndexValue;
+      llvm37::APSInt IndexValue;
       if (!Index->isTypeDependent() && !Index->isValueDependent())
         Index = CheckArrayDesignatorExpr(*this, Index, IndexValue).get();
       if (!Index)
@@ -2715,8 +2715,8 @@ ExprResult Sema::ActOnDesignatedInitializer(Designation &Desig,
     case Designator::ArrayRangeDesignator: {
       Expr *StartIndex = static_cast<Expr *>(D.getArrayRangeStart());
       Expr *EndIndex = static_cast<Expr *>(D.getArrayRangeEnd());
-      llvm::APSInt StartValue;
-      llvm::APSInt EndValue;
+      llvm37::APSInt StartValue;
+      llvm37::APSInt EndValue;
       bool StartDependent = StartIndex->isTypeDependent() ||
                             StartIndex->isValueDependent();
       bool EndDependent = EndIndex->isTypeDependent() ||
@@ -2943,7 +2943,7 @@ unsigned InitializedEntity::dumpImpl(raw_ostream &OS) const {
 }
 
 void InitializedEntity::dump() const {
-  dumpImpl(llvm::errs());
+  dumpImpl(llvm37::errs());
 }
 
 //===----------------------------------------------------------------------===//
@@ -3348,7 +3348,7 @@ static bool TryInitializerListConstruction(Sema &S,
 
   // Try initializing a temporary array from the init list.
   QualType ArrayType = S.Context.getConstantArrayType(
-      E.withConst(), llvm::APInt(S.Context.getTypeSize(S.Context.getSizeType()),
+      E.withConst(), llvm37::APInt(S.Context.getTypeSize(S.Context.getSizeType()),
                                  List->getNumInits()),
       clang::ArrayType::Normal, 0);
   InitializedEntity HiddenArray =
@@ -6543,7 +6543,7 @@ InitializationSequence::Perform(Sema &S,
           QualType EltTy = IncompleteAT->getElementType();
           unsigned arraySize = hlsl::CaculateInitListArraySizeForHLSL(&S, InitList, EltTy);
           if (arraySize) {
-            llvm::APInt Size(
+            llvm37::APInt Size(
                 /*numBits=*/32, arraySize);
             QualType AT = S.getASTContext().getConstantArrayType(
                 EltTy, Size, ArrayType::ArraySizeModifier::Normal,
@@ -6903,7 +6903,7 @@ static void diagnoseListInit(Sema &S, const InitializedEntity &Entity,
   if (S.getLangOpts().CPlusPlus11 && S.isStdInitializerList(DestType, &E)) {
     QualType ArrayType = S.Context.getConstantArrayType(
         E.withConst(),
-        llvm::APInt(S.Context.getTypeSize(S.Context.getSizeType()),
+        llvm37::APInt(S.Context.getTypeSize(S.Context.getSizeType()),
                     InitList->getNumInits()),
         clang::ArrayType::Normal, 0);
     InitializedEntity HiddenArray =
@@ -7601,7 +7601,7 @@ void InitializationSequence::dump(raw_ostream &OS) const {
 }
 
 void InitializationSequence::dump() const {
-  dump(llvm::errs());
+  dump(llvm37::errs());
 }
 
 static void DiagnoseNarrowingInInitList(Sema &S,
@@ -7669,7 +7669,7 @@ static void DiagnoseNarrowingInInitList(Sema &S,
   }
 
   SmallString<128> StaticCast;
-  llvm::raw_svector_ostream OS(StaticCast);
+  llvm37::raw_svector_ostream OS(StaticCast);
   OS << "static_cast<";
   if (const TypedefType *TT = EntityType->getAs<TypedefType>()) {
     // It's important to use the typedef's name if there is one so that the

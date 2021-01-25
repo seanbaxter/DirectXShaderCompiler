@@ -17,6 +17,6 @@ add_llvm_library(LLVMDebugInfoDWARF
   SyntaxHighlighting.cpp
 
   ADDITIONAL_HEADER_DIRS
-  ${LLVM_MAIN_INCLUDE_DIR}/llvm/DebugInfo/DWARF
-  ${LLVM_MAIN_INCLUDE_DIR}/llvm/DebugInfo
+  ${LLVM37_MAIN_INCLUDE_DIR}/llvm/DebugInfo/DWARF
+  ${LLVM37_MAIN_INCLUDE_DIR}/llvm/DebugInfo
   )

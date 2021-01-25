@@ -23,16 +23,16 @@
 #include "ObjCARC.h"
 #include "DependencyAnalysis.h"
 #include "ProvenanceAnalysis.h"
-#include "llvm/IR/CFG.h"
+#include "llvm37/IR/CFG.h"
 
-using namespace llvm;
-using namespace llvm::objcarc;
+using namespace llvm37;
+using namespace llvm37::objcarc;
 
 #define DEBUG_TYPE "objc-arc-dependency"
 
 /// Test whether the given instruction can result in a reference count
 /// modification (positive or negative) for the pointer's object.
-bool llvm::objcarc::CanAlterRefCount(const Instruction *Inst, const Value *Ptr,
+bool llvm37::objcarc::CanAlterRefCount(const Instruction *Inst, const Value *Ptr,
                                      ProvenanceAnalysis &PA,
                                      ARCInstKind Class) {
   switch (Class) {
@@ -68,7 +68,7 @@ bool llvm::objcarc::CanAlterRefCount(const Instruction *Inst, const Value *Ptr,
   return true;
 }
 
-bool llvm::objcarc::CanDecrementRefCount(const Instruction *Inst,
+bool llvm37::objcarc::CanDecrementRefCount(const Instruction *Inst,
                                          const Value *Ptr,
                                          ProvenanceAnalysis &PA,
                                          ARCInstKind Class) {
@@ -82,7 +82,7 @@ bool llvm::objcarc::CanDecrementRefCount(const Instruction *Inst,
 
 /// Test whether the given instruction can "use" the given pointer's object in a
 /// way that requires the reference count to be positive.
-bool llvm::objcarc::CanUse(const Instruction *Inst, const Value *Ptr,
+bool llvm37::objcarc::CanUse(const Instruction *Inst, const Value *Ptr,
                            ProvenanceAnalysis &PA, ARCInstKind Class) {
   // ARCInstKind::Call operations (as opposed to
   // ARCInstKind::CallOrUser) never "use" objc pointers.
@@ -132,7 +132,7 @@ bool llvm::objcarc::CanUse(const Instruction *Inst, const Value *Ptr,
 /// Test if there can be dependencies on Inst through Arg. This function only
 /// tests dependencies relevant for removing pairs of calls.
 bool
-llvm::objcarc::Depends(DependenceKind Flavor, Instruction *Inst,
+llvm37::objcarc::Depends(DependenceKind Flavor, Instruction *Inst,
                        const Value *Arg, ProvenanceAnalysis &PA) {
   // If we've reached the definition of Arg, stop.
   if (Inst == Arg)
@@ -220,7 +220,7 @@ llvm::objcarc::Depends(DependenceKind Flavor, Instruction *Inst,
 ///
 /// TODO: Cache results?
 void
-llvm::objcarc::FindDependencies(DependenceKind Flavor,
+llvm37::objcarc::FindDependencies(DependenceKind Flavor,
                                 const Value *Arg,
                                 BasicBlock *StartBB, Instruction *StartInst,
                                 SmallPtrSetImpl<Instruction *> &DependingInsts,

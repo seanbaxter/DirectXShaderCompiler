@@ -7,16 +7,16 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Support/Errc.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/FileOutputBuffer.h"
-#include "llvm/Support/FileSystem.h"
-#include "llvm/Support/Path.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/Support/Errc.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/FileOutputBuffer.h"
+#include "llvm37/Support/FileSystem.h"
+#include "llvm37/Support/Path.h"
+#include "llvm37/Support/raw_ostream.h"
 #include "gtest/gtest.h"
 
-using namespace llvm;
-using namespace llvm::sys;
+using namespace llvm37;
+using namespace llvm37::sys;
 
 #define ASSERT_NO_ERROR(x)                                                     \
   if (std::error_code ASSERT_NO_ERROR_ec = x) {                                \

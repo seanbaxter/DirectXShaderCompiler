@@ -12,13 +12,13 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_STATICANALYZER_CORE_PATHSENSITIVE_SVALS_H
-#define LLVM_CLANG_STATICANALYZER_CORE_PATHSENSITIVE_SVALS_H
+#ifndef LLVM37_CLANG_STATICANALYZER_CORE_PATHSENSITIVE_SVALS_H
+#define LLVM37_CLANG_STATICANALYZER_CORE_PATHSENSITIVE_SVALS_H
 
 #include "clang/Basic/LLVM.h"
 #include "clang/StaticAnalyzer/Core/PathSensitive/ProgramState_Fwd.h"
 #include "clang/StaticAnalyzer/Core/PathSensitive/SymbolManager.h"
-#include "llvm/ADT/ImmutableList.h"
+#include "llvm37/ADT/ImmutableList.h"
 
 //==------------------------------------------------------------------------==//
 //  Base SVal types.
@@ -101,7 +101,7 @@ public:
 
   // This method is required for using SVal in a FoldingSetNode.  It
   // extracts a unique signature for this SVal object.
-  inline void Profile(llvm::FoldingSetNodeID& ID) const {
+  inline void Profile(llvm37::FoldingSetNodeID& ID) const {
     ID.AddInteger((unsigned) getRawKind());
     ID.AddPointer(Data);
   }
@@ -338,10 +338,10 @@ private:
 /// \brief Value representing integer constant.
 class ConcreteInt : public NonLoc {
 public:
-  explicit ConcreteInt(const llvm::APSInt& V) : NonLoc(ConcreteIntKind, &V) {}
+  explicit ConcreteInt(const llvm37::APSInt& V) : NonLoc(ConcreteIntKind, &V) {}
 
-  const llvm::APSInt& getValue() const {
-    return *static_cast<const llvm::APSInt*>(Data);
+  const llvm37::APSInt& getValue() const {
+    return *static_cast<const llvm37::APSInt*>(Data);
   }
 
   // Transfer functions for binary/unary operations on ConcreteInts.
@@ -417,7 +417,7 @@ public:
     return static_cast<const CompoundValData*>(Data);
   }
 
-  typedef llvm::ImmutableList<SVal>::iterator iterator;
+  typedef llvm37::ImmutableList<SVal>::iterator iterator;
   iterator begin() const;
   iterator end() const;
 
@@ -528,10 +528,10 @@ private:
 
 class ConcreteInt : public Loc {
 public:
-  explicit ConcreteInt(const llvm::APSInt& V) : Loc(ConcreteIntKind, &V) {}
+  explicit ConcreteInt(const llvm37::APSInt& V) : Loc(ConcreteIntKind, &V) {}
 
-  const llvm::APSInt& getValue() const {
-    return *static_cast<const llvm::APSInt*>(Data);
+  const llvm37::APSInt& getValue() const {
+    return *static_cast<const llvm37::APSInt*>(Data);
   }
 
   // Transfer functions for binary/unary operations on ConcreteInts.
@@ -557,7 +557,7 @@ private:
 
 } // end clang namespace
 
-namespace llvm {
+namespace llvm37 {
 static inline raw_ostream &operator<<(raw_ostream &os,
                                             clang::ento::SVal V) {
   V.dumpToStream(os);

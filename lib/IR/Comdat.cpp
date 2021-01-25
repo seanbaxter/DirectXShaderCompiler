@@ -11,9 +11,9 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/IR/Comdat.h"
-#include "llvm/ADT/StringMap.h"
-using namespace llvm;
+#include "llvm37/IR/Comdat.h"
+#include "llvm37/ADT/StringMap.h"
+using namespace llvm37;
 
 Comdat::Comdat(SelectionKind SK, StringMapEntry<Comdat> *Name)
     : Name(Name), SK(SK) {}

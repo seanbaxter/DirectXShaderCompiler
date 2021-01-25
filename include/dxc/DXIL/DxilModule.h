@@ -27,7 +27,7 @@
 #include <unordered_map>
 #include <unordered_set>
 
-namespace llvm {
+namespace llvm37 {
 class LLVMContext;
 class Module;
 class Function;
@@ -46,17 +46,17 @@ struct DxilFunctionProps;
 class DxilEntryProps;
 
 using DxilEntryPropsMap =
-    std::unordered_map<const llvm::Function *, std::unique_ptr<DxilEntryProps>>;
+    std::unordered_map<const llvm37::Function *, std::unique_ptr<DxilEntryProps>>;
 
 /// Use this class to manipulate DXIL of a shader.
 class DxilModule {
 public:
-  DxilModule(llvm::Module *pModule);
+  DxilModule(llvm37::Module *pModule);
   ~DxilModule();
 
   // Subsystems.
-  llvm::LLVMContext &GetCtx() const;
-  llvm::Module *GetModule() const;
+  llvm37::LLVMContext &GetCtx() const;
+  llvm37::Module *GetModule() const;
   OP *GetOP() const;
   void SetShaderModel(const ShaderModel *pSM, bool bUseMinPrecision = true);
   const ShaderModel *GetShaderModel() const;
@@ -73,15 +73,15 @@ public:
   bool UpgradeToMinValidatorVersion();
 
   // Entry functions.
-  llvm::Function *GetEntryFunction();
-  const llvm::Function *GetEntryFunction() const;
-  void SetEntryFunction(llvm::Function *pEntryFunc);
+  llvm37::Function *GetEntryFunction();
+  const llvm37::Function *GetEntryFunction() const;
+  void SetEntryFunction(llvm37::Function *pEntryFunc);
   const std::string &GetEntryFunctionName() const;
   void SetEntryFunctionName(const std::string &name);
-  llvm::Function *GetPatchConstantFunction();
-  const llvm::Function *GetPatchConstantFunction() const;
-  void SetPatchConstantFunction(llvm::Function *pFunc);
-  bool IsEntryOrPatchConstantFunction(const llvm::Function* pFunc) const;
+  llvm37::Function *GetPatchConstantFunction();
+  const llvm37::Function *GetPatchConstantFunction() const;
+  void SetPatchConstantFunction(llvm37::Function *pFunc);
+  bool IsEntryOrPatchConstantFunction(const llvm37::Function* pFunc) const;
 
   // Flags.
   unsigned GetGlobalFlags() const;
@@ -108,13 +108,13 @@ public:
   const DxilResource &GetUAV(unsigned idx) const;
   const std::vector<std::unique_ptr<DxilResource> > &GetUAVs() const;
 
-  void LoadDxilResourceBaseFromMDNode(llvm::MDNode *MD, DxilResourceBase &R);
-  void LoadDxilResourceFromMDNode(llvm::MDNode *MD, DxilResource &R);
-  void LoadDxilSamplerFromMDNode(llvm::MDNode *MD, DxilSampler &S);
+  void LoadDxilResourceBaseFromMDNode(llvm37::MDNode *MD, DxilResourceBase &R);
+  void LoadDxilResourceFromMDNode(llvm37::MDNode *MD, DxilResource &R);
+  void LoadDxilSamplerFromMDNode(llvm37::MDNode *MD, DxilSampler &S);
 
   void RemoveUnusedResources();
   void RemoveResourcesWithUnusedSymbols();
-  void RemoveFunction(llvm::Function *F);
+  void RemoveFunction(llvm37::Function *F);
 
   bool RenameResourcesWithPrefix(const std::string &prefix);
   bool RenameResourceGlobalsWithBinding(bool bKeepName = true);
@@ -129,33 +129,33 @@ public:
   const std::vector<uint8_t> &GetSerializedRootSignature() const;
   std::vector<uint8_t> &GetSerializedRootSignature();
 
-  bool HasDxilEntrySignature(const llvm::Function *F) const;
-  DxilEntrySignature &GetDxilEntrySignature(const llvm::Function *F);
+  bool HasDxilEntrySignature(const llvm37::Function *F) const;
+  DxilEntrySignature &GetDxilEntrySignature(const llvm37::Function *F);
   // Move DxilEntryProps of F to NewF.
-  void ReplaceDxilEntryProps(llvm::Function *F, llvm::Function *NewF);
+  void ReplaceDxilEntryProps(llvm37::Function *F, llvm37::Function *NewF);
   // Clone DxilEntryProps of F to NewF.
-  void CloneDxilEntryProps(llvm::Function *F, llvm::Function *NewF);
-  bool HasDxilEntryProps(const llvm::Function *F) const;
-  DxilEntryProps &GetDxilEntryProps(const llvm::Function *F);
-  const DxilEntryProps &GetDxilEntryProps(const llvm::Function *F) const;
+  void CloneDxilEntryProps(llvm37::Function *F, llvm37::Function *NewF);
+  bool HasDxilEntryProps(const llvm37::Function *F) const;
+  DxilEntryProps &GetDxilEntryProps(const llvm37::Function *F);
+  const DxilEntryProps &GetDxilEntryProps(const llvm37::Function *F) const;
 
   // DxilFunctionProps.
-  bool HasDxilFunctionProps(const llvm::Function *F) const;
-  DxilFunctionProps &GetDxilFunctionProps(const llvm::Function *F);
-  const DxilFunctionProps &GetDxilFunctionProps(const llvm::Function *F) const;
+  bool HasDxilFunctionProps(const llvm37::Function *F) const;
+  DxilFunctionProps &GetDxilFunctionProps(const llvm37::Function *F);
+  const DxilFunctionProps &GetDxilFunctionProps(const llvm37::Function *F) const;
 
   // Move DxilFunctionProps of F to NewF.
-  void SetPatchConstantFunctionForHS(llvm::Function *hullShaderFunc, llvm::Function *patchConstantFunc);
-  bool IsGraphicsShader(const llvm::Function *F) const; // vs,hs,ds,gs,ps
-  bool IsPatchConstantShader(const llvm::Function *F) const;
-  bool IsComputeShader(const llvm::Function *F) const;
+  void SetPatchConstantFunctionForHS(llvm37::Function *hullShaderFunc, llvm37::Function *patchConstantFunc);
+  bool IsGraphicsShader(const llvm37::Function *F) const; // vs,hs,ds,gs,ps
+  bool IsPatchConstantShader(const llvm37::Function *F) const;
+  bool IsComputeShader(const llvm37::Function *F) const;
 
   // Is an entry function that uses input/output signature conventions?
   // Includes: vs/hs/ds/gs/ps/cs as well as the patch constant function.
-  bool IsEntryThatUsesSignatures(const llvm::Function *F) const ;
+  bool IsEntryThatUsesSignatures(const llvm37::Function *F) const ;
   // Is F an entry?
   // Includes: IsEntryThatUsesSignatures and all ray tracing shaders.
-  bool IsEntry(const llvm::Function *F) const;
+  bool IsEntry(const llvm37::Function *F) const;
 
   // Remove Root Signature from module metadata, return true if changed
   bool StripRootSignatureFromMetadata();
@@ -169,7 +169,7 @@ public:
 
   /// Emit llvm.used array to make sure that optimizations do not remove unreferenced globals.
   void EmitLLVMUsed();
-  std::vector<llvm::GlobalVariable* > &GetLLVMUsed();
+  std::vector<llvm37::GlobalVariable* > &GetLLVMUsed();
   void ClearLLVMUsed();
 
   // ViewId state.
@@ -178,7 +178,7 @@ public:
 
   // DXIL metadata manipulation.
   /// Clear all DXIL data that exists in in-memory form.
-  static void ClearDxilMetadata(llvm::Module &M);
+  static void ClearDxilMetadata(llvm37::Module &M);
   /// Serialize DXIL in-memory form to metadata form.
   void EmitDxilMetadata();
   /// Update resource metadata.
@@ -193,7 +193,7 @@ public:
   void LoadDxilCounters(DxilCounters &counters) const;
 
   /// Check if a Named meta data node is known by dxil module.
-  static bool IsKnownNamedMetaData(llvm::NamedMDNode &Node);
+  static bool IsKnownNamedMetaData(llvm37::NamedMDNode &Node);
 
   // Reset functions used to transfer ownership.
   void ResetEntrySignature(DxilEntrySignature *pValue);
@@ -204,9 +204,9 @@ public:
 
   bool StripReflection();
   void StripDebugRelatedCode();
-  llvm::DebugInfoFinder &GetOrCreateDebugInfoFinder();
+  llvm37::DebugInfoFinder &GetOrCreateDebugInfoFinder();
 
-  static DxilModule *TryGetDxilModule(llvm::Module *pModule);
+  static DxilModule *TryGetDxilModule(llvm37::Module *pModule);
 
   // Helpers for working with precise.
 
@@ -218,17 +218,17 @@ public:
   // 2. The instruction has a precise metadata annotation.
   // 3. The instruction has precise fast math flags set.
   //
-  bool IsPrecise(const llvm::Instruction *inst) const;
+  bool IsPrecise(const llvm37::Instruction *inst) const;
 
   // Check if the instruction has fast math flags configured to indicate
   // the instruction is precise.
-  static bool HasPreciseFastMathFlags(const llvm::Instruction *inst);
+  static bool HasPreciseFastMathFlags(const llvm37::Instruction *inst);
   
   // Set fast math flags configured to indicate the instruction is precise.
-  static void SetPreciseFastMathFlags(llvm::Instruction *inst);
+  static void SetPreciseFastMathFlags(llvm37::Instruction *inst);
   
   // True if fast math flags are preserved across serialize/deserialize.
-  static bool PreservesFastMathFlags(const llvm::Instruction *inst);
+  static bool PreservesFastMathFlags(const llvm37::Instruction *inst);
 
 public:
   ShaderFlags m_ShaderFlags;
@@ -333,12 +333,12 @@ private:
   };
 
 private:
-  llvm::LLVMContext &m_Ctx;
-  llvm::Module *m_pModule;
-  llvm::Function *m_pEntryFunc;
+  llvm37::LLVMContext &m_Ctx;
+  llvm37::Module *m_pModule;
+  llvm37::Function *m_pEntryFunc;
   std::string m_EntryName;
   std::unique_ptr<DxilMDHelper> m_pMDHelper;
-  std::unique_ptr<llvm::DebugInfoFinder> m_pDebugInfoFinder;
+  std::unique_ptr<llvm37::DebugInfoFinder> m_pDebugInfoFinder;
   const ShaderModel *m_pSM;
   unsigned m_DxilMajor;
   unsigned m_DxilMinor;
@@ -350,7 +350,7 @@ private:
   size_t m_pUnused;
 
   // LLVM used.
-  std::vector<llvm::GlobalVariable*> m_LLVMUsed;
+  std::vector<llvm37::GlobalVariable*> m_LLVMUsed;
 
   // Type annotations.
   std::unique_ptr<DxilTypeSystem> m_pTypeSystem;
@@ -359,18 +359,18 @@ private:
   DxilEntryPropsMap  m_DxilEntryPropsMap;
 
   // Keeps track of patch constant functions used by hull shaders
-  std::unordered_set<const llvm::Function *>  m_PatchConstantFunctions;
+  std::unordered_set<const llvm37::Function *>  m_PatchConstantFunctions;
 
   // Serialized ViewId state.
   std::vector<unsigned> m_SerializedState;
 
   // DXIL metadata serialization/deserialization.
-  llvm::MDTuple *EmitDxilResources();
-  void LoadDxilResources(const llvm::MDOperand &MDO);
+  llvm37::MDTuple *EmitDxilResources();
+  void LoadDxilResources(const llvm37::MDOperand &MDO);
 
   // Helpers.
   template<typename T> unsigned AddResource(std::vector<std::unique_ptr<T> > &Vec, std::unique_ptr<T> pRes);
-  void LoadDxilSignature(const llvm::MDTuple *pSigTuple, DxilSignature &Sig, bool bInput);
+  void LoadDxilSignature(const llvm37::MDTuple *pSigTuple, DxilSignature &Sig, bool bInput);
 
   // properties from HLModule preserved as ShaderFlags
   bool m_bDisableOptimizations;

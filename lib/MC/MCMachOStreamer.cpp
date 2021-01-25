@@ -7,28 +7,28 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/MC/MCStreamer.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/MC/MCAsmBackend.h"
-#include "llvm/MC/MCAssembler.h"
-#include "llvm/MC/MCCodeEmitter.h"
-#include "llvm/MC/MCContext.h"
-#include "llvm/MC/MCDwarf.h"
-#include "llvm/MC/MCExpr.h"
-#include "llvm/MC/MCInst.h"
-#include "llvm/MC/MCLinkerOptimizationHint.h"
-#include "llvm/MC/MCObjectFileInfo.h"
-#include "llvm/MC/MCObjectStreamer.h"
-#include "llvm/MC/MCSection.h"
-#include "llvm/MC/MCSectionMachO.h"
-#include "llvm/MC/MCSymbolMachO.h"
-#include "llvm/Support/Dwarf.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/TargetRegistry.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/MC/MCStreamer.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/MC/MCAsmBackend.h"
+#include "llvm37/MC/MCAssembler.h"
+#include "llvm37/MC/MCCodeEmitter.h"
+#include "llvm37/MC/MCContext.h"
+#include "llvm37/MC/MCDwarf.h"
+#include "llvm37/MC/MCExpr.h"
+#include "llvm37/MC/MCInst.h"
+#include "llvm37/MC/MCLinkerOptimizationHint.h"
+#include "llvm37/MC/MCObjectFileInfo.h"
+#include "llvm37/MC/MCObjectStreamer.h"
+#include "llvm37/MC/MCSection.h"
+#include "llvm37/MC/MCSectionMachO.h"
+#include "llvm37/MC/MCSymbolMachO.h"
+#include "llvm37/Support/Dwarf.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/TargetRegistry.h"
+#include "llvm37/Support/raw_ostream.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 namespace {
 
@@ -487,7 +487,7 @@ void MCMachOStreamer::FinishImpl() {
   this->MCObjectStreamer::FinishImpl();
 }
 
-MCStreamer *llvm::createMachOStreamer(MCContext &Context, MCAsmBackend &MAB,
+MCStreamer *llvm37::createMachOStreamer(MCContext &Context, MCAsmBackend &MAB,
                                       raw_pwrite_stream &OS, MCCodeEmitter *CE,
                                       bool RelaxAll, bool DWARFMustBeAtTheEnd,
                                       bool LabelSections) {

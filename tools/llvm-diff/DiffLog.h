@@ -11,13 +11,13 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_TOOLS_LLVM_DIFF_DIFFLOG_H
-#define LLVM_TOOLS_LLVM_DIFF_DIFFLOG_H
+#ifndef LLVM37_TOOLS_LLVM37_DIFF_DIFFLOG_H
+#define LLVM37_TOOLS_LLVM37_DIFF_DIFFLOG_H
 
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/ADT/StringRef.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/ADT/StringRef.h"
 
-namespace llvm {
+namespace llvm37 {
   class Instruction;
   class Value;
   class Consumer;

@@ -13,7 +13,7 @@
 //===----------------------------------------------------------------------===//
 
 #include "WhitespaceManager.h"
-#include "llvm/ADT/STLExtras.h"
+#include "llvm37/ADT/STLExtras.h"
 
 namespace clang {
 namespace format {

@@ -12,9 +12,9 @@
 #pragma once
 
 #include <functional>
-#include <llvm/ADT/SmallVector.h> // HLSL Change
+#include <llvm37/ADT/SmallVector.h> // HLSL Change
 
-namespace llvm {
+namespace llvm37 {
 class Function;
 class Value;
 class Constant;
@@ -52,7 +52,7 @@ class LValue;
 class CGHLSLRuntime {
 protected:
   CodeGenModule &CGM;
-  llvm::SmallVector<llvm::BranchInst*, 16> m_DxBreaks;
+  llvm37::SmallVector<llvm37::BranchInst*, 16> m_DxBreaks;
 
 public:
   CGHLSLRuntime(CodeGenModule &CGM) : CGM(CGM) {}
@@ -67,80 +67,80 @@ public:
                                          ReturnValueSlot ReturnValue) = 0;
   // Is E is a c++ init list not a hlsl init list which only match size.
   virtual bool IsTrivalInitListExpr(CodeGenFunction &CGF, InitListExpr *E) = 0;
-  virtual llvm::Value *EmitHLSLInitListExpr(CodeGenFunction &CGF, InitListExpr *E,
+  virtual llvm37::Value *EmitHLSLInitListExpr(CodeGenFunction &CGF, InitListExpr *E,
       // The destPtr when emiting aggregate init, for normal case, it will be null.
-      llvm::Value *DestPtr) = 0;
-  virtual llvm::Constant *EmitHLSLConstInitListExpr(CodeGenModule &CGM, InitListExpr *E) = 0;
+      llvm37::Value *DestPtr) = 0;
+  virtual llvm37::Constant *EmitHLSLConstInitListExpr(CodeGenModule &CGM, InitListExpr *E) = 0;
 
   virtual void EmitHLSLOutParamConversionInit(
       CodeGenFunction &CGF, const FunctionDecl *FD, const CallExpr *E,
-      llvm::SmallVector<LValue, 8> &castArgList,
-      llvm::SmallVector<const Stmt *, 8> &argList,
-      llvm::SmallVector<LValue, 8> &lifetimeCleanupList,
-      const std::function<void(const VarDecl *, llvm::Value *)> &TmpArgMap) = 0;
+      llvm37::SmallVector<LValue, 8> &castArgList,
+      llvm37::SmallVector<const Stmt *, 8> &argList,
+      llvm37::SmallVector<LValue, 8> &lifetimeCleanupList,
+      const std::function<void(const VarDecl *, llvm37::Value *)> &TmpArgMap) = 0;
   virtual void EmitHLSLOutParamConversionCopyBack(
-      CodeGenFunction &CGF, llvm::SmallVector<LValue, 8> &castArgList,
-      llvm::SmallVector<LValue, 8> &lifetimeCleanupList) = 0;
-  virtual void MarkRetTemp(CodeGenFunction &CGF, llvm::Value *V,
+      CodeGenFunction &CGF, llvm37::SmallVector<LValue, 8> &castArgList,
+      llvm37::SmallVector<LValue, 8> &lifetimeCleanupList) = 0;
+  virtual void MarkRetTemp(CodeGenFunction &CGF, llvm37::Value *V,
                           clang::QualType QaulTy) = 0;
-  virtual llvm::Value *EmitHLSLMatrixOperationCall(CodeGenFunction &CGF, const clang::Expr *E, llvm::Type *RetType,
-      llvm::ArrayRef<llvm::Value*> paramList) = 0;
+  virtual llvm37::Value *EmitHLSLMatrixOperationCall(CodeGenFunction &CGF, const clang::Expr *E, llvm37::Type *RetType,
+      llvm37::ArrayRef<llvm37::Value*> paramList) = 0;
   virtual void EmitHLSLDiscard(CodeGenFunction &CGF) = 0;
-  virtual llvm::BranchInst *EmitHLSLCondBreak(CodeGenFunction &CGF, llvm::Function *F, llvm::BasicBlock *DestBB, llvm::BasicBlock *AltBB) = 0;
+  virtual llvm37::BranchInst *EmitHLSLCondBreak(CodeGenFunction &CGF, llvm37::Function *F, llvm37::BasicBlock *DestBB, llvm37::BasicBlock *AltBB) = 0;
 
   // For [] on matrix
-  virtual llvm::Value *EmitHLSLMatrixSubscript(CodeGenFunction &CGF,
-                                          llvm::Type *RetType,
-                                          llvm::Value *Ptr, llvm::Value *Idx,
+  virtual llvm37::Value *EmitHLSLMatrixSubscript(CodeGenFunction &CGF,
+                                          llvm37::Type *RetType,
+                                          llvm37::Value *Ptr, llvm37::Value *Idx,
                                           clang::QualType Ty) = 0;
   // For ._m on matrix
-  virtual llvm::Value *EmitHLSLMatrixElement(CodeGenFunction &CGF,
-                                          llvm::Type *RetType,
-                                          llvm::ArrayRef<llvm::Value*> paramList,
+  virtual llvm37::Value *EmitHLSLMatrixElement(CodeGenFunction &CGF,
+                                          llvm37::Type *RetType,
+                                          llvm37::ArrayRef<llvm37::Value*> paramList,
                                           clang::QualType Ty) = 0;
 
-  virtual llvm::Value *EmitHLSLMatrixLoad(CodeGenFunction &CGF,
-                                          llvm::Value *Ptr,
+  virtual llvm37::Value *EmitHLSLMatrixLoad(CodeGenFunction &CGF,
+                                          llvm37::Value *Ptr,
                                           clang::QualType Ty) = 0;
-  virtual void EmitHLSLMatrixStore(CodeGenFunction &CGF, llvm::Value *Val,
-                                   llvm::Value *DestPtr,
+  virtual void EmitHLSLMatrixStore(CodeGenFunction &CGF, llvm37::Value *Val,
+                                   llvm37::Value *DestPtr,
                                    clang::QualType Ty) = 0;
-  virtual void EmitHLSLAggregateCopy(CodeGenFunction &CGF, llvm::Value *SrcPtr,
-                                   llvm::Value *DestPtr,
+  virtual void EmitHLSLAggregateCopy(CodeGenFunction &CGF, llvm37::Value *SrcPtr,
+                                   llvm37::Value *DestPtr,
                                    clang::QualType Ty) = 0;
-  virtual void EmitHLSLAggregateStore(CodeGenFunction &CGF, llvm::Value *Val,
-                                   llvm::Value *DestPtr,
+  virtual void EmitHLSLAggregateStore(CodeGenFunction &CGF, llvm37::Value *Val,
+                                   llvm37::Value *DestPtr,
                                    clang::QualType Ty) = 0;
-  virtual void EmitHLSLFlatConversion(CodeGenFunction &CGF, llvm::Value *Val,
-                                   llvm::Value *DestPtr,
+  virtual void EmitHLSLFlatConversion(CodeGenFunction &CGF, llvm37::Value *Val,
+                                   llvm37::Value *DestPtr,
                                    clang::QualType Ty, clang::QualType SrcTy) = 0;
-  virtual void EmitHLSLFlatConversionAggregateCopy(CodeGenFunction &CGF, llvm::Value *SrcPtr,
+  virtual void EmitHLSLFlatConversionAggregateCopy(CodeGenFunction &CGF, llvm37::Value *SrcPtr,
                                    clang::QualType SrcTy,
-                                   llvm::Value *DestPtr,
+                                   llvm37::Value *DestPtr,
                                    clang::QualType DestTy) = 0;
   virtual void EmitHLSLRootSignature(CodeGenFunction &CGF,
                                      clang::HLSLRootSignatureAttr *RSA,
-                                     llvm::Function *Fn) = 0;
-  virtual llvm::Value *EmitHLSLLiteralCast(CodeGenFunction &CGF, llvm::Value *Src, clang::QualType SrcType,
+                                     llvm37::Function *Fn) = 0;
+  virtual llvm37::Value *EmitHLSLLiteralCast(CodeGenFunction &CGF, llvm37::Value *Src, clang::QualType SrcType,
                                                clang::QualType DstType) = 0;
 
-  virtual void AddHLSLFunctionInfo(llvm::Function *, const FunctionDecl *FD) = 0;
-  virtual void EmitHLSLFunctionProlog(llvm::Function *, const FunctionDecl *FD) = 0;
+  virtual void AddHLSLFunctionInfo(llvm37::Function *, const FunctionDecl *FD) = 0;
+  virtual void EmitHLSLFunctionProlog(llvm37::Function *, const FunctionDecl *FD) = 0;
 
   
-  virtual void AddControlFlowHint(CodeGenFunction &CGF, const Stmt &S, llvm::TerminatorInst *TI, llvm::ArrayRef<const Attr *> Attrs) = 0;
+  virtual void AddControlFlowHint(CodeGenFunction &CGF, const Stmt &S, llvm37::TerminatorInst *TI, llvm37::ArrayRef<const Attr *> Attrs) = 0;
 
   virtual void FinishAutoVar(CodeGenFunction &CGF, const VarDecl &D,
-                             llvm::Value *V) = 0;
-  virtual void MarkIfStmt(CodeGenFunction &CGF, llvm::BasicBlock *endIfBB) = 0;
+                             llvm37::Value *V) = 0;
+  virtual void MarkIfStmt(CodeGenFunction &CGF, llvm37::BasicBlock *endIfBB) = 0;
   virtual void MarkSwitchStmt(CodeGenFunction &CGF,
-                              llvm::SwitchInst *switchInst,
-                              llvm::BasicBlock *endSwitch) = 0;
+                              llvm37::SwitchInst *switchInst,
+                              llvm37::BasicBlock *endSwitch) = 0;
   virtual void MarkReturnStmt(CodeGenFunction &CGF,
-                              llvm::BasicBlock *bbWithRet) = 0;
+                              llvm37::BasicBlock *bbWithRet) = 0;
   virtual void MarkLoopStmt(CodeGenFunction &CGF,
-                             llvm::BasicBlock *loopContinue,
-                             llvm::BasicBlock *loopExit) = 0;
+                             llvm37::BasicBlock *loopContinue,
+                             llvm37::BasicBlock *loopExit) = 0;
 
   virtual void MarkScopeEnd(CodeGenFunction &CGF) = 0;
 };

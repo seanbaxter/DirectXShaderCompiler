@@ -38,7 +38,7 @@
 
 #pragma once
 
-namespace llvm {
+namespace llvm37 {
 
 struct ScopeNestEvent {
     enum class Type {

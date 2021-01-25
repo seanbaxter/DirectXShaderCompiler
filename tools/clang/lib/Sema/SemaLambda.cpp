@@ -1142,7 +1142,7 @@ void Sema::ActOnStartOfLambdaDefinition(LambdaIntroducer &Intro,
     Diag(Intro.DefaultLoc, diag::err_capture_default_non_local);
 
   // Distinct capture names, for diagnostics.
-  llvm::SmallSet<IdentifierInfo*, 8> CaptureNames;
+  llvm37::SmallSet<IdentifierInfo*, 8> CaptureNames;
 
   // Handle explicit captures.
   SourceLocation PrevCaptureLoc
@@ -1242,7 +1242,7 @@ void Sema::ActOnStartOfLambdaDefinition(LambdaIntroducer &Intro,
         // FIXME: Disable corrections that would add qualification?
         CXXScopeSpec ScopeSpec;
         if (DiagnoseEmptyLookup(CurScope, ScopeSpec, R,
-                                llvm::make_unique<DeclFilterCCC<VarDecl>>()))
+                                llvm37::make_unique<DeclFilterCCC<VarDecl>>()))
           continue;
       }
 
@@ -1614,7 +1614,7 @@ static ExprResult performLambdaVarCaptureInitialization(
     IdentifierInfo *IterationVarName = nullptr;
     {
       SmallString<8> Str;
-      llvm::raw_svector_ostream OS(Str);
+      llvm37::raw_svector_ostream OS(Str);
       OS << "__i" << IndexVariables.size();
       IterationVarName = &S.Context.Idents.get(OS.str());
     }

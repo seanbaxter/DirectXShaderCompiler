@@ -11,13 +11,13 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Support/ManagedStatic.h"
-#include "llvm/Config/config.h"
-#include "llvm/Support/Atomic.h"
-#include "llvm/Support/Mutex.h"
-#include "llvm/Support/MutexGuard.h"
+#include "llvm37/Support/ManagedStatic.h"
+#include "llvm37/Config/config.h"
+#include "llvm37/Support/Atomic.h"
+#include "llvm37/Support/Mutex.h"
+#include "llvm37/Support/MutexGuard.h"
 #include <cassert>
-using namespace llvm;
+using namespace llvm37;
 
 static const ManagedStaticBase *StaticList = nullptr;
 
@@ -82,7 +82,7 @@ void ManagedStaticBase::destroy() const {
 }
 
 /// llvm_shutdown - Deallocate and destroy all ManagedStatic variables.
-void llvm::llvm_shutdown() {
+void llvm37::llvm_shutdown() {
   MutexGuard Lock(getManagedStaticMutex());
 
   while (StaticList)

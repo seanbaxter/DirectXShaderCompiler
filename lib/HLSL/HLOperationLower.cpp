@@ -28,14 +28,14 @@
 #include "dxc/HLSL/DxilConvergent.h"
 #include "dxc/DXIL/DxilResourceProperties.h"
 
-#include "llvm/IR/GetElementPtrTypeIterator.h"
-#include "llvm/IR/IRBuilder.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/IR/Module.h"
-#include "llvm/ADT/APSInt.h"
+#include "llvm37/IR/GetElementPtrTypeIterator.h"
+#include "llvm37/IR/IRBuilder.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/ADT/APSInt.h"
 
-using namespace llvm;
+using namespace llvm37;
 using namespace hlsl;
 
 struct HLOperationLowerHelper {
@@ -44,7 +44,7 @@ struct HLOperationLowerHelper {
   Type *f32Ty;
   Type *i32Ty;
   Type *i16Ty;
-  llvm::Type *i1Ty;
+  llvm37::Type *i1Ty;
   Type *i8Ty;
   DxilTypeSystem &dxilTypeSys;
   DxilFunctionProps *functionProps;
@@ -58,7 +58,7 @@ HLOperationLowerHelper::HLOperationLowerHelper(HLModule &HLM)
       dataLayout(DataLayout(HLM.GetHLOptions().bUseMinPrecision
                                   ? hlsl::DXIL::kLegacyLayoutString
                                   : hlsl::DXIL::kNewLayoutString)) {
-  llvm::LLVMContext &Ctx = HLM.GetCtx();
+  llvm37::LLVMContext &Ctx = HLM.GetCtx();
   voidTy = Type::getVoidTy(Ctx);
   f32Ty = Type::getFloatTy(Ctx);
   i32Ty = Type::getInt32Ty(Ctx);
@@ -383,7 +383,7 @@ Value *TrivialDxilOperation(Function *dxilFunc, OP::OpCode opcode, ArrayRef<Valu
   std::vector<Value *> args = refArgs;
 
   if (Ty->isVectorTy()) {
-    Value *retVal = llvm::UndefValue::get(RetTy);
+    Value *retVal = llvm37::UndefValue::get(RetTy);
     unsigned vecSize = Ty->getVectorNumElements();
     for (unsigned i = 0; i < vecSize; i++) {
       // Update vector args, skip known opcode arg.
@@ -429,7 +429,7 @@ Value *TrivialDxilOperation(OP::OpCode opcode, ArrayRef<Value *> refArgs,
            "else caller has already filled the value in");
   IRBuilder<> B(Inst);
   Constant *opArg = hlslOP->GetU32Const((unsigned)opcode);
-  const_cast<llvm::Value **>(refArgs.data())[0] =
+  const_cast<llvm37::Value **>(refArgs.data())[0] =
       opArg; // actually stack memory from caller
   return TrivialDxilOperation(opcode, refArgs, Ty, Inst->getType(), hlslOP, B);
 }
@@ -1156,7 +1156,7 @@ Value *TranslateWaveBallot(CallInst *CI, IntrinsicOp IOP, OP::OpCode opcode,
                  dxilVal->getType()->getNumContainedTypes() == 4);
 
   // 'x' component is the first vector element, highest bits.
-  Value *ResVal = llvm::UndefValue::get(ResTy);
+  Value *ResVal = llvm37::UndefValue::get(ResTy);
   for (unsigned Idx = 0; Idx < 4; ++Idx) {
     ResVal = B.CreateInsertElement(
         ResVal, B.CreateExtractValue(dxilVal, ArrayRef<unsigned>(Idx)), Idx);
@@ -1246,7 +1246,7 @@ Value *TranslateWaveA2A(CallInst *CI, IntrinsicOp IOP, OP::OpCode opcode,
   if (!WaveIntrinsicNeedsSign(opcode))
     refArgCount--;
   return TrivialDxilOperation(opcode,
-                              llvm::ArrayRef<Value *>(refArgs, refArgCount),
+                              llvm37::ArrayRef<Value *>(refArgs, refArgCount),
                               CI->getOperand(1)->getType(), CI, hlslOP);
 }
 
@@ -1429,8 +1429,8 @@ Value *TranslateDoubleAsUint(Value *x, Value *lo, Value *hi,
 
 
   if (Ty->isVectorTy()) {
-    Value *retValLo = llvm::UndefValue::get(outTy);
-    Value *retValHi = llvm::UndefValue::get(outTy);
+    Value *retValLo = llvm37::UndefValue::get(outTy);
+    Value *retValHi = llvm37::UndefValue::get(outTy);
     unsigned vecSize = Ty->getVectorNumElements();
 
     for (unsigned i = 0; i < vecSize; i++) {
@@ -2415,7 +2415,7 @@ Value *TranslateGetSamplePosition(CallInst *CI, IntrinsicOp IOP, OP::OpCode op,
       CI->getArgOperand(HLOperandIndex::kGetSamplePositionSampleIdxOpIndex);
 
   OP::OpCode opcode = OP::OpCode::Texture2DMSGetSamplePosition;
-  llvm::Constant *opArg = hlslOP->GetU32Const((unsigned)opcode);
+  llvm37::Constant *opArg = hlslOP->GetU32Const((unsigned)opcode);
   Function *dxilFunc =
       hlslOP->GetOpFunc(opcode, Type::getVoidTy(CI->getContext()));
 
@@ -2439,7 +2439,7 @@ Value *TranslateGetDimensions(CallInst *CI, IntrinsicOp IOP, OP::OpCode op,
 
   IRBuilder<> Builder(CI);
   OP::OpCode opcode = OP::OpCode::GetDimensions;
-  llvm::Constant *opArg = hlslOP->GetU32Const((unsigned)opcode);
+  llvm37::Constant *opArg = hlslOP->GetU32Const((unsigned)opcode);
   Function *dxilFunc =
       hlslOP->GetOpFunc(opcode, Type::getVoidTy(CI->getContext()));
 
@@ -2551,7 +2551,7 @@ Value *GenerateUpdateCounter(CallInst *CI, IntrinsicOp IOP, OP::OpCode opcode,
 
 static Value *ScalarizeResRet(Type *RetTy, Value *ResRet, IRBuilder<> &Builder) {
   // Extract value part.
-  Value *retVal = llvm::UndefValue::get(RetTy);
+  Value *retVal = llvm37::UndefValue::get(RetTy);
   if (RetTy->isVectorTy()) {
     for (unsigned i = 0; i < RetTy->getVectorNumElements(); i++) {
       Value *retComp = Builder.CreateExtractValue(ResRet, i);
@@ -2565,7 +2565,7 @@ static Value *ScalarizeResRet(Type *RetTy, Value *ResRet, IRBuilder<> &Builder) 
 
 static Value *ScalarizeElements(Type *RetTy, ArrayRef<Value*> Elts, IRBuilder<> &Builder) {
   // Extract value part.
-  Value *retVal = llvm::UndefValue::get(RetTy);
+  Value *retVal = llvm37::UndefValue::get(RetTy);
   if (RetTy->isVectorTy()) {
     unsigned vecSize = RetTy->getVectorNumElements();
     DXASSERT(vecSize <= Elts.size(), "vector size mismatch");
@@ -3632,9 +3632,9 @@ void TranslateLoad(ResLoadHelper &helper, HLResource::Kind RK,
   }
 
   Function *F = OP->GetOpFunc(opcode, EltTy);
-  llvm::Constant *opArg = OP->GetU32Const((unsigned)opcode);
+  llvm37::Constant *opArg = OP->GetU32Const((unsigned)opcode);
 
-  llvm::Value *undefI = llvm::UndefValue::get(i32Ty);
+  llvm37::Value *undefI = llvm37::UndefValue::get(i32Ty);
 
   SmallVector<Value *, 12> loadArgs;
   loadArgs.emplace_back(opArg);         // opcode
@@ -3673,7 +3673,7 @@ void TranslateLoad(ResLoadHelper &helper, HLResource::Kind RK,
   }
   // offset 0
   if (opcode == OP::OpCode::TextureLoad) {
-    if (helper.offset && !isa<llvm::UndefValue>(helper.offset)) {
+    if (helper.offset && !isa<llvm37::UndefValue>(helper.offset)) {
       unsigned offsetSize = DxilResource::GetNumOffsets(RK);
       for (unsigned i = 0; i < 3; i++) {
         if (i < offsetSize)
@@ -3840,12 +3840,12 @@ void TranslateStore(DxilResource::Kind RK, Value *handle, Value *val,
   }
 
   Function *F = OP->GetOpFunc(opcode, EltTy);
-  llvm::Constant *opArg = OP->GetU32Const((unsigned)opcode);
+  llvm37::Constant *opArg = OP->GetU32Const((unsigned)opcode);
 
-  llvm::Value *undefI =
-      llvm::UndefValue::get(llvm::Type::getInt32Ty(Ty->getContext()));
+  llvm37::Value *undefI =
+      llvm37::UndefValue::get(llvm37::Type::getInt32Ty(Ty->getContext()));
 
-  llvm::Value *undefVal = llvm::UndefValue::get(Ty->getScalarType());
+  llvm37::Value *undefVal = llvm37::UndefValue::get(Ty->getScalarType());
 
   SmallVector<Value *, 13> storeArgs;
   storeArgs.emplace_back(opArg);  // opcode
@@ -6663,7 +6663,7 @@ Value *GEPIdxToOffset(GetElementPtrInst *GEP, IRBuilder<> &Builder,
     for (; GEPIt != E; GEPIt++) {
       Value *idx = GEPIt.getOperand();
       unsigned immIdx = 0;
-      if (llvm::Constant *constIdx = dyn_cast<llvm::Constant>(idx)) {
+      if (llvm37::Constant *constIdx = dyn_cast<llvm37::Constant>(idx)) {
         immIdx = constIdx->getUniqueInteger().getLimitedValue();
         if (immIdx == 0) {
           continue;
@@ -6943,7 +6943,7 @@ void TranslateStructBufSubscriptUser(Instruction *user,
 // return [i][j] not mat[i][j] because resource ptr and temp ptr need different
 // code gen.
 static Value *LowerGEPOnMatIndexListToIndex(
-  llvm::GetElementPtrInst *GEP, ArrayRef<Value *> IdxList) {
+  llvm37::GetElementPtrInst *GEP, ArrayRef<Value *> IdxList) {
   IRBuilder<> Builder(GEP);
   Value *zero = Builder.getInt32(0);
   DXASSERT(GEP->getNumIndices() == 2, "must have 2 level");
@@ -7254,7 +7254,7 @@ void TranslateStructBufSubscriptUser(
     } else {
       Value *val = stInst->getValueOperand();
       auto StElement = [&](Value *offset, Value *val, IRBuilder<> &Builder) {
-        Value *undefVal = llvm::UndefValue::get(pOverloadTy);
+        Value *undefVal = llvm37::UndefValue::get(pOverloadTy);
         Value *vals[] = {undefVal, undefVal, undefVal, undefVal};
         uint8_t mask = 0;
         if (Ty->isVectorTy()) {
@@ -7931,7 +7931,7 @@ void TranslateHLBuiltinOperation(Function *F, HLOperationLowerHelper &helper,
   }
 }
 
-typedef std::unordered_map<llvm::Instruction *, llvm::Value *> HandleMap;
+typedef std::unordered_map<llvm37::Instruction *, llvm37::Value *> HandleMap;
 static void TranslateHLExtension(Function *F,
                                  HLSLExtensionsCodegenHelper *helper,
                                  OP& hlslOp,
@@ -7948,7 +7948,7 @@ static void TranslateHLExtension(Function *F,
   }
 
   // Get the lowering strategy to use for this intrinsic.
-  llvm::StringRef LowerStrategy = GetHLLowerStrategy(F);
+  llvm37::StringRef LowerStrategy = GetHLLowerStrategy(F);
   HLObjectExtensionLowerHelper extObjHelper(objHelper);
   ExtensionLowering lower(LowerStrategy, helper, hlslOp, extObjHelper);
 

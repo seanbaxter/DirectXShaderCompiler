@@ -16,8 +16,8 @@
 |*                                                                            *|
 \*===----------------------------------------------------------------------===*/
 
-#ifndef LLVM_C_TARGETMACHINE_H
-#define LLVM_C_TARGETMACHINE_H
+#ifndef LLVM37_C_TARGETMACHINE_H
+#define LLVM37_C_TARGETMACHINE_H
 
 #include "llvm-c/Core.h"
 #include "llvm-c/Target.h"
@@ -56,9 +56,9 @@ typedef enum {
     LLVMObjectFile
 } LLVMCodeGenFileType;
 
-/** Returns the first llvm::Target in the registered targets list. */
+/** Returns the first llvm37::Target in the registered targets list. */
 LLVMTargetRef LLVMGetFirstTarget(void);
-/** Returns the next llvm::Target given a previous one (or null if there's none) */
+/** Returns the next llvm37::Target given a previous one (or null if there's none) */
 LLVMTargetRef LLVMGetNextTarget(LLVMTargetRef T);
 
 /*===-- Target ------------------------------------------------------------===*/
@@ -74,10 +74,10 @@ LLVMBool LLVMGetTargetFromTriple(
     LLVMTargetRef *T,
     _Out_opt_ char **ErrorMessage);
 
-/** Returns the name of a target. See llvm::Target::getName */
+/** Returns the name of a target. See llvm37::Target::getName */
 const char *LLVMGetTargetName(LLVMTargetRef T);
 
-/** Returns the description  of a target. See llvm::Target::getDescription */
+/** Returns the description  of a target. See llvm37::Target::getDescription */
 const char *LLVMGetTargetDescription(LLVMTargetRef T);
 
 /** Returns if the target has a JIT */
@@ -90,7 +90,7 @@ LLVMBool LLVMTargetHasTargetMachine(LLVMTargetRef T);
 LLVMBool LLVMTargetHasAsmBackend(LLVMTargetRef T);
 
 /*===-- Target Machine ----------------------------------------------------===*/
-/** Creates a new llvm::TargetMachine. See llvm::Target::createTargetMachine */
+/** Creates a new llvm37::TargetMachine. See llvm37::Target::createTargetMachine */
 LLVMTargetMachineRef LLVMCreateTargetMachine(LLVMTargetRef T,
   const char *Triple, const char *CPU, const char *Features,
   LLVMCodeGenOptLevel Level, LLVMRelocMode Reloc, LLVMCodeModel CodeModel);
@@ -103,17 +103,17 @@ void LLVMDisposeTargetMachine(LLVMTargetMachineRef T);
 LLVMTargetRef LLVMGetTargetMachineTarget(LLVMTargetMachineRef T);
 
 /** Returns the triple used creating this target machine. See
-  llvm::TargetMachine::getTriple. The result needs to be disposed with
+  llvm37::TargetMachine::getTriple. The result needs to be disposed with
   LLVMDisposeMessage. */
 char *LLVMGetTargetMachineTriple(LLVMTargetMachineRef T);
 
 /** Returns the cpu used creating this target machine. See
-  llvm::TargetMachine::getCPU. The result needs to be disposed with
+  llvm37::TargetMachine::getCPU. The result needs to be disposed with
   LLVMDisposeMessage. */
 char *LLVMGetTargetMachineCPU(LLVMTargetMachineRef T);
 
 /** Returns the feature string used creating this target machine. See
-  llvm::TargetMachine::getFeatureString. The result needs to be disposed with
+  llvm37::TargetMachine::getFeatureString. The result needs to be disposed with
   LLVMDisposeMessage. */
 char *LLVMGetTargetMachineFeatureString(LLVMTargetMachineRef T);
 

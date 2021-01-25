@@ -1,13 +1,13 @@
 # Test runner infrastructure for Clang. This configures the Clang test trees
-# for use by Lit, and delegates to LLVM's lit test handlers.
+# for use by Lit, and delegates to LLVM37's lit test handlers.
 
 if (CMAKE_CFG_INTDIR STREQUAL ".")
-  set(LLVM_BUILD_MODE ".")
+  set(LLVM37_BUILD_MODE ".")
 else ()
-  set(LLVM_BUILD_MODE "%(build_mode)s")
+  set(LLVM37_BUILD_MODE "%(build_mode)s")
 endif ()
 
-string(REPLACE ${CMAKE_CFG_INTDIR} ${LLVM_BUILD_MODE} CLANG_TOOLS_DIR ${LLVM_RUNTIME_OUTPUT_INTDIR})
+string(REPLACE ${CMAKE_CFG_INTDIR} ${LLVM37_BUILD_MODE} CLANG_TOOLS_DIR ${LLVM37_RUNTIME_OUTPUT_INTDIR})
 
 configure_lit_site_cfg(
   ${CMAKE_CURRENT_SOURCE_DIR}/lit.site.cfg.in
@@ -64,7 +64,7 @@ endif()
 
 add_lit_testsuite(check-clang "Running the Clang regression tests"
   ${CMAKE_CURRENT_BINARY_DIR}
-  #LIT ${LLVM_LIT}
+  #LIT ${LLVM37_LIT}
   PARAMS ${CLANG_TEST_PARAMS}
   DEPENDS ${CLANG_TEST_DEPS}
   ARGS ${CLANG_TEST_EXTRA_ARGS}

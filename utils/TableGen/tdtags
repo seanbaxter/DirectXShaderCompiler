@@ -180,8 +180,8 @@ td_prep() {
     if [ -z "$d" ]
     then
       # See whether this include file can be found in a common location.
-      for d in $LLVM_SRC_ROOT/include \
-               $LLVM_SRC_ROOT/tools/clang/include
+      for d in $LLVM37_SRC_ROOT/include \
+               $LLVM37_SRC_ROOT/tools/clang/include
       do
         if [ -f "$d/$i" ]
         then
@@ -283,7 +283,7 @@ do_recurse()
 # Generate tags for all .td files in LLVM.
 do_all()
 {
-  td_find "$LLVM_SRC_ROOT"
+  td_find "$LLVM37_SRC_ROOT"
   td_dirs
 }
 
@@ -309,7 +309,7 @@ td_find()
 # Generate tags for the specified code generator targets, or
 # if there are no arguments, all targets.
 do_targets() {
-  cd $LLVM_SRC_ROOT/lib/Target
+  cd $LLVM37_SRC_ROOT/lib/Target
   if [ -z "$*" ]
   then
     td_find "$PWD"
@@ -353,7 +353,7 @@ export LC_ALL
 
 # Globals.
 TBLGEN=llvm-tblgen
-LLVM_SRC_ROOT=
+LLVM37_SRC_ROOT=
 
 # Command options.
 OPT_TAGSFILE=tags
@@ -412,7 +412,7 @@ then
 fi
 
 # Find the directory at the top of the enclosing LLVM source tree.
-if ! LLVM_SRC_ROOT=$(llvm_src_root && pwd)
+if ! LLVM37_SRC_ROOT=$(llvm_src_root && pwd)
 then
   printf >&2 '%s: Run from within the LLVM source tree.\n' "$SELF"
   exit 3

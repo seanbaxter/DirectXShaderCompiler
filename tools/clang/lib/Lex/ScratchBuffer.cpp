@@ -13,7 +13,7 @@
 
 #include "clang/Lex/ScratchBuffer.h"
 #include "clang/Basic/SourceManager.h"
-#include "llvm/Support/MemoryBuffer.h"
+#include "llvm37/Support/MemoryBuffer.h"
 #include <cstring>
 using namespace clang;
 
@@ -66,9 +66,9 @@ void ScratchBuffer::AllocScratchBuffer(unsigned RequestLen) {
 
   // Get scratch buffer. Zero-initialize it so it can be dumped into a PCH file
   // deterministically.
-  std::unique_ptr<llvm::MemoryBuffer> OwnBuf =
-      llvm::MemoryBuffer::getNewMemBuffer(RequestLen, "<scratch space>");
-  llvm::MemoryBuffer &Buf = *OwnBuf;
+  std::unique_ptr<llvm37::MemoryBuffer> OwnBuf =
+      llvm37::MemoryBuffer::getNewMemBuffer(RequestLen, "<scratch space>");
+  llvm37::MemoryBuffer &Buf = *OwnBuf;
   FileID FID = SourceMgr.createFileID(std::move(OwnBuf));
   BufferStartLoc = SourceMgr.getLocForStartOfFile(FID);
   CurBuffer = const_cast<char*>(Buf.getBufferStart());

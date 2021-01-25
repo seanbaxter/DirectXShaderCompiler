@@ -1,5 +1,5 @@
-set(LLVM_LINK_COMPONENTS
-  ${LLVM_TARGETS_TO_BUILD}
+set(LLVM37_LINK_COMPONENTS
+  ${LLVM37_TARGETS_TO_BUILD}
   Analysis
   BitWriter
 #  CodeGen # HLSL Change
@@ -24,9 +24,9 @@ set(LLVM_LINK_COMPONENTS
 )
 
 # Support plugins.
-set(LLVM_NO_DEAD_STRIP 1)
+set(LLVM37_NO_DEAD_STRIP 1)
 
-set(LLVM_LINK_COMPONENTS ${LLVM_LINK_COMPONENTS} mssupport hlsl)  # HLSL Change
+set(LLVM37_LINK_COMPONENTS ${LLVM37_LINK_COMPONENTS} mssupport hlsl)  # HLSL Change
 
 add_llvm_tool(opt
   AnalysisWrappers.cpp

@@ -11,27 +11,27 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Target/TargetInstrInfo.h"
-#include "llvm/CodeGen/MachineFrameInfo.h"
-#include "llvm/CodeGen/MachineInstrBuilder.h"
-#include "llvm/CodeGen/MachineMemOperand.h"
-#include "llvm/CodeGen/MachineRegisterInfo.h"
-#include "llvm/CodeGen/PseudoSourceValue.h"
-#include "llvm/CodeGen/ScoreboardHazardRecognizer.h"
-#include "llvm/CodeGen/StackMaps.h"
-#include "llvm/CodeGen/TargetSchedule.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/MC/MCAsmInfo.h"
-#include "llvm/MC/MCInstrItineraries.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Target/TargetFrameLowering.h"
-#include "llvm/Target/TargetLowering.h"
-#include "llvm/Target/TargetMachine.h"
-#include "llvm/Target/TargetRegisterInfo.h"
+#include "llvm37/Target/TargetInstrInfo.h"
+#include "llvm37/CodeGen/MachineFrameInfo.h"
+#include "llvm37/CodeGen/MachineInstrBuilder.h"
+#include "llvm37/CodeGen/MachineMemOperand.h"
+#include "llvm37/CodeGen/MachineRegisterInfo.h"
+#include "llvm37/CodeGen/PseudoSourceValue.h"
+#include "llvm37/CodeGen/ScoreboardHazardRecognizer.h"
+#include "llvm37/CodeGen/StackMaps.h"
+#include "llvm37/CodeGen/TargetSchedule.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/MC/MCAsmInfo.h"
+#include "llvm37/MC/MCInstrItineraries.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Target/TargetFrameLowering.h"
+#include "llvm37/Target/TargetLowering.h"
+#include "llvm37/Target/TargetMachine.h"
+#include "llvm37/Target/TargetRegisterInfo.h"
 #include <cctype>
-using namespace llvm;
+using namespace llvm37;
 
 static cl::opt<bool> DisableHazardRecognizer(
   "disable-sched-hazard", cl::Hidden, cl::init(false),

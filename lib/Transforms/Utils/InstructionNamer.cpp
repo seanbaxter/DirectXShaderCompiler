@@ -14,11 +14,11 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Transforms/Scalar.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/Type.h"
-#include "llvm/Pass.h"
-using namespace llvm;
+#include "llvm37/Transforms/Scalar.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/Type.h"
+#include "llvm37/Pass.h"
+using namespace llvm37;
 
 namespace {
   struct InstNamer : public FunctionPass {
@@ -54,11 +54,11 @@ namespace {
 
 INITIALIZE_PASS(InstNamer, "instnamer", 
                 "Assign names to anonymous instructions", false, false)
-char &llvm::InstructionNamerID = InstNamer::ID;
+char &llvm37::InstructionNamerID = InstNamer::ID;
 //===----------------------------------------------------------------------===//
 //
 // InstructionNamer - Give any unnamed non-void instructions "tmp" names.
 //
-FunctionPass *llvm::createInstructionNamerPass() {
+FunctionPass *llvm37::createInstructionNamerPass() {
   return new InstNamer();
 }

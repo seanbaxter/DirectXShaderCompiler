@@ -19,8 +19,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_ANALYSIS_ANALYSES_THREADSAFETYCOMMON_H
-#define LLVM_CLANG_ANALYSIS_ANALYSES_THREADSAFETYCOMMON_H
+#ifndef LLVM37_CLANG_ANALYSIS_ANALYSES_THREADSAFETYCOMMON_H
+#define LLVM37_CLANG_ANALYSIS_ANALYSES_THREADSAFETYCOMMON_H
 
 #include "clang/Analysis/Analyses/PostOrderCFGView.h"
 #include "clang/Analysis/Analyses/ThreadSafetyTIL.h"
@@ -395,10 +395,10 @@ private:
   til::SExpr *translateDeclStmt(const DeclStmt *S, CallingContext *Ctx);
 
   // Map from statements in the clang CFG to SExprs in the til::SCFG.
-  typedef llvm::DenseMap<const Stmt*, til::SExpr*> StatementMap;
+  typedef llvm37::DenseMap<const Stmt*, til::SExpr*> StatementMap;
 
   // Map from clang local variables to indices in a LVarDefinitionMap.
-  typedef llvm::DenseMap<const ValueDecl *, unsigned> LVarIndexMap;
+  typedef llvm37::DenseMap<const ValueDecl *, unsigned> LVarIndexMap;
 
   // Map from local variable indices to SSA variables (or constants).
   typedef std::pair<const ValueDecl *, til::SExpr *> NameVarPair;
@@ -492,7 +492,7 @@ private:
 };
 
 
-// Dump an SCFG to llvm::errs().
+// Dump an SCFG to llvm37::errs().
 void printSCFG(CFGWalker &Walker);
 
 
@@ -500,4 +500,4 @@ void printSCFG(CFGWalker &Walker);
 
 } // end namespace clang
 
-#endif  // LLVM_CLANG_THREAD_SAFETY_COMMON_H
+#endif  // LLVM37_CLANG_THREAD_SAFETY_COMMON_H

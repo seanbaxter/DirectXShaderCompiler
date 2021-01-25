@@ -10,8 +10,8 @@
 |* This header provides the interface to C Index strings.                     *|
 |*                                                                            *|
 \*===----------------------------------------------------------------------===*/
-#ifndef LLVM_CLANG_C_CXSTRING_H
-#define LLVM_CLANG_C_CXSTRING_H
+#ifndef LLVM37_CLANG_C_CXSTRING_H
+#define LLVM37_CLANG_C_CXSTRING_H
 
 #include "clang-c/Platform.h"
 

@@ -7,30 +7,30 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/MC/MCAssembler.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/ADT/StringExtras.h"
-#include "llvm/ADT/Twine.h"
-#include "llvm/MC/MCAsmBackend.h"
-#include "llvm/MC/MCAsmInfo.h"
-#include "llvm/MC/MCAsmLayout.h"
-#include "llvm/MC/MCCodeEmitter.h"
-#include "llvm/MC/MCContext.h"
-#include "llvm/MC/MCDwarf.h"
-#include "llvm/MC/MCExpr.h"
-#include "llvm/MC/MCFixupKindInfo.h"
-#include "llvm/MC/MCObjectWriter.h"
-#include "llvm/MC/MCSection.h"
-#include "llvm/MC/MCSectionELF.h"
-#include "llvm/MC/MCSymbol.h"
-#include "llvm/MC/MCValue.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/LEB128.h"
-#include "llvm/Support/TargetRegistry.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/MC/MCAssembler.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/ADT/StringExtras.h"
+#include "llvm37/ADT/Twine.h"
+#include "llvm37/MC/MCAsmBackend.h"
+#include "llvm37/MC/MCAsmInfo.h"
+#include "llvm37/MC/MCAsmLayout.h"
+#include "llvm37/MC/MCCodeEmitter.h"
+#include "llvm37/MC/MCContext.h"
+#include "llvm37/MC/MCDwarf.h"
+#include "llvm37/MC/MCExpr.h"
+#include "llvm37/MC/MCFixupKindInfo.h"
+#include "llvm37/MC/MCObjectWriter.h"
+#include "llvm37/MC/MCSection.h"
+#include "llvm37/MC/MCSectionELF.h"
+#include "llvm37/MC/MCSymbol.h"
+#include "llvm37/MC/MCValue.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/LEB128.h"
+#include "llvm37/Support/TargetRegistry.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <tuple>
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "assembler"
 
@@ -219,7 +219,7 @@ uint64_t MCAsmLayout::getSectionFileSize(const MCSection *Sec) const {
   return getSectionAddressSize(Sec);
 }
 
-uint64_t llvm::computeBundlePadding(const MCAssembler &Assembler,
+uint64_t llvm37::computeBundlePadding(const MCAssembler &Assembler,
                                     const MCFragment *F,
                                     uint64_t FOffset, uint64_t FSize) {
   uint64_t BundleSize = Assembler.getBundleAlignSize();
@@ -856,7 +856,7 @@ std::pair<uint64_t, bool> MCAssembler::handleFixup(const MCAsmLayout &Layout,
 
 void MCAssembler::Finish() {
   DEBUG_WITH_TYPE("mc-dump", {
-      llvm::errs() << "assembler backend - pre-layout\n--\n";
+      llvm37::errs() << "assembler backend - pre-layout\n--\n";
       dump(); });
 
   // Create the layout object.
@@ -889,14 +889,14 @@ void MCAssembler::Finish() {
     continue;
 
   DEBUG_WITH_TYPE("mc-dump", {
-      llvm::errs() << "assembler backend - post-relaxation\n--\n";
+      llvm37::errs() << "assembler backend - post-relaxation\n--\n";
       dump(); });
 
   // Finalize the layout, including fragment lowering.
   finishLayout(Layout);
 
   DEBUG_WITH_TYPE("mc-dump", {
-      llvm::errs() << "assembler backend - final-layout\n--\n";
+      llvm37::errs() << "assembler backend - final-layout\n--\n";
       dump(); });
 
   uint64_t StartOffset = OS.tell();
@@ -1116,7 +1116,7 @@ void MCAssembler::finishLayout(MCAsmLayout &Layout) {
 
 // Debugging methods
 
-namespace llvm {
+namespace llvm37 {
 
 raw_ostream &operator<<(raw_ostream &OS, const MCFixup &AF) {
   OS << "<MCFixup" << " Offset:" << AF.getOffset()
@@ -1127,9 +1127,9 @@ raw_ostream &operator<<(raw_ostream &OS, const MCFixup &AF) {
 
 }
 
-#if !defined(NDEBUG) || defined(LLVM_ENABLE_DUMP)
+#if !defined(NDEBUG) || defined(LLVM37_ENABLE_DUMP)
 void MCFragment::dump() {
-  raw_ostream &OS = llvm::errs();
+  raw_ostream &OS = llvm37::errs();
 
   OS << "<";
   switch (getKind()) {
@@ -1247,7 +1247,7 @@ void MCFragment::dump() {
 }
 
 void MCAssembler::dump() {
-  raw_ostream &OS = llvm::errs();
+  raw_ostream &OS = llvm37::errs();
 
   OS << "<MCAssembler\n";
   OS << "  Sections:[\n    ";

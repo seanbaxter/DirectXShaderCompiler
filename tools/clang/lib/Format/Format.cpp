@@ -23,12 +23,12 @@
 #include "clang/Basic/SourceManager.h"
 #include "clang/Format/Format.h"
 #include "clang/Lex/Lexer.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/Support/Allocator.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/Path.h"
-#include "llvm/Support/Regex.h"
-#include "llvm/Support/YAMLTraits.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/Support/Allocator.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/Path.h"
+#include "llvm37/Support/Regex.h"
+#include "llvm37/Support/YAMLTraits.h"
 #include <queue>
 #include <string>
 
@@ -36,9 +36,9 @@
 
 using clang::format::FormatStyle;
 
-LLVM_YAML_IS_FLOW_SEQUENCE_VECTOR(std::string)
+LLVM37_YAML_IS_FLOW_SEQUENCE_VECTOR(std::string)
 
-namespace llvm {
+namespace llvm37 {
 namespace yaml {
 template <> struct ScalarEnumerationTraits<FormatStyle::LanguageKind> {
   static void enumeration(IO &IO, FormatStyle::LanguageKind &Value) {
@@ -323,7 +323,7 @@ std::error_code make_error_code(ParseError e) {
   return std::error_code(static_cast<int>(e), getParseCategory());
 }
 
-const char *ParseErrorCategory::name() const LLVM_NOEXCEPT {
+const char *ParseErrorCategory::name() const LLVM37_NOEXCEPT {
   return "clang-format.parse_error";
 }
 
@@ -568,7 +568,7 @@ std::error_code parseConfiguration(StringRef Text, FormatStyle *Style) {
     return make_error_code(ParseError::Error);
 
   std::vector<FormatStyle> Styles;
-  llvm::yaml::Input Input(Text);
+  llvm37::yaml::Input Input(Text);
   // DocumentListTraits<vector<FormatStyle>> uses the context to get default
   // values for the fields, keys for which are missing from the configuration.
   // Mapping also uses the context to get the language to find the correct
@@ -585,7 +585,7 @@ std::error_code parseConfiguration(StringRef Text, FormatStyle *Style) {
     // Ensure that each language is configured at most once.
     for (unsigned j = 0; j < i; ++j) {
       if (Styles[i].Language == Styles[j].Language) {
-        DEBUG(llvm::dbgs()
+        DEBUG(llvm37::dbgs()
               << "Duplicate languages in the config file on positions " << j
               << " and " << i << "\n");
         return make_error_code(ParseError::Error);
@@ -608,8 +608,8 @@ std::error_code parseConfiguration(StringRef Text, FormatStyle *Style) {
 
 std::string configurationAsText(const FormatStyle &Style) {
   std::string Text;
-  llvm::raw_string_ostream Stream(Text);
-  llvm::yaml::Output Output(Stream);
+  llvm37::raw_string_ostream Stream(Text);
+  llvm37::yaml::Output Output(Stream);
   // We use the same mapping method for input and output, so we need a non-const
   // reference here.
   FormatStyle NonConstStyle = Style;
@@ -1208,7 +1208,7 @@ private:
   IdentifierTable IdentTable;
   AdditionalKeywords Keywords;
   encoding::Encoding Encoding;
-  llvm::SpecificBumpPtrAllocator<FormatToken> Allocator;
+  llvm37::SpecificBumpPtrAllocator<FormatToken> Allocator;
   // Index (in 'Tokens') of the last token that starts a new line.
   unsigned FirstInLineIndex;
   SmallVector<FormatToken *, 16> Tokens;
@@ -1216,8 +1216,8 @@ private:
 
   bool FormattingDisabled;
 
-  llvm::Regex MacroBlockBeginRegex;
-  llvm::Regex MacroBlockEndRegex;
+  llvm37::Regex MacroBlockBeginRegex;
+  llvm37::Regex MacroBlockEndRegex;
 
   void readRawToken(FormatToken &Tok) {
     Lex->LexFromRawLexer(Tok.Tok);
@@ -1282,11 +1282,11 @@ public:
                     inputUsesCRLF(SourceMgr.getBufferData(ID))),
         Ranges(Ranges.begin(), Ranges.end()), UnwrappedLines(1),
         Encoding(encoding::detectEncoding(SourceMgr.getBufferData(ID))) {
-    DEBUG(llvm::dbgs() << "File encoding: "
+    DEBUG(llvm37::dbgs() << "File encoding: "
                        << (Encoding == encoding::Encoding_UTF8 ? "UTF8"
                                                                : "unknown")
                        << "\n");
-    DEBUG(llvm::dbgs() << "Language: " << getLanguageName(Style.Language)
+    DEBUG(llvm37::dbgs() << "Language: " << getLanguageName(Style.Language)
                        << "\n");
   }
 
@@ -1300,7 +1300,7 @@ public:
     assert(UnwrappedLines.rbegin()->empty());
     for (unsigned Run = 0, RunE = UnwrappedLines.size(); Run + 1 != RunE;
          ++Run) {
-      DEBUG(llvm::dbgs() << "Run " << Run << "...\n");
+      DEBUG(llvm37::dbgs() << "Run " << Run << "...\n");
       SmallVector<AnnotatedLine *, 16> AnnotatedLines;
       for (unsigned i = 0, e = UnwrappedLines[Run].size(); i != e; ++i) {
         AnnotatedLines.push_back(new AnnotatedLine(UnwrappedLines[Run][i]));
@@ -1308,11 +1308,11 @@ public:
       tooling::Replacements RunResult =
           format(AnnotatedLines, Tokens, IncompleteFormat);
       DEBUG({
-        llvm::dbgs() << "Replacements for run " << Run << ":\n";
+        llvm37::dbgs() << "Replacements for run " << Run << ":\n";
         for (tooling::Replacements::iterator I = RunResult.begin(),
                                              E = RunResult.end();
              I != E; ++I) {
-          llvm::dbgs() << I->toString() << "\n";
+          llvm37::dbgs() << I->toString() << "\n";
         }
       });
       for (unsigned i = 0, e = AnnotatedLines.size(); i != e; ++i) {
@@ -1581,8 +1581,8 @@ tooling::Replacements reformat(const FormatStyle &Style, StringRef Code,
       IntrusiveRefCntPtr<DiagnosticIDs>(new DiagnosticIDs),
       new DiagnosticOptions);
   SourceManager SourceMgr(Diagnostics, Files);
-  std::unique_ptr<llvm::MemoryBuffer> Buf =
-      llvm::MemoryBuffer::getMemBuffer(Code, FileName);
+  std::unique_ptr<llvm37::MemoryBuffer> Buf =
+      llvm37::MemoryBuffer::getMemBuffer(Code, FileName);
   const clang::FileEntry *Entry =
       Files.getVirtualFile(FileName, Buf->getBufferSize(), 0);
   SourceMgr.overrideFileContents(Entry, std::move(Buf));
@@ -1644,7 +1644,7 @@ FormatStyle getStyle(StringRef StyleName, StringRef FileName,
   FormatStyle Style = getLLVMStyle();
   Style.Language = getLanguageByFileName(FileName);
   if (!getPredefinedStyle(FallbackStyle, Style.Language, &Style)) {
-    llvm::errs() << "Invalid fallback style \"" << FallbackStyle
+    llvm37::errs() << "Invalid fallback style \"" << FallbackStyle
                  << "\" using LLVM style\n";
     return Style;
   }
@@ -1652,7 +1652,7 @@ FormatStyle getStyle(StringRef StyleName, StringRef FileName,
   if (StyleName.startswith("{")) {
     // Parse YAML/JSON style from the command line.
     if (std::error_code ec = parseConfiguration(StyleName, &Style)) {
-      llvm::errs() << "Error parsing -style: " << ec.message() << ", using "
+      llvm37::errs() << "Error parsing -style: " << ec.message() << ", using "
                    << FallbackStyle << " style\n";
     }
     return Style;
@@ -1660,7 +1660,7 @@ FormatStyle getStyle(StringRef StyleName, StringRef FileName,
 
   if (!StyleName.equals_lower("file")) {
     if (!getPredefinedStyle(StyleName, Style.Language, &Style))
-      llvm::errs() << "Invalid value for -style, using " << FallbackStyle
+      llvm37::errs() << "Invalid value for -style, using " << FallbackStyle
                    << " style\n";
     return Style;
   }
@@ -1668,33 +1668,33 @@ FormatStyle getStyle(StringRef StyleName, StringRef FileName,
   // Look for .clang-format/_clang-format file in the file's parent directories.
   SmallString<128> UnsuitableConfigFiles;
   SmallString<128> Path(FileName);
-  llvm::sys::fs::make_absolute(Path);
+  llvm37::sys::fs::make_absolute(Path);
   for (StringRef Directory = Path; !Directory.empty();
-       Directory = llvm::sys::path::parent_path(Directory)) {
-    if (!llvm::sys::fs::is_directory(Directory))
+       Directory = llvm37::sys::path::parent_path(Directory)) {
+    if (!llvm37::sys::fs::is_directory(Directory))
       continue;
     SmallString<128> ConfigFile(Directory);
 
-    llvm::sys::path::append(ConfigFile, ".clang-format");
-    DEBUG(llvm::dbgs() << "Trying " << ConfigFile << "...\n");
+    llvm37::sys::path::append(ConfigFile, ".clang-format");
+    DEBUG(llvm37::dbgs() << "Trying " << ConfigFile << "...\n");
     bool IsFile = false;
     // Ignore errors from is_regular_file: we only need to know if we can read
     // the file or not.
-    llvm::sys::fs::is_regular_file(Twine(ConfigFile), IsFile);
+    llvm37::sys::fs::is_regular_file(Twine(ConfigFile), IsFile);
 
     if (!IsFile) {
       // Try _clang-format too, since dotfiles are not commonly used on Windows.
       ConfigFile = Directory;
-      llvm::sys::path::append(ConfigFile, "_clang-format");
-      DEBUG(llvm::dbgs() << "Trying " << ConfigFile << "...\n");
-      llvm::sys::fs::is_regular_file(Twine(ConfigFile), IsFile);
+      llvm37::sys::path::append(ConfigFile, "_clang-format");
+      DEBUG(llvm37::dbgs() << "Trying " << ConfigFile << "...\n");
+      llvm37::sys::fs::is_regular_file(Twine(ConfigFile), IsFile);
     }
 
     if (IsFile) {
-      llvm::ErrorOr<std::unique_ptr<llvm::MemoryBuffer>> Text =
-          llvm::MemoryBuffer::getFile(ConfigFile.c_str());
+      llvm37::ErrorOr<std::unique_ptr<llvm37::MemoryBuffer>> Text =
+          llvm37::MemoryBuffer::getFile(ConfigFile.c_str());
       if (std::error_code EC = Text.getError()) {
-        llvm::errs() << EC.message() << "\n";
+        llvm37::errs() << EC.message() << "\n";
         break;
       }
       if (std::error_code ec =
@@ -1705,16 +1705,16 @@ FormatStyle getStyle(StringRef StyleName, StringRef FileName,
           UnsuitableConfigFiles.append(ConfigFile);
           continue;
         }
-        llvm::errs() << "Error reading " << ConfigFile << ": " << ec.message()
+        llvm37::errs() << "Error reading " << ConfigFile << ": " << ec.message()
                      << "\n";
         break;
       }
-      DEBUG(llvm::dbgs() << "Using configuration file " << ConfigFile << "\n");
+      DEBUG(llvm37::dbgs() << "Using configuration file " << ConfigFile << "\n");
       return Style;
     }
   }
   if (!UnsuitableConfigFiles.empty()) {
-    llvm::errs() << "Configuration file(s) do(es) not support "
+    llvm37::errs() << "Configuration file(s) do(es) not support "
                  << getLanguageName(Style.Language) << ": "
                  << UnsuitableConfigFiles << "\n";
   }

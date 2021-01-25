@@ -14,13 +14,13 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Transforms/Scalar.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/Analysis/LoopPass.h"
-#include "llvm/Analysis/ScalarEvolution.h"
-#include "llvm/IR/Dominators.h"
-using namespace llvm;
+#include "llvm37/Transforms/Scalar.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/Analysis/LoopPass.h"
+#include "llvm37/Analysis/ScalarEvolution.h"
+#include "llvm37/IR/Dominators.h"
+using namespace llvm37;
 
 #define DEBUG_TYPE "loop-delete"
 
@@ -70,7 +70,7 @@ INITIALIZE_PASS_DEPENDENCY(LCSSA)
 INITIALIZE_PASS_END(LoopDeletion, "loop-deletion",
                 "Delete dead loops", false, false)
 
-Pass *llvm::createLoopDeletionPass() {
+Pass *llvm37::createLoopDeletionPass() {
   return new LoopDeletion();
 }
 

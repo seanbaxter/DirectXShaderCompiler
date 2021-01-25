@@ -13,13 +13,13 @@
 ///
 //===----------------------------------------------------------------------===//
 
-#include "llvm/DebugInfo/DIContext.h"
-#include "llvm/DebugInfo/DWARF/DWARFContext.h"
-#include "llvm/Object/ObjectFile.h"
-#include "llvm/Support/MemoryBuffer.h"
+#include "llvm37/DebugInfo/DIContext.h"
+#include "llvm37/DebugInfo/DWARF/DWARFContext.h"
+#include "llvm37/Object/ObjectFile.h"
+#include "llvm37/Support/MemoryBuffer.h"
 //                                                                           //
 ///////////////////////////////////////////////////////////////////////////////
-using namespace llvm;
+using namespace llvm37;
 using namespace object;
 
 extern "C" void LLVMFuzzerTestOneInput(uint8_t *data, size_t size) {

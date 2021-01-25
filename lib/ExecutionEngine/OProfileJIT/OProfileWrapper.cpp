@@ -13,13 +13,13 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/ExecutionEngine/OProfileWrapper.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/DynamicLibrary.h"
-#include "llvm/Support/Mutex.h"
-#include "llvm/Support/MutexGuard.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ExecutionEngine/OProfileWrapper.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/DynamicLibrary.h"
+#include "llvm37/Support/Mutex.h"
+#include "llvm37/Support/MutexGuard.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <cstring>
 #include <dirent.h>
 #include <fcntl.h>
@@ -33,11 +33,11 @@
 namespace {
 
 // Global mutex to ensure a single thread initializes oprofile agent.
-llvm::sys::Mutex OProfileInitializationMutex;
+llvm37::sys::Mutex OProfileInitializationMutex;
 
 } // anonymous namespace
 
-namespace llvm {
+namespace llvm37 {
 
 OProfileWrapper::OProfileWrapper()
 : Agent(0),
@@ -53,8 +53,8 @@ OProfileWrapper::OProfileWrapper()
 }
 
 bool OProfileWrapper::initialize() {
-  using namespace llvm;
-  using namespace llvm::sys;
+  using namespace llvm37;
+  using namespace llvm37::sys;
 
   MutexGuard Guard(OProfileInitializationMutex);
 
@@ -265,4 +265,4 @@ int  OProfileWrapper::op_unload_native_code(uint64_t Addr) {
   return -1;
 }
 
-} // namespace llvm
+} // namespace llvm37

@@ -14,20 +14,20 @@
 
 #include "clang/StaticAnalyzer/Core/AnalyzerOptions.h"
 #include "clang/StaticAnalyzer/Core/Checker.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/ADT/StringSwitch.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/ADT/StringSwitch.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/raw_ostream.h"
 
 using namespace clang;
 using namespace ento;
-using namespace llvm;
+using namespace llvm37;
 
 AnalyzerOptions::UserModeKind AnalyzerOptions::getUserMode() {
   if (UserMode == UMK_NotSet) {
     StringRef ModeStr =
         Config.insert(std::make_pair("mode", "deep")).first->second;
-    UserMode = llvm::StringSwitch<UserModeKind>(ModeStr)
+    UserMode = llvm37::StringSwitch<UserModeKind>(ModeStr)
       .Case("shallow", UMK_Shallow)
       .Case("deep", UMK_Deep)
       .Default(UMK_NotSet);
@@ -53,7 +53,7 @@ IPAKind AnalyzerOptions::getIPAMode() {
     // Lookup the ipa configuration option, use the default from User Mode.
     StringRef ModeStr =
         Config.insert(std::make_pair("ipa", DefaultIPA)).first->second;
-    IPAKind IPAConfig = llvm::StringSwitch<IPAKind>(ModeStr)
+    IPAKind IPAConfig = llvm37::StringSwitch<IPAKind>(ModeStr)
             .Case("none", IPAK_None)
             .Case("basic-inlining", IPAK_BasicInlining)
             .Case("inlining", IPAK_Inlining)
@@ -83,7 +83,7 @@ AnalyzerOptions::mayInlineCXXMemberFunction(CXXInlineableMemberKind K) {
     CXXInlineableMemberKind &MutableMode =
       const_cast<CXXInlineableMemberKind &>(CXXMemberInliningMode);
 
-    MutableMode = llvm::StringSwitch<CXXInlineableMemberKind>(ModeStr)
+    MutableMode = llvm37::StringSwitch<CXXInlineableMemberKind>(ModeStr)
       .Case("constructors", CIMK_Constructors)
       .Case("destructors", CIMK_Destructors)
       .Case("none", CIMK_None)
@@ -133,7 +133,7 @@ bool AnalyzerOptions::getBooleanOption(StringRef Name, bool DefaultVal,
       C ? getCheckerOption(C->getTagDescription(), Name, Default,
                            SearchInParents)
         : StringRef(Config.insert(std::make_pair(Name, Default)).first->second);
-  return llvm::StringSwitch<bool>(V)
+  return llvm37::StringSwitch<bool>(V)
       .Case("true", true)
       .Case("false", false)
       .Default(DefaultVal);
@@ -231,7 +231,7 @@ int AnalyzerOptions::getOptionAsInteger(StringRef Name, int DefaultVal,
                                         const CheckerBase *C,
                                         bool SearchInParents) {
   SmallString<10> StrBuf;
-  llvm::raw_svector_ostream OS(StrBuf);
+  llvm37::raw_svector_ostream OS(StrBuf);
   OS << DefaultVal;
 
   StringRef V = C ? getCheckerOption(C->getTagDescription(), Name, OS.str(),

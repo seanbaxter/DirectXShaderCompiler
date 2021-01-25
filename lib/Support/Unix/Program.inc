@@ -17,13 +17,13 @@
 //===----------------------------------------------------------------------===//
 
 #include "Unix.h"
-#include "llvm/ADT/StringExtras.h"
-#include "llvm/Config/config.h"
-#include "llvm/Support/Compiler.h"
-#include "llvm/Support/Errc.h"
-#include "llvm/Support/FileSystem.h"
-#include "llvm/Support/Path.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/StringExtras.h"
+#include "llvm37/Config/config.h"
+#include "llvm37/Support/Compiler.h"
+#include "llvm37/Support/Errc.h"
+#include "llvm37/Support/FileSystem.h"
+#include "llvm37/Support/Path.h"
+#include "llvm37/Support/raw_ostream.h"
 #if HAVE_SYS_STAT_H
 #include <sys/stat.h>
 #endif
@@ -62,7 +62,7 @@
 #endif
 #endif
 
-namespace llvm {
+namespace llvm37 {
 
 using namespace sys;
 
@@ -166,7 +166,7 @@ static void SetMemoryLimits (unsigned size)
 #ifdef RLIMIT_AS  // e.g. NetBSD doesn't have it.
   // Don't set virtual memory limit if built with any Sanitizer. They need 80Tb
   // of virtual memory for shadow memory mapping.
-#if !LLVM_MEMORY_SANITIZER_BUILD && !LLVM_ADDRESS_SANITIZER_BUILD
+#if !LLVM37_MEMORY_SANITIZER_BUILD && !LLVM37_ADDRESS_SANITIZER_BUILD
   // Virtual memory.
   getrlimit (RLIMIT_AS, &r);
   r.rlim_cur = limit;
@@ -181,7 +181,7 @@ static void SetMemoryLimits (unsigned size)
 static bool Execute(ProcessInfo &PI, StringRef Program, const char **args,
                     const char **envp, const StringRef **redirects,
                     unsigned memoryLimit, std::string *ErrMsg) {
-  if (!llvm::sys::fs::exists(Program)) {
+  if (!llvm37::sys::fs::exists(Program)) {
     if (ErrMsg)
       *ErrMsg = std::string("Executable \"") + Program.str() +
                 std::string("\" doesn't exist!");
@@ -319,7 +319,7 @@ static bool Execute(ProcessInfo &PI, StringRef Program, const char **args,
   return true;
 }
 
-namespace llvm {
+namespace llvm37 {
 
 ProcessInfo sys::Wait(const ProcessInfo &PI, unsigned SecondsToWait,
                       bool WaitUntilTerminates, std::string *ErrMsg) {
@@ -395,7 +395,7 @@ ProcessInfo sys::Wait(const ProcessInfo &PI, unsigned SecondsToWait,
 
     if (result == 127) {
       if (ErrMsg)
-        *ErrMsg = llvm::sys::StrError(ENOENT);
+        *ErrMsg = llvm37::sys::StrError(ENOENT);
       WaitResult.ReturnCode = -1;
       return WaitResult;
     }
@@ -437,10 +437,10 @@ ProcessInfo sys::Wait(const ProcessInfo &PI, unsigned SecondsToWait,
 }
 
 std::error_code
-llvm::sys::writeFileWithEncoding(StringRef FileName, StringRef Contents,
+llvm37::sys::writeFileWithEncoding(StringRef FileName, StringRef Contents,
                                  WindowsEncodingMethod Encoding /*unused*/) {
   std::error_code EC;
-  llvm::raw_fd_ostream OS(FileName, EC, llvm::sys::fs::OpenFlags::F_Text);
+  llvm37::raw_fd_ostream OS(FileName, EC, llvm37::sys::fs::OpenFlags::F_Text);
 
   if (EC)
     return EC;
@@ -453,7 +453,7 @@ llvm::sys::writeFileWithEncoding(StringRef FileName, StringRef Contents,
   return EC;
 }
 
-bool llvm::sys::argumentsFitWithinSystemLimits(ArrayRef<const char*> Args) {
+bool llvm37::sys::argumentsFitWithinSystemLimits(ArrayRef<const char*> Args) {
   static long ArgMax = sysconf(_SC_ARG_MAX);
 
   // System says no practical limit.

@@ -14,21 +14,21 @@
 
 #include "StatepointLowering.h"
 #include "SelectionDAGBuilder.h"
-#include "llvm/ADT/SmallSet.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/CodeGen/FunctionLoweringInfo.h"
-#include "llvm/CodeGen/GCMetadata.h"
-#include "llvm/CodeGen/GCStrategy.h"
-#include "llvm/CodeGen/SelectionDAG.h"
-#include "llvm/CodeGen/StackMaps.h"
-#include "llvm/IR/CallingConv.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/IR/Intrinsics.h"
-#include "llvm/IR/Statepoint.h"
-#include "llvm/Target/TargetLowering.h"
+#include "llvm37/ADT/SmallSet.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/CodeGen/FunctionLoweringInfo.h"
+#include "llvm37/CodeGen/GCMetadata.h"
+#include "llvm37/CodeGen/GCStrategy.h"
+#include "llvm37/CodeGen/SelectionDAG.h"
+#include "llvm37/CodeGen/StackMaps.h"
+#include "llvm37/IR/CallingConv.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/IR/Intrinsics.h"
+#include "llvm37/IR/Statepoint.h"
+#include "llvm37/Target/TargetLowering.h"
 #include <algorithm>
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "statepoint-lowering"
 
@@ -378,9 +378,9 @@ static void getIncomingStatepointGCValues(
     Ptrs.push_back(relocateOpers.getDerivedPtr());
   }
 
-  // Remove any redundant llvm::Values which map to the same SDValue as another
+  // Remove any redundant llvm37::Values which map to the same SDValue as another
   // input.  Also has the effect of removing duplicates in the original
-  // llvm::Value input list as well.  This is a useful optimization for
+  // llvm37::Value input list as well.  This is a useful optimization for
   // reducing the size of the StackMap section.  It has no other impact.
   removeDuplicatesGCPtrs(Bases, Ptrs, Relocs, Builder);
 

@@ -7,15 +7,15 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/Config/config.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/StringSaver.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/Config/config.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/StringSaver.h"
 #include "gtest/gtest.h"
 #include <stdlib.h>
 #include <string>
 
-using namespace llvm;
+using namespace llvm37;
 
 namespace {
 
@@ -111,7 +111,7 @@ TEST(CommandLineTest, ModifyExisitingOption) {
 }
 #ifndef SKIP_ENVIRONMENT_TESTS
 
-const char test_env_var[] = "LLVM_TEST_COMMAND_LINE_FLAGS";
+const char test_env_var[] = "LLVM37_TEST_COMMAND_LINE_FLAGS";
 
 cl::opt<std::string> EnvironmentTestOption("env-test-opt");
 TEST(CommandLineTest, ParseEnvironment) {
@@ -197,7 +197,7 @@ TEST(CommandLineTest, AliasesWithArguments) {
     StackOption<bool> Extra("extra");
     StackOption<std::string> Input(cl::Positional);
 
-    cl::alias Alias("alias", llvm::cl::aliasopt(Actual));
+    cl::alias Alias("alias", llvm37::cl::aliasopt(Actual));
 
     cl::ParseCommandLineOptions(ARGC, Inputs[i]);
     EXPECT_EQ("x", Actual);
@@ -209,7 +209,7 @@ TEST(CommandLineTest, AliasesWithArguments) {
 
 void testAliasRequired(int argc, const char *const *argv) {
   StackOption<std::string> Option("option", cl::Required);
-  cl::alias Alias("o", llvm::cl::aliasopt(Option));
+  cl::alias Alias("o", llvm37::cl::aliasopt(Option));
 
   cl::ParseCommandLineOptions(argc, argv);
   EXPECT_EQ("x", Option);

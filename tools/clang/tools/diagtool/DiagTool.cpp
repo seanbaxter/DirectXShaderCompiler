@@ -12,25 +12,25 @@
 //===----------------------------------------------------------------------===//
 
 #include "DiagTool.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/ADT/StringMap.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/ADT/StringMap.h"
 #include <vector>
 
 using namespace diagtool;
 
-DiagTool::DiagTool(llvm::StringRef toolCmd,
-                   llvm::StringRef toolDesc)
+DiagTool::DiagTool(llvm37::StringRef toolCmd,
+                   llvm37::StringRef toolDesc)
   : cmd(toolCmd), description(toolDesc) {}
 
 DiagTool::~DiagTool() {}
 
-typedef llvm::StringMap<DiagTool *> ToolMap;
+typedef llvm37::StringMap<DiagTool *> ToolMap;
 static inline ToolMap *getTools(void *v) { return static_cast<ToolMap*>(v); }
 
 DiagTools::DiagTools() : tools(new ToolMap()) {}
 DiagTools::~DiagTools() { delete getTools(tools); }
 
-DiagTool *DiagTools::getTool(llvm::StringRef toolCmd) {
+DiagTool *DiagTools::getTool(llvm37::StringRef toolCmd) {
   ToolMap::iterator it = getTools(tools)->find(toolCmd);
   return (it == getTools(tools)->end()) ? nullptr : it->getValue();
 }
@@ -39,8 +39,8 @@ void DiagTools::registerTool(DiagTool *tool) {
   (*getTools(tools))[tool->getName()] = tool;
 }
 
-void DiagTools::printCommands(llvm::raw_ostream &out) {
-  std::vector<llvm::StringRef> toolNames;
+void DiagTools::printCommands(llvm37::raw_ostream &out) {
+  std::vector<llvm37::StringRef> toolNames;
   unsigned maxName = 0;
   for (ToolMap::iterator it = getTools(tools)->begin(),
        ei = getTools(tools)->end(); it != ei; ++it) {
@@ -51,7 +51,7 @@ void DiagTools::printCommands(llvm::raw_ostream &out) {
   }
   std::sort(toolNames.begin(), toolNames.end());
 
-  for (std::vector<llvm::StringRef>::iterator it = toolNames.begin(),
+  for (std::vector<llvm37::StringRef>::iterator it = toolNames.begin(),
        ei = toolNames.end(); it != ei; ++it) {
 
     out << "  " << (*it);
@@ -64,5 +64,5 @@ void DiagTools::printCommands(llvm::raw_ostream &out) {
 }
 
 namespace diagtool {
-  llvm::ManagedStatic<DiagTools> diagTools;
+  llvm37::ManagedStatic<DiagTools> diagTools;
 }

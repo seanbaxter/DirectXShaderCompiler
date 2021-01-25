@@ -18,7 +18,7 @@
 #include "clang/Sema/Lookup.h"
 #include "clang/Sema/LoopHint.h"
 #include "clang/Sema/ScopeInfo.h"
-#include "llvm/ADT/StringExtras.h"
+#include "llvm37/ADT/StringExtras.h"
 #include "clang/Sema/SemaHLSL.h" // HLSL Change
 
 using namespace clang;
@@ -58,7 +58,7 @@ static Attr *handleLoopHintAttr(Sema &S, Stmt *St, const AttributeList &A,
       St->getStmtClass() != Stmt::CXXForRangeStmtClass &&
       St->getStmtClass() != Stmt::WhileStmtClass) {
     const char *Pragma =
-        llvm::StringSwitch<const char *>(PragmaNameLoc->Ident->getName())
+        llvm37::StringSwitch<const char *>(PragmaNameLoc->Ident->getName())
             .Case("unroll", "#pragma unroll")
             .Case("nounroll", "#pragma nounroll")
             .Default("#pragma clang loop");
@@ -78,7 +78,7 @@ static Attr *handleLoopHintAttr(Sema &S, Stmt *St, const AttributeList &A,
     assert(OptionLoc && OptionLoc->Ident &&
            "Attribute must have valid option info.");
     IdentifierInfo *OptionInfo = OptionLoc->Ident;
-    Option = llvm::StringSwitch<LoopHintAttr::OptionType>(OptionInfo->getName())
+    Option = llvm37::StringSwitch<LoopHintAttr::OptionType>(OptionInfo->getName())
                  .Case("vectorize", LoopHintAttr::Vectorize)
                  .Case("vectorize_width", LoopHintAttr::VectorizeWidth)
                  .Case("interleave", LoopHintAttr::Interleave)

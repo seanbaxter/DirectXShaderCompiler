@@ -97,26 +97,26 @@
 //===----------------------------------------------------------------------===//
 
 #include "CodeGenTarget.h"
-#include "llvm/ADT/PointerUnion.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/SmallPtrSet.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/ADT/StringExtras.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/TableGen/Error.h"
-#include "llvm/TableGen/Record.h"
-#include "llvm/TableGen/StringMatcher.h"
-#include "llvm/TableGen/StringToOffsetTable.h"
-#include "llvm/TableGen/TableGenBackend.h"
+#include "llvm37/ADT/PointerUnion.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/SmallPtrSet.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/ADT/StringExtras.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/TableGen/Error.h"
+#include "llvm37/TableGen/Record.h"
+#include "llvm37/TableGen/StringMatcher.h"
+#include "llvm37/TableGen/StringToOffsetTable.h"
+#include "llvm37/TableGen/TableGenBackend.h"
 #include <cassert>
 #include <cctype>
 #include <map>
 #include <set>
 #include <sstream>
 #include <forward_list>
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "asm-matcher-emitter"
 
@@ -1395,7 +1395,7 @@ void AsmMatcherInfo::buildInfo() {
     std::vector<Record*> AllInstAliases =
       Records.getAllDerivedDefinitions("InstAlias");
     for (unsigned i = 0, e = AllInstAliases.size(); i != e; ++i) {
-      auto Alias = llvm::make_unique<CodeGenInstAlias>(AllInstAliases[i],
+      auto Alias = llvm37::make_unique<CodeGenInstAlias>(AllInstAliases[i],
                                                        AsmVariantNo, Target);
 
       // If the tblgen -match-prefix option is specified (for tblgen hackers),
@@ -3054,7 +3054,7 @@ void AsmMatcherEmitter::run(raw_ostream &OS) {
   OS << "#endif // GET_MATCHER_IMPLEMENTATION\n\n";
 }
 
-namespace llvm {
+namespace llvm37 {
 
 void EmitAsmMatcher(RecordKeeper &RK, raw_ostream &OS) {
   emitSourceFileHeader("Assembly Matcher Source Fragment", OS);

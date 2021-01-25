@@ -62,8 +62,8 @@ add_llvm_library(LLVMScalarOpts
   TailRecursionElimination.cpp
 
   ADDITIONAL_HEADER_DIRS
-  ${LLVM_MAIN_INCLUDE_DIR}/llvm/Transforms
-  ${LLVM_MAIN_INCLUDE_DIR}/llvm/Transforms/Scalar
+  ${LLVM37_MAIN_INCLUDE_DIR}/llvm/Transforms
+  ${LLVM37_MAIN_INCLUDE_DIR}/llvm/Transforms/Scalar
   )
 
 add_dependencies(LLVMScalarOpts intrinsics_gen)

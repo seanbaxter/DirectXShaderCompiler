@@ -11,8 +11,8 @@
 |* documentation comments.                                                    *|
 |*                                                                            *|
 \*===----------------------------------------------------------------------===*/
-#ifndef LLVM_CLANG_C_DOCUMENTATION_H
-#define LLVM_CLANG_C_DOCUMENTATION_H
+#ifndef LLVM37_CLANG_C_DOCUMENTATION_H
+#define LLVM37_CLANG_C_DOCUMENTATION_H
 
 #include "clang-c/Index.h"
 

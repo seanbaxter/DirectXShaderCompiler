@@ -7,20 +7,20 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/IR/IRBuilder.h"
-#include "llvm/IR/BasicBlock.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/DIBuilder.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/MDBuilder.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/NoFolder.h"
-#include "llvm/IR/Verifier.h"
+#include "llvm37/IR/IRBuilder.h"
+#include "llvm37/IR/BasicBlock.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/IR/DIBuilder.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/MDBuilder.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/NoFolder.h"
+#include "llvm37/IR/Verifier.h"
 #include "gtest/gtest.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 namespace {
 

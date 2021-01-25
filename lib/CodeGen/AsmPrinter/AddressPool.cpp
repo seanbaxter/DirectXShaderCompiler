@@ -8,11 +8,11 @@
 //===----------------------------------------------------------------------===//
 
 #include "AddressPool.h"
-#include "llvm/CodeGen/AsmPrinter.h"
-#include "llvm/MC/MCStreamer.h"
-#include "llvm/Target/TargetLoweringObjectFile.h"
+#include "llvm37/CodeGen/AsmPrinter.h"
+#include "llvm37/MC/MCStreamer.h"
+#include "llvm37/Target/TargetLoweringObjectFile.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 class MCExpr;
 

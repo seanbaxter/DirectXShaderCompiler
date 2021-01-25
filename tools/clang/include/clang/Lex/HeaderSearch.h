@@ -11,16 +11,16 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_LEX_HEADERSEARCH_H
-#define LLVM_CLANG_LEX_HEADERSEARCH_H
+#ifndef LLVM37_CLANG_LEX_HEADERSEARCH_H
+#define LLVM37_CLANG_LEX_HEADERSEARCH_H
 
 #include "clang/Lex/DirectoryLookup.h"
 #include "clang/Lex/ModuleMap.h"
-#include "llvm/ADT/ArrayRef.h"
-#include "llvm/ADT/IntrusiveRefCntPtr.h"
-#include "llvm/ADT/StringMap.h"
-#include "llvm/ADT/StringSet.h"
-#include "llvm/Support/Allocator.h"
+#include "llvm37/ADT/ArrayRef.h"
+#include "llvm37/ADT/IntrusiveRefCntPtr.h"
+#include "llvm37/ADT/StringMap.h"
+#include "llvm37/ADT/StringSet.h"
+#include "llvm37/Support/Allocator.h"
 #include <memory>
 #include <vector>
 
@@ -211,16 +211,16 @@ class HeaderSearch {
       this->MappedName = nullptr;
     }
   };
-  llvm::StringMap<LookupFileCacheInfo, llvm::BumpPtrAllocator> LookupFileCache;
+  llvm37::StringMap<LookupFileCacheInfo, llvm37::BumpPtrAllocator> LookupFileCache;
 
   /// \brief Collection mapping a framework or subframework
   /// name like "Carbon" to the Carbon.framework directory.
-  llvm::StringMap<FrameworkCacheEntry, llvm::BumpPtrAllocator> FrameworkMap;
+  llvm37::StringMap<FrameworkCacheEntry, llvm37::BumpPtrAllocator> FrameworkMap;
 
   /// IncludeAliases - maps include file names (including the quotes or
   /// angle brackets) to other include file names.  This is used to support the
   /// include_alias pragma for Microsoft compatibility.
-  typedef llvm::StringMap<std::string, llvm::BumpPtrAllocator>
+  typedef llvm37::StringMap<std::string, llvm37::BumpPtrAllocator>
     IncludeAliasMap;
   std::unique_ptr<IncludeAliasMap> IncludeAliases;
 
@@ -232,15 +232,15 @@ class HeaderSearch {
   mutable ModuleMap ModMap;
   
   /// \brief Describes whether a given directory has a module map in it.
-  llvm::DenseMap<const DirectoryEntry *, bool> DirectoryHasModuleMap;
+  llvm37::DenseMap<const DirectoryEntry *, bool> DirectoryHasModuleMap;
 
   /// \brief Set of module map files we've already loaded, and a flag indicating
   /// whether they were valid or not.
-  llvm::DenseMap<const FileEntry *, bool> LoadedModuleMaps;
+  llvm37::DenseMap<const FileEntry *, bool> LoadedModuleMaps;
 
   /// \brief Uniqued set of framework names, which is used to track which 
   /// headers were included as framework headers.
-  llvm::StringSet<llvm::BumpPtrAllocator> FrameworkNames;
+  llvm37::StringSet<llvm37::BumpPtrAllocator> FrameworkNames;
   
   /// \brief Entity used to resolve the identifier IDs of controlling
   /// macros into IdentifierInfo pointers, and keep the identifire up to date,

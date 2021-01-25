@@ -15,8 +15,8 @@
 
 #include "TokenAnnotator.h"
 #include "clang/Basic/SourceManager.h"
-#include "llvm/ADT/SmallPtrSet.h"
-#include "llvm/Support/Debug.h"
+#include "llvm37/ADT/SmallPtrSet.h"
+#include "llvm37/Support/Debug.h"
 
 #define DEBUG_TYPE "format-token-annotator"
 
@@ -1221,7 +1221,7 @@ private:
   // determines that a specific token can't be a template opener, it will make
   // same decision irrespective of the decisions for tokens leading up to it.
   // Store this information to prevent this from causing exponential runtime.
-  llvm::SmallPtrSet<FormatToken *, 16> NonTemplateLess;
+  llvm37::SmallPtrSet<FormatToken *, 16> NonTemplateLess;
 };
 
 static const int PrecedenceUnaryOperator = prec::PointerToMember + 1;
@@ -2270,10 +2270,10 @@ bool TokenAnnotator::canBreakBefore(const AnnotatedLine &Line,
 }
 
 void TokenAnnotator::printDebugInfo(const AnnotatedLine &Line) {
-  llvm::errs() << "AnnotatedTokens:\n";
+  llvm37::errs() << "AnnotatedTokens:\n";
   const FormatToken *Tok = Line.First;
   while (Tok) {
-    llvm::errs() << " M=" << Tok->MustBreakBefore
+    llvm37::errs() << " M=" << Tok->MustBreakBefore
                  << " C=" << Tok->CanBreakBefore
                  << " T=" << getTokenTypeName(Tok->Type)
                  << " S=" << Tok->SpacesRequiredBefore
@@ -2282,13 +2282,13 @@ void TokenAnnotator::printDebugInfo(const AnnotatedLine &Line) {
                  << " L=" << Tok->TotalLength << " PPK=" << Tok->PackingKind
                  << " FakeLParens=";
     for (unsigned i = 0, e = Tok->FakeLParens.size(); i != e; ++i)
-      llvm::errs() << Tok->FakeLParens[i] << "/";
-    llvm::errs() << " FakeRParens=" << Tok->FakeRParens << "\n";
+      llvm37::errs() << Tok->FakeLParens[i] << "/";
+    llvm37::errs() << " FakeRParens=" << Tok->FakeRParens << "\n";
     if (!Tok->Next)
       assert(Tok == Line.Last);
     Tok = Tok->Next;
   }
-  llvm::errs() << "----\n";
+  llvm37::errs() << "----\n";
 }
 
 } // namespace format

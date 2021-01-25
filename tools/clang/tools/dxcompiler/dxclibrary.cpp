@@ -12,8 +12,8 @@
 #include "dxc/Support/WinIncludes.h"
 #include "dxc/Support/Global.h"
 #include "dxc/Support/Unicode.h"
-#include "llvm/Support/FileSystem.h"
-#include "llvm/Support/MSFileSystem.h"
+#include "llvm37/Support/FileSystem.h"
+#include "llvm37/Support/MSFileSystem.h"
 #include "dxc/Support/microcom.h"
 #include "dxc/Support/FileIOHelper.h"
 
@@ -25,7 +25,7 @@
 #include <unordered_set>
 #include <vector>
 
-using namespace llvm;
+using namespace llvm37;
 using namespace hlsl;
 
 #ifdef _WIN32

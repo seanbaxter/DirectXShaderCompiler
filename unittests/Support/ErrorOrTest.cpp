@@ -7,12 +7,12 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Support/ErrorOr.h"
-#include "llvm/Support/Errc.h"
+#include "llvm37/Support/ErrorOr.h"
+#include "llvm37/Support/Errc.h"
 #include "gtest/gtest.h"
 #include <memory>
 
-using namespace llvm;
+using namespace llvm37;
 
 namespace {
 

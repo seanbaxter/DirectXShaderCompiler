@@ -12,26 +12,26 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Target/TargetLoweringObjectFile.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/DerivedTypes.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/GlobalVariable.h"
-#include "llvm/IR/Mangler.h"
-#include "llvm/MC/MCAsmInfo.h"
-#include "llvm/MC/MCContext.h"
-#include "llvm/MC/MCExpr.h"
-#include "llvm/MC/MCStreamer.h"
-#include "llvm/MC/MCSymbol.h"
-#include "llvm/Support/Dwarf.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Target/TargetLowering.h"
-#include "llvm/Target/TargetMachine.h"
-#include "llvm/Target/TargetOptions.h"
-#include "llvm/Target/TargetSubtargetInfo.h"
-using namespace llvm;
+#include "llvm37/Target/TargetLoweringObjectFile.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/IR/DerivedTypes.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/GlobalVariable.h"
+#include "llvm37/IR/Mangler.h"
+#include "llvm37/MC/MCAsmInfo.h"
+#include "llvm37/MC/MCContext.h"
+#include "llvm37/MC/MCExpr.h"
+#include "llvm37/MC/MCStreamer.h"
+#include "llvm37/MC/MCSymbol.h"
+#include "llvm37/Support/Dwarf.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Target/TargetLowering.h"
+#include "llvm37/Target/TargetMachine.h"
+#include "llvm37/Target/TargetOptions.h"
+#include "llvm37/Target/TargetSubtargetInfo.h"
+using namespace llvm37;
 
 //===----------------------------------------------------------------------===//
 //                              Generic Code

@@ -12,8 +12,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/MC/MCAsmInfoCOFF.h"
-using namespace llvm;
+#include "llvm37/MC/MCAsmInfoCOFF.h"
+using namespace llvm37;
 
 void MCAsmInfoCOFF::anchor() { }
 

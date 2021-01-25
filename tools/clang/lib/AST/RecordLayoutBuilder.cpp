@@ -17,10 +17,10 @@
 #include "clang/AST/Expr.h"
 #include "clang/Basic/TargetInfo.h"
 #include "clang/Sema/SemaDiagnostic.h"
-#include "llvm/ADT/SmallSet.h"
-#include "llvm/Support/CrashRecoveryContext.h"
-#include "llvm/Support/Format.h"
-#include "llvm/Support/MathExtras.h"
+#include "llvm37/ADT/SmallSet.h"
+#include "llvm37/Support/CrashRecoveryContext.h"
+#include "llvm37/Support/Format.h"
+#include "llvm37/Support/MathExtras.h"
 
 using namespace clang;
 
@@ -68,13 +68,13 @@ struct ExternalLayout {
   uint64_t Align;
 
   /// \brief Record field offsets in bits.
-  llvm::DenseMap<const FieldDecl *, uint64_t> FieldOffsets;
+  llvm37::DenseMap<const FieldDecl *, uint64_t> FieldOffsets;
 
   /// \brief Direct, non-virtual base offsets.
-  llvm::DenseMap<const CXXRecordDecl *, CharUnits> BaseOffsets;
+  llvm37::DenseMap<const CXXRecordDecl *, CharUnits> BaseOffsets;
 
   /// \brief Virtual base offsets.
-  llvm::DenseMap<const CXXRecordDecl *, CharUnits> VirtualBaseOffsets;
+  llvm37::DenseMap<const CXXRecordDecl *, CharUnits> VirtualBaseOffsets;
 
   /// Get the offset of the given field. The external source must provide
   /// entries for all fields in the record.
@@ -111,8 +111,8 @@ class EmptySubobjectMap {
   const CXXRecordDecl *Class;
 
   /// EmptyClassOffsets - A map from offsets to empty record decls.
-  typedef llvm::TinyPtrVector<const CXXRecordDecl *> ClassVectorTy;
-  typedef llvm::DenseMap<CharUnits, ClassVectorTy> EmptyClassOffsetsMapTy;
+  typedef llvm37::TinyPtrVector<const CXXRecordDecl *> ClassVectorTy;
+  typedef llvm37::DenseMap<CharUnits, ClassVectorTy> EmptyClassOffsetsMapTy;
   EmptyClassOffsetsMapTy EmptyClassOffsets;
   
   /// MaxEmptyClassOffset - The highest offset known to contain an empty
@@ -563,7 +563,7 @@ void EmptySubobjectMap::UpdateEmptyFieldSubobjects(const FieldDecl *FD,
   }
 }
 
-typedef llvm::SmallPtrSet<const CXXRecordDecl*, 4> ClassSetTy;
+typedef llvm37::SmallPtrSet<const CXXRecordDecl*, 4> ClassSetTy;
 
 class RecordLayoutBuilder {
 protected:
@@ -633,7 +633,7 @@ protected:
   /// pointer, as opposed to inheriting one from a primary base class.
   bool HasOwnVFPtr;
 
-  typedef llvm::DenseMap<const CXXRecordDecl *, CharUnits> BaseOffsetsMapTy;
+  typedef llvm37::DenseMap<const CXXRecordDecl *, CharUnits> BaseOffsetsMapTy;
 
   /// Bases - base classes and their offsets in the record.
   BaseOffsetsMapTy Bases;
@@ -651,7 +651,7 @@ protected:
 
   /// VisitedVirtualBases - A set of all the visited virtual bases, used to
   /// avoid visiting virtual bases more than once.
-  llvm::SmallPtrSet<const CXXRecordDecl *, 4> VisitedVirtualBases;
+  llvm37::SmallPtrSet<const CXXRecordDecl *, 4> VisitedVirtualBases;
 
   /// Valid if UseExternalLayout is true.
   ExternalLayout External;
@@ -685,9 +685,9 @@ protected:
   }
 
   /// BaseSubobjectInfoAllocator - Allocator for BaseSubobjectInfo objects.
-  llvm::SpecificBumpPtrAllocator<BaseSubobjectInfo> BaseSubobjectInfoAllocator;
+  llvm37::SpecificBumpPtrAllocator<BaseSubobjectInfo> BaseSubobjectInfoAllocator;
   
-  typedef llvm::DenseMap<const CXXRecordDecl *, BaseSubobjectInfo *>
+  typedef llvm37::DenseMap<const CXXRecordDecl *, BaseSubobjectInfo *>
     BaseSubobjectInfoMapTy;
 
   /// VirtualBaseInfo - Map from all the (direct or indirect) virtual bases
@@ -1169,7 +1169,7 @@ CharUnits RecordLayoutBuilder::LayoutBase(const BaseSubobjectInfo *Base) {
   // Query the external layout to see if it provides an offset.
   bool HasExternalLayout = false;
   if (UseExternalLayout) {
-    llvm::DenseMap<const CXXRecordDecl *, CharUnits>::iterator Known;
+    llvm37::DenseMap<const CXXRecordDecl *, CharUnits>::iterator Known;
     if (Base->IsVirtual)
       HasExternalLayout = External.getExternalNVBaseOffset(Base->Class, Offset);
     else
@@ -1295,7 +1295,7 @@ void RecordLayoutBuilder::Layout(const CXXRecordDecl *RD) {
   LayoutFields(RD);
 
   NonVirtualSize = Context.toCharUnitsFromBits(
-        llvm::RoundUpToAlignment(getSizeInBits(), 
+        llvm37::RoundUpToAlignment(getSizeInBits(), 
                                  Context.getTargetInfo().getCharAlign()));
   NonVirtualAlignment = Alignment;
 
@@ -1367,7 +1367,7 @@ static uint64_t
 roundUpSizeToCharAlignment(uint64_t Size,
                            const ASTContext &Context) {
   uint64_t CharAlignment = Context.getTargetInfo().getCharAlign();
-  return llvm::RoundUpToAlignment(Size, CharAlignment);
+  return llvm37::RoundUpToAlignment(Size, CharAlignment);
 }
 
 void RecordLayoutBuilder::LayoutWideBitField(uint64_t FieldSize,
@@ -1414,12 +1414,12 @@ void RecordLayoutBuilder::LayoutWideBitField(uint64_t FieldSize,
   } else {
     // The bitfield is allocated starting at the next offset aligned 
     // appropriately for T', with length n bits.
-    FieldOffset = llvm::RoundUpToAlignment(getDataSizeInBits(), 
+    FieldOffset = llvm37::RoundUpToAlignment(getDataSizeInBits(), 
                                            Context.toBits(TypeAlign));
 
     uint64_t NewSizeInBits = FieldOffset + FieldSize;
 
-    setDataSize(llvm::RoundUpToAlignment(NewSizeInBits, 
+    setDataSize(llvm37::RoundUpToAlignment(NewSizeInBits, 
                                          Context.getTargetInfo().getCharAlign()));
     UnfilledBitsInLastUnit = getDataSizeInBits() - NewSizeInBits;
   }
@@ -1583,8 +1583,8 @@ void RecordLayoutBuilder::LayoutBitField(const FieldDecl *D) {
     // start a new storage unit), just do so, regardless of any other
     // other consideration.  Otherwise, round up to the right alignment.
     if (FieldSize == 0 || FieldSize > UnfilledBitsInLastUnit) {
-      FieldOffset = llvm::RoundUpToAlignment(FieldOffset, FieldAlign);
-      UnpackedFieldOffset = llvm::RoundUpToAlignment(UnpackedFieldOffset,
+      FieldOffset = llvm37::RoundUpToAlignment(FieldOffset, FieldAlign);
+      UnpackedFieldOffset = llvm37::RoundUpToAlignment(UnpackedFieldOffset,
                                                      UnpackedFieldAlign);
       UnfilledBitsInLastUnit = 0;
     }
@@ -1597,14 +1597,14 @@ void RecordLayoutBuilder::LayoutBitField(const FieldDecl *D) {
     if (FieldSize == 0 || 
         (AllowPadding &&
          (FieldOffset & (FieldAlign-1)) + FieldSize > TypeSize)) {
-      FieldOffset = llvm::RoundUpToAlignment(FieldOffset, FieldAlign);
+      FieldOffset = llvm37::RoundUpToAlignment(FieldOffset, FieldAlign);
     }
 
     // Repeat the computation for diagnostic purposes.
     if (FieldSize == 0 ||
         (AllowPadding &&
          (UnpackedFieldOffset & (UnpackedFieldAlign-1)) + FieldSize > TypeSize))
-      UnpackedFieldOffset = llvm::RoundUpToAlignment(UnpackedFieldOffset,
+      UnpackedFieldOffset = llvm37::RoundUpToAlignment(UnpackedFieldOffset,
                                                      UnpackedFieldAlign);
   }
 
@@ -1655,7 +1655,7 @@ void RecordLayoutBuilder::LayoutBitField(const FieldDecl *D) {
   } else {
     uint64_t NewSizeInBits = FieldOffset + FieldSize;
     uint64_t CharAlignment = Context.getTargetInfo().getCharAlign();
-    setDataSize(llvm::RoundUpToAlignment(NewSizeInBits, CharAlignment));
+    setDataSize(llvm37::RoundUpToAlignment(NewSizeInBits, CharAlignment));
     UnfilledBitsInLastUnit = getDataSizeInBits() - NewSizeInBits;
 
     // The only time we can get here for an ms_struct is if this is a
@@ -1818,11 +1818,11 @@ void RecordLayoutBuilder::FinishLayout(const NamedDecl *D) {
   // record itself.
   uint64_t UnpaddedSize = getSizeInBits() - UnfilledBitsInLastUnit;
   uint64_t UnpackedSizeInBits =
-  llvm::RoundUpToAlignment(getSizeInBits(),
+  llvm37::RoundUpToAlignment(getSizeInBits(),
                            Context.toBits(UnpackedAlignment));
   CharUnits UnpackedSize = Context.toCharUnitsFromBits(UnpackedSizeInBits);
   uint64_t RoundedSize
-    = llvm::RoundUpToAlignment(getSizeInBits(), Context.toBits(Alignment));
+    = llvm37::RoundUpToAlignment(getSizeInBits(), Context.toBits(Alignment));
 
   if (UseExternalLayout) {
     // If we're inferring alignment, and the external size is smaller than
@@ -1872,13 +1872,13 @@ void RecordLayoutBuilder::UpdateAlignment(CharUnits NewAlignment,
     return;
 
   if (NewAlignment > Alignment) {
-    assert(llvm::isPowerOf2_64(NewAlignment.getQuantity()) &&
+    assert(llvm37::isPowerOf2_64(NewAlignment.getQuantity()) &&
            "Alignment not a power of 2");
     Alignment = NewAlignment;
   }
 
   if (UnpackedNewAlignment > UnpackedAlignment) {
-    assert(llvm::isPowerOf2_64(UnpackedNewAlignment.getQuantity()) &&
+    assert(llvm37::isPowerOf2_64(UnpackedNewAlignment.getQuantity()) &&
            "Alignment not a power of 2");
     UnpackedAlignment = UnpackedNewAlignment;
   }
@@ -2174,7 +2174,7 @@ struct MicrosoftRecordLayoutBuilder {
     CharUnits Size;
     CharUnits Alignment;
   };
-  typedef llvm::DenseMap<const CXXRecordDecl *, CharUnits> BaseOffsetsMapTy;
+  typedef llvm37::DenseMap<const CXXRecordDecl *, CharUnits> BaseOffsetsMapTy;
   MicrosoftRecordLayoutBuilder(const ASTContext &Context) : Context(Context) {}
 private:
   MicrosoftRecordLayoutBuilder(const MicrosoftRecordLayoutBuilder &) = delete;
@@ -2221,7 +2221,7 @@ public:
   }
   /// \brief Compute the set of virtual bases for which vtordisps are required.
   void computeVtorDispSet(
-      llvm::SmallPtrSetImpl<const CXXRecordDecl *> &HasVtorDispSet,
+      llvm37::SmallPtrSetImpl<const CXXRecordDecl *> &HasVtorDispSet,
       const CXXRecordDecl *RD) const;
   const ASTContext &Context;
   /// \brief The size of the record being laid out.
@@ -2693,7 +2693,7 @@ void MicrosoftRecordLayoutBuilder::layoutVirtualBases(const CXXRecordDecl *RD) {
   }
   VtorDispAlignment = std::max(VtorDispAlignment, RequiredAlignment);
   // Compute the vtordisp set.
-  llvm::SmallPtrSet<const CXXRecordDecl *, 2> HasVtorDispSet;
+  llvm37::SmallPtrSet<const CXXRecordDecl *, 2> HasVtorDispSet;
   computeVtorDispSet(HasVtorDispSet, RD);
   // Iterate through the virtual bases and lay them out.
   const ASTRecordLayout *PreviousBaseLayout = nullptr;
@@ -2767,7 +2767,7 @@ void MicrosoftRecordLayoutBuilder::finalizeLayout(const RecordDecl *RD) {
 // Recursively walks the non-virtual bases of a class and determines if any of
 // them are in the bases with overridden methods set.
 static bool
-RequiresVtordisp(const llvm::SmallPtrSetImpl<const CXXRecordDecl *> &
+RequiresVtordisp(const llvm37::SmallPtrSetImpl<const CXXRecordDecl *> &
                      BasesWithOverriddenMethods,
                  const CXXRecordDecl *RD) {
   if (BasesWithOverriddenMethods.count(RD))
@@ -2783,7 +2783,7 @@ RequiresVtordisp(const llvm::SmallPtrSetImpl<const CXXRecordDecl *> &
 }
 
 void MicrosoftRecordLayoutBuilder::computeVtorDispSet(
-    llvm::SmallPtrSetImpl<const CXXRecordDecl *> &HasVtordispSet,
+    llvm37::SmallPtrSetImpl<const CXXRecordDecl *> &HasVtordispSet,
     const CXXRecordDecl *RD) const {
   // /vd2 or #pragma vtordisp(2): Always use vtordisps for virtual bases with
   // vftables.
@@ -2820,8 +2820,8 @@ void MicrosoftRecordLayoutBuilder::computeVtorDispSet(
   // base in this set will require a vtordisp.  A virtual base that transitively
   // contains one of these bases as a non-virtual base will also require a
   // vtordisp.
-  llvm::SmallPtrSet<const CXXMethodDecl *, 8> Work;
-  llvm::SmallPtrSet<const CXXRecordDecl *, 2> BasesWithOverriddenMethods;
+  llvm37::SmallPtrSet<const CXXMethodDecl *, 8> Work;
+  llvm37::SmallPtrSet<const CXXRecordDecl *, 2> BasesWithOverriddenMethods;
   // Seed the working set with our non-destructor, non-pure virtual methods.
   for (const CXXMethodDecl *MD : RD->methods())
     if (MD->isVirtual() && !isa<CXXDestructorDecl>(MD) && !MD->isPure())
@@ -2953,8 +2953,8 @@ ASTContext::getASTRecordLayout(const RecordDecl *D) const {
   ASTRecordLayouts[D] = NewEntry;
 
   if (getLangOpts().DumpRecordLayouts) {
-    llvm::outs() << "\n*** Dumping AST Record Layout\n";
-    DumpRecordLayout(D, llvm::outs(), getLangOpts().DumpRecordLayoutsSimple);
+    llvm37::outs() << "\n*** Dumping AST Record Layout\n";
+    DumpRecordLayout(D, llvm37::outs(), getLangOpts().DumpRecordLayoutsSimple);
   }
 
   return *NewEntry;
@@ -3076,7 +3076,7 @@ ASTContext::getObjCLayout(const ObjCInterfaceDecl *D,
 
 static void PrintOffset(raw_ostream &OS,
                         CharUnits Offset, unsigned IndentLevel) {
-  OS << llvm::format("%4" PRId64 " | ", (int64_t)Offset.getQuantity());
+  OS << llvm37::format("%4" PRId64 " | ", (int64_t)Offset.getQuantity());
   OS.indent(IndentLevel * 2);
 }
 

@@ -7,13 +7,13 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_EDIT_COMMIT_H
-#define LLVM_CLANG_EDIT_COMMIT_H
+#ifndef LLVM37_CLANG_EDIT_COMMIT_H
+#define LLVM37_CLANG_EDIT_COMMIT_H
 
 #include "clang/Edit/FileOffset.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/ADT/StringRef.h"
-#include "llvm/Support/Allocator.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/ADT/StringRef.h"
+#include "llvm37/Support/Allocator.h"
 
 namespace clang {
   class LangOptions;
@@ -53,7 +53,7 @@ private:
   bool IsCommitable;
   SmallVector<Edit, 8> CachedEdits;
   
-  llvm::BumpPtrAllocator StrAlloc;
+  llvm37::BumpPtrAllocator StrAlloc;
 
 public:
   explicit Commit(EditedSource &Editor);

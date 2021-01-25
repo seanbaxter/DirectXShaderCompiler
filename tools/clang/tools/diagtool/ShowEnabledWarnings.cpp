@@ -14,7 +14,7 @@
 #include "clang/Frontend/TextDiagnosticBuffer.h"
 #include "clang/Frontend/TextDiagnosticPrinter.h"
 #include "clang/Frontend/Utils.h"
-#include "llvm/Support/TargetSelect.h"
+#include "llvm37/Support/TargetSelect.h"
 
 DEF_DIAGTOOL("show-enabled",
              "Show which warnings are enabled for a given command line",
@@ -37,7 +37,7 @@ namespace {
 }
 
 static void printUsage() {
-  llvm::errs() << "Usage: diagtool show-enabled [<flags>] <single-input.c>\n";
+  llvm37::errs() << "Usage: diagtool show-enabled [<flags>] <single-input.c>\n";
 }
 
 static char getCharForLevel(DiagnosticsEngine::Level Level) {
@@ -65,7 +65,7 @@ createDiagnostics(unsigned int argc, char **argv) {
 
   // Try to build a CompilerInvocation.
   std::unique_ptr<CompilerInvocation> Invocation(
-      createInvocationFromCommandLine(llvm::makeArrayRef(argv, argc),
+      createInvocationFromCommandLine(llvm37::makeArrayRef(argv, argc),
                                       InterimDiags));
   if (!Invocation)
     return nullptr;

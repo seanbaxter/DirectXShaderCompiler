@@ -7,12 +7,12 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_LIB_OBJECT_RECORDSTREAMER_H
-#define LLVM_LIB_OBJECT_RECORDSTREAMER_H
+#ifndef LLVM37_LIB_OBJECT_RECORDSTREAMER_H
+#define LLVM37_LIB_OBJECT_RECORDSTREAMER_H
 
-#include "llvm/MC/MCStreamer.h"
+#include "llvm37/MC/MCStreamer.h"
 
-namespace llvm {
+namespace llvm37 {
 class RecordStreamer : public MCStreamer {
 public:
   enum State { NeverSeen, Global, Defined, DefinedGlobal, Used };

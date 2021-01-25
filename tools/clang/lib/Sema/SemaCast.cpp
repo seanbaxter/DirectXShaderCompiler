@@ -23,7 +23,7 @@
 #include "clang/Basic/PartialDiagnostic.h"
 #include "clang/Basic/TargetInfo.h"
 #include "clang/Sema/Initialization.h"
-#include "llvm/ADT/SmallVector.h"
+#include "llvm37/ADT/SmallVector.h"
 #include "clang/Sema/SemaHLSL.h" // HLSL Change
 #include <set>
 using namespace clang;

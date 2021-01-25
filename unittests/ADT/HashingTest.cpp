@@ -12,14 +12,14 @@
 //===----------------------------------------------------------------------===//
 
 #include "gtest/gtest.h"
-#include "llvm/ADT/Hashing.h"
-#include "llvm/Support/DataTypes.h"
+#include "llvm37/ADT/Hashing.h"
+#include "llvm37/Support/DataTypes.h"
 #include <deque>
 #include <list>
 #include <map>
 #include <vector>
 
-namespace llvm {
+namespace llvm37 {
 
 // Helper for test code to print hash codes.
 void PrintTo(const hash_code &code, std::ostream *os) {
@@ -44,9 +44,9 @@ template <> struct is_hashable_data<LargeTestInteger> : std::true_type {};
 } // namespace detail
 } // namespace hashing
 
-} // namespace llvm
+} // namespace llvm37
 
-using namespace llvm;
+using namespace llvm37;
 
 namespace {
 

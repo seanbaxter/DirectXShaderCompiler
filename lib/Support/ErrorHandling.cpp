@@ -12,20 +12,20 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Support/ErrorHandling.h"
+#include "llvm37/Support/ErrorHandling.h"
 #include "llvm-c/Core.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/ADT/Twine.h"
-#include "llvm/Config/config.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/Errc.h"
-#include "llvm/Support/ManagedStatic.h"
-#include "llvm/Support/Mutex.h"
-#include "llvm/Support/MutexGuard.h"
-#include "llvm/Support/Signals.h"
-#include "llvm/Support/Threading.h"
-#include "llvm/Support/WindowsError.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/ADT/Twine.h"
+#include "llvm37/Config/config.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/Errc.h"
+#include "llvm37/Support/ManagedStatic.h"
+#include "llvm37/Support/Mutex.h"
+#include "llvm37/Support/MutexGuard.h"
+#include "llvm37/Support/Signals.h"
+#include "llvm37/Support/Threading.h"
+#include "llvm37/Support/WindowsError.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <cassert>
 #include <cstdlib>
 
@@ -41,7 +41,7 @@
 # include <fcntl.h>
 #endif
 
-using namespace llvm;
+using namespace llvm37;
 
 // HLSL Change - mark these as thread_local
 thread_local static fatal_error_handler_t ErrorHandler = nullptr;
@@ -50,44 +50,44 @@ thread_local static void *ErrorHandlerUserData = nullptr;
 // HLSL Change - no mutex needed, handlers are thread_local
 //static ManagedStatic<sys::Mutex> ErrorHandlerMutex;
 
-void llvm::install_fatal_error_handler(fatal_error_handler_t handler,
+void llvm37::install_fatal_error_handler(fatal_error_handler_t handler,
                                        void *user_data) {
-  // llvm::MutexGuard Lock(*ErrorHandlerMutex); // HLSL Change - ErrorHandler and user data already thread-local
+  // llvm37::MutexGuard Lock(*ErrorHandlerMutex); // HLSL Change - ErrorHandler and user data already thread-local
   assert(!ErrorHandler && "Error handler already registered!\n");
   ErrorHandler = handler;
   ErrorHandlerUserData = user_data;
 }
 
-void llvm::remove_fatal_error_handler() {
-  // llvm::MutexGuard Lock(*ErrorHandlerMutex); // HLSL Change - ErrorHandler and user data already thread-local
+void llvm37::remove_fatal_error_handler() {
+  // llvm37::MutexGuard Lock(*ErrorHandlerMutex); // HLSL Change - ErrorHandler and user data already thread-local
   ErrorHandler = nullptr;
   ErrorHandlerUserData = nullptr;
 }
 
-void llvm::report_fatal_error(const char *Reason, bool GenCrashDiag) {
+void llvm37::report_fatal_error(const char *Reason, bool GenCrashDiag) {
   report_fatal_error(Twine(Reason), GenCrashDiag);
 }
 
-void llvm::report_fatal_error(const std::string &Reason, bool GenCrashDiag) {
+void llvm37::report_fatal_error(const std::string &Reason, bool GenCrashDiag) {
   report_fatal_error(Twine(Reason), GenCrashDiag);
 }
 
-void llvm::report_fatal_error(StringRef Reason, bool GenCrashDiag) {
+void llvm37::report_fatal_error(StringRef Reason, bool GenCrashDiag) {
   report_fatal_error(Twine(Reason), GenCrashDiag);
 }
 
-void llvm::report_fatal_error(const Twine &Reason, bool GenCrashDiag) {
-  llvm::fatal_error_handler_t handler = nullptr;
+void llvm37::report_fatal_error(const Twine &Reason, bool GenCrashDiag) {
+  llvm37::fatal_error_handler_t handler = nullptr;
   void* handlerData = nullptr;
   {
     // Only acquire the mutex while reading the handler, so as not to invoke a
     // user-supplied callback under a lock.
-    // llvm::MutexGuard Lock(*ErrorHandlerMutex); // HLSL Change - ErrorHandler and user data already thread-local
+    // llvm37::MutexGuard Lock(*ErrorHandlerMutex); // HLSL Change - ErrorHandler and user data already thread-local
     handler = ErrorHandler;
     handlerData = ErrorHandlerUserData;
   }
 
-#ifndef LLVM_ON_WIN32 // HLSL Change - unwind if necessary, but don't terminate the process
+#ifndef LLVM37_ON_WIN32 // HLSL Change - unwind if necessary, but don't terminate the process
   if (handler) {
     handler(handlerData, Reason.str(), GenCrashDiag);
   } else {
@@ -112,11 +112,11 @@ void llvm::report_fatal_error(const Twine &Reason, bool GenCrashDiag) {
   if (handler) {
     handler(handlerData, Reason.str(), GenCrashDiag);
   }
-  RaiseException(STATUS_LLVM_FATAL, 0, 0, 0);
+  RaiseException(STATUS_LLVM37_FATAL, 0, 0, 0);
 #endif
 }
 
-void llvm::llvm_unreachable_internal(const char *msg, const char *file,
+void llvm37::llvm_unreachable_internal(const char *msg, const char *file,
                                      unsigned line) {
   // This code intentionally doesn't call the ErrorHandler callback, because
   // llvm_unreachable is intended to be used to indicate "impossible"
@@ -127,30 +127,30 @@ void llvm::llvm_unreachable_internal(const char *msg, const char *file,
   if (file)
     dbgs() << " at " << file << ":" << line;
   dbgs() << "!\n";
-#ifndef LLVM_ON_WIN32 // HLSL Change - unwind if necessary, but don't terminate the process
+#ifndef LLVM37_ON_WIN32 // HLSL Change - unwind if necessary, but don't terminate the process
   abort();
 #else
-  RaiseException(STATUS_LLVM_UNREACHABLE, 0, 0, 0);
+  RaiseException(STATUS_LLVM37_UNREACHABLE, 0, 0, 0);
 #endif
 }
 
 static void bindingsErrorHandler(void *user_data, const std::string& reason,
                                  bool gen_crash_diag) {
   LLVMFatalErrorHandler handler =
-      LLVM_EXTENSION reinterpret_cast<LLVMFatalErrorHandler>(user_data);
+      LLVM37_EXTENSION reinterpret_cast<LLVMFatalErrorHandler>(user_data);
   handler(reason.c_str());
 }
 
 void LLVMInstallFatalErrorHandler(LLVMFatalErrorHandler Handler) {
   install_fatal_error_handler(bindingsErrorHandler,
-                              LLVM_EXTENSION reinterpret_cast<void *>(Handler));
+                              LLVM37_EXTENSION reinterpret_cast<void *>(Handler));
 }
 
 void LLVMResetFatalErrorHandler() {
   remove_fatal_error_handler();
 }
 
-#ifdef LLVM_ON_WIN32
+#ifdef LLVM37_ON_WIN32
 
 #include <winerror.h>
 
@@ -159,7 +159,7 @@ void LLVMResetFatalErrorHandler() {
   case x:                                                                      \
     return make_error_code(errc::y)
 
-std::error_code llvm::mapWindowsError(unsigned EV) {
+std::error_code llvm37::mapWindowsError(unsigned EV) {
   switch (EV) {
     MAP_ERR_TO_COND(ERROR_ACCESS_DENIED, permission_denied);
     MAP_ERR_TO_COND(ERROR_ALREADY_EXISTS, file_exists);

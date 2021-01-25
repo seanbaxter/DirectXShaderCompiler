@@ -7,23 +7,23 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/ADT/SmallString.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/AsmParser/Parser.h"
-#include "llvm/Bitcode/BitstreamWriter.h"
-#include "llvm/Bitcode/ReaderWriter.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/Verifier.h"
-#include "llvm/Support/DataStream.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/MemoryBuffer.h"
-#include "llvm/Support/SourceMgr.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/AsmParser/Parser.h"
+#include "llvm37/Bitcode/BitstreamWriter.h"
+#include "llvm37/Bitcode/ReaderWriter.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/Verifier.h"
+#include "llvm37/Support/DataStream.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/MemoryBuffer.h"
+#include "llvm37/Support/SourceMgr.h"
 #include "gtest/gtest.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 namespace {
 
@@ -83,7 +83,7 @@ getStreamedModuleFromAssembly(LLVMContext &Context, SmallString<1024> &Mem,
   writeModuleToBuffer(parseAssembly(Assembly), Mem);
   std::unique_ptr<MemoryBuffer> Buffer =
       MemoryBuffer::getMemBuffer(Mem.str(), "test", false);
-  auto Streamer = llvm::make_unique<BufferDataStreamer>(std::move(Buffer));
+  auto Streamer = llvm37::make_unique<BufferDataStreamer>(std::move(Buffer));
   ErrorOr<std::unique_ptr<Module>> ModuleOrErr =
       getStreamedBitcodeModule("test", std::move(Streamer), Context);
   return std::move(ModuleOrErr.get());

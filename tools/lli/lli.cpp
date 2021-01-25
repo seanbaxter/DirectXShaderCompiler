@@ -13,47 +13,47 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/IR/LLVMContext.h"
+#include "llvm37/IR/LLVMContext.h"
 #include "OrcLazyJIT.h"
 #include "RemoteMemoryManager.h"
 #include "RemoteTarget.h"
 #include "RemoteTargetExternal.h"
-#include "llvm/ADT/Triple.h"
-#include "llvm/Bitcode/ReaderWriter.h"
-#include "llvm/CodeGen/LinkAllCodegenComponents.h"
-#include "llvm/ExecutionEngine/GenericValue.h"
-#include "llvm/ExecutionEngine/Interpreter.h"
-#include "llvm/ExecutionEngine/JITEventListener.h"
-// #include "llvm/ExecutionEngine/MCJIT.h"    // HLSL Change
-#include "llvm/ExecutionEngine/ObjectCache.h"
-#include "llvm/ExecutionEngine/OrcMCJITReplacement.h"
-#include "llvm/ExecutionEngine/SectionMemoryManager.h"
-// #include "llvm/ExecutionEngine/SectionMemoryManager.h" // HLSL Change
-#include "llvm/IR/IRBuilder.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/Type.h"
-#include "llvm/IR/TypeBuilder.h"
-#include "llvm/IRReader/IRReader.h"
-#include "llvm/Object/Archive.h"
-#include "llvm/Object/ObjectFile.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/DynamicLibrary.h"
-#include "llvm/Support/Format.h"
-#include "llvm/Support/ManagedStatic.h"
-#include "llvm/Support/MathExtras.h"
-#include "llvm/Support/Memory.h"
-#include "llvm/Support/MemoryBuffer.h"
-#include "llvm/Support/Path.h"
-#include "llvm/Support/PluginLoader.h"
-#include "llvm/Support/PrettyStackTrace.h"
-#include "llvm/Support/Process.h"
-#include "llvm/Support/Program.h"
-#include "llvm/Support/Signals.h"
-#include "llvm/Support/SourceMgr.h"
-#include "llvm/Support/TargetSelect.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Transforms/Instrumentation.h"
+#include "llvm37/ADT/Triple.h"
+#include "llvm37/Bitcode/ReaderWriter.h"
+#include "llvm37/CodeGen/LinkAllCodegenComponents.h"
+#include "llvm37/ExecutionEngine/GenericValue.h"
+#include "llvm37/ExecutionEngine/Interpreter.h"
+#include "llvm37/ExecutionEngine/JITEventListener.h"
+// #include "llvm37/ExecutionEngine/MCJIT.h"    // HLSL Change
+#include "llvm37/ExecutionEngine/ObjectCache.h"
+#include "llvm37/ExecutionEngine/OrcMCJITReplacement.h"
+#include "llvm37/ExecutionEngine/SectionMemoryManager.h"
+// #include "llvm37/ExecutionEngine/SectionMemoryManager.h" // HLSL Change
+#include "llvm37/IR/IRBuilder.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/Type.h"
+#include "llvm37/IR/TypeBuilder.h"
+#include "llvm37/IRReader/IRReader.h"
+#include "llvm37/Object/Archive.h"
+#include "llvm37/Object/ObjectFile.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/DynamicLibrary.h"
+#include "llvm37/Support/Format.h"
+#include "llvm37/Support/ManagedStatic.h"
+#include "llvm37/Support/MathExtras.h"
+#include "llvm37/Support/Memory.h"
+#include "llvm37/Support/MemoryBuffer.h"
+#include "llvm37/Support/Path.h"
+#include "llvm37/Support/PluginLoader.h"
+#include "llvm37/Support/PrettyStackTrace.h"
+#include "llvm37/Support/Process.h"
+#include "llvm37/Support/Program.h"
+#include "llvm37/Support/Signals.h"
+#include "llvm37/Support/SourceMgr.h"
+#include "llvm37/Support/TargetSelect.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Transforms/Instrumentation.h"
 #include <cerrno>
 
 #ifdef __CYGWIN__
@@ -63,7 +63,7 @@
 #endif
 #endif
 
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "lli"
 
@@ -203,7 +203,7 @@ namespace {
                        "Relocatable external references, non-relocatable code"),
             clEnumValEnd));
 
-  cl::opt<llvm::CodeModel::Model>
+  cl::opt<llvm37::CodeModel::Model>
   CMModel("code-model",
           cl::desc("Choose code model"),
           cl::init(CodeModel::JITDefault),
@@ -224,7 +224,7 @@ namespace {
     cl::desc("Generate software floating point library calls"),
     cl::init(false));
 
-  cl::opt<llvm::FloatABI::ABIType>
+  cl::opt<llvm37::FloatABI::ABIType>
   FloatABIForCalls("float-abi",
                    cl::desc("Choose float ABI type"),
                    cl::init(FloatABI::Default),
@@ -645,7 +645,7 @@ int __cdecl main(int argc, char **argv, char * const *envp) {
 
     std::unique_ptr<RemoteTarget> Target;
     if (!ChildExecPath.empty()) { // Remote execution on a child process
-#ifndef LLVM_ON_UNIX
+#ifndef LLVM37_ON_UNIX
       // FIXME: Remove this pointless fallback mode which causes tests to "pass"
       // on platforms where they should XFAIL.
       errs() << "Warning: host does not support external remote targets.\n"

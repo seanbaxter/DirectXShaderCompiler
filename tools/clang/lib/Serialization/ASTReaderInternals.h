@@ -10,13 +10,13 @@
 //  This file provides internal definitions used in the AST reader.
 //
 //===----------------------------------------------------------------------===//
-#ifndef LLVM_CLANG_LIB_SERIALIZATION_ASTREADERINTERNALS_H
-#define LLVM_CLANG_LIB_SERIALIZATION_ASTREADERINTERNALS_H
+#ifndef LLVM37_CLANG_LIB_SERIALIZATION_ASTREADERINTERNALS_H
+#define LLVM37_CLANG_LIB_SERIALIZATION_ASTREADERINTERNALS_H
 
 #include "clang/AST/DeclarationName.h"
 #include "clang/Serialization/ASTBitCodes.h"
-#include "llvm/Support/Endian.h"
-#include "llvm/Support/OnDiskHashTable.h"
+#include "llvm37/Support/Endian.h"
+#include "llvm37/Support/OnDiskHashTable.h"
 #include <utility>
 
 namespace clang {
@@ -43,7 +43,7 @@ public:
   ///
   /// Note that these declaration IDs are local to the module that contains this
   /// particular lookup t
-  typedef llvm::support::ulittle32_t LE32DeclID;
+  typedef llvm37::support::ulittle32_t LE32DeclID;
   typedef std::pair<LE32DeclID *, LE32DeclID *> data_type;
   typedef unsigned hash_value_type;
   typedef unsigned offset_type;
@@ -142,7 +142,7 @@ public:
   
 /// \brief The on-disk hash table used to contain information about
 /// all of the identifiers in the program.
-typedef llvm::OnDiskIterableChainedHashTable<ASTIdentifierLookupTrait>
+typedef llvm37::OnDiskIterableChainedHashTable<ASTIdentifierLookupTrait>
   ASTIdentifierLookupTable;
 
 /// \brief Class that performs lookup for a selector's entries in the global
@@ -188,7 +188,7 @@ public:
 };
   
 /// \brief The on-disk hash table used for the global method pool.
-typedef llvm::OnDiskChainedHashTable<ASTSelectorLookupTrait>
+typedef llvm37::OnDiskChainedHashTable<ASTSelectorLookupTrait>
   ASTSelectorLookupTable;
   
 /// \brief Trait class used to search the on-disk hash table containing all of
@@ -238,7 +238,7 @@ public:
 };
 
 /// \brief The on-disk hash table used for known header files.
-typedef llvm::OnDiskChainedHashTable<HeaderFileInfoTrait>
+typedef llvm37::OnDiskChainedHashTable<HeaderFileInfoTrait>
   HeaderFileInfoLookupTable;
   
 } // end namespace clang::serialization::reader

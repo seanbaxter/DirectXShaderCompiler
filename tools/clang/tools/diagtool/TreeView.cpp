@@ -13,39 +13,39 @@
 #include "clang/Basic/AllDiagnostics.h"
 #include "clang/Basic/Diagnostic.h"
 #include "clang/Basic/DiagnosticOptions.h"
-#include "llvm/ADT/DenseSet.h"
-#include "llvm/ADT/StringMap.h"
-#include "llvm/Support/Format.h"
-#include "llvm/Support/Process.h"
+#include "llvm37/ADT/DenseSet.h"
+#include "llvm37/ADT/StringMap.h"
+#include "llvm37/Support/Format.h"
+#include "llvm37/Support/Process.h"
 
 DEF_DIAGTOOL("tree", "Show warning flags in a tree view", TreeView)
 
 using namespace clang;
 using namespace diagtool;
 
-static bool hasColors(const llvm::raw_ostream &out) {
-  if (&out != &llvm::errs() && &out != &llvm::outs())
+static bool hasColors(const llvm37::raw_ostream &out) {
+  if (&out != &llvm37::errs() && &out != &llvm37::outs())
     return false;
-  return llvm::errs().is_displayed() && llvm::outs().is_displayed();
+  return llvm37::errs().is_displayed() && llvm37::outs().is_displayed();
 }
 
 class TreePrinter {
 public:
-  llvm::raw_ostream &out;
+  llvm37::raw_ostream &out;
   const bool ShowColors;
   bool FlagsOnly;
 
-  TreePrinter(llvm::raw_ostream &out)
+  TreePrinter(llvm37::raw_ostream &out)
       : out(out), ShowColors(hasColors(out)), FlagsOnly(false) {}
 
-  void setColor(llvm::raw_ostream::Colors Color) {
+  void setColor(llvm37::raw_ostream::Colors Color) {
     if (ShowColors)
-      out << llvm::sys::Process::OutputColor(Color, false, false);
+      out << llvm37::sys::Process::OutputColor(Color, false, false);
   }
 
   void resetColor() {
     if (ShowColors)
-      out << llvm::sys::Process::ResetColor();
+      out << llvm37::sys::Process::ResetColor();
   }
 
   static bool isIgnored(unsigned DiagID) {
@@ -58,7 +58,7 @@ public:
   void printGroup(const GroupRecord &Group, unsigned Indent = 0) {
     out.indent(Indent * 2);
 
-    setColor(llvm::raw_ostream::YELLOW);
+    setColor(llvm37::raw_ostream::YELLOW);
     out << "-W" << Group.getName() << "\n";
     resetColor();
 
@@ -74,7 +74,7 @@ public:
                                              E = Group.diagnostics_end();
            I != E; ++I) {
         if (ShowColors && !isIgnored(I->DiagID))
-          setColor(llvm::raw_ostream::GREEN);
+          setColor(llvm37::raw_ostream::GREEN);
         out.indent(Indent * 2);
         out << I->getName();
         resetColor();
@@ -87,7 +87,7 @@ public:
     ArrayRef<GroupRecord> AllGroups = getDiagnosticGroups();
 
     if (RootGroup.size() > UINT16_MAX) {
-      llvm::errs() << "No such diagnostic group exists\n";
+      llvm37::errs() << "No such diagnostic group exists\n";
       return 1;
     }
 
@@ -95,7 +95,7 @@ public:
         std::lower_bound(AllGroups.begin(), AllGroups.end(), RootGroup);
 
     if (Found == AllGroups.end() || Found->getName() != RootGroup) {
-      llvm::errs() << "No such diagnostic group exists\n";
+      llvm37::errs() << "No such diagnostic group exists\n";
       return 1;
     }
 
@@ -106,7 +106,7 @@ public:
 
   int showAll() {
     ArrayRef<GroupRecord> AllGroups = getDiagnosticGroups();
-    llvm::DenseSet<unsigned> NonRootGroupIDs;
+    llvm37::DenseSet<unsigned> NonRootGroupIDs;
 
     for (ArrayRef<GroupRecord>::iterator I = AllGroups.begin(),
                                          E = AllGroups.end();
@@ -131,7 +131,7 @@ public:
   void showKey() {
     if (ShowColors) {
       out << '\n';
-      setColor(llvm::raw_ostream::GREEN);
+      setColor(llvm37::raw_ostream::GREEN);
       out << "GREEN";
       resetColor();
       out << " = enabled by default\n\n";
@@ -140,10 +140,10 @@ public:
 };
 
 static void printUsage() {
-  llvm::errs() << "Usage: diagtool tree [--flags-only] [<diagnostic-group>]\n";
+  llvm37::errs() << "Usage: diagtool tree [--flags-only] [<diagnostic-group>]\n";
 }
 
-int TreeView::run(unsigned int argc, char **argv, llvm::raw_ostream &out) {
+int TreeView::run(unsigned int argc, char **argv, llvm37::raw_ostream &out) {
   // First check our one flag (--flags-only).
   bool FlagsOnly = false;
   if (argc > 0) {

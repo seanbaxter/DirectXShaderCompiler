@@ -62,8 +62,8 @@ SpirvDebugTypeComposite *DebugTypeVisitor::createDebugTypeComposite(
 
 void DebugTypeVisitor::addDebugTypeForMemberVariables(
     SpirvDebugTypeComposite *debugTypeComposite, const StructType *type,
-    llvm::function_ref<SourceLocation()> location, unsigned numBases) {
-  llvm::SmallVector<SpirvDebugInstruction *, 4> members;
+    llvm37::function_ref<SourceLocation()> location, unsigned numBases) {
+  llvm37::SmallVector<SpirvDebugInstruction *, 4> members;
   uint32_t compositeSizeInBits = 0;
   const auto &sm = astContext.getSourceManager();
   for (auto &field : type->getFields()) {
@@ -170,7 +170,7 @@ SpirvDebugTypeTemplate *DebugTypeVisitor::lowerDebugTypeTemplate(
   if (debugTypeTemplate != nullptr)
     return debugTypeTemplate;
 
-  llvm::SmallVector<SpirvDebugTypeTemplateParameter *, 2> tempTypeParams;
+  llvm37::SmallVector<SpirvDebugTypeTemplateParameter *, 2> tempTypeParams;
   const auto &argList = templateDecl->getTemplateArgs();
   for (unsigned i = 0; i < argList.size(); ++i) {
     // Reuse already lowered DebugTypeTemplateParameter.
@@ -187,7 +187,7 @@ SpirvDebugTypeTemplate *DebugTypeVisitor::lowerDebugTypeTemplate(
 
     // Lower DebugTypeTemplateParameter.
     const auto *spvType = spvTypeVisitor.lowerType(
-        argList[i].getAsType(), currentDebugInstructionLayoutRule, llvm::None,
+        argList[i].getAsType(), currentDebugInstructionLayoutRule, llvm37::None,
         debugTypeComposite->getSourceLocation());
     debugTypeTemplateParam = spvContext.createDebugTypeTemplateParameter(
         &argList[i], "TemplateParam", lowerToDebugType(spvType),
@@ -247,13 +247,13 @@ SpirvDebugType *DebugTypeVisitor::lowerToDebugType(const SpirvType *spirvType) {
 
   switch (spirvType->getKind()) {
   case SpirvType::TK_Bool: {
-    llvm::StringRef name = "bool";
+    llvm37::StringRef name = "bool";
     // TODO: Should we use 1 bit for booleans or 32 bits?
     uint32_t size = 32;
     // TODO: Use enums rather than uint32_t.
     uint32_t encoding = 2u;
     SpirvConstant *sizeInstruction = spvBuilder.getConstantInt(
-        astContext.UnsignedIntTy, llvm::APInt(32, size));
+        astContext.UnsignedIntTy, llvm37::APInt(32, size));
     sizeInstruction->setResultType(spvContext.getUIntType(32));
     debugType = spvContext.getDebugTypeBasic(spirvType, name, sizeInstruction,
                                              encoding);
@@ -264,7 +264,7 @@ SpirvDebugType *DebugTypeVisitor::lowerToDebugType(const SpirvType *spirvType) {
     const uint32_t size = intType->getBitwidth();
     const bool isSigned = intType->isSignedInt();
     SpirvConstant *sizeInstruction = spvBuilder.getConstantInt(
-        astContext.UnsignedIntTy, llvm::APInt(32, size));
+        astContext.UnsignedIntTy, llvm37::APInt(32, size));
     sizeInstruction->setResultType(spvContext.getUIntType(32));
     // TODO: Use enums rather than uint32_t.
     uint32_t encoding = isSigned ? 4u : 6u;
@@ -284,7 +284,7 @@ SpirvDebugType *DebugTypeVisitor::lowerToDebugType(const SpirvType *spirvType) {
     auto *floatType = dyn_cast<FloatType>(spirvType);
     const uint32_t size = floatType->getBitwidth();
     SpirvConstant *sizeInstruction = spvBuilder.getConstantInt(
-        astContext.UnsignedIntTy, llvm::APInt(32, size));
+        astContext.UnsignedIntTy, llvm37::APInt(32, size));
     sizeInstruction->setResultType(spvContext.getUIntType(32));
     // TODO: Use enums rather than uint32_t.
     uint32_t encoding = 3u;
@@ -313,7 +313,7 @@ SpirvDebugType *DebugTypeVisitor::lowerToDebugType(const SpirvType *spirvType) {
     SpirvDebugInstruction *elemDebugType =
         lowerToDebugType(arrType->getElementType());
 
-    llvm::SmallVector<uint32_t, 4> counts;
+    llvm37::SmallVector<uint32_t, 4> counts;
     if (auto *dbgArrType = dyn_cast<SpirvDebugTypeArray>(elemDebugType)) {
       counts.insert(counts.end(), dbgArrType->getElementCount().begin(),
                     dbgArrType->getElementCount().end());
@@ -360,7 +360,7 @@ SpirvDebugType *DebugTypeVisitor::lowerToDebugType(const SpirvType *spirvType) {
       returnType = dyn_cast<SpirvDebugType>(loweredRetTy);
       assert(returnType && "Function return type info must be SpirvDebugType");
     }
-    llvm::SmallVector<SpirvDebugType *, 4> params;
+    llvm37::SmallVector<SpirvDebugType *, 4> params;
     for (const auto *paramType : fnType->getParamTypes()) {
       params.push_back(dyn_cast<SpirvDebugType>(lowerToDebugType(paramType)));
     }

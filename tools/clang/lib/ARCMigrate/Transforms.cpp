@@ -19,8 +19,8 @@
 #include "clang/Lex/Preprocessor.h"
 #include "clang/Sema/Sema.h"
 #include "clang/Sema/SemaDiagnostic.h"
-#include "llvm/ADT/DenseSet.h"
-#include "llvm/ADT/StringSwitch.h"
+#include "llvm37/ADT/DenseSet.h"
+#include "llvm37/ADT/StringSwitch.h"
 #include <map>
 
 using namespace clang;

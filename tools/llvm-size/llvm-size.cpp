@@ -13,24 +13,24 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/ADT/APInt.h"
-#include "llvm/Object/Archive.h"
-#include "llvm/Object/MachO.h"
-#include "llvm/Object/MachOUniversal.h"
-#include "llvm/Object/ObjectFile.h"
-#include "llvm/Support/Casting.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/FileSystem.h"
-#include "llvm/Support/Format.h"
-#include "llvm/Support/ManagedStatic.h"
-#include "llvm/Support/MemoryBuffer.h"
-#include "llvm/Support/PrettyStackTrace.h"
-#include "llvm/Support/Signals.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/APInt.h"
+#include "llvm37/Object/Archive.h"
+#include "llvm37/Object/MachO.h"
+#include "llvm37/Object/MachOUniversal.h"
+#include "llvm37/Object/ObjectFile.h"
+#include "llvm37/Support/Casting.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/FileSystem.h"
+#include "llvm37/Support/Format.h"
+#include "llvm37/Support/ManagedStatic.h"
+#include "llvm37/Support/MemoryBuffer.h"
+#include "llvm37/Support/PrettyStackTrace.h"
+#include "llvm37/Support/Signals.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <algorithm>
 #include <string>
 #include <system_error>
-using namespace llvm;
+using namespace llvm37;
 using namespace object;
 
 enum OutputFormatTy { berkeley, sysv, darwin };

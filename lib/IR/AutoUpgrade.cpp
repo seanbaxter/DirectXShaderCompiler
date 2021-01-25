@@ -13,22 +13,22 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/IR/AutoUpgrade.h"
-#include "llvm/IR/CFG.h"
-#include "llvm/IR/CallSite.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/DIBuilder.h"
-#include "llvm/IR/DebugInfo.h"
-#include "llvm/IR/DiagnosticInfo.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/IRBuilder.h"
-#include "llvm/IR/Instruction.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Module.h"
-#include "llvm/Support/ErrorHandling.h"
+#include "llvm37/IR/AutoUpgrade.h"
+#include "llvm37/IR/CFG.h"
+#include "llvm37/IR/CallSite.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/DIBuilder.h"
+#include "llvm37/IR/DebugInfo.h"
+#include "llvm37/IR/DiagnosticInfo.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/IRBuilder.h"
+#include "llvm37/IR/Instruction.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/Support/ErrorHandling.h"
 #include <cstring>
-using namespace llvm;
+using namespace llvm37;
 
 #if 0 // HLSL Change - remove platform intrinsics
 // Upgrade the declarations of the SSE4.1 functions whose arguments have
@@ -230,7 +230,7 @@ static bool UpgradeIntrinsicFunction1(Function *F, Function *&NewFn) {
   return false;
 }
 
-bool llvm::UpgradeIntrinsicFunction(Function *F, Function *&NewFn) {
+bool llvm37::UpgradeIntrinsicFunction(Function *F, Function *&NewFn) {
   NewFn = nullptr;
   bool Upgraded = UpgradeIntrinsicFunction1(F, NewFn);
   assert(F != NewFn && "Intrinsic function upgraded to the same function");
@@ -243,7 +243,7 @@ bool llvm::UpgradeIntrinsicFunction(Function *F, Function *&NewFn) {
   return Upgraded;
 }
 
-bool llvm::UpgradeGlobalVariable(GlobalVariable *GV) {
+bool llvm37::UpgradeGlobalVariable(GlobalVariable *GV) {
   // Nothing to do yet.
   return false;
 }
@@ -327,7 +327,7 @@ static Value *UpgradeX86PSRLDQIntrinsics(IRBuilder<> &Builder, LLVMContext &C,
 // UpgradeIntrinsicCall - Upgrade a call to an old intrinsic to be a call the
 // upgraded intrinsic. All argument and return casting must be provided in
 // order to seamlessly integrate with existing context.
-void llvm::UpgradeIntrinsicCall(CallInst *CI, Function *NewFn) {
+void llvm37::UpgradeIntrinsicCall(CallInst *CI, Function *NewFn) {
   Function *F = CI->getCalledFunction();
   LLVMContext &C = CI->getContext();
   IRBuilder<> Builder(C);
@@ -719,7 +719,7 @@ void llvm::UpgradeIntrinsicCall(CallInst *CI, Function *NewFn) {
 // This tests each Function to determine if it needs upgrading. When we find
 // one we are interested in, we then upgrade all calls to reflect the new
 // function.
-void llvm::UpgradeCallsToIntrinsic(Function* F) {
+void llvm37::UpgradeCallsToIntrinsic(Function* F) {
   assert(F && "Illegal attempt to upgrade a non-existent intrinsic.");
 
   // Upgrade the function and check if it is a totaly new function.
@@ -736,7 +736,7 @@ void llvm::UpgradeCallsToIntrinsic(Function* F) {
   }
 }
 
-void llvm::UpgradeInstWithTBAATag(Instruction *I) {
+void llvm37::UpgradeInstWithTBAATag(Instruction *I) {
   MDNode *MD = I->getMetadata(LLVMContext::MD_tbaa);
   assert(MD && "UpgradeInstWithTBAATag should have a TBAA tag");
   // Check if the tag uses struct-path aware TBAA format.
@@ -760,7 +760,7 @@ void llvm::UpgradeInstWithTBAATag(Instruction *I) {
   }
 }
 
-Instruction *llvm::UpgradeBitCastInst(unsigned Opc, Value *V, Type *DestTy,
+Instruction *llvm37::UpgradeBitCastInst(unsigned Opc, Value *V, Type *DestTy,
                                       Instruction *&Temp) {
   if (Opc != Instruction::BitCast)
     return nullptr;
@@ -782,7 +782,7 @@ Instruction *llvm::UpgradeBitCastInst(unsigned Opc, Value *V, Type *DestTy,
   return nullptr;
 }
 
-Value *llvm::UpgradeBitCastExpr(unsigned Opc, Constant *C, Type *DestTy) {
+Value *llvm37::UpgradeBitCastExpr(unsigned Opc, Constant *C, Type *DestTy) {
   if (Opc != Instruction::BitCast)
     return nullptr;
 
@@ -804,7 +804,7 @@ Value *llvm::UpgradeBitCastExpr(unsigned Opc, Constant *C, Type *DestTy) {
 
 /// Check the debug info version number, if it is out-dated, drop the debug
 /// info. Return true if module is modified.
-bool llvm::UpgradeDebugInfo(Module &M) {
+bool llvm37::UpgradeDebugInfo(Module &M) {
   unsigned Version = getDebugMetadataVersionFromModule(M);
   if (Version == DEBUG_METADATA_VERSION)
     return false;
@@ -817,7 +817,7 @@ bool llvm::UpgradeDebugInfo(Module &M) {
   return RetCode;
 }
 
-void llvm::UpgradeMDStringConstant(std::string &String) {
+void llvm37::UpgradeMDStringConstant(std::string &String) {
   const std::string OldPrefix = "llvm.vectorizer.";
   if (String == "llvm.vectorizer.unroll") {
     String = "llvm.loop.interleave.count";

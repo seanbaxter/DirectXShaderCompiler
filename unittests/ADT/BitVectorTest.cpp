@@ -9,11 +9,11 @@
 
 #ifndef __ppc__
 
-#include "llvm/ADT/BitVector.h"
-#include "llvm/ADT/SmallBitVector.h"
+#include "llvm37/ADT/BitVector.h"
+#include "llvm37/ADT/SmallBitVector.h"
 #include "gtest/gtest.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 namespace {
 

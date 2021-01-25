@@ -7,8 +7,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_EDIT_FILEOFFSET_H
-#define LLVM_CLANG_EDIT_FILEOFFSET_H
+#ifndef LLVM37_CLANG_EDIT_FILEOFFSET_H
+#define LLVM37_CLANG_EDIT_FILEOFFSET_H
 
 #include "clang/Basic/SourceLocation.h"
 

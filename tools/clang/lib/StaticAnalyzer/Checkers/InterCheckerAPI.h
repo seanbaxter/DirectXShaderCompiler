@@ -10,8 +10,8 @@
 // inter-checker communications.
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_LIB_STATICANALYZER_CHECKERS_INTERCHECKERAPI_H
-#define LLVM_CLANG_LIB_STATICANALYZER_CHECKERS_INTERCHECKERAPI_H
+#ifndef LLVM37_CLANG_LIB_STATICANALYZER_CHECKERS_INTERCHECKERAPI_H
+#define LLVM37_CLANG_LIB_STATICANALYZER_CHECKERS_INTERCHECKERAPI_H
 namespace clang {
 class CheckerManager;
 

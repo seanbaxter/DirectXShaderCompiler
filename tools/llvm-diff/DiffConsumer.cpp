@@ -12,11 +12,11 @@
 //===----------------------------------------------------------------------===//
 
 #include "DiffConsumer.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/Module.h"
-#include "llvm/Support/ErrorHandling.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/Support/ErrorHandling.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 static void ComputeNumbering(Function *F, DenseMap<Value*,unsigned> &Numbering){
   unsigned IN = 0;

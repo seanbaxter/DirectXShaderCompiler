@@ -7,11 +7,11 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/MC/MCDisassembler.h"
-#include "llvm/MC/MCExternalSymbolizer.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/MC/MCDisassembler.h"
+#include "llvm37/MC/MCExternalSymbolizer.h"
+#include "llvm37/Support/raw_ostream.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 MCDisassembler::~MCDisassembler() {
 }

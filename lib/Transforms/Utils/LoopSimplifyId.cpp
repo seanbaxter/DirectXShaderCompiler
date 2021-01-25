@@ -8,17 +8,17 @@
 //===----------------------------------------------------------------------===//
 //
 
-#include "llvm/Pass.h"
-#include "llvm/Analysis/AliasAnalysis.h"
-#include "llvm/Analysis/LoopInfo.h"
-#include "llvm/Analysis/ScalarEvolution.h"
-#include "llvm/Transforms/Utils/LoopSimplify.h"
+#include "llvm37/Pass.h"
+#include "llvm37/Analysis/AliasAnalysis.h"
+#include "llvm37/Analysis/LoopInfo.h"
+#include "llvm37/Analysis/ScalarEvolution.h"
+#include "llvm37/Transforms/Utils/LoopSimplify.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 char LoopSimplify::ID = 0;
 
 // Publicly exposed interface to pass...
 // This is in a separate file instead of LoopSimplify.cpp which brings in many dependencies
 // unnecessary increasing the size of dxilconv.dll.
-char &llvm::LoopSimplifyID = LoopSimplify::ID;
+char &llvm37::LoopSimplifyID = LoopSimplify::ID;

@@ -7,14 +7,14 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Support/ConvertUTF.h"
-#include "llvm/Support/Format.h"
+#include "llvm37/Support/ConvertUTF.h"
+#include "llvm37/Support/Format.h"
 #include "gtest/gtest.h"
 #include <string>
 #include <utility>
 #include <vector>
 
-using namespace llvm;
+using namespace llvm37;
 
 TEST(ConvertUTFTest, ConvertUTF16LittleEndianToUTF8String) {
   // Src is the look of disapproval.

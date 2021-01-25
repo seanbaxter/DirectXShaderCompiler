@@ -12,8 +12,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_LIB_PARSE_RAIIOBJECTSFORPARSER_H
-#define LLVM_CLANG_LIB_PARSE_RAIIOBJECTSFORPARSER_H
+#ifndef LLVM37_CLANG_LIB_PARSE_RAIIOBJECTSFORPARSER_H
+#define LLVM37_CLANG_LIB_PARSE_RAIIOBJECTSFORPARSER_H
 
 #include "clang/Parse/ParseDiagnostic.h"
 #include "clang/Parse/Parser.h"

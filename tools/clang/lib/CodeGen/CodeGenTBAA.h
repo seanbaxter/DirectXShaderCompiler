@@ -12,14 +12,14 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_LIB_CODEGEN_CODEGENTBAA_H
-#define LLVM_CLANG_LIB_CODEGEN_CODEGENTBAA_H
+#ifndef LLVM37_CLANG_LIB_CODEGEN_CODEGENTBAA_H
+#define LLVM37_CLANG_LIB_CODEGEN_CODEGENTBAA_H
 
 #include "clang/Basic/LLVM.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/IR/MDBuilder.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/IR/MDBuilder.h"
 
-namespace llvm {
+namespace llvm37 {
   class LLVMContext;
   class MDNode;
 }
@@ -36,10 +36,10 @@ namespace CodeGen {
   class CGRecordLayout;
 
   struct TBAAPathTag {
-    TBAAPathTag(const Type *B, const llvm::MDNode *A, uint64_t O)
+    TBAAPathTag(const Type *B, const llvm37::MDNode *A, uint64_t O)
       : BaseT(B), AccessN(A), Offset(O) {}
     const Type *BaseT;
-    const llvm::MDNode *AccessN;
+    const llvm37::MDNode *AccessN;
     uint64_t Offset;
   };
 
@@ -52,47 +52,47 @@ class CodeGenTBAA {
   MangleContext &MContext;
 
   // MDHelper - Helper for creating metadata.
-  llvm::MDBuilder MDHelper;
+  llvm37::MDBuilder MDHelper;
 
-  /// MetadataCache - This maps clang::Types to scalar llvm::MDNodes describing
+  /// MetadataCache - This maps clang::Types to scalar llvm37::MDNodes describing
   /// them.
-  llvm::DenseMap<const Type *, llvm::MDNode *> MetadataCache;
+  llvm37::DenseMap<const Type *, llvm37::MDNode *> MetadataCache;
   /// This maps clang::Types to a struct node in the type DAG.
-  llvm::DenseMap<const Type *, llvm::MDNode *> StructTypeMetadataCache;
+  llvm37::DenseMap<const Type *, llvm37::MDNode *> StructTypeMetadataCache;
   /// This maps TBAAPathTags to a tag node.
-  llvm::DenseMap<TBAAPathTag, llvm::MDNode *> StructTagMetadataCache;
+  llvm37::DenseMap<TBAAPathTag, llvm37::MDNode *> StructTagMetadataCache;
   /// This maps a scalar type to a scalar tag node.
-  llvm::DenseMap<const llvm::MDNode *, llvm::MDNode *> ScalarTagMetadataCache;
+  llvm37::DenseMap<const llvm37::MDNode *, llvm37::MDNode *> ScalarTagMetadataCache;
 
-  /// StructMetadataCache - This maps clang::Types to llvm::MDNodes describing
+  /// StructMetadataCache - This maps clang::Types to llvm37::MDNodes describing
   /// them for struct assignments.
-  llvm::DenseMap<const Type *, llvm::MDNode *> StructMetadataCache;
+  llvm37::DenseMap<const Type *, llvm37::MDNode *> StructMetadataCache;
 
-  llvm::MDNode *Root;
-  llvm::MDNode *Char;
+  llvm37::MDNode *Root;
+  llvm37::MDNode *Char;
 
   /// getRoot - This is the mdnode for the root of the metadata type graph
   /// for this translation unit.
-  llvm::MDNode *getRoot();
+  llvm37::MDNode *getRoot();
 
   /// getChar - This is the mdnode for "char", which is special, and any types
   /// considered to be equivalent to it.
-  llvm::MDNode *getChar();
+  llvm37::MDNode *getChar();
 
   /// CollectFields - Collect information about the fields of a type for
   /// !tbaa.struct metadata formation. Return false for an unsupported type.
   bool CollectFields(uint64_t BaseOffset,
                      QualType Ty,
-                     SmallVectorImpl<llvm::MDBuilder::TBAAStructField> &Fields,
+                     SmallVectorImpl<llvm37::MDBuilder::TBAAStructField> &Fields,
                      bool MayAlias);
 
   /// A wrapper function to create a scalar type. For struct-path aware TBAA,
   /// the scalar type has the same format as the struct type: name, offset,
   /// pointer to another node in the type DAG.
-  llvm::MDNode *createTBAAScalarType(StringRef Name, llvm::MDNode *Parent);
+  llvm37::MDNode *createTBAAScalarType(StringRef Name, llvm37::MDNode *Parent);
 
 public:
-  CodeGenTBAA(ASTContext &Ctx, llvm::LLVMContext &VMContext,
+  CodeGenTBAA(ASTContext &Ctx, llvm37::LLVMContext &VMContext,
               const CodeGenOptions &CGO,
               const LangOptions &Features,
               MangleContext &MContext);
@@ -100,31 +100,31 @@ public:
 
   /// getTBAAInfo - Get the TBAA MDNode to be used for a dereference
   /// of the given type.
-  llvm::MDNode *getTBAAInfo(QualType QTy);
+  llvm37::MDNode *getTBAAInfo(QualType QTy);
 
   /// getTBAAInfoForVTablePtr - Get the TBAA MDNode to be used for a
   /// dereference of a vtable pointer.
-  llvm::MDNode *getTBAAInfoForVTablePtr();
+  llvm37::MDNode *getTBAAInfoForVTablePtr();
 
   /// getTBAAStructInfo - Get the TBAAStruct MDNode to be used for a memcpy of
   /// the given type.
-  llvm::MDNode *getTBAAStructInfo(QualType QTy);
+  llvm37::MDNode *getTBAAStructInfo(QualType QTy);
 
   /// Get the MDNode in the type DAG for given struct type QType.
-  llvm::MDNode *getTBAAStructTypeInfo(QualType QType);
+  llvm37::MDNode *getTBAAStructTypeInfo(QualType QType);
   /// Get the tag MDNode for a given base type, the actual scalar access MDNode
   /// and offset into the base type.
-  llvm::MDNode *getTBAAStructTagInfo(QualType BaseQType,
-                                     llvm::MDNode *AccessNode, uint64_t Offset);
+  llvm37::MDNode *getTBAAStructTagInfo(QualType BaseQType,
+                                     llvm37::MDNode *AccessNode, uint64_t Offset);
 
   /// Get the scalar tag MDNode for a given scalar type.
-  llvm::MDNode *getTBAAScalarTagInfo(llvm::MDNode *AccessNode);
+  llvm37::MDNode *getTBAAScalarTagInfo(llvm37::MDNode *AccessNode);
 };
 
 }  // end namespace CodeGen
 }  // end namespace clang
 
-namespace llvm {
+namespace llvm37 {
 
 template<> struct DenseMapInfo<clang::CodeGen::TBAAPathTag> {
   static clang::CodeGen::TBAAPathTag getEmptyKey() {
@@ -155,6 +155,6 @@ template<> struct DenseMapInfo<clang::CodeGen::TBAAPathTag> {
   }
 };
 
-}  // end namespace llvm
+}  // end namespace llvm37
 
 #endif

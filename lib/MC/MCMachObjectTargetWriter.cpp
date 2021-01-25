@@ -7,9 +7,9 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/MC/MCMachObjectWriter.h"
+#include "llvm37/MC/MCMachObjectWriter.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 MCMachObjectTargetWriter::MCMachObjectTargetWriter(bool Is64Bit_,
                                                    uint32_t CPUType_,

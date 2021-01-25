@@ -11,15 +11,15 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Object/MachOUniversal.h"
-#include "llvm/Object/Archive.h"
-#include "llvm/Object/MachO.h"
-#include "llvm/Object/ObjectFile.h"
-#include "llvm/Support/Casting.h"
-#include "llvm/Support/Host.h"
-#include "llvm/Support/MemoryBuffer.h"
+#include "llvm37/Object/MachOUniversal.h"
+#include "llvm37/Object/Archive.h"
+#include "llvm37/Object/MachO.h"
+#include "llvm37/Object/ObjectFile.h"
+#include "llvm37/Support/Casting.h"
+#include "llvm37/Support/Host.h"
+#include "llvm37/Support/MemoryBuffer.h"
 
-using namespace llvm;
+using namespace llvm37;
 using namespace object;
 
 template<typename T>

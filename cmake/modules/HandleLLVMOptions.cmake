@@ -1,4 +1,4 @@
-# This CMake module is responsible for interpreting the user defined LLVM_
+# This CMake module is responsible for interpreting the user defined LLVM37_
 # options and executing the appropriate CMake commands to realize the users'
 # selections.
 
@@ -11,7 +11,7 @@ include(AddLLVMDefinitions)
 include(CheckCCompilerFlag)
 include(CheckCXXCompilerFlag)
 
-if(NOT LLVM_FORCE_USE_OLD_TOOLCHAIN)
+if(NOT LLVM37_FORCE_USE_OLD_TOOLCHAIN)
   if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
     if(CMAKE_CXX_COMPILER_VERSION VERSION_LESS 4.7)
       message(FATAL_ERROR "Host GCC version must be at least 4.7!")
@@ -26,7 +26,7 @@ if(NOT LLVM_FORCE_USE_OLD_TOOLCHAIN)
         message(FATAL_ERROR "Host Clang must have at least -fms-compatibility-version=18.0")
       endif()
       set(CLANG_CL 1)
-    elseif(NOT LLVM_ENABLE_LIBCXX)
+    elseif(NOT LLVM37_ENABLE_LIBCXX)
       # Otherwise, test that we aren't using too old of a version of libstdc++
       # with the Clang compiler. This is tricky as there is no real way to
       # check the version of libstdc++ directly. Instead we test for a known
@@ -38,8 +38,8 @@ if(NOT LLVM_FORCE_USE_OLD_TOOLCHAIN)
 #include <atomic>
 std::atomic<float> x(0.0f);
 int main() { return (float)x; }"
-        LLVM_NO_OLD_LIBSTDCXX)
-      if(NOT LLVM_NO_OLD_LIBSTDCXX)
+        LLVM37_NO_OLD_LIBSTDCXX)
+      if(NOT LLVM37_NO_OLD_LIBSTDCXX)
         message(FATAL_ERROR "Host Clang must be able to find libstdc++4.7 or newer!")
       endif()
       set(CMAKE_REQUIRED_FLAGS ${OLD_CMAKE_REQUIRED_FLAGS})
@@ -55,7 +55,7 @@ int main() { return (float)x; }"
   endif()
 endif()
 
-if( LLVM_ENABLE_ASSERTIONS )
+if( LLVM37_ENABLE_ASSERTIONS )
   # MSVC doesn't like _DEBUG on release builds. See PR 4379.
   if( NOT MSVC )
     add_definitions( -D_DEBUG )
@@ -82,40 +82,40 @@ if( LLVM_ENABLE_ASSERTIONS )
   endif (0) # HLSL Change Ends
 endif()
 
-string(TOUPPER "${LLVM_ABI_BREAKING_CHECKS}" uppercase_LLVM_ABI_BREAKING_CHECKS)
+string(TOUPPER "${LLVM37_ABI_BREAKING_CHECKS}" uppercase_LLVM37_ABI_BREAKING_CHECKS)
 
-if( uppercase_LLVM_ABI_BREAKING_CHECKS STREQUAL "WITH_ASSERTS" )
-  if( LLVM_ENABLE_ASSERTIONS )
-    set( LLVM_ENABLE_ABI_BREAKING_CHECKS 1 )
+if( uppercase_LLVM37_ABI_BREAKING_CHECKS STREQUAL "WITH_ASSERTS" )
+  if( LLVM37_ENABLE_ASSERTIONS )
+    set( LLVM37_ENABLE_ABI_BREAKING_CHECKS 1 )
   endif()
-elseif( uppercase_LLVM_ABI_BREAKING_CHECKS STREQUAL "FORCE_ON" )
-  set( LLVM_ENABLE_ABI_BREAKING_CHECKS 1 )
-elseif( uppercase_LLVM_ABI_BREAKING_CHECKS STREQUAL "FORCE_OFF" )
+elseif( uppercase_LLVM37_ABI_BREAKING_CHECKS STREQUAL "FORCE_ON" )
+  set( LLVM37_ENABLE_ABI_BREAKING_CHECKS 1 )
+elseif( uppercase_LLVM37_ABI_BREAKING_CHECKS STREQUAL "FORCE_OFF" )
   # We don't need to do anything special to turn off ABI breaking checks.
-elseif( NOT DEFINED LLVM_ABI_BREAKING_CHECKS )
-  # Treat LLVM_ABI_BREAKING_CHECKS like "FORCE_OFF" when it has not been
+elseif( NOT DEFINED LLVM37_ABI_BREAKING_CHECKS )
+  # Treat LLVM37_ABI_BREAKING_CHECKS like "FORCE_OFF" when it has not been
   # defined.
 else()
-  message(FATAL_ERROR "Unknown value for LLVM_ABI_BREAKING_CHECKS: \"${LLVM_ABI_BREAKING_CHECKS}\"!")
+  message(FATAL_ERROR "Unknown value for LLVM37_ABI_BREAKING_CHECKS: \"${LLVM37_ABI_BREAKING_CHECKS}\"!")
 endif()
 
 if(WIN32)
-  set(LLVM_HAVE_LINK_VERSION_SCRIPT 0)
+  set(LLVM37_HAVE_LINK_VERSION_SCRIPT 0)
   if(CYGWIN)
-    set(LLVM_ON_WIN32 0)
-    set(LLVM_ON_UNIX 1)
+    set(LLVM37_ON_WIN32 0)
+    set(LLVM37_ON_UNIX 1)
   else(CYGWIN)
-    set(LLVM_ON_WIN32 1)
-    set(LLVM_ON_UNIX 0)
+    set(LLVM37_ON_WIN32 1)
+    set(LLVM37_ON_UNIX 0)
   endif(CYGWIN)
 else(WIN32)
   if(UNIX)
-    set(LLVM_ON_WIN32 0)
-    set(LLVM_ON_UNIX 1)
+    set(LLVM37_ON_WIN32 0)
+    set(LLVM37_ON_UNIX 1)
     if(APPLE)
-      set(LLVM_HAVE_LINK_VERSION_SCRIPT 0)
+      set(LLVM37_HAVE_LINK_VERSION_SCRIPT 0)
     else(APPLE)
-      set(LLVM_HAVE_LINK_VERSION_SCRIPT 1)
+      set(LLVM37_HAVE_LINK_VERSION_SCRIPT 1)
     endif(APPLE)
   else(UNIX)
     MESSAGE(SEND_ERROR "Unable to determine platform")
@@ -126,7 +126,7 @@ set(EXEEXT ${CMAKE_EXECUTABLE_SUFFIX})
 set(LTDL_SHLIB_EXT ${CMAKE_SHARED_LIBRARY_SUFFIX})
 
 # We use *.dylib rather than *.so on darwin.
-set(LLVM_PLUGIN_EXT ${CMAKE_SHARED_LIBRARY_SUFFIX})
+set(LLVM37_PLUGIN_EXT ${CMAKE_SHARED_LIBRARY_SUFFIX})
 
 if(APPLE)
   # Darwin-specific linker flags for loadable modules.
@@ -137,7 +137,7 @@ endif()
 # build might work on ELF but fail on MachO/COFF.
 if(NOT (${CMAKE_SYSTEM_NAME} MATCHES "Darwin" OR WIN32 OR CYGWIN OR
         ${CMAKE_SYSTEM_NAME} MATCHES "FreeBSD") AND
-   NOT LLVM_USE_SANITIZER)
+   NOT LLVM37_USE_SANITIZER)
   set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,-z,defs")
 endif()
 
@@ -175,7 +175,7 @@ function(add_flag_or_print_warning flag name)
   endif()
 endfunction()
 
-if( LLVM_ENABLE_PIC )
+if( LLVM37_ENABLE_PIC )
   if( XCODE )
     # Xcode has -mdynamic-no-pic on by default, which overrides -fPIC. I don't
     # know how to disable this, so just force ENABLE_PIC off for now.
@@ -196,16 +196,16 @@ endif()
 
 if( CMAKE_SIZEOF_VOID_P EQUAL 8 AND NOT WIN32 )
   # TODO: support other platforms and toolchains.
-  if( LLVM_BUILD_32_BITS )
+  if( LLVM37_BUILD_32_BITS )
     message(STATUS "Building 32 bits executables and libraries.")
     add_llvm_definitions( -m32 )
     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -m32")
     set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -m32")
     set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -m32")
-  endif( LLVM_BUILD_32_BITS )
+  endif( LLVM37_BUILD_32_BITS )
 endif( CMAKE_SIZEOF_VOID_P EQUAL 8 AND NOT WIN32 )
 
-if (LLVM_BUILD_STATIC)
+if (LLVM37_BUILD_STATIC)
   set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static")
 endif()
 
@@ -235,14 +235,14 @@ endif()
 # On Win32 using MS tools, provide an option to set the number of parallel jobs
 # to use.
 if( MSVC_IDE )
-  set(LLVM_COMPILER_JOBS "0" CACHE STRING
+  set(LLVM37_COMPILER_JOBS "0" CACHE STRING
     "Number of parallel compiler jobs. 0 means use all processors. Default is 0.")
-  if( NOT LLVM_COMPILER_JOBS STREQUAL "1" )
-    if( LLVM_COMPILER_JOBS STREQUAL "0" )
+  if( NOT LLVM37_COMPILER_JOBS STREQUAL "1" )
+    if( LLVM37_COMPILER_JOBS STREQUAL "0" )
       add_llvm_definitions( /MP )
     else()
-      message(STATUS "Number of parallel compiler jobs set to " ${LLVM_COMPILER_JOBS})
-      add_llvm_definitions( /MP${LLVM_COMPILER_JOBS} )
+      message(STATUS "Number of parallel compiler jobs set to " ${LLVM37_COMPILER_JOBS})
+      add_llvm_definitions( /MP${LLVM37_COMPILER_JOBS} )
     endif()
   else()
     message(STATUS "Parallel compilation disabled")
@@ -314,7 +314,7 @@ if( MSVC )
 
 	# Ideally, we'd like this warning to be enabled, but MSVC 2013 doesn't
 	# support the 'aligned' attribute in the way that clang sources requires (for
-	# any code that uses the LLVM_ALIGNAS macro), so this is must be disabled to
+	# any code that uses the LLVM37_ALIGNAS macro), so this is must be disabled to
 	# avoid unwanted alignment warnings.
 	# When we switch to requiring a version of MSVC that supports the 'alignas'
 	# specifier (MSVC 2015?) this warning can be re-enabled.
@@ -341,7 +341,7 @@ if( MSVC )
   # HLSL Changes End
 
   # Enable warnings
-  if (LLVM_ENABLE_WARNINGS)
+  if (LLVM37_ENABLE_WARNINGS)
     append("/W4" msvc_warning_flags)
     # CMake appends /W3 by default, and having /W3 followed by /W4 will result in 
     # cl : Command line warning D9025 : overriding '/W3' with '/W4'.  Since this is
@@ -350,13 +350,13 @@ if( MSVC )
     string(REGEX REPLACE " /W[0-4]" "" CMAKE_C_FLAGS "${CMAKE_C_FLAGS}")
     string(REGEX REPLACE " /W[0-4]" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
 
-    if (LLVM_ENABLE_PEDANTIC)
+    if (LLVM37_ENABLE_PEDANTIC)
       # No MSVC equivalent available
-    endif (LLVM_ENABLE_PEDANTIC)
-  endif (LLVM_ENABLE_WARNINGS)
-  if (LLVM_ENABLE_WERROR)
+    endif (LLVM37_ENABLE_PEDANTIC)
+  endif (LLVM37_ENABLE_WARNINGS)
+  if (LLVM37_ENABLE_WERROR)
     append("/WX" msvc_warning_flags)
-  endif (LLVM_ENABLE_WERROR)
+  endif (LLVM37_ENABLE_WERROR)
 
   foreach(flag ${msvc_warning_flags})
     append("${flag}" CMAKE_C_FLAGS CMAKE_CXX_FLAGS)
@@ -367,8 +367,8 @@ if( MSVC )
   check_c_compiler_flag("/WX /Zc:sizedDealloc-" SUPPORTS_SIZED_DEALLOC)
   append_if(SUPPORTS_SIZED_DEALLOC "/Zc:sizedDealloc-" CMAKE_C_FLAGS CMAKE_CXX_FLAGS)
 
-elseif( LLVM_COMPILER_IS_GCC_COMPATIBLE )
-  if (LLVM_ENABLE_WARNINGS)
+elseif( LLVM37_COMPILER_IS_GCC_COMPATIBLE )
+  if (LLVM37_ENABLE_WARNINGS)
     append("-Wall -W -Wno-unused-parameter -Wwrite-strings" CMAKE_C_FLAGS CMAKE_CXX_FLAGS)
     append("-Wcast-qual" CMAKE_CXX_FLAGS)
 
@@ -393,7 +393,7 @@ elseif( LLVM_COMPILER_IS_GCC_COMPATIBLE )
       endif()
     endif()
 
-    append_if(LLVM_ENABLE_PEDANTIC "-pedantic -Wno-long-long" CMAKE_C_FLAGS CMAKE_CXX_FLAGS)
+    append_if(LLVM37_ENABLE_PEDANTIC "-pedantic -Wno-long-long" CMAKE_C_FLAGS CMAKE_CXX_FLAGS)
     # add_flag_if_supported("-Wcovered-switch-default" COVERED_SWITCH_DEFAULT_FLAG) # HLSL Change
     append("-Wno-switch" CMAKE_CXX_FLAGS) # HLSL Change
     append_if(USE_NO_UNINITIALIZED "-Wno-uninitialized" CMAKE_CXX_FLAGS)
@@ -423,12 +423,12 @@ elseif( LLVM_COMPILER_IS_GCC_COMPATIBLE )
     if (NOT C_WCOMMENT_ALLOWS_LINE_WRAP)
       append("-Wno-comment" CMAKE_C_FLAGS CMAKE_CXX_FLAGS)
     endif()
-  endif (LLVM_ENABLE_WARNINGS)
-  append_if(LLVM_ENABLE_WERROR "-Werror" CMAKE_C_FLAGS CMAKE_CXX_FLAGS)
-  if (NOT LLVM_ENABLE_TIMESTAMPS)
+  endif (LLVM37_ENABLE_WARNINGS)
+  append_if(LLVM37_ENABLE_WERROR "-Werror" CMAKE_C_FLAGS CMAKE_CXX_FLAGS)
+  if (NOT LLVM37_ENABLE_TIMESTAMPS)
     add_flag_if_supported("-Werror=date-time" WERROR_DATE_TIME)
   endif ()
-  if (LLVM_ENABLE_CXX1Y)
+  if (LLVM37_ENABLE_CXX1Y)
     check_cxx_compiler_flag("-std=c++1y" CXX_SUPPORTS_CXX1Y)
     append_if(CXX_SUPPORTS_CXX1Y "-std=c++1y" CMAKE_CXX_FLAGS)
   else()
@@ -445,7 +445,7 @@ elseif( LLVM_COMPILER_IS_GCC_COMPATIBLE )
       message(FATAL_ERROR "LLVM requires C++11 support but the '-std=c++11' flag isn't supported.")
     endif()
   endif()
-  if (LLVM_ENABLE_MODULES)
+  if (LLVM37_ENABLE_MODULES)
     set(OLD_CMAKE_REQUIRED_FLAGS ${CMAKE_REQUIRED_FLAGS})
     set(CMAKE_REQUIRED_FLAGS "${CMAKE_REQUIRED_FLAGS} -fmodules -fcxx-modules")
     # Check that we can build code with modules enabled, and that repeatedly
@@ -461,9 +461,9 @@ elseif( LLVM_COMPILER_IS_GCC_COMPATIBLE )
       append_if(CXX_SUPPORTS_MODULES "-fmodules" CMAKE_C_FLAGS)
       append_if(CXX_SUPPORTS_MODULES "-fmodules -fcxx-modules" CMAKE_CXX_FLAGS)
     else()
-      message(FATAL_ERROR "LLVM_ENABLE_MODULES is not supported by this compiler")
+      message(FATAL_ERROR "LLVM37_ENABLE_MODULES is not supported by this compiler")
     endif()
-  endif(LLVM_ENABLE_MODULES)
+  endif(LLVM37_ENABLE_MODULES)
 endif( MSVC )
 
 macro(append_common_sanitizer_flags)
@@ -481,42 +481,42 @@ macro(append_common_sanitizer_flags)
 endmacro()
 
 # Turn on sanitizers if necessary.
-if(LLVM_USE_SANITIZER)
-  if (LLVM_ON_UNIX)
-    if (LLVM_USE_SANITIZER STREQUAL "Address")
+if(LLVM37_USE_SANITIZER)
+  if (LLVM37_ON_UNIX)
+    if (LLVM37_USE_SANITIZER STREQUAL "Address")
       append_common_sanitizer_flags()
       append("-fsanitize=address" CMAKE_C_FLAGS CMAKE_CXX_FLAGS)
-    elseif (LLVM_USE_SANITIZER MATCHES "Memory(WithOrigins)?")
+    elseif (LLVM37_USE_SANITIZER MATCHES "Memory(WithOrigins)?")
       append_common_sanitizer_flags()
       append("-fsanitize=memory" CMAKE_C_FLAGS CMAKE_CXX_FLAGS)
-      if(LLVM_USE_SANITIZER STREQUAL "MemoryWithOrigins")
+      if(LLVM37_USE_SANITIZER STREQUAL "MemoryWithOrigins")
         append("-fsanitize-memory-track-origins" CMAKE_C_FLAGS CMAKE_CXX_FLAGS)
       endif()
-    elseif (LLVM_USE_SANITIZER STREQUAL "Undefined")
+    elseif (LLVM37_USE_SANITIZER STREQUAL "Undefined")
       append_common_sanitizer_flags()
       append("-fsanitize=undefined -fno-sanitize=vptr,function -fno-sanitize-recover=all"
               CMAKE_C_FLAGS CMAKE_CXX_FLAGS)
-    elseif (LLVM_USE_SANITIZER STREQUAL "Thread")
+    elseif (LLVM37_USE_SANITIZER STREQUAL "Thread")
       append_common_sanitizer_flags()
       append("-fsanitize=thread" CMAKE_C_FLAGS CMAKE_CXX_FLAGS)
-    elseif (LLVM_USE_SANITIZER STREQUAL "Address;Undefined" OR
-            LLVM_USE_SANITIZER STREQUAL "Undefined;Address")
+    elseif (LLVM37_USE_SANITIZER STREQUAL "Address;Undefined" OR
+            LLVM37_USE_SANITIZER STREQUAL "Undefined;Address")
       append_common_sanitizer_flags()
       append("-fsanitize=address,undefined -fno-sanitize=vptr,function -fno-sanitize-recover=all"
               CMAKE_C_FLAGS CMAKE_CXX_FLAGS)
     else()
-      message(WARNING "Unsupported value of LLVM_USE_SANITIZER: ${LLVM_USE_SANITIZER}")
+      message(WARNING "Unsupported value of LLVM37_USE_SANITIZER: ${LLVM37_USE_SANITIZER}")
     endif()
   else()
-    message(WARNING "LLVM_USE_SANITIZER is not supported on this platform.")
+    message(WARNING "LLVM37_USE_SANITIZER is not supported on this platform.")
   endif()
-  if (LLVM_USE_SANITIZE_COVERAGE)
+  if (LLVM37_USE_SANITIZE_COVERAGE)
     append("-fsanitize-coverage=edge,indirect-calls,8bit-counters,trace-cmp" CMAKE_C_FLAGS CMAKE_CXX_FLAGS)
   endif()
 endif()
 
 # Turn on -gsplit-dwarf if requested
-if(LLVM_USE_SPLIT_DWARF)
+if(LLVM37_USE_SPLIT_DWARF)
   add_definitions("-gsplit-dwarf")
 endif()
 
@@ -541,7 +541,7 @@ endif()
 # Add flags for add_dead_strip().
 # FIXME: With MSVS, consider compiling with /Gy and linking with /OPT:REF?
 # But MinSizeRel seems to add that automatically, so maybe disable these
-# flags instead if LLVM_NO_DEAD_STRIP is set.
+# flags instead if LLVM37_NO_DEAD_STRIP is set.
 if(NOT CYGWIN AND NOT WIN32)
   if(NOT ${CMAKE_SYSTEM_NAME} MATCHES "Darwin" AND
      NOT uppercase_CMAKE_BUILD_TYPE STREQUAL "DEBUG")
@@ -574,20 +574,20 @@ if(MSVC)
 endif()
 
 # Provide public options to globally control RTTI and EH
-option(LLVM_ENABLE_EH "Enable Exception handling" OFF)
-option(LLVM_ENABLE_RTTI "Enable run time type information" OFF)
-if(LLVM_ENABLE_EH AND NOT LLVM_ENABLE_RTTI)
-  message(FATAL_ERROR "Exception handling requires RTTI. You must set LLVM_ENABLE_RTTI to ON")
+option(LLVM37_ENABLE_EH "Enable Exception handling" OFF)
+option(LLVM37_ENABLE_RTTI "Enable run time type information" OFF)
+if(LLVM37_ENABLE_EH AND NOT LLVM37_ENABLE_RTTI)
+  message(FATAL_ERROR "Exception handling requires RTTI. You must set LLVM37_ENABLE_RTTI to ON")
 endif()
 
 # Plugin support
 # FIXME: Make this configurable.
 if(WIN32 OR CYGWIN)
   if(BUILD_SHARED_LIBS)
-    set(LLVM_ENABLE_PLUGINS ON)
+    set(LLVM37_ENABLE_PLUGINS ON)
   else()
-    set(LLVM_ENABLE_PLUGINS OFF)
+    set(LLVM37_ENABLE_PLUGINS OFF)
   endif()
 else()
-  set(LLVM_ENABLE_PLUGINS ON)
+  set(LLVM37_ENABLE_PLUGINS ON)
 endif()

@@ -44,8 +44,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_ANALYSIS_ANALYSES_THREADSAFETYTIL_H
-#define LLVM_CLANG_ANALYSIS_ANALYSES_THREADSAFETYTIL_H
+#ifndef LLVM37_CLANG_ANALYSIS_ANALYSES_THREADSAFETYTIL_H
+#define LLVM37_CLANG_ANALYSIS_ANALYSES_THREADSAFETYTIL_H
 
 // All clang include dependencies for this file must be put in
 // ThreadSafetyUtil.h.

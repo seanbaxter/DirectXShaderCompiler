@@ -16,19 +16,19 @@
 //===----------------------------------------------------------------------===//
 
 #include "llvm-objdump.h"
-#include "llvm/Object/COFF.h"
-#include "llvm/Object/ObjectFile.h"
-#include "llvm/Support/Format.h"
-#include "llvm/Support/SourceMgr.h"
-#include "llvm/Support/Win64EH.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/Object/COFF.h"
+#include "llvm37/Object/ObjectFile.h"
+#include "llvm37/Support/Format.h"
+#include "llvm37/Support/SourceMgr.h"
+#include "llvm37/Support/Win64EH.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <algorithm>
 #include <cstring>
 #include <system_error>
 
-using namespace llvm;
+using namespace llvm37;
 using namespace object;
-using namespace llvm::Win64EH;
+using namespace llvm37::Win64EH;
 
 // Returns the name of the unwind code.
 static StringRef getUnwindCodeTypeName(uint8_t Code) {
@@ -222,7 +222,7 @@ static std::error_code resolveSymbolName(const std::vector<RelocationRef> &Rels,
   return std::error_code();
 }
 
-static void printCOFFSymbolAddress(llvm::raw_ostream &Out,
+static void printCOFFSymbolAddress(llvm37::raw_ostream &Out,
                                    const std::vector<RelocationRef> &Rels,
                                    uint64_t Offset, uint32_t Disp) {
   StringRef Sym;
@@ -516,7 +516,7 @@ static void printRuntimeFunctionRels(const COFFObjectFile *Obj,
   printWin64EHUnwindInfo(UI);
 }
 
-void llvm::printCOFFUnwindInfo(const COFFObjectFile *Obj) {
+void llvm37::printCOFFUnwindInfo(const COFFObjectFile *Obj) {
   if (Obj->getMachine() != COFF::IMAGE_FILE_MACHINE_AMD64) {
     errs() << "Unsupported image machine type "
               "(currently only AMD64 is supported).\n";
@@ -544,7 +544,7 @@ void llvm::printCOFFUnwindInfo(const COFFObjectFile *Obj) {
   }
 }
 
-void llvm::printCOFFFileHeader(const object::ObjectFile *Obj) {
+void llvm37::printCOFFFileHeader(const object::ObjectFile *Obj) {
   const COFFObjectFile *file = dyn_cast<const COFFObjectFile>(Obj);
   printLoadConfiguration(file);
   printImportTables(file);

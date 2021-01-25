@@ -8,11 +8,11 @@
 //===----------------------------------------------------------------------===//
 
 #include "gtest/gtest.h"
-#include "llvm/ADT/DenseMap.h"
+#include "llvm37/ADT/DenseMap.h"
 #include <map>
 #include <set>
 
-using namespace llvm;
+using namespace llvm37;
 
 namespace {
 

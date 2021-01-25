@@ -11,8 +11,8 @@
 |* the full Clang C++ API.                                                    *|
 |*                                                                            *|
 \*===----------------------------------------------------------------------===*/
-#ifndef LLVM_CLANG_C_CXCOMPILATIONDATABASE_H
-#define LLVM_CLANG_C_CXCOMPILATIONDATABASE_H
+#ifndef LLVM37_CLANG_C_CXCOMPILATIONDATABASE_H
+#define LLVM37_CLANG_C_CXCOMPILATIONDATABASE_H
 
 #include "clang-c/Platform.h"
 #include "clang-c/CXString.h"

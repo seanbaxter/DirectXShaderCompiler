@@ -18,7 +18,7 @@
 #include "clang/Basic/OperatorPrecedence.h"
 #include "clang/Basic/SourceManager.h"
 #include "clang/Format/Format.h"
-#include "llvm/Support/Debug.h"
+#include "llvm37/Support/Debug.h"
 #include <string>
 
 #define DEBUG_TYPE "format-formatter"

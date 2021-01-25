@@ -13,13 +13,13 @@
 //===----------------------------------------------------------------------===//
 
 #include "RemoteTarget.h"
-#include "llvm/ADT/StringRef.h"
-#include "llvm/Support/DataTypes.h"
-#include "llvm/Support/Memory.h"
+#include "llvm37/ADT/StringRef.h"
+#include "llvm37/Support/DataTypes.h"
+#include "llvm37/Support/Memory.h"
 #include <stdlib.h>
 #include <string>
 
-using namespace llvm;
+using namespace llvm37;
 
 ////////////////////////////////////////////////////////////////////////////////
 // Simulated remote execution

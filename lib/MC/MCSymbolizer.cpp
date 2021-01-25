@@ -7,9 +7,9 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/MC/MCSymbolizer.h"
+#include "llvm37/MC/MCSymbolizer.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 MCSymbolizer::~MCSymbolizer() {
 }

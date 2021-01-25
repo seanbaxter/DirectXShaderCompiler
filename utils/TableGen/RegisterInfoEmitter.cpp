@@ -16,18 +16,18 @@
 #include "CodeGenRegisters.h"
 #include "CodeGenTarget.h"
 #include "SequenceToOffsetTable.h"
-#include "llvm/ADT/BitVector.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/StringExtras.h"
-#include "llvm/ADT/Twine.h"
-#include "llvm/Support/Format.h"
-#include "llvm/TableGen/Error.h"
-#include "llvm/TableGen/Record.h"
-#include "llvm/TableGen/TableGenBackend.h"
+#include "llvm37/ADT/BitVector.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/StringExtras.h"
+#include "llvm37/ADT/Twine.h"
+#include "llvm37/Support/Format.h"
+#include "llvm37/TableGen/Error.h"
+#include "llvm37/TableGen/Record.h"
+#include "llvm37/TableGen/TableGenBackend.h"
 #include <algorithm>
 #include <set>
 #include <vector>
-using namespace llvm;
+using namespace llvm37;
 
 namespace {
 class RegisterInfoEmitter {
@@ -83,7 +83,7 @@ void RegisterInfoEmitter::runEnums(raw_ostream &OS,
   OS << "\n#ifdef GET_REGINFO_ENUM\n";
   OS << "#undef GET_REGINFO_ENUM\n";
 
-  OS << "namespace llvm {\n\n";
+  OS << "namespace llvm37 {\n\n";
 
   OS << "class MCRegisterClass;\n"
      << "extern const MCRegisterClass " << Namespace
@@ -808,7 +808,7 @@ RegisterInfoEmitter::runMCDesc(raw_ostream &OS, CodeGenTarget &Target,
   // Keep track of sub-register names as well. These are not differentially
   // encoded.
   typedef SmallVector<const CodeGenSubRegIndex*, 4> SubRegIdxVec;
-  SequenceToOffsetTable<SubRegIdxVec, deref<llvm::less>> SubRegIdxSeqs;
+  SequenceToOffsetTable<SubRegIdxVec, deref<llvm37::less>> SubRegIdxSeqs;
   SmallVector<SubRegIdxVec, 4> SubRegIdxLists(Regs.size());
 
   SequenceToOffsetTable<std::string> RegStrings;
@@ -881,7 +881,7 @@ RegisterInfoEmitter::runMCDesc(raw_ostream &OS, CodeGenTarget &Target,
   LaneMaskSeqs.layout();
   SubRegIdxSeqs.layout();
 
-  OS << "namespace llvm {\n\n";
+  OS << "namespace llvm37 {\n\n";
 
   const std::string &TargetName = Target.getName();
 
@@ -1066,9 +1066,9 @@ RegisterInfoEmitter::runTargetHeader(raw_ostream &OS, CodeGenTarget &Target,
   const std::string &TargetName = Target.getName();
   std::string ClassName = TargetName + "GenRegisterInfo";
 
-  OS << "#include \"llvm/Target/TargetRegisterInfo.h\"\n\n";
+  OS << "#include \"llvm37/Target/TargetRegisterInfo.h\"\n\n";
 
-  OS << "namespace llvm {\n\n";
+  OS << "namespace llvm37 {\n\n";
 
   OS << "class " << TargetName << "FrameLowering;\n\n";
 
@@ -1132,7 +1132,7 @@ RegisterInfoEmitter::runTargetDesc(raw_ostream &OS, CodeGenTarget &Target,
   OS << "\n#ifdef GET_REGINFO_TARGET_DESC\n";
   OS << "#undef GET_REGINFO_TARGET_DESC\n";
 
-  OS << "namespace llvm {\n\n";
+  OS << "namespace llvm37 {\n\n";
 
   // Get access to MCRegisterClass data.
   OS << "extern const MCRegisterClass " << Target.getName()
@@ -1206,7 +1206,7 @@ RegisterInfoEmitter::runTargetDesc(raw_ostream &OS, CodeGenTarget &Target,
     // Compress the sub-reg index lists.
     typedef std::vector<const CodeGenSubRegIndex*> IdxList;
     SmallVector<IdxList, 8> SuperRegIdxLists(RegisterClasses.size());
-    SequenceToOffsetTable<IdxList, deref<llvm::less>> SuperRegIdxSeqs;
+    SequenceToOffsetTable<IdxList, deref<llvm37::less>> SuperRegIdxSeqs;
     BitVector MaskBV(RegisterClasses.size());
 
     for (const auto &RC : RegisterClasses) {
@@ -1494,7 +1494,7 @@ void RegisterInfoEmitter::run(raw_ostream &OS) {
   runTargetDesc(OS, Target, RegBank);
 }
 
-namespace llvm {
+namespace llvm37 {
 
 void EmitRegisterInfo(RecordKeeper &RK, raw_ostream &OS) {
   RegisterInfoEmitter(RK).run(OS);

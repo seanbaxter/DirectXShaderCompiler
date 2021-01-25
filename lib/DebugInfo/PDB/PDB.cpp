@@ -7,20 +7,20 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/DebugInfo/PDB/PDB.h"
+#include "llvm37/DebugInfo/PDB/PDB.h"
 
-#include "llvm/ADT/StringRef.h"
-#include "llvm/Config/config.h"
-#include "llvm/DebugInfo/PDB/IPDBSession.h"
-#include "llvm/DebugInfo/PDB/PDB.h"
+#include "llvm37/ADT/StringRef.h"
+#include "llvm37/Config/config.h"
+#include "llvm37/DebugInfo/PDB/IPDBSession.h"
+#include "llvm37/DebugInfo/PDB/PDB.h"
 
 #if HAVE_DIA_SDK
-#include "llvm/DebugInfo/PDB/DIA/DIASession.h"
+#include "llvm37/DebugInfo/PDB/DIA/DIASession.h"
 #endif
 
-using namespace llvm;
+using namespace llvm37;
 
-PDB_ErrorCode llvm::loadDataForPDB(PDB_ReaderType Type, StringRef Path,
+PDB_ErrorCode llvm37::loadDataForPDB(PDB_ReaderType Type, StringRef Path,
                                    std::unique_ptr<IPDBSession> &Session) {
   // Create the correct concrete instance type based on the value of Type.
 #if HAVE_DIA_SDK
@@ -29,7 +29,7 @@ PDB_ErrorCode llvm::loadDataForPDB(PDB_ReaderType Type, StringRef Path,
   return PDB_ErrorCode::NoPdbImpl;
 }
 
-PDB_ErrorCode llvm::loadDataForEXE(PDB_ReaderType Type, StringRef Path,
+PDB_ErrorCode llvm37::loadDataForEXE(PDB_ReaderType Type, StringRef Path,
                                    std::unique_ptr<IPDBSession> &Session) {
 // Create the correct concrete instance type based on the value of Type.
 #if HAVE_DIA_SDK

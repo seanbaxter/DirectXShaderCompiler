@@ -7,17 +7,17 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Object/ObjectFile.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/LEB128.h"
-#include "llvm/Support/ManagedStatic.h"
-#include "llvm/Support/PrettyStackTrace.h"
-#include "llvm/Support/Signals.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/Object/ObjectFile.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/LEB128.h"
+#include "llvm37/Support/ManagedStatic.h"
+#include "llvm37/Support/PrettyStackTrace.h"
+#include "llvm37/Support/Signals.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <functional>
 #include <system_error>
 
-using namespace llvm;
+using namespace llvm37;
 using namespace object;
 
 int convertForTestingMain(int argc, const char *argv[]) {
@@ -35,7 +35,7 @@ int convertForTestingMain(int argc, const char *argv[]) {
 
   cl::ParseCommandLineOptions(argc, argv, "LLVM code coverage tool\n");
 
-  auto ObjErr = llvm::object::ObjectFile::createObjectFile(InputSourceFile);
+  auto ObjErr = llvm37::object::ObjectFile::createObjectFile(InputSourceFile);
   if (auto Err = ObjErr.getError()) {
     errs() << "error: " << Err.message() << "\n";
     return 1;

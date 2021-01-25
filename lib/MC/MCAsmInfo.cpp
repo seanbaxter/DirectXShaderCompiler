@@ -12,15 +12,15 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/MC/MCAsmInfo.h"
-#include "llvm/MC/MCContext.h"
-#include "llvm/MC/MCExpr.h"
-#include "llvm/MC/MCStreamer.h"
-#include "llvm/Support/DataTypes.h"
-#include "llvm/Support/Dwarf.h"
+#include "llvm37/MC/MCAsmInfo.h"
+#include "llvm37/MC/MCContext.h"
+#include "llvm37/MC/MCExpr.h"
+#include "llvm37/MC/MCStreamer.h"
+#include "llvm37/Support/DataTypes.h"
+#include "llvm37/Support/Dwarf.h"
 #include <cctype>
 #include <cstring>
-using namespace llvm;
+using namespace llvm37;
 
 MCAsmInfo::MCAsmInfo() {
   PointerSize = 4;

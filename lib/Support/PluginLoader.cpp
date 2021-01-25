@@ -12,13 +12,13 @@
 //===----------------------------------------------------------------------===//
 
 #define DONT_GET_PLUGIN_LOADER_OPTION
-#include "llvm/Support/PluginLoader.h"
-#include "llvm/Support/DynamicLibrary.h"
-#include "llvm/Support/ManagedStatic.h"
-#include "llvm/Support/Mutex.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/Support/PluginLoader.h"
+#include "llvm37/Support/DynamicLibrary.h"
+#include "llvm37/Support/ManagedStatic.h"
+#include "llvm37/Support/Mutex.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <vector>
-using namespace llvm;
+using namespace llvm37;
 
 static ManagedStatic<std::vector<std::string> > Plugins;
 static ManagedStatic<sys::SmartMutex<true> > PluginsLock;

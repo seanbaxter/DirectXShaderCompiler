@@ -17,10 +17,10 @@
 #include "clang/StaticAnalyzer/Core/CheckerManager.h"
 #include "clang/StaticAnalyzer/Core/PathSensitive/ExplodedGraph.h"
 #include "clang/StaticAnalyzer/Core/PathSensitive/ExprEngine.h"
-#include "llvm/ADT/SmallPtrSet.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/SmallPtrSet.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/Support/raw_ostream.h"
 using namespace clang;
 using namespace ento;
 
@@ -43,7 +43,7 @@ void AnalyzerStatsChecker::checkEndAnalysis(ExplodedGraph &G,
                                             ExprEngine &Eng) const {
   const CFG *C = nullptr;
   const SourceManager &SM = B.getSourceManager();
-  llvm::SmallPtrSet<const CFGBlock*, 256> reachable;
+  llvm37::SmallPtrSet<const CFGBlock*, 256> reachable;
 
   // Root node should have the location context of the top most function.
   const ExplodedNode *GraphRoot = *G.roots_begin();
@@ -89,7 +89,7 @@ void AnalyzerStatsChecker::checkEndAnalysis(ExplodedGraph &G,
 
   // Generate the warning string
   SmallString<128> buf;
-  llvm::raw_svector_ostream output(buf);
+  llvm37::raw_svector_ostream output(buf);
   PresumedLoc Loc = SM.getPresumedLoc(D->getLocation());
   if (!Loc.isValid())
     return;
@@ -125,7 +125,7 @@ void AnalyzerStatsChecker::checkEndAnalysis(ExplodedGraph &G,
     const CFGElement &CE = Exit->front();
     if (Optional<CFGStmt> CS = CE.getAs<CFGStmt>()) {
       SmallString<128> bufI;
-      llvm::raw_svector_ostream outputI(bufI);
+      llvm37::raw_svector_ostream outputI(bufI);
       outputI << "(" << NameOfRootFunction << ")" <<
                  ": The analyzer generated a sink at this point";
       B.EmitBasicReport(

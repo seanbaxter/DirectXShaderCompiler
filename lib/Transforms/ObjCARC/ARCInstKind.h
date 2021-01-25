@@ -7,13 +7,13 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_LIB_TRANSFORMS_OBJCARC_ARCINSTKIND_H
-#define LLVM_LIB_TRANSFORMS_OBJCARC_ARCINSTKIND_H
+#ifndef LLVM37_LIB_TRANSFORMS_OBJCARC_ARCINSTKIND_H
+#define LLVM37_LIB_TRANSFORMS_OBJCARC_ARCINSTKIND_H
 
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/Function.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/Function.h"
 
-namespace llvm {
+namespace llvm37 {
 namespace objcarc {
 
 /// \enum ARCInstKind
@@ -118,6 +118,6 @@ ARCInstKind GetARCInstKind(const Value *V);
 bool CanDecrementRefCount(ARCInstKind Kind);
 
 } // end namespace objcarc
-} // end namespace llvm
+} // end namespace llvm37
 
 #endif

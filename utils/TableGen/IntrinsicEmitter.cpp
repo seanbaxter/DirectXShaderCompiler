@@ -15,13 +15,13 @@
 #include "CodeGenTarget.h"
 #include "SequenceToOffsetTable.h"
 #include "TableGenBackends.h"
-#include "llvm/ADT/StringExtras.h"
-#include "llvm/TableGen/Error.h"
-#include "llvm/TableGen/Record.h"
-#include "llvm/TableGen/StringMatcher.h"
-#include "llvm/TableGen/TableGenBackend.h"
+#include "llvm37/ADT/StringExtras.h"
+#include "llvm37/TableGen/Error.h"
+#include "llvm37/TableGen/Record.h"
+#include "llvm37/TableGen/StringMatcher.h"
+#include "llvm37/TableGen/TableGenBackend.h"
 #include <algorithm>
-using namespace llvm;
+using namespace llvm37;
 
 namespace {
 class IntrinsicEmitter {
@@ -789,7 +789,7 @@ EmitIntrinsicToGCCBuiltinMap(const std::vector<CodeGenIntrinsic> &Ints,
   OS << "// This is used by the C front-end.  The GCC builtin name is passed\n";
   OS << "// in as BuiltinName, and a target prefix (e.g. 'ppc') is passed\n";
   OS << "// in as TargetPrefix.  The result is assigned to 'IntrinsicID'.\n";
-  OS << "#ifdef GET_LLVM_INTRINSIC_FOR_GCC_BUILTIN\n";
+  OS << "#ifdef GET_LLVM37_INTRINSIC_FOR_GCC_BUILTIN\n";
 
   if (TargetOnly) {
     OS << "static " << TargetPrefix << "Intrinsic::ID "
@@ -844,7 +844,7 @@ EmitIntrinsicToMSBuiltinMap(const std::vector<CodeGenIntrinsic> &Ints,
         "// This is used by the C front-end.  The MS builtin name is passed\n"
         "// in as a BuiltinName, and a target prefix (e.g. 'arm') is passed\n"
         "// in as a TargetPrefix.  The result is assigned to 'IntrinsicID'.\n"
-        "#ifdef GET_LLVM_INTRINSIC_FOR_MS_BUILTIN\n";
+        "#ifdef GET_LLVM37_INTRINSIC_FOR_MS_BUILTIN\n";
 
   OS << (TargetOnly ? "static " + TargetPrefix : "") << "Intrinsic::ID "
      << (TargetOnly ? "" : "Intrinsic::")
@@ -873,6 +873,6 @@ EmitIntrinsicToMSBuiltinMap(const std::vector<CodeGenIntrinsic> &Ints,
   OS << "#endif\n\n";
 }
 
-void llvm::EmitIntrinsics(RecordKeeper &RK, raw_ostream &OS, bool TargetOnly) {
+void llvm37::EmitIntrinsics(RecordKeeper &RK, raw_ostream &OS, bool TargetOnly) {
   IntrinsicEmitter(RK, TargetOnly).run(OS);
 }

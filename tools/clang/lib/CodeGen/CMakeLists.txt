@@ -1,6 +1,6 @@
 set(HLSL_IGNORE_SOURCES CGObjCGNU.cpp CGObjCMac.cpp CGObjCRuntime.cpp CGOpenCLRuntime.cpp CGOpenMPRuntime.cpp)
 
-set(LLVM_LINK_COMPONENTS
+set(LLVM37_LINK_COMPONENTS
   Analysis
   BitReader
   BitWriter
@@ -22,9 +22,9 @@ set(LLVM_LINK_COMPONENTS
   TransformUtils
   )
 
-# In a standard Clang+LLVM build, we need to generate intrinsics before
-# building codegen. In a standalone build, LLVM is already built and we don't
-# need this dependency. Furthermore, LLVM doesn't export it so we can't have
+# In a standard Clang+LLVM37 build, we need to generate intrinsics before
+# building codegen. In a standalone build, LLVM37 is already built and we don't
+# need this dependency. Furthermore, LLVM37 doesn't export it so we can't have
 # this dependency.
 set(codegen_deps intrinsics_gen)
 if (CLANG_BUILT_STANDALONE)

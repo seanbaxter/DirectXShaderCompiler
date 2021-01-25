@@ -12,26 +12,26 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Transforms/IPO/PassManagerBuilder.h"
+#include "llvm37/Transforms/IPO/PassManagerBuilder.h"
 #include "llvm-c/Transforms/PassManagerBuilder.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/Analysis/Passes.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/Verifier.h"
-#include "llvm/IR/LegacyPassManager.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/ManagedStatic.h"
-#include "llvm/Analysis/TargetLibraryInfo.h"
-#include "llvm/Target/TargetMachine.h"
-#include "llvm/Transforms/IPO.h"
-#include "llvm/Transforms/Scalar.h"
-#include "llvm/Transforms/Vectorize.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/Analysis/Passes.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/IR/Verifier.h"
+#include "llvm37/IR/LegacyPassManager.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/ManagedStatic.h"
+#include "llvm37/Analysis/TargetLibraryInfo.h"
+#include "llvm37/Target/TargetMachine.h"
+#include "llvm37/Transforms/IPO.h"
+#include "llvm37/Transforms/Scalar.h"
+#include "llvm37/Transforms/Vectorize.h"
 #include "dxc/HLSL/DxilGenerationPass.h" // HLSL Change
 #include "dxc/HLSL/HLMatrixLowerPass.h" // HLSL Change
 #include "dxc/HLSL/ComputeViewIdState.h" // HLSL Change
-#include "llvm/Analysis/DxilValueCache.h" // HLSL Change
+#include "llvm37/Analysis/DxilValueCache.h" // HLSL Change
 
-using namespace llvm;
+using namespace llvm37;
 
 #if HLSL_VECTORIZATION_ENABLED // HLSL Change - don't build vectorization passes
 

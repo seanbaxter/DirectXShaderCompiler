@@ -12,13 +12,13 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_SEMA_TYPOCORRECTION_H
-#define LLVM_CLANG_SEMA_TYPOCORRECTION_H
+#ifndef LLVM37_CLANG_SEMA_TYPOCORRECTION_H
+#define LLVM37_CLANG_SEMA_TYPOCORRECTION_H
 
 #include "clang/AST/DeclCXX.h"
 #include "clang/Sema/DeclSpec.h"
 #include "clang/Sema/Ownership.h"
-#include "llvm/ADT/SmallVector.h"
+#include "llvm37/ADT/SmallVector.h"
 
 namespace clang {
 

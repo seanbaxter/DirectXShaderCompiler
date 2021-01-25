@@ -13,9 +13,9 @@
 #include "clang/Basic/SourceManager.h"
 #include "clang/Lex/Lexer.h"
 #include "clang/Sema/SemaDiagnostic.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/ADT/TinyPtrVector.h"
-#include "llvm/Support/SaveAndRestore.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/ADT/TinyPtrVector.h"
+#include "llvm37/Support/SaveAndRestore.h"
 
 using namespace clang;
 using namespace arcmt;
@@ -219,7 +219,7 @@ static void checkWeakGCAttrs(MigrationContext &MigrateCtx) {
   }
 }
 
-typedef llvm::TinyPtrVector<ObjCPropertyDecl *> IndivPropsTy;
+typedef llvm37::TinyPtrVector<ObjCPropertyDecl *> IndivPropsTy;
 
 static void checkAllAtProps(MigrationContext &MigrateCtx,
                             SourceLocation AtLoc,
@@ -300,8 +300,8 @@ static void checkAllAtProps(MigrationContext &MigrateCtx,
 
 static void checkAllProps(MigrationContext &MigrateCtx,
                           std::vector<ObjCPropertyDecl *> &AllProps) {
-  typedef llvm::TinyPtrVector<ObjCPropertyDecl *> IndivPropsTy;
-  llvm::DenseMap<unsigned, IndivPropsTy> AtProps;
+  typedef llvm37::TinyPtrVector<ObjCPropertyDecl *> IndivPropsTy;
+  llvm37::DenseMap<unsigned, IndivPropsTy> AtProps;
 
   for (unsigned i = 0, e = AllProps.size(); i != e; ++i) {
     ObjCPropertyDecl *PD = AllProps[i];
@@ -316,7 +316,7 @@ static void checkAllProps(MigrationContext &MigrateCtx,
     }
   }
 
-  for (llvm::DenseMap<unsigned, IndivPropsTy>::iterator
+  for (llvm37::DenseMap<unsigned, IndivPropsTy>::iterator
          I = AtProps.begin(), E = AtProps.end(); I != E; ++I) {
     SourceLocation AtLoc = SourceLocation::getFromRawEncoding(I->first);
     IndivPropsTy &IndProps = I->second;
@@ -335,23 +335,23 @@ void GCAttrsTraverser::traverseTU(MigrationContext &MigrateCtx) {
 }
 
 void MigrationContext::dumpGCAttrs() {
-  llvm::errs() << "\n################\n";
+  llvm37::errs() << "\n################\n";
   for (unsigned i = 0, e = GCAttrs.size(); i != e; ++i) {
     GCAttrOccurrence &Attr = GCAttrs[i];
-    llvm::errs() << "KIND: "
+    llvm37::errs() << "KIND: "
         << (Attr.Kind == GCAttrOccurrence::Strong ? "strong" : "weak");
-    llvm::errs() << "\nLOC: ";
+    llvm37::errs() << "\nLOC: ";
     Attr.Loc.dump(Pass.Ctx.getSourceManager());
-    llvm::errs() << "\nTYPE: ";
+    llvm37::errs() << "\nTYPE: ";
     Attr.ModifiedType.dump();
     if (Attr.Dcl) {
-      llvm::errs() << "DECL:\n";
+      llvm37::errs() << "DECL:\n";
       Attr.Dcl->dump();
     } else {
-      llvm::errs() << "DECL: NONE";
+      llvm37::errs() << "DECL: NONE";
     }
-    llvm::errs() << "\nMIGRATABLE: " << Attr.FullyMigratable;
-    llvm::errs() << "\n----------------\n";
+    llvm37::errs() << "\nMIGRATABLE: " << Attr.FullyMigratable;
+    llvm37::errs() << "\n----------------\n";
   }
-  llvm::errs() << "\n################\n";
+  llvm37::errs() << "\n################\n";
 }

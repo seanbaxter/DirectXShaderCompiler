@@ -6,8 +6,8 @@ if (WIN32)
   find_package(DiaSDK REQUIRED) # Used for constants and declarations.
 endif (WIN32)
 
-set( LLVM_LINK_COMPONENTS
-  ${LLVM_TARGETS_TO_BUILD}
+set( LLVM37_LINK_COMPONENTS
+  ${LLVM37_TARGETS_TO_BUILD}
   dxcsupport
   DXIL
   DxilContainer
@@ -37,7 +37,7 @@ if (WIN32)
   include_directories(AFTER ${DIASDK_INCLUDE_DIRS})
 endif (WIN32)
 
-include_directories(${LLVM_SOURCE_DIR}/tools/clang/tools)
+include_directories(${LLVM37_SOURCE_DIR}/tools/clang/tools)
 
 add_dependencies(dxc dxclib dxcompiler)
 

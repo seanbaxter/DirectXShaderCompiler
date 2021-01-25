@@ -11,31 +11,31 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Support/Dwarf.h"
-#include "llvm/ADT/StringSwitch.h"
-#include "llvm/Support/ErrorHandling.h"
+#include "llvm37/Support/Dwarf.h"
+#include "llvm37/ADT/StringSwitch.h"
+#include "llvm37/Support/ErrorHandling.h"
 
-using namespace llvm;
+using namespace llvm37;
 using namespace dwarf;
 
-const char *llvm::dwarf::TagString(unsigned Tag) {
+const char *llvm37::dwarf::TagString(unsigned Tag) {
   switch (Tag) {
   default: return nullptr;
 #define HANDLE_DW_TAG(ID, NAME)                                                \
   case DW_TAG_##NAME:                                                          \
     return "DW_TAG_" #NAME;
-#include "llvm/Support/Dwarf.def"
+#include "llvm37/Support/Dwarf.def"
   }
 }
 
-unsigned llvm::dwarf::getTag(StringRef TagString) {
+unsigned llvm37::dwarf::getTag(StringRef TagString) {
   return StringSwitch<unsigned>(TagString)
 #define HANDLE_DW_TAG(ID, NAME) .Case("DW_TAG_" #NAME, DW_TAG_##NAME)
-#include "llvm/Support/Dwarf.def"
+#include "llvm37/Support/Dwarf.def"
       .Default(DW_TAG_invalid);
 }
 
-const char *llvm::dwarf::ChildrenString(unsigned Children) {
+const char *llvm37::dwarf::ChildrenString(unsigned Children) {
   switch (Children) {
   case DW_CHILDREN_no:                   return "DW_CHILDREN_no";
   case DW_CHILDREN_yes:                  return "DW_CHILDREN_yes";
@@ -43,7 +43,7 @@ const char *llvm::dwarf::ChildrenString(unsigned Children) {
   return nullptr;
 }
 
-const char *llvm::dwarf::AttributeString(unsigned Attribute) {
+const char *llvm37::dwarf::AttributeString(unsigned Attribute) {
   switch (Attribute) {
   case DW_AT_sibling:                    return "DW_AT_sibling";
   case DW_AT_location:                   return "DW_AT_location";
@@ -190,9 +190,9 @@ const char *llvm::dwarf::AttributeString(unsigned Attribute) {
   case DW_AT_APPLE_property_attribute:   return "DW_AT_APPLE_property_attribute";
   case DW_AT_APPLE_property:             return "DW_AT_APPLE_property";
   case DW_AT_APPLE_objc_complete_type:   return "DW_AT_APPLE_objc_complete_type";
-  case DW_AT_LLVM_include_path:          return "DW_AT_LLVM_include_path";
-  case DW_AT_LLVM_config_macros:         return "DW_AT_LLVM_config_macros";
-  case DW_AT_LLVM_isysroot:              return "DW_AT_LLVM_isysroot";
+  case DW_AT_LLVM37_include_path:          return "DW_AT_LLVM37_include_path";
+  case DW_AT_LLVM37_config_macros:         return "DW_AT_LLVM37_config_macros";
+  case DW_AT_LLVM37_isysroot:              return "DW_AT_LLVM37_isysroot";
 
     // DWARF5 Fission Extension Attribute
   case DW_AT_GNU_dwo_name:               return "DW_AT_GNU_dwo_name";
@@ -205,7 +205,7 @@ const char *llvm::dwarf::AttributeString(unsigned Attribute) {
   return nullptr;
 }
 
-const char *llvm::dwarf::FormEncodingString(unsigned Encoding) {
+const char *llvm37::dwarf::FormEncodingString(unsigned Encoding) {
   switch (Encoding) {
   case DW_FORM_addr:                     return "DW_FORM_addr";
   case DW_FORM_block2:                   return "DW_FORM_block2";
@@ -244,41 +244,41 @@ const char *llvm::dwarf::FormEncodingString(unsigned Encoding) {
   return nullptr;
 }
 
-const char *llvm::dwarf::OperationEncodingString(unsigned Encoding) {
+const char *llvm37::dwarf::OperationEncodingString(unsigned Encoding) {
   switch (Encoding) {
   default: return nullptr;
 #define HANDLE_DW_OP(ID, NAME)                                                 \
   case DW_OP_##NAME:                                                           \
     return "DW_OP_" #NAME;
-#include "llvm/Support/Dwarf.def"
+#include "llvm37/Support/Dwarf.def"
   }
 }
 
-unsigned llvm::dwarf::getOperationEncoding(StringRef OperationEncodingString) {
+unsigned llvm37::dwarf::getOperationEncoding(StringRef OperationEncodingString) {
   return StringSwitch<unsigned>(OperationEncodingString)
 #define HANDLE_DW_OP(ID, NAME) .Case("DW_OP_" #NAME, DW_OP_##NAME)
-#include "llvm/Support/Dwarf.def"
+#include "llvm37/Support/Dwarf.def"
       .Default(0);
 }
 
-const char *llvm::dwarf::AttributeEncodingString(unsigned Encoding) {
+const char *llvm37::dwarf::AttributeEncodingString(unsigned Encoding) {
   switch (Encoding) {
   default: return nullptr;
 #define HANDLE_DW_ATE(ID, NAME)                                                \
   case DW_ATE_##NAME:                                                          \
     return "DW_ATE_" #NAME;
-#include "llvm/Support/Dwarf.def"
+#include "llvm37/Support/Dwarf.def"
   }
 }
 
-unsigned llvm::dwarf::getAttributeEncoding(StringRef EncodingString) {
+unsigned llvm37::dwarf::getAttributeEncoding(StringRef EncodingString) {
   return StringSwitch<unsigned>(EncodingString)
 #define HANDLE_DW_ATE(ID, NAME) .Case("DW_ATE_" #NAME, DW_ATE_##NAME)
-#include "llvm/Support/Dwarf.def"
+#include "llvm37/Support/Dwarf.def"
       .Default(0);
 }
 
-const char *llvm::dwarf::DecimalSignString(unsigned Sign) {
+const char *llvm37::dwarf::DecimalSignString(unsigned Sign) {
   switch (Sign) {
   case DW_DS_unsigned:                   return "DW_DS_unsigned";
   case DW_DS_leading_overpunch:          return "DW_DS_leading_overpunch";
@@ -289,7 +289,7 @@ const char *llvm::dwarf::DecimalSignString(unsigned Sign) {
   return nullptr;
 }
 
-const char *llvm::dwarf::EndianityString(unsigned Endian) {
+const char *llvm37::dwarf::EndianityString(unsigned Endian) {
   switch (Endian) {
   case DW_END_default:                   return "DW_END_default";
   case DW_END_big:                       return "DW_END_big";
@@ -300,7 +300,7 @@ const char *llvm::dwarf::EndianityString(unsigned Endian) {
   return nullptr;
 }
 
-const char *llvm::dwarf::AccessibilityString(unsigned Access) {
+const char *llvm37::dwarf::AccessibilityString(unsigned Access) {
   switch (Access) {
   // Accessibility codes
   case DW_ACCESS_public:                 return "DW_ACCESS_public";
@@ -310,7 +310,7 @@ const char *llvm::dwarf::AccessibilityString(unsigned Access) {
   return nullptr;
 }
 
-const char *llvm::dwarf::VisibilityString(unsigned Visibility) {
+const char *llvm37::dwarf::VisibilityString(unsigned Visibility) {
   switch (Visibility) {
   case DW_VIS_local:                     return "DW_VIS_local";
   case DW_VIS_exported:                  return "DW_VIS_exported";
@@ -319,44 +319,44 @@ const char *llvm::dwarf::VisibilityString(unsigned Visibility) {
   return nullptr;
 }
 
-const char *llvm::dwarf::VirtualityString(unsigned Virtuality) {
+const char *llvm37::dwarf::VirtualityString(unsigned Virtuality) {
   switch (Virtuality) {
   default:
     return nullptr;
 #define HANDLE_DW_VIRTUALITY(ID, NAME)                                         \
   case DW_VIRTUALITY_##NAME:                                                   \
     return "DW_VIRTUALITY_" #NAME;
-#include "llvm/Support/Dwarf.def"
+#include "llvm37/Support/Dwarf.def"
   }
 }
 
-unsigned llvm::dwarf::getVirtuality(StringRef VirtualityString) {
+unsigned llvm37::dwarf::getVirtuality(StringRef VirtualityString) {
   return StringSwitch<unsigned>(VirtualityString)
 #define HANDLE_DW_VIRTUALITY(ID, NAME)                                         \
   .Case("DW_VIRTUALITY_" #NAME, DW_VIRTUALITY_##NAME)
-#include "llvm/Support/Dwarf.def"
+#include "llvm37/Support/Dwarf.def"
       .Default(DW_VIRTUALITY_invalid);
 }
 
-const char *llvm::dwarf::LanguageString(unsigned Language) {
+const char *llvm37::dwarf::LanguageString(unsigned Language) {
   switch (Language) {
   default:
     return nullptr;
 #define HANDLE_DW_LANG(ID, NAME)                                               \
   case DW_LANG_##NAME:                                                         \
     return "DW_LANG_" #NAME;
-#include "llvm/Support/Dwarf.def"
+#include "llvm37/Support/Dwarf.def"
   }
 }
 
-unsigned llvm::dwarf::getLanguage(StringRef LanguageString) {
+unsigned llvm37::dwarf::getLanguage(StringRef LanguageString) {
   return StringSwitch<unsigned>(LanguageString)
 #define HANDLE_DW_LANG(ID, NAME) .Case("DW_LANG_" #NAME, DW_LANG_##NAME)
-#include "llvm/Support/Dwarf.def"
+#include "llvm37/Support/Dwarf.def"
       .Default(0);
 }
 
-const char *llvm::dwarf::CaseString(unsigned Case) {
+const char *llvm37::dwarf::CaseString(unsigned Case) {
   switch (Case) {
   case DW_ID_case_sensitive:             return "DW_ID_case_sensitive";
   case DW_ID_up_case:                    return "DW_ID_up_case";
@@ -366,7 +366,7 @@ const char *llvm::dwarf::CaseString(unsigned Case) {
   return nullptr;
 }
 
-const char *llvm::dwarf::ConventionString(unsigned Convention) {
+const char *llvm37::dwarf::ConventionString(unsigned Convention) {
    switch (Convention) {
    case DW_CC_normal:                     return "DW_CC_normal";
    case DW_CC_program:                    return "DW_CC_program";
@@ -377,7 +377,7 @@ const char *llvm::dwarf::ConventionString(unsigned Convention) {
   return nullptr;
 }
 
-const char *llvm::dwarf::InlineCodeString(unsigned Code) {
+const char *llvm37::dwarf::InlineCodeString(unsigned Code) {
   switch (Code) {
   case DW_INL_not_inlined:               return "DW_INL_not_inlined";
   case DW_INL_inlined:                   return "DW_INL_inlined";
@@ -387,7 +387,7 @@ const char *llvm::dwarf::InlineCodeString(unsigned Code) {
   return nullptr;
 }
 
-const char *llvm::dwarf::ArrayOrderString(unsigned Order) {
+const char *llvm37::dwarf::ArrayOrderString(unsigned Order) {
   switch (Order) {
   case DW_ORD_row_major:                 return "DW_ORD_row_major";
   case DW_ORD_col_major:                 return "DW_ORD_col_major";
@@ -395,7 +395,7 @@ const char *llvm::dwarf::ArrayOrderString(unsigned Order) {
   return nullptr;
 }
 
-const char *llvm::dwarf::DiscriminantString(unsigned Discriminant) {
+const char *llvm37::dwarf::DiscriminantString(unsigned Discriminant) {
   switch (Discriminant) {
   case DW_DSC_label:                     return "DW_DSC_label";
   case DW_DSC_range:                     return "DW_DSC_range";
@@ -403,7 +403,7 @@ const char *llvm::dwarf::DiscriminantString(unsigned Discriminant) {
   return nullptr;
 }
 
-const char *llvm::dwarf::LNStandardString(unsigned Standard) {
+const char *llvm37::dwarf::LNStandardString(unsigned Standard) {
   switch (Standard) {
   case DW_LNS_copy:                      return "DW_LNS_copy";
   case DW_LNS_advance_pc:                return "DW_LNS_advance_pc";
@@ -421,7 +421,7 @@ const char *llvm::dwarf::LNStandardString(unsigned Standard) {
   return nullptr;
 }
 
-const char *llvm::dwarf::LNExtendedString(unsigned Encoding) {
+const char *llvm37::dwarf::LNExtendedString(unsigned Encoding) {
   switch (Encoding) {
   // Line Number Extended Opcode Encodings
   case DW_LNE_end_sequence:              return "DW_LNE_end_sequence";
@@ -434,7 +434,7 @@ const char *llvm::dwarf::LNExtendedString(unsigned Encoding) {
   return nullptr;
 }
 
-const char *llvm::dwarf::MacinfoString(unsigned Encoding) {
+const char *llvm37::dwarf::MacinfoString(unsigned Encoding) {
   switch (Encoding) {
   // Macinfo Type Encodings
   case DW_MACINFO_define:                return "DW_MACINFO_define";
@@ -446,7 +446,7 @@ const char *llvm::dwarf::MacinfoString(unsigned Encoding) {
   return nullptr;
 }
 
-const char *llvm::dwarf::CallFrameString(unsigned Encoding) {
+const char *llvm37::dwarf::CallFrameString(unsigned Encoding) {
   switch (Encoding) {
   case DW_CFA_nop:                       return "DW_CFA_nop";
   case DW_CFA_advance_loc:               return "DW_CFA_advance_loc";
@@ -483,7 +483,7 @@ const char *llvm::dwarf::CallFrameString(unsigned Encoding) {
   return nullptr;
 }
 
-const char *llvm::dwarf::ApplePropertyString(unsigned Prop) {
+const char *llvm37::dwarf::ApplePropertyString(unsigned Prop) {
   switch (Prop) {
   case DW_APPLE_PROPERTY_readonly:
     return "DW_APPLE_PROPERTY_readonly";
@@ -513,7 +513,7 @@ const char *llvm::dwarf::ApplePropertyString(unsigned Prop) {
   return nullptr;
 }
 
-const char *llvm::dwarf::AtomTypeString(unsigned AT) {
+const char *llvm37::dwarf::AtomTypeString(unsigned AT) {
   switch (AT) {
   case dwarf::DW_ATOM_null:
     return "DW_ATOM_null";
@@ -529,7 +529,7 @@ const char *llvm::dwarf::AtomTypeString(unsigned AT) {
   return nullptr;
 }
 
-const char *llvm::dwarf::GDBIndexEntryKindString(GDBIndexEntryKind Kind) {
+const char *llvm37::dwarf::GDBIndexEntryKindString(GDBIndexEntryKind Kind) {
   switch (Kind) {
   case GIEK_NONE:
     return "NONE";
@@ -551,7 +551,7 @@ const char *llvm::dwarf::GDBIndexEntryKindString(GDBIndexEntryKind Kind) {
   llvm_unreachable("Unknown GDBIndexEntryKind value");
 }
 
-const char *llvm::dwarf::GDBIndexEntryLinkageString(GDBIndexEntryLinkage Linkage) {
+const char *llvm37::dwarf::GDBIndexEntryLinkageString(GDBIndexEntryLinkage Linkage) {
   switch (Linkage) {
   case GIEL_EXTERNAL:
     return "EXTERNAL";
@@ -561,7 +561,7 @@ const char *llvm::dwarf::GDBIndexEntryLinkageString(GDBIndexEntryLinkage Linkage
   llvm_unreachable("Unknown GDBIndexEntryLinkage value");
 }
 
-const char *llvm::dwarf::AttributeValueString(uint16_t Attr, unsigned Val) {
+const char *llvm37::dwarf::AttributeValueString(uint16_t Attr, unsigned Val) {
   switch (Attr) {
   case DW_AT_accessibility:
     return AccessibilityString(Val);

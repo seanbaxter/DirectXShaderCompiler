@@ -126,8 +126,8 @@ add_llvm_library(LLVMCodeGen
 #  WinEHPrepare.cpp
 
   ADDITIONAL_HEADER_DIRS
-  ${LLVM_MAIN_INCLUDE_DIR}/llvm/CodeGen
-  ${LLVM_MAIN_INCLUDE_DIR}/llvm/CodeGen/PBQP
+  ${LLVM37_MAIN_INCLUDE_DIR}/llvm/CodeGen
+  ${LLVM37_MAIN_INCLUDE_DIR}/llvm/CodeGen/PBQP
   )
 
 add_dependencies(LLVMCodeGen intrinsics_gen)

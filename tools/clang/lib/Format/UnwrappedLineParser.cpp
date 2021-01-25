@@ -14,9 +14,9 @@
 //===----------------------------------------------------------------------===//
 
 #include "UnwrappedLineParser.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/raw_ostream.h"
 
 #define DEBUG_TYPE "format-parser"
 
@@ -126,7 +126,7 @@ public:
     else if (!Parser.Line->Tokens.empty())
       Parser.CurrentLines = &Parser.Line->Tokens.back().Children;
     PreBlockLine = std::move(Parser.Line);
-    Parser.Line = llvm::make_unique<UnwrappedLine>();
+    Parser.Line = llvm37::make_unique<UnwrappedLine>();
     Parser.Line->Level = PreBlockLine->Level;
     Parser.Line->InPPDirective = PreBlockLine->InPPDirective;
   }
@@ -222,7 +222,7 @@ void UnwrappedLineParser::reset() {
 void UnwrappedLineParser::parse() {
   IndexedTokenSource TokenSource(AllTokens);
   do {
-    DEBUG(llvm::dbgs() << "----\n");
+    DEBUG(llvm37::dbgs() << "----\n");
     reset();
     Tokens = &TokenSource;
     TokenSource.reset();
@@ -1791,14 +1791,14 @@ void UnwrappedLineParser::parseJavaScriptEs6ImportExport() {
   }
 }
 
-LLVM_ATTRIBUTE_UNUSED static void printDebugInfo(const UnwrappedLine &Line,
+LLVM37_ATTRIBUTE_UNUSED static void printDebugInfo(const UnwrappedLine &Line,
                                                  StringRef Prefix = "") {
-  llvm::dbgs() << Prefix << "Line(" << Line.Level << ")"
+  llvm37::dbgs() << Prefix << "Line(" << Line.Level << ")"
                << (Line.InPPDirective ? " MACRO" : "") << ": ";
   for (std::list<UnwrappedLineNode>::const_iterator I = Line.Tokens.begin(),
                                                     E = Line.Tokens.end();
        I != E; ++I) {
-    llvm::dbgs() << I->Tok->Tok.getName() << "[" << I->Tok->Type << "] ";
+    llvm37::dbgs() << I->Tok->Tok.getName() << "[" << I->Tok->Type << "] ";
   }
   for (std::list<UnwrappedLineNode>::const_iterator I = Line.Tokens.begin(),
                                                     E = Line.Tokens.end();
@@ -1811,7 +1811,7 @@ LLVM_ATTRIBUTE_UNUSED static void printDebugInfo(const UnwrappedLine &Line,
       printDebugInfo(*I, "\nChild: ");
     }
   }
-  llvm::dbgs() << "\n";
+  llvm37::dbgs() << "\n";
 }
 
 void UnwrappedLineParser::addUnwrappedLine() {

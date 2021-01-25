@@ -12,13 +12,13 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_COV_COVERAGESUMMARYINFO_H
-#define LLVM_COV_COVERAGESUMMARYINFO_H
+#ifndef LLVM37_COV_COVERAGESUMMARYINFO_H
+#define LLVM37_COV_COVERAGESUMMARYINFO_H
 
-#include "llvm/ProfileData/CoverageMapping.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ProfileData/CoverageMapping.h"
+#include "llvm37/Support/raw_ostream.h"
 
-namespace llvm {
+namespace llvm37 {
 
 /// \brief Provides information about region coverage for a function/file.
 struct RegionCoverageInfo {
@@ -151,6 +151,6 @@ struct FileCoverageSummary {
   }
 };
 
-} // namespace llvm
+} // namespace llvm37
 
-#endif // LLVM_COV_COVERAGESUMMARYINFO_H
+#endif // LLVM37_COV_COVERAGESUMMARYINFO_H

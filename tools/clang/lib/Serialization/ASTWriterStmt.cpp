@@ -19,7 +19,7 @@
 #include "clang/AST/DeclTemplate.h"
 #include "clang/AST/StmtVisitor.h"
 #include "clang/Lex/Token.h"
-#include "llvm/Bitcode/BitstreamWriter.h"
+#include "llvm37/Bitcode/BitstreamWriter.h"
 using namespace clang;
 
 //===----------------------------------------------------------------------===//
@@ -2170,8 +2170,8 @@ void ASTWriter::ClearSwitchCaseIDs() {
 /// \brief Write the given substatement or subexpression to the
 /// bitstream.
 void ASTWriter::WriteSubStmt(Stmt *S,
-                             llvm::DenseMap<Stmt *, uint64_t> &SubStmtEntries,
-                             llvm::DenseSet<Stmt *> &ParentStmts) {
+                             llvm37::DenseMap<Stmt *, uint64_t> &SubStmtEntries,
+                             llvm37::DenseSet<Stmt *> &ParentStmts) {
   RecordData Record;
   ASTStmtWriter Writer(*this, Record);
   ++NumStatements;
@@ -2181,7 +2181,7 @@ void ASTWriter::WriteSubStmt(Stmt *S,
     return;
   }
 
-  llvm::DenseMap<Stmt *, uint64_t>::iterator I = SubStmtEntries.find(S);
+  llvm37::DenseMap<Stmt *, uint64_t>::iterator I = SubStmtEntries.find(S);
   if (I != SubStmtEntries.end()) {
     Record.push_back(I->second);
     Stream.EmitRecord(serialization::STMT_REF_PTR, Record);
@@ -2193,9 +2193,9 @@ void ASTWriter::WriteSubStmt(Stmt *S,
 
   struct ParentStmtInserterRAII {
     Stmt *S;
-    llvm::DenseSet<Stmt *> &ParentStmts;
+    llvm37::DenseSet<Stmt *> &ParentStmts;
 
-    ParentStmtInserterRAII(Stmt *S, llvm::DenseSet<Stmt *> &ParentStmts)
+    ParentStmtInserterRAII(Stmt *S, llvm37::DenseSet<Stmt *> &ParentStmts)
       : S(S), ParentStmts(ParentStmts) {
       ParentStmts.insert(S);
     }

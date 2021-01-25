@@ -1,4 +1,4 @@
-set(LLVM_LINK_COMPONENTS
+set(LLVM37_LINK_COMPONENTS
   Support
   dxcsupport
   dxil
@@ -42,7 +42,7 @@ target_include_directories(clang-spirv-tests
   PRIVATE ${SPIRV_TOOLS_INCLUDE_DIR} ${DXC_EFFCEE_DIR})
 
 set_output_directory(clang-spirv-tests
-  ${LLVM_RUNTIME_OUTPUT_INTDIR} ${LLVM_LIBRARY_OUTPUT_INTDIR})
+  ${LLVM37_RUNTIME_OUTPUT_INTDIR} ${LLVM37_LIBRARY_OUTPUT_INTDIR})
 
 add_test(NAME test-spirv-codegen
   COMMAND clang-spirv-tests --spirv-test-root

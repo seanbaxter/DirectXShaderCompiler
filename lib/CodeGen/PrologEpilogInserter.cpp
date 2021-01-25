@@ -16,36 +16,36 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/ADT/IndexedMap.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/SetVector.h"
-#include "llvm/ADT/SmallSet.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/CodeGen/MachineDominators.h"
-#include "llvm/CodeGen/MachineFrameInfo.h"
-#include "llvm/CodeGen/MachineInstr.h"
-#include "llvm/CodeGen/MachineLoopInfo.h"
-#include "llvm/CodeGen/MachineModuleInfo.h"
-#include "llvm/CodeGen/MachineRegisterInfo.h"
-#include "llvm/CodeGen/Passes.h"
-#include "llvm/CodeGen/RegisterScavenging.h"
-#include "llvm/CodeGen/StackProtector.h"
-#include "llvm/CodeGen/WinEHFuncInfo.h"
-#include "llvm/IR/DiagnosticInfo.h"
-#include "llvm/IR/InlineAsm.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/Compiler.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Target/TargetFrameLowering.h"
-#include "llvm/Target/TargetInstrInfo.h"
-#include "llvm/Target/TargetMachine.h"
-#include "llvm/Target/TargetRegisterInfo.h"
-#include "llvm/Target/TargetSubtargetInfo.h"
+#include "llvm37/ADT/IndexedMap.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/SetVector.h"
+#include "llvm37/ADT/SmallSet.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/CodeGen/MachineDominators.h"
+#include "llvm37/CodeGen/MachineFrameInfo.h"
+#include "llvm37/CodeGen/MachineInstr.h"
+#include "llvm37/CodeGen/MachineLoopInfo.h"
+#include "llvm37/CodeGen/MachineModuleInfo.h"
+#include "llvm37/CodeGen/MachineRegisterInfo.h"
+#include "llvm37/CodeGen/Passes.h"
+#include "llvm37/CodeGen/RegisterScavenging.h"
+#include "llvm37/CodeGen/StackProtector.h"
+#include "llvm37/CodeGen/WinEHFuncInfo.h"
+#include "llvm37/IR/DiagnosticInfo.h"
+#include "llvm37/IR/InlineAsm.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/Compiler.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Target/TargetFrameLowering.h"
+#include "llvm37/Target/TargetInstrInfo.h"
+#include "llvm37/Target/TargetMachine.h"
+#include "llvm37/Target/TargetRegisterInfo.h"
+#include "llvm37/Target/TargetSubtargetInfo.h"
 #include <climits>
 
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "pei"
 
@@ -98,7 +98,7 @@ private:
 } // namespace
 
 char PEI::ID = 0;
-char &llvm::PrologEpilogCodeInserterID = PEI::ID;
+char &llvm37::PrologEpilogCodeInserterID = PEI::ID;
 
 static cl::opt<unsigned>
 WarnStackSize("warn-stack-size", cl::Hidden, cl::init((unsigned)-1),

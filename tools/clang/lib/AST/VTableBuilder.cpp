@@ -17,10 +17,10 @@
 #include "clang/AST/CXXInheritance.h"
 #include "clang/AST/RecordLayout.h"
 #include "clang/Basic/TargetInfo.h"
-#include "llvm/ADT/SetOperations.h"
-#include "llvm/ADT/SmallPtrSet.h"
-#include "llvm/Support/Format.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/SetOperations.h"
+#include "llvm37/ADT/SmallPtrSet.h"
+#include "llvm37/Support/Format.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <algorithm>
 #include <cstdio>
 
@@ -101,7 +101,7 @@ private:
   /// in a base subobject.
   typedef std::pair<const CXXMethodDecl *, CharUnits> MethodBaseOffsetPairTy;
 
-  typedef llvm::DenseMap<MethodBaseOffsetPairTy,
+  typedef llvm37::DenseMap<MethodBaseOffsetPairTy,
                          OverriderInfo> OverridersMapTy;
   
   /// OverridersMap - The final overriders for all virtual member functions of 
@@ -111,10 +111,10 @@ private:
   /// SubobjectsToOffsetsMapTy - A mapping from a base subobject (represented
   /// as a record decl and a subobject number) and its offsets in the most
   /// derived class as well as the layout class.
-  typedef llvm::DenseMap<std::pair<const CXXRecordDecl *, unsigned>, 
+  typedef llvm37::DenseMap<std::pair<const CXXRecordDecl *, unsigned>, 
                          CharUnits> SubobjectOffsetMapTy;
 
-  typedef llvm::DenseMap<const CXXRecordDecl *, unsigned> SubobjectCountMapTy;
+  typedef llvm37::DenseMap<const CXXRecordDecl *, unsigned> SubobjectCountMapTy;
   
   /// ComputeBaseOffsets - Compute the offsets for all base subobjects of the
   /// given base.
@@ -124,7 +124,7 @@ private:
                           SubobjectOffsetMapTy &SubobjectLayoutClassOffsets,
                           SubobjectCountMapTy &SubobjectCounts);
 
-  typedef llvm::SmallPtrSet<const CXXRecordDecl *, 4> VisitedVirtualBasesSetTy;
+  typedef llvm37::SmallPtrSet<const CXXRecordDecl *, 4> VisitedVirtualBasesSetTy;
   
   /// dump - dump the final overriders for a base subobject, and all its direct
   /// and indirect base subobjects.
@@ -149,7 +149,7 @@ public:
   /// dump - dump the final overriders.
   void dump() {
     VisitedVirtualBasesSetTy VisitedVirtualBases;
-    dump(llvm::errs(), BaseSubobject(MostDerivedClass, CharUnits::Zero()), 
+    dump(llvm37::errs(), BaseSubobject(MostDerivedClass, CharUnits::Zero()), 
          VisitedVirtualBases);
   }
   
@@ -538,7 +538,7 @@ CharUnits VCallOffsetMap::getVCallOffsetOffset(const CXXMethodDecl *MD) {
 /// VCallAndVBaseOffsetBuilder - Class for building vcall and vbase offsets.
 class VCallAndVBaseOffsetBuilder {
 public:
-  typedef llvm::DenseMap<const CXXRecordDecl *, CharUnits> 
+  typedef llvm37::DenseMap<const CXXRecordDecl *, CharUnits> 
     VBaseOffsetOffsetsMapTy;
 
 private:
@@ -559,7 +559,7 @@ private:
   VTableComponentVectorTy Components;
   
   /// VisitedVirtualBases - Visited virtual bases.
-  llvm::SmallPtrSet<const CXXRecordDecl *, 4> VisitedVirtualBases;
+  llvm37::SmallPtrSet<const CXXRecordDecl *, 4> VisitedVirtualBases;
   
   /// VCallOffsets - Keeps track of vcall offsets.
   VCallOffsetMap VCallOffsets;
@@ -778,16 +778,16 @@ class ItaniumVTableBuilder {
 public:
   /// PrimaryBasesSetVectorTy - A set vector of direct and indirect 
   /// primary bases.
-  typedef llvm::SmallSetVector<const CXXRecordDecl *, 8> 
+  typedef llvm37::SmallSetVector<const CXXRecordDecl *, 8> 
     PrimaryBasesSetVectorTy;
   
-  typedef llvm::DenseMap<const CXXRecordDecl *, CharUnits> 
+  typedef llvm37::DenseMap<const CXXRecordDecl *, CharUnits> 
     VBaseOffsetOffsetsMapTy;
   
-  typedef llvm::DenseMap<BaseSubobject, uint64_t> 
+  typedef llvm37::DenseMap<BaseSubobject, uint64_t> 
     AddressPointsMapTy;
 
-  typedef llvm::DenseMap<GlobalDecl, int64_t> MethodVTableIndicesTy;
+  typedef llvm37::DenseMap<GlobalDecl, int64_t> MethodVTableIndicesTy;
 
 private:
   /// VTables - Global vtable information.
@@ -818,7 +818,7 @@ private:
 
   /// VCallOffsetsForVBases - Keeps track of vcall offsets for the virtual
   /// bases in this vtable.
-  llvm::DenseMap<const CXXRecordDecl *, VCallOffsetMap> VCallOffsetsForVBases;
+  llvm37::DenseMap<const CXXRecordDecl *, VCallOffsetMap> VCallOffsetsForVBases;
 
   /// VBaseOffsetOffsets - Contains the offsets of the virtual base offsets for
   /// the most derived class.
@@ -856,7 +856,7 @@ private:
       VTableIndex(0) { }
   };
   
-  typedef llvm::DenseMap<const CXXMethodDecl *, MethodInfo> MethodInfoMapTy;
+  typedef llvm37::DenseMap<const CXXMethodDecl *, MethodInfo> MethodInfoMapTy;
   
   /// MethodInfoMap - The information for all methods in the vtable we're
   /// currently building.
@@ -866,14 +866,14 @@ private:
   /// point) where the function pointer for a virtual function is stored.
   MethodVTableIndicesTy MethodVTableIndices;
 
-  typedef llvm::DenseMap<uint64_t, ThunkInfo> VTableThunksMapTy;
+  typedef llvm37::DenseMap<uint64_t, ThunkInfo> VTableThunksMapTy;
   
   /// VTableThunks - The thunks by vtable index in the vtable currently being 
   /// built.
   VTableThunksMapTy VTableThunks;
 
   typedef SmallVector<ThunkInfo, 1> ThunkInfoVectorTy;
-  typedef llvm::DenseMap<const CXXMethodDecl *, ThunkInfoVectorTy> ThunksMapTy;
+  typedef llvm37::DenseMap<const CXXMethodDecl *, ThunkInfoVectorTy> ThunksMapTy;
   
   /// Thunks - A map that contains all the thunks needed for all methods in the
   /// most derived class for which the vtable is currently being built.
@@ -886,7 +886,7 @@ private:
   /// part of the vtable we're currently building.
   void ComputeThisAdjustments();
   
-  typedef llvm::SmallPtrSet<const CXXRecordDecl *, 4> VisitedVirtualBasesSetTy;
+  typedef llvm37::SmallPtrSet<const CXXRecordDecl *, 4> VisitedVirtualBasesSetTy;
 
   /// PrimaryVirtualBases - All known virtual bases who are a primary base of
   /// some other base.
@@ -1003,7 +1003,7 @@ public:
     LayoutVTable();
 
     if (Context.getLangOpts().DumpVTableLayouts)
-      dumpLayout(llvm::outs());
+      dumpLayout(llvm37::outs());
   }
 
   uint64_t getNumThunks() const {
@@ -1083,7 +1083,7 @@ void ItaniumVTableBuilder::AddThunk(const CXXMethodDecl *MD,
   ThunksVector.push_back(Thunk);
 }
 
-typedef llvm::SmallPtrSet<const CXXMethodDecl *, 8> OverriddenMethodsSetTy;
+typedef llvm37::SmallPtrSet<const CXXMethodDecl *, 8> OverriddenMethodsSetTy;
 
 /// Visit all the methods overridden by the given method recursively,
 /// in a depth-first pre-order. The Visitor's visitor method returns a bool
@@ -1430,7 +1430,7 @@ bool ItaniumVTableBuilder::IsOverriderUsed(
   return OverridesIndirectMethodInBases(Overrider, PrimaryBases);
 }
 
-typedef llvm::SmallSetVector<const CXXRecordDecl *, 8> BasesSetVectorTy;
+typedef llvm37::SmallSetVector<const CXXRecordDecl *, 8> BasesSetVectorTy;
 
 /// FindNearestOverriddenMethod - Given a method, returns the overridden method
 /// from the nearest base. Returns null if no method was found.
@@ -1511,7 +1511,7 @@ void ItaniumVTableBuilder::AddMethods(
 
   const CXXDestructorDecl *ImplicitVirtualDtor = nullptr;
 
-  typedef llvm::SmallVector<const CXXMethodDecl *, 8> NewVirtualFunctionsTy;
+  typedef llvm37::SmallVector<const CXXMethodDecl *, 8> NewVirtualFunctionsTy;
   NewVirtualFunctionsTy NewVirtualFunctions;
 
   // Now go through all virtual member functions and add them.
@@ -1935,7 +1935,7 @@ void ItaniumVTableBuilder::dumpLayout(raw_ostream &Out) {
   for (unsigned I = 0, E = Components.size(); I != E; ++I) {
     uint64_t Index = I;
 
-    Out << llvm::format("%4d | ", I);
+    Out << llvm37::format("%4d | ", I);
 
     const VTableComponent &Component = Components[I];
 
@@ -2160,7 +2160,7 @@ void ItaniumVTableBuilder::dumpLayout(raw_ostream &Out) {
       for (unsigned I = 0, E = ThunksVector.size(); I != E; ++I) {
         const ThunkInfo &Thunk = ThunksVector[I];
 
-        Out << llvm::format("%4d | ", I);
+        Out << llvm37::format("%4d | ", I);
         
         // If this function pointer has a return pointer adjustment, dump it.
         if (!Thunk.Return.isEmpty()) {
@@ -2230,7 +2230,7 @@ void ItaniumVTableBuilder::dumpLayout(raw_ostream &Out) {
       uint64_t VTableIndex = I->first;
       const std::string &MethodName = I->second;
 
-      Out << llvm::format("%4" PRIu64 " | ", VTableIndex) << MethodName
+      Out << llvm37::format("%4" PRIu64 " | ", VTableIndex) << MethodName
           << '\n';
     }
   }
@@ -2271,7 +2271,7 @@ ItaniumVTableContext::ItaniumVTableContext(ASTContext &Context)
     : VTableContextBase(/*MS=*/false) {}
 
 ItaniumVTableContext::~ItaniumVTableContext() {
-  llvm::DeleteContainerSeconds(VTableLayouts);
+  llvm37::DeleteContainerSeconds(VTableLayouts);
 }
 
 uint64_t ItaniumVTableContext::getMethodVTableIndex(GlobalDecl GD) {
@@ -2428,10 +2428,10 @@ class VFTableBuilder {
 public:
   typedef MicrosoftVTableContext::MethodVFTableLocation MethodVFTableLocation;
 
-  typedef llvm::DenseMap<GlobalDecl, MethodVFTableLocation>
+  typedef llvm37::DenseMap<GlobalDecl, MethodVFTableLocation>
     MethodVFTableLocationsTy;
 
-  typedef llvm::iterator_range<MethodVFTableLocationsTy::const_iterator>
+  typedef llvm37::iterator_range<MethodVFTableLocationsTy::const_iterator>
     method_locations_range;
 
 private:
@@ -2489,20 +2489,20 @@ private:
           UsesExtraSlot(false) {}
   };
 
-  typedef llvm::DenseMap<const CXXMethodDecl *, MethodInfo> MethodInfoMapTy;
+  typedef llvm37::DenseMap<const CXXMethodDecl *, MethodInfo> MethodInfoMapTy;
 
   /// MethodInfoMap - The information for all methods in the vftable we're
   /// currently building.
   MethodInfoMapTy MethodInfoMap;
 
-  typedef llvm::DenseMap<uint64_t, ThunkInfo> VTableThunksMapTy;
+  typedef llvm37::DenseMap<uint64_t, ThunkInfo> VTableThunksMapTy;
 
   /// VTableThunks - The thunks by vftable index in the vftable currently being
   /// built.
   VTableThunksMapTy VTableThunks;
 
   typedef SmallVector<ThunkInfo, 1> ThunkInfoVectorTy;
-  typedef llvm::DenseMap<const CXXMethodDecl *, ThunkInfoVectorTy> ThunksMapTy;
+  typedef llvm37::DenseMap<const CXXMethodDecl *, ThunkInfoVectorTy> ThunksMapTy;
 
   /// Thunks - A map that contains all the thunks needed for all methods in the
   /// most derived class for which the vftable is currently being built.
@@ -2598,7 +2598,7 @@ public:
     LayoutVFTable();
 
     if (Context.getLangOpts().DumpVTableLayouts)
-      dumpLayout(llvm::outs());
+      dumpLayout(llvm37::outs());
   }
 
   uint64_t getNumThunks() const { return Thunks.size(); }
@@ -2936,7 +2936,7 @@ static void GroupNewVirtualOverloads(
   // 2) In each group, new overloads appear in the reverse order of declaration.
   typedef SmallVector<const CXXMethodDecl *, 1> MethodGroup;
   SmallVector<MethodGroup, 10> Groups;
-  typedef llvm::DenseMap<DeclarationName, unsigned> VisitedGroupIndicesTy;
+  typedef llvm37::DenseMap<DeclarationName, unsigned> VisitedGroupIndicesTy;
   VisitedGroupIndicesTy VisitedGroupIndices;
   for (const auto *MD : RD->methods()) {
     MD = MD->getCanonicalDecl();
@@ -3178,7 +3178,7 @@ void VFTableBuilder::dumpLayout(raw_ostream &Out) {
       << (Components.size() == 1 ? " entry" : " entries") << ").\n";
 
   for (unsigned I = 0, E = Components.size(); I != E; ++I) {
-    Out << llvm::format("%4d | ", I);
+    Out << llvm37::format("%4d | ", I);
 
     const VTableComponent &Component = Components[I];
 
@@ -3277,7 +3277,7 @@ void VFTableBuilder::dumpLayout(raw_ostream &Out) {
       for (unsigned I = 0, E = ThunksVector.size(); I != E; ++I) {
         const ThunkInfo &Thunk = ThunksVector[I];
 
-        Out << llvm::format("%4d | ", I);
+        Out << llvm37::format("%4d | ", I);
         dumpMicrosoftThunkAdjustment(Thunk, Out, /*ContinueFirstLine=*/true);
         Out << '\n';
       }
@@ -3289,7 +3289,7 @@ void VFTableBuilder::dumpLayout(raw_ostream &Out) {
   Out.flush();
 }
 
-static bool setsIntersect(const llvm::SmallPtrSet<const CXXRecordDecl *, 4> &A,
+static bool setsIntersect(const llvm37::SmallPtrSet<const CXXRecordDecl *, 4> &A,
                           ArrayRef<const CXXRecordDecl *> B) {
   for (ArrayRef<const CXXRecordDecl *>::iterator I = B.begin(), E = B.end();
        I != E; ++I) {
@@ -3334,7 +3334,7 @@ void MicrosoftVTableContext::computeVTablePaths(bool ForVBTables,
 
   // Recursive case: get all the vbtables from our bases and remove anything
   // that shares a virtual base.
-  llvm::SmallPtrSet<const CXXRecordDecl*, 4> VBasesSeen;
+  llvm37::SmallPtrSet<const CXXRecordDecl*, 4> VBasesSeen;
   for (const auto &B : RD->bases()) {
     const CXXRecordDecl *Base = B.getType()->getAsCXXRecordDecl();
     if (B.isVirtual() && VBasesSeen.count(Base))
@@ -3441,15 +3441,15 @@ static bool rebucketPaths(VPtrInfoVector &Paths) {
 
 MicrosoftVTableContext::~MicrosoftVTableContext() {
   for (auto &P : VFPtrLocations) 
-    llvm::DeleteContainerPointers(*P.second);
-  llvm::DeleteContainerSeconds(VFPtrLocations);
-  llvm::DeleteContainerSeconds(VFTableLayouts);
-  llvm::DeleteContainerSeconds(VBaseInfo);
+    llvm37::DeleteContainerPointers(*P.second);
+  llvm37::DeleteContainerSeconds(VFPtrLocations);
+  llvm37::DeleteContainerSeconds(VFTableLayouts);
+  llvm37::DeleteContainerSeconds(VBaseInfo);
 }
 
 namespace {
-typedef llvm::SetVector<BaseSubobject, std::vector<BaseSubobject>,
-                        llvm::DenseSet<BaseSubobject>> FullPathTy;
+typedef llvm37::SetVector<BaseSubobject, std::vector<BaseSubobject>,
+                        llvm37::DenseSet<BaseSubobject>> FullPathTy;
 }
 
 // This recursive function finds all paths from a subobject centered at
@@ -3571,11 +3571,11 @@ static const FullPathTy *selectBestPath(ASTContext &Context,
       CurrentOverrides.insert(OverridingMethod);
     }
     OverriderSetTy NewOverrides =
-        llvm::set_difference(CurrentOverrides, LastOverrides);
+        llvm37::set_difference(CurrentOverrides, LastOverrides);
     if (NewOverrides.empty())
       continue;
     OverriderSetTy MissingOverrides =
-        llvm::set_difference(LastOverrides, CurrentOverrides);
+        llvm37::set_difference(LastOverrides, CurrentOverrides);
     if (MissingOverrides.empty()) {
       // This path is a strict improvement over the last path, let's use it.
       BestPath = &SpecificPath;
@@ -3661,7 +3661,7 @@ void MicrosoftVTableContext::computeVTableRelatedInformation(
   MethodVFTableLocations.insert(NewMethodLocations.begin(),
                                 NewMethodLocations.end());
   if (Context.getLangOpts().DumpVTableLayouts)
-    dumpMethodLocations(RD, NewMethodLocations, llvm::outs());
+    dumpMethodLocations(RD, NewMethodLocations, llvm37::outs());
 }
 
 void MicrosoftVTableContext::dumpMethodLocations(
@@ -3719,7 +3719,7 @@ void MicrosoftVTableContext::dumpMethodLocations(
 
       uint64_t VTableIndex = I->first.Index;
       const std::string &MethodName = I->second;
-      Out << llvm::format("%4" PRIu64 " | ", VTableIndex) << MethodName << '\n';
+      Out << llvm37::format("%4" PRIu64 " | ", VTableIndex) << MethodName << '\n';
     }
     Out << '\n';
   }

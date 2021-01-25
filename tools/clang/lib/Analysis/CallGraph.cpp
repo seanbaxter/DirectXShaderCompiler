@@ -15,9 +15,9 @@
 #include "clang/AST/ASTContext.h"
 #include "clang/AST/Decl.h"
 #include "clang/AST/StmtVisitor.h"
-#include "llvm/ADT/PostOrderIterator.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/Support/GraphWriter.h"
+#include "llvm37/ADT/PostOrderIterator.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/Support/GraphWriter.h"
 //                                                                           //
 ///////////////////////////////////////////////////////////////////////////////
 using namespace clang;
@@ -107,7 +107,7 @@ CallGraph::CallGraph() {
 }
 
 CallGraph::~CallGraph() {
-  llvm::DeleteContainerSeconds(FunctionMap);
+  llvm37::DeleteContainerSeconds(FunctionMap);
 }
 
 bool CallGraph::includeInGraph(const Decl *D) {
@@ -167,8 +167,8 @@ void CallGraph::print(raw_ostream &OS) const {
 
   // We are going to print the graph in reverse post order, partially, to make
   // sure the output is deterministic.
-  llvm::ReversePostOrderTraversal<const clang::CallGraph*> RPOT(this);
-  for (llvm::ReversePostOrderTraversal<const clang::CallGraph*>::rpo_iterator
+  llvm37::ReversePostOrderTraversal<const clang::CallGraph*> RPOT(this);
+  for (llvm37::ReversePostOrderTraversal<const clang::CallGraph*>::rpo_iterator
          I = RPOT.begin(), E = RPOT.end(); I != E; ++I) {
     const CallGraphNode *N = *I;
 
@@ -191,11 +191,11 @@ void CallGraph::print(raw_ostream &OS) const {
 }
 
 void CallGraph::dump() const {
-  print(llvm::errs());
+  print(llvm37::errs());
 }
 
 void CallGraph::viewGraph() const {
-  llvm::ViewGraph(this, "CallGraph");
+  llvm37::ViewGraph(this, "CallGraph");
 }
 
 void CallGraphNode::print(raw_ostream &os) const {
@@ -205,10 +205,10 @@ void CallGraphNode::print(raw_ostream &os) const {
 }
 
 void CallGraphNode::dump() const {
-  print(llvm::errs());
+  print(llvm37::errs());
 }
 
-namespace llvm {
+namespace llvm37 {
 
 template <>
 struct DOTGraphTraits<const CallGraph*> : public DefaultDOTGraphTraits {

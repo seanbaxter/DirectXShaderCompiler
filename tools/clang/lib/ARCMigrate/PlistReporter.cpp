@@ -57,9 +57,9 @@ void arcmt::writeARCDiagsToPlist(const std::string &outPath,
   }
 
   std::error_code EC;
-  llvm::raw_fd_ostream o(outPath, EC, llvm::sys::fs::F_Text);
+  llvm37::raw_fd_ostream o(outPath, EC, llvm37::sys::fs::F_Text);
   if (EC) {
-    llvm::errs() << "error: could not create file: " << outPath << '\n';
+    llvm37::errs() << "error: could not create file: " << outPath << '\n';
     return;
   }
 

@@ -7,8 +7,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_FRONTEND_CHAINEDDIAGNOSTICCONSUMER_H
-#define LLVM_CLANG_FRONTEND_CHAINEDDIAGNOSTICCONSUMER_H
+#ifndef LLVM37_CLANG_FRONTEND_CHAINEDDIAGNOSTICCONSUMER_H
+#define LLVM37_CLANG_FRONTEND_CHAINEDDIAGNOSTICCONSUMER_H
 
 #include "clang/Basic/Diagnostic.h"
 #include <memory>

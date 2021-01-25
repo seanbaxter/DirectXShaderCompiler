@@ -53,9 +53,9 @@ static const IdentifierInfo *findAnonymousUnionVarDeclName(const VarDecl& VD) {
 /// \brief Keeps track of the mangled names of lambda expressions and block
 /// literals within a particular context.
 class ItaniumNumberingContext : public MangleNumberingContext {
-  llvm::DenseMap<const Type *, unsigned> ManglingNumbers;
-  llvm::DenseMap<const IdentifierInfo *, unsigned> VarManglingNumbers;
-  llvm::DenseMap<const IdentifierInfo *, unsigned> TagManglingNumbers;
+  llvm37::DenseMap<const Type *, unsigned> ManglingNumbers;
+  llvm37::DenseMap<const IdentifierInfo *, unsigned> VarManglingNumbers;
+  llvm37::DenseMap<const IdentifierInfo *, unsigned> TagManglingNumbers;
 
 public:
   unsigned getManglingNumber(const CXXMethodDecl *CallOperator) override {
@@ -112,9 +112,9 @@ public:
   }
 
   CallingConv getDefaultMethodCallConv(bool isVariadic) const override {
-    const llvm::Triple &T = Context.getTargetInfo().getTriple();
+    const llvm37::Triple &T = Context.getTargetInfo().getTriple();
     if (!isVariadic && T.isWindowsGNUEnvironment() &&
-        T.getArch() == llvm::Triple::x86)
+        T.getArch() == llvm37::Triple::x86)
       return CC_X86ThisCall;
     return CC_C;
   }

@@ -23,8 +23,8 @@
 #include "clang/StaticAnalyzer/Core/CheckerManager.h"
 #include "clang/StaticAnalyzer/Core/PathSensitive/CheckerContext.h"
 #include "clang/StaticAnalyzer/Core/PathSensitive/ProgramStateTrait.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/Support/raw_ostream.h"
 
 using namespace clang;
 using namespace ento;
@@ -166,7 +166,7 @@ public:
 };
 }
 
-typedef llvm::ImmutableMap<SymbolRef, unsigned> ErrorOutFlag;
+typedef llvm37::ImmutableMap<SymbolRef, unsigned> ErrorOutFlag;
 REGISTER_TRAIT_WITH_PROGRAMSTATE(NSErrorOut, ErrorOutFlag)
 REGISTER_TRAIT_WITH_PROGRAMSTATE(CFErrorOut, ErrorOutFlag)
 
@@ -255,7 +255,7 @@ void NSOrCFErrorDerefChecker::checkEvent(ImplicitNullDerefEvent event) const {
 
   // Storing to possible null NSError/CFErrorRef out parameter.
   SmallString<128> Buf;
-  llvm::raw_svector_ostream os(Buf);
+  llvm37::raw_svector_ostream os(Buf);
 
   os << "Potential null dereference.  According to coding standards ";
   os << (isNSError
@@ -275,7 +275,7 @@ void NSOrCFErrorDerefChecker::checkEvent(ImplicitNullDerefEvent event) const {
       CFBT.reset(new CFErrorDerefBug(this));
     bug = CFBT.get();
   }
-  BR.emitReport(llvm::make_unique<BugReport>(*bug, os.str(), event.SinkNode));
+  BR.emitReport(llvm37::make_unique<BugReport>(*bug, os.str(), event.SinkNode));
 }
 
 static bool IsNSError(QualType T, IdentifierInfo *II) {

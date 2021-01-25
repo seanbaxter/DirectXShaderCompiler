@@ -13,39 +13,39 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/Triple.h"
-#include "llvm/Analysis/TargetLibraryInfo.h"
-#include "llvm/CodeGen/CommandFlags.h"
-#include "llvm/CodeGen/LinkAllAsmWriterComponents.h"
-#include "llvm/CodeGen/LinkAllCodegenComponents.h"
-#include "llvm/CodeGen/MIRParser/MIRParser.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/IRPrintingPasses.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/LegacyPassManager.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/Verifier.h"
-#include "llvm/IRReader/IRReader.h"
-#include "llvm/MC/SubtargetFeature.h"
-#include "llvm/Pass.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/FileSystem.h"
-#include "llvm/Support/FormattedStream.h"
-#include "llvm/Support/Host.h"
-#include "llvm/Support/ManagedStatic.h"
-#include "llvm/Support/PluginLoader.h"
-#include "llvm/Support/PrettyStackTrace.h"
-#include "llvm/Support/Signals.h"
-#include "llvm/Support/SourceMgr.h"
-#include "llvm/Support/TargetRegistry.h"
-#include "llvm/Support/TargetSelect.h"
-#include "llvm/Support/ToolOutputFile.h"
-#include "llvm/Target/TargetMachine.h"
-#include "llvm/Target/TargetSubtargetInfo.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/Triple.h"
+#include "llvm37/Analysis/TargetLibraryInfo.h"
+#include "llvm37/CodeGen/CommandFlags.h"
+#include "llvm37/CodeGen/LinkAllAsmWriterComponents.h"
+#include "llvm37/CodeGen/LinkAllCodegenComponents.h"
+#include "llvm37/CodeGen/MIRParser/MIRParser.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/IR/IRPrintingPasses.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/LegacyPassManager.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/Verifier.h"
+#include "llvm37/IRReader/IRReader.h"
+#include "llvm37/MC/SubtargetFeature.h"
+#include "llvm37/Pass.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/FileSystem.h"
+#include "llvm37/Support/FormattedStream.h"
+#include "llvm37/Support/Host.h"
+#include "llvm37/Support/ManagedStatic.h"
+#include "llvm37/Support/PluginLoader.h"
+#include "llvm37/Support/PrettyStackTrace.h"
+#include "llvm37/Support/Signals.h"
+#include "llvm37/Support/SourceMgr.h"
+#include "llvm37/Support/TargetRegistry.h"
+#include "llvm37/Support/TargetSelect.h"
+#include "llvm37/Support/ToolOutputFile.h"
+#include "llvm37/Target/TargetMachine.h"
+#include "llvm37/Target/TargetSubtargetInfo.h"
 #include <memory>
-using namespace llvm;
+using namespace llvm37;
 
 // General options for llc.  Other pass-specific options are specified
 // within the corresponding llc passes, and target-specific options
@@ -155,7 +155,7 @@ GetOutputStream(const char *TargetName, Triple::OSType OS,
   sys::fs::OpenFlags OpenFlags = sys::fs::F_None;
   if (!Binary)
     OpenFlags |= sys::fs::F_Text;
-  auto FDOut = llvm::make_unique<tool_output_file>(OutputFilename, EC,
+  auto FDOut = llvm37::make_unique<tool_output_file>(OutputFilename, EC,
                                                    OpenFlags);
   if (EC) {
     errs() << EC.message() << '\n';

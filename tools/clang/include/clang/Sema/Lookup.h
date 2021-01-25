@@ -12,8 +12,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_SEMA_LOOKUP_H
-#define LLVM_CLANG_SEMA_LOOKUP_H
+#ifndef LLVM37_CLANG_SEMA_LOOKUP_H
+#define LLVM37_CLANG_SEMA_LOOKUP_H
 
 #include "clang/AST/DeclCXX.h"
 #include "clang/Sema/Sema.h"
@@ -720,7 +720,7 @@ public:
 class ADLResult {
 private:
   /// A map from canonical decls to the 'most recent' decl.
-  llvm::DenseMap<NamedDecl*, NamedDecl*> Decls;
+  llvm37::DenseMap<NamedDecl*, NamedDecl*> Decls;
 
 public:
   /// Adds a new ADL candidate to this map.
@@ -732,12 +732,12 @@ public:
   }
 
   class iterator
-      : public llvm::iterator_adaptor_base<
-            iterator, llvm::DenseMap<NamedDecl *, NamedDecl *>::iterator,
+      : public llvm37::iterator_adaptor_base<
+            iterator, llvm37::DenseMap<NamedDecl *, NamedDecl *>::iterator,
             std::forward_iterator_tag, NamedDecl *> {
     friend class ADLResult;
 
-    iterator(llvm::DenseMap<NamedDecl *, NamedDecl *>::iterator Iter)
+    iterator(llvm37::DenseMap<NamedDecl *, NamedDecl *>::iterator Iter)
         : iterator_adaptor_base(std::move(Iter)) {}
 
   public:

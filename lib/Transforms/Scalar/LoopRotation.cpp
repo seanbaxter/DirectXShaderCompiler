@@ -11,28 +11,28 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Transforms/Scalar.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/Analysis/AssumptionCache.h"
-#include "llvm/Analysis/CodeMetrics.h"
-#include "llvm/Analysis/InstructionSimplify.h"
-#include "llvm/Analysis/LoopPass.h"
-#include "llvm/Analysis/ScalarEvolution.h"
-#include "llvm/Analysis/TargetTransformInfo.h"
-#include "llvm/Analysis/ValueTracking.h"
-#include "llvm/IR/CFG.h"
-#include "llvm/IR/Dominators.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/IR/Module.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Transforms/Utils/BasicBlockUtils.h"
-#include "llvm/Transforms/Utils/Local.h"
-#include "llvm/Transforms/Utils/SSAUpdater.h"
-#include "llvm/Transforms/Utils/ValueMapper.h"
-using namespace llvm;
+#include "llvm37/Transforms/Scalar.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/Analysis/AssumptionCache.h"
+#include "llvm37/Analysis/CodeMetrics.h"
+#include "llvm37/Analysis/InstructionSimplify.h"
+#include "llvm37/Analysis/LoopPass.h"
+#include "llvm37/Analysis/ScalarEvolution.h"
+#include "llvm37/Analysis/TargetTransformInfo.h"
+#include "llvm37/Analysis/ValueTracking.h"
+#include "llvm37/IR/CFG.h"
+#include "llvm37/IR/Dominators.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Transforms/Utils/BasicBlockUtils.h"
+#include "llvm37/Transforms/Utils/Local.h"
+#include "llvm37/Transforms/Utils/SSAUpdater.h"
+#include "llvm37/Transforms/Utils/ValueMapper.h"
+using namespace llvm37;
 
 #define DEBUG_TYPE "loop-rotate"
 
@@ -94,7 +94,7 @@ INITIALIZE_PASS_DEPENDENCY(LoopSimplify)
 INITIALIZE_PASS_DEPENDENCY(LCSSA)
 INITIALIZE_PASS_END(LoopRotate, "loop-rotate", "Rotate Loops", false, false)
 
-Pass *llvm::createLoopRotatePass(int MaxHeaderSize) {
+Pass *llvm37::createLoopRotatePass(int MaxHeaderSize) {
   return new LoopRotate(MaxHeaderSize);
 }
 

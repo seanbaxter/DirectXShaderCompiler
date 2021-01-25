@@ -7,8 +7,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/ADT/IntrusiveRefCntPtr.h"
+#include "llvm37/ADT/IntrusiveRefCntPtr.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 void RefCountedBaseVPTR::anchor() { }

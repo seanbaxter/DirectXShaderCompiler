@@ -12,8 +12,8 @@
 ///
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_AST_STMTOPENMP_H
-#define LLVM_CLANG_AST_STMTOPENMP_H
+#ifndef LLVM37_CLANG_AST_STMTOPENMP_H
+#define LLVM37_CLANG_AST_STMTOPENMP_H
 
 #include "clang/AST/Expr.h"
 #include "clang/AST/OpenMPClause.h"
@@ -71,8 +71,8 @@ protected:
       : Stmt(SC), Kind(K), StartLoc(std::move(StartLoc)),
         EndLoc(std::move(EndLoc)), NumClauses(NumClauses),
         NumChildren(NumChildren),
-        ClausesOffset(llvm::RoundUpToAlignment(sizeof(T),
-                                               llvm::alignOf<OMPClause *>())) {}
+        ClausesOffset(llvm37::RoundUpToAlignment(sizeof(T),
+                                               llvm37::alignOf<OMPClause *>())) {}
 
   /// \brief Sets the list of variables for this clause.
   ///

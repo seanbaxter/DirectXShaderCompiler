@@ -7,13 +7,13 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/ADT/ilist.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/ilist_node.h"
+#include "llvm37/ADT/ilist.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/ilist_node.h"
 #include "gtest/gtest.h"
 #include <ostream>
 
-using namespace llvm;
+using namespace llvm37;
 
 namespace {
 

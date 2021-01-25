@@ -12,31 +12,31 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/CodeGen/Passes.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/SetVector.h"
-#include "llvm/ADT/SmallPtrSet.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/DerivedTypes.h"
-#include "llvm/IR/IRBuilder.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/Intrinsics.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Module.h"
-#include "llvm/Pass.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Target/TargetLowering.h"
-#include "llvm/Target/TargetSubtargetInfo.h"
-#include "llvm/Transforms/Scalar.h"
-#include "llvm/Transforms/Utils/BasicBlockUtils.h"
-#include "llvm/Transforms/Utils/Local.h"
+#include "llvm37/CodeGen/Passes.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/SetVector.h"
+#include "llvm37/ADT/SmallPtrSet.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/IR/DerivedTypes.h"
+#include "llvm37/IR/IRBuilder.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/Intrinsics.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/Pass.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Target/TargetLowering.h"
+#include "llvm37/Target/TargetSubtargetInfo.h"
+#include "llvm37/Transforms/Scalar.h"
+#include "llvm37/Transforms/Utils/BasicBlockUtils.h"
+#include "llvm37/Transforms/Utils/Local.h"
 #include <set>
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "sjljehprepare"
 
@@ -86,7 +86,7 @@ INITIALIZE_PASS(SjLjEHPrepare, "sjljehprepare", "Prepare SjLj exceptions",
                 false, false)
 
 // Public Interface To the SjLjEHPrepare pass.
-FunctionPass *llvm::createSjLjEHPreparePass() { return new SjLjEHPrepare(); }
+FunctionPass *llvm37::createSjLjEHPreparePass() { return new SjLjEHPrepare(); }
 // doInitialization - Set up decalarations and types needed to process
 // exceptions.
 bool SjLjEHPrepare::doInitialization(Module &M) {

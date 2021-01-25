@@ -12,12 +12,12 @@
 //  literals.
 //
 //===----------------------------------------------------------------------===//
-#ifndef LLVM_CLANG_AST_MANGLENUMBERINGCONTEXT_H
-#define LLVM_CLANG_AST_MANGLENUMBERINGCONTEXT_H
+#ifndef LLVM37_CLANG_AST_MANGLENUMBERINGCONTEXT_H
+#define LLVM37_CLANG_AST_MANGLENUMBERINGCONTEXT_H
 
 #include "clang/Basic/LLVM.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/IntrusiveRefCntPtr.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/IntrusiveRefCntPtr.h"
 
 namespace clang {
 

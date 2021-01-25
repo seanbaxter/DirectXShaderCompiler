@@ -14,23 +14,23 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/IR/Constants.h"
-#include "llvm/Analysis/LoopInfo.h"
-#include "llvm/Analysis/Passes.h"
-#include "llvm/Analysis/ScalarEvolution.h"
-#include "llvm/Analysis/ScalarEvolutionExpressions.h"
-#include "llvm/IR/DerivedTypes.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/InstIterator.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Type.h"
-#include "llvm/Pass.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/Analysis/LoopInfo.h"
+#include "llvm37/Analysis/Passes.h"
+#include "llvm37/Analysis/ScalarEvolution.h"
+#include "llvm37/Analysis/ScalarEvolutionExpressions.h"
+#include "llvm37/IR/DerivedTypes.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/InstIterator.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/Type.h"
+#include "llvm37/Pass.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/raw_ostream.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 #define DL_NAME "delinearize"
 #define DEBUG_TYPE DL_NAME
@@ -144,4 +144,4 @@ INITIALIZE_PASS_BEGIN(Delinearization, DL_NAME, delinearization_name, true,
 INITIALIZE_PASS_DEPENDENCY(LoopInfoWrapperPass)
 INITIALIZE_PASS_END(Delinearization, DL_NAME, delinearization_name, true, true)
 
-FunctionPass *llvm::createDelinearizationPass() { return new Delinearization; }
+FunctionPass *llvm37::createDelinearizationPass() { return new Delinearization; }

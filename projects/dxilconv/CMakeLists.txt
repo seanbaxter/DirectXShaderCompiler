@@ -4,7 +4,7 @@ set(DXILCONV_PROJECT_BINARY_DIR ${CMAKE_CURRENT_BINARY_DIR})
 macro(add_dxilconv_project_library name)
   add_llvm_library(${name} ${ARGN})
 #  add_definitions(/D_ITERATOR_DEBUG_LEVEL=0)
-  set_output_directory(${name} ${LLVM_RUNTIME_OUTPUT_INTDIR} ${LLVM_LIBRARY_OUTPUT_INTDIR})  
+  set_output_directory(${name} ${LLVM37_RUNTIME_OUTPUT_INTDIR} ${LLVM37_LIBRARY_OUTPUT_INTDIR})  
   set_target_properties(${name} PROPERTIES FOLDER "Dxilconv libraries")
 endmacro(add_dxilconv_project_library)
 

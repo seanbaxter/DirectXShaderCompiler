@@ -11,8 +11,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_PARSE_PARSEAST_H
-#define LLVM_CLANG_PARSE_PARSEAST_H
+#ifndef LLVM37_CLANG_PARSE_PARSEAST_H
+#define LLVM37_CLANG_PARSE_PARSEAST_H
 
 #include "clang/Basic/LangOptions.h"
 

@@ -13,20 +13,20 @@
 //===----------------------------------------------------------------------===//
 
 #include "yaml2obj.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/ADT/StringExtras.h"
-#include "llvm/ADT/StringMap.h"
-#include "llvm/ADT/StringSwitch.h"
-#include "llvm/Object/COFF.h"
-#include "llvm/Object/COFFYAML.h"
-#include "llvm/Support/Endian.h"
-#include "llvm/Support/MemoryBuffer.h"
-#include "llvm/Support/SourceMgr.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/ADT/StringExtras.h"
+#include "llvm37/ADT/StringMap.h"
+#include "llvm37/ADT/StringSwitch.h"
+#include "llvm37/Object/COFF.h"
+#include "llvm37/Object/COFFYAML.h"
+#include "llvm37/Support/Endian.h"
+#include "llvm37/Support/MemoryBuffer.h"
+#include "llvm37/Support/SourceMgr.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <vector>
 
-using namespace llvm;
+using namespace llvm37;
 
 /// This parses a yaml stream that represents a COFF object file.
 /// See docs/yaml2obj for the yaml scheema.

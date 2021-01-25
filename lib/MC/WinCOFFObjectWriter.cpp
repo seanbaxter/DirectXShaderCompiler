@@ -11,31 +11,31 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/MC/MCWinCOFFObjectWriter.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/StringMap.h"
-#include "llvm/ADT/StringRef.h"
-#include "llvm/ADT/Twine.h"
-#include "llvm/MC/MCAsmLayout.h"
-#include "llvm/MC/MCAssembler.h"
-#include "llvm/MC/MCContext.h"
-#include "llvm/MC/MCExpr.h"
-#include "llvm/MC/MCObjectFileInfo.h"
-#include "llvm/MC/MCObjectWriter.h"
-#include "llvm/MC/MCSection.h"
-#include "llvm/MC/MCSectionCOFF.h"
-#include "llvm/MC/MCSymbolCOFF.h"
-#include "llvm/MC/MCValue.h"
-#include "llvm/MC/StringTableBuilder.h"
-#include "llvm/Support/COFF.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/Endian.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/TimeValue.h"
+#include "llvm37/MC/MCWinCOFFObjectWriter.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/StringMap.h"
+#include "llvm37/ADT/StringRef.h"
+#include "llvm37/ADT/Twine.h"
+#include "llvm37/MC/MCAsmLayout.h"
+#include "llvm37/MC/MCAssembler.h"
+#include "llvm37/MC/MCContext.h"
+#include "llvm37/MC/MCExpr.h"
+#include "llvm37/MC/MCObjectFileInfo.h"
+#include "llvm37/MC/MCObjectWriter.h"
+#include "llvm37/MC/MCSection.h"
+#include "llvm37/MC/MCSectionCOFF.h"
+#include "llvm37/MC/MCSymbolCOFF.h"
+#include "llvm37/MC/MCValue.h"
+#include "llvm37/MC/StringTableBuilder.h"
+#include "llvm37/Support/COFF.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/Endian.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/TimeValue.h"
 #include <cstdio>
 
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "WinCOFFObjectWriter"
 
@@ -1093,7 +1093,7 @@ void MCWinCOFFObjectTargetWriter::anchor() {}
 // WinCOFFObjectWriter factory function
 
 MCObjectWriter *
-llvm::createWinCOFFObjectWriter(MCWinCOFFObjectTargetWriter *MOTW,
+llvm37::createWinCOFFObjectWriter(MCWinCOFFObjectTargetWriter *MOTW,
                                 raw_pwrite_stream &OS) {
   return new WinCOFFObjectWriter(MOTW, OS);
 }

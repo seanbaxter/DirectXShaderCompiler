@@ -11,17 +11,17 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_AST_CXXINHERITANCE_H
-#define LLVM_CLANG_AST_CXXINHERITANCE_H
+#ifndef LLVM37_CLANG_AST_CXXINHERITANCE_H
+#define LLVM37_CLANG_AST_CXXINHERITANCE_H
 
 #include "clang/AST/DeclBase.h"
 #include "clang/AST/DeclCXX.h"
 #include "clang/AST/DeclarationName.h"
 #include "clang/AST/Type.h"
 #include "clang/AST/TypeOrdering.h"
-#include "llvm/ADT/MapVector.h"
-#include "llvm/ADT/SmallSet.h"
-#include "llvm/ADT/SmallVector.h"
+#include "llvm37/ADT/MapVector.h"
+#include "llvm37/ADT/SmallSet.h"
+#include "llvm37/ADT/SmallVector.h"
 #include <cassert>
 #include <list>
 #include <map>
@@ -128,7 +128,7 @@ class CXXBasePaths {
   /// while the element contains the number of non-virtual base
   /// class subobjects for that class type. The key of the map is
   /// the cv-unqualified canonical type of the base class subobject.
-  llvm::SmallDenseMap<QualType, std::pair<bool, unsigned>, 8> ClassSubobjects;
+  llvm37::SmallDenseMap<QualType, std::pair<bool, unsigned>, 8> ClassSubobjects;
   
   /// FindAmbiguities - Whether Sema::IsDerivedFrom should try find
   /// ambiguous paths while it is looking for a path from a derived
@@ -190,7 +190,7 @@ public:
   CXXBasePath&       front()       { return Paths.front(); }
   const CXXBasePath& front() const { return Paths.front(); }
   
-  typedef llvm::iterator_range<decl_iterator> decl_range;
+  typedef llvm37::iterator_range<decl_iterator> decl_range;
   decl_range found_decls();
   
   /// \brief Determine whether the path from the most-derived type to the
@@ -273,7 +273,7 @@ struct UniqueVirtualMethod {
 /// subobject in which that virtual function occurs).
 class OverridingMethods {
   typedef SmallVector<UniqueVirtualMethod, 4> ValuesT;
-  typedef llvm::MapVector<unsigned, ValuesT> MapType;
+  typedef llvm37::MapVector<unsigned, ValuesT> MapType;
   MapType Overrides;
 
 public:
@@ -358,11 +358,11 @@ public:
 /// subobject numbers greater than 0 refer to non-virtual base class
 /// subobjects of that type.
 class CXXFinalOverriderMap
-  : public llvm::MapVector<const CXXMethodDecl *, OverridingMethods> { };
+  : public llvm37::MapVector<const CXXMethodDecl *, OverridingMethods> { };
 
 /// \brief A set of all the primary bases for a class.
 class CXXIndirectPrimaryBaseSet
-  : public llvm::SmallSet<const CXXRecordDecl*, 32> { };
+  : public llvm37::SmallSet<const CXXRecordDecl*, 32> { };
 
 } // end namespace clang
 

@@ -12,20 +12,20 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_UTILS_TABLEGEN_CODEGENDAGPATTERNS_H
-#define LLVM_UTILS_TABLEGEN_CODEGENDAGPATTERNS_H
+#ifndef LLVM37_UTILS_TABLEGEN_CODEGENDAGPATTERNS_H
+#define LLVM37_UTILS_TABLEGEN_CODEGENDAGPATTERNS_H
 
 #include "CodeGenIntrinsics.h"
 #include "CodeGenTarget.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/ADT/StringMap.h"
-#include "llvm/Support/ErrorHandling.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/ADT/StringMap.h"
+#include "llvm37/Support/ErrorHandling.h"
 #include <algorithm>
 #include <map>
 #include <set>
 #include <vector>
 
-namespace llvm {
+namespace llvm37 {
   class Record;
   class Init;
   class ListInit;
@@ -853,6 +853,6 @@ private:
                                    TreePatternNode*> &InstResults,
                                    std::vector<Record*> &InstImpResults);
 };
-} // end namespace llvm
+} // end namespace llvm37
 
 #endif

@@ -2,16 +2,16 @@
 
 target datalayout = "e-p:64:64:64-i1:8:8-i8:8:8-i16:16:16-i32:32:32-i64:64:64-f32:32:32-f64:64:64-v64:64:64-v128:128:128-a0:0:64-s0:64:64-f80:128:128-n8:16:32:64"
 
-%0 = type { %"class.llvm::SmallVectorImpl", [1 x %"union.llvm::SmallVectorBase::U"] }
+%0 = type { %"class.llvm37::SmallVectorImpl", [1 x %"union.llvm37::SmallVectorBase::U"] }
 %"class.clang::SourceLocation" = type { i32 }
 %"class.clang::driver::Arg" = type { %"class.clang::driver::Option"*, %"class.clang::driver::Arg"*, i32, i8, %0 }
 %"class.clang::driver::Option" = type { i32 (...)**, i32, %"class.clang::SourceLocation", i8*, %"class.clang::driver::OptionGroup"*, %"class.clang::driver::Option"*, i8 }
 %"class.clang::driver::OptionGroup" = type { %"class.clang::driver::Option" }
-%"class.llvm::SmallVectorBase" = type { i8*, i8*, i8*, %"union.llvm::SmallVectorBase::U" }
-%"class.llvm::SmallVectorImpl" = type { %"class.llvm::SmallVectorTemplateBase" }
-%"class.llvm::SmallVectorTemplateBase" = type { %"class.llvm::SmallVectorTemplateCommon" }
-%"class.llvm::SmallVectorTemplateCommon" = type { %"class.llvm::SmallVectorBase" }
-%"union.llvm::SmallVectorBase::U" = type { x86_fp80 }
+%"class.llvm37::SmallVectorBase" = type { i8*, i8*, i8*, %"union.llvm37::SmallVectorBase::U" }
+%"class.llvm37::SmallVectorImpl" = type { %"class.llvm37::SmallVectorTemplateBase" }
+%"class.llvm37::SmallVectorTemplateBase" = type { %"class.llvm37::SmallVectorTemplateCommon" }
+%"class.llvm37::SmallVectorTemplateCommon" = type { %"class.llvm37::SmallVectorBase" }
+%"union.llvm37::SmallVectorBase::U" = type { x86_fp80 }
 
 define void @_ZNK5clang6driver7ArgList20AddAllArgsTranslatedERN4llvm11SmallVectorIPKcLj16EEENS0_12OptSpecifierES5_b(i1 zeroext %Joined) nounwind align 2 {
 entry:

@@ -11,13 +11,13 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/IR/DebugInfoMetadata.h"
+#include "llvm37/IR/DebugInfoMetadata.h"
 #include "LLVMContextImpl.h"
 #include "MetadataImpl.h"
-#include "llvm/ADT/StringSwitch.h"
-#include "llvm/IR/Function.h"
+#include "llvm37/ADT/StringSwitch.h"
+#include "llvm37/IR/Function.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 DILocation::DILocation(LLVMContext &C, StorageType Storage, unsigned Line,
                        unsigned Column, ArrayRef<Metadata *> MDs)
@@ -86,7 +86,7 @@ unsigned DILocation::computeNewDiscriminator() const {
 unsigned DINode::getFlag(StringRef Flag) {
   return StringSwitch<unsigned>(Flag)
 #define HANDLE_DI_FLAG(ID, NAME) .Case("DIFlag" #NAME, Flag##NAME)
-#include "llvm/IR/DebugInfoFlags.def"
+#include "llvm37/IR/DebugInfoFlags.def"
       .Default(0);
 }
 
@@ -97,7 +97,7 @@ const char *DINode::getFlagString(unsigned Flag) {
 #define HANDLE_DI_FLAG(ID, NAME)                                               \
   case Flag##NAME:                                                             \
     return "DIFlag" #NAME;
-#include "llvm/IR/DebugInfoFlags.def"
+#include "llvm37/IR/DebugInfoFlags.def"
   }
 }
 
@@ -120,7 +120,7 @@ unsigned DINode::splitFlags(unsigned Flags,
     SplitFlags.push_back(Bit);                                                 \
     Flags &= ~Bit;                                                             \
   }
-#include "llvm/IR/DebugInfoFlags.def"
+#include "llvm37/IR/DebugInfoFlags.def"
 
   return Flags;
 }

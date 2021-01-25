@@ -27,7 +27,7 @@
 using namespace clang;
 using namespace sema;
 
-typedef llvm::SmallPtrSet<const CXXRecordDecl*, 4> BaseSet;
+typedef llvm37::SmallPtrSet<const CXXRecordDecl*, 4> BaseSet;
 static bool BaseIsNotInSet(const CXXRecordDecl *Base, void *BasesPtr) {
   const BaseSet &Bases = *reinterpret_cast<const BaseSet*>(BasesPtr);
   return !Bases.count(Base->getCanonicalDecl());
@@ -645,7 +645,7 @@ static bool LookupMemberExprInRecord(Sema &SemaRef, LookupResult &R,
   SourceLocation TypoLoc = R.getNameLoc();
   TE = SemaRef.CorrectTypoDelayed(
       R.getLookupNameInfo(), R.getLookupKind(), nullptr, &SS,
-      llvm::make_unique<RecordMemberExprValidatorCCC>(RTy),
+      llvm37::make_unique<RecordMemberExprValidatorCCC>(RTy),
       [=, &SemaRef](const TypoCorrection &TC) {
         if (TC) {
           assert(!TC.isKeyword() &&
@@ -1298,7 +1298,7 @@ static ExprResult LookupMemberExpr(Sema &S, LookupResult &R,
 
     if (!IV) {
       // Attempt to correct for typos in ivar names.
-      auto Validator = llvm::make_unique<DeclFilterCCC<ObjCIvarDecl>>();
+      auto Validator = llvm37::make_unique<DeclFilterCCC<ObjCIvarDecl>>();
       Validator->IsObjCIvarLookup = IsArrow;
       if (TypoCorrection Corrected = S.CorrectTypo(
               R.getLookupNameInfo(), Sema::LookupMemberName, nullptr, nullptr,

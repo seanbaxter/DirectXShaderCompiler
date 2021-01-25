@@ -25,19 +25,19 @@ namespace {
 /// Chops the given original string into multiple smaller ones to make sure they
 /// can be encoded in a sequence of OpSourceContinued instructions following an
 /// OpSource instruction.
-void chopString(llvm::StringRef original,
-                llvm::SmallVectorImpl<llvm::StringRef> *chopped) {
+void chopString(llvm37::StringRef original,
+                llvm37::SmallVectorImpl<llvm37::StringRef> *chopped) {
   const uint32_t maxCharInOpSource = 0xFFFFu - 5u; // Minus operands and nul
   const uint32_t maxCharInContinue = 0xFFFFu - 2u; // Minus opcode and nul
 
   chopped->clear();
   if (original.size() > maxCharInOpSource) {
-    chopped->push_back(llvm::StringRef(original.data(), maxCharInOpSource));
-    original = llvm::StringRef(original.data() + maxCharInOpSource,
+    chopped->push_back(llvm37::StringRef(original.data(), maxCharInOpSource));
+    original = llvm37::StringRef(original.data() + maxCharInOpSource,
                                original.size() - maxCharInOpSource);
     while (original.size() > maxCharInContinue) {
-      chopped->push_back(llvm::StringRef(original.data(), maxCharInContinue));
-      original = llvm::StringRef(original.data() + maxCharInContinue,
+      chopped->push_back(llvm37::StringRef(original.data(), maxCharInContinue));
+      original = llvm37::StringRef(original.data() + maxCharInContinue,
                                  original.size() - maxCharInContinue);
     }
     if (!original.empty()) {
@@ -86,7 +86,7 @@ bool isOpLineLegalForOp(spv::Op op) {
 }
 
 // Returns SPIR-V version that will be used in SPIR-V header section.
-uint32_t getHeaderVersion(llvm::StringRef env) {
+uint32_t getHeaderVersion(llvm37::StringRef env) {
   if (env == "vulkan1.1")
     return 0x00010300u;
   if (env == "vulkan1.2" || env == "universal1.5")
@@ -96,7 +96,7 @@ uint32_t getHeaderVersion(llvm::StringRef env) {
 
 // Read the file in |filePath| and returns its contents as a string.
 // This function will be used by DebugSource to get its source code.
-std::string ReadSourceCode(llvm::StringRef filePath) {
+std::string ReadSourceCode(llvm37::StringRef filePath) {
   try {
     dxc::DxcDllSupport dllSupport;
     IFT(dllSupport.Initialize());
@@ -168,7 +168,7 @@ std::vector<uint32_t> EmitVisitor::Header::takeBinary() {
   return words;
 }
 
-uint32_t EmitVisitor::getOrCreateOpStringId(llvm::StringRef str) {
+uint32_t EmitVisitor::getOrCreateOpStringId(llvm37::StringRef str) {
   auto it = stringIdMap.find(str);
   if (it != stringIdMap.end()) {
     return it->second;
@@ -180,7 +180,7 @@ uint32_t EmitVisitor::getOrCreateOpStringId(llvm::StringRef str) {
 }
 
 void EmitVisitor::emitDebugNameForInstruction(uint32_t resultId,
-                                              llvm::StringRef debugName) {
+                                              llvm37::StringRef debugName) {
   // Most instructions do not have a debug name associated with them.
   if (debugName.empty())
     return;
@@ -373,7 +373,7 @@ std::vector<uint32_t> EmitVisitor::takeBinary() {
   return result;
 }
 
-void EmitVisitor::encodeString(llvm::StringRef value) {
+void EmitVisitor::encodeString(llvm37::StringRef value) {
   const auto &words = string::encodeSPIRVString(value);
   curInst.insert(curInst.end(), words.begin(), words.end());
 }
@@ -533,14 +533,14 @@ bool EmitVisitor::visit(SpirvSource *inst) {
     curInst.push_back(fileId);
 
   // Chop up the source into multiple segments if it is too long.
-  llvm::Optional<llvm::StringRef> firstSnippet = llvm::None;
-  llvm::SmallVector<llvm::StringRef, 2> choppedSrcCode;
+  llvm37::Optional<llvm37::StringRef> firstSnippet = llvm37::None;
+  llvm37::SmallVector<llvm37::StringRef, 2> choppedSrcCode;
   if (spvOptions.debugInfoSource && inst->hasFile()) {
     auto text = ReadSourceCode(inst->getFile()->getString());
     if (!text.empty()) {
       chopString(text, &choppedSrcCode);
       if (!choppedSrcCode.empty()) {
-        firstSnippet = llvm::Optional<llvm::StringRef>(choppedSrcCode.front());
+        firstSnippet = llvm37::Optional<llvm37::StringRef>(choppedSrcCode.front());
       }
     }
 
@@ -736,16 +736,16 @@ bool EmitVisitor::visit(SpirvAtomic *inst) {
   curInst.push_back(getOrAssignResultId<SpirvInstruction>(inst->getPointer()));
 
   curInst.push_back(typeHandler.getOrCreateConstantInt(
-      llvm::APInt(32, static_cast<uint32_t>(inst->getScope())),
+      llvm37::APInt(32, static_cast<uint32_t>(inst->getScope())),
       context.getUIntType(32), /*isSpecConst */ false));
 
   curInst.push_back(typeHandler.getOrCreateConstantInt(
-      llvm::APInt(32, static_cast<uint32_t>(inst->getMemorySemantics())),
+      llvm37::APInt(32, static_cast<uint32_t>(inst->getMemorySemantics())),
       context.getUIntType(32), /*isSpecConst */ false));
 
   if (inst->hasComparator())
     curInst.push_back(typeHandler.getOrCreateConstantInt(
-        llvm::APInt(32,
+        llvm37::APInt(32,
                     static_cast<uint32_t>(inst->getMemorySemanticsUnequal())),
         context.getUIntType(32), /*isSpecConst */ false));
 
@@ -764,17 +764,17 @@ bool EmitVisitor::visit(SpirvBarrier *inst) {
   const uint32_t executionScopeId =
       inst->isControlBarrier()
           ? typeHandler.getOrCreateConstantInt(
-                llvm::APInt(32,
+                llvm37::APInt(32,
                             static_cast<uint32_t>(inst->getExecutionScope())),
                 context.getUIntType(32), /*isSpecConst */ false)
           : 0;
 
   const uint32_t memoryScopeId = typeHandler.getOrCreateConstantInt(
-      llvm::APInt(32, static_cast<uint32_t>(inst->getMemoryScope())),
+      llvm37::APInt(32, static_cast<uint32_t>(inst->getMemoryScope())),
       context.getUIntType(32), /*isSpecConst */ false);
 
   const uint32_t memorySemanticsId = typeHandler.getOrCreateConstantInt(
-      llvm::APInt(32, static_cast<uint32_t>(inst->getMemorySemantics())),
+      llvm37::APInt(32, static_cast<uint32_t>(inst->getMemorySemantics())),
       context.getUIntType(32), /* isSpecConst */ false);
 
   initInstruction(inst);
@@ -949,7 +949,7 @@ bool EmitVisitor::visit(SpirvNonUniformBinaryOp *inst) {
   curInst.push_back(inst->getResultTypeId());
   curInst.push_back(getOrAssignResultId<SpirvInstruction>(inst));
   curInst.push_back(typeHandler.getOrCreateConstantInt(
-      llvm::APInt(32, static_cast<uint32_t>(inst->getExecutionScope())),
+      llvm37::APInt(32, static_cast<uint32_t>(inst->getExecutionScope())),
       context.getUIntType(32), /* isSpecConst */ false));
   curInst.push_back(getOrAssignResultId<SpirvInstruction>(inst->getArg1()));
   curInst.push_back(getOrAssignResultId<SpirvInstruction>(inst->getArg2()));
@@ -964,7 +964,7 @@ bool EmitVisitor::visit(SpirvNonUniformElect *inst) {
   curInst.push_back(inst->getResultTypeId());
   curInst.push_back(getOrAssignResultId<SpirvInstruction>(inst));
   curInst.push_back(typeHandler.getOrCreateConstantInt(
-      llvm::APInt(32, static_cast<uint32_t>(inst->getExecutionScope())),
+      llvm37::APInt(32, static_cast<uint32_t>(inst->getExecutionScope())),
       context.getUIntType(32), /* isSpecConst */ false));
   finalizeInstruction(&mainBinary);
   emitDebugNameForInstruction(getOrAssignResultId<SpirvInstruction>(inst),
@@ -977,7 +977,7 @@ bool EmitVisitor::visit(SpirvNonUniformUnaryOp *inst) {
   curInst.push_back(inst->getResultTypeId());
   curInst.push_back(getOrAssignResultId<SpirvInstruction>(inst));
   curInst.push_back(typeHandler.getOrCreateConstantInt(
-      llvm::APInt(32, static_cast<uint32_t>(inst->getExecutionScope())),
+      llvm37::APInt(32, static_cast<uint32_t>(inst->getExecutionScope())),
       context.getUIntType(32), /* isSpecConst */ false));
   if (inst->hasGroupOp())
     curInst.push_back(static_cast<uint32_t>(inst->getGroupOp()));
@@ -1411,7 +1411,7 @@ bool EmitVisitor::visit(SpirvDebugTypeArray *inst) {
   for (auto it = inst->getElementCount().rbegin();
        it != inst->getElementCount().rend(); ++it) {
     const auto countId = typeHandler.getOrCreateConstantInt(
-        llvm::APInt(32, *it), context.getUIntType(32),
+        llvm37::APInt(32, *it), context.getUIntType(32),
         /* isSpecConst */ false);
     curInst.push_back(countId);
   }
@@ -1446,7 +1446,7 @@ bool EmitVisitor::visit(SpirvDebugTypeComposite *inst) {
   uint32_t typeNameId = getOrCreateOpStringId(inst->getDebugName());
   uint32_t linkageNameId = getOrCreateOpStringId(inst->getLinkageName());
   const auto size = typeHandler.getOrCreateConstantInt(
-      llvm::APInt(32, inst->getSizeInBits()), context.getUIntType(32),
+      llvm37::APInt(32, inst->getSizeInBits()), context.getUIntType(32),
       /* isSpecConst */ false);
   initInstruction(inst);
   curInst.push_back(inst->getResultTypeId());
@@ -1479,10 +1479,10 @@ bool EmitVisitor::visit(SpirvDebugTypeComposite *inst) {
 bool EmitVisitor::visit(SpirvDebugTypeMember *inst) {
   uint32_t typeNameId = getOrCreateOpStringId(inst->getDebugName());
   const auto offset = typeHandler.getOrCreateConstantInt(
-      llvm::APInt(32, inst->getOffsetInBits()), context.getUIntType(32),
+      llvm37::APInt(32, inst->getOffsetInBits()), context.getUIntType(32),
       /* isSpecConst */ false);
   const auto size = typeHandler.getOrCreateConstantInt(
-      llvm::APInt(32, inst->getSizeInBits()), context.getUIntType(32),
+      llvm37::APInt(32, inst->getSizeInBits()), context.getUIntType(32),
       /* isSpecConst */ false);
   initInstruction(inst);
   curInst.push_back(inst->getResultTypeId());
@@ -1746,28 +1746,28 @@ uint32_t EmitTypeHandler::getOrCreateConstantNull(SpirvConstantNull *inst) {
 }
 
 uint32_t EmitTypeHandler::getOrCreateConstantFloat(SpirvConstantFloat *inst) {
-  llvm::APFloat value = inst->getValue();
+  llvm37::APFloat value = inst->getValue();
   const SpirvType *type = inst->getResultType();
   const bool isSpecConst = inst->isSpecConstant();
 
   assert(isa<FloatType>(type));
   const auto *floatType = dyn_cast<FloatType>(type);
   const auto typeBitwidth = floatType->getBitwidth();
-  const auto valueBitwidth = llvm::APFloat::getSizeInBits(value.getSemantics());
+  const auto valueBitwidth = llvm37::APFloat::getSizeInBits(value.getSemantics());
   auto valueToUse = value;
 
   // If the type and the value have different widths, we need to convert the
   // value to the width of the type. Error out if the conversion is lossy.
   if (valueBitwidth != typeBitwidth) {
     bool losesInfo = false;
-    const llvm::fltSemantics &targetSemantics =
-        typeBitwidth == 16 ? llvm::APFloat::IEEEhalf
-                           : typeBitwidth == 32 ? llvm::APFloat::IEEEsingle
-                                                : llvm::APFloat::IEEEdouble;
+    const llvm37::fltSemantics &targetSemantics =
+        typeBitwidth == 16 ? llvm37::APFloat::IEEEhalf
+                           : typeBitwidth == 32 ? llvm37::APFloat::IEEEsingle
+                                                : llvm37::APFloat::IEEEdouble;
     const auto status = valueToUse.convert(
-        targetSemantics, llvm::APFloat::roundingMode::rmTowardZero, &losesInfo);
-    if (status != llvm::APFloat::opStatus::opOK &&
-        status != llvm::APFloat::opStatus::opInexact) {
+        targetSemantics, llvm37::APFloat::roundingMode::rmTowardZero, &losesInfo);
+    if (status != llvm37::APFloat::opStatus::opOK &&
+        status != llvm37::APFloat::opStatus::opInexact) {
       emitError(
           "evaluating float literal %0 at a lower bitwidth loses information",
           {})
@@ -1836,7 +1836,7 @@ uint32_t EmitTypeHandler::getOrCreateConstantFloat(SpirvConstantFloat *inst) {
 }
 
 uint32_t
-EmitTypeHandler::getOrCreateConstantInt(llvm::APInt value,
+EmitTypeHandler::getOrCreateConstantInt(llvm37::APInt value,
                                         const SpirvType *type, bool isSpecConst,
                                         SpirvInstruction *constantInstruction) {
   auto valueTypePair =
@@ -2053,7 +2053,7 @@ uint32_t EmitTypeHandler::emitType(const SpirvType *type) {
     // Emit the OpConstant instruction that is needed to get the result-id for
     // the array length.
     const auto length = getOrCreateConstantInt(
-        llvm::APInt(32, arrayType->getElementCount()), context.getUIntType(32),
+        llvm37::APInt(32, arrayType->getElementCount()), context.getUIntType(32),
         /* isSpecConst */ false);
 
     // Emit the OpTypeArray instruction
@@ -2082,14 +2082,14 @@ uint32_t EmitTypeHandler::emitType(const SpirvType *type) {
   }
   // Structure types
   else if (const auto *structType = dyn_cast<StructType>(type)) {
-    llvm::ArrayRef<StructType::FieldInfo> fields = structType->getFields();
+    llvm37::ArrayRef<StructType::FieldInfo> fields = structType->getFields();
     size_t numFields = fields.size();
 
     // Emit OpMemberName for the struct members.
     for (size_t i = 0; i < numFields; ++i)
       emitNameForType(fields[i].name, id, i);
 
-    llvm::SmallVector<uint32_t, 4> fieldTypeIds;
+    llvm37::SmallVector<uint32_t, 4> fieldTypeIds;
     for (auto &field : fields) {
       fieldTypeIds.push_back(emitType(field.type));
     }
@@ -2152,7 +2152,7 @@ uint32_t EmitTypeHandler::emitType(const SpirvType *type) {
   // Function types
   else if (const auto *fnType = dyn_cast<FunctionType>(type)) {
     const uint32_t retTypeId = emitType(fnType->getReturnType());
-    llvm::SmallVector<uint32_t, 4> paramTypeIds;
+    llvm37::SmallVector<uint32_t, 4> paramTypeIds;
     for (auto *paramType : fnType->getParamTypes())
       paramTypeIds.push_back(emitType(paramType));
 
@@ -2193,8 +2193,8 @@ uint32_t EmitTypeHandler::emitType(const SpirvType *type) {
 
 void EmitTypeHandler::emitDecoration(uint32_t typeResultId,
                                      spv::Decoration decoration,
-                                     llvm::ArrayRef<uint32_t> decorationParams,
-                                     llvm::Optional<uint32_t> memberIndex) {
+                                     llvm37::ArrayRef<uint32_t> decorationParams,
+                                     llvm37::Optional<uint32_t> memberIndex) {
 
   spv::Op op =
       memberIndex.hasValue() ? spv::Op::OpMemberDecorate : spv::Op::OpDecorate;
@@ -2219,9 +2219,9 @@ void EmitTypeHandler::emitDecoration(uint32_t typeResultId,
   curDecorationInst.clear();
 }
 
-void EmitTypeHandler::emitNameForType(llvm::StringRef name,
+void EmitTypeHandler::emitNameForType(llvm37::StringRef name,
                                       uint32_t targetTypeId,
-                                      llvm::Optional<uint32_t> memberIndex) {
+                                      llvm37::Optional<uint32_t> memberIndex) {
   if (name.empty())
     return;
   std::vector<uint32_t> nameInstr;

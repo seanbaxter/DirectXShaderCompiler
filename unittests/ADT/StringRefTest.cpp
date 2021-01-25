@@ -7,17 +7,17 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/ADT/StringRef.h"
-#include "llvm/ADT/Hashing.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/ADT/StringExtras.h"
-#include "llvm/Support/Allocator.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/StringRef.h"
+#include "llvm37/ADT/Hashing.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/ADT/StringExtras.h"
+#include "llvm37/Support/Allocator.h"
+#include "llvm37/Support/raw_ostream.h"
 #include "gtest/gtest.h"
-using namespace llvm;
+using namespace llvm37;
 
-namespace llvm {
+namespace llvm37 {
 
 std::ostream &operator<<(std::ostream &OS, const StringRef &S) {
   OS << S.str();

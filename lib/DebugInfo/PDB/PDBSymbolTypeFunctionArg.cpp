@@ -7,13 +7,13 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/DebugInfo/PDB/PDBSymbolTypeFunctionArg.h"
+#include "llvm37/DebugInfo/PDB/PDBSymbolTypeFunctionArg.h"
 
-#include "llvm/DebugInfo/PDB/PDBSymDumper.h"
+#include "llvm37/DebugInfo/PDB/PDBSymDumper.h"
 
 #include <utility>
 
-using namespace llvm;
+using namespace llvm37;
 
 PDBSymbolTypeFunctionArg::PDBSymbolTypeFunctionArg(
     const IPDBSession &PDBSession, std::unique_ptr<IPDBRawSymbol> Symbol)

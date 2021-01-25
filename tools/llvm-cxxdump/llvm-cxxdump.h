@@ -7,17 +7,17 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_TOOLS_LLVM_CXXDUMP_LLVM_CXXDUMP_H
-#define LLVM_TOOLS_LLVM_CXXDUMP_LLVM_CXXDUMP_H
+#ifndef LLVM37_TOOLS_LLVM37_CXXDUMP_LLVM37_CXXDUMP_H
+#define LLVM37_TOOLS_LLVM37_CXXDUMP_LLVM37_CXXDUMP_H
 
-#include "llvm/Support/CommandLine.h"
+#include "llvm37/Support/CommandLine.h"
 #include <string>
 
 namespace opts {
-extern llvm::cl::list<std::string> InputFilenames;
+extern llvm37::cl::list<std::string> InputFilenames;
 } // namespace opts
 
-#define LLVM_CXXDUMP_ENUM_ENT(ns, enum)                                        \
+#define LLVM37_CXXDUMP_ENUM_ENT(ns, enum)                                        \
   { #enum, ns::enum }
 
 #endif

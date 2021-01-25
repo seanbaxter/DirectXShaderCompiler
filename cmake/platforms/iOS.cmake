@@ -4,7 +4,7 @@
 # mkdir build; cd build
 # cmake ..; make
 # mkdir ios; cd ios
-# cmake -DLLVM_IOS_TOOLCHAIN_DIR=/path/to/ios/ndk \
+# cmake -DLLVM37_IOS_TOOLCHAIN_DIR=/path/to/ios/ndk \
 #   -DCMAKE_TOOLCHAIN_FILE=../../cmake/platforms/iOS.cmake ../..
 # make <target>
 

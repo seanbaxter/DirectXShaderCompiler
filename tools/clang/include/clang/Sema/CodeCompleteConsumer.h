@@ -10,17 +10,17 @@
 //  This file defines the CodeCompleteConsumer class.
 //
 //===----------------------------------------------------------------------===//
-#ifndef LLVM_CLANG_SEMA_CODECOMPLETECONSUMER_H
-#define LLVM_CLANG_SEMA_CODECOMPLETECONSUMER_H
+#ifndef LLVM37_CLANG_SEMA_CODECOMPLETECONSUMER_H
+#define LLVM37_CLANG_SEMA_CODECOMPLETECONSUMER_H
 
 #include "clang-c/Index.h"
 #include "clang/AST/CanonicalType.h"
 #include "clang/AST/Type.h"
 #include "clang/Sema/CodeCompleteOptions.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/ADT/StringRef.h"
-#include "llvm/Support/Allocator.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/ADT/StringRef.h"
+#include "llvm37/Support/Allocator.h"
 #include <string>
 
 namespace clang {
@@ -496,7 +496,7 @@ public:
 };
 
 /// \brief An allocator used specifically for the purpose of code completion.
-class CodeCompletionAllocator : public llvm::BumpPtrAllocator {
+class CodeCompletionAllocator : public llvm37::BumpPtrAllocator {
 public:
   /// \brief Copy the given string into this allocator.
   const char *CopyString(const Twine &String);
@@ -511,7 +511,7 @@ class GlobalCodeCompletionAllocator
 };
 
 class CodeCompletionTUInfo {
-  llvm::DenseMap<const DeclContext *, StringRef> ParentNames;
+  llvm37::DenseMap<const DeclContext *, StringRef> ParentNames;
   IntrusiveRefCntPtr<GlobalCodeCompletionAllocator> AllocatorRef;
 
 public:
@@ -532,7 +532,7 @@ public:
 
 } // end namespace clang
 
-namespace llvm {
+namespace llvm37 {
   template <> struct isPodLike<clang::CodeCompletionString::Chunk> {
     static const bool value = true;
   };
@@ -973,4 +973,4 @@ public:
 
 } // end namespace clang
 
-#endif // LLVM_CLANG_SEMA_CODECOMPLETECONSUMER_H
+#endif // LLVM37_CLANG_SEMA_CODECOMPLETECONSUMER_H

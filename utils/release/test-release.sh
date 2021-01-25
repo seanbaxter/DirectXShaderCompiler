@@ -336,14 +336,14 @@ function configure_llvmCore() {
     else
         echo "#" env CC="$c_compiler" CXX="$cxx_compiler" \
             cmake -G "Unix Makefiles" \
-            -DCMAKE_BUILD_TYPE=$BuildType -DLLVM_ENABLE_ASSERTIONS=$Assertions \
-            -DLLVM_ENABLE_TIMESTAMPS=OFF -DLLVM_CONFIGTIME="(timestamp not enabled)" \
+            -DCMAKE_BUILD_TYPE=$BuildType -DLLVM37_ENABLE_ASSERTIONS=$Assertions \
+            -DLLVM37_ENABLE_TIMESTAMPS=OFF -DLLVM37_CONFIGTIME="(timestamp not enabled)" \
             $ExtraConfigureFlags $BuildDir/llvm.src \
             2>&1 | tee $LogDir/llvm.configure-Phase$Phase-$Flavor.log
         env CC="$c_compiler" CXX="$cxx_compiler" \
             cmake -G "Unix Makefiles" \
-            -DCMAKE_BUILD_TYPE=$BuildType -DLLVM_ENABLE_ASSERTIONS=$Assertions \
-            -DLLVM_ENABLE_TIMESTAMPS=OFF -DLLVM_CONFIGTIME="(timestamp not enabled)" \
+            -DCMAKE_BUILD_TYPE=$BuildType -DLLVM37_ENABLE_ASSERTIONS=$Assertions \
+            -DLLVM37_ENABLE_TIMESTAMPS=OFF -DLLVM37_CONFIGTIME="(timestamp not enabled)" \
             $ExtraConfigureFlags $BuildDir/llvm.src \
             2>&1 | tee $LogDir/llvm.configure-Phase$Phase-$Flavor.log
     fi

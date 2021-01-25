@@ -13,8 +13,8 @@
 
 #include "clang/Driver/Multilib.h"
 #include "clang/Basic/LLVM.h"
-#include "llvm/ADT/StringRef.h"
-#include "llvm/ADT/StringSwitch.h"
+#include "llvm37/ADT/StringRef.h"
+#include "llvm37/ADT/StringSwitch.h"
 #include "gtest/gtest.h"
 
 using namespace clang::driver;
@@ -160,7 +160,7 @@ TEST(MultilibTest, Construction3) {
   for (Multilib::flags_list::const_iterator I = M.flags().begin(),
                                             E = M.flags().end();
        I != E; ++I) {
-    ASSERT_TRUE(llvm::StringSwitch<bool>(*I)
+    ASSERT_TRUE(llvm37::StringSwitch<bool>(*I)
                     .Cases("+f1", "+f2", "-f3", true)
                     .Default(false));
   }
@@ -202,18 +202,18 @@ TEST(MultilibTest, SetConstruction2) {
   ASSERT_TRUE(MS.size() == 4);
   for (MultilibSet::const_iterator I = MS.begin(), E = MS.end(); I != E; ++I) {
     ASSERT_TRUE(I->isValid()) << "Multilb " << *I << " should be valid";
-    ASSERT_TRUE(llvm::StringSwitch<bool>(I->gccSuffix())
+    ASSERT_TRUE(llvm37::StringSwitch<bool>(I->gccSuffix())
                     .Cases("", "/sof", "/el", "/sof/el", true)
                     .Default(false))
         << "Multilib " << *I << " wasn't expected";
-    ASSERT_TRUE(llvm::StringSwitch<bool>(I->gccSuffix())
+    ASSERT_TRUE(llvm37::StringSwitch<bool>(I->gccSuffix())
                     .Case("", hasFlag(*I, "-sof"))
                     .Case("/sof", hasFlag(*I, "+sof"))
                     .Case("/el", hasFlag(*I, "-sof"))
                     .Case("/sof/el", hasFlag(*I, "+sof"))
                     .Default(false))
         << "Multilib " << *I << " didn't have the appropriate {+,-}sof flag";
-    ASSERT_TRUE(llvm::StringSwitch<bool>(I->gccSuffix())
+    ASSERT_TRUE(llvm37::StringSwitch<bool>(I->gccSuffix())
                     .Case("", hasFlag(*I, "-EL"))
                     .Case("/sof", hasFlag(*I, "-EL"))
                     .Case("/el", hasFlag(*I, "+EL"))
@@ -229,7 +229,7 @@ TEST(MultilibTest, SetPushback) {
   MS.push_back(Multilib("two"));
   ASSERT_TRUE(MS.size() == 2);
   for (MultilibSet::const_iterator I = MS.begin(), E = MS.end(); I != E; ++I) {
-    ASSERT_TRUE(llvm::StringSwitch<bool>(I->gccSuffix())
+    ASSERT_TRUE(llvm37::StringSwitch<bool>(I->gccSuffix())
                     .Cases("/one", "/two", true)
                     .Default(false));
   }

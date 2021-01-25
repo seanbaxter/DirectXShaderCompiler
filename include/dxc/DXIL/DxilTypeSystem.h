@@ -10,8 +10,8 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #pragma once
-#include "llvm/ADT/StringRef.h"
-#include "llvm/ADT/MapVector.h"
+#include "llvm37/ADT/StringRef.h"
+#include "llvm37/ADT/MapVector.h"
 #include "dxc/DXIL/DxilCompType.h"
 #include "dxc/DXIL/DxilInterpolationMode.h"
 
@@ -19,7 +19,7 @@
 #include <string>
 #include <vector>
 
-namespace llvm {
+namespace llvm37 {
 class LLVMContext;
 class Module;
 class Function;
@@ -55,8 +55,8 @@ public:
   void SetMatrixAnnotation(const DxilMatrixAnnotation &MA);
 
   bool HasResourceAttribute() const;
-  llvm::MDNode *GetResourceAttribute() const;
-  void SetResourceAttribute(llvm::MDNode *MD);
+  llvm37::MDNode *GetResourceAttribute() const;
+  void SetResourceAttribute(llvm37::MDNode *MD);
 
   bool HasCBufferOffset() const;
   unsigned GetCBufferOffset() const;
@@ -68,7 +68,7 @@ public:
 
   bool HasSemanticString() const;
   const std::string &GetSemanticString() const;
-  llvm::StringRef GetSemanticStringRef() const;
+  llvm37::StringRef GetSemanticStringRef() const;
   void SetSemanticString(const std::string &SemString);
 
   bool HasInterpolationMode() const;
@@ -86,7 +86,7 @@ private:
   bool m_bPrecise;
   CompType m_CompType;
   DxilMatrixAnnotation m_Matrix;
-  llvm::MDNode *m_ResourceAttribute;
+  llvm37::MDNode *m_ResourceAttribute;
   unsigned m_CBufferOffset;
   std::string m_Semantic;
   InterpolationMode m_InterpMode;
@@ -99,15 +99,15 @@ public:
   DxilTemplateArgAnnotation();
 
   bool IsType() const;
-  const llvm::Type *GetType() const;
-  void SetType(const llvm::Type *pType);
+  const llvm37::Type *GetType() const;
+  void SetType(const llvm37::Type *pType);
 
   bool IsIntegral() const;
   int64_t GetIntegral() const;
   void SetIntegral(int64_t i64);
 
 private:
-  const llvm::Type *m_Type;
+  const llvm37::Type *m_Type;
   int64_t m_Integral;
 };
 
@@ -119,8 +119,8 @@ public:
   unsigned GetNumFields() const;
   DxilFieldAnnotation &GetFieldAnnotation(unsigned FieldIdx);
   const DxilFieldAnnotation &GetFieldAnnotation(unsigned FieldIdx) const;
-  const llvm::StructType *GetStructType() const;
-  void SetStructType(const llvm::StructType *Ty);
+  const llvm37::StructType *GetStructType() const;
+  void SetStructType(const llvm37::StructType *Ty);
   unsigned GetCBufferSize() const;
   void SetCBufferSize(unsigned size);
   void MarkEmptyStruct();
@@ -133,7 +133,7 @@ public:
   const DxilTemplateArgAnnotation &GetTemplateArgAnnotation(unsigned argIdx) const;
 
 private:
-  const llvm::StructType *m_pStructType;
+  const llvm37::StructType *m_pStructType;
   std::vector<DxilFieldAnnotation> m_FieldAnnotations;
   unsigned m_CBufferSize;  // The size of struct if inside constant buffer.
   std::vector<DxilTemplateArgAnnotation> m_TemplateAnnotations;
@@ -179,11 +179,11 @@ public:
   unsigned GetNumParameters() const;
   DxilParameterAnnotation &GetParameterAnnotation(unsigned ParamIdx);
   const DxilParameterAnnotation &GetParameterAnnotation(unsigned ParamIdx) const;
-  const llvm::Function *GetFunction() const;
+  const llvm37::Function *GetFunction() const;
   DxilParameterAnnotation &GetRetTypeAnnotation();
   const DxilParameterAnnotation &GetRetTypeAnnotation() const;
 private:
-  const llvm::Function *m_pFunction;
+  const llvm37::Function *m_pFunction;
   std::vector<DxilParameterAnnotation> m_parameterAnnotations;
   DxilParameterAnnotation m_retTypeAnnotation;
 };
@@ -191,63 +191,63 @@ private:
 /// Use this class to represent structure type annotations in HL and DXIL.
 class DxilTypeSystem {
 public:
-  using StructAnnotationMap = llvm::MapVector<const llvm::StructType *, std::unique_ptr<DxilStructAnnotation> >;
-  using FunctionAnnotationMap = llvm::MapVector<const llvm::Function *, std::unique_ptr<DxilFunctionAnnotation> >;
+  using StructAnnotationMap = llvm37::MapVector<const llvm37::StructType *, std::unique_ptr<DxilStructAnnotation> >;
+  using FunctionAnnotationMap = llvm37::MapVector<const llvm37::Function *, std::unique_ptr<DxilFunctionAnnotation> >;
 
-  DxilTypeSystem(llvm::Module *pModule);
+  DxilTypeSystem(llvm37::Module *pModule);
 
-  DxilStructAnnotation *AddStructAnnotation(const llvm::StructType *pStructType, unsigned numTemplateArgs = 0);
-  DxilStructAnnotation *GetStructAnnotation(const llvm::StructType *pStructType);
-  const DxilStructAnnotation *GetStructAnnotation(const llvm::StructType *pStructType) const;
-  void EraseStructAnnotation(const llvm::StructType *pStructType);
+  DxilStructAnnotation *AddStructAnnotation(const llvm37::StructType *pStructType, unsigned numTemplateArgs = 0);
+  DxilStructAnnotation *GetStructAnnotation(const llvm37::StructType *pStructType);
+  const DxilStructAnnotation *GetStructAnnotation(const llvm37::StructType *pStructType) const;
+  void EraseStructAnnotation(const llvm37::StructType *pStructType);
 
   StructAnnotationMap &GetStructAnnotationMap();
 
-  DxilFunctionAnnotation *AddFunctionAnnotation(const llvm::Function *pFunction);
-  DxilFunctionAnnotation *GetFunctionAnnotation(const llvm::Function *pFunction);
-  const DxilFunctionAnnotation *GetFunctionAnnotation(const llvm::Function *pFunction) const;
-  void EraseFunctionAnnotation(const llvm::Function *pFunction);
+  DxilFunctionAnnotation *AddFunctionAnnotation(const llvm37::Function *pFunction);
+  DxilFunctionAnnotation *GetFunctionAnnotation(const llvm37::Function *pFunction);
+  const DxilFunctionAnnotation *GetFunctionAnnotation(const llvm37::Function *pFunction) const;
+  void EraseFunctionAnnotation(const llvm37::Function *pFunction);
 
   FunctionAnnotationMap &GetFunctionAnnotationMap();
 
   // Utility methods to create stand-alone SNORM and UNORM.
   // We may want to move them to a more centralized place for most utilities.
-  llvm::StructType *GetSNormF32Type(unsigned NumComps);
-  llvm::StructType *GetUNormF32Type(unsigned NumComps);
+  llvm37::StructType *GetSNormF32Type(unsigned NumComps);
+  llvm37::StructType *GetUNormF32Type(unsigned NumComps);
 
   // Methods to copy annotation from another DxilTypeSystem.
-  void CopyTypeAnnotation(const llvm::Type *Ty, const DxilTypeSystem &src);
-  void CopyFunctionAnnotation(const llvm::Function *pDstFunction,
-                              const llvm::Function *pSrcFunction,
+  void CopyTypeAnnotation(const llvm37::Type *Ty, const DxilTypeSystem &src);
+  void CopyFunctionAnnotation(const llvm37::Function *pDstFunction,
+                              const llvm37::Function *pSrcFunction,
                               const DxilTypeSystem &src);
 
   bool UseMinPrecision();
   void SetMinPrecision(bool bMinPrecision);
 
 private:
-  llvm::Module *m_pModule;
+  llvm37::Module *m_pModule;
   StructAnnotationMap m_StructAnnotations;
   FunctionAnnotationMap m_FunctionAnnotations;
 
   DXIL::LowPrecisionMode m_LowPrecisionMode;
 
-  llvm::StructType *GetNormFloatType(CompType CT, unsigned NumComps);
+  llvm37::StructType *GetNormFloatType(CompType CT, unsigned NumComps);
 };
 
 DXIL::SigPointKind SigPointFromInputQual(DxilParamInputQual Q, DXIL::ShaderKind SK, bool isPC);
 
-void RemapObsoleteSemantic(DxilParameterAnnotation &paramInfo, DXIL::SigPointKind sigPoint, llvm::LLVMContext &Context);
+void RemapObsoleteSemantic(DxilParameterAnnotation &paramInfo, DXIL::SigPointKind sigPoint, llvm37::LLVMContext &Context);
 
 class DxilStructTypeIterator
     : public std::iterator<std::input_iterator_tag,
-                           std::pair<llvm::Type *, DxilFieldAnnotation *>> {
+                           std::pair<llvm37::Type *, DxilFieldAnnotation *>> {
 private:
-  llvm::StructType *STy;
+  llvm37::StructType *STy;
   DxilStructAnnotation *SAnnotation;
   unsigned index;
 
 public:
-  DxilStructTypeIterator(llvm::StructType *sTy,
+  DxilStructTypeIterator(llvm37::StructType *sTy,
                          DxilStructAnnotation *sAnnotation, unsigned idx = 0);
   // prefix
   DxilStructTypeIterator &operator++();
@@ -256,11 +256,11 @@ public:
 
   bool operator==(DxilStructTypeIterator iter);
   bool operator!=(DxilStructTypeIterator iter);
-  std::pair<llvm::Type *, DxilFieldAnnotation *> operator*();
+  std::pair<llvm37::Type *, DxilFieldAnnotation *> operator*();
 };
 
-DxilStructTypeIterator begin(llvm::StructType *STy,
+DxilStructTypeIterator begin(llvm37::StructType *STy,
                              DxilStructAnnotation *SAnno);
-DxilStructTypeIterator end(llvm::StructType *STy, DxilStructAnnotation *SAnno);
+DxilStructTypeIterator end(llvm37::StructType *STy, DxilStructAnnotation *SAnno);
 
 } // namespace hlsl

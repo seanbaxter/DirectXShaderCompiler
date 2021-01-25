@@ -11,12 +11,12 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_LEX_PRAGMA_H
-#define LLVM_CLANG_LEX_PRAGMA_H
+#ifndef LLVM37_CLANG_LEX_PRAGMA_H
+#define LLVM37_CLANG_LEX_PRAGMA_H
 
 #include "clang/Basic/LLVM.h"
-#include "llvm/ADT/StringMap.h"
-#include "llvm/ADT/StringRef.h"
+#include "llvm37/ADT/StringMap.h"
+#include "llvm37/ADT/StringRef.h"
 #include <cassert>
 
 namespace clang {
@@ -90,7 +90,7 @@ class PragmaNamespace : public PragmaHandler {
   /// Handlers - This is a map of the handlers in this namespace with their name
   /// as key.
   ///
-  llvm::StringMap<PragmaHandler*> Handlers;
+  llvm37::StringMap<PragmaHandler*> Handlers;
 public:
   explicit PragmaNamespace(StringRef Name) : PragmaHandler(Name) {}
   ~PragmaNamespace() override;

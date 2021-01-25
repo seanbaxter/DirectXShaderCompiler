@@ -11,12 +11,12 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Bitcode/BitcodeWriterPass.h"
-#include "llvm/Bitcode/ReaderWriter.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/PassManager.h"
-#include "llvm/Pass.h"
-using namespace llvm;
+#include "llvm37/Bitcode/BitcodeWriterPass.h"
+#include "llvm37/Bitcode/ReaderWriter.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/PassManager.h"
+#include "llvm37/Pass.h"
+using namespace llvm37;
 
 PreservedAnalyses BitcodeWriterPass::run(Module &M) {
   WriteBitcodeToFile(&M, OS, ShouldPreserveUseListOrder);
@@ -45,7 +45,7 @@ namespace {
 
 char WriteBitcodePass::ID = 0;
 
-ModulePass *llvm::createBitcodeWriterPass(raw_ostream &Str,
+ModulePass *llvm37::createBitcodeWriterPass(raw_ostream &Str,
                                           bool ShouldPreserveUseListOrder) {
   return new WriteBitcodePass(Str, ShouldPreserveUseListOrder);
 }

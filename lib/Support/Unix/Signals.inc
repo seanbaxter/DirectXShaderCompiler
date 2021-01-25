@@ -13,16 +13,16 @@
 //===----------------------------------------------------------------------===//
 
 #include "Unix.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/Support/Format.h"
-#include "llvm/Support/FileSystem.h"
-#include "llvm/Support/FileUtilities.h"
-#include "llvm/Support/ManagedStatic.h"
-#include "llvm/Support/MemoryBuffer.h"
-#include "llvm/Support/Mutex.h"
-#include "llvm/Support/Program.h"
-#include "llvm/Support/UniqueLock.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/Support/Format.h"
+#include "llvm37/Support/FileSystem.h"
+#include "llvm37/Support/FileUtilities.h"
+#include "llvm37/Support/ManagedStatic.h"
+#include "llvm37/Support/MemoryBuffer.h"
+#include "llvm37/Support/Mutex.h"
+#include "llvm37/Support/Program.h"
+#include "llvm37/Support/UniqueLock.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <algorithm>
 #include <string>
 #include <vector>
@@ -48,7 +48,7 @@
 #include <link.h>
 #endif
 
-using namespace llvm;
+using namespace llvm37;
 
 static RETSIGTYPE SignalHandler(int Sig);  // defined below.
 
@@ -221,12 +221,12 @@ static RETSIGTYPE SignalHandler(int Sig) {
 #endif
 }
 
-void llvm::sys::RunInterruptHandlers() {
+void llvm37::sys::RunInterruptHandlers() {
   sys::SmartScopedLock<true> Guard(*SignalsMutex);
   RemoveFilesToRemove();
 }
 
-void llvm::sys::SetInterruptFunction(void (*IF)()) {
+void llvm37::sys::SetInterruptFunction(void (*IF)()) {
   {
     sys::SmartScopedLock<true> Guard(*SignalsMutex);
     InterruptFunction = IF;
@@ -235,7 +235,7 @@ void llvm::sys::SetInterruptFunction(void (*IF)()) {
 }
 
 // RemoveFileOnSignal - The public API
-bool llvm::sys::RemoveFileOnSignal(StringRef Filename,
+bool llvm37::sys::RemoveFileOnSignal(StringRef Filename,
                                    std::string* ErrMsg) {
   {
     sys::SmartScopedLock<true> Guard(*SignalsMutex);
@@ -261,7 +261,7 @@ bool llvm::sys::RemoveFileOnSignal(StringRef Filename,
 }
 
 // DontRemoveFileOnSignal - The public API
-void llvm::sys::DontRemoveFileOnSignal(StringRef Filename) {
+void llvm37::sys::DontRemoveFileOnSignal(StringRef Filename) {
   sys::SmartScopedLock<true> Guard(*SignalsMutex);
   std::vector<std::string>::reverse_iterator RI =
     std::find(FilesToRemove->rbegin(), FilesToRemove->rend(), Filename);
@@ -280,7 +280,7 @@ void llvm::sys::DontRemoveFileOnSignal(StringRef Filename) {
 /// AddSignalHandler - Add a function to be called when a signal is delivered
 /// to the process.  The handler can have a cookie passed to it to identify
 /// what instance of the handler it is.
-void llvm::sys::AddSignalHandler(void (*FnPtr)(void *), void *Cookie) {
+void llvm37::sys::AddSignalHandler(void (*FnPtr)(void *), void *Cookie) {
   CallBacksToRun->push_back(std::make_pair(FnPtr, Cookie));
   RegisterHandlers();
 }
@@ -338,7 +338,7 @@ static bool findModulesAndOffsets(void **StackTrace, int Depth,
 #endif
 
 static bool printSymbolizedStackTrace(void **StackTrace, int Depth,
-                                      llvm::raw_ostream &OS) {
+                                      llvm37::raw_ostream &OS) {
   // FIXME: Subtract necessary number from StackTrace entries to turn return addresses
   // into actual instruction addresses.
   // Use llvm-symbolizer tool to symbolize the stack traces.
@@ -429,7 +429,7 @@ static bool printSymbolizedStackTrace(void **StackTrace, int Depth,
 //
 // On glibc systems we have the 'backtrace' function, which works nicely, but
 // doesn't demangle symbols.
-void llvm::sys::PrintStackTrace(raw_ostream &OS) {
+void llvm37::sys::PrintStackTrace(raw_ostream &OS) {
 #if defined(HAVE_BACKTRACE) && defined(ENABLE_BACKTRACES)
   static void* StackTrace[256];
   // Use backtrace() to output a backtrace on Linux systems with glibc.
@@ -491,19 +491,19 @@ void llvm::sys::PrintStackTrace(raw_ostream &OS) {
 }
 
 static void PrintStackTraceSignalHandler(void *) {
-  PrintStackTrace(llvm::errs());
+  PrintStackTrace(llvm37::errs());
 }
 
-void llvm::sys::DisableSystemDialogsOnCrash() {}
+void llvm37::sys::DisableSystemDialogsOnCrash() {}
 
 /// PrintStackTraceOnErrorSignal - When an error signal (such as SIGABRT or
 /// SIGSEGV) is delivered to the process, print a stack trace and then exit.
-void llvm::sys::PrintStackTraceOnErrorSignal(bool DisableCrashReporting) {
+void llvm37::sys::PrintStackTraceOnErrorSignal(bool DisableCrashReporting) {
   AddSignalHandler(PrintStackTraceSignalHandler, nullptr);
 
 #if defined(__APPLE__) && defined(ENABLE_CRASH_OVERRIDES)
   // Environment variable to disable any kind of crash dialog.
-  if (DisableCrashReporting || getenv("LLVM_DISABLE_CRASH_REPORT")) {
+  if (DisableCrashReporting || getenv("LLVM37_DISABLE_CRASH_REPORT")) {
     mach_port_t self = mach_task_self();
 
     exception_mask_t mask = EXC_MASK_CRASH;

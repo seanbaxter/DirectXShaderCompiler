@@ -28,7 +28,7 @@ using namespace clang;
 using namespace ento;
 
 enum IVarState { Unused, Used };
-typedef llvm::DenseMap<const ObjCIvarDecl*,IVarState> IvarUsageMap;
+typedef llvm37::DenseMap<const ObjCIvarDecl*,IVarState> IvarUsageMap;
 
 static void Scan(IvarUsageMap& M, const Stmt *S) {
   if (!S)
@@ -156,7 +156,7 @@ static void checkObjCUnusedIvar(const ObjCImplementationDecl *D,
   for (IvarUsageMap::iterator I = M.begin(), E = M.end(); I!=E; ++I)
     if (I->second == Unused) {
       std::string sbuf;
-      llvm::raw_string_ostream os(sbuf);
+      llvm37::raw_string_ostream os(sbuf);
       os << "Instance variable '" << *I->first << "' in class '" << *ID
          << "' is never used by the methods in its @implementation "
             "(although it may be used by category methods).";

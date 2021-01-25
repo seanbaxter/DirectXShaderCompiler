@@ -19,36 +19,36 @@
 //
 // The machine code verifier is enabled from LLVMTargetMachine.cpp with the
 // command-line option -verify-machineinstrs, or by defining the environment
-// variable LLVM_VERIFY_MACHINEINSTRS to the name of a file that will receive
+// variable LLVM37_VERIFY_MACHINEINSTRS to the name of a file that will receive
 // the verifier errors.
 //===----------------------------------------------------------------------===//
 
-#include "llvm/CodeGen/Passes.h"
-#include "llvm/ADT/DenseSet.h"
-#include "llvm/ADT/DepthFirstIterator.h"
-#include "llvm/ADT/SetOperations.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/CodeGen/LiveIntervalAnalysis.h"
-#include "llvm/CodeGen/LiveStackAnalysis.h"
-#include "llvm/CodeGen/LiveVariables.h"
-#include "llvm/CodeGen/MachineFrameInfo.h"
-#include "llvm/CodeGen/MachineFunctionPass.h"
-#include "llvm/CodeGen/MachineMemOperand.h"
-#include "llvm/CodeGen/MachineRegisterInfo.h"
-#include "llvm/IR/BasicBlock.h"
-#include "llvm/IR/InlineAsm.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/MC/MCAsmInfo.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/FileSystem.h"
-#include "llvm/Support/Format.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Target/TargetInstrInfo.h"
-#include "llvm/Target/TargetMachine.h"
-#include "llvm/Target/TargetRegisterInfo.h"
-#include "llvm/Target/TargetSubtargetInfo.h"
-using namespace llvm;
+#include "llvm37/CodeGen/Passes.h"
+#include "llvm37/ADT/DenseSet.h"
+#include "llvm37/ADT/DepthFirstIterator.h"
+#include "llvm37/ADT/SetOperations.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/CodeGen/LiveIntervalAnalysis.h"
+#include "llvm37/CodeGen/LiveStackAnalysis.h"
+#include "llvm37/CodeGen/LiveVariables.h"
+#include "llvm37/CodeGen/MachineFrameInfo.h"
+#include "llvm37/CodeGen/MachineFunctionPass.h"
+#include "llvm37/CodeGen/MachineMemOperand.h"
+#include "llvm37/CodeGen/MachineRegisterInfo.h"
+#include "llvm37/IR/BasicBlock.h"
+#include "llvm37/IR/InlineAsm.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/MC/MCAsmInfo.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/FileSystem.h"
+#include "llvm37/Support/Format.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Target/TargetInstrInfo.h"
+#include "llvm37/Target/TargetMachine.h"
+#include "llvm37/Target/TargetRegisterInfo.h"
+#include "llvm37/Target/TargetSubtargetInfo.h"
+using namespace llvm37;
 
 namespace {
   struct MachineVerifier {
@@ -264,7 +264,7 @@ char MachineVerifierPass::ID = 0;
 INITIALIZE_PASS(MachineVerifierPass, "machineverifier",
                 "Verify generated machine code", false, false)
 
-FunctionPass *llvm::createMachineVerifierPass(const std::string &Banner) {
+FunctionPass *llvm37::createMachineVerifierPass(const std::string &Banner) {
   return new MachineVerifierPass(Banner);
 }
 

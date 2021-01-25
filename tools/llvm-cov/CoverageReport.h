@@ -11,13 +11,13 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_COV_COVERAGEREPORT_H
-#define LLVM_COV_COVERAGEREPORT_H
+#ifndef LLVM37_COV_COVERAGEREPORT_H
+#define LLVM37_COV_COVERAGEREPORT_H
 
 #include "CoverageSummaryInfo.h"
 #include "CoverageViewOptions.h"
 
-namespace llvm {
+namespace llvm37 {
 
 /// \brief Displays the code coverage report.
 class CoverageReport {
@@ -38,4 +38,4 @@ public:
 };
 }
 
-#endif // LLVM_COV_COVERAGEREPORT_H
+#endif // LLVM37_COV_COVERAGEREPORT_H

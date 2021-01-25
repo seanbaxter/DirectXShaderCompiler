@@ -19,8 +19,8 @@
 #include "clang/AST/PrettyPrinter.h"
 #include "clang/AST/Type.h"
 #include "clang/AST/TypeLoc.h"
-#include "llvm/Support/AlignOf.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/Support/AlignOf.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <cassert>
 //                                                                           //
 ///////////////////////////////////////////////////////////////////////////////
@@ -29,14 +29,14 @@ using namespace clang;
 NestedNameSpecifier *
 NestedNameSpecifier::FindOrInsert(const ASTContext &Context,
                                   const NestedNameSpecifier &Mockup) {
-  llvm::FoldingSetNodeID ID;
+  llvm37::FoldingSetNodeID ID;
   Mockup.Profile(ID);
 
   void *InsertPos = nullptr;
   NestedNameSpecifier *NNS
     = Context.NestedNameSpecifiers.FindNodeOrInsertPos(ID, InsertPos);
   if (!NNS) {
-    NNS = new (Context, llvm::alignOf<NestedNameSpecifier>())
+    NNS = new (Context, llvm37::alignOf<NestedNameSpecifier>())
         NestedNameSpecifier(Mockup);
     Context.NestedNameSpecifiers.InsertNode(NNS, InsertPos);
   }
@@ -115,7 +115,7 @@ NestedNameSpecifier *
 NestedNameSpecifier::GlobalSpecifier(const ASTContext &Context) {
   if (!Context.GlobalNestedNameSpecifier)
     Context.GlobalNestedNameSpecifier =
-        new (Context, llvm::alignOf<NestedNameSpecifier>())
+        new (Context, llvm37::alignOf<NestedNameSpecifier>())
             NestedNameSpecifier();
   return Context.GlobalNestedNameSpecifier;
 }
@@ -321,7 +321,7 @@ NestedNameSpecifier::print(raw_ostream &OS,
 }
 
 void NestedNameSpecifier::dump(const LangOptions &LO) {
-  print(llvm::errs(), PrintingPolicy(LO));
+  print(llvm37::errs(), PrintingPolicy(LO));
 }
 
 unsigned 
@@ -675,7 +675,7 @@ NestedNameSpecifierLocBuilder::getWithLocInContext(ASTContext &Context) const {
   // FIXME: After copying the source-location information, should we free
   // our (temporary) buffer and adopt the ASTContext-allocated memory?
   // Doing so would optimize repeated calls to getWithLocInContext().
-  void *Mem = Context.Allocate(BufferSize, llvm::alignOf<void *>());
+  void *Mem = Context.Allocate(BufferSize, llvm37::alignOf<void *>());
   memcpy(Mem, Buffer, BufferSize);
   return NestedNameSpecifierLoc(Representation, Mem);
 }

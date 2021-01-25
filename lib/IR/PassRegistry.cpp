@@ -12,17 +12,17 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/PassRegistry.h"
-#include "llvm/IR/Function.h"
-#include "llvm/PassSupport.h"
-#include "llvm/Support/Compiler.h"
-#include "llvm/Support/ManagedStatic.h"
-#include "llvm/Support/RWMutex.h"
+#include "llvm37/PassRegistry.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/PassSupport.h"
+#include "llvm37/Support/Compiler.h"
+#include "llvm37/Support/ManagedStatic.h"
+#include "llvm37/Support/RWMutex.h"
 #include <vector>
 
-using namespace llvm;
+using namespace llvm37;
 
-#ifdef LLVM_ON_WIN32
+#ifdef LLVM37_ON_WIN32
 // HLSL Change Starts - managed statics are tied to DLL lifetime
 // Passes exist only in dxcompiler.dll or in a tool like opt that is updated.
 //
@@ -63,7 +63,7 @@ PassRegistry *PassRegistry::getPassRegistry() {
 PassRegistry::~PassRegistry() {}
 
 const PassInfo *PassRegistry::getPassInfo(const void *TI) const {
-  #ifndef LLVM_ON_WIN32  // HLSL Change
+  #ifndef LLVM37_ON_WIN32  // HLSL Change
   sys::SmartScopedReader<true> Guard(Lock);
   #endif
   MapType::const_iterator I = PassInfoMap.find(TI);
@@ -71,7 +71,7 @@ const PassInfo *PassRegistry::getPassInfo(const void *TI) const {
 }
 
 const PassInfo *PassRegistry::getPassInfo(StringRef Arg) const {
-  #ifndef LLVM_ON_WIN32  // HLSL Change
+  #ifndef LLVM37_ON_WIN32  // HLSL Change
   sys::SmartScopedReader<true> Guard(Lock);
   #endif
   StringMapType::const_iterator I = PassInfoStringMap.find(Arg);
@@ -83,7 +83,7 @@ const PassInfo *PassRegistry::getPassInfo(StringRef Arg) const {
 //
 
 void PassRegistry::registerPass(const PassInfo &PI, bool ShouldFree) {
-  #ifdef LLVM_ON_WIN32  // HLSL Change
+  #ifdef LLVM37_ON_WIN32  // HLSL Change
   CheckThreadId();
   #else
   sys::SmartScopedReader<true> Guard(Lock);
@@ -103,7 +103,7 @@ void PassRegistry::registerPass(const PassInfo &PI, bool ShouldFree) {
 }
 
 void PassRegistry::enumerateWith(PassRegistrationListener *L) {
-  #ifndef LLVM_ON_WIN32  // HLSL Change
+  #ifndef LLVM37_ON_WIN32  // HLSL Change
   sys::SmartScopedReader<true> Guard(Lock);
   #endif
   for (auto PassInfoPair : PassInfoMap)
@@ -129,7 +129,7 @@ void PassRegistry::registerAnalysisGroup(const void *InterfaceID,
     assert(ImplementationInfo &&
            "Must register pass before adding to AnalysisGroup!");
 
-    #ifdef LLVM_ON_WIN32  // HLSL Change
+    #ifdef LLVM37_ON_WIN32  // HLSL Change
     CheckThreadId();
     #else
     sys::SmartScopedReader<true> Guard(Lock);
@@ -156,7 +156,7 @@ void PassRegistry::registerAnalysisGroup(const void *InterfaceID,
 }
 
 void PassRegistry::addRegistrationListener(PassRegistrationListener *L) {
-  #ifdef LLVM_ON_WIN32  // HLSL Change
+  #ifdef LLVM37_ON_WIN32  // HLSL Change
   CheckThreadId();
   #else
   sys::SmartScopedReader<true> Guard(Lock);
@@ -165,7 +165,7 @@ void PassRegistry::addRegistrationListener(PassRegistrationListener *L) {
 }
 
 void PassRegistry::removeRegistrationListener(PassRegistrationListener *L) {
-  #ifdef LLVM_ON_WIN32  // HLSL Change
+  #ifdef LLVM37_ON_WIN32  // HLSL Change
   CheckThreadId();
   #else
   sys::SmartScopedReader<true> Guard(Lock);

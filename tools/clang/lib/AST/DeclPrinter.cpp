@@ -22,7 +22,7 @@
 #include "clang/AST/ExprCXX.h"
 #include "clang/AST/PrettyPrinter.h"
 #include "clang/Basic/Module.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/Support/raw_ostream.h"
 #include "clang/Sema/SemaHLSL.h"  // HLSL Change
 using namespace clang;
 //                                                                           //
@@ -216,14 +216,14 @@ void Decl::printGroup(Decl** Begin, unsigned NumDecls,
   }
 }
 
-LLVM_DUMP_METHOD void DeclContext::dumpDeclContext() const {
+LLVM37_DUMP_METHOD void DeclContext::dumpDeclContext() const {
   // Get the translation unit
   const DeclContext *DC = this;
   while (!DC->isTranslationUnit())
     DC = DC->getParent();
   
   ASTContext &Ctx = cast<TranslationUnitDecl>(DC)->getASTContext();
-  DeclPrinter Printer(llvm::errs(), Ctx.getPrintingPolicy(), 0);
+  DeclPrinter Printer(llvm37::errs(), Ctx.getPrintingPolicy(), 0);
   Printer.VisitDeclContext(const_cast<DeclContext *>(this), /*Indent=*/false);
 }
 
@@ -507,7 +507,7 @@ void DeclPrinter::VisitFunctionDecl(FunctionDecl *D) {
 
     Proto += "(";
     if (FT) {
-      llvm::raw_string_ostream POut(Proto);
+      llvm37::raw_string_ostream POut(Proto);
       DeclPrinter ParamPrinter(POut, SubPolicy, Indentation);
       for (unsigned i = 0, e = D->getNumParams(); i != e; ++i) {
         if (Policy.HLSLSuppressUniformParameters &&
@@ -568,7 +568,7 @@ void DeclPrinter::VisitFunctionDecl(FunctionDecl *D) {
       Proto += " noexcept";
       if (FT->getExceptionSpecType() == EST_ComputedNoexcept) {
         Proto += "(";
-        llvm::raw_string_ostream EOut(Proto);
+        llvm37::raw_string_ostream EOut(Proto);
         FT->getNoexceptExpr()->printPretty(EOut, nullptr, SubPolicy,
                                            Indentation);
         EOut.flush();

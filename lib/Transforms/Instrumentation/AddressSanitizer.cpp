@@ -13,52 +13,52 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Transforms/Instrumentation.h"
-#include "llvm/ADT/ArrayRef.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/DenseSet.h"
-#include "llvm/ADT/DepthFirstIterator.h"
-#include "llvm/ADT/SmallSet.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/ADT/StringExtras.h"
-#include "llvm/ADT/Triple.h"
-#include "llvm/Analysis/MemoryBuiltins.h"
-#include "llvm/Analysis/TargetLibraryInfo.h"
-#include "llvm/Analysis/ValueTracking.h"
-#include "llvm/IR/CallSite.h"
-#include "llvm/IR/DIBuilder.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/Dominators.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/IRBuilder.h"
-#include "llvm/IR/InlineAsm.h"
-#include "llvm/IR/InstVisitor.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/MDBuilder.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/Type.h"
-#include "llvm/MC/MCSectionMachO.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/DataTypes.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/Endian.h"
-#include "llvm/Support/SwapByteOrder.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Transforms/Scalar.h"
-#include "llvm/Transforms/Utils/ASanStackFrameLayout.h"
-#include "llvm/Transforms/Utils/BasicBlockUtils.h"
-#include "llvm/Transforms/Utils/Cloning.h"
-#include "llvm/Transforms/Utils/Local.h"
-#include "llvm/Transforms/Utils/ModuleUtils.h"
-#include "llvm/Transforms/Utils/PromoteMemToReg.h"
+#include "llvm37/Transforms/Instrumentation.h"
+#include "llvm37/ADT/ArrayRef.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/DenseSet.h"
+#include "llvm37/ADT/DepthFirstIterator.h"
+#include "llvm37/ADT/SmallSet.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/ADT/StringExtras.h"
+#include "llvm37/ADT/Triple.h"
+#include "llvm37/Analysis/MemoryBuiltins.h"
+#include "llvm37/Analysis/TargetLibraryInfo.h"
+#include "llvm37/Analysis/ValueTracking.h"
+#include "llvm37/IR/CallSite.h"
+#include "llvm37/IR/DIBuilder.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/IR/Dominators.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/IRBuilder.h"
+#include "llvm37/IR/InlineAsm.h"
+#include "llvm37/IR/InstVisitor.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/MDBuilder.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/Type.h"
+#include "llvm37/MC/MCSectionMachO.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/DataTypes.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/Endian.h"
+#include "llvm37/Support/SwapByteOrder.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Transforms/Scalar.h"
+#include "llvm37/Transforms/Utils/ASanStackFrameLayout.h"
+#include "llvm37/Transforms/Utils/BasicBlockUtils.h"
+#include "llvm37/Transforms/Utils/Cloning.h"
+#include "llvm37/Transforms/Utils/Local.h"
+#include "llvm37/Transforms/Utils/ModuleUtils.h"
+#include "llvm37/Transforms/Utils/PromoteMemToReg.h"
 #include <algorithm>
 #include <string>
 #include <system_error>
 
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "asan"
 
@@ -321,18 +321,18 @@ struct ShadowMapping {
 
 static ShadowMapping getShadowMapping(Triple &TargetTriple, int LongSize,
                                       bool IsKasan) {
-  bool IsAndroid = TargetTriple.getEnvironment() == llvm::Triple::Android;
+  bool IsAndroid = TargetTriple.getEnvironment() == llvm37::Triple::Android;
   bool IsIOS = TargetTriple.isiOS();
   bool IsFreeBSD = TargetTriple.isOSFreeBSD();
   bool IsLinux = TargetTriple.isOSLinux();
-  bool IsPPC64 = TargetTriple.getArch() == llvm::Triple::ppc64 ||
-                 TargetTriple.getArch() == llvm::Triple::ppc64le;
-  bool IsX86_64 = TargetTriple.getArch() == llvm::Triple::x86_64;
-  bool IsMIPS32 = TargetTriple.getArch() == llvm::Triple::mips ||
-                  TargetTriple.getArch() == llvm::Triple::mipsel;
-  bool IsMIPS64 = TargetTriple.getArch() == llvm::Triple::mips64 ||
-                  TargetTriple.getArch() == llvm::Triple::mips64el;
-  bool IsAArch64 = TargetTriple.getArch() == llvm::Triple::aarch64;
+  bool IsPPC64 = TargetTriple.getArch() == llvm37::Triple::ppc64 ||
+                 TargetTriple.getArch() == llvm37::Triple::ppc64le;
+  bool IsX86_64 = TargetTriple.getArch() == llvm37::Triple::x86_64;
+  bool IsMIPS32 = TargetTriple.getArch() == llvm37::Triple::mips ||
+                  TargetTriple.getArch() == llvm37::Triple::mipsel;
+  bool IsMIPS64 = TargetTriple.getArch() == llvm37::Triple::mips64 ||
+                  TargetTriple.getArch() == llvm37::Triple::mips64el;
+  bool IsAArch64 = TargetTriple.getArch() == llvm37::Triple::aarch64;
   bool IsWindows = TargetTriple.isOSWindows();
 
   ShadowMapping Mapping;
@@ -701,7 +701,7 @@ INITIALIZE_PASS_END(
     AddressSanitizer, "asan",
     "AddressSanitizer: detects use-after-free and out-of-bounds bugs.", false,
     false)
-FunctionPass *llvm::createAddressSanitizerFunctionPass(bool CompileKernel) {
+FunctionPass *llvm37::createAddressSanitizerFunctionPass(bool CompileKernel) {
   return new AddressSanitizer(CompileKernel);
 }
 
@@ -711,7 +711,7 @@ INITIALIZE_PASS(
     "AddressSanitizer: detects use-after-free and out-of-bounds bugs."
     "ModulePass",
     false, false)
-ModulePass *llvm::createAddressSanitizerModulePass(bool CompileKernel) {
+ModulePass *llvm37::createAddressSanitizerModulePass(bool CompileKernel) {
   return new AddressSanitizerModule(CompileKernel);
 }
 

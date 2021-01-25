@@ -11,7 +11,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Support/MathExtras.h"
+#include "llvm37/Support/MathExtras.h"
 
 #ifdef _MSC_VER
 #include <limits>
@@ -19,7 +19,7 @@
 #include <math.h>
 #endif
 
-namespace llvm {
+namespace llvm37 {
 
 #if defined(_MSC_VER)
   // Visual Studio defines the HUGE_VAL class of macros using purposeful

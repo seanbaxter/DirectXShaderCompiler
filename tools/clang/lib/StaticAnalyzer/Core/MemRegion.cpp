@@ -22,7 +22,7 @@
 #include "clang/Analysis/Support/BumpVector.h"
 #include "clang/Basic/SourceManager.h"
 #include "clang/StaticAnalyzer/Core/PathSensitive/SValBuilder.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/Support/raw_ostream.h"
 
 using namespace clang;
 using namespace ento;
@@ -39,7 +39,7 @@ RegionTy* MemRegionManager::getRegion(const A1 a1) {
   const typename MemRegionManagerTrait<RegionTy>::SuperRegionTy *superRegion =
   MemRegionManagerTrait<RegionTy>::getSuperRegion(*this, a1);
 
-  llvm::FoldingSetNodeID ID;
+  llvm37::FoldingSetNodeID ID;
   RegionTy::ProfileRegion(ID, a1, superRegion);
   void *InsertPos;
   RegionTy* R = cast_or_null<RegionTy>(Regions.FindNodeOrInsertPos(ID,
@@ -57,7 +57,7 @@ RegionTy* MemRegionManager::getRegion(const A1 a1) {
 template <typename RegionTy, typename A1>
 RegionTy* MemRegionManager::getSubRegion(const A1 a1,
                                          const MemRegion *superRegion) {
-  llvm::FoldingSetNodeID ID;
+  llvm37::FoldingSetNodeID ID;
   RegionTy::ProfileRegion(ID, a1, superRegion);
   void *InsertPos;
   RegionTy* R = cast_or_null<RegionTy>(Regions.FindNodeOrInsertPos(ID,
@@ -78,7 +78,7 @@ RegionTy* MemRegionManager::getRegion(const A1 a1, const A2 a2) {
   const typename MemRegionManagerTrait<RegionTy>::SuperRegionTy *superRegion =
   MemRegionManagerTrait<RegionTy>::getSuperRegion(*this, a1, a2);
 
-  llvm::FoldingSetNodeID ID;
+  llvm37::FoldingSetNodeID ID;
   RegionTy::ProfileRegion(ID, a1, a2, superRegion);
   void *InsertPos;
   RegionTy* R = cast_or_null<RegionTy>(Regions.FindNodeOrInsertPos(ID,
@@ -97,7 +97,7 @@ template <typename RegionTy, typename A1, typename A2>
 RegionTy* MemRegionManager::getSubRegion(const A1 a1, const A2 a2,
                                          const MemRegion *superRegion) {
 
-  llvm::FoldingSetNodeID ID;
+  llvm37::FoldingSetNodeID ID;
   RegionTy::ProfileRegion(ID, a1, a2, superRegion);
   void *InsertPos;
   RegionTy* R = cast_or_null<RegionTy>(Regions.FindNodeOrInsertPos(ID,
@@ -116,7 +116,7 @@ template <typename RegionTy, typename A1, typename A2, typename A3>
 RegionTy* MemRegionManager::getSubRegion(const A1 a1, const A2 a2, const A3 a3,
                                          const MemRegion *superRegion) {
 
-  llvm::FoldingSetNodeID ID;
+  llvm37::FoldingSetNodeID ID;
   RegionTy::ProfileRegion(ID, a1, a2, a3, superRegion);
   void *InsertPos;
   RegionTy* R = cast_or_null<RegionTy>(Regions.FindNodeOrInsertPos(ID,
@@ -245,21 +245,21 @@ QualType CXXBaseObjectRegion::getValueType() const {
 // FoldingSet profiling.
 //===----------------------------------------------------------------------===//
 
-void MemSpaceRegion::Profile(llvm::FoldingSetNodeID& ID) const {
+void MemSpaceRegion::Profile(llvm37::FoldingSetNodeID& ID) const {
   ID.AddInteger((unsigned)getKind());
 }
 
-void StackSpaceRegion::Profile(llvm::FoldingSetNodeID &ID) const {
+void StackSpaceRegion::Profile(llvm37::FoldingSetNodeID &ID) const {
   ID.AddInteger((unsigned)getKind());
   ID.AddPointer(getStackFrame());
 }
 
-void StaticGlobalSpaceRegion::Profile(llvm::FoldingSetNodeID &ID) const {
+void StaticGlobalSpaceRegion::Profile(llvm37::FoldingSetNodeID &ID) const {
   ID.AddInteger((unsigned)getKind());
   ID.AddPointer(getCodeRegion());
 }
 
-void StringRegion::ProfileRegion(llvm::FoldingSetNodeID& ID,
+void StringRegion::ProfileRegion(llvm37::FoldingSetNodeID& ID,
                                  const StringLiteral* Str,
                                  const MemRegion* superRegion) {
   ID.AddInteger((unsigned) StringRegionKind);
@@ -267,7 +267,7 @@ void StringRegion::ProfileRegion(llvm::FoldingSetNodeID& ID,
   ID.AddPointer(superRegion);
 }
 
-void ObjCStringRegion::ProfileRegion(llvm::FoldingSetNodeID& ID,
+void ObjCStringRegion::ProfileRegion(llvm37::FoldingSetNodeID& ID,
                                      const ObjCStringLiteral* Str,
                                      const MemRegion* superRegion) {
   ID.AddInteger((unsigned) ObjCStringRegionKind);
@@ -275,7 +275,7 @@ void ObjCStringRegion::ProfileRegion(llvm::FoldingSetNodeID& ID,
   ID.AddPointer(superRegion);
 }
 
-void AllocaRegion::ProfileRegion(llvm::FoldingSetNodeID& ID,
+void AllocaRegion::ProfileRegion(llvm37::FoldingSetNodeID& ID,
                                  const Expr *Ex, unsigned cnt,
                                  const MemRegion *superRegion) {
   ID.AddInteger((unsigned) AllocaRegionKind);
@@ -284,15 +284,15 @@ void AllocaRegion::ProfileRegion(llvm::FoldingSetNodeID& ID,
   ID.AddPointer(superRegion);
 }
 
-void AllocaRegion::Profile(llvm::FoldingSetNodeID& ID) const {
+void AllocaRegion::Profile(llvm37::FoldingSetNodeID& ID) const {
   ProfileRegion(ID, Ex, Cnt, superRegion);
 }
 
-void CompoundLiteralRegion::Profile(llvm::FoldingSetNodeID& ID) const {
+void CompoundLiteralRegion::Profile(llvm37::FoldingSetNodeID& ID) const {
   CompoundLiteralRegion::ProfileRegion(ID, CL, superRegion);
 }
 
-void CompoundLiteralRegion::ProfileRegion(llvm::FoldingSetNodeID& ID,
+void CompoundLiteralRegion::ProfileRegion(llvm37::FoldingSetNodeID& ID,
                                           const CompoundLiteralExpr *CL,
                                           const MemRegion* superRegion) {
   ID.AddInteger((unsigned) CompoundLiteralRegionKind);
@@ -300,7 +300,7 @@ void CompoundLiteralRegion::ProfileRegion(llvm::FoldingSetNodeID& ID,
   ID.AddPointer(superRegion);
 }
 
-void CXXThisRegion::ProfileRegion(llvm::FoldingSetNodeID &ID,
+void CXXThisRegion::ProfileRegion(llvm37::FoldingSetNodeID &ID,
                                   const PointerType *PT,
                                   const MemRegion *sRegion) {
   ID.AddInteger((unsigned) CXXThisRegionKind);
@@ -308,43 +308,43 @@ void CXXThisRegion::ProfileRegion(llvm::FoldingSetNodeID &ID,
   ID.AddPointer(sRegion);
 }
 
-void CXXThisRegion::Profile(llvm::FoldingSetNodeID &ID) const {
+void CXXThisRegion::Profile(llvm37::FoldingSetNodeID &ID) const {
   CXXThisRegion::ProfileRegion(ID, ThisPointerTy, superRegion);
 }
 
-void ObjCIvarRegion::ProfileRegion(llvm::FoldingSetNodeID& ID,
+void ObjCIvarRegion::ProfileRegion(llvm37::FoldingSetNodeID& ID,
                                    const ObjCIvarDecl *ivd,
                                    const MemRegion* superRegion) {
   DeclRegion::ProfileRegion(ID, ivd, superRegion, ObjCIvarRegionKind);
 }
 
-void DeclRegion::ProfileRegion(llvm::FoldingSetNodeID& ID, const Decl *D,
+void DeclRegion::ProfileRegion(llvm37::FoldingSetNodeID& ID, const Decl *D,
                                const MemRegion* superRegion, Kind k) {
   ID.AddInteger((unsigned) k);
   ID.AddPointer(D);
   ID.AddPointer(superRegion);
 }
 
-void DeclRegion::Profile(llvm::FoldingSetNodeID& ID) const {
+void DeclRegion::Profile(llvm37::FoldingSetNodeID& ID) const {
   DeclRegion::ProfileRegion(ID, D, superRegion, getKind());
 }
 
-void VarRegion::Profile(llvm::FoldingSetNodeID &ID) const {
+void VarRegion::Profile(llvm37::FoldingSetNodeID &ID) const {
   VarRegion::ProfileRegion(ID, getDecl(), superRegion);
 }
 
-void SymbolicRegion::ProfileRegion(llvm::FoldingSetNodeID& ID, SymbolRef sym,
+void SymbolicRegion::ProfileRegion(llvm37::FoldingSetNodeID& ID, SymbolRef sym,
                                    const MemRegion *sreg) {
   ID.AddInteger((unsigned) MemRegion::SymbolicRegionKind);
   ID.Add(sym);
   ID.AddPointer(sreg);
 }
 
-void SymbolicRegion::Profile(llvm::FoldingSetNodeID& ID) const {
+void SymbolicRegion::Profile(llvm37::FoldingSetNodeID& ID) const {
   SymbolicRegion::ProfileRegion(ID, sym, getSuperRegion());
 }
 
-void ElementRegion::ProfileRegion(llvm::FoldingSetNodeID& ID,
+void ElementRegion::ProfileRegion(llvm37::FoldingSetNodeID& ID,
                                   QualType ElementType, SVal Idx,
                                   const MemRegion* superRegion) {
   ID.AddInteger(MemRegion::ElementRegionKind);
@@ -353,22 +353,22 @@ void ElementRegion::ProfileRegion(llvm::FoldingSetNodeID& ID,
   Idx.Profile(ID);
 }
 
-void ElementRegion::Profile(llvm::FoldingSetNodeID& ID) const {
+void ElementRegion::Profile(llvm37::FoldingSetNodeID& ID) const {
   ElementRegion::ProfileRegion(ID, ElementType, Index, superRegion);
 }
 
-void FunctionTextRegion::ProfileRegion(llvm::FoldingSetNodeID& ID,
+void FunctionTextRegion::ProfileRegion(llvm37::FoldingSetNodeID& ID,
                                        const NamedDecl *FD,
                                        const MemRegion*) {
   ID.AddInteger(MemRegion::FunctionTextRegionKind);
   ID.AddPointer(FD);
 }
 
-void FunctionTextRegion::Profile(llvm::FoldingSetNodeID& ID) const {
+void FunctionTextRegion::Profile(llvm37::FoldingSetNodeID& ID) const {
   FunctionTextRegion::ProfileRegion(ID, FD, superRegion);
 }
 
-void BlockTextRegion::ProfileRegion(llvm::FoldingSetNodeID& ID,
+void BlockTextRegion::ProfileRegion(llvm37::FoldingSetNodeID& ID,
                                     const BlockDecl *BD, CanQualType,
                                     const AnalysisDeclContext *AC,
                                     const MemRegion*) {
@@ -376,11 +376,11 @@ void BlockTextRegion::ProfileRegion(llvm::FoldingSetNodeID& ID,
   ID.AddPointer(BD);
 }
 
-void BlockTextRegion::Profile(llvm::FoldingSetNodeID& ID) const {
+void BlockTextRegion::Profile(llvm37::FoldingSetNodeID& ID) const {
   BlockTextRegion::ProfileRegion(ID, BD, locTy, AC, superRegion);
 }
 
-void BlockDataRegion::ProfileRegion(llvm::FoldingSetNodeID& ID,
+void BlockDataRegion::ProfileRegion(llvm37::FoldingSetNodeID& ID,
                                     const BlockTextRegion *BC,
                                     const LocationContext *LC,
                                     unsigned BlkCount,
@@ -392,22 +392,22 @@ void BlockDataRegion::ProfileRegion(llvm::FoldingSetNodeID& ID,
   ID.AddPointer(sReg);
 }
 
-void BlockDataRegion::Profile(llvm::FoldingSetNodeID& ID) const {
+void BlockDataRegion::Profile(llvm37::FoldingSetNodeID& ID) const {
   BlockDataRegion::ProfileRegion(ID, BC, LC, BlockCount, getSuperRegion());
 }
 
-void CXXTempObjectRegion::ProfileRegion(llvm::FoldingSetNodeID &ID,
+void CXXTempObjectRegion::ProfileRegion(llvm37::FoldingSetNodeID &ID,
                                         Expr const *Ex,
                                         const MemRegion *sReg) {
   ID.AddPointer(Ex);
   ID.AddPointer(sReg);
 }
 
-void CXXTempObjectRegion::Profile(llvm::FoldingSetNodeID &ID) const {
+void CXXTempObjectRegion::Profile(llvm37::FoldingSetNodeID &ID) const {
   ProfileRegion(ID, Ex, getSuperRegion());
 }
 
-void CXXBaseObjectRegion::ProfileRegion(llvm::FoldingSetNodeID &ID,
+void CXXBaseObjectRegion::ProfileRegion(llvm37::FoldingSetNodeID &ID,
                                         const CXXRecordDecl *RD,
                                         bool IsVirtual,
                                         const MemRegion *SReg) {
@@ -416,7 +416,7 @@ void CXXBaseObjectRegion::ProfileRegion(llvm::FoldingSetNodeID &ID,
   ID.AddPointer(SReg);
 }
 
-void CXXBaseObjectRegion::Profile(llvm::FoldingSetNodeID &ID) const {
+void CXXBaseObjectRegion::Profile(llvm37::FoldingSetNodeID &ID) const {
   ProfileRegion(ID, getDecl(), isVirtual(), superRegion);
 }
 
@@ -439,12 +439,12 @@ void SubRegion::anchor() { }
 //===----------------------------------------------------------------------===//
 
 void MemRegion::dump() const {
-  dumpToStream(llvm::errs());
+  dumpToStream(llvm37::errs());
 }
 
 std::string MemRegion::getString() const {
   std::string s;
-  llvm::raw_string_ostream os(s);
+  llvm37::raw_string_ostream os(s);
   dumpToStream(os);
   return os.str();
 }
@@ -526,7 +526,7 @@ void VarRegion::dumpToStream(raw_ostream &os) const {
 }
 
 void RegionRawOffset::dump() const {
-  dumpToStream(llvm::errs());
+  dumpToStream(llvm37::errs());
 }
 
 void RegionRawOffset::dumpToStream(raw_ostream &os) const {
@@ -734,7 +734,7 @@ MemRegionManager::getObjCStringRegion(const ObjCStringLiteral* Str){
 /// Look through a chain of LocationContexts to either find the
 /// StackFrameContext that matches a DeclContext, or find a VarRegion
 /// for a variable captured by a block.
-static llvm::PointerUnion<const StackFrameContext *, const VarRegion *>
+static llvm37::PointerUnion<const StackFrameContext *, const VarRegion *>
 getStackOrCaptureRegionForDeclContext(const LocationContext *LC,
                                       const DeclContext *DC,
                                       const VarDecl *VD) {
@@ -794,7 +794,7 @@ const VarRegion* MemRegionManager::getVarRegion(const VarDecl *D,
     // FIXME: Once we implement scope handling, we will need to properly lookup
     // 'D' to the proper LocationContext.
     const DeclContext *DC = D->getDeclContext();
-    llvm::PointerUnion<const StackFrameContext *, const VarRegion *> V =
+    llvm37::PointerUnion<const StackFrameContext *, const VarRegion *> V =
       getStackOrCaptureRegionForDeclContext(LC, DC, D);
     
     if (V.is<const VarRegion*>())
@@ -909,7 +909,7 @@ MemRegionManager::getElementRegion(QualType elementType, NonLoc Idx,
 
   QualType T = Ctx.getCanonicalType(elementType).getUnqualifiedType();
 
-  llvm::FoldingSetNodeID ID;
+  llvm37::FoldingSetNodeID ID;
   ElementRegion::ProfileRegion(ID, T, Idx, superRegion);
 
   void *InsertPos;
@@ -1385,7 +1385,7 @@ void BlockDataRegion::LazyInitializeReferencedVars() {
   }
 
   MemRegionManager &MemMgr = *getMemRegionManager();
-  llvm::BumpPtrAllocator &A = MemMgr.getAllocator();
+  llvm37::BumpPtrAllocator &A = MemMgr.getAllocator();
   BumpVectorContext BC(A);
 
   typedef BumpVector<const MemRegion*> VarVec;

@@ -18,9 +18,9 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/ADT/IntEqClasses.h"
+#include "llvm37/ADT/IntEqClasses.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 void IntEqClasses::grow(unsigned N) {
   assert(NumClasses == 0 && "grow() called after compress().");

@@ -12,10 +12,10 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/FileUtilities.h"
-#include "llvm/Support/raw_ostream.h"
-using namespace llvm;
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/FileUtilities.h"
+#include "llvm37/Support/raw_ostream.h"
+using namespace llvm37;
 
 namespace {
   cl::opt<std::string>

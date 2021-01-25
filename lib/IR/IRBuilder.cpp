@@ -12,13 +12,13 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/IR/Function.h"
-#include "llvm/IR/GlobalVariable.h"
-#include "llvm/IR/IRBuilder.h"
-#include "llvm/IR/Intrinsics.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Statepoint.h"
-using namespace llvm;
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/GlobalVariable.h"
+#include "llvm37/IR/IRBuilder.h"
+#include "llvm37/IR/Intrinsics.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/Statepoint.h"
+using namespace llvm37;
 
 /// CreateGlobalString - Make a new global variable with an initializer that
 /// has array of i8 type filled in with the nul terminated string value
@@ -282,7 +282,7 @@ CallInst *IRBuilderBase::CreateGCStatepointCall(
     Intrinsic::getDeclaration(M, Intrinsic::experimental_gc_statepoint,
                               ArgTypes);
 
-  std::vector<llvm::Value *> Args = getStatepointArgs(
+  std::vector<llvm37::Value *> Args = getStatepointArgs(
       *this, ID, NumPatchBytes, ActualCallee, CallArgs, DeoptArgs, GCArgs);
   return createCallHelper(FnStatepoint, Args, this, Name);
 }
@@ -313,7 +313,7 @@ InvokeInst *IRBuilderBase::CreateGCStatepointInvoke(
   Function *FnStatepoint = Intrinsic::getDeclaration(
       M, Intrinsic::experimental_gc_statepoint, {FuncPtrType});
 
-  std::vector<llvm::Value *> Args = getStatepointArgs(
+  std::vector<llvm37::Value *> Args = getStatepointArgs(
       *this, ID, NumPatchBytes, ActualInvokee, InvokeArgs, DeoptArgs, GCArgs);
   return createInvokeHelper(FnStatepoint, NormalDest, UnwindDest, Args, this,
                             Name);

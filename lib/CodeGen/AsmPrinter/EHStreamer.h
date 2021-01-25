@@ -11,13 +11,13 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_LIB_CODEGEN_ASMPRINTER_EHSTREAMER_H
-#define LLVM_LIB_CODEGEN_ASMPRINTER_EHSTREAMER_H
+#ifndef LLVM37_LIB_CODEGEN_ASMPRINTER_EHSTREAMER_H
+#define LLVM37_LIB_CODEGEN_ASMPRINTER_EHSTREAMER_H
 
 #include "AsmPrinterHandler.h"
-#include "llvm/ADT/DenseMap.h"
+#include "llvm37/ADT/DenseMap.h"
 
-namespace llvm {
+namespace llvm37 {
 struct LandingPadInfo;
 class MachineModuleInfo;
 class MachineInstr;
@@ -30,7 +30,7 @@ template <typename T>
 class SmallVectorImpl;
 
 /// Emits exception handling directives.
-class LLVM_LIBRARY_VISIBILITY EHStreamer : public AsmPrinterHandler {
+class LLVM37_LIBRARY_VISIBILITY EHStreamer : public AsmPrinterHandler {
 protected:
   /// Target of directive emission.
   AsmPrinter *Asm;

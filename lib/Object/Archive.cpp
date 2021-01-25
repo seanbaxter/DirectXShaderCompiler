@@ -11,17 +11,17 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Object/Archive.h"
-#include "llvm/ADT/APInt.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/ADT/Twine.h"
-#include "llvm/Support/Endian.h"
-#include "llvm/Support/MemoryBuffer.h"
-#include "llvm/Support/Path.h"
+#include "llvm37/Object/Archive.h"
+#include "llvm37/ADT/APInt.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/ADT/Twine.h"
+#include "llvm37/Support/Endian.h"
+#include "llvm37/Support/MemoryBuffer.h"
+#include "llvm37/Support/Path.h"
 
-using namespace llvm;
+using namespace llvm37;
 using namespace object;
-using namespace llvm::support::endian;
+using namespace llvm37::support::endian;
 
 static const char *const Magic = "!<arch>\n";
 static const char *const ThinMagic = "!<thin>\n";
@@ -34,18 +34,18 @@ StringRef ArchiveMemberHeader::getName() const {
     EndCond = ' ';
   else
     EndCond = '/';
-  llvm::StringRef::size_type end =
-      llvm::StringRef(Name, sizeof(Name)).find(EndCond);
-  if (end == llvm::StringRef::npos)
+  llvm37::StringRef::size_type end =
+      llvm37::StringRef(Name, sizeof(Name)).find(EndCond);
+  if (end == llvm37::StringRef::npos)
     end = sizeof(Name);
   assert(end <= sizeof(Name) && end > 0);
   // Don't include the EndCond if there is one.
-  return llvm::StringRef(Name, end);
+  return llvm37::StringRef(Name, end);
 }
 
 uint32_t ArchiveMemberHeader::getSize() const {
   uint32_t Ret;
-  if (llvm::StringRef(Size, sizeof(Size)).rtrim(" ").getAsInteger(10, Ret))
+  if (llvm37::StringRef(Size, sizeof(Size)).rtrim(" ").getAsInteger(10, Ret))
     llvm_unreachable("Size is not a decimal number.");
   return Ret;
 }

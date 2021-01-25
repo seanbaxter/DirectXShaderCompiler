@@ -7,11 +7,11 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Analysis/CGSCCPassManager.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/Debug.h"
+#include "llvm37/Analysis/CGSCCPassManager.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/Debug.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 char CGSCCAnalysisManagerModuleProxy::PassID;
 

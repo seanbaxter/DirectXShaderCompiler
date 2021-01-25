@@ -15,12 +15,12 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_UTILS_TABLEGEN_X86MODRMFILTERS_H
-#define LLVM_UTILS_TABLEGEN_X86MODRMFILTERS_H
+#ifndef LLVM37_UTILS_TABLEGEN_X86MODRMFILTERS_H
+#define LLVM37_UTILS_TABLEGEN_X86MODRMFILTERS_H
 
-#include "llvm/Support/DataTypes.h"
+#include "llvm37/Support/DataTypes.h"
 
-namespace llvm {
+namespace llvm37 {
 
 namespace X86Disassembler {
 
@@ -130,6 +130,6 @@ public:
 
 } // namespace X86Disassembler
 
-} // namespace llvm
+} // namespace llvm37
 
 #endif

@@ -11,9 +11,9 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Support/raw_os_ostream.h"
+#include "llvm37/Support/raw_os_ostream.h"
 #include <ostream>
-using namespace llvm;
+using namespace llvm37;
 
 //===----------------------------------------------------------------------===//
 //  raw_os_ostream

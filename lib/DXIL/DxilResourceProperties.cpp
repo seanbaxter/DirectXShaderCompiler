@@ -8,10 +8,10 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include "dxc/DXIL/DxilResourceProperties.h"
-#include "llvm/IR/Constant.h"
+#include "llvm37/IR/Constant.h"
 #include "dxc/DXIL/DxilShaderModel.h"
-#include "llvm/IR/DerivedTypes.h"
-#include "llvm/IR/Constants.h"
+#include "llvm37/IR/DerivedTypes.h"
+#include "llvm37/IR/Constants.h"
 #include "dxc/DXIL/DxilResourceBase.h"
 #include "dxc/DXIL/DxilResource.h"
 #include "dxc/DXIL/DxilCBuffer.h"
@@ -20,7 +20,7 @@
 #include "dxc/DXIL/DxilInstructions.h"
 #include "dxc/DXIL/DxilUtil.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 namespace hlsl {
 
@@ -130,7 +130,7 @@ DxilResourceProperties loadPropsFromConstant(const Constant &C) {
 
 DxilResourceProperties
 loadPropsFromAnnotateHandle(DxilInst_AnnotateHandle &annotateHandle,
-                            llvm::Type *Ty, const ShaderModel &SM) {
+                            llvm37::Type *Ty, const ShaderModel &SM) {
   Constant *ResProp = cast<Constant>(annotateHandle.get_props());
   return loadPropsFromConstant(*ResProp);
 }

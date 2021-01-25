@@ -18,13 +18,13 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Analysis/DomPrinter.h"
-#include "llvm/Analysis/DOTGraphTraitsPass.h"
-#include "llvm/Analysis/PostDominators.h"
+#include "llvm37/Analysis/DomPrinter.h"
+#include "llvm37/Analysis/DOTGraphTraitsPass.h"
+#include "llvm37/Analysis/PostDominators.h"
 
-using namespace llvm;
+using namespace llvm37;
 
-namespace llvm {
+namespace llvm37 {
 template<>
 struct DOTGraphTraits<DomTreeNode*> : public DefaultDOTGraphTraits {
 
@@ -221,34 +221,34 @@ INITIALIZE_PASS(PostDomOnlyPrinter, "dot-postdom-only",
 // "include/llvm/LinkAllPasses.h". Otherwise the pass would be deleted by
 // the link time optimization.
 
-FunctionPass *llvm::createDomPrinterPass() {
+FunctionPass *llvm37::createDomPrinterPass() {
   return new DomPrinter();
 }
 
-FunctionPass *llvm::createDomOnlyPrinterPass() {
+FunctionPass *llvm37::createDomOnlyPrinterPass() {
   return new DomOnlyPrinter();
 }
 
-FunctionPass *llvm::createDomViewerPass() {
+FunctionPass *llvm37::createDomViewerPass() {
   return new DomViewer();
 }
 
-FunctionPass *llvm::createDomOnlyViewerPass() {
+FunctionPass *llvm37::createDomOnlyViewerPass() {
   return new DomOnlyViewer();
 }
 
-FunctionPass *llvm::createPostDomPrinterPass() {
+FunctionPass *llvm37::createPostDomPrinterPass() {
   return new PostDomPrinter();
 }
 
-FunctionPass *llvm::createPostDomOnlyPrinterPass() {
+FunctionPass *llvm37::createPostDomOnlyPrinterPass() {
   return new PostDomOnlyPrinter();
 }
 
-FunctionPass *llvm::createPostDomViewerPass() {
+FunctionPass *llvm37::createPostDomViewerPass() {
   return new PostDomViewer();
 }
 
-FunctionPass *llvm::createPostDomOnlyViewerPass() {
+FunctionPass *llvm37::createPostDomOnlyViewerPass() {
   return new PostDomOnlyViewer();
 }

@@ -11,32 +11,32 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/MC/MCAsmBackend.h"
-#include "llvm/MC/MCAsmLayout.h"
-#include "llvm/MC/MCAssembler.h"
-#include "llvm/MC/MCCodeEmitter.h"
-#include "llvm/MC/MCContext.h"
-#include "llvm/MC/MCExpr.h"
-#include "llvm/MC/MCObjectFileInfo.h"
-#include "llvm/MC/MCObjectStreamer.h"
-#include "llvm/MC/MCSection.h"
-#include "llvm/MC/MCSectionCOFF.h"
-#include "llvm/MC/MCStreamer.h"
-#include "llvm/MC/MCSymbolCOFF.h"
-#include "llvm/MC/MCValue.h"
-#include "llvm/MC/MCWinCOFFStreamer.h"
-#include "llvm/Support/COFF.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/MathExtras.h"
-#include "llvm/Support/TargetRegistry.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/MC/MCAsmBackend.h"
+#include "llvm37/MC/MCAsmLayout.h"
+#include "llvm37/MC/MCAssembler.h"
+#include "llvm37/MC/MCCodeEmitter.h"
+#include "llvm37/MC/MCContext.h"
+#include "llvm37/MC/MCExpr.h"
+#include "llvm37/MC/MCObjectFileInfo.h"
+#include "llvm37/MC/MCObjectStreamer.h"
+#include "llvm37/MC/MCSection.h"
+#include "llvm37/MC/MCSectionCOFF.h"
+#include "llvm37/MC/MCStreamer.h"
+#include "llvm37/MC/MCSymbolCOFF.h"
+#include "llvm37/MC/MCValue.h"
+#include "llvm37/MC/MCWinCOFFStreamer.h"
+#include "llvm37/Support/COFF.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/MathExtras.h"
+#include "llvm37/Support/TargetRegistry.h"
+#include "llvm37/Support/raw_ostream.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "WinCOFFStreamer"
 
-namespace llvm {
+namespace llvm37 {
 MCWinCOFFStreamer::MCWinCOFFStreamer(MCContext &Context, MCAsmBackend &MAB,
                                      MCCodeEmitter &CE, raw_pwrite_stream &OS)
     : MCObjectStreamer(Context, MAB, OS, &CE), CurSymbol(nullptr) {}
@@ -287,7 +287,7 @@ void MCWinCOFFStreamer::FinishImpl() {
   MCObjectStreamer::FinishImpl();
 }
 
-LLVM_ATTRIBUTE_NORETURN
+LLVM37_ATTRIBUTE_NORETURN
 void MCWinCOFFStreamer::FatalError(const Twine &Msg) const {
   getContext().reportFatalError(SMLoc(), Msg);
 }

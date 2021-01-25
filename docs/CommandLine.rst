@@ -89,7 +89,7 @@ To start out, you need to include the CommandLine header file into your program:
 
 .. code-block:: c++
 
-  #include "llvm/Support/CommandLine.h"
+  #include "llvm37/Support/CommandLine.h"
 
 Additionally, you need to add this as the first line of your main program:
 
@@ -1298,7 +1298,7 @@ Here is an example of how the function could be used:
 
 .. code-block:: c++
 
-  using namespace llvm;
+  using namespace llvm37;
   int main(int argc, char **argv) {
     cl::OptionCategory AnotherCategory("Some options");
 
@@ -1732,8 +1732,8 @@ automatically be included in any program that links with that library.  This is
 a feature. However, sometimes it is necessary to know the value of the command
 line option outside of the library. In these cases the library does or should
 provide an external storage location that is accessible to users of the
-library. Examples of this include the ``llvm::DebugFlag`` exported by the
-``lib/Support/Debug.cpp`` file and the ``llvm::TimePassesIsEnabled`` flag
+library. Examples of this include the ``llvm37::DebugFlag`` exported by the
+``lib/Support/Debug.cpp`` file and the ``llvm37::TimePassesIsEnabled`` flag
 exported by the ``lib/VMCore/PassManager.cpp`` file.
 
 .. todo::

@@ -7,26 +7,26 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_TOOLS_LLVMPDBDUMP_LLVMPDBDUMP_H
-#define LLVM_TOOLS_LLVMPDBDUMP_LLVMPDBDUMP_H
+#ifndef LLVM37_TOOLS_LLVMPDBDUMP_LLVMPDBDUMP_H
+#define LLVM37_TOOLS_LLVMPDBDUMP_LLVMPDBDUMP_H
 
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/raw_ostream.h"
 
 namespace opts {
-extern llvm::cl::opt<bool> Compilands;
-extern llvm::cl::opt<bool> Symbols;
-extern llvm::cl::opt<bool> Globals;
-extern llvm::cl::opt<bool> Types;
-extern llvm::cl::opt<bool> All;
+extern llvm37::cl::opt<bool> Compilands;
+extern llvm37::cl::opt<bool> Symbols;
+extern llvm37::cl::opt<bool> Globals;
+extern llvm37::cl::opt<bool> Types;
+extern llvm37::cl::opt<bool> All;
 
-extern llvm::cl::opt<bool> ExcludeCompilerGenerated;
+extern llvm37::cl::opt<bool> ExcludeCompilerGenerated;
 
-extern llvm::cl::opt<bool> NoClassDefs;
-extern llvm::cl::opt<bool> NoEnumDefs;
-extern llvm::cl::list<std::string> ExcludeTypes;
-extern llvm::cl::list<std::string> ExcludeSymbols;
-extern llvm::cl::list<std::string> ExcludeCompilands;
+extern llvm37::cl::opt<bool> NoClassDefs;
+extern llvm37::cl::opt<bool> NoEnumDefs;
+extern llvm37::cl::list<std::string> ExcludeTypes;
+extern llvm37::cl::list<std::string> ExcludeSymbols;
+extern llvm37::cl::list<std::string> ExcludeCompilands;
 }
 
 #endif

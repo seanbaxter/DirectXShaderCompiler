@@ -1,21 +1,21 @@
 
 #include "DwarfCompileUnit.h"
 #include "DwarfExpression.h"
-#include "llvm/CodeGen/MachineFunction.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/GlobalValue.h"
-#include "llvm/IR/GlobalVariable.h"
-#include "llvm/IR/Instruction.h"
-#include "llvm/MC/MCAsmInfo.h"
-#include "llvm/MC/MCStreamer.h"
-#include "llvm/Target/TargetFrameLowering.h"
-#include "llvm/Target/TargetLoweringObjectFile.h"
-#include "llvm/Target/TargetMachine.h"
-#include "llvm/Target/TargetRegisterInfo.h"
-#include "llvm/Target/TargetSubtargetInfo.h"
+#include "llvm37/CodeGen/MachineFunction.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/IR/GlobalValue.h"
+#include "llvm37/IR/GlobalVariable.h"
+#include "llvm37/IR/Instruction.h"
+#include "llvm37/MC/MCAsmInfo.h"
+#include "llvm37/MC/MCStreamer.h"
+#include "llvm37/Target/TargetFrameLowering.h"
+#include "llvm37/Target/TargetLoweringObjectFile.h"
+#include "llvm37/Target/TargetMachine.h"
+#include "llvm37/Target/TargetRegisterInfo.h"
+#include "llvm37/Target/TargetSubtargetInfo.h"
 
-namespace llvm {
+namespace llvm37 {
 
 DwarfCompileUnit::DwarfCompileUnit(unsigned UID, const DICompileUnit *Node,
                                    AsmPrinter *A, DwarfDebug *DW,

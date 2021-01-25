@@ -7,11 +7,11 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/IR/ConstantRange.h"
-#include "llvm/IR/Instructions.h"
+#include "llvm37/IR/ConstantRange.h"
+#include "llvm37/IR/Instructions.h"
 #include "gtest/gtest.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 namespace {
 

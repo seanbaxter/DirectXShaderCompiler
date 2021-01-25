@@ -11,27 +11,27 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/IR/IRPrintingPasses.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/PassManager.h"
-#include "llvm/IR/AssemblyAnnotationWriter.h" // HLSL Change
-#include "llvm/IR/DebugInfoMetadata.h" // HLSL Change
-#include "llvm/IR/IntrinsicInst.h" // HLSL Change
-#include "llvm/Support/FormattedStream.h" // HLSL Change
-#include "llvm/Pass.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/IR/IRPrintingPasses.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/PassManager.h"
+#include "llvm37/IR/AssemblyAnnotationWriter.h" // HLSL Change
+#include "llvm37/IR/DebugInfoMetadata.h" // HLSL Change
+#include "llvm37/IR/IntrinsicInst.h" // HLSL Change
+#include "llvm37/Support/FormattedStream.h" // HLSL Change
+#include "llvm37/Pass.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/raw_ostream.h"
 #include "dxc/DXIL/DxilUtil.h"
-using namespace llvm;
+using namespace llvm37;
 
 // HLSL Change - Begin
 namespace {
-class DxilAAW : public llvm::AssemblyAnnotationWriter {
+class DxilAAW : public llvm37::AssemblyAnnotationWriter {
 public:
   ~DxilAAW() {}
   void printInfoComment(const Value &V, formatted_raw_ostream &OS) override {
-    using namespace llvm;
+    using namespace llvm37;
     if (const Instruction *I = dyn_cast<Instruction>(&V)) {
       if (isa<DbgInfoIntrinsic>(I)) {
         DILocalVariable *Var = nullptr;
@@ -158,18 +158,18 @@ char PrintBasicBlockPass::ID = 0;
 INITIALIZE_PASS(PrintBasicBlockPass, "print-bb", "Print BB to stderr", false,
                 false)
 
-ModulePass *llvm::createPrintModulePass(llvm::raw_ostream &OS,
+ModulePass *llvm37::createPrintModulePass(llvm37::raw_ostream &OS,
                                         const std::string &Banner,
                                         bool ShouldPreserveUseListOrder) {
   return new PrintModulePassWrapper(OS, Banner, ShouldPreserveUseListOrder);
 }
 
-FunctionPass *llvm::createPrintFunctionPass(llvm::raw_ostream &OS,
+FunctionPass *llvm37::createPrintFunctionPass(llvm37::raw_ostream &OS,
                                             const std::string &Banner) {
   return new PrintFunctionPassWrapper(OS, Banner);
 }
 
-BasicBlockPass *llvm::createPrintBasicBlockPass(llvm::raw_ostream &OS,
+BasicBlockPass *llvm37::createPrintBasicBlockPass(llvm37::raw_ostream &OS,
                                                 const std::string &Banner) {
   return new PrintBasicBlockPass(OS, Banner);
 }

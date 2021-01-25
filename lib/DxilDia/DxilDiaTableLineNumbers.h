@@ -17,8 +17,8 @@
 
 #include "dia2.h"
 
-#include "llvm/IR/DebugLoc.h"
-#include "llvm/IR/Instruction.h"
+#include "llvm37/IR/DebugLoc.h"
+#include "llvm37/IR/Instruction.h"
 
 #include "dxc/Support/Global.h"
 #include "dxc/Support/microcom.h"
@@ -33,7 +33,7 @@ class LineNumber : public IDiaLineNumber {
 private:
   DXC_MICROCOM_TM_REF_FIELDS()
   CComPtr<Session> m_pSession;
-  const llvm::Instruction *m_inst;
+  const llvm37::Instruction *m_inst;
 
 public:
   DXC_MICROCOM_TM_ADDREF_RELEASE_IMPL()
@@ -44,11 +44,11 @@ public:
   LineNumber(
     /* [in] */ IMalloc *pMalloc,
     /* [in] */ Session *pSession,
-    /* [in] */ const llvm::Instruction * inst);
+    /* [in] */ const llvm37::Instruction * inst);
 
-  const llvm::DebugLoc &DL() const;
+  const llvm37::DebugLoc &DL() const;
 
-  const llvm::Instruction *Inst() const { return m_inst; }
+  const llvm37::Instruction *Inst() const { return m_inst; }
 
   STDMETHODIMP get_compiland(
     /* [retval][out] */ IDiaSymbol **pRetVal) override { return ENotImpl(); }
@@ -102,7 +102,7 @@ public:
   LineNumbersTable(
     /* [in] */ IMalloc *pMalloc,
     /* [in] */ Session *pSession,
-    /* [in] */ std::vector<const llvm::Instruction*> &&instructions);
+    /* [in] */ std::vector<const llvm37::Instruction*> &&instructions);
 
   HRESULT GetItem(
     /* [in] */ DWORD index, 
@@ -110,11 +110,11 @@ public:
 
 private:
   // Keep a reference to the instructions that contain the line numbers.
-  const std::vector<const llvm::Instruction *> &m_instructions;
+  const std::vector<const llvm37::Instruction *> &m_instructions;
 
   // Provide storage space for instructions for when the table contains
   // a subset of all instructions.
-  std::vector<const llvm::Instruction *> m_instructionsStorage;
+  std::vector<const llvm37::Instruction *> m_instructionsStorage;
 };
 
 }  // namespace dxil_dia

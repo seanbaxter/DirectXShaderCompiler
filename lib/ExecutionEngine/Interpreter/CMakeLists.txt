@@ -12,7 +12,7 @@ add_llvm_library(LLVMInterpreter
   Interpreter.cpp
   )
 
-if( LLVM_ENABLE_FFI )
+if( LLVM37_ENABLE_FFI )
   target_link_libraries( LLVMInterpreter PRIVATE ${FFI_LIBRARY_PATH} )
 endif()
 

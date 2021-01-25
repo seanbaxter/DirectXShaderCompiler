@@ -13,8 +13,8 @@
 ///
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_LIB_FORMAT_UNWRAPPEDLINEPARSER_H
-#define LLVM_CLANG_LIB_FORMAT_UNWRAPPEDLINEPARSER_H
+#ifndef LLVM37_CLANG_LIB_FORMAT_UNWRAPPEDLINEPARSER_H
+#define LLVM37_CLANG_LIB_FORMAT_UNWRAPPEDLINEPARSER_H
 
 #include "FormatToken.h"
 #include "clang/Basic/IdentifierTable.h"

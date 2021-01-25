@@ -11,8 +11,8 @@
 //  construction of macro definitions from some external source.
 //
 //===----------------------------------------------------------------------===//
-#ifndef LLVM_CLANG_LEX_EXTERNALPREPROCESSORSOURCE_H
-#define LLVM_CLANG_LEX_EXTERNALPREPROCESSORSOURCE_H
+#ifndef LLVM37_CLANG_LEX_EXTERNALPREPROCESSORSOURCE_H
+#define LLVM37_CLANG_LEX_EXTERNALPREPROCESSORSOURCE_H
 
 namespace clang {
 

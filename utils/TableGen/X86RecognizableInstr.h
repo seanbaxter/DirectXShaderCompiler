@@ -14,16 +14,16 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_UTILS_TABLEGEN_X86RECOGNIZABLEINSTR_H
-#define LLVM_UTILS_TABLEGEN_X86RECOGNIZABLEINSTR_H
+#ifndef LLVM37_UTILS_TABLEGEN_X86RECOGNIZABLEINSTR_H
+#define LLVM37_UTILS_TABLEGEN_X86RECOGNIZABLEINSTR_H
 
 #include "CodeGenTarget.h"
 #include "X86DisassemblerTables.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/Support/DataTypes.h"
-#include "llvm/TableGen/Record.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/Support/DataTypes.h"
+#include "llvm37/TableGen/Record.h"
 
-namespace llvm {
+namespace llvm37 {
 
 namespace X86Disassembler {
 
@@ -235,6 +235,6 @@ public:
   
 } // namespace X86Disassembler
 
-} // namespace llvm
+} // namespace llvm37
 
 #endif

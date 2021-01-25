@@ -11,12 +11,12 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Support/BranchProbability.h"
-#include "llvm/Support/BlockFrequency.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/Support/BranchProbability.h"
+#include "llvm37/Support/BlockFrequency.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <cassert>
 
-using namespace llvm;
+using namespace llvm37;
 
 BlockFrequency &BlockFrequency::operator*=(const BranchProbability &Prob) {
   Frequency = Prob.scale(Frequency);

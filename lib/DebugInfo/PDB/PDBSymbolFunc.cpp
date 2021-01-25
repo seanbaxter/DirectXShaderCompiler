@@ -7,22 +7,22 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/DebugInfo/PDB/PDBSymbolFunc.h"
+#include "llvm37/DebugInfo/PDB/PDBSymbolFunc.h"
 
-#include "llvm/DebugInfo/PDB/ConcreteSymbolEnumerator.h"
-#include "llvm/DebugInfo/PDB/IPDBEnumChildren.h"
-#include "llvm/DebugInfo/PDB/IPDBSession.h"
-#include "llvm/DebugInfo/PDB/PDBSymbolData.h"
-#include "llvm/DebugInfo/PDB/PDBSymbolTypeFunctionSig.h"
-#include "llvm/DebugInfo/PDB/PDBSymbolTypeUDT.h"
-#include "llvm/DebugInfo/PDB/PDBSymDumper.h"
-#include "llvm/DebugInfo/PDB/PDBTypes.h"
+#include "llvm37/DebugInfo/PDB/ConcreteSymbolEnumerator.h"
+#include "llvm37/DebugInfo/PDB/IPDBEnumChildren.h"
+#include "llvm37/DebugInfo/PDB/IPDBSession.h"
+#include "llvm37/DebugInfo/PDB/PDBSymbolData.h"
+#include "llvm37/DebugInfo/PDB/PDBSymbolTypeFunctionSig.h"
+#include "llvm37/DebugInfo/PDB/PDBSymbolTypeUDT.h"
+#include "llvm37/DebugInfo/PDB/PDBSymDumper.h"
+#include "llvm37/DebugInfo/PDB/PDBTypes.h"
 
 #include <unordered_set>
 #include <utility>
 #include <vector>
 
-using namespace llvm;
+using namespace llvm37;
 
 namespace {
 class FunctionArgEnumerator : public IPDBEnumChildren<PDBSymbolData> {
@@ -92,7 +92,7 @@ std::unique_ptr<PDBSymbolTypeFunctionSig> PDBSymbolFunc::getSignature() const {
 
 std::unique_ptr<IPDBEnumChildren<PDBSymbolData>>
 PDBSymbolFunc::getArguments() const {
-  return llvm::make_unique<FunctionArgEnumerator>(Session, *this);
+  return llvm37::make_unique<FunctionArgEnumerator>(Session, *this);
 }
 
 std::unique_ptr<PDBSymbolTypeUDT> PDBSymbolFunc::getClassParent() const {

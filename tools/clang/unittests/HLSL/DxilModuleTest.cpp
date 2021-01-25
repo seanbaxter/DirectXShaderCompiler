@@ -18,17 +18,17 @@
 #include "dxc/DXIL/DxilInstructions.h"
 #include "dxc/DxilContainer/DxilContainer.h"
 #include "dxc/DXIL/DxilModule.h"
-#include "llvm/Support/Regex.h"
-#include "llvm/Support/MSFileSystem.h"
-#include "llvm/Support/FileSystem.h"
-#include "llvm/Support/MemoryBuffer.h"
-#include "llvm/Support/ErrorOr.h"
-#include "llvm/Bitcode/ReaderWriter.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/InstIterator.h"
+#include "llvm37/Support/Regex.h"
+#include "llvm37/Support/MSFileSystem.h"
+#include "llvm37/Support/FileSystem.h"
+#include "llvm37/Support/MemoryBuffer.h"
+#include "llvm37/Support/ErrorOr.h"
+#include "llvm37/Bitcode/ReaderWriter.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/InstIterator.h"
 
 using namespace hlsl;
-using namespace llvm;
+using namespace llvm37;
 
 ///////////////////////////////////////////////////////////////////////////////
 // DxilModule unit tests.
@@ -148,10 +148,10 @@ public:
     GetDxilProgramBitcode(pProgramHeader, &pIL, &pILLength);
       
     // Parse llvm bitcode into a module.
-    std::unique_ptr<llvm::MemoryBuffer> pBitcodeBuf(
-          llvm::MemoryBuffer::getMemBuffer(llvm::StringRef(pIL, pILLength), "", false));
-    llvm::ErrorOr<std::unique_ptr<llvm::Module>>
-      pModule(llvm::parseBitcodeFile(pBitcodeBuf->getMemBufferRef(), m_llvmContext));
+    std::unique_ptr<llvm37::MemoryBuffer> pBitcodeBuf(
+          llvm37::MemoryBuffer::getMemBuffer(llvm37::StringRef(pIL, pILLength), "", false));
+    llvm37::ErrorOr<std::unique_ptr<llvm37::Module>>
+      pModule(llvm37::parseBitcodeFile(pBitcodeBuf->getMemBufferRef(), m_llvmContext));
     if (std::error_code ec = pModule.getError()) {
       VERIFY_FAIL();
     }
@@ -164,8 +164,8 @@ public:
   }
 
 public:
-  static ::llvm::sys::fs::MSFileSystem *CreateMSFileSystem() {
-    ::llvm::sys::fs::MSFileSystem *msfPtr;
+  static ::llvm37::sys::fs::MSFileSystem *CreateMSFileSystem() {
+    ::llvm37::sys::fs::MSFileSystem *msfPtr;
     VERIFY_SUCCEEDED(CreateMSFileSystemForDisk(&msfPtr));
     return msfPtr;
   }
@@ -175,10 +175,10 @@ public:
   CComPtr<IDxcCompiler> pCompiler;
   CComPtr<IDxcBlobEncoding> pCodeBlob;
   CComPtr<IDxcOperationResult> pCompileResult;
-  llvm::LLVMContext m_llvmContext;
-  std::unique_ptr<llvm::Module> m_module;
-  std::unique_ptr<::llvm::sys::fs::MSFileSystem> m_msf;
-  ::llvm::sys::fs::AutoPerThreadSystem m_pts;
+  llvm37::LLVMContext m_llvmContext;
+  std::unique_ptr<llvm37::Module> m_module;
+  std::unique_ptr<::llvm37::sys::fs::MSFileSystem> m_msf;
+  ::llvm37::sys::fs::AutoPerThreadSystem m_pts;
 };
 }
 

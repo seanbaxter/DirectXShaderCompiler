@@ -11,14 +11,14 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Analysis/PostDominators.h"
-#include "llvm/ADT/DepthFirstIterator.h"
-#include "llvm/ADT/SetOperations.h"
-#include "llvm/IR/CFG.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/GenericDomTreeConstruction.h"
-using namespace llvm;
+#include "llvm37/Analysis/PostDominators.h"
+#include "llvm37/ADT/DepthFirstIterator.h"
+#include "llvm37/ADT/SetOperations.h"
+#include "llvm37/IR/CFG.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/GenericDomTreeConstruction.h"
+using namespace llvm37;
 
 #define DEBUG_TYPE "postdomtree"
 
@@ -44,7 +44,7 @@ void PostDominatorTree::print(raw_ostream &OS, const Module *) const {
 }
 
 
-FunctionPass* llvm::createPostDomTree() {
+FunctionPass* llvm37::createPostDomTree() {
   return new PostDominatorTree();
 }
 

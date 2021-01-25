@@ -13,19 +13,19 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/IR/Attributes.h"
+#include "llvm37/IR/Attributes.h"
 #include "AttributeImpl.h"
 #include "LLVMContextImpl.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/StringExtras.h"
-#include "llvm/IR/Type.h"
-#include "llvm/Support/Atomic.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/ManagedStatic.h"
-#include "llvm/Support/Mutex.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/StringExtras.h"
+#include "llvm37/IR/Type.h"
+#include "llvm37/Support/Atomic.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/ManagedStatic.h"
+#include "llvm37/Support/Mutex.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <algorithm>
-using namespace llvm;
+using namespace llvm37;
 
 //===----------------------------------------------------------------------===//
 // Attribute Construction Methods
@@ -758,14 +758,14 @@ AttributeSet AttributeSet::addAttribute(LLVMContext &C, unsigned Index,
 
 AttributeSet AttributeSet::addAttribute(LLVMContext &C, unsigned Index,
                                         StringRef Kind) const {
-  llvm::AttrBuilder B;
+  llvm37::AttrBuilder B;
   B.addAttribute(Kind);
   return addAttributes(C, Index, AttributeSet::get(C, Index, B));
 }
 
 AttributeSet AttributeSet::addAttribute(LLVMContext &C, unsigned Index,
                                         StringRef Kind, StringRef Value) const {
-  llvm::AttrBuilder B;
+  llvm37::AttrBuilder B;
   B.addAttribute(Kind, Value);
   return addAttributes(C, Index, AttributeSet::get(C, Index, B));
 }
@@ -906,7 +906,7 @@ AttributeSet AttributeSet::removeAttributes(LLVMContext &C, unsigned Index,
 
 AttributeSet AttributeSet::addDereferenceableAttr(LLVMContext &C, unsigned Index,
                                                   uint64_t Bytes) const {
-  llvm::AttrBuilder B;
+  llvm37::AttrBuilder B;
   B.addDereferenceableAttr(Bytes);
   return addAttributes(C, Index, AttributeSet::get(C, Index, B));
 }
@@ -914,7 +914,7 @@ AttributeSet AttributeSet::addDereferenceableAttr(LLVMContext &C, unsigned Index
 AttributeSet AttributeSet::addDereferenceableOrNullAttr(LLVMContext &C,
                                                         unsigned Index,
                                                         uint64_t Bytes) const {
-  llvm::AttrBuilder B;
+  llvm37::AttrBuilder B;
   B.addDereferenceableOrNullAttr(Bytes);
   return addAttributes(C, Index, AttributeSet::get(C, Index, B));
 }

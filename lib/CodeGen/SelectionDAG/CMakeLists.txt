@@ -1,4 +1,4 @@
-set(LLVM_OPTIONAL_SOURCES legalizevectorops.cpp) # HLSL Change - ignore file
+set(LLVM37_OPTIONAL_SOURCES legalizevectorops.cpp) # HLSL Change - ignore file
 
 add_llvm_library(LLVMSelectionDAG
   DAGCombiner.cpp

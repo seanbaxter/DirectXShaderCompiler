@@ -12,52 +12,52 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/LTO/LTOCodeGenerator.h"
-#include "llvm/ADT/StringExtras.h"
-#include "llvm/Analysis/Passes.h"
-#include "llvm/Analysis/TargetLibraryInfo.h"
-#include "llvm/Analysis/TargetTransformInfo.h"
-#include "llvm/Bitcode/ReaderWriter.h"
-#include "llvm/CodeGen/RuntimeLibcalls.h"
-#include "llvm/Config/config.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/DerivedTypes.h"
-#include "llvm/IR/DiagnosticInfo.h"
-#include "llvm/IR/DiagnosticPrinter.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/LegacyPassManager.h"
-#include "llvm/IR/Mangler.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/Verifier.h"
-#include "llvm/InitializePasses.h"
-#include "llvm/LTO/LTOModule.h"
-#include "llvm/Linker/Linker.h"
-#include "llvm/MC/MCAsmInfo.h"
-#include "llvm/MC/MCContext.h"
-#include "llvm/MC/SubtargetFeature.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/FileSystem.h"
-#include "llvm/Support/Host.h"
-#include "llvm/Support/MemoryBuffer.h"
-#include "llvm/Support/Signals.h"
-#include "llvm/Support/TargetRegistry.h"
-#include "llvm/Support/TargetSelect.h"
-#include "llvm/Support/ToolOutputFile.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Target/TargetLowering.h"
-#include "llvm/Target/TargetOptions.h"
-#include "llvm/Target/TargetRegisterInfo.h"
-#include "llvm/Target/TargetSubtargetInfo.h"
-#include "llvm/Transforms/IPO.h"
-#include "llvm/Transforms/IPO/PassManagerBuilder.h"
-#include "llvm/Transforms/ObjCARC.h"
+#include "llvm37/LTO/LTOCodeGenerator.h"
+#include "llvm37/ADT/StringExtras.h"
+#include "llvm37/Analysis/Passes.h"
+#include "llvm37/Analysis/TargetLibraryInfo.h"
+#include "llvm37/Analysis/TargetTransformInfo.h"
+#include "llvm37/Bitcode/ReaderWriter.h"
+#include "llvm37/CodeGen/RuntimeLibcalls.h"
+#include "llvm37/Config/config.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/IR/DerivedTypes.h"
+#include "llvm37/IR/DiagnosticInfo.h"
+#include "llvm37/IR/DiagnosticPrinter.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/LegacyPassManager.h"
+#include "llvm37/IR/Mangler.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/Verifier.h"
+#include "llvm37/InitializePasses.h"
+#include "llvm37/LTO/LTOModule.h"
+#include "llvm37/Linker/Linker.h"
+#include "llvm37/MC/MCAsmInfo.h"
+#include "llvm37/MC/MCContext.h"
+#include "llvm37/MC/SubtargetFeature.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/FileSystem.h"
+#include "llvm37/Support/Host.h"
+#include "llvm37/Support/MemoryBuffer.h"
+#include "llvm37/Support/Signals.h"
+#include "llvm37/Support/TargetRegistry.h"
+#include "llvm37/Support/TargetSelect.h"
+#include "llvm37/Support/ToolOutputFile.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Target/TargetLowering.h"
+#include "llvm37/Target/TargetOptions.h"
+#include "llvm37/Target/TargetRegisterInfo.h"
+#include "llvm37/Target/TargetSubtargetInfo.h"
+#include "llvm37/Transforms/IPO.h"
+#include "llvm37/Transforms/IPO/PassManagerBuilder.h"
+#include "llvm37/Transforms/ObjCARC.h"
 #include <system_error>
-using namespace llvm;
+using namespace llvm37;
 
 const char* LTOCodeGenerator::getVersionString() {
-#ifdef LLVM_VERSION_INFO
-  return PACKAGE_NAME " version " PACKAGE_VERSION ", " LLVM_VERSION_INFO;
+#ifdef LLVM37_VERSION_INFO
+  return PACKAGE_NAME " version " PACKAGE_VERSION ", " LLVM37_VERSION_INFO;
 #else
   return PACKAGE_NAME " version " PACKAGE_VERSION;
 #endif
@@ -301,7 +301,7 @@ bool LTOCodeGenerator::determineTarget(std::string &errMsg) {
   std::string TripleStr = IRLinker.getModule()->getTargetTriple();
   if (TripleStr.empty())
     TripleStr = sys::getDefaultTargetTriple();
-  llvm::Triple Triple(TripleStr);
+  llvm37::Triple Triple(TripleStr);
 
   // create target machine from info for merged modules
   const Target *march = TargetRegistry::lookupTarget(TripleStr, errMsg);
@@ -333,11 +333,11 @@ bool LTOCodeGenerator::determineTarget(std::string &errMsg) {
   std::string FeatureStr = Features.getString();
   // Set a default CPU for Darwin triples.
   if (MCpu.empty() && Triple.isOSDarwin()) {
-    if (Triple.getArch() == llvm::Triple::x86_64)
+    if (Triple.getArch() == llvm37::Triple::x86_64)
       MCpu = "core2";
-    else if (Triple.getArch() == llvm::Triple::x86)
+    else if (Triple.getArch() == llvm37::Triple::x86)
       MCpu = "yonah";
-    else if (Triple.getArch() == llvm::Triple::aarch64)
+    else if (Triple.getArch() == llvm37::Triple::aarch64)
       MCpu = "cyclone";
   }
 
@@ -479,18 +479,18 @@ void LTOCodeGenerator::applyScopeRestrictions() {
     LLVMCompilerUsed->eraseFromParent();
 
   if (!AsmUsed.empty()) {
-    llvm::Type *i8PTy = llvm::Type::getInt8PtrTy(Context);
+    llvm37::Type *i8PTy = llvm37::Type::getInt8PtrTy(Context);
     std::vector<Constant*> asmUsed2;
     for (auto *GV : AsmUsed) {
       Constant *c = ConstantExpr::getBitCast(GV, i8PTy);
       asmUsed2.push_back(c);
     }
 
-    llvm::ArrayType *ATy = llvm::ArrayType::get(i8PTy, asmUsed2.size());
+    llvm37::ArrayType *ATy = llvm37::ArrayType::get(i8PTy, asmUsed2.size());
     LLVMCompilerUsed =
-      new llvm::GlobalVariable(*mergedModule, ATy, false,
-                               llvm::GlobalValue::AppendingLinkage,
-                               llvm::ConstantArray::get(ATy, asmUsed2),
+      new llvm37::GlobalVariable(*mergedModule, ATy, false,
+                               llvm37::GlobalValue::AppendingLinkage,
+                               llvm37::ConstantArray::get(ATy, asmUsed2),
                                "llvm.compiler.used");
 
     LLVMCompilerUsed->setSection("llvm.metadata");

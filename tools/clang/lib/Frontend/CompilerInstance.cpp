@@ -33,18 +33,18 @@
 #include "clang/Sema/Sema.h"
 #include "clang/Serialization/ASTReader.h"
 #include "clang/Serialization/GlobalModuleIndex.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/Support/CrashRecoveryContext.h"
-#include "llvm/Support/Errc.h"
-#include "llvm/Support/FileSystem.h"
-#include "llvm/Support/Host.h"
-#include "llvm/Support/LockFileManager.h"
-#include "llvm/Support/MemoryBuffer.h"
-#include "llvm/Support/Path.h"
-#include "llvm/Support/Program.h"
-#include "llvm/Support/Signals.h"
-#include "llvm/Support/Timer.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/Support/CrashRecoveryContext.h"
+#include "llvm37/Support/Errc.h"
+#include "llvm37/Support/FileSystem.h"
+#include "llvm37/Support/Host.h"
+#include "llvm37/Support/LockFileManager.h"
+#include "llvm37/Support/MemoryBuffer.h"
+#include "llvm37/Support/Path.h"
+#include "llvm37/Support/Program.h"
+#include "llvm37/Support/Signals.h"
+#include "llvm37/Support/Timer.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <sys/stat.h>
 #include <system_error>
 #include <time.h>
@@ -151,12 +151,12 @@ static void SetUpDiagnosticLog(DiagnosticOptions *DiagOpts,
                                DiagnosticsEngine &Diags) {
   std::error_code EC;
   std::unique_ptr<raw_ostream> StreamOwner;
-  raw_ostream *OS = &llvm::errs();
+  raw_ostream *OS = &llvm37::errs();
   if (DiagOpts->DiagnosticLogFile != "-") {
     // Create the output stream.
-    auto FileOS = llvm::make_unique<llvm::raw_fd_ostream>(
+    auto FileOS = llvm37::make_unique<llvm37::raw_fd_ostream>(
         DiagOpts->DiagnosticLogFile, EC,
-        llvm::sys::fs::F_Append | llvm::sys::fs::F_Text);
+        llvm37::sys::fs::F_Append | llvm37::sys::fs::F_Text);
     if (EC) {
       Diags.Report(diag::warn_fe_cc_log_diagnostics_failure)
           << DiagOpts->DiagnosticLogFile << EC.message();
@@ -169,7 +169,7 @@ static void SetUpDiagnosticLog(DiagnosticOptions *DiagOpts,
   }
 
   // Chain in the diagnostic client which will log the diagnostics.
-  auto Logger = llvm::make_unique<LogDiagnosticPrinter>(*OS, DiagOpts,
+  auto Logger = llvm37::make_unique<LogDiagnosticPrinter>(*OS, DiagOpts,
                                                         std::move(StreamOwner));
   if (CodeGenOpts)
     Logger->setDwarfDebugFlags(CodeGenOpts->DwarfDebugFlags);
@@ -213,7 +213,7 @@ CompilerInstance::createDiagnostics(DiagnosticOptions *Opts,
   if (Client) {
     Diags->setClient(Client, ShouldOwnClient);
   } else
-    Diags->setClient(new TextDiagnosticPrinter(llvm::errs(), Opts));
+    Diags->setClient(new TextDiagnosticPrinter(llvm37::errs(), Opts));
 
   // Chain in -verify checker, if requested.
   if (Opts->VerifyDiagnostics)
@@ -400,7 +400,7 @@ std::string CompilerInstance::getSpecificModuleCachePath() {
   SmallString<256> SpecificModuleCache(
                            getHeaderSearchOpts().ModuleCachePath);
   if (!getHeaderSearchOpts().DisableModuleHash)
-    llvm::sys::path::append(SpecificModuleCache,
+    llvm37::sys::path::append(SpecificModuleCache,
                             getInvocation().getModuleHash());
   return SpecificModuleCache.str();
 #endif // HLSL Change Ends - no support for modules
@@ -510,7 +510,7 @@ void CompilerInstance::createCodeCompletionConsumer() {
       createCodeCompletionConsumer(getPreprocessor(),
                                    Loc.FileName, Loc.Line, Loc.Column,
                                    getFrontendOpts().CodeCompleteOpts,
-                                   llvm::outs()));
+                                   llvm37::outs()));
     if (!CompletionConsumer)
       return;
   } else if (EnableCodeCompletion(getPreprocessor(), Loc.FileName,
@@ -520,16 +520,16 @@ void CompilerInstance::createCodeCompletionConsumer() {
   }
 
   if (CompletionConsumer->isOutputBinary() &&
-      llvm::sys::ChangeStdoutToBinary()) {
+      llvm37::sys::ChangeStdoutToBinary()) {
     getPreprocessor().getDiagnostics().Report(diag::err_fe_stdout_binary);
     setCodeCompletionConsumer(nullptr);
   }
 }
 
 void CompilerInstance::createFrontendTimer() {
-  FrontendTimerGroup.reset(new llvm::TimerGroup("Clang front-end time report"));
+  FrontendTimerGroup.reset(new llvm37::TimerGroup("Clang front-end time report"));
   FrontendTimer.reset(
-      new llvm::Timer("Clang front-end timer", *FrontendTimerGroup));
+      new llvm37::Timer("Clang front-end timer", *FrontendTimerGroup));
 }
 
 CodeCompleteConsumer *
@@ -575,7 +575,7 @@ void CompilerInstance::clearOutputFiles(bool EraseFiles) {
 
     if (!OF.TempFilename.empty()) {
       if (EraseFiles) {
-        llvm::sys::fs::remove(OF.TempFilename);
+        llvm37::sys::fs::remove(OF.TempFilename);
       } else {
         SmallString<128> NewOutFile(OF.Filename);
 
@@ -583,15 +583,15 @@ void CompilerInstance::clearOutputFiles(bool EraseFiles) {
         // relative to that.
         FileMgr->FixupRelativePath(NewOutFile);
         if (std::error_code ec =
-                llvm::sys::fs::rename(OF.TempFilename, NewOutFile)) {
+                llvm37::sys::fs::rename(OF.TempFilename, NewOutFile)) {
           getDiagnostics().Report(diag::err_unable_to_rename_temp)
             << OF.TempFilename << OF.Filename << ec.message();
 
-          llvm::sys::fs::remove(OF.TempFilename);
+          llvm37::sys::fs::remove(OF.TempFilename);
         }
       }
     } else if (!OF.Filename.empty() && EraseFiles)
-      llvm::sys::fs::remove(OF.Filename);
+      llvm37::sys::fs::remove(OF.Filename);
 
   }
   OutputFiles.clear();
@@ -607,9 +607,9 @@ CompilerInstance::createDefaultOutputFile(bool Binary, StringRef InFile,
                           /*UseTemporary=*/!WriteDefaultOutputDirectly); // HLSL Change
 }
 
-llvm::raw_null_ostream *CompilerInstance::createNullOutputFile() {
-  auto OS = llvm::make_unique<llvm::raw_null_ostream>();
-  llvm::raw_null_ostream *Ret = OS.get();
+llvm37::raw_null_ostream *CompilerInstance::createNullOutputFile() {
+  auto OS = llvm37::make_unique<llvm37::raw_null_ostream>();
+  llvm37::raw_null_ostream *Ret = OS.get();
   addOutputFile(OutputFile("", "", std::move(OS)));
   return Ret;
 }
@@ -639,7 +639,7 @@ CompilerInstance::createOutputFile(StringRef OutputPath, bool Binary,
   return Ret;
 }
 
-std::unique_ptr<llvm::raw_pwrite_stream> CompilerInstance::createOutputFile(
+std::unique_ptr<llvm37::raw_pwrite_stream> CompilerInstance::createOutputFile(
     StringRef OutputPath, std::error_code &Error, bool Binary,
     bool RemoveFileOnSignal, StringRef InFile, StringRef Extension,
     bool UseTemporary, bool CreateMissingDirectories,
@@ -654,29 +654,29 @@ std::unique_ptr<llvm::raw_pwrite_stream> CompilerInstance::createOutputFile(
     OutFile = "-";
   } else if (!Extension.empty()) {
     SmallString<128> Path(InFile);
-    llvm::sys::path::replace_extension(Path, Extension);
+    llvm37::sys::path::replace_extension(Path, Extension);
     OutFile = Path.str();
   } else {
     OutFile = "-";
   }
 
-  std::unique_ptr<llvm::raw_fd_ostream> OS;
+  std::unique_ptr<llvm37::raw_fd_ostream> OS;
   std::string OSFile;
 
   if (UseTemporary) {
     if (OutFile == "-")
       UseTemporary = false;
     else {
-      llvm::sys::fs::file_status Status;
-      llvm::sys::fs::status(OutputPath, Status);
-      if (llvm::sys::fs::exists(Status)) {
+      llvm37::sys::fs::file_status Status;
+      llvm37::sys::fs::status(OutputPath, Status);
+      if (llvm37::sys::fs::exists(Status)) {
         // Fail early if we can't write to the final destination.
-        if (!llvm::sys::fs::can_write(OutputPath))
+        if (!llvm37::sys::fs::can_write(OutputPath))
           return nullptr;
 
         // Don't use a temporary if the output is a special file. This handles
         // things like '-o /dev/null'
-        if (!llvm::sys::fs::is_regular_file(Status))
+        if (!llvm37::sys::fs::is_regular_file(Status))
           UseTemporary = false;
       }
     }
@@ -689,19 +689,19 @@ std::unique_ptr<llvm::raw_pwrite_stream> CompilerInstance::createOutputFile(
     TempPath += "-%%%%%%%%";
     int fd;
     std::error_code EC =
-        llvm::sys::fs::createUniqueFile(TempPath, fd, TempPath);
+        llvm37::sys::fs::createUniqueFile(TempPath, fd, TempPath);
 
     if (CreateMissingDirectories &&
-        EC == llvm::errc::no_such_file_or_directory) {
-      StringRef Parent = llvm::sys::path::parent_path(OutputPath);
-      EC = llvm::sys::fs::create_directories(Parent);
+        EC == llvm37::errc::no_such_file_or_directory) {
+      StringRef Parent = llvm37::sys::path::parent_path(OutputPath);
+      EC = llvm37::sys::fs::create_directories(Parent);
       if (!EC) {
-        EC = llvm::sys::fs::createUniqueFile(TempPath, fd, TempPath);
+        EC = llvm37::sys::fs::createUniqueFile(TempPath, fd, TempPath);
       }
     }
 
     if (!EC) {
-      OS.reset(new llvm::raw_fd_ostream(fd, /*shouldClose=*/true));
+      OS.reset(new llvm37::raw_fd_ostream(fd, /*shouldClose=*/true));
       OSFile = TempFile = TempPath.str();
     }
     // If we failed to create the temporary, fallback to writing to the file
@@ -711,16 +711,16 @@ std::unique_ptr<llvm::raw_pwrite_stream> CompilerInstance::createOutputFile(
 
   if (!OS) {
     OSFile = OutFile;
-    OS.reset(new llvm::raw_fd_ostream(
+    OS.reset(new llvm37::raw_fd_ostream(
         OSFile, Error,
-        (Binary ? llvm::sys::fs::F_None : llvm::sys::fs::F_Text)));
+        (Binary ? llvm37::sys::fs::F_None : llvm37::sys::fs::F_Text)));
     if (Error)
       return nullptr;
   }
 
   // Make sure the out stream file gets removed if we crash.
   if (RemoveFileOnSignal)
-    llvm::sys::RemoveFileOnSignal(OSFile);
+    llvm37::sys::RemoveFileOnSignal(OSFile);
 
   if (ResultPathName)
     *ResultPathName = OutFile;
@@ -730,7 +730,7 @@ std::unique_ptr<llvm::raw_pwrite_stream> CompilerInstance::createOutputFile(
   if (!Binary || OS->supportsSeeking())
     return std::move(OS);
 
-  auto B = llvm::make_unique<llvm::buffer_ostream>(*OS);
+  auto B = llvm37::make_unique<llvm37::buffer_ostream>(*OS);
   assert(!NonSeekStream);
   NonSeekStream = std::move(OS);
   return std::move(B);
@@ -754,7 +754,7 @@ bool CompilerInstance::InitializeSourceManager(const FrontendInputFile &Input,
 
   if (Input.isBuffer()) {
     SourceMgr.setMainFileID(SourceMgr.createFileID(
-        std::unique_ptr<llvm::MemoryBuffer>(Input.getBuffer()), Kind));
+        std::unique_ptr<llvm37::MemoryBuffer>(Input.getBuffer()), Kind));
     assert(!SourceMgr.getMainFileID().isInvalid() &&
            "Couldn't establish MainFileID!");
     return true;
@@ -791,13 +791,13 @@ bool CompilerInstance::InitializeSourceManager(const FrontendInputFile &Input,
     SourceMgr.setMainFileID(
         SourceMgr.createFileID(File, SourceLocation(), Kind));
   } else {
-    llvm::ErrorOr<std::unique_ptr<llvm::MemoryBuffer>> SBOrErr =
-        llvm::MemoryBuffer::getSTDIN();
+    llvm37::ErrorOr<std::unique_ptr<llvm37::MemoryBuffer>> SBOrErr =
+        llvm37::MemoryBuffer::getSTDIN();
     if (std::error_code EC = SBOrErr.getError()) {
       Diags.Report(diag::err_fe_error_reading_stdin) << EC.message();
       return false;
     }
-    std::unique_ptr<llvm::MemoryBuffer> SB = std::move(SBOrErr.get());
+    std::unique_ptr<llvm37::MemoryBuffer> SB = std::move(SBOrErr.get());
 
     const FileEntry *File = FileMgr.getVirtualFile(SB->getBufferIdentifier(),
                                                    SB->getBufferSize(), 0);
@@ -819,8 +819,8 @@ bool CompilerInstance::ExecuteAction(FrontendAction &Act) {
   assert(!getFrontendOpts().ShowVersion && "Client must handle '-version'!");
 
   // FIXME: Take this as an argument, once all the APIs we used have moved to
-  // taking it as an input instead of hard-coding llvm::errs.
-  raw_ostream &OS = llvm::errs();
+  // taking it as an input instead of hard-coding llvm37::errs.
+  raw_ostream &OS = llvm37::errs();
 
   // Create the target instance.
   setTarget(TargetInfo::CreateTargetInfo(getDiagnostics(),
@@ -842,13 +842,13 @@ bool CompilerInstance::ExecuteAction(FrontendAction &Act) {
   if (getHeaderSearchOpts().Verbose)
     OS << "clang -cc1 version " CLANG_VERSION_STRING
        << " based upon " << BACKEND_PACKAGE_STRING
-       << " default target " << llvm::sys::getDefaultTargetTriple() << "\n";
+       << " default target " << llvm37::sys::getDefaultTargetTriple() << "\n";
 
   if (getFrontendOpts().ShowTimers)
     createFrontendTimer();
 
   if (getFrontendOpts().ShowStats)
-    llvm::EnableStatistics();
+    llvm37::EnableStatistics();
 
   for (unsigned i = 0, e = getFrontendOpts().Inputs.size(); i != e; ++i) {
     // Reset the ID tables if we are reusing the SourceManager and parsing
@@ -1008,15 +1008,15 @@ static bool compileModuleImpl(CompilerInstance &ImportingInstance,
     FrontendOpts.Inputs.emplace_back(ModuleMapFile->getName(), IK);
   } else {
     SmallString<128> FakeModuleMapFile(Module->Directory->getName());
-    llvm::sys::path::append(FakeModuleMapFile, "__inferred_module.map");
+    llvm37::sys::path::append(FakeModuleMapFile, "__inferred_module.map");
     FrontendOpts.Inputs.emplace_back(FakeModuleMapFile, IK);
 
-    llvm::raw_string_ostream OS(InferredModuleMapContent);
+    llvm37::raw_string_ostream OS(InferredModuleMapContent);
     Module->print(OS);
     OS.flush();
 
-    std::unique_ptr<llvm::MemoryBuffer> ModuleMapBuffer =
-        llvm::MemoryBuffer::getMemBuffer(InferredModuleMapContent);
+    std::unique_ptr<llvm37::MemoryBuffer> ModuleMapBuffer =
+        llvm37::MemoryBuffer::getMemBuffer(InferredModuleMapContent);
     ModuleMapFile = Instance.getFileManager().getVirtualFile(
         FakeModuleMapFile, InferredModuleMapContent.size(), 0);
     SourceMgr.overrideFileContents(ModuleMapFile, std::move(ModuleMapBuffer));
@@ -1034,7 +1034,7 @@ static bool compileModuleImpl(CompilerInstance &ImportingInstance,
   // Execute the action to actually build the module in-place. Use a separate
   // thread so that we get a stack large enough.
   const unsigned ThreadStackSize = 8 << 20;
-  llvm::CrashRecoveryContext CRC;
+  llvm37::CrashRecoveryContext CRC;
   CRC.RunSafelyOnThread([&]() { Instance.ExecuteAction(CreateModuleAction); },
                         ThreadStackSize);
 
@@ -1070,19 +1070,19 @@ static bool compileAndLoadModule(CompilerInstance &ImportingInstance,
 
   // FIXME: have LockFileManager return an error_code so that we can
   // avoid the mkdir when the directory already exists.
-  StringRef Dir = llvm::sys::path::parent_path(ModuleFileName);
-  llvm::sys::fs::create_directories(Dir);
+  StringRef Dir = llvm37::sys::path::parent_path(ModuleFileName);
+  llvm37::sys::fs::create_directories(Dir);
 
   while (1) {
     unsigned ModuleLoadCapabilities = ASTReader::ARR_Missing;
-    llvm::LockFileManager Locked(ModuleFileName);
+    llvm37::LockFileManager Locked(ModuleFileName);
     switch (Locked) {
-    case llvm::LockFileManager::LFS_Error:
+    case llvm37::LockFileManager::LFS_Error:
       Diags.Report(ModuleNameLoc, diag::err_module_lock_failure)
           << Module->Name;
       return false;
 
-    case llvm::LockFileManager::LFS_Owned:
+    case llvm37::LockFileManager::LFS_Owned:
       // We're responsible for building the module ourselves.
       if (!compileModuleImpl(ImportingInstance, ModuleNameLoc, Module,
                              ModuleFileName)) {
@@ -1091,16 +1091,16 @@ static bool compileAndLoadModule(CompilerInstance &ImportingInstance,
       }
       break;
 
-    case llvm::LockFileManager::LFS_Shared:
+    case llvm37::LockFileManager::LFS_Shared:
       // Someone else is responsible for building the module. Wait for them to
       // finish.
       switch (Locked.waitForUnlock()) {
-      case llvm::LockFileManager::Res_Success:
+      case llvm37::LockFileManager::Res_Success:
         ModuleLoadCapabilities |= ASTReader::ARR_OutOfDate;
         break;
-      case llvm::LockFileManager::Res_OwnerDied:
+      case llvm37::LockFileManager::Res_OwnerDied:
         continue; // try again to get the lock.
-      case llvm::LockFileManager::Res_Timeout:
+      case llvm37::LockFileManager::Res_Timeout:
         Diags.Report(ModuleNameLoc, diag::err_module_lock_timeout)
             << Module->Name;
         // Clear the lock file so that future invokations can make progress.
@@ -1117,7 +1117,7 @@ static bool compileAndLoadModule(CompilerInstance &ImportingInstance,
             ModuleLoadCapabilities);
 
     if (ReadResult == ASTReader::OutOfDate &&
-        Locked == llvm::LockFileManager::LFS_Shared) {
+        Locked == llvm37::LockFileManager::LFS_Shared) {
       // The module may be out of date in the presence of file system races,
       // or if one of its imports depends on header search paths that are not
       // consistent with this ImportingInstance.  Try again...
@@ -1194,16 +1194,16 @@ static void checkConfigMacro(Preprocessor &PP, StringRef ConfigMacro,
 /// \brief Write a new timestamp file with the given path.
 static void writeTimestampFile(StringRef TimestampFile) {
   std::error_code EC;
-  llvm::raw_fd_ostream Out(TimestampFile.str(), EC, llvm::sys::fs::F_None);
+  llvm37::raw_fd_ostream Out(TimestampFile.str(), EC, llvm37::sys::fs::F_None);
 }
 
 /// \brief Prune the module cache of modules that haven't been accessed in
 /// a long time.
 static void pruneModuleCache(const HeaderSearchOptions &HSOpts) {
   struct stat StatBuf;
-  llvm::SmallString<128> TimestampFile;
+  llvm37::SmallString<128> TimestampFile;
   TimestampFile = HSOpts.ModuleCachePath;
-  llvm::sys::path::append(TimestampFile, "modules.timestamp");
+  llvm37::sys::path::append(TimestampFile, "modules.timestamp");
 
   // Try to stat() the timestamp file.
   if (::stat(TimestampFile.c_str(), &StatBuf)) {
@@ -1230,20 +1230,20 @@ static void pruneModuleCache(const HeaderSearchOptions &HSOpts) {
   // indices.
   std::error_code EC;
   SmallString<128> ModuleCachePathNative;
-  llvm::sys::path::native(HSOpts.ModuleCachePath, ModuleCachePathNative);
-  for (llvm::sys::fs::directory_iterator Dir(ModuleCachePathNative, EC), DirEnd;
+  llvm37::sys::path::native(HSOpts.ModuleCachePath, ModuleCachePathNative);
+  for (llvm37::sys::fs::directory_iterator Dir(ModuleCachePathNative, EC), DirEnd;
        Dir != DirEnd && !EC; Dir.increment(EC)) {
     // If we don't have a directory, there's nothing to look into.
-    if (!llvm::sys::fs::is_directory(Dir->path()))
+    if (!llvm37::sys::fs::is_directory(Dir->path()))
       continue;
 
     // Walk all of the files within this directory.
-    for (llvm::sys::fs::directory_iterator File(Dir->path(), EC), FileEnd;
+    for (llvm37::sys::fs::directory_iterator File(Dir->path(), EC), FileEnd;
          File != FileEnd && !EC; File.increment(EC)) {
       // We only care about module and global module index files.
-      StringRef Extension = llvm::sys::path::extension(File->path());
+      StringRef Extension = llvm37::sys::path::extension(File->path());
       if (Extension != ".pcm" && Extension != ".timestamp" &&
-          llvm::sys::path::filename(File->path()) != "modules.idx")
+          llvm37::sys::path::filename(File->path()) != "modules.idx")
         continue;
 
       // Look at this file. If we can't stat it, there's nothing interesting
@@ -1259,18 +1259,18 @@ static void pruneModuleCache(const HeaderSearchOptions &HSOpts) {
       }
 
       // Remove the file.
-      llvm::sys::fs::remove(File->path());
+      llvm37::sys::fs::remove(File->path());
 
       // Remove the timestamp file.
       std::string TimpestampFilename = File->path() + ".timestamp";
-      llvm::sys::fs::remove(TimpestampFilename);
+      llvm37::sys::fs::remove(TimpestampFilename);
     }
 
     // If we removed all of the files in the directory, remove the directory
     // itself.
-    if (llvm::sys::fs::directory_iterator(Dir->path(), EC) ==
-            llvm::sys::fs::directory_iterator() && !EC)
-      llvm::sys::fs::remove(Dir->path());
+    if (llvm37::sys::fs::directory_iterator(Dir->path(), EC) ==
+            llvm37::sys::fs::directory_iterator() && !EC)
+      llvm37::sys::fs::remove(Dir->path());
   }
 }
 
@@ -1291,9 +1291,9 @@ void CompilerInstance::createModuleManager() {
     HeaderSearchOptions &HSOpts = getHeaderSearchOpts();
     std::string Sysroot = HSOpts.Sysroot;
     const PreprocessorOptions &PPOpts = getPreprocessorOpts();
-    std::unique_ptr<llvm::Timer> ReadTimer;
+    std::unique_ptr<llvm37::Timer> ReadTimer;
     if (FrontendTimerGroup)
-      ReadTimer = llvm::make_unique<llvm::Timer>("Reading modules",
+      ReadTimer = llvm37::make_unique<llvm37::Timer>("Reading modules",
                                                  *FrontendTimerGroup);
     ModuleManager = new ASTReader(
         getPreprocessor(), *Context, getPCHContainerReader(),
@@ -1318,10 +1318,10 @@ void CompilerInstance::createModuleManager() {
 }
 
 bool CompilerInstance::loadModuleFile(StringRef FileName) {
-  llvm::Timer Timer;
+  llvm37::Timer Timer;
   if (FrontendTimerGroup)
     Timer.init("Preloading " + FileName.str(), *FrontendTimerGroup);
-  llvm::TimeRegion TimeLoading(FrontendTimerGroup ? &Timer : nullptr);
+  llvm37::TimeRegion TimeLoading(FrontendTimerGroup ? &Timer : nullptr);
 
   // Helper to recursively read the module names for all modules we're adding.
   // We mark these as known and redirect any attempt to load that module to
@@ -1435,7 +1435,7 @@ CompilerInstance::loadModule(SourceLocation ImportLoc,
   clang::Module *Module = nullptr;
 
   // If we don't already have information on this module, load the module now.
-  llvm::DenseMap<const IdentifierInfo *, clang::Module *>::iterator Known
+  llvm37::DenseMap<const IdentifierInfo *, clang::Module *>::iterator Known
     = KnownModules.find(Path[0].first);
   if (Known != KnownModules.end()) {
     // Retrieve the cached top-level module.
@@ -1482,10 +1482,10 @@ CompilerInstance::loadModule(SourceLocation ImportLoc,
     for (auto &Listener : DependencyCollectors)
       Listener->attachToASTReader(*ModuleManager);
 
-    llvm::Timer Timer;
+    llvm37::Timer Timer;
     if (FrontendTimerGroup)
       Timer.init("Loading " + ModuleFileName, *FrontendTimerGroup);
-    llvm::TimeRegion TimeLoading(FrontendTimerGroup ? &Timer : nullptr);
+    llvm37::TimeRegion TimeLoading(FrontendTimerGroup ? &Timer : nullptr);
 
     // Try to load the module file.
     unsigned ARRFlags =
@@ -1716,7 +1716,7 @@ GlobalModuleIndex *CompilerInstance::loadGlobalModuleIndex(
   // If the global index doesn't exist, create it.
   if (!GlobalIndex && shouldBuildGlobalModuleIndex() && hasFileManager() &&
       hasPreprocessor()) {
-    llvm::sys::fs::create_directories(
+    llvm37::sys::fs::create_directories(
       getPreprocessor().getHeaderSearchInfo().getModuleCachePath());
     GlobalModuleIndex::writeIndex(
         getFileManager(), getPCHContainerReader(),

@@ -7,12 +7,12 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_COV_COVERAGEVIEWOPTIONS_H
-#define LLVM_COV_COVERAGEVIEWOPTIONS_H
+#ifndef LLVM37_COV_COVERAGEVIEWOPTIONS_H
+#define LLVM37_COV_COVERAGEVIEWOPTIONS_H
 
 #include "RenderingSupport.h"
 
-namespace llvm {
+namespace llvm37 {
 
 /// \brief The options for displaying the code coverage information.
 struct CoverageViewOptions {
@@ -28,9 +28,9 @@ struct CoverageViewOptions {
   /// \brief Change the output's stream color if the colors are enabled.
   ColoredRawOstream colored_ostream(raw_ostream &OS,
                                     raw_ostream::Colors Color) const {
-    return llvm::colored_ostream(OS, Color, Colors);
+    return llvm37::colored_ostream(OS, Color, Colors);
   }
 };
 }
 
-#endif // LLVM_COV_COVERAGEVIEWOPTIONS_H
+#endif // LLVM37_COV_COVERAGEVIEWOPTIONS_H

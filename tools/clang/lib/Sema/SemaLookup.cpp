@@ -37,13 +37,13 @@
 #include "clang/Sema/SemaInternal.h"
 #include "clang/Sema/TemplateDeduction.h"
 #include "clang/Sema/TypoCorrection.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/SetVector.h"
-#include "llvm/ADT/SmallPtrSet.h"
-#include "llvm/ADT/StringMap.h"
-#include "llvm/ADT/TinyPtrVector.h"
-#include "llvm/ADT/edit_distance.h"
-#include "llvm/Support/ErrorHandling.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/SetVector.h"
+#include "llvm37/ADT/SmallPtrSet.h"
+#include "llvm37/ADT/StringMap.h"
+#include "llvm37/ADT/TinyPtrVector.h"
+#include "llvm37/ADT/edit_distance.h"
+#include "llvm37/Support/ErrorHandling.h"
 #include <algorithm>
 #include <iterator>
 #include <limits>
@@ -96,7 +96,7 @@ namespace {
     typedef SmallVector<UnqualUsingEntry, 8> ListTy;
 
     ListTy list;
-    llvm::SmallPtrSet<DeclContext*, 8> visited;
+    llvm37::SmallPtrSet<DeclContext*, 8> visited;
 
   public:
     UnqualUsingDirectiveSet() {}
@@ -197,9 +197,9 @@ namespace {
     const_iterator begin() const { return list.begin(); }
     const_iterator end() const { return list.end(); }
 
-    llvm::iterator_range<const_iterator>
+    llvm37::iterator_range<const_iterator>
     getNamespacesFor(DeclContext *DC) const {
-      return llvm::make_range(std::equal_range(begin(), end(),
+      return llvm37::make_range(std::equal_range(begin(), end(),
                                                DC->getPrimaryContext(),
                                                UnqualUsingEntry::Comparator()));
     }
@@ -378,8 +378,8 @@ void LookupResult::resolveKind() {
   // Don't do any extra resolution if we've already resolved as ambiguous.
   if (ResultKind == Ambiguous) return;
 
-  llvm::SmallPtrSet<NamedDecl*, 16> Unique;
-  llvm::SmallPtrSet<QualType, 16> UniqueTypes;
+  llvm37::SmallPtrSet<NamedDecl*, 16> Unique;
+  llvm37::SmallPtrSet<QualType, 16> UniqueTypes;
 
   bool Ambiguous = false;
   bool HasTag = false, HasFunction = false, HasNonFunction = false;
@@ -1268,7 +1268,7 @@ static Module *getDefiningModule(Sema &S, Decl *Entity) {
   return getDefiningModule(S, cast<Decl>(Context));
 }
 
-llvm::DenseSet<Module*> &Sema::getLookupModules() {
+llvm37::DenseSet<Module*> &Sema::getLookupModules() {
   unsigned N = ActiveTemplateInstantiations.size();
   for (unsigned I = ActiveTemplateInstantiationLookupModules.size();
        I != N; ++I) {
@@ -1291,7 +1291,7 @@ bool Sema::hasVisibleMergedDefinition(NamedDecl *Def) {
 template<typename ParmDecl>
 static bool
 hasVisibleDefaultArgument(Sema &S, const ParmDecl *D,
-                          llvm::SmallVectorImpl<Module *> *Modules) {
+                          llvm37::SmallVectorImpl<Module *> *Modules) {
   if (!D->hasDefaultArgument())
     return false;
 
@@ -1314,7 +1314,7 @@ hasVisibleDefaultArgument(Sema &S, const ParmDecl *D,
 }
 
 bool Sema::hasVisibleDefaultArgument(const NamedDecl *D,
-                                     llvm::SmallVectorImpl<Module *> *Modules) {
+                                     llvm37::SmallVectorImpl<Module *> *Modules) {
   if (auto *P = dyn_cast<TemplateTypeParmDecl>(D))
     return ::hasVisibleDefaultArgument(*this, P, Modules);
   if (auto *P = dyn_cast<NonTypeTemplateParmDecl>(D))
@@ -1376,7 +1376,7 @@ bool LookupResult::isVisibleSlow(Sema &SemaRef, NamedDecl *D) {
   }
 
   // Find the extra places where we need to look.
-  llvm::DenseSet<Module*> &LookupModules = SemaRef.getLookupModules();
+  llvm37::DenseSet<Module*> &LookupModules = SemaRef.getLookupModules();
   if (LookupModules.empty())
     return false;
 
@@ -1390,7 +1390,7 @@ bool LookupResult::isVisibleSlow(Sema &SemaRef, NamedDecl *D) {
 
   // Check whether DeclModule is transitively exported to an import of
   // the lookup set.
-  for (llvm::DenseSet<Module *>::iterator I = LookupModules.begin(),
+  for (llvm37::DenseSet<Module *>::iterator I = LookupModules.begin(),
                                           E = LookupModules.end();
        I != E; ++I)
     if ((*I)->isModuleVisible(DeclModule))
@@ -1603,7 +1603,7 @@ static bool LookupQualifiedNameInUsingDirectives(Sema &S, LookupResult &R,
   if (UsingDirectives.begin() == UsingDirectives.end()) return false;
 
   // We have at least added all these contexts to the queue.
-  llvm::SmallPtrSet<DeclContext*, 8> Visited;
+  llvm37::SmallPtrSet<DeclContext*, 8> Visited;
   Visited.insert(StartDC);
 
   // We have not yet looked into these namespaces, much less added
@@ -2075,7 +2075,7 @@ void Sema::DiagnoseAmbiguousLookup(LookupResult &Result) {
   case LookupResult::AmbiguousTagHiding: {
     Diag(NameLoc, diag::err_ambiguous_tag_hiding) << Name << LookupRange;
 
-    llvm::SmallPtrSet<NamedDecl*,8> TagDecls;
+    llvm37::SmallPtrSet<NamedDecl*,8> TagDecls;
 
     for (auto *D : Result)
       if (TagDecl *TD = dyn_cast<TagDecl>(D)) {
@@ -2559,7 +2559,7 @@ Sema::SpecialMemberOverloadResult *Sema::LookupSpecialMember(CXXRecordDecl *RD,
     assert((SM != CXXDefaultConstructor && SM != CXXDestructor) &&
            "parameter-less special members can't have qualified arguments");
 
-  llvm::FoldingSetNodeID ID;
+  llvm37::FoldingSetNodeID ID;
   ID.AddPointer(RD);
   ID.AddInteger(SM);
   ID.AddInteger(ConstArg);
@@ -2697,21 +2697,21 @@ Sema::SpecialMemberOverloadResult *Sema::LookupSpecialMember(CXXRecordDecl *RD,
     if (CXXMethodDecl *M = dyn_cast<CXXMethodDecl>(Cand)) {
       if (SM == CXXCopyAssignment || SM == CXXMoveAssignment)
         AddMethodCandidate(M, DeclAccessPair::make(M, AS_public), RD, ThisTy,
-                           Classification, llvm::makeArrayRef(&Arg, NumArgs),
+                           Classification, llvm37::makeArrayRef(&Arg, NumArgs),
                            OCS, true);
       else
         AddOverloadCandidate(M, DeclAccessPair::make(M, AS_public),
-                             llvm::makeArrayRef(&Arg, NumArgs), OCS, true);
+                             llvm37::makeArrayRef(&Arg, NumArgs), OCS, true);
     } else if (FunctionTemplateDecl *Tmpl =
                  dyn_cast<FunctionTemplateDecl>(Cand)) {
       if (SM == CXXCopyAssignment || SM == CXXMoveAssignment)
         AddMethodTemplateCandidate(Tmpl, DeclAccessPair::make(Tmpl, AS_public),
                                    RD, nullptr, ThisTy, Classification,
-                                   llvm::makeArrayRef(&Arg, NumArgs),
+                                   llvm37::makeArrayRef(&Arg, NumArgs),
                                    OCS, true);
       else
         AddTemplateOverloadCandidate(Tmpl, DeclAccessPair::make(Tmpl, AS_public),
-                                     nullptr, llvm::makeArrayRef(&Arg, NumArgs),
+                                     nullptr, llvm37::makeArrayRef(&Arg, NumArgs),
                                      OCS, true);
     } else {
       assert(isa<UsingDecl>(Cand) && "illegal Kind of operator = Decl");
@@ -3071,18 +3071,18 @@ public:
   /// \brief An entry in the shadow map, which is optimized to store a
   /// single declaration (the common case) but can also store a list
   /// of declarations.
-  typedef llvm::TinyPtrVector<NamedDecl*> ShadowMapEntry;
+  typedef llvm37::TinyPtrVector<NamedDecl*> ShadowMapEntry;
 
 private:
   /// \brief A mapping from declaration names to the declarations that have
   /// this name within a particular scope.
-  typedef llvm::DenseMap<DeclarationName, ShadowMapEntry> ShadowMap;
+  typedef llvm37::DenseMap<DeclarationName, ShadowMapEntry> ShadowMap;
 
   /// \brief A list of shadow maps, which is used to model name hiding.
   std::list<ShadowMap> ShadowMaps;
 
   /// \brief The declaration contexts we have already visited.
-  llvm::SmallPtrSet<DeclContext *, 8> VisitedContexts;
+  llvm37::SmallPtrSet<DeclContext *, 8> VisitedContexts;
 
   friend class ShadowContextRAII;
 
@@ -3520,7 +3520,7 @@ static void checkCorrectionVisibility(Sema &SemaRef, TypoCorrection &TC) {
   if (DI == DE)
     return;
 
-  llvm::SmallVector<NamedDecl*, 4> NewDecls(TC.begin(), DI);
+  llvm37::SmallVector<NamedDecl*, 4> NewDecls(TC.begin(), DI);
   bool AnyVisibleDecls = !NewDecls.empty();
 
   for (/**/; DI != DE; ++DI) {
@@ -3692,7 +3692,7 @@ void TypoCorrectionConsumer::addCorrection(TypoCorrection Correction) {
 }
 
 void TypoCorrectionConsumer::addNamespaces(
-    const llvm::MapVector<NamespaceDecl *, bool> &KnownNamespaces) {
+    const llvm37::MapVector<NamespaceDecl *, bool> &KnownNamespaces) {
   SearchNamespaces = true;
 
   for (auto KNPair : KnownNamespaces)
@@ -3837,7 +3837,7 @@ void TypoCorrectionConsumer::performQualifiedLookups() {
         if (SS && SS->isValid()) {
           std::string NewQualified = TC.getAsString(SemaRef.getLangOpts());
           std::string OldQualified;
-          llvm::raw_string_ostream OldOStream(OldQualified);
+          llvm37::raw_string_ostream OldOStream(OldQualified);
           SS->getScopeRep()->print(OldOStream, SemaRef.getPrintingPolicy());
           OldOStream << Typo->getName();
           // If correction candidate would be an identical written qualified
@@ -3876,7 +3876,7 @@ TypoCorrectionConsumer::NamespaceSpecifierSet::NamespaceSpecifierSet(
     : Context(Context), CurContextChain(buildContextChain(CurContext)) {
   if (NestedNameSpecifier *NNS =
           CurScopeSpec ? CurScopeSpec->getScopeRep() : nullptr) {
-    llvm::raw_string_ostream SpecifierOStream(CurNameSpecifier);
+    llvm37::raw_string_ostream SpecifierOStream(CurNameSpecifier);
     NNS->print(SpecifierOStream, Context.getPrintingPolicy());
 
     getNestedNameSpecifierIdentifiers(NNS, CurNameSpecifierIdentifiers);
@@ -3962,7 +3962,7 @@ void TypoCorrectionConsumer::NamespaceSpecifierSet::addNameSpecifier(
                   CurNameSpecifierIdentifiers.end(),
                   Name) != CurNameSpecifierIdentifiers.end()) {
       std::string NewNameSpecifier;
-      llvm::raw_string_ostream SpecifierOStream(NewNameSpecifier);
+      llvm37::raw_string_ostream SpecifierOStream(NewNameSpecifier);
       SmallVector<const IdentifierInfo *, 4> NewNameSpecifierIdentifiers;
       getNestedNameSpecifierIdentifiers(NNS, NewNameSpecifierIdentifiers);
       NNS->print(SpecifierOStream, Context.getPrintingPolicy());
@@ -3986,9 +3986,9 @@ void TypoCorrectionConsumer::NamespaceSpecifierSet::addNameSpecifier(
   if (NNS && !CurNameSpecifierIdentifiers.empty()) {
     SmallVector<const IdentifierInfo*, 4> NewNameSpecifierIdentifiers;
     getNestedNameSpecifierIdentifiers(NNS, NewNameSpecifierIdentifiers);
-    NumSpecifiers = llvm::ComputeEditDistance(
-        llvm::makeArrayRef(CurNameSpecifierIdentifiers),
-        llvm::makeArrayRef(NewNameSpecifierIdentifiers));
+    NumSpecifiers = llvm37::ComputeEditDistance(
+        llvm37::makeArrayRef(CurNameSpecifierIdentifiers),
+        llvm37::makeArrayRef(NewNameSpecifierIdentifiers));
   }
 
   SpecifierInfo SI = {Ctx, NNS, NumSpecifiers};
@@ -4074,7 +4074,7 @@ static void AddKeywordsToConsumer(Sema &SemaRef,
       "extern", "inline", "static", "typedef"
     };
 
-    const unsigned NumCTypeSpecs = llvm::array_lengthof(CTypeSpecs);
+    const unsigned NumCTypeSpecs = llvm37::array_lengthof(CTypeSpecs);
     for (unsigned I = 0; I != NumCTypeSpecs; ++I)
       Consumer.addKeywordResult(CTypeSpecs[I]);
 
@@ -4128,7 +4128,7 @@ static void AddKeywordsToConsumer(Sema &SemaRef,
       static const char *const CXXExprs[] = {
         "delete", "new", "operator", "throw", "typeid"
       };
-      const unsigned NumCXXExprs = llvm::array_lengthof(CXXExprs);
+      const unsigned NumCXXExprs = llvm37::array_lengthof(CXXExprs);
       for (unsigned I = 0; I != NumCXXExprs; ++I)
         Consumer.addKeywordResult(CXXExprs[I]);
 
@@ -4154,7 +4154,7 @@ static void AddKeywordsToConsumer(Sema &SemaRef,
       // Statements.
       static const char *const CStmts[] = {
         "do", "else", "for", "goto", "if", "return", "switch", "while" };
-      const unsigned NumCStmts = llvm::array_lengthof(CStmts);
+      const unsigned NumCStmts = llvm37::array_lengthof(CStmts);
       for (unsigned I = 0; I != NumCStmts; ++I)
         Consumer.addKeywordResult(CStmts[I]);
 
@@ -4266,7 +4266,7 @@ std::unique_ptr<TypoCorrectionConsumer> Sema::makeTypoCorrectionConsumer(
   }
 
   CorrectionCandidateCallback &CCCRef = *CCC;
-  auto Consumer = llvm::make_unique<TypoCorrectionConsumer>(
+  auto Consumer = llvm37::make_unique<TypoCorrectionConsumer>(
       *this, TypoName, LookupKind, S, SS, std::move(CCC), MemberContext,
       EnteringContext);
 
@@ -4549,7 +4549,7 @@ void TypoCorrection::addCorrectionDecl(NamedDecl *CDecl) {
 std::string TypoCorrection::getAsString(const LangOptions &LO) const {
   if (CorrectionNameSpec) {
     std::string tmpBuffer;
-    llvm::raw_string_ostream PrefixOStream(tmpBuffer);
+    llvm37::raw_string_ostream PrefixOStream(tmpBuffer);
     CorrectionNameSpec->print(PrefixOStream, PrintingPolicy(LO));
     PrefixOStream << CorrectionName;
     return PrefixOStream.str();
@@ -4691,7 +4691,7 @@ void Sema::diagnoseMissingImport(SourceLocation Loc, NamedDecl *Decl,
   Module *Owner = getOwningModule(Decl);
   assert(Owner && "definition of hidden declaration is not in a module");
 
-  llvm::SmallVector<Module*, 8> OwningModules;
+  llvm37::SmallVector<Module*, 8> OwningModules;
   OwningModules.push_back(Owner);
   auto Merged = Context.getModulesWithMergedDefinition(Decl);
   OwningModules.insert(OwningModules.end(), Merged.begin(), Merged.end());

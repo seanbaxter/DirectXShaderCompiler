@@ -14,7 +14,7 @@
 
 #include "clang/Tooling/ArgumentsAdjusters.h"
 #include "clang/Basic/LLVM.h"
-#include "llvm/ADT/StringRef.h"
+#include "llvm37/ADT/StringRef.h"
 
 namespace clang {
 namespace tooling {

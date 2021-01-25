@@ -22,7 +22,7 @@
 #include "clang/Sema/PrettyDeclStackTrace.h"
 #include "clang/Sema/Scope.h"
 #include "clang/Sema/SemaDiagnostic.h"
-#include "llvm/ADT/SmallString.h"
+#include "llvm37/ADT/SmallString.h"
 
 using namespace clang;
 
@@ -100,7 +100,7 @@ void Parser::ParseHLSLAttributeSpecifier(ParsedAttributes &attrs,
 
   ConsumeBracket();
 
-  llvm::SmallDenseMap<IdentifierInfo *, SourceLocation, 4> SeenAttrs;
+  llvm37::SmallDenseMap<IdentifierInfo *, SourceLocation, 4> SeenAttrs;
 
   // '[]' is valid.
   if (Tok.is(tok::r_square)) {

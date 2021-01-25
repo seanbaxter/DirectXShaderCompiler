@@ -19,20 +19,20 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Transforms/IPO.h"
-#include "llvm/ADT/SmallPtrSet.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/Analysis/CallGraph.h"
-#include "llvm/IR/Module.h"
-#include "llvm/Pass.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Transforms/Utils/GlobalStatus.h"
-#include "llvm/Transforms/Utils/ModuleUtils.h"
+#include "llvm37/Transforms/IPO.h"
+#include "llvm37/ADT/SmallPtrSet.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/Analysis/CallGraph.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/Pass.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Transforms/Utils/GlobalStatus.h"
+#include "llvm37/Transforms/Utils/ModuleUtils.h"
 #include <fstream>
 #include <set>
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "internalize"
 
@@ -217,8 +217,8 @@ bool InternalizePass::runOnModule(Module &M) {
   return Changed;
 }
 
-ModulePass *llvm::createInternalizePass() { return new InternalizePass(); }
+ModulePass *llvm37::createInternalizePass() { return new InternalizePass(); }
 
-ModulePass *llvm::createInternalizePass(ArrayRef<const char *> ExportList) {
+ModulePass *llvm37::createInternalizePass(ArrayRef<const char *> ExportList) {
   return new InternalizePass(ExportList);
 }

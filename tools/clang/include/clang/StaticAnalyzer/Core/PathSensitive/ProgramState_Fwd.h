@@ -7,11 +7,11 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_STATICANALYZER_CORE_PATHSENSITIVE_PROGRAMSTATE_FWD_H
-#define LLVM_CLANG_STATICANALYZER_CORE_PATHSENSITIVE_PROGRAMSTATE_FWD_H
+#ifndef LLVM37_CLANG_STATICANALYZER_CORE_PATHSENSITIVE_PROGRAMSTATE_FWD_H
+#define LLVM37_CLANG_STATICANALYZER_CORE_PATHSENSITIVE_PROGRAMSTATE_FWD_H
 
 #include "clang/Basic/LLVM.h"
-#include "llvm/ADT/IntrusiveRefCntPtr.h"
+#include "llvm37/ADT/IntrusiveRefCntPtr.h"
 
 namespace clang {
 namespace ento {
@@ -22,7 +22,7 @@ namespace ento {
 }
 }
 
-namespace llvm {
+namespace llvm37 {
   template <> struct IntrusiveRefCntPtrInfo<const clang::ento::ProgramState> {
     static void retain(const clang::ento::ProgramState *state) {
       clang::ento::ProgramStateRetain(state);

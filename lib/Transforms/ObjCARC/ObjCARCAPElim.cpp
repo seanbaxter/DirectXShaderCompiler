@@ -25,13 +25,13 @@
 //===----------------------------------------------------------------------===//
 
 #include "ObjCARC.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/raw_ostream.h"
 
-using namespace llvm;
-using namespace llvm::objcarc;
+using namespace llvm37;
+using namespace llvm37::objcarc;
 
 #define DEBUG_TYPE "objc-arc-ap-elim"
 
@@ -58,7 +58,7 @@ INITIALIZE_PASS(ObjCARCAPElim,
                 "ObjC ARC autorelease pool elimination",
                 false, false)
 
-Pass *llvm::createObjCARCAPElimPass() {
+Pass *llvm37::createObjCARCAPElimPass() {
   return new ObjCARCAPElim();
 }
 

@@ -24,11 +24,11 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_TOOLING_COMMONOPTIONSPARSER_H
-#define LLVM_CLANG_TOOLING_COMMONOPTIONSPARSER_H
+#ifndef LLVM37_CLANG_TOOLING_COMMONOPTIONSPARSER_H
+#define LLVM37_CLANG_TOOLING_COMMONOPTIONSPARSER_H
 
 #include "clang/Tooling/CompilationDatabase.h"
-#include "llvm/Support/CommandLine.h"
+#include "llvm37/Support/CommandLine.h"
 
 namespace clang {
 namespace tooling {
@@ -42,10 +42,10 @@ namespace tooling {
 /// \code
 /// #include "clang/Frontend/FrontendActions.h"
 /// #include "clang/Tooling/CommonOptionsParser.h"
-/// #include "llvm/Support/CommandLine.h"
+/// #include "llvm37/Support/CommandLine.h"
 ///
 /// using namespace clang::tooling;
-/// using namespace llvm;
+/// using namespace llvm37;
 ///
 /// static cl::OptionCategory MyToolCategory("My tool options");
 /// static cl::extrahelp CommonHelp(CommonOptionsParser::HelpMessage);
@@ -71,7 +71,7 @@ public:
   ///
   /// This constructor exits program in case of error.
   CommonOptionsParser(int &argc, const char **argv,
-                      llvm::cl::OptionCategory &Category,
+                      llvm37::cl::OptionCategory &Category,
                       const char *Overview = nullptr);
 
   /// Returns a reference to the loaded compilations database.
@@ -96,4 +96,4 @@ private:
 }  // namespace tooling
 }  // namespace clang
 
-#endif  // LLVM_TOOLS_CLANG_INCLUDE_CLANG_TOOLING_COMMONOPTIONSPARSER_H
+#endif  // LLVM37_TOOLS_CLANG_INCLUDE_CLANG_TOOLING_COMMONOPTIONSPARSER_H

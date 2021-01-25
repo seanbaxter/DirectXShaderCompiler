@@ -3794,7 +3794,7 @@ void Sema::InstantiateVariableDefinition(SourceLocation PointOfInstantiation,
     // find the real pattern.
     assert(VarSpec->getSpecializedTemplate() &&
            "Specialization without specialized template?");
-    llvm::PointerUnion<VarTemplateDecl *,
+    llvm37::PointerUnion<VarTemplateDecl *,
                        VarTemplatePartialSpecializationDecl *> PatternPtr =
         VarSpec->getSpecializedTemplateOrPartial();
     if (PatternPtr.is<VarTemplatePartialSpecializationDecl *>()) {
@@ -3973,7 +3973,7 @@ void Sema::InstantiateVariableDefinition(SourceLocation PointOfInstantiation,
         VarSpec->getSpecializedTemplate(), Def, nullptr,
         VarSpec->getTemplateArgsInfo(), VarSpec->getTemplateArgs().asArray()));
     if (Var) {
-      llvm::PointerUnion<VarTemplateDecl *,
+      llvm37::PointerUnion<VarTemplateDecl *,
                          VarTemplatePartialSpecializationDecl *> PatternPtr =
           VarSpec->getSpecializedTemplateOrPartial();
       if (VarTemplatePartialSpecializationDecl *Partial =

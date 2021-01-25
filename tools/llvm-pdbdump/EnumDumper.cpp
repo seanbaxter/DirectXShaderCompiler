@@ -13,11 +13,11 @@
 #include "LinePrinter.h"
 #include "llvm-pdbdump.h"
 
-#include "llvm/DebugInfo/PDB/PDBSymbolData.h"
-#include "llvm/DebugInfo/PDB/PDBSymbolTypeBuiltin.h"
-#include "llvm/DebugInfo/PDB/PDBSymbolTypeEnum.h"
+#include "llvm37/DebugInfo/PDB/PDBSymbolData.h"
+#include "llvm37/DebugInfo/PDB/PDBSymbolTypeBuiltin.h"
+#include "llvm37/DebugInfo/PDB/PDBSymbolTypeEnum.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 EnumDumper::EnumDumper(LinePrinter &P) : PDBSymDumper(true), Printer(P) {}
 

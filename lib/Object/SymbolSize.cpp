@@ -7,13 +7,13 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Object/SymbolSize.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/Object/COFF.h"
-#include "llvm/Object/ELFObjectFile.h"
-#include "llvm/Object/MachO.h"
+#include "llvm37/Object/SymbolSize.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/Object/COFF.h"
+#include "llvm37/Object/ELFObjectFile.h"
+#include "llvm37/Object/MachO.h"
 
-using namespace llvm;
+using namespace llvm37;
 using namespace object;
 
 namespace {
@@ -44,7 +44,7 @@ static unsigned getSymbolSectionID(const ObjectFile &O, SymbolRef Sym) {
 }
 
 std::vector<std::pair<SymbolRef, uint64_t>>
-llvm::object::computeSymbolSizes(const ObjectFile &O) {
+llvm37::object::computeSymbolSizes(const ObjectFile &O) {
   std::vector<std::pair<SymbolRef, uint64_t>> Ret;
 
   if (const auto *E = dyn_cast<ELFObjectFileBase>(&O)) {

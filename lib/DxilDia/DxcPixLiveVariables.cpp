@@ -18,14 +18,14 @@
 #include "DxilDiaSession.h"
 
 #include "dxc/Support/Global.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/IR/DebugInfo.h"
-#include "llvm/IR/DebugInfoMetadata.h"
-#include "llvm/IR/Dominators.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/Intrinsics.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/IR/Module.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/IR/DebugInfo.h"
+#include "llvm37/IR/DebugInfoMetadata.h"
+#include "llvm37/IR/Dominators.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/Intrinsics.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/IR/Module.h"
 
 #include <unordered_map>
 
@@ -57,28 +57,28 @@ void ValidateDbgDeclare(
 struct dxil_debug_info::LiveVariables::Impl
 {
   using VariableInfoMap = std::unordered_map<
-      llvm::DIVariable *,
+      llvm37::DIVariable *,
       std::unique_ptr<VariableInfo>>;
 
   using LiveVarsMap =
-      std::unordered_map<llvm::DIScope*, VariableInfoMap>;
+      std::unordered_map<llvm37::DIScope*, VariableInfoMap>;
 
   IMalloc *m_pMalloc;
   DxcPixDxilDebugInfo *m_pDxilDebugInfo;
-  llvm::Module *m_pModule;
+  llvm37::Module *m_pModule;
   LiveVarsMap m_LiveVarsDbgDeclare;
 
   void Init(
       IMalloc *pMalloc,
       DxcPixDxilDebugInfo *pDxilDebugInfo,
-      llvm::Module *pModule);
+      llvm37::Module *pModule);
 
-  void Init_DbgDeclare(llvm::DbgDeclareInst *DbgDeclare);
+  void Init_DbgDeclare(llvm37::DbgDeclareInst *DbgDeclare);
 
   VariableInfo *AssignValueToOffset(
       VariableInfoMap *VarInfoMap,
-      llvm::DIVariable *Var,
-      llvm::Value *Address,
+      llvm37::DIVariable *Var,
+      llvm37::Value *Address,
       unsigned FragmentIndex,
       unsigned FragmentOffsetInBits);
 };
@@ -86,19 +86,19 @@ struct dxil_debug_info::LiveVariables::Impl
 void dxil_debug_info::LiveVariables::Impl::Init(
     IMalloc *pMalloc,
     DxcPixDxilDebugInfo *pDxilDebugInfo,
-    llvm::Module *pModule)
+    llvm37::Module *pModule)
 {
   m_pMalloc = pMalloc;
   m_pDxilDebugInfo = pDxilDebugInfo;
   m_pModule = pModule;
 
-  llvm::Function* DbgDeclareFn = llvm::Intrinsic::getDeclaration(
+  llvm37::Function* DbgDeclareFn = llvm37::Intrinsic::getDeclaration(
       m_pModule,
-      llvm::Intrinsic::dbg_declare);
+      llvm37::Intrinsic::dbg_declare);
 
-  for (llvm::User* U : DbgDeclareFn->users())
+  for (llvm37::User* U : DbgDeclareFn->users())
   {
-    if (auto* DbgDeclare = llvm::dyn_cast<llvm::DbgDeclareInst>(U))
+    if (auto* DbgDeclare = llvm37::dyn_cast<llvm37::DbgDeclareInst>(U))
     {
       Init_DbgDeclare(DbgDeclare);
     }
@@ -106,10 +106,10 @@ void dxil_debug_info::LiveVariables::Impl::Init(
 }
 
 void dxil_debug_info::LiveVariables::Impl::Init_DbgDeclare(
-    llvm::DbgDeclareInst *DbgDeclare
+    llvm37::DbgDeclareInst *DbgDeclare
 )
 {
-  llvm::Value *Address = DbgDeclare->getAddress();
+  llvm37::Value *Address = DbgDeclare->getAddress();
   auto *Variable = DbgDeclare->getVariable();
   auto *Expression = DbgDeclare->getExpression();
 
@@ -118,7 +118,7 @@ void dxil_debug_info::LiveVariables::Impl::Init_DbgDeclare(
     return;
   }
 
-  auto* AddressAsAlloca = llvm::dyn_cast<llvm::AllocaInst>(Address);
+  auto* AddressAsAlloca = llvm37::dyn_cast<llvm37::AllocaInst>(Address);
   if (AddressAsAlloca == nullptr)
   {
       return;
@@ -172,8 +172,8 @@ void dxil_debug_info::LiveVariables::Impl::Init_DbgDeclare(
 
 dxil_debug_info::VariableInfo* dxil_debug_info::LiveVariables::Impl::AssignValueToOffset(
     VariableInfoMap *VarInfoMap,
-    llvm::DIVariable *Variable,
-    llvm::Value *Address,
+    llvm37::DIVariable *Variable,
+    llvm37::Value *Address,
     unsigned FragmentIndex,
     unsigned FragmentOffsetInBits
 )
@@ -214,7 +214,7 @@ void dxil_debug_info::LiveVariables::Clear() {
 }
 
 HRESULT dxil_debug_info::LiveVariables::GetLiveVariablesAtInstruction(
-  llvm::Instruction *IP,
+  llvm37::Instruction *IP,
   IDxcPixDxilLiveVariables **ppResult) const {
   DXASSERT(IP != nullptr, "else IP should not be nullptr");
   DXASSERT(ppResult != nullptr, "else Result should not be nullptr");
@@ -222,20 +222,20 @@ HRESULT dxil_debug_info::LiveVariables::GetLiveVariablesAtInstruction(
   std::vector<const VariableInfo *> LiveVars;
   std::set<std::string> LiveVarsName;
 
-  const llvm::DebugLoc &DL = IP->getDebugLoc();
+  const llvm37::DebugLoc &DL = IP->getDebugLoc();
 
   if (!DL)
   {
     return E_FAIL;
   }
 
-  llvm::DIScope *S = DL->getScope();
+  llvm37::DIScope *S = DL->getScope();
   if (S == nullptr)
   {
     return E_FAIL;
   }
 
-  const llvm::DITypeIdentifierMap EmptyMap;
+  const llvm37::DITypeIdentifierMap EmptyMap;
   while (S != nullptr)
   {
     auto it = m_pImpl->m_LiveVarsDbgDeclare.find(S);
@@ -244,7 +244,7 @@ HRESULT dxil_debug_info::LiveVariables::GetLiveVariablesAtInstruction(
       for (const auto &VarAndInfo :  it->second)
       {
         auto *Var = VarAndInfo.first;
-        llvm::StringRef VarName = Var->getName();
+        llvm37::StringRef VarName = Var->getName();
         if (Var->getLine() > DL.getLine())
         {
           // Defined later in the HLSL source.

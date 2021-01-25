@@ -33,7 +33,7 @@ namespace dxil_dia {
 class Session : public IDiaSession, public IDxcPixDxilDebugInfoFactory {
 public:
   using RVA = unsigned;
-  using RVAMap = std::map<RVA, const llvm::Instruction *>;
+  using RVAMap = std::map<RVA, const llvm37::Instruction *>;
 
   struct LineInfo {
     LineInfo(std::uint32_t start_col, RVA first, RVA last)
@@ -52,24 +52,24 @@ public:
 
   IMalloc *GetMallocNoRef() { return m_pMalloc.p; }
 
-  void Init(std::shared_ptr<llvm::LLVMContext> context,
-            std::shared_ptr<llvm::Module> mod,
-            std::shared_ptr<llvm::DebugInfoFinder> finder);
+  void Init(std::shared_ptr<llvm37::LLVMContext> context,
+            std::shared_ptr<llvm37::Module> mod,
+            std::shared_ptr<llvm37::DebugInfoFinder> finder);
 
-  llvm::NamedMDNode *Contents() { return m_contents; }
-  llvm::NamedMDNode *Defines() { return m_defines; }
-  llvm::NamedMDNode *MainFileName() { return m_mainFileName; }
-  llvm::NamedMDNode *Arguments() { return m_arguments; }
+  llvm37::NamedMDNode *Contents() { return m_contents; }
+  llvm37::NamedMDNode *Defines() { return m_defines; }
+  llvm37::NamedMDNode *MainFileName() { return m_mainFileName; }
+  llvm37::NamedMDNode *Arguments() { return m_arguments; }
   hlsl::DxilModule &DxilModuleRef() { return *m_dxilModule.get(); }
-  llvm::Module &ModuleRef() { return *m_module.get(); }
-  llvm::DebugInfoFinder &InfoRef() { return *m_finder.get(); }
+  llvm37::Module &ModuleRef() { return *m_module.get(); }
+  llvm37::DebugInfoFinder &InfoRef() { return *m_finder.get(); }
   const SymbolManager &SymMgr() const { return m_symsMgr; }
   const RVAMap &InstructionsRef() const { return m_instructions; }
-  const std::vector<const llvm::Instruction *> &InstructionLinesRef() const { return m_instructionLines; }
-  const std::unordered_map<const llvm::Instruction *, RVA> &RvaMapRef() const { return m_rvaMap; }
+  const std::vector<const llvm37::Instruction *> &InstructionLinesRef() const { return m_instructionLines; }
+  const std::unordered_map<const llvm37::Instruction *, RVA> &RvaMapRef() const { return m_rvaMap; }
   const LineToInfoMap &LineToColumnStartMapRef() const { return m_lineToInfoMap; }
 
-  HRESULT getSourceFileIdByName(llvm::StringRef fileName, DWORD *pRetVal);
+  HRESULT getSourceFileIdByName(llvm37::StringRef fileName, DWORD *pRetVal);
 
   HRESULT STDMETHODCALLTYPE QueryInterface(REFIID iid, void **ppvObject) {
     return DoBasicQueryInterface<IDiaSession, IDxcPixDxilDebugInfoFactory>(this, iid, ppvObject);
@@ -384,17 +384,17 @@ public:
 
 private:
   DXC_MICROCOM_TM_REF_FIELDS()
-  std::shared_ptr<llvm::LLVMContext> m_context;
-  std::shared_ptr<llvm::Module> m_module;
-  std::shared_ptr<llvm::DebugInfoFinder> m_finder;
+  std::shared_ptr<llvm37::LLVMContext> m_context;
+  std::shared_ptr<llvm37::Module> m_module;
+  std::shared_ptr<llvm37::DebugInfoFinder> m_finder;
   std::unique_ptr<hlsl::DxilModule> m_dxilModule;
-  llvm::NamedMDNode *m_contents;
-  llvm::NamedMDNode *m_defines;
-  llvm::NamedMDNode *m_mainFileName;
-  llvm::NamedMDNode *m_arguments;
+  llvm37::NamedMDNode *m_contents;
+  llvm37::NamedMDNode *m_defines;
+  llvm37::NamedMDNode *m_mainFileName;
+  llvm37::NamedMDNode *m_arguments;
   RVAMap m_instructions;
-  std::vector<const llvm::Instruction *> m_instructionLines; // Instructions with line info.
-  std::unordered_map<const llvm::Instruction *, RVA> m_rvaMap; // Map instruction to its RVA.
+  std::vector<const llvm37::Instruction *> m_instructionLines; // Instructions with line info.
+  std::unordered_map<const llvm37::Instruction *, RVA> m_rvaMap; // Map instruction to its RVA.
   LineToInfoMap m_lineToInfoMap;
   SymbolManager m_symsMgr;
 

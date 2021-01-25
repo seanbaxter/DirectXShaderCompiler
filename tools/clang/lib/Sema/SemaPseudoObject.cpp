@@ -37,7 +37,7 @@
 #include "clang/Lex/Preprocessor.h"
 #include "clang/Sema/Initialization.h"
 #include "clang/Sema/ScopeInfo.h"
-#include "llvm/ADT/SmallString.h"
+#include "llvm37/ADT/SmallString.h"
 
 using namespace clang;
 using namespace sema;
@@ -509,7 +509,7 @@ PseudoOpBuilder::buildIncDecOperation(Scope *Sc, SourceLocation opcLoc,
   }
 
   // Add or subtract a literal 1.
-  llvm::APInt oneV(S.Context.getTypeSize(S.Context.IntTy), 1);
+  llvm37::APInt oneV(S.Context.getTypeSize(S.Context.IntTy), 1);
   Expr *one = IntegerLiteral::Create(S.Context, oneV, S.Context.IntTy,
                                      GenericLoc);
 

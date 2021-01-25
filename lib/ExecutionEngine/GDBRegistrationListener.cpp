@@ -7,17 +7,17 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ExecutionEngine/JITEventListener.h"
-#include "llvm/Object/ObjectFile.h"
-#include "llvm/Support/Compiler.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/ManagedStatic.h"
-#include "llvm/Support/Mutex.h"
-#include "llvm/Support/MutexGuard.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ExecutionEngine/JITEventListener.h"
+#include "llvm37/Object/ObjectFile.h"
+#include "llvm37/Support/Compiler.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/ManagedStatic.h"
+#include "llvm37/Support/Mutex.h"
+#include "llvm37/Support/MutexGuard.h"
 
-using namespace llvm;
-using namespace llvm::object;
+using namespace llvm37;
+using namespace llvm37::object;
 
 // This must be kept in sync with gdb/gdb/jit.h .
 extern "C" {
@@ -50,7 +50,7 @@ extern "C" {
   struct jit_descriptor __jit_debug_descriptor = { 1, 0, nullptr, nullptr };
 
   // Debuggers puts a breakpoint in this function.
-  LLVM_ATTRIBUTE_NOINLINE void __jit_debug_register_code() {
+  LLVM37_ATTRIBUTE_NOINLINE void __jit_debug_register_code() {
     // The noinline and the asm prevent calls to this function from being
     // optimized out.
 #if !defined(_MSC_VER)
@@ -85,7 +85,7 @@ struct RegisteredObjectInfo {
 };
 
 // Buffer for an in-memory object file in executable memory
-typedef llvm::DenseMap< const char*, RegisteredObjectInfo>
+typedef llvm37::DenseMap< const char*, RegisteredObjectInfo>
   RegisteredObjectBufferMap;
 
 /// Global access point for the JIT debugging interface designed for use with a
@@ -145,7 +145,7 @@ void NotifyDebugger(jit_code_entry* JITCodeEntry) {
 
 GDBJITRegistrationListener::~GDBJITRegistrationListener() {
   // Free all registered object files.
-  llvm::MutexGuard locked(*JITDebugLock);
+  llvm37::MutexGuard locked(*JITDebugLock);
   for (RegisteredObjectBufferMap::iterator I = ObjectBufferMap.begin(),
                                            E = ObjectBufferMap.end();
        I != E; ++I) {
@@ -172,13 +172,13 @@ void GDBJITRegistrationListener::NotifyObjectEmitted(
   const char *Key = Object.getMemoryBufferRef().getBufferStart();
 
   assert(Key && "Attempt to register a null object with a debugger.");
-  llvm::MutexGuard locked(*JITDebugLock);
+  llvm37::MutexGuard locked(*JITDebugLock);
   assert(ObjectBufferMap.find(Key) == ObjectBufferMap.end() &&
          "Second attempt to perform debug registration.");
   jit_code_entry* JITCodeEntry = new jit_code_entry();
 
   if (!JITCodeEntry) {
-    llvm::report_fatal_error(
+    llvm37::report_fatal_error(
       "Allocation failed when registering a JIT entry!\n");
   } else {
     JITCodeEntry->symfile_addr = Buffer;
@@ -192,7 +192,7 @@ void GDBJITRegistrationListener::NotifyObjectEmitted(
 
 void GDBJITRegistrationListener::NotifyFreeingObject(const ObjectFile& Object) {
   const char *Key = Object.getMemoryBufferRef().getBufferStart();
-  llvm::MutexGuard locked(*JITDebugLock);
+  llvm37::MutexGuard locked(*JITDebugLock);
   RegisteredObjectBufferMap::iterator I = ObjectBufferMap.find(Key);
 
   if (I != ObjectBufferMap.end()) {
@@ -234,14 +234,14 @@ void GDBJITRegistrationListener::deregisterObjectInternal(
   JITCodeEntry = nullptr;
 }
 
-llvm::ManagedStatic<GDBJITRegistrationListener> GDBRegListener;
+llvm37::ManagedStatic<GDBJITRegistrationListener> GDBRegListener;
 
 } // end namespace
 
-namespace llvm {
+namespace llvm37 {
 
 JITEventListener* JITEventListener::createGDBRegistrationListener() {
   return &*GDBRegListener;
 }
 
-} // namespace llvm
+} // namespace llvm37

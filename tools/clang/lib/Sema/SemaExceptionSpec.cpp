@@ -19,8 +19,8 @@
 #include "clang/AST/TypeLoc.h"
 #include "clang/Basic/Diagnostic.h"
 #include "clang/Basic/SourceManager.h"
-#include "llvm/ADT/SmallPtrSet.h"
-#include "llvm/ADT/SmallString.h"
+#include "llvm37/ADT/SmallPtrSet.h"
+#include "llvm37/ADT/SmallString.h"
 
 namespace clang {
 
@@ -53,7 +53,7 @@ bool Sema::isLibstdcxxEagerExceptionSpecHack(const Declarator &D) {
   if (!Context.getSourceManager().isInSystemHeader(D.getLocStart()))
     return false;
 
-  return llvm::StringSwitch<bool>(RD->getIdentifier()->getName())
+  return llvm37::StringSwitch<bool>(RD->getIdentifier()->getName())
       .Case("array", true)
       .Case("pair", true)
       .Case("priority_queue", true)
@@ -291,7 +291,7 @@ bool Sema::CheckEquivalentExceptionSpec(FunctionDecl *Old, FunctionDecl *New) {
 
   // Warn about the lack of exception specification.
   SmallString<128> ExceptionSpecString;
-  llvm::raw_svector_ostream OS(ExceptionSpecString);
+  llvm37::raw_svector_ostream OS(ExceptionSpecString);
   switch (OldProto->getExceptionSpecType()) {
   case EST_DynamicNone:
     OS << "throw()";
@@ -544,7 +544,7 @@ bool Sema::CheckEquivalentExceptionSpec(const PartialDiagnostic &DiagID,
   bool Success = true;
   // Both have a dynamic exception spec. Collect the first set, then compare
   // to the second.
-  llvm::SmallPtrSet<CanQualType, 8> OldTypes, NewTypes;
+  llvm37::SmallPtrSet<CanQualType, 8> OldTypes, NewTypes;
   for (const auto &I : Old->exceptions())
     OldTypes.insert(Context.getCanonicalType(I).getUnqualifiedType());
 

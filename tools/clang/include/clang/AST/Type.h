@@ -11,8 +11,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_AST_TYPE_H
-#define LLVM_CLANG_AST_TYPE_H
+#ifndef LLVM37_CLANG_AST_TYPE_H
+#define LLVM37_CLANG_AST_TYPE_H
 
 #include "clang/AST/NestedNameSpecifier.h"
 #include "clang/AST/TemplateName.h"
@@ -24,14 +24,14 @@
 #include "clang/Basic/PartialDiagnostic.h"
 #include "clang/Basic/Specifiers.h"
 #include "clang/Basic/Visibility.h"
-#include "llvm/ADT/APInt.h"
-#include "llvm/ADT/FoldingSet.h"
-#include "llvm/ADT/Optional.h"
-#include "llvm/ADT/PointerIntPair.h"
-#include "llvm/ADT/PointerUnion.h"
-#include "llvm/ADT/Twine.h"
-#include "llvm/ADT/iterator_range.h"
-#include "llvm/Support/ErrorHandling.h"
+#include "llvm37/ADT/APInt.h"
+#include "llvm37/ADT/FoldingSet.h"
+#include "llvm37/ADT/Optional.h"
+#include "llvm37/ADT/PointerIntPair.h"
+#include "llvm37/ADT/PointerUnion.h"
+#include "llvm37/ADT/Twine.h"
+#include "llvm37/ADT/iterator_range.h"
+#include "llvm37/Support/ErrorHandling.h"
 
 namespace clang {
   enum {
@@ -43,7 +43,7 @@ namespace clang {
   class QualType;
 }
 
-namespace llvm {
+namespace llvm37 {
   template <typename T>
   class PointerLikeTypeTraits;
   template<>
@@ -488,7 +488,7 @@ public:
   void print(raw_ostream &OS, const PrintingPolicy &Policy,
              bool appendSpaceIfNonEmpty = false) const;
 
-  void Profile(llvm::FoldingSetNodeID &ID) const {
+  void Profile(llvm37::FoldingSetNodeID &ID) const {
     ID.AddInteger(Mask);
   }
 
@@ -565,7 +565,7 @@ enum class ObjCSubstitutionContext {
 /// case the pointer points to a special structure.
 class QualType {
   // Thankfully, these are efficiently composable.
-  llvm::PointerIntPair<llvm::PointerUnion<const Type*,const ExtQuals*>,
+  llvm37::PointerIntPair<llvm37::PointerUnion<const Type*,const ExtQuals*>,
                        Qualifiers::FastWidth> Value;
 
   const ExtQuals *getExtQualsUnsafe() const {
@@ -952,7 +952,7 @@ public:
   void dump(const char *s) const;
   void dump() const;
 
-  void Profile(llvm::FoldingSetNodeID &ID) const {
+  void Profile(llvm37::FoldingSetNodeID &ID) const {
     ID.AddPointer(getAsOpaquePtr());
   }
 
@@ -1073,7 +1073,7 @@ private:
 
 } // end clang.
 
-namespace llvm {
+namespace llvm37 {
 /// Implement simplify_type for QualType, so that we can dyn_cast from QualType
 /// to a specific Type class.
 template<> struct simplify_type< ::clang::QualType> {
@@ -1097,7 +1097,7 @@ public:
   enum { NumLowBitsAvailable = 0 };
 };
 
-} // end namespace llvm
+} // end namespace llvm37
 
 namespace clang {
 
@@ -1134,7 +1134,7 @@ class ExtQualsTypeCommonBase {
 /// in three low bits on the QualType pointer; a fourth bit records whether
 /// the pointer is an ExtQuals node. The extended qualifiers (address spaces,
 /// Objective-C GC attributes) are much more rare.
-class ExtQuals : public ExtQualsTypeCommonBase, public llvm::FoldingSetNode {
+class ExtQuals : public ExtQualsTypeCommonBase, public llvm37::FoldingSetNode {
   // NOTE: changing the fast qualifiers should be straightforward as
   // long as you don't make 'const' non-fast.
   // 1. Qualifiers:
@@ -1182,10 +1182,10 @@ public:
   const Type *getBaseType() const { return BaseType; }
 
 public:
-  void Profile(llvm::FoldingSetNodeID &ID) const {
+  void Profile(llvm37::FoldingSetNodeID &ID) const {
     Profile(ID, getBaseType(), Quals);
   }
-  static void Profile(llvm::FoldingSetNodeID &ID,
+  static void Profile(llvm37::FoldingSetNodeID &ID,
                       const Type *BaseType,
                       Qualifiers Quals) {
     assert(!Quals.hasFastQualifiers() && "fast qualifiers in ExtQuals hash!");
@@ -2062,7 +2062,7 @@ public:
 /// ComplexType - C99 6.2.5p11 - Complex values.  This supports the C99 complex
 /// types (_Complex float etc) as well as the GCC integer complex extensions.
 ///
-class ComplexType : public Type, public llvm::FoldingSetNode {
+class ComplexType : public Type, public llvm37::FoldingSetNode {
   QualType ElementType;
   ComplexType(QualType Element, QualType CanonicalPtr) :
     Type(Complex, CanonicalPtr, Element->isDependentType(),
@@ -2079,10 +2079,10 @@ public:
   bool isSugared() const { return false; }
   QualType desugar() const { return QualType(this, 0); }
 
-  void Profile(llvm::FoldingSetNodeID &ID) {
+  void Profile(llvm37::FoldingSetNodeID &ID) {
     Profile(ID, getElementType());
   }
-  static void Profile(llvm::FoldingSetNodeID &ID, QualType Element) {
+  static void Profile(llvm37::FoldingSetNodeID &ID, QualType Element) {
     ID.AddPointer(Element.getAsOpaquePtr());
   }
 
@@ -2091,7 +2091,7 @@ public:
 
 /// ParenType - Sugar for parentheses used when specifying types.
 ///
-class ParenType : public Type, public llvm::FoldingSetNode {
+class ParenType : public Type, public llvm37::FoldingSetNode {
   QualType Inner;
 
   ParenType(QualType InnerType, QualType CanonType) :
@@ -2110,10 +2110,10 @@ public:
   bool isSugared() const { return true; }
   QualType desugar() const { return getInnerType(); }
 
-  void Profile(llvm::FoldingSetNodeID &ID) {
+  void Profile(llvm37::FoldingSetNodeID &ID) {
     Profile(ID, getInnerType());
   }
-  static void Profile(llvm::FoldingSetNodeID &ID, QualType Inner) {
+  static void Profile(llvm37::FoldingSetNodeID &ID, QualType Inner) {
     Inner.Profile(ID);
   }
 
@@ -2122,7 +2122,7 @@ public:
 
 /// PointerType - C99 6.7.5.1 - Pointer Declarators.
 ///
-class PointerType : public Type, public llvm::FoldingSetNode {
+class PointerType : public Type, public llvm37::FoldingSetNode {
   QualType PointeeType;
 
   PointerType(QualType Pointee, QualType CanonicalPtr) :
@@ -2157,10 +2157,10 @@ public:
   bool isSugared() const { return false; }
   QualType desugar() const { return QualType(this, 0); }
 
-  void Profile(llvm::FoldingSetNodeID &ID) {
+  void Profile(llvm37::FoldingSetNodeID &ID) {
     Profile(ID, getPointeeType());
   }
-  static void Profile(llvm::FoldingSetNodeID &ID, QualType Pointee) {
+  static void Profile(llvm37::FoldingSetNodeID &ID, QualType Pointee) {
     ID.AddPointer(Pointee.getAsOpaquePtr());
   }
 
@@ -2170,7 +2170,7 @@ public:
 /// \brief Represents a type which was implicitly adjusted by the semantic
 /// engine for arbitrary reasons.  For example, array and function types can
 /// decay, and function types can have their calling conventions adjusted.
-class AdjustedType : public Type, public llvm::FoldingSetNode {
+class AdjustedType : public Type, public llvm37::FoldingSetNode {
   QualType OriginalTy;
   QualType AdjustedTy;
 
@@ -2192,10 +2192,10 @@ public:
   bool isSugared() const { return true; }
   QualType desugar() const { return AdjustedTy; }
 
-  void Profile(llvm::FoldingSetNodeID &ID) {
+  void Profile(llvm37::FoldingSetNodeID &ID) {
     Profile(ID, OriginalTy, AdjustedTy);
   }
-  static void Profile(llvm::FoldingSetNodeID &ID, QualType Orig, QualType New) {
+  static void Profile(llvm37::FoldingSetNodeID &ID, QualType Orig, QualType New) {
     ID.AddPointer(Orig.getAsOpaquePtr());
     ID.AddPointer(New.getAsOpaquePtr());
   }
@@ -2229,7 +2229,7 @@ public:
 /// This type is to represent types syntactically represented as
 /// "void (^)(int)", etc. Pointee is required to always be a function type.
 ///
-class BlockPointerType : public Type, public llvm::FoldingSetNode {
+class BlockPointerType : public Type, public llvm37::FoldingSetNode {
   QualType PointeeType;  // Block is some kind of pointer type
   BlockPointerType(QualType Pointee, QualType CanonicalCls) :
     Type(BlockPointer, CanonicalCls, Pointee->isDependentType(),
@@ -2248,10 +2248,10 @@ public:
   bool isSugared() const { return false; }
   QualType desugar() const { return QualType(this, 0); }
 
-  void Profile(llvm::FoldingSetNodeID &ID) {
+  void Profile(llvm37::FoldingSetNodeID &ID) {
       Profile(ID, getPointeeType());
   }
-  static void Profile(llvm::FoldingSetNodeID &ID, QualType Pointee) {
+  static void Profile(llvm37::FoldingSetNodeID &ID, QualType Pointee) {
       ID.AddPointer(Pointee.getAsOpaquePtr());
   }
 
@@ -2262,7 +2262,7 @@ public:
 
 /// ReferenceType - Base for LValueReferenceType and RValueReferenceType
 ///
-class ReferenceType : public Type, public llvm::FoldingSetNode {
+class ReferenceType : public Type, public llvm37::FoldingSetNode {
   QualType PointeeType;
 
 protected:
@@ -2291,10 +2291,10 @@ public:
     return T->PointeeType;
   }
 
-  void Profile(llvm::FoldingSetNodeID &ID) {
+  void Profile(llvm37::FoldingSetNodeID &ID) {
     Profile(ID, PointeeType, isSpelledAsLValue());
   }
-  static void Profile(llvm::FoldingSetNodeID &ID,
+  static void Profile(llvm37::FoldingSetNodeID &ID,
                       QualType Referencee,
                       bool SpelledAsLValue) {
     ID.AddPointer(Referencee.getAsOpaquePtr());
@@ -2342,7 +2342,7 @@ public:
 
 /// MemberPointerType - C++ 8.3.3 - Pointers to members
 ///
-class MemberPointerType : public Type, public llvm::FoldingSetNode {
+class MemberPointerType : public Type, public llvm37::FoldingSetNode {
   QualType PointeeType;
   /// The class of which the pointee is a member. Must ultimately be a
   /// RecordType, but could be a typedef or a template parameter too.
@@ -2381,10 +2381,10 @@ public:
   bool isSugared() const { return false; }
   QualType desugar() const { return QualType(this, 0); }
 
-  void Profile(llvm::FoldingSetNodeID &ID) {
+  void Profile(llvm37::FoldingSetNodeID &ID) {
     Profile(ID, getPointeeType(), getClass());
   }
-  static void Profile(llvm::FoldingSetNodeID &ID, QualType Pointee,
+  static void Profile(llvm37::FoldingSetNodeID &ID, QualType Pointee,
                       const Type *Class) {
     ID.AddPointer(Pointee.getAsOpaquePtr());
     ID.AddPointer(Class);
@@ -2397,7 +2397,7 @@ public:
 
 /// ArrayType - C99 6.7.5.2 - Array Declarators.
 ///
-class ArrayType : public Type, public llvm::FoldingSetNode {
+class ArrayType : public Type, public llvm37::FoldingSetNode {
 public:
   /// ArraySizeModifier - Capture whether this is a normal array (e.g. int X[4])
   /// an array with a static size (e.g. int X[static 4]), or an array
@@ -2455,21 +2455,21 @@ public:
 /// type for 'int A[4 + 4*100]' is a ConstantArrayType where the element
 /// type is 'int' and the size is 404.
 class ConstantArrayType : public ArrayType {
-  llvm::APInt Size; // Allows us to unique the type.
+  llvm37::APInt Size; // Allows us to unique the type.
 
-  ConstantArrayType(QualType et, QualType can, const llvm::APInt &size,
+  ConstantArrayType(QualType et, QualType can, const llvm37::APInt &size,
                     ArraySizeModifier sm, unsigned tq)
     : ArrayType(ConstantArray, et, can, sm, tq,
                 et->containsUnexpandedParameterPack()),
       Size(size) {}
 protected:
   ConstantArrayType(TypeClass tc, QualType et, QualType can,
-                    const llvm::APInt &size, ArraySizeModifier sm, unsigned tq)
+                    const llvm37::APInt &size, ArraySizeModifier sm, unsigned tq)
     : ArrayType(tc, et, can, sm, tq, et->containsUnexpandedParameterPack()),
       Size(size) {}
   friend class ASTContext;  // ASTContext creates these.
 public:
-  const llvm::APInt &getSize() const { return Size; }
+  const llvm37::APInt &getSize() const { return Size; }
   bool isSugared() const { return false; }
   QualType desugar() const { return QualType(this, 0); }
 
@@ -2478,18 +2478,18 @@ public:
   // an array with the given element type and number of elements.
   static unsigned getNumAddressingBits(ASTContext &Context,
                                        QualType ElementType,
-                                       const llvm::APInt &NumElements);
+                                       const llvm37::APInt &NumElements);
 
   /// \brief Determine the maximum number of active bits that an array's size
   /// can require, which limits the maximum size of the array.
   static unsigned getMaxSizeBits(ASTContext &Context);
 
-  void Profile(llvm::FoldingSetNodeID &ID) {
+  void Profile(llvm37::FoldingSetNodeID &ID) {
     Profile(ID, getElementType(), getSize(),
             getSizeModifier(), getIndexTypeCVRQualifiers());
   }
-  static void Profile(llvm::FoldingSetNodeID &ID, QualType ET,
-                      const llvm::APInt &ArraySize, ArraySizeModifier SizeMod,
+  static void Profile(llvm37::FoldingSetNodeID &ID, QualType ET,
+                      const llvm37::APInt &ArraySize, ArraySizeModifier SizeMod,
                       unsigned TypeQuals) {
     ID.AddPointer(ET.getAsOpaquePtr());
     ID.AddInteger(ArraySize.getZExtValue());
@@ -2521,12 +2521,12 @@ public:
 
   friend class StmtIteratorBase;
 
-  void Profile(llvm::FoldingSetNodeID &ID) {
+  void Profile(llvm37::FoldingSetNodeID &ID) {
     Profile(ID, getElementType(), getSizeModifier(),
             getIndexTypeCVRQualifiers());
   }
 
-  static void Profile(llvm::FoldingSetNodeID &ID, QualType ET,
+  static void Profile(llvm37::FoldingSetNodeID &ID, QualType ET,
                       ArraySizeModifier SizeMod, unsigned TypeQuals) {
     ID.AddPointer(ET.getAsOpaquePtr());
     ID.AddInteger(SizeMod);
@@ -2583,7 +2583,7 @@ public:
 
   friend class StmtIteratorBase;
 
-  void Profile(llvm::FoldingSetNodeID &ID) {
+  void Profile(llvm37::FoldingSetNodeID &ID) {
     llvm_unreachable("Cannot unique VariableArrayTypes.");
   }
 };
@@ -2640,12 +2640,12 @@ public:
   friend class StmtIteratorBase;
 
 
-  void Profile(llvm::FoldingSetNodeID &ID) {
+  void Profile(llvm37::FoldingSetNodeID &ID) {
     Profile(ID, Context, getElementType(),
             getSizeModifier(), getIndexTypeCVRQualifiers(), getSizeExpr());
   }
 
-  static void Profile(llvm::FoldingSetNodeID &ID, const ASTContext &Context,
+  static void Profile(llvm37::FoldingSetNodeID &ID, const ASTContext &Context,
                       QualType ET, ArraySizeModifier SizeMod,
                       unsigned TypeQuals, Expr *E);
 };
@@ -2658,7 +2658,7 @@ public:
 ///   typedef T __attribute__((ext_vector_type(Size))) type;
 /// }
 /// @endcode
-class DependentSizedExtVectorType : public Type, public llvm::FoldingSetNode {
+class DependentSizedExtVectorType : public Type, public llvm37::FoldingSetNode {
   const ASTContext &Context;
   Expr *SizeExpr;
   /// ElementType - The element type of the array.
@@ -2682,11 +2682,11 @@ public:
     return T->getTypeClass() == DependentSizedExtVector;
   }
 
-  void Profile(llvm::FoldingSetNodeID &ID) {
+  void Profile(llvm37::FoldingSetNodeID &ID) {
     Profile(ID, Context, getElementType(), getSizeExpr());
   }
 
-  static void Profile(llvm::FoldingSetNodeID &ID, const ASTContext &Context,
+  static void Profile(llvm37::FoldingSetNodeID &ID, const ASTContext &Context,
                       QualType ElementType, Expr *SizeExpr);
 };
 
@@ -2696,7 +2696,7 @@ public:
 /// bytes; or from an Altivec __vector or vector declaration.
 /// Since the constructor takes the number of vector elements, the
 /// client is responsible for converting the size into the number of elements.
-class VectorType : public Type, public llvm::FoldingSetNode {
+class VectorType : public Type, public llvm37::FoldingSetNode {
 public:
   enum VectorKind {
     GenericVector,  // not a target-specific vector type
@@ -2733,11 +2733,11 @@ public:
     return VectorKind(VectorTypeBits.VecKind);
   }
 
-  void Profile(llvm::FoldingSetNodeID &ID) {
+  void Profile(llvm37::FoldingSetNodeID &ID) {
     Profile(ID, getElementType(), getNumElements(),
             getTypeClass(), getVectorKind());
   }
-  static void Profile(llvm::FoldingSetNodeID &ID, QualType ElementType,
+  static void Profile(llvm37::FoldingSetNodeID &ID, QualType ElementType,
                       unsigned NumElements, TypeClass TypeClass,
                       VectorKind VecKind) {
     ID.AddPointer(ElementType.getAsOpaquePtr());
@@ -2946,7 +2946,7 @@ class FunctionType : public Type {
       return ExtInfo((Bits & ~CallConvMask) | (unsigned) cc);
     }
 
-    void Profile(llvm::FoldingSetNodeID &ID) const {
+    void Profile(llvm37::FoldingSetNodeID &ID) const {
       ID.AddInteger(Bits);
     }
   };
@@ -2995,7 +2995,7 @@ public:
 
 /// FunctionNoProtoType - Represents a K&R-style 'int foo()' function, which has
 /// no information available about its arguments.
-class FunctionNoProtoType : public FunctionType, public llvm::FoldingSetNode {
+class FunctionNoProtoType : public FunctionType, public llvm37::FoldingSetNode {
   FunctionNoProtoType(QualType Result, QualType Canonical, ExtInfo Info)
     : FunctionType(FunctionNoProto, Result, Canonical,
                    /*Dependent=*/false, /*InstantiationDependent=*/false,
@@ -3010,10 +3010,10 @@ public:
   bool isSugared() const { return false; }
   QualType desugar() const { return QualType(this, 0); }
 
-  void Profile(llvm::FoldingSetNodeID &ID) {
+  void Profile(llvm37::FoldingSetNodeID &ID) {
     Profile(ID, getReturnType(), getExtInfo());
   }
-  static void Profile(llvm::FoldingSetNodeID &ID, QualType ResultType,
+  static void Profile(llvm37::FoldingSetNodeID &ID, QualType ResultType,
                       ExtInfo Info) {
     Info.Profile(ID);
     ID.AddPointer(ResultType.getAsOpaquePtr());
@@ -3029,7 +3029,7 @@ public:
 /// parameters, not as having a single void parameter. Such a type can have an
 /// exception specification, but this specification is not part of the canonical
 /// type.
-class FunctionProtoType : public FunctionType, public llvm::FoldingSetNode {
+class FunctionProtoType : public FunctionType, public llvm37::FoldingSetNode {
 public:
   struct ExceptionSpecInfo {
     ExceptionSpecInfo()
@@ -3155,7 +3155,7 @@ public:
     return param_type_begin()[i];
   }
   ArrayRef<QualType> getParamTypes() const {
-    return llvm::makeArrayRef(param_type_begin(), param_type_end());
+    return llvm37::makeArrayRef(param_type_begin(), param_type_end());
   }
 
   ExtProtoInfo getExtProtoInfo() const {
@@ -3265,7 +3265,7 @@ public:
   }
 
   typedef const QualType *param_type_iterator;
-  typedef llvm::iterator_range<param_type_iterator> param_type_range;
+  typedef llvm37::iterator_range<param_type_iterator> param_type_range;
 
   param_type_range param_types() const {
     return param_type_range(param_type_begin(), param_type_end());
@@ -3280,7 +3280,7 @@ public:
   typedef const QualType *exception_iterator;
 
   ArrayRef<QualType> exceptions() const {
-    return llvm::makeArrayRef(exception_begin(), exception_end());
+    return llvm37::makeArrayRef(exception_begin(), exception_end());
   }
   exception_iterator exception_begin() const {
     // exceptions begin where arguments end
@@ -3294,7 +3294,7 @@ public:
 
   // HLSL Change Starts
   ArrayRef<hlsl::ParameterModifier> getParamMods() const {
-    return llvm::makeArrayRef(parammods_begin(), parammods_end());
+    return llvm37::makeArrayRef(parammods_begin(), parammods_end());
   }
   const hlsl::ParameterModifier *parammods_begin() const {
     // param modifiers begin where exceptions end
@@ -3324,8 +3324,8 @@ public:
     return T->getTypeClass() == FunctionProto;
   }
 
-  void Profile(llvm::FoldingSetNodeID &ID, const ASTContext &Ctx);
-  static void Profile(llvm::FoldingSetNodeID &ID, QualType Result,
+  void Profile(llvm37::FoldingSetNodeID &ID, const ASTContext &Ctx);
+  static void Profile(llvm37::FoldingSetNodeID &ID, QualType Result,
                       param_type_iterator ArgTys, unsigned NumArgs,
                       const ExtProtoInfo &EPI,
                       ArrayRef<hlsl::ParameterModifier> ParamMods, // HLSL Change
@@ -3355,10 +3355,10 @@ public:
     return T->getTypeClass() == UnresolvedUsing;
   }
 
-  void Profile(llvm::FoldingSetNodeID &ID) {
+  void Profile(llvm37::FoldingSetNodeID &ID) {
     return Profile(ID, Decl);
   }
-  static void Profile(llvm::FoldingSetNodeID &ID,
+  static void Profile(llvm37::FoldingSetNodeID &ID,
                       UnresolvedUsingTypenameDecl *D) {
     ID.AddPointer(D);
   }
@@ -3413,18 +3413,18 @@ public:
 /// canonical, dependent types, only. Clients will only see instances
 /// of this class via TypeOfExprType nodes.
 class DependentTypeOfExprType
-  : public TypeOfExprType, public llvm::FoldingSetNode {
+  : public TypeOfExprType, public llvm37::FoldingSetNode {
   const ASTContext &Context;
 
 public:
   DependentTypeOfExprType(const ASTContext &Context, Expr *E)
     : TypeOfExprType(E), Context(Context) { }
 
-  void Profile(llvm::FoldingSetNodeID &ID) {
+  void Profile(llvm37::FoldingSetNodeID &ID) {
     Profile(ID, Context, getUnderlyingExpr());
   }
 
-  static void Profile(llvm::FoldingSetNodeID &ID, const ASTContext &Context,
+  static void Profile(llvm37::FoldingSetNodeID &ID, const ASTContext &Context,
                       Expr *E);
 };
 
@@ -3479,17 +3479,17 @@ public:
 /// This class is used internally by the ASTContext to manage
 /// canonical, dependent types, only. Clients will only see instances
 /// of this class via DecltypeType nodes.
-class DependentDecltypeType : public DecltypeType, public llvm::FoldingSetNode {
+class DependentDecltypeType : public DecltypeType, public llvm37::FoldingSetNode {
   const ASTContext &Context;
 
 public:
   DependentDecltypeType(const ASTContext &Context, Expr *E);
 
-  void Profile(llvm::FoldingSetNodeID &ID) {
+  void Profile(llvm37::FoldingSetNodeID &ID) {
     Profile(ID, Context, getUnderlyingExpr());
   }
 
-  static void Profile(llvm::FoldingSetNodeID &ID, const ASTContext &Context,
+  static void Profile(llvm37::FoldingSetNodeID &ID, const ASTContext &Context,
                       Expr *E);
 };
 
@@ -3603,7 +3603,7 @@ public:
 ///   - the modified type is the TypedefType for int32_t
 ///   - the equivalent type is VectorType(16, int32_t)
 ///   - the canonical type is VectorType(16, int)
-class AttributedType : public Type, public llvm::FoldingSetNode {
+class AttributedType : public Type, public llvm37::FoldingSetNode {
 public:
   // It is really silly to have yet another attribute-kind enum, but
   // clang::attr::Kind doesn't currently cover the pure type attrs.
@@ -3688,7 +3688,7 @@ public:
 
   bool isCallingConv() const;
 
-  llvm::Optional<NullabilityKind> getImmediateNullability() const;
+  llvm37::Optional<NullabilityKind> getImmediateNullability() const;
 
   /// Retrieve the attribute kind corresponding to the given
   /// nullability kind.
@@ -3717,11 +3717,11 @@ public:
   /// \returns the top-level nullability, if present.
   static Optional<NullabilityKind> stripOuterNullability(QualType &T);
 
-  void Profile(llvm::FoldingSetNodeID &ID) {
+  void Profile(llvm37::FoldingSetNodeID &ID) {
     Profile(ID, getAttrKind(), ModifiedType, EquivalentType);
   }
 
-  static void Profile(llvm::FoldingSetNodeID &ID, Kind attrKind,
+  static void Profile(llvm37::FoldingSetNodeID &ID, Kind attrKind,
                       QualType modified, QualType equivalent) {
     ID.AddInteger(attrKind);
     ID.AddPointer(modified.getAsOpaquePtr());
@@ -3733,7 +3733,7 @@ public:
   }
 };
 
-class TemplateTypeParmType : public Type, public llvm::FoldingSetNode {
+class TemplateTypeParmType : public Type, public llvm37::FoldingSetNode {
   // Helper data collector for canonical types.
   struct CanonicalTTPTInfo {
     unsigned Depth : 15;
@@ -3788,11 +3788,11 @@ public:
   bool isSugared() const { return false; }
   QualType desugar() const { return QualType(this, 0); }
 
-  void Profile(llvm::FoldingSetNodeID &ID) {
+  void Profile(llvm37::FoldingSetNodeID &ID) {
     Profile(ID, getDepth(), getIndex(), isParameterPack(), getDecl());
   }
 
-  static void Profile(llvm::FoldingSetNodeID &ID, unsigned Depth,
+  static void Profile(llvm37::FoldingSetNodeID &ID, unsigned Depth,
                       unsigned Index, bool ParameterPack,
                       TemplateTypeParmDecl *TTPDecl) {
     ID.AddInteger(Depth);
@@ -3813,7 +3813,7 @@ public:
 /// been replaced with these.  They are used solely to record that a
 /// type was originally written as a template type parameter;
 /// therefore they are never canonical.
-class SubstTemplateTypeParmType : public Type, public llvm::FoldingSetNode {
+class SubstTemplateTypeParmType : public Type, public llvm37::FoldingSetNode {
   // The original type parameter.
   const TemplateTypeParmType *Replaced;
 
@@ -3841,10 +3841,10 @@ public:
   bool isSugared() const { return true; }
   QualType desugar() const { return getReplacementType(); }
 
-  void Profile(llvm::FoldingSetNodeID &ID) {
+  void Profile(llvm37::FoldingSetNodeID &ID) {
     Profile(ID, getReplacedParameter(), getReplacementType());
   }
-  static void Profile(llvm::FoldingSetNodeID &ID,
+  static void Profile(llvm37::FoldingSetNodeID &ID,
                       const TemplateTypeParmType *Replaced,
                       QualType Replacement) {
     ID.AddPointer(Replaced);
@@ -3868,7 +3868,7 @@ public:
 /// that pack expansion (e.g., when all template parameters have corresponding
 /// arguments), this type will be replaced with the \c SubstTemplateTypeParmType
 /// at the current pack substitution index.
-class SubstTemplateTypeParmPackType : public Type, public llvm::FoldingSetNode {
+class SubstTemplateTypeParmPackType : public Type, public llvm37::FoldingSetNode {
   /// \brief The original type parameter.
   const TemplateTypeParmType *Replaced;
 
@@ -3898,8 +3898,8 @@ public:
 
   TemplateArgument getArgumentPack() const;
 
-  void Profile(llvm::FoldingSetNodeID &ID);
-  static void Profile(llvm::FoldingSetNodeID &ID,
+  void Profile(llvm37::FoldingSetNodeID &ID);
+  static void Profile(llvm37::FoldingSetNodeID &ID,
                       const TemplateTypeParmType *Replaced,
                       const TemplateArgument &ArgPack);
 
@@ -3914,7 +3914,7 @@ public:
 /// the initializer is attached, or if the initializer is type-dependent, there
 /// is no deduced type and an auto type is canonical. In the latter case, it is
 /// also a dependent type.
-class AutoType : public Type, public llvm::FoldingSetNode {
+class AutoType : public Type, public llvm37::FoldingSetNode {
   AutoType(QualType DeducedType, bool IsDecltypeAuto, 
            bool IsDependent)
     : Type(Auto, DeducedType.isNull() ? QualType(this, 0) : DeducedType,
@@ -3944,12 +3944,12 @@ public:
     return !isCanonicalUnqualified() || isDependentType();
   }
 
-  void Profile(llvm::FoldingSetNodeID &ID) {
+  void Profile(llvm37::FoldingSetNodeID &ID) {
     Profile(ID, getDeducedType(), isDecltypeAuto(), 
             isDependentType());
   }
 
-  static void Profile(llvm::FoldingSetNodeID &ID, QualType Deduced,
+  static void Profile(llvm37::FoldingSetNodeID &ID, QualType Deduced,
                       bool IsDecltypeAuto, bool IsDependent) {
     ID.AddPointer(Deduced.getAsOpaquePtr());
     ID.AddBoolean(IsDecltypeAuto);
@@ -3982,7 +3982,7 @@ public:
 /// non-canonical aliased type when the template is a type alias
 /// template.
 class TemplateSpecializationType
-  : public Type, public llvm::FoldingSetNode {
+  : public Type, public llvm37::FoldingSetNode {
   /// \brief The name of the template being specialized.  This is
   /// either a TemplateName::Template (in which case it is a
   /// ClassTemplateDecl*, a TemplateTemplateParmDecl*, or a
@@ -4089,13 +4089,13 @@ public:
   }
   QualType desugar() const { return getCanonicalTypeInternal(); }
 
-  void Profile(llvm::FoldingSetNodeID &ID, const ASTContext &Ctx) {
+  void Profile(llvm37::FoldingSetNodeID &ID, const ASTContext &Ctx) {
     Profile(ID, Template, getArgs(), NumArgs, Ctx);
     if (isTypeAlias())
       getAliasedType().Profile(ID);
   }
 
-  static void Profile(llvm::FoldingSetNodeID &ID, TemplateName T,
+  static void Profile(llvm37::FoldingSetNodeID &ID, TemplateName T,
                       const TemplateArgument *Args,
                       unsigned NumArgs,
                       const ASTContext &Context);
@@ -4259,7 +4259,7 @@ public:
 /// source code, including tag keywords and any nested-name-specifiers.
 /// The type itself is always "sugar", used to express what was written
 /// in the source code but containing no additional semantic information.
-class ElaboratedType : public TypeWithKeyword, public llvm::FoldingSetNode {
+class ElaboratedType : public TypeWithKeyword, public llvm37::FoldingSetNode {
 
   /// \brief The nested name specifier containing the qualifier.
   NestedNameSpecifier *NNS;
@@ -4297,11 +4297,11 @@ public:
   /// \brief Returns whether this type directly provides sugar.
   bool isSugared() const { return true; }
 
-  void Profile(llvm::FoldingSetNodeID &ID) {
+  void Profile(llvm37::FoldingSetNodeID &ID) {
     Profile(ID, getKeyword(), NNS, NamedType);
   }
 
-  static void Profile(llvm::FoldingSetNodeID &ID, ElaboratedTypeKeyword Keyword,
+  static void Profile(llvm37::FoldingSetNodeID &ID, ElaboratedTypeKeyword Keyword,
                       NestedNameSpecifier *NNS, QualType NamedType) {
     ID.AddInteger(Keyword);
     ID.AddPointer(NNS);
@@ -4325,7 +4325,7 @@ public:
 /// Typically the nested-name-specifier is dependent, but in MSVC compatibility
 /// mode, this type is used with non-dependent names to delay name lookup until
 /// instantiation.
-class DependentNameType : public TypeWithKeyword, public llvm::FoldingSetNode {
+class DependentNameType : public TypeWithKeyword, public llvm37::FoldingSetNode {
 
   /// \brief The nested name specifier containing the qualifier.
   NestedNameSpecifier *NNS;
@@ -4360,11 +4360,11 @@ public:
   bool isSugared() const { return false; }
   QualType desugar() const { return QualType(this, 0); }
 
-  void Profile(llvm::FoldingSetNodeID &ID) {
+  void Profile(llvm37::FoldingSetNodeID &ID) {
     Profile(ID, getKeyword(), NNS, Name);
   }
 
-  static void Profile(llvm::FoldingSetNodeID &ID, ElaboratedTypeKeyword Keyword,
+  static void Profile(llvm37::FoldingSetNodeID &ID, ElaboratedTypeKeyword Keyword,
                       NestedNameSpecifier *NNS, const IdentifierInfo *Name) {
     ID.AddInteger(Keyword);
     ID.AddPointer(NNS);
@@ -4380,7 +4380,7 @@ public:
 /// specialization type whose template cannot be resolved, e.g.
 ///   A<T>::template B<T>
 class DependentTemplateSpecializationType :
-  public TypeWithKeyword, public llvm::FoldingSetNode {
+  public TypeWithKeyword, public llvm37::FoldingSetNode {
 
   /// \brief The nested name specifier containing the qualifier.
   NestedNameSpecifier *NNS;
@@ -4429,11 +4429,11 @@ public:
   bool isSugared() const { return false; }
   QualType desugar() const { return QualType(this, 0); }
 
-  void Profile(llvm::FoldingSetNodeID &ID, const ASTContext &Context) {
+  void Profile(llvm37::FoldingSetNodeID &ID, const ASTContext &Context) {
     Profile(ID, Context, getKeyword(), NNS, Name, NumArgs, getArgs());
   }
 
-  static void Profile(llvm::FoldingSetNodeID &ID,
+  static void Profile(llvm37::FoldingSetNodeID &ID,
                       const ASTContext &Context,
                       ElaboratedTypeKeyword Keyword,
                       NestedNameSpecifier *Qualifier,
@@ -4468,7 +4468,7 @@ public:
 ///
 /// Here, the pack expansion \c Types&... is represented via a
 /// PackExpansionType whose pattern is Types&.
-class PackExpansionType : public Type, public llvm::FoldingSetNode {
+class PackExpansionType : public Type, public llvm37::FoldingSetNode {
   /// \brief The pattern of the pack expansion.
   QualType Pattern;
 
@@ -4509,11 +4509,11 @@ public:
   bool isSugared() const { return !Pattern->isDependentType(); }
   QualType desugar() const { return isSugared() ? Pattern : QualType(this, 0); }
 
-  void Profile(llvm::FoldingSetNodeID &ID) {
+  void Profile(llvm37::FoldingSetNodeID &ID) {
     Profile(ID, getPattern(), getNumExpansions());
   }
 
-  static void Profile(llvm::FoldingSetNodeID &ID, QualType Pattern,
+  static void Profile(llvm37::FoldingSetNodeID &ID, QualType Pattern,
                       Optional<unsigned> NumExpansions) {
     ID.AddPointer(Pattern.getAsOpaquePtr());
     ID.AddBoolean(NumExpansions.hasValue());
@@ -4571,7 +4571,7 @@ class ObjCObjectType : public Type {
   QualType BaseType;
 
   /// Cached superclass type.
-  mutable llvm::PointerIntPair<const ObjCObjectType *, 1, bool>
+  mutable llvm37::PointerIntPair<const ObjCObjectType *, 1, bool>
     CachedSuperClassType;
 
   ObjCProtocolDecl * const *getProtocolStorage() const {
@@ -4661,7 +4661,7 @@ public:
   }
 
   typedef ObjCProtocolDecl * const *qual_iterator;
-  typedef llvm::iterator_range<qual_iterator> qual_range;
+  typedef llvm37::iterator_range<qual_iterator> qual_range;
 
   qual_range quals() const { return qual_range(qual_begin(), qual_end()); }
   qual_iterator qual_begin() const { return getProtocolStorage(); }
@@ -4721,7 +4721,7 @@ public:
 /// of ObjCObjectType, so as to not increase the footprint of
 /// ObjCInterfaceType.  Code outside of ASTContext and the core type
 /// system should not reference this type.
-class ObjCObjectTypeImpl : public ObjCObjectType, public llvm::FoldingSetNode {
+class ObjCObjectTypeImpl : public ObjCObjectType, public llvm37::FoldingSetNode {
   friend class ASTContext;
 
   // If anyone adds fields here, ObjCObjectType::getProtocolStorage()
@@ -4734,8 +4734,8 @@ class ObjCObjectTypeImpl : public ObjCObjectType, public llvm::FoldingSetNode {
     : ObjCObjectType(Canonical, Base, typeArgs, protocols, isKindOf) {}
 
 public:
-  void Profile(llvm::FoldingSetNodeID &ID);
-  static void Profile(llvm::FoldingSetNodeID &ID,
+  void Profile(llvm37::FoldingSetNodeID &ID);
+  static void Profile(llvm37::FoldingSetNodeID &ID,
                       QualType Base,
                       ArrayRef<QualType> typeArgs,
                       ArrayRef<ObjCProtocolDecl *> protocols,
@@ -4819,7 +4819,7 @@ inline ObjCInterfaceDecl *ObjCObjectType::getInterface() const {
 ///
 /// Pointers to pointers to Objective C objects are still PointerTypes;
 /// only the first level of pointer gets it own type implementation.
-class ObjCObjectPointerType : public Type, public llvm::FoldingSetNode {
+class ObjCObjectPointerType : public Type, public llvm37::FoldingSetNode {
   QualType PointeeType;
 
   ObjCObjectPointerType(QualType Canonical, QualType Pointee)
@@ -4941,7 +4941,7 @@ public:
   /// for convenience.  This will always iterate over the full set of
   /// protocols on a type, not just those provided directly.
   typedef ObjCObjectType::qual_iterator qual_iterator;
-  typedef llvm::iterator_range<qual_iterator> qual_range;
+  typedef llvm37::iterator_range<qual_iterator> qual_range;
 
   qual_range quals() const { return qual_range(qual_begin(), qual_end()); }
   qual_iterator qual_begin() const {
@@ -4980,10 +4980,10 @@ public:
   const ObjCObjectPointerType *stripObjCKindOfTypeAndQuals(
                                  const ASTContext &ctx) const;
 
-  void Profile(llvm::FoldingSetNodeID &ID) {
+  void Profile(llvm37::FoldingSetNodeID &ID) {
     Profile(ID, getPointeeType());
   }
-  static void Profile(llvm::FoldingSetNodeID &ID, QualType T) {
+  static void Profile(llvm37::FoldingSetNodeID &ID, QualType T) {
     ID.AddPointer(T.getAsOpaquePtr());
   }
   static bool classof(const Type *T) {
@@ -4991,7 +4991,7 @@ public:
   }
 };
 
-class AtomicType : public Type, public llvm::FoldingSetNode {
+class AtomicType : public Type, public llvm37::FoldingSetNode {
   QualType ValueType;
 
   AtomicType(QualType ValTy, QualType Canonical)
@@ -5010,10 +5010,10 @@ class AtomicType : public Type, public llvm::FoldingSetNode {
   bool isSugared() const { return false; }
   QualType desugar() const { return QualType(this, 0); }
 
-  void Profile(llvm::FoldingSetNodeID &ID) {
+  void Profile(llvm37::FoldingSetNodeID &ID) {
     Profile(ID, getValueType());
   }
-  static void Profile(llvm::FoldingSetNodeID &ID, QualType T) {
+  static void Profile(llvm37::FoldingSetNodeID &ID, QualType T) {
     ID.AddPointer(T.getAsOpaquePtr());
   }
   static bool classof(const Type *T) {

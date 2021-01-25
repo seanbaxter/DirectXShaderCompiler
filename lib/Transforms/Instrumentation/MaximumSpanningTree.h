@@ -12,15 +12,15 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_ANALYSIS_MAXIMUMSPANNINGTREE_H
-#define LLVM_ANALYSIS_MAXIMUMSPANNINGTREE_H
+#ifndef LLVM37_ANALYSIS_MAXIMUMSPANNINGTREE_H
+#define LLVM37_ANALYSIS_MAXIMUMSPANNINGTREE_H
 
-#include "llvm/ADT/EquivalenceClasses.h"
-#include "llvm/IR/BasicBlock.h"
+#include "llvm37/ADT/EquivalenceClasses.h"
+#include "llvm37/IR/BasicBlock.h"
 #include <algorithm>
 #include <vector>
 
-namespace llvm {
+namespace llvm37 {
 
   /// MaximumSpanningTree - A MST implementation.
   /// The type parameter T determines the type of the nodes of the graph.

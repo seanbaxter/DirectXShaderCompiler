@@ -7,12 +7,12 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_TOOLS_OBJ2YAML_ERROR_H
-#define LLVM_TOOLS_OBJ2YAML_ERROR_H
+#ifndef LLVM37_TOOLS_OBJ2YAML_ERROR_H
+#define LLVM37_TOOLS_OBJ2YAML_ERROR_H
 
 #include <system_error>
 
-namespace llvm {
+namespace llvm37 {
 const std::error_category &obj2yaml_category();
 
 enum class obj2yaml_error {
@@ -26,10 +26,10 @@ inline std::error_code make_error_code(obj2yaml_error e) {
   return std::error_code(static_cast<int>(e), obj2yaml_category());
 }
 
-} // namespace llvm
+} // namespace llvm37
 
 namespace std {
-template <> struct is_error_code_enum<llvm::obj2yaml_error> : std::true_type {};
+template <> struct is_error_code_enum<llvm37::obj2yaml_error> : std::true_type {};
 }
 
 #endif

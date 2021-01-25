@@ -12,8 +12,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_AST_SELECTORLOCATIONSKIND_H
-#define LLVM_CLANG_AST_SELECTORLOCATIONSKIND_H
+#ifndef LLVM37_CLANG_AST_SELECTORLOCATIONSKIND_H
+#define LLVM37_CLANG_AST_SELECTORLOCATIONSKIND_H
 
 #include "clang/Basic/LLVM.h"
 

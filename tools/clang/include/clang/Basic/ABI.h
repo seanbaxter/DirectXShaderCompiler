@@ -13,10 +13,10 @@
 ///
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_BASIC_ABI_H
-#define LLVM_CLANG_BASIC_ABI_H
+#ifndef LLVM37_CLANG_BASIC_ABI_H
+#define LLVM37_CLANG_BASIC_ABI_H
 
-#include "llvm/Support/DataTypes.h"
+#include "llvm37/Support/DataTypes.h"
 #include <cstring>
 
 namespace clang {

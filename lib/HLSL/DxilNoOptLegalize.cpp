@@ -7,15 +7,15 @@
 //                                                                           //
 ///////////////////////////////////////////////////////////////////////////////
 
-#include "llvm/Pass.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/Instructions.h"
+#include "llvm37/Pass.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/Instructions.h"
 #include "dxc/HLSL/DxilGenerationPass.h"
 #include "dxc/HLSL/DxilNoops.h"
-#include "llvm/IR/Operator.h"
-#include "llvm/Analysis/DxilValueCache.h"
+#include "llvm37/IR/Operator.h"
+#include "llvm37/Analysis/DxilValueCache.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 class DxilNoOptLegalize : public ModulePass {
   SmallVector<Value *, 16> Worklist;
@@ -82,7 +82,7 @@ bool DxilNoOptLegalize::runOnModule(Module &M) {
   return Changed;
 }
 
-ModulePass *llvm::createDxilNoOptLegalizePass() {
+ModulePass *llvm37::createDxilNoOptLegalizePass() {
   return new DxilNoOptLegalize();
 }
 
@@ -129,7 +129,7 @@ public:
 };
 char DxilNoOptSimplifyInstructions::ID;
 
-ModulePass *llvm::createDxilNoOptSimplifyInstructionsPass() {
+ModulePass *llvm37::createDxilNoOptSimplifyInstructionsPass() {
   return new DxilNoOptSimplifyInstructions();
 }
 

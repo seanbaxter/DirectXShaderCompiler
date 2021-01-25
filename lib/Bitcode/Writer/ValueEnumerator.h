@@ -11,17 +11,17 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_LIB_BITCODE_WRITER_VALUEENUMERATOR_H
-#define LLVM_LIB_BITCODE_WRITER_VALUEENUMERATOR_H
+#ifndef LLVM37_LIB_BITCODE_WRITER_VALUEENUMERATOR_H
+#define LLVM37_LIB_BITCODE_WRITER_VALUEENUMERATOR_H
 
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/ADT/UniqueVector.h"
-#include "llvm/IR/Attributes.h"
-#include "llvm/IR/UseListOrder.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/ADT/UniqueVector.h"
+#include "llvm37/IR/Attributes.h"
+#include "llvm37/IR/UseListOrder.h"
 #include <vector>
 
-namespace llvm {
+namespace llvm37 {
 
 class Type;
 class Value;

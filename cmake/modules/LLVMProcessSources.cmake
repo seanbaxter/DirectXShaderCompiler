@@ -80,7 +80,7 @@ function(llvm_check_source_file_list)
     # Don't reject hidden files. Some editors create backups in the
     # same directory as the file.
     if (NOT "${fn}" MATCHES "^\\.")
-      list(FIND LLVM_OPTIONAL_SOURCES ${fn} idx)
+      list(FIND LLVM37_OPTIONAL_SOURCES ${fn} idx)
       if( idx LESS 0 )
         list(FIND listed_lower ${fn_lower} idx) # HLSL Change - case insensitive
         if( idx LESS 0 )

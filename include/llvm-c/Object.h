@@ -16,11 +16,11 @@
 /*                                                                            */
 /*===----------------------------------------------------------------------===*/
 
-#ifndef LLVM_C_OBJECT_H
-#define LLVM_C_OBJECT_H
+#ifndef LLVM37_C_OBJECT_H
+#define LLVM37_C_OBJECT_H
 
 #include "llvm-c/Core.h"
-#include "llvm/Config/llvm-config.h"
+#include "llvm37/Config/llvm-config.h"
 
 #ifdef __cplusplus
 extern "C" {

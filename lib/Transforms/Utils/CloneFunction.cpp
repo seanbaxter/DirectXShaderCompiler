@@ -13,30 +13,30 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Transforms/Utils/Cloning.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/Analysis/ConstantFolding.h"
-#include "llvm/Analysis/InstructionSimplify.h"
-#include "llvm/Analysis/LoopInfo.h"
-#include "llvm/IR/CFG.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/DebugInfo.h"
-#include "llvm/IR/DerivedTypes.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/GlobalVariable.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Metadata.h"
-#include "llvm/IR/Module.h"
-#include "llvm/Transforms/Utils/BasicBlockUtils.h"
-#include "llvm/Transforms/Utils/Local.h"
-#include "llvm/Transforms/Utils/ValueMapper.h"
+#include "llvm37/Transforms/Utils/Cloning.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/Analysis/ConstantFolding.h"
+#include "llvm37/Analysis/InstructionSimplify.h"
+#include "llvm37/Analysis/LoopInfo.h"
+#include "llvm37/IR/CFG.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/DebugInfo.h"
+#include "llvm37/IR/DerivedTypes.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/GlobalVariable.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/Metadata.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/Transforms/Utils/BasicBlockUtils.h"
+#include "llvm37/Transforms/Utils/Local.h"
+#include "llvm37/Transforms/Utils/ValueMapper.h"
 #include <map>
-using namespace llvm;
+using namespace llvm37;
 
 /// See comments in Cloning.h.
-BasicBlock *llvm::CloneBasicBlock(const BasicBlock *BB,
+BasicBlock *llvm37::CloneBasicBlock(const BasicBlock *BB,
                                   ValueToValueMapTy &VMap,
                                   const Twine &NameSuffix, Function *F,
                                   ClonedCodeInfo *CodeInfo) {
@@ -75,7 +75,7 @@ BasicBlock *llvm::CloneBasicBlock(const BasicBlock *BB,
 // Clone OldFunc into NewFunc, transforming the old arguments into references to
 // VMap values.
 //
-void llvm::CloneFunctionInto(Function *NewFunc, const Function *OldFunc,
+void llvm37::CloneFunctionInto(Function *NewFunc, const Function *OldFunc,
                              ValueToValueMapTy &VMap,
                              bool ModuleLevelChanges,
                              SmallVectorImpl<ReturnInst*> &Returns,
@@ -214,7 +214,7 @@ static void CloneDebugInfoMetadata(Function *NewFunc, const Function *OldFunc,
 /// updated to include mappings from all of the instructions and basicblocks in
 /// the function from their old to new values.
 ///
-Function *llvm::CloneFunction(const Function *F, ValueToValueMapTy &VMap,
+Function *llvm37::CloneFunction(const Function *F, ValueToValueMapTy &VMap,
                               bool ModuleLevelChanges,
                               ClonedCodeInfo *CodeInfo) {
   std::vector<Type*> ArgTypes;
@@ -465,7 +465,7 @@ void PruningFunctionCloner::CloneBlock(const BasicBlock *BB,
 /// This works like CloneAndPruneFunctionInto, except that it does not clone the
 /// entire function. Instead it starts at an instruction provided by the caller
 /// and copies (and prunes) only the code reachable from that instruction.
-void llvm::CloneAndPruneIntoFromInst(Function *NewFunc, const Function *OldFunc,
+void llvm37::CloneAndPruneIntoFromInst(Function *NewFunc, const Function *OldFunc,
                                      const Instruction *StartingInst,
                                      ValueToValueMapTy &VMap,
                                      bool ModuleLevelChanges,
@@ -710,7 +710,7 @@ void llvm::CloneAndPruneIntoFromInst(Function *NewFunc, const Function *OldFunc,
 /// constant arguments cause a significant amount of code in the callee to be
 /// dead.  Since this doesn't produce an exact copy of the input, it can't be
 /// used for things like CloneFunction or CloneModule.
-void llvm::CloneAndPruneFunctionInto(Function *NewFunc, const Function *OldFunc,
+void llvm37::CloneAndPruneFunctionInto(Function *NewFunc, const Function *OldFunc,
                                      ValueToValueMapTy &VMap,
                                      bool ModuleLevelChanges,
                                      SmallVectorImpl<ReturnInst*> &Returns,
@@ -723,7 +723,7 @@ void llvm::CloneAndPruneFunctionInto(Function *NewFunc, const Function *OldFunc,
 }
 
 /// \brief Remaps instructions in \p Blocks using the mapping in \p VMap.
-void llvm::remapInstructionsInBlocks(
+void llvm37::remapInstructionsInBlocks(
     const SmallVectorImpl<BasicBlock *> &Blocks, ValueToValueMapTy &VMap) {
   // Rewrite the code to refer to itself.
   for (auto *BB : Blocks)
@@ -737,7 +737,7 @@ void llvm::remapInstructionsInBlocks(
 ///
 /// Updates LoopInfo and DominatorTree assuming the loop is dominated by block
 /// \p LoopDomBB.  Insert the new blocks before block specified in \p Before.
-Loop *llvm::cloneLoopWithPreheader(BasicBlock *Before, BasicBlock *LoopDomBB,
+Loop *llvm37::cloneLoopWithPreheader(BasicBlock *Before, BasicBlock *LoopDomBB,
                                    Loop *OrigLoop, ValueToValueMapTy &VMap,
                                    const Twine &NameSuffix, LoopInfo *LI,
                                    DominatorTree *DT,

@@ -8,19 +8,19 @@
 //===----------------------------------------------------------------------===//
 
 #include "OrcMCJITReplacement.h"
-#include "llvm/ExecutionEngine/GenericValue.h"
+#include "llvm37/ExecutionEngine/GenericValue.h"
 
 namespace {
 
 static struct RegisterJIT {
-  RegisterJIT() { llvm::orc::OrcMCJITReplacement::Register(); }
+  RegisterJIT() { llvm37::orc::OrcMCJITReplacement::Register(); }
 } JITRegistrator;
 
 }
 
 extern "C" void LLVMLinkInOrcMCJITReplacement() {}
 
-namespace llvm {
+namespace llvm37 {
 namespace orc {
 
 GenericValue
@@ -125,4 +125,4 @@ OrcMCJITReplacement::runFunction(Function *F,
 }
 
 } // End namespace orc.
-} // End namespace llvm.
+} // End namespace llvm37.

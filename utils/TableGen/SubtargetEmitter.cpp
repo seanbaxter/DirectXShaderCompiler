@@ -13,20 +13,20 @@
 
 #include "CodeGenTarget.h"
 #include "CodeGenSchedule.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/StringExtras.h"
-#include "llvm/MC/MCInstrItineraries.h"
-#include "llvm/MC/SubtargetFeature.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/Format.h"
-#include "llvm/TableGen/Error.h"
-#include "llvm/TableGen/Record.h"
-#include "llvm/TableGen/TableGenBackend.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/StringExtras.h"
+#include "llvm37/MC/MCInstrItineraries.h"
+#include "llvm37/MC/SubtargetFeature.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/Format.h"
+#include "llvm37/TableGen/Error.h"
+#include "llvm37/TableGen/Record.h"
+#include "llvm37/TableGen/TableGenBackend.h"
 #include <algorithm>
 #include <map>
 #include <string>
 #include <vector>
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "subtarget-emitter"
 
@@ -161,7 +161,7 @@ unsigned SubtargetEmitter::FeatureKeyValues(raw_ostream &OS) {
 
   // Begin feature table
   OS << "// Sorted (by key) array of values for CPU features.\n"
-     << "extern const llvm::SubtargetFeatureKV " << Target
+     << "extern const llvm37::SubtargetFeatureKV " << Target
      << "FeatureKV[] = {\n";
 
   // For each feature
@@ -223,7 +223,7 @@ unsigned SubtargetEmitter::CPUKeyValues(raw_ostream &OS) {
 
   // Begin processor table
   OS << "// Sorted (by key) array of values for CPU subtype.\n"
-     << "extern const llvm::SubtargetFeatureKV " << Target
+     << "extern const llvm37::SubtargetFeatureKV " << Target
      << "SubTypeKV[] = {\n";
 
   // For each processor
@@ -303,7 +303,7 @@ void SubtargetEmitter::FormItineraryStageString(const std::string &Name,
     ItinString += ", " + itostr(TimeInc);
 
     int Kind = Stage->getValueAsInt("Kind");
-    ItinString += ", (llvm::InstrStage::ReservationKinds)" + itostr(Kind);
+    ItinString += ", (llvm37::InstrStage::ReservationKinds)" + itostr(Kind);
 
     // Close off stage
     ItinString += " }";
@@ -400,9 +400,9 @@ EmitStageAndOperandCycleData(raw_ostream &OS,
   }
 
   // Begin stages table
-  std::string StageTable = "\nextern const llvm::InstrStage " + Target +
+  std::string StageTable = "\nextern const llvm37::InstrStage " + Target +
                            "Stages[] = {\n";
-  StageTable += "  { 0, 0, 0, llvm::InstrStage::Required }, // No itinerary\n";
+  StageTable += "  { 0, 0, 0, llvm37::InstrStage::Required }, // No itinerary\n";
 
   // Begin operand cycle table
   std::string OperandCycleTable = "extern const unsigned " + Target +
@@ -511,7 +511,7 @@ EmitStageAndOperandCycleData(raw_ostream &OS,
   }
 
   // Closing stage
-  StageTable += "  { 0, 0, 0, llvm::InstrStage::Required } // End stages\n";
+  StageTable += "  { 0, 0, 0, llvm37::InstrStage::Required } // End stages\n";
   StageTable += "};\n";
 
   // Closing operand cycles
@@ -563,7 +563,7 @@ EmitItineraries(raw_ostream &OS,
       continue;
 
     OS << "\n";
-    OS << "static const llvm::InstrItinerary ";
+    OS << "static const llvm37::InstrItinerary ";
 
     // Begin processor itinerary table
     OS << Name << "[] = {\n";
@@ -607,7 +607,7 @@ void SubtargetEmitter::EmitProcessorResources(const CodeGenProcModel &ProcModel,
   char Sep = ProcModel.ProcResourceDefs.empty() ? ' ' : ',';
 
   OS << "\n// {Name, NumUnits, SuperIdx, IsBuffered}\n";
-  OS << "static const llvm::MCProcResourceDesc "
+  OS << "static const llvm37::MCProcResourceDesc "
      << ProcModel.ModelName << "ProcResources" << "[] = {\n"
      << "  {DBGFIELD(\"InvalidUnit\")     0, 0, 0}" << Sep << "\n";
 
@@ -1071,7 +1071,7 @@ void SubtargetEmitter::EmitSchedClassTables(SchedClassTables &SchedTables,
                                             raw_ostream &OS) {
   // Emit global WriteProcResTable.
   OS << "\n// {ProcResourceIdx, Cycles}\n"
-     << "extern const llvm::MCWriteProcResEntry "
+     << "extern const llvm37::MCWriteProcResEntry "
      << Target << "WriteProcResTable[] = {\n"
      << "  { 0,  0}, // Invalid\n";
   for (unsigned WPRIdx = 1, WPREnd = SchedTables.WriteProcResources.size();
@@ -1087,7 +1087,7 @@ void SubtargetEmitter::EmitSchedClassTables(SchedClassTables &SchedTables,
 
   // Emit global WriteLatencyTable.
   OS << "\n// {Cycles, WriteResourceID}\n"
-     << "extern const llvm::MCWriteLatencyEntry "
+     << "extern const llvm37::MCWriteLatencyEntry "
      << Target << "WriteLatencyTable[] = {\n"
      << "  { 0,  0}, // Invalid\n";
   for (unsigned WLIdx = 1, WLEnd = SchedTables.WriteLatencies.size();
@@ -1103,7 +1103,7 @@ void SubtargetEmitter::EmitSchedClassTables(SchedClassTables &SchedTables,
 
   // Emit global ReadAdvanceTable.
   OS << "\n// {UseIdx, WriteResourceID, Cycles}\n"
-     << "extern const llvm::MCReadAdvanceEntry "
+     << "extern const llvm37::MCReadAdvanceEntry "
      << Target << "ReadAdvanceTable[] = {\n"
      << "  {0,  0,  0}, // Invalid\n";
   for (unsigned RAIdx = 1, RAEnd = SchedTables.ReadAdvanceEntries.size();
@@ -1129,7 +1129,7 @@ void SubtargetEmitter::EmitSchedClassTables(SchedClassTables &SchedTables,
 
     OS << "\n// {Name, NumMicroOps, BeginGroup, EndGroup,"
        << " WriteProcResIdx,#, WriteLatencyIdx,#, ReadAdvanceIdx,#}\n";
-    OS << "static const llvm::MCSchedClassDesc "
+    OS << "static const llvm37::MCSchedClassDesc "
        << PI->ModelName << "SchedClasses[] = {\n";
 
     // The first class is always invalid. We no way to distinguish it except by
@@ -1175,7 +1175,7 @@ void SubtargetEmitter::EmitProcessorModels(raw_ostream &OS) {
 
     // Begin processor itinerary properties
     OS << "\n";
-    OS << "static const llvm::MCSchedModel " << PI->ModelName << " = {\n";
+    OS << "static const llvm37::MCSchedModel " << PI->ModelName << " = {\n";
     EmitProcessorProp(OS, PI->ModelDef, "IssueWidth", ',');
     EmitProcessorProp(OS, PI->ModelDef, "MicroOpBufferSize", ',');
     EmitProcessorProp(OS, PI->ModelDef, "LoopMicroOpBufferSize", ',');
@@ -1219,7 +1219,7 @@ void SubtargetEmitter::EmitProcessorLookup(raw_ostream &OS) {
   // Begin processor table
   OS << "\n";
   OS << "// Sorted (by key) array of itineraries for CPU subtype.\n"
-     << "extern const llvm::SubtargetInfoKV "
+     << "extern const llvm37::SubtargetInfoKV "
      << Target << "ProcSchedKV[] = {\n";
 
   // For each processor
@@ -1412,7 +1412,7 @@ void SubtargetEmitter::run(raw_ostream &OS) {
   OS << "\n#ifdef GET_SUBTARGETINFO_ENUM\n";
   OS << "#undef GET_SUBTARGETINFO_ENUM\n";
 
-  OS << "namespace llvm {\n";
+  OS << "namespace llvm37 {\n";
   Enumeration(OS, "SubtargetFeature");
   OS << "} // End llvm namespace \n";
   OS << "#endif // GET_SUBTARGETINFO_ENUM\n\n";
@@ -1420,7 +1420,7 @@ void SubtargetEmitter::run(raw_ostream &OS) {
   OS << "\n#ifdef GET_SUBTARGETINFO_MC_DESC\n";
   OS << "#undef GET_SUBTARGETINFO_MC_DESC\n";
 
-  OS << "namespace llvm {\n";
+  OS << "namespace llvm37 {\n";
 #if 0
   OS << "namespace {\n";
 #endif
@@ -1468,8 +1468,8 @@ void SubtargetEmitter::run(raw_ostream &OS) {
   OS << "\n#ifdef GET_SUBTARGETINFO_TARGET_DESC\n";
   OS << "#undef GET_SUBTARGETINFO_TARGET_DESC\n";
 
-  OS << "#include \"llvm/Support/Debug.h\"\n";
-  OS << "#include \"llvm/Support/raw_ostream.h\"\n";
+  OS << "#include \"llvm37/Support/Debug.h\"\n";
+  OS << "#include \"llvm37/Support/raw_ostream.h\"\n";
   ParseFeaturesFunction(OS, NumFeatures, NumProcs);
 
   OS << "#endif // GET_SUBTARGETINFO_TARGET_DESC\n\n";
@@ -1479,7 +1479,7 @@ void SubtargetEmitter::run(raw_ostream &OS) {
   OS << "#undef GET_SUBTARGETINFO_HEADER\n";
 
   std::string ClassName = Target + "GenSubtargetInfo";
-  OS << "namespace llvm {\n";
+  OS << "namespace llvm37 {\n";
   OS << "class DFAPacketizer;\n";
   OS << "struct " << ClassName << " : public TargetSubtargetInfo {\n"
      << "  explicit " << ClassName << "(const Triple &TT, StringRef CPU, "
@@ -1498,20 +1498,20 @@ void SubtargetEmitter::run(raw_ostream &OS) {
   OS << "\n#ifdef GET_SUBTARGETINFO_CTOR\n";
   OS << "#undef GET_SUBTARGETINFO_CTOR\n";
 
-  OS << "#include \"llvm/CodeGen/TargetSchedule.h\"\n";
-  OS << "namespace llvm {\n";
-  OS << "extern const llvm::SubtargetFeatureKV " << Target << "FeatureKV[];\n";
-  OS << "extern const llvm::SubtargetFeatureKV " << Target << "SubTypeKV[];\n";
-  OS << "extern const llvm::SubtargetInfoKV " << Target << "ProcSchedKV[];\n";
-  OS << "extern const llvm::MCWriteProcResEntry "
+  OS << "#include \"llvm37/CodeGen/TargetSchedule.h\"\n";
+  OS << "namespace llvm37 {\n";
+  OS << "extern const llvm37::SubtargetFeatureKV " << Target << "FeatureKV[];\n";
+  OS << "extern const llvm37::SubtargetFeatureKV " << Target << "SubTypeKV[];\n";
+  OS << "extern const llvm37::SubtargetInfoKV " << Target << "ProcSchedKV[];\n";
+  OS << "extern const llvm37::MCWriteProcResEntry "
      << Target << "WriteProcResTable[];\n";
-  OS << "extern const llvm::MCWriteLatencyEntry "
+  OS << "extern const llvm37::MCWriteLatencyEntry "
      << Target << "WriteLatencyTable[];\n";
-  OS << "extern const llvm::MCReadAdvanceEntry "
+  OS << "extern const llvm37::MCReadAdvanceEntry "
      << Target << "ReadAdvanceTable[];\n";
 
   if (SchedModels.hasItineraries()) {
-    OS << "extern const llvm::InstrStage " << Target << "Stages[];\n";
+    OS << "extern const llvm37::InstrStage " << Target << "Stages[];\n";
     OS << "extern const unsigned " << Target << "OperandCycles[];\n";
     OS << "extern const unsigned " << Target << "ForwardingPaths[];\n";
   }
@@ -1548,7 +1548,7 @@ void SubtargetEmitter::run(raw_ostream &OS) {
   OS << "#endif // GET_SUBTARGETINFO_CTOR\n\n";
 }
 
-namespace llvm {
+namespace llvm37 {
 
 void EmitSubtarget(RecordKeeper &RK, raw_ostream &OS) {
   CodeGenTarget CGTarget(RK);

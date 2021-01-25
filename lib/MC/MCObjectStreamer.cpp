@@ -7,21 +7,21 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/MC/MCObjectStreamer.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/MC/MCAsmBackend.h"
-#include "llvm/MC/MCAsmInfo.h"
-#include "llvm/MC/MCAssembler.h"
-#include "llvm/MC/MCCodeEmitter.h"
-#include "llvm/MC/MCContext.h"
-#include "llvm/MC/MCDwarf.h"
-#include "llvm/MC/MCExpr.h"
-#include "llvm/MC/MCObjectWriter.h"
-#include "llvm/MC/MCSection.h"
-#include "llvm/MC/MCSymbol.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/TargetRegistry.h"
-using namespace llvm;
+#include "llvm37/MC/MCObjectStreamer.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/MC/MCAsmBackend.h"
+#include "llvm37/MC/MCAsmInfo.h"
+#include "llvm37/MC/MCAssembler.h"
+#include "llvm37/MC/MCCodeEmitter.h"
+#include "llvm37/MC/MCContext.h"
+#include "llvm37/MC/MCDwarf.h"
+#include "llvm37/MC/MCExpr.h"
+#include "llvm37/MC/MCObjectWriter.h"
+#include "llvm37/MC/MCSection.h"
+#include "llvm37/MC/MCSymbol.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/TargetRegistry.h"
+using namespace llvm37;
 
 MCObjectStreamer::MCObjectStreamer(MCContext &Context, MCAsmBackend &TAB,
                                    raw_pwrite_stream &OS,

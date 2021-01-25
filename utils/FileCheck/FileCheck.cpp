@@ -16,29 +16,29 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/ADT/SmallString.h"
-#include "llvm/ADT/StringExtras.h"
-#include "llvm/ADT/StringMap.h"
-#include "llvm/ADT/StringSet.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/MemoryBuffer.h"
-#include "llvm/Support/PrettyStackTrace.h"
-#include "llvm/Support/Regex.h"
-#include "llvm/Support/Signals.h"
-#include "llvm/Support/SourceMgr.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/ADT/StringExtras.h"
+#include "llvm37/ADT/StringMap.h"
+#include "llvm37/ADT/StringSet.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/MemoryBuffer.h"
+#include "llvm37/Support/PrettyStackTrace.h"
+#include "llvm37/Support/Regex.h"
+#include "llvm37/Support/Signals.h"
+#include "llvm37/Support/SourceMgr.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <algorithm>
 #include <cctype>
 #include <map>
 #include <string>
 #include <system_error>
 #include <vector>
-using namespace llvm;
+using namespace llvm37;
 
 // HLSL Change
 #define NOMINMAX
 #include <windows.h>
-#include "llvm/Support/MSFileSystem.h"
+#include "llvm37/Support/MSFileSystem.h"
 // End HLSL Change
 
 static cl::opt<std::string>
@@ -374,7 +374,7 @@ bool Pattern::EvaluateExpression(StringRef Expr, std::string &Value) const {
     if (Expr.getAsInteger(10, Offset))
       return false;
   }
-  Value = llvm::itostr(LineNumber + Offset);
+  Value = llvm37::itostr(LineNumber + Offset);
   return true;
 }
 
@@ -1286,12 +1286,12 @@ static void AddCheckPrefixIfNeeded() {
 
 int main(int argc, char **argv) {
   // HLSL Change Starts
-  llvm::sys::fs::MSFileSystem* msfPtr;
+  llvm37::sys::fs::MSFileSystem* msfPtr;
   HRESULT hr;
   if(!SUCCEEDED(hr = CreateMSFileSystemForDisk(&msfPtr)))
     return 1;
-  std::unique_ptr<llvm::sys::fs::MSFileSystem> msf(msfPtr);
-  llvm::sys::fs::AutoPerThreadSystem pts(msf.get());
+  std::unique_ptr<llvm37::sys::fs::MSFileSystem> msf(msfPtr);
+  llvm37::sys::fs::AutoPerThreadSystem pts(msf.get());
   STDStreamCloser stdStreamCloser;
   // HLSL Change Ends
   

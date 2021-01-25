@@ -12,8 +12,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_FRONTENDTOOL_UTILS_H
-#define LLVM_CLANG_FRONTENDTOOL_UTILS_H
+#ifndef LLVM37_CLANG_FRONTENDTOOL_UTILS_H
+#define LLVM37_CLANG_FRONTENDTOOL_UTILS_H
 
 namespace clang {
 

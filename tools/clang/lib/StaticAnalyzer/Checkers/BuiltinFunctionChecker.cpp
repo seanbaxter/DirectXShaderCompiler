@@ -81,7 +81,7 @@ bool BuiltinFunctionChecker::evalCall(const CallExpr *CE,
     // This must be resolvable at compile time, so we defer to the constant
     // evaluator for a value.
     SVal V = UnknownVal();
-    llvm::APSInt Result;
+    llvm37::APSInt Result;
     if (CE->EvaluateAsInt(Result, C.getASTContext(), Expr::SE_NoSideEffects)) {
       // Make sure the result has the correct type.
       SValBuilder &SVB = C.getSValBuilder();

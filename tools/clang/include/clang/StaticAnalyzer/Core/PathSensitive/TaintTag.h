@@ -11,8 +11,8 @@
 // of taint.
 //
 //===----------------------------------------------------------------------===//
-#ifndef LLVM_CLANG_STATICANALYZER_CORE_PATHSENSITIVE_TAINTTAG_H
-#define LLVM_CLANG_STATICANALYZER_CORE_PATHSENSITIVE_TAINTTAG_H
+#ifndef LLVM37_CLANG_STATICANALYZER_CORE_PATHSENSITIVE_TAINTTAG_H
+#define LLVM37_CLANG_STATICANALYZER_CORE_PATHSENSITIVE_TAINTTAG_H
 
 namespace clang {
 namespace ento {

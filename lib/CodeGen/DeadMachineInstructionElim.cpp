@@ -11,17 +11,17 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/CodeGen/Passes.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/CodeGen/MachineFunctionPass.h"
-#include "llvm/CodeGen/MachineRegisterInfo.h"
-#include "llvm/Pass.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Target/TargetInstrInfo.h"
-#include "llvm/Target/TargetSubtargetInfo.h"
+#include "llvm37/CodeGen/Passes.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/CodeGen/MachineFunctionPass.h"
+#include "llvm37/CodeGen/MachineRegisterInfo.h"
+#include "llvm37/Pass.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Target/TargetInstrInfo.h"
+#include "llvm37/Target/TargetSubtargetInfo.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "codegen-dce"
 
@@ -47,7 +47,7 @@ namespace {
   };
 }
 char DeadMachineInstructionElim::ID = 0;
-char &llvm::DeadMachineInstructionElimID = DeadMachineInstructionElim::ID;
+char &llvm37::DeadMachineInstructionElimID = DeadMachineInstructionElim::ID;
 
 INITIALIZE_PASS(DeadMachineInstructionElim, "dead-mi-elimination",
                 "Remove dead machine instructions", false, false)

@@ -30,10 +30,10 @@
 #include "clang/Sema/TemplateDeduction.h"
 #include "clang/Sema/SemaHLSL.h" // HLSL Change
 #include "clang/AST/HlslTypes.h" // HLSL Change
-#include "llvm/ADT/DenseSet.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/SmallPtrSet.h"
-#include "llvm/ADT/SmallString.h"
+#include "llvm37/ADT/DenseSet.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/SmallPtrSet.h"
+#include "llvm37/ADT/SmallString.h"
 #include <algorithm>
 #include <cstdlib>
 
@@ -336,19 +336,19 @@ StandardConversionSequence::getNarrowingKind(ASTContext &Ctx,
     if (FromType->isRealFloatingType() && ToType->isIntegralType(Ctx)) {
       return NK_Type_Narrowing;
     } else if (FromType->isIntegralType(Ctx) && ToType->isRealFloatingType()) {
-      llvm::APSInt IntConstantValue;
+      llvm37::APSInt IntConstantValue;
       const Expr *Initializer = IgnoreNarrowingConversion(Converted);
       if (Initializer &&
           Initializer->isIntegerConstantExpr(IntConstantValue, Ctx)) {
         // Convert the integer to the floating type.
-        llvm::APFloat Result(Ctx.getFloatTypeSemantics(ToType));
+        llvm37::APFloat Result(Ctx.getFloatTypeSemantics(ToType));
         Result.convertFromAPInt(IntConstantValue, IntConstantValue.isSigned(),
-                                llvm::APFloat::rmNearestTiesToEven);
+                                llvm37::APFloat::rmNearestTiesToEven);
         // And back.
-        llvm::APSInt ConvertedValue = IntConstantValue;
+        llvm37::APSInt ConvertedValue = IntConstantValue;
         bool ignored;
         Result.convertToInteger(ConvertedValue,
-                                llvm::APFloat::rmTowardZero, &ignored);
+                                llvm37::APFloat::rmTowardZero, &ignored);
         // If the resulting value is different, this was a narrowing conversion.
         if (IntConstantValue != ConvertedValue) {
           ConstantValue = APValue(IntConstantValue);
@@ -374,15 +374,15 @@ StandardConversionSequence::getNarrowingKind(ASTContext &Ctx,
       if (Initializer->isCXX11ConstantExpr(Ctx, &ConstantValue)) {
         // Constant!
         assert(ConstantValue.isFloat());
-        llvm::APFloat FloatVal = ConstantValue.getFloat();
+        llvm37::APFloat FloatVal = ConstantValue.getFloat();
         // Convert the source value into the target type.
         bool ignored;
-        llvm::APFloat::opStatus ConvertStatus = FloatVal.convert(
+        llvm37::APFloat::opStatus ConvertStatus = FloatVal.convert(
           Ctx.getFloatTypeSemantics(ToType),
-          llvm::APFloat::rmNearestTiesToEven, &ignored);
+          llvm37::APFloat::rmNearestTiesToEven, &ignored);
         // If there was no overflow, the source value is within the range of
         // values that can be represented.
-        if (ConvertStatus & llvm::APFloat::opOverflow) {
+        if (ConvertStatus & llvm37::APFloat::opOverflow) {
           ConstantType = Initializer->getType();
           return NK_Constant_Narrowing;
         }
@@ -410,7 +410,7 @@ StandardConversionSequence::getNarrowingKind(ASTContext &Ctx,
         (FromWidth == ToWidth && FromSigned != ToSigned) ||
         (FromSigned && !ToSigned)) {
       // Not all values of FromType can be represented in ToType.
-      llvm::APSInt InitializerValue;
+      llvm37::APSInt InitializerValue;
       const Expr *Initializer = IgnoreNarrowingConversion(Converted);
       if (!Initializer->isIntegerConstantExpr(InitializerValue, Ctx)) {
         // Such conversions on variables are always narrowing.
@@ -428,7 +428,7 @@ StandardConversionSequence::getNarrowingKind(ASTContext &Ctx,
         InitializerValue = InitializerValue.extend(
           InitializerValue.getBitWidth() + 1);
         // Convert the initializer to and from the target width and signed-ness.
-        llvm::APSInt ConvertedValue = InitializerValue;
+        llvm37::APSInt ConvertedValue = InitializerValue;
         ConvertedValue = ConvertedValue.trunc(ToWidth);
         ConvertedValue.setIsSigned(ToSigned);
         ConvertedValue = ConvertedValue.extend(InitializerValue.getBitWidth());
@@ -455,7 +455,7 @@ StandardConversionSequence::getNarrowingKind(ASTContext &Ctx,
 /// dump - Print this standard conversion sequence to standard
 /// error. Useful for debugging overloading issues.
 void StandardConversionSequence::dump() const {
-  raw_ostream &OS = llvm::errs();
+  raw_ostream &OS = llvm37::errs();
   bool PrintedSomething = false;
   if (First != ICK_Identity) {
     OS << GetImplicitConversionName(First);
@@ -504,7 +504,7 @@ void StandardConversionSequence::dump() const {
 /// dump - Print this user-defined conversion sequence to standard
 /// error. Useful for debugging overloading issues.
 void UserDefinedConversionSequence::dump() const {
-  raw_ostream &OS = llvm::errs();
+  raw_ostream &OS = llvm37::errs();
   if (Before.First || Before.Second || Before.Third) {
     Before.dump();
     OS << " -> ";
@@ -522,7 +522,7 @@ void UserDefinedConversionSequence::dump() const {
 /// dump - Print this implicit conversion sequence to standard
 /// error. Useful for debugging overloading issues.
 void ImplicitConversionSequence::dump() const {
-  raw_ostream &OS = llvm::errs();
+  raw_ostream &OS = llvm37::errs();
   if (isStdInitializerListElement())
     OS << "Worst std::initializer_list element conversion: ";
   switch (ConversionKind) {
@@ -1099,7 +1099,7 @@ bool Sema::IsOverload(FunctionDecl *New, FunctionDecl *Old,
        NewI != NewE || OldI != OldE; ++NewI, ++OldI) {
     if (NewI == NewE || OldI == OldE)
       return true;
-    llvm::FoldingSetNodeID NewID, OldID;
+    llvm37::FoldingSetNodeID NewID, OldID;
     NewI->getCond()->Profile(NewID, Context, true);
     OldI->getCond()->Profile(OldID, Context, true);
     if (NewID != OldID)
@@ -1860,10 +1860,10 @@ bool Sema::IsIntegralPromotion(Expr *From, QualType FromType, QualType ToType) {
   // conversion.
   if (From) {
     if (FieldDecl *MemberDecl = From->getSourceBitField()) {
-      llvm::APSInt BitWidth;
+      llvm37::APSInt BitWidth;
       if (FromType->isIntegralType(Context) &&
           MemberDecl->getBitWidth()->isIntegerConstantExpr(BitWidth, Context)) {
-        llvm::APSInt ToSize(BitWidth.getBitWidth(), BitWidth.isUnsigned());
+        llvm37::APSInt ToSize(BitWidth.getBitWidth(), BitWidth.isUnsigned());
         ToSize = Context.getTypeSize(ToType);
 
         // Are we promoting to an int from a bitfield that fits in an int?
@@ -3137,13 +3137,13 @@ IsUserDefinedConversion(Sema &S, Expr *From, QualType ToType,
           if (ConstructorTmpl)
             S.AddTemplateOverloadCandidate(ConstructorTmpl, FoundDecl,
                                            /*ExplicitArgs*/ nullptr,
-                                           llvm::makeArrayRef(Args, NumArgs),
+                                           llvm37::makeArrayRef(Args, NumArgs),
                                            CandidateSet, SuppressUserConversions);
           else
             // Allow one user-defined conversion when user specifies a
             // From->ToType conversion via an static cast (c-style, etc).
             S.AddOverloadCandidate(Constructor, FoundDecl,
-                                   llvm::makeArrayRef(Args, NumArgs),
+                                   llvm37::makeArrayRef(Args, NumArgs),
                                    CandidateSet, SuppressUserConversions);
         }
       }
@@ -5257,7 +5257,7 @@ ExprResult Sema::CheckConvertedConstantExpression(Expr *From, QualType T,
 }
 
 ExprResult Sema::CheckConvertedConstantExpression(Expr *From, QualType T,
-                                                  llvm::APSInt &Value,
+                                                  llvm37::APSInt &Value,
                                                   CCEKind CCE) {
   assert(T->isIntegralOrEnumerationType() && "unexpected converted const type");
 
@@ -6026,7 +6026,7 @@ EnableIfAttr *Sema::CheckEnableIf(FunctionDecl *Function, ArrayRef<Expr *> Args,
     }
 
     if (!EIA->getCond()->EvaluateWithSubstitution(
-            Result, Context, Function, llvm::makeArrayRef(ConvertedArgs))) {
+            Result, Context, Function, llvm37::makeArrayRef(ConvertedArgs))) {
       if (!ContainsValueDependentExpr)
         return EIA;
     } else if (!Result.isInt() || !Result.getInt().getBoolValue()) {
@@ -6832,7 +6832,7 @@ namespace {
 /// enumeration types.
 class BuiltinCandidateTypeSet  {
   /// TypeSet - A set of types.
-  typedef llvm::SmallPtrSet<QualType, 8> TypeSet;
+  typedef llvm37::SmallPtrSet<QualType, 8> TypeSet;
 
   /// PointerTypes - The set of pointer types that will be used in the
   /// built-in candidates.
@@ -7549,7 +7549,7 @@ public:
   //        bool operator!=(T,T);
   void addEqualEqualOrNotEqualMemberPointerOverloads() {
     /// Set of (canonical) types that we've already handled.
-    llvm::SmallPtrSet<QualType, 8> AddedTypes;
+    llvm37::SmallPtrSet<QualType, 8> AddedTypes;
 
     for (unsigned ArgIdx = 0, N = Args.size(); ArgIdx != N; ++ArgIdx) {
       for (BuiltinCandidateTypeSet::iterator
@@ -7591,7 +7591,7 @@ public:
     // overloaded operator with enumeration arguments, operator=,
     // cannot be overloaded for enumeration types, so this is the only place
     // where we must suppress candidates like this.
-    llvm::DenseSet<std::pair<CanQualType, CanQualType> >
+    llvm37::DenseSet<std::pair<CanQualType, CanQualType> >
       UserDefinedBinaryOperators;
 
     for (unsigned ArgIdx = 0, N = Args.size(); ArgIdx != N; ++ArgIdx) {
@@ -7625,7 +7625,7 @@ public:
     }
 
     /// Set of (canonical) types that we've already handled.
-    llvm::SmallPtrSet<QualType, 8> AddedTypes;
+    llvm37::SmallPtrSet<QualType, 8> AddedTypes;
 
     for (unsigned ArgIdx = 0, N = Args.size(); ArgIdx != N; ++ArgIdx) {
       for (BuiltinCandidateTypeSet::iterator
@@ -7688,7 +7688,7 @@ public:
   //      ptrdiff_t  operator-(T, T);
   void addBinaryPlusOrMinusPointerOverloads(OverloadedOperatorKind Op) {
     /// Set of (canonical) types that we've already handled.
-    llvm::SmallPtrSet<QualType, 8> AddedTypes;
+    llvm37::SmallPtrSet<QualType, 8> AddedTypes;
 
     for (int Arg = 0; Arg < 2; ++Arg) {
       QualType AsymetricParamTypes[2] = {
@@ -7833,7 +7833,7 @@ public:
   //        VQ T&      operator=(VQ T&, T);
   void addAssignmentMemberPointerOrEnumeralOverloads() {
     /// Set of (canonical) types that we've already handled.
-    llvm::SmallPtrSet<QualType, 8> AddedTypes;
+    llvm37::SmallPtrSet<QualType, 8> AddedTypes;
 
     for (unsigned ArgIdx = 0; ArgIdx < 2; ++ArgIdx) {
       for (BuiltinCandidateTypeSet::iterator
@@ -7876,7 +7876,7 @@ public:
   //        T*VQ&      operator-=(T*VQ&, ptrdiff_t);
   void addAssignmentPointerOverloads(bool isEqualOp) {
     /// Set of (canonical) types that we've already handled.
-    llvm::SmallPtrSet<QualType, 8> AddedTypes;
+    llvm37::SmallPtrSet<QualType, 8> AddedTypes;
 
     for (BuiltinCandidateTypeSet::iterator
               Ptr = CandidateTypes[0].pointer_begin(),
@@ -8207,7 +8207,7 @@ public:
   //
   void addConditionalOperatorOverloads() {
     /// Set of (canonical) types that we've already handled.
-    llvm::SmallPtrSet<QualType, 8> AddedTypes;
+    llvm37::SmallPtrSet<QualType, 8> AddedTypes;
 
     for (unsigned ArgIdx = 0; ArgIdx < 2; ++ArgIdx) {
       for (BuiltinCandidateTypeSet::iterator
@@ -8632,7 +8632,7 @@ bool clang::isBetterOverloadCandidate(Sema &S, const OverloadCandidate &Cand1,
     auto Cand1I = Cand1Attrs.begin();
     for (auto &Cand2A : Cand2Attrs) {
       auto &Cand1A = *Cand1I++;
-      llvm::FoldingSetNodeID Cand1ID, Cand2ID;
+      llvm37::FoldingSetNodeID Cand1ID, Cand2ID;
       cast<EnableIfAttr>(Cand1A)->getCond()->Profile(Cand1ID,
                                                      S.getASTContext(), true);
       cast<EnableIfAttr>(Cand2A)->getCond()->Profile(Cand2ID,
@@ -10827,8 +10827,8 @@ static std::unique_ptr<CorrectionCandidateCallback>
 MakeValidator(Sema &SemaRef, MemberExpr *ME, size_t NumArgs,
               bool HasTemplateArgs, bool AllowTypoCorrection) {
   if (!AllowTypoCorrection)
-    return llvm::make_unique<NoTypoCorrectionCCC>();
-  return llvm::make_unique<FunctionCallFilterCCC>(SemaRef, NumArgs,
+    return llvm37::make_unique<NoTypoCorrectionCCC>();
+  return llvm37::make_unique<FunctionCallFilterCCC>(SemaRef, NumArgs,
                                                   HasTemplateArgs, ME);
 }
 
@@ -11124,7 +11124,7 @@ Sema::CreateOverloadedUnaryOp(SourceLocation OpLoc, unsigned OpcIn,
   // the second argument, so that we know this is a post-increment or
   // post-decrement.
   if (Opc == UO_PostInc || Opc == UO_PostDec) {
-    llvm::APSInt Zero(Context.getTypeSize(Context.IntTy), false);
+    llvm37::APSInt Zero(Context.getTypeSize(Context.IntTy), false);
     Args[1] = IntegerLiteral::Create(Context, Zero, Context.IntTy,
                                      SourceLocation());
     NumArgs = 2;
@@ -12211,7 +12211,7 @@ Sema::BuildCallToObjectOfClassType(Scope *S, Expr *Obj,
 
   CXXOperatorCallExpr *TheCall = new (Context)
       CXXOperatorCallExpr(Context, OO_Call, NewFn.get(),
-                          llvm::makeArrayRef(MethodArgs.get(), Args.size() + 1),
+                          llvm37::makeArrayRef(MethodArgs.get(), Args.size() + 1),
                           ResultTy, VK, RParenLoc, false);
   MethodArgs.reset();
 
@@ -12463,7 +12463,7 @@ ExprResult Sema::BuildLiteralOperatorCall(LookupResult &R,
 
   UserDefinedLiteral *UDL =
     new (Context) UserDefinedLiteral(Context, Fn.get(),
-                                     llvm::makeArrayRef(ConvArgs, Args.size()),
+                                     llvm37::makeArrayRef(ConvArgs, Args.size()),
                                      ResultTy, VK, LitEndLoc, UDSuffixLoc);
 
   if (CheckCallReturnType(FD->getReturnType(), UDSuffixLoc, UDL, FD))

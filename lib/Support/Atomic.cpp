@@ -11,10 +11,10 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Support/Atomic.h"
-#include "llvm/Config/llvm-config.h"
+#include "llvm37/Support/Atomic.h"
+#include "llvm37/Config/llvm-config.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 #if defined(_MSC_VER)
 #include <Intrin.h>
@@ -27,7 +27,7 @@ using namespace llvm;
 #endif
 
 void sys::MemoryFence() {
-#if LLVM_HAS_ATOMICS == 0
+#if LLVM37_HAS_ATOMICS == 0
   return;
 #else
 #  if defined(GNU_ATOMICS)
@@ -43,7 +43,7 @@ void sys::MemoryFence() {
 sys::cas_flag sys::CompareAndSwap(volatile sys::cas_flag* ptr,
                                   sys::cas_flag new_value,
                                   sys::cas_flag old_value) {
-#if LLVM_HAS_ATOMICS == 0
+#if LLVM37_HAS_ATOMICS == 0
   sys::cas_flag result = *ptr;
   if (result == old_value)
     *ptr = new_value;
@@ -58,7 +58,7 @@ sys::cas_flag sys::CompareAndSwap(volatile sys::cas_flag* ptr,
 }
 
 sys::cas_flag sys::AtomicIncrement(volatile sys::cas_flag* ptr) {
-#if LLVM_HAS_ATOMICS == 0
+#if LLVM37_HAS_ATOMICS == 0
   ++(*ptr);
   return *ptr;
 #elif defined(GNU_ATOMICS)
@@ -71,7 +71,7 @@ sys::cas_flag sys::AtomicIncrement(volatile sys::cas_flag* ptr) {
 }
 
 sys::cas_flag sys::AtomicDecrement(volatile sys::cas_flag* ptr) {
-#if LLVM_HAS_ATOMICS == 0
+#if LLVM37_HAS_ATOMICS == 0
   --(*ptr);
   return *ptr;
 #elif defined(GNU_ATOMICS)
@@ -84,7 +84,7 @@ sys::cas_flag sys::AtomicDecrement(volatile sys::cas_flag* ptr) {
 }
 
 sys::cas_flag sys::AtomicAdd(volatile sys::cas_flag* ptr, sys::cas_flag val) {
-#if LLVM_HAS_ATOMICS == 0
+#if LLVM37_HAS_ATOMICS == 0
   *ptr += val;
   return *ptr;
 #elif defined(GNU_ATOMICS)

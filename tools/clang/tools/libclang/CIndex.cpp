@@ -39,28 +39,28 @@
 #include "clang/Lex/PreprocessingRecord.h"
 #include "clang/Lex/Preprocessor.h"
 #include "clang/Serialization/SerializationDiagnostic.h"
-#include "llvm/ADT/Optional.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/StringSwitch.h"
-#include "llvm/Config/llvm-config.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/Mangler.h"
-#include "llvm/Support/Compiler.h"
-#include "llvm/Support/CrashRecoveryContext.h"
-#include "llvm/Support/Format.h"
-#include "llvm/Support/ManagedStatic.h"
-#include "llvm/Support/MemoryBuffer.h"
-#include "llvm/Support/Mutex.h"
-#include "llvm/Support/Program.h"
-#include "llvm/Support/SaveAndRestore.h"
-#include "llvm/Support/Signals.h"
-#include "llvm/Support/TargetSelect.h"
-#include "llvm/Support/Threading.h"
-#include "llvm/Support/Timer.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/Optional.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/StringSwitch.h"
+#include "llvm37/Config/llvm-config.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/IR/Mangler.h"
+#include "llvm37/Support/Compiler.h"
+#include "llvm37/Support/CrashRecoveryContext.h"
+#include "llvm37/Support/Format.h"
+#include "llvm37/Support/ManagedStatic.h"
+#include "llvm37/Support/MemoryBuffer.h"
+#include "llvm37/Support/Mutex.h"
+#include "llvm37/Support/Program.h"
+#include "llvm37/Support/SaveAndRestore.h"
+#include "llvm37/Support/Signals.h"
+#include "llvm37/Support/TargetSelect.h"
+#include "llvm37/Support/Threading.h"
+#include "llvm37/Support/Timer.h"
+#include "llvm37/Support/raw_ostream.h"
 #include "clang/AST/HlslTypes.h" // HLSL Change
 
-#if LLVM_ENABLE_THREADS != 0 && defined(__APPLE__)
+#if LLVM37_ENABLE_THREADS != 0 && defined(__APPLE__)
 #define USE_DARWIN_THREADS
 #endif
 
@@ -830,7 +830,7 @@ bool CursorVisitor::VisitFunctionDecl(FunctionDecl *ND) {
       }
       
       // Sort the initializers in source order
-      llvm::array_pod_sort(WrittenInits.begin(), WrittenInits.end(),
+      llvm37::array_pod_sort(WrittenInits.begin(), WrittenInits.end(),
                            &CompareCXXCtorInitializers);
       
       // Visit the initializers in source order
@@ -2867,12 +2867,12 @@ static void fatal_error_handler(void *user_data, const std::string& reason,
 namespace {
 struct RegisterFatalErrorHandler {
   RegisterFatalErrorHandler() {
-    llvm::install_fatal_error_handler(fatal_error_handler, nullptr);
+    llvm37::install_fatal_error_handler(fatal_error_handler, nullptr);
   }
 };
 }
 
-//static llvm::ManagedStatic<RegisterFatalErrorHandler> RegisterFatalErrorHandlerOnce; // HLSL Change - properly scoped mechanisms should be used
+//static llvm37::ManagedStatic<RegisterFatalErrorHandler> RegisterFatalErrorHandlerOnce; // HLSL Change - properly scoped mechanisms should be used
 
 // extern "C" {    // HLSL Change -Don't use c linkage.
 CXIndex clang_createIndex(int excludeDeclarationsFromPCH,
@@ -2880,7 +2880,7 @@ CXIndex clang_createIndex(int excludeDeclarationsFromPCH,
   // We use crash recovery to make some of our APIs more reliable, implicitly
   // enable it.
   // if (!getenv("LIBCLANG_DISABLE_CRASH_RECOVERY"))
-  //   llvm::CrashRecoveryContext::Enable(); // HLSL Change: libclang isn't cleaning this up, which will crash if vectored exception handler called after unload
+  //   llvm37::CrashRecoveryContext::Enable(); // HLSL Change: libclang isn't cleaning this up, which will crash if vectored exception handler called after unload
 
   // Look through the managed static to trigger construction of the managed
   // static which registers our fatal error handler. This ensures it is only
@@ -2888,10 +2888,10 @@ CXIndex clang_createIndex(int excludeDeclarationsFromPCH,
   // (void)*RegisterFatalErrorHandlerOnce; // HLSL Change - properly scoped mechanisms should be used
 
   // Initialize targets for clang module support.
-  llvm::InitializeAllTargets();
-  llvm::InitializeAllTargetMCs();
-  llvm::InitializeAllAsmPrinters();
-  llvm::InitializeAllAsmParsers();
+  llvm37::InitializeAllTargets();
+  llvm37::InitializeAllTargetMCs();
+  llvm37::InitializeAllAsmPrinters();
+  llvm37::InitializeAllAsmParsers();
 
   CIndexer *CIdxr = new CIndexer();
 
@@ -2936,9 +2936,9 @@ unsigned clang_CXIndex_getGlobalOptions(CXIndex CIdx) {
 
 void clang_toggleCrashRecovery(unsigned isEnabled) {
   if (isEnabled)
-    llvm::CrashRecoveryContext::Enable();
+    llvm37::CrashRecoveryContext::Enable();
   else
-    llvm::CrashRecoveryContext::Disable();
+    llvm37::CrashRecoveryContext::Disable();
 }
 
 CXTranslationUnit clang_createTranslationUnit(CXIndex CIdx,
@@ -3012,7 +3012,7 @@ struct ParseTranslationUnitInfo {
   unsigned options;
   CXTranslationUnit *out_TU;
   CXErrorCode &result;
-  ::llvm::sys::fs::MSFileSystemRef fsr;
+  ::llvm37::sys::fs::MSFileSystemRef fsr;
 };
 static void clang_parseTranslationUnit_Impl(void *UserData) {
   const ParseTranslationUnitInfo *PTUI =
@@ -3038,7 +3038,7 @@ static void clang_parseTranslationUnit_Impl(void *UserData) {
   if (PTUI->fsr) {
     // No need to clean up in this case - this means we run in our own thread
     // (otherwise caller owns the thread and should set this up).
-    ::llvm::sys::fs::SetCurrentThreadFileSystem(PTUI->fsr);
+    ::llvm37::sys::fs::SetCurrentThreadFileSystem(PTUI->fsr);
   }
   // HLSL Change Ends
 
@@ -3063,20 +3063,20 @@ static void clang_parseTranslationUnit_Impl(void *UserData) {
     Diags(CompilerInstance::createDiagnostics(new DiagnosticOptions));
 
   // Recover resources if we crash before exiting this function.
-  llvm::CrashRecoveryContextCleanupRegistrar<DiagnosticsEngine,
-    llvm::CrashRecoveryContextReleaseRefCleanup<DiagnosticsEngine> >
+  llvm37::CrashRecoveryContextCleanupRegistrar<DiagnosticsEngine,
+    llvm37::CrashRecoveryContextReleaseRefCleanup<DiagnosticsEngine> >
     DiagCleanup(Diags.get());
 
   std::unique_ptr<std::vector<ASTUnit::RemappedFile>> RemappedFiles(
       new std::vector<ASTUnit::RemappedFile>());
 
   // Recover resources if we crash before exiting this function.
-  llvm::CrashRecoveryContextCleanupRegistrar<
+  llvm37::CrashRecoveryContextCleanupRegistrar<
     std::vector<ASTUnit::RemappedFile> > RemappedCleanup(RemappedFiles.get());
 
   for (auto &UF : PTUI->unsaved_files) {
-    std::unique_ptr<llvm::MemoryBuffer> MB =
-        llvm::MemoryBuffer::getMemBufferCopy(getContents(UF), UF.Filename);
+    std::unique_ptr<llvm37::MemoryBuffer> MB =
+        llvm37::MemoryBuffer::getMemBufferCopy(getContents(UF), UF.Filename);
     RemappedFiles->push_back(std::make_pair(UF.Filename, MB.release()));
   }
 
@@ -3084,7 +3084,7 @@ static void clang_parseTranslationUnit_Impl(void *UserData) {
       new std::vector<const char *>());
 
   // Recover resources if we crash before exiting this method.
-  llvm::CrashRecoveryContextCleanupRegistrar<std::vector<const char*> >
+  llvm37::CrashRecoveryContextCleanupRegistrar<std::vector<const char*> >
     ArgsCleanup(Args.get());
 
   // Since the Clang C library is primarily used by batch tools dealing with
@@ -3195,12 +3195,12 @@ enum CXErrorCode clang_parseTranslationUnit2(
       source_filename,
       command_line_args,
       num_command_line_args,
-      llvm::makeArrayRef(unsaved_files, num_unsaved_files),
+      llvm37::makeArrayRef(unsaved_files, num_unsaved_files),
       options,
       out_TU,
       result,
       nullptr};
-  llvm::CrashRecoveryContext CRC;
+  llvm37::CrashRecoveryContext CRC;
 
   // HLSL Change Starts - allow an option to control this behavior.
   bool runSucceeded;
@@ -3208,7 +3208,7 @@ enum CXErrorCode clang_parseTranslationUnit2(
     PTUI.fsr = nullptr;
     runSucceeded = CRC.RunSafely(clang_parseTranslationUnit_Impl, &PTUI);
   } else {
-    PTUI.fsr = ::llvm::sys::fs::GetCurrentThreadFileSystem();
+    PTUI.fsr = ::llvm37::sys::fs::GetCurrentThreadFileSystem();
     runSucceeded = RunSafely(CRC, clang_parseTranslationUnit_Impl, &PTUI);
   }
   if (!runSucceeded) {
@@ -3300,7 +3300,7 @@ int clang_saveTranslationUnit(CXTranslationUnit TU, const char *FileName,
   // We have an AST that has invalid nodes due to compiler errors.
   // Use a crash recovery thread for protection.
 
-  llvm::CrashRecoveryContext CRC;
+  llvm37::CrashRecoveryContext CRC;
 
   if (!RunSafely(CRC, clang_saveTranslationUnit_Impl, &STUI)) {
     fprintf(stderr, "libclang: crash detected during AST saving: {\n");
@@ -3374,12 +3374,12 @@ static void clang_reparseTranslationUnit_Impl(void *UserData) {
       new std::vector<ASTUnit::RemappedFile>());
 
   // Recover resources if we crash before exiting this function.
-  llvm::CrashRecoveryContextCleanupRegistrar<
+  llvm37::CrashRecoveryContextCleanupRegistrar<
     std::vector<ASTUnit::RemappedFile> > RemappedCleanup(RemappedFiles.get());
 
   for (auto &UF : RTUI->unsaved_files) {
-    std::unique_ptr<llvm::MemoryBuffer> MB =
-        llvm::MemoryBuffer::getMemBufferCopy(getContents(UF), UF.Filename);
+    std::unique_ptr<llvm37::MemoryBuffer> MB =
+        llvm37::MemoryBuffer::getMemBufferCopy(getContents(UF), UF.Filename);
     RemappedFiles->push_back(std::make_pair(UF.Filename, MB.release()));
   }
 
@@ -3403,7 +3403,7 @@ int clang_reparseTranslationUnit(CXTranslationUnit TU,
 
   CXErrorCode result = CXError_Failure;
   ReparseTranslationUnitInfo RTUI = {
-      TU, llvm::makeArrayRef(unsaved_files, num_unsaved_files), options,
+      TU, llvm37::makeArrayRef(unsaved_files, num_unsaved_files), options,
       result};
 
   if (getenv("LIBCLANG_NOTHREADS")) {
@@ -3411,7 +3411,7 @@ int clang_reparseTranslationUnit(CXTranslationUnit TU,
     return result;
   }
 
-  llvm::CrashRecoveryContext CRC;
+  llvm37::CrashRecoveryContext CRC;
 
   if (!RunSafely(CRC, clang_reparseTranslationUnit_Impl, &RTUI)) {
     fprintf(stderr, "libclang: crash detected during reparsing\n");
@@ -3500,7 +3500,7 @@ int clang_getFileUniqueID(CXFile file, CXFileUniqueID *outID) {
     return 1;
 
   FileEntry *FEnt = static_cast<FileEntry *>(file);
-  const llvm::sys::fs::UniqueID &ID = FEnt->getUniqueID();
+  const llvm37::sys::fs::UniqueID &ID = FEnt->getUniqueID();
   outID->data[0] = ID.getDevice();
   outID->data[1] = ID.getFile();
   outID->data[2] = FEnt->getModificationTime();
@@ -3671,7 +3671,7 @@ static CXString getDeclSpelling(const Decl *D, PrintingPolicy* declPolicy) { // 
     return cxstring::createEmpty();
   
   SmallString<1024> S;
-  llvm::raw_svector_ostream os(S);
+  llvm37::raw_svector_ostream os(S);
   // HLSL Change Starts - forward declPolicy if available
   if (declPolicy)
   {
@@ -3805,7 +3805,7 @@ CXString clang_getCursorSpellingWithFormatting(CXCursor C, unsigned options) {
         SLit = cast<StringLiteral>(E);
       }
       SmallString<256> Buf;
-      llvm::raw_svector_ostream OS(Buf);
+      llvm37::raw_svector_ostream OS(Buf);
       SLit->outputString(OS);
       return cxstring::createDup(OS.str());
     }
@@ -3970,16 +3970,16 @@ CXString clang_Cursor_getMangling(CXCursor C) {
   std::unique_ptr<MangleContext> MC(Ctx.createMangleContext());
 
   std::string FrontendBuf;
-  llvm::raw_string_ostream FrontendBufOS(FrontendBuf);
+  llvm37::raw_string_ostream FrontendBufOS(FrontendBuf);
   MC->mangleName(ND, FrontendBufOS);
 
   // Now apply backend mangling.
-  std::unique_ptr<llvm::DataLayout> DL(
-      new llvm::DataLayout(Ctx.getTargetInfo().getTargetDescription()));
+  std::unique_ptr<llvm37::DataLayout> DL(
+      new llvm37::DataLayout(Ctx.getTargetInfo().getTargetDescription()));
 
   std::string FinalBuf;
-  llvm::raw_string_ostream FinalBufOS(FinalBuf);
-  llvm::Mangler::getNameWithPrefix(FinalBufOS, llvm::Twine(FrontendBufOS.str()),
+  llvm37::raw_string_ostream FinalBufOS(FinalBuf);
+  llvm37::Mangler::getNameWithPrefix(FinalBufOS, llvm37::Twine(FrontendBufOS.str()),
                                    *DL);
 
   return cxstring::createDup(FinalBufOS.str());
@@ -3999,7 +3999,7 @@ CXString clang_getCursorDisplayName(CXCursor C) {
   
   if (const FunctionDecl *Function = dyn_cast<FunctionDecl>(D)) {
     SmallString<64> Str;
-    llvm::raw_svector_ostream OS(Str);
+    llvm37::raw_svector_ostream OS(Str);
     OS << *Function;
     if (Function->getPrimaryTemplate())
       OS << "<>";
@@ -4021,7 +4021,7 @@ CXString clang_getCursorDisplayName(CXCursor C) {
   
   if (const ClassTemplateDecl *ClassTemplate = dyn_cast<ClassTemplateDecl>(D)) {
     SmallString<64> Str;
-    llvm::raw_svector_ostream OS(Str);
+    llvm37::raw_svector_ostream OS(Str);
     OS << *ClassTemplate;
     OS << "<";
     TemplateParameterList *Params = ClassTemplate->getTemplateParameters();
@@ -4057,7 +4057,7 @@ CXString clang_getCursorDisplayName(CXCursor C) {
       return cxstring::createDup(TSInfo->getType().getAsString(Policy));
     
     SmallString<128> Str;
-    llvm::raw_svector_ostream OS(Str);
+    llvm37::raw_svector_ostream OS(Str);
     OS << *ClassSpec;
     TemplateSpecializationType::PrintTemplateArgumentList(OS,
                                       ClassSpec->getTemplateArgs().data(),
@@ -4584,10 +4584,10 @@ CXCursor clang_getCursor(CXTranslationUnit TU, CXSourceLocation Loc) {
     ResultFileName = clang_getFileName(ResultFile);
     KindSpelling = clang_getCursorKindSpelling(Result.kind);
     USR = clang_getCursorUSR(Result);
-    *Log << llvm::format("(%s:%d:%d) = %s",
+    *Log << llvm37::format("(%s:%d:%d) = %s",
                    clang_getCString(SearchFileName), SearchLine, SearchColumn,
                    clang_getCString(KindSpelling))
-        << llvm::format("(%s:%d:%d):%s%s",
+        << llvm37::format("(%s:%d:%d):%s%s",
                      clang_getCString(ResultFileName), ResultLine, ResultColumn,
                      clang_getCString(USR), IsDef);
     clang_disposeString(SearchFileName);
@@ -4605,7 +4605,7 @@ CXCursor clang_getCursor(CXTranslationUnit TU, CXSourceLocation Loc) {
       clang_getFileLocation(DefinitionLoc, &DefinitionFile,
                             &DefinitionLine, &DefinitionColumn, nullptr);
       CXString DefinitionFileName = clang_getFileName(DefinitionFile);
-      *Log << llvm::format("  -> %s(%s:%d:%d)",
+      *Log << llvm37::format("  -> %s(%s:%d:%d)",
                      clang_getCString(DefinitionKindSpelling),
                      clang_getCString(DefinitionFileName),
                      DefinitionLine, DefinitionColumn);
@@ -4642,7 +4642,7 @@ unsigned clang_hashCursor(CXCursor C) {
   if (clang_isExpression(C.kind) || clang_isStatement(C.kind))
     Index = 1;
   
-  return llvm::DenseMapInfo<std::pair<unsigned, const void*> >::getHashValue(
+  return llvm37::DenseMapInfo<std::pair<unsigned, const void*> >::getHashValue(
                                         std::make_pair(C.kind, C.data[Index]));
 }
 
@@ -5478,12 +5478,12 @@ CXSourceRange clang_getCursorReferenceNameRange(CXCursor C, unsigned NameFlags,
 }
 
 void clang_enableStackTraces(void) {
-  llvm::sys::PrintStackTraceOnErrorSignal();
+  llvm37::sys::PrintStackTraceOnErrorSignal();
 }
 
 void clang_executeOnThread(void (*fn)(void*), void *user_data,
                            unsigned stack_size) {
-  llvm::llvm_execute_on_thread(fn, user_data, stack_size);
+  llvm37::llvm_execute_on_thread(fn, user_data, stack_size);
 }
 
 // } // end: extern "C"   // HLSL Change -Don't use c linkage.
@@ -6359,7 +6359,7 @@ static void clang_annotateTokensImpl(void *UserData) {
         if (const ObjCPropertyDecl *Property
             = dyn_cast_or_null<ObjCPropertyDecl>(getCursorDecl(Cursors[I]))) {
           if (Property->getPropertyAttributesAsWritten() != 0 &&
-              llvm::StringSwitch<bool>(II->getName())
+              llvm37::StringSwitch<bool>(II->getName())
               .Case("readonly", true)
               .Case("assign", true)
               .Case("unsafe_unretained", true)
@@ -6381,7 +6381,7 @@ static void clang_annotateTokensImpl(void *UserData) {
       if (Cursors[I].kind == CXCursor_ObjCInstanceMethodDecl ||
           Cursors[I].kind == CXCursor_ObjCClassMethodDecl) {
         IdentifierInfo *II = static_cast<IdentifierInfo *>(Tokens[I].ptr_data);
-        if (llvm::StringSwitch<bool>(II->getName())
+        if (llvm37::StringSwitch<bool>(II->getName())
             .Case("in", true)
             .Case("out", true)
             .Case("inout", true)
@@ -6435,7 +6435,7 @@ void clang_annotateTokens(CXTranslationUnit TU,
   ASTUnit::ConcurrencyCheck Check(*CXXUnit);
   
   clang_annotateTokens_Data data = { TU, CXXUnit, Tokens, NumTokens, Cursors };
-  llvm::CrashRecoveryContext CRC;
+  llvm37::CrashRecoveryContext CRC;
   if (!RunSafely(CRC, clang_annotateTokensImpl, &data,
                  GetSafetyThreadStackSize() * 2)) {
     fprintf(stderr, "libclang: crash detected while annotating tokens\n");
@@ -7286,7 +7286,7 @@ static unsigned SafetyStackThreadSize = 8 << 20;
 
 namespace clang {
 
-bool RunSafely(llvm::CrashRecoveryContext &CRC,
+bool RunSafely(llvm37::CrashRecoveryContext &CRC,
                void (*Fn)(void*), void *UserData,
                unsigned Size) {
   if (!Size)
@@ -7328,7 +7328,7 @@ void cxindex::printDiagsToStderr(ASTUnit *Unit) {
     fprintf(stderr, "%s\n", clang_getCString(Msg));
     clang_disposeString(Msg);
   }
-#ifdef LLVM_ON_WIN32
+#ifdef LLVM37_ON_WIN32
   // On Windows, force a flush, since there may be multiple copies of
   // stderr and stdout in the file system, all with different buffers
   // but writing to the same device.
@@ -7469,7 +7469,7 @@ Logger &cxindex::Logger::operator<<(CXSourceLocation Loc) {
   unsigned Line, Column;
   clang_getFileLocation(Loc, &File, &Line, &Column, nullptr);
   CXString FileName = clang_getFileName(File);
-  *this << llvm::format("(%s:%d:%d)", clang_getCString(FileName), Line, Column);
+  *this << llvm37::format("(%s:%d:%d)", clang_getCString(FileName), Line, Column);
   clang_disposeString(FileName);
   return *this;
 }
@@ -7488,13 +7488,13 @@ Logger &cxindex::Logger::operator<<(CXSourceRange range) {
 
   CXString BFileName = clang_getFileName(BFile);
   if (BFile == EFile) {
-    *this << llvm::format("[%s %d:%d-%d:%d]", clang_getCString(BFileName),
+    *this << llvm37::format("[%s %d:%d-%d:%d]", clang_getCString(BFileName),
                          BLine, BColumn, ELine, EColumn);
   } else {
     CXString EFileName = clang_getFileName(EFile);
-    *this << llvm::format("[%s:%d:%d - ", clang_getCString(BFileName),
+    *this << llvm37::format("[%s:%d:%d - ", clang_getCString(BFileName),
                           BLine, BColumn)
-          << llvm::format("%s:%d:%d]", clang_getCString(EFileName),
+          << llvm37::format("%s:%d:%d]", clang_getCString(EFileName),
                           ELine, EColumn);
     clang_disposeString(EFileName);
   }
@@ -7507,21 +7507,21 @@ Logger &cxindex::Logger::operator<<(CXString Str) {
   return *this;
 }
 
-Logger &cxindex::Logger::operator<<(const llvm::format_object_base &Fmt) {
+Logger &cxindex::Logger::operator<<(const llvm37::format_object_base &Fmt) {
   LogOS << Fmt;
   return *this;
 }
 
-static llvm::ManagedStatic<llvm::sys::Mutex> LoggingMutex;
+static llvm37::ManagedStatic<llvm37::sys::Mutex> LoggingMutex;
 
 cxindex::Logger::~Logger() {
   LogOS.flush();
 
-  llvm::sys::ScopedLock L(*LoggingMutex);
+  llvm37::sys::ScopedLock L(*LoggingMutex);
 
-  static llvm::TimeRecord sBeginTR = llvm::TimeRecord::getCurrentTime();
+  static llvm37::TimeRecord sBeginTR = llvm37::TimeRecord::getCurrentTime();
 
-  raw_ostream &OS = llvm::errs();
+  raw_ostream &OS = llvm37::errs();
   OS << "[libclang:" << Name << ':';
 
 #ifdef USE_DARWIN_THREADS
@@ -7530,12 +7530,12 @@ cxindex::Logger::~Logger() {
   OS << tid << ':';
 #endif
 
-  llvm::TimeRecord TR = llvm::TimeRecord::getCurrentTime();
-  OS << llvm::format("%7.4f] ", TR.getWallTime() - sBeginTR.getWallTime());
+  llvm37::TimeRecord TR = llvm37::TimeRecord::getCurrentTime();
+  OS << llvm37::format("%7.4f] ", TR.getWallTime() - sBeginTR.getWallTime());
   OS << Msg << '\n';
 
   if (Trace) {
-    // llvm::sys::PrintStackTrace(OS);  // HLSL Change - disable this
+    // llvm37::sys::PrintStackTrace(OS);  // HLSL Change - disable this
     OS << "--------------------------------------------------\n";
   }
 }
@@ -7604,7 +7604,7 @@ void clang_ms_getSkippedRanges(CXTranslationUnit TU, CXFile file, CXSourceRange*
       unsigned beginLine = sm.getLineNumber(wantedFileID, beginOffset);
       unsigned beginCol = sm.getColumnNumber(wantedFileID, beginOffset);
       // Move beginCol forward until we see a '\n' or the end of the file.
-      const llvm::MemoryBuffer* memBuffer = sm.getBuffer(wantedFileID);
+      const llvm37::MemoryBuffer* memBuffer = sm.getBuffer(wantedFileID);
       const char* buffer = memBuffer->getBufferStart() + (beginOffset + (beginCol-1));
       const char* bufferEnd = memBuffer->getBufferEnd();
       while (buffer < bufferEnd && *buffer != '\n')

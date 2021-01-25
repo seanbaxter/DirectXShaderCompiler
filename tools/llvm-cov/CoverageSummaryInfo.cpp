@@ -14,7 +14,7 @@
 
 #include "CoverageSummaryInfo.h"
 
-using namespace llvm;
+using namespace llvm37;
 using namespace coverage;
 
 FunctionCoverageSummary
@@ -46,7 +46,7 @@ FunctionCoverageSummary::get(const coverage::FunctionRecord &Function) {
     unsigned LineCount = LineEnd - LineStart + 1;
 
     // Get counters
-    llvm::SmallVector<uint64_t, 16> ExecutionCounts;
+    llvm37::SmallVector<uint64_t, 16> ExecutionCounts;
     ExecutionCounts.resize(LineCount, 0);
     for (auto &CR : Function.CountedRegions) {
       if (CR.FileID != FileID)

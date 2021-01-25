@@ -14,15 +14,15 @@
 //===----------------------------------------------------------------------===//
 
 #include "CodeGenTarget.h"
-#include "llvm/ADT/StringExtras.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/TableGen/Record.h"
-#include "llvm/TableGen/TableGenBackend.h"
+#include "llvm37/ADT/StringExtras.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/TableGen/Record.h"
+#include "llvm37/TableGen/TableGenBackend.h"
 #include <map>
 #include <string>
 #include <vector>
-using namespace llvm;
+using namespace llvm37;
 
 namespace {
 
@@ -316,7 +316,7 @@ void CodeEmitterGen::run(raw_ostream &o) {
 
 } // End anonymous namespace
 
-namespace llvm {
+namespace llvm37 {
 
 void EmitCodeEmitter(RecordKeeper &RK, raw_ostream &OS) {
   emitSourceFileHeader("Machine Code Emitter", OS);

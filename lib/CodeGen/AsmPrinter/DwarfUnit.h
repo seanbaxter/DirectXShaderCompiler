@@ -11,22 +11,22 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_LIB_CODEGEN_ASMPRINTER_DWARFUNIT_H
-#define LLVM_LIB_CODEGEN_ASMPRINTER_DWARFUNIT_H
+#ifndef LLVM37_LIB_CODEGEN_ASMPRINTER_DWARFUNIT_H
+#define LLVM37_LIB_CODEGEN_ASMPRINTER_DWARFUNIT_H
 
 #include "DwarfDebug.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/Optional.h"
-#include "llvm/ADT/StringMap.h"
-#include "llvm/CodeGen/AsmPrinter.h"
-#include "llvm/CodeGen/DIE.h"
-#include "llvm/IR/DIBuilder.h"
-#include "llvm/IR/DebugInfo.h"
-#include "llvm/MC/MCDwarf.h"
-#include "llvm/MC/MCExpr.h"
-#include "llvm/MC/MCSection.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/Optional.h"
+#include "llvm37/ADT/StringMap.h"
+#include "llvm37/CodeGen/AsmPrinter.h"
+#include "llvm37/CodeGen/DIE.h"
+#include "llvm37/IR/DIBuilder.h"
+#include "llvm37/IR/DebugInfo.h"
+#include "llvm37/MC/MCDwarf.h"
+#include "llvm37/MC/MCExpr.h"
+#include "llvm37/MC/MCSection.h"
 
-namespace llvm {
+namespace llvm37 {
 
 class MachineLocation;
 class MachineOperand;

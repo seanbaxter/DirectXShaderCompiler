@@ -9,15 +9,15 @@
 
 #include "Error.h"
 #include "obj2yaml.h"
-#include "llvm/Object/Archive.h"
-#include "llvm/Object/COFF.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/ManagedStatic.h"
-#include "llvm/Support/PrettyStackTrace.h"
-#include "llvm/Support/Signals.h"
+#include "llvm37/Object/Archive.h"
+#include "llvm37/Object/COFF.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/ManagedStatic.h"
+#include "llvm37/Support/PrettyStackTrace.h"
+#include "llvm37/Support/Signals.h"
 
-using namespace llvm;
-using namespace llvm::object;
+using namespace llvm37;
+using namespace llvm37::object;
 
 static std::error_code dumpObject(const ObjectFile &Obj) {
   if (Obj.isCOFF())

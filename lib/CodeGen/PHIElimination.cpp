@@ -13,27 +13,27 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/CodeGen/Passes.h"
+#include "llvm37/CodeGen/Passes.h"
 #include "PHIEliminationUtils.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/SmallPtrSet.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/CodeGen/LiveIntervalAnalysis.h"
-#include "llvm/CodeGen/LiveVariables.h"
-#include "llvm/CodeGen/MachineDominators.h"
-#include "llvm/CodeGen/MachineInstr.h"
-#include "llvm/CodeGen/MachineInstrBuilder.h"
-#include "llvm/CodeGen/MachineLoopInfo.h"
-#include "llvm/CodeGen/MachineRegisterInfo.h"
-#include "llvm/IR/Function.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/Compiler.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Target/TargetInstrInfo.h"
-#include "llvm/Target/TargetSubtargetInfo.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/SmallPtrSet.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/CodeGen/LiveIntervalAnalysis.h"
+#include "llvm37/CodeGen/LiveVariables.h"
+#include "llvm37/CodeGen/MachineDominators.h"
+#include "llvm37/CodeGen/MachineInstr.h"
+#include "llvm37/CodeGen/MachineInstrBuilder.h"
+#include "llvm37/CodeGen/MachineLoopInfo.h"
+#include "llvm37/CodeGen/MachineRegisterInfo.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/Compiler.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Target/TargetInstrInfo.h"
+#include "llvm37/Target/TargetSubtargetInfo.h"
 #include <algorithm>
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "phielim"
 
@@ -111,7 +111,7 @@ STATISTIC(NumCriticalEdgesSplit, "Number of critical edges split");
 STATISTIC(NumReused, "Number of reused lowered phis");
 
 char PHIElimination::ID = 0;
-char& llvm::PHIEliminationID = PHIElimination::ID;
+char& llvm37::PHIEliminationID = PHIElimination::ID;
 
 INITIALIZE_PASS_BEGIN(PHIElimination, "phi-node-elimination",
                       "Eliminate PHI nodes for register allocation",

@@ -12,11 +12,11 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/ADT/Statistic.h"
-#include "llvm/IR/Function.h"
-#include "llvm/Pass.h"
-#include "llvm/Support/raw_ostream.h"
-using namespace llvm;
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/Pass.h"
+#include "llvm37/Support/raw_ostream.h"
+using namespace llvm37;
 
 #define DEBUG_TYPE "hello"
 

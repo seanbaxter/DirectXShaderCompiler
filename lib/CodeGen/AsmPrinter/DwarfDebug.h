@@ -11,31 +11,31 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_LIB_CODEGEN_ASMPRINTER_DWARFDEBUG_H
-#define LLVM_LIB_CODEGEN_ASMPRINTER_DWARFDEBUG_H
+#ifndef LLVM37_LIB_CODEGEN_ASMPRINTER_DWARFDEBUG_H
+#define LLVM37_LIB_CODEGEN_ASMPRINTER_DWARFDEBUG_H
 
 #include "AsmPrinterHandler.h"
 #include "DbgValueHistoryCalculator.h"
 #include "DebugLocStream.h"
 #include "DwarfAccelTable.h"
 #include "DwarfFile.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/DenseSet.h"
-#include "llvm/ADT/FoldingSet.h"
-#include "llvm/ADT/MapVector.h"
-#include "llvm/ADT/SmallPtrSet.h"
-#include "llvm/ADT/StringMap.h"
-#include "llvm/CodeGen/DIE.h"
-#include "llvm/CodeGen/LexicalScopes.h"
-#include "llvm/CodeGen/MachineInstr.h"
-#include "llvm/IR/DebugInfo.h"
-#include "llvm/IR/DebugLoc.h"
-#include "llvm/MC/MCDwarf.h"
-#include "llvm/MC/MachineLocation.h"
-#include "llvm/Support/Allocator.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/DenseSet.h"
+#include "llvm37/ADT/FoldingSet.h"
+#include "llvm37/ADT/MapVector.h"
+#include "llvm37/ADT/SmallPtrSet.h"
+#include "llvm37/ADT/StringMap.h"
+#include "llvm37/CodeGen/DIE.h"
+#include "llvm37/CodeGen/LexicalScopes.h"
+#include "llvm37/CodeGen/MachineInstr.h"
+#include "llvm37/IR/DebugInfo.h"
+#include "llvm37/IR/DebugLoc.h"
+#include "llvm37/MC/MCDwarf.h"
+#include "llvm37/MC/MachineLocation.h"
+#include "llvm37/Support/Allocator.h"
 #include <memory>
 
-namespace llvm {
+namespace llvm37 {
 
 class AsmPrinter;
 class ByteStreamer;
@@ -646,6 +646,6 @@ public:
     return ProcessedSPNodes;
   }
 };
-} // End of namespace llvm
+} // End of namespace llvm37
 
 #endif

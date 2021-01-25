@@ -12,12 +12,12 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_LIB_ANALYSIS_BODYFARM_H
-#define LLVM_CLANG_LIB_ANALYSIS_BODYFARM_H
+#ifndef LLVM37_CLANG_LIB_ANALYSIS_BODYFARM_H
+#define LLVM37_CLANG_LIB_ANALYSIS_BODYFARM_H
 
 #include "clang/Basic/LLVM.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/Optional.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/Optional.h"
 
 namespace clang {
 
@@ -40,7 +40,7 @@ public:
   Stmt *getBody(const ObjCMethodDecl *D);
 
 private:
-  typedef llvm::DenseMap<const Decl *, Optional<Stmt *> > BodyMap;
+  typedef llvm37::DenseMap<const Decl *, Optional<Stmt *> > BodyMap;
 
   ASTContext &C;
   BodyMap Bodies;

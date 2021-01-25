@@ -10,12 +10,12 @@
 #include "CodeGenTarget.h"
 // #include "X86DisassemblerTables.h" // HLSL Change
 // #include "X86RecognizableInstr.h"  // HLSL Change
-#include "llvm/TableGen/Error.h"
-#include "llvm/TableGen/Record.h"
-#include "llvm/TableGen/TableGenBackend.h"
+#include "llvm37/TableGen/Error.h"
+#include "llvm37/TableGen/Record.h"
+#include "llvm37/TableGen/TableGenBackend.h"
 
-using namespace llvm;
-// using namespace llvm::X86Disassembler; // HLSL Change
+using namespace llvm37;
+// using namespace llvm37::X86Disassembler; // HLSL Change
 
 /// DisassemblerEmitter - Contains disassembler table emitters for various
 /// architectures.
@@ -93,7 +93,7 @@ using namespace llvm;
 /// X86RecognizableInstr.cpp contains the implementation for a single
 ///   instruction.
 
-namespace llvm {
+namespace llvm37 {
 
 extern void EmitFixedLenDecoder(RecordKeeper &RK, raw_ostream &OS,
                                 std::string PredicateNamespace,

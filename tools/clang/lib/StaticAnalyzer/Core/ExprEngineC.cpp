@@ -17,7 +17,7 @@
 
 using namespace clang;
 using namespace ento;
-using llvm::APSInt;
+using llvm37::APSInt;
 
 void ExprEngine::VisitBinaryOperator(const BinaryOperator* B,
                                      ExplodedNode *Pred,
@@ -595,7 +595,7 @@ void ExprEngine::VisitInitListExpr(const InitListExpr *IE,
   if (!IE->isGLValue() &&
       (T->isArrayType() || T->isRecordType() || T->isVectorType() ||
        T->isAnyComplexType())) {
-    llvm::ImmutableList<SVal> vals = getBasicVals().getEmptySValList();
+    llvm37::ImmutableList<SVal> vals = getBasicVals().getEmptySValList();
     
     // Handle base case where the initializer has no elements.
     // e.g: static int* myArray[] = {};

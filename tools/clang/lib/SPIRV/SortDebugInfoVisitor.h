@@ -7,8 +7,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_LIB_SPIRV_SORTDEBUGINFOVISITOR_H
-#define LLVM_CLANG_LIB_SPIRV_SORTDEBUGINFOVISITOR_H
+#ifndef LLVM37_CLANG_LIB_SPIRV_SORTDEBUGINFOVISITOR_H
+#define LLVM37_CLANG_LIB_SPIRV_SORTDEBUGINFOVISITOR_H
 
 #include "clang/SPIRV/SpirvContext.h"
 #include "clang/SPIRV/SpirvInstruction.h"
@@ -50,10 +50,10 @@ private:
   // `visitor` returns false, it stops and returns.
   void whileEachOperandOfDebugInstruction(
       SpirvDebugInstruction *di,
-      llvm::function_ref<bool(SpirvDebugInstruction *)> visitor);
+      llvm37::function_ref<bool(SpirvDebugInstruction *)> visitor);
 };
 
 } // end namespace spirv
 } // end namespace clang
 
-#endif // LLVM_CLANG_LIB_SPIRV_SORTDEBUGINFOVISITOR_H
+#endif // LLVM37_CLANG_LIB_SPIRV_SORTDEBUGINFOVISITOR_H

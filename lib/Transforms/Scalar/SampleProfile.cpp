@@ -22,32 +22,32 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Transforms/Scalar.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/SmallPtrSet.h"
-#include "llvm/ADT/SmallSet.h"
-#include "llvm/ADT/StringRef.h"
-#include "llvm/Analysis/LoopInfo.h"
-#include "llvm/Analysis/PostDominators.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/DebugInfo.h"
-#include "llvm/IR/DiagnosticInfo.h"
-#include "llvm/IR/Dominators.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/InstIterator.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/MDBuilder.h"
-#include "llvm/IR/Metadata.h"
-#include "llvm/IR/Module.h"
-#include "llvm/Pass.h"
-#include "llvm/ProfileData/SampleProfReader.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/Transforms/Scalar.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/SmallPtrSet.h"
+#include "llvm37/ADT/SmallSet.h"
+#include "llvm37/ADT/StringRef.h"
+#include "llvm37/Analysis/LoopInfo.h"
+#include "llvm37/Analysis/PostDominators.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/DebugInfo.h"
+#include "llvm37/IR/DiagnosticInfo.h"
+#include "llvm37/IR/Dominators.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/InstIterator.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/MDBuilder.h"
+#include "llvm37/IR/Metadata.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/Pass.h"
+#include "llvm37/ProfileData/SampleProfReader.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <cctype>
 
-using namespace llvm;
+using namespace llvm37;
 using namespace sampleprof;
 
 #define DEBUG_TYPE "sample-profile"
@@ -631,7 +631,7 @@ void SampleProfileLoader::propagateWeights(Function &F) {
     // In any other case, let the analyzer set weights.
     if (!AllWeightsZero) {
       DEBUG(dbgs() << "SUCCESS. Found non-zero weights.\n");
-      TI->setMetadata(llvm::LLVMContext::MD_prof,
+      TI->setMetadata(llvm37::LLVMContext::MD_prof,
                       MDB.createBranchWeights(Weights));
     } else {
       DEBUG(dbgs() << "SKIPPED. All branch weights are zero.\n");
@@ -759,11 +759,11 @@ bool SampleProfileLoader::doInitialization(Module &M) {
   return true;
 }
 
-FunctionPass *llvm::createSampleProfileLoaderPass() {
+FunctionPass *llvm37::createSampleProfileLoaderPass() {
   return new SampleProfileLoader(SampleProfileFile);
 }
 
-FunctionPass *llvm::createSampleProfileLoaderPass(StringRef Name) {
+FunctionPass *llvm37::createSampleProfileLoaderPass(StringRef Name) {
   return new SampleProfileLoader(Name);
 }
 

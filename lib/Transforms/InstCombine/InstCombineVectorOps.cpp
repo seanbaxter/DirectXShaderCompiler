@@ -13,11 +13,11 @@
 //===----------------------------------------------------------------------===//
 
 #include "InstCombineInternal.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/Analysis/InstructionSimplify.h"
-#include "llvm/Analysis/VectorUtils.h"
-#include "llvm/IR/PatternMatch.h"
-using namespace llvm;
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/Analysis/InstructionSimplify.h"
+#include "llvm37/Analysis/VectorUtils.h"
+#include "llvm37/IR/PatternMatch.h"
+using namespace llvm37;
 using namespace PatternMatch;
 
 #define DEBUG_TYPE "instcombine"

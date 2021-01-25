@@ -1,12 +1,12 @@
 #include "LiveValues.h"
 
-#include "llvm/IR/CFG.h"
-#include "llvm/IR/InstIterator.h"
-#include "llvm/IR/Instructions.h"
+#include "llvm37/IR/CFG.h"
+#include "llvm37/IR/InstIterator.h"
+#include "llvm37/IR/Instructions.h"
 
-using namespace llvm;
+using namespace llvm37;
 
-static void applyMapping(InstructionSetVector& iset, llvm::DenseMap<llvm::Instruction *, llvm::Instruction *>& imap)
+static void applyMapping(InstructionSetVector& iset, llvm37::DenseMap<llvm37::Instruction *, llvm37::Instruction *>& imap)
 {
   // There will be probably be few entries in the imap, so apply them one at a time to the iset.
   for (auto& kv : imap)
@@ -243,7 +243,7 @@ void LiveValues::run()
   }
 }
 
-void LiveValues::remapLiveValues(llvm::DenseMap<llvm::Instruction*, llvm::Instruction*>& imap)
+void LiveValues::remapLiveValues(llvm37::DenseMap<llvm37::Instruction*, llvm37::Instruction*>& imap)
 {
   applyMapping(m_allLiveSet, imap);
   for (auto& liveSet : m_liveSets)
@@ -303,7 +303,7 @@ void LiveValues::setLiveAtIndex(Value* value, unsigned int index, bool live)
   }
 }
 
-void LiveValues::setLiveAtAllIndices(llvm::Value* value, bool live)
+void LiveValues::setLiveAtAllIndices(llvm37::Value* value, bool live)
 {
   Instruction* inst = cast<Instruction>(value);
   if (live)

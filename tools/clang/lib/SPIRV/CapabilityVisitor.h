@@ -7,8 +7,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_LIB_SPIRV_CAPABILITYVISITOR_H
-#define LLVM_CLANG_LIB_SPIRV_CAPABILITYVISITOR_H
+#ifndef LLVM37_CLANG_LIB_SPIRV_CAPABILITYVISITOR_H
+#define LLVM37_CLANG_LIB_SPIRV_CAPABILITYVISITOR_H
 
 #include "clang/SPIRV/FeatureManager.h"
 #include "clang/SPIRV/SpirvContext.h"
@@ -61,7 +61,7 @@ private:
   /// Checks that the given extension is a valid extension for the target
   /// environment (e.g. Vulkan 1.0). And if so, utilizes the SpirvBuilder to add
   /// the given extension to the SPIR-V module in memory.
-  void addExtension(Extension ext, llvm::StringRef target, SourceLocation loc);
+  void addExtension(Extension ext, llvm37::StringRef target, SourceLocation loc);
 
   /// Checks that the given capability is a valid capability. And if so,
   /// utilizes the SpirvBuilder to add the given capability to the SPIR-V module
@@ -81,4 +81,4 @@ private:
 } // end namespace spirv
 } // end namespace clang
 
-#endif // LLVM_CLANG_LIB_SPIRV_CAPABILITYVISITOR_H
+#endif // LLVM37_CLANG_LIB_SPIRV_CAPABILITYVISITOR_H

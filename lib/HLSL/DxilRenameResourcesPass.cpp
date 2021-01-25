@@ -7,16 +7,16 @@
 //                                                                           //
 ///////////////////////////////////////////////////////////////////////////////
 
-#include "llvm/Pass.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/Instruction.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Module.h"
+#include "llvm37/Pass.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/Instruction.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/Module.h"
 #include "dxc/DXIL/DxilModule.h"
 #include "dxc/HLSL/DxilGenerationPass.h"
 
-using namespace llvm;
+using namespace llvm37;
 using namespace hlsl;
 
 // Rename resources with prefix
@@ -66,7 +66,7 @@ char DxilRenameResources::ID = 0;
 
 }
 
-ModulePass *llvm::createDxilRenameResourcesPass() {
+ModulePass *llvm37::createDxilRenameResourcesPass() {
   return new DxilRenameResources();
 }
 

@@ -19,8 +19,8 @@
 #include "clang/Sema/DeclSpec.h"
 #include "clang/Sema/PrettyDeclStackTrace.h"
 #include "clang/Sema/Scope.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/ADT/StringExtras.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/ADT/StringExtras.h"
 using namespace clang;
 
 /// Skips attributes after an Objective-C @ directive. Emits a diagnostic.

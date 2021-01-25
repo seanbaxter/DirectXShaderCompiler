@@ -11,7 +11,7 @@
 
 #pragma once
 
-namespace llvm {
+namespace llvm37 {
 class ModulePass;
 class PassRegistry;
 
@@ -26,15 +26,15 @@ ModulePass *createDxilForceEarlyZPass();
 ModulePass *createDxilDebugInstrumentationPass();
 ModulePass *createDxilShaderAccessTrackingPass();
 
-void initializeDxilAddPixelHitInstrumentationPass(llvm::PassRegistry&);
-void initializeDxilDbgValueToDbgDeclarePass(llvm::PassRegistry&);
-void initializeDxilAnnotateWithVirtualRegisterPass(llvm::PassRegistry&);
-void initializeDxilOutputColorBecomesConstantPass(llvm::PassRegistry&);
-void initializeDxilPIXMeshShaderOutputInstrumentationPass(llvm::PassRegistry &);
-void initializeDxilRemoveDiscardsPass(llvm::PassRegistry&);
-void initializeDxilReduceMSAAToSingleSamplePass(llvm::PassRegistry&);
-void initializeDxilForceEarlyZPass(llvm::PassRegistry&);
-void initializeDxilDebugInstrumentationPass(llvm::PassRegistry&);
-void initializeDxilShaderAccessTrackingPass(llvm::PassRegistry&);
+void initializeDxilAddPixelHitInstrumentationPass(llvm37::PassRegistry&);
+void initializeDxilDbgValueToDbgDeclarePass(llvm37::PassRegistry&);
+void initializeDxilAnnotateWithVirtualRegisterPass(llvm37::PassRegistry&);
+void initializeDxilOutputColorBecomesConstantPass(llvm37::PassRegistry&);
+void initializeDxilPIXMeshShaderOutputInstrumentationPass(llvm37::PassRegistry &);
+void initializeDxilRemoveDiscardsPass(llvm37::PassRegistry&);
+void initializeDxilReduceMSAAToSingleSamplePass(llvm37::PassRegistry&);
+void initializeDxilForceEarlyZPass(llvm37::PassRegistry&);
+void initializeDxilDebugInstrumentationPass(llvm37::PassRegistry&);
+void initializeDxilShaderAccessTrackingPass(llvm37::PassRegistry&);
 
 }

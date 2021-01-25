@@ -9,9 +9,9 @@
 
 #include "DebugLocStream.h"
 #include "DwarfDebug.h"
-#include "llvm/CodeGen/AsmPrinter.h"
+#include "llvm37/CodeGen/AsmPrinter.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 bool DebugLocStream::finalizeList(AsmPrinter &Asm) {
   if (Lists.back().EntryOffset == Entries.size()) {

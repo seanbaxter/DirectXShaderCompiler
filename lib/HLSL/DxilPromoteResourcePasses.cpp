@@ -10,21 +10,21 @@
 #include "dxc/DXIL/DxilUtil.h"
 #include "dxc/HLSL/DxilGenerationPass.h"
 #include "dxc/HLSL/HLModule.h"
-#include "llvm/Pass.h"
-#include "llvm/Analysis/AssumptionCache.h"
-#include "llvm/IR/Dominators.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/Instruction.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/Operator.h"
-#include "llvm/Transforms/Utils/PromoteMemToReg.h"
-#include "llvm/Transforms/Utils/SSAUpdater.h"
+#include "llvm37/Pass.h"
+#include "llvm37/Analysis/AssumptionCache.h"
+#include "llvm37/IR/Dominators.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/Instruction.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/Operator.h"
+#include "llvm37/Transforms/Utils/PromoteMemToReg.h"
+#include "llvm37/Transforms/Utils/SSAUpdater.h"
 #include <unordered_set>
 #include <vector>
 
-using namespace llvm;
+using namespace llvm37;
 using namespace hlsl;
 
 // Legalize resource use.
@@ -126,7 +126,7 @@ bool DxilPromoteLocalResources::PromoteLocalResource(Function &F) {
   return bModified;
 }
 
-FunctionPass *llvm::createDxilPromoteLocalResources() {
+FunctionPass *llvm37::createDxilPromoteLocalResources() {
   return new DxilPromoteLocalResources();
 }
 
@@ -216,7 +216,7 @@ bool DxilPromoteStaticResources::PromoteStaticGlobalResources(
   return bModified;
 }
 
-ModulePass *llvm::createDxilPromoteStaticResources() {
+ModulePass *llvm37::createDxilPromoteStaticResources() {
   return new DxilPromoteStaticResources();
 }
 

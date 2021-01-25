@@ -11,9 +11,9 @@
 #include "LinePrinter.h"
 #include "llvm-pdbdump.h"
 
-#include "llvm/DebugInfo/PDB/PDBSymbolTypeBuiltin.h"
+#include "llvm37/DebugInfo/PDB/PDBSymbolTypeBuiltin.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 BuiltinDumper::BuiltinDumper(LinePrinter &P)
     : PDBSymDumper(false), Printer(P) {}

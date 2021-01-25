@@ -20,10 +20,10 @@
 #include "clang/Frontend/ASTUnit.h"
 #include "clang/Frontend/TextDiagnosticPrinter.h"
 #include "clang/Sema/SemaHLSL.h"
-#include "llvm/Bitcode/ReaderWriter.h"
+#include "llvm37/Bitcode/ReaderWriter.h"
 #include "clang/Frontend/FrontendActions.h"
 #include "clang/CodeGen/CodeGenAction.h"
-#include "llvm/IR/LLVMContext.h"
+#include "llvm37/IR/LLVMContext.h"
 #include "dxc/Support/WinIncludes.h"
 #include "dxc/HLSL/HLSLExtensionsCodegenHelper.h"
 #include "dxc/DxilRootSignature/DxilRootSignature.h"
@@ -62,7 +62,7 @@
 
 #define CP_UTF16 1200
 
-using namespace llvm;
+using namespace llvm37;
 using namespace clang;
 using namespace hlsl;
 using std::string;
@@ -75,8 +75,8 @@ HRESULT CreateDxcValidator(_In_ REFIID riid, _Out_ LPVOID *ppv);
 // kept internal because the layout of the module class may change based
 // on changes across modules, or picking a different compiler version or CRT.
 HRESULT RunInternalValidator(_In_ IDxcValidator *pValidator,
-                             _In_ llvm::Module *pModule,
-                             _In_ llvm::Module *pDebugModule,
+                             _In_ llvm37::Module *pModule,
+                             _In_ llvm37::Module *pDebugModule,
                              _In_ IDxcBlob *pShader, UINT32 Flags,
                              _In_ IDxcOperationResult **ppResult);
 
@@ -268,7 +268,7 @@ private:
   // !hlsl.semdefs = {!0, !1}
   // !0 = !{!"FOO", !"BAR"}
   // !1 = !{!"BOO", !"HOO"}
-  void WriteSemanticDefines(llvm::Module *M, const ParsedSemanticDefineList &defines) {
+  void WriteSemanticDefines(llvm37::Module *M, const ParsedSemanticDefineList &defines) {
     // Create all metadata nodes for each define. Each node is a (name, value) pair.
     std::vector<MDNode *> mdNodes;
     const std::string enableStr("_ENABLE_");
@@ -278,7 +278,7 @@ private:
     auto &optToggles = m_CI.getCodeGenOpts().HLSLOptimizationToggles;
     auto &optSelects = m_CI.getCodeGenOpts().HLSLOptimizationSelects;
 
-    const llvm::SmallVector<std::string, 2> &semDefPrefixes =
+    const llvm37::SmallVector<std::string, 2> &semDefPrefixes =
                              m_langExtensionsHelper.GetSemanticDefines();
 
     // Add semantic defines to mdNodes and also to codeGenOpts
@@ -340,7 +340,7 @@ public:
   {}
 
   // Write semantic defines as metadata in the module.
-  virtual std::vector<SemanticDefineError> WriteSemanticDefines(llvm::Module *M) override {
+  virtual std::vector<SemanticDefineError> WriteSemanticDefines(llvm37::Module *M) override {
     // Grab the semantic defines seen by the parser.
     ParsedSemanticDefineList defines =
       CollectSemanticDefinesParsedByCompiler(m_CI, &m_langExtensionsHelper);
@@ -577,9 +577,9 @@ public:
       CComPtr<IDxcBlob> pOutputBlob;
       dxcutil::DxcArgsFileSystem *msfPtr =
         dxcutil::CreateDxcArgsFileSystem(utf8Source, pUtf16SourceName.m_psz, pIncludeHandler);
-      std::unique_ptr<::llvm::sys::fs::MSFileSystem> msf(msfPtr);
+      std::unique_ptr<::llvm37::sys::fs::MSFileSystem> msf(msfPtr);
 
-      ::llvm::sys::fs::AutoPerThreadSystem pts(msf.get());
+      ::llvm37::sys::fs::AutoPerThreadSystem pts(msf.get());
       IFTLLVM(pts.error_code());
 
       IFT(pOutputStream.QueryInterface(&pOutputBlob));
@@ -610,10 +610,10 @@ public:
 
       // Setup a compiler instance.
       raw_stream_ostream outStream(pOutputStream.p);
-      llvm::LLVMContext llvmContext; // LLVMContext should outlive CompilerInstance
+      llvm37::LLVMContext llvmContext; // LLVMContext should outlive CompilerInstance
       CompilerInstance compiler;
       std::unique_ptr<TextDiagnosticPrinter> diagPrinter =
-          llvm::make_unique<TextDiagnosticPrinter>(w, &compiler.getDiagnosticOpts());
+          llvm37::make_unique<TextDiagnosticPrinter>(w, &compiler.getDiagnosticOpts());
       SetupCompilerForCompile(compiler, &m_langExtensionsHelper, pUtf8SourceName, diagPrinter.get(), defines, opts, pArguments, argCount);
       msfPtr->SetupForCompilerInstance(compiler);
 
@@ -966,11 +966,11 @@ public:
     try {
       DefaultFPEnvScope fpEnvScope;
 
-      ::llvm::sys::fs::MSFileSystem *msfPtr;
+      ::llvm37::sys::fs::MSFileSystem *msfPtr;
       IFT(CreateMSFileSystemForDisk(&msfPtr));
-      std::unique_ptr<::llvm::sys::fs::MSFileSystem> msf(msfPtr);
+      std::unique_ptr<::llvm37::sys::fs::MSFileSystem> msf(msfPtr);
 
-      ::llvm::sys::fs::AutoPerThreadSystem pts(msf.get());
+      ::llvm37::sys::fs::AutoPerThreadSystem pts(msf.get());
       IFTLLVM(pts.error_code());
 
       std::string StreamStr;
@@ -1062,7 +1062,7 @@ public:
     clang::HeaderSearchOptions &HSOpts = compiler.getHeaderSearchOpts();
     HSOpts.UseBuiltinIncludes = 0;
     // Consider: should we force-include '.' if the source file is relative?
-    for (const llvm::opt::Arg *A : Opts.Args.filtered(options::OPT_I)) {
+    for (const llvm37::opt::Arg *A : Opts.Args.filtered(options::OPT_I)) {
       const bool IsFrameworkFalse = false;
       const bool IgnoreSysRoot = true;
       if (dxcutil::IsAbsoluteOrCurDirRelative(A->getValue())) {

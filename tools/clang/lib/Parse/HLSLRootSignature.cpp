@@ -10,8 +10,8 @@
 //                                                                           //
 ///////////////////////////////////////////////////////////////////////////////
 
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/Support/raw_ostream.h"
 #include "clang/Basic/Diagnostic.h"
 #include "clang/Parse/ParseHLSL.h"
 #include "clang/Parse/ParseDiagnostic.h"
@@ -22,7 +22,7 @@
 
 #include <float.h>
 
-using namespace llvm;
+using namespace llvm37;
 using namespace hlsl;
 
 // Error codes. These could be useful for localization at some point.
@@ -488,7 +488,7 @@ bool RootSignatureTokenizer::IsAlpha(char c) const
 
 RootSignatureParser::RootSignatureParser(
     RootSignatureTokenizer *pTokenizer, DxilRootSignatureVersion DefaultVersion,
-    DxilRootSignatureCompilationFlags CompilationFlags, llvm::raw_ostream &OS)
+    DxilRootSignatureCompilationFlags CompilationFlags, llvm37::raw_ostream &OS)
     : m_pTokenizer(pTokenizer), m_Version(DefaultVersion), m_CompilationFlags(CompilationFlags), m_OS(OS) {}
 
 HRESULT RootSignatureParser::Parse(DxilVersionedRootSignatureDesc **ppRootSignature)
@@ -1687,7 +1687,7 @@ bool clang::ParseHLSLRootSignature(
     SourceLocation Loc, clang::DiagnosticsEngine &Diags) {
   *ppDesc = nullptr;
   std::string OSStr;
-  llvm::raw_string_ostream OS(OSStr);
+  llvm37::raw_string_ostream OS(OSStr);
   hlsl::RootSignatureTokenizer RST(pData, Len);
   hlsl::RootSignatureParser RSP(&RST, Ver, Flags, OS);
   hlsl::DxilVersionedRootSignatureDesc *D = nullptr;

@@ -8,15 +8,15 @@
 //===----------------------------------------------------------------------===//
 
 #include "clang/Basic/VirtualFileSystem.h"
-#include "llvm/Support/Errc.h"
-#include "llvm/Support/MemoryBuffer.h"
-#include "llvm/Support/Path.h"
-#include "llvm/Support/SourceMgr.h"
+#include "llvm37/Support/Errc.h"
+#include "llvm37/Support/MemoryBuffer.h"
+#include "llvm37/Support/Path.h"
+#include "llvm37/Support/SourceMgr.h"
 #include "gtest/gtest.h"
 #include <map>
 using namespace clang;
-using namespace llvm;
-using llvm::sys::fs::UniqueID;
+using namespace llvm37;
+using llvm37::sys::fs::UniqueID;
 
 namespace {
 class DummyFileSystem : public vfs::FileSystem {
@@ -36,7 +36,7 @@ public:
     std::map<std::string, vfs::Status>::iterator I =
         FilesAndDirs.find(Path.str());
     if (I == FilesAndDirs.end())
-      return make_error_code(llvm::errc::no_such_file_or_directory);
+      return make_error_code(llvm37::errc::no_such_file_or_directory);
     return I->second;
   }
   ErrorOr<std::unique_ptr<vfs::File>>
@@ -264,10 +264,10 @@ struct ScopedDir {
   ScopedDir(const Twine &Name, bool Unique=false) {
     std::error_code EC;
     if (Unique) {
-      EC =  llvm::sys::fs::createUniqueDirectory(Name, Path);
+      EC =  llvm37::sys::fs::createUniqueDirectory(Name, Path);
     } else {
       Path = Name.str();
-      EC = llvm::sys::fs::create_directory(Twine(Path));
+      EC = llvm37::sys::fs::create_directory(Twine(Path));
     }
     if (EC)
       Path = "";
@@ -275,7 +275,7 @@ struct ScopedDir {
   }
   ~ScopedDir() {
     if (Path != "")
-      EXPECT_FALSE(llvm::sys::fs::remove(Path.str()));
+      EXPECT_FALSE(llvm37::sys::fs::remove(Path.str()));
   }
   operator StringRef() { return Path.str(); }
 };
@@ -602,7 +602,7 @@ TEST_F(VFSFromYAMLTest, MappedFiles) {
 
   // broken mapping
   EXPECT_EQ(O->status("//root/file2").getError(),
-            llvm::errc::no_such_file_or_directory);
+            llvm37::errc::no_such_file_or_directory);
   EXPECT_EQ(0, NumDiagnostics);
 }
 
@@ -666,11 +666,11 @@ TEST_F(VFSFromYAMLTest, CaseSensitive) {
   O->pushOverlay(FS);
 
   ErrorOr<vfs::Status> SS = O->status("//root/xx");
-  EXPECT_EQ(SS.getError(), llvm::errc::no_such_file_or_directory);
+  EXPECT_EQ(SS.getError(), llvm37::errc::no_such_file_or_directory);
   SS = O->status("//root/xX");
-  EXPECT_EQ(SS.getError(), llvm::errc::no_such_file_or_directory);
+  EXPECT_EQ(SS.getError(), llvm37::errc::no_such_file_or_directory);
   SS = O->status("//root/Xx");
-  EXPECT_EQ(SS.getError(), llvm::errc::no_such_file_or_directory);
+  EXPECT_EQ(SS.getError(), llvm37::errc::no_such_file_or_directory);
   EXPECT_EQ(0, NumDiagnostics);
 }
 

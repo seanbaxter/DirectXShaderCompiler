@@ -7,25 +7,25 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/CodeGen/StackMaps.h"
-#include "llvm/CodeGen/AsmPrinter.h"
-#include "llvm/CodeGen/MachineFrameInfo.h"
-#include "llvm/CodeGen/MachineFunction.h"
-#include "llvm/CodeGen/MachineInstr.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/MC/MCContext.h"
-#include "llvm/MC/MCExpr.h"
-#include "llvm/MC/MCObjectFileInfo.h"
-#include "llvm/MC/MCSectionMachO.h"
-#include "llvm/MC/MCStreamer.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Target/TargetMachine.h"
-#include "llvm/Target/TargetOpcodes.h"
-#include "llvm/Target/TargetRegisterInfo.h"
-#include "llvm/Target/TargetSubtargetInfo.h"
+#include "llvm37/CodeGen/StackMaps.h"
+#include "llvm37/CodeGen/AsmPrinter.h"
+#include "llvm37/CodeGen/MachineFrameInfo.h"
+#include "llvm37/CodeGen/MachineFunction.h"
+#include "llvm37/CodeGen/MachineInstr.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/MC/MCContext.h"
+#include "llvm37/MC/MCExpr.h"
+#include "llvm37/MC/MCObjectFileInfo.h"
+#include "llvm37/MC/MCSectionMachO.h"
+#include "llvm37/MC/MCStreamer.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Target/TargetMachine.h"
+#include "llvm37/Target/TargetOpcodes.h"
+#include "llvm37/Target/TargetRegisterInfo.h"
+#include "llvm37/Target/TargetSubtargetInfo.h"
 #include <iterator>
 
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "stackmaps"
 
@@ -534,7 +534,7 @@ void StackMaps::serializeToStackMapSection() {
   OS.SwitchSection(StackMapSection);
 
   // Emit a dummy symbol to force section inclusion.
-  OS.EmitLabel(OutContext.getOrCreateSymbol(Twine("__LLVM_StackMaps")));
+  OS.EmitLabel(OutContext.getOrCreateSymbol(Twine("__LLVM37_StackMaps")));
 
   // Serialize data.
   DEBUG(dbgs() << "********** Stack Map Output **********\n");

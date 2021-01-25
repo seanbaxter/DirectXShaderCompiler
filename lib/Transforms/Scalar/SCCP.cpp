@@ -17,29 +17,29 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Transforms/Scalar.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/DenseSet.h"
-#include "llvm/ADT/PointerIntPair.h"
-#include "llvm/ADT/SmallPtrSet.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/Analysis/ConstantFolding.h"
-#include "llvm/Analysis/TargetLibraryInfo.h"
-#include "llvm/IR/CallSite.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/DerivedTypes.h"
-#include "llvm/IR/InstVisitor.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/Pass.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Transforms/IPO.h"
-#include "llvm/Transforms/Utils/Local.h"
+#include "llvm37/Transforms/Scalar.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/DenseSet.h"
+#include "llvm37/ADT/PointerIntPair.h"
+#include "llvm37/ADT/SmallPtrSet.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/Analysis/ConstantFolding.h"
+#include "llvm37/Analysis/TargetLibraryInfo.h"
+#include "llvm37/IR/CallSite.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/IR/DerivedTypes.h"
+#include "llvm37/IR/InstVisitor.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/Pass.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Transforms/IPO.h"
+#include "llvm37/Transforms/Utils/Local.h"
 #include <algorithm>
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "sccp"
 
@@ -1524,7 +1524,7 @@ INITIALIZE_PASS(SCCP, "sccp",
                 "Sparse Conditional Constant Propagation", false, false)
 
 // createSCCPPass - This is the public interface to this file.
-FunctionPass *llvm::createSCCPPass() {
+FunctionPass *llvm37::createSCCPPass() {
   return new SCCP();
 }
 
@@ -1658,7 +1658,7 @@ INITIALIZE_PASS_END(IPSCCP, "ipsccp",
                 false, false)
 
 // createIPSCCPPass - This is the public interface to this file.
-ModulePass *llvm::createIPSCCPPass() {
+ModulePass *llvm37::createIPSCCPPass() {
   return new IPSCCP();
 }
 

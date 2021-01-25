@@ -12,14 +12,14 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_TOOLS_LIBCLANG_CINDEXER_H
-#define LLVM_CLANG_TOOLS_LIBCLANG_CINDEXER_H
+#ifndef LLVM37_CLANG_TOOLS_LIBCLANG_CINDEXER_H
+#define LLVM37_CLANG_TOOLS_LIBCLANG_CINDEXER_H
 
 #include "clang-c/Index.h"
 #include "clang/Frontend/PCHContainerOperations.h"
 #include "clang/Lex/ModuleLoader.h"
-#include "llvm/ADT/StringRef.h"
-#include "llvm/Support/Path.h"
+#include "llvm37/ADT/StringRef.h"
+#include "llvm37/Support/Path.h"
 #include <vector>
 
 // HLSL Change Starts
@@ -28,7 +28,7 @@ namespace hlsl {
 }
 // HLSL Change Ends
 
-namespace llvm {
+namespace llvm37 {
   class CrashRecoveryContext;
 }
 
@@ -93,7 +93,7 @@ public:
   /// threads when possible.
   ///
   /// \return False if a crash was detected.
-  bool RunSafely(llvm::CrashRecoveryContext &CRC,
+  bool RunSafely(llvm37::CrashRecoveryContext &CRC,
                  void (*Fn)(void*), void *UserData, unsigned Size = 0);
 
   /// \brief Set the thread priority to background.

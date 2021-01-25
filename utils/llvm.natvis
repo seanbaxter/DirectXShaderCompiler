@@ -9,7 +9,7 @@ mklink "%USERPROFILE%\Documents\Visual Studio 2015\Visualizers\llvm.natvis" %HLS
 
 -->
 <AutoVisualizer xmlns="http://schemas.microsoft.com/vstudio/debugger/natvis/2010">
-  <Type Name="llvm::SmallVector&lt;*,*&gt;">
+  <Type Name="llvm37::SmallVector&lt;*,*&gt;">
     <DisplayString Condition="(($T1*)EndX - ($T1*)BeginX) == 0">empty</DisplayString>
     <DisplayString Condition="(($T1*)EndX - ($T1*)BeginX) != 0">{{ size={($T1*)EndX - ($T1*)BeginX} }}</DisplayString>
     <Expand>
@@ -22,7 +22,7 @@ mklink "%USERPROFILE%\Documents\Visual Studio 2015\Visualizers\llvm.natvis" %HLS
     </Expand>
   </Type>
 
-  <Type Name="llvm::SmallVectorImpl&lt;*&gt;">
+  <Type Name="llvm37::SmallVectorImpl&lt;*&gt;">
     <DisplayString Condition="(($T1*)EndX - ($T1*)BeginX) == 0">empty</DisplayString>
     <DisplayString Condition="(($T1*)EndX - ($T1*)BeginX) != 0">[{($T1*)EndX - ($T1*)BeginX}]</DisplayString>
     <Expand>
@@ -35,7 +35,7 @@ mklink "%USERPROFILE%\Documents\Visual Studio 2015\Visualizers\llvm.natvis" %HLS
     </Expand>
   </Type>
 
-  <Type Name="llvm::SmallString&lt;*&gt;">
+  <Type Name="llvm37::SmallString&lt;*&gt;">
     <DisplayString>{BeginX,s}</DisplayString>
     <StringView>BeginX,s</StringView>
     <Expand>
@@ -48,7 +48,7 @@ mklink "%USERPROFILE%\Documents\Visual Studio 2015\Visualizers\llvm.natvis" %HLS
     </Expand>
   </Type>
 
-  <Type Name="llvm::StringRef">
+  <Type Name="llvm37::StringRef">
     <DisplayString>[{Length}] {Data,s}</DisplayString>
     <StringView>Data,s</StringView>
     <Expand>
@@ -60,7 +60,7 @@ mklink "%USERPROFILE%\Documents\Visual Studio 2015\Visualizers\llvm.natvis" %HLS
     </Expand>
   </Type>
 
-  <Type Name="llvm::PointerIntPair&lt;*,*,*,*&gt;">
+  <Type Name="llvm37::PointerIntPair&lt;*,*,*,*&gt;">
     <DisplayString>{Value &amp; PointerBitMask} [{(Value &gt;&gt; IntShift) &amp; IntMask}]</DisplayString>
     <Expand>
       <Item Name="[ptr]">($T1)(Value &amp; PointerBitMask)</Item>
@@ -68,7 +68,7 @@ mklink "%USERPROFILE%\Documents\Visual Studio 2015\Visualizers\llvm.natvis" %HLS
     </Expand>
   </Type>
 
-  <Type Name="llvm::PointerIntPair&lt;llvm::PointerUnion&lt;*,*&gt;,*,*,*&gt;">
+  <Type Name="llvm37::PointerIntPair&lt;llvm37::PointerUnion&lt;*,*&gt;,*,*,*&gt;">
     <DisplayString>TODO - fix this case to avoid expression ambiguity</DisplayString>
     
     <!--<DisplayString>{Value &amp; PointerBitMask} [{(Value &gt;&gt; IntShift) &amp; IntMask}]</DisplayString>
@@ -78,7 +78,7 @@ mklink "%USERPROFILE%\Documents\Visual Studio 2015\Visualizers\llvm.natvis" %HLS
     </Expand>-->
   </Type>
 
-  <Type Name="llvm::PointerUnion&lt;*,*&gt;">
+  <Type Name="llvm37::PointerUnion&lt;*,*&gt;">
     <DisplayString Condition="((Val.Value &gt;&gt; Val.IntShift) &amp; Val.IntMask) == 0">[P1] {($T1)(Val.Value &amp; Val.PointerBitMask)}</DisplayString>
     <DisplayString Condition="((Val.Value &gt;&gt; Val.IntShift) &amp; Val.IntMask) != 0">[P2] {($T2)(Val.Value &amp; Val.PointerBitMask)}</DisplayString>
     <Expand>
@@ -87,7 +87,7 @@ mklink "%USERPROFILE%\Documents\Visual Studio 2015\Visualizers\llvm.natvis" %HLS
     </Expand>
   </Type>
 
-  <Type Name="llvm::PointerUnion3&lt;*,*,*&gt;">
+  <Type Name="llvm37::PointerUnion3&lt;*,*,*&gt;">
     <DisplayString Condition="(Val.Val.Value &amp; 2) != 2 &amp;&amp; (Val.Val.Value &amp; 1) != 1">[P1] {($T1)((Val.Val.Value &gt;&gt; 2) &lt;&lt; 2)}</DisplayString>
     <DisplayString Condition="(Val.Val.Value &amp; 2) == 2">[P2] {($T2)((Val.Val.Value &gt;&gt; 2) &lt;&lt; 2)}</DisplayString>
     <DisplayString Condition="(Val.Val.Value &amp; 1) == 1">[P3] {($T3)((Val.Val.Value &gt;&gt; 2) &lt;&lt; 2)}</DisplayString>
@@ -98,7 +98,7 @@ mklink "%USERPROFILE%\Documents\Visual Studio 2015\Visualizers\llvm.natvis" %HLS
     </Expand>
   </Type>
 
-  <Type Name="llvm::PointerUnion4&lt;*,*,*,*&gt;">
+  <Type Name="llvm37::PointerUnion4&lt;*,*,*,*&gt;">
     <DisplayString Condition="(Val.Val.Value &amp; 3) != 3 &amp;&amp; (Val.Val.Value &amp; 2) != 2 &amp;&amp; (Val.Val.Value &amp; 1) != 1">[P1] {($T1)((Val.Val.Value &gt;&gt; 2) &lt;&lt; 2)}</DisplayString>
     <DisplayString Condition="(Val.Val.Value &amp; 3) != 3 &amp;&amp; (Val.Val.Value &amp; 2) == 2">[P2] {($T2)((Val.Val.Value &gt;&gt; 2) &lt;&lt; 2)}</DisplayString>
     <DisplayString Condition="(Val.Val.Value &amp; 3) != 3 &amp;&amp; (Val.Val.Value &amp; 1) == 1">[P3] {($T3)((Val.Val.Value &gt;&gt; 2) &lt;&lt; 2)}</DisplayString>
@@ -111,7 +111,7 @@ mklink "%USERPROFILE%\Documents\Visual Studio 2015\Visualizers\llvm.natvis" %HLS
     </Expand>
   </Type>
 
-  <Type Name="llvm::iplist&lt;*,*&gt;">
+  <Type Name="llvm37::iplist&lt;*,*&gt;">
     <DisplayString Condition="Head == 0">{{ empty }}</DisplayString>
     <DisplayString Condition="Head != 0">{{ head={Head} }}</DisplayString>
     <Expand>
@@ -123,7 +123,7 @@ mklink "%USERPROFILE%\Documents\Visual Studio 2015\Visualizers\llvm.natvis" %HLS
     </Expand>
   </Type>
 
-  <Type Name="llvm::IntrusiveRefCntPtr&lt;*&gt;">
+  <Type Name="llvm37::IntrusiveRefCntPtr&lt;*&gt;">
     <DisplayString Condition="Obj == 0">empty</DisplayString>
     <DisplayString Condition="(Obj != 0) &amp;&amp; (Obj-&gt;ref_cnt == 1)">RefPtr [1 ref] {*Obj}</DisplayString>
     <DisplayString Condition="(Obj != 0) &amp;&amp; (Obj-&gt;ref_cnt != 1)">RefPtr [{Obj-&gt;ref_cnt} refs] {*Obj}</DisplayString>
@@ -133,7 +133,7 @@ mklink "%USERPROFILE%\Documents\Visual Studio 2015\Visualizers\llvm.natvis" %HLS
     </Expand>
   </Type>
 
-  <Type Name="llvm::OwningPtr&lt;*&gt;">
+  <Type Name="llvm37::OwningPtr&lt;*&gt;">
     <DisplayString Condition="Ptr == 0">empty</DisplayString>
     <DisplayString Condition="Ptr != 0">OwningPtr {*Ptr}</DisplayString>
     <Expand>
@@ -141,7 +141,7 @@ mklink "%USERPROFILE%\Documents\Visual Studio 2015\Visualizers\llvm.natvis" %HLS
     </Expand>
   </Type>
 
-  <Type Name="llvm::SmallPtrSet&lt;*,*&gt;">
+  <Type Name="llvm37::SmallPtrSet&lt;*,*&gt;">
     <DisplayString Condition="CurArray == SmallArray">{{ [Small Mode] elements={NumElements}, arraySize={CurArraySize} }}</DisplayString>
     <DisplayString Condition="CurArray != SmallArray">{{ [Big Mode] elements={NumElements}, arraySize={CurArraySize} }}</DisplayString>
     <Expand>
@@ -154,7 +154,7 @@ mklink "%USERPROFILE%\Documents\Visual Studio 2015\Visualizers\llvm.natvis" %HLS
     </Expand>
   </Type>
 
-  <Type Name="llvm::DenseMap&lt;*,*,*&gt;">
+  <Type Name="llvm37::DenseMap&lt;*,*,*&gt;">
     <DisplayString Condition="NumEntries == 0">empty</DisplayString>
     <DisplayString Condition="NumEntries != 0">{{ entries={NumEntries}, buckets={NumBuckets} }}</DisplayString>
     <Expand>
@@ -167,33 +167,33 @@ mklink "%USERPROFILE%\Documents\Visual Studio 2015\Visualizers\llvm.natvis" %HLS
     </Expand>
   </Type>
 
-  <Type Name="llvm::StringMap&lt;*,*&gt;">
+  <Type Name="llvm37::StringMap&lt;*,*&gt;">
     <DisplayString>{{ NumBuckets={NumBuckets}, ItemSize={ItemSize} }}</DisplayString>
     <Expand>
       <Item Name="[NumBuckets]">NumBuckets</Item>
       <Item Name="[ItemSize]">ItemSize</Item>
       <IndexListItems>
         <Size>NumBuckets</Size>
-        <ValueNode>(llvm::StringMapEntry&lt;$T1&gt;*)TheTable[$i]</ValueNode>
+        <ValueNode>(llvm37::StringMapEntry&lt;$T1&gt;*)TheTable[$i]</ValueNode>
       </IndexListItems>
     </Expand>
   </Type>
 
-  <Type Name="llvm::StringMapEntry&lt;*&gt;">
+  <Type Name="llvm37::StringMapEntry&lt;*&gt;">
     <DisplayString Condition="StrLen == 0">empty</DisplayString>
-    <DisplayString Condition="StrLen != 0">({((llvm::StringMapEntry&lt;$T1&gt;*)this)+1,s}, {second})</DisplayString>
+    <DisplayString Condition="StrLen != 0">({((llvm37::StringMapEntry&lt;$T1&gt;*)this)+1,s}, {second})</DisplayString>
     <Expand>
-      <Item Name="[key]">((llvm::StringMapEntry&lt;$T1&gt;*)this)+1,s</Item>
+      <Item Name="[key]">((llvm37::StringMapEntry&lt;$T1&gt;*)this)+1,s</Item>
       <Item Name="[value]" Condition="StrLen != 0">second</Item>
     </Expand>
   </Type>
 
-  <Type Name="llvm::Triple">
+  <Type Name="llvm37::Triple">
     <DisplayString>{Data}</DisplayString>
   </Type>
   <!-- HLSL Changes Start -->
-  <Type Name="llvm::Value">
-    <DisplayString>{(llvm::Value::ValueTy)SubclassID}</DisplayString>
+  <Type Name="llvm37::Value">
+    <DisplayString>{(llvm37::Value::ValueTy)SubclassID}</DisplayString>
     <Expand>
       <Item Name="[HasName]">HasName</Item>
       <Item Name="[IsUsedByMD]">IsUsedByMD</Item>
@@ -201,41 +201,41 @@ mklink "%USERPROFILE%\Documents\Visual Studio 2015\Visualizers\llvm.natvis" %HLS
       <!-- User values ... -->
       <!-- Constant values ... -->
       <!-- Global value - alias, variable or function -->
-      <Item Name="[Linkage]" Condition="llvm::Value::GlobalAliasVal == (llvm::Value::ValueTy)SubclassID || llvm::Value::FunctionVal == (llvm::Value::ValueTy)SubclassID || llvm::Value::GlobalVariableVal == (llvm::Value::ValueTy)SubclassID">
-        ((llvm::GlobalObject*)this)-&gt;Linkage
+      <Item Name="[Linkage]" Condition="llvm37::Value::GlobalAliasVal == (llvm37::Value::ValueTy)SubclassID || llvm37::Value::FunctionVal == (llvm37::Value::ValueTy)SubclassID || llvm37::Value::GlobalVariableVal == (llvm37::Value::ValueTy)SubclassID">
+        ((llvm37::GlobalObject*)this)-&gt;Linkage
       </Item>
-      <Item Name="[Visibility]" Condition="llvm::Value::GlobalAliasVal == (llvm::Value::ValueTy)SubclassID || llvm::Value::FunctionVal == (llvm::Value::ValueTy)SubclassID || llvm::Value::GlobalVariableVal == (llvm::Value::ValueTy)SubclassID">
-        ((llvm::GlobalObject*)this)-&gt;Visibility
+      <Item Name="[Visibility]" Condition="llvm37::Value::GlobalAliasVal == (llvm37::Value::ValueTy)SubclassID || llvm37::Value::FunctionVal == (llvm37::Value::ValueTy)SubclassID || llvm37::Value::GlobalVariableVal == (llvm37::Value::ValueTy)SubclassID">
+        ((llvm37::GlobalObject*)this)-&gt;Visibility
       </Item>
       <!-- Global object - variable or function -->
-      <Item Name="[section]" Condition="llvm::Value::FunctionVal == (llvm::Value::ValueTy)SubclassID || llvm::Value::GlobalVariableVal == (llvm::Value::ValueTy)SubclassID">
-        ((llvm::GlobalObject*)this)-&gt;Section
+      <Item Name="[section]" Condition="llvm37::Value::FunctionVal == (llvm37::Value::ValueTy)SubclassID || llvm37::Value::GlobalVariableVal == (llvm37::Value::ValueTy)SubclassID">
+        ((llvm37::GlobalObject*)this)-&gt;Section
       </Item>
       <!-- Global variable -->
-      <Item Name="[isConstant]" Condition="llvm::Value::GlobalVariableVal == (llvm::Value::ValueTy)SubclassID">((llvm::GlobalVariable *)this)-&gt;isConstantGlobal</Item>
-      <Item Name="[isExternallyInitializedConstant]" Condition="llvm::Value::GlobalVariableVal == (llvm::Value::ValueTy)SubclassID">((llvm::GlobalVariable *)this)-&gt;isExternallyInitializedConstant</Item>
+      <Item Name="[isConstant]" Condition="llvm37::Value::GlobalVariableVal == (llvm37::Value::ValueTy)SubclassID">((llvm37::GlobalVariable *)this)-&gt;isConstantGlobal</Item>
+      <Item Name="[isExternallyInitializedConstant]" Condition="llvm37::Value::GlobalVariableVal == (llvm37::Value::ValueTy)SubclassID">((llvm37::GlobalVariable *)this)-&gt;isExternallyInitializedConstant</Item>
     </Expand>
   </Type>
-  <Type Name="llvm::ValueSymbolTable">
+  <Type Name="llvm37::ValueSymbolTable">
     <DisplayString>{vmap.NumItems} items</DisplayString>
   </Type>
-  <Type Name="llvm::Type">
-    <DisplayString>{(llvm::Type::TypeID)(IDAndSubclassData &amp; 0xFF)}</DisplayString>
+  <Type Name="llvm37::Type">
+    <DisplayString>{(llvm37::Type::TypeID)(IDAndSubclassData &amp; 0xFF)}</DisplayString>
     <Expand>
-      <Item Name="[TypeID]">(llvm::Type::TypeID)(IDAndSubclassData &amp; 0xFF)</Item>
-      <Item Name="[BitWidth]" Condition="llvm::Type::TypeID::IntegerTyID == (llvm::Type::TypeID)(IDAndSubclassData &amp; 0xFF)">IDAndSubclassData &gt;&gt; 8</Item>
-      <Item Name="[IsVarArg]" Condition="llvm::Type::TypeID::FunctionTyID == (llvm::Type::TypeID)(IDAndSubclassData &amp; 0xFF)">(IDAndSubclassData &amp; 0xFFFFFF00) != 0</Item>
-      <Item Name="[NumElements]" Condition="llvm::Type::TypeID::VectorTyID == (llvm::Type::TypeID)(IDAndSubclassData &amp; 0xFF)">((llvm::VectorType *)this)-&gt;NumElements</Item>
+      <Item Name="[TypeID]">(llvm37::Type::TypeID)(IDAndSubclassData &amp; 0xFF)</Item>
+      <Item Name="[BitWidth]" Condition="llvm37::Type::TypeID::IntegerTyID == (llvm37::Type::TypeID)(IDAndSubclassData &amp; 0xFF)">IDAndSubclassData &gt;&gt; 8</Item>
+      <Item Name="[IsVarArg]" Condition="llvm37::Type::TypeID::FunctionTyID == (llvm37::Type::TypeID)(IDAndSubclassData &amp; 0xFF)">(IDAndSubclassData &amp; 0xFFFFFF00) != 0</Item>
+      <Item Name="[NumElements]" Condition="llvm37::Type::TypeID::VectorTyID == (llvm37::Type::TypeID)(IDAndSubclassData &amp; 0xFF)">((llvm37::VectorType *)this)-&gt;NumElements</Item>
       <ArrayItems>
         <Size>NumContainedTys</Size>
         <ValuePointer>ContainedTys</ValuePointer>
       </ArrayItems>
     </Expand>
   </Type>
-  <Type Name="llvm::opt::Arg">
+  <Type Name="llvm37::opt::Arg">
     <DisplayString>Arg: {Spelling}</DisplayString>
   </Type>
-  <Type Name="llvm::opt::OptTable">
+  <Type Name="llvm37::opt::OptTable">
     <Expand>
       <ArrayItems>
         <Size>NumOptionInfos</Size>
@@ -243,7 +243,7 @@ mklink "%USERPROFILE%\Documents\Visual Studio 2015\Visualizers\llvm.natvis" %HLS
       </ArrayItems>
     </Expand>
   </Type>
-  <Type Name="llvm::opt::OptTable::Info">
+  <Type Name="llvm37::opt::OptTable::Info">
     <DisplayString>{Name} (#{ID})</DisplayString>
   </Type>
   

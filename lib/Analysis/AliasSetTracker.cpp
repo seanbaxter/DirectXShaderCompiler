@@ -11,19 +11,19 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Analysis/AliasSetTracker.h"
-#include "llvm/Analysis/AliasAnalysis.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/InstIterator.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Type.h"
-#include "llvm/Pass.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/raw_ostream.h"
-using namespace llvm;
+#include "llvm37/Analysis/AliasSetTracker.h"
+#include "llvm37/Analysis/AliasAnalysis.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/IR/InstIterator.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/Type.h"
+#include "llvm37/Pass.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/raw_ostream.h"
+using namespace llvm37;
 
 /// mergeSetIn - Merge the specified alias set into this alias set.
 ///
@@ -608,7 +608,7 @@ void AliasSetTracker::print(raw_ostream &OS) const {
   OS << "\n";
 }
 
-#if !defined(NDEBUG) || defined(LLVM_ENABLE_DUMP)
+#if !defined(NDEBUG) || defined(LLVM37_ENABLE_DUMP)
 void AliasSet::dump() const { print(dbgs()); }
 void AliasSetTracker::dump() const { print(dbgs()); }
 #endif

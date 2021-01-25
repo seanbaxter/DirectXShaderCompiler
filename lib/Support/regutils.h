@@ -35,8 +35,8 @@
  *	@(#)utils.h	8.3 (Berkeley) 3/20/94
  */
 
-#ifndef LLVM_SUPPORT_REGUTILS_H
-#define LLVM_SUPPORT_REGUTILS_H
+#ifndef LLVM37_SUPPORT_REGUTILS_H
+#define LLVM37_SUPPORT_REGUTILS_H
 
 #include <stdlib.h>
 

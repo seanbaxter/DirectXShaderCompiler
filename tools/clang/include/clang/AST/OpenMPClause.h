@@ -13,8 +13,8 @@
 ///
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_AST_OPENMPCLAUSE_H
-#define LLVM_CLANG_AST_OPENMPCLAUSE_H
+#ifndef LLVM37_CLANG_AST_OPENMPCLAUSE_H
+#define LLVM37_CLANG_AST_OPENMPCLAUSE_H
 
 #include "clang/AST/Expr.h"
 #include "clang/AST/Stmt.h"
@@ -81,7 +81,7 @@ protected:
     return MutableArrayRef<Expr *>(
         reinterpret_cast<Expr **>(
             reinterpret_cast<char *>(this) +
-            llvm::RoundUpToAlignment(sizeof(T), llvm::alignOf<Expr *>())),
+            llvm37::RoundUpToAlignment(sizeof(T), llvm37::alignOf<Expr *>())),
         NumVars);
   }
 
@@ -93,7 +93,7 @@ protected:
         VL.begin(), VL.end(),
         reinterpret_cast<Expr **>(
             reinterpret_cast<char *>(this) +
-            llvm::RoundUpToAlignment(sizeof(T), llvm::alignOf<Expr *>())));
+            llvm37::RoundUpToAlignment(sizeof(T), llvm37::alignOf<Expr *>())));
   }
 
   /// \brief Build a clause with \a N variables
@@ -111,8 +111,8 @@ protected:
 public:
   typedef MutableArrayRef<Expr *>::iterator varlist_iterator;
   typedef ArrayRef<const Expr *>::iterator varlist_const_iterator;
-  typedef llvm::iterator_range<varlist_iterator> varlist_range;
-  typedef llvm::iterator_range<varlist_const_iterator> varlist_const_range;
+  typedef llvm37::iterator_range<varlist_iterator> varlist_range;
+  typedef llvm37::iterator_range<varlist_const_iterator> varlist_const_range;
 
   unsigned varlist_size() const { return NumVars; }
   bool varlist_empty() const { return NumVars == 0; }
@@ -136,10 +136,10 @@ public:
 
   /// \brief Fetches list of all variables in the clause.
   ArrayRef<const Expr *> getVarRefs() const {
-    return llvm::makeArrayRef(
+    return llvm37::makeArrayRef(
         reinterpret_cast<const Expr *const *>(
             reinterpret_cast<const char *>(this) +
-            llvm::RoundUpToAlignment(sizeof(T), llvm::alignOf<const Expr *>())),
+            llvm37::RoundUpToAlignment(sizeof(T), llvm37::alignOf<const Expr *>())),
         NumVars);
   }
 };
@@ -988,7 +988,7 @@ class OMPPrivateClause : public OMPVarListClause<OMPPrivateClause> {
     return MutableArrayRef<Expr *>(varlist_end(), varlist_size());
   }
   ArrayRef<const Expr *> getPrivateCopies() const {
-    return llvm::makeArrayRef(varlist_end(), varlist_size());
+    return llvm37::makeArrayRef(varlist_end(), varlist_size());
   }
 
 public:
@@ -1014,8 +1014,8 @@ public:
 
   typedef MutableArrayRef<Expr *>::iterator private_copies_iterator;
   typedef ArrayRef<const Expr *>::iterator private_copies_const_iterator;
-  typedef llvm::iterator_range<private_copies_iterator> private_copies_range;
-  typedef llvm::iterator_range<private_copies_const_iterator>
+  typedef llvm37::iterator_range<private_copies_iterator> private_copies_range;
+  typedef llvm37::iterator_range<private_copies_const_iterator>
       private_copies_const_range;
 
   private_copies_range private_copies() {
@@ -1080,7 +1080,7 @@ class OMPFirstprivateClause : public OMPVarListClause<OMPFirstprivateClause> {
     return MutableArrayRef<Expr *>(varlist_end(), varlist_size());
   }
   ArrayRef<const Expr *> getPrivateCopies() const {
-    return llvm::makeArrayRef(varlist_end(), varlist_size());
+    return llvm37::makeArrayRef(varlist_end(), varlist_size());
   }
 
   /// \brief Sets the list of references to initializer variables for new
@@ -1094,7 +1094,7 @@ class OMPFirstprivateClause : public OMPVarListClause<OMPFirstprivateClause> {
     return MutableArrayRef<Expr *>(getPrivateCopies().end(), varlist_size());
   }
   ArrayRef<const Expr *> getInits() const {
-    return llvm::makeArrayRef(getPrivateCopies().end(), varlist_size());
+    return llvm37::makeArrayRef(getPrivateCopies().end(), varlist_size());
   }
 
 public:
@@ -1123,8 +1123,8 @@ public:
 
   typedef MutableArrayRef<Expr *>::iterator private_copies_iterator;
   typedef ArrayRef<const Expr *>::iterator private_copies_const_iterator;
-  typedef llvm::iterator_range<private_copies_iterator> private_copies_range;
-  typedef llvm::iterator_range<private_copies_const_iterator>
+  typedef llvm37::iterator_range<private_copies_iterator> private_copies_range;
+  typedef llvm37::iterator_range<private_copies_const_iterator>
       private_copies_const_range;
 
   private_copies_range private_copies() {
@@ -1138,8 +1138,8 @@ public:
 
   typedef MutableArrayRef<Expr *>::iterator inits_iterator;
   typedef ArrayRef<const Expr *>::iterator inits_const_iterator;
-  typedef llvm::iterator_range<inits_iterator> inits_range;
-  typedef llvm::iterator_range<inits_const_iterator> inits_const_range;
+  typedef llvm37::iterator_range<inits_iterator> inits_range;
+  typedef llvm37::iterator_range<inits_const_iterator> inits_const_range;
 
   inits_range inits() {
     return inits_range(getInits().begin(), getInits().end());
@@ -1213,7 +1213,7 @@ class OMPLastprivateClause : public OMPVarListClause<OMPLastprivateClause> {
     return MutableArrayRef<Expr *>(varlist_end(), varlist_size());
   }
   ArrayRef<const Expr *> getPrivateCopies() const {
-    return llvm::makeArrayRef(varlist_end(), varlist_size());
+    return llvm37::makeArrayRef(varlist_end(), varlist_size());
   }
 
   /// \brief Set list of helper expressions, required for proper codegen of the
@@ -1227,7 +1227,7 @@ class OMPLastprivateClause : public OMPVarListClause<OMPLastprivateClause> {
     return MutableArrayRef<Expr *>(getPrivateCopies().end(), varlist_size());
   }
   ArrayRef<const Expr *> getSourceExprs() const {
-    return llvm::makeArrayRef(getPrivateCopies().end(), varlist_size());
+    return llvm37::makeArrayRef(getPrivateCopies().end(), varlist_size());
   }
 
   /// \brief Set list of helper expressions, required for proper codegen of the
@@ -1241,7 +1241,7 @@ class OMPLastprivateClause : public OMPVarListClause<OMPLastprivateClause> {
     return MutableArrayRef<Expr *>(getSourceExprs().end(), varlist_size());
   }
   ArrayRef<const Expr *> getDestinationExprs() const {
-    return llvm::makeArrayRef(getSourceExprs().end(), varlist_size());
+    return llvm37::makeArrayRef(getSourceExprs().end(), varlist_size());
   }
 
   /// \brief Set list of helper assignment expressions, required for proper
@@ -1254,7 +1254,7 @@ class OMPLastprivateClause : public OMPVarListClause<OMPLastprivateClause> {
     return MutableArrayRef<Expr *>(getDestinationExprs().end(), varlist_size());
   }
   ArrayRef<const Expr *> getAssignmentOps() const {
-    return llvm::makeArrayRef(getDestinationExprs().end(), varlist_size());
+    return llvm37::makeArrayRef(getDestinationExprs().end(), varlist_size());
   }
 
 public:
@@ -1293,8 +1293,8 @@ public:
 
   typedef MutableArrayRef<Expr *>::iterator helper_expr_iterator;
   typedef ArrayRef<const Expr *>::iterator helper_expr_const_iterator;
-  typedef llvm::iterator_range<helper_expr_iterator> helper_expr_range;
-  typedef llvm::iterator_range<helper_expr_const_iterator>
+  typedef llvm37::iterator_range<helper_expr_iterator> helper_expr_range;
+  typedef llvm37::iterator_range<helper_expr_const_iterator>
       helper_expr_const_range;
 
   /// \brief Set list of helper expressions, required for generation of private
@@ -1465,7 +1465,7 @@ class OMPReductionClause : public OMPVarListClause<OMPReductionClause> {
     return MutableArrayRef<Expr *>(varlist_end(), varlist_size());
   }
   ArrayRef<const Expr *> getLHSExprs() const {
-    return llvm::makeArrayRef(varlist_end(), varlist_size());
+    return llvm37::makeArrayRef(varlist_end(), varlist_size());
   }
 
   /// \brief Set list of helper expressions, required for proper codegen of the
@@ -1480,7 +1480,7 @@ class OMPReductionClause : public OMPVarListClause<OMPReductionClause> {
     return MutableArrayRef<Expr *>(getLHSExprs().end(), varlist_size());
   }
   ArrayRef<const Expr *> getRHSExprs() const {
-    return llvm::makeArrayRef(getLHSExprs().end(), varlist_size());
+    return llvm37::makeArrayRef(getLHSExprs().end(), varlist_size());
   }
 
   /// \brief Set list of helper reduction expressions, required for proper
@@ -1494,7 +1494,7 @@ class OMPReductionClause : public OMPVarListClause<OMPReductionClause> {
     return MutableArrayRef<Expr *>(getRHSExprs().end(), varlist_size());
   }
   ArrayRef<const Expr *> getReductionOps() const {
-    return llvm::makeArrayRef(getRHSExprs().end(), varlist_size());
+    return llvm37::makeArrayRef(getRHSExprs().end(), varlist_size());
   }
 
 public:
@@ -1547,8 +1547,8 @@ public:
 
   typedef MutableArrayRef<Expr *>::iterator helper_expr_iterator;
   typedef ArrayRef<const Expr *>::iterator helper_expr_const_iterator;
-  typedef llvm::iterator_range<helper_expr_iterator> helper_expr_range;
-  typedef llvm::iterator_range<helper_expr_const_iterator>
+  typedef llvm37::iterator_range<helper_expr_iterator> helper_expr_range;
+  typedef llvm37::iterator_range<helper_expr_const_iterator>
       helper_expr_const_range;
 
   helper_expr_const_range lhs_exprs() const {
@@ -1644,7 +1644,7 @@ class OMPLinearClause : public OMPVarListClause<OMPLinearClause> {
     return MutableArrayRef<Expr *>(varlist_end(), varlist_size());
   }
   ArrayRef<const Expr *> getInits() const {
-    return llvm::makeArrayRef(varlist_end(), varlist_size());
+    return llvm37::makeArrayRef(varlist_end(), varlist_size());
   }
 
   /// \brief Sets the list of update expressions for linear variables.
@@ -1652,7 +1652,7 @@ class OMPLinearClause : public OMPVarListClause<OMPLinearClause> {
     return MutableArrayRef<Expr *>(getInits().end(), varlist_size());
   }
   ArrayRef<const Expr *> getUpdates() const {
-    return llvm::makeArrayRef(getInits().end(), varlist_size());
+    return llvm37::makeArrayRef(getInits().end(), varlist_size());
   }
 
   /// \brief Sets the list of final update expressions for linear variables.
@@ -1660,7 +1660,7 @@ class OMPLinearClause : public OMPVarListClause<OMPLinearClause> {
     return MutableArrayRef<Expr *>(getUpdates().end(), varlist_size());
   }
   ArrayRef<const Expr *> getFinals() const {
-    return llvm::makeArrayRef(getUpdates().end(), varlist_size());
+    return llvm37::makeArrayRef(getUpdates().end(), varlist_size());
   }
 
   /// \brief Sets the list of the initial values for linear variables.
@@ -1717,8 +1717,8 @@ public:
 
   typedef MutableArrayRef<Expr *>::iterator inits_iterator;
   typedef ArrayRef<const Expr *>::iterator inits_const_iterator;
-  typedef llvm::iterator_range<inits_iterator> inits_range;
-  typedef llvm::iterator_range<inits_const_iterator> inits_const_range;
+  typedef llvm37::iterator_range<inits_iterator> inits_range;
+  typedef llvm37::iterator_range<inits_const_iterator> inits_const_range;
 
   inits_range inits() {
     return inits_range(getInits().begin(), getInits().end());
@@ -1729,8 +1729,8 @@ public:
 
   typedef MutableArrayRef<Expr *>::iterator updates_iterator;
   typedef ArrayRef<const Expr *>::iterator updates_const_iterator;
-  typedef llvm::iterator_range<updates_iterator> updates_range;
-  typedef llvm::iterator_range<updates_const_iterator> updates_const_range;
+  typedef llvm37::iterator_range<updates_iterator> updates_range;
+  typedef llvm37::iterator_range<updates_const_iterator> updates_const_range;
 
   updates_range updates() {
     return updates_range(getUpdates().begin(), getUpdates().end());
@@ -1741,8 +1741,8 @@ public:
 
   typedef MutableArrayRef<Expr *>::iterator finals_iterator;
   typedef ArrayRef<const Expr *>::iterator finals_const_iterator;
-  typedef llvm::iterator_range<finals_iterator> finals_range;
-  typedef llvm::iterator_range<finals_const_iterator> finals_const_range;
+  typedef llvm37::iterator_range<finals_iterator> finals_range;
+  typedef llvm37::iterator_range<finals_const_iterator> finals_const_range;
 
   finals_range finals() {
     return finals_range(getFinals().begin(), getFinals().end());
@@ -1900,7 +1900,7 @@ class OMPCopyinClause : public OMPVarListClause<OMPCopyinClause> {
     return MutableArrayRef<Expr *>(varlist_end(), varlist_size());
   }
   ArrayRef<const Expr *> getSourceExprs() const {
-    return llvm::makeArrayRef(varlist_end(), varlist_size());
+    return llvm37::makeArrayRef(varlist_end(), varlist_size());
   }
 
   /// \brief Set list of helper expressions, required for proper codegen of the
@@ -1913,7 +1913,7 @@ class OMPCopyinClause : public OMPVarListClause<OMPCopyinClause> {
     return MutableArrayRef<Expr *>(getSourceExprs().end(), varlist_size());
   }
   ArrayRef<const Expr *> getDestinationExprs() const {
-    return llvm::makeArrayRef(getSourceExprs().end(), varlist_size());
+    return llvm37::makeArrayRef(getSourceExprs().end(), varlist_size());
   }
 
   /// \brief Set list of helper assignment expressions, required for proper
@@ -1927,7 +1927,7 @@ class OMPCopyinClause : public OMPVarListClause<OMPCopyinClause> {
     return MutableArrayRef<Expr *>(getDestinationExprs().end(), varlist_size());
   }
   ArrayRef<const Expr *> getAssignmentOps() const {
-    return llvm::makeArrayRef(getDestinationExprs().end(), varlist_size());
+    return llvm37::makeArrayRef(getDestinationExprs().end(), varlist_size());
   }
 
 public:
@@ -1966,8 +1966,8 @@ public:
 
   typedef MutableArrayRef<Expr *>::iterator helper_expr_iterator;
   typedef ArrayRef<const Expr *>::iterator helper_expr_const_iterator;
-  typedef llvm::iterator_range<helper_expr_iterator> helper_expr_range;
-  typedef llvm::iterator_range<helper_expr_const_iterator>
+  typedef llvm37::iterator_range<helper_expr_iterator> helper_expr_range;
+  typedef llvm37::iterator_range<helper_expr_const_iterator>
       helper_expr_const_range;
 
   helper_expr_const_range source_exprs() const {
@@ -2046,7 +2046,7 @@ class OMPCopyprivateClause : public OMPVarListClause<OMPCopyprivateClause> {
     return MutableArrayRef<Expr *>(varlist_end(), varlist_size());
   }
   ArrayRef<const Expr *> getSourceExprs() const {
-    return llvm::makeArrayRef(varlist_end(), varlist_size());
+    return llvm37::makeArrayRef(varlist_end(), varlist_size());
   }
 
   /// \brief Set list of helper expressions, required for proper codegen of the
@@ -2059,7 +2059,7 @@ class OMPCopyprivateClause : public OMPVarListClause<OMPCopyprivateClause> {
     return MutableArrayRef<Expr *>(getSourceExprs().end(), varlist_size());
   }
   ArrayRef<const Expr *> getDestinationExprs() const {
-    return llvm::makeArrayRef(getSourceExprs().end(), varlist_size());
+    return llvm37::makeArrayRef(getSourceExprs().end(), varlist_size());
   }
 
   /// \brief Set list of helper assignment expressions, required for proper
@@ -2073,7 +2073,7 @@ class OMPCopyprivateClause : public OMPVarListClause<OMPCopyprivateClause> {
     return MutableArrayRef<Expr *>(getDestinationExprs().end(), varlist_size());
   }
   ArrayRef<const Expr *> getAssignmentOps() const {
-    return llvm::makeArrayRef(getDestinationExprs().end(), varlist_size());
+    return llvm37::makeArrayRef(getDestinationExprs().end(), varlist_size());
   }
 
 public:
@@ -2111,8 +2111,8 @@ public:
 
   typedef MutableArrayRef<Expr *>::iterator helper_expr_iterator;
   typedef ArrayRef<const Expr *>::iterator helper_expr_const_iterator;
-  typedef llvm::iterator_range<helper_expr_iterator> helper_expr_range;
-  typedef llvm::iterator_range<helper_expr_const_iterator>
+  typedef llvm37::iterator_range<helper_expr_iterator> helper_expr_range;
+  typedef llvm37::iterator_range<helper_expr_const_iterator>
       helper_expr_const_range;
 
   helper_expr_const_range source_exprs() const {

@@ -11,9 +11,9 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Support/Allocator.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/WindowsError.h"
+#include "llvm37/Support/Allocator.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/WindowsError.h"
 #include <malloc.h>
 
 // The Windows.h header must be after LLVM and standard headers.
@@ -46,7 +46,7 @@
 #  define _HEAPOK (-2)
 #endif
 
-using namespace llvm;
+using namespace llvm37;
 using namespace sys;
 
 static TimeValue getTimeValueFromFILETIME(FILETIME Time) {
@@ -214,7 +214,7 @@ WildcardExpand(const wchar_t *Arg, SmallVectorImpl<const char *> &Args,
       break;
 
     // Push the filename onto Dir, and remove it afterwards.
-    llvm::sys::path::append(Dir, StringRef(FileName.data(), FileName.size()));
+    llvm37::sys::path::append(Dir, StringRef(FileName.data(), FileName.size()));
     AllocateAndPush(Dir, Args, Allocator);
     Dir.resize(DirSize);
   } while (FindNextFileW(FindHandle, &FileData));
@@ -266,7 +266,7 @@ std::error_code Process::FixupStandardFileDescriptors() {
 }
 
 std::error_code Process::SafelyCloseFileDescriptor(int FD) {
-  if (llvm::sys::fs::msf_close(FD) < 0) // HLSL Change
+  if (llvm37::sys::fs::msf_close(FD) < 0) // HLSL Change
     return std::error_code(errno, std::generic_category());
   return std::error_code();
 }
@@ -440,7 +440,7 @@ const char *Process::ResetColor() {
 #ifdef MSFT_SUPPORTS_ANSI_ESCAPE_CODES
   if (UseANSI) return "\033[0m";
 #endif
-  ::llvm::sys::fs::GetCurrentThreadFileSystem()->ResetConsoleOutputTextAttributes();
+  ::llvm37::sys::fs::GetCurrentThreadFileSystem()->ResetConsoleOutputTextAttributes();
   return 0;
 }
 

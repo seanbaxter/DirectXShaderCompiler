@@ -12,8 +12,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_SEMA_SEMA_H
-#define LLVM_CLANG_SEMA_SEMA_H
+#ifndef LLVM37_CLANG_SEMA_SEMA_H
+#define LLVM37_CLANG_SEMA_SEMA_H
 
 #include "clang/AST/Attr.h"
 #include "clang/AST/DeclarationName.h"
@@ -42,12 +42,12 @@
 #include "clang/Sema/ScopeInfo.h"
 #include "clang/Sema/TypoCorrection.h"
 #include "clang/Sema/Weak.h"
-#include "llvm/ADT/ArrayRef.h"
-#include "llvm/ADT/Optional.h"
-#include "llvm/ADT/SetVector.h"
-#include "llvm/ADT/SmallPtrSet.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/ADT/TinyPtrVector.h"
+#include "llvm37/ADT/ArrayRef.h"
+#include "llvm37/ADT/Optional.h"
+#include "llvm37/ADT/SetVector.h"
+#include "llvm37/ADT/SmallPtrSet.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/ADT/TinyPtrVector.h"
 #include <deque>
 #include <memory>
 #include <string>
@@ -55,14 +55,14 @@
 
 // HLSL Change Starts
 
-#include "llvm/Support/OacrIgnoreCond.h" // HLSL Change - all sema use is heavily language-dependant
+#include "llvm37/Support/OacrIgnoreCond.h" // HLSL Change - all sema use is heavily language-dependant
 
 namespace hlsl {
   struct UnusualAnnotation;
 }
 // HLSL Change Ends
 
-namespace llvm {
+namespace llvm37 {
   class APSInt;
   template <typename ValueT> struct DenseMapInfo;
   template <typename ValueT, typename ValueInfoT> class DenseSet;
@@ -216,7 +216,7 @@ namespace threadSafety {
 
 // FIXME: No way to easily map from TemplateTypeParmTypes to
 // TemplateTypeParmDecls, so we have this horrible PointerUnion.
-typedef std::pair<llvm::PointerUnion<const TemplateTypeParmType*, NamedDecl*>,
+typedef std::pair<llvm37::PointerUnion<const TemplateTypeParmType*, NamedDecl*>,
                   SourceLocation> UnexpandedParameterPack;
 
 /// Describes whether we've seen any nullability information for the given
@@ -237,7 +237,7 @@ struct FileNullability {
 /// information in that file.
 class FileNullabilityMap {
   /// A mapping from file IDs to the nullability information for each file ID.
-  llvm::DenseMap<FileID, FileNullability> Map;
+  llvm37::DenseMap<FileID, FileNullability> Map;
 
   /// A single-element cache based on the file ID.
   struct {
@@ -378,10 +378,10 @@ public:
   template<typename ValueType>
   struct PragmaStack {
     struct Slot {
-      llvm::StringRef StackSlotLabel;
+      llvm37::StringRef StackSlotLabel;
       ValueType Value;
       SourceLocation PragmaLocation;
-      Slot(llvm::StringRef StackSlotLabel,
+      Slot(llvm37::StringRef StackSlotLabel,
            ValueType Value,
            SourceLocation PragmaLocation)
         : StackSlotLabel(StackSlotLabel), Value(Value),
@@ -389,7 +389,7 @@ public:
     };
     void Act(SourceLocation PragmaLocation,
              PragmaMsStackAction Action,
-             llvm::StringRef StackSlotLabel,
+             llvm37::StringRef StackSlotLabel,
              ValueType Value);
     explicit PragmaStack(const ValueType &Value)
       : CurrentValue(Value) {}
@@ -440,7 +440,7 @@ public:
   ///  and discarded value conversions have been applied to all subexpressions 
   ///  of the enclosing full expression.  This is cleared at the end of each 
   ///  full expression. 
-  llvm::SmallPtrSet<Expr*, 2> MaybeODRUseExprs;
+  llvm37::SmallPtrSet<Expr*, 2> MaybeODRUseExprs;
 
   /// \brief Stack containing information about each of the nested
   /// function, block, and method scopes that are currently active.
@@ -462,13 +462,13 @@ public:
   /// FieldCollector - Collects CXXFieldDecls during parsing of C++ classes.
   std::unique_ptr<CXXFieldCollector> FieldCollector;
 
-  typedef llvm::SmallSetVector<const NamedDecl*, 16> NamedDeclSetType;
+  typedef llvm37::SmallSetVector<const NamedDecl*, 16> NamedDeclSetType;
 
   /// \brief Set containing all declared private fields that are not used.
   NamedDeclSetType UnusedPrivateFields;
 
   /// \brief Set containing all typedefs that are likely unused.
-  llvm::SmallSetVector<const TypedefNameDecl *, 4>
+  llvm37::SmallSetVector<const TypedefNameDecl *, 4>
       UnusedLocalTypedefNameCandidates;
 
   /// \brief Delete-expressions to be analyzed at the end of translation unit
@@ -477,10 +477,10 @@ public:
   /// that could not be proven as to whether they mismatch with new-expression
   /// used in initializer of the field.
   typedef std::pair<SourceLocation, bool> DeleteExprLoc;
-  typedef llvm::SmallVector<DeleteExprLoc, 4> DeleteLocs;
-  llvm::MapVector<FieldDecl *, DeleteLocs> DeleteExprs;
+  typedef llvm37::SmallVector<DeleteExprLoc, 4> DeleteLocs;
+  llvm37::MapVector<FieldDecl *, DeleteLocs> DeleteExprs;
 
-  typedef llvm::SmallPtrSet<const CXXRecordDecl*, 8> RecordDeclSetTy;
+  typedef llvm37::SmallPtrSet<const CXXRecordDecl*, 8> RecordDeclSetTy;
 
   /// PureVirtualClassDiagSet - a set of class declarations which we have
   /// emitted a list of pure virtual functions. Used to prevent emitting the
@@ -489,7 +489,7 @@ public:
 
   /// ParsingInitForAutoVars - a set of declarations with auto types for which
   /// we are currently parsing the initializer.
-  llvm::SmallPtrSet<const Decl*, 4> ParsingInitForAutoVars;
+  llvm37::SmallPtrSet<const Decl*, 4> ParsingInitForAutoVars;
 
   /// \brief Look for a locally scoped extern "C" declaration by the given name.
   NamedDecl *findLocallyScopedExternCDecl(DeclarationName Name);
@@ -533,7 +533,7 @@ public:
   SmallVector<std::pair<CXXMethodDecl*, const FunctionProtoType*>, 2>
     DelayedDefaultedMemberExceptionSpecs;
 
-  typedef llvm::MapVector<const FunctionDecl *, LateParsedTemplate *>
+  typedef llvm37::MapVector<const FunctionDecl *, LateParsedTemplate *>
       LateParsedTemplateMapT;
   LateParsedTemplateMapT LateParsedTemplateMap;
 
@@ -670,13 +670,13 @@ public:
   /// WeakUndeclaredIdentifiers - Identifiers contained in
   /// \#pragma weak before declared. rare. may alias another
   /// identifier, declared or undeclared
-  llvm::MapVector<IdentifierInfo *, WeakInfo> WeakUndeclaredIdentifiers;
+  llvm37::MapVector<IdentifierInfo *, WeakInfo> WeakUndeclaredIdentifiers;
 
   /// ExtnameUndeclaredIdentifiers - Identifiers contained in
   /// \#pragma redefine_extname before declared.  Used in Solaris system headers
   /// to define functions that occur in multiple standards to call the version
   /// in the currently selected standard.
-  llvm::DenseMap<IdentifierInfo*,AsmLabelAttr*> ExtnameUndeclaredIdentifiers;
+  llvm37::DenseMap<IdentifierInfo*,AsmLabelAttr*> ExtnameUndeclaredIdentifiers;
 
 
   /// \brief Load weak undeclared identifiers from the external source.
@@ -828,7 +828,7 @@ public:
     /// context (i.e. the number of TypoExprs created).
     unsigned NumTypos;
 
-    llvm::SmallPtrSet<Expr*, 2> SavedMaybeODRUseExprs;
+    llvm37::SmallPtrSet<Expr*, 2> SavedMaybeODRUseExprs;
 
     /// \brief The lambdas that are present within this context, if it
     /// is indeed an unevaluated context.
@@ -893,7 +893,7 @@ public:
   ///
   /// This is basically a wrapper around PointerIntPair. The lowest bits of the
   /// integer are used to determine whether overload resolution succeeded.
-  class SpecialMemberOverloadResult : public llvm::FastFoldingSetNode {
+  class SpecialMemberOverloadResult : public llvm37::FastFoldingSetNode {
   public:
     enum Kind {
       NoMemberOrDeleted,
@@ -902,10 +902,10 @@ public:
     };
 
   private:
-    llvm::PointerIntPair<CXXMethodDecl*, 2> Pair;
+    llvm37::PointerIntPair<CXXMethodDecl*, 2> Pair;
 
   public:
-    SpecialMemberOverloadResult(const llvm::FoldingSetNodeID &ID)
+    SpecialMemberOverloadResult(const llvm37::FoldingSetNodeID &ID)
       : FastFoldingSetNode(ID)
     {}
 
@@ -918,7 +918,7 @@ public:
 
   /// \brief A cache of special member function overload resolution results
   /// for C++ records.
-  llvm::FoldingSet<SpecialMemberOverloadResult> SpecialMemberCache;
+  llvm37::FoldingSet<SpecialMemberOverloadResult> SpecialMemberCache;
 
   /// \brief The kind of translation unit we are processing.
   ///
@@ -929,12 +929,12 @@ public:
   /// checks.
   TranslationUnitKind TUKind;
 
-  llvm::BumpPtrAllocator BumpAlloc;
+  llvm37::BumpPtrAllocator BumpAlloc;
 
   /// \brief The number of SFINAE diagnostics that have been trapped.
   unsigned NumSFINAEErrors;
 
-  typedef llvm::DenseMap<ParmVarDecl *, llvm::TinyPtrVector<ParmVarDecl *>>
+  typedef llvm37::DenseMap<ParmVarDecl *, llvm37::TinyPtrVector<ParmVarDecl *>>
     UnparsedDefaultArgInstantiationsMap;
 
   /// \brief A mapping from parameters with unparsed default arguments to the
@@ -948,11 +948,11 @@ public:
 
   // Contains the locations of the beginning of unparsed default
   // argument locations.
-  llvm::DenseMap<ParmVarDecl *, SourceLocation> UnparsedDefaultArgLocs;
+  llvm37::DenseMap<ParmVarDecl *, SourceLocation> UnparsedDefaultArgLocs;
 
   /// UndefinedInternals - all the used, undefined objects which require a
   /// definition in this translation unit.
-  llvm::DenseMap<NamedDecl *, SourceLocation> UndefinedButUsed;
+  llvm37::DenseMap<NamedDecl *, SourceLocation> UndefinedButUsed;
 
   /// Obtain a sorted list of functions that are undefined but ODR-used.
   void getUndefinedButUsed(
@@ -960,11 +960,11 @@ public:
 
   /// Retrieves list of suspicious delete-expressions that will be checked at
   /// the end of translation unit.
-  const llvm::MapVector<FieldDecl *, DeleteLocs> &
+  const llvm37::MapVector<FieldDecl *, DeleteLocs> &
   getMismatchingDeleteExpressions() const;
 
   typedef std::pair<ObjCMethodList, ObjCMethodList> GlobalMethods;
-  typedef llvm::DenseMap<Selector, GlobalMethods> GlobalMethodPool;
+  typedef llvm37::DenseMap<Selector, GlobalMethods> GlobalMethodPool;
 
   /// Method Pool - allows efficient lookup when typechecking messages to "id".
   /// We need to maintain a list, since selectors can have differing signatures
@@ -976,7 +976,7 @@ public:
 
   /// Method selectors used in a \@selector expression. Used for implementation
   /// of -Wselector.
-  llvm::MapVector<Selector, SourceLocation> ReferencedSelectors;
+  llvm37::MapVector<Selector, SourceLocation> ReferencedSelectors;
 
   /// Kinds of C++ special members.
   enum CXXSpecialMember {
@@ -994,7 +994,7 @@ public:
   /// The C++ special members which we are currently in the process of
   /// declaring. If this process recursively triggers the declaration of the
   /// same special member, we should act as if it is not yet declared.
-  llvm::SmallSet<SpecialMemberDecl, 4> SpecialMembersBeingDeclared;
+  llvm37::SmallSet<SpecialMemberDecl, 4> SpecialMembersBeingDeclared;
 
   void ReadMethodPool(Selector Sel);
 
@@ -1343,7 +1343,7 @@ public:
 
     template <std::size_t... Is>
     void emit(const SemaDiagnosticBuilder &DB,
-              llvm::index_sequence<Is...>) const {
+              llvm37::index_sequence<Is...>) const {
       // Apply all tuple elements to the builder in order.
       bool Dummy[] = {(DB << getPrintable(std::get<Is>(Args)))...};
       (void)Dummy;
@@ -1357,7 +1357,7 @@ public:
       if (Suppressed)
         return;
       const SemaDiagnosticBuilder &DB = S.Diag(Loc, DiagID);
-      emit(DB, llvm::index_sequence_for<Ts...>());
+      emit(DB, llvm37::index_sequence_for<Ts...>());
       DB << T;
     }
   };
@@ -1367,7 +1367,7 @@ private:
                            TypeDiagnoser &Diagnoser);
 
   VisibleModuleSet VisibleModules;
-  llvm::SmallVector<VisibleModuleSet, 16> VisibleModulesStack;
+  llvm37::SmallVector<VisibleModuleSet, 16> VisibleModulesStack;
 
   Module *CachedFakeTopLevelModule;
 
@@ -1399,7 +1399,7 @@ public:
   /// Determine if the template parameter \p D has a visible default argument.
   bool
   hasVisibleDefaultArgument(const NamedDecl *D,
-                            llvm::SmallVectorImpl<Module *> *Modules = nullptr);
+                            llvm37::SmallVectorImpl<Module *> *Modules = nullptr);
 
   bool RequireCompleteType(SourceLocation Loc, QualType T,
                            TypeDiagnoser &Diagnoser);
@@ -2249,7 +2249,7 @@ public:
     CCEK_NewExpr      ///< Constant expression in a noptr-new-declarator.
   };
   ExprResult CheckConvertedConstantExpression(Expr *From, QualType T,
-                                              llvm::APSInt &Value, CCEKind CCE);
+                                              llvm37::APSInt &Value, CCEKind CCE);
   ExprResult CheckConvertedConstantExpression(Expr *From, QualType T,
                                               APValue &Value, CCEKind CCE);
 
@@ -2358,8 +2358,8 @@ public:
 
   // Members have to be NamespaceDecl* or TranslationUnitDecl*.
   // TODO: make this is a typesafe union.
-  typedef llvm::SmallPtrSet<DeclContext   *, 16> AssociatedNamespaceSet;
-  typedef llvm::SmallPtrSet<CXXRecordDecl *, 16> AssociatedClassSet;
+  typedef llvm37::SmallPtrSet<DeclContext   *, 16> AssociatedNamespaceSet;
+  typedef llvm37::SmallPtrSet<CXXRecordDecl *, 16> AssociatedClassSet;
 
   void AddOverloadCandidate(FunctionDecl *Function,
                             DeclAccessPair FoundDecl,
@@ -2698,12 +2698,12 @@ private:
     TypoDiagnosticGenerator DiagHandler;
     TypoRecoveryCallback RecoveryHandler;
     TypoExprState();
-    TypoExprState(TypoExprState&& other) LLVM_NOEXCEPT;
-    TypoExprState& operator=(TypoExprState&& other) LLVM_NOEXCEPT;
+    TypoExprState(TypoExprState&& other) LLVM37_NOEXCEPT;
+    TypoExprState& operator=(TypoExprState&& other) LLVM37_NOEXCEPT;
   };
 
   /// \brief The set of unhandled TypoExprs and their associated state.
-  llvm::MapVector<TypoExpr *, TypoExprState> DelayedTypos;
+  llvm37::MapVector<TypoExpr *, TypoExprState> DelayedTypos;
 
   /// \brief Creates a new TypoExpr AST node.
   TypoExpr *createDelayedTypo(std::unique_ptr<TypoCorrectionConsumer> TCC,
@@ -2714,7 +2714,7 @@ private:
   //
   // The boolean value will be true to indicate that the namespace was loaded
   // from an AST/PCH file, or false otherwise.
-  llvm::MapVector<NamespaceDecl*, bool> KnownNamespaces;
+  llvm37::MapVector<NamespaceDecl*, bool> KnownNamespaces;
 
   /// \brief Whether we have already loaded known namespaces from an extenal
   /// source.
@@ -2843,25 +2843,25 @@ public:
   /// combinations of corrections will be tried until all are exhausted.
   ExprResult
   CorrectDelayedTyposInExpr(Expr *E, VarDecl *InitDecl = nullptr,
-                            llvm::function_ref<ExprResult(Expr *)> Filter =
+                            llvm37::function_ref<ExprResult(Expr *)> Filter =
                                 [](Expr *E) -> ExprResult { return E; });
 
   ExprResult
   CorrectDelayedTyposInExpr(Expr *E,
-                            llvm::function_ref<ExprResult(Expr *)> Filter) {
+                            llvm37::function_ref<ExprResult(Expr *)> Filter) {
     return CorrectDelayedTyposInExpr(E, nullptr, Filter);
   }
 
   ExprResult
   CorrectDelayedTyposInExpr(ExprResult ER, VarDecl *InitDecl = nullptr,
-                            llvm::function_ref<ExprResult(Expr *)> Filter =
+                            llvm37::function_ref<ExprResult(Expr *)> Filter =
                                 [](Expr *E) -> ExprResult { return E; }) {
     return ER.isInvalid() ? ER : CorrectDelayedTyposInExpr(ER.get(), Filter);
   }
 
   ExprResult
   CorrectDelayedTyposInExpr(ExprResult ER,
-                            llvm::function_ref<ExprResult(Expr *)> Filter) {
+                            llvm37::function_ref<ExprResult(Expr *)> Filter) {
     return CorrectDelayedTyposInExpr(ER, nullptr, Filter);
   }
 
@@ -2980,8 +2980,8 @@ public:
                              ObjCMethodDecl *MethodDecl,
                              bool IsProtocolMethodDecl);
 
-  typedef llvm::SmallPtrSet<Selector, 8> SelectorSet;
-  typedef llvm::DenseMap<Selector, ObjCMethodDecl*> ProtocolsMethodsMap;
+  typedef llvm37::SmallPtrSet<Selector, 8> SelectorSet;
+  typedef llvm37::DenseMap<Selector, ObjCMethodDecl*> ProtocolsMethodsMap;
 
   /// CheckImplementationIvars - This routine checks if the instance variables
   /// listed in the implelementation match those listed in the interface.
@@ -3389,7 +3389,7 @@ public:
   ExprResult LookupInlineAsmIdentifier(CXXScopeSpec &SS,
                                        SourceLocation TemplateKWLoc,
                                        UnqualifiedId &Id,
-                                       llvm::InlineAsmIdentifierInfo &Info,
+                                       llvm37::InlineAsmIdentifierInfo &Info,
                                        bool IsUnevaluatedContext);
   bool LookupInlineAsmField(StringRef Base, StringRef Member,
                             unsigned &Offset, SourceLocation AsmLoc);
@@ -4060,7 +4060,7 @@ public:
   //===---------------------------- HLSL Features -------------------------===//
 
   /// cbuffer/tbuffer
-  llvm::SmallVector<Decl*, 1> HLSLBuffers;
+  llvm37::SmallVector<Decl*, 1> HLSLBuffers;
   Decl* ActOnStartHLSLBuffer(Scope* bufferScope, bool cbuffer, SourceLocation KwLoc,
     IdentifierInfo *Ident, SourceLocation IdentLoc,
     std::vector<hlsl::UnusualAnnotation *>& BufferAttributes,
@@ -4214,7 +4214,7 @@ public:
     // Finally no specification, which is expressed as noexcept(false).
     // throw(...) is used instead if any called function uses it.
     ExceptionSpecificationType ComputedEST;
-    llvm::SmallPtrSet<CanQualType, 4> ExceptionsSeen;
+    llvm37::SmallPtrSet<CanQualType, 4> ExceptionsSeen;
     SmallVector<QualType, 4> Exceptions;
 
     void ClearExceptions() {
@@ -5227,7 +5227,7 @@ public:
   /// this translation unit, and a bit that will be true if the vtable is
   /// required to be emitted (otherwise, it should be emitted only if needed
   /// by code generation).
-  llvm::DenseMap<CXXRecordDecl *, bool> VTablesUsed;
+  llvm37::DenseMap<CXXRecordDecl *, bool> VTablesUsed;
 
   /// \brief Load any externally-stored vtable uses.
   void LoadExternalVTableUses();
@@ -6425,15 +6425,15 @@ public:
   void MarkUsedTemplateParameters(const TemplateArgumentList &TemplateArgs,
                                   bool OnlyDeduced,
                                   unsigned Depth,
-                                  llvm::SmallBitVector &Used);
+                                  llvm37::SmallBitVector &Used);
   void MarkDeducedTemplateParameters(
                                   const FunctionTemplateDecl *FunctionTemplate,
-                                  llvm::SmallBitVector &Deduced) {
+                                  llvm37::SmallBitVector &Deduced) {
     return MarkDeducedTemplateParameters(Context, FunctionTemplate, Deduced);
   }
   static void MarkDeducedTemplateParameters(ASTContext &Ctx,
                                   const FunctionTemplateDecl *FunctionTemplate,
-                                  llvm::SmallBitVector &Deduced);
+                                  llvm37::SmallBitVector &Deduced);
 
   //===--------------------------------------------------------------------===//
   // C++ Template Instantiation
@@ -6575,12 +6575,12 @@ public:
   /// \brief Cache of additional modules that should be used for name lookup
   /// within the current template instantiation. Computed lazily; use
   /// getLookupModules() to get a complete set.
-  llvm::DenseSet<Module*> LookupModulesCache;
+  llvm37::DenseSet<Module*> LookupModulesCache;
 
   /// \brief Get the set of additional modules that should be checked during
   /// name lookup. A module and its imports become visible when instanting a
   /// template defined within it.
-  llvm::DenseSet<Module*> &getLookupModules();
+  llvm37::DenseSet<Module*> &getLookupModules();
 
   /// \brief Whether we are in a SFINAE context that is not associated with
   /// template instantiation.
@@ -6643,7 +6643,7 @@ public:
   /// deduction.
   ///
   /// FIXME: Serialize this structure to the AST file.
-  typedef llvm::DenseMap<Decl *, SmallVector<PartialDiagnosticAt, 1> >
+  typedef llvm37::DenseMap<Decl *, SmallVector<PartialDiagnosticAt, 1> >
     SuppressedDiagnosticsMap;
   SuppressedDiagnosticsMap SuppressedDiagnostics;
 
@@ -6850,8 +6850,8 @@ public:
   /// \brief The number of typos corrected by CorrectTypo.
   unsigned TyposCorrected;
 
-  typedef llvm::SmallSet<SourceLocation, 2> SrcLocSet;
-  typedef llvm::DenseMap<IdentifierInfo *, SrcLocSet> IdentifierSourceLocations;
+  typedef llvm37::SmallSet<SourceLocation, 2> SrcLocSet;
+  typedef llvm37::DenseMap<IdentifierInfo *, SrcLocSet> IdentifierSourceLocations;
 
   /// \brief A cache containing identifiers for which typo correction failed and
   /// their locations, so that repeated attempts to correct an identifier in a
@@ -7605,9 +7605,9 @@ public:
   /// \brief Called on well formed \#pragma bss_seg/data_seg/const_seg/code_seg.
   void ActOnPragmaMSSeg(SourceLocation PragmaLocation,
                         PragmaMsStackAction Action,
-                        llvm::StringRef StackSlotLabel,
+                        llvm37::StringRef StackSlotLabel,
                         StringLiteral *SegmentName,
-                        llvm::StringRef PragmaName);
+                        llvm37::StringRef PragmaName);
 
   /// \brief Called on well formed \#pragma section().
   void ActOnPragmaMSSection(SourceLocation PragmaLocation,
@@ -7805,19 +7805,19 @@ public:
   StmtResult ActOnOpenMPSimdDirective(
       ArrayRef<OMPClause *> Clauses, Stmt *AStmt, SourceLocation StartLoc,
       SourceLocation EndLoc,
-      llvm::DenseMap<VarDecl *, Expr *> &VarsWithImplicitDSA);
+      llvm37::DenseMap<VarDecl *, Expr *> &VarsWithImplicitDSA);
   /// \brief Called on well-formed '\#pragma omp for' after parsing
   /// of the associated statement.
   StmtResult ActOnOpenMPForDirective(
       ArrayRef<OMPClause *> Clauses, Stmt *AStmt, SourceLocation StartLoc,
       SourceLocation EndLoc,
-      llvm::DenseMap<VarDecl *, Expr *> &VarsWithImplicitDSA);
+      llvm37::DenseMap<VarDecl *, Expr *> &VarsWithImplicitDSA);
   /// \brief Called on well-formed '\#pragma omp for simd' after parsing
   /// of the associated statement.
   StmtResult ActOnOpenMPForSimdDirective(
       ArrayRef<OMPClause *> Clauses, Stmt *AStmt, SourceLocation StartLoc,
       SourceLocation EndLoc,
-      llvm::DenseMap<VarDecl *, Expr *> &VarsWithImplicitDSA);
+      llvm37::DenseMap<VarDecl *, Expr *> &VarsWithImplicitDSA);
   /// \brief Called on well-formed '\#pragma omp sections' after parsing
   /// of the associated statement.
   StmtResult ActOnOpenMPSectionsDirective(ArrayRef<OMPClause *> Clauses,
@@ -7846,13 +7846,13 @@ public:
   StmtResult ActOnOpenMPParallelForDirective(
       ArrayRef<OMPClause *> Clauses, Stmt *AStmt, SourceLocation StartLoc,
       SourceLocation EndLoc,
-      llvm::DenseMap<VarDecl *, Expr *> &VarsWithImplicitDSA);
+      llvm37::DenseMap<VarDecl *, Expr *> &VarsWithImplicitDSA);
   /// \brief Called on well-formed '\#pragma omp parallel for simd' after
   /// parsing of the  associated statement.
   StmtResult ActOnOpenMPParallelForSimdDirective(
       ArrayRef<OMPClause *> Clauses, Stmt *AStmt, SourceLocation StartLoc,
       SourceLocation EndLoc,
-      llvm::DenseMap<VarDecl *, Expr *> &VarsWithImplicitDSA);
+      llvm37::DenseMap<VarDecl *, Expr *> &VarsWithImplicitDSA);
   /// \brief Called on well-formed '\#pragma omp parallel sections' after
   /// parsing of the  associated statement.
   StmtResult ActOnOpenMPParallelSectionsDirective(ArrayRef<OMPClause *> Clauses,
@@ -8270,7 +8270,7 @@ public:
   /// IsValueInFlagEnum - Determine if a value is allowed as part of a flag
   /// enum. If AllowMask is true, then we also allow the complement of a valid
   /// value, to be used as a mask.
-  bool IsValueInFlagEnum(const EnumDecl *ED, const llvm::APInt &Val,
+  bool IsValueInFlagEnum(const EnumDecl *ED, const llvm37::APInt &Val,
                          bool AllowMask) const;
 
   /// DiagnoseAssignmentEnum - Warn if assignment to enum is a constant
@@ -8564,7 +8564,7 @@ public:
   /// ConvertIntegerToTypeWarnOnOverflow - Convert the specified APInt to have
   /// the specified width and sign.  If an overflow occurs, detect it and emit
   /// the specified diagnostic.
-  void ConvertIntegerToTypeWarnOnOverflow(llvm::APSInt &OldVal,
+  void ConvertIntegerToTypeWarnOnOverflow(llvm37::APSInt &OldVal,
                                           unsigned NewWidth, bool NewSign,
                                           SourceLocation Loc, unsigned DiagID);
 
@@ -8589,14 +8589,14 @@ public:
   /// VerifyIntegerConstantExpression - Verifies that an expression is an ICE,
   /// and reports the appropriate diagnostics. Returns false on success.
   /// Can optionally return the value of the expression.
-  ExprResult VerifyIntegerConstantExpression(Expr *E, llvm::APSInt *Result,
+  ExprResult VerifyIntegerConstantExpression(Expr *E, llvm37::APSInt *Result,
                                              VerifyICEDiagnoser &Diagnoser,
                                              bool AllowFold = true);
-  ExprResult VerifyIntegerConstantExpression(Expr *E, llvm::APSInt *Result,
+  ExprResult VerifyIntegerConstantExpression(Expr *E, llvm37::APSInt *Result,
                                              unsigned DiagID,
                                              bool AllowFold = true);
   ExprResult VerifyIntegerConstantExpression(Expr *E,
-                                             llvm::APSInt *Result = nullptr);
+                                             llvm37::APSInt *Result = nullptr);
 
   /// VerifyBitField - verifies that a bit field expression is an ICE and has
   /// the correct width, and that the field type is valid.
@@ -8866,7 +8866,7 @@ private:
   ExprResult SemaAtomicOpsOverloaded(ExprResult TheCallResult,
                                      AtomicExpr::AtomicOp Op);
   bool SemaBuiltinConstantArg(CallExpr *TheCall, int ArgNum,
-                              llvm::APSInt &Result);
+                              llvm37::APSInt &Result);
   bool SemaBuiltinConstantArgRange(CallExpr *TheCall, int ArgNum,
                                    int Low, int High);
   bool SemaBuiltinARMSpecialReg(unsigned BuiltinID, CallExpr *TheCall,
@@ -8892,7 +8892,7 @@ public:
                          unsigned format_idx, unsigned firstDataArg,
                          FormatStringType Type, bool inFunctionCall,
                          VariadicCallType CallType,
-                         llvm::SmallBitVector &CheckedVarArgs);
+                         llvm37::SmallBitVector &CheckedVarArgs);
   
   bool FormatStringHasSArg(const StringLiteral *FExpr);
   
@@ -8904,13 +8904,13 @@ private:
                             bool IsCXXMember,
                             VariadicCallType CallType,
                             SourceLocation Loc, SourceRange Range,
-                            llvm::SmallBitVector &CheckedVarArgs);
+                            llvm37::SmallBitVector &CheckedVarArgs);
   bool CheckFormatArguments(ArrayRef<const Expr *> Args,
                             bool HasVAListArg, unsigned format_idx,
                             unsigned firstDataArg, FormatStringType Type,
                             VariadicCallType CallType,
                             SourceLocation Loc, SourceRange range,
-                            llvm::SmallBitVector &CheckedVarArgs);
+                            llvm37::SmallBitVector &CheckedVarArgs);
 
   void CheckAbsoluteValueFunction(const CallExpr *Call,
                                   const FunctionDecl *FDecl,
@@ -8985,7 +8985,7 @@ public:
 
 private:
   /// \brief A map from magic value to type information.
-  std::unique_ptr<llvm::DenseMap<TypeTagMagicValue, TypeTagData>>
+  std::unique_ptr<llvm37::DenseMap<TypeTagMagicValue, TypeTagData>>
       TypeTagForDatatypeMagicValues;
 
   /// \brief Peform checks on a call of a function with argument_with_type_tag

@@ -7,16 +7,16 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Support/Process.h"
+#include "llvm37/Support/Process.h"
 #include "gtest/gtest.h"
 
-#ifdef LLVM_ON_WIN32
+#ifdef LLVM37_ON_WIN32
 #include <windows.h>
 #endif
 
 namespace {
 
-using namespace llvm;
+using namespace llvm37;
 using namespace sys;
 
 TEST(ProcessTest, GetRandomNumberTest) {
@@ -32,23 +32,23 @@ TEST(ProcessTest, GetRandomNumberTest) {
 
 #if HAVE_SETENV || _MSC_VER
 TEST(ProcessTest, Basic) {
-  setenv("__LLVM_TEST_ENVIRON_VAR__", "abc", true);
-  Optional<std::string> val(Process::GetEnv("__LLVM_TEST_ENVIRON_VAR__"));
+  setenv("__LLVM37_TEST_ENVIRON_VAR__", "abc", true);
+  Optional<std::string> val(Process::GetEnv("__LLVM37_TEST_ENVIRON_VAR__"));
   EXPECT_TRUE(val.hasValue());
   EXPECT_STREQ("abc", val->c_str());
 }
 
 TEST(ProcessTest, None) {
   Optional<std::string> val(
-      Process::GetEnv("__LLVM_TEST_ENVIRON_NO_SUCH_VAR__"));
+      Process::GetEnv("__LLVM37_TEST_ENVIRON_NO_SUCH_VAR__"));
   EXPECT_FALSE(val.hasValue());
 }
 #endif
 
-#ifdef LLVM_ON_WIN32
+#ifdef LLVM37_ON_WIN32
 TEST(ProcessTest, Wchar) {
-  SetEnvironmentVariableW(L"__LLVM_TEST_ENVIRON_VAR__", L"abcdefghijklmnopqrs");
-  Optional<std::string> val(Process::GetEnv("__LLVM_TEST_ENVIRON_VAR__"));
+  SetEnvironmentVariableW(L"__LLVM37_TEST_ENVIRON_VAR__", L"abcdefghijklmnopqrs");
+  Optional<std::string> val(Process::GetEnv("__LLVM37_TEST_ENVIRON_VAR__"));
   EXPECT_TRUE(val.hasValue());
   EXPECT_STREQ("abcdefghijklmnopqrs", val->c_str());
 }

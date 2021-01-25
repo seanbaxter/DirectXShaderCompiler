@@ -20,26 +20,26 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Transforms/Scalar.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/PostOrderIterator.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/SetVector.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/IR/CFG.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/DerivedTypes.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/IRBuilder.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/IR/ValueHandle.h"
-#include "llvm/Pass.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Transforms/Utils/Local.h"
+#include "llvm37/Transforms/Scalar.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/PostOrderIterator.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/SetVector.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/IR/CFG.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/DerivedTypes.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/IRBuilder.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/IR/ValueHandle.h"
+#include "llvm37/Pass.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Transforms/Utils/Local.h"
 #include <algorithm>
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "reassociate"
 
@@ -231,7 +231,7 @@ INITIALIZE_PASS(Reassociate, "reassociate",
                 "Reassociate expressions", false, false)
 
 // Public interface to the Reassociate pass
-FunctionPass *llvm::createReassociatePass() { return new Reassociate(); }
+FunctionPass *llvm37::createReassociatePass() { return new Reassociate(); }
 
 /// Return true if V is an instruction of the specified opcode and if it
 /// only has one use.

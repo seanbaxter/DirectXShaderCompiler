@@ -16,12 +16,12 @@
 
 #include "X86DisassemblerTables.h"
 #include "X86DisassemblerShared.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/Format.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/Format.h"
 #include <map>
 
-using namespace llvm;
+using namespace llvm37;
 using namespace X86Disassembler;
 
 /// stringForContext - Returns a string containing the name of a particular

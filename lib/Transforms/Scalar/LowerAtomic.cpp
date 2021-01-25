@@ -12,12 +12,12 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Transforms/Scalar.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/IRBuilder.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/Pass.h"
-using namespace llvm;
+#include "llvm37/Transforms/Scalar.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/IRBuilder.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/Pass.h"
+using namespace llvm37;
 
 #define DEBUG_TYPE "loweratomic"
 
@@ -145,4 +145,4 @@ INITIALIZE_PASS(LowerAtomic, "loweratomic",
                 "Lower atomic intrinsics to non-atomic form",
                 false, false)
 
-Pass *llvm::createLowerAtomicPass() { return new LowerAtomic(); }
+Pass *llvm37::createLowerAtomicPass() { return new LowerAtomic(); }

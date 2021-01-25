@@ -13,15 +13,15 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_CODEGEN_CGFUNCTIONINFO_H
-#define LLVM_CLANG_CODEGEN_CGFUNCTIONINFO_H
+#ifndef LLVM37_CLANG_CODEGEN_CGFUNCTIONINFO_H
+#define LLVM37_CLANG_CODEGEN_CGFUNCTIONINFO_H
 
 #include "clang/AST/CanonicalType.h"
 #include "clang/AST/Type.h"
-#include "llvm/ADT/FoldingSet.h"
+#include "llvm37/ADT/FoldingSet.h"
 #include <cassert>
 
-namespace llvm {
+namespace llvm37 {
   class Type;
   class StructType;
 }
@@ -73,8 +73,8 @@ public:
   };
 
 private:
-  llvm::Type *TypeData; // isDirect() || isExtend()
-  llvm::Type *PaddingType;
+  llvm37::Type *TypeData; // isDirect() || isExtend()
+  llvm37::Type *PaddingType;
   union {
     unsigned DirectOffset;     // isDirect() || isExtend()
     unsigned IndirectAlign;    // isIndirect()
@@ -97,8 +97,8 @@ public:
       : TypeData(nullptr), PaddingType(nullptr), DirectOffset(0),
         TheKind(Direct), PaddingInReg(false), InReg(false) {}
 
-  static ABIArgInfo getDirect(llvm::Type *T = nullptr, unsigned Offset = 0,
-                              llvm::Type *Padding = nullptr,
+  static ABIArgInfo getDirect(llvm37::Type *T = nullptr, unsigned Offset = 0,
+                              llvm37::Type *Padding = nullptr,
                               bool CanBeFlattened = true) {
     auto AI = ABIArgInfo(Direct);
     AI.setCoerceToType(T);
@@ -107,18 +107,18 @@ public:
     AI.setCanBeFlattened(CanBeFlattened);
     return AI;
   }
-  static ABIArgInfo getDirectInReg(llvm::Type *T = nullptr) {
+  static ABIArgInfo getDirectInReg(llvm37::Type *T = nullptr) {
     auto AI = getDirect(T);
     AI.setInReg(true);
     return AI;
   }
-  static ABIArgInfo getExtend(llvm::Type *T = nullptr) {
+  static ABIArgInfo getExtend(llvm37::Type *T = nullptr) {
     auto AI = ABIArgInfo(Extend);
     AI.setCoerceToType(T);
     AI.setDirectOffset(0);
     return AI;
   }
-  static ABIArgInfo getExtendInReg(llvm::Type *T = nullptr) {
+  static ABIArgInfo getExtendInReg(llvm37::Type *T = nullptr) {
     auto AI = getExtend(T);
     AI.setInReg(true);
     return AI;
@@ -128,7 +128,7 @@ public:
   }
   static ABIArgInfo getIndirect(unsigned Alignment, bool ByVal = true,
                                 bool Realign = false,
-                                llvm::Type *Padding = nullptr) {
+                                llvm37::Type *Padding = nullptr) {
     auto AI = ABIArgInfo(Indirect);
     AI.setIndirectAlign(Alignment);
     AI.setIndirectByVal(ByVal);
@@ -152,7 +152,7 @@ public:
     return ABIArgInfo(Expand);
   }
   static ABIArgInfo getExpandWithPadding(bool PaddingInReg,
-                                         llvm::Type *Padding) {
+                                         llvm37::Type *Padding) {
     auto AI = getExpand();
     AI.setPaddingInReg(PaddingInReg);
     AI.setPaddingType(Padding);
@@ -179,9 +179,9 @@ public:
     DirectOffset = Offset;
   }
 
-  llvm::Type *getPaddingType() const { return PaddingType; }
+  llvm37::Type *getPaddingType() const { return PaddingType; }
 
-  void setPaddingType(llvm::Type *T) { PaddingType = T; }
+  void setPaddingType(llvm37::Type *T) { PaddingType = T; }
 
   bool getPaddingInReg() const {
     return PaddingInReg;
@@ -190,12 +190,12 @@ public:
     PaddingInReg = PIR;
   }
 
-  llvm::Type *getCoerceToType() const {
+  llvm37::Type *getCoerceToType() const {
     assert(canHaveCoerceToType() && "Invalid kind!");
     return TypeData;
   }
 
-  void setCoerceToType(llvm::Type *T) {
+  void setCoerceToType(llvm37::Type *T) {
     assert(canHaveCoerceToType() && "Invalid kind!");
     TypeData = T;
   }
@@ -332,7 +332,7 @@ public:
 
 /// CGFunctionInfo - Class to encapsulate the information about a
 /// function definition.
-class CGFunctionInfo : public llvm::FoldingSetNode {
+class CGFunctionInfo : public llvm37::FoldingSetNode {
   struct ArgInfo {
     CanQualType type;
     ABIArgInfo info;
@@ -369,7 +369,7 @@ class CGFunctionInfo : public llvm::FoldingSetNode {
 
   /// The struct representing all arguments passed in memory.  Only used when
   /// passing non-trivial types with inalloca.  Not part of the profile.
-  llvm::StructType *ArgStruct;
+  llvm37::StructType *ArgStruct;
 
   unsigned NumArgs;
   ArgInfo *getArgsBuffer() {
@@ -393,8 +393,8 @@ public:
   typedef const ArgInfo *const_arg_iterator;
   typedef ArgInfo *arg_iterator;
 
-  typedef llvm::iterator_range<arg_iterator> arg_range;
-  typedef llvm::iterator_range<const_arg_iterator> arg_const_range;
+  typedef llvm37::iterator_range<arg_iterator> arg_range;
+  typedef llvm37::iterator_range<const_arg_iterator> arg_const_range;
 
   arg_range arguments() { return arg_range(arg_begin(), arg_end()); }
   arg_const_range arguments() const {
@@ -462,10 +462,10 @@ public:
   bool usesInAlloca() const { return ArgStruct; }
 
   /// \brief Get the struct type used to represent all the arguments in memory.
-  llvm::StructType *getArgStruct() const { return ArgStruct; }
-  void setArgStruct(llvm::StructType *Ty) { ArgStruct = Ty; }
+  llvm37::StructType *getArgStruct() const { return ArgStruct; }
+  void setArgStruct(llvm37::StructType *Ty) { ArgStruct = Ty; }
 
-  void Profile(llvm::FoldingSetNodeID &ID) {
+  void Profile(llvm37::FoldingSetNodeID &ID) {
     ID.AddInteger(getASTCallingConvention());
     ID.AddBoolean(InstanceMethod);
     ID.AddBoolean(ChainCall);
@@ -478,7 +478,7 @@ public:
     for (const auto &I : arguments())
       I.type.Profile(ID);
   }
-  static void Profile(llvm::FoldingSetNodeID &ID,
+  static void Profile(llvm37::FoldingSetNodeID &ID,
                       bool InstanceMethod,
                       bool ChainCall,
                       const FunctionType::ExtInfo &info,

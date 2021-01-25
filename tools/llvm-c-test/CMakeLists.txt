@@ -1,5 +1,5 @@
-set(LLVM_LINK_COMPONENTS
-  ${LLVM_TARGETS_TO_BUILD}
+set(LLVM37_LINK_COMPONENTS
+  ${LLVM37_TARGETS_TO_BUILD}
   BitReader
   Core
   MCDisassembler
@@ -11,26 +11,26 @@ set(LLVM_LINK_COMPONENTS
 # default list of components. Using libLLVM with custom components can result in
 # build failures.
 
-set (USE_LLVM_DYLIB FALSE)
+set (USE_LLVM37_DYLIB FALSE)
 
-if (TARGET LLVM)
-  set (USE_LLVM_DYLIB TRUE)
-  if (DEFINED LLVM_DYLIB_COMPONENTS)
-    foreach(c in ${LLVM_LINK_COMPONENTS})
-      list(FIND LLVM_DYLIB_COMPONENTS ${c} C_IDX)
+if (TARGET LLVM37)
+  set (USE_LLVM37_DYLIB TRUE)
+  if (DEFINED LLVM37_DYLIB_COMPONENTS)
+    foreach(c in ${LLVM37_LINK_COMPONENTS})
+      list(FIND LLVM37_DYLIB_COMPONENTS ${c} C_IDX)
       if (C_IDX EQUAL -1)
-        set(USE_LLVM_DYLIB FALSE)
+        set(USE_LLVM37_DYLIB FALSE)
         break()
       endif()
     endforeach()
   endif()
 endif()
 
-if(USE_LLVM_DYLIB)
-  set(LLVM_LINK_COMPONENTS)
+if(USE_LLVM37_DYLIB)
+  set(LLVM37_LINK_COMPONENTS)
 endif()
 
-if (LLVM_COMPILER_IS_GCC_COMPATIBLE)
+if (LLVM37_COMPILER_IS_GCC_COMPATIBLE)
   set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=gnu99 -Wstrict-prototypes")
 endif ()
 
@@ -46,6 +46,6 @@ add_llvm_tool(llvm-c-test
   targets.c
   )
 
-if(USE_LLVM_DYLIB)
-  target_link_libraries(llvm-c-test LLVM)
+if(USE_LLVM37_DYLIB)
+  target_link_libraries(llvm-c-test LLVM37)
 endif()

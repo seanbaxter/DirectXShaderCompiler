@@ -7,12 +7,12 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/ADT/ArrayRef.h"
-#include "llvm/Support/Allocator.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/ArrayRef.h"
+#include "llvm37/Support/Allocator.h"
+#include "llvm37/Support/raw_ostream.h"
 #include "gtest/gtest.h"
 #include <vector>
-using namespace llvm;
+using namespace llvm37;
 
 // Check that the ArrayRef-of-pointer converting constructor only allows adding
 // cv qualifiers (not removing them, or otherwise changing the type)
@@ -31,7 +31,7 @@ static_assert(
     !std::is_convertible<ArrayRef<volatile int *>, ArrayRef<int *>>::value,
     "Removing volatile");
 
-namespace llvm {
+namespace llvm37 {
 
 TEST(ArrayRefTest, AllocatorCopy) {
   BumpPtrAllocator Alloc;

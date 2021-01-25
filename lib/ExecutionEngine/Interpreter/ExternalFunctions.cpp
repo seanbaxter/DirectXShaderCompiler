@@ -20,15 +20,15 @@
 //===----------------------------------------------------------------------===//
 
 #include "Interpreter.h"
-#include "llvm/Config/config.h"     // Detect libffi
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/DerivedTypes.h"
-#include "llvm/IR/Module.h"
-#include "llvm/Support/DynamicLibrary.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/ManagedStatic.h"
-#include "llvm/Support/Mutex.h"
-#include "llvm/Support/UniqueLock.h"
+#include "llvm37/Config/config.h"     // Detect libffi
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/IR/DerivedTypes.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/Support/DynamicLibrary.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/ManagedStatic.h"
+#include "llvm37/Support/Mutex.h"
+#include "llvm37/Support/UniqueLock.h"
 #include <cmath>
 #include <csignal>
 #include <cstdio>
@@ -45,7 +45,7 @@
 #endif
 #endif
 
-using namespace llvm;
+using namespace llvm37;
 
 static ManagedStatic<sys::Mutex> FunctionsLock;
 

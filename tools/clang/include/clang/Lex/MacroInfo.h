@@ -12,15 +12,15 @@
 ///
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_LEX_MACROINFO_H
-#define LLVM_CLANG_LEX_MACROINFO_H
+#ifndef LLVM37_CLANG_LEX_MACROINFO_H
+#define LLVM37_CLANG_LEX_MACROINFO_H
 
 #include "clang/Lex/Token.h"
-#include "llvm/ADT/ArrayRef.h"
-#include "llvm/ADT/FoldingSet.h"
-#include "llvm/ADT/PointerIntPair.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/Support/Allocator.h"
+#include "llvm37/ADT/ArrayRef.h"
+#include "llvm37/ADT/FoldingSet.h"
+#include "llvm37/ADT/PointerIntPair.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/Support/Allocator.h"
 #include <cassert>
 
 namespace clang {
@@ -159,7 +159,7 @@ public:
   /// \brief Set the specified list of identifiers as the argument list for
   /// this macro.
   void setArgumentList(IdentifierInfo *const *List, unsigned NumArgs,
-                       llvm::BumpPtrAllocator &PPAllocator) {
+                       llvm37::BumpPtrAllocator &PPAllocator) {
     assert(ArgumentList == nullptr && NumArguments == 0 &&
            "Argument list already set!");
     if (NumArgs == 0)
@@ -495,7 +495,7 @@ MacroDirective::DefInfo::getPreviousDefinition() {
 /// represent the macro override graph.
 ///
 /// These are stored in a FoldingSet in the preprocessor.
-class ModuleMacro : public llvm::FoldingSetNode {
+class ModuleMacro : public llvm37::FoldingSetNode {
   /// The name defined by the macro.
   IdentifierInfo *II;
   /// The body of the #define, or nullptr if this is a #undef.
@@ -523,10 +523,10 @@ public:
                              IdentifierInfo *II, MacroInfo *Macro,
                              ArrayRef<ModuleMacro *> Overrides);
 
-  void Profile(llvm::FoldingSetNodeID &ID) const {
+  void Profile(llvm37::FoldingSetNodeID &ID) const {
     return Profile(ID, OwningModule, II);
   }
-  static void Profile(llvm::FoldingSetNodeID &ID, Module *OwningModule,
+  static void Profile(llvm37::FoldingSetNodeID &ID, Module *OwningModule,
                       IdentifierInfo *II) {
     ID.AddPointer(OwningModule);
     ID.AddPointer(II);
@@ -549,7 +549,7 @@ public:
     return overrides_begin() + NumOverrides;
   }
   ArrayRef<ModuleMacro *> overrides() const {
-    return llvm::makeArrayRef(overrides_begin(), overrides_end());
+    return llvm37::makeArrayRef(overrides_begin(), overrides_end());
   }
   /// \}
 
@@ -562,7 +562,7 @@ public:
 /// The definition of a macro comprises a set of (at least one) defining
 /// entities, which are either local MacroDirectives or imported ModuleMacros.
 class MacroDefinition {
-  llvm::PointerIntPair<DefMacroDirective *, 1, bool> LatestLocalAndAmbiguous;
+  llvm37::PointerIntPair<DefMacroDirective *, 1, bool> LatestLocalAndAmbiguous;
   ArrayRef<ModuleMacro *> ModuleMacros;
 
 public:

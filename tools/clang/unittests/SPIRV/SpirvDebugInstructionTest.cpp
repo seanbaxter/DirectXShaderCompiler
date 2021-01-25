@@ -28,17 +28,17 @@ private:
 
 TEST_F(SpirvDebugInstructionTest, DynamicTypeCheckDebugInfoNone) {
   SpirvInstruction *i = GetSpirvBuilder()->getOrCreateDebugInfoNone();
-  EXPECT_TRUE(llvm::isa<SpirvDebugInfoNone>(i));
-  EXPECT_TRUE(llvm::isa<SpirvDebugInstruction>(i));
-  EXPECT_TRUE(llvm::isa<SpirvInstruction>(i));
+  EXPECT_TRUE(llvm37::isa<SpirvDebugInfoNone>(i));
+  EXPECT_TRUE(llvm37::isa<SpirvDebugInstruction>(i));
+  EXPECT_TRUE(llvm37::isa<SpirvInstruction>(i));
 }
 
 TEST_F(SpirvDebugInstructionTest, DynamicTypeCheckDebugTypeTemplateParameter) {
   SpirvInstruction *i = new (getSpirvContext()) SpirvDebugTypeTemplateParameter(
       "vtable check", nullptr, nullptr, nullptr, 0, 0);
-  EXPECT_TRUE(llvm::isa<SpirvDebugTypeTemplateParameter>(i));
-  EXPECT_TRUE(llvm::isa<SpirvDebugInstruction>(i));
-  EXPECT_TRUE(llvm::isa<SpirvInstruction>(i));
+  EXPECT_TRUE(llvm37::isa<SpirvDebugTypeTemplateParameter>(i));
+  EXPECT_TRUE(llvm37::isa<SpirvDebugInstruction>(i));
+  EXPECT_TRUE(llvm37::isa<SpirvInstruction>(i));
 }
 
 } // anonymous namespace

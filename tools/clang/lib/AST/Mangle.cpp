@@ -22,9 +22,9 @@
 #include "clang/Basic/ABI.h"
 #include "clang/Basic/SourceManager.h"
 #include "clang/Basic/TargetInfo.h"
-#include "llvm/ADT/StringExtras.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/StringExtras.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/raw_ostream.h"
 //                                                                           //
 ///////////////////////////////////////////////////////////////////////////////
 #define MANGLE_CHECKER 0
@@ -67,10 +67,10 @@ static bool isExternC(const NamedDecl *ND) {
 static CCMangling getCallingConvMangling(const ASTContext &Context,
                                          const NamedDecl *ND) {
   const TargetInfo &TI = Context.getTargetInfo();
-  const llvm::Triple &Triple = TI.getTriple();
+  const llvm37::Triple &Triple = TI.getTriple();
   if (!Triple.isOSWindows() ||
-      !(Triple.getArch() == llvm::Triple::x86 ||
-        Triple.getArch() == llvm::Triple::x86_64))
+      !(Triple.getArch() == llvm37::Triple::x86 ||
+        Triple.getArch() == llvm37::Triple::x86_64))
     return CCM_Other;
 
   if (Context.getLangOpts().CPlusPlus && !isExternC(ND) &&
@@ -179,7 +179,7 @@ void MangleContext::mangleName(const NamedDecl *D, raw_ostream &Out) {
       ++ArgWords;
   for (const auto &AT : Proto->param_types())
     // Size should be aligned to pointer size.
-    ArgWords += llvm::RoundUpToAlignment(ASTContext.getTypeSize(AT),
+    ArgWords += llvm37::RoundUpToAlignment(ASTContext.getTypeSize(AT),
                                          TI.getPointerWidth(0)) /
                 TI.getPointerWidth(0);
   Out << ((TI.getPointerWidth(0) / 8) * ArgWords);
@@ -206,7 +206,7 @@ void MangleContext::mangleCtorBlock(const CXXConstructorDecl *CD,
                                     CXXCtorType CT, const BlockDecl *BD,
                                     raw_ostream &ResStream) {
   SmallString<64> Buffer;
-  llvm::raw_svector_ostream Out(Buffer);
+  llvm37::raw_svector_ostream Out(Buffer);
   mangleCXXCtor(CD, CT, Out);
   Out.flush();
   mangleFunctionBlock(*this, Buffer, BD, ResStream);
@@ -216,7 +216,7 @@ void MangleContext::mangleDtorBlock(const CXXDestructorDecl *DD,
                                     CXXDtorType DT, const BlockDecl *BD,
                                     raw_ostream &ResStream) {
   SmallString<64> Buffer;
-  llvm::raw_svector_ostream Out(Buffer);
+  llvm37::raw_svector_ostream Out(Buffer);
   mangleCXXDtor(DD, DT, Out);
   Out.flush();
   mangleFunctionBlock(*this, Buffer, BD, ResStream);
@@ -227,7 +227,7 @@ void MangleContext::mangleBlock(const DeclContext *DC, const BlockDecl *BD,
   assert(!isa<CXXConstructorDecl>(DC) && !isa<CXXDestructorDecl>(DC));
 
   SmallString<64> Buffer;
-  llvm::raw_svector_ostream Stream(Buffer);
+  llvm37::raw_svector_ostream Stream(Buffer);
   if (const ObjCMethodDecl *Method = dyn_cast<ObjCMethodDecl>(DC)) {
     mangleObjCMethodName(Method, Stream);
   } else {
@@ -262,7 +262,7 @@ void MangleContext::mangleBlock(const DeclContext *DC, const BlockDecl *BD,
 void MangleContext::mangleObjCMethodName(const ObjCMethodDecl *MD,
                                          raw_ostream &Out) {
   SmallString<64> Name;
-  llvm::raw_svector_ostream OS(Name);
+  llvm37::raw_svector_ostream OS(Name);
   
   const ObjCContainerDecl *CD =
   dyn_cast<ObjCContainerDecl>(MD->getDeclContext());

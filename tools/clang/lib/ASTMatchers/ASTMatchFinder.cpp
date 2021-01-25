@@ -20,9 +20,9 @@
 #include "clang/AST/ASTConsumer.h"
 #include "clang/AST/ASTContext.h"
 #include "clang/AST/RecursiveASTVisitor.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/StringMap.h"
-#include "llvm/Support/Timer.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/StringMap.h"
+#include "llvm37/Support/Timer.h"
 #include <deque>
 #include <memory>
 #include <set>
@@ -505,9 +505,9 @@ private:
     /// until the \c TimeBucketRegion is destroyed.
     /// If \p NewBucket is the same as the currently timed bucket, this call
     /// does nothing.
-    void setBucket(llvm::TimeRecord *NewBucket) {
+    void setBucket(llvm37::TimeRecord *NewBucket) {
       if (Bucket != NewBucket) {
-        auto Now = llvm::TimeRecord::getCurrentTime(true);
+        auto Now = llvm37::TimeRecord::getCurrentTime(true);
         if (Bucket)
           *Bucket += Now;
         if (NewBucket)
@@ -517,7 +517,7 @@ private:
     }
 
   private:
-    llvm::TimeRecord *Bucket;
+    llvm37::TimeRecord *Bucket;
   };
 
   /// \brief Runs all the \p Matchers on \p Node.
@@ -660,7 +660,7 @@ private:
       }
     } else {
       // Multiple parents - BFS over the rest of the nodes.
-      llvm::DenseSet<const void *> Visited;
+      llvm37::DenseSet<const void *> Visited;
       std::deque<ast_type_traits::DynTypedNode> Queue(Parents.begin(),
                                                       Parents.end());
       while (!Queue.empty()) {
@@ -727,7 +727,7 @@ private:
   /// \brief Bucket to record map.
   ///
   /// Used to get the appropriate bucket for each matcher.
-  llvm::StringMap<llvm::TimeRecord> TimeByBucket;
+  llvm37::StringMap<llvm37::TimeRecord> TimeByBucket;
 
   const MatchFinder::MatchersByType *Matchers;
 
@@ -739,14 +739,14 @@ private:
   /// We precalculate a list of matchers that pass the toplevel restrict check.
   /// This also allows us to skip the restrict check at matching time. See
   /// use \c matchesNoKindCheck() above.
-  llvm::DenseMap<ast_type_traits::ASTNodeKind, std::vector<unsigned short>>
+  llvm37::DenseMap<ast_type_traits::ASTNodeKind, std::vector<unsigned short>>
       MatcherFiltersMap;
 
   const MatchFinder::MatchFinderOptions &Options;
   ASTContext *ActiveASTContext;
 
   // Maps a canonical type to its TypedefDecls.
-  llvm::DenseMap<const Type*, std::set<const TypedefNameDecl*> > TypeAliases;
+  llvm37::DenseMap<const Type*, std::set<const TypedefNameDecl*> > TypeAliases;
 
   // Maps (matcher, node) -> the match result for memoization.
   typedef std::map<MatchKey, MemoizedMatchResult> MemoizationMap;
@@ -971,7 +971,7 @@ bool MatchFinder::addDynamicMatcher(const internal::DynTypedMatcher &NodeMatch,
 }
 
 std::unique_ptr<ASTConsumer> MatchFinder::newASTConsumer() {
-  return llvm::make_unique<internal::MatchASTConsumer>(this, ParsingDone);
+  return llvm37::make_unique<internal::MatchASTConsumer>(this, ParsingDone);
 }
 
 void MatchFinder::match(const clang::ast_type_traits::DynTypedNode &Node,

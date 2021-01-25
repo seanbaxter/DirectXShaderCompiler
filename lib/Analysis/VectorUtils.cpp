@@ -11,19 +11,19 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Analysis/LoopInfo.h"
-#include "llvm/Analysis/ScalarEvolutionExpressions.h"
-#include "llvm/Analysis/ScalarEvolution.h"
-#include "llvm/Analysis/VectorUtils.h"
-#include "llvm/IR/GetElementPtrTypeIterator.h"
-#include "llvm/IR/PatternMatch.h"
-#include "llvm/IR/Value.h"
+#include "llvm37/Analysis/LoopInfo.h"
+#include "llvm37/Analysis/ScalarEvolutionExpressions.h"
+#include "llvm37/Analysis/ScalarEvolution.h"
+#include "llvm37/Analysis/VectorUtils.h"
+#include "llvm37/IR/GetElementPtrTypeIterator.h"
+#include "llvm37/IR/PatternMatch.h"
+#include "llvm37/IR/Value.h"
 
 /// \brief Identify if the intrinsic is trivially vectorizable.
 /// This method returns true if the intrinsic's argument types are all
 /// scalars for the scalar form of the intrinsic and all vectors for
 /// the vector form of the intrinsic.
-bool llvm::isTriviallyVectorizable(Intrinsic::ID ID) {
+bool llvm37::isTriviallyVectorizable(Intrinsic::ID ID) {
   switch (ID) {
   case Intrinsic::sqrt:
   case Intrinsic::sin:
@@ -59,7 +59,7 @@ bool llvm::isTriviallyVectorizable(Intrinsic::ID ID) {
 
 /// \brief Identifies if the intrinsic has a scalar operand. It check for
 /// ctlz,cttz and powi special intrinsics whose argument is scalar.
-bool llvm::hasVectorInstrinsicScalarOpd(Intrinsic::ID ID,
+bool llvm37::hasVectorInstrinsicScalarOpd(Intrinsic::ID ID,
                                         unsigned ScalarOpdIdx) {
   switch (ID) {
   case Intrinsic::ctlz:
@@ -79,8 +79,8 @@ bool llvm::hasVectorInstrinsicScalarOpd(Intrinsic::ID ID,
 /// d) call should only reads memory.
 /// If all these condition is met then return ValidIntrinsicID
 /// else return not_intrinsic.
-llvm::Intrinsic::ID
-llvm::checkUnaryFloatSignature(const CallInst &I,
+llvm37::Intrinsic::ID
+llvm37::checkUnaryFloatSignature(const CallInst &I,
                                Intrinsic::ID ValidIntrinsicID) {
   if (I.getNumArgOperands() != 1 ||
       !I.getArgOperand(0)->getType()->isFloatingPointTy() ||
@@ -98,8 +98,8 @@ llvm::checkUnaryFloatSignature(const CallInst &I,
 /// d) call should only reads memory.
 /// If all these condition is met then return ValidIntrinsicID
 /// else return not_intrinsic.
-llvm::Intrinsic::ID
-llvm::checkBinaryFloatSignature(const CallInst &I,
+llvm37::Intrinsic::ID
+llvm37::checkBinaryFloatSignature(const CallInst &I,
                                 Intrinsic::ID ValidIntrinsicID) {
   if (I.getNumArgOperands() != 2 ||
       !I.getArgOperand(0)->getType()->isFloatingPointTy() ||
@@ -114,7 +114,7 @@ llvm::checkBinaryFloatSignature(const CallInst &I,
 /// \brief Returns intrinsic ID for call.
 /// For the input call instruction it finds mapping intrinsic and returns
 /// its ID, in case it does not found it return not_intrinsic.
-llvm::Intrinsic::ID llvm::getIntrinsicIDForCall(CallInst *CI,
+llvm37::Intrinsic::ID llvm37::getIntrinsicIDForCall(CallInst *CI,
                                                 const TargetLibraryInfo *TLI) {
   // If we have an intrinsic call, check if it is trivially vectorizable.
   if (IntrinsicInst *II = dyn_cast<IntrinsicInst>(CI)) {
@@ -221,7 +221,7 @@ llvm::Intrinsic::ID llvm::getIntrinsicIDForCall(CallInst *CI,
 /// \brief Find the operand of the GEP that should be checked for consecutive
 /// stores. This ignores trailing indices that have no effect on the final
 /// pointer.
-unsigned llvm::getGEPInductionOperand(const GetElementPtrInst *Gep) {
+unsigned llvm37::getGEPInductionOperand(const GetElementPtrInst *Gep) {
   const DataLayout &DL = Gep->getModule()->getDataLayout();
   unsigned LastOperand = Gep->getNumOperands() - 1;
   unsigned GEPAllocSize = DL.getTypeAllocSize(
@@ -229,7 +229,7 @@ unsigned llvm::getGEPInductionOperand(const GetElementPtrInst *Gep) {
 
   // Walk backwards and try to peel off zeros.
   while (LastOperand > 1 &&
-         match(Gep->getOperand(LastOperand), llvm::PatternMatch::m_Zero())) {
+         match(Gep->getOperand(LastOperand), llvm37::PatternMatch::m_Zero())) {
     // Find the type we're currently indexing into.
     gep_type_iterator GEPTI = gep_type_begin(Gep);
     std::advance(GEPTI, LastOperand - 1);
@@ -247,7 +247,7 @@ unsigned llvm::getGEPInductionOperand(const GetElementPtrInst *Gep) {
 /// \brief If the argument is a GEP, then returns the operand identified by
 /// getGEPInductionOperand. However, if there is some other non-loop-invariant
 /// operand, it returns that instead.
-llvm::Value *llvm::stripGetElementPtr(llvm::Value *Ptr, ScalarEvolution *SE,
+llvm37::Value *llvm37::stripGetElementPtr(llvm37::Value *Ptr, ScalarEvolution *SE,
                                       Loop *Lp) {
   GetElementPtrInst *GEP = dyn_cast<GetElementPtrInst>(Ptr);
   if (!GEP)
@@ -265,8 +265,8 @@ llvm::Value *llvm::stripGetElementPtr(llvm::Value *Ptr, ScalarEvolution *SE,
 }
 
 /// \brief If a value has only one user that is a CastInst, return it.
-llvm::Value *llvm::getUniqueCastUse(llvm::Value *Ptr, Loop *Lp, Type *Ty) {
-  llvm::Value *UniqueCast = nullptr;
+llvm37::Value *llvm37::getUniqueCastUse(llvm37::Value *Ptr, Loop *Lp, Type *Ty) {
+  llvm37::Value *UniqueCast = nullptr;
   for (User *U : Ptr->users()) {
     CastInst *CI = dyn_cast<CastInst>(U);
     if (CI && CI->getType() == Ty) {
@@ -281,7 +281,7 @@ llvm::Value *llvm::getUniqueCastUse(llvm::Value *Ptr, Loop *Lp, Type *Ty) {
 
 /// \brief Get the stride of a pointer access in a loop. Looks for symbolic
 /// strides "a[i*stride]". Returns the symbolic stride, or null otherwise.
-llvm::Value *llvm::getStrideFromPointer(llvm::Value *Ptr, ScalarEvolution *SE,
+llvm37::Value *llvm37::getStrideFromPointer(llvm37::Value *Ptr, ScalarEvolution *SE,
                                         Loop *Lp) {
   const PointerType *PtrTy = dyn_cast<PointerType>(Ptr->getType());
   if (!PtrTy || PtrTy->isAggregateType())
@@ -290,7 +290,7 @@ llvm::Value *llvm::getStrideFromPointer(llvm::Value *Ptr, ScalarEvolution *SE,
   // Try to remove a gep instruction to make the pointer (actually index at this
   // point) easier analyzable. If OrigPtr is equal to Ptr we are analzying the
   // pointer, otherwise, we are analyzing the index.
-  llvm::Value *OrigPtr = Ptr;
+  llvm37::Value *OrigPtr = Ptr;
 
   // The size of the pointer access.
   int64_t PtrAccessSize = 1;
@@ -346,7 +346,7 @@ llvm::Value *llvm::getStrideFromPointer(llvm::Value *Ptr, ScalarEvolution *SE,
   if (!U)
     return nullptr;
 
-  llvm::Value *Stride = U->getValue();
+  llvm37::Value *Stride = U->getValue();
   if (!Lp->isLoopInvariant(Stride))
     return nullptr;
 

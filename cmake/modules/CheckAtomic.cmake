@@ -20,7 +20,7 @@ endfunction(check_working_cxx_atomics)
 
 # This isn't necessary on MSVC, so avoid command-line switch annoyance
 # by only running on GCC-like hosts.
-if (LLVM_COMPILER_IS_GCC_COMPATIBLE)
+if (LLVM37_COMPILER_IS_GCC_COMPATIBLE)
   # First check if atomics work without the library.
   check_working_cxx_atomics(HAVE_CXX_ATOMICS_WITHOUT_LIB)
   # If not, check if the library exists, and atomics work with it.
@@ -62,8 +62,8 @@ int main() {
 #endif
         return 0;
       }
-" LLVM_HAS_ATOMICS)
+" LLVM37_HAS_ATOMICS)
 
-if( NOT LLVM_HAS_ATOMICS )
+if( NOT LLVM37_HAS_ATOMICS )
   message(STATUS "Warning: LLVM will be built thread-unsafe because atomic builtins are missing")
 endif()

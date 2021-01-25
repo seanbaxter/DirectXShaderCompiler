@@ -7,8 +7,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_CODEGEN_OBJECT_FILE_PCH_CONTAINER_OPERATIONS_H
-#define LLVM_CLANG_CODEGEN_OBJECT_FILE_PCH_CONTAINER_OPERATIONS_H
+#ifndef LLVM37_CLANG_CODEGEN_OBJECT_FILE_PCH_CONTAINER_OPERATIONS_H
+#define LLVM37_CLANG_CODEGEN_OBJECT_FILE_PCH_CONTAINER_OPERATIONS_H
 
 #include "clang/Frontend/PCHContainerOperations.h"
 
@@ -26,7 +26,7 @@ class ObjectFilePCHContainerWriter : public PCHContainerWriter {
       DiagnosticsEngine &Diags, const HeaderSearchOptions &HSO,
       const PreprocessorOptions &PPO, const TargetOptions &TO,
       const LangOptions &LO, const std::string &MainFileName,
-      const std::string &OutputFileName, llvm::raw_pwrite_stream *OS,
+      const std::string &OutputFileName, llvm37::raw_pwrite_stream *OS,
       std::shared_ptr<PCHBuffer> Buffer) const override;
 };
 
@@ -35,10 +35,10 @@ class ObjectFilePCHContainerWriter : public PCHContainerWriter {
 class ObjectFilePCHContainerReader : public PCHContainerReader {
   StringRef getFormat() const override { return "obj"; }
 
-  /// Initialize an llvm::BitstreamReader with the serialized
+  /// Initialize an llvm37::BitstreamReader with the serialized
   /// AST inside the PCH container Buffer.
-  void ExtractPCH(llvm::MemoryBufferRef Buffer,
-                  llvm::BitstreamReader &StreamFile) const override;
+  void ExtractPCH(llvm37::MemoryBufferRef Buffer,
+                  llvm37::BitstreamReader &StreamFile) const override;
 };
 }
 

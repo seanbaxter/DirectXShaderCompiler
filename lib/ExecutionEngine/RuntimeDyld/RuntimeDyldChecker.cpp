@@ -7,22 +7,22 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/ADT/STLExtras.h"
+#include "llvm37/ADT/STLExtras.h"
 #include "RuntimeDyldCheckerImpl.h"
 #include "RuntimeDyldImpl.h"
-#include "llvm/ExecutionEngine/RuntimeDyldChecker.h"
-#include "llvm/MC/MCContext.h"
-#include "llvm/MC/MCDisassembler.h"
-#include "llvm/MC/MCInst.h"
-#include "llvm/Support/Path.h"
+#include "llvm37/ExecutionEngine/RuntimeDyldChecker.h"
+#include "llvm37/MC/MCContext.h"
+#include "llvm37/MC/MCDisassembler.h"
+#include "llvm37/MC/MCInst.h"
+#include "llvm37/Support/Path.h"
 #include <cctype>
 #include <memory>
 
 #define DEBUG_TYPE "rtdyld"
 
-using namespace llvm;
+using namespace llvm37;
 
-namespace llvm {
+namespace llvm37 {
 
 // Helper class that implements the language evaluated by RuntimeDyldChecker.
 class RuntimeDyldCheckerExprEval {

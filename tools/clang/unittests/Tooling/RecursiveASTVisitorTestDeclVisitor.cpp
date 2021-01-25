@@ -65,7 +65,7 @@ class NamedDeclVisitor
 public:
   bool VisitNamedDecl(NamedDecl *Decl) {
     std::string NameWithTemplateArgs;
-    llvm::raw_string_ostream OS(NameWithTemplateArgs);
+    llvm37::raw_string_ostream OS(NameWithTemplateArgs);
     Decl->getNameForDiagnostic(OS,
                                Decl->getASTContext().getPrintingPolicy(),
                                true);

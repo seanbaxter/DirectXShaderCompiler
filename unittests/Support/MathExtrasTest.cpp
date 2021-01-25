@@ -8,9 +8,9 @@
 //===----------------------------------------------------------------------===//
 
 #include "gtest/gtest.h"
-#include "llvm/Support/MathExtras.h"
+#include "llvm37/Support/MathExtras.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 namespace {
 

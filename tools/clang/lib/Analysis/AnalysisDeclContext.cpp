@@ -26,14 +26,14 @@
 #include "clang/Analysis/CFG.h"
 #include "clang/Analysis/CFGStmtMap.h"
 #include "clang/Analysis/Support/BumpVector.h"
-#include "llvm/ADT/SmallPtrSet.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/SaveAndRestore.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/SmallPtrSet.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/SaveAndRestore.h"
+#include "llvm37/Support/raw_ostream.h"
 
 using namespace clang;
 
-typedef llvm::DenseMap<const void *, ManagedAnalysis *> ManagedAnalysisMap;
+typedef llvm37::DenseMap<const void *, ManagedAnalysis *> ManagedAnalysisMap;
 
 AnalysisDeclContext::AnalysisDeclContext(AnalysisDeclContextManager *Mgr,
                                          const Decl *d,
@@ -82,7 +82,7 @@ AnalysisDeclContextManager::AnalysisDeclContextManager(bool useUnoptimizedCFG,
 }
 
 void AnalysisDeclContextManager::clear() {
-  llvm::DeleteContainerSeconds(Contexts);
+  llvm37::DeleteContainerSeconds(Contexts);
 }
 
 static BodyFarm &getBodyFarm(ASTContext &C, CodeInjector *injector = nullptr) {
@@ -310,7 +310,7 @@ LocationContextManager & AnalysisDeclContext::getLocationContextManager() {
 // FoldingSet profiling.
 //===----------------------------------------------------------------------===//
 
-void LocationContext::ProfileCommon(llvm::FoldingSetNodeID &ID,
+void LocationContext::ProfileCommon(llvm37::FoldingSetNodeID &ID,
                                     ContextKind ck,
                                     AnalysisDeclContext *ctx,
                                     const LocationContext *parent,
@@ -321,15 +321,15 @@ void LocationContext::ProfileCommon(llvm::FoldingSetNodeID &ID,
   ID.AddPointer(data);
 }
 
-void StackFrameContext::Profile(llvm::FoldingSetNodeID &ID) {
+void StackFrameContext::Profile(llvm37::FoldingSetNodeID &ID) {
   Profile(ID, getAnalysisDeclContext(), getParent(), CallSite, Block, Index);
 }
 
-void ScopeContext::Profile(llvm::FoldingSetNodeID &ID) {
+void ScopeContext::Profile(llvm37::FoldingSetNodeID &ID) {
   Profile(ID, getAnalysisDeclContext(), getParent(), Enter);
 }
 
-void BlockInvocationContext::Profile(llvm::FoldingSetNodeID &ID) {
+void BlockInvocationContext::Profile(llvm37::FoldingSetNodeID &ID) {
   Profile(ID, getAnalysisDeclContext(), getParent(), BD, ContextData);
 }
 
@@ -342,7 +342,7 @@ const LOC*
 LocationContextManager::getLocationContext(AnalysisDeclContext *ctx,
                                            const LocationContext *parent,
                                            const DATA *d) {
-  llvm::FoldingSetNodeID ID;
+  llvm37::FoldingSetNodeID ID;
   LOC::Profile(ID, ctx, parent, d);
   void *InsertPos;
 
@@ -360,7 +360,7 @@ LocationContextManager::getStackFrame(AnalysisDeclContext *ctx,
                                       const LocationContext *parent,
                                       const Stmt *s,
                                       const CFGBlock *blk, unsigned idx) {
-  llvm::FoldingSetNodeID ID;
+  llvm37::FoldingSetNodeID ID;
   StackFrameContext::Profile(ID, ctx, parent, s, blk, idx);
   void *InsertPos;
   StackFrameContext *L =
@@ -384,7 +384,7 @@ LocationContextManager::getBlockInvocationContext(AnalysisDeclContext *ctx,
                                                   const LocationContext *parent,
                                                   const BlockDecl *BD,
                                                   const void *ContextData) {
-  llvm::FoldingSetNodeID ID;
+  llvm37::FoldingSetNodeID ID;
   BlockInvocationContext::Profile(ID, ctx, parent, BD, ContextData);
   void *InsertPos;
   BlockInvocationContext *L =
@@ -452,8 +452,8 @@ void LocationContext::dumpStack(raw_ostream &OS, StringRef Indent) const {
   }
 }
 
-LLVM_DUMP_METHOD void LocationContext::dumpStack() const {
-  dumpStack(llvm::errs());
+LLVM37_DUMP_METHOD void LocationContext::dumpStack() const {
+  dumpStack(llvm37::errs());
 }
 
 //===----------------------------------------------------------------------===//
@@ -464,8 +464,8 @@ namespace {
 class FindBlockDeclRefExprsVals : public StmtVisitor<FindBlockDeclRefExprsVals>{
   BumpVector<const VarDecl*> &BEVals;
   BumpVectorContext &BC;
-  llvm::SmallPtrSet<const VarDecl*, 4> Visited;
-  llvm::SmallPtrSet<const DeclContext*, 4> IgnoredContexts;
+  llvm37::SmallPtrSet<const VarDecl*, 4> Visited;
+  llvm37::SmallPtrSet<const DeclContext*, 4> IgnoredContexts;
 public:
   FindBlockDeclRefExprsVals(BumpVector<const VarDecl*> &bevals,
                             BumpVectorContext &bc)
@@ -509,7 +509,7 @@ typedef BumpVector<const VarDecl*> DeclVec;
 
 static DeclVec* LazyInitializeReferencedDecls(const BlockDecl *BD,
                                               void *&Vec,
-                                              llvm::BumpPtrAllocator &A) {
+                                              llvm37::BumpPtrAllocator &A) {
   if (Vec)
     return (DeclVec*) Vec;
 
@@ -530,14 +530,14 @@ static DeclVec* LazyInitializeReferencedDecls(const BlockDecl *BD,
   return BV;
 }
 
-llvm::iterator_range<AnalysisDeclContext::referenced_decls_iterator>
+llvm37::iterator_range<AnalysisDeclContext::referenced_decls_iterator>
 AnalysisDeclContext::getReferencedBlockVars(const BlockDecl *BD) {
   if (!ReferencedBlockVars)
-    ReferencedBlockVars = new llvm::DenseMap<const BlockDecl*,void*>();
+    ReferencedBlockVars = new llvm37::DenseMap<const BlockDecl*,void*>();
 
   const DeclVec *V =
       LazyInitializeReferencedDecls(BD, (*ReferencedBlockVars)[BD], A);
-  return llvm::make_range(V->begin(), V->end());
+  return llvm37::make_range(V->begin(), V->end());
 }
 
 ManagedAnalysis *&AnalysisDeclContext::getAnalysisImpl(const void *tag) {
@@ -559,13 +559,13 @@ AnalysisDeclContext::~AnalysisDeclContext() {
   // Release the managed analyses.
   if (ManagedAnalyses) {
     ManagedAnalysisMap *M = (ManagedAnalysisMap*) ManagedAnalyses;
-    llvm::DeleteContainerSeconds(*M);
+    llvm37::DeleteContainerSeconds(*M);
     delete M;
   }
 }
 
 AnalysisDeclContextManager::~AnalysisDeclContextManager() {
-  llvm::DeleteContainerSeconds(Contexts);
+  llvm37::DeleteContainerSeconds(Contexts);
 }
 
 LocationContext::~LocationContext() {}
@@ -575,7 +575,7 @@ LocationContextManager::~LocationContextManager() {
 }
 
 void LocationContextManager::clear() {
-  for (llvm::FoldingSet<LocationContext>::iterator I = Contexts.begin(),
+  for (llvm37::FoldingSet<LocationContext>::iterator I = Contexts.begin(),
        E = Contexts.end(); I != E; ) {
     LocationContext *LC = &*I;
     ++I;

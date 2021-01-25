@@ -12,13 +12,13 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_AST_DECLFRIEND_H
-#define LLVM_CLANG_AST_DECLFRIEND_H
+#ifndef LLVM37_CLANG_AST_DECLFRIEND_H
+#define LLVM37_CLANG_AST_DECLFRIEND_H
 
 #include "clang/AST/DeclCXX.h"
 #include "clang/AST/DeclTemplate.h"
 #include "clang/AST/TypeLoc.h"
-#include "llvm/Support/Compiler.h"
+#include "llvm37/Support/Compiler.h"
 
 namespace clang {
 
@@ -40,7 +40,7 @@ namespace clang {
 class FriendDecl : public Decl {
   virtual void anchor();
 public:
-  typedef llvm::PointerUnion<NamedDecl*,TypeSourceInfo*> FriendUnion;
+  typedef llvm37::PointerUnion<NamedDecl*,TypeSourceInfo*> FriendUnion;
 
 private:
   // The declaration that's a friend of this class.
@@ -133,7 +133,7 @@ public:
   }
 
   /// Retrieves the source range for the friend declaration.
-  SourceRange getSourceRange() const override LLVM_READONLY {
+  SourceRange getSourceRange() const override LLVM37_READONLY {
     if (NamedDecl *ND = getFriendDecl()) {
       if (FunctionDecl *FD = dyn_cast<FunctionDecl>(ND))
         return FD->getSourceRange();

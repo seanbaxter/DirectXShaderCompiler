@@ -12,17 +12,17 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Analysis/AssumptionCache.h"
-#include "llvm/IR/CallSite.h"
-#include "llvm/IR/Dominators.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/IR/PassManager.h"
-#include "llvm/IR/PatternMatch.h"
-#include "llvm/Support/Debug.h"
-using namespace llvm;
-using namespace llvm::PatternMatch;
+#include "llvm37/Analysis/AssumptionCache.h"
+#include "llvm37/IR/CallSite.h"
+#include "llvm37/IR/Dominators.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/IR/PassManager.h"
+#include "llvm37/IR/PatternMatch.h"
+#include "llvm37/Support/Debug.h"
+using namespace llvm37;
+using namespace llvm37::PatternMatch;
 
 void AssumptionCache::scanFunction() {
   assert(!Scanned && "Tried to scan the function twice!");
@@ -107,7 +107,7 @@ AssumptionCache &AssumptionCacheTracker::getAssumptionCache(Function &F) {
   // Ok, build a new cache by scanning the function, insert it and the value
   // handle into our map, and return the newly populated cache.
   auto IP = AssumptionCaches.insert(std::make_pair(
-      FunctionCallbackVH(&F, this), llvm::make_unique<AssumptionCache>(F)));
+      FunctionCallbackVH(&F, this), llvm37::make_unique<AssumptionCache>(F)));
   assert(IP.second && "Scanning function already in the map?");
   return *IP.first->second;
 }

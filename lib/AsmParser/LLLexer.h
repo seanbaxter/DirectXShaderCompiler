@@ -11,16 +11,16 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_LIB_ASMPARSER_LLLEXER_H
-#define LLVM_LIB_ASMPARSER_LLLEXER_H
+#ifndef LLVM37_LIB_ASMPARSER_LLLEXER_H
+#define LLVM37_LIB_ASMPARSER_LLLEXER_H
 
 #include "LLToken.h"
-#include "llvm/ADT/APFloat.h"
-#include "llvm/ADT/APSInt.h"
-#include "llvm/Support/SourceMgr.h"
+#include "llvm37/ADT/APFloat.h"
+#include "llvm37/ADT/APSInt.h"
+#include "llvm37/Support/SourceMgr.h"
 #include <string>
 
-namespace llvm {
+namespace llvm37 {
   class MemoryBuffer;
   class Type;
   class SMDiagnostic;
@@ -91,6 +91,6 @@ namespace llvm {
     void HexToIntPair(const char *Buffer, const char *End, uint64_t Pair[2]);
     void FP80HexToIntPair(const char *Buff, const char *End, uint64_t Pair[2]);
   };
-} // end namespace llvm
+} // end namespace llvm37
 
 #endif

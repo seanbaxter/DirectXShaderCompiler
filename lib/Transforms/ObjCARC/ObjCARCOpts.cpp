@@ -31,19 +31,19 @@
 #include "ObjCARCAliasAnalysis.h"
 #include "ProvenanceAnalysis.h"
 #include "PtrState.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/DenseSet.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/SmallPtrSet.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/IR/CFG.h"
-#include "llvm/IR/IRBuilder.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/DenseSet.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/SmallPtrSet.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/IR/CFG.h"
+#include "llvm37/IR/IRBuilder.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/raw_ostream.h"
 
-using namespace llvm;
-using namespace llvm::objcarc;
+using namespace llvm37;
+using namespace llvm37::objcarc;
 
 #define DEBUG_TYPE "objc-arc-opts"
 
@@ -315,9 +315,9 @@ namespace {
   const unsigned BBState::OverflowOccurredValue = 0xffffffff;
 }
 
-namespace llvm {
+namespace llvm37 {
 raw_ostream &operator<<(raw_ostream &OS,
-                        BBState &BBState) LLVM_ATTRIBUTE_UNUSED;
+                        BBState &BBState) LLVM37_ATTRIBUTE_UNUSED;
 }
 
 void BBState::InitFromPred(const BBState &Other) {
@@ -417,11 +417,11 @@ void BBState::MergeSucc(const BBState &Other) {
       MI->second.Merge(BottomUpPtrState(), /*TopDown=*/false);
 }
 
-raw_ostream &llvm::operator<<(raw_ostream &OS, BBState &BBInfo) {
+raw_ostream &llvm37::operator<<(raw_ostream &OS, BBState &BBInfo) {
   // Dump the pointers we are tracking.
   OS << "    TopDown State:\n";
   if (!BBInfo.hasTopDownPtrs()) {
-    DEBUG(llvm::dbgs() << "        NONE!\n");
+    DEBUG(llvm37::dbgs() << "        NONE!\n");
   } else {
     for (auto I = BBInfo.top_down_ptr_begin(), E = BBInfo.top_down_ptr_end();
          I != E; ++I) {
@@ -441,7 +441,7 @@ raw_ostream &llvm::operator<<(raw_ostream &OS, BBState &BBInfo) {
 
   OS << "    BottomUp State:\n";
   if (!BBInfo.hasBottomUpPtrs()) {
-    DEBUG(llvm::dbgs() << "        NONE!\n");
+    DEBUG(llvm37::dbgs() << "        NONE!\n");
   } else {
     for (auto I = BBInfo.bottom_up_ptr_begin(), E = BBInfo.bottom_up_ptr_end();
          I != E; ++I) {
@@ -560,7 +560,7 @@ INITIALIZE_PASS_DEPENDENCY(ObjCARCAliasAnalysis)
 INITIALIZE_PASS_END(ObjCARCOpt,
                     "objc-arc", "ObjC ARC optimization", false, false)
 
-Pass *llvm::createObjCARCOptPass() {
+Pass *llvm37::createObjCARCOptPass() {
   return new ObjCARCOpt();
 }
 
@@ -715,7 +715,7 @@ void ObjCARCOpt::OptimizeIndividualCalls(Function &F) {
         new StoreInst(UndefValue::get(cast<PointerType>(Ty)->getElementType()),
                       Constant::getNullValue(Ty),
                       CI);
-        llvm::Value *NewValue = UndefValue::get(CI->getType());
+        llvm37::Value *NewValue = UndefValue::get(CI->getType());
         DEBUG(dbgs() << "A null pointer-to-weak-pointer is undefined behavior."
                        "\nOld = " << *CI << "\nNew = " << *NewValue << "\n");
         CI->replaceAllUsesWith(NewValue);
@@ -735,7 +735,7 @@ void ObjCARCOpt::OptimizeIndividualCalls(Function &F) {
                       Constant::getNullValue(Ty),
                       CI);
 
-        llvm::Value *NewValue = UndefValue::get(CI->getType());
+        llvm37::Value *NewValue = UndefValue::get(CI->getType());
         DEBUG(dbgs() << "A null pointer-to-weak-pointer is undefined behavior."
                         "\nOld = " << *CI << "\nNew = " << *NewValue << "\n");
 
@@ -1122,7 +1122,7 @@ bool ObjCARCOpt::VisitInstructionBottomUp(
       // Don't do retain+release tracking for ARCInstKind::RetainRV, because
       // it's better to let it remain as the first instruction after a call.
       if (Class != ARCInstKind::RetainRV) {
-        DEBUG(llvm::dbgs() << "        Matching with: " << *Inst << "\n");
+        DEBUG(llvm37::dbgs() << "        Matching with: " << *Inst << "\n");
         Retains[Inst] = S.GetRRInfo();
       }
       S.ClearSequenceProgress();
@@ -1211,7 +1211,7 @@ bool ObjCARCOpt::VisitBottomUp(BasicBlock *BB,
     }
   }
 
-  DEBUG(llvm::dbgs() << "Before:\n" << BBStates[BB] << "\n"
+  DEBUG(llvm37::dbgs() << "Before:\n" << BBStates[BB] << "\n"
                      << "Performing Dataflow:\n");
 
   // Visit all the instructions, bottom-up.
@@ -1237,7 +1237,7 @@ bool ObjCARCOpt::VisitBottomUp(BasicBlock *BB,
       NestingDetected |= VisitInstructionBottomUp(II, BB, Retains, MyStates);
   }
 
-  DEBUG(llvm::dbgs() << "\nFinal State:\n" << BBStates[BB] << "\n");
+  DEBUG(llvm37::dbgs() << "\nFinal State:\n" << BBStates[BB] << "\n");
 
   return NestingDetected;
 }
@@ -1250,7 +1250,7 @@ ObjCARCOpt::VisitInstructionTopDown(Instruction *Inst,
   ARCInstKind Class = GetARCInstKind(Inst);
   const Value *Arg = nullptr;
 
-  DEBUG(llvm::dbgs() << "        Class: " << Class << "\n");
+  DEBUG(llvm37::dbgs() << "        Class: " << Class << "\n");
 
   switch (Class) {
   case ARCInstKind::RetainBlock:
@@ -1276,7 +1276,7 @@ ObjCARCOpt::VisitInstructionTopDown(Instruction *Inst,
     if (S.MatchWithRelease(MDKindCache, Inst)) {
       // If we succeed, copy S's RRInfo into the Release -> {Retain Set
       // Map}. Then we clear S.
-      DEBUG(llvm::dbgs() << "        Matching with: " << *Inst << "\n");
+      DEBUG(llvm37::dbgs() << "        Matching with: " << *Inst << "\n");
       Releases[Inst] = S.GetRRInfo();
       S.ClearSequenceProgress();
     }
@@ -1338,7 +1338,7 @@ ObjCARCOpt::VisitTopDown(BasicBlock *BB,
     }
   }
 
-  DEBUG(llvm::dbgs() << "Before:\n" << BBStates[BB]  << "\n"
+  DEBUG(llvm37::dbgs() << "Before:\n" << BBStates[BB]  << "\n"
                      << "Performing Dataflow:\n");
 
   // Visit all the instructions, top-down.
@@ -1350,10 +1350,10 @@ ObjCARCOpt::VisitTopDown(BasicBlock *BB,
     NestingDetected |= VisitInstructionTopDown(Inst, Releases, MyStates);
   }
 
-  DEBUG(llvm::dbgs() << "\nState Before Checking for CFG Hazards:\n"
+  DEBUG(llvm37::dbgs() << "\nState Before Checking for CFG Hazards:\n"
                      << BBStates[BB] << "\n\n");
   CheckForCFGHazards(BB, BBStates, MyStates);
-  DEBUG(llvm::dbgs() << "Final State:\n" << BBStates[BB] << "\n");
+  DEBUG(llvm37::dbgs() << "Final State:\n" << BBStates[BB] << "\n");
   return NestingDetected;
 }
 
@@ -2138,9 +2138,9 @@ void ObjCARCOpt::OptimizeReturns(Function &F) {
 #ifndef NDEBUG
 void
 ObjCARCOpt::GatherStatistics(Function &F, bool AfterOptimization) {
-  llvm::Statistic &NumRetains =
+  llvm37::Statistic &NumRetains =
     AfterOptimization? NumRetainsAfterOpt : NumRetainsBeforeOpt;
-  llvm::Statistic &NumReleases =
+  llvm37::Statistic &NumReleases =
     AfterOptimization? NumReleasesAfterOpt : NumReleasesBeforeOpt;
 
   for (inst_iterator I = inst_begin(&F), E = inst_end(&F); I != E; ) {

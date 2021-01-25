@@ -11,13 +11,13 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Support/COFF.h"
-#include "llvm/Support/Endian.h"
-#include "llvm/Support/Errc.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/FileSystem.h"
-#include "llvm/Support/Path.h"
-#include "llvm/Support/Process.h"
+#include "llvm37/Support/COFF.h"
+#include "llvm37/Support/Endian.h"
+#include "llvm37/Support/Errc.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/FileSystem.h"
+#include "llvm37/Support/Path.h"
+#include "llvm37/Support/Process.h"
 #include <cctype>
 #include <cstring>
 
@@ -27,14 +27,14 @@
 #include <io.h>
 #endif
 
-using namespace llvm;
-using namespace llvm::support::endian;
+using namespace llvm37;
+using namespace llvm37::support::endian;
 
 namespace {
-  using llvm::StringRef;
-  using llvm::sys::path::is_separator;
+  using llvm37::StringRef;
+  using llvm37::sys::path::is_separator;
 
-#ifdef LLVM_ON_WIN32
+#ifdef LLVM37_ON_WIN32
   const char *separators = "\\/";
   const char preferred_separator = '\\';
 #else
@@ -52,7 +52,7 @@ namespace {
     if (path.empty())
       return path;
 
-#ifdef LLVM_ON_WIN32
+#ifdef LLVM37_ON_WIN32
     // C:
     if (path.size() >= 2 && std::isalpha(static_cast<unsigned char>(path[0])) &&
         path[1] == ':')
@@ -89,7 +89,7 @@ namespace {
 
     size_t pos = str.find_last_of(separators, str.size() - 1);
 
-#ifdef LLVM_ON_WIN32
+#ifdef LLVM37_ON_WIN32
     if (pos == StringRef::npos)
       pos = str.find_last_of(':', str.size() - 2);
 #endif
@@ -103,7 +103,7 @@ namespace {
 
   size_t root_dir_start(StringRef str) {
     // case "c:/"
-#ifdef LLVM_ON_WIN32
+#ifdef LLVM37_ON_WIN32
     if (str.size() > 2 &&
         str[1] == ':' &&
         is_separator(str[2]))
@@ -225,7 +225,7 @@ retry_random_path:
   llvm_unreachable("Invalid Type");
 }
 
-namespace llvm {
+namespace llvm37 {
 namespace sys  {
 namespace path {
 
@@ -267,7 +267,7 @@ const_iterator &const_iterator::operator++() {
   if (is_separator(Path[Position])) {
     // Root dir.
     if (was_net
-#ifdef LLVM_ON_WIN32
+#ifdef LLVM37_ON_WIN32
         // c:/
         || Component.endswith(":")
 #endif
@@ -359,7 +359,7 @@ StringRef root_path(StringRef path) {
   if (b != e) {
     bool has_net = b->size() > 2 && is_separator((*b)[0]) && (*b)[1] == (*b)[0];
     bool has_drive =
-#ifdef LLVM_ON_WIN32
+#ifdef LLVM37_ON_WIN32
       b->endswith(":");
 #else
       false;
@@ -390,7 +390,7 @@ StringRef root_name(StringRef path) {
   if (b != e) {
     bool has_net = b->size() > 2 && is_separator((*b)[0]) && (*b)[1] == (*b)[0];
     bool has_drive =
-#ifdef LLVM_ON_WIN32
+#ifdef LLVM37_ON_WIN32
       b->endswith(":");
 #else
       false;
@@ -413,7 +413,7 @@ StringRef root_directory(StringRef path) {
   if (b != e) {
     bool has_net = b->size() > 2 && is_separator((*b)[0]) && (*b)[1] == (*b)[0];
     bool has_drive =
-#ifdef LLVM_ON_WIN32
+#ifdef LLVM37_ON_WIN32
       b->endswith(":");
 #else
       false;
@@ -530,7 +530,7 @@ void native(const Twine &path, SmallVectorImpl<char> &result) {
 }
 
 void native(SmallVectorImpl<char> &Path) {
-#ifdef LLVM_ON_WIN32
+#ifdef LLVM37_ON_WIN32
   std::replace(Path.begin(), Path.end(), '/', '\\');
 #else
   for (auto PI = Path.begin(), PE = Path.end(); PI < PE; ++PI) {
@@ -577,7 +577,7 @@ StringRef extension(StringRef path) {
 
 bool is_separator(char value) {
   switch(value) {
-#ifdef LLVM_ON_WIN32
+#ifdef LLVM37_ON_WIN32
     case '\\': // fall through
 #endif
     case '/': return true;
@@ -652,7 +652,7 @@ bool is_absolute(const Twine &path) {
   StringRef p = path.toStringRef(path_storage);
 
   bool rootDir = has_root_directory(p),
-#ifdef LLVM_ON_WIN32
+#ifdef LLVM37_ON_WIN32
        rootName = has_root_name(p);
 #else
        rootName = true;
@@ -692,7 +692,7 @@ std::error_code createUniqueFile(const Twine &Model,
 
 static std::error_code
 createTemporaryFile(const Twine &Model, int &ResultFD,
-                    llvm::SmallVectorImpl<char> &ResultPath, FSEntity Type) {
+                    llvm37::SmallVectorImpl<char> &ResultPath, FSEntity Type) {
   SmallString<128> Storage;
   StringRef P = Model.toNullTerminatedStringRef(Storage);
   assert(P.find_first_of(separators) == StringRef::npos &&
@@ -704,7 +704,7 @@ createTemporaryFile(const Twine &Model, int &ResultFD,
 
 static std::error_code
 createTemporaryFile(const Twine &Prefix, StringRef Suffix, int &ResultFD,
-                    llvm::SmallVectorImpl<char> &ResultPath, FSEntity Type) {
+                    llvm37::SmallVectorImpl<char> &ResultPath, FSEntity Type) {
   const char *Middle = Suffix.empty() ? "-%%%%%%" : "-%%%%%%.";
   return createTemporaryFile(Prefix + Middle + Suffix, ResultFD, ResultPath,
                              Type);
@@ -736,7 +736,7 @@ std::error_code make_absolute(SmallVectorImpl<char> &path) {
   StringRef p(path.data(), path.size());
 
   bool rootDirectory = path::has_root_directory(p),
-#ifdef LLVM_ON_WIN32
+#ifdef LLVM37_ON_WIN32
        rootName = path::has_root_name(p);
 #else
        rootName = true;
@@ -1065,12 +1065,12 @@ std::error_code directory_entry::status(file_status &result) const {
 
 } // end namespace fs
 } // end namespace sys
-} // end namespace llvm
+} // end namespace llvm37
 
 // Include the truly platform-specific parts.
-#if defined(LLVM_ON_UNIX)
+#if defined(LLVM37_ON_UNIX)
 #include "Unix/Path.inc"
 #endif
-#if defined(LLVM_ON_WIN32)
+#if defined(LLVM37_ON_WIN32)
 #include "Windows/MSFileSystem.inc.cpp"
 #endif

@@ -7,12 +7,12 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Support/Memory.h"
-#include "llvm/Support/Process.h"
+#include "llvm37/Support/Memory.h"
+#include "llvm37/Support/Process.h"
 #include "gtest/gtest.h"
 #include <cstdlib>
 
-using namespace llvm;
+using namespace llvm37;
 using namespace sys;
 
 namespace {

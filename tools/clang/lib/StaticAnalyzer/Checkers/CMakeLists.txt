@@ -3,7 +3,7 @@ clang_tablegen(Checkers.inc -gen-clang-sa-checkers
   SOURCE Checkers.td
   TARGET ClangSACheckers)
 
-set(LLVM_LINK_COMPONENTS
+set(LLVM37_LINK_COMPONENTS
   Support
   )
 

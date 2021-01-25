@@ -7,12 +7,12 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/MC/StringTableBuilder.h"
-#include "llvm/Support/Endian.h"
+#include "llvm37/MC/StringTableBuilder.h"
+#include "llvm37/Support/Endian.h"
 #include "gtest/gtest.h"
 #include <string>
 
-using namespace llvm;
+using namespace llvm37;
 
 namespace {
 

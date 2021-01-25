@@ -7,16 +7,16 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/CodeGen/FaultMaps.h"
+#include "llvm37/CodeGen/FaultMaps.h"
 
-#include "llvm/CodeGen/AsmPrinter.h"
-#include "llvm/MC/MCContext.h"
-#include "llvm/MC/MCExpr.h"
-#include "llvm/MC/MCObjectFileInfo.h"
-#include "llvm/MC/MCStreamer.h"
-#include "llvm/Support/Debug.h"
+#include "llvm37/CodeGen/AsmPrinter.h"
+#include "llvm37/MC/MCContext.h"
+#include "llvm37/MC/MCExpr.h"
+#include "llvm37/MC/MCObjectFileInfo.h"
+#include "llvm37/MC/MCStreamer.h"
+#include "llvm37/Support/Debug.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "faultmaps"
 
@@ -57,7 +57,7 @@ void FaultMaps::serializeToFaultMapSection() {
   OS.SwitchSection(FaultMapSection);
 
   // Emit a dummy symbol to force section inclusion.
-  OS.EmitLabel(OutContext.getOrCreateSymbol(Twine("__LLVM_FaultMaps")));
+  OS.EmitLabel(OutContext.getOrCreateSymbol(Twine("__LLVM37_FaultMaps")));
 
   DEBUG(dbgs() << "********** Fault Map Output **********\n");
 
@@ -132,7 +132,7 @@ operator<<(raw_ostream &OS, const FaultMapParser::FunctionInfoAccessor &FI) {
   return OS;
 }
 
-raw_ostream &llvm::operator<<(raw_ostream &OS, const FaultMapParser &FMP) {
+raw_ostream &llvm37::operator<<(raw_ostream &OS, const FaultMapParser &FMP) {
   OS << "Version: " << format_hex(FMP.getFaultMapVersion(), 2) << "\n";
   OS << "NumFunctions: " << FMP.getNumFunctions() << "\n";
 

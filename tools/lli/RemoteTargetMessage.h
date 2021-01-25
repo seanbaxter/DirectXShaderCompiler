@@ -12,10 +12,10 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_TOOLS_LLI_REMOTETARGETMESSAGE_H
-#define LLVM_TOOLS_LLI_REMOTETARGETMESSAGE_H
+#ifndef LLVM37_TOOLS_LLI_REMOTETARGETMESSAGE_H
+#define LLVM37_TOOLS_LLI_REMOTETARGETMESSAGE_H
 
-namespace llvm {
+namespace llvm37 {
 
 // LLI messages from parent-to-child or vice versa follow an exceedingly simple
 // protocol where the first four bytes represent the message type, the next
@@ -80,6 +80,6 @@ enum LLIMessageStatus {
   LLI_Status_IncompleteMsg    // Size received doesn't match request
 };
 
-} // end namespace llvm
+} // end namespace llvm37
 
 #endif

@@ -11,18 +11,18 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Analysis/LoopInfo.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/PatternMatch.h"
-#include "llvm/IR/ValueHandle.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Analysis/ScalarEvolution.h"
-#include "llvm/Analysis/ScalarEvolutionExpressions.h"
-#include "llvm/IR/Module.h"
-#include "llvm/Transforms/Utils/LoopUtils.h"
+#include "llvm37/Analysis/LoopInfo.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/PatternMatch.h"
+#include "llvm37/IR/ValueHandle.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Analysis/ScalarEvolution.h"
+#include "llvm37/Analysis/ScalarEvolutionExpressions.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/Transforms/Utils/LoopUtils.h"
 
-using namespace llvm;
-using namespace llvm::PatternMatch;
+using namespace llvm37;
+using namespace llvm37::PatternMatch;
 
 #define DEBUG_TYPE "loop-utils"
 
@@ -452,7 +452,7 @@ Value *RecurrenceDescriptor::createMinMaxOp(IRBuilder<> &Builder,
   return Select;
 }
 
-bool llvm::isInductionPHI(PHINode *Phi, ScalarEvolution *SE,
+bool llvm37::isInductionPHI(PHINode *Phi, ScalarEvolution *SE,
                           ConstantInt *&StepValue) {
   Type *PhiTy = Phi->getType();
   // We only handle integer and pointer inductions variables.

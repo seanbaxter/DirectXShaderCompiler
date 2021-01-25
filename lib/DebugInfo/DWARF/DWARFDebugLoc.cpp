@@ -7,13 +7,13 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/DebugInfo/DWARF/DWARFDebugLoc.h"
-#include "llvm/Support/Compiler.h"
-#include "llvm/Support/Dwarf.h"
-#include "llvm/Support/Format.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/DebugInfo/DWARF/DWARFDebugLoc.h"
+#include "llvm37/Support/Compiler.h"
+#include "llvm37/Support/Dwarf.h"
+#include "llvm37/Support/Format.h"
+#include "llvm37/Support/raw_ostream.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 void DWARFDebugLoc::dump(raw_ostream &OS) const {
   for (const LocationList &L : Locations) {
@@ -72,7 +72,7 @@ void DWARFDebugLoc::parse(DataExtractor data, unsigned AddressSize) {
     }
   }
   if (data.isValidOffset(Offset))
-    llvm::errs() << "error: failed to consume entire .debug_loc section\n";
+    llvm37::errs() << "error: failed to consume entire .debug_loc section\n";
 }
 
 void DWARFDebugLocDWO::parse(DataExtractor data) {
@@ -86,7 +86,7 @@ void DWARFDebugLocDWO::parse(DataExtractor data) {
                 data.getU8(&Offset))) != dwarf::DW_LLE_end_of_list_entry) {
 
       if (Kind != dwarf::DW_LLE_start_length_entry) {
-        llvm::errs() << "error: dumping support for LLE of kind " << (int)Kind
+        llvm37::errs() << "error: dumping support for LLE of kind " << (int)Kind
                      << " not implemented\n";
         return;
       }

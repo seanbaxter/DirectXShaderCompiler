@@ -18,23 +18,23 @@
 
 #define AA_NAME "alignment-from-assumptions"
 #define DEBUG_TYPE AA_NAME
-#include "llvm/Transforms/Scalar.h"
-#include "llvm/ADT/SmallPtrSet.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/Analysis/AssumptionCache.h"
-#include "llvm/Analysis/LoopInfo.h"
-#include "llvm/Analysis/ScalarEvolution.h"
-#include "llvm/Analysis/ScalarEvolutionExpressions.h"
-#include "llvm/Analysis/ValueTracking.h"
-#include "llvm/IR/Constant.h"
-#include "llvm/IR/Dominators.h"
-#include "llvm/IR/Instruction.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/IR/Intrinsics.h"
-#include "llvm/IR/Module.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/raw_ostream.h"
-using namespace llvm;
+#include "llvm37/Transforms/Scalar.h"
+#include "llvm37/ADT/SmallPtrSet.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/Analysis/AssumptionCache.h"
+#include "llvm37/Analysis/LoopInfo.h"
+#include "llvm37/Analysis/ScalarEvolution.h"
+#include "llvm37/Analysis/ScalarEvolutionExpressions.h"
+#include "llvm37/Analysis/ValueTracking.h"
+#include "llvm37/IR/Constant.h"
+#include "llvm37/IR/Dominators.h"
+#include "llvm37/IR/Instruction.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/IR/Intrinsics.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/raw_ostream.h"
+using namespace llvm37;
 
 STATISTIC(NumLoadAlignChanged,
   "Number of loads changed by alignment assumptions");
@@ -88,7 +88,7 @@ INITIALIZE_PASS_DEPENDENCY(ScalarEvolution)
 INITIALIZE_PASS_END(AlignmentFromAssumptions, AA_NAME,
                     aip_name, false, false)
 
-FunctionPass *llvm::createAlignmentFromAssumptionsPass() {
+FunctionPass *llvm37::createAlignmentFromAssumptionsPass() {
   return new AlignmentFromAssumptions();
 }
 

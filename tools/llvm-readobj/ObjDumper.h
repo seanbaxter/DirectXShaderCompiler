@@ -7,13 +7,13 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_TOOLS_LLVM_READOBJ_OBJDUMPER_H
-#define LLVM_TOOLS_LLVM_READOBJ_OBJDUMPER_H
+#ifndef LLVM37_TOOLS_LLVM37_READOBJ_OBJDUMPER_H
+#define LLVM37_TOOLS_LLVM37_READOBJ_OBJDUMPER_H
 
 #include <memory>
 #include <system_error>
 
-namespace llvm {
+namespace llvm37 {
 namespace object {
   class ObjectFile;
 }
@@ -71,6 +71,6 @@ std::error_code createMachODumper(const object::ObjectFile *Obj,
                                   StreamWriter &Writer,
                                   std::unique_ptr<ObjDumper> &Result);
 
-} // namespace llvm
+} // namespace llvm37
 
 #endif

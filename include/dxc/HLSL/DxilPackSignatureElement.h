@@ -11,7 +11,7 @@
 
 #pragma once
 
-#include "llvm/ADT/StringRef.h"
+#include "llvm37/ADT/StringRef.h"
 #include "dxc/DXIL/DxilSemantic.h"
 #include "dxc/DXIL/DxilInterpolationMode.h"
 #include "dxc/DXIL/DxilCompType.h"

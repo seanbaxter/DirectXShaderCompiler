@@ -16,8 +16,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_TOOLING_REFACTORING_H
-#define LLVM_CLANG_TOOLING_REFACTORING_H
+#ifndef LLVM37_CLANG_TOOLING_REFACTORING_H
+#define LLVM37_CLANG_TOOLING_REFACTORING_H
 
 #include "clang/Tooling/Core/Replacement.h"
 #include "clang/Tooling/Tooling.h"
@@ -71,4 +71,4 @@ private:
 } // end namespace tooling
 } // end namespace clang
 
-#endif // LLVM_CLANG_TOOLING_REFACTORING_H
+#endif // LLVM37_CLANG_TOOLING_REFACTORING_H

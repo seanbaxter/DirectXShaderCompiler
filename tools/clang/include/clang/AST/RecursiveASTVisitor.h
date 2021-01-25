@@ -11,8 +11,8 @@
 //  traverses the entire AST.
 //
 //===----------------------------------------------------------------------===//
-#ifndef LLVM_CLANG_AST_RECURSIVEASTVISITOR_H
-#define LLVM_CLANG_AST_RECURSIVEASTVISITOR_H
+#ifndef LLVM37_CLANG_AST_RECURSIVEASTVISITOR_H
+#define LLVM37_CLANG_AST_RECURSIVEASTVISITOR_H
 
 #include "clang/AST/Attr.h"
 #include "clang/AST/Decl.h"
@@ -2723,4 +2723,4 @@ bool RecursiveASTVisitor<Derived>::VisitOMPDependClause(OMPDependClause *C) {
 
 } // end namespace clang
 
-#endif // LLVM_CLANG_AST_RECURSIVEASTVISITOR_H
+#endif // LLVM37_CLANG_AST_RECURSIVEASTVISITOR_H

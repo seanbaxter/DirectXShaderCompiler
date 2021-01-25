@@ -12,18 +12,18 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/CodeGen/ScheduleDAG.h"
-#include "llvm/CodeGen/ScheduleHazardRecognizer.h"
-#include "llvm/CodeGen/SelectionDAGNodes.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Target/TargetInstrInfo.h"
-#include "llvm/Target/TargetMachine.h"
-#include "llvm/Target/TargetRegisterInfo.h"
-#include "llvm/Target/TargetSubtargetInfo.h"
+#include "llvm37/CodeGen/ScheduleDAG.h"
+#include "llvm37/CodeGen/ScheduleHazardRecognizer.h"
+#include "llvm37/CodeGen/SelectionDAGNodes.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Target/TargetInstrInfo.h"
+#include "llvm37/Target/TargetMachine.h"
+#include "llvm37/Target/TargetRegisterInfo.h"
+#include "llvm37/Target/TargetSubtargetInfo.h"
 #include <climits>
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "pre-RA-sched"
 
@@ -310,7 +310,7 @@ void SUnit::biasCriticalPath() {
     std::swap(*Preds.begin(), *BestI);
 }
 
-#if !defined(NDEBUG) || defined(LLVM_ENABLE_DUMP)
+#if !defined(NDEBUG) || defined(LLVM37_ENABLE_DUMP)
 /// SUnit - Scheduling unit. It's an wrapper around either a single SDNode or
 /// a group of nodes flagged together.
 void SUnit::dump(const ScheduleDAG *G) const {

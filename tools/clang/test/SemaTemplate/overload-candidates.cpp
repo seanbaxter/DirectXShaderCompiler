@@ -48,12 +48,12 @@ namespace boost {
 template<typename T> typename boost::enable_if<sizeof(T) == 4, int>::type if_size_4(); // expected-note{{candidate template ignored: disabled by 'enable_if' [with T = char]}}
 int k = if_size_4<char>(); // expected-error{{no matching function}}
 
-namespace llvm {
+namespace llvm37 {
   template<typename Cond, typename T = void> struct enable_if : boost::enable_if<Cond::value, T> {};
 }
 template<typename T> struct is_int { enum { value = false }; };
 template<> struct is_int<int> { enum { value = true }; };
-template<typename T> typename llvm::enable_if<is_int<T> >::type if_int(); // expected-note{{candidate template ignored: disabled by 'enable_if' [with T = char]}}
+template<typename T> typename llvm37::enable_if<is_int<T> >::type if_int(); // expected-note{{candidate template ignored: disabled by 'enable_if' [with T = char]}}
 void test_if_int() {
   if_int<char>(); // expected-error{{no matching function}}
 }

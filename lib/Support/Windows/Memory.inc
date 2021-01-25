@@ -12,10 +12,10 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Support/DataTypes.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/Process.h"
-#include "llvm/Support/WindowsError.h"
+#include "llvm37/Support/DataTypes.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/Process.h"
+#include "llvm37/Support/WindowsError.h"
 
 // The Windows.h header must be the last one included.
 #include "WindowsSupport.h"
@@ -26,20 +26,20 @@ DWORD getWindowsProtectionFlags(unsigned Flags) {
   switch (Flags) {
   // Contrary to what you might expect, the Windows page protection flags
   // are not a bitwise combination of RWX values
-  case llvm::sys::Memory::MF_READ:
+  case llvm37::sys::Memory::MF_READ:
     return PAGE_READONLY;
-  case llvm::sys::Memory::MF_WRITE:
+  case llvm37::sys::Memory::MF_WRITE:
     // Note: PAGE_WRITE is not supported by VirtualProtect
     return PAGE_READWRITE;
-  case llvm::sys::Memory::MF_READ|llvm::sys::Memory::MF_WRITE:
+  case llvm37::sys::Memory::MF_READ|llvm37::sys::Memory::MF_WRITE:
     return PAGE_READWRITE;
-  case llvm::sys::Memory::MF_READ|llvm::sys::Memory::MF_EXEC:
+  case llvm37::sys::Memory::MF_READ|llvm37::sys::Memory::MF_EXEC:
     return PAGE_EXECUTE_READ;
-  case llvm::sys::Memory::MF_READ |
-         llvm::sys::Memory::MF_WRITE |
-         llvm::sys::Memory::MF_EXEC:
+  case llvm37::sys::Memory::MF_READ |
+         llvm37::sys::Memory::MF_WRITE |
+         llvm37::sys::Memory::MF_EXEC:
     return PAGE_EXECUTE_READWRITE;
-  case llvm::sys::Memory::MF_EXEC:
+  case llvm37::sys::Memory::MF_EXEC:
     return PAGE_EXECUTE;
   default:
     llvm_unreachable("Illegal memory protection flag specified!");
@@ -59,7 +59,7 @@ size_t getAllocationGranularity() {
 
 } // namespace
 
-namespace llvm {
+namespace llvm37 {
 namespace sys {
 
 //===----------------------------------------------------------------------===//
@@ -241,4 +241,4 @@ bool Memory::setRangeExecutable(const void *Addr, size_t Size) {
 }
 
 } // namespace sys
-} // namespace llvm
+} // namespace llvm37

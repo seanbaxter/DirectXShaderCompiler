@@ -7,13 +7,13 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/MC/MCSection.h"
-#include "llvm/MC/MCAssembler.h"
-#include "llvm/MC/MCAsmInfo.h"
-#include "llvm/MC/MCContext.h"
-#include "llvm/MC/MCSymbol.h"
-#include "llvm/Support/raw_ostream.h"
-using namespace llvm;
+#include "llvm37/MC/MCSection.h"
+#include "llvm37/MC/MCAssembler.h"
+#include "llvm37/MC/MCAsmInfo.h"
+#include "llvm37/MC/MCContext.h"
+#include "llvm37/MC/MCSymbol.h"
+#include "llvm37/Support/raw_ostream.h"
+using namespace llvm37;
 
 //===----------------------------------------------------------------------===//
 // MCSection
@@ -85,9 +85,9 @@ MCSection::getSubsectionInsertionPoint(unsigned Subsection) {
   return IP;
 }
 
-#if !defined(NDEBUG) || defined(LLVM_ENABLE_DUMP)
+#if !defined(NDEBUG) || defined(LLVM37_ENABLE_DUMP)
 void MCSection::dump() {
-  raw_ostream &OS = llvm::errs();
+  raw_ostream &OS = llvm37::errs();
 
   OS << "<MCSection";
   OS << " Fragments:[\n      ";

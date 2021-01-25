@@ -11,10 +11,10 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Support/StringPool.h"
-#include "llvm/ADT/StringRef.h"
+#include "llvm37/Support/StringPool.h"
+#include "llvm37/ADT/StringRef.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 StringPool::StringPool() {}
 

@@ -15,44 +15,44 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Transforms/Scalar.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/DepthFirstIterator.h"
-#include "llvm/ADT/Hashing.h"
-#include "llvm/ADT/MapVector.h"
-#include "llvm/ADT/PostOrderIterator.h"
-#include "llvm/ADT/SetVector.h"
-#include "llvm/ADT/SmallPtrSet.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/Analysis/AliasAnalysis.h"
-#include "llvm/Analysis/AssumptionCache.h"
-#include "llvm/Analysis/CFG.h"
-#include "llvm/Analysis/ConstantFolding.h"
-#include "llvm/Analysis/InstructionSimplify.h"
-#include "llvm/Analysis/Loads.h"
-#include "llvm/Analysis/MemoryBuiltins.h"
-#include "llvm/Analysis/MemoryDependenceAnalysis.h"
-#include "llvm/Analysis/PHITransAddr.h"
-#include "llvm/Analysis/TargetLibraryInfo.h"
-#include "llvm/Analysis/ValueTracking.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/Dominators.h"
-#include "llvm/IR/GlobalVariable.h"
-#include "llvm/IR/IRBuilder.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Metadata.h"
-#include "llvm/IR/PatternMatch.h"
-#include "llvm/Support/Allocator.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Transforms/Utils/BasicBlockUtils.h"
-#include "llvm/Transforms/Utils/Local.h"
-#include "llvm/Transforms/Utils/SSAUpdater.h"
+#include "llvm37/Transforms/Scalar.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/DepthFirstIterator.h"
+#include "llvm37/ADT/Hashing.h"
+#include "llvm37/ADT/MapVector.h"
+#include "llvm37/ADT/PostOrderIterator.h"
+#include "llvm37/ADT/SetVector.h"
+#include "llvm37/ADT/SmallPtrSet.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/Analysis/AliasAnalysis.h"
+#include "llvm37/Analysis/AssumptionCache.h"
+#include "llvm37/Analysis/CFG.h"
+#include "llvm37/Analysis/ConstantFolding.h"
+#include "llvm37/Analysis/InstructionSimplify.h"
+#include "llvm37/Analysis/Loads.h"
+#include "llvm37/Analysis/MemoryBuiltins.h"
+#include "llvm37/Analysis/MemoryDependenceAnalysis.h"
+#include "llvm37/Analysis/PHITransAddr.h"
+#include "llvm37/Analysis/TargetLibraryInfo.h"
+#include "llvm37/Analysis/ValueTracking.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/IR/Dominators.h"
+#include "llvm37/IR/GlobalVariable.h"
+#include "llvm37/IR/IRBuilder.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/Metadata.h"
+#include "llvm37/IR/PatternMatch.h"
+#include "llvm37/Support/Allocator.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Transforms/Utils/BasicBlockUtils.h"
+#include "llvm37/Transforms/Utils/Local.h"
+#include "llvm37/Transforms/Utils/SSAUpdater.h"
 #include <vector>
 #include "dxc/DXIL/DxilConstants.h"  // HLSL Change
-using namespace llvm;
+using namespace llvm37;
 using namespace PatternMatch;
 
 #define DEBUG_TYPE "gvn"
@@ -147,7 +147,7 @@ namespace {
   };
 }
 
-namespace llvm {
+namespace llvm37 {
 template <> struct DenseMapInfo<Expression> {
   static inline Expression getEmptyKey() {
     return ~0U;
@@ -158,7 +158,7 @@ template <> struct DenseMapInfo<Expression> {
   }
 
   static unsigned getHashValue(const Expression e) {
-    using llvm::hash_value;
+    using llvm37::hash_value;
     return static_cast<unsigned>(hash_value(e));
   }
   static bool isEqual(const Expression &LHS, const Expression &RHS) {
@@ -736,7 +736,7 @@ namespace {
 }
 
 // The public interface to this file...
-FunctionPass *llvm::createGVNPass(bool NoLoads) {
+FunctionPass *llvm37::createGVNPass(bool NoLoads) {
   return new GVN(NoLoads);
 }
 
@@ -748,7 +748,7 @@ INITIALIZE_PASS_DEPENDENCY(TargetLibraryInfoWrapperPass)
 INITIALIZE_AG_DEPENDENCY(AliasAnalysis)
 INITIALIZE_PASS_END(GVN, "gvn", "Global Value Numbering", false, false)
 
-#if !defined(NDEBUG) || defined(LLVM_ENABLE_DUMP)
+#if !defined(NDEBUG) || defined(LLVM37_ENABLE_DUMP)
 void GVN::dump(DenseMap<uint32_t, Value*>& d) {
   errs() << "{\n";
   for (DenseMap<uint32_t, Value*>::iterator I = d.begin(),

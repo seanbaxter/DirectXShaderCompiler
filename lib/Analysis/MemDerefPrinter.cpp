@@ -7,18 +7,18 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Analysis/Passes.h"
-#include "llvm/ADT/SetVector.h"
-#include "llvm/Analysis/MemoryDependenceAnalysis.h"
-#include "llvm/Analysis/ValueTracking.h"
-#include "llvm/IR/CallSite.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/InstIterator.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Module.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/raw_ostream.h"
-using namespace llvm;
+#include "llvm37/Analysis/Passes.h"
+#include "llvm37/ADT/SetVector.h"
+#include "llvm37/Analysis/MemoryDependenceAnalysis.h"
+#include "llvm37/Analysis/ValueTracking.h"
+#include "llvm37/IR/CallSite.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/IR/InstIterator.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/raw_ostream.h"
+using namespace llvm37;
 
 namespace {
   struct MemDerefPrinter : public FunctionPass {
@@ -45,7 +45,7 @@ INITIALIZE_PASS_BEGIN(MemDerefPrinter, "print-memderefs",
 INITIALIZE_PASS_END(MemDerefPrinter, "print-memderefs",
                     "Memory Dereferenciblity of pointers in function", false, true)
 
-FunctionPass *llvm::createMemDerefPrinter() {
+FunctionPass *llvm37::createMemDerefPrinter() {
   return new MemDerefPrinter();
 }
 

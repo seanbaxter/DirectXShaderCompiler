@@ -7,25 +7,25 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_DRIVER_DRIVER_H
-#define LLVM_CLANG_DRIVER_DRIVER_H
+#ifndef LLVM37_CLANG_DRIVER_DRIVER_H
+#define LLVM37_CLANG_DRIVER_DRIVER_H
 
 #include "clang/Basic/Diagnostic.h"
 #include "clang/Basic/LLVM.h"
 #include "clang/Driver/Phases.h"
 #include "clang/Driver/Types.h"
 #include "clang/Driver/Util.h"
-#include "llvm/ADT/StringMap.h"
-#include "llvm/ADT/StringRef.h"
-#include "llvm/ADT/Triple.h"
-#include "llvm/Support/Path.h" // FIXME: Kill when CompilationInfo
+#include "llvm37/ADT/StringMap.h"
+#include "llvm37/ADT/StringRef.h"
+#include "llvm37/ADT/Triple.h"
+#include "llvm37/Support/Path.h" // FIXME: Kill when CompilationInfo
 #include <memory>
                               // lands.
 #include <list>
 #include <set>
 #include <string>
 
-namespace llvm {
+namespace llvm37 {
 namespace opt {
   class Arg;
   class ArgList;
@@ -50,7 +50,7 @@ namespace driver {
 /// Driver - Encapsulate logic for constructing compilation processes
 /// from a set of gcc-driver-like command line arguments.
 class Driver {
-  llvm::opt::OptTable *Opts;
+  llvm37::opt::OptTable *Opts;
 
   DiagnosticsEngine &Diags;
 
@@ -126,7 +126,7 @@ public:
   const char *CCLogDiagnosticsFilename;
 
   /// A list of inputs and their types for the given arguments.
-  typedef SmallVector<std::pair<types::ID, const llvm::opt::Arg *>, 16>
+  typedef SmallVector<std::pair<types::ID, const llvm37::opt::Arg *>, 16>
       InputList;
 
   /// Whether the driver should follow g++ like behavior.
@@ -181,18 +181,18 @@ private:
   /// This maps from the string representation of a triple to a ToolChain
   /// created targeting that triple. The driver owns all the ToolChain objects
   /// stored in it, and will clean them up when torn down.
-  mutable llvm::StringMap<ToolChain *> ToolChains;
+  mutable llvm37::StringMap<ToolChain *> ToolChains;
 
 private:
   /// TranslateInputArgs - Create a new derived argument list from the input
   /// arguments, after applying the standard argument translations.
-  llvm::opt::DerivedArgList *
-  TranslateInputArgs(const llvm::opt::InputArgList &Args) const;
+  llvm37::opt::DerivedArgList *
+  TranslateInputArgs(const llvm37::opt::InputArgList &Args) const;
 
   // getFinalPhase - Determine which compilation mode we are in and record 
   // which option we used to determine the final phase.
-  phases::ID getFinalPhase(const llvm::opt::DerivedArgList &DAL,
-                           llvm::opt::Arg **FinalPhaseArg = nullptr) const;
+  phases::ID getFinalPhase(const llvm37::opt::DerivedArgList &DAL,
+                           llvm37::opt::Arg **FinalPhaseArg = nullptr) const;
 
   // Before executing jobs, sets up response files for commands that need them.
   void setUpResponseFiles(Compilation &C, Command &Cmd);
@@ -212,7 +212,7 @@ public:
   /// Name to use when invoking gcc/g++.
   const std::string &getCCCGenericGCCName() const { return CCCGenericGCCName; }
 
-  const llvm::opt::OptTable &getOpts() const { return *Opts; }
+  const llvm37::opt::OptTable &getOpts() const { return *Opts; }
 
   const DiagnosticsEngine &getDiags() const { return Diags; }
 
@@ -262,7 +262,7 @@ public:
 
   /// ParseArgStrings - Parse the given list of strings into an
   /// ArgList.
-  llvm::opt::InputArgList ParseArgStrings(ArrayRef<const char *> Args);
+  llvm37::opt::InputArgList ParseArgStrings(ArrayRef<const char *> Args);
 
   /// BuildInputs - Construct the list of inputs and their types from 
   /// the given arguments.
@@ -271,7 +271,7 @@ public:
   /// \param Args - The input arguments.
   /// \param Inputs - The list to store the resulting compilation 
   /// inputs onto.
-  void BuildInputs(const ToolChain &TC, llvm::opt::DerivedArgList &Args,
+  void BuildInputs(const ToolChain &TC, llvm37::opt::DerivedArgList &Args,
                    InputList &Inputs) const;
 
   /// BuildActions - Construct the list of actions to perform for the
@@ -280,7 +280,7 @@ public:
   /// \param TC - The default host tool chain.
   /// \param Args - The input arguments.
   /// \param Actions - The list to store the resulting actions onto.
-  void BuildActions(const ToolChain &TC, llvm::opt::DerivedArgList &Args,
+  void BuildActions(const ToolChain &TC, llvm37::opt::DerivedArgList &Args,
                     const InputList &Inputs, ActionList &Actions) const;
 
   /// BuildUniversalActions - Construct the list of actions to perform
@@ -290,7 +290,7 @@ public:
   /// \param Args - The input arguments.
   /// \param Actions - The list to store the resulting actions onto.
   void BuildUniversalActions(const ToolChain &TC,
-                             llvm::opt::DerivedArgList &Args,
+                             llvm37::opt::DerivedArgList &Args,
                              const InputList &BAInputs,
                              ActionList &Actions) const;
 
@@ -357,7 +357,7 @@ public:
   /// \p Phase on the \p Input, taking in to account arguments
   /// like -fsyntax-only or --analyze.
   std::unique_ptr<Action>
-  ConstructPhaseAction(const ToolChain &TC, const llvm::opt::ArgList &Args,
+  ConstructPhaseAction(const ToolChain &TC, const llvm37::opt::ArgList &Args,
                        phases::ID Phase, std::unique_ptr<Action> Input) const;
 
   /// BuildJobsForAction - Construct the jobs to perform for the
@@ -402,15 +402,15 @@ public:
   /// handle this action.
   bool ShouldUseClangCompiler(const JobAction &JA) const;
 
-  bool IsUsingLTO(const llvm::opt::ArgList &Args) const;
+  bool IsUsingLTO(const llvm37::opt::ArgList &Args) const;
 
 private:
   /// \brief Retrieves a ToolChain for a particular \p Target triple.
   ///
   /// Will cache ToolChains for the life of the driver object, and create them
   /// on-demand.
-  const ToolChain &getToolChain(const llvm::opt::ArgList &Args,
-                                const llvm::Triple &Target) const;
+  const ToolChain &getToolChain(const llvm37::opt::ArgList &Args,
+                                const llvm37::Triple &Target) const;
 
   /// @}
 
@@ -433,7 +433,7 @@ public:
 
 /// \return True if the last defined optimization level is -Ofast.
 /// And False otherwise.
-bool isOptimizationLevelFast(const llvm::opt::ArgList &Args);
+bool isOptimizationLevelFast(const llvm37::opt::ArgList &Args);
 
 } // end namespace driver
 } // end namespace clang

@@ -13,8 +13,8 @@
 ///
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_SEMA_SEMALAMBDA_H
-#define LLVM_CLANG_SEMA_SEMALAMBDA_H
+#ifndef LLVM37_CLANG_SEMA_SEMALAMBDA_H
+#define LLVM37_CLANG_SEMA_SEMALAMBDA_H
 #include "clang/AST/ASTLambda.h"
 #include "clang/Sema/ScopeInfo.h"
 namespace clang {

@@ -30,7 +30,7 @@ bool LiteralTypeVisitor::isLiteralLargerThan32Bits(
   assert(constant->hasAstResultType());
   QualType type = constant->getAstResultType();
   const bool isSigned = type->isSignedIntegerType();
-  const llvm::APInt &value = constant->getValue();
+  const llvm37::APInt &value = constant->getValue();
   return (isSigned && !value.isSignedIntN(32)) ||
          (!isSigned && !value.isIntN(32));
 }
@@ -311,7 +311,7 @@ bool LiteralTypeVisitor::visit(SpirvStore *inst) {
 
 bool LiteralTypeVisitor::visit(SpirvConstantComposite *inst) {
   const auto resultType = inst->getAstResultType();
-  llvm::SmallVector<SpirvInstruction *, 4> constituents(
+  llvm37::SmallVector<SpirvInstruction *, 4> constituents(
       inst->getConstituents().begin(), inst->getConstituents().end());
   updateTypeForCompositeMembers(resultType, constituents);
   return true;
@@ -340,7 +340,7 @@ bool LiteralTypeVisitor::visit(SpirvCompositeExtract *inst) {
 }
 
 bool LiteralTypeVisitor::updateTypeForCompositeMembers(
-    QualType compositeType, llvm::ArrayRef<SpirvInstruction *> constituents) {
+    QualType compositeType, llvm37::ArrayRef<SpirvInstruction *> constituents) {
 
   if (compositeType == QualType())
     return true;

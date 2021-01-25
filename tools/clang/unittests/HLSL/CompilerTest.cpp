@@ -35,7 +35,7 @@
 #include "dxc/Test/HlslTestUtils.h"
 #include "dxc/Test/DxcTestUtils.h"
 
-#include "llvm/Support/raw_os_ostream.h"
+#include "llvm37/Support/raw_os_ostream.h"
 #include "dxc/Support/Global.h"
 #include "dxc/Support/dxcapi.use.h"
 #include "dxc/Support/microcom.h"
@@ -43,11 +43,11 @@
 #include "dxc/Support/Unicode.h"
 
 #include <fstream>
-#include "llvm/Support/FileSystem.h"
-#include "llvm/Support/MSFileSystem.h"
-#include "llvm/Support/Path.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/ADT/StringSwitch.h"
+#include "llvm37/Support/FileSystem.h"
+#include "llvm37/Support/MSFileSystem.h"
+#include "llvm37/Support/Path.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/ADT/StringSwitch.h"
 
 using namespace std;
 using namespace hlsl_test;
@@ -272,12 +272,12 @@ public:
 
     std::string cmdLine = GetFirstLine(name.c_str());
 
-    llvm::StringRef argsRef = cmdLine;
-    llvm::SmallVector<llvm::StringRef, 8> splitArgs;
+    llvm37::StringRef argsRef = cmdLine;
+    llvm37::SmallVector<llvm37::StringRef, 8> splitArgs;
     argsRef.split(splitArgs, " ");
     hlsl::options::MainArgs argStrings(splitArgs);
     std::string errorString;
-    llvm::raw_string_ostream errorStream(errorString);
+    llvm37::raw_string_ostream errorStream(errorString);
     hlsl::options::DxcOpts opts;
     IFT(ReadDxcOpts(hlsl::options::getHlslOptTable(), /*flagsToInclude*/ 0,
                     argStrings, opts, errorStream));
@@ -341,19 +341,19 @@ public:
   }
 
   void CodeGenTestCheckBatchHash(std::wstring suitePath, bool implicitDir = true) {
-    using namespace llvm;
+    using namespace llvm37;
     using namespace WEX::TestExecution;
 
     if (implicitDir) suitePath.insert(0, L"..\\HLSLFileCheck\\");
 
-    ::llvm::sys::fs::MSFileSystem *msfPtr;
+    ::llvm37::sys::fs::MSFileSystem *msfPtr;
     VERIFY_SUCCEEDED(CreateMSFileSystemForDisk(&msfPtr));
-    std::unique_ptr<::llvm::sys::fs::MSFileSystem> msf(msfPtr);
-    ::llvm::sys::fs::AutoPerThreadSystem pts(msf.get());
+    std::unique_ptr<::llvm37::sys::fs::MSFileSystem> msf(msfPtr);
+    ::llvm37::sys::fs::AutoPerThreadSystem pts(msf.get());
     IFTLLVM(pts.error_code());
 
     CW2A pUtf8Filename(suitePath.c_str());
-    if (!llvm::sys::path::is_absolute(pUtf8Filename.m_psz)) {
+    if (!llvm37::sys::path::is_absolute(pUtf8Filename.m_psz)) {
       suitePath = hlsl_test::GetPathToHlslDataFile(suitePath.c_str());
     }
 
@@ -362,13 +362,13 @@ public:
     unsigned numTestsRun = 0;
 
     std::error_code EC;
-    llvm::SmallString<128> DirNative;
-    llvm::sys::path::native(utf8SuitePath.m_psz, DirNative);
-    for (llvm::sys::fs::recursive_directory_iterator Dir(DirNative, EC), DirEnd;
+    llvm37::SmallString<128> DirNative;
+    llvm37::sys::path::native(utf8SuitePath.m_psz, DirNative);
+    for (llvm37::sys::fs::recursive_directory_iterator Dir(DirNative, EC), DirEnd;
          Dir != DirEnd && !EC; Dir.increment(EC)) {
       // Check whether this entry has an extension typically associated with
       // headers.
-      if (!llvm::StringSwitch<bool>(llvm::sys::path::extension(Dir->path()))
+      if (!llvm37::StringSwitch<bool>(llvm37::sys::path::extension(Dir->path()))
           .Cases(".hlsl", ".ll", true).Default(false))
         continue;
       StringRef filename = Dir->path();
@@ -390,13 +390,13 @@ public:
 
   void CodeGenTestCheckFullPath(LPCWSTR fullPath, LPCWSTR dumpPath = nullptr) {
     // Create file system if needed
-    llvm::sys::fs::MSFileSystem *msfPtr = llvm::sys::fs::GetCurrentThreadFileSystem();
-    std::unique_ptr<llvm::sys::fs::MSFileSystem> msf;
+    llvm37::sys::fs::MSFileSystem *msfPtr = llvm37::sys::fs::GetCurrentThreadFileSystem();
+    std::unique_ptr<llvm37::sys::fs::MSFileSystem> msf;
     if (!msfPtr) {
       VERIFY_SUCCEEDED(CreateMSFileSystemForDisk(&msfPtr));
       msf.reset(msfPtr);
     }
-    llvm::sys::fs::AutoPerThreadSystem pts(msfPtr);
+    llvm37::sys::fs::AutoPerThreadSystem pts(msfPtr);
     IFTLLVM(pts.error_code());
 
     FileRunTestResult t = FileRunTestResult::RunFromFileCommands(fullPath,
@@ -423,20 +423,20 @@ public:
   }
 
   void CodeGenTestCheckBatchDir(std::wstring suitePath, bool implicitDir = true) {
-    using namespace llvm;
+    using namespace llvm37;
     using namespace WEX::TestExecution;
 
     if (implicitDir) suitePath.insert(0, L"..\\HLSLFileCheck\\");
 
-    ::llvm::sys::fs::MSFileSystem *msfPtr;
+    ::llvm37::sys::fs::MSFileSystem *msfPtr;
     VERIFY_SUCCEEDED(CreateMSFileSystemForDisk(&msfPtr));
-    std::unique_ptr<::llvm::sys::fs::MSFileSystem> msf(msfPtr);
-    ::llvm::sys::fs::AutoPerThreadSystem pts(msf.get());
+    std::unique_ptr<::llvm37::sys::fs::MSFileSystem> msf(msfPtr);
+    ::llvm37::sys::fs::AutoPerThreadSystem pts(msf.get());
     IFTLLVM(pts.error_code());
 
     std::wstring dumpPath;
     CW2A pUtf8Filename(suitePath.c_str());
-    if (!llvm::sys::path::is_absolute(pUtf8Filename.m_psz)) {
+    if (!llvm37::sys::path::is_absolute(pUtf8Filename.m_psz)) {
       dumpPath = hlsl_test::GetPathToHlslDataFile(suitePath.c_str(), FILECHECKDUMPDIRPARAM);
       suitePath = hlsl_test::GetPathToHlslDataFile(suitePath.c_str());
     }
@@ -446,13 +446,13 @@ public:
     unsigned numTestsRun = 0;
 
     std::error_code EC;
-    llvm::SmallString<128> DirNative;
-    llvm::sys::path::native(utf8SuitePath.m_psz, DirNative);
-    for (llvm::sys::fs::recursive_directory_iterator Dir(DirNative, EC), DirEnd;
+    llvm37::SmallString<128> DirNative;
+    llvm37::sys::path::native(utf8SuitePath.m_psz, DirNative);
+    for (llvm37::sys::fs::recursive_directory_iterator Dir(DirNative, EC), DirEnd;
          Dir != DirEnd && !EC; Dir.increment(EC)) {
       // Check whether this entry has an extension typically associated with
       // headers.
-      if (!llvm::StringSwitch<bool>(llvm::sys::path::extension(Dir->path()))
+      if (!llvm37::StringSwitch<bool>(llvm37::sys::path::extension(Dir->path()))
           .Cases(".hlsl", ".ll", true).Default(false))
         continue;
       StringRef filename = Dir->path();
@@ -2426,7 +2426,7 @@ TEST_F(CompilerTest, CompileOtherModesWithDebugOptsThenOk) {
     "float main(float i : IN) : OUT { return i * 2.0F; }",
     &pSource);
 
-  auto testWithOpts = [&](LPCWSTR entry, LPCWSTR target, llvm::ArrayRef<LPCWSTR> mainOpts) -> HRESULT {
+  auto testWithOpts = [&](LPCWSTR entry, LPCWSTR target, llvm37::ArrayRef<LPCWSTR> mainOpts) -> HRESULT {
     std::vector<LPCWSTR> opts(mainOpts);
     opts.insert(opts.end(), {L"-Zi", L"-Fd", L"file.pdb"});
     CComPtr<IDxcOperationResult> pResult;
@@ -2530,14 +2530,14 @@ TEST_F(CompilerTest, ManualFileCheckTest) {
 #else
 TEST_F(CompilerTest, DISABLED_ManualFileCheckTest) {
 #endif
-  using namespace llvm;
+  using namespace llvm37;
   using namespace WEX::TestExecution;
 
   WEX::Common::String value;
   VERIFY_SUCCEEDED(RuntimeParameters::TryGetValue(L"InputPath", value));
 
   std::wstring path = value;
-  if (!llvm::sys::path::is_absolute(CW2A(path.c_str()).m_psz)) {
+  if (!llvm37::sys::path::is_absolute(CW2A(path.c_str()).m_psz)) {
     path = hlsl_test::GetPathToHlslDataFile(path.c_str());
   }
 
@@ -2545,12 +2545,12 @@ TEST_F(CompilerTest, DISABLED_ManualFileCheckTest) {
   {
     // Temporarily setup the filesystem for testing whether the path is a directory.
     // If it is, CodeGenTestCheckBatchDir will create its own instance.
-    llvm::sys::fs::MSFileSystem *msfPtr;
+    llvm37::sys::fs::MSFileSystem *msfPtr;
     VERIFY_SUCCEEDED(CreateMSFileSystemForDisk(&msfPtr));
-    std::unique_ptr<llvm::sys::fs::MSFileSystem> msf(msfPtr);
-    llvm::sys::fs::AutoPerThreadSystem pts(msf.get());
+    std::unique_ptr<llvm37::sys::fs::MSFileSystem> msf(msfPtr);
+    llvm37::sys::fs::AutoPerThreadSystem pts(msf.get());
     IFTLLVM(pts.error_code());
-    isDirectory = llvm::sys::fs::is_directory(CW2A(path.c_str()).m_psz);
+    isDirectory = llvm37::sys::fs::is_directory(CW2A(path.c_str()).m_psz);
   }
 
   if (isDirectory) {

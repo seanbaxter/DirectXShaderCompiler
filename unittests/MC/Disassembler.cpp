@@ -8,10 +8,10 @@
 //===----------------------------------------------------------------------===//
 
 #include "llvm-c/Disassembler.h"
-#include "llvm/Support/TargetSelect.h"
+#include "llvm37/Support/TargetSelect.h"
 #include "gtest/gtest.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 static const char *symbolLookupCallback(void *DisInfo, uint64_t ReferenceValue,
                                         uint64_t *ReferenceType,
@@ -22,9 +22,9 @@ static const char *symbolLookupCallback(void *DisInfo, uint64_t ReferenceValue,
 }
 
 TEST(Disassembler, Test1) {
-  llvm::InitializeAllTargetInfos();
-  llvm::InitializeAllTargetMCs();
-  llvm::InitializeAllDisassemblers();
+  llvm37::InitializeAllTargetInfos();
+  llvm37::InitializeAllTargetMCs();
+  llvm37::InitializeAllDisassemblers();
 
   uint8_t Bytes[] = {0x90, 0x90, 0xeb, 0xfd};
   uint8_t *BytesP = Bytes;

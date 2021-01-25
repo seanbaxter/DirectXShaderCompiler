@@ -63,7 +63,7 @@ Don't Expose System Headers
 ---------------------------
 
 The System Library must shield LLVM from **all** system headers. To obtain
-system level functionality, LLVM source must ``#include "llvm/System/Thing.h"``
+system level functionality, LLVM source must ``#include "llvm37/System/Thing.h"``
 and nothing else. This means that ``Thing.h`` cannot expose any system header
 files. This protects LLVM from accidentally using system specific functionality
 and only allows it via the ``lib/System`` interface.
@@ -214,19 +214,19 @@ Implementations of the System Library interface are separated by their general
 class of operating system. Currently only Unix and Win32 classes are defined
 but more could be added for other operating system classifications.  To
 distinguish which implementation to compile, the code in ``lib/System`` uses
-the ``LLVM_ON_UNIX`` and ``LLVM_ON_WIN32`` ``#defines`` provided via configure
+the ``LLVM37_ON_UNIX`` and ``LLVM37_ON_WIN32`` ``#defines`` provided via configure
 through the ``llvm/Config/config.h`` file. Each source file in ``lib/System``,
 after implementing the generic (operating system independent) functionality
 needs to include the correct implementation using a set of
-``#if defined(LLVM_ON_XYZ)`` directives. For example, if we had
+``#if defined(LLVM37_ON_XYZ)`` directives. For example, if we had
 ``lib/System/File.cpp``, we'd expect to see in that file:
 
 .. code-block:: c++
 
-  #if defined(LLVM_ON_UNIX)
+  #if defined(LLVM37_ON_UNIX)
   #include "Unix/File.cpp"
   #endif
-  #if defined(LLVM_ON_WIN32)
+  #if defined(LLVM37_ON_WIN32)
   #include "Win32/File.cpp"
   #endif
 

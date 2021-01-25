@@ -12,15 +12,15 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/ProfileData/SampleProf.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/ManagedStatic.h"
+#include "llvm37/ProfileData/SampleProf.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/ManagedStatic.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 namespace {
 class SampleProfErrorCategoryType : public std::error_category {
-  const char *name() const LLVM_NOEXCEPT override { return "llvm.sampleprof"; }
+  const char *name() const LLVM37_NOEXCEPT override { return "llvm.sampleprof"; }
   std::string message(int IE) const override {
     sampleprof_error E = static_cast<sampleprof_error>(IE);
     switch (E) {
@@ -46,6 +46,6 @@ class SampleProfErrorCategoryType : public std::error_category {
 
 static ManagedStatic<SampleProfErrorCategoryType> ErrorCategory;
 
-const std::error_category &llvm::sampleprof_category() {
+const std::error_category &llvm37::sampleprof_category() {
   return *ErrorCategory;
 }

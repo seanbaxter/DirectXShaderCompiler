@@ -12,7 +12,7 @@
 //===----------------------------------------------------------------------===//
 
 #include "clang/Basic/TokenKinds.h"
-#include "llvm/Support/ErrorHandling.h"
+#include "llvm37/Support/ErrorHandling.h"
 using namespace clang;
 
 static const char * const TokNames[] = {

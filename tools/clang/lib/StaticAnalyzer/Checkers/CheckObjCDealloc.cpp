@@ -23,7 +23,7 @@
 #include "clang/StaticAnalyzer/Core/BugReporter/PathDiagnostic.h"
 #include "clang/StaticAnalyzer/Core/Checker.h"
 #include "clang/StaticAnalyzer/Core/PathSensitive/AnalysisManager.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/Support/raw_ostream.h"
 
 using namespace clang;
 using namespace ento;
@@ -152,7 +152,7 @@ static void checkObjCDealloc(const CheckerBase *Checker,
                        : "missing -dealloc (Hybrid MM, non-GC)";
 
     std::string buf;
-    llvm::raw_string_ostream os(buf);
+    llvm37::raw_string_ostream os(buf);
     os << "Objective-C class '" << *D << "' lacks a 'dealloc' instance method";
 
     BR.EmitBasicReport(D, Checker, name, categories::CoreFoundationObjectiveC,
@@ -196,7 +196,7 @@ static void checkObjCDealloc(const CheckerBase *Checker,
        != requiresRelease) {
       const char *name = nullptr;
       std::string buf;
-      llvm::raw_string_ostream os(buf);
+      llvm37::raw_string_ostream os(buf);
 
       if (requiresRelease) {
         name = LOpts.getGC() == LangOptions::NonGC

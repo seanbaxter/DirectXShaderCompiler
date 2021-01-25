@@ -12,27 +12,27 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Transforms/Utils/Cloning.h"
-#include "llvm/IR/Constant.h"
-#include "llvm/IR/DerivedTypes.h"
-#include "llvm/IR/Module.h"
-#include "llvm/Transforms/Utils/ValueMapper.h"
+#include "llvm37/Transforms/Utils/Cloning.h"
+#include "llvm37/IR/Constant.h"
+#include "llvm37/IR/DerivedTypes.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/Transforms/Utils/ValueMapper.h"
 #include "llvm-c/Core.h"
-using namespace llvm;
+using namespace llvm37;
 
 /// CloneModule - Return an exact copy of the specified module.  This is not as
 /// easy as it might seem because we have to worry about making copies of global
 /// variables and functions, and making their (initializers and references,
 /// respectively) refer to the right globals.
 ///
-Module *llvm::CloneModule(const Module *M) {
+Module *llvm37::CloneModule(const Module *M) {
   // Create the value map that maps things from the old module over to the new
   // module.
   ValueToValueMapTy VMap;
   return CloneModule(M, VMap);
 }
 
-Module *llvm::CloneModule(const Module *M, ValueToValueMapTy &VMap) {
+Module *llvm37::CloneModule(const Module *M, ValueToValueMapTy &VMap) {
   // First off, we need to create the new module.
   Module *New = new Module(M->getModuleIdentifier(), M->getContext());
   New->setDataLayout(M->getDataLayout());

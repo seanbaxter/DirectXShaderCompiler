@@ -11,21 +11,21 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_LIB_ASMPARSER_LLPARSER_H
-#define LLVM_LIB_ASMPARSER_LLPARSER_H
+#ifndef LLVM37_LIB_ASMPARSER_LLPARSER_H
+#define LLVM37_LIB_ASMPARSER_LLPARSER_H
 
 #include "LLLexer.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/StringMap.h"
-#include "llvm/IR/Attributes.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/Operator.h"
-#include "llvm/IR/Type.h"
-#include "llvm/IR/ValueHandle.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/StringMap.h"
+#include "llvm37/IR/Attributes.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/Operator.h"
+#include "llvm37/IR/Type.h"
+#include "llvm37/IR/ValueHandle.h"
 #include <map>
 
-namespace llvm {
+namespace llvm37 {
   class Module;
   class OpaqueType;
   class Function;
@@ -410,7 +410,7 @@ namespace llvm {
 
 #define HANDLE_SPECIALIZED_MDNODE_LEAF(CLASS)                                  \
   bool Parse##CLASS(MDNode *&Result, bool IsDistinct);
-#include "llvm/IR/Metadata.def"
+#include "llvm37/IR/Metadata.def"
 
     // Function Parsing.
     struct ArgInfo {

@@ -253,7 +253,7 @@ MultiplexConsumer::MultiplexConsumer(
   }
   if (!mutationListeners.empty()) {
     MutationListener =
-        llvm::make_unique<MultiplexASTMutationListener>(mutationListeners);
+        llvm37::make_unique<MultiplexASTMutationListener>(mutationListeners);
   }
 }
 #else
@@ -272,11 +272,11 @@ MultiplexConsumer::MultiplexConsumer(
   }
   if (!mutationListeners.empty()) {
     MutationListener =
-        llvm::make_unique<MultiplexASTMutationListener>(mutationListeners);
+        llvm37::make_unique<MultiplexASTMutationListener>(mutationListeners);
   }
   if (!serializationListeners.empty()) {
     DeserializationListener =
-        llvm::make_unique<MultiplexASTDeserializationListener>(
+        llvm37::make_unique<MultiplexASTDeserializationListener>(
             serializationListeners);
   }
 }
@@ -341,17 +341,17 @@ void MultiplexConsumer::HandleImplicitImportDecl(ImportDecl *D) {
     Consumer->HandleImplicitImportDecl(D);
 }
 
-void MultiplexConsumer::HandleLinkerOptionPragma(llvm::StringRef Opts) {
+void MultiplexConsumer::HandleLinkerOptionPragma(llvm37::StringRef Opts) {
   for (auto &Consumer : Consumers)
     Consumer->HandleLinkerOptionPragma(Opts);
 }
 
-void MultiplexConsumer::HandleDetectMismatch(llvm::StringRef Name, llvm::StringRef Value) {
+void MultiplexConsumer::HandleDetectMismatch(llvm37::StringRef Name, llvm37::StringRef Value) {
   for (auto &Consumer : Consumers)
     Consumer->HandleDetectMismatch(Name, Value);
 }
 
-void MultiplexConsumer::HandleDependentLibrary(llvm::StringRef Lib) {
+void MultiplexConsumer::HandleDependentLibrary(llvm37::StringRef Lib) {
   for (auto &Consumer : Consumers)
     Consumer->HandleDependentLibrary(Lib);
 }

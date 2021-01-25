@@ -7,13 +7,13 @@
 #include "clang/AST/PrettyPrinter.h"
 #include "clang/AST/StmtVisitor.h"
 #include "clang/Basic/Builtins.h"
-#include "llvm/ADT/DenseMap.h"
+#include "llvm37/ADT/DenseMap.h"
 #include <memory>
-#include "llvm/ADT/SmallPtrSet.h"
-#include "llvm/Support/Allocator.h"
-#include "llvm/Support/Format.h"
-#include "llvm/Support/GraphWriter.h"
-#include "llvm/Support/SaveAndRestore.h"
+#include "llvm37/ADT/SmallPtrSet.h"
+#include "llvm37/Support/Allocator.h"
+#include "llvm37/Support/Format.h"
+#include "llvm37/Support/GraphWriter.h"
+#include "llvm37/Support/SaveAndRestore.h"
 
 using namespace clang;
 
@@ -228,7 +228,7 @@ TryResult bothKnownTrue(TryResult R1, TryResult R2) {
 }
 
 class reverse_children {
-  llvm::SmallVector<Stmt *, 12> childrenBuf;
+  llvm37::SmallVector<Stmt *, 12> childrenBuf;
   ArrayRef<Stmt*> children;
 public:
   reverse_children(Stmt *S);
@@ -248,7 +248,7 @@ reverse_children::reverse_children(Stmt *S) {
     // Note: Fill in this switch with more cases we want to optimize.
     case Stmt::InitListExprClass: {
       InitListExpr *IE = cast<InitListExpr>(S);
-      children = llvm::makeArrayRef(reinterpret_cast<Stmt**>(IE->getInits()),
+      children = llvm37::makeArrayRef(reinterpret_cast<Stmt**>(IE->getInits()),
                                     IE->getNumInits());
       return;
     }
@@ -297,7 +297,7 @@ class CFGBuilder {
   LocalScope::const_iterator ScopePos;
 
   // LabelMap records the mapping from Label expressions to their jump targets.
-  typedef llvm::DenseMap<LabelDecl*, JumpTarget> LabelMapTy;
+  typedef llvm37::DenseMap<LabelDecl*, JumpTarget> LabelMapTy;
   LabelMapTy LabelMap;
 
   // A list of blocks that end with a "goto" that must be backpatched to their
@@ -306,7 +306,7 @@ class CFGBuilder {
   BackpatchBlocksTy BackpatchBlocks;
 
   // A list of labels whose address has been taken (for indirect gotos).
-  typedef llvm::SmallPtrSet<LabelDecl*, 5> LabelSetTy;
+  typedef llvm37::SmallPtrSet<LabelDecl*, 5> LabelSetTy;
   LabelSetTy AddressTakenLabels;
 
   bool badCFG;
@@ -321,7 +321,7 @@ class CFGBuilder {
 
   // Caches boolean evaluations of expressions to avoid multiple re-evaluations
   // during construction of branches for chained logical operators.
-  typedef llvm::DenseMap<Expr *, TryResult> CachedBoolEvalsTy;
+  typedef llvm37::DenseMap<Expr *, TryResult> CachedBoolEvalsTy;
   CachedBoolEvalsTy CachedBoolEvals;
 
 public:
@@ -571,7 +571,7 @@ private:
     if (!IntLiteral || !BoolExpr->isKnownToHaveBooleanValue())
       return TryResult();
 
-    llvm::APInt IntValue = IntLiteral->getValue();
+    llvm37::APInt IntValue = IntLiteral->getValue();
     if ((IntValue == 1) || (IntValue == 0))
       return TryResult();
 
@@ -623,8 +623,8 @@ private:
       if (!IntLiteral2)
         return TryResult();
 
-      llvm::APInt L1 = IntLiteral->getValue();
-      llvm::APInt L2 = IntLiteral2->getValue();
+      llvm37::APInt L1 = IntLiteral->getValue();
+      llvm37::APInt L2 = IntLiteral2->getValue();
       if ((BitOp->getOpcode() == BO_And && (L2 & L1) != L1) ||
           (BitOp->getOpcode() == BO_Or  && (L2 | L1) != L1)) {
         if (BuildOpts.Observer)
@@ -633,7 +633,7 @@ private:
         TryResult(B->getOpcode() != BO_EQ);
       }
     } else if (BoolExpr->isKnownToHaveBooleanValue()) {
-      llvm::APInt IntValue = IntLiteral->getValue();
+      llvm37::APInt IntValue = IntLiteral->getValue();
       if ((IntValue == 1) || (IntValue == 0)) {
         return TryResult();
       }
@@ -644,8 +644,8 @@ private:
   }
 
   TryResult analyzeLogicOperatorCondition(BinaryOperatorKind Relation,
-                                          const llvm::APSInt &Value1,
-                                          const llvm::APSInt &Value2) {
+                                          const llvm37::APSInt &Value1,
+                                          const llvm37::APSInt &Value2) {
     assert(Value1.isSigned() == Value2.isSigned());
     switch (Relation) {
       default:
@@ -727,7 +727,7 @@ private:
     if (Decl1->getDecl() != Decl2->getDecl())
       return TryResult();
 
-    llvm::APSInt L1, L2;
+    llvm37::APSInt L1, L2;
 
     if (!Literal1->EvaluateAsInt(L1, *Context) ||
         !Literal2->EvaluateAsInt(L2, *Context))
@@ -739,18 +739,18 @@ private:
 
     // Values that will be used to determine if result of logical
     // operator is always true/false
-    const llvm::APSInt Values[] = {
+    const llvm37::APSInt Values[] = {
       // Value less than both Value1 and Value2
-      llvm::APSInt::getMinValue(L1.getBitWidth(), L1.isUnsigned()),
+      llvm37::APSInt::getMinValue(L1.getBitWidth(), L1.isUnsigned()),
       // L1
       L1,
       // Value between Value1 and Value2
-      ((L1 < L2) ? L1 : L2) + llvm::APSInt(llvm::APInt(L1.getBitWidth(), 1),
+      ((L1 < L2) ? L1 : L2) + llvm37::APSInt(llvm37::APInt(L1.getBitWidth(), 1),
                               L1.isUnsigned()),
       // L2
       L2,
       // Value greater than both Value1 and Value2
-      llvm::APSInt::getMaxValue(L1.getBitWidth(), L1.isUnsigned()),
+      llvm37::APSInt::getMaxValue(L1.getBitWidth(), L1.isUnsigned()),
     };
 
     // Check whether expression is always true/false by evaluating the following
@@ -763,7 +763,7 @@ private:
     for (unsigned int ValueIndex = 0;
          ValueIndex < sizeof(Values) / sizeof(Values[0]);
          ++ValueIndex) {
-      llvm::APSInt Value = Values[ValueIndex];
+      llvm37::APSInt Value = Values[ValueIndex];
       TryResult Res1, Res2;
       Res1 = analyzeLogicOperatorCondition(BO1, Value, L1);
       Res2 = analyzeLogicOperatorCondition(BO2, Value, L2);
@@ -825,7 +825,7 @@ private:
           case BO_And: {
             // If either operand is zero, we know the value
             // must be false.
-            llvm::APSInt IntVal;
+            llvm37::APSInt IntVal;
             if (Bop->getLHS()->EvaluateAsInt(IntVal, *Context)) {
               if (!IntVal.getBoolValue()) {
                 return TryResult(false);
@@ -1236,7 +1236,7 @@ void CFGBuilder::addImplicitDtorsForDestructor(const CXXDestructorDecl *DD) {
 /// way return valid LocalScope object.
 LocalScope* CFGBuilder::createOrReuseLocalScope(LocalScope* Scope) {
   if (!Scope) {
-    llvm::BumpPtrAllocator &alloc = cfg->getAllocator();
+    llvm37::BumpPtrAllocator &alloc = cfg->getAllocator();
     Scope = alloc.Allocate<LocalScope>();
     BumpVectorContext ctx(alloc);
     new (Scope) LocalScope(ctx, ScopePos);
@@ -1982,8 +1982,8 @@ CFGBlock *CFGBuilder::VisitDeclStmt(DeclStmt *DS) {
                                        E = DS->decl_rend();
        I != E; ++I) {
     // Get the alignment of the new DeclStmt, padding out to >=8 bytes.
-    unsigned A = llvm::AlignOf<DeclStmt>::Alignment < 8
-               ? 8 : llvm::AlignOf<DeclStmt>::Alignment;
+    unsigned A = llvm37::AlignOf<DeclStmt>::Alignment < 8
+               ? 8 : llvm37::AlignOf<DeclStmt>::Alignment;
 
     // Allocate the DeclStmt using the BumpPtrAllocator.  It will get
     // automatically freed with the CFG.
@@ -3084,8 +3084,8 @@ static bool shouldAddCase(bool &switchExclusivelyCovered,
   if (!switchExclusivelyCovered) {
     if (switchCond->Val.isInt()) {
       // Evaluate the LHS of the case value.
-      const llvm::APSInt &lhsInt = CS->getLHS()->EvaluateKnownConstInt(Ctx);
-      const llvm::APSInt &condInt = switchCond->Val.getInt();
+      const llvm37::APSInt &lhsInt = CS->getLHS()->EvaluateKnownConstInt(Ctx);
+      const llvm37::APSInt &condInt = switchCond->Val.getInt();
       
       if (condInt == lhsInt) {
         addCase = true;
@@ -3094,7 +3094,7 @@ static bool shouldAddCase(bool &switchExclusivelyCovered,
       else if (condInt < lhsInt) {
         if (const Expr *RHS = CS->getRHS()) {
           // Evaluate the RHS of the case value.
-          const llvm::APSInt &V2 = RHS->EvaluateKnownConstInt(Ctx);
+          const llvm37::APSInt &V2 = RHS->EvaluateKnownConstInt(Ctx);
           if (V2 <= condInt) {
             addCase = true;
             switchExclusivelyCovered = true;
@@ -3883,8 +3883,8 @@ bool CFGBlock::FilterEdge(const CFGBlock::FilterOptions &F,
 namespace {
 
 class StmtPrinterHelper : public PrinterHelper  {
-  typedef llvm::DenseMap<const Stmt*,std::pair<unsigned,unsigned> > StmtMapTy;
-  typedef llvm::DenseMap<const Decl*,std::pair<unsigned,unsigned> > DeclMapTy;
+  typedef llvm37::DenseMap<const Stmt*,std::pair<unsigned,unsigned> > StmtMapTy;
+  typedef llvm37::DenseMap<const Decl*,std::pair<unsigned,unsigned> > DeclMapTy;
   StmtMapTy StmtMap;
   DeclMapTy DeclMap;
   signed currentBlock;
@@ -4291,7 +4291,7 @@ static void print_block(raw_ostream &OS, const CFG* cfg,
     if (print_edges)
       OS << " ";
 
-    OS << llvm::format("%3d", j) << ": ";
+    OS << llvm37::format("%3d", j) << ": ";
 
     Helper.setStmtID(j);
 
@@ -4403,7 +4403,7 @@ static void print_block(raw_ostream &OS, const CFG* cfg,
 
 /// dump - A simple pretty printer of a CFG that outputs to stderr.
 void CFG::dump(const LangOptions &LO, bool ShowColors) const {
-  print(llvm::errs(), LO, ShowColors);
+  print(llvm37::errs(), LO, ShowColors);
 }
 
 /// print - A simple pretty printer of a CFG that outputs to an ostream.
@@ -4431,7 +4431,7 @@ void CFG::print(raw_ostream &OS, const LangOptions &LO, bool ShowColors) const {
 /// dump - A simply pretty printer of a CFGBlock that outputs to stderr.
 void CFGBlock::dump(const CFG* cfg, const LangOptions &LO,
                     bool ShowColors) const {
-  print(llvm::errs(), cfg, LO, ShowColors);
+  print(llvm37::errs(), cfg, LO, ShowColors);
 }
 
 void CFGBlock::dump() const {
@@ -4532,12 +4532,12 @@ void CFG::viewCFG(const LangOptions &LO) const {
 #ifndef NDEBUG
   StmtPrinterHelper H(this, LO);
   GraphHelper = &H;
-  llvm::ViewGraph(this,"CFG");
+  llvm37::ViewGraph(this,"CFG");
   GraphHelper = nullptr;
 #endif
 }
 
-namespace llvm {
+namespace llvm37 {
 template<>
 struct DOTGraphTraits<const CFG*> : public DefaultDOTGraphTraits {
 
@@ -4547,7 +4547,7 @@ struct DOTGraphTraits<const CFG*> : public DefaultDOTGraphTraits {
 
 #ifndef NDEBUG
     std::string OutSStr;
-    llvm::raw_string_ostream Out(OutSStr);
+    llvm37::raw_string_ostream Out(OutSStr);
     print_block(Out,Graph, *Node, *GraphHelper, false, false);
     std::string& OutStr = Out.str();
 
@@ -4566,4 +4566,4 @@ struct DOTGraphTraits<const CFG*> : public DefaultDOTGraphTraits {
 #endif
   }
 };
-} // end namespace llvm
+} // end namespace llvm37

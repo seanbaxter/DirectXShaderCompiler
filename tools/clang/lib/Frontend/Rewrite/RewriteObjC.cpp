@@ -22,17 +22,17 @@
 #include "clang/Basic/SourceManager.h"
 #include "clang/Lex/Lexer.h"
 #include "clang/Rewrite/Core/Rewriter.h"
-#include "llvm/ADT/DenseSet.h"
-#include "llvm/ADT/SmallPtrSet.h"
-#include "llvm/ADT/StringExtras.h"
-#include "llvm/Support/MemoryBuffer.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/DenseSet.h"
+#include "llvm37/ADT/SmallPtrSet.h"
+#include "llvm37/ADT/StringExtras.h"
+#include "llvm37/Support/MemoryBuffer.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <memory>
 
 #ifdef CLANG_ENABLE_OBJC_REWRITER
 
 using namespace clang;
-using llvm::utostr;
+using llvm37::utostr;
 
 namespace {
   class RewriteObjC : public ASTConsumer {
@@ -109,16 +109,16 @@ namespace {
     /* Misc. containers needed for meta-data rewrite. */
     SmallVector<ObjCImplementationDecl *, 8> ClassImplementation;
     SmallVector<ObjCCategoryImplDecl *, 8> CategoryImplementation;
-    llvm::SmallPtrSet<ObjCInterfaceDecl*, 8> ObjCSynthesizedStructs;
-    llvm::SmallPtrSet<ObjCProtocolDecl*, 8> ObjCSynthesizedProtocols;
-    llvm::SmallPtrSet<ObjCInterfaceDecl*, 8> ObjCForwardDecls;
-    llvm::DenseMap<ObjCMethodDecl*, std::string> MethodInternalNames;
+    llvm37::SmallPtrSet<ObjCInterfaceDecl*, 8> ObjCSynthesizedStructs;
+    llvm37::SmallPtrSet<ObjCProtocolDecl*, 8> ObjCSynthesizedProtocols;
+    llvm37::SmallPtrSet<ObjCInterfaceDecl*, 8> ObjCForwardDecls;
+    llvm37::DenseMap<ObjCMethodDecl*, std::string> MethodInternalNames;
     SmallVector<Stmt *, 32> Stmts;
     SmallVector<int, 8> ObjCBcLabelNo;
     // Remember all the @protocol(<expr>) expressions.
-    llvm::SmallPtrSet<ObjCProtocolDecl *, 32> ProtocolExprDecls;
+    llvm37::SmallPtrSet<ObjCProtocolDecl *, 32> ProtocolExprDecls;
     
-    llvm::DenseSet<uint64_t> CopyDestroyCache;
+    llvm37::DenseSet<uint64_t> CopyDestroyCache;
 
     // Block expressions.
     SmallVector<BlockExpr *, 32> Blocks;
@@ -129,19 +129,19 @@ namespace {
 
     // Block related declarations.
     SmallVector<ValueDecl *, 8> BlockByCopyDecls;
-    llvm::SmallPtrSet<ValueDecl *, 8> BlockByCopyDeclsPtrSet;
+    llvm37::SmallPtrSet<ValueDecl *, 8> BlockByCopyDeclsPtrSet;
     SmallVector<ValueDecl *, 8> BlockByRefDecls;
-    llvm::SmallPtrSet<ValueDecl *, 8> BlockByRefDeclsPtrSet;
-    llvm::DenseMap<ValueDecl *, unsigned> BlockByRefDeclNo;
-    llvm::SmallPtrSet<ValueDecl *, 8> ImportedBlockDecls;
-    llvm::SmallPtrSet<VarDecl *, 8> ImportedLocalExternalDecls;
+    llvm37::SmallPtrSet<ValueDecl *, 8> BlockByRefDeclsPtrSet;
+    llvm37::DenseMap<ValueDecl *, unsigned> BlockByRefDeclNo;
+    llvm37::SmallPtrSet<ValueDecl *, 8> ImportedBlockDecls;
+    llvm37::SmallPtrSet<VarDecl *, 8> ImportedLocalExternalDecls;
     
-    llvm::DenseMap<BlockExpr *, std::string> RewrittenBlockExprs;
+    llvm37::DenseMap<BlockExpr *, std::string> RewrittenBlockExprs;
 
     // This maps an original source AST to it's rewritten form. This allows
     // us to avoid rewriting the same node twice (which is very uncommon).
     // This is needed to support some of the exotic property rewriting.
-    llvm::DenseMap<Stmt *, Stmt *> ReplacedNodes;
+    llvm37::DenseMap<Stmt *, Stmt *> ReplacedNodes;
 
     // Needed for header files being rewritten
     bool IsHeader;
@@ -220,7 +220,7 @@ namespace {
       }
       // Get the new text.
       std::string SStr;
-      llvm::raw_string_ostream S(SStr);
+      llvm37::raw_string_ostream S(SStr);
       New->printPretty(S, nullptr, PrintingPolicy(LangOpts));
       const std::string &Str = S.str();
 
@@ -402,7 +402,7 @@ namespace {
     void GetBlockDeclRefExprs(Stmt *S);
     void GetInnerBlockDeclRefExprs(Stmt *S,
                 SmallVectorImpl<DeclRefExpr *> &InnerBlockDeclRefs,
-                llvm::SmallPtrSetImpl<const DeclContext *> &InnerContexts);
+                llvm37::SmallPtrSetImpl<const DeclContext *> &InnerContexts);
 
     // We avoid calling Type::isBlockPointerType(), since it operates on the
     // canonical type. We only care if the top-level type is a closure pointer.
@@ -496,7 +496,7 @@ namespace {
 
     StringLiteral *getStringLiteral(StringRef Str) {
       QualType StrType = Context->getConstantArrayType(
-          Context->CharTy, llvm::APInt(32, Str.size() + 1), ArrayType::Normal,
+          Context->CharTy, llvm37::APInt(32, Str.size() + 1), ArrayType::Normal,
           0);
       return StringLiteral::Create(*Context, Str, StringLiteral::Ascii,
                                    /*Pascal=*/false, StrType, SourceLocation());
@@ -593,7 +593,7 @@ std::unique_ptr<ASTConsumer>
 clang::CreateObjCRewriter(const std::string &InFile, raw_ostream *OS,
                           DiagnosticsEngine &Diags, const LangOptions &LOpts,
                           bool SilenceRewriteMacroWarning) {
-  return llvm::make_unique<RewriteObjCFragileABI>(InFile, OS, Diags, LOpts,
+  return llvm37::make_unique<RewriteObjCFragileABI>(InFile, OS, Diags, LOpts,
                                                   SilenceRewriteMacroWarning);
 }
 
@@ -630,7 +630,7 @@ void RewriteObjC::InitializeCommon(ASTContext &context) {
 
   // Get the ID and start/end of the main file.
   MainFileID = SM->getMainFileID();
-  const llvm::MemoryBuffer *MainBuf = SM->getBuffer(MainFileID);
+  const llvm37::MemoryBuffer *MainBuf = SM->getBuffer(MainFileID);
   MainFileStart = MainBuf->getBufferStart();
   MainFileEnd = MainBuf->getBufferEnd();
 
@@ -1688,7 +1688,7 @@ Stmt *RewriteObjC::RewriteObjCSynchronizedStmt(ObjCAtSynchronizedStmt *S) {
   syncExpr = NoTypeInfoCStyleCastExpr(Context, Context->getObjCIdType(),
                                       CK, syncExpr);
   std::string syncExprBufS;
-  llvm::raw_string_ostream syncExprBuf(syncExprBufS);
+  llvm37::raw_string_ostream syncExprBuf(syncExprBufS);
   assert(syncExpr != nullptr && "Expected non-null Expr");
   syncExpr->printPretty(syncExprBuf, nullptr, PrintingPolicy(LangOpts));
   syncBuf += syncExprBuf.str();
@@ -2022,7 +2022,7 @@ CallExpr *RewriteObjC::SynthesizeCallToFunctionDecl(
   const FunctionType *FT = msgSendType->getAs<FunctionType>();
 
   CallExpr *Exp =  
-    new (Context) CallExpr(*Context, ICE, llvm::makeArrayRef(args, nargs),
+    new (Context) CallExpr(*Context, ICE, llvm37::makeArrayRef(args, nargs),
                            FT->getCallResultType(*Context),
                            VK_RValue, EndLoc);
   return Exp;
@@ -2500,7 +2500,7 @@ Stmt *RewriteObjC::RewriteObjCStringLiteral(ObjCStringLiteral *Exp) {
   Preamble += "0x000007c8,"; // utf8_str
   // The pretty printer for StringLiteral handles escape characters properly.
   std::string prettyBufS;
-  llvm::raw_string_ostream prettyBuf(prettyBufS);
+  llvm37::raw_string_ostream prettyBuf(prettyBufS);
   Exp->getString()->printPretty(prettyBuf, nullptr, PrintingPolicy(LangOpts));
   Preamble += prettyBuf.str();
   Preamble += ",";
@@ -3004,7 +3004,7 @@ Stmt *RewriteObjC::SynthMessageExpr(ObjCMessageExpr *Exp,
     unsigned IntSize =
       static_cast<unsigned>(Context->getTypeSize(Context->IntTy));
     IntegerLiteral *limit = IntegerLiteral::Create(*Context,
-                                                   llvm::APInt(IntSize, 8),
+                                                   llvm37::APInt(IntSize, 8),
                                                    Context->IntTy,
                                                    SourceLocation());
     BinaryOperator *lessThanExpr = 
@@ -3682,7 +3682,7 @@ void RewriteObjC::GetBlockDeclRefExprs(Stmt *S) {
 
 void RewriteObjC::GetInnerBlockDeclRefExprs(Stmt *S,
                 SmallVectorImpl<DeclRefExpr *> &InnerBlockDeclRefs,
-                llvm::SmallPtrSetImpl<const DeclContext *> &InnerContexts) {
+                llvm37::SmallPtrSetImpl<const DeclContext *> &InnerContexts) {
   for (Stmt *SubStmt : S->children())
     if (SubStmt) {
       if (BlockExpr *CBE = dyn_cast<BlockExpr>(SubStmt)) {
@@ -4553,7 +4553,7 @@ Stmt *RewriteObjC::SynthBlockInitExpr(BlockExpr *Exp,
     int flag = (BLOCK_HAS_COPY_DISPOSE | BLOCK_HAS_DESCRIPTOR);
     unsigned IntSize = 
       static_cast<unsigned>(Context->getTypeSize(Context->IntTy));
-    Expr *FlagExp = IntegerLiteral::Create(*Context, llvm::APInt(IntSize, flag), 
+    Expr *FlagExp = IntegerLiteral::Create(*Context, llvm37::APInt(IntSize, flag), 
                                            Context->IntTy, SourceLocation());
     InitExprs.push_back(FlagExp);
   }
@@ -4618,7 +4618,7 @@ Stmt *RewriteObjC::RewriteFunctionBodyOrGlobalInitializer(Stmt *S) {
 
   if (BlockExpr *BE = dyn_cast<BlockExpr>(S)) {
     SmallVector<DeclRefExpr *, 8> InnerBlockDeclRefs;
-    llvm::SmallPtrSet<const DeclContext *, 8> InnerContexts;
+    llvm37::SmallPtrSet<const DeclContext *, 8> InnerContexts;
     InnerContexts.insert(BE->getBlockDecl());
     ImportedLocalExternalDecls.clear();
     GetInnerBlockDeclRefExprs(BE->getBody(),
@@ -4785,7 +4785,7 @@ Stmt *RewriteObjC::RewriteFunctionBodyOrGlobalInitializer(Stmt *S) {
                                                    SourceLocation());
     // Get the new text.
     std::string SStr;
-    llvm::raw_string_ostream Buf(SStr);
+    llvm37::raw_string_ostream Buf(SStr);
     Replacement->printPretty(Buf);
     const std::string &Str = Buf.str();
 
@@ -4956,7 +4956,7 @@ void RewriteObjC::HandleTranslationUnit(ASTContext &C) {
     //printf("Changed:\n");
     *OutFile << std::string(RewriteBuf->begin(), RewriteBuf->end());
   } else {
-    llvm::errs() << "No changes\n";
+    llvm37::errs() << "No changes\n";
   }
 
   if (ClassImplementation.size() || CategoryImplementation.size() ||

@@ -7,25 +7,25 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/MC/MCStreamer.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/ADT/Twine.h"
-#include "llvm/MC/MCAsmBackend.h"
-#include "llvm/MC/MCAsmInfo.h"
-#include "llvm/MC/MCContext.h"
-#include "llvm/MC/MCExpr.h"
-#include "llvm/MC/MCInst.h"
-#include "llvm/MC/MCInstPrinter.h"
-#include "llvm/MC/MCObjectFileInfo.h"
-#include "llvm/MC/MCObjectWriter.h"
-#include "llvm/MC/MCSection.h"
-#include "llvm/MC/MCSymbol.h"
-#include "llvm/MC/MCWin64EH.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/LEB128.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/MC/MCStreamer.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/ADT/Twine.h"
+#include "llvm37/MC/MCAsmBackend.h"
+#include "llvm37/MC/MCAsmInfo.h"
+#include "llvm37/MC/MCContext.h"
+#include "llvm37/MC/MCExpr.h"
+#include "llvm37/MC/MCInst.h"
+#include "llvm37/MC/MCInstPrinter.h"
+#include "llvm37/MC/MCObjectFileInfo.h"
+#include "llvm37/MC/MCObjectWriter.h"
+#include "llvm37/MC/MCSection.h"
+#include "llvm37/MC/MCSymbol.h"
+#include "llvm37/MC/MCWin64EH.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/LEB128.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <cstdlib>
-using namespace llvm;
+using namespace llvm37;
 
 // Pin the vtables to this file.
 MCTargetStreamer::~MCTargetStreamer() {}

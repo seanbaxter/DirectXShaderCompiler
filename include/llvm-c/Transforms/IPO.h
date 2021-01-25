@@ -12,8 +12,8 @@
 |*                                                                            *|
 \*===----------------------------------------------------------------------===*/
 
-#ifndef LLVM_C_TRANSFORMS_IPO_H
-#define LLVM_C_TRANSFORMS_IPO_H
+#ifndef LLVM37_C_TRANSFORMS_IPO_H
+#define LLVM37_C_TRANSFORMS_IPO_H
 
 #include "llvm-c/Core.h"
 
@@ -28,46 +28,46 @@ extern "C" {
  * @{
  */
 
-/** See llvm::createArgumentPromotionPass function. */
+/** See llvm37::createArgumentPromotionPass function. */
 void LLVMAddArgumentPromotionPass(LLVMPassManagerRef PM);
 
-/** See llvm::createConstantMergePass function. */
+/** See llvm37::createConstantMergePass function. */
 void LLVMAddConstantMergePass(LLVMPassManagerRef PM);
 
-/** See llvm::createDeadArgEliminationPass function. */
+/** See llvm37::createDeadArgEliminationPass function. */
 void LLVMAddDeadArgEliminationPass(LLVMPassManagerRef PM);
 
-/** See llvm::createFunctionAttrsPass function. */
+/** See llvm37::createFunctionAttrsPass function. */
 void LLVMAddFunctionAttrsPass(LLVMPassManagerRef PM);
 
-/** See llvm::createFunctionInliningPass function. */
+/** See llvm37::createFunctionInliningPass function. */
 void LLVMAddFunctionInliningPass(LLVMPassManagerRef PM);
 
-/** See llvm::createAlwaysInlinerPass function. */
+/** See llvm37::createAlwaysInlinerPass function. */
 void LLVMAddAlwaysInlinerPass(LLVMPassManagerRef PM);
 
-/** See llvm::createGlobalDCEPass function. */
+/** See llvm37::createGlobalDCEPass function. */
 void LLVMAddGlobalDCEPass(LLVMPassManagerRef PM);
 
-/** See llvm::createGlobalOptimizerPass function. */
+/** See llvm37::createGlobalOptimizerPass function. */
 void LLVMAddGlobalOptimizerPass(LLVMPassManagerRef PM);
 
-/** See llvm::createIPConstantPropagationPass function. */
+/** See llvm37::createIPConstantPropagationPass function. */
 void LLVMAddIPConstantPropagationPass(LLVMPassManagerRef PM);
 
-/** See llvm::createPruneEHPass function. */
+/** See llvm37::createPruneEHPass function. */
 void LLVMAddPruneEHPass(LLVMPassManagerRef PM);
 
-/** See llvm::createIPSCCPPass function. */
+/** See llvm37::createIPSCCPPass function. */
 void LLVMAddIPSCCPPass(LLVMPassManagerRef PM);
 
-/** See llvm::createInternalizePass function. */
+/** See llvm37::createInternalizePass function. */
 void LLVMAddInternalizePass(LLVMPassManagerRef, unsigned AllButMain);
 
-/** See llvm::createStripDeadPrototypesPass function. */
+/** See llvm37::createStripDeadPrototypesPass function. */
 void LLVMAddStripDeadPrototypesPass(LLVMPassManagerRef PM);
 
-/** See llvm::createStripSymbolsPass function. */
+/** See llvm37::createStripSymbolsPass function. */
 void LLVMAddStripSymbolsPass(LLVMPassManagerRef PM);
 
 /**

@@ -7,11 +7,11 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/DebugInfo/PDB/PDBSymbol.h"
-#include "llvm/DebugInfo/PDB/DIA/DIAEnumSourceFiles.h"
-#include "llvm/DebugInfo/PDB/DIA/DIASourceFile.h"
+#include "llvm37/DebugInfo/PDB/PDBSymbol.h"
+#include "llvm37/DebugInfo/PDB/DIA/DIAEnumSourceFiles.h"
+#include "llvm37/DebugInfo/PDB/DIA/DIASourceFile.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 DIAEnumSourceFiles::DIAEnumSourceFiles(
     const DIASession &PDBSession, CComPtr<IDiaEnumSourceFiles> DiaEnumerator)

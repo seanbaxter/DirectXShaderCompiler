@@ -11,25 +11,25 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_LIB_CODEGEN_ASMPRINTER_WINCODEVIEWLINETABLES_H
-#define LLVM_LIB_CODEGEN_ASMPRINTER_WINCODEVIEWLINETABLES_H
+#ifndef LLVM37_LIB_CODEGEN_ASMPRINTER_WINCODEVIEWLINETABLES_H
+#define LLVM37_LIB_CODEGEN_ASMPRINTER_WINCODEVIEWLINETABLES_H
 
 #include "AsmPrinterHandler.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/StringMap.h"
-#include "llvm/ADT/StringRef.h"
-#include "llvm/CodeGen/AsmPrinter.h"
-#include "llvm/CodeGen/LexicalScopes.h"
-#include "llvm/CodeGen/MachineFunction.h"
-#include "llvm/CodeGen/MachineModuleInfo.h"
-#include "llvm/IR/DebugInfo.h"
-#include "llvm/IR/DebugLoc.h"
-#include "llvm/MC/MCStreamer.h"
-#include "llvm/Target/TargetLoweringObjectFile.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/StringMap.h"
+#include "llvm37/ADT/StringRef.h"
+#include "llvm37/CodeGen/AsmPrinter.h"
+#include "llvm37/CodeGen/LexicalScopes.h"
+#include "llvm37/CodeGen/MachineFunction.h"
+#include "llvm37/CodeGen/MachineModuleInfo.h"
+#include "llvm37/IR/DebugInfo.h"
+#include "llvm37/IR/DebugLoc.h"
+#include "llvm37/MC/MCStreamer.h"
+#include "llvm37/Target/TargetLoweringObjectFile.h"
 
-namespace llvm {
+namespace llvm37 {
 /// \brief Collects and handles line tables information in a CodeView format.
-class LLVM_LIBRARY_VISIBILITY WinCodeViewLineTables : public AsmPrinterHandler {
+class LLVM37_LIBRARY_VISIBILITY WinCodeViewLineTables : public AsmPrinterHandler {
   AsmPrinter *Asm;
   DebugLoc PrevInstLoc;
 
@@ -124,7 +124,7 @@ public:
       free(I->second);
   }
 
-  void setSymbolSize(const llvm::MCSymbol *, uint64_t) override {}
+  void setSymbolSize(const llvm37::MCSymbol *, uint64_t) override {}
 
   /// \brief Emit the COFF section that holds the line table information.
   void endModule() override;
@@ -141,6 +141,6 @@ public:
   /// \brief Process end of an instruction.
   void endInstruction() override {}
 };
-} // End of namespace llvm
+} // End of namespace llvm37
 
 #endif

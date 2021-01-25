@@ -20,7 +20,7 @@
 #include "clang/Parse/ParseAST.h"
 #include "clang/Serialization/ASTReader.h"
 #include "clang/Serialization/ASTWriter.h"
-#include "llvm/Support/MemoryBuffer.h"
+#include "llvm37/Support/MemoryBuffer.h"
 
 using namespace clang;
 
@@ -75,7 +75,7 @@ protected:
 
 static ASTReader *
 createASTReader(CompilerInstance &CI, StringRef pchFile,
-                SmallVectorImpl<std::unique_ptr<llvm::MemoryBuffer>> &MemBufs,
+                SmallVectorImpl<std::unique_ptr<llvm37::MemoryBuffer>> &MemBufs,
                 SmallVectorImpl<std::string> &bufNames,
                 ASTDeserializationListener *deserialListener = nullptr) {
   Preprocessor &PP = CI.getPreprocessor();
@@ -120,7 +120,7 @@ IntrusiveRefCntPtr<ExternalSemaSource> clang::createChainedIncludesSource(
   IntrusiveRefCntPtr<ChainedIncludesSource> source(new ChainedIncludesSource());
   InputKind IK = CI.getFrontendOpts().Inputs[0].getKind();
 
-  SmallVector<std::unique_ptr<llvm::MemoryBuffer>, 4> SerialBufs;
+  SmallVector<std::unique_ptr<llvm37::MemoryBuffer>, 4> SerialBufs;
   SmallVector<std::string, 4> serialBufNames;
 
   for (unsigned i = 0, e = includes.size(); i != e; ++i) {
@@ -141,7 +141,7 @@ IntrusiveRefCntPtr<ExternalSemaSource> clang::createChainedIncludesSource(
     CInvok->getFrontendOpts().Inputs.push_back(InputFile);
 
     TextDiagnosticPrinter *DiagClient =
-      new TextDiagnosticPrinter(llvm::errs(), new DiagnosticOptions());
+      new TextDiagnosticPrinter(llvm37::errs(), new DiagnosticOptions());
     IntrusiveRefCntPtr<DiagnosticIDs> DiagID(new DiagnosticIDs());
     IntrusiveRefCntPtr<DiagnosticsEngine> Diags(
         new DiagnosticsEngine(DiagID, &CI.getDiagnosticOpts(), DiagClient));
@@ -160,7 +160,7 @@ IntrusiveRefCntPtr<ExternalSemaSource> clang::createChainedIncludesSource(
     Clang->createASTContext();
 
     auto Buffer = std::make_shared<PCHBuffer>();
-    auto consumer = llvm::make_unique<PCHGenerator>(
+    auto consumer = llvm37::make_unique<PCHGenerator>(
         Clang->getPreprocessor(), "-", nullptr, /*isysroot=*/"", Buffer);
     Clang->getASTContext().setASTMutationListener(
                                             consumer->GetASTMutationListener());
@@ -173,13 +173,13 @@ IntrusiveRefCntPtr<ExternalSemaSource> clang::createChainedIncludesSource(
                                              PP.getLangOpts());
     } else {
       assert(!SerialBufs.empty());
-      SmallVector<std::unique_ptr<llvm::MemoryBuffer>, 4> Bufs;
+      SmallVector<std::unique_ptr<llvm37::MemoryBuffer>, 4> Bufs;
       // TODO: Pass through the existing MemoryBuffer instances instead of
       // allocating new ones.
       for (auto &SB : SerialBufs)
-        Bufs.push_back(llvm::MemoryBuffer::getMemBuffer(SB->getBuffer()));
+        Bufs.push_back(llvm37::MemoryBuffer::getMemBuffer(SB->getBuffer()));
       std::string pchName = includes[i-1];
-      llvm::raw_string_ostream os(pchName);
+      llvm37::raw_string_ostream os(pchName);
       os << ".pch" << i-1;
       serialBufNames.push_back(os.str());
 
@@ -200,7 +200,7 @@ IntrusiveRefCntPtr<ExternalSemaSource> clang::createChainedIncludesSource(
     Clang->getDiagnosticClient().EndSourceFile();
     assert(Buffer->IsComplete && "serialization did not complete");
     auto &serialAST = Buffer->Data;
-    SerialBufs.push_back(llvm::MemoryBuffer::getMemBufferCopy(
+    SerialBufs.push_back(llvm37::MemoryBuffer::getMemBufferCopy(
         StringRef(serialAST.data(), serialAST.size())));
     serialAST.clear();
     source->CIs.push_back(Clang.release());

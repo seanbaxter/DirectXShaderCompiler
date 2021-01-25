@@ -20,14 +20,14 @@
 #include "clang/Basic/SourceManager.h"
 #include "clang/Lex/Lexer.h"
 #include "clang/Lex/Preprocessor.h"
-#include "llvm/ADT/StringExtras.h"
-#include "llvm/ADT/StringMap.h"
-#include "llvm/Support/EndianStream.h"
-#include "llvm/Support/FileSystem.h"
-#include "llvm/Support/MemoryBuffer.h"
-#include "llvm/Support/OnDiskHashTable.h"
-#include "llvm/Support/Path.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/StringExtras.h"
+#include "llvm37/ADT/StringMap.h"
+#include "llvm37/Support/EndianStream.h"
+#include "llvm37/Support/FileSystem.h"
+#include "llvm37/Support/MemoryBuffer.h"
+#include "llvm37/Support/OnDiskHashTable.h"
+#include "llvm37/Support/Path.h"
+#include "llvm37/Support/raw_ostream.h"
 
 // FIXME: put this somewhere else?
 #ifndef S_ISDIR
@@ -80,12 +80,12 @@ public:
   unsigned getKind() const { return (unsigned) Kind; }
 
   void EmitData(raw_ostream& Out) {
-    using namespace llvm::support;
+    using namespace llvm37::support;
     endian::Writer<little> LE(Out);
     switch (Kind) {
     case IsFE: {
       // Emit stat information.
-      llvm::sys::fs::UniqueID UID = FE->getUniqueID();
+      llvm37::sys::fs::UniqueID UID = FE->getUniqueID();
       LE.write<uint64_t>(UID.getFile());
       LE.write<uint64_t>(UID.getDevice());
       LE.write<uint64_t>(FE->getModificationTime());
@@ -121,13 +121,13 @@ public:
   typedef unsigned offset_type;
 
   static hash_value_type ComputeHash(PTHEntryKeyVariant V) {
-    return llvm::HashString(V.getString());
+    return llvm37::HashString(V.getString());
   }
 
   static std::pair<unsigned,unsigned>
   EmitKeyDataLength(raw_ostream& Out, PTHEntryKeyVariant V,
                     const PTHEntry& E) {
-    using namespace llvm::support;
+    using namespace llvm37::support;
     endian::Writer<little> LE(Out);
 
     unsigned n = V.getString().size() + 1 + 1;
@@ -140,7 +140,7 @@ public:
   }
 
   static void EmitKey(raw_ostream& Out, PTHEntryKeyVariant V, unsigned n){
-    using namespace llvm::support;
+    using namespace llvm37::support;
     // Emit the entry kind.
     endian::Writer<little>(Out).write<uint8_t>((unsigned)V.getKind());
     // Emit the string.
@@ -149,7 +149,7 @@ public:
 
   static void EmitData(raw_ostream& Out, PTHEntryKeyVariant V,
                        const PTHEntry& E, unsigned) {
-    using namespace llvm::support;
+    using namespace llvm37::support;
     endian::Writer<little> LE(Out);
 
     // For file entries emit the offsets into the PTH file for token data
@@ -175,12 +175,12 @@ public:
 };
 } // end anonymous namespace
 
-typedef llvm::OnDiskChainedHashTableGenerator<FileEntryPTHEntryInfo> PTHMap;
+typedef llvm37::OnDiskChainedHashTableGenerator<FileEntryPTHEntryInfo> PTHMap;
 
 namespace {
 class PTHWriter {
-  typedef llvm::DenseMap<const IdentifierInfo*,uint32_t> IDMap;
-  typedef llvm::StringMap<OffsetOpt, llvm::BumpPtrAllocator> CachedStrsTy;
+  typedef llvm37::DenseMap<const IdentifierInfo*,uint32_t> IDMap;
+  typedef llvm37::StringMap<OffsetOpt, llvm37::BumpPtrAllocator> CachedStrsTy;
 
   IDMap IM;
   raw_pwrite_stream &Out;
@@ -189,7 +189,7 @@ class PTHWriter {
   PTHMap PM;
   CachedStrsTy CachedStrs;
   Offset CurStrOffset;
-  std::vector<llvm::StringMapEntry<OffsetOpt>*> StrEntries;
+  std::vector<llvm37::StringMapEntry<OffsetOpt>*> StrEntries;
 
   //// Get the persistent id for the given IdentifierInfo*.
   uint32_t ResolveID(const IdentifierInfo* II);
@@ -198,17 +198,17 @@ class PTHWriter {
   void EmitToken(const Token& T);
 
   void Emit8(uint32_t V) {
-    using namespace llvm::support;
+    using namespace llvm37::support;
     endian::Writer<little>(Out).write<uint8_t>(V);
   }
 
   void Emit16(uint32_t V) {
-    using namespace llvm::support;
+    using namespace llvm37::support;
     endian::Writer<little>(Out).write<uint16_t>(V);
   }
 
   void Emit32(uint32_t V) {
-    using namespace llvm::support;
+    using namespace llvm37::support;
     endian::Writer<little>(Out).write<uint32_t>(V);
   }
 
@@ -217,7 +217,7 @@ class PTHWriter {
   }
 
   void EmitString(StringRef V) {
-    using namespace llvm::support;
+    using namespace llvm37::support;
     endian::Writer<little>(Out).write<uint16_t>(V.size());
     EmitBuf(V.data(), V.size());
   }
@@ -291,10 +291,10 @@ void PTHWriter::EmitToken(const Token& T) {
 PTHEntry PTHWriter::LexTokens(Lexer& L) {
   // Pad 0's so that we emit tokens to a 4-byte alignment.
   // This speed up reading them back in.
-  using namespace llvm::support;
+  using namespace llvm37::support;
   endian::Writer<little> LE(Out);
   uint32_t TokenOff = Out.tell();
-  for (uint64_t N = llvm::OffsetToAlignment(TokenOff, 4); N; --N, ++TokenOff)
+  for (uint64_t N = llvm37::OffsetToAlignment(TokenOff, 4); N; --N, ++TokenOff)
     LE.write<uint8_t>(0);
 
   // Keep track of matching '#if' ... '#endif'.
@@ -461,7 +461,7 @@ Offset PTHWriter::EmitCachedSpellings() {
   // Write each cached strings to the PTH file.
   Offset SpellingsOff = Out.tell();
 
-  for (std::vector<llvm::StringMapEntry<OffsetOpt>*>::iterator
+  for (std::vector<llvm37::StringMapEntry<OffsetOpt>*>::iterator
        I = StrEntries.begin(), E = StrEntries.end(); I!=E; ++I)
     EmitBuf((*I)->getKeyData(), (*I)->getKeyLength()+1 /*nul included*/);
 
@@ -469,7 +469,7 @@ Offset PTHWriter::EmitCachedSpellings() {
 }
 
 static uint32_t swap32le(uint32_t X) {
-  return llvm::support::endian::byte_swap<uint32_t, llvm::support::little>(X);
+  return llvm37::support::endian::byte_swap<uint32_t, llvm37::support::little>(X);
 }
 
 static void pwrite32le(raw_pwrite_stream &OS, uint32_t Val, uint64_t &Off) {
@@ -508,14 +508,14 @@ void PTHWriter::GeneratePTH(const std::string &MainFile) {
     const FileEntry *FE = C.OrigEntry;
 
     // FIXME: Handle files with non-absolute paths.
-    if (llvm::sys::path::is_relative(FE->getName()))
+    if (llvm37::sys::path::is_relative(FE->getName()))
       continue;
 
-    const llvm::MemoryBuffer *B = C.getBuffer(PP.getDiagnostics(), SM);
+    const llvm37::MemoryBuffer *B = C.getBuffer(PP.getDiagnostics(), SM);
     if (!B) continue;
 
     FileID FID = SM.createFileID(FE, SourceLocation(), SrcMgr::C_User);
-    const llvm::MemoryBuffer *FromFile = SM.getBuffer(FID);
+    const llvm37::MemoryBuffer *FromFile = SM.getBuffer(FID);
     Lexer L(FID, FromFile, SM, LOpts);
     PM.insert(FE, LexTokens(L));
   }
@@ -558,7 +558,7 @@ public:
       PM.insert(PTHEntryKeyVariant(Path), PTHEntry());
     else if (Data.IsDirectory) {
       // Only cache directories with absolute paths.
-      if (llvm::sys::path::is_relative(Path))
+      if (llvm37::sys::path::is_relative(Path))
         return Result;
 
       PM.insert(PTHEntryKeyVariant(&Data, Path), PTHEntry());
@@ -575,13 +575,13 @@ void clang::CacheTokens(Preprocessor &PP, raw_pwrite_stream *OS) {
   const FileEntry *MainFile = SrcMgr.getFileEntryForID(SrcMgr.getMainFileID());
   SmallString<128> MainFilePath(MainFile->getName());
 
-  llvm::sys::fs::make_absolute(MainFilePath);
+  llvm37::sys::fs::make_absolute(MainFilePath);
 
   // Create the PTHWriter.
   PTHWriter PW(*OS, PP);
 
   // Install the 'stat' system call listener in the FileManager.
-  auto StatCacheOwner = llvm::make_unique<StatListener>(PW.getPM());
+  auto StatCacheOwner = llvm37::make_unique<StatListener>(PW.getPM());
   StatListener *StatCache = StatCacheOwner.get();
   PP.getFileManager().addStatCache(std::move(StatCacheOwner),
                                    /*AtBeginning=*/true);
@@ -618,12 +618,12 @@ public:
   typedef unsigned offset_type;
 
   static hash_value_type ComputeHash(PTHIdKey* key) {
-    return llvm::HashString(key->II->getName());
+    return llvm37::HashString(key->II->getName());
   }
 
   static std::pair<unsigned,unsigned>
   EmitKeyDataLength(raw_ostream& Out, const PTHIdKey* key, uint32_t) {
-    using namespace llvm::support;
+    using namespace llvm37::support;
     unsigned n = key->II->getLength() + 1;
     endian::Writer<little>(Out).write<uint16_t>(n);
     return std::make_pair(n, sizeof(uint32_t));
@@ -638,7 +638,7 @@ public:
 
   static void EmitData(raw_ostream& Out, PTHIdKey*, uint32_t pID,
                        unsigned) {
-    using namespace llvm::support;
+    using namespace llvm37::support;
     endian::Writer<little>(Out).write<uint32_t>(pID);
   }
 };
@@ -659,7 +659,7 @@ std::pair<Offset,Offset> PTHWriter::EmitIdentifierTable() {
   if (IIDMap == nullptr) throw std::bad_alloc(); // HLSL Change
 
   // Create the hashtable.
-  llvm::OnDiskChainedHashTableGenerator<PTHIdentifierTableTrait> IIOffMap;
+  llvm37::OnDiskChainedHashTableGenerator<PTHIdentifierTableTrait> IIOffMap;
 
   // Generate mapping from persistent IDs -> IdentifierInfo*.
   for (IDMap::iterator I = IM.begin(), E = IM.end(); I != E; ++I) {

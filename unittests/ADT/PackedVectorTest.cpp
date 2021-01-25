@@ -9,10 +9,10 @@
 
 #ifndef __ppc__
 
-#include "llvm/ADT/PackedVector.h"
+#include "llvm37/ADT/PackedVector.h"
 #include "gtest/gtest.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 namespace {
 

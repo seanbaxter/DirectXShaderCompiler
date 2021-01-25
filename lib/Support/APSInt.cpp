@@ -12,10 +12,10 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/ADT/APSInt.h"
-#include "llvm/ADT/FoldingSet.h"
+#include "llvm37/ADT/APSInt.h"
+#include "llvm37/ADT/FoldingSet.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 APSInt::APSInt(StringRef Str) {
   assert(!Str.empty() && "Invalid string length");

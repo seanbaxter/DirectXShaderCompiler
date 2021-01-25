@@ -63,13 +63,13 @@ and automatic location of the compilation database using source files paths.
 .. code-block:: c++
 
   #include "clang/Tooling/CommonOptionsParser.h"
-  #include "llvm/Support/CommandLine.h"
+  #include "llvm37/Support/CommandLine.h"
 
   using namespace clang::tooling;
 
   // Apply a custom category to all command-line options so that they are the
   // only ones displayed.
-  static llvm::cl::OptionCategory MyToolCategory("my-tool options");
+  static llvm37::cl::OptionCategory MyToolCategory("my-tool options");
 
   int main(int argc, const char **argv) {
     // CommonOptionsParser constructor will parse arguments and create a
@@ -117,11 +117,11 @@ version of this example tool is also checked into the clang tree at
   #include "clang/Frontend/FrontendActions.h"
   #include "clang/Tooling/CommonOptionsParser.h"
   #include "clang/Tooling/Tooling.h"
-  // Declares llvm::cl::extrahelp.
-  #include "llvm/Support/CommandLine.h"
+  // Declares llvm37::cl::extrahelp.
+  #include "llvm37/Support/CommandLine.h"
 
   using namespace clang::tooling;
-  using namespace llvm;
+  using namespace llvm37;
 
   // Apply a custom category to all command-line options so that they are the
   // only ones displayed.

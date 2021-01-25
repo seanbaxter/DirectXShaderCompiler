@@ -11,15 +11,15 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_LIB_CODEGEN_ASMPRINTER_DWARFCOMPILEUNIT_H
-#define LLVM_LIB_CODEGEN_ASMPRINTER_DWARFCOMPILEUNIT_H
+#ifndef LLVM37_LIB_CODEGEN_ASMPRINTER_DWARFCOMPILEUNIT_H
+#define LLVM37_LIB_CODEGEN_ASMPRINTER_DWARFCOMPILEUNIT_H
 
 #include "DwarfUnit.h"
-#include "llvm/ADT/StringRef.h"
-#include "llvm/IR/DebugInfo.h"
-#include "llvm/Support/Dwarf.h"
+#include "llvm37/ADT/StringRef.h"
+#include "llvm37/IR/DebugInfo.h"
+#include "llvm37/Support/Dwarf.h"
 
-namespace llvm {
+namespace llvm37 {
 
 class AsmPrinter;
 class DIE;

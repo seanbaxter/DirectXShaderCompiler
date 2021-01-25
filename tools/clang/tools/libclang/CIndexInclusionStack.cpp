@@ -17,8 +17,8 @@
 #include "CXTranslationUnit.h"
 #include "clang/AST/DeclVisitor.h"
 #include "clang/Frontend/ASTUnit.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/Support/raw_ostream.h"
 using namespace clang;
 
 // extern "C" {                // HLSL Change -Don't use c linkage.

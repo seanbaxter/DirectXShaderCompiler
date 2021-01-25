@@ -7,14 +7,14 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/DebugInfo/DWARF/DWARFUnit.h"
-#include "llvm/DebugInfo/DWARF/DWARFContext.h"
-#include "llvm/DebugInfo/DWARF/DWARFFormValue.h"
-#include "llvm/Support/Dwarf.h"
-#include "llvm/Support/Path.h"
+#include "llvm37/DebugInfo/DWARF/DWARFUnit.h"
+#include "llvm37/DebugInfo/DWARF/DWARFContext.h"
+#include "llvm37/DebugInfo/DWARF/DWARFFormValue.h"
+#include "llvm37/Support/Dwarf.h"
+#include "llvm37/Support/Path.h"
 #include <cstdio>
 
-using namespace llvm;
+using namespace llvm37;
 using namespace dwarf;
 
 void DWARFUnitSectionBase::parse(DWARFContext &C, const DWARFSection &Section) {
@@ -275,7 +275,7 @@ bool DWARFUnit::parseDWO() {
     sys::path::append(AbsolutePath, CompilationDir);
   }
   sys::path::append(AbsolutePath, DWOFileName);
-  DWO = llvm::make_unique<DWOHolder>(AbsolutePath);
+  DWO = llvm37::make_unique<DWOHolder>(AbsolutePath);
   DWARFUnit *DWOCU = DWO->getUnit();
   // Verify that compile unit in .dwo file is valid.
   if (!DWOCU || DWOCU->getDWOId() != getDWOId()) {

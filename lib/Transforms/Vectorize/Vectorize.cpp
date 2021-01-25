@@ -15,19 +15,19 @@
 
 #if HLSL_VECTORIZATION_ENABLED // HLSL Change - don't build vectorization passes
 
-#include "llvm/Transforms/Vectorize.h"
+#include "llvm37/Transforms/Vectorize.h"
 #include "llvm-c/Initialization.h"
 #include "llvm-c/Transforms/Vectorize.h"
-#include "llvm/Analysis/Passes.h"
-#include "llvm/IR/Verifier.h"
-#include "llvm/InitializePasses.h"
-#include "llvm/IR/LegacyPassManager.h"
+#include "llvm37/Analysis/Passes.h"
+#include "llvm37/IR/Verifier.h"
+#include "llvm37/InitializePasses.h"
+#include "llvm37/IR/LegacyPassManager.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 /// initializeVectorizationPasses - Initialize all passes linked into the
 /// Vectorization library.
-void llvm::initializeVectorization(PassRegistry &Registry) {
+void llvm37::initializeVectorization(PassRegistry &Registry) {
   initializeBBVectorizePass(Registry);
   initializeLoopVectorizePass(Registry);
   initializeSLPVectorizerPass(Registry);
@@ -51,7 +51,7 @@ void LLVMAddSLPVectorizePass(LLVMPassManagerRef PM) {
 
 #else
 
-namespace llvm {
+namespace llvm37 {
 class PassRegistry;
 
 void initializeVectorization(PassRegistry &) {}

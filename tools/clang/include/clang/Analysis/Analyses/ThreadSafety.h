@@ -16,12 +16,12 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_ANALYSIS_ANALYSES_THREADSAFETY_H
-#define LLVM_CLANG_ANALYSIS_ANALYSES_THREADSAFETY_H
+#ifndef LLVM37_CLANG_ANALYSIS_ANALYSES_THREADSAFETY_H
+#define LLVM37_CLANG_ANALYSIS_ANALYSES_THREADSAFETY_H
 
 #include "clang/Analysis/AnalysisContext.h"
 #include "clang/Basic/SourceLocation.h"
-#include "llvm/ADT/StringRef.h"
+#include "llvm37/ADT/StringRef.h"
 
 namespace clang {
 namespace threadSafety {

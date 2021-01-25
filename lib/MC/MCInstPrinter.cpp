@@ -7,16 +7,16 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/MC/MCInstPrinter.h"
-#include "llvm/ADT/StringRef.h"
-#include "llvm/MC/MCAsmInfo.h"
-#include "llvm/MC/MCInstrInfo.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/Format.h"
-#include "llvm/Support/raw_ostream.h"
-using namespace llvm;
+#include "llvm37/MC/MCInstPrinter.h"
+#include "llvm37/ADT/StringRef.h"
+#include "llvm37/MC/MCAsmInfo.h"
+#include "llvm37/MC/MCInstrInfo.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/Format.h"
+#include "llvm37/Support/raw_ostream.h"
+using namespace llvm37;
 
-void llvm::dumpBytes(ArrayRef<uint8_t> bytes, raw_ostream &OS) {
+void llvm37::dumpBytes(ArrayRef<uint8_t> bytes, raw_ostream &OS) {
   static const char hex_rep[] = "0123456789abcdef";
   for (char i: bytes) {
     OS << hex_rep[(i & 0xF0) >> 4];

@@ -7,16 +7,16 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_LIB_DRIVER_TOOLS_H
-#define LLVM_CLANG_LIB_DRIVER_TOOLS_H
+#ifndef LLVM37_CLANG_LIB_DRIVER_TOOLS_H
+#define LLVM37_CLANG_LIB_DRIVER_TOOLS_H
 
 #include "clang/Basic/VersionTuple.h"
 #include "clang/Driver/Tool.h"
 #include "clang/Driver/Types.h"
 #include "clang/Driver/Util.h"
-#include "llvm/ADT/Triple.h"
-#include "llvm/Option/Option.h"
-#include "llvm/Support/Compiler.h"
+#include "llvm37/ADT/Triple.h"
+#include "llvm37/Option/Option.h"
+#include "llvm37/Support/Compiler.h"
 
 namespace clang {
   class ObjCRuntime;
@@ -35,59 +35,59 @@ namespace visualstudio {
 class Compiler;
 }
 
-using llvm::opt::ArgStringList;
+using llvm37::opt::ArgStringList;
 
 SmallString<128> getCompilerRT(const ToolChain &TC, StringRef Component,
                                bool Shared = false);
 
   /// \brief Clang compiler tool.
-  class LLVM_LIBRARY_VISIBILITY Clang : public Tool {
+  class LLVM37_LIBRARY_VISIBILITY Clang : public Tool {
   public:
-    static const char *getBaseInputName(const llvm::opt::ArgList &Args,
+    static const char *getBaseInputName(const llvm37::opt::ArgList &Args,
                                         const InputInfo &Input);
-    static const char *getBaseInputStem(const llvm::opt::ArgList &Args,
+    static const char *getBaseInputStem(const llvm37::opt::ArgList &Args,
                                         const InputInfoList &Inputs);
-    static const char *getDependencyFileName(const llvm::opt::ArgList &Args,
+    static const char *getDependencyFileName(const llvm37::opt::ArgList &Args,
                                              const InputInfoList &Inputs);
 
   private:
     void AddPreprocessingOptions(Compilation &C, const JobAction &JA,
                                  const Driver &D,
-                                 const llvm::opt::ArgList &Args,
-                                 llvm::opt::ArgStringList &CmdArgs,
+                                 const llvm37::opt::ArgList &Args,
+                                 llvm37::opt::ArgStringList &CmdArgs,
                                  const InputInfo &Output,
                                  const InputInfoList &Inputs) const;
 
-    void AddAArch64TargetArgs(const llvm::opt::ArgList &Args,
-                              llvm::opt::ArgStringList &CmdArgs) const;
-    void AddARMTargetArgs(const llvm::opt::ArgList &Args,
-                          llvm::opt::ArgStringList &CmdArgs,
+    void AddAArch64TargetArgs(const llvm37::opt::ArgList &Args,
+                              llvm37::opt::ArgStringList &CmdArgs) const;
+    void AddARMTargetArgs(const llvm37::opt::ArgList &Args,
+                          llvm37::opt::ArgStringList &CmdArgs,
                           bool KernelOrKext) const;
-    void AddARM64TargetArgs(const llvm::opt::ArgList &Args,
-                            llvm::opt::ArgStringList &CmdArgs) const;
-    void AddMIPSTargetArgs(const llvm::opt::ArgList &Args,
-                           llvm::opt::ArgStringList &CmdArgs) const;
-    void AddPPCTargetArgs(const llvm::opt::ArgList &Args,
-                          llvm::opt::ArgStringList &CmdArgs) const;
-    void AddR600TargetArgs(const llvm::opt::ArgList &Args,
-                           llvm::opt::ArgStringList &CmdArgs) const;
-    void AddSparcTargetArgs(const llvm::opt::ArgList &Args,
-                            llvm::opt::ArgStringList &CmdArgs) const;
-    void AddSystemZTargetArgs(const llvm::opt::ArgList &Args,
-                              llvm::opt::ArgStringList &CmdArgs) const;
-    void AddX86TargetArgs(const llvm::opt::ArgList &Args,
-                          llvm::opt::ArgStringList &CmdArgs) const;
-    void AddHexagonTargetArgs(const llvm::opt::ArgList &Args,
-                              llvm::opt::ArgStringList &CmdArgs) const;
+    void AddARM64TargetArgs(const llvm37::opt::ArgList &Args,
+                            llvm37::opt::ArgStringList &CmdArgs) const;
+    void AddMIPSTargetArgs(const llvm37::opt::ArgList &Args,
+                           llvm37::opt::ArgStringList &CmdArgs) const;
+    void AddPPCTargetArgs(const llvm37::opt::ArgList &Args,
+                          llvm37::opt::ArgStringList &CmdArgs) const;
+    void AddR600TargetArgs(const llvm37::opt::ArgList &Args,
+                           llvm37::opt::ArgStringList &CmdArgs) const;
+    void AddSparcTargetArgs(const llvm37::opt::ArgList &Args,
+                            llvm37::opt::ArgStringList &CmdArgs) const;
+    void AddSystemZTargetArgs(const llvm37::opt::ArgList &Args,
+                              llvm37::opt::ArgStringList &CmdArgs) const;
+    void AddX86TargetArgs(const llvm37::opt::ArgList &Args,
+                          llvm37::opt::ArgStringList &CmdArgs) const;
+    void AddHexagonTargetArgs(const llvm37::opt::ArgList &Args,
+                              llvm37::opt::ArgStringList &CmdArgs) const;
 
     enum RewriteKind { RK_None, RK_Fragile, RK_NonFragile };
 
-    ObjCRuntime AddObjCRuntimeArgs(const llvm::opt::ArgList &args,
-                                   llvm::opt::ArgStringList &cmdArgs,
+    ObjCRuntime AddObjCRuntimeArgs(const llvm37::opt::ArgList &args,
+                                   llvm37::opt::ArgStringList &cmdArgs,
                                    RewriteKind rewrite) const;
 
-    void AddClangCLArgs(const llvm::opt::ArgList &Args,
-                        llvm::opt::ArgStringList &CmdArgs) const;
+    void AddClangCLArgs(const llvm37::opt::ArgList &Args,
+                        llvm37::opt::ArgStringList &CmdArgs) const;
 
     visualstudio::Compiler *getCLFallback() const;
 
@@ -106,41 +106,41 @@ SmallString<128> getCompilerRT(const ToolChain &TC, StringRef Component,
 
     void ConstructJob(Compilation &C, const JobAction &JA,
                       const InputInfo &Output, const InputInfoList &Inputs,
-                      const llvm::opt::ArgList &TCArgs,
+                      const llvm37::opt::ArgList &TCArgs,
                       const char *LinkingOutput) const override;
   };
 
   /// \brief Clang integrated assembler tool.
-  class LLVM_LIBRARY_VISIBILITY ClangAs : public Tool {
+  class LLVM37_LIBRARY_VISIBILITY ClangAs : public Tool {
   public:
     ClangAs(const ToolChain &TC) : Tool("clang::as",
                                         "clang integrated assembler", TC,
                                         RF_Full) {}
-    void AddMIPSTargetArgs(const llvm::opt::ArgList &Args,
-                           llvm::opt::ArgStringList &CmdArgs) const;
+    void AddMIPSTargetArgs(const llvm37::opt::ArgList &Args,
+                           llvm37::opt::ArgStringList &CmdArgs) const;
     bool hasGoodDiagnostics() const override { return true; }
     bool hasIntegratedAssembler() const override { return false; }
     bool hasIntegratedCPP() const override { return false; }
 
     void ConstructJob(Compilation &C, const JobAction &JA,
                       const InputInfo &Output, const InputInfoList &Inputs,
-                      const llvm::opt::ArgList &TCArgs,
+                      const llvm37::opt::ArgList &TCArgs,
                       const char *LinkingOutput) const override;
   };
 
   /// \brief Base class for all GNU tools that provide the same behavior when
   /// it comes to response files support
-  class LLVM_LIBRARY_VISIBILITY GnuTool : public Tool {
+  class LLVM37_LIBRARY_VISIBILITY GnuTool : public Tool {
     virtual void anchor();
 
   public:
     GnuTool(const char *Name, const char *ShortName, const ToolChain &TC)
-        : Tool(Name, ShortName, TC, RF_Full, llvm::sys::WEM_CurrentCodePage) {}
+        : Tool(Name, ShortName, TC, RF_Full, llvm37::sys::WEM_CurrentCodePage) {}
   };
 
   /// gcc - Generic GCC tool implementations.
 namespace gcc {
-  class LLVM_LIBRARY_VISIBILITY Common : public GnuTool {
+  class LLVM37_LIBRARY_VISIBILITY Common : public GnuTool {
   public:
     Common(const char *Name, const char *ShortName,
            const ToolChain &TC) : GnuTool(Name, ShortName, TC) {}
@@ -148,17 +148,17 @@ namespace gcc {
     void ConstructJob(Compilation &C, const JobAction &JA,
                       const InputInfo &Output,
                       const InputInfoList &Inputs,
-                      const llvm::opt::ArgList &TCArgs,
+                      const llvm37::opt::ArgList &TCArgs,
                       const char *LinkingOutput) const override;
 
     /// RenderExtraToolArgs - Render any arguments necessary to force
     /// the particular tool mode.
     virtual void
     RenderExtraToolArgs(const JobAction &JA,
-                        llvm::opt::ArgStringList &CmdArgs) const = 0;
+                        llvm37::opt::ArgStringList &CmdArgs) const = 0;
   };
 
-  class LLVM_LIBRARY_VISIBILITY Preprocessor : public Common {
+  class LLVM37_LIBRARY_VISIBILITY Preprocessor : public Common {
   public:
     Preprocessor(const ToolChain &TC)
         : Common("gcc::Preprocessor", "gcc preprocessor", TC) {}
@@ -167,10 +167,10 @@ namespace gcc {
     bool hasIntegratedCPP() const override { return false; }
 
     void RenderExtraToolArgs(const JobAction &JA,
-                             llvm::opt::ArgStringList &CmdArgs) const override;
+                             llvm37::opt::ArgStringList &CmdArgs) const override;
   };
 
-  class LLVM_LIBRARY_VISIBILITY Compiler : public Common {
+  class LLVM37_LIBRARY_VISIBILITY Compiler : public Common {
   public:
     Compiler(const ToolChain &TC)
         : Common("gcc::Compiler", "gcc frontend", TC) {}
@@ -179,10 +179,10 @@ namespace gcc {
     bool hasIntegratedCPP() const override { return true; }
 
     void RenderExtraToolArgs(const JobAction &JA,
-                             llvm::opt::ArgStringList &CmdArgs) const override;
+                             llvm37::opt::ArgStringList &CmdArgs) const override;
   };
 
-  class LLVM_LIBRARY_VISIBILITY Linker : public Common {
+  class LLVM37_LIBRARY_VISIBILITY Linker : public Common {
   public:
     Linker(const ToolChain &TC)
         : Common("gcc::Linker", "linker (via gcc)", TC) {}
@@ -191,7 +191,7 @@ namespace gcc {
     bool isLinkJob() const override { return true; }
 
     void RenderExtraToolArgs(const JobAction &JA,
-                             llvm::opt::ArgStringList &CmdArgs) const override;
+                             llvm37::opt::ArgStringList &CmdArgs) const override;
   };
 } // end namespace gcc
 
@@ -199,7 +199,7 @@ namespace hexagon {
 // For Hexagon, we do not need to instantiate tools for PreProcess, PreCompile
 // and Compile.
 // We simply use "clang -cc1" for those actions.
-class LLVM_LIBRARY_VISIBILITY Assembler : public GnuTool {
+class LLVM37_LIBRARY_VISIBILITY Assembler : public GnuTool {
 public:
   Assembler(const ToolChain &TC)
       : GnuTool("hexagon::Assembler", "hexagon-as", TC) {}
@@ -207,14 +207,14 @@ public:
   bool hasIntegratedCPP() const override { return false; }
 
     void RenderExtraToolArgs(const JobAction &JA,
-                             llvm::opt::ArgStringList &CmdArgs) const;
+                             llvm37::opt::ArgStringList &CmdArgs) const;
     void ConstructJob(Compilation &C, const JobAction &JA,
                       const InputInfo &Output, const InputInfoList &Inputs,
-                      const llvm::opt::ArgList &TCArgs,
+                      const llvm37::opt::ArgList &TCArgs,
                       const char *LinkingOutput) const override;
 };
 
-class LLVM_LIBRARY_VISIBILITY Linker : public GnuTool {
+class LLVM37_LIBRARY_VISIBILITY Linker : public GnuTool {
 public:
   Linker(const ToolChain &TC) : GnuTool("hexagon::Linker", "hexagon-ld", TC) {}
 
@@ -222,24 +222,24 @@ public:
     bool isLinkJob() const override { return true; }
 
     virtual void RenderExtraToolArgs(const JobAction &JA,
-                                     llvm::opt::ArgStringList &CmdArgs) const;
+                                     llvm37::opt::ArgStringList &CmdArgs) const;
     void ConstructJob(Compilation &C, const JobAction &JA,
                       const InputInfo &Output, const InputInfoList &Inputs,
-                      const llvm::opt::ArgList &TCArgs,
+                      const llvm37::opt::ArgList &TCArgs,
                       const char *LinkingOutput) const override;
   };
 } // end namespace hexagon.
 
 namespace arm {
   std::string getARMTargetCPU(StringRef CPU, StringRef Arch,
-                              const llvm::Triple &Triple);
+                              const llvm37::Triple &Triple);
   const std::string getARMArch(StringRef Arch,
-                               const llvm::Triple &Triple);
+                               const llvm37::Triple &Triple);
   const char* getARMCPUForMArch(StringRef Arch,
-                                const llvm::Triple &Triple);
+                                const llvm37::Triple &Triple);
   const char* getLLVMArchSuffixForARM(StringRef CPU, StringRef Arch);
 
-  void appendEBLinkFlags(const llvm::opt::ArgList &Args, ArgStringList &CmdArgs, const llvm::Triple &Triple);
+  void appendEBLinkFlags(const llvm37::opt::ArgList &Args, ArgStringList &CmdArgs, const llvm37::Triple &Triple);
 }
 
 namespace mips {
@@ -248,25 +248,25 @@ namespace mips {
     Nan2008 = 2
   } NanEncoding;
   NanEncoding getSupportedNanEncoding(StringRef &CPU);
-  void getMipsCPUAndABI(const llvm::opt::ArgList &Args,
-                        const llvm::Triple &Triple, StringRef &CPUName,
+  void getMipsCPUAndABI(const llvm37::opt::ArgList &Args,
+                        const llvm37::Triple &Triple, StringRef &CPUName,
                         StringRef &ABIName);
-  bool hasMipsAbiArg(const llvm::opt::ArgList &Args, const char *Value);
-  bool isUCLibc(const llvm::opt::ArgList &Args);
-  bool isNaN2008(const llvm::opt::ArgList &Args, const llvm::Triple &Triple);
-  bool isFPXXDefault(const llvm::Triple &Triple, StringRef CPUName,
+  bool hasMipsAbiArg(const llvm37::opt::ArgList &Args, const char *Value);
+  bool isUCLibc(const llvm37::opt::ArgList &Args);
+  bool isNaN2008(const llvm37::opt::ArgList &Args, const llvm37::Triple &Triple);
+  bool isFPXXDefault(const llvm37::Triple &Triple, StringRef CPUName,
                      StringRef ABIName, StringRef FloatABI);
-  bool shouldUseFPXX(const llvm::opt::ArgList &Args, const llvm::Triple &Triple,
+  bool shouldUseFPXX(const llvm37::opt::ArgList &Args, const llvm37::Triple &Triple,
                      StringRef CPUName, StringRef ABIName, StringRef FloatABI);
 }
 
 namespace ppc {
-  bool hasPPCAbiArg(const llvm::opt::ArgList &Args, const char *Value);
+  bool hasPPCAbiArg(const llvm37::opt::ArgList &Args, const char *Value);
 }
 
 /// cloudabi -- Directly call GNU Binutils linker
 namespace cloudabi {
-class LLVM_LIBRARY_VISIBILITY Linker : public GnuTool {
+class LLVM37_LIBRARY_VISIBILITY Linker : public GnuTool {
 public:
   Linker(const ToolChain &TC) : GnuTool("cloudabi::Linker", "linker", TC) {}
 
@@ -275,20 +275,20 @@ public:
 
   void ConstructJob(Compilation &C, const JobAction &JA,
                     const InputInfo &Output, const InputInfoList &Inputs,
-                    const llvm::opt::ArgList &TCArgs,
+                    const llvm37::opt::ArgList &TCArgs,
                     const char *LinkingOutput) const override;
 };
 } // end namespace cloudabi
 
 namespace darwin {
-  llvm::Triple::ArchType getArchTypeForMachOArchName(StringRef Str);
-  void setTripleTypeForMachOArchName(llvm::Triple &T, StringRef Str);
+  llvm37::Triple::ArchType getArchTypeForMachOArchName(StringRef Str);
+  void setTripleTypeForMachOArchName(llvm37::Triple &T, StringRef Str);
 
-  class LLVM_LIBRARY_VISIBILITY MachOTool : public Tool {
+  class LLVM37_LIBRARY_VISIBILITY MachOTool : public Tool {
     virtual void anchor();
   protected:
-    void AddMachOArch(const llvm::opt::ArgList &Args,
-                       llvm::opt::ArgStringList &CmdArgs) const;
+    void AddMachOArch(const llvm37::opt::ArgList &Args,
+                       llvm37::opt::ArgStringList &CmdArgs) const;
 
     const toolchains::MachO &getMachOToolChain() const {
       return reinterpret_cast<const toolchains::MachO&>(getToolChain());
@@ -298,13 +298,13 @@ namespace darwin {
     MachOTool(
         const char *Name, const char *ShortName, const ToolChain &TC,
         ResponseFileSupport ResponseSupport = RF_None,
-        llvm::sys::WindowsEncodingMethod ResponseEncoding = llvm::sys::WEM_UTF8,
+        llvm37::sys::WindowsEncodingMethod ResponseEncoding = llvm37::sys::WEM_UTF8,
         const char *ResponseFlag = "@")
         : Tool(Name, ShortName, TC, ResponseSupport, ResponseEncoding,
                ResponseFlag) {}
   };
 
-  class LLVM_LIBRARY_VISIBILITY Assembler : public MachOTool {
+  class LLVM37_LIBRARY_VISIBILITY Assembler : public MachOTool {
   public:
     Assembler(const ToolChain &TC)
         : MachOTool("darwin::Assembler", "assembler", TC) {}
@@ -313,31 +313,31 @@ namespace darwin {
 
     void ConstructJob(Compilation &C, const JobAction &JA,
                       const InputInfo &Output, const InputInfoList &Inputs,
-                      const llvm::opt::ArgList &TCArgs,
+                      const llvm37::opt::ArgList &TCArgs,
                       const char *LinkingOutput) const override;
   };
 
-  class LLVM_LIBRARY_VISIBILITY Linker : public MachOTool {
+  class LLVM37_LIBRARY_VISIBILITY Linker : public MachOTool {
     bool NeedsTempPath(const InputInfoList &Inputs) const;
-    void AddLinkArgs(Compilation &C, const llvm::opt::ArgList &Args,
-                     llvm::opt::ArgStringList &CmdArgs,
+    void AddLinkArgs(Compilation &C, const llvm37::opt::ArgList &Args,
+                     llvm37::opt::ArgStringList &CmdArgs,
                      const InputInfoList &Inputs) const;
 
   public:
     Linker(const ToolChain &TC)
         : MachOTool("darwin::Linker", "linker", TC, RF_FileList,
-                    llvm::sys::WEM_UTF8, "-filelist") {}
+                    llvm37::sys::WEM_UTF8, "-filelist") {}
 
     bool hasIntegratedCPP() const override { return false; }
     bool isLinkJob() const override { return true; }
 
     void ConstructJob(Compilation &C, const JobAction &JA,
                       const InputInfo &Output, const InputInfoList &Inputs,
-                      const llvm::opt::ArgList &TCArgs,
+                      const llvm37::opt::ArgList &TCArgs,
                       const char *LinkingOutput) const override;
   };
 
-  class LLVM_LIBRARY_VISIBILITY Lipo : public MachOTool  {
+  class LLVM37_LIBRARY_VISIBILITY Lipo : public MachOTool  {
   public:
     Lipo(const ToolChain &TC) : MachOTool("darwin::Lipo", "lipo", TC) {}
 
@@ -345,11 +345,11 @@ namespace darwin {
 
     void ConstructJob(Compilation &C, const JobAction &JA,
                       const InputInfo &Output, const InputInfoList &Inputs,
-                      const llvm::opt::ArgList &TCArgs,
+                      const llvm37::opt::ArgList &TCArgs,
                       const char *LinkingOutput) const override;
   };
 
-  class LLVM_LIBRARY_VISIBILITY Dsymutil : public MachOTool  {
+  class LLVM37_LIBRARY_VISIBILITY Dsymutil : public MachOTool  {
   public:
     Dsymutil(const ToolChain &TC) : MachOTool("darwin::Dsymutil",
                                               "dsymutil", TC) {}
@@ -360,11 +360,11 @@ namespace darwin {
     void ConstructJob(Compilation &C, const JobAction &JA,
                       const InputInfo &Output,
                       const InputInfoList &Inputs,
-                      const llvm::opt::ArgList &TCArgs,
+                      const llvm37::opt::ArgList &TCArgs,
                       const char *LinkingOutput) const override;
   };
 
-  class LLVM_LIBRARY_VISIBILITY VerifyDebug : public MachOTool  {
+  class LLVM37_LIBRARY_VISIBILITY VerifyDebug : public MachOTool  {
   public:
     VerifyDebug(const ToolChain &TC) : MachOTool("darwin::VerifyDebug",
                                                  "dwarfdump", TC) {}
@@ -373,7 +373,7 @@ namespace darwin {
 
     void ConstructJob(Compilation &C, const JobAction &JA,
                       const InputInfo &Output, const InputInfoList &Inputs,
-                      const llvm::opt::ArgList &TCArgs,
+                      const llvm37::opt::ArgList &TCArgs,
                       const char *LinkingOutput) const override;
   };
 
@@ -381,7 +381,7 @@ namespace darwin {
 
 /// openbsd -- Directly call GNU Binutils assembler and linker
 namespace openbsd {
-class LLVM_LIBRARY_VISIBILITY Assembler : public GnuTool {
+class LLVM37_LIBRARY_VISIBILITY Assembler : public GnuTool {
 public:
   Assembler(const ToolChain &TC)
       : GnuTool("openbsd::Assembler", "assembler", TC) {}
@@ -390,10 +390,10 @@ public:
 
   void ConstructJob(Compilation &C, const JobAction &JA,
                     const InputInfo &Output, const InputInfoList &Inputs,
-                    const llvm::opt::ArgList &TCArgs,
+                    const llvm37::opt::ArgList &TCArgs,
                     const char *LinkingOutput) const override;
 };
-class LLVM_LIBRARY_VISIBILITY Linker : public GnuTool {
+class LLVM37_LIBRARY_VISIBILITY Linker : public GnuTool {
 public:
   Linker(const ToolChain &TC) : GnuTool("openbsd::Linker", "linker", TC) {}
 
@@ -402,14 +402,14 @@ public:
 
     void ConstructJob(Compilation &C, const JobAction &JA,
                       const InputInfo &Output, const InputInfoList &Inputs,
-                      const llvm::opt::ArgList &TCArgs,
+                      const llvm37::opt::ArgList &TCArgs,
                       const char *LinkingOutput) const override;
   };
 } // end namespace openbsd
 
 /// bitrig -- Directly call GNU Binutils assembler and linker
 namespace bitrig {
-class LLVM_LIBRARY_VISIBILITY Assembler : public GnuTool {
+class LLVM37_LIBRARY_VISIBILITY Assembler : public GnuTool {
 public:
   Assembler(const ToolChain &TC)
       : GnuTool("bitrig::Assembler", "assembler", TC) {}
@@ -418,10 +418,10 @@ public:
 
   void ConstructJob(Compilation &C, const JobAction &JA,
                     const InputInfo &Output, const InputInfoList &Inputs,
-                    const llvm::opt::ArgList &TCArgs,
+                    const llvm37::opt::ArgList &TCArgs,
                     const char *LinkingOutput) const override;
 };
-class LLVM_LIBRARY_VISIBILITY Linker : public GnuTool {
+class LLVM37_LIBRARY_VISIBILITY Linker : public GnuTool {
 public:
   Linker(const ToolChain &TC) : GnuTool("bitrig::Linker", "linker", TC) {}
 
@@ -430,14 +430,14 @@ public:
 
     void ConstructJob(Compilation &C, const JobAction &JA,
                       const InputInfo &Output, const InputInfoList &Inputs,
-                      const llvm::opt::ArgList &TCArgs,
+                      const llvm37::opt::ArgList &TCArgs,
                       const char *LinkingOutput) const override;
   };
 } // end namespace bitrig
 
 /// freebsd -- Directly call GNU Binutils assembler and linker
 namespace freebsd {
-class LLVM_LIBRARY_VISIBILITY Assembler : public GnuTool {
+class LLVM37_LIBRARY_VISIBILITY Assembler : public GnuTool {
 public:
   Assembler(const ToolChain &TC)
       : GnuTool("freebsd::Assembler", "assembler", TC) {}
@@ -446,10 +446,10 @@ public:
 
   void ConstructJob(Compilation &C, const JobAction &JA,
                     const InputInfo &Output, const InputInfoList &Inputs,
-                    const llvm::opt::ArgList &TCArgs,
+                    const llvm37::opt::ArgList &TCArgs,
                     const char *LinkingOutput) const override;
 };
-class LLVM_LIBRARY_VISIBILITY Linker : public GnuTool {
+class LLVM37_LIBRARY_VISIBILITY Linker : public GnuTool {
 public:
   Linker(const ToolChain &TC) : GnuTool("freebsd::Linker", "linker", TC) {}
 
@@ -458,14 +458,14 @@ public:
 
     void ConstructJob(Compilation &C, const JobAction &JA,
                       const InputInfo &Output, const InputInfoList &Inputs,
-                      const llvm::opt::ArgList &TCArgs,
+                      const llvm37::opt::ArgList &TCArgs,
                       const char *LinkingOutput) const override;
   };
 } // end namespace freebsd
 
 /// netbsd -- Directly call GNU Binutils assembler and linker
 namespace netbsd {
-class LLVM_LIBRARY_VISIBILITY Assembler : public GnuTool {
+class LLVM37_LIBRARY_VISIBILITY Assembler : public GnuTool {
 
 public:
   Assembler(const ToolChain &TC)
@@ -475,10 +475,10 @@ public:
 
   void ConstructJob(Compilation &C, const JobAction &JA,
                     const InputInfo &Output, const InputInfoList &Inputs,
-                    const llvm::opt::ArgList &TCArgs,
+                    const llvm37::opt::ArgList &TCArgs,
                     const char *LinkingOutput) const override;
 };
-class LLVM_LIBRARY_VISIBILITY Linker : public GnuTool {
+class LLVM37_LIBRARY_VISIBILITY Linker : public GnuTool {
 
 public:
   Linker(const ToolChain &TC) : GnuTool("netbsd::Linker", "linker", TC) {}
@@ -488,14 +488,14 @@ public:
 
     void ConstructJob(Compilation &C, const JobAction &JA,
                       const InputInfo &Output, const InputInfoList &Inputs,
-                      const llvm::opt::ArgList &TCArgs,
+                      const llvm37::opt::ArgList &TCArgs,
                       const char *LinkingOutput) const override;
   };
 } // end namespace netbsd
 
 /// Directly call GNU Binutils' assembler and linker.
 namespace gnutools {
-class LLVM_LIBRARY_VISIBILITY Assembler : public GnuTool {
+class LLVM37_LIBRARY_VISIBILITY Assembler : public GnuTool {
 public:
   Assembler(const ToolChain &TC) : GnuTool("GNU::Assembler", "assembler", TC) {}
 
@@ -503,10 +503,10 @@ public:
 
   void ConstructJob(Compilation &C, const JobAction &JA,
                     const InputInfo &Output, const InputInfoList &Inputs,
-                    const llvm::opt::ArgList &TCArgs,
+                    const llvm37::opt::ArgList &TCArgs,
                     const char *LinkingOutput) const override;
 };
-class LLVM_LIBRARY_VISIBILITY Linker : public GnuTool {
+class LLVM37_LIBRARY_VISIBILITY Linker : public GnuTool {
 public:
   Linker(const ToolChain &TC) : GnuTool("GNU::Linker", "linker", TC) {}
 
@@ -516,22 +516,22 @@ public:
     void ConstructJob(Compilation &C, const JobAction &JA,
                       const InputInfo &Output,
                       const InputInfoList &Inputs,
-                      const llvm::opt::ArgList &TCArgs,
+                      const llvm37::opt::ArgList &TCArgs,
                       const char *LinkingOutput) const override;
   };
   }
 
   namespace nacltools {
-  class LLVM_LIBRARY_VISIBILITY AssemblerARM : public gnutools::Assembler {
+  class LLVM37_LIBRARY_VISIBILITY AssemblerARM : public gnutools::Assembler {
   public:
     AssemblerARM(const ToolChain &TC) : gnutools::Assembler(TC) {}
 
     void ConstructJob(Compilation &C, const JobAction &JA,
                       const InputInfo &Output, const InputInfoList &Inputs,
-                      const llvm::opt::ArgList &TCArgs,
+                      const llvm37::opt::ArgList &TCArgs,
                       const char *LinkingOutput) const override;
   };
-  class LLVM_LIBRARY_VISIBILITY Linker : public Tool {
+  class LLVM37_LIBRARY_VISIBILITY Linker : public Tool {
   public:
     Linker(const ToolChain &TC) : Tool("NaCl::Linker", "linker", TC) {}
 
@@ -541,14 +541,14 @@ public:
     void ConstructJob(Compilation &C, const JobAction &JA,
                               const InputInfo &Output,
                               const InputInfoList &Inputs,
-                              const llvm::opt::ArgList &TCArgs,
+                              const llvm37::opt::ArgList &TCArgs,
                               const char *LinkingOutput) const override;
   };
 }
 
 /// minix -- Directly call GNU Binutils assembler and linker
 namespace minix {
-class LLVM_LIBRARY_VISIBILITY Assembler : public GnuTool {
+class LLVM37_LIBRARY_VISIBILITY Assembler : public GnuTool {
 public:
   Assembler(const ToolChain &TC)
       : GnuTool("minix::Assembler", "assembler", TC) {}
@@ -557,10 +557,10 @@ public:
 
   void ConstructJob(Compilation &C, const JobAction &JA,
                     const InputInfo &Output, const InputInfoList &Inputs,
-                    const llvm::opt::ArgList &TCArgs,
+                    const llvm37::opt::ArgList &TCArgs,
                     const char *LinkingOutput) const override;
 };
-class LLVM_LIBRARY_VISIBILITY Linker : public GnuTool {
+class LLVM37_LIBRARY_VISIBILITY Linker : public GnuTool {
 public:
   Linker(const ToolChain &TC) : GnuTool("minix::Linker", "linker", TC) {}
 
@@ -570,14 +570,14 @@ public:
     void ConstructJob(Compilation &C, const JobAction &JA,
                       const InputInfo &Output,
                       const InputInfoList &Inputs,
-                      const llvm::opt::ArgList &TCArgs,
+                      const llvm37::opt::ArgList &TCArgs,
                       const char *LinkingOutput) const override;
   };
 } // end namespace minix
 
 /// solaris -- Directly call Solaris assembler and linker
 namespace solaris {
-class LLVM_LIBRARY_VISIBILITY Assembler : public Tool {
+class LLVM37_LIBRARY_VISIBILITY Assembler : public Tool {
 public:
   Assembler(const ToolChain &TC)
       : Tool("solaris::Assembler", "assembler", TC) {}
@@ -586,10 +586,10 @@ public:
 
   void ConstructJob(Compilation &C, const JobAction &JA,
                     const InputInfo &Output, const InputInfoList &Inputs,
-                    const llvm::opt::ArgList &TCArgs,
+                    const llvm37::opt::ArgList &TCArgs,
                     const char *LinkingOutput) const override;
 };
-class LLVM_LIBRARY_VISIBILITY Linker : public Tool {
+class LLVM37_LIBRARY_VISIBILITY Linker : public Tool {
 public:
   Linker(const ToolChain &TC) : Tool("solaris::Linker", "linker", TC) {}
 
@@ -598,14 +598,14 @@ public:
 
     void ConstructJob(Compilation &C, const JobAction &JA,
                       const InputInfo &Output, const InputInfoList &Inputs,
-                      const llvm::opt::ArgList &TCArgs,
+                      const llvm37::opt::ArgList &TCArgs,
                       const char *LinkingOutput) const override;
   };
 } // end namespace solaris
 
 /// dragonfly -- Directly call GNU Binutils assembler and linker
 namespace dragonfly {
-class LLVM_LIBRARY_VISIBILITY Assembler : public GnuTool {
+class LLVM37_LIBRARY_VISIBILITY Assembler : public GnuTool {
 public:
   Assembler(const ToolChain &TC)
       : GnuTool("dragonfly::Assembler", "assembler", TC) {}
@@ -614,10 +614,10 @@ public:
 
   void ConstructJob(Compilation &C, const JobAction &JA,
                     const InputInfo &Output, const InputInfoList &Inputs,
-                    const llvm::opt::ArgList &TCArgs,
+                    const llvm37::opt::ArgList &TCArgs,
                     const char *LinkingOutput) const override;
 };
-class LLVM_LIBRARY_VISIBILITY Linker : public GnuTool {
+class LLVM37_LIBRARY_VISIBILITY Linker : public GnuTool {
 public:
   Linker(const ToolChain &TC) : GnuTool("dragonfly::Linker", "linker", TC) {}
 
@@ -627,36 +627,36 @@ public:
     void ConstructJob(Compilation &C, const JobAction &JA,
                       const InputInfo &Output,
                       const InputInfoList &Inputs,
-                      const llvm::opt::ArgList &TCArgs,
+                      const llvm37::opt::ArgList &TCArgs,
                       const char *LinkingOutput) const override;
   };
 } // end namespace dragonfly
 
 /// Visual studio tools.
 namespace visualstudio {
-VersionTuple getMSVCVersion(const Driver *D, const llvm::Triple &Triple,
-                            const llvm::opt::ArgList &Args, bool IsWindowsMSVC);
+VersionTuple getMSVCVersion(const Driver *D, const llvm37::Triple &Triple,
+                            const llvm37::opt::ArgList &Args, bool IsWindowsMSVC);
 
-class LLVM_LIBRARY_VISIBILITY Linker : public Tool {
+class LLVM37_LIBRARY_VISIBILITY Linker : public Tool {
 public:
   Linker(const ToolChain &TC)
       : Tool("visualstudio::Linker", "linker", TC, RF_Full,
-             llvm::sys::WEM_UTF16) {}
+             llvm37::sys::WEM_UTF16) {}
 
   bool hasIntegratedCPP() const override { return false; }
     bool isLinkJob() const override { return true; }
 
     void ConstructJob(Compilation &C, const JobAction &JA,
                       const InputInfo &Output, const InputInfoList &Inputs,
-                      const llvm::opt::ArgList &TCArgs,
+                      const llvm37::opt::ArgList &TCArgs,
                       const char *LinkingOutput) const override;
 };
 
-class LLVM_LIBRARY_VISIBILITY Compiler : public Tool {
+class LLVM37_LIBRARY_VISIBILITY Compiler : public Tool {
 public:
   Compiler(const ToolChain &TC)
       : Tool("visualstudio::Compiler", "compiler", TC, RF_Full,
-             llvm::sys::WEM_UTF16) {}
+             llvm37::sys::WEM_UTF16) {}
 
   bool hasIntegratedAssembler() const override { return true; }
     bool hasIntegratedCPP() const override { return true; }
@@ -664,20 +664,20 @@ public:
 
     void ConstructJob(Compilation &C, const JobAction &JA,
                       const InputInfo &Output, const InputInfoList &Inputs,
-                      const llvm::opt::ArgList &TCArgs,
+                      const llvm37::opt::ArgList &TCArgs,
                       const char *LinkingOutput) const override;
 
     std::unique_ptr<Command> GetCommand(Compilation &C, const JobAction &JA,
                                         const InputInfo &Output,
                                         const InputInfoList &Inputs,
-                                        const llvm::opt::ArgList &TCArgs,
+                                        const llvm37::opt::ArgList &TCArgs,
                                         const char *LinkingOutput) const;
   };
 } // end namespace visualstudio
 
 /// MinGW -- Directly call GNU Binutils assembler and linker
 namespace MinGW {
-class LLVM_LIBRARY_VISIBILITY Assembler : public Tool {
+class LLVM37_LIBRARY_VISIBILITY Assembler : public Tool {
 public:
   Assembler(const ToolChain &TC) : Tool("MinGW::Assemble", "assembler", TC) {}
 
@@ -685,11 +685,11 @@ public:
 
   void ConstructJob(Compilation &C, const JobAction &JA,
                     const InputInfo &Output, const InputInfoList &Inputs,
-                    const llvm::opt::ArgList &TCArgs,
+                    const llvm37::opt::ArgList &TCArgs,
                     const char *LinkingOutput) const override;
 };
 
-class LLVM_LIBRARY_VISIBILITY Linker : public Tool {
+class LLVM37_LIBRARY_VISIBILITY Linker : public Tool {
 public:
   Linker(const ToolChain &TC) : Tool("MinGW::Linker", "linker", TC) {}
 
@@ -698,34 +698,34 @@ public:
 
   void ConstructJob(Compilation &C, const JobAction &JA,
                     const InputInfo &Output, const InputInfoList &Inputs,
-                    const llvm::opt::ArgList &TCArgs,
+                    const llvm37::opt::ArgList &TCArgs,
                     const char *LinkingOutput) const override;
 
 private:
-  void AddLibGCC(const llvm::opt::ArgList &Args, ArgStringList &CmdArgs) const;
+  void AddLibGCC(const llvm37::opt::ArgList &Args, ArgStringList &CmdArgs) const;
 };
 } // end namespace MinGW
 
 namespace arm {
-  StringRef getARMFloatABI(const Driver &D, const llvm::opt::ArgList &Args,
-                         const llvm::Triple &Triple);
+  StringRef getARMFloatABI(const Driver &D, const llvm37::opt::ArgList &Args,
+                         const llvm37::Triple &Triple);
 }
 namespace XCore {
 // For XCore, we do not need to instantiate tools for PreProcess, PreCompile and
 // Compile.
 // We simply use "clang -cc1" for those actions.
-class LLVM_LIBRARY_VISIBILITY Assembler : public Tool {
+class LLVM37_LIBRARY_VISIBILITY Assembler : public Tool {
 public:
   Assembler(const ToolChain &TC) : Tool("XCore::Assembler", "XCore-as", TC) {}
 
   bool hasIntegratedCPP() const override { return false; }
   void ConstructJob(Compilation &C, const JobAction &JA,
                     const InputInfo &Output, const InputInfoList &Inputs,
-                    const llvm::opt::ArgList &TCArgs,
+                    const llvm37::opt::ArgList &TCArgs,
                     const char *LinkingOutput) const override;
 };
 
-class LLVM_LIBRARY_VISIBILITY Linker : public Tool {
+class LLVM37_LIBRARY_VISIBILITY Linker : public Tool {
 public:
   Linker(const ToolChain &TC) : Tool("XCore::Linker", "XCore-ld", TC) {}
 
@@ -733,13 +733,13 @@ public:
     bool isLinkJob() const override { return true; }
     void ConstructJob(Compilation &C, const JobAction &JA,
                       const InputInfo &Output, const InputInfoList &Inputs,
-                      const llvm::opt::ArgList &TCArgs,
+                      const llvm37::opt::ArgList &TCArgs,
                       const char *LinkingOutput) const override;
   };
   } // end namespace XCore.
 
   namespace CrossWindows {
-  class LLVM_LIBRARY_VISIBILITY Assembler : public Tool {
+  class LLVM37_LIBRARY_VISIBILITY Assembler : public Tool {
   public:
     Assembler(const ToolChain &TC)
         : Tool("CrossWindows::Assembler", "as", TC) {}
@@ -748,11 +748,11 @@ public:
 
     void ConstructJob(Compilation &C, const JobAction &JA,
                       const InputInfo &Output, const InputInfoList &Inputs,
-                      const llvm::opt::ArgList &TCArgs,
+                      const llvm37::opt::ArgList &TCArgs,
                       const char *LinkingOutput) const override;
   };
 
-  class LLVM_LIBRARY_VISIBILITY Linker : public Tool {
+  class LLVM37_LIBRARY_VISIBILITY Linker : public Tool {
   public:
     Linker(const ToolChain &TC)
         : Tool("CrossWindows::Linker", "ld", TC, RF_Full) {}
@@ -762,14 +762,14 @@ public:
 
   void ConstructJob(Compilation &C, const JobAction &JA,
                     const InputInfo &Output, const InputInfoList &Inputs,
-                    const llvm::opt::ArgList &TCArgs,
+                    const llvm37::opt::ArgList &TCArgs,
                     const char *LinkingOutput) const override;
 };
 }
 
 /// SHAVE tools -- Directly call moviCompile and moviAsm
 namespace SHAVE {
-class LLVM_LIBRARY_VISIBILITY Compiler : public Tool {
+class LLVM37_LIBRARY_VISIBILITY Compiler : public Tool {
 public:
   Compiler(const ToolChain &TC) : Tool("moviCompile", "movicompile", TC) {}
 
@@ -777,11 +777,11 @@ public:
 
   void ConstructJob(Compilation &C, const JobAction &JA,
                     const InputInfo &Output, const InputInfoList &Inputs,
-                    const llvm::opt::ArgList &TCArgs,
+                    const llvm37::opt::ArgList &TCArgs,
                     const char *LinkingOutput) const override;
 };
 
-class LLVM_LIBRARY_VISIBILITY Assembler : public Tool {
+class LLVM37_LIBRARY_VISIBILITY Assembler : public Tool {
 public:
   Assembler(const ToolChain &TC) : Tool("moviAsm", "moviAsm", TC) {}
 
@@ -789,7 +789,7 @@ public:
 
   void ConstructJob(Compilation &C, const JobAction &JA,
                     const InputInfo &Output, const InputInfoList &Inputs,
-                    const llvm::opt::ArgList &TCArgs,
+                    const llvm37::opt::ArgList &TCArgs,
                     const char *LinkingOutput) const override;
 };
 } // end namespace SHAVE

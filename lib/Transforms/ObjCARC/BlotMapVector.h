@@ -7,11 +7,11 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/ADT/DenseMap.h"
+#include "llvm37/ADT/DenseMap.h"
 #include <vector>
 #include <algorithm>
 
-namespace llvm {
+namespace llvm37 {
 /// \brief An associative container with fast insertion-order (deterministic)
 /// iteration over its elements. Plus the special blot operation.
 template <class KeyT, class ValueT> class BlotMapVector {

@@ -13,10 +13,10 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/CodeGen/LatencyPriorityQueue.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/raw_ostream.h"
-using namespace llvm;
+#include "llvm37/CodeGen/LatencyPriorityQueue.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/raw_ostream.h"
+using namespace llvm37;
 
 #define DEBUG_TYPE "scheduler"
 

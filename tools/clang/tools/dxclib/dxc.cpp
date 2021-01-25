@@ -55,11 +55,11 @@
 #include "dxc/DxilRootSignature/DxilRootSignature.h"
 #include "dxc/Support/FileIOHelper.h"
 #include "dxc/Support/microcom.h"
-#include "llvm/Option/OptTable.h"
-#include "llvm/Option/ArgList.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Support/MemoryBuffer.h"
-#include "llvm/Support/Path.h"
+#include "llvm37/Option/OptTable.h"
+#include "llvm37/Option/ArgList.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Support/MemoryBuffer.h"
+#include "llvm37/Support/Path.h"
 #ifdef _WIN32
 #include <dia2.h>
 #include <comdef.h>
@@ -115,7 +115,7 @@ inline bool wcseq(LPCWSTR a, LPCWSTR b) {
 }
 
 using namespace dxc;
-using namespace llvm::opt;
+using namespace llvm37::opt;
 using namespace hlsl::options;
 
 class DxcContext {
@@ -129,7 +129,7 @@ private:
   void UpdatePart(IDxcBlob *pBlob, IDxcBlob **ppResult);
   bool UpdatePartRequired();
   void WriteHeader(IDxcBlobEncoding *pDisassembly, IDxcBlob *pCode,
-                   llvm::Twine &pVariableName, LPCWSTR pPath);
+                   llvm37::Twine &pVariableName, LPCWSTR pPath);
   HRESULT ReadFileIntoPartContent(hlsl::DxilFourCC fourCC, LPCWSTR fileName, IDxcBlob **ppResult);
 
 // Dia is only supported on Windows.
@@ -159,15 +159,15 @@ public:
                  IDxcOperationResult **pCompileResult);
   int DumpBinary();
   void Preprocess();
-  void GetCompilerVersionInfo(llvm::raw_string_ostream &OS);
+  void GetCompilerVersionInfo(llvm37::raw_string_ostream &OS);
 };
 
-static void WriteBlobToFile(_In_opt_ IDxcBlob *pBlob, llvm::StringRef FName, UINT32 defaultTextCodePage) {
+static void WriteBlobToFile(_In_opt_ IDxcBlob *pBlob, llvm37::StringRef FName, UINT32 defaultTextCodePage) {
   ::dxc::WriteBlobToFile(pBlob, StringRefUtf16(FName), defaultTextCodePage);
 }
 
 static void WritePartToFile(IDxcBlob *pBlob, hlsl::DxilFourCC CC,
-                            llvm::StringRef FName) {
+                            llvm37::StringRef FName) {
   const hlsl::DxilContainerHeader *pContainer = hlsl::IsDxilContainerLike(
       pBlob->GetBufferPointer(), pBlob->GetBufferSize());
   if (!pContainer) {
@@ -365,8 +365,8 @@ int DxcContext::ActOnBlob(IDxcBlob *pBlob, IDxcBlob *pDebugBlob, LPCWSTR pDebugB
 
   bool disassemblyWritten = false;
   if (!m_Opts.OutputHeader.empty()) {
-    llvm::Twine varName = m_Opts.VariableName.empty()
-                              ? llvm::Twine("g_", m_Opts.EntryPoint)
+    llvm37::Twine varName = m_Opts.VariableName.empty()
+                              ? llvm37::Twine("g_", m_Opts.EntryPoint)
                               : m_Opts.VariableName;
     WriteHeader(pDisassembleResult, pBlob, varName,
                 StringRefUtf16(m_Opts.OutputHeader));
@@ -616,8 +616,8 @@ public:
     try {
       // Convert pFilename into native form for indexing as is done when the MD is created
       std::string FilenameStr8 = Unicode::UTF16ToUTF8StringOrThrow(pFilename);
-      llvm::SmallString<128> NormalizedPath;
-      llvm::sys::path::native(FilenameStr8, NormalizedPath);
+      llvm37::SmallString<128> NormalizedPath;
+      llvm37::sys::path::native(FilenameStr8, NormalizedPath);
       std::wstring FilenameStr16 = Unicode::UTF8ToUTF16StringOrThrow(NormalizedPath.c_str());
       *ppIncludeSource = includeFiles.at(FilenameStr16);
       (*ppIncludeSource)->AddRef();
@@ -840,7 +840,7 @@ int DxcContext::Compile() {
       IFT(pLibrary->CreateIncludeHandler(&pIncludeHandler));
 
       // Upgrade profile to 6.0 version from minimum recognized shader model
-      llvm::StringRef TargetProfile = m_Opts.TargetProfile;
+      llvm37::StringRef TargetProfile = m_Opts.TargetProfile;
       const hlsl::ShaderModel *SM = hlsl::ShaderModel::GetByName(m_Opts.TargetProfile.str().c_str());
       if (SM->IsValid() && SM->GetMajor() < 6) {
         TargetProfile = hlsl::ShaderModel::Get(SM->GetKind(), 6, 0)->GetName();
@@ -934,7 +934,7 @@ void DxcContext::Preprocess() {
     args.push_back(L"-flegacy-macro-expansion");
 
   std::vector<std::wstring> includePath;
-  for (const llvm::opt::Arg *A : m_Opts.Args.filtered(hlsl::options::OPT_I))
+  for (const llvm37::opt::Arg *A : m_Opts.Args.filtered(hlsl::options::OPT_I))
     includePath.emplace_back(Unicode::UTF8ToUTF16StringOrThrow(A->getValue()));
   for (const std::wstring &directory : includePath) {
     args.emplace_back(L"-I");
@@ -956,13 +956,13 @@ void DxcContext::Preprocess() {
 }
 
 void DxcContext::WriteHeader(IDxcBlobEncoding *pDisassembly, IDxcBlob *pCode,
-                             llvm::Twine &pVariableName, LPCWSTR pFileName) {
+                             llvm37::Twine &pVariableName, LPCWSTR pFileName) {
   // Use older interface for compatibility with older DLL.
   CComPtr<IDxcLibrary> pLibrary;
   IFT(CreateInstance(CLSID_DxcLibrary, &pLibrary));
 
   std::string s;
-  llvm::raw_string_ostream OS(s);
+  llvm37::raw_string_ostream OS(s);
 
   {
     // Not safe to assume pDisassembly is utf8, must GetBlobAsUtf8 first.
@@ -1134,7 +1134,7 @@ bool GetDLLProductVersionInfo(const char *dllPath, std::string &productVersion) 
 namespace dxc {
 
 // Writes compiler version info to stream
-void WriteDxCompilerVersionInfo(llvm::raw_ostream &OS,
+void WriteDxCompilerVersionInfo(llvm37::raw_ostream &OS,
                                 const char *ExternalLib,
                                 const char *ExternalFn,
                                 DxcDllSupport &DxcSupport) {
@@ -1196,7 +1196,7 @@ void WriteDxCompilerVersionInfo(llvm::raw_ostream &OS,
 }
 
 // Writes compiler version info to stream
-void WriteDXILVersionInfo(llvm::raw_ostream &OS,
+void WriteDXILVersionInfo(llvm37::raw_ostream &OS,
                           DxcDllSupport &DxilSupport) {
   if (DxilSupport.IsEnabled()) {
     CComPtr<IDxcVersionInfo> VerInfo;
@@ -1224,7 +1224,7 @@ void WriteDXILVersionInfo(llvm::raw_ostream &OS,
 } // namespace dxc
 
 // Collects compiler/validator version info
-void DxcContext::GetCompilerVersionInfo(llvm::raw_string_ostream &OS) {
+void DxcContext::GetCompilerVersionInfo(llvm37::raw_string_ostream &OS) {
   WriteDxCompilerVersionInfo(OS,
     m_Opts.ExternalLib.empty() ? nullptr : m_Opts.ExternalLib.data(),
     m_Opts.ExternalFn.empty() ? nullptr : m_Opts.ExternalFn.data(),
@@ -1262,7 +1262,7 @@ int dxc::main(int argc, const char **argv_) {
     // Read options and check errors.
     {
       std::string errorString;
-      llvm::raw_string_ostream errorStream(errorString);
+      llvm37::raw_string_ostream errorStream(errorString);
       int optResult =
           ReadDxcOpts(optionTable, DxcFlags, argStrings, dxcOpts, errorStream);
       errorStream.flush();
@@ -1282,7 +1282,7 @@ int dxc::main(int argc, const char **argv_) {
     // Setup a helper DLL.
     {
       std::string dllErrorString;
-      llvm::raw_string_ostream dllErrorStream(dllErrorString);
+      llvm37::raw_string_ostream dllErrorStream(dllErrorString);
       int dllResult = SetupDxcDllSupport(dxcOpts, dxcSupport, dllErrorStream);
       dllErrorStream.flush();
       if (dllErrorString.size()) {
@@ -1297,9 +1297,9 @@ int dxc::main(int argc, const char **argv_) {
     // Handle help request, which overrides any other processing.
     if (dxcOpts.ShowHelp) {
       std::string helpString;
-      llvm::raw_string_ostream helpStream(helpString);
+      llvm37::raw_string_ostream helpStream(helpString);
       std::string version;
-      llvm::raw_string_ostream versionStream(version);
+      llvm37::raw_string_ostream versionStream(version);
       context.GetCompilerVersionInfo(versionStream);
       optionTable->PrintHelp(helpStream, "dxc.exe", "HLSL Compiler" VERSION_STRING_SUFFIX,
                              versionStream.str().c_str(),

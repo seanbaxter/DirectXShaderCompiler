@@ -15,13 +15,13 @@
 //===----------------------------------------------------------------------===//
 
 
-#ifndef LLVM_CLANG_STATICANALYZER_CORE_PATHSENSITIVE_PROGRAMSTATETRAIT_H
-#define LLVM_CLANG_STATICANALYZER_CORE_PATHSENSITIVE_PROGRAMSTATETRAIT_H
+#ifndef LLVM37_CLANG_STATICANALYZER_CORE_PATHSENSITIVE_PROGRAMSTATETRAIT_H
+#define LLVM37_CLANG_STATICANALYZER_CORE_PATHSENSITIVE_PROGRAMSTATETRAIT_H
 
-#include "llvm/Support/Allocator.h"
-#include "llvm/Support/DataTypes.h"
+#include "llvm37/Support/Allocator.h"
+#include "llvm37/Support/DataTypes.h"
 
-namespace llvm {
+namespace llvm37 {
   template <typename K, typename D, typename I> class ImmutableMap;
   template <typename K, typename I> class ImmutableSet;
   template <typename T> class ImmutableList;
@@ -56,8 +56,8 @@ namespace ento {
   // Partial-specialization for ImmutableMap.
 
   template <typename Key, typename Data, typename Info>
-  struct ProgramStatePartialTrait< llvm::ImmutableMap<Key,Data,Info> > {
-    typedef llvm::ImmutableMap<Key,Data,Info> data_type;
+  struct ProgramStatePartialTrait< llvm37::ImmutableMap<Key,Data,Info> > {
+    typedef llvm37::ImmutableMap<Key,Data,Info> data_type;
     typedef typename data_type::Factory&      context_type;
     typedef Key                               key_type;
     typedef Data                              value_type;
@@ -85,7 +85,7 @@ namespace ento {
       return *((typename data_type::Factory*) p);
     }
 
-    static void *CreateContext(llvm::BumpPtrAllocator& Alloc) {
+    static void *CreateContext(llvm37::BumpPtrAllocator& Alloc) {
       return new typename data_type::Factory(Alloc);
     }
 
@@ -101,14 +101,14 @@ namespace ento {
   /// would be treated as a macro argument separator, which is wrong.
   /// This allows the user to specify a map type in a way that the preprocessor
   /// can deal with.
-  #define CLANG_ENTO_PROGRAMSTATE_MAP(Key, Value) llvm::ImmutableMap<Key, Value>
+  #define CLANG_ENTO_PROGRAMSTATE_MAP(Key, Value) llvm37::ImmutableMap<Key, Value>
 
 
   // Partial-specialization for ImmutableSet.
 
   template <typename Key, typename Info>
-  struct ProgramStatePartialTrait< llvm::ImmutableSet<Key,Info> > {
-    typedef llvm::ImmutableSet<Key,Info>      data_type;
+  struct ProgramStatePartialTrait< llvm37::ImmutableSet<Key,Info> > {
+    typedef llvm37::ImmutableSet<Key,Info>      data_type;
     typedef typename data_type::Factory&      context_type;
     typedef Key                               key_type;
 
@@ -137,7 +137,7 @@ namespace ento {
       return *((typename data_type::Factory*) p);
     }
 
-    static void *CreateContext(llvm::BumpPtrAllocator& Alloc) {
+    static void *CreateContext(llvm37::BumpPtrAllocator& Alloc) {
       return new typename data_type::Factory(Alloc);
     }
 
@@ -150,8 +150,8 @@ namespace ento {
   // Partial-specialization for ImmutableList.
 
   template <typename T>
-  struct ProgramStatePartialTrait< llvm::ImmutableList<T> > {
-    typedef llvm::ImmutableList<T>            data_type;
+  struct ProgramStatePartialTrait< llvm37::ImmutableList<T> > {
+    typedef llvm37::ImmutableList<T>            data_type;
     typedef T                                 key_type;
     typedef typename data_type::Factory&      context_type;
 
@@ -164,19 +164,19 @@ namespace ento {
     }
 
     static inline data_type MakeData(void *const* p) {
-      return p ? data_type((const llvm::ImmutableListImpl<T>*) *p)
+      return p ? data_type((const llvm37::ImmutableListImpl<T>*) *p)
                : data_type(nullptr);
     }
 
     static inline void *MakeVoidPtr(data_type D) {
-      return const_cast<llvm::ImmutableListImpl<T> *>(D.getInternalPointer());
+      return const_cast<llvm37::ImmutableListImpl<T> *>(D.getInternalPointer());
     }
 
     static inline context_type MakeContext(void *p) {
       return *((typename data_type::Factory*) p);
     }
 
-    static void *CreateContext(llvm::BumpPtrAllocator& Alloc) {
+    static void *CreateContext(llvm37::BumpPtrAllocator& Alloc) {
       return new typename data_type::Factory(Alloc);
     }
 

@@ -14,14 +14,14 @@
 ///
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_ASTMATCHERS_DYNAMIC_VARIANTVALUE_H
-#define LLVM_CLANG_ASTMATCHERS_DYNAMIC_VARIANTVALUE_H
+#ifndef LLVM37_CLANG_ASTMATCHERS_DYNAMIC_VARIANTVALUE_H
+#define LLVM37_CLANG_ASTMATCHERS_DYNAMIC_VARIANTVALUE_H
 
 #include "clang/ASTMatchers/ASTMatchers.h"
 #include "clang/ASTMatchers/ASTMatchersInternal.h"
-#include "llvm/ADT/IntrusiveRefCntPtr.h"
-#include "llvm/ADT/Optional.h"
-#include "llvm/ADT/Twine.h"
+#include "llvm37/ADT/IntrusiveRefCntPtr.h"
+#include "llvm37/ADT/Optional.h"
+#include "llvm37/ADT/Twine.h"
 #include <memory>
 #include <vector>
 
@@ -105,8 +105,8 @@ class VariantMatcher {
 
     /// \brief Constructs a variadic typed matcher from \p InnerMatchers.
     /// Will try to convert each inner matcher to the destination type and
-    /// return llvm::None if it fails to do so.
-    llvm::Optional<DynTypedMatcher>
+    /// return llvm37::None if it fails to do so.
+    llvm37::Optional<DynTypedMatcher>
     constructVariadicOperator(DynTypedMatcher::VariadicOperator Op,
                               ArrayRef<VariantMatcher> InnerMatchers) const;
 
@@ -123,9 +123,9 @@ class VariantMatcher {
   class Payload : public RefCountedBaseVPTR {
   public:
     ~Payload() override;
-    virtual llvm::Optional<DynTypedMatcher> getSingleMatcher() const = 0;
+    virtual llvm37::Optional<DynTypedMatcher> getSingleMatcher() const = 0;
     virtual std::string getTypeAsString() const = 0;
-    virtual llvm::Optional<DynTypedMatcher>
+    virtual llvm37::Optional<DynTypedMatcher>
     getTypedMatcher(const MatcherOps &Ops) const = 0;
     virtual bool isConvertibleTo(ast_type_traits::ASTNodeKind Kind,
                                  unsigned *Specificity) const = 0;
@@ -162,7 +162,7 @@ public:
   /// \returns the matcher, if there is only one matcher. An empty Optional, if
   /// the underlying matcher is a polymorphic matcher with more than one
   /// representation.
-  llvm::Optional<DynTypedMatcher> getSingleMatcher() const;
+  llvm37::Optional<DynTypedMatcher> getSingleMatcher() const;
 
   /// \brief Determines if the contained matcher can be converted to
   ///   \c Matcher<T>.
@@ -242,7 +242,7 @@ struct VariantMatcher::TypedMatcherOps final : VariantMatcher::MatcherOps {
 ///
 /// Supported types:
 ///  - \c unsigned
-///  - \c llvm::StringRef
+///  - \c llvm37::StringRef
 ///  - \c VariantMatcher (\c DynTypedMatcher / \c Matcher<T>)
 class VariantValue {
 public:
@@ -323,4 +323,4 @@ private:
 } // end namespace ast_matchers
 } // end namespace clang
 
-#endif  // LLVM_CLANG_AST_MATCHERS_DYNAMIC_VARIANT_VALUE_H
+#endif  // LLVM37_CLANG_AST_MATCHERS_DYNAMIC_VARIANT_VALUE_H

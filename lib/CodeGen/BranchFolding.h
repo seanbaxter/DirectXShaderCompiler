@@ -7,15 +7,15 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_LIB_CODEGEN_BRANCHFOLDING_H
-#define LLVM_LIB_CODEGEN_BRANCHFOLDING_H
+#ifndef LLVM37_LIB_CODEGEN_BRANCHFOLDING_H
+#define LLVM37_LIB_CODEGEN_BRANCHFOLDING_H
 
-#include "llvm/ADT/SmallPtrSet.h"
-#include "llvm/CodeGen/MachineBasicBlock.h"
-#include "llvm/Support/BlockFrequency.h"
+#include "llvm37/ADT/SmallPtrSet.h"
+#include "llvm37/CodeGen/MachineBasicBlock.h"
+#include "llvm37/Support/BlockFrequency.h"
 #include <vector>
 
-namespace llvm {
+namespace llvm37 {
   class MachineBlockFrequencyInfo;
   class MachineBranchProbabilityInfo;
   class MachineFunction;
@@ -24,7 +24,7 @@ namespace llvm {
   class TargetInstrInfo;
   class TargetRegisterInfo;
 
-  class LLVM_LIBRARY_VISIBILITY BranchFolder {
+  class LLVM37_LIBRARY_VISIBILITY BranchFolder {
   public:
     explicit BranchFolder(bool defaultEnableTailMerge, bool CommonHoist,
                           const MachineBlockFrequencyInfo &MBFI,
@@ -144,4 +144,4 @@ namespace llvm {
   };
 }
 
-#endif /* LLVM_CODEGEN_BRANCHFOLDING_HPP */
+#endif /* LLVM37_CODEGEN_BRANCHFOLDING_HPP */

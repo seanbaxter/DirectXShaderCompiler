@@ -7,12 +7,12 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/MC/StringTableBuilder.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/Support/COFF.h"
-#include "llvm/Support/Endian.h"
+#include "llvm37/MC/StringTableBuilder.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/Support/COFF.h"
+#include "llvm37/Support/Endian.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 static bool compareBySuffix(StringRef a, StringRef b) {
   size_t sizeA = a.size();

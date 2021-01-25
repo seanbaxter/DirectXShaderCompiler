@@ -6,14 +6,14 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_TOOLS_LLVM_OBJDUMP_LLVM_OBJDUMP_H
-#define LLVM_TOOLS_LLVM_OBJDUMP_LLVM_OBJDUMP_H
+#ifndef LLVM37_TOOLS_LLVM37_OBJDUMP_LLVM37_OBJDUMP_H
+#define LLVM37_TOOLS_LLVM37_OBJDUMP_LLVM37_OBJDUMP_H
 
-#include "llvm/ADT/StringRef.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/DataTypes.h"
+#include "llvm37/ADT/StringRef.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/DataTypes.h"
 
-namespace llvm {
+namespace llvm37 {
 namespace object {
   class COFFObjectFile;
   class MachOObjectFile;
@@ -78,6 +78,6 @@ void PrintSectionHeaders(const object::ObjectFile *o);
 void PrintSectionContents(const object::ObjectFile *o);
 void PrintSymbolTable(const object::ObjectFile *o);
 
-} // end namespace llvm
+} // end namespace llvm37
 
 #endif

@@ -38,12 +38,12 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_ASTMATCHERS_ASTMATCHFINDER_H
-#define LLVM_CLANG_ASTMATCHERS_ASTMATCHFINDER_H
+#ifndef LLVM37_CLANG_ASTMATCHERS_ASTMATCHFINDER_H
+#define LLVM37_CLANG_ASTMATCHERS_ASTMATCHFINDER_H
 
 #include "clang/ASTMatchers/ASTMatchers.h"
-#include "llvm/ADT/StringMap.h"
-#include "llvm/Support/Timer.h"
+#include "llvm37/ADT/StringMap.h"
+#include "llvm37/Support/Timer.h"
 
 namespace clang {
 
@@ -121,17 +121,17 @@ public:
 
   struct MatchFinderOptions {
     struct Profiling {
-      Profiling(llvm::StringMap<llvm::TimeRecord> &Records)
+      Profiling(llvm37::StringMap<llvm37::TimeRecord> &Records)
           : Records(Records) {}
 
       /// \brief Per bucket timing information.
-      llvm::StringMap<llvm::TimeRecord> &Records;
+      llvm37::StringMap<llvm37::TimeRecord> &Records;
     };
 
     /// \brief Enables per-check timers.
     ///
     /// It prints a report after match.
-    llvm::Optional<Profiling> CheckProfiling;
+    llvm37::Optional<Profiling> CheckProfiling;
   };
 
   MatchFinder(MatchFinderOptions Options = MatchFinderOptions());

@@ -14,17 +14,17 @@
 #include "ByteStreamer.h"
 #include "DIEHash.h"
 #include "DwarfDebug.h"
-#include "llvm/ADT/ArrayRef.h"
-#include "llvm/ADT/StringRef.h"
-#include "llvm/CodeGen/AsmPrinter.h"
-#include "llvm/CodeGen/DIE.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/Dwarf.h"
-#include "llvm/Support/Endian.h"
-#include "llvm/Support/MD5.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/ArrayRef.h"
+#include "llvm37/ADT/StringRef.h"
+#include "llvm37/CodeGen/AsmPrinter.h"
+#include "llvm37/CodeGen/DIE.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/Dwarf.h"
+#include "llvm37/Support/Endian.h"
+#include "llvm37/Support/MD5.h"
+#include "llvm37/Support/raw_ostream.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "dwarfdebug"
 

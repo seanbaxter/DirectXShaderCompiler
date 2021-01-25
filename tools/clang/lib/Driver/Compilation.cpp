@@ -13,14 +13,14 @@
 #include "clang/Driver/DriverDiagnostic.h"
 #include "clang/Driver/Options.h"
 #include "clang/Driver/ToolChain.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/Option/ArgList.h"
-#include "llvm/Support/FileSystem.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/Option/ArgList.h"
+#include "llvm37/Support/FileSystem.h"
+#include "llvm37/Support/raw_ostream.h"
 
 using namespace clang::driver;
 using namespace clang;
-using namespace llvm::opt;
+using namespace llvm37::opt;
 
 Compilation::Compilation(const Driver &D, const ToolChain &_DefaultToolChain,
                          InputArgList *_Args, DerivedArgList *_TranslatedArgs)
@@ -33,7 +33,7 @@ Compilation::~Compilation() {
   delete Args;
 
   // Free any derived arg lists.
-  for (llvm::DenseMap<std::pair<const ToolChain*, const char*>,
+  for (llvm37::DenseMap<std::pair<const ToolChain*, const char*>,
                       DerivedArgList*>::iterator it = TCArgs.begin(),
          ie = TCArgs.end(); it != ie; ++it)
     if (it->second != TranslatedArgs)
@@ -75,18 +75,18 @@ bool Compilation::CleanupFile(const char *File, bool IssueErrors) const {
   // during a failure?
 
   // FIXME: If this is necessary, we can still try to split
-  // llvm::sys::fs::remove into a removeFile and a removeDir and avoid the
+  // llvm37::sys::fs::remove into a removeFile and a removeDir and avoid the
   // duplicated stat from is_regular_file.
 
   // Don't try to remove files which we don't have write access to (but may be
   // able to remove), or non-regular files. Underlying tools may have
   // intentionally not overwritten them.
-  if (!llvm::sys::fs::can_write(File) || !llvm::sys::fs::is_regular_file(File))
+  if (!llvm37::sys::fs::can_write(File) || !llvm37::sys::fs::is_regular_file(File))
     return true;
 
-  if (std::error_code EC = llvm::sys::fs::remove(File)) {
+  if (std::error_code EC = llvm37::sys::fs::remove(File)) {
     // Failure is only failure if the file exists and is "regular". We checked
-    // for it being regular before, and llvm::sys::fs::remove ignores ENOENT,
+    // for it being regular before, and llvm37::sys::fs::remove ignores ENOENT,
     // so we don't need to check again.
 
     if (IssueErrors)
@@ -126,15 +126,15 @@ int Compilation::ExecuteCommand(const Command &C,
                                 const Command *&FailingCommand) const {
   if ((getDriver().CCPrintOptions ||
        getArgs().hasArg(options::OPT_v)) && !getDriver().CCGenDiagnostics) {
-    raw_ostream *OS = &llvm::errs();
+    raw_ostream *OS = &llvm37::errs();
 
     // Follow gcc implementation of CC_PRINT_OPTIONS; we could also cache the
     // output stream.
     if (getDriver().CCPrintOptions && getDriver().CCPrintOptionsFilename) {
       std::error_code EC;
-      OS = new llvm::raw_fd_ostream(getDriver().CCPrintOptionsFilename, EC,
-                                    llvm::sys::fs::F_Append |
-                                        llvm::sys::fs::F_Text);
+      OS = new llvm37::raw_fd_ostream(getDriver().CCPrintOptionsFilename, EC,
+                                    llvm37::sys::fs::F_Append |
+                                        llvm37::sys::fs::F_Text);
       if (EC) {
         getDriver().Diag(clang::diag::err_drv_cc_print_options_failure)
             << EC.message();
@@ -149,7 +149,7 @@ int Compilation::ExecuteCommand(const Command &C,
 
     C.Print(*OS, "\n", /*Quote=*/getDriver().CCPrintOptions);
 
-    if (OS != &llvm::errs())
+    if (OS != &llvm37::errs())
       delete OS;
   }
 
@@ -219,7 +219,7 @@ void Compilation::initCompilationForDiagnostics() {
   // to avoid emitting warnings about unused args.
   OptSpecifier OutputOpts[] = { options::OPT_o, options::OPT_MD,
                                 options::OPT_MMD };
-  for (unsigned i = 0, e = llvm::array_lengthof(OutputOpts); i != e; ++i) {
+  for (unsigned i = 0, e = llvm37::array_lengthof(OutputOpts); i != e; ++i) {
     if (TranslatedArgs->hasArg(OutputOpts[i]))
       TranslatedArgs->eraseArg(OutputOpts[i]);
   }

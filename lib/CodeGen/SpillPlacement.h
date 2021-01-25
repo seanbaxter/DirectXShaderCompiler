@@ -24,15 +24,15 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_LIB_CODEGEN_SPILLPLACEMENT_H
-#define LLVM_LIB_CODEGEN_SPILLPLACEMENT_H
+#ifndef LLVM37_LIB_CODEGEN_SPILLPLACEMENT_H
+#define LLVM37_LIB_CODEGEN_SPILLPLACEMENT_H
 
-#include "llvm/ADT/ArrayRef.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/CodeGen/MachineFunctionPass.h"
-#include "llvm/Support/BlockFrequency.h"
+#include "llvm37/ADT/ArrayRef.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/CodeGen/MachineFunctionPass.h"
+#include "llvm37/Support/BlockFrequency.h"
 
-namespace llvm {
+namespace llvm37 {
 
 class BitVector;
 class EdgeBundles;
@@ -159,6 +159,6 @@ private:
   void setThreshold(const BlockFrequency &Entry);
 };
 
-} // end namespace llvm
+} // end namespace llvm37
 
 #endif

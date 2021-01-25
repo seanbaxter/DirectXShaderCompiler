@@ -12,16 +12,16 @@
 //===----------------------------------------------------------------------===//
 
 #include "InstCombineInternal.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/Analysis/Loads.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/IR/MDBuilder.h"
-#include "llvm/Transforms/Utils/BasicBlockUtils.h"
-#include "llvm/Transforms/Utils/Local.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/Analysis/Loads.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/IR/MDBuilder.h"
+#include "llvm37/Transforms/Utils/BasicBlockUtils.h"
+#include "llvm37/Transforms/Utils/Local.h"
 #include "dxc/DXIL/DxilOperations.h"   // HLSL Change - avoid unpack for dxil types.
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "instcombine"
 

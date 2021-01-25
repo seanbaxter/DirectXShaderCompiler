@@ -19,8 +19,8 @@
 #include "clang/StaticAnalyzer/Core/CheckerManager.h"
 #include "clang/StaticAnalyzer/Core/PathSensitive/CheckerContext.h"
 #include "clang/StaticAnalyzer/Core/PathSensitive/ExprEngine.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/Support/raw_ostream.h"
 
 using namespace clang;
 using namespace ento;
@@ -193,7 +193,7 @@ void ArrayBoundCheckerV2::reportOOB(CheckerContext &checkerContext,
   // diagnostics for explaining buffer overruns.
 
   SmallString<256> buf;
-  llvm::raw_svector_ostream os(buf);
+  llvm37::raw_svector_ostream os(buf);
   os << "Out of bound memory access ";
   switch (kind) {
   case OOB_Precedes:
@@ -208,11 +208,11 @@ void ArrayBoundCheckerV2::reportOOB(CheckerContext &checkerContext,
   }
 
   checkerContext.emitReport(
-      llvm::make_unique<BugReport>(*BT, os.str(), errorNode));
+      llvm37::make_unique<BugReport>(*BT, os.str(), errorNode));
 }
 
 void RegionRawOffsetV2::dump() const {
-  dumpToStream(llvm::errs());
+  dumpToStream(llvm37::errs());
 }
 
 void RegionRawOffsetV2::dumpToStream(raw_ostream &os) const {

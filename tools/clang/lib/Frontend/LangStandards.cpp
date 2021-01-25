@@ -8,8 +8,8 @@
 //===----------------------------------------------------------------------===//
 
 #include "clang/Frontend/LangStandard.h"
-#include "llvm/ADT/StringSwitch.h"
-#include "llvm/Support/ErrorHandling.h"
+#include "llvm37/ADT/StringSwitch.h"
+#include "llvm37/Support/ErrorHandling.h"
 using namespace clang;
 using namespace clang::frontend;
 
@@ -20,7 +20,7 @@ using namespace clang::frontend;
 const LangStandard &LangStandard::getLangStandardForKind(Kind K) {
   switch (K) {
   case lang_unspecified:
-    llvm::report_fatal_error("getLangStandardForKind() on unspecified kind");
+    llvm37::report_fatal_error("getLangStandardForKind() on unspecified kind");
 #define LANGSTANDARD(id, name, desc, features) \
     case lang_##id: return Lang_##id;
 #include "clang/Frontend/LangStandards.def"
@@ -29,7 +29,7 @@ const LangStandard &LangStandard::getLangStandardForKind(Kind K) {
 }
 
 const LangStandard *LangStandard::getLangStandardForName(StringRef Name) {
-  Kind K = llvm::StringSwitch<Kind>(Name)
+  Kind K = llvm37::StringSwitch<Kind>(Name)
 #define LANGSTANDARD(id, name, desc, features) \
     .Case(name, lang_##id)
 #include "clang/Frontend/LangStandards.def"

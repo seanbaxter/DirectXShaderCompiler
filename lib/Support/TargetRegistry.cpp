@@ -7,13 +7,13 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Support/TargetRegistry.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/StringRef.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/Support/TargetRegistry.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/StringRef.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <cassert>
 #include <vector>
-using namespace llvm;
+using namespace llvm37;
 
 // Clients are responsible for avoid race conditions in registration.
 static Target *FirstTarget = nullptr;

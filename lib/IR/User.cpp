@@ -7,12 +7,12 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/IR/User.h"
-#include "llvm/IR/Constant.h"
-#include "llvm/IR/GlobalValue.h"
-#include "llvm/IR/Operator.h"
+#include "llvm37/IR/User.h"
+#include "llvm37/IR/Constant.h"
+#include "llvm37/IR/GlobalValue.h"
+#include "llvm37/IR/Operator.h"
 
-namespace llvm {
+namespace llvm37 {
 class BasicBlock;
 
 //===----------------------------------------------------------------------===//

@@ -12,13 +12,13 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Support/ARMBuildAttributes.h"
-#include "llvm/Support/TargetParser.h"
-#include "llvm/ADT/StringExtras.h"
-#include "llvm/ADT/StringSwitch.h"
+#include "llvm37/Support/ARMBuildAttributes.h"
+#include "llvm37/Support/TargetParser.h"
+#include "llvm37/ADT/StringExtras.h"
+#include "llvm37/ADT/StringSwitch.h"
 #include <cctype>
 
-using namespace llvm;
+using namespace llvm37;
 
 namespace {
 

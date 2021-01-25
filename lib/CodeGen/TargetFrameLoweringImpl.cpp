@@ -11,17 +11,17 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/ADT/BitVector.h"
-#include "llvm/Target/TargetFrameLowering.h"
-#include "llvm/CodeGen/MachineFrameInfo.h"
-#include "llvm/CodeGen/MachineFunction.h"
-#include "llvm/CodeGen/MachineModuleInfo.h"
-#include "llvm/CodeGen/MachineRegisterInfo.h"
-#include "llvm/IR/Function.h"
-#include "llvm/Target/TargetRegisterInfo.h"
-#include "llvm/Target/TargetSubtargetInfo.h"
+#include "llvm37/ADT/BitVector.h"
+#include "llvm37/Target/TargetFrameLowering.h"
+#include "llvm37/CodeGen/MachineFrameInfo.h"
+#include "llvm37/CodeGen/MachineFunction.h"
+#include "llvm37/CodeGen/MachineModuleInfo.h"
+#include "llvm37/CodeGen/MachineRegisterInfo.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/Target/TargetRegisterInfo.h"
+#include "llvm37/Target/TargetSubtargetInfo.h"
 #include <cstdlib>
-using namespace llvm;
+using namespace llvm37;
 
 TargetFrameLowering::~TargetFrameLowering() {
 }

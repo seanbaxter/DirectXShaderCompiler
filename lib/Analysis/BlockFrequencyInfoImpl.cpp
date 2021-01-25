@@ -11,13 +11,13 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Analysis/BlockFrequencyInfoImpl.h"
-#include "llvm/ADT/SCCIterator.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/Analysis/BlockFrequencyInfoImpl.h"
+#include "llvm37/ADT/SCCIterator.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <numeric>
 
-using namespace llvm;
-using namespace llvm::bfi_detail;
+using namespace llvm37;
+using namespace llvm37::bfi_detail;
 
 #define DEBUG_TYPE "block-freq"
 
@@ -585,7 +585,7 @@ void IrreducibleGraph::addEdge(IrrNode &Irr, const BlockNode &Succ,
   ++SuccIrr.NumIn;
 }
 
-namespace llvm {
+namespace llvm37 {
 template <> struct GraphTraits<IrreducibleGraph> {
   typedef bfi_detail::IrreducibleGraph GraphT;
 

@@ -12,12 +12,12 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/MC/MCInstrDesc.h"
-#include "llvm/MC/MCInst.h"
-#include "llvm/MC/MCRegisterInfo.h"
-#include "llvm/MC/MCSubtargetInfo.h"
+#include "llvm37/MC/MCInstrDesc.h"
+#include "llvm37/MC/MCInst.h"
+#include "llvm37/MC/MCRegisterInfo.h"
+#include "llvm37/MC/MCSubtargetInfo.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 bool MCInstrDesc::getDeprecatedInfo(MCInst &MI, const MCSubtargetInfo &STI,
                                     std::string &Info) const {

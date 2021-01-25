@@ -22,7 +22,7 @@
 #include "clang/Lex/PreprocessorOptions.h"
 #include "gtest/gtest.h"
 
-using namespace llvm;
+using namespace llvm37;
 using namespace clang;
 
 namespace {

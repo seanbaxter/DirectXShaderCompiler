@@ -13,7 +13,7 @@
 
 #include "dxc/Support/WinIncludes.h"
 #include "dxc/DxilPIXPasses/DxilPIXVirtualRegisters.h"
-#include "llvm/IR/Instructions.h"
+#include "llvm37/IR/Instructions.h"
 
 #include "DxcPixBase.h"
 #include "DxcPixLiveVariables.h"
@@ -244,7 +244,7 @@ STDMETHODIMP dxil_debug_info::DxcPixDxilScalarStorage::GetRegisterNumber(
     return E_FAIL;
   }
 
-  if (auto *AllocaReg = llvm::dyn_cast<llvm::AllocaInst>(RegIt->second.m_V))
+  if (auto *AllocaReg = llvm37::dyn_cast<llvm37::AllocaInst>(RegIt->second.m_V))
   {
     uint32_t RegNum;
     uint32_t RegSize;
@@ -282,7 +282,7 @@ STDMETHODIMP dxil_debug_info::DxcPixDxilScalarStorage::GetType(
 
 HRESULT dxil_debug_info::CreateDxcPixStorage(
     DxcPixDxilDebugInfo *pDxilDebugInfo,
-    llvm::DIType *diType,
+    llvm37::DIType *diType,
     const VariableInfo *VarInfo,
     unsigned CurrentOffsetInBits,
     IDxcPixDxilStorage **ppStorage)

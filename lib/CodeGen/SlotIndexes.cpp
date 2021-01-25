@@ -7,14 +7,14 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/CodeGen/SlotIndexes.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/CodeGen/MachineFunction.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Target/TargetInstrInfo.h"
+#include "llvm37/CodeGen/SlotIndexes.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/CodeGen/MachineFunction.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Target/TargetInstrInfo.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "slotindexes"
 
@@ -213,7 +213,7 @@ void SlotIndexes::repairIndexesInRange(MachineBasicBlock *MBB,
   }
 }
 
-#if !defined(NDEBUG) || defined(LLVM_ENABLE_DUMP)
+#if !defined(NDEBUG) || defined(LLVM37_ENABLE_DUMP)
 void SlotIndexes::dump() const {
   for (IndexList::const_iterator itr = indexList.begin();
        itr != indexList.end(); ++itr) {
@@ -240,7 +240,7 @@ void SlotIndex::print(raw_ostream &os) const {
     os << "invalid";
 }
 
-#if !defined(NDEBUG) || defined(LLVM_ENABLE_DUMP)
+#if !defined(NDEBUG) || defined(LLVM37_ENABLE_DUMP)
 // Dump a SlotIndex to stderr.
 void SlotIndex::dump() const {
   print(dbgs());

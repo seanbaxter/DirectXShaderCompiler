@@ -17,7 +17,7 @@
 
 #include <objbase.h>
 
-namespace llvm {
+namespace llvm37 {
 namespace sys {
 
 InitializeCOMRAII::InitializeCOMRAII(COMThreadingMode Threading,

@@ -11,17 +11,17 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/IR/DIBuilder.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/DebugInfo.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/IR/Module.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/Dwarf.h"
+#include "llvm37/IR/DIBuilder.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/DebugInfo.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/Dwarf.h"
 
-using namespace llvm;
-using namespace llvm::dwarf;
+using namespace llvm37;
+using namespace llvm37::dwarf;
 
 namespace {
 class HeaderBuilder {
@@ -309,7 +309,7 @@ DIDerivedType *DIBuilder::createStaticMemberType(DIScope *Scope, StringRef Name,
                                                  DIFile *File,
                                                  unsigned LineNumber,
                                                  DIType *Ty, unsigned Flags,
-                                                 llvm::Constant *Val) {
+                                                 llvm37::Constant *Val) {
   Flags |= DINode::FlagStaticMember;
   return DIDerivedType::get(
       VMContext, dwarf::DW_TAG_member, Name, File, LineNumber,
@@ -540,7 +540,7 @@ DINodeArray DIBuilder::getOrCreateArray(ArrayRef<Metadata *> Elements) {
 }
 
 DITypeRefArray DIBuilder::getOrCreateTypeArray(ArrayRef<Metadata *> Elements) {
-  SmallVector<llvm::Metadata *, 16> Elts;
+  SmallVector<llvm37::Metadata *, 16> Elts;
   for (unsigned i = 0, e = Elements.size(); i != e; ++i) {
     if (Elements[i] && isa<MDNode>(Elements[i]))
       Elts.push_back(DITypeRef::get(cast<DIType>(Elements[i])));

@@ -11,8 +11,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_LEX_SCRATCHBUFFER_H
-#define LLVM_CLANG_LEX_SCRATCHBUFFER_H
+#ifndef LLVM37_CLANG_LEX_SCRATCHBUFFER_H
+#define LLVM37_CLANG_LEX_SCRATCHBUFFER_H
 
 #include "clang/Basic/SourceLocation.h"
 

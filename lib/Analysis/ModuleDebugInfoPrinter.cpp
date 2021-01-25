@@ -15,14 +15,14 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Analysis/Passes.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/IR/DebugInfo.h"
-#include "llvm/IR/Function.h"
-#include "llvm/Pass.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/raw_ostream.h"
-using namespace llvm;
+#include "llvm37/Analysis/Passes.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/IR/DebugInfo.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/Pass.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/raw_ostream.h"
+using namespace llvm37;
 
 namespace {
   class ModuleDebugInfoPrinter : public ModulePass {
@@ -46,7 +46,7 @@ char ModuleDebugInfoPrinter::ID = 0;
 INITIALIZE_PASS(ModuleDebugInfoPrinter, "module-debuginfo",
                 "Decodes module-level debug info", false, true)
 
-ModulePass *llvm::createModuleDebugInfoPrinterPass() {
+ModulePass *llvm37::createModuleDebugInfoPrinterPass() {
   return new ModuleDebugInfoPrinter();
 }
 

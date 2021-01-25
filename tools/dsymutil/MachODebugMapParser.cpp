@@ -10,14 +10,14 @@
 #include "BinaryHolder.h"
 #include "DebugMap.h"
 #include "dsymutil.h"
-#include "llvm/Object/MachO.h"
-#include "llvm/Support/Path.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/Object/MachO.h"
+#include "llvm37/Support/Path.h"
+#include "llvm37/Support/raw_ostream.h"
 
 namespace {
-using namespace llvm;
-using namespace llvm::dsymutil;
-using namespace llvm::object;
+using namespace llvm37;
+using namespace llvm37::dsymutil;
+using namespace llvm37::object;
 
 class MachODebugMapParser {
 public:
@@ -241,9 +241,9 @@ void MachODebugMapParser::loadMainBinarySymbols() {
   }
 }
 
-namespace llvm {
+namespace llvm37 {
 namespace dsymutil {
-llvm::ErrorOr<std::unique_ptr<DebugMap>> parseDebugMap(StringRef InputFile,
+llvm37::ErrorOr<std::unique_ptr<DebugMap>> parseDebugMap(StringRef InputFile,
                                                        StringRef PrependPath,
                                                        bool Verbose,
                                                        bool InputIsYAML) {

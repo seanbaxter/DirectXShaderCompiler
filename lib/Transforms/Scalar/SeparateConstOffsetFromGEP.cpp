@@ -156,24 +156,24 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Analysis/TargetTransformInfo.h"
-#include "llvm/Analysis/ValueTracking.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/Dominators.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/Operator.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Transforms/Scalar.h"
-#include "llvm/Transforms/Utils/Local.h"
-#include "llvm/Target/TargetMachine.h"
-#include "llvm/Target/TargetSubtargetInfo.h"
-#include "llvm/IR/IRBuilder.h"
+#include "llvm37/Analysis/TargetTransformInfo.h"
+#include "llvm37/Analysis/ValueTracking.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/IR/Dominators.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/Operator.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Transforms/Scalar.h"
+#include "llvm37/Transforms/Utils/Local.h"
+#include "llvm37/Target/TargetMachine.h"
+#include "llvm37/Target/TargetSubtargetInfo.h"
+#include "llvm37/IR/IRBuilder.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 static cl::opt<bool> DisableSeparateConstOffsetFromGEP(
     "disable-separate-const-offset-from-gep", cl::init(false),
@@ -398,7 +398,7 @@ INITIALIZE_PASS_END(
     false)
 
 FunctionPass *
-llvm::createSeparateConstOffsetFromGEPPass(const TargetMachine *TM,
+llvm37::createSeparateConstOffsetFromGEPPass(const TargetMachine *TM,
                                            bool LowerGEP) {
   return new SeparateConstOffsetFromGEP(TM, LowerGEP);
 }

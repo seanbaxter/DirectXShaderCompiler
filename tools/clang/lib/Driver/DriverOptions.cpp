@@ -8,13 +8,13 @@
 //===----------------------------------------------------------------------===//
 
 #include "clang/Driver/Options.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/Option/OptTable.h"
-#include "llvm/Option/Option.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/Option/OptTable.h"
+#include "llvm37/Option/Option.h"
 
 using namespace clang::driver;
 using namespace clang::driver::options;
-using namespace llvm::opt;
+using namespace llvm37::opt;
 
 #define PREFIX(NAME, VALUE) static const char *const NAME[] = VALUE;
 #include "clang/Driver/Options.inc"
@@ -34,7 +34,7 @@ namespace {
 class DriverOptTable : public OptTable {
 public:
   DriverOptTable()
-    : OptTable(InfoTable, llvm::array_lengthof(InfoTable)) {}
+    : OptTable(InfoTable, llvm37::array_lengthof(InfoTable)) {}
 };
 
 }

@@ -7,13 +7,13 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_LIB_SPIRV_DEBUGTYPEVISITOR_H
-#define LLVM_CLANG_LIB_SPIRV_DEBUGTYPEVISITOR_H
+#ifndef LLVM37_CLANG_LIB_SPIRV_DEBUGTYPEVISITOR_H
+#define LLVM37_CLANG_LIB_SPIRV_DEBUGTYPEVISITOR_H
 
 #include "clang/AST/ASTContext.h"
 #include "clang/SPIRV/SpirvContext.h"
 #include "clang/SPIRV/SpirvVisitor.h"
-#include "llvm/ADT/Optional.h"
+#include "llvm37/ADT/Optional.h"
 
 namespace clang {
 namespace spirv {
@@ -73,7 +73,7 @@ private:
   /// Adds DebugTypeMembers for member variables to DebugTypeComposite.
   void addDebugTypeForMemberVariables(
       SpirvDebugTypeComposite *debugTypeComposite, const StructType *type,
-      llvm::function_ref<SourceLocation()> location, unsigned numBases);
+      llvm37::function_ref<SourceLocation()> location, unsigned numBases);
 
   /// Lowers DebugTypeMembers of DebugTypeComposite.
   void lowerDebugTypeMembers(SpirvDebugTypeComposite *debugTypeComposite,
@@ -103,4 +103,4 @@ private:
 } // end namespace spirv
 } // end namespace clang
 
-#endif // LLVM_CLANG_LIB_SPIRV_DEBUGTYPEVISITOR_H
+#endif // LLVM37_CLANG_LIB_SPIRV_DEBUGTYPEVISITOR_H

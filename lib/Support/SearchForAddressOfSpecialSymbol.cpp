@@ -51,8 +51,8 @@ static void *DoSearch(const char* symbolName) {
   return nullptr;
 }
 
-namespace llvm {
+namespace llvm37 {
 void *SearchForAddressOfSpecialSymbol(const char* symbolName) {
   return DoSearch(symbolName);
 }
-}  // namespace llvm
+}  // namespace llvm37

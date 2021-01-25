@@ -16,8 +16,8 @@
 #include "FormatToken.h"
 #include "ContinuationIndenter.h"
 #include "clang/Format/Format.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/Support/Debug.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/Support/Debug.h"
 #include <climits>
 
 namespace clang {

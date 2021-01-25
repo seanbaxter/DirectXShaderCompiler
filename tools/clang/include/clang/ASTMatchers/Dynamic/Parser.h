@@ -31,16 +31,16 @@
 ///
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_ASTMATCHERS_DYNAMIC_PARSER_H
-#define LLVM_CLANG_ASTMATCHERS_DYNAMIC_PARSER_H
+#ifndef LLVM37_CLANG_ASTMATCHERS_DYNAMIC_PARSER_H
+#define LLVM37_CLANG_ASTMATCHERS_DYNAMIC_PARSER_H
 
 #include "clang/ASTMatchers/Dynamic/Diagnostics.h"
 #include "clang/ASTMatchers/Dynamic/Registry.h"
 #include "clang/ASTMatchers/Dynamic/VariantValue.h"
 #include "clang/Basic/LLVM.h"
-#include "llvm/ADT/ArrayRef.h"
-#include "llvm/ADT/Optional.h"
-#include "llvm/ADT/StringRef.h"
+#include "llvm37/ADT/ArrayRef.h"
+#include "llvm37/ADT/Optional.h"
+#include "llvm37/ADT/StringRef.h"
 
 namespace clang {
 namespace ast_matchers {
@@ -92,7 +92,7 @@ public:
     ///
     /// \return The matcher constructor, or Optional<MatcherCtor>() if not
     /// found.
-    virtual llvm::Optional<MatcherCtor>
+    virtual llvm37::Optional<MatcherCtor>
     lookupMatcherCtor(StringRef MatcherName) = 0;
 
     /// \brief Compute the list of completion types for \p Context.
@@ -104,7 +104,7 @@ public:
     /// the completion point in the argument list). An empty list requests
     /// completion for the root matcher.
     virtual std::vector<ArgKind> getAcceptedCompletionTypes(
-        llvm::ArrayRef<std::pair<MatcherCtor, unsigned>> Context);
+        llvm37::ArrayRef<std::pair<MatcherCtor, unsigned>> Context);
 
     /// \brief Compute the list of completions that match any of
     /// \p AcceptedTypes.
@@ -116,7 +116,7 @@ public:
     /// The matcher constructed from the return of \c lookupMatcherCtor()
     /// should be convertible to some type in \p AcceptedTypes.
     virtual std::vector<MatcherCompletion>
-    getMatcherCompletions(llvm::ArrayRef<ArgKind> AcceptedTypes);
+    getMatcherCompletions(llvm37::ArrayRef<ArgKind> AcceptedTypes);
   };
 
   /// \brief Sema implementation that uses the matcher registry to process the
@@ -125,7 +125,7 @@ public:
    public:
      ~RegistrySema() override;
 
-    llvm::Optional<MatcherCtor>
+    llvm37::Optional<MatcherCtor>
     lookupMatcherCtor(StringRef MatcherName) override;
 
     VariantMatcher actOnMatcherExpression(MatcherCtor Ctor,
@@ -135,13 +135,13 @@ public:
                                           Diagnostics *Error) override;
 
     std::vector<ArgKind> getAcceptedCompletionTypes(
-        llvm::ArrayRef<std::pair<MatcherCtor, unsigned>> Context) override;
+        llvm37::ArrayRef<std::pair<MatcherCtor, unsigned>> Context) override;
 
     std::vector<MatcherCompletion>
-    getMatcherCompletions(llvm::ArrayRef<ArgKind> AcceptedTypes) override;
+    getMatcherCompletions(llvm37::ArrayRef<ArgKind> AcceptedTypes) override;
   };
 
-  typedef llvm::StringMap<VariantValue> NamedValueMap;
+  typedef llvm37::StringMap<VariantValue> NamedValueMap;
 
   /// \brief Parse a matcher expression.
   ///
@@ -158,16 +158,16 @@ public:
   ///   Optional if an error occurred. In that case, \c Error will contain a
   ///   description of the error.
   ///   The caller takes ownership of the DynTypedMatcher object returned.
-  static llvm::Optional<DynTypedMatcher>
+  static llvm37::Optional<DynTypedMatcher>
   parseMatcherExpression(StringRef MatcherCode, Sema *S,
                          const NamedValueMap *NamedValues,
                          Diagnostics *Error);
-  static llvm::Optional<DynTypedMatcher>
+  static llvm37::Optional<DynTypedMatcher>
   parseMatcherExpression(StringRef MatcherCode, Sema *S,
                          Diagnostics *Error) {
     return parseMatcherExpression(MatcherCode, S, nullptr, Error);
   }
-  static llvm::Optional<DynTypedMatcher>
+  static llvm37::Optional<DynTypedMatcher>
   parseMatcherExpression(StringRef MatcherCode, Diagnostics *Error) {
     return parseMatcherExpression(MatcherCode, nullptr, Error);
   }
@@ -254,4 +254,4 @@ private:
 }  // namespace ast_matchers
 }  // namespace clang
 
-#endif  // LLVM_CLANG_AST_MATCHERS_DYNAMIC_PARSER_H
+#endif  // LLVM37_CLANG_AST_MATCHERS_DYNAMIC_PARSER_H

@@ -12,15 +12,15 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Analysis/Passes.h"
-#include "llvm/Analysis/AliasAnalysis.h"
-#include "llvm/IR/Module.h"
-#include "llvm/Pass.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/raw_ostream.h"
-using namespace llvm;
+#include "llvm37/Analysis/Passes.h"
+#include "llvm37/Analysis/AliasAnalysis.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/Pass.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/raw_ostream.h"
+using namespace llvm37;
 
 static cl::opt<bool>
 PrintAll("count-aa-print-all-queries", cl::ReallyHidden, cl::init(true));
@@ -121,7 +121,7 @@ char AliasAnalysisCounter::ID = 0;
 INITIALIZE_AG_PASS(AliasAnalysisCounter, AliasAnalysis, "count-aa",
                    "Count Alias Analysis Query Responses", false, true, false)
 
-ModulePass *llvm::createAliasAnalysisCounterPass() {
+ModulePass *llvm37::createAliasAnalysisCounterPass() {
   return new AliasAnalysisCounter();
 }
 

@@ -27,31 +27,31 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/DenseSet.h"
-#include "llvm/AsmParser/Parser.h"
-#include "llvm/Bitcode/ReaderWriter.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/UseListOrder.h"
-#include "llvm/IR/Verifier.h"
-#include "llvm/IRReader/IRReader.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/FileSystem.h"
-#include "llvm/Support/FileUtilities.h"
-#include "llvm/Support/ManagedStatic.h"
-#include "llvm/Support/MemoryBuffer.h"
-#include "llvm/Support/PrettyStackTrace.h"
-#include "llvm/Support/Signals.h"
-#include "llvm/Support/SourceMgr.h"
-#include "llvm/Support/SystemUtils.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/DenseSet.h"
+#include "llvm37/AsmParser/Parser.h"
+#include "llvm37/Bitcode/ReaderWriter.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/UseListOrder.h"
+#include "llvm37/IR/Verifier.h"
+#include "llvm37/IRReader/IRReader.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/FileSystem.h"
+#include "llvm37/Support/FileUtilities.h"
+#include "llvm37/Support/ManagedStatic.h"
+#include "llvm37/Support/MemoryBuffer.h"
+#include "llvm37/Support/PrettyStackTrace.h"
+#include "llvm37/Support/Signals.h"
+#include "llvm37/Support/SourceMgr.h"
+#include "llvm37/Support/SystemUtils.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <random>
 #include <vector>
 
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "uselistorder"
 
@@ -518,7 +518,7 @@ static void reverseUseLists(Module &M) {
 
 int main(int argc, char **argv) {
   sys::PrintStackTraceOnErrorSignal();
-  llvm::PrettyStackTraceProgram X(argc, argv);
+  llvm37::PrettyStackTraceProgram X(argc, argv);
 
   // Enable debug stream buffering.
   EnableDebugBuffering = true;

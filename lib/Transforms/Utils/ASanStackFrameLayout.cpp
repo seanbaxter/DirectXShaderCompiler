@@ -11,14 +11,14 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Transforms/Utils/ASanStackFrameLayout.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Support/MathExtras.h"
+#include "llvm37/Transforms/Utils/ASanStackFrameLayout.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Support/MathExtras.h"
 #include <algorithm>
 //                                                                           //
 ///////////////////////////////////////////////////////////////////////////////
-namespace llvm {
+namespace llvm37 {
 
 // We sort the stack variables by alignment (largest first) to minimize
 // unnecessary large gaps due to alignment.

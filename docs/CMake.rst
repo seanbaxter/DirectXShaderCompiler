@@ -178,9 +178,9 @@ CMake docs or execute ``cmake --help-variable VARIABLE_NAME``.
   Path where LLVM will be installed if "make install" is invoked or the
   "INSTALL" target is built.
 
-**LLVM_LIBDIR_SUFFIX**:STRING
+**LLVM37_LIBDIR_SUFFIX**:STRING
   Extra suffix to append to the directory where libraries are to be
-  installed. On a 64-bit architecture, one could use ``-DLLVM_LIBDIR_SUFFIX=64``
+  installed. On a 64-bit architecture, one could use ``-DLLVM37_LIBDIR_SUFFIX=64``
   to install libraries to ``/usr/lib64``.
 
 **CMAKE_C_FLAGS**:STRING
@@ -199,31 +199,31 @@ CMake docs or execute ``cmake --help-variable VARIABLE_NAME``.
 LLVM-specific variables
 -----------------------
 
-**LLVM_TARGETS_TO_BUILD**:STRING
+**LLVM37_TARGETS_TO_BUILD**:STRING
   Semicolon-separated list of targets to build, or *all* for building all
   targets. Case-sensitive. Defaults to *all*. Example:
-  ``-DLLVM_TARGETS_TO_BUILD="X86;PowerPC"``.
+  ``-DLLVM37_TARGETS_TO_BUILD="X86;PowerPC"``.
 
-**LLVM_BUILD_TOOLS**:BOOL
+**LLVM37_BUILD_TOOLS**:BOOL
   Build LLVM tools. Defaults to ON. Targets for building each tool are generated
   in any case. You can build an tool separately by invoking its target. For
   example, you can build *llvm-as* with a makefile-based system executing *make
   llvm-as* on the root of your build directory.
 
-**LLVM_INCLUDE_TOOLS**:BOOL
+**LLVM37_INCLUDE_TOOLS**:BOOL
   Generate build targets for the LLVM tools. Defaults to ON. You can use that
   option for disabling the generation of build targets for the LLVM tools.
 
-**LLVM_BUILD_EXAMPLES**:BOOL
+**LLVM37_BUILD_EXAMPLES**:BOOL
   Build LLVM examples. Defaults to OFF. Targets for building each example are
-  generated in any case. See documentation for *LLVM_BUILD_TOOLS* above for more
+  generated in any case. See documentation for *LLVM37_BUILD_TOOLS* above for more
   details.
 
-**LLVM_INCLUDE_EXAMPLES**:BOOL
+**LLVM37_INCLUDE_EXAMPLES**:BOOL
   Generate build targets for the LLVM examples. Defaults to ON. You can use that
   option for disabling the generation of build targets for the LLVM examples.
 
-**LLVM_BUILD_TESTS**:BOOL
+**LLVM37_BUILD_TESTS**:BOOL
   Build LLVM unit tests. Defaults to OFF. Targets for building each unit test
   are generated in any case. You can build a specific unit test with the target
   *UnitTestNameTests* (where at this time *UnitTestName* can be ADT, Analysis,
@@ -231,49 +231,49 @@ LLVM-specific variables
   *unittests* for an updated list.) It is possible to build all unit tests with
   the target *UnitTests*.
 
-**LLVM_INCLUDE_TESTS**:BOOL
+**LLVM37_INCLUDE_TESTS**:BOOL
   Generate build targets for the LLVM unit tests. Defaults to ON. You can use
   that option for disabling the generation of build targets for the LLVM unit
   tests.
 
-**LLVM_APPEND_VC_REV**:BOOL
+**LLVM37_APPEND_VC_REV**:BOOL
   Append version control revision info (svn revision number or Git revision id)
   to LLVM version string (stored in the PACKAGE_VERSION macro). For this to work
   cmake must be invoked before the build. Defaults to OFF.
 
-**LLVM_ENABLE_THREADS**:BOOL
+**LLVM37_ENABLE_THREADS**:BOOL
   Build with threads support, if available. Defaults to ON.
 
-**LLVM_ENABLE_CXX1Y**:BOOL
+**LLVM37_ENABLE_CXX1Y**:BOOL
   Build in C++1y mode, if available. Defaults to OFF.
 
-**LLVM_ENABLE_ASSERTIONS**:BOOL
+**LLVM37_ENABLE_ASSERTIONS**:BOOL
   Enables code assertions. Defaults to ON if and only if ``CMAKE_BUILD_TYPE``
   is *Debug*.
 
-**LLVM_ENABLE_EH**:BOOL
+**LLVM37_ENABLE_EH**:BOOL
   Build LLVM with exception handling support. This is necessary if you wish to
   link against LLVM libraries and make use of C++ exceptions in your own code
   that need to propagate through LLVM code. Defaults to OFF.
 
-**LLVM_ENABLE_PIC**:BOOL
+**LLVM37_ENABLE_PIC**:BOOL
   Add the ``-fPIC`` flag for the compiler command-line, if the compiler supports
   this flag. Some systems, like Windows, do not need this flag. Defaults to ON.
 
-**LLVM_ENABLE_RTTI**:BOOL
+**LLVM37_ENABLE_RTTI**:BOOL
   Build LLVM with run time type information. Defaults to OFF.
 
-**LLVM_ENABLE_WARNINGS**:BOOL
+**LLVM37_ENABLE_WARNINGS**:BOOL
   Enable all compiler warnings. Defaults to ON.
 
-**LLVM_ENABLE_PEDANTIC**:BOOL
+**LLVM37_ENABLE_PEDANTIC**:BOOL
   Enable pedantic mode. This disables compiler specific extensions, if
   possible. Defaults to ON.
 
-**LLVM_ENABLE_WERROR**:BOOL
+**LLVM37_ENABLE_WERROR**:BOOL
   Stop and fail build, if a compiler warning is triggered. Defaults to OFF.
 
-**LLVM_ABI_BREAKING_CHECKS**:STRING
+**LLVM37_ABI_BREAKING_CHECKS**:STRING
   Used to decide if LLVM should be built with ABI breaking checks or
   not.  Allowed values are `WITH_ASSERTS` (default), `FORCE_ON` and
   `FORCE_OFF`.  `WITH_ASSERTS` turns on ABI breaking checks in an
@@ -282,119 +282,119 @@ LLVM-specific variables
   enabled or not.  A version of LLVM built with ABI breaking checks
   is not ABI compatible with a version built without it.
 
-**LLVM_BUILD_32_BITS**:BOOL
+**LLVM37_BUILD_32_BITS**:BOOL
   Build 32-bits executables and libraries on 64-bits systems. This option is
   available only on some 64-bits unix systems. Defaults to OFF.
 
-**LLVM_TARGET_ARCH**:STRING
+**LLVM37_TARGET_ARCH**:STRING
   LLVM target to use for native code generation. This is required for JIT
   generation. It defaults to "host", meaning that it shall pick the architecture
   of the machine where LLVM is being built. If you are cross-compiling, set it
   to the target architecture name.
 
-**LLVM_TABLEGEN**:STRING
+**LLVM37_TABLEGEN**:STRING
   Full path to a native TableGen executable (usually named ``tblgen``). This is
   intended for cross-compiling: if the user sets this variable, no native
   TableGen will be created.
 
-**LLVM_LIT_ARGS**:STRING
+**LLVM37_LIT_ARGS**:STRING
   Arguments given to lit.  ``make check`` and ``make clang-test`` are affected.
   By default, ``'-sv --no-progress-bar'`` on Visual C++ and Xcode, ``'-sv'`` on
   others.
 
-**LLVM_LIT_TOOLS_DIR**:PATH
+**LLVM37_LIT_TOOLS_DIR**:PATH
   The path to GnuWin32 tools for tests. Valid on Windows host.  Defaults to "",
   then Lit seeks tools according to %PATH%.  Lit can find tools(eg. grep, sort,
-  &c) on LLVM_LIT_TOOLS_DIR at first, without specifying GnuWin32 to %PATH%.
+  &c) on LLVM37_LIT_TOOLS_DIR at first, without specifying GnuWin32 to %PATH%.
 
-**LLVM_ENABLE_FFI**:BOOL
+**LLVM37_ENABLE_FFI**:BOOL
   Indicates whether LLVM Interpreter will be linked with Foreign Function
   Interface library. If the library or its headers are installed on a custom
   location, you can set the variables FFI_INCLUDE_DIR and
   FFI_LIBRARY_DIR. Defaults to OFF.
 
-**LLVM_EXTERNAL_{CLANG,LLD,POLLY}_SOURCE_DIR**:PATH
+**LLVM37_EXTERNAL_{CLANG,LLD,POLLY}_SOURCE_DIR**:PATH
   Path to ``{Clang,lld,Polly}``\'s source directory. Defaults to
   ``tools/{clang,lld,polly}``. ``{Clang,lld,Polly}`` will not be built when it
   is empty or it does not point to a valid path.
 
-**LLVM_USE_OPROFILE**:BOOL
+**LLVM37_USE_OPROFILE**:BOOL
   Enable building OProfile JIT support. Defaults to OFF
 
-**LLVM_USE_INTEL_JITEVENTS**:BOOL
+**LLVM37_USE_INTEL_JITEVENTS**:BOOL
   Enable building support for Intel JIT Events API. Defaults to OFF
 
-**LLVM_ENABLE_ZLIB**:BOOL
+**LLVM37_ENABLE_ZLIB**:BOOL
   Build with zlib to support compression/uncompression in LLVM tools.
   Defaults to ON.
 
-**LLVM_USE_SANITIZER**:STRING
+**LLVM37_USE_SANITIZER**:STRING
   Define the sanitizer used to build LLVM binaries and tests. Possible values
   are ``Address``, ``Memory``, ``MemoryWithOrigins``, ``Undefined``, ``Thread``,
   and ``Address;Undefined``. Defaults to empty string.
 
-**LLVM_PARALLEL_COMPILE_JOBS**:STRING
+**LLVM37_PARALLEL_COMPILE_JOBS**:STRING
   Define the maximum number of concurrent compilation jobs.
 
-**LLVM_PARALLEL_LINK_JOBS**:STRING
+**LLVM37_PARALLEL_LINK_JOBS**:STRING
   Define the maximum number of concurrent link jobs.
 
-**LLVM_BUILD_DOCS**:BOOL
+**LLVM37_BUILD_DOCS**:BOOL
   Enables all enabled documentation targets (i.e. Doxgyen and Sphinx targets) to
   be built as part of the normal build. If the ``install`` target is run then
   this also enables all built documentation targets to be installed. Defaults to
   OFF.
 
-**LLVM_ENABLE_DOXYGEN**:BOOL
+**LLVM37_ENABLE_DOXYGEN**:BOOL
   Enables the generation of browsable HTML documentation using doxygen.
   Defaults to OFF.
 
-**LLVM_ENABLE_DOXYGEN_QT_HELP**:BOOL
+**LLVM37_ENABLE_DOXYGEN_QT_HELP**:BOOL
   Enables the generation of a Qt Compressed Help file. Defaults to OFF.
   This affects the make target ``doxygen-llvm``. When enabled, apart from
   the normal HTML output generated by doxygen, this will produce a QCH file
   named ``org.llvm.qch``. You can then load this file into Qt Creator.
-  This option is only useful in combination with ``-DLLVM_ENABLE_DOXYGEN=ON``;
+  This option is only useful in combination with ``-DLLVM37_ENABLE_DOXYGEN=ON``;
   otherwise this has no effect.
 
-**LLVM_DOXYGEN_QCH_FILENAME**:STRING
+**LLVM37_DOXYGEN_QCH_FILENAME**:STRING
   The filename of the Qt Compressed Help file that will be generated when
-  ``-DLLVM_ENABLE_DOXYGEN=ON`` and
-  ``-DLLVM_ENABLE_DOXYGEN_QT_HELP=ON`` are given. Defaults to
+  ``-DLLVM37_ENABLE_DOXYGEN=ON`` and
+  ``-DLLVM37_ENABLE_DOXYGEN_QT_HELP=ON`` are given. Defaults to
   ``org.llvm.qch``.
   This option is only useful in combination with
-  ``-DLLVM_ENABLE_DOXYGEN_QT_HELP=ON``;
+  ``-DLLVM37_ENABLE_DOXYGEN_QT_HELP=ON``;
   otherwise this has no effect.
 
-**LLVM_DOXYGEN_QHP_NAMESPACE**:STRING
+**LLVM37_DOXYGEN_QHP_NAMESPACE**:STRING
   Namespace under which the intermediate Qt Help Project file lives. See `Qt
   Help Project`_
   for more information. Defaults to "org.llvm". This option is only useful in
-  combination with ``-DLLVM_ENABLE_DOXYGEN_QT_HELP=ON``; otherwise
+  combination with ``-DLLVM37_ENABLE_DOXYGEN_QT_HELP=ON``; otherwise
   this has no effect.
 
-**LLVM_DOXYGEN_QHP_CUST_FILTER_NAME**:STRING
+**LLVM37_DOXYGEN_QHP_CUST_FILTER_NAME**:STRING
   See `Qt Help Project`_ for
   more information. Defaults to the CMake variable ``${PACKAGE_STRING}`` which
   is a combination of the package name and version string. This filter can then
   be used in Qt Creator to select only documentation from LLVM when browsing
   through all the help files that you might have loaded. This option is only
-  useful in combination with ``-DLLVM_ENABLE_DOXYGEN_QT_HELP=ON``;
+  useful in combination with ``-DLLVM37_ENABLE_DOXYGEN_QT_HELP=ON``;
   otherwise this has no effect.
 
 .. _Qt Help Project: http://qt-project.org/doc/qt-4.8/qthelpproject.html#custom-filters
 
-**LLVM_DOXYGEN_QHELPGENERATOR_PATH**:STRING
+**LLVM37_DOXYGEN_QHELPGENERATOR_PATH**:STRING
   The path to the ``qhelpgenerator`` executable. Defaults to whatever CMake's
   ``find_program()`` can find. This option is only useful in combination with
-  ``-DLLVM_ENABLE_DOXYGEN_QT_HELP=ON``; otherwise this has no
+  ``-DLLVM37_ENABLE_DOXYGEN_QT_HELP=ON``; otherwise this has no
   effect.
 
-**LLVM_DOXYGEN_SVG**:BOOL
+**LLVM37_DOXYGEN_SVG**:BOOL
   Uses .svg files instead of .png files for graphs in the Doxygen output.
   Defaults to OFF.
 
-**LLVM_ENABLE_SPHINX**:BOOL
+**LLVM37_ENABLE_SPHINX**:BOOL
   If enabled CMake will search for the ``sphinx-build`` executable and will make
   the ``SPHINX_OUTPUT_HTML`` and ``SPHINX_OUTPUT_MAN`` CMake options available.
   Defaults to OFF.
@@ -403,15 +403,15 @@ LLVM-specific variables
   The path to the ``sphinx-build`` executable detected by CMake.
 
 **SPHINX_OUTPUT_HTML**:BOOL
-  If enabled (and ``LLVM_ENABLE_SPHINX`` is enabled) then the targets for
+  If enabled (and ``LLVM37_ENABLE_SPHINX`` is enabled) then the targets for
   building the documentation as html are added (but not built by default unless
-  ``LLVM_BUILD_DOCS`` is enabled). There is a target for each project in the
+  ``LLVM37_BUILD_DOCS`` is enabled). There is a target for each project in the
   source tree that uses sphinx (e.g.  ``docs-llvm-html``, ``docs-clang-html``
   and ``docs-lld-html``). Defaults to ON.
 
 **SPHINX_OUTPUT_MAN**:BOOL
-  If enabled (and ``LLVM_ENABLE_SPHINX`` is enabled) the targets for building
-  the man pages are added (but not built by default unless ``LLVM_BUILD_DOCS``
+  If enabled (and ``LLVM37_ENABLE_SPHINX`` is enabled) the targets for building
+  the man pages are added (but not built by default unless ``LLVM37_BUILD_DOCS``
   is enabled). Currently the only target added is ``docs-llvm-man``. Defaults
   to ON.
 
@@ -463,16 +463,16 @@ and uses them to build a simple application ``simple-tool``.
 
   find_package(LLVM REQUIRED CONFIG)
 
-  message(STATUS "Found LLVM ${LLVM_PACKAGE_VERSION}")
-  message(STATUS "Using LLVMConfig.cmake in: ${LLVM_DIR}")
+  message(STATUS "Found LLVM ${LLVM37_PACKAGE_VERSION}")
+  message(STATUS "Using LLVMConfig.cmake in: ${LLVM37_DIR}")
 
   # Set your project compile flags.
   # E.g. if using the C++ header files
   # you will need to enable C++11 support
   # for your compiler.
 
-  include_directories(${LLVM_INCLUDE_DIRS})
-  add_definitions(${LLVM_DEFINITIONS})
+  include_directories(${LLVM37_INCLUDE_DIRS})
+  add_definitions(${LLVM37_DEFINITIONS})
 
   # Now build our tools
   add_executable(simple-tool tool.cpp)
@@ -486,9 +486,9 @@ and uses them to build a simple application ``simple-tool``.
 
 The ``find_package(...)`` directive when used in CONFIG mode (as in the above
 example) will look for the ``LLVMConfig.cmake`` file in various locations (see
-cmake manual for details).  It creates a ``LLVM_DIR`` cache entry to save the
+cmake manual for details).  It creates a ``LLVM37_DIR`` cache entry to save the
 directory where ``LLVMConfig.cmake`` is found or allows the user to specify the
-directory (e.g. by passing ``-DLLVM_DIR=/usr/share/llvm/cmake`` to
+directory (e.g. by passing ``-DLLVM37_DIR=/usr/share/llvm/cmake`` to
 the ``cmake`` command or by setting it directly in ``ccmake`` or ``cmake-gui``).
 
 This file is available in two different locations.
@@ -497,45 +497,45 @@ This file is available in two different locations.
   ``<INSTALL_PREFIX>`` is the install prefix of an installed version of LLVM.
   On Linux typically this is ``/usr/share/llvm/cmake/LLVMConfig.cmake``.
 
-* ``<LLVM_BUILD_ROOT>/share/llvm/cmake/LLVMConfig.cmake`` where
-  ``<LLVM_BUILD_ROOT>`` is the root of the LLVM build tree. **Note this only
+* ``<LLVM37_BUILD_ROOT>/share/llvm/cmake/LLVMConfig.cmake`` where
+  ``<LLVM37_BUILD_ROOT>`` is the root of the LLVM build tree. **Note this only
   available when building LLVM with CMake**
 
 If LLVM is installed in your operating system's normal installation prefix (e.g.
 on Linux this is usually ``/usr/``) ``find_package(LLVM ...)`` will
 automatically find LLVM if it is installed correctly. If LLVM is not installed
 or you wish to build directly against the LLVM build tree you can use
-``LLVM_DIR`` as previously mentioned.
+``LLVM37_DIR`` as previously mentioned.
 
 The ``LLVMConfig.cmake`` file sets various useful variables. Notable variables
 include
 
-``LLVM_CMAKE_DIR``
+``LLVM37_CMAKE_DIR``
   The path to the LLVM CMake directory (i.e. the directory containing
   LLVMConfig.cmake).
 
-``LLVM_DEFINITIONS``
+``LLVM37_DEFINITIONS``
   A list of preprocessor defines that should be used when building against LLVM.
 
-``LLVM_ENABLE_ASSERTIONS``
+``LLVM37_ENABLE_ASSERTIONS``
   This is set to ON if LLVM was built with assertions, otherwise OFF.
 
-``LLVM_ENABLE_EH``
+``LLVM37_ENABLE_EH``
   This is set to ON if LLVM was built with exception handling (EH) enabled,
   otherwise OFF.
 
-``LLVM_ENABLE_RTTI``
+``LLVM37_ENABLE_RTTI``
   This is set to ON if LLVM was built with run time type information (RTTI),
   otherwise OFF.
 
-``LLVM_INCLUDE_DIRS``
+``LLVM37_INCLUDE_DIRS``
   A list of include paths to directories containing LLVM header files.
 
-``LLVM_PACKAGE_VERSION``
+``LLVM37_PACKAGE_VERSION``
   The LLVM version. This string can be used with CMake conditionals. E.g. ``if
-  (${LLVM_PACKAGE_VERSION} VERSION_LESS "3.5")``.
+  (${LLVM37_PACKAGE_VERSION} VERSION_LESS "3.5")``.
 
-``LLVM_TOOLS_BINARY_DIR``
+``LLVM37_TOOLS_BINARY_DIR``
   The path to the directory containing the LLVM tools (e.g. ``llvm-as``).
 
 Notice that in the above example we link ``simple-tool`` against several LLVM
@@ -572,8 +572,8 @@ Contents of ``<project dir>/CMakeLists.txt``:
 
   find_package(LLVM REQUIRED CONFIG)
 
-  add_definitions(${LLVM_DEFINITIONS})
-  include_directories(${LLVM_INCLUDE_DIRS})
+  add_definitions(${LLVM37_DEFINITIONS})
+  include_directories(${LLVM37_INCLUDE_DIRS})
 
   add_subdirectory(<pass name>)
 
@@ -593,7 +593,7 @@ Adding the following to ``<project dir>/CMakeLists.txt`` (after
 
 .. code-block:: cmake
 
-  list(APPEND CMAKE_MODULE_PATH "${LLVM_CMAKE_DIR}")
+  list(APPEND CMAKE_MODULE_PATH "${LLVM37_CMAKE_DIR}")
   include(AddLLVM)
 
 And then changing ``<project dir>/<pass name>/CMakeLists.txt`` to
@@ -620,7 +620,7 @@ Notes for specific compilers and/or platforms.
 Microsoft Visual C++
 --------------------
 
-**LLVM_COMPILER_JOBS**:STRING
+**LLVM37_COMPILER_JOBS**:STRING
   Specifies the maximum number of parallell compiler jobs to use per project
   when building with msbuild or Visual Studio. Only supported for the Visual
   Studio 2010 CMake generator. 0 means use all processors. Default is 0.

@@ -27,7 +27,7 @@
 #include "clang/AST/ExprCXX.h"
 #include "clang/AST/ExprObjC.h"
 #include "clang/Frontend/ASTUnit.h"
-#include "llvm/Support/ErrorHandling.h"
+#include "llvm37/Support/ErrorHandling.h"
 
 using namespace clang;
 using namespace cxcursor;
@@ -1096,7 +1096,7 @@ int clang_Cursor_getNumTemplateArguments(CXCursor C) {
     return -1;
   }
 
-  const FunctionDecl *FD = llvm::dyn_cast_or_null<clang::FunctionDecl>(
+  const FunctionDecl *FD = llvm37::dyn_cast_or_null<clang::FunctionDecl>(
       getCursorDecl(C));
   if (!FD) {
     return -1;
@@ -1134,7 +1134,7 @@ static int clang_Cursor_getTemplateArgument(
     return CXGetTemplateArgumentStatus_CursorNotFunctionDecl;
   }
 
-  const FunctionDecl *FD = llvm::dyn_cast_or_null<clang::FunctionDecl>(
+  const FunctionDecl *FD = llvm37::dyn_cast_or_null<clang::FunctionDecl>(
       getCursorDecl(C));
   if (!FD) {
     return CXGetTemplateArgumentStatus_BadFunctionDeclCast;
@@ -1231,7 +1231,7 @@ unsigned long long clang_Cursor_getTemplateArgumentUnsignedValue(CXCursor C,
 // CXCursorSet.
 //===----------------------------------------------------------------------===//
 
-typedef llvm::DenseMap<CXCursor, unsigned> CXCursorSet_Impl;
+typedef llvm37::DenseMap<CXCursor, unsigned> CXCursorSet_Impl;
 
 static inline CXCursorSet packCXCursorSet(CXCursorSet_Impl *setImpl) {
   return (CXCursorSet) setImpl;
@@ -1239,7 +1239,7 @@ static inline CXCursorSet packCXCursorSet(CXCursorSet_Impl *setImpl) {
 static inline CXCursorSet_Impl *unpackCXCursorSet(CXCursorSet set) {
   return (CXCursorSet_Impl*) set;
 }
-namespace llvm {
+namespace llvm37 {
 template<> struct DenseMapInfo<CXCursor> {
 public:
   static inline CXCursor getEmptyKey() {
@@ -1249,7 +1249,7 @@ public:
     return MakeCXCursorInvalid(CXCursor_NoDeclFound);
   }
   static inline unsigned getHashValue(const CXCursor &cursor) {
-    return llvm::DenseMapInfo<std::pair<const void *, const void *> >
+    return llvm37::DenseMapInfo<std::pair<const void *, const void *> >
       ::getHashValue(std::make_pair(cursor.data[0], cursor.data[1]));
   }
   static inline bool isEqual(const CXCursor &x, const CXCursor &y) {

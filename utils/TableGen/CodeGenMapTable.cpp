@@ -77,9 +77,9 @@
 //===----------------------------------------------------------------------===//
 
 #include "CodeGenTarget.h"
-#include "llvm/Support/Format.h"
-#include "llvm/TableGen/Error.h"
-using namespace llvm;
+#include "llvm37/Support/Format.h"
+#include "llvm37/TableGen/Error.h"
+using namespace llvm37;
 typedef std::map<std::string, std::vector<Record*> > InstrRelMapTy;
 
 typedef std::map<std::vector<Init*>, std::vector<Record*> > RowInstrMapTy;
@@ -551,7 +551,7 @@ static void emitEnums(raw_ostream &OS, RecordKeeper &Records) {
   }
 }
 
-namespace llvm {
+namespace llvm37 {
 //===----------------------------------------------------------------------===//
 // Parse 'InstrMapping' records and use the information to form relationship
 // between instructions. These relations are emitted as a tables along with the
@@ -568,7 +568,7 @@ void EmitMapTable(RecordKeeper &Records, raw_ostream &OS) {
 
   OS << "#ifdef GET_INSTRMAP_INFO\n";
   OS << "#undef GET_INSTRMAP_INFO\n";
-  OS << "namespace llvm {\n\n";
+  OS << "namespace llvm37 {\n\n";
   OS << "namespace " << TargetName << " {\n\n";
 
   // Emit coulumn field names and their values as enums.

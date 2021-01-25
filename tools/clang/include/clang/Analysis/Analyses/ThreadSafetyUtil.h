@@ -11,14 +11,14 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_ANALYSIS_ANALYSES_THREADSAFETYUTIL_H
-#define LLVM_CLANG_ANALYSIS_ANALYSES_THREADSAFETYUTIL_H
+#ifndef LLVM37_CLANG_ANALYSIS_ANALYSES_THREADSAFETYUTIL_H
+#define LLVM37_CLANG_ANALYSIS_ANALYSES_THREADSAFETYUTIL_H
 
 #include "clang/AST/ExprCXX.h"
-#include "llvm/ADT/StringRef.h"
-#include "llvm/Support/AlignOf.h"
-#include "llvm/Support/Allocator.h"
-#include "llvm/Support/Compiler.h"
+#include "llvm37/ADT/StringRef.h"
+#include "llvm37/Support/AlignOf.h"
+#include "llvm37/Support/Allocator.h"
+#include "llvm37/Support/Compiler.h"
 #include <cassert>
 #include <cstddef>
 #include <ostream>
@@ -42,10 +42,10 @@ private:
 
 public:
   MemRegionRef() : Allocator(nullptr) {}
-  MemRegionRef(llvm::BumpPtrAllocator *A) : Allocator(A) {}
+  MemRegionRef(llvm37::BumpPtrAllocator *A) : Allocator(A) {}
 
   void *allocate(size_t Sz) {
-    return Allocator->Allocate(Sz, llvm::AlignOf<AlignmentType>::Alignment);
+    return Allocator->Allocate(Sz, llvm37::AlignOf<AlignmentType>::Alignment);
   }
 
   template <typename T> T *allocateT() { return Allocator->Allocate<T>(); }
@@ -55,7 +55,7 @@ public:
   }
 
 private:
-  llvm::BumpPtrAllocator *Allocator;
+  llvm37::BumpPtrAllocator *Allocator;
 };
 
 
@@ -75,7 +75,7 @@ namespace threadSafety {
 
 std::string getSourceLiteralString(const clang::Expr *CE);
 
-using llvm::StringRef;
+using llvm37::StringRef;
 using clang::SourceLocation;
 
 namespace til {
@@ -200,11 +200,11 @@ public:
     return J - Osz;
   }
 
-  llvm::iterator_range<reverse_iterator> reverse() {
-    return llvm::make_range(rbegin(), rend());
+  llvm37::iterator_range<reverse_iterator> reverse() {
+    return llvm37::make_range(rbegin(), rend());
   }
-  llvm::iterator_range<const_reverse_iterator> reverse() const {
-    return llvm::make_range(rbegin(), rend());
+  llvm37::iterator_range<const_reverse_iterator> reverse() const {
+    return llvm37::make_range(rbegin(), rend());
   }
 
 private:
@@ -355,4 +355,4 @@ inline std::ostream& operator<<(std::ostream& ss, const StringRef str) {
 } // end namespace threadSafety
 } // end namespace clang
 
-#endif  // LLVM_CLANG_THREAD_SAFETY_UTIL_H
+#endif  // LLVM37_CLANG_THREAD_SAFETY_UTIL_H

@@ -7,22 +7,22 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/IRReader/IRReader.h"
+#include "llvm37/IRReader/IRReader.h"
 // #include "llvm-c/Core.h"
 // #include "llvm-c/IRReader.h"
-#include "llvm/AsmParser/Parser.h"
-#include "llvm/Bitcode/ReaderWriter.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Module.h"
-#include "llvm/Support/MemoryBuffer.h"
-#include "llvm/Support/SourceMgr.h"
-#include "llvm/Support/Timer.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/AsmParser/Parser.h"
+#include "llvm37/Bitcode/ReaderWriter.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/Support/MemoryBuffer.h"
+#include "llvm37/Support/SourceMgr.h"
+#include "llvm37/Support/Timer.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <system_error>
 
-using namespace llvm;
+using namespace llvm37;
 
-namespace llvm {
+namespace llvm37 {
   extern bool TimePassesIsEnabled;
 }
 
@@ -47,7 +47,7 @@ getLazyIRModule(std::unique_ptr<MemoryBuffer> Buffer, SMDiagnostic &Err,
   return parseAssembly(Buffer->getMemBufferRef(), Err, Context);
 }
 
-std::unique_ptr<Module> llvm::getLazyIRFileModule(StringRef Filename,
+std::unique_ptr<Module> llvm37::getLazyIRFileModule(StringRef Filename,
                                                   SMDiagnostic &Err,
                                                   LLVMContext &Context) {
   ErrorOr<std::unique_ptr<MemoryBuffer>> FileOrErr =
@@ -61,7 +61,7 @@ std::unique_ptr<Module> llvm::getLazyIRFileModule(StringRef Filename,
   return getLazyIRModule(std::move(FileOrErr.get()), Err, Context);
 }
 
-std::unique_ptr<Module> llvm::parseIR(MemoryBufferRef Buffer, SMDiagnostic &Err,
+std::unique_ptr<Module> llvm37::parseIR(MemoryBufferRef Buffer, SMDiagnostic &Err,
                                       LLVMContext &Context) {
   NamedRegionTimer T(TimeIRParsingName, TimeIRParsingGroupName,
                      TimePassesIsEnabled);
@@ -80,7 +80,7 @@ std::unique_ptr<Module> llvm::parseIR(MemoryBufferRef Buffer, SMDiagnostic &Err,
   return parseAssembly(Buffer, Err, Context);
 }
 
-std::unique_ptr<Module> llvm::parseIRFile(StringRef Filename, SMDiagnostic &Err,
+std::unique_ptr<Module> llvm37::parseIRFile(StringRef Filename, SMDiagnostic &Err,
                                           LLVMContext &Context) {
   ErrorOr<std::unique_ptr<MemoryBuffer>> FileOrErr =
       MemoryBuffer::getFileOrSTDIN(Filename);

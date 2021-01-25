@@ -15,8 +15,8 @@
 #include "clang/Lex/LexDiagnostic.h"
 #include "clang/Lex/MacroInfo.h"
 #include "clang/Lex/Preprocessor.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/Support/SaveAndRestore.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/Support/SaveAndRestore.h"
 #include <algorithm>
 
 using namespace clang;

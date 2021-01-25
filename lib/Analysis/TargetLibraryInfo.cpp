@@ -11,10 +11,10 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Analysis/TargetLibraryInfo.h"
-#include "llvm/ADT/Triple.h"
-#include "llvm/Support/CommandLine.h"
-using namespace llvm;
+#include "llvm37/Analysis/TargetLibraryInfo.h"
+#include "llvm37/ADT/Triple.h"
+#include "llvm37/Support/CommandLine.h"
+using namespace llvm37;
 
 #if 0 // HLSL Change Starts - option pending
 static cl::opt<TargetLibraryInfoImpl::VectorLibrary> ClVectorLibrary(
@@ -31,7 +31,7 @@ static const TargetLibraryInfoImpl::VectorLibrary ClVectorLibrary = TargetLibrar
 
 const char *const TargetLibraryInfoImpl::StandardNames[LibFunc::NumLibFuncs] = {
 #define TLI_DEFINE_STRING
-#include "llvm/Analysis/TargetLibraryInfo.def"
+#include "llvm37/Analysis/TargetLibraryInfo.def"
 };
 
 static bool hasSinCosPiStret(const Triple &T) {

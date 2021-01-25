@@ -31,25 +31,25 @@
 #include "clang/StaticAnalyzer/Core/PathSensitive/CheckerContext.h"
 #include "clang/StaticAnalyzer/Core/PathSensitive/ProgramStateTrait.h"
 #include "clang/StaticAnalyzer/Core/PathSensitive/SymbolManager.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/FoldingSet.h"
-#include "llvm/ADT/ImmutableList.h"
-#include "llvm/ADT/ImmutableMap.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/ADT/StringExtras.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/FoldingSet.h"
+#include "llvm37/ADT/ImmutableList.h"
+#include "llvm37/ADT/ImmutableMap.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/ADT/StringExtras.h"
 #include <cstdarg>
 
 using namespace clang;
 using namespace ento;
 using namespace objc_retain;
-using llvm::StrInStrNoCase;
+using llvm37::StrInStrNoCase;
 
 //===----------------------------------------------------------------------===//
 // Adapters for FoldingSet.
 //===----------------------------------------------------------------------===//
 
-namespace llvm {
+namespace llvm37 {
 template <> struct FoldingSetTrait<ArgEffect> {
 static inline void Profile(const ArgEffect X, FoldingSetNodeID &ID) {
   ID.AddInteger((unsigned) X);
@@ -69,7 +69,7 @@ template <> struct FoldingSetTrait<RetEffect> {
 
 /// ArgEffects summarizes the effects of a function/method call on all of
 /// its arguments.
-typedef llvm::ImmutableMap<unsigned,ArgEffect> ArgEffects;
+typedef llvm37::ImmutableMap<unsigned,ArgEffect> ArgEffects;
 
 namespace {
 class RefVal {
@@ -251,7 +251,7 @@ public:
     return T == X.T && hasSameState(X) && getObjKind() == X.getObjKind();
   }
   
-  void Profile(llvm::FoldingSetNodeID& ID) const {
+  void Profile(llvm37::FoldingSetNodeID& ID) const {
     ID.Add(T);
     ID.AddInteger(RawKind);
     ID.AddInteger(Cnt);
@@ -443,7 +443,7 @@ public:
   }
 
   /// Profile this summary for inclusion in a FoldingSet.
-  void Profile(llvm::FoldingSetNodeID& ID) const {
+  void Profile(llvm37::FoldingSetNodeID& ID) const {
     ID.Add(Args);
     ID.Add(DefaultArgEffect);
     ID.Add(Receiver);
@@ -486,7 +486,7 @@ public:
 };
 }
 
-namespace llvm {
+namespace llvm37 {
 template <> struct DenseMapInfo<ObjCSummaryKey> {
   static inline ObjCSummaryKey getEmptyKey() {
     return ObjCSummaryKey(DenseMapInfo<IdentifierInfo*>::getEmptyKey(),
@@ -514,7 +514,7 @@ template <> struct DenseMapInfo<ObjCSummaryKey> {
 
 namespace {
 class ObjCSummaryCache {
-  typedef llvm::DenseMap<ObjCSummaryKey, const RetainSummary *> MapTy;
+  typedef llvm37::DenseMap<ObjCSummaryKey, const RetainSummary *> MapTy;
   MapTy M;
 public:
   ObjCSummaryCache() {}
@@ -583,12 +583,12 @@ class RetainSummaryManager {
   //  Typedefs.
   //==-----------------------------------------------------------------==//
 
-  typedef llvm::DenseMap<const FunctionDecl*, const RetainSummary *>
+  typedef llvm37::DenseMap<const FunctionDecl*, const RetainSummary *>
           FuncSummariesTy;
 
   typedef ObjCSummaryCache ObjCMethodSummariesTy;
 
-  typedef llvm::FoldingSetNodeWrapper<RetainSummary> CachedSummaryNode;
+  typedef llvm37::FoldingSetNodeWrapper<RetainSummary> CachedSummaryNode;
 
   //==-----------------------------------------------------------------==//
   //  Data.
@@ -615,7 +615,7 @@ class RetainSummaryManager {
 
   /// BPAlloc - A BumpPtrAllocator used for allocating summaries, ArgEffects,
   ///  and all other data used by the checker.
-  llvm::BumpPtrAllocator BPAlloc;
+  llvm37::BumpPtrAllocator BPAlloc;
 
   /// AF - A factory for ArgEffects objects.
   ArgEffects::Factory AF;
@@ -633,7 +633,7 @@ class RetainSummaryManager {
 
   /// SimpleSummaries - Used for uniquing summaries that don't have special
   /// effects.
-  llvm::FoldingSet<CachedSummaryNode> SimpleSummaries;
+  llvm37::FoldingSet<CachedSummaryNode> SimpleSummaries;
 
   //==-----------------------------------------------------------------==//
   //  Methods.
@@ -856,7 +856,7 @@ const RetainSummary *
 RetainSummaryManager::getPersistentSummary(const RetainSummary &OldSumm) {
   // Unique "simple" summaries -- those without ArgEffects.
   if (OldSumm.isSimple()) {
-    llvm::FoldingSetNodeID ID;
+    llvm37::FoldingSetNodeID ID;
     OldSumm.Profile(ID);
 
     void *Pos;
@@ -1647,7 +1647,7 @@ void RetainSummaryManager::InitializeMethodSummaries() {
 // Error reporting.
 //===----------------------------------------------------------------------===//
 namespace {
-  typedef llvm::DenseMap<const ExplodedNode *, const RetainSummary *>
+  typedef llvm37::DenseMap<const ExplodedNode *, const RetainSummary *>
     SummaryLogTy;
 
   //===-------------===//
@@ -1754,7 +1754,7 @@ namespace {
     CFRefReportVisitor(SymbolRef sym, bool gcEnabled, const SummaryLogTy &log)
        : Sym(sym), SummaryLog(log), GCEnabled(gcEnabled) {}
 
-    void Profile(llvm::FoldingSetNodeID &ID) const override {
+    void Profile(llvm37::FoldingSetNodeID &ID) const override {
       static int x = 0;
       ID.AddPointer(&x);
       ID.AddPointer(Sym);
@@ -1786,7 +1786,7 @@ namespace {
       // CFRefReportVisitor, we simply override clone() to do the right thing.
       // This could be trouble someday if BugReporterVisitorImpl is ever
       // used for something else besides a convenient implementation of clone().
-      return llvm::make_unique<CFRefLeakReportVisitor>(*this);
+      return llvm37::make_unique<CFRefLeakReportVisitor>(*this);
     }
   };
 
@@ -1799,7 +1799,7 @@ namespace {
                 bool registerVisitor = true)
       : BugReport(D, D.getDescription(), n) {
       if (registerVisitor)
-        addVisitor(llvm::make_unique<CFRefReportVisitor>(sym, GCEnabled, Log));
+        addVisitor(llvm37::make_unique<CFRefReportVisitor>(sym, GCEnabled, Log));
       addGCModeDescription(LOpts, GCEnabled);
     }
 
@@ -1807,15 +1807,15 @@ namespace {
                 const SummaryLogTy &Log, ExplodedNode *n, SymbolRef sym,
                 StringRef endText)
       : BugReport(D, D.getDescription(), endText, n) {
-      addVisitor(llvm::make_unique<CFRefReportVisitor>(sym, GCEnabled, Log));
+      addVisitor(llvm37::make_unique<CFRefReportVisitor>(sym, GCEnabled, Log));
       addGCModeDescription(LOpts, GCEnabled);
     }
 
-    llvm::iterator_range<ranges_iterator> getRanges() override {
+    llvm37::iterator_range<ranges_iterator> getRanges() override {
       const CFRefBug& BugTy = static_cast<CFRefBug&>(getBugType());
       if (!BugTy.isLeak())
         return BugReport::getRanges();
-      return llvm::make_range(ranges_iterator(), ranges_iterator());
+      return llvm37::make_range(ranges_iterator(), ranges_iterator());
     }
   };
 
@@ -1909,7 +1909,7 @@ PathDiagnosticPiece *CFRefReportVisitor::VisitNode(const ExplodedNode *N,
   // Create a string buffer to constain all the useful things we want
   // to tell the user.
   std::string sbuf;
-  llvm::raw_string_ostream os(sbuf);
+  llvm37::raw_string_ostream os(sbuf);
 
   // This is the allocation site since the previous node had no bindings
   // for this symbol.
@@ -2325,7 +2325,7 @@ CFRefLeakReportVisitor::getEndPath(BugReporterContext &BRC,
   PathDiagnosticLocation L = PathDiagnosticLocation::createEndOfPath(LeakN, SM);
 
   std::string sbuf;
-  llvm::raw_string_ostream os(sbuf);
+  llvm37::raw_string_ostream os(sbuf);
 
   os << "Object leaked: ";
 
@@ -2381,7 +2381,7 @@ CFRefLeakReportVisitor::getEndPath(BugReporterContext &BRC,
     os << " is not referenced later in this execution path and has a retain "
           "count of +" << RV->getCount();
 
-  return llvm::make_unique<PathDiagnosticEventPiece>(L, os.str());
+  return llvm37::make_unique<PathDiagnosticEventPiece>(L, os.str());
 }
 
 CFRefLeakReport::CFRefLeakReport(CFRefBug &D, const LangOptions &LOpts,
@@ -2434,7 +2434,7 @@ CFRefLeakReport::CFRefLeakReport(CFRefBug &D, const LangOptions &LOpts,
 
   // Fill in the description of the bug.
   Description.clear();
-  llvm::raw_string_ostream os(Description);
+  llvm37::raw_string_ostream os(Description);
   os << "Potential leak ";
   if (GCEnabled)
     os << "(when using garbage collection) ";
@@ -2448,7 +2448,7 @@ CFRefLeakReport::CFRefLeakReport(CFRefBug &D, const LangOptions &LOpts,
     }
   }
 
-  addVisitor(llvm::make_unique<CFRefLeakReportVisitor>(sym, GCEnabled, Log));
+  addVisitor(llvm37::make_unique<CFRefLeakReportVisitor>(sym, GCEnabled, Log));
 }
 
 //===----------------------------------------------------------------------===//
@@ -2478,7 +2478,7 @@ class RetainCountChecker
   mutable std::unique_ptr<CFRefBug> leakWithinFunction, leakAtReturn;
   mutable std::unique_ptr<CFRefBug> leakWithinFunctionGC, leakAtReturnGC;
 
-  typedef llvm::DenseMap<SymbolRef, const CheckerProgramPointTag *> SymbolTagMap;
+  typedef llvm37::DenseMap<SymbolRef, const CheckerProgramPointTag *> SymbolTagMap;
 
   // This map is only used to ensure proper deletion of any allocated tags.
   mutable SymbolTagMap DeadSymbolTags;
@@ -3709,7 +3709,7 @@ RetainCountChecker::checkRegionChanges(ProgramStateRef state,
   if (!invalidated)
     return state;
 
-  llvm::SmallPtrSet<SymbolRef, 8> WhitelistedSymbols;
+  llvm37::SmallPtrSet<SymbolRef, 8> WhitelistedSymbols;
   for (ArrayRef<const MemRegion *>::iterator I = ExplicitRegions.begin(),
        E = ExplicitRegions.end(); I != E; ++I) {
     if (const SymbolicRegion *SR = (*I)->StripCasts()->getAs<SymbolicRegion>())
@@ -3790,7 +3790,7 @@ RetainCountChecker::handleAutoreleaseCounts(ProgramStateRef state,
   ExplodedNode *N = Ctx.generateSink(state, Pred, Tag);
   if (N) {
     SmallString<128> sbuf;
-    llvm::raw_svector_ostream os(sbuf);
+    llvm37::raw_svector_ostream os(sbuf);
     os << "Object was autoreleased ";
     if (V.getAutoreleaseCount() > 1)
       os << V.getAutoreleaseCount() << " times but the object ";
@@ -3905,7 +3905,7 @@ RetainCountChecker::getDeadSymbolTag(SymbolRef sym) const {
   const CheckerProgramPointTag *&tag = DeadSymbolTags[sym];
   if (!tag) {
     SmallString<64> buf;
-    llvm::raw_svector_ostream out(buf);
+    llvm37::raw_svector_ostream out(buf);
     out << "Dead Symbol : ";
     sym->dumpToStream(out);
     tag = new CheckerProgramPointTag(this, out.str());

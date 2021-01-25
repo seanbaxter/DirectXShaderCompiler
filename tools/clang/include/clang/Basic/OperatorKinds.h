@@ -12,8 +12,8 @@
 ///
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_BASIC_OPERATORKINDS_H
-#define LLVM_CLANG_BASIC_OPERATORKINDS_H
+#ifndef LLVM37_CLANG_BASIC_OPERATORKINDS_H
+#define LLVM37_CLANG_BASIC_OPERATORKINDS_H
 
 namespace clang {
 

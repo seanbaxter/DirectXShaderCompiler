@@ -39,7 +39,7 @@ LCXXFLAGS += -O2 -Wall
 LLCFLAGS =
 TESTRUNR = @echo Running test: $<; \
              PATH="$(LLVMTOOLCURRENT):$(PATH)" \
-                  $(LLVM_SRC_ROOT)/test/TestRunner.sh
+                  $(LLVM37_SRC_ROOT)/test/TestRunner.sh
 
 LLCLIBS := $(LLCLIBS) -lm
 

@@ -17,9 +17,9 @@
 //===----------------------------------------------------------------------===//
 
 #include "WindowsSupport.h"
-#include "llvm/Support/ThreadLocal.h"
+#include "llvm37/Support/ThreadLocal.h"
 
-namespace llvm {
+namespace llvm37 {
 using namespace sys;
 
 ThreadLocalImpl::ThreadLocalImpl() : data() {

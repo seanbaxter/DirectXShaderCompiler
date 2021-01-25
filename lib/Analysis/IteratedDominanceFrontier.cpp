@@ -11,12 +11,12 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Analysis/IteratedDominanceFrontier.h"
-#include "llvm/IR/CFG.h"
-#include "llvm/IR/Dominators.h"
+#include "llvm37/Analysis/IteratedDominanceFrontier.h"
+#include "llvm37/IR/CFG.h"
+#include "llvm37/IR/Dominators.h"
 #include <queue>
 
-using namespace llvm;
+using namespace llvm37;
 
 void IDFCalculator::calculate(SmallVectorImpl<BasicBlock *> &PHIBlocks) {
   // If we haven't computed dominator tree levels, do so now.

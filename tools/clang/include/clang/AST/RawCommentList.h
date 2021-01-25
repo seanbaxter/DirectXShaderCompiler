@@ -7,12 +7,12 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_AST_RAWCOMMENTLIST_H
-#define LLVM_CLANG_AST_RAWCOMMENTLIST_H
+#ifndef LLVM37_CLANG_AST_RAWCOMMENTLIST_H
+#define LLVM37_CLANG_AST_RAWCOMMENTLIST_H
 
 #include "clang/Basic/CommentOptions.h"
 #include "clang/Basic/SourceManager.h"
-#include "llvm/ADT/ArrayRef.h"
+#include "llvm37/ADT/ArrayRef.h"
 
 namespace clang {
 
@@ -43,20 +43,20 @@ public:
   RawComment(const SourceManager &SourceMgr, SourceRange SR,
              bool Merged, bool ParseAllComments);
 
-  CommentKind getKind() const LLVM_READONLY {
+  CommentKind getKind() const LLVM37_READONLY {
     return (CommentKind) Kind;
   }
 
-  bool isInvalid() const LLVM_READONLY {
+  bool isInvalid() const LLVM37_READONLY {
     return Kind == RCK_Invalid;
   }
 
-  bool isMerged() const LLVM_READONLY {
+  bool isMerged() const LLVM37_READONLY {
     return Kind == RCK_Merged;
   }
 
   /// Is this comment attached to any declaration?
-  bool isAttached() const LLVM_READONLY {
+  bool isAttached() const LLVM37_READONLY {
     return IsAttached;
   }
 
@@ -69,7 +69,7 @@ public:
   /// \code //!< stuff \endcode
   /// \code /**< stuff */ \endcode
   /// \code /*!< stuff */ \endcode
-  bool isTrailingComment() const LLVM_READONLY {
+  bool isTrailingComment() const LLVM37_READONLY {
     assert(isDocumentation());
     return IsTrailingComment;
   }
@@ -77,23 +77,23 @@ public:
   /// Returns true if it is a probable typo:
   /// \code //< stuff \endcode
   /// \code /*< stuff */ \endcode
-  bool isAlmostTrailingComment() const LLVM_READONLY {
+  bool isAlmostTrailingComment() const LLVM37_READONLY {
     return IsAlmostTrailingComment;
   }
 
   /// Returns true if this comment is not a documentation comment.
-  bool isOrdinary() const LLVM_READONLY {
+  bool isOrdinary() const LLVM37_READONLY {
     return ((Kind == RCK_OrdinaryBCPL) || (Kind == RCK_OrdinaryC)) &&
         !ParseAllComments;
   }
 
   /// Returns true if this comment any kind of a documentation comment.
-  bool isDocumentation() const LLVM_READONLY {
+  bool isDocumentation() const LLVM37_READONLY {
     return !isInvalid() && !isOrdinary();
   }
 
   /// Returns whether we are parsing all comments.
-  bool isParseAllComments() const LLVM_READONLY {
+  bool isParseAllComments() const LLVM37_READONLY {
     return ParseAllComments;
   }
 
@@ -107,9 +107,9 @@ public:
     return RawText;
   }
 
-  SourceRange getSourceRange() const LLVM_READONLY { return Range; }
-  SourceLocation getLocStart() const LLVM_READONLY { return Range.getBegin(); }
-  SourceLocation getLocEnd() const LLVM_READONLY { return Range.getEnd(); }
+  SourceRange getSourceRange() const LLVM37_READONLY { return Range; }
+  SourceLocation getLocStart() const LLVM37_READONLY { return Range.getBegin(); }
+  SourceLocation getLocEnd() const LLVM37_READONLY { return Range.getEnd(); }
 
   const char *getBriefText(const ASTContext &Context) const {
     if (BriefTextValid)
@@ -183,7 +183,7 @@ class RawCommentList {
 public:
   RawCommentList(SourceManager &SourceMgr) : SourceMgr(SourceMgr) {}
 
-  void addComment(const RawComment &RC, llvm::BumpPtrAllocator &Allocator);
+  void addComment(const RawComment &RC, llvm37::BumpPtrAllocator &Allocator);
 
   ArrayRef<RawComment *> getComments() const {
     return Comments;

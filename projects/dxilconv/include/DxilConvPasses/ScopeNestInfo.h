@@ -30,18 +30,18 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #pragma once
-#include "llvm/Pass.h"
+#include "llvm37/Pass.h"
 #include "DxilConvPasses/ScopeNest.h"
 
 
-namespace llvm {
+namespace llvm37 {
 class Function;
 class PassRegistry;
 class FunctionPass;
 
 
-llvm::FunctionPass *createScopeNestInfoWrapperPass();
-void initializeScopeNestInfoWrapperPassPass(llvm::PassRegistry&);
+llvm37::FunctionPass *createScopeNestInfoWrapperPass();
+void initializeScopeNestInfoWrapperPassPass(llvm37::PassRegistry&);
 
 // Class to hold the results of the scope nest analysis.
 //

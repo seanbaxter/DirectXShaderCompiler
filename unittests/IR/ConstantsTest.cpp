@@ -7,17 +7,17 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/AsmParser/Parser.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/DerivedTypes.h"
-#include "llvm/IR/InstrTypes.h"
-#include "llvm/IR/Instruction.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Module.h"
-#include "llvm/Support/SourceMgr.h"
+#include "llvm37/AsmParser/Parser.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/DerivedTypes.h"
+#include "llvm37/IR/InstrTypes.h"
+#include "llvm37/IR/Instruction.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/Support/SourceMgr.h"
 #include "gtest/gtest.h"
 
-namespace llvm {
+namespace llvm37 {
 namespace {
 
 TEST(ConstantsTest, Integer_i1) {
@@ -383,4 +383,4 @@ TEST(ConstantsTest, AliasCAPI) {
 }
 
 }  // end anonymous namespace
-}  // end namespace llvm
+}  // end namespace llvm37

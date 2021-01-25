@@ -18,8 +18,8 @@
 #include "dxc/Support/FileIOHelper.h"
 #include "dxc/Support/Global.h"
 #include "dxc/Support/microcom.h"
-#include "llvm/Support/FileSystem.h"
-#include "llvm/Support/MSFileSystem.h"
+#include "llvm37/Support/FileSystem.h"
+#include "llvm37/Support/MSFileSystem.h"
 
 #include "DxcPixBase.h"
 #include "DxcPixDxilDebugInfo.h"
@@ -32,14 +32,14 @@
 #include "DxcPixDxilDebugInfo.h"
 
 #include "dxc/Support/Global.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/IR/DebugInfo.h"
-#include "llvm/IR/DebugInfoMetadata.h"
-#include "llvm/IR/Dominators.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/IR/Intrinsics.h"
-#include "llvm/IR/Module.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/IR/DebugInfo.h"
+#include "llvm37/IR/DebugInfoMetadata.h"
+#include "llvm37/IR/Dominators.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/IR/Intrinsics.h"
+#include "llvm37/IR/Module.h"
 
 #include "DxilDiaSession.h"
 
@@ -52,10 +52,10 @@ private:
   DXC_MICROCOM_TM_REF_FIELDS();
 
   dxil_dia::Session *m_pSession;
-  llvm::NamedMDNode *m_contents;
-  llvm::NamedMDNode *m_defines;
-  llvm::NamedMDNode *m_mainFileName;
-  llvm::NamedMDNode *m_arguments;
+  llvm37::NamedMDNode *m_contents;
+  llvm37::NamedMDNode *m_defines;
+  llvm37::NamedMDNode *m_mainFileName;
+  llvm37::NamedMDNode *m_arguments;
 
 public:
   CompilationInfo(IMalloc *pMalloc, dxil_dia::Session *pSession);
@@ -106,10 +106,10 @@ CompilationInfo::CompilationInfo(IMalloc *pMalloc, dxil_dia::Session *pSession)
     m_arguments = Module->getNamedMetadata("llvm.dbg.args");
 }
 
-static void MDStringOperandToBSTR(llvm::MDOperand const &mdOperand,
+static void MDStringOperandToBSTR(llvm37::MDOperand const &mdOperand,
                                   BSTR *pBStr) {
-  llvm::StringRef MetadataAsStringRef =
-      llvm::dyn_cast<llvm::MDString>(mdOperand)->getString();
+  llvm37::StringRef MetadataAsStringRef =
+      llvm37::dyn_cast<llvm37::MDString>(mdOperand)->getString();
   std::string StringWithTerminator(MetadataAsStringRef.begin(),
                                    MetadataAsStringRef.size());
   CA2W cv(StringWithTerminator.c_str(), CP_UTF8);
@@ -130,8 +130,8 @@ CompilationInfo::GetSourceFile(_In_ DWORD SourceFileOrdinal,
     return E_INVALIDARG;
   }
 
-  llvm::MDTuple *FileTuple =
-      llvm::cast<llvm::MDTuple>(m_contents->getOperand(SourceFileOrdinal));
+  llvm37::MDTuple *FileTuple =
+      llvm37::cast<llvm37::MDTuple>(m_contents->getOperand(SourceFileOrdinal));
 
   MDStringOperandToBSTR(FileTuple->getOperand(0), pSourceName);
   MDStringOperandToBSTR(FileTuple->getOperand(1), pSourceContents);
@@ -140,7 +140,7 @@ CompilationInfo::GetSourceFile(_In_ DWORD SourceFileOrdinal,
 }
 
 STDMETHODIMP CompilationInfo::GetArguments(_Outptr_result_z_ BSTR *pArguments) {
-  llvm::MDNode *argsNode = m_arguments->getOperand(0);
+  llvm37::MDNode *argsNode = m_arguments->getOperand(0);
 
   // Don't return any arguments that denote things that are returned via
   // other methods in this class (and that PIX isn't expecting to see
@@ -151,9 +151,9 @@ STDMETHODIMP CompilationInfo::GetArguments(_Outptr_result_z_ BSTR *pArguments) {
 
   // Concatenate arguments into one string
   CComBSTR pBSTR;
-  for (llvm::MDNode::op_iterator it = argsNode->op_begin();
+  for (llvm37::MDNode::op_iterator it = argsNode->op_begin();
        it != argsNode->op_end(); ++it) {
-    llvm::StringRef strRef = llvm::dyn_cast<llvm::MDString>(*it)->getString();
+    llvm37::StringRef strRef = llvm37::dyn_cast<llvm37::MDString>(*it)->getString();
 
     bool skip = false;
     bool skipTwice = false;
@@ -187,12 +187,12 @@ STDMETHODIMP CompilationInfo::GetArguments(_Outptr_result_z_ BSTR *pArguments) {
 
 STDMETHODIMP CompilationInfo::GetMacroDefinitions(
     _Outptr_result_z_ BSTR *pMacroDefinitions) {
-  llvm::MDNode *definesNode = m_defines->getOperand(0);
+  llvm37::MDNode *definesNode = m_defines->getOperand(0);
   // Concatenate definitions into one string separated by spaces
   CComBSTR pBSTR;
-  for (llvm::MDNode::op_iterator it = definesNode->op_begin();
+  for (llvm37::MDNode::op_iterator it = definesNode->op_begin();
        it != definesNode->op_end(); ++it) {
-    llvm::StringRef strRef = llvm::dyn_cast<llvm::MDString>(*it)->getString();
+    llvm37::StringRef strRef = llvm37::dyn_cast<llvm37::MDString>(*it)->getString();
     std::string str(strRef.begin(), strRef.size());
 
     // PIX is expecting quoted strings as the definitions. So if no quotes were
@@ -222,7 +222,7 @@ STDMETHODIMP CompilationInfo::GetMacroDefinitions(
 
 STDMETHODIMP
 CompilationInfo::GetEntryPointFile(_Outptr_result_z_ BSTR *pEntryPointFile) {
-  llvm::StringRef strRef = llvm::dyn_cast<llvm::MDString>(
+  llvm37::StringRef strRef = llvm37::dyn_cast<llvm37::MDString>(
                                m_mainFileName->getOperand(0)->getOperand(0))
                                ->getString();
   std::string str(strRef.begin(),

@@ -15,8 +15,8 @@
 #include "clang/Lex/PreprocessingRecord.h"
 #include "clang/Lex/MacroInfo.h"
 #include "clang/Lex/Token.h"
-#include "llvm/Support/Capacity.h"
-#include "llvm/Support/ErrorHandling.h"
+#include "llvm37/Support/Capacity.h"
+#include "llvm37/Support/ErrorHandling.h"
 //                                                                           //
 ///////////////////////////////////////////////////////////////////////////////
 using namespace clang;
@@ -34,7 +34,7 @@ InclusionDirective::InclusionDirective(PreprocessingRecord &PPRec,
     InQuotes(InQuotes), Kind(Kind), ImportedModule(ImportedModule), File(File)
 { 
   char *Memory 
-    = (char*)PPRec.Allocate(FileName.size() + 1, llvm::alignOf<char>());
+    = (char*)PPRec.Allocate(FileName.size() + 1, llvm37::alignOf<char>());
   memcpy(Memory, FileName.data(), FileName.size());
   Memory[FileName.size()] = 0;
   this->FileName = StringRef(Memory, FileName.size());
@@ -47,13 +47,13 @@ PreprocessingRecord::PreprocessingRecord(SourceManager &SM)
 
 /// \brief Returns a pair of [Begin, End) iterators of preprocessed entities
 /// that source range \p Range encompasses.
-llvm::iterator_range<PreprocessingRecord::iterator>
+llvm37::iterator_range<PreprocessingRecord::iterator>
 PreprocessingRecord::getPreprocessedEntitiesInRange(SourceRange Range) {
   if (Range.isInvalid())
-    return llvm::make_range(iterator(), iterator());
+    return llvm37::make_range(iterator(), iterator());
 
   if (CachedRangeQuery.Range == Range) {
-    return llvm::make_range(iterator(this, CachedRangeQuery.Result.first),
+    return llvm37::make_range(iterator(this, CachedRangeQuery.Result.first),
                             iterator(this, CachedRangeQuery.Result.second));
   }
 
@@ -62,7 +62,7 @@ PreprocessingRecord::getPreprocessedEntitiesInRange(SourceRange Range) {
   CachedRangeQuery.Range = Range;
   CachedRangeQuery.Result = Res;
 
-  return llvm::make_range(iterator(this, Res.first),
+  return llvm37::make_range(iterator(this, Res.first),
                           iterator(this, Res.second));
 }
 
@@ -360,7 +360,7 @@ PreprocessingRecord::getLoadedPreprocessedEntity(unsigned Index) {
 
 MacroDefinitionRecord *
 PreprocessingRecord::findMacroDefinition(const MacroInfo *MI) {
-  llvm::DenseMap<const MacroInfo *, MacroDefinitionRecord *>::iterator Pos =
+  llvm37::DenseMap<const MacroInfo *, MacroDefinitionRecord *>::iterator Pos =
       MacroDefinitions.find(MI);
   if (Pos == MacroDefinitions.end())
     return nullptr;
@@ -484,7 +484,7 @@ void PreprocessingRecord::InclusionDirective(
 
 size_t PreprocessingRecord::getTotalMemory() const {
   return BumpAlloc.getTotalMemory()
-    + llvm::capacity_in_bytes(MacroDefinitions)
-    + llvm::capacity_in_bytes(PreprocessedEntities)
-    + llvm::capacity_in_bytes(LoadedPreprocessedEntities);
+    + llvm37::capacity_in_bytes(MacroDefinitions)
+    + llvm37::capacity_in_bytes(PreprocessedEntities)
+    + llvm37::capacity_in_bytes(LoadedPreprocessedEntities);
 }

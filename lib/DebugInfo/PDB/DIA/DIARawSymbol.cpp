@@ -7,15 +7,15 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/DebugInfo/PDB/DIA/DIAEnumSymbols.h"
-#include "llvm/DebugInfo/PDB/DIA/DIARawSymbol.h"
-#include "llvm/DebugInfo/PDB/DIA/DIASession.h"
-#include "llvm/DebugInfo/PDB/PDBExtras.h"
-#include "llvm/Support/ConvertUTF.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/DebugInfo/PDB/DIA/DIAEnumSymbols.h"
+#include "llvm37/DebugInfo/PDB/DIA/DIARawSymbol.h"
+#include "llvm37/DebugInfo/PDB/DIA/DIASession.h"
+#include "llvm37/DebugInfo/PDB/PDBExtras.h"
+#include "llvm37/Support/ConvertUTF.h"
+#include "llvm37/Support/raw_ostream.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 namespace {
 Variant VariantFromVARIANT(const VARIANT &V) {
@@ -100,9 +100,9 @@ PrivateGetDIAValue(IDiaSymbol *Symbol,
     return std::string();
 
   const char *SrcBytes = reinterpret_cast<const char *>(Result16.m_str);
-  llvm::ArrayRef<char> SrcByteArray(SrcBytes, Result16.ByteLength());
+  llvm37::ArrayRef<char> SrcByteArray(SrcBytes, Result16.ByteLength());
   std::string Result8;
-  if (!llvm::convertUTF16ToUTF8String(SrcByteArray, Result8))
+  if (!llvm37::convertUTF16ToUTF8String(SrcByteArray, Result8))
     return std::string();
   return Result8;
 }
@@ -122,7 +122,7 @@ PrivateGetDIAValue(IDiaSymbol *Symbol,
 }
 
 template <typename ArgType>
-void DumpDIAValue(llvm::raw_ostream &OS, int Indent, StringRef Name,
+void DumpDIAValue(llvm37::raw_ostream &OS, int Indent, StringRef Name,
                   IDiaSymbol *Symbol,
                   HRESULT (__stdcall IDiaSymbol::*Method)(ArgType *)) {
   ArgType Value;
@@ -133,7 +133,7 @@ void DumpDIAValue(llvm::raw_ostream &OS, int Indent, StringRef Name,
   }
 }
 
-void DumpDIAValue(llvm::raw_ostream &OS, int Indent, StringRef Name,
+void DumpDIAValue(llvm37::raw_ostream &OS, int Indent, StringRef Name,
                   IDiaSymbol *Symbol,
                   HRESULT (__stdcall IDiaSymbol::*Method)(BSTR *)) {
   BSTR Value = nullptr;
@@ -142,7 +142,7 @@ void DumpDIAValue(llvm::raw_ostream &OS, int Indent, StringRef Name,
   const char *Bytes = reinterpret_cast<const char *>(Value);
   ArrayRef<char> ByteArray(Bytes, ::SysStringByteLen(Value));
   std::string Result;
-  if (llvm::convertUTF16ToUTF8String(ByteArray, Result)) {
+  if (llvm37::convertUTF16ToUTF8String(ByteArray, Result)) {
     OS << "\n";
     OS.indent(Indent);
     OS << Name << ": " << Result;
@@ -150,7 +150,7 @@ void DumpDIAValue(llvm::raw_ostream &OS, int Indent, StringRef Name,
   ::SysFreeString(Value);
 }
 
-void DumpDIAValue(llvm::raw_ostream &OS, int Indent, StringRef Name,
+void DumpDIAValue(llvm37::raw_ostream &OS, int Indent, StringRef Name,
                   IDiaSymbol *Symbol,
                   HRESULT (__stdcall IDiaSymbol::*Method)(VARIANT *)) {
   VARIANT Value;
@@ -164,7 +164,7 @@ void DumpDIAValue(llvm::raw_ostream &OS, int Indent, StringRef Name,
 }
 }
 
-namespace llvm {
+namespace llvm37 {
 raw_ostream &operator<<(raw_ostream &OS, const GUID &Guid) {
   const PDB_UniqueId *Id = reinterpret_cast<const PDB_UniqueId *>(&Guid);
   OS << *Id;
@@ -356,14 +356,14 @@ DIARawSymbol::findChildren(PDB_SymType Type) const {
   if (S_OK != Symbol->findChildrenEx(EnumVal, nullptr, nsNone, &DiaEnumerator))
     return nullptr;
 
-  return llvm::make_unique<DIAEnumSymbols>(Session, DiaEnumerator);
+  return llvm37::make_unique<DIAEnumSymbols>(Session, DiaEnumerator);
 }
 
 std::unique_ptr<IPDBEnumSymbols>
 DIARawSymbol::findChildren(PDB_SymType Type, StringRef Name,
                            PDB_NameSearchFlags Flags) const {
-  llvm::SmallVector<UTF16, 32> Name16;
-  llvm::convertUTF8ToUTF16String(Name, Name16);
+  llvm37::SmallVector<UTF16, 32> Name16;
+  llvm37::convertUTF8ToUTF16String(Name, Name16);
 
   enum SymTagEnum EnumVal = static_cast<enum SymTagEnum>(Type);
   DWORD CompareFlags = static_cast<DWORD>(Flags);
@@ -374,14 +374,14 @@ DIARawSymbol::findChildren(PDB_SymType Type, StringRef Name,
       Symbol->findChildrenEx(EnumVal, Name16Str, CompareFlags, &DiaEnumerator))
     return nullptr;
 
-  return llvm::make_unique<DIAEnumSymbols>(Session, DiaEnumerator);
+  return llvm37::make_unique<DIAEnumSymbols>(Session, DiaEnumerator);
 }
 
 std::unique_ptr<IPDBEnumSymbols>
 DIARawSymbol::findChildrenByRVA(PDB_SymType Type, StringRef Name,
                                 PDB_NameSearchFlags Flags, uint32_t RVA) const {
-  llvm::SmallVector<UTF16, 32> Name16;
-  llvm::convertUTF8ToUTF16String(Name, Name16);
+  llvm37::SmallVector<UTF16, 32> Name16;
+  llvm37::convertUTF8ToUTF16String(Name, Name16);
 
   enum SymTagEnum EnumVal = static_cast<enum SymTagEnum>(Type);
   DWORD CompareFlags = static_cast<DWORD>(Flags);
@@ -393,7 +393,7 @@ DIARawSymbol::findChildrenByRVA(PDB_SymType Type, StringRef Name,
                                   &DiaEnumerator))
     return nullptr;
 
-  return llvm::make_unique<DIAEnumSymbols>(Session, DiaEnumerator);
+  return llvm37::make_unique<DIAEnumSymbols>(Session, DiaEnumerator);
 }
 
 std::unique_ptr<IPDBEnumSymbols>
@@ -402,10 +402,10 @@ DIARawSymbol::findInlineFramesByRVA(uint32_t RVA) const {
   if (S_OK != Symbol->findInlineFramesByRVA(RVA, &DiaEnumerator))
     return nullptr;
 
-  return llvm::make_unique<DIAEnumSymbols>(Session, DiaEnumerator);
+  return llvm37::make_unique<DIAEnumSymbols>(Session, DiaEnumerator);
 }
 
-void DIARawSymbol::getDataBytes(llvm::SmallVector<uint8_t, 32> &bytes) const {
+void DIARawSymbol::getDataBytes(llvm37::SmallVector<uint8_t, 32> &bytes) const {
   bytes.clear();
 
   DWORD DataSize = 0;

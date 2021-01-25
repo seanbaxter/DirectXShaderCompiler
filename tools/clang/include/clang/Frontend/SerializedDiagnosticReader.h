@@ -7,13 +7,13 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_FRONTEND_SERIALIZED_DIAGNOSTIC_READER_H_
-#define LLVM_CLANG_FRONTEND_SERIALIZED_DIAGNOSTIC_READER_H_
+#ifndef LLVM37_CLANG_FRONTEND_SERIALIZED_DIAGNOSTIC_READER_H_
+#define LLVM37_CLANG_FRONTEND_SERIALIZED_DIAGNOSTIC_READER_H_
 
 #include "clang/Basic/LLVM.h"
-#include "llvm/ADT/ArrayRef.h"
-#include "llvm/Bitcode/BitstreamReader.h"
-#include "llvm/Support/ErrorOr.h"
+#include "llvm37/ADT/ArrayRef.h"
+#include "llvm37/Bitcode/BitstreamReader.h"
+#include "llvm37/Support/ErrorOr.h"
 
 namespace clang {
 namespace serialized_diags {
@@ -68,14 +68,14 @@ private:
   enum class Cursor;
 
   /// \brief Read to the next record or block to process.
-  llvm::ErrorOr<Cursor> skipUntilRecordOrBlock(llvm::BitstreamCursor &Stream,
+  llvm37::ErrorOr<Cursor> skipUntilRecordOrBlock(llvm37::BitstreamCursor &Stream,
                                                unsigned &BlockOrRecordId);
 
   /// \brief Read a metadata block from \c Stream.
-  std::error_code readMetaBlock(llvm::BitstreamCursor &Stream);
+  std::error_code readMetaBlock(llvm37::BitstreamCursor &Stream);
 
   /// \brief Read a diagnostic block from \c Stream.
-  std::error_code readDiagnosticBlock(llvm::BitstreamCursor &Stream);
+  std::error_code readDiagnosticBlock(llvm37::BitstreamCursor &Stream);
 
 protected:
   /// \brief Visit the start of a diagnostic block.

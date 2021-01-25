@@ -11,18 +11,18 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/CodeGen/MachineBlockFrequencyInfo.h"
-#include "llvm/Analysis/BlockFrequencyInfoImpl.h"
-#include "llvm/CodeGen/MachineBranchProbabilityInfo.h"
-#include "llvm/CodeGen/MachineFunction.h"
-#include "llvm/CodeGen/MachineLoopInfo.h"
-#include "llvm/CodeGen/Passes.h"
-#include "llvm/InitializePasses.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/GraphWriter.h"
+#include "llvm37/CodeGen/MachineBlockFrequencyInfo.h"
+#include "llvm37/Analysis/BlockFrequencyInfoImpl.h"
+#include "llvm37/CodeGen/MachineBranchProbabilityInfo.h"
+#include "llvm37/CodeGen/MachineFunction.h"
+#include "llvm37/CodeGen/MachineLoopInfo.h"
+#include "llvm37/CodeGen/Passes.h"
+#include "llvm37/InitializePasses.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/GraphWriter.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "block-freq"
 
@@ -47,7 +47,7 @@ ViewMachineBlockFreqPropagationDAG("view-machine-block-freq-propagation-dags",
                        "integer fractional block frequency representation."),
             clEnumValEnd));
 
-namespace llvm {
+namespace llvm37 {
 
 template <>
 struct GraphTraits<MachineBlockFrequencyInfo *> {
@@ -110,7 +110,7 @@ struct DOTGraphTraits<MachineBlockFrequencyInfo*> :
 };
 
 
-} // end namespace llvm
+} // end namespace llvm37
 #endif
 
 INITIALIZE_PASS_BEGIN(MachineBlockFrequencyInfo, "machine-block-freq",

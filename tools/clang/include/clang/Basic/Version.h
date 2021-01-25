@@ -13,11 +13,11 @@
 ///
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_BASIC_VERSION_H
-#define LLVM_CLANG_BASIC_VERSION_H
+#ifndef LLVM37_CLANG_BASIC_VERSION_H
+#define LLVM37_CLANG_BASIC_VERSION_H
 
 #include "clang/Basic/Version.inc"
-#include "llvm/ADT/StringRef.h"
+#include "llvm37/ADT/StringRef.h"
 
 /// \brief Helper macro for CLANG_VERSION_STRING.
 #define CLANG_MAKE_VERSION_STRING2(X) #X
@@ -71,7 +71,7 @@ namespace clang {
   std::string getClangFullVersion();
 
   /// \brief Like getClangFullVersion(), but with a custom tool name.
-  std::string getClangToolFullVersion(llvm::StringRef ToolName);
+  std::string getClangToolFullVersion(llvm37::StringRef ToolName);
 
   /// \brief Retrieves a string representing the complete clang version suitable
   /// for use in the CPP __VERSION__ macro, which includes the clang version
@@ -88,4 +88,4 @@ namespace clang {
   // HLSL Change Ends
 }
 
-#endif // LLVM_CLANG_BASIC_VERSION_H
+#endif // LLVM37_CLANG_BASIC_VERSION_H

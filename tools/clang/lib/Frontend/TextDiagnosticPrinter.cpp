@@ -17,10 +17,10 @@
 #include "clang/Basic/SourceManager.h"
 #include "clang/Frontend/TextDiagnostic.h"
 #include "clang/Lex/Lexer.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/MemoryBuffer.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/MemoryBuffer.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <algorithm>
 using namespace clang;
 
@@ -119,7 +119,7 @@ void TextDiagnosticPrinter::HandleDiagnostic(DiagnosticsEngine::Level Level,
   SmallString<100> OutStr;
   Info.FormatDiagnostic(OutStr);
 
-  llvm::raw_svector_ostream DiagMessageStream(OutStr);
+  llvm37::raw_svector_ostream DiagMessageStream(OutStr);
   printDiagnosticOptions(DiagMessageStream, Level, Info, *DiagOpts);
 
   // Keeps track of the starting position of the location

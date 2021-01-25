@@ -16,13 +16,13 @@
 #include "dxc/DXIL/DxilModule.h"
 #include "dxc/HLSL/DxilGenerationPass.h"
 
-#include "llvm/IR/IRBuilder.h"
-#include "llvm/IR/Module.h"
-#include "llvm/Pass.h"
+#include "llvm37/IR/IRBuilder.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/Pass.h"
 #include <unordered_set>
 #include <vector>
 
-using namespace llvm;
+using namespace llvm37;
 using namespace hlsl;
 using namespace hlsl::HLMatrixLower;
 
@@ -245,6 +245,6 @@ void MatrixBitcastLowerPass::lowerMatrix(Instruction *M, Value *A) {
 }
 
 char MatrixBitcastLowerPass::ID = 0;
-FunctionPass *llvm::createMatrixBitcastLowerPass() { return new MatrixBitcastLowerPass(); }
+FunctionPass *llvm37::createMatrixBitcastLowerPass() { return new MatrixBitcastLowerPass(); }
 
 INITIALIZE_PASS(MatrixBitcastLowerPass, "matrixbitcastlower", "Matrix Bitcast lower", false, false)

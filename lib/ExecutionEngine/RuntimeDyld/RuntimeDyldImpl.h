@@ -11,31 +11,31 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_LIB_EXECUTIONENGINE_RUNTIMEDYLD_RUNTIMEDYLDIMPL_H
-#define LLVM_LIB_EXECUTIONENGINE_RUNTIMEDYLD_RUNTIMEDYLDIMPL_H
+#ifndef LLVM37_LIB_EXECUTIONENGINE_RUNTIMEDYLD_RUNTIMEDYLDIMPL_H
+#define LLVM37_LIB_EXECUTIONENGINE_RUNTIMEDYLD_RUNTIMEDYLDIMPL_H
 
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/ADT/StringMap.h"
-#include "llvm/ADT/Triple.h"
-#include "llvm/ExecutionEngine/RTDyldMemoryManager.h"
-#include "llvm/ExecutionEngine/RuntimeDyld.h"
-#include "llvm/ExecutionEngine/RuntimeDyldChecker.h"
-#include "llvm/Object/ObjectFile.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/Format.h"
-#include "llvm/Support/Host.h"
-#include "llvm/Support/Mutex.h"
-#include "llvm/Support/SwapByteOrder.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/ADT/StringMap.h"
+#include "llvm37/ADT/Triple.h"
+#include "llvm37/ExecutionEngine/RTDyldMemoryManager.h"
+#include "llvm37/ExecutionEngine/RuntimeDyld.h"
+#include "llvm37/ExecutionEngine/RuntimeDyldChecker.h"
+#include "llvm37/Object/ObjectFile.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/Format.h"
+#include "llvm37/Support/Host.h"
+#include "llvm37/Support/Mutex.h"
+#include "llvm37/Support/SwapByteOrder.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <map>
 #include <system_error>
 
-using namespace llvm;
-using namespace llvm::object;
+using namespace llvm37;
+using namespace llvm37::object;
 
-namespace llvm {
+namespace llvm37 {
 
   // Helper for extensive error checking in debug builds.
 inline std::error_code Check(std::error_code Err) {
@@ -447,6 +447,6 @@ public:
                             ObjSectionToIDMap &SectionMap) {}
 };
 
-} // end namespace llvm
+} // end namespace llvm37
 
 #endif

@@ -9,14 +9,14 @@
 //                                                                           //
 ///////////////////////////////////////////////////////////////////////////////
 
-#include "llvm/IR/BasicBlock.h"
-#include "llvm/IR/Dominators.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/IRBuilder.h"
-#include "llvm/IR/Intrinsics.h"
-#include "llvm/IR/Module.h"
-#include "llvm/Support/GenericDomTree.h"
-#include "llvm/Support/raw_os_ostream.h"
+#include "llvm37/IR/BasicBlock.h"
+#include "llvm37/IR/Dominators.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/IRBuilder.h"
+#include "llvm37/IR/Intrinsics.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/Support/GenericDomTree.h"
+#include "llvm37/Support/raw_os_ostream.h"
 
 #include "dxc/DXIL/DxilConstants.h"
 #include "dxc/HLSL/DxilGenerationPass.h"
@@ -26,7 +26,7 @@
 #include "dxc/HlslIntrinsicOp.h"
 #include "dxc/HLSL/DxilConvergentName.h"
 
-using namespace llvm;
+using namespace llvm37;
 using namespace hlsl;
 
 bool hlsl::IsConvergentMarker(Value *V) {
@@ -209,7 +209,7 @@ Value *DxilConvergentMark::FindConvergentOperand(Instruction *I) {
 INITIALIZE_PASS(DxilConvergentMark, "hlsl-dxil-convergent-mark",
                 "Mark convergent", false, false)
 
-ModulePass *llvm::createDxilConvergentMarkPass() {
+ModulePass *llvm37::createDxilConvergentMarkPass() {
   return new DxilConvergentMark();
 }
 
@@ -261,6 +261,6 @@ void DxilConvergentClear::ClearConvergent(Function *F) {
 INITIALIZE_PASS(DxilConvergentClear, "hlsl-dxil-convergent-clear",
                 "Clear convergent before dxil emit", false, false)
 
-ModulePass *llvm::createDxilConvergentClearPass() {
+ModulePass *llvm37::createDxilConvergentClearPass() {
   return new DxilConvergentClear();
 }

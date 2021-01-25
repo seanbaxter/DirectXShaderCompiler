@@ -16,22 +16,22 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/IR/DataLayout.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/Triple.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/DerivedTypes.h"
-#include "llvm/IR/GetElementPtrTypeIterator.h"
-#include "llvm/IR/Module.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/ManagedStatic.h"
-#include "llvm/Support/MathExtras.h"
-#include "llvm/Support/Mutex.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/Triple.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/DerivedTypes.h"
+#include "llvm37/IR/GetElementPtrTypeIterator.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/ManagedStatic.h"
+#include "llvm37/Support/MathExtras.h"
+#include "llvm37/Support/Mutex.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <algorithm>
 #include <cstdlib>
-using namespace llvm;
+using namespace llvm37;
 
 //===----------------------------------------------------------------------===//
 // Support for StructLayout

@@ -12,19 +12,19 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_ANALYSIS_CFG_H
-#define LLVM_CLANG_ANALYSIS_CFG_H
+#ifndef LLVM37_CLANG_ANALYSIS_CFG_H
+#define LLVM37_CLANG_ANALYSIS_CFG_H
 
 #include "clang/AST/Stmt.h"
 #include "clang/Analysis/Support/BumpVector.h"
 #include "clang/Basic/SourceLocation.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/GraphTraits.h"
-#include "llvm/ADT/Optional.h"
-#include "llvm/ADT/PointerIntPair.h"
-#include "llvm/Support/Allocator.h"
-#include "llvm/Support/Casting.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/GraphTraits.h"
+#include "llvm37/ADT/Optional.h"
+#include "llvm37/ADT/PointerIntPair.h"
+#include "llvm37/Support/Allocator.h"
+#include "llvm37/Support/Casting.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <bitset>
 #include <cassert>
 #include <iterator>
@@ -69,8 +69,8 @@ public:
 
 protected:
   // The int bits are used to mark the kind.
-  llvm::PointerIntPair<void *, 2> Data1;
-  llvm::PointerIntPair<void *, 2> Data2;
+  llvm37::PointerIntPair<void *, 2> Data1;
+  llvm37::PointerIntPair<void *, 2> Data2;
 
   CFGElement(Kind kind, const void *Ptr1, const void *Ptr2 = nullptr)
     : Data1(const_cast<void*>(Ptr1), ((unsigned) kind) & 0x3),
@@ -302,7 +302,7 @@ private:
 /// statement is the same statement that branches control flow in evaluation
 /// of matching full expression.
 class CFGTerminator {
-  llvm::PointerIntPair<Stmt *, 1> Data;
+  llvm37::PointerIntPair<Stmt *, 1> Data;
 public:
   CFGTerminator() {}
   CFGTerminator(Stmt *S, bool TemporaryDtorsBranch = false)
@@ -427,7 +427,7 @@ public:
     };
 
     CFGBlock *ReachableBlock;
-    llvm::PointerIntPair<CFGBlock*, 2> UnreachableBlock;
+    llvm37::PointerIntPair<CFGBlock*, 2> UnreachableBlock;
 
   public:
     /// Construct an AdjacentBlock with a possibly unreachable block.
@@ -728,7 +728,7 @@ public:
   class BuildOptions {
     std::bitset<Stmt::lastStmtConstant> alwaysAddMask;
   public:
-    typedef llvm::DenseMap<const Stmt *, const CFGBlock*> ForcedBlkExprs;
+    typedef llvm37::DenseMap<const Stmt *, const CFGBlock*> ForcedBlkExprs;
     ForcedBlkExprs **forcedBlkExprs;
     CFGCallback *Observer;
     bool PruneTriviallyFalseEdges;
@@ -892,7 +892,7 @@ public:
     SyntheticDeclStmts[Synthetic] = Source;
   }
 
-  typedef llvm::DenseMap<const DeclStmt *, const DeclStmt *>::const_iterator
+  typedef llvm37::DenseMap<const DeclStmt *, const DeclStmt *>::const_iterator
     synthetic_stmt_iterator;
 
   /// Iterates over synthetic DeclStmts in the CFG.
@@ -952,7 +952,7 @@ public:
     : Entry(nullptr), Exit(nullptr), IndirectGotoBlock(nullptr), NumBlockIDs(0),
       Blocks(BlkBVC, 10) {}
 
-  llvm::BumpPtrAllocator& getAllocator() {
+  llvm37::BumpPtrAllocator& getAllocator() {
     return BlkBVC.getAllocator();
   }
 
@@ -977,7 +977,7 @@ private:
 
   /// Collects DeclStmts synthesized for this CFG and maps each one back to its
   /// source DeclStmt.
-  llvm::DenseMap<const DeclStmt *, const DeclStmt *> SyntheticDeclStmts;
+  llvm37::DenseMap<const DeclStmt *, const DeclStmt *> SyntheticDeclStmts;
 };
 } // end namespace clang
 
@@ -986,7 +986,7 @@ private:
 //                                                                           //
 ///////////////////////////////////////////////////////////////////////////////
 
-namespace llvm {
+namespace llvm37 {
 
 /// Implement simplify_type for CFGTerminator, so that we can dyn_cast from
 /// CFGTerminator to a specific Stmt class.

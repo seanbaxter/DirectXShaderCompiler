@@ -1,4 +1,4 @@
-set(LLVM_LINK_COMPONENTS
+set(LLVM37_LINK_COMPONENTS
   Core
   Support
   TransformUtils

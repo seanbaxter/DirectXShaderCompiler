@@ -12,11 +12,11 @@
 //===----------------------------------------------------------------------===//
 
 #include "InterferenceCache.h"
-#include "llvm/CodeGen/LiveIntervalAnalysis.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Target/TargetRegisterInfo.h"
+#include "llvm37/CodeGen/LiveIntervalAnalysis.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Target/TargetRegisterInfo.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "regalloc"
 

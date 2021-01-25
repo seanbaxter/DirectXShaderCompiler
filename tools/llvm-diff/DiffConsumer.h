@@ -11,17 +11,17 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_TOOLS_LLVM_DIFF_DIFFCONSUMER_H
-#define LLVM_TOOLS_LLVM_DIFF_DIFFCONSUMER_H
+#ifndef LLVM37_TOOLS_LLVM37_DIFF_DIFFCONSUMER_H
+#define LLVM37_TOOLS_LLVM37_DIFF_DIFFCONSUMER_H
 
 #include "DiffLog.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/ADT/StringRef.h"
-#include "llvm/Support/Casting.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/ADT/StringRef.h"
+#include "llvm37/Support/Casting.h"
+#include "llvm37/Support/raw_ostream.h"
 
-namespace llvm {
+namespace llvm37 {
   class Module;
   class Value;
   class Function;

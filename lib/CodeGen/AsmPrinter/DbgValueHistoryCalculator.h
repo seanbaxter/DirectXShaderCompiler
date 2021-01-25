@@ -7,13 +7,13 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_LIB_CODEGEN_ASMPRINTER_DBGVALUEHISTORYCALCULATOR_H
-#define LLVM_LIB_CODEGEN_ASMPRINTER_DBGVALUEHISTORYCALCULATOR_H
+#ifndef LLVM37_LIB_CODEGEN_ASMPRINTER_DBGVALUEHISTORYCALCULATOR_H
+#define LLVM37_LIB_CODEGEN_ASMPRINTER_DBGVALUEHISTORYCALCULATOR_H
 
-#include "llvm/ADT/MapVector.h"
-#include "llvm/ADT/SmallVector.h"
+#include "llvm37/ADT/MapVector.h"
+#include "llvm37/ADT/SmallVector.h"
 
-namespace llvm {
+namespace llvm37 {
 
 class MachineFunction;
 class MachineInstr;

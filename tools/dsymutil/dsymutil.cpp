@@ -14,18 +14,18 @@
 
 #include "DebugMap.h"
 #include "dsymutil.h"
-#include "llvm/Support/ManagedStatic.h"
-#include "llvm/Support/Options.h"
-#include "llvm/Support/PrettyStackTrace.h"
-#include "llvm/Support/Signals.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Support/TargetSelect.h"
+#include "llvm37/Support/ManagedStatic.h"
+#include "llvm37/Support/Options.h"
+#include "llvm37/Support/PrettyStackTrace.h"
+#include "llvm37/Support/Signals.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Support/TargetSelect.h"
 #include <string>
 
-using namespace llvm::dsymutil;
+using namespace llvm37::dsymutil;
 
 namespace {
-using namespace llvm::cl;
+using namespace llvm37::cl;
 
 static opt<std::string> InputFile(Positional, desc("<input file>"),
                                   init("a.out"));
@@ -59,12 +59,12 @@ static opt<bool> InputIsYAMLDebugMap(
 }
 
 int main(int argc, char **argv) {
-  llvm::sys::PrintStackTraceOnErrorSignal();
-  llvm::PrettyStackTraceProgram StackPrinter(argc, argv);
-  llvm::llvm_shutdown_obj Shutdown;
+  llvm37::sys::PrintStackTraceOnErrorSignal();
+  llvm37::PrettyStackTraceProgram StackPrinter(argc, argv);
+  llvm37::llvm_shutdown_obj Shutdown;
   LinkOptions Options;
 
-  llvm::cl::ParseCommandLineOptions(argc, argv, "llvm dsymutil\n");
+  llvm37::cl::ParseCommandLineOptions(argc, argv, "llvm dsymutil\n");
 
   auto DebugMapPtrOrErr =
       parseDebugMap(InputFile, OsoPrependPath, Verbose, InputIsYAMLDebugMap);
@@ -72,19 +72,19 @@ int main(int argc, char **argv) {
   Options.Verbose = Verbose;
   Options.NoOutput = NoOutput;
 
-  llvm::InitializeAllTargetInfos();
-  llvm::InitializeAllTargetMCs();
-  llvm::InitializeAllTargets();
-  llvm::InitializeAllAsmPrinters();
+  llvm37::InitializeAllTargetInfos();
+  llvm37::InitializeAllTargetMCs();
+  llvm37::InitializeAllTargets();
+  llvm37::InitializeAllAsmPrinters();
 
   if (auto EC = DebugMapPtrOrErr.getError()) {
-    llvm::errs() << "error: cannot parse the debug map for \"" << InputFile
+    llvm37::errs() << "error: cannot parse the debug map for \"" << InputFile
                  << "\": " << EC.message() << '\n';
     return 1;
   }
 
   if (Verbose || DumpDebugMap)
-    (*DebugMapPtrOrErr)->print(llvm::outs());
+    (*DebugMapPtrOrErr)->print(llvm37::outs());
 
   if (DumpDebugMap)
     return 0;

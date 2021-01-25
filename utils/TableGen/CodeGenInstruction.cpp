@@ -13,13 +13,13 @@
 
 #include "CodeGenInstruction.h"
 #include "CodeGenTarget.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/StringExtras.h"
-#include "llvm/ADT/StringMap.h"
-#include "llvm/TableGen/Error.h"
-#include "llvm/TableGen/Record.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/StringExtras.h"
+#include "llvm37/ADT/StringMap.h"
+#include "llvm37/TableGen/Error.h"
+#include "llvm37/TableGen/Record.h"
 #include <set>
-using namespace llvm;
+using namespace llvm37;
 
 //===----------------------------------------------------------------------===//
 // CGIOperandList Implementation

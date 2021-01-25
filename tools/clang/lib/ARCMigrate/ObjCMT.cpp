@@ -28,11 +28,11 @@
 #include "clang/Lex/Preprocessor.h"
 #include "clang/Rewrite/Core/Rewriter.h"
 #include "clang/StaticAnalyzer/Checkers/ObjCRetainCount.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/ADT/StringSet.h"
-#include "llvm/Support/Path.h"
-#include "llvm/Support/SourceMgr.h"
-#include "llvm/Support/YAMLParser.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/ADT/StringSet.h"
+#include "llvm37/Support/Path.h"
+#include "llvm37/Support/SourceMgr.h"
+#include "llvm37/Support/YAMLParser.h"
 
 using namespace clang;
 using namespace arcmt;
@@ -99,9 +99,9 @@ public:
   Preprocessor &PP;
   bool IsOutputFile;
   bool FoundationIncluded;
-  llvm::SmallPtrSet<ObjCProtocolDecl *, 32> ObjCProtocolDecls;
-  llvm::SmallVector<const Decl *, 8> CFFunctionIBCandidates;
-  llvm::StringSet<> WhiteListFilenames;
+  llvm37::SmallPtrSet<ObjCProtocolDecl *, 32> ObjCProtocolDecls;
+  llvm37::SmallVector<const Decl *, 8> CFFunctionIBCandidates;
+  llvm37::StringSet<> WhiteListFilenames;
 
   ObjCMigrateASTConsumer(StringRef migrateDir,
                          unsigned astMigrateActions,
@@ -148,7 +148,7 @@ protected:
   bool canModifyFile(StringRef Path) {
     if (WhiteListFilenames.empty())
       return true;
-    return WhiteListFilenames.find(llvm::sys::path::filename(Path))
+    return WhiteListFilenames.find(llvm37::sys::path::filename(Path))
         != WhiteListFilenames.end();
   }
   bool canModifyFile(const FileEntry *FE) {
@@ -196,10 +196,10 @@ ObjCMigrateAction::CreateASTConsumer(CompilerInstance &CI, StringRef InFile) {
   CI.getPreprocessor().addPPCallbacks(std::unique_ptr<PPCallbacks>(PPRec));
   std::vector<std::unique_ptr<ASTConsumer>> Consumers;
   Consumers.push_back(WrapperFrontendAction::CreateASTConsumer(CI, InFile));
-  Consumers.push_back(llvm::make_unique<ObjCMigrateASTConsumer>(
+  Consumers.push_back(llvm37::make_unique<ObjCMigrateASTConsumer>(
       MigrateDir, ObjCMigAction, Remapper, CompInst->getFileManager(), PPRec,
       CompInst->getPreprocessor(), false, None));
-  return llvm::make_unique<MultiplexConsumer>(std::move(Consumers));
+  return llvm37::make_unique<MultiplexConsumer>(std::move(Consumers));
 }
 
 bool ObjCMigrateAction::BeginInvocation(CompilerInstance &CI) {
@@ -671,7 +671,7 @@ ClassImplementsAllMethodsAndProperties(ASTContext &Ctx,
 }
 
 static bool rewriteToObjCInterfaceDecl(const ObjCInterfaceDecl *IDecl,
-                    llvm::SmallVectorImpl<ObjCProtocolDecl*> &ConformingProtocols,
+                    llvm37::SmallVectorImpl<ObjCProtocolDecl*> &ConformingProtocols,
                     const NSAPI &NS, edit::Commit &commit) {
   const ObjCList<ObjCProtocolDecl> &Protocols = IDecl->getReferencedProtocols();
   std::string ClassString;
@@ -703,7 +703,7 @@ static bool rewriteToObjCInterfaceDecl(const ObjCInterfaceDecl *IDecl,
 }
 
 static StringRef GetUnsignedName(StringRef NSIntegerName) {
-  StringRef UnsignedName = llvm::StringSwitch<StringRef>(NSIntegerName)
+  StringRef UnsignedName = llvm37::StringSwitch<StringRef>(NSIntegerName)
     .Case("int8_t", "uint8_t")
     .Case("int16_t", "uint16_t")
     .Case("int32_t", "uint32_t")
@@ -827,7 +827,7 @@ static bool UseNSOptionsMacro(Preprocessor &PP, ASTContext &Ctx,
     
     uint64_t EnumVal = Enumerator->getInitVal().getZExtValue();
     if (PowerOfTwo && EnumVal) {
-      if (!llvm::isPowerOf2_64(EnumVal))
+      if (!llvm37::isPowerOf2_64(EnumVal))
         PowerOfTwo = false;
       else if (EnumVal > MaxPowerOfTwoVal)
         MaxPowerOfTwoVal = EnumVal;
@@ -856,9 +856,9 @@ void ObjCMigrateASTConsumer::migrateProtocolConformance(ASTContext &Ctx,
     return;
   // Find all implicit conforming protocols for this class
   // and make them explicit.
-  llvm::SmallPtrSet<ObjCProtocolDecl *, 8> ExplicitProtocols;
+  llvm37::SmallPtrSet<ObjCProtocolDecl *, 8> ExplicitProtocols;
   Ctx.CollectInheritedProtocols(IDecl, ExplicitProtocols);
-  llvm::SmallVector<ObjCProtocolDecl *, 8> PotentialImplicitProtocols;
+  llvm37::SmallVector<ObjCProtocolDecl *, 8> PotentialImplicitProtocols;
   
   for (ObjCProtocolDecl *ProtDecl : ObjCProtocolDecls)
     if (!ExplicitProtocols.count(ProtDecl))
@@ -870,7 +870,7 @@ void ObjCMigrateASTConsumer::migrateProtocolConformance(ASTContext &Ctx,
   // go through list of non-optional methods and properties in each protocol
   // in the PotentialImplicitProtocols list. If class implements every one of the
   // methods and properties, then this class conforms to this protocol.
-  llvm::SmallVector<ObjCProtocolDecl*, 8> ConformingProtocols;
+  llvm37::SmallVector<ObjCProtocolDecl*, 8> ConformingProtocols;
   for (unsigned i = 0, e = PotentialImplicitProtocols.size(); i != e; i++)
     if (ClassImplementsAllMethodsAndProperties(Ctx, ImpDecl, IDecl,
                                               PotentialImplicitProtocols[i]))
@@ -881,7 +881,7 @@ void ObjCMigrateASTConsumer::migrateProtocolConformance(ASTContext &Ctx,
   
   // Further reduce number of conforming protocols. If protocol P1 is in the list
   // protocol P2 (P2<P1>), No need to include P1.
-  llvm::SmallVector<ObjCProtocolDecl*, 8> MinimalConformingProtocols;
+  llvm37::SmallVector<ObjCProtocolDecl*, 8> MinimalConformingProtocols;
   for (unsigned i = 0, e = ConformingProtocols.size(); i != e; i++) {
     bool DropIt = false;
     ObjCProtocolDecl *TargetPDecl = ConformingProtocols[i];
@@ -1779,10 +1779,10 @@ public:
 
 class JSONEditWriter : public edit::EditsReceiver {
   SourceManager &SourceMgr;
-  llvm::raw_ostream &OS;
+  llvm37::raw_ostream &OS;
 
 public:
-  JSONEditWriter(SourceManager &SM, llvm::raw_ostream &OS)
+  JSONEditWriter(SourceManager &SM, llvm37::raw_ostream &OS)
     : SourceMgr(SM), OS(OS) {
     OS << "[\n";
   }
@@ -1791,9 +1791,9 @@ public:
 private:
   struct EntryWriter {
     SourceManager &SourceMgr;
-    llvm::raw_ostream &OS;
+    llvm37::raw_ostream &OS;
 
-    EntryWriter(SourceManager &SM, llvm::raw_ostream &OS)
+    EntryWriter(SourceManager &SM, llvm37::raw_ostream &OS)
       : SourceMgr(SM), OS(OS) {
       OS << " {\n";
     }
@@ -1808,7 +1808,7 @@ private:
       assert(!FID.isInvalid());
       SmallString<200> Path =
           StringRef(SourceMgr.getFileEntryForID(FID)->getName());
-      llvm::sys::fs::make_absolute(Path);
+      llvm37::sys::fs::make_absolute(Path);
       OS << "  \"file\": \"";
       OS.write_escaped(Path.str()) << "\",\n";
       OS << "  \"offset\": " << Offset << ",\n";
@@ -1956,7 +1956,7 @@ void ObjCMigrateASTConsumer::HandleTranslationUnit(ASTContext &Ctx) {
   
  if (IsOutputFile) {
    std::error_code EC;
-   llvm::raw_fd_ostream OS(MigrateDir, EC, llvm::sys::fs::F_None);
+   llvm37::raw_fd_ostream OS(MigrateDir, EC, llvm37::sys::fs::F_None);
    if (EC) {
       DiagnosticsEngine &Diags = Ctx.getDiagnostics();
       Diags.Report(Diags.getCustomDiagID(DiagnosticsEngine::Error, "%0"))
@@ -1980,11 +1980,11 @@ void ObjCMigrateASTConsumer::HandleTranslationUnit(ASTContext &Ctx) {
     const FileEntry *file = Ctx.getSourceManager().getFileEntryForID(FID);
     assert(file);
     SmallString<512> newText;
-    llvm::raw_svector_ostream vecOS(newText);
+    llvm37::raw_svector_ostream vecOS(newText);
     buf.write(vecOS);
     vecOS.flush();
-    std::unique_ptr<llvm::MemoryBuffer> memBuf(
-        llvm::MemoryBuffer::getMemBufferCopy(
+    std::unique_ptr<llvm37::MemoryBuffer> memBuf(
+        llvm37::MemoryBuffer::getMemBufferCopy(
             StringRef(newText.data(), newText.size()), file->getName()));
     SmallString<64> filePath(file->getName());
     FileMgr.FixupRelativePath(filePath);
@@ -2004,8 +2004,8 @@ bool MigrateSourceAction::BeginInvocation(CompilerInstance &CI) {
 }
 
 static std::vector<std::string> getWhiteListFilenames(StringRef DirPath) {
-  using namespace llvm::sys::fs;
-  using namespace llvm::sys::path;
+  using namespace llvm37::sys::fs;
+  using namespace llvm37::sys::path;
 
   std::vector<std::string> Filenames;
   if (DirPath.empty() || !is_directory(DirPath))
@@ -2040,7 +2040,7 @@ MigrateSourceAction::CreateASTConsumer(CompilerInstance &CI, StringRef InFile) {
   CI.getPreprocessor().addPPCallbacks(std::unique_ptr<PPCallbacks>(PPRec));
   std::vector<std::string> WhiteList =
     getWhiteListFilenames(CI.getFrontendOpts().ObjCMTWhiteListPath);
-  return llvm::make_unique<ObjCMigrateASTConsumer>(
+  return llvm37::make_unique<ObjCMigrateASTConsumer>(
       CI.getFrontendOpts().OutputFile, ObjCMTAction, Remapper,
       CI.getFileManager(), PPRec, CI.getPreprocessor(),
       /*isOutputFile=*/true, WhiteList);
@@ -2057,7 +2057,7 @@ struct EditEntry {
 };
 }
 
-namespace llvm {
+namespace llvm37 {
 template<> struct DenseMapInfo<EditEntry> {
   static inline EditEntry getEmptyKey() {
     EditEntry Entry;
@@ -2070,7 +2070,7 @@ template<> struct DenseMapInfo<EditEntry> {
     return Entry;
   }
   static unsigned getHashValue(const EditEntry& Val) {
-    llvm::FoldingSetNodeID ID;
+    llvm37::FoldingSetNodeID ID;
     ID.AddPointer(Val.File);
     ID.AddInteger(Val.Offset);
     ID.AddInteger(Val.RemoveLen);
@@ -2094,14 +2094,14 @@ public:
   RemapFileParser(FileManager &FileMgr) : FileMgr(FileMgr) { }
 
   bool parse(StringRef File, SmallVectorImpl<EditEntry> &Entries) {
-    using namespace llvm::yaml;
+    using namespace llvm37::yaml;
 
-    llvm::ErrorOr<std::unique_ptr<llvm::MemoryBuffer>> FileBufOrErr =
-        llvm::MemoryBuffer::getFile(File);
+    llvm37::ErrorOr<std::unique_ptr<llvm37::MemoryBuffer>> FileBufOrErr =
+        llvm37::MemoryBuffer::getFile(File);
     if (!FileBufOrErr)
       return true;
 
-    llvm::SourceMgr SM;
+    llvm37::SourceMgr SM;
     Stream YAMLStream(FileBufOrErr.get()->getMemBufferRef(), SM);
     document_iterator I = YAMLStream.begin();
     if (I == YAMLStream.end())
@@ -2126,9 +2126,9 @@ public:
   }
 
 private:
-  void parseEdit(llvm::yaml::MappingNode *Node,
+  void parseEdit(llvm37::yaml::MappingNode *Node,
                  SmallVectorImpl<EditEntry> &Entries) {
-    using namespace llvm::yaml;
+    using namespace llvm37::yaml;
     EditEntry Entry;
     bool Ignore = false;
 
@@ -2178,7 +2178,7 @@ static std::string applyEditsToTemp(const FileEntry *FE,
                                     ArrayRef<EditEntry> Edits,
                                     FileManager &FileMgr,
                                     DiagnosticsEngine &Diag) {
-  using namespace llvm::sys;
+  using namespace llvm37::sys;
 
   SourceManager SM(Diag, FileMgr);
   FileID FID = SM.createFileID(FE, SourceLocation(), SrcMgr::C_User);
@@ -2213,7 +2213,7 @@ static std::string applyEditsToTemp(const FileEntry *FE,
 
   const RewriteBuffer *Buf = rewriter.getRewriteBufferFor(FID);
   SmallString<512> NewText;
-  llvm::raw_svector_ostream OS(NewText);
+  llvm37::raw_svector_ostream OS(NewText);
   Buf->write(OS);
   OS.flush();
 
@@ -2226,7 +2226,7 @@ static std::string applyEditsToTemp(const FileEntry *FE,
     return std::string();
   }
 
-  llvm::raw_fd_ostream TmpOut(FD, /*shouldClose=*/true);
+  llvm37::raw_fd_ostream TmpOut(FD, /*shouldClose=*/true);
   TmpOut.write(NewText.data(), NewText.size());
   TmpOut.close();
 
@@ -2248,11 +2248,11 @@ bool arcmt::getFileRemappingsFromFileList(
       new DiagnosticsEngine(DiagID, new DiagnosticOptions,
                             DiagClient, /*ShouldOwnClient=*/false));
 
-  typedef llvm::DenseMap<const FileEntry *, std::vector<EditEntry> >
+  typedef llvm37::DenseMap<const FileEntry *, std::vector<EditEntry> >
       FileEditEntriesTy;
   FileEditEntriesTy FileEditEntries;
 
-  llvm::DenseSet<EditEntry> EntriesSet;
+  llvm37::DenseSet<EditEntry> EntriesSet;
 
   for (ArrayRef<StringRef>::iterator
          I = remapFiles.begin(), E = remapFiles.end(); I != E; ++I) {
@@ -2265,7 +2265,7 @@ bool arcmt::getFileRemappingsFromFileList(
       EditEntry &Entry = *EI;
       if (!Entry.File)
         continue;
-      std::pair<llvm::DenseSet<EditEntry>::iterator, bool>
+      std::pair<llvm37::DenseSet<EditEntry>::iterator, bool>
         Insert = EntriesSet.insert(Entry);
       if (!Insert.second)
         continue;

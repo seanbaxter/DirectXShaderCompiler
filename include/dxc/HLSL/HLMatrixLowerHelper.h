@@ -11,9 +11,9 @@
 
 #pragma once
 
-#include "llvm/IR/IRBuilder.h"
+#include "llvm37/IR/IRBuilder.h"
 
-namespace llvm {
+namespace llvm37 {
   class Type;
   class Value;
   template<typename T>
@@ -27,9 +27,9 @@ class DxilTypeSystem;
 
 namespace HLMatrixLower {
 
-llvm::Value *BuildVector(llvm::Type *EltTy,
-                         llvm::ArrayRef<llvm::Value *> elts,
-                         llvm::IRBuilder<> &Builder);
+llvm37::Value *BuildVector(llvm37::Type *EltTy,
+                         llvm37::ArrayRef<llvm37::Value *> elts,
+                         llvm37::IRBuilder<> &Builder);
 
 } // namespace HLMatrixLower
 

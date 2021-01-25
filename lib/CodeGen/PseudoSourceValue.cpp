@@ -11,16 +11,16 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/CodeGen/PseudoSourceValue.h"
-#include "llvm/CodeGen/MachineFrameInfo.h"
-#include "llvm/IR/DerivedTypes.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/ManagedStatic.h"
-#include "llvm/Support/Mutex.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/CodeGen/PseudoSourceValue.h"
+#include "llvm37/CodeGen/MachineFrameInfo.h"
+#include "llvm37/IR/DerivedTypes.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/ManagedStatic.h"
+#include "llvm37/Support/Mutex.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <map>
-using namespace llvm;
+using namespace llvm37;
 
 namespace {
 struct PSVGlobalsTy {

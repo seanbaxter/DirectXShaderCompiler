@@ -11,23 +11,23 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_LIB_CODEGEN_SELECTIONDAG_SELECTIONDAGBUILDER_H
-#define LLVM_LIB_CODEGEN_SELECTIONDAG_SELECTIONDAGBUILDER_H
+#ifndef LLVM37_LIB_CODEGEN_SELECTIONDAG_SELECTIONDAGBUILDER_H
+#define LLVM37_LIB_CODEGEN_SELECTIONDAG_SELECTIONDAGBUILDER_H
 
 #include "StatepointLowering.h"
-#include "llvm/ADT/APInt.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/CodeGen/Analysis.h"
-#include "llvm/CodeGen/SelectionDAG.h"
-#include "llvm/CodeGen/SelectionDAGNodes.h"
-#include "llvm/IR/CallSite.h"
-#include "llvm/IR/Statepoint.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Target/TargetLowering.h"
+#include "llvm37/ADT/APInt.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/CodeGen/Analysis.h"
+#include "llvm37/CodeGen/SelectionDAG.h"
+#include "llvm37/CodeGen/SelectionDAGNodes.h"
+#include "llvm37/IR/CallSite.h"
+#include "llvm37/IR/Statepoint.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Target/TargetLowering.h"
 #include <vector>
 
-namespace llvm {
+namespace llvm37 {
 
 class AddrSpaceCastInst;
 class AliasAnalysis;
@@ -951,6 +951,6 @@ struct RegsForValue {
                             std::vector<SDValue> &Ops) const;
 };
 
-} // end namespace llvm
+} // end namespace llvm37
 
 #endif

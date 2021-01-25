@@ -7,12 +7,12 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/DebugInfo/DWARF/DWARFAcceleratorTable.h"
-#include "llvm/Support/Dwarf.h"
-#include "llvm/Support/Format.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/DebugInfo/DWARF/DWARFAcceleratorTable.h"
+#include "llvm37/Support/Dwarf.h"
+#include "llvm37/Support/Format.h"
+#include "llvm37/Support/raw_ostream.h"
 
-namespace llvm {
+namespace llvm37 {
 
 bool DWARFAcceleratorTable::extract() {
   uint32_t Offset = 0;

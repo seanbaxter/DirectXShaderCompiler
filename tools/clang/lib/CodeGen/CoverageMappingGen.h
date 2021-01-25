@@ -11,17 +11,17 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_LIB_CODEGEN_COVERAGEMAPPINGGEN_H
-#define LLVM_CLANG_LIB_CODEGEN_COVERAGEMAPPINGGEN_H
+#ifndef LLVM37_CLANG_LIB_CODEGEN_COVERAGEMAPPINGGEN_H
+#define LLVM37_CLANG_LIB_CODEGEN_COVERAGEMAPPINGGEN_H
 
 #include "clang/Basic/LLVM.h"
 #include "clang/Basic/SourceLocation.h"
 #include "clang/Frontend/CodeGenOptions.h"
 #include "clang/Lex/PPCallbacks.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/StringMap.h"
-#include "llvm/IR/GlobalValue.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/StringMap.h"
+#include "llvm37/IR/GlobalValue.h"
+#include "llvm37/Support/raw_ostream.h"
 
 namespace clang {
 
@@ -52,9 +52,9 @@ class CodeGenModule;
 class CoverageMappingModuleGen {
   CodeGenModule &CGM;
   CoverageSourceInfo &SourceInfo;
-  llvm::SmallDenseMap<const FileEntry *, unsigned, 8> FileEntries;
-  std::vector<llvm::Constant *> FunctionRecords;
-  llvm::StructType *FunctionRecordTy;
+  llvm37::SmallDenseMap<const FileEntry *, unsigned, 8> FileEntries;
+  std::vector<llvm37::Constant *> FunctionRecords;
+  llvm37::StructType *FunctionRecordTy;
   std::string CoverageMappings;
 
 public:
@@ -67,7 +67,7 @@ public:
 
   /// \brief Add a function's coverage mapping record to the collection of the
   /// function mapping records.
-  void addFunctionMappingRecord(llvm::GlobalVariable *FunctionName,
+  void addFunctionMappingRecord(llvm37::GlobalVariable *FunctionName,
                                 StringRef FunctionNameValue,
                                 uint64_t FunctionHash,
                                 const std::string &CoverageMapping);
@@ -86,7 +86,7 @@ class CoverageMappingGen {
   CoverageMappingModuleGen &CVM;
   SourceManager &SM;
   const LangOptions &LangOpts;
-  llvm::DenseMap<const Stmt *, unsigned> *CounterMap;
+  llvm37::DenseMap<const Stmt *, unsigned> *CounterMap;
 
 public:
   CoverageMappingGen(CoverageMappingModuleGen &CVM, SourceManager &SM,
@@ -95,17 +95,17 @@ public:
 
   CoverageMappingGen(CoverageMappingModuleGen &CVM, SourceManager &SM,
                      const LangOptions &LangOpts,
-                     llvm::DenseMap<const Stmt *, unsigned> *CounterMap)
+                     llvm37::DenseMap<const Stmt *, unsigned> *CounterMap)
       : CVM(CVM), SM(SM), LangOpts(LangOpts), CounterMap(CounterMap) {}
 
   /// \brief Emit the coverage mapping data which maps the regions of
   /// code to counters that will be used to find the execution
   /// counts for those regions.
-  void emitCounterMapping(const Decl *D, llvm::raw_ostream &OS);
+  void emitCounterMapping(const Decl *D, llvm37::raw_ostream &OS);
 
   /// \brief Emit the coverage mapping data for an unused function.
   /// It creates mapping regions with the counter of zero.
-  void emitEmptyMapping(const Decl *D, llvm::raw_ostream &OS);
+  void emitEmptyMapping(const Decl *D, llvm37::raw_ostream &OS);
 };
 
 } // end namespace CodeGen

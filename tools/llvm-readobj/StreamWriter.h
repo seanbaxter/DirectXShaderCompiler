@@ -7,21 +7,21 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_TOOLS_LLVM_READOBJ_STREAMWRITER_H
-#define LLVM_TOOLS_LLVM_READOBJ_STREAMWRITER_H
+#ifndef LLVM37_TOOLS_LLVM37_READOBJ_STREAMWRITER_H
+#define LLVM37_TOOLS_LLVM37_READOBJ_STREAMWRITER_H
 
-#include "llvm/ADT/ArrayRef.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/ADT/StringRef.h"
-#include "llvm/Support/DataTypes.h"
-#include "llvm/Support/Endian.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/ArrayRef.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/ADT/StringRef.h"
+#include "llvm37/Support/DataTypes.h"
+#include "llvm37/Support/Endian.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <algorithm>
 
-using namespace llvm;
-using namespace llvm::support;
+using namespace llvm37;
+using namespace llvm37::support;
 
-namespace llvm {
+namespace llvm37 {
 
 template<typename T>
 struct EnumEntry {
@@ -299,6 +299,6 @@ struct ListScope {
   StreamWriter& W;
 };
 
-} // namespace llvm
+} // namespace llvm37
 
 #endif

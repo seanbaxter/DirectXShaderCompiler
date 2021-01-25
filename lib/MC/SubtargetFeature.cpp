@@ -11,16 +11,16 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/MC/SubtargetFeature.h"
-#include "llvm/ADT/StringExtras.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/Format.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/MC/SubtargetFeature.h"
+#include "llvm37/ADT/StringExtras.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/Format.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <algorithm>
 #include <cassert>
 #include <cctype>
 #include <cstdlib>
-using namespace llvm;
+using namespace llvm37;
 
 //===----------------------------------------------------------------------===//
 //                          Static Helper Functions
@@ -291,7 +291,7 @@ void SubtargetFeatures::print(raw_ostream &OS) const {
   OS << "\n";
 }
 
-#if !defined(NDEBUG) || defined(LLVM_ENABLE_DUMP)
+#if !defined(NDEBUG) || defined(LLVM37_ENABLE_DUMP)
 /// dump - Dump feature info.
 ///
 void SubtargetFeatures::dump() const {

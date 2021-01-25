@@ -10,27 +10,27 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include "dxc/HLSL/DxilGenerationPass.h"
-#include "llvm/Analysis/DxilValueCache.h"
+#include "llvm37/Analysis/DxilValueCache.h"
 #include "dxc/DXIL/DxilModule.h"
 #include "dxc/DXIL/DxilOperations.h"
 #include "dxc/DXIL/DxilUtil.h"
 
-#include "llvm/Analysis/InstructionSimplify.h"
-#include "llvm/Analysis/LoopInfo.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/Dominators.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/LegacyPassManager.h"
-#include "llvm/IR/PassManager.h"
-#include "llvm/Pass.h"
-#include "llvm/Transforms/Scalar.h"
+#include "llvm37/Analysis/InstructionSimplify.h"
+#include "llvm37/Analysis/LoopInfo.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/Dominators.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/LegacyPassManager.h"
+#include "llvm37/IR/PassManager.h"
+#include "llvm37/Pass.h"
+#include "llvm37/Transforms/Scalar.h"
 
 #include <unordered_set>
 
 using std::vector;
 using std::unique_ptr;
-using namespace llvm;
+using namespace llvm37;
 using namespace hlsl;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -215,7 +215,7 @@ void DxilLegalizeSampleOffsetPass::LegalizeOffsets(
   }
 }
 
-FunctionPass *llvm::createDxilLegalizeSampleOffsetPass() {
+FunctionPass *llvm37::createDxilLegalizeSampleOffsetPass() {
   return new DxilLegalizeSampleOffsetPass();
 }
 

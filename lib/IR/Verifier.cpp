@@ -45,38 +45,38 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/IR/Verifier.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/SetVector.h"
-#include "llvm/ADT/SmallPtrSet.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/ADT/StringExtras.h"
-#include "llvm/IR/CFG.h"
-#include "llvm/IR/CallSite.h"
-#include "llvm/IR/CallingConv.h"
-#include "llvm/IR/ConstantRange.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/DebugInfo.h"
-#include "llvm/IR/DerivedTypes.h"
-#include "llvm/IR/Dominators.h"
-#include "llvm/IR/InlineAsm.h"
-#include "llvm/IR/InstIterator.h"
-#include "llvm/IR/InstVisitor.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Metadata.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/PassManager.h"
-#include "llvm/IR/Statepoint.h"
-#include "llvm/Pass.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/IR/Verifier.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/SetVector.h"
+#include "llvm37/ADT/SmallPtrSet.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/ADT/StringExtras.h"
+#include "llvm37/IR/CFG.h"
+#include "llvm37/IR/CallSite.h"
+#include "llvm37/IR/CallingConv.h"
+#include "llvm37/IR/ConstantRange.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/IR/DebugInfo.h"
+#include "llvm37/IR/DerivedTypes.h"
+#include "llvm37/IR/Dominators.h"
+#include "llvm37/IR/InlineAsm.h"
+#include "llvm37/IR/InstIterator.h"
+#include "llvm37/IR/InstVisitor.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/Metadata.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/PassManager.h"
+#include "llvm37/IR/Statepoint.h"
+#include "llvm37/Pass.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <algorithm>
 #include <cstdarg>
-using namespace llvm;
+using namespace llvm37;
 
 #if 0 // HLSL Change Starts - option pending
 static cl::opt<bool> VerifyDebugInfo("verify-debug-info", cl::init(true));
@@ -302,7 +302,7 @@ private:
 
   template <class Ty> bool isValidMetadataArray(const MDTuple &N);
 #define HANDLE_SPECIALIZED_MDNODE_LEAF(CLASS) void visit##CLASS(const CLASS &N);
-#include "llvm/IR/Metadata.def"
+#include "llvm37/IR/Metadata.def"
   void visitDIScope(const DIScope &N);
   void visitDIDerivedTypeBase(const DIDerivedTypeBase &N);
   void visitDIVariable(const DIVariable &N);
@@ -632,7 +632,7 @@ void Verifier::visitMDNode(const MDNode &MD) {
   case Metadata::CLASS##Kind:                                                  \
     visit##CLASS(cast<CLASS>(MD));                                             \
     break;
-#include "llvm/IR/Metadata.def"
+#include "llvm37/IR/Metadata.def"
   }
 
   for (unsigned i = 0, e = MD.getNumOperands(); i != e; ++i) {
@@ -3638,7 +3638,7 @@ void Verifier::verifyTypeRefs() {
 //  Implement the public interfaces to this file...
 //===----------------------------------------------------------------------===//
 
-bool llvm::verifyFunction(const Function &f, raw_ostream *OS) {
+bool llvm37::verifyFunction(const Function &f, raw_ostream *OS) {
   Function &F = const_cast<Function &>(f);
   assert(!F.isDeclaration() && "Cannot verify external functions");
 
@@ -3650,7 +3650,7 @@ bool llvm::verifyFunction(const Function &f, raw_ostream *OS) {
   return !V.verify(F);
 }
 
-bool llvm::verifyModule(const Module &M, raw_ostream *OS) {
+bool llvm37::verifyModule(const Module &M, raw_ostream *OS) {
   raw_null_ostream NullStr;
   Verifier V(OS ? *OS : NullStr);
 
@@ -3703,7 +3703,7 @@ struct VerifierLegacyPass : public FunctionPass {
 char VerifierLegacyPass::ID = 0;
 INITIALIZE_PASS(VerifierLegacyPass, "verify", "Module Verifier", false, false)
 
-FunctionPass *llvm::createVerifierPass(bool FatalErrors) {
+FunctionPass *llvm37::createVerifierPass(bool FatalErrors) {
   return new VerifierLegacyPass(FatalErrors);
 }
 

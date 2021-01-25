@@ -12,18 +12,18 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Analysis/LoopAccessAnalysis.h"
-#include "llvm/Analysis/LoopInfo.h"
-#include "llvm/Analysis/ScalarEvolutionExpander.h"
-#include "llvm/Analysis/TargetLibraryInfo.h"
-#include "llvm/Analysis/ValueTracking.h"
-#include "llvm/IR/DiagnosticInfo.h"
-#include "llvm/IR/Dominators.h"
-#include "llvm/IR/IRBuilder.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Analysis/VectorUtils.h"
-using namespace llvm;
+#include "llvm37/Analysis/LoopAccessAnalysis.h"
+#include "llvm37/Analysis/LoopInfo.h"
+#include "llvm37/Analysis/ScalarEvolutionExpander.h"
+#include "llvm37/Analysis/TargetLibraryInfo.h"
+#include "llvm37/Analysis/ValueTracking.h"
+#include "llvm37/IR/DiagnosticInfo.h"
+#include "llvm37/IR/Dominators.h"
+#include "llvm37/IR/IRBuilder.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Analysis/VectorUtils.h"
+using namespace llvm37;
 
 #define DEBUG_TYPE "loop-accesses"
 
@@ -89,14 +89,14 @@ void LoopAccessReport::emitAnalysis(const LoopAccessReport &Message,
                                  *TheFunction, DL, Message.str());
 }
 
-Value *llvm::stripIntegerCast(Value *V) {
+Value *llvm37::stripIntegerCast(Value *V) {
   if (CastInst *CI = dyn_cast<CastInst>(V))
     if (CI->getOperand(0)->getType()->isIntegerTy())
       return CI->getOperand(0);
   return V;
 }
 
-const SCEV *llvm::replaceSymbolicStrideSCEV(ScalarEvolution *SE,
+const SCEV *llvm37::replaceSymbolicStrideSCEV(ScalarEvolution *SE,
                                             const ValueToValueMap &PtrToStride,
                                             Value *Ptr, Value *OrigPtr) {
 
@@ -784,7 +784,7 @@ static bool isNoWrapAddRec(Value *Ptr, const SCEVAddRecExpr *AR,
 }
 
 /// \brief Check whether the access through \p Ptr has a constant stride.
-int llvm::isStridedPtr(ScalarEvolution *SE, Value *Ptr, const Loop *Lp,
+int llvm37::isStridedPtr(ScalarEvolution *SE, Value *Ptr, const Loop *Lp,
                        const ValueToValueMap &StridesMap) {
   const Type *Ty = Ptr->getType();
   assert(Ty->isPointerTy() && "Unexpected non-ptr");
@@ -1723,7 +1723,7 @@ LoopAccessAnalysis::getInfo(Loop *L, const ValueToValueMap &Strides) {
 
   if (!LAI) {
     const DataLayout &DL = L->getHeader()->getModule()->getDataLayout();
-    LAI = llvm::make_unique<LoopAccessInfo>(L, SE, DL, TLI, AA, DT, LI,
+    LAI = llvm37::make_unique<LoopAccessInfo>(L, SE, DL, TLI, AA, DT, LI,
                                             Strides);
 #ifndef NDEBUG
     LAI->NumSymbolicStrides = Strides.size();
@@ -1776,7 +1776,7 @@ INITIALIZE_PASS_DEPENDENCY(DominatorTreeWrapperPass)
 INITIALIZE_PASS_DEPENDENCY(LoopInfoWrapperPass)
 INITIALIZE_PASS_END(LoopAccessAnalysis, LAA_NAME, laa_name, false, true)
 
-namespace llvm {
+namespace llvm37 {
   Pass *createLAAPass() {
     return new LoopAccessAnalysis();
   }

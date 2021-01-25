@@ -261,7 +261,7 @@ void SpirvModule::addExtInstSet(SpirvExtInstImport *set) {
   extInstSets.push_back(set);
 }
 
-SpirvExtInstImport *SpirvModule::getExtInstSet(llvm::StringRef name) {
+SpirvExtInstImport *SpirvModule::getExtInstSet(llvm37::StringRef name) {
   // We expect very few (usually 1) extended instruction sets to exist in the
   // module, so this is not expensive.
   auto found = std::find_if(extInstSets.begin(), extInstSets.end(),

@@ -12,13 +12,13 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Analysis/Passes.h"
-#include "llvm/Analysis/AliasAnalysis.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Module.h"
-#include "llvm/Pass.h"
-using namespace llvm;
+#include "llvm37/Analysis/Passes.h"
+#include "llvm37/Analysis/AliasAnalysis.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/Pass.h"
+using namespace llvm37;
 
 namespace {
   /// NoAA - This class implements the -no-aa pass, which always returns "I
@@ -92,4 +92,4 @@ INITIALIZE_AG_PASS(NoAA, AliasAnalysis, "no-aa",
                    "No Alias Analysis (always returns 'may' alias)",
                    true, true, true)
 
-ImmutablePass *llvm::createNoAAPass() { return new NoAA(); }
+ImmutablePass *llvm37::createNoAAPass() { return new NoAA(); }

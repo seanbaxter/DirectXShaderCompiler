@@ -12,14 +12,14 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_EXECUTIONENGINE_OBJECTBUFFER_H
-#define LLVM_EXECUTIONENGINE_OBJECTBUFFER_H
+#ifndef LLVM37_EXECUTIONENGINE_OBJECTBUFFER_H
+#define LLVM37_EXECUTIONENGINE_OBJECTBUFFER_H
 
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/Support/MemoryBuffer.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/Support/MemoryBuffer.h"
+#include "llvm37/Support/raw_ostream.h"
 
-namespace llvm {
+namespace llvm37 {
 
 class ObjectMemoryBuffer : public MemoryBuffer {
 public:
@@ -43,6 +43,6 @@ private:
   std::string BufferName;
 };
 
-} // namespace llvm
+} // namespace llvm37
 
 #endif

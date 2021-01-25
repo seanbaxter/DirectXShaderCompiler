@@ -15,11 +15,11 @@
 #include "clang/AST/ASTContext.h"
 #include "clang/AST/Expr.h"
 #include "clang/AST/TypeLocVisitor.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/raw_ostream.h"
 using namespace clang;
 
-static const unsigned TypeLocMaxDataAlign = llvm::alignOf<void *>();
+static const unsigned TypeLocMaxDataAlign = llvm37::alignOf<void *>();
 
 //===----------------------------------------------------------------------===//
 // TypeLoc Implementation
@@ -80,11 +80,11 @@ unsigned TypeLoc::getFullDataSizeForType(QualType Ty) {
   while (!TyLoc.isNull()) {
     unsigned Align = getLocalAlignmentForType(TyLoc.getType());
     MaxAlign = std::max(Align, MaxAlign);
-    Total = llvm::RoundUpToAlignment(Total, Align);
+    Total = llvm37::RoundUpToAlignment(Total, Align);
     Total += TypeSizer().Visit(TyLoc);
     TyLoc = TyLoc.getNextTypeLoc();
   }
-  Total = llvm::RoundUpToAlignment(Total, MaxAlign);
+  Total = llvm37::RoundUpToAlignment(Total, MaxAlign);
   return Total;
 }
 
@@ -150,10 +150,10 @@ void TypeLoc::copy(TypeLoc other) {
   // can memcpy because getFullDataSize() accurately reflects the
   // layout of the data.
   if (reinterpret_cast<uintptr_t>(Data)
-        == llvm::RoundUpToAlignment(reinterpret_cast<uintptr_t>(Data),
+        == llvm37::RoundUpToAlignment(reinterpret_cast<uintptr_t>(Data),
                                     TypeLocMaxDataAlign) &&
       reinterpret_cast<uintptr_t>(other.Data)
-        == llvm::RoundUpToAlignment(reinterpret_cast<uintptr_t>(other.Data),
+        == llvm37::RoundUpToAlignment(reinterpret_cast<uintptr_t>(other.Data),
                                     TypeLocMaxDataAlign)) {
     memcpy(Data, other.Data, getFullDataSize());
     return;

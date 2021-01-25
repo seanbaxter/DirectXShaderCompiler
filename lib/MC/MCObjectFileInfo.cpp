@@ -7,16 +7,16 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/MC/MCObjectFileInfo.h"
-#include "llvm/ADT/StringExtras.h"
-#include "llvm/ADT/Triple.h"
-#include "llvm/MC/MCAsmInfo.h"
-#include "llvm/MC/MCContext.h"
-#include "llvm/MC/MCSection.h"
-#include "llvm/MC/MCSectionCOFF.h"
-#include "llvm/MC/MCSectionELF.h"
-#include "llvm/MC/MCSectionMachO.h"
-using namespace llvm;
+#include "llvm37/MC/MCObjectFileInfo.h"
+#include "llvm37/ADT/StringExtras.h"
+#include "llvm37/ADT/Triple.h"
+#include "llvm37/MC/MCAsmInfo.h"
+#include "llvm37/MC/MCContext.h"
+#include "llvm37/MC/MCSection.h"
+#include "llvm37/MC/MCSectionCOFF.h"
+#include "llvm37/MC/MCSectionELF.h"
+#include "llvm37/MC/MCSectionMachO.h"
+using namespace llvm37;
 
 static bool useCompactUnwind(const Triple &T) {
   // Only on darwin.
@@ -235,10 +235,10 @@ void MCObjectFileInfo::initMachOMCObjectFileInfo(Triple T) {
   DwarfDebugInlineSection =
       Ctx->getMachOSection("__DWARF", "__debug_inlined", MachO::S_ATTR_DEBUG,
                            SectionKind::getMetadata());
-  StackMapSection = Ctx->getMachOSection("__LLVM_STACKMAPS", "__llvm_stackmaps",
+  StackMapSection = Ctx->getMachOSection("__LLVM37_STACKMAPS", "__llvm_stackmaps",
                                          0, SectionKind::getMetadata());
 
-  FaultMapSection = Ctx->getMachOSection("__LLVM_FAULTMAPS", "__llvm_faultmaps",
+  FaultMapSection = Ctx->getMachOSection("__LLVM37_FAULTMAPS", "__llvm_faultmaps",
                                          0, SectionKind::getMetadata());
 
   TLSExtraDataSection = TLSTLVSection;

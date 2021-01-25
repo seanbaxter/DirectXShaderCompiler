@@ -11,21 +11,21 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/CodeGen/SchedulerRegistry.h"
+#include "llvm37/CodeGen/SchedulerRegistry.h"
 #include "InstrEmitter.h"
 #include "ScheduleDAGSDNodes.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/SmallSet.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/CodeGen/SelectionDAGISel.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/InlineAsm.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Target/TargetInstrInfo.h"
-#include "llvm/Target/TargetRegisterInfo.h"
-using namespace llvm;
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/SmallSet.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/CodeGen/SelectionDAGISel.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/IR/InlineAsm.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Target/TargetInstrInfo.h"
+#include "llvm37/Target/TargetRegisterInfo.h"
+using namespace llvm37;
 
 #define DEBUG_TYPE "pre-RA-sched"
 
@@ -794,12 +794,12 @@ ScheduleDAGLinearize::EmitSchedule(MachineBasicBlock::iterator &InsertPos) {
 //                         Public Constructor Functions
 //===----------------------------------------------------------------------===//
 
-llvm::ScheduleDAGSDNodes *
-llvm::createFastDAGScheduler(SelectionDAGISel *IS, CodeGenOpt::Level) {
+llvm37::ScheduleDAGSDNodes *
+llvm37::createFastDAGScheduler(SelectionDAGISel *IS, CodeGenOpt::Level) {
   return new ScheduleDAGFast(*IS->MF);
 }
 
-llvm::ScheduleDAGSDNodes *
-llvm::createDAGLinearizer(SelectionDAGISel *IS, CodeGenOpt::Level) {
+llvm37::ScheduleDAGSDNodes *
+llvm37::createDAGLinearizer(SelectionDAGISel *IS, CodeGenOpt::Level) {
   return new ScheduleDAGLinearize(*IS->MF);
 }

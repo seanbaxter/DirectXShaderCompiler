@@ -11,16 +11,16 @@
 // Darwin's dsymutil.
 //
 //===----------------------------------------------------------------------===//
-#ifndef LLVM_TOOLS_DSYMUTIL_BINARYHOLDER_H
-#define LLVM_TOOLS_DSYMUTIL_BINARYHOLDER_H
+#ifndef LLVM37_TOOLS_DSYMUTIL_BINARYHOLDER_H
+#define LLVM37_TOOLS_DSYMUTIL_BINARYHOLDER_H
 
-#include "llvm/Object/Archive.h"
-#include "llvm/Object/Error.h"
-#include "llvm/Object/ObjectFile.h"
-#include "llvm/Support/Errc.h"
-#include "llvm/Support/ErrorOr.h"
+#include "llvm37/Object/Archive.h"
+#include "llvm37/Object/Error.h"
+#include "llvm37/Object/ObjectFile.h"
+#include "llvm37/Support/Errc.h"
+#include "llvm37/Support/ErrorOr.h"
 
-namespace llvm {
+namespace llvm37 {
 namespace dsymutil {
 
 /// \brief The BinaryHolder class is responsible for creating and

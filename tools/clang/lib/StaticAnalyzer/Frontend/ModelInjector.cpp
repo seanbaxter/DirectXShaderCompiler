@@ -16,9 +16,9 @@
 #include "clang/Lex/Preprocessor.h"
 #include "clang/Serialization/ASTReader.h"
 #include "clang/StaticAnalyzer/Frontend/FrontendActions.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/Support/CrashRecoveryContext.h"
-#include "llvm/Support/FileSystem.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/Support/CrashRecoveryContext.h"
+#include "llvm37/Support/FileSystem.h"
 #include <string>
 #include <utility>
 
@@ -48,17 +48,17 @@ void ModelInjector::onBodySynthesis(const NamedDecl *D) {
   FileID mainFileID = SM.getMainFileID();
 
   AnalyzerOptionsRef analyzerOpts = CI.getAnalyzerOpts();
-  llvm::StringRef modelPath = analyzerOpts->Config["model-path"];
+  llvm37::StringRef modelPath = analyzerOpts->Config["model-path"];
 
-  llvm::SmallString<128> fileName;
+  llvm37::SmallString<128> fileName;
 
   if (!modelPath.empty())
     fileName =
-        llvm::StringRef(modelPath.str() + "/" + D->getName().str() + ".model");
+        llvm37::StringRef(modelPath.str() + "/" + D->getName().str() + ".model");
   else
-    fileName = llvm::StringRef(D->getName().str() + ".model");
+    fileName = llvm37::StringRef(D->getName().str() + ".model");
 
-  if (!llvm::sys::fs::exists(fileName.str())) {
+  if (!llvm37::sys::fs::exists(fileName.str())) {
     Bodies[D->getName()] = nullptr;
     return;
   }
@@ -98,7 +98,7 @@ void ModelInjector::onBodySynthesis(const NamedDecl *D) {
   ParseModelFileAction parseModelFile(Bodies);
 
   const unsigned ThreadStackSize = 8 << 20;
-  llvm::CrashRecoveryContext CRC;
+  llvm37::CrashRecoveryContext CRC;
 
   CRC.RunSafelyOnThread([&]() { Instance.ExecuteAction(parseModelFile); },
                         ThreadStackSize);

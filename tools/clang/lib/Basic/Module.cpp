@@ -16,11 +16,11 @@
 #include "clang/Basic/FileManager.h"
 #include "clang/Basic/LangOptions.h"
 #include "clang/Basic/TargetInfo.h"
-#include "llvm/ADT/ArrayRef.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/ADT/StringSwitch.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/ArrayRef.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/ADT/StringSwitch.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/raw_ostream.h"
 
 using namespace clang;
 
@@ -58,7 +58,7 @@ Module::~Module() {
 /// language options has the given feature.
 static bool hasFeature(StringRef Feature, const LangOptions &LangOpts,
                        const TargetInfo &Target) {
-  bool HasFeature = llvm::StringSwitch<bool>(Feature)
+  bool HasFeature = llvm37::StringSwitch<bool>(Feature)
                         .Case("altivec", LangOpts.AltiVec)
                         .Case("blocks", LangOpts.Blocks)
                         .Case("cplusplus", LangOpts.CPlusPlus)
@@ -156,7 +156,7 @@ ArrayRef<const FileEntry *> Module::getTopHeaders(FileManager &FileMgr) {
     TopHeaderNames.clear();
   }
 
-  return llvm::makeArrayRef(TopHeaders.begin(), TopHeaders.end());
+  return llvm37::makeArrayRef(TopHeaders.begin(), TopHeaders.end());
 }
 
 bool Module::directlyUses(const Module *Requested) const {
@@ -213,7 +213,7 @@ void Module::markUnavailable(bool MissingRequirement) {
 }
 
 Module *Module::findSubmodule(StringRef Name) const {
-  llvm::StringMap<unsigned>::const_iterator Pos = SubModuleIndex.find(Name);
+  llvm37::StringMap<unsigned>::const_iterator Pos = SubModuleIndex.find(Name);
   if (Pos == SubModuleIndex.end())
     return nullptr;
 
@@ -477,7 +477,7 @@ void Module::print(raw_ostream &OS, unsigned Indent) const {
 }
 
 void Module::dump() const {
-  print(llvm::errs());
+  print(llvm37::errs());
 }
 
 void VisibleModuleSet::setVisible(Module *M, SourceLocation Loc,
@@ -515,7 +515,7 @@ void VisibleModuleSet::setVisible(Module *M, SourceLocation Loc,
 
     for (auto &C : V.M->Conflicts) {
       if (isVisible(C.Other)) {
-        llvm::SmallVector<Module*, 8> Path;
+        llvm37::SmallVector<Module*, 8> Path;
         for (Visiting *I = &V; I; I = I->ExportedBy)
           Path.push_back(I->M);
         Cb(Path, C.Other, C.Message);

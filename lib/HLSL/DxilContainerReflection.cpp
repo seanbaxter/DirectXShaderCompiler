@@ -9,11 +9,11 @@
 //                                                                           //
 ///////////////////////////////////////////////////////////////////////////////
 
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/Bitcode/ReaderWriter.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/InstIterator.h"
-#include "llvm/IR/Operator.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/Bitcode/ReaderWriter.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/InstIterator.h"
+#include "llvm37/IR/Operator.h"
 #include "dxc/DxilContainer/DxilContainer.h"
 #include "dxc/DXIL/DxilModule.h"
 #include "dxc/DXIL/DxilShaderModel.h"
@@ -32,11 +32,11 @@
 #include "dxc/DXIL/DxilCounters.h"
 
 #include <unordered_set>
-#include "llvm/ADT/SetVector.h"
+#include "llvm37/ADT/SetVector.h"
 
 #include "dxc/dxcapi.h"
 
-#ifdef LLVM_ON_WIN32
+#ifdef LLVM37_ON_WIN32
 #include "d3d12shader.h" // for compatibility
 #include "d3d11shader.h" // for compatibility
 
@@ -58,7 +58,7 @@ const GUID IID_ID3D11ShaderReflection_47 = {
     0x4956,
     {0xa8, 0x37, 0x78, 0x69, 0x63, 0x75, 0x55, 0x84}};
 
-using namespace llvm;
+using namespace llvm37;
 using namespace hlsl;
 using namespace hlsl::DXIL;
 
@@ -444,7 +444,7 @@ public:
   HRESULT InitializeEmpty();
   HRESULT Initialize(
     DxilModule              &M,
-    llvm::Type              *type,
+    llvm37::Type              *type,
     DxilFieldAnnotation     &typeAnnotation,
     unsigned int            baseOffset,
     std::vector<std::unique_ptr<CShaderReflectionType>>& allTypes,
@@ -713,7 +713,7 @@ STDMETHODIMP CShaderReflectionType::ImplementsInterface(THIS_ ID3D12ShaderReflec
 // Helper routine for types that don't have an obvious mapping
 // to the existing shader reflection interface.
 static bool ProcessUnhandledObjectType(
-  llvm::StructType            *structType,
+  llvm37::StructType            *structType,
   D3D_SHADER_VARIABLE_TYPE    *outObjectType)
 {
   // Don't actually make this a hard error, but instead report the problem using a suitable debug message.
@@ -728,7 +728,7 @@ static bool ProcessUnhandledObjectType(
 // (a texture, sampler, buffer, etc.), and to extract the coresponding shader
 // reflection type.
 static bool TryToDetectObjectType(
-  llvm::StructType            *structType,
+  llvm37::StructType            *structType,
   D3D_SHADER_VARIABLE_TYPE    *outObjectType)
 {
   // Note: This logic is largely duplicated from `dxilutil::IsHLSLObjectType`
@@ -810,15 +810,15 @@ static bool TryToDetectObjectType(
 // object type (uses the `TryToDetectObjectType()` function
 // defined previously).
 static bool IsObjectType(
-  llvm::Type* inType)
+  llvm37::Type* inType)
 {
-  llvm::Type* type = inType;
+  llvm37::Type* type = inType;
   while(type->isArrayTy())
   {
     type = type->getArrayElementType();
   }
 
-  llvm::StructType* structType = dyn_cast<StructType>(type);
+  llvm37::StructType* structType = dyn_cast<StructType>(type);
   if(!structType)
     return false;
 
@@ -836,7 +836,7 @@ HRESULT CShaderReflectionType::InitializeEmpty()
 // annotations into a D3D shader reflection type.
 HRESULT CShaderReflectionType::Initialize(
   DxilModule              &M,
-  llvm::Type              *inType,
+  llvm37::Type              *inType,
   DxilFieldAnnotation     &typeAnnotation,
   unsigned int            baseOffset,
   std::vector<std::unique_ptr<CShaderReflectionType>>& allTypes,
@@ -873,11 +873,11 @@ HRESULT CShaderReflectionType::Initialize(
   // data, but only as the `Elements` field being non-zero.
   // We "unwrap" any array type here, and then proceed to look
   // at the element type.
-  llvm::Type* type = inType;
+  llvm37::Type* type = inType;
 
   while(type->isArrayTy())
   {
-    llvm::Type* elementType = type->getArrayElementType();
+    llvm37::Type* elementType = type->getArrayElementType();
 
     // Note: At this point an HLSL matrix type may appear as an ordinary
     // array (not wrapped in a `struct`), so `dxilutil::IsHLSLMatrixType()`
@@ -1084,7 +1084,7 @@ HRESULT CShaderReflectionType::Initialize(
       m_Desc.Rows = 1;
 
       // Try to "clean" the type name for use in reflection data
-      llvm::StringRef name = structType->getName();
+      llvm37::StringRef name = structType->getName();
       name = name.ltrim("dx.alignment.legacy.");
       name = name.ltrim("struct.");
       m_Name = name;
@@ -1108,7 +1108,7 @@ HRESULT CShaderReflectionType::Initialize(
       for(unsigned int ff = 0; ff < fieldCount; ++ff)
       {
         DxilFieldAnnotation& fieldAnnotation = structAnnotation->GetFieldAnnotation(ff);
-        llvm::Type* fieldType = structType->getStructElementType(ff);
+        llvm37::Type* fieldType = structType->getStructElementType(ff);
 
         // Skip fields with object types, since these are not part of constant buffers,
         // and are not allowed in other buffer types.
@@ -1583,7 +1583,7 @@ static UINT ResourceToFlags(DxilResourceBase *RB) {
   DxilResource *R = DxilResourceFromBase(RB);
   if (R != nullptr &&
       (R->IsAnyTexture() || R->GetKind() == DXIL::ResourceKind::TypedBuffer)) {
-    llvm::Type *RetTy = R->GetRetType();
+    llvm37::Type *RetTy = R->GetRetType();
     if (VectorType *VT = dyn_cast<VectorType>(RetTy)) {
       unsigned vecSize = VT->getNumElements();
       switch (vecSize) {
@@ -2026,7 +2026,7 @@ LPCSTR DxilShaderReflection::CreateUpperCase(LPCSTR pValue) {
   if (*pCursor == '\0')
     return pValue;
 
-  std::unique_ptr<char[]> pUpperStr = llvm::make_unique<char[]>(strlen(pValue) + 1);
+  std::unique_ptr<char[]> pUpperStr = llvm37::make_unique<char[]>(strlen(pValue) + 1);
   char *pWrite = pUpperStr.get();
   pCursor = pValue;
   for (;;) {
@@ -2755,10 +2755,10 @@ ID3D12FunctionReflection *DxilLibraryReflection::GetFunctionByIndex(INT Function
   return m_FunctionVector[FunctionIndex];
 }
 
-#else // LLVM_ON_WIN32
+#else // LLVM37_ON_WIN32
 
 void hlsl::CreateDxcContainerReflection(IDxcContainerReflection **ppResult) {
   *ppResult = nullptr;
 }
 
-#endif // LLVM_ON_WIN32
+#endif // LLVM37_ON_WIN32

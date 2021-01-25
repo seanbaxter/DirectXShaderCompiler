@@ -13,8 +13,8 @@
 // to avoid bad interactions between the code used in the fuzzer and
 // the code used in the target function.
 
-#ifndef LLVM_FUZZER_INTERFACE_H
-#define LLVM_FUZZER_INTERFACE_H
+#ifndef LLVM37_FUZZER_INTERFACE_H
+#define LLVM37_FUZZER_INTERFACE_H
 
 #include <cstddef>
 #include <cstdint>
@@ -95,4 +95,4 @@ int FuzzerDriver(int argc, char **argv, UserSuppliedFuzzer &USF);
 
 }  // namespace fuzzer
 
-#endif  // LLVM_FUZZER_INTERFACE_H
+#endif  // LLVM37_FUZZER_INTERFACE_H

@@ -13,14 +13,14 @@
 
 #include "DwarfExpression.h"
 #include "DwarfDebug.h"
-#include "llvm/ADT/SmallBitVector.h"
-#include "llvm/CodeGen/AsmPrinter.h"
-#include "llvm/Support/Dwarf.h"
-#include "llvm/Target/TargetMachine.h"
-#include "llvm/Target/TargetRegisterInfo.h"
-#include "llvm/Target/TargetSubtargetInfo.h"
+#include "llvm37/ADT/SmallBitVector.h"
+#include "llvm37/CodeGen/AsmPrinter.h"
+#include "llvm37/Support/Dwarf.h"
+#include "llvm37/Target/TargetMachine.h"
+#include "llvm37/Target/TargetRegisterInfo.h"
+#include "llvm37/Target/TargetSubtargetInfo.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 void DwarfExpression::AddReg(int DwarfReg, const char *Comment) {
   assert(DwarfReg >= 0 && "invalid negative dwarf register number");

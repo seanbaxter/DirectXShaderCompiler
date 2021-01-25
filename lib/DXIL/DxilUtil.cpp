@@ -15,23 +15,23 @@
 #include "dxc/DXIL/DxilModule.h"
 #include "dxc/DXIL/DxilOperations.h"
 #include "dxc/Support/Global.h"
-#include "llvm/ADT/StringExtras.h"
-#include "llvm/ADT/Twine.h"
-#include "llvm/Bitcode/ReaderWriter.h"
-#include "llvm/IR/DiagnosticInfo.h"
-#include "llvm/IR/DiagnosticPrinter.h"
-#include "llvm/IR/GlobalVariable.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Module.h"
-#include "llvm/Support/MemoryBuffer.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/DIBuilder.h"
-#include "llvm/IR/IRBuilder.h"
+#include "llvm37/ADT/StringExtras.h"
+#include "llvm37/ADT/Twine.h"
+#include "llvm37/Bitcode/ReaderWriter.h"
+#include "llvm37/IR/DiagnosticInfo.h"
+#include "llvm37/IR/DiagnosticPrinter.h"
+#include "llvm37/IR/GlobalVariable.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/Support/MemoryBuffer.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/DIBuilder.h"
+#include "llvm37/IR/IRBuilder.h"
 
-using namespace llvm;
+using namespace llvm37;
 using namespace hlsl;
 
 namespace hlsl {
@@ -64,7 +64,7 @@ bool HasDynamicIndexing(Value *V) {
 
 unsigned
 GetLegacyCBufferFieldElementSize(DxilFieldAnnotation &fieldAnnotation,
-                                           llvm::Type *Ty,
+                                           llvm37::Type *Ty,
                                            DxilTypeSystem &typeSys) {
 
   while (isa<ArrayType>(Ty)) {
@@ -110,7 +110,7 @@ bool IsStaticGlobal(GlobalVariable *GV) {
          GV->getType()->getPointerAddressSpace() == DXIL::kDefaultAddrSpace;
 }
 
-bool IsSharedMemoryGlobal(llvm::GlobalVariable *GV) {
+bool IsSharedMemoryGlobal(llvm37::GlobalVariable *GV) {
   return GV->getType()->getPointerAddressSpace() == DXIL::kTGSMAddrSpace;
 }
 
@@ -131,7 +131,7 @@ bool RemoveUnusedFunctions(Module &M, Function *EntryFunc,
   return bUpdated;
 }
 
-void PrintDiagnosticHandler(const llvm::DiagnosticInfo &DI, void *Context) {
+void PrintDiagnosticHandler(const llvm37::DiagnosticInfo &DI, void *Context) {
   DiagnosticPrinter *printer = reinterpret_cast<DiagnosticPrinter *>(Context);
   DI.print(*printer);
 }
@@ -191,33 +191,33 @@ void PrintUnescapedString(StringRef Name, raw_ostream &Out) {
   }
 }
 
-std::unique_ptr<llvm::Module> LoadModuleFromBitcode(llvm::MemoryBuffer *MB,
-  llvm::LLVMContext &Ctx,
+std::unique_ptr<llvm37::Module> LoadModuleFromBitcode(llvm37::MemoryBuffer *MB,
+  llvm37::LLVMContext &Ctx,
   std::string &DiagStr) {
   // Note: the DiagStr is not used.
-  auto pModule = llvm::parseBitcodeFile(MB->getMemBufferRef(), Ctx);
+  auto pModule = llvm37::parseBitcodeFile(MB->getMemBufferRef(), Ctx);
   if (!pModule) {
     return nullptr;
   }
-  return std::unique_ptr<llvm::Module>(pModule.get().release());
+  return std::unique_ptr<llvm37::Module>(pModule.get().release());
 }
 
-std::unique_ptr<llvm::Module> LoadModuleFromBitcodeLazy(std::unique_ptr<llvm::MemoryBuffer> &&MB,
-  llvm::LLVMContext &Ctx, std::string &DiagStr)
+std::unique_ptr<llvm37::Module> LoadModuleFromBitcodeLazy(std::unique_ptr<llvm37::MemoryBuffer> &&MB,
+  llvm37::LLVMContext &Ctx, std::string &DiagStr)
 {
   // Note: the DiagStr is not used.
-  auto pModule = llvm::getLazyBitcodeModule(std::move(MB), Ctx, nullptr, true);
+  auto pModule = llvm37::getLazyBitcodeModule(std::move(MB), Ctx, nullptr, true);
   if (!pModule) {
     return nullptr;
   }
-  return std::unique_ptr<llvm::Module>(pModule.get().release());
+  return std::unique_ptr<llvm37::Module>(pModule.get().release());
 }
 
-std::unique_ptr<llvm::Module> LoadModuleFromBitcode(llvm::StringRef BC,
-  llvm::LLVMContext &Ctx,
+std::unique_ptr<llvm37::Module> LoadModuleFromBitcode(llvm37::StringRef BC,
+  llvm37::LLVMContext &Ctx,
   std::string &DiagStr) {
-  std::unique_ptr<llvm::MemoryBuffer> pBitcodeBuf(
-    llvm::MemoryBuffer::getMemBuffer(BC, "", false));
+  std::unique_ptr<llvm37::MemoryBuffer> pBitcodeBuf(
+    llvm37::MemoryBuffer::getMemBuffer(BC, "", false));
   return LoadModuleFromBitcode(pBitcodeBuf.get(), Ctx, DiagStr);
 }
 
@@ -226,7 +226,7 @@ DIGlobalVariable *FindGlobalVariableDebugInfo(GlobalVariable *GV,
                                               DebugInfoFinder &DbgInfoFinder) {
   struct GlobalFinder {
     GlobalVariable *GV;
-    bool operator()(llvm::DIGlobalVariable *const arg) const {
+    bool operator()(llvm37::DIGlobalVariable *const arg) const {
       return arg->getVariable() == GV;
     }
   };
@@ -363,8 +363,8 @@ void EmitNoteOnContext(LLVMContext &Ctx, Twine Msg) {
   EmitWarningOrErrorOnContext(Ctx, Msg, DiagnosticSeverity::DS_Note);
 }
 
-void CollectSelect(llvm::Instruction *Inst,
-                   std::unordered_set<llvm::Instruction *> &selectSet) {
+void CollectSelect(llvm37::Instruction *Inst,
+                   std::unordered_set<llvm37::Instruction *> &selectSet) {
   unsigned startOpIdx = 0;
   // Skip Cond for Select.
   if (isa<SelectInst>(Inst)) {
@@ -430,7 +430,7 @@ bool SimplifyTrivialPHIs(BasicBlock *BB) {
   return Changed;
 }
 
-llvm::BasicBlock *GetSwitchSuccessorForCond(llvm::SwitchInst *Switch,llvm::ConstantInt *Cond) {
+llvm37::BasicBlock *GetSwitchSuccessorForCond(llvm37::SwitchInst *Switch,llvm37::ConstantInt *Cond) {
   for (auto it = Switch->case_begin(), end = Switch->case_end(); it != end; it++) {
     if (it.getCaseValue() == Cond) {
       return it.getCaseSuccessor();
@@ -509,7 +509,7 @@ void TryScatterDebugValueToVectorElements(Value *Val) {
   }
 }
 
-Value *SelectOnOperation(llvm::Instruction *Inst, unsigned operandIdx) {
+Value *SelectOnOperation(llvm37::Instruction *Inst, unsigned operandIdx) {
   Instruction *prototype = Inst;
   for (unsigned i = 0; i < prototype->getNumOperands(); i++) {
     if (i == operandIdx)
@@ -550,32 +550,32 @@ Value *SelectOnOperation(llvm::Instruction *Inst, unsigned operandIdx) {
   return nullptr;
 }
 
-llvm::Instruction *SkipAllocas(llvm::Instruction *I) {
+llvm37::Instruction *SkipAllocas(llvm37::Instruction *I) {
   // Step past any allocas:
   while (I && (isa<AllocaInst>(I) || isa<DbgInfoIntrinsic>(I)))
     I = I->getNextNode();
   return I;
 }
-llvm::Instruction *FindAllocaInsertionPt(llvm::BasicBlock* BB) {
+llvm37::Instruction *FindAllocaInsertionPt(llvm37::BasicBlock* BB) {
   return &*BB->getFirstInsertionPt();
 }
-llvm::Instruction *FindAllocaInsertionPt(llvm::Function* F) {
+llvm37::Instruction *FindAllocaInsertionPt(llvm37::Function* F) {
   return FindAllocaInsertionPt(&F->getEntryBlock());
 }
-llvm::Instruction *FindAllocaInsertionPt(llvm::Instruction* I) {
+llvm37::Instruction *FindAllocaInsertionPt(llvm37::Instruction* I) {
   Function *F = I->getParent()->getParent();
   if (F)
     return FindAllocaInsertionPt(F);
   else // BB with no parent function
     return FindAllocaInsertionPt(I->getParent());
 }
-llvm::Instruction *FirstNonAllocaInsertionPt(llvm::Instruction* I) {
+llvm37::Instruction *FirstNonAllocaInsertionPt(llvm37::Instruction* I) {
   return SkipAllocas(FindAllocaInsertionPt(I));
 }
-llvm::Instruction *FirstNonAllocaInsertionPt(llvm::BasicBlock* BB) {
+llvm37::Instruction *FirstNonAllocaInsertionPt(llvm37::BasicBlock* BB) {
   return SkipAllocas(FindAllocaInsertionPt(BB));
 }
-llvm::Instruction *FirstNonAllocaInsertionPt(llvm::Function* F) {
+llvm37::Instruction *FirstNonAllocaInsertionPt(llvm37::Function* F) {
   return SkipAllocas(FindAllocaInsertionPt(F));
 }
 
@@ -586,19 +586,19 @@ static bool ConsumePrefix(StringRef &Str, StringRef Prefix) {
 }
 
 bool IsResourceSingleComponent(Type *Ty) {
-  if (llvm::ArrayType *arrType = llvm::dyn_cast<llvm::ArrayType>(Ty)) {
+  if (llvm37::ArrayType *arrType = llvm37::dyn_cast<llvm37::ArrayType>(Ty)) {
     if (arrType->getArrayNumElements() > 1) {
       return false;
     }
     return IsResourceSingleComponent(arrType->getArrayElementType());
-  } else if (llvm::StructType *structType =
-                 llvm::dyn_cast<llvm::StructType>(Ty)) {
+  } else if (llvm37::StructType *structType =
+                 llvm37::dyn_cast<llvm37::StructType>(Ty)) {
     if (structType->getStructNumElements() > 1) {
       return false;
     }
     return IsResourceSingleComponent(structType->getStructElementType(0));
-  } else if (llvm::VectorType *vectorType =
-                 llvm::dyn_cast<llvm::VectorType>(Ty)) {
+  } else if (llvm37::VectorType *vectorType =
+                 llvm37::dyn_cast<llvm37::VectorType>(Ty)) {
     if (vectorType->getNumElements() > 1) {
       return false;
     }
@@ -607,26 +607,26 @@ bool IsResourceSingleComponent(Type *Ty) {
   return true;
 }
 
-uint8_t GetResourceComponentCount(llvm::Type *Ty) {
-  if (llvm::ArrayType *arrType = llvm::dyn_cast<llvm::ArrayType>(Ty)) {
+uint8_t GetResourceComponentCount(llvm37::Type *Ty) {
+  if (llvm37::ArrayType *arrType = llvm37::dyn_cast<llvm37::ArrayType>(Ty)) {
     return arrType->getArrayNumElements() *
            GetResourceComponentCount(arrType->getArrayElementType());
-  } else if (llvm::StructType *structType =
-                 llvm::dyn_cast<llvm::StructType>(Ty)) {
+  } else if (llvm37::StructType *structType =
+                 llvm37::dyn_cast<llvm37::StructType>(Ty)) {
     uint32_t Count = 0;
     for (Type *EltTy : structType->elements())  {
       Count += GetResourceComponentCount(EltTy);
     }
     DXASSERT(Count <= 4, "Component Count out of bound.");
     return Count;
-  } else if (llvm::VectorType *vectorType =
-                 llvm::dyn_cast<llvm::VectorType>(Ty)) {
+  } else if (llvm37::VectorType *vectorType =
+                 llvm37::dyn_cast<llvm37::VectorType>(Ty)) {
     return vectorType->getNumElements();
   }
   return 1;
 }
 
-bool IsHLSLResourceType(llvm::Type *Ty) {
+bool IsHLSLResourceType(llvm37::Type *Ty) {
   return GetHLSLResourceProperties(Ty).first;
 }
 
@@ -639,12 +639,12 @@ static DxilResourceProperties MakeResourceProperties(hlsl::DXIL::ResourceKind Ki
   return Ret;
 }
 
-std::pair<bool, DxilResourceProperties> GetHLSLResourceProperties(llvm::Type *Ty)
+std::pair<bool, DxilResourceProperties> GetHLSLResourceProperties(llvm37::Type *Ty)
 {
    using RetType = std::pair<bool, DxilResourceProperties>;
    RetType FalseRet(false, DxilResourceProperties{});
 
-  if (llvm::StructType *ST = dyn_cast<llvm::StructType>(Ty)) {
+  if (llvm37::StructType *ST = dyn_cast<llvm37::StructType>(Ty)) {
     if (!ST->hasName())
       return FalseRet;
 
@@ -723,8 +723,8 @@ std::pair<bool, DxilResourceProperties> GetHLSLResourceProperties(llvm::Type *Ty
   return FalseRet;
 }
 
-bool IsHLSLObjectType(llvm::Type *Ty) {
-  if (llvm::StructType *ST = dyn_cast<llvm::StructType>(Ty)) {
+bool IsHLSLObjectType(llvm37::Type *Ty) {
+  if (llvm37::StructType *ST = dyn_cast<llvm37::StructType>(Ty)) {
     if (!ST->hasName()) {
       return false;
     }
@@ -753,8 +753,8 @@ bool IsHLSLObjectType(llvm::Type *Ty) {
   return false;
 }
 
-bool IsHLSLRayQueryType(llvm::Type *Ty) {
-  if (llvm::StructType *ST = dyn_cast<llvm::StructType>(Ty)) {
+bool IsHLSLRayQueryType(llvm37::Type *Ty) {
+  if (llvm37::StructType *ST = dyn_cast<llvm37::StructType>(Ty)) {
     if (!ST->hasName())
       return false;
     StringRef name = ST->getName();
@@ -766,8 +766,8 @@ bool IsHLSLRayQueryType(llvm::Type *Ty) {
   return false;
 }
 
-bool IsHLSLResourceDescType(llvm::Type *Ty) {
-  if (llvm::StructType *ST = dyn_cast<llvm::StructType>(Ty)) {
+bool IsHLSLResourceDescType(llvm37::Type *Ty) {
+  if (llvm37::StructType *ST = dyn_cast<llvm37::StructType>(Ty)) {
     if (!ST->hasName())
       return false;
     StringRef name = ST->getName();
@@ -782,18 +782,18 @@ bool IsHLSLResourceDescType(llvm::Type *Ty) {
   return false;
 }
 
-bool IsIntegerOrFloatingPointType(llvm::Type *Ty) {
+bool IsIntegerOrFloatingPointType(llvm37::Type *Ty) {
   return Ty->isIntegerTy() || Ty->isFloatingPointTy();
 }
 
-bool ContainsHLSLObjectType(llvm::Type *Ty) {
+bool ContainsHLSLObjectType(llvm37::Type *Ty) {
   // Unwrap pointer/array
-  while (llvm::isa<llvm::PointerType>(Ty))
-    Ty = llvm::cast<llvm::PointerType>(Ty)->getPointerElementType();
-  while (llvm::isa<llvm::ArrayType>(Ty))
-    Ty = llvm::cast<llvm::ArrayType>(Ty)->getArrayElementType();
+  while (llvm37::isa<llvm37::PointerType>(Ty))
+    Ty = llvm37::cast<llvm37::PointerType>(Ty)->getPointerElementType();
+  while (llvm37::isa<llvm37::ArrayType>(Ty))
+    Ty = llvm37::cast<llvm37::ArrayType>(Ty)->getArrayElementType();
 
-  if (llvm::StructType *ST = llvm::dyn_cast<llvm::StructType>(Ty)) {
+  if (llvm37::StructType *ST = llvm37::dyn_cast<llvm37::StructType>(Ty)) {
     if (ST->hasName() && ST->getName().startswith("dx.types."))
       return true;
     // TODO: How is this suppoed to check for Input/OutputPatch types if
@@ -811,7 +811,7 @@ bool ContainsHLSLObjectType(llvm::Type *Ty) {
 
 // Based on the implementation available in LLVM's trunk:
 // http://llvm.org/doxygen/Constants_8cpp_source.html#l02734
-bool IsSplat(llvm::ConstantDataVector *cdv) {
+bool IsSplat(llvm37::ConstantDataVector *cdv) {
   const char *Base = cdv->getRawDataValues().data();
 
   // Compare elements 1+ to the 0'th element.
@@ -823,7 +823,7 @@ bool IsSplat(llvm::ConstantDataVector *cdv) {
   return true;
 }
 
-llvm::Type* StripArrayTypes(llvm::Type *Ty, llvm::SmallVectorImpl<unsigned> *OuterToInnerLengths) {
+llvm37::Type* StripArrayTypes(llvm37::Type *Ty, llvm37::SmallVectorImpl<unsigned> *OuterToInnerLengths) {
   DXASSERT_NOMSG(Ty);
   while (Ty->isArrayTy()) {
     if (OuterToInnerLengths) {
@@ -833,7 +833,7 @@ llvm::Type* StripArrayTypes(llvm::Type *Ty, llvm::SmallVectorImpl<unsigned> *Out
   }
   return Ty;
 }
-llvm::Type* WrapInArrayTypes(llvm::Type *Ty, llvm::ArrayRef<unsigned> OuterToInnerLengths) {
+llvm37::Type* WrapInArrayTypes(llvm37::Type *Ty, llvm37::ArrayRef<unsigned> OuterToInnerLengths) {
   DXASSERT_NOMSG(Ty);
   for (auto it = OuterToInnerLengths.rbegin(), E = OuterToInnerLengths.rend(); it != E; ++it) {
     Ty = ArrayType::get(Ty, *it);
@@ -911,8 +911,8 @@ void Split64bitValForStore(Type *EltTy, ArrayRef<Value *> vals, unsigned size,
 }
 }
 
-llvm::CallInst *TranslateCallRawBufferLoadToBufferLoad(
-    llvm::CallInst *CI, llvm::Function *newFunction, hlsl::OP *op) {
+llvm37::CallInst *TranslateCallRawBufferLoadToBufferLoad(
+    llvm37::CallInst *CI, llvm37::Function *newFunction, hlsl::OP *op) {
   IRBuilder<> Builder(CI);
   SmallVector<Value *, 4> args;
   args.emplace_back(op->GetI32Const((unsigned)DXIL::OpCode::BufferLoad));
@@ -924,7 +924,7 @@ llvm::CallInst *TranslateCallRawBufferLoadToBufferLoad(
 }
 
 void ReplaceRawBufferLoadWithBufferLoad(
-    llvm::Function *F, hlsl::OP *op) {
+    llvm37::Function *F, hlsl::OP *op) {
   Type *RTy = F->getReturnType();
   if (StructType *STy = dyn_cast<StructType>(RTy)) {
     Type *ETy = STy->getElementType(0);
@@ -945,8 +945,8 @@ void ReplaceRawBufferLoadWithBufferLoad(
 }
 
 
-llvm::CallInst *TranslateCallRawBufferStoreToBufferStore(
-    llvm::CallInst *CI, llvm::Function *newFunction, hlsl::OP *op) {
+llvm37::CallInst *TranslateCallRawBufferStoreToBufferStore(
+    llvm37::CallInst *CI, llvm37::Function *newFunction, hlsl::OP *op) {
   IRBuilder<> Builder(CI);
   SmallVector<Value *, 4> args;
   args.emplace_back(op->GetI32Const((unsigned)DXIL::OpCode::BufferStore));
@@ -957,7 +957,7 @@ llvm::CallInst *TranslateCallRawBufferStoreToBufferStore(
   return newCall;
 }
 
-void ReplaceRawBufferStoreWithBufferStore(llvm::Function *F, hlsl::OP *op) {
+void ReplaceRawBufferStoreWithBufferStore(llvm37::Function *F, hlsl::OP *op) {
   DXASSERT(F->getReturnType()->isVoidTy(), "rawBufferStore should return a void type.");
   Type *ETy = F->getFunctionType()->getParamType(4); // value
   Function *newFunction = op->GetOpFunc(hlsl::DXIL::OpCode::BufferStore, ETy);
@@ -974,7 +974,7 @@ void ReplaceRawBufferStoreWithBufferStore(llvm::Function *F, hlsl::OP *op) {
 }
 
 
-void ReplaceRawBufferLoad64Bit(llvm::Function *F, llvm::Type *EltTy, hlsl::OP *hlslOP) {
+void ReplaceRawBufferLoad64Bit(llvm37::Function *F, llvm37::Type *EltTy, hlsl::OP *hlslOP) {
   Function *bufLd = hlslOP->GetOpFunc(DXIL::OpCode::RawBufferLoad,
                                       Type::getInt32Ty(hlslOP->GetCtx()));
   for (auto U = F->user_begin(), E = F->user_end(); U != E;) {
@@ -1072,7 +1072,7 @@ void ReplaceRawBufferLoad64Bit(llvm::Function *F, llvm::Type *EltTy, hlsl::OP *h
   }
 }
 
-void ReplaceRawBufferStore64Bit(llvm::Function *F, llvm::Type *ETy, hlsl::OP *hlslOP) {
+void ReplaceRawBufferStore64Bit(llvm37::Function *F, llvm37::Type *ETy, hlsl::OP *hlslOP) {
   Function *newFunction = hlslOP->GetOpFunc(hlsl::DXIL::OpCode::RawBufferStore,
                                             Type::getInt32Ty(hlslOP->GetCtx()));
   for (auto U = F->user_begin(), E = F->user_end(); U != E;) {
@@ -1185,7 +1185,7 @@ public:
 
 char DxilLoadMetadata::ID = 0;
 
-ModulePass *llvm::createDxilLoadMetadataPass() {
+ModulePass *llvm37::createDxilLoadMetadataPass() {
   return new DxilLoadMetadata();
 }
 

@@ -23,10 +23,10 @@
 #include "clang/Lex/Preprocessor.h"
 #include "clang/Lex/PreprocessorOptions.h"
 #include "clang/Serialization/ASTReader.h"
-#include "llvm/ADT/APFloat.h"
-#include "llvm/Support/FileSystem.h"
-#include "llvm/Support/MemoryBuffer.h"
-#include "llvm/Support/Path.h"
+#include "llvm37/ADT/APFloat.h"
+#include "llvm37/Support/FileSystem.h"
+#include "llvm37/Support/MemoryBuffer.h"
+#include "llvm37/Support/Path.h"
 #include "dxcversion.inc" // HLSL Change
 #include "dxc/DXIL/DxilConstants.h" // HLSL Change
 #include "dxc/DXIL/DxilShaderModel.h" // HLSL Change
@@ -116,23 +116,23 @@ static void AddImplicitIncludePCH(MacroBuilder &Builder, Preprocessor &PP,
 /// PickFP - This is used to pick a value based on the FP semantics of the
 /// specified FP model.
 template <typename T>
-static T PickFP(const llvm::fltSemantics *Sem, T IEEESingleVal,
+static T PickFP(const llvm37::fltSemantics *Sem, T IEEESingleVal,
                 T IEEEDoubleVal, T X87DoubleExtendedVal, T PPCDoubleDoubleVal,
                 T IEEEQuadVal) {
-  if (Sem == (const llvm::fltSemantics*)&llvm::APFloat::IEEEsingle)
+  if (Sem == (const llvm37::fltSemantics*)&llvm37::APFloat::IEEEsingle)
     return IEEESingleVal;
-  if (Sem == (const llvm::fltSemantics*)&llvm::APFloat::IEEEdouble)
+  if (Sem == (const llvm37::fltSemantics*)&llvm37::APFloat::IEEEdouble)
     return IEEEDoubleVal;
-  if (Sem == (const llvm::fltSemantics*)&llvm::APFloat::x87DoubleExtended)
+  if (Sem == (const llvm37::fltSemantics*)&llvm37::APFloat::x87DoubleExtended)
     return X87DoubleExtendedVal;
-  if (Sem == (const llvm::fltSemantics*)&llvm::APFloat::PPCDoubleDouble)
+  if (Sem == (const llvm37::fltSemantics*)&llvm37::APFloat::PPCDoubleDouble)
     return PPCDoubleDoubleVal;
-  assert(Sem == (const llvm::fltSemantics*)&llvm::APFloat::IEEEquad);
+  assert(Sem == (const llvm37::fltSemantics*)&llvm37::APFloat::IEEEquad);
   return IEEEQuadVal;
 }
 
 static void DefineFloatMacros(MacroBuilder &Builder, StringRef Prefix,
-                              const llvm::fltSemantics *Sem, StringRef Ext) {
+                              const llvm37::fltSemantics *Sem, StringRef Ext) {
   const char *DenormMin, *Epsilon, *Max, *Min;
   DenormMin = PickFP(Sem, "1.40129846e-45", "4.9406564584124654e-324",
                      "3.64519953188247460253e-4951",
@@ -188,8 +188,8 @@ static void DefineFloatMacros(MacroBuilder &Builder, StringRef Prefix,
 static void DefineTypeSize(const Twine &MacroName, unsigned TypeWidth,
                            StringRef ValSuffix, bool isSigned,
                            MacroBuilder &Builder) {
-  llvm::APInt MaxVal = isSigned ? llvm::APInt::getSignedMaxValue(TypeWidth)
-                                : llvm::APInt::getMaxValue(TypeWidth);
+  llvm37::APInt MaxVal = isSigned ? llvm37::APInt::getSignedMaxValue(TypeWidth)
+                                : llvm37::APInt::getMaxValue(TypeWidth);
   Builder.defineMacro(MacroName, MaxVal.toString(10, isSigned) + ValSuffix);
 }
 
@@ -318,7 +318,7 @@ static void AddObjCXXARCLibstdcxxDefines(const LangOptions &LangOpts,
     // libstdc++ uses as an indicator of the presence of trivial copy, assign,
     // default-construct, and destruct semantics (none of which hold for
     // lifetime-qualified objects in ARC).
-    llvm::raw_string_ostream Out(Result);
+    llvm37::raw_string_ostream Out(Result);
     
     Out << "namespace std {\n"
         << "\n"
@@ -956,7 +956,7 @@ void clang::InitializePreprocessor(
   const LangOptions &LangOpts = PP.getLangOpts();
   std::string PredefineBuffer;
   PredefineBuffer.reserve(4080);
-  llvm::raw_string_ostream Predefines(PredefineBuffer);
+  llvm37::raw_string_ostream Predefines(PredefineBuffer);
   MacroBuilder Builder(Predefines);
 
   // Emit line markers for various builtin sections of the file.  We don't do

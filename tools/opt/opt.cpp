@@ -14,54 +14,54 @@
 
 #include "BreakpointPrinter.h"
 #include "NewPMDriver.h"
-#include "llvm/PassPrinters/PassPrinters.h"
-#include "llvm/ADT/Triple.h"
-#include "llvm/Analysis/CallGraph.h"
-#include "llvm/Analysis/CallGraphSCCPass.h"
-#include "llvm/Analysis/LoopPass.h"
-#include "llvm/Analysis/RegionPass.h"
-#include "llvm/Analysis/TargetLibraryInfo.h"
-#include "llvm/Analysis/TargetTransformInfo.h"
-#include "llvm/Bitcode/BitcodeWriterPass.h"
-#include "llvm/CodeGen/CommandFlags.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/DebugInfo.h"
-#include "llvm/IR/IRPrintingPasses.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/LegacyPassNameParser.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/Verifier.h"
-#include "llvm/IRReader/IRReader.h"
-#include "llvm/InitializePasses.h"
-#include "llvm/LinkAllIR.h"
-#include "llvm/LinkAllPasses.h"
-#include "llvm/MC/SubtargetFeature.h"
-#include "llvm/IR/LegacyPassManager.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/FileSystem.h"
-#include "llvm/Support/Host.h"
-#include "llvm/Support/ManagedStatic.h"
-#include "llvm/Support/PluginLoader.h"
-#include "llvm/Support/PrettyStackTrace.h"
-#include "llvm/Support/Signals.h"
-#include "llvm/Support/SourceMgr.h"
-#include "llvm/Support/SystemUtils.h"
-#include "llvm/Support/TargetRegistry.h"
-#include "llvm/Support/TargetSelect.h"
-#include "llvm/Support/ToolOutputFile.h"
-#include "llvm/Target/TargetMachine.h"
-#include "llvm/Transforms/IPO/PassManagerBuilder.h"
+#include "llvm37/PassPrinters/PassPrinters.h"
+#include "llvm37/ADT/Triple.h"
+#include "llvm37/Analysis/CallGraph.h"
+#include "llvm37/Analysis/CallGraphSCCPass.h"
+#include "llvm37/Analysis/LoopPass.h"
+#include "llvm37/Analysis/RegionPass.h"
+#include "llvm37/Analysis/TargetLibraryInfo.h"
+#include "llvm37/Analysis/TargetTransformInfo.h"
+#include "llvm37/Bitcode/BitcodeWriterPass.h"
+#include "llvm37/CodeGen/CommandFlags.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/IR/DebugInfo.h"
+#include "llvm37/IR/IRPrintingPasses.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/LegacyPassNameParser.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/Verifier.h"
+#include "llvm37/IRReader/IRReader.h"
+#include "llvm37/InitializePasses.h"
+#include "llvm37/LinkAllIR.h"
+#include "llvm37/LinkAllPasses.h"
+#include "llvm37/MC/SubtargetFeature.h"
+#include "llvm37/IR/LegacyPassManager.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/FileSystem.h"
+#include "llvm37/Support/Host.h"
+#include "llvm37/Support/ManagedStatic.h"
+#include "llvm37/Support/PluginLoader.h"
+#include "llvm37/Support/PrettyStackTrace.h"
+#include "llvm37/Support/Signals.h"
+#include "llvm37/Support/SourceMgr.h"
+#include "llvm37/Support/SystemUtils.h"
+#include "llvm37/Support/TargetRegistry.h"
+#include "llvm37/Support/TargetSelect.h"
+#include "llvm37/Support/ToolOutputFile.h"
+#include "llvm37/Target/TargetMachine.h"
+#include "llvm37/Transforms/IPO/PassManagerBuilder.h"
 
 // HLSL Change Starts
 #include "dxc/Support/Global.h"
-#include "llvm/Analysis/ReducibilityAnalysis.h"
+#include "llvm37/Analysis/ReducibilityAnalysis.h"
 #include "dxc/Support/WinIncludes.h"
-#include "llvm/Support/MSFileSystem.h"
+#include "llvm37/Support/MSFileSystem.h"
 // HLSL Change Ends
 
 #include <algorithm>
 #include <memory>
-using namespace llvm;
+using namespace llvm37;
 using namespace opt_tool;
 
 // The OptimizationList is automatically populated with registered Passes by the
@@ -291,12 +291,12 @@ static TargetMachine* GetTargetMachine(Triple TheTriple, StringRef CPUStr,
 
 #ifdef LINK_POLLY_INTO_TOOLS
 namespace polly {
-void initializePollyPasses(llvm::PassRegistry &Registry);
+void initializePollyPasses(llvm37::PassRegistry &Registry);
 }
 #endif
 
 // HLSL Change Start
-void __cdecl initializeDxilConvPasses(llvm::PassRegistry &);
+void __cdecl initializeDxilConvPasses(llvm37::PassRegistry &);
 // HLSL Change End
 
 //===----------------------------------------------------------------------===//
@@ -305,20 +305,20 @@ void __cdecl initializeDxilConvPasses(llvm::PassRegistry &);
 // HLSL Change: changed calling convention to __cdecl
 int __cdecl main(int argc, char **argv) {
   // HLSL Change Starts
-  if (llvm::sys::fs::SetupPerThreadFileSystem())
+  if (llvm37::sys::fs::SetupPerThreadFileSystem())
     return 1;
-  llvm::sys::fs::AutoCleanupPerThreadFileSystem auto_cleanup_fs;
+  llvm37::sys::fs::AutoCleanupPerThreadFileSystem auto_cleanup_fs;
   if (FAILED(DxcInitThreadMalloc())) return 1;
   DxcSetThreadMallocToDefault();
-  llvm::sys::fs::MSFileSystem* msfPtr;
+  llvm37::sys::fs::MSFileSystem* msfPtr;
   if (FAILED(CreateMSFileSystemForDisk(&msfPtr))) return 1;
-  std::unique_ptr<llvm::sys::fs::MSFileSystem> msf(msfPtr);
-  llvm::sys::fs::AutoPerThreadSystem pts(msf.get());
-  //llvm::STDStreamCloser stdStreamCloser;
+  std::unique_ptr<llvm37::sys::fs::MSFileSystem> msf(msfPtr);
+  llvm37::sys::fs::AutoPerThreadSystem pts(msf.get());
+  //llvm37::STDStreamCloser stdStreamCloser;
   // HLSL Change Ends
   
   //sys::PrintStackTraceOnErrorSignal();          // HLSL Change
-  //llvm::PrettyStackTraceProgram X(argc, argv);  // HLSL Change
+  //llvm37::PrettyStackTraceProgram X(argc, argv);  // HLSL Change
 
   // Enable debug stream buffering.
   EnableDebugBuffering = true;
@@ -499,7 +499,7 @@ int __cdecl main(int argc, char **argv) {
         OutputFilename = "-";
 
       std::error_code EC;
-      Out = llvm::make_unique<tool_output_file>(OutputFilename, EC,
+      Out = llvm37::make_unique<tool_output_file>(OutputFilename, EC,
                                                 sys::fs::F_None);
       if (EC) {
         errs() << EC.message() << '\n';

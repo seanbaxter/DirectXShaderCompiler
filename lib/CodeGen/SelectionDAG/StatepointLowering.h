@@ -12,15 +12,15 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_LIB_CODEGEN_SELECTIONDAG_STATEPOINTLOWERING_H
-#define LLVM_LIB_CODEGEN_SELECTIONDAG_STATEPOINTLOWERING_H
+#ifndef LLVM37_LIB_CODEGEN_SELECTIONDAG_STATEPOINTLOWERING_H
+#define LLVM37_LIB_CODEGEN_SELECTIONDAG_STATEPOINTLOWERING_H
 
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/CodeGen/SelectionDAG.h"
-#include "llvm/CodeGen/SelectionDAGNodes.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/CodeGen/SelectionDAG.h"
+#include "llvm37/CodeGen/SelectionDAGNodes.h"
 #include <vector>
 
-namespace llvm {
+namespace llvm37 {
 class SelectionDAGBuilder;
 
 /// This class tracks both per-statepoint and per-selectiondag information.
@@ -111,6 +111,6 @@ private:
   /// Keep track of pending gcrelocate calls for consistency check
   SmallVector<const CallInst *, 10> PendingGCRelocateCalls;
 };
-} // end namespace llvm
+} // end namespace llvm37
 
-#endif // LLVM_LIB_CODEGEN_SELECTIONDAG_STATEPOINTLOWERING_H
+#endif // LLVM37_LIB_CODEGEN_SELECTIONDAG_STATEPOINTLOWERING_H

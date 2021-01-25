@@ -11,17 +11,17 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_LIB_TABLEGEN_TGPARSER_H
-#define LLVM_LIB_TABLEGEN_TGPARSER_H
+#ifndef LLVM37_LIB_TABLEGEN_TGPARSER_H
+#define LLVM37_LIB_TABLEGEN_TGPARSER_H
 
 #include "TGLexer.h"
-#include "llvm/ADT/Twine.h"
-#include "llvm/Support/SourceMgr.h"
-#include "llvm/TableGen/Error.h"
-#include "llvm/TableGen/Record.h"
+#include "llvm37/ADT/Twine.h"
+#include "llvm37/Support/SourceMgr.h"
+#include "llvm37/TableGen/Error.h"
+#include "llvm37/TableGen/Record.h"
 #include <map>
 
-namespace llvm {
+namespace llvm37 {
   class Record;
   class RecordVal;
   class RecordKeeper;
@@ -177,7 +177,7 @@ private:  // Parser methods.
                    IDParseMode Mode = ParseValueMode);
   std::vector<Init*> ParseValueList(Record *CurRec, Record *ArgsRec = nullptr,
                                     RecTy *EltTy = nullptr);
-  std::vector<std::pair<llvm::Init*, std::string> > ParseDagArgList(Record *);
+  std::vector<std::pair<llvm37::Init*, std::string> > ParseDagArgList(Record *);
   bool ParseOptionalRangeList(std::vector<unsigned> &Ranges);
   bool ParseOptionalBitList(std::vector<unsigned> &Ranges);
   std::vector<unsigned> ParseRangeList();
@@ -191,6 +191,6 @@ private:  // Parser methods.
   bool ApplyLetStack(Record *CurRec);
 };
 
-} // end namespace llvm
+} // end namespace llvm37
 
 #endif

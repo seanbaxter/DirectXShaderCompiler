@@ -18,20 +18,20 @@
 #include "clang/Frontend/FrontendDiagnostic.h"
 #include "clang/Lex/PPCallbacks.h"
 #include "clang/Lex/Preprocessor.h"
-#include "llvm/ADT/SetVector.h"
-#include "llvm/Support/GraphWriter.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/SetVector.h"
+#include "llvm37/Support/GraphWriter.h"
+#include "llvm37/Support/raw_ostream.h"
 
 using namespace clang;
-namespace DOT = llvm::DOT;
+namespace DOT = llvm37::DOT;
 
 namespace {
 class DependencyGraphCallback : public PPCallbacks {
   const Preprocessor *PP;
   std::string OutputFile;
   std::string SysRoot;
-  llvm::SetVector<const FileEntry *> AllFiles;
-  typedef llvm::DenseMap<const FileEntry *,
+  llvm37::SetVector<const FileEntry *> AllFiles;
+  typedef llvm37::DenseMap<const FileEntry *,
                          SmallVector<const FileEntry *, 2> > DependencyMap;
   
   DependencyMap Dependencies;
@@ -61,7 +61,7 @@ public:
 
 void clang::AttachDependencyGraphGen(Preprocessor &PP, StringRef OutputFile,
                                      StringRef SysRoot) {
-  PP.addPPCallbacks(llvm::make_unique<DependencyGraphCallback>(&PP, OutputFile,
+  PP.addPPCallbacks(llvm37::make_unique<DependencyGraphCallback>(&PP, OutputFile,
                                                                SysRoot));
 }
 
@@ -98,7 +98,7 @@ DependencyGraphCallback::writeNodeReference(raw_ostream &OS,
 
 void DependencyGraphCallback::OutputGraphFile() {
   std::error_code EC;
-  llvm::raw_fd_ostream OS(OutputFile, EC, llvm::sys::fs::F_Text);
+  llvm37::raw_fd_ostream OS(OutputFile, EC, llvm37::sys::fs::F_Text);
   if (EC) {
     PP->getDiagnostics().Report(diag::err_fe_error_opening) << OutputFile
                                                             << EC.message();

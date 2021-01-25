@@ -13,42 +13,42 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/CodeGen/Passes.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/SmallSet.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/Analysis/InstructionSimplify.h"
-#include "llvm/Analysis/TargetLibraryInfo.h"
-#include "llvm/Analysis/TargetTransformInfo.h"
-#include "llvm/IR/CallSite.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/DerivedTypes.h"
-#include "llvm/IR/Dominators.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/GetElementPtrTypeIterator.h"
-#include "llvm/IR/IRBuilder.h"
-#include "llvm/IR/InlineAsm.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/IR/MDBuilder.h"
-#include "llvm/IR/PatternMatch.h"
-#include "llvm/IR/Statepoint.h"
-#include "llvm/IR/ValueHandle.h"
-#include "llvm/IR/ValueMap.h"
-#include "llvm/Pass.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Target/TargetLowering.h"
-#include "llvm/Target/TargetSubtargetInfo.h"
-#include "llvm/Transforms/Utils/BasicBlockUtils.h"
-#include "llvm/Transforms/Utils/BuildLibCalls.h"
-#include "llvm/Transforms/Utils/BypassSlowDivision.h"
-#include "llvm/Transforms/Utils/Local.h"
-#include "llvm/Transforms/Utils/SimplifyLibCalls.h"
-using namespace llvm;
-using namespace llvm::PatternMatch;
+#include "llvm37/CodeGen/Passes.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/SmallSet.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/Analysis/InstructionSimplify.h"
+#include "llvm37/Analysis/TargetLibraryInfo.h"
+#include "llvm37/Analysis/TargetTransformInfo.h"
+#include "llvm37/IR/CallSite.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/IR/DerivedTypes.h"
+#include "llvm37/IR/Dominators.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/GetElementPtrTypeIterator.h"
+#include "llvm37/IR/IRBuilder.h"
+#include "llvm37/IR/InlineAsm.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/IR/MDBuilder.h"
+#include "llvm37/IR/PatternMatch.h"
+#include "llvm37/IR/Statepoint.h"
+#include "llvm37/IR/ValueHandle.h"
+#include "llvm37/IR/ValueMap.h"
+#include "llvm37/Pass.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Target/TargetLowering.h"
+#include "llvm37/Target/TargetSubtargetInfo.h"
+#include "llvm37/Transforms/Utils/BasicBlockUtils.h"
+#include "llvm37/Transforms/Utils/BuildLibCalls.h"
+#include "llvm37/Transforms/Utils/BypassSlowDivision.h"
+#include "llvm37/Transforms/Utils/Local.h"
+#include "llvm37/Transforms/Utils/SimplifyLibCalls.h"
+using namespace llvm37;
+using namespace llvm37::PatternMatch;
 
 #define DEBUG_TYPE "codegenprepare"
 
@@ -198,7 +198,7 @@ char CodeGenPrepare::ID = 0;
 INITIALIZE_TM_PASS(CodeGenPrepare, "codegenprepare",
                    "Optimize for code generation", false, false)
 
-FunctionPass *llvm::createCodeGenPreparePass(const TargetMachine *TM) {
+FunctionPass *llvm37::createCodeGenPreparePass(const TargetMachine *TM) {
   return new CodeGenPrepare(TM);
 }
 
@@ -1505,7 +1505,7 @@ bool CodeGenPrepare::DupRetToEnableTailCallOpts(BasicBlock *BB) {
     return false;
 
   // It's not safe to eliminate the sign / zero extension of the return value.
-  // See llvm::isInTailCallPosition().
+  // See llvm37::isInTailCallPosition().
   const Function *F = BB->getParent();
   AttributeSet CallerAttrs = F->getAttributes();
   if (CallerAttrs.hasAttribute(AttributeSet::ReturnIndex, Attribute::ZExt) ||
@@ -1653,7 +1653,7 @@ void ExtAddrMode::print(raw_ostream &OS) const {
   OS << ']';
 }
 
-#if !defined(NDEBUG) || defined(LLVM_ENABLE_DUMP)
+#if !defined(NDEBUG) || defined(LLVM37_ENABLE_DUMP)
 void ExtAddrMode::dump() const {
   print(dbgs());
   dbgs() << '\n';
@@ -2483,7 +2483,7 @@ TypePromotionHelper::Action TypePromotionHelper::getAction(
 }
 
 Value *TypePromotionHelper::promoteOperandForTruncAndAnyExt(
-    llvm::Instruction *SExt, TypePromotionTransaction &TPT,
+    llvm37::Instruction *SExt, TypePromotionTransaction &TPT,
     InstrToOrigTy &PromotedInsts, unsigned &CreatedInstsCost,
     SmallVectorImpl<Instruction *> *Exts,
     SmallVectorImpl<Instruction *> *Truncs, const TargetLowering &TLI) {

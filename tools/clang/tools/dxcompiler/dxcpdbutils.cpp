@@ -16,11 +16,11 @@
 #include "dxc/Support/WinIncludes.h"
 #include "dxc/Support/dxcapi.use.h"
 #include "dxc/Support/FileIOHelper.h"
-#include "llvm/Support/MSFileSystem.h"
-#include "llvm/Support/FileSystem.h"
-#include "llvm/Support/MemoryBuffer.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Module.h"
+#include "llvm37/Support/MSFileSystem.h"
+#include "llvm37/Support/FileSystem.h"
+#include "llvm37/Support/MemoryBuffer.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/Module.h"
 
 #include "dxc/dxcapi.h"
 #include "dxc/dxcpix.h"
@@ -38,7 +38,7 @@
 #include <dia2.h>
 
 using namespace dxc;
-using namespace llvm;
+using namespace llvm37;
 
 static std::wstring ToWstring(const char *ptr, size_t size) {
   std::wstring_convert<std::codecvt_utf8_utf16<wchar_t> > converter;
@@ -127,11 +127,11 @@ private:
 
     hlsl::GetDxilProgramBitcode((hlsl::DxilProgramHeader *)pProgramBlob->GetBufferPointer(), &bitcode, &bitcode_size);
 
-    llvm::LLVMContext context;
-    std::unique_ptr<llvm::Module> pModule;
+    llvm37::LLVMContext context;
+    std::unique_ptr<llvm37::Module> pModule;
 
     // NOTE: this doesn't copy the memory, just references it.
-    std::unique_ptr<llvm::MemoryBuffer> mb = llvm::MemoryBuffer::getMemBuffer(StringRef(bitcode, bitcode_size), "-", /*RequiresNullTerminator*/ false);
+    std::unique_ptr<llvm37::MemoryBuffer> mb = llvm37::MemoryBuffer::getMemBuffer(StringRef(bitcode, bitcode_size), "-", /*RequiresNullTerminator*/ false);
 
     // Lazily parse the module
     std::string DiagStr;
@@ -141,7 +141,7 @@ private:
 
     // Materialize only the stuff we need, so it's fast
     {
-      llvm::StringRef DebugMetadataList[] = {
+      llvm37::StringRef DebugMetadataList[] = {
         hlsl::DxilMDHelper::kDxilSourceContentsMDName,
         hlsl::DxilMDHelper::kDxilSourceDefinesMDName,
         hlsl::DxilMDHelper::kDxilSourceArgsMDName,
@@ -158,15 +158,15 @@ private:
     m_TargetProfile = ToWstring(DM.GetShaderModel()->GetName());
 
     // For each all the named metadata node in the module
-    for (llvm::NamedMDNode &node : pModule->named_metadata()) {
-      llvm::StringRef node_name = node.getName();
+    for (llvm37::NamedMDNode &node : pModule->named_metadata()) {
+      llvm37::StringRef node_name = node.getName();
 
       // dx.source.content
       if (node_name == hlsl::DxilMDHelper::kDxilSourceContentsMDName ||
           node_name == hlsl::DxilMDHelper::kDxilSourceContentsOldMDName)
       {
         for (unsigned i = 0; i < node.getNumOperands(); i++) {
-          llvm::MDTuple *tup = cast<llvm::MDTuple>(node.getOperand(i));
+          llvm37::MDTuple *tup = cast<llvm37::MDTuple>(node.getOperand(i));
           MDString *md_name = cast<MDString>(tup->getOperand(0));
           MDString *md_content = cast<MDString>(tup->getOperand(1));
 
@@ -279,11 +279,11 @@ public:
   HRESULT STDMETHODCALLTYPE Load(_In_ IDxcBlob *pPdbOrDxil) override {
     DxcThreadMalloc TM(m_pMalloc);
 
-    ::llvm::sys::fs::MSFileSystem *msfPtr = nullptr;
+    ::llvm37::sys::fs::MSFileSystem *msfPtr = nullptr;
     IFT(CreateMSFileSystemForDisk(&msfPtr));
-    std::unique_ptr<::llvm::sys::fs::MSFileSystem> msf(msfPtr);
+    std::unique_ptr<::llvm37::sys::fs::MSFileSystem> msf(msfPtr);
   
-    ::llvm::sys::fs::AutoPerThreadSystem pts(msf.get());
+    ::llvm37::sys::fs::AutoPerThreadSystem pts(msf.get());
     IFTLLVM(pts.error_code());
 
     if (!pPdbOrDxil)

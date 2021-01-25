@@ -12,11 +12,11 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_SEMA_IDENTIFIERRESOLVER_H
-#define LLVM_CLANG_SEMA_IDENTIFIERRESOLVER_H
+#ifndef LLVM37_CLANG_SEMA_IDENTIFIERRESOLVER_H
+#define LLVM37_CLANG_SEMA_IDENTIFIERRESOLVER_H
 
 #include "clang/Basic/IdentifierTable.h"
-#include "llvm/ADT/SmallVector.h"
+#include "llvm37/ADT/SmallVector.h"
 
 namespace clang {
 

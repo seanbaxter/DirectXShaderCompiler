@@ -25,15 +25,15 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/CodeGen/GCs.h"
-#include "llvm/ADT/StringExtras.h"
-#include "llvm/CodeGen/GCStrategy.h"
-#include "llvm/IR/CallSite.h"
-#include "llvm/IR/IRBuilder.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/IR/Module.h"
+#include "llvm37/CodeGen/GCs.h"
+#include "llvm37/ADT/StringExtras.h"
+#include "llvm37/CodeGen/GCStrategy.h"
+#include "llvm37/IR/CallSite.h"
+#include "llvm37/IR/IRBuilder.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/IR/Module.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "shadowstackgc"
 
@@ -47,7 +47,7 @@ public:
 static GCRegistry::Add<ShadowStackGC>
     X("shadow-stack", "Very portable GC for uncooperative code generators");
 
-void llvm::linkShadowStackGC() {}
+void llvm37::linkShadowStackGC() {}
 
 ShadowStackGC::ShadowStackGC() {
   InitRoots = true;

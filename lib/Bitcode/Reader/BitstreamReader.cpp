@@ -7,9 +7,9 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Bitcode/BitstreamReader.h"
+#include "llvm37/Bitcode/BitstreamReader.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 //===----------------------------------------------------------------------===//
 //  BitstreamCursor implementation
@@ -433,12 +433,12 @@ bool BitstreamCursor::ReadBlockInfoBlock(unsigned *pCount) {
     BitstreamEntry Entry = advanceSkippingSubblocks(AF_DontAutoprocessAbbrevs, pCount);
 
     switch (Entry.Kind) {
-    case llvm::BitstreamEntry::SubBlock: // Handled for us already.
-    case llvm::BitstreamEntry::Error:
+    case llvm37::BitstreamEntry::SubBlock: // Handled for us already.
+    case llvm37::BitstreamEntry::Error:
       return true;
-    case llvm::BitstreamEntry::EndBlock:
+    case llvm37::BitstreamEntry::EndBlock:
       return false;
-    case llvm::BitstreamEntry::Record:
+    case llvm37::BitstreamEntry::Record:
       // The interesting case.
       break;
     }

@@ -24,7 +24,7 @@
 #include "clang/StaticAnalyzer/Core/PathSensitive/CheckerHelpers.h"
 #include "clang/StaticAnalyzer/Core/PathSensitive/ExplodedGraph.h"
 #include "clang/StaticAnalyzer/Core/PathSensitive/SVals.h"
-#include "llvm/ADT/SmallSet.h"
+#include "llvm37/ADT/SmallSet.h"
 
 // The number of CFGBlock pointers we want to reserve memory for. This is used
 // once for each function we analyze.
@@ -39,7 +39,7 @@ public:
   void checkEndAnalysis(ExplodedGraph &G, BugReporter &B,
                         ExprEngine &Eng) const;
 private:
-  typedef llvm::SmallSet<unsigned, DEFAULT_CFGBLOCKS> CFGBlocksSet;
+  typedef llvm37::SmallSet<unsigned, DEFAULT_CFGBLOCKS> CFGBlocksSet;
 
   static inline const Stmt *getUnreachableStmt(const CFGBlock *CB);
   static void FindUnreachableEntryPoints(const CFGBlock *CB,

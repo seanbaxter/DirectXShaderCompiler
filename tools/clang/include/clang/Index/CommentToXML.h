@@ -7,8 +7,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_INDEX_COMMENTTOXML_H
-#define LLVM_CLANG_INDEX_COMMENTTOXML_H
+#ifndef LLVM37_CLANG_INDEX_COMMENTTOXML_H
+#define LLVM37_CLANG_INDEX_COMMENTTOXML_H
 
 #include "clang/Basic/LLVM.h"
 #include <memory>
@@ -48,5 +48,5 @@ public:
 } // namespace index
 } // namespace clang
 
-#endif // LLVM_CLANG_INDEX_COMMENTTOXML_H
+#endif // LLVM37_CLANG_INDEX_COMMENTTOXML_H
 

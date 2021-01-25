@@ -16,13 +16,13 @@
 #include "dxc/Support/Global.h"
 #include "dxc/DXIL/DxilInstructions.h"
 
-#include "llvm/IR/Module.h"
-#include "llvm/IR/InstIterator.h"
-#include "llvm/Pass.h"
-#include "llvm/IR/IRBuilder.h"
-#include <llvm/ADT/DenseSet.h>
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/InstIterator.h"
+#include "llvm37/Pass.h"
+#include "llvm37/IR/IRBuilder.h"
+#include <llvm37/ADT/DenseSet.h>
 
-using namespace llvm;
+using namespace llvm37;
 using namespace hlsl;
 
 namespace {
@@ -311,7 +311,7 @@ void DxilPreserveAllOutputs::removeOriginalOutputStores(OutputVec & outputStores
 
 char DxilPreserveAllOutputs::ID = 0;
 
-FunctionPass *llvm::createDxilPreserveAllOutputsPass() {
+FunctionPass *llvm37::createDxilPreserveAllOutputsPass() {
   return new DxilPreserveAllOutputs();
 }
 

@@ -20,18 +20,18 @@
 ///
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_LIB_TRANSFORMS_OBJCARC_DEPENDENCYANALYSIS_H
-#define LLVM_LIB_TRANSFORMS_OBJCARC_DEPENDENCYANALYSIS_H
+#ifndef LLVM37_LIB_TRANSFORMS_OBJCARC_DEPENDENCYANALYSIS_H
+#define LLVM37_LIB_TRANSFORMS_OBJCARC_DEPENDENCYANALYSIS_H
 
-#include "llvm/ADT/SmallPtrSet.h"
+#include "llvm37/ADT/SmallPtrSet.h"
 
-namespace llvm {
+namespace llvm37 {
   class BasicBlock;
   class Instruction;
   class Value;
 }
 
-namespace llvm {
+namespace llvm37 {
 namespace objcarc {
 
 class ProvenanceAnalysis;
@@ -83,6 +83,6 @@ static inline bool CanDecrementRefCount(const Instruction *Inst,
 }
 
 } // namespace objcarc
-} // namespace llvm
+} // namespace llvm37
 
 #endif

@@ -11,23 +11,23 @@
 ///
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Transforms/Scalar.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/Analysis/AliasAnalysis.h"
-#include "llvm/Analysis/AliasSetTracker.h"
-#include "llvm/Analysis/TargetFolder.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/IRBuilder.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/Module.h"
-#include "llvm/Pass.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/MathExtras.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/Transforms/Scalar.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/Analysis/AliasAnalysis.h"
+#include "llvm37/Analysis/AliasSetTracker.h"
+#include "llvm37/Analysis/TargetFolder.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/IRBuilder.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/Pass.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/MathExtras.h"
+#include "llvm37/Support/raw_ostream.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "load-combine"
 
@@ -59,7 +59,7 @@ public:
     initializeSROAPass(*PassRegistry::getPassRegistry());
   }
   
-  using llvm::Pass::doInitialization;
+  using llvm37::Pass::doInitialization;
   bool doInitialization(Function &) override;
   bool runOnBasicBlock(BasicBlock &BB) override;
   void getAnalysisUsage(AnalysisUsage &AU) const override;
@@ -268,7 +268,7 @@ void LoadCombine::getAnalysisUsage(AnalysisUsage &AU) const {
 
 char LoadCombine::ID = 0;
 
-BasicBlockPass *llvm::createLoadCombinePass() {
+BasicBlockPass *llvm37::createLoadCombinePass() {
   return new LoadCombine();
 }
 

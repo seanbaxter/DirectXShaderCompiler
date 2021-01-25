@@ -10,7 +10,7 @@
 #include "clang/Frontend/LayoutOverrideSource.h"
 #include "clang/AST/Decl.h"
 #include "clang/Basic/CharInfo.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <fstream>
 #include <string>
 //                                                                           //
@@ -157,16 +157,16 @@ LayoutOverrideSource::LayoutOverrideSource(StringRef Filename) {
 bool 
 LayoutOverrideSource::layoutRecordType(const RecordDecl *Record,
   uint64_t &Size, uint64_t &Alignment,
-  llvm::DenseMap<const FieldDecl *, uint64_t> &FieldOffsets,
-  llvm::DenseMap<const CXXRecordDecl *, CharUnits> &BaseOffsets,
-  llvm::DenseMap<const CXXRecordDecl *, CharUnits> &VirtualBaseOffsets) 
+  llvm37::DenseMap<const FieldDecl *, uint64_t> &FieldOffsets,
+  llvm37::DenseMap<const CXXRecordDecl *, CharUnits> &BaseOffsets,
+  llvm37::DenseMap<const CXXRecordDecl *, CharUnits> &VirtualBaseOffsets) 
 {
   // We can't override unnamed declarations.
   if (!Record->getIdentifier())
     return false;
   
   // Check whether we have a layout for this record.
-  llvm::StringMap<Layout>::iterator Known = Layouts.find(Record->getName());
+  llvm37::StringMap<Layout>::iterator Known = Layouts.find(Record->getName());
   if (Known == Layouts.end())
     return false;
   
@@ -191,8 +191,8 @@ LayoutOverrideSource::layoutRecordType(const RecordDecl *Record,
 }
 
 void LayoutOverrideSource::dump() {
-  raw_ostream &OS = llvm::errs();
-  for (llvm::StringMap<Layout>::iterator L = Layouts.begin(), 
+  raw_ostream &OS = llvm37::errs();
+  for (llvm37::StringMap<Layout>::iterator L = Layouts.begin(), 
                                       LEnd = Layouts.end();
        L != LEnd; ++L) {
     OS << "Type: blah " << L->first() << '\n';

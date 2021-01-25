@@ -21,9 +21,9 @@
 #include "clang/AST/Type.h"
 #include "clang/AST/TypeLoc.h"
 #include "clang/Basic/Diagnostic.h"
-#include "llvm/ADT/FoldingSet.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/FoldingSet.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <algorithm>
 
 using namespace clang;
@@ -38,7 +38,7 @@ using namespace clang;
 static void printIntegral(const TemplateArgument &TemplArg,
                           raw_ostream &Out, const PrintingPolicy& Policy) {
   const ::clang::Type *T = TemplArg.getIntegralType().getTypePtr();
-  const llvm::APSInt &Val = TemplArg.getAsIntegral();
+  const llvm37::APSInt &Val = TemplArg.getAsIntegral();
 
   if (const EnumType *ET = T->getAs<EnumType>()) {
     for (const EnumConstantDecl* ECD : ET->getDecl()->enumerators()) {
@@ -46,7 +46,7 @@ static void printIntegral(const TemplateArgument &TemplArg,
       // extended to the size of the integer underlying the enum type.  This
       // may create a size difference between the enum value and template
       // argument value, requiring isSameValue here instead of operator==.
-      if (llvm::APSInt::isSameValue(ECD->getInitVal(), Val)) {
+      if (llvm37::APSInt::isSameValue(ECD->getInitVal(), Val)) {
         ECD->printQualifiedName(Out, Policy);
         return;
       }
@@ -69,7 +69,7 @@ static void printIntegral(const TemplateArgument &TemplArg,
 // TemplateArgument Implementation
 //===----------------------------------------------------------------------===//
 
-TemplateArgument::TemplateArgument(ASTContext &Ctx, const llvm::APSInt &Value,
+TemplateArgument::TemplateArgument(ASTContext &Ctx, const llvm37::APSInt &Value,
                                    QualType Type) {
   Integer.Kind = Integral;
   // Copy the APSInt value into our decomposed form.
@@ -245,7 +245,7 @@ Optional<unsigned> TemplateArgument::getNumTemplateExpansions() const {
   return None; 
 }
 
-void TemplateArgument::Profile(llvm::FoldingSetNodeID &ID,
+void TemplateArgument::Profile(llvm37::FoldingSetNodeID &ID,
                                const ASTContext &Context) const {
   ID.AddInteger(getKind());
   switch (getKind()) {
@@ -496,7 +496,7 @@ const DiagnosticBuilder &clang::operator<<(const DiagnosticBuilder &DB,
     // regurgitating an expression here.
     // FIXME: We're guessing at LangOptions!
     SmallString<32> Str;
-    llvm::raw_svector_ostream OS(Str);
+    llvm37::raw_svector_ostream OS(Str);
     LangOptions LangOpts;
 #ifdef MS_SUPPORT_VARIABLE_LANGOPTS
     LangOpts.CPlusPlus = true;
@@ -509,7 +509,7 @@ const DiagnosticBuilder &clang::operator<<(const DiagnosticBuilder &DB,
   case TemplateArgument::Pack: {
     // FIXME: We're guessing at LangOptions!
     SmallString<32> Str;
-    llvm::raw_svector_ostream OS(Str);
+    llvm37::raw_svector_ostream OS(Str);
     LangOptions LangOpts;
 #ifdef MS_SUPPORT_VARIABLE_LANGOPTS
     LangOpts.CPlusPlus = true;
@@ -526,10 +526,10 @@ const DiagnosticBuilder &clang::operator<<(const DiagnosticBuilder &DB,
 const ASTTemplateArgumentListInfo *
 ASTTemplateArgumentListInfo::Create(ASTContext &C,
                                     const TemplateArgumentListInfo &List) {
-  assert(llvm::alignOf<ASTTemplateArgumentListInfo>() >=
-         llvm::alignOf<TemplateArgumentLoc>());
+  assert(llvm37::alignOf<ASTTemplateArgumentListInfo>() >=
+         llvm37::alignOf<TemplateArgumentLoc>());
   std::size_t size = ASTTemplateArgumentListInfo::sizeFor(List.size());
-  void *Mem = C.Allocate(size, llvm::alignOf<ASTTemplateArgumentListInfo>());
+  void *Mem = C.Allocate(size, llvm37::alignOf<ASTTemplateArgumentListInfo>());
   ASTTemplateArgumentListInfo *TAI = new (Mem) ASTTemplateArgumentListInfo();
   TAI->initializeFrom(List);
   return TAI;

@@ -17,12 +17,12 @@
 #include "dxc/Support/Global.h"
 #include "dxc/DXIL/DxilInstructions.h"
 
-#include "llvm/IR/Module.h"
-#include "llvm/Pass.h"
-#include "llvm/IR/IRBuilder.h"
-#include "llvm/ADT/MapVector.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/Pass.h"
+#include "llvm37/IR/IRBuilder.h"
+#include "llvm37/ADT/MapVector.h"
 
-using namespace llvm;
+using namespace llvm37;
 using namespace hlsl;
 
 namespace {
@@ -70,28 +70,28 @@ private:
 // void (opcode, sigId, rowIndex, colIndex, value);
 class DxilOutputStore {
 public:
-  const llvm::CallInst *Instr;
+  const llvm37::CallInst *Instr;
   // Construction and identification
-  DxilOutputStore(llvm::CallInst *pInstr) : Instr(pInstr) {}
+  DxilOutputStore(llvm37::CallInst *pInstr) : Instr(pInstr) {}
   // Validation support
   bool isAllowed() const { return true; }
   bool isArgumentListValid() const {
-    if (5 != llvm::dyn_cast<llvm::CallInst>(Instr)->getNumArgOperands())
+    if (5 != llvm37::dyn_cast<llvm37::CallInst>(Instr)->getNumArgOperands())
       return false;
     return true;
   }
   // Accessors
-  llvm::Value *get_outputSigId() const {
+  llvm37::Value *get_outputSigId() const {
     return Instr->getOperand(DXIL::OperandIndex::kStoreOutputIDOpIdx);
   }
-  llvm::Value *get_rowIndex() const {
+  llvm37::Value *get_rowIndex() const {
     return Instr->getOperand(DXIL::OperandIndex::kStoreOutputRowOpIdx);
   }
   uint64_t get_colIndex() const {
     Value *col = Instr->getOperand(DXIL::OperandIndex::kStoreOutputColOpIdx);
     return cast<ConstantInt>(col)->getLimitedValue();
   }
-  llvm::Value *get_value() const {
+  llvm37::Value *get_value() const {
     return Instr->getOperand(DXIL::OperandIndex::kStoreOutputValOpIdx);
   }
 };
@@ -200,7 +200,7 @@ void DxilEliminateOutputDynamicIndexing::StoreTmpSigToOutput(
 
 char DxilEliminateOutputDynamicIndexing::ID = 0;
 
-ModulePass *llvm::createDxilEliminateOutputDynamicIndexingPass() {
+ModulePass *llvm37::createDxilEliminateOutputDynamicIndexingPass() {
   return new DxilEliminateOutputDynamicIndexing();
 }
 

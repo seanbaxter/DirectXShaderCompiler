@@ -16,24 +16,24 @@
 #include "dxc/HLSL/HLUtil.h"
 #include "dxc/DXIL/DxilTypeSystem.h"
 
-#include "llvm/IR/IntrinsicInst.h"
+#include "llvm37/IR/IntrinsicInst.h"
 
 #include "dxc/Support/Global.h"
-#include "llvm/Pass.h"
-#include "llvm/ADT/ArrayRef.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/IR/Constant.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/Instruction.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/IRBuilder.h"
-#include "llvm/IR/Module.h"
-#include "llvm/Support/Casting.h"
+#include "llvm37/Pass.h"
+#include "llvm37/ADT/ArrayRef.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/IR/Constant.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/Instruction.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/IRBuilder.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/Support/Casting.h"
 
 #include <vector>
 
-using namespace llvm;
+using namespace llvm37;
 using namespace hlsl;
 
 // For parameter need to legalize, create alloca to replace all uses of it, and copy between the alloca and the parameter.
@@ -168,7 +168,7 @@ void ParameterCopyInCopyOut(hlsl::HLModule &HLM) {
     if (!Annot)
       continue;
 
-    bool bNoInline = F.hasFnAttribute(llvm::Attribute::NoInline) || F.isDeclaration();
+    bool bNoInline = F.hasFnAttribute(llvm37::Attribute::NoInline) || F.isDeclaration();
 
     for (User *U : F.users()) {
       CallInst *CI = dyn_cast<CallInst>(U);
@@ -318,7 +318,7 @@ void HLLegalizeParameter::patchReadOnOutParam(Function &F, Argument &Arg,
 }
 
 char HLLegalizeParameter::ID = 0;
-ModulePass *llvm::createHLLegalizeParameter() {
+ModulePass *llvm37::createHLLegalizeParameter() {
   return new HLLegalizeParameter();
 }
 

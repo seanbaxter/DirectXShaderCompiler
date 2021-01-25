@@ -11,11 +11,11 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/TableGen/TableGenBackend.h"
-#include "llvm/ADT/Twine.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/TableGen/TableGenBackend.h"
+#include "llvm37/ADT/Twine.h"
+#include "llvm37/Support/raw_ostream.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 const size_t MAX_LINE_LEN = 80U;
 
@@ -31,7 +31,7 @@ static void printLine(raw_ostream &OS, const Twine &Prefix, char Fill,
   OS << Suffix << '\n';
 }
 
-void llvm::emitSourceFileHeader(StringRef Desc, raw_ostream &OS) {
+void llvm37::emitSourceFileHeader(StringRef Desc, raw_ostream &OS) {
   printLine(OS, "/*===- TableGen'erated file ", '-', "*- C++ -*-===*\\");
   StringRef Prefix("|* ");
   StringRef Suffix(" *|");

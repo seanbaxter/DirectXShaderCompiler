@@ -29,27 +29,27 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/CodeGen/RegAllocPBQP.h"
+#include "llvm37/CodeGen/RegAllocPBQP.h"
 #include "RegisterCoalescer.h"
 #include "Spiller.h"
-#include "llvm/Analysis/AliasAnalysis.h"
-#include "llvm/CodeGen/CalcSpillWeights.h"
-#include "llvm/CodeGen/LiveIntervalAnalysis.h"
-#include "llvm/CodeGen/LiveRangeEdit.h"
-#include "llvm/CodeGen/LiveStackAnalysis.h"
-#include "llvm/CodeGen/MachineBlockFrequencyInfo.h"
-#include "llvm/CodeGen/MachineDominators.h"
-#include "llvm/CodeGen/MachineFunctionPass.h"
-#include "llvm/CodeGen/MachineLoopInfo.h"
-#include "llvm/CodeGen/MachineRegisterInfo.h"
-#include "llvm/CodeGen/RegAllocRegistry.h"
-#include "llvm/CodeGen/VirtRegMap.h"
-#include "llvm/IR/Module.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/FileSystem.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Target/TargetInstrInfo.h"
-#include "llvm/Target/TargetSubtargetInfo.h"
+#include "llvm37/Analysis/AliasAnalysis.h"
+#include "llvm37/CodeGen/CalcSpillWeights.h"
+#include "llvm37/CodeGen/LiveIntervalAnalysis.h"
+#include "llvm37/CodeGen/LiveRangeEdit.h"
+#include "llvm37/CodeGen/LiveStackAnalysis.h"
+#include "llvm37/CodeGen/MachineBlockFrequencyInfo.h"
+#include "llvm37/CodeGen/MachineDominators.h"
+#include "llvm37/CodeGen/MachineFunctionPass.h"
+#include "llvm37/CodeGen/MachineLoopInfo.h"
+#include "llvm37/CodeGen/MachineRegisterInfo.h"
+#include "llvm37/CodeGen/RegAllocRegistry.h"
+#include "llvm37/CodeGen/VirtRegMap.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/FileSystem.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Target/TargetInstrInfo.h"
+#include "llvm37/Target/TargetSubtargetInfo.h"
 #include <limits>
 #include <memory>
 #include <queue>
@@ -57,7 +57,7 @@
 #include <sstream>
 #include <vector>
 
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "regalloc"
 
@@ -758,11 +758,11 @@ bool RegAllocPBQP::runOnMachineFunction(MachineFunction &MF) {
 
     const TargetSubtargetInfo &Subtarget = MF.getSubtarget();
     std::unique_ptr<PBQPRAConstraintList> ConstraintsRoot =
-      llvm::make_unique<PBQPRAConstraintList>();
-    ConstraintsRoot->addConstraint(llvm::make_unique<SpillCosts>());
-    ConstraintsRoot->addConstraint(llvm::make_unique<Interference>());
+      llvm37::make_unique<PBQPRAConstraintList>();
+    ConstraintsRoot->addConstraint(llvm37::make_unique<SpillCosts>());
+    ConstraintsRoot->addConstraint(llvm37::make_unique<Interference>());
     if (PBQPCoalescing)
-      ConstraintsRoot->addConstraint(llvm::make_unique<Coalescing>());
+      ConstraintsRoot->addConstraint(llvm37::make_unique<Coalescing>());
     ConstraintsRoot->addConstraint(Subtarget.getCustomPBQPConstraints());
 
     bool PBQPAllocComplete = false;
@@ -878,11 +878,11 @@ void PBQP::RegAlloc::PBQPRAGraph::printDot(raw_ostream &OS) const {
   OS << "}\n";
 }
 
-FunctionPass *llvm::createPBQPRegisterAllocator(char *customPassID) {
+FunctionPass *llvm37::createPBQPRegisterAllocator(char *customPassID) {
   return new RegAllocPBQP(customPassID);
 }
 
-FunctionPass* llvm::createDefaultPBQPRegisterAllocator() {
+FunctionPass* llvm37::createDefaultPBQPRegisterAllocator() {
   return createPBQPRegisterAllocator();
 }
 

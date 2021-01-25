@@ -12,24 +12,24 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/Analysis/AssumptionCache.h"
-#include "llvm/Analysis/CodeMetrics.h"
-#include "llvm/Analysis/IVUsers.h"
-#include "llvm/Analysis/LoopPass.h"
-#include "llvm/Analysis/ScalarEvolutionExpressions.h"
-#include "llvm/Analysis/ValueTracking.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/DerivedTypes.h"
-#include "llvm/IR/Dominators.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/Type.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/Analysis/AssumptionCache.h"
+#include "llvm37/Analysis/CodeMetrics.h"
+#include "llvm37/Analysis/IVUsers.h"
+#include "llvm37/Analysis/LoopPass.h"
+#include "llvm37/Analysis/ScalarEvolutionExpressions.h"
+#include "llvm37/Analysis/ValueTracking.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/IR/DerivedTypes.h"
+#include "llvm37/IR/Dominators.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/Type.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <algorithm>
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "iv-users"
 
@@ -43,7 +43,7 @@ INITIALIZE_PASS_DEPENDENCY(ScalarEvolution)
 INITIALIZE_PASS_END(IVUsers, "iv-users",
                       "Induction Variable Users", false, true)
 
-Pass *llvm::createIVUsersPass() {
+Pass *llvm37::createIVUsersPass() {
   return new IVUsers();
 }
 
@@ -311,7 +311,7 @@ void IVUsers::print(raw_ostream &OS, const Module *M) const {
   }
 }
 
-#if !defined(NDEBUG) || defined(LLVM_ENABLE_DUMP)
+#if !defined(NDEBUG) || defined(LLVM37_ENABLE_DUMP)
 void IVUsers::dump() const {
   print(dbgs());
 }

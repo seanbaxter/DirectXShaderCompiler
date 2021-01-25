@@ -11,8 +11,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_FRONTEND_ASTCONSUMERS_H
-#define LLVM_CLANG_FRONTEND_ASTCONSUMERS_H
+#ifndef LLVM37_CLANG_FRONTEND_ASTCONSUMERS_H
+#define LLVM37_CLANG_FRONTEND_ASTCONSUMERS_H
 
 #include "clang/Basic/LLVM.h"
 #include <memory>

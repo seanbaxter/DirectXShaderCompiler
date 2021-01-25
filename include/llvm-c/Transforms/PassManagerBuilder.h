@@ -11,8 +11,8 @@
 |*                                                                            *|
 \*===----------------------------------------------------------------------===*/
 
-#ifndef LLVM_C_TRANSFORMS_PASSMANAGERBUILDER_H
-#define LLVM_C_TRANSFORMS_PASSMANAGERBUILDER_H
+#ifndef LLVM37_C_TRANSFORMS_PASSMANAGERBUILDER_H
+#define LLVM37_C_TRANSFORMS_PASSMANAGERBUILDER_H
 
 #include "llvm-c/Core.h"
 
@@ -29,51 +29,51 @@ extern "C" {
  * @{
  */
 
-/** See llvm::PassManagerBuilder. */
+/** See llvm37::PassManagerBuilder. */
 LLVMPassManagerBuilderRef LLVMPassManagerBuilderCreate(void);
 void LLVMPassManagerBuilderDispose(LLVMPassManagerBuilderRef PMB);
 
-/** See llvm::PassManagerBuilder::OptLevel. */
+/** See llvm37::PassManagerBuilder::OptLevel. */
 void
 LLVMPassManagerBuilderSetOptLevel(LLVMPassManagerBuilderRef PMB,
                                   unsigned OptLevel);
 
-/** See llvm::PassManagerBuilder::SizeLevel. */
+/** See llvm37::PassManagerBuilder::SizeLevel. */
 void
 LLVMPassManagerBuilderSetSizeLevel(LLVMPassManagerBuilderRef PMB,
                                    unsigned SizeLevel);
 
-/** See llvm::PassManagerBuilder::DisableUnitAtATime. */
+/** See llvm37::PassManagerBuilder::DisableUnitAtATime. */
 void
 LLVMPassManagerBuilderSetDisableUnitAtATime(LLVMPassManagerBuilderRef PMB,
                                             LLVMBool Value);
 
-/** See llvm::PassManagerBuilder::DisableUnrollLoops. */
+/** See llvm37::PassManagerBuilder::DisableUnrollLoops. */
 void
 LLVMPassManagerBuilderSetDisableUnrollLoops(LLVMPassManagerBuilderRef PMB,
                                             LLVMBool Value);
 
-/** See llvm::PassManagerBuilder::DisableSimplifyLibCalls */
+/** See llvm37::PassManagerBuilder::DisableSimplifyLibCalls */
 void
 LLVMPassManagerBuilderSetDisableSimplifyLibCalls(LLVMPassManagerBuilderRef PMB,
                                                  LLVMBool Value);
 
-/** See llvm::PassManagerBuilder::Inliner. */
+/** See llvm37::PassManagerBuilder::Inliner. */
 void
 LLVMPassManagerBuilderUseInlinerWithThreshold(LLVMPassManagerBuilderRef PMB,
                                               unsigned Threshold);
 
-/** See llvm::PassManagerBuilder::populateFunctionPassManager. */
+/** See llvm37::PassManagerBuilder::populateFunctionPassManager. */
 void
 LLVMPassManagerBuilderPopulateFunctionPassManager(LLVMPassManagerBuilderRef PMB,
                                                   LLVMPassManagerRef PM);
 
-/** See llvm::PassManagerBuilder::populateModulePassManager. */
+/** See llvm37::PassManagerBuilder::populateModulePassManager. */
 void
 LLVMPassManagerBuilderPopulateModulePassManager(LLVMPassManagerBuilderRef PMB,
                                                 LLVMPassManagerRef PM);
 
-/** See llvm::PassManagerBuilder::populateLTOPassManager. */
+/** See llvm37::PassManagerBuilder::populateLTOPassManager. */
 void LLVMPassManagerBuilderPopulateLTOPassManager(LLVMPassManagerBuilderRef PMB,
                                                   LLVMPassManagerRef PM,
                                                   LLVMBool Internalize,

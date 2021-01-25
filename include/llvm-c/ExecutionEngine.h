@@ -16,8 +16,8 @@
 |*                                                                            *|
 \*===----------------------------------------------------------------------===*/
 
-#ifndef LLVM_C_EXECUTIONENGINE_H
-#define LLVM_C_EXECUTIONENGINE_H
+#ifndef LLVM37_C_EXECUTIONENGINE_H
+#define LLVM37_C_EXECUTIONENGINE_H
 
 #include "llvm-c/Core.h"
 #include "llvm-c/Target.h"

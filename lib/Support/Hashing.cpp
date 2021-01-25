@@ -13,17 +13,17 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/ADT/Hashing.h"
+#include "llvm37/ADT/Hashing.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 // Provide a definition and static initializer for the fixed seed. This
 // initializer should always be zero to ensure its value can never appear to be
 // non-zero, even during dynamic initialization.
-size_t llvm::hashing::detail::fixed_seed_override = 0;
+size_t llvm37::hashing::detail::fixed_seed_override = 0;
 
 // Implement the function for forced setting of the fixed seed.
 // FIXME: Use atomic operations here so that there is no data race.
-void llvm::set_fixed_execution_hash_seed(size_t fixed_value) {
+void llvm37::set_fixed_execution_hash_seed(size_t fixed_value) {
   hashing::detail::fixed_seed_override = fixed_value;
 }

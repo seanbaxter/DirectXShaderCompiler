@@ -11,15 +11,15 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Transforms/Utils/Local.h"
-#include "llvm/ADT/SmallPtrSet.h"
-#include "llvm/Analysis/AliasAnalysis.h"
-#include "llvm/Analysis/ValueTracking.h"
-#include "llvm/IR/IRBuilder.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Transforms/Utils/BasicBlockUtils.h"
-using namespace llvm;
+#include "llvm37/Transforms/Utils/Local.h"
+#include "llvm37/ADT/SmallPtrSet.h"
+#include "llvm37/Analysis/AliasAnalysis.h"
+#include "llvm37/Analysis/ValueTracking.h"
+#include "llvm37/IR/IRBuilder.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Transforms/Utils/BasicBlockUtils.h"
+using namespace llvm37;
 
 #define DEBUG_TYPE "flattencfg"
 
@@ -484,6 +484,6 @@ bool FlattenCFGOpt::run(BasicBlock *BB) {
 /// example, it uses parallel-and and parallel-or mode to collapse
 //  if-conditions and merge if-regions with identical statements.
 ///
-bool llvm::FlattenCFG(BasicBlock *BB, AliasAnalysis *AA) {
+bool llvm37::FlattenCFG(BasicBlock *BB, AliasAnalysis *AA) {
   return FlattenCFGOpt(AA).run(BB);
 }

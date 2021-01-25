@@ -7,11 +7,11 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/ExecutionEngine/Orc/NullResolver.h"
+#include "llvm37/ExecutionEngine/Orc/NullResolver.h"
 
-#include "llvm/Support/ErrorHandling.h"
+#include "llvm37/Support/ErrorHandling.h"
 
-namespace llvm {
+namespace llvm37 {
 namespace orc {
 
 RuntimeDyld::SymbolInfo NullResolver::findSymbol(const std::string &Name) {
@@ -24,4 +24,4 @@ NullResolver::findSymbolInLogicalDylib(const std::string &Name) {
 }
 
 } // End namespace orc.
-} // End namespace llvm.
+} // End namespace llvm37.

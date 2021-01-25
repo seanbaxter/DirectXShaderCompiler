@@ -7,10 +7,10 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Support/Unicode.h"
+#include "llvm37/Support/Unicode.h"
 #include "gtest/gtest.h"
 
-namespace llvm {
+namespace llvm37 {
 namespace sys {
 namespace unicode {
 namespace {
@@ -90,4 +90,4 @@ TEST(Unicode, isPrintable) {
 } // namespace
 } // namespace unicode
 } // namespace sys
-} // namespace llvm
+} // namespace llvm37

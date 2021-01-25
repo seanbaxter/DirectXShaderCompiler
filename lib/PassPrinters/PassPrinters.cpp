@@ -12,16 +12,16 @@
 ///
 //===----------------------------------------------------------------------===//
 
-#include "llvm/PassPrinters/PassPrinters.h"
-#include "llvm/Analysis/CallGraphSCCPass.h"
-#include "llvm/Analysis/LoopPass.h"
-#include "llvm/Analysis/RegionPass.h"
-#include "llvm/IR/Function.h"
-#include "llvm/Pass.h"
+#include "llvm37/PassPrinters/PassPrinters.h"
+#include "llvm37/Analysis/CallGraphSCCPass.h"
+#include "llvm37/Analysis/LoopPass.h"
+#include "llvm37/Analysis/RegionPass.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/Pass.h"
 #include <string>
 //                                                                           //
 ///////////////////////////////////////////////////////////////////////////////
-using namespace llvm;
+using namespace llvm37;
 
 namespace {
 
@@ -230,33 +230,33 @@ struct BasicBlockPassPrinter : public BasicBlockPass {
 char BasicBlockPassPrinter::ID = 0;
 }
 
-FunctionPass *llvm::createFunctionPassPrinter(const PassInfo *PI,
+FunctionPass *llvm37::createFunctionPassPrinter(const PassInfo *PI,
                                               raw_ostream &OS, bool Quiet) {
   return new FunctionPassPrinter(PI, OS, Quiet);
 }
 
-CallGraphSCCPass *llvm::createCallGraphPassPrinter(const PassInfo *PI,
+CallGraphSCCPass *llvm37::createCallGraphPassPrinter(const PassInfo *PI,
                                                    raw_ostream &OS,
                                                    bool Quiet) {
   return new CallGraphSCCPassPrinter(PI, OS, Quiet);
 }
 
-ModulePass *llvm::createModulePassPrinter(const PassInfo *PI, raw_ostream &OS,
+ModulePass *llvm37::createModulePassPrinter(const PassInfo *PI, raw_ostream &OS,
                                           bool Quiet) {
   return new ModulePassPrinter(PI, OS, Quiet);
 }
 
-LoopPass *llvm::createLoopPassPrinter(const PassInfo *PI, raw_ostream &OS,
+LoopPass *llvm37::createLoopPassPrinter(const PassInfo *PI, raw_ostream &OS,
                                       bool Quiet) {
   return new LoopPassPrinter(PI, OS, Quiet);
 }
 
-RegionPass *llvm::createRegionPassPrinter(const PassInfo *PI, raw_ostream &OS,
+RegionPass *llvm37::createRegionPassPrinter(const PassInfo *PI, raw_ostream &OS,
                                           bool Quiet) {
   return new RegionPassPrinter(PI, OS, Quiet);
 }
 
-BasicBlockPass *llvm::createBasicBlockPassPrinter(const PassInfo *PI,
+BasicBlockPass *llvm37::createBasicBlockPassPrinter(const PassInfo *PI,
                                                   raw_ostream &OS, bool Quiet) {
   return new BasicBlockPassPrinter(PI, OS, Quiet);
 }

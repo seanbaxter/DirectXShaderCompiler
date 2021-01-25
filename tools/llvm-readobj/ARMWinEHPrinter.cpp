@@ -9,16 +9,16 @@
 
 #include "ARMWinEHPrinter.h"
 #include "Error.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/StringExtras.h"
-#include "llvm/Support/ARMWinEH.h"
-#include "llvm/Support/Format.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/StringExtras.h"
+#include "llvm37/Support/ARMWinEH.h"
+#include "llvm37/Support/Format.h"
 
-using namespace llvm;
-using namespace llvm::object;
-using namespace llvm::support;
+using namespace llvm37;
+using namespace llvm37::object;
+using namespace llvm37::support;
 
-namespace llvm {
+namespace llvm37 {
 raw_ostream &operator<<(raw_ostream &OS, const ARM::WinEH::ReturnType &RT) {
   switch (RT) {
   case ARM::WinEH::ReturnType::RT_POP:
@@ -56,7 +56,7 @@ static std::string formatSymbol(StringRef Name, uint64_t Address,
   return OS.str();
 }
 
-namespace llvm {
+namespace llvm37 {
 namespace ARM {
 namespace WinEH {
 const size_t Decoder::PDataEntrySize = sizeof(RuntimeFunction);

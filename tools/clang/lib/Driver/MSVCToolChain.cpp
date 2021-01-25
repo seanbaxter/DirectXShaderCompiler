@@ -15,18 +15,18 @@
 #include "clang/Driver/Driver.h"
 #include "clang/Driver/DriverDiagnostic.h"
 #include "clang/Driver/Options.h"
-#include "llvm/ADT/StringExtras.h"
-#include "llvm/Config/llvm-config.h"
-#include "llvm/Option/Arg.h"
-#include "llvm/Option/ArgList.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/FileSystem.h"
-#include "llvm/Support/Process.h"
+#include "llvm37/ADT/StringExtras.h"
+#include "llvm37/Config/llvm-config.h"
+#include "llvm37/Option/Arg.h"
+#include "llvm37/Option/ArgList.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/FileSystem.h"
+#include "llvm37/Support/Process.h"
 #include <cstdio>
 
 // Include the necessary headers to interface with the Windows registry and
 // environment.
-#if defined(LLVM_ON_WIN32)
+#if defined(LLVM37_ON_WIN32)
 #define USE_WIN32
 #endif
 
@@ -42,9 +42,9 @@
 using namespace clang::driver;
 using namespace clang::driver::toolchains;
 using namespace clang;
-using namespace llvm::opt;
+using namespace llvm37::opt;
 
-MSVCToolChain::MSVCToolChain(const Driver &D, const llvm::Triple& Triple,
+MSVCToolChain::MSVCToolChain(const Driver &D, const llvm37::Triple& Triple,
                              const ArgList &Args)
   : ToolChain(D, Triple, Args) {
   getProgramPaths().push_back(getDriver().getInstalledDir());
@@ -71,11 +71,11 @@ bool MSVCToolChain::IsUnwindTablesDefault() const {
   // Emit unwind tables by default on Win64. All non-x86_32 Windows platforms
   // such as ARM and PPC actually require unwind tables, but LLVM doesn't know
   // how to generate them yet.
-  return getArch() == llvm::Triple::x86_64;
+  return getArch() == llvm37::Triple::x86_64;
 }
 
 bool MSVCToolChain::isPICDefault() const {
-  return getArch() == llvm::Triple::x86_64;
+  return getArch() == llvm37::Triple::x86_64;
 }
 
 bool MSVCToolChain::isPIEDefault() const {
@@ -83,7 +83,7 @@ bool MSVCToolChain::isPIEDefault() const {
 }
 
 bool MSVCToolChain::isPICDefaultForced() const {
-  return getArch() == llvm::Triple::x86_64;
+  return getArch() == llvm37::Triple::x86_64;
 }
 
 #ifdef USE_WIN32
@@ -228,17 +228,17 @@ bool MSVCToolChain::getWindowsSDKLibraryPath(std::string &path) const {
   if (!getWindowsSDKDir(sdkPath, sdkMajor, sdkMinor))
     return false;
 
-  llvm::SmallString<128> libPath(sdkPath);
-  llvm::sys::path::append(libPath, "Lib");
+  llvm37::SmallString<128> libPath(sdkPath);
+  llvm37::sys::path::append(libPath, "Lib");
   if (sdkMajor <= 7) {
     switch (getArch()) {
     // In Windows SDK 7.x, x86 libraries are directly in the Lib folder.
-    case llvm::Triple::x86:
+    case llvm37::Triple::x86:
       break;
-    case llvm::Triple::x86_64:
-      llvm::sys::path::append(libPath, "x64");
+    case llvm37::Triple::x86_64:
+      llvm37::sys::path::append(libPath, "x64");
       break;
-    case llvm::Triple::arm:
+    case llvm37::Triple::arm:
       // It is not necessary to link against Windows SDK 7.x when targeting ARM.
       return false;
     default:
@@ -251,9 +251,9 @@ bool MSVCToolChain::getWindowsSDKLibraryPath(std::string &path) const {
     const char *tests[] = {"winv6.3", "win8", "win7"};
     bool found = false;
     for (const char *test : tests) {
-      llvm::SmallString<128> testPath(libPath);
-      llvm::sys::path::append(testPath, test);
-      if (llvm::sys::fs::exists(testPath.c_str())) {
+      llvm37::SmallString<128> testPath(libPath);
+      llvm37::sys::path::append(testPath, test);
+      if (llvm37::sys::fs::exists(testPath.c_str())) {
         libPath = testPath;
         found = true;
         break;
@@ -263,16 +263,16 @@ bool MSVCToolChain::getWindowsSDKLibraryPath(std::string &path) const {
     if (!found)
       return false;
 
-    llvm::sys::path::append(libPath, "um");
+    llvm37::sys::path::append(libPath, "um");
     switch (getArch()) {
-    case llvm::Triple::x86:
-      llvm::sys::path::append(libPath, "x86");
+    case llvm37::Triple::x86:
+      llvm37::sys::path::append(libPath, "x86");
       break;
-    case llvm::Triple::x86_64:
-      llvm::sys::path::append(libPath, "x64");
+    case llvm37::Triple::x86_64:
+      llvm37::sys::path::append(libPath, "x64");
       break;
-    case llvm::Triple::arm:
-      llvm::sys::path::append(libPath, "arm");
+    case llvm37::Triple::arm:
+      llvm37::sys::path::append(libPath, "arm");
       break;
     default:
       return false;
@@ -293,28 +293,28 @@ bool MSVCToolChain::getVisualStudioBinariesFolder(const char *clangProgramPath,
   SmallString<128> BinDir;
 
   // First check the environment variables that vsvars32.bat sets.
-  llvm::Optional<std::string> VcInstallDir =
-      llvm::sys::Process::GetEnv("VCINSTALLDIR");
+  llvm37::Optional<std::string> VcInstallDir =
+      llvm37::sys::Process::GetEnv("VCINSTALLDIR");
   if (VcInstallDir.hasValue()) {
     BinDir = VcInstallDir.getValue();
-    llvm::sys::path::append(BinDir, "bin");
+    llvm37::sys::path::append(BinDir, "bin");
   } else {
     // Next walk the PATH, trying to find a cl.exe in the path.  If we find one,
     // use that.  However, make sure it's not clang's cl.exe.
-    llvm::Optional<std::string> OptPath = llvm::sys::Process::GetEnv("PATH");
+    llvm37::Optional<std::string> OptPath = llvm37::sys::Process::GetEnv("PATH");
     if (OptPath.hasValue()) {
-      const char EnvPathSeparatorStr[] = {llvm::sys::EnvPathSeparator, '\0'};
+      const char EnvPathSeparatorStr[] = {llvm37::sys::EnvPathSeparator, '\0'};
       SmallVector<StringRef, 8> PathSegments;
-      llvm::SplitString(OptPath.getValue(), PathSegments, EnvPathSeparatorStr);
+      llvm37::SplitString(OptPath.getValue(), PathSegments, EnvPathSeparatorStr);
 
       for (StringRef PathSegment : PathSegments) {
         if (PathSegment.empty())
           continue;
 
         SmallString<128> FilePath(PathSegment);
-        llvm::sys::path::append(FilePath, "cl.exe");
-        if (llvm::sys::fs::can_execute(FilePath.c_str()) &&
-            !llvm::sys::fs::equivalent(FilePath.c_str(), clangProgramPath)) {
+        llvm37::sys::path::append(FilePath, "cl.exe");
+        if (llvm37::sys::fs::can_execute(FilePath.c_str()) &&
+            !llvm37::sys::fs::equivalent(FilePath.c_str(), clangProgramPath)) {
           // If we found it on the PATH, use it exactly as is with no
           // modifications.
           path = PathSegment;
@@ -335,11 +335,11 @@ bool MSVCToolChain::getVisualStudioBinariesFolder(const char *clangProgramPath,
     // GnuWin32 also have a utility called link.exe, so cl.exe is the least
     // ambiguous.
     BinDir = installDir;
-    llvm::sys::path::append(BinDir, "VC", "bin");
+    llvm37::sys::path::append(BinDir, "VC", "bin");
     SmallString<128> ClPath(BinDir);
-    llvm::sys::path::append(ClPath, "cl.exe");
+    llvm37::sys::path::append(ClPath, "cl.exe");
 
-    if (!llvm::sys::fs::can_execute(ClPath.c_str()))
+    if (!llvm37::sys::fs::can_execute(ClPath.c_str()))
       return false;
   }
 
@@ -347,13 +347,13 @@ bool MSVCToolChain::getVisualStudioBinariesFolder(const char *clangProgramPath,
     return false;
 
   switch (getArch()) {
-  case llvm::Triple::x86:
+  case llvm37::Triple::x86:
     break;
-  case llvm::Triple::x86_64:
-    llvm::sys::path::append(BinDir, "amd64");
+  case llvm37::Triple::x86_64:
+    llvm37::sys::path::append(BinDir, "amd64");
     break;
-  case llvm::Triple::arm:
-    llvm::sys::path::append(BinDir, "arm");
+  case llvm37::Triple::arm:
+    llvm37::sys::path::append(BinDir, "arm");
     break;
   default:
     // Whatever this is, Visual Studio doesn't have a toolchain for it.
@@ -423,8 +423,8 @@ void MSVCToolChain::AddSystemIncludeWithSubfolder(const ArgList &DriverArgs,
                                                   ArgStringList &CC1Args,
                                                   const std::string &folder,
                                                   const char *subfolder) const {
-  llvm::SmallString<128> path(folder);
-  llvm::sys::path::append(path, subfolder);
+  llvm37::SmallString<128> path(folder);
+  llvm37::sys::path::append(path, subfolder);
   addSystemInclude(DriverArgs, CC1Args, path);
 }
 
@@ -435,7 +435,7 @@ void MSVCToolChain::AddClangSystemIncludeArgs(const ArgList &DriverArgs,
 
   if (!DriverArgs.hasArg(options::OPT_nobuiltininc)) {
     SmallString<128> P(getDriver().ResourceDir);
-    llvm::sys::path::append(P, "include");
+    llvm37::sys::path::append(P, "include");
     addSystemInclude(DriverArgs, CC1Args, P);
   }
 
@@ -502,7 +502,7 @@ MSVCToolChain::ComputeEffectiveClangTriple(const ArgList &Args,
                                            types::ID InputType) const {
   std::string TripleStr =
       ToolChain::ComputeEffectiveClangTriple(Args, InputType);
-  llvm::Triple Triple(TripleStr);
+  llvm37::Triple Triple(TripleStr);
   VersionTuple MSVT =
       tools::visualstudio::getMSVCVersion(/*D=*/nullptr, Triple, Args,
                                           /*IsWindowsMSVC=*/true);
@@ -512,7 +512,7 @@ MSVCToolChain::ComputeEffectiveClangTriple(const ArgList &Args,
   MSVT = VersionTuple(MSVT.getMajor(), MSVT.getMinor().getValueOr(0),
                       MSVT.getSubminor().getValueOr(0));
 
-  if (Triple.getEnvironment() == llvm::Triple::MSVC) {
+  if (Triple.getEnvironment() == llvm37::Triple::MSVC) {
     StringRef ObjFmt = Triple.getEnvironmentName().split('-').second;
     if (ObjFmt.empty())
       Triple.setEnvironmentName((Twine("msvc") + MSVT.getAsString()).str());

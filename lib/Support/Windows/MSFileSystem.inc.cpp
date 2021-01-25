@@ -10,7 +10,7 @@
 //                                                                           //
 ///////////////////////////////////////////////////////////////////////////////
 
-#include "llvm/ADT/STLExtras.h"
+#include "llvm37/ADT/STLExtras.h"
 #define NOMINMAX
 #include "WindowsSupport.h"
 #include <fcntl.h>
@@ -20,8 +20,8 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <system_error>
-#include "llvm/Support/WindowsError.h"
-#include "llvm/Support/MSFileSystem.h"
+#include "llvm37/Support/WindowsError.h"
+#include "llvm37/Support/MSFileSystem.h"
 
 // MinGW doesn't define this.
 #ifndef _ERRNO_T_DEFINED
@@ -29,24 +29,24 @@
 typedef int errno_t;
 #endif
 
-using namespace llvm;
+using namespace llvm37;
 
 using std::error_code;
 using std::system_category;
 
-using llvm::sys::windows::UTF8ToUTF16;
-using llvm::sys::windows::UTF16ToUTF8;
-using llvm::sys::path::widenPath;
+using llvm37::sys::windows::UTF8ToUTF16;
+using llvm37::sys::windows::UTF16ToUTF8;
+using llvm37::sys::path::widenPath;
 
-namespace llvm {
+namespace llvm37 {
 namespace sys  {
 
 namespace windows {
-  error_code UTF8ToUTF16(llvm::StringRef utf8,
-    llvm::SmallVectorImpl<wchar_t> &utf16);
+  error_code UTF8ToUTF16(llvm37::StringRef utf8,
+    llvm37::SmallVectorImpl<wchar_t> &utf16);
   error_code UTF16ToUTF8(const wchar_t *utf16, size_t utf16_len,
-    llvm::SmallVectorImpl<char> &utf8);
-} // llvm::sys::windows
+    llvm37::SmallVectorImpl<char> &utf8);
+} // llvm37::sys::windows
 
 namespace fs {
 
@@ -203,12 +203,12 @@ int msf_setmode(int fd, int mode) throw()
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // MSFileSystem-based support for Path APIs.
 
-typedef llvm::sys::fs::MSFileSystemRef MSFileSystemRef;
+typedef llvm37::sys::fs::MSFileSystemRef MSFileSystemRef;
 
 static
 error_code GetCurrentThreadFileSystemOrError(_Outptr_ MSFileSystemRef* pResult) throw()
 {
-  *pResult = ::llvm::sys::fs::GetCurrentThreadFileSystem();
+  *pResult = ::llvm37::sys::fs::GetCurrentThreadFileSystem();
 
   // It is an error to have an I/O API invoked without having installed support 
   // for it. We handle it gracefully in case there is problem while shutting 
@@ -251,7 +251,7 @@ namespace {
   }
 }
 
-namespace llvm {
+namespace llvm37 {
 namespace sys  {
 
 namespace path {
@@ -269,7 +269,7 @@ namespace path {
 
     // If we made this path absolute, how much longer would it get?
     size_t CurPathLen;
-    if (llvm::sys::path::is_absolute(Twine(Path8Str)))
+    if (llvm37::sys::path::is_absolute(Twine(Path8Str)))
       CurPathLen = 0; // No contribution from current_path needed.
     else {
       CurPathLen = ::GetCurrentDirectoryW(0, NULL);
@@ -283,7 +283,7 @@ namespace path {
       SmallString<2 * MAX_PATH> FullPath("\\\\?\\");
       if (CurPathLen) {
         SmallString<80> CurPath;
-        if (std::error_code EC = llvm::sys::fs::current_path(CurPath))
+        if (std::error_code EC = llvm37::sys::fs::current_path(CurPath))
           return EC;
         FullPath.append(CurPath);
       }
@@ -291,15 +291,15 @@ namespace path {
       // the \\?\ prefix is documented to treat them as real components).
       // The iterators don't report separators and append() always attaches
       // preferred_separator so we don't need to call native() on the result.
-      for (llvm::sys::path::const_iterator I = llvm::sys::path::begin(Path8Str),
-        E = llvm::sys::path::end(Path8Str);
+      for (llvm37::sys::path::const_iterator I = llvm37::sys::path::begin(Path8Str),
+        E = llvm37::sys::path::end(Path8Str);
         I != E; ++I) {
         if (I->size() == 1 && *I == ".")
           continue;
         if (I->size() == 2 && *I == "..")
-          llvm::sys::path::remove_filename(FullPath);
+          llvm37::sys::path::remove_filename(FullPath);
         else
-          llvm::sys::path::append(FullPath, *I);
+          llvm37::sys::path::append(FullPath, *I);
       }
       return UTF8ToUTF16(FullPath, Path16);
     }
@@ -1073,8 +1073,8 @@ retry_temp_dir:
 } // end namespace path
 
 namespace windows {
-std::error_code ACPToUTF16(llvm::StringRef acp,
-                            llvm::SmallVectorImpl<wchar_t> &utf16) {
+std::error_code ACPToUTF16(llvm37::StringRef acp,
+                            llvm37::SmallVectorImpl<wchar_t> &utf16) {
   int len = ::MultiByteToWideChar(CP_ACP, MB_ERR_INVALID_CHARS,
                                   acp.begin(), acp.size(),
                                   utf16.begin(), 0);
@@ -1100,15 +1100,15 @@ std::error_code ACPToUTF16(llvm::StringRef acp,
 }
 
 std::error_code ACPToUTF8(const char *acp, size_t acp_len,
-                           llvm::SmallVectorImpl<char> &utf8) {
-  llvm::SmallVector<wchar_t, 128> utf16;
+                           llvm37::SmallVectorImpl<char> &utf8) {
+  llvm37::SmallVector<wchar_t, 128> utf16;
   std::error_code ec = ACPToUTF16(StringRef(acp, acp_len), utf16);
   if (ec) return ec;
   return UTF16ToUTF8(utf16.begin(), utf16.size(), utf8);
 }
 
-std::error_code UTF8ToUTF16(llvm::StringRef utf8,
-                             llvm::SmallVectorImpl<wchar_t> &utf16) {
+std::error_code UTF8ToUTF16(llvm37::StringRef utf8,
+                             llvm37::SmallVectorImpl<wchar_t> &utf16) {
   int len = ::MultiByteToWideChar(CP_UTF8, MB_ERR_INVALID_CHARS,
                                   utf8.begin(), utf8.size(),
                                   utf16.begin(), 0);
@@ -1136,7 +1136,7 @@ std::error_code UTF8ToUTF16(llvm::StringRef utf8,
 static
 std::error_code UTF16ToCodePage(unsigned codepage, const wchar_t *utf16,
                                 size_t utf16_len,
-                                llvm::SmallVectorImpl<char> &utf8) {
+                                llvm37::SmallVectorImpl<char> &utf8) {
   if (utf16_len) {
     // Get length.
     int len = ::WideCharToMultiByte(codepage, 0, utf16, utf16_len, utf8.begin(),
@@ -1164,15 +1164,15 @@ std::error_code UTF16ToCodePage(unsigned codepage, const wchar_t *utf16,
 }
 
 std::error_code UTF16ToUTF8(const wchar_t *utf16, size_t utf16_len,
-  llvm::SmallVectorImpl<char> &utf8) {
+  llvm37::SmallVectorImpl<char> &utf8) {
   return UTF16ToCodePage(CP_UTF8, utf16, utf16_len, utf8);
 }
 
 std::error_code UTF16ToCurCP(const wchar_t *utf16, size_t utf16_len,
-  llvm::SmallVectorImpl<char> &utf8) {
+  llvm37::SmallVectorImpl<char> &utf8) {
   return UTF16ToCodePage(CP_ACP, utf16, utf16_len, utf8);
 }
 
 } // end namespace windows
 } // end namespace sys
-} // end namespace llvm
+} // end namespace llvm37

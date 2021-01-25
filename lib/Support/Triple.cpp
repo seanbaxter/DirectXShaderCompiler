@@ -7,15 +7,15 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/ADT/Triple.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/ADT/StringSwitch.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/TargetParser.h"
-#include "llvm/Support/Host.h"
+#include "llvm37/ADT/Triple.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/ADT/StringSwitch.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/TargetParser.h"
+#include "llvm37/Support/Host.h"
 #include <cstring>
-using namespace llvm;
+using namespace llvm37;
 
 const char *Triple::getArchTypeName(ArchType Kind) {
   switch (Kind) {
@@ -1008,58 +1008,58 @@ void Triple::setOSAndEnvironmentName(StringRef Str) {
   setTriple(getArchName() + "-" + getVendorName() + "-" + Str);
 }
 
-static unsigned getArchPointerBitWidth(llvm::Triple::ArchType Arch) {
+static unsigned getArchPointerBitWidth(llvm37::Triple::ArchType Arch) {
   switch (Arch) {
-  case llvm::Triple::UnknownArch:
+  case llvm37::Triple::UnknownArch:
     return 0;
 
-  case llvm::Triple::msp430:
+  case llvm37::Triple::msp430:
     return 16;
 
-  case llvm::Triple::arm:
-  case llvm::Triple::armeb:
-  case llvm::Triple::hexagon:
-  case llvm::Triple::le32:
-  case llvm::Triple::mips:
-  case llvm::Triple::mipsel:
-  case llvm::Triple::nvptx:
-  case llvm::Triple::ppc:
-  case llvm::Triple::r600:
-  case llvm::Triple::sparc:
-  case llvm::Triple::sparcel:
-  case llvm::Triple::tce:
-  case llvm::Triple::thumb:
-  case llvm::Triple::thumbeb:
-  case llvm::Triple::x86:
-  case llvm::Triple::xcore:
-  case llvm::Triple::amdil:
-  case llvm::Triple::hsail:
-  case llvm::Triple::spir:
-  case llvm::Triple::dxil:      // HLSL Change
-  case llvm::Triple::kalimba:
-  case llvm::Triple::shave:
-  case llvm::Triple::wasm32:
+  case llvm37::Triple::arm:
+  case llvm37::Triple::armeb:
+  case llvm37::Triple::hexagon:
+  case llvm37::Triple::le32:
+  case llvm37::Triple::mips:
+  case llvm37::Triple::mipsel:
+  case llvm37::Triple::nvptx:
+  case llvm37::Triple::ppc:
+  case llvm37::Triple::r600:
+  case llvm37::Triple::sparc:
+  case llvm37::Triple::sparcel:
+  case llvm37::Triple::tce:
+  case llvm37::Triple::thumb:
+  case llvm37::Triple::thumbeb:
+  case llvm37::Triple::x86:
+  case llvm37::Triple::xcore:
+  case llvm37::Triple::amdil:
+  case llvm37::Triple::hsail:
+  case llvm37::Triple::spir:
+  case llvm37::Triple::dxil:      // HLSL Change
+  case llvm37::Triple::kalimba:
+  case llvm37::Triple::shave:
+  case llvm37::Triple::wasm32:
     return 32;
 
-  case llvm::Triple::aarch64:
-  case llvm::Triple::aarch64_be:
-  case llvm::Triple::amdgcn:
-  case llvm::Triple::bpfel:
-  case llvm::Triple::bpfeb:
-  case llvm::Triple::le64:
-  case llvm::Triple::mips64:
-  case llvm::Triple::mips64el:
-  case llvm::Triple::nvptx64:
-  case llvm::Triple::ppc64:
-  case llvm::Triple::ppc64le:
-  case llvm::Triple::sparcv9:
-  case llvm::Triple::systemz:
-  case llvm::Triple::x86_64:
-  case llvm::Triple::amdil64:
-  case llvm::Triple::hsail64:
-  case llvm::Triple::spir64:
-  case llvm::Triple::dxil64:    // HLSL Change
-  case llvm::Triple::wasm64:
+  case llvm37::Triple::aarch64:
+  case llvm37::Triple::aarch64_be:
+  case llvm37::Triple::amdgcn:
+  case llvm37::Triple::bpfel:
+  case llvm37::Triple::bpfeb:
+  case llvm37::Triple::le64:
+  case llvm37::Triple::mips64:
+  case llvm37::Triple::mips64el:
+  case llvm37::Triple::nvptx64:
+  case llvm37::Triple::ppc64:
+  case llvm37::Triple::ppc64le:
+  case llvm37::Triple::sparcv9:
+  case llvm37::Triple::systemz:
+  case llvm37::Triple::x86_64:
+  case llvm37::Triple::amdil64:
+  case llvm37::Triple::hsail64:
+  case llvm37::Triple::spir64:
+  case llvm37::Triple::dxil64:    // HLSL Change
+  case llvm37::Triple::wasm64:
     return 64;
   }
   llvm_unreachable("Invalid architecture value");
@@ -1318,12 +1318,12 @@ const char *Triple::getARMCPUForArch(StringRef MArch) const {
 
   // Some defaults are forced.
   switch (getOS()) {
-  case llvm::Triple::FreeBSD:
-  case llvm::Triple::NetBSD:
+  case llvm37::Triple::FreeBSD:
+  case llvm37::Triple::NetBSD:
     if (!MArch.empty() && MArch == "v6")
       return "arm1176jzf-s";
     break;
-  case llvm::Triple::Win32:
+  case llvm37::Triple::Win32:
     // FIXME: this is invalid for WindowsCE
     return "cortex-a9";
   default:
@@ -1340,22 +1340,22 @@ const char *Triple::getARMCPUForArch(StringRef MArch) const {
   // If no specific architecture version is requested, return the minimum CPU
   // required by the OS and environment.
   switch (getOS()) {
-  case llvm::Triple::NetBSD:
+  case llvm37::Triple::NetBSD:
     switch (getEnvironment()) {
-    case llvm::Triple::GNUEABIHF:
-    case llvm::Triple::GNUEABI:
-    case llvm::Triple::EABIHF:
-    case llvm::Triple::EABI:
+    case llvm37::Triple::GNUEABIHF:
+    case llvm37::Triple::GNUEABI:
+    case llvm37::Triple::EABIHF:
+    case llvm37::Triple::EABI:
       return "arm926ej-s";
     default:
       return "strongarm";
     }
-  case llvm::Triple::NaCl:
+  case llvm37::Triple::NaCl:
     return "cortex-a8";
   default:
     switch (getEnvironment()) {
-    case llvm::Triple::EABIHF:
-    case llvm::Triple::GNUEABIHF:
+    case llvm37::Triple::EABIHF:
+    case llvm37::Triple::GNUEABIHF:
       return "arm1176jzf-s";
     default:
       return "arm7tdmi";

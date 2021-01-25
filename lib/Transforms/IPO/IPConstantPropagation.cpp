@@ -15,16 +15,16 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Transforms/IPO.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/Analysis/ValueTracking.h"
-#include "llvm/IR/CallSite.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/Module.h"
-#include "llvm/Pass.h"
-using namespace llvm;
+#include "llvm37/Transforms/IPO.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/Analysis/ValueTracking.h"
+#include "llvm37/IR/CallSite.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/Pass.h"
+using namespace llvm37;
 
 #define DEBUG_TYPE "ipconstprop"
 
@@ -51,7 +51,7 @@ char IPCP::ID = 0;
 INITIALIZE_PASS(IPCP, "ipconstprop",
                 "Interprocedural constant propagation", false, false)
 
-ModulePass *llvm::createIPConstantPropagationPass() { return new IPCP(); }
+ModulePass *llvm37::createIPConstantPropagationPass() { return new IPCP(); }
 
 bool IPCP::runOnModule(Module &M) {
   bool Changed = false;

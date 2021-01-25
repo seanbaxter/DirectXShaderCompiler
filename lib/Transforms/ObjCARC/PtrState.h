@@ -14,17 +14,17 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_LIB_TRANSFORMS_OBJCARC_PTRSTATE_H
-#define LLVM_LIB_TRANSFORMS_OBJCARC_PTRSTATE_H
+#ifndef LLVM37_LIB_TRANSFORMS_OBJCARC_PTRSTATE_H
+#define LLVM37_LIB_TRANSFORMS_OBJCARC_PTRSTATE_H
 
 #include "ARCInstKind.h"
-#include "llvm/ADT/SmallPtrSet.h"
-#include "llvm/IR/Instruction.h"
-#include "llvm/IR/Value.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Support/Debug.h"
+#include "llvm37/ADT/SmallPtrSet.h"
+#include "llvm37/IR/Instruction.h"
+#include "llvm37/IR/Value.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Support/Debug.h"
 
-namespace llvm {
+namespace llvm37 {
 namespace objcarc {
 
 class ARCMDKindCache;
@@ -45,7 +45,7 @@ enum Sequence {
 };
 
 raw_ostream &operator<<(raw_ostream &OS,
-                        const Sequence S) LLVM_ATTRIBUTE_UNUSED;
+                        const Sequence S) LLVM37_ATTRIBUTE_UNUSED;
 
 /// \brief Unidirectional information about either a
 /// retain-decrement-use-release sequence or release-use-decrement-retain
@@ -205,6 +205,6 @@ struct TopDownPtrState : PtrState {
 };
 
 } // end namespace objcarc
-} // end namespace llvm
+} // end namespace llvm37
 
 #endif

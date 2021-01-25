@@ -40,10 +40,10 @@ ENABLE_ASSERTIONS := no
 endif
 
 # Default is optimized build.
-ifeq ($(LLVM_DEBUG),1)
-LLVM_OPTIMIZED := no
+ifeq ($(LLVM37_DEBUG),1)
+LLVM37_OPTIMIZED := no
 else
-LLVM_OPTIMIZED := yes
+LLVM37_OPTIMIZED := yes
 endif
 
 # Default to do a native build, not a cross-build for an ARM host or simulator.
@@ -63,7 +63,7 @@ install: $(OBJROOT) $(SYMROOT) $(DSTROOT)
 	cd $(OBJROOT) && \
 	  $(SRC)/utils/buildit/build_llvm "$(RC_ARCHS)" "$(TARGETS)" \
 	    $(SRC) $(PREFIX) $(DSTROOT) $(SYMROOT) \
-	    $(ENABLE_ASSERTIONS) $(LLVM_OPTIMIZED) \
+	    $(ENABLE_ASSERTIONS) $(LLVM37_OPTIMIZED) \
 	    $(ARM_HOSTED_BUILD) $(IOS_SIM_BUILD) \
 	    $(RC_ProjectSourceVersion) $(RC_ProjectSourceSubversion) 
 

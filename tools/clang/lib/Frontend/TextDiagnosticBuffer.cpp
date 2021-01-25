@@ -12,8 +12,8 @@
 //===----------------------------------------------------------------------===//
 
 #include "clang/Frontend/TextDiagnosticBuffer.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/Support/ErrorHandling.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/Support/ErrorHandling.h"
 using namespace clang;
 
 /// HandleDiagnostic - Store the errors, warnings, and notes that are

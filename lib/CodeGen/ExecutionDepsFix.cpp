@@ -20,19 +20,19 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/CodeGen/Passes.h"
-#include "llvm/ADT/PostOrderIterator.h"
-#include "llvm/ADT/iterator_range.h"
-#include "llvm/CodeGen/LivePhysRegs.h"
-#include "llvm/CodeGen/MachineFunctionPass.h"
-#include "llvm/CodeGen/MachineRegisterInfo.h"
-#include "llvm/Support/Allocator.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Target/TargetInstrInfo.h"
-#include "llvm/Target/TargetSubtargetInfo.h"
+#include "llvm37/CodeGen/Passes.h"
+#include "llvm37/ADT/PostOrderIterator.h"
+#include "llvm37/ADT/iterator_range.h"
+#include "llvm37/CodeGen/LivePhysRegs.h"
+#include "llvm37/CodeGen/MachineFunctionPass.h"
+#include "llvm37/CodeGen/MachineRegisterInfo.h"
+#include "llvm37/Support/Allocator.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Target/TargetInstrInfo.h"
+#include "llvm37/Target/TargetSubtargetInfo.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "execution-fix"
 
@@ -801,6 +801,6 @@ bool ExeDepsFix::runOnMachineFunction(MachineFunction &mf) {
 }
 
 FunctionPass *
-llvm::createExecutionDependencyFixPass(const TargetRegisterClass *RC) {
+llvm37::createExecutionDependencyFixPass(const TargetRegisterClass *RC) {
   return new ExeDepsFix(RC);
 }

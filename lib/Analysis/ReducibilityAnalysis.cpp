@@ -7,26 +7,26 @@
 //                                                                           //
 ///////////////////////////////////////////////////////////////////////////////
 
-#include "llvm/Analysis/ReducibilityAnalysis.h"
+#include "llvm37/Analysis/ReducibilityAnalysis.h"
 #include "dxc/Support/Global.h"
 
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/Function.h"
-#include "llvm/Pass.h"
-#include "llvm/IR/LegacyPassManager.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/IR/CFG.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/Pass.h"
+#include "llvm37/IR/LegacyPassManager.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/IR/CFG.h"
 
 #include <vector>
 #include <unordered_map>
 #include <unordered_set>
 #include <algorithm>
 
-using namespace llvm;
-using llvm::legacy::PassManager;
-using llvm::legacy::FunctionPassManager;
+using namespace llvm37;
+using llvm37::legacy::PassManager;
+using llvm37::legacy::FunctionPassManager;
 using std::vector;
 using std::unordered_map;
 using std::unordered_set;
@@ -230,13 +230,13 @@ bool ReducibilityAnalysis::runOnFunction(Function &F) {
 using namespace ReducibilityAnalysisNS;
 
 // Publicly exposed interface to pass...
-char &llvm::ReducibilityAnalysisID = ReducibilityAnalysis::ID;
+char &llvm37::ReducibilityAnalysisID = ReducibilityAnalysis::ID;
 
 
 INITIALIZE_PASS_BEGIN(ReducibilityAnalysis, "red", "Reducibility Analysis", true, true)
 INITIALIZE_PASS_END(ReducibilityAnalysis, "red", "Reducibility Analysis", true, true)
 
-namespace llvm {
+namespace llvm37 {
 
 FunctionPass *createReducibilityAnalysisPass(IrreducibilityAction Action) {
   return new ReducibilityAnalysis(Action);

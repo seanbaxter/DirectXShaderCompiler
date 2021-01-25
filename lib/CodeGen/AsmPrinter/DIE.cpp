@@ -11,25 +11,25 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/CodeGen/DIE.h"
+#include "llvm37/CodeGen/DIE.h"
 #include "DwarfCompileUnit.h"
 #include "DwarfDebug.h"
 #include "DwarfUnit.h"
-#include "llvm/ADT/Twine.h"
-#include "llvm/CodeGen/AsmPrinter.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/MC/MCAsmInfo.h"
-#include "llvm/MC/MCContext.h"
-#include "llvm/MC/MCStreamer.h"
-#include "llvm/MC/MCSymbol.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/Format.h"
-#include "llvm/Support/FormattedStream.h"
-#include "llvm/Support/LEB128.h"
-#include "llvm/Support/MD5.h"
-#include "llvm/Support/raw_ostream.h"
-using namespace llvm;
+#include "llvm37/ADT/Twine.h"
+#include "llvm37/CodeGen/AsmPrinter.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/MC/MCAsmInfo.h"
+#include "llvm37/MC/MCContext.h"
+#include "llvm37/MC/MCStreamer.h"
+#include "llvm37/MC/MCSymbol.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/Format.h"
+#include "llvm37/Support/FormattedStream.h"
+#include "llvm37/Support/LEB128.h"
+#include "llvm37/Support/MD5.h"
+#include "llvm37/Support/raw_ostream.h"
+using namespace llvm37;
 
 //===----------------------------------------------------------------------===//
 // DIEAbbrevData Implementation
@@ -199,7 +199,7 @@ void DIEValue::EmitValue(const AsmPrinter *AP) const {
   case is##T:                                                                  \
     getDIE##T().EmitValue(AP, Form);                                           \
     break;
-#include "llvm/CodeGen/DIEValue.def"
+#include "llvm37/CodeGen/DIEValue.def"
   }
 }
 
@@ -210,7 +210,7 @@ unsigned DIEValue::SizeOf(const AsmPrinter *AP) const {
 #define HANDLE_DIEVALUE(T)                                                     \
   case is##T:                                                                  \
     return getDIE##T().SizeOf(AP, Form);
-#include "llvm/CodeGen/DIEValue.def"
+#include "llvm37/CodeGen/DIEValue.def"
   }
   llvm_unreachable("Unknown DIE kind");
 }
@@ -224,7 +224,7 @@ void DIEValue::print(raw_ostream &O) const {
   case is##T:                                                                  \
     getDIE##T().print(O);                                                      \
     break;
-#include "llvm/CodeGen/DIEValue.def"
+#include "llvm37/CodeGen/DIEValue.def"
   }
 }
 

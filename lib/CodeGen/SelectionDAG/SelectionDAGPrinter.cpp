@@ -11,25 +11,25 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/CodeGen/SelectionDAG.h"
+#include "llvm37/CodeGen/SelectionDAG.h"
 #include "ScheduleDAGSDNodes.h"
-#include "llvm/ADT/DenseSet.h"
-#include "llvm/ADT/StringExtras.h"
-#include "llvm/CodeGen/MachineConstantPool.h"
-#include "llvm/CodeGen/MachineFunction.h"
-#include "llvm/CodeGen/MachineModuleInfo.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/DebugInfo.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/GraphWriter.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Target/TargetMachine.h"
-#include "llvm/Target/TargetRegisterInfo.h"
-using namespace llvm;
+#include "llvm37/ADT/DenseSet.h"
+#include "llvm37/ADT/StringExtras.h"
+#include "llvm37/CodeGen/MachineConstantPool.h"
+#include "llvm37/CodeGen/MachineFunction.h"
+#include "llvm37/CodeGen/MachineModuleInfo.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/DebugInfo.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/GraphWriter.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Target/TargetMachine.h"
+#include "llvm37/Target/TargetRegisterInfo.h"
+using namespace llvm37;
 
 #define DEBUG_TYPE "dag-printer"
 
-namespace llvm {
+namespace llvm37 {
   template<>
   struct DOTGraphTraits<SelectionDAG*> : public DefaultDOTGraphTraits {
 

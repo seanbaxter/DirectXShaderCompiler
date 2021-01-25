@@ -15,13 +15,13 @@
 #include "dxc/DxilContainer/DxilContainerReader.h"
 #include "dxc/DXIL/DxilConstants.h"
 
-#include "llvm/Support/Path.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Support/MemoryBuffer.h"
-#include "llvm/Support/ManagedStatic.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Module.h"
-#include "llvm/Bitcode/ReaderWriter.h"
+#include "llvm37/Support/Path.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Support/MemoryBuffer.h"
+#include "llvm37/Support/ManagedStatic.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/Bitcode/ReaderWriter.h"
 
 #include <atlbase.h>
 #include "dxc/Support/microcom.h"
@@ -34,7 +34,7 @@
 
 #include <fstream>
 
-using namespace llvm;
+using namespace llvm37;
 using std::string;
 using std::wstring;
 using std::unique_ptr;

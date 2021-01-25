@@ -18,8 +18,8 @@
 #include "clang/Frontend/ASTUnit.h"
 #include "clang/Index/USRGeneration.h"
 #include "clang/Lex/PreprocessingRecord.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/Support/raw_ostream.h"
 
 using namespace clang;
 using namespace clang::index;
@@ -94,7 +94,7 @@ CXString clang_getCursorUSR(CXCursor C) {
 
 CXString clang_constructUSR_ObjCIvar(const char *name, CXString classUSR) {
   SmallString<128> Buf(getUSRSpacePrefix());
-  llvm::raw_svector_ostream OS(Buf);
+  llvm37::raw_svector_ostream OS(Buf);
   OS << extractUSRSuffix(clang_getCString(classUSR));
   generateUSRForObjCIvar(name, OS);
   return cxstring::createDup(OS.str());
@@ -104,7 +104,7 @@ CXString clang_constructUSR_ObjCMethod(const char *name,
                                        unsigned isInstanceMethod,
                                        CXString classUSR) {
   SmallString<128> Buf(getUSRSpacePrefix());
-  llvm::raw_svector_ostream OS(Buf);
+  llvm37::raw_svector_ostream OS(Buf);
   OS << extractUSRSuffix(clang_getCString(classUSR));
   generateUSRForObjCMethod(name, isInstanceMethod, OS);
   return cxstring::createDup(OS.str());
@@ -112,14 +112,14 @@ CXString clang_constructUSR_ObjCMethod(const char *name,
 
 CXString clang_constructUSR_ObjCClass(const char *name) {
   SmallString<128> Buf(getUSRSpacePrefix());
-  llvm::raw_svector_ostream OS(Buf);
+  llvm37::raw_svector_ostream OS(Buf);
   generateUSRForObjCClass(name, OS);
   return cxstring::createDup(OS.str());
 }
 
 CXString clang_constructUSR_ObjCProtocol(const char *name) {
   SmallString<128> Buf(getUSRSpacePrefix());
-  llvm::raw_svector_ostream OS(Buf);
+  llvm37::raw_svector_ostream OS(Buf);
   generateUSRForObjCProtocol(name, OS);
   return cxstring::createDup(OS.str());
 }
@@ -127,7 +127,7 @@ CXString clang_constructUSR_ObjCProtocol(const char *name) {
 CXString clang_constructUSR_ObjCCategory(const char *class_name,
                                          const char *category_name) {
   SmallString<128> Buf(getUSRSpacePrefix());
-  llvm::raw_svector_ostream OS(Buf);
+  llvm37::raw_svector_ostream OS(Buf);
   generateUSRForObjCCategory(class_name, category_name, OS);
   return cxstring::createDup(OS.str());
 }
@@ -135,7 +135,7 @@ CXString clang_constructUSR_ObjCCategory(const char *class_name,
 CXString clang_constructUSR_ObjCProperty(const char *property,
                                          CXString classUSR) {
   SmallString<128> Buf(getUSRSpacePrefix());
-  llvm::raw_svector_ostream OS(Buf);
+  llvm37::raw_svector_ostream OS(Buf);
   OS << extractUSRSuffix(clang_getCString(classUSR));
   generateUSRForObjCProperty(property, OS);
   return cxstring::createDup(OS.str());

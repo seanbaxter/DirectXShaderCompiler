@@ -10,11 +10,11 @@
 #include "PtrState.h"
 #include "DependencyAnalysis.h"
 #include "ObjCARC.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/raw_ostream.h"
 
-using namespace llvm;
-using namespace llvm::objcarc;
+using namespace llvm37;
+using namespace llvm37::objcarc;
 
 #define DEBUG_TYPE "objc-arc-ptr-state"
 
@@ -22,7 +22,7 @@ using namespace llvm::objcarc;
 //                                  Utility
 //===----------------------------------------------------------------------===//
 
-raw_ostream &llvm::objcarc::operator<<(raw_ostream &OS, const Sequence S) {
+raw_ostream &llvm37::objcarc::operator<<(raw_ostream &OS, const Sequence S) {
   switch (S) {
   case S_None:
     return OS << "S_None";

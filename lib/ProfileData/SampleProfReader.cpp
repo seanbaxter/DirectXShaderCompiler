@@ -94,16 +94,16 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/ProfileData/SampleProfReader.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/ErrorOr.h"
-#include "llvm/Support/LEB128.h"
-#include "llvm/Support/LineIterator.h"
-#include "llvm/Support/MemoryBuffer.h"
-#include "llvm/Support/Regex.h"
+#include "llvm37/ProfileData/SampleProfReader.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/ErrorOr.h"
+#include "llvm37/Support/LEB128.h"
+#include "llvm37/Support/LineIterator.h"
+#include "llvm37/Support/MemoryBuffer.h"
+#include "llvm37/Support/Regex.h"
 
-using namespace llvm::sampleprof;
-using namespace llvm;
+using namespace llvm37::sampleprof;
+using namespace llvm37;
 
 /// \brief Print the samples collected for a function on stream \p OS.
 ///

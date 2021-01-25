@@ -11,7 +11,7 @@
 
 #pragma once
 
-#include "llvm/ADT/StringRef.h"
+#include "llvm37/ADT/StringRef.h"
 
 #include "DxilConstants.h"
 #include "DxilShaderModel.h"
@@ -26,16 +26,16 @@ public:
   static const int kUndefinedRow = -1;
   static const int kUndefinedCol = -1;
 
-  static const Semantic *GetByName(llvm::StringRef name);
-  static const Semantic *GetByName(llvm::StringRef Name, DXIL::SigPointKind sigPointKind,
+  static const Semantic *GetByName(llvm37::StringRef name);
+  static const Semantic *GetByName(llvm37::StringRef Name, DXIL::SigPointKind sigPointKind,
     unsigned MajorVersion = ShaderModel::kHighestMajor, unsigned MinorVersion = ShaderModel::kHighestMinor);
   static const Semantic *Get(Kind kind);
   static const Semantic *Get(Kind kind, DXIL::SigPointKind sigPointKind,
     unsigned MajorVersion = ShaderModel::kHighestMajor, unsigned MinorVersion = ShaderModel::kHighestMinor);
   static const Semantic *GetInvalid();
   static const Semantic *GetArbitrary();
-  static bool HasSVPrefix(llvm::StringRef Name);
-  static void DecomposeNameAndIndex(llvm::StringRef FullName, llvm::StringRef *pName, unsigned *pIndex);
+  static bool HasSVPrefix(llvm37::StringRef Name);
+  static void DecomposeNameAndIndex(llvm37::StringRef FullName, llvm37::StringRef *pName, unsigned *pIndex);
 
   Kind GetKind() const;
   const char *GetName() const;

@@ -10,10 +10,10 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef LLVM_CLANG_PARSE_PARSEHLSL_H
-#define LLVM_CLANG_PARSE_PARSEHLSL_H
+#ifndef LLVM37_CLANG_PARSE_PARSEHLSL_H
+#define LLVM37_CLANG_PARSE_PARSEHLSL_H
 
-namespace llvm {
+namespace llvm37 {
 class raw_ostream;
 }
 

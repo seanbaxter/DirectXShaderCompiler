@@ -17,8 +17,8 @@
 |*                                                                            *|
 \*===----------------------------------------------------------------------===*/
 
-#ifndef LLVM_C_TRANSFORMS_VECTORIZE_H
-#define LLVM_C_TRANSFORMS_VECTORIZE_H
+#ifndef LLVM37_C_TRANSFORMS_VECTORIZE_H
+#define LLVM37_C_TRANSFORMS_VECTORIZE_H
 
 #include "llvm-c/Core.h"
 
@@ -33,13 +33,13 @@ extern "C" {
  * @{
  */
 
-/** See llvm::createBBVectorizePass function. */
+/** See llvm37::createBBVectorizePass function. */
 void LLVMAddBBVectorizePass(LLVMPassManagerRef PM);
 
-/** See llvm::createLoopVectorizePass function. */
+/** See llvm37::createLoopVectorizePass function. */
 void LLVMAddLoopVectorizePass(LLVMPassManagerRef PM);
 
-/** See llvm::createSLPVectorizerPass function. */
+/** See llvm37::createSLPVectorizerPass function. */
 void LLVMAddSLPVectorizePass(LLVMPassManagerRef PM);
 
 /**

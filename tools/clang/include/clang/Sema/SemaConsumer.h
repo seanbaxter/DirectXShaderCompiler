@@ -12,8 +12,8 @@
 //  additional semantic analysis.
 //
 //===----------------------------------------------------------------------===//
-#ifndef LLVM_CLANG_SEMA_SEMACONSUMER_H
-#define LLVM_CLANG_SEMA_SEMACONSUMER_H
+#ifndef LLVM37_CLANG_SEMA_SEMACONSUMER_H
+#define LLVM37_CLANG_SEMA_SEMACONSUMER_H
 
 #include "clang/AST/ASTConsumer.h"
 

@@ -7,14 +7,14 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_FRONTEND_SERIALIZEDDIAGNOSTICPRINTER_H
-#define LLVM_CLANG_FRONTEND_SERIALIZEDDIAGNOSTICPRINTER_H
+#ifndef LLVM37_CLANG_FRONTEND_SERIALIZEDDIAGNOSTICPRINTER_H
+#define LLVM37_CLANG_FRONTEND_SERIALIZEDDIAGNOSTICPRINTER_H
 
 #include "clang/Basic/LLVM.h"
 #include "clang/Frontend/SerializedDiagnostics.h"
-#include "llvm/Bitcode/BitstreamWriter.h"
+#include "llvm37/Bitcode/BitstreamWriter.h"
 
-namespace llvm {
+namespace llvm37 {
 class raw_ostream;
 }
 

@@ -7,14 +7,14 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/ADT/SmallPtrSet.h"
-#include "llvm/IR/BasicBlock.h"
-#include "llvm/IR/CallSite.h"
-#include "llvm/IR/GlobalVariable.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/Transforms/Utils/GlobalStatus.h"
+#include "llvm37/ADT/SmallPtrSet.h"
+#include "llvm37/IR/BasicBlock.h"
+#include "llvm37/IR/CallSite.h"
+#include "llvm37/IR/GlobalVariable.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/Transforms/Utils/GlobalStatus.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 /// Return the stronger of the two ordering. If the two orderings are acquire
 /// and release, then return AcquireRelease.
@@ -31,7 +31,7 @@ static AtomicOrdering strongerOrdering(AtomicOrdering X, AtomicOrdering Y) {
 /// Note that constants cannot be cyclic, so this test is pretty easy to
 /// implement recursively.
 ///
-bool llvm::isSafeToDestroyConstant(const Constant *C) {
+bool llvm37::isSafeToDestroyConstant(const Constant *C) {
   if (isa<GlobalValue>(C))
     return false;
 

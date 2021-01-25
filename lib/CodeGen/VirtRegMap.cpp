@@ -16,29 +16,29 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/CodeGen/VirtRegMap.h"
+#include "llvm37/CodeGen/VirtRegMap.h"
 #include "LiveDebugVariables.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/SparseSet.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/CodeGen/LiveIntervalAnalysis.h"
-#include "llvm/CodeGen/LiveStackAnalysis.h"
-#include "llvm/CodeGen/MachineFrameInfo.h"
-#include "llvm/CodeGen/MachineFunction.h"
-#include "llvm/CodeGen/MachineInstrBuilder.h"
-#include "llvm/CodeGen/MachineRegisterInfo.h"
-#include "llvm/CodeGen/Passes.h"
-#include "llvm/IR/Function.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/Compiler.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Target/TargetInstrInfo.h"
-#include "llvm/Target/TargetMachine.h"
-#include "llvm/Target/TargetRegisterInfo.h"
-#include "llvm/Target/TargetSubtargetInfo.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/SparseSet.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/CodeGen/LiveIntervalAnalysis.h"
+#include "llvm37/CodeGen/LiveStackAnalysis.h"
+#include "llvm37/CodeGen/MachineFrameInfo.h"
+#include "llvm37/CodeGen/MachineFunction.h"
+#include "llvm37/CodeGen/MachineInstrBuilder.h"
+#include "llvm37/CodeGen/MachineRegisterInfo.h"
+#include "llvm37/CodeGen/Passes.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/Compiler.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Target/TargetInstrInfo.h"
+#include "llvm37/Target/TargetMachine.h"
+#include "llvm37/Target/TargetRegisterInfo.h"
+#include "llvm37/Target/TargetSubtargetInfo.h"
 #include <algorithm>
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "regalloc"
 
@@ -138,7 +138,7 @@ void VirtRegMap::print(raw_ostream &OS, const Module*) const {
   OS << '\n';
 }
 
-#if !defined(NDEBUG) || defined(LLVM_ENABLE_DUMP)
+#if !defined(NDEBUG) || defined(LLVM37_ENABLE_DUMP)
 void VirtRegMap::dump() const {
   print(dbgs());
 }
@@ -178,7 +178,7 @@ public:
 };
 } // end anonymous namespace
 
-char &llvm::VirtRegRewriterID = VirtRegRewriter::ID;
+char &llvm37::VirtRegRewriterID = VirtRegRewriter::ID;
 
 INITIALIZE_PASS_BEGIN(VirtRegRewriter, "virtregrewriter",
                       "Virtual Register Rewriter", false, false)

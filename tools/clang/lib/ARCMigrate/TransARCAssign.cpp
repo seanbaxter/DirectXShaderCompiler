@@ -34,7 +34,7 @@ namespace {
 
 class ARCAssignChecker : public RecursiveASTVisitor<ARCAssignChecker> {
   MigrationPass &Pass;
-  llvm::DenseSet<VarDecl *> ModifiedVars;
+  llvm37::DenseSet<VarDecl *> ModifiedVars;
 
 public:
   ARCAssignChecker(MigrationPass &pass) : Pass(pass) { }

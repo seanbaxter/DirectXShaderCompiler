@@ -9,18 +9,18 @@
 
 #include "DebugMap.h"
 #include "BinaryHolder.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/iterator_range.h"
-#include "llvm/Support/DataTypes.h"
-#include "llvm/Support/Format.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/iterator_range.h"
+#include "llvm37/Support/DataTypes.h"
+#include "llvm37/Support/Format.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <algorithm>
 //                                                                           //
 ///////////////////////////////////////////////////////////////////////////////
-namespace llvm {
+namespace llvm37 {
 namespace dsymutil {
 
-using namespace llvm::object;
+using namespace llvm37::object;
 
 DebugMapObject::DebugMapObject(StringRef ObjectFilename)
     : Filename(ObjectFilename) {}
@@ -147,7 +147,7 @@ void MappingTraits<dsymutil::DebugMapObject>::mapping(
 }
 
 void ScalarTraits<Triple>::output(const Triple &val, void *,
-                                  llvm::raw_ostream &out) {
+                                  llvm37::raw_ostream &out) {
   out << val.str();
 }
 
@@ -209,7 +209,7 @@ MappingTraits<dsymutil::DebugMapObject>::YamlDMO::denormalize(IO &IO) {
   sys::path::append(Path, Filename);
   auto ErrOrObjectFile = BinHolder.GetObjectFile(Path);
   if (auto EC = ErrOrObjectFile.getError()) {
-    llvm::errs() << "warning: Unable to open " << Path << " " << EC.message()
+    llvm37::errs() << "warning: Unable to open " << Path << " " << EC.message()
                  << '\n';
   } else {
     // Rewrite the object file symbol addresses in the debug map. The

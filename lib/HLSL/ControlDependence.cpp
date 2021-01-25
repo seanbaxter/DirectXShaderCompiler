@@ -13,9 +13,9 @@
 
 #include "dxc/HLSL/ControlDependence.h"
 #include "dxc/Support/Global.h"
-#include "llvm/Support/Debug.h"
+#include "llvm37/Support/Debug.h"
 
-using namespace llvm;
+using namespace llvm37;
 using namespace hlsl;
 
 

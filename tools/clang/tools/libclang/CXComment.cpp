@@ -18,9 +18,9 @@
 #include "clang-c/Documentation.h"
 #include "clang/AST/Decl.h"
 #include "clang/Index/CommentToXML.h"
-#include "llvm/ADT/StringExtras.h"
-#include "llvm/ADT/StringSwitch.h"
-#include "llvm/Support/ErrorHandling.h"
+#include "llvm37/ADT/StringExtras.h"
+#include "llvm37/ADT/StringSwitch.h"
+#include "llvm37/Support/ErrorHandling.h"
 #include <climits>
 
 using namespace clang;

@@ -13,8 +13,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_C_LINKTIMEOPTIMIZER_H
-#define LLVM_C_LINKTIMEOPTIMIZER_H
+#ifndef LLVM37_C_LINKTIMEOPTIMIZER_H
+#define LLVM37_C_LINKTIMEOPTIMIZER_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -33,18 +33,18 @@ extern "C" {
   /// This provides a C-visible enumerator to manage status codes.
   /// This should map exactly onto the C++ enumerator LTOStatus.
   typedef enum llvm_lto_status {
-    LLVM_LTO_UNKNOWN,
-    LLVM_LTO_OPT_SUCCESS,
-    LLVM_LTO_READ_SUCCESS,
-    LLVM_LTO_READ_FAILURE,
-    LLVM_LTO_WRITE_FAILURE,
-    LLVM_LTO_NO_TARGET,
-    LLVM_LTO_NO_WORK,
-    LLVM_LTO_MODULE_MERGE_FAILURE,
-    LLVM_LTO_ASM_FAILURE,
+    LLVM37_LTO_UNKNOWN,
+    LLVM37_LTO_OPT_SUCCESS,
+    LLVM37_LTO_READ_SUCCESS,
+    LLVM37_LTO_READ_FAILURE,
+    LLVM37_LTO_WRITE_FAILURE,
+    LLVM37_LTO_NO_TARGET,
+    LLVM37_LTO_NO_WORK,
+    LLVM37_LTO_MODULE_MERGE_FAILURE,
+    LLVM37_LTO_ASM_FAILURE,
 
     //  Added C-specific error codes
-    LLVM_LTO_NULL_OBJECT
+    LLVM37_LTO_NULL_OBJECT
   } llvm_lto_status_t;
 
   /// This provides C interface to initialize link time optimizer. This allows

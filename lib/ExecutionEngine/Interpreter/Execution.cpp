@@ -12,21 +12,21 @@
 //===----------------------------------------------------------------------===//
 
 #include "Interpreter.h"
-#include "llvm/ADT/APInt.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/CodeGen/IntrinsicLowering.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/DerivedTypes.h"
-#include "llvm/IR/GetElementPtrTypeIterator.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/MathExtras.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/APInt.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/CodeGen/IntrinsicLowering.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/DerivedTypes.h"
+#include "llvm37/IR/GetElementPtrTypeIterator.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/MathExtras.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <algorithm>
 #include <cmath>
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "interpreter"
 
@@ -1124,7 +1124,7 @@ void Interpreter::visitCallSite(CallSite CS) {
 
 // auxiliary function for shift operations
 static unsigned getShiftAmount(uint64_t orgShiftAmount,
-                               llvm::APInt valueToShift) {
+                               llvm37::APInt valueToShift) {
   unsigned valueWidth = valueToShift.getBitWidth();
   if (orgShiftAmount < (uint64_t)valueWidth)
     return orgShiftAmount;
@@ -1147,14 +1147,14 @@ void Interpreter::visitShl(BinaryOperator &I) {
     for (unsigned i = 0; i < src1Size; i++) {
       GenericValue Result;
       uint64_t shiftAmount = Src2.AggregateVal[i].IntVal.getZExtValue();
-      llvm::APInt valueToShift = Src1.AggregateVal[i].IntVal;
+      llvm37::APInt valueToShift = Src1.AggregateVal[i].IntVal;
       Result.IntVal = valueToShift.shl(getShiftAmount(shiftAmount, valueToShift));
       Dest.AggregateVal.push_back(Result);
     }
   } else {
     // scalar
     uint64_t shiftAmount = Src2.IntVal.getZExtValue();
-    llvm::APInt valueToShift = Src1.IntVal;
+    llvm37::APInt valueToShift = Src1.IntVal;
     Dest.IntVal = valueToShift.shl(getShiftAmount(shiftAmount, valueToShift));
   }
 
@@ -1174,14 +1174,14 @@ void Interpreter::visitLShr(BinaryOperator &I) {
     for (unsigned i = 0; i < src1Size; i++) {
       GenericValue Result;
       uint64_t shiftAmount = Src2.AggregateVal[i].IntVal.getZExtValue();
-      llvm::APInt valueToShift = Src1.AggregateVal[i].IntVal;
+      llvm37::APInt valueToShift = Src1.AggregateVal[i].IntVal;
       Result.IntVal = valueToShift.lshr(getShiftAmount(shiftAmount, valueToShift));
       Dest.AggregateVal.push_back(Result);
     }
   } else {
     // scalar
     uint64_t shiftAmount = Src2.IntVal.getZExtValue();
-    llvm::APInt valueToShift = Src1.IntVal;
+    llvm37::APInt valueToShift = Src1.IntVal;
     Dest.IntVal = valueToShift.lshr(getShiftAmount(shiftAmount, valueToShift));
   }
 
@@ -1201,14 +1201,14 @@ void Interpreter::visitAShr(BinaryOperator &I) {
     for (unsigned i = 0; i < src1Size; i++) {
       GenericValue Result;
       uint64_t shiftAmount = Src2.AggregateVal[i].IntVal.getZExtValue();
-      llvm::APInt valueToShift = Src1.AggregateVal[i].IntVal;
+      llvm37::APInt valueToShift = Src1.AggregateVal[i].IntVal;
       Result.IntVal = valueToShift.ashr(getShiftAmount(shiftAmount, valueToShift));
       Dest.AggregateVal.push_back(Result);
     }
   } else {
     // scalar
     uint64_t shiftAmount = Src2.IntVal.getZExtValue();
-    llvm::APInt valueToShift = Src1.IntVal;
+    llvm37::APInt valueToShift = Src1.IntVal;
     Dest.IntVal = valueToShift.ashr(getShiftAmount(shiftAmount, valueToShift));
   }
 

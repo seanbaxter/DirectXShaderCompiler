@@ -10,8 +10,8 @@
 |* This header provides various utilities for use by build systems.           *|
 |*                                                                            *|
 \*===----------------------------------------------------------------------===*/
-#ifndef LLVM_CLANG_C_BUILDSYSTEM_H
-#define LLVM_CLANG_C_BUILDSYSTEM_H
+#ifndef LLVM37_CLANG_C_BUILDSYSTEM_H
+#define LLVM37_CLANG_C_BUILDSYSTEM_H
 
 #include "clang-c/Platform.h"
 #include "clang-c/CXErrorCode.h"

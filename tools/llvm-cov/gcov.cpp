@@ -11,17 +11,17 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/ADT/SmallString.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/Errc.h"
-#include "llvm/Support/FileSystem.h"
-#include "llvm/Support/GCOV.h"
-#include "llvm/Support/ManagedStatic.h"
-#include "llvm/Support/Path.h"
-#include "llvm/Support/PrettyStackTrace.h"
-#include "llvm/Support/Signals.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/Errc.h"
+#include "llvm37/Support/FileSystem.h"
+#include "llvm37/Support/GCOV.h"
+#include "llvm37/Support/ManagedStatic.h"
+#include "llvm37/Support/Path.h"
+#include "llvm37/Support/PrettyStackTrace.h"
+#include "llvm37/Support/Signals.h"
 #include <system_error>
-using namespace llvm;
+using namespace llvm37;
 
 static void reportCoverage(StringRef SourceFile, StringRef ObjectDir,
                            const std::string &InputGCNO,
@@ -81,7 +81,7 @@ static void reportCoverage(StringRef SourceFile, StringRef ObjectDir,
 
   FileInfo FI(Options);
   GF.collectLineCounts(FI);
-  FI.print(llvm::outs(), SourceFile, GCNO, GCDA);
+  FI.print(llvm37::outs(), SourceFile, GCNO, GCDA);
 }
 
 int gcovMain(int argc, const char *argv[]) {

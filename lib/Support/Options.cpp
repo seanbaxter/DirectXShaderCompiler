@@ -12,10 +12,10 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Support/Options.h"
-#include "llvm/Support/ManagedStatic.h"
+#include "llvm37/Support/Options.h"
+#include "llvm37/Support/ManagedStatic.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 OptionRegistry::~OptionRegistry() {
   for (auto IT = Options.begin(); IT != Options.end(); ++IT)

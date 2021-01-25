@@ -16,14 +16,14 @@
 #include "llvm-pdbdump.h"
 #include "TypedefDumper.h"
 
-#include "llvm/DebugInfo/PDB/IPDBSession.h"
-#include "llvm/DebugInfo/PDB/PDBSymbolExe.h"
-#include "llvm/DebugInfo/PDB/PDBSymbolTypeBuiltin.h"
-#include "llvm/DebugInfo/PDB/PDBSymbolTypeEnum.h"
-#include "llvm/DebugInfo/PDB/PDBSymbolTypeTypedef.h"
-#include "llvm/DebugInfo/PDB/PDBSymbolTypeUDT.h"
+#include "llvm37/DebugInfo/PDB/IPDBSession.h"
+#include "llvm37/DebugInfo/PDB/PDBSymbolExe.h"
+#include "llvm37/DebugInfo/PDB/PDBSymbolTypeBuiltin.h"
+#include "llvm37/DebugInfo/PDB/PDBSymbolTypeEnum.h"
+#include "llvm37/DebugInfo/PDB/PDBSymbolTypeTypedef.h"
+#include "llvm37/DebugInfo/PDB/PDBSymbolTypeUDT.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 TypeDumper::TypeDumper(LinePrinter &P) : PDBSymDumper(true), Printer(P) {}
 

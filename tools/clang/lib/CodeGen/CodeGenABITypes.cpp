@@ -27,8 +27,8 @@ using namespace clang;
 using namespace CodeGen;
 
 CodeGenABITypes::CodeGenABITypes(ASTContext &C,
-                                 llvm::Module &M,
-                                 const llvm::DataLayout &TD,
+                                 llvm37::Module &M,
+                                 const llvm37::DataLayout &TD,
                                  CoverageSourceInfo *CoverageInfo)
   : CGO(new CodeGenOptions),
     HSO(new HeaderSearchOptions),

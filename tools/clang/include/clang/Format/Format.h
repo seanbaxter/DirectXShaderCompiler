@@ -12,12 +12,12 @@
 ///
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_FORMAT_FORMAT_H
-#define LLVM_CLANG_FORMAT_FORMAT_H
+#ifndef LLVM37_CLANG_FORMAT_FORMAT_H
+#define LLVM37_CLANG_FORMAT_FORMAT_H
 
 #include "clang/Basic/LangOptions.h"
 #include "clang/Tooling/Core/Replacement.h"
-#include "llvm/ADT/ArrayRef.h"
+#include "llvm37/ADT/ArrayRef.h"
 #include <system_error>
 
 namespace clang {
@@ -31,7 +31,7 @@ namespace format {
 enum class ParseError { Success = 0, Error, Unsuitable };
 class ParseErrorCategory final : public std::error_category {
 public:
-  const char *name() const LLVM_NOEXCEPT override;
+  const char *name() const LLVM37_NOEXCEPT override;
   std::string message(int EV) const override;
 };
 const std::error_category &getParseCategory();
@@ -599,7 +599,7 @@ tooling::Replacements reformat(const FormatStyle &Style, StringRef Code,
 /// \param Style determines specific settings for lexing mode.
 LangOptions getFormattingLangOpts(const FormatStyle &Style = getLLVMStyle());
 
-/// \brief Description to be used for help text for a llvm::cl option for
+/// \brief Description to be used for help text for a llvm37::cl option for
 /// specifying format style. The description is closely related to the operation
 /// of getStyle().
 extern const char *StyleOptionHelpDescription;
@@ -634,4 +634,4 @@ template <>
 struct is_error_code_enum<clang::format::ParseError> : std::true_type {};
 }
 
-#endif // LLVM_CLANG_FORMAT_FORMAT_H
+#endif // LLVM37_CLANG_FORMAT_FORMAT_H

@@ -15,12 +15,12 @@
 
 #include "dxc/DXIL/DxilMetadataHelper.h"
 #include "dxc/Support/exception.h"
-#include "llvm/IR/DebugInfo.h"
-#include "llvm/IR/DebugInfoMetadata.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/Type.h"
+#include "llvm37/IR/DebugInfo.h"
+#include "llvm37/IR/DebugInfoMetadata.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/Type.h"
 
 #include <vector>
 
@@ -64,9 +64,9 @@ FragmentIteratorBase::FragmentIteratorBase(
 
 
 ///////////////////////////////////////////////////////////////////////////////
-static unsigned NumAllocaElements(llvm::AllocaInst *Alloca) {
-  llvm::Type *FragmentTy = Alloca->getAllocatedType();
-  if (auto *ArrayTy = llvm::dyn_cast<llvm::ArrayType>(FragmentTy)) {
+static unsigned NumAllocaElements(llvm37::AllocaInst *Alloca) {
+  llvm37::Type *FragmentTy = Alloca->getAllocatedType();
+  if (auto *ArrayTy = llvm37::dyn_cast<llvm37::ArrayType>(FragmentTy)) {
     return ArrayTy->getNumElements();
   }
 
@@ -74,10 +74,10 @@ static unsigned NumAllocaElements(llvm::AllocaInst *Alloca) {
   return NumElements;
 }
 
-static unsigned FragmentSizeInBitsFromAlloca(const llvm::DataLayout &DataLayout,
-                                             llvm::AllocaInst *Alloca) {
-  llvm::Type *FragmentTy = Alloca->getAllocatedType();
-  if (auto *ArrayTy = llvm::dyn_cast<llvm::ArrayType>(FragmentTy)) {
+static unsigned FragmentSizeInBitsFromAlloca(const llvm37::DataLayout &DataLayout,
+                                             llvm37::AllocaInst *Alloca) {
+  llvm37::Type *FragmentTy = Alloca->getAllocatedType();
+  if (auto *ArrayTy = llvm37::dyn_cast<llvm37::ArrayType>(FragmentTy)) {
     FragmentTy = ArrayTy->getElementType();
   }
 
@@ -88,13 +88,13 @@ static unsigned FragmentSizeInBitsFromAlloca(const llvm::DataLayout &DataLayout,
 }
 
 static unsigned
-InitialOffsetInBitsFromDIExpression(const llvm::DataLayout &DataLayout,
-                                    llvm::AllocaInst *Alloca,
-                                    llvm::DIExpression *Expression) {
+InitialOffsetInBitsFromDIExpression(const llvm37::DataLayout &DataLayout,
+                                    llvm37::AllocaInst *Alloca,
+                                    llvm37::DIExpression *Expression) {
   unsigned FragmentOffsetInBits = 0;
   if (Expression->getNumElements() > 0) {
     if (Expression->getNumElements() == 1 &&
-      Expression->expr_op_begin()->getOp() == llvm::dwarf::DW_OP_deref) {
+      Expression->expr_op_begin()->getOp() == llvm37::dwarf::DW_OP_deref) {
       return 0;
     }
     else if (!Expression->isBitPiece()) {
@@ -113,16 +113,16 @@ InitialOffsetInBitsFromDIExpression(const llvm::DataLayout &DataLayout,
 ///////////////////////////////////////////////////////////////////////////////
 class DILayoutFragmentIterator : public FragmentIteratorBase {
 public:
-  DILayoutFragmentIterator(const llvm::DataLayout &DataLayout,
-                           llvm::AllocaInst *Alloca,
-                           llvm::DIExpression *Expression);
+  DILayoutFragmentIterator(const llvm37::DataLayout &DataLayout,
+                           llvm37::AllocaInst *Alloca,
+                           llvm37::DIExpression *Expression);
 
   virtual unsigned OffsetInBits(unsigned Index) override;
 };
 
 DILayoutFragmentIterator::DILayoutFragmentIterator(
-    const llvm::DataLayout &DataLayout, llvm::AllocaInst *Alloca,
-    llvm::DIExpression *Expression)
+    const llvm37::DataLayout &DataLayout, llvm37::AllocaInst *Alloca,
+    llvm37::DIExpression *Expression)
     : FragmentIteratorBase(NumAllocaElements(Alloca),
                        FragmentSizeInBitsFromAlloca(DataLayout, Alloca),
                        InitialOffsetInBitsFromDIExpression(DataLayout, Alloca,
@@ -142,8 +142,8 @@ NumFragmentsFromArrayDims(const std::vector<hlsl::DxilDIArrayDim> &ArrayDims) {
   return TotalNumFragments;
 }
 
-static unsigned FragmentSizeInBitsFrom(const llvm::DataLayout &DataLayout,
-                                       llvm::AllocaInst *Alloca,
+static unsigned FragmentSizeInBitsFrom(const llvm37::DataLayout &DataLayout,
+                                       llvm37::AllocaInst *Alloca,
                                        unsigned TotalNumFragments) {
   const unsigned TotalSizeInBits =
       DataLayout.getTypeAllocSizeInBits(Alloca->getAllocatedType());
@@ -160,7 +160,7 @@ static unsigned FragmentSizeInBitsFrom(const llvm::DataLayout &DataLayout,
 class DebugLayoutFragmentIterator : public FragmentIteratorBase {
 public:
   DebugLayoutFragmentIterator(
-      const llvm::DataLayout &DataLayout, llvm::AllocaInst *Alloca,
+      const llvm37::DataLayout &DataLayout, llvm37::AllocaInst *Alloca,
       unsigned InitialOffsetInBits,
       const std::vector<hlsl::DxilDIArrayDim> &ArrayDims);
 
@@ -171,7 +171,7 @@ private:
 };
 
 DebugLayoutFragmentIterator::DebugLayoutFragmentIterator(
-    const llvm::DataLayout &DataLayout, llvm::AllocaInst *Alloca,
+    const llvm37::DataLayout &DataLayout, llvm37::AllocaInst *Alloca,
     unsigned InitialOffsetInBits,
     const std::vector<hlsl::DxilDIArrayDim> &ArrayDims)
     : FragmentIteratorBase(
@@ -198,7 +198,7 @@ unsigned DebugLayoutFragmentIterator::OffsetInBits(unsigned Index) {
 ///////////////////////////////////////////////////////////////////////////////
 class CompositeTypeFragmentIterator : public dxil_debug_info::MemberIterator {
 public:
-  CompositeTypeFragmentIterator(llvm::DICompositeType* CT);
+  CompositeTypeFragmentIterator(llvm37::DICompositeType* CT);
 
   virtual unsigned SizeInBits(unsigned Index) const override;
   virtual unsigned OffsetInBits(unsigned Index) override;
@@ -213,27 +213,27 @@ private:
   std::vector<FragmentSizeAndOffset> m_fragmentLocations;
   unsigned m_currentFragment = 0;
   void CompositeTypeFragmentIterator::DetermineStructMemberSizesAndOffsets(
-    llvm::DIType const*, uint64_t BaseOffset);
+    llvm37::DIType const*, uint64_t BaseOffset);
 };
 
-unsigned SizeIfBaseType(llvm::DIType const* diType)
+unsigned SizeIfBaseType(llvm37::DIType const* diType)
 {
-  if (auto* BT = llvm::dyn_cast<llvm::DIBasicType>(diType))
+  if (auto* BT = llvm37::dyn_cast<llvm37::DIBasicType>(diType))
   {
     return BT->getSizeInBits();
   }
-  if (auto* DT = llvm::dyn_cast<llvm::DIDerivedType>(diType))
+  if (auto* DT = llvm37::dyn_cast<llvm37::DIDerivedType>(diType))
   {
-    const llvm::DITypeIdentifierMap EmptyMap;
+    const llvm37::DITypeIdentifierMap EmptyMap;
     return SizeIfBaseType(DT->getBaseType().resolve(EmptyMap));
   }
   return 0;
 }
 
-void CompositeTypeFragmentIterator::DetermineStructMemberSizesAndOffsets(llvm::DIType const*diType, uint64_t BaseOffset)
+void CompositeTypeFragmentIterator::DetermineStructMemberSizesAndOffsets(llvm37::DIType const*diType, uint64_t BaseOffset)
 {
-  assert(diType->getTag() != llvm::dwarf::DW_TAG_subroutine_type);
-  if (diType->getTag() == llvm::dwarf::DW_TAG_member)
+  assert(diType->getTag() != llvm37::dwarf::DW_TAG_subroutine_type);
+  if (diType->getTag() == llvm37::dwarf::DW_TAG_member)
   {
     BaseOffset += diType->getOffsetInBits();
   }
@@ -244,26 +244,26 @@ void CompositeTypeFragmentIterator::DetermineStructMemberSizesAndOffsets(llvm::D
   }
   else
   {
-    if (auto* CT = llvm::dyn_cast<llvm::DICompositeType>(diType))
+    if (auto* CT = llvm37::dyn_cast<llvm37::DICompositeType>(diType))
     {
 
       switch (diType->getTag())
       {
-      case llvm::dwarf::DW_TAG_array_type:
+      case llvm37::dwarf::DW_TAG_array_type:
       {
-        llvm::DINodeArray elements = CT->getElements();
+        llvm37::DINodeArray elements = CT->getElements();
         unsigned arraySize = 1;
         for (auto const& node : elements)
         {
-          if (llvm::DISubrange* SR = llvm::dyn_cast<llvm::DISubrange>(node))
+          if (llvm37::DISubrange* SR = llvm37::dyn_cast<llvm37::DISubrange>(node))
           {
             arraySize *= SR->getCount();
           }
         }
         if (arraySize != 0)
         {
-          const llvm::DITypeIdentifierMap EmptyMap;
-          llvm::DIType* BT = CT->getBaseType().resolve(EmptyMap);
+          const llvm37::DITypeIdentifierMap EmptyMap;
+          llvm37::DIType* BT = CT->getBaseType().resolve(EmptyMap);
           unsigned elementSize = static_cast<unsigned>(CT->getSizeInBits()) / arraySize;
           for (unsigned i = 0; i < arraySize; ++i) {
             DetermineStructMemberSizesAndOffsets(BT, BaseOffset + i * elementSize);
@@ -271,11 +271,11 @@ void CompositeTypeFragmentIterator::DetermineStructMemberSizesAndOffsets(llvm::D
         }
       }
       break;
-      case llvm::dwarf::DW_TAG_class_type:
-      case llvm::dwarf::DW_TAG_structure_type:
+      case llvm37::dwarf::DW_TAG_class_type:
+      case llvm37::dwarf::DW_TAG_structure_type:
         for (auto const& node : CT->getElements())
         {
-          if (llvm::DIType* subType = llvm::dyn_cast<llvm::DIType>(node))
+          if (llvm37::DIType* subType = llvm37::dyn_cast<llvm37::DIType>(node))
           {
             DetermineStructMemberSizesAndOffsets(subType, BaseOffset /*TODO: plus member offset*/);
           }
@@ -286,17 +286,17 @@ void CompositeTypeFragmentIterator::DetermineStructMemberSizesAndOffsets(llvm::D
         break;
       }
     }
-    else if (auto* DT = llvm::dyn_cast<llvm::DIDerivedType>(diType))
+    else if (auto* DT = llvm37::dyn_cast<llvm37::DIDerivedType>(diType))
     {
-      const llvm::DITypeIdentifierMap EmptyMap;
-      llvm::DIType* BT = DT->getBaseType().resolve(EmptyMap);
+      const llvm37::DITypeIdentifierMap EmptyMap;
+      llvm37::DIType* BT = DT->getBaseType().resolve(EmptyMap);
       DetermineStructMemberSizesAndOffsets(BT, BaseOffset);
     }
   }
 }
 
 CompositeTypeFragmentIterator::CompositeTypeFragmentIterator(
-  llvm::DICompositeType* CT)
+  llvm37::DICompositeType* CT)
 {
   DetermineStructMemberSizesAndOffsets(CT, 0);
 }
@@ -321,10 +321,10 @@ bool CompositeTypeFragmentIterator::Next(
 
 ///////////////////////////////////////////////////////////////////////////////
 std::unique_ptr<dxil_debug_info::MemberIterator>
-dxil_debug_info::CreateMemberIterator(llvm::DbgDeclareInst *DbgDeclare,
-                                          const llvm::DataLayout &DataLayout,
-                                          llvm::AllocaInst *Alloca,
-                                          llvm::DIExpression *Expression) {
+dxil_debug_info::CreateMemberIterator(llvm37::DbgDeclareInst *DbgDeclare,
+                                          const llvm37::DataLayout &DataLayout,
+                                          llvm37::AllocaInst *Alloca,
+                                          llvm37::DIExpression *Expression) {
   bool HasVariableDebugLayout = false;
   unsigned FirstFragmentOffsetInBits;
   std::vector<hlsl::DxilDIArrayDim> ArrayDims;
@@ -339,10 +339,10 @@ dxil_debug_info::CreateMemberIterator(llvm::DbgDeclareInst *DbgDeclare,
       Iter.reset(new DebugLayoutFragmentIterator(
           DataLayout, Alloca, FirstFragmentOffsetInBits, ArrayDims));
     } else {
-      llvm::DICompositeType *CT = llvm::dyn_cast<llvm::DICompositeType>(
+      llvm37::DICompositeType *CT = llvm37::dyn_cast<llvm37::DICompositeType>(
           DbgDeclare->getVariable()->getType());
       if (CT != nullptr && Expression->getNumElements() == 0 ) {
-          if (CT->getTag() != llvm::dwarf::DW_TAG_subroutine_type) {
+          if (CT->getTag() != llvm37::dwarf::DW_TAG_subroutine_type) {
               Iter.reset(new CompositeTypeFragmentIterator(CT));
           }
       } else {

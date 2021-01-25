@@ -12,9 +12,9 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/CodeGen/MachinePassRegistry.h"
+#include "llvm37/CodeGen/MachinePassRegistry.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 void MachinePassRegistryListener::anchor() { }
 

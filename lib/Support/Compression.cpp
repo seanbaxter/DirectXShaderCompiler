@@ -11,19 +11,19 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Support/Compression.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/ADT/StringRef.h"
-#include "llvm/Config/config.h"
-#include "llvm/Support/Compiler.h"
-#include "llvm/Support/ErrorHandling.h"
-#if LLVM_ENABLE_ZLIB == 1 && HAVE_ZLIB_H
+#include "llvm37/Support/Compression.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/ADT/StringRef.h"
+#include "llvm37/Config/config.h"
+#include "llvm37/Support/Compiler.h"
+#include "llvm37/Support/ErrorHandling.h"
+#if LLVM37_ENABLE_ZLIB == 1 && HAVE_ZLIB_H
 #include <zlib.h>
 #endif
 
-using namespace llvm;
+using namespace llvm37;
 
-#if LLVM_ENABLE_ZLIB == 1 && HAVE_LIBZ
+#if LLVM37_ENABLE_ZLIB == 1 && HAVE_LIBZ
 static int encodeZlibCompressionLevel(zlib::CompressionLevel Level) {
   switch (Level) {
     case zlib::NoCompression: return 0;

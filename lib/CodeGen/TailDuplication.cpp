@@ -12,27 +12,27 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/CodeGen/Passes.h"
-#include "llvm/ADT/DenseSet.h"
-#include "llvm/ADT/SetVector.h"
-#include "llvm/ADT/SmallSet.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/CodeGen/MachineBranchProbabilityInfo.h"
-#include "llvm/CodeGen/MachineFunctionPass.h"
-#include "llvm/CodeGen/MachineInstrBuilder.h"
-#include "llvm/CodeGen/MachineModuleInfo.h"
-#include "llvm/CodeGen/MachineRegisterInfo.h"
-#include "llvm/CodeGen/MachineSSAUpdater.h"
-#include "llvm/CodeGen/RegisterScavenging.h"
-#include "llvm/IR/Function.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Target/TargetInstrInfo.h"
-#include "llvm/Target/TargetRegisterInfo.h"
-#include "llvm/Target/TargetSubtargetInfo.h"
-using namespace llvm;
+#include "llvm37/CodeGen/Passes.h"
+#include "llvm37/ADT/DenseSet.h"
+#include "llvm37/ADT/SetVector.h"
+#include "llvm37/ADT/SmallSet.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/CodeGen/MachineBranchProbabilityInfo.h"
+#include "llvm37/CodeGen/MachineFunctionPass.h"
+#include "llvm37/CodeGen/MachineInstrBuilder.h"
+#include "llvm37/CodeGen/MachineModuleInfo.h"
+#include "llvm37/CodeGen/MachineRegisterInfo.h"
+#include "llvm37/CodeGen/MachineSSAUpdater.h"
+#include "llvm37/CodeGen/RegisterScavenging.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Target/TargetInstrInfo.h"
+#include "llvm37/Target/TargetRegisterInfo.h"
+#include "llvm37/Target/TargetSubtargetInfo.h"
+using namespace llvm37;
 
 #define DEBUG_TYPE "tailduplication"
 
@@ -127,7 +127,7 @@ namespace {
   char TailDuplicatePass::ID = 0;
 }
 
-char &llvm::TailDuplicateID = TailDuplicatePass::ID;
+char &llvm37::TailDuplicateID = TailDuplicatePass::ID;
 
 INITIALIZE_PASS(TailDuplicatePass, "tailduplication", "Tail Duplication",
                 false, false)

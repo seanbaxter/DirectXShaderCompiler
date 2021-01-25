@@ -11,13 +11,13 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Support/COM.h"
+#include "llvm37/Support/COM.h"
 
-#include "llvm/Config/config.h"
+#include "llvm37/Config/config.h"
 
 // Include the platform-specific parts of this class.
-#ifdef LLVM_ON_UNIX
+#ifdef LLVM37_ON_UNIX
 #include "Unix/COM.inc"
-#elif LLVM_ON_WIN32
+#elif LLVM37_ON_WIN32
 #include "Windows/COM.inc"
 #endif

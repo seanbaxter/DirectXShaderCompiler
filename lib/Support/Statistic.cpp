@@ -21,20 +21,20 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/ADT/Statistic.h"
-#include "llvm/ADT/StringExtras.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/Format.h"
-#include "llvm/Support/ManagedStatic.h"
-#include "llvm/Support/Mutex.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/ADT/StringExtras.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/Format.h"
+#include "llvm37/Support/ManagedStatic.h"
+#include "llvm37/Support/Mutex.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <algorithm>
 #include <cstring>
-using namespace llvm;
+using namespace llvm37;
 
 // CreateInfoOutputFile - Return a file stream to print our output on.
-namespace llvm { extern raw_ostream *CreateInfoOutputFile(); }
+namespace llvm37 { extern raw_ostream *CreateInfoOutputFile(); }
 
 /// -stats - Command line option to cause transformations to emit stats about
 /// what they did.
@@ -54,8 +54,8 @@ namespace {
 /// llvm_shutdown is called.  We print statistics from the destructor.
 class StatisticInfo {
   std::vector<const Statistic*> Stats;
-  friend void llvm::PrintStatistics();
-  friend void llvm::PrintStatistics(raw_ostream &OS);
+  friend void llvm37::PrintStatistics();
+  friend void llvm37::PrintStatistics(raw_ostream &OS);
 public:
   ~StatisticInfo();
 
@@ -89,18 +89,18 @@ void Statistic::RegisterStatistic() {
 
 // Print information when destroyed, iff command line option is specified.
 StatisticInfo::~StatisticInfo() {
-  llvm::PrintStatistics();
+  llvm37::PrintStatistics();
 }
 
-void llvm::EnableStatistics() {
+void llvm37::EnableStatistics() {
   //Enabled.setValue(true); // HLSL Change
 }
 
-bool llvm::AreStatisticsEnabled() {
+bool llvm37::AreStatisticsEnabled() {
   return Enabled;
 }
 
-void llvm::PrintStatistics(raw_ostream &OS) {
+void llvm37::PrintStatistics(raw_ostream &OS) {
   StatisticInfo &Stats = *StatInfo;
 
   // Figure out how long the biggest Value and Name fields are.
@@ -139,8 +139,8 @@ void llvm::PrintStatistics(raw_ostream &OS) {
 
 }
 
-void llvm::PrintStatistics() {
-#if !defined(NDEBUG) || defined(LLVM_ENABLE_STATS)
+void llvm37::PrintStatistics() {
+#if !defined(NDEBUG) || defined(LLVM37_ENABLE_STATS)
   StatisticInfo &Stats = *StatInfo;
 
   // Statistics not enabled?
@@ -158,7 +158,7 @@ void llvm::PrintStatistics() {
     // Get the stream to write to.
     raw_ostream &OutStream = *CreateInfoOutputFile();
     OutStream << "Statistics are disabled.  "
-            << "Build with asserts or with -DLLVM_ENABLE_STATS\n";
+            << "Build with asserts or with -DLLVM37_ENABLE_STATS\n";
     OutStream.flush();
     delete &OutStream;   // Close the file.
   }

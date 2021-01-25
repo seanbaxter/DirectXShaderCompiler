@@ -12,11 +12,11 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Transforms/Utils/CmpInstAnalysis.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/Instructions.h"
+#include "llvm37/Transforms/Utils/CmpInstAnalysis.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/Instructions.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 /// getICmpCode - Encode a icmp predicate into a three bit mask.  These bits
 /// are carefully arranged to allow folding of expressions such as:
@@ -41,7 +41,7 @@ using namespace llvm;
 /// 110     6   A <= B
 /// 111     7   Always true
 ///
-unsigned llvm::getICmpCode(const ICmpInst *ICI, bool InvertPred) {
+unsigned llvm37::getICmpCode(const ICmpInst *ICI, bool InvertPred) {
   ICmpInst::Predicate Pred = InvertPred ? ICI->getInversePredicate()
                                         : ICI->getPredicate();
   switch (Pred) {
@@ -69,7 +69,7 @@ unsigned llvm::getICmpCode(const ICmpInst *ICI, bool InvertPred) {
 /// Non-NULL return value will be a true or false constant.
 /// NULL return means a new ICmp is needed.  The predicate for which is
 /// output in NewICmpPred.
-Value *llvm::getICmpValue(bool Sign, unsigned Code, Value *LHS, Value *RHS,
+Value *llvm37::getICmpValue(bool Sign, unsigned Code, Value *LHS, Value *RHS,
                           CmpInst::Predicate &NewICmpPred) {
   switch (Code) {
     default: llvm_unreachable("Illegal ICmp code!");
@@ -89,7 +89,7 @@ Value *llvm::getICmpValue(bool Sign, unsigned Code, Value *LHS, Value *RHS,
 
 /// PredicatesFoldable - Return true if both predicates match sign or if at
 /// least one of them is an equality comparison (which is signless).
-bool llvm::PredicatesFoldable(ICmpInst::Predicate p1, ICmpInst::Predicate p2) {
+bool llvm37::PredicatesFoldable(ICmpInst::Predicate p1, ICmpInst::Predicate p2) {
   return (CmpInst::isSigned(p1) == CmpInst::isSigned(p2)) ||
          (CmpInst::isSigned(p1) && ICmpInst::isEquality(p2)) ||
          (CmpInst::isSigned(p2) && ICmpInst::isEquality(p1));

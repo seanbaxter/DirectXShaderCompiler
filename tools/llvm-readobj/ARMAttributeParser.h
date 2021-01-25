@@ -7,13 +7,13 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_TOOLS_LLVM_READOBJ_ARMATTRIBUTEPARSER_H
-#define LLVM_TOOLS_LLVM_READOBJ_ARMATTRIBUTEPARSER_H
+#ifndef LLVM37_TOOLS_LLVM37_READOBJ_ARMATTRIBUTEPARSER_H
+#define LLVM37_TOOLS_LLVM37_READOBJ_ARMATTRIBUTEPARSER_H
 
 #include "StreamWriter.h"
-#include "llvm/Support/ARMBuildAttributes.h"
+#include "llvm37/Support/ARMBuildAttributes.h"
 
-namespace llvm {
+namespace llvm37 {
 class StringRef;
 
 class ARMAttributeParser {

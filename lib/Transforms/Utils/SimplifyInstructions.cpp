@@ -14,20 +14,20 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Transforms/Scalar.h"
-#include "llvm/ADT/DepthFirstIterator.h"
-#include "llvm/ADT/SmallPtrSet.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/Analysis/AssumptionCache.h"
-#include "llvm/Analysis/InstructionSimplify.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/Dominators.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/Type.h"
-#include "llvm/Pass.h"
-#include "llvm/Analysis/TargetLibraryInfo.h"
-#include "llvm/Transforms/Utils/Local.h"
-using namespace llvm;
+#include "llvm37/Transforms/Scalar.h"
+#include "llvm37/ADT/DepthFirstIterator.h"
+#include "llvm37/ADT/SmallPtrSet.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/Analysis/AssumptionCache.h"
+#include "llvm37/Analysis/InstructionSimplify.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/IR/Dominators.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/Type.h"
+#include "llvm37/Pass.h"
+#include "llvm37/Analysis/TargetLibraryInfo.h"
+#include "llvm37/Transforms/Utils/Local.h"
+using namespace llvm37;
 
 #define DEBUG_TYPE "instsimplify"
 
@@ -109,9 +109,9 @@ INITIALIZE_PASS_DEPENDENCY(AssumptionCacheTracker)
 INITIALIZE_PASS_DEPENDENCY(TargetLibraryInfoWrapperPass)
 INITIALIZE_PASS_END(InstSimplifier, "instsimplify",
                     "Remove redundant instructions", false, false)
-char &llvm::InstructionSimplifierID = InstSimplifier::ID;
+char &llvm37::InstructionSimplifierID = InstSimplifier::ID;
 
 // Public interface to the simplify instructions pass.
-FunctionPass *llvm::createInstructionSimplifierPass() {
+FunctionPass *llvm37::createInstructionSimplifierPass() {
   return new InstSimplifier();
 }

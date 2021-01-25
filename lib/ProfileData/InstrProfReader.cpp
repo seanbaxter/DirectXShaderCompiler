@@ -12,12 +12,12 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/ProfileData/InstrProfReader.h"
+#include "llvm37/ProfileData/InstrProfReader.h"
 #include "InstrProfIndexed.h"
-#include "llvm/ADT/STLExtras.h"
+#include "llvm37/ADT/STLExtras.h"
 #include <cassert>
 
-using namespace llvm;
+using namespace llvm37;
 
 static ErrorOr<std::unique_ptr<MemoryBuffer>>
 setupMemoryBuffer(std::string Path) {
@@ -84,7 +84,7 @@ IndexedInstrProfReader::create(std::unique_ptr<MemoryBuffer> Buffer) {
   // Create the reader.
   if (!IndexedInstrProfReader::hasFormat(*Buffer))
     return instrprof_error::bad_magic;
-  auto Result = llvm::make_unique<IndexedInstrProfReader>(std::move(Buffer));
+  auto Result = llvm37::make_unique<IndexedInstrProfReader>(std::move(Buffer));
 
   // Initialize the reader and return the result.
   if (std::error_code EC = initializeReader(*Result))
@@ -289,7 +289,7 @@ RawInstrProfReader<IntPtrT>::readNextRecord(InstrProfRecord &Record) {
   return success();
 }
 
-namespace llvm {
+namespace llvm37 {
 template class RawInstrProfReader<uint32_t>;
 template class RawInstrProfReader<uint64_t>;
 }

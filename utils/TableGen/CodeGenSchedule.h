@@ -12,16 +12,16 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_UTILS_TABLEGEN_CODEGENSCHEDULE_H
-#define LLVM_UTILS_TABLEGEN_CODEGENSCHEDULE_H
+#ifndef LLVM37_UTILS_TABLEGEN_CODEGENSCHEDULE_H
+#define LLVM37_UTILS_TABLEGEN_CODEGENSCHEDULE_H
 
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/StringMap.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/TableGen/Record.h"
-#include "llvm/TableGen/SetTheory.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/StringMap.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/TableGen/Record.h"
+#include "llvm37/TableGen/SetTheory.h"
 
-namespace llvm {
+namespace llvm37 {
 
 class CodeGenTarget;
 class CodeGenSchedModels;
@@ -425,6 +425,6 @@ private:
   void addReadAdvance(Record *ProcReadAdvanceDef, unsigned PIdx);
 };
 
-} // namespace llvm
+} // namespace llvm37
 
 #endif

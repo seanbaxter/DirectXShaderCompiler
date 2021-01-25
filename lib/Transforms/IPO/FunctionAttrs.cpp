@@ -18,21 +18,21 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Transforms/IPO.h"
-#include "llvm/ADT/SCCIterator.h"
-#include "llvm/ADT/SetVector.h"
-#include "llvm/ADT/SmallSet.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/Analysis/AliasAnalysis.h"
-#include "llvm/Analysis/CallGraph.h"
-#include "llvm/Analysis/CallGraphSCCPass.h"
-#include "llvm/Analysis/CaptureTracking.h"
-#include "llvm/IR/GlobalVariable.h"
-#include "llvm/IR/InstIterator.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/Analysis/TargetLibraryInfo.h"
-using namespace llvm;
+#include "llvm37/Transforms/IPO.h"
+#include "llvm37/ADT/SCCIterator.h"
+#include "llvm37/ADT/SetVector.h"
+#include "llvm37/ADT/SmallSet.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/Analysis/AliasAnalysis.h"
+#include "llvm37/Analysis/CallGraph.h"
+#include "llvm37/Analysis/CallGraphSCCPass.h"
+#include "llvm37/Analysis/CaptureTracking.h"
+#include "llvm37/IR/GlobalVariable.h"
+#include "llvm37/IR/InstIterator.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/Analysis/TargetLibraryInfo.h"
+using namespace llvm37;
 
 #define DEBUG_TYPE "functionattrs"
 
@@ -143,7 +143,7 @@ INITIALIZE_PASS_DEPENDENCY(TargetLibraryInfoWrapperPass)
 INITIALIZE_PASS_END(FunctionAttrs, "functionattrs",
                 "Deduce function attributes", false, false)
 
-Pass *llvm::createFunctionAttrsPass() { return new FunctionAttrs(); }
+Pass *llvm37::createFunctionAttrsPass() { return new FunctionAttrs(); }
 
 
 /// AddReadAttrs - Deduce readonly/readnone attributes for the SCC.
@@ -381,7 +381,7 @@ namespace {
   };
 }
 
-namespace llvm {
+namespace llvm37 {
   template<> struct GraphTraits<ArgumentGraphNode*> {
     typedef ArgumentGraphNode NodeType;
     typedef SmallVectorImpl<ArgumentGraphNode*>::iterator ChildIteratorType;

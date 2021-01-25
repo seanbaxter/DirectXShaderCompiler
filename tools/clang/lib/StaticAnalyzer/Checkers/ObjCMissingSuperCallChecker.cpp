@@ -22,9 +22,9 @@
 #include "clang/StaticAnalyzer/Core/BugReporter/PathDiagnostic.h"
 #include "clang/StaticAnalyzer/Core/Checker.h"
 #include "clang/StaticAnalyzer/Core/PathSensitive/AnalysisManager.h"
-#include "llvm/ADT/SmallSet.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/SmallSet.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/Support/raw_ostream.h"
 
 using namespace clang;
 using namespace ento;
@@ -75,7 +75,7 @@ private:
   void initializeSelectors(ASTContext &Ctx) const;
   void fillSelectors(ASTContext &Ctx, ArrayRef<SelectorDescriptor> Sel,
                      StringRef ClassName) const;
-  mutable llvm::StringMap<llvm::SmallSet<Selector, 16> > SelectorsForClass;
+  mutable llvm37::StringMap<llvm37::SmallSet<Selector, 16> > SelectorsForClass;
   mutable bool IsInitialized;
 };
 
@@ -101,7 +101,7 @@ bool ObjCSuperCallChecker::isCheckableClass(const ObjCImplementationDecl *D,
 void ObjCSuperCallChecker::fillSelectors(ASTContext &Ctx,
                                          ArrayRef<SelectorDescriptor> Sel,
                                          StringRef ClassName) const {
-  llvm::SmallSet<Selector, 16> &ClassSelectors = SelectorsForClass[ClassName];
+  llvm37::SmallSet<Selector, 16> &ClassSelectors = SelectorsForClass[ClassName];
   // Fill the Selectors SmallSet with all selectors we want to check.
   for (ArrayRef<SelectorDescriptor>::iterator I = Sel.begin(), E = Sel.end();
        I != E; ++I) {
@@ -200,7 +200,7 @@ void ObjCSuperCallChecker::checkASTDecl(const ObjCImplementationDecl *D,
 
         const char *Name = "Missing call to superclass";
         SmallString<320> Buf;
-        llvm::raw_svector_ostream os(Buf);
+        llvm37::raw_svector_ostream os(Buf);
 
         os << "The '" << S.getAsString() 
            << "' instance method in " << SuperclassName.str() << " subclass '"

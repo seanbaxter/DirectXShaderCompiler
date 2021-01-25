@@ -7,16 +7,16 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/ADT/IntrusiveRefCntPtr.h"
+#include "llvm37/ADT/IntrusiveRefCntPtr.h"
 #include "gtest/gtest.h"
 
 namespace {
-struct VirtualRefCounted : public llvm::RefCountedBaseVPTR {
+struct VirtualRefCounted : public llvm37::RefCountedBaseVPTR {
   virtual void f() {}
 };
 }
 
-namespace llvm {
+namespace llvm37 {
 
 // Run this test with valgrind to detect memory leaks.
 TEST(IntrusiveRefCntPtr, RefCountedBaseVPTRCopyDoesNotLeak) {
@@ -63,4 +63,4 @@ TEST(IntrusiveRefCntPtr, UsesTraitsToRetainAndRelease) {
   EXPECT_TRUE(Retained);
 }
 
-} // end namespace llvm
+} // end namespace llvm37

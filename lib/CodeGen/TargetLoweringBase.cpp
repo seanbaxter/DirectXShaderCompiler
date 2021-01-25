@@ -11,32 +11,32 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Target/TargetLowering.h"
-#include "llvm/ADT/BitVector.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/Triple.h"
-#include "llvm/CodeGen/Analysis.h"
-#include "llvm/CodeGen/MachineFrameInfo.h"
-#include "llvm/CodeGen/MachineFunction.h"
-#include "llvm/CodeGen/MachineInstrBuilder.h"
-#include "llvm/CodeGen/MachineJumpTableInfo.h"
-#include "llvm/CodeGen/StackMaps.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/DerivedTypes.h"
-#include "llvm/IR/GlobalVariable.h"
-#include "llvm/IR/Mangler.h"
-#include "llvm/MC/MCAsmInfo.h"
-#include "llvm/MC/MCContext.h"
-#include "llvm/MC/MCExpr.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/MathExtras.h"
-#include "llvm/Target/TargetLoweringObjectFile.h"
-#include "llvm/Target/TargetMachine.h"
-#include "llvm/Target/TargetRegisterInfo.h"
-#include "llvm/Target/TargetSubtargetInfo.h"
+#include "llvm37/Target/TargetLowering.h"
+#include "llvm37/ADT/BitVector.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/Triple.h"
+#include "llvm37/CodeGen/Analysis.h"
+#include "llvm37/CodeGen/MachineFrameInfo.h"
+#include "llvm37/CodeGen/MachineFunction.h"
+#include "llvm37/CodeGen/MachineInstrBuilder.h"
+#include "llvm37/CodeGen/MachineJumpTableInfo.h"
+#include "llvm37/CodeGen/StackMaps.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/IR/DerivedTypes.h"
+#include "llvm37/IR/GlobalVariable.h"
+#include "llvm37/IR/Mangler.h"
+#include "llvm37/MC/MCAsmInfo.h"
+#include "llvm37/MC/MCContext.h"
+#include "llvm37/MC/MCExpr.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/MathExtras.h"
+#include "llvm37/Target/TargetLoweringObjectFile.h"
+#include "llvm37/Target/TargetMachine.h"
+#include "llvm37/Target/TargetRegisterInfo.h"
+#include "llvm37/Target/TargetSubtargetInfo.h"
 #include <cctype>
-using namespace llvm;
+using namespace llvm37;
 
 static cl::opt<bool> JumpIsExpensiveOverride(
     "jump-is-expensive", cl::init(false),
@@ -1474,7 +1474,7 @@ unsigned TargetLoweringBase::getVectorTypeBreakdown(LLVMContext &Context, EVT VT
 /// type of the given function.  This does not require a DAG or a return value,
 /// and is suitable for use before any DAGs for the function are constructed.
 /// TODO: Move this out of TargetLowering.cpp.
-void llvm::GetReturnInfo(Type *ReturnType, AttributeSet attr,
+void llvm37::GetReturnInfo(Type *ReturnType, AttributeSet attr,
                          SmallVectorImpl<ISD::OutputArg> &Outs,
                          const TargetLowering &TLI, const DataLayout &DL) {
   SmallVector<EVT, 4> ValueVTs;
@@ -1536,7 +1536,7 @@ int TargetLoweringBase::InstructionOpcodeToISD(unsigned Opcode) const {
   enum InstructionOpcodes {
 #define HANDLE_INST(NUM, OPCODE, CLASS) OPCODE = NUM,
 #define LAST_OTHER_INST(NUM) InstructionOpcodesCount = NUM
-#include "llvm/IR/Instruction.def"
+#include "llvm37/IR/Instruction.def"
   };
   switch (static_cast<InstructionOpcodes>(Opcode)) {
   case Ret:            return 0;

@@ -22,7 +22,7 @@
 #include "clang/AST/RecordLayout.h"
 #include "clang/AST/StmtCXX.h"
 #include "clang/Frontend/CodeGenOptions.h"
-#include "llvm/ADT/StringExtras.h"
+#include "llvm37/ADT/StringExtras.h"
 using namespace clang;
 using namespace CodeGen;
 
@@ -116,44 +116,44 @@ bool CodeGenModule::TryEmitDefinitionAsAlias(GlobalDecl AliasDecl,
 
   // The alias will use the linkage of the referent.  If we can't
   // support aliases with that linkage, fail.
-  llvm::GlobalValue::LinkageTypes Linkage = getFunctionLinkage(AliasDecl);
+  llvm37::GlobalValue::LinkageTypes Linkage = getFunctionLinkage(AliasDecl);
 
   // We can't use an alias if the linkage is not valid for one.
-  if (!llvm::GlobalAlias::isValidLinkage(Linkage))
+  if (!llvm37::GlobalAlias::isValidLinkage(Linkage))
     return true;
 
   // Don't create a weak alias for a dllexport'd symbol.
   if (AliasDecl.getDecl()->hasAttr<DLLExportAttr>() &&
-      llvm::GlobalValue::isWeakForLinker(Linkage))
+      llvm37::GlobalValue::isWeakForLinker(Linkage))
     return true;
 
-  llvm::GlobalValue::LinkageTypes TargetLinkage =
+  llvm37::GlobalValue::LinkageTypes TargetLinkage =
       getFunctionLinkage(TargetDecl);
 
   // Check if we have it already.
   StringRef MangledName = getMangledName(AliasDecl);
-  llvm::GlobalValue *Entry = GetGlobalValue(MangledName);
+  llvm37::GlobalValue *Entry = GetGlobalValue(MangledName);
   if (Entry && !Entry->isDeclaration())
     return false;
   if (Replacements.count(MangledName))
     return false;
 
   // Derive the type for the alias.
-  llvm::PointerType *AliasType
+  llvm37::PointerType *AliasType
     = getTypes().GetFunctionType(AliasDecl)->getPointerTo();
 
   // Find the referent.  Some aliases might require a bitcast, in
   // which case the caller is responsible for ensuring the soundness
   // of these semantics.
-  auto *Ref = cast<llvm::GlobalValue>(GetAddrOfGlobal(TargetDecl));
-  llvm::Constant *Aliasee = Ref;
+  auto *Ref = cast<llvm37::GlobalValue>(GetAddrOfGlobal(TargetDecl));
+  llvm37::Constant *Aliasee = Ref;
   if (Ref->getType() != AliasType)
-    Aliasee = llvm::ConstantExpr::getBitCast(Ref, AliasType);
+    Aliasee = llvm37::ConstantExpr::getBitCast(Ref, AliasType);
 
   // Instead of creating as alias to a linkonce_odr, replace all of the uses
   // of the aliasee.
-  if (llvm::GlobalValue::isDiscardableIfUnused(Linkage) &&
-     (TargetLinkage != llvm::GlobalValue::AvailableExternallyLinkage ||
+  if (llvm37::GlobalValue::isDiscardableIfUnused(Linkage) &&
+     (TargetLinkage != llvm37::GlobalValue::AvailableExternallyLinkage ||
       !TargetDecl.getDecl()->hasAttr<AlwaysInlineAttr>())) {
     // FIXME: An extern template instantiation will create functions with
     // linkage "AvailableExternally". In libc++, some classes also define
@@ -176,12 +176,12 @@ bool CodeGenModule::TryEmitDefinitionAsAlias(GlobalDecl AliasDecl,
   // different COMDATs in different TUs. Another option would be to
   // output the alias both for weak_odr and linkonce_odr, but that
   // requires explicit comdat support in the IL.
-  if (llvm::GlobalValue::isWeakForLinker(TargetLinkage))
+  if (llvm37::GlobalValue::isWeakForLinker(TargetLinkage))
     return true;
 
   // Create the alias with no name.
   auto *Alias =
-      llvm::GlobalAlias::create(AliasType, Linkage, "", Aliasee, &getModule());
+      llvm37::GlobalAlias::create(AliasType, Linkage, "", Aliasee, &getModule());
 
   // Switch any previous uses to the alias.
   if (Entry) {
@@ -200,11 +200,11 @@ bool CodeGenModule::TryEmitDefinitionAsAlias(GlobalDecl AliasDecl,
   return false;
 }
 
-llvm::Function *CodeGenModule::codegenCXXStructor(const CXXMethodDecl *MD,
+llvm37::Function *CodeGenModule::codegenCXXStructor(const CXXMethodDecl *MD,
                                                   StructorType Type) {
   const CGFunctionInfo &FnInfo =
       getTypes().arrangeCXXStructorDeclaration(MD, Type);
-  auto *Fn = cast<llvm::Function>(
+  auto *Fn = cast<llvm37::Function>(
       getAddrOfCXXStructor(MD, Type, &FnInfo, nullptr, true));
 
   GlobalDecl GD;
@@ -224,9 +224,9 @@ llvm::Function *CodeGenModule::codegenCXXStructor(const CXXMethodDecl *MD,
   return Fn;
 }
 
-llvm::GlobalValue *CodeGenModule::getAddrOfCXXStructor(
+llvm37::GlobalValue *CodeGenModule::getAddrOfCXXStructor(
     const CXXMethodDecl *MD, StructorType Type, const CGFunctionInfo *FnInfo,
-    llvm::FunctionType *FnType, bool DontDefer) {
+    llvm37::FunctionType *FnType, bool DontDefer) {
   GlobalDecl GD;
   if (auto *CD = dyn_cast<CXXConstructorDecl>(MD)) {
     GD = GlobalDecl(CD, toCXXCtorType(Type));
@@ -235,7 +235,7 @@ llvm::GlobalValue *CodeGenModule::getAddrOfCXXStructor(
   }
 
   StringRef Name = getMangledName(GD);
-  if (llvm::GlobalValue *Existing = GetGlobalValue(Name))
+  if (llvm37::GlobalValue *Existing = GetGlobalValue(Name))
     return Existing;
 
   if (!FnType) {
@@ -244,20 +244,20 @@ llvm::GlobalValue *CodeGenModule::getAddrOfCXXStructor(
     FnType = getTypes().GetFunctionType(*FnInfo);
   }
 
-  return cast<llvm::Function>(GetOrCreateLLVMFunction(Name, FnType, GD,
+  return cast<llvm37::Function>(GetOrCreateLLVMFunction(Name, FnType, GD,
                                                       /*ForVTable=*/false,
                                                       DontDefer));
 }
 
-static llvm::Value *BuildAppleKextVirtualCall(CodeGenFunction &CGF,
+static llvm37::Value *BuildAppleKextVirtualCall(CodeGenFunction &CGF,
                                               GlobalDecl GD,
-                                              llvm::Type *Ty,
+                                              llvm37::Type *Ty,
                                               const CXXRecordDecl *RD) {
   assert(!CGF.CGM.getTarget().getCXXABI().isMicrosoft() &&
          "No kext in Microsoft ABI");
   GD = GD.getCanonicalDecl();
   CodeGenModule &CGM = CGF.CGM;
-  llvm::Value *VTable = CGM.getCXXABI().getAddrOfVTable(RD, CharUnits());
+  llvm37::Value *VTable = CGM.getCXXABI().getAddrOfVTable(RD, CharUnits());
   Ty = Ty->getPointerTo()->getPointerTo();
   VTable = CGF.Builder.CreateBitCast(VTable, Ty);
   assert(VTable && "BuildVirtualCall = kext vtbl pointer is null");
@@ -266,7 +266,7 @@ static llvm::Value *BuildAppleKextVirtualCall(CodeGenFunction &CGF,
     CGM.getItaniumVTableContext().getVTableLayout(RD)
        .getAddressPoint(BaseSubobject(RD, CharUnits::Zero()));
   VTableIndex += AddressPoint;
-  llvm::Value *VFuncPtr =
+  llvm37::Value *VFuncPtr =
     CGF.Builder.CreateConstInBoundsGEP1_64(VTable, VTableIndex, "vfnkxt");
   return CGF.Builder.CreateLoad(VFuncPtr);
 }
@@ -274,10 +274,10 @@ static llvm::Value *BuildAppleKextVirtualCall(CodeGenFunction &CGF,
 /// BuildAppleKextVirtualCall - This routine is to support gcc's kext ABI making
 /// indirect call to virtual functions. It makes the call through indexing
 /// into the vtable.
-llvm::Value *
+llvm37::Value *
 CodeGenFunction::BuildAppleKextVirtualCall(const CXXMethodDecl *MD, 
                                   NestedNameSpecifier *Qual,
-                                  llvm::Type *Ty) {
+                                  llvm37::Type *Ty) {
   assert((Qual->getKind() == NestedNameSpecifier::TypeSpec) &&
          "BuildAppleKextVirtualCall - bad Qual kind");
   
@@ -295,7 +295,7 @@ CodeGenFunction::BuildAppleKextVirtualCall(const CXXMethodDecl *MD,
 
 /// BuildVirtualCall - This routine makes indirect vtable call for
 /// call to virtual destructors. It returns 0 if it could not do it.
-llvm::Value *
+llvm37::Value *
 CodeGenFunction::BuildAppleKextVirtualDestructorCall(
                                             const CXXDestructorDecl *DD,
                                             CXXDtorType Type,
@@ -308,7 +308,7 @@ CodeGenFunction::BuildAppleKextVirtualDestructorCall(
     // Compute the function type we're calling.
     const CGFunctionInfo &FInfo = CGM.getTypes().arrangeCXXStructorDeclaration(
         DD, StructorType::Complete);
-    llvm::Type *Ty = CGM.getTypes().GetFunctionType(FInfo);
+    llvm37::Type *Ty = CGM.getTypes().GetFunctionType(FInfo);
     return ::BuildAppleKextVirtualCall(*this, GlobalDecl(DD, Type), Ty, RD);
   }
   return nullptr;

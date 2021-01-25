@@ -24,11 +24,11 @@
 
 #include "ObjCARC.h"
 #include "ProvenanceAnalysis.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/SmallPtrSet.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/SmallPtrSet.h"
 
-using namespace llvm;
-using namespace llvm::objcarc;
+using namespace llvm37;
+using namespace llvm37::objcarc;
 
 bool ProvenanceAnalysis::relatedSelect(const SelectInst *A,
                                        const Value *B) {

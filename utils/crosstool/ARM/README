@@ -31,7 +31,7 @@ HOWTO create an LLVM crosstool from x86_64/Linux to ARM/Linux
 
    % env INSTALL_ROOT=[dir to install in] \
          CODE_SOURCERY_PKG_PATH=[dir where you downloaded CodeSourcery tarball] \
-         LLVM_PKG_PATH=[dir where you stored your LLVM and LLVM-GCC snapshots] \
-         LLVM_SVN_REV=${REV_L} \
+         LLVM37_PKG_PATH=[dir where you stored your LLVM and LLVM-GCC snapshots] \
+         LLVM37_SVN_REV=${REV_L} \
          LLVMGCC_SVN_REV=${REV_G} \
          build-install-linux.sh

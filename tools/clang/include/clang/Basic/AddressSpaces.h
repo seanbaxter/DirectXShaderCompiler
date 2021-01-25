@@ -13,8 +13,8 @@
 ///
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_BASIC_ADDRESSSPACES_H
-#define LLVM_CLANG_BASIC_ADDRESSSPACES_H
+#ifndef LLVM37_CLANG_BASIC_ADDRESSSPACES_H
+#define LLVM37_CLANG_BASIC_ADDRESSSPACES_H
 
 namespace clang {
 

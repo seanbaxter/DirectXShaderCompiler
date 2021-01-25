@@ -13,7 +13,7 @@
 
 #include "DxilConstants.h"
 
-namespace llvm {
+namespace llvm37 {
 class Type;
 class PointerType;
 class LLVMContext;
@@ -69,9 +69,9 @@ public:
   /// For min-precision types, returns upconverted (base) type.
   CompType GetBaseCompType() const;
   bool HasMinPrec() const;
-  llvm::Type *GetLLVMType(llvm::LLVMContext &Ctx) const;
-  llvm::PointerType *GetLLVMPtrType(llvm::LLVMContext &Ctx, const unsigned AddrSpace = 0) const;
-  llvm::Type *GetLLVMBaseType(llvm::LLVMContext &Ctx) const;
+  llvm37::Type *GetLLVMType(llvm37::LLVMContext &Ctx) const;
+  llvm37::PointerType *GetLLVMPtrType(llvm37::LLVMContext &Ctx, const unsigned AddrSpace = 0) const;
+  llvm37::Type *GetLLVMBaseType(llvm37::LLVMContext &Ctx) const;
 
   /// Get the component type for a given llvm type.
   ///
@@ -82,7 +82,7 @@ public:
   /// 
   /// TODO: decide if we should distinguish between signed
   ///       and unsigned types in this api.
-  static CompType GetCompType(llvm::Type * type);
+  static CompType GetCompType(llvm37::Type * type);
 
   const char *GetName() const;
   const char *GetHLSLName(bool MinPrecision) const;

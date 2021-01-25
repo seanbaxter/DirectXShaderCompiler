@@ -13,12 +13,12 @@
 //===----------------------------------------------------------------------===//
 
 #include "InstCombineInternal.h"
-#include "llvm/Analysis/ValueTracking.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/IR/PatternMatch.h"
+#include "llvm37/Analysis/ValueTracking.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/IR/PatternMatch.h"
 
-using namespace llvm;
-using namespace llvm::PatternMatch;
+using namespace llvm37;
+using namespace llvm37::PatternMatch;
 
 #define DEBUG_TYPE "instcombine"
 

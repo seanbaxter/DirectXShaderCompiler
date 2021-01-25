@@ -11,15 +11,15 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_COV_SOURCECOVERAGEVIEW_H
-#define LLVM_COV_SOURCECOVERAGEVIEW_H
+#ifndef LLVM37_COV_SOURCECOVERAGEVIEW_H
+#define LLVM37_COV_SOURCECOVERAGEVIEW_H
 
 #include "CoverageViewOptions.h"
-#include "llvm/ProfileData/CoverageMapping.h"
-#include "llvm/Support/MemoryBuffer.h"
+#include "llvm37/ProfileData/CoverageMapping.h"
+#include "llvm37/Support/MemoryBuffer.h"
 #include <vector>
 
-namespace llvm {
+namespace llvm37 {
 
 class SourceCoverageView;
 
@@ -156,6 +156,6 @@ public:
   void render(raw_ostream &OS, bool WholeFile, unsigned IndentLevel = 0);
 };
 
-} // namespace llvm
+} // namespace llvm37
 
-#endif // LLVM_COV_SOURCECOVERAGEVIEW_H
+#endif // LLVM37_COV_SOURCECOVERAGEVIEW_H

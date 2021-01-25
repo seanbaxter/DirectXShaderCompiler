@@ -26,23 +26,23 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/CodeGen/LiveVariables.h"
-#include "llvm/ADT/DepthFirstIterator.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/SmallPtrSet.h"
-#include "llvm/ADT/SmallSet.h"
-#include "llvm/CodeGen/MachineInstr.h"
-#include "llvm/CodeGen/MachineRegisterInfo.h"
-#include "llvm/CodeGen/Passes.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Target/TargetInstrInfo.h"
+#include "llvm37/CodeGen/LiveVariables.h"
+#include "llvm37/ADT/DepthFirstIterator.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/SmallPtrSet.h"
+#include "llvm37/ADT/SmallSet.h"
+#include "llvm37/CodeGen/MachineInstr.h"
+#include "llvm37/CodeGen/MachineRegisterInfo.h"
+#include "llvm37/CodeGen/Passes.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Target/TargetInstrInfo.h"
 #include <algorithm>
-using namespace llvm;
+using namespace llvm37;
 
 char LiveVariables::ID = 0;
-char &llvm::LiveVariablesID = LiveVariables::ID;
+char &llvm37::LiveVariablesID = LiveVariables::ID;
 INITIALIZE_PASS_BEGIN(LiveVariables, "livevars",
                 "Live Variable Analysis", false, false)
 INITIALIZE_PASS_DEPENDENCY(UnreachableMachineBlockElim)
@@ -65,7 +65,7 @@ LiveVariables::VarInfo::findKill(const MachineBasicBlock *MBB) const {
 }
 
 void LiveVariables::VarInfo::dump() const {
-#if !defined(NDEBUG) || defined(LLVM_ENABLE_DUMP)
+#if !defined(NDEBUG) || defined(LLVM37_ENABLE_DUMP)
   dbgs() << "  Alive in blocks: ";
   for (SparseBitVector<>::iterator I = AliveBlocks.begin(),
            E = AliveBlocks.end(); I != E; ++I)

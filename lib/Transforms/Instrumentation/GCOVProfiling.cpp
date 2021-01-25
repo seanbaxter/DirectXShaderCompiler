@@ -14,33 +14,33 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Transforms/Instrumentation.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/Hashing.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/ADT/StringExtras.h"
-#include "llvm/ADT/StringMap.h"
-#include "llvm/ADT/UniqueVector.h"
-#include "llvm/IR/DebugInfo.h"
-#include "llvm/IR/DebugLoc.h"
-#include "llvm/IR/IRBuilder.h"
-#include "llvm/IR/InstIterator.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/IR/Module.h"
-#include "llvm/Pass.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/FileSystem.h"
-#include "llvm/Support/Path.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Transforms/Utils/ModuleUtils.h"
+#include "llvm37/Transforms/Instrumentation.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/Hashing.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/ADT/StringExtras.h"
+#include "llvm37/ADT/StringMap.h"
+#include "llvm37/ADT/UniqueVector.h"
+#include "llvm37/IR/DebugInfo.h"
+#include "llvm37/IR/DebugLoc.h"
+#include "llvm37/IR/IRBuilder.h"
+#include "llvm37/IR/InstIterator.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/Pass.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/FileSystem.h"
+#include "llvm37/Support/Path.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Transforms/Utils/ModuleUtils.h"
 #include <algorithm>
 #include <memory>
 #include <string>
 #include <utility>
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "insert-gcov-profiling"
 
@@ -60,7 +60,7 @@ GCOVOptions GCOVOptions::getDefault() {
   Options.ExitBlockBeforeBody = DefaultExitBlockBeforeBody;
 
   if (DefaultGCOVVersion.size() != 4) {
-    llvm::report_fatal_error(std::string("Invalid -default-gcov-version: ") +
+    llvm37::report_fatal_error(std::string("Invalid -default-gcov-version: ") +
                              DefaultGCOVVersion);
   }
   memcpy(Options.Version, DefaultGCOVVersion.c_str(), 4);
@@ -145,7 +145,7 @@ char GCOVProfiler::ID = 0;
 INITIALIZE_PASS(GCOVProfiler, "insert-gcov-profiling",
                 "Insert instrumentation for GCOV profiling", false, false)
 
-ModulePass *llvm::createGCOVProfilerPass(const GCOVOptions &Options) {
+ModulePass *llvm37::createGCOVProfilerPass(const GCOVOptions &Options) {
   return new GCOVProfiler(Options);
 }
 

@@ -22,27 +22,27 @@
 
 #include "ObjCARC.h"
 #include "ObjCARCAliasAnalysis.h"
-#include "llvm/IR/Instruction.h"
-#include "llvm/InitializePasses.h"
-#include "llvm/PassAnalysisSupport.h"
-#include "llvm/PassSupport.h"
+#include "llvm37/IR/Instruction.h"
+#include "llvm37/InitializePasses.h"
+#include "llvm37/PassAnalysisSupport.h"
+#include "llvm37/PassSupport.h"
 
 #define DEBUG_TYPE "objc-arc-aa"
 
-namespace llvm {
+namespace llvm37 {
   class Function;
   class Value;
 }
 
-using namespace llvm;
-using namespace llvm::objcarc;
+using namespace llvm37;
+using namespace llvm37::objcarc;
 
 // Register this pass...
 char ObjCARCAliasAnalysis::ID = 0;
 INITIALIZE_AG_PASS(ObjCARCAliasAnalysis, AliasAnalysis, "objc-arc-aa",
                    "ObjC-ARC-Based Alias Analysis", false, true, false)
 
-ImmutablePass *llvm::createObjCARCAliasAnalysisPass() {
+ImmutablePass *llvm37::createObjCARCAliasAnalysisPass() {
   return new ObjCARCAliasAnalysis();
 }
 

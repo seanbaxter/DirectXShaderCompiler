@@ -18,8 +18,8 @@
 #include "clang/StaticAnalyzer/Core/CheckerManager.h"
 #include "clang/StaticAnalyzer/Core/PathSensitive/CheckerContext.h"
 #include "clang/StaticAnalyzer/Core/PathSensitive/ExprEngine.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/Support/raw_ostream.h"
 
 using namespace clang;
 using namespace ento;
@@ -81,15 +81,15 @@ UndefCapturedBlockVarChecker::checkPostStmt(const BlockExpr *BE,
 
         // Generate a bug report.
         SmallString<128> buf;
-        llvm::raw_svector_ostream os(buf);
+        llvm37::raw_svector_ostream os(buf);
 
         os << "Variable '" << VD->getName() 
            << "' is uninitialized when captured by block";
 
-        auto R = llvm::make_unique<BugReport>(*BT, os.str(), N);
+        auto R = llvm37::make_unique<BugReport>(*BT, os.str(), N);
         if (const Expr *Ex = FindBlockDeclRefExpr(BE->getBody(), VD))
           R->addRange(Ex->getSourceRange());
-        R->addVisitor(llvm::make_unique<FindLastStoreBRVisitor>(
+        R->addVisitor(llvm37::make_unique<FindLastStoreBRVisitor>(
             *V, VR, /*EnableNullFPSuppression*/ false));
         R->disablePathPruning();
         // need location of block

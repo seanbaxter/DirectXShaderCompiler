@@ -13,20 +13,20 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Transforms/Scalar.h"
+#include "llvm37/Transforms/Scalar.h"
 #include "llvm-c/Initialization.h"
 #include "llvm-c/Transforms/Scalar.h"
-#include "llvm/Analysis/Passes.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/Verifier.h"
-#include "llvm/InitializePasses.h"
-#include "llvm/IR/LegacyPassManager.h"
+#include "llvm37/Analysis/Passes.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/IR/Verifier.h"
+#include "llvm37/InitializePasses.h"
+#include "llvm37/IR/LegacyPassManager.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 /// initializeScalarOptsPasses - Initialize all passes linked into the
 /// ScalarOpts library.
-void llvm::initializeScalarOpts(PassRegistry &Registry) {
+void llvm37::initializeScalarOpts(PassRegistry &Registry) {
   initializeADCEPass(Registry);
   initializeBDCEPass(Registry);
   initializeAlignmentFromAssumptionsPass(Registry);

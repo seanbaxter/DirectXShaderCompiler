@@ -16,8 +16,8 @@
 #include "clang/AST/DeclObjC.h"
 #include "clang/AST/Type.h"
 #include "clang/Basic/CharInfo.h"
-#include "llvm/ADT/StringExtras.h"
-#include "llvm/Support/ErrorHandling.h"
+#include "llvm37/ADT/StringExtras.h"
+#include "llvm37/Support/ErrorHandling.h"
 
 using namespace clang;
 using namespace ento;

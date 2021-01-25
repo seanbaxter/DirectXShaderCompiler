@@ -7,22 +7,22 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Transforms/Scalar.h"
-#include "llvm/ADT/MapVector.h"
-#include "llvm/ADT/PostOrderIterator.h"
-#include "llvm/ADT/SCCIterator.h"
-#include "llvm/Analysis/LoopInfo.h"
-#include "llvm/Analysis/RegionInfo.h"
-#include "llvm/Analysis/RegionIterator.h"
-#include "llvm/Analysis/RegionPass.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/PatternMatch.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Transforms/Utils/SSAUpdater.h"
+#include "llvm37/Transforms/Scalar.h"
+#include "llvm37/ADT/MapVector.h"
+#include "llvm37/ADT/PostOrderIterator.h"
+#include "llvm37/ADT/SCCIterator.h"
+#include "llvm37/Analysis/LoopInfo.h"
+#include "llvm37/Analysis/RegionInfo.h"
+#include "llvm37/Analysis/RegionIterator.h"
+#include "llvm37/Analysis/RegionPass.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/PatternMatch.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Transforms/Utils/SSAUpdater.h"
 
-using namespace llvm;
-using namespace llvm::PatternMatch;
+using namespace llvm37;
+using namespace llvm37::PatternMatch;
 
 #define DEBUG_TYPE "structurizecfg"
 
@@ -952,6 +952,6 @@ bool StructurizeCFG::runOnRegion(Region *R, RGPassManager &RGM) {
 }
 
 /// \brief Create the pass
-Pass *llvm::createStructurizeCFGPass() {
+Pass *llvm37::createStructurizeCFGPass() {
   return new StructurizeCFG();
 }

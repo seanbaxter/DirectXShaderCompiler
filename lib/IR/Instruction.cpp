@@ -11,14 +11,14 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/IR/Instruction.h"
-#include "llvm/IR/CallSite.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/Operator.h"
-#include "llvm/IR/Type.h"
-using namespace llvm;
+#include "llvm37/IR/Instruction.h"
+#include "llvm37/IR/CallSite.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/Operator.h"
+#include "llvm37/IR/Type.h"
+using namespace llvm37;
 
 Instruction::Instruction(Type *ty, unsigned it, Use *Ops, unsigned NumOps,
                          Instruction *InsertBefore)
@@ -547,7 +547,7 @@ Instruction *Instruction::clone() const {
   case Instruction::opc:                                                       \
     New = cast<clas>(this)->cloneImpl();                                       \
     break;
-#include "llvm/IR/Instruction.def"
+#include "llvm37/IR/Instruction.def"
 #undef HANDLE_INST
   }
 

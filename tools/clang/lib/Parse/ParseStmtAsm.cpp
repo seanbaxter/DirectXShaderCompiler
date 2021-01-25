@@ -16,26 +16,26 @@
 #include "clang/AST/ASTContext.h"
 #include "clang/Basic/Diagnostic.h"
 #include "clang/Basic/TargetInfo.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/MC/MCAsmInfo.h"
-#include "llvm/MC/MCContext.h"
-#include "llvm/MC/MCInstPrinter.h"
-#include "llvm/MC/MCInstrInfo.h"
-#include "llvm/MC/MCObjectFileInfo.h"
-#include "llvm/MC/MCParser/MCAsmParser.h"
-#include "llvm/MC/MCRegisterInfo.h"
-#include "llvm/MC/MCStreamer.h"
-#include "llvm/MC/MCSubtargetInfo.h"
-#include "llvm/MC/MCTargetAsmParser.h"
-#include "llvm/MC/MCTargetOptions.h"
-#include "llvm/Support/SourceMgr.h"
-#include "llvm/Support/TargetRegistry.h"
-#include "llvm/Support/TargetSelect.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/MC/MCAsmInfo.h"
+#include "llvm37/MC/MCContext.h"
+#include "llvm37/MC/MCInstPrinter.h"
+#include "llvm37/MC/MCInstrInfo.h"
+#include "llvm37/MC/MCObjectFileInfo.h"
+#include "llvm37/MC/MCParser/MCAsmParser.h"
+#include "llvm37/MC/MCRegisterInfo.h"
+#include "llvm37/MC/MCStreamer.h"
+#include "llvm37/MC/MCSubtargetInfo.h"
+#include "llvm37/MC/MCTargetAsmParser.h"
+#include "llvm37/MC/MCTargetOptions.h"
+#include "llvm37/Support/SourceMgr.h"
+#include "llvm37/Support/TargetRegistry.h"
+#include "llvm37/Support/TargetSelect.h"
 using namespace clang;
 
 #if 0 // HLSL Change - disable this block to avoid having to build/link llvmMC
 namespace {
-class ClangAsmParserCallback : public llvm::MCAsmParserSemaCallback {
+class ClangAsmParserCallback : public llvm37::MCAsmParserSemaCallback {
   Parser &TheParser;
   SourceLocation AsmLoc;
   StringRef AsmString;
@@ -55,7 +55,7 @@ public:
   }
 
   void *LookupInlineAsmIdentifier(StringRef &LineBuf,
-                                  llvm::InlineAsmIdentifierInfo &Info,
+                                  llvm37::InlineAsmIdentifierInfo &Info,
                                   bool IsUnevaluatedContext) override {
     // Collect the desired tokens.
     SmallVector<Token, 16> LineToks;
@@ -94,8 +94,8 @@ public:
     return Info.OpDecl;
   }
 
-  StringRef LookupInlineAsmLabel(StringRef Identifier, llvm::SourceMgr &LSM,
-                                 llvm::SMLoc Location,
+  StringRef LookupInlineAsmLabel(StringRef Identifier, llvm37::SourceMgr &LSM,
+                                 llvm37::SMLoc Location,
                                  bool Create) override {
     SourceLocation Loc = translateLocation(LSM, Location);
     LabelDecl *Label =
@@ -109,7 +109,7 @@ public:
                                                        AsmLoc);
   }
 
-  static void DiagHandlerCallback(const llvm::SMDiagnostic &D, void *Context) {
+  static void DiagHandlerCallback(const llvm37::SMDiagnostic &D, void *Context) {
     ((ClangAsmParserCallback *)Context)->handleDiagnostic(D);
   }
 
@@ -143,11 +143,11 @@ private:
     }
   }
 
-  SourceLocation translateLocation(const llvm::SourceMgr &LSM, llvm::SMLoc SMLoc) {
+  SourceLocation translateLocation(const llvm37::SourceMgr &LSM, llvm37::SMLoc SMLoc) {
     // Compute an offset into the inline asm buffer.
     // FIXME: This isn't right if .macro is involved (but hopefully, no
     // real-world code does that).
-    const llvm::MemoryBuffer *LBuf =
+    const llvm37::MemoryBuffer *LBuf =
         LSM.getMemoryBuffer(LSM.FindBufferContainingLoc(SMLoc));
     unsigned Offset = SMLoc.getPointer() - LBuf->getBufferStart();
 
@@ -169,8 +169,8 @@ private:
     return Loc;
   }
 
-  void handleDiagnostic(const llvm::SMDiagnostic &D) {
-    const llvm::SourceMgr &LSM = *D.getSourceMgr();
+  void handleDiagnostic(const llvm37::SMDiagnostic &D) {
+    const llvm37::SourceMgr &LSM = *D.getSourceMgr();
     SourceLocation Loc = translateLocation(LSM, D.getLoc());
     TheParser.Diag(Loc, diag::err_inline_ms_asm_parsing) << D.getMessage();
   }
@@ -182,13 +182,13 @@ private:
 ///
 /// \param CastInfo - a void* so that we don't have to teach Parser.h
 ///   about the actual type.
-ExprResult Parser::ParseMSAsmIdentifier(llvm::SmallVectorImpl<Token> &LineToks,
+ExprResult Parser::ParseMSAsmIdentifier(llvm37::SmallVectorImpl<Token> &LineToks,
                                         unsigned &NumLineToksConsumed,
                                         void *CastInfo,
                                         bool IsUnevaluatedContext) {
   assert(!getLangOpts().HLSL && "no MS assembly support in HLSL");    // HLSL Change
-  llvm::InlineAsmIdentifierInfo &Info =
-      *(llvm::InlineAsmIdentifierInfo *)CastInfo;
+  llvm37::InlineAsmIdentifierInfo &Info =
+      *(llvm37::InlineAsmIdentifierInfo *)CastInfo;
 
   // Push a fake token on the end so that we don't overrun the token
   // stream.  We use ';' because it expression-parsing should never
@@ -480,17 +480,17 @@ StmtResult Parser::ParseMicrosoftAsmStatement(SourceLocation AsmLoc) {
   SmallVector<StringRef, 4> ClobberRefs;
 
   // We need an actual supported target.
-  const llvm::Triple &TheTriple = Actions.Context.getTargetInfo().getTriple();
-  llvm::Triple::ArchType ArchTy = TheTriple.getArch();
+  const llvm37::Triple &TheTriple = Actions.Context.getTargetInfo().getTriple();
+  llvm37::Triple::ArchType ArchTy = TheTriple.getArch();
   const std::string &TT = TheTriple.getTriple();
-  const llvm::Target *TheTarget = nullptr;
+  const llvm37::Target *TheTarget = nullptr;
   bool UnsupportedArch =
-      (ArchTy != llvm::Triple::x86 && ArchTy != llvm::Triple::x86_64);
+      (ArchTy != llvm37::Triple::x86 && ArchTy != llvm37::Triple::x86_64);
   if (UnsupportedArch) {
     Diag(AsmLoc, diag::err_msasm_unsupported_arch) << TheTriple.getArchName();
   } else {
     std::string Error;
-    TheTarget = llvm::TargetRegistry::lookupTarget(TT, Error);
+    TheTarget = llvm37::TargetRegistry::lookupTarget(TT, Error);
     if (!TheTarget)
       Diag(AsmLoc, diag::err_msasm_unable_to_create_target) << Error;
   }
@@ -511,35 +511,35 @@ StmtResult Parser::ParseMicrosoftAsmStatement(SourceLocation AsmLoc) {
   if (buildMSAsmString(PP, AsmLoc, AsmToks, TokOffsets, AsmString))
     return StmtError();
 
-  std::unique_ptr<llvm::MCRegisterInfo> MRI(TheTarget->createMCRegInfo(TT));
-  std::unique_ptr<llvm::MCAsmInfo> MAI(TheTarget->createMCAsmInfo(*MRI, TT));
+  std::unique_ptr<llvm37::MCRegisterInfo> MRI(TheTarget->createMCRegInfo(TT));
+  std::unique_ptr<llvm37::MCAsmInfo> MAI(TheTarget->createMCAsmInfo(*MRI, TT));
   // Get the instruction descriptor.
-  std::unique_ptr<llvm::MCInstrInfo> MII(TheTarget->createMCInstrInfo());
-  std::unique_ptr<llvm::MCObjectFileInfo> MOFI(new llvm::MCObjectFileInfo());
-  std::unique_ptr<llvm::MCSubtargetInfo> STI(
+  std::unique_ptr<llvm37::MCInstrInfo> MII(TheTarget->createMCInstrInfo());
+  std::unique_ptr<llvm37::MCObjectFileInfo> MOFI(new llvm37::MCObjectFileInfo());
+  std::unique_ptr<llvm37::MCSubtargetInfo> STI(
       TheTarget->createMCSubtargetInfo(TT, "", ""));
 
-  llvm::SourceMgr TempSrcMgr;
-  llvm::MCContext Ctx(MAI.get(), MRI.get(), MOFI.get(), &TempSrcMgr);
-  MOFI->InitMCObjectFileInfo(TheTriple, llvm::Reloc::Default,
-                             llvm::CodeModel::Default, Ctx);
-  std::unique_ptr<llvm::MemoryBuffer> Buffer =
-      llvm::MemoryBuffer::getMemBuffer(AsmString, "<MS inline asm>");
+  llvm37::SourceMgr TempSrcMgr;
+  llvm37::MCContext Ctx(MAI.get(), MRI.get(), MOFI.get(), &TempSrcMgr);
+  MOFI->InitMCObjectFileInfo(TheTriple, llvm37::Reloc::Default,
+                             llvm37::CodeModel::Default, Ctx);
+  std::unique_ptr<llvm37::MemoryBuffer> Buffer =
+      llvm37::MemoryBuffer::getMemBuffer(AsmString, "<MS inline asm>");
 
   // Tell SrcMgr about this buffer, which is what the parser will pick up.
-  TempSrcMgr.AddNewSourceBuffer(std::move(Buffer), llvm::SMLoc());
+  TempSrcMgr.AddNewSourceBuffer(std::move(Buffer), llvm37::SMLoc());
 
-  std::unique_ptr<llvm::MCStreamer> Str(createNullStreamer(Ctx));
-  std::unique_ptr<llvm::MCAsmParser> Parser(
+  std::unique_ptr<llvm37::MCStreamer> Str(createNullStreamer(Ctx));
+  std::unique_ptr<llvm37::MCAsmParser> Parser(
       createMCAsmParser(TempSrcMgr, Ctx, *Str.get(), *MAI));
 
   // FIXME: init MCOptions from sanitizer flags here.
-  llvm::MCTargetOptions MCOptions;
-  std::unique_ptr<llvm::MCTargetAsmParser> TargetParser(
+  llvm37::MCTargetOptions MCOptions;
+  std::unique_ptr<llvm37::MCTargetAsmParser> TargetParser(
       TheTarget->createMCAsmParser(*STI, *Parser, *MII, MCOptions));
 
-  std::unique_ptr<llvm::MCInstPrinter> IP(
-      TheTarget->createMCInstPrinter(llvm::Triple(TT), 1, *MAI, *MII, *MRI));
+  std::unique_ptr<llvm37::MCInstPrinter> IP(
+      TheTarget->createMCInstPrinter(llvm37::Triple(TT), 1, *MAI, *MII, *MRI));
 
   // Change to the Intel dialect.
   Parser->setAssemblerDialect(1);

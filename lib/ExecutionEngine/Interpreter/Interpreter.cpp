@@ -14,11 +14,11 @@
 //===----------------------------------------------------------------------===//
 
 #include "Interpreter.h"
-#include "llvm/CodeGen/IntrinsicLowering.h"
-#include "llvm/IR/DerivedTypes.h"
-#include "llvm/IR/Module.h"
+#include "llvm37/CodeGen/IntrinsicLowering.h"
+#include "llvm37/IR/DerivedTypes.h"
+#include "llvm37/IR/Module.h"
 #include <cstring>
-using namespace llvm;
+using namespace llvm37;
 
 namespace {
 

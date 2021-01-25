@@ -8,14 +8,14 @@
 //===----------------------------------------------------------------------===//
 
 #include "clang/SPIRV/String.h"
-#include "llvm/llvm_assert/assert.h"
+#include "llvm37/llvm_assert/assert.h"
 
 namespace clang {
 namespace spirv {
 namespace string {
 
 /// \brief Reinterprets a given string as sequence of words.
-std::vector<uint32_t> encodeSPIRVString(llvm::StringRef strChars) {
+std::vector<uint32_t> encodeSPIRVString(llvm37::StringRef strChars) {
   // Initialize all words to 0.
   size_t numChars = strChars.size();
   std::vector<uint32_t> result(numChars / 4 + 1, 0);
@@ -39,7 +39,7 @@ std::vector<uint32_t> encodeSPIRVString(llvm::StringRef strChars) {
 /// \brief Reinterprets the given vector of 32-bit words as a string.
 /// Expectes that the words represent a NULL-terminated string.
 /// Assumes Little Endian architecture.
-std::string decodeSPIRVString(llvm::ArrayRef<uint32_t> strWords) {
+std::string decodeSPIRVString(llvm37::ArrayRef<uint32_t> strWords) {
   if (!strWords.empty()) {
     return reinterpret_cast<const char *>(strWords.data());
   }

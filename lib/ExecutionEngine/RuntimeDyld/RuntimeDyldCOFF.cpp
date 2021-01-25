@@ -13,12 +13,12 @@
 
 #include "RuntimeDyldCOFF.h"
 #include "Targets/RuntimeDyldCOFFX86_64.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/Triple.h"
-#include "llvm/Object/ObjectFile.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/Triple.h"
+#include "llvm37/Object/ObjectFile.h"
 
-using namespace llvm;
-using namespace llvm::object;
+using namespace llvm37;
+using namespace llvm37::object;
 
 #define DEBUG_TYPE "dyld"
 
@@ -38,10 +38,10 @@ public:
 };
 }
 
-namespace llvm {
+namespace llvm37 {
 
 std::unique_ptr<RuntimeDyldCOFF>
-llvm::RuntimeDyldCOFF::create(Triple::ArchType Arch,
+llvm37::RuntimeDyldCOFF::create(Triple::ArchType Arch,
                               RuntimeDyld::MemoryManager &MemMgr,
                               RuntimeDyld::SymbolResolver &Resolver) {
   switch (Arch) {
@@ -57,7 +57,7 @@ std::unique_ptr<RuntimeDyld::LoadedObjectInfo>
 RuntimeDyldCOFF::loadObject(const object::ObjectFile &O) {
   unsigned SectionStartIdx, SectionEndIdx;
   std::tie(SectionStartIdx, SectionEndIdx) = loadObjectImpl(O);
-  return llvm::make_unique<LoadedCOFFObjectInfo>(*this, SectionStartIdx,
+  return llvm37::make_unique<LoadedCOFFObjectInfo>(*this, SectionStartIdx,
                                                  SectionEndIdx);
 }
 
@@ -70,4 +70,4 @@ bool RuntimeDyldCOFF::isCompatibleFile(const object::ObjectFile &Obj) const {
   return Obj.isCOFF();
 }
 
-} // namespace llvm
+} // namespace llvm37

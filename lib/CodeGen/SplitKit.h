@@ -12,16 +12,16 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_LIB_CODEGEN_SPLITKIT_H
-#define LLVM_LIB_CODEGEN_SPLITKIT_H
+#ifndef LLVM37_LIB_CODEGEN_SPLITKIT_H
+#define LLVM37_LIB_CODEGEN_SPLITKIT_H
 
 #include "LiveRangeCalc.h"
-#include "llvm/ADT/ArrayRef.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/IntervalMap.h"
-#include "llvm/ADT/SmallPtrSet.h"
+#include "llvm37/ADT/ArrayRef.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/IntervalMap.h"
+#include "llvm37/ADT/SmallPtrSet.h"
 
-namespace llvm {
+namespace llvm37 {
 
 class ConnectedVNInfoEqClasses;
 class LiveInterval;
@@ -39,7 +39,7 @@ class raw_ostream;
 
 /// SplitAnalysis - Analyze a LiveInterval, looking for live range splitting
 /// opportunities.
-class LLVM_LIBRARY_VISIBILITY SplitAnalysis {
+class LLVM37_LIBRARY_VISIBILITY SplitAnalysis {
 public:
   const MachineFunction &MF;
   const VirtRegMap &VRM;
@@ -208,7 +208,7 @@ public:
 /// - Finish the current interval with closeIntv and repeat from 2.
 /// - Rewrite instructions with finish().
 ///
-class LLVM_LIBRARY_VISIBILITY SplitEditor {
+class LLVM37_LIBRARY_VISIBILITY SplitEditor {
   SplitAnalysis &SA;
   LiveIntervals &LIS;
   VirtRegMap &VRM;

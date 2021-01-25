@@ -11,14 +11,14 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_COV_COVERAGEFILTERS_H
-#define LLVM_COV_COVERAGEFILTERS_H
+#ifndef LLVM37_COV_COVERAGEFILTERS_H
+#define LLVM37_COV_COVERAGEFILTERS_H
 
-#include "llvm/ProfileData/CoverageMapping.h"
+#include "llvm37/ProfileData/CoverageMapping.h"
 #include <memory>
 #include <vector>
 
-namespace llvm {
+namespace llvm37 {
 
 /// \brief Matches specific functions that pass the requirement of this filter.
 class CoverageFilter {
@@ -122,6 +122,6 @@ public:
   bool matches(const coverage::FunctionRecord &Function) override;
 };
 
-} // namespace llvm
+} // namespace llvm37
 
-#endif // LLVM_COV_COVERAGEFILTERS_H
+#endif // LLVM37_COV_COVERAGEFILTERS_H

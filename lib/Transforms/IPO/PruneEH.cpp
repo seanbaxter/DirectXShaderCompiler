@@ -14,23 +14,23 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Transforms/IPO.h"
-#include "llvm/ADT/SmallPtrSet.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Analysis/CallGraph.h"
-#include "llvm/Analysis/CallGraphSCCPass.h"
-#include "llvm/Analysis/LibCallSemantics.h"
-#include "llvm/IR/CFG.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/InlineAsm.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/IR/LLVMContext.h"
+#include "llvm37/Transforms/IPO.h"
+#include "llvm37/ADT/SmallPtrSet.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Analysis/CallGraph.h"
+#include "llvm37/Analysis/CallGraphSCCPass.h"
+#include "llvm37/Analysis/LibCallSemantics.h"
+#include "llvm37/IR/CFG.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/InlineAsm.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/IR/LLVMContext.h"
 #include <algorithm>
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "prune-eh"
 
@@ -59,7 +59,7 @@ INITIALIZE_PASS_DEPENDENCY(CallGraphWrapperPass)
 INITIALIZE_PASS_END(PruneEH, "prune-eh",
                 "Remove unused exception handling info", false, false)
 
-Pass *llvm::createPruneEHPass() { return new PruneEH(); }
+Pass *llvm37::createPruneEHPass() { return new PruneEH(); }
 
 
 bool PruneEH::runOnSCC(CallGraphSCC &SCC) {

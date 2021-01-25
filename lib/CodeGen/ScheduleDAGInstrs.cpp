@@ -12,33 +12,33 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/CodeGen/ScheduleDAGInstrs.h"
-#include "llvm/ADT/MapVector.h"
-#include "llvm/ADT/SmallPtrSet.h"
-#include "llvm/ADT/SmallSet.h"
-#include "llvm/Analysis/AliasAnalysis.h"
-#include "llvm/Analysis/ValueTracking.h"
-#include "llvm/CodeGen/LiveIntervalAnalysis.h"
-#include "llvm/CodeGen/MachineFunctionPass.h"
-#include "llvm/CodeGen/MachineFrameInfo.h"
-#include "llvm/CodeGen/MachineInstrBuilder.h"
-#include "llvm/CodeGen/MachineMemOperand.h"
-#include "llvm/CodeGen/MachineRegisterInfo.h"
-#include "llvm/CodeGen/PseudoSourceValue.h"
-#include "llvm/CodeGen/RegisterPressure.h"
-#include "llvm/CodeGen/ScheduleDFS.h"
-#include "llvm/IR/Operator.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/Format.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Target/TargetInstrInfo.h"
-#include "llvm/Target/TargetMachine.h"
-#include "llvm/Target/TargetRegisterInfo.h"
-#include "llvm/Target/TargetSubtargetInfo.h"
+#include "llvm37/CodeGen/ScheduleDAGInstrs.h"
+#include "llvm37/ADT/MapVector.h"
+#include "llvm37/ADT/SmallPtrSet.h"
+#include "llvm37/ADT/SmallSet.h"
+#include "llvm37/Analysis/AliasAnalysis.h"
+#include "llvm37/Analysis/ValueTracking.h"
+#include "llvm37/CodeGen/LiveIntervalAnalysis.h"
+#include "llvm37/CodeGen/MachineFunctionPass.h"
+#include "llvm37/CodeGen/MachineFrameInfo.h"
+#include "llvm37/CodeGen/MachineInstrBuilder.h"
+#include "llvm37/CodeGen/MachineMemOperand.h"
+#include "llvm37/CodeGen/MachineRegisterInfo.h"
+#include "llvm37/CodeGen/PseudoSourceValue.h"
+#include "llvm37/CodeGen/RegisterPressure.h"
+#include "llvm37/CodeGen/ScheduleDFS.h"
+#include "llvm37/IR/Operator.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/Format.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Target/TargetInstrInfo.h"
+#include "llvm37/Target/TargetMachine.h"
+#include "llvm37/Target/TargetRegisterInfo.h"
+#include "llvm37/Target/TargetSubtargetInfo.h"
 #include <queue>
 
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "misched"
 
@@ -1263,7 +1263,7 @@ void ScheduleDAGInstrs::fixupKills(MachineBasicBlock *MBB) {
 }
 
 void ScheduleDAGInstrs::dumpNode(const SUnit *SU) const {
-#if !defined(NDEBUG) || defined(LLVM_ENABLE_DUMP)
+#if !defined(NDEBUG) || defined(LLVM37_ENABLE_DUMP)
   SU->getInstr()->dump();
 #endif
 }
@@ -1290,7 +1290,7 @@ std::string ScheduleDAGInstrs::getDAGName() const {
 // SchedDFSResult Implementation
 //===----------------------------------------------------------------------===//
 
-namespace llvm {
+namespace llvm37 {
 /// \brief Internal state used to compute SchedDFSResult.
 class SchedDFSImpl {
   SchedDFSResult &R;
@@ -1481,7 +1481,7 @@ protected:
     } while (FromTree != SchedDFSResult::InvalidSubtreeID);
   }
 };
-} // namespace llvm
+} // namespace llvm37
 
 namespace {
 /// \brief Manage the stack used by a reverse depth-first search over the DAG.
@@ -1580,7 +1580,7 @@ void SchedDFSResult::scheduleTree(unsigned SubtreeID) {
   }
 }
 
-LLVM_DUMP_METHOD
+LLVM37_DUMP_METHOD
 void ILPValue::print(raw_ostream &OS) const {
   OS << InstrCount << " / " << Length << " = ";
   if (!Length)
@@ -1589,17 +1589,17 @@ void ILPValue::print(raw_ostream &OS) const {
     OS << format("%g", ((double)InstrCount / Length));
 }
 
-LLVM_DUMP_METHOD
+LLVM37_DUMP_METHOD
 void ILPValue::dump() const {
   dbgs() << *this << '\n';
 }
 
-namespace llvm {
+namespace llvm37 {
 
-LLVM_DUMP_METHOD
+LLVM37_DUMP_METHOD
 raw_ostream &operator<<(raw_ostream &OS, const ILPValue &Val) {
   Val.print(OS);
   return OS;
 }
 
-} // namespace llvm
+} // namespace llvm37

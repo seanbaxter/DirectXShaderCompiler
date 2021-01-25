@@ -14,7 +14,7 @@ namespace spirv {
 
 void SortDebugInfoVisitor::whileEachOperandOfDebugInstruction(
     SpirvDebugInstruction *di,
-    llvm::function_ref<bool(SpirvDebugInstruction *)> visitor) {
+    llvm37::function_ref<bool(SpirvDebugInstruction *)> visitor) {
   if (di == nullptr)
     return;
   if (di->getDebugType() != nullptr) {
@@ -162,14 +162,14 @@ bool SortDebugInfoVisitor::visit(SpirvModule *mod, Phase phase) {
 
   // Keep the number of unique debug instructions to verify that it is not
   // changed at the end of this visitor.
-  llvm::SmallSet<SpirvDebugInstruction *, 32> uniqueDebugInstructions;
+  llvm37::SmallSet<SpirvDebugInstruction *, 32> uniqueDebugInstructions;
   uniqueDebugInstructions.insert(debugInstructions.begin(),
                                  debugInstructions.end());
   auto numberOfDebugInstrs = uniqueDebugInstructions.size();
   (void)numberOfDebugInstrs;
 
   // Collect nodes without predecessor.
-  llvm::SmallSet<SpirvDebugInstruction *, 32> visited;
+  llvm37::SmallSet<SpirvDebugInstruction *, 32> visited;
   for (auto *di : debugInstructions) {
     whileEachOperandOfDebugInstruction(
         di, [&visited](SpirvDebugInstruction *operand) {
@@ -178,7 +178,7 @@ bool SortDebugInfoVisitor::visit(SpirvModule *mod, Phase phase) {
           return true;
         });
   }
-  llvm::SmallVector<SpirvDebugInstruction *, 32> stack;
+  llvm37::SmallVector<SpirvDebugInstruction *, 32> stack;
   for (auto *di : debugInstructions) {
     if (visited.count(di) == 0)
       stack.push_back(di);

@@ -11,8 +11,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_UNITTESTS_TOOLING_REWRITERTESTCONTEXT_H
-#define LLVM_CLANG_UNITTESTS_TOOLING_REWRITERTESTCONTEXT_H
+#ifndef LLVM37_CLANG_UNITTESTS_TOOLING_REWRITERTESTCONTEXT_H
+#define LLVM37_CLANG_UNITTESTS_TOOLING_REWRITERTESTCONTEXT_H
 
 #include "clang/Basic/Diagnostic.h"
 #include "clang/Basic/DiagnosticOptions.h"
@@ -21,9 +21,9 @@
 #include "clang/Basic/SourceManager.h"
 #include "clang/Frontend/TextDiagnosticPrinter.h"
 #include "clang/Rewrite/Core/Rewriter.h"
-#include "llvm/Support/FileSystem.h"
-#include "llvm/Support/Path.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/Support/FileSystem.h"
+#include "llvm37/Support/Path.h"
+#include "llvm37/Support/raw_ostream.h"
 
 namespace clang {
 
@@ -38,7 +38,7 @@ class RewriterTestContext {
       : DiagOpts(new DiagnosticOptions()),
         Diagnostics(IntrusiveRefCntPtr<DiagnosticIDs>(new DiagnosticIDs),
                     &*DiagOpts),
-        DiagnosticPrinter(llvm::outs(), &*DiagOpts),
+        DiagnosticPrinter(llvm37::outs(), &*DiagOpts),
         Files((FileSystemOptions())),
         Sources(Diagnostics, Files),
         Rewrite(Sources, Options) {
@@ -48,8 +48,8 @@ class RewriterTestContext {
   ~RewriterTestContext() {}
 
   FileID createInMemoryFile(StringRef Name, StringRef Content) {
-    std::unique_ptr<llvm::MemoryBuffer> Source =
-        llvm::MemoryBuffer::getMemBuffer(Content);
+    std::unique_ptr<llvm37::MemoryBuffer> Source =
+        llvm37::MemoryBuffer::getMemBuffer(Content);
     const FileEntry *Entry =
       Files.getVirtualFile(Name, Source->getBufferSize(), 0);
     Sources.overrideFileContents(Entry, std::move(Source));
@@ -62,11 +62,11 @@ class RewriterTestContext {
   FileID createOnDiskFile(StringRef Name, StringRef Content) {
     SmallString<1024> Path;
     int FD;
-    std::error_code EC = llvm::sys::fs::createTemporaryFile(Name, "", FD, Path);
+    std::error_code EC = llvm37::sys::fs::createTemporaryFile(Name, "", FD, Path);
     assert(!EC);
     (void)EC;
 
-    llvm::raw_fd_ostream OutStream(FD, true);
+    llvm37::raw_fd_ostream OutStream(FD, true);
     OutStream << Content;
     OutStream.close();
     const FileEntry *File = Files.getFile(Path);
@@ -88,7 +88,7 @@ class RewriterTestContext {
 
   std::string getRewrittenText(FileID ID) {
     std::string Result;
-    llvm::raw_string_ostream OS(Result);
+    llvm37::raw_string_ostream OS(Result);
     Rewrite.getEditBuffer(ID).write(OS);
     OS.flush();
     return Result;
@@ -115,7 +115,7 @@ class RewriterTestContext {
   Rewriter Rewrite;
 
   // Will be set once on disk files are generated.
-  llvm::StringMap<std::string> TemporaryFiles;
+  llvm37::StringMap<std::string> TemporaryFiles;
 };
 
 } // end namespace clang

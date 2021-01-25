@@ -12,11 +12,11 @@
 /// the form major[.minor[.subminor]].
 ///
 //===----------------------------------------------------------------------===//
-#ifndef LLVM_CLANG_BASIC_VERSIONTUPLE_H
-#define LLVM_CLANG_BASIC_VERSIONTUPLE_H
+#ifndef LLVM37_CLANG_BASIC_VERSIONTUPLE_H
+#define LLVM37_CLANG_BASIC_VERSIONTUPLE_H
 
 #include "clang/Basic/LLVM.h"
-#include "llvm/ADT/Optional.h"
+#include "llvm37/ADT/Optional.h"
 #include <string>
 #include <tuple>
 
@@ -160,4 +160,4 @@ public:
 raw_ostream& operator<<(raw_ostream &Out, const VersionTuple &V);
 
 } // end namespace clang
-#endif // LLVM_CLANG_BASIC_VERSIONTUPLE_H
+#endif // LLVM37_CLANG_BASIC_VERSIONTUPLE_H

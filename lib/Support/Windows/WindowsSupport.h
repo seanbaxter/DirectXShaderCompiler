@@ -20,8 +20,8 @@
 //                                                                           //
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef LLVM_SUPPORT_WINDOWSSUPPORT_H
-#define LLVM_SUPPORT_WINDOWSSUPPORT_H
+#ifndef LLVM37_SUPPORT_WINDOWSSUPPORT_H
+#define LLVM37_SUPPORT_WINDOWSSUPPORT_H
 
 // mingw-w64 tends to define it as 0x0502 in its headers.
 #undef _WIN32_WINNT
@@ -32,11 +32,11 @@
 #define _WIN32_IE    0x0600 // MinGW at it again.
 #define WIN32_LEAN_AND_MEAN
 
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/ADT/StringRef.h"
-#include "llvm/ADT/Twine.h"
-#include "llvm/Config/config.h" // Get build system configuration settings
-#include "llvm/Support/Compiler.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/ADT/StringRef.h"
+#include "llvm37/ADT/Twine.h"
+#include "llvm37/Config/config.h" // Get build system configuration settings
+#include "llvm37/Support/Compiler.h"
 #include <system_error>
 #include <windows.h>
 #include <wincrypt.h>
@@ -44,8 +44,8 @@
 #include <string>
 #include <vector>
 
-#include "llvm/Support/FileSystem.h"
-#include "llvm/Support/MSFileSystem.h"
+#include "llvm37/Support/FileSystem.h"
+#include "llvm37/Support/MSFileSystem.h"
 
 inline bool MakeErrMsg(std::string* ErrMsg, const std::string& prefix) {
   if (!ErrMsg)
@@ -113,7 +113,7 @@ struct CommonHandleTraits {
   }
 
   static void Close(handle_type h) {
-    ::llvm::sys::fs::GetCurrentThreadFileSystem()->CloseHandle(h);
+    ::llvm37::sys::fs::GetCurrentThreadFileSystem()->CloseHandle(h);
   }
 
   static bool IsValid(handle_type h) {
@@ -145,7 +145,7 @@ struct CryptContextTraits : CommonHandleTraits {
 
 struct FindHandleTraits : CommonHandleTraits {
   static void Close(handle_type h) {
-    ::llvm::sys::fs::GetCurrentThreadFileSystem()->FindClose(h);
+    ::llvm37::sys::fs::GetCurrentThreadFileSystem()->FindClose(h);
   }
 };
 
@@ -157,7 +157,7 @@ typedef ScopedHandle<CryptContextTraits> ScopedCryptContext;
 typedef ScopedHandle<FindHandleTraits>   ScopedFindHandle;
 typedef ScopedHandle<JobHandleTraits>    ScopedJobHandle;
 
-namespace llvm {
+namespace llvm37 {
 template <class T>
 class SmallVectorImpl;
 
@@ -186,6 +186,6 @@ std::error_code ACPToUTF8(const char *acp, size_t acp_len,
                        SmallVectorImpl<char> &utf8);
 } // end namespace windows
 } // end namespace sys
-} // end namespace llvm.
+} // end namespace llvm37.
 
 #endif

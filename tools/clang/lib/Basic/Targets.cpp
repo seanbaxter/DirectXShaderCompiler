@@ -19,15 +19,15 @@
 #include "clang/Basic/MacroBuilder.h"
 #include "clang/Basic/TargetBuiltins.h"
 #include "clang/Basic/TargetOptions.h"
-#include "llvm/ADT/APFloat.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/StringExtras.h"
-#include "llvm/ADT/StringRef.h"
-#include "llvm/ADT/StringSwitch.h"
-#include "llvm/ADT/Triple.h"
-#include "llvm/MC/MCSectionMachO.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/TargetParser.h"
+#include "llvm37/ADT/APFloat.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/StringExtras.h"
+#include "llvm37/ADT/StringRef.h"
+#include "llvm37/ADT/StringSwitch.h"
+#include "llvm37/ADT/Triple.h"
+#include "llvm37/MC/MCSectionMachO.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/TargetParser.h"
 #include <algorithm>
 #include <memory>
 using namespace clang;
@@ -73,10 +73,10 @@ namespace {
 template<typename TgtInfo>
 class OSTargetInfo : public TgtInfo {
 protected:
-  virtual void getOSDefines(const LangOptions &Opts, const llvm::Triple &Triple,
+  virtual void getOSDefines(const LangOptions &Opts, const llvm37::Triple &Triple,
                             MacroBuilder &Builder) const=0;
 public:
-  OSTargetInfo(const llvm::Triple &Triple) : TgtInfo(Triple) {}
+  OSTargetInfo(const llvm37::Triple &Triple) : TgtInfo(Triple) {}
   void getTargetDefines(const LangOptions &Opts,
                         MacroBuilder &Builder) const override {
     TgtInfo::getTargetDefines(Opts, Builder);
@@ -89,7 +89,7 @@ public:
 #if 0 // HLSL Change Starts - remove unsupported targets
 
 static void getDarwinDefines(MacroBuilder &Builder, const LangOptions &Opts,
-                             const llvm::Triple &Triple,
+                             const llvm37::Triple &Triple,
                              StringRef &PlatformName,
                              VersionTuple &PlatformMinVersion) {
   Builder.defineMacro("__APPLE_CC__", "6000");
@@ -131,7 +131,7 @@ static void getDarwinDefines(MacroBuilder &Builder, const LangOptions &Opts,
     PlatformName = "macosx";
   } else {
     Triple.getOSVersion(Maj, Min, Rev);
-    PlatformName = llvm::Triple::getOSTypeName(Triple.getOS());
+    PlatformName = llvm37::Triple::getOSTypeName(Triple.getOS());
   }
 
   // If -target arch-pc-win32-macho option specified, we're
@@ -192,7 +192,7 @@ namespace {
 template <typename Target>
 class CloudABITargetInfo : public OSTargetInfo<Target> {
 protected:
-  void getOSDefines(const LangOptions &Opts, const llvm::Triple &Triple,
+  void getOSDefines(const LangOptions &Opts, const llvm37::Triple &Triple,
                     MacroBuilder &Builder) const override {
     Builder.defineMacro("__CloudABI__");
     Builder.defineMacro("__ELF__");
@@ -204,7 +204,7 @@ protected:
   }
 
 public:
-  CloudABITargetInfo(const llvm::Triple &Triple)
+  CloudABITargetInfo(const llvm37::Triple &Triple)
       : OSTargetInfo<Target>(Triple) {
     this->UserLabelPrefix = "";
   }
@@ -213,14 +213,14 @@ public:
 template<typename Target>
 class DarwinTargetInfo : public OSTargetInfo<Target> {
 protected:
-  void getOSDefines(const LangOptions &Opts, const llvm::Triple &Triple,
+  void getOSDefines(const LangOptions &Opts, const llvm37::Triple &Triple,
                     MacroBuilder &Builder) const override {
     getDarwinDefines(Builder, Opts, Triple, this->PlatformName,
                      this->PlatformMinVersion);
   }
 
 public:
-  DarwinTargetInfo(const llvm::Triple &Triple) : OSTargetInfo<Target>(Triple) {
+  DarwinTargetInfo(const llvm37::Triple &Triple) : OSTargetInfo<Target>(Triple) {
     this->TLSSupported = Triple.isMacOSX() && !Triple.isMacOSXVersionLT(10, 7);
     this->MCountName = "\01mcount";
   }
@@ -230,7 +230,7 @@ public:
     StringRef Segment, Section;
     unsigned TAA, StubSize;
     bool HasTAA;
-    return llvm::MCSectionMachO::ParseSectionSpecifier(SR, Segment, Section,
+    return llvm37::MCSectionMachO::ParseSectionSpecifier(SR, Segment, Section,
                                                        TAA, HasTAA, StubSize);
   }
 
@@ -252,7 +252,7 @@ public:
 template<typename Target>
 class DragonFlyBSDTargetInfo : public OSTargetInfo<Target> {
 protected:
-  void getOSDefines(const LangOptions &Opts, const llvm::Triple &Triple,
+  void getOSDefines(const LangOptions &Opts, const llvm37::Triple &Triple,
                     MacroBuilder &Builder) const override {
     // DragonFly defines; list based off of gcc output
     Builder.defineMacro("__DragonFly__");
@@ -263,14 +263,14 @@ protected:
     DefineStd(Builder, "unix", Opts);
   }
 public:
-  DragonFlyBSDTargetInfo(const llvm::Triple &Triple)
+  DragonFlyBSDTargetInfo(const llvm37::Triple &Triple)
       : OSTargetInfo<Target>(Triple) {
     this->UserLabelPrefix = "";
 
     switch (Triple.getArch()) {
     default:
-    case llvm::Triple::x86:
-    case llvm::Triple::x86_64:
+    case llvm37::Triple::x86:
+    case llvm37::Triple::x86_64:
       this->MCountName = ".mcount";
       break;
     }
@@ -281,7 +281,7 @@ public:
 template<typename Target>
 class FreeBSDTargetInfo : public OSTargetInfo<Target> {
 protected:
-  void getOSDefines(const LangOptions &Opts, const llvm::Triple &Triple,
+  void getOSDefines(const LangOptions &Opts, const llvm37::Triple &Triple,
                     MacroBuilder &Builder) const override {
     // FreeBSD defines; list based off of gcc output
 
@@ -307,23 +307,23 @@ protected:
     Builder.defineMacro("__STDC_MB_MIGHT_NEQ_WC__", "1");
   }
 public:
-  FreeBSDTargetInfo(const llvm::Triple &Triple) : OSTargetInfo<Target>(Triple) {
+  FreeBSDTargetInfo(const llvm37::Triple &Triple) : OSTargetInfo<Target>(Triple) {
     this->UserLabelPrefix = "";
 
     switch (Triple.getArch()) {
     default:
-    case llvm::Triple::x86:
-    case llvm::Triple::x86_64:
+    case llvm37::Triple::x86:
+    case llvm37::Triple::x86_64:
       this->MCountName = ".mcount";
       break;
-    case llvm::Triple::mips:
-    case llvm::Triple::mipsel:
-    case llvm::Triple::ppc:
-    case llvm::Triple::ppc64:
-    case llvm::Triple::ppc64le:
+    case llvm37::Triple::mips:
+    case llvm37::Triple::mipsel:
+    case llvm37::Triple::ppc:
+    case llvm37::Triple::ppc64:
+    case llvm37::Triple::ppc64le:
       this->MCountName = "_mcount";
       break;
-    case llvm::Triple::arm:
+    case llvm37::Triple::arm:
       this->MCountName = "__mcount";
       break;
     }
@@ -334,7 +334,7 @@ public:
 template<typename Target>
 class KFreeBSDTargetInfo : public OSTargetInfo<Target> {
 protected:
-  void getOSDefines(const LangOptions &Opts, const llvm::Triple &Triple,
+  void getOSDefines(const LangOptions &Opts, const llvm37::Triple &Triple,
                     MacroBuilder &Builder) const override {
     // GNU/kFreeBSD defines; list based off of gcc output
 
@@ -348,7 +348,7 @@ protected:
       Builder.defineMacro("_GNU_SOURCE");
   }
 public:
-  KFreeBSDTargetInfo(const llvm::Triple &Triple)
+  KFreeBSDTargetInfo(const llvm37::Triple &Triple)
       : OSTargetInfo<Target>(Triple) {
     this->UserLabelPrefix = "";
   }
@@ -358,7 +358,7 @@ public:
 template<typename Target>
 class MinixTargetInfo : public OSTargetInfo<Target> {
 protected:
-  void getOSDefines(const LangOptions &Opts, const llvm::Triple &Triple,
+  void getOSDefines(const LangOptions &Opts, const llvm37::Triple &Triple,
                     MacroBuilder &Builder) const override {
     // Minix defines
 
@@ -373,7 +373,7 @@ protected:
     DefineStd(Builder, "unix", Opts);
   }
 public:
-  MinixTargetInfo(const llvm::Triple &Triple) : OSTargetInfo<Target>(Triple) {
+  MinixTargetInfo(const llvm37::Triple &Triple) : OSTargetInfo<Target>(Triple) {
     this->UserLabelPrefix = "";
   }
 };
@@ -382,14 +382,14 @@ public:
 template<typename Target>
 class LinuxTargetInfo : public OSTargetInfo<Target> {
 protected:
-  void getOSDefines(const LangOptions &Opts, const llvm::Triple &Triple,
+  void getOSDefines(const LangOptions &Opts, const llvm37::Triple &Triple,
                     MacroBuilder &Builder) const override {
     // Linux defines; list based off of gcc output
     DefineStd(Builder, "unix", Opts);
     DefineStd(Builder, "linux", Opts);
     Builder.defineMacro("__gnu_linux__");
     Builder.defineMacro("__ELF__");
-    if (Triple.getEnvironment() == llvm::Triple::Android) {
+    if (Triple.getEnvironment() == llvm37::Triple::Android) {
       Builder.defineMacro("__ANDROID__", "1");
       unsigned Maj, Min, Rev;
       Triple.getEnvironmentVersion(Maj, Min, Rev);
@@ -402,16 +402,16 @@ protected:
       Builder.defineMacro("_GNU_SOURCE");
   }
 public:
-  LinuxTargetInfo(const llvm::Triple &Triple) : OSTargetInfo<Target>(Triple) {
+  LinuxTargetInfo(const llvm37::Triple &Triple) : OSTargetInfo<Target>(Triple) {
     this->UserLabelPrefix = "";
     this->WIntType = TargetInfo::UnsignedInt;
 
     switch (Triple.getArch()) {
     default:
       break;
-    case llvm::Triple::ppc:
-    case llvm::Triple::ppc64:
-    case llvm::Triple::ppc64le:
+    case llvm37::Triple::ppc:
+    case llvm37::Triple::ppc64:
+    case llvm37::Triple::ppc64le:
       this->MCountName = "_mcount";
       break;
     }
@@ -426,7 +426,7 @@ public:
 template<typename Target>
 class NetBSDTargetInfo : public OSTargetInfo<Target> {
 protected:
-  void getOSDefines(const LangOptions &Opts, const llvm::Triple &Triple,
+  void getOSDefines(const LangOptions &Opts, const llvm37::Triple &Triple,
                     MacroBuilder &Builder) const override {
     // NetBSD defines; list based off of gcc output
     Builder.defineMacro("__NetBSD__");
@@ -438,16 +438,16 @@ protected:
     switch (Triple.getArch()) {
     default:
       break;
-    case llvm::Triple::arm:
-    case llvm::Triple::armeb:
-    case llvm::Triple::thumb:
-    case llvm::Triple::thumbeb:
+    case llvm37::Triple::arm:
+    case llvm37::Triple::armeb:
+    case llvm37::Triple::thumb:
+    case llvm37::Triple::thumbeb:
       Builder.defineMacro("__ARM_DWARF_EH__");
       break;
     }
   }
 public:
-  NetBSDTargetInfo(const llvm::Triple &Triple) : OSTargetInfo<Target>(Triple) {
+  NetBSDTargetInfo(const llvm37::Triple &Triple) : OSTargetInfo<Target>(Triple) {
     this->UserLabelPrefix = "";
     this->MCountName = "_mcount";
   }
@@ -457,7 +457,7 @@ public:
 template<typename Target>
 class OpenBSDTargetInfo : public OSTargetInfo<Target> {
 protected:
-  void getOSDefines(const LangOptions &Opts, const llvm::Triple &Triple,
+  void getOSDefines(const LangOptions &Opts, const llvm37::Triple &Triple,
                     MacroBuilder &Builder) const override {
     // OpenBSD defines; list based off of gcc output
 
@@ -468,22 +468,22 @@ protected:
       Builder.defineMacro("_REENTRANT");
   }
 public:
-  OpenBSDTargetInfo(const llvm::Triple &Triple) : OSTargetInfo<Target>(Triple) {
+  OpenBSDTargetInfo(const llvm37::Triple &Triple) : OSTargetInfo<Target>(Triple) {
     this->UserLabelPrefix = "";
     this->TLSSupported = false;
 
       switch (Triple.getArch()) {
         default:
-        case llvm::Triple::x86:
-        case llvm::Triple::x86_64:
-        case llvm::Triple::arm:
-        case llvm::Triple::sparc:
+        case llvm37::Triple::x86:
+        case llvm37::Triple::x86_64:
+        case llvm37::Triple::arm:
+        case llvm37::Triple::sparc:
           this->MCountName = "__mcount";
           break;
-        case llvm::Triple::mips64:
-        case llvm::Triple::mips64el:
-        case llvm::Triple::ppc:
-        case llvm::Triple::sparcv9:
+        case llvm37::Triple::mips64:
+        case llvm37::Triple::mips64el:
+        case llvm37::Triple::ppc:
+        case llvm37::Triple::sparcv9:
           this->MCountName = "_mcount";
           break;
       }
@@ -494,7 +494,7 @@ public:
 template<typename Target>
 class BitrigTargetInfo : public OSTargetInfo<Target> {
 protected:
-  void getOSDefines(const LangOptions &Opts, const llvm::Triple &Triple,
+  void getOSDefines(const LangOptions &Opts, const llvm37::Triple &Triple,
                     MacroBuilder &Builder) const override {
     // Bitrig defines; list based off of gcc output
 
@@ -507,16 +507,16 @@ protected:
     switch (Triple.getArch()) {
     default:
       break;
-    case llvm::Triple::arm:
-    case llvm::Triple::armeb:
-    case llvm::Triple::thumb:
-    case llvm::Triple::thumbeb:
+    case llvm37::Triple::arm:
+    case llvm37::Triple::armeb:
+    case llvm37::Triple::thumb:
+    case llvm37::Triple::thumbeb:
       Builder.defineMacro("__ARM_DWARF_EH__");
       break;
     }
   }
 public:
-  BitrigTargetInfo(const llvm::Triple &Triple) : OSTargetInfo<Target>(Triple) {
+  BitrigTargetInfo(const llvm37::Triple &Triple) : OSTargetInfo<Target>(Triple) {
     this->UserLabelPrefix = "";
     this->MCountName = "__mcount";
   }
@@ -526,7 +526,7 @@ public:
 template<typename Target>
 class PSPTargetInfo : public OSTargetInfo<Target> {
 protected:
-  void getOSDefines(const LangOptions &Opts, const llvm::Triple &Triple,
+  void getOSDefines(const LangOptions &Opts, const llvm37::Triple &Triple,
                     MacroBuilder &Builder) const override {
     // PSP defines; list based on the output of the pspdev gcc toolchain.
     Builder.defineMacro("PSP");
@@ -535,7 +535,7 @@ protected:
     Builder.defineMacro("__ELF__");
   }
 public:
-  PSPTargetInfo(const llvm::Triple &Triple) : OSTargetInfo<Target>(Triple) {
+  PSPTargetInfo(const llvm37::Triple &Triple) : OSTargetInfo<Target>(Triple) {
     this->UserLabelPrefix = "";
   }
 };
@@ -544,7 +544,7 @@ public:
 template<typename Target>
 class PS3PPUTargetInfo : public OSTargetInfo<Target> {
 protected:
-  void getOSDefines(const LangOptions &Opts, const llvm::Triple &Triple,
+  void getOSDefines(const LangOptions &Opts, const llvm37::Triple &Triple,
                     MacroBuilder &Builder) const override {
     // PS3 PPU defines.
     Builder.defineMacro("__PPC__");
@@ -556,7 +556,7 @@ protected:
     Builder.defineMacro("__powerpc64__");
   }
 public:
-  PS3PPUTargetInfo(const llvm::Triple &Triple) : OSTargetInfo<Target>(Triple) {
+  PS3PPUTargetInfo(const llvm37::Triple &Triple) : OSTargetInfo<Target>(Triple) {
     this->UserLabelPrefix = "";
     this->LongWidth = this->LongAlign = 32;
     this->PointerWidth = this->PointerAlign = 32;
@@ -570,7 +570,7 @@ public:
 template <typename Target>
 class PS4OSTargetInfo : public OSTargetInfo<Target> {
 protected:
-  void getOSDefines(const LangOptions &Opts, const llvm::Triple &Triple,
+  void getOSDefines(const LangOptions &Opts, const llvm37::Triple &Triple,
                     MacroBuilder &Builder) const override {
     Builder.defineMacro("__FreeBSD__", "9");
     Builder.defineMacro("__FreeBSD_cc_version", "900001");
@@ -580,7 +580,7 @@ protected:
     Builder.defineMacro("__PS4__");
   }
 public:
-  PS4OSTargetInfo(const llvm::Triple &Triple) : OSTargetInfo<Target>(Triple) {
+  PS4OSTargetInfo(const llvm37::Triple &Triple) : OSTargetInfo<Target>(Triple) {
     this->WCharType = this->UnsignedShort;
 
     // On PS4, TLS variable cannot be aligned to more than 32 bytes (256 bits).
@@ -589,7 +589,7 @@ public:
 
     switch (Triple.getArch()) {
     default:
-    case llvm::Triple::x86_64:
+    case llvm37::Triple::x86_64:
       this->MCountName = ".mcount";
       break;
     }
@@ -600,7 +600,7 @@ public:
 template<typename Target>
 class SolarisTargetInfo : public OSTargetInfo<Target> {
 protected:
-  void getOSDefines(const LangOptions &Opts, const llvm::Triple &Triple,
+  void getOSDefines(const LangOptions &Opts, const llvm37::Triple &Triple,
                     MacroBuilder &Builder) const override {
     DefineStd(Builder, "sun", Opts);
     DefineStd(Builder, "unix", Opts);
@@ -623,7 +623,7 @@ protected:
     Builder.defineMacro("_REENTRANT");
   }
 public:
-  SolarisTargetInfo(const llvm::Triple &Triple) : OSTargetInfo<Target>(Triple) {
+  SolarisTargetInfo(const llvm37::Triple &Triple) : OSTargetInfo<Target>(Triple) {
     this->UserLabelPrefix = "";
     this->WCharType = this->SignedInt;
     // FIXME: WIntType should be SignedLong
@@ -634,7 +634,7 @@ public:
 template<typename Target>
 class WindowsTargetInfo : public OSTargetInfo<Target> {
 protected:
-  void getOSDefines(const LangOptions &Opts, const llvm::Triple &Triple,
+  void getOSDefines(const LangOptions &Opts, const llvm37::Triple &Triple,
                     MacroBuilder &Builder) const override {
     Builder.defineMacro("_WIN32");
   }
@@ -681,14 +681,14 @@ protected:
   }
 
 public:
-  WindowsTargetInfo(const llvm::Triple &Triple)
+  WindowsTargetInfo(const llvm37::Triple &Triple)
       : OSTargetInfo<Target>(Triple) {}
 };
 
 template <typename Target>
 class NaClTargetInfo : public OSTargetInfo<Target> {
 protected:
-  void getOSDefines(const LangOptions &Opts, const llvm::Triple &Triple,
+  void getOSDefines(const LangOptions &Opts, const llvm37::Triple &Triple,
                     MacroBuilder &Builder) const override {
     if (Opts.POSIXThreads)
       Builder.defineMacro("_REENTRANT");
@@ -701,7 +701,7 @@ protected:
   }
 
 public:
-  NaClTargetInfo(const llvm::Triple &Triple) : OSTargetInfo<Target>(Triple) {
+  NaClTargetInfo(const llvm37::Triple &Triple) : OSTargetInfo<Target>(Triple) {
     this->UserLabelPrefix = "";
     this->LongAlign = 32;
     this->LongWidth = 32;
@@ -718,17 +718,17 @@ public:
     this->PtrDiffType = TargetInfo::SignedInt;
     this->IntPtrType = TargetInfo::SignedInt;
     // RegParmMax is inherited from the underlying architecture
-    this->LongDoubleFormat = &llvm::APFloat::IEEEdouble;
-    if (Triple.getArch() == llvm::Triple::arm) {
+    this->LongDoubleFormat = &llvm37::APFloat::IEEEdouble;
+    if (Triple.getArch() == llvm37::Triple::arm) {
       // Handled in ARM's setABI().
-    } else if (Triple.getArch() == llvm::Triple::x86) {
+    } else if (Triple.getArch() == llvm37::Triple::x86) {
       this->DescriptionString = "e-m:e-p:32:32-i64:64-n8:16:32-S128";
-    } else if (Triple.getArch() == llvm::Triple::x86_64) {
+    } else if (Triple.getArch() == llvm37::Triple::x86_64) {
       this->DescriptionString = "e-m:e-p:32:32-i64:64-n8:16:32:64-S128";
-    } else if (Triple.getArch() == llvm::Triple::mipsel) {
+    } else if (Triple.getArch() == llvm37::Triple::mipsel) {
       // Handled on mips' setDescriptionString.
     } else {
-      assert(Triple.getArch() == llvm::Triple::le32);
+      assert(Triple.getArch() == llvm37::Triple::le32);
       this->DescriptionString = "e-p:32:32-i64:64";
     }
   }
@@ -759,14 +759,14 @@ protected:
   std::string ABI;
 
 public:
-  PPCTargetInfo(const llvm::Triple &Triple)
+  PPCTargetInfo(const llvm37::Triple &Triple)
     : TargetInfo(Triple), HasVSX(false), HasP8Vector(false),
       HasP8Crypto(false), HasDirectMove(false), HasQPX(false), HasHTM(false),
       HasBPERMD(false), HasExtDiv(false) {
-    BigEndian = (Triple.getArch() != llvm::Triple::ppc64le);
+    BigEndian = (Triple.getArch() != llvm37::Triple::ppc64le);
     SimdDefaultAlign = 128;
     LongDoubleWidth = LongDoubleAlign = 128;
-    LongDoubleFormat = &llvm::APFloat::PPCDoubleDouble;
+    LongDoubleFormat = &llvm37::APFloat::PPCDoubleDouble;
   }
 
   /// \brief Flags for architecture specific defines.
@@ -794,7 +794,7 @@ public:
   //  821, 823, 8540, 8548, e300c2, e300c3, e500mc64, e6500, 860, cell,
   //  titan, rs64.
   bool setCPU(const std::string &Name) override {
-    bool CPUKnown = llvm::StringSwitch<bool>(Name)
+    bool CPUKnown = llvm37::StringSwitch<bool>(Name)
       .Case("generic", true)
       .Case("440", true)
       .Case("450", true)
@@ -863,12 +863,12 @@ public:
   void getTargetDefines(const LangOptions &Opts,
                         MacroBuilder &Builder) const override;
 
-  void getDefaultFeatures(llvm::StringMap<bool> &Features) const override;
+  void getDefaultFeatures(llvm37::StringMap<bool> &Features) const override;
 
   bool handleTargetFeatures(std::vector<std::string> &Features,
                             DiagnosticsEngine &Diags) override;
   bool hasFeature(StringRef Feature) const override;
-  void setFeatureEnabled(llvm::StringMap<bool> &Features, StringRef Name,
+  void setFeatureEnabled(llvm37::StringMap<bool> &Features, StringRef Name,
                          bool Enabled) const override;
 
   void getGCCRegNames(const char * const *&Names,
@@ -1003,7 +1003,7 @@ public:
 
   bool useFloat128ManglingForLongDouble() const override {
     return LongDoubleWidth == 128 &&
-           LongDoubleFormat == &llvm::APFloat::PPCDoubleDouble &&
+           LongDoubleFormat == &llvm37::APFloat::PPCDoubleDouble &&
            getTriple().isOSBinFormatELF();
   }
 };
@@ -1100,11 +1100,11 @@ void PPCTargetInfo::getTargetDefines(const LangOptions &Opts,
   }
 
   // Target properties.
-  if (getTriple().getArch() == llvm::Triple::ppc64le) {
+  if (getTriple().getArch() == llvm37::Triple::ppc64le) {
     Builder.defineMacro("_LITTLE_ENDIAN");
   } else {
-    if (getTriple().getOS() != llvm::Triple::NetBSD &&
-        getTriple().getOS() != llvm::Triple::OpenBSD)
+    if (getTriple().getOS() != llvm37::Triple::NetBSD &&
+        getTriple().getOS() != llvm37::Triple::OpenBSD)
       Builder.defineMacro("_BIG_ENDIAN");
   }
 
@@ -1128,7 +1128,7 @@ void PPCTargetInfo::getTargetDefines(const LangOptions &Opts,
   }
 
   // CPU identification.
-  ArchDefineTypes defs = (ArchDefineTypes)llvm::StringSwitch<int>(CPU)
+  ArchDefineTypes defs = (ArchDefineTypes)llvm37::StringSwitch<int>(CPU)
     .Case("440",   ArchDefineName)
     .Case("450",   ArchDefineName | ArchDefine440)
     .Case("601",   ArchDefineName)
@@ -1216,7 +1216,7 @@ void PPCTargetInfo::getTargetDefines(const LangOptions &Opts,
     Builder.defineMacro("_ARCH_QP");
   }
 
-  if (getTriple().getVendor() == llvm::Triple::BGQ) {
+  if (getTriple().getVendor() == llvm37::Triple::BGQ) {
     Builder.defineMacro("__bg__");
     Builder.defineMacro("__THW_BLUEGENE__");
     Builder.defineMacro("__bgq__");
@@ -1231,7 +1231,7 @@ void PPCTargetInfo::getTargetDefines(const LangOptions &Opts,
     Builder.defineMacro("__CRYPTO__");
   if (HasHTM)
     Builder.defineMacro("__HTM__");
-  if (getTriple().getArch() == llvm::Triple::ppc64le ||
+  if (getTriple().getArch() == llvm37::Triple::ppc64le ||
       (defs & ArchDefinePwr8) || (CPU == "pwr8")) {
     Builder.defineMacro("__GCC_HAVE_SYNC_COMPARE_AND_SWAP_1");
     Builder.defineMacro("__GCC_HAVE_SYNC_COMPARE_AND_SWAP_2");
@@ -1261,8 +1261,8 @@ void PPCTargetInfo::getTargetDefines(const LangOptions &Opts,
   //   __NO_FPRS__
 }
 
-void PPCTargetInfo::getDefaultFeatures(llvm::StringMap<bool> &Features) const {
-  Features["altivec"] = llvm::StringSwitch<bool>(CPU)
+void PPCTargetInfo::getDefaultFeatures(llvm37::StringMap<bool> &Features) const {
+  Features["altivec"] = llvm37::StringSwitch<bool>(CPU)
     .Case("7400", true)
     .Case("g4", true)
     .Case("7450", true)
@@ -1277,29 +1277,29 @@ void PPCTargetInfo::getDefaultFeatures(llvm::StringMap<bool> &Features) const {
     .Default(false);
 
   Features["qpx"] = (CPU == "a2q");
-  Features["crypto"] = llvm::StringSwitch<bool>(CPU)
+  Features["crypto"] = llvm37::StringSwitch<bool>(CPU)
     .Case("ppc64le", true)
     .Case("pwr8", true)
     .Default(false);
-  Features["power8-vector"] = llvm::StringSwitch<bool>(CPU)
+  Features["power8-vector"] = llvm37::StringSwitch<bool>(CPU)
     .Case("ppc64le", true)
     .Case("pwr8", true)
     .Default(false);
-  Features["bpermd"] = llvm::StringSwitch<bool>(CPU)
-    .Case("ppc64le", true)
-    .Case("pwr8", true)
-    .Case("pwr7", true)
-    .Default(false);
-  Features["extdiv"] = llvm::StringSwitch<bool>(CPU)
+  Features["bpermd"] = llvm37::StringSwitch<bool>(CPU)
     .Case("ppc64le", true)
     .Case("pwr8", true)
     .Case("pwr7", true)
     .Default(false);
-  Features["direct-move"] = llvm::StringSwitch<bool>(CPU)
+  Features["extdiv"] = llvm37::StringSwitch<bool>(CPU)
+    .Case("ppc64le", true)
+    .Case("pwr8", true)
+    .Case("pwr7", true)
+    .Default(false);
+  Features["direct-move"] = llvm37::StringSwitch<bool>(CPU)
     .Case("ppc64le", true)
     .Case("pwr8", true)
     .Default(false);
-  Features["vsx"] = llvm::StringSwitch<bool>(CPU)
+  Features["vsx"] = llvm37::StringSwitch<bool>(CPU)
     .Case("ppc64le", true)
     .Case("pwr8", true)
     .Case("pwr7", true)
@@ -1307,7 +1307,7 @@ void PPCTargetInfo::getDefaultFeatures(llvm::StringMap<bool> &Features) const {
 }
 
 bool PPCTargetInfo::hasFeature(StringRef Feature) const {
-  return llvm::StringSwitch<bool>(Feature)
+  return llvm37::StringSwitch<bool>(Feature)
     .Case("powerpc", true)
     .Case("vsx", HasVSX)
     .Case("power8-vector", HasP8Vector)
@@ -1333,9 +1333,9 @@ bool PPCTargetInfo::hasFeature(StringRef Feature) const {
 
 NOTE: Do not call this from PPCTargetInfo::getDefaultFeatures
 */
-void PPCTargetInfo::setFeatureEnabled(llvm::StringMap<bool> &Features,
+void PPCTargetInfo::setFeatureEnabled(llvm37::StringMap<bool> &Features,
                                       StringRef Name, bool Enabled) const {
-  static llvm::StringMap<bool> ExplicitFeatures;
+  static llvm37::StringMap<bool> ExplicitFeatures;
   ExplicitFeatures[Name] = Enabled;
 
   // At this point, -mno-vsx turns off the dependent features but we respect
@@ -1377,7 +1377,7 @@ const char * const PPCTargetInfo::GCCRegNames[] = {
 void PPCTargetInfo::getGCCRegNames(const char * const *&Names,
                                    unsigned &NumNames) const {
   Names = GCCRegNames;
-  NumNames = llvm::array_lengthof(GCCRegNames);
+  NumNames = llvm37::array_lengthof(GCCRegNames);
 }
 
 const TargetInfo::GCCRegAlias PPCTargetInfo::GCCRegAliases[] = {
@@ -1453,18 +1453,18 @@ const TargetInfo::GCCRegAlias PPCTargetInfo::GCCRegAliases[] = {
 void PPCTargetInfo::getGCCRegAliases(const GCCRegAlias *&Aliases,
                                      unsigned &NumAliases) const {
   Aliases = GCCRegAliases;
-  NumAliases = llvm::array_lengthof(GCCRegAliases);
+  NumAliases = llvm37::array_lengthof(GCCRegAliases);
 }
 
 class PPC32TargetInfo : public PPCTargetInfo {
 public:
-  PPC32TargetInfo(const llvm::Triple &Triple) : PPCTargetInfo(Triple) {
+  PPC32TargetInfo(const llvm37::Triple &Triple) : PPCTargetInfo(Triple) {
     DescriptionString = "E-m:e-p:32:32-i64:64-n32";
 
     switch (getTriple().getOS()) {
-    case llvm::Triple::Linux:
-    case llvm::Triple::FreeBSD:
-    case llvm::Triple::NetBSD:
+    case llvm37::Triple::Linux:
+    case llvm37::Triple::FreeBSD:
+    case llvm37::Triple::NetBSD:
       SizeType = UnsignedInt;
       PtrDiffType = SignedInt;
       IntPtrType = SignedInt;
@@ -1473,9 +1473,9 @@ public:
       break;
     }
 
-    if (getTriple().getOS() == llvm::Triple::FreeBSD) {
+    if (getTriple().getOS() == llvm37::Triple::FreeBSD) {
       LongDoubleWidth = LongDoubleAlign = 64;
-      LongDoubleFormat = &llvm::APFloat::IEEEdouble;
+      LongDoubleFormat = &llvm37::APFloat::IEEEdouble;
     }
 
     // PPC32 supports atomics up to 4 bytes.
@@ -1492,12 +1492,12 @@ public:
 // TargetInfo for little endian.
 class PPC64TargetInfo : public PPCTargetInfo {
 public:
-  PPC64TargetInfo(const llvm::Triple &Triple) : PPCTargetInfo(Triple) {
+  PPC64TargetInfo(const llvm37::Triple &Triple) : PPCTargetInfo(Triple) {
     LongWidth = LongAlign = PointerWidth = PointerAlign = 64;
     IntMaxType = SignedLong;
     Int64Type = SignedLong;
 
-    if ((Triple.getArch() == llvm::Triple::ppc64le)) {
+    if ((Triple.getArch() == llvm37::Triple::ppc64le)) {
       DescriptionString = "e-m:e-i64:64-n32:64";
       ABI = "elfv2";
     } else {
@@ -1506,11 +1506,11 @@ public:
     }
 
     switch (getTriple().getOS()) {
-    case llvm::Triple::FreeBSD:
+    case llvm37::Triple::FreeBSD:
       LongDoubleWidth = LongDoubleAlign = 64;
-      LongDoubleFormat = &llvm::APFloat::IEEEdouble;
+      LongDoubleFormat = &llvm37::APFloat::IEEEdouble;
       break;
-    case llvm::Triple::NetBSD:
+    case llvm37::Triple::NetBSD:
       IntMaxType = SignedLongLong;
       Int64Type = SignedLongLong;
       break;
@@ -1537,7 +1537,7 @@ public:
 class DarwinPPC32TargetInfo :
   public DarwinTargetInfo<PPC32TargetInfo> {
 public:
-  DarwinPPC32TargetInfo(const llvm::Triple &Triple)
+  DarwinPPC32TargetInfo(const llvm37::Triple &Triple)
       : DarwinTargetInfo<PPC32TargetInfo>(Triple) {
     HasAlignMac68kSupport = true;
     BoolWidth = BoolAlign = 32; //XXX support -mone-byte-bool?
@@ -1554,7 +1554,7 @@ public:
 class DarwinPPC64TargetInfo :
   public DarwinTargetInfo<PPC64TargetInfo> {
 public:
-  DarwinPPC64TargetInfo(const llvm::Triple &Triple)
+  DarwinPPC64TargetInfo(const llvm37::Triple &Triple)
       : DarwinTargetInfo<PPC64TargetInfo>(Triple) {
     HasAlignMac68kSupport = true;
     SuitableAlign = 128;
@@ -1587,7 +1587,7 @@ public:
   } GPU;
 
   public:
-    NVPTXTargetInfo(const llvm::Triple &Triple) : TargetInfo(Triple) {
+    NVPTXTargetInfo(const llvm37::Triple &Triple) : TargetInfo(Triple) {
       BigEndian = false;
       TLSSupported = false;
       LongWidth = LongAlign = 64;
@@ -1669,7 +1669,7 @@ public:
       return TargetInfo::CharPtrBuiltinVaList;
     }
     bool setCPU(const std::string &Name) override {
-      GPU = llvm::StringSwitch<GPUKind>(Name)
+      GPU = llvm37::StringSwitch<GPUKind>(Name)
                 .Case("sm_20", GK_SM20)
                 .Case("sm_21", GK_SM21)
                 .Case("sm_30", GK_SM30)
@@ -1695,12 +1695,12 @@ public:
   void NVPTXTargetInfo::getGCCRegNames(const char * const *&Names,
                                      unsigned &NumNames) const {
     Names = GCCRegNames;
-    NumNames = llvm::array_lengthof(GCCRegNames);
+    NumNames = llvm37::array_lengthof(GCCRegNames);
   }
 
   class NVPTX32TargetInfo : public NVPTXTargetInfo {
   public:
-    NVPTX32TargetInfo(const llvm::Triple &Triple) : NVPTXTargetInfo(Triple) {
+    NVPTX32TargetInfo(const llvm37::Triple &Triple) : NVPTXTargetInfo(Triple) {
       PointerWidth = PointerAlign = 32;
       SizeType = TargetInfo::UnsignedInt;
       PtrDiffType = TargetInfo::SignedInt;
@@ -1711,7 +1711,7 @@ public:
 
   class NVPTX64TargetInfo : public NVPTXTargetInfo {
   public:
-    NVPTX64TargetInfo(const llvm::Triple &Triple) : NVPTXTargetInfo(Triple) {
+    NVPTX64TargetInfo(const llvm37::Triple &Triple) : NVPTXTargetInfo(Triple) {
       PointerWidth = PointerAlign = 64;
       SizeType = TargetInfo::UnsignedLong;
       PtrDiffType = TargetInfo::SignedLong;
@@ -1771,10 +1771,10 @@ class AMDGPUTargetInfo : public TargetInfo {
   bool hasLDEXPF:1;
 
 public:
-  AMDGPUTargetInfo(const llvm::Triple &Triple)
+  AMDGPUTargetInfo(const llvm37::Triple &Triple)
     : TargetInfo(Triple) {
 
-    if (Triple.getArch() == llvm::Triple::amdgcn) {
+    if (Triple.getArch() == llvm37::Triple::amdgcn) {
       DescriptionString = DescriptionStringSI;
       GPU = GK_SOUTHERN_ISLANDS;
       hasFP64 = true;
@@ -1846,7 +1846,7 @@ public:
   }
 
   bool setCPU(const std::string &Name) override {
-    GPU = llvm::StringSwitch<GPUKind>(Name)
+    GPU = llvm37::StringSwitch<GPUKind>(Name)
       .Case("r600" ,    GK_R600)
       .Case("rv610",    GK_R600)
       .Case("rv620",    GK_R600)
@@ -1987,7 +1987,7 @@ const char * const AMDGPUTargetInfo::GCCRegNames[] = {
 void AMDGPUTargetInfo::getGCCRegNames(const char * const *&Names,
                                       unsigned &NumNames) const {
   Names = GCCRegNames;
-  NumNames = llvm::array_lengthof(GCCRegNames);
+  NumNames = llvm37::array_lengthof(GCCRegNames);
 }
 
 // Namespace for x86 abstract base class
@@ -2232,7 +2232,7 @@ class X86TargetInfo : public TargetInfo {
   } FPMath;
 
 public:
-  X86TargetInfo(const llvm::Triple &Triple)
+  X86TargetInfo(const llvm37::Triple &Triple)
       : TargetInfo(Triple), SSELevel(NoSSE), MMX3DNowLevel(NoMMX3DNow),
         XOPLevel(NoXOP), HasAES(false), HasPCLMUL(false), HasLZCNT(false),
         HasRDRND(false), HasFSGSBASE(false), HasBMI(false), HasBMI2(false),
@@ -2242,7 +2242,7 @@ public:
         HasAVX512DQ(false), HasAVX512BW(false), HasAVX512VL(false),
         HasSHA(false), HasCX16(false), CPU(CK_Generic), FPMath(FP_Default) {
     BigEndian = false;
-    LongDoubleFormat = &llvm::APFloat::x87DoubleExtended;
+    LongDoubleFormat = &llvm37::APFloat::x87DoubleExtended;
   }
   unsigned getFloatEvalMethod() const override {
     // X87 evaluates with 80 bits "long double" precision.
@@ -2256,7 +2256,7 @@ public:
   void getGCCRegNames(const char * const *&Names,
                       unsigned &NumNames) const override {
     Names = GCCRegNames;
-    NumNames = llvm::array_lengthof(GCCRegNames);
+    NumNames = llvm37::array_lengthof(GCCRegNames);
   }
   void getGCCRegAliases(const GCCRegAlias *&Aliases,
                         unsigned &NumAliases) const override {
@@ -2266,7 +2266,7 @@ public:
   void getGCCAddlRegNames(const AddlRegName *&Names,
                           unsigned &NumNames) const override {
     Names = AddlRegNames;
-    NumNames = llvm::array_lengthof(AddlRegNames);
+    NumNames = llvm37::array_lengthof(AddlRegNames);
   }
   bool validateCpuSupports(StringRef Name) const override;
   bool validateAsmConstraint(const char *&Name,
@@ -2284,36 +2284,36 @@ public:
   }
   void getTargetDefines(const LangOptions &Opts,
                         MacroBuilder &Builder) const override;
-  static void setSSELevel(llvm::StringMap<bool> &Features, X86SSEEnum Level,
+  static void setSSELevel(llvm37::StringMap<bool> &Features, X86SSEEnum Level,
                           bool Enabled);
-  static void setMMXLevel(llvm::StringMap<bool> &Features, MMX3DNowEnum Level,
+  static void setMMXLevel(llvm37::StringMap<bool> &Features, MMX3DNowEnum Level,
                           bool Enabled);
-  static void setXOPLevel(llvm::StringMap<bool> &Features, XOPEnum Level,
+  static void setXOPLevel(llvm37::StringMap<bool> &Features, XOPEnum Level,
                           bool Enabled);
-  void setFeatureEnabled(llvm::StringMap<bool> &Features,
+  void setFeatureEnabled(llvm37::StringMap<bool> &Features,
                          StringRef Name, bool Enabled) const override {
     setFeatureEnabledImpl(Features, Name, Enabled);
   }
   // This exists purely to cut down on the number of virtual calls in
   // getDefaultFeatures which calls this repeatedly.
-  static void setFeatureEnabledImpl(llvm::StringMap<bool> &Features,
+  static void setFeatureEnabledImpl(llvm37::StringMap<bool> &Features,
                                     StringRef Name, bool Enabled);
-  void getDefaultFeatures(llvm::StringMap<bool> &Features) const override;
+  void getDefaultFeatures(llvm37::StringMap<bool> &Features) const override;
   bool hasFeature(StringRef Feature) const override;
   bool handleTargetFeatures(std::vector<std::string> &Features,
                             DiagnosticsEngine &Diags) override;
   StringRef getABI() const override {
-    if (getTriple().getArch() == llvm::Triple::x86_64 && SSELevel >= AVX512F)
+    if (getTriple().getArch() == llvm37::Triple::x86_64 && SSELevel >= AVX512F)
       return "avx512";
-    else if (getTriple().getArch() == llvm::Triple::x86_64 && SSELevel >= AVX)
+    else if (getTriple().getArch() == llvm37::Triple::x86_64 && SSELevel >= AVX)
       return "avx";
-    else if (getTriple().getArch() == llvm::Triple::x86 &&
+    else if (getTriple().getArch() == llvm37::Triple::x86 &&
              MMX3DNowLevel == NoMMX3DNow)
       return "no-mmx";
     return "";
   }
   bool setCPU(const std::string &Name) override {
-    CPU = llvm::StringSwitch<CPUKind>(Name)
+    CPU = llvm37::StringSwitch<CPUKind>(Name)
       .Case("i386", CK_i386)
       .Case("i486", CK_i486)
       .Case("winchip-c6", CK_WinChipC6)
@@ -2418,7 +2418,7 @@ public:
     case CK_AthlonMP:
     case CK_Geode:
       // Only accept certain architectures when compiling in 32-bit mode.
-      if (getTriple().getArch() != llvm::Triple::x86)
+      if (getTriple().getArch() != llvm37::Triple::x86)
         return false;
 
       // Fallthrough
@@ -2489,11 +2489,11 @@ bool X86TargetInfo::setFPMath(StringRef Name) {
   return false;
 }
 
-void X86TargetInfo::getDefaultFeatures(llvm::StringMap<bool> &Features) const {
+void X86TargetInfo::getDefaultFeatures(llvm37::StringMap<bool> &Features) const {
   // FIXME: This *really* should not be here.
 
   // X86_64 always has SSE2.
-  if (getTriple().getArch() == llvm::Triple::x86_64)
+  if (getTriple().getArch() == llvm37::Triple::x86_64)
     setFeatureEnabledImpl(Features, "sse2", true);
 
   switch (CPU) {
@@ -2667,7 +2667,7 @@ void X86TargetInfo::getDefaultFeatures(llvm::StringMap<bool> &Features) const {
   }
 }
 
-void X86TargetInfo::setSSELevel(llvm::StringMap<bool> &Features,
+void X86TargetInfo::setSSELevel(llvm37::StringMap<bool> &Features,
                                 X86SSEEnum Level, bool Enabled) {
   if (Enabled) {
     switch (Level) {
@@ -2723,7 +2723,7 @@ void X86TargetInfo::setSSELevel(llvm::StringMap<bool> &Features,
   }
 }
 
-void X86TargetInfo::setMMXLevel(llvm::StringMap<bool> &Features,
+void X86TargetInfo::setMMXLevel(llvm37::StringMap<bool> &Features,
                                 MMX3DNowEnum Level, bool Enabled) {
   if (Enabled) {
     switch (Level) {
@@ -2750,7 +2750,7 @@ void X86TargetInfo::setMMXLevel(llvm::StringMap<bool> &Features,
   }
 }
 
-void X86TargetInfo::setXOPLevel(llvm::StringMap<bool> &Features, XOPEnum Level,
+void X86TargetInfo::setXOPLevel(llvm37::StringMap<bool> &Features, XOPEnum Level,
                                 bool Enabled) {
   if (Enabled) {
     switch (Level) {
@@ -2779,7 +2779,7 @@ void X86TargetInfo::setXOPLevel(llvm::StringMap<bool> &Features, XOPEnum Level,
   }
 }
 
-void X86TargetInfo::setFeatureEnabledImpl(llvm::StringMap<bool> &Features,
+void X86TargetInfo::setFeatureEnabledImpl(llvm37::StringMap<bool> &Features,
                                           StringRef Name, bool Enabled) {
   // This is a bit of a hack to deal with the sse4 target feature when used
   // as part of the target attribute. We handle sse4 correctly everywhere
@@ -2976,7 +2976,7 @@ bool X86TargetInfo::handleTargetFeatures(std::vector<std::string> &Features,
     }
 
     assert(Features[i][0] == '+' && "Invalid target feature!");
-    X86SSEEnum Level = llvm::StringSwitch<X86SSEEnum>(Feature)
+    X86SSEEnum Level = llvm37::StringSwitch<X86SSEEnum>(Feature)
       .Case("avx512f", AVX512F)
       .Case("avx2", AVX2)
       .Case("avx", AVX)
@@ -2990,14 +2990,14 @@ bool X86TargetInfo::handleTargetFeatures(std::vector<std::string> &Features,
     SSELevel = std::max(SSELevel, Level);
 
     MMX3DNowEnum ThreeDNowLevel =
-      llvm::StringSwitch<MMX3DNowEnum>(Feature)
+      llvm37::StringSwitch<MMX3DNowEnum>(Feature)
         .Case("3dnowa", AMD3DNowAthlon)
         .Case("3dnow", AMD3DNow)
         .Case("mmx", MMX)
         .Default(NoMMX3DNow);
     MMX3DNowLevel = std::max(MMX3DNowLevel, ThreeDNowLevel);
 
-    XOPEnum XLevel = llvm::StringSwitch<XOPEnum>(Feature)
+    XOPEnum XLevel = llvm37::StringSwitch<XOPEnum>(Feature)
         .Case("xop", XOP)
         .Case("fma4", FMA4)
         .Case("sse4a", SSE4A)
@@ -3052,7 +3052,7 @@ bool X86TargetInfo::handleTargetFeatures(std::vector<std::string> &Features,
 void X86TargetInfo::getTargetDefines(const LangOptions &Opts,
                                      MacroBuilder &Builder) const {
   // Target identification.
-  if (getTriple().getArch() == llvm::Triple::x86_64) {
+  if (getTriple().getArch() == llvm37::Triple::x86_64) {
     Builder.defineMacro("__amd64__");
     Builder.defineMacro("__amd64");
     Builder.defineMacro("__x86_64");
@@ -3322,7 +3322,7 @@ void X86TargetInfo::getTargetDefines(const LangOptions &Opts,
     break;
   }
 
-  if (Opts.MicrosoftExt && getTriple().getArch() == llvm::Triple::x86) {
+  if (Opts.MicrosoftExt && getTriple().getArch() == llvm37::Triple::x86) {
     switch (SSELevel) {
     case AVX512F:
     case AVX2:
@@ -3364,7 +3364,7 @@ void X86TargetInfo::getTargetDefines(const LangOptions &Opts,
 }
 
 bool X86TargetInfo::hasFeature(StringRef Feature) const {
-  return llvm::StringSwitch<bool>(Feature)
+  return llvm37::StringSwitch<bool>(Feature)
       .Case("aes", HasAES)
       .Case("avx", SSELevel >= AVX)
       .Case("avx2", SSELevel >= AVX2)
@@ -3402,8 +3402,8 @@ bool X86TargetInfo::hasFeature(StringRef Feature) const {
       .Case("sse4a", XOPLevel >= SSE4A)
       .Case("tbm", HasTBM)
       .Case("x86", true)
-      .Case("x86_32", getTriple().getArch() == llvm::Triple::x86)
-      .Case("x86_64", getTriple().getArch() == llvm::Triple::x86_64)
+      .Case("x86_32", getTriple().getArch() == llvm37::Triple::x86)
+      .Case("x86_64", getTriple().getArch() == llvm37::Triple::x86_64)
       .Case("xop", XOPLevel >= XOP)
       .Default(false);
 }
@@ -3414,7 +3414,7 @@ bool X86TargetInfo::hasFeature(StringRef Feature) const {
 // below currently rather than the full range of subtarget features. (See
 // X86TargetInfo::hasFeature for a somewhat comprehensive list).
 bool X86TargetInfo::validateCpuSupports(StringRef FeatureStr) const {
-  return llvm::StringSwitch<bool>(FeatureStr)
+  return llvm37::StringSwitch<bool>(FeatureStr)
       .Case("cmov", true)
       .Case("mmx", true)
       .Case("popcnt", true)
@@ -3563,7 +3563,7 @@ X86TargetInfo::convertConstraint(const char *&Constraint) const {
 // X86-32 generic target
 class X86_32TargetInfo : public X86TargetInfo {
 public:
-  X86_32TargetInfo(const llvm::Triple &Triple) : X86TargetInfo(Triple) {
+  X86_32TargetInfo(const llvm37::Triple &Triple) : X86TargetInfo(Triple) {
     DoubleAlign = LongLongAlign = 32;
     LongDoubleWidth = 96;
     LongDoubleAlign = 32;
@@ -3617,7 +3617,7 @@ public:
 
 class NetBSDI386TargetInfo : public NetBSDTargetInfo<X86_32TargetInfo> {
 public:
-  NetBSDI386TargetInfo(const llvm::Triple &Triple)
+  NetBSDI386TargetInfo(const llvm37::Triple &Triple)
       : NetBSDTargetInfo<X86_32TargetInfo>(Triple) {}
 
   unsigned getFloatEvalMethod() const override {
@@ -3633,7 +3633,7 @@ public:
 
 class OpenBSDI386TargetInfo : public OpenBSDTargetInfo<X86_32TargetInfo> {
 public:
-  OpenBSDI386TargetInfo(const llvm::Triple &Triple)
+  OpenBSDI386TargetInfo(const llvm37::Triple &Triple)
       : OpenBSDTargetInfo<X86_32TargetInfo>(Triple) {
     SizeType = UnsignedLong;
     IntPtrType = SignedLong;
@@ -3643,7 +3643,7 @@ public:
 
 class BitrigI386TargetInfo : public BitrigTargetInfo<X86_32TargetInfo> {
 public:
-  BitrigI386TargetInfo(const llvm::Triple &Triple)
+  BitrigI386TargetInfo(const llvm37::Triple &Triple)
       : BitrigTargetInfo<X86_32TargetInfo>(Triple) {
     SizeType = UnsignedLong;
     IntPtrType = SignedLong;
@@ -3653,7 +3653,7 @@ public:
 
 class DarwinI386TargetInfo : public DarwinTargetInfo<X86_32TargetInfo> {
 public:
-  DarwinI386TargetInfo(const llvm::Triple &Triple)
+  DarwinI386TargetInfo(const llvm37::Triple &Triple)
       : DarwinTargetInfo<X86_32TargetInfo>(Triple) {
     LongDoubleWidth = 128;
     LongDoubleAlign = 128;
@@ -3670,7 +3670,7 @@ public:
 // x86-32 Windows target
 class WindowsX86_32TargetInfo : public WindowsTargetInfo<X86_32TargetInfo> {
 public:
-  WindowsX86_32TargetInfo(const llvm::Triple &Triple)
+  WindowsX86_32TargetInfo(const llvm37::Triple &Triple)
       : WindowsTargetInfo<X86_32TargetInfo>(Triple) {
     WCharType = UnsignedShort;
     DoubleAlign = LongLongAlign = 64;
@@ -3689,10 +3689,10 @@ public:
 // x86-32 Windows Visual Studio target
 class MicrosoftX86_32TargetInfo : public WindowsX86_32TargetInfo {
 public:
-  MicrosoftX86_32TargetInfo(const llvm::Triple &Triple)
+  MicrosoftX86_32TargetInfo(const llvm37::Triple &Triple)
       : WindowsX86_32TargetInfo(Triple) {
     LongDoubleWidth = LongDoubleAlign = 64;
-    LongDoubleFormat = &llvm::APFloat::IEEEdouble;
+    LongDoubleFormat = &llvm37::APFloat::IEEEdouble;
   }
   void getTargetDefines(const LangOptions &Opts,
                         MacroBuilder &Builder) const override {
@@ -3740,7 +3740,7 @@ namespace {
 // x86-32 MinGW target
 class MinGWX86_32TargetInfo : public WindowsX86_32TargetInfo {
 public:
-  MinGWX86_32TargetInfo(const llvm::Triple &Triple)
+  MinGWX86_32TargetInfo(const llvm37::Triple &Triple)
       : WindowsX86_32TargetInfo(Triple) {}
   void getTargetDefines(const LangOptions &Opts,
                         MacroBuilder &Builder) const override {
@@ -3755,7 +3755,7 @@ public:
 // x86-32 Cygwin target
 class CygwinX86_32TargetInfo : public X86_32TargetInfo {
 public:
-  CygwinX86_32TargetInfo(const llvm::Triple &Triple)
+  CygwinX86_32TargetInfo(const llvm37::Triple &Triple)
       : X86_32TargetInfo(Triple) {
     TLSSupported = false;
     WCharType = UnsignedShort;
@@ -3778,7 +3778,7 @@ public:
 // x86-32 Haiku target
 class HaikuX86_32TargetInfo : public X86_32TargetInfo {
 public:
-  HaikuX86_32TargetInfo(const llvm::Triple &Triple) : X86_32TargetInfo(Triple) {
+  HaikuX86_32TargetInfo(const llvm37::Triple &Triple) : X86_32TargetInfo(Triple) {
     SizeType = UnsignedLong;
     IntPtrType = SignedLong;
     PtrDiffType = SignedLong;
@@ -3798,7 +3798,7 @@ public:
 template<typename Target>
 class RTEMSTargetInfo : public OSTargetInfo<Target> {
 protected:
-  void getOSDefines(const LangOptions &Opts, const llvm::Triple &Triple,
+  void getOSDefines(const LangOptions &Opts, const llvm37::Triple &Triple,
                     MacroBuilder &Builder) const override {
     // RTEMS defines; list based off of gcc output
 
@@ -3807,22 +3807,22 @@ protected:
   }
 
 public:
-  RTEMSTargetInfo(const llvm::Triple &Triple) : OSTargetInfo<Target>(Triple) {
+  RTEMSTargetInfo(const llvm37::Triple &Triple) : OSTargetInfo<Target>(Triple) {
     this->UserLabelPrefix = "";
 
     switch (Triple.getArch()) {
     default:
-    case llvm::Triple::x86:
+    case llvm37::Triple::x86:
       // this->MCountName = ".mcount";
       break;
-    case llvm::Triple::mips:
-    case llvm::Triple::mipsel:
-    case llvm::Triple::ppc:
-    case llvm::Triple::ppc64:
-    case llvm::Triple::ppc64le:
+    case llvm37::Triple::mips:
+    case llvm37::Triple::mipsel:
+    case llvm37::Triple::ppc:
+    case llvm37::Triple::ppc64:
+    case llvm37::Triple::ppc64le:
       // this->MCountName = "_mcount";
       break;
-    case llvm::Triple::arm:
+    case llvm37::Triple::arm:
       // this->MCountName = "__mcount";
       break;
     }
@@ -3832,7 +3832,7 @@ public:
 // x86-32 RTEMS target
 class RTEMSX86_32TargetInfo : public X86_32TargetInfo {
 public:
-  RTEMSX86_32TargetInfo(const llvm::Triple &Triple) : X86_32TargetInfo(Triple) {
+  RTEMSX86_32TargetInfo(const llvm37::Triple &Triple) : X86_32TargetInfo(Triple) {
     SizeType = UnsignedLong;
     IntPtrType = SignedLong;
     PtrDiffType = SignedLong;
@@ -3849,8 +3849,8 @@ public:
 // x86-64 generic target
 class X86_64TargetInfo : public X86TargetInfo {
 public:
-  X86_64TargetInfo(const llvm::Triple &Triple) : X86TargetInfo(Triple) {
-    const bool IsX32 = getTriple().getEnvironment() == llvm::Triple::GNUX32;
+  X86_64TargetInfo(const llvm37::Triple &Triple) : X86TargetInfo(Triple) {
+    const bool IsX32 = getTriple().getEnvironment() == llvm37::Triple::GNUX32;
     bool IsWinCOFF =
         getTriple().isOSWindows() && getTriple().isOSBinFormatCOFF();
     LongWidth = LongAlign = PointerWidth = PointerAlign = IsX32 ? 32 : 64;
@@ -3910,7 +3910,7 @@ public:
 // x86-64 Windows target
 class WindowsX86_64TargetInfo : public WindowsTargetInfo<X86_64TargetInfo> {
 public:
-  WindowsX86_64TargetInfo(const llvm::Triple &Triple)
+  WindowsX86_64TargetInfo(const llvm37::Triple &Triple)
       : WindowsTargetInfo<X86_64TargetInfo>(Triple) {
     WCharType = UnsignedShort;
     LongWidth = LongAlign = 32;
@@ -3953,10 +3953,10 @@ public:
 // x86-64 Windows Visual Studio target
 class MicrosoftX86_64TargetInfo : public WindowsX86_64TargetInfo {
 public:
-  MicrosoftX86_64TargetInfo(const llvm::Triple &Triple)
+  MicrosoftX86_64TargetInfo(const llvm37::Triple &Triple)
       : WindowsX86_64TargetInfo(Triple) {
     LongDoubleWidth = LongDoubleAlign = 64;
-    LongDoubleFormat = &llvm::APFloat::IEEEdouble;
+    LongDoubleFormat = &llvm37::APFloat::IEEEdouble;
   }
   void getTargetDefines(const LangOptions &Opts,
                         MacroBuilder &Builder) const override {
@@ -3970,7 +3970,7 @@ public:
 // x86-64 MinGW target
 class MinGWX86_64TargetInfo : public WindowsX86_64TargetInfo {
 public:
-  MinGWX86_64TargetInfo(const llvm::Triple &Triple)
+  MinGWX86_64TargetInfo(const llvm37::Triple &Triple)
       : WindowsX86_64TargetInfo(Triple) {}
   void getTargetDefines(const LangOptions &Opts,
                         MacroBuilder &Builder) const override {
@@ -3987,12 +3987,12 @@ public:
 
 class DarwinX86_64TargetInfo : public DarwinTargetInfo<X86_64TargetInfo> {
 public:
-  DarwinX86_64TargetInfo(const llvm::Triple &Triple)
+  DarwinX86_64TargetInfo(const llvm37::Triple &Triple)
       : DarwinTargetInfo<X86_64TargetInfo>(Triple) {
     Int64Type = SignedLongLong;
     MaxVectorAlign = 256;
     // The 64-bit iOS simulator uses the builtin bool type for Objective-C.
-    llvm::Triple T = llvm::Triple(Triple);
+    llvm37::Triple T = llvm37::Triple(Triple);
     if (T.isiOS())
       UseSignedCharForObjCBool = false;
     DescriptionString = "e-m:o-i64:64-f80:128-n8:16:32:64-S128";
@@ -4001,7 +4001,7 @@ public:
 
 class OpenBSDX86_64TargetInfo : public OpenBSDTargetInfo<X86_64TargetInfo> {
 public:
-  OpenBSDX86_64TargetInfo(const llvm::Triple &Triple)
+  OpenBSDX86_64TargetInfo(const llvm37::Triple &Triple)
       : OpenBSDTargetInfo<X86_64TargetInfo>(Triple) {
     IntMaxType = SignedLongLong;
     Int64Type = SignedLongLong;
@@ -4010,7 +4010,7 @@ public:
 
 class BitrigX86_64TargetInfo : public BitrigTargetInfo<X86_64TargetInfo> {
 public:
-  BitrigX86_64TargetInfo(const llvm::Triple &Triple)
+  BitrigX86_64TargetInfo(const llvm37::Triple &Triple)
       : BitrigTargetInfo<X86_64TargetInfo>(Triple) {
     IntMaxType = SignedLongLong;
     Int64Type = SignedLongLong;
@@ -4071,10 +4071,10 @@ class ARMTargetInfo : public TargetInfo {
 
   static const Builtin::Info BuiltinInfo[];
 
-  static bool shouldUseInlineAtomic(const llvm::Triple &T) {
+  static bool shouldUseInlineAtomic(const llvm37::Triple &T) {
     StringRef ArchName = T.getArchName();
-    if (T.getArch() == llvm::Triple::arm ||
-        T.getArch() == llvm::Triple::armeb) {
+    if (T.getArch() == llvm37::Triple::arm ||
+        T.getArch() == llvm37::Triple::armeb) {
       StringRef VersionStr;
       if (ArchName.startswith("armv"))
         VersionStr = ArchName.substr(4, 1);
@@ -4087,8 +4087,8 @@ class ARMTargetInfo : public TargetInfo {
         return false;
       return Version >= 6;
     }
-    assert(T.getArch() == llvm::Triple::thumb ||
-           T.getArch() == llvm::Triple::thumbeb);
+    assert(T.getArch() == llvm37::Triple::thumb ||
+           T.getArch() == llvm37::Triple::thumbeb);
     StringRef VersionStr;
     if (ArchName.startswith("thumbv"))
       VersionStr = ArchName.substr(6, 1);
@@ -4106,23 +4106,23 @@ class ARMTargetInfo : public TargetInfo {
     IsAAPCS = true;
 
     DoubleAlign = LongLongAlign = LongDoubleAlign = SuitableAlign = 64;
-    const llvm::Triple &T = getTriple();
+    const llvm37::Triple &T = getTriple();
 
     // size_t is unsigned long on MachO-derived environments, NetBSD and Bitrig.
-    if (T.isOSBinFormatMachO() || T.getOS() == llvm::Triple::NetBSD ||
-        T.getOS() == llvm::Triple::Bitrig)
+    if (T.isOSBinFormatMachO() || T.getOS() == llvm37::Triple::NetBSD ||
+        T.getOS() == llvm37::Triple::Bitrig)
       SizeType = UnsignedLong;
     else
       SizeType = UnsignedInt;
 
     switch (T.getOS()) {
-    case llvm::Triple::NetBSD:
+    case llvm37::Triple::NetBSD:
       WCharType = SignedInt;
       break;
-    case llvm::Triple::Win32:
+    case llvm37::Triple::Win32:
       WCharType = UnsignedShort;
       break;
-    case llvm::Triple::Linux:
+    case llvm37::Triple::Linux:
     default:
       // AAPCS 7.1.1, ARM-Linux ABI 2.4: type of wchar_t is unsigned int.
       WCharType = UnsignedInt;
@@ -4162,14 +4162,14 @@ class ARMTargetInfo : public TargetInfo {
   }
 
   void setABIAPCS() {
-    const llvm::Triple &T = getTriple();
+    const llvm37::Triple &T = getTriple();
 
     IsAAPCS = false;
 
     DoubleAlign = LongLongAlign = LongDoubleAlign = SuitableAlign = 32;
 
     // size_t is unsigned int on FreeBSD.
-    if (T.getOS() == llvm::Triple::FreeBSD)
+    if (T.getOS() == llvm37::Triple::FreeBSD)
       SizeType = UnsignedInt;
     else
       SizeType = UnsignedLong;
@@ -4201,13 +4201,13 @@ class ARMTargetInfo : public TargetInfo {
   }
 
 public:
-  ARMTargetInfo(const llvm::Triple &Triple, bool IsBigEndian)
+  ARMTargetInfo(const llvm37::Triple &Triple, bool IsBigEndian)
       : TargetInfo(Triple), CPU("arm1136j-s"), FPMath(FP_Default),
         IsAAPCS(true), HW_FP(0) {
     BigEndian = IsBigEndian;
 
     switch (getTriple().getOS()) {
-    case llvm::Triple::NetBSD:
+    case llvm37::Triple::NetBSD:
       PtrDiffType = SignedLong;
       break;
     default:
@@ -4228,8 +4228,8 @@ public:
     if (Triple.isOSBinFormatMachO()) {
       // The backend is hardwired to assume AAPCS for M-class processors, ensure
       // the frontend matches that.
-      if (Triple.getEnvironment() == llvm::Triple::EABI ||
-          Triple.getOS() == llvm::Triple::UnknownOS ||
+      if (Triple.getEnvironment() == llvm37::Triple::EABI ||
+          Triple.getOS() == llvm37::Triple::UnknownOS ||
           StringRef(CPU).startswith("cortex-m")) {
         setABI("aapcs");
       } else {
@@ -4241,20 +4241,20 @@ public:
     } else {
       // Select the default based on the platform.
       switch (Triple.getEnvironment()) {
-      case llvm::Triple::Android:
-      case llvm::Triple::GNUEABI:
-      case llvm::Triple::GNUEABIHF:
+      case llvm37::Triple::Android:
+      case llvm37::Triple::GNUEABI:
+      case llvm37::Triple::GNUEABIHF:
         setABI("aapcs-linux");
         break;
-      case llvm::Triple::EABIHF:
-      case llvm::Triple::EABI:
+      case llvm37::Triple::EABIHF:
+      case llvm37::Triple::EABI:
         setABI("aapcs");
         break;
-      case llvm::Triple::GNU:
+      case llvm37::Triple::GNU:
 	setABI("apcs-gnu");
 	break;
       default:
-        if (Triple.getOS() == llvm::Triple::NetBSD)
+        if (Triple.getOS() == llvm37::Triple::NetBSD)
           setABI("apcs-gnu");
         else
           setABI("aapcs");
@@ -4298,11 +4298,11 @@ public:
   }
 
   // FIXME: This should be based on Arch attributes, not CPU names.
-  void getDefaultFeatures(llvm::StringMap<bool> &Features) const override {
+  void getDefaultFeatures(llvm37::StringMap<bool> &Features) const override {
     StringRef ArchName = getTriple().getArchName();
-    unsigned ArchKind = llvm::ARMTargetParser::parseArch(ArchName);
-    bool IsV8 = (ArchKind == llvm::ARM::AK_ARMV8A ||
-                 ArchKind == llvm::ARM::AK_ARMV8_1A);
+    unsigned ArchKind = llvm37::ARMTargetParser::parseArch(ArchName);
+    bool IsV8 = (ArchKind == llvm37::ARM::AK_ARMV8A ||
+                 ArchKind == llvm37::ARM::AK_ARMV8_1A);
 
     if (CPU == "arm1136jf-s" || CPU == "arm1176jzf-s" || CPU == "mpcore")
       Features["vfp2"] = true;
@@ -4402,7 +4402,7 @@ public:
   }
 
   bool hasFeature(StringRef Feature) const override {
-    return llvm::StringSwitch<bool>(Feature)
+    return llvm37::StringSwitch<bool>(Feature)
         .Case("arm", true)
         .Case("softfloat", SoftFloat)
         .Case("thumb", IsThumb)
@@ -4415,38 +4415,38 @@ public:
     if(Name == "generic") {
       auto subarch = getTriple().getSubArch();
       switch (subarch) {
-        case llvm::Triple::SubArchType::ARMSubArch_v8_1a: 
+        case llvm37::Triple::SubArchType::ARMSubArch_v8_1a: 
           return "8_1A";
         default:
           break;
       }
     }
 
-    unsigned ArchKind = llvm::ARMTargetParser::parseCPUArch(Name);
-    if (ArchKind == llvm::ARM::AK_INVALID)
+    unsigned ArchKind = llvm37::ARMTargetParser::parseCPUArch(Name);
+    if (ArchKind == llvm37::ARM::AK_INVALID)
       return "";
 
     // For most sub-arches, the build attribute CPU name is enough.
     // For Cortex variants, it's slightly different.
     switch(ArchKind) {
     default:
-      return llvm::ARMTargetParser::getCPUAttr(ArchKind);
-    case llvm::ARM::AK_ARMV6M:
-    case llvm::ARM::AK_ARMV6SM:
+      return llvm37::ARMTargetParser::getCPUAttr(ArchKind);
+    case llvm37::ARM::AK_ARMV6M:
+    case llvm37::ARM::AK_ARMV6SM:
       return "6M";
-    case llvm::ARM::AK_ARMV7:
-    case llvm::ARM::AK_ARMV7A:
-    case llvm::ARM::AK_ARMV7S:
+    case llvm37::ARM::AK_ARMV7:
+    case llvm37::ARM::AK_ARMV7A:
+    case llvm37::ARM::AK_ARMV7S:
       return "7A";
-    case llvm::ARM::AK_ARMV7R:
+    case llvm37::ARM::AK_ARMV7R:
       return "7R";
-    case llvm::ARM::AK_ARMV7M:
+    case llvm37::ARM::AK_ARMV7M:
       return "7M";
-    case llvm::ARM::AK_ARMV7EM:
+    case llvm37::ARM::AK_ARMV7EM:
       return "7EM";
-    case llvm::ARM::AK_ARMV8A:
+    case llvm37::ARM::AK_ARMV8A:
       return "8A";
-    case llvm::ARM::AK_ARMV8_1A:
+    case llvm37::ARM::AK_ARMV8_1A:
       return "8_1A";
     }
   }
@@ -4454,24 +4454,24 @@ public:
     if(Name == "generic") {
       auto subarch = getTriple().getSubArch();
       switch (subarch) {
-        case llvm::Triple::SubArchType::ARMSubArch_v8_1a: 
+        case llvm37::Triple::SubArchType::ARMSubArch_v8_1a: 
           return "A";
         default:
           break;
       }
     }
 
-    unsigned CPUArch = llvm::ARMTargetParser::parseCPUArch(Name);
-    if (CPUArch == llvm::ARM::AK_INVALID)
+    unsigned CPUArch = llvm37::ARMTargetParser::parseCPUArch(Name);
+    if (CPUArch == llvm37::ARM::AK_INVALID)
       return "";
 
-    StringRef ArchName = llvm::ARMTargetParser::getArchName(CPUArch);
-    switch(llvm::ARMTargetParser::parseArchProfile(ArchName)) {
-      case llvm::ARM::PK_A:
+    StringRef ArchName = llvm37::ARMTargetParser::getArchName(CPUArch);
+    switch(llvm37::ARMTargetParser::parseArchProfile(ArchName)) {
+      case llvm37::ARM::PK_A:
         return "A";
-      case llvm::ARM::PK_R:
+      case llvm37::ARM::PK_R:
         return "R";
-      case llvm::ARM::PK_M:
+      case llvm37::ARM::PK_M:
         return "M";
       default:
         return "";
@@ -4557,7 +4557,7 @@ public:
 
     // ACLE 6.5.1 Hardware Floating Point
     if (HW_FP)
-      Builder.defineMacro("__ARM_FP", "0x" + llvm::utohexstr(HW_FP));
+      Builder.defineMacro("__ARM_FP", "0x" + llvm37::utohexstr(HW_FP));
 
     // ACLE predefines.
     Builder.defineMacro("__ARM_ACLE", "200");
@@ -4790,7 +4790,7 @@ const char * const ARMTargetInfo::GCCRegNames[] = {
 void ARMTargetInfo::getGCCRegNames(const char * const *&Names,
                                    unsigned &NumNames) const {
   Names = GCCRegNames;
-  NumNames = llvm::array_lengthof(GCCRegNames);
+  NumNames = llvm37::array_lengthof(GCCRegNames);
 }
 
 const TargetInfo::GCCRegAlias ARMTargetInfo::GCCRegAliases[] = {
@@ -4817,7 +4817,7 @@ const TargetInfo::GCCRegAlias ARMTargetInfo::GCCRegAliases[] = {
 void ARMTargetInfo::getGCCRegAliases(const GCCRegAlias *&Aliases,
                                        unsigned &NumAliases) const {
   Aliases = GCCRegAliases;
-  NumAliases = llvm::array_lengthof(GCCRegAliases);
+  NumAliases = llvm37::array_lengthof(GCCRegAliases);
 }
 
 const Builtin::Info ARMTargetInfo::BuiltinInfo[] = {
@@ -4835,7 +4835,7 @@ const Builtin::Info ARMTargetInfo::BuiltinInfo[] = {
 
 class ARMleTargetInfo : public ARMTargetInfo {
 public:
-  ARMleTargetInfo(const llvm::Triple &Triple)
+  ARMleTargetInfo(const llvm37::Triple &Triple)
     : ARMTargetInfo(Triple, false) { }
   void getTargetDefines(const LangOptions &Opts,
                         MacroBuilder &Builder) const override {
@@ -4846,7 +4846,7 @@ public:
 
 class ARMbeTargetInfo : public ARMTargetInfo {
 public:
-  ARMbeTargetInfo(const llvm::Triple &Triple)
+  ARMbeTargetInfo(const llvm37::Triple &Triple)
     : ARMTargetInfo(Triple, true) { }
   void getTargetDefines(const LangOptions &Opts,
                         MacroBuilder &Builder) const override {
@@ -4857,9 +4857,9 @@ public:
 };
 
 class WindowsARMTargetInfo : public WindowsTargetInfo<ARMleTargetInfo> {
-  const llvm::Triple Triple;
+  const llvm37::Triple Triple;
 public:
-  WindowsARMTargetInfo(const llvm::Triple &Triple)
+  WindowsARMTargetInfo(const llvm37::Triple &Triple)
     : WindowsTargetInfo<ARMleTargetInfo>(Triple), Triple(Triple) {
     TLSSupported = false;
     WCharType = UnsignedShort;
@@ -4875,10 +4875,10 @@ public:
     Builder.defineMacro("_M_ARMT", "_M_ARM");
     Builder.defineMacro("_M_THUMB", "_M_ARM");
 
-    assert((Triple.getArch() == llvm::Triple::arm ||
-            Triple.getArch() == llvm::Triple::thumb) &&
+    assert((Triple.getArch() == llvm37::Triple::arm ||
+            Triple.getArch() == llvm37::Triple::thumb) &&
            "invalid architecture for Windows ARM target info");
-    unsigned Offset = Triple.getArch() == llvm::Triple::arm ? 4 : 6;
+    unsigned Offset = Triple.getArch() == llvm37::Triple::arm ? 4 : 6;
     Builder.defineMacro("_M_ARM", Triple.getArchName().substr(Offset));
 
     // TODO map the complete set of values
@@ -4893,7 +4893,7 @@ public:
 // Windows ARM + Itanium C++ ABI Target
 class ItaniumWindowsARMleTargetInfo : public WindowsARMTargetInfo {
 public:
-  ItaniumWindowsARMleTargetInfo(const llvm::Triple &Triple)
+  ItaniumWindowsARMleTargetInfo(const llvm37::Triple &Triple)
     : WindowsARMTargetInfo(Triple) {
     TheCXXABI.set(TargetCXXABI::GenericARM);
   }
@@ -4910,7 +4910,7 @@ public:
 // Windows ARM, MS (C++) ABI
 class MicrosoftARMleTargetInfo : public WindowsARMTargetInfo {
 public:
-  MicrosoftARMleTargetInfo(const llvm::Triple &Triple)
+  MicrosoftARMleTargetInfo(const llvm37::Triple &Triple)
     : WindowsARMTargetInfo(Triple) {
     TheCXXABI.set(TargetCXXABI::Microsoft);
   }
@@ -4925,13 +4925,13 @@ public:
 class DarwinARMTargetInfo :
   public DarwinTargetInfo<ARMleTargetInfo> {
 protected:
-  void getOSDefines(const LangOptions &Opts, const llvm::Triple &Triple,
+  void getOSDefines(const LangOptions &Opts, const llvm37::Triple &Triple,
                     MacroBuilder &Builder) const override {
     getDarwinDefines(Builder, Opts, Triple, PlatformName, PlatformMinVersion);
   }
 
 public:
-  DarwinARMTargetInfo(const llvm::Triple &Triple)
+  DarwinARMTargetInfo(const llvm37::Triple &Triple)
       : DarwinTargetInfo<ARMleTargetInfo>(Triple) {
     HasAlignMac68kSupport = true;
     // iOS always has 64-bit atomic instructions.
@@ -4963,10 +4963,10 @@ class AArch64TargetInfo : public TargetInfo {
   std::string ABI;
 
 public:
-  AArch64TargetInfo(const llvm::Triple &Triple)
+  AArch64TargetInfo(const llvm37::Triple &Triple)
       : TargetInfo(Triple), ABI("aapcs") {
 
-    if (getTriple().getOS() == llvm::Triple::NetBSD) {
+    if (getTriple().getOS() == llvm37::Triple::NetBSD) {
       WCharType = SignedInt;
 
       // NetBSD apparently prefers consistency across ARM targets to consistency
@@ -4985,7 +4985,7 @@ public:
     MaxAtomicPromoteWidth = 128;
 
     LongDoubleWidth = LongDoubleAlign = SuitableAlign = 128;
-    LongDoubleFormat = &llvm::APFloat::IEEEquad;
+    LongDoubleFormat = &llvm37::APFloat::IEEEquad;
 
     // {} in inline assembly are neon specifiers, not assembly variant
     // specifiers.
@@ -5012,7 +5012,7 @@ public:
   }
 
   bool setCPU(const std::string &Name) override {
-    bool CPUKnown = llvm::StringSwitch<bool>(Name)
+    bool CPUKnown = llvm37::StringSwitch<bool>(Name)
                         .Case("generic", true)
                         .Cases("cortex-a53", "cortex-a57", "cortex-a72", true)
                         .Case("cyclone", true)
@@ -5239,7 +5239,7 @@ const char *const AArch64TargetInfo::GCCRegNames[] = {
 void AArch64TargetInfo::getGCCRegNames(const char *const *&Names,
                                      unsigned &NumNames) const {
   Names = GCCRegNames;
-  NumNames = llvm::array_lengthof(GCCRegNames);
+  NumNames = llvm37::array_lengthof(GCCRegNames);
 }
 
 const TargetInfo::GCCRegAlias AArch64TargetInfo::GCCRegAliases[] = {
@@ -5254,7 +5254,7 @@ const TargetInfo::GCCRegAlias AArch64TargetInfo::GCCRegAliases[] = {
 void AArch64TargetInfo::getGCCRegAliases(const GCCRegAlias *&Aliases,
                                        unsigned &NumAliases) const {
   Aliases = GCCRegAliases;
-  NumAliases = llvm::array_lengthof(GCCRegAliases);
+  NumAliases = llvm37::array_lengthof(GCCRegAliases);
 }
 
 const Builtin::Info AArch64TargetInfo::BuiltinInfo[] = {
@@ -5276,7 +5276,7 @@ class AArch64leTargetInfo : public AArch64TargetInfo {
   }
 
 public:
-  AArch64leTargetInfo(const llvm::Triple &Triple)
+  AArch64leTargetInfo(const llvm37::Triple &Triple)
     : AArch64TargetInfo(Triple) {
     BigEndian = false;
     }
@@ -5294,7 +5294,7 @@ class AArch64beTargetInfo : public AArch64TargetInfo {
   }
 
 public:
-  AArch64beTargetInfo(const llvm::Triple &Triple)
+  AArch64beTargetInfo(const llvm37::Triple &Triple)
     : AArch64TargetInfo(Triple) { }
   void getTargetDefines(const LangOptions &Opts,
                         MacroBuilder &Builder) const override {
@@ -5307,7 +5307,7 @@ public:
 
 class DarwinAArch64TargetInfo : public DarwinTargetInfo<AArch64leTargetInfo> {
 protected:
-  void getOSDefines(const LangOptions &Opts, const llvm::Triple &Triple,
+  void getOSDefines(const LangOptions &Opts, const llvm37::Triple &Triple,
                     MacroBuilder &Builder) const override {
     Builder.defineMacro("__AARCH64_SIMD__");
     Builder.defineMacro("__ARM64_ARCH_8__");
@@ -5321,14 +5321,14 @@ protected:
   }
 
 public:
-  DarwinAArch64TargetInfo(const llvm::Triple &Triple)
+  DarwinAArch64TargetInfo(const llvm37::Triple &Triple)
       : DarwinTargetInfo<AArch64leTargetInfo>(Triple) {
     Int64Type = SignedLongLong;
     WCharType = SignedInt;
     UseSignedCharForObjCBool = false;
 
     LongDoubleWidth = LongDoubleAlign = SuitableAlign = 64;
-    LongDoubleFormat = &llvm::APFloat::IEEEdouble;
+    LongDoubleFormat = &llvm37::APFloat::IEEEdouble;
 
     TheCXXABI.set(TargetCXXABI::iOS64);
   }
@@ -5345,7 +5345,7 @@ class HexagonTargetInfo : public TargetInfo {
   static const TargetInfo::GCCRegAlias GCCRegAliases[];
   std::string CPU;
 public:
-  HexagonTargetInfo(const llvm::Triple &Triple) : TargetInfo(Triple) {
+  HexagonTargetInfo(const llvm37::Triple &Triple) : TargetInfo(Triple) {
     BigEndian = false;
     DescriptionString = "e-m:e-p:32:32-i1:32-i64:64-a:0-n32";
 
@@ -5384,7 +5384,7 @@ public:
   }
 
   static const char *getHexagonCPUSuffix(StringRef Name) {
-    return llvm::StringSwitch<const char*>(Name)
+    return llvm37::StringSwitch<const char*>(Name)
       .Case("hexagonv4", "4")
       .Case("hexagonv5", "5")
       .Default(nullptr);
@@ -5463,7 +5463,7 @@ const char * const HexagonTargetInfo::GCCRegNames[] = {
 void HexagonTargetInfo::getGCCRegNames(const char * const *&Names,
                                    unsigned &NumNames) const {
   Names = GCCRegNames;
-  NumNames = llvm::array_lengthof(GCCRegNames);
+  NumNames = llvm37::array_lengthof(GCCRegNames);
 }
 
 
@@ -5476,7 +5476,7 @@ const TargetInfo::GCCRegAlias HexagonTargetInfo::GCCRegAliases[] = {
 void HexagonTargetInfo::getGCCRegAliases(const GCCRegAlias *&Aliases,
                                      unsigned &NumAliases) const {
   Aliases = GCCRegAliases;
-  NumAliases = llvm::array_lengthof(GCCRegAliases);
+  NumAliases = llvm37::array_lengthof(GCCRegAliases);
 }
 
 
@@ -5493,7 +5493,7 @@ class SparcTargetInfo : public TargetInfo {
   static const char * const GCCRegNames[];
   bool SoftFloat;
 public:
-  SparcTargetInfo(const llvm::Triple &Triple)
+  SparcTargetInfo(const llvm37::Triple &Triple)
       : TargetInfo(Triple), SoftFloat(false) {}
 
   bool handleTargetFeatures(std::vector<std::string> &Features,
@@ -5517,7 +5517,7 @@ public:
   }
 
   bool hasFeature(StringRef Feature) const override {
-    return llvm::StringSwitch<bool>(Feature)
+    return llvm37::StringSwitch<bool>(Feature)
              .Case("softfloat", SoftFloat)
              .Case("sparc", true)
              .Default(false);
@@ -5565,7 +5565,7 @@ const char * const SparcTargetInfo::GCCRegNames[] = {
 void SparcTargetInfo::getGCCRegNames(const char * const *&Names,
                                      unsigned &NumNames) const {
   Names = GCCRegNames;
-  NumNames = llvm::array_lengthof(GCCRegNames);
+  NumNames = llvm37::array_lengthof(GCCRegNames);
 }
 
 const TargetInfo::GCCRegAlias SparcTargetInfo::GCCRegAliases[] = {
@@ -5606,16 +5606,16 @@ const TargetInfo::GCCRegAlias SparcTargetInfo::GCCRegAliases[] = {
 void SparcTargetInfo::getGCCRegAliases(const GCCRegAlias *&Aliases,
                                        unsigned &NumAliases) const {
   Aliases = GCCRegAliases;
-  NumAliases = llvm::array_lengthof(GCCRegAliases);
+  NumAliases = llvm37::array_lengthof(GCCRegAliases);
 }
 
 // SPARC v8 is the 32-bit mode selected by Triple::sparc.
 class SparcV8TargetInfo : public SparcTargetInfo {
 public:
-  SparcV8TargetInfo(const llvm::Triple &Triple) : SparcTargetInfo(Triple) {
+  SparcV8TargetInfo(const llvm37::Triple &Triple) : SparcTargetInfo(Triple) {
     DescriptionString = "E-m:e-p:32:32-i64:64-f128:64-n32-S64";
     // NetBSD uses long (same as llvm default); everyone else uses int.
-    if (getTriple().getOS() == llvm::Triple::NetBSD) {
+    if (getTriple().getOS() == llvm37::Triple::NetBSD) {
       SizeType = UnsignedLong;
       IntPtrType = SignedLong;
       PtrDiffType = SignedLong;
@@ -5636,7 +5636,7 @@ public:
 // SPARCV8el is the 32-bit little-endian mode selected by Triple::sparcel.
 class SparcV8elTargetInfo : public SparcV8TargetInfo {
  public:
-  SparcV8elTargetInfo(const llvm::Triple &Triple) : SparcV8TargetInfo(Triple) {
+  SparcV8elTargetInfo(const llvm37::Triple &Triple) : SparcV8TargetInfo(Triple) {
     DescriptionString = "e-m:e-p:32:32-i64:64-f128:64-n32-S64";
     BigEndian = false;
   }
@@ -5645,14 +5645,14 @@ class SparcV8elTargetInfo : public SparcV8TargetInfo {
 // SPARC v9 is the 64-bit mode selected by Triple::sparcv9.
 class SparcV9TargetInfo : public SparcTargetInfo {
 public:
-  SparcV9TargetInfo(const llvm::Triple &Triple) : SparcTargetInfo(Triple) {
+  SparcV9TargetInfo(const llvm37::Triple &Triple) : SparcTargetInfo(Triple) {
     // FIXME: Support Sparc quad-precision long double?
     DescriptionString = "E-m:e-i64:64-n32:64-S128";
     // This is an LP64 platform.
     LongWidth = LongAlign = PointerWidth = PointerAlign = 64;
 
     // OpenBSD uses long long for int64_t and intmax_t.
-    if (getTriple().getOS() == llvm::Triple::OpenBSD)
+    if (getTriple().getOS() == llvm37::Triple::OpenBSD)
       IntMaxType = SignedLongLong;
     else
       IntMaxType = SignedLong;
@@ -5662,7 +5662,7 @@ public:
     // aligned. The SPARCv9 SCD 2.4.1 says 16-byte aligned.
     LongDoubleWidth = 128;
     LongDoubleAlign = 128;
-    LongDoubleFormat = &llvm::APFloat::IEEEquad;
+    LongDoubleFormat = &llvm37::APFloat::IEEEquad;
     MaxAtomicPromoteWidth = MaxAtomicInlineWidth = 64;
   }
 
@@ -5672,7 +5672,7 @@ public:
     Builder.defineMacro("__sparcv9");
     Builder.defineMacro("__arch64__");
     // Solaris doesn't need these variants, but the BSDs do.
-    if (getTriple().getOS() != llvm::Triple::Solaris) {
+    if (getTriple().getOS() != llvm37::Triple::Solaris) {
       Builder.defineMacro("__sparc64__");
       Builder.defineMacro("__sparc_v9__");
       Builder.defineMacro("__sparcv9__");
@@ -5680,7 +5680,7 @@ public:
   }
 
   bool setCPU(const std::string &Name) override {
-    bool CPUKnown = llvm::StringSwitch<bool>(Name)
+    bool CPUKnown = llvm37::StringSwitch<bool>(Name)
       .Case("v9", true)
       .Case("ultrasparc", true)
       .Case("ultrasparc3", true)
@@ -5704,7 +5704,7 @@ class SystemZTargetInfo : public TargetInfo {
   bool HasVector;
 
 public:
-  SystemZTargetInfo(const llvm::Triple &Triple)
+  SystemZTargetInfo(const llvm37::Triple &Triple)
     : TargetInfo(Triple), CPU("z10"), HasTransactionalExecution(false), HasVector(false) {
     IntMaxType = SignedLong;
     Int64Type = SignedLong;
@@ -5714,7 +5714,7 @@ public:
     PointerWidth = PointerAlign = 64;
     LongDoubleWidth = 128;
     LongDoubleAlign = 64;
-    LongDoubleFormat = &llvm::APFloat::IEEEquad;
+    LongDoubleFormat = &llvm37::APFloat::IEEEquad;
     DefaultAlignForAttributeAligned = 64;
     MinGlobalAlign = 16;
     DescriptionString = "E-m:e-i1:8:16-i8:8:16-i64:64-f128:64-a:8:16-n32:64";
@@ -5756,7 +5756,7 @@ public:
   }
   bool setCPU(const std::string &Name) override {
     CPU = Name;
-    bool CPUKnown = llvm::StringSwitch<bool>(Name)
+    bool CPUKnown = llvm37::StringSwitch<bool>(Name)
       .Case("z10", true)
       .Case("z196", true)
       .Case("zEC12", true)
@@ -5765,7 +5765,7 @@ public:
 
     return CPUKnown;
   }
-  void getDefaultFeatures(llvm::StringMap<bool> &Features) const override {
+  void getDefaultFeatures(llvm37::StringMap<bool> &Features) const override {
     if (CPU == "zEC12")
       Features["transactional-execution"] = true;
     if (CPU == "z13") {
@@ -5793,7 +5793,7 @@ public:
   }
 
   bool hasFeature(StringRef Feature) const override {
-    return llvm::StringSwitch<bool>(Feature)
+    return llvm37::StringSwitch<bool>(Feature)
         .Case("systemz", true)
         .Case("htm", HasTransactionalExecution)
         .Case("vx", HasVector)
@@ -5827,7 +5827,7 @@ const char *const SystemZTargetInfo::GCCRegNames[] = {
 void SystemZTargetInfo::getGCCRegNames(const char *const *&Names,
                                        unsigned &NumNames) const {
   Names = GCCRegNames;
-  NumNames = llvm::array_lengthof(GCCRegNames);
+  NumNames = llvm37::array_lengthof(GCCRegNames);
 }
 
 bool SystemZTargetInfo::
@@ -5862,7 +5862,7 @@ validateAsmConstraint(const char *&Name,
   class MSP430TargetInfo : public TargetInfo {
     static const char * const GCCRegNames[];
   public:
-    MSP430TargetInfo(const llvm::Triple &Triple) : TargetInfo(Triple) {
+    MSP430TargetInfo(const llvm37::Triple &Triple) : TargetInfo(Triple) {
       BigEndian = false;
       TLSSupported = false;
       IntWidth = 16; IntAlign = 16;
@@ -5931,7 +5931,7 @@ validateAsmConstraint(const char *&Name,
   void MSP430TargetInfo::getGCCRegNames(const char * const *&Names,
                                         unsigned &NumNames) const {
     Names = GCCRegNames;
-    NumNames = llvm::array_lengthof(GCCRegNames);
+    NumNames = llvm37::array_lengthof(GCCRegNames);
   }
 
   // LLVM and Clang cannot be used directly to output native binaries for
@@ -5955,7 +5955,7 @@ validateAsmConstraint(const char *&Name,
 
   class TCETargetInfo : public TargetInfo{
   public:
-    TCETargetInfo(const llvm::Triple &Triple) : TargetInfo(Triple) {
+    TCETargetInfo(const llvm37::Triple &Triple) : TargetInfo(Triple) {
       TLSSupported = false;
       IntWidth = 32;
       LongWidth = LongLongWidth = 32;
@@ -5974,9 +5974,9 @@ validateAsmConstraint(const char *&Name,
       DoubleAlign = 32;
       LongDoubleWidth = 32;
       LongDoubleAlign = 32;
-      FloatFormat = &llvm::APFloat::IEEEsingle;
-      DoubleFormat = &llvm::APFloat::IEEEsingle;
-      LongDoubleFormat = &llvm::APFloat::IEEEsingle;
+      FloatFormat = &llvm37::APFloat::IEEEsingle;
+      DoubleFormat = &llvm37::APFloat::IEEEsingle;
+      LongDoubleFormat = &llvm37::APFloat::IEEEsingle;
       DescriptionString = "E-p:32:32-i8:8:32-i16:16:32-i64:32"
                           "-f64:32-v64:32-v128:32-a:0:32-n32";
       AddrSpaceMap = &TCEOpenCLAddrSpaceMap;
@@ -6013,7 +6013,7 @@ validateAsmConstraint(const char *&Name,
 
 class BPFTargetInfo : public TargetInfo {
 public:
-  BPFTargetInfo(const llvm::Triple &Triple) : TargetInfo(Triple) {
+  BPFTargetInfo(const llvm37::Triple &Triple) : TargetInfo(Triple) {
     LongWidth = LongAlign = PointerWidth = PointerAlign = 64;
     SizeType    = UnsignedLong;
     PtrDiffType = SignedLong;
@@ -6021,7 +6021,7 @@ public:
     IntMaxType  = SignedLong;
     Int64Type   = SignedLong;
     RegParmMax = 5;
-    if (Triple.getArch() == llvm::Triple::bpfeb) {
+    if (Triple.getArch() == llvm37::Triple::bpfeb) {
       BigEndian = true;
       DescriptionString = "E-m:e-p:64:64-i64:64-n32:64-S128";
     } else {
@@ -6087,7 +6087,7 @@ protected:
   std::string ABI;
 
 public:
-  MipsTargetInfoBase(const llvm::Triple &Triple, const std::string &ABIStr,
+  MipsTargetInfoBase(const llvm37::Triple &Triple, const std::string &ABIStr,
                      const std::string &CPUStr)
       : TargetInfo(Triple), CPU(CPUStr), IsMips16(false), IsMicromips(false),
         IsNan2008(false), IsSingleFloat(false), FloatABI(HardFloat),
@@ -6109,10 +6109,10 @@ public:
 
   StringRef getABI() const override { return ABI; }
   bool setCPU(const std::string &Name) override {
-    bool IsMips32 = getTriple().getArch() == llvm::Triple::mips ||
-                    getTriple().getArch() == llvm::Triple::mipsel;
+    bool IsMips32 = getTriple().getArch() == llvm37::Triple::mips ||
+                    getTriple().getArch() == llvm37::Triple::mipsel;
     CPU = Name;
-    return llvm::StringSwitch<bool>(Name)
+    return llvm37::StringSwitch<bool>(Name)
         .Case("mips1", IsMips32)
         .Case("mips2", IsMips32)
         .Case("mips3", true)
@@ -6132,7 +6132,7 @@ public:
         .Default(false);
   }
   const std::string& getCPU() const { return CPU; }
-  void getDefaultFeatures(llvm::StringMap<bool> &Features) const override {
+  void getDefaultFeatures(llvm37::StringMap<bool> &Features) const override {
     if (CPU == "octeon")
       Features["mips64r2"] = Features["cnmips"] = true;
     else
@@ -6204,7 +6204,7 @@ public:
     NumRecords = clang::Mips::LastTSBuiltin - Builtin::FirstTSBuiltin;
   }
   bool hasFeature(StringRef Feature) const override {
-    return llvm::StringSwitch<bool>(Feature)
+    return llvm37::StringSwitch<bool>(Feature)
       .Case("mips", true)
       .Case("fp64", HasFP64)
       .Default(false);
@@ -6239,7 +6239,7 @@ public:
       "$msarequest", "$msamap", "$msaunmap"
     };
     Names = GCCRegNames;
-    NumNames = llvm::array_lengthof(GCCRegNames);
+    NumNames = llvm37::array_lengthof(GCCRegNames);
   }
   void getGCCRegAliases(const GCCRegAlias *&Aliases,
                         unsigned &NumAliases) const override = 0;
@@ -6377,7 +6377,7 @@ const Builtin::Info MipsTargetInfoBase::BuiltinInfo[] = {
 
 class Mips32TargetInfoBase : public MipsTargetInfoBase {
 public:
-  Mips32TargetInfoBase(const llvm::Triple &Triple)
+  Mips32TargetInfoBase(const llvm37::Triple &Triple)
       : MipsTargetInfoBase(Triple, "o32", "mips32r2") {
     SizeType = UnsignedInt;
     PtrDiffType = SignedInt;
@@ -6457,7 +6457,7 @@ public:
       { { "ra" }, "$31" }
     };
     Aliases = GCCRegAliases;
-    NumAliases = llvm::array_lengthof(GCCRegAliases);
+    NumAliases = llvm37::array_lengthof(GCCRegAliases);
   }
 };
 
@@ -6467,7 +6467,7 @@ class Mips32EBTargetInfo : public Mips32TargetInfoBase {
   }
 
 public:
-  Mips32EBTargetInfo(const llvm::Triple &Triple)
+  Mips32EBTargetInfo(const llvm37::Triple &Triple)
       : Mips32TargetInfoBase(Triple) {
   }
   void getTargetDefines(const LangOptions &Opts,
@@ -6484,7 +6484,7 @@ class Mips32ELTargetInfo : public Mips32TargetInfoBase {
   }
 
 public:
-  Mips32ELTargetInfo(const llvm::Triple &Triple)
+  Mips32ELTargetInfo(const llvm37::Triple &Triple)
       : Mips32TargetInfoBase(Triple) {
     BigEndian = false;
   }
@@ -6498,13 +6498,13 @@ public:
 
 class Mips64TargetInfoBase : public MipsTargetInfoBase {
 public:
-  Mips64TargetInfoBase(const llvm::Triple &Triple)
+  Mips64TargetInfoBase(const llvm37::Triple &Triple)
       : MipsTargetInfoBase(Triple, "n64", "mips64r2") {
     LongDoubleWidth = LongDoubleAlign = 128;
-    LongDoubleFormat = &llvm::APFloat::IEEEquad;
-    if (getTriple().getOS() == llvm::Triple::FreeBSD) {
+    LongDoubleFormat = &llvm37::APFloat::IEEEquad;
+    if (getTriple().getOS() == llvm37::Triple::FreeBSD) {
       LongDoubleWidth = LongDoubleAlign = 64;
-      LongDoubleFormat = &llvm::APFloat::IEEEdouble;
+      LongDoubleFormat = &llvm37::APFloat::IEEEdouble;
     }
     setN64ABITypes();
     SuitableAlign = 128;
@@ -6613,7 +6613,7 @@ public:
       { { "ra" }, "$31" }
     };
     Aliases = GCCRegAliases;
-    NumAliases = llvm::array_lengthof(GCCRegAliases);
+    NumAliases = llvm37::array_lengthof(GCCRegAliases);
   }
 
   bool hasInt128Type() const override { return true; }
@@ -6629,7 +6629,7 @@ class Mips64EBTargetInfo : public Mips64TargetInfoBase {
   }
 
 public:
-  Mips64EBTargetInfo(const llvm::Triple &Triple)
+  Mips64EBTargetInfo(const llvm37::Triple &Triple)
       : Mips64TargetInfoBase(Triple) {}
   void getTargetDefines(const LangOptions &Opts,
                         MacroBuilder &Builder) const override {
@@ -6647,7 +6647,7 @@ class Mips64ELTargetInfo : public Mips64TargetInfoBase {
       DescriptionString = "e-m:m-i8:8:32-i16:16:32-i64:64-n32:64-S128";
   }
 public:
-  Mips64ELTargetInfo(const llvm::Triple &Triple)
+  Mips64ELTargetInfo(const llvm37::Triple &Triple)
       : Mips64TargetInfoBase(Triple) {
     // Default ABI is n64.
     BigEndian = false;
@@ -6662,7 +6662,7 @@ public:
 
 class PNaClTargetInfo : public TargetInfo {
 public:
-  PNaClTargetInfo(const llvm::Triple &Triple) : TargetInfo(Triple) {
+  PNaClTargetInfo(const llvm37::Triple &Triple) : TargetInfo(Triple) {
     BigEndian = false;
     this->UserLabelPrefix = "";
     this->LongAlign = 32;
@@ -6680,7 +6680,7 @@ public:
     this->RegParmMax = 0; // Disallow regparm
   }
 
-  void getDefaultFeatures(llvm::StringMap<bool> &Features) const override {
+  void getDefaultFeatures(llvm37::StringMap<bool> &Features) const override {
   }
   void getArchDefines(const LangOptions &Opts, MacroBuilder &Builder) const {
     Builder.defineMacro("__le32__");
@@ -6728,7 +6728,7 @@ void PNaClTargetInfo::getGCCRegAliases(const GCCRegAlias *&Aliases,
 // We attempt to use PNaCl (le32) frontend and Mips32EL backend.
 class NaClMips32ELTargetInfo : public Mips32ELTargetInfo {
 public:
-  NaClMips32ELTargetInfo(const llvm::Triple &Triple) :
+  NaClMips32ELTargetInfo(const llvm37::Triple &Triple) :
     Mips32ELTargetInfo(Triple)  {
       MaxAtomicPromoteWidth = MaxAtomicInlineWidth = 0;
   }
@@ -6742,7 +6742,7 @@ class Le64TargetInfo : public TargetInfo {
   static const Builtin::Info BuiltinInfo[];
 
 public:
-  Le64TargetInfo(const llvm::Triple &Triple) : TargetInfo(Triple) {
+  Le64TargetInfo(const llvm37::Triple &Triple) : TargetInfo(Triple) {
     BigEndian = false;
     NoAsmVariants = true;
     LongWidth = LongAlign = PointerWidth = PointerAlign = 64;
@@ -6803,10 +6803,10 @@ namespace {
   };
   class SPIRTargetInfo : public TargetInfo {
   public:
-    SPIRTargetInfo(const llvm::Triple &Triple) : TargetInfo(Triple) {
-      assert(getTriple().getOS() == llvm::Triple::UnknownOS &&
+    SPIRTargetInfo(const llvm37::Triple &Triple) : TargetInfo(Triple) {
+      assert(getTriple().getOS() == llvm37::Triple::UnknownOS &&
         "SPIR target must use unknown OS");
-      assert(getTriple().getEnvironment() == llvm::Triple::UnknownEnvironment &&
+      assert(getTriple().getEnvironment() == llvm37::Triple::UnknownEnvironment &&
         "SPIR target must use unknown environment type");
       BigEndian = false;
       TLSSupported = false;
@@ -6856,7 +6856,7 @@ namespace {
 
   class SPIR32TargetInfo : public SPIRTargetInfo {
   public:
-    SPIR32TargetInfo(const llvm::Triple &Triple) : SPIRTargetInfo(Triple) {
+    SPIR32TargetInfo(const llvm37::Triple &Triple) : SPIRTargetInfo(Triple) {
       PointerWidth = PointerAlign = 32;
       SizeType     = TargetInfo::UnsignedInt;
       PtrDiffType = IntPtrType = TargetInfo::SignedInt;
@@ -6872,7 +6872,7 @@ namespace {
 
   class SPIR64TargetInfo : public SPIRTargetInfo {
   public:
-    SPIR64TargetInfo(const llvm::Triple &Triple) : SPIRTargetInfo(Triple) {
+    SPIR64TargetInfo(const llvm37::Triple &Triple) : SPIRTargetInfo(Triple) {
       PointerWidth = PointerAlign = 64;
       SizeType     = TargetInfo::UnsignedLong;
       PtrDiffType = IntPtrType = TargetInfo::SignedLong;
@@ -6888,7 +6888,7 @@ namespace {
 class XCoreTargetInfo : public TargetInfo {
   static const Builtin::Info BuiltinInfo[];
 public:
-  XCoreTargetInfo(const llvm::Triple &Triple) : TargetInfo(Triple) {
+  XCoreTargetInfo(const llvm37::Triple &Triple) : TargetInfo(Triple) {
     BigEndian = false;
     NoAsmVariants = true;
     LongLongAlign = 32;
@@ -6925,7 +6925,7 @@ public:
       "r8",   "r9",   "r10",  "r11",  "cp",   "dp",   "sp",   "lr"
     };
     Names = GCCRegNames;
-    NumNames = llvm::array_lengthof(GCCRegNames);
+    NumNames = llvm37::array_lengthof(GCCRegNames);
   }
   void getGCCRegAliases(const GCCRegAlias *&Aliases,
                         unsigned &NumAliases) const override {
@@ -6954,11 +6954,11 @@ namespace {
 // x86_32 Android target
 class AndroidX86_32TargetInfo : public LinuxTargetInfo<X86_32TargetInfo> {
 public:
-  AndroidX86_32TargetInfo(const llvm::Triple &Triple)
+  AndroidX86_32TargetInfo(const llvm37::Triple &Triple)
       : LinuxTargetInfo<X86_32TargetInfo>(Triple) {
     SuitableAlign = 32;
     LongDoubleWidth = 64;
-    LongDoubleFormat = &llvm::APFloat::IEEEdouble;
+    LongDoubleFormat = &llvm37::APFloat::IEEEdouble;
   }
 };
 } // end anonymous namespace
@@ -6967,9 +6967,9 @@ namespace {
 // x86_64 Android target
 class AndroidX86_64TargetInfo : public LinuxTargetInfo<X86_64TargetInfo> {
 public:
-  AndroidX86_64TargetInfo(const llvm::Triple &Triple)
+  AndroidX86_64TargetInfo(const llvm37::Triple &Triple)
       : LinuxTargetInfo<X86_64TargetInfo>(Triple) {
-    LongDoubleFormat = &llvm::APFloat::IEEEquad;
+    LongDoubleFormat = &llvm37::APFloat::IEEEquad;
   }
 
   bool useFloat128ManglingForLongDouble() const override {
@@ -6985,12 +6985,12 @@ class DXILTargetInfo : public TargetInfo {
   static const Builtin::Info BuiltinInfo[];
 
 public:
-  DXILTargetInfo(const llvm::Triple &Triple) : TargetInfo(Triple) {
+  DXILTargetInfo(const llvm37::Triple &Triple) : TargetInfo(Triple) {
     BigEndian = false;
     TLSSupported = false;
     LongWidth = LongAlign = 32;
     LongDoubleWidth = LongDoubleAlign = 64;
-    LongDoubleFormat = &llvm::APFloat::IEEEdouble;
+    LongDoubleFormat = &llvm37::APFloat::IEEEdouble;
     BoolWidth = BoolAlign = 32;
 
     // using the Microsoft ABI.
@@ -7033,7 +7033,7 @@ const Builtin::Info DXILTargetInfo::BuiltinInfo[] = {
 class DXIL_32TargetInfo : public DXILTargetInfo {
 
 public:
-  DXIL_32TargetInfo(const llvm::Triple &Triple, const char *descriptionString) : DXILTargetInfo(Triple) {
+  DXIL_32TargetInfo(const llvm37::Triple &Triple, const char *descriptionString) : DXILTargetInfo(Triple) {
     // TODO: Update Description for DXIL
     DescriptionString = descriptionString;
   }
@@ -7046,74 +7046,74 @@ public:
 // Driver code
 //===----------------------------------------------------------------------===//
 
-static TargetInfo *AllocateTarget(const llvm::Triple &Triple, const char* descrptionString) {
+static TargetInfo *AllocateTarget(const llvm37::Triple &Triple, const char* descrptionString) {
 #if 1 // HLSL Change
   return new DXIL_32TargetInfo(Triple, descrptionString);
 #else // HLSL Change
-  llvm::Triple::OSType os = Triple.getOS();
+  llvm37::Triple::OSType os = Triple.getOS();
 
   switch (Triple.getArch()) {
   default:
     return nullptr;
 
-  case llvm::Triple::xcore:
+  case llvm37::Triple::xcore:
     return new XCoreTargetInfo(Triple);
 
-  case llvm::Triple::hexagon:
+  case llvm37::Triple::hexagon:
     return new HexagonTargetInfo(Triple);
 
-  case llvm::Triple::aarch64:
+  case llvm37::Triple::aarch64:
     if (Triple.isOSDarwin())
       return new DarwinAArch64TargetInfo(Triple);
 
     switch (os) {
-    case llvm::Triple::FreeBSD:
+    case llvm37::Triple::FreeBSD:
       return new FreeBSDTargetInfo<AArch64leTargetInfo>(Triple);
-    case llvm::Triple::Linux:
+    case llvm37::Triple::Linux:
       return new LinuxTargetInfo<AArch64leTargetInfo>(Triple);
-    case llvm::Triple::NetBSD:
+    case llvm37::Triple::NetBSD:
       return new NetBSDTargetInfo<AArch64leTargetInfo>(Triple);
     default:
       return new AArch64leTargetInfo(Triple);
     }
 
-  case llvm::Triple::aarch64_be:
+  case llvm37::Triple::aarch64_be:
     switch (os) {
-    case llvm::Triple::FreeBSD:
+    case llvm37::Triple::FreeBSD:
       return new FreeBSDTargetInfo<AArch64beTargetInfo>(Triple);
-    case llvm::Triple::Linux:
+    case llvm37::Triple::Linux:
       return new LinuxTargetInfo<AArch64beTargetInfo>(Triple);
-    case llvm::Triple::NetBSD:
+    case llvm37::Triple::NetBSD:
       return new NetBSDTargetInfo<AArch64beTargetInfo>(Triple);
     default:
       return new AArch64beTargetInfo(Triple);
     }
 
-  case llvm::Triple::arm:
-  case llvm::Triple::thumb:
+  case llvm37::Triple::arm:
+  case llvm37::Triple::thumb:
     if (Triple.isOSBinFormatMachO())
       return new DarwinARMTargetInfo(Triple);
 
     switch (os) {
-    case llvm::Triple::Linux:
+    case llvm37::Triple::Linux:
       return new LinuxTargetInfo<ARMleTargetInfo>(Triple);
-    case llvm::Triple::FreeBSD:
+    case llvm37::Triple::FreeBSD:
       return new FreeBSDTargetInfo<ARMleTargetInfo>(Triple);
-    case llvm::Triple::NetBSD:
+    case llvm37::Triple::NetBSD:
       return new NetBSDTargetInfo<ARMleTargetInfo>(Triple);
-    case llvm::Triple::OpenBSD:
+    case llvm37::Triple::OpenBSD:
       return new OpenBSDTargetInfo<ARMleTargetInfo>(Triple);
-    case llvm::Triple::Bitrig:
+    case llvm37::Triple::Bitrig:
       return new BitrigTargetInfo<ARMleTargetInfo>(Triple);
-    case llvm::Triple::RTEMS:
+    case llvm37::Triple::RTEMS:
       return new RTEMSTargetInfo<ARMleTargetInfo>(Triple);
-    case llvm::Triple::NaCl:
+    case llvm37::Triple::NaCl:
       return new NaClTargetInfo<ARMleTargetInfo>(Triple);
-    case llvm::Triple::Win32:
+    case llvm37::Triple::Win32:
       switch (Triple.getEnvironment()) {
-      case llvm::Triple::Itanium:
+      case llvm37::Triple::Itanium:
         return new ItaniumWindowsARMleTargetInfo(Triple);
-      case llvm::Triple::MSVC:
+      case llvm37::Triple::MSVC:
       default: // Assume MSVC for unknown environments
         return new MicrosoftARMleTargetInfo(Triple);
       }
@@ -7121,329 +7121,329 @@ static TargetInfo *AllocateTarget(const llvm::Triple &Triple, const char* descrp
       return new ARMleTargetInfo(Triple);
     }
 
-  case llvm::Triple::armeb:
-  case llvm::Triple::thumbeb:
+  case llvm37::Triple::armeb:
+  case llvm37::Triple::thumbeb:
     if (Triple.isOSDarwin())
       return new DarwinARMTargetInfo(Triple);
 
     switch (os) {
-    case llvm::Triple::Linux:
+    case llvm37::Triple::Linux:
       return new LinuxTargetInfo<ARMbeTargetInfo>(Triple);
-    case llvm::Triple::FreeBSD:
+    case llvm37::Triple::FreeBSD:
       return new FreeBSDTargetInfo<ARMbeTargetInfo>(Triple);
-    case llvm::Triple::NetBSD:
+    case llvm37::Triple::NetBSD:
       return new NetBSDTargetInfo<ARMbeTargetInfo>(Triple);
-    case llvm::Triple::OpenBSD:
+    case llvm37::Triple::OpenBSD:
       return new OpenBSDTargetInfo<ARMbeTargetInfo>(Triple);
-    case llvm::Triple::Bitrig:
+    case llvm37::Triple::Bitrig:
       return new BitrigTargetInfo<ARMbeTargetInfo>(Triple);
-    case llvm::Triple::RTEMS:
+    case llvm37::Triple::RTEMS:
       return new RTEMSTargetInfo<ARMbeTargetInfo>(Triple);
-    case llvm::Triple::NaCl:
+    case llvm37::Triple::NaCl:
       return new NaClTargetInfo<ARMbeTargetInfo>(Triple);
     default:
       return new ARMbeTargetInfo(Triple);
     }
 
-  case llvm::Triple::bpfeb:
-  case llvm::Triple::bpfel:
+  case llvm37::Triple::bpfeb:
+  case llvm37::Triple::bpfel:
     return new BPFTargetInfo(Triple);
 
-  case llvm::Triple::msp430:
+  case llvm37::Triple::msp430:
     return new MSP430TargetInfo(Triple);
 
-  case llvm::Triple::mips:
+  case llvm37::Triple::mips:
     switch (os) {
-    case llvm::Triple::Linux:
+    case llvm37::Triple::Linux:
       return new LinuxTargetInfo<Mips32EBTargetInfo>(Triple);
-    case llvm::Triple::RTEMS:
+    case llvm37::Triple::RTEMS:
       return new RTEMSTargetInfo<Mips32EBTargetInfo>(Triple);
-    case llvm::Triple::FreeBSD:
+    case llvm37::Triple::FreeBSD:
       return new FreeBSDTargetInfo<Mips32EBTargetInfo>(Triple);
-    case llvm::Triple::NetBSD:
+    case llvm37::Triple::NetBSD:
       return new NetBSDTargetInfo<Mips32EBTargetInfo>(Triple);
     default:
       return new Mips32EBTargetInfo(Triple);
     }
 
-  case llvm::Triple::mipsel:
+  case llvm37::Triple::mipsel:
     switch (os) {
-    case llvm::Triple::Linux:
+    case llvm37::Triple::Linux:
       return new LinuxTargetInfo<Mips32ELTargetInfo>(Triple);
-    case llvm::Triple::RTEMS:
+    case llvm37::Triple::RTEMS:
       return new RTEMSTargetInfo<Mips32ELTargetInfo>(Triple);
-    case llvm::Triple::FreeBSD:
+    case llvm37::Triple::FreeBSD:
       return new FreeBSDTargetInfo<Mips32ELTargetInfo>(Triple);
-    case llvm::Triple::NetBSD:
+    case llvm37::Triple::NetBSD:
       return new NetBSDTargetInfo<Mips32ELTargetInfo>(Triple);
-    case llvm::Triple::NaCl:
+    case llvm37::Triple::NaCl:
       return new NaClTargetInfo<NaClMips32ELTargetInfo>(Triple);
     default:
       return new Mips32ELTargetInfo(Triple);
     }
 
-  case llvm::Triple::mips64:
+  case llvm37::Triple::mips64:
     switch (os) {
-    case llvm::Triple::Linux:
+    case llvm37::Triple::Linux:
       return new LinuxTargetInfo<Mips64EBTargetInfo>(Triple);
-    case llvm::Triple::RTEMS:
+    case llvm37::Triple::RTEMS:
       return new RTEMSTargetInfo<Mips64EBTargetInfo>(Triple);
-    case llvm::Triple::FreeBSD:
+    case llvm37::Triple::FreeBSD:
       return new FreeBSDTargetInfo<Mips64EBTargetInfo>(Triple);
-    case llvm::Triple::NetBSD:
+    case llvm37::Triple::NetBSD:
       return new NetBSDTargetInfo<Mips64EBTargetInfo>(Triple);
-    case llvm::Triple::OpenBSD:
+    case llvm37::Triple::OpenBSD:
       return new OpenBSDTargetInfo<Mips64EBTargetInfo>(Triple);
     default:
       return new Mips64EBTargetInfo(Triple);
     }
 
-  case llvm::Triple::mips64el:
+  case llvm37::Triple::mips64el:
     switch (os) {
-    case llvm::Triple::Linux:
+    case llvm37::Triple::Linux:
       return new LinuxTargetInfo<Mips64ELTargetInfo>(Triple);
-    case llvm::Triple::RTEMS:
+    case llvm37::Triple::RTEMS:
       return new RTEMSTargetInfo<Mips64ELTargetInfo>(Triple);
-    case llvm::Triple::FreeBSD:
+    case llvm37::Triple::FreeBSD:
       return new FreeBSDTargetInfo<Mips64ELTargetInfo>(Triple);
-    case llvm::Triple::NetBSD:
+    case llvm37::Triple::NetBSD:
       return new NetBSDTargetInfo<Mips64ELTargetInfo>(Triple);
-    case llvm::Triple::OpenBSD:
+    case llvm37::Triple::OpenBSD:
       return new OpenBSDTargetInfo<Mips64ELTargetInfo>(Triple);
     default:
       return new Mips64ELTargetInfo(Triple);
     }
 
-  case llvm::Triple::le32:
+  case llvm37::Triple::le32:
     switch (os) {
-    case llvm::Triple::NaCl:
+    case llvm37::Triple::NaCl:
       return new NaClTargetInfo<PNaClTargetInfo>(Triple);
     default:
       return nullptr;
     }
 
-  case llvm::Triple::le64:
+  case llvm37::Triple::le64:
     return new Le64TargetInfo(Triple);
 
-  case llvm::Triple::ppc:
+  case llvm37::Triple::ppc:
     if (Triple.isOSDarwin())
       return new DarwinPPC32TargetInfo(Triple);
     switch (os) {
-    case llvm::Triple::Linux:
+    case llvm37::Triple::Linux:
       return new LinuxTargetInfo<PPC32TargetInfo>(Triple);
-    case llvm::Triple::FreeBSD:
+    case llvm37::Triple::FreeBSD:
       return new FreeBSDTargetInfo<PPC32TargetInfo>(Triple);
-    case llvm::Triple::NetBSD:
+    case llvm37::Triple::NetBSD:
       return new NetBSDTargetInfo<PPC32TargetInfo>(Triple);
-    case llvm::Triple::OpenBSD:
+    case llvm37::Triple::OpenBSD:
       return new OpenBSDTargetInfo<PPC32TargetInfo>(Triple);
-    case llvm::Triple::RTEMS:
+    case llvm37::Triple::RTEMS:
       return new RTEMSTargetInfo<PPC32TargetInfo>(Triple);
     default:
       return new PPC32TargetInfo(Triple);
     }
 
-  case llvm::Triple::ppc64:
+  case llvm37::Triple::ppc64:
     if (Triple.isOSDarwin())
       return new DarwinPPC64TargetInfo(Triple);
     switch (os) {
-    case llvm::Triple::Linux:
+    case llvm37::Triple::Linux:
       return new LinuxTargetInfo<PPC64TargetInfo>(Triple);
-    case llvm::Triple::Lv2:
+    case llvm37::Triple::Lv2:
       return new PS3PPUTargetInfo<PPC64TargetInfo>(Triple);
-    case llvm::Triple::FreeBSD:
+    case llvm37::Triple::FreeBSD:
       return new FreeBSDTargetInfo<PPC64TargetInfo>(Triple);
-    case llvm::Triple::NetBSD:
+    case llvm37::Triple::NetBSD:
       return new NetBSDTargetInfo<PPC64TargetInfo>(Triple);
     default:
       return new PPC64TargetInfo(Triple);
     }
 
-  case llvm::Triple::ppc64le:
+  case llvm37::Triple::ppc64le:
     switch (os) {
-    case llvm::Triple::Linux:
+    case llvm37::Triple::Linux:
       return new LinuxTargetInfo<PPC64TargetInfo>(Triple);
-    case llvm::Triple::NetBSD:
+    case llvm37::Triple::NetBSD:
       return new NetBSDTargetInfo<PPC64TargetInfo>(Triple);
     default:
       return new PPC64TargetInfo(Triple);
     }
 
-  case llvm::Triple::nvptx:
+  case llvm37::Triple::nvptx:
     return new NVPTX32TargetInfo(Triple);
-  case llvm::Triple::nvptx64:
+  case llvm37::Triple::nvptx64:
     return new NVPTX64TargetInfo(Triple);
 
-  case llvm::Triple::amdgcn:
-  case llvm::Triple::r600:
+  case llvm37::Triple::amdgcn:
+  case llvm37::Triple::r600:
     return new AMDGPUTargetInfo(Triple);
 
-  case llvm::Triple::sparc:
+  case llvm37::Triple::sparc:
     switch (os) {
-    case llvm::Triple::Linux:
+    case llvm37::Triple::Linux:
       return new LinuxTargetInfo<SparcV8TargetInfo>(Triple);
-    case llvm::Triple::Solaris:
+    case llvm37::Triple::Solaris:
       return new SolarisTargetInfo<SparcV8TargetInfo>(Triple);
-    case llvm::Triple::NetBSD:
+    case llvm37::Triple::NetBSD:
       return new NetBSDTargetInfo<SparcV8TargetInfo>(Triple);
-    case llvm::Triple::OpenBSD:
+    case llvm37::Triple::OpenBSD:
       return new OpenBSDTargetInfo<SparcV8TargetInfo>(Triple);
-    case llvm::Triple::RTEMS:
+    case llvm37::Triple::RTEMS:
       return new RTEMSTargetInfo<SparcV8TargetInfo>(Triple);
     default:
       return new SparcV8TargetInfo(Triple);
     }
 
   // The 'sparcel' architecture copies all the above cases except for Solaris.
-  case llvm::Triple::sparcel:
+  case llvm37::Triple::sparcel:
     switch (os) {
-    case llvm::Triple::Linux:
+    case llvm37::Triple::Linux:
       return new LinuxTargetInfo<SparcV8elTargetInfo>(Triple);
-    case llvm::Triple::NetBSD:
+    case llvm37::Triple::NetBSD:
       return new NetBSDTargetInfo<SparcV8elTargetInfo>(Triple);
-    case llvm::Triple::OpenBSD:
+    case llvm37::Triple::OpenBSD:
       return new OpenBSDTargetInfo<SparcV8elTargetInfo>(Triple);
-    case llvm::Triple::RTEMS:
+    case llvm37::Triple::RTEMS:
       return new RTEMSTargetInfo<SparcV8elTargetInfo>(Triple);
     default:
       return new SparcV8elTargetInfo(Triple);
     }
 
-  case llvm::Triple::sparcv9:
+  case llvm37::Triple::sparcv9:
     switch (os) {
-    case llvm::Triple::Linux:
+    case llvm37::Triple::Linux:
       return new LinuxTargetInfo<SparcV9TargetInfo>(Triple);
-    case llvm::Triple::Solaris:
+    case llvm37::Triple::Solaris:
       return new SolarisTargetInfo<SparcV9TargetInfo>(Triple);
-    case llvm::Triple::NetBSD:
+    case llvm37::Triple::NetBSD:
       return new NetBSDTargetInfo<SparcV9TargetInfo>(Triple);
-    case llvm::Triple::OpenBSD:
+    case llvm37::Triple::OpenBSD:
       return new OpenBSDTargetInfo<SparcV9TargetInfo>(Triple);
-    case llvm::Triple::FreeBSD:
+    case llvm37::Triple::FreeBSD:
       return new FreeBSDTargetInfo<SparcV9TargetInfo>(Triple);
     default:
       return new SparcV9TargetInfo(Triple);
     }
 
-  case llvm::Triple::systemz:
+  case llvm37::Triple::systemz:
     switch (os) {
-    case llvm::Triple::Linux:
+    case llvm37::Triple::Linux:
       return new LinuxTargetInfo<SystemZTargetInfo>(Triple);
     default:
       return new SystemZTargetInfo(Triple);
     }
 
-  case llvm::Triple::tce:
+  case llvm37::Triple::tce:
     return new TCETargetInfo(Triple);
 
-  case llvm::Triple::x86:
+  case llvm37::Triple::x86:
     if (Triple.isOSDarwin())
       return new DarwinI386TargetInfo(Triple);
 
     switch (os) {
-    case llvm::Triple::CloudABI:
+    case llvm37::Triple::CloudABI:
       return new CloudABITargetInfo<X86_32TargetInfo>(Triple);
-    case llvm::Triple::Linux: {
+    case llvm37::Triple::Linux: {
       switch (Triple.getEnvironment()) {
       default:
         return new LinuxTargetInfo<X86_32TargetInfo>(Triple);
-      case llvm::Triple::Android:
+      case llvm37::Triple::Android:
         return new AndroidX86_32TargetInfo(Triple);
       }
     }
-    case llvm::Triple::DragonFly:
+    case llvm37::Triple::DragonFly:
       return new DragonFlyBSDTargetInfo<X86_32TargetInfo>(Triple);
-    case llvm::Triple::NetBSD:
+    case llvm37::Triple::NetBSD:
       return new NetBSDI386TargetInfo(Triple);
-    case llvm::Triple::OpenBSD:
+    case llvm37::Triple::OpenBSD:
       return new OpenBSDI386TargetInfo(Triple);
-    case llvm::Triple::Bitrig:
+    case llvm37::Triple::Bitrig:
       return new BitrigI386TargetInfo(Triple);
-    case llvm::Triple::FreeBSD:
+    case llvm37::Triple::FreeBSD:
       return new FreeBSDTargetInfo<X86_32TargetInfo>(Triple);
-    case llvm::Triple::KFreeBSD:
+    case llvm37::Triple::KFreeBSD:
       return new KFreeBSDTargetInfo<X86_32TargetInfo>(Triple);
-    case llvm::Triple::Minix:
+    case llvm37::Triple::Minix:
       return new MinixTargetInfo<X86_32TargetInfo>(Triple);
-    case llvm::Triple::Solaris:
+    case llvm37::Triple::Solaris:
       return new SolarisTargetInfo<X86_32TargetInfo>(Triple);
-    case llvm::Triple::Win32: {
+    case llvm37::Triple::Win32: {
       switch (Triple.getEnvironment()) {
-      case llvm::Triple::Cygnus:
+      case llvm37::Triple::Cygnus:
         return new CygwinX86_32TargetInfo(Triple);
-      case llvm::Triple::GNU:
+      case llvm37::Triple::GNU:
         return new MinGWX86_32TargetInfo(Triple);
-      case llvm::Triple::Itanium:
-      case llvm::Triple::MSVC:
+      case llvm37::Triple::Itanium:
+      case llvm37::Triple::MSVC:
       default: // Assume MSVC for unknown environments
         return new MicrosoftX86_32TargetInfo(Triple);
       }
     }
-    case llvm::Triple::Haiku:
+    case llvm37::Triple::Haiku:
       return new HaikuX86_32TargetInfo(Triple);
-    case llvm::Triple::RTEMS:
+    case llvm37::Triple::RTEMS:
       return new RTEMSX86_32TargetInfo(Triple);
-    case llvm::Triple::NaCl:
+    case llvm37::Triple::NaCl:
       return new NaClTargetInfo<X86_32TargetInfo>(Triple);
     default:
       return new X86_32TargetInfo(Triple);
     }
 
-  case llvm::Triple::x86_64:
+  case llvm37::Triple::x86_64:
     if (Triple.isOSDarwin() || Triple.isOSBinFormatMachO())
       return new DarwinX86_64TargetInfo(Triple);
 
     switch (os) {
-    case llvm::Triple::CloudABI:
+    case llvm37::Triple::CloudABI:
       return new CloudABITargetInfo<X86_64TargetInfo>(Triple);
-    case llvm::Triple::Linux: {
+    case llvm37::Triple::Linux: {
       switch (Triple.getEnvironment()) {
       default:
         return new LinuxTargetInfo<X86_64TargetInfo>(Triple);
-      case llvm::Triple::Android:
+      case llvm37::Triple::Android:
         return new AndroidX86_64TargetInfo(Triple);
       }
     }
-    case llvm::Triple::DragonFly:
+    case llvm37::Triple::DragonFly:
       return new DragonFlyBSDTargetInfo<X86_64TargetInfo>(Triple);
-    case llvm::Triple::NetBSD:
+    case llvm37::Triple::NetBSD:
       return new NetBSDTargetInfo<X86_64TargetInfo>(Triple);
-    case llvm::Triple::OpenBSD:
+    case llvm37::Triple::OpenBSD:
       return new OpenBSDX86_64TargetInfo(Triple);
-    case llvm::Triple::Bitrig:
+    case llvm37::Triple::Bitrig:
       return new BitrigX86_64TargetInfo(Triple);
-    case llvm::Triple::FreeBSD:
+    case llvm37::Triple::FreeBSD:
       return new FreeBSDTargetInfo<X86_64TargetInfo>(Triple);
-    case llvm::Triple::KFreeBSD:
+    case llvm37::Triple::KFreeBSD:
       return new KFreeBSDTargetInfo<X86_64TargetInfo>(Triple);
-    case llvm::Triple::Solaris:
+    case llvm37::Triple::Solaris:
       return new SolarisTargetInfo<X86_64TargetInfo>(Triple);
-    case llvm::Triple::Win32: {
+    case llvm37::Triple::Win32: {
       switch (Triple.getEnvironment()) {
-      case llvm::Triple::GNU:
+      case llvm37::Triple::GNU:
         return new MinGWX86_64TargetInfo(Triple);
-      case llvm::Triple::MSVC:
+      case llvm37::Triple::MSVC:
       default: // Assume MSVC for unknown environments
         return new MicrosoftX86_64TargetInfo(Triple);
       }
     }
-    case llvm::Triple::NaCl:
+    case llvm37::Triple::NaCl:
       return new NaClTargetInfo<X86_64TargetInfo>(Triple);
-    case llvm::Triple::PS4:
+    case llvm37::Triple::PS4:
       return new PS4OSTargetInfo<X86_64TargetInfo>(Triple);
     default:
       return new X86_64TargetInfo(Triple);
     }
 
-  case llvm::Triple::spir: {
-    if (Triple.getOS() != llvm::Triple::UnknownOS ||
-        Triple.getEnvironment() != llvm::Triple::UnknownEnvironment)
+  case llvm37::Triple::spir: {
+    if (Triple.getOS() != llvm37::Triple::UnknownOS ||
+        Triple.getEnvironment() != llvm37::Triple::UnknownEnvironment)
       return nullptr;
     return new SPIR32TargetInfo(Triple);
   }
-  case llvm::Triple::spir64: {
-    if (Triple.getOS() != llvm::Triple::UnknownOS ||
-        Triple.getEnvironment() != llvm::Triple::UnknownEnvironment)
+  case llvm37::Triple::spir64: {
+    if (Triple.getOS() != llvm37::Triple::UnknownOS ||
+        Triple.getEnvironment() != llvm37::Triple::UnknownEnvironment)
       return nullptr;
     return new SPIR64TargetInfo(Triple);
   }
@@ -7456,7 +7456,7 @@ static TargetInfo *AllocateTarget(const llvm::Triple &Triple, const char* descrp
 TargetInfo *
 TargetInfo::CreateTargetInfo(DiagnosticsEngine &Diags,
                              const std::shared_ptr<TargetOptions> &Opts) {
-  llvm::Triple Triple(Opts->Triple);
+  llvm37::Triple Triple(Opts->Triple);
 
   // Construct the target
   std::unique_ptr<TargetInfo> Target(AllocateTarget(Triple, Opts.get()->DescriptionString));
@@ -7486,7 +7486,7 @@ TargetInfo::CreateTargetInfo(DiagnosticsEngine &Diags,
 
   // Compute the default target features, we need the target to handle this
   // because features may have dependencies on one another.
-  llvm::StringMap<bool> Features;
+  llvm37::StringMap<bool> Features;
   Target->getDefaultFeatures(Features);
 
   // Apply the user specified deltas.
@@ -7503,7 +7503,7 @@ TargetInfo::CreateTargetInfo(DiagnosticsEngine &Diags,
   // FIXME: If we are completely confident that we have the right set, we only
   // need to pass the minuses.
   Opts->Features.clear();
-  for (llvm::StringMap<bool>::const_iterator it = Features.begin(),
+  for (llvm37::StringMap<bool>::const_iterator it = Features.begin(),
          ie = Features.end(); it != ie; ++it)
     Opts->Features.push_back((it->second ? "+" : "-") + it->first().str());
   if (!Target->handleTargetFeatures(Opts->Features, Diags))

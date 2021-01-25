@@ -19,12 +19,12 @@
 ///
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_LIB_TRANSFORMS_OBJCARC_ARCRUNTIMEENTRYPOINTS_H
-#define LLVM_LIB_TRANSFORMS_OBJCARC_ARCRUNTIMEENTRYPOINTS_H
+#ifndef LLVM37_LIB_TRANSFORMS_OBJCARC_ARCRUNTIMEENTRYPOINTS_H
+#define LLVM37_LIB_TRANSFORMS_OBJCARC_ARCRUNTIMEENTRYPOINTS_H
 
 #include "ObjCARC.h"
 
-namespace llvm {
+namespace llvm37 {
 namespace objcarc {
 
 enum class ARCRuntimeEntryPointKind {
@@ -179,6 +179,6 @@ private:
 }; // class ARCRuntimeEntryPoints
 
 } // namespace objcarc
-} // namespace llvm
+} // namespace llvm37
 
 #endif

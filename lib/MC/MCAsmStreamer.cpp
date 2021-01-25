@@ -7,32 +7,32 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/MC/MCStreamer.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/ADT/StringExtras.h"
-#include "llvm/ADT/Twine.h"
-#include "llvm/MC/MCAsmBackend.h"
-#include "llvm/MC/MCAsmInfo.h"
-#include "llvm/MC/MCCodeEmitter.h"
-#include "llvm/MC/MCContext.h"
-#include "llvm/MC/MCExpr.h"
-#include "llvm/MC/MCFixupKindInfo.h"
-#include "llvm/MC/MCInst.h"
-#include "llvm/MC/MCInstPrinter.h"
-#include "llvm/MC/MCObjectFileInfo.h"
-#include "llvm/MC/MCRegisterInfo.h"
-#include "llvm/MC/MCSectionCOFF.h"
-#include "llvm/MC/MCSectionMachO.h"
-#include "llvm/MC/MCSymbolELF.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/Format.h"
-#include "llvm/Support/FormattedStream.h"
-#include "llvm/Support/MathExtras.h"
-#include "llvm/Support/Path.h"
+#include "llvm37/MC/MCStreamer.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/ADT/StringExtras.h"
+#include "llvm37/ADT/Twine.h"
+#include "llvm37/MC/MCAsmBackend.h"
+#include "llvm37/MC/MCAsmInfo.h"
+#include "llvm37/MC/MCCodeEmitter.h"
+#include "llvm37/MC/MCContext.h"
+#include "llvm37/MC/MCExpr.h"
+#include "llvm37/MC/MCFixupKindInfo.h"
+#include "llvm37/MC/MCInst.h"
+#include "llvm37/MC/MCInstPrinter.h"
+#include "llvm37/MC/MCObjectFileInfo.h"
+#include "llvm37/MC/MCRegisterInfo.h"
+#include "llvm37/MC/MCSectionCOFF.h"
+#include "llvm37/MC/MCSectionMachO.h"
+#include "llvm37/MC/MCSymbolELF.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/Format.h"
+#include "llvm37/Support/FormattedStream.h"
+#include "llvm37/Support/MathExtras.h"
+#include "llvm37/Support/Path.h"
 #include <cctype>
-using namespace llvm;
+using namespace llvm37;
 
 namespace {
 
@@ -1362,7 +1362,7 @@ void MCAsmStreamer::FinishImpl() {
   }
 }
 
-MCStreamer *llvm::createAsmStreamer(MCContext &Context,
+MCStreamer *llvm37::createAsmStreamer(MCContext &Context,
                                     std::unique_ptr<formatted_raw_ostream> OS,
                                     bool isVerboseAsm, bool useDwarfDirectory,
                                     MCInstPrinter *IP, MCCodeEmitter *CE,

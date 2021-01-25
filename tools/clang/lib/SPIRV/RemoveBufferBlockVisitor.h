@@ -7,8 +7,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_LIB_SPIRV_REMOVEBUFFERBLOCKVISITOR_H
-#define LLVM_CLANG_LIB_SPIRV_REMOVEBUFFERBLOCKVISITOR_H
+#ifndef LLVM37_CLANG_LIB_SPIRV_REMOVEBUFFERBLOCKVISITOR_H
+#define LLVM37_CLANG_LIB_SPIRV_REMOVEBUFFERBLOCKVISITOR_H
 
 #include "clang/AST/ASTContext.h"
 #include "clang/SPIRV/FeatureManager.h"
@@ -51,4 +51,4 @@ private:
 } // end namespace spirv
 } // end namespace clang
 
-#endif // LLVM_CLANG_LIB_SPIRV_REMOVEBUFFERBLOCKVISITOR_H
+#endif // LLVM37_CLANG_LIB_SPIRV_REMOVEBUFFERBLOCKVISITOR_H

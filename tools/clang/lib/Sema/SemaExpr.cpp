@@ -42,7 +42,7 @@
 #include "clang/Sema/ScopeInfo.h"
 #include "clang/Sema/SemaFixItUtils.h"
 #include "clang/Sema/Template.h"
-#include "llvm/Support/ConvertUTF.h"
+#include "llvm37/Support/ConvertUTF.h"
 #include "clang/Sema/SemaHLSL.h" // HLSL Change
 using namespace clang;
 using namespace sema;
@@ -1368,7 +1368,7 @@ Sema::ActOnGenericSelectionExpr(SourceLocation KeyLoc,
 
   ExprResult ER = CreateGenericSelectionExpr(KeyLoc, DefaultLoc, RParenLoc,
                                              ControllingExpr,
-                                             llvm::makeArrayRef(Types, NumAssocs),
+                                             llvm37::makeArrayRef(Types, NumAssocs),
                                              ArgExprs);
   delete [] Types;
   return ER;
@@ -1544,7 +1544,7 @@ static ExprResult BuildCookedLiteralOperatorCall(Sema &S, Scope *Scope,
   OpNameInfo.setCXXLiteralOperatorNameLoc(UDSuffixLoc);
 
   LookupResult R(S, OpName, UDSuffixLoc, Sema::LookupOrdinaryName);
-  if (S.LookupLiteralOperator(Scope, R, llvm::makeArrayRef(ArgTy, Args.size()),
+  if (S.LookupLiteralOperator(Scope, R, llvm37::makeArrayRef(ArgTy, Args.size()),
                               /*AllowRaw*/false, /*AllowTemplate*/false,
                               /*AllowStringTemplate*/false) == Sema::LOLR_Error)
     return ExprError();
@@ -1577,7 +1577,7 @@ Sema::ActOnStringLiteral(ArrayRef<Token> StringToks, Scope *UDLScope) {
     QualType CharTyConst = Context.CharTy;
     CharTyConst.addConst();
     QualType StrTy = Context.getConstantArrayType(CharTyConst,
-                                 llvm::APInt(32, Literal.GetNumStringChars()+1),
+                                 llvm37::APInt(32, Literal.GetNumStringChars()+1),
                                  ArrayType::Normal, 0);
 
     StringLiteral *Result = StringLiteral::Create(Context, Literal.GetString(), StringLiteral::StringKind::Ascii,
@@ -1612,7 +1612,7 @@ Sema::ActOnStringLiteral(ArrayRef<Token> StringToks, Scope *UDLScope) {
   // the nul terminator character as well as the string length for pascal
   // strings.
   QualType StrTy = Context.getConstantArrayType(CharTyConst,
-                                 llvm::APInt(32, Literal.GetNumStringChars()+1),
+                                 llvm37::APInt(32, Literal.GetNumStringChars()+1),
                                  ArrayType::Normal, 0);
 
   // OpenCL v1.1 s6.5.3: a string literal is in the constant address space.
@@ -1657,7 +1657,7 @@ Sema::ActOnStringLiteral(ArrayRef<Token> StringToks, Scope *UDLScope) {
                                 /*AllowStringTemplate*/true)) {
 
   case LOLR_Cooked: {
-    llvm::APInt Len(Context.getIntWidth(SizeType), Literal.GetNumStringChars());
+    llvm37::APInt Len(Context.getIntWidth(SizeType), Literal.GetNumStringChars());
     IntegerLiteral *LenArg = IntegerLiteral::Create(Context, Len, SizeType,
                                                     StringTokLocs[0]);
     Expr *Args[] = { Lit, LenArg };
@@ -1670,7 +1670,7 @@ Sema::ActOnStringLiteral(ArrayRef<Token> StringToks, Scope *UDLScope) {
 
     unsigned CharBits = Context.getIntWidth(CharTy);
     bool CharIsUnsigned = CharTy->isUnsignedIntegerType();
-    llvm::APSInt Value(CharBits, CharIsUnsigned);
+    llvm37::APSInt Value(CharBits, CharIsUnsigned);
 
     TemplateArgument TypeArg(CharTy);
     TemplateArgumentLocInfo TypeArgInfo(Context.getTrivialTypeSourceInfo(CharTy));
@@ -2230,7 +2230,7 @@ Sema::ActOnIdExpression(Scope *S, CXXScopeSpec &SS,
     // If this name wasn't predeclared and if this is not a function
     // call, diagnose the problem.
     TypoExpr *TE = nullptr;
-    auto DefaultValidator = llvm::make_unique<CorrectionCandidateCallback>(
+    auto DefaultValidator = llvm37::make_unique<CorrectionCandidateCallback>(
         II, SS.isValid() ? SS.getScopeRep() : nullptr);
     DefaultValidator->IsAddressOfOperand = IsAddressOfOperand;
     assert((!CCC || CCC->IsAddressOfOperand == IsAddressOfOperand) &&
@@ -3103,7 +3103,7 @@ ExprResult Sema::BuildPredefinedExpr(SourceLocation Loc,
     auto Str = PredefinedExpr::ComputeName(IT, currentDecl);
     unsigned Length = Str.length();
 
-    llvm::APInt LengthI(32, Length + 1);
+    llvm37::APInt LengthI(32, Length + 1);
     if (IT == PredefinedExpr::LFunction) {
       ResTy = Context.WideCharTy.withConst();
       SmallString<32> RawChars;
@@ -3218,15 +3218,15 @@ ExprResult Sema::ActOnIntegerConstant(SourceLocation Loc, uint64_t Val) {
   } else
     Ty = Context.IntTy;
   // HLSL Change Ends
-  return IntegerLiteral::Create(Context, llvm::APInt(IntSize, Val),
+  return IntegerLiteral::Create(Context, llvm37::APInt(IntSize, Val),
                                 Ty, Loc);    // HLSL Change
 }
 
 static Expr *BuildFloatingLiteral(Sema &S, NumericLiteralParser &Literal,
                                   QualType Ty, SourceLocation Loc) {
-  const llvm::fltSemantics &Format = S.Context.getFloatTypeSemantics(Ty);
+  const llvm37::fltSemantics &Format = S.Context.getFloatTypeSemantics(Ty);
 
-  using llvm::APFloat;
+  using llvm37::APFloat;
   APFloat Val(Format);
 
   APFloat::opStatus result = Literal.GetFloatValue(Val);
@@ -3266,7 +3266,7 @@ bool Sema::CheckLoopHintExpr(Expr *E, SourceLocation Loc) {
     return true;
   }
 
-  llvm::APSInt ValueAPS;
+  llvm37::APSInt ValueAPS;
   ExprResult R = VerifyIntegerConstantExpression(E, &ValueAPS);
 
   if (R.isInvalid())
@@ -3351,7 +3351,7 @@ ExprResult Sema::ActOnNumericConstant(const Token &Tok, Scope *UDLScope) {
       if (Literal.isFloatingLiteral()) {
         Lit = BuildFloatingLiteral(*this, Literal, CookedTy, Tok.getLocation());
       } else {
-        llvm::APInt ResultVal(Context.getTargetInfo().getLongLongWidth(), 0);
+        llvm37::APInt ResultVal(Context.getTargetInfo().getLongLongWidth(), 0);
         if (Literal.GetIntegerValue(ResultVal))
           Diag(Tok.getLocation(), diag::err_integer_literal_too_large)
               << /* Unsigned */ 1;
@@ -3367,7 +3367,7 @@ ExprResult Sema::ActOnNumericConstant(const Token &Tok, Scope *UDLScope) {
       //   operator "" X ("n")
       unsigned Length = Literal.getUDSuffixOffset();
       QualType StrTy = Context.getConstantArrayType(
-          Context.CharTy.withConst(), llvm::APInt(32, Length + 1),
+          Context.CharTy.withConst(), llvm37::APInt(32, Length + 1),
           ArrayType::Normal, 0);
       Expr *Lit = StringLiteral::Create(
           Context, StringRef(TokSpelling.data(), Length), StringLiteral::Ascii,
@@ -3383,7 +3383,7 @@ ExprResult Sema::ActOnNumericConstant(const Token &Tok, Scope *UDLScope) {
       TemplateArgumentListInfo ExplicitArgs;
       unsigned CharBits = Context.getIntWidth(Context.CharTy);
       bool CharIsUnsigned = Context.CharTy->isUnsignedIntegerType();
-      llvm::APSInt Value(CharBits, CharIsUnsigned);
+      llvm37::APSInt Value(CharBits, CharIsUnsigned);
       for (unsigned I = 0, N = Literal.getUDSuffixOffset(); I != N; ++I) {
         Value = TokSpelling[I];
         TemplateArgument Arg(Context, Value, Context.CharTy);
@@ -3438,7 +3438,7 @@ ExprResult Sema::ActOnNumericConstant(const Token &Tok, Scope *UDLScope) {
   } else if (getLangOpts().HLSL) {
     QualType Ty;
     unsigned Width = 64;
-    llvm::APInt ResultVal(Width, 0);
+    llvm37::APInt ResultVal(Width, 0);
     if (!Literal.isLong && !Literal.isLongLong && !Literal.isUnsigned) {
       // in HLSL, unspecific literal ints are LitIntTy, using 64-bit
       Ty = Context.LitIntTy;
@@ -3493,7 +3493,7 @@ ExprResult Sema::ActOnNumericConstant(const Token &Tok, Scope *UDLScope) {
     if (Literal.MicrosoftInteger == 128 && MaxWidth < 128 &&
         Context.getTargetInfo().hasInt128Type())
       MaxWidth = 128;
-    llvm::APInt ResultVal(MaxWidth, 0);
+    llvm37::APInt ResultVal(MaxWidth, 0);
 
     if (Literal.GetIntegerValue(ResultVal)) {
       // If this value didn't fit into uintmax_t, error and force to ull.
@@ -4464,7 +4464,7 @@ static TypoCorrection TryTypoCorrectionForCall(Sema &S, Expr *Fn,
   if (TypoCorrection Corrected = S.CorrectTypo(
           DeclarationNameInfo(FuncName, NameLoc), Sema::LookupOrdinaryName,
           S.getScopeForContext(S.CurContext), nullptr,
-          llvm::make_unique<FunctionCallCCC>(S, FuncName.getAsIdentifierInfo(),
+          llvm37::make_unique<FunctionCallCCC>(S, FuncName.getAsIdentifierInfo(),
                                              Args.size(), ME),
           Sema::CTK_ErrorRecovery)) {
     if (NamedDecl *ND = Corrected.getCorrectionDecl()) {
@@ -6192,7 +6192,7 @@ OpenCLConvertScalarsToVectors(Sema &S, ExprResult &LHS, ExprResult &RHS,
     // with an OpenCL name. Instead, we just print a description.
     std::string EleTyName = ResTy.getUnqualifiedType().getAsString();
     SmallString<64> Str;
-    llvm::raw_svector_ostream OS(Str);
+    llvm37::raw_svector_ostream OS(Str);
     OS << "(vector of " << NumElements << " '" << EleTyName << "' values)";
     S.Diag(QuestionLoc, diag::err_conditional_vector_element_size)
       << CondTy << OS.str();
@@ -7648,7 +7648,7 @@ QualType Sema::CheckMultiplyDivideOperands(ExprResult &LHS, ExprResult &RHS,
     return InvalidOperands(Loc, LHS, RHS);
 
   // Check for division by zero.
-  llvm::APSInt RHSValue;
+  llvm37::APSInt RHSValue;
   if (IsDiv && !RHS.get()->isValueDependent() &&
       RHS.get()->EvaluateAsInt(RHSValue, Context) && RHSValue == 0)
     DiagRuntimeBehavior(Loc, RHS.get(),
@@ -7680,7 +7680,7 @@ QualType Sema::CheckRemainderOperands(
     return InvalidOperands(Loc, LHS, RHS);
 
   // Check for remainder by zero.
-  llvm::APSInt RHSValue;
+  llvm37::APSInt RHSValue;
   if (!RHS.get()->isValueDependent() &&
       RHS.get()->EvaluateAsInt(RHSValue, Context) && RHSValue == 0)
     DiagRuntimeBehavior(Loc, RHS.get(),
@@ -7862,11 +7862,11 @@ static void diagnoseStringPlusInt(Sema &Self, SourceLocation OpLoc,
   if (!IsStringPlusInt || IndexExpr->isValueDependent())
     return;
 
-  llvm::APSInt index;
+  llvm37::APSInt index;
   if (IndexExpr->EvaluateAsInt(index, Self.getASTContext())) {
     unsigned StrLenWithNull = StrExpr->getLength() + 1;
     if (index.isNonNegative() &&
-        index <= llvm::APSInt(llvm::APInt(index.getBitWidth(), StrLenWithNull),
+        index <= llvm37::APSInt(llvm37::APInt(index.getBitWidth(), StrLenWithNull),
                               index.isUnsigned()))
       return;
   }
@@ -7917,7 +7917,7 @@ static void diagnoseStringPlusChar(Sema &Self, SourceLocation OpLoc,
   const QualType CharType = CharExpr->getType();
   if (!CharType->isAnyCharacterType() &&
       CharType->isIntegerType() &&
-      llvm::isUIntN(Ctx.getCharWidth(), CharExpr->getValue())) {
+      llvm37::isUIntN(Ctx.getCharWidth(), CharExpr->getValue())) {
     Self.Diag(OpLoc, diag::warn_string_plus_char)
         << DiagRange << Ctx.CharTy;
   } else {
@@ -8132,7 +8132,7 @@ static void DiagnoseBadShiftValues(Sema& S, ExprResult &LHS, ExprResult &RHS,
   if (S.getLangOpts().OpenCL)
     return;
 
-  llvm::APSInt Right;
+  llvm37::APSInt Right;
   // Check right/shifter operand
   if (RHS.get()->isValueDependent() ||
       !RHS.get()->EvaluateAsInt(Right, S.Context))
@@ -8144,7 +8144,7 @@ static void DiagnoseBadShiftValues(Sema& S, ExprResult &LHS, ExprResult &RHS,
                             << RHS.get()->getSourceRange());
     return;
   }
-  llvm::APInt LeftBits(Right.getBitWidth(),
+  llvm37::APInt LeftBits(Right.getBitWidth(),
                        S.Context.getTypeSize(LHS.get()->getType()));
   if (Right.uge(LeftBits)) {
     S.DiagRuntimeBehavior(Loc, RHS.get(),
@@ -8159,7 +8159,7 @@ static void DiagnoseBadShiftValues(Sema& S, ExprResult &LHS, ExprResult &RHS,
   // according to C++ has undefined behavior ([expr.shift] 5.8/2). Unsigned
   // integers have defined behavior modulo one more than the maximum value
   // representable in the result type, so never warn for those.
-  llvm::APSInt Left;
+  llvm37::APSInt Left;
   if (LHS.get()->isValueDependent() ||
       LHSType->hasUnsignedIntegerRepresentation() ||
       !LHS.get()->EvaluateAsInt(Left, S.Context))
@@ -8174,11 +8174,11 @@ static void DiagnoseBadShiftValues(Sema& S, ExprResult &LHS, ExprResult &RHS,
     return;
   }
 
-  llvm::APInt ResultBits =
-      static_cast<llvm::APInt&>(Right) + Left.getMinSignedBits();
+  llvm37::APInt ResultBits =
+      static_cast<llvm37::APInt&>(Right) + Left.getMinSignedBits();
   if (LeftBits.uge(ResultBits))
     return;
-  llvm::APSInt Result = Left.extend(ResultBits.getLimitedValue());
+  llvm37::APSInt Result = Left.extend(ResultBits.getLimitedValue());
   Result = Result.shl(Right);
 
   // Print the bit representation of the signed integer as an unsigned
@@ -9181,7 +9181,7 @@ inline QualType Sema::CheckLogicalOperands( // C99 6.5.[13,14]
     // that isn't 0 or 1 (which indicate a potential logical operation that
     // happened to fold to true/false) then warn.
     // Parens on the RHS are ignored.
-    llvm::APSInt Result;
+    llvm37::APSInt Result;
     if (RHS.get()->EvaluateAsInt(Result, Context))
       if ((getLangOpts().Bool && !RHS.get()->getType()->isBooleanType() &&
            !RHS.get()->getExprLoc().isMacroID()) ||
@@ -11471,7 +11471,7 @@ ExprResult Sema::ActOnChooseExpr(SourceLocation BuiltinLoc,
     ValueDependent = true;
   } else {
     // The conditional expression is required to be a constant expression.
-    llvm::APSInt condEval(32);
+    llvm37::APSInt condEval(32);
     ExprResult CondICE
       = VerifyIntegerConstantExpression(CondExpr, &condEval,
           diag::err_typecheck_choose_expr_requires_constant, false);
@@ -12130,7 +12130,7 @@ bool Sema::DiagnoseAssignmentResult(AssignConvertType ConvTy,
 }
 
 ExprResult Sema::VerifyIntegerConstantExpression(Expr *E,
-                                                 llvm::APSInt *Result) {
+                                                 llvm37::APSInt *Result) {
   class SimpleICEDiagnoser : public VerifyICEDiagnoser {
   public:
     void diagnoseNotICE(Sema &S, SourceLocation Loc, SourceRange SR) override {
@@ -12142,7 +12142,7 @@ ExprResult Sema::VerifyIntegerConstantExpression(Expr *E,
 }
 
 ExprResult Sema::VerifyIntegerConstantExpression(Expr *E,
-                                                 llvm::APSInt *Result,
+                                                 llvm37::APSInt *Result,
                                                  unsigned DiagID,
                                                  bool AllowFold) {
   class IDDiagnoser : public VerifyICEDiagnoser {
@@ -12166,7 +12166,7 @@ void Sema::VerifyICEDiagnoser::diagnoseFold(Sema &S, SourceLocation Loc,
 }
 
 ExprResult
-Sema::VerifyIntegerConstantExpression(Expr *E, llvm::APSInt *Result,
+Sema::VerifyIntegerConstantExpression(Expr *E, llvm37::APSInt *Result,
                                       VerifyICEDiagnoser &Diagnoser,
                                       bool AllowFold) {
   SourceLocation DiagLoc = E->getLocStart();
@@ -13452,7 +13452,7 @@ ExprResult Sema::ActOnConstantExpression(ExprResult Res) {
 }
 
 void Sema::CleanupVarDeclMarking() {
-  for (llvm::SmallPtrSetIterator<Expr*> i = MaybeODRUseExprs.begin(),
+  for (llvm37::SmallPtrSetIterator<Expr*> i = MaybeODRUseExprs.begin(),
                                         e = MaybeODRUseExprs.end();
        i != e; ++i) {
     VarDecl *Var;

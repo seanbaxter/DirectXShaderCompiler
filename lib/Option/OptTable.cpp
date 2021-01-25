@@ -7,20 +7,20 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Option/OptTable.h"
-#include "llvm/Option/Arg.h"
-#include "llvm/Option/ArgList.h"
-#include "llvm/Option/Option.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/Option/OptTable.h"
+#include "llvm37/Option/Arg.h"
+#include "llvm37/Option/ArgList.h"
+#include "llvm37/Option/Option.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <algorithm>
 #include <cctype>
 #include <map>
 
-using namespace llvm;
-using namespace llvm::opt;
+using namespace llvm37;
+using namespace llvm37::opt;
 
-namespace llvm {
+namespace llvm37 {
 namespace opt {
 
 // Ordering on Info. The ordering is *almost* case-insensitive lexicographic,
@@ -139,7 +139,7 @@ OptTable::OptTable(const Info *OptionInfos, unsigned NumOptionInfos,
   }
 
   // Build prefix chars.
-  for (llvm::StringSet<>::const_iterator I = PrefixesUnion.begin(),
+  for (llvm37::StringSet<>::const_iterator I = PrefixesUnion.begin(),
                                          E = PrefixesUnion.end(); I != E; ++I) {
     StringRef Prefix = I->getKey();
     for (StringRef::const_iterator C = Prefix.begin(), CE = Prefix.end();
@@ -161,10 +161,10 @@ const Option OptTable::getOption(OptSpecifier Opt) const {
   return Option(&getInfo(id), this);
 }
 
-static bool isInput(const llvm::StringSet<> &Prefixes, StringRef Arg) {
+static bool isInput(const llvm37::StringSet<> &Prefixes, StringRef Arg) {
   if (Arg == "-")
     return true;
-  for (llvm::StringSet<>::const_iterator I = Prefixes.begin(),
+  for (llvm37::StringSet<>::const_iterator I = Prefixes.begin(),
                                          E = Prefixes.end(); I != E; ++I)
     if (Arg.startswith(I->getKey()))
       return false;

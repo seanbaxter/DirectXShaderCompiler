@@ -26,15 +26,15 @@ else(WIN32)
   add_compile_options(-w)
 endif(WIN32)
 
-set(LLVM_REQUIRES_RTTI 1)
+set(LLVM37_REQUIRES_RTTI 1)
 add_definitions( -DGTEST_HAS_RTTI=0 )
 
-if (NOT LLVM_ENABLE_THREADS)
+if (NOT LLVM37_ENABLE_THREADS)
   add_definitions( -DGTEST_HAS_PTHREAD=0 )
 endif()
 
-find_library(LLVM_PTHREAD_LIBRARY_PATH pthread)
-if (LLVM_PTHREAD_LIBRARY_PATH)
+find_library(LLVM37_PTHREAD_LIBRARY_PATH pthread)
+if (LLVM37_PTHREAD_LIBRARY_PATH)
   list(APPEND LIBS pthread)
 endif()
 

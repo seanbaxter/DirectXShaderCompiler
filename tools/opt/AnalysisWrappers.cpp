@@ -17,12 +17,12 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Analysis/CallGraph.h"
-#include "llvm/IR/CallSite.h"
-#include "llvm/IR/Module.h"
-#include "llvm/Pass.h"
-#include "llvm/Support/raw_ostream.h"
-using namespace llvm;
+#include "llvm37/Analysis/CallGraph.h"
+#include "llvm37/IR/CallSite.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/Pass.h"
+#include "llvm37/Support/raw_ostream.h"
+using namespace llvm37;
 
 namespace {
   /// ExternalFunctionsPassedConstants - This pass prints out call sites to

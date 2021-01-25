@@ -18,7 +18,7 @@
 
 #include "WindowsSupport.h"
 
-namespace llvm {
+namespace llvm37 {
 using namespace sys;
 
 // Windows has slim read-writer lock support on Vista and higher, so we

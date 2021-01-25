@@ -11,16 +11,16 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_AST_COMMENTLEXER_H
-#define LLVM_CLANG_AST_COMMENTLEXER_H
+#ifndef LLVM37_CLANG_AST_COMMENTLEXER_H
+#define LLVM37_CLANG_AST_COMMENTLEXER_H
 
 #include "clang/Basic/Diagnostic.h"
 #include "clang/Basic/SourceManager.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/ADT/StringRef.h"
-#include "llvm/Support/Allocator.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/ADT/StringRef.h"
+#include "llvm37/Support/Allocator.h"
+#include "llvm37/Support/raw_ostream.h"
 
 namespace clang {
 namespace comments {
@@ -79,25 +79,25 @@ class Token {
   unsigned IntVal;
   
 public:
-  SourceLocation getLocation() const LLVM_READONLY { return Loc; }
+  SourceLocation getLocation() const LLVM37_READONLY { return Loc; }
   void setLocation(SourceLocation SL) { Loc = SL; }
 
-  SourceLocation getEndLocation() const LLVM_READONLY {
+  SourceLocation getEndLocation() const LLVM37_READONLY {
     if (Length == 0 || Length == 1)
       return Loc;
     return Loc.getLocWithOffset(Length - 1);
   }
 
-  tok::TokenKind getKind() const LLVM_READONLY { return Kind; }
+  tok::TokenKind getKind() const LLVM37_READONLY { return Kind; }
   void setKind(tok::TokenKind K) { Kind = K; }
 
-  bool is(tok::TokenKind K) const LLVM_READONLY { return Kind == K; }
-  bool isNot(tok::TokenKind K) const LLVM_READONLY { return Kind != K; }
+  bool is(tok::TokenKind K) const LLVM37_READONLY { return Kind == K; }
+  bool isNot(tok::TokenKind K) const LLVM37_READONLY { return Kind != K; }
 
-  unsigned getLength() const LLVM_READONLY { return Length; }
+  unsigned getLength() const LLVM37_READONLY { return Length; }
   void setLength(unsigned L) { Length = L; }
 
-  StringRef getText() const LLVM_READONLY {
+  StringRef getText() const LLVM37_READONLY {
     assert(is(tok::text));
     return StringRef(TextPtr, IntVal);
   }
@@ -108,7 +108,7 @@ public:
     IntVal = Text.size();
   }
 
-  StringRef getUnknownCommandName() const LLVM_READONLY {
+  StringRef getUnknownCommandName() const LLVM37_READONLY {
     assert(is(tok::unknown_command));
     return StringRef(TextPtr, IntVal);
   }
@@ -119,7 +119,7 @@ public:
     IntVal = Name.size();
   }
 
-  unsigned getCommandID() const LLVM_READONLY {
+  unsigned getCommandID() const LLVM37_READONLY {
     assert(is(tok::backslash_command) || is(tok::at_command));
     return IntVal;
   }
@@ -129,7 +129,7 @@ public:
     IntVal = ID;
   }
 
-  unsigned getVerbatimBlockID() const LLVM_READONLY {
+  unsigned getVerbatimBlockID() const LLVM37_READONLY {
     assert(is(tok::verbatim_block_begin) || is(tok::verbatim_block_end));
     return IntVal;
   }
@@ -139,7 +139,7 @@ public:
     IntVal = ID;
   }
 
-  StringRef getVerbatimBlockText() const LLVM_READONLY {
+  StringRef getVerbatimBlockText() const LLVM37_READONLY {
     assert(is(tok::verbatim_block_line));
     return StringRef(TextPtr, IntVal);
   }
@@ -150,7 +150,7 @@ public:
     IntVal = Text.size();
   }
 
-  unsigned getVerbatimLineID() const LLVM_READONLY {
+  unsigned getVerbatimLineID() const LLVM37_READONLY {
     assert(is(tok::verbatim_line_name));
     return IntVal;
   }
@@ -160,7 +160,7 @@ public:
     IntVal = ID;
   }
 
-  StringRef getVerbatimLineText() const LLVM_READONLY {
+  StringRef getVerbatimLineText() const LLVM37_READONLY {
     assert(is(tok::verbatim_line_text));
     return StringRef(TextPtr, IntVal);
   }
@@ -171,7 +171,7 @@ public:
     IntVal = Text.size();
   }
 
-  StringRef getHTMLTagStartName() const LLVM_READONLY {
+  StringRef getHTMLTagStartName() const LLVM37_READONLY {
     assert(is(tok::html_start_tag));
     return StringRef(TextPtr, IntVal);
   }
@@ -182,7 +182,7 @@ public:
     IntVal = Name.size();
   }
 
-  StringRef getHTMLIdent() const LLVM_READONLY {
+  StringRef getHTMLIdent() const LLVM37_READONLY {
     assert(is(tok::html_ident));
     return StringRef(TextPtr, IntVal);
   }
@@ -193,7 +193,7 @@ public:
     IntVal = Name.size();
   }
 
-  StringRef getHTMLQuotedString() const LLVM_READONLY {
+  StringRef getHTMLQuotedString() const LLVM37_READONLY {
     assert(is(tok::html_quoted_string));
     return StringRef(TextPtr, IntVal);
   }
@@ -204,7 +204,7 @@ public:
     IntVal = Str.size();
   }
 
-  StringRef getHTMLTagEndName() const LLVM_READONLY {
+  StringRef getHTMLTagEndName() const LLVM37_READONLY {
     assert(is(tok::html_end_tag));
     return StringRef(TextPtr, IntVal);
   }
@@ -226,7 +226,7 @@ private:
 
   /// Allocator for strings that are semantic values of tokens and have to be
   /// computed (for example, resolved decimal character references).
-  llvm::BumpPtrAllocator &Allocator;
+  llvm37::BumpPtrAllocator &Allocator;
 
   DiagnosticsEngine &Diags;
   
@@ -343,7 +343,7 @@ private:
   void lexHTMLEndTag(Token &T);
 
 public:
-  Lexer(llvm::BumpPtrAllocator &Allocator, DiagnosticsEngine &Diags,
+  Lexer(llvm37::BumpPtrAllocator &Allocator, DiagnosticsEngine &Diags,
         const CommandTraits &Traits,
         SourceLocation FileLoc,
         const char *BufferStart, const char *BufferEnd);

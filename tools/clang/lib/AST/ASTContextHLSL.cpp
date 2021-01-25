@@ -419,7 +419,7 @@ static void AddConstUInt(clang::ASTContext& context, DeclContext *DC, StringRef 
                                 context.getTrivialTypeSourceInfo(type),
                                 clang::StorageClass::SC_Static);
   Expr *exprVal = IntegerLiteral::Create(
-      context, llvm::APInt(context.getIntWidth(type), val), type, NoLoc);
+      context, llvm37::APInt(context.getIntWidth(type), val), type, NoLoc);
   varDecl->setInit(exprVal);
   varDecl->setImplicit(true);
   DC->addDecl(varDecl);
@@ -916,7 +916,7 @@ CXXRecordDecl* hlsl::DeclareResourceType(ASTContext& context, bool bSampler) {
   return recordDecl;
 }
 
-VarDecl *hlsl::DeclareBuiltinGlobal(llvm::StringRef name, clang::QualType Ty,
+VarDecl *hlsl::DeclareBuiltinGlobal(llvm37::StringRef name, clang::QualType Ty,
                               clang::ASTContext &context) {
   IdentifierInfo &II = context.Idents.get(name);
 
@@ -937,7 +937,7 @@ bool hlsl::IsIntrinsicOp(const clang::FunctionDecl *FD) {
 }
 
 bool hlsl::GetIntrinsicOp(const clang::FunctionDecl *FD, unsigned &opcode,
-                    llvm::StringRef &group) {
+                    llvm37::StringRef &group) {
   if (FD == nullptr || !FD->hasAttr<HLSLIntrinsicAttr>()) {
     return false;
   }
@@ -948,7 +948,7 @@ bool hlsl::GetIntrinsicOp(const clang::FunctionDecl *FD, unsigned &opcode,
   return true;
 }
 
-bool hlsl::GetIntrinsicLowering(const clang::FunctionDecl *FD, llvm::StringRef &S) {
+bool hlsl::GetIntrinsicLowering(const clang::FunctionDecl *FD, llvm37::StringRef &S) {
   if (FD == nullptr || !FD->hasAttr<HLSLIntrinsicAttr>()) {
     return false;
   }
@@ -1145,11 +1145,11 @@ TypedefDecl* hlsl::CreateVectorSpecializationShorthand(
   return decl;
 }
 
-llvm::ArrayRef<hlsl::UnusualAnnotation*>
+llvm37::ArrayRef<hlsl::UnusualAnnotation*>
 hlsl::UnusualAnnotation::CopyToASTContextArray(
   clang::ASTContext& Context, hlsl::UnusualAnnotation** begin, size_t count) {
   if (count == 0) {
-    return llvm::ArrayRef<hlsl::UnusualAnnotation*>();
+    return llvm37::ArrayRef<hlsl::UnusualAnnotation*>();
   }
 
   UnusualAnnotation** arr = ::new (Context) UnusualAnnotation*[count];
@@ -1157,7 +1157,7 @@ hlsl::UnusualAnnotation::CopyToASTContextArray(
     arr[i] = begin[i]->CopyToASTContext(Context);
   }
 
-  return llvm::ArrayRef<hlsl::UnusualAnnotation*>(arr, count);
+  return llvm37::ArrayRef<hlsl::UnusualAnnotation*>(arr, count);
 }
 
 UnusualAnnotation* hlsl::UnusualAnnotation::CopyToASTContext(ASTContext& Context) {

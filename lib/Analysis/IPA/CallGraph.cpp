@@ -7,15 +7,15 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Analysis/CallGraph.h"
-#include "llvm/IR/CallSite.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/IR/Module.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/Analysis/CallGraph.h"
+#include "llvm37/IR/CallSite.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/raw_ostream.h"
 #include "dxc/HLSL/HLModule.h" // HLSL Change
-using namespace llvm;
+using namespace llvm37;
 
 //===----------------------------------------------------------------------===//
 // Implementations of the CallGraph class methods.
@@ -23,7 +23,7 @@ using namespace llvm;
 
 CallGraph::CallGraph(Module &M)
     : M(M), ExternalCallingNode(getOrInsertFunction(nullptr)),
-      CallsExternalNode(llvm::make_unique<CallGraphNode>(nullptr)) {
+      CallsExternalNode(llvm37::make_unique<CallGraphNode>(nullptr)) {
   // Add every function to the call graph.
   for (Function &F : M)
     addToCallGraph(&F);
@@ -107,7 +107,7 @@ void CallGraph::print(raw_ostream &OS) const {
     CN->print(OS);
 }
 
-#if !defined(NDEBUG) || defined(LLVM_ENABLE_DUMP)
+#if !defined(NDEBUG) || defined(LLVM37_ENABLE_DUMP)
 void CallGraph::dump() const { print(dbgs()); }
 #endif
 
@@ -153,7 +153,7 @@ CallGraphNode *CallGraph::getOrInsertFunction(const Function *F) {
     return CGN.get();
 
   assert((!F || F->getParent() == &M) && "Function not in current module!");
-  CGN = llvm::make_unique<CallGraphNode>(const_cast<Function *>(F));
+  CGN = llvm37::make_unique<CallGraphNode>(const_cast<Function *>(F));
   return CGN.get();
 }
 
@@ -179,7 +179,7 @@ void CallGraphNode::print(raw_ostream &OS) const {
   OS << '\n';
 }
 
-#if !defined(NDEBUG) || defined(LLVM_ENABLE_DUMP)
+#if !defined(NDEBUG) || defined(LLVM37_ENABLE_DUMP)
 void CallGraphNode::dump() const { print(dbgs()); }
 #endif
 
@@ -286,6 +286,6 @@ void CallGraphWrapperPass::print(raw_ostream &OS, const Module *) const {
   G->print(OS);
 }
 
-#if !defined(NDEBUG) || defined(LLVM_ENABLE_DUMP)
+#if !defined(NDEBUG) || defined(LLVM37_ENABLE_DUMP)
 void CallGraphWrapperPass::dump() const { print(dbgs(), nullptr); }
 #endif

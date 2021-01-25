@@ -11,10 +11,10 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Target/TargetIntrinsicInfo.h"
-#include "llvm/ADT/StringMap.h"
-#include "llvm/IR/Function.h"
-using namespace llvm;
+#include "llvm37/Target/TargetIntrinsicInfo.h"
+#include "llvm37/ADT/StringMap.h"
+#include "llvm37/IR/Function.h"
+using namespace llvm37;
 
 TargetIntrinsicInfo::TargetIntrinsicInfo() {
 }

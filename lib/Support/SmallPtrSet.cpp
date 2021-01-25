@@ -12,13 +12,13 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/ADT/SmallPtrSet.h"
-#include "llvm/ADT/DenseMapInfo.h"
-#include "llvm/Support/MathExtras.h"
+#include "llvm37/ADT/SmallPtrSet.h"
+#include "llvm37/ADT/DenseMapInfo.h"
+#include "llvm37/Support/MathExtras.h"
 #include <algorithm>
 #include <cstdlib>
 
-using namespace llvm;
+using namespace llvm37;
 
 void SmallPtrSetImplBase::shrink_and_clear() {
   assert(!isSmall() && "Can't shrink a small set!");
@@ -51,10 +51,10 @@ SmallPtrSetImplBase::insert_imp(const void *Ptr) {
     // Otherwise, hit the big set case, which will call grow.
   }
 
-  if (LLVM_UNLIKELY(NumElements * 4 >= CurArraySize * 3)) {
+  if (LLVM37_UNLIKELY(NumElements * 4 >= CurArraySize * 3)) {
     // If more than 3/4 of the array is full, grow.
     Grow(CurArraySize < 64 ? 128 : CurArraySize*2);
-  } else if (LLVM_UNLIKELY(CurArraySize - (NumElements + NumTombstones) <
+  } else if (LLVM37_UNLIKELY(CurArraySize - (NumElements + NumTombstones) <
                            CurArraySize / 8)) {
     // If fewer of 1/8 of the array is empty (meaning that many are filled with
     // tombstones), rehash.
@@ -111,11 +111,11 @@ const void * const *SmallPtrSetImplBase::FindBucketFor(const void *Ptr) const {
     // If we found an empty bucket, the pointer doesn't exist in the set.
     // Return a tombstone if we've seen one so far, or the empty bucket if
     // not.
-    if (LLVM_LIKELY(Array[Bucket] == getEmptyMarker()))
+    if (LLVM37_LIKELY(Array[Bucket] == getEmptyMarker()))
       return Tombstone ? Tombstone : Array+Bucket;
 
     // Found Ptr's bucket?
-    if (LLVM_LIKELY(Array[Bucket] == Ptr))
+    if (LLVM37_LIKELY(Array[Bucket] == Ptr))
       return Array+Bucket;
 
     // If this is a tombstone, remember it.  If Ptr ends up not in the set, we

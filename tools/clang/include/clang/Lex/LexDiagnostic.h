@@ -7,8 +7,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_LEX_LEXDIAGNOSTIC_H
-#define LLVM_CLANG_LEX_LEXDIAGNOSTIC_H
+#ifndef LLVM37_CLANG_LEX_LEXDIAGNOSTIC_H
+#define LLVM37_CLANG_LEX_LEXDIAGNOSTIC_H
 
 #include "clang/Basic/Diagnostic.h"
 

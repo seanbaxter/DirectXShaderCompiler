@@ -11,28 +11,28 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Object/IRObjectFile.h"
+#include "llvm37/Object/IRObjectFile.h"
 #include "RecordStreamer.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/Bitcode/ReaderWriter.h"
-#include "llvm/IR/GVMaterializer.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Mangler.h"
-#include "llvm/IR/Module.h"
-#include "llvm/MC/MCAsmInfo.h"
-#include "llvm/MC/MCContext.h"
-#include "llvm/MC/MCInstrInfo.h"
-#include "llvm/MC/MCObjectFileInfo.h"
-#include "llvm/MC/MCParser/MCAsmParser.h"
-#include "llvm/MC/MCRegisterInfo.h"
-#include "llvm/MC/MCSubtargetInfo.h"
-#include "llvm/MC/MCTargetAsmParser.h"
-#include "llvm/Object/ObjectFile.h"
-#include "llvm/Support/MemoryBuffer.h"
-#include "llvm/Support/SourceMgr.h"
-#include "llvm/Support/TargetRegistry.h"
-#include "llvm/Support/raw_ostream.h"
-using namespace llvm;
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/Bitcode/ReaderWriter.h"
+#include "llvm37/IR/GVMaterializer.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/Mangler.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/MC/MCAsmInfo.h"
+#include "llvm37/MC/MCContext.h"
+#include "llvm37/MC/MCInstrInfo.h"
+#include "llvm37/MC/MCObjectFileInfo.h"
+#include "llvm37/MC/MCParser/MCAsmParser.h"
+#include "llvm37/MC/MCRegisterInfo.h"
+#include "llvm37/MC/MCSubtargetInfo.h"
+#include "llvm37/MC/MCTargetAsmParser.h"
+#include "llvm37/Object/ObjectFile.h"
+#include "llvm37/Support/MemoryBuffer.h"
+#include "llvm37/Support/SourceMgr.h"
+#include "llvm37/Support/TargetRegistry.h"
+#include "llvm37/Support/raw_ostream.h"
+using namespace llvm37;
 using namespace object;
 
 IRObjectFile::IRObjectFile(MemoryBufferRef Object, std::unique_ptr<Module> Mod)
@@ -296,7 +296,7 @@ ErrorOr<MemoryBufferRef> IRObjectFile::findBitcodeInMemBuffer(MemoryBufferRef Ob
 }
 
 ErrorOr<std::unique_ptr<IRObjectFile>>
-llvm::object::IRObjectFile::create(MemoryBufferRef Object,
+llvm37::object::IRObjectFile::create(MemoryBufferRef Object,
                                    LLVMContext &Context) {
   ErrorOr<MemoryBufferRef> BCOrErr = findBitcodeInMemBuffer(Object);
   if (!BCOrErr)
@@ -312,5 +312,5 @@ llvm::object::IRObjectFile::create(MemoryBufferRef Object,
     return EC;
 
   std::unique_ptr<Module> &M = MOrErr.get();
-  return llvm::make_unique<IRObjectFile>(Object, std::move(M));
+  return llvm37::make_unique<IRObjectFile>(Object, std::move(M));
 }

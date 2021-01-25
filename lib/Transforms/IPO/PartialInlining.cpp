@@ -12,16 +12,16 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Transforms/IPO.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/IR/CFG.h"
-#include "llvm/IR/Dominators.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/Module.h"
-#include "llvm/Pass.h"
-#include "llvm/Transforms/Utils/Cloning.h"
-#include "llvm/Transforms/Utils/CodeExtractor.h"
-using namespace llvm;
+#include "llvm37/Transforms/IPO.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/IR/CFG.h"
+#include "llvm37/IR/Dominators.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/Pass.h"
+#include "llvm37/Transforms/Utils/Cloning.h"
+#include "llvm37/Transforms/Utils/CodeExtractor.h"
+using namespace llvm37;
 
 #define DEBUG_TYPE "partialinlining"
 
@@ -46,7 +46,7 @@ char PartialInliner::ID = 0;
 INITIALIZE_PASS(PartialInliner, "partial-inliner",
                 "Partial Inliner", false, false)
 
-ModulePass* llvm::createPartialInliningPass() { return new PartialInliner(); }
+ModulePass* llvm37::createPartialInliningPass() { return new PartialInliner(); }
 
 Function* PartialInliner::unswitchFunction(Function* F) {
   // First, verify that this function is an unswitching candidate...

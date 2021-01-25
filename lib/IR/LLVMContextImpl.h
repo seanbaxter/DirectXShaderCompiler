@@ -12,29 +12,29 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_LIB_IR_LLVMCONTEXTIMPL_H
-#define LLVM_LIB_IR_LLVMCONTEXTIMPL_H
+#ifndef LLVM37_LIB_IR_LLVMCONTEXTIMPL_H
+#define LLVM37_LIB_IR_LLVMCONTEXTIMPL_H
 
 #include "AttributeImpl.h"
 #include "ConstantsContext.h"
-#include "llvm/ADT/APFloat.h"
-#include "llvm/ADT/APInt.h"
-#include "llvm/ADT/ArrayRef.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/DenseSet.h"
-#include "llvm/ADT/FoldingSet.h"
-#include "llvm/ADT/Hashing.h"
-#include "llvm/ADT/SmallPtrSet.h"
-#include "llvm/ADT/StringMap.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/DebugInfoMetadata.h"
-#include "llvm/IR/DerivedTypes.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Metadata.h"
-#include "llvm/IR/ValueHandle.h"
+#include "llvm37/ADT/APFloat.h"
+#include "llvm37/ADT/APInt.h"
+#include "llvm37/ADT/ArrayRef.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/DenseSet.h"
+#include "llvm37/ADT/FoldingSet.h"
+#include "llvm37/ADT/Hashing.h"
+#include "llvm37/ADT/SmallPtrSet.h"
+#include "llvm37/ADT/StringMap.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/DebugInfoMetadata.h"
+#include "llvm37/IR/DerivedTypes.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/Metadata.h"
+#include "llvm37/IR/ValueHandle.h"
 #include <vector>
 
-namespace llvm {
+namespace llvm37 {
 
 class ConstantInt;
 class ConstantFP;
@@ -881,7 +881,7 @@ template <class NodeTy> struct MDNodeInfo {
 };
 
 #define HANDLE_MDNODE_LEAF(CLASS) typedef MDNodeInfo<CLASS> CLASS##Info;
-#include "llvm/IR/Metadata.def"
+#include "llvm37/IR/Metadata.def"
 
 /// \brief Map-like storage for metadata attachments.
 class MDAttachmentMap {
@@ -954,7 +954,7 @@ public:
   DenseMap<const Value*, ValueName*> ValueNames;
 
 #define HANDLE_MDNODE_LEAF(CLASS) DenseSet<CLASS *, CLASS##Info> CLASS##s;
-#include "llvm/IR/Metadata.def"
+#include "llvm37/IR/Metadata.def"
 
   // MDNodes may be uniqued or not uniqued.  When they're not uniqued, they
   // aren't in the MDNodeSet, but they're still shared between objects, so no

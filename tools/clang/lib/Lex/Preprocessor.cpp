@@ -42,14 +42,14 @@
 #include "clang/Lex/PreprocessingRecord.h"
 #include "clang/Lex/PreprocessorOptions.h"
 #include "clang/Lex/ScratchBuffer.h"
-#include "llvm/ADT/APFloat.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/ADT/StringExtras.h"
-#include "llvm/Support/Capacity.h"
-#include "llvm/Support/ConvertUTF.h"
-#include "llvm/Support/MemoryBuffer.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/APFloat.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/ADT/StringExtras.h"
+#include "llvm37/Support/Capacity.h"
+#include "llvm37/Support/ConvertUTF.h"
+#include "llvm37/Support/MemoryBuffer.h"
+#include "llvm37/Support/raw_ostream.h"
 using namespace clang;
 
 //===----------------------------------------------------------------------===//
@@ -185,7 +185,7 @@ void Preprocessor::InitializeForModelFile() {
 
   // Reset pragmas
   PragmaHandlersBackup = std::move(PragmaHandlers);
-  PragmaHandlers = llvm::make_unique<PragmaNamespace>(StringRef());
+  PragmaHandlers = llvm37::make_unique<PragmaNamespace>(StringRef());
   RegisterBuiltinPragmas();
 
   // Reset PredefinesFileID
@@ -204,27 +204,27 @@ void Preprocessor::setPTHManager(PTHManager* pm) {
 }
 
 void Preprocessor::DumpToken(const Token &Tok, bool DumpFlags) const {
-  llvm::errs() << tok::getTokenName(Tok.getKind()) << " '"
+  llvm37::errs() << tok::getTokenName(Tok.getKind()) << " '"
                << getSpelling(Tok) << "'";
 
   if (!DumpFlags) return;
 
-  llvm::errs() << "\t";
+  llvm37::errs() << "\t";
   if (Tok.isAtStartOfLine())
-    llvm::errs() << " [StartOfLine]";
+    llvm37::errs() << " [StartOfLine]";
   if (Tok.hasLeadingSpace())
-    llvm::errs() << " [LeadingSpace]";
+    llvm37::errs() << " [LeadingSpace]";
   if (Tok.isExpandDisabled())
-    llvm::errs() << " [ExpandDisabled]";
+    llvm37::errs() << " [ExpandDisabled]";
   if (Tok.needsCleaning()) {
     const char *Start = SourceMgr.getCharacterData(Tok.getLocation());
-    llvm::errs() << " [UnClean='" << StringRef(Start, Tok.getLength())
+    llvm37::errs() << " [UnClean='" << StringRef(Start, Tok.getLength())
                  << "']";
   }
 
-  llvm::errs() << "\tLoc=<";
+  llvm37::errs() << "\tLoc=<";
   DumpLocation(Tok.getLocation());
-  llvm::errs() << ">";
+  llvm37::errs() << ">";
 }
 
 void Preprocessor::DumpLocation(SourceLocation Loc) const {
@@ -232,50 +232,50 @@ void Preprocessor::DumpLocation(SourceLocation Loc) const {
 }
 
 void Preprocessor::DumpMacro(const MacroInfo &MI) const {
-  llvm::errs() << "MACRO: ";
+  llvm37::errs() << "MACRO: ";
   for (unsigned i = 0, e = MI.getNumTokens(); i != e; ++i) {
     DumpToken(MI.getReplacementToken(i));
-    llvm::errs() << "  ";
+    llvm37::errs() << "  ";
   }
-  llvm::errs() << "\n";
+  llvm37::errs() << "\n";
 }
 
 void Preprocessor::PrintStats() {
-  llvm::errs() << "\n*** Preprocessor Stats:\n";
-  llvm::errs() << NumDirectives << " directives found:\n";
-  llvm::errs() << "  " << NumDefined << " #define.\n";
-  llvm::errs() << "  " << NumUndefined << " #undef.\n";
-  llvm::errs() << "  #include/#include_next/#import:\n";
-  llvm::errs() << "    " << NumEnteredSourceFiles << " source files entered.\n";
-  llvm::errs() << "    " << MaxIncludeStackDepth << " max include stack depth\n";
-  llvm::errs() << "  " << NumIf << " #if/#ifndef/#ifdef.\n";
-  llvm::errs() << "  " << NumElse << " #else/#elif.\n";
-  llvm::errs() << "  " << NumEndif << " #endif.\n";
-  llvm::errs() << "  " << NumPragma << " #pragma.\n";
-  llvm::errs() << NumSkipped << " #if/#ifndef#ifdef regions skipped\n";
+  llvm37::errs() << "\n*** Preprocessor Stats:\n";
+  llvm37::errs() << NumDirectives << " directives found:\n";
+  llvm37::errs() << "  " << NumDefined << " #define.\n";
+  llvm37::errs() << "  " << NumUndefined << " #undef.\n";
+  llvm37::errs() << "  #include/#include_next/#import:\n";
+  llvm37::errs() << "    " << NumEnteredSourceFiles << " source files entered.\n";
+  llvm37::errs() << "    " << MaxIncludeStackDepth << " max include stack depth\n";
+  llvm37::errs() << "  " << NumIf << " #if/#ifndef/#ifdef.\n";
+  llvm37::errs() << "  " << NumElse << " #else/#elif.\n";
+  llvm37::errs() << "  " << NumEndif << " #endif.\n";
+  llvm37::errs() << "  " << NumPragma << " #pragma.\n";
+  llvm37::errs() << NumSkipped << " #if/#ifndef#ifdef regions skipped\n";
 
-  llvm::errs() << NumMacroExpanded << "/" << NumFnMacroExpanded << "/"
+  llvm37::errs() << NumMacroExpanded << "/" << NumFnMacroExpanded << "/"
              << NumBuiltinMacroExpanded << " obj/fn/builtin macros expanded, "
              << NumFastMacroExpanded << " on the fast path.\n";
-  llvm::errs() << (NumFastTokenPaste+NumTokenPaste)
+  llvm37::errs() << (NumFastTokenPaste+NumTokenPaste)
              << " token paste (##) operations performed, "
              << NumFastTokenPaste << " on the fast path.\n";
 
-  llvm::errs() << "\nPreprocessor Memory: " << getTotalMemory() << "B total";
+  llvm37::errs() << "\nPreprocessor Memory: " << getTotalMemory() << "B total";
 
-  llvm::errs() << "\n  BumpPtr: " << BP.getTotalMemory();
-  llvm::errs() << "\n  Macro Expanded Tokens: "
-               << llvm::capacity_in_bytes(MacroExpandedTokens);
-  llvm::errs() << "\n  Predefines Buffer: " << Predefines.capacity();
+  llvm37::errs() << "\n  BumpPtr: " << BP.getTotalMemory();
+  llvm37::errs() << "\n  Macro Expanded Tokens: "
+               << llvm37::capacity_in_bytes(MacroExpandedTokens);
+  llvm37::errs() << "\n  Predefines Buffer: " << Predefines.capacity();
   // FIXME: List information for all submodules.
-  llvm::errs() << "\n  Macros: "
-               << llvm::capacity_in_bytes(CurSubmoduleState->Macros);
-  llvm::errs() << "\n  #pragma push_macro Info: "
-               << llvm::capacity_in_bytes(PragmaPushMacroInfo);
-  llvm::errs() << "\n  Poison Reasons: "
-               << llvm::capacity_in_bytes(PoisonReasons);
-  llvm::errs() << "\n  Comment Handlers: "
-               << llvm::capacity_in_bytes(CommentHandlers) << "\n";
+  llvm37::errs() << "\n  Macros: "
+               << llvm37::capacity_in_bytes(CurSubmoduleState->Macros);
+  llvm37::errs() << "\n  #pragma push_macro Info: "
+               << llvm37::capacity_in_bytes(PragmaPushMacroInfo);
+  llvm37::errs() << "\n  Poison Reasons: "
+               << llvm37::capacity_in_bytes(PoisonReasons);
+  llvm37::errs() << "\n  Comment Handlers: "
+               << llvm37::capacity_in_bytes(CommentHandlers) << "\n";
 }
 
 Preprocessor::macro_iterator
@@ -295,14 +295,14 @@ Preprocessor::macro_begin(bool IncludeExternalMacros) const {
 
 size_t Preprocessor::getTotalMemory() const {
   return BP.getTotalMemory()
-    + llvm::capacity_in_bytes(MacroExpandedTokens)
+    + llvm37::capacity_in_bytes(MacroExpandedTokens)
     + Predefines.capacity() /* Predefines buffer. */
     // FIXME: Include sizes from all submodules, and include MacroInfo sizes,
     // and ModuleMacros.
-    + llvm::capacity_in_bytes(CurSubmoduleState->Macros)
-    + llvm::capacity_in_bytes(PragmaPushMacroInfo)
-    + llvm::capacity_in_bytes(PoisonReasons)
-    + llvm::capacity_in_bytes(CommentHandlers);
+    + llvm37::capacity_in_bytes(CurSubmoduleState->Macros)
+    + llvm37::capacity_in_bytes(PragmaPushMacroInfo)
+    + llvm37::capacity_in_bytes(PoisonReasons)
+    + llvm37::capacity_in_bytes(CommentHandlers);
 }
 
 Preprocessor::macro_iterator
@@ -368,7 +368,7 @@ bool Preprocessor::SetCodeCompletionPoint(const FileEntry *File,
   assert(CompleteLine && CompleteColumn && "Starts from 1:1");
   assert(!CodeCompletionFile && "Already set");
 
-  using llvm::MemoryBuffer;
+  using llvm37::MemoryBuffer;
 
   // Load the actual file's contents.
   bool Invalid = false;
@@ -511,8 +511,8 @@ void Preprocessor::EnterMainSourceFile() {
   }
 
   // Preprocess Predefines to populate the initial preprocessor state.
-  std::unique_ptr<llvm::MemoryBuffer> SB =
-    llvm::MemoryBuffer::getMemBufferCopy(Predefines, "<built-in>");
+  std::unique_ptr<llvm37::MemoryBuffer> SB =
+    llvm37::MemoryBuffer::getMemBufferCopy(Predefines, "<built-in>");
   if (SB.get() == nullptr) throw std::bad_alloc(); // HLSL Change
   assert(SB && "Cannot create predefined source buffer");
   FileID FID = SourceMgr.createFileID(std::move(SB));
@@ -586,7 +586,7 @@ void Preprocessor::PoisonSEHIdentifiers(bool Poison) {
 void Preprocessor::HandlePoisonedIdentifier(Token & Identifier) {
   assert(Identifier.getIdentifierInfo() &&
          "Can't handle identifiers without identifier info!");
-  llvm::DenseMap<IdentifierInfo*,unsigned>::const_iterator it =
+  llvm37::DenseMap<IdentifierInfo*,unsigned>::const_iterator it =
     PoisonReasons.find(Identifier.getIdentifierInfo());
   if(it == PoisonReasons.end())
     Diag(Identifier, diag::err_pp_used_poisoned_id);
@@ -601,7 +601,7 @@ static diag::kind getFutureCompatDiagKind(const IdentifierInfo &II,
   assert(II.isFutureCompatKeyword() && "diagnostic should not be needed");
 
   if (LangOpts.CPlusPlus)
-    return llvm::StringSwitch<diag::kind>(II.getName())
+    return llvm37::StringSwitch<diag::kind>(II.getName())
 #define CXX11_KEYWORD(NAME, FLAGS)                                             \
         .Case(#NAME, diag::warn_cxx11_keyword)
 #include "clang/Basic/TokenKinds.def"
@@ -859,7 +859,7 @@ bool Preprocessor::parseSimpleIntegerLiteral(Token &Tok, uint64_t &Value) {
   NumericLiteralParser Literal(Spelling, Tok.getLocation(), *this);
   if (Literal.hadError || !Literal.isIntegerLiteral() || Literal.hasUDSuffix())
     return false;
-  llvm::APInt APVal(64, 0);
+  llvm37::APInt APVal(64, 0);
   if (Literal.GetIntegerValue(APVal))
     return false;
   Lex(Tok);

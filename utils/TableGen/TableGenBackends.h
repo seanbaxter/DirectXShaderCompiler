@@ -13,8 +13,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_UTILS_TABLEGEN_TABLEGENBACKENDS_H
-#define LLVM_UTILS_TABLEGEN_TABLEGENBACKENDS_H
+#ifndef LLVM37_UTILS_TABLEGEN_TABLEGENBACKENDS_H
+#define LLVM37_UTILS_TABLEGEN_TABLEGENBACKENDS_H
 
 // A TableGen backend is a function that looks like
 //
@@ -57,7 +57,7 @@
 // LLVM.
 
 
-namespace llvm {
+namespace llvm37 {
 
 class raw_ostream;
 class RecordKeeper;

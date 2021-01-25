@@ -21,33 +21,33 @@
 #include "TypeDumper.h"
 #include "VariableDumper.h"
 
-#include "llvm/ADT/ArrayRef.h"
-#include "llvm/ADT/StringExtras.h"
-#include "llvm/Config/config.h"
-#include "llvm/DebugInfo/PDB/IPDBEnumChildren.h"
-#include "llvm/DebugInfo/PDB/IPDBRawSymbol.h"
-#include "llvm/DebugInfo/PDB/IPDBSession.h"
-#include "llvm/DebugInfo/PDB/PDB.h"
-#include "llvm/DebugInfo/PDB/PDBSymbolCompiland.h"
-#include "llvm/DebugInfo/PDB/PDBSymbolData.h"
-#include "llvm/DebugInfo/PDB/PDBSymbolExe.h"
-#include "llvm/DebugInfo/PDB/PDBSymbolFunc.h"
-#include "llvm/DebugInfo/PDB/PDBSymbolThunk.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/ConvertUTF.h"
-#include "llvm/Support/FileSystem.h"
-#include "llvm/Support/Format.h"
-#include "llvm/Support/ManagedStatic.h"
-#include "llvm/Support/PrettyStackTrace.h"
-#include "llvm/Support/Process.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Support/Signals.h"
+#include "llvm37/ADT/ArrayRef.h"
+#include "llvm37/ADT/StringExtras.h"
+#include "llvm37/Config/config.h"
+#include "llvm37/DebugInfo/PDB/IPDBEnumChildren.h"
+#include "llvm37/DebugInfo/PDB/IPDBRawSymbol.h"
+#include "llvm37/DebugInfo/PDB/IPDBSession.h"
+#include "llvm37/DebugInfo/PDB/PDB.h"
+#include "llvm37/DebugInfo/PDB/PDBSymbolCompiland.h"
+#include "llvm37/DebugInfo/PDB/PDBSymbolData.h"
+#include "llvm37/DebugInfo/PDB/PDBSymbolExe.h"
+#include "llvm37/DebugInfo/PDB/PDBSymbolFunc.h"
+#include "llvm37/DebugInfo/PDB/PDBSymbolThunk.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/ConvertUTF.h"
+#include "llvm37/Support/FileSystem.h"
+#include "llvm37/Support/Format.h"
+#include "llvm37/Support/ManagedStatic.h"
+#include "llvm37/Support/PrettyStackTrace.h"
+#include "llvm37/Support/Process.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Support/Signals.h"
 
 #if defined(HAVE_DIA_SDK)
 #include <windows.h>
 #endif
 
-using namespace llvm;
+using namespace llvm37;
 
 namespace opts {
 
@@ -110,7 +110,7 @@ cl::opt<bool> NoEnumDefs("no-enum-definitions",
 static void dumpInput(StringRef Path) {
   std::unique_ptr<IPDBSession> Session;
   PDB_ErrorCode Error =
-      llvm::loadDataForPDB(PDB_ReaderType::DIA, Path, Session);
+      llvm37::loadDataForPDB(PDB_ReaderType::DIA, Path, Session);
   switch (Error) {
   case PDB_ErrorCode::Success:
     break;
@@ -145,7 +145,7 @@ static void dumpInput(StringRef Path) {
 
   Printer.NewLine();
   WithColor(Printer, PDB_ColorItem::Identifier).get() << "Size";
-  if (!llvm::sys::fs::file_size(FileName, FileSize)) {
+  if (!llvm37::sys::fs::file_size(FileName, FileSize)) {
     Printer << ": " << FileSize << " bytes";
   } else {
     Printer << ": (Unable to obtain file size)";
@@ -242,11 +242,11 @@ int main(int argc_, const char *argv_[]) {
   PrettyStackTraceProgram X(argc_, argv_);
 
   SmallVector<const char *, 256> argv;
-  llvm::SpecificBumpPtrAllocator<char> ArgAllocator;
-  std::error_code EC = llvm::sys::Process::GetArgumentVector(
-      argv, llvm::makeArrayRef(argv_, argc_), ArgAllocator);
+  llvm37::SpecificBumpPtrAllocator<char> ArgAllocator;
+  std::error_code EC = llvm37::sys::Process::GetArgumentVector(
+      argv, llvm37::makeArrayRef(argv_, argc_), ArgAllocator);
   if (EC) {
-    llvm::errs() << "error: couldn't get arguments: " << EC.message() << '\n';
+    llvm37::errs() << "error: couldn't get arguments: " << EC.message() << '\n';
     return 1;
   }
 

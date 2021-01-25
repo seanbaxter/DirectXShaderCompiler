@@ -14,20 +14,20 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Transforms/IPO.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/Analysis/LoopPass.h"
-#include "llvm/IR/Dominators.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/Module.h"
-#include "llvm/Pass.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Transforms/Scalar.h"
-#include "llvm/Transforms/Utils/BasicBlockUtils.h"
-#include "llvm/Transforms/Utils/CodeExtractor.h"
+#include "llvm37/Transforms/IPO.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/Analysis/LoopPass.h"
+#include "llvm37/IR/Dominators.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/Pass.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Transforms/Scalar.h"
+#include "llvm37/Transforms/Utils/BasicBlockUtils.h"
+#include "llvm37/Transforms/Utils/CodeExtractor.h"
 #include <fstream>
 #include <set>
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "loop-extract"
 
@@ -77,7 +77,7 @@ INITIALIZE_PASS(SingleLoopExtractor, "loop-extract-single",
 // createLoopExtractorPass - This pass extracts all natural loops from the
 // program into a function if it can.
 //
-Pass *llvm::createLoopExtractorPass() { return new LoopExtractor(); }
+Pass *llvm37::createLoopExtractorPass() { return new LoopExtractor(); }
 
 bool LoopExtractor::runOnLoop(Loop *L, LPPassManager &LPM) {
   if (skipOptnoneFunction(L))
@@ -152,7 +152,7 @@ bool LoopExtractor::runOnLoop(Loop *L, LPPassManager &LPM) {
 // createSingleLoopExtractorPass - This pass extracts one natural loop from the
 // program into a function if it can.  This is used by bugpoint.
 //
-Pass *llvm::createSingleLoopExtractorPass() {
+Pass *llvm37::createSingleLoopExtractorPass() {
   return new SingleLoopExtractor();
 }
 
@@ -193,7 +193,7 @@ INITIALIZE_PASS(BlockExtractorPass, "extract-blocks",
 // createBlockExtractorPass - This pass extracts all blocks (except those
 // specified in the argument list) from the functions in the module.
 //
-ModulePass *llvm::createBlockExtractorPass() {
+ModulePass *llvm37::createBlockExtractorPass() {
   return new BlockExtractorPass();
 }
 

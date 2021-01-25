@@ -10,10 +10,10 @@
 #include "dxc/DXIL/DxilResource.h"
 #include "dxc/Support/Global.h"
 #include "dxc/DXIL/DxilResourceBase.h"
-#include "llvm/IR/Constant.h"
-#include "llvm/IR/DerivedTypes.h"
+#include "llvm37/IR/Constant.h"
+#include "llvm37/IR/DerivedTypes.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 namespace hlsl {
 

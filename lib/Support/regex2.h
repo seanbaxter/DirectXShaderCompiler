@@ -35,8 +35,8 @@
  *	@(#)regex2.h	8.4 (Berkeley) 3/20/94
  */
 
-#ifndef LLVM_SUPPORT_REGEX2_H
-#define LLVM_SUPPORT_REGEX2_H
+#ifndef LLVM37_SUPPORT_REGEX2_H
+#define LLVM37_SUPPORT_REGEX2_H
 
 /*
  * internals of regex_t

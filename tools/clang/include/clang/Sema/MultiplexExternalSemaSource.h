@@ -10,12 +10,12 @@
 //  This file defines ExternalSemaSource interface, dispatching to all clients
 //
 //===----------------------------------------------------------------------===//
-#ifndef LLVM_CLANG_SEMA_MULTIPLEXEXTERNALSEMASOURCE_H
-#define LLVM_CLANG_SEMA_MULTIPLEXEXTERNALSEMASOURCE_H
+#ifndef LLVM37_CLANG_SEMA_MULTIPLEXEXTERNALSEMASOURCE_H
+#define LLVM37_CLANG_SEMA_MULTIPLEXEXTERNALSEMASOURCE_H
 
 #include "clang/Sema/ExternalSemaSource.h"
 #include "clang/Sema/Weak.h"
-#include "llvm/ADT/SmallVector.h"
+#include "llvm37/ADT/SmallVector.h"
 #include <utility>
 
 namespace clang {
@@ -195,9 +195,9 @@ public:
   bool
   layoutRecordType(const RecordDecl *Record,
                    uint64_t &Size, uint64_t &Alignment,
-                   llvm::DenseMap<const FieldDecl *, uint64_t> &FieldOffsets,
-                 llvm::DenseMap<const CXXRecordDecl *, CharUnits> &BaseOffsets,
-                 llvm::DenseMap<const CXXRecordDecl *,
+                   llvm37::DenseMap<const FieldDecl *, uint64_t> &FieldOffsets,
+                 llvm37::DenseMap<const CXXRecordDecl *, CharUnits> &BaseOffsets,
+                 llvm37::DenseMap<const CXXRecordDecl *,
                                 CharUnits> &VirtualBaseOffsets) override;
 
   /// Return the amount of memory used by memory buffers, breaking down
@@ -228,10 +228,10 @@ public:
   /// \brief Load the set of used but not defined functions or variables with
   /// internal linkage, or used but not defined inline functions.
   void ReadUndefinedButUsed(
-                llvm::DenseMap<NamedDecl*, SourceLocation> &Undefined) override;
+                llvm37::DenseMap<NamedDecl*, SourceLocation> &Undefined) override;
 
-  void ReadMismatchingDeleteExpressions(llvm::MapVector<
-      FieldDecl *, llvm::SmallVector<std::pair<SourceLocation, bool>, 4>> &
+  void ReadMismatchingDeleteExpressions(llvm37::MapVector<
+      FieldDecl *, llvm37::SmallVector<std::pair<SourceLocation, bool>, 4>> &
                                             Exprs) override;
 
   /// \brief Do last resort, unqualified lookup on a LookupResult that
@@ -289,7 +289,7 @@ public:
   /// be invoked multiple times; the external source should take care not to
   /// introduce the same declarations repeatedly.
   void ReadUnusedLocalTypedefNameCandidates(
-      llvm::SmallSetVector<const TypedefNameDecl *, 4> &Decls) override;
+      llvm37::SmallSetVector<const TypedefNameDecl *, 4> &Decls) override;
 
   /// \brief Read the set of referenced selectors known to the
   /// external Sema source.
@@ -335,7 +335,7 @@ public:
   /// external source should take care not to introduce the same map entries
   /// repeatedly.
   void ReadLateParsedTemplates(
-      llvm::MapVector<const FunctionDecl *, LateParsedTemplate *> &LPTMap)
+      llvm37::MapVector<const FunctionDecl *, LateParsedTemplate *> &LPTMap)
       override;
 
   /// \copydoc ExternalSemaSource::CorrectTypo

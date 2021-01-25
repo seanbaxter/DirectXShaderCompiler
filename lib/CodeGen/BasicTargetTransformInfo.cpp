@@ -15,21 +15,21 @@
 ///
 //===----------------------------------------------------------------------===//
 
-#include "llvm/CodeGen/BasicTTIImpl.h"
-#include "llvm/Analysis/LoopInfo.h"
-#include "llvm/Analysis/TargetTransformInfo.h"
-#include "llvm/Analysis/TargetTransformInfoImpl.h"
-#include "llvm/CodeGen/Passes.h"
-#include "llvm/Support/CommandLine.h"
+#include "llvm37/CodeGen/BasicTTIImpl.h"
+#include "llvm37/Analysis/LoopInfo.h"
+#include "llvm37/Analysis/TargetTransformInfo.h"
+#include "llvm37/Analysis/TargetTransformInfoImpl.h"
+#include "llvm37/CodeGen/Passes.h"
+#include "llvm37/Support/CommandLine.h"
 #include <utility>
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "basictti"
 
 // This flag is used by the template base class for BasicTTIImpl, and here to
 // provide a definition.
 cl::opt<unsigned>
-    llvm::PartialUnrollingThreshold("partial-unrolling-threshold", cl::init(0),
+    llvm37::PartialUnrollingThreshold("partial-unrolling-threshold", cl::init(0),
                                     cl::desc("Threshold for partial unrolling"),
                                     cl::Hidden);
 

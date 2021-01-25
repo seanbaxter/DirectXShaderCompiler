@@ -7,14 +7,14 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_LIB_EXECUTIONENGINE_RUNTIMEDYLD_TARGETS_RUNTIMEDYLDMACHOX86_64_H
-#define LLVM_LIB_EXECUTIONENGINE_RUNTIMEDYLD_TARGETS_RUNTIMEDYLDMACHOX86_64_H
+#ifndef LLVM37_LIB_EXECUTIONENGINE_RUNTIMEDYLD_TARGETS_RUNTIMEDYLDMACHOX86_64_H
+#define LLVM37_LIB_EXECUTIONENGINE_RUNTIMEDYLD_TARGETS_RUNTIMEDYLDMACHOX86_64_H
 
 #include "../RuntimeDyldMachO.h"
 
 #define DEBUG_TYPE "dyld"
 
-namespace llvm {
+namespace llvm37 {
 
 class RuntimeDyldMachOX86_64
     : public RuntimeDyldMachOCRTPBase<RuntimeDyldMachOX86_64> {

@@ -14,16 +14,16 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_UTILS_TABLEGEN_CODEGENTARGET_H
-#define LLVM_UTILS_TABLEGEN_CODEGENTARGET_H
+#ifndef LLVM37_UTILS_TABLEGEN_CODEGENTARGET_H
+#define LLVM37_UTILS_TABLEGEN_CODEGENTARGET_H
 
 #include "CodeGenInstruction.h"
 #include "CodeGenRegisters.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/TableGen/Record.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/TableGen/Record.h"
 #include <algorithm>
 
-namespace llvm {
+namespace llvm37 {
 
 struct CodeGenRegister;
 class CodeGenSchedModels;

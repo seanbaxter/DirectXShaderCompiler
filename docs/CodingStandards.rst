@@ -580,10 +580,10 @@ understood for formatting nested function calls. Examples:
 
   foo({a, b, c}, {1, 2, 3});
 
-  llvm::Constant *Mask[] = {
-      llvm::ConstantInt::get(llvm::Type::getInt32Ty(getLLVMContext()), 0),
-      llvm::ConstantInt::get(llvm::Type::getInt32Ty(getLLVMContext()), 1),
-      llvm::ConstantInt::get(llvm::Type::getInt32Ty(getLLVMContext()), 2)};
+  llvm37::Constant *Mask[] = {
+      llvm37::ConstantInt::get(llvm37::Type::getInt32Ty(getLLVMContext()), 0),
+      llvm37::ConstantInt::get(llvm37::Type::getInt32Ty(getLLVMContext()), 1),
+      llvm37::ConstantInt::get(llvm37::Type::getInt32Ty(getLLVMContext()), 2)};
 
 This formatting scheme also makes it particularly easy to get predictable,
 consistent, and automatic formatting with tools like `Clang Format`_.
@@ -1380,7 +1380,7 @@ provides various APIs that are better performing for almost every use than
 .. note::
 
   New code should always use `raw_ostream`_ for writing, or the
-  ``llvm::MemoryBuffer`` API for reading files.
+  ``llvm37::MemoryBuffer`` API for reading files.
 
 .. _raw_ostream:
 
@@ -1519,7 +1519,7 @@ being closed by a ``}``.  For example:
 
 .. code-block:: c++
 
-  namespace llvm {
+  namespace llvm37 {
   namespace knowledge {
 
   /// This class represents things that Smith can have an intimate
@@ -1535,7 +1535,7 @@ being closed by a ``}``.  For example:
   };
 
   } // end namespace knowledge
-  } // end namespace llvm
+  } // end namespace llvm37
 
 
 Feel free to skip the closing comment when the namespace being closed is

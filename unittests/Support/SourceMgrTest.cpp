@@ -7,12 +7,12 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Support/SourceMgr.h"
-#include "llvm/Support/MemoryBuffer.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/Support/SourceMgr.h"
+#include "llvm37/Support/MemoryBuffer.h"
+#include "llvm37/Support/raw_ostream.h"
 #include "gtest/gtest.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 namespace {
 
@@ -25,7 +25,7 @@ public:
   void setMainBuffer(StringRef Text, StringRef BufferName) {
     std::unique_ptr<MemoryBuffer> MainBuffer =
         MemoryBuffer::getMemBuffer(Text, BufferName);
-    MainBufferID = SM.AddNewSourceBuffer(std::move(MainBuffer), llvm::SMLoc());
+    MainBufferID = SM.AddNewSourceBuffer(std::move(MainBuffer), llvm37::SMLoc());
   }
 
   SMLoc getLoc(unsigned Offset) {

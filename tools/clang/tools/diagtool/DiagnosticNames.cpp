@@ -9,7 +9,7 @@
 
 #include "DiagnosticNames.h"
 #include "clang/Basic/AllDiagnostics.h"
-#include "llvm/ADT/STLExtras.h"
+#include "llvm37/ADT/STLExtras.h"
 
 using namespace clang;
 using namespace diagtool;
@@ -20,8 +20,8 @@ static const DiagnosticRecord BuiltinDiagnosticsByName[] = {
 #undef DIAG_NAME_INDEX
 };
 
-llvm::ArrayRef<DiagnosticRecord> diagtool::getBuiltinDiagnosticsByName() {
-  return llvm::makeArrayRef(BuiltinDiagnosticsByName);
+llvm37::ArrayRef<DiagnosticRecord> diagtool::getBuiltinDiagnosticsByName() {
+  return llvm37::makeArrayRef(BuiltinDiagnosticsByName);
 }
 
 
@@ -72,7 +72,7 @@ static const GroupRecord OptionTable[] = {
 #undef GET_DIAG_TABLE
 };
 
-llvm::StringRef GroupRecord::getName() const {
+llvm37::StringRef GroupRecord::getName() const {
   return StringRef(DiagGroupNames + NameOffset + 1, DiagGroupNames[NameOffset]);
 }
 
@@ -92,6 +92,6 @@ GroupRecord::diagnostics_iterator GroupRecord::diagnostics_end() const {
   return nullptr;
 }
 
-llvm::ArrayRef<GroupRecord> diagtool::getDiagnosticGroups() {
-  return llvm::makeArrayRef(OptionTable);
+llvm37::ArrayRef<GroupRecord> diagtool::getDiagnosticGroups() {
+  return llvm37::makeArrayRef(OptionTable);
 }

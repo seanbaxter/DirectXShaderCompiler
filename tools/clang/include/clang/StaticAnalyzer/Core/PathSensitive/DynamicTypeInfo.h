@@ -6,8 +6,8 @@
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
-#ifndef LLVM_CLANG_STATICANALYZER_CORE_PATHSENSITIVE_DYNAMICTYPEINFO_H
-#define LLVM_CLANG_STATICANALYZER_CORE_PATHSENSITIVE_DYNAMICTYPEINFO_H
+#ifndef LLVM37_CLANG_STATICANALYZER_CORE_PATHSENSITIVE_DYNAMICTYPEINFO_H
+#define LLVM37_CLANG_STATICANALYZER_CORE_PATHSENSITIVE_DYNAMICTYPEINFO_H
 
 #include "clang/AST/Type.h"
 
@@ -37,7 +37,7 @@ public:
   /// the only type in the lattice), true otherwise.
   bool canBeASubClass() const { return CanBeASubClass; }
 
-  void Profile(llvm::FoldingSetNodeID &ID) const {
+  void Profile(llvm37::FoldingSetNodeID &ID) const {
     ID.Add(T);
     ID.AddInteger((unsigned)CanBeASubClass);
   }

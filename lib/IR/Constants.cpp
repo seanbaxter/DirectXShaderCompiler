@@ -11,30 +11,30 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/IR/Constants.h"
+#include "llvm37/IR/Constants.h"
 #include "ConstantFold.h"
 #include "LLVMContextImpl.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/FoldingSet.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/ADT/StringExtras.h"
-#include "llvm/ADT/StringMap.h"
-#include "llvm/IR/DerivedTypes.h"
-#include "llvm/IR/GetElementPtrTypeIterator.h"
-#include "llvm/IR/GlobalValue.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/Operator.h"
-#include "llvm/Support/Compiler.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/ManagedStatic.h"
-#include "llvm/Support/MathExtras.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/FoldingSet.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/ADT/StringExtras.h"
+#include "llvm37/ADT/StringMap.h"
+#include "llvm37/IR/DerivedTypes.h"
+#include "llvm37/IR/GetElementPtrTypeIterator.h"
+#include "llvm37/IR/GlobalValue.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/Operator.h"
+#include "llvm37/Support/Compiler.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/ManagedStatic.h"
+#include "llvm37/Support/MathExtras.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <algorithm>
 #include <cstdarg>
-using namespace llvm;
+using namespace llvm37;
 
 //===----------------------------------------------------------------------===//
 //                              Constant Class
@@ -286,7 +286,7 @@ void Constant::destroyConstant() {
   case Value::Name##Val:                                                       \
     cast<Name>(this)->destroyConstantImpl();                                   \
     break;
-#include "llvm/IR/Value.def"
+#include "llvm37/IR/Value.def"
   }
 
   // When a Constant is destroyed, there may be lingering
@@ -1037,7 +1037,7 @@ Constant *ConstantStruct::get(StructType *T, ...) {
   va_list ap;
   SmallVector<Constant*, 8> Values;
   va_start(ap, T);
-  while (Constant *Val = va_arg(ap, llvm::Constant*))
+  while (Constant *Val = va_arg(ap, llvm37::Constant*))
     Values.push_back(Val);
   va_end(ap);
   return get(T, Values);
@@ -2846,7 +2846,7 @@ void Constant::handleOperandChange(Value *From, Value *To, Use *U) {
   case Value::Name##Val:                                                       \
     Replacement = cast<Name>(this)->handleOperandChangeImpl(From, To, U);      \
     break;
-#include "llvm/IR/Value.def"
+#include "llvm37/IR/Value.def"
   }
 
   // If handleOperandChangeImpl returned nullptr, then it handled

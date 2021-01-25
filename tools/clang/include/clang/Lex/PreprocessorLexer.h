@@ -12,12 +12,12 @@
 ///
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_LEX_PREPROCESSORLEXER_H
-#define LLVM_CLANG_LEX_PREPROCESSORLEXER_H
+#ifndef LLVM37_CLANG_LEX_PREPROCESSORLEXER_H
+#define LLVM37_CLANG_LEX_PREPROCESSORLEXER_H
 
 #include "clang/Lex/MultipleIncludeOpt.h"
 #include "clang/Lex/Token.h"
-#include "llvm/ADT/SmallVector.h"
+#include "llvm37/ADT/SmallVector.h"
 
 namespace clang {
 

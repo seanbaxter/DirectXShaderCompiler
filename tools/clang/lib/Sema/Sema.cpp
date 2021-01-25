@@ -37,10 +37,10 @@
 #include "clang/Sema/ScopeInfo.h"
 #include "clang/Sema/SemaConsumer.h"
 #include "clang/Sema/TemplateDeduction.h"
-#include "llvm/ADT/APFloat.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/SmallSet.h"
-#include "llvm/Support/CrashRecoveryContext.h"
+#include "llvm37/ADT/APFloat.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/SmallSet.h"
+#include "llvm37/Support/CrashRecoveryContext.h"
 using namespace clang;
 using namespace sema;
 
@@ -247,7 +247,7 @@ void Sema::Initialize() {
 }
 
 Sema::~Sema() {
-  llvm::DeleteContainerSeconds(LateParsedTemplateMap);
+  llvm37::DeleteContainerSeconds(LateParsedTemplateMap);
   if (PackContext) FreePackedContext();
   if (VisContext) FreeVisContext();
   // Kill all the active scopes.
@@ -329,8 +329,8 @@ void Sema::addExternalSource(ExternalSemaSource *E) {
 
 /// \brief Print out statistics about the semantic analysis.
 void Sema::PrintStats() const {
-  llvm::errs() << "\n*** Semantic Analysis Stats:\n";
-  llvm::errs() << NumSFINAEErrors << " SFINAE diagnostics trapped.\n";
+  llvm37::errs() << "\n*** Semantic Analysis Stats:\n";
+  llvm37::errs() << NumSFINAEErrors << " SFINAE diagnostics trapped.\n";
 
   BumpAlloc.PrintStats();
   AnalysisWarnings.PrintStats();
@@ -464,7 +464,7 @@ static bool ShouldRemoveFromUnused(Sema *SemaRef, const DeclaratorDecl *D) {
 /// Obtains a sorted list of functions that are undefined but ODR-used.
 void Sema::getUndefinedButUsed(
     SmallVectorImpl<std::pair<NamedDecl *, SourceLocation> > &Undefined) {
-  for (llvm::DenseMap<NamedDecl *, SourceLocation>::iterator
+  for (llvm37::DenseMap<NamedDecl *, SourceLocation>::iterator
          I = UndefinedButUsed.begin(), E = UndefinedButUsed.end();
        I != E; ++I) {
     NamedDecl *ND = I->first;
@@ -492,7 +492,7 @@ void Sema::getUndefinedButUsed(
   }
 
   // Sort (in order of use site) so that we're not dependent on the iteration
-  // order through an llvm::DenseMap.
+  // order through an llvm37::DenseMap.
   SourceManager &SM = Context.getSourceManager();
   std::sort(Undefined.begin(), Undefined.end(),
             [&SM](const std::pair<NamedDecl *, SourceLocation> &l,
@@ -553,7 +553,7 @@ void Sema::LoadExternalWeakUndeclaredIdentifiers() {
 }
 
 
-typedef llvm::DenseMap<const CXXRecordDecl*, bool> RecordCompleteMap;
+typedef llvm37::DenseMap<const CXXRecordDecl*, bool> RecordCompleteMap;
 
 /// \brief Returns true, if all methods and nested classes of the given
 /// CXXRecordDecl are defined in this translation unit.
@@ -771,7 +771,7 @@ void Sema::ActOnEndOfTranslationUnit() {
   //   translation unit contains a file scope declaration of that
   //   identifier, with the composite type as of the end of the
   //   translation unit, with an initializer equal to 0.
-  llvm::SmallSet<VarDecl *, 32> Seen;
+  llvm37::SmallSet<VarDecl *, 32> Seen;
   for (TentativeDefinitionsType::iterator
             T = TentativeDefinitions.begin(ExternalSource),
          TEnd = TentativeDefinitions.end();
@@ -789,7 +789,7 @@ void Sema::ActOnEndOfTranslationUnit() {
         = Context.getAsIncompleteArrayType(VD->getType())) {
       // Set the length of the array to 1 (C99 6.9.2p5).
       Diag(VD->getLocation(), diag::warn_tentative_incomplete_array);
-      llvm::APInt One(Context.getTypeSize(Context.getSizeType()), true);
+      llvm37::APInt One(Context.getTypeSize(Context.getSizeType()), true);
       QualType T = Context.getConstantArrayType(ArrayT->getElementType(),
                                                 One, ArrayType::Normal, 0);
       VD->setType(T);
@@ -1249,11 +1249,11 @@ void ExternalSemaSource::ReadKnownNamespaces(
 }
 
 void ExternalSemaSource::ReadUndefinedButUsed(
-                       llvm::DenseMap<NamedDecl *, SourceLocation> &Undefined) {
+                       llvm37::DenseMap<NamedDecl *, SourceLocation> &Undefined) {
 }
 
-void ExternalSemaSource::ReadMismatchingDeleteExpressions(llvm::MapVector<
-    FieldDecl *, llvm::SmallVector<std::pair<SourceLocation, bool>, 4>> &) {}
+void ExternalSemaSource::ReadMismatchingDeleteExpressions(llvm37::MapVector<
+    FieldDecl *, llvm37::SmallVector<std::pair<SourceLocation, bool>, 4>> &) {}
 
 void PrettyDeclStackTraceEntry::print(raw_ostream &OS) const {
   SourceLocation Loc = this->Loc;
@@ -1505,7 +1505,7 @@ CapturedRegionScopeInfo *Sema::getCurCapturedRegion() {
   return dyn_cast<CapturedRegionScopeInfo>(FunctionScopes.back());
 }
 
-const llvm::MapVector<FieldDecl *, Sema::DeleteLocs> &
+const llvm37::MapVector<FieldDecl *, Sema::DeleteLocs> &
 Sema::getMismatchingDeleteExpressions() const {
   return DeleteExprs;
 }

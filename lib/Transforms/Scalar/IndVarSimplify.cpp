@@ -24,32 +24,32 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Transforms/Scalar.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/Analysis/LoopInfo.h"
-#include "llvm/Analysis/LoopPass.h"
-#include "llvm/Analysis/ScalarEvolutionExpander.h"
-#include "llvm/Analysis/TargetLibraryInfo.h"
-#include "llvm/Analysis/TargetTransformInfo.h"
-#include "llvm/IR/BasicBlock.h"
-#include "llvm/IR/CFG.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/Dominators.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/PatternMatch.h"
-#include "llvm/IR/Type.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Transforms/Utils/BasicBlockUtils.h"
-#include "llvm/Transforms/Utils/Local.h"
-#include "llvm/Transforms/Utils/SimplifyIndVar.h"
-using namespace llvm;
+#include "llvm37/Transforms/Scalar.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/Analysis/LoopInfo.h"
+#include "llvm37/Analysis/LoopPass.h"
+#include "llvm37/Analysis/ScalarEvolutionExpander.h"
+#include "llvm37/Analysis/TargetLibraryInfo.h"
+#include "llvm37/Analysis/TargetTransformInfo.h"
+#include "llvm37/IR/BasicBlock.h"
+#include "llvm37/IR/CFG.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/IR/Dominators.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/PatternMatch.h"
+#include "llvm37/IR/Type.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Transforms/Utils/BasicBlockUtils.h"
+#include "llvm37/Transforms/Utils/Local.h"
+#include "llvm37/Transforms/Utils/SimplifyIndVar.h"
+using namespace llvm37;
 
 #define DEBUG_TYPE "indvars"
 
@@ -161,7 +161,7 @@ INITIALIZE_PASS_DEPENDENCY(LCSSA)
 INITIALIZE_PASS_END(IndVarSimplify, "indvars",
                 "Induction Variable Simplification", false, false)
 
-Pass *llvm::createIndVarSimplifyPass() {
+Pass *llvm37::createIndVarSimplifyPass() {
   return new IndVarSimplify();
 }
 
@@ -512,7 +512,7 @@ Value *IndVarSimplify::ExpandSCEVIfNeeded(SCEVExpander &Rewriter, const SCEV *S,
                                           Loop *L, Instruction *InsertPt,
                                           Type *ResultTy,
                                           bool &IsHighCostExpansion) {
-  using namespace llvm::PatternMatch;
+  using namespace llvm37::PatternMatch;
 
   if (!Rewriter.isHighCostExpansion(S, L)) {
     IsHighCostExpansion = false;

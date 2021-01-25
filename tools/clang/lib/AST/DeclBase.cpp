@@ -28,11 +28,11 @@
 #include "clang/AST/StmtCXX.h"
 #include "clang/AST/Type.h"
 #include "clang/Basic/TargetInfo.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <algorithm>
 
-#include "llvm/Support/OacrIgnoreCond.h" // HLSL Change - options change visibility rules
+#include "llvm37/Support/OacrIgnoreCond.h" // HLSL Change - options change visibility rules
 
 using namespace clang;
 
@@ -122,19 +122,19 @@ void Decl::EnableStatistics() {
 }
 
 void Decl::PrintStats() {
-  llvm::errs() << "\n*** Decl Stats:\n";
+  llvm37::errs() << "\n*** Decl Stats:\n";
 
   int totalDecls = 0;
 #define DECL(DERIVED, BASE) totalDecls += n##DERIVED##s;
 #define ABSTRACT_DECL(DECL)
 #include "clang/AST/DeclNodes.inc"
-  llvm::errs() << "  " << totalDecls << " decls total.\n";
+  llvm37::errs() << "  " << totalDecls << " decls total.\n";
 
   int totalBytes = 0;
 #define DECL(DERIVED, BASE)                                             \
   if (n##DERIVED##s > 0) {                                              \
     totalBytes += (int)(n##DERIVED##s * sizeof(DERIVED##Decl));         \
-    llvm::errs() << "    " << n##DERIVED##s << " " #DERIVED " decls, "  \
+    llvm37::errs() << "    " << n##DERIVED##s << " " #DERIVED " decls, "  \
                  << sizeof(DERIVED##Decl) << " each ("                  \
                  << n##DERIVED##s * sizeof(DERIVED##Decl)               \
                  << " bytes)\n";                                        \
@@ -142,7 +142,7 @@ void Decl::PrintStats() {
 #define ABSTRACT_DECL(DECL)
 #include "clang/AST/DeclNodes.inc"
 
-  llvm::errs() << "Total bytes = " << totalBytes << "\n";
+  llvm37::errs() << "Total bytes = " << totalBytes << "\n";
 }
 
 void Decl::add(Kind k) {
@@ -388,7 +388,7 @@ static AvailabilityResult CheckAvailability(ASTContext &Context,
   if (A->getUnavailable()) {
     if (Message) {
       Message->clear();
-      llvm::raw_string_ostream Out(*Message);
+      llvm37::raw_string_ostream Out(*Message);
       Out << "not available on " << PrettyPlatformName 
           << HintMessage;
     }
@@ -401,7 +401,7 @@ static AvailabilityResult CheckAvailability(ASTContext &Context,
       TargetMinVersion < A->getIntroduced()) {
     if (Message) {
       Message->clear();
-      llvm::raw_string_ostream Out(*Message);
+      llvm37::raw_string_ostream Out(*Message);
       VersionTuple VTI(A->getIntroduced());
       VTI.UseDotAsSeparator();
       Out << "introduced in " << PrettyPlatformName << ' ' 
@@ -415,7 +415,7 @@ static AvailabilityResult CheckAvailability(ASTContext &Context,
   if (!A->getObsoleted().empty() && TargetMinVersion >= A->getObsoleted()) {
     if (Message) {
       Message->clear();
-      llvm::raw_string_ostream Out(*Message);
+      llvm37::raw_string_ostream Out(*Message);
       VersionTuple VTO(A->getObsoleted());
       VTO.UseDotAsSeparator();
       Out << "obsoleted in " << PrettyPlatformName << ' ' 
@@ -429,7 +429,7 @@ static AvailabilityResult CheckAvailability(ASTContext &Context,
   if (!A->getDeprecated().empty() && TargetMinVersion >= A->getDeprecated()) {
     if (Message) {
       Message->clear();
-      llvm::raw_string_ostream Out(*Message);
+      llvm37::raw_string_ostream Out(*Message);
       VersionTuple VTD(A->getDeprecated());
       VTD.UseDotAsSeparator();
       Out << "first deprecated in " << PrettyPlatformName << ' '
@@ -1125,7 +1125,7 @@ ExternalASTSource::SetExternalVisibleDeclsForName(const DeclContext *DC,
     // We have both existing declarations and new declarations for this name.
     // Some of the declarations may simply replace existing ones. Handle those
     // first.
-    llvm::SmallVector<unsigned, 8> Skip;
+    llvm37::SmallVector<unsigned, 8> Skip;
     for (unsigned I = 0, N = Decls.size(); I != N; ++I)
       if (List.HandleRedeclaration(Decls[I], /*IsKnownNewer*/false))
         Skip.push_back(I);
@@ -1652,7 +1652,7 @@ StoredDeclsMap *DeclContext::CreateStoredDeclsMap(ASTContext &C) const {
   else
     M = new StoredDeclsMap();
   M->Previous = C.LastSDM;
-  C.LastSDM = llvm::PointerIntPair<StoredDeclsMap*,1>(M, Dependent);
+  C.LastSDM = llvm37::PointerIntPair<StoredDeclsMap*,1>(M, Dependent);
   LookupPtr = M;
   return M;
 }
@@ -1667,7 +1667,7 @@ void ASTContext::ReleaseDeclContextMaps() {
 void StoredDeclsMap::DestroyAll(StoredDeclsMap *Map, bool Dependent) {
   while (Map) {
     // Advance the iteration before we invalidate memory.
-    llvm::PointerIntPair<StoredDeclsMap*,1> Next = Map->Previous;
+    llvm37::PointerIntPair<StoredDeclsMap*,1> Next = Map->Previous;
 
     if (Dependent)
       delete static_cast<DependentStoredDeclsMap*>(Map);

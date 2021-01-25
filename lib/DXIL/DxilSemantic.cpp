@@ -30,7 +30,7 @@ Semantic::Semantic(Kind Kind,
 {
 }
 
-const Semantic *Semantic::GetByName(llvm::StringRef name) {
+const Semantic *Semantic::GetByName(llvm37::StringRef name) {
   if (!HasSVPrefix(name))
     return GetArbitrary();
 
@@ -44,7 +44,7 @@ const Semantic *Semantic::GetByName(llvm::StringRef name) {
   return GetInvalid();
 }
 
-const Semantic *Semantic::GetByName(llvm::StringRef Name, DXIL::SigPointKind sigPointKind,
+const Semantic *Semantic::GetByName(llvm37::StringRef Name, DXIL::SigPointKind sigPointKind,
                                     unsigned MajorVersion, unsigned MinorVersion) {
   return Get(GetByName(Name)->GetKind(), sigPointKind, MajorVersion, MinorVersion);
 }
@@ -75,12 +75,12 @@ const Semantic *Semantic::GetArbitrary() {
   return &Semantic::ms_SemanticTable[(unsigned)Kind::Arbitrary];
 }
 
-bool Semantic::HasSVPrefix(llvm::StringRef Name) {
+bool Semantic::HasSVPrefix(llvm37::StringRef Name) {
   return Name.size() >= 3 && (Name[0] == 'S' || Name[0] == 's') &&
       (Name[1] == 'V' || Name[1] == 'v') && Name[2] == '_';
 }
 
-void Semantic::DecomposeNameAndIndex(llvm::StringRef FullName, llvm::StringRef *pName, unsigned *pIndex) {
+void Semantic::DecomposeNameAndIndex(llvm37::StringRef FullName, llvm37::StringRef *pName, unsigned *pIndex) {
   unsigned L = FullName.size(), i;
 
   for (i = L; i > 0; i--) {

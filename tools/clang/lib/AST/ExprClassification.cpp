@@ -18,7 +18,7 @@
 #include "clang/AST/DeclTemplate.h"
 #include "clang/AST/ExprCXX.h"
 #include "clang/AST/ExprObjC.h"
-#include "llvm/Support/ErrorHandling.h"
+#include "llvm37/Support/ErrorHandling.h"
 using namespace clang;
 
 typedef Expr::Classification Cl;

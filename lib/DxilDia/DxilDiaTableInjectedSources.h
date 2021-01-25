@@ -19,8 +19,8 @@
 
 #include "dxc/Support/Global.h"
 #include "dxc/Support/microcom.h"
-#include "llvm/ADT/StringRef.h"
-#include "llvm/IR/Metadata.h"
+#include "llvm37/ADT/StringRef.h"
+#include "llvm37/IR/Metadata.h"
 
 #include "DxilDia.h"
 #include "DxilDiaTable.h"
@@ -42,9 +42,9 @@ public:
   InjectedSource(IMalloc *pMalloc, Session *pSession, DWORD index)
     : m_pMalloc(pMalloc), m_pSession(pSession), m_index(index) {}
 
-  llvm::MDTuple *NameContent();
-  llvm::StringRef Name();
-  llvm::StringRef Content();
+  llvm37::MDTuple *NameContent();
+  llvm37::StringRef Name();
+  llvm37::StringRef Content();
 
   STDMETHODIMP get_crc(
     /* [retval][out] */ DWORD *pRetVal) override { return ENotImpl(); }
@@ -73,7 +73,7 @@ public:
 
   HRESULT GetItem(DWORD index, IDiaInjectedSource **ppItem) override;
 
-  void Init(llvm::StringRef filename);
+  void Init(llvm37::StringRef filename);
 
 private:
   std::vector<unsigned> m_indexList;

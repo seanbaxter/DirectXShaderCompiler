@@ -24,13 +24,13 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Support/CommandLine.h"
+#include "llvm37/Support/CommandLine.h"
 #include "clang/Tooling/ArgumentsAdjusters.h"
 #include "clang/Tooling/CommonOptionsParser.h"
 #include "clang/Tooling/Tooling.h"
 
 using namespace clang::tooling;
-using namespace llvm;
+using namespace llvm37;
 
 const char *const CommonOptionsParser::HelpMessage =
     "\n"
@@ -130,10 +130,10 @@ CommonOptionsParser::CommonOptionsParser(int &argc, const char **argv,
                                                                ErrorMessage);
     }
     if (!Compilations)
-      llvm::report_fatal_error(ErrorMessage);
+      llvm37::report_fatal_error(ErrorMessage);
   }
   auto AdjustingCompilations =
-      llvm::make_unique<ArgumentsAdjustingCompilations>(
+      llvm37::make_unique<ArgumentsAdjustingCompilations>(
           std::move(Compilations));
   AdjustingCompilations->appendArgumentsAdjuster(
       getInsertArgumentAdjuster(ArgsBefore, ArgumentInsertPosition::BEGIN));

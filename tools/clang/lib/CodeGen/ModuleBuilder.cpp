@@ -20,19 +20,19 @@
 #include "clang/Basic/Diagnostic.h"
 #include "clang/Basic/TargetInfo.h"
 #include "clang/Frontend/CodeGenOptions.h"
-#include "llvm/ADT/StringRef.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Module.h"
+#include "llvm37/ADT/StringRef.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/Module.h"
 #include <memory>
 #include "dxc/DXIL/DxilMetadataHelper.h" // HLSL Change - dx source info
-#include "llvm/Support/Path.h"
+#include "llvm37/Support/Path.h"
 using namespace clang;
 
 namespace {
   class CodeGeneratorImpl : public CodeGenerator {
     DiagnosticsEngine &Diags;
-    std::unique_ptr<const llvm::DataLayout> TD;
+    std::unique_ptr<const llvm37::DataLayout> TD;
     ASTContext *Ctx;
     const HeaderSearchOptions &HeaderSearchOpts; // Only used for debug info.
     const PreprocessorOptions &PreprocessorOpts; // Only used for debug info.
@@ -53,7 +53,7 @@ namespace {
     CoverageSourceInfo *CoverageInfo;
 
   protected:
-    std::unique_ptr<llvm::Module> M;
+    std::unique_ptr<llvm37::Module> M;
     std::unique_ptr<CodeGen::CodeGenModule> Builder;
 
   private:
@@ -63,12 +63,12 @@ namespace {
     CodeGeneratorImpl(DiagnosticsEngine &diags, const std::string &ModuleName,
                       const HeaderSearchOptions &HSO,
                       const PreprocessorOptions &PPO, const CodeGenOptions &CGO,
-                      llvm::LLVMContext &C,
+                      llvm37::LLVMContext &C,
                       CoverageSourceInfo *CoverageInfo = nullptr)
         : Diags(diags), Ctx(nullptr), HeaderSearchOpts(HSO),
           PreprocessorOpts(PPO), CodeGenOpts(CGO), HandlingTopLevelDecls(0),
           CoverageInfo(CoverageInfo),
-          M(new llvm::Module(ModuleName, C)) {}
+          M(new llvm37::Module(ModuleName, C)) {}
 
     ~CodeGeneratorImpl() override {
       // There should normally not be any leftover inline method definitions.
@@ -76,7 +76,7 @@ namespace {
              Diags.hasErrorOccurred());
     }
 
-    llvm::Module* GetModule() override {
+    llvm37::Module* GetModule() override {
       return M.get();
     }
 
@@ -95,7 +95,7 @@ namespace {
       return D;
     }
 
-    llvm::Module *ReleaseModule() override { return M.release(); }
+    llvm37::Module *ReleaseModule() override { return M.release(); }
 
     void Initialize(ASTContext &Context) override {
       Ctx = &Context;
@@ -103,7 +103,7 @@ namespace {
       M->setTargetTriple(Ctx->getTargetInfo().getTriple().getTriple());
       M->setDataLayout(Ctx->getTargetInfo().getTargetDescription());
       TD.reset(
-          new llvm::DataLayout(Ctx->getTargetInfo().getTargetDescription()));
+          new llvm37::DataLayout(Ctx->getTargetInfo().getTargetDescription()));
       Builder.reset(new CodeGen::CodeGenModule(Context,
                                                HeaderSearchOpts,
                                                PreprocessorOpts,
@@ -216,17 +216,17 @@ namespace {
       // Error may happen in Builder->Release for HLSL
       if (CodeGenOpts.getDebugInfo() == CodeGenOptions::DebugInfoKind::FullDebugInfo) {
         // Add all file contents in a list of filename/content pairs.
-        llvm::NamedMDNode *pContents = nullptr;
-        llvm::LLVMContext &LLVMCtx = M->getContext();
+        llvm37::NamedMDNode *pContents = nullptr;
+        llvm37::LLVMContext &LLVMCtx = M->getContext();
         auto AddFile = [&](StringRef name, StringRef content) {
           if (pContents == nullptr) {
             pContents = M->getOrInsertNamedMetadata(
               hlsl::DxilMDHelper::kDxilSourceContentsMDName);
           }
-          llvm::MDTuple *pFileInfo = llvm::MDNode::get(
+          llvm37::MDTuple *pFileInfo = llvm37::MDNode::get(
             LLVMCtx,
-            { llvm::MDString::get(LLVMCtx, name),
-              llvm::MDString::get(LLVMCtx, content) });
+            { llvm37::MDString::get(LLVMCtx, name),
+              llvm37::MDString::get(LLVMCtx, content) });
           pContents->addOperand(pFileInfo);
         };
         std::map<std::string, StringRef> filesMap;
@@ -238,8 +238,8 @@ namespace {
           if (it->first->isValid() && !it->second->IsSystemFile) {
             // If main file, write that to metadata first.
             // Add the rest to filesMap to sort by name.
-            llvm::SmallString<128> NormalizedPath;
-            llvm::sys::path::native(it->first->getName(), NormalizedPath);
+            llvm37::SmallString<128> NormalizedPath;
+            llvm37::sys::path::native(it->first->getName(), NormalizedPath);
             if (CodeGenOpts.MainFileName.compare(it->first->getName()) == 0) {
               assert(!bFoundMainFile && "otherwise, more than one file matches main filename");
               AddFile(NormalizedPath, it->second->getRawBuffer()->getBuffer());
@@ -257,30 +257,30 @@ namespace {
         }
 
         // Add Defines to Debug Info
-        llvm::NamedMDNode *pDefines = M->getOrInsertNamedMetadata(
+        llvm37::NamedMDNode *pDefines = M->getOrInsertNamedMetadata(
             hlsl::DxilMDHelper::kDxilSourceDefinesMDName);
-        std::vector<llvm::Metadata *> vecDefines;
+        std::vector<llvm37::Metadata *> vecDefines;
         vecDefines.resize(CodeGenOpts.HLSLDefines.size());
         std::transform(CodeGenOpts.HLSLDefines.begin(), CodeGenOpts.HLSLDefines.end(),
-          vecDefines.begin(), [&LLVMCtx](const std::string &str) { return llvm::MDString::get(LLVMCtx, str); });
-        llvm::MDTuple *pDefinesInfo = llvm::MDNode::get(LLVMCtx, vecDefines);
+          vecDefines.begin(), [&LLVMCtx](const std::string &str) { return llvm37::MDString::get(LLVMCtx, str); });
+        llvm37::MDTuple *pDefinesInfo = llvm37::MDNode::get(LLVMCtx, vecDefines);
         pDefines->addOperand(pDefinesInfo);
 
         // Add main file name to debug info
-        llvm::NamedMDNode *pSourceFilename = M->getOrInsertNamedMetadata(
+        llvm37::NamedMDNode *pSourceFilename = M->getOrInsertNamedMetadata(
             hlsl::DxilMDHelper::kDxilSourceMainFileNameMDName);
-        llvm::MDTuple *pFileName = llvm::MDNode::get(
-          LLVMCtx, llvm::MDString::get(LLVMCtx, CodeGenOpts.MainFileName));
+        llvm37::MDTuple *pFileName = llvm37::MDNode::get(
+          LLVMCtx, llvm37::MDString::get(LLVMCtx, CodeGenOpts.MainFileName));
         pSourceFilename->addOperand(pFileName);
 
         // Pass in any other arguments to debug info
-        llvm::NamedMDNode *pArgs = M->getOrInsertNamedMetadata(
+        llvm37::NamedMDNode *pArgs = M->getOrInsertNamedMetadata(
             hlsl::DxilMDHelper::kDxilSourceArgsMDName);
-        std::vector<llvm::Metadata *> vecArguments;
+        std::vector<llvm37::Metadata *> vecArguments;
         vecArguments.resize(CodeGenOpts.HLSLArguments.size());
         std::transform(CodeGenOpts.HLSLArguments.begin(), CodeGenOpts.HLSLArguments.end(),
-          vecArguments.begin(), [&LLVMCtx](const std::string &str) { return llvm::MDString::get(LLVMCtx, str); });
-        llvm::MDTuple *pArgumentsInfo = llvm::MDNode::get(LLVMCtx, vecArguments);
+          vecArguments.begin(), [&LLVMCtx](const std::string &str) { return llvm37::MDString::get(LLVMCtx, str); });
+        llvm37::MDTuple *pArgumentsInfo = llvm37::MDNode::get(LLVMCtx, vecArguments);
         pArgs->addOperand(pArgumentsInfo);
 
       }
@@ -303,16 +303,16 @@ namespace {
       Builder->EmitVTable(RD);
     }
 
-    void HandleLinkerOptionPragma(llvm::StringRef Opts) override {
+    void HandleLinkerOptionPragma(llvm37::StringRef Opts) override {
       Builder->AppendLinkerOptions(Opts);
     }
 
-    void HandleDetectMismatch(llvm::StringRef Name,
-                              llvm::StringRef Value) override {
+    void HandleDetectMismatch(llvm37::StringRef Name,
+                              llvm37::StringRef Value) override {
       Builder->AddDetectMismatch(Name, Value);
     }
 
-    void HandleDependentLibrary(llvm::StringRef Lib) override {
+    void HandleDependentLibrary(llvm37::StringRef Lib) override {
       Builder->AddDependentLib(Lib);
     }
   };
@@ -324,7 +324,7 @@ CodeGenerator *clang::CreateLLVMCodeGen(
     DiagnosticsEngine &Diags, const std::string &ModuleName,
     const HeaderSearchOptions &HeaderSearchOpts,
     const PreprocessorOptions &PreprocessorOpts, const CodeGenOptions &CGO,
-    llvm::LLVMContext &C, CoverageSourceInfo *CoverageInfo) {
+    llvm37::LLVMContext &C, CoverageSourceInfo *CoverageInfo) {
   return new CodeGeneratorImpl(Diags, ModuleName, HeaderSearchOpts,
                                PreprocessorOpts, CGO, C, CoverageInfo);
 }

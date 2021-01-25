@@ -7,10 +7,10 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/ADT/STLExtras.h"
+#include "llvm37/ADT/STLExtras.h"
 #include "gtest/gtest.h"
 #include <tuple>
-using namespace llvm;
+using namespace llvm37;
 
 namespace {
 

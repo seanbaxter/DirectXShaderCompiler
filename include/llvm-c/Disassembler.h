@@ -12,11 +12,11 @@
 |*                                                                            *|
 \*===----------------------------------------------------------------------===*/
 
-#ifndef LLVM_C_DISASSEMBLER_H
-#define LLVM_C_DISASSEMBLER_H
+#ifndef LLVM37_C_DISASSEMBLER_H
+#define LLVM37_C_DISASSEMBLER_H
 
 #include "dxc/Support/WinAdapter.h" // HLSL Change
-#include "llvm/Support/DataTypes.h"
+#include "llvm37/Support/DataTypes.h"
 #include <stddef.h>
 
 /**
@@ -252,4 +252,4 @@ size_t LLVMDisasmInstruction(LLVMDisasmContextRef DC, uint8_t *Bytes,
 }
 #endif /* !defined(__cplusplus) */
 
-#endif /* !defined(LLVM_C_DISASSEMBLER_H) */
+#endif /* !defined(LLVM37_C_DISASSEMBLER_H) */

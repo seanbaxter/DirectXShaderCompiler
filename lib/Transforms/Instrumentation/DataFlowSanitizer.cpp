@@ -44,33 +44,33 @@
 /// For more information, please refer to the design document:
 /// http://clang.llvm.org/docs/DataFlowSanitizerDesign.html
 
-#include "llvm/Transforms/Instrumentation.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/DenseSet.h"
-#include "llvm/ADT/DepthFirstIterator.h"
-#include "llvm/ADT/StringExtras.h"
-#include "llvm/ADT/Triple.h"
-#include "llvm/Analysis/ValueTracking.h"
-#include "llvm/IR/Dominators.h"
-#include "llvm/IR/DebugInfo.h"
-#include "llvm/IR/IRBuilder.h"
-#include "llvm/IR/InlineAsm.h"
-#include "llvm/IR/InstVisitor.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/MDBuilder.h"
-#include "llvm/IR/Type.h"
-#include "llvm/IR/Value.h"
-#include "llvm/Pass.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/SpecialCaseList.h"
-#include "llvm/Transforms/Utils/BasicBlockUtils.h"
-#include "llvm/Transforms/Utils/Local.h"
+#include "llvm37/Transforms/Instrumentation.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/DenseSet.h"
+#include "llvm37/ADT/DepthFirstIterator.h"
+#include "llvm37/ADT/StringExtras.h"
+#include "llvm37/ADT/Triple.h"
+#include "llvm37/Analysis/ValueTracking.h"
+#include "llvm37/IR/Dominators.h"
+#include "llvm37/IR/DebugInfo.h"
+#include "llvm37/IR/IRBuilder.h"
+#include "llvm37/IR/InlineAsm.h"
+#include "llvm37/IR/InstVisitor.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/MDBuilder.h"
+#include "llvm37/IR/Type.h"
+#include "llvm37/IR/Value.h"
+#include "llvm37/Pass.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/SpecialCaseList.h"
+#include "llvm37/Transforms/Utils/BasicBlockUtils.h"
+#include "llvm37/Transforms/Utils/Local.h"
 #include <algorithm>
 #include <iterator>
 #include <set>
 #include <utility>
 
-using namespace llvm;
+using namespace llvm37;
 
 // The -dfsan-preserve-alignment flag controls whether this pass assumes that
 // alignment requirements provided by the input IR are correct.  For example,
@@ -353,7 +353,7 @@ INITIALIZE_PASS(DataFlowSanitizer, "dfsan",
                 "DataFlowSanitizer: dynamic data flow analysis.", false, false)
 
 ModulePass *
-llvm::createDataFlowSanitizerPass(const std::vector<std::string> &ABIListFiles,
+llvm37::createDataFlowSanitizerPass(const std::vector<std::string> &ABIListFiles,
                                   void *(*getArgTLS)(),
                                   void *(*getRetValTLS)()) {
   return new DataFlowSanitizer(ABIListFiles, getArgTLS, getRetValTLS);
@@ -370,7 +370,7 @@ DataFlowSanitizer::DataFlowSanitizer(
 }
 
 FunctionType *DataFlowSanitizer::getArgsFunctionType(FunctionType *T) {
-  llvm::SmallVector<Type *, 4> ArgTypes(T->param_begin(), T->param_end());
+  llvm37::SmallVector<Type *, 4> ArgTypes(T->param_begin(), T->param_end());
   ArgTypes.append(T->getNumParams(), ShadowTy);
   if (T->isVarArg())
     ArgTypes.push_back(ShadowPtrTy);
@@ -382,7 +382,7 @@ FunctionType *DataFlowSanitizer::getArgsFunctionType(FunctionType *T) {
 
 FunctionType *DataFlowSanitizer::getTrampolineFunctionType(FunctionType *T) {
   assert(!T->isVarArg());
-  llvm::SmallVector<Type *, 4> ArgTypes;
+  llvm37::SmallVector<Type *, 4> ArgTypes;
   ArgTypes.push_back(T->getPointerTo());
   ArgTypes.append(T->param_begin(), T->param_end());
   ArgTypes.append(T->getNumParams(), ShadowTy);
@@ -393,7 +393,7 @@ FunctionType *DataFlowSanitizer::getTrampolineFunctionType(FunctionType *T) {
 }
 
 FunctionType *DataFlowSanitizer::getCustomFunctionType(FunctionType *T) {
-  llvm::SmallVector<Type *, 4> ArgTypes;
+  llvm37::SmallVector<Type *, 4> ArgTypes;
   for (FunctionType::param_iterator i = T->param_begin(), e = T->param_end();
        i != e; ++i) {
     FunctionType *FT;
@@ -416,10 +416,10 @@ FunctionType *DataFlowSanitizer::getCustomFunctionType(FunctionType *T) {
 }
 
 bool DataFlowSanitizer::doInitialization(Module &M) {
-  llvm::Triple TargetTriple(M.getTargetTriple());
-  bool IsX86_64 = TargetTriple.getArch() == llvm::Triple::x86_64;
-  bool IsMIPS64 = TargetTriple.getArch() == llvm::Triple::mips64 ||
-                  TargetTriple.getArch() == llvm::Triple::mips64el;
+  llvm37::Triple TargetTriple(M.getTargetTriple());
+  bool IsX86_64 = TargetTriple.getArch() == llvm37::Triple::x86_64;
+  bool IsMIPS64 = TargetTriple.getArch() == llvm37::Triple::mips64 ||
+                  TargetTriple.getArch() == llvm37::Triple::mips64el;
 
   const DataLayout &DL = M.getDataLayout();
 
@@ -642,7 +642,7 @@ bool DataFlowSanitizer::runOnModule(Module &M) {
                                                   DFSanVarargWrapperFnTy);
 
   std::vector<Function *> FnsToInstrument;
-  llvm::SmallPtrSet<Function *, 2> FnsWithNativeABI;
+  llvm37::SmallPtrSet<Function *, 2> FnsWithNativeABI;
   for (Module::iterator i = M.begin(), e = M.end(); i != e; ++i) {
     if (!i->isIntrinsic() &&
         i != DFSanUnionFn &&
@@ -794,10 +794,10 @@ bool DataFlowSanitizer::runOnModule(Module &M) {
 
     // DFSanVisitor may create new basic blocks, which confuses df_iterator.
     // Build a copy of the list before iterating over it.
-    llvm::SmallVector<BasicBlock *, 4> BBList(
+    llvm37::SmallVector<BasicBlock *, 4> BBList(
         depth_first(&(*i)->getEntryBlock()));
 
-    for (llvm::SmallVector<BasicBlock *, 4>::iterator i = BBList.begin(),
+    for (llvm37::SmallVector<BasicBlock *, 4>::iterator i = BBList.begin(),
                                                       e = BBList.end();
          i != e; ++i) {
       Instruction *Inst = &(*i)->front();
@@ -1039,7 +1039,7 @@ void DFSanVisitor::visitOperandShadowInst(Instruction &I) {
 Value *DFSanFunction::loadShadow(Value *Addr, uint64_t Size, uint64_t Align,
                                  Instruction *Pos) {
   if (AllocaInst *AI = dyn_cast<AllocaInst>(Addr)) {
-    llvm::DenseMap<AllocaInst *, AllocaInst *>::iterator i =
+    llvm37::DenseMap<AllocaInst *, AllocaInst *>::iterator i =
         AllocaShadowMap.find(AI);
     if (i != AllocaShadowMap.end()) {
       IRBuilder<> IRB(Pos);
@@ -1182,7 +1182,7 @@ void DFSanVisitor::visitLoadInst(LoadInst &LI) {
 void DFSanFunction::storeShadow(Value *Addr, uint64_t Size, uint64_t Align,
                                 Value *Shadow, Instruction *Pos) {
   if (AllocaInst *AI = dyn_cast<AllocaInst>(Addr)) {
-    llvm::DenseMap<AllocaInst *, AllocaInst *>::iterator i =
+    llvm37::DenseMap<AllocaInst *, AllocaInst *>::iterator i =
         AllocaShadowMap.find(AI);
     if (i != AllocaShadowMap.end()) {
       IRBuilder<> IRB(Pos);

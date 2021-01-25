@@ -1,4 +1,4 @@
-set(LLVM_OPTIONAL_SOURCES ARCMigrate.cpp) # HLSL Change - ignore file
+set(LLVM37_OPTIONAL_SOURCES ARCMigrate.cpp) # HLSL Change - ignore file
 
 if (WIN32)
 set (HLSL_IGNORE_SOURCES
@@ -112,13 +112,13 @@ endif()
 option(LIBCLANG_BUILD_STATIC
   "Build libclang as a static library (in addition to a shared one)" OFF)
 
-set(LLVM_EXPORTED_SYMBOL_FILE ${CMAKE_CURRENT_SOURCE_DIR}/libclang.exports)
+set(LLVM37_EXPORTED_SYMBOL_FILE ${CMAKE_CURRENT_SOURCE_DIR}/libclang.exports)
 
 if(MSVC)
   # Avoid LNK4197 not to spceify libclang.def here.
   # Each functions is exported as "dllexport" in include/clang-c.
   # KB835326
-  set(LLVM_EXPORTED_SYMBOL_FILE)
+  set(LLVM37_EXPORTED_SYMBOL_FILE)
 endif()
 
 # HLSL Change Starts
@@ -128,11 +128,11 @@ add_definitions(-DLIBCLANG_CC=)
 set(ENABLE_STATIC STATIC)
 # HLSL Change Ends
 
-if( 0 AND LLVM_ENABLE_PIC ) # HLSL Change - disable DLL, we only use the static lib
+if( 0 AND LLVM37_ENABLE_PIC ) # HLSL Change - disable DLL, we only use the static lib
   set(ENABLE_SHARED SHARED)
 endif()
 
-if((NOT LLVM_ENABLE_PIC OR LIBCLANG_BUILD_STATIC) AND NOT WIN32)
+if((NOT LLVM37_ENABLE_PIC OR LIBCLANG_BUILD_STATIC) AND NOT WIN32)
   set(ENABLE_STATIC STATIC)
 endif()
 
@@ -152,7 +152,7 @@ add_clang_library(libclang ${ENABLE_SHARED} ${ENABLE_STATIC}
   ${LIBS}
 
   LINK_COMPONENTS
-  ${LLVM_TARGETS_TO_BUILD}
+  ${LLVM37_TARGETS_TO_BUILD}
   Core
   Support
   MSSupport
@@ -173,9 +173,9 @@ if(ENABLE_SHARED)
 
   if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     set(LIBCLANG_LINK_FLAGS " -Wl,-compatibility_version -Wl,1")
-    if (DEFINED ${LLVM_SUBMIT_VERSION})
+    if (DEFINED ${LLVM37_SUBMIT_VERSION})
       set(LIBCLANG_LINK_FLAGS
-        "${LIBCLANG_LINK_FLAGS} -Wl,-current_version -Wl,${LLVM_SUBMIT_VERSION}.${LLVM_SUBMIT_SUBVERSION}")
+        "${LIBCLANG_LINK_FLAGS} -Wl,-current_version -Wl,${LLVM37_SUBMIT_VERSION}.${LLVM37_SUBMIT_SUBVERSION}")
     endif()
 
     set_property(TARGET libclang APPEND_STRING PROPERTY

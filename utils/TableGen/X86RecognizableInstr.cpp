@@ -17,10 +17,10 @@
 #include "X86RecognizableInstr.h"
 #include "X86DisassemblerShared.h"
 #include "X86ModRMFilters.h"
-#include "llvm/Support/ErrorHandling.h"
+#include "llvm37/Support/ErrorHandling.h"
 #include <string>
 
-using namespace llvm;
+using namespace llvm37;
 
 #define MRM_MAPPING     \
   MAP(C0, 32)           \

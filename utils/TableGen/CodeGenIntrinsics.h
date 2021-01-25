@@ -11,14 +11,14 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_UTILS_TABLEGEN_CODEGENINTRINSICS_H
-#define LLVM_UTILS_TABLEGEN_CODEGENINTRINSICS_H
+#ifndef LLVM37_UTILS_TABLEGEN_CODEGENINTRINSICS_H
+#define LLVM37_UTILS_TABLEGEN_CODEGENINTRINSICS_H
 
-#include "llvm/CodeGen/MachineValueType.h"
+#include "llvm37/CodeGen/MachineValueType.h"
 #include <string>
 #include <vector>
 
-namespace llvm {
+namespace llvm37 {
   class Record;
   class RecordKeeper;
   class CodeGenTarget;

@@ -12,23 +12,23 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Transforms/IPO/LowerBitSets.h"
-#include "llvm/Transforms/IPO.h"
-#include "llvm/ADT/EquivalenceClasses.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/ADT/Triple.h"
-#include "llvm/IR/Constant.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/GlobalVariable.h"
-#include "llvm/IR/IRBuilder.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/Intrinsics.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/Operator.h"
-#include "llvm/Pass.h"
-#include "llvm/Transforms/Utils/BasicBlockUtils.h"
+#include "llvm37/Transforms/IPO/LowerBitSets.h"
+#include "llvm37/Transforms/IPO.h"
+#include "llvm37/ADT/EquivalenceClasses.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/ADT/Triple.h"
+#include "llvm37/IR/Constant.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/GlobalVariable.h"
+#include "llvm37/IR/IRBuilder.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/Intrinsics.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/Operator.h"
+#include "llvm37/Pass.h"
+#include "llvm37/Transforms/Utils/BasicBlockUtils.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "lowerbitsets"
 
@@ -240,7 +240,7 @@ INITIALIZE_PASS_END(LowerBitSets, "lowerbitsets",
                 "Lower bitset metadata", false, false)
 char LowerBitSets::ID = 0;
 
-ModulePass *llvm::createLowerBitSetsPass() { return new LowerBitSets; }
+ModulePass *llvm37::createLowerBitSetsPass() { return new LowerBitSets; }
 
 bool LowerBitSets::doInitialization(Module &Mod) {
   M = &Mod;
@@ -656,8 +656,8 @@ bool LowerBitSets::buildBitSets() {
     // Build the list of bitsets and referenced globals in this disjoint set.
     std::vector<MDString *> BitSets;
     std::vector<GlobalVariable *> Globals;
-    llvm::DenseMap<MDString *, uint64_t> BitSetIndices;
-    llvm::DenseMap<GlobalVariable *, uint64_t> GlobalIndices;
+    llvm37::DenseMap<MDString *, uint64_t> BitSetIndices;
+    llvm37::DenseMap<GlobalVariable *, uint64_t> GlobalIndices;
     for (GlobalClassesTy::member_iterator MI = GlobalClasses.member_begin(I);
          MI != GlobalClasses.member_end(); ++MI) {
       if ((*MI).is<MDString *>()) {

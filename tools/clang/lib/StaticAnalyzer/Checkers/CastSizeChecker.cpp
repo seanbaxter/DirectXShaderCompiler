@@ -114,7 +114,7 @@ void CastSizeChecker::checkPreStmt(const CastExpr *CE,CheckerContext &C) const {
 
   SValBuilder &svalBuilder = C.getSValBuilder();
   SVal extent = SR->getExtent(svalBuilder);
-  const llvm::APSInt *extentInt = svalBuilder.getKnownValue(state, extent);
+  const llvm37::APSInt *extentInt = svalBuilder.getKnownValue(state, extent);
   if (!extentInt)
     return;
 
@@ -136,7 +136,7 @@ void CastSizeChecker::checkPreStmt(const CastExpr *CE,CheckerContext &C) const {
       BT.reset(new BuiltinBug(this, "Cast region with wrong size.",
                                     "Cast a region whose size is not a multiple"
                                     " of the destination type size."));
-    auto R = llvm::make_unique<BugReport>(*BT, BT->getDescription(), errorNode);
+    auto R = llvm37::make_unique<BugReport>(*BT, BT->getDescription(), errorNode);
     R->addRange(CE->getSourceRange());
     C.emitReport(std::move(R));
   }

@@ -13,7 +13,7 @@
 #ifndef __DXC_DXCLIB__
 #define __DXC_DXCLIB__
 
-namespace llvm {
+namespace llvm37 {
 class raw_ostream;
 }
 
@@ -22,11 +22,11 @@ namespace dxc
 class DxcDllSupport;
 
 // Writes compiler version info to stream
-void WriteDxCompilerVersionInfo(llvm::raw_ostream &OS,
+void WriteDxCompilerVersionInfo(llvm37::raw_ostream &OS,
                                 const char *ExternalLib,
                                 const char *ExternalFn,
                                 dxc::DxcDllSupport &DxcSupport);
-void WriteDXILVersionInfo(llvm::raw_ostream &OS,
+void WriteDXILVersionInfo(llvm37::raw_ostream &OS,
                           dxc::DxcDllSupport &DxilSupport);
 
 #ifdef _WIN32

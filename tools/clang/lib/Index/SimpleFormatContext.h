@@ -13,8 +13,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_LIB_INDEX_SIMPLEFORMATCONTEXT_H
-#define LLVM_CLANG_LIB_INDEX_SIMPLEFORMATCONTEXT_H
+#ifndef LLVM37_CLANG_LIB_INDEX_SIMPLEFORMATCONTEXT_H
+#define LLVM37_CLANG_LIB_INDEX_SIMPLEFORMATCONTEXT_H
 
 #include "clang/Basic/Diagnostic.h"
 #include "clang/Basic/DiagnosticOptions.h"
@@ -22,9 +22,9 @@
 #include "clang/Basic/LangOptions.h"
 #include "clang/Basic/SourceManager.h"
 #include "clang/Rewrite/Core/Rewriter.h"
-#include "llvm/Support/FileSystem.h"
-#include "llvm/Support/Path.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/Support/FileSystem.h"
+#include "llvm37/Support/Path.h"
+#include "llvm37/Support/raw_ostream.h"
 
 namespace clang {
 namespace index {
@@ -45,8 +45,8 @@ public:
   }
 
   FileID createInMemoryFile(StringRef Name, StringRef Content) {
-    std::unique_ptr<llvm::MemoryBuffer> Source =
-        llvm::MemoryBuffer::getMemBuffer(Content);
+    std::unique_ptr<llvm37::MemoryBuffer> Source =
+        llvm37::MemoryBuffer::getMemBuffer(Content);
     const FileEntry *Entry =
         Files.getVirtualFile(Name, Source->getBufferSize(), 0);
     Sources.overrideFileContents(Entry, std::move(Source));
@@ -56,7 +56,7 @@ public:
 
   std::string getRewrittenText(FileID ID) {
     std::string Result;
-    llvm::raw_string_ostream OS(Result);
+    llvm37::raw_string_ostream OS(Result);
     Rewrite.getEditBuffer(ID).write(OS);
     OS.flush();
     return Result;

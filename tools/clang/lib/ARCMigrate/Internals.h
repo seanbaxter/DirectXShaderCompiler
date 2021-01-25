@@ -7,13 +7,13 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_LIB_ARCMIGRATE_INTERNALS_H
-#define LLVM_CLANG_LIB_ARCMIGRATE_INTERNALS_H
+#ifndef LLVM37_CLANG_LIB_ARCMIGRATE_INTERNALS_H
+#define LLVM37_CLANG_LIB_ARCMIGRATE_INTERNALS_H
 
 #include "clang/ARCMigrate/ARCMT.h"
 #include "clang/Basic/Diagnostic.h"
-#include "llvm/ADT/ArrayRef.h"
-#include "llvm/ADT/Optional.h"
+#include "llvm37/ADT/ArrayRef.h"
+#include "llvm37/ADT/Optional.h"
 #include <list>
 
 namespace clang {

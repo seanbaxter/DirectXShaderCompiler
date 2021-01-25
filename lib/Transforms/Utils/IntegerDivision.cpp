@@ -14,14 +14,14 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Transforms/Utils/IntegerDivision.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/IRBuilder.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/Intrinsics.h"
+#include "llvm37/Transforms/Utils/IntegerDivision.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/IRBuilder.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/Intrinsics.h"
 #include <utility>
 
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "integer-division"
 
@@ -373,7 +373,7 @@ static Value *generateUnsignedDivisionCode(Value *Dividend, Value *Divisor,
 /// scalar division.
 ///
 /// @brief Replace Rem with generated code.
-bool llvm::expandRemainder(BinaryOperator *Rem) {
+bool llvm37::expandRemainder(BinaryOperator *Rem) {
   assert((Rem->getOpcode() == Instruction::SRem ||
           Rem->getOpcode() == Instruction::URem) &&
          "Trying to expand remainder from a non-remainder function");
@@ -433,7 +433,7 @@ bool llvm::expandRemainder(BinaryOperator *Rem) {
 /// 32bit and 64bit scalar division.
 ///
 /// @brief Replace Div with generated code.
-bool llvm::expandDivision(BinaryOperator *Div) {
+bool llvm37::expandDivision(BinaryOperator *Div) {
   assert((Div->getOpcode() == Instruction::SDiv ||
           Div->getOpcode() == Instruction::UDiv) &&
          "Trying to expand division from a non-division function");
@@ -486,7 +486,7 @@ bool llvm::expandDivision(BinaryOperator *Div) {
 /// arithmetic.
 ///
 /// @brief Replace Rem with emulation code.
-bool llvm::expandRemainderUpTo32Bits(BinaryOperator *Rem) {
+bool llvm37::expandRemainderUpTo32Bits(BinaryOperator *Rem) {
   assert((Rem->getOpcode() == Instruction::SRem ||
           Rem->getOpcode() == Instruction::URem) &&
           "Trying to expand remainder from a non-remainder function");
@@ -536,7 +536,7 @@ bool llvm::expandRemainderUpTo32Bits(BinaryOperator *Rem) {
 /// outputs to operate in 64 bits.
 ///
 /// @brief Replace Rem with emulation code.
-bool llvm::expandRemainderUpTo64Bits(BinaryOperator *Rem) {
+bool llvm37::expandRemainderUpTo64Bits(BinaryOperator *Rem) {
   assert((Rem->getOpcode() == Instruction::SRem ||
           Rem->getOpcode() == Instruction::URem) &&
           "Trying to expand remainder from a non-remainder function");
@@ -587,7 +587,7 @@ bool llvm::expandRemainderUpTo64Bits(BinaryOperator *Rem) {
 /// or very little support for smaller than 32 bit integer arithmetic.
 ///
 /// @brief Replace Div with emulation code.
-bool llvm::expandDivisionUpTo32Bits(BinaryOperator *Div) {
+bool llvm37::expandDivisionUpTo32Bits(BinaryOperator *Div) {
   assert((Div->getOpcode() == Instruction::SDiv ||
           Div->getOpcode() == Instruction::UDiv) &&
           "Trying to expand division from a non-division function");
@@ -637,7 +637,7 @@ bool llvm::expandDivisionUpTo32Bits(BinaryOperator *Div) {
 /// in 64 bits.
 ///
 /// @brief Replace Div with emulation code.
-bool llvm::expandDivisionUpTo64Bits(BinaryOperator *Div) {
+bool llvm37::expandDivisionUpTo64Bits(BinaryOperator *Div) {
   assert((Div->getOpcode() == Instruction::SDiv ||
           Div->getOpcode() == Instruction::UDiv) &&
           "Trying to expand division from a non-division function");

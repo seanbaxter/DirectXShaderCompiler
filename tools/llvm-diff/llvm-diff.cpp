@@ -13,22 +13,22 @@
 
 #include "DiffLog.h"
 #include "DifferenceEngine.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/ADT/StringRef.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/Type.h"
-#include "llvm/IRReader/IRReader.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/MemoryBuffer.h"
-#include "llvm/Support/SourceMgr.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/ADT/StringRef.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/Type.h"
+#include "llvm37/IRReader/IRReader.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/MemoryBuffer.h"
+#include "llvm37/Support/SourceMgr.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <string>
 #include <utility>
 
 
-using namespace llvm;
+using namespace llvm37;
 
 /// Reads a module from a file.  On error, messages are written to stderr
 /// and null is returned.

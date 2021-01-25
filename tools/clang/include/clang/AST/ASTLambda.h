@@ -13,8 +13,8 @@
 ///
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_AST_ASTLAMBDA_H
-#define LLVM_CLANG_AST_ASTLAMBDA_H
+#ifndef LLVM37_CLANG_AST_ASTLAMBDA_H
+#define LLVM37_CLANG_AST_ASTLAMBDA_H
 
 #include "clang/AST/DeclCXX.h"
 #include "clang/AST/DeclTemplate.h"

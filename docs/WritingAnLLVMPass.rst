@@ -99,9 +99,9 @@ Start out with:
 
 .. code-block:: c++
 
-  #include "llvm/Pass.h"
-  #include "llvm/IR/Function.h"
-  #include "llvm/Support/raw_ostream.h"
+  #include "llvm37/Pass.h"
+  #include "llvm37/IR/Function.h"
+  #include "llvm37/Support/raw_ostream.h"
 
 Which are needed because we are writing a `Pass
 <http://llvm.org/doxygen/classllvm_1_1Pass.html>`_, we are operating on
@@ -112,7 +112,7 @@ Next we have:
 
 .. code-block:: c++
 
-  using namespace llvm;
+  using namespace llvm37;
 
 ... which is required because the functions from the include files live in the
 llvm namespace.
@@ -187,11 +187,11 @@ As a whole, the ``.cpp`` file looks like:
 
 .. code-block:: c++
 
-    #include "llvm/Pass.h"
-    #include "llvm/IR/Function.h"
-    #include "llvm/Support/raw_ostream.h"
+    #include "llvm37/Pass.h"
+    #include "llvm37/IR/Function.h"
+    #include "llvm37/Support/raw_ostream.h"
 
-    using namespace llvm;
+    using namespace llvm37;
 
     namespace {
       struct Hello : public FunctionPass {
@@ -273,7 +273,7 @@ functions.  Because nothing is known about the behavior of ``ModulePass``
 subclasses, no optimization can be done for their execution.
 
 A module pass can use function level passes (e.g. dominators) using the
-``getAnalysis`` interface ``getAnalysis<DominatorTree>(llvm::Function *)`` to
+``getAnalysis`` interface ``getAnalysis<DominatorTree>(llvm37::Function *)`` to
 provide the function to retrieve analysis result for, if the function pass does
 not require any module or immutable passes.  Note that this can only be done
 for functions for which the analysis ran, e.g. in the case of dominators you
@@ -683,14 +683,14 @@ The ``print`` method
 
 .. code-block:: c++
 
-  virtual void print(llvm::raw_ostream &O, const Module *M) const;
+  virtual void print(llvm37::raw_ostream &O, const Module *M) const;
 
 The ``print`` method must be implemented by "analyses" in order to print a
 human readable version of the analysis results.  This is useful for debugging
 an analysis itself, as well as for other people to figure out how an analysis
 works.  Use the opt ``-analyze`` argument to invoke this method.
 
-The ``llvm::raw_ostream`` parameter specifies the stream to write the results
+The ``llvm37::raw_ostream`` parameter specifies the stream to write the results
 on, and the ``Module`` parameter gives a pointer to the top level module of the
 program that has been analyzed.  Note however that this pointer may be ``NULL``
 in certain circumstances (such as calling the ``Pass::dump()`` from a
@@ -1188,7 +1188,7 @@ Implement your register allocator machine pass.  In your register allocator
 
 .. code-block:: c++
 
-  #include "llvm/CodeGen/RegAllocRegistry.h"
+  #include "llvm37/CodeGen/RegAllocRegistry.h"
 
 Also in your register allocator ``.cpp`` file, define a creator function in the
 form:
@@ -1300,7 +1300,7 @@ object.  The most foolproof way of doing this is to set a breakpoint in
 
 .. code-block:: console
 
-  $ (gdb) break llvm::PassManager::run
+  $ (gdb) break llvm37::PassManager::run
   Breakpoint 1 at 0x2413bc: file Pass.cpp, line 70.
   (gdb) run test.bc -load $(LLVMTOP)/llvm/Debug+Asserts/lib/[libname].so -[passoption]
   Starting program: opt test.bc -load $(LLVMTOP)/llvm/Debug+Asserts/lib/[libname].so -[passoption]

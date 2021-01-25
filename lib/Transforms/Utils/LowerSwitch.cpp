@@ -13,21 +13,21 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Transforms/Scalar.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/IR/CFG.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/Pass.h"
-#include "llvm/Support/Compiler.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Transforms/Utils/BasicBlockUtils.h"
-#include "llvm/Transforms/Utils/UnifyFunctionExitNodes.h"
+#include "llvm37/Transforms/Scalar.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/IR/CFG.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/Pass.h"
+#include "llvm37/Support/Compiler.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Transforms/Utils/BasicBlockUtils.h"
+#include "llvm37/Transforms/Utils/UnifyFunctionExitNodes.h"
 #include <algorithm>
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "lower-switch"
 
@@ -108,9 +108,9 @@ INITIALIZE_PASS(LowerSwitch, "lowerswitch",
                 "Lower SwitchInst's to branches", false, false)
 
 // Publicly exposed interface to pass...
-char &llvm::LowerSwitchID = LowerSwitch::ID;
+char &llvm37::LowerSwitchID = LowerSwitch::ID;
 // createLowerSwitchPass - Interface to this file...
-FunctionPass *llvm::createLowerSwitchPass() {
+FunctionPass *llvm37::createLowerSwitchPass() {
   return new LowerSwitch();
 }
 
@@ -133,7 +133,7 @@ bool LowerSwitch::runOnFunction(Function &F) {
 //
 static raw_ostream& operator<<(raw_ostream &O,
                                const LowerSwitch::CaseVector &C)
-    LLVM_ATTRIBUTE_USED;
+    LLVM37_ATTRIBUTE_USED;
 static raw_ostream& operator<<(raw_ostream &O,
                                const LowerSwitch::CaseVector &C) {
   O << "[";

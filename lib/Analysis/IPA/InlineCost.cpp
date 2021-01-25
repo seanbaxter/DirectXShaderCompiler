@@ -11,29 +11,29 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Analysis/InlineCost.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/SetVector.h"
-#include "llvm/ADT/SmallPtrSet.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/Analysis/AssumptionCache.h"
-#include "llvm/Analysis/CodeMetrics.h"
-#include "llvm/Analysis/ConstantFolding.h"
-#include "llvm/Analysis/InstructionSimplify.h"
-#include "llvm/Analysis/TargetTransformInfo.h"
-#include "llvm/IR/CallSite.h"
-#include "llvm/IR/CallingConv.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/GetElementPtrTypeIterator.h"
-#include "llvm/IR/GlobalAlias.h"
-#include "llvm/IR/InstVisitor.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/IR/Operator.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/Analysis/InlineCost.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/SetVector.h"
+#include "llvm37/ADT/SmallPtrSet.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/Analysis/AssumptionCache.h"
+#include "llvm37/Analysis/CodeMetrics.h"
+#include "llvm37/Analysis/ConstantFolding.h"
+#include "llvm37/Analysis/InstructionSimplify.h"
+#include "llvm37/Analysis/TargetTransformInfo.h"
+#include "llvm37/IR/CallSite.h"
+#include "llvm37/IR/CallingConv.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/IR/GetElementPtrTypeIterator.h"
+#include "llvm37/IR/GlobalAlias.h"
+#include "llvm37/IR/InstVisitor.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/IR/Operator.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/raw_ostream.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "inline-cost"
 
@@ -1284,7 +1284,7 @@ bool CallAnalyzer::analyzeCall(CallSite CS) {
   return Cost < Threshold;
 }
 
-#if !defined(NDEBUG) || defined(LLVM_ENABLE_DUMP)
+#if !defined(NDEBUG) || defined(LLVM37_ENABLE_DUMP)
 /// \brief Dump stats about this call's analysis.
 void CallAnalyzer::dump() {
 #define DEBUG_PRINT_STAT(x) dbgs() << "      " #x ": " << x << "\n"
@@ -1356,34 +1356,34 @@ InlineCost InlineCostAnalysis::getInlineCost(CallSite CS, Function *Callee,
                                              int Threshold) {
   // Cannot inline indirect calls.
   if (!Callee)
-    return llvm::InlineCost::getNever();
+    return llvm37::InlineCost::getNever();
 
   // Calls to functions with always-inline attributes should be inlined
   // whenever possible.
   if (CS.hasFnAttr(Attribute::AlwaysInline)) {
     if (isInlineViable(*Callee))
-      return llvm::InlineCost::getAlways();
-    return llvm::InlineCost::getNever();
+      return llvm37::InlineCost::getAlways();
+    return llvm37::InlineCost::getNever();
   }
 
   // Never inline functions with conflicting attributes (unless callee has
   // always-inline attribute).
   if (!functionsHaveCompatibleAttributes(CS.getCaller(), Callee,
                                          TTIWP->getTTI(*Callee)))
-    return llvm::InlineCost::getNever();
+    return llvm37::InlineCost::getNever();
 
   // Don't inline this call if the caller has the optnone attribute.
   if (CS.getCaller()->hasFnAttribute(Attribute::OptimizeNone))
-    return llvm::InlineCost::getNever();
+    return llvm37::InlineCost::getNever();
 
   // Don't inline functions which can be redefined at link-time to mean
   // something else.  Don't inline functions marked noinline or call sites
   // marked noinline.
   if (Callee->mayBeOverridden() ||
       Callee->hasFnAttribute(Attribute::NoInline) || CS.isNoInline())
-    return llvm::InlineCost::getNever();
+    return llvm37::InlineCost::getNever();
 
-  DEBUG(llvm::dbgs() << "      Analyzing call of " << Callee->getName()
+  DEBUG(llvm37::dbgs() << "      Analyzing call of " << Callee->getName()
         << "...\n");
 
   CallAnalyzer CA(TTIWP->getTTI(*Callee), ACT, *Callee, Threshold, CS);
@@ -1397,7 +1397,7 @@ InlineCost InlineCostAnalysis::getInlineCost(CallSite CS, Function *Callee,
   if (ShouldInline && CA.getCost() >= CA.getThreshold())
     return InlineCost::getAlways();
 
-  return llvm::InlineCost::get(CA.getCost(), CA.getThreshold());
+  return llvm37::InlineCost::get(CA.getCost(), CA.getThreshold());
 }
 
 bool InlineCostAnalysis::isInlineViable(Function &F) {
@@ -1428,7 +1428,7 @@ bool InlineCostAnalysis::isInlineViable(Function &F) {
       // correctly would require major changes to the inliner.
       if (CS.getCalledFunction() &&
           CS.getCalledFunction()->getIntrinsicID() ==
-              llvm::Intrinsic::localescape)
+              llvm37::Intrinsic::localescape)
         return false;
     }
   }

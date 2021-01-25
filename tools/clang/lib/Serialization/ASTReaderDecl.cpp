@@ -25,7 +25,7 @@
 #include "clang/Sema/IdentifierResolver.h"
 #include "clang/Sema/Sema.h"
 #include "clang/Sema/SemaDiagnostic.h"
-#include "llvm/Support/SaveAndRestore.h"
+#include "llvm37/Support/SaveAndRestore.h"
 using namespace clang;
 using namespace clang::serialization;
 
@@ -433,8 +433,8 @@ public:
 };
 }
 template<typename DeclT>
-llvm::iterator_range<MergedRedeclIterator<DeclT>> merged_redecls(DeclT *D) {
-  return llvm::iterator_range<MergedRedeclIterator<DeclT>>(
+llvm37::iterator_range<MergedRedeclIterator<DeclT>> merged_redecls(DeclT *D) {
+  return llvm37::iterator_range<MergedRedeclIterator<DeclT>>(
       MergedRedeclIterator<DeclT>(D),
       MergedRedeclIterator<DeclT>());
 }
@@ -814,7 +814,7 @@ void ASTDeclReader::VisitFunctionDecl(FunctionDecl *FD) {
       // FunctionTemplateSpecializationInfo's Profile().
       // We avoid getASTContext because a decl in the parent hierarchy may
       // be initializing.
-      llvm::FoldingSetNodeID ID;
+      llvm37::FoldingSetNodeID ID;
       FunctionTemplateSpecializationInfo::Profile(ID, TemplArgs, C);
       void *InsertPos = nullptr;
       FunctionTemplateDecl::Common *CommonPtr = CanonTemplate->getCommonPtr();
@@ -3090,7 +3090,7 @@ Decl *ASTReader::ReadDeclRecord(DeclID ID) {
   unsigned Index = ID - NUM_PREDEF_DECL_IDS;
   unsigned RawLocation = 0;
   RecordLocation Loc = DeclCursorForID(ID, RawLocation);
-  llvm::BitstreamCursor &DeclsCursor = Loc.F->DeclsCursor;
+  llvm37::BitstreamCursor &DeclsCursor = Loc.F->DeclsCursor;
   // Keep track of where we are in the stream, then jump back there
   // after reading this declaration.
   SavedStreamPosition SavedPosition(DeclsCursor);
@@ -3383,7 +3383,7 @@ void ASTReader::loadDeclUpdateRecords(serialization::DeclID ID, Decl *D) {
          I = UpdateOffsets.begin(), E = UpdateOffsets.end(); I != E; ++I) {
       ModuleFile *F = I->first;
       uint64_t Offset = I->second;
-      llvm::BitstreamCursor &Cursor = F->DeclsCursor;
+      llvm37::BitstreamCursor &Cursor = F->DeclsCursor;
       SavedStreamPosition SavedPosition(Cursor);
       Cursor.JumpToBit(Offset);
       RecordData Record;
@@ -3413,13 +3413,13 @@ namespace {
   class RedeclChainVisitor {
     ASTReader &Reader;
     SmallVectorImpl<DeclID> &SearchDecls;
-    llvm::SmallPtrSetImpl<Decl *> &Deserialized;
+    llvm37::SmallPtrSetImpl<Decl *> &Deserialized;
     GlobalDeclID CanonID;
     SmallVector<Decl *, 4> Chain;
 
   public:
     RedeclChainVisitor(ASTReader &Reader, SmallVectorImpl<DeclID> &SearchDecls,
-                       llvm::SmallPtrSetImpl<Decl *> &Deserialized,
+                       llvm37::SmallPtrSetImpl<Decl *> &Deserialized,
                        GlobalDeclID CanonID)
       : Reader(Reader), SearchDecls(SearchDecls), Deserialized(Deserialized),
         CanonID(CanonID) {
@@ -3566,10 +3566,10 @@ namespace {
     ASTReader &Reader;
     serialization::GlobalDeclID InterfaceID;
     ObjCInterfaceDecl *Interface;
-    llvm::SmallPtrSetImpl<ObjCCategoryDecl *> &Deserialized;
+    llvm37::SmallPtrSetImpl<ObjCCategoryDecl *> &Deserialized;
     unsigned PreviousGeneration;
     ObjCCategoryDecl *Tail;
-    llvm::DenseMap<DeclarationName, ObjCCategoryDecl *> NameCategoryMap;
+    llvm37::DenseMap<DeclarationName, ObjCCategoryDecl *> NameCategoryMap;
     
     void add(ObjCCategoryDecl *Cat) {
       // Only process each category once.
@@ -3614,7 +3614,7 @@ namespace {
     ObjCCategoriesVisitor(ASTReader &Reader,
                           serialization::GlobalDeclID InterfaceID,
                           ObjCInterfaceDecl *Interface,
-                        llvm::SmallPtrSetImpl<ObjCCategoryDecl *> &Deserialized,
+                        llvm37::SmallPtrSetImpl<ObjCCategoryDecl *> &Deserialized,
                           unsigned PreviousGeneration)
       : Reader(Reader), InterfaceID(InterfaceID), Interface(Interface),
         Deserialized(Deserialized), PreviousGeneration(PreviousGeneration),

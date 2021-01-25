@@ -12,8 +12,8 @@
 |* Clang C++ API.                                                             *|
 |*                                                                            *|
 \*===----------------------------------------------------------------------===*/
-#ifndef LLVM_CLANG_C_INDEX_H
-#define LLVM_CLANG_C_INDEX_H
+#ifndef LLVM37_CLANG_C_INDEX_H
+#define LLVM37_CLANG_C_INDEX_H
 
 #include <time.h>
 
@@ -2969,7 +2969,7 @@ CINDEX_LINKAGE CXCursor clang_Cursor_getArgument(CXCursor C, unsigned i);
 /**
  * \brief Describes the kind of a template argument.
  *
- * See the definition of llvm::clang::TemplateArgument::ArgKind for full
+ * See the definition of llvm37::clang::TemplateArgument::ArgKind for full
  * element descriptions.
  */
 enum CXTemplateArgumentKind {

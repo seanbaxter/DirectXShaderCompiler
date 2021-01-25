@@ -16,11 +16,11 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/CodeGen/GCStrategy.h"
-#include "llvm/IR/DerivedTypes.h"
-#include "llvm/IR/Value.h"
+#include "llvm37/CodeGen/GCStrategy.h"
+#include "llvm37/IR/DerivedTypes.h"
+#include "llvm37/IR/Value.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 namespace {
 class StatepointGC : public GCStrategy {
@@ -50,6 +50,6 @@ public:
 static GCRegistry::Add<StatepointGC> X("statepoint-example",
                                        "an example strategy for statepoint");
 
-namespace llvm {
+namespace llvm37 {
 void linkStatepointExampleGC() {}
 }

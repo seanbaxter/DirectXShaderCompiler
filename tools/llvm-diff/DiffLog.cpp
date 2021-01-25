@@ -13,11 +13,11 @@
 
 #include "DiffLog.h"
 #include "DiffConsumer.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/ADT/StringRef.h"
-#include "llvm/IR/Instructions.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/ADT/StringRef.h"
+#include "llvm37/IR/Instructions.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 LogBuilder::~LogBuilder() {
   consumer.logf(*this);

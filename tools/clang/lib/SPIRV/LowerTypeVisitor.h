@@ -7,14 +7,14 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_LIB_SPIRV_LOWERTYPEVISITOR_H
-#define LLVM_CLANG_LIB_SPIRV_LOWERTYPEVISITOR_H
+#ifndef LLVM37_CLANG_LIB_SPIRV_LOWERTYPEVISITOR_H
+#define LLVM37_CLANG_LIB_SPIRV_LOWERTYPEVISITOR_H
 
 #include "AlignmentSizeCalculator.h"
 #include "clang/AST/ASTContext.h"
 #include "clang/SPIRV/SpirvContext.h"
 #include "clang/SPIRV/SpirvVisitor.h"
-#include "llvm/ADT/Optional.h"
+#include "llvm37/ADT/Optional.h"
 
 namespace clang {
 namespace spirv {
@@ -46,7 +46,7 @@ public:
   /// The lowering is recursive; all the types that the target type depends
   /// on will be created in SpirvContext.
   const SpirvType *lowerType(QualType type, SpirvLayoutRule,
-                             llvm::Optional<bool> isRowMajor, SourceLocation);
+                             llvm37::Optional<bool> isRowMajor, SourceLocation);
 
 private:
   /// Emits error to the diagnostic engine associated with this visitor.
@@ -79,8 +79,8 @@ private:
   /// Returns the lowered field info vector.
   /// In other words: lowers the HybridStructType field information to
   /// StructType field information.
-  llvm::SmallVector<StructType::FieldInfo, 4>
-  populateLayoutInformation(llvm::ArrayRef<HybridStructType::FieldInfo> fields,
+  llvm37::SmallVector<StructType::FieldInfo, 4>
+  populateLayoutInformation(llvm37::ArrayRef<HybridStructType::FieldInfo> fields,
                             SpirvLayoutRule rule);
 
 private:
@@ -92,4 +92,4 @@ private:
 } // end namespace spirv
 } // end namespace clang
 
-#endif // LLVM_CLANG_LIB_SPIRV_LOWERTYPEVISITOR_H
+#endif // LLVM37_CLANG_LIB_SPIRV_LOWERTYPEVISITOR_H

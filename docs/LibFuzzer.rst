@@ -314,7 +314,7 @@ The inputs are random pieces of C++-like text.
 
 Build (make sure to use fresh clang as the host compiler)::
 
-    cmake -GNinja  -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ -DLLVM_USE_SANITIZER=Address -DLLVM_USE_SANITIZE_COVERAGE=YES -DCMAKE_BUILD_TYPE=Release /path/to/llvm
+    cmake -GNinja  -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ -DLLVM37_USE_SANITIZER=Address -DLLVM37_USE_SANITIZE_COVERAGE=YES -DCMAKE_BUILD_TYPE=Release /path/to/llvm
     ninja clang-format-fuzzer
     mkdir CORPUS_DIR
     ./bin/clang-format-fuzzer CORPUS_DIR

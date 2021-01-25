@@ -7,13 +7,13 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/ProfileData/InstrProfReader.h"
-#include "llvm/ProfileData/InstrProfWriter.h"
+#include "llvm37/ProfileData/InstrProfReader.h"
+#include "llvm37/ProfileData/InstrProfWriter.h"
 #include "gtest/gtest.h"
 
 #include <cstdarg>
 
-using namespace llvm;
+using namespace llvm37;
 
 static ::testing::AssertionResult NoError(std::error_code EC) {
   if (!EC)

@@ -12,15 +12,15 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_ANALYSIS_ANALYSISCONTEXT_H
-#define LLVM_CLANG_ANALYSIS_ANALYSISCONTEXT_H
+#ifndef LLVM37_CLANG_ANALYSIS_ANALYSISCONTEXT_H
+#define LLVM37_CLANG_ANALYSIS_ANALYSISCONTEXT_H
 
 #include "clang/AST/Decl.h"
 #include "clang/Analysis/CFG.h"
 #include "clang/Analysis/CodeInjector.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/FoldingSet.h"
-#include "llvm/Support/Allocator.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/FoldingSet.h"
+#include "llvm37/Support/Allocator.h"
 #include <memory>
 
 namespace clang {
@@ -81,9 +81,9 @@ class AnalysisDeclContext {
   std::unique_ptr<PseudoConstantAnalysis> PCA;
   std::unique_ptr<CFGReverseBlockReachabilityAnalysis> CFA;
 
-  llvm::BumpPtrAllocator A;
+  llvm37::BumpPtrAllocator A;
 
-  llvm::DenseMap<const BlockDecl*,void*> *ReferencedBlockVars;
+  llvm37::DenseMap<const BlockDecl*,void*> *ReferencedBlockVars;
 
   void *ManagedAnalyses;
 
@@ -173,7 +173,7 @@ public:
 
   typedef const VarDecl * const * referenced_decls_iterator;
 
-  llvm::iterator_range<referenced_decls_iterator>
+  llvm37::iterator_range<referenced_decls_iterator>
   getReferencedBlockVars(const BlockDecl *BD);
 
   /// Return the ImplicitParamDecl* associated with 'self' if this
@@ -207,7 +207,7 @@ private:
   LocationContextManager &getLocationContextManager();
 };
 
-class LocationContext : public llvm::FoldingSetNode {
+class LocationContext : public llvm37::FoldingSetNode {
 public:
   enum ContextKind { StackFrame, Scope, Block };
 
@@ -258,13 +258,13 @@ public:
   /// Return true if the current LocationContext has no caller context.
   virtual bool inTopFrame() const;
 
-  virtual void Profile(llvm::FoldingSetNodeID &ID) = 0;
+  virtual void Profile(llvm37::FoldingSetNodeID &ID) = 0;
 
   void dumpStack(raw_ostream &OS, StringRef Indent = "") const;
   void dumpStack() const;
 
 public:
-  static void ProfileCommon(llvm::FoldingSetNodeID &ID,
+  static void ProfileCommon(llvm37::FoldingSetNodeID &ID,
                             ContextKind ck,
                             AnalysisDeclContext *ctx,
                             const LocationContext *parent,
@@ -300,9 +300,9 @@ public:
 
   unsigned getIndex() const { return Index; }
 
-  void Profile(llvm::FoldingSetNodeID &ID) override;
+  void Profile(llvm37::FoldingSetNodeID &ID) override;
 
-  static void Profile(llvm::FoldingSetNodeID &ID, AnalysisDeclContext *ctx,
+  static void Profile(llvm37::FoldingSetNodeID &ID, AnalysisDeclContext *ctx,
                       const LocationContext *parent, const Stmt *s,
                       const CFGBlock *blk, unsigned idx) {
     ProfileCommon(ID, StackFrame, ctx, parent, s);
@@ -326,9 +326,9 @@ class ScopeContext : public LocationContext {
 public:
   ~ScopeContext() override {}
 
-  void Profile(llvm::FoldingSetNodeID &ID) override;
+  void Profile(llvm37::FoldingSetNodeID &ID) override;
 
-  static void Profile(llvm::FoldingSetNodeID &ID, AnalysisDeclContext *ctx,
+  static void Profile(llvm37::FoldingSetNodeID &ID, AnalysisDeclContext *ctx,
                       const LocationContext *parent, const Stmt *s) {
     ProfileCommon(ID, Scope, ctx, parent, s);
   }
@@ -358,9 +358,9 @@ public:
   
   const void *getContextData() const { return ContextData; }
 
-  void Profile(llvm::FoldingSetNodeID &ID) override;
+  void Profile(llvm37::FoldingSetNodeID &ID) override;
 
-  static void Profile(llvm::FoldingSetNodeID &ID, AnalysisDeclContext *ctx,
+  static void Profile(llvm37::FoldingSetNodeID &ID, AnalysisDeclContext *ctx,
                       const LocationContext *parent, const BlockDecl *bd,
                       const void *contextData) {
     ProfileCommon(ID, Block, ctx, parent, bd);
@@ -373,7 +373,7 @@ public:
 };
 
 class LocationContextManager {
-  llvm::FoldingSet<LocationContext> Contexts;
+  llvm37::FoldingSet<LocationContext> Contexts;
 public:
   ~LocationContextManager();
 
@@ -402,7 +402,7 @@ private:
 };
 
 class AnalysisDeclContextManager {
-  typedef llvm::DenseMap<const Decl*, AnalysisDeclContext*> ContextMap;
+  typedef llvm37::DenseMap<const Decl*, AnalysisDeclContext*> ContextMap;
 
   ContextMap Contexts;
   LocationContextManager LocContexts;

@@ -13,17 +13,17 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_LIB_CODEGEN_SELECTIONDAG_LEGALIZETYPES_H
-#define LLVM_LIB_CODEGEN_SELECTIONDAG_LEGALIZETYPES_H
+#ifndef LLVM37_LIB_CODEGEN_SELECTIONDAG_LEGALIZETYPES_H
+#define LLVM37_LIB_CODEGEN_SELECTIONDAG_LEGALIZETYPES_H
 
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/DenseSet.h"
-#include "llvm/CodeGen/SelectionDAG.h"
-#include "llvm/Support/Compiler.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Target/TargetLowering.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/DenseSet.h"
+#include "llvm37/CodeGen/SelectionDAG.h"
+#include "llvm37/Support/Compiler.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Target/TargetLowering.h"
 
-namespace llvm {
+namespace llvm37 {
 //                                                                           //
 ///////////////////////////////////////////////////////////////////////////////
 /// DAGTypeLegalizer - This takes an arbitrary SelectionDAG as input and hacks
@@ -31,7 +31,7 @@ namespace llvm {
 /// involves promoting small sizes to large sizes or splitting up large values
 /// into small values.
 ///
-class LLVM_LIBRARY_VISIBILITY DAGTypeLegalizer {
+class LLVM37_LIBRARY_VISIBILITY DAGTypeLegalizer {
   const TargetLowering &TLI;
   SelectionDAG &DAG;
 public:
@@ -817,6 +817,6 @@ private:
   SDValue ExpandOp_NormalStore      (SDNode *N, unsigned OpNo);
 };
 
-} // end namespace llvm.
+} // end namespace llvm37.
 
 #endif

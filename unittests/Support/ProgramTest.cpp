@@ -7,10 +7,10 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/FileSystem.h"
-#include "llvm/Support/Path.h"
-#include "llvm/Support/Program.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/FileSystem.h"
+#include "llvm37/Support/Path.h"
+#include "llvm37/Support/Program.h"
 #include "gtest/gtest.h"
 #include <stdlib.h>
 #if defined(__APPLE__)
@@ -20,12 +20,12 @@
 extern char **environ;
 #endif
 
-#if defined(LLVM_ON_UNIX)
+#if defined(LLVM37_ON_UNIX)
 #include <unistd.h>
 void sleep_for(unsigned int seconds) {
   sleep(seconds);
 }
-#elif defined(LLVM_ON_WIN32)
+#elif defined(LLVM37_ON_WIN32)
 #include <windows.h>
 void sleep_for(unsigned int seconds) {
   Sleep(seconds * 1000);
@@ -49,7 +49,7 @@ extern const char *TestMainArgv0;
 
 namespace {
 
-using namespace llvm;
+using namespace llvm37;
 using namespace sys;
 
 static cl::opt<std::string>
@@ -70,9 +70,9 @@ static void CopyEnvironment(std::vector<const char *> &out) {
   }
 }
 
-#ifdef LLVM_ON_WIN32
+#ifdef LLVM37_ON_WIN32
 TEST(ProgramTest, CreateProcessLongPath) {
-  if (getenv("LLVM_PROGRAM_TEST_LONG_PATH"))
+  if (getenv("LLVM37_PROGRAM_TEST_LONG_PATH"))
     exit(0);
 
   // getMainExecutable returns an absolute path; prepend the long-path prefix.
@@ -89,10 +89,10 @@ TEST(ProgramTest, CreateProcessLongPath) {
     nullptr
   };
 
-  // Add LLVM_PROGRAM_TEST_LONG_PATH to the environment of the child.
+  // Add LLVM37_PROGRAM_TEST_LONG_PATH to the environment of the child.
   std::vector<const char *> EnvP;
   CopyEnvironment(EnvP);
-  EnvP.push_back("LLVM_PROGRAM_TEST_LONG_PATH=1");
+  EnvP.push_back("LLVM37_PROGRAM_TEST_LONG_PATH=1");
   EnvP.push_back(nullptr);
 
   // Redirect stdout to a long path.
@@ -121,7 +121,7 @@ TEST(ProgramTest, CreateProcessLongPath) {
 #endif
 
 TEST(ProgramTest, CreateProcessTrailingSlash) {
-  if (getenv("LLVM_PROGRAM_TEST_CHILD")) {
+  if (getenv("LLVM37_PROGRAM_TEST_CHILD")) {
     if (ProgramTestStringArg1 == "has\\\\ trailing\\" &&
         ProgramTestStringArg2 == "has\\\\ trailing\\") {
       exit(0);  // Success!  The arguments were passed and parsed.
@@ -139,16 +139,16 @@ TEST(ProgramTest, CreateProcessTrailingSlash) {
     nullptr
   };
 
-  // Add LLVM_PROGRAM_TEST_CHILD to the environment of the child.
+  // Add LLVM37_PROGRAM_TEST_CHILD to the environment of the child.
   std::vector<const char *> envp;
   CopyEnvironment(envp);
-  envp.push_back("LLVM_PROGRAM_TEST_CHILD=1");
+  envp.push_back("LLVM37_PROGRAM_TEST_CHILD=1");
   envp.push_back(nullptr);
 
   std::string error;
   bool ExecutionFailed;
   // Redirect stdout and stdin to NUL, but let stderr through.
-#ifdef LLVM_ON_WIN32
+#ifdef LLVM37_ON_WIN32
   StringRef nul("NUL");
 #else
   StringRef nul("/dev/null");
@@ -162,9 +162,9 @@ TEST(ProgramTest, CreateProcessTrailingSlash) {
 }
 
 TEST(ProgramTest, TestExecuteNoWait) {
-  using namespace llvm::sys;
+  using namespace llvm37::sys;
 
-  if (getenv("LLVM_PROGRAM_TEST_EXECUTE_NO_WAIT")) {
+  if (getenv("LLVM37_PROGRAM_TEST_EXECUTE_NO_WAIT")) {
     sleep_for(/*seconds*/ 1);
     exit(0);
   }
@@ -177,10 +177,10 @@ TEST(ProgramTest, TestExecuteNoWait) {
     nullptr
   };
 
-  // Add LLVM_PROGRAM_TEST_EXECUTE_NO_WAIT to the environment of the child.
+  // Add LLVM37_PROGRAM_TEST_EXECUTE_NO_WAIT to the environment of the child.
   std::vector<const char *> envp;
   CopyEnvironment(envp);
-  envp.push_back("LLVM_PROGRAM_TEST_EXECUTE_NO_WAIT=1");
+  envp.push_back("LLVM37_PROGRAM_TEST_EXECUTE_NO_WAIT=1");
   envp.push_back(nullptr);
 
   std::string Error;
@@ -223,9 +223,9 @@ TEST(ProgramTest, TestExecuteNoWait) {
 }
 
 TEST(ProgramTest, TestExecuteAndWaitTimeout) {
-  using namespace llvm::sys;
+  using namespace llvm37::sys;
 
-  if (getenv("LLVM_PROGRAM_TEST_TIMEOUT")) {
+  if (getenv("LLVM37_PROGRAM_TEST_TIMEOUT")) {
     sleep_for(/*seconds*/ 10);
     exit(0);
   }
@@ -238,10 +238,10 @@ TEST(ProgramTest, TestExecuteAndWaitTimeout) {
     nullptr
   };
 
-  // Add LLVM_PROGRAM_TEST_TIMEOUT to the environment of the child.
+  // Add LLVM37_PROGRAM_TEST_TIMEOUT to the environment of the child.
   std::vector<const char *> envp;
   CopyEnvironment(envp);
-  envp.push_back("LLVM_PROGRAM_TEST_TIMEOUT=1");
+  envp.push_back("LLVM37_PROGRAM_TEST_TIMEOUT=1");
   envp.push_back(nullptr);
 
   std::string Error;
@@ -280,7 +280,7 @@ TEST(ProgramTest, TestExecuteNegative) {
 
 }
 
-#ifdef LLVM_ON_WIN32
+#ifdef LLVM37_ON_WIN32
 const char utf16le_text[] =
     "\x6c\x00\x69\x00\x6e\x00\x67\x00\xfc\x00\x69\x00\xe7\x00\x61\x00";
 const char utf16be_text[] =
@@ -300,7 +300,7 @@ TEST(ProgramTest, TestWriteWithSystemEncoding) {
                                              sys::WEM_UTF16));
   int fd = 0;
   ASSERT_NO_ERROR(fs::openFileForRead(file_pathname.c_str(), fd));
-#if defined(LLVM_ON_WIN32)
+#if defined(LLVM37_ON_WIN32)
   char buf[18];
   ASSERT_EQ(::read(fd, buf, 18), 18);
   if (strncmp(buf, "\xfe\xff", 2) == 0) { // UTF16-BE

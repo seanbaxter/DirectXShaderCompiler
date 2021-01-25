@@ -7,18 +7,18 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/MC/MCParser/MCAsmParserExtension.h"
-#include "llvm/ADT/StringSwitch.h"
-#include "llvm/ADT/Twine.h"
-#include "llvm/MC/MCAsmInfo.h"
-#include "llvm/MC/MCContext.h"
-#include "llvm/MC/MCExpr.h"
-#include "llvm/MC/MCParser/MCAsmLexer.h"
-#include "llvm/MC/MCSectionELF.h"
-#include "llvm/MC/MCStreamer.h"
-#include "llvm/MC/MCSymbolELF.h"
-#include "llvm/Support/ELF.h"
-using namespace llvm;
+#include "llvm37/MC/MCParser/MCAsmParserExtension.h"
+#include "llvm37/ADT/StringSwitch.h"
+#include "llvm37/ADT/Twine.h"
+#include "llvm37/MC/MCAsmInfo.h"
+#include "llvm37/MC/MCContext.h"
+#include "llvm37/MC/MCExpr.h"
+#include "llvm37/MC/MCParser/MCAsmLexer.h"
+#include "llvm37/MC/MCSectionELF.h"
+#include "llvm37/MC/MCStreamer.h"
+#include "llvm37/MC/MCSymbolELF.h"
+#include "llvm37/Support/ELF.h"
+using namespace llvm37;
 
 namespace {
 
@@ -739,7 +739,7 @@ bool ELFAsmParser::ParseDirectiveSubsection(StringRef, SMLoc) {
   return false;
 }
 
-namespace llvm {
+namespace llvm37 {
 
 MCAsmParserExtension *createELFAsmParser() {
   return new ELFAsmParser;

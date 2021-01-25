@@ -16,7 +16,7 @@
 #include "clang/Analysis/AnalysisContext.h"
 #include "clang/Analysis/CFG.h"
 #include "clang/StaticAnalyzer/Core/PathSensitive/ProgramState.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/Support/raw_ostream.h"
 
 using namespace clang;
 using namespace ento;
@@ -155,7 +155,7 @@ EnvironmentManager::removeDeadBindings(Environment Env,
   MarkLiveCallback CB(SymReaper);
   ScanReachableSymbols RSScaner(ST, CB);
 
-  llvm::ImmutableMapRef<EnvironmentEntry,SVal>
+  llvm37::ImmutableMapRef<EnvironmentEntry,SVal>
     EBMapRef(NewEnv.ExprBindings.getRootWithoutRetain(),
              F.getTreeFactory());
 

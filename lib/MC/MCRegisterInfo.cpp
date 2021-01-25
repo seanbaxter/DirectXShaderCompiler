@@ -11,9 +11,9 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/MC/MCRegisterInfo.h"
+#include "llvm37/MC/MCRegisterInfo.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 unsigned MCRegisterInfo::getMatchingSuperReg(unsigned Reg, unsigned SubIdx,
                                              const MCRegisterClass *RC) const {

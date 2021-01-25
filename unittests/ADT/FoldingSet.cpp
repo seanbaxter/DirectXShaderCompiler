@@ -12,10 +12,10 @@
 //===----------------------------------------------------------------------===//
 
 #include "gtest/gtest.h"
-#include "llvm/ADT/FoldingSet.h"
+#include "llvm37/ADT/FoldingSet.h"
 #include <string>
 
-using namespace llvm;
+using namespace llvm37;
 
 namespace {
 

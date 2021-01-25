@@ -11,24 +11,24 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/CodeGen/SelectionDAG.h"
+#include "llvm37/CodeGen/SelectionDAG.h"
 #include "ScheduleDAGSDNodes.h"
-#include "llvm/ADT/StringExtras.h"
-#include "llvm/CodeGen/MachineConstantPool.h"
-#include "llvm/CodeGen/MachineFunction.h"
-#include "llvm/CodeGen/MachineModuleInfo.h"
-#include "llvm/IR/DebugInfo.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/Intrinsics.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/GraphWriter.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Target/TargetInstrInfo.h"
-#include "llvm/Target/TargetIntrinsicInfo.h"
-#include "llvm/Target/TargetMachine.h"
-#include "llvm/Target/TargetRegisterInfo.h"
-#include "llvm/Target/TargetSubtargetInfo.h"
-using namespace llvm;
+#include "llvm37/ADT/StringExtras.h"
+#include "llvm37/CodeGen/MachineConstantPool.h"
+#include "llvm37/CodeGen/MachineFunction.h"
+#include "llvm37/CodeGen/MachineModuleInfo.h"
+#include "llvm37/IR/DebugInfo.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/Intrinsics.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/GraphWriter.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Target/TargetInstrInfo.h"
+#include "llvm37/Target/TargetIntrinsicInfo.h"
+#include "llvm37/Target/TargetMachine.h"
+#include "llvm37/Target/TargetRegisterInfo.h"
+#include "llvm37/Target/TargetSubtargetInfo.h"
+using namespace llvm37;
 
 std::string SDNode::getOperationName(const SelectionDAG *G) const {
   switch (getOpcode()) {

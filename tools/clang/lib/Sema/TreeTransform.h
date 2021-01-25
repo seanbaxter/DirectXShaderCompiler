@@ -11,8 +11,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_LIB_SEMA_TREETRANSFORM_H
-#define LLVM_CLANG_LIB_SEMA_TREETRANSFORM_H
+#ifndef LLVM37_CLANG_LIB_SEMA_TREETRANSFORM_H
+#define LLVM37_CLANG_LIB_SEMA_TREETRANSFORM_H
 
 #include "TypeLocBuilder.h"
 #include "clang/AST/Decl.h"
@@ -33,8 +33,8 @@
 #include "clang/Sema/SemaDiagnostic.h"
 #include "clang/Sema/SemaInternal.h"
 #include "clang/Sema/SemaHLSL.h" // HLSL Change
-#include "llvm/ADT/ArrayRef.h"
-#include "llvm/Support/ErrorHandling.h"
+#include "llvm37/ADT/ArrayRef.h"
+#include "llvm37/Support/ErrorHandling.h"
 #include <algorithm>
 
 namespace clang {
@@ -116,7 +116,7 @@ protected:
   /// \brief The set of local declarations that have been transformed, for
   /// cases where we are forced to build new declarations within the transformer
   /// rather than in the subclass (e.g., lambda closure types).
-  llvm::DenseMap<Decl *, Decl *> TransformedLocalDecls;
+  llvm37::DenseMap<Decl *, Decl *> TransformedLocalDecls;
 
 public:
   /// \brief Initializes a new tree transformer.
@@ -402,7 +402,7 @@ public:
   /// transformer has had to transform the declaration itself. Subclasses
   /// may override this function to provide alternate behavior.
   Decl *TransformDecl(SourceLocation Loc, Decl *D) {
-    llvm::DenseMap<Decl *, Decl *>::iterator Known
+    llvm37::DenseMap<Decl *, Decl *>::iterator Known
       = TransformedLocalDecls.find(D);
     if (Known != TransformedLocalDecls.end())
       return Known->second;
@@ -638,19 +638,19 @@ public:
 
   StmtResult TransformOMPExecutableDirective(OMPExecutableDirective *S);
 
-// FIXME: We use LLVM_ATTRIBUTE_NOINLINE because inlining causes a ridiculous
+// FIXME: We use LLVM37_ATTRIBUTE_NOINLINE because inlining causes a ridiculous
 // amount of stack usage with clang.
 #define STMT(Node, Parent)                        \
-  LLVM_ATTRIBUTE_NOINLINE \
+  LLVM37_ATTRIBUTE_NOINLINE \
   StmtResult Transform##Node(Node *S);
 #define EXPR(Node, Parent)                        \
-  LLVM_ATTRIBUTE_NOINLINE \
+  LLVM37_ATTRIBUTE_NOINLINE \
   ExprResult Transform##Node(Node *E);
 #define ABSTRACT_STMT(Stmt)
 #include "clang/AST/StmtNodes.inc"
 
 #define OPENMP_CLAUSE(Name, Class)                        \
-  LLVM_ATTRIBUTE_NOINLINE \
+  LLVM37_ATTRIBUTE_NOINLINE \
   OMPClause *Transform ## Class(Class *S);
 #include "clang/Basic/OpenMPKinds.def"
 
@@ -716,7 +716,7 @@ public:
   /// Also by default, all of the other Rebuild*Array
   QualType RebuildArrayType(QualType ElementType,
                             ArrayType::ArraySizeModifier SizeMod,
-                            const llvm::APInt *Size,
+                            const llvm37::APInt *Size,
                             Expr *SizeExpr,
                             unsigned IndexTypeQuals,
                             SourceRange BracketsRange);
@@ -728,7 +728,7 @@ public:
   /// Subclasses may override this routine to provide different behavior.
   QualType RebuildConstantArrayType(QualType ElementType,
                                     ArrayType::ArraySizeModifier SizeMod,
-                                    const llvm::APInt &Size,
+                                    const llvm37::APInt &Size,
                                     unsigned IndexTypeQuals,
                                     SourceRange BracketsRange);
 
@@ -5770,7 +5770,7 @@ TreeTransform<Derived>::TransformObjCObjectType(TypeLocBuilder &TLB,
                NewTypeArgInfos,
                TL.getTypeArgsRAngleLoc(),
                TL.getProtocolLAngleLoc(),
-               llvm::makeArrayRef(TL.getTypePtr()->qual_begin(),
+               llvm37::makeArrayRef(TL.getTypePtr()->qual_begin(),
                                   TL.getNumProtocols()),
                TL.getProtocolLocs(),
                TL.getProtocolRAngleLoc());
@@ -6370,7 +6370,7 @@ template<typename Derived>
 StmtResult
 TreeTransform<Derived>::TransformMSAsmStmt(MSAsmStmt *S) {
   ArrayRef<Token> AsmToks =
-    llvm::makeArrayRef(S->getAsmToks(), S->getNumAsmToks());
+    llvm37::makeArrayRef(S->getAsmToks(), S->getNumAsmToks());
 
   bool HadError = false, HadChange = false;
 
@@ -6875,7 +6875,7 @@ StmtResult TreeTransform<Derived>::TransformOMPExecutableDirective(
     OMPExecutableDirective *D) {
 
   // Transform the clauses
-  llvm::SmallVector<OMPClause *, 16> TClauses;
+  llvm37::SmallVector<OMPClause *, 16> TClauses;
   ArrayRef<OMPClause *> Clauses = D->clauses();
   TClauses.reserve(Clauses.size());
   for (ArrayRef<OMPClause *>::iterator I = Clauses.begin(), E = Clauses.end();
@@ -7336,7 +7336,7 @@ TreeTransform<Derived>::TransformOMPSeqCstClause(OMPSeqCstClause *C) {
 template <typename Derived>
 OMPClause *
 TreeTransform<Derived>::TransformOMPPrivateClause(OMPPrivateClause *C) {
-  llvm::SmallVector<Expr *, 16> Vars;
+  llvm37::SmallVector<Expr *, 16> Vars;
   Vars.reserve(C->varlist_size());
   for (auto *VE : C->varlists()) {
     ExprResult EVar = getDerived().TransformExpr(cast<Expr>(VE));
@@ -7351,7 +7351,7 @@ TreeTransform<Derived>::TransformOMPPrivateClause(OMPPrivateClause *C) {
 template <typename Derived>
 OMPClause *TreeTransform<Derived>::TransformOMPFirstprivateClause(
     OMPFirstprivateClause *C) {
-  llvm::SmallVector<Expr *, 16> Vars;
+  llvm37::SmallVector<Expr *, 16> Vars;
   Vars.reserve(C->varlist_size());
   for (auto *VE : C->varlists()) {
     ExprResult EVar = getDerived().TransformExpr(cast<Expr>(VE));
@@ -7366,7 +7366,7 @@ OMPClause *TreeTransform<Derived>::TransformOMPFirstprivateClause(
 template <typename Derived>
 OMPClause *
 TreeTransform<Derived>::TransformOMPLastprivateClause(OMPLastprivateClause *C) {
-  llvm::SmallVector<Expr *, 16> Vars;
+  llvm37::SmallVector<Expr *, 16> Vars;
   Vars.reserve(C->varlist_size());
   for (auto *VE : C->varlists()) {
     ExprResult EVar = getDerived().TransformExpr(cast<Expr>(VE));
@@ -7381,7 +7381,7 @@ TreeTransform<Derived>::TransformOMPLastprivateClause(OMPLastprivateClause *C) {
 template <typename Derived>
 OMPClause *
 TreeTransform<Derived>::TransformOMPSharedClause(OMPSharedClause *C) {
-  llvm::SmallVector<Expr *, 16> Vars;
+  llvm37::SmallVector<Expr *, 16> Vars;
   Vars.reserve(C->varlist_size());
   for (auto *VE : C->varlists()) {
     ExprResult EVar = getDerived().TransformExpr(cast<Expr>(VE));
@@ -7396,7 +7396,7 @@ TreeTransform<Derived>::TransformOMPSharedClause(OMPSharedClause *C) {
 template <typename Derived>
 OMPClause *
 TreeTransform<Derived>::TransformOMPReductionClause(OMPReductionClause *C) {
-  llvm::SmallVector<Expr *, 16> Vars;
+  llvm37::SmallVector<Expr *, 16> Vars;
   Vars.reserve(C->varlist_size());
   for (auto *VE : C->varlists()) {
     ExprResult EVar = getDerived().TransformExpr(cast<Expr>(VE));
@@ -7421,7 +7421,7 @@ TreeTransform<Derived>::TransformOMPReductionClause(OMPReductionClause *C) {
 template <typename Derived>
 OMPClause *
 TreeTransform<Derived>::TransformOMPLinearClause(OMPLinearClause *C) {
-  llvm::SmallVector<Expr *, 16> Vars;
+  llvm37::SmallVector<Expr *, 16> Vars;
   Vars.reserve(C->varlist_size());
   for (auto *VE : C->varlists()) {
     ExprResult EVar = getDerived().TransformExpr(cast<Expr>(VE));
@@ -7440,7 +7440,7 @@ TreeTransform<Derived>::TransformOMPLinearClause(OMPLinearClause *C) {
 template <typename Derived>
 OMPClause *
 TreeTransform<Derived>::TransformOMPAlignedClause(OMPAlignedClause *C) {
-  llvm::SmallVector<Expr *, 16> Vars;
+  llvm37::SmallVector<Expr *, 16> Vars;
   Vars.reserve(C->varlist_size());
   for (auto *VE : C->varlists()) {
     ExprResult EVar = getDerived().TransformExpr(cast<Expr>(VE));
@@ -7459,7 +7459,7 @@ TreeTransform<Derived>::TransformOMPAlignedClause(OMPAlignedClause *C) {
 template <typename Derived>
 OMPClause *
 TreeTransform<Derived>::TransformOMPCopyinClause(OMPCopyinClause *C) {
-  llvm::SmallVector<Expr *, 16> Vars;
+  llvm37::SmallVector<Expr *, 16> Vars;
   Vars.reserve(C->varlist_size());
   for (auto *VE : C->varlists()) {
     ExprResult EVar = getDerived().TransformExpr(cast<Expr>(VE));
@@ -7474,7 +7474,7 @@ TreeTransform<Derived>::TransformOMPCopyinClause(OMPCopyinClause *C) {
 template <typename Derived>
 OMPClause *
 TreeTransform<Derived>::TransformOMPCopyprivateClause(OMPCopyprivateClause *C) {
-  llvm::SmallVector<Expr *, 16> Vars;
+  llvm37::SmallVector<Expr *, 16> Vars;
   Vars.reserve(C->varlist_size());
   for (auto *VE : C->varlists()) {
     ExprResult EVar = getDerived().TransformExpr(cast<Expr>(VE));
@@ -7488,7 +7488,7 @@ TreeTransform<Derived>::TransformOMPCopyprivateClause(OMPCopyprivateClause *C) {
 
 template <typename Derived>
 OMPClause *TreeTransform<Derived>::TransformOMPFlushClause(OMPFlushClause *C) {
-  llvm::SmallVector<Expr *, 16> Vars;
+  llvm37::SmallVector<Expr *, 16> Vars;
   Vars.reserve(C->varlist_size());
   for (auto *VE : C->varlists()) {
     ExprResult EVar = getDerived().TransformExpr(cast<Expr>(VE));
@@ -7503,7 +7503,7 @@ OMPClause *TreeTransform<Derived>::TransformOMPFlushClause(OMPFlushClause *C) {
 template <typename Derived>
 OMPClause *
 TreeTransform<Derived>::TransformOMPDependClause(OMPDependClause *C) {
-  llvm::SmallVector<Expr *, 16> Vars;
+  llvm37::SmallVector<Expr *, 16> Vars;
   Vars.reserve(C->varlist_size());
   for (auto *VE : C->varlists()) {
     ExprResult EVar = getDerived().TransformExpr(cast<Expr>(VE));
@@ -10765,7 +10765,7 @@ template<typename Derived>
 QualType
 TreeTransform<Derived>::RebuildArrayType(QualType ElementType,
                                          ArrayType::ArraySizeModifier SizeMod,
-                                         const llvm::APInt *Size,
+                                         const llvm37::APInt *Size,
                                          Expr *SizeExpr,
                                          unsigned IndexTypeQuals,
                                          SourceRange BracketsRange) {
@@ -10779,7 +10779,7 @@ TreeTransform<Derived>::RebuildArrayType(QualType ElementType,
     SemaRef.Context.UnsignedIntTy, SemaRef.Context.UnsignedLongTy,
     SemaRef.Context.UnsignedLongLongTy, SemaRef.Context.UnsignedInt128Ty
   };
-  const unsigned NumTypes = llvm::array_lengthof(Types);
+  const unsigned NumTypes = llvm37::array_lengthof(Types);
   QualType SizeType;
   for (unsigned I = 0; I != NumTypes; ++I)
     if (Size->getBitWidth() == SemaRef.Context.getIntWidth(Types[I])) {
@@ -10801,7 +10801,7 @@ template<typename Derived>
 QualType
 TreeTransform<Derived>::RebuildConstantArrayType(QualType ElementType,
                                                  ArrayType::ArraySizeModifier SizeMod,
-                                                 const llvm::APInt &Size,
+                                                 const llvm37::APInt &Size,
                                                  unsigned IndexTypeQuals,
                                                  SourceRange BracketsRange) {
   return getDerived().RebuildArrayType(ElementType, SizeMod, &Size, nullptr,
@@ -10854,7 +10854,7 @@ template<typename Derived>
 QualType TreeTransform<Derived>::RebuildExtVectorType(QualType ElementType,
                                                       unsigned NumElements,
                                                  SourceLocation AttributeLoc) {
-  llvm::APInt numElements(SemaRef.Context.getIntWidth(SemaRef.Context.IntTy),
+  llvm37::APInt numElements(SemaRef.Context.getIntWidth(SemaRef.Context.IntTy),
                           NumElements, true);
   IntegerLiteral *VectorSize
     = IntegerLiteral::Create(SemaRef.Context, numElements, SemaRef.Context.IntTy,

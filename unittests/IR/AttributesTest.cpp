@@ -7,10 +7,10 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/IR/Attributes.h"
-#include "llvm/IR/LLVMContext.h"
+#include "llvm37/IR/Attributes.h"
+#include "llvm37/IR/LLVMContext.h"
 #include "gtest/gtest.h"
-using namespace llvm;
+using namespace llvm37;
 
 namespace {
 

@@ -13,25 +13,25 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_LIB_CODEGEN_CRITICALANTIDEPBREAKER_H
-#define LLVM_LIB_CODEGEN_CRITICALANTIDEPBREAKER_H
+#ifndef LLVM37_LIB_CODEGEN_CRITICALANTIDEPBREAKER_H
+#define LLVM37_LIB_CODEGEN_CRITICALANTIDEPBREAKER_H
 
 #include "AntiDepBreaker.h"
-#include "llvm/ADT/BitVector.h"
-#include "llvm/CodeGen/MachineBasicBlock.h"
-#include "llvm/CodeGen/MachineFrameInfo.h"
-#include "llvm/CodeGen/MachineFunction.h"
-#include "llvm/CodeGen/MachineRegisterInfo.h"
-#include "llvm/CodeGen/RegisterClassInfo.h"
-#include "llvm/CodeGen/ScheduleDAG.h"
+#include "llvm37/ADT/BitVector.h"
+#include "llvm37/CodeGen/MachineBasicBlock.h"
+#include "llvm37/CodeGen/MachineFrameInfo.h"
+#include "llvm37/CodeGen/MachineFunction.h"
+#include "llvm37/CodeGen/MachineRegisterInfo.h"
+#include "llvm37/CodeGen/RegisterClassInfo.h"
+#include "llvm37/CodeGen/ScheduleDAG.h"
 #include <map>
 
-namespace llvm {
+namespace llvm37 {
 class RegisterClassInfo;
 class TargetInstrInfo;
 class TargetRegisterInfo;
 
-class LLVM_LIBRARY_VISIBILITY CriticalAntiDepBreaker : public AntiDepBreaker {
+class LLVM37_LIBRARY_VISIBILITY CriticalAntiDepBreaker : public AntiDepBreaker {
     MachineFunction& MF;
     MachineRegisterInfo &MRI;
     const TargetInstrInfo *TII;

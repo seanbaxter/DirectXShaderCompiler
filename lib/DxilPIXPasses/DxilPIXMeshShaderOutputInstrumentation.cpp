@@ -19,9 +19,9 @@
 #include "dxc/HLSL/DxilGenerationPass.h"
 #include "dxc/HLSL/DxilSpanAllocator.h"
 
-#include "llvm/IR/PassManager.h"
-#include "llvm/Support/FormattedStream.h"
-#include "llvm/Transforms/Utils/Local.h"
+#include "llvm37/IR/PassManager.h"
+#include "llvm37/Support/FormattedStream.h"
+#include "llvm37/Transforms/Utils/Local.h"
 #include <deque>
 
 #ifdef _WIN32
@@ -43,7 +43,7 @@ constexpr uint32_t floatValueIndicator = 3;
 constexpr uint32_t int16ValueIndicator = 4;
 constexpr uint32_t float16ValueIndicator = 5;
 
-using namespace llvm;
+using namespace llvm37;
 using namespace hlsl;
 
 class DxilPIXMeshShaderOutputInstrumentation : public ModulePass 
@@ -97,10 +97,10 @@ CallInst *DxilPIXMeshShaderOutputInstrumentation::addUAV(BuilderContext &BC)
   // Set up a UAV with structure of a single int
   unsigned int UAVResourceHandle =
       static_cast<unsigned int>(BC.DM.GetUAVs().size());
-  SmallVector<llvm::Type *, 1> Elements{Type::getInt32Ty(BC.Ctx)};
-  llvm::StructType *UAVStructTy =
-      llvm::StructType::create(Elements, "PIX_DebugUAV_Type");
-  std::unique_ptr<DxilResource> pUAV = llvm::make_unique<DxilResource>();
+  SmallVector<llvm37::Type *, 1> Elements{Type::getInt32Ty(BC.Ctx)};
+  llvm37::StructType *UAVStructTy =
+      llvm37::StructType::create(Elements, "PIX_DebugUAV_Type");
+  std::unique_ptr<DxilResource> pUAV = llvm37::make_unique<DxilResource>();
   pUAV->SetGlobalName("PIX_DebugUAVName");
   pUAV->SetGlobalSymbol(UndefValue::get(UAVStructTy->getPointerTo()));
   pUAV->SetID(UAVResourceHandle);
@@ -250,12 +250,12 @@ template <typename... T>
 void DxilPIXMeshShaderOutputInstrumentation::Instrument(BuilderContext &BC,
                                                         T... values)
 {
-  llvm::SmallVector<llvm::Value *, 10> Values(
-      {static_cast<llvm::Value *>(values)...});
+  llvm37::SmallVector<llvm37::Value *, 10> Values(
+      {static_cast<llvm37::Value *>(values)...});
   const uint32_t DwordCount = Values.size();
-  llvm::Value *byteOffset =
+  llvm37::Value *byteOffset =
       reserveDebugEntrySpace(BC, DwordCount * sizeof(uint32_t));
-  for (llvm::Value *V : Values)
+  for (llvm37::Value *V : Values)
   {
     byteOffset = writeDwordAndReturnNewOffset(BC, byteOffset, V);
   }
@@ -380,7 +380,7 @@ bool DxilPIXMeshShaderOutputInstrumentation::runOnModule(Module &M)
 
 char DxilPIXMeshShaderOutputInstrumentation::ID = 0;
 
-ModulePass *llvm::createDxilDxilPIXMeshShaderOutputInstrumentation()
+ModulePass *llvm37::createDxilDxilPIXMeshShaderOutputInstrumentation()
 {
   return new DxilPIXMeshShaderOutputInstrumentation();
 }

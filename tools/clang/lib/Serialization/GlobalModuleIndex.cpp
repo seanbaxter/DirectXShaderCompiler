@@ -18,17 +18,17 @@
 #include "clang/Serialization/ASTBitCodes.h"
 #include "clang/Serialization/GlobalModuleIndex.h"
 #include "clang/Serialization/Module.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/MapVector.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/ADT/StringExtras.h"
-#include "llvm/Bitcode/BitstreamReader.h"
-#include "llvm/Bitcode/BitstreamWriter.h"
-#include "llvm/Support/FileSystem.h"
-#include "llvm/Support/LockFileManager.h"
-#include "llvm/Support/MemoryBuffer.h"
-#include "llvm/Support/OnDiskHashTable.h"
-#include "llvm/Support/Path.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/MapVector.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/ADT/StringExtras.h"
+#include "llvm37/Bitcode/BitstreamReader.h"
+#include "llvm37/Bitcode/BitstreamWriter.h"
+#include "llvm37/Support/FileSystem.h"
+#include "llvm37/Support/LockFileManager.h"
+#include "llvm37/Support/MemoryBuffer.h"
+#include "llvm37/Support/OnDiskHashTable.h"
+#include "llvm37/Support/Path.h"
 #include <cstdio>
 using namespace clang;
 using namespace serialization;
@@ -39,7 +39,7 @@ using namespace serialization;
 namespace {
   enum {
     /// \brief The block containing the index.
-    GLOBAL_INDEX_BLOCK_ID = llvm::bitc::FIRST_APPLICATION_BLOCKID
+    GLOBAL_INDEX_BLOCK_ID = llvm37::bitc::FIRST_APPLICATION_BLOCKID
   };
 
   /// \brief Describes the record types in the index.
@@ -81,12 +81,12 @@ public:
   }
 
   static hash_value_type ComputeHash(const internal_key_type& a) {
-    return llvm::HashString(a);
+    return llvm37::HashString(a);
   }
 
   static std::pair<unsigned, unsigned>
   ReadKeyDataLength(const unsigned char*& d) {
-    using namespace llvm::support;
+    using namespace llvm37::support;
     unsigned KeyLen = endian::readNext<uint16_t, little, unaligned>(d);
     unsigned DataLen = endian::readNext<uint16_t, little, unaligned>(d);
     return std::make_pair(KeyLen, DataLen);
@@ -105,7 +105,7 @@ public:
   static data_type ReadData(const internal_key_type& k,
                             const unsigned char* d,
                             unsigned DataLen) {
-    using namespace llvm::support;
+    using namespace llvm37::support;
 
     data_type Result;
     while (DataLen > 0) {
@@ -118,26 +118,26 @@ public:
   }
 };
 
-typedef llvm::OnDiskIterableChainedHashTable<IdentifierIndexReaderTrait>
+typedef llvm37::OnDiskIterableChainedHashTable<IdentifierIndexReaderTrait>
     IdentifierIndexTable;
 
 }
 
-GlobalModuleIndex::GlobalModuleIndex(std::unique_ptr<llvm::MemoryBuffer> Buffer,
-                                     llvm::BitstreamCursor Cursor)
+GlobalModuleIndex::GlobalModuleIndex(std::unique_ptr<llvm37::MemoryBuffer> Buffer,
+                                     llvm37::BitstreamCursor Cursor)
     : Buffer(std::move(Buffer)), IdentifierIndex(), NumIdentifierLookups(),
       NumIdentifierLookupHits() {
   // Read the global index.
   bool InGlobalIndexBlock = false;
   bool Done = false;
   while (!Done) {
-    llvm::BitstreamEntry Entry = Cursor.advance();
+    llvm37::BitstreamEntry Entry = Cursor.advance();
 
     switch (Entry.Kind) {
-    case llvm::BitstreamEntry::Error:
+    case llvm37::BitstreamEntry::Error:
       return;
 
-    case llvm::BitstreamEntry::EndBlock:
+    case llvm37::BitstreamEntry::EndBlock:
       if (InGlobalIndexBlock) {
         InGlobalIndexBlock = false;
         Done = true;
@@ -146,14 +146,14 @@ GlobalModuleIndex::GlobalModuleIndex(std::unique_ptr<llvm::MemoryBuffer> Buffer,
       return;
 
 
-    case llvm::BitstreamEntry::Record:
+    case llvm37::BitstreamEntry::Record:
       // Entries in the global index block are handled below.
       if (InGlobalIndexBlock)
         break;
 
       return;
 
-    case llvm::BitstreamEntry::SubBlock:
+    case llvm37::BitstreamEntry::SubBlock:
       if (!InGlobalIndexBlock && Entry.ID == GLOBAL_INDEX_BLOCK_ID) {
         if (Cursor.EnterSubBlock(GLOBAL_INDEX_BLOCK_ID))
           return;
@@ -208,7 +208,7 @@ GlobalModuleIndex::GlobalModuleIndex(std::unique_ptr<llvm::MemoryBuffer> Buffer,
       // Record this module as an unresolved module.
       // FIXME: this doesn't work correctly for module names containing path
       // separators.
-      StringRef ModuleName = llvm::sys::path::stem(Modules[ID].FileName);
+      StringRef ModuleName = llvm37::sys::path::stem(Modules[ID].FileName);
       // Remove the -<hash of ModuleMapPath>
       ModuleName = ModuleName.rsplit('-').first;
       UnresolvedModules[ModuleName] = ID;
@@ -235,22 +235,22 @@ GlobalModuleIndex::~GlobalModuleIndex() {
 std::pair<GlobalModuleIndex *, GlobalModuleIndex::ErrorCode>
 GlobalModuleIndex::readIndex(StringRef Path) {
   // Load the index file, if it's there.
-  llvm::SmallString<128> IndexPath;
+  llvm37::SmallString<128> IndexPath;
   IndexPath += Path;
-  llvm::sys::path::append(IndexPath, IndexFileName);
+  llvm37::sys::path::append(IndexPath, IndexFileName);
 
-  llvm::ErrorOr<std::unique_ptr<llvm::MemoryBuffer>> BufferOrErr =
-      llvm::MemoryBuffer::getFile(IndexPath.c_str());
+  llvm37::ErrorOr<std::unique_ptr<llvm37::MemoryBuffer>> BufferOrErr =
+      llvm37::MemoryBuffer::getFile(IndexPath.c_str());
   if (!BufferOrErr)
     return std::make_pair(nullptr, EC_NotFound);
-  std::unique_ptr<llvm::MemoryBuffer> Buffer = std::move(BufferOrErr.get());
+  std::unique_ptr<llvm37::MemoryBuffer> Buffer = std::move(BufferOrErr.get());
 
   /// \brief The bitstream reader from which we'll read the AST file.
-  llvm::BitstreamReader Reader((const unsigned char *)Buffer->getBufferStart(),
+  llvm37::BitstreamReader Reader((const unsigned char *)Buffer->getBufferStart(),
                                (const unsigned char *)Buffer->getBufferEnd());
 
   /// \brief The main bitstream cursor for the main block.
-  llvm::BitstreamCursor Cursor(Reader);
+  llvm37::BitstreamCursor Cursor(Reader);
 
   // Sniff for the signature.
   if (Cursor.Read(8) != 'B' ||
@@ -277,7 +277,7 @@ void GlobalModuleIndex::getModuleDependencies(
        ModuleFile *File,
        SmallVectorImpl<ModuleFile *> &Dependencies) {
   // Look for information about this module file.
-  llvm::DenseMap<ModuleFile *, unsigned>::iterator Known
+  llvm37::DenseMap<ModuleFile *, unsigned>::iterator Known
     = ModulesByFile.find(File);
   if (Known == ModulesByFile.end())
     return;
@@ -320,7 +320,7 @@ bool GlobalModuleIndex::lookupIdentifier(StringRef Name, HitSet &Hits) {
 bool GlobalModuleIndex::loadedModuleFile(ModuleFile *File) {
   // Look for the module in the global module index based on the module name.
   StringRef Name = File->ModuleName;
-  llvm::StringMap<unsigned>::iterator Known = UnresolvedModules.find(Name);
+  llvm37::StringMap<unsigned>::iterator Known = UnresolvedModules.find(Name);
   if (Known == UnresolvedModules.end()) {
     return true;
   }
@@ -355,16 +355,16 @@ void GlobalModuleIndex::printStats() {
 }
 
 void GlobalModuleIndex::dump() {
-  llvm::errs() << "*** Global Module Index Dump:\n";
-  llvm::errs() << "Module files:\n";
+  llvm37::errs() << "*** Global Module Index Dump:\n";
+  llvm37::errs() << "Module files:\n";
   for (auto &MI : Modules) {
-    llvm::errs() << "** " << MI.FileName << "\n";
+    llvm37::errs() << "** " << MI.FileName << "\n";
     if (MI.File)
       MI.File->dump();
     else
-      llvm::errs() << "\n";
+      llvm37::errs() << "\n";
   }
-  llvm::errs() << "\n";
+  llvm37::errs() << "\n";
 }
 
 //----------------------------------------------------------------------------//
@@ -388,25 +388,25 @@ namespace {
     const PCHContainerReader &PCHContainerRdr;
 
     /// \brief Mapping from files to module file information.
-    typedef llvm::MapVector<const FileEntry *, ModuleFileInfo> ModuleFilesMap;
+    typedef llvm37::MapVector<const FileEntry *, ModuleFileInfo> ModuleFilesMap;
 
     /// \brief Information about each of the known module files.
     ModuleFilesMap ModuleFiles;
 
     /// \brief Mapping from identifiers to the list of module file IDs that
     /// consider this identifier to be interesting.
-    typedef llvm::StringMap<SmallVector<unsigned, 2> > InterestingIdentifierMap;
+    typedef llvm37::StringMap<SmallVector<unsigned, 2> > InterestingIdentifierMap;
 
     /// \brief A mapping from all interesting identifiers to the set of module
     /// files in which those identifiers are considered interesting.
     InterestingIdentifierMap InterestingIdentifiers;
     
     /// \brief Write the block-info block for the global module index file.
-    void emitBlockInfoBlock(llvm::BitstreamWriter &Stream);
+    void emitBlockInfoBlock(llvm37::BitstreamWriter &Stream);
 
     /// \brief Retrieve the module file information for the given file.
     ModuleFileInfo &getModuleFileInfo(const FileEntry *File) {
-      llvm::MapVector<const FileEntry *, ModuleFileInfo>::iterator Known
+      llvm37::MapVector<const FileEntry *, ModuleFileInfo>::iterator Known
         = ModuleFiles.find(File);
       if (Known != ModuleFiles.end())
         return Known->second;
@@ -428,39 +428,39 @@ namespace {
     bool loadModuleFile(const FileEntry *File);
 
     /// \brief Write the index to the given bitstream.
-    void writeIndex(llvm::BitstreamWriter &Stream);
+    void writeIndex(llvm37::BitstreamWriter &Stream);
   };
 }
 
 static void emitBlockID(unsigned ID, const char *Name,
-                        llvm::BitstreamWriter &Stream,
+                        llvm37::BitstreamWriter &Stream,
                         SmallVectorImpl<uint64_t> &Record) {
   Record.clear();
   Record.push_back(ID);
-  Stream.EmitRecord(llvm::bitc::BLOCKINFO_CODE_SETBID, Record);
+  Stream.EmitRecord(llvm37::bitc::BLOCKINFO_CODE_SETBID, Record);
 
   // Emit the block name if present.
   if (!Name || Name[0] == 0) return;
   Record.clear();
   while (*Name)
     Record.push_back(*Name++);
-  Stream.EmitRecord(llvm::bitc::BLOCKINFO_CODE_BLOCKNAME, Record);
+  Stream.EmitRecord(llvm37::bitc::BLOCKINFO_CODE_BLOCKNAME, Record);
 }
 
 static void emitRecordID(unsigned ID, const char *Name,
-                         llvm::BitstreamWriter &Stream,
+                         llvm37::BitstreamWriter &Stream,
                          SmallVectorImpl<uint64_t> &Record) {
   Record.clear();
   Record.push_back(ID);
   while (*Name)
     Record.push_back(*Name++);
-  Stream.EmitRecord(llvm::bitc::BLOCKINFO_CODE_SETRECORDNAME, Record);
+  Stream.EmitRecord(llvm37::bitc::BLOCKINFO_CODE_SETRECORDNAME, Record);
 }
 
 void
-GlobalModuleIndexBuilder::emitBlockInfoBlock(llvm::BitstreamWriter &Stream) {
+GlobalModuleIndexBuilder::emitBlockInfoBlock(llvm37::BitstreamWriter &Stream) {
   SmallVector<uint64_t, 64> Record;
-  Stream.EnterSubblock(llvm::bitc::BLOCKINFO_BLOCK_ID, 3);
+  Stream.EnterSubblock(llvm37::bitc::BLOCKINFO_BLOCK_ID, 3);
 
 #define BLOCK(X) emitBlockID(X ## _ID, #X, Stream, Record)
 #define RECORD(X) emitRecordID(X, #X, Stream, Record)
@@ -487,7 +487,7 @@ namespace {
                        unsigned DataLen) {
       // The first bit indicates whether this identifier is interesting.
       // That's all we care about.
-      using namespace llvm::support;
+      using namespace llvm37::support;
       unsigned RawID = endian::readNext<uint32_t, little, unaligned>(d);
       bool IsInteresting = RawID & 0x01;
       return std::make_pair(k, IsInteresting);
@@ -504,9 +504,9 @@ bool GlobalModuleIndexBuilder::loadModuleFile(const FileEntry *File) {
   }
 
   // Initialize the input stream
-  llvm::BitstreamReader InStreamFile;
+  llvm37::BitstreamReader InStreamFile;
   PCHContainerRdr.ExtractPCH((*Buffer)->getMemBufferRef(), InStreamFile);
-  llvm::BitstreamCursor InStream(InStreamFile);
+  llvm37::BitstreamCursor InStream(InStreamFile);
 
   // Sniff for the signature.
   if (InStream.Read(8) != 'C' ||
@@ -524,13 +524,13 @@ bool GlobalModuleIndexBuilder::loadModuleFile(const FileEntry *File) {
   enum { Other, ControlBlock, ASTBlock } State = Other;
   bool Done = false;
   while (!Done) {
-    llvm::BitstreamEntry Entry = InStream.advance();
+    llvm37::BitstreamEntry Entry = InStream.advance();
     switch (Entry.Kind) {
-    case llvm::BitstreamEntry::Error:
+    case llvm37::BitstreamEntry::Error:
       Done = true;
       continue;
 
-    case llvm::BitstreamEntry::Record:
+    case llvm37::BitstreamEntry::Record:
       // In the 'other' state, just skip the record. We don't care.
       if (State == Other) {
         InStream.skipRecord(Entry.ID);
@@ -540,7 +540,7 @@ bool GlobalModuleIndexBuilder::loadModuleFile(const FileEntry *File) {
       // Handle potentially-interesting records below.
       break;
 
-    case llvm::BitstreamEntry::SubBlock:
+    case llvm37::BitstreamEntry::SubBlock:
       if (Entry.ID == CONTROL_BLOCK_ID) {
         if (InStream.EnterSubBlock(CONTROL_BLOCK_ID))
           return true;
@@ -564,7 +564,7 @@ bool GlobalModuleIndexBuilder::loadModuleFile(const FileEntry *File) {
 
       continue;
 
-    case llvm::BitstreamEntry::EndBlock:
+    case llvm37::BitstreamEntry::EndBlock:
       State = Other;
       continue;
     }
@@ -620,7 +620,7 @@ bool GlobalModuleIndexBuilder::loadModuleFile(const FileEntry *File) {
 
     // Handle the identifier table
     if (State == ASTBlock && Code == IDENTIFIER_TABLE && Record[0] > 0) {
-      typedef llvm::OnDiskIterableChainedHashTable<
+      typedef llvm37::OnDiskIterableChainedHashTable<
           InterestingASTIdentifierLookupTrait> InterestingIdentifierTable;
       std::unique_ptr<InterestingIdentifierTable> Table(
           InterestingIdentifierTable::Create(
@@ -658,12 +658,12 @@ public:
   typedef unsigned offset_type;
 
   static hash_value_type ComputeHash(key_type_ref Key) {
-    return llvm::HashString(Key);
+    return llvm37::HashString(Key);
   }
 
   std::pair<unsigned,unsigned>
   EmitKeyDataLength(raw_ostream& Out, key_type_ref Key, data_type_ref Data) {
-    using namespace llvm::support;
+    using namespace llvm37::support;
     endian::Writer<little> LE(Out);
     unsigned KeyLen = Key.size();
     unsigned DataLen = Data.size() * 4;
@@ -678,7 +678,7 @@ public:
 
   void EmitData(raw_ostream& Out, key_type_ref Key, data_type_ref Data,
                 unsigned DataLen) {
-    using namespace llvm::support;
+    using namespace llvm37::support;
     for (unsigned I = 0, N = Data.size(); I != N; ++I)
       endian::Writer<little>(Out).write<uint32_t>(Data[I]);
   }
@@ -686,8 +686,8 @@ public:
 
 }
 
-void GlobalModuleIndexBuilder::writeIndex(llvm::BitstreamWriter &Stream) {
-  using namespace llvm;
+void GlobalModuleIndexBuilder::writeIndex(llvm37::BitstreamWriter &Stream) {
+  using namespace llvm37;
   
   // Emit the file header.
   Stream.Emit((unsigned)'B', 8);
@@ -728,7 +728,7 @@ void GlobalModuleIndexBuilder::writeIndex(llvm::BitstreamWriter &Stream) {
 
   // Write the identifier -> module file mapping.
   {
-    llvm::OnDiskChainedHashTableGenerator<IdentifierIndexWriterTrait> Generator;
+    llvm37::OnDiskChainedHashTableGenerator<IdentifierIndexWriterTrait> Generator;
     IdentifierIndexWriterTrait Trait;
 
     // Populate the hash table.
@@ -742,8 +742,8 @@ void GlobalModuleIndexBuilder::writeIndex(llvm::BitstreamWriter &Stream) {
     SmallString<4096> IdentifierTable;
     uint32_t BucketOffset;
     {
-      using namespace llvm::support;
-      llvm::raw_svector_ostream Out(IdentifierTable);
+      using namespace llvm37::support;
+      llvm37::raw_svector_ostream Out(IdentifierTable);
       // Make sure that no bucket is at offset 0
       endian::Writer<little>(Out).write<uint32_t>(0);
       BucketOffset = Generator.Emit(Out, Trait);
@@ -770,22 +770,22 @@ GlobalModuleIndex::ErrorCode
 GlobalModuleIndex::writeIndex(FileManager &FileMgr,
                               const PCHContainerReader &PCHContainerRdr,
                               StringRef Path) {
-  llvm::SmallString<128> IndexPath;
+  llvm37::SmallString<128> IndexPath;
   IndexPath += Path;
-  llvm::sys::path::append(IndexPath, IndexFileName);
+  llvm37::sys::path::append(IndexPath, IndexFileName);
 
   // Coordinate building the global index file with other processes that might
   // try to do the same.
-  llvm::LockFileManager Locked(IndexPath);
+  llvm37::LockFileManager Locked(IndexPath);
   switch (Locked) {
-  case llvm::LockFileManager::LFS_Error:
+  case llvm37::LockFileManager::LFS_Error:
     return EC_IOError;
 
-  case llvm::LockFileManager::LFS_Owned:
+  case llvm37::LockFileManager::LFS_Owned:
     // We're responsible for building the index ourselves. Do so below.
     break;
 
-  case llvm::LockFileManager::LFS_Shared:
+  case llvm37::LockFileManager::LFS_Shared:
     // Someone else is responsible for building the index. We don't care
     // when they finish, so we're done.
     return EC_Building;
@@ -796,15 +796,15 @@ GlobalModuleIndex::writeIndex(FileManager &FileMgr,
 
   // Load each of the module files.
   std::error_code EC;
-  for (llvm::sys::fs::directory_iterator D(Path, EC), DEnd;
+  for (llvm37::sys::fs::directory_iterator D(Path, EC), DEnd;
        D != DEnd && !EC;
        D.increment(EC)) {
     // If this isn't a module file, we don't care.
-    if (llvm::sys::path::extension(D->path()) != ".pcm") {
+    if (llvm37::sys::path::extension(D->path()) != ".pcm") {
       // ... unless it's a .pcm.lock file, which indicates that someone is
       // in the process of rebuilding a module. They'll rebuild the index
       // at the end of that translation unit, so we don't have to.
-      if (llvm::sys::path::extension(D->path()) == ".pcm.lock")
+      if (llvm37::sys::path::extension(D->path()) == ".pcm.lock")
         return EC_Building;
 
       continue;
@@ -823,19 +823,19 @@ GlobalModuleIndex::writeIndex(FileManager &FileMgr,
   // The output buffer, into which the global index will be written.
   SmallVector<char, 16> OutputBuffer;
   {
-    llvm::BitstreamWriter OutputStream(OutputBuffer);
+    llvm37::BitstreamWriter OutputStream(OutputBuffer);
     Builder.writeIndex(OutputStream);
   }
 
   // Write the global index file to a temporary file.
-  llvm::SmallString<128> IndexTmpPath;
+  llvm37::SmallString<128> IndexTmpPath;
   int TmpFD;
-  if (llvm::sys::fs::createUniqueFile(IndexPath + "-%%%%%%%%", TmpFD,
+  if (llvm37::sys::fs::createUniqueFile(IndexPath + "-%%%%%%%%", TmpFD,
                                       IndexTmpPath))
     return EC_IOError;
 
   // Open the temporary global index file for output.
-  llvm::raw_fd_ostream Out(TmpFD, true);
+  llvm37::raw_fd_ostream Out(TmpFD, true);
   if (Out.has_error())
     return EC_IOError;
 
@@ -846,12 +846,12 @@ GlobalModuleIndex::writeIndex(FileManager &FileMgr,
     return EC_IOError;
 
   // Remove the old index file. It isn't relevant any more.
-  llvm::sys::fs::remove(IndexPath);
+  llvm37::sys::fs::remove(IndexPath);
 
   // Rename the newly-written index file to the proper name.
-  if (llvm::sys::fs::rename(IndexTmpPath, IndexPath)) {
+  if (llvm37::sys::fs::rename(IndexTmpPath, IndexPath)) {
     // Rename failed; just remove the 
-    llvm::sys::fs::remove(IndexTmpPath);
+    llvm37::sys::fs::remove(IndexTmpPath);
     return EC_IOError;
   }
 

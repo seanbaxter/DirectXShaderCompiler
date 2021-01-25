@@ -30,9 +30,9 @@
 #include "clang/StaticAnalyzer/Core/PathSensitive/ExprEngine.h"
 #include "clang/StaticAnalyzer/Core/PathSensitive/MemRegion.h"
 #include "clang/StaticAnalyzer/Core/PathSensitive/ProgramState.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/ADT/StringMap.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/ADT/StringMap.h"
+#include "llvm37/Support/raw_ostream.h"
 
 using namespace clang;
 using namespace ento;
@@ -68,7 +68,7 @@ enum FoundationClass {
 
 static FoundationClass findKnownClass(const ObjCInterfaceDecl *ID,
                                       bool IncludeSuperclasses = true) {
-  static llvm::StringMap<FoundationClass> Classes;
+  static llvm37::StringMap<FoundationClass> Classes;
   if (Classes.empty()) {
     Classes["NSArray"] = FC_NSArray;
     Classes["NSDictionary"] = FC_NSDictionary;
@@ -98,7 +98,7 @@ namespace {
                                        check::PostStmt<ObjCArrayLiteral> > {
     mutable std::unique_ptr<APIMisuse> BT;
 
-    mutable llvm::SmallDenseMap<Selector, unsigned, 16> StringSelectors;
+    mutable llvm37::SmallDenseMap<Selector, unsigned, 16> StringSelectors;
     mutable Selector ArrayWithObjectSel;
     mutable Selector AddObjectSel;
     mutable Selector InsertObjectAtIndexSel;
@@ -159,7 +159,7 @@ void NilArgChecker::warnIfNilArg(CheckerContext &C,
       
   if (ExplodedNode *N = C.generateSink()) {
     SmallString<128> sbuf;
-    llvm::raw_svector_ostream os(sbuf);
+    llvm37::raw_svector_ostream os(sbuf);
 
     if (CanBeSubscript && msg.getMessageKind() == OCM_Subscript) {
 
@@ -207,7 +207,7 @@ void NilArgChecker::generateBugReport(ExplodedNode *N,
   if (!BT)
     BT.reset(new APIMisuse(this, "nil argument"));
 
-  auto R = llvm::make_unique<BugReport>(*BT, Msg, N);
+  auto R = llvm37::make_unique<BugReport>(*BT, Msg, N);
   R->addRange(Range);
   bugreporter::trackNullOrUndefValue(N, E, *R);
   C.emitReport(std::move(R));
@@ -498,7 +498,7 @@ void CFNumberCreateChecker::checkPreStmt(const CallExpr *CE,
   if (ExplodedNode *N = SourceSize < TargetSize ? C.generateSink() 
                                                 : C.addTransition()) {
     SmallString<128> sbuf;
-    llvm::raw_svector_ostream os(sbuf);
+    llvm37::raw_svector_ostream os(sbuf);
     
     os << (SourceSize == 8 ? "An " : "A ")
        << SourceSize << " bit integer is used to initialize a CFNumber "
@@ -516,7 +516,7 @@ void CFNumberCreateChecker::checkPreStmt(const CallExpr *CE,
     if (!BT)
       BT.reset(new APIMisuse(this, "Bad use of CFNumberCreate"));
 
-    auto report = llvm::make_unique<BugReport>(*BT, os.str(), N);
+    auto report = llvm37::make_unique<BugReport>(*BT, os.str(), N);
     report->addRange(CE->getArg(2)->getSourceRange());
     C.emitReport(std::move(report));
   }
@@ -605,7 +605,7 @@ void CFRetainReleaseChecker::checkPreStmt(const CallExpr *CE,
     else
       llvm_unreachable("impossible case");
 
-    auto report = llvm::make_unique<BugReport>(*BT, description, N);
+    auto report = llvm37::make_unique<BugReport>(*BT, description, N);
     report->addRange(Arg->getSourceRange());
     bugreporter::trackNullOrUndefValue(N, Arg, *report);
     C.emitReport(std::move(report));
@@ -658,7 +658,7 @@ void ClassReleaseChecker::checkPreObjCMessage(const ObjCMethodCall &msg,
   
   if (ExplodedNode *N = C.addTransition()) {
     SmallString<200> buf;
-    llvm::raw_svector_ostream os(buf);
+    llvm37::raw_svector_ostream os(buf);
 
     os << "The '";
     S.print(os);
@@ -666,7 +666,7 @@ void ClassReleaseChecker::checkPreObjCMessage(const ObjCMethodCall &msg,
           "of class '" << Class->getName()
        << "' and not the class directly";
   
-    auto report = llvm::make_unique<BugReport>(*BT, os.str(), N);
+    auto report = llvm37::make_unique<BugReport>(*BT, os.str(), N);
     report->addRange(msg.getSourceRange());
     C.emitReport(std::move(report));
   }
@@ -806,7 +806,7 @@ void VariadicMethodTypeChecker::checkPreObjCMessage(const ObjCMethodCall &msg,
       continue;
 
     SmallString<128> sbuf;
-    llvm::raw_svector_ostream os(sbuf);
+    llvm37::raw_svector_ostream os(sbuf);
 
     StringRef TypeName = GetReceiverInterfaceName(msg);
     if (!TypeName.empty())
@@ -819,7 +819,7 @@ void VariadicMethodTypeChecker::checkPreObjCMessage(const ObjCMethodCall &msg,
     ArgTy.print(os, C.getLangOpts());
     os << "'";
 
-    auto R = llvm::make_unique<BugReport>(*BT, os.str(), errorNode.getValue());
+    auto R = llvm37::make_unique<BugReport>(*BT, os.str(), errorNode.getValue());
     R->addRange(msg.getArgSourceRange(I));
     C.emitReport(std::move(R));
   }

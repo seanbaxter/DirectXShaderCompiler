@@ -225,7 +225,7 @@ CXString clang_getTypeSpelling(CXType CT) {
 
   CXTranslationUnit TU = GetTU(CT);
   SmallString<64> Str;
-  llvm::raw_svector_ostream OS(Str);
+  llvm37::raw_svector_ostream OS(Str);
   PrintingPolicy PP(cxtu::getASTUnit(TU)->getASTContext().getLangOpts());
 
   T.print(OS, PP);

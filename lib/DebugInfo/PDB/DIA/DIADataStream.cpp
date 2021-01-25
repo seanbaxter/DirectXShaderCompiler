@@ -7,10 +7,10 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/DebugInfo/PDB/DIA/DIADataStream.h"
-#include "llvm/Support/ConvertUTF.h"
+#include "llvm37/DebugInfo/PDB/DIA/DIADataStream.h"
+#include "llvm37/Support/ConvertUTF.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 DIADataStream::DIADataStream(CComPtr<IDiaEnumDebugStreamData> DiaStreamData)
     : StreamData(DiaStreamData) {}
@@ -26,24 +26,24 @@ std::string DIADataStream::getName() const {
     return std::string();
 
   std::string Name8;
-  llvm::ArrayRef<char> Name16Bytes(reinterpret_cast<char *>(Name16.m_str),
+  llvm37::ArrayRef<char> Name16Bytes(reinterpret_cast<char *>(Name16.m_str),
                                    Name16.ByteLength());
-  if (!llvm::convertUTF16ToUTF8String(Name16Bytes, Name8))
+  if (!llvm37::convertUTF16ToUTF8String(Name16Bytes, Name8))
     return std::string();
   return Name8;
 }
 
-llvm::Optional<DIADataStream::RecordType>
+llvm37::Optional<DIADataStream::RecordType>
 DIADataStream::getItemAtIndex(uint32_t Index) const {
   RecordType Record;
   DWORD RecordSize = 0;
   StreamData->Item(Index, 0, &RecordSize, nullptr);
   if (RecordSize == 0)
-    return llvm::Optional<RecordType>();
+    return llvm37::Optional<RecordType>();
 
   Record.resize(RecordSize);
   if (S_OK != StreamData->Item(Index, RecordSize, &RecordSize, &Record[0]))
-    return llvm::Optional<RecordType>();
+    return llvm37::Optional<RecordType>();
   return Record;
 }
 

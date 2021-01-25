@@ -11,8 +11,8 @@
 |*                                                                            *|
 \*===----------------------------------------------------------------------===*/
 
-#ifndef LLVM_C_IRREADER_H
-#define LLVM_C_IRREADER_H
+#ifndef LLVM37_C_IRREADER_H
+#define LLVM37_C_IRREADER_H
 
 #include "llvm-c/Core.h"
 
@@ -27,7 +27,7 @@ extern "C" {
  * occurred during parsing IR. OutMessage must be disposed with
  * LLVMDisposeMessage.
  *
- * @see llvm::ParseIR()
+ * @see llvm37::ParseIR()
  */
 LLVMBool LLVMParseIRInContext(LLVMContextRef ContextRef,
                               LLVMMemoryBufferRef MemBuf, LLVMModuleRef *OutM,

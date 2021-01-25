@@ -27,19 +27,19 @@
 
 #include "clang/Basic/Diagnostic.h"
 #include "clang/Frontend/TextDiagnosticPrinter.h"
-#include "llvm/Bitcode/ReaderWriter.h"
-#include "llvm/IR/DiagnosticPrinter.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IRReader/IRReader.h"
-#include "llvm/Support/FileSystem.h"
-#include "llvm/Support/MemoryBuffer.h"
-#include "llvm/Support/MSFileSystem.h"
-#include "llvm/Support/SourceMgr.h"
-#include "llvm/IR/LegacyPassManager.h"
+#include "llvm37/Bitcode/ReaderWriter.h"
+#include "llvm37/IR/DiagnosticPrinter.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IRReader/IRReader.h"
+#include "llvm37/Support/FileSystem.h"
+#include "llvm37/Support/MemoryBuffer.h"
+#include "llvm37/Support/MSFileSystem.h"
+#include "llvm37/Support/SourceMgr.h"
+#include "llvm37/IR/LegacyPassManager.h"
 
 #include "dxc/HLSL/DxilFallbackLayerPass.h"
 
-using namespace llvm;
+using namespace llvm37;
 using namespace hlsl;
 
 
@@ -99,7 +99,7 @@ static DxilModule* ExtractDxil(LLVMContext& context, IDxcBlob* pContainer)
   std::unique_ptr<Module> M;
   std::string diagStr;
   M = dxilutil::LoadModuleFromBitcode(
-    llvm::StringRef(pIL, ILLength), context, diagStr);
+    llvm37::StringRef(pIL, ILLength), context, diagStr);
 
   DxilModule* dxil = nullptr;
   if (M)
@@ -110,7 +110,7 @@ static DxilModule* ExtractDxil(LLVMContext& context, IDxcBlob* pContainer)
 }
 
 
-static void saveModuleToAsmFile(const llvm::Module* mod, const std::string& filename)
+static void saveModuleToAsmFile(const llvm37::Module* mod, const std::string& filename)
 {
   std::error_code EC;
   raw_fd_ostream out(filename, EC, sys::fs::F_Text);
@@ -219,8 +219,8 @@ static Function* getFunctionFromName(Module &M, const std::wstring& exportName) 
 
 DXIL::ShaderKind getRayShaderKind(Function* F);
 Function *CloneFunction(Function *Orig,
-    const llvm::Twine &Name,
-    llvm::Module *llvmModule);
+    const llvm37::Twine &Name,
+    llvm37::Module *llvmModule);
 
 HRESULT STDMETHODCALLTYPE DxcDxrFallbackCompiler::RenameAndLink(
     _In_count_(libCount) DxcShaderBytecode *pLibs,
@@ -243,10 +243,10 @@ HRESULT STDMETHODCALLTYPE DxcDxrFallbackCompiler::RenameAndLink(
     try
     {
         // Init file system because we are currently loading the runtime from disk
-        ::llvm::sys::fs::MSFileSystem *msfPtr;
+        ::llvm37::sys::fs::MSFileSystem *msfPtr;
         IFT(CreateMSFileSystemForDisk(&msfPtr));
-        std::unique_ptr<::llvm::sys::fs::MSFileSystem> msf(msfPtr);
-        ::llvm::sys::fs::AutoPerThreadSystem pts(msf.get());
+        std::unique_ptr<::llvm37::sys::fs::MSFileSystem> msf(msfPtr);
+        ::llvm37::sys::fs::AutoPerThreadSystem pts(msf.get());
         IFTLLVM(pts.error_code());
 
         // Create a diagnostic printer
@@ -360,10 +360,10 @@ HRESULT STDMETHODCALLTYPE DxcDxrFallbackCompiler::PatchShaderBindingTables(
         hlsl::DxcCreateBlobWithEncodingFromPinned(pShaderBytecode->pData, pShaderBytecode->Size, CP_ACP, &pShaderBlob);
 
         // Init file system because we are currently loading the runtime from disk
-        ::llvm::sys::fs::MSFileSystem *msfPtr;
+        ::llvm37::sys::fs::MSFileSystem *msfPtr;
         IFT(CreateMSFileSystemForDisk(&msfPtr));
-        std::unique_ptr<::llvm::sys::fs::MSFileSystem> msf(msfPtr);
-        ::llvm::sys::fs::AutoPerThreadSystem pts(msf.get());
+        std::unique_ptr<::llvm37::sys::fs::MSFileSystem> msf(msfPtr);
+        ::llvm37::sys::fs::AutoPerThreadSystem pts(msf.get());
         IFTLLVM(pts.error_code());
 
         // Create a diagnostic printer
@@ -449,10 +449,10 @@ HRESULT STDMETHODCALLTYPE DxcDxrFallbackCompiler::Link(
     try
     {
         // Init file system because we are currently loading the runtime from disk
-        ::llvm::sys::fs::MSFileSystem *msfPtr;
+        ::llvm37::sys::fs::MSFileSystem *msfPtr;
         IFT(CreateMSFileSystemForDisk(&msfPtr));
-        std::unique_ptr<::llvm::sys::fs::MSFileSystem> msf(msfPtr);
-        ::llvm::sys::fs::AutoPerThreadSystem pts(msf.get());
+        std::unique_ptr<::llvm37::sys::fs::MSFileSystem> msf(msfPtr);
+        ::llvm37::sys::fs::AutoPerThreadSystem pts(msf.get());
         IFTLLVM(pts.error_code());
 
         // Create a diagnostic printer
@@ -528,10 +528,10 @@ HRESULT STDMETHODCALLTYPE DxcDxrFallbackCompiler::Link(
             if (!hasErrors && stackSizeInBytes)
                 DxrFallbackCompiler::resizeStack(M->getFunction(ws2s(pEntryName).c_str()), stackSizeInBytes);
 
-            llvm::NamedMDNode *IdentMetadata = M->getOrInsertNamedMetadata("llvm.ident");
-            llvm::LLVMContext &Ctx = M->getContext();
-            llvm::Metadata *IdentNode[] = { llvm::MDString::get(Ctx, "FallbackLayer") };
-            IdentMetadata->addOperand(llvm::MDNode::get(Ctx, IdentNode));
+            llvm37::NamedMDNode *IdentMetadata = M->getOrInsertNamedMetadata("llvm.ident");
+            llvm37::LLVMContext &Ctx = M->getContext();
+            llvm37::Metadata *IdentNode[] = { llvm37::MDString::get(Ctx, "FallbackLayer") };
+            IdentMetadata->addOperand(llvm37::MDNode::get(Ctx, IdentNode));
 
             DxilModule& DM = M->GetDxilModule();
             DM.SetValidatorVersion(valMajor, valMinor);
@@ -613,10 +613,10 @@ HRESULT STDMETHODCALLTYPE DxcDxrFallbackCompiler::Compile(
     }
 
     // Init file system because we are currently loading the runtime from disk
-    ::llvm::sys::fs::MSFileSystem *msfPtr;
+    ::llvm37::sys::fs::MSFileSystem *msfPtr;
     IFT(CreateMSFileSystemForDisk(&msfPtr));
-    std::unique_ptr<::llvm::sys::fs::MSFileSystem> msf(msfPtr);
-    ::llvm::sys::fs::AutoPerThreadSystem pts(msf.get());
+    std::unique_ptr<::llvm37::sys::fs::MSFileSystem> msf(msfPtr);
+    ::llvm37::sys::fs::AutoPerThreadSystem pts(msf.get());
     IFTLLVM(pts.error_code());
 
     // Create a diagnostic printer

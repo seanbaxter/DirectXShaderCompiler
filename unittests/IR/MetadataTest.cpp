@@ -7,21 +7,21 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/DebugInfo.h"
-#include "llvm/IR/DebugInfoMetadata.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Metadata.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/ModuleSlotTracker.h"
-#include "llvm/IR/Type.h"
-#include "llvm/IR/Verifier.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/DebugInfo.h"
+#include "llvm37/IR/DebugInfoMetadata.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/Metadata.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/ModuleSlotTracker.h"
+#include "llvm37/IR/Type.h"
+#include "llvm37/IR/Verifier.h"
+#include "llvm37/Support/raw_ostream.h"
 #include "gtest/gtest.h"
-using namespace llvm;
+using namespace llvm37;
 
 namespace {
 
@@ -1459,7 +1459,7 @@ TEST_F(DISubprogramTest, get) {
   unsigned VirtualIndex = 5;
   unsigned Flags = 6;
   bool IsOptimized = false;
-  llvm::Function *Function = getFunction("foo");
+  llvm37::Function *Function = getFunction("foo");
   MDTuple *TemplateParams = getTuple();
   DISubprogram *Declaration = getSubprogram();
   MDTuple *Variables = getTuple();

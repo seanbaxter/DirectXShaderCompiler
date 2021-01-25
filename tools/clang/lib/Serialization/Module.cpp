@@ -14,8 +14,8 @@
 
 #include "clang/Serialization/Module.h"
 #include "ASTReaderInternals.h"
-#include "llvm/Support/MemoryBuffer.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/Support/MemoryBuffer.h"
+#include "llvm37/Support/raw_ostream.h"
 using namespace clang;
 using namespace serialization;
 using namespace reader;
@@ -66,58 +66,58 @@ dumpLocalRemap(StringRef Name,
     return;
   
   typedef ContinuousRangeMap<Key, Offset, InitialCapacity> MapType;
-  llvm::errs() << "  " << Name << ":\n";
+  llvm37::errs() << "  " << Name << ":\n";
   for (typename MapType::const_iterator I = Map.begin(), IEnd = Map.end(); 
        I != IEnd; ++I) {
-    llvm::errs() << "    " << I->first << " -> " << I->second << "\n";
+    llvm37::errs() << "    " << I->first << " -> " << I->second << "\n";
   }
 }
 
 void ModuleFile::dump() {
-  llvm::errs() << "\nModule: " << FileName << "\n";
+  llvm37::errs() << "\nModule: " << FileName << "\n";
   if (!Imports.empty()) {
-    llvm::errs() << "  Imports: ";
+    llvm37::errs() << "  Imports: ";
     for (unsigned I = 0, N = Imports.size(); I != N; ++I) {
       if (I)
-        llvm::errs() << ", ";
-      llvm::errs() << Imports[I]->FileName;
+        llvm37::errs() << ", ";
+      llvm37::errs() << Imports[I]->FileName;
     }
-    llvm::errs() << "\n";
+    llvm37::errs() << "\n";
   }
   
   // Remapping tables.
-  llvm::errs() << "  Base source location offset: " << SLocEntryBaseOffset 
+  llvm37::errs() << "  Base source location offset: " << SLocEntryBaseOffset 
                << '\n';
   dumpLocalRemap("Source location offset local -> global map", SLocRemap);
   
-  llvm::errs() << "  Base identifier ID: " << BaseIdentifierID << '\n'
+  llvm37::errs() << "  Base identifier ID: " << BaseIdentifierID << '\n'
                << "  Number of identifiers: " << LocalNumIdentifiers << '\n';
   dumpLocalRemap("Identifier ID local -> global map", IdentifierRemap);
 
-  llvm::errs() << "  Base macro ID: " << BaseMacroID << '\n'
+  llvm37::errs() << "  Base macro ID: " << BaseMacroID << '\n'
                << "  Number of macros: " << LocalNumMacros << '\n';
   dumpLocalRemap("Macro ID local -> global map", MacroRemap);
 
-  llvm::errs() << "  Base submodule ID: " << BaseSubmoduleID << '\n'
+  llvm37::errs() << "  Base submodule ID: " << BaseSubmoduleID << '\n'
                << "  Number of submodules: " << LocalNumSubmodules << '\n';
   dumpLocalRemap("Submodule ID local -> global map", SubmoduleRemap);
 
-  llvm::errs() << "  Base selector ID: " << BaseSelectorID << '\n'
+  llvm37::errs() << "  Base selector ID: " << BaseSelectorID << '\n'
                << "  Number of selectors: " << LocalNumSelectors << '\n';
   dumpLocalRemap("Selector ID local -> global map", SelectorRemap);
   
-  llvm::errs() << "  Base preprocessed entity ID: " << BasePreprocessedEntityID
+  llvm37::errs() << "  Base preprocessed entity ID: " << BasePreprocessedEntityID
                << '\n'  
                << "  Number of preprocessed entities: " 
                << NumPreprocessedEntities << '\n';
   dumpLocalRemap("Preprocessed entity ID local -> global map", 
                  PreprocessedEntityRemap);
   
-  llvm::errs() << "  Base type index: " << BaseTypeIndex << '\n'
+  llvm37::errs() << "  Base type index: " << BaseTypeIndex << '\n'
                << "  Number of types: " << LocalNumTypes << '\n';
   dumpLocalRemap("Type index local -> global map", TypeRemap);
   
-  llvm::errs() << "  Base decl ID: " << BaseDeclID << '\n'
+  llvm37::errs() << "  Base decl ID: " << BaseDeclID << '\n'
                << "  Number of decls: " << LocalNumDecls << '\n';
   dumpLocalRemap("Decl ID local -> global map", DeclRemap);
 }

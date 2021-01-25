@@ -7,17 +7,17 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Option/Option.h"
-#include "llvm/ADT/Twine.h"
-#include "llvm/Option/Arg.h"
-#include "llvm/Option/ArgList.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/Option/Option.h"
+#include "llvm37/ADT/Twine.h"
+#include "llvm37/Option/Arg.h"
+#include "llvm37/Option/ArgList.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <algorithm>
 #include <cassert>
 
-using namespace llvm;
-using namespace llvm::opt;
+using namespace llvm37;
+using namespace llvm37::opt;
 
 Option::Option(const OptTable::Info *info, const OptTable *owner)
   : Info(info), Owner(owner) {
@@ -36,9 +36,9 @@ Option::Option(const OptTable::Info *info, const OptTable *owner)
 }
 
 void Option::dump() const {
-  llvm::errs() << "<";
+  llvm37::errs() << "<";
   switch (getKind()) {
-#define P(N) case N: llvm::errs() << #N; break
+#define P(N) case N: llvm37::errs() << #N; break
     P(GroupClass);
     P(InputClass);
     P(UnknownClass);
@@ -54,31 +54,31 @@ void Option::dump() const {
   }
 
   if (Info->Prefixes) {
-    llvm::errs() << " Prefixes:[";
+    llvm37::errs() << " Prefixes:[";
     for (const char * const *Pre = Info->Prefixes; *Pre != nullptr; ++Pre) {
-      llvm::errs() << '"' << *Pre << (*(Pre + 1) == nullptr ? "\"" : "\", ");
+      llvm37::errs() << '"' << *Pre << (*(Pre + 1) == nullptr ? "\"" : "\", ");
     }
-    llvm::errs() << ']';
+    llvm37::errs() << ']';
   }
 
-  llvm::errs() << " Name:\"" << getName() << '"';
+  llvm37::errs() << " Name:\"" << getName() << '"';
 
   const Option Group = getGroup();
   if (Group.isValid()) {
-    llvm::errs() << " Group:";
+    llvm37::errs() << " Group:";
     Group.dump();
   }
 
   const Option Alias = getAlias();
   if (Alias.isValid()) {
-    llvm::errs() << " Alias:";
+    llvm37::errs() << " Alias:";
     Alias.dump();
   }
 
   if (getKind() == MultiArgClass)
-    llvm::errs() << " NumArgs:" << getNumArgs();
+    llvm37::errs() << " NumArgs:" << getNumArgs();
 
-  llvm::errs() << ">\n";
+  llvm37::errs() << ">\n";
 }
 
 bool Option::matches(OptSpecifier Opt) const {

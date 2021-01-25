@@ -8,11 +8,11 @@
 //===----------------------------------------------------------------------===//
 
 #include "DwarfStringPool.h"
-#include "llvm/CodeGen/AsmPrinter.h"
-#include "llvm/MC/MCAsmInfo.h"
-#include "llvm/MC/MCStreamer.h"
+#include "llvm37/CodeGen/AsmPrinter.h"
+#include "llvm37/MC/MCAsmInfo.h"
+#include "llvm37/MC/MCStreamer.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 DwarfStringPool::DwarfStringPool(BumpPtrAllocator &A, AsmPrinter &Asm,
                                  StringRef Prefix)

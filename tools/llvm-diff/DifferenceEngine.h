@@ -12,16 +12,16 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_TOOLS_LLVM_DIFF_DIFFERENCEENGINE_H
-#define LLVM_TOOLS_LLVM_DIFF_DIFFERENCEENGINE_H
+#ifndef LLVM37_TOOLS_LLVM37_DIFF_DIFFERENCEENGINE_H
+#define LLVM37_TOOLS_LLVM37_DIFF_DIFFERENCEENGINE_H
 
 #include "DiffConsumer.h"
 #include "DiffLog.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/ADT/StringRef.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/ADT/StringRef.h"
 #include <utility>
 
-namespace llvm {
+namespace llvm37 {
   class Function;
   class GlobalValue;
   class Instruction;

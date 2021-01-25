@@ -16,29 +16,29 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/CodeGen/SelectionDAG.h"
-#include "llvm/ADT/SetVector.h"
-#include "llvm/ADT/SmallBitVector.h"
-#include "llvm/ADT/SmallPtrSet.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/Analysis/AliasAnalysis.h"
-#include "llvm/CodeGen/MachineFrameInfo.h"
-#include "llvm/CodeGen/MachineFunction.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/DerivedTypes.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/MathExtras.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Target/TargetLowering.h"
-#include "llvm/Target/TargetOptions.h"
-#include "llvm/Target/TargetRegisterInfo.h"
-#include "llvm/Target/TargetSubtargetInfo.h"
+#include "llvm37/CodeGen/SelectionDAG.h"
+#include "llvm37/ADT/SetVector.h"
+#include "llvm37/ADT/SmallBitVector.h"
+#include "llvm37/ADT/SmallPtrSet.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/Analysis/AliasAnalysis.h"
+#include "llvm37/CodeGen/MachineFrameInfo.h"
+#include "llvm37/CodeGen/MachineFunction.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/IR/DerivedTypes.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/MathExtras.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Target/TargetLowering.h"
+#include "llvm37/Target/TargetOptions.h"
+#include "llvm37/Target/TargetRegisterInfo.h"
+#include "llvm37/Target/TargetSubtargetInfo.h"
 #include <algorithm>
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "dagcombine"
 
@@ -8284,8 +8284,8 @@ SDValue DAGCombiner::visitFDIV(SDNode *N) {
           (!LegalOperations ||
            // FIXME: custom lowering of ConstantFP might fail (see e.g. ARM
            // backend)... we should handle this gracefully after Legalize.
-           // TLI.isOperationLegalOrCustom(llvm::ISD::ConstantFP, VT) ||
-           TLI.isOperationLegal(llvm::ISD::ConstantFP, VT) ||
+           // TLI.isOperationLegalOrCustom(llvm37::ISD::ConstantFP, VT) ||
+           TLI.isOperationLegal(llvm37::ISD::ConstantFP, VT) ||
            TLI.isFPImmLegal(Recip, VT)))
         return DAG.getNode(ISD::FMUL, DL, VT, N0,
                            DAG.getConstantFP(Recip, DL, VT));
@@ -8498,7 +8498,7 @@ SDValue DAGCombiner::visitSINT_TO_FP(SDNode *N) {
   if (isConstantIntBuildVectorOrConstantInt(N0) &&
       // ...but only if the target supports immediate floating-point values
       (!LegalOperations ||
-       TLI.isOperationLegalOrCustom(llvm::ISD::ConstantFP, VT)))
+       TLI.isOperationLegalOrCustom(llvm37::ISD::ConstantFP, VT)))
     return DAG.getNode(ISD::SINT_TO_FP, SDLoc(N), VT, N0);
 
   // If the input is a legal type, and SINT_TO_FP is not legal on this target,
@@ -8516,7 +8516,7 @@ SDValue DAGCombiner::visitSINT_TO_FP(SDNode *N) {
     if (N0.getOpcode() == ISD::SETCC && N0.getValueType() == MVT::i1 &&
         !VT.isVector() &&
         (!LegalOperations ||
-         TLI.isOperationLegalOrCustom(llvm::ISD::ConstantFP, VT))) {
+         TLI.isOperationLegalOrCustom(llvm37::ISD::ConstantFP, VT))) {
       SDLoc DL(N);
       SDValue Ops[] =
         { N0.getOperand(0), N0.getOperand(1),
@@ -8530,7 +8530,7 @@ SDValue DAGCombiner::visitSINT_TO_FP(SDNode *N) {
     if (N0.getOpcode() == ISD::ZERO_EXTEND &&
         N0.getOperand(0).getOpcode() == ISD::SETCC &&!VT.isVector() &&
         (!LegalOperations ||
-         TLI.isOperationLegalOrCustom(llvm::ISD::ConstantFP, VT))) {
+         TLI.isOperationLegalOrCustom(llvm37::ISD::ConstantFP, VT))) {
       SDLoc DL(N);
       SDValue Ops[] =
         { N0.getOperand(0).getOperand(0), N0.getOperand(0).getOperand(1),
@@ -8552,7 +8552,7 @@ SDValue DAGCombiner::visitUINT_TO_FP(SDNode *N) {
   if (isConstantIntBuildVectorOrConstantInt(N0) &&
       // ...but only if the target supports immediate floating-point values
       (!LegalOperations ||
-       TLI.isOperationLegalOrCustom(llvm::ISD::ConstantFP, VT)))
+       TLI.isOperationLegalOrCustom(llvm37::ISD::ConstantFP, VT)))
     return DAG.getNode(ISD::UINT_TO_FP, SDLoc(N), VT, N0);
 
   // If the input is a legal type, and UINT_TO_FP is not legal on this target,
@@ -8570,7 +8570,7 @@ SDValue DAGCombiner::visitUINT_TO_FP(SDNode *N) {
 
     if (N0.getOpcode() == ISD::SETCC && !VT.isVector() &&
         (!LegalOperations ||
-         TLI.isOperationLegalOrCustom(llvm::ISD::ConstantFP, VT))) {
+         TLI.isOperationLegalOrCustom(llvm37::ISD::ConstantFP, VT))) {
       SDLoc DL(N);
       SDValue Ops[] =
         { N0.getOperand(0), N0.getOperand(1),

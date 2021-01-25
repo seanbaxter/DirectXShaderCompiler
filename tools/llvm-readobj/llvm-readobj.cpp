@@ -23,25 +23,25 @@
 #include "Error.h"
 #include "ObjDumper.h"
 #include "StreamWriter.h"
-#include "llvm/Object/Archive.h"
-#include "llvm/Object/ELFObjectFile.h"
-#include "llvm/Object/MachOUniversal.h"
-#include "llvm/Object/ObjectFile.h"
-#include "llvm/Support/Casting.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/DataTypes.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/FileSystem.h"
-#include "llvm/Support/ManagedStatic.h"
-#include "llvm/Support/PrettyStackTrace.h"
-#include "llvm/Support/Signals.h"
-#include "llvm/Support/TargetRegistry.h"
-#include "llvm/Support/TargetSelect.h"
+#include "llvm37/Object/Archive.h"
+#include "llvm37/Object/ELFObjectFile.h"
+#include "llvm37/Object/MachOUniversal.h"
+#include "llvm37/Object/ObjectFile.h"
+#include "llvm37/Support/Casting.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/DataTypes.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/FileSystem.h"
+#include "llvm37/Support/ManagedStatic.h"
+#include "llvm37/Support/PrettyStackTrace.h"
+#include "llvm37/Support/Signals.h"
+#include "llvm37/Support/TargetRegistry.h"
+#include "llvm37/Support/TargetSelect.h"
 #include <string>
 #include <system_error>
 
-using namespace llvm;
-using namespace llvm::object;
+using namespace llvm37;
+using namespace llvm37::object;
 
 namespace opts {
   cl::list<std::string> InputFilenames(cl::Positional,
@@ -190,7 +190,7 @@ namespace opts {
 
 static int ReturnValue = EXIT_SUCCESS;
 
-namespace llvm {
+namespace llvm37 {
 
 bool error(std::error_code EC) {
   if (!EC)
@@ -206,7 +206,7 @@ bool relocAddressLess(RelocationRef a, RelocationRef b) {
   return a.getOffset() < b.getOffset();
 }
 
-} // namespace llvm
+} // namespace llvm37
 
 static void reportError(StringRef Input, std::error_code EC) {
   if (Input == "-")
@@ -227,10 +227,10 @@ static void reportError(StringRef Input, StringRef Message) {
 
 static bool isMipsArch(unsigned Arch) {
   switch (Arch) {
-  case llvm::Triple::mips:
-  case llvm::Triple::mipsel:
-  case llvm::Triple::mips64:
-  case llvm::Triple::mips64el:
+  case llvm37::Triple::mips:
+  case llvm37::Triple::mipsel:
+  case llvm37::Triple::mips64:
+  case llvm37::Triple::mips64el:
     return true;
   default:
     return false;
@@ -278,7 +278,7 @@ static void dumpObject(const ObjectFile *Obj) {
   outs() << "File: " << Obj->getFileName() << "\n";
   outs() << "Format: " << Obj->getFileFormatName() << "\n";
   outs() << "Arch: "
-         << Triple::getArchTypeName((llvm::Triple::ArchType)Obj->getArch())
+         << Triple::getArchTypeName((llvm37::Triple::ArchType)Obj->getArch())
          << "\n";
   outs() << "AddressSize: " << (8*Obj->getBytesInAddress()) << "bit\n";
   if (Obj->isELF())
@@ -306,7 +306,7 @@ static void dumpObject(const ObjectFile *Obj) {
     Dumper->printProgramHeaders();
   if (opts::HashTable)
     Dumper->printHashTable();
-  if (Obj->getArch() == llvm::Triple::arm && Obj->isELF())
+  if (Obj->getArch() == llvm37::Triple::arm && Obj->isELF())
     if (opts::ARMAttributes)
       Dumper->printAttributes();
   if (isMipsArch(Obj->getArch()) && Obj->isELF()) {

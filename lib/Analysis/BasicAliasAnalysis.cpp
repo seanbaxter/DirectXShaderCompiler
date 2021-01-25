@@ -13,34 +13,34 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Analysis/Passes.h"
-#include "llvm/ADT/SmallPtrSet.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/Analysis/AliasAnalysis.h"
-#include "llvm/Analysis/AssumptionCache.h"
-#include "llvm/Analysis/CFG.h"
-#include "llvm/Analysis/CaptureTracking.h"
-#include "llvm/Analysis/InstructionSimplify.h"
-#include "llvm/Analysis/LoopInfo.h"
-#include "llvm/Analysis/MemoryBuiltins.h"
-#include "llvm/Analysis/TargetLibraryInfo.h"
-#include "llvm/Analysis/ValueTracking.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/DerivedTypes.h"
-#include "llvm/IR/Dominators.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/GetElementPtrTypeIterator.h"
-#include "llvm/IR/GlobalAlias.h"
-#include "llvm/IR/GlobalVariable.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Operator.h"
-#include "llvm/Pass.h"
-#include "llvm/Support/ErrorHandling.h"
+#include "llvm37/Analysis/Passes.h"
+#include "llvm37/ADT/SmallPtrSet.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/Analysis/AliasAnalysis.h"
+#include "llvm37/Analysis/AssumptionCache.h"
+#include "llvm37/Analysis/CFG.h"
+#include "llvm37/Analysis/CaptureTracking.h"
+#include "llvm37/Analysis/InstructionSimplify.h"
+#include "llvm37/Analysis/LoopInfo.h"
+#include "llvm37/Analysis/MemoryBuiltins.h"
+#include "llvm37/Analysis/TargetLibraryInfo.h"
+#include "llvm37/Analysis/ValueTracking.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/IR/DerivedTypes.h"
+#include "llvm37/IR/Dominators.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/GetElementPtrTypeIterator.h"
+#include "llvm37/IR/GlobalAlias.h"
+#include "llvm37/IR/GlobalVariable.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/Operator.h"
+#include "llvm37/Pass.h"
+#include "llvm37/Support/ErrorHandling.h"
 #include <algorithm>
-using namespace llvm;
+using namespace llvm37;
 
 /// Cutoff after which to stop analysing a set of phi nodes potentially involved
 /// in a cycle. Because we are analysing 'through' phi nodes we need to be
@@ -115,7 +115,7 @@ static bool isObjectSmallerThan(const Value *V, uint64_t Size,
                                 const TargetLibraryInfo &TLI) {
   // Note that the meanings of the "object" are slightly different in the
   // following contexts:
-  //    c1: llvm::getObjectSize()
+  //    c1: llvm37::getObjectSize()
   //    c2: llvm.objectsize() intrinsic
   //    c3: isObjectSmallerThan()
   // c1 and c2 share the same meaning; however, the meaning of "object" in c3
@@ -131,7 +131,7 @@ static bool isObjectSmallerThan(const Value *V, uint64_t Size,
   //  However, in the context of c3, the "object" refers to the chunk of memory
   // being allocated. So, the "object" has 100 bytes, and q points to the middle
   // the "object". In case q is passed to isObjectSmallerThan() as the 1st
-  // parameter, before the llvm::getObjectSize() is called to get the size of
+  // parameter, before the llvm37::getObjectSize() is called to get the size of
   // entire object, we should:
   //    - either rewind the pointer q to the base-address of the object in
   //      question (in this case rewind to p), or
@@ -576,7 +576,7 @@ INITIALIZE_AG_PASS_END(BasicAliasAnalysis, AliasAnalysis, "basicaa",
                    false, true, false)
 
 
-ImmutablePass *llvm::createBasicAliasAnalysisPass() {
+ImmutablePass *llvm37::createBasicAliasAnalysisPass() {
   return new BasicAliasAnalysis();
 }
 
@@ -692,7 +692,7 @@ BasicAliasAnalysis::getModRefBehavior(const Function *F) {
   // For intrinsics, we can check the table.
   if (Intrinsic::ID iid = F->getIntrinsicID()) {
 #define GET_INTRINSIC_MODREF_BEHAVIOR
-#include "llvm/IR/Intrinsics.gen"
+#include "llvm37/IR/Intrinsics.gen"
 #undef GET_INTRINSIC_MODREF_BEHAVIOR
   }
 

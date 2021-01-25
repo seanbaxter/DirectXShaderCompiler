@@ -8,8 +8,8 @@
 //===----------------------------------------------------------------------===//
 
 #include "gtest/gtest.h"
-#include "llvm/ADT/PointerUnion.h"
-using namespace llvm;
+#include "llvm37/ADT/PointerUnion.h"
+using namespace llvm37;
 
 namespace {
 

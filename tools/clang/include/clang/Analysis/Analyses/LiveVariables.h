@@ -11,13 +11,13 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_ANALYSIS_ANALYSES_LIVEVARIABLES_H
-#define LLVM_CLANG_ANALYSIS_ANALYSES_LIVEVARIABLES_H
+#ifndef LLVM37_CLANG_ANALYSIS_ANALYSES_LIVEVARIABLES_H
+#define LLVM37_CLANG_ANALYSIS_ANALYSES_LIVEVARIABLES_H
 
 #include "clang/AST/Decl.h"
 #include "clang/Analysis/AnalysisContext.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/ImmutableSet.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/ImmutableSet.h"
 
 namespace clang {
 
@@ -32,16 +32,16 @@ public:
   class LivenessValues {
   public:
 
-    llvm::ImmutableSet<const Stmt *> liveStmts;
-    llvm::ImmutableSet<const VarDecl *> liveDecls;
+    llvm37::ImmutableSet<const Stmt *> liveStmts;
+    llvm37::ImmutableSet<const VarDecl *> liveDecls;
     
     bool equals(const LivenessValues &V) const;
 
     LivenessValues()
       : liveStmts(nullptr), liveDecls(nullptr) {}
 
-    LivenessValues(llvm::ImmutableSet<const Stmt *> LiveStmts,
-                   llvm::ImmutableSet<const VarDecl *> LiveDecls)
+    LivenessValues(llvm37::ImmutableSet<const Stmt *> LiveStmts,
+                   llvm37::ImmutableSet<const VarDecl *> LiveDecls)
       : liveStmts(LiveStmts), liveDecls(LiveDecls) {}
 
     bool isLive(const Stmt *S) const;

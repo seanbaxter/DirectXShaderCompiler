@@ -1,6 +1,6 @@
 include_directories( ${CMAKE_CURRENT_BINARY_DIR}/../Checkers )
 
-set(LLVM_LINK_COMPONENTS
+set(LLVM37_LINK_COMPONENTS
   Support
   )
 

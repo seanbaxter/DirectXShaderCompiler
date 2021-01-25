@@ -21,9 +21,9 @@
 #include "clang/Basic/Diagnostic.h"
 #include "clang/Basic/FileManager.h"
 #include "clang/Basic/SourceManager.h"
-#include "llvm/Support/Path.h"
-#include "llvm/Support/Timer.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/Support/Path.h"
+#include "llvm37/Support/Timer.h"
+#include "llvm37/Support/raw_ostream.h"
 using namespace clang;
 
 //===----------------------------------------------------------------------===//
@@ -37,7 +37,7 @@ namespace {
   public:
     ASTPrinter(raw_ostream *Out = nullptr, bool Dump = false,
                StringRef FilterString = "", bool DumpLookups = false)
-        : Out(Out ? *Out : llvm::outs()), Dump(Dump),
+        : Out(Out ? *Out : llvm37::outs()), Dump(Dump),
           FilterString(FilterString), DumpLookups(DumpLookups) {}
 
     void HandleTranslationUnit(ASTContext &Context) override {
@@ -103,7 +103,7 @@ namespace {
                      public RecursiveASTVisitor<ASTDeclNodeLister> {
   public:
     ASTDeclNodeLister(raw_ostream *Out = nullptr)
-        : Out(Out ? *Out : llvm::outs()) {}
+        : Out(Out ? *Out : llvm37::outs()) {}
 
     void HandleTranslationUnit(ASTContext &Context) override {
       TraverseDecl(Context.getTranslationUnitDecl());
@@ -124,7 +124,7 @@ namespace {
 
 std::unique_ptr<ASTConsumer> clang::CreateASTPrinter(raw_ostream *Out,
                                                      StringRef FilterString) {
-  return llvm::make_unique<ASTPrinter>(Out, /*Dump=*/false, FilterString);
+  return llvm37::make_unique<ASTPrinter>(Out, /*Dump=*/false, FilterString);
 }
 
 std::unique_ptr<ASTConsumer> clang::CreateASTDumper(raw_ostream *Out,  // HLSL Change - explicit Out
@@ -132,12 +132,12 @@ std::unique_ptr<ASTConsumer> clang::CreateASTDumper(raw_ostream *Out,  // HLSL C
                                                     bool DumpDecls,
                                                     bool DumpLookups) {
   assert((DumpDecls || DumpLookups) && "nothing to dump");
-  return llvm::make_unique<ASTPrinter>(Out, DumpDecls, FilterString, // HLSL Change - explicit Out
+  return llvm37::make_unique<ASTPrinter>(Out, DumpDecls, FilterString, // HLSL Change - explicit Out
                                        DumpLookups);
 }
 
 std::unique_ptr<ASTConsumer> clang::CreateASTDeclNodeLister() {
-  return llvm::make_unique<ASTDeclNodeLister>(nullptr);
+  return llvm37::make_unique<ASTDeclNodeLister>(nullptr);
 }
 
 //===----------------------------------------------------------------------===//
@@ -163,18 +163,18 @@ namespace {
 
 void ASTViewer::HandleTopLevelSingleDecl(Decl *D) {
   if (isa<FunctionDecl>(D) || isa<ObjCMethodDecl>(D)) {
-    D->print(llvm::errs());
+    D->print(llvm37::errs());
   
     if (Stmt *Body = D->getBody()) {
-      llvm::errs() << '\n';
+      llvm37::errs() << '\n';
       Body->viewAST();
-      llvm::errs() << '\n';
+      llvm37::errs() << '\n';
     }
   }
 }
 
 std::unique_ptr<ASTConsumer> clang::CreateASTViewer() {
-  return llvm::make_unique<ASTViewer>();
+  return llvm37::make_unique<ASTViewer>();
 }
 
 //===----------------------------------------------------------------------===//
@@ -185,7 +185,7 @@ namespace {
 class DeclContextPrinter : public ASTConsumer {
   raw_ostream& Out;
 public:
-  DeclContextPrinter() : Out(llvm::errs()) {}
+  DeclContextPrinter() : Out(llvm37::errs()) {}
 
   void HandleTranslationUnit(ASTContext &C) override {
     PrintDeclContext(C.getTranslationUnitDecl(), 4);
@@ -486,5 +486,5 @@ void DeclContextPrinter::PrintDeclContext(const DeclContext* DC,
   }
 }
 std::unique_ptr<ASTConsumer> clang::CreateDeclContextPrinter() {
-  return llvm::make_unique<DeclContextPrinter>();
+  return llvm37::make_unique<DeclContextPrinter>();
 }

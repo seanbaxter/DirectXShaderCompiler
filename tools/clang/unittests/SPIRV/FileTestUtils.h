@@ -7,8 +7,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_UNITTESTS_SPIRV_FILETESTUTILS_H
-#define LLVM_CLANG_UNITTESTS_SPIRV_FILETESTUTILS_H
+#ifndef LLVM37_CLANG_UNITTESTS_SPIRV_FILETESTUTILS_H
+#define LLVM37_CLANG_UNITTESTS_SPIRV_FILETESTUTILS_H
 
 #include <string>
 #include <vector>
@@ -17,7 +17,7 @@
 #include "dxc/Support/WinIncludes.h"
 #include "dxc/Support/dxcapi.use.h"
 #include "spirv-tools/libspirv.hpp"
-#include "llvm/ADT/StringRef.h"
+#include "llvm37/ADT/StringRef.h"
 
 namespace clang {
 namespace spirv {
@@ -40,7 +40,7 @@ bool validateSpirvBinary(spv_target_env, std::vector<uint32_t> &binary,
 /// \brief Parses the Target Profile, Entry Point, and Target Environment from
 /// the Run command returns the target profile, entry point, target environment,
 /// and the rest via arguments. Returns true on success, and false otherwise.
-bool processRunCommandArgs(const llvm::StringRef runCommandLine,
+bool processRunCommandArgs(const llvm37::StringRef runCommandLine,
                            std::string *targetProfile, std::string *entryPoint,
                            spv_target_env *targetEnv,
                            std::vector<std::string> *restArgs);
@@ -53,15 +53,15 @@ void convertIDxcBlobToUint32(const CComPtr<IDxcBlob> &blob,
 /// \brief Returns the absolute path to the input file of the test.
 /// The input file is expected to be located in the directory given by the
 /// testOptions::inputDataDir
-std::string getAbsPathOfInputDataFile(const llvm::StringRef filename);
+std::string getAbsPathOfInputDataFile(const llvm37::StringRef filename);
 
 /// \brief Passes the HLSL input file to the DXC compiler with SPIR-V CodeGen.
 /// Returns the generated SPIR-V binary via 'generatedBinary' argument.
 /// Returns true on success, and false on failure. Writes error messages to
 /// errorMessages and stderr on failure.
-bool runCompilerWithSpirvGeneration(const llvm::StringRef inputFilePath,
-                                    const llvm::StringRef entryPoint,
-                                    const llvm::StringRef targetProfile,
+bool runCompilerWithSpirvGeneration(const llvm37::StringRef inputFilePath,
+                                    const llvm37::StringRef entryPoint,
+                                    const llvm37::StringRef targetProfile,
                                     const std::vector<std::string> &restArgs,
                                     std::vector<uint32_t> *generatedBinary,
                                     std::string *errorMessages);

@@ -41,9 +41,9 @@ unsigned DxilResourceBase::GetSpaceID() const     { return m_SpaceID; }
 unsigned DxilResourceBase::GetLowerBound() const  { return m_LowerBound; }
 unsigned DxilResourceBase::GetUpperBound() const  { return m_RangeSize != UINT_MAX ? m_LowerBound + m_RangeSize - 1 : UINT_MAX; }
 unsigned DxilResourceBase::GetRangeSize() const   { return m_RangeSize; }
-llvm::Constant *DxilResourceBase::GetGlobalSymbol() const { return m_pSymbol; }
+llvm37::Constant *DxilResourceBase::GetGlobalSymbol() const { return m_pSymbol; }
 const std::string &DxilResourceBase::GetGlobalName() const      { return m_Name; }
-llvm::Value *DxilResourceBase::GetHandle() const  { return m_pHandle; }
+llvm37::Value *DxilResourceBase::GetHandle() const  { return m_pHandle; }
 bool DxilResourceBase::IsAllocated() const        { return m_LowerBound != UINT_MAX; }
 bool DxilResourceBase::IsUnbounded() const        { return m_RangeSize == UINT_MAX; }
 
@@ -52,9 +52,9 @@ void DxilResourceBase::SetID(unsigned ID)                         { m_ID = ID; }
 void DxilResourceBase::SetSpaceID(unsigned SpaceID)               { m_SpaceID = SpaceID; }
 void DxilResourceBase::SetLowerBound(unsigned LB)                 { m_LowerBound = LB; }
 void DxilResourceBase::SetRangeSize(unsigned RangeSize)           { m_RangeSize = RangeSize; }
-void DxilResourceBase::SetGlobalSymbol(llvm::Constant *pGV)       { m_pSymbol = pGV; }
+void DxilResourceBase::SetGlobalSymbol(llvm37::Constant *pGV)       { m_pSymbol = pGV; }
 void DxilResourceBase::SetGlobalName(const std::string &Name)     { m_Name = Name; }
-void DxilResourceBase::SetHandle(llvm::Value *pHandle)            { m_pHandle = pHandle; }
+void DxilResourceBase::SetHandle(llvm37::Value *pHandle)            { m_pHandle = pHandle; }
 
 static const char *s_ResourceClassNames[] = {
     "texture", "UAV", "cbuffer", "sampler"

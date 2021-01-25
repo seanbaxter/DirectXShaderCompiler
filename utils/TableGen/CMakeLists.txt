@@ -1,4 +1,4 @@
-set(LLVM_LINK_COMPONENTS Support MSSupport)
+set(LLVM37_LINK_COMPONENTS Support MSSupport)
 
 set (HLSL_IGNORE_SOURCES
   X86DisassemblerTables.cpp
@@ -6,7 +6,7 @@ set (HLSL_IGNORE_SOURCES
   X86RecognizableInstr.cpp
   )
 
-add_tablegen(llvm-tblgen LLVM
+add_tablegen(llvm-tblgen LLVM37
   AsmMatcherEmitter.cpp
   AsmWriterEmitter.cpp
   AsmWriterInst.cpp

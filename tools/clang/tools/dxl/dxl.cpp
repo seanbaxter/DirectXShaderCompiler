@@ -18,14 +18,14 @@
 #include "dxc/Support/HLSLOptions.h"
 #include "dxc/DxilContainer/DxilContainer.h"
 
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support//MSFileSystem.h"
-#include "llvm/Support/FileSystem.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support//MSFileSystem.h"
+#include "llvm37/Support/FileSystem.h"
 #include <dia2.h>
 #include <intsafe.h>
 
-using namespace llvm;
-using namespace llvm::opt;
+using namespace llvm37;
+using namespace llvm37::opt;
 using namespace dxc;
 using namespace hlsl::options;
 
@@ -120,17 +120,17 @@ using namespace hlsl::options;
 int __cdecl main(int argc, _In_reads_z_(argc) char **argv) {
   const char *pStage = "Operation";
   int retVal = 0;
-  if (llvm::sys::fs::SetupPerThreadFileSystem())
+  if (llvm37::sys::fs::SetupPerThreadFileSystem())
     return 1;
-  llvm::sys::fs::AutoCleanupPerThreadFileSystem auto_cleanup_fs;
+  llvm37::sys::fs::AutoCleanupPerThreadFileSystem auto_cleanup_fs;
   if (FAILED(DxcInitThreadMalloc())) return 1;
   DxcSetThreadMallocToDefault();
   try {
-    llvm::sys::fs::MSFileSystem *msfPtr;
+    llvm37::sys::fs::MSFileSystem *msfPtr;
     IFT(CreateMSFileSystemForDisk(&msfPtr));
-    std::unique_ptr<::llvm::sys::fs::MSFileSystem> msf(msfPtr);
+    std::unique_ptr<::llvm37::sys::fs::MSFileSystem> msf(msfPtr);
 
-    ::llvm::sys::fs::AutoPerThreadSystem pts(msf.get());
+    ::llvm37::sys::fs::AutoPerThreadSystem pts(msf.get());
     IFTLLVM(pts.error_code());
 
     pStage = "Argument processing";

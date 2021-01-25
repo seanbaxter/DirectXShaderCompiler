@@ -14,16 +14,16 @@
 #include "DwarfAccelTable.h"
 #include "DwarfCompileUnit.h"
 #include "DwarfDebug.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/Twine.h"
-#include "llvm/CodeGen/AsmPrinter.h"
-#include "llvm/CodeGen/DIE.h"
-#include "llvm/MC/MCExpr.h"
-#include "llvm/MC/MCStreamer.h"
-#include "llvm/MC/MCSymbol.h"
-#include "llvm/Support/Debug.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/Twine.h"
+#include "llvm37/CodeGen/AsmPrinter.h"
+#include "llvm37/CodeGen/DIE.h"
+#include "llvm37/MC/MCExpr.h"
+#include "llvm37/MC/MCStreamer.h"
+#include "llvm37/MC/MCSymbol.h"
+#include "llvm37/Support/Debug.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 // The length of the header data is always going to be 4 + 4 + 4*NumAtoms.
 DwarfAccelTable::DwarfAccelTable(ArrayRef<DwarfAccelTable::Atom> atomList)

@@ -24,7 +24,7 @@ add_llvm_library(LLVMDXIL
   DxilPDB.cpp
 
   ADDITIONAL_HEADER_DIRS
-  ${LLVM_MAIN_INCLUDE_DIR}/llvm/IR
+  ${LLVM37_MAIN_INCLUDE_DIR}/llvm/IR
 )
 
 add_dependencies(LLVMDXIL intrinsics_gen)

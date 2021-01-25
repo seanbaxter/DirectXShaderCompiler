@@ -39,7 +39,7 @@ namespace {
 
 class RootBlockObjCVarRewriter :
                           public RecursiveASTVisitor<RootBlockObjCVarRewriter> {
-  llvm::DenseSet<VarDecl *> &VarsToChange;
+  llvm37::DenseSet<VarDecl *> &VarsToChange;
 
   class BlockVarChecker : public RecursiveASTVisitor<BlockVarChecker> {
     VarDecl *Var;
@@ -72,7 +72,7 @@ class RootBlockObjCVarRewriter :
   };
 
 public:
-  RootBlockObjCVarRewriter(llvm::DenseSet<VarDecl *> &VarsToChange)
+  RootBlockObjCVarRewriter(llvm37::DenseSet<VarDecl *> &VarsToChange)
     : VarsToChange(VarsToChange) { }
 
   bool VisitBlockDecl(BlockDecl *block) {
@@ -110,10 +110,10 @@ private:
 };
 
 class BlockObjCVarRewriter : public RecursiveASTVisitor<BlockObjCVarRewriter> {
-  llvm::DenseSet<VarDecl *> &VarsToChange;
+  llvm37::DenseSet<VarDecl *> &VarsToChange;
 
 public:
-  BlockObjCVarRewriter(llvm::DenseSet<VarDecl *> &VarsToChange)
+  BlockObjCVarRewriter(llvm37::DenseSet<VarDecl *> &VarsToChange)
     : VarsToChange(VarsToChange) { }
 
   bool TraverseBlockDecl(BlockDecl *block) {
@@ -126,12 +126,12 @@ public:
 
 void BlockObjCVariableTraverser::traverseBody(BodyContext &BodyCtx) {
   MigrationPass &Pass = BodyCtx.getMigrationContext().Pass;
-  llvm::DenseSet<VarDecl *> VarsToChange;
+  llvm37::DenseSet<VarDecl *> VarsToChange;
 
   BlockObjCVarRewriter trans(VarsToChange);
   trans.TraverseStmt(BodyCtx.getTopStmt());
 
-  for (llvm::DenseSet<VarDecl *>::iterator
+  for (llvm37::DenseSet<VarDecl *>::iterator
          I = VarsToChange.begin(), E = VarsToChange.end(); I != E; ++I) {
     VarDecl *var = *I;
     BlocksAttr *attr = var->getAttr<BlocksAttr>();

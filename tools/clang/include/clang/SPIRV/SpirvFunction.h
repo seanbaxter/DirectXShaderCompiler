@@ -6,14 +6,14 @@
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
-#ifndef LLVM_CLANG_SPIRV_SPIRVFUNCTION_H
-#define LLVM_CLANG_SPIRV_SPIRVFUNCTION_H
+#ifndef LLVM37_CLANG_SPIRV_SPIRVFUNCTION_H
+#define LLVM37_CLANG_SPIRV_SPIRVFUNCTION_H
 
 #include <vector>
 
 #include "clang/SPIRV/SpirvInstruction.h"
-#include "llvm/ADT/ArrayRef.h"
-#include "llvm/ADT/SmallVector.h"
+#include "llvm37/ADT/ArrayRef.h"
+#include "llvm37/ADT/SmallVector.h"
 
 namespace clang {
 namespace spirv {
@@ -25,7 +25,7 @@ class SpirvVisitor;
 class SpirvFunction {
 public:
   SpirvFunction(QualType astReturnType, SourceLocation,
-                llvm::StringRef name = "", bool precise = false,
+                llvm37::StringRef name = "", bool precise = false,
                 bool noInline = false);
 
   ~SpirvFunction();
@@ -55,7 +55,7 @@ public:
   QualType getAstReturnType() const { return astReturnType; }
 
   // Gets the vector of parameters.
-  llvm::SmallVector<SpirvFunctionParameter *, 8> getParameters() const {
+  llvm37::SmallVector<SpirvFunctionParameter *, 8> getParameters() const {
     return parameters;
   }
 
@@ -81,8 +81,8 @@ public:
   void setSourceLocation(SourceLocation loc) { functionLoc = loc; }
   SourceLocation getSourceLocation() const { return functionLoc; }
 
-  void setFunctionName(llvm::StringRef name) { functionName = name; }
-  llvm::StringRef getFunctionName() const { return functionName; }
+  void setFunctionName(llvm37::StringRef name) { functionName = name; }
+  llvm37::StringRef getFunctionName() const { return functionName; }
 
   void addParameter(SpirvFunctionParameter *);
   void addParameterDebugDeclare(SpirvDebugDeclare *inst) {
@@ -137,7 +137,7 @@ private:
   std::string functionName;   ///< This function's name
 
   /// Parameters to this function.
-  llvm::SmallVector<SpirvFunctionParameter *, 8> parameters;
+  llvm37::SmallVector<SpirvFunctionParameter *, 8> parameters;
 
   /// Variables defined in this function.
   ///
@@ -156,10 +156,10 @@ private:
   SpirvDebugScope *debugScope;
 
   /// DebugDeclare instructions for parameters to this function.
-  llvm::SmallVector<SpirvDebugDeclare *, 8> debugDeclares;
+  llvm37::SmallVector<SpirvDebugDeclare *, 8> debugDeclares;
 };
 
 } // end namespace spirv
 } // end namespace clang
 
-#endif // LLVM_CLANG_SPIRV_SPIRVFUNCTION_H
+#endif // LLVM37_CLANG_SPIRV_SPIRVFUNCTION_H

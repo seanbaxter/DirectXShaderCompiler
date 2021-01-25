@@ -23,10 +23,10 @@
 #include "clang/Frontend/TextDiagnosticPrinter.h"
 #include "clang/Tooling/CompilationDatabasePluginRegistry.h"
 #include "clang/Tooling/Tooling.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/Option/Arg.h"
-#include "llvm/Support/Host.h"
-#include "llvm/Support/Path.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/Option/Arg.h"
+#include "llvm37/Support/Host.h"
+#include "llvm37/Support/Path.h"
 #include <sstream>
 #include <system_error>
 using namespace clang;
@@ -71,7 +71,7 @@ findCompilationDatabaseFromDirectory(StringRef Directory,
       HasErrorMessage = true;
     }
 
-    Directory = llvm::sys::path::parent_path(Directory);
+    Directory = llvm37::sys::path::parent_path(Directory);
   }
   ErrorMessage = ErrorStream.str();
   return nullptr;
@@ -81,7 +81,7 @@ std::unique_ptr<CompilationDatabase>
 CompilationDatabase::autoDetectFromSource(StringRef SourceFile,
                                           std::string &ErrorMessage) {
   SmallString<1024> AbsolutePath(getAbsolutePath(SourceFile));
-  StringRef Directory = llvm::sys::path::parent_path(AbsolutePath);
+  StringRef Directory = llvm37::sys::path::parent_path(AbsolutePath);
 
   std::unique_ptr<CompilationDatabase> DB =
       findCompilationDatabaseFromDirectory(Directory, ErrorMessage);
@@ -215,7 +215,7 @@ static bool stripPositionalArgs(std::vector<const char *> Args,
   // The clang executable path isn't required since the jobs the driver builds
   // will not be executed.
   std::unique_ptr<driver::Driver> NewDriver(new driver::Driver(
-      /* ClangExecutable= */ "", llvm::sys::getDefaultTargetTriple(),
+      /* ClangExecutable= */ "", llvm37::sys::getDefaultTargetTriple(),
       Diagnostics));
   NewDriver->setCheckInputsExist(false);
 

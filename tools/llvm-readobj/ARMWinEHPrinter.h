@@ -7,14 +7,14 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_TOOLS_LLVM_READOBJ_ARMWINEHPRINTER_H
-#define LLVM_TOOLS_LLVM_READOBJ_ARMWINEHPRINTER_H
+#ifndef LLVM37_TOOLS_LLVM37_READOBJ_ARMWINEHPRINTER_H
+#define LLVM37_TOOLS_LLVM37_READOBJ_ARMWINEHPRINTER_H
 
 #include "StreamWriter.h"
-#include "llvm/Object/COFF.h"
-#include "llvm/Support/ErrorOr.h"
+#include "llvm37/Object/COFF.h"
+#include "llvm37/Support/ErrorOr.h"
 
-namespace llvm {
+namespace llvm37 {
 namespace ARM {
 namespace WinEH {
 class RuntimeFunction;

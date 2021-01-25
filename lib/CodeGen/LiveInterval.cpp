@@ -18,19 +18,19 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/CodeGen/LiveInterval.h"
+#include "llvm37/CodeGen/LiveInterval.h"
 #include "RegisterCoalescer.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/SmallSet.h"
-#include "llvm/CodeGen/LiveIntervalAnalysis.h"
-#include "llvm/CodeGen/MachineRegisterInfo.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/Format.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Target/TargetRegisterInfo.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/SmallSet.h"
+#include "llvm37/CodeGen/LiveIntervalAnalysis.h"
+#include "llvm37/CodeGen/MachineRegisterInfo.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/Format.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Target/TargetRegisterInfo.h"
 #include <algorithm>
-using namespace llvm;
+using namespace llvm37;
 
 namespace {
 //===----------------------------------------------------------------------===//
@@ -1021,11 +1021,11 @@ unsigned LiveInterval::getSize() const {
   return Sum;
 }
 
-raw_ostream& llvm::operator<<(raw_ostream& os, const LiveRange::Segment &S) {
+raw_ostream& llvm37::operator<<(raw_ostream& os, const LiveRange::Segment &S) {
   return os << '[' << S.start << ',' << S.end << ':' << S.valno->id << ")";
 }
 
-#if !defined(NDEBUG) || defined(LLVM_ENABLE_DUMP)
+#if !defined(NDEBUG) || defined(LLVM37_ENABLE_DUMP)
 void LiveRange::Segment::dump() const {
   dbgs() << *this << "\n";
 }
@@ -1070,7 +1070,7 @@ void LiveInterval::print(raw_ostream &OS) const {
   }
 }
 
-#if !defined(NDEBUG) || defined(LLVM_ENABLE_DUMP)
+#if !defined(NDEBUG) || defined(LLVM37_ENABLE_DUMP)
 void LiveRange::dump() const {
   dbgs() << *this << "\n";
 }

@@ -8,10 +8,10 @@
 //===----------------------------------------------------------------------===//
 
 #include "gtest/gtest.h"
-#include "llvm/Support/TimeValue.h"
+#include "llvm37/Support/TimeValue.h"
 #include <time.h>
 
-using namespace llvm;
+using namespace llvm37;
 namespace {
 
 TEST(TimeValue, time_t) {

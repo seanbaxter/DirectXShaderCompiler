@@ -8,8 +8,8 @@
 //===----------------------------------------------------------------------===//
 
 #include "clang/Driver/Types.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/StringSwitch.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/StringSwitch.h"
 #include <cassert>
 #include <string.h>
 
@@ -29,7 +29,7 @@ static const TypeInfo TypeInfos[] = {
 #include "clang/Driver/Types.def"
 #undef TYPE
 };
-static const unsigned numTypes = llvm::array_lengthof(TypeInfos);
+static const unsigned numTypes = llvm37::array_lengthof(TypeInfos);
 
 static const TypeInfo &getInfo(unsigned id) {
   assert(id > 0 && id - 1 < numTypes && "Invalid Type ID.");
@@ -96,7 +96,7 @@ bool types::isAcceptedByClang(ID Id) {
   case TY_CXXHeader: case TY_PP_CXXHeader:
   case TY_ObjCXXHeader: case TY_PP_ObjCXXHeader:
   case TY_AST: case TY_ModuleFile:
-  case TY_LLVM_IR: case TY_LLVM_BC:
+  case TY_LLVM37_IR: case TY_LLVM37_BC:
   case TY_HLSL: // HLSL Change
     return true;
   }
@@ -142,7 +142,7 @@ bool types::isCuda(ID Id) {
 }
 
 types::ID types::lookupTypeForExtension(const char *Ext) {
-  return llvm::StringSwitch<types::ID>(Ext)
+  return llvm37::StringSwitch<types::ID>(Ext)
            .Case("c", TY_C)
            .Case("i", TY_PP_C)
            .Case("m", TY_ObjC)
@@ -162,7 +162,7 @@ types::ID types::lookupTypeForExtension(const char *Ext) {
            .Case("ii", TY_PP_CXX)
            .Case("mi", TY_PP_ObjC)
            .Case("mm", TY_ObjCXX)
-           .Case("bc", TY_LLVM_BC)
+           .Case("bc", TY_LLVM37_BC)
            .Case("cc", TY_CXX)
            .Case("CC", TY_CXX)
            .Case("cl", TY_CL)
@@ -170,7 +170,7 @@ types::ID types::lookupTypeForExtension(const char *Ext) {
            .Case("cu", TY_CUDA)
            .Case("cui", TY_PP_CUDA)
            .Case("hh", TY_CXXHeader)
-           .Case("ll", TY_LLVM_IR)
+           .Case("ll", TY_LLVM37_IR)
            .Case("hpp", TY_CXXHeader)
            .Case("ads", TY_Ada)
            .Case("adb", TY_Ada)
@@ -208,7 +208,7 @@ types::ID types::lookupTypeForTypeSpecifier(const char *Name) {
 }
 
 // FIXME: Why don't we just put this list in the defs file, eh.
-void types::getCompilationPhases(ID Id, llvm::SmallVectorImpl<phases::ID> &P) {
+void types::getCompilationPhases(ID Id, llvm37::SmallVectorImpl<phases::ID> &P) {
   if (Id != TY_Object) {
     if (getPreprocessedType(Id) != TY_INVALID) {
       P.push_back(phases::Preprocess);

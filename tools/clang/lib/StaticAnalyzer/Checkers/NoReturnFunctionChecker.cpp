@@ -19,7 +19,7 @@
 #include "clang/StaticAnalyzer/Core/CheckerManager.h"
 #include "clang/StaticAnalyzer/Core/PathSensitive/CallEvent.h"
 #include "clang/StaticAnalyzer/Core/PathSensitive/CheckerContext.h"
-#include "llvm/ADT/StringSwitch.h"
+#include "llvm37/ADT/StringSwitch.h"
 #include <cstdarg>
 
 using namespace clang;
@@ -55,7 +55,7 @@ void NoReturnFunctionChecker::checkPostCall(const CallEvent &CE,
       //  Here are a few hardwired ones.  If this takes too long, we can
       //  potentially cache these results.
       BuildSinks
-        = llvm::StringSwitch<bool>(StringRef(II->getName()))
+        = llvm37::StringSwitch<bool>(StringRef(II->getName()))
             .Case("exit", true)
             .Case("panic", true)
             .Case("error", true)

@@ -7,17 +7,17 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/TableGen/Error.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/ADT/Twine.h"
-#include "llvm/TableGen/Record.h"
-#include "llvm/TableGen/TableGenBackend.h"
+#include "llvm37/TableGen/Error.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/ADT/Twine.h"
+#include "llvm37/TableGen/Record.h"
+#include "llvm37/TableGen/TableGenBackend.h"
 #include <cctype>
 #include <cstring>
 #include <map>
 
-using namespace llvm;
+using namespace llvm37;
 
 // Ordering on Info. The logic should match with the consumer-side function in
 // llvm/Option/OptTable.h.
@@ -95,7 +95,7 @@ static const std::string getOptionName(const Record &R) {
   return R.getValueAsString("EnumName");
 }
 
-static raw_ostream &write_cstring(raw_ostream &OS, llvm::StringRef Str) {
+static raw_ostream &write_cstring(raw_ostream &OS, llvm37::StringRef Str) {
   OS << '"';
   OS.write_escaped(Str);
   OS << '"';
@@ -105,7 +105,7 @@ static raw_ostream &write_cstring(raw_ostream &OS, llvm::StringRef Str) {
 /// OptParserEmitter - This tablegen backend takes an input .td file
 /// describing a list of options and emits a data structure for parsing and
 /// working with those options when given an input command line.
-namespace llvm {
+namespace llvm37 {
 void EmitOptParser(RecordKeeper &Records, raw_ostream &OS) {
   // Get the option groups and options.
   const std::vector<Record*> &Groups =
@@ -288,4 +288,4 @@ void EmitOptParser(RecordKeeper &Records, raw_ostream &OS) {
   }
   OS << "#endif\n";
 }
-} // end namespace llvm
+} // end namespace llvm37

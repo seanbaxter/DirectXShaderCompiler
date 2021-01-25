@@ -25,9 +25,9 @@
 #include "clang/Basic/OperatorKinds.h"
 #include "clang/Basic/SourceLocation.h"
 #include "clang/Basic/SourceManager.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/ADT/StringRef.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/ADT/StringRef.h"
 #include <algorithm>
 #include <climits>
 #include <vector>
@@ -968,10 +968,10 @@ void SExprBuilder::exitCFG(const CFGBlock *Last) {
 
 /*
 void printSCFG(CFGWalker &Walker) {
-  llvm::BumpPtrAllocator Bpa;
+  llvm37::BumpPtrAllocator Bpa;
   til::MemRegionRef Arena(&Bpa);
   SExprBuilder SxBuilder(Arena);
   til::SCFG *Scfg = SxBuilder.buildCFG(Walker);
-  TILPrinter::print(Scfg, llvm::errs());
+  TILPrinter::print(Scfg, llvm37::errs());
 }
 */

@@ -15,19 +15,19 @@
 #include "TypedefDumper.h"
 #include "VariableDumper.h"
 
-#include "llvm/DebugInfo/PDB/IPDBSession.h"
-#include "llvm/DebugInfo/PDB/PDBExtras.h"
-#include "llvm/DebugInfo/PDB/PDBSymbolData.h"
-#include "llvm/DebugInfo/PDB/PDBSymbolFunc.h"
-#include "llvm/DebugInfo/PDB/PDBSymbolTypeBaseClass.h"
-#include "llvm/DebugInfo/PDB/PDBSymbolTypeEnum.h"
-#include "llvm/DebugInfo/PDB/PDBSymbolTypePointer.h"
-#include "llvm/DebugInfo/PDB/PDBSymbolTypeTypedef.h"
-#include "llvm/DebugInfo/PDB/PDBSymbolTypeUDT.h"
-#include "llvm/DebugInfo/PDB/PDBSymbolTypeVTable.h"
-#include "llvm/Support/Format.h"
+#include "llvm37/DebugInfo/PDB/IPDBSession.h"
+#include "llvm37/DebugInfo/PDB/PDBExtras.h"
+#include "llvm37/DebugInfo/PDB/PDBSymbolData.h"
+#include "llvm37/DebugInfo/PDB/PDBSymbolFunc.h"
+#include "llvm37/DebugInfo/PDB/PDBSymbolTypeBaseClass.h"
+#include "llvm37/DebugInfo/PDB/PDBSymbolTypeEnum.h"
+#include "llvm37/DebugInfo/PDB/PDBSymbolTypePointer.h"
+#include "llvm37/DebugInfo/PDB/PDBSymbolTypeTypedef.h"
+#include "llvm37/DebugInfo/PDB/PDBSymbolTypeUDT.h"
+#include "llvm37/DebugInfo/PDB/PDBSymbolTypeVTable.h"
+#include "llvm37/Support/Format.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 ClassDefinitionDumper::ClassDefinitionDumper(LinePrinter &P)
     : PDBSymDumper(true), Printer(P) {}

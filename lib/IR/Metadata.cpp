@@ -11,23 +11,23 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/IR/Metadata.h"
+#include "llvm37/IR/Metadata.h"
 #include "LLVMContextImpl.h"
 #include "MetadataImpl.h"
 #include "SymbolTableListTraitsImpl.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/SmallSet.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/ADT/StringMap.h"
-#include "llvm/IR/ConstantRange.h"
-#include "llvm/IR/DebugInfoMetadata.h"
-#include "llvm/IR/Instruction.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/ValueHandle.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/SmallSet.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/ADT/StringMap.h"
+#include "llvm37/IR/ConstantRange.h"
+#include "llvm37/IR/DebugInfoMetadata.h"
+#include "llvm37/IR/Instruction.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/ValueHandle.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 MetadataAsValue::MetadataAsValue(Type *Ty, Metadata *MD)
     : Value(Ty, MetadataAsValueVal), MD(MD) {
@@ -198,7 +198,7 @@ void ReplaceableMetadataImpl::replaceAllUsesWith(Metadata *MD) {
   case Metadata::CLASS##Kind:                                                  \
     cast<CLASS>(OwnerMD)->handleChangedOperand(Pair.first, MD);                \
     continue;
-#include "llvm/IR/Metadata.def"
+#include "llvm37/IR/Metadata.def"
     default:
       llvm_unreachable("Invalid metadata subclass");
     }
@@ -393,15 +393,15 @@ StringRef MDString::getString() const {
 // prepended to them.
 #define HANDLE_MDNODE_LEAF(CLASS)                                              \
   static_assert(                                                               \
-      llvm::AlignOf<uint64_t>::Alignment >= llvm::AlignOf<CLASS>::Alignment,   \
+      llvm37::AlignOf<uint64_t>::Alignment >= llvm37::AlignOf<CLASS>::Alignment,   \
       "Alignment is insufficient after objects prepended to " #CLASS);
-#include "llvm/IR/Metadata.def"
+#include "llvm37/IR/Metadata.def"
 
 void *MDNode::operator new(size_t Size, unsigned NumOps) {
   size_t OpSize = NumOps * sizeof(MDOperand);
   // uint64_t is the most aligned type we need support (ensured by static_assert
   // above)
-  OpSize = RoundUpToAlignment(OpSize, llvm::alignOf<uint64_t>());
+  OpSize = RoundUpToAlignment(OpSize, llvm37::alignOf<uint64_t>());
   void *Ptr = reinterpret_cast<char *>(::operator new(OpSize + Size)) + OpSize;
   MDOperand *O = static_cast<MDOperand *>(Ptr);
   for (MDOperand *E = O - NumOps; O != E; --O)
@@ -412,7 +412,7 @@ void *MDNode::operator new(size_t Size, unsigned NumOps) {
 void MDNode::operator delete(void *Mem) {
   MDNode *N = static_cast<MDNode *>(Mem);
   size_t OpSize = N->NumOperands * sizeof(MDOperand);
-  OpSize = RoundUpToAlignment(OpSize, llvm::alignOf<uint64_t>());
+  OpSize = RoundUpToAlignment(OpSize, llvm37::alignOf<uint64_t>());
 
   MDOperand *O = static_cast<MDOperand *>(Mem);
   for (MDOperand *E = O - N->NumOperands; O != E; --O)
@@ -449,7 +449,7 @@ TempMDNode MDNode::clone() const {
 #define HANDLE_MDNODE_LEAF(CLASS)                                              \
   case CLASS##Kind:                                                            \
     return cast<CLASS>(this)->cloneImpl();
-#include "llvm/IR/Metadata.def"
+#include "llvm37/IR/Metadata.def"
   }
 }
 
@@ -648,7 +648,7 @@ void MDNode::deleteAsSubclass() {
   case CLASS##Kind:                                                            \
     delete cast<CLASS>(this);                                                  \
     break;
-#include "llvm/IR/Metadata.def"
+#include "llvm37/IR/Metadata.def"
   }
 }
 
@@ -688,7 +688,7 @@ MDNode *MDNode::uniquify() {
     dispatchRecalculateHash(SubclassThis, ShouldRecalculateHash);              \
     return uniquifyImpl(SubclassThis, getContext().pImpl->CLASS##s);           \
   }
-#include "llvm/IR/Metadata.def"
+#include "llvm37/IR/Metadata.def"
   }
 }
 
@@ -700,7 +700,7 @@ void MDNode::eraseFromStore() {
   case CLASS##Kind:                                                            \
     getContext().pImpl->CLASS##s.erase(cast<CLASS>(this));                     \
     break;
-#include "llvm/IR/Metadata.def"
+#include "llvm37/IR/Metadata.def"
   }
 }
 
@@ -750,7 +750,7 @@ void MDNode::storeDistinctInContext() {
     dispatchResetHash(cast<CLASS>(this), ShouldResetHash);                     \
     break;                                                                     \
   }
-#include "llvm/IR/Metadata.def"
+#include "llvm37/IR/Metadata.def"
   }
 
   getContext().pImpl->DistinctMDNodes.insert(this);

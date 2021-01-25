@@ -7,14 +7,14 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_DRIVER_ACTION_H
-#define LLVM_CLANG_DRIVER_ACTION_H
+#ifndef LLVM37_CLANG_DRIVER_ACTION_H
+#define LLVM37_CLANG_DRIVER_ACTION_H
 
 #include "clang/Driver/Types.h"
 #include "clang/Driver/Util.h"
-#include "llvm/ADT/SmallVector.h"
+#include "llvm37/ADT/SmallVector.h"
 
-namespace llvm {
+namespace llvm37 {
 namespace opt {
   class Arg;
 }
@@ -107,12 +107,12 @@ public:
 
 class InputAction : public Action {
   virtual void anchor();
-  const llvm::opt::Arg &Input;
+  const llvm37::opt::Arg &Input;
 
 public:
-  InputAction(const llvm::opt::Arg &Input, types::ID Type);
+  InputAction(const llvm37::opt::Arg &Input, types::ID Type);
 
-  const llvm::opt::Arg &getInputArg() const { return Input; }
+  const llvm37::opt::Arg &getInputArg() const { return Input; }
 
   static bool classof(const Action *A) {
     return A->getKind() == InputClass;

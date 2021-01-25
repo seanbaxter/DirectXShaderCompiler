@@ -18,12 +18,12 @@
 ///
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_TOOLS_OPT_NEWPMDRIVER_H
-#define LLVM_TOOLS_OPT_NEWPMDRIVER_H
+#ifndef LLVM37_TOOLS_OPT_NEWPMDRIVER_H
+#define LLVM37_TOOLS_OPT_NEWPMDRIVER_H
 
-#include "llvm/ADT/StringRef.h"
+#include "llvm37/ADT/StringRef.h"
 
-namespace llvm {
+namespace llvm37 {
 class LLVMContext;
 class Module;
 class TargetMachine;

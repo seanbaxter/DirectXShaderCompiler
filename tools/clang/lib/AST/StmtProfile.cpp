@@ -20,18 +20,18 @@
 #include "clang/AST/ExprCXX.h"
 #include "clang/AST/ExprObjC.h"
 #include "clang/AST/StmtVisitor.h"
-#include "llvm/ADT/FoldingSet.h"
+#include "llvm37/ADT/FoldingSet.h"
 using namespace clang;
 //                                                                           //
 ///////////////////////////////////////////////////////////////////////////////
 namespace {
   class StmtProfiler : public ConstStmtVisitor<StmtProfiler> {
-    llvm::FoldingSetNodeID &ID;
+    llvm37::FoldingSetNodeID &ID;
     const ASTContext &Context;
     bool Canonical;
 
   public:
-    StmtProfiler(llvm::FoldingSetNodeID &ID, const ASTContext &Context,
+    StmtProfiler(llvm37::FoldingSetNodeID &ID, const ASTContext &Context,
                  bool Canonical)
       : ID(ID), Context(Context), Canonical(Canonical) { }
 
@@ -1551,7 +1551,7 @@ void StmtProfiler::VisitTemplateArgument(const TemplateArgument &Arg) {
   }
 }
 
-void Stmt::Profile(llvm::FoldingSetNodeID &ID, const ASTContext &Context,
+void Stmt::Profile(llvm37::FoldingSetNodeID &ID, const ASTContext &Context,
                    bool Canonical) const {
   StmtProfiler Profiler(ID, Context, Canonical);
   Profiler.Visit(this);

@@ -7,19 +7,19 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Support/LockFileManager.h"
-#include "llvm/ADT/StringExtras.h"
-#include "llvm/Support/Errc.h"
-#include "llvm/Support/FileSystem.h"
-#include "llvm/Support/MemoryBuffer.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Support/Signals.h"
+#include "llvm37/Support/LockFileManager.h"
+#include "llvm37/ADT/StringExtras.h"
+#include "llvm37/Support/Errc.h"
+#include "llvm37/Support/FileSystem.h"
+#include "llvm37/Support/MemoryBuffer.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Support/Signals.h"
 #include <sys/stat.h>
 #include <sys/types.h>
-#if LLVM_ON_WIN32
+#if LLVM37_ON_WIN32
 #include <windows.h>
 #endif
-#if LLVM_ON_UNIX
+#if LLVM37_ON_UNIX
 #include <unistd.h>
 #endif
 //                                                                           //
@@ -33,7 +33,7 @@
 #if USE_OSX_GETHOSTUUID
 #include <uuid/uuid.h>
 #endif
-using namespace llvm;
+using namespace llvm37;
 
 /// \brief Attempt to read the lock file with the given name, if it exists.
 ///
@@ -83,7 +83,7 @@ static std::error_code getHostID(SmallVectorImpl<char> &HostID) {
   StringRef UUIDRef(UUIDStr);
   HostID.append(UUIDRef.begin(), UUIDRef.end());
 
-#elif LLVM_ON_UNIX
+#elif LLVM37_ON_UNIX
   char HostName[256];
   HostName[255] = 0;
   HostName[0] = 0;
@@ -100,7 +100,7 @@ static std::error_code getHostID(SmallVectorImpl<char> &HostID) {
 }
 
 bool LockFileManager::processStillExecuting(StringRef HostID, int PID) {
-#if LLVM_ON_UNIX && !defined(__ANDROID__)
+#if LLVM37_ON_UNIX && !defined(__ANDROID__)
   SmallString<256> StoredHostID;
   if (getHostID(StoredHostID))
     return true; // Conservatively assume it's executing on error.
@@ -177,7 +177,7 @@ LockFileManager::LockFileManager(StringRef FileName)
 
     raw_fd_ostream Out(UniqueLockFileID, /*shouldClose=*/true);
     Out << HostID << ' ';
-#if LLVM_ON_UNIX
+#if LLVM37_ON_UNIX
     Out << getpid();
 #else
     Out << "1";
@@ -260,7 +260,7 @@ LockFileManager::WaitForUnlockResult LockFileManager::waitForUnlock() {
   if (getState() != LFS_Shared)
     return Res_Success;
 
-#if LLVM_ON_WIN32
+#if LLVM37_ON_WIN32
   unsigned long Interval = 1;
 #else
   struct timespec Interval;
@@ -275,7 +275,7 @@ LockFileManager::WaitForUnlockResult LockFileManager::waitForUnlock() {
     // finish up and remove the lock file.
     // FIXME: Should we hook in to system APIs to get a notification when the
     // lock file is deleted?
-#if LLVM_ON_WIN32
+#if LLVM37_ON_WIN32
     Sleep(Interval);
 #else
     nanosleep(&Interval, nullptr);
@@ -294,7 +294,7 @@ LockFileManager::WaitForUnlockResult LockFileManager::waitForUnlock() {
       return Res_OwnerDied;
 
     // Exponentially increase the time we wait for the lock to be removed.
-#if LLVM_ON_WIN32
+#if LLVM37_ON_WIN32
     Interval *= 2;
 #else
     Interval.tv_sec *= 2;
@@ -305,7 +305,7 @@ LockFileManager::WaitForUnlockResult LockFileManager::waitForUnlock() {
     }
 #endif
   } while (
-#if LLVM_ON_WIN32
+#if LLVM37_ON_WIN32
            Interval < MaxSeconds * 1000
 #else
            Interval.tv_sec < (time_t)MaxSeconds

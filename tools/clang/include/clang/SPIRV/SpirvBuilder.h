@@ -6,8 +6,8 @@
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
-#ifndef LLVM_CLANG_SPIRV_SPIRVBUILDER_H
-#define LLVM_CLANG_SPIRV_SPIRVBUILDER_H
+#ifndef LLVM37_CLANG_SPIRV_SPIRVBUILDER_H
+#define LLVM37_CLANG_SPIRV_SPIRVBUILDER_H
 
 #include "clang/SPIRV/SpirvBasicBlock.h"
 #include "clang/SPIRV/SpirvContext.h"
@@ -26,7 +26,7 @@ struct StringMapInfo {
   static inline std::string getEmptyKey() { return ""; }
   static inline std::string getTombstoneKey() { return ""; }
   static unsigned getHashValue(const std::string Val) {
-    return llvm::hash_combine(Val);
+    return llvm37::hash_combine(Val);
   }
   static bool isEqual(const std::string LHS, const std::string RHS) {
     // Either both are null, or both should have the same underlying type.
@@ -68,7 +68,7 @@ public:
   /// \brief Creates a SpirvFunction object with the given information and adds
   /// it to list of all discovered functions in the SpirvModule.
   SpirvFunction *createSpirvFunction(QualType returnType, SourceLocation,
-                                     llvm::StringRef name, bool isPrecise,
+                                     llvm37::StringRef name, bool isPrecise,
                                      bool isNoInline = false);
 
   /// \brief Begins building a SPIR-V function by allocating a SpirvFunction
@@ -77,14 +77,14 @@ public:
   ///
   /// At any time, there can only exist at most one function under building.
   SpirvFunction *beginFunction(QualType returnType, SourceLocation,
-                               llvm::StringRef name = "",
+                               llvm37::StringRef name = "",
                                bool isPrecise = false, bool isNoInline = false,
                                SpirvFunction *func = nullptr);
 
   /// \brief Creates and registers a function parameter of the given pointer
   /// type in the current function and returns its pointer.
   SpirvFunctionParameter *addFnParam(QualType ptrType, bool isPrecise,
-                                     SourceLocation, llvm::StringRef name = "");
+                                     SourceLocation, llvm37::StringRef name = "");
 
   /// \brief Creates a local variable of the given type in the current
   /// function and returns it.
@@ -92,7 +92,7 @@ public:
   /// The corresponding pointer type of the given type will be constructed in
   /// this method for the variable itself.
   SpirvVariable *addFnVar(QualType valueType, SourceLocation,
-                          llvm::StringRef name = "", bool isPrecise = false,
+                          llvm37::StringRef name = "", bool isPrecise = false,
                           SpirvInstruction *init = nullptr);
 
   /// \brief Ends building of the current function. All basic blocks constructed
@@ -102,7 +102,7 @@ public:
 
   /// \brief Creates a SPIR-V basic block. On success, returns the <label-id>
   /// for the basic block. On failure, returns zero.
-  SpirvBasicBlock *createBasicBlock(llvm::StringRef name = "");
+  SpirvBasicBlock *createBasicBlock(llvm37::StringRef name = "");
 
   /// \brief Creates a SPIR-V DebugScope (OpenCL.DebugInfo.100 instruction).
   /// On success, returns the <id> of DebugScope. On failure, returns nullptr.
@@ -141,7 +141,7 @@ public:
   /// composite instruction.
   SpirvCompositeConstruct *
   createCompositeConstruct(QualType resultType,
-                           llvm::ArrayRef<SpirvInstruction *> constituents,
+                           llvm37::ArrayRef<SpirvInstruction *> constituents,
                            SourceLocation loc);
 
   /// \brief Creates a composite extract instruction. The given composite is
@@ -149,14 +149,14 @@ public:
   /// Returns the instruction pointer for the extracted element.
   SpirvCompositeExtract *
   createCompositeExtract(QualType resultType, SpirvInstruction *composite,
-                         llvm::ArrayRef<uint32_t> indexes, SourceLocation loc);
+                         llvm37::ArrayRef<uint32_t> indexes, SourceLocation loc);
 
   /// \brief Creates a composite insert instruction. The given object will
   /// replace the component in the composite at the given indices. Returns the
   /// instruction pointer for the new composite.
   SpirvCompositeInsert *createCompositeInsert(QualType resultType,
                                               SpirvInstruction *composite,
-                                              llvm::ArrayRef<uint32_t> indices,
+                                              llvm37::ArrayRef<uint32_t> indices,
                                               SpirvInstruction *object,
                                               SourceLocation loc);
 
@@ -166,7 +166,7 @@ public:
   SpirvVectorShuffle *createVectorShuffle(QualType resultType,
                                           SpirvInstruction *vector1,
                                           SpirvInstruction *vector2,
-                                          llvm::ArrayRef<uint32_t> selectors,
+                                          llvm37::ArrayRef<uint32_t> selectors,
                                           SourceLocation loc);
 
   /// \brief Creates a load instruction loading the value of the given
@@ -190,7 +190,7 @@ public:
   /// pointer for the return value.
   SpirvFunctionCall *
   createFunctionCall(QualType returnType, SpirvFunction *func,
-                     llvm::ArrayRef<SpirvInstruction *> params,
+                     llvm37::ArrayRef<SpirvInstruction *> params,
                      SourceLocation loc);
 
   /// \brief Creates an access chain instruction to retrieve the element from
@@ -201,7 +201,7 @@ public:
   /// proper storage class (based on the access base) to the result type.
   SpirvAccessChain *
   createAccessChain(QualType resultType, SpirvInstruction *base,
-                    llvm::ArrayRef<SpirvInstruction *> indexes,
+                    llvm37::ArrayRef<SpirvInstruction *> indexes,
                     SourceLocation loc);
 
   /// \brief Creates a unary operation with the given SPIR-V opcode. Returns
@@ -230,7 +230,7 @@ public:
   SpirvNonUniformUnaryOp *createGroupNonUniformUnaryOp(
       SourceLocation, spv::Op op, QualType resultType, spv::Scope execScope,
       SpirvInstruction *operand,
-      llvm::Optional<spv::GroupOperation> groupOp = llvm::None);
+      llvm37::Optional<spv::GroupOperation> groupOp = llvm37::None);
   SpirvNonUniformBinaryOp *createGroupNonUniformBinaryOp(
       spv::Op op, QualType resultType, spv::Scope execScope,
       SpirvInstruction *operand1, SpirvInstruction *operand2, SourceLocation);
@@ -358,7 +358,7 @@ public:
   void
   createSwitch(SpirvBasicBlock *mergeLabel, SpirvInstruction *selector,
                SpirvBasicBlock *defaultLabel,
-               llvm::ArrayRef<std::pair<uint32_t, SpirvBasicBlock *>> target,
+               llvm37::ArrayRef<std::pair<uint32_t, SpirvBasicBlock *>> target,
                SourceLocation);
 
   /// \brief Creates a fragment-shader discard via by emitting OpKill.
@@ -398,25 +398,25 @@ public:
   /// resulting instruction pointer.
   SpirvInstruction *
   createGLSLExtInst(QualType resultType, GLSLstd450 instId,
-                    llvm::ArrayRef<SpirvInstruction *> operands,
+                    llvm37::ArrayRef<SpirvInstruction *> operands,
                     SourceLocation);
   SpirvInstruction *
   createGLSLExtInst(const SpirvType *resultType, GLSLstd450 instId,
-                    llvm::ArrayRef<SpirvInstruction *> operands,
+                    llvm37::ArrayRef<SpirvInstruction *> operands,
                     SourceLocation);
 
   /// \brief Creates an OpExtInst instruction for the NonSemantic.DebugPrintf
   /// extension set. Returns the resulting instruction pointer.
   SpirvInstruction *createNonSemanticDebugPrintfExtInst(
       QualType resultType, NonSemanticDebugPrintfInstructions instId,
-      llvm::ArrayRef<SpirvInstruction *> operands, SourceLocation);
+      llvm37::ArrayRef<SpirvInstruction *> operands, SourceLocation);
 
   /// \brief Creates an OpMemoryBarrier or OpControlBarrier instruction with the
   /// given flags. If execution scope (exec) is provided, an OpControlBarrier
   /// is created; otherwise an OpMemoryBarrier is created.
   void createBarrier(spv::Scope memoryScope,
                      spv::MemorySemanticsMask memorySemantics,
-                     llvm::Optional<spv::Scope> exec, SourceLocation);
+                     llvm37::Optional<spv::Scope> exec, SourceLocation);
 
   /// \brief Creates an OpBitFieldInsert SPIR-V instruction for the given
   /// arguments.
@@ -447,15 +447,15 @@ public:
   /// \brief Creates SPIR-V instructions for NV raytracing ops.
   SpirvInstruction *
   createRayTracingOpsNV(spv::Op opcode, QualType resultType,
-                        llvm::ArrayRef<SpirvInstruction *> operands,
+                        llvm37::ArrayRef<SpirvInstruction *> operands,
                         SourceLocation loc);
 
   /// \brief Creates an OpDemoteToHelperInvocationEXT instruction.
   SpirvInstruction *createDemoteToHelperInvocationEXT(SourceLocation);
 
   // === SPIR-V Rich Debug Info Creation ===
-  SpirvDebugSource *createDebugSource(llvm::StringRef file,
-                                      llvm::StringRef text = "");
+  SpirvDebugSource *createDebugSource(llvm37::StringRef file,
+                                      llvm37::StringRef text = "");
 
   SpirvDebugCompilationUnit *createDebugCompilationUnit(SpirvDebugSource *);
 
@@ -464,15 +464,15 @@ public:
                           SpirvDebugInstruction *parent);
 
   SpirvDebugLocalVariable *createDebugLocalVariable(
-      QualType debugType, llvm::StringRef varName, SpirvDebugSource *src,
+      QualType debugType, llvm37::StringRef varName, SpirvDebugSource *src,
       uint32_t line, uint32_t column, SpirvDebugInstruction *parentScope,
-      uint32_t flags, llvm::Optional<uint32_t> argNumber = llvm::None);
+      uint32_t flags, llvm37::Optional<uint32_t> argNumber = llvm37::None);
 
   SpirvDebugGlobalVariable *createDebugGlobalVariable(
-      QualType debugType, llvm::StringRef varName, SpirvDebugSource *src,
+      QualType debugType, llvm37::StringRef varName, SpirvDebugSource *src,
       uint32_t line, uint32_t column, SpirvDebugInstruction *parentScope,
-      llvm::StringRef linkageName, SpirvVariable *var, uint32_t flags,
-      llvm::Optional<SpirvInstruction *> staticMemberDebugType = llvm::None);
+      llvm37::StringRef linkageName, SpirvVariable *var, uint32_t flags,
+      llvm37::Optional<SpirvInstruction *> staticMemberDebugType = llvm37::None);
 
   // Get a DebugInfoNone if exists. Otherwise, create one and return it.
   SpirvDebugInfoNone *getOrCreateDebugInfoNone();
@@ -482,19 +482,19 @@ public:
 
   SpirvDebugDeclare *createDebugDeclare(
       SpirvDebugLocalVariable *dbgVar, SpirvInstruction *var,
-      llvm::Optional<SpirvDebugExpression *> dbgExpr = llvm::None);
+      llvm37::Optional<SpirvDebugExpression *> dbgExpr = llvm37::None);
 
   SpirvDebugFunction *
-  createDebugFunction(const FunctionDecl *decl, llvm::StringRef name,
+  createDebugFunction(const FunctionDecl *decl, llvm37::StringRef name,
                       SpirvDebugSource *src, uint32_t fnLine, uint32_t fnColumn,
                       SpirvDebugInstruction *parentScope,
-                      llvm::StringRef linkageName, uint32_t flags,
+                      llvm37::StringRef linkageName, uint32_t flags,
                       uint32_t scopeLine, SpirvFunction *fn);
 
   /// \brief Create SPIR-V instructions for KHR RayQuery ops
   SpirvInstruction *
   createRayQueryOpsKHR(spv::Op opcode, QualType resultType,
-                       llvm::ArrayRef<SpirvInstruction *> operands,
+                       llvm37::ArrayRef<SpirvInstruction *> operands,
                        bool cullFlags, SourceLocation loc);
   /// \brief Creates an OpReadClockKHR instruction.
   SpirvInstruction *createReadClock(SpirvInstruction *scope, SourceLocation);
@@ -510,21 +510,21 @@ public:
   /// support a single entry point per module for now.
   inline void addEntryPoint(spv::ExecutionModel em, SpirvFunction *target,
                             std::string targetName,
-                            llvm::ArrayRef<SpirvVariable *> interfaces);
+                            llvm37::ArrayRef<SpirvVariable *> interfaces);
 
   /// \brief Sets the shader model version, source file name, and source file
   /// content. Returns the SpirvString instruction of the file name.
   inline SpirvString *setDebugSource(uint32_t major, uint32_t minor,
-                                     const std::vector<llvm::StringRef> &name,
-                                     llvm::StringRef content = "");
+                                     const std::vector<llvm37::StringRef> &name,
+                                     llvm37::StringRef content = "");
 
   /// \brief Adds an execution mode to the module under construction.
   inline void addExecutionMode(SpirvFunction *entryPoint, spv::ExecutionMode em,
-                               llvm::ArrayRef<uint32_t> params, SourceLocation);
+                               llvm37::ArrayRef<uint32_t> params, SourceLocation);
 
   /// \brief Adds an OpModuleProcessed instruction to the module under
   /// construction.
-  void addModuleProcessed(llvm::StringRef process);
+  void addModuleProcessed(llvm37::StringRef process);
 
   /// \brief If not added already, adds an OpExtInstImport (import of extended
   /// instruction set) of the OpenCL.DebugInfo.100 instruction set. Returns the
@@ -555,13 +555,13 @@ public:
   /// constructed in this method.
   SpirvVariable *
   addModuleVar(QualType valueType, spv::StorageClass storageClass,
-               bool isPrecise, llvm::StringRef name = "",
-               llvm::Optional<SpirvInstruction *> init = llvm::None,
+               bool isPrecise, llvm37::StringRef name = "",
+               llvm37::Optional<SpirvInstruction *> init = llvm37::None,
                SourceLocation loc = {});
   SpirvVariable *
   addModuleVar(const SpirvType *valueType, spv::StorageClass storageClass,
-               bool isPrecise, llvm::StringRef name = "",
-               llvm::Optional<SpirvInstruction *> init = llvm::None,
+               bool isPrecise, llvm37::StringRef name = "",
+               llvm37::Optional<SpirvInstruction *> init = llvm37::None,
                SourceLocation loc = {});
 
   /// \brief Decorates the given target with the given location.
@@ -589,8 +589,8 @@ public:
                              SpirvInstruction *counterBuffer, SourceLocation);
 
   /// \brief Decorates the given target with the given HLSL semantic string.
-  void decorateHlslSemantic(SpirvInstruction *target, llvm::StringRef semantic,
-                            llvm::Optional<uint32_t> memberIdx = llvm::None);
+  void decorateHlslSemantic(SpirvInstruction *target, llvm37::StringRef semantic,
+                            llvm37::Optional<uint32_t> memberIdx = llvm37::None);
 
   /// \brief Decorates the given target with centroid
   void decorateCentroid(SpirvInstruction *target, SourceLocation);
@@ -623,18 +623,18 @@ public:
   /// --- Constants ---
   /// Each of these methods can acquire a unique constant from the SpirvContext,
   /// and add the context to the list of constants in the module.
-  SpirvConstant *getConstantInt(QualType type, llvm::APInt value,
+  SpirvConstant *getConstantInt(QualType type, llvm37::APInt value,
                                 bool specConst = false);
-  SpirvConstant *getConstantFloat(QualType type, llvm::APFloat value,
+  SpirvConstant *getConstantFloat(QualType type, llvm37::APFloat value,
                                   bool specConst = false);
   SpirvConstant *getConstantBool(bool value, bool specConst = false);
   SpirvConstant *
   getConstantComposite(QualType compositeType,
-                       llvm::ArrayRef<SpirvConstant *> constituents,
+                       llvm37::ArrayRef<SpirvConstant *> constituents,
                        bool specConst = false);
   SpirvConstant *getConstantNull(QualType);
 
-  SpirvString *getString(llvm::StringRef str);
+  SpirvString *getString(llvm37::StringRef str);
 
 public:
   std::vector<uint32_t> takeModule();
@@ -649,13 +649,13 @@ protected:
 
   /// \brief Adds an extension to the module under construction for translating
   /// the given target at the given source location.
-  inline void requireExtension(llvm::StringRef extension, SourceLocation);
+  inline void requireExtension(llvm37::StringRef extension, SourceLocation);
 
 private:
   /// \brief If not added already, adds an OpExtInstImport (import of extended
   /// instruction set) for the given instruction set. Returns the imported
   /// instruction set.
-  SpirvExtInstImport *getExtInstSet(llvm::StringRef extensionName);
+  SpirvExtInstImport *getExtInstSet(llvm37::StringRef extensionName);
 
   /// \brief Returns the composed ImageOperandsMask from non-zero parameters
   /// and pushes non-zero parameters to *orderedParams in the expected order.
@@ -685,7 +685,7 @@ private:
     SpirvVariable *variable;
   };
   /// Used as caches for all created builtin variables to avoid duplication.
-  llvm::SmallVector<BuiltInVarInfo, 16> builtinVars;
+  llvm37::SmallVector<BuiltInVarInfo, 16> builtinVars;
 
   SpirvDebugInfoNone *debugNone;
 
@@ -694,7 +694,7 @@ private:
 
   // To avoid generating multiple OpStrings for the same string literal
   // the SpirvBuilder will generate and reuse them.
-  llvm::DenseMap<std::string, SpirvString *, StringMapInfo> stringLiterals;
+  llvm37::DenseMap<std::string, SpirvString *, StringMapInfo> stringLiterals;
 };
 
 void SpirvBuilder::requireCapability(spv::Capability cap, SourceLocation loc) {
@@ -703,7 +703,7 @@ void SpirvBuilder::requireCapability(spv::Capability cap, SourceLocation loc) {
     capability->releaseMemory();
 }
 
-void SpirvBuilder::requireExtension(llvm::StringRef ext, SourceLocation loc) {
+void SpirvBuilder::requireExtension(llvm37::StringRef ext, SourceLocation loc) {
   auto *extension = new (context) SpirvExtension(loc, ext);
   if (!mod->addExtension(extension))
     extension->releaseMemory();
@@ -716,15 +716,15 @@ void SpirvBuilder::setMemoryModel(spv::AddressingModel addrModel,
 
 void SpirvBuilder::addEntryPoint(spv::ExecutionModel em, SpirvFunction *target,
                                  std::string targetName,
-                                 llvm::ArrayRef<SpirvVariable *> interfaces) {
+                                 llvm37::ArrayRef<SpirvVariable *> interfaces) {
   mod->addEntryPoint(new (context) SpirvEntryPoint(
       target->getSourceLocation(), em, target, targetName, interfaces));
 }
 
 SpirvString *
 SpirvBuilder::setDebugSource(uint32_t major, uint32_t minor,
-                             const std::vector<llvm::StringRef> &fileNames,
-                             llvm::StringRef content) {
+                             const std::vector<llvm37::StringRef> &fileNames,
+                             llvm37::StringRef content) {
   uint32_t version = 100 * major + 10 * minor;
   SpirvSource *mainSource = nullptr;
   for (const auto &name : fileNames) {
@@ -750,7 +750,7 @@ SpirvBuilder::setDebugSource(uint32_t major, uint32_t minor,
 
 void SpirvBuilder::addExecutionMode(SpirvFunction *entryPoint,
                                     spv::ExecutionMode em,
-                                    llvm::ArrayRef<uint32_t> params,
+                                    llvm37::ArrayRef<uint32_t> params,
                                     SourceLocation loc) {
   mod->addExecutionMode(
       new (context) SpirvExecutionMode(loc, entryPoint, em, params, false));
@@ -759,4 +759,4 @@ void SpirvBuilder::addExecutionMode(SpirvFunction *entryPoint,
 } // end namespace spirv
 } // end namespace clang
 
-#endif // LLVM_CLANG_SPIRV_SPIRVBUILDER_H
+#endif // LLVM37_CLANG_SPIRV_SPIRVBUILDER_H

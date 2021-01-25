@@ -12,27 +12,27 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Analysis/CallGraphSCCPass.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/IRPrintingPasses.h"
-#include "llvm/IR/Instruction.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/LegacyPassNameParser.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/Verifier.h"
-#include "llvm/IR/LegacyPassManager.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/FileSystem.h"
-#include "llvm/Support/ManagedStatic.h"
-#include "llvm/Support/PluginLoader.h"
-#include "llvm/Support/PrettyStackTrace.h"
-#include "llvm/Support/ToolOutputFile.h"
+#include "llvm37/Analysis/CallGraphSCCPass.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/IRPrintingPasses.h"
+#include "llvm37/IR/Instruction.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/LegacyPassNameParser.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/Verifier.h"
+#include "llvm37/IR/LegacyPassManager.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/FileSystem.h"
+#include "llvm37/Support/ManagedStatic.h"
+#include "llvm37/Support/PluginLoader.h"
+#include "llvm37/Support/PrettyStackTrace.h"
+#include "llvm37/Support/ToolOutputFile.h"
 #include <algorithm>
 #include <set>
 #include <sstream>
 #include <vector>
 
-namespace llvm {
+namespace llvm37 {
 
 static cl::opt<unsigned> SeedCL("seed",
   cl::desc("Seed used for randomness"), cl::init(0));
@@ -679,7 +679,7 @@ static void IntroduceControlFlow(Function *F, Random &R) {
 }
 
 int __cdecl main(int argc, char **argv) { // HLSL Change - __cdecl
-  using namespace llvm;
+  using namespace llvm37;
 
   // Init LLVM, call llvm_shutdown() on exit, parse args, etc.
   PrettyStackTraceProgram X(argc, argv);

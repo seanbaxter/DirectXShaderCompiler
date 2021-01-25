@@ -12,8 +12,8 @@
 |*                                                                            *|
 \*===----------------------------------------------------------------------===*/
 
-#ifndef LLVM_C_CORE_H
-#define LLVM_C_CORE_H
+#ifndef LLVM37_C_CORE_H
+#define LLVM37_C_CORE_H
 
 #include "dxc/Support/WinAdapter.h" // HLSL Change
 #include "llvm-c/Support.h"
@@ -74,60 +74,60 @@ typedef struct LLVMOpaqueContext *LLVMContextRef;
  * The top-level container for all other LLVM Intermediate Representation (IR)
  * objects.
  *
- * @see llvm::Module
+ * @see llvm37::Module
  */
 typedef struct LLVMOpaqueModule *LLVMModuleRef;
 
 /**
  * Each value in the LLVM IR has a type, an LLVMTypeRef.
  *
- * @see llvm::Type
+ * @see llvm37::Type
  */
 typedef struct LLVMOpaqueType *LLVMTypeRef;
 
 /**
  * Represents an individual value in LLVM IR.
  *
- * This models llvm::Value.
+ * This models llvm37::Value.
  */
 typedef struct LLVMOpaqueValue *LLVMValueRef;
 
 /**
  * Represents a basic block of instructions in LLVM IR.
  *
- * This models llvm::BasicBlock.
+ * This models llvm37::BasicBlock.
  */
 typedef struct LLVMOpaqueBasicBlock *LLVMBasicBlockRef;
 
 /**
  * Represents an LLVM basic block builder.
  *
- * This models llvm::IRBuilder.
+ * This models llvm37::IRBuilder.
  */
 typedef struct LLVMOpaqueBuilder *LLVMBuilderRef;
 
 /**
  * Interface used to provide a module to JIT or interpreter.
- * This is now just a synonym for llvm::Module, but we have to keep using the
+ * This is now just a synonym for llvm37::Module, but we have to keep using the
  * different type to keep binary compatibility.
  */
 typedef struct LLVMOpaqueModuleProvider *LLVMModuleProviderRef;
 
-/** @see llvm::PassManagerBase */
+/** @see llvm37::PassManagerBase */
 typedef struct LLVMOpaquePassManager *LLVMPassManagerRef;
 
-/** @see llvm::PassRegistry */
+/** @see llvm37::PassRegistry */
 typedef struct LLVMOpaquePassRegistry *LLVMPassRegistryRef;
 
 /**
  * Used to get the users and usees of a Value.
  *
- * @see llvm::Use */
+ * @see llvm37::Use */
 typedef struct LLVMOpaqueUse *LLVMUseRef;
 
 
 /**
- * @see llvm::DiagnosticInfo
+ * @see llvm37::DiagnosticInfo
  */
 typedef struct LLVMOpaqueDiagnosticInfo *LLVMDiagnosticInfoRef;
 
@@ -425,7 +425,7 @@ typedef enum {
 void LLVMInitializeCore(LLVMPassRegistryRef R);
 
 /** Deallocate and destroy all ManagedStatic variables.
-    @see llvm::llvm_shutdown
+    @see llvm37::llvm_shutdown
     @see ManagedStatic */
 void LLVMShutdown(void);
 
@@ -649,7 +649,7 @@ LLVMTypeRef LLVMGetTypeByName(LLVMModuleRef M, const char *Name);
 /**
  * Obtain the number of operands for named metadata in a module.
  *
- * @see llvm::Module::getNamedMetadata()
+ * @see llvm37::Module::getNamedMetadata()
  */
 unsigned LLVMGetNamedMetadataNumOperands(LLVMModuleRef M, const char* name);
 
@@ -659,18 +659,18 @@ unsigned LLVMGetNamedMetadataNumOperands(LLVMModuleRef M, const char* name);
  * The passed LLVMValueRef pointer should refer to an array of
  * LLVMValueRef at least LLVMGetNamedMetadataNumOperands long. This
  * array will be populated with the LLVMValueRef instances. Each
- * instance corresponds to a llvm::MDNode.
+ * instance corresponds to a llvm37::MDNode.
  *
- * @see llvm::Module::getNamedMetadata()
- * @see llvm::MDNode::getOperand()
+ * @see llvm37::Module::getNamedMetadata()
+ * @see llvm37::MDNode::getOperand()
  */
 void LLVMGetNamedMetadataOperands(LLVMModuleRef M, const char* name, LLVMValueRef *Dest);
 
 /**
  * Add an operand to named metadata.
  *
- * @see llvm::Module::getNamedMetadata()
- * @see llvm::MDNode::addOperand()
+ * @see llvm37::Module::getNamedMetadata()
+ * @see llvm37::MDNode::addOperand()
  */
 void LLVMAddNamedMetadataOperand(LLVMModuleRef M, const char* name,
                                  LLVMValueRef Val);
@@ -678,7 +678,7 @@ void LLVMAddNamedMetadataOperand(LLVMModuleRef M, const char* name,
 /**
  * Add a function to a module under a specified name.
  *
- * @see llvm::Function::Create()
+ * @see llvm37::Function::Create()
  */
 LLVMValueRef LLVMAddFunction(LLVMModuleRef M, const char *Name,
                              LLVMTypeRef FunctionTy);
@@ -686,23 +686,23 @@ LLVMValueRef LLVMAddFunction(LLVMModuleRef M, const char *Name,
 /**
  * Obtain a Function value from a Module by its name.
  *
- * The returned value corresponds to a llvm::Function value.
+ * The returned value corresponds to a llvm37::Function value.
  *
- * @see llvm::Module::getFunction()
+ * @see llvm37::Module::getFunction()
  */
 LLVMValueRef LLVMGetNamedFunction(LLVMModuleRef M, const char *Name);
 
 /**
  * Obtain an iterator to the first Function in a Module.
  *
- * @see llvm::Module::begin()
+ * @see llvm37::Module::begin()
  */
 LLVMValueRef LLVMGetFirstFunction(LLVMModuleRef M);
 
 /**
  * Obtain an iterator to the last Function in a Module.
  *
- * @see llvm::Module::end()
+ * @see llvm37::Module::end()
  */
 LLVMValueRef LLVMGetLastFunction(LLVMModuleRef M);
 
@@ -736,7 +736,7 @@ LLVMValueRef LLVMGetPreviousFunction(LLVMValueRef Fn);
  * alive at a time. In other words, a unique type is shared among all
  * consumers within a context.
  *
- * A Type in the C API corresponds to llvm::Type.
+ * A Type in the C API corresponds to llvm37::Type.
  *
  * Types have the following hierarchy:
  *
@@ -758,7 +758,7 @@ LLVMValueRef LLVMGetPreviousFunction(LLVMValueRef Fn);
 /**
  * Obtain the enumerated type of a Type instance.
  *
- * @see llvm::Type:getTypeID()
+ * @see llvm37::Type:getTypeID()
  */
 LLVMTypeKind LLVMGetTypeKind(LLVMTypeRef Ty);
 
@@ -767,21 +767,21 @@ LLVMTypeKind LLVMGetTypeKind(LLVMTypeRef Ty);
  *
  * Things that don't have a size are abstract types, labels, and void.a
  *
- * @see llvm::Type::isSized()
+ * @see llvm37::Type::isSized()
  */
 LLVMBool LLVMTypeIsSized(LLVMTypeRef Ty);
 
 /**
  * Obtain the context to which this type instance is associated.
  *
- * @see llvm::Type::getContext()
+ * @see llvm37::Type::getContext()
  */
 LLVMContextRef LLVMGetTypeContext(LLVMTypeRef Ty);
 
 /**
  * Dump a representation of a type to stderr.
  *
- * @see llvm::Type::dump()
+ * @see llvm37::Type::dump()
  */
 void LLVMDumpType(LLVMTypeRef Val);
 
@@ -789,7 +789,7 @@ void LLVMDumpType(LLVMTypeRef Val);
  * Return a string representation of the type. Use
  * LLVMDisposeMessage to free the string.
  *
- * @see llvm::Type::print()
+ * @see llvm37::Type::print()
  */
 char *LLVMPrintTypeToString(LLVMTypeRef Val);
 
@@ -933,7 +933,7 @@ void LLVMGetParamTypes(LLVMTypeRef FunctionTy, LLVMTypeRef *Dest);
  *
  * These functions relate to LLVMTypeRef instances.
  *
- * @see llvm::StructType
+ * @see llvm37::StructType
  *
  * @{
  */
@@ -944,7 +944,7 @@ void LLVMGetParamTypes(LLVMTypeRef FunctionTy, LLVMTypeRef *Dest);
  * A structure is specified by a list of inner elements/types and
  * whether these can be packed together.
  *
- * @see llvm::StructType::create()
+ * @see llvm37::StructType::create()
  */
 LLVMTypeRef LLVMStructTypeInContext(LLVMContextRef C, LLVMTypeRef *ElementTypes,
                                     unsigned ElementCount, LLVMBool Packed);
@@ -952,7 +952,7 @@ LLVMTypeRef LLVMStructTypeInContext(LLVMContextRef C, LLVMTypeRef *ElementTypes,
 /**
  * Create a new structure type in the global context.
  *
- * @see llvm::StructType::create()
+ * @see llvm37::StructType::create()
  */
 LLVMTypeRef LLVMStructType(LLVMTypeRef *ElementTypes, unsigned ElementCount,
                            LLVMBool Packed);
@@ -960,21 +960,21 @@ LLVMTypeRef LLVMStructType(LLVMTypeRef *ElementTypes, unsigned ElementCount,
 /**
  * Create an empty structure in a context having a specified name.
  *
- * @see llvm::StructType::create()
+ * @see llvm37::StructType::create()
  */
 LLVMTypeRef LLVMStructCreateNamed(LLVMContextRef C, const char *Name);
 
 /**
  * Obtain the name of a structure.
  *
- * @see llvm::StructType::getName()
+ * @see llvm37::StructType::getName()
  */
 const char *LLVMGetStructName(LLVMTypeRef Ty);
 
 /**
  * Set the contents of a structure type.
  *
- * @see llvm::StructType::setBody()
+ * @see llvm37::StructType::setBody()
  */
 void LLVMStructSetBody(LLVMTypeRef StructTy, LLVMTypeRef *ElementTypes,
                        unsigned ElementCount, LLVMBool Packed);
@@ -982,7 +982,7 @@ void LLVMStructSetBody(LLVMTypeRef StructTy, LLVMTypeRef *ElementTypes,
 /**
  * Get the number of elements defined inside the structure.
  *
- * @see llvm::StructType::getNumElements()
+ * @see llvm37::StructType::getNumElements()
  */
 unsigned LLVMCountStructElementTypes(LLVMTypeRef StructTy);
 
@@ -1001,21 +1001,21 @@ void LLVMGetStructElementTypes(LLVMTypeRef StructTy, LLVMTypeRef *Dest);
 /**
  * Get the type of the element at a given index in the structure.
  *
- * @see llvm::StructType::getTypeAtIndex()
+ * @see llvm37::StructType::getTypeAtIndex()
  */
 LLVMTypeRef LLVMStructGetTypeAtIndex(LLVMTypeRef StructTy, unsigned i);
 
 /**
  * Determine whether a structure is packed.
  *
- * @see llvm::StructType::isPacked()
+ * @see llvm37::StructType::isPacked()
  */
 LLVMBool LLVMIsPackedStruct(LLVMTypeRef StructTy);
 
 /**
  * Determine whether a structure is opaque.
  *
- * @see llvm::StructType::isOpaque()
+ * @see llvm37::StructType::isOpaque()
  */
 LLVMBool LLVMIsOpaqueStruct(LLVMTypeRef StructTy);
 
@@ -1038,7 +1038,7 @@ LLVMBool LLVMIsOpaqueStruct(LLVMTypeRef StructTy);
  *
  * This works on array, vector, and pointer types.
  *
- * @see llvm::SequentialType::getElementType()
+ * @see llvm37::SequentialType::getElementType()
  */
 LLVMTypeRef LLVMGetElementType(LLVMTypeRef Ty);
 
@@ -1048,7 +1048,7 @@ LLVMTypeRef LLVMGetElementType(LLVMTypeRef Ty);
  * The created type will exist in the context that its element type
  * exists in.
  *
- * @see llvm::ArrayType::get()
+ * @see llvm37::ArrayType::get()
  */
 LLVMTypeRef LLVMArrayType(LLVMTypeRef ElementType, unsigned ElementCount);
 
@@ -1057,7 +1057,7 @@ LLVMTypeRef LLVMArrayType(LLVMTypeRef ElementType, unsigned ElementCount);
  *
  * This only works on types that represent arrays.
  *
- * @see llvm::ArrayType::getNumElements()
+ * @see llvm37::ArrayType::getNumElements()
  */
 unsigned LLVMGetArrayLength(LLVMTypeRef ArrayTy);
 
@@ -1067,7 +1067,7 @@ unsigned LLVMGetArrayLength(LLVMTypeRef ArrayTy);
  * The created type will exist in the context that its pointee type
  * exists in.
  *
- * @see llvm::PointerType::get()
+ * @see llvm37::PointerType::get()
  */
 LLVMTypeRef LLVMPointerType(LLVMTypeRef ElementType, unsigned AddressSpace);
 
@@ -1076,7 +1076,7 @@ LLVMTypeRef LLVMPointerType(LLVMTypeRef ElementType, unsigned AddressSpace);
  *
  * This only works on types that represent pointers.
  *
- * @see llvm::PointerType::getAddressSpace()
+ * @see llvm37::PointerType::getAddressSpace()
  */
 unsigned LLVMGetPointerAddressSpace(LLVMTypeRef PointerTy);
 
@@ -1087,7 +1087,7 @@ unsigned LLVMGetPointerAddressSpace(LLVMTypeRef PointerTy);
  * The created type will exist in the context thats its element type
  * exists in.
  *
- * @see llvm::VectorType::get()
+ * @see llvm37::VectorType::get()
  */
 LLVMTypeRef LLVMVectorType(LLVMTypeRef ElementType, unsigned ElementCount);
 
@@ -1096,7 +1096,7 @@ LLVMTypeRef LLVMVectorType(LLVMTypeRef ElementType, unsigned ElementCount);
  *
  * This only works on types that represent vectors.
  *
- * @see llvm::VectorType::getNumElements()
+ * @see llvm37::VectorType::getNumElements()
  */
 unsigned LLVMGetVectorSize(LLVMTypeRef VectorTy);
 
@@ -1147,7 +1147,7 @@ LLVMTypeRef LLVMX86MMXType(void);
  * The bulk of LLVM's object model consists of values, which comprise a very
  * rich type hierarchy.
  *
- * LLVMValueRef essentially represents llvm::Value. There is a rich
+ * LLVMValueRef essentially represents llvm37::Value. There is a rich
  * hierarchy of classes within this type. Depending on the instance
  * obtained, not all APIs are available.
  *
@@ -1155,14 +1155,14 @@ LLVMTypeRef LLVMX86MMXType(void);
  * LLVMIsA* family of functions (e.g. LLVMIsAArgument()). These
  * functions are defined by a macro, so it isn't obvious which are
  * available by looking at the Doxygen source code. Instead, look at the
- * source definition of LLVM_FOR_EACH_VALUE_SUBCLASS and note the list
+ * source definition of LLVM37_FOR_EACH_VALUE_SUBCLASS and note the list
  * of value names given. These value names also correspond to classes in
- * the llvm::Value hierarchy.
+ * the llvm37::Value hierarchy.
  *
  * @{
  */
 
-#define LLVM_FOR_EACH_VALUE_SUBCLASS(macro) \
+#define LLVM37_FOR_EACH_VALUE_SUBCLASS(macro) \
   macro(Argument)                           \
   macro(BasicBlock)                         \
   macro(InlineAsm)                          \
@@ -1241,7 +1241,7 @@ LLVMTypeRef LLVMX86MMXType(void);
  *
  * Functions in this section work on all LLVMValueRef instances,
  * regardless of their sub-type. They correspond to functions available
- * on llvm::Value.
+ * on llvm37::Value.
  *
  * @{
  */
@@ -1249,28 +1249,28 @@ LLVMTypeRef LLVMX86MMXType(void);
 /**
  * Obtain the type of a value.
  *
- * @see llvm::Value::getType()
+ * @see llvm37::Value::getType()
  */
 LLVMTypeRef LLVMTypeOf(LLVMValueRef Val);
 
 /**
  * Obtain the string name of a value.
  *
- * @see llvm::Value::getName()
+ * @see llvm37::Value::getName()
  */
 const char *LLVMGetValueName(LLVMValueRef Val);
 
 /**
  * Set the string name of a value.
  *
- * @see llvm::Value::setName()
+ * @see llvm37::Value::setName()
  */
 void LLVMSetValueName(LLVMValueRef Val, const char *Name);
 
 /**
  * Dump a representation of a value to stderr.
  *
- * @see llvm::Value::dump()
+ * @see llvm37::Value::dump()
  */
 void LLVMDumpValue(LLVMValueRef Val);
 
@@ -1278,14 +1278,14 @@ void LLVMDumpValue(LLVMValueRef Val);
  * Return a string representation of the value. Use
  * LLVMDisposeMessage to free the string.
  *
- * @see llvm::Value::print()
+ * @see llvm37::Value::print()
  */
 char *LLVMPrintValueToString(LLVMValueRef Val);
 
 /**
  * Replace all uses of a value with another one.
  *
- * @see llvm::Value::replaceAllUsesWith()
+ * @see llvm37::Value::replaceAllUsesWith()
  */
 void LLVMReplaceAllUsesWith(LLVMValueRef OldVal, LLVMValueRef NewVal);
 
@@ -1308,11 +1308,11 @@ LLVMBool LLVMIsUndef(LLVMValueRef Val);
  *
  * If the cast is not valid for the specified type, NULL is returned.
  *
- * @see llvm::dyn_cast_or_null<>
+ * @see llvm37::dyn_cast_or_null<>
  */
-#define LLVM_DECLARE_VALUE_CAST(name) \
+#define LLVM37_DECLARE_VALUE_CAST(name) \
   LLVMValueRef LLVMIsA##name(LLVMValueRef Val);
-LLVM_FOR_EACH_VALUE_SUBCLASS(LLVM_DECLARE_VALUE_CAST)
+LLVM37_FOR_EACH_VALUE_SUBCLASS(LLVM37_DECLARE_VALUE_CAST)
 
 LLVMValueRef LLVMIsAMDNode(LLVMValueRef Val);
 LLVMValueRef LLVMIsAMDString(LLVMValueRef Val);
@@ -1328,8 +1328,8 @@ LLVMValueRef LLVMIsAMDString(LLVMValueRef Val);
  * LLVMValueRef.
  *
  * It is possible to obtain an LLVMUseRef for any LLVMValueRef instance.
- * Each LLVMUseRef (which corresponds to a llvm::Use instance) holds a
- * llvm::User and llvm::Value.
+ * Each LLVMUseRef (which corresponds to a llvm37::Use instance) holds a
+ * llvm37::User and llvm37::Value.
  *
  * @{
  */
@@ -1342,7 +1342,7 @@ LLVMValueRef LLVMIsAMDString(LLVMValueRef Val);
  * on that instance and all subsequently obtained instances until
  * LLVMGetNextUse() returns NULL.
  *
- * @see llvm::Value::use_begin()
+ * @see llvm37::Value::use_begin()
  */
 LLVMUseRef LLVMGetFirstUse(LLVMValueRef Val);
 
@@ -1357,16 +1357,16 @@ LLVMUseRef LLVMGetNextUse(LLVMUseRef U);
 /**
  * Obtain the user value for a user.
  *
- * The returned value corresponds to a llvm::User type.
+ * The returned value corresponds to a llvm37::User type.
  *
- * @see llvm::Use::getUser()
+ * @see llvm37::Use::getUser()
  */
 LLVMValueRef LLVMGetUser(LLVMUseRef U);
 
 /**
  * Obtain the value this use corresponds to.
  *
- * @see llvm::Use::get().
+ * @see llvm37::Use::get().
  */
 LLVMValueRef LLVMGetUsedValue(LLVMUseRef U);
 
@@ -1378,37 +1378,37 @@ LLVMValueRef LLVMGetUsedValue(LLVMUseRef U);
  * @defgroup LLVMCCoreValueUser User value
  *
  * Function in this group pertain to LLVMValueRef instances that descent
- * from llvm::User. This includes constants, instructions, and
+ * from llvm37::User. This includes constants, instructions, and
  * operators.
  *
  * @{
  */
 
 /**
- * Obtain an operand at a specific index in a llvm::User value.
+ * Obtain an operand at a specific index in a llvm37::User value.
  *
- * @see llvm::User::getOperand()
+ * @see llvm37::User::getOperand()
  */
 LLVMValueRef LLVMGetOperand(LLVMValueRef Val, unsigned Index);
 
 /**
- * Obtain the use of an operand at a specific index in a llvm::User value.
+ * Obtain the use of an operand at a specific index in a llvm37::User value.
  *
- * @see llvm::User::getOperandUse()
+ * @see llvm37::User::getOperandUse()
  */
 LLVMUseRef LLVMGetOperandUse(LLVMValueRef Val, unsigned Index);
 
 /**
- * Set an operand at a specific index in a llvm::User value.
+ * Set an operand at a specific index in a llvm37::User value.
  *
- * @see llvm::User::setOperand()
+ * @see llvm37::User::setOperand()
  */
 void LLVMSetOperand(LLVMValueRef User, unsigned Index, LLVMValueRef Val);
 
 /**
- * Obtain the number of operands in a llvm::User value.
+ * Obtain the number of operands in a llvm37::User value.
  *
- * @see llvm::User::getNumOperands()
+ * @see llvm37::User::getNumOperands()
  */
 int LLVMGetNumOperands(LLVMValueRef Val);
 
@@ -1420,9 +1420,9 @@ int LLVMGetNumOperands(LLVMValueRef Val);
  * @defgroup LLVMCCoreValueConstant Constants
  *
  * This section contains APIs for interacting with LLVMValueRef that
- * correspond to llvm::Constant instances.
+ * correspond to llvm37::Constant instances.
  *
- * These functions will work for any LLVMValueRef in the llvm::Constant
+ * These functions will work for any LLVMValueRef in the llvm37::Constant
  * class hierarchy.
  *
  * @{
@@ -1431,7 +1431,7 @@ int LLVMGetNumOperands(LLVMValueRef Val);
 /**
  * Obtain a constant value referring to the null instance of a type.
  *
- * @see llvm::Constant::getNullValue()
+ * @see llvm37::Constant::getNullValue()
  */
 LLVMValueRef LLVMConstNull(LLVMTypeRef Ty); /* all zeroes */
 
@@ -1441,21 +1441,21 @@ LLVMValueRef LLVMConstNull(LLVMTypeRef Ty); /* all zeroes */
  *
  * This is only valid for integer types.
  *
- * @see llvm::Constant::getAllOnesValue()
+ * @see llvm37::Constant::getAllOnesValue()
  */
 LLVMValueRef LLVMConstAllOnes(LLVMTypeRef Ty);
 
 /**
  * Obtain a constant value referring to an undefined value of a type.
  *
- * @see llvm::UndefValue::get()
+ * @see llvm37::UndefValue::get()
  */
 LLVMValueRef LLVMGetUndef(LLVMTypeRef Ty);
 
 /**
  * Determine whether a value instance is null.
  *
- * @see llvm::Constant::isNullValue()
+ * @see llvm37::Constant::isNullValue()
  */
 LLVMBool LLVMIsNull(LLVMValueRef Val);
 
@@ -1472,11 +1472,11 @@ LLVMValueRef LLVMConstPointerNull(LLVMTypeRef Ty);
  * to constants referring to scalar types.
  *
  * For integer types, the LLVMTypeRef parameter should correspond to a
- * llvm::IntegerType instance and the returned LLVMValueRef will
- * correspond to a llvm::ConstantInt.
+ * llvm37::IntegerType instance and the returned LLVMValueRef will
+ * correspond to a llvm37::ConstantInt.
  *
  * For floating point types, the LLVMTypeRef returned corresponds to a
- * llvm::ConstantFP.
+ * llvm37::ConstantFP.
  *
  * @{
  */
@@ -1484,9 +1484,9 @@ LLVMValueRef LLVMConstPointerNull(LLVMTypeRef Ty);
 /**
  * Obtain a constant value for an integer type.
  *
- * The returned value corresponds to a llvm::ConstantInt.
+ * The returned value corresponds to a llvm37::ConstantInt.
  *
- * @see llvm::ConstantInt::get()
+ * @see llvm37::ConstantInt::get()
  *
  * @param IntTy Integer type to obtain value of.
  * @param N The value the returned instance should refer to.
@@ -1498,7 +1498,7 @@ LLVMValueRef LLVMConstInt(LLVMTypeRef IntTy, unsigned long long N,
 /**
  * Obtain a constant value for an integer of arbitrary precision.
  *
- * @see llvm::ConstantInt::get()
+ * @see llvm37::ConstantInt::get()
  */
 LLVMValueRef LLVMConstIntOfArbitraryPrecision(LLVMTypeRef IntTy,
                                               unsigned NumWords,
@@ -1511,7 +1511,7 @@ LLVMValueRef LLVMConstIntOfArbitraryPrecision(LLVMTypeRef IntTy,
  * string's length is available, it is preferred to call that function
  * instead.
  *
- * @see llvm::ConstantInt::get()
+ * @see llvm37::ConstantInt::get()
  */
 LLVMValueRef LLVMConstIntOfString(LLVMTypeRef IntTy, const char *Text,
                                   uint8_t Radix);
@@ -1520,7 +1520,7 @@ LLVMValueRef LLVMConstIntOfString(LLVMTypeRef IntTy, const char *Text,
  * Obtain a constant value for an integer parsed from a string with
  * specified length.
  *
- * @see llvm::ConstantInt::get()
+ * @see llvm37::ConstantInt::get()
  */
 LLVMValueRef LLVMConstIntOfStringAndSize(LLVMTypeRef IntTy, const char *Text,
                                          unsigned SLen, uint8_t Radix);
@@ -1547,14 +1547,14 @@ LLVMValueRef LLVMConstRealOfStringAndSize(LLVMTypeRef RealTy, const char *Text,
 /**
  * Obtain the zero extended value for an integer constant value.
  *
- * @see llvm::ConstantInt::getZExtValue()
+ * @see llvm37::ConstantInt::getZExtValue()
  */
 unsigned long long LLVMConstIntGetZExtValue(LLVMValueRef ConstantVal);
 
 /**
  * Obtain the sign extended value for an integer constant value.
  *
- * @see llvm::ConstantInt::getSExtValue()
+ * @see llvm37::ConstantInt::getSExtValue()
  */
 long long LLVMConstIntGetSExtValue(LLVMValueRef ConstantVal);
 
@@ -1562,7 +1562,7 @@ long long LLVMConstIntGetSExtValue(LLVMValueRef ConstantVal);
  * Obtain the double value for an floating point constant value.
  * losesInfo indicates if some precision was lost in the conversion.
  *
- * @see llvm::ConstantFP::getDoubleValue
+ * @see llvm37::ConstantFP::getDoubleValue
  */
 double LLVMConstRealGetDouble(LLVMValueRef ConstantVal, LLVMBool *losesInfo);
 
@@ -1581,7 +1581,7 @@ double LLVMConstRealGetDouble(LLVMValueRef ConstantVal, LLVMBool *losesInfo);
 /**
  * Create a ConstantDataSequential and initialize it with a string.
  *
- * @see llvm::ConstantDataArray::getString()
+ * @see llvm37::ConstantDataArray::getString()
  */
 LLVMValueRef LLVMConstStringInContext(LLVMContextRef C, const char *Str,
                                       unsigned Length, LLVMBool DontNullTerminate);
@@ -1593,7 +1593,7 @@ LLVMValueRef LLVMConstStringInContext(LLVMContextRef C, const char *Str,
  * global context.
  *
  * @see LLVMConstStringInContext()
- * @see llvm::ConstantDataArray::getString()
+ * @see llvm37::ConstantDataArray::getString()
  */
 LLVMValueRef LLVMConstString(const char *Str, unsigned Length,
                              LLVMBool DontNullTerminate);
@@ -1615,7 +1615,7 @@ const char *LLVMGetAsString(LLVMValueRef c, size_t* out);
 /**
  * Create an anonymous ConstantStruct with the specified values.
  *
- * @see llvm::ConstantStruct::getAnon()
+ * @see llvm37::ConstantStruct::getAnon()
  */
 LLVMValueRef LLVMConstStructInContext(LLVMContextRef C,
                                       LLVMValueRef *ConstantVals,
@@ -1635,7 +1635,7 @@ LLVMValueRef LLVMConstStruct(LLVMValueRef *ConstantVals, unsigned Count,
 /**
  * Create a ConstantArray from values.
  *
- * @see llvm::ConstantArray::get()
+ * @see llvm37::ConstantArray::get()
  */
 LLVMValueRef LLVMConstArray(LLVMTypeRef ElementTy,
                             LLVMValueRef *ConstantVals, unsigned Length);
@@ -1643,7 +1643,7 @@ LLVMValueRef LLVMConstArray(LLVMTypeRef ElementTy,
 /**
  * Create a non-anonymous ConstantStruct from values.
  *
- * @see llvm::ConstantStruct::get()
+ * @see llvm37::ConstantStruct::get()
  */
 LLVMValueRef LLVMConstNamedStruct(LLVMTypeRef StructTy,
                                   LLVMValueRef *ConstantVals,
@@ -1659,7 +1659,7 @@ LLVMValueRef LLVMGetElementAsConstant(LLVMValueRef c, unsigned idx);
 /**
  * Create a ConstantVector from values.
  *
- * @see llvm::ConstantVector::get()
+ * @see llvm37::ConstantVector::get()
  */
 LLVMValueRef LLVMConstVector(LLVMValueRef *ScalarConstantVals, unsigned Size);
 
@@ -1670,9 +1670,9 @@ LLVMValueRef LLVMConstVector(LLVMValueRef *ScalarConstantVals, unsigned Size);
 /**
  * @defgroup LLVMCCoreValueConstantExpressions Constant Expressions
  *
- * Functions in this group correspond to APIs on llvm::ConstantExpr.
+ * Functions in this group correspond to APIs on llvm37::ConstantExpr.
  *
- * @see llvm::ConstantExpr.
+ * @see llvm37::ConstantExpr.
  *
  * @{
  */
@@ -1771,9 +1771,9 @@ LLVMValueRef LLVMBlockAddress(LLVMValueRef F, LLVMBasicBlockRef BB);
  * @defgroup LLVMCCoreValueConstantGlobals Global Values
  *
  * This group contains functions that operate on global values. Functions in
- * this group relate to functions in the llvm::GlobalValue class tree.
+ * this group relate to functions in the llvm37::GlobalValue class tree.
  *
- * @see llvm::GlobalValue
+ * @see llvm37::GlobalValue
  *
  * @{
  */
@@ -1800,19 +1800,19 @@ void LLVMSetUnnamedAddr(LLVMValueRef Global, LLVMBool HasUnnamedAddr);
 
 /**
  * Obtain the preferred alignment of the value.
- * @see llvm::AllocaInst::getAlignment()
- * @see llvm::LoadInst::getAlignment()
- * @see llvm::StoreInst::getAlignment()
- * @see llvm::GlobalValue::getAlignment()
+ * @see llvm37::AllocaInst::getAlignment()
+ * @see llvm37::LoadInst::getAlignment()
+ * @see llvm37::StoreInst::getAlignment()
+ * @see llvm37::GlobalValue::getAlignment()
  */
 unsigned LLVMGetAlignment(LLVMValueRef V);
 
 /**
  * Set the preferred alignment of the value.
- * @see llvm::AllocaInst::setAlignment()
- * @see llvm::LoadInst::setAlignment()
- * @see llvm::StoreInst::setAlignment()
- * @see llvm::GlobalValue::setAlignment()
+ * @see llvm37::AllocaInst::setAlignment()
+ * @see llvm37::LoadInst::setAlignment()
+ * @see llvm37::StoreInst::setAlignment()
+ * @see llvm37::GlobalValue::setAlignment()
  */
 void LLVMSetAlignment(LLVMValueRef V, unsigned Bytes);
 
@@ -1825,7 +1825,7 @@ void LLVMSetAlignment(LLVMValueRef V, unsigned Bytes);
  *
  * This group contains functions that operate on global variable values.
  *
- * @see llvm::GlobalVariable
+ * @see llvm37::GlobalVariable
  *
  * @{
  */
@@ -1859,7 +1859,7 @@ void LLVMSetExternallyInitialized(LLVMValueRef GlobalVar, LLVMBool IsExtInit);
  *
  * This group contains function that operate on global alias values.
  *
- * @see llvm::GlobalAlias
+ * @see llvm37::GlobalAlias
  *
  * @{
  */
@@ -1874,9 +1874,9 @@ LLVMValueRef LLVMAddAlias(LLVMModuleRef M, LLVMTypeRef Ty, LLVMValueRef Aliasee,
  * @defgroup LLVMCCoreValueFunction Function values
  *
  * Functions in this group operate on LLVMValueRef instances that
- * correspond to llvm::Function instances.
+ * correspond to llvm37::Function instances.
  *
- * @see llvm::Function
+ * @see llvm37::Function
  *
  * @{
  */
@@ -1884,28 +1884,28 @@ LLVMValueRef LLVMAddAlias(LLVMModuleRef M, LLVMTypeRef Ty, LLVMValueRef Aliasee,
 /**
  * Remove a function from its containing module and deletes it.
  *
- * @see llvm::Function::eraseFromParent()
+ * @see llvm37::Function::eraseFromParent()
  */
 void LLVMDeleteFunction(LLVMValueRef Fn);
 
 /**
  * Obtain the personality function attached to the function.
  *
- * @see llvm::Function::getPersonalityFn()
+ * @see llvm37::Function::getPersonalityFn()
  */
 LLVMValueRef LLVMGetPersonalityFn(LLVMValueRef Fn);
 
 /**
  * Set the personality function attached to the function.
  *
- * @see llvm::Function::setPersonalityFn()
+ * @see llvm37::Function::setPersonalityFn()
  */
 void LLVMSetPersonalityFn(LLVMValueRef Fn, LLVMValueRef PersonalityFn);
 
 /**
  * Obtain the ID number from a function instance.
  *
- * @see llvm::Function::getIntrinsicID()
+ * @see llvm37::Function::getIntrinsicID()
  */
 unsigned LLVMGetIntrinsicID(LLVMValueRef Fn);
 
@@ -1914,14 +1914,14 @@ unsigned LLVMGetIntrinsicID(LLVMValueRef Fn);
  *
  * The returned value corresponds to the LLVMCallConv enumeration.
  *
- * @see llvm::Function::getCallingConv()
+ * @see llvm37::Function::getCallingConv()
  */
 unsigned LLVMGetFunctionCallConv(LLVMValueRef Fn);
 
 /**
  * Set the calling convention of a function.
  *
- * @see llvm::Function::setCallingConv()
+ * @see llvm37::Function::setCallingConv()
  *
  * @param Fn Function to operate on
  * @param CC LLVMCallConv to set calling convention to
@@ -1932,27 +1932,27 @@ void LLVMSetFunctionCallConv(LLVMValueRef Fn, unsigned CC);
  * Obtain the name of the garbage collector to use during code
  * generation.
  *
- * @see llvm::Function::getGC()
+ * @see llvm37::Function::getGC()
  */
 const char *LLVMGetGC(LLVMValueRef Fn);
 
 /**
  * Define the garbage collector to use during code generation.
  *
- * @see llvm::Function::setGC()
+ * @see llvm37::Function::setGC()
  */
 void LLVMSetGC(LLVMValueRef Fn, const char *Name);
 
 /**
  * Add an attribute to a function.
  *
- * @see llvm::Function::addAttribute()
+ * @see llvm37::Function::addAttribute()
  */
 void LLVMAddFunctionAttr(LLVMValueRef Fn, LLVMAttribute PA);
 
 /**
  * Add a target-dependent attribute to a fuction
- * @see llvm::AttrBuilder::addAttribute()
+ * @see llvm37::AttrBuilder::addAttribute()
  */
 void LLVMAddTargetDependentFunctionAttr(LLVMValueRef Fn, const char *A,
                                         const char *V);
@@ -1960,7 +1960,7 @@ void LLVMAddTargetDependentFunctionAttr(LLVMValueRef Fn, const char *A,
 /**
  * Obtain an attribute from a function.
  *
- * @see llvm::Function::getAttributes()
+ * @see llvm37::Function::getAttributes()
  */
 LLVMAttribute LLVMGetFunctionAttr(LLVMValueRef Fn);
 
@@ -1975,7 +1975,7 @@ void LLVMRemoveFunctionAttr(LLVMValueRef Fn, LLVMAttribute PA);
  * Functions in this group relate to arguments/parameters on functions.
  *
  * Functions in this group expect LLVMValueRef instances that correspond
- * to llvm::Function instances.
+ * to llvm37::Function instances.
  *
  * @{
  */
@@ -1983,7 +1983,7 @@ void LLVMRemoveFunctionAttr(LLVMValueRef Fn, LLVMAttribute PA);
 /**
  * Obtain the number of parameters in a function.
  *
- * @see llvm::Function::arg_size()
+ * @see llvm37::Function::arg_size()
  */
 unsigned LLVMCountParams(LLVMValueRef Fn);
 
@@ -1993,10 +1993,10 @@ unsigned LLVMCountParams(LLVMValueRef Fn);
  * The takes a pointer to a pre-allocated array of LLVMValueRef that is
  * at least LLVMCountParams() long. This array will be filled with
  * LLVMValueRef instances which correspond to the parameters the
- * function receives. Each LLVMValueRef corresponds to a llvm::Argument
+ * function receives. Each LLVMValueRef corresponds to a llvm37::Argument
  * instance.
  *
- * @see llvm::Function::arg_begin()
+ * @see llvm37::Function::arg_begin()
  */
 void LLVMGetParams(LLVMValueRef Fn, LLVMValueRef *Params);
 
@@ -2005,7 +2005,7 @@ void LLVMGetParams(LLVMValueRef Fn, LLVMValueRef *Params);
  *
  * Parameters are indexed from 0.
  *
- * @see llvm::Function::arg_begin()
+ * @see llvm37::Function::arg_begin()
  */
 LLVMValueRef LLVMGetParam(LLVMValueRef Fn, unsigned Index);
 
@@ -2013,9 +2013,9 @@ LLVMValueRef LLVMGetParam(LLVMValueRef Fn, unsigned Index);
  * Obtain the function to which this argument belongs.
  *
  * Unlike other functions in this group, this one takes an LLVMValueRef
- * that corresponds to a llvm::Attribute.
+ * that corresponds to a llvm37::Attribute.
  *
- * The returned LLVMValueRef is the llvm::Function to which this
+ * The returned LLVMValueRef is the llvm37::Function to which this
  * argument belongs.
  */
 LLVMValueRef LLVMGetParamParent(LLVMValueRef Inst);
@@ -2023,14 +2023,14 @@ LLVMValueRef LLVMGetParamParent(LLVMValueRef Inst);
 /**
  * Obtain the first parameter to a function.
  *
- * @see llvm::Function::arg_begin()
+ * @see llvm37::Function::arg_begin()
  */
 LLVMValueRef LLVMGetFirstParam(LLVMValueRef Fn);
 
 /**
  * Obtain the last parameter to a function.
  *
- * @see llvm::Function::arg_end()
+ * @see llvm37::Function::arg_end()
  */
 LLVMValueRef LLVMGetLastParam(LLVMValueRef Fn);
 
@@ -2053,14 +2053,14 @@ LLVMValueRef LLVMGetPreviousParam(LLVMValueRef Arg);
 /**
  * Add an attribute to a function argument.
  *
- * @see llvm::Argument::addAttr()
+ * @see llvm37::Argument::addAttr()
  */
 void LLVMAddAttribute(LLVMValueRef Arg, LLVMAttribute PA);
 
 /**
  * Remove an attribute from a function argument.
  *
- * @see llvm::Argument::removeAttr()
+ * @see llvm37::Argument::removeAttr()
  */
 void LLVMRemoveAttribute(LLVMValueRef Arg, LLVMAttribute PA);
 
@@ -2072,8 +2072,8 @@ LLVMAttribute LLVMGetAttribute(LLVMValueRef Arg);
 /**
  * Set the alignment for a function parameter.
  *
- * @see llvm::Argument::addAttr()
- * @see llvm::AttrBuilder::addAlignmentAttr()
+ * @see llvm37::Argument::addAttr()
+ * @see llvm37::AttrBuilder::addAlignmentAttr()
  */
 void LLVMSetParamAlignment(LLVMValueRef Arg, unsigned align);
 
@@ -2102,7 +2102,7 @@ void LLVMSetParamAlignment(LLVMValueRef Arg, unsigned align);
 /**
  * Obtain a MDString value from a context.
  *
- * The returned instance corresponds to the llvm::MDString class.
+ * The returned instance corresponds to the llvm37::MDString class.
  *
  * The instance is specified by string data of a specified length. The
  * string content is copied, so the backing memory can be freed after
@@ -2119,7 +2119,7 @@ LLVMValueRef LLVMMDString(const char *Str, unsigned SLen);
 /**
  * Obtain a MDNode value from a context.
  *
- * The returned value corresponds to the llvm::MDNode class.
+ * The returned value corresponds to the llvm37::MDNode class.
  */
 LLVMValueRef LLVMMDNodeInContext(LLVMContextRef C, LLVMValueRef *Vals,
                                  unsigned Count);
@@ -2175,7 +2175,7 @@ void LLVMGetMDNodeOperands(LLVMValueRef V, LLVMValueRef *Dest);
  * Basic blocks are themselves values. However, the C API models them as
  * LLVMBasicBlockRef.
  *
- * @see llvm::BasicBlock
+ * @see llvm37::BasicBlock
  *
  * @{
  */
@@ -2198,7 +2198,7 @@ LLVMBasicBlockRef LLVMValueAsBasicBlock(LLVMValueRef Val);
 /**
  * Obtain the function to which a basic block belongs.
  *
- * @see llvm::BasicBlock::getParent()
+ * @see llvm37::BasicBlock::getParent()
  */
 LLVMValueRef LLVMGetBasicBlockParent(LLVMBasicBlockRef BB);
 
@@ -2208,9 +2208,9 @@ LLVMValueRef LLVMGetBasicBlockParent(LLVMBasicBlockRef BB);
  * If the basic block does not have a terminator (it is not well-formed
  * if it doesn't), then NULL is returned.
  *
- * The returned LLVMValueRef corresponds to a llvm::TerminatorInst.
+ * The returned LLVMValueRef corresponds to a llvm37::TerminatorInst.
  *
- * @see llvm::BasicBlock::getTerminator()
+ * @see llvm37::BasicBlock::getTerminator()
  */
 LLVMValueRef LLVMGetBasicBlockTerminator(LLVMBasicBlockRef BB);
 
@@ -2237,14 +2237,14 @@ void LLVMGetBasicBlocks(LLVMValueRef Fn, LLVMBasicBlockRef *BasicBlocks);
  * The returned basic block can be used as an iterator. You will likely
  * eventually call into LLVMGetNextBasicBlock() with it.
  *
- * @see llvm::Function::begin()
+ * @see llvm37::Function::begin()
  */
 LLVMBasicBlockRef LLVMGetFirstBasicBlock(LLVMValueRef Fn);
 
 /**
  * Obtain the last basic block in a function.
  *
- * @see llvm::Function::end()
+ * @see llvm37::Function::end()
  */
 LLVMBasicBlockRef LLVMGetLastBasicBlock(LLVMValueRef Fn);
 
@@ -2262,14 +2262,14 @@ LLVMBasicBlockRef LLVMGetPreviousBasicBlock(LLVMBasicBlockRef BB);
  * Obtain the basic block that corresponds to the entry point of a
  * function.
  *
- * @see llvm::Function::getEntryBlock()
+ * @see llvm37::Function::getEntryBlock()
  */
 LLVMBasicBlockRef LLVMGetEntryBasicBlock(LLVMValueRef Fn);
 
 /**
  * Append a basic block to the end of a function.
  *
- * @see llvm::BasicBlock::Create()
+ * @see llvm37::BasicBlock::Create()
  */
 LLVMBasicBlockRef LLVMAppendBasicBlockInContext(LLVMContextRef C,
                                                 LLVMValueRef Fn,
@@ -2279,7 +2279,7 @@ LLVMBasicBlockRef LLVMAppendBasicBlockInContext(LLVMContextRef C,
  * Append a basic block to the end of a function using the global
  * context.
  *
- * @see llvm::BasicBlock::Create()
+ * @see llvm37::BasicBlock::Create()
  */
 LLVMBasicBlockRef LLVMAppendBasicBlock(LLVMValueRef Fn, const char *Name);
 
@@ -2289,7 +2289,7 @@ LLVMBasicBlockRef LLVMAppendBasicBlock(LLVMValueRef Fn, const char *Name);
  * The function to add to is determined by the function of the
  * passed basic block.
  *
- * @see llvm::BasicBlock::Create()
+ * @see llvm37::BasicBlock::Create()
  */
 LLVMBasicBlockRef LLVMInsertBasicBlockInContext(LLVMContextRef C,
                                                 LLVMBasicBlockRef BB,
@@ -2298,7 +2298,7 @@ LLVMBasicBlockRef LLVMInsertBasicBlockInContext(LLVMContextRef C,
 /**
  * Insert a basic block in a function using the global context.
  *
- * @see llvm::BasicBlock::Create()
+ * @see llvm37::BasicBlock::Create()
  */
 LLVMBasicBlockRef LLVMInsertBasicBlock(LLVMBasicBlockRef InsertBeforeBB,
                                        const char *Name);
@@ -2309,7 +2309,7 @@ LLVMBasicBlockRef LLVMInsertBasicBlock(LLVMBasicBlockRef InsertBeforeBB,
  * This deletes the basic block from its containing function and deletes
  * the basic block itself.
  *
- * @see llvm::BasicBlock::eraseFromParent()
+ * @see llvm37::BasicBlock::eraseFromParent()
  */
 void LLVMDeleteBasicBlock(LLVMBasicBlockRef BB);
 
@@ -2319,28 +2319,28 @@ void LLVMDeleteBasicBlock(LLVMBasicBlockRef BB);
  * This deletes the basic block from its containing function but keep
  * the basic block alive.
  *
- * @see llvm::BasicBlock::removeFromParent()
+ * @see llvm37::BasicBlock::removeFromParent()
  */
 void LLVMRemoveBasicBlockFromParent(LLVMBasicBlockRef BB);
 
 /**
  * Move a basic block to before another one.
  *
- * @see llvm::BasicBlock::moveBefore()
+ * @see llvm37::BasicBlock::moveBefore()
  */
 void LLVMMoveBasicBlockBefore(LLVMBasicBlockRef BB, LLVMBasicBlockRef MovePos);
 
 /**
  * Move a basic block to after another one.
  *
- * @see llvm::BasicBlock::moveAfter()
+ * @see llvm37::BasicBlock::moveAfter()
  */
 void LLVMMoveBasicBlockAfter(LLVMBasicBlockRef BB, LLVMBasicBlockRef MovePos);
 
 /**
  * Obtain the first instruction in a basic block.
  *
- * The returned LLVMValueRef corresponds to a llvm::Instruction
+ * The returned LLVMValueRef corresponds to a llvm37::Instruction
  * instance.
  */
 LLVMValueRef LLVMGetFirstInstruction(LLVMBasicBlockRef BB);
@@ -2362,13 +2362,13 @@ LLVMValueRef LLVMGetLastInstruction(LLVMBasicBlockRef BB);
  * Functions in this group relate to the inspection and manipulation of
  * individual instructions.
  *
- * In the C++ API, an instruction is modeled by llvm::Instruction. This
- * class has a large number of descendents. llvm::Instruction is a
- * llvm::Value and in the C API, instructions are modeled by
+ * In the C++ API, an instruction is modeled by llvm37::Instruction. This
+ * class has a large number of descendents. llvm37::Instruction is a
+ * llvm37::Value and in the C API, instructions are modeled by
  * LLVMValueRef.
  *
  * This group also contains sub-groups which operate on specific
- * llvm::Instruction types, e.g. llvm::CallInst.
+ * llvm37::Instruction types, e.g. llvm37::CallInst.
  *
  * @{
  */
@@ -2391,7 +2391,7 @@ void LLVMSetMetadata(LLVMValueRef Val, unsigned KindID, LLVMValueRef Node);
 /**
  * Obtain the basic block to which an instruction belongs.
  *
- * @see llvm::Instruction::getParent()
+ * @see llvm37::Instruction::getParent()
  */
 LLVMBasicBlockRef LLVMGetInstructionParent(LLVMValueRef Inst);
 
@@ -2419,34 +2419,34 @@ LLVMValueRef LLVMGetPreviousInstruction(LLVMValueRef Inst);
  * The instruction specified is removed from its containing building
  * block and then deleted.
  *
- * @see llvm::Instruction::eraseFromParent()
+ * @see llvm37::Instruction::eraseFromParent()
  */
 void LLVMInstructionEraseFromParent(LLVMValueRef Inst);
 
 /**
  * Obtain the code opcode for an individual instruction.
  *
- * @see llvm::Instruction::getOpCode()
+ * @see llvm37::Instruction::getOpCode()
  */
 LLVMOpcode   LLVMGetInstructionOpcode(LLVMValueRef Inst);
 
 /**
  * Obtain the predicate of an instruction.
  *
- * This is only valid for instructions that correspond to llvm::ICmpInst
- * or llvm::ConstantExpr whose opcode is llvm::Instruction::ICmp.
+ * This is only valid for instructions that correspond to llvm37::ICmpInst
+ * or llvm37::ConstantExpr whose opcode is llvm37::Instruction::ICmp.
  *
- * @see llvm::ICmpInst::getPredicate()
+ * @see llvm37::ICmpInst::getPredicate()
  */
 LLVMIntPredicate LLVMGetICmpPredicate(LLVMValueRef Inst);
 
 /**
  * Obtain the float predicate of an instruction.
  *
- * This is only valid for instructions that correspond to llvm::FCmpInst
- * or llvm::ConstantExpr whose opcode is llvm::Instruction::FCmp.
+ * This is only valid for instructions that correspond to llvm37::FCmpInst
+ * or llvm37::ConstantExpr whose opcode is llvm37::Instruction::FCmp.
  *
- * @see llvm::FCmpInst::getPredicate()
+ * @see llvm37::FCmpInst::getPredicate()
  */
 LLVMRealPredicate LLVMGetFCmpPredicate(LLVMValueRef Inst);
 
@@ -2456,7 +2456,7 @@ LLVMRealPredicate LLVMGetFCmpPredicate(LLVMValueRef Inst);
  *   * The instruction has no parent
  *   * The instruction has no name
  *
- * @see llvm::Instruction::clone()
+ * @see llvm37::Instruction::clone()
  */
 LLVMValueRef LLVMInstructionClone(LLVMValueRef Inst);
 
@@ -2465,7 +2465,7 @@ LLVMValueRef LLVMInstructionClone(LLVMValueRef Inst);
  *
  * Functions in this group apply to instructions that refer to call
  * sites and invocations. These correspond to C++ types in the
- * llvm::CallInst class tree.
+ * llvm37::CallInst class tree.
  *
  * @{
  */
@@ -2473,11 +2473,11 @@ LLVMValueRef LLVMInstructionClone(LLVMValueRef Inst);
 /**
  * Set the calling convention for a call instruction.
  *
- * This expects an LLVMValueRef that corresponds to a llvm::CallInst or
- * llvm::InvokeInst.
+ * This expects an LLVMValueRef that corresponds to a llvm37::CallInst or
+ * llvm37::InvokeInst.
  *
- * @see llvm::CallInst::setCallingConv()
- * @see llvm::InvokeInst::setCallingConv()
+ * @see llvm37::CallInst::setCallingConv()
+ * @see llvm37::InvokeInst::setCallingConv()
  */
 void LLVMSetInstructionCallConv(LLVMValueRef Instr, unsigned CC);
 
@@ -2501,18 +2501,18 @@ void LLVMSetInstrParamAlignment(LLVMValueRef Instr, unsigned index,
 /**
  * Obtain whether a call instruction is a tail call.
  *
- * This only works on llvm::CallInst instructions.
+ * This only works on llvm37::CallInst instructions.
  *
- * @see llvm::CallInst::isTailCall()
+ * @see llvm37::CallInst::isTailCall()
  */
 LLVMBool LLVMIsTailCall(LLVMValueRef CallInst);
 
 /**
  * Set whether a call instruction is a tail call.
  *
- * This only works on llvm::CallInst instructions.
+ * This only works on llvm37::CallInst instructions.
  *
- * @see llvm::CallInst::setTailCall()
+ * @see llvm37::CallInst::setTailCall()
  */
 void LLVMSetTailCall(LLVMValueRef CallInst, LLVMBool IsTailCall);
 
@@ -2524,7 +2524,7 @@ void LLVMSetTailCall(LLVMValueRef CallInst, LLVMBool IsTailCall);
  * @defgroup LLVMCCoreValueInstructionTerminator Terminators
  *
  * Functions in this group only apply to instructions that map to
- * llvm::TerminatorInst instances.
+ * llvm37::TerminatorInst instances.
  *
  * @{
  */
@@ -2532,57 +2532,57 @@ void LLVMSetTailCall(LLVMValueRef CallInst, LLVMBool IsTailCall);
 /**
  * Return the number of successors that this terminator has.
  *
- * @see llvm::TerminatorInst::getNumSuccessors
+ * @see llvm37::TerminatorInst::getNumSuccessors
  */
 unsigned LLVMGetNumSuccessors(LLVMValueRef Term);
 
 /**
  * Return the specified successor.
  *
- * @see llvm::TerminatorInst::getSuccessor
+ * @see llvm37::TerminatorInst::getSuccessor
  */
 LLVMBasicBlockRef LLVMGetSuccessor(LLVMValueRef Term, unsigned i);
 
 /**
  * Update the specified successor to point at the provided block.
  *
- * @see llvm::TerminatorInst::setSuccessor
+ * @see llvm37::TerminatorInst::setSuccessor
  */
 void LLVMSetSuccessor(LLVMValueRef Term, unsigned i, LLVMBasicBlockRef block);
 
 /**
  * Return if a branch is conditional.
  *
- * This only works on llvm::BranchInst instructions.
+ * This only works on llvm37::BranchInst instructions.
  *
- * @see llvm::BranchInst::isConditional
+ * @see llvm37::BranchInst::isConditional
  */
 LLVMBool LLVMIsConditional(LLVMValueRef Branch);
 
 /**
  * Return the condition of a branch instruction.
  *
- * This only works on llvm::BranchInst instructions.
+ * This only works on llvm37::BranchInst instructions.
  *
- * @see llvm::BranchInst::getCondition
+ * @see llvm37::BranchInst::getCondition
  */
 LLVMValueRef LLVMGetCondition(LLVMValueRef Branch);
 
 /**
  * Set the condition of a branch instruction.
  *
- * This only works on llvm::BranchInst instructions.
+ * This only works on llvm37::BranchInst instructions.
  *
- * @see llvm::BranchInst::setCondition
+ * @see llvm37::BranchInst::setCondition
  */
 void LLVMSetCondition(LLVMValueRef Branch, LLVMValueRef Cond);
 
 /**
  * Obtain the default destination basic block of a switch instruction.
  *
- * This only works on llvm::SwitchInst instructions.
+ * This only works on llvm37::SwitchInst instructions.
  *
- * @see llvm::SwitchInst::getDefaultDest()
+ * @see llvm37::SwitchInst::getDefaultDest()
  */
 LLVMBasicBlockRef LLVMGetSwitchDefaultDest(LLVMValueRef SwitchInstr);
 
@@ -2594,7 +2594,7 @@ LLVMBasicBlockRef LLVMGetSwitchDefaultDest(LLVMValueRef SwitchInstr);
  * @defgroup LLVMCCoreValueInstructionPHINode PHI Nodes
  *
  * Functions in this group only apply to instructions that map to
- * llvm::PHINode instances.
+ * llvm37::PHINode instances.
  *
  * @{
  */
@@ -2927,7 +2927,7 @@ void LLVMDisposeMemoryBuffer(LLVMMemoryBufferRef MemBuf);
  */
 
 /** Return the global pass registry, for use with initialization functions.
-    @see llvm::PassRegistry::getPassRegistry */
+    @see llvm37::PassRegistry::getPassRegistry */
 LLVMPassRegistryRef LLVMGetGlobalPassRegistry(void);
 
 /**
@@ -2942,13 +2942,13 @@ LLVMPassRegistryRef LLVMGetGlobalPassRegistry(void);
 
 /** Constructs a new whole-module pass pipeline. This type of pipeline is
     suitable for link-time optimization and whole-module transformations.
-    @see llvm::PassManager::PassManager */
+    @see llvm37::PassManager::PassManager */
 LLVMPassManagerRef LLVMCreatePassManager(void);
 
 /** Constructs a new function-by-function pass pipeline over the module
     provider. It does not take ownership of the module provider. This type of
     pipeline is suitable for code generation and JIT compilation tasks.
-    @see llvm::FunctionPassManager::FunctionPassManager */
+    @see llvm37::FunctionPassManager::FunctionPassManager */
 LLVMPassManagerRef LLVMCreateFunctionPassManagerForModule(LLVMModuleRef M);
 
 /** Deprecated: Use LLVMCreateFunctionPassManagerForModule instead. */
@@ -2957,28 +2957,28 @@ LLVMPassManagerRef LLVMCreateFunctionPassManager(LLVMModuleProviderRef MP);
 /** Initializes, executes on the provided module, and finalizes all of the
     passes scheduled in the pass manager. Returns 1 if any of the passes
     modified the module, 0 otherwise.
-    @see llvm::PassManager::run(Module&) */
+    @see llvm37::PassManager::run(Module&) */
 LLVMBool LLVMRunPassManager(LLVMPassManagerRef PM, LLVMModuleRef M);
 
 /** Initializes all of the function passes scheduled in the function pass
     manager. Returns 1 if any of the passes modified the module, 0 otherwise.
-    @see llvm::FunctionPassManager::doInitialization */
+    @see llvm37::FunctionPassManager::doInitialization */
 LLVMBool LLVMInitializeFunctionPassManager(LLVMPassManagerRef FPM);
 
 /** Executes all of the function passes scheduled in the function pass manager
     on the provided function. Returns 1 if any of the passes modified the
     function, false otherwise.
-    @see llvm::FunctionPassManager::run(Function&) */
+    @see llvm37::FunctionPassManager::run(Function&) */
 LLVMBool LLVMRunFunctionPassManager(LLVMPassManagerRef FPM, LLVMValueRef F);
 
 /** Finalizes all of the function passes scheduled in in the function pass
     manager. Returns 1 if any of the passes modified the module, 0 otherwise.
-    @see llvm::FunctionPassManager::doFinalization */
+    @see llvm37::FunctionPassManager::doFinalization */
 LLVMBool LLVMFinalizeFunctionPassManager(LLVMPassManagerRef FPM);
 
 /** Frees the memory of a pass pipeline. For function pipelines, does not free
     the module provider.
-    @see llvm::PassManagerBase::~PassManagerBase. */
+    @see llvm37::PassManagerBase::~PassManagerBase. */
 void LLVMDisposePassManager(LLVMPassManagerRef PM);
 
 /**
@@ -2994,16 +2994,16 @@ void LLVMDisposePassManager(LLVMPassManagerRef PM);
  */
 
 /** Deprecated: Multi-threading can only be enabled/disabled with the compile
-    time define LLVM_ENABLE_THREADS.  This function always returns
+    time define LLVM37_ENABLE_THREADS.  This function always returns
     LLVMIsMultithreaded(). */
 LLVMBool LLVMStartMultithreaded(void);
 
 /** Deprecated: Multi-threading can only be enabled/disabled with the compile
-    time define LLVM_ENABLE_THREADS. */
+    time define LLVM37_ENABLE_THREADS. */
 void LLVMStopMultithreaded(void);
 
 /** Check whether LLVM is executing in thread-safe mode or not.
-    @see llvm::llvm_is_multithreaded */
+    @see llvm37::llvm_is_multithreaded */
 LLVMBool LLVMIsMultithreaded(void);
 
 /**
@@ -3022,4 +3022,4 @@ LLVMBool LLVMIsMultithreaded(void);
 }
 #endif /* !defined(__cplusplus) */
 
-#endif /* !defined(LLVM_C_CORE_H) */
+#endif /* !defined(LLVM37_C_CORE_H) */

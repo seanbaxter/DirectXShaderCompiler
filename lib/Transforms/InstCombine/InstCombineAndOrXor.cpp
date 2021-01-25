@@ -12,12 +12,12 @@
 //===----------------------------------------------------------------------===//
 
 #include "InstCombineInternal.h"
-#include "llvm/Analysis/InstructionSimplify.h"
-#include "llvm/IR/ConstantRange.h"
-#include "llvm/IR/Intrinsics.h"
-#include "llvm/IR/PatternMatch.h"
-#include "llvm/Transforms/Utils/CmpInstAnalysis.h"
-using namespace llvm;
+#include "llvm37/Analysis/InstructionSimplify.h"
+#include "llvm37/IR/ConstantRange.h"
+#include "llvm37/IR/Intrinsics.h"
+#include "llvm37/IR/PatternMatch.h"
+#include "llvm37/Transforms/Utils/CmpInstAnalysis.h"
+using namespace llvm37;
 using namespace PatternMatch;
 
 #define DEBUG_TYPE "instcombine"
@@ -704,7 +704,7 @@ static unsigned foldLogOpOfMaskedICmpsHelper(Value*& A,
 /// try to fold (icmp(A & B) ==/!= C) &/| (icmp(A & D) ==/!= E)
 /// into a single (icmp(A & X) ==/!= Y)
 static Value *foldLogOpOfMaskedICmps(ICmpInst *LHS, ICmpInst *RHS, bool IsAnd,
-                                     llvm::InstCombiner::BuilderTy *Builder) {
+                                     llvm37::InstCombiner::BuilderTy *Builder) {
   Value *A = nullptr, *B = nullptr, *C = nullptr, *D = nullptr, *E = nullptr;
   ICmpInst::Predicate LHSCC = LHS->getPredicate(), RHSCC = RHS->getPredicate();
   unsigned mask = foldLogOpOfMaskedICmpsHelper(A, B, C, D, E, LHS, RHS,

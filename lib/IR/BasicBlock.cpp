@@ -11,17 +11,17 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/IR/BasicBlock.h"
+#include "llvm37/IR/BasicBlock.h"
 #include "SymbolTableListTraitsImpl.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/IR/CFG.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Type.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/IR/CFG.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/Type.h"
 #include <algorithm>
-using namespace llvm;
+using namespace llvm37;
 
 ValueSymbolTable *BasicBlock::getValueSymbolTable() {
   if (Function *F = getParent())
@@ -35,7 +35,7 @@ LLVMContext &BasicBlock::getContext() const {
 
 // Explicit instantiation of SymbolTableListTraits since some of the methods
 // are not in the public header file...
-template class llvm::SymbolTableListTraits<Instruction, BasicBlock>;
+template class llvm37::SymbolTableListTraits<Instruction, BasicBlock>;
 
 
 BasicBlock::BasicBlock(LLVMContext &C, const Twine &Name, Function *NewParent,
@@ -77,7 +77,7 @@ BasicBlock::~BasicBlock() {
   if (hasAddressTaken()) {
     assert(!use_empty() && "There should be at least one blockaddress!");
     Constant *Replacement =
-      ConstantInt::get(llvm::Type::getInt32Ty(getContext()), 1);
+      ConstantInt::get(llvm37::Type::getInt32Ty(getContext()), 1);
     while (!use_empty()) {
       BlockAddress *BA = cast<BlockAddress>(user_back());
       BA->replaceAllUsesWith(ConstantExpr::getIntToPtr(Replacement,

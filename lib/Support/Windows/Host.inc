@@ -15,14 +15,14 @@
 #include <cstdio>
 #include <string>
 
-using namespace llvm;
+using namespace llvm37;
 
 // HLSL Change Starts - this is a fixed static char array now.
 #if _WIN32
 const char *sys::getDefaultTargetTriple() { return "dxil-ms-dx"; }
 #else
 std::string sys::getDefaultTargetTriple() {
-  return Triple::normalize(LLVM_DEFAULT_TARGET_TRIPLE);
+  return Triple::normalize(LLVM37_DEFAULT_TARGET_TRIPLE);
 }
 #endif
 // HLSL Change Ends - this is a fixed static char array now.

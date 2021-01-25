@@ -11,13 +11,13 @@
 
 #include "dxc/HLSL/HLOperations.h"
 #include "dxc/HlslIntrinsicOp.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/Module.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/Support/raw_ostream.h"
 
 using namespace hlsl;
-using namespace llvm;
+using namespace llvm37;
 
 namespace hlsl {
 
@@ -111,8 +111,8 @@ HLOpcodeGroup GetHLOpcodeGroupByName(const Function *F) {
   return GetHLOpcodeGroupInternal(group);
 }
 
-HLOpcodeGroup GetHLOpcodeGroup(llvm::Function *F) {
-  llvm::StringRef name = GetHLOpcodeGroupNameByAttr(F);
+HLOpcodeGroup GetHLOpcodeGroup(llvm37::Function *F) {
+  llvm37::StringRef name = GetHLOpcodeGroupNameByAttr(F);
   HLOpcodeGroup result = GetHLOpcodeGroupInternal(name);
   if (result == HLOpcodeGroup::NotHL) {
     result = name.empty() ? result : HLOpcodeGroup::HLExtIntrinsic;
@@ -123,7 +123,7 @@ HLOpcodeGroup GetHLOpcodeGroup(llvm::Function *F) {
   return result;
 }
 
-llvm::StringRef GetHLOpcodeGroupNameByAttr(llvm::Function *F) {
+llvm37::StringRef GetHLOpcodeGroupNameByAttr(llvm37::Function *F) {
   Attribute groupAttr = F->getFnAttribute(hlsl::HLPrefix);
   StringRef group = groupAttr.getValueAsString();
   return group;
@@ -167,7 +167,7 @@ StringRef GetHLOpcodeGroupFullName(HLOpcodeGroup op) {
   }
 }
 
-llvm::StringRef GetHLOpcodeName(HLUnaryOpcode Op) {
+llvm37::StringRef GetHLOpcodeName(HLUnaryOpcode Op) {
   switch (Op) {
   case HLUnaryOpcode::PostInc: return "++";
   case HLUnaryOpcode::PostDec: return "--";
@@ -186,7 +186,7 @@ llvm::StringRef GetHLOpcodeName(HLUnaryOpcode Op) {
 
 }
 
-llvm::StringRef GetHLOpcodeName(HLBinaryOpcode Op) {
+llvm37::StringRef GetHLOpcodeName(HLBinaryOpcode Op) {
   switch (Op) {
   case HLBinaryOpcode::Mul:       return "*";
   case HLBinaryOpcode::UDiv:
@@ -222,7 +222,7 @@ llvm::StringRef GetHLOpcodeName(HLBinaryOpcode Op) {
   llvm_unreachable("Invalid OpCode!");
 }
 
-llvm::StringRef GetHLOpcodeName(HLSubscriptOpcode Op) {
+llvm37::StringRef GetHLOpcodeName(HLSubscriptOpcode Op) {
   switch (Op) {
   case HLSubscriptOpcode::DefaultSubscript:
     return "[]";
@@ -244,7 +244,7 @@ llvm::StringRef GetHLOpcodeName(HLSubscriptOpcode Op) {
   return "";
 }
 
-llvm::StringRef GetHLOpcodeName(HLCastOpcode Op) {
+llvm37::StringRef GetHLOpcodeName(HLCastOpcode Op) {
   switch (Op) {
   case HLCastOpcode::DefaultCast:
     return "default";
@@ -268,7 +268,7 @@ llvm::StringRef GetHLOpcodeName(HLCastOpcode Op) {
   return "";
 }
 
-llvm::StringRef GetHLOpcodeName(HLMatLoadStoreOpcode Op) {
+llvm37::StringRef GetHLOpcodeName(HLMatLoadStoreOpcode Op) {
   switch (Op) {
   case HLMatLoadStoreOpcode::ColMatLoad:
     return "colLoad";
@@ -283,8 +283,8 @@ llvm::StringRef GetHLOpcodeName(HLMatLoadStoreOpcode Op) {
 }
 
 StringRef GetHLLowerStrategy(Function *F) {
-  llvm::Attribute A = F->getFnAttribute(HLLowerStrategy);
-  llvm::StringRef LowerStrategy = A.getValueAsString();
+  llvm37::Attribute A = F->getFnAttribute(HLLowerStrategy);
+  llvm37::StringRef LowerStrategy = A.getValueAsString();
   return LowerStrategy;
 }
 
@@ -556,7 +556,7 @@ Function *GetOrCreateHLFunctionWithBody(Module &M, FunctionType *funcTy,
 
   SetHLFunctionAttribute(F, group, opcode);
 
-  F->setLinkage(llvm::GlobalValue::LinkageTypes::InternalLinkage);
+  F->setLinkage(llvm37::GlobalValue::LinkageTypes::InternalLinkage);
 
   return F;
 }

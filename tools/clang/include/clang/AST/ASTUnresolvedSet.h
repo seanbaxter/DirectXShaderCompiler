@@ -12,8 +12,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_AST_ASTUNRESOLVEDSET_H
-#define LLVM_CLANG_AST_ASTUNRESOLVEDSET_H
+#ifndef LLVM37_CLANG_AST_ASTUNRESOLVEDSET_H
+#define LLVM37_CLANG_AST_ASTUNRESOLVEDSET_H
 
 #include "clang/AST/ASTVector.h"
 #include "clang/AST/UnresolvedSet.h"

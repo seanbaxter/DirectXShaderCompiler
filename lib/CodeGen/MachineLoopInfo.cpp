@@ -14,17 +14,17 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/CodeGen/MachineLoopInfo.h"
-#include "llvm/Analysis/LoopInfoImpl.h"
-#include "llvm/CodeGen/MachineDominators.h"
-#include "llvm/CodeGen/Passes.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/raw_ostream.h"
-using namespace llvm;
+#include "llvm37/CodeGen/MachineLoopInfo.h"
+#include "llvm37/Analysis/LoopInfoImpl.h"
+#include "llvm37/CodeGen/MachineDominators.h"
+#include "llvm37/CodeGen/Passes.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/raw_ostream.h"
+using namespace llvm37;
 
 // Explicitly instantiate methods in LoopInfoImpl.h for MI-level Loops.
-template class llvm::LoopBase<MachineBasicBlock, MachineLoop>;
-template class llvm::LoopInfoBase<MachineBasicBlock, MachineLoop>;
+template class llvm37::LoopBase<MachineBasicBlock, MachineLoop>;
+template class llvm37::LoopInfoBase<MachineBasicBlock, MachineLoop>;
 
 char MachineLoopInfo::ID = 0;
 INITIALIZE_PASS_BEGIN(MachineLoopInfo, "machine-loops",
@@ -33,7 +33,7 @@ INITIALIZE_PASS_DEPENDENCY(MachineDominatorTree)
 INITIALIZE_PASS_END(MachineLoopInfo, "machine-loops",
                 "Machine Natural Loop Construction", true, true)
 
-char &llvm::MachineLoopInfoID = MachineLoopInfo::ID;
+char &llvm37::MachineLoopInfoID = MachineLoopInfo::ID;
 
 bool MachineLoopInfo::runOnMachineFunction(MachineFunction &) {
   releaseMemory();
@@ -75,7 +75,7 @@ MachineBasicBlock *MachineLoop::getBottomBlock() {
   return BotMBB;
 }
 
-#if !defined(NDEBUG) || defined(LLVM_ENABLE_DUMP)
+#if !defined(NDEBUG) || defined(LLVM37_ENABLE_DUMP)
 void MachineLoop::dump() const {
   print(dbgs());
 }

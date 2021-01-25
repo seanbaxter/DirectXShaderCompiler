@@ -11,17 +11,17 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/CodeGen/GCMetadata.h"
-#include "llvm/CodeGen/GCStrategy.h"
-#include "llvm/CodeGen/MachineFrameInfo.h"
-#include "llvm/CodeGen/Passes.h"
-#include "llvm/IR/Function.h"
-#include "llvm/MC/MCSymbol.h"
-#include "llvm/Pass.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/raw_ostream.h"
-using namespace llvm;
+#include "llvm37/CodeGen/GCMetadata.h"
+#include "llvm37/CodeGen/GCStrategy.h"
+#include "llvm37/CodeGen/MachineFrameInfo.h"
+#include "llvm37/CodeGen/Passes.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/MC/MCSymbol.h"
+#include "llvm37/Pass.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/raw_ostream.h"
+using namespace llvm37;
 
 namespace {
 
@@ -83,7 +83,7 @@ void GCModuleInfo::clear() {
 
 char Printer::ID = 0;
 
-FunctionPass *llvm::createGCInfoPrinter(raw_ostream &OS) {
+FunctionPass *llvm37::createGCInfoPrinter(raw_ostream &OS) {
   return new Printer(OS);
 }
 

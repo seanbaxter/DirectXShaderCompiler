@@ -11,8 +11,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_FRONTEND_TEXTDIAGNOSTICBUFFER_H
-#define LLVM_CLANG_FRONTEND_TEXTDIAGNOSTICBUFFER_H
+#ifndef LLVM37_CLANG_FRONTEND_TEXTDIAGNOSTICBUFFER_H
+#define LLVM37_CLANG_FRONTEND_TEXTDIAGNOSTICBUFFER_H
 
 #include "clang/Basic/Diagnostic.h"
 #include <vector>

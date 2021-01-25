@@ -14,37 +14,37 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/SetVector.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/ADT/StringExtras.h"
-#include "llvm/IR/AssemblyAnnotationWriter.h"
-#include "llvm/IR/CFG.h"
-#include "llvm/IR/CallingConv.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/DebugInfo.h"
-#include "llvm/IR/DerivedTypes.h"
-#include "llvm/IR/IRPrintingPasses.h"
-#include "llvm/IR/InlineAsm.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/ModuleSlotTracker.h"
-#include "llvm/IR/Operator.h"
-#include "llvm/IR/Statepoint.h"
-#include "llvm/IR/TypeFinder.h"
-#include "llvm/IR/UseListOrder.h"
-#include "llvm/IR/ValueSymbolTable.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/Dwarf.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/FormattedStream.h"
-#include "llvm/Support/MathExtras.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/SetVector.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/ADT/StringExtras.h"
+#include "llvm37/IR/AssemblyAnnotationWriter.h"
+#include "llvm37/IR/CFG.h"
+#include "llvm37/IR/CallingConv.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/DebugInfo.h"
+#include "llvm37/IR/DerivedTypes.h"
+#include "llvm37/IR/IRPrintingPasses.h"
+#include "llvm37/IR/InlineAsm.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/ModuleSlotTracker.h"
+#include "llvm37/IR/Operator.h"
+#include "llvm37/IR/Statepoint.h"
+#include "llvm37/IR/TypeFinder.h"
+#include "llvm37/IR/UseListOrder.h"
+#include "llvm37/IR/ValueSymbolTable.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/Dwarf.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/FormattedStream.h"
+#include "llvm37/Support/MathExtras.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <algorithm>
 #include <cctype>
-using namespace llvm;
+using namespace llvm37;
 
 // Make virtual table appear in this compilation unit.
 AssemblyAnnotationWriter::~AssemblyAnnotationWriter() {}
@@ -545,7 +545,7 @@ void TypePrinting::printStructBody(StructType *STy, raw_ostream &OS) {
     OS << '>';
 }
 
-namespace llvm {
+namespace llvm37 {
 //===----------------------------------------------------------------------===//
 // SlotTracker Class: Enumerate slot numbers for unnamed values
 //===----------------------------------------------------------------------===//
@@ -664,7 +664,7 @@ private:
   SlotTracker(const SlotTracker &) = delete;
   void operator=(const SlotTracker &) = delete;
 };
-} // namespace llvm
+} // namespace llvm37
 
 ModuleSlotTracker::ModuleSlotTracker(SlotTracker &Machine, const Module *M,
                                      const Function *F)
@@ -1868,7 +1868,7 @@ static void WriteMDNodeBodyInternal(raw_ostream &Out, const MDNode *Node,
   case Metadata::CLASS##Kind:                                                  \
     write##CLASS(Out, cast<CLASS>(Node), TypePrinter, Machine, Context);       \
     break;
-#include "llvm/IR/Metadata.def"
+#include "llvm37/IR/Metadata.def"
   }
 }
 
@@ -3366,29 +3366,29 @@ void MDNode::printAsBody(raw_ostream &OS, ModuleSlotTracker &MST, const Module *
 // HLSL Change end
 
 // Value::dump - allow easy printing of Values from the debugger.
-LLVM_DUMP_METHOD
+LLVM37_DUMP_METHOD
 void Value::dump() const { print(dbgs()); dbgs() << '\n'; }
 
 // Type::dump - allow easy printing of Types from the debugger.
-LLVM_DUMP_METHOD
+LLVM37_DUMP_METHOD
 void Type::dump() const { print(dbgs()); dbgs() << '\n'; }
 
 // Module::dump() - Allow printing of Modules from the debugger.
-LLVM_DUMP_METHOD
+LLVM37_DUMP_METHOD
 void Module::dump() const { print(dbgs(), nullptr); }
 
 // \brief Allow printing of Comdats from the debugger.
-LLVM_DUMP_METHOD
+LLVM37_DUMP_METHOD
 void Comdat::dump() const { print(dbgs()); }
 
 // NamedMDNode::dump() - Allow printing of NamedMDNodes from the debugger.
-LLVM_DUMP_METHOD
+LLVM37_DUMP_METHOD
 void NamedMDNode::dump() const { print(dbgs()); }
 
-LLVM_DUMP_METHOD
+LLVM37_DUMP_METHOD
 void Metadata::dump() const { dump(nullptr); }
 
-LLVM_DUMP_METHOD
+LLVM37_DUMP_METHOD
 void Metadata::dump(const Module *M) const {
   print(dbgs(), M);
   dbgs() << '\n';

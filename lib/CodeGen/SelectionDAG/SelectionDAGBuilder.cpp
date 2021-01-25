@@ -13,57 +13,57 @@
 
 #include "SelectionDAGBuilder.h"
 #include "SDNodeDbgValue.h"
-#include "llvm/ADT/BitVector.h"
-#include "llvm/ADT/Optional.h"
-#include "llvm/ADT/SmallSet.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/Analysis/AliasAnalysis.h"
-#include "llvm/Analysis/BranchProbabilityInfo.h"
-#include "llvm/Analysis/ConstantFolding.h"
-#include "llvm/Analysis/TargetLibraryInfo.h"
-#include "llvm/Analysis/ValueTracking.h"
-#include "llvm/CodeGen/FastISel.h"
-#include "llvm/CodeGen/FunctionLoweringInfo.h"
-#include "llvm/CodeGen/GCMetadata.h"
-#include "llvm/CodeGen/GCStrategy.h"
-#include "llvm/CodeGen/MachineFrameInfo.h"
-#include "llvm/CodeGen/MachineFunction.h"
-#include "llvm/CodeGen/MachineInstrBuilder.h"
-#include "llvm/CodeGen/MachineJumpTableInfo.h"
-#include "llvm/CodeGen/MachineModuleInfo.h"
-#include "llvm/CodeGen/MachineRegisterInfo.h"
-#include "llvm/CodeGen/SelectionDAG.h"
-#include "llvm/CodeGen/StackMaps.h"
-#include "llvm/CodeGen/WinEHFuncInfo.h"
-#include "llvm/IR/CallingConv.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/DebugInfo.h"
-#include "llvm/IR/DerivedTypes.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/GlobalVariable.h"
-#include "llvm/IR/InlineAsm.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/IR/Intrinsics.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/Statepoint.h"
-#include "llvm/MC/MCSymbol.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/MathExtras.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Target/TargetFrameLowering.h"
-#include "llvm/Target/TargetInstrInfo.h"
-#include "llvm/Target/TargetIntrinsicInfo.h"
-#include "llvm/Target/TargetLowering.h"
-#include "llvm/Target/TargetOptions.h"
-#include "llvm/Target/TargetSelectionDAGInfo.h"
-#include "llvm/Target/TargetSubtargetInfo.h"
+#include "llvm37/ADT/BitVector.h"
+#include "llvm37/ADT/Optional.h"
+#include "llvm37/ADT/SmallSet.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/Analysis/AliasAnalysis.h"
+#include "llvm37/Analysis/BranchProbabilityInfo.h"
+#include "llvm37/Analysis/ConstantFolding.h"
+#include "llvm37/Analysis/TargetLibraryInfo.h"
+#include "llvm37/Analysis/ValueTracking.h"
+#include "llvm37/CodeGen/FastISel.h"
+#include "llvm37/CodeGen/FunctionLoweringInfo.h"
+#include "llvm37/CodeGen/GCMetadata.h"
+#include "llvm37/CodeGen/GCStrategy.h"
+#include "llvm37/CodeGen/MachineFrameInfo.h"
+#include "llvm37/CodeGen/MachineFunction.h"
+#include "llvm37/CodeGen/MachineInstrBuilder.h"
+#include "llvm37/CodeGen/MachineJumpTableInfo.h"
+#include "llvm37/CodeGen/MachineModuleInfo.h"
+#include "llvm37/CodeGen/MachineRegisterInfo.h"
+#include "llvm37/CodeGen/SelectionDAG.h"
+#include "llvm37/CodeGen/StackMaps.h"
+#include "llvm37/CodeGen/WinEHFuncInfo.h"
+#include "llvm37/IR/CallingConv.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/IR/DebugInfo.h"
+#include "llvm37/IR/DerivedTypes.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/GlobalVariable.h"
+#include "llvm37/IR/InlineAsm.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/IR/Intrinsics.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/Statepoint.h"
+#include "llvm37/MC/MCSymbol.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/MathExtras.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Target/TargetFrameLowering.h"
+#include "llvm37/Target/TargetInstrInfo.h"
+#include "llvm37/Target/TargetIntrinsicInfo.h"
+#include "llvm37/Target/TargetLowering.h"
+#include "llvm37/Target/TargetOptions.h"
+#include "llvm37/Target/TargetSelectionDAGInfo.h"
+#include "llvm37/Target/TargetSubtargetInfo.h"
 #include <algorithm>
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "isel"
 
@@ -925,7 +925,7 @@ void SelectionDAGBuilder::visit(unsigned Opcode, const User &I) {
     // Build the switch statement using the Instruction.def file.
 #define HANDLE_INST(NUM, OPCODE, CLASS) \
     case Instruction::OPCODE: visit##OPCODE((const CLASS&)I); break;
-#include "llvm/IR/Instruction.def"
+#include "llvm37/IR/Instruction.def"
   }
 }
 
@@ -5726,13 +5726,13 @@ public:
     if (isa<BasicBlock>(CallOperandVal))
       return TLI.getPointerTy(DL);
 
-    llvm::Type *OpTy = CallOperandVal->getType();
+    llvm37::Type *OpTy = CallOperandVal->getType();
 
     // FIXME: code duplicated from TargetLowering::ParseConstraints().
     // If this is an indirect operand, the operand is a pointer to the
     // accessed type.
     if (isIndirect) {
-      llvm::PointerType *PtrTy = dyn_cast<PointerType>(OpTy);
+      llvm37::PointerType *PtrTy = dyn_cast<PointerType>(OpTy);
       if (!PtrTy)
         report_fatal_error("Indirect operand for inline asm not a pointer!");
       OpTy = PtrTy->getElementType();
@@ -7060,7 +7060,7 @@ SelectionDAGBuilder::CopyValueToVirtualRegister(const Value *V, unsigned Reg) {
   PendingExports.push_back(Chain);
 }
 
-#include "llvm/CodeGen/SelectionDAGISel.h"
+#include "llvm37/CodeGen/SelectionDAGISel.h"
 
 /// isOnlyUsedInEntryBlock - If the specified argument is only used in the
 /// entry block, return true.  This includes arguments used by switches, since

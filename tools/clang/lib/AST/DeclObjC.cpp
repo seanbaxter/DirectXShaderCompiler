@@ -16,8 +16,8 @@
 #include "clang/AST/ASTMutationListener.h"
 #include "clang/AST/Attr.h"
 #include "clang/AST/Stmt.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/SmallString.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/SmallString.h"
 using namespace clang;
 
 //===----------------------------------------------------------------------===//
@@ -174,7 +174,7 @@ IdentifierInfo *
 ObjCPropertyDecl::getDefaultSynthIvarName(ASTContext &Ctx) const {
   SmallString<128> ivarName;
   {
-    llvm::raw_svector_ostream os(ivarName);
+    llvm37::raw_svector_ostream os(ivarName);
     os << '_' << getIdentifier()->getName();
   }
   return &Ctx.Idents.get(ivarName.str());
@@ -463,7 +463,7 @@ bool ObjCInterfaceDecl::inheritsDesignatedInitializers() const {
 }
 
 void ObjCInterfaceDecl::getDesignatedInitializers(
-    llvm::SmallVectorImpl<const ObjCMethodDecl *> &Methods) const {
+    llvm37::SmallVectorImpl<const ObjCMethodDecl *> &Methods) const {
   // Check for a complete definition and recover if not so.
   if (!isThisDeclarationADefinition())
     return;
@@ -766,12 +766,12 @@ void ObjCMethodDecl::setMethodParams(ASTContext &C,
   assert((!SelLocs.empty() || isImplicit()) &&
          "No selector locs for non-implicit method");
   if (isImplicit())
-    return setParamsAndSelLocs(C, Params, llvm::None);
+    return setParamsAndSelLocs(C, Params, llvm37::None);
 
   SelLocsKind = hasStandardSelectorLocs(getSelector(), SelLocs, Params,
                                         DeclEndLoc);
   if (SelLocsKind != SelLoc_NonStandard)
-    return setParamsAndSelLocs(C, Params, llvm::None);
+    return setParamsAndSelLocs(C, Params, llvm37::None);
 
   setParamsAndSelLocs(C, Params, SelLocs);
 }
@@ -1274,10 +1274,10 @@ ObjCTypeParamList *ObjCTypeParamList::create(
                      SourceLocation rAngleLoc) {
   unsigned size = sizeof(ObjCTypeParamList)
                 + sizeof(ObjCTypeParamDecl *) * typeParams.size();
-  static_assert(llvm::AlignOf<ObjCTypeParamList>::Alignment >=
-                    llvm::AlignOf<ObjCTypeParamDecl *>::Alignment,
+  static_assert(llvm37::AlignOf<ObjCTypeParamList>::Alignment >=
+                    llvm37::AlignOf<ObjCTypeParamDecl *>::Alignment,
                 "type parameter list needs greater alignment");
-  unsigned align = llvm::alignOf<ObjCTypeParamList>();
+  unsigned align = llvm37::alignOf<ObjCTypeParamList>();
   void *mem = ctx.Allocate(size, align);
   return new (mem) ObjCTypeParamList(lAngleLoc, typeParams, rAngleLoc);
 }

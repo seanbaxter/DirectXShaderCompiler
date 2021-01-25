@@ -13,15 +13,15 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Transforms/Instrumentation.h"
+#include "llvm37/Transforms/Instrumentation.h"
 
-#include "llvm/ADT/Triple.h"
-#include "llvm/IR/IRBuilder.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/IR/Module.h"
-#include "llvm/Transforms/Utils/ModuleUtils.h"
+#include "llvm37/ADT/Triple.h"
+#include "llvm37/IR/IRBuilder.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/Transforms/Utils/ModuleUtils.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "instrprof"
 
@@ -109,7 +109,7 @@ INITIALIZE_PASS(InstrProfiling, "instrprof",
                 "Frontend instrumentation-based coverage lowering.", false,
                 false)
 
-ModulePass *llvm::createInstrProfilingPass(const InstrProfOptions &Options) {
+ModulePass *llvm37::createInstrProfilingPass(const InstrProfOptions &Options) {
   return new InstrProfiling(Options);
 }
 

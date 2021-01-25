@@ -16,15 +16,15 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Transforms/Scalar.h"
-#include "llvm/ADT/SetVector.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/IR/InstIterator.h"
-#include "llvm/IR/Instruction.h"
-#include "llvm/Pass.h"
-#include "llvm/Analysis/TargetLibraryInfo.h"
-#include "llvm/Transforms/Utils/Local.h"
-using namespace llvm;
+#include "llvm37/Transforms/Scalar.h"
+#include "llvm37/ADT/SetVector.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/IR/InstIterator.h"
+#include "llvm37/IR/Instruction.h"
+#include "llvm37/Pass.h"
+#include "llvm37/Analysis/TargetLibraryInfo.h"
+#include "llvm37/Transforms/Utils/Local.h"
+using namespace llvm37;
 
 #define DEBUG_TYPE "dce"
 
@@ -67,7 +67,7 @@ char DeadInstElimination::ID = 0;
 INITIALIZE_PASS(DeadInstElimination, "die",
                 "Dead Instruction Elimination", false, false)
 
-Pass *llvm::createDeadInstEliminationPass() {
+Pass *llvm37::createDeadInstEliminationPass() {
   return new DeadInstElimination();
 }
 
@@ -132,7 +132,7 @@ bool DCE::runOnFunction(Function &F) {
   return MadeChange;
 }
 
-FunctionPass *llvm::createDeadCodeEliminationPass() {
+FunctionPass *llvm37::createDeadCodeEliminationPass() {
   return new DCE();
 }
 

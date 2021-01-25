@@ -12,8 +12,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_FRONTEND_MULTIPLEXCONSUMER_H
-#define LLVM_CLANG_FRONTEND_MULTIPLEXCONSUMER_H
+#ifndef LLVM37_CLANG_FRONTEND_MULTIPLEXCONSUMER_H
+#define LLVM37_CLANG_FRONTEND_MULTIPLEXCONSUMER_H
 
 #include "clang/Basic/LLVM.h"
 #include "clang/Sema/SemaConsumer.h"
@@ -44,10 +44,10 @@ public:
   void HandleCXXImplicitFunctionInstantiation(FunctionDecl *D) override;
   void HandleTopLevelDeclInObjCContainer(DeclGroupRef D) override;
   void HandleImplicitImportDecl(ImportDecl *D) override;
-  void HandleLinkerOptionPragma(llvm::StringRef Opts) override;
-  void HandleDetectMismatch(llvm::StringRef Name,
-                            llvm::StringRef Value) override;
-  void HandleDependentLibrary(llvm::StringRef Lib) override;
+  void HandleLinkerOptionPragma(llvm37::StringRef Opts) override;
+  void HandleDetectMismatch(llvm37::StringRef Name,
+                            llvm37::StringRef Value) override;
+  void HandleDependentLibrary(llvm37::StringRef Lib) override;
   void CompleteTentativeDefinition(VarDecl *D) override;
   void HandleVTable(CXXRecordDecl *RD) override;
   ASTMutationListener *GetASTMutationListener() override;

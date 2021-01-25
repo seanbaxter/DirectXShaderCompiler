@@ -12,15 +12,15 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/ADT/FoldingSet.h"
-#include "llvm/ADT/Hashing.h"
-#include "llvm/Support/Allocator.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/Host.h"
-#include "llvm/Support/MathExtras.h"
+#include "llvm37/ADT/FoldingSet.h"
+#include "llvm37/ADT/Hashing.h"
+#include "llvm37/Support/Allocator.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/Host.h"
+#include "llvm37/Support/MathExtras.h"
 #include <cassert>
 #include <cstring>
-using namespace llvm;
+using namespace llvm37;
 
 //===----------------------------------------------------------------------===//
 // FoldingSetNodeIDRef Implementation

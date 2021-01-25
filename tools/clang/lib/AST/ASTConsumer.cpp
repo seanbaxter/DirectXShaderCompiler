@@ -12,7 +12,7 @@
 //===----------------------------------------------------------------------===//
 
 #include "clang/AST/ASTConsumer.h"
-#include "llvm/Bitcode/BitstreamReader.h"
+#include "llvm37/Bitcode/BitstreamReader.h"
 #include "clang/AST/Decl.h"
 #include "clang/AST/DeclGroup.h"
 using namespace clang;

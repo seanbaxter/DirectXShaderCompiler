@@ -13,13 +13,13 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_LIB_IR_SYMBOLTABLELISTTRAITSIMPL_H
-#define LLVM_LIB_IR_SYMBOLTABLELISTTRAITSIMPL_H
+#ifndef LLVM37_LIB_IR_SYMBOLTABLELISTTRAITSIMPL_H
+#define LLVM37_LIB_IR_SYMBOLTABLELISTTRAITSIMPL_H
 
-#include "llvm/IR/SymbolTableListTraits.h"
-#include "llvm/IR/ValueSymbolTable.h"
+#include "llvm37/IR/SymbolTableListTraits.h"
+#include "llvm37/IR/ValueSymbolTable.h"
 
-namespace llvm {
+namespace llvm37 {
 
 /// setSymTabObject - This is called when (f.e.) the parent of a basic block
 /// changes.  This requires us to remove all the instruction symtab entries from

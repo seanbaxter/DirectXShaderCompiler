@@ -16,11 +16,11 @@
 #include "dxc/DxilPIXPasses/DxilPIXPasses.h"
 #include "dxc/HLSL/DxilGenerationPass.h"
 
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/PassManager.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/PassManager.h"
 
-using namespace llvm;
+using namespace llvm37;
 using namespace hlsl;
 
 class DxilReduceMSAAToSingleSample : public ModulePass {
@@ -87,7 +87,7 @@ bool DxilReduceMSAAToSingleSample::runOnModule(Module &M) {
 
 char DxilReduceMSAAToSingleSample::ID = 0;
 
-ModulePass *llvm::createDxilReduceMSAAToSingleSamplePass() {
+ModulePass *llvm37::createDxilReduceMSAAToSingleSamplePass() {
   return new DxilReduceMSAAToSingleSample();
 }
 

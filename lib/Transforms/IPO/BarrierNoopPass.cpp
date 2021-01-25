@@ -18,9 +18,9 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Pass.h"
-#include "llvm/Transforms/IPO.h"
-using namespace llvm;
+#include "llvm37/Pass.h"
+#include "llvm37/Transforms/IPO.h"
+using namespace llvm37;
 
 namespace {
 /// \brief A nonce module pass used to place a barrier in a pass manager.
@@ -40,7 +40,7 @@ public:
 };
 }
 
-ModulePass *llvm::createBarrierNoopPass() { return new BarrierNoop(); }
+ModulePass *llvm37::createBarrierNoopPass() { return new BarrierNoop(); }
 
 char BarrierNoop::ID = 0;
 INITIALIZE_PASS(BarrierNoop, "barrier", "A No-Op Barrier Pass",

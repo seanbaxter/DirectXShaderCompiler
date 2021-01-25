@@ -225,7 +225,7 @@ The source manager block also contains information about all of the headers
 that were included when building the AST file.  This includes information about
 the controlling macro for the header (e.g., when the preprocessor identified
 that the contents of the header dependent on a macro like
-``LLVM_CLANG_SOURCEMANAGER_H``).
+``LLVM37_CLANG_SOURCEMANAGER_H``).
 
 .. _pchinternals-preprocessor:
 

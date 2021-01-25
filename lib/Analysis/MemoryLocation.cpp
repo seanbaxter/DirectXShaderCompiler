@@ -7,16 +7,16 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Analysis/MemoryLocation.h"
-#include "llvm/Analysis/TargetLibraryInfo.h"
-#include "llvm/IR/BasicBlock.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/Type.h"
-using namespace llvm;
+#include "llvm37/Analysis/MemoryLocation.h"
+#include "llvm37/Analysis/TargetLibraryInfo.h"
+#include "llvm37/IR/BasicBlock.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/Type.h"
+using namespace llvm37;
 
 MemoryLocation MemoryLocation::get(const LoadInst *LI) {
   AAMDNodes AATags;

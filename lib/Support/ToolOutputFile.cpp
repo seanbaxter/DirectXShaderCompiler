@@ -11,10 +11,10 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Support/ToolOutputFile.h"
-#include "llvm/Support/FileSystem.h"
-#include "llvm/Support/Signals.h"
-using namespace llvm;
+#include "llvm37/Support/ToolOutputFile.h"
+#include "llvm37/Support/FileSystem.h"
+#include "llvm37/Support/Signals.h"
+using namespace llvm37;
 
 tool_output_file::CleanupInstaller::CleanupInstaller(StringRef Filename)
     : Filename(Filename), Keep(false) {

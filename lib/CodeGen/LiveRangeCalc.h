@@ -19,14 +19,14 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_LIB_CODEGEN_LIVERANGECALC_H
-#define LLVM_LIB_CODEGEN_LIVERANGECALC_H
+#ifndef LLVM37_LIB_CODEGEN_LIVERANGECALC_H
+#define LLVM37_LIB_CODEGEN_LIVERANGECALC_H
 
-#include "llvm/ADT/BitVector.h"
-#include "llvm/ADT/IndexedMap.h"
-#include "llvm/CodeGen/LiveInterval.h"
+#include "llvm37/ADT/BitVector.h"
+#include "llvm37/ADT/IndexedMap.h"
+#include "llvm37/CodeGen/LiveInterval.h"
 
-namespace llvm {
+namespace llvm37 {
 
 /// Forward declarations for MachineDominators.h:
 class MachineDominatorTree;
@@ -238,6 +238,6 @@ public:
   void calculateValues();
 };
 
-} // end namespace llvm
+} // end namespace llvm37
 
 #endif

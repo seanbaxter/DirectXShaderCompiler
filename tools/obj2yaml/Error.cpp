@@ -8,19 +8,19 @@
 //===----------------------------------------------------------------------===//
 
 #include "Error.h"
-#include "llvm/Support/ErrorHandling.h"
+#include "llvm37/Support/ErrorHandling.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 namespace {
 class _obj2yaml_error_category : public std::error_category {
 public:
-  const char *name() const LLVM_NOEXCEPT override;
+  const char *name() const LLVM37_NOEXCEPT override;
   std::string message(int ev) const override;
 };
 } // namespace
 
-const char *_obj2yaml_error_category::name() const LLVM_NOEXCEPT {
+const char *_obj2yaml_error_category::name() const LLVM37_NOEXCEPT {
   return "obj2yaml";
 }
 
@@ -39,9 +39,9 @@ std::string _obj2yaml_error_category::message(int ev) const {
                    "defined.");
 }
 
-namespace llvm {
+namespace llvm37 {
   const std::error_category &obj2yaml_category() {
   static _obj2yaml_error_category o;
   return o;
 }
-} // namespace llvm
+} // namespace llvm37

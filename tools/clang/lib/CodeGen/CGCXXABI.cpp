@@ -63,84 +63,84 @@ bool CGCXXABI::canCopyArgument(const CXXRecordDecl *RD) const {
   return !(CopyDeleted && MoveDeleted);
 }
 
-llvm::Constant *CGCXXABI::GetBogusMemberPointer(QualType T) {
-  return llvm::Constant::getNullValue(CGM.getTypes().ConvertType(T));
+llvm37::Constant *CGCXXABI::GetBogusMemberPointer(QualType T) {
+  return llvm37::Constant::getNullValue(CGM.getTypes().ConvertType(T));
 }
 
-llvm::Type *
+llvm37::Type *
 CGCXXABI::ConvertMemberPointerType(const MemberPointerType *MPT) {
   return CGM.getTypes().ConvertType(CGM.getContext().getPointerDiffType());
 }
 
-llvm::Value *CGCXXABI::EmitLoadOfMemberFunctionPointer(
-    CodeGenFunction &CGF, const Expr *E, llvm::Value *&This,
-    llvm::Value *MemPtr, const MemberPointerType *MPT) {
+llvm37::Value *CGCXXABI::EmitLoadOfMemberFunctionPointer(
+    CodeGenFunction &CGF, const Expr *E, llvm37::Value *&This,
+    llvm37::Value *MemPtr, const MemberPointerType *MPT) {
   ErrorUnsupportedABI(CGF, "calls through member pointers");
 
   const FunctionProtoType *FPT = 
     MPT->getPointeeType()->getAs<FunctionProtoType>();
   const CXXRecordDecl *RD = 
     cast<CXXRecordDecl>(MPT->getClass()->getAs<RecordType>()->getDecl());
-  llvm::FunctionType *FTy = CGM.getTypes().GetFunctionType(
+  llvm37::FunctionType *FTy = CGM.getTypes().GetFunctionType(
                               CGM.getTypes().arrangeCXXMethodType(RD, FPT));
-  return llvm::Constant::getNullValue(FTy->getPointerTo());
+  return llvm37::Constant::getNullValue(FTy->getPointerTo());
 }
 
-llvm::Value *
+llvm37::Value *
 CGCXXABI::EmitMemberDataPointerAddress(CodeGenFunction &CGF, const Expr *E,
-                                       llvm::Value *Base, llvm::Value *MemPtr,
+                                       llvm37::Value *Base, llvm37::Value *MemPtr,
                                        const MemberPointerType *MPT) {
   ErrorUnsupportedABI(CGF, "loads of member pointers");
-  llvm::Type *Ty = CGF.ConvertType(MPT->getPointeeType())->getPointerTo();
-  return llvm::Constant::getNullValue(Ty);
+  llvm37::Type *Ty = CGF.ConvertType(MPT->getPointeeType())->getPointerTo();
+  return llvm37::Constant::getNullValue(Ty);
 }
 
-llvm::Value *CGCXXABI::EmitMemberPointerConversion(CodeGenFunction &CGF,
+llvm37::Value *CGCXXABI::EmitMemberPointerConversion(CodeGenFunction &CGF,
                                                    const CastExpr *E,
-                                                   llvm::Value *Src) {
+                                                   llvm37::Value *Src) {
   ErrorUnsupportedABI(CGF, "member function pointer conversions");
   return GetBogusMemberPointer(E->getType());
 }
 
-llvm::Constant *CGCXXABI::EmitMemberPointerConversion(const CastExpr *E,
-                                                      llvm::Constant *Src) {
+llvm37::Constant *CGCXXABI::EmitMemberPointerConversion(const CastExpr *E,
+                                                      llvm37::Constant *Src) {
   return GetBogusMemberPointer(E->getType());
 }
 
-llvm::Value *
+llvm37::Value *
 CGCXXABI::EmitMemberPointerComparison(CodeGenFunction &CGF,
-                                      llvm::Value *L,
-                                      llvm::Value *R,
+                                      llvm37::Value *L,
+                                      llvm37::Value *R,
                                       const MemberPointerType *MPT,
                                       bool Inequality) {
   ErrorUnsupportedABI(CGF, "member function pointer comparison");
   return CGF.Builder.getFalse();
 }
 
-llvm::Value *
+llvm37::Value *
 CGCXXABI::EmitMemberPointerIsNotNull(CodeGenFunction &CGF,
-                                     llvm::Value *MemPtr,
+                                     llvm37::Value *MemPtr,
                                      const MemberPointerType *MPT) {
   ErrorUnsupportedABI(CGF, "member function pointer null testing");
   return CGF.Builder.getFalse();
 }
 
-llvm::Constant *
+llvm37::Constant *
 CGCXXABI::EmitNullMemberPointer(const MemberPointerType *MPT) {
   return GetBogusMemberPointer(QualType(MPT, 0));
 }
 
-llvm::Constant *CGCXXABI::EmitMemberFunctionPointer(const CXXMethodDecl *MD) {
+llvm37::Constant *CGCXXABI::EmitMemberFunctionPointer(const CXXMethodDecl *MD) {
   return GetBogusMemberPointer(CGM.getContext().getMemberPointerType(
       MD->getType(), MD->getParent()->getTypeForDecl()));
 }
 
-llvm::Constant *CGCXXABI::EmitMemberDataPointer(const MemberPointerType *MPT,
+llvm37::Constant *CGCXXABI::EmitMemberDataPointer(const MemberPointerType *MPT,
                                                 CharUnits offset) {
   return GetBogusMemberPointer(QualType(MPT, 0));
 }
 
-llvm::Constant *CGCXXABI::EmitMemberPointer(const APValue &MP, QualType MPT) {
+llvm37::Constant *CGCXXABI::EmitMemberPointer(const APValue &MP, QualType MPT) {
   return GetBogusMemberPointer(MPT);
 }
 
@@ -190,9 +190,9 @@ CharUnits CGCXXABI::getArrayCookieSizeImpl(QualType elementType) {
   return CharUnits::Zero();
 }
 
-llvm::Value *CGCXXABI::InitializeArrayCookie(CodeGenFunction &CGF,
-                                             llvm::Value *NewPtr,
-                                             llvm::Value *NumElements,
+llvm37::Value *CGCXXABI::InitializeArrayCookie(CodeGenFunction &CGF,
+                                             llvm37::Value *NewPtr,
+                                             llvm37::Value *NumElements,
                                              const CXXNewExpr *expr,
                                              QualType ElementType) {
   // Should never be called.
@@ -219,13 +219,13 @@ bool CGCXXABI::requiresArrayCookie(const CXXNewExpr *expr) {
   return expr->getAllocatedType().isDestructedType();
 }
 
-void CGCXXABI::ReadArrayCookie(CodeGenFunction &CGF, llvm::Value *ptr,
+void CGCXXABI::ReadArrayCookie(CodeGenFunction &CGF, llvm37::Value *ptr,
                                const CXXDeleteExpr *expr, QualType eltTy,
-                               llvm::Value *&numElements,
-                               llvm::Value *&allocPtr, CharUnits &cookieSize) {
+                               llvm37::Value *&numElements,
+                               llvm37::Value *&allocPtr, CharUnits &cookieSize) {
   // Derive a char* in the same address space as the pointer.
   unsigned AS = ptr->getType()->getPointerAddressSpace();
-  llvm::Type *charPtrTy = CGF.Int8Ty->getPointerTo(AS);
+  llvm37::Type *charPtrTy = CGF.Int8Ty->getPointerTo(AS);
   ptr = CGF.Builder.CreateBitCast(ptr, charPtrTy);
 
   // If we don't need an array cookie, bail out early.
@@ -242,17 +242,17 @@ void CGCXXABI::ReadArrayCookie(CodeGenFunction &CGF, llvm::Value *ptr,
   numElements = readArrayCookieImpl(CGF, allocPtr, cookieSize);
 }
 
-llvm::Value *CGCXXABI::readArrayCookieImpl(CodeGenFunction &CGF,
-                                           llvm::Value *ptr,
+llvm37::Value *CGCXXABI::readArrayCookieImpl(CodeGenFunction &CGF,
+                                           llvm37::Value *ptr,
                                            CharUnits cookieSize) {
   ErrorUnsupportedABI(CGF, "reading a new[] cookie");
-  return llvm::ConstantInt::get(CGF.SizeTy, 0);
+  return llvm37::ConstantInt::get(CGF.SizeTy, 0);
 }
 
 /// Returns the adjustment, in bytes, required for the given
 /// member-pointer operation.  Returns null if no adjustment is
 /// required.
-llvm::Constant *CGCXXABI::getMemberPointerAdjustment(const CastExpr *E) {
+llvm37::Constant *CGCXXABI::getMemberPointerAdjustment(const CastExpr *E) {
   assert(E->getCastKind() == CK_DerivedToBaseMemberPointer ||
          E->getCastKind() == CK_BaseToDerivedMemberPointer);
 
@@ -292,7 +292,7 @@ CharUnits CGCXXABI::getMemberPointerPathAdjustment(const APValue &MP) {
   return ThisAdjustment;
 }
 
-llvm::BasicBlock *
+llvm37::BasicBlock *
 CGCXXABI::EmitCtorCompleteObjectHandler(CodeGenFunction &CGF,
                                         const CXXRecordDecl *RD) {
   if (CGM.getTarget().getCXXABI().hasConstructorVariants())
@@ -306,9 +306,9 @@ bool CGCXXABI::NeedsVTTParameter(GlobalDecl GD) {
   return false;
 }
 
-llvm::CallInst *
+llvm37::CallInst *
 CGCXXABI::emitTerminateForUnexpectedException(CodeGenFunction &CGF,
-                                              llvm::Value *Exn) {
+                                              llvm37::Value *Exn) {
   // Just call std::terminate and ignore the violating exception.
   return CGF.EmitNounwindRuntimeCall(CGF.CGM.getTerminateFn());
 }

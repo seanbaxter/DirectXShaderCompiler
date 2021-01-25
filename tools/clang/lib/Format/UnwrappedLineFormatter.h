@@ -13,8 +13,8 @@
 ///
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_LIB_FORMAT_UNWRAPPEDLINEFORMATTER_H
-#define LLVM_CLANG_LIB_FORMAT_UNWRAPPEDLINEFORMATTER_H
+#ifndef LLVM37_CLANG_LIB_FORMAT_UNWRAPPEDLINEFORMATTER_H
+#define LLVM37_CLANG_LIB_FORMAT_UNWRAPPEDLINEFORMATTER_H
 
 #include "ContinuationIndenter.h"
 #include "clang/Format/Format.h"
@@ -70,4 +70,4 @@ private:
 } // end namespace format
 } // end namespace clang
 
-#endif // LLVM_CLANG_LIB_FORMAT_UNWRAPPEDLINEFORMATTER_H
+#endif // LLVM37_CLANG_LIB_FORMAT_UNWRAPPEDLINEFORMATTER_H

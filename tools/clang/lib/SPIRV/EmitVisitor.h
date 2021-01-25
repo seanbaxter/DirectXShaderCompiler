@@ -5,14 +5,14 @@
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //===----------------------------------------------------------------------===//
-#ifndef LLVM_CLANG_SPIRV_EMITVISITOR_H
-#define LLVM_CLANG_SPIRV_EMITVISITOR_H
+#ifndef LLVM37_CLANG_SPIRV_EMITVISITOR_H
+#define LLVM37_CLANG_SPIRV_EMITVISITOR_H
 
 #include "clang/SPIRV/FeatureManager.h"
 #include "clang/SPIRV/SpirvContext.h"
 #include "clang/SPIRV/SpirvVisitor.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/StringMap.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/StringMap.h"
 
 #include <functional>
 
@@ -26,8 +26,8 @@ class SpirvType;
 class EmitTypeHandler {
 public:
   struct DecorationInfo {
-    DecorationInfo(spv::Decoration decor, llvm::ArrayRef<uint32_t> params = {},
-                   llvm::Optional<uint32_t> index = llvm::None)
+    DecorationInfo(spv::Decoration decor, llvm37::ArrayRef<uint32_t> params = {},
+                   llvm37::Optional<uint32_t> index = llvm37::None)
         : decoration(decor), decorationParams(params.begin(), params.end()),
           memberIndex(index) {}
 
@@ -40,8 +40,8 @@ public:
     }
 
     spv::Decoration decoration;
-    llvm::SmallVector<uint32_t, 4> decorationParams;
-    llvm::Optional<uint32_t> memberIndex;
+    llvm37::SmallVector<uint32_t, 4> decorationParams;
+    llvm37::Optional<uint32_t> memberIndex;
   };
 
 public:
@@ -81,8 +81,8 @@ public:
   // targetting the given type. Uses the given decoration kind and its
   // parameters.
   void emitDecoration(uint32_t typeResultId, spv::Decoration,
-                      llvm::ArrayRef<uint32_t> decorationParams,
-                      llvm::Optional<uint32_t> memberIndex = llvm::None);
+                      llvm37::ArrayRef<uint32_t> decorationParams,
+                      llvm37::Optional<uint32_t> memberIndex = llvm37::None);
 
   uint32_t getOrCreateConstant(SpirvConstant *);
 
@@ -101,7 +101,7 @@ public:
   // it will be used. Otherwise a new result-id will be allocated for the
   // instruction.
   uint32_t
-  getOrCreateConstantInt(llvm::APInt value, const SpirvType *type,
+  getOrCreateConstantInt(llvm37::APInt value, const SpirvType *type,
                          bool isSpecConst,
                          SpirvInstruction *constantInstruction = nullptr);
   uint32_t getOrCreateConstantFloat(SpirvConstantFloat *);
@@ -120,8 +120,8 @@ private:
 
   // Emits an OpName (if memberIndex is not provided) or OpMemberName (if
   // memberIndex is provided) for the given target result-id.
-  void emitNameForType(llvm::StringRef name, uint32_t targetTypeId,
-                       llvm::Optional<uint32_t> memberIndex = llvm::None);
+  void emitNameForType(llvm37::StringRef name, uint32_t targetTypeId,
+                       llvm37::Optional<uint32_t> memberIndex = llvm37::None);
 
   // There is no guarantee that an instruction or a function or a basic block
   // has been assigned result-id. This method returns the result-id for the
@@ -158,17 +158,17 @@ private:
   // The array type requires the result-id of an OpConstant for its length. In
   // order to avoid duplicate OpConstant instructions, we keep a map of constant
   // uint value to the result-id of the OpConstant for that value.
-  llvm::DenseMap<std::pair<uint64_t, const SpirvType *>, uint32_t>
+  llvm37::DenseMap<std::pair<uint64_t, const SpirvType *>, uint32_t>
       emittedConstantInts;
-  llvm::DenseMap<std::pair<uint64_t, const SpirvType *>, uint32_t>
+  llvm37::DenseMap<std::pair<uint64_t, const SpirvType *>, uint32_t>
       emittedConstantFloats;
-  llvm::SmallVector<SpirvConstantComposite *, 8> emittedConstantComposites;
-  llvm::SmallVector<SpirvConstantNull *, 8> emittedConstantNulls;
+  llvm37::SmallVector<SpirvConstantComposite *, 8> emittedConstantComposites;
+  llvm37::SmallVector<SpirvConstantNull *, 8> emittedConstantNulls;
   SpirvConstantBoolean *emittedConstantBools[2];
 
   // emittedTypes is a map that caches the result-id of types in order to avoid
   // emitting an identical type multiple times.
-  llvm::DenseMap<const SpirvType *, uint32_t> emittedTypes;
+  llvm37::DenseMap<const SpirvType *, uint32_t> emittedTypes;
 };
 
 /// \breif The visitor class that emits the SPIR-V words from the in-memory
@@ -310,7 +310,7 @@ private:
 
   /// If we already created OpString for str, just return the id of the created
   /// one. Otherwise, create it, keep it in stringIdMap, and return its id.
-  uint32_t getOrCreateOpStringId(llvm::StringRef str);
+  uint32_t getOrCreateOpStringId(llvm37::StringRef str);
 
   // Emits an OpLine instruction for the given operation into the given binary
   // section.
@@ -331,10 +331,10 @@ private:
   void finalizeInstruction(std::vector<uint32_t> *section);
 
   // Encodes the given string into the current instruction that is being built.
-  void encodeString(llvm::StringRef value);
+  void encodeString(llvm37::StringRef value);
 
   // Emits an OpName instruction into the debugBinary for the given target.
-  void emitDebugNameForInstruction(uint32_t resultId, llvm::StringRef name);
+  void emitDebugNameForInstruction(uint32_t resultId, llvm37::StringRef name);
 
   // TODO: Add a method for adding OpMemberName instructions for struct members
   // using the type information.
@@ -381,7 +381,7 @@ private:
   // All other instructions
   std::vector<uint32_t> mainBinary;
   // String literals to SpirvString objects
-  llvm::StringMap<uint32_t> stringIdMap;
+  llvm37::StringMap<uint32_t> stringIdMap;
   // Main file information for debugging that will be used by OpLine.
   uint32_t debugMainFileId;
   // One HLSL source line may result in several SPIR-V instructions. In order to
@@ -397,7 +397,7 @@ private:
   // True if currently it enters an entry function wrapper.
   bool inEntryFunctionWrapper;
   // Set of files that we already dumped their source code in OpSource.
-  llvm::DenseSet<uint32_t> dumpedFiles;
+  llvm37::DenseSet<uint32_t> dumpedFiles;
   uint32_t hlslVersion;
   // Vector to contain SpirvInstruction objects created by this class. The
   // destructor of this class will release them.
@@ -407,4 +407,4 @@ private:
 } // namespace spirv
 } // namespace clang
 
-#endif // LLVM_CLANG_SPIRV_EMITVISITOR_H
+#endif // LLVM37_CLANG_SPIRV_EMITVISITOR_H

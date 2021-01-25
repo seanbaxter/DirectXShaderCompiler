@@ -11,23 +11,23 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Transforms/Scalar/LowerExpectIntrinsic.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/IR/BasicBlock.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/Intrinsics.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/MDBuilder.h"
-#include "llvm/IR/Metadata.h"
-#include "llvm/Pass.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Transforms/Scalar.h"
+#include "llvm37/Transforms/Scalar/LowerExpectIntrinsic.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/IR/BasicBlock.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/Intrinsics.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/MDBuilder.h"
+#include "llvm37/IR/Metadata.h"
+#include "llvm37/Pass.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Transforms/Scalar.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "lower-expect-intrinsic"
 
@@ -197,6 +197,6 @@ char LowerExpectIntrinsic::ID = 0;
 INITIALIZE_PASS(LowerExpectIntrinsic, "lower-expect",
                 "Lower 'expect' Intrinsics", false, false)
 
-FunctionPass *llvm::createLowerExpectIntrinsicPass() {
+FunctionPass *llvm37::createLowerExpectIntrinsicPass() {
   return new LowerExpectIntrinsic();
 }

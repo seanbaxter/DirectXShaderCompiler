@@ -11,17 +11,17 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_FRONTEND_UTILS_H
-#define LLVM_CLANG_FRONTEND_UTILS_H
+#ifndef LLVM37_CLANG_FRONTEND_UTILS_H
+#define LLVM37_CLANG_FRONTEND_UTILS_H
 
 #include "clang/Basic/Diagnostic.h"
 #include "clang/Basic/VirtualFileSystem.h"
-#include "llvm/ADT/IntrusiveRefCntPtr.h"
-#include "llvm/ADT/StringRef.h"
-#include "llvm/ADT/StringSet.h"
-#include "llvm/Option/OptSpecifier.h"
+#include "llvm37/ADT/IntrusiveRefCntPtr.h"
+#include "llvm37/ADT/StringRef.h"
+#include "llvm37/ADT/StringSet.h"
+#include "llvm37/Option/OptSpecifier.h"
 
-namespace llvm {
+namespace llvm37 {
 class raw_fd_ostream;
 class Triple;
 
@@ -58,7 +58,7 @@ class FrontendOptions;
 void ApplyHeaderSearchOptions(HeaderSearch &HS,
                               const HeaderSearchOptions &HSOpts,
                               const LangOptions &Lang,
-                              const llvm::Triple &triple);
+                              const llvm37::Triple &triple);
 
 /// InitializePreprocessor - Initialize the preprocessor getting it and the
 /// environment ready to process a single file.
@@ -79,7 +79,7 @@ class DependencyCollector {
 public:
   void attachToPreprocessor(Preprocessor &PP);
   void attachToASTReader(ASTReader &R);
-  llvm::ArrayRef<std::string> getDependencies() const { return Dependencies; }
+  llvm37::ArrayRef<std::string> getDependencies() const { return Dependencies; }
 
   /// Called when a new file is seen. Return true if \p Filename should be added
   /// to the list of dependencies.
@@ -99,7 +99,7 @@ public: // implementation detail
   void maybeAddDependency(StringRef Filename, bool FromModule, bool IsSystem,
                           bool IsModuleFile, bool IsMissing);
 private:
-  llvm::StringSet<> Seen;
+  llvm37::StringSet<> Seen;
   std::vector<std::string> Dependencies;
 };
 
@@ -121,7 +121,7 @@ public:
 class ModuleDependencyCollector {
   std::string DestDir;
   bool HasErrors;
-  llvm::StringSet<> Seen;
+  llvm37::StringSet<> Seen;
   vfs::YAMLVFSWriter VFSWriter;
 
 public:
@@ -181,22 +181,22 @@ createInvocationFromCommandLine(ArrayRef<const char *> Args,
 
 /// Return the value of the last argument as an integer, or a default. If Diags
 /// is non-null, emits an error if the argument is given, but non-integral.
-int getLastArgIntValue(const llvm::opt::ArgList &Args,
-                       llvm::opt::OptSpecifier Id, int Default,
+int getLastArgIntValue(const llvm37::opt::ArgList &Args,
+                       llvm37::opt::OptSpecifier Id, int Default,
                        DiagnosticsEngine *Diags = nullptr);
 
-inline int getLastArgIntValue(const llvm::opt::ArgList &Args,
-                              llvm::opt::OptSpecifier Id, int Default,
+inline int getLastArgIntValue(const llvm37::opt::ArgList &Args,
+                              llvm37::opt::OptSpecifier Id, int Default,
                               DiagnosticsEngine &Diags) {
   return getLastArgIntValue(Args, Id, Default, &Diags);
 }
 
-uint64_t getLastArgUInt64Value(const llvm::opt::ArgList &Args,
-                               llvm::opt::OptSpecifier Id, uint64_t Default,
+uint64_t getLastArgUInt64Value(const llvm37::opt::ArgList &Args,
+                               llvm37::opt::OptSpecifier Id, uint64_t Default,
                                DiagnosticsEngine *Diags = nullptr);
 
-inline uint64_t getLastArgUInt64Value(const llvm::opt::ArgList &Args,
-                                      llvm::opt::OptSpecifier Id,
+inline uint64_t getLastArgUInt64Value(const llvm37::opt::ArgList &Args,
+                                      llvm37::opt::OptSpecifier Id,
                                       uint64_t Default,
                                       DiagnosticsEngine &Diags) {
   return getLastArgUInt64Value(Args, Id, Default, &Diags);

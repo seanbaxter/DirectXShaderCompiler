@@ -21,21 +21,21 @@
 #include "dxc/DXIL/DxilShaderFlags.h"
 #include "dxc/DXIL/DxilSubobject.h"
 
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Metadata.h"
-#include "llvm/IR/Module.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/ADT/DenseSet.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/Metadata.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/ADT/DenseSet.h"
 #include <array>
 #include <algorithm>
 
 #include "dxc/Support/WinIncludes.h"
 #include "dxc/Support/WinFunctions.h"
 
-using namespace llvm;
+using namespace llvm37;
 using std::string;
 using std::vector;
 using std::unique_ptr;
@@ -383,8 +383,8 @@ void DxilMDHelper::EmitRootSignature(
     return;
   }
 
-  Constant *V = llvm::ConstantDataArray::get(
-      m_Ctx, llvm::ArrayRef<uint8_t>(SerializedRootSignature.data(),
+  Constant *V = llvm37::ConstantDataArray::get(
+      m_Ctx, llvm37::ArrayRef<uint8_t>(SerializedRootSignature.data(),
                                      SerializedRootSignature.size()));
 
   NamedMDNode *pRootSignatureNamedMD = m_pModule->getNamedMetadata(kDxilRootSignatureMDName);
@@ -551,14 +551,14 @@ MDTuple *DxilMDHelper::EmitDxilResourceTuple(MDTuple *pSRVs, MDTuple *pUAVs,
   return pTupleMD;
 }
 
-void DxilMDHelper::EmitDxilResources(llvm::MDTuple *pDxilResourceTuple) {
+void DxilMDHelper::EmitDxilResources(llvm37::MDTuple *pDxilResourceTuple) {
   NamedMDNode *pResourcesNamedMD = m_pModule->getNamedMetadata(kDxilResourcesMDName);
   IFTBOOL(pResourcesNamedMD == nullptr, DXC_E_INCORRECT_DXIL_METADATA);
   pResourcesNamedMD = m_pModule->getOrInsertNamedMetadata(kDxilResourcesMDName);
   pResourcesNamedMD->addOperand(pDxilResourceTuple);
 }
 
-void DxilMDHelper::UpdateDxilResources(llvm::MDTuple *pDxilResourceTuple) {
+void DxilMDHelper::UpdateDxilResources(llvm37::MDTuple *pDxilResourceTuple) {
   NamedMDNode *pResourcesNamedMD =
       m_pModule->getNamedMetadata(kDxilResourcesMDName);
   if (!pResourcesNamedMD) {
@@ -786,7 +786,7 @@ void DxilMDHelper::EmitDxilTypeSystem(DxilTypeSystem &TypeSystem, vector<GlobalV
   }
 }
 
-void DxilMDHelper::LoadDxilTypeSystemNode(const llvm::MDTuple &MDT,
+void DxilMDHelper::LoadDxilTypeSystemNode(const llvm37::MDTuple &MDT,
                                           DxilTypeSystem &TypeSystem) {
 
   unsigned Tag = ConstMDToUint32(MDT.getOperand(0));
@@ -838,7 +838,7 @@ Metadata *DxilMDHelper::EmitDxilTemplateArgAnnotation(const DxilTemplateArgAnnot
   }
   return MDNode::get(m_Ctx, MDVals);
 }
-void DxilMDHelper::LoadDxilTemplateArgAnnotation(const llvm::MDOperand &MDO, DxilTemplateArgAnnotation &annotation) {
+void DxilMDHelper::LoadDxilTemplateArgAnnotation(const llvm37::MDOperand &MDO, DxilTemplateArgAnnotation &annotation) {
   IFTBOOL(MDO.get() != nullptr, DXC_E_INCORRECT_DXIL_METADATA);
   const MDTuple *pTupleMD = dyn_cast<MDTuple>(MDO.get());
   IFTBOOL(pTupleMD != nullptr, DXC_E_INCORRECT_DXIL_METADATA);
@@ -946,7 +946,7 @@ void DxilMDHelper::LoadDxilFunctionAnnotation(const MDOperand &MDO,
   LoadDxilParamAnnotations(MDO, FA);
 }
 
-llvm::Metadata *
+llvm37::Metadata *
 DxilMDHelper::EmitDxilParamAnnotations(const DxilFunctionAnnotation &FA) {
   vector<Metadata *> MDParamAnnotations(FA.GetNumParameters() + 1);
   MDParamAnnotations[0] = EmitDxilParamAnnotation(FA.GetRetTypeAnnotation());
@@ -957,7 +957,7 @@ DxilMDHelper::EmitDxilParamAnnotations(const DxilFunctionAnnotation &FA) {
   return MDNode::get(m_Ctx, MDParamAnnotations);
 }
 
-void DxilMDHelper::LoadDxilParamAnnotations(const llvm::MDOperand &MDO,
+void DxilMDHelper::LoadDxilParamAnnotations(const llvm37::MDOperand &MDO,
                                             DxilFunctionAnnotation &FA) {
   IFTBOOL(MDO.get() != nullptr, DXC_E_INCORRECT_DXIL_METADATA);
   const MDTuple *pTupleMD = dyn_cast<MDTuple>(MDO.get());
@@ -1532,7 +1532,7 @@ DxilMDHelper::EmitDxilFunctionProps(const hlsl::DxilFunctionProps *props,
   default:
     break;
   }
-  return MDTuple::get(m_Ctx, ArrayRef<llvm::Metadata *>(MDVals, valIdx));
+  return MDTuple::get(m_Ctx, ArrayRef<llvm37::Metadata *>(MDVals, valIdx));
 }
 
 void DxilMDHelper::EmitDxilViewIdState(std::vector<unsigned> &SerializedState) {
@@ -1576,7 +1576,7 @@ void DxilMDHelper::LoadDxilViewIdState(std::vector<unsigned> &SerializedState) {
   memcpy(SerializedState.data(), Ptr, size * sizeof(unsigned));
 }
 
-MDNode *DxilMDHelper::EmitControlFlowHints(llvm::LLVMContext &Ctx, std::vector<DXIL::ControlFlowHint> &hints) {
+MDNode *DxilMDHelper::EmitControlFlowHints(llvm37::LLVMContext &Ctx, std::vector<DXIL::ControlFlowHint> &hints) {
   SmallVector<Metadata *, 4> Args;
   // Reserve operand 0 for self reference.
   auto TempNode = MDNode::getTemporary(Ctx, None);
@@ -1611,7 +1611,7 @@ unsigned DxilMDHelper::GetControlFlowHintMask(const Instruction *I) {
 }
 
 bool DxilMDHelper::HasControlFlowHintToPreventFlatten(
-    const llvm::Instruction *I) {
+    const llvm37::Instruction *I) {
   unsigned mask = GetControlFlowHintMask(I);
   const unsigned BranchMask =
       1 << (unsigned)(DXIL::ControlFlowHint::Branch) |
@@ -1700,7 +1700,7 @@ Metadata *DxilMDHelper::EmitSubobject(const DxilSubobject &obj) {
     break;
   }
   case DXIL::SubobjectKind::HitGroup: {
-    llvm::StringRef Intersection, AnyHit, ClosestHit;
+    llvm37::StringRef Intersection, AnyHit, ClosestHit;
     DXIL::HitGroupType hgType;
     IFTBOOL(obj.GetHitGroup(hgType, Intersection, AnyHit, ClosestHit),
       DXC_E_INCORRECT_DXIL_METADATA);
@@ -1726,7 +1726,7 @@ Metadata *DxilMDHelper::EmitSubobject(const DxilSubobject &obj) {
   }
   return MDNode::get(m_Ctx, Args);
 }
-void DxilMDHelper::LoadSubobject(const llvm::MDNode &MD, DxilSubobjects &Subobjects) {
+void DxilMDHelper::LoadSubobject(const llvm37::MDNode &MD, DxilSubobjects &Subobjects) {
   IFTBOOL(MD.getNumOperands() >= 2, DXC_E_INCORRECT_DXIL_METADATA);
   unsigned i = 0;
   StringRef name(StringMDToStringRef(MD.getOperand(i++)));
@@ -1842,7 +1842,7 @@ void DxilMDHelper::LoadDxilSampler(const MDOperand &MDO, DxilSampler &S) {
   m_bExtraMetadata |= m_ExtraPropertyHelper->m_bExtraMetadata;
 }
 
-const MDOperand &DxilMDHelper::GetResourceClass(llvm::MDNode *MD,
+const MDOperand &DxilMDHelper::GetResourceClass(llvm37::MDNode *MD,
                                                 DXIL::ResourceClass &RC) {
   IFTBOOL(MD->getNumOperands() >=
               DxilMDHelper::kHLDxilResourceAttributeNumFields,
@@ -1852,7 +1852,7 @@ const MDOperand &DxilMDHelper::GetResourceClass(llvm::MDNode *MD,
   return MD->getOperand(DxilMDHelper::kHLDxilResourceAttributeMeta);
 }
 
-void DxilMDHelper::LoadDxilResourceBaseFromMDNode(llvm::MDNode *MD,
+void DxilMDHelper::LoadDxilResourceBaseFromMDNode(llvm37::MDNode *MD,
                                                   DxilResourceBase &R) {
   DxilResource::Class RC = DxilResource::Class::Invalid;
   const MDOperand &Meta = GetResourceClass(MD, RC);
@@ -1883,7 +1883,7 @@ void DxilMDHelper::LoadDxilResourceBaseFromMDNode(llvm::MDNode *MD,
   }
 }
 
-void DxilMDHelper::LoadDxilResourceFromMDNode(llvm::MDNode *MD,
+void DxilMDHelper::LoadDxilResourceFromMDNode(llvm37::MDNode *MD,
                                               DxilResource &R) {
   DxilResource::Class RC = DxilResource::Class::Invalid;
   const MDOperand &Meta = GetResourceClass(MD, RC);
@@ -1900,7 +1900,7 @@ void DxilMDHelper::LoadDxilResourceFromMDNode(llvm::MDNode *MD,
   }
 }
 
-void DxilMDHelper::LoadDxilSamplerFromMDNode(llvm::MDNode *MD, DxilSampler &S) {
+void DxilMDHelper::LoadDxilSamplerFromMDNode(llvm37::MDNode *MD, DxilSampler &S) {
   DxilResource::Class RC = DxilResource::Class::Invalid;
   const MDOperand &Meta = GetResourceClass(MD, RC);
 
@@ -2363,7 +2363,7 @@ void DxilExtraPropertyHelper::LoadSignatureElementProperties(const MDOperand &MD
 //
 // Utilities.
 //
-bool DxilMDHelper::IsKnownNamedMetaData(const llvm::NamedMDNode &Node) {
+bool DxilMDHelper::IsKnownNamedMetaData(const llvm37::NamedMDNode &Node) {
   StringRef name = Node.getName();
   for (unsigned i = 0; i < DxilMDNames.size(); i++) {
     if (name == DxilMDNames[i]) {
@@ -2393,8 +2393,8 @@ void DxilMDHelper::GetKnownMetadataIDs(LLVMContext &Ctx, SmallVectorImpl<unsigne
     AddIdIfExists(hlsl::DxilMDHelper::kDxilPreciseAttributeMDName);
     AddIdIfExists(hlsl::DxilMDHelper::kDxilNonUniformAttributeMDName);
 }
-void DxilMDHelper::combineDxilMetadata(llvm::Instruction *K,
-                                       const llvm::Instruction *J) {
+void DxilMDHelper::combineDxilMetadata(llvm37::Instruction *K,
+                                       const llvm37::Instruction *J) {
   if (IsMarkedNonUniform(J))
     MarkNonUniform(K);
   if (IsMarkedPrecise(J))
@@ -2559,9 +2559,9 @@ void DxilMDHelper::MarkNonUniform(Instruction *I) {
   I->setMetadata(DxilMDHelper::kDxilNonUniformAttributeMDName, preciseNode);
 }
 
-bool DxilMDHelper::GetVariableDebugLayout(llvm::DbgDeclareInst *inst,
+bool DxilMDHelper::GetVariableDebugLayout(llvm37::DbgDeclareInst *inst,
     unsigned &StartOffsetInBits, std::vector<DxilDIArrayDim> &ArrayDims) {
-  llvm::MDTuple *Tuple = dyn_cast_or_null<MDTuple>(inst->getMetadata(DxilMDHelper::kDxilVariableDebugLayoutMDName));
+  llvm37::MDTuple *Tuple = dyn_cast_or_null<MDTuple>(inst->getMetadata(DxilMDHelper::kDxilVariableDebugLayoutMDName));
   if (Tuple == nullptr) return false;
 
   IFTBOOL(Tuple->getNumOperands() % 2 == 1, DXC_E_INCORRECT_DXIL_METADATA);
@@ -2578,7 +2578,7 @@ bool DxilMDHelper::GetVariableDebugLayout(llvm::DbgDeclareInst *inst,
   return true;
 }
 
-void DxilMDHelper::SetVariableDebugLayout(llvm::DbgDeclareInst *inst,
+void DxilMDHelper::SetVariableDebugLayout(llvm37::DbgDeclareInst *inst,
     unsigned StartOffsetInBits, const std::vector<DxilDIArrayDim> &ArrayDims) {
   LLVMContext &Ctx = inst->getContext();
 

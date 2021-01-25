@@ -98,9 +98,9 @@ SpirvContext::~SpirvContext() {
 }
 
 inline uint32_t log2ForBitwidth(uint32_t bitwidth) {
-  assert(bitwidth >= 8 && bitwidth <= 64 && llvm::isPowerOf2_32(bitwidth));
+  assert(bitwidth >= 8 && bitwidth <= 64 && llvm37::isPowerOf2_32(bitwidth));
 
-  return llvm::Log2_32(bitwidth);
+  return llvm37::Log2_32(bitwidth);
 }
 
 const IntegerType *SpirvContext::getSIntType(uint32_t bitwidth) {
@@ -162,7 +162,7 @@ const SpirvType *SpirvContext::getMatrixType(const SpirvType *elemType,
   // In the case of non-floating-point matrices, we represent them as array of
   // vectors.
   if (!isa<FloatType>(vecType->getElementType())) {
-    return getArrayType(elemType, count, llvm::None);
+    return getArrayType(elemType, count, llvm37::None);
   }
 
   auto foundVec = matTypes.find(vecType);
@@ -226,7 +226,7 @@ SpirvContext::getSampledImageType(QualType image) {
 
 const ArrayType *
 SpirvContext::getArrayType(const SpirvType *elemType, uint32_t elemCount,
-                           llvm::Optional<uint32_t> arrayStride) {
+                           llvm37::Optional<uint32_t> arrayStride) {
   ArrayType type(elemType, elemCount, arrayStride);
 
   auto found = arrayTypes.find(&type);
@@ -242,7 +242,7 @@ SpirvContext::getArrayType(const SpirvType *elemType, uint32_t elemCount,
 
 const RuntimeArrayType *
 SpirvContext::getRuntimeArrayType(const SpirvType *elemType,
-                                  llvm::Optional<uint32_t> arrayStride) {
+                                  llvm37::Optional<uint32_t> arrayStride) {
   RuntimeArrayType type(elemType, arrayStride);
   auto found = runtimeArrayTypes.find(&type);
   if (found != runtimeArrayTypes.end())
@@ -254,8 +254,8 @@ SpirvContext::getRuntimeArrayType(const SpirvType *elemType,
 }
 
 const StructType *
-SpirvContext::getStructType(llvm::ArrayRef<StructType::FieldInfo> fields,
-                            llvm::StringRef name, bool isReadOnly,
+SpirvContext::getStructType(llvm37::ArrayRef<StructType::FieldInfo> fields,
+                            llvm37::StringRef name, bool isReadOnly,
                             StructInterfaceType interfaceType) {
   // We are creating a temporary struct type here for querying whether the
   // same type was already created. It is a little bit costly, but we can
@@ -278,7 +278,7 @@ SpirvContext::getStructType(llvm::ArrayRef<StructType::FieldInfo> fields,
 }
 
 const HybridStructType *SpirvContext::getHybridStructType(
-    llvm::ArrayRef<HybridStructType::FieldInfo> fields, llvm::StringRef name,
+    llvm37::ArrayRef<HybridStructType::FieldInfo> fields, llvm37::StringRef name,
     bool isReadOnly, StructInterfaceType interfaceType) {
   const HybridStructType *result =
       new (this) HybridStructType(fields, name, isReadOnly, interfaceType);
@@ -310,7 +310,7 @@ const HybridPointerType *SpirvContext::getPointerType(QualType pointee,
 
 FunctionType *
 SpirvContext::getFunctionType(const SpirvType *ret,
-                              llvm::ArrayRef<const SpirvType *> param) {
+                              llvm37::ArrayRef<const SpirvType *> param) {
   // Create a temporary object for finding in the set.
   FunctionType type(ret, param);
   auto found = functionTypes.find(&type);
@@ -347,7 +347,7 @@ const StructType *SpirvContext::getACSBufferCounterType() {
 }
 
 SpirvDebugType *SpirvContext::getDebugTypeBasic(const SpirvType *spirvType,
-                                                llvm::StringRef name,
+                                                llvm37::StringRef name,
                                                 SpirvConstant *size,
                                                 uint32_t encoding) {
   // Reuse existing debug type if possible.
@@ -360,7 +360,7 @@ SpirvDebugType *SpirvContext::getDebugTypeBasic(const SpirvType *spirvType,
 }
 
 SpirvDebugType *
-SpirvContext::getDebugTypeMember(llvm::StringRef name, SpirvDebugType *type,
+SpirvContext::getDebugTypeMember(llvm37::StringRef name, SpirvDebugType *type,
                                  SpirvDebugSource *source, uint32_t line,
                                  uint32_t column, SpirvDebugInstruction *parent,
                                  uint32_t flags, uint32_t offsetInBits,
@@ -375,9 +375,9 @@ SpirvContext::getDebugTypeMember(llvm::StringRef name, SpirvDebugType *type,
 }
 
 SpirvDebugTypeComposite *SpirvContext::getDebugTypeComposite(
-    const SpirvType *spirvType, llvm::StringRef name, SpirvDebugSource *source,
+    const SpirvType *spirvType, llvm37::StringRef name, SpirvDebugSource *source,
     uint32_t line, uint32_t column, SpirvDebugInstruction *parent,
-    llvm::StringRef linkageName, uint32_t flags, uint32_t tag) {
+    llvm37::StringRef linkageName, uint32_t flags, uint32_t tag) {
   // Reuse existing debug type if possible.
   auto it = debugTypes.find(spirvType);
   if (it != debugTypes.end()) {
@@ -402,7 +402,7 @@ SpirvDebugType *SpirvContext::getDebugType(const SpirvType *spirvType) {
 SpirvDebugType *
 SpirvContext::getDebugTypeArray(const SpirvType *spirvType,
                                 SpirvDebugInstruction *elemType,
-                                llvm::ArrayRef<uint32_t> elemCount) {
+                                llvm37::ArrayRef<uint32_t> elemCount) {
   // Reuse existing debug type if possible.
   if (debugTypes.find(spirvType) != debugTypes.end())
     return debugTypes[spirvType];
@@ -432,7 +432,7 @@ SpirvContext::getDebugTypeVector(const SpirvType *spirvType,
 SpirvDebugType *
 SpirvContext::getDebugTypeFunction(const SpirvType *spirvType, uint32_t flags,
                                    SpirvDebugType *ret,
-                                   llvm::ArrayRef<SpirvDebugType *> params) {
+                                   llvm37::ArrayRef<SpirvDebugType *> params) {
   // Reuse existing debug type if possible.
   if (debugTypes.find(spirvType) != debugTypes.end())
     return debugTypes[spirvType];
@@ -445,7 +445,7 @@ SpirvContext::getDebugTypeFunction(const SpirvType *spirvType, uint32_t flags,
 SpirvDebugTypeTemplate *SpirvContext::createDebugTypeTemplate(
     const ClassTemplateSpecializationDecl *templateType,
     SpirvDebugInstruction *target,
-    const llvm::SmallVector<SpirvDebugTypeTemplateParameter *, 2> &params) {
+    const llvm37::SmallVector<SpirvDebugTypeTemplateParameter *, 2> &params) {
   auto *tempTy = getDebugTypeTemplate(templateType);
   if (tempTy != nullptr)
     return tempTy;
@@ -463,7 +463,7 @@ SpirvDebugTypeTemplate *SpirvContext::getDebugTypeTemplate(
 }
 
 SpirvDebugTypeTemplateParameter *SpirvContext::createDebugTypeTemplateParameter(
-    const TemplateArgument *templateArg, llvm::StringRef name,
+    const TemplateArgument *templateArg, llvm37::StringRef name,
     SpirvDebugType *type, SpirvInstruction *value, SpirvDebugSource *source,
     uint32_t line, uint32_t column) {
   auto *param = getDebugTypeTemplateParameter(templateArg);

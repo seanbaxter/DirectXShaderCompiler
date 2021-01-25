@@ -7,8 +7,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_ARCMIGRATE_ARCMTACTIONS_H
-#define LLVM_CLANG_ARCMIGRATE_ARCMTACTIONS_H
+#ifndef LLVM37_CLANG_ARCMIGRATE_ARCMTACTIONS_H
+#define LLVM37_CLANG_ARCMIGRATE_ARCMTACTIONS_H
 
 #include "clang/ARCMigrate/FileRemapper.h"
 #include "clang/Frontend/FrontendAction.h"

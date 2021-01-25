@@ -14,7 +14,7 @@
 #include <vector>
 #include <string>
 
-namespace llvm {
+namespace llvm37 {
 class CallInst;
 class Value;
 class Module;
@@ -61,7 +61,7 @@ public:
   typedef std::vector<SemanticDefineError> SemanticDefineErrorList;
 
   // Write semantic defines as metadata in the module.
-  virtual SemanticDefineErrorList WriteSemanticDefines(llvm::Module *M) = 0;
+  virtual SemanticDefineErrorList WriteSemanticDefines(llvm37::Module *M) = 0;
 
   // Query the named option enable
   // Needed because semantic defines may have set it since options were copied

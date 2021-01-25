@@ -7,8 +7,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_UTILS_TABLEGEN_X86DISASSEMBLERSHARED_H
-#define LLVM_UTILS_TABLEGEN_X86DISASSEMBLERSHARED_H
+#ifndef LLVM37_UTILS_TABLEGEN_X86DISASSEMBLERSHARED_H
+#define LLVM37_UTILS_TABLEGEN_X86DISASSEMBLERSHARED_H
 
 #include <cstring>
 #include <string>
@@ -16,13 +16,13 @@
 #include "../../lib/Target/X86/Disassembler/X86DisassemblerDecoderCommon.h"
 
 struct InstructionSpecifier {
-  llvm::X86Disassembler::OperandSpecifier
-      operands[llvm::X86Disassembler::X86_MAX_OPERANDS];
-  llvm::X86Disassembler::InstructionContext insnContext;
+  llvm37::X86Disassembler::OperandSpecifier
+      operands[llvm37::X86Disassembler::X86_MAX_OPERANDS];
+  llvm37::X86Disassembler::InstructionContext insnContext;
   std::string name;
 
   InstructionSpecifier() {
-    insnContext = llvm::X86Disassembler::IC;
+    insnContext = llvm37::X86Disassembler::IC;
     name = "";
     memset(operands, 0, sizeof(operands));
   }
@@ -33,7 +33,7 @@ struct InstructionSpecifier {
 /// this information is known, we have narrowed down to a single instruction.
 struct ModRMDecision {
   uint8_t modrm_type;
-  llvm::X86Disassembler::InstrUID instructionIDs[256];
+  llvm37::X86Disassembler::InstrUID instructionIDs[256];
 };
 
 /// Specifies which set of ModR/M->instruction tables to look at
@@ -48,7 +48,7 @@ struct OpcodeDecision {
 /// applies given a specific set of attributes.  Hence there are only IC_max
 /// entries in this table, rather than 2^(ATTR_max).
 struct ContextDecision {
-  OpcodeDecision opcodeDecisions[llvm::X86Disassembler::IC_max];
+  OpcodeDecision opcodeDecisions[llvm37::X86Disassembler::IC_max];
 };
 
 #endif

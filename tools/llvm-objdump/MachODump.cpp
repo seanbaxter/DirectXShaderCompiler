@@ -13,36 +13,36 @@
 
 #include "llvm-objdump.h"
 #include "llvm-c/Disassembler.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/StringExtras.h"
-#include "llvm/ADT/Triple.h"
-#include "llvm/Config/config.h"
-#include "llvm/DebugInfo/DIContext.h"
-#include "llvm/DebugInfo/DWARF/DWARFContext.h"
-#include "llvm/MC/MCAsmInfo.h"
-#include "llvm/MC/MCContext.h"
-#include "llvm/MC/MCDisassembler.h"
-#include "llvm/MC/MCInst.h"
-#include "llvm/MC/MCInstPrinter.h"
-#include "llvm/MC/MCInstrDesc.h"
-#include "llvm/MC/MCInstrInfo.h"
-#include "llvm/MC/MCRegisterInfo.h"
-#include "llvm/MC/MCSubtargetInfo.h"
-#include "llvm/Object/MachO.h"
-#include "llvm/Object/MachOUniversal.h"
-#include "llvm/Support/Casting.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/Endian.h"
-#include "llvm/Support/Format.h"
-#include "llvm/Support/FormattedStream.h"
-#include "llvm/Support/GraphWriter.h"
-#include "llvm/Support/LEB128.h"
-#include "llvm/Support/MachO.h"
-#include "llvm/Support/MemoryBuffer.h"
-#include "llvm/Support/TargetRegistry.h"
-#include "llvm/Support/TargetSelect.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/StringExtras.h"
+#include "llvm37/ADT/Triple.h"
+#include "llvm37/Config/config.h"
+#include "llvm37/DebugInfo/DIContext.h"
+#include "llvm37/DebugInfo/DWARF/DWARFContext.h"
+#include "llvm37/MC/MCAsmInfo.h"
+#include "llvm37/MC/MCContext.h"
+#include "llvm37/MC/MCDisassembler.h"
+#include "llvm37/MC/MCInst.h"
+#include "llvm37/MC/MCInstPrinter.h"
+#include "llvm37/MC/MCInstrDesc.h"
+#include "llvm37/MC/MCInstrInfo.h"
+#include "llvm37/MC/MCRegisterInfo.h"
+#include "llvm37/MC/MCSubtargetInfo.h"
+#include "llvm37/Object/MachO.h"
+#include "llvm37/Object/MachOUniversal.h"
+#include "llvm37/Support/Casting.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/Endian.h"
+#include "llvm37/Support/Format.h"
+#include "llvm37/Support/FormattedStream.h"
+#include "llvm37/Support/GraphWriter.h"
+#include "llvm37/Support/LEB128.h"
+#include "llvm37/Support/MachO.h"
+#include "llvm37/Support/MemoryBuffer.h"
+#include "llvm37/Support/TargetRegistry.h"
+#include "llvm37/Support/TargetSelect.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <algorithm>
 #include <cstring>
 #include <system_error>
@@ -51,7 +51,7 @@
 #include <cxxabi.h>
 #endif
 
-using namespace llvm;
+using namespace llvm37;
 using namespace object;
 
 static cl::opt<bool>
@@ -67,12 +67,12 @@ static cl::opt<bool> FullLeadingAddr("full-leading-addr",
 static cl::opt<bool> NoLeadingAddr("no-leading-addr",
                                    cl::desc("Print no leading address"));
 
-cl::opt<bool> llvm::UniversalHeaders("universal-headers",
+cl::opt<bool> llvm37::UniversalHeaders("universal-headers",
                                      cl::desc("Print Mach-O universal headers "
                                               "(requires -macho)"));
 
 cl::opt<bool>
-    llvm::ArchiveHeaders("archive-headers",
+    llvm37::ArchiveHeaders("archive-headers",
                          cl::desc("Print archive headers for Mach-O archives "
                                   "(requires -macho)"));
 
@@ -83,51 +83,51 @@ cl::opt<bool>
                                   "-archive-headers)"));
 
 cl::opt<bool>
-    llvm::IndirectSymbols("indirect-symbols",
+    llvm37::IndirectSymbols("indirect-symbols",
                           cl::desc("Print indirect symbol table for Mach-O "
                                    "objects (requires -macho)"));
 
 cl::opt<bool>
-    llvm::DataInCode("data-in-code",
+    llvm37::DataInCode("data-in-code",
                      cl::desc("Print the data in code table for Mach-O objects "
                               "(requires -macho)"));
 
 cl::opt<bool>
-    llvm::LinkOptHints("link-opt-hints",
+    llvm37::LinkOptHints("link-opt-hints",
                        cl::desc("Print the linker optimization hints for "
                                 "Mach-O objects (requires -macho)"));
 
 cl::list<std::string>
-    llvm::DumpSections("section",
+    llvm37::DumpSections("section",
                        cl::desc("Prints the specified segment,section for "
                                 "Mach-O objects (requires -macho)"));
 
 cl::opt<bool>
-    llvm::InfoPlist("info-plist",
+    llvm37::InfoPlist("info-plist",
                     cl::desc("Print the info plist section as strings for "
                              "Mach-O objects (requires -macho)"));
 
 cl::opt<bool>
-    llvm::DylibsUsed("dylibs-used",
+    llvm37::DylibsUsed("dylibs-used",
                      cl::desc("Print the shared libraries used for linked "
                               "Mach-O files (requires -macho)"));
 
 cl::opt<bool>
-    llvm::DylibId("dylib-id",
+    llvm37::DylibId("dylib-id",
                   cl::desc("Print the shared library's id for the dylib Mach-O "
                            "file (requires -macho)"));
 
 cl::opt<bool>
-    llvm::NonVerbose("non-verbose",
+    llvm37::NonVerbose("non-verbose",
                      cl::desc("Print the info for Mach-O objects in "
                               "non-verbose or numeric form (requires -macho)"));
 
 cl::opt<bool>
-    llvm::ObjcMetaData("objc-meta-data",
+    llvm37::ObjcMetaData("objc-meta-data",
                        cl::desc("Print the Objective-C runtime meta data for "
                                 "Mach-O files (requires -macho)"));
 
-cl::opt<std::string> llvm::DisSymName(
+cl::opt<std::string> llvm37::DisSymName(
     "dis-symname",
     cl::desc("disassemble just this symbol's instructions (requires -macho"));
 
@@ -147,8 +147,8 @@ static const Target *GetTarget(const MachOObjectFile *MachOObj,
                                const Target **ThumbTarget) {
   // Figure out the target triple.
   if (TripleName.empty()) {
-    llvm::Triple TT("unknown-unknown-unknown");
-    llvm::Triple ThumbTriple = Triple();
+    llvm37::Triple TT("unknown-unknown-unknown");
+    llvm37::Triple ThumbTriple = Triple();
     TT = MachOObj->getArch(McpuDefault, &ThumbTriple);
     TripleName = TT.str();
     ThumbTripleName = ThumbTriple.str();
@@ -1499,7 +1499,7 @@ static void printArchiveHeaders(Archive *A, bool verbose, bool print_offset) {
 // -arch flags selecting just those slices as specified by them and also parses
 // archive files.  Then for each individual Mach-O file ProcessMachO() is
 // called to process the file based on the command line options.
-void llvm::ParseInputMachO(StringRef Filename) {
+void llvm37::ParseInputMachO(StringRef Filename) {
   // Check for -arch all and verifiy the -arch flags are valid.
   for (unsigned i = 0; i < ArchFlags.size(); ++i) {
     if (ArchFlags[i] == "all") {
@@ -6361,8 +6361,8 @@ static void DisassembleMachO(StringRef Filename, MachOObjectFile *MachOOF,
 namespace {
 
 template <typename T> static uint64_t readNext(const char *&Buf) {
-  using llvm::support::little;
-  using llvm::support::unaligned;
+  using llvm37::support::little;
+  using llvm37::support::unaligned;
 
   uint64_t Val = support::endian::read<T, little, unaligned>(Buf);
   Buf += sizeof(T);
@@ -6780,7 +6780,7 @@ static void printMachOUnwindInfoSection(const MachOObjectFile *Obj,
   }
 }
 
-void llvm::printMachOUnwindInfo(const MachOObjectFile *Obj) {
+void llvm37::printMachOUnwindInfo(const MachOObjectFile *Obj) {
   std::map<uint64_t, SymbolRef> Symbols;
   for (const SymbolRef &SymRef : Obj->symbols()) {
     // Discard any undefined or absolute symbols. They're not going to take part
@@ -8456,7 +8456,7 @@ static void getAndPrintMachHeader(const MachOObjectFile *Obj,
   }
 }
 
-void llvm::printMachOFileHeader(const object::ObjectFile *Obj) {
+void llvm37::printMachOFileHeader(const object::ObjectFile *Obj) {
   const MachOObjectFile *file = dyn_cast<const MachOObjectFile>(Obj);
   uint32_t filetype = 0;
   uint32_t cputype = 0;
@@ -8468,8 +8468,8 @@ void llvm::printMachOFileHeader(const object::ObjectFile *Obj) {
 // export trie dumping
 //===----------------------------------------------------------------------===//
 
-void llvm::printMachOExportsTrie(const object::MachOObjectFile *Obj) {
-  for (const llvm::object::ExportEntry &Entry : Obj->exports()) {
+void llvm37::printMachOExportsTrie(const object::MachOObjectFile *Obj) {
+  for (const llvm37::object::ExportEntry &Entry : Obj->exports()) {
     uint64_t Flags = Entry.flags();
     bool ReExport = (Flags & MachO::EXPORT_SYMBOL_FLAGS_REEXPORT);
     bool WeakDef = (Flags & MachO::EXPORT_SYMBOL_FLAGS_WEAK_DEFINITION);
@@ -8608,12 +8608,12 @@ uint64_t SegInfo::address(uint32_t SegIndex, uint64_t OffsetInSeg) {
   return SI.SegmentStartAddress + OffsetInSeg;
 }
 
-void llvm::printMachORebaseTable(const object::MachOObjectFile *Obj) {
+void llvm37::printMachORebaseTable(const object::MachOObjectFile *Obj) {
   // Build table of sections so names can used in final output.
   SegInfo sectionTable(Obj);
 
   outs() << "segment  section            address     type\n";
-  for (const llvm::object::MachORebaseEntry &Entry : Obj->rebaseTable()) {
+  for (const llvm37::object::MachORebaseEntry &Entry : Obj->rebaseTable()) {
     uint32_t SegIndex = Entry.segmentIndex();
     uint64_t OffsetInSeg = Entry.segmentOffset();
     StringRef SegmentName = sectionTable.segmentName(SegIndex);
@@ -8652,13 +8652,13 @@ static StringRef ordinalName(const object::MachOObjectFile *Obj, int Ordinal) {
 // bind table dumping
 //===----------------------------------------------------------------------===//
 
-void llvm::printMachOBindTable(const object::MachOObjectFile *Obj) {
+void llvm37::printMachOBindTable(const object::MachOObjectFile *Obj) {
   // Build table of sections so names can used in final output.
   SegInfo sectionTable(Obj);
 
   outs() << "segment  section            address    type       "
             "addend dylib            symbol\n";
-  for (const llvm::object::MachOBindEntry &Entry : Obj->bindTable()) {
+  for (const llvm37::object::MachOBindEntry &Entry : Obj->bindTable()) {
     uint32_t SegIndex = Entry.segmentIndex();
     uint64_t OffsetInSeg = Entry.segmentOffset();
     StringRef SegmentName = sectionTable.segmentName(SegIndex);
@@ -8684,13 +8684,13 @@ void llvm::printMachOBindTable(const object::MachOObjectFile *Obj) {
 // lazy bind table dumping
 //===----------------------------------------------------------------------===//
 
-void llvm::printMachOLazyBindTable(const object::MachOObjectFile *Obj) {
+void llvm37::printMachOLazyBindTable(const object::MachOObjectFile *Obj) {
   // Build table of sections so names can used in final output.
   SegInfo sectionTable(Obj);
 
   outs() << "segment  section            address     "
             "dylib            symbol\n";
-  for (const llvm::object::MachOBindEntry &Entry : Obj->lazyBindTable()) {
+  for (const llvm37::object::MachOBindEntry &Entry : Obj->lazyBindTable()) {
     uint32_t SegIndex = Entry.segmentIndex();
     uint64_t OffsetInSeg = Entry.segmentOffset();
     StringRef SegmentName = sectionTable.segmentName(SegIndex);
@@ -8711,13 +8711,13 @@ void llvm::printMachOLazyBindTable(const object::MachOObjectFile *Obj) {
 // weak bind table dumping
 //===----------------------------------------------------------------------===//
 
-void llvm::printMachOWeakBindTable(const object::MachOObjectFile *Obj) {
+void llvm37::printMachOWeakBindTable(const object::MachOObjectFile *Obj) {
   // Build table of sections so names can used in final output.
   SegInfo sectionTable(Obj);
 
   outs() << "segment  section            address     "
             "type       addend   symbol\n";
-  for (const llvm::object::MachOBindEntry &Entry : Obj->weakBindTable()) {
+  for (const llvm37::object::MachOBindEntry &Entry : Obj->weakBindTable()) {
     // Strong symbols don't have a location to update.
     if (Entry.flags() & MachO::BIND_SYMBOL_FLAGS_NON_WEAK_DEFINITION) {
       outs() << "                                        strong              "
@@ -8750,7 +8750,7 @@ static const char *get_dyld_bind_info_symbolname(uint64_t ReferenceValue,
   if (info->bindtable == nullptr) {
     info->bindtable = new (BindTable);
     SegInfo sectionTable(info->O);
-    for (const llvm::object::MachOBindEntry &Entry : info->O->bindTable()) {
+    for (const llvm37::object::MachOBindEntry &Entry : info->O->bindTable()) {
       uint32_t SegIndex = Entry.segmentIndex();
       uint64_t OffsetInSeg = Entry.segmentOffset();
       uint64_t Address = sectionTable.address(SegIndex, OffsetInSeg);

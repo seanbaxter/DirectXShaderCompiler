@@ -9,17 +9,17 @@
 
 #include "llvm-c/Analysis.h"
 #include "llvm-c/Initialization.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/Verifier.h"
-#include "llvm/InitializePasses.h"
-#include "llvm/PassRegistry.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/Verifier.h"
+#include "llvm37/InitializePasses.h"
+#include "llvm37/PassRegistry.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <cstring>
 
-using namespace llvm;
+using namespace llvm37;
 
 /// initializeAnalysis - Initialize all passes linked into the Analysis library.
-void llvm::initializeAnalysis(PassRegistry &Registry) {
+void llvm37::initializeAnalysis(PassRegistry &Registry) {
   initializeAliasAnalysisAnalysisGroup(Registry);
   initializeAliasAnalysisCounterPass(Registry);
   initializeAAEvalPass(Registry);

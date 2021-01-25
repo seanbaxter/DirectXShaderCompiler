@@ -22,13 +22,13 @@
 #include "clang/Lex/LexDiagnostic.h"
 #include "clang/Lex/MacroArgs.h"
 #include "clang/Lex/MacroInfo.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/ADT/StringSwitch.h"
-#include "llvm/Config/llvm-config.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/Format.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/ADT/StringSwitch.h"
+#include "llvm37/Config/llvm-config.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/Format.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <cstdio>
 #include <ctime>
 using namespace clang;
@@ -77,7 +77,7 @@ ModuleMacro *Preprocessor::addModuleMacro(Module *Mod, IdentifierInfo *II,
                                           MacroInfo *Macro,
                                           ArrayRef<ModuleMacro *> Overrides,
                                           bool &New) {
-  llvm::FoldingSetNodeID ID;
+  llvm37::FoldingSetNodeID ID;
   ModuleMacro::Profile(ID, Mod, II);
 
   void *InsertPos;
@@ -116,7 +116,7 @@ ModuleMacro *Preprocessor::addModuleMacro(Module *Mod, IdentifierInfo *II,
 }
 
 ModuleMacro *Preprocessor::getModuleMacro(Module *Mod, IdentifierInfo *II) {
-  llvm::FoldingSetNodeID ID;
+  llvm37::FoldingSetNodeID ID;
   ModuleMacro::Profile(ID, Mod, II);
 
   void *InsertPos;
@@ -140,12 +140,12 @@ void Preprocessor::updateModuleMacroInfo(const IdentifierInfo *II,
   Info.ActiveModuleMacros.clear();
 
   // Every macro that's locally overridden is overridden by a visible macro.
-  llvm::DenseMap<ModuleMacro *, int> NumHiddenOverrides;
+  llvm37::DenseMap<ModuleMacro *, int> NumHiddenOverrides;
   for (auto *O : Info.OverriddenMacros)
     NumHiddenOverrides[O] = -1;
 
   // Collect all macros that are not overridden by a visible macro.
-  llvm::SmallVector<ModuleMacro *, 16> Worklist(Leaf->second.begin(),
+  llvm37::SmallVector<ModuleMacro *, 16> Worklist(Leaf->second.begin(),
                                                 Leaf->second.end());
   while (!Worklist.empty()) {
     auto *MM = Worklist.pop_back_val();
@@ -207,57 +207,57 @@ void Preprocessor::dumpMacroInfo(const IdentifierInfo *II) {
   if (Pos != CurSubmoduleState->Macros.end())
     State = &Pos->second;
 
-  llvm::errs() << "MacroState " << State << " " << II->getNameStart();
+  llvm37::errs() << "MacroState " << State << " " << II->getNameStart();
   if (State && State->isAmbiguous(*this, II))
-    llvm::errs() << " ambiguous";
+    llvm37::errs() << " ambiguous";
   if (State && !State->getOverriddenMacros().empty()) {
-    llvm::errs() << " overrides";
+    llvm37::errs() << " overrides";
     for (auto *O : State->getOverriddenMacros())
-      llvm::errs() << " " << O->getOwningModule()->getFullModuleName();
+      llvm37::errs() << " " << O->getOwningModule()->getFullModuleName();
   }
-  llvm::errs() << "\n";
+  llvm37::errs() << "\n";
 
   // Dump local macro directives.
   for (auto *MD = State ? State->getLatest() : nullptr; MD;
        MD = MD->getPrevious()) {
-    llvm::errs() << " ";
+    llvm37::errs() << " ";
     MD->dump();
   }
 
   // Dump module macros.
-  llvm::DenseSet<ModuleMacro*> Active;
+  llvm37::DenseSet<ModuleMacro*> Active;
   for (auto *MM : State ? State->getActiveModuleMacros(*this, II) : None)
     Active.insert(MM);
-  llvm::DenseSet<ModuleMacro*> Visited;
-  llvm::SmallVector<ModuleMacro *, 16> Worklist(Leaf.begin(), Leaf.end());
+  llvm37::DenseSet<ModuleMacro*> Visited;
+  llvm37::SmallVector<ModuleMacro *, 16> Worklist(Leaf.begin(), Leaf.end());
   while (!Worklist.empty()) {
     auto *MM = Worklist.pop_back_val();
-    llvm::errs() << " ModuleMacro " << MM << " "
+    llvm37::errs() << " ModuleMacro " << MM << " "
                  << MM->getOwningModule()->getFullModuleName();
     if (!MM->getMacroInfo())
-      llvm::errs() << " undef";
+      llvm37::errs() << " undef";
 
     if (Active.count(MM))
-      llvm::errs() << " active";
+      llvm37::errs() << " active";
     else if (!CurSubmoduleState->VisibleModules.isVisible(
                  MM->getOwningModule()))
-      llvm::errs() << " hidden";
+      llvm37::errs() << " hidden";
     else if (MM->getMacroInfo())
-      llvm::errs() << " overridden";
+      llvm37::errs() << " overridden";
 
     if (!MM->overrides().empty()) {
-      llvm::errs() << " overrides";
+      llvm37::errs() << " overrides";
       for (auto *O : MM->overrides()) {
-        llvm::errs() << " " << O->getOwningModule()->getFullModuleName();
+        llvm37::errs() << " " << O->getOwningModule()->getFullModuleName();
         if (Visited.insert(O).second)
           Worklist.push_back(O);
       }
     }
-    llvm::errs() << "\n";
+    llvm37::errs() << "\n";
     if (auto *MI = MM->getMacroInfo()) {
-      llvm::errs() << "  ";
+      llvm37::errs() << "  ";
       MI->dump();
-      llvm::errs() << "\n";
+      llvm37::errs() << "\n";
     }
   }
 }
@@ -1016,8 +1016,8 @@ static void ComputeDATE_TIME(SourceLocation &DATELoc, SourceLocation &TIMELoc,
 
   {
     SmallString<32> TmpBuffer;
-    llvm::raw_svector_ostream TmpStream(TmpBuffer);
-    TmpStream << llvm::format("\"%s %2d %4d\"", Months[TM->tm_mon],
+    llvm37::raw_svector_ostream TmpStream(TmpBuffer);
+    TmpStream << llvm37::format("\"%s %2d %4d\"", Months[TM->tm_mon],
                               TM->tm_mday, TM->tm_year + 1900);
     Token TmpTok;
     TmpTok.startToken();
@@ -1027,8 +1027,8 @@ static void ComputeDATE_TIME(SourceLocation &DATELoc, SourceLocation &TIMELoc,
 
   {
     SmallString<32> TmpBuffer;
-    llvm::raw_svector_ostream TmpStream(TmpBuffer);
-    TmpStream << llvm::format("\"%02d:%02d:%02d\"",
+    llvm37::raw_svector_ostream TmpStream(TmpBuffer);
+    TmpStream << llvm37::format("\"%02d:%02d:%02d\"",
                               TM->tm_hour, TM->tm_min, TM->tm_sec);
     Token TmpTok;
     TmpTok.startToken();
@@ -1048,7 +1048,7 @@ static bool HasFeature(const Preprocessor &PP, const IdentifierInfo *II) {
   if (Feature.startswith("__") && Feature.endswith("__") && Feature.size() >= 4)
     Feature = Feature.substr(2, Feature.size() - 4);
 
-  return llvm::StringSwitch<bool>(Feature)
+  return llvm37::StringSwitch<bool>(Feature)
       .Case("address_sanitizer",
             LangOpts.Sanitize.hasOneOf(SanitizerKind::Address |
                                        SanitizerKind::KernelAddress))
@@ -1228,7 +1228,7 @@ static bool HasExtension(const Preprocessor &PP, const IdentifierInfo *II) {
 
   // Because we inherit the feature list from HasFeature, this string switch
   // must be less restrictive than HasFeature's.
-  return llvm::StringSwitch<bool>(Extension)
+  return llvm37::StringSwitch<bool>(Extension)
            // C11 features supported by other languages as extensions.
            .Case("c_alignas", true)
            .Case("c_alignof", true)
@@ -1463,7 +1463,7 @@ void Preprocessor::ExpandBuiltinMacro(Token &Tok) {
   ++NumBuiltinMacroExpanded;
 
   SmallString<128> TmpBuffer;
-  llvm::raw_svector_ostream OS(TmpBuffer);
+  llvm37::raw_svector_ostream OS(TmpBuffer);
 
   // Set up the return result.
   Tok.setIdentifierInfo(nullptr);

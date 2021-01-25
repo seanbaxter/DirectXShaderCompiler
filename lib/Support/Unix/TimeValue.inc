@@ -18,7 +18,7 @@
 
 #include "Unix.h"
 
-namespace llvm {
+namespace llvm37 {
   using namespace sys;
 
 std::string TimeValue::str() const {

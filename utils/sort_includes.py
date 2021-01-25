@@ -53,7 +53,7 @@ def sort_includes(f):
           header.startswith('"polly/')):
         subproject_headers.append(header)
         continue
-      if (header.startswith('"llvm/') or header.startswith('"llvm-c/')):
+      if (header.startswith('"llvm37/') or header.startswith('"llvm-c/')):
         llvm_headers.append(header)
         continue
       local_headers.append(header)

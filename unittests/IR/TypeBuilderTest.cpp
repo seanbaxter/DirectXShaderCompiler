@@ -7,12 +7,12 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/IR/TypeBuilder.h"
-#include "llvm/ADT/ArrayRef.h"
-#include "llvm/IR/LLVMContext.h"
+#include "llvm37/IR/TypeBuilder.h"
+#include "llvm37/ADT/ArrayRef.h"
+#include "llvm37/IR/LLVMContext.h"
 #include "gtest/gtest.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 namespace {
 
@@ -180,7 +180,7 @@ struct MyPortableType {
 
 }  // anonymous namespace
 
-namespace llvm {
+namespace llvm37 {
 template<bool cross> class TypeBuilder<MyType, cross> {
 public:
   static StructType *get(LLVMContext &Context) {
@@ -226,7 +226,7 @@ public:
     FIELD_ARRAY
   };
 };
-}  // namespace llvm
+}  // namespace llvm37
 namespace {
 
 TEST(TypeBuilderTest, Extensions) {

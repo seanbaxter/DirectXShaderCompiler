@@ -9,16 +9,16 @@
 
 #include "CodeGenInstruction.h"
 #include "CodeGenTarget.h"
-#include "llvm/ADT/IndexedMap.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/ADT/StringMap.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/TableGen/Error.h"
-#include "llvm/TableGen/Record.h"
-#include "llvm/TableGen/TableGenBackend.h"
+#include "llvm37/ADT/IndexedMap.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/ADT/StringMap.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/TableGen/Error.h"
+#include "llvm37/TableGen/Record.h"
+#include "llvm37/TableGen/TableGenBackend.h"
 #include <vector>
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "pseudo-lowering"
 
@@ -292,7 +292,7 @@ void PseudoLoweringEmitter::run(raw_ostream &o) {
   emitLoweringEmitter(o);
 }
 
-namespace llvm {
+namespace llvm37 {
 
 void EmitPseudoLowering(RecordKeeper &RK, raw_ostream &OS) {
   PseudoLoweringEmitter(RK).run(OS);

@@ -16,10 +16,10 @@
 
 #include "dxc/Support/WinIncludes.h"
 #include "dxc/Support/WinFunctions.h"
-#include "llvm/Support/ThreadLocal.h"
+#include "llvm37/Support/ThreadLocal.h"
 #include <memory>
 
-static llvm::sys::ThreadLocal<IMalloc> *g_ThreadMallocTls;
+static llvm37::sys::ThreadLocal<IMalloc> *g_ThreadMallocTls;
 static IMalloc *g_pDefaultMalloc;
 
 HRESULT DxcInitThreadMalloc() throw() {
@@ -29,13 +29,13 @@ HRESULT DxcInitThreadMalloc() throw() {
   HRESULT hrMalloc = CoGetMalloc(1, &g_pDefaultMalloc);
   if (FAILED(hrMalloc)) return hrMalloc;
 
-  g_ThreadMallocTls = (llvm::sys::ThreadLocal<IMalloc>*)g_pDefaultMalloc->Alloc(sizeof(llvm::sys::ThreadLocal<IMalloc>));
+  g_ThreadMallocTls = (llvm37::sys::ThreadLocal<IMalloc>*)g_pDefaultMalloc->Alloc(sizeof(llvm37::sys::ThreadLocal<IMalloc>));
   if (g_ThreadMallocTls == nullptr) {
     g_pDefaultMalloc->Release();
     g_pDefaultMalloc = nullptr;
     return E_OUTOFMEMORY;
   }
-  g_ThreadMallocTls = new(g_ThreadMallocTls) llvm::sys::ThreadLocal<IMalloc>;
+  g_ThreadMallocTls = new(g_ThreadMallocTls) llvm37::sys::ThreadLocal<IMalloc>;
 
   return S_OK;
 }
@@ -43,7 +43,7 @@ HRESULT DxcInitThreadMalloc() throw() {
 void DxcCleanupThreadMalloc() throw() {
   if (g_ThreadMallocTls) {
     DXASSERT(g_pDefaultMalloc, "else DxcInitThreadMalloc didn't work/fail atomically");
-    g_ThreadMallocTls->llvm::sys::ThreadLocal<IMalloc>::~ThreadLocal();
+    g_ThreadMallocTls->llvm37::sys::ThreadLocal<IMalloc>::~ThreadLocal();
     g_pDefaultMalloc->Free(g_ThreadMallocTls);
     g_ThreadMallocTls = nullptr;
   }

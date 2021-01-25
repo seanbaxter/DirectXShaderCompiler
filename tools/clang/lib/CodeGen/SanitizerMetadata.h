@@ -10,14 +10,14 @@
 // Class which emits metadata consumed by sanitizer instrumentation passes.
 //
 //===----------------------------------------------------------------------===//
-#ifndef LLVM_CLANG_LIB_CODEGEN_SANITIZERMETADATA_H
-#define LLVM_CLANG_LIB_CODEGEN_SANITIZERMETADATA_H
+#ifndef LLVM37_CLANG_LIB_CODEGEN_SANITIZERMETADATA_H
+#define LLVM37_CLANG_LIB_CODEGEN_SANITIZERMETADATA_H
 
 #include "clang/AST/Type.h"
 #include "clang/Basic/LLVM.h"
 #include "clang/Basic/SourceLocation.h"
 
-namespace llvm {
+namespace llvm37 {
 class GlobalVariable;
 class Instruction;
 class MDNode;
@@ -37,15 +37,15 @@ class SanitizerMetadata {
   CodeGenModule &CGM;
 public:
   SanitizerMetadata(CodeGenModule &CGM);
-  void reportGlobalToASan(llvm::GlobalVariable *GV, const VarDecl &D,
+  void reportGlobalToASan(llvm37::GlobalVariable *GV, const VarDecl &D,
                           bool IsDynInit = false);
-  void reportGlobalToASan(llvm::GlobalVariable *GV, SourceLocation Loc,
+  void reportGlobalToASan(llvm37::GlobalVariable *GV, SourceLocation Loc,
                           StringRef Name, QualType Ty, bool IsDynInit = false,
                           bool IsBlacklisted = false);
-  void disableSanitizerForGlobal(llvm::GlobalVariable *GV);
-  void disableSanitizerForInstruction(llvm::Instruction *I);
+  void disableSanitizerForGlobal(llvm37::GlobalVariable *GV);
+  void disableSanitizerForInstruction(llvm37::Instruction *I);
 private:
-  llvm::MDNode *getLocationMetadata(SourceLocation Loc);
+  llvm37::MDNode *getLocationMetadata(SourceLocation Loc);
 };
 }  // end namespace CodeGen
 }  // end namespace clang

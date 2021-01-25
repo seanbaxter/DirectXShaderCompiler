@@ -6,8 +6,8 @@ if (WIN32)
   find_package(DiaSDK REQUIRED) # Used for constants and declarations.
 endif (WIN32)
 
-set( LLVM_LINK_COMPONENTS
-  ${LLVM_TARGETS_TO_BUILD}
+set( LLVM37_LINK_COMPONENTS
+  ${LLVM37_TARGETS_TO_BUILD}
   DXIL
   HLSL
   dxcsupport

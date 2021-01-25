@@ -12,16 +12,16 @@
 //===----------------------------------------------------------------------===//
 
 #include "llvm-c/ExecutionEngine.h"
-#include "llvm/ExecutionEngine/ExecutionEngine.h"
-#include "llvm/ExecutionEngine/GenericValue.h"
-#include "llvm/ExecutionEngine/RTDyldMemoryManager.h"
-#include "llvm/IR/DerivedTypes.h"
-#include "llvm/IR/Module.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Target/TargetOptions.h"
+#include "llvm37/ExecutionEngine/ExecutionEngine.h"
+#include "llvm37/ExecutionEngine/GenericValue.h"
+#include "llvm37/ExecutionEngine/RTDyldMemoryManager.h"
+#include "llvm37/IR/DerivedTypes.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Target/TargetOptions.h"
 #include <cstring>
 
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "jit"
 

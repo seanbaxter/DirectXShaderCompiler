@@ -21,11 +21,11 @@
 #include "clang/Lex/PTHManager.h"
 #include "clang/Lex/Token.h"
 #include "clang/Lex/TokenLexer.h"
-#include "llvm/ADT/StringRef.h"
+#include "llvm37/ADT/StringRef.h"
 
 #include "dxc/Support/Global.h"
 using namespace clang;
-using namespace llvm;
+using namespace llvm37;
 using namespace hlsl;
 
 MacroExpander::MacroExpander(Preprocessor &PP_, unsigned options)
@@ -39,7 +39,7 @@ MacroExpander::MacroExpander(Preprocessor &PP_, unsigned options)
   // The preprocess requires a file to be on the lexing stack when we
   // call ExpandMacro. We add an empty in-memory buffer that we use
   // just for expanding macros.
-  std::unique_ptr<llvm::MemoryBuffer> SB = llvm::MemoryBuffer::getMemBuffer("", "<hlsl-semantic-defines>");
+  std::unique_ptr<llvm37::MemoryBuffer> SB = llvm37::MemoryBuffer::getMemBuffer("", "<hlsl-semantic-defines>");
   if (!SB) {
     DXASSERT(false, "Cannot create macro expansion source buffer");
     throw hlsl::Exception(DXC_E_MACRO_EXPANSION_FAILURE);
@@ -127,7 +127,7 @@ bool MacroExpander::ExpandMacro(MacroInfo *pMacro, std::string *out) {
   PP.EnterSourceFile(m_expansionFileId, nullptr, PP.getSourceManager().getLocForStartOfFile(m_expansionFileId));
   PP.EnterMacro(Tok, macro.getDefinitionEndLoc(), &macro, nullptr);
   PP.Lex(Tok);
-  llvm::raw_string_ostream OS(*out);
+  llvm37::raw_string_ostream OS(*out);
 
   // Keep track of previous token to print spaces correctly.
   Token PrevTok;

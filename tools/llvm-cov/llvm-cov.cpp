@@ -11,15 +11,15 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/ADT/StringRef.h"
-#include "llvm/ADT/StringSwitch.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/Path.h"
-#include "llvm/Support/Process.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/StringRef.h"
+#include "llvm37/ADT/StringSwitch.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/Path.h"
+#include "llvm37/Support/Process.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <string>
 
-using namespace llvm;
+using namespace llvm37;
 
 /// \brief The main entry point for the 'show' subcommand.
 int showMain(int argc, const char *argv[]);

@@ -21,8 +21,8 @@
 #include "clang/Lex/Lexer.h"
 #include "clang/Lex/Preprocessor.h"
 #include "clang/Sema/Initialization.h"
-#include "llvm/ADT/DenseSet.h"
-#include "llvm/ADT/SmallString.h"
+#include "llvm37/ADT/DenseSet.h"
+#include "llvm37/ADT/SmallString.h"
 
 using namespace clang;
 
@@ -244,7 +244,7 @@ static void checkARCPropertyDecl(Sema &S, ObjCPropertyDecl *property) {
 static void
 CheckPropertyAgainstProtocol(Sema &S, ObjCPropertyDecl *Prop,
                              ObjCProtocolDecl *Proto,
-                             llvm::SmallPtrSetImpl<ObjCProtocolDecl *> &Known) {
+                             llvm37::SmallPtrSetImpl<ObjCProtocolDecl *> &Known) {
   // Have we seen this protocol before?
   if (!Known.insert(Proto).second)
     return;
@@ -324,7 +324,7 @@ Decl *Sema::ActOnProperty(Scope *S, SourceLocation AtLoc,
   if (getLangOpts().ObjCAutoRefCount)
     checkARCPropertyDecl(*this, Res);
 
-  llvm::SmallPtrSet<ObjCProtocolDecl *, 16> KnownProtos;
+  llvm37::SmallPtrSet<ObjCProtocolDecl *, 16> KnownProtos;
   if (ObjCInterfaceDecl *IFace = dyn_cast<ObjCInterfaceDecl>(ClassDecl)) {
     // For a class, compare the property against a property in our superclass.
     bool FoundInSuper = false;
@@ -1856,7 +1856,7 @@ void Sema::DiagnoseUnimplementedProperties(Scope *S, ObjCImplDecl* IMPDecl,
   if (PropMap.empty())
     return;
 
-  llvm::DenseSet<ObjCPropertyDecl *> PropImplMap;
+  llvm37::DenseSet<ObjCPropertyDecl *> PropImplMap;
   for (const auto *I : IMPDecl->property_impls())
     PropImplMap.insert(I->getPropertyDecl());
 

@@ -14,16 +14,16 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/ExecutionEngine/ExecutionEngine.h"
-#include "llvm/ADT/Triple.h"
-#include "llvm/IR/Module.h"
-#include "llvm/MC/SubtargetFeature.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/Host.h"
-#include "llvm/Support/TargetRegistry.h"
-#include "llvm/Target/TargetMachine.h"
+#include "llvm37/ExecutionEngine/ExecutionEngine.h"
+#include "llvm37/ADT/Triple.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/MC/SubtargetFeature.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/Host.h"
+#include "llvm37/Support/TargetRegistry.h"
+#include "llvm37/Target/TargetMachine.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 TargetMachine *EngineBuilder::selectTarget() {
   Triple TT;

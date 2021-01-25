@@ -31,12 +31,12 @@
 #include "clang/Sema/Lookup.h"
 #include "clang/Sema/Scope.h"
 #include "clang/Sema/ScopeInfo.h"
-#include "llvm/ADT/ArrayRef.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/SmallPtrSet.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/ADT/SmallVector.h"
+#include "llvm37/ADT/ArrayRef.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/SmallPtrSet.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/ADT/SmallVector.h"
 #include "clang/Sema/SemaHLSL.h" // HLSL Change
 using namespace clang;
 using namespace sema;
@@ -382,7 +382,7 @@ Sema::ActOnCaseStmt(SourceLocation CaseLoc, Expr *LHSVal,
         if (Expr *CondExpr =
                 getCurFunction()->SwitchStack.back()->getCond()) {
           QualType CondType = CondExpr->getType();
-          llvm::APSInt TempVal;
+          llvm37::APSInt TempVal;
           return CheckConvertedConstantExpression(E, CondType, TempVal,
                                                         CCEK_CaseValue);
         }
@@ -542,16 +542,16 @@ Sema::ActOnIfStmt(SourceLocation IfLoc, FullExprArg CondVal, Decl *CondVar,
 
 namespace {
   struct CaseCompareFunctor {
-    bool operator()(const std::pair<llvm::APSInt, CaseStmt*> &LHS,
-                    const llvm::APSInt &RHS) {
+    bool operator()(const std::pair<llvm37::APSInt, CaseStmt*> &LHS,
+                    const llvm37::APSInt &RHS) {
       return LHS.first < RHS;
     }
-    bool operator()(const std::pair<llvm::APSInt, CaseStmt*> &LHS,
-                    const std::pair<llvm::APSInt, CaseStmt*> &RHS) {
+    bool operator()(const std::pair<llvm37::APSInt, CaseStmt*> &LHS,
+                    const std::pair<llvm37::APSInt, CaseStmt*> &RHS) {
       return LHS.first < RHS.first;
     }
-    bool operator()(const llvm::APSInt &LHS,
-                    const std::pair<llvm::APSInt, CaseStmt*> &RHS) {
+    bool operator()(const llvm37::APSInt &LHS,
+                    const std::pair<llvm37::APSInt, CaseStmt*> &RHS) {
       return LHS < RHS.first;
     }
   };
@@ -559,8 +559,8 @@ namespace {
 
 /// CmpCaseVals - Comparison predicate for sorting case values.
 ///
-static bool CmpCaseVals(const std::pair<llvm::APSInt, CaseStmt*>& lhs,
-                        const std::pair<llvm::APSInt, CaseStmt*>& rhs) {
+static bool CmpCaseVals(const std::pair<llvm37::APSInt, CaseStmt*>& lhs,
+                        const std::pair<llvm37::APSInt, CaseStmt*>& rhs) {
   if (lhs.first < rhs.first)
     return true;
 
@@ -573,16 +573,16 @@ static bool CmpCaseVals(const std::pair<llvm::APSInt, CaseStmt*>& lhs,
 
 /// CmpEnumVals - Comparison predicate for sorting enumeration values.
 ///
-static bool CmpEnumVals(const std::pair<llvm::APSInt, EnumConstantDecl*>& lhs,
-                        const std::pair<llvm::APSInt, EnumConstantDecl*>& rhs)
+static bool CmpEnumVals(const std::pair<llvm37::APSInt, EnumConstantDecl*>& lhs,
+                        const std::pair<llvm37::APSInt, EnumConstantDecl*>& rhs)
 {
   return lhs.first < rhs.first;
 }
 
 /// EqEnumVals - Comparison preficate for uniqing enumeration values.
 ///
-static bool EqEnumVals(const std::pair<llvm::APSInt, EnumConstantDecl*>& lhs,
-                       const std::pair<llvm::APSInt, EnumConstantDecl*>& rhs)
+static bool EqEnumVals(const std::pair<llvm37::APSInt, EnumConstantDecl*>& lhs,
+                       const std::pair<llvm37::APSInt, EnumConstantDecl*>& rhs)
 {
   return lhs.first == rhs.first;
 }
@@ -697,20 +697,20 @@ Sema::ActOnStartOfSwitchStmt(SourceLocation SwitchLoc, Expr *Cond,
   return SS;
 }
 
-static void AdjustAPSInt(llvm::APSInt &Val, unsigned BitWidth, bool IsSigned) {
+static void AdjustAPSInt(llvm37::APSInt &Val, unsigned BitWidth, bool IsSigned) {
   Val = Val.extOrTrunc(BitWidth);
   Val.setIsSigned(IsSigned);
 }
 
 /// Check the specified case value is in range for the given unpromoted switch
 /// type.
-static void checkCaseValue(Sema &S, SourceLocation Loc, const llvm::APSInt &Val,
+static void checkCaseValue(Sema &S, SourceLocation Loc, const llvm37::APSInt &Val,
                            unsigned UnpromotedWidth, bool UnpromotedSign) {
   // If the case value was signed and negative and the switch expression is
   // unsigned, don't bother to warn: this is implementation-defined behavior.
   // FIXME: Introduce a second, default-ignored warning for this case?
   if (UnpromotedWidth < Val.getBitWidth()) {
-    llvm::APSInt ConvVal(Val);
+    llvm37::APSInt ConvVal(Val);
     AdjustAPSInt(ConvVal, UnpromotedWidth, UnpromotedSign);
     AdjustAPSInt(ConvVal, Val.getBitWidth(), Val.isSigned());
     // FIXME: Use different diagnostics for overflow  in conversion to promoted
@@ -722,7 +722,7 @@ static void checkCaseValue(Sema &S, SourceLocation Loc, const llvm::APSInt &Val,
   }
 }
 
-typedef SmallVector<std::pair<llvm::APSInt, EnumConstantDecl*>, 64> EnumValsTy;
+typedef SmallVector<std::pair<llvm37::APSInt, EnumConstantDecl*>, 64> EnumValsTy;
 
 /// Returns true if we should emit a diagnostic about this case expression not
 /// being a part of the enum used in the switch controlling expression.
@@ -731,7 +731,7 @@ static bool ShouldDiagnoseSwitchCaseNotInEnum(const Sema &S,
                                               const Expr *CaseExpr,
                                               EnumValsTy::iterator &EI,
                                               EnumValsTy::iterator &EIEnd,
-                                              const llvm::APSInt &Val) {
+                                              const llvm37::APSInt &Val) {
   bool FlagType = ED->hasAttr<FlagEnumAttr>();
 
   if (const DeclRefExpr *DRE =
@@ -821,11 +821,11 @@ Sema::ActOnFinishSwitchStmt(SourceLocation SwitchLoc, Stmt *Switch,
   // Accumulate all of the case values in a vector so that we can sort them
   // and detect duplicates.  This vector contains the APInt for the case after
   // it has been converted to the condition type.
-  typedef SmallVector<std::pair<llvm::APSInt, CaseStmt*>, 64> CaseValsTy;
+  typedef SmallVector<std::pair<llvm37::APSInt, CaseStmt*>, 64> CaseValsTy;
   CaseValsTy CaseVals;
 
   // Keep track of any GNU case ranges we see.  The APSInt is the low value.
-  typedef std::vector<std::pair<llvm::APSInt, CaseStmt*> > CaseRangesTy;
+  typedef std::vector<std::pair<llvm37::APSInt, CaseStmt*> > CaseRangesTy;
   CaseRangesTy CaseRanges;
 
   DefaultStmt *TheDefaultStmt = nullptr;
@@ -858,7 +858,7 @@ Sema::ActOnFinishSwitchStmt(SourceLocation SwitchLoc, Stmt *Switch,
         break;
       }
 
-      llvm::APSInt LoVal;
+      llvm37::APSInt LoVal;
 
       if (getLangOpts().CPlusPlus11 || getLangOpts().HLSLVersion >= 2017) {
         // C++11 [stmt.switch]p2: the constant-expression shall be a converted
@@ -907,7 +907,7 @@ Sema::ActOnFinishSwitchStmt(SourceLocation SwitchLoc, Stmt *Switch,
   if (!HasDependentValue) {
     // If we don't have a default statement, check whether the
     // condition is constant.
-    llvm::APSInt ConstantCondValue;
+    llvm37::APSInt ConstantCondValue;
     bool HasConstantCond = false;
     if (!HasDependentValue && !TheDefaultStmt) {
       HasConstantCond = CondExpr->EvaluateAsInt(ConstantCondValue, Context,
@@ -970,12 +970,12 @@ Sema::ActOnFinishSwitchStmt(SourceLocation SwitchLoc, Stmt *Switch,
       std::stable_sort(CaseRanges.begin(), CaseRanges.end());
 
       // Scan the ranges, computing the high values and removing empty ranges.
-      std::vector<llvm::APSInt> HiVals;
+      std::vector<llvm37::APSInt> HiVals;
       for (unsigned i = 0, e = CaseRanges.size(); i != e; ++i) {
-        llvm::APSInt &LoVal = CaseRanges[i].first;
+        llvm37::APSInt &LoVal = CaseRanges[i].first;
         CaseStmt *CR = CaseRanges[i].second;
         Expr *Hi = CR->getRHS();
-        llvm::APSInt HiVal;
+        llvm37::APSInt HiVal;
 
         if (getLangOpts().CPlusPlus11) {
           // C++11 [stmt.switch]p2: the constant-expression shall be a converted
@@ -1029,14 +1029,14 @@ Sema::ActOnFinishSwitchStmt(SourceLocation SwitchLoc, Stmt *Switch,
       // ranges.  Since the range list is sorted, we only need to compare case
       // ranges with their neighbors.
       for (unsigned i = 0, e = CaseRanges.size(); i != e; ++i) {
-        llvm::APSInt &CRLo = CaseRanges[i].first;
-        llvm::APSInt &CRHi = HiVals[i];
+        llvm37::APSInt &CRLo = CaseRanges[i].first;
+        llvm37::APSInt &CRHi = HiVals[i];
         CaseStmt *CR = CaseRanges[i].second;
 
         // Check to see whether the case range overlaps with any
         // singleton cases.
         CaseStmt *OverlapStmt = nullptr;
-        llvm::APSInt OverlapVal(32);
+        llvm37::APSInt OverlapVal(32);
 
         // Find the smallest value >= the lower bound.  If I is in the
         // case range, then we have overlap.
@@ -1099,7 +1099,7 @@ Sema::ActOnFinishSwitchStmt(SourceLocation SwitchLoc, Stmt *Switch,
       // Gather all enum values, set their type and sort them,
       // allowing easier comparison with CaseVals.
       for (auto *EDI : ED->enumerators()) {
-        llvm::APSInt Val = EDI->getInitVal();
+        llvm37::APSInt Val = EDI->getInitVal();
         AdjustAPSInt(Val, CondWidth, CondIsSigned);
         EnumVals.push_back(std::make_pair(Val, EDI));
       }
@@ -1127,7 +1127,7 @@ Sema::ActOnFinishSwitchStmt(SourceLocation SwitchLoc, Stmt *Switch,
           Diag(CaseExpr->getExprLoc(), diag::warn_not_in_enum)
             << CondTypeBeforePromotion;
 
-        llvm::APSInt Hi =
+        llvm37::APSInt Hi =
           RI->second->getRHS()->EvaluateKnownConstInt(Context);
         AdjustAPSInt(Hi, CondWidth, CondIsSigned);
 
@@ -1155,7 +1155,7 @@ Sema::ActOnFinishSwitchStmt(SourceLocation SwitchLoc, Stmt *Switch,
 
         // Drop unneeded case ranges
         for (; RI != CaseRanges.end(); RI++) {
-          llvm::APSInt Hi =
+          llvm37::APSInt Hi =
             RI->second->getRHS()->EvaluateKnownConstInt(Context);
           AdjustAPSInt(Hi, CondWidth, CondIsSigned);
           if (EI->first <= Hi)
@@ -1215,7 +1215,7 @@ Sema::DiagnoseAssignmentEnum(QualType DstType, QualType SrcType,
         unsigned DstWidth = Context.getIntWidth(DstType);
         bool DstIsSigned = DstType->isSignedIntegerOrEnumerationType();
 
-        llvm::APSInt RhsVal = SrcExpr->EvaluateKnownConstInt(Context);
+        llvm37::APSInt RhsVal = SrcExpr->EvaluateKnownConstInt(Context);
         AdjustAPSInt(RhsVal, DstWidth, DstIsSigned);
         const EnumDecl *ED = ET->getDecl();
 
@@ -1224,14 +1224,14 @@ Sema::DiagnoseAssignmentEnum(QualType DstType, QualType SrcType,
             Diag(SrcExpr->getExprLoc(), diag::warn_not_in_enum_assignment)
               << DstType.getUnqualifiedType();
         } else {
-          typedef SmallVector<std::pair<llvm::APSInt, EnumConstantDecl *>, 64>
+          typedef SmallVector<std::pair<llvm37::APSInt, EnumConstantDecl *>, 64>
               EnumValsTy;
           EnumValsTy EnumVals;
 
           // Gather all enum values, set their type and sort them,
           // allowing easier comparison with rhs constant.
           for (auto *EDI : ED->enumerators()) {
-            llvm::APSInt Val = EDI->getInitVal();
+            llvm37::APSInt Val = EDI->getInitVal();
             AdjustAPSInt(Val, DstWidth, DstIsSigned);
             EnumVals.push_back(std::make_pair(Val, EDI));
           }
@@ -1318,13 +1318,13 @@ namespace {
   // the evaluated decls into a vector.  Simple is set to true if none
   // of the excluded constructs are used.
   class DeclExtractor : public EvaluatedExprVisitor<DeclExtractor> {
-    llvm::SmallPtrSetImpl<VarDecl*> &Decls;
+    llvm37::SmallPtrSetImpl<VarDecl*> &Decls;
     SmallVectorImpl<SourceRange> &Ranges;
     bool Simple;
   public:
     typedef EvaluatedExprVisitor<DeclExtractor> Inherited;
 
-    DeclExtractor(Sema &S, llvm::SmallPtrSetImpl<VarDecl*> &Decls,
+    DeclExtractor(Sema &S, llvm37::SmallPtrSetImpl<VarDecl*> &Decls,
                   SmallVectorImpl<SourceRange> &Ranges) :
         Inherited(S.Context),
         Decls(Decls),
@@ -1396,13 +1396,13 @@ namespace {
   // DeclMatcher checks to see if the decls are used in a non-evauluated
   // context.
   class DeclMatcher : public EvaluatedExprVisitor<DeclMatcher> {
-    llvm::SmallPtrSetImpl<VarDecl*> &Decls;
+    llvm37::SmallPtrSetImpl<VarDecl*> &Decls;
     bool FoundDecl;
 
   public:
     typedef EvaluatedExprVisitor<DeclMatcher> Inherited;
 
-    DeclMatcher(Sema &S, llvm::SmallPtrSetImpl<VarDecl*> &Decls,
+    DeclMatcher(Sema &S, llvm37::SmallPtrSetImpl<VarDecl*> &Decls,
                 Stmt *Statement) :
         Inherited(S.Context), Decls(Decls), FoundDecl(false) {
       if (!Statement) return;
@@ -1473,7 +1473,7 @@ namespace {
       return;
 
     PartialDiagnostic PDiag = S.PDiag(diag::warn_variables_not_in_loop_body);
-    llvm::SmallPtrSet<VarDecl*, 8> Decls;
+    llvm37::SmallPtrSet<VarDecl*, 8> Decls;
     SmallVector<SourceRange, 10> Ranges;
     DeclExtractor DE(S, Decls, Ranges);
     DE.Visit(Second);
@@ -1485,7 +1485,7 @@ namespace {
     if (Decls.size() == 0) return;
 
     // Don't warn on volatile, static, or global variables.
-    for (llvm::SmallPtrSetImpl<VarDecl*>::iterator I = Decls.begin(),
+    for (llvm37::SmallPtrSetImpl<VarDecl*>::iterator I = Decls.begin(),
                                                    E = Decls.end();
          I != E; ++I)
       if ((*I)->getType().isVolatileQualified() ||
@@ -1501,7 +1501,7 @@ namespace {
       PDiag << 0;
     else {
       PDiag << Decls.size();
-      for (llvm::SmallPtrSetImpl<VarDecl*>::iterator I = Decls.begin(),
+      for (llvm37::SmallPtrSetImpl<VarDecl*>::iterator I = Decls.begin(),
                                                      E = Decls.end();
            I != E; ++I)
         PDiag << (*I)->getDeclName();
@@ -3483,7 +3483,7 @@ class CatchHandlerType {
 
   // This is a special constructor to be used only with DenseMapInfo's
   // getEmptyKey() and getTombstoneKey() functions.
-  friend struct llvm::DenseMapInfo<CatchHandlerType>;
+  friend struct llvm37::DenseMapInfo<CatchHandlerType>;
   enum Unique { ForDenseMap };
   CatchHandlerType(QualType QT, Unique) : QT(QT), IsPointer(false) {}
 
@@ -3520,7 +3520,7 @@ public:
 };
 } // namespace
 
-namespace llvm {
+namespace llvm37 {
 template <> struct DenseMapInfo<CatchHandlerType> {
   static CatchHandlerType getEmptyKey() {
     return CatchHandlerType(DenseMapInfo<QualType>::getEmptyKey(),
@@ -3551,7 +3551,7 @@ template <> struct isPodLike<CatchHandlerType> {
 namespace {
 class CatchTypePublicBases {
   ASTContext &Ctx;
-  const llvm::DenseMap<CatchHandlerType, CXXCatchStmt *> &TypesToCheck;
+  const llvm37::DenseMap<CatchHandlerType, CXXCatchStmt *> &TypesToCheck;
   const bool CheckAgainstPointer;
 
   CXXCatchStmt *FoundHandler;
@@ -3560,7 +3560,7 @@ class CatchTypePublicBases {
 public:
   CatchTypePublicBases(
       ASTContext &Ctx,
-      const llvm::DenseMap<CatchHandlerType, CXXCatchStmt *> &T, bool C)
+      const llvm37::DenseMap<CatchHandlerType, CXXCatchStmt *> &T, bool C)
       : Ctx(Ctx), TypesToCheck(T), CheckAgainstPointer(C),
         FoundHandler(nullptr) {}
 
@@ -3609,7 +3609,7 @@ StmtResult Sema::ActOnCXXTryBlock(SourceLocation TryLoc, Stmt *TryBlock,
   assert(!Handlers.empty() &&
          "The parser shouldn't call this if there are no handlers.");
 
-  llvm::DenseMap<CatchHandlerType, CXXCatchStmt *> HandledTypes;
+  llvm37::DenseMap<CatchHandlerType, CXXCatchStmt *> HandledTypes;
   for (unsigned i = 0; i < NumHandlers; ++i) {
     CXXCatchStmt *H = cast<CXXCatchStmt>(Handlers[i]);
 

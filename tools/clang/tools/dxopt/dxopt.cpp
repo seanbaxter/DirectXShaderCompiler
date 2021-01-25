@@ -27,7 +27,7 @@
 #include <iostream>
 #include <limits>
 
-#include "llvm/Support/FileSystem.h"
+#include "llvm37/Support/FileSystem.h"
 
 inline bool wcseq(LPCWSTR a, LPCWSTR b) {
   return (a == nullptr && b == nullptr) || (a != nullptr && b != nullptr && wcscmp(a, b) == 0);
@@ -213,9 +213,9 @@ static void PrintHelp() {
 int __cdecl wmain(int argc, const wchar_t **argv_) {
   const char *pStage = "Operation";
   int retVal = 0;
-  if (llvm::sys::fs::SetupPerThreadFileSystem())
+  if (llvm37::sys::fs::SetupPerThreadFileSystem())
     return 1;
-  llvm::sys::fs::AutoCleanupPerThreadFileSystem auto_cleanup_fs;
+  llvm37::sys::fs::AutoCleanupPerThreadFileSystem auto_cleanup_fs;
   try {
     // Parse command line options.
     pStage = "Argument processing";

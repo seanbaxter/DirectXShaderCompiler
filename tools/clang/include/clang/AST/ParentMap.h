@@ -11,8 +11,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_AST_PARENTMAP_H
-#define LLVM_CLANG_AST_PARENTMAP_H
+#ifndef LLVM37_CLANG_AST_PARENTMAP_H
+#define LLVM37_CLANG_AST_PARENTMAP_H
 
 namespace clang {
 class Stmt;

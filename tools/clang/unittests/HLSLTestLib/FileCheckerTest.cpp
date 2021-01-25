@@ -29,11 +29,11 @@
 #include "dxc/Test/HlslTestUtils.h"
 #include "dxc/Test/DxcTestUtils.h"
 
-#include "llvm/Support/raw_os_ostream.h"
-#include "llvm/Support/MD5.h"
-#include "llvm/Support/FileSystem.h"
-#include "llvm/Support/Path.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/Support/raw_os_ostream.h"
+#include "llvm37/Support/MD5.h"
+#include "llvm37/Support/FileSystem.h"
+#include "llvm37/Support/Path.h"
+#include "llvm37/Support/raw_ostream.h"
 #include "dxc/Support/Global.h"
 #include "dxc/Support/dxcapi.use.h"
 #include "dxc/dxctools.h"
@@ -155,10 +155,10 @@ FileRunCommandResult FileRunCommandPart::RunFileChecker(const FileRunCommandResu
   if (dumpName) {
     // Dump t.InputForStdin to file for comparison purposes
     CW2A dumpNameUtf8(dumpName, CP_UTF8);
-    llvm::StringRef dumpPath(dumpNameUtf8.m_psz);
-    llvm::sys::fs::create_directories(llvm::sys::path::parent_path(dumpPath), /*IgnoreExisting*/true);
+    llvm37::StringRef dumpPath(dumpNameUtf8.m_psz);
+    llvm37::sys::fs::create_directories(llvm37::sys::path::parent_path(dumpPath), /*IgnoreExisting*/true);
     std::error_code ec;
-    llvm::raw_fd_ostream os(dumpPath, ec, llvm::sys::fs::OpenFlags::F_Text);
+    llvm37::raw_fd_ostream os(dumpPath, ec, llvm37::sys::fs::OpenFlags::F_Text);
     if (!ec) {
       os << t.InputForStdin;
     }
@@ -187,12 +187,12 @@ FileRunCommandResult FileRunCommandPart::ReadOptsForDxc(
     return FileRunCommandResult::Error("Only supported pattern includes input file as argument");
   args.erase(inputPos - args.c_str(), strlen("%s"));
 
-  llvm::StringRef argsRef = args;
-  llvm::SmallVector<llvm::StringRef, 8> splitArgs;
+  llvm37::StringRef argsRef = args;
+  llvm37::SmallVector<llvm37::StringRef, 8> splitArgs;
   argsRef.split(splitArgs, " ");
   argStrings = hlsl::options::MainArgs(splitArgs);
   std::string errorString;
-  llvm::raw_string_ostream errorStream(errorString);
+  llvm37::raw_string_ostream errorStream(errorString);
   int RunResult = ReadDxcOpts(hlsl::options::getHlslOptTable(), flagsToInclude,
                           argStrings, Opts, errorStream);
   errorStream.flush();
@@ -435,7 +435,7 @@ FileRunCommandResult FileRunCommandPart::RunDxc(dxc::DxcDllSupport &DllSupport, 
   // shader model, but these should use %dxilver explicitly.
   {
     unsigned RequiredDxilMajor = 1, RequiredDxilMinor = 0;
-    llvm::StringRef stage;
+    llvm37::StringRef stage;
     IFTBOOL(ParseTargetProfile(opts.TargetProfile, stage, RequiredDxilMajor, RequiredDxilMinor), E_INVALIDARG);
     if (RequiredDxilMinor != 0xF && stage.compare("rootsig") != 0) {
       // Convert stage to minimum dxil/validator version:
@@ -510,8 +510,8 @@ FileRunCommandResult FileRunCommandPart::RunDxv(dxc::DxcDllSupport &DllSupport, 
   }
   args.erase(inputPos - args.c_str(), strlen("%s"));
 
-  llvm::StringRef argsRef = args;
-  llvm::SmallVector<llvm::StringRef, 8> splitArgs;
+  llvm37::StringRef argsRef = args;
+  llvm37::SmallVector<llvm37::StringRef, 8> splitArgs;
   argsRef.split(splitArgs, " ");
   IFTMSG(splitArgs.size()==1, "wrong arg num for dxv");
       
@@ -583,12 +583,12 @@ FileRunCommandResult FileRunCommandPart::RunOpt(dxc::DxcDllSupport &DllSupport, 
   }
 
   args = strtrim(args);
-  llvm::StringRef argsRef = args;
-  llvm::SmallVector<llvm::StringRef, 8> splitArgs;
+  llvm37::StringRef argsRef = args;
+  llvm37::SmallVector<llvm37::StringRef, 8> splitArgs;
   argsRef.split(splitArgs, " ");
   std::vector<LPCWSTR> options;
   std::vector<std::wstring> optionStrings;
-  for (llvm::StringRef S : splitArgs) {
+  for (llvm37::StringRef S : splitArgs) {
     optionStrings.push_back(
         Unicode::UTF8ToUTF16StringOrThrow(strtrim(S.str()).c_str()));
   }

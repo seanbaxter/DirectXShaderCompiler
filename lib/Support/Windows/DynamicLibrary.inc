@@ -23,7 +23,7 @@
  #include <ntverp.h>
 #endif
 
-namespace llvm {
+namespace llvm37 {
 using namespace sys;
 
 //===----------------------------------------------------------------------===//

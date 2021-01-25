@@ -11,8 +11,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_AST_STMTVISITOR_H
-#define LLVM_CLANG_AST_STMTVISITOR_H
+#ifndef LLVM37_CLANG_AST_STMTVISITOR_H
+#define LLVM37_CLANG_AST_STMTVISITOR_H
 
 #include "clang/AST/ExprCXX.h"
 #include "clang/AST/ExprObjC.h"

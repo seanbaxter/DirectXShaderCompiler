@@ -20,7 +20,7 @@
 
 #include "jitprofiling.h"
 
-namespace llvm {
+namespace llvm37 {
 
 class IntelJITEventsWrapper {
   // Function pointer types for testing implementation of Intel jitprofiling
@@ -91,6 +91,6 @@ public:
   }
 };
 
-} //namespace llvm
+} //namespace llvm37
 
 #endif //INTEL_JIT_EVENTS_WRAPPER_H

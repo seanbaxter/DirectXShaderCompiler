@@ -12,13 +12,13 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_LIB_CODEGEN_CGCXXABI_H
-#define LLVM_CLANG_LIB_CODEGEN_CGCXXABI_H
+#ifndef LLVM37_CLANG_LIB_CODEGEN_CGCXXABI_H
+#define LLVM37_CLANG_LIB_CODEGEN_CGCXXABI_H
 
 #include "CodeGenFunction.h"
 #include "clang/Basic/LLVM.h"
 
-namespace llvm {
+namespace llvm37 {
 class Constant;
 class Type;
 class Value;
@@ -51,7 +51,7 @@ protected:
   ImplicitParamDecl *&getThisDecl(CodeGenFunction &CGF) {
     return CGF.CXXABIThisDecl;
   }
-  llvm::Value *&getThisValue(CodeGenFunction &CGF) {
+  llvm37::Value *&getThisValue(CodeGenFunction &CGF) {
     return CGF.CXXABIThisValue;
   }
 
@@ -59,12 +59,12 @@ protected:
   void ErrorUnsupportedABI(CodeGenFunction &CGF, StringRef S);
 
   /// Get a null value for unsupported member pointers.
-  llvm::Constant *GetBogusMemberPointer(QualType T);
+  llvm37::Constant *GetBogusMemberPointer(QualType T);
 
   ImplicitParamDecl *&getStructorImplicitParamDecl(CodeGenFunction &CGF) {
     return CGF.CXXStructorImplicitParamDecl;
   }
-  llvm::Value *&getStructorImplicitParamValue(CodeGenFunction &CGF) {
+  llvm37::Value *&getStructorImplicitParamValue(CodeGenFunction &CGF) {
     return CGF.CXXStructorImplicitParamValue;
   }
 
@@ -128,32 +128,32 @@ public:
 
   /// Find the LLVM type used to represent the given member pointer
   /// type.
-  virtual llvm::Type *
+  virtual llvm37::Type *
   ConvertMemberPointerType(const MemberPointerType *MPT);
 
   /// Load a member function from an object and a member function
   /// pointer.  Apply the this-adjustment and set 'This' to the
   /// adjusted value.
-  virtual llvm::Value *EmitLoadOfMemberFunctionPointer(
-      CodeGenFunction &CGF, const Expr *E, llvm::Value *&This,
-      llvm::Value *MemPtr, const MemberPointerType *MPT);
+  virtual llvm37::Value *EmitLoadOfMemberFunctionPointer(
+      CodeGenFunction &CGF, const Expr *E, llvm37::Value *&This,
+      llvm37::Value *MemPtr, const MemberPointerType *MPT);
 
   /// Calculate an l-value from an object and a data member pointer.
-  virtual llvm::Value *
+  virtual llvm37::Value *
   EmitMemberDataPointerAddress(CodeGenFunction &CGF, const Expr *E,
-                               llvm::Value *Base, llvm::Value *MemPtr,
+                               llvm37::Value *Base, llvm37::Value *MemPtr,
                                const MemberPointerType *MPT);
 
   /// Perform a derived-to-base, base-to-derived, or bitcast member
   /// pointer conversion.
-  virtual llvm::Value *EmitMemberPointerConversion(CodeGenFunction &CGF,
+  virtual llvm37::Value *EmitMemberPointerConversion(CodeGenFunction &CGF,
                                                    const CastExpr *E,
-                                                   llvm::Value *Src);
+                                                   llvm37::Value *Src);
 
   /// Perform a derived-to-base, base-to-derived, or bitcast member
   /// pointer conversion on a constant value.
-  virtual llvm::Constant *EmitMemberPointerConversion(const CastExpr *E,
-                                                      llvm::Constant *Src);
+  virtual llvm37::Constant *EmitMemberPointerConversion(const CastExpr *E,
+                                                      llvm37::Constant *Src);
 
   /// Return true if the given member pointer can be zero-initialized
   /// (in the C++ sense) with an LLVM zeroinitializer.
@@ -169,30 +169,30 @@ public:
   }
 
   /// Create a null member pointer of the given type.
-  virtual llvm::Constant *EmitNullMemberPointer(const MemberPointerType *MPT);
+  virtual llvm37::Constant *EmitNullMemberPointer(const MemberPointerType *MPT);
 
   /// Create a member pointer for the given method.
-  virtual llvm::Constant *EmitMemberFunctionPointer(const CXXMethodDecl *MD);
+  virtual llvm37::Constant *EmitMemberFunctionPointer(const CXXMethodDecl *MD);
 
   /// Create a member pointer for the given field.
-  virtual llvm::Constant *EmitMemberDataPointer(const MemberPointerType *MPT,
+  virtual llvm37::Constant *EmitMemberDataPointer(const MemberPointerType *MPT,
                                                 CharUnits offset);
 
   /// Create a member pointer for the given member pointer constant.
-  virtual llvm::Constant *EmitMemberPointer(const APValue &MP, QualType MPT);
+  virtual llvm37::Constant *EmitMemberPointer(const APValue &MP, QualType MPT);
 
   /// Emit a comparison between two member pointers.  Returns an i1.
-  virtual llvm::Value *
+  virtual llvm37::Value *
   EmitMemberPointerComparison(CodeGenFunction &CGF,
-                              llvm::Value *L,
-                              llvm::Value *R,
+                              llvm37::Value *L,
+                              llvm37::Value *R,
                               const MemberPointerType *MPT,
                               bool Inequality);
 
   /// Determine if a member pointer is non-null.  Returns an i1.
-  virtual llvm::Value *
+  virtual llvm37::Value *
   EmitMemberPointerIsNotNull(CodeGenFunction &CGF,
-                             llvm::Value *MemPtr,
+                             llvm37::Value *MemPtr,
                              const MemberPointerType *MPT);
 
 protected:
@@ -201,7 +201,7 @@ protected:
   /// Does not handle virtual conversions (in case we ever fully
   /// support an ABI that allows this).  Returns null if no adjustment
   /// is required.
-  llvm::Constant *getMemberPointerAdjustment(const CastExpr *E);
+  llvm37::Constant *getMemberPointerAdjustment(const CastExpr *E);
 
   /// \brief Computes the non-virtual adjustment needed for a member pointer
   /// conversion along an inheritance path stored in an APValue.  Unlike
@@ -212,50 +212,50 @@ protected:
 public:
   virtual void emitVirtualObjectDelete(CodeGenFunction &CGF,
                                        const CXXDeleteExpr *DE,
-                                       llvm::Value *Ptr, QualType ElementType,
+                                       llvm37::Value *Ptr, QualType ElementType,
                                        const CXXDestructorDecl *Dtor) = 0;
   virtual void emitRethrow(CodeGenFunction &CGF, bool isNoReturn) = 0;
   virtual void emitThrow(CodeGenFunction &CGF, const CXXThrowExpr *E) = 0;
-  virtual llvm::GlobalVariable *getThrowInfo(QualType T) { return nullptr; }
+  virtual llvm37::GlobalVariable *getThrowInfo(QualType T) { return nullptr; }
 
   virtual void emitBeginCatch(CodeGenFunction &CGF, const CXXCatchStmt *C) = 0;
 
-  virtual llvm::CallInst *
+  virtual llvm37::CallInst *
   emitTerminateForUnexpectedException(CodeGenFunction &CGF,
-                                      llvm::Value *Exn);
+                                      llvm37::Value *Exn);
 
-  virtual llvm::Constant *getAddrOfRTTIDescriptor(QualType Ty) = 0;
-  virtual llvm::Constant *
+  virtual llvm37::Constant *getAddrOfRTTIDescriptor(QualType Ty) = 0;
+  virtual llvm37::Constant *
   getAddrOfCXXCatchHandlerType(QualType Ty, QualType CatchHandlerType) = 0;
 
   virtual bool shouldTypeidBeNullChecked(bool IsDeref,
                                          QualType SrcRecordTy) = 0;
   virtual void EmitBadTypeidCall(CodeGenFunction &CGF) = 0;
-  virtual llvm::Value *EmitTypeid(CodeGenFunction &CGF, QualType SrcRecordTy,
-                                  llvm::Value *ThisPtr,
-                                  llvm::Type *StdTypeInfoPtrTy) = 0;
+  virtual llvm37::Value *EmitTypeid(CodeGenFunction &CGF, QualType SrcRecordTy,
+                                  llvm37::Value *ThisPtr,
+                                  llvm37::Type *StdTypeInfoPtrTy) = 0;
 
   virtual bool shouldDynamicCastCallBeNullChecked(bool SrcIsPtr,
                                                   QualType SrcRecordTy) = 0;
 
-  virtual llvm::Value *
-  EmitDynamicCastCall(CodeGenFunction &CGF, llvm::Value *Value,
+  virtual llvm37::Value *
+  EmitDynamicCastCall(CodeGenFunction &CGF, llvm37::Value *Value,
                       QualType SrcRecordTy, QualType DestTy,
-                      QualType DestRecordTy, llvm::BasicBlock *CastEnd) = 0;
+                      QualType DestRecordTy, llvm37::BasicBlock *CastEnd) = 0;
 
-  virtual llvm::Value *EmitDynamicCastToVoid(CodeGenFunction &CGF,
-                                             llvm::Value *Value,
+  virtual llvm37::Value *EmitDynamicCastToVoid(CodeGenFunction &CGF,
+                                             llvm37::Value *Value,
                                              QualType SrcRecordTy,
                                              QualType DestTy) = 0;
 
   virtual bool EmitBadCastCall(CodeGenFunction &CGF) = 0;
 
-  virtual llvm::Value *GetVirtualBaseClassOffset(CodeGenFunction &CGF,
-                                                 llvm::Value *This,
+  virtual llvm37::Value *GetVirtualBaseClassOffset(CodeGenFunction &CGF,
+                                                 llvm37::Value *This,
                                                  const CXXRecordDecl *ClassDecl,
                                         const CXXRecordDecl *BaseClassDecl) = 0;
 
-  virtual llvm::BasicBlock *EmitCtorCompleteObjectHandler(CodeGenFunction &CGF,
+  virtual llvm37::BasicBlock *EmitCtorCompleteObjectHandler(CodeGenFunction &CGF,
                                                           const CXXRecordDecl *RD);
 
   /// Emit the code to initialize hidden members required
@@ -294,9 +294,9 @@ public:
   /// Perform ABI-specific "this" argument adjustment required prior to
   /// a call of a virtual function.
   /// The "VirtualCall" argument is true iff the call itself is virtual.
-  virtual llvm::Value *
+  virtual llvm37::Value *
   adjustThisArgumentForVirtualFunctionCall(CodeGenFunction &CGF, GlobalDecl GD,
-                                           llvm::Value *This,
+                                           llvm37::Value *This,
                                            bool VirtualCall) {
     return This;
   }
@@ -316,8 +316,8 @@ public:
 
   /// Perform ABI-specific "this" parameter adjustment in a virtual function
   /// prologue.
-  virtual llvm::Value *adjustThisParameterInVirtualFunctionPrologue(
-      CodeGenFunction &CGF, GlobalDecl GD, llvm::Value *This) {
+  virtual llvm37::Value *adjustThisParameterInVirtualFunctionPrologue(
+      CodeGenFunction &CGF, GlobalDecl GD, llvm37::Value *This) {
     return This;
   }
 
@@ -337,7 +337,7 @@ public:
   virtual void EmitDestructorCall(CodeGenFunction &CGF,
                                   const CXXDestructorDecl *DD, CXXDtorType Type,
                                   bool ForVirtualBase, bool Delegating,
-                                  llvm::Value *This) = 0;
+                                  llvm37::Value *This) = 0;
 
   /// Emits the VTable definitions required for the given record type.
   virtual void emitVTableDefinitions(CodeGenVTables &CGVT,
@@ -347,32 +347,32 @@ public:
   /// building a constructor or a destructor. On return, NeedsVirtualOffset
   /// tells if a virtual base adjustment is needed in order to get the offset
   /// of the base subobject.
-  virtual llvm::Value *getVTableAddressPointInStructor(
+  virtual llvm37::Value *getVTableAddressPointInStructor(
       CodeGenFunction &CGF, const CXXRecordDecl *RD, BaseSubobject Base,
       const CXXRecordDecl *NearestVBase, bool &NeedsVirtualOffset) = 0;
 
   /// Get the address point of the vtable for the given base subobject while
   /// building a constexpr.
-  virtual llvm::Constant *
+  virtual llvm37::Constant *
   getVTableAddressPointForConstExpr(BaseSubobject Base,
                                     const CXXRecordDecl *VTableClass) = 0;
 
   /// Get the address of the vtable for the given record decl which should be
   /// used for the vptr at the given offset in RD.
-  virtual llvm::GlobalVariable *getAddrOfVTable(const CXXRecordDecl *RD,
+  virtual llvm37::GlobalVariable *getAddrOfVTable(const CXXRecordDecl *RD,
                                                 CharUnits VPtrOffset) = 0;
 
   /// Build a virtual function pointer in the ABI-specific way.
-  virtual llvm::Value *getVirtualFunctionPointer(CodeGenFunction &CGF,
+  virtual llvm37::Value *getVirtualFunctionPointer(CodeGenFunction &CGF,
                                                  GlobalDecl GD,
-                                                 llvm::Value *This,
-                                                 llvm::Type *Ty,
+                                                 llvm37::Value *This,
+                                                 llvm37::Type *Ty,
                                                  SourceLocation Loc) = 0;
 
   /// Emit the ABI-specific virtual destructor call.
-  virtual llvm::Value *
+  virtual llvm37::Value *
   EmitVirtualDestructorCall(CodeGenFunction &CGF, const CXXDestructorDecl *Dtor,
-                            CXXDtorType DtorType, llvm::Value *This,
+                            CXXDtorType DtorType, llvm37::Value *This,
                             const CXXMemberCallExpr *CE) = 0;
 
   virtual void adjustCallArgsForDestructorThunk(CodeGenFunction &CGF,
@@ -384,15 +384,15 @@ public:
   /// base tables.
   virtual void emitVirtualInheritanceTables(const CXXRecordDecl *RD) = 0;
 
-  virtual void setThunkLinkage(llvm::Function *Thunk, bool ForVTable,
+  virtual void setThunkLinkage(llvm37::Function *Thunk, bool ForVTable,
                                GlobalDecl GD, bool ReturnAdjustment) = 0;
 
-  virtual llvm::Value *performThisAdjustment(CodeGenFunction &CGF,
-                                             llvm::Value *This,
+  virtual llvm37::Value *performThisAdjustment(CodeGenFunction &CGF,
+                                             llvm37::Value *This,
                                              const ThisAdjustment &TA) = 0;
 
-  virtual llvm::Value *performReturnAdjustment(CodeGenFunction &CGF,
-                                               llvm::Value *Ret,
+  virtual llvm37::Value *performReturnAdjustment(CodeGenFunction &CGF,
+                                               llvm37::Value *Ret,
                                                const ReturnAdjustment &RA) = 0;
 
   virtual void EmitReturnFromThunk(CodeGenFunction &CGF,
@@ -429,9 +429,9 @@ public:
   ///   always a size_t
   /// \param ElementType - the base element allocated type,
   ///   i.e. the allocated type after stripping all array types
-  virtual llvm::Value *InitializeArrayCookie(CodeGenFunction &CGF,
-                                             llvm::Value *NewPtr,
-                                             llvm::Value *NumElements,
+  virtual llvm37::Value *InitializeArrayCookie(CodeGenFunction &CGF,
+                                             llvm37::Value *NewPtr,
+                                             llvm37::Value *NumElements,
                                              const CXXNewExpr *expr,
                                              QualType ElementType);
 
@@ -448,10 +448,10 @@ public:
   ///   function
   /// \param CookieSize - an out parameter which will be initialized
   ///   with the size of the cookie, or zero if there is no cookie
-  virtual void ReadArrayCookie(CodeGenFunction &CGF, llvm::Value *Ptr,
+  virtual void ReadArrayCookie(CodeGenFunction &CGF, llvm37::Value *Ptr,
                                const CXXDeleteExpr *expr,
-                               QualType ElementType, llvm::Value *&NumElements,
-                               llvm::Value *&AllocPtr, CharUnits &CookieSize);
+                               QualType ElementType, llvm37::Value *&NumElements,
+                               llvm37::Value *&AllocPtr, CharUnits &CookieSize);
 
   /// Return whether the given global decl needs a VTT parameter.
   virtual bool NeedsVTTParameter(GlobalDecl GD);
@@ -471,8 +471,8 @@ protected:
   /// Other parameters are as above.
   ///
   /// \return a size_t
-  virtual llvm::Value *readArrayCookieImpl(CodeGenFunction &IGF,
-                                           llvm::Value *ptr,
+  virtual llvm37::Value *readArrayCookieImpl(CodeGenFunction &IGF,
+                                           llvm37::Value *ptr,
                                            CharUnits cookieSize);
 
 public:
@@ -488,7 +488,7 @@ public:
   ///   - a static local variable
   ///   - a static data member of a class template instantiation
   virtual void EmitGuardedInit(CodeGenFunction &CGF, const VarDecl &D,
-                               llvm::GlobalVariable *DeclPtr,
+                               llvm37::GlobalVariable *DeclPtr,
                                bool PerformInit) = 0;
 
   /// Emit code to force the execution of a destructor during global
@@ -497,8 +497,8 @@ public:
   /// \param Dtor - a function taking a single pointer argument
   /// \param Addr - a pointer to pass to the destructor function.
   virtual void registerGlobalDtor(CodeGenFunction &CGF, const VarDecl &D,
-                                  llvm::Constant *Dtor,
-                                  llvm::Constant *Addr) = 0;
+                                  llvm37::Constant *Dtor,
+                                  llvm37::Constant *Addr) = 0;
 
   /*************************** thread_local initialization ********************/
 
@@ -513,10 +513,10 @@ public:
   ///        initialization.
   virtual void EmitThreadLocalInitFuncs(
       CodeGenModule &CGM,
-      ArrayRef<std::pair<const VarDecl *, llvm::GlobalVariable *>>
+      ArrayRef<std::pair<const VarDecl *, llvm37::GlobalVariable *>>
           CXXThreadLocals,
-      ArrayRef<llvm::Function *> CXXThreadLocalInits,
-      ArrayRef<llvm::GlobalVariable *> CXXThreadLocalInitVars) = 0;
+      ArrayRef<llvm37::Function *> CXXThreadLocalInits,
+      ArrayRef<llvm37::GlobalVariable *> CXXThreadLocalInitVars) = 0;
 
   // Determine if references to thread_local global variables can be made
   // directly or require access through a thread wrapper function.

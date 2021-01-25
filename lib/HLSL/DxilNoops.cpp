@@ -85,24 +85,24 @@
 // to return %cur_val.
 //
 
-#include "llvm/Pass.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/IR/Intrinsics.h"
-#include "llvm/IR/IRBuilder.h"
-#include "llvm/Transforms/Scalar.h"
-#include "llvm/Transforms/Utils/Local.h"
-#include "llvm/IR/DIBuilder.h"
-#include "llvm/Support/raw_os_ostream.h"
+#include "llvm37/Pass.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/IR/Intrinsics.h"
+#include "llvm37/IR/IRBuilder.h"
+#include "llvm37/Transforms/Scalar.h"
+#include "llvm37/Transforms/Utils/Local.h"
+#include "llvm37/IR/DIBuilder.h"
+#include "llvm37/Support/raw_os_ostream.h"
 #include "dxc/DXIL/DxilMetadataHelper.h"
 #include "dxc/DXIL/DxilConstants.h"
 #include "dxc/HLSL/DxilNoops.h"
-#include "llvm/Analysis/DxilValueCache.h"
+#include "llvm37/Analysis/DxilValueCache.h"
 
 #include <unordered_set>
 
-using namespace llvm;
+using namespace llvm37;
 
 static Function *GetOrCreateNoopF(Module &M) {
   LLVMContext &Ctx = M.getContext();
@@ -199,11 +199,11 @@ static Value *GetOrCreatePreserveCond(Function *F) {
     Type *i32ArrayTy = ArrayType::get(i32Ty, 1);
 
     unsigned int Values[1] = { 0 };
-    Constant *InitialValue = llvm::ConstantDataArray::get(M->getContext(), Values);
+    Constant *InitialValue = llvm37::ConstantDataArray::get(M->getContext(), Values);
 
     GV = new GlobalVariable(*M,
       i32ArrayTy, true,
-      llvm::GlobalValue::InternalLinkage,
+      llvm37::GlobalValue::InternalLinkage,
       InitialValue, hlsl::kPreserveName);
   }
 
@@ -229,7 +229,7 @@ static Value *GetOrCreatePreserveCond(Function *F) {
   return B.CreateTrunc(Load, B.getInt1Ty());
 }
 
-bool hlsl::IsPreserve(llvm::Instruction *I) {
+bool hlsl::IsPreserve(llvm37::Instruction *I) {
   SelectInst *S = dyn_cast<SelectInst>(I);
   if (!S)
     return false;
@@ -427,7 +427,7 @@ struct DxilInsertPreserves : public ModulePass {
 
 char DxilInsertPreserves::ID;
 
-Pass *llvm::createDxilInsertPreservesPass(bool AllowPreserves) {
+Pass *llvm37::createDxilInsertPreservesPass(bool AllowPreserves) {
   return new DxilInsertPreserves(AllowPreserves);
 }
 
@@ -481,7 +481,7 @@ public:
 char DxilPreserveToSelect::ID;
 }
 
-Pass *llvm::createDxilPreserveToSelectPass() {
+Pass *llvm37::createDxilPreserveToSelectPass() {
   return new DxilPreserveToSelect();
 }
 
@@ -512,7 +512,7 @@ public:
         if (!Arg.getType()->isPointerTy())
           continue;
 
-        DbgDeclareInst *Declare = llvm::FindAllocaDbgDeclare(&Arg);
+        DbgDeclareInst *Declare = llvm37::FindAllocaDbgDeclare(&Arg);
         if (!Declare)
           continue;
 
@@ -550,7 +550,7 @@ public:
 char DxilRewriteOutputArgDebugInfo::ID;
 }
 
-Pass *llvm::createDxilRewriteOutputArgDebugInfoPass() {
+Pass *llvm37::createDxilRewriteOutputArgDebugInfoPass() {
   return new DxilRewriteOutputArgDebugInfo();
 }
 
@@ -580,17 +580,17 @@ public:
         Type *i32ArrayTy = ArrayType::get(i32Ty, 1);
 
         unsigned int Values[1] = { 0 };
-        Constant *InitialValue = llvm::ConstantDataArray::get(M.getContext(), Values);
+        Constant *InitialValue = llvm37::ConstantDataArray::get(M.getContext(), Values);
 
         NothingGV = new GlobalVariable(M,
           i32ArrayTy, true,
-          llvm::GlobalValue::InternalLinkage,
+          llvm37::GlobalValue::InternalLinkage,
           InitialValue, hlsl::kNothingName);
       }
     }
 
     Constant *Gep = GetConstGep(NothingGV, 0, 0);
-    return new llvm::LoadInst(Gep, nullptr, InsertBefore);
+    return new llvm37::LoadInst(Gep, nullptr, InsertBefore);
   }
 
   bool LowerPreserves(Module &M);
@@ -676,7 +676,7 @@ bool DxilFinalizePreserves::runOnModule(Module &M) {
   return Changed;
 }
 
-Pass *llvm::createDxilFinalizePreservesPass() {
+Pass *llvm37::createDxilFinalizePreservesPass() {
   return new DxilFinalizePreserves();
 }
 

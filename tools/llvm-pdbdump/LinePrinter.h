@@ -7,17 +7,17 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_TOOLS_LLVMPDBDUMP_LINEPRINTER_H
-#define LLVM_TOOLS_LLVMPDBDUMP_LINEPRINTER_H
+#ifndef LLVM37_TOOLS_LLVMPDBDUMP_LINEPRINTER_H
+#define LLVM37_TOOLS_LLVMPDBDUMP_LINEPRINTER_H
 
-#include "llvm/ADT/StringRef.h"
-#include "llvm/ADT/Twine.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Support/Regex.h"
+#include "llvm37/ADT/StringRef.h"
+#include "llvm37/ADT/Twine.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Support/Regex.h"
 
 #include <list>
 
-namespace llvm {
+namespace llvm37 {
 
 class LinePrinter {
   friend class WithColor;
@@ -32,9 +32,9 @@ public:
   raw_ostream &getStream() { return OS; }
   int getIndentLevel() const { return CurrentIndent; }
 
-  bool IsTypeExcluded(llvm::StringRef TypeName);
-  bool IsSymbolExcluded(llvm::StringRef SymbolName);
-  bool IsCompilandExcluded(llvm::StringRef CompilandName);
+  bool IsTypeExcluded(llvm37::StringRef TypeName);
+  bool IsSymbolExcluded(llvm37::StringRef SymbolName);
+  bool IsCompilandExcluded(llvm37::StringRef CompilandName);
 
 private:
   template <typename Iter>

@@ -28,30 +28,30 @@
 //===----------------------------------------------------------------------===//
 
 #include "StratifiedSets.h"
-#include "llvm/ADT/BitVector.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/None.h"
-#include "llvm/ADT/Optional.h"
-#include "llvm/Analysis/AliasAnalysis.h"
-#include "llvm/Analysis/Passes.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/InstVisitor.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/ValueHandle.h"
-#include "llvm/Pass.h"
-#include "llvm/Support/Allocator.h"
-#include "llvm/Support/Compiler.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/BitVector.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/None.h"
+#include "llvm37/ADT/Optional.h"
+#include "llvm37/Analysis/AliasAnalysis.h"
+#include "llvm37/Analysis/Passes.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/InstVisitor.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/ValueHandle.h"
+#include "llvm37/Pass.h"
+#include "llvm37/Support/Allocator.h"
+#include "llvm37/Support/Compiler.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <algorithm>
 #include <cassert>
 #include <forward_list>
 #include <memory>
 #include <tuple>
 
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "cfl-aa"
 
@@ -83,17 +83,17 @@ const StratifiedIndex StratifiedLink::SetSentinel =
 namespace {
 // StratifiedInfo Attribute things.
 typedef unsigned StratifiedAttr;
-LLVM_CONSTEXPR unsigned MaxStratifiedAttrIndex = NumStratifiedAttrs;
-LLVM_CONSTEXPR unsigned AttrAllIndex = 0;
-LLVM_CONSTEXPR unsigned AttrGlobalIndex = 1;
-LLVM_CONSTEXPR unsigned AttrUnknownIndex = 2;
-LLVM_CONSTEXPR unsigned AttrFirstArgIndex = 3;
-LLVM_CONSTEXPR unsigned AttrLastArgIndex = MaxStratifiedAttrIndex;
-LLVM_CONSTEXPR unsigned AttrMaxNumArgs = AttrLastArgIndex - AttrFirstArgIndex;
+LLVM37_CONSTEXPR unsigned MaxStratifiedAttrIndex = NumStratifiedAttrs;
+LLVM37_CONSTEXPR unsigned AttrAllIndex = 0;
+LLVM37_CONSTEXPR unsigned AttrGlobalIndex = 1;
+LLVM37_CONSTEXPR unsigned AttrUnknownIndex = 2;
+LLVM37_CONSTEXPR unsigned AttrFirstArgIndex = 3;
+LLVM37_CONSTEXPR unsigned AttrLastArgIndex = MaxStratifiedAttrIndex;
+LLVM37_CONSTEXPR unsigned AttrMaxNumArgs = AttrLastArgIndex - AttrFirstArgIndex;
 
-LLVM_CONSTEXPR StratifiedAttr AttrNone = 0;
-LLVM_CONSTEXPR StratifiedAttr AttrUnknown = 1 << AttrUnknownIndex;
-LLVM_CONSTEXPR StratifiedAttr AttrAll = ~AttrNone;
+LLVM37_CONSTEXPR StratifiedAttr AttrNone = 0;
+LLVM37_CONSTEXPR StratifiedAttr AttrUnknown = 1 << AttrUnknownIndex;
+LLVM37_CONSTEXPR StratifiedAttr AttrAll = ~AttrNone;
 
 // \brief StratifiedSets call for knowledge of "direction", so this is how we
 // represent that locally.
@@ -549,7 +549,7 @@ public:
   case Instruction::OPCODE:                                                    \
     visit##OPCODE(*(CLASS *)CE);                                               \
     break;
-#include "llvm/IR/Instruction.def"
+#include "llvm37/IR/Instruction.def"
     }
   }
 };
@@ -733,7 +733,7 @@ char CFLAliasAnalysis::ID = 0;
 INITIALIZE_AG_PASS(CFLAliasAnalysis, AliasAnalysis, "cfl-aa",
                    "CFL-Based AA implementation", false, true, false)
 
-ImmutablePass *llvm::createCFLAliasAnalysisPass() {
+ImmutablePass *llvm37::createCFLAliasAnalysisPass() {
   return new CFLAliasAnalysis();
 }
 

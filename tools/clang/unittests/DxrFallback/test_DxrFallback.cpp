@@ -8,10 +8,10 @@
 #include "dxc/dxcdxrfallbackcompiler.h"
 #include "dxc/support/dxcapi.use.h"
 
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Module.h"
-#include "llvm/Support/FileSystem.h"
-#include "llvm/Support/MSFileSystem.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/Support/FileSystem.h"
+#include "llvm37/Support/MSFileSystem.h"
 
 #include "defaultTestFilePath.h"
 #include "ShaderTester.h"
@@ -25,7 +25,7 @@
 #include <vector>
 
 using namespace dxc;
-using namespace llvm;
+using namespace llvm37;
 using namespace hlsl;
 
 const int DEBUG_OUTPUT_LEVEL = 1;

@@ -16,13 +16,13 @@
 ///////////////////////////////////////////////////////////////////////////////
 using namespace clang;
 
-#ifdef LLVM_ON_UNIX
+#ifdef LLVM37_ON_UNIX
 #ifndef MS_SUPPORT_VARIABLE_LANGOPTS
 #define LANGOPT(Name, Bits, Default, Description) const unsigned LangOptionsBase::Name;
 #define ENUM_LANGOPT(Name, Type, Bits, Default, Description)
 #include "clang/Basic/LangOptions.fixed.def"
 #endif // MS_SUPPORT_VARIABLE_LANGOPTS
-#endif // LLVM_ON_UNIX
+#endif // LLVM37_ON_UNIX
 
 LangOptions::LangOptions() 
     : HLSLVersion(2018) {

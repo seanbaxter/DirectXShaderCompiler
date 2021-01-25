@@ -20,19 +20,19 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Transforms/IPO.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/SmallPtrSet.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/DebugInfo.h"
-#include "llvm/IR/DerivedTypes.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/TypeFinder.h"
-#include "llvm/IR/ValueSymbolTable.h"
-#include "llvm/Pass.h"
-#include "llvm/Transforms/Utils/Local.h"
-using namespace llvm;
+#include "llvm37/Transforms/IPO.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/SmallPtrSet.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/DebugInfo.h"
+#include "llvm37/IR/DerivedTypes.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/TypeFinder.h"
+#include "llvm37/IR/ValueSymbolTable.h"
+#include "llvm37/Pass.h"
+#include "llvm37/Transforms/Utils/Local.h"
+using namespace llvm37;
 
 namespace {
   class StripSymbols : public ModulePass {
@@ -101,7 +101,7 @@ char StripSymbols::ID = 0;
 INITIALIZE_PASS(StripSymbols, "strip",
                 "Strip all symbols from a module", false, false)
 
-ModulePass *llvm::createStripSymbolsPass(bool OnlyDebugInfo) {
+ModulePass *llvm37::createStripSymbolsPass(bool OnlyDebugInfo) {
   return new StripSymbols(OnlyDebugInfo);
 }
 
@@ -110,7 +110,7 @@ INITIALIZE_PASS(StripNonDebugSymbols, "strip-nondebug",
                 "Strip all symbols, except dbg symbols, from a module",
                 false, false)
 
-ModulePass *llvm::createStripNonDebugSymbolsPass() {
+ModulePass *llvm37::createStripNonDebugSymbolsPass() {
   return new StripNonDebugSymbols();
 }
 
@@ -118,7 +118,7 @@ char StripDebugDeclare::ID = 0;
 INITIALIZE_PASS(StripDebugDeclare, "strip-debug-declare",
                 "Strip all llvm.dbg.declare intrinsics", false, false)
 
-ModulePass *llvm::createStripDebugDeclarePass() {
+ModulePass *llvm37::createStripDebugDeclarePass() {
   return new StripDebugDeclare();
 }
 
@@ -126,7 +126,7 @@ char StripDeadDebugInfo::ID = 0;
 INITIALIZE_PASS(StripDeadDebugInfo, "strip-dead-debug-info",
                 "Strip debug info for unused symbols", false, false)
 
-ModulePass *llvm::createStripDeadDebugInfoPass() {
+ModulePass *llvm37::createStripDeadDebugInfoPass() {
   return new StripDeadDebugInfo();
 }
 

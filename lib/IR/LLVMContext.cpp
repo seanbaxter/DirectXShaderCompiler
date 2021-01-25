@@ -12,22 +12,22 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/IR/LLVMContext.h"
+#include "llvm37/IR/LLVMContext.h"
 #include "LLVMContextImpl.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/DebugLoc.h"
-#include "llvm/IR/DiagnosticInfo.h"
-#include "llvm/IR/DiagnosticPrinter.h"
-#include "llvm/IR/Instruction.h"
-#include "llvm/IR/Metadata.h"
-#include "llvm/Support/ManagedStatic.h"
-#include "llvm/Support/SourceMgr.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/DebugLoc.h"
+#include "llvm37/IR/DiagnosticInfo.h"
+#include "llvm37/IR/DiagnosticPrinter.h"
+#include "llvm37/IR/Instruction.h"
+#include "llvm37/IR/Metadata.h"
+#include "llvm37/Support/ManagedStatic.h"
+#include "llvm37/Support/SourceMgr.h"
 #include <cctype>
-using namespace llvm;
+using namespace llvm37;
 
 static ManagedStatic<LLVMContext> GlobalContext;
 
-LLVMContext& llvm::getGlobalContext() {
+LLVMContext& llvm37::getGlobalContext() {
   return *GlobalContext;
 }
 
@@ -191,15 +191,15 @@ static bool isDiagnosticEnabled(const DiagnosticInfo &DI) {
   // the pass that is emitting the diagnostic. If there is no match, ignore the
   // diagnostic and return.
   switch (DI.getKind()) {
-  case llvm::DK_OptimizationRemark:
+  case llvm37::DK_OptimizationRemark:
     if (!cast<DiagnosticInfoOptimizationRemark>(DI).isEnabled())
       return false;
     break;
-  case llvm::DK_OptimizationRemarkMissed:
+  case llvm37::DK_OptimizationRemarkMissed:
     if (!cast<DiagnosticInfoOptimizationRemarkMissed>(DI).isEnabled())
       return false;
     break;
-  case llvm::DK_OptimizationRemarkAnalysis:
+  case llvm37::DK_OptimizationRemarkAnalysis:
     if (!cast<DiagnosticInfoOptimizationRemarkAnalysis>(DI).isEnabled())
       return false;
     break;

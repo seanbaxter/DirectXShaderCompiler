@@ -17,9 +17,9 @@
 #include "clang/Analysis/Analyses/PostOrderCFGView.h"
 #include "clang/Analysis/AnalysisContext.h"
 #include "clang/Analysis/CFG.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/PostOrderIterator.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/PostOrderIterator.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <algorithm>
 #include <vector>
 
@@ -29,7 +29,7 @@ namespace {
 
 class DataflowWorklist {
   SmallVector<const CFGBlock *, 20> worklist;
-  llvm::BitVector enqueuedBlocks;
+  llvm37::BitVector enqueuedBlocks;
   PostOrderCFGView *POV;
 public:
   DataflowWorklist(const CFG &cfg, AnalysisDeclContext &Ctx)
@@ -82,12 +82,12 @@ namespace {
 class LiveVariablesImpl {
 public:  
   AnalysisDeclContext &analysisContext;
-  llvm::ImmutableSet<const Stmt *>::Factory SSetFact;
-  llvm::ImmutableSet<const VarDecl *>::Factory DSetFact;
-  llvm::DenseMap<const CFGBlock *, LiveVariables::LivenessValues> blocksEndToLiveness;
-  llvm::DenseMap<const CFGBlock *, LiveVariables::LivenessValues> blocksBeginToLiveness;
-  llvm::DenseMap<const Stmt *, LiveVariables::LivenessValues> stmtsToLiveness;
-  llvm::DenseMap<const DeclRefExpr *, unsigned> inAssignment;
+  llvm37::ImmutableSet<const Stmt *>::Factory SSetFact;
+  llvm37::ImmutableSet<const VarDecl *>::Factory DSetFact;
+  llvm37::DenseMap<const CFGBlock *, LiveVariables::LivenessValues> blocksEndToLiveness;
+  llvm37::DenseMap<const CFGBlock *, LiveVariables::LivenessValues> blocksBeginToLiveness;
+  llvm37::DenseMap<const Stmt *, LiveVariables::LivenessValues> stmtsToLiveness;
+  llvm37::DenseMap<const DeclRefExpr *, unsigned> inAssignment;
   const bool killAtAssign;
   
   LiveVariables::LivenessValues
@@ -143,12 +143,12 @@ LiveVariables::LivenessValues
 LiveVariablesImpl::merge(LiveVariables::LivenessValues valsA,
                          LiveVariables::LivenessValues valsB) {  
   
-  llvm::ImmutableSetRef<const Stmt *>
+  llvm37::ImmutableSetRef<const Stmt *>
     SSetRefA(valsA.liveStmts.getRootWithoutRetain(), SSetFact.getTreeFactory()),
     SSetRefB(valsB.liveStmts.getRootWithoutRetain(), SSetFact.getTreeFactory());
                                                 
   
-  llvm::ImmutableSetRef<const VarDecl *>
+  llvm37::ImmutableSetRef<const VarDecl *>
     DSetRefA(valsA.liveDecls.getRootWithoutRetain(), DSetFact.getTreeFactory()),
     DSetRefB(valsB.liveDecls.getRootWithoutRetain(), DSetFact.getTreeFactory());
   
@@ -244,8 +244,8 @@ static const Stmt *LookThroughStmt(const Stmt *S) {
   return S;
 }
 
-static void AddLiveStmt(llvm::ImmutableSet<const Stmt *> &Set,
-                        llvm::ImmutableSet<const Stmt *>::Factory &F,
+static void AddLiveStmt(llvm37::ImmutableSet<const Stmt *> &Set,
+                        llvm37::ImmutableSet<const Stmt *>::Factory &F,
                         const Stmt *S) {
   Set = F.add(Set, LookThroughStmt(S));
 }
@@ -500,7 +500,7 @@ LiveVariables::computeLiveness(AnalysisDeclContext &AC,
   // Construct the dataflow worklist.  Enqueue the exit block as the
   // start of the analysis.
   DataflowWorklist worklist(*cfg, AC);
-  llvm::BitVector everAnalyzedBlock(cfg->getNumBlockIDs());
+  llvm37::BitVector everAnalyzedBlock(cfg->getNumBlockIDs());
 
   // FIXME: we should enqueue using post order.
   for (CFG::const_iterator it = cfg->begin(), ei = cfg->end(); it != ei; ++it) {
@@ -567,7 +567,7 @@ void LiveVariables::dumpBlockLiveness(const SourceManager &M) {
 
 void LiveVariablesImpl::dumpBlockLiveness(const SourceManager &M) {
   std::vector<const CFGBlock *> vec;
-  for (llvm::DenseMap<const CFGBlock *, LiveVariables::LivenessValues>::iterator
+  for (llvm37::DenseMap<const CFGBlock *, LiveVariables::LivenessValues>::iterator
        it = blocksEndToLiveness.begin(), ei = blocksEndToLiveness.end();
        it != ei; ++it) {
     vec.push_back(it->first);    
@@ -580,13 +580,13 @@ void LiveVariablesImpl::dumpBlockLiveness(const SourceManager &M) {
 
   for (std::vector<const CFGBlock *>::iterator
         it = vec.begin(), ei = vec.end(); it != ei; ++it) {
-    llvm::errs() << "\n[ B" << (*it)->getBlockID()
+    llvm37::errs() << "\n[ B" << (*it)->getBlockID()
                  << " (live variables at block exit) ]\n";
     
     LiveVariables::LivenessValues vals = blocksEndToLiveness[*it];
     declVec.clear();
     
-    for (llvm::ImmutableSet<const VarDecl *>::iterator si =
+    for (llvm37::ImmutableSet<const VarDecl *>::iterator si =
           vals.liveDecls.begin(),
           se = vals.liveDecls.end(); si != se; ++si) {
       declVec.push_back(*si);      
@@ -598,13 +598,13 @@ void LiveVariablesImpl::dumpBlockLiveness(const SourceManager &M) {
 
     for (std::vector<const VarDecl*>::iterator di = declVec.begin(),
          de = declVec.end(); di != de; ++di) {
-      llvm::errs() << " " << (*di)->getDeclName().getAsString()
+      llvm37::errs() << " " << (*di)->getDeclName().getAsString()
                    << " <";
       (*di)->getLocation().dump(M);
-      llvm::errs() << ">\n";
+      llvm37::errs() << ">\n";
     }
   }
-  llvm::errs() << "\n";  
+  llvm37::errs() << "\n";  
 }
 
 const void *LiveVariables::getTag() { static int x; return &x; }

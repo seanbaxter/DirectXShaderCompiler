@@ -12,8 +12,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_STATICANALYZER_CORE_BUGREPORTER_BUGREPORTER_H
-#define LLVM_CLANG_STATICANALYZER_CORE_BUGREPORTER_BUGREPORTER_H
+#ifndef LLVM37_CLANG_STATICANALYZER_CORE_BUGREPORTER_BUGREPORTER_H
+#define LLVM37_CLANG_STATICANALYZER_CORE_BUGREPORTER_BUGREPORTER_H
 
 #include "clang/Basic/SourceLocation.h"
 #include "clang/StaticAnalyzer/Core/AnalyzerOptions.h"
@@ -21,12 +21,12 @@
 #include "clang/StaticAnalyzer/Core/BugReporter/PathDiagnostic.h"
 #include "clang/StaticAnalyzer/Core/CheckerManager.h"
 #include "clang/StaticAnalyzer/Core/PathSensitive/ProgramState.h"
-#include "llvm/ADT/DenseSet.h"
-#include "llvm/ADT/FoldingSet.h"
-#include "llvm/ADT/ImmutableSet.h"
-#include "llvm/ADT/SmallSet.h"
-#include "llvm/ADT/ilist.h"
-#include "llvm/ADT/ilist_node.h"
+#include "llvm37/ADT/DenseSet.h"
+#include "llvm37/ADT/FoldingSet.h"
+#include "llvm37/ADT/ImmutableSet.h"
+#include "llvm37/ADT/SmallSet.h"
+#include "llvm37/ADT/ilist.h"
+#include "llvm37/ADT/ilist_node.h"
 
 namespace clang {
 
@@ -52,7 +52,7 @@ class BugType;
 
 /// This class provides an interface through which checkers can create
 /// individual bug reports.
-class BugReport : public llvm::ilist_node<BugReport> {
+class BugReport : public llvm37::ilist_node<BugReport> {
 public:  
   class NodeResolver {
     virtual void anchor();
@@ -83,8 +83,8 @@ protected:
   SmallVector<SourceRange, 4> Ranges;
   ExtraTextList ExtraText;
   
-  typedef llvm::DenseSet<SymbolRef> Symbols;
-  typedef llvm::DenseSet<const MemRegion *> Regions;
+  typedef llvm37::DenseSet<SymbolRef> Symbols;
+  typedef llvm37::DenseSet<const MemRegion *> Regions;
 
   /// A (stack of) a set of symbols that are registered with this
   /// report as being "interesting", and thus used to help decide which
@@ -102,14 +102,14 @@ protected:
 
   /// A set of location contexts that correspoind to call sites which should be
   /// considered "interesting".
-  llvm::SmallSet<const LocationContext *, 2> InterestingLocationContexts;
+  llvm37::SmallSet<const LocationContext *, 2> InterestingLocationContexts;
 
   /// A set of custom visitors which generate "event" diagnostics at
   /// interesting points in the path.
   VisitorList Callbacks;
 
   /// Used for ensuring the visitors are only added once.
-  llvm::FoldingSet<BugReporterVisitor> CallbacksSet;
+  llvm37::FoldingSet<BugReporterVisitor> CallbacksSet;
 
   /// Used for clients to tell if the report's configuration has changed
   /// since the last time they checked.
@@ -131,7 +131,7 @@ protected:
   ///
   /// \sa markInvalid
   /// \sa removeInvalidation
-  llvm::SmallSet<InvalidationRecord, 4> Invalidations;
+  llvm37::SmallSet<InvalidationRecord, 4> Invalidations;
 
 private:
   // Used internally by BugReporter.
@@ -290,7 +290,7 @@ public:
   }
 
   /// \brief Get the SourceRanges associated with the report.
-  virtual llvm::iterator_range<ranges_iterator> getRanges();
+  virtual llvm37::iterator_range<ranges_iterator> getRanges();
 
   /// \brief Add custom or predefined bug report visitors to this report.
   ///
@@ -308,13 +308,13 @@ public:
   /// Profile to identify equivalent bug reports for error report coalescing.
   /// Reports are uniqued to ensure that we do not emit multiple diagnostics
   /// for each bug.
-  virtual void Profile(llvm::FoldingSetNodeID& hash) const;
+  virtual void Profile(llvm37::FoldingSetNodeID& hash) const;
 };
 
 } // end ento namespace
 } // end clang namespace
 
-namespace llvm {
+namespace llvm37 {
   template<> struct ilist_traits<clang::ento::BugReport>
     : public ilist_default_traits<clang::ento::BugReport> {
     clang::ento::BugReport *createSentinel() const {
@@ -340,9 +340,9 @@ namespace ento {
 // BugTypes (collections of related reports).
 //===----------------------------------------------------------------------===//
 
-class BugReportEquivClass : public llvm::FoldingSetNode {
+class BugReportEquivClass : public llvm37::FoldingSetNode {
   /// List of *owned* BugReport objects.
-  llvm::ilist<BugReport> Reports;
+  llvm37::ilist<BugReport> Reports;
 
   friend class BugReporter;
   void AddReport(std::unique_ptr<BugReport> R) {
@@ -353,13 +353,13 @@ public:
   BugReportEquivClass(std::unique_ptr<BugReport> R) { AddReport(std::move(R)); }
   ~BugReportEquivClass();
 
-  void Profile(llvm::FoldingSetNodeID& ID) const {
+  void Profile(llvm37::FoldingSetNodeID& ID) const {
     assert(!Reports.empty());
     Reports.front().Profile(ID);
   }
 
-  typedef llvm::ilist<BugReport>::iterator iterator;
-  typedef llvm::ilist<BugReport>::const_iterator const_iterator;
+  typedef llvm37::ilist<BugReport>::iterator iterator;
+  typedef llvm37::ilist<BugReport>::const_iterator const_iterator;
 
   iterator begin() { return Reports.begin(); }
   iterator end() { return Reports.end(); }
@@ -391,7 +391,7 @@ public:
   enum Kind { BaseBRKind, GRBugReporterKind };
 
 private:
-  typedef llvm::ImmutableSet<BugType*> BugTypesTy;
+  typedef llvm37::ImmutableSet<BugType*> BugTypesTy;
   BugTypesTy::Factory F;
   BugTypesTy BugTypes;
 
@@ -408,7 +408,7 @@ private:
                    ArrayRef<BugReport*> BugReports);
 
   /// The set of bug reports tracked by the BugReporter.
-  llvm::FoldingSet<BugReportEquivClass> EQClasses;
+  llvm37::FoldingSet<BugReportEquivClass> EQClasses;
   /// A vector of BugReports for tracking the allocated pointers and cleanup.
   std::vector<BugReportEquivClass *> EQClassesVector;
 
@@ -440,7 +440,7 @@ public:
   iterator end() { return BugTypes.end(); }
 
   /// \brief Iterator over the set of BugReports tracked by the BugReporter.
-  typedef llvm::FoldingSet<BugReportEquivClass>::iterator EQClasses_iterator;
+  typedef llvm37::FoldingSet<BugReportEquivClass>::iterator EQClasses_iterator;
   EQClasses_iterator EQClasses_begin() { return EQClasses.begin(); }
   EQClasses_iterator EQClasses_end() { return EQClasses.end(); }
 
@@ -478,7 +478,7 @@ public:
                        ArrayRef<SourceRange> Ranges = None);
 
 private:
-  llvm::StringMap<BugType *> StrBugTypes;
+  llvm37::StringMap<BugType *> StrBugTypes;
 
   /// \brief Returns a BugType that is associated with the given name and
   /// category.

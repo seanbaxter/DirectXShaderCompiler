@@ -8,11 +8,11 @@
 //===----------------------------------------------------------------------===//
 
 #include "gtest/gtest.h"
-#include "llvm/Support/DataTypes.h"
-#include "llvm/Support/LEB128.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/Support/DataTypes.h"
+#include "llvm37/Support/LEB128.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <string>
-using namespace llvm;
+using namespace llvm37;
 
 namespace {
 

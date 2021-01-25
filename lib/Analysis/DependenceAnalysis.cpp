@@ -51,23 +51,23 @@
 //                                                                            //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Analysis/DependenceAnalysis.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/Analysis/AliasAnalysis.h"
-#include "llvm/Analysis/LoopInfo.h"
-#include "llvm/Analysis/ScalarEvolution.h"
-#include "llvm/Analysis/ScalarEvolutionExpressions.h"
-#include "llvm/Analysis/ValueTracking.h"
-#include "llvm/IR/InstIterator.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/Operator.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/Analysis/DependenceAnalysis.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/Analysis/AliasAnalysis.h"
+#include "llvm37/Analysis/LoopInfo.h"
+#include "llvm37/Analysis/ScalarEvolution.h"
+#include "llvm37/Analysis/ScalarEvolutionExpressions.h"
+#include "llvm37/Analysis/ValueTracking.h"
+#include "llvm37/IR/InstIterator.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/Operator.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/raw_ostream.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "da"
 
@@ -129,7 +129,7 @@ INITIALIZE_PASS_END(DependenceAnalysis, "da",
 char DependenceAnalysis::ID = 0;
 
 
-FunctionPass *llvm::createDependenceAnalysisPass() {
+FunctionPass *llvm37::createDependenceAnalysisPass() {
   return new DependenceAnalysis();
 }
 

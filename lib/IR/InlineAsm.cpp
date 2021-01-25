@@ -11,13 +11,13 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/IR/InlineAsm.h"
+#include "llvm37/IR/InlineAsm.h"
 #include "ConstantsContext.h"
 #include "LLVMContextImpl.h"
-#include "llvm/IR/DerivedTypes.h"
+#include "llvm37/IR/DerivedTypes.h"
 #include <algorithm>
 #include <cctype>
-using namespace llvm;
+using namespace llvm37;
 
 // Implement the first virtual method in this class in this file so the
 // InlineAsm vtable is emitted here.

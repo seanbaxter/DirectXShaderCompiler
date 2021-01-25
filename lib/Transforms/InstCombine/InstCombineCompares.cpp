@@ -12,21 +12,21 @@
 //===----------------------------------------------------------------------===//
 
 #include "InstCombineInternal.h"
-#include "llvm/ADT/APSInt.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/Analysis/ConstantFolding.h"
-#include "llvm/Analysis/InstructionSimplify.h"
-#include "llvm/Analysis/MemoryBuiltins.h"
-#include "llvm/IR/ConstantRange.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/GetElementPtrTypeIterator.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/IR/PatternMatch.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Analysis/TargetLibraryInfo.h"
+#include "llvm37/ADT/APSInt.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/Analysis/ConstantFolding.h"
+#include "llvm37/Analysis/InstructionSimplify.h"
+#include "llvm37/Analysis/MemoryBuiltins.h"
+#include "llvm37/IR/ConstantRange.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/IR/GetElementPtrTypeIterator.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/IR/PatternMatch.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Analysis/TargetLibraryInfo.h"
 
-using namespace llvm;
+using namespace llvm37;
 using namespace PatternMatch;
 
 #define DEBUG_TYPE "instcombine"

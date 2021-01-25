@@ -7,19 +7,19 @@
 //
 //===----------------------------------------------------------------------===//
 //
-//  This file defines a template specialization of llvm::GraphTraits to
+//  This file defines a template specialization of llvm37::GraphTraits to
 //  treat ASTs (Stmt*) as graphs
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_AST_STMTGRAPHTRAITS_H
-#define LLVM_CLANG_AST_STMTGRAPHTRAITS_H
+#ifndef LLVM37_CLANG_AST_STMTGRAPHTRAITS_H
+#define LLVM37_CLANG_AST_STMTGRAPHTRAITS_H
 
 #include "clang/AST/Stmt.h"
-#include "llvm/ADT/DepthFirstIterator.h"
-#include "llvm/ADT/GraphTraits.h"
+#include "llvm37/ADT/DepthFirstIterator.h"
+#include "llvm37/ADT/GraphTraits.h"
 
-namespace llvm {
+namespace llvm37 {
 
 //template <typename T> struct GraphTraits;
 
@@ -27,7 +27,7 @@ namespace llvm {
 template <> struct GraphTraits<clang::Stmt*> {
   typedef clang::Stmt                       NodeType;
   typedef clang::Stmt::child_iterator       ChildIteratorType;
-  typedef llvm::df_iterator<clang::Stmt*>   nodes_iterator;
+  typedef llvm37::df_iterator<clang::Stmt*>   nodes_iterator;
 
   static NodeType* getEntryNode(clang::Stmt* S) { return S; }
 
@@ -54,7 +54,7 @@ template <> struct GraphTraits<clang::Stmt*> {
 template <> struct GraphTraits<const clang::Stmt*> {
   typedef const clang::Stmt                       NodeType;
   typedef clang::Stmt::const_child_iterator       ChildIteratorType;
-  typedef llvm::df_iterator<const clang::Stmt*>   nodes_iterator;
+  typedef llvm37::df_iterator<const clang::Stmt*>   nodes_iterator;
 
   static NodeType* getEntryNode(const clang::Stmt* S) { return S; }
 
@@ -78,6 +78,6 @@ template <> struct GraphTraits<const clang::Stmt*> {
 };
 
 
-} // end namespace llvm
+} // end namespace llvm37
 
 #endif

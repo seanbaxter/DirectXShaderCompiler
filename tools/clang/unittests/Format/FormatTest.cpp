@@ -9,7 +9,7 @@
 
 #include "FormatTestUtils.h"
 #include "clang/Format/Format.h"
-#include "llvm/Support/Debug.h"
+#include "llvm37/Support/Debug.h"
 #include "gtest/gtest.h"
 
 #define DEBUG_TYPE "format-test"
@@ -28,11 +28,11 @@ protected:
     IC_DoNotCheck
   };
 
-  std::string format(llvm::StringRef Code,
+  std::string format(llvm37::StringRef Code,
                      const FormatStyle &Style = getLLVMStyle(),
                      IncompleteCheck CheckIncomplete = IC_ExpectComplete) {
-    DEBUG(llvm::errs() << "---\n");
-    DEBUG(llvm::errs() << Code << "\n\n");
+    DEBUG(llvm37::errs() << "---\n");
+    DEBUG(llvm37::errs() << Code << "\n\n");
     std::vector<tooling::Range> Ranges(1, tooling::Range(0, Code.size()));
     bool IncompleteFormat = false;
     tooling::Replacements Replaces =
@@ -44,7 +44,7 @@ protected:
     ReplacementCount = Replaces.size();
     std::string Result = applyAllReplacements(Code, Replaces);
     EXPECT_NE("", Result);
-    DEBUG(llvm::errs() << "\n" << Result << "\n\n");
+    DEBUG(llvm37::errs() << "\n" << Result << "\n\n");
     return Result;
   }
 
@@ -60,28 +60,28 @@ protected:
     return Style;
   }
 
-  void verifyFormat(llvm::StringRef Code,
+  void verifyFormat(llvm37::StringRef Code,
                     const FormatStyle &Style = getLLVMStyle()) {
     EXPECT_EQ(Code.str(), format(test::messUp(Code), Style));
   }
 
-  void verifyIncompleteFormat(llvm::StringRef Code,
+  void verifyIncompleteFormat(llvm37::StringRef Code,
                               const FormatStyle &Style = getLLVMStyle()) {
     EXPECT_EQ(Code.str(),
               format(test::messUp(Code), Style, IC_ExpectIncomplete));
   }
 
-  void verifyGoogleFormat(llvm::StringRef Code) {
+  void verifyGoogleFormat(llvm37::StringRef Code) {
     verifyFormat(Code, getGoogleStyle());
   }
 
-  void verifyIndependentOfContext(llvm::StringRef text) {
+  void verifyIndependentOfContext(llvm37::StringRef text) {
     verifyFormat(text);
-    verifyFormat(llvm::Twine("void f() { " + text + " }").str());
+    verifyFormat(llvm37::Twine("void f() { " + text + " }").str());
   }
 
   /// \brief Verify that clang-format does not crash on the given input.
-  void verifyNoCrash(llvm::StringRef Code,
+  void verifyNoCrash(llvm37::StringRef Code,
                      const FormatStyle &Style = getLLVMStyle()) {
     format(Code, Style, IC_DoNotCheck);
   }
@@ -490,7 +490,7 @@ TEST_F(FormatTest, FormatsForLoop) {
   verifyFormat("for (aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaa =\n"
                "         aaaaaaaaaaaaaaaa.aaaaaaaaaaaaaaa;\n"
                "     aaaaaaaaaaa != aaaaaaaaaaaaaaaaaaa; ++aaaaaaaaaaa) {\n}");
-  verifyFormat("for (llvm::ArrayRef<NamedDecl *>::iterator\n"
+  verifyFormat("for (llvm37::ArrayRef<NamedDecl *>::iterator\n"
                "         I = FD->getDeclsInPrototypeScope().begin(),\n"
                "         E = FD->getDeclsInPrototypeScope().end();\n"
                "     I != E; ++I) {\n}");
@@ -4086,7 +4086,7 @@ TEST_F(FormatTest, AdaptiveOnePerLineFormatting) {
 }
 
 TEST_F(FormatTest, FormatsBuilderPattern) {
-  verifyFormat("return llvm::StringSwitch<Reference::Kind>(name)\n"
+  verifyFormat("return llvm37::StringSwitch<Reference::Kind>(name)\n"
                "    .StartsWith(\".eh_frame_hdr\", ORDER_EH_FRAMEHDR)\n"
                "    .StartsWith(\".eh_frame\", ORDER_EH_FRAME)\n"
                "    .StartsWith(\".init\", ORDER_INIT)\n"
@@ -4785,21 +4785,21 @@ TEST_F(FormatTest, AlignsPipes) {
       "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa << aaaaaaaaaaaaaaaaaaaaaaaaaaaa\n"
       "                                 << aaaaaaaaaaaaaaaaaaaaaaaaaaaa;");
   verifyFormat(
-      "llvm::outs() << \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"\n"
+      "llvm37::outs() << \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"\n"
       "                \"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\"\n"
       "             << \"ccccccccccccccccccccccccccccccccccccccccccccccccc\";");
   verifyFormat(
       "aaaaaaaa << (aaaaaaaaaaaaaaaaaaa << aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\n"
       "                                 << aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa)\n"
       "         << aaaaaaaaaaaaaaaaaaaaaaaaaaaaa;");
-  verifyFormat("llvm::errs() << aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa(\n"
+  verifyFormat("llvm37::errs() << aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa(\n"
                "                    aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa,\n"
                "                    aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa)\n"
                "             << bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb;");
-  verifyFormat("llvm::errs() << \"aaaaaaaaaaaaaaaaaaaaaaa: \"\n"
+  verifyFormat("llvm37::errs() << \"aaaaaaaaaaaaaaaaaaaaaaa: \"\n"
                "             << aaaaaaaaaaaaaaaaa(aaaaaaaa, aaaaaaaaaaa);");
   verifyFormat(
-      "llvm::errs() << aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa(\n"
+      "llvm37::errs() << aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa(\n"
       "    aaaaaaaaaaaaaaaaaaaaaaaaaaaa, aaaaaaaaaaaaaaaaaaaaaaaaaaaa);");
 
   verifyFormat("return out << \"somepacket = {\\n\"\n"
@@ -4809,25 +4809,25 @@ TEST_F(FormatTest, AlignsPipes) {
                "           << \" ddd = [\" << pkt.ddd << \"]\\n\"\n"
                "           << \"}\";");
 
-  verifyFormat("llvm::outs() << \"aaaaaaaaaaaaaaaa: \" << aaaaaaaaaaaaaaaa\n"
+  verifyFormat("llvm37::outs() << \"aaaaaaaaaaaaaaaa: \" << aaaaaaaaaaaaaaaa\n"
                "             << \"aaaaaaaaaaaaaaaa: \" << aaaaaaaaaaaaaaaa\n"
                "             << \"aaaaaaaaaaaaaaaa: \" << aaaaaaaaaaaaaaaa;");
   verifyFormat(
-      "llvm::outs() << \"aaaaaaaaaaaaaaaaa = \" << aaaaaaaaaaaaaaaaa\n"
+      "llvm37::outs() << \"aaaaaaaaaaaaaaaaa = \" << aaaaaaaaaaaaaaaaa\n"
       "             << \"bbbbbbbbbbbbbbbbb = \" << bbbbbbbbbbbbbbbbb\n"
       "             << \"ccccccccccccccccc = \" << ccccccccccccccccc\n"
       "             << \"ddddddddddddddddd = \" << ddddddddddddddddd\n"
       "             << \"eeeeeeeeeeeeeeeee = \" << eeeeeeeeeeeeeeeee;");
-  verifyFormat("llvm::outs() << aaaaaaaaaaaaaaaaaaaaaaaa << \"=\"\n"
+  verifyFormat("llvm37::outs() << aaaaaaaaaaaaaaaaaaaaaaaa << \"=\"\n"
                "             << bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb;");
   verifyFormat(
       "void f() {\n"
-      "  llvm::outs() << \"aaaaaaaaaaaaaaaaaaaa: \"\n"
+      "  llvm37::outs() << \"aaaaaaaaaaaaaaaaaaaa: \"\n"
       "               << aaaaaaaaaaaaa(aaaaaaaaaaaaaaaaaaaaaaaaaaaa);\n"
       "}");
-  verifyFormat("llvm::outs() << \"aaaaaaaaaaaaaaaa: \"\n"
+  verifyFormat("llvm37::outs() << \"aaaaaaaaaaaaaaaa: \"\n"
                "             << aaaaaaaa.aaaaaaaaaaaa(aaa)->aaaaaaaaaaaaaa();");
-  verifyFormat("llvm::errs() << aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa(\n"
+  verifyFormat("llvm37::errs() << aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa(\n"
                "                    aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa,\n"
                "                    aaaaaaaaaaaaaaaaaaaaa)\n"
                "             << aaaaaaaaaaaaaaaaaaaaaaaaaa;");
@@ -4837,13 +4837,13 @@ TEST_F(FormatTest, AlignsPipes) {
 
   // Breaking before the first "<<" is generally not desirable.
   verifyFormat(
-      "llvm::errs()\n"
+      "llvm37::errs()\n"
       "    << \"aaaaaaaaaaaaaaaaaaa: \" << aaaaaaaaaaaaaaaaaaaaaaaaaaaa\n"
       "    << \"aaaaaaaaaaaaaaaaaaa: \" << aaaaaaaaaaaaaaaaaaaaaaaaaaaa\n"
       "    << \"aaaaaaaaaaaaaaaaaaa: \" << aaaaaaaaaaaaaaaaaaaaaaaaaaaa\n"
       "    << \"aaaaaaaaaaaaaaaaaaa: \" << aaaaaaaaaaaaaaaaaaaaaaaaaaaa;",
       getLLVMStyleWithColumns(70));
-  verifyFormat("llvm::errs() << \"aaaaaaaaaaaaaaaaaaa: \"\n"
+  verifyFormat("llvm37::errs() << \"aaaaaaaaaaaaaaaaaaa: \"\n"
                "             << aaaaaaaaaaaaaaaaaaaaaaaaaaaa\n"
                "             << \"aaaaaaaaaaaaaaaaaaa: \"\n"
                "             << aaaaaaaaaaaaaaaaaaaaaaaaaaaa\n"
@@ -4861,13 +4861,13 @@ TEST_F(FormatTest, AlignsPipes) {
                "    << BEF << IsTemplate << Description << E->getType();");
 
   verifyFormat(
-      "llvm::errs() << aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\n"
+      "llvm37::errs() << aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\n"
       "                    .aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa();");
 
   // Incomplete string literal.
-  EXPECT_EQ("llvm::errs() << \"\n"
+  EXPECT_EQ("llvm37::errs() << \"\n"
             "             << a;",
-            format("llvm::errs() << \"\n<<a;"));
+            format("llvm37::errs() << \"\n<<a;"));
 
   verifyFormat("void f() {\n"
                "  CHECK_EQ(aaaa, (*bbbbbbbbb)->cccccc)\n"
@@ -4875,9 +4875,9 @@ TEST_F(FormatTest, AlignsPipes) {
                "}");
 
   // Handle 'endl'.
-  verifyFormat("llvm::errs() << aaaaaaaaaaaaaaaaaaaaaa << endl\n"
+  verifyFormat("llvm37::errs() << aaaaaaaaaaaaaaaaaaaaaa << endl\n"
                "             << bbbbbbbbbbbbbbbbbbbbbb << endl;");
-  verifyFormat("llvm::errs() << endl << bbbbbbbbbbbbbbbbbbbbbb << endl;");
+  verifyFormat("llvm37::errs() << endl << bbbbbbbbbbbbbbbbbbbbbb << endl;");
 }
 
 TEST_F(FormatTest, UnderstandsEquals) {
@@ -5692,7 +5692,7 @@ TEST_F(FormatTest, FormatsCasts) {
   verifyFormat("int a = alignof(int) * b;", getGoogleStyle());
   verifyFormat("template <> void f<int>(int i) SOME_ANNOTATION;");
   verifyFormat("f(\"%\" SOME_MACRO(ll) \"d\");");
-  verifyFormat("aaaaa &operator=(const aaaaa &) LLVM_DELETED_FUNCTION;");
+  verifyFormat("aaaaa &operator=(const aaaaa &) LLVM37_DELETED_FUNCTION;");
 
   // These are not casts, but at some point were confused with casts.
   verifyFormat("virtual void foo(int *) override;");
@@ -5856,7 +5856,7 @@ TEST_F(FormatTest, FormatsArrays) {
                "    [aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa]\n"
                "    [bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb] = ccccccccccc;");
   verifyFormat(
-      "llvm::outs() << \"aaaaaaaaaaaa: \"\n"
+      "llvm37::outs() << \"aaaaaaaaaaaa: \"\n"
       "             << (*aaaaaaaiaaaaaaa)[aaaaaaaaaaaaaaaaaaaaaaaaa]\n"
       "                                  [aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa];");
 
@@ -7604,9 +7604,9 @@ TEST_F(FormatTest, BreaksStringLiterals) {
                    "aaaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaaa "
                    "aaaaaaaaaaaaaaaaaaaaaa\";",
                    getGoogleStyle()));
-  EXPECT_EQ("llvm::outs() << \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa \"\n"
+  EXPECT_EQ("llvm37::outs() << \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa \"\n"
             "                \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\";",
-            format("llvm::outs() << "
+            format("llvm37::outs() << "
                    "\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaa"
                    "aaaaaaaaaaaaaaaaaaa\";"));
   EXPECT_EQ("ffff(\n"
@@ -9857,7 +9857,7 @@ TEST_F(FormatTest, FormatsLambdas) {
                "               : [] {\n"
                "                   return 2; //\n"
                "                 }();");
-  verifyFormat("llvm::errs() << \"number of twos is \"\n"
+  verifyFormat("llvm37::errs() << \"number of twos is \"\n"
                "             << std::count_if(v.begin(), v.end(), [](int x) {\n"
                "                  return x == 2; // force break\n"
                "                });");

@@ -12,8 +12,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_STATICANALYZER_CORE_PATHSENSITIVE_CHECKERCONTEXT_H
-#define LLVM_CLANG_STATICANALYZER_CORE_PATHSENSITIVE_CHECKERCONTEXT_H
+#ifndef LLVM37_CLANG_STATICANALYZER_CORE_PATHSENSITIVE_CHECKERCONTEXT_H
+#define LLVM37_CLANG_STATICANALYZER_CORE_PATHSENSITIVE_CHECKERCONTEXT_H
 
 #include "clang/StaticAnalyzer/Core/PathSensitive/ExprEngine.h"
 #include "clang/StaticAnalyzer/Core/PathSensitive/ProgramStateTrait.h"
@@ -22,7 +22,7 @@ namespace clang {
 namespace ento {
 
   /// Declares an immutable map of type \p NameTy, suitable for placement into
-  /// the ProgramState. This is implementing using llvm::ImmutableMap.
+  /// the ProgramState. This is implementing using llvm37::ImmutableMap.
   ///
   /// \code
   /// State = State->set<Name>(K, V);
@@ -38,7 +38,7 @@ namespace ento {
                                      CLANG_ENTO_PROGRAMSTATE_MAP(Key, Value))
 
   /// Declares an immutable set of type \p NameTy, suitable for placement into
-  /// the ProgramState. This is implementing using llvm::ImmutableSet.
+  /// the ProgramState. This is implementing using llvm37::ImmutableSet.
   ///
   /// \code
   /// State = State->add<Name>(E);
@@ -50,10 +50,10 @@ namespace ento {
   /// The macro should not be used inside namespaces, or for traits that must
   /// be accessible from more than one translation unit.
   #define REGISTER_SET_WITH_PROGRAMSTATE(Name, Elem) \
-    REGISTER_TRAIT_WITH_PROGRAMSTATE(Name, llvm::ImmutableSet<Elem>)
+    REGISTER_TRAIT_WITH_PROGRAMSTATE(Name, llvm37::ImmutableSet<Elem>)
   
   /// Declares an immutable list of type \p NameTy, suitable for placement into
-  /// the ProgramState. This is implementing using llvm::ImmutableList.
+  /// the ProgramState. This is implementing using llvm37::ImmutableList.
   ///
   /// \code
   /// State = State->add<Name>(E); // Adds to the /end/ of the list.
@@ -64,7 +64,7 @@ namespace ento {
   /// The macro should not be used inside namespaces, or for traits that must
   /// be accessible from more than one translation unit.
   #define REGISTER_LIST_WITH_PROGRAMSTATE(Name, Elem) \
-    REGISTER_TRAIT_WITH_PROGRAMSTATE(Name, llvm::ImmutableList<Elem>)
+    REGISTER_TRAIT_WITH_PROGRAMSTATE(Name, llvm37::ImmutableList<Elem>)
 
 
 class CheckerContext {

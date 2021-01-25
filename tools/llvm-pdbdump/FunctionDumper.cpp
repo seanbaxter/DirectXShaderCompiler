@@ -12,26 +12,26 @@
 #include "LinePrinter.h"
 #include "llvm-pdbdump.h"
 
-#include "llvm/DebugInfo/PDB/IPDBSession.h"
-#include "llvm/DebugInfo/PDB/PDBSymbolData.h"
-#include "llvm/DebugInfo/PDB/PDBSymbolFunc.h"
-#include "llvm/DebugInfo/PDB/PDBSymbolFuncDebugEnd.h"
-#include "llvm/DebugInfo/PDB/PDBSymbolFuncDebugStart.h"
-#include "llvm/DebugInfo/PDB/PDBSymbolTypeArray.h"
-#include "llvm/DebugInfo/PDB/PDBSymbolTypeEnum.h"
-#include "llvm/DebugInfo/PDB/PDBSymbolTypeFunctionArg.h"
-#include "llvm/DebugInfo/PDB/PDBSymbolTypeFunctionSig.h"
-#include "llvm/DebugInfo/PDB/PDBSymbolTypePointer.h"
-#include "llvm/DebugInfo/PDB/PDBSymbolTypeTypedef.h"
-#include "llvm/DebugInfo/PDB/PDBSymbolTypeUDT.h"
-#include "llvm/Support/Format.h"
+#include "llvm37/DebugInfo/PDB/IPDBSession.h"
+#include "llvm37/DebugInfo/PDB/PDBSymbolData.h"
+#include "llvm37/DebugInfo/PDB/PDBSymbolFunc.h"
+#include "llvm37/DebugInfo/PDB/PDBSymbolFuncDebugEnd.h"
+#include "llvm37/DebugInfo/PDB/PDBSymbolFuncDebugStart.h"
+#include "llvm37/DebugInfo/PDB/PDBSymbolTypeArray.h"
+#include "llvm37/DebugInfo/PDB/PDBSymbolTypeEnum.h"
+#include "llvm37/DebugInfo/PDB/PDBSymbolTypeFunctionArg.h"
+#include "llvm37/DebugInfo/PDB/PDBSymbolTypeFunctionSig.h"
+#include "llvm37/DebugInfo/PDB/PDBSymbolTypePointer.h"
+#include "llvm37/DebugInfo/PDB/PDBSymbolTypeTypedef.h"
+#include "llvm37/DebugInfo/PDB/PDBSymbolTypeUDT.h"
+#include "llvm37/Support/Format.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 namespace {
 template <class T>
 void dumpClassParentWithScopeOperator(const T &Symbol, LinePrinter &Printer,
-                                      llvm::FunctionDumper &Dumper) {
+                                      llvm37::FunctionDumper &Dumper) {
   uint32_t ClassParentId = Symbol.getClassParentId();
   auto ClassParent =
       Symbol.getSession().template getConcreteSymbolById<PDBSymbolTypeUDT>(

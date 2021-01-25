@@ -15,11 +15,11 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_AST_DECLACCESSPAIR_H
-#define LLVM_CLANG_AST_DECLACCESSPAIR_H
+#ifndef LLVM37_CLANG_AST_DECLACCESSPAIR_H
+#define LLVM37_CLANG_AST_DECLACCESSPAIR_H
 
 #include "clang/Basic/Specifiers.h"
-#include "llvm/Support/DataTypes.h"
+#include "llvm37/Support/DataTypes.h"
 
 namespace clang {
 
@@ -28,7 +28,7 @@ class NamedDecl;
 /// A POD class for pairing a NamedDecl* with an access specifier.
 /// Can be put into unions.
 class DeclAccessPair {
-  uintptr_t Ptr; // we'd use llvm::PointerUnion, but it isn't trivial
+  uintptr_t Ptr; // we'd use llvm37::PointerUnion, but it isn't trivial
 
   enum { Mask = 0x3 };
 
@@ -62,7 +62,7 @@ public:
 }
 
 // Take a moment to tell SmallVector that DeclAccessPair is POD.
-namespace llvm {
+namespace llvm37 {
 template<typename> struct isPodLike;
 template<> struct isPodLike<clang::DeclAccessPair> {
    static const bool value = true;

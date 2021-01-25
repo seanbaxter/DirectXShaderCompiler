@@ -31,16 +31,16 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/ADT/DAGDeltaAlgorithm.h"
-#include "llvm/ADT/DeltaAlgorithm.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/Format.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/DAGDeltaAlgorithm.h"
+#include "llvm37/ADT/DeltaAlgorithm.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/Format.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <algorithm>
 #include <cassert>
 #include <iterator>
 #include <map>
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "dag-delta"
 
@@ -225,58 +225,58 @@ DAGDeltaAlgorithmImpl::DAGDeltaAlgorithmImpl(
   
   // Dump useful debug info.
   DEBUG({
-      llvm::errs() << "-- DAGDeltaAlgorithmImpl --\n";
-      llvm::errs() << "Changes: [";
+      llvm37::errs() << "-- DAGDeltaAlgorithmImpl --\n";
+      llvm37::errs() << "Changes: [";
       for (changeset_ty::const_iterator it = Changes.begin(),
              ie = Changes.end(); it != ie; ++it) {
-        if (it != Changes.begin()) llvm::errs() << ", ";
-        llvm::errs() << *it;
+        if (it != Changes.begin()) llvm37::errs() << ", ";
+        llvm37::errs() << *it;
 
         if (succ_begin(*it) != succ_end(*it)) {
-          llvm::errs() << "(";
+          llvm37::errs() << "(";
           for (succ_iterator_ty it2 = succ_begin(*it),
                  ie2 = succ_end(*it); it2 != ie2; ++it2) {
-            if (it2 != succ_begin(*it)) llvm::errs() << ", ";
-            llvm::errs() << "->" << *it2;
+            if (it2 != succ_begin(*it)) llvm37::errs() << ", ";
+            llvm37::errs() << "->" << *it2;
           }
-          llvm::errs() << ")";
+          llvm37::errs() << ")";
         }
       }
-      llvm::errs() << "]\n";
+      llvm37::errs() << "]\n";
 
-      llvm::errs() << "Roots: [";
+      llvm37::errs() << "Roots: [";
       for (std::vector<change_ty>::const_iterator it = Roots.begin(),
              ie = Roots.end(); it != ie; ++it) {
-        if (it != Roots.begin()) llvm::errs() << ", ";
-        llvm::errs() << *it;
+        if (it != Roots.begin()) llvm37::errs() << ", ";
+        llvm37::errs() << *it;
       }
-      llvm::errs() << "]\n";
+      llvm37::errs() << "]\n";
 
-      llvm::errs() << "Predecessor Closure:\n";
+      llvm37::errs() << "Predecessor Closure:\n";
       for (changeset_ty::const_iterator it = Changes.begin(),
              ie = Changes.end(); it != ie; ++it) {
-        llvm::errs() << format("  %-4d: [", *it);
+        llvm37::errs() << format("  %-4d: [", *it);
         for (pred_closure_iterator_ty it2 = pred_closure_begin(*it),
                ie2 = pred_closure_end(*it); it2 != ie2; ++it2) {
-          if (it2 != pred_closure_begin(*it)) llvm::errs() << ", ";
-          llvm::errs() << *it2;
+          if (it2 != pred_closure_begin(*it)) llvm37::errs() << ", ";
+          llvm37::errs() << *it2;
         }
-        llvm::errs() << "]\n";
+        llvm37::errs() << "]\n";
       }
       
-      llvm::errs() << "Successor Closure:\n";
+      llvm37::errs() << "Successor Closure:\n";
       for (changeset_ty::const_iterator it = Changes.begin(),
              ie = Changes.end(); it != ie; ++it) {
-        llvm::errs() << format("  %-4d: [", *it);
+        llvm37::errs() << format("  %-4d: [", *it);
         for (succ_closure_iterator_ty it2 = succ_closure_begin(*it),
                ie2 = succ_closure_end(*it); it2 != ie2; ++it2) {
-          if (it2 != succ_closure_begin(*it)) llvm::errs() << ", ";
-          llvm::errs() << *it2;
+          if (it2 != succ_closure_begin(*it)) llvm37::errs() << ", ";
+          llvm37::errs() << *it2;
         }
-        llvm::errs() << "]\n";
+        llvm37::errs() << "]\n";
       }
 
-      llvm::errs() << "\n\n";
+      llvm37::errs() << "\n\n";
     });
 }
 
@@ -313,7 +313,7 @@ DAGDeltaAlgorithmImpl::Run() {
   // Invariant:  Required == (Required union succ*(Required))
   while (!CurrentSet.empty()) {
     DEBUG({
-        llvm::errs() << "DAG_DD - " << CurrentSet.size() << " active changes, "
+        llvm37::errs() << "DAG_DD - " << CurrentSet.size() << " active changes, "
                      << Required.size() << " required changes\n";
       });
 

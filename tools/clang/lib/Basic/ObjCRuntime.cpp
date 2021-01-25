@@ -13,7 +13,7 @@
 //===----------------------------------------------------------------------===//
 
 #include "clang/Basic/ObjCRuntime.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/Support/raw_ostream.h"
 //                                                                           //
 ///////////////////////////////////////////////////////////////////////////////
 using namespace clang;
@@ -21,7 +21,7 @@ using namespace clang;
 std::string ObjCRuntime::getAsString() const {
   std::string Result;
   {
-    llvm::raw_string_ostream Out(Result);
+    llvm37::raw_string_ostream Out(Result);
     Out << *this;
   }
   return Result;  

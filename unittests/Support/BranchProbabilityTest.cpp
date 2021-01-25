@@ -7,13 +7,13 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Support/BranchProbability.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/Support/BranchProbability.h"
+#include "llvm37/Support/raw_ostream.h"
 #include "gtest/gtest.h"
 
-using namespace llvm;
+using namespace llvm37;
 
-namespace llvm {
+namespace llvm37 {
 void PrintTo(const BranchProbability &P, ::std::ostream *os) {
   *os << P.getNumerator() << "/" << P.getDenominator();
 }

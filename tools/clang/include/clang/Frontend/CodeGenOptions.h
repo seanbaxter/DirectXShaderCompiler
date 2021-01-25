@@ -11,11 +11,11 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_FRONTEND_CODEGENOPTIONS_H
-#define LLVM_CLANG_FRONTEND_CODEGENOPTIONS_H
+#ifndef LLVM37_CLANG_FRONTEND_CODEGENOPTIONS_H
+#define LLVM37_CLANG_FRONTEND_CODEGENOPTIONS_H
 
 #include "clang/Basic/Sanitizers.h"
-#include "llvm/Support/Regex.h"
+#include "llvm37/Support/Regex.h"
 #include <memory>
 #include <string>
 #include <vector>
@@ -245,14 +245,14 @@ public:
   /// expression (and support this feature), will emit a diagnostic
   /// whenever they perform a transformation. This is enabled by the
   /// -Rpass=regexp flag.
-  std::shared_ptr<llvm::Regex> OptimizationRemarkPattern;
+  std::shared_ptr<llvm37::Regex> OptimizationRemarkPattern;
 
   /// Regular expression to select optimizations for which we should enable
   /// missed optimization remarks. Transformation passes whose name matches this
   /// expression (and support this feature), will emit a diagnostic
   /// whenever they tried but failed to perform a transformation. This is
   /// enabled by the -Rpass-missed=regexp flag.
-  std::shared_ptr<llvm::Regex> OptimizationRemarkMissedPattern;
+  std::shared_ptr<llvm37::Regex> OptimizationRemarkMissedPattern;
 
   /// Regular expression to select optimizations for which we should enable
   /// optimization analyses. Transformation passes whose name matches this
@@ -260,7 +260,7 @@ public:
   /// whenever they want to explain why they decided to apply or not apply
   /// a given transformation. This is enabled by the -Rpass-analysis=regexp
   /// flag.
-  std::shared_ptr<llvm::Regex> OptimizationRemarkAnalysisPattern;
+  std::shared_ptr<llvm37::Regex> OptimizationRemarkAnalysisPattern;
 
   /// Set of files definining the rules for the symbol rewriting.
   std::vector<std::string> RewriteMapFiles;

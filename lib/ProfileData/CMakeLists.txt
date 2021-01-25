@@ -10,7 +10,7 @@ add_llvm_library(LLVMProfileData
   SampleProfWriter.cpp
 
   ADDITIONAL_HEADER_DIRS
-  ${LLVM_MAIN_INCLUDE_DIR}/llvm/ProfileData
+  ${LLVM37_MAIN_INCLUDE_DIR}/llvm/ProfileData
 
   DEPENDS
   intrinsics_gen

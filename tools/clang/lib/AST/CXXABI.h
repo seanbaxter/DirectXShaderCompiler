@@ -12,8 +12,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_LIB_AST_CXXABI_H
-#define LLVM_CLANG_LIB_AST_CXXABI_H
+#ifndef LLVM37_CLANG_LIB_AST_CXXABI_H
+#define LLVM37_CLANG_LIB_AST_CXXABI_H
 
 #include "clang/AST/Type.h"
 

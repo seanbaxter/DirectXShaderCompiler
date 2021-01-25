@@ -9,7 +9,7 @@
 //                                                                           //
 ///////////////////////////////////////////////////////////////////////////////
 
-#include "llvm/Support/Debug.h"
+#include "llvm37/Support/Debug.h"
 #include "DxbcConverterImpl.h"
 #include "DxilConvPasses/DxilCleanup.h"
 #include "dxc/DxilContainer/DxilContainer.h"
@@ -142,13 +142,13 @@ DxbcConverter::~DxbcConverter() {
 
 static void AddDxilPipelineStateValidationToDXBC( DxilModule *pModule,
                                                   DxilPipelineStateValidation &PSV);
-static void EmitIdentMetadata(llvm::Module *pModule, LPCSTR pValue) {
-  llvm::NamedMDNode *IdentMetadata =
+static void EmitIdentMetadata(llvm37::Module *pModule, LPCSTR pValue) {
+  llvm37::NamedMDNode *IdentMetadata =
     pModule->getOrInsertNamedMetadata("llvm.ident");
-  llvm::LLVMContext &Ctx = pModule->getContext();
+  llvm37::LLVMContext &Ctx = pModule->getContext();
 
-  llvm::Metadata *IdentNode[] = {llvm::MDString::get(Ctx, pValue)};
-  IdentMetadata->addOperand(llvm::MDNode::get(Ctx, IdentNode));
+  llvm37::Metadata *IdentNode[] = {llvm37::MDString::get(Ctx, pValue)};
+  IdentMetadata->addOperand(llvm37::MDNode::get(Ctx, IdentNode));
 }
 
 void WritePart(AbstractMemoryStream *pStream, const void *pData, size_t size) {
@@ -178,7 +178,7 @@ void DxbcConverter::ConvertImpl(_In_reads_bytes_(DxbcSize) LPCVOID pDxbc,
   ParseExtraOptions(pExtraOptions);
 
   // Create the module.
-  m_pModule = std::make_unique<llvm::Module>("main", m_Ctx);
+  m_pModule = std::make_unique<llvm37::Module>("main", m_Ctx);
 
   // Setup DxilModule.
   m_pPR = &(m_pModule->GetOrCreateDxilModule(/*skipInit*/true));
@@ -362,7 +362,7 @@ void DxbcConverter::ConvertInDriverImpl(_In_reads_bytes_(8) const UINT32 *pByteC
   ParseExtraOptions(pExtraOptions);
 
   // Create the module.
-  m_pModule = std::make_unique<llvm::Module>("main", m_Ctx);
+  m_pModule = std::make_unique<llvm37::Module>("main", m_Ctx);
 
   // Setup DxilModule.
   m_pPR = &(m_pModule->GetOrCreateDxilModule(/*skipInit*/true));
@@ -2126,7 +2126,7 @@ void DxbcConverter::ConvertInstructions(D3D10ShaderBinary::CShaderCodeParser &Pa
         unsigned Size = Inst.m_CustomData.DataSizeInBytes >> 2;
         DXASSERT_DXBC(m_pIcbGV == nullptr && Inst.m_CustomData.DataSizeInBytes == Size*4);
 
-        llvm::Constant *pIcbData = ConstantDataArray::get(m_Ctx, ArrayRef<float>((float*)Inst.m_CustomData.pData, Size));
+        llvm37::Constant *pIcbData = ConstantDataArray::get(m_Ctx, ArrayRef<float>((float*)Inst.m_CustomData.pData, Size));
         m_pIcbGV = new GlobalVariable(*m_pModule, pIcbData->getType(), true, GlobalValue::InternalLinkage,
                                       pIcbData, "dx.icb", nullptr, 
                                       GlobalVariable::NotThreadLocal, DXIL::kImmediateCBufferAddrSpace);

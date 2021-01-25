@@ -7,10 +7,10 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_FRONTEND_SERIALIZE_DIAGNOSTICS_H_
-#define LLVM_CLANG_FRONTEND_SERIALIZE_DIAGNOSTICS_H_
+#ifndef LLVM37_CLANG_FRONTEND_SERIALIZE_DIAGNOSTICS_H_
+#define LLVM37_CLANG_FRONTEND_SERIALIZE_DIAGNOSTICS_H_
 
-#include "llvm/Bitcode/BitCodes.h"
+#include "llvm37/Bitcode/BitCodes.h"
 
 namespace clang {
 namespace serialized_diags {
@@ -18,7 +18,7 @@ namespace serialized_diags {
 enum BlockIDs {
   /// \brief A top-level block which represents any meta data associated
   /// with the diagostics, including versioning of the format.
-  BLOCK_META = llvm::bitc::FIRST_APPLICATION_BLOCKID,
+  BLOCK_META = llvm37::bitc::FIRST_APPLICATION_BLOCKID,
 
   /// \brief The this block acts as a container for all the information
   /// for a specific diagnostic.

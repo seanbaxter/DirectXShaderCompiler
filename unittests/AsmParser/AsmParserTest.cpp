@@ -7,15 +7,15 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/ADT/StringRef.h"
-#include "llvm/AsmParser/Parser.h"
-#include "llvm/AsmParser/SlotMapping.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Module.h"
-#include "llvm/Support/SourceMgr.h"
+#include "llvm37/ADT/StringRef.h"
+#include "llvm37/AsmParser/Parser.h"
+#include "llvm37/AsmParser/SlotMapping.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/Support/SourceMgr.h"
 #include "gtest/gtest.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 namespace {
 

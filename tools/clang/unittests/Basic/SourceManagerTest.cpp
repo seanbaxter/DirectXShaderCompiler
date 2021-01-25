@@ -19,11 +19,11 @@
 #include "clang/Lex/ModuleLoader.h"
 #include "clang/Lex/Preprocessor.h"
 #include "clang/Lex/PreprocessorOptions.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/Config/llvm-config.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/Config/llvm-config.h"
 #include "gtest/gtest.h"
 
-using namespace llvm;
+using namespace llvm37;
 using namespace clang;
 
 namespace {
@@ -170,7 +170,7 @@ TEST_F(SourceManagerTest, getColumnNumber) {
   EXPECT_EQ(1U, SourceMgr.getColumnNumber(MainFileID, 0, nullptr));
 }
 
-#if defined(LLVM_ON_UNIX)
+#if defined(LLVM37_ON_UNIX)
 
 TEST_F(SourceManagerTest, getMacroArgExpandedLocation) {
   const char *header =
@@ -302,7 +302,7 @@ TEST_F(SourceManagerTest, isBeforeInTranslationUnitWithMacroInInclude) {
   PP.Initialize(*Target);
 
   std::vector<MacroAction> Macros;
-  PP.addPPCallbacks(llvm::make_unique<MacroTracker>(Macros));
+  PP.addPPCallbacks(llvm37::make_unique<MacroTracker>(Macros));
 
   PP.EnterMainSourceFile();
 

@@ -19,7 +19,7 @@
 #include "clang/StaticAnalyzer/Core/PathSensitive/AnalysisManager.h"
 #include "clang/StaticAnalyzer/Core/PathSensitive/ExplodedGraph.h"
 #include "clang/StaticAnalyzer/Core/PathSensitive/ExprEngine.h"
-#include "llvm/Support/Process.h"
+#include "llvm37/Support/Process.h"
 
 using namespace clang;
 using namespace ento;
@@ -98,11 +98,11 @@ public:
     PrintingPolicy Policy(mgr.getLangOpts());
     Policy.TerseOutput = true;
     Policy.PolishForDeclaration = true;
-    D->print(llvm::errs(), Policy);
+    D->print(llvm37::errs(), Policy);
 
     if (CFG *cfg = mgr.getCFG(D)) {
       cfg->dump(mgr.getLangOpts(),
-                llvm::sys::Process::StandardErrHasColors());
+                llvm37::sys::Process::StandardErrHasColors());
     }
   }
 };
@@ -177,13 +177,13 @@ public:
     for (Table::const_iterator I = Config.begin(), E = Config.end(); I != E;
          ++I)
       Keys.push_back(&*I);
-    llvm::array_pod_sort(Keys.begin(), Keys.end(), compareEntry);
+    llvm37::array_pod_sort(Keys.begin(), Keys.end(), compareEntry);
 
-    llvm::errs() << "[config]\n";
+    llvm37::errs() << "[config]\n";
     for (unsigned I = 0, E = Keys.size(); I != E; ++I)
-      llvm::errs() << Keys[I]->getKey() << " = " << Keys[I]->second << '\n';
+      llvm37::errs() << Keys[I]->getKey() << " = " << Keys[I]->second << '\n';
 
-    llvm::errs() << "[stats]\n" << "num-entries = " << Keys.size() << '\n';
+    llvm37::errs() << "[stats]\n" << "num-entries = " << Keys.size() << '\n';
   }
 };
 }

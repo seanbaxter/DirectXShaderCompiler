@@ -11,15 +11,15 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_STATICANALYZER_CORE_CHECKERMANAGER_H
-#define LLVM_CLANG_STATICANALYZER_CORE_CHECKERMANAGER_H
+#ifndef LLVM37_CLANG_STATICANALYZER_CORE_CHECKERMANAGER_H
+#define LLVM37_CLANG_STATICANALYZER_CORE_CHECKERMANAGER_H
 
 #include "clang/Analysis/ProgramPoint.h"
 #include "clang/Basic/LangOptions.h"
 #include "clang/StaticAnalyzer/Core/AnalyzerOptions.h"
 #include "clang/StaticAnalyzer/Core/PathSensitive/Store.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/SmallVector.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/SmallVector.h"
 #include <vector>
 
 namespace clang {
@@ -529,7 +529,7 @@ private:
   template <typename T>
   static void *getTag() { static int tag; return &tag; }
 
-  llvm::DenseMap<CheckerTag, CheckerRef> CheckerTags;
+  llvm37::DenseMap<CheckerTag, CheckerRef> CheckerTags;
 
   std::vector<CheckerDtor> CheckerDtors;
 
@@ -542,7 +542,7 @@ private:
   std::vector<CheckDeclFunc> BodyCheckers;
 
   typedef SmallVector<CheckDeclFunc, 4> CachedDeclCheckers;
-  typedef llvm::DenseMap<unsigned, CachedDeclCheckers> CachedDeclCheckersMapTy;
+  typedef llvm37::DenseMap<unsigned, CachedDeclCheckers> CachedDeclCheckersMapTy;
   CachedDeclCheckersMapTy CachedDeclCheckersMap;
 
   struct StmtCheckerInfo {
@@ -553,7 +553,7 @@ private:
   std::vector<StmtCheckerInfo> StmtCheckers;
 
   typedef SmallVector<CheckStmtFunc, 4> CachedStmtCheckers;
-  typedef llvm::DenseMap<unsigned, CachedStmtCheckers> CachedStmtCheckersMapTy;
+  typedef llvm37::DenseMap<unsigned, CachedStmtCheckers> CachedStmtCheckersMapTy;
   CachedStmtCheckersMapTy CachedStmtCheckersMap;
 
   const CachedStmtCheckers &getCachedStmtCheckersFor(const Stmt *S,
@@ -599,7 +599,7 @@ private:
     EventInfo() : HasDispatcher(false) { }
   };
   
-  typedef llvm::DenseMap<EventTag, EventInfo> EventsTy;
+  typedef llvm37::DenseMap<EventTag, EventInfo> EventsTy;
   EventsTy Events;
 };
 

@@ -15,11 +15,11 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Analysis/Trace.h"
-#include "llvm/IR/Function.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/raw_ostream.h"
-using namespace llvm;
+#include "llvm37/Analysis/Trace.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/raw_ostream.h"
+using namespace llvm37;
 
 Function *Trace::getFunction() const {
   return getEntryBasicBlock()->getParent();
@@ -42,7 +42,7 @@ void Trace::print(raw_ostream &O) const {
   O << "; Trace parent function: \n" << *F;
 }
 
-#if !defined(NDEBUG) || defined(LLVM_ENABLE_DUMP)
+#if !defined(NDEBUG) || defined(LLVM37_ENABLE_DUMP)
 /// dump - Debugger convenience method; writes trace to standard error
 /// output stream.
 ///

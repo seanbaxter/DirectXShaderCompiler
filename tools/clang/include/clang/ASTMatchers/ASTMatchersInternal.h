@@ -32,8 +32,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_ASTMATCHERS_ASTMATCHERSINTERNAL_H
-#define LLVM_CLANG_ASTMATCHERS_ASTMATCHERSINTERNAL_H
+#ifndef LLVM37_CLANG_ASTMATCHERS_ASTMATCHERSINTERNAL_H
+#define LLVM37_CLANG_ASTMATCHERS_ASTMATCHERSINTERNAL_H
 
 #include "clang/AST/ASTTypeTraits.h"
 #include "clang/AST/Decl.h"
@@ -46,9 +46,9 @@
 #include "clang/AST/StmtCXX.h"
 #include "clang/AST/StmtObjC.h"
 #include "clang/AST/Type.h"
-#include "llvm/ADT/Optional.h"
-#include "llvm/ADT/VariadicFunction.h"
-#include "llvm/Support/ManagedStatic.h"
+#include "llvm37/ADT/Optional.h"
+#include "llvm37/ADT/VariadicFunction.h"
+#include "llvm37/Support/ManagedStatic.h"
 #include <map>
 #include <string>
 #include <vector>
@@ -314,7 +314,7 @@ public:
   /// \brief Bind the specified \p ID to the matcher.
   /// \return A new matcher with the \p ID bound to it if this matcher supports
   ///   binding. Otherwise, returns an empty \c Optional<>.
-  llvm::Optional<DynTypedMatcher> tryBind(StringRef ID) const;
+  llvm37::Optional<DynTypedMatcher> tryBind(StringRef ID) const;
 
   /// \brief Returns a unique \p ID for the matcher.
   ///
@@ -1137,14 +1137,14 @@ public:
 
   template <typename T> operator Matcher<T>() const {
     return DynTypedMatcher::constructVariadic(
-               Op, getMatchers<T>(llvm::index_sequence_for<Ps...>()))
+               Op, getMatchers<T>(llvm37::index_sequence_for<Ps...>()))
         .template unconditionalConvertTo<T>();
   }
 
 private:
   // Helper method to unpack the tuple into a vector.
   template <typename T, std::size_t... Is>
-  std::vector<DynTypedMatcher> getMatchers(llvm::index_sequence<Is...>) const {
+  std::vector<DynTypedMatcher> getMatchers(llvm37::index_sequence<Is...>) const {
     return {Matcher<T>(std::get<Is>(Params))...};
   }
 
@@ -1187,7 +1187,7 @@ BindableMatcher<T> makeAllOfComposite(
     return BindableMatcher<T>(*InnerMatchers[0]);
   }
 
-  typedef llvm::pointee_iterator<const Matcher<T> *const *> PI;
+  typedef llvm37::pointee_iterator<const Matcher<T> *const *> PI;
   std::vector<DynTypedMatcher> DynMatchers(PI(InnerMatchers.begin()),
                                            PI(InnerMatchers.end()));
   return BindableMatcher<T>(
@@ -1319,25 +1319,25 @@ private:
 template <>
 inline bool ValueEqualsMatcher<FloatingLiteral, double>::matchesNode(
     const FloatingLiteral &Node) const {
-  if ((&Node.getSemantics()) == &llvm::APFloat::IEEEsingle)
+  if ((&Node.getSemantics()) == &llvm37::APFloat::IEEEsingle)
     return Node.getValue().convertToFloat() == ExpectedValue;
-  if ((&Node.getSemantics()) == &llvm::APFloat::IEEEdouble)
+  if ((&Node.getSemantics()) == &llvm37::APFloat::IEEEdouble)
     return Node.getValue().convertToDouble() == ExpectedValue;
   return false;
 }
 template <>
 inline bool ValueEqualsMatcher<FloatingLiteral, float>::matchesNode(
     const FloatingLiteral &Node) const {
-  if ((&Node.getSemantics()) == &llvm::APFloat::IEEEsingle)
+  if ((&Node.getSemantics()) == &llvm37::APFloat::IEEEsingle)
     return Node.getValue().convertToFloat() == ExpectedValue;
-  if ((&Node.getSemantics()) == &llvm::APFloat::IEEEdouble)
+  if ((&Node.getSemantics()) == &llvm37::APFloat::IEEEdouble)
     return Node.getValue().convertToDouble() == ExpectedValue;
   return false;
 }
 template <>
-inline bool ValueEqualsMatcher<FloatingLiteral, llvm::APFloat>::matchesNode(
+inline bool ValueEqualsMatcher<FloatingLiteral, llvm37::APFloat>::matchesNode(
     const FloatingLiteral &Node) const {
-  return ExpectedValue.compare(Node.getValue()) == llvm::APFloat::cmpEqual;
+  return ExpectedValue.compare(Node.getValue()) == llvm37::APFloat::cmpEqual;
 }
 
 /// \brief A VariadicDynCastAllOfMatcher<SourceT, TargetT> object is a
@@ -1354,7 +1354,7 @@ inline bool ValueEqualsMatcher<FloatingLiteral, llvm::APFloat>::matchesNode(
 /// casted to CXXRecordDecl and all given matchers match.
 template <typename SourceT, typename TargetT>
 class VariadicDynCastAllOfMatcher
-    : public llvm::VariadicFunction<
+    : public llvm37::VariadicFunction<
         BindableMatcher<SourceT>, Matcher<TargetT>,
         makeDynCastAllOfComposite<SourceT, TargetT> > {
 public:
@@ -1372,7 +1372,7 @@ public:
 /// \c Matcher<NestedNameSpecifier>.
 /// The returned matcher matches if all given matchers match.
 template <typename T>
-class VariadicAllOfMatcher : public llvm::VariadicFunction<
+class VariadicAllOfMatcher : public llvm37::VariadicFunction<
                                BindableMatcher<T>, Matcher<T>,
                                makeAllOfComposite<T> > {
 public:
@@ -1495,7 +1495,7 @@ public:
         new MatcherImpl<OuterT>(InnerMatcher, Getter<OuterT>::value()));
   }
 
-  struct Func : public llvm::VariadicFunction<Self, Matcher<InnerTBase>,
+  struct Func : public llvm37::VariadicFunction<Self, Matcher<InnerTBase>,
                                               &Self::create> {
     Func() {}
   };
@@ -1516,7 +1516,7 @@ template <typename Matcher, Matcher (*Func)()> class MemoizedMatcher {
 
 public:
   static const Matcher &getInstance() {
-    static llvm::ManagedStatic<Wrapper> Instance;
+    static llvm37::ManagedStatic<Wrapper> Instance;
     return Instance->M;
   }
 };
@@ -1542,7 +1542,7 @@ getTemplateSpecializationArgs(const ClassTemplateSpecializationDecl &D) {
 
 inline ArrayRef<TemplateArgument>
 getTemplateSpecializationArgs(const TemplateSpecializationType &T) {
-  return llvm::makeArrayRef(T.getArgs(), T.getNumArgs());
+  return llvm37::makeArrayRef(T.getArgs(), T.getNumArgs());
 }
 
 struct NotEqualsBoundNodePredicate {

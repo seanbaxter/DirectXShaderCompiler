@@ -12,12 +12,12 @@
 ///
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_BASIC_SOURCEMANAGERINTERNALS_H
-#define LLVM_CLANG_BASIC_SOURCEMANAGERINTERNALS_H
+#ifndef LLVM37_CLANG_BASIC_SOURCEMANAGERINTERNALS_H
+#define LLVM37_CLANG_BASIC_SOURCEMANAGERINTERNALS_H
 
 #include "clang/Basic/SourceLocation.h"
 #include "clang/Basic/SourceManager.h"
-#include "llvm/ADT/StringMap.h"
+#include "llvm37/ADT/StringMap.h"
 #include <map>
 
 namespace clang {
@@ -82,8 +82,8 @@ class LineTableInfo {
   /// frequently reoccur and reference them with indices.  FilenameIDs holds
   /// the mapping from string -> ID, and FilenamesByID holds the mapping of ID
   /// to string.
-  llvm::StringMap<unsigned, llvm::BumpPtrAllocator> FilenameIDs;
-  std::vector<llvm::StringMapEntry<unsigned>*> FilenamesByID;
+  llvm37::StringMap<unsigned, llvm37::BumpPtrAllocator> FilenameIDs;
+  std::vector<llvm37::StringMapEntry<unsigned>*> FilenamesByID;
 
   /// \brief Map from FileIDs to a list of line entries (sorted by the offset
   /// at which they occur in the file).

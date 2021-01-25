@@ -18,10 +18,10 @@
 #include "clang/Basic/FileManager.h"
 #include "clang/Basic/SourceManager.h"
 #include "clang/Lex/Lexer.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/Config/llvm-config.h"
-#include "llvm/Support/FileSystem.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/Config/llvm-config.h"
+#include "llvm37/Support/FileSystem.h"
+#include "llvm37/Support/raw_ostream.h"
 using namespace clang;
 
 raw_ostream &RewriteBuffer::write(raw_ostream &os) const {
@@ -409,12 +409,12 @@ public:
     TempFilename = Filename;
     TempFilename += "-%%%%%%%%";
     int FD;
-    if (llvm::sys::fs::createUniqueFile(TempFilename.str(), FD, TempFilename)) {
+    if (llvm37::sys::fs::createUniqueFile(TempFilename.str(), FD, TempFilename)) {
       AllWritten = false;
       Diagnostics.Report(clang::diag::err_unable_to_make_temp)
         << TempFilename;
     } else {
-      FileStream.reset(new llvm::raw_fd_ostream(FD, /*shouldClose=*/true));
+      FileStream.reset(new llvm37::raw_fd_ostream(FD, /*shouldClose=*/true));
     }
   }
 
@@ -422,18 +422,18 @@ public:
     if (!ok()) return;
 
     FileStream->flush();
-#ifdef LLVM_ON_WIN32
+#ifdef LLVM37_ON_WIN32
     // Win32 does not allow rename/removing opened files.
     FileStream.reset();
 #endif
     if (std::error_code ec =
-            llvm::sys::fs::rename(TempFilename.str(), Filename)) {
+            llvm37::sys::fs::rename(TempFilename.str(), Filename)) {
       AllWritten = false;
       Diagnostics.Report(clang::diag::err_unable_to_rename_temp)
         << TempFilename << Filename << ec.message();
       // If the remove fails, there's not a lot we can do - this is already an
       // error.
-      llvm::sys::fs::remove(TempFilename.str());
+      llvm37::sys::fs::remove(TempFilename.str());
     }
   }
 
@@ -444,7 +444,7 @@ private:
   DiagnosticsEngine &Diagnostics;
   StringRef Filename;
   SmallString<128> TempFilename;
-  std::unique_ptr<llvm::raw_fd_ostream> FileStream;
+  std::unique_ptr<llvm37::raw_fd_ostream> FileStream;
   bool &AllWritten;
 };
 } // end anonymous namespace

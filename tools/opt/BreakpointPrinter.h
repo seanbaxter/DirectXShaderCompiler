@@ -11,10 +11,10 @@
 /// \brief Breakpoint location printer.
 ///
 //===----------------------------------------------------------------------===//
-#ifndef LLVM_TOOLS_OPT_BREAKPOINTPRINTER_H
-#define LLVM_TOOLS_OPT_BREAKPOINTPRINTER_H
+#ifndef LLVM37_TOOLS_OPT_BREAKPOINTPRINTER_H
+#define LLVM37_TOOLS_OPT_BREAKPOINTPRINTER_H
 
-namespace llvm {
+namespace llvm37 {
 
 class ModulePass;
 class raw_ostream;
@@ -22,4 +22,4 @@ class raw_ostream;
 ModulePass *createBreakpointPrinter(raw_ostream &out);
 }
 
-#endif // LLVM_TOOLS_OPT_BREAKPOINTPRINTER_H
+#endif // LLVM37_TOOLS_OPT_BREAKPOINTPRINTER_H

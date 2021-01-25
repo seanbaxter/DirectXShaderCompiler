@@ -7,8 +7,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_LIB_SPIRV_DECLRESULTIDMAPPER_H
-#define LLVM_CLANG_LIB_SPIRV_DECLRESULTIDMAPPER_H
+#ifndef LLVM37_CLANG_LIB_SPIRV_DECLRESULTIDMAPPER_H
+#define LLVM37_CLANG_LIB_SPIRV_DECLRESULTIDMAPPER_H
 
 #include <tuple>
 #include <vector>
@@ -20,9 +20,9 @@
 #include "clang/AST/Attr.h"
 #include "clang/SPIRV/FeatureManager.h"
 #include "clang/SPIRV/SpirvBuilder.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/Optional.h"
-#include "llvm/ADT/SmallVector.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/Optional.h"
+#include "llvm37/ADT/SmallVector.h"
 
 #include "GlPerVertex.h"
 
@@ -33,9 +33,9 @@ class SpirvEmitter;
 
 /// A struct containing information about a particular HLSL semantic.
 struct SemanticInfo {
-  llvm::StringRef str;            ///< The original semantic string
+  llvm37::StringRef str;            ///< The original semantic string
   const hlsl::Semantic *semantic; ///< The unique semantic object
-  llvm::StringRef name;           ///< The semantic string without index
+  llvm37::StringRef name;           ///< The semantic string without index
   uint32_t index;                 ///< The semantic index
   SourceLocation loc;             ///< Source code location
 
@@ -144,7 +144,7 @@ private:
 /// A (instruction-pointer, is-alias-or-not) pair for counter variables
 class CounterIdAliasPair {
 public:
-  /// Default constructor to satisfy llvm::DenseMap
+  /// Default constructor to satisfy llvm37::DenseMap
   CounterIdAliasPair() : counterVar(nullptr), isAlias(false) {}
   CounterIdAliasPair(SpirvVariable *var, bool alias)
       : counterVar(var), isAlias(alias) {}
@@ -209,7 +209,7 @@ public:
   CounterVarFields() = default;
 
   /// Registers a field's associated counter.
-  void append(const llvm::SmallVector<uint32_t, 4> &indices,
+  void append(const llvm37::SmallVector<uint32_t, 4> &indices,
               SpirvVariable *counter) {
     fields.emplace_back(indices, counter);
   }
@@ -217,7 +217,7 @@ public:
   /// Returns the counter associated with the field at the given indices if it
   /// has. Returns nullptr otherwise.
   const CounterIdAliasPair *
-  get(const llvm::SmallVectorImpl<uint32_t> &indices) const;
+  get(const llvm37::SmallVectorImpl<uint32_t> &indices) const;
 
   /// Assigns to all the fields' associated counter from the srcFields.
   /// Returns true if there are no errors during the assignment.
@@ -228,21 +228,21 @@ public:
   bool assign(const CounterVarFields &srcFields, SpirvBuilder &,
               SpirvContext &) const;
   bool assign(const CounterVarFields &srcFields,
-              const llvm::SmallVector<uint32_t, 4> &dstPrefix,
-              const llvm::SmallVector<uint32_t, 4> &srcPrefix, SpirvBuilder &,
+              const llvm37::SmallVector<uint32_t, 4> &dstPrefix,
+              const llvm37::SmallVector<uint32_t, 4> &srcPrefix, SpirvBuilder &,
               SpirvContext &) const;
 
 private:
   struct IndexCounterPair {
-    IndexCounterPair(const llvm::SmallVector<uint32_t, 4> &idx,
+    IndexCounterPair(const llvm37::SmallVector<uint32_t, 4> &idx,
                      SpirvVariable *counter)
         : indices(idx), counterVar(counter, true) {}
 
-    llvm::SmallVector<uint32_t, 4> indices; ///< Index vector
+    llvm37::SmallVector<uint32_t, 4> indices; ///< Index vector
     CounterIdAliasPair counterVar;          ///< Counter variable information
   };
 
-  llvm::SmallVector<IndexCounterPair, 4> fields;
+  llvm37::SmallVector<IndexCounterPair, 4> fields;
 };
 
 /// \brief The class containing mappings from Clang frontend Decls to their
@@ -308,7 +308,7 @@ public:
   bool createPayloadStageVars(const hlsl::SigPoint *sigPoint,
                               spv::StorageClass sc, const NamedDecl *decl,
                               bool asInput, QualType type,
-                              const llvm::StringRef namePrefix,
+                              const llvm37::StringRef namePrefix,
                               SpirvInstruction **value,
                               uint32_t payloadMemOffset = 0);
 
@@ -331,11 +331,11 @@ public:
   /// \brief Creates a function-scope variable in the current function and
   /// returns its instruction.
   SpirvVariable *createFnVar(const VarDecl *var,
-                             llvm::Optional<SpirvInstruction *> init);
+                             llvm37::Optional<SpirvInstruction *> init);
 
   /// \brief Creates a file-scope variable and returns its instruction.
   SpirvVariable *createFileVar(const VarDecl *var,
-                               llvm::Optional<SpirvInstruction *> init);
+                               llvm37::Optional<SpirvInstruction *> init);
 
   /// \brief Creates an external-visible variable and returns its instruction.
   SpirvVariable *createExternVar(const VarDecl *var);
@@ -466,7 +466,7 @@ public:
   /// if the given decl has no associated counter variable created.
   const CounterIdAliasPair *getCounterIdAliasPair(
       const DeclaratorDecl *decl,
-      const llvm::SmallVector<uint32_t, 4> *indices = nullptr);
+      const llvm37::SmallVector<uint32_t, 4> *indices = nullptr);
 
   /// \brief Returns all the associated counters for the given decl. The decl is
   /// expected to be a struct containing alias RW/Append/Consume structured
@@ -625,7 +625,7 @@ private:
   /// Panics if the DeclContext is neither HLSLBufferDecl or RecordDecl.
   SpirvVariable *createStructOrStructArrayVarOfExplicitLayout(
       const DeclContext *decl, int arraySize, ContextUsageKind usageKind,
-      llvm::StringRef typeName, llvm::StringRef varName);
+      llvm37::StringRef typeName, llvm37::StringRef varName);
 
   /// Creates all the stage variables mapped from semantics on the given decl.
   /// Returns true on sucess.
@@ -653,8 +653,8 @@ private:
   /// the semantic in inheritSemantic, with index increasing sequentially.
   bool createStageVars(const hlsl::SigPoint *sigPoint, const NamedDecl *decl,
                        bool asInput, QualType asType, uint32_t arraySize,
-                       const llvm::StringRef namePrefix,
-                       llvm::Optional<SpirvInstruction *> invocationId,
+                       const llvm37::StringRef namePrefix,
+                       llvm37::Optional<SpirvInstruction *> invocationId,
                        SpirvInstruction **value, bool noWriteBack,
                        SemanticInfo *inheritSemantic);
 
@@ -663,13 +663,13 @@ private:
   /// its storage class accordingly. name will be used as the debug name when
   /// creating a stage input/output variable.
   SpirvVariable *createSpirvStageVar(StageVar *, const NamedDecl *decl,
-                                     const llvm::StringRef name,
+                                     const llvm37::StringRef name,
                                      SourceLocation);
 
   // Create intermediate output variable to communicate patch constant
   // data in hull shader since workgroup memory is not allowed there.
   SpirvVariable *createSpirvIntermediateOutputStageVar(
-      const NamedDecl *decl, const llvm::StringRef name, QualType asType);
+      const NamedDecl *decl, const llvm37::StringRef name, QualType asType);
 
   /// Returns true if all vk:: attributes usages are valid.
   bool validateVKAttributes(const NamedDecl *decl);
@@ -697,14 +697,14 @@ private:
   void
   createCounterVar(const DeclaratorDecl *decl, SpirvInstruction *declInstr,
                    bool isAlias,
-                   const llvm::SmallVector<uint32_t, 4> *indices = nullptr);
+                   const llvm37::SmallVector<uint32_t, 4> *indices = nullptr);
   /// Creates all assoicated counter variables by recursively visiting decl's
   /// fields. Handles AssocCounter#3 and AssocCounter#4 (see the comment of
   /// CounterVarFields).
   inline void createFieldCounterVars(const DeclaratorDecl *decl);
   void createFieldCounterVars(const DeclaratorDecl *rootDecl,
                               const DeclaratorDecl *decl,
-                              llvm::SmallVector<uint32_t, 4> *indices);
+                              llvm37::SmallVector<uint32_t, 4> *indices);
 
   /// Decorates varInstr of the given asType with proper interpolation modes
   /// considering the attributes on the given decl.
@@ -783,30 +783,30 @@ private:
   SpirvFunction *entryFunction;
 
   /// Mapping of all Clang AST decls to their instruction pointers.
-  llvm::DenseMap<const ValueDecl *, DeclSpirvInfo> astDecls;
-  llvm::DenseMap<const ValueDecl *, SpirvFunction *> astFunctionDecls;
+  llvm37::DenseMap<const ValueDecl *, DeclSpirvInfo> astDecls;
+  llvm37::DenseMap<const ValueDecl *, SpirvFunction *> astFunctionDecls;
   /// Vector of all defined stage variables.
-  llvm::SmallVector<StageVar, 8> stageVars;
+  llvm37::SmallVector<StageVar, 8> stageVars;
   /// Mapping from Clang AST decls to the corresponding stage variables.
   /// This field is only used by GS for manually emitting vertices, when
   /// we need to query the output stage variables involved in writing back. For
   /// other cases, stage variable reading and writing is done at the time of
   /// creating that stage variable, so that we don't need to query them again
   /// for reading and writing.
-  llvm::DenseMap<const ValueDecl *, SpirvVariable *> stageVarInstructions;
+  llvm37::DenseMap<const ValueDecl *, SpirvVariable *> stageVarInstructions;
   /// Vector of all defined resource variables.
-  llvm::SmallVector<ResourceVar, 8> resourceVars;
+  llvm37::SmallVector<ResourceVar, 8> resourceVars;
   /// Mapping from {RW|Append|Consume}StructuredBuffers to their
   /// counter variables' (instr-ptr, is-alias-or-not) pairs
   ///
   /// conterVars holds entities of AssocCounter#1, fieldCounterVars holds
   /// entities of the rest.
-  llvm::DenseMap<const DeclaratorDecl *, CounterIdAliasPair> counterVars;
-  llvm::DenseMap<const DeclaratorDecl *, CounterVarFields> fieldCounterVars;
+  llvm37::DenseMap<const DeclaratorDecl *, CounterIdAliasPair> counterVars;
+  llvm37::DenseMap<const DeclaratorDecl *, CounterVarFields> fieldCounterVars;
 
   /// Mapping from cbuffer/tbuffer/ConstantBuffer/TextureBufer/push-constant
   /// to the SPIR-V type.
-  llvm::DenseMap<const DeclContext *, const SpirvType *> ctBufferPCTypes;
+  llvm37::DenseMap<const DeclContext *, const SpirvType *> ctBufferPCTypes;
 
   /// The SPIR-V builtin variables accessed by WaveGetLaneCount(),
   /// WaveGetLaneIndex() and ray tracing builtins.
@@ -814,7 +814,7 @@ private:
   /// These are the only few cases where SPIR-V builtin variables are accessed
   /// using HLSL intrinsic function calls. All other builtin variables are
   /// accessed using stage IO variables.
-  llvm::DenseMap<uint32_t, SpirvVariable *> builtinToVarMap;
+  llvm37::DenseMap<uint32_t, SpirvVariable *> builtinToVarMap;
 
   /// Whether the translated SPIR-V binary needs legalization.
   ///
@@ -927,7 +927,7 @@ void DeclResultIdMapper::createFnParamCounterVar(const VarDecl *param) {
 }
 
 void DeclResultIdMapper::createFieldCounterVars(const DeclaratorDecl *decl) {
-  llvm::SmallVector<uint32_t, 4> indices;
+  llvm37::SmallVector<uint32_t, 4> indices;
   createFieldCounterVars(decl, decl, &indices);
 }
 

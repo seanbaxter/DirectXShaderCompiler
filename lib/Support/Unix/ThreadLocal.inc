@@ -22,7 +22,7 @@
 #include <pthread.h>
 #include <stdlib.h>
 
-namespace llvm {
+namespace llvm37 {
 using namespace sys;
 
 ThreadLocalImpl::ThreadLocalImpl() : data() {
@@ -58,7 +58,7 @@ void ThreadLocalImpl::removeInstance() {
 
 }
 #else
-namespace llvm {
+namespace llvm37 {
 using namespace sys;
 ThreadLocalImpl::ThreadLocalImpl() : data() { }
 ThreadLocalImpl::~ThreadLocalImpl() { }

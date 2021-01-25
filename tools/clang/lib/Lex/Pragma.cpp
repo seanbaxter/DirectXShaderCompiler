@@ -20,15 +20,15 @@
 #include "clang/Lex/LiteralSupport.h"
 #include "clang/Lex/MacroInfo.h"
 #include "clang/Lex/Preprocessor.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/StringSwitch.h"
-#include "llvm/ADT/StringExtras.h"
-#include "llvm/Support/CrashRecoveryContext.h"
-#include "llvm/Support/ErrorHandling.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/StringSwitch.h"
+#include "llvm37/ADT/StringExtras.h"
+#include "llvm37/Support/CrashRecoveryContext.h"
+#include "llvm37/Support/ErrorHandling.h"
 #include <algorithm>
 using namespace clang;
 
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/Support/raw_ostream.h"
 
 // Out-of-line destructor to provide a home for the class.
 PragmaHandler::~PragmaHandler() {
@@ -49,7 +49,7 @@ void EmptyPragmaHandler::HandlePragma(Preprocessor &PP,
 //===----------------------------------------------------------------------===//
 
 PragmaNamespace::~PragmaNamespace() {
-  llvm::DeleteContainerSeconds(Handlers);
+  llvm37::DeleteContainerSeconds(Handlers);
 }
 
 /// FindHandler - Check to see if there is already a handler for the
@@ -591,7 +591,7 @@ void Preprocessor::HandlePragmaPopMacro(Token &PopMacroTok) {
   if (!IdentInfo) return;
 
   // Find the vector<MacroInfo*> associated with the macro.
-  llvm::DenseMap<IdentifierInfo*, std::vector<MacroInfo*> >::iterator iter =
+  llvm37::DenseMap<IdentifierInfo*, std::vector<MacroInfo*> >::iterator iter =
     PragmaPushMacroInfo.find(IdentInfo);
   if (iter != PragmaPushMacroInfo.end()) {
     // Forget the MacroInfo currently associated with IdentInfo.
@@ -870,7 +870,7 @@ struct PragmaDebugHandler : public PragmaHandler {
     if (II->isStr("assert")) {
       llvm_unreachable("This is an assertion!");
     } else if (II->isStr("crash")) {
-      LLVM_BUILTIN_TRAP;
+      LLVM37_BUILTIN_TRAP;
     } else if (II->isStr("parser_crash")) {
       Token Crasher;
       Crasher.startToken();
@@ -878,7 +878,7 @@ struct PragmaDebugHandler : public PragmaHandler {
       Crasher.setAnnotationRange(SourceRange(Tok.getLocation()));
       PP.EnterToken(Crasher);
     } else if (II->isStr("llvm_fatal_error")) {
-      llvm::report_fatal_error("#pragma clang __debug llvm_fatal_error");
+      llvm37::report_fatal_error("#pragma clang __debug llvm_fatal_error");
     } else if (II->isStr("llvm_unreachable")) {
       llvm_unreachable("#pragma clang __debug llvm_unreachable");
     } else if (II->isStr("macro")) {
@@ -892,7 +892,7 @@ struct PragmaDebugHandler : public PragmaHandler {
     } else if (II->isStr("overflow_stack")) {
       DebugOverflowStack();
     } else if (II->isStr("handle_crash")) {
-      llvm::CrashRecoveryContext *CRC =llvm::CrashRecoveryContext::GetCurrent();
+      llvm37::CrashRecoveryContext *CRC =llvm37::CrashRecoveryContext::GetCurrent();
       if (CRC)
         CRC->HandleCrash();
     } else if (II->isStr("captured")) {
@@ -977,7 +977,7 @@ public:
       return;
     }
 
-    diag::Severity SV = llvm::StringSwitch<diag::Severity>(II->getName())
+    diag::Severity SV = llvm37::StringSwitch<diag::Severity>(II->getName())
                             .Case("ignored", diag::Severity::Ignored)
                             .Case("warning", diag::Severity::Warning)
                             .Case("error", diag::Severity::Error)
@@ -1078,10 +1078,10 @@ struct PragmaWarningHandler : public PragmaHandler {
         // Figure out which warning specifier this is.
         bool SpecifierValid;
         StringRef Specifier;
-        llvm::SmallString<1> SpecifierBuf;
+        llvm37::SmallString<1> SpecifierBuf;
         if (II) {
           Specifier = II->getName();
-          SpecifierValid = llvm::StringSwitch<bool>(Specifier)
+          SpecifierValid = llvm37::StringSwitch<bool>(Specifier)
                                .Cases("default", "disable", "error", "once",
                                       "suppress", true)
                                .Default(false);

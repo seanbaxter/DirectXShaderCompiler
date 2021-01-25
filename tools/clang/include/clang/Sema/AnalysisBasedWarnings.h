@@ -11,10 +11,10 @@
 // that issues warnings based on dataflow-analysis.
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_SEMA_ANALYSISBASEDWARNINGS_H
-#define LLVM_CLANG_SEMA_ANALYSISBASEDWARNINGS_H
+#ifndef LLVM37_CLANG_SEMA_ANALYSISBASEDWARNINGS_H
+#define LLVM37_CLANG_SEMA_ANALYSISBASEDWARNINGS_H
 
-#include "llvm/ADT/DenseMap.h"
+#include "llvm37/ADT/DenseMap.h"
 
 namespace clang {
 
@@ -49,7 +49,7 @@ private:
   Policy DefaultPolicy;
 
   enum VisitFlag { NotVisited = 0, Visited = 1, Pending = 2 };
-  llvm::DenseMap<const FunctionDecl*, VisitFlag> VisitedFD;
+  llvm37::DenseMap<const FunctionDecl*, VisitFlag> VisitedFD;
 
   /// \name Statistics
   /// @{

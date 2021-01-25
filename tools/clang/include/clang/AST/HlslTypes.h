@@ -13,18 +13,18 @@
 //                                                                           //
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef LLVM_CLANG_AST_HLSLTYPES_H
-#define LLVM_CLANG_AST_HLSLTYPES_H
+#ifndef LLVM37_CLANG_AST_HLSLTYPES_H
+#define LLVM37_CLANG_AST_HLSLTYPES_H
 
 #include "clang/AST/Type.h"             // needs QualType
 #include "clang/Basic/SourceLocation.h"
 #include "clang/Basic/Specifiers.h"
 #include "dxc/DXIL/DxilConstants.h"
 #include "dxc/Support/WinAdapter.h"
-#include "llvm/Support/Casting.h"
-#include "llvm/ADT/ArrayRef.h"
-#include "llvm/ADT/Optional.h"
-#include "llvm/ADT/StringRef.h"
+#include "llvm37/Support/Casting.h"
+#include "llvm37/ADT/ArrayRef.h"
+#include "llvm37/ADT/Optional.h"
+#include "llvm37/ADT/StringRef.h"
 
 namespace clang {
   class ASTContext;
@@ -210,7 +210,7 @@ public:
   UnusualAnnotationKind getKind() const { return Kind; }
 
   UnusualAnnotation* CopyToASTContext(clang::ASTContext& Context);
-  static llvm::ArrayRef<UnusualAnnotation*> CopyToASTContextArray(
+  static llvm37::ArrayRef<UnusualAnnotation*> CopyToASTContextArray(
     clang::ASTContext& Context, UnusualAnnotation** begin, size_t count);
 
   /// <summary>Location where the annotation was parsed.</summary>
@@ -223,11 +223,11 @@ struct RegisterAssignment : public UnusualAnnotation
   /// <summary>Initializes a new RegisterAssignment in invalid state.</summary>
   RegisterAssignment() : UnusualAnnotation(UA_RegisterAssignment) { }
 
-  llvm::StringRef   ShaderProfile;
+  llvm37::StringRef   ShaderProfile;
   bool              IsValid = false;
   char              RegisterType = 0; // Lower-case letter, 0 if not explicitly set
   uint32_t          RegisterNumber = 0; // Iff RegisterType != 0
-  llvm::Optional<uint32_t> RegisterSpace; // Set only if explicit "spaceN" syntax
+  llvm37::Optional<uint32_t> RegisterSpace; // Set only if explicit "spaceN" syntax
   uint32_t          RegisterOffset = 0;
 
   void setIsValid(bool value) {
@@ -270,11 +270,11 @@ struct SemanticDecl : public UnusualAnnotation
   SemanticDecl() : UnusualAnnotation(UA_SemanticDecl), SemanticName() { }
 
   /// <summary>Initializes a new SemanticDecl with the specified name.</summary>
-  SemanticDecl(llvm::StringRef name) : UnusualAnnotation(UA_SemanticDecl), 
+  SemanticDecl(llvm37::StringRef name) : UnusualAnnotation(UA_SemanticDecl), 
     SemanticName(name) { }
 
   /// <summary>Name for semantic.</summary>
-  llvm::StringRef SemanticName;
+  llvm37::StringRef SemanticName;
 
   static bool classof(const UnusualAnnotation *UA) {
     return UA->getKind() == UA_SemanticDecl;
@@ -287,7 +287,7 @@ ParamModFromAttributeList(_In_opt_ clang::AttributeList *pAttributes);
 
 /// Returns a ParameterModifier initialized as per the attribute list.
 ParameterModifier
-ParamModFromAttrs(llvm::ArrayRef<clang::InheritableAttr *> attributes);
+ParamModFromAttrs(llvm37::ArrayRef<clang::InheritableAttr *> attributes);
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // AST manipulation functions.
@@ -302,7 +302,7 @@ void AddHLSLVectorTemplate(
   _Outptr_ clang::ClassTemplateDecl** vectorTemplateDecl);
 
 clang::CXXRecordDecl* DeclareRecordTypeWithHandle(
-  clang::ASTContext& context, llvm::StringRef name);
+  clang::ASTContext& context, llvm37::StringRef name);
 
 void AddRaytracingConstants(clang::ASTContext& context);
 void AddSamplerFeedbackConstants(clang::ASTContext& context);
@@ -318,17 +318,17 @@ void AddStdIsEqualImplementation(clang::ASTContext& context, clang::Sema& sema);
 /// <parm name="defaultTypeArgValue">If assigned, the default argument for the element template.</param>
 clang::CXXRecordDecl* DeclareTemplateTypeWithHandle(
             clang::ASTContext& context,
-            llvm::StringRef name,
+            llvm37::StringRef name,
             uint8_t templateArgCount,
   _In_opt_  clang::TypeSourceInfo* defaultTypeArgValue);
 
 clang::CXXRecordDecl* DeclareUIntTemplatedTypeWithHandle(
-  clang::ASTContext& context, llvm::StringRef typeName, llvm::StringRef templateParamName);
+  clang::ASTContext& context, llvm37::StringRef typeName, llvm37::StringRef templateParamName);
 clang::CXXRecordDecl *DeclareConstantBufferViewType(clang::ASTContext& context, bool bTBuf);
 clang::CXXRecordDecl* DeclareRayQueryType(clang::ASTContext& context);
 clang::CXXRecordDecl *DeclareResourceType(clang::ASTContext &context,
                                           bool bSampler);
-clang::VarDecl *DeclareBuiltinGlobal(llvm::StringRef name, clang::QualType Ty,
+clang::VarDecl *DeclareBuiltinGlobal(llvm37::StringRef name, clang::QualType Ty,
                                      clang::ASTContext &context);
 
 /// <summary>Create a function template declaration for the specified method.</summary>
@@ -411,8 +411,8 @@ clang::QualType GetHLSLMatElementType(clang::QualType type);
 clang::QualType GetHLSLVecElementType(clang::QualType type);
 bool IsIntrinsicOp(const clang::FunctionDecl *FD);
 bool GetIntrinsicOp(const clang::FunctionDecl *FD, unsigned &opcode,
-                    llvm::StringRef &group);
-bool GetIntrinsicLowering(const clang::FunctionDecl *FD, llvm::StringRef &S);
+                    llvm37::StringRef &group);
+bool GetIntrinsicLowering(const clang::FunctionDecl *FD, llvm37::StringRef &S);
 
 /// <summary>Adds a function declaration to the specified class record.</summary>
 /// <param name="context">ASTContext that owns declarations.</param>
@@ -427,8 +427,8 @@ clang::CXXMethodDecl* CreateObjectFunctionDeclarationWithParams(
   clang::ASTContext& context,
   _In_ clang::CXXRecordDecl* recordDecl,
   clang::QualType resultType,
-  llvm::ArrayRef<clang::QualType> paramTypes,
-  llvm::ArrayRef<clang::StringRef> paramNames,
+  llvm37::ArrayRef<clang::QualType> paramTypes,
+  llvm37::ArrayRef<clang::StringRef> paramNames,
   clang::DeclarationName declarationName,
   bool isConst);
 

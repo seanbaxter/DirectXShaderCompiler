@@ -12,12 +12,12 @@
 ///
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_BASIC_SANITIZERS_H
-#define LLVM_CLANG_BASIC_SANITIZERS_H
+#ifndef LLVM37_CLANG_BASIC_SANITIZERS_H
+#define LLVM37_CLANG_BASIC_SANITIZERS_H
 
 #include "clang/Basic/LLVM.h"
-#include "llvm/ADT/StringRef.h"
-#include "llvm/Support/MathExtras.h"
+#include "llvm37/ADT/StringRef.h"
+#include "llvm37/Support/MathExtras.h"
 
 namespace clang {
 
@@ -50,7 +50,7 @@ struct SanitizerSet {
 
   /// \brief Check if a certain (single) sanitizer is enabled.
   bool has(SanitizerMask K) const {
-    assert(llvm::isPowerOf2_64(K));
+    assert(llvm37::isPowerOf2_64(K));
     return Mask & K;
   }
 
@@ -59,7 +59,7 @@ struct SanitizerSet {
 
   /// \brief Enable or disable a certain (single) sanitizer.
   void set(SanitizerMask K, bool Value) {
-    assert(llvm::isPowerOf2_64(K));
+    assert(llvm37::isPowerOf2_64(K));
     Mask = Value ? (Mask | K) : (Mask & ~K);
   }
 

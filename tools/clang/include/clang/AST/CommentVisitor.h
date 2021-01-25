@@ -7,11 +7,11 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_AST_COMMENTVISITOR_H
-#define LLVM_CLANG_AST_COMMENTVISITOR_H
+#ifndef LLVM37_CLANG_AST_COMMENTVISITOR_H
+#define LLVM37_CLANG_AST_COMMENTVISITOR_H
 
 #include "clang/AST/Comment.h"
-#include "llvm/Support/ErrorHandling.h"
+#include "llvm37/Support/ErrorHandling.h"
 
 namespace clang {
 namespace comments {

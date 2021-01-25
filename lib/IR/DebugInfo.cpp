@@ -12,34 +12,34 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/IR/DebugInfo.h"
+#include "llvm37/IR/DebugInfo.h"
 #include "LLVMContextImpl.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/SmallPtrSet.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/Analysis/ValueTracking.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/DIBuilder.h"
-#include "llvm/IR/DerivedTypes.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/IR/Intrinsics.h"
-#include "llvm/IR/GVMaterializer.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/ValueHandle.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/Dwarf.h"
-#include "llvm/Support/raw_ostream.h"
-using namespace llvm;
-using namespace llvm::dwarf;
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/SmallPtrSet.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/Analysis/ValueTracking.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/DIBuilder.h"
+#include "llvm37/IR/DerivedTypes.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/IR/Intrinsics.h"
+#include "llvm37/IR/GVMaterializer.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/ValueHandle.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/Dwarf.h"
+#include "llvm37/Support/raw_ostream.h"
+using namespace llvm37;
+using namespace llvm37::dwarf;
 
-DISubprogram *llvm::getDISubprogram(const MDNode *Scope) {
+DISubprogram *llvm37::getDISubprogram(const MDNode *Scope) {
   if (auto *LocalScope = dyn_cast_or_null<DILocalScope>(Scope))
     return LocalScope->getSubprogram();
   return nullptr;
 }
 
-DISubprogram *llvm::getDISubprogram(const Function *F) {
+DISubprogram *llvm37::getDISubprogram(const Function *F) {
   // We look for the first instr that has a debug annotation leading back to F.
   for (auto &BB : *F) {
     auto Inst = std::find_if(BB.begin(), BB.end(), [](const Instruction &Inst) {
@@ -56,7 +56,7 @@ DISubprogram *llvm::getDISubprogram(const Function *F) {
   return nullptr;
 }
 
-DICompositeTypeBase *llvm::getDICompositeType(DIType *T) {
+DICompositeTypeBase *llvm37::getDICompositeType(DIType *T) {
   if (auto *C = dyn_cast_or_null<DICompositeTypeBase>(T))
     return C;
 
@@ -72,7 +72,7 @@ DICompositeTypeBase *llvm::getDICompositeType(DIType *T) {
 }
 
 DITypeIdentifierMap
-llvm::generateDITypeIdentifierMap(const NamedMDNode *CU_Nodes) {
+llvm37::generateDITypeIdentifierMap(const NamedMDNode *CU_Nodes) {
   DITypeIdentifierMap Map;
   for (unsigned CUi = 0, CUe = CU_Nodes->getNumOperands(); CUi != CUe; ++CUi) {
     auto *CU = cast<DICompileUnit>(CU_Nodes->getOperand(CUi));
@@ -317,7 +317,7 @@ bool DebugInfoFinder::addScope(DIScope *Scope) {
   return true;
 }
 
-bool llvm::stripDebugInfo(Function &F) {
+bool llvm37::stripDebugInfo(Function &F) {
   bool Changed = false;
   for (BasicBlock &BB : F) {
     for (Instruction &I : BB) {
@@ -330,7 +330,7 @@ bool llvm::stripDebugInfo(Function &F) {
   return Changed;
 }
 
-bool llvm::StripDebugInfo(Module &M) {
+bool llvm37::StripDebugInfo(Module &M) {
   bool Changed = false;
 
   // Remove all of the calls to the debugger intrinsics, and remove them from
@@ -372,15 +372,15 @@ bool llvm::StripDebugInfo(Module &M) {
   return Changed;
 }
 
-unsigned llvm::getDebugMetadataVersionFromModule(const Module &M) {
+unsigned llvm37::getDebugMetadataVersionFromModule(const Module &M) {
   if (auto *Val = mdconst::dyn_extract_or_null<ConstantInt>(
           M.getModuleFlag("Debug Info Version")))
     return Val->getZExtValue();
   return 0;
 }
 
-DenseMap<const llvm::Function *, DISubprogram *>
-llvm::makeSubprogramMap(const Module &M) {
+DenseMap<const llvm37::Function *, DISubprogram *>
+llvm37::makeSubprogramMap(const Module &M) {
   DenseMap<const Function *, DISubprogram *> R;
 
   NamedMDNode *CU_Nodes = M.getNamedMetadata("llvm.dbg.cu");

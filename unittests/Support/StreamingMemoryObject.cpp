@@ -7,12 +7,12 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/Support/StreamingMemoryObject.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/Support/StreamingMemoryObject.h"
 #include "gtest/gtest.h"
 #include <string.h>
 
-using namespace llvm;
+using namespace llvm37;
 
 namespace {
 class NullDataStreamer : public DataStreamer {

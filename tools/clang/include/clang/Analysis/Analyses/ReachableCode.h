@@ -11,8 +11,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_ANALYSIS_ANALYSES_REACHABLECODE_H
-#define LLVM_CLANG_ANALYSIS_ANALYSES_REACHABLECODE_H
+#ifndef LLVM37_CLANG_ANALYSIS_ANALYSES_REACHABLECODE_H
+#define LLVM37_CLANG_ANALYSIS_ANALYSES_REACHABLECODE_H
 
 #include "clang/Basic/SourceLocation.h"
 
@@ -20,7 +20,7 @@
 // Forward declarations.
 //===----------------------------------------------------------------------===//
 
-namespace llvm {
+namespace llvm37 {
   class BitVector;
 }
 
@@ -60,7 +60,7 @@ public:
 /// ScanReachableFromBlock - Mark all blocks reachable from Start.
 /// Returns the total number of blocks that were marked reachable.  
 unsigned ScanReachableFromBlock(const CFGBlock *Start,
-                                llvm::BitVector &Reachable);
+                                llvm37::BitVector &Reachable);
 
 void FindUnreachableCode(AnalysisDeclContext &AC, Preprocessor &PP,
                          Callback &CB);

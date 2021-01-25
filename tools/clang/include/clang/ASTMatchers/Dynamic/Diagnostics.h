@@ -12,15 +12,15 @@
 ///
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_ASTMATCHERS_DYNAMIC_DIAGNOSTICS_H
-#define LLVM_CLANG_ASTMATCHERS_DYNAMIC_DIAGNOSTICS_H
+#ifndef LLVM37_CLANG_ASTMATCHERS_DYNAMIC_DIAGNOSTICS_H
+#define LLVM37_CLANG_ASTMATCHERS_DYNAMIC_DIAGNOSTICS_H
 
 #include "clang/ASTMatchers/Dynamic/VariantValue.h"
 #include "clang/Basic/LLVM.h"
-#include "llvm/ADT/ArrayRef.h"
-#include "llvm/ADT/StringRef.h"
-#include "llvm/ADT/Twine.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/ArrayRef.h"
+#include "llvm37/ADT/StringRef.h"
+#include "llvm37/ADT/Twine.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <string>
 #include <vector>
 
@@ -161,13 +161,13 @@ public:
   /// \brief Returns a simple string representation of each error.
   ///
   /// Each error only shows the error message without any context.
-  void printToStream(llvm::raw_ostream &OS) const;
+  void printToStream(llvm37::raw_ostream &OS) const;
   std::string toString() const;
 
   /// \brief Returns the full string representation of each error.
   ///
   /// Each error message contains the full context.
-  void printToStreamFull(llvm::raw_ostream &OS) const;
+  void printToStreamFull(llvm37::raw_ostream &OS) const;
   std::string toStringFull() const;
 
 private:
@@ -182,4 +182,4 @@ private:
 }  // namespace ast_matchers
 }  // namespace clang
 
-#endif  // LLVM_CLANG_AST_MATCHERS_DYNAMIC_DIAGNOSTICS_H
+#endif  // LLVM37_CLANG_AST_MATCHERS_DYNAMIC_DIAGNOSTICS_H

@@ -18,22 +18,22 @@
 #include "clang/StaticAnalyzer/Core/BugReporter/BugReporter.h"
 #include "clang/StaticAnalyzer/Core/Checker.h"
 #include "clang/StaticAnalyzer/Core/PathSensitive/AnalysisManager.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/ADT/StringSwitch.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/ADT/StringSwitch.h"
+#include "llvm37/Support/raw_ostream.h"
 
 using namespace clang;
 using namespace ento;
 
 static bool isArc4RandomAvailable(const ASTContext &Ctx) {
-  const llvm::Triple &T = Ctx.getTargetInfo().getTriple();
-  return T.getVendor() == llvm::Triple::Apple ||
-         T.getOS() == llvm::Triple::CloudABI ||
-         T.getOS() == llvm::Triple::FreeBSD ||
-         T.getOS() == llvm::Triple::NetBSD ||
-         T.getOS() == llvm::Triple::OpenBSD ||
-         T.getOS() == llvm::Triple::Bitrig ||
-         T.getOS() == llvm::Triple::DragonFly;
+  const llvm37::Triple &T = Ctx.getTargetInfo().getTriple();
+  return T.getVendor() == llvm37::Triple::Apple ||
+         T.getOS() == llvm37::Triple::CloudABI ||
+         T.getOS() == llvm37::Triple::FreeBSD ||
+         T.getOS() == llvm37::Triple::NetBSD ||
+         T.getOS() == llvm37::Triple::OpenBSD ||
+         T.getOS() == llvm37::Triple::Bitrig ||
+         T.getOS() == llvm37::Triple::DragonFly;
 }
 
 namespace {
@@ -130,7 +130,7 @@ void WalkAST::VisitCallExpr(CallExpr *CE) {
     Name = Name.substr(10);
 
   // Set the evaluation function by switching on the callee name.
-  FnCheck evalFunction = llvm::StringSwitch<FnCheck>(Name)
+  FnCheck evalFunction = llvm37::StringSwitch<FnCheck>(Name)
     .Case("gets", &WalkAST::checkCall_gets)
     .Case("getpw", &WalkAST::checkCall_getpw)
     .Case("mktemp", &WalkAST::checkCall_mktemp)
@@ -279,7 +279,7 @@ void WalkAST::checkLoopConditionForFloat(const ForStmt *FS) {
 
   SmallVector<SourceRange, 2> ranges;
   SmallString<256> sbuf;
-  llvm::raw_svector_ostream os(sbuf);
+  llvm37::raw_svector_ostream os(sbuf);
 
   os << "Variable '" << drCond->getDecl()->getName()
      << "' with floating point type '" << drCond->getType().getAsString()
@@ -428,7 +428,7 @@ void WalkAST::checkCall_mkstemp(const CallExpr *CE, const FunctionDecl *FD) {
 
   StringRef Name = FD->getIdentifier()->getName();
   std::pair<signed, signed> ArgSuffix =
-    llvm::StringSwitch<std::pair<signed, signed> >(Name)
+    llvm37::StringSwitch<std::pair<signed, signed> >(Name)
       .Case("mktemp", std::make_pair(0,-1))
       .Case("mkstemp", std::make_pair(0,-1))
       .Case("mkdtemp", std::make_pair(0,-1))
@@ -461,7 +461,7 @@ void WalkAST::checkCall_mkstemp(const CallExpr *CE, const FunctionDecl *FD) {
   unsigned suffix = 0;
   if (ArgSuffix.second >= 0) {
     const Expr *suffixEx = CE->getArg((unsigned)ArgSuffix.second);
-    llvm::APSInt Result;
+    llvm37::APSInt Result;
     if (!suffixEx->EvaluateAsInt(Result, BR.getContext()))
       return;
     // FIXME: Issue a warning.
@@ -481,7 +481,7 @@ void WalkAST::checkCall_mkstemp(const CallExpr *CE, const FunctionDecl *FD) {
   PathDiagnosticLocation CELoc =
     PathDiagnosticLocation::createBegin(CE, BR.getSourceManager(), AC);
   SmallString<512> buf;
-  llvm::raw_svector_ostream out(buf);
+  llvm37::raw_svector_ostream out(buf);
   out << "Call to '" << Name << "' should have at least 6 'X's in the"
     " format string to be secure (" << numX << " 'X'";
   if (numX != 1)
@@ -609,11 +609,11 @@ void WalkAST::checkCall_rand(const CallExpr *CE, const FunctionDecl *FD) {
 
   // Issue a warning.
   SmallString<256> buf1;
-  llvm::raw_svector_ostream os1(buf1);
+  llvm37::raw_svector_ostream os1(buf1);
   os1 << '\'' << *FD << "' is a poor random number generator";
 
   SmallString<256> buf2;
-  llvm::raw_svector_ostream os2(buf2);
+  llvm37::raw_svector_ostream os2(buf2);
   os2 << "Function '" << *FD
       << "' is obsolete because it implements a poor random number generator."
       << "  Use 'arc4random' instead";
@@ -725,11 +725,11 @@ void WalkAST::checkUncheckedReturnValue(CallExpr *CE) {
 
   // Issue a warning.
   SmallString<256> buf1;
-  llvm::raw_svector_ostream os1(buf1);
+  llvm37::raw_svector_ostream os1(buf1);
   os1 << "Return value is not checked in call to '" << *FD << '\'';
 
   SmallString<256> buf2;
-  llvm::raw_svector_ostream os2(buf2);
+  llvm37::raw_svector_ostream os2(buf2);
   os2 << "The return value from the call to '" << *FD
       << "' is not checked.  If an error occurs in '" << *FD
       << "', the following code may execute with unexpected privileges";

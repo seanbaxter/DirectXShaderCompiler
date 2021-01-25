@@ -11,8 +11,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_AST_ATTR_H
-#define LLVM_CLANG_AST_ATTR_H
+#ifndef LLVM37_CLANG_AST_ATTR_H
+#define LLVM37_CLANG_AST_ATTR_H
 
 #include "clang/AST/AttrIterator.h"
 #include "clang/AST/Decl.h"
@@ -23,11 +23,11 @@
 #include "clang/Basic/Sanitizers.h"
 #include "clang/Basic/SourceLocation.h"
 #include "clang/Basic/VersionTuple.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/ADT/StringRef.h"
-#include "llvm/ADT/StringSwitch.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/ADT/StringRef.h"
+#include "llvm37/ADT/StringSwitch.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <algorithm>
 #include <cassert>
 

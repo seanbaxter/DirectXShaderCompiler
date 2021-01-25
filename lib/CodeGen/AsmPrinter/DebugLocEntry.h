@@ -7,15 +7,15 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_LIB_CODEGEN_ASMPRINTER_DEBUGLOCENTRY_H
-#define LLVM_LIB_CODEGEN_ASMPRINTER_DEBUGLOCENTRY_H
-#include "llvm/ADT/SmallString.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/DebugInfo.h"
-#include "llvm/MC/MCSymbol.h"
-#include "llvm/MC/MachineLocation.h"
+#ifndef LLVM37_LIB_CODEGEN_ASMPRINTER_DEBUGLOCENTRY_H
+#define LLVM37_LIB_CODEGEN_ASMPRINTER_DEBUGLOCENTRY_H
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/DebugInfo.h"
+#include "llvm37/MC/MCSymbol.h"
+#include "llvm37/MC/MachineLocation.h"
 
-namespace llvm {
+namespace llvm37 {
 class AsmPrinter;
 class DebugLocStream;
 

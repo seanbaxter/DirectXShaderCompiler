@@ -15,9 +15,9 @@
 #include "clang/AST/CommentVisitor.h"
 #include "clang/Format/Format.h"
 #include "clang/Index/USRGeneration.h"
-#include "llvm/ADT/StringExtras.h"
-#include "llvm/ADT/TinyPtrVector.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/StringExtras.h"
+#include "llvm37/ADT/TinyPtrVector.h"
+#include "llvm37/Support/raw_ostream.h"
 
 using namespace clang;
 using namespace clang::comments;
@@ -90,7 +90,7 @@ struct FullCommentParts {
   SmallVector<const BlockCommandComment *, 4> Returns;
   SmallVector<const ParamCommandComment *, 8> Params;
   SmallVector<const TParamCommandComment *, 4> TParams;
-  llvm::TinyPtrVector<const BlockCommandComment *> Exceptions;
+  llvm37::TinyPtrVector<const BlockCommandComment *> Exceptions;
   SmallVector<const BlockContentComment *, 8> MiscBlocks;
 };
 
@@ -198,7 +198,7 @@ FullCommentParts::FullCommentParts(const FullComment *C,
 }
 
 void printHTMLStartTagComment(const HTMLStartTagComment *C,
-                              llvm::raw_svector_ostream &Result) {
+                              llvm37::raw_svector_ostream &Result) {
   Result << "<" << C->getTagName();
 
   if (C->getNumAttrs() != 0) {
@@ -255,7 +255,7 @@ public:
 private:
   const FullComment *FC;
   /// Output stream for HTML.
-  llvm::raw_svector_ostream Result;
+  llvm37::raw_svector_ostream Result;
 
   const CommandTraits &Traits;
 };
@@ -571,7 +571,7 @@ private:
   const FullComment *FC;
 
   /// Output stream for XML.
-  llvm::raw_svector_ostream Result;
+  llvm37::raw_svector_ostream Result;
 
   const CommandTraits &Traits;
   const SourceManager &SM;
@@ -583,7 +583,7 @@ void getSourceTextOfDeclaration(const DeclInfo *ThisDecl,
                                 SmallVectorImpl<char> &Str) {
   ASTContext &Context = ThisDecl->CurrentDecl->getASTContext();
   const LangOptions &LangOpts = Context.getLangOpts();
-  llvm::raw_svector_ostream OS(Str);
+  llvm37::raw_svector_ostream OS(Str);
   PrintingPolicy PPolicy(LangOpts);
   PPolicy.PolishForDeclaration = true;
   PPolicy.TerseOutput = true;
@@ -601,7 +601,7 @@ void CommentASTToXMLConverter::formatTextOfDeclaration(
   // Form a unique in memory buffer name.
   SmallString<128> filename;
   filename += "xmldecl";
-  filename += llvm::utostr(FormatInMemoryUniqueId);
+  filename += llvm37::utostr(FormatInMemoryUniqueId);
   filename += ".xd";
   FileID ID = FormatRewriterContext.createInMemoryFile(filename, StringDecl);
   SourceLocation Start = FormatRewriterContext.Sources.getLocForStartOfFile(ID)
@@ -669,7 +669,7 @@ void CommentASTToXMLConverter::visitHTMLStartTagComment(
   {
     SmallString<32> Tag;
     {
-      llvm::raw_svector_ostream TagOS(Tag);
+      llvm37::raw_svector_ostream TagOS(Tag);
       printHTMLStartTagComment(C, TagOS);
     }
     appendToResultWithCDATAEscaping(Tag);

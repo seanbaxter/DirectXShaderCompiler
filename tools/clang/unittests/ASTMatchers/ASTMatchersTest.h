@@ -7,8 +7,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_UNITTESTS_ASTMATCHERS_ASTMATCHERSTEST_H
-#define LLVM_CLANG_UNITTESTS_ASTMATCHERS_ASTMATCHERSTEST_H
+#ifndef LLVM37_CLANG_UNITTESTS_ASTMATCHERS_ASTMATCHERSTEST_H
+#define LLVM37_CLANG_UNITTESTS_ASTMATCHERS_ASTMATCHERSTEST_H
 
 #include "clang/ASTMatchers/ASTMatchFinder.h"
 #include "clang/Frontend/ASTUnit.h"
@@ -61,7 +61,7 @@ private:
 template <typename T>
 testing::AssertionResult matchesConditionally(
     const std::string &Code, const T &AMatcher, bool ExpectMatch,
-    llvm::StringRef CompileArg,
+    llvm37::StringRef CompileArg,
     const FileContentMappings &VirtualMappedFiles = FileContentMappings(),
     const std::string &Filename = "input.cc") {
   bool Found = false, DynamicFound = false;
@@ -133,7 +133,7 @@ testing::AssertionResult notMatchesObjC(const std::string &Code,
 template <typename T>
 testing::AssertionResult matchesConditionallyWithCuda(
     const std::string &Code, const T &AMatcher, bool ExpectMatch,
-    llvm::StringRef CompileArg) {
+    llvm37::StringRef CompileArg) {
   const std::string CudaHeader =
       "typedef unsigned int size_t;\n"
       "#define __constant__ __attribute__((constant))\n"
@@ -261,4 +261,4 @@ matchAndVerifyResultFalse(const std::string &Code, const T &AMatcher,
 } // end namespace ast_matchers
 } // end namespace clang
 
-#endif  // LLVM_CLANG_UNITTESTS_AST_MATCHERS_AST_MATCHERS_TEST_H
+#endif  // LLVM37_CLANG_UNITTESTS_AST_MATCHERS_AST_MATCHERS_TEST_H

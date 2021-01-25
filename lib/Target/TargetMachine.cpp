@@ -11,27 +11,27 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Target/TargetMachine.h"
-#include "llvm/Analysis/TargetTransformInfo.h"
-#include "llvm/CodeGen/MachineFunction.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/GlobalAlias.h"
-#include "llvm/IR/GlobalValue.h"
-#include "llvm/IR/GlobalVariable.h"
-#include "llvm/IR/Mangler.h"
-#include "llvm/MC/MCAsmInfo.h"
-#include "llvm/MC/MCCodeGenInfo.h"
-#include "llvm/MC/MCContext.h"
-#include "llvm/MC/MCInstrInfo.h"
-#include "llvm/MC/MCSectionMachO.h"
-#include "llvm/MC/MCTargetOptions.h"
-#include "llvm/MC/SectionKind.h"
-#include "llvm/IR/LegacyPassManager.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Target/TargetLowering.h"
-#include "llvm/Target/TargetLoweringObjectFile.h"
-#include "llvm/Target/TargetSubtargetInfo.h"
-using namespace llvm;
+#include "llvm37/Target/TargetMachine.h"
+#include "llvm37/Analysis/TargetTransformInfo.h"
+#include "llvm37/CodeGen/MachineFunction.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/GlobalAlias.h"
+#include "llvm37/IR/GlobalValue.h"
+#include "llvm37/IR/GlobalVariable.h"
+#include "llvm37/IR/Mangler.h"
+#include "llvm37/MC/MCAsmInfo.h"
+#include "llvm37/MC/MCCodeGenInfo.h"
+#include "llvm37/MC/MCContext.h"
+#include "llvm37/MC/MCInstrInfo.h"
+#include "llvm37/MC/MCSectionMachO.h"
+#include "llvm37/MC/MCTargetOptions.h"
+#include "llvm37/MC/SectionKind.h"
+#include "llvm37/IR/LegacyPassManager.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Target/TargetLowering.h"
+#include "llvm37/Target/TargetLoweringObjectFile.h"
+#include "llvm37/Target/TargetSubtargetInfo.h"
+using namespace llvm37;
 
 //---------------------------------------------------------------------------
 // TargetMachine Class

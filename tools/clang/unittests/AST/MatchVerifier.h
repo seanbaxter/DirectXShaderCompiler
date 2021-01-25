@@ -16,8 +16,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_UNITTESTS_AST_MATCHVERIFIER_H
-#define LLVM_CLANG_UNITTESTS_AST_MATCHVERIFIER_H
+#ifndef LLVM37_CLANG_UNITTESTS_AST_MATCHVERIFIER_H
+#define LLVM37_CLANG_UNITTESTS_AST_MATCHVERIFIER_H
 
 #include "clang/AST/ASTContext.h"
 #include "clang/ASTMatchers/ASTMatchFinder.h"
@@ -173,7 +173,7 @@ protected:
     unsigned Column = Result.SourceManager->getSpellingColumnNumber(Loc);
     if (Line != ExpectLine || Column != ExpectColumn) {
       std::string MsgStr;
-      llvm::raw_string_ostream Msg(MsgStr);
+      llvm37::raw_string_ostream Msg(MsgStr);
       Msg << "Expected location <" << ExpectLine << ":" << ExpectColumn
           << ">, found <";
       Loc.print(Msg, *Result.SourceManager);
@@ -218,7 +218,7 @@ protected:
     if (BeginLine != ExpectBeginLine || BeginColumn != ExpectBeginColumn ||
         EndLine != ExpectEndLine || EndColumn != ExpectEndColumn) {
       std::string MsgStr;
-      llvm::raw_string_ostream Msg(MsgStr);
+      llvm37::raw_string_ostream Msg(MsgStr);
       Msg << "Expected range <" << ExpectBeginLine << ":" << ExpectBeginColumn
           << '-' << ExpectEndLine << ":" << ExpectEndColumn << ">, found <";
       Begin.print(Msg, *Result.SourceManager);
@@ -248,12 +248,12 @@ protected:
   void verify(const MatchFinder::MatchResult &Result,
               const ast_type_traits::DynTypedNode &Node) override {
     std::string DumpStr;
-    llvm::raw_string_ostream Dump(DumpStr);
+    llvm37::raw_string_ostream Dump(DumpStr);
     Node.dump(Dump, *Result.SourceManager);
 
     if (Dump.str().find(ExpectSubstring) == std::string::npos) {
       std::string MsgStr;
-      llvm::raw_string_ostream Msg(MsgStr);
+      llvm37::raw_string_ostream Msg(MsgStr);
       Msg << "Expected dump substring <" << ExpectSubstring << ">, found <"
           << Dump.str() << '>';
       this->setFailure(Msg.str());
@@ -275,12 +275,12 @@ protected:
   void verify(const MatchFinder::MatchResult &Result,
               const ast_type_traits::DynTypedNode &Node) override {
     std::string PrintStr;
-    llvm::raw_string_ostream Print(PrintStr);
+    llvm37::raw_string_ostream Print(PrintStr);
     Node.print(Print, Result.Context->getPrintingPolicy());
 
     if (Print.str() != ExpectString) {
       std::string MsgStr;
-      llvm::raw_string_ostream Msg(MsgStr);
+      llvm37::raw_string_ostream Msg(MsgStr);
       Msg << "Expected pretty print <" << ExpectString << ">, found <"
           << Print.str() << '>';
       this->setFailure(Msg.str());

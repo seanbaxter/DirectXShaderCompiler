@@ -11,8 +11,8 @@
 //  traverses the entire AST, using data recursion for Stmts/Exprs.
 //
 //===----------------------------------------------------------------------===//
-#ifndef LLVM_CLANG_AST_DATARECURSIVEASTVISITOR_H
-#define LLVM_CLANG_AST_DATARECURSIVEASTVISITOR_H
+#ifndef LLVM37_CLANG_AST_DATARECURSIVEASTVISITOR_H
+#define LLVM37_CLANG_AST_DATARECURSIVEASTVISITOR_H
 
 #include "clang/AST/Attr.h"
 #include "clang/AST/Decl.h"
@@ -2698,4 +2698,4 @@ bool RecursiveASTVisitor<Derived>::VisitOMPDependClause(OMPDependClause *C) {
 
 } // end namespace clang
 
-#endif // LLVM_CLANG_LIBCLANG_RECURSIVEASTVISITOR_H
+#endif // LLVM37_CLANG_LIBCLANG_RECURSIVEASTVISITOR_H

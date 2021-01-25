@@ -7,13 +7,13 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_DRIVER_MULTILIB_H
-#define LLVM_CLANG_DRIVER_MULTILIB_H
+#ifndef LLVM37_CLANG_DRIVER_MULTILIB_H
+#define LLVM37_CLANG_DRIVER_MULTILIB_H
 
 #include "clang/Basic/LLVM.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/Triple.h"
-#include "llvm/Option/Option.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/Triple.h"
+#include "llvm37/Option/Option.h"
 #include <functional>
 #include <string>
 #include <vector>
@@ -103,7 +103,7 @@ public:
       StringRef InstallDir, StringRef Triple, const Multilib &M)>
   IncludeDirsFunc;
 
-  typedef llvm::function_ref<bool(const Multilib &)> FilterCallback;
+  typedef llvm37::function_ref<bool(const Multilib &)> FilterCallback;
 
 private:
   multilib_list Multilibs;

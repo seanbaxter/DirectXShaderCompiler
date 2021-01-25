@@ -12,8 +12,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_SEMA_OVERLOAD_H
-#define LLVM_CLANG_SEMA_OVERLOAD_H
+#ifndef LLVM37_CLANG_SEMA_OVERLOAD_H
+#define LLVM37_CLANG_SEMA_OVERLOAD_H
 
 #include "clang/AST/Decl.h"
 #include "clang/AST/DeclTemplate.h"
@@ -23,10 +23,10 @@
 #include "clang/AST/UnresolvedSet.h"
 #include "clang/Sema/SemaFixItUtils.h"
 #include "clang/Sema/TemplateDeduction.h"
-#include "llvm/ADT/SmallPtrSet.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/Support/AlignOf.h"
-#include "llvm/Support/Allocator.h"
+#include "llvm37/ADT/SmallPtrSet.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/Support/AlignOf.h"
+#include "llvm37/Support/Allocator.h"
 
 namespace clang {
   class ASTContext;
@@ -732,17 +732,17 @@ namespace clang {
   private:
     static const int InlineCandidates = 4; // HLSL Change - shrink inline cost
     SmallVector<OverloadCandidate, InlineCandidates> Candidates; // HLSL Change - shrink inline cost
-    llvm::SmallPtrSet<Decl *, InlineCandidates> Functions; // HLSL Change - shrink inline cost
+    llvm37::SmallPtrSet<Decl *, InlineCandidates> Functions; // HLSL Change - shrink inline cost
 
     // Allocator for OverloadCandidate::Conversions. We store the first few
     // elements inline to avoid allocation for small sets.
-    llvm::BumpPtrAllocator ConversionSequenceAllocator;
+    llvm37::BumpPtrAllocator ConversionSequenceAllocator;
 
     SourceLocation Loc;
     CandidateSetKind Kind;
 
     unsigned NumInlineSequences;
-    llvm::AlignedCharArray<llvm::AlignOf<ImplicitConversionSequence>::Alignment,
+    llvm37::AlignedCharArray<llvm37::AlignOf<ImplicitConversionSequence>::Alignment,
                            InlineCandidates * sizeof(ImplicitConversionSequence)> InlineSpace; // HLSL Change - shrink inline cost
 
     OverloadCandidateSet(const OverloadCandidateSet &) = delete;
@@ -836,4 +836,4 @@ namespace clang {
                                  bool UserDefinedConversion = false);
 } // end namespace clang
 
-#endif // LLVM_CLANG_SEMA_OVERLOAD_H
+#endif // LLVM37_CLANG_SEMA_OVERLOAD_H

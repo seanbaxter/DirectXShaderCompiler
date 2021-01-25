@@ -41,17 +41,17 @@
 #include "clang/Sema/IdentifierResolver.h"
 #include "clang/Sema/Sema.h"
 #include "clang/Serialization/ASTReader.h"
-#include "llvm/ADT/APFloat.h"
-#include "llvm/ADT/APInt.h"
-#include "llvm/ADT/Hashing.h"
-#include "llvm/ADT/StringExtras.h"
-#include "llvm/Bitcode/BitstreamWriter.h"
-#include "llvm/Support/EndianStream.h"
-#include "llvm/Support/FileSystem.h"
-#include "llvm/Support/MemoryBuffer.h"
-#include "llvm/Support/OnDiskHashTable.h"
-#include "llvm/Support/Path.h"
-#include "llvm/Support/Process.h"
+#include "llvm37/ADT/APFloat.h"
+#include "llvm37/ADT/APInt.h"
+#include "llvm37/ADT/Hashing.h"
+#include "llvm37/ADT/StringExtras.h"
+#include "llvm37/Bitcode/BitstreamWriter.h"
+#include "llvm37/Support/EndianStream.h"
+#include "llvm37/Support/FileSystem.h"
+#include "llvm37/Support/MemoryBuffer.h"
+#include "llvm37/Support/OnDiskHashTable.h"
+#include "llvm37/Support/Path.h"
+#include "llvm37/Support/Process.h"
 #include <algorithm>
 #include <cstdio>
 #include <string.h>
@@ -671,7 +671,7 @@ void TypeLocWriter::VisitAtomicTypeLoc(AtomicTypeLoc TL) {
 }
 
 void ASTWriter::WriteTypeAbbrevs() {
-  using namespace llvm;
+  using namespace llvm37;
 
   BitCodeAbbrev *Abv;
 
@@ -709,11 +709,11 @@ void ASTWriter::WriteTypeAbbrevs() {
 //===----------------------------------------------------------------------===//
 
 static void EmitBlockID(unsigned ID, const char *Name,
-                        llvm::BitstreamWriter &Stream,
+                        llvm37::BitstreamWriter &Stream,
                         ASTWriter::RecordDataImpl &Record) {
   Record.clear();
   Record.push_back(ID);
-  Stream.EmitRecord(llvm::bitc::BLOCKINFO_CODE_SETBID, Record);
+  Stream.EmitRecord(llvm37::bitc::BLOCKINFO_CODE_SETBID, Record);
 
   // Emit the block name if present.
   if (!Name || Name[0] == 0)
@@ -721,20 +721,20 @@ static void EmitBlockID(unsigned ID, const char *Name,
   Record.clear();
   while (*Name)
     Record.push_back(*Name++);
-  Stream.EmitRecord(llvm::bitc::BLOCKINFO_CODE_BLOCKNAME, Record);
+  Stream.EmitRecord(llvm37::bitc::BLOCKINFO_CODE_BLOCKNAME, Record);
 }
 
 static void EmitRecordID(unsigned ID, const char *Name,
-                         llvm::BitstreamWriter &Stream,
+                         llvm37::BitstreamWriter &Stream,
                          ASTWriter::RecordDataImpl &Record) {
   Record.clear();
   Record.push_back(ID);
   while (*Name)
     Record.push_back(*Name++);
-  Stream.EmitRecord(llvm::bitc::BLOCKINFO_CODE_SETRECORDNAME, Record);
+  Stream.EmitRecord(llvm37::bitc::BLOCKINFO_CODE_SETRECORDNAME, Record);
 }
 
-static void AddStmtsExprs(llvm::BitstreamWriter &Stream,
+static void AddStmtsExprs(llvm37::BitstreamWriter &Stream,
                           ASTWriter::RecordDataImpl &Record) {
 #define RECORD(X) EmitRecordID(X, #X, Stream, Record)
   RECORD(STMT_STOP);
@@ -865,7 +865,7 @@ static void AddStmtsExprs(llvm::BitstreamWriter &Stream,
 
 void ASTWriter::WriteBlockInfoBlock() {
   RecordData Record;
-  Stream.EnterSubblock(llvm::bitc::BLOCKINFO_BLOCK_ID, 3);
+  Stream.EnterSubblock(llvm37::bitc::BLOCKINFO_BLOCK_ID, 3);
 
 #define BLOCK(X) EmitBlockID(X ## _ID, #X, Stream, Record)
 #define RECORD(X) EmitRecordID(X, #X, Stream, Record)
@@ -1076,8 +1076,8 @@ static bool cleanPathForOutput(FileManager &FileMgr,
                                SmallVectorImpl<char> &Path) {
   bool Changed = false;
 
-  if (!llvm::sys::path::is_absolute(StringRef(Path.data(), Path.size()))) {
-    llvm::sys::fs::make_absolute(Path);
+  if (!llvm37::sys::path::is_absolute(StringRef(Path.data(), Path.size()))) {
+    llvm37::sys::fs::make_absolute(Path);
     Changed = true;
   }
 
@@ -1113,8 +1113,8 @@ adjustFilenameForRelocatableAST(const char *Filename, StringRef BaseDir) {
 
   // If there's not a path separator at the end of the base directory nor
   // immediately after it, then this isn't within the base directory.
-  if (!llvm::sys::path::is_separator(Filename[Pos])) {
-    if (!llvm::sys::path::is_separator(BaseDir.back()))
+  if (!llvm37::sys::path::is_separator(Filename[Pos])) {
+    if (!llvm37::sys::path::is_separator(BaseDir.back()))
       return Filename;
   } else {
     // If the file name has a '/' at the current position, skip over the '/'.
@@ -1133,7 +1133,7 @@ adjustFilenameForRelocatableAST(const char *Filename, StringRef BaseDir) {
 
 static ASTFileSignature getSignature() {
   while (1) {
-    if (ASTFileSignature S = llvm::sys::Process::GetRandomNumber())
+    if (ASTFileSignature S = llvm37::sys::Process::GetRandomNumber())
       return S;
     // Rely on GetRandomNumber to eventually return non-zero...
   }
@@ -1143,7 +1143,7 @@ static ASTFileSignature getSignature() {
 void ASTWriter::WriteControlBlock(Preprocessor &PP, ASTContext &Context,
                                   StringRef isysroot,
                                   const std::string &OutputFile) {
-  using namespace llvm;
+  using namespace llvm37;
   Stream.EnterSubblock(CONTROL_BLOCK_ID, 5);
   RecordData Record;
   
@@ -1429,8 +1429,8 @@ void ASTWriter::WriteControlBlock(Preprocessor &PP, ASTContext &Context,
 
     SmallString<128> OutputPath(OutputFile);
 
-    llvm::sys::fs::make_absolute(OutputPath);
-    StringRef origDir = llvm::sys::path::parent_path(OutputPath);
+    llvm37::sys::fs::make_absolute(OutputPath);
+    StringRef origDir = llvm37::sys::path::parent_path(OutputPath);
 
     RecordData Record;
     Record.push_back(ORIGINAL_PCH_DIR);
@@ -1455,7 +1455,7 @@ namespace  {
 void ASTWriter::WriteInputFiles(SourceManager &SourceMgr,
                                 HeaderSearchOptions &HSOpts,
                                 bool Modules) {
-  using namespace llvm;
+  using namespace llvm37;
   Stream.EnterSubblock(INPUT_FILES_BLOCK_ID, 4);
   RecordData Record;
   
@@ -1552,8 +1552,8 @@ void ASTWriter::WriteInputFiles(SourceManager &SourceMgr,
 
 /// \brief Create an abbreviation for the SLocEntry that refers to a
 /// file.
-static unsigned CreateSLocFileAbbrev(llvm::BitstreamWriter &Stream) {
-  using namespace llvm;
+static unsigned CreateSLocFileAbbrev(llvm37::BitstreamWriter &Stream) {
+  using namespace llvm37;
   BitCodeAbbrev *Abbrev = new BitCodeAbbrev();
   Abbrev->Add(BitCodeAbbrevOp(SM_SLOC_FILE_ENTRY));
   Abbrev->Add(BitCodeAbbrevOp(BitCodeAbbrevOp::VBR, 8)); // Offset
@@ -1570,8 +1570,8 @@ static unsigned CreateSLocFileAbbrev(llvm::BitstreamWriter &Stream) {
 
 /// \brief Create an abbreviation for the SLocEntry that refers to a
 /// buffer.
-static unsigned CreateSLocBufferAbbrev(llvm::BitstreamWriter &Stream) {
-  using namespace llvm;
+static unsigned CreateSLocBufferAbbrev(llvm37::BitstreamWriter &Stream) {
+  using namespace llvm37;
   BitCodeAbbrev *Abbrev = new BitCodeAbbrev();
   Abbrev->Add(BitCodeAbbrevOp(SM_SLOC_BUFFER_ENTRY));
   Abbrev->Add(BitCodeAbbrevOp(BitCodeAbbrevOp::VBR, 8)); // Offset
@@ -1584,8 +1584,8 @@ static unsigned CreateSLocBufferAbbrev(llvm::BitstreamWriter &Stream) {
 
 /// \brief Create an abbreviation for the SLocEntry that refers to a
 /// buffer's blob.
-static unsigned CreateSLocBufferBlobAbbrev(llvm::BitstreamWriter &Stream) {
-  using namespace llvm;
+static unsigned CreateSLocBufferBlobAbbrev(llvm37::BitstreamWriter &Stream) {
+  using namespace llvm37;
   BitCodeAbbrev *Abbrev = new BitCodeAbbrev();
   Abbrev->Add(BitCodeAbbrevOp(SM_SLOC_BUFFER_BLOB));
   Abbrev->Add(BitCodeAbbrevOp(BitCodeAbbrevOp::Blob)); // Blob
@@ -1594,8 +1594,8 @@ static unsigned CreateSLocBufferBlobAbbrev(llvm::BitstreamWriter &Stream) {
 
 /// \brief Create an abbreviation for the SLocEntry that refers to a macro
 /// expansion.
-static unsigned CreateSLocExpansionAbbrev(llvm::BitstreamWriter &Stream) {
-  using namespace llvm;
+static unsigned CreateSLocExpansionAbbrev(llvm37::BitstreamWriter &Stream) {
+  using namespace llvm37;
   BitCodeAbbrev *Abbrev = new BitCodeAbbrev();
   Abbrev->Add(BitCodeAbbrevOp(SM_SLOC_EXPANSION_ENTRY));
   Abbrev->Add(BitCodeAbbrevOp(BitCodeAbbrevOp::VBR, 8)); // Offset
@@ -1614,7 +1614,7 @@ namespace {
     
     // Keep track of the framework names we've used during serialization.
     SmallVector<char, 128> FrameworkStringData;
-    llvm::StringMap<unsigned> FrameworkNameOffset;
+    llvm37::StringMap<unsigned> FrameworkNameOffset;
     
   public:
     HeaderFileInfoTrait(ASTWriter &Writer, const HeaderSearch &HS)
@@ -1638,13 +1638,13 @@ namespace {
       //
       // FIXME: Using the mtime here will cause problems for explicit module
       // imports.
-      return llvm::hash_combine(key.FE->getSize(),
+      return llvm37::hash_combine(key.FE->getSize(),
                                 key.FE->getModificationTime());
     }
     
     std::pair<unsigned,unsigned>
     EmitKeyDataLength(raw_ostream& Out, key_type_ref key, data_type_ref Data) {
-      using namespace llvm::support;
+      using namespace llvm37::support;
       endian::Writer<little> Writer(Out);
       unsigned KeyLen = strlen(key.Filename) + 1 + 8 + 8;
       Writer.write<uint16_t>(KeyLen);
@@ -1656,7 +1656,7 @@ namespace {
     }
     
     void EmitKey(raw_ostream& Out, key_type_ref key, unsigned KeyLen) {
-      using namespace llvm::support;
+      using namespace llvm37::support;
       endian::Writer<little> LE(Out);
       LE.write<uint64_t>(key.FE->getSize());
       KeyLen -= 8;
@@ -1667,7 +1667,7 @@ namespace {
     
     void EmitData(raw_ostream &Out, key_type_ref key,
                   data_type_ref Data, unsigned DataLen) {
-      using namespace llvm::support;
+      using namespace llvm37::support;
       endian::Writer<little> LE(Out);
       uint64_t Start = Out.tell(); (void)Start;
       
@@ -1688,7 +1688,7 @@ namespace {
       unsigned Offset = 0;
       if (!Data.Framework.empty()) {
         // If this header refers into a framework, save the framework name.
-        llvm::StringMap<unsigned>::iterator Pos
+        llvm37::StringMap<unsigned>::iterator Pos
           = FrameworkNameOffset.find(Data.Framework);
         if (Pos == FrameworkNameOffset.end()) {
           Offset = FrameworkStringData.size() + 1;
@@ -1726,7 +1726,7 @@ void ASTWriter::WriteHeaderSearch(const HeaderSearch &HS) {
     FilesByUID.resize(HS.header_file_size());
   
   HeaderFileInfoTrait GeneratorTrait(*this, HS);
-  llvm::OnDiskChainedHashTableGenerator<HeaderFileInfoTrait> Generator;
+  llvm37::OnDiskChainedHashTableGenerator<HeaderFileInfoTrait> Generator;
   SmallVector<const char *, 4> SavedStrings;
   unsigned NumHeaderSearchEntries = 0;
   for (unsigned UID = 0, LastUID = FilesByUID.size(); UID != LastUID; ++UID) {
@@ -1761,15 +1761,15 @@ void ASTWriter::WriteHeaderSearch(const HeaderSearch &HS) {
   SmallString<4096> TableData;
   uint32_t BucketOffset;
   {
-    using namespace llvm::support;
-    llvm::raw_svector_ostream Out(TableData);
+    using namespace llvm37::support;
+    llvm37::raw_svector_ostream Out(TableData);
     // Make sure that no bucket is at offset 0
     endian::Writer<little>(Out).write<uint32_t>(0);
     BucketOffset = Generator.Emit(Out, GeneratorTrait);
   }
 
   // Create a blob abbreviation
-  using namespace llvm;
+  using namespace llvm37;
   BitCodeAbbrev *Abbrev = new BitCodeAbbrev();
   Abbrev->Add(BitCodeAbbrevOp(HEADER_SEARCH_TABLE));
   Abbrev->Add(BitCodeAbbrevOp(BitCodeAbbrevOp::Fixed, 32));
@@ -1874,7 +1874,7 @@ void ASTWriter::WriteSourceManagerBlock(SourceManager &SourceMgr,
         if (Content->BufferOverridden) {
           Record.clear();
           Record.push_back(SM_SLOC_BUFFER_BLOB);
-          const llvm::MemoryBuffer *Buffer
+          const llvm37::MemoryBuffer *Buffer
             = Content->getBuffer(PP.getDiagnostics(), PP.getSourceManager());
           Stream.EmitRecordWithBlob(SLocBufferBlobAbbrv, Record,
                                     StringRef(Buffer->getBufferStart(),
@@ -1885,9 +1885,9 @@ void ASTWriter::WriteSourceManagerBlock(SourceManager &SourceMgr,
         // with this entry contains the contents of the buffer.
 
         // We add one to the size so that we capture the trailing NULL
-        // that is required by llvm::MemoryBuffer::getMemBuffer (on
+        // that is required by llvm37::MemoryBuffer::getMemBuffer (on
         // the reader side).
-        const llvm::MemoryBuffer *Buffer
+        const llvm37::MemoryBuffer *Buffer
           = Content->getBuffer(PP.getDiagnostics(), PP.getSourceManager());
         const char *Name = Buffer->getBufferIdentifier();
         Stream.EmitRecordWithBlob(SLocBufferAbbrv, Record,
@@ -1926,7 +1926,7 @@ void ASTWriter::WriteSourceManagerBlock(SourceManager &SourceMgr,
 
   // Write the source-location offsets table into the AST block. This
   // table is used for lazily loading source-location information.
-  using namespace llvm;
+  using namespace llvm37;
   BitCodeAbbrev *Abbrev = new BitCodeAbbrev();
   Abbrev->Add(BitCodeAbbrevOp(SOURCE_LOCATION_OFFSETS));
   Abbrev->Add(BitCodeAbbrevOp(BitCodeAbbrevOp::VBR, 16)); // # of slocs
@@ -2043,7 +2043,7 @@ void ASTWriter::WritePreprocessor(const Preprocessor &PP, bool IsModule) {
   // Sort the set of macro definitions that need to be serialized by the
   // name of the macro, to provide a stable ordering.
   std::sort(MacroIdentifiers.begin(), MacroIdentifiers.end(),
-            llvm::less_ptr<IdentifierInfo>());
+            llvm37::less_ptr<IdentifierInfo>());
 
   // Emit the macro directives as a list and associate the offset with the
   // identifier they belong to.
@@ -2072,7 +2072,7 @@ void ASTWriter::WritePreprocessor(const Preprocessor &PP, bool IsModule) {
     if (IsModule) {
       auto Leafs = PP.getLeafModuleMacros(Name);
       SmallVector<ModuleMacro*, 8> Worklist(Leafs.begin(), Leafs.end());
-      llvm::DenseMap<ModuleMacro*, unsigned> Visits;
+      llvm37::DenseMap<ModuleMacro*, unsigned> Visits;
       while (!Worklist.empty()) {
         auto *Macro = Worklist.pop_back_val();
 
@@ -2176,7 +2176,7 @@ void ASTWriter::WritePreprocessor(const Preprocessor &PP, bool IsModule) {
   Stream.ExitBlock();
 
   // Write the offsets table for macro IDs.
-  using namespace llvm;
+  using namespace llvm37;
   auto *Abbrev = new BitCodeAbbrev();
   Abbrev->Add(BitCodeAbbrevOp(MACRO_OFFSET));
   Abbrev->Add(BitCodeAbbrevOp(BitCodeAbbrevOp::Fixed, 32)); // # of macros
@@ -2203,7 +2203,7 @@ void ASTWriter::WritePreprocessorDetail(PreprocessingRecord &PPRec) {
 
   // If the preprocessor has a preprocessing record, emit it.
   unsigned NumPreprocessingRecords = 0;
-  using namespace llvm;
+  using namespace llvm37;
   
   // Set up the abbreviation for 
   unsigned InclusionAbbrev = 0;
@@ -2276,7 +2276,7 @@ void ASTWriter::WritePreprocessorDetail(PreprocessingRecord &PPRec) {
     assert(PreprocessedEntityOffsets.size() == NumPreprocessingRecords);
 
     // Write the offsets table for identifier IDs.
-    using namespace llvm;
+    using namespace llvm37;
     BitCodeAbbrev *Abbrev = new BitCodeAbbrev();
     Abbrev->Add(BitCodeAbbrevOp(PPD_ENTITIES_OFFSETS));
     Abbrev->Add(BitCodeAbbrevOp(BitCodeAbbrevOp::Fixed, 32)); // first pp entity
@@ -2292,7 +2292,7 @@ void ASTWriter::WritePreprocessorDetail(PreprocessingRecord &PPRec) {
 }
 
 unsigned ASTWriter::getSubmoduleID(Module *Mod) {
-  llvm::DenseMap<Module *, unsigned>::iterator Known = SubmoduleIDs.find(Mod);
+  llvm37::DenseMap<Module *, unsigned>::iterator Known = SubmoduleIDs.find(Mod);
   if (Known != SubmoduleIDs.end())
     return Known->second;
   
@@ -2303,7 +2303,7 @@ unsigned ASTWriter::getExistingSubmoduleID(Module *Mod) const {
   if (!Mod)
     return 0;
 
-  llvm::DenseMap<Module *, unsigned>::const_iterator
+  llvm37::DenseMap<Module *, unsigned>::const_iterator
     Known = SubmoduleIDs.find(Mod);
   if (Known != SubmoduleIDs.end())
     return Known->second;
@@ -2328,7 +2328,7 @@ void ASTWriter::WriteSubmodules(Module *WritingModule) {
   Stream.EnterSubblock(SUBMODULE_BLOCK_ID, /*bits for abbreviations*/5);
   
   // Write the abbreviations needed for the submodules block.
-  using namespace llvm;
+  using namespace llvm37;
   BitCodeAbbrev *Abbrev = new BitCodeAbbrev();
   Abbrev->Add(BitCodeAbbrevOp(SUBMODULE_DEFINITION));
   Abbrev->Add(BitCodeAbbrevOp(BitCodeAbbrevOp::VBR, 6)); // ID
@@ -2596,7 +2596,7 @@ void ASTWriter::WritePragmaDiagnosticMappings(const DiagnosticsEngine &Diag,
   if (isModule)
     return;
 
-  llvm::SmallDenseMap<const DiagnosticsEngine::DiagState *, unsigned, 64>
+  llvm37::SmallDenseMap<const DiagnosticsEngine::DiagState *, unsigned, 64>
       DiagStateIDMap;
   unsigned CurrID = 0;
   DiagStateIDMap[&Diag.DiagStates.front()] = ++CurrID; // the command-line one.
@@ -2637,7 +2637,7 @@ void ASTWriter::WriteCXXCtorInitializersOffsets() {
   RecordData Record;
 
   // Create a blob abbreviation for the C++ ctor initializer offsets.
-  using namespace llvm;
+  using namespace llvm37;
 
   BitCodeAbbrev *Abbrev = new BitCodeAbbrev();
   Abbrev->Add(BitCodeAbbrevOp(CXX_CTOR_INITIALIZERS_OFFSETS));
@@ -2660,7 +2660,7 @@ void ASTWriter::WriteCXXBaseSpecifiersOffsets() {
   RecordData Record;
 
   // Create a blob abbreviation for the C++ base specifiers offsets.
-  using namespace llvm;
+  using namespace llvm37;
     
   BitCodeAbbrev *Abbrev = new BitCodeAbbrev();
   Abbrev->Add(BitCodeAbbrevOp(CXX_BASE_SPECIFIER_OFFSETS));
@@ -2754,7 +2754,7 @@ uint64_t ASTWriter::WriteDeclContextLexicalBlock(ASTContext &Context,
 }
 
 void ASTWriter::WriteTypeDeclOffsets() {
-  using namespace llvm;
+  using namespace llvm37;
   RecordData Record;
 
   // Write the type offsets array
@@ -2785,13 +2785,13 @@ void ASTWriter::WriteTypeDeclOffsets() {
 }
 
 void ASTWriter::WriteFileDeclIDsMap() {
-  using namespace llvm;
+  using namespace llvm37;
   RecordData Record;
 
   SmallVector<std::pair<FileID, DeclIDInFileInfo *>, 64> SortedFileDeclIDs(
       FileDeclIDs.begin(), FileDeclIDs.end());
   std::sort(SortedFileDeclIDs.begin(), SortedFileDeclIDs.end(),
-            llvm::less_first());
+            llvm37::less_first());
 
   // Join the vectors of DeclIDs from all files.
   SmallVector<DeclID, 256> FileGroupedDeclIDs;
@@ -2860,7 +2860,7 @@ public:
   std::pair<unsigned,unsigned>
     EmitKeyDataLength(raw_ostream& Out, Selector Sel,
                       data_type_ref Methods) {
-    using namespace llvm::support;
+    using namespace llvm37::support;
     endian::Writer<little> LE(Out);
     unsigned KeyLen = 2 + (Sel.getNumArgs()? Sel.getNumArgs() * 4 : 4);
     LE.write<uint16_t>(KeyLen);
@@ -2878,7 +2878,7 @@ public:
   }
 
   void EmitKey(raw_ostream& Out, Selector Sel, unsigned) {
-    using namespace llvm::support;
+    using namespace llvm37::support;
     endian::Writer<little> LE(Out);
     uint64_t Start = Out.tell();
     assert((Start >> 32) == 0 && "Selector key offset too large");
@@ -2894,7 +2894,7 @@ public:
 
   void EmitData(raw_ostream& Out, key_type_ref,
                 data_type_ref Methods, unsigned DataLen) {
-    using namespace llvm::support;
+    using namespace llvm37::support;
     endian::Writer<little> LE(Out);
     uint64_t Start = Out.tell(); (void)Start;
     LE.write<uint32_t>(Methods.ID);
@@ -2946,7 +2946,7 @@ public:
 /// in an on-disk hash table indexed by the selector. The hash table also
 /// contains an empty entry for every other selector known to Sema.
 void ASTWriter::WriteSelectors(Sema &SemaRef) {
-  using namespace llvm;
+  using namespace llvm37;
 
   // Do we have to do anything at all?
   if (SemaRef.MethodPool.empty() && SelectorIDs.empty())
@@ -2954,7 +2954,7 @@ void ASTWriter::WriteSelectors(Sema &SemaRef) {
   unsigned NumTableEntries = 0;
   // Create and write out the blob that contains selectors and the method pool.
   {
-    llvm::OnDiskChainedHashTableGenerator<ASTMethodPoolTrait> Generator;
+    llvm37::OnDiskChainedHashTableGenerator<ASTMethodPoolTrait> Generator;
     ASTMethodPoolTrait Trait(*this);
 
     // Create the on-disk hash table representation. We walk through every
@@ -3001,9 +3001,9 @@ void ASTWriter::WriteSelectors(Sema &SemaRef) {
     SmallString<4096> MethodPool;
     uint32_t BucketOffset;
     {
-      using namespace llvm::support;
+      using namespace llvm37::support;
       ASTMethodPoolTrait Trait(*this);
-      llvm::raw_svector_ostream Out(MethodPool);
+      llvm37::raw_svector_ostream Out(MethodPool);
       // Make sure that no bucket is at offset 0
       endian::Writer<little>(Out).write<uint32_t>(0);
       BucketOffset = Generator.Emit(Out, Trait);
@@ -3044,7 +3044,7 @@ void ASTWriter::WriteSelectors(Sema &SemaRef) {
 
 /// \brief Write the selectors referenced in @selector expression into AST file.
 void ASTWriter::WriteReferencedSelectorsPool(Sema &SemaRef) {
-  using namespace llvm;
+  using namespace llvm37;
   if (SemaRef.ReferencedSelectors.empty())
     return;
 
@@ -3134,7 +3134,7 @@ public:
       : Writer(Writer), PP(PP), IdResolver(IdResolver) {}
 
   static hash_value_type ComputeHash(const IdentifierInfo* II) {
-    return llvm::HashString(II->getName());
+    return llvm37::HashString(II->getName());
   }
 
   std::pair<unsigned,unsigned>
@@ -3153,7 +3153,7 @@ public:
            D != DEnd; ++D)
         DataLen += 4;
     }
-    using namespace llvm::support;
+    using namespace llvm37::support;
     endian::Writer<little> LE(Out);
 
     assert((uint16_t)DataLen == DataLen && (uint16_t)KeyLen == KeyLen);
@@ -3175,7 +3175,7 @@ public:
 
   void EmitData(raw_ostream& Out, IdentifierInfo* II,
                 IdentID ID, unsigned) {
-    using namespace llvm::support;
+    using namespace llvm37::support;
     endian::Writer<little> LE(Out);
 
     auto MacroOffset = Writer.getMacroDirectivesOffset(II);
@@ -3224,12 +3224,12 @@ public:
 void ASTWriter::WriteIdentifierTable(Preprocessor &PP, 
                                      IdentifierResolver &IdResolver,
                                      bool IsModule) {
-  using namespace llvm;
+  using namespace llvm37;
 
   // Create and write out the blob that contains the identifier
   // strings.
   {
-    llvm::OnDiskChainedHashTableGenerator<ASTIdentifierTableTrait> Generator;
+    llvm37::OnDiskChainedHashTableGenerator<ASTIdentifierTableTrait> Generator;
     ASTIdentifierTableTrait Trait(*this, PP, IdResolver);
 
     // Look for any identifiers that were named while processing the
@@ -3244,7 +3244,7 @@ void ASTWriter::WriteIdentifierTable(Preprocessor &PP,
       IIs.push_back(ID->second);
     // Sort the identifiers lexicographically before getting them references so
     // that their order is stable.
-    std::sort(IIs.begin(), IIs.end(), llvm::less_ptr<IdentifierInfo>());
+    std::sort(IIs.begin(), IIs.end(), llvm37::less_ptr<IdentifierInfo>());
     for (const IdentifierInfo *II : IIs)
       getIdentifierRef(II);
 
@@ -3263,8 +3263,8 @@ void ASTWriter::WriteIdentifierTable(Preprocessor &PP,
     SmallString<4096> IdentifierTable;
     uint32_t BucketOffset;
     {
-      using namespace llvm::support;
-      llvm::raw_svector_ostream Out(IdentifierTable);
+      using namespace llvm37::support;
+      llvm37::raw_svector_ostream Out(IdentifierTable);
       // Make sure that no bucket is at offset 0
       endian::Writer<little>(Out).write<uint32_t>(0);
       BucketOffset = Generator.Emit(Out, Trait);
@@ -3327,7 +3327,7 @@ public:
   explicit ASTDeclContextNameLookupTrait(ASTWriter &Writer) : Writer(Writer) { }
 
   hash_value_type ComputeHash(DeclarationName Name) {
-    llvm::FoldingSetNodeID ID;
+    llvm37::FoldingSetNodeID ID;
     ID.AddInteger(Name.getNameKind());
 
     switch (Name.getNameKind()) {
@@ -3358,7 +3358,7 @@ public:
   std::pair<unsigned,unsigned>
     EmitKeyDataLength(raw_ostream& Out, DeclarationName Name,
                       data_type_ref Lookup) {
-    using namespace llvm::support;
+    using namespace llvm37::support;
     endian::Writer<little> LE(Out);
     unsigned KeyLen = 1;
     switch (Name.getNameKind()) {
@@ -3388,7 +3388,7 @@ public:
   }
 
   void EmitKey(raw_ostream& Out, DeclarationName Name, unsigned) {
-    using namespace llvm::support;
+    using namespace llvm37::support;
     endian::Writer<little> LE(Out);
     LE.write<uint8_t>(Name.getNameKind());
     switch (Name.getNameKind()) {
@@ -3420,7 +3420,7 @@ public:
 
   void EmitData(raw_ostream& Out, key_type_ref,
                 data_type Lookup, unsigned DataLen) {
-    using namespace llvm::support;
+    using namespace llvm37::support;
     endian::Writer<little> LE(Out);
     uint64_t Start = Out.tell(); (void)Start;
     LE.write<uint16_t>(Lookup.size());
@@ -3450,7 +3450,7 @@ bool ASTWriter::isLookupResultEntirelyExternal(StoredDeclsList &Result,
 
 uint32_t
 ASTWriter::GenerateNameLookupTable(const DeclContext *ConstDC,
-                                   llvm::SmallVectorImpl<char> &LookupTable) {
+                                   llvm37::SmallVectorImpl<char> &LookupTable) {
   assert(!ConstDC->HasLazyLocalLexicalLookups &&
          !ConstDC->HasLazyExternalLexicalLookups &&
          "must call buildLookups first");
@@ -3460,7 +3460,7 @@ ASTWriter::GenerateNameLookupTable(const DeclContext *ConstDC,
   assert(DC == DC->getPrimaryContext() && "only primary DC has lookup table");
 
   // Create the on-disk hash table representation.
-  llvm::OnDiskChainedHashTableGenerator<ASTDeclContextNameLookupTrait>
+  llvm37::OnDiskChainedHashTableGenerator<ASTDeclContextNameLookupTrait>
       Generator;
   ASTDeclContextNameLookupTrait Trait(*this);
 
@@ -3471,7 +3471,7 @@ ASTWriter::GenerateNameLookupTable(const DeclContext *ConstDC,
 
   // We also build up small sets of the constructor and conversion function
   // names which are visible.
-  llvm::SmallSet<DeclarationName, 8> ConstructorNameSet, ConversionNameSet;
+  llvm37::SmallSet<DeclarationName, 8> ConstructorNameSet, ConversionNameSet;
 
   for (auto &Lookup : *DC->buildLookup()) {
     auto &Name = Lookup.first;
@@ -3620,9 +3620,9 @@ ASTWriter::GenerateNameLookupTable(const DeclContext *ConstDC,
                      DeclContext::lookup_result(ConversionDecls), Trait);
 
   // Create the on-disk hash table in a buffer.
-  llvm::raw_svector_ostream Out(LookupTable);
+  llvm37::raw_svector_ostream Out(LookupTable);
   // Make sure that no bucket is at offset 0
-  using namespace llvm::support;
+  using namespace llvm37::support;
   endian::Writer<little>(Out).write<uint32_t>(0);
   return Generator.Emit(Out, Trait);
 }
@@ -3661,7 +3661,7 @@ uint64_t ASTWriter::WriteDeclContextVisibleBlock(ASTContext &Context,
             std::make_pair(Entry.first, Entry.second.getLookupResult()));
     }
 
-    std::sort(LookupResults.begin(), LookupResults.end(), llvm::less_first());
+    std::sort(LookupResults.begin(), LookupResults.end(), llvm37::less_first());
     for (auto &NameAndResult : LookupResults) {
       DeclarationName Name = NameAndResult.first;
       DeclContext::lookup_result Result = NameAndResult.second;
@@ -3820,11 +3820,11 @@ void ASTWriter::WriteRedeclarations() {
 
   // Sort the local redeclarations map by the first declaration ID,
   // since the reader will be performing binary searches on this information.
-  llvm::array_pod_sort(LocalRedeclsMap.begin(), LocalRedeclsMap.end());
+  llvm37::array_pod_sort(LocalRedeclsMap.begin(), LocalRedeclsMap.end());
   
   // Emit the local redeclarations map.
-  using namespace llvm;
-  llvm::BitCodeAbbrev *Abbrev = new BitCodeAbbrev();
+  using namespace llvm37;
+  llvm37::BitCodeAbbrev *Abbrev = new BitCodeAbbrev();
   Abbrev->Add(BitCodeAbbrevOp(LOCAL_REDECLARATIONS_MAP));
   Abbrev->Add(BitCodeAbbrevOp(BitCodeAbbrevOp::VBR, 6)); // # of entries
   Abbrev->Add(BitCodeAbbrevOp(BitCodeAbbrevOp::Blob));
@@ -3873,11 +3873,11 @@ void ASTWriter::WriteObjCCategories() {
 
   // Sort the categories map by the definition ID, since the reader will be
   // performing binary searches on this information.
-  llvm::array_pod_sort(CategoriesMap.begin(), CategoriesMap.end());
+  llvm37::array_pod_sort(CategoriesMap.begin(), CategoriesMap.end());
 
   // Emit the categories map.
-  using namespace llvm;
-  llvm::BitCodeAbbrev *Abbrev = new BitCodeAbbrev();
+  using namespace llvm37;
+  llvm37::BitCodeAbbrev *Abbrev = new BitCodeAbbrev();
   Abbrev->Add(BitCodeAbbrevOp(OBJC_CATEGORIES_MAP));
   Abbrev->Add(BitCodeAbbrevOp(BitCodeAbbrevOp::VBR, 6)); // # of entries
   Abbrev->Add(BitCodeAbbrevOp(BitCodeAbbrevOp::Blob));
@@ -4028,7 +4028,7 @@ void ASTWriter::SetSelectorOffset(Selector Sel, uint32_t Offset) {
   SelectorOffsets[ID - FirstSelectorID] = Offset;
 }
 
-ASTWriter::ASTWriter(llvm::BitstreamWriter &Stream)
+ASTWriter::ASTWriter(llvm37::BitstreamWriter &Stream)
     : Stream(Stream), Context(nullptr), PP(nullptr), Chain(nullptr),
       WritingModule(nullptr), WritingAST(false),
       DoneWritingDeclsAndTypes(false), ASTHasCompilerErrors(false),
@@ -4052,7 +4052,7 @@ ASTWriter::ASTWriter(llvm::BitstreamWriter &Stream)
       ExprImplicitCastAbbrev(0) {}
 
 ASTWriter::~ASTWriter() {
-  llvm::DeleteContainerSeconds(FileDeclIDs);
+  llvm37::DeleteContainerSeconds(FileDeclIDs);
 }
 
 const LangOptions &ASTWriter::getLangOpts() const {
@@ -4101,7 +4101,7 @@ void ASTWriter::WriteASTCore(Sema &SemaRef,
                              StringRef isysroot,
                              const std::string &OutputFile, 
                              Module *WritingModule) {
-  using namespace llvm;
+  using namespace llvm37;
 
   bool isModule = WritingModule != nullptr;
 
@@ -4210,7 +4210,7 @@ void ASTWriter::WriteASTCore(Sema &SemaRef,
 
   // Build a record containing all of the known namespaces.
   RecordData KnownNamespaces;
-  for (llvm::MapVector<NamespaceDecl*, bool>::iterator
+  for (llvm37::MapVector<NamespaceDecl*, bool>::iterator
             I = SemaRef.KnownNamespaces.begin(),
          IEnd = SemaRef.KnownNamespaces.end();
        I != IEnd; ++I) {
@@ -4265,9 +4265,9 @@ void ASTWriter::WriteASTCore(Sema &SemaRef,
       NewGlobalDecls.push_back(std::make_pair(I->getKind(), GetDeclRef(I)));
   }
   
-  llvm::BitCodeAbbrev *Abv = new llvm::BitCodeAbbrev();
-  Abv->Add(llvm::BitCodeAbbrevOp(TU_UPDATE_LEXICAL));
-  Abv->Add(llvm::BitCodeAbbrevOp(llvm::BitCodeAbbrevOp::Blob));
+  llvm37::BitCodeAbbrev *Abv = new llvm37::BitCodeAbbrev();
+  Abv->Add(llvm37::BitCodeAbbrevOp(TU_UPDATE_LEXICAL));
+  Abv->Add(llvm37::BitCodeAbbrevOp(llvm37::BitCodeAbbrevOp::Blob));
   unsigned TuUpdateLexicalAbbrev = Stream.EmitAbbrev(Abv);
   Record.clear();
   Record.push_back(TU_UPDATE_LEXICAL);
@@ -4275,11 +4275,11 @@ void ASTWriter::WriteASTCore(Sema &SemaRef,
                             bytes(NewGlobalDecls));
   
   // And a visible updates block for the translation unit.
-  Abv = new llvm::BitCodeAbbrev();
-  Abv->Add(llvm::BitCodeAbbrevOp(UPDATE_VISIBLE));
-  Abv->Add(llvm::BitCodeAbbrevOp(llvm::BitCodeAbbrevOp::VBR, 6));
-  Abv->Add(llvm::BitCodeAbbrevOp(llvm::BitCodeAbbrevOp::Fixed, 32));
-  Abv->Add(llvm::BitCodeAbbrevOp(llvm::BitCodeAbbrevOp::Blob));
+  Abv = new llvm37::BitCodeAbbrev();
+  Abv->Add(llvm37::BitCodeAbbrevOp(UPDATE_VISIBLE));
+  Abv->Add(llvm37::BitCodeAbbrevOp(llvm37::BitCodeAbbrevOp::VBR, 6));
+  Abv->Add(llvm37::BitCodeAbbrevOp(llvm37::BitCodeAbbrevOp::Fixed, 32));
+  Abv->Add(llvm37::BitCodeAbbrevOp(llvm37::BitCodeAbbrevOp::Blob));
   UpdateVisibleAbbrev = Stream.EmitAbbrev(Abv);
   WriteDeclContextVisibleUpdate(TU);
 
@@ -4318,7 +4318,7 @@ void ASTWriter::WriteASTCore(Sema &SemaRef,
 
   // Make sure all decls associated with an identifier are registered for
   // serialization.
-  llvm::SmallVector<const IdentifierInfo*, 256> IIs;
+  llvm37::SmallVector<const IdentifierInfo*, 256> IIs;
   for (IdentifierTable::iterator ID = PP.getIdentifierTable().begin(),
                               IDEnd = PP.getIdentifierTable().end();
        ID != IDEnd; ++ID) {
@@ -4327,7 +4327,7 @@ void ASTWriter::WriteASTCore(Sema &SemaRef,
       IIs.push_back(II);
   }
   // Sort the identifiers to visit based on their name.
-  std::sort(IIs.begin(), IIs.end(), llvm::less_ptr<IdentifierInfo>());
+  std::sort(IIs.begin(), IIs.end(), llvm37::less_ptr<IdentifierInfo>());
   for (const IdentifierInfo *II : IIs) {
     for (IdentifierResolver::iterator D = SemaRef.IdResolver.begin(II),
                                    DEnd = SemaRef.IdResolver.end();
@@ -4363,15 +4363,15 @@ void ASTWriter::WriteASTCore(Sema &SemaRef,
     //   c++-base-specifiers-id:i32
     //   type-id:i32)
     // 
-    llvm::BitCodeAbbrev *Abbrev = new BitCodeAbbrev();
+    llvm37::BitCodeAbbrev *Abbrev = new BitCodeAbbrev();
     Abbrev->Add(BitCodeAbbrevOp(MODULE_OFFSET_MAP));
     Abbrev->Add(BitCodeAbbrevOp(BitCodeAbbrevOp::Blob));
     unsigned ModuleOffsetMapAbbrev = Stream.EmitAbbrev(Abbrev);
     SmallString<2048> Buffer;
     {
-      llvm::raw_svector_ostream Out(Buffer);
+      llvm37::raw_svector_ostream Out(Buffer);
       for (ModuleFile *M : Chain->ModuleMgr) {
-        using namespace llvm::support;
+        using namespace llvm37::support;
         endian::Writer<little> LE(Out);
         StringRef FileName = M->FileName;
         LE.write<uint16_t>(FileName.size());
@@ -4527,7 +4527,7 @@ void ASTWriter::WriteASTCore(Sema &SemaRef,
       Module *M;
       ModuleInfo(uint64_t ID, Module *M) : ID(ID), M(M) {}
     };
-    llvm::SmallVector<ModuleInfo, 64> Imports;
+    llvm37::SmallVector<ModuleInfo, 64> Imports;
     for (const auto *I : Context.local_imports()) {
       assert(SubmoduleIDs.find(I->getImportedModule()) != SubmoduleIDs.end());
       Imports.push_back(ModuleInfo(SubmoduleIDs[I->getImportedModule()],
@@ -4653,7 +4653,7 @@ void ASTWriter::WriteDeclUpdatesBlocks(RecordDataImpl &OffsetsRecord) {
         // Instantiation may change attributes; write them all out afresh.
         Record.push_back(D->hasAttrs());
         if (Record.back())
-          WriteAttributes(llvm::makeArrayRef(D->getAttrs().begin(),
+          WriteAttributes(llvm37::makeArrayRef(D->getAttrs().begin(),
                                              D->getAttrs().size()), Record);
 
         // FIXME: Ensure we don't get here for explicit instantiations.
@@ -4693,7 +4693,7 @@ void ASTWriter::WriteDeclUpdatesBlocks(RecordDataImpl &OffsetsRecord) {
         break;
 
       case UPD_ADDED_ATTR_TO_RECORD:
-        WriteAttributes(llvm::makeArrayRef(Update.getAttr()), Record);
+        WriteAttributes(llvm37::makeArrayRef(Update.getAttr()), Record);
         break;
       }
     }
@@ -4738,18 +4738,18 @@ void ASTWriter::AddSourceRange(SourceRange Range, RecordDataImpl &Record) {
   AddSourceLocation(Range.getEnd(), Record);
 }
 
-void ASTWriter::AddAPInt(const llvm::APInt &Value, RecordDataImpl &Record) {
+void ASTWriter::AddAPInt(const llvm37::APInt &Value, RecordDataImpl &Record) {
   Record.push_back(Value.getBitWidth());
   const uint64_t *Words = Value.getRawData();
   Record.append(Words, Words + Value.getNumWords());
 }
 
-void ASTWriter::AddAPSInt(const llvm::APSInt &Value, RecordDataImpl &Record) {
+void ASTWriter::AddAPSInt(const llvm37::APSInt &Value, RecordDataImpl &Record) {
   Record.push_back(Value.isUnsigned());
   AddAPInt(Value, Record);
 }
 
-void ASTWriter::AddAPFloat(const llvm::APFloat &Value, RecordDataImpl &Record) {
+void ASTWriter::AddAPFloat(const llvm37::APFloat &Value, RecordDataImpl &Record) {
   AddAPInt(Value.bitcastToAPInt(), Record);
 }
 
@@ -5027,7 +5027,7 @@ void ASTWriter::associateDeclWithFile(const Decl *D, DeclID ID) {
   }
 
   LocDeclIDsTy::iterator I =
-      std::upper_bound(Decls.begin(), Decls.end(), LocDecl, llvm::less_first());
+      std::upper_bound(Decls.begin(), Decls.end(), LocDecl, llvm37::less_first());
 
   Decls.insert(I, LocDecl);
 }

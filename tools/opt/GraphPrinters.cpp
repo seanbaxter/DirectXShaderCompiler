@@ -14,10 +14,10 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/IR/Dominators.h"
-#include "llvm/Pass.h"
+#include "llvm37/IR/Dominators.h"
+#include "llvm37/Pass.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 //===----------------------------------------------------------------------===//
 //                            DomInfoPrinter Pass

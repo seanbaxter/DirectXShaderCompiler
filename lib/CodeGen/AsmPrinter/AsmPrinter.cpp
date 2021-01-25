@@ -11,48 +11,48 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/CodeGen/AsmPrinter.h"
+#include "llvm37/CodeGen/AsmPrinter.h"
 #include "DwarfDebug.h"
 #include "DwarfException.h"
 #include "WinException.h"
 #include "WinCodeViewLineTables.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/Analysis/ConstantFolding.h"
-#include "llvm/CodeGen/Analysis.h"
-#include "llvm/CodeGen/GCMetadataPrinter.h"
-#include "llvm/CodeGen/MachineConstantPool.h"
-#include "llvm/CodeGen/MachineFrameInfo.h"
-#include "llvm/CodeGen/MachineFunction.h"
-#include "llvm/CodeGen/MachineInstrBundle.h"
-#include "llvm/CodeGen/MachineJumpTableInfo.h"
-#include "llvm/CodeGen/MachineLoopInfo.h"
-#include "llvm/CodeGen/MachineModuleInfoImpls.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/DebugInfo.h"
-#include "llvm/IR/Mangler.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/Operator.h"
-#include "llvm/MC/MCAsmInfo.h"
-#include "llvm/MC/MCContext.h"
-#include "llvm/MC/MCExpr.h"
-#include "llvm/MC/MCInst.h"
-#include "llvm/MC/MCSection.h"
-#include "llvm/MC/MCStreamer.h"
-#include "llvm/MC/MCSymbolELF.h"
-#include "llvm/MC/MCValue.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/Format.h"
-#include "llvm/Support/MathExtras.h"
-#include "llvm/Support/TargetRegistry.h"
-#include "llvm/Support/Timer.h"
-#include "llvm/Target/TargetFrameLowering.h"
-#include "llvm/Target/TargetInstrInfo.h"
-#include "llvm/Target/TargetLowering.h"
-#include "llvm/Target/TargetLoweringObjectFile.h"
-#include "llvm/Target/TargetRegisterInfo.h"
-#include "llvm/Target/TargetSubtargetInfo.h"
-using namespace llvm;
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/Analysis/ConstantFolding.h"
+#include "llvm37/CodeGen/Analysis.h"
+#include "llvm37/CodeGen/GCMetadataPrinter.h"
+#include "llvm37/CodeGen/MachineConstantPool.h"
+#include "llvm37/CodeGen/MachineFrameInfo.h"
+#include "llvm37/CodeGen/MachineFunction.h"
+#include "llvm37/CodeGen/MachineInstrBundle.h"
+#include "llvm37/CodeGen/MachineJumpTableInfo.h"
+#include "llvm37/CodeGen/MachineLoopInfo.h"
+#include "llvm37/CodeGen/MachineModuleInfoImpls.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/IR/DebugInfo.h"
+#include "llvm37/IR/Mangler.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/Operator.h"
+#include "llvm37/MC/MCAsmInfo.h"
+#include "llvm37/MC/MCContext.h"
+#include "llvm37/MC/MCExpr.h"
+#include "llvm37/MC/MCInst.h"
+#include "llvm37/MC/MCSection.h"
+#include "llvm37/MC/MCStreamer.h"
+#include "llvm37/MC/MCSymbolELF.h"
+#include "llvm37/MC/MCValue.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/Format.h"
+#include "llvm37/Support/MathExtras.h"
+#include "llvm37/Support/TargetRegistry.h"
+#include "llvm37/Support/Timer.h"
+#include "llvm37/Target/TargetFrameLowering.h"
+#include "llvm37/Target/TargetInstrInfo.h"
+#include "llvm37/Target/TargetLowering.h"
+#include "llvm37/Target/TargetLoweringObjectFile.h"
+#include "llvm37/Target/TargetRegisterInfo.h"
+#include "llvm37/Target/TargetSubtargetInfo.h"
+using namespace llvm37;
 
 #define DEBUG_TYPE "asm-printer"
 
@@ -1478,8 +1478,8 @@ namespace {
 struct Structor {
   Structor() : Priority(0), Func(nullptr), ComdatKey(nullptr) {}
   int Priority;
-  llvm::Constant *Func;
-  llvm::GlobalValue *ComdatKey;
+  llvm37::Constant *Func;
+  llvm37::GlobalValue *ComdatKey;
 };
 } // end namespace
 

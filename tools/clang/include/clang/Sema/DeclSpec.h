@@ -20,8 +20,8 @@
 ///
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_SEMA_DECLSPEC_H
-#define LLVM_CLANG_SEMA_DECLSPEC_H
+#ifndef LLVM37_CLANG_SEMA_DECLSPEC_H
+#define LLVM37_CLANG_SEMA_DECLSPEC_H
 
 #include "clang/AST/Attr.h"
 #include "clang/AST/NestedNameSpecifier.h"
@@ -32,10 +32,10 @@
 #include "clang/Lex/Token.h"
 #include "clang/Sema/AttributeList.h"
 #include "clang/Sema/Ownership.h"
-#include "llvm/ADT/Optional.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/Support/Compiler.h"
-#include "llvm/Support/ErrorHandling.h"
+#include "llvm37/ADT/Optional.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/Support/Compiler.h"
+#include "llvm37/Support/ErrorHandling.h"
 
 // HLSL Change Starts
 namespace hlsl {
@@ -534,9 +534,9 @@ public:
   CXXScopeSpec &getTypeSpecScope() { return TypeScope; }
   const CXXScopeSpec &getTypeSpecScope() const { return TypeScope; }
 
-  const SourceRange &getSourceRange() const LLVM_READONLY { return Range; }
-  SourceLocation getLocStart() const LLVM_READONLY { return Range.getBegin(); }
-  SourceLocation getLocEnd() const LLVM_READONLY { return Range.getEnd(); }
+  const SourceRange &getSourceRange() const LLVM37_READONLY { return Range; }
+  SourceLocation getLocStart() const LLVM37_READONLY { return Range.getBegin(); }
+  SourceLocation getLocEnd() const LLVM37_READONLY { return Range.getEnd(); }
 
   SourceLocation getTypeSpecWidthLoc() const { return TSWLoc; }
   SourceLocation getTypeSpecComplexLoc() const { return TSCLoc; }
@@ -1110,11 +1110,11 @@ public:
   void setTemplateId(TemplateIdAnnotation *TemplateId);
 
   /// \brief Return the source range that covers this unqualified-id.
-  SourceRange getSourceRange() const LLVM_READONLY { 
+  SourceRange getSourceRange() const LLVM37_READONLY { 
     return SourceRange(StartLocation, EndLocation); 
   }
-  SourceLocation getLocStart() const LLVM_READONLY { return StartLocation; }
-  SourceLocation getLocEnd() const LLVM_READONLY { return EndLocation; }
+  SourceLocation getLocStart() const LLVM37_READONLY { return StartLocation; }
+  SourceLocation getLocEnd() const LLVM37_READONLY { return EndLocation; }
 };
 
 /// \brief A set of tokens that has been cached for later parsing.
@@ -1748,9 +1748,9 @@ public:
   }
 
   /// \brief Get the source range that spans this declarator.
-  const SourceRange &getSourceRange() const LLVM_READONLY { return Range; }
-  SourceLocation getLocStart() const LLVM_READONLY { return Range.getBegin(); }
-  SourceLocation getLocEnd() const LLVM_READONLY { return Range.getEnd(); }
+  const SourceRange &getSourceRange() const LLVM37_READONLY { return Range; }
+  SourceLocation getLocStart() const LLVM37_READONLY { return Range.getBegin(); }
+  SourceLocation getLocEnd() const LLVM37_READONLY { return Range.getEnd(); }
 
   void SetSourceRange(SourceRange R) { Range = R; }
   /// SetRangeBegin - Set the start of the source range to Loc, unless it's
@@ -2002,7 +2002,7 @@ public:
   }
 
   typedef SmallVectorImpl<DeclaratorChunk>::const_iterator type_object_iterator;
-  typedef llvm::iterator_range<type_object_iterator> type_object_range;
+  typedef llvm37::iterator_range<type_object_iterator> type_object_range;
 
   /// Returns the range of type objects, from the identifier outwards.
   type_object_range type_objects() const {

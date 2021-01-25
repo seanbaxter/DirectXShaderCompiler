@@ -17,10 +17,10 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Analysis/CFGPrinter.h"
-#include "llvm/Pass.h"
-#include "llvm/Support/FileSystem.h"
-using namespace llvm;
+#include "llvm37/Analysis/CFGPrinter.h"
+#include "llvm37/Pass.h"
+#include "llvm37/Support/FileSystem.h"
+using namespace llvm37;
 
 namespace {
   struct CFGViewer : public FunctionPass {
@@ -33,7 +33,7 @@ namespace {
       // HLSL Change Starts
       if (OSOverride != nullptr) {
         *OSOverride << "\ngraph: " << "cfg" << F.getName() << ".dot\n";
-        llvm::WriteGraph(*OSOverride, (const Function*)&F, false, F.getName());
+        llvm37::WriteGraph(*OSOverride, (const Function*)&F, false, F.getName());
         return false;
       }
       // HLSL Change Ends
@@ -63,7 +63,7 @@ namespace {
       // HLSL Change Starts
       if (OSOverride != nullptr) {
         *OSOverride << "\ngraph: " << "cfg" << F.getName() << ".dot\n";
-        llvm::WriteGraph(*OSOverride, (const Function*)&F, true, F.getName());
+        llvm37::WriteGraph(*OSOverride, (const Function*)&F, true, F.getName());
         return false;
       }
       // HLSL Change Ends
@@ -94,7 +94,7 @@ namespace {
       // HLSL Change Starts
       if (OSOverride != nullptr) {
         *OSOverride << "\ngraph: " << "cfg." << F.getName() << ".dot\n";
-        llvm::WriteGraph(*OSOverride, (const Function*)&F, false, F.getName());
+        llvm37::WriteGraph(*OSOverride, (const Function*)&F, false, F.getName());
         return false;
       }
       // HLSL Change Ends
@@ -136,7 +136,7 @@ namespace {
       // HLSL Change Starts
       if (OSOverride != nullptr) {
         *OSOverride << "\ngraph: " << "cfg." << F.getName() << ".dot\n";
-        llvm::WriteGraph(*OSOverride, (const Function*)&F, true, F.getName());
+        llvm37::WriteGraph(*OSOverride, (const Function*)&F, true, F.getName());
         return false;
       }
       // HLSL Change Ends
@@ -184,16 +184,16 @@ void Function::viewCFGOnly() const {
   ViewGraph(this, "cfg" + getName(), true);
 }
 
-FunctionPass *llvm::createCFGPrinterPass () {
+FunctionPass *llvm37::createCFGPrinterPass () {
   return new CFGPrinter();
 }
 
-FunctionPass *llvm::createCFGOnlyPrinterPass () {
+FunctionPass *llvm37::createCFGOnlyPrinterPass () {
   return new CFGOnlyPrinter();
 }
 
 // HLSL Change Starts
-void llvm::initializeCFGPrinterPasses(PassRegistry &Registry) {
+void llvm37::initializeCFGPrinterPasses(PassRegistry &Registry) {
   initializeCFGPrinterPass(Registry);
   initializeCFGOnlyPrinterPass(Registry);
   initializeCFGViewerPass(Registry);

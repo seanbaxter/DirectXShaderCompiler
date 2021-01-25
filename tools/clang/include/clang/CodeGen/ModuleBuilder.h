@@ -11,13 +11,13 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_CODEGEN_MODULEBUILDER_H
-#define LLVM_CLANG_CODEGEN_MODULEBUILDER_H
+#ifndef LLVM37_CLANG_CODEGEN_MODULEBUILDER_H
+#define LLVM37_CLANG_CODEGEN_MODULEBUILDER_H
 
 #include "clang/AST/ASTConsumer.h"
 #include <string>
 
-namespace llvm {
+namespace llvm37 {
   class LLVMContext;
   class Module;
 }
@@ -34,9 +34,9 @@ namespace clang {
   class CodeGenerator : public ASTConsumer {
     virtual void anchor();
   public:
-    virtual llvm::Module* GetModule() = 0;
-    virtual llvm::Module* ReleaseModule() = 0;
-    virtual const Decl *GetDeclForMangledName(llvm::StringRef MangledName) = 0;
+    virtual llvm37::Module* GetModule() = 0;
+    virtual llvm37::Module* ReleaseModule() = 0;
+    virtual const Decl *GetDeclForMangledName(llvm37::StringRef MangledName) = 0;
   };
 
   /// CreateLLVMCodeGen - Create a CodeGenerator instance.
@@ -47,7 +47,7 @@ namespace clang {
                                    const HeaderSearchOptions &HeaderSearchOpts,
                                    const PreprocessorOptions &PreprocessorOpts,
                                    const CodeGenOptions &CGO,
-                                   llvm::LLVMContext& C,
+                                   llvm37::LLVMContext& C,
                                    CoverageSourceInfo *CoverageInfo = nullptr);
 }
 

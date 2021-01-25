@@ -21,15 +21,15 @@
 #include "clang/Lex/LexDiagnostic.h"
 #include "clang/Lex/Lexer.h"
 #include "clang/Lex/Preprocessor.h"
-#include "llvm/ADT/APInt.h"
-#include "llvm/ADT/Hashing.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/Support/Capacity.h"
-#include "llvm/Support/FileSystem.h"
-#include "llvm/Support/Path.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/APInt.h"
+#include "llvm37/ADT/Hashing.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/Support/Capacity.h"
+#include "llvm37/Support/FileSystem.h"
+#include "llvm37/Support/Path.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <cstdio>
-#if defined(LLVM_ON_UNIX)
+#if defined(LLVM37_ON_UNIX)
 #include <limits.h>
 #endif
 using namespace clang;
@@ -132,10 +132,10 @@ std::string HeaderSearch::getModuleFileName(StringRef ModuleName,
     return std::string();
 
   SmallString<256> Result(ModuleCachePath);
-  llvm::sys::fs::make_absolute(Result);
+  llvm37::sys::fs::make_absolute(Result);
 
   if (HSOpts->DisableModuleHash) {
-    llvm::sys::path::append(Result, ModuleName + ".pcm");
+    llvm37::sys::path::append(Result, ModuleName + ".pcm");
   } else {
     // Construct the name <ModuleName>-<hash of ModuleMapPath>.pcm which should
     // ideally be globally unique to this particular module. Name collisions
@@ -145,19 +145,19 @@ std::string HeaderSearch::getModuleFileName(StringRef ModuleName,
     // To avoid false-negatives, we form as canonical a path as we can, and map
     // to lower-case in case we're on a case-insensitive file system.
    auto *Dir =
-        FileMgr.getDirectory(llvm::sys::path::parent_path(ModuleMapPath));
+        FileMgr.getDirectory(llvm37::sys::path::parent_path(ModuleMapPath));
     if (!Dir)
       return std::string();
     auto DirName = FileMgr.getCanonicalName(Dir);
-    auto FileName = llvm::sys::path::filename(ModuleMapPath);
+    auto FileName = llvm37::sys::path::filename(ModuleMapPath);
 
-    llvm::hash_code Hash =
-      llvm::hash_combine(DirName.lower(), FileName.lower(),
+    llvm37::hash_code Hash =
+      llvm37::hash_combine(DirName.lower(), FileName.lower(),
                          HSOpts->ModuleFormat);
 
     SmallString<128> HashStr;
-    llvm::APInt(64, size_t(Hash)).toStringUnsigned(HashStr, /*Radix*/36);
-    llvm::sys::path::append(Result, ModuleName + "-" + HashStr + ".pcm");
+    llvm37::APInt(64, size_t(Hash)).toStringUnsigned(HashStr, /*Radix*/36);
+    llvm37::sys::path::append(Result, ModuleName + "-" + HashStr + ".pcm");
   }
   return Result.str().str();
 }
@@ -175,7 +175,7 @@ Module *HeaderSearch::lookupModule(StringRef ModuleName, bool AllowSearch) {
       // Search for or infer a module map for a framework.
       SmallString<128> FrameworkDirName;
       FrameworkDirName += SearchDirs[Idx].getFrameworkDir()->getName();
-      llvm::sys::path::append(FrameworkDirName, ModuleName + ".framework");
+      llvm37::sys::path::append(FrameworkDirName, ModuleName + ".framework");
       if (const DirectoryEntry *FrameworkDir 
             = FileMgr.getDirectory(FrameworkDirName)) {
         bool IsSystem
@@ -207,7 +207,7 @@ Module *HeaderSearch::lookupModule(StringRef ModuleName, bool AllowSearch) {
     // module.
     SmallString<128> NestedModuleMapDirName;
     NestedModuleMapDirName = SearchDirs[Idx].getDir()->getName();
-    llvm::sys::path::append(NestedModuleMapDirName, ModuleName);
+    llvm37::sys::path::append(NestedModuleMapDirName, ModuleName);
     if (loadModuleMapFile(NestedModuleMapDirName, IsSystem,
                           /*IsFramework*/false) == LMM_NewlyLoaded){
       // If we just loaded a module map file, look for the module again.
@@ -294,7 +294,7 @@ const FileEntry *DirectoryLookup::LookupFile(
   if (isNormalDir()) {
     // Concatenate the requested file onto the directory.
     TmpDir = getDir()->getName();
-    llvm::sys::path::append(TmpDir, Filename);
+    llvm37::sys::path::append(TmpDir, Filename);
     if (SearchPath) {
       StringRef SearchPathRef(getDir()->getName());
       SearchPath->clear();
@@ -326,7 +326,7 @@ const FileEntry *DirectoryLookup::LookupFile(
   // Check if the headermap maps the filename to a framework include
   // ("Foo.h" -> "Foo/Foo.h"), in which case continue header lookup using the
   // framework include.
-  if (llvm::sys::path::is_relative(Dest)) {
+  if (llvm37::sys::path::is_relative(Dest)) {
     MappedName.clear();
     MappedName.append(Dest.begin(), Dest.end());
     Filename = StringRef(MappedName.begin(), MappedName.size());
@@ -360,7 +360,7 @@ const FileEntry *DirectoryLookup::LookupFile(
 static const DirectoryEntry *
 getTopFrameworkDir(FileManager &FileMgr, StringRef DirName,
                    SmallVectorImpl<std::string> &SubmodulePath) {
-  assert(llvm::sys::path::extension(DirName) == ".framework" &&
+  assert(llvm37::sys::path::extension(DirName) == ".framework" &&
          "Not a framework directory");
 
   // Note: as an egregious but useful hack we use the real path here, because
@@ -381,7 +381,7 @@ getTopFrameworkDir(FileManager &FileMgr, StringRef DirName,
   DirName = FileMgr.getCanonicalName(TopFrameworkDir);
   do {
     // Get the parent directory name.
-    DirName = llvm::sys::path::parent_path(DirName);
+    DirName = llvm37::sys::path::parent_path(DirName);
     if (DirName.empty())
       break;
 
@@ -392,8 +392,8 @@ getTopFrameworkDir(FileManager &FileMgr, StringRef DirName,
 
     // If this is a framework directory, then we're a subframework of this
     // framework.
-    if (llvm::sys::path::extension(DirName) == ".framework") {
-      SubmodulePath.push_back(llvm::sys::path::stem(DirName));
+    if (llvm37::sys::path::extension(DirName) == ".framework") {
+      SubmodulePath.push_back(llvm37::sys::path::stem(DirName));
       TopFrameworkDir = Dir;
     }
   } while (true);
@@ -458,7 +458,7 @@ const FileEntry *DirectoryLookup::DoFrameworkLookup(
     if (getDirCharacteristic() == SrcMgr::C_User) {
       SmallString<1024> SystemFrameworkMarker(FrameworkName);
       SystemFrameworkMarker += ".system_framework";
-      if (llvm::sys::fs::exists(SystemFrameworkMarker)) {
+      if (llvm37::sys::fs::exists(SystemFrameworkMarker)) {
         CacheEntry.IsUserSpecifiedSystemFramework = true;
       }
     }
@@ -511,13 +511,13 @@ const FileEntry *DirectoryLookup::DoFrameworkLookup(
 
       // If this is a framework directory, then we're a subframework of this
       // framework.
-      if (llvm::sys::path::extension(FrameworkPath) == ".framework") {
+      if (llvm37::sys::path::extension(FrameworkPath) == ".framework") {
         FoundFramework = true;
         break;
       }
 
       // Get the parent directory name.
-      FrameworkPath = llvm::sys::path::parent_path(FrameworkPath);
+      FrameworkPath = llvm37::sys::path::parent_path(FrameworkPath);
       if (FrameworkPath.empty())
         break;
     } while (true);
@@ -529,7 +529,7 @@ const FileEntry *DirectoryLookup::DoFrameworkLookup(
         = ::getTopFrameworkDir(FileMgr, FrameworkPath, SubmodulePath);
 
       // Determine the name of the top-level framework.
-      StringRef ModuleName = llvm::sys::path::stem(TopFrameworkDir->getName());
+      StringRef ModuleName = llvm37::sys::path::stem(TopFrameworkDir->getName());
 
       // Load this framework module. If that succeeds, find the suggested module
       // for this header, if any.
@@ -572,7 +572,7 @@ static bool checkMSVCHeaderSearch(DiagnosticsEngine &Diags,
   return false;
 }
 
-static const char *copyString(StringRef Str, llvm::BumpPtrAllocator &Alloc) {
+static const char *copyString(StringRef Str, llvm37::BumpPtrAllocator &Alloc) {
   assert(!Str.empty());
   char *CopyStr = Alloc.Allocate<char>(Str.size()+1);
   std::copy(Str.begin(), Str.end(), CopyStr);
@@ -595,7 +595,7 @@ const FileEntry *HeaderSearch::LookupFile(
     *SuggestedModule = ModuleMap::KnownHeader();
     
   // If 'Filename' is absolute, check to see if it exists and no searching.
-  if (llvm::sys::path::is_absolute(Filename)) {
+  if (llvm37::sys::path::is_absolute(Filename)) {
     CurDir = nullptr;
 
     // If this was an #include_next "/absolute/file", fail.
@@ -943,7 +943,7 @@ LookupSubframeworkHeader(StringRef Filename,
       = ::getTopFrameworkDir(FileMgr, FrameworkName, SubmodulePath);
     
     // Determine the name of the top-level framework.
-    StringRef ModuleName = llvm::sys::path::stem(TopFrameworkDir->getName());
+    StringRef ModuleName = llvm37::sys::path::stem(TopFrameworkDir->getName());
 
     // Load this framework module. If that succeeds, find the suggested module
     // for this header, if any.
@@ -1082,8 +1082,8 @@ bool HeaderSearch::ShouldEnterIncludeFile(Preprocessor &PP,
 
 size_t HeaderSearch::getTotalMemory() const {
   return SearchDirs.capacity()
-    + llvm::capacity_in_bytes(FileInfo)
-    + llvm::capacity_in_bytes(HeaderMaps)
+    + llvm37::capacity_in_bytes(FileInfo)
+    + llvm37::capacity_in_bytes(HeaderMaps)
     + LookupFileCache.getAllocator().getTotalMemory()
     + FrameworkMap.getAllocator().getTotalMemory();
 }
@@ -1103,7 +1103,7 @@ bool HeaderSearch::hasModuleMap(StringRef FileName,
   StringRef DirName = FileName;
   do {
     // Get the parent directory name.
-    DirName = llvm::sys::path::parent_path(DirName);
+    DirName = llvm37::sys::path::parent_path(DirName);
     if (DirName.empty())
       return false;
 
@@ -1114,7 +1114,7 @@ bool HeaderSearch::hasModuleMap(StringRef FileName,
 
     // Try to load the module map file in this directory.
     switch (loadModuleMapFile(Dir, IsSystem,
-                              llvm::sys::path::extension(Dir->getName()) ==
+                              llvm37::sys::path::extension(Dir->getName()) ==
                                   ".framework")) {
     case LMM_NewlyLoaded:
     case LMM_AlreadyLoaded:
@@ -1151,12 +1151,12 @@ HeaderSearch::findModuleForHeader(const FileEntry *File) const {
 
 static const FileEntry *getPrivateModuleMap(const FileEntry *File,
                                             FileManager &FileMgr) {
-  StringRef Filename = llvm::sys::path::filename(File->getName());
+  StringRef Filename = llvm37::sys::path::filename(File->getName());
   SmallString<128>  PrivateFilename(File->getDir()->getName());
   if (Filename == "module.map")
-    llvm::sys::path::append(PrivateFilename, "module_private.map");
+    llvm37::sys::path::append(PrivateFilename, "module_private.map");
   else if (Filename == "module.modulemap")
-    llvm::sys::path::append(PrivateFilename, "module.private.modulemap");
+    llvm37::sys::path::append(PrivateFilename, "module.private.modulemap");
   else
     return nullptr;
   return FileMgr.getFile(PrivateFilename);
@@ -1171,8 +1171,8 @@ bool HeaderSearch::loadModuleMapFile(const FileEntry *File, bool IsSystem) {
   else {
     Dir = File->getDir();
     StringRef DirName(Dir->getName());
-    if (llvm::sys::path::filename(DirName) == "Modules") {
-      DirName = llvm::sys::path::parent_path(DirName);
+    if (llvm37::sys::path::filename(DirName) == "Modules") {
+      DirName = llvm37::sys::path::parent_path(DirName);
       if (DirName.endswith(".framework"))
         Dir = FileMgr.getDirectory(DirName);
       // FIXME: This assert can fail if there's a race between the above check
@@ -1228,14 +1228,14 @@ HeaderSearch::lookupModuleMapFile(const DirectoryEntry *Dir, bool IsFramework) {
   // module.map at the framework root is also accepted.
   SmallString<128> ModuleMapFileName(Dir->getName());
   if (IsFramework)
-    llvm::sys::path::append(ModuleMapFileName, "Modules");
-  llvm::sys::path::append(ModuleMapFileName, "module.modulemap");
+    llvm37::sys::path::append(ModuleMapFileName, "Modules");
+  llvm37::sys::path::append(ModuleMapFileName, "module.modulemap");
   if (const FileEntry *F = FileMgr.getFile(ModuleMapFileName))
     return F;
 
   // Continue to allow module.map
   ModuleMapFileName = Dir->getName();
-  llvm::sys::path::append(ModuleMapFileName, "module.map");
+  llvm37::sys::path::append(ModuleMapFileName, "module.map");
   return FileMgr.getFile(ModuleMapFileName);
 }
 
@@ -1306,13 +1306,13 @@ void HeaderSearch::collectAllModules(SmallVectorImpl<Module *> &Modules) {
       if (SearchDirs[Idx].isFramework()) {
         std::error_code EC;
         SmallString<128> DirNative;
-        llvm::sys::path::native(SearchDirs[Idx].getFrameworkDir()->getName(),
+        llvm37::sys::path::native(SearchDirs[Idx].getFrameworkDir()->getName(),
                                 DirNative);
 
         // Search each of the ".framework" directories to load them as modules.
-        for (llvm::sys::fs::directory_iterator Dir(DirNative, EC), DirEnd;
+        for (llvm37::sys::fs::directory_iterator Dir(DirNative, EC), DirEnd;
              Dir != DirEnd && !EC; Dir.increment(EC)) {
-          if (llvm::sys::path::extension(Dir->path()) != ".framework")
+          if (llvm37::sys::path::extension(Dir->path()) != ".framework")
             continue;
 
           const DirectoryEntry *FrameworkDir =
@@ -1321,7 +1321,7 @@ void HeaderSearch::collectAllModules(SmallVectorImpl<Module *> &Modules) {
             continue;
 
           // Load this framework module.
-          loadFrameworkModule(llvm::sys::path::stem(Dir->path()), FrameworkDir,
+          loadFrameworkModule(llvm37::sys::path::stem(Dir->path()), FrameworkDir,
                               IsSystem);
         }
         continue;
@@ -1376,10 +1376,10 @@ void HeaderSearch::loadSubdirectoryModuleMaps(DirectoryLookup &SearchDir) {
 
   std::error_code EC;
   SmallString<128> DirNative;
-  llvm::sys::path::native(SearchDir.getDir()->getName(), DirNative);
-  for (llvm::sys::fs::directory_iterator Dir(DirNative, EC), DirEnd;
+  llvm37::sys::path::native(SearchDir.getDir()->getName(), DirNative);
+  for (llvm37::sys::fs::directory_iterator Dir(DirNative, EC), DirEnd;
        Dir != DirEnd && !EC; Dir.increment(EC)) {
-    bool IsFramework = llvm::sys::path::extension(Dir->path()) == ".framework";
+    bool IsFramework = llvm37::sys::path::extension(Dir->path()) == ".framework";
     if (IsFramework == SearchDir.isFramework())
       loadModuleMapFile(Dir->path(), SearchDir.isSystemHeaderDirectory(),
                         SearchDir.isFramework());

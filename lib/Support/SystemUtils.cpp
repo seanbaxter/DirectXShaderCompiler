@@ -12,11 +12,11 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Support/SystemUtils.h"
-#include "llvm/Support/raw_ostream.h"
-using namespace llvm;
+#include "llvm37/Support/SystemUtils.h"
+#include "llvm37/Support/raw_ostream.h"
+using namespace llvm37;
 
-bool llvm::CheckBitcodeOutputToConsole(raw_ostream &stream_to_check,
+bool llvm37::CheckBitcodeOutputToConsole(raw_ostream &stream_to_check,
                                        bool print_warning) {
   if (stream_to_check.is_displayed()) {
     if (print_warning) {

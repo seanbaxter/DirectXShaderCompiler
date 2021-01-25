@@ -69,7 +69,7 @@ set(files
   xtestintrin.h
   )
 
-set(output_dir ${LLVM_LIBRARY_OUTPUT_INTDIR}/clang/${CLANG_VERSION}/include)
+set(output_dir ${LLVM37_LIBRARY_OUTPUT_INTDIR}/clang/${CLANG_VERSION}/include)
 
 # Generate arm_neon.h
 clang_tablegen(arm_neon.h -gen-arm-neon
@@ -98,4 +98,4 @@ set_target_properties(clang-headers PROPERTIES FOLDER "Misc")
 install(
   FILES ${files} ${CMAKE_CURRENT_BINARY_DIR}/arm_neon.h
   PERMISSIONS OWNER_READ OWNER_WRITE GROUP_READ WORLD_READ
-  DESTINATION lib${LLVM_LIBDIR_SUFFIX}/clang/${CLANG_VERSION}/include)
+  DESTINATION lib${LLVM37_LIBDIR_SUFFIX}/clang/${CLANG_VERSION}/include)

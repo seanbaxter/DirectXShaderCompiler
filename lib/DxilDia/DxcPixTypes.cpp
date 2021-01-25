@@ -16,10 +16,10 @@
 
 HRESULT dxil_debug_info::CreateDxcPixType(
     DxcPixDxilDebugInfo *pDxilDebugInfo,
-    llvm::DIType *diType,
+    llvm37::DIType *diType,
     IDxcPixType **ppResult)
 {
-  if (auto *BT = llvm::dyn_cast<llvm::DIBasicType>(diType))
+  if (auto *BT = llvm37::dyn_cast<llvm37::DIBasicType>(diType))
   {
     return NewDxcPixDxilDebugInfoObjectOrThrow<DxcPixScalarType>(
         ppResult,
@@ -27,14 +27,14 @@ HRESULT dxil_debug_info::CreateDxcPixType(
         pDxilDebugInfo,
         BT);
   }
-  else if (auto *CT = llvm::dyn_cast<llvm::DICompositeType>(diType))
+  else if (auto *CT = llvm37::dyn_cast<llvm37::DICompositeType>(diType))
   {
     switch (CT->getTag())
     {
     default:
       break;
 
-    case llvm::dwarf::DW_TAG_array_type:
+    case llvm37::dwarf::DW_TAG_array_type:
     {
       const unsigned FirstDim = 0;
       return NewDxcPixDxilDebugInfoObjectOrThrow< DxcPixArrayType>(
@@ -45,8 +45,8 @@ HRESULT dxil_debug_info::CreateDxcPixType(
           FirstDim);
     }
 
-    case llvm::dwarf::DW_TAG_class_type:
-    case llvm::dwarf::DW_TAG_structure_type:
+    case llvm37::dwarf::DW_TAG_class_type:
+    case llvm37::dwarf::DW_TAG_structure_type:
       return NewDxcPixDxilDebugInfoObjectOrThrow<DxcPixStructType>(
           ppResult,
           pDxilDebugInfo->GetMallocNoRef(),
@@ -54,21 +54,21 @@ HRESULT dxil_debug_info::CreateDxcPixType(
           CT);
     }
   }
-  else if (auto* DT = llvm::dyn_cast<llvm::DIDerivedType>(diType))
+  else if (auto* DT = llvm37::dyn_cast<llvm37::DIDerivedType>(diType))
   {
     switch (DT->getTag())
     {
     default:
       break;
 
-    case llvm::dwarf::DW_TAG_const_type:
+    case llvm37::dwarf::DW_TAG_const_type:
       return NewDxcPixDxilDebugInfoObjectOrThrow<DxcPixConstType>(
           ppResult,
           pDxilDebugInfo->GetMallocNoRef(),
           pDxilDebugInfo,
           DT);
 
-    case llvm::dwarf::DW_TAG_typedef:
+    case llvm37::dwarf::DW_TAG_typedef:
       return NewDxcPixDxilDebugInfoObjectOrThrow<DxcPixTypedefType>(
           ppResult,
           pDxilDebugInfo->GetMallocNoRef(),
@@ -164,7 +164,7 @@ STDMETHODIMP dxil_debug_info::DxcPixArrayType::GetSizeInBits(
   *pSizeInBits = m_pArray->getSizeInBits();
   for (unsigned ContainerDims = 0; ContainerDims < m_DimNum; ++ContainerDims)
   {
-    auto *SR = llvm::dyn_cast<llvm::DISubrange>(m_pArray->getElements()[ContainerDims]);
+    auto *SR = llvm37::dyn_cast<llvm37::DISubrange>(m_pArray->getElements()[ContainerDims]);
     auto count = SR->getCount();
     if (count == 0)
     {
@@ -186,7 +186,7 @@ STDMETHODIMP dxil_debug_info::DxcPixArrayType::UnAlias(
 STDMETHODIMP dxil_debug_info::DxcPixArrayType::GetNumElements(
     _Outptr_result_z_ DWORD *ppNumElements) 
 {
-  auto* SR = llvm::dyn_cast<llvm::DISubrange>(m_pArray->getElements()[m_DimNum]);
+  auto* SR = llvm37::dyn_cast<llvm37::DISubrange>(m_pArray->getElements()[m_DimNum]);
   if (SR == nullptr)
   {
     return E_FAIL;
@@ -257,7 +257,7 @@ STDMETHODIMP dxil_debug_info::DxcPixStructType::GetFieldByIndex(
     return E_BOUNDS;
   }
 
-  auto* pDIField = llvm::dyn_cast<llvm::DIDerivedType>(
+  auto* pDIField = llvm37::dyn_cast<llvm37::DIDerivedType>(
       m_pStruct->getElements()[dwIndex]);
   if (pDIField == nullptr)
   {
@@ -278,7 +278,7 @@ STDMETHODIMP dxil_debug_info::DxcPixStructType::GetFieldByName(
   std::string name = CW2A(lpName);
   for (auto *Node : m_pStruct->getElements())
   {
-    auto* pDIField = llvm::dyn_cast<llvm::DIDerivedType>(Node);
+    auto* pDIField = llvm37::dyn_cast<llvm37::DIDerivedType>(Node);
     if (pDIField == nullptr)
     {
       return E_FAIL;

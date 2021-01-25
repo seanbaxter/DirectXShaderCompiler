@@ -22,7 +22,7 @@
 #include "clang/AST/ASTContext.h"
 #include "clang/ASTMatchers/ASTMatchFinder.h"
 #include "clang/Tooling/Tooling.h"
-#include "llvm/ADT/SmallString.h"
+#include "llvm37/ADT/SmallString.h"
 #include "gtest/gtest.h"
 
 using namespace clang;
@@ -52,7 +52,7 @@ public:
     if (NumFoundStmts > 1)
       return;
 
-    llvm::raw_svector_ostream Out(Printed);
+    llvm37::raw_svector_ostream Out(Printed);
     PrintStmt(Out, Result.Context, S);
   }
 

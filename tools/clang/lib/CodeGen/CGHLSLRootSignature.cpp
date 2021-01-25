@@ -11,8 +11,8 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include "clang/Basic/SourceLocation.h"
-#include "llvm/ADT/StringRef.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/StringRef.h"
+#include "llvm37/Support/raw_ostream.h"
 
 #include "dxc/DXIL/DxilConstants.h"
 #include "dxc/DxilRootSignature/DxilRootSignature.h"
@@ -21,7 +21,7 @@
 #include "clang/Parse/ParseHLSL.h" // root sig would be in Parser if part of lang
 #include "dxc/dxcapi.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 void clang::CompileRootSignature(
     StringRef rootSigStr, DiagnosticsEngine &Diags, SourceLocation SLoc,
@@ -29,7 +29,7 @@ void clang::CompileRootSignature(
     hlsl::DxilRootSignatureCompilationFlags flags,
     hlsl::RootSignatureHandle *pRootSigHandle) {
   std::string OSStr;
-  llvm::raw_string_ostream OS(OSStr);
+  llvm37::raw_string_ostream OS(OSStr);
   hlsl::DxilVersionedRootSignatureDesc *D = nullptr;
 
   if (ParseHLSLRootSignature(rootSigStr.data(), rootSigStr.size(), rootSigVer,

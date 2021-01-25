@@ -13,14 +13,14 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_FRONTEND_DIAGNOSTICRENDERER_H
-#define LLVM_CLANG_FRONTEND_DIAGNOSTICRENDERER_H
+#ifndef LLVM37_CLANG_FRONTEND_DIAGNOSTICRENDERER_H
+#define LLVM37_CLANG_FRONTEND_DIAGNOSTICRENDERER_H
 
 #include "clang/Basic/Diagnostic.h"
 #include "clang/Basic/LLVM.h"
 #include "clang/Basic/SourceLocation.h"
-#include "llvm/ADT/Optional.h"
-#include "llvm/ADT/PointerUnion.h"
+#include "llvm37/ADT/Optional.h"
+#include "llvm37/ADT/PointerUnion.h"
 
 namespace clang {
 
@@ -28,7 +28,7 @@ class DiagnosticOptions;
 class LangOptions;
 class SourceManager;
 
-typedef llvm::PointerUnion<const Diagnostic *,
+typedef llvm37::PointerUnion<const Diagnostic *,
                            const StoredDiagnostic *> DiagOrStoredDiag;
   
 /// \brief Class to encapsulate the logic for formatting a diagnostic message.

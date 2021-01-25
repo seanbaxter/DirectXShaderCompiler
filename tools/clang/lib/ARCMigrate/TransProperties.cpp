@@ -68,7 +68,7 @@ class PropertiesRewriter {
   typedef SmallVector<PropData, 2> PropsTy;
   typedef std::map<unsigned, PropsTy> AtPropDeclsTy;
   AtPropDeclsTy AtProps;
-  llvm::DenseMap<IdentifierInfo *, PropActionKind> ActionOnProp;
+  llvm37::DenseMap<IdentifierInfo *, PropActionKind> ActionOnProp;
 
 public:
   explicit PropertiesRewriter(MigrationContext &MigrateCtx)
@@ -178,7 +178,7 @@ private:
   }
 
   void doActionForExtensionProp(PropsTy &props, SourceLocation atLoc) {
-    llvm::DenseMap<IdentifierInfo *, PropActionKind>::iterator I;
+    llvm37::DenseMap<IdentifierInfo *, PropActionKind>::iterator I;
     I = ActionOnProp.find(props[0].PropD->getIdentifier());
     if (I == ActionOnProp.end())
       return;

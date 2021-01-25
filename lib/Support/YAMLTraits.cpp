@@ -7,19 +7,19 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Support/YAMLTraits.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/ADT/Twine.h"
-#include "llvm/Support/Casting.h"
-#include "llvm/Support/Errc.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/Format.h"
-#include "llvm/Support/LineIterator.h"
-#include "llvm/Support/YAMLParser.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/Support/YAMLTraits.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/ADT/Twine.h"
+#include "llvm37/Support/Casting.h"
+#include "llvm37/Support/Errc.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/Format.h"
+#include "llvm37/Support/LineIterator.h"
+#include "llvm37/Support/YAMLParser.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <cctype>
 #include <cstring>
-using namespace llvm;
+using namespace llvm37;
 using namespace yaml;
 
 //===----------------------------------------------------------------------===//
@@ -337,14 +337,14 @@ std::unique_ptr<Input::HNode> Input::createHNodes(Node *N) {
       memcpy(Buf, &StringStorage[0], Len);
       KeyStr = StringRef(Buf, Len);
     }
-    return llvm::make_unique<ScalarHNode>(N, KeyStr);
+    return llvm37::make_unique<ScalarHNode>(N, KeyStr);
   } else if (BlockScalarNode *BSN = dyn_cast<BlockScalarNode>(N)) {
     StringRef Value = BSN->getValue();
     char *Buf = StringAllocator.Allocate<char>(Value.size());
     memcpy(Buf, Value.data(), Value.size());
-    return llvm::make_unique<ScalarHNode>(N, StringRef(Buf, Value.size()));
+    return llvm37::make_unique<ScalarHNode>(N, StringRef(Buf, Value.size()));
   } else if (SequenceNode *SQ = dyn_cast<SequenceNode>(N)) {
-    auto SQHNode = llvm::make_unique<SequenceHNode>(N);
+    auto SQHNode = llvm37::make_unique<SequenceHNode>(N);
     for (Node &SN : *SQ) {
       auto Entry = this->createHNodes(&SN);
       if (EC)
@@ -353,7 +353,7 @@ std::unique_ptr<Input::HNode> Input::createHNodes(Node *N) {
     }
     return std::move(SQHNode);
   } else if (MappingNode *Map = dyn_cast<MappingNode>(N)) {
-    auto mapHNode = llvm::make_unique<MapHNode>(N);
+    auto mapHNode = llvm37::make_unique<MapHNode>(N);
     for (KeyValueNode &KVN : *Map) {
       Node *KeyNode = KVN.getKey();
       ScalarNode *KeyScalar = dyn_cast<ScalarNode>(KeyNode);
@@ -377,7 +377,7 @@ std::unique_ptr<Input::HNode> Input::createHNodes(Node *N) {
     }
     return std::move(mapHNode);
   } else if (isa<NullNode>(N)) {
-    return llvm::make_unique<EmptyHNode>(N);
+    return llvm37::make_unique<EmptyHNode>(N);
   } else {
     setError(N, "unknown node kind");
     return nullptr;

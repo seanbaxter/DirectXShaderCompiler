@@ -26,10 +26,10 @@
 #include "clang/StaticAnalyzer/Core/PathSensitive/ProgramState.h"
 #include "clang/StaticAnalyzer/Core/PathSensitive/ProgramStateTrait.h"
 #include "clang/StaticAnalyzer/Core/PathSensitive/SubEngine.h"
-#include "llvm/ADT/ImmutableList.h"
-#include "llvm/ADT/ImmutableMap.h"
-#include "llvm/ADT/Optional.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/ImmutableList.h"
+#include "llvm37/ADT/ImmutableMap.h"
+#include "llvm37/ADT/Optional.h"
+#include "llvm37/Support/raw_ostream.h"
 //                                                                           //
 ///////////////////////////////////////////////////////////////////////////////
 using namespace clang;
@@ -46,7 +46,7 @@ public:
 private:
   enum { Symbolic = 0x2 };
 
-  llvm::PointerIntPair<const MemRegion *, 2> P;
+  llvm37::PointerIntPair<const MemRegion *, 2> P;
   uint64_t Data;
 
   /// Create a key for a binding to region \p r, which has a symbolic offset
@@ -86,7 +86,7 @@ public:
     return getRegion()->getBaseRegion();
   }
 
-  void Profile(llvm::FoldingSetNodeID& ID) const {
+  void Profile(llvm37::FoldingSetNodeID& ID) const {
     ID.AddPointer(P.getOpaqueValue());
     ID.AddInteger(Data);
   }
@@ -118,7 +118,7 @@ BindingKey BindingKey::Make(const MemRegion *R, Kind k) {
   return BindingKey(RO.getRegion(), RO.getOffset(), k);
 }
 
-namespace llvm {
+namespace llvm37 {
   static inline
   raw_ostream &operator<<(raw_ostream &os, BindingKey K) {
     os << '(' << K.getRegion();
@@ -135,35 +135,35 @@ namespace llvm {
   };
 } // end llvm namespace
 
-LLVM_DUMP_METHOD void BindingKey::dump() const { llvm::errs() << *this; }
+LLVM37_DUMP_METHOD void BindingKey::dump() const { llvm37::errs() << *this; }
 
 //===----------------------------------------------------------------------===//
 // Actual Store type.
 //===----------------------------------------------------------------------===//
 
-typedef llvm::ImmutableMap<BindingKey, SVal>    ClusterBindings;
-typedef llvm::ImmutableMapRef<BindingKey, SVal> ClusterBindingsRef;
+typedef llvm37::ImmutableMap<BindingKey, SVal>    ClusterBindings;
+typedef llvm37::ImmutableMapRef<BindingKey, SVal> ClusterBindingsRef;
 typedef std::pair<BindingKey, SVal> BindingPair;
 
-typedef llvm::ImmutableMap<const MemRegion *, ClusterBindings>
+typedef llvm37::ImmutableMap<const MemRegion *, ClusterBindings>
         RegionBindings;
 
 namespace {
-class RegionBindingsRef : public llvm::ImmutableMapRef<const MemRegion *,
+class RegionBindingsRef : public llvm37::ImmutableMapRef<const MemRegion *,
                                  ClusterBindings> {
  ClusterBindings::Factory &CBFactory;
 public:
-  typedef llvm::ImmutableMapRef<const MemRegion *, ClusterBindings>
+  typedef llvm37::ImmutableMapRef<const MemRegion *, ClusterBindings>
           ParentTy;
 
   RegionBindingsRef(ClusterBindings::Factory &CBFactory,
                     const RegionBindings::TreeTy *T,
                     RegionBindings::TreeTy::Factory *F)
-    : llvm::ImmutableMapRef<const MemRegion *, ClusterBindings>(T, F),
+    : llvm37::ImmutableMapRef<const MemRegion *, ClusterBindings>(T, F),
       CBFactory(CBFactory) {}
 
   RegionBindingsRef(const ParentTy &P, ClusterBindings::Factory &CBFactory)
-    : llvm::ImmutableMapRef<const MemRegion *, ClusterBindings>(P),
+    : llvm37::ImmutableMapRef<const MemRegion *, ClusterBindings>(P),
       CBFactory(CBFactory) {}
 
   RegionBindingsRef add(key_type_ref K, data_type_ref D) const {
@@ -224,7 +224,7 @@ public:
    }
   }
 
-  LLVM_DUMP_METHOD void dump() const { dump(llvm::errs(), "\n"); }
+  LLVM37_DUMP_METHOD void dump() const { dump(llvm37::errs(), "\n"); }
 };
 } // end anonymous namespace
 
@@ -329,7 +329,7 @@ public:
 
   typedef std::vector<SVal> SValListTy;
 private:
-  typedef llvm::DenseMap<const LazyCompoundValData *,
+  typedef llvm37::DenseMap<const LazyCompoundValData *,
                          SValListTy> LazyBindingsMapTy;
   LazyBindingsMapTy LazyBindingsMap;
 
@@ -614,14 +614,14 @@ public: // Part of public interface to class.
 std::unique_ptr<StoreManager>
 ento::CreateRegionStoreManager(ProgramStateManager &StMgr) {
   RegionStoreFeatures F = maximal_features_tag();
-  return llvm::make_unique<RegionStoreManager>(StMgr, F);
+  return llvm37::make_unique<RegionStoreManager>(StMgr, F);
 }
 
 std::unique_ptr<StoreManager>
 ento::CreateFieldsOnlyRegionStoreManager(ProgramStateManager &StMgr) {
   RegionStoreFeatures F = minimal_features_tag();
   F.enableFields(true);
-  return llvm::make_unique<RegionStoreManager>(StMgr, F);
+  return llvm37::make_unique<RegionStoreManager>(StMgr, F);
 }
 
 
@@ -644,11 +644,11 @@ enum GlobalsFilterKind {
 template <typename DERIVED>
 class ClusterAnalysis  {
 protected:
-  typedef llvm::DenseMap<const MemRegion *, const ClusterBindings *> ClusterMap;
+  typedef llvm37::DenseMap<const MemRegion *, const ClusterBindings *> ClusterMap;
   typedef const MemRegion * WorkListElement;
   typedef SmallVector<WorkListElement, 10> WorkList;
 
-  llvm::SmallPtrSet<const ClusterBindings *, 16> Visited;
+  llvm37::SmallPtrSet<const ClusterBindings *, 16> Visited;
 
   WorkList WL;
 
@@ -829,7 +829,7 @@ collectSubRegionBindings(SmallVectorImpl<BindingPair> &Bindings,
   SVal Extent = Top->getExtent(SVB);
   if (Optional<nonloc::ConcreteInt> ExtentCI =
           Extent.getAs<nonloc::ConcreteInt>()) {
-    const llvm::APSInt &ExtentInt = ExtentCI->getValue();
+    const llvm37::APSInt &ExtentInt = ExtentCI->getValue();
     assert(ExtentInt.isNonNegative() || ExtentInt.isUnsigned());
     // Extents are in bytes but region offsets are in bits. Be careful!
     Length = ExtentInt.getLimitedValue() * SVB.getContext().getCharWidth();
@@ -1212,7 +1212,7 @@ RegionStoreManager::getSizeInElements(ProgramStateRef state,
                                       const MemRegion *R,
                                       QualType EleTy) {
   SVal Size = cast<SubRegion>(R)->getExtent(svalBuilder);
-  const llvm::APSInt *SizeInt = svalBuilder.getKnownValue(state, Size);
+  const llvm37::APSInt *SizeInt = svalBuilder.getKnownValue(state, Size);
   if (!SizeInt)
     return UnknownVal();
 

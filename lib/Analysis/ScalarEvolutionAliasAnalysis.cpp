@@ -19,12 +19,12 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Analysis/Passes.h"
-#include "llvm/Analysis/AliasAnalysis.h"
-#include "llvm/Analysis/ScalarEvolutionExpressions.h"
-#include "llvm/IR/Module.h"
-#include "llvm/Pass.h"
-using namespace llvm;
+#include "llvm37/Analysis/Passes.h"
+#include "llvm37/Analysis/AliasAnalysis.h"
+#include "llvm37/Analysis/ScalarEvolutionExpressions.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/Pass.h"
+using namespace llvm37;
 
 namespace {
   /// ScalarEvolutionAliasAnalysis - This is a simple alias analysis
@@ -68,7 +68,7 @@ INITIALIZE_PASS_DEPENDENCY(ScalarEvolution)
 INITIALIZE_AG_PASS_END(ScalarEvolutionAliasAnalysis, AliasAnalysis, "scev-aa",
                     "ScalarEvolution-based Alias Analysis", false, true, false)
 
-FunctionPass *llvm::createScalarEvolutionAliasAnalysisPass() {
+FunctionPass *llvm37::createScalarEvolutionAliasAnalysisPass() {
   return new ScalarEvolutionAliasAnalysis();
 }
 

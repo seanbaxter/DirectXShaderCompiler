@@ -27,9 +27,9 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/CodeGen/SelectionDAG.h"
-#include "llvm/Target/TargetLowering.h"
-using namespace llvm;
+#include "llvm37/CodeGen/SelectionDAG.h"
+#include "llvm37/Target/TargetLowering.h"
+using namespace llvm37;
 
 namespace {
 class VectorLegalizer {

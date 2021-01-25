@@ -11,13 +11,13 @@
 // file that incldues the corresponding header.
 //===----------------------------------------------------------------------===//
 
-#include "llvm/DebugInfo/PDB/IPDBDataStream.h"
-#include "llvm/DebugInfo/PDB/IPDBLineNumber.h"
-#include "llvm/DebugInfo/PDB/IPDBRawSymbol.h"
-#include "llvm/DebugInfo/PDB/IPDBSession.h"
-#include "llvm/DebugInfo/PDB/IPDBRawSymbol.h"
+#include "llvm37/DebugInfo/PDB/IPDBDataStream.h"
+#include "llvm37/DebugInfo/PDB/IPDBLineNumber.h"
+#include "llvm37/DebugInfo/PDB/IPDBRawSymbol.h"
+#include "llvm37/DebugInfo/PDB/IPDBSession.h"
+#include "llvm37/DebugInfo/PDB/IPDBRawSymbol.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 IPDBSession::~IPDBSession() {}
 

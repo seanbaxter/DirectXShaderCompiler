@@ -6,12 +6,12 @@
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
-#ifndef LLVM_CLANG_STATICANALYZER_FRONTEND_FRONTENDACTIONS_H
-#define LLVM_CLANG_STATICANALYZER_FRONTEND_FRONTENDACTIONS_H
+#ifndef LLVM37_CLANG_STATICANALYZER_FRONTEND_FRONTENDACTIONS_H
+#define LLVM37_CLANG_STATICANALYZER_FRONTEND_FRONTENDACTIONS_H
 
 #include "clang/Frontend/FrontendAction.h"
-#include "llvm/ADT/StringMap.h"
-#include "llvm/ADT/StringRef.h"
+#include "llvm37/ADT/StringMap.h"
+#include "llvm37/ADT/StringRef.h"
 
 namespace clang {
 
@@ -40,7 +40,7 @@ protected:
 /// parsed, the function definitions will be collected into a StringMap.
 class ParseModelFileAction : public ASTFrontendAction {
 public:
-  ParseModelFileAction(llvm::StringMap<Stmt *> &Bodies);
+  ParseModelFileAction(llvm37::StringMap<Stmt *> &Bodies);
   bool isModelParsingAction() const override { return true; }
 
 protected:
@@ -48,7 +48,7 @@ protected:
                                                  StringRef InFile) override;
 
 private:
-  llvm::StringMap<Stmt *> &Bodies;
+  llvm37::StringMap<Stmt *> &Bodies;
 };
 
 void printCheckerHelp(raw_ostream &OS, ArrayRef<std::string> plugins);

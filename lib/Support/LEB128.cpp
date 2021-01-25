@@ -12,9 +12,9 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Support/LEB128.h"
+#include "llvm37/Support/LEB128.h"
 
-namespace llvm {
+namespace llvm37 {
 
 /// Utility function to get the size of the ULEB128-encoded value.
 unsigned getULEB128Size(uint64_t Value) {
@@ -41,4 +41,4 @@ unsigned getSLEB128Size(int64_t Value) {
   return Size;
 }
 
-}  // namespace llvm
+}  // namespace llvm37

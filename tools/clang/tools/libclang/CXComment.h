@@ -11,8 +11,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_TOOLS_LIBCLANG_CXCOMMENT_H
-#define LLVM_CLANG_TOOLS_LIBCLANG_CXCOMMENT_H
+#ifndef LLVM37_CLANG_TOOLS_LIBCLANG_CXCOMMENT_H
+#define LLVM37_CLANG_TOOLS_LIBCLANG_CXCOMMENT_H
 
 #include "CXTranslationUnit.h"
 #include "clang-c/Documentation.h"

@@ -11,16 +11,16 @@
 #include "dxc/DXIL/DxilModule.h"
 #include "dxc/HLSL/DxilGenerationPass.h"
 #include "dxc/HLSL/HLOperations.h"
-#include "llvm/Pass.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/Instruction.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/Module.h"
-#include "llvm/Transforms/Utils/SSAUpdater.h"
+#include "llvm37/Pass.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/Instruction.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/Transforms/Utils/SSAUpdater.h"
 #include <unordered_set>
 #include <vector>
 
-using namespace llvm;
+using namespace llvm37;
 using namespace hlsl;
 
 // Make sure src of EvalOperations are from function parameter.
@@ -122,7 +122,7 @@ void DxilLegalizeEvalOperations::FindAllocasForEvalOperations(
 }
 } // namespace
 
-ModulePass *llvm::createDxilLegalizeEvalOperationsPass() {
+ModulePass *llvm37::createDxilLegalizeEvalOperationsPass() {
   return new DxilLegalizeEvalOperations();
 }
 

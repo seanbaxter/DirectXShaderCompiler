@@ -20,12 +20,12 @@
 //===----------------------------------------------------------------------===//
 
 #include "ObjCARC.h"
-#include "llvm/IR/Intrinsics.h"
+#include "llvm37/IR/Intrinsics.h"
 
-using namespace llvm;
-using namespace llvm::objcarc;
+using namespace llvm37;
+using namespace llvm37::objcarc;
 
-raw_ostream &llvm::objcarc::operator<<(raw_ostream &OS,
+raw_ostream &llvm37::objcarc::operator<<(raw_ostream &OS,
                                        const ARCInstKind Class) {
   switch (Class) {
   case ARCInstKind::Retain:
@@ -80,7 +80,7 @@ raw_ostream &llvm::objcarc::operator<<(raw_ostream &OS,
   llvm_unreachable("Unknown instruction class!");
 }
 
-ARCInstKind llvm::objcarc::GetFunctionClass(const Function *F) {
+ARCInstKind llvm37::objcarc::GetFunctionClass(const Function *F) {
   Function::const_arg_iterator AI = F->arg_begin(), AE = F->arg_end();
 
   // No (mandatory) arguments.
@@ -223,7 +223,7 @@ static bool isUseOnlyIntrinsic(unsigned ID) {
 }
 
 /// \brief Determine what kind of construct V is.
-ARCInstKind llvm::objcarc::GetARCInstKind(const Value *V) {
+ARCInstKind llvm37::objcarc::GetARCInstKind(const Value *V) {
   if (const Instruction *I = dyn_cast<Instruction>(V)) {
     // Any instruction other than bitcast and gep with a pointer operand have a
     // use of an objc pointer. Bitcasts, GEPs, Selects, PHIs transfer a pointer
@@ -321,7 +321,7 @@ ARCInstKind llvm::objcarc::GetARCInstKind(const Value *V) {
 }
 
 /// \brief Test if the given class is a kind of user.
-bool llvm::objcarc::IsUser(ARCInstKind Class) {
+bool llvm37::objcarc::IsUser(ARCInstKind Class) {
   switch (Class) {
   case ARCInstKind::User:
   case ARCInstKind::CallOrUser:
@@ -354,7 +354,7 @@ bool llvm::objcarc::IsUser(ARCInstKind Class) {
 }
 
 /// \brief Test if the given class is objc_retain or equivalent.
-bool llvm::objcarc::IsRetain(ARCInstKind Class) {
+bool llvm37::objcarc::IsRetain(ARCInstKind Class) {
   switch (Class) {
   case ARCInstKind::Retain:
   case ARCInstKind::RetainRV:
@@ -389,7 +389,7 @@ bool llvm::objcarc::IsRetain(ARCInstKind Class) {
 }
 
 /// \brief Test if the given class is objc_autorelease or equivalent.
-bool llvm::objcarc::IsAutorelease(ARCInstKind Class) {
+bool llvm37::objcarc::IsAutorelease(ARCInstKind Class) {
   switch (Class) {
   case ARCInstKind::Autorelease:
   case ARCInstKind::AutoreleaseRV:
@@ -423,7 +423,7 @@ bool llvm::objcarc::IsAutorelease(ARCInstKind Class) {
 
 /// \brief Test if the given class represents instructions which return their
 /// argument verbatim.
-bool llvm::objcarc::IsForwarding(ARCInstKind Class) {
+bool llvm37::objcarc::IsForwarding(ARCInstKind Class) {
   switch (Class) {
   case ARCInstKind::Retain:
   case ARCInstKind::RetainRV:
@@ -457,7 +457,7 @@ bool llvm::objcarc::IsForwarding(ARCInstKind Class) {
 
 /// \brief Test if the given class represents instructions which do nothing if
 /// passed a null pointer.
-bool llvm::objcarc::IsNoopOnNull(ARCInstKind Class) {
+bool llvm37::objcarc::IsNoopOnNull(ARCInstKind Class) {
   switch (Class) {
   case ARCInstKind::Retain:
   case ARCInstKind::RetainRV:
@@ -491,7 +491,7 @@ bool llvm::objcarc::IsNoopOnNull(ARCInstKind Class) {
 
 /// \brief Test if the given class represents instructions which are always safe
 /// to mark with the "tail" keyword.
-bool llvm::objcarc::IsAlwaysTail(ARCInstKind Class) {
+bool llvm37::objcarc::IsAlwaysTail(ARCInstKind Class) {
   // ARCInstKind::RetainBlock may be given a stack argument.
   switch (Class) {
   case ARCInstKind::Retain:
@@ -526,7 +526,7 @@ bool llvm::objcarc::IsAlwaysTail(ARCInstKind Class) {
 
 /// \brief Test if the given class represents instructions which are never safe
 /// to mark with the "tail" keyword.
-bool llvm::objcarc::IsNeverTail(ARCInstKind Class) {
+bool llvm37::objcarc::IsNeverTail(ARCInstKind Class) {
   /// It is never safe to tail call objc_autorelease since by tail calling
   /// objc_autorelease: fast autoreleasing causing our object to be potentially
   /// reclaimed from the autorelease pool which violates the semantics of
@@ -564,7 +564,7 @@ bool llvm::objcarc::IsNeverTail(ARCInstKind Class) {
 
 /// \brief Test if the given class represents instructions which are always safe
 /// to mark with the nounwind attribute.
-bool llvm::objcarc::IsNoThrow(ARCInstKind Class) {
+bool llvm37::objcarc::IsNoThrow(ARCInstKind Class) {
   // objc_retainBlock is not nounwind because it calls user copy constructors
   // which could theoretically throw.
   switch (Class) {
@@ -602,7 +602,7 @@ bool llvm::objcarc::IsNoThrow(ARCInstKind Class) {
 /// autoreleasepool pop.
 ///
 /// This means that it *could* interrupt the RV optimization.
-bool llvm::objcarc::CanInterruptRV(ARCInstKind Class) {
+bool llvm37::objcarc::CanInterruptRV(ARCInstKind Class) {
   switch (Class) {
   case ARCInstKind::AutoreleasepoolPop:
   case ARCInstKind::CallOrUser:
@@ -634,7 +634,7 @@ bool llvm::objcarc::CanInterruptRV(ARCInstKind Class) {
   llvm_unreachable("covered switch isn't covered?");
 }
 
-bool llvm::objcarc::CanDecrementRefCount(ARCInstKind Kind) {
+bool llvm37::objcarc::CanDecrementRefCount(ARCInstKind Kind) {
   switch (Kind) {
   case ARCInstKind::Retain:
   case ARCInstKind::RetainRV:

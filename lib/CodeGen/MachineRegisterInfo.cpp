@@ -11,15 +11,15 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/CodeGen/MachineRegisterInfo.h"
-#include "llvm/CodeGen/MachineInstrBuilder.h"
-#include "llvm/IR/Function.h"
-#include "llvm/Support/raw_os_ostream.h"
-#include "llvm/Target/TargetInstrInfo.h"
-#include "llvm/Target/TargetMachine.h"
-#include "llvm/Target/TargetSubtargetInfo.h"
+#include "llvm37/CodeGen/MachineRegisterInfo.h"
+#include "llvm37/CodeGen/MachineInstrBuilder.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/Support/raw_os_ostream.h"
+#include "llvm37/Target/TargetInstrInfo.h"
+#include "llvm37/Target/TargetMachine.h"
+#include "llvm37/Target/TargetSubtargetInfo.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 // Pin the vtable to this file.
 void MachineRegisterInfo::Delegate::anchor() {}

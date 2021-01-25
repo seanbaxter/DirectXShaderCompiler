@@ -11,8 +11,8 @@
 // source-location information.
 //
 //===----------------------------------------------------------------------===//
-#ifndef LLVM_CLANG_SEMA_LOCINFOTYPE_H
-#define LLVM_CLANG_SEMA_LOCINFOTYPE_H
+#ifndef LLVM37_CLANG_SEMA_LOCINFOTYPE_H
+#define LLVM37_CLANG_SEMA_LOCINFOTYPE_H
 
 #include "clang/AST/Type.h"
 
@@ -59,4 +59,4 @@ public:
 
 } // end namespace clang
 
-#endif // LLVM_CLANG_SEMA_LOCINFOTYPE_H
+#endif // LLVM37_CLANG_SEMA_LOCINFOTYPE_H

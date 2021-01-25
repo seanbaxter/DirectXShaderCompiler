@@ -10,14 +10,14 @@
 #include "ToolChains.h"
 #include "clang/Driver/Driver.h"
 #include "clang/Driver/Options.h"
-#include "llvm/Option/ArgList.h"
+#include "llvm37/Option/ArgList.h"
 
 using namespace clang::driver;
 using namespace clang::driver::toolchains;
 
 CrossWindowsToolChain::CrossWindowsToolChain(const Driver &D,
-                                             const llvm::Triple &T,
-                                             const llvm::opt::ArgList &Args)
+                                             const llvm37::Triple &T,
+                                             const llvm37::opt::ArgList &Args)
     : Generic_GCC(D, T, Args) {
   if (GetCXXStdlibType(Args) == ToolChain::CST_Libstdcxx) {
     const std::string &SysRoot = D.SysRoot;
@@ -32,24 +32,24 @@ CrossWindowsToolChain::CrossWindowsToolChain(const Driver &D,
 bool CrossWindowsToolChain::IsUnwindTablesDefault() const {
   // FIXME: all non-x86 targets need unwind tables, however, LLVM currently does
   // not know how to emit them.
-  return getArch() == llvm::Triple::x86_64;
+  return getArch() == llvm37::Triple::x86_64;
 }
 
 bool CrossWindowsToolChain::isPICDefault() const {
-  return getArch() == llvm::Triple::x86_64;
+  return getArch() == llvm37::Triple::x86_64;
 }
 
 bool CrossWindowsToolChain::isPIEDefault() const {
-  return getArch() == llvm::Triple::x86_64;
+  return getArch() == llvm37::Triple::x86_64;
 }
 
 bool CrossWindowsToolChain::isPICDefaultForced() const {
-  return getArch() == llvm::Triple::x86_64;
+  return getArch() == llvm37::Triple::x86_64;
 }
 
 void CrossWindowsToolChain::
-AddClangSystemIncludeArgs(const llvm::opt::ArgList &DriverArgs,
-                          llvm::opt::ArgStringList &CC1Args) const {
+AddClangSystemIncludeArgs(const llvm37::opt::ArgList &DriverArgs,
+                          llvm37::opt::ArgStringList &CC1Args) const {
   const Driver &D = getDriver();
   const std::string &SysRoot = D.SysRoot;
 
@@ -59,16 +59,16 @@ AddClangSystemIncludeArgs(const llvm::opt::ArgList &DriverArgs,
   addSystemInclude(DriverArgs, CC1Args, SysRoot + "/usr/local/include");
   if (!DriverArgs.hasArg(options::OPT_nobuiltininc)) {
     SmallString<128> ResourceDir(D.ResourceDir);
-    llvm::sys::path::append(ResourceDir, "include");
+    llvm37::sys::path::append(ResourceDir, "include");
     addSystemInclude(DriverArgs, CC1Args, ResourceDir);
   }
   addExternCSystemInclude(DriverArgs, CC1Args, SysRoot + "/usr/include");
 }
 
 void CrossWindowsToolChain::
-AddClangCXXStdlibIncludeArgs(const llvm::opt::ArgList &DriverArgs,
-                             llvm::opt::ArgStringList &CC1Args) const {
-  const llvm::Triple &Triple = getTriple();
+AddClangCXXStdlibIncludeArgs(const llvm37::opt::ArgList &DriverArgs,
+                             llvm37::opt::ArgStringList &CC1Args) const {
+  const llvm37::Triple &Triple = getTriple();
   const std::string &SysRoot = getDriver().SysRoot;
 
   if (DriverArgs.hasArg(options::OPT_nostdlibinc) ||
@@ -90,8 +90,8 @@ AddClangCXXStdlibIncludeArgs(const llvm::opt::ArgList &DriverArgs,
 }
 
 void CrossWindowsToolChain::
-AddCXXStdlibLibArgs(const llvm::opt::ArgList &DriverArgs,
-                    llvm::opt::ArgStringList &CC1Args) const {
+AddCXXStdlibLibArgs(const llvm37::opt::ArgList &DriverArgs,
+                    llvm37::opt::ArgStringList &CC1Args) const {
   switch (GetCXXStdlibType(DriverArgs)) {
   case ToolChain::CST_Libcxx:
     CC1Args.push_back("-lc++");

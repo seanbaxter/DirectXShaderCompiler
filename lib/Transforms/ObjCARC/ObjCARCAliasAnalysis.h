@@ -20,13 +20,13 @@
 ///
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_LIB_TRANSFORMS_OBJCARC_OBJCARCALIASANALYSIS_H
-#define LLVM_LIB_TRANSFORMS_OBJCARC_OBJCARCALIASANALYSIS_H
+#ifndef LLVM37_LIB_TRANSFORMS_OBJCARC_OBJCARCALIASANALYSIS_H
+#define LLVM37_LIB_TRANSFORMS_OBJCARC_OBJCARCALIASANALYSIS_H
 
-#include "llvm/Analysis/AliasAnalysis.h"
-#include "llvm/Pass.h"
+#include "llvm37/Analysis/AliasAnalysis.h"
+#include "llvm37/Pass.h"
 
-namespace llvm {
+namespace llvm37 {
 namespace objcarc {
 
   /// \brief This is a simple alias analysis implementation that uses knowledge
@@ -69,6 +69,6 @@ namespace objcarc {
   };
 
 } // namespace objcarc
-} // namespace llvm
+} // namespace llvm37
 
 #endif

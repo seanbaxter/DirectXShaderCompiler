@@ -11,17 +11,17 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_LIB_EXECUTIONENGINE_ORC_ORCMCJITREPLACEMENT_H
-#define LLVM_LIB_EXECUTIONENGINE_ORC_ORCMCJITREPLACEMENT_H
+#ifndef LLVM37_LIB_EXECUTIONENGINE_ORC_ORCMCJITREPLACEMENT_H
+#define LLVM37_LIB_EXECUTIONENGINE_ORC_ORCMCJITREPLACEMENT_H
 
-#include "llvm/ExecutionEngine/ExecutionEngine.h"
-#include "llvm/ExecutionEngine/Orc/CompileUtils.h"
-#include "llvm/ExecutionEngine/Orc/IRCompileLayer.h"
-#include "llvm/ExecutionEngine/Orc/LazyEmittingLayer.h"
-#include "llvm/ExecutionEngine/Orc/ObjectLinkingLayer.h"
-#include "llvm/Object/Archive.h"
+#include "llvm37/ExecutionEngine/ExecutionEngine.h"
+#include "llvm37/ExecutionEngine/Orc/CompileUtils.h"
+#include "llvm37/ExecutionEngine/Orc/IRCompileLayer.h"
+#include "llvm37/ExecutionEngine/Orc/LazyEmittingLayer.h"
+#include "llvm37/ExecutionEngine/Orc/ObjectLinkingLayer.h"
+#include "llvm37/Object/Archive.h"
 
-namespace llvm {
+namespace llvm37 {
 namespace orc {
 
 class OrcMCJITReplacement : public ExecutionEngine {
@@ -350,6 +350,6 @@ private:
 };
 
 } // End namespace orc.
-} // End namespace llvm.
+} // End namespace llvm37.
 
-#endif // LLVM_LIB_EXECUTIONENGINE_ORC_MCJITREPLACEMENT_H
+#endif // LLVM37_LIB_EXECUTIONENGINE_ORC_MCJITREPLACEMENT_H

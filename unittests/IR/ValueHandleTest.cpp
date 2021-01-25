@@ -7,14 +7,14 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/IR/ValueHandle.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/LLVMContext.h"
+#include "llvm37/IR/ValueHandle.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/LLVMContext.h"
 #include "gtest/gtest.h"
 #include <memory>
 
-using namespace llvm;
+using namespace llvm37;
 
 namespace {
 

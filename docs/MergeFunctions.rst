@@ -187,7 +187,7 @@ merged with each other. It is defined as:
 
 ``std::set<FunctionNode> FnTree;``
 
-Here ``FunctionNode`` is a wrapper for ``llvm::Function`` class, with
+Here ``FunctionNode`` is a wrapper for ``llvm37::Function`` class, with
 implemented “<” operator among the functions set (below we explain how it works
 exactly; this is a key point in fast functions comparison).
 

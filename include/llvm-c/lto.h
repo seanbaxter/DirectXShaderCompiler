@@ -13,8 +13,8 @@
 |*                                                                            *|
 \*===----------------------------------------------------------------------===*/
 
-#ifndef LLVM_C_LTO_H
-#define LLVM_C_LTO_H
+#ifndef LLVM37_C_LTO_H
+#define LLVM37_C_LTO_H
 
 #include <stddef.h>
 #include <sys/types.h>

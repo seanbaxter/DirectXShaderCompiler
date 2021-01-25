@@ -9,7 +9,7 @@
 
 #include "FormatTestUtils.h"
 #include "clang/Format/Format.h"
-#include "llvm/Support/Debug.h"
+#include "llvm37/Support/Debug.h"
 #include "gtest/gtest.h"
 
 #define DEBUG_TYPE "format-test"
@@ -20,9 +20,9 @@ namespace {
 
 class FormatTestSelective : public ::testing::Test {
 protected:
-  std::string format(llvm::StringRef Code, unsigned Offset, unsigned Length) {
-    DEBUG(llvm::errs() << "---\n");
-    DEBUG(llvm::errs() << Code << "\n\n");
+  std::string format(llvm37::StringRef Code, unsigned Offset, unsigned Length) {
+    DEBUG(llvm37::errs() << "---\n");
+    DEBUG(llvm37::errs() << Code << "\n\n");
     std::vector<tooling::Range> Ranges(1, tooling::Range(Offset, Length));
     bool IncompleteFormat = false;
     tooling::Replacements Replaces =
@@ -30,7 +30,7 @@ protected:
     EXPECT_FALSE(IncompleteFormat) << Code << "\n\n";
     std::string Result = applyAllReplacements(Code, Replaces);
     EXPECT_NE("", Result);
-    DEBUG(llvm::errs() << "\n" << Result << "\n\n");
+    DEBUG(llvm37::errs() << "\n" << Result << "\n\n");
     return Result;
   }
 

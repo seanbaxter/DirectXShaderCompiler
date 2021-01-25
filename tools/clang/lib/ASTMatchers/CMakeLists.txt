@@ -1,5 +1,5 @@
 
-set(LLVM_LINK_COMPONENTS support)
+set(LLVM37_LINK_COMPONENTS support)
 
 add_clang_library(clangASTMatchers
   ASTMatchFinder.cpp

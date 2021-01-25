@@ -21,8 +21,8 @@
 #include "clang/AST/ExprCXX.h"
 #include "clang/AST/TypeLoc.h"
 #include "clang/Basic/IdentifierTable.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/SmallPtrSet.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/SmallPtrSet.h"
 using namespace clang;
 //                                                                           //
 ///////////////////////////////////////////////////////////////////////////////
@@ -155,7 +155,7 @@ CXXRecordDecl::setBases(CXXBaseSpecifier const * const *Bases,
   }
 
   // The set of seen virtual base types.
-  llvm::SmallPtrSet<CanQualType, 8> SeenVBaseTypes;
+  llvm37::SmallPtrSet<CanQualType, 8> SeenVBaseTypes;
   
   // The virtual bases of this class.
   SmallVector<const CXXBaseSpecifier *, 8> VBases;
@@ -1022,7 +1022,7 @@ CXXMethodDecl* CXXRecordDecl::getLambdaStaticInvoker() const {
 }
 
 void CXXRecordDecl::getCaptureFields(
-       llvm::DenseMap<const VarDecl *, FieldDecl *> &Captures,
+       llvm37::DenseMap<const VarDecl *, FieldDecl *> &Captures,
        FieldDecl *&ThisCapture) const {
   Captures.clear();
   ThisCapture = nullptr;
@@ -1071,15 +1071,15 @@ static void CollectVisibleConversions(ASTContext &Context,
                                       CXXRecordDecl *Record,
                                       bool InVirtual,
                                       AccessSpecifier Access,
-                  const llvm::SmallPtrSet<CanQualType, 8> &ParentHiddenTypes,
+                  const llvm37::SmallPtrSet<CanQualType, 8> &ParentHiddenTypes,
                                       ASTUnresolvedSet &Output,
                                       UnresolvedSetImpl &VOutput,
-                           llvm::SmallPtrSet<NamedDecl*, 8> &HiddenVBaseCs) {
+                           llvm37::SmallPtrSet<NamedDecl*, 8> &HiddenVBaseCs) {
   // The set of types which have conversions in this class or its
   // subclasses.  As an optimization, we don't copy the derived set
   // unless it might change.
-  const llvm::SmallPtrSet<CanQualType, 8> *HiddenTypes = &ParentHiddenTypes;
-  llvm::SmallPtrSet<CanQualType, 8> HiddenTypesBuffer;
+  const llvm37::SmallPtrSet<CanQualType, 8> *HiddenTypes = &ParentHiddenTypes;
+  llvm37::SmallPtrSet<CanQualType, 8> HiddenTypesBuffer;
 
   // Collect the direct conversions and figure out which conversions
   // will be hidden in the subclasses.
@@ -1142,10 +1142,10 @@ static void CollectVisibleConversions(ASTContext &Context,
   
   // The set of conversions in virtual bases that we've determined to
   // be hidden.
-  llvm::SmallPtrSet<NamedDecl*, 8> HiddenVBaseCs;
+  llvm37::SmallPtrSet<NamedDecl*, 8> HiddenVBaseCs;
 
   // The set of types hidden by classes derived from this one.
-  llvm::SmallPtrSet<CanQualType, 8> HiddenTypes;
+  llvm37::SmallPtrSet<CanQualType, 8> HiddenTypes;
 
   // Go ahead and collect the direct conversions and add them to the
   // hidden-types set.
@@ -1175,7 +1175,7 @@ static void CollectVisibleConversions(ASTContext &Context,
 
 /// getVisibleConversionFunctions - get all conversion functions visible
 /// in current class; including conversion function templates.
-llvm::iterator_range<CXXRecordDecl::conversion_iterator>
+llvm37::iterator_range<CXXRecordDecl::conversion_iterator>
 CXXRecordDecl::getVisibleConversionFunctions() {
   ASTContext &Ctx = getASTContext();
 
@@ -1191,7 +1191,7 @@ CXXRecordDecl::getVisibleConversionFunctions() {
       data().ComputedVisibleConversions = true;
     }
   }
-  return llvm::make_range(Set->begin(), Set->end());
+  return llvm37::make_range(Set->begin(), Set->end());
 }
 
 void CXXRecordDecl::removeConversion(const NamedDecl *ConvDecl) {
@@ -1696,7 +1696,7 @@ CXXCtorInitializer *CXXCtorInitializer::Create(ASTContext &Context,
                                                unsigned NumIndices) {
   void *Mem = Context.Allocate(sizeof(CXXCtorInitializer) +
                                sizeof(VarDecl *) * NumIndices,
-                               llvm::alignOf<CXXCtorInitializer>());
+                               llvm37::alignOf<CXXCtorInitializer>());
   return new (Mem) CXXCtorInitializer(Context, Member, MemberLoc, L, Init, R,
                                       Indices, NumIndices);
 }

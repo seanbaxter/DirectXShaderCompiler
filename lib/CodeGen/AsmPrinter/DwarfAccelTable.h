@@ -11,20 +11,20 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_LIB_CODEGEN_ASMPRINTER_DWARFACCELTABLE_H
-#define LLVM_LIB_CODEGEN_ASMPRINTER_DWARFACCELTABLE_H
+#ifndef LLVM37_LIB_CODEGEN_ASMPRINTER_DWARFACCELTABLE_H
+#define LLVM37_LIB_CODEGEN_ASMPRINTER_DWARFACCELTABLE_H
 
-#include "llvm/ADT/ArrayRef.h"
-#include "llvm/ADT/StringMap.h"
-#include "llvm/CodeGen/DIE.h"
-#include "llvm/MC/MCSymbol.h"
-#include "llvm/Support/Compiler.h"
-#include "llvm/Support/DataTypes.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/Dwarf.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/Format.h"
-#include "llvm/Support/FormattedStream.h"
+#include "llvm37/ADT/ArrayRef.h"
+#include "llvm37/ADT/StringMap.h"
+#include "llvm37/CodeGen/DIE.h"
+#include "llvm37/MC/MCSymbol.h"
+#include "llvm37/Support/Compiler.h"
+#include "llvm37/Support/DataTypes.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/Dwarf.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/Format.h"
+#include "llvm37/Support/FormattedStream.h"
 #include <vector>
 
 // The dwarf accelerator tables are an indirect hash table optimized
@@ -59,7 +59,7 @@
 // If we have a match we look at that same entry in the offsets table and
 // grab the offset in the data for our final match.
 
-namespace llvm {
+namespace llvm37 {
 
 class AsmPrinter;
 class DwarfDebug;
@@ -126,7 +126,7 @@ public:
     uint16_t type; // enum AtomType
     uint16_t form; // DWARF DW_FORM_ defines
 
-    LLVM_CONSTEXPR Atom(uint16_t type, uint16_t form)
+    LLVM37_CONSTEXPR Atom(uint16_t type, uint16_t form)
         : type(type), form(form) {}
 #ifndef NDEBUG
     void print(raw_ostream &O) {

@@ -11,13 +11,13 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_LIB_CODEGEN_ASMPRINTER_DWARFEXPRESSION_H
-#define LLVM_LIB_CODEGEN_ASMPRINTER_DWARFEXPRESSION_H
+#ifndef LLVM37_LIB_CODEGEN_ASMPRINTER_DWARFEXPRESSION_H
+#define LLVM37_LIB_CODEGEN_ASMPRINTER_DWARFEXPRESSION_H
 
-#include "llvm/IR/DebugInfo.h"
-#include "llvm/Support/DataTypes.h"
+#include "llvm37/IR/DebugInfo.h"
+#include "llvm37/Support/DataTypes.h"
 
-namespace llvm {
+namespace llvm37 {
 
 class AsmPrinter;
 class ByteStreamer;

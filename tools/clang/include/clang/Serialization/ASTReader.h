@@ -11,8 +11,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_SERIALIZATION_ASTREADER_H
-#define LLVM_CLANG_SERIALIZATION_ASTREADER_H
+#ifndef LLVM37_CLANG_SERIALIZATION_ASTREADER_H
+#define LLVM37_CLANG_SERIALIZATION_ASTREADER_H
 
 #include "clang/AST/DeclObjC.h"
 #include "clang/AST/DeclarationName.h"
@@ -31,18 +31,18 @@
 #include "clang/Serialization/ContinuousRangeMap.h"
 #include "clang/Serialization/Module.h"
 #include "clang/Serialization/ModuleManager.h"
-#include "llvm/ADT/APFloat.h"
-#include "llvm/ADT/APInt.h"
-#include "llvm/ADT/APSInt.h"
-#include "llvm/ADT/MapVector.h"
-#include "llvm/ADT/SmallPtrSet.h"
-#include "llvm/ADT/SmallSet.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/ADT/StringRef.h"
-#include "llvm/ADT/TinyPtrVector.h"
-#include "llvm/Bitcode/BitstreamReader.h"
-#include "llvm/Support/DataTypes.h"
-#include "llvm/Support/Timer.h"
+#include "llvm37/ADT/APFloat.h"
+#include "llvm37/ADT/APInt.h"
+#include "llvm37/ADT/APSInt.h"
+#include "llvm37/ADT/MapVector.h"
+#include "llvm37/ADT/SmallPtrSet.h"
+#include "llvm37/ADT/SmallSet.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/ADT/StringRef.h"
+#include "llvm37/ADT/TinyPtrVector.h"
+#include "llvm37/Bitcode/BitstreamReader.h"
+#include "llvm37/Support/DataTypes.h"
+#include "llvm37/Support/Timer.h"
 #include <deque>
 #include <map>
 #include <memory>
@@ -50,7 +50,7 @@
 #include <utility>
 #include <vector>
 
-namespace llvm {
+namespace llvm37 {
   class MemoryBuffer;
 }
 
@@ -281,7 +281,7 @@ class ReadMethodPoolVisitor;
 namespace reader {
   class ASTIdentifierLookupTrait;
   /// \brief The on-disk hash table used for the DeclContext's Name lookup table.
-  typedef llvm::OnDiskIterableChainedHashTable<ASTDeclContextNameLookupTrait>
+  typedef llvm37::OnDiskIterableChainedHashTable<ASTDeclContextNameLookupTrait>
     ASTDeclContextNameLookupTable;
 }
 
@@ -382,7 +382,7 @@ private:
   ModuleManager ModuleMgr;
 
   /// \brief A timer used to track the time spent deserializing.
-  std::unique_ptr<llvm::Timer> ReadTimer;
+  std::unique_ptr<llvm37::Timer> ReadTimer;
 
   /// \brief The location where the module file will be considered as
   /// imported from. For non-module AST types it should be invalid.
@@ -433,7 +433,7 @@ private:
 
   typedef std::pair<ModuleFile *, uint64_t> FileOffset;
   typedef SmallVector<FileOffset, 2> FileOffsetsTy;
-  typedef llvm::DenseMap<serialization::DeclID, FileOffsetsTy>
+  typedef llvm37::DenseMap<serialization::DeclID, FileOffsetsTy>
       DeclUpdateOffsetsMap;
 
   /// \brief Declarations that have modifications residing in a later file
@@ -442,20 +442,20 @@ private:
 
   /// \brief Declaration updates for already-loaded declarations that we need
   /// to apply once we finish processing an import.
-  llvm::SmallVector<std::pair<serialization::GlobalDeclID, Decl*>, 16>
+  llvm37::SmallVector<std::pair<serialization::GlobalDeclID, Decl*>, 16>
       PendingUpdateRecords;
 
   enum class PendingFakeDefinitionKind { NotFake, Fake, FakeLoaded };
 
   /// \brief The DefinitionData pointers that we faked up for class definitions
   /// that we needed but hadn't loaded yet.
-  llvm::DenseMap<void *, PendingFakeDefinitionKind> PendingFakeDefinitionData;
+  llvm37::DenseMap<void *, PendingFakeDefinitionKind> PendingFakeDefinitionData;
 
   /// \brief Exception specification updates that have been loaded but not yet
   /// propagated across the relevant redeclaration chain. The map key is the
   /// canonical declaration (used only for deduplication) and the value is a
   /// declaration that has an exception specification.
-  llvm::SmallMapVector<Decl *, FunctionDecl *, 4> PendingExceptionSpecUpdates;
+  llvm37::SmallMapVector<Decl *, FunctionDecl *, 4> PendingExceptionSpecUpdates;
 
   struct ReplacedDeclInfo {
     ModuleFile *Mod;
@@ -467,19 +467,19 @@ private:
       : Mod(Mod), Offset(Offset), RawLoc(RawLoc) {}
   };
 
-  typedef llvm::DenseMap<serialization::DeclID, ReplacedDeclInfo>
+  typedef llvm37::DenseMap<serialization::DeclID, ReplacedDeclInfo>
       DeclReplacementMap;
   /// \brief Declarations that have been replaced in a later file in the chain.
   DeclReplacementMap ReplacedDecls;
 
   /// \brief Declarations that have been imported and have typedef names for
   /// linkage purposes.
-  llvm::DenseMap<std::pair<DeclContext*, IdentifierInfo*>, NamedDecl*>
+  llvm37::DenseMap<std::pair<DeclContext*, IdentifierInfo*>, NamedDecl*>
       ImportedTypedefNamesForLinkage;
 
   /// \brief Mergeable declaration contexts that have anonymous declarations
   /// within them, and those anonymous declarations.
-  llvm::DenseMap<DeclContext*, llvm::SmallVector<NamedDecl*, 2>>
+  llvm37::DenseMap<DeclContext*, llvm37::SmallVector<NamedDecl*, 2>>
     AnonymousDeclarationsForMerging;
 
   struct FileDeclsInfo {
@@ -492,7 +492,7 @@ private:
   };
 
   /// \brief Map from a FileID to the file-level declarations that it contains.
-  llvm::DenseMap<FileID, FileDeclsInfo> FileDeclIDs;
+  llvm37::DenseMap<FileID, FileDeclsInfo> FileDeclIDs;
 
   // Updates for visible decls can occur for other contexts than just the
   // TU, and when we read those update records, the actual context will not
@@ -501,7 +501,7 @@ private:
   typedef
     SmallVector<std::pair<serialization::reader::ASTDeclContextNameLookupTable *,
                           ModuleFile*>, 1> DeclContextVisibleUpdates;
-  typedef llvm::DenseMap<serialization::DeclID, DeclContextVisibleUpdates>
+  typedef llvm37::DenseMap<serialization::DeclID, DeclContextVisibleUpdates>
       DeclContextVisibleUpdatesPending;
 
   /// \brief Updates to the visible declarations of declaration contexts that
@@ -510,10 +510,10 @@ private:
   
   /// \brief The set of C++ or Objective-C classes that have forward 
   /// declarations that have not yet been linked to their definitions.
-  llvm::SmallPtrSet<Decl *, 4> PendingDefinitions;
+  llvm37::SmallPtrSet<Decl *, 4> PendingDefinitions;
 
-  typedef llvm::MapVector<Decl *, uint64_t,
-                          llvm::SmallDenseMap<Decl *, unsigned, 4>,
+  typedef llvm37::MapVector<Decl *, uint64_t,
+                          llvm37::SmallDenseMap<Decl *, unsigned, 4>,
                           SmallVector<std::pair<Decl *, uint64_t>, 4> >
     PendingBodiesMap;
 
@@ -522,11 +522,11 @@ private:
 
   /// \brief Definitions for which we have added merged definitions but not yet
   /// performed deduplication.
-  llvm::SetVector<NamedDecl*> PendingMergedDefinitionsToDeduplicate;
+  llvm37::SetVector<NamedDecl*> PendingMergedDefinitionsToDeduplicate;
 
   /// \brief Read the records that describe the contents of declcontexts.
   bool ReadDeclContextStorage(ModuleFile &M,
-                              llvm::BitstreamCursor &Cursor,
+                              llvm37::BitstreamCursor &Cursor,
                               const std::pair<uint64_t, uint64_t> &Offsets,
                               serialization::DeclContextInfo &Info);
 
@@ -560,7 +560,7 @@ private:
   /// \brief A set of #undef directives that we have loaded; used to
   /// deduplicate the same #undef information coming from multiple module
   /// files.
-  llvm::DenseSet<LoadedMacroInfo> LoadedUndefs;
+  llvm37::DenseSet<LoadedMacroInfo> LoadedUndefs;
 
   typedef ContinuousRangeMap<serialization::MacroID, ModuleFile *, 4>
     GlobalMacroMapType;
@@ -586,7 +586,7 @@ private:
 
   /// \brief A set of hidden declarations.
   typedef SmallVector<Decl*, 2> HiddenNames;
-  typedef llvm::DenseMap<Module *, HiddenNames> HiddenNamesMapType;
+  typedef llvm37::DenseMap<Module *, HiddenNames> HiddenNamesMapType;
 
   /// \brief A mapping from each of the hidden submodules to the deserialized
   /// declarations in that submodule that could be made visible.
@@ -635,7 +635,7 @@ private:
 
   /// \brief The generation number of the last time we loaded data from the
   /// global method pool for this selector.
-  llvm::DenseMap<Selector, unsigned> SelectorGeneration;
+  llvm37::DenseMap<Selector, unsigned> SelectorGeneration;
 
   struct PendingMacroInfo {
     ModuleFile *M;
@@ -645,7 +645,7 @@ private:
         : M(M), MacroDirectivesOffset(MacroDirectivesOffset) {}
   };
 
-  typedef llvm::MapVector<IdentifierInfo *, SmallVector<PendingMacroInfo, 2> >
+  typedef llvm37::MapVector<IdentifierInfo *, SmallVector<PendingMacroInfo, 2> >
     PendingMacroIDsMap;
 
   /// \brief Mapping from identifiers that have a macro history to the global
@@ -810,7 +810,7 @@ private:
   /// \brief Whether we have tried loading the global module index yet.
   bool TriedLoadingGlobalIndex;
 
-  typedef llvm::DenseMap<unsigned, SwitchCase *> SwitchCaseMapTy;
+  typedef llvm37::DenseMap<unsigned, SwitchCase *> SwitchCaseMapTy;
   /// \brief Mapping from switch-case IDs in the chain to switch-case statements
   ///
   /// Statements usually don't have IDs, but switch cases need them, so that the
@@ -894,17 +894,17 @@ private:
   ///
   /// The declarations on the identifier chain for these identifiers will be
   /// loaded once the recursive loading has completed.
-  llvm::MapVector<IdentifierInfo *, SmallVector<uint32_t, 4> >
+  llvm37::MapVector<IdentifierInfo *, SmallVector<uint32_t, 4> >
     PendingIdentifierInfos;
 
   /// \brief The set of lookup results that we have faked in order to support
   /// merging of partially deserialized decls but that we have not yet removed.
-  llvm::SmallMapVector<IdentifierInfo *, SmallVector<NamedDecl*, 2>, 16>
+  llvm37::SmallMapVector<IdentifierInfo *, SmallVector<NamedDecl*, 2>, 16>
     PendingFakeLookupResults;
 
   /// \brief The generation number of each identifier, which keeps track of
   /// the last time we loaded information about this identifier.
-  llvm::DenseMap<IdentifierInfo *, unsigned> IdentifierGeneration;
+  llvm37::DenseMap<IdentifierInfo *, unsigned> IdentifierGeneration;
   
   /// \brief Contains declarations and definitions that will be
   /// "interesting" to the ASTConsumer, when we get that AST consumer.
@@ -916,7 +916,7 @@ private:
 
   /// \brief The set of redeclarable declarations that have been deserialized
   /// since the last time the declaration chains were linked.
-  llvm::SmallPtrSet<Decl *, 16> RedeclsDeserialized;
+  llvm37::SmallPtrSet<Decl *, 16> RedeclsDeserialized;
   
   /// \brief The list of redeclaration chains that still need to be 
   /// reconstructed.
@@ -927,7 +927,7 @@ private:
   SmallVector<Decl *, 16> PendingDeclChains;
 
   /// \brief Keeps track of the elements added to PendingDeclChains.
-  llvm::SmallSet<Decl *, 16> PendingDeclChainsKnown;
+  llvm37::SmallSet<Decl *, 16> PendingDeclChainsKnown;
 
   /// \brief The list of canonical declarations whose redeclaration chains
   /// need to be marked as incomplete once we're done deserializing things.
@@ -954,18 +954,18 @@ private:
   ///
   /// We will check whether the corresponding declaration is in fact missing
   /// once recursing loading has been completed.
-  llvm::SmallVector<NamedDecl *, 16> PendingOdrMergeChecks;
+  llvm37::SmallVector<NamedDecl *, 16> PendingOdrMergeChecks;
 
   /// \brief Record definitions in which we found an ODR violation.
-  llvm::SmallDenseMap<CXXRecordDecl *, llvm::TinyPtrVector<CXXRecordDecl *>, 2>
+  llvm37::SmallDenseMap<CXXRecordDecl *, llvm37::TinyPtrVector<CXXRecordDecl *>, 2>
       PendingOdrMergeFailures;
 
   /// \brief DeclContexts in which we have diagnosed an ODR violation.
-  llvm::SmallPtrSet<DeclContext*, 2> DiagnosedOdrMergeFailures;
+  llvm37::SmallPtrSet<DeclContext*, 2> DiagnosedOdrMergeFailures;
 
   /// \brief The set of Objective-C categories that have been deserialized
   /// since the last time the declaration chains were linked.
-  llvm::SmallPtrSet<ObjCCategoryDecl *, 16> CategoriesDeserialized;
+  llvm37::SmallPtrSet<ObjCCategoryDecl *, 16> CategoriesDeserialized;
 
   /// \brief The set of Objective-C class definitions that have already been
   /// loaded, for which we will need to check for categories whenever a new
@@ -976,10 +976,10 @@ private:
   /// other declarations of that entity that also have name lookup tables.
   /// Used when we merge together two class definitions that have different
   /// sets of declared special member functions.
-  llvm::DenseMap<const DeclContext*, SmallVector<const DeclContext*, 2>>
+  llvm37::DenseMap<const DeclContext*, SmallVector<const DeclContext*, 2>>
       MergedLookups;
 
-  typedef llvm::DenseMap<Decl *, SmallVector<serialization::DeclID, 2> >
+  typedef llvm37::DenseMap<Decl *, SmallVector<serialization::DeclID, 2> >
     KeyDeclsMap;
     
   /// \brief A mapping from canonical declarations to the set of global
@@ -992,11 +992,11 @@ private:
   /// \brief A mapping from DeclContexts to the semantic DeclContext that we
   /// are treating as the definition of the entity. This is used, for instance,
   /// when merging implicit instantiations of class templates across modules.
-  llvm::DenseMap<DeclContext *, DeclContext *> MergedDeclContexts;
+  llvm37::DenseMap<DeclContext *, DeclContext *> MergedDeclContexts;
 
   /// \brief A mapping from canonical declarations of enums to their canonical
   /// definitions. Only populated when using modules in C++.
-  llvm::DenseMap<EnumDecl *, EnumDecl *> EnumDefinitions;
+  llvm37::DenseMap<EnumDecl *, EnumDecl *> EnumDefinitions;
 
   /// \brief When reading a Stmt tree, Stmt operands are placed in this stack.
   SmallVector<Stmt *, 16> StmtStack;
@@ -1115,7 +1115,7 @@ private:
   ASTReadResult ReadASTBlock(ModuleFile &F, unsigned ClientLoadCapabilities);
   bool ParseLineTable(ModuleFile &F, const RecordData &Record);
   bool ReadSourceManagerBlock(ModuleFile &F);
-  llvm::BitstreamCursor &SLocCursorForID(int ID);
+  llvm37::BitstreamCursor &SLocCursorForID(int ID);
   SourceLocation getImportLocation(ModuleFile *F);
   ASTReadResult ReadModuleMapFileBlock(RecordData &Record, ModuleFile &F,
                                        const ModuleFile *ImportedBy,
@@ -1192,11 +1192,11 @@ private:
 
   /// \brief Returns (begin, end) pair for the preprocessed entities of a
   /// particular module.
-  llvm::iterator_range<PreprocessingRecord::iterator>
+  llvm37::iterator_range<PreprocessingRecord::iterator>
   getModulePreprocessedEntities(ModuleFile &Mod) const;
 
   class ModuleDeclIterator
-      : public llvm::iterator_adaptor_base<
+      : public llvm37::iterator_adaptor_base<
             ModuleDeclIterator, const serialization::LocalDeclID *,
             std::random_access_iterator_tag, const Decl *, ptrdiff_t,
             const Decl *, const Decl *> {
@@ -1222,7 +1222,7 @@ private:
     }
   };
 
-  llvm::iterator_range<ModuleDeclIterator>
+  llvm37::iterator_range<ModuleDeclIterator>
   getModuleFileLevelDecls(ModuleFile &Mod);
 
   void PassInterestingDeclsToConsumer();
@@ -1294,7 +1294,7 @@ public:
             bool AllowASTWithCompilerErrors = false,
             bool AllowConfigurationMismatch = false,
             bool ValidateSystemInputs = false, bool UseGlobalIndex = true,
-            std::unique_ptr<llvm::Timer> ReadTimer = {});
+            std::unique_ptr<llvm37::Timer> ReadTimer = {});
 
   ~ASTReader() override;
 
@@ -1372,7 +1372,7 @@ public:
   /// Takes ownership of \p L.
   void addListener(std::unique_ptr<ASTReaderListener> L) {
     if (Listener)
-      L = llvm::make_unique<ChainedASTReaderListener>(std::move(L),
+      L = llvm37::make_unique<ChainedASTReaderListener>(std::move(L),
                                                       std::move(Listener));
     Listener = std::move(L);
   }
@@ -1388,7 +1388,7 @@ public:
       auto Old = Reader.takeListener();
       if (Old) {
         Chained = true;
-        L = llvm::make_unique<ChainedASTReaderListener>(std::move(L),
+        L = llvm37::make_unique<ChainedASTReaderListener>(std::move(L),
                                                         std::move(Old));
       }
       Reader.setListener(std::move(L));
@@ -1431,7 +1431,7 @@ public:
 
   /// \brief Add in-memory (virtual file) buffer.
   void addInMemoryBuffer(StringRef &FileName,
-                         std::unique_ptr<llvm::MemoryBuffer> Buffer) {
+                         std::unique_ptr<llvm37::MemoryBuffer> Buffer) {
     ModuleMgr.addInMemoryBuffer(FileName, std::move(Buffer));
   }
 
@@ -1684,7 +1684,7 @@ public:
   /// ReadBlockAbbrevs - Enter a subblock of the specified BlockID with the
   /// specified cursor.  Read the abbreviations that are at the top of the block
   /// and then leave the cursor pointing into the block.
-  bool ReadBlockAbbrevs(llvm::BitstreamCursor &Cursor, unsigned BlockID);
+  bool ReadBlockAbbrevs(llvm37::BitstreamCursor &Cursor, unsigned BlockID);
 
   /// \brief Finds all the visible declarations with a given name.
   /// The current implementation of this method just loads the entire
@@ -1774,10 +1774,10 @@ public:
                          SmallVectorImpl<NamespaceDecl *> &Namespaces) override;
 
   void ReadUndefinedButUsed(
-               llvm::DenseMap<NamedDecl *, SourceLocation> &Undefined) override;
+               llvm37::DenseMap<NamedDecl *, SourceLocation> &Undefined) override;
 
-  void ReadMismatchingDeleteExpressions(llvm::MapVector<
-      FieldDecl *, llvm::SmallVector<std::pair<SourceLocation, bool>, 4>> &
+  void ReadMismatchingDeleteExpressions(llvm37::MapVector<
+      FieldDecl *, llvm37::SmallVector<std::pair<SourceLocation, bool>, 4>> &
                                             Exprs) override;
 
   void ReadTentativeDefinitions(
@@ -1792,7 +1792,7 @@ public:
   void ReadExtVectorDecls(SmallVectorImpl<TypedefNameDecl *> &Decls) override;
 
   void ReadUnusedLocalTypedefNameCandidates(
-      llvm::SmallSetVector<const TypedefNameDecl *, 4> &Decls) override;
+      llvm37::SmallSetVector<const TypedefNameDecl *, 4> &Decls) override;
 
   void ReadReferencedSelectors(
           SmallVectorImpl<std::pair<Selector, SourceLocation> > &Sels) override;
@@ -1807,7 +1807,7 @@ public:
                                            SourceLocation> > &Pending) override;
 
   void ReadLateParsedTemplates(
-      llvm::MapVector<const FunctionDecl *, LateParsedTemplate *> &LPTMap)
+      llvm37::MapVector<const FunctionDecl *, LateParsedTemplate *> &LPTMap)
       override;
 
   /// \brief Load a selector from disk, registering its ID if it exists.
@@ -1874,7 +1874,7 @@ public:
   Module *getModule(unsigned ID) override;
 
   /// \brief Return a descriptor for the corresponding module.
-  llvm::Optional<ASTSourceDescriptor> getSourceDescriptor(unsigned ID) override;
+  llvm37::Optional<ASTSourceDescriptor> getSourceDescriptor(unsigned ID) override;
   /// \brief Return a descriptor for the module.
   ASTSourceDescriptor getSourceDescriptor(const Module &M) override;
 
@@ -1977,14 +1977,14 @@ public:
                               const RecordData &Record, unsigned &Idx);
 
   /// \brief Read an integral value
-  llvm::APInt ReadAPInt(const RecordData &Record, unsigned &Idx);
+  llvm37::APInt ReadAPInt(const RecordData &Record, unsigned &Idx);
 
   /// \brief Read a signed integral value
-  llvm::APSInt ReadAPSInt(const RecordData &Record, unsigned &Idx);
+  llvm37::APSInt ReadAPSInt(const RecordData &Record, unsigned &Idx);
 
   /// \brief Read a floating-point value
-  llvm::APFloat ReadAPFloat(const RecordData &Record,
-                            const llvm::fltSemantics &Sem, unsigned &Idx);
+  llvm37::APFloat ReadAPFloat(const RecordData &Record,
+                            const llvm37::fltSemantics &Sem, unsigned &Idx);
 
   // \brief Read a string
   static std::string ReadString(const RecordData &Record, unsigned &Idx);
@@ -2079,7 +2079,7 @@ public:
   void ClearSwitchCaseIDs();
 
   /// \brief Cursors for comments blocks.
-  SmallVector<std::pair<llvm::BitstreamCursor,
+  SmallVector<std::pair<llvm37::BitstreamCursor,
                         serialization::ModuleFile *>, 8> CommentsCursors;
 
   //RIDErief Loads comments ranges.
@@ -2093,7 +2093,7 @@ public:
 /// \brief Helper class that saves the current stream position and
 /// then restores it when destroyed.
 struct SavedStreamPosition {
-  explicit SavedStreamPosition(llvm::BitstreamCursor &Cursor)
+  explicit SavedStreamPosition(llvm37::BitstreamCursor &Cursor)
     : Cursor(Cursor), Offset(Cursor.GetCurrentBitNo()) { }
 
   ~SavedStreamPosition() {
@@ -2101,7 +2101,7 @@ struct SavedStreamPosition {
   }
 
 private:
-  llvm::BitstreamCursor &Cursor;
+  llvm37::BitstreamCursor &Cursor;
   uint64_t Offset;
 };
 

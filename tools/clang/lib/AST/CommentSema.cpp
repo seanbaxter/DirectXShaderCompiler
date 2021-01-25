@@ -15,8 +15,8 @@
 #include "clang/AST/DeclTemplate.h"
 #include "clang/Basic/SourceManager.h"
 #include "clang/Lex/Preprocessor.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/ADT/StringSwitch.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/ADT/StringSwitch.h"
 
 namespace clang {
 namespace comments {
@@ -25,7 +25,7 @@ namespace {
 #include "clang/AST/CommentHTMLTagsProperties.inc"
 } // unnamed namespace
 
-Sema::Sema(llvm::BumpPtrAllocator &Allocator, const SourceManager &SourceMgr,
+Sema::Sema(llvm37::BumpPtrAllocator &Allocator, const SourceManager &SourceMgr,
            DiagnosticsEngine &Diags, CommandTraits &Traits,
            const Preprocessor *PP) :
     Allocator(Allocator), SourceMgr(SourceMgr), Diags(Diags), Traits(Traits),
@@ -218,7 +218,7 @@ void Sema::checkContainerDecl(const BlockCommandComment *Comment) {
 /// \brief Turn a string into the corresponding PassDirection or -1 if it's not
 /// valid.
 static int getParamPassDirection(StringRef Arg) {
-  return llvm::StringSwitch<int>(Arg)
+  return llvm37::StringSwitch<int>(Arg)
       .Case("[in]", ParamCommandComment::In)
       .Case("[out]", ParamCommandComment::Out)
       .Cases("[in,out]", "[out,in]", ParamCommandComment::InOut)
@@ -269,7 +269,7 @@ void Sema::actOnParamCommandParamNameArg(ParamCommandComment *Command,
   Argument *A = new (Allocator) Argument(SourceRange(ArgLocBegin,
                                                      ArgLocEnd),
                                          Arg);
-  Command->setArgs(llvm::makeArrayRef(A, 1));
+  Command->setArgs(llvm37::makeArrayRef(A, 1));
 }
 
 void Sema::actOnParamCommandFinish(ParamCommandComment *Command,
@@ -307,7 +307,7 @@ void Sema::actOnTParamCommandParamNameArg(TParamCommandComment *Command,
   Argument *A = new (Allocator) Argument(SourceRange(ArgLocBegin,
                                                      ArgLocEnd),
                                          Arg);
-  Command->setArgs(llvm::makeArrayRef(A, 1));
+  Command->setArgs(llvm37::makeArrayRef(A, 1));
 
   if (!isTemplateOrSpecialization()) {
     // We already warned that this \\tparam is not attached to a template decl.
@@ -318,7 +318,7 @@ void Sema::actOnTParamCommandParamNameArg(TParamCommandComment *Command,
       ThisDeclInfo->TemplateParameters;
   SmallVector<unsigned, 2> Position;
   if (resolveTParamReference(Arg, TemplateParameters, &Position)) {
-    Command->setPosition(copyArray(llvm::makeArrayRef(Position)));
+    Command->setPosition(copyArray(llvm37::makeArrayRef(Position)));
     TParamCommandComment *&PrevCommand = TemplateParameterDocs[Arg];
     if (PrevCommand) {
       SourceRange ArgRange(ArgLocBegin, ArgLocEnd);
@@ -393,7 +393,7 @@ InlineCommandComment *Sema::actOnInlineCommand(SourceLocation CommandLocBegin,
                                   CommandLocEnd,
                                   CommandID,
                                   getInlineCommandRenderKind(CommandName),
-                                  llvm::makeArrayRef(A, 1));
+                                  llvm37::makeArrayRef(A, 1));
 }
 
 InlineContentComment *Sema::actOnUnknownCommand(SourceLocation LocBegin,
@@ -1086,7 +1086,7 @@ InlineCommandComment::RenderKind
 Sema::getInlineCommandRenderKind(StringRef Name) const {
   assert(Traits.getCommandInfo(Name)->IsInlineCommand);
 
-  return llvm::StringSwitch<InlineCommandComment::RenderKind>(Name)
+  return llvm37::StringSwitch<InlineCommandComment::RenderKind>(Name)
       .Case("b", InlineCommandComment::RenderBold)
       .Cases("c", "p", InlineCommandComment::RenderMonospaced)
       .Cases("a", "e", "em", InlineCommandComment::RenderEmphasized)

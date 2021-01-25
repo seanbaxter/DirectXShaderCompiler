@@ -7,18 +7,18 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_TOOLS_LLVMPDBDUMP_CLASSDEFINITIONDUMPER_H
-#define LLVM_TOOLS_LLVMPDBDUMP_CLASSDEFINITIONDUMPER_H
+#ifndef LLVM37_TOOLS_LLVMPDBDUMP_CLASSDEFINITIONDUMPER_H
+#define LLVM37_TOOLS_LLVMPDBDUMP_CLASSDEFINITIONDUMPER_H
 
-#include "llvm/DebugInfo/PDB/PDBSymDumper.h"
-#include "llvm/DebugInfo/PDB/PDBSymbolFunc.h"
-#include "llvm/DebugInfo/PDB/PDBSymbolData.h"
+#include "llvm37/DebugInfo/PDB/PDBSymDumper.h"
+#include "llvm37/DebugInfo/PDB/PDBSymbolFunc.h"
+#include "llvm37/DebugInfo/PDB/PDBSymbolData.h"
 
 #include <list>
 #include <memory>
 #include <unordered_map>
 
-namespace llvm {
+namespace llvm37 {
 
 class LinePrinter;
 

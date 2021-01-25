@@ -13,21 +13,21 @@
 //===----------------------------------------------------------------------===//
 
 #include "MIRPrinter.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/CodeGen/MachineFunction.h"
-#include "llvm/CodeGen/MachineFrameInfo.h"
-#include "llvm/CodeGen/MachineRegisterInfo.h"
-#include "llvm/CodeGen/MIRYamlMapping.h"
-#include "llvm/IR/BasicBlock.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/ModuleSlotTracker.h"
-#include "llvm/Support/MemoryBuffer.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Support/YAMLTraits.h"
-#include "llvm/Target/TargetInstrInfo.h"
-#include "llvm/Target/TargetSubtargetInfo.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/CodeGen/MachineFunction.h"
+#include "llvm37/CodeGen/MachineFrameInfo.h"
+#include "llvm37/CodeGen/MachineRegisterInfo.h"
+#include "llvm37/CodeGen/MIRYamlMapping.h"
+#include "llvm37/IR/BasicBlock.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/ModuleSlotTracker.h"
+#include "llvm37/Support/MemoryBuffer.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Support/YAMLTraits.h"
+#include "llvm37/Target/TargetInstrInfo.h"
+#include "llvm37/Target/TargetSubtargetInfo.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 namespace {
 
@@ -73,7 +73,7 @@ public:
 
 } // end anonymous namespace
 
-namespace llvm {
+namespace llvm37 {
 namespace yaml {
 
 /// This struct serializes the LLVM IR module.
@@ -88,7 +88,7 @@ template <> struct BlockScalarTraits<Module> {
 };
 
 } // end namespace yaml
-} // end namespace llvm
+} // end namespace llvm37
 
 static void printReg(unsigned Reg, raw_ostream &OS,
                      const TargetRegisterInfo *TRI) {
@@ -341,12 +341,12 @@ void MIPrinter::print(const MachineOperand &Op, const TargetRegisterInfo *TRI) {
   }
 }
 
-void llvm::printMIR(raw_ostream &OS, const Module &M) {
+void llvm37::printMIR(raw_ostream &OS, const Module &M) {
   yaml::Output Out(OS);
   Out << const_cast<Module &>(M);
 }
 
-void llvm::printMIR(raw_ostream &OS, const MachineFunction &MF) {
+void llvm37::printMIR(raw_ostream &OS, const MachineFunction &MF) {
   MIRPrinter Printer(OS);
   Printer.print(MF);
 }

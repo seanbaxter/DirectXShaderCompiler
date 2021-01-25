@@ -12,20 +12,20 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Transforms/Instrumentation.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/Analysis/MemoryBuiltins.h"
-#include "llvm/Analysis/TargetFolder.h"
-#include "llvm/Analysis/TargetLibraryInfo.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/IRBuilder.h"
-#include "llvm/IR/InstIterator.h"
-#include "llvm/IR/Intrinsics.h"
-#include "llvm/Pass.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/raw_ostream.h"
-using namespace llvm;
+#include "llvm37/Transforms/Instrumentation.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/Analysis/MemoryBuiltins.h"
+#include "llvm37/Analysis/TargetFolder.h"
+#include "llvm37/Analysis/TargetLibraryInfo.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/IR/IRBuilder.h"
+#include "llvm37/IR/InstIterator.h"
+#include "llvm37/IR/Intrinsics.h"
+#include "llvm37/Pass.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/raw_ostream.h"
+using namespace llvm37;
 
 #define DEBUG_TYPE "bounds-checking"
 
@@ -81,7 +81,7 @@ BasicBlock *BoundsChecking::getTrapBB() {
   TrapBB = BasicBlock::Create(Fn->getContext(), "trap", Fn);
   Builder->SetInsertPoint(TrapBB);
 
-  llvm::Value *F = Intrinsic::getDeclaration(Fn->getParent(), Intrinsic::trap);
+  llvm37::Value *F = Intrinsic::getDeclaration(Fn->getParent(), Intrinsic::trap);
   CallInst *TrapCall = Builder->CreateCall(F, {});
   TrapCall->setDoesNotReturn();
   TrapCall->setDoesNotThrow();
@@ -208,6 +208,6 @@ bool BoundsChecking::runOnFunction(Function &F) {
   return MadeChange;
 }
 
-FunctionPass *llvm::createBoundsCheckingPass() {
+FunctionPass *llvm37::createBoundsCheckingPass() {
   return new BoundsChecking();
 }

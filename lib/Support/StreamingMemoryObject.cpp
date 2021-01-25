@@ -7,11 +7,11 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Support/StreamingMemoryObject.h"
+#include "llvm37/Support/StreamingMemoryObject.h"
 #include <cassert>
 #include <cstddef>
 #include <cstring>
-using namespace llvm;
+using namespace llvm37;
 
 namespace {
 
@@ -68,7 +68,7 @@ const uint8_t *RawMemoryObject::getPointer(uint64_t address,
 }
 } // anonymous namespace
 
-namespace llvm {
+namespace llvm37 {
 // If the bitcode has a header, then its size is known, and we don't have to
 // block until we actually want to read it.
 bool StreamingMemoryObject::isValidAddress(uint64_t address) const {

@@ -11,8 +11,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_AST_AST_H
-#define LLVM_CLANG_AST_AST_H
+#ifndef LLVM37_CLANG_AST_AST_H
+#define LLVM37_CLANG_AST_AST_H
 
 // This header exports all AST interfaces.
 #include "clang/AST/ASTContext.h"

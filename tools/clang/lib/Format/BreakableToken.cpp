@@ -16,8 +16,8 @@
 #include "BreakableToken.h"
 #include "clang/Basic/CharInfo.h"
 #include "clang/Format/Format.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/Support/Debug.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/Support/Debug.h"
 #include <algorithm>
 
 #define DEBUG_TYPE "format-token-breaker"
@@ -315,9 +315,9 @@ BreakableBlockComment::BreakableBlockComment(
   }
   IndentAtLineBreak = std::max<unsigned>(IndentAtLineBreak, Decoration.size());
   DEBUG({
-    llvm::dbgs() << "IndentAtLineBreak " << IndentAtLineBreak << "\n";
+    llvm37::dbgs() << "IndentAtLineBreak " << IndentAtLineBreak << "\n";
     for (size_t i = 0; i < Lines.size(); ++i) {
-      llvm::dbgs() << i << " |" << Lines[i] << "| " << LeadingWhitespace[i]
+      llvm37::dbgs() << i << " |" << Lines[i] << "| " << LeadingWhitespace[i]
                    << "\n";
     }
   });

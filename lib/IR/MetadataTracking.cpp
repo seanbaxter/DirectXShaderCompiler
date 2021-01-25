@@ -11,10 +11,10 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/IR/MetadataTracking.h"
-#include "llvm/IR/Metadata.h"
+#include "llvm37/IR/MetadataTracking.h"
+#include "llvm37/IR/Metadata.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 ReplaceableMetadataImpl *ReplaceableMetadataImpl::get(Metadata &MD) {
   if (auto *N = dyn_cast<MDNode>(&MD))

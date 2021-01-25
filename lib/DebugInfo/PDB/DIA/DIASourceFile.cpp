@@ -7,12 +7,12 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/DebugInfo/PDB/DIA/DIAEnumSymbols.h"
-#include "llvm/DebugInfo/PDB/DIA/DIASession.h"
-#include "llvm/DebugInfo/PDB/DIA/DIASourceFile.h"
-#include "llvm/Support/ConvertUTF.h"
+#include "llvm37/DebugInfo/PDB/DIA/DIAEnumSymbols.h"
+#include "llvm37/DebugInfo/PDB/DIA/DIASession.h"
+#include "llvm37/DebugInfo/PDB/DIA/DIASourceFile.h"
+#include "llvm37/Support/ConvertUTF.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 DIASourceFile::DIASourceFile(const DIASession &PDBSession,
                              CComPtr<IDiaSourceFile> DiaSourceFile)
@@ -25,9 +25,9 @@ std::string DIASourceFile::getFileName() const {
     return std::string();
 
   std::string FileName8;
-  llvm::ArrayRef<char> FileNameBytes(reinterpret_cast<char *>(FileName16.m_str),
+  llvm37::ArrayRef<char> FileNameBytes(reinterpret_cast<char *>(FileName16.m_str),
                                      FileName16.ByteLength());
-  llvm::convertUTF16ToUTF8String(FileNameBytes, FileName8);
+  llvm37::convertUTF16ToUTF8String(FileNameBytes, FileName8);
   return FileName8;
 }
 

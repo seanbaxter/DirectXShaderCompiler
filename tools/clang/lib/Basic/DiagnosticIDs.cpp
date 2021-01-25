@@ -15,9 +15,9 @@
 #include "clang/Basic/AllDiagnostics.h"
 #include "clang/Basic/DiagnosticCategories.h"
 #include "clang/Basic/SourceManager.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/Support/ErrorHandling.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/Support/ErrorHandling.h"
 #include <map>
 using namespace clang;
 
@@ -91,7 +91,7 @@ static const StaticDiagInfoRec StaticDiagInfo[] = {
 #undef DIAG
 };
 
-static const unsigned StaticDiagInfoSize = _countof(StaticDiagInfo); // HLSL Change - SAL doesn't understand llvm::array_lengthof(StaticDiagInfo);
+static const unsigned StaticDiagInfoSize = _countof(StaticDiagInfo); // HLSL Change - SAL doesn't understand llvm37::array_lengthof(StaticDiagInfo);
 
 /// GetDiagInfo - Return the StaticDiagInfoRec entry for the specified DiagID,
 /// or null if the ID is invalid.
@@ -220,7 +220,7 @@ static const StaticDiagCategoryRec CategoryNameTable[] = {
 
 /// getNumberOfCategories - Return the number of categories
 unsigned DiagnosticIDs::getNumberOfCategories() {
-  return llvm::array_lengthof(CategoryNameTable) - 1;
+  return llvm37::array_lengthof(CategoryNameTable) - 1;
 }
 
 /// getCategoryNameFromID - Given a category ID, return the name of the
@@ -510,7 +510,7 @@ static const WarningOption OptionTable[] = {
 #include "clang/Basic/DiagnosticGroups.inc"
 #undef GET_DIAG_TABLE
 };
-static const size_t OptionTableSize = llvm::array_lengthof(OptionTable);
+static const size_t OptionTableSize = llvm37::array_lengthof(OptionTable);
 
 static bool WarningOptionCompare(const WarningOption &LHS, StringRef RHS) {
   return LHS.getName() < RHS;
@@ -589,7 +589,7 @@ StringRef DiagnosticIDs::getNearestOption(diag::Flavor Flavor,
       continue;
 
     // Don't suggest groups that are not of this kind.
-    llvm::SmallVector<diag::kind, 8> Diags;
+    llvm37::SmallVector<diag::kind, 8> Diags;
     if (::getDiagnosticsInGroup(Flavor, i, Diags) || Diags.empty())
       continue;
 
@@ -735,7 +735,7 @@ bool DiagnosticIDs::isARCDiagnostic(unsigned DiagID) {
 
 // HLSL Change Starts
 static_assert(std::is_nothrow_constructible<clang::DiagnosticIDs::Level>::value == 1, "enum cannot nothrow");
-static_assert(std::is_nothrow_constructible<std::string, llvm::StringRef>::value == 0, "string from StringRef can throw");
-static_assert(std::is_nothrow_constructible<std::string, llvm::StringRef &>::value == 0, "string from StringRef & can throw");
+static_assert(std::is_nothrow_constructible<std::string, llvm37::StringRef>::value == 0, "string from StringRef can throw");
+static_assert(std::is_nothrow_constructible<std::string, llvm37::StringRef &>::value == 0, "string from StringRef & can throw");
 static_assert(std::is_nothrow_constructible<std::pair<clang::DiagnosticIDs::Level, std::string>, std::pair<clang::DiagnosticIDs::Level, std::string>&>::value == 0, "pair can throw");
 // HLSL Change Starts Ends

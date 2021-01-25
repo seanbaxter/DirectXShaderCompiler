@@ -226,13 +226,13 @@ there to drive a number of code-generation tasks, which can be found in other
 HLSL Modules
 ============
 
-llvm::Module is the type that represents a shader program. It includes
+llvm37::Module is the type that represents a shader program. It includes
 metadata nodes to provide details around the ABI, flags, etc. However,
 manipulation of all this information in terms of metadata is not very
 efficient or convenient.
 
 As part of the work with HLSL, we introduce two modules that are attached
-in-memory to an llvm::Module: a high-level HLModule, and a low-level
+in-memory to an llvm37::Module: a high-level HLModule, and a low-level
 DxilModule. The high-level module is used in the early passes to deal with
 HLSL-as-a-language concepts, such as intrinsics, matrices and vectors; the
 low-level module is used to deal with concepts as they exist in the DXIL

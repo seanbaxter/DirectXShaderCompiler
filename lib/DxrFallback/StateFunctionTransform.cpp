@@ -1,18 +1,18 @@
 #include "StateFunctionTransform.h"
 
-#include "llvm/IR/CFG.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/InstIterator.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/LegacyPassManager.h"
-#include "llvm/IR/PassManager.h"
-#include "llvm/IR/ValueMap.h"
-#include "llvm/IR/Verifier.h"
-#include "llvm/Support/FileSystem.h"
-#include "llvm/Transforms/Scalar.h"
-#include "llvm/Transforms/Utils/BasicBlockUtils.h"
-#include "llvm/Transforms/Utils/Cloning.h"
-#include "llvm/Transforms/Utils/Local.h"
+#include "llvm37/IR/CFG.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/InstIterator.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/LegacyPassManager.h"
+#include "llvm37/IR/PassManager.h"
+#include "llvm37/IR/ValueMap.h"
+#include "llvm37/IR/Verifier.h"
+#include "llvm37/Support/FileSystem.h"
+#include "llvm37/Transforms/Scalar.h"
+#include "llvm37/Transforms/Utils/BasicBlockUtils.h"
+#include "llvm37/Transforms/Utils/Cloning.h"
+#include "llvm37/Transforms/Utils/Local.h"
 
 #include "FunctionBuilder.h"
 #include "LiveValues.h"
@@ -22,7 +22,7 @@
 #define DBGS dbgs
 //#define DBGS errs
 
-using namespace llvm;
+using namespace llvm37;
 
 static const char* CALL_INDIRECT_NAME = "\x1?Fallback_CallIndirect@@YAXH@Z";
 static const char* SET_PENDING_ATTR_PREFIX = "\x1?Fallback_SetPendingAttr@@";
@@ -139,13 +139,13 @@ static uint64_t align(uint64_t offset, Instruction* inst, DataLayout& DL)
 
 
 template <class T>  // T can be Value* or Instruction*
-T createCastForStack(T ptr, llvm::Type* targetPtrElemType, llvm::Instruction* insertBefore)
+T createCastForStack(T ptr, llvm37::Type* targetPtrElemType, llvm37::Instruction* insertBefore)
 {
-  llvm::PointerType* requiredType = llvm::PointerType::get(targetPtrElemType, ptr->getType()->getPointerAddressSpace());
+  llvm37::PointerType* requiredType = llvm37::PointerType::get(targetPtrElemType, ptr->getType()->getPointerAddressSpace());
   if (ptr->getType() == requiredType)
     return ptr;
 
-  return new llvm::BitCastInst(ptr, requiredType, ptr->getName(), insertBefore);
+  return new llvm37::BitCastInst(ptr, requiredType, ptr->getName(), insertBefore);
 }
 
 
@@ -459,7 +459,7 @@ static int store(Value* val, Function* stackIntPtrFunc, Value* runtimeDataArg, V
 }
 
 
-static Value* load(llvm::Function* m_stackIntPtrFunc, Value* runtimeDataArg, Value* offset, Value* idx, const std::string& name, Type* ty, Instruction* insertBefore)
+static Value* load(llvm37::Function* m_stackIntPtrFunc, Value* runtimeDataArg, Value* offset, Value* idx, const std::string& name, Type* ty, Instruction* insertBefore)
 {
   if (VectorType* VTy = dyn_cast<VectorType>(ty))
   {
@@ -651,7 +651,7 @@ void StateFunctionTransform::setParameterInfo(const std::vector<ParameterSemanti
   m_useCommittedAttr = useCommittedAttr;
 }
 
-void StateFunctionTransform::setResourceGlobals(const std::set<llvm::Value*>& resources)
+void StateFunctionTransform::setResourceGlobals(const std::set<llvm37::Value*>& resources)
 {
   m_resources = &resources;
 }
@@ -691,7 +691,7 @@ void StateFunctionTransform::run(std::vector<Function*>& stateFunctions, _Out_ u
   printFunctions(stateFunctions, "AfterLowerStackFuncs");
 }
 
-void StateFunctionTransform::finalizeStateIds(llvm::Module* mod, const std::vector<int>& candidateFuncEntryStateIds)
+void StateFunctionTransform::finalizeStateIds(llvm37::Module* mod, const std::vector<int>& candidateFuncEntryStateIds)
 {
   LLVMContext& context = mod->getContext();
   Function* func = mod->getFunction("dummyStateId");
@@ -1681,7 +1681,7 @@ BasicBlockVector StateFunctionTransform::replaceCallSites()
   return substateEntryPoints;
 }
 
-llvm::Value* StateFunctionTransform::getDummyStateId(int functionIdx, int substate, llvm::Instruction* insertBefore)
+llvm37::Value* StateFunctionTransform::getDummyStateId(int functionIdx, int substate, llvm37::Instruction* insertBefore)
 {
   if (!m_dummyStateIdFunc)
   {

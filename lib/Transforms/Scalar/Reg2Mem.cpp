@@ -16,18 +16,18 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Transforms/Scalar.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/IR/BasicBlock.h"
-#include "llvm/IR/CFG.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Module.h"
-#include "llvm/Pass.h"
-#include "llvm/Transforms/Utils/Local.h"
+#include "llvm37/Transforms/Scalar.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/IR/BasicBlock.h"
+#include "llvm37/IR/CFG.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/Pass.h"
+#include "llvm37/Transforms/Utils/Local.h"
 #include <list>
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "reg2mem"
 
@@ -127,7 +127,7 @@ bool RegToMem::runOnFunction(Function &F) {
 
 
 // createDemoteRegisterToMemory - Provide an entry point to create this pass.
-char &llvm::DemoteRegisterToMemoryID = RegToMem::ID;
-FunctionPass *llvm::createDemoteRegisterToMemoryPass() {
+char &llvm37::DemoteRegisterToMemoryID = RegToMem::ID;
+FunctionPass *llvm37::createDemoteRegisterToMemoryPass() {
   return new RegToMem();
 }

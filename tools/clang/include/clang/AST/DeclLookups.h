@@ -11,8 +11,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_AST_DECLLOOKUPS_H
-#define LLVM_CLANG_AST_DECLLOOKUPS_H
+#ifndef LLVM37_CLANG_AST_DECLLOOKUPS_H
+#define LLVM37_CLANG_AST_DECLLOOKUPS_H
 
 #include "clang/AST/ASTContext.h"
 #include "clang/AST/DeclBase.h"

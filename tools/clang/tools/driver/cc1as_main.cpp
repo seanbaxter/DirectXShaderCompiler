@@ -19,47 +19,47 @@
 #include "clang/Frontend/FrontendDiagnostic.h"
 #include "clang/Frontend/TextDiagnosticPrinter.h"
 #include "clang/Frontend/Utils.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/StringSwitch.h"
-#include "llvm/ADT/Triple.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/MC/MCAsmBackend.h"
-#include "llvm/MC/MCAsmInfo.h"
-#include "llvm/MC/MCCodeEmitter.h"
-#include "llvm/MC/MCContext.h"
-#include "llvm/MC/MCInstrInfo.h"
-#include "llvm/MC/MCObjectFileInfo.h"
-#include "llvm/MC/MCParser/MCAsmParser.h"
-#include "llvm/MC/MCRegisterInfo.h"
-#include "llvm/MC/MCStreamer.h"
-#include "llvm/MC/MCSubtargetInfo.h"
-#include "llvm/MC/MCTargetAsmParser.h"
-#include "llvm/MC/MCTargetOptions.h"
-#include "llvm/Option/Arg.h"
-#include "llvm/Option/ArgList.h"
-#include "llvm/Option/OptTable.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/FileSystem.h"
-#include "llvm/Support/FormattedStream.h"
-#include "llvm/Support/Host.h"
-#include "llvm/Support/ManagedStatic.h"
-#include "llvm/Support/MemoryBuffer.h"
-#include "llvm/Support/Path.h"
-#include "llvm/Support/PrettyStackTrace.h"
-#include "llvm/Support/Signals.h"
-#include "llvm/Support/SourceMgr.h"
-#include "llvm/Support/TargetRegistry.h"
-#include "llvm/Support/TargetSelect.h"
-#include "llvm/Support/Timer.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/StringSwitch.h"
+#include "llvm37/ADT/Triple.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/MC/MCAsmBackend.h"
+#include "llvm37/MC/MCAsmInfo.h"
+#include "llvm37/MC/MCCodeEmitter.h"
+#include "llvm37/MC/MCContext.h"
+#include "llvm37/MC/MCInstrInfo.h"
+#include "llvm37/MC/MCObjectFileInfo.h"
+#include "llvm37/MC/MCParser/MCAsmParser.h"
+#include "llvm37/MC/MCRegisterInfo.h"
+#include "llvm37/MC/MCStreamer.h"
+#include "llvm37/MC/MCSubtargetInfo.h"
+#include "llvm37/MC/MCTargetAsmParser.h"
+#include "llvm37/MC/MCTargetOptions.h"
+#include "llvm37/Option/Arg.h"
+#include "llvm37/Option/ArgList.h"
+#include "llvm37/Option/OptTable.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/FileSystem.h"
+#include "llvm37/Support/FormattedStream.h"
+#include "llvm37/Support/Host.h"
+#include "llvm37/Support/ManagedStatic.h"
+#include "llvm37/Support/MemoryBuffer.h"
+#include "llvm37/Support/Path.h"
+#include "llvm37/Support/PrettyStackTrace.h"
+#include "llvm37/Support/Signals.h"
+#include "llvm37/Support/SourceMgr.h"
+#include "llvm37/Support/TargetRegistry.h"
+#include "llvm37/Support/TargetSelect.h"
+#include "llvm37/Support/Timer.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <memory>
 #include <system_error>
 using namespace clang;
 using namespace clang::driver;
 using namespace clang::driver::options;
-using namespace llvm;
-using namespace llvm::opt;
+using namespace llvm37;
+using namespace llvm37::opt;
 
 namespace {
 
@@ -180,13 +180,13 @@ bool AssemblerInvocation::CreateFromArgs(AssemblerInvocation &Opts,
   // Construct the invocation.
 
   // Target Options
-  Opts.Triple = llvm::Triple::normalize(Args.getLastArgValue(OPT_triple));
+  Opts.Triple = llvm37::Triple::normalize(Args.getLastArgValue(OPT_triple));
   Opts.CPU = Args.getLastArgValue(OPT_target_cpu);
   Opts.Features = Args.getAllArgValues(OPT_target_feature);
 
   // Use the default target triple if unspecified.
   if (Opts.Triple.empty())
-    Opts.Triple = llvm::sys::getDefaultTargetTriple();
+    Opts.Triple = llvm37::sys::getDefaultTargetTriple();
 
   // Language Options
   Opts.IncludePaths = Args.getAllArgValues(OPT_I);
@@ -264,7 +264,7 @@ getOutputStream(AssemblerInvocation &Opts, DiagnosticsEngine &Diags,
     sys::RemoveFileOnSignal(Opts.OutputPath);
 
   std::error_code EC;
-  auto Out = llvm::make_unique<raw_fd_ostream>(
+  auto Out = llvm37::make_unique<raw_fd_ostream>(
       Opts.OutputPath, EC, (Binary ? sys::fs::F_None : sys::fs::F_Text));
   if (EC) {
     Diags.Report(diag::err_fe_unable_to_open_output) << Opts.OutputPath
@@ -358,14 +358,14 @@ static bool ExecuteAssembler(AssemblerInvocation &Opts,
   // FIXME: There is a bit of code duplication with addPassesToEmitFile.
   if (Opts.OutputType == AssemblerInvocation::FT_Asm) {
     MCInstPrinter *IP = TheTarget->createMCInstPrinter(
-        llvm::Triple(Opts.Triple), Opts.OutputAsmVariant, *MAI, *MCII, *MRI);
+        llvm37::Triple(Opts.Triple), Opts.OutputAsmVariant, *MAI, *MCII, *MRI);
     MCCodeEmitter *CE = nullptr;
     MCAsmBackend *MAB = nullptr;
     if (Opts.ShowEncoding) {
       CE = TheTarget->createMCCodeEmitter(*MCII, *MRI, Ctx);
       MAB = TheTarget->createMCAsmBackend(*MRI, Opts.Triple, Opts.CPU);
     }
-    auto FOut = llvm::make_unique<formatted_raw_ostream>(*Out);
+    auto FOut = llvm37::make_unique<formatted_raw_ostream>(*Out);
     Str.reset(TheTarget->createAsmStreamer(
         Ctx, std::move(FOut), /*asmverbose*/ true,
         /*useDwarfDirectory*/ true, IP, CE, MAB, Opts.ShowInst));
@@ -461,7 +461,7 @@ int cc1as_main(ArrayRef<const char *> Argv, const char *Argv0, void *MainAddr) {
 
   if (Asm.ShowHelp) {
     std::unique_ptr<OptTable> Opts(driver::createDriverOptTable());
-    Opts->PrintHelp(llvm::outs(), "clang -cc1as", "Clang Integrated Assembler",
+    Opts->PrintHelp(llvm37::outs(), "clang -cc1as", "Clang Integrated Assembler",
                     /*Include=*/driver::options::CC1AsOption, /*Exclude=*/0);
     return 0;
   }
@@ -470,7 +470,7 @@ int cc1as_main(ArrayRef<const char *> Argv, const char *Argv0, void *MainAddr) {
   //
   // FIXME: Use a better -version message?
   if (Asm.ShowVersion) {
-    llvm::cl::PrintVersionMessage();
+    llvm37::cl::PrintVersionMessage();
     return 0;
   }
 
@@ -484,7 +484,7 @@ int cc1as_main(ArrayRef<const char *> Argv, const char *Argv0, void *MainAddr) {
     for (unsigned i = 0; i != NumArgs; ++i)
       Args[i + 1] = Asm.LLVMArgs[i].c_str();
     Args[NumArgs + 1] = nullptr;
-    llvm::cl::ParseCommandLineOptions(NumArgs + 1, Args);
+    llvm37::cl::ParseCommandLineOptions(NumArgs + 1, Args);
   }
 
   // Execute the invocation, unless there were parsing errors.

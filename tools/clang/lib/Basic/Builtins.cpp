@@ -15,8 +15,8 @@
 #include "clang/Basic/IdentifierTable.h"
 #include "clang/Basic/LangOptions.h"
 #include "clang/Basic/TargetInfo.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/ADT/StringRef.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/ADT/StringRef.h"
 using namespace clang;
 
 static const Builtin::Info BuiltinInfo[] = {
@@ -52,7 +52,7 @@ bool Builtin::Context::BuiltinIsSupported(const Builtin::Info &BuiltinInfo,
                              strchr(BuiltinInfo.Attributes, 'f');
   bool MathBuiltinsUnsupported =
     LangOpts.NoMathBuiltin && BuiltinInfo.HeaderName &&      
-    llvm::StringRef(BuiltinInfo.HeaderName).equals("math.h");
+    llvm37::StringRef(BuiltinInfo.HeaderName).equals("math.h");
   bool GnuModeUnsupported = !LangOpts.GNUMode &&
                             (BuiltinInfo.builtin_lang & GNU_LANG);
   bool MSModeUnsupported = !LangOpts.MicrosoftExt &&

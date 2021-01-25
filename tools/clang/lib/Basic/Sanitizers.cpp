@@ -13,14 +13,14 @@
 
 #include "clang/Basic/Sanitizers.h"
 #include "clang/Basic/LLVM.h"
-#include "llvm/ADT/StringRef.h"
-#include "llvm/ADT/StringSwitch.h"
+#include "llvm37/ADT/StringRef.h"
+#include "llvm37/ADT/StringSwitch.h"
 //                                                                           //
 ///////////////////////////////////////////////////////////////////////////////
 using namespace clang;
 
 SanitizerMask clang::parseSanitizerValue(StringRef Value, bool AllowGroups) {
-  SanitizerMask ParsedKind = llvm::StringSwitch<SanitizerMask>(Value)
+  SanitizerMask ParsedKind = llvm37::StringSwitch<SanitizerMask>(Value)
 #define SANITIZER(NAME, ID) .Case(NAME, SanitizerKind::ID)
 #define SANITIZER_GROUP(NAME, ID, ALIAS)                                       \
   .Case(NAME, AllowGroups ? SanitizerKind::ID##Group : 0)

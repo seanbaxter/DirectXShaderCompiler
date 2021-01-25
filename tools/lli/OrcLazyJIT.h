@@ -12,20 +12,20 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_TOOLS_LLI_ORCLAZYJIT_H
-#define LLVM_TOOLS_LLI_ORCLAZYJIT_H
+#ifndef LLVM37_TOOLS_LLI_ORCLAZYJIT_H
+#define LLVM37_TOOLS_LLI_ORCLAZYJIT_H
 
-#include "llvm/ADT/Triple.h"
-#include "llvm/ExecutionEngine/Orc/CompileOnDemandLayer.h"
-#include "llvm/ExecutionEngine/Orc/CompileUtils.h"
-#include "llvm/ExecutionEngine/Orc/ExecutionUtils.h"
-#include "llvm/ExecutionEngine/Orc/IRCompileLayer.h"
-#include "llvm/ExecutionEngine/Orc/IRTransformLayer.h"
-#include "llvm/ExecutionEngine/Orc/ObjectLinkingLayer.h"
-#include "llvm/ExecutionEngine/RTDyldMemoryManager.h"
-#include "llvm/IR/LLVMContext.h"
+#include "llvm37/ADT/Triple.h"
+#include "llvm37/ExecutionEngine/Orc/CompileOnDemandLayer.h"
+#include "llvm37/ExecutionEngine/Orc/CompileUtils.h"
+#include "llvm37/ExecutionEngine/Orc/ExecutionUtils.h"
+#include "llvm37/ExecutionEngine/Orc/IRCompileLayer.h"
+#include "llvm37/ExecutionEngine/Orc/IRTransformLayer.h"
+#include "llvm37/ExecutionEngine/Orc/ObjectLinkingLayer.h"
+#include "llvm37/ExecutionEngine/RTDyldMemoryManager.h"
+#include "llvm37/IR/LLVMContext.h"
 
-namespace llvm {
+namespace llvm37 {
 
 class OrcLazyJIT {
 public:
@@ -158,6 +158,6 @@ private:
 
 int runOrcLazyJIT(std::unique_ptr<Module> M, int ArgC, char* ArgV[]);
 
-} // end namespace llvm
+} // end namespace llvm37
 
 #endif

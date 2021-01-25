@@ -12,8 +12,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_SEMA_SEMAINTERNAL_H
-#define LLVM_CLANG_SEMA_SEMAINTERNAL_H
+#ifndef LLVM37_CLANG_SEMA_SEMAINTERNAL_H
+#define LLVM37_CLANG_SEMA_SEMAINTERNAL_H
 
 #include "clang/AST/ASTContext.h"
 #include "clang/Sema/Lookup.h"
@@ -101,7 +101,7 @@ inline InheritableAttr *getDLLAttr(Decl *D) {
 
 class TypoCorrectionConsumer : public VisibleDeclConsumer {
   typedef SmallVector<TypoCorrection, 1> TypoResultList;
-  typedef llvm::StringMap<TypoResultList> TypoResultsMap;
+  typedef llvm37::StringMap<TypoResultList> TypoResultsMap;
   typedef std::map<unsigned, TypoResultsMap> TypoEditDistanceMap;
 
 public:
@@ -114,7 +114,7 @@ public:
                          bool EnteringContext)
       : Typo(TypoName.getName().getAsIdentifierInfo()), CurrentTCIndex(0),
         SavedTCIndex(0), SemaRef(SemaRef), S(S),
-        SS(SS ? llvm::make_unique<CXXScopeSpec>(*SS) : nullptr),
+        SS(SS ? llvm37::make_unique<CXXScopeSpec>(*SS) : nullptr),
         CorrectionValidator(std::move(CCC)), MemberContext(MemberContext),
         Result(SemaRef, TypoName, LookupKind),
         Namespaces(SemaRef.Context, SemaRef.CurContext, SS),
@@ -158,7 +158,7 @@ public:
   /// implicitly adds all of the known classes in the current AST context to the
   /// to the consumer for correcting nested name specifiers.
   void
-  addNamespaces(const llvm::MapVector<NamespaceDecl *, bool> &KnownNamespaces);
+  addNamespaces(const llvm37::MapVector<NamespaceDecl *, bool> &KnownNamespaces);
 
   /// \brief Return the next typo correction that passes all internal filters
   /// and is deemed valid by the consumer's CorrectionCandidateCallback,
@@ -253,7 +253,7 @@ private:
 
     /// \brief Provides flat iteration over specifiers, sorted by distance.
     class iterator
-        : public llvm::iterator_facade_base<iterator, std::forward_iterator_tag,
+        : public llvm37::iterator_facade_base<iterator, std::forward_iterator_tag,
                                             SpecifierInfo> {
       /// Always points to the last element in the distance map.
       const std::map<unsigned, SpecifierInfoList>::iterator OuterBack;
@@ -329,12 +329,12 @@ private:
 
 inline Sema::TypoExprState::TypoExprState() {}
 
-inline Sema::TypoExprState::TypoExprState(TypoExprState &&other) LLVM_NOEXCEPT {
+inline Sema::TypoExprState::TypoExprState(TypoExprState &&other) LLVM37_NOEXCEPT {
   *this = std::move(other);
 }
 
 inline Sema::TypoExprState &Sema::TypoExprState::operator=(
-    Sema::TypoExprState &&other) LLVM_NOEXCEPT {
+    Sema::TypoExprState &&other) LLVM37_NOEXCEPT {
   Consumer = std::move(other.Consumer);
   DiagHandler = std::move(other.DiagHandler);
   RecoveryHandler = std::move(other.RecoveryHandler);

@@ -12,8 +12,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Analysis/IntervalIterator.h"
-using namespace llvm;
+#include "llvm37/Analysis/IntervalIterator.h"
+using namespace llvm37;
 
 char IntervalPartition::ID = 0;
 INITIALIZE_PASS(IntervalPartition, "intervals",

@@ -13,9 +13,9 @@
 
 #include "CoverageFilters.h"
 #include "CoverageSummaryInfo.h"
-#include "llvm/Support/Regex.h"
+#include "llvm37/Support/Regex.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 bool NameCoverageFilter::matches(const coverage::FunctionRecord &Function) {
   StringRef FuncName = Function.Name;
@@ -24,7 +24,7 @@ bool NameCoverageFilter::matches(const coverage::FunctionRecord &Function) {
 
 bool
 NameRegexCoverageFilter::matches(const coverage::FunctionRecord &Function) {
-  return llvm::Regex(Regex).match(Function.Name);
+  return llvm37::Regex(Regex).match(Function.Name);
 }
 
 bool RegionCoverageFilter::matches(const coverage::FunctionRecord &Function) {

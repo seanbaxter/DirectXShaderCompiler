@@ -32,16 +32,16 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/ADT/SmallPtrSet.h"
-#include "llvm/Analysis/AliasAnalysis.h"
-#include "llvm/Analysis/Passes.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Metadata.h"
-#include "llvm/IR/Module.h"
-#include "llvm/Pass.h"
-#include "llvm/Support/CommandLine.h"
-using namespace llvm;
+#include "llvm37/ADT/SmallPtrSet.h"
+#include "llvm37/Analysis/AliasAnalysis.h"
+#include "llvm37/Analysis/Passes.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/Metadata.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/Pass.h"
+#include "llvm37/Support/CommandLine.h"
+using namespace llvm37;
 
 // A handy option for disabling scoped no-alias functionality. The same effect
 // can also be achieved by stripping the associated metadata tags from IR, but
@@ -120,7 +120,7 @@ char ScopedNoAliasAA::ID = 0;
 INITIALIZE_AG_PASS(ScopedNoAliasAA, AliasAnalysis, "scoped-noalias",
                    "Scoped NoAlias Alias Analysis", false, true, false)
 
-ImmutablePass *llvm::createScopedNoAliasAAPass() {
+ImmutablePass *llvm37::createScopedNoAliasAAPass() {
   return new ScopedNoAliasAA();
 }
 

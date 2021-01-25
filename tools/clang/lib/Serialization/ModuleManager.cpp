@@ -17,12 +17,12 @@
 #include "clang/Lex/ModuleMap.h"
 #include "clang/Serialization/GlobalModuleIndex.h"
 #include "clang/Serialization/ModuleManager.h"
-#include "llvm/Support/MemoryBuffer.h"
-#include "llvm/Support/Path.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/Support/MemoryBuffer.h"
+#include "llvm37/Support/Path.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <system_error>
 #ifndef NDEBUG
-#include "llvm/Support/GraphWriter.h"
+#include "llvm37/Support/GraphWriter.h"
 #endif
 
 using namespace clang;
@@ -38,7 +38,7 @@ ModuleFile *ModuleManager::lookup(StringRef Name) {
 }
 
 ModuleFile *ModuleManager::lookup(const FileEntry *File) {
-  llvm::DenseMap<const FileEntry *, ModuleFile *>::iterator Known
+  llvm37::DenseMap<const FileEntry *, ModuleFile *>::iterator Known
     = Modules.find(File);
   if (Known == Modules.end())
     return nullptr;
@@ -46,7 +46,7 @@ ModuleFile *ModuleManager::lookup(const FileEntry *File) {
   return Known->second;
 }
 
-std::unique_ptr<llvm::MemoryBuffer>
+std::unique_ptr<llvm37::MemoryBuffer>
 ModuleManager::lookupBuffer(StringRef Name) {
   const FileEntry *Entry = FileMgr.getFile(Name, /*openFile=*/false,
                                            /*cacheFailure=*/false);
@@ -111,15 +111,15 @@ ModuleManager::addModule(StringRef FileName, ModuleKind Type,
     }
 
     // Load the contents of the module
-    if (std::unique_ptr<llvm::MemoryBuffer> Buffer = lookupBuffer(FileName)) {
+    if (std::unique_ptr<llvm37::MemoryBuffer> Buffer = lookupBuffer(FileName)) {
       // The buffer was already provided for us.
       New->Buffer = std::move(Buffer);
     } else {
       // Open the AST file.
-      llvm::ErrorOr<std::unique_ptr<llvm::MemoryBuffer>> Buf(
+      llvm37::ErrorOr<std::unique_ptr<llvm37::MemoryBuffer>> Buf(
           (std::error_code()));
       if (FileName == "-") {
-        Buf = llvm::MemoryBuffer::getSTDIN();
+        Buf = llvm37::MemoryBuffer::getSTDIN();
       } else {
         // Leave the FileEntry open so if it gets read again by another
         // ModuleManager it must be the same underlying file.
@@ -185,13 +185,13 @@ ModuleManager::addModule(StringRef FileName, ModuleKind Type,
 
 void ModuleManager::removeModules(
     ModuleIterator first, ModuleIterator last,
-    llvm::SmallPtrSetImpl<ModuleFile *> &LoadedSuccessfully,
+    llvm37::SmallPtrSetImpl<ModuleFile *> &LoadedSuccessfully,
     ModuleMap *modMap) {
   if (first == last)
     return;
 
   // Collect the set of module file pointers that we'll be removing.
-  llvm::SmallPtrSet<ModuleFile *, 4> victimSet(first, last);
+  llvm37::SmallPtrSet<ModuleFile *, 4> victimSet(first, last);
 
   auto IsVictim = [&](ModuleFile *MF) {
     return victimSet.count(MF);
@@ -229,7 +229,7 @@ void ModuleManager::removeModules(
 
 void
 ModuleManager::addInMemoryBuffer(StringRef FileName,
-                                 std::unique_ptr<llvm::MemoryBuffer> Buffer) {
+                                 std::unique_ptr<llvm37::MemoryBuffer> Buffer) {
 
   const FileEntry *Entry =
       FileMgr.getVirtualFile(FileName, Buffer->getBufferSize(), 0);
@@ -303,7 +303,7 @@ ModuleManager::~ModuleManager() {
 void
 ModuleManager::visit(bool (*Visitor)(ModuleFile &M, void *UserData),
                      void *UserData,
-                     llvm::SmallPtrSetImpl<ModuleFile *> *ModuleFilesHit) {
+                     llvm37::SmallPtrSetImpl<ModuleFile *> *ModuleFilesHit) {
   // If the visitation order vector is the wrong size, recompute the order.
   if (VisitOrder.size() != Chain.size()) {
     unsigned N = size();
@@ -315,7 +315,7 @@ ModuleManager::visit(bool (*Visitor)(ModuleFile &M, void *UserData),
     // to seed the queue.
     SmallVector<ModuleFile *, 4> Queue;
     Queue.reserve(N);
-    llvm::SmallVector<unsigned, 4> UnusedIncomingEdges;
+    llvm37::SmallVector<unsigned, 4> UnusedIncomingEdges;
     UnusedIncomingEdges.reserve(size());
     for (ModuleIterator M = begin(), MEnd = end(); M != MEnd; ++M) {
       if (unsigned Size = (*M)->ImportedBy.size())
@@ -335,7 +335,7 @@ ModuleManager::visit(bool (*Visitor)(ModuleFile &M, void *UserData),
 
       // For any module that this module depends on, push it on the
       // stack (if it hasn't already been marked as visited).
-      for (llvm::SetVector<ModuleFile *>::iterator
+      for (llvm37::SetVector<ModuleFile *>::iterator
              M = CurrentModule->Imports.begin(),
              MEnd = CurrentModule->Imports.end();
            M != MEnd; ++M) {
@@ -389,7 +389,7 @@ ModuleManager::visit(bool (*Visitor)(ModuleFile &M, void *UserData),
     do {
       // For any module that this module depends on, push it on the
       // stack (if it hasn't already been marked as visited).
-      for (llvm::SetVector<ModuleFile *>::iterator
+      for (llvm37::SetVector<ModuleFile *>::iterator
              M = NextModule->Imports.begin(),
              MEnd = NextModule->Imports.end();
            M != MEnd; ++M) {
@@ -412,7 +412,7 @@ ModuleManager::visit(bool (*Visitor)(ModuleFile &M, void *UserData),
 
 static void markVisitedDepthFirst(ModuleFile &M,
                                   SmallVectorImpl<bool> &Visited) {
-  for (llvm::SetVector<ModuleFile *>::iterator IM = M.Imports.begin(),
+  for (llvm37::SetVector<ModuleFile *>::iterator IM = M.Imports.begin(),
                                                IMEnd = M.Imports.end();
        IM != IMEnd; ++IM) {
     if (Visited[(*IM)->Index])
@@ -443,7 +443,7 @@ static bool visitDepthFirst(
   }
 
   // Visit children
-  for (llvm::SetVector<ModuleFile *>::iterator IM = M.Imports.begin(),
+  for (llvm37::SetVector<ModuleFile *>::iterator IM = M.Imports.begin(),
                                             IMEnd = M.Imports.end();
        IM != IMEnd; ++IM) {
     if (Visited[(*IM)->Index])
@@ -497,11 +497,11 @@ bool ModuleManager::lookupModuleFile(StringRef FileName,
 }
 
 #ifndef NDEBUG
-namespace llvm {
+namespace llvm37 {
   template<>
   struct GraphTraits<ModuleManager> {
     typedef ModuleFile NodeType;
-    typedef llvm::SetVector<ModuleFile *>::const_iterator ChildIteratorType;
+    typedef llvm37::SetVector<ModuleFile *>::const_iterator ChildIteratorType;
     typedef ModuleManager::ModuleConstIterator nodes_iterator;
     
     static ChildIteratorType child_begin(NodeType *Node) {
@@ -537,6 +537,6 @@ namespace llvm {
 }
 
 void ModuleManager::viewGraph() {
-  llvm::ViewGraph(*this, "Modules");
+  llvm37::ViewGraph(*this, "Modules");
 }
 #endif

@@ -14,23 +14,23 @@
 #include "llvm-c/TargetMachine.h"
 #include "llvm-c/Core.h"
 #include "llvm-c/Target.h"
-#include "llvm/Analysis/TargetTransformInfo.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/LegacyPassManager.h"
-#include "llvm/Support/CodeGen.h"
-#include "llvm/Support/FileSystem.h"
-#include "llvm/Support/FormattedStream.h"
-#include "llvm/Support/Host.h"
-#include "llvm/Support/TargetRegistry.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Target/TargetMachine.h"
-#include "llvm/Target/TargetSubtargetInfo.h"
+#include "llvm37/Analysis/TargetTransformInfo.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/LegacyPassManager.h"
+#include "llvm37/Support/CodeGen.h"
+#include "llvm37/Support/FileSystem.h"
+#include "llvm37/Support/FormattedStream.h"
+#include "llvm37/Support/Host.h"
+#include "llvm37/Support/TargetRegistry.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Target/TargetMachine.h"
+#include "llvm37/Target/TargetSubtargetInfo.h"
 #include <cassert>
 #include <cstdlib>
 #include <cstring>
 
-using namespace llvm;
+using namespace llvm37;
 
 inline TargetMachine *unwrap(LLVMTargetMachineRef P) {
   return reinterpret_cast<TargetMachine*>(P);

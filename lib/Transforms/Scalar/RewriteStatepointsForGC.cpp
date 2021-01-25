@@ -12,39 +12,39 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Pass.h"
-#include "llvm/Analysis/CFG.h"
-#include "llvm/Analysis/TargetTransformInfo.h"
-#include "llvm/ADT/SetOperations.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/ADT/DenseSet.h"
-#include "llvm/ADT/SetVector.h"
-#include "llvm/ADT/StringRef.h"
-#include "llvm/IR/BasicBlock.h"
-#include "llvm/IR/CallSite.h"
-#include "llvm/IR/Dominators.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/IRBuilder.h"
-#include "llvm/IR/InstIterator.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/Intrinsics.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/MDBuilder.h"
-#include "llvm/IR/Statepoint.h"
-#include "llvm/IR/Value.h"
-#include "llvm/IR/Verifier.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Transforms/Scalar.h"
-#include "llvm/Transforms/Utils/BasicBlockUtils.h"
-#include "llvm/Transforms/Utils/Cloning.h"
-#include "llvm/Transforms/Utils/Local.h"
-#include "llvm/Transforms/Utils/PromoteMemToReg.h"
+#include "llvm37/Pass.h"
+#include "llvm37/Analysis/CFG.h"
+#include "llvm37/Analysis/TargetTransformInfo.h"
+#include "llvm37/ADT/SetOperations.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/ADT/DenseSet.h"
+#include "llvm37/ADT/SetVector.h"
+#include "llvm37/ADT/StringRef.h"
+#include "llvm37/IR/BasicBlock.h"
+#include "llvm37/IR/CallSite.h"
+#include "llvm37/IR/Dominators.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/IRBuilder.h"
+#include "llvm37/IR/InstIterator.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/Intrinsics.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/MDBuilder.h"
+#include "llvm37/IR/Statepoint.h"
+#include "llvm37/IR/Value.h"
+#include "llvm37/IR/Verifier.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Transforms/Scalar.h"
+#include "llvm37/Transforms/Utils/BasicBlockUtils.h"
+#include "llvm37/Transforms/Utils/Cloning.h"
+#include "llvm37/Transforms/Utils/Local.h"
+#include "llvm37/Transforms/Utils/PromoteMemToReg.h"
 
 #define DEBUG_TYPE "rewrite-statepoints-for-gc"
 
-using namespace llvm;
+using namespace llvm37;
 
 // Print tracing output
 static cl::opt<bool> TraceLSP("trace-rewrite-statepoints", cl::Hidden,
@@ -122,7 +122,7 @@ struct RewriteStatepointsForGC : public ModulePass {
 
 char RewriteStatepointsForGC::ID = 0;
 
-ModulePass *llvm::createRewriteStatepointsForGCPass() {
+ModulePass *llvm37::createRewriteStatepointsForGCPass() {
   return new RewriteStatepointsForGC();
 }
 
@@ -160,7 +160,7 @@ struct GCPtrLivenessData {
 // base relation will remain.  Internally, we add a mixture of the two
 // types, then update all the second type to the first type
 typedef DenseMap<Value *, Value *> DefiningValueMapTy;
-typedef DenseSet<llvm::Value *> StatepointLiveSetTy;
+typedef DenseSet<llvm37::Value *> StatepointLiveSetTy;
 typedef DenseMap<Instruction *, Value *> RematerializedValueMapTy;
 
 struct PartiallyConstructedSafepointRecord {
@@ -168,7 +168,7 @@ struct PartiallyConstructedSafepointRecord {
   StatepointLiveSetTy liveset;
 
   /// Mapping from live pointers to a base-defining-value
-  DenseMap<llvm::Value *, llvm::Value *> PointerToBase;
+  DenseMap<llvm37::Value *, llvm37::Value *> PointerToBase;
 
   /// The *new* gc.statepoint instruction itself.  This produces the token
   /// that normal path gc.relocates and the gc.result are tied to.
@@ -247,7 +247,7 @@ static bool isUnhandledGCPointerType(Type *Ty) {
 }
 #endif
 
-static bool order_by_name(llvm::Value *a, llvm::Value *b) {
+static bool order_by_name(llvm37::Value *a, llvm37::Value *b) {
   if (a->hasName() && b->hasName()) {
     return -1 == a->getName().compare(b->getName());
   } else if (a->hasName() && !b->hasName()) {
@@ -919,7 +919,7 @@ static Value *findBasePointer(Value *I, DefiningValueMapTy &cache) {
           // values incoming from the same basic block may be
           // different is by being different bitcasts of the same
           // value.  A cleanup that remains TODO is changing
-          // findBaseOrBDV to return an llvm::Value of the correct
+          // findBaseOrBDV to return an llvm37::Value of the correct
           // type (and still remain pure).  This will remove the
           // need to add bitcasts.
           assert(base->stripPointerCasts() == oldBase->stripPointerCasts() &&
@@ -1024,7 +1024,7 @@ static Value *findBasePointer(Value *I, DefiningValueMapTy &cache) {
 // pointer was a base pointer.
 static void
 findBasePointers(const StatepointLiveSetTy &live,
-                 DenseMap<llvm::Value *, llvm::Value *> &PointerToBase,
+                 DenseMap<llvm37::Value *, llvm37::Value *> &PointerToBase,
                  DominatorTree *DT, DefiningValueMapTy &DVCache) {
   // For the naming of values inserted to be deterministic - which makes for
   // much cleaner and more stable tests - we need to assign an order to the
@@ -1056,7 +1056,7 @@ findBasePointers(const StatepointLiveSetTy &live,
 static void findBasePointers(DominatorTree &DT, DefiningValueMapTy &DVCache,
                              const CallSite &CS,
                              PartiallyConstructedSafepointRecord &result) {
-  DenseMap<llvm::Value *, llvm::Value *> PointerToBase;
+  DenseMap<llvm37::Value *, llvm37::Value *> PointerToBase;
   findBasePointers(result.liveset, PointerToBase, &DT, DVCache);
 
   if (PrintBasePointers) {
@@ -1173,9 +1173,9 @@ static AttributeSet legalizeCallAttributes(AttributeSet AS) {
 ///   statepointToken - statepoint instruction to which relocates should be
 ///   bound.
 ///   Builder - Llvm IR builder to be used to construct new calls.
-static void CreateGCRelocates(ArrayRef<llvm::Value *> LiveVariables,
+static void CreateGCRelocates(ArrayRef<llvm37::Value *> LiveVariables,
                               const int LiveStart,
-                              ArrayRef<llvm::Value *> BasePtrs,
+                              ArrayRef<llvm37::Value *> BasePtrs,
                               Instruction *StatepointToken,
                               IRBuilder<> Builder) {
   SmallVector<Instruction *, 64> NewDefs;
@@ -1221,8 +1221,8 @@ static void CreateGCRelocates(ArrayRef<llvm::Value *> LiveVariables,
 
 static void
 makeStatepointExplicitImpl(const CallSite &CS, /* to replace */
-                           const SmallVectorImpl<llvm::Value *> &basePtrs,
-                           const SmallVectorImpl<llvm::Value *> &liveVariables,
+                           const SmallVectorImpl<llvm37::Value *> &basePtrs,
+                           const SmallVectorImpl<llvm37::Value *> &liveVariables,
                            Pass *P,
                            PartiallyConstructedSafepointRecord &result) {
   assert(basePtrs.size() == liveVariables.size());
@@ -1249,7 +1249,7 @@ makeStatepointExplicitImpl(const CallSite &CS, /* to replace */
   IRBuilder<> Builder(insertBefore);
   // Copy all of the arguments from the original statepoint - this includes the
   // target, call args, and deopt args
-  SmallVector<llvm::Value *, 64> args;
+  SmallVector<llvm37::Value *, 64> args;
   args.insert(args.end(), CS.arg_begin(), CS.arg_end());
   // TODO: Clear the 'needs rewrite' flag
 

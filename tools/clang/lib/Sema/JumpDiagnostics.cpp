@@ -18,7 +18,7 @@
 #include "clang/AST/ExprCXX.h"
 #include "clang/AST/StmtCXX.h"
 #include "clang/AST/StmtObjC.h"
-#include "llvm/ADT/BitVector.h"
+#include "llvm37/ADT/BitVector.h"
 using namespace clang;
 
 namespace {
@@ -63,7 +63,7 @@ class JumpScopeChecker {
   };
 
   SmallVector<GotoScope, 48> Scopes;
-  llvm::DenseMap<Stmt*, unsigned> LabelAndGotoScopes;
+  llvm37::DenseMap<Stmt*, unsigned> LabelAndGotoScopes;
   SmallVector<Stmt*, 16> Jumps;
 
   SmallVector<IndirectGotoStmt*, 4> IndirectJumps;
@@ -597,7 +597,7 @@ void JumpScopeChecker::VerifyIndirectJumps() {
   typedef std::pair<unsigned, IndirectGotoStmt*> JumpScope;
   SmallVector<JumpScope, 32> JumpScopes;
   {
-    llvm::DenseMap<unsigned, IndirectGotoStmt*> JumpScopesMap;
+    llvm37::DenseMap<unsigned, IndirectGotoStmt*> JumpScopesMap;
     for (SmallVectorImpl<IndirectGotoStmt*>::iterator
            I = IndirectJumps.begin(), E = IndirectJumps.end(); I != E; ++I) {
       IndirectGotoStmt *IG = *I;
@@ -608,7 +608,7 @@ void JumpScopeChecker::VerifyIndirectJumps() {
       if (!Entry) Entry = IG;
     }
     JumpScopes.reserve(JumpScopesMap.size());
-    for (llvm::DenseMap<unsigned, IndirectGotoStmt*>::iterator
+    for (llvm37::DenseMap<unsigned, IndirectGotoStmt*>::iterator
            I = JumpScopesMap.begin(), E = JumpScopesMap.end(); I != E; ++I)
       JumpScopes.push_back(*I);
   }
@@ -616,7 +616,7 @@ void JumpScopeChecker::VerifyIndirectJumps() {
   // Collect a single representative of every scope containing a
   // label whose address was taken somewhere in the function.
   // For most code bases, there will be only one such scope.
-  llvm::DenseMap<unsigned, LabelDecl*> TargetScopes;
+  llvm37::DenseMap<unsigned, LabelDecl*> TargetScopes;
   for (SmallVectorImpl<LabelDecl*>::iterator
          I = IndirectJumpTargets.begin(), E = IndirectJumpTargets.end();
        I != E; ++I) {
@@ -636,8 +636,8 @@ void JumpScopeChecker::VerifyIndirectJumps() {
   // of scopes S from which the target scope can be trivially
   // entered, then verify that every jump scope can be trivially
   // exitted to reach a scope in S.
-  llvm::BitVector Reachable(Scopes.size(), false);
-  for (llvm::DenseMap<unsigned,LabelDecl*>::iterator
+  llvm37::BitVector Reachable(Scopes.size(), false);
+  for (llvm37::DenseMap<unsigned,LabelDecl*>::iterator
          TI = TargetScopes.begin(), TE = TargetScopes.end(); TI != TE; ++TI) {
     unsigned TargetScope = TI->first;
     LabelDecl *TargetLabel = TI->second;

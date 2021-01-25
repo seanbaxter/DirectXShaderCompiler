@@ -9,13 +9,13 @@
 
 #include "Error.h"
 #include "obj2yaml.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/Object/ELFObjectFile.h"
-#include "llvm/Object/ELFYAML.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/YAMLTraits.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/Object/ELFObjectFile.h"
+#include "llvm37/Object/ELFYAML.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/YAMLTraits.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 namespace {
 
@@ -354,7 +354,7 @@ ErrorOr<ELFYAML::Group *> ELFDumper<ELFT>::dumpGroup(const Elf_Shdr *Shdr) {
   const long count = (Shdr->sh_size) / sizeof(Elf_Word);
   ELFYAML::SectionOrType s;
   for (int i = 0; i < count; i++) {
-    if (groupMembers[i] == llvm::ELF::GRP_COMDAT) {
+    if (groupMembers[i] == llvm37::ELF::GRP_COMDAT) {
       s.sectionNameOrType = "GRP_COMDAT";
     } else {
       ErrorOr<const Elf_Shdr *> sHdr = Obj.getSection(groupMembers[i]);

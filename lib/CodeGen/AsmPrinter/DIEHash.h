@@ -11,14 +11,14 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_LIB_CODEGEN_ASMPRINTER_DIEHASH_H
-#define LLVM_LIB_CODEGEN_ASMPRINTER_DIEHASH_H
+#ifndef LLVM37_LIB_CODEGEN_ASMPRINTER_DIEHASH_H
+#define LLVM37_LIB_CODEGEN_ASMPRINTER_DIEHASH_H
 
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/CodeGen/DIE.h"
-#include "llvm/Support/MD5.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/CodeGen/DIE.h"
+#include "llvm37/Support/MD5.h"
 
-namespace llvm {
+namespace llvm37 {
 
 class AsmPrinter;
 class CompileUnit;

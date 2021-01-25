@@ -14,7 +14,7 @@
 #include "clang/Rewrite/Frontend/Rewriters.h"
 #include "clang/Lex/Preprocessor.h"
 #include "clang/Rewrite/Core/TokenRewriter.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/Support/raw_ostream.h"
 
 void clang::DoRewriteTest(Preprocessor &PP, raw_ostream* OS) {
   SourceManager &SM = PP.getSourceManager();

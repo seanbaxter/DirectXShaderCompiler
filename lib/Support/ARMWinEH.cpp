@@ -7,10 +7,10 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Support/ARMWinEH.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/Support/ARMWinEH.h"
+#include "llvm37/Support/raw_ostream.h"
 
-namespace llvm {
+namespace llvm37 {
 namespace ARM {
 namespace WinEH {
 std::pair<uint16_t, uint32_t> SavedRegisterMask(const RuntimeFunction &RF) {

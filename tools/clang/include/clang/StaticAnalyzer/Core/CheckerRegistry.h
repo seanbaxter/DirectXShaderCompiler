@@ -7,8 +7,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_STATICANALYZER_CORE_CHECKERREGISTRY_H
-#define LLVM_CLANG_STATICANALYZER_CORE_CHECKERREGISTRY_H
+#ifndef LLVM37_CLANG_STATICANALYZER_CORE_CHECKERREGISTRY_H
+#define LLVM37_CLANG_STATICANALYZER_CORE_CHECKERREGISTRY_H
 
 #include "clang/Basic/LLVM.h"
 #include "clang/StaticAnalyzer/Core/CheckerManager.h"
@@ -131,7 +131,7 @@ public:
 
 private:
   mutable CheckerInfoList Checkers;
-  mutable llvm::StringMap<size_t> Packages;
+  mutable llvm37::StringMap<size_t> Packages;
 };
 
 } // end namespace ento

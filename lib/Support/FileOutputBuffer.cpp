@@ -11,10 +11,10 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Support/FileOutputBuffer.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/Support/Errc.h"
+#include "llvm37/Support/FileOutputBuffer.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/Support/Errc.h"
 #include <system_error>
 
 #if !defined(_MSC_VER) && !defined(__MINGW32__)
@@ -23,9 +23,9 @@
 #include <io.h>
 #endif
 
-using llvm::sys::fs::mapped_file_region;
+using llvm37::sys::fs::mapped_file_region;
 
-namespace llvm {
+namespace llvm37 {
 FileOutputBuffer::FileOutputBuffer(std::unique_ptr<mapped_file_region> R,
                                    StringRef Path, StringRef TmpPath)
     : Region(std::move(R)), FinalPath(Path), TempPath(TmpPath) {}
@@ -76,7 +76,7 @@ FileOutputBuffer::create(StringRef FilePath, size_t Size,
   if (EC)
     return EC;
 
-#ifndef LLVM_ON_WIN32
+#ifndef LLVM37_ON_WIN32
   // On Windows, CreateFileMapping (the mmap function on Windows)
   // automatically extends the underlying file. We don't need to
   // extend the file beforehand. _chsize (ftruncate on Windows) is
@@ -87,7 +87,7 @@ FileOutputBuffer::create(StringRef FilePath, size_t Size,
     return EC;
 #endif
 
-  auto MappedFile = llvm::make_unique<mapped_file_region>(
+  auto MappedFile = llvm37::make_unique<mapped_file_region>(
       FD, mapped_file_region::readwrite, Size, 0, EC);
   int Ret = close(FD);
   if (EC)

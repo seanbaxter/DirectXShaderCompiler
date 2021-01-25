@@ -14,19 +14,19 @@
 
 // simplify dxil op like mad 0, a, b->b.
 
-#include "llvm/Analysis/InstructionSimplify.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/Instruction.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/IRBuilder.h"
+#include "llvm37/Analysis/InstructionSimplify.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/Instruction.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/IRBuilder.h"
 
 #include "dxc/DXIL/DxilModule.h"
 #include "dxc/DXIL/DxilOperations.h"
-#include "llvm/Analysis/DxilConstantFolding.h"
-#include "llvm/Analysis/DxilSimplify.h"
+#include "llvm37/Analysis/DxilConstantFolding.h"
+#include "llvm37/Analysis/DxilSimplify.h"
 
-using namespace llvm;
+using namespace llvm37;
 using namespace hlsl;
 
 namespace {
@@ -42,7 +42,7 @@ DXIL::OpCode GetOpcode(Value *opArg) {
 } // namespace
 
 namespace hlsl {
-bool CanSimplify(const llvm::Function *F) {
+bool CanSimplify(const llvm37::Function *F) {
   // Only simplify dxil functions when we have a valid dxil module.
   if (!F->getParent()->HasDxilModule()) {
     assert(!OP::IsDxilOpFunc(F) && "dx.op function with no dxil module?");
@@ -74,8 +74,8 @@ bool CanSimplify(const llvm::Function *F) {
 /// result as dxil operation.
 ///
 /// If this call could not be simplified returns null.
-Value *SimplifyDxilCall(llvm::Function *F, ArrayRef<Value *> Args,
-                        llvm::Instruction *I,
+Value *SimplifyDxilCall(llvm37::Function *F, ArrayRef<Value *> Args,
+                        llvm37::Instruction *I,
                         bool MayInsert)
 {
   if (!F->getParent()->HasDxilModule()) {
@@ -133,14 +133,14 @@ Value *SimplifyDxilCall(llvm::Function *F, ArrayRef<Value *> Args,
       Constant *one = ConstantFP::get(op0->getType(), 1);
       if (op0 == one) {
         IRBuilder<> Builder(I);
-        llvm::FastMathFlags FMF;
+        llvm37::FastMathFlags FMF;
         FMF.setUnsafeAlgebraHLSL();
         Builder.SetFastMathFlags(FMF);
         return Builder.CreateFAdd(op1, op2);
       }
       if (op1 == one) {
         IRBuilder<> Builder(I);
-        llvm::FastMathFlags FMF;
+        llvm37::FastMathFlags FMF;
         FMF.setUnsafeAlgebraHLSL();
         Builder.SetFastMathFlags(FMF);
 

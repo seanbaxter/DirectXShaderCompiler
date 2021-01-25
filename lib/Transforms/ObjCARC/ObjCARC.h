@@ -20,27 +20,27 @@
 ///
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_LIB_TRANSFORMS_OBJCARC_OBJCARC_H
-#define LLVM_LIB_TRANSFORMS_OBJCARC_OBJCARC_H
+#ifndef LLVM37_LIB_TRANSFORMS_OBJCARC_OBJCARC_H
+#define LLVM37_LIB_TRANSFORMS_OBJCARC_OBJCARC_H
 
-#include "llvm/ADT/StringSwitch.h"
-#include "llvm/ADT/Optional.h"
-#include "llvm/Analysis/AliasAnalysis.h"
-#include "llvm/Analysis/Passes.h"
-#include "llvm/Analysis/ValueTracking.h"
-#include "llvm/IR/CallSite.h"
-#include "llvm/IR/InstIterator.h"
-#include "llvm/IR/Module.h"
-#include "llvm/Pass.h"
-#include "llvm/Transforms/ObjCARC.h"
-#include "llvm/Transforms/Utils/Local.h"
+#include "llvm37/ADT/StringSwitch.h"
+#include "llvm37/ADT/Optional.h"
+#include "llvm37/Analysis/AliasAnalysis.h"
+#include "llvm37/Analysis/Passes.h"
+#include "llvm37/Analysis/ValueTracking.h"
+#include "llvm37/IR/CallSite.h"
+#include "llvm37/IR/InstIterator.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/Pass.h"
+#include "llvm37/Transforms/ObjCARC.h"
+#include "llvm37/Transforms/Utils/Local.h"
 #include "ARCInstKind.h"
 
-namespace llvm {
+namespace llvm37 {
 class raw_ostream;
 }
 
-namespace llvm {
+namespace llvm37 {
 namespace objcarc {
 
 /// \brief A handy option to enable/disable all ARC Optimizations.
@@ -270,13 +270,13 @@ class ARCMDKindCache {
   Module *M;
 
   /// The Metadata Kind for clang.imprecise_release metadata.
-  llvm::Optional<unsigned> ImpreciseReleaseMDKind;
+  llvm37::Optional<unsigned> ImpreciseReleaseMDKind;
 
   /// The Metadata Kind for clang.arc.copy_on_escape metadata.
-  llvm::Optional<unsigned> CopyOnEscapeMDKind;
+  llvm37::Optional<unsigned> CopyOnEscapeMDKind;
 
   /// The Metadata Kind for clang.arc.no_objc_arc_exceptions metadata.
-  llvm::Optional<unsigned> NoObjCARCExceptionsMDKind;
+  llvm37::Optional<unsigned> NoObjCARCExceptionsMDKind;
 
 public:
   void init(Module *Mod) {
@@ -309,6 +309,6 @@ public:
 };
 
 } // end namespace objcarc
-} // end namespace llvm
+} // end namespace llvm37
 
 #endif

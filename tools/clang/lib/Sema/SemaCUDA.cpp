@@ -16,8 +16,8 @@
 #include "clang/AST/Decl.h"
 #include "clang/Lex/Preprocessor.h"
 #include "clang/Sema/SemaDiagnostic.h"
-#include "llvm/ADT/Optional.h"
-#include "llvm/ADT/SmallVector.h"
+#include "llvm37/ADT/Optional.h"
+#include "llvm37/ADT/SmallVector.h"
 using namespace clang;
 
 ExprResult Sema::ActOnCUDAExecConfigExpr(Scope *S, SourceLocation LLLLoc,
@@ -154,7 +154,7 @@ bool Sema::inferCUDATargetForImplicitSpecialMember(CXXRecordDecl *ClassDecl,
                                                    CXXMethodDecl *MemberDecl,
                                                    bool ConstRHS,
                                                    bool Diagnose) {
-  llvm::Optional<CUDAFunctionTarget> InferredTarget;
+  llvm37::Optional<CUDAFunctionTarget> InferredTarget;
 
   // We're going to invoke special member lookup; mark that these special
   // members are called from this one, and not from its caller.
@@ -163,7 +163,7 @@ bool Sema::inferCUDATargetForImplicitSpecialMember(CXXRecordDecl *ClassDecl,
   // Look for special members in base classes that should be invoked from here.
   // Infer the target of this member base on the ones it should call.
   // Skip direct and indirect virtual bases for abstract classes.
-  llvm::SmallVector<const CXXBaseSpecifier *, 16> Bases;
+  llvm37::SmallVector<const CXXBaseSpecifier *, 16> Bases;
   for (const auto &B : ClassDecl->bases()) {
     if (!B.isVirtual()) {
       Bases.push_back(&B);

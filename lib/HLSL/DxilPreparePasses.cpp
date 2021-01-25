@@ -20,26 +20,26 @@
 #include "dxc/DXIL/DxilInstructions.h"
 #include "dxc/DXIL/DxilConstants.h"
 #include "dxc/HlslIntrinsicOp.h"
-#include "llvm/IR/GetElementPtrTypeIterator.h"
-#include "llvm/IR/IRBuilder.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/InstIterator.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/Analysis/PostDominators.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/DebugInfo.h"
-#include "llvm/IR/DIBuilder.h"
-#include "llvm/IR/PassManager.h"
-#include "llvm/ADT/BitVector.h"
-#include "llvm/Pass.h"
-#include "llvm/Transforms/Utils/Local.h"
-#include "llvm/Analysis/AssumptionCache.h"
-#include "llvm/Analysis/DxilValueCache.h"
-#include "llvm/Analysis/LoopInfo.h"
+#include "llvm37/IR/GetElementPtrTypeIterator.h"
+#include "llvm37/IR/IRBuilder.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/InstIterator.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/Analysis/PostDominators.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/DebugInfo.h"
+#include "llvm37/IR/DIBuilder.h"
+#include "llvm37/IR/PassManager.h"
+#include "llvm37/ADT/BitVector.h"
+#include "llvm37/Pass.h"
+#include "llvm37/Transforms/Utils/Local.h"
+#include "llvm37/Analysis/AssumptionCache.h"
+#include "llvm37/Analysis/DxilValueCache.h"
+#include "llvm37/Analysis/LoopInfo.h"
 #include <memory>
 #include <unordered_set>
 
-using namespace llvm;
+using namespace llvm37;
 using namespace hlsl;
 
 namespace {
@@ -59,7 +59,7 @@ public:
 
 char InvalidateUndefResources::ID = 0;
 
-ModulePass *llvm::createInvalidateUndefResourcesPass() { return new InvalidateUndefResources(); }
+ModulePass *llvm37::createInvalidateUndefResourcesPass() { return new InvalidateUndefResources(); }
 
 INITIALIZE_PASS(InvalidateUndefResources, "invalidate-undef-resource", "Invalidate undef resources", false, false)
 
@@ -106,14 +106,14 @@ private:
 
 char SimplifyInst::ID = 0;
 
-FunctionPass *llvm::createSimplifyInstPass() { return new SimplifyInst(); }
+FunctionPass *llvm37::createSimplifyInstPass() { return new SimplifyInst(); }
 
 INITIALIZE_PASS(SimplifyInst, "simplify-inst", "Simplify Instructions", false, false)
 
 bool SimplifyInst::runOnFunction(Function &F) {
   for (Function::iterator BBI = F.begin(), BBE = F.end(); BBI != BBE; ++BBI) {
     BasicBlock *BB = BBI;
-    llvm::SimplifyInstructionsInBlock(BB, nullptr);
+    llvm37::SimplifyInstructionsInBlock(BB, nullptr);
   }
   return true;
 }
@@ -149,7 +149,7 @@ public:
 
 char DxilDeadFunctionElimination::ID = 0;
 
-ModulePass *llvm::createDxilDeadFunctionEliminationPass() {
+ModulePass *llvm37::createDxilDeadFunctionEliminationPass() {
   return new DxilDeadFunctionElimination();
 }
 
@@ -193,7 +193,7 @@ static Function *StripFunctionParameter(Function *F, DxilModule &DM,
   for (auto &arg : F->args()) {
     if (!arg.user_empty())
       return nullptr;
-    DbgDeclareInst *DDI = llvm::FindAllocaDbgDeclare(&arg);
+    DbgDeclareInst *DDI = llvm37::FindAllocaDbgDeclare(&arg);
     if (DDI) {
       DDI->eraseFromParent();
     }
@@ -266,7 +266,7 @@ static void MarkUsedSignatureElements(Function *F, DxilModule &DM) {
   DXASSERT_NOMSG(F != nullptr);
   // For every loadInput/storeOutput, update the corresponding ReadWriteMask.
   // F is a pointer to a Function instance
-  for (llvm::inst_iterator I = llvm::inst_begin(F), E = llvm::inst_end(F); I != E; ++I) {
+  for (llvm37::inst_iterator I = llvm37::inst_begin(F), E = llvm37::inst_end(F); I != E; ++I) {
     DxilInst_LoadInput LI(&*I);
     DxilInst_StoreOutput SO(&*I);
     DxilInst_LoadPatchConstant LPC(&*I);
@@ -706,7 +706,7 @@ private:
     } else {
       std::vector<Function *> entries;
       // Handle when multiple hull shaders point to the same patch constant function
-      MapVector<Function*, llvm::SmallVector<Function*, 2>> PatchConstantFuncUsers;
+      MapVector<Function*, llvm37::SmallVector<Function*, 2>> PatchConstantFuncUsers;
       for (iplist<Function>::iterator F : M.getFunctionList()) {
         if (DM.IsEntryThatUsesSignatures(F)) {
           auto *FT = F->getFunctionType();
@@ -774,7 +774,7 @@ private:
 
   void RemoveUnusedRayQuery(Module &M) {
     hlsl::OP *hlslOP = M.GetDxilModule().GetOP();
-    llvm::Function *AllocFn = hlslOP->GetOpFunc(
+    llvm37::Function *AllocFn = hlslOP->GetOpFunc(
       DXIL::OpCode::AllocateRayQuery, Type::getVoidTy(M.getContext()));
     SmallVector<CallInst*, 4> DeadInsts;
     for (auto U : AllocFn->users()) {
@@ -796,7 +796,7 @@ private:
   void LowerDxBreak(Module &M) {
     if (Function *BreakFunc = M.getFunction(DXIL::kDxBreakFuncName)) {
       if (!BreakFunc->use_empty()) {
-        llvm::Type *i32Ty = llvm::Type::getInt32Ty(M.getContext());
+        llvm37::Type *i32Ty = llvm37::Type::getInt32Ty(M.getContext());
         Type *i32ArrayTy = ArrayType::get(i32Ty, 1);
         unsigned int Values[1] = { 0 };
         Constant *InitialValue = ConstantDataArray::get(M.getContext(), Values);
@@ -806,7 +806,7 @@ private:
 
         Constant *Indices[] = { ConstantInt::get(i32Ty, 0), ConstantInt::get(i32Ty, 0) };
         Constant *Gep = ConstantExpr::getGetElementPtr(nullptr, GV, Indices);
-        SmallDenseMap<llvm::Function*, llvm::ICmpInst*, 16> DxBreakCmpMap;
+        SmallDenseMap<llvm37::Function*, llvm37::ICmpInst*, 16> DxBreakCmpMap;
         // Replace all uses of dx.break with references to the constant global
         for (auto I = BreakFunc->user_begin(), E = BreakFunc->user_end(); I != E;) {
           User *U = *I++;
@@ -816,7 +816,7 @@ private:
           if (!Cmp) {
             Instruction *IP = dxilutil::FindAllocaInsertionPt(F);
             LoadInst *LI = new LoadInst(Gep, nullptr, false, IP);
-            Cmp = new ICmpInst(IP, ICmpInst::ICMP_EQ, LI, llvm::ConstantInt::get(i32Ty,0));
+            Cmp = new ICmpInst(IP, ICmpInst::ICMP_EQ, LI, llvm37::ConstantInt::get(i32Ty,0));
             DxBreakCmpMap[F] = Cmp;
           }
           CI->replaceAllUsesWith(Cmp);
@@ -839,7 +839,7 @@ private:
 
 char DxilFinalizeModule::ID = 0;
 
-ModulePass *llvm::createDxilFinalizeModulePass() {
+ModulePass *llvm37::createDxilFinalizeModulePass() {
   return new DxilFinalizeModule();
 }
 
@@ -1061,7 +1061,7 @@ public:
 
 char DxilCleanupAddrSpaceCast::ID = 0;
 
-ModulePass *llvm::createDxilCleanupAddrSpaceCastPass() {
+ModulePass *llvm37::createDxilCleanupAddrSpaceCastPass() {
   return new DxilCleanupAddrSpaceCast();
 }
 
@@ -1128,7 +1128,7 @@ void DxilEmitMetadata::patchIsFrontfaceTy(Module &M) {
 
 char DxilEmitMetadata::ID = 0;
 
-ModulePass *llvm::createDxilEmitMetadataPass() {
+ModulePass *llvm37::createDxilEmitMetadataPass() {
   return new DxilEmitMetadata();
 }
 
@@ -1235,7 +1235,7 @@ public:
 
 char DxilValidateWaveSensitivity::ID = 0;
 
-ModulePass *llvm::createDxilValidateWaveSensitivityPass() {
+ModulePass *llvm37::createDxilValidateWaveSensitivityPass() {
   return new DxilValidateWaveSensitivity();
 }
 
@@ -1385,6 +1385,6 @@ INITIALIZE_PASS_BEGIN(CleanupDxBreak, "hlsl-cleanup-dxbreak", "HLSL Remove unnec
 INITIALIZE_PASS_DEPENDENCY(LoopInfoWrapperPass)
 INITIALIZE_PASS_END(CleanupDxBreak, "hlsl-cleanup-dxbreak", "HLSL Remove unnecessary dx.break conditions", false, false)
 
-FunctionPass *llvm::createCleanupDxBreakPass() {
+FunctionPass *llvm37::createCleanupDxBreakPass() {
   return new CleanupDxBreak();
 }

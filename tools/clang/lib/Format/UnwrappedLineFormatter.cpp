@@ -9,7 +9,7 @@
 
 #include "UnwrappedLineFormatter.h"
 #include "WhitespaceManager.h"
-#include "llvm/Support/Debug.h"
+#include "llvm37/Support/Debug.h"
 
 #define DEBUG_TYPE "format-formatter"
 
@@ -460,12 +460,12 @@ static void markFinalized(FormatToken *Tok) {
 
 #ifndef NDEBUG
 static void printLineState(const LineState &State) {
-  llvm::dbgs() << "State: ";
+  llvm37::dbgs() << "State: ";
   for (const ParenState &P : State.Stack) {
-    llvm::dbgs() << P.Indent << "|" << P.LastSpace << "|" << P.NestedBlockIndent
+    llvm37::dbgs() << P.Indent << "|" << P.LastSpace << "|" << P.NestedBlockIndent
                  << " ";
   }
-  llvm::dbgs() << State.NextToken->TokenText << "\n";
+  llvm37::dbgs() << State.NextToken->TokenText << "\n";
 }
 #endif
 
@@ -702,7 +702,7 @@ private:
       Penalty = Queue.top().first.first;
       StateNode *Node = Queue.top().second;
       if (!Node->State.NextToken) {
-        DEBUG(llvm::dbgs() << "\n---\nPenalty for line: " << Penalty << "\n");
+        DEBUG(llvm37::dbgs() << "\n---\nPenalty for line: " << Penalty << "\n");
         break;
       }
       Queue.pop();
@@ -726,7 +726,7 @@ private:
     if (Queue.empty()) {
       // We were unable to find a solution, do nothing.
       // FIXME: Add diagnostic?
-      DEBUG(llvm::dbgs() << "Could not find a solution.\n");
+      DEBUG(llvm37::dbgs() << "Could not find a solution.\n");
       return 0;
     }
 
@@ -734,8 +734,8 @@ private:
     if (!DryRun)
       reconstructPath(InitialState, Queue.top().second);
 
-    DEBUG(llvm::dbgs() << "Total number of analyzed states: " << Count << "\n");
-    DEBUG(llvm::dbgs() << "---\n");
+    DEBUG(llvm37::dbgs() << "Total number of analyzed states: " << Count << "\n");
+    DEBUG(llvm37::dbgs() << "---\n");
 
     return Penalty;
   }
@@ -780,7 +780,7 @@ private:
       DEBUG({
         printLineState((*I)->Previous->State);
         if ((*I)->NewLine) {
-          llvm::dbgs() << "Penalty for placing "
+          llvm37::dbgs() << "Penalty for placing "
                        << (*I)->Previous->State.NextToken->Tok.getName() << ": "
                        << Penalty << "\n";
         }
@@ -788,7 +788,7 @@ private:
     }
   }
 
-  llvm::SpecificBumpPtrAllocator<StateNode> Allocator;
+  llvm37::SpecificBumpPtrAllocator<StateNode> Allocator;
 };
 
 } // namespace

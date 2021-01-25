@@ -10,10 +10,10 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #pragma once
-#include "llvm/Pass.h"
+#include "llvm37/Pass.h"
 
 
-namespace llvm {
+namespace llvm37 {
   class Function;
   class PassRegistry;
   class FunctionPass;
@@ -21,8 +21,8 @@ namespace llvm {
   class DominatorTree;
 
 
-  llvm::FunctionPass *createNormalizeDxilPass();
-  void initializeNormalizeDxilPassPass(llvm::PassRegistry&);
+  llvm37::FunctionPass *createNormalizeDxilPass();
+  void initializeNormalizeDxilPassPass(llvm37::PassRegistry&);
 
   class NormalizeDxil {
   public:

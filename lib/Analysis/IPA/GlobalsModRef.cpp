@@ -14,23 +14,23 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Analysis/Passes.h"
-#include "llvm/ADT/SCCIterator.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/Analysis/AliasAnalysis.h"
-#include "llvm/Analysis/CallGraph.h"
-#include "llvm/Analysis/MemoryBuiltins.h"
-#include "llvm/Analysis/ValueTracking.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/DerivedTypes.h"
-#include "llvm/IR/InstIterator.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/IR/Module.h"
-#include "llvm/Pass.h"
-#include "llvm/Support/CommandLine.h"
+#include "llvm37/Analysis/Passes.h"
+#include "llvm37/ADT/SCCIterator.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/Analysis/AliasAnalysis.h"
+#include "llvm37/Analysis/CallGraph.h"
+#include "llvm37/Analysis/MemoryBuiltins.h"
+#include "llvm37/Analysis/ValueTracking.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/DerivedTypes.h"
+#include "llvm37/IR/InstIterator.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/Pass.h"
+#include "llvm37/Support/CommandLine.h"
 #include <set>
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "globalsmodref-aa"
 
@@ -199,7 +199,7 @@ INITIALIZE_AG_PASS_END(GlobalsModRef, AliasAnalysis, "globalsmodref-aa",
                        "Simple mod/ref analysis for globals", false, true,
                        false)
 
-Pass *llvm::createGlobalsModRefPass() { return new GlobalsModRef(); }
+Pass *llvm37::createGlobalsModRefPass() { return new GlobalsModRef(); }
 
 /// AnalyzeGlobals - Scan through the users of all of the internal
 /// GlobalValue's in the program.  If none of them have their "address taken"

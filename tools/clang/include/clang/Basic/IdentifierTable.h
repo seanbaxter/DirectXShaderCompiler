@@ -13,17 +13,17 @@
 ///
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_BASIC_IDENTIFIERTABLE_H
-#define LLVM_CLANG_BASIC_IDENTIFIERTABLE_H
+#ifndef LLVM37_CLANG_BASIC_IDENTIFIERTABLE_H
+#define LLVM37_CLANG_BASIC_IDENTIFIERTABLE_H
 
 #include "clang/Basic/LLVM.h"
 #include "clang/Basic/TokenKinds.h"
-#include "llvm/ADT/StringMap.h"
-#include "llvm/ADT/StringRef.h"
+#include "llvm37/ADT/StringMap.h"
+#include "llvm37/ADT/StringRef.h"
 #include <cassert>
 #include <string>
 
-namespace llvm {
+namespace llvm37 {
   template <typename T> struct DenseMapInfo;
 }
 
@@ -72,7 +72,7 @@ class IdentifierInfo {
   // 30 bit left in 64-bit word.
 
   void *FETokenInfo;               // Managed by the language front-end.
-  llvm::StringMapEntry<IdentifierInfo*> *Entry;
+  llvm37::StringMapEntry<IdentifierInfo*> *Entry;
 
   IdentifierInfo(const IdentifierInfo&) = delete;
   void operator=(const IdentifierInfo&) = delete;
@@ -414,7 +414,7 @@ public:
 class IdentifierTable {
   // Shark shows that using MallocAllocator is *much* slower than using this
   // BumpPtrAllocator!
-  typedef llvm::StringMap<IdentifierInfo*, llvm::BumpPtrAllocator> HashTableTy;
+  typedef llvm37::StringMap<IdentifierInfo*, llvm37::BumpPtrAllocator> HashTableTy;
   HashTableTy HashTable;
 
   IdentifierInfoLookup* ExternalLookup;
@@ -435,7 +435,7 @@ public:
     return ExternalLookup;
   }
   
-  llvm::BumpPtrAllocator& getAllocator() {
+  llvm37::BumpPtrAllocator& getAllocator() {
     return HashTable.getAllocator();
   }
 
@@ -697,7 +697,7 @@ public:
   std::string getAsString() const;
 
   /// \brief Prints the full selector name (e.g. "foo:bar:").
-  void print(llvm::raw_ostream &OS) const;
+  void print(llvm37::raw_ostream &OS) const;
 
   /// \brief Derive the conventional family of this method.
   ObjCMethodFamily getMethodFamily() const {
@@ -793,7 +793,7 @@ public:
 
 }  // end namespace clang
 
-namespace llvm {
+namespace llvm37 {
 /// Define DenseMapInfo so that Selectors can be used as keys in DenseMap and
 /// DenseSets.
 template <>
@@ -855,5 +855,5 @@ public:
   enum { NumLowBitsAvailable = 1 };
 };
 
-}  // end namespace llvm
+}  // end namespace llvm37
 #endif

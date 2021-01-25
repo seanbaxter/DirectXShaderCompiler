@@ -7,16 +7,16 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_UTILS_TABLEGEN_DAGISELMATCHER_H
-#define LLVM_UTILS_TABLEGEN_DAGISELMATCHER_H
+#ifndef LLVM37_UTILS_TABLEGEN_DAGISELMATCHER_H
+#define LLVM37_UTILS_TABLEGEN_DAGISELMATCHER_H
 
-#include "llvm/ADT/ArrayRef.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/ADT/StringRef.h"
-#include "llvm/CodeGen/MachineValueType.h"
-#include "llvm/Support/Casting.h"
+#include "llvm37/ADT/ArrayRef.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/ADT/StringRef.h"
+#include "llvm37/CodeGen/MachineValueType.h"
+#include "llvm37/Support/Casting.h"
 
-namespace llvm {
+namespace llvm37 {
   struct CodeGenRegister;
   class CodeGenDAGPatterns;
   class Matcher;
@@ -1173,6 +1173,6 @@ private:
   unsigned getHashImpl() const override;
 };
 
-} // end namespace llvm
+} // end namespace llvm37
 
 #endif

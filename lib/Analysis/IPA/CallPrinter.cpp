@@ -14,13 +14,13 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Analysis/CallGraph.h"
-#include "llvm/Analysis/CallPrinter.h"
-#include "llvm/Analysis/DOTGraphTraitsPass.h"
+#include "llvm37/Analysis/CallGraph.h"
+#include "llvm37/Analysis/CallPrinter.h"
+#include "llvm37/Analysis/DOTGraphTraitsPass.h"
 
-using namespace llvm;
+using namespace llvm37;
 
-namespace llvm {
+namespace llvm37 {
 
 template <> struct DOTGraphTraits<CallGraph *> : public DefaultDOTGraphTraits {
   DOTGraphTraits(bool isSimple = false) : DefaultDOTGraphTraits(isSimple) {}
@@ -85,8 +85,8 @@ INITIALIZE_PASS(CallGraphPrinter, "dot-callgraph",
 // "include/llvm/LinkAllPasses.h". Otherwise the pass would be deleted by
 // the link time optimization.
 
-ModulePass *llvm::createCallGraphViewerPass() { return new CallGraphViewer(); }
+ModulePass *llvm37::createCallGraphViewerPass() { return new CallGraphViewer(); }
 
-ModulePass *llvm::createCallGraphPrinterPass() {
+ModulePass *llvm37::createCallGraphPrinterPass() {
   return new CallGraphPrinter();
 }

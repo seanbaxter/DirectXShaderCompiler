@@ -11,22 +11,22 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Object/Error.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/ManagedStatic.h"
+#include "llvm37/Object/Error.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/ManagedStatic.h"
 
-using namespace llvm;
+using namespace llvm37;
 using namespace object;
 
 namespace {
 class _object_error_category : public std::error_category {
 public:
-  const char* name() const LLVM_NOEXCEPT override;
+  const char* name() const LLVM37_NOEXCEPT override;
   std::string message(int ev) const override;
 };
 }
 
-const char *_object_error_category::name() const LLVM_NOEXCEPT {
+const char *_object_error_category::name() const LLVM37_NOEXCEPT {
   return "llvm.object";
 }
 

@@ -131,7 +131,7 @@ static StringRef errorTypeToFormatString(Diagnostics::ErrorType Type) {
 
 static void formatErrorString(StringRef FormatString,
                               ArrayRef<std::string> Args,
-                              llvm::raw_ostream &OS) {
+                              llvm37::raw_ostream &OS) {
   while (!FormatString.empty()) {
     std::pair<StringRef, StringRef> Pieces = FormatString.split("$");
     OS << Pieces.first.str();
@@ -151,28 +151,28 @@ static void formatErrorString(StringRef FormatString,
 }
 
 static void maybeAddLineAndColumn(const SourceRange &Range,
-                                  llvm::raw_ostream &OS) {
+                                  llvm37::raw_ostream &OS) {
   if (Range.Start.Line > 0 && Range.Start.Column > 0) {
     OS << Range.Start.Line << ":" << Range.Start.Column << ": ";
   }
 }
 
 static void printContextFrameToStream(const Diagnostics::ContextFrame &Frame,
-                                      llvm::raw_ostream &OS) {
+                                      llvm37::raw_ostream &OS) {
   maybeAddLineAndColumn(Frame.Range, OS);
   formatErrorString(contextTypeToFormatString(Frame.Type), Frame.Args, OS);
 }
 
 static void
 printMessageToStream(const Diagnostics::ErrorContent::Message &Message,
-                     const Twine Prefix, llvm::raw_ostream &OS) {
+                     const Twine Prefix, llvm37::raw_ostream &OS) {
   maybeAddLineAndColumn(Message.Range, OS);
   OS << Prefix;
   formatErrorString(errorTypeToFormatString(Message.Type), Message.Args, OS);
 }
 
 static void printErrorContentToStream(const Diagnostics::ErrorContent &Content,
-                                      llvm::raw_ostream &OS) {
+                                      llvm37::raw_ostream &OS) {
   if (Content.Messages.size() == 1) {
     printMessageToStream(Content.Messages[0], "", OS);
   } else {
@@ -184,7 +184,7 @@ static void printErrorContentToStream(const Diagnostics::ErrorContent &Content,
   }
 }
 
-void Diagnostics::printToStream(llvm::raw_ostream &OS) const {
+void Diagnostics::printToStream(llvm37::raw_ostream &OS) const {
   for (size_t i = 0, e = Errors.size(); i != e; ++i) {
     if (i != 0) OS << "\n";
     printErrorContentToStream(Errors[i], OS);
@@ -193,12 +193,12 @@ void Diagnostics::printToStream(llvm::raw_ostream &OS) const {
 
 std::string Diagnostics::toString() const {
   std::string S;
-  llvm::raw_string_ostream OS(S);
+  llvm37::raw_string_ostream OS(S);
   printToStream(OS);
   return OS.str();
 }
 
-void Diagnostics::printToStreamFull(llvm::raw_ostream &OS) const {
+void Diagnostics::printToStreamFull(llvm37::raw_ostream &OS) const {
   for (size_t i = 0, e = Errors.size(); i != e; ++i) {
     if (i != 0) OS << "\n";
     const ErrorContent &Error = Errors[i];
@@ -212,7 +212,7 @@ void Diagnostics::printToStreamFull(llvm::raw_ostream &OS) const {
 
 std::string Diagnostics::toStringFull() const {
   std::string S;
-  llvm::raw_string_ostream OS(S);
+  llvm37::raw_string_ostream OS(S);
   printToStreamFull(OS);
   return OS.str();
 }

@@ -23,7 +23,7 @@
 #include "clang/Sema/PrettyDeclStackTrace.h"
 #include "clang/Sema/Scope.h"
 #include "clang/Sema/TypoCorrection.h"
-#include "llvm/ADT/SmallString.h"
+#include "llvm37/ADT/SmallString.h"
 using namespace clang;
 
 //===----------------------------------------------------------------------===//
@@ -218,7 +218,7 @@ Retry:
       // Try to limit which sets of keywords should be included in typo
       // correction based on what the next token is.
       if (TryAnnotateName(/*IsAddressOfOperand*/ false,
-                          llvm::make_unique<StatementFilterCCC>(Next)) ==
+                          llvm37::make_unique<StatementFilterCCC>(Next)) ==
           ANK_Error) {
         // Handle errors here by skipping up to the next semicolon or '}', and
         // eat the semicolon if that's what stopped us.

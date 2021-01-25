@@ -11,8 +11,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_PARSE_PARSER_H
-#define LLVM_CLANG_PARSE_PARSER_H
+#ifndef LLVM37_CLANG_PARSE_PARSER_H
+#define LLVM37_CLANG_PARSE_PARSER_H
 
 #include "clang/Basic/OpenMPKinds.h"
 #include "clang/Basic/OperatorPrecedence.h"
@@ -22,14 +22,14 @@
 #include "clang/Sema/DeclSpec.h"
 #include "clang/Sema/LoopHint.h"
 #include "clang/Sema/Sema.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/Support/Compiler.h"
-#include "llvm/Support/PrettyStackTrace.h"
-#include "llvm/Support/SaveAndRestore.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/Support/Compiler.h"
+#include "llvm37/Support/PrettyStackTrace.h"
+#include "llvm37/Support/SaveAndRestore.h"
 #include <memory>
 #include <stack>
 
-#include "llvm/Support/OacrIgnoreCond.h" // HLSL Change - all parser use is heavily language-dependant
+#include "llvm37/Support/OacrIgnoreCond.h" // HLSL Change - all parser use is heavily language-dependant
 
 namespace clang {
   class PragmaHandler;
@@ -142,7 +142,7 @@ class Parser : public CodeCompletionHandler {
 
   // C++ type trait keywords that can be reverted to identifiers and still be
   // used as type traits.
-  llvm::SmallDenseMap<IdentifierInfo *, tok::TokenKind> RevertibleTypeTraits;
+  llvm37::SmallDenseMap<IdentifierInfo *, tok::TokenKind> RevertibleTypeTraits;
 
   std::unique_ptr<PragmaHandler> AlignHandler;
   std::unique_ptr<PragmaHandler> GCCVisibilityHandler;
@@ -853,7 +853,7 @@ public:
     StopAtCodeCompletion = 1 << 2 ///< Stop at code completion
   };
 
-  friend LLVM_CONSTEXPR SkipUntilFlags operator|(SkipUntilFlags L,
+  friend LLVM37_CONSTEXPR SkipUntilFlags operator|(SkipUntilFlags L,
                                                  SkipUntilFlags R) {
     return static_cast<SkipUntilFlags>(static_cast<unsigned>(L) |
                                        static_cast<unsigned>(R));
@@ -869,7 +869,7 @@ public:
   /// returns false.
   bool SkipUntil(tok::TokenKind T,
                  SkipUntilFlags Flags = static_cast<SkipUntilFlags>(0)) {
-    return SkipUntil(llvm::makeArrayRef(T), Flags);
+    return SkipUntil(llvm37::makeArrayRef(T), Flags);
   }
   bool SkipUntil(tok::TokenKind T1, tok::TokenKind T2,
                  SkipUntilFlags Flags = static_cast<SkipUntilFlags>(0)) {
@@ -1172,7 +1172,7 @@ private:
     /// \brief Whether the last template parameter list was empty.
     bool LastParameterListWasEmpty;
 
-    SourceRange getSourceRange() const LLVM_READONLY;
+    SourceRange getSourceRange() const LLVM37_READONLY;
   };
 
   void LexTemplateFunctionForLateParsing(CachedTokens &Toks);
@@ -1396,7 +1396,7 @@ public:
   // Expr that doesn't include commas.
   ExprResult ParseAssignmentExpression(TypeCastState isTypeCast = NotTypeCast);
 
-  ExprResult ParseMSAsmIdentifier(llvm::SmallVectorImpl<Token> &LineToks,
+  ExprResult ParseMSAsmIdentifier(llvm37::SmallVectorImpl<Token> &LineToks,
                                   unsigned &NumLineToksConsumed,
                                   void *Info,
                                   bool IsUnevaluated);
@@ -1854,7 +1854,7 @@ private:
 
   void ParseStructDeclaration(
       ParsingDeclSpec &DS,
-      llvm::function_ref<void(ParsingFieldDeclarator &)> FieldsCallback);
+      llvm37::function_ref<void(ParsingFieldDeclarator &)> FieldsCallback);
 
   bool isDeclarationSpecifier(bool DisambiguatingWithExpression = false);
   bool isTypeSpecifierQualifier();

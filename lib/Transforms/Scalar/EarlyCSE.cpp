@@ -12,28 +12,28 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Transforms/Scalar/EarlyCSE.h"
-#include "llvm/ADT/Hashing.h"
-#include "llvm/ADT/ScopedHashTable.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/Analysis/AssumptionCache.h"
-#include "llvm/Analysis/InstructionSimplify.h"
-#include "llvm/Analysis/TargetLibraryInfo.h"
-#include "llvm/Analysis/TargetTransformInfo.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/Dominators.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/IR/PatternMatch.h"
-#include "llvm/Pass.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/RecyclingAllocator.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Transforms/Scalar.h"
-#include "llvm/Transforms/Utils/Local.h"
+#include "llvm37/Transforms/Scalar/EarlyCSE.h"
+#include "llvm37/ADT/Hashing.h"
+#include "llvm37/ADT/ScopedHashTable.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/Analysis/AssumptionCache.h"
+#include "llvm37/Analysis/InstructionSimplify.h"
+#include "llvm37/Analysis/TargetLibraryInfo.h"
+#include "llvm37/Analysis/TargetTransformInfo.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/IR/Dominators.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/IR/PatternMatch.h"
+#include "llvm37/Pass.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/RecyclingAllocator.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Transforms/Scalar.h"
+#include "llvm37/Transforms/Utils/Local.h"
 #include <deque>
-using namespace llvm;
-using namespace llvm::PatternMatch;
+using namespace llvm37;
+using namespace llvm37::PatternMatch;
 
 #define DEBUG_TYPE "early-cse"
 
@@ -74,7 +74,7 @@ struct SimpleValue {
 };
 }
 
-namespace llvm {
+namespace llvm37 {
 template <> struct DenseMapInfo<SimpleValue> {
   static inline SimpleValue getEmptyKey() {
     return DenseMapInfo<Instruction *>::getEmptyKey();
@@ -221,7 +221,7 @@ struct CallValue {
 };
 }
 
-namespace llvm {
+namespace llvm37 {
 template <> struct DenseMapInfo<CallValue> {
   static inline CallValue getEmptyKey() {
     return DenseMapInfo<Instruction *>::getEmptyKey();
@@ -768,7 +768,7 @@ public:
 
 char EarlyCSELegacyPass::ID = 0;
 
-FunctionPass *llvm::createEarlyCSEPass() { return new EarlyCSELegacyPass(); }
+FunctionPass *llvm37::createEarlyCSEPass() { return new EarlyCSELegacyPass(); }
 
 INITIALIZE_PASS_BEGIN(EarlyCSELegacyPass, "early-cse", "Early CSE", false,
                       false)

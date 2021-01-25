@@ -54,12 +54,12 @@ The most basic working setup for LLVM-style RTTI requires the following
 steps:
 
 #. In the header where you declare ``Shape``, you will want to ``#include
-   "llvm/Support/Casting.h"``, which declares LLVM's RTTI templates. That
+   "llvm37/Support/Casting.h"``, which declares LLVM's RTTI templates. That
    way your clients don't even have to think about it.
 
    .. code-block:: c++
 
-      #include "llvm/Support/Casting.h"
+      #include "llvm37/Support/Casting.h"
 
 #. In the base class, introduce an enum which discriminates all of the
    different concrete classes in the hierarchy, and stash the enum value

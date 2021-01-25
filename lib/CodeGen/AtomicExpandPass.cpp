@@ -12,19 +12,19 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/CodeGen/Passes.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/IRBuilder.h"
-#include "llvm/IR/InstIterator.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/Intrinsics.h"
-#include "llvm/IR/Module.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Target/TargetLowering.h"
-#include "llvm/Target/TargetMachine.h"
-#include "llvm/Target/TargetSubtargetInfo.h"
+#include "llvm37/CodeGen/Passes.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/IRBuilder.h"
+#include "llvm37/IR/InstIterator.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/Intrinsics.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Target/TargetLowering.h"
+#include "llvm37/Target/TargetMachine.h"
+#include "llvm37/Target/TargetSubtargetInfo.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "atomic-expand"
 
@@ -58,12 +58,12 @@ namespace {
 }
 
 char AtomicExpand::ID = 0;
-char &llvm::AtomicExpandID = AtomicExpand::ID;
+char &llvm37::AtomicExpandID = AtomicExpand::ID;
 INITIALIZE_TM_PASS(AtomicExpand, "atomic-expand",
     "Expand Atomic calls in terms of either load-linked & store-conditional or cmpxchg",
     false, false)
 
-FunctionPass *llvm::createAtomicExpandPass(const TargetMachine *TM) {
+FunctionPass *llvm37::createAtomicExpandPass(const TargetMachine *TM) {
   return new AtomicExpand(TM);
 }
 

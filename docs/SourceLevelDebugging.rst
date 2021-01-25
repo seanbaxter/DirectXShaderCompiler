@@ -357,7 +357,7 @@ in ``lib/IR/DIBuilder.cpp``.
 C/C++ source file information
 -----------------------------
 
-``llvm::Instruction`` provides easy access to metadata attached with an
+``llvm37::Instruction`` provides easy access to metadata attached with an
 instruction.  One can extract line number information encoded in LLVM IR using
 ``Instruction::getMetadata()`` and ``DILocation::getLineNumber()``.
 

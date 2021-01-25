@@ -37,10 +37,10 @@
  * compile-time configuration.
  */
 
-#include "llvm/ADT/ArrayRef.h"
-#include "llvm/Support/Format.h"
-#include "llvm/Support/MD5.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/ArrayRef.h"
+#include "llvm37/Support/Format.h"
+#include "llvm37/Support/MD5.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <cstring>
 
 // The basic MD5 functions.
@@ -68,7 +68,7 @@
        ((MD5_u32plus) ptr[(n) * 4 + 3] << 24))
 #define GET(n) (block[(n)])
 
-namespace llvm {
+namespace llvm37 {
 
 /// \brief This processes one or more 64-byte data blocks, but does NOT update
 ///the bit counters.  There are no alignment requirements.

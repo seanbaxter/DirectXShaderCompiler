@@ -10,20 +10,20 @@
 // Header for LLVM symbolization library.
 //
 //===----------------------------------------------------------------------===//
-#ifndef LLVM_TOOLS_LLVM_SYMBOLIZER_LLVMSYMBOLIZE_H
-#define LLVM_TOOLS_LLVM_SYMBOLIZER_LLVMSYMBOLIZE_H
+#ifndef LLVM37_TOOLS_LLVM37_SYMBOLIZER_LLVMSYMBOLIZE_H
+#define LLVM37_TOOLS_LLVM37_SYMBOLIZER_LLVMSYMBOLIZE_H
 
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/DebugInfo/DIContext.h"
-#include "llvm/Object/MachOUniversal.h"
-#include "llvm/Object/ObjectFile.h"
-#include "llvm/Support/DataExtractor.h"
-#include "llvm/Support/MemoryBuffer.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/DebugInfo/DIContext.h"
+#include "llvm37/Object/MachOUniversal.h"
+#include "llvm37/Object/ObjectFile.h"
+#include "llvm37/Support/DataExtractor.h"
+#include "llvm37/Support/MemoryBuffer.h"
 #include <map>
 #include <memory>
 #include <string>
 
-namespace llvm {
+namespace llvm37 {
 
 typedef DILineInfoSpecifier::FunctionNameKind FunctionNameKind;
 using namespace object;
@@ -139,6 +139,6 @@ private:
 };
 
 } // namespace symbolize
-} // namespace llvm
+} // namespace llvm37
 
 #endif

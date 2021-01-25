@@ -10,18 +10,18 @@
 /// \brief Defines the virtual file system interface vfs::FileSystem.
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_BASIC_VIRTUALFILESYSTEM_H
-#define LLVM_CLANG_BASIC_VIRTUALFILESYSTEM_H
+#ifndef LLVM37_CLANG_BASIC_VIRTUALFILESYSTEM_H
+#define LLVM37_CLANG_BASIC_VIRTUALFILESYSTEM_H
 
 #include "clang/Basic/LLVM.h"
-#include "llvm/ADT/IntrusiveRefCntPtr.h"
-#include "llvm/ADT/Optional.h"
-#include "llvm/Support/ErrorOr.h"
-#include "llvm/Support/FileSystem.h"
-#include "llvm/Support/SourceMgr.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/IntrusiveRefCntPtr.h"
+#include "llvm37/ADT/Optional.h"
+#include "llvm37/Support/ErrorOr.h"
+#include "llvm37/Support/FileSystem.h"
+#include "llvm37/Support/SourceMgr.h"
+#include "llvm37/Support/raw_ostream.h"
 
-namespace llvm {
+namespace llvm37 {
 class MemoryBuffer;
 }
 
@@ -31,43 +31,43 @@ namespace vfs {
 /// \brief The result of a \p status operation.
 class Status {
   std::string Name;
-  llvm::sys::fs::UniqueID UID;
-  llvm::sys::TimeValue MTime;
+  llvm37::sys::fs::UniqueID UID;
+  llvm37::sys::TimeValue MTime;
   uint32_t User;
   uint32_t Group;
   uint64_t Size;
-  llvm::sys::fs::file_type Type;
-  llvm::sys::fs::perms Perms;
+  llvm37::sys::fs::file_type Type;
+  llvm37::sys::fs::perms Perms;
 
 public:
   bool IsVFSMapped; // FIXME: remove when files support multiple names
 
 public:
-  Status() : Type(llvm::sys::fs::file_type::status_error) {}
-  Status(const llvm::sys::fs::file_status &Status);
-  Status(StringRef Name, StringRef RealName, llvm::sys::fs::UniqueID UID,
-         llvm::sys::TimeValue MTime, uint32_t User, uint32_t Group,
-         uint64_t Size, llvm::sys::fs::file_type Type,
-         llvm::sys::fs::perms Perms);
+  Status() : Type(llvm37::sys::fs::file_type::status_error) {}
+  Status(const llvm37::sys::fs::file_status &Status);
+  Status(StringRef Name, StringRef RealName, llvm37::sys::fs::UniqueID UID,
+         llvm37::sys::TimeValue MTime, uint32_t User, uint32_t Group,
+         uint64_t Size, llvm37::sys::fs::file_type Type,
+         llvm37::sys::fs::perms Perms);
 
   /// \brief Returns the name that should be used for this file or directory.
   StringRef getName() const { return Name; }
   void setName(StringRef N) { Name = N; }
 
-  /// @name Status interface from llvm::sys::fs
+  /// @name Status interface from llvm37::sys::fs
   /// @{
-  llvm::sys::fs::file_type getType() const { return Type; }
-  llvm::sys::fs::perms getPermissions() const { return Perms; }
-  llvm::sys::TimeValue getLastModificationTime() const { return MTime; }
-  llvm::sys::fs::UniqueID getUniqueID() const { return UID; }
+  llvm37::sys::fs::file_type getType() const { return Type; }
+  llvm37::sys::fs::perms getPermissions() const { return Perms; }
+  llvm37::sys::TimeValue getLastModificationTime() const { return MTime; }
+  llvm37::sys::fs::UniqueID getUniqueID() const { return UID; }
   uint32_t getUser() const { return User; }
   uint32_t getGroup() const { return Group; }
   uint64_t getSize() const { return Size; }
-  void setType(llvm::sys::fs::file_type v) { Type = v; }
-  void setPermissions(llvm::sys::fs::perms p) { Perms = p; }
+  void setType(llvm37::sys::fs::file_type v) { Type = v; }
+  void setPermissions(llvm37::sys::fs::perms p) { Perms = p; }
   /// @}
   /// @name Status queries
-  /// These are static queries in llvm::sys::fs.
+  /// These are static queries in llvm37::sys::fs.
   /// @{
   bool equivalent(const Status &Other) const;
   bool isDirectory() const;
@@ -87,9 +87,9 @@ public:
   /// cannot do that from the base class, since close is virtual.
   virtual ~File();
   /// \brief Get the status of the file.
-  virtual llvm::ErrorOr<Status> status() = 0;
+  virtual llvm37::ErrorOr<Status> status() = 0;
   /// \brief Get the contents of the file as a \p MemoryBuffer.
-  virtual llvm::ErrorOr<std::unique_ptr<llvm::MemoryBuffer>>
+  virtual llvm37::ErrorOr<std::unique_ptr<llvm37::MemoryBuffer>>
   getBuffer(const Twine &Name, int64_t FileSize = -1,
             bool RequiresNullTerminator = true, bool IsVolatile = false) = 0;
   /// \brief Closes the file.
@@ -111,7 +111,7 @@ struct DirIterImpl {
 } // end namespace detail
 
 /// \brief An input iterator over the entries in a virtual path, similar to
-/// llvm::sys::fs::directory_iterator.
+/// llvm37::sys::fs::directory_iterator.
 class directory_iterator {
   std::shared_ptr<detail::DirIterImpl> Impl; // Input iterator semantics on copy
 
@@ -150,7 +150,7 @@ public:
 class FileSystem;
 
 /// \brief An input iterator over the recursive contents of a virtual path,
-/// similar to llvm::sys::fs::recursive_directory_iterator.
+/// similar to llvm37::sys::fs::recursive_directory_iterator.
 class recursive_directory_iterator {
   typedef std::stack<directory_iterator, std::vector<directory_iterator>>
       IterState;
@@ -179,19 +179,19 @@ public:
 };
 
 /// \brief The virtual file system interface.
-class FileSystem : public llvm::ThreadSafeRefCountedBase<FileSystem> {
+class FileSystem : public llvm37::ThreadSafeRefCountedBase<FileSystem> {
 public:
   virtual ~FileSystem();
 
   /// \brief Get the status of the entry at \p Path, if one exists.
-  virtual llvm::ErrorOr<Status> status(const Twine &Path) = 0;
+  virtual llvm37::ErrorOr<Status> status(const Twine &Path) = 0;
   /// \brief Get a \p File object for the file at \p Path, if one exists.
-  virtual llvm::ErrorOr<std::unique_ptr<File>>
+  virtual llvm37::ErrorOr<std::unique_ptr<File>>
   openFileForRead(const Twine &Path) = 0;
 
   /// This is a convenience method that opens a file, gets its content and then
   /// closes the file.
-  llvm::ErrorOr<std::unique_ptr<llvm::MemoryBuffer>>
+  llvm37::ErrorOr<std::unique_ptr<llvm37::MemoryBuffer>>
   getBufferForFile(const Twine &Name, int64_t FileSize = -1,
                    bool RequiresNullTerminator = true, bool IsVolatile = false);
 
@@ -226,8 +226,8 @@ public:
   /// \brief Pushes a file system on top of the stack.
   void pushOverlay(IntrusiveRefCntPtr<FileSystem> FS);
 
-  llvm::ErrorOr<Status> status(const Twine &Path) override;
-  llvm::ErrorOr<std::unique_ptr<File>>
+  llvm37::ErrorOr<Status> status(const Twine &Path) override;
+  llvm37::ErrorOr<std::unique_ptr<File>>
   openFileForRead(const Twine &Path) override;
   directory_iterator dir_begin(const Twine &Dir, std::error_code &EC) override;
 
@@ -242,13 +242,13 @@ public:
 };
 
 /// \brief Get a globally unique ID for a virtual file or directory.
-llvm::sys::fs::UniqueID getNextVirtualUniqueID();
+llvm37::sys::fs::UniqueID getNextVirtualUniqueID();
 
 /// \brief Gets a \p FileSystem for a virtual file system described in YAML
 /// format.
 IntrusiveRefCntPtr<FileSystem>
-getVFSFromYAML(std::unique_ptr<llvm::MemoryBuffer> Buffer,
-               llvm::SourceMgr::DiagHandlerTy DiagHandler,
+getVFSFromYAML(std::unique_ptr<llvm37::MemoryBuffer> Buffer,
+               llvm37::SourceMgr::DiagHandlerTy DiagHandler,
                void *DiagContext = nullptr,
                IntrusiveRefCntPtr<FileSystem> ExternalFS = getRealFileSystem());
 
@@ -269,7 +269,7 @@ public:
   void setCaseSensitivity(bool CaseSensitive) {
     IsCaseSensitive = CaseSensitive;
   }
-  void write(llvm::raw_ostream &OS);
+  void write(llvm37::raw_ostream &OS);
 };
 
 } // end namespace vfs

@@ -2,8 +2,8 @@
 # This file is distributed under the University of Illinois Open Source License. See LICENSE.TXT for details.
 # Builds dxc_batch.exe
 
-set( LLVM_LINK_COMPONENTS
-  ${LLVM_TARGETS_TO_BUILD}
+set( LLVM37_LINK_COMPONENTS
+  ${LLVM37_TARGETS_TO_BUILD}
   analysis
   ipa
   dxcsupport

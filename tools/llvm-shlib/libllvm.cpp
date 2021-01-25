@@ -12,9 +12,9 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Config/config.h"
+#include "llvm37/Config/config.h"
 
-#if defined(DISABLE_LLVM_DYLIB_ATEXIT)
+#if defined(DISABLE_LLVM37_DYLIB_ATEXIT)
 extern "C" int __cxa_atexit();
 extern "C" int __cxa_atexit() { return 0; }
 #endif

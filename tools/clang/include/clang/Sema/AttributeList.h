@@ -12,16 +12,16 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_SEMA_ATTRIBUTELIST_H
-#define LLVM_CLANG_SEMA_ATTRIBUTELIST_H
+#ifndef LLVM37_CLANG_SEMA_ATTRIBUTELIST_H
+#define LLVM37_CLANG_SEMA_ATTRIBUTELIST_H
 
 #include "clang/Basic/SourceLocation.h"
 #include "clang/Basic/VersionTuple.h"
 #include "clang/Sema/Ownership.h"
-#include "llvm/ADT/PointerUnion.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/ADT/Triple.h"
-#include "llvm/Support/Allocator.h"
+#include "llvm37/ADT/PointerUnion.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/ADT/Triple.h"
+#include "llvm37/Support/Allocator.h"
 #include <cassert>
 
 namespace clang {
@@ -57,8 +57,8 @@ struct IdentifierLoc {
 
 /// \brief A union of the various pointer types that can be passed to an
 /// AttributeList as an argument.
-typedef llvm::PointerUnion<Expr*, IdentifierLoc*> ArgsUnion;
-typedef llvm::SmallVector<ArgsUnion, 12U> ArgsVector;
+typedef llvm37::PointerUnion<Expr*, IdentifierLoc*> ArgsUnion;
+typedef llvm37::SmallVector<ArgsUnion, 12U> ArgsVector;
 
 /// AttributeList - Represents a syntactic attribute.
 ///
@@ -466,7 +466,7 @@ public:
   bool hasVariadicArg() const;
   bool diagnoseAppertainsTo(class Sema &S, const Decl *D) const;
   bool diagnoseLangOpts(class Sema &S) const;
-  bool existsInTarget(const llvm::Triple &T) const;
+  bool existsInTarget(const llvm37::Triple &T) const;
   bool isKnownToGCC() const;
 
   /// \brief If the parsed attribute has a semantic equivalent, and it would
@@ -514,7 +514,7 @@ private:
       1 + (AvailabilityAllocSize - sizeof(AttributeList)) / sizeof(void*)
   };
 
-  llvm::BumpPtrAllocator Alloc;
+  llvm37::BumpPtrAllocator Alloc;
 
   /// Free lists.  The index is determined by the following formula:
   ///   (size - sizeof(AttributeList)) / sizeof(void*)

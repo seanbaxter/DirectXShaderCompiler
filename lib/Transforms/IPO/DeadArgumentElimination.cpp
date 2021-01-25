@@ -17,28 +17,28 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Transforms/IPO.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/ADT/StringExtras.h"
-#include "llvm/IR/CallSite.h"
-#include "llvm/IR/CallingConv.h"
-#include "llvm/IR/Constant.h"
-#include "llvm/IR/DIBuilder.h"
-#include "llvm/IR/DebugInfo.h"
-#include "llvm/IR/DerivedTypes.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Module.h"
-#include "llvm/Pass.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/Transforms/IPO.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/ADT/StringExtras.h"
+#include "llvm37/IR/CallSite.h"
+#include "llvm37/IR/CallingConv.h"
+#include "llvm37/IR/Constant.h"
+#include "llvm37/IR/DIBuilder.h"
+#include "llvm37/IR/DebugInfo.h"
+#include "llvm37/IR/DerivedTypes.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/Pass.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <map>
 #include <set>
 #include <tuple>
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "deadargelim"
 
@@ -185,8 +185,8 @@ INITIALIZE_PASS(DAH, "deadarghaX0r",
 /// createDeadArgEliminationPass - This pass removes arguments from functions
 /// which are not used by the body of the function.
 ///
-ModulePass *llvm::createDeadArgEliminationPass() { return new DAE(); }
-ModulePass *llvm::createDeadArgHackingPass() { return new DAH(); }
+ModulePass *llvm37::createDeadArgEliminationPass() { return new DAE(); }
+ModulePass *llvm37::createDeadArgHackingPass() { return new DAH(); }
 
 /// DeleteDeadVarargs - If this is an function that takes a ... list, and if
 /// llvm.vastart is never called, the varargs list is dead for the function.

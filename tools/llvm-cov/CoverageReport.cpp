@@ -13,10 +13,10 @@
 
 #include "CoverageReport.h"
 #include "RenderingSupport.h"
-#include "llvm/Support/FileSystem.h"
-#include "llvm/Support/Format.h"
+#include "llvm37/Support/FileSystem.h"
+#include "llvm37/Support/Format.h"
 
-using namespace llvm;
+using namespace llvm37;
 namespace {
 /// \brief Helper struct which prints trimmed and aligned columns.
 struct Column {

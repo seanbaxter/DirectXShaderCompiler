@@ -16,12 +16,12 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_STATICANALYZER_CHECKERS_OBJCRETAINCOUNT_H
-#define LLVM_CLANG_STATICANALYZER_CHECKERS_OBJCRETAINCOUNT_H
+#ifndef LLVM37_CLANG_STATICANALYZER_CHECKERS_OBJCRETAINCOUNT_H
+#define LLVM37_CLANG_STATICANALYZER_CHECKERS_OBJCRETAINCOUNT_H
 
 #include "clang/Basic/LLVM.h"
-#include "llvm/ADT/ArrayRef.h"
-#include "llvm/ADT/SmallVector.h"
+#include "llvm37/ADT/ArrayRef.h"
+#include "llvm37/ADT/SmallVector.h"
 
 namespace clang {
 class FunctionDecl;
@@ -205,7 +205,7 @@ public:
 /// static analyzer checker that implements retain/release typestate
 /// tracking uses something more efficient.
 class CallEffects {
-  llvm::SmallVector<ArgEffect, 10> Args;
+  llvm37::SmallVector<ArgEffect, 10> Args;
   RetEffect Ret;
   ArgEffect Receiver;
 

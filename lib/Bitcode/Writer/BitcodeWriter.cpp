@@ -11,28 +11,28 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Bitcode/ReaderWriter.h"
+#include "llvm37/Bitcode/ReaderWriter.h"
 #include "ValueEnumerator.h"
-#include "llvm/ADT/Triple.h"
-#include "llvm/Bitcode/BitstreamWriter.h"
-#include "llvm/Bitcode/LLVMBitCodes.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/DebugInfoMetadata.h"
-#include "llvm/IR/DerivedTypes.h"
-#include "llvm/IR/InlineAsm.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/Operator.h"
-#include "llvm/IR/UseListOrder.h"
-#include "llvm/IR/ValueSymbolTable.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/MathExtras.h"
-#include "llvm/Support/Program.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/Triple.h"
+#include "llvm37/Bitcode/BitstreamWriter.h"
+#include "llvm37/Bitcode/LLVMBitCodes.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/DebugInfoMetadata.h"
+#include "llvm37/IR/DerivedTypes.h"
+#include "llvm37/IR/InlineAsm.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/Operator.h"
+#include "llvm37/IR/UseListOrder.h"
+#include "llvm37/IR/ValueSymbolTable.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/MathExtras.h"
+#include "llvm37/Support/Program.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <cctype>
 #include <map>
-using namespace llvm;
+using namespace llvm37;
 
 /// These are manifest constants used by the bitcode writer. They do not need to
 /// be kept in sync with the reader, but need to be consistent within this file.
@@ -1181,7 +1181,7 @@ static void WriteModuleMetadata(const Module *M,
 
   // Initialize MDNode abbreviations.
 #define HANDLE_MDNODE_LEAF(CLASS) unsigned CLASS##Abbrev = 0;
-#include "llvm/IR/Metadata.def"
+#include "llvm37/IR/Metadata.def"
 
   if (VE.hasDILocation()) {
     // Abbrev for METADATA_LOCATION.
@@ -1236,7 +1236,7 @@ static void WriteModuleMetadata(const Module *M,
   case Metadata::CLASS##Kind:                                                  \
     Write##CLASS(cast<CLASS>(N), VE, Stream, Record, CLASS##Abbrev);           \
     continue;
-#include "llvm/IR/Metadata.def"
+#include "llvm37/IR/Metadata.def"
       }
     }
     if (const auto *MDC = dyn_cast<ConstantAsMetadata>(MD)) {
@@ -2493,7 +2493,7 @@ static void EmitDarwinBCHeaderAndTrailer(SmallVectorImpl<char> &Buffer,
 
 /// WriteBitcodeToFile - Write the specified module to the specified output
 /// stream.
-void llvm::WriteBitcodeToFile(const Module *M, raw_ostream &Out,
+void llvm37::WriteBitcodeToFile(const Module *M, raw_ostream &Out,
                               bool ShouldPreserveUseListOrder) {
   SmallVector<char, 0> Buffer;
   Buffer.reserve(256*1024);

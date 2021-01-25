@@ -12,21 +12,21 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_AST_VTTBUILDER_H
-#define LLVM_CLANG_AST_VTTBUILDER_H
+#ifndef LLVM37_CLANG_AST_VTTBUILDER_H
+#define LLVM37_CLANG_AST_VTTBUILDER_H
 
 #include "clang/AST/BaseSubobject.h"
 #include "clang/AST/CXXInheritance.h"
 #include "clang/AST/GlobalDecl.h"
 #include "clang/AST/RecordLayout.h"
 #include "clang/Basic/ABI.h"
-#include "llvm/ADT/SetVector.h"
+#include "llvm37/ADT/SetVector.h"
 #include <utility>
 
 namespace clang {
 
 class VTTVTable {
-  llvm::PointerIntPair<const CXXRecordDecl *, 1, bool> BaseAndIsVirtual;
+  llvm37::PointerIntPair<const CXXRecordDecl *, 1, bool> BaseAndIsVirtual;
   CharUnits BaseOffset;
 
 public:
@@ -84,16 +84,16 @@ class VTTBuilder {
   /// \brief The AST record layout of the most derived class.
   const ASTRecordLayout &MostDerivedClassLayout;
 
-  typedef llvm::SmallPtrSet<const CXXRecordDecl *, 4> VisitedVirtualBasesSetTy;
+  typedef llvm37::SmallPtrSet<const CXXRecordDecl *, 4> VisitedVirtualBasesSetTy;
 
-  typedef llvm::DenseMap<BaseSubobject, uint64_t> AddressPointsMapTy;
+  typedef llvm37::DenseMap<BaseSubobject, uint64_t> AddressPointsMapTy;
 
   /// \brief The sub-VTT indices for the bases of the most derived class.
-  llvm::DenseMap<BaseSubobject, uint64_t> SubVTTIndicies;
+  llvm37::DenseMap<BaseSubobject, uint64_t> SubVTTIndicies;
 
   /// \brief The secondary virtual pointer indices of all subobjects of
   /// the most derived class.
-  llvm::DenseMap<BaseSubobject, uint64_t> SecondaryVirtualPointerIndices;
+  llvm37::DenseMap<BaseSubobject, uint64_t> SecondaryVirtualPointerIndices;
 
   /// \brief Whether the VTT builder should generate LLVM IR for the VTT.
   bool GenerateDefinition;
@@ -145,12 +145,12 @@ public:
   }
   
   /// \brief Returns a reference to the sub-VTT indices.
-  const llvm::DenseMap<BaseSubobject, uint64_t> &getSubVTTIndicies() const {
+  const llvm37::DenseMap<BaseSubobject, uint64_t> &getSubVTTIndicies() const {
     return SubVTTIndicies;
   }
   
   /// \brief Returns a reference to the secondary virtual pointer indices.
-  const llvm::DenseMap<BaseSubobject, uint64_t> &
+  const llvm37::DenseMap<BaseSubobject, uint64_t> &
   getSecondaryVirtualPointerIndices() const {
     return SecondaryVirtualPointerIndices;
   }

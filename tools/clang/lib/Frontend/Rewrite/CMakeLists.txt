@@ -1,6 +1,6 @@
-set(LLVM_OPTIONAL_SOURCES RewriteModernObjC.cpp) # HLSL Change - ignore file
+set(LLVM37_OPTIONAL_SOURCES RewriteModernObjC.cpp) # HLSL Change - ignore file
 
-set(LLVM_LINK_COMPONENTS
+set(LLVM37_LINK_COMPONENTS
   Support
   )
 

@@ -15,7 +15,7 @@
 #include "clang/AST/CommentLexer.h"
 #include "clang/AST/CommentParser.h"
 #include "clang/AST/CommentSema.h"
-#include "llvm/ADT/STLExtras.h"
+#include "llvm37/ADT/STLExtras.h"
 
 using namespace clang;
 
@@ -122,7 +122,7 @@ const char *RawComment::extractBriefText(const ASTContext &Context) const {
   // Since we will be copying the resulting text, all allocations made during
   // parsing are garbage after resulting string is formed.  Thus we can use
   // a separate allocator for all temporary stuff.
-  llvm::BumpPtrAllocator Allocator;
+  llvm37::BumpPtrAllocator Allocator;
 
   comments::Lexer L(Allocator, Context.getDiagnostics(),
                     Context.getCommentCommandTraits(),
@@ -211,7 +211,7 @@ static bool onlyWhitespaceBetween(SourceManager &SM,
 }
 
 void RawCommentList::addComment(const RawComment &RC,
-                                llvm::BumpPtrAllocator &Allocator) {
+                                llvm37::BumpPtrAllocator &Allocator) {
   if (RC.isInvalid())
     return;
 

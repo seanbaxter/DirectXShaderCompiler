@@ -19,11 +19,11 @@
 #include "clang/Frontend/SerializedDiagnostics.h"
 #include "clang/Frontend/TextDiagnosticPrinter.h"
 #include "clang/Lex/Lexer.h"
-#include "llvm/ADT/DenseSet.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/ADT/StringRef.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/DenseSet.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/ADT/StringRef.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <vector>
 
 using namespace clang;
@@ -32,7 +32,7 @@ using namespace clang::serialized_diags;
 namespace {
   
 class AbbreviationMap {
-  llvm::DenseMap<unsigned, unsigned> Abbrevs;
+  llvm37::DenseMap<unsigned, unsigned> Abbrevs;
 public:
   AbbreviationMap() {}
   
@@ -92,7 +92,7 @@ protected:
                      DiagnosticsEngine::Level Level) override;
 };
 
-typedef llvm::DenseMap<unsigned, unsigned> AbbrevLookup;
+typedef llvm37::DenseMap<unsigned, unsigned> AbbrevLookup;
 
 class SDiagsMerger : SerializedDiagnosticReader {
   SDiagsWriter &Writer;
@@ -264,7 +264,7 @@ private:
     SmallString<1024> Buffer;
 
     /// \brief The BitStreamWriter for the serialized diagnostics.
-    llvm::BitstreamWriter Stream;
+    llvm37::BitstreamWriter Stream;
 
     /// \brief The name of the diagnostics file.
     std::string OutputFile;
@@ -279,12 +279,12 @@ private:
     SmallString<256> diagBuf;
 
     /// \brief The collection of diagnostic categories used.
-    llvm::DenseSet<unsigned> Categories;
+    llvm37::DenseSet<unsigned> Categories;
 
     /// \brief The collection of files used.
-    llvm::DenseMap<const char *, unsigned> Files;
+    llvm37::DenseMap<const char *, unsigned> Files;
 
-    typedef llvm::DenseMap<const void *, std::pair<unsigned, StringRef> >
+    typedef llvm37::DenseMap<const void *, std::pair<unsigned, StringRef> >
     DiagFlagsTy;
 
     /// \brief Map for uniquing strings.
@@ -308,7 +308,7 @@ namespace clang {
 namespace serialized_diags {
 std::unique_ptr<DiagnosticConsumer>
 create(StringRef OutputFile, DiagnosticOptions *Diags, bool MergeChildRecords) {
-  return llvm::make_unique<SDiagsWriter>(OutputFile, Diags, MergeChildRecords);
+  return llvm37::make_unique<SDiagsWriter>(OutputFile, Diags, MergeChildRecords);
 }
 
 } // end namespace serialized_diags
@@ -320,11 +320,11 @@ create(StringRef OutputFile, DiagnosticOptions *Diags, bool MergeChildRecords) {
 
 /// \brief Emits a block ID in the BLOCKINFO block.
 static void EmitBlockID(unsigned ID, const char *Name,
-                        llvm::BitstreamWriter &Stream,
+                        llvm37::BitstreamWriter &Stream,
                         RecordDataImpl &Record) {
   Record.clear();
   Record.push_back(ID);
-  Stream.EmitRecord(llvm::bitc::BLOCKINFO_CODE_SETBID, Record);
+  Stream.EmitRecord(llvm37::bitc::BLOCKINFO_CODE_SETBID, Record);
   
   // Emit the block name if present.
   if (!Name || Name[0] == 0)
@@ -335,12 +335,12 @@ static void EmitBlockID(unsigned ID, const char *Name,
   while (*Name)
     Record.push_back(*Name++);
 
-  Stream.EmitRecord(llvm::bitc::BLOCKINFO_CODE_BLOCKNAME, Record);
+  Stream.EmitRecord(llvm37::bitc::BLOCKINFO_CODE_BLOCKNAME, Record);
 }
 
 /// \brief Emits a record ID in the BLOCKINFO block.
 static void EmitRecordID(unsigned ID, const char *Name,
-                         llvm::BitstreamWriter &Stream,
+                         llvm37::BitstreamWriter &Stream,
                          RecordDataImpl &Record){
   Record.clear();
   Record.push_back(ID);
@@ -348,7 +348,7 @@ static void EmitRecordID(unsigned ID, const char *Name,
   while (*Name)
     Record.push_back(*Name++);
 
-  Stream.EmitRecord(llvm::bitc::BLOCKINFO_CODE_SETRECORDNAME, Record);
+  Stream.EmitRecord(llvm37::bitc::BLOCKINFO_CODE_SETRECORDNAME, Record);
 }
 
 void SDiagsWriter::AddLocToRecord(SourceLocation Loc,
@@ -427,15 +427,15 @@ void SDiagsWriter::EmitPreamble() {
   EmitMetaBlock();
 }
 
-static void AddSourceLocationAbbrev(llvm::BitCodeAbbrev *Abbrev) {
-  using namespace llvm;
+static void AddSourceLocationAbbrev(llvm37::BitCodeAbbrev *Abbrev) {
+  using namespace llvm37;
   Abbrev->Add(BitCodeAbbrevOp(BitCodeAbbrevOp::Fixed, 10)); // File ID.
   Abbrev->Add(BitCodeAbbrevOp(BitCodeAbbrevOp::Fixed, 32)); // Line.
   Abbrev->Add(BitCodeAbbrevOp(BitCodeAbbrevOp::Fixed, 32)); // Column.
   Abbrev->Add(BitCodeAbbrevOp(BitCodeAbbrevOp::Fixed, 32)); // Offset;
 }
 
-static void AddRangeLocationAbbrev(llvm::BitCodeAbbrev *Abbrev) {
+static void AddRangeLocationAbbrev(llvm37::BitCodeAbbrev *Abbrev) {
   AddSourceLocationAbbrev(Abbrev);
   AddSourceLocationAbbrev(Abbrev);  
 }
@@ -443,8 +443,8 @@ static void AddRangeLocationAbbrev(llvm::BitCodeAbbrev *Abbrev) {
 void SDiagsWriter::EmitBlockInfoBlock() {
   State->Stream.EnterBlockInfoBlock(3);
 
-  using namespace llvm;
-  llvm::BitstreamWriter &Stream = State->Stream;
+  using namespace llvm37;
+  llvm37::BitstreamWriter &Stream = State->Stream;
   RecordData &Record = State->Record;
   AbbreviationMap &Abbrevs = State->Abbrevs;
 
@@ -530,7 +530,7 @@ void SDiagsWriter::EmitBlockInfoBlock() {
 }
 
 void SDiagsWriter::EmitMetaBlock() {
-  llvm::BitstreamWriter &Stream = State->Stream;
+  llvm37::BitstreamWriter &Stream = State->Stream;
   RecordData &Record = State->Record;
   AbbreviationMap &Abbrevs = State->Abbrevs;
 
@@ -660,7 +660,7 @@ void SDiagsWriter::EmitDiagnosticMessage(SourceLocation Loc,
                                          StringRef Message,
                                          const SourceManager *SM,
                                          DiagOrStoredDiag D) {
-  llvm::BitstreamWriter &Stream = State->Stream;
+  llvm37::BitstreamWriter &Stream = State->Stream;
   RecordData &Record = State->Record;
   AbbreviationMap &Abbrevs = State->Abbrevs;
   
@@ -721,7 +721,7 @@ void SDiagsRenderer::endDiagnostic(DiagOrStoredDiag D,
 void SDiagsWriter::EmitCodeContext(SmallVectorImpl<CharSourceRange> &Ranges,
                                    ArrayRef<FixItHint> Hints,
                                    const SourceManager &SM) {
-  llvm::BitstreamWriter &Stream = State->Stream;
+  llvm37::BitstreamWriter &Stream = State->Stream;
   RecordData &Record = State->Record;
   AbbreviationMap &Abbrevs = State->Abbrevs;
 
@@ -780,15 +780,15 @@ DiagnosticsEngine *SDiagsWriter::getMetaDiags() {
   if (!State->MetaDiagnostics) {
     IntrusiveRefCntPtr<DiagnosticIDs> IDs(new DiagnosticIDs());
     auto Client =
-        new TextDiagnosticPrinter(llvm::errs(), State->DiagOpts.get());
-    State->MetaDiagnostics = llvm::make_unique<DiagnosticsEngine>(
+        new TextDiagnosticPrinter(llvm37::errs(), State->DiagOpts.get());
+    State->MetaDiagnostics = llvm37::make_unique<DiagnosticsEngine>(
         IDs, State->DiagOpts.get(), Client);
   }
   return State->MetaDiagnostics.get();
 }
 
 void SDiagsWriter::RemoveOldDiagnostics() {
-  if (!llvm::sys::fs::remove(State->OutputFile))
+  if (!llvm37::sys::fs::remove(State->OutputFile))
     return;
 
   getMetaDiags()->Report(diag::warn_fe_serialized_diag_merge_failure);
@@ -812,14 +812,14 @@ void SDiagsWriter::finish() {
       // process' output alone
       return;
 
-    if (llvm::sys::fs::exists(State->OutputFile))
+    if (llvm37::sys::fs::exists(State->OutputFile))
       if (SDiagsMerger(*this).mergeRecordsFromFile(State->OutputFile.c_str()))
         getMetaDiags()->Report(diag::warn_fe_serialized_diag_merge_failure);
   }
 
   std::error_code EC;
-  auto OS = llvm::make_unique<llvm::raw_fd_ostream>(State->OutputFile.c_str(),
-                                                    EC, llvm::sys::fs::F_None);
+  auto OS = llvm37::make_unique<llvm37::raw_fd_ostream>(State->OutputFile.c_str(),
+                                                    EC, llvm37::sys::fs::F_None);
   if (EC) {
     getMetaDiags()->Report(diag::warn_fe_serialized_diag_failure)
         << State->OutputFile << EC.message();

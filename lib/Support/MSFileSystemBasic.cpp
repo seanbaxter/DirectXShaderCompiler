@@ -23,7 +23,7 @@
 #include <new>
 #include <unordered_map>
 
-#include "llvm/Support/MSFileSystem.h"
+#include "llvm37/Support/MSFileSystem.h"
 #include "dxc/Support/Global.h"
 
 #include "dxc/dxcapi.internal.h"
@@ -33,10 +33,10 @@
 // Externally visible functions.
 
 /// <summary>Creates an implementation based on IDxcSystemAccess.</summary>
-HRESULT CreateMSFileSystemForIface(_In_ IUnknown* pService, _COM_Outptr_ ::llvm::sys::fs::MSFileSystem** pResult) throw();
+HRESULT CreateMSFileSystemForIface(_In_ IUnknown* pService, _COM_Outptr_ ::llvm37::sys::fs::MSFileSystem** pResult) throw();
 
 /// <summary>Creates an implementation with no access to system resources.</summary>
-HRESULT CreateMSFileSystemBlocked(_COM_Outptr_ ::llvm::sys::fs::MSFileSystem** pResult) throw();
+HRESULT CreateMSFileSystemBlocked(_COM_Outptr_ ::llvm37::sys::fs::MSFileSystem** pResult) throw();
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // Helper functions.
@@ -149,7 +149,7 @@ struct MSFileSystemHandle
   }
 };
 
-namespace llvm {
+namespace llvm37 {
 namespace sys  {
 namespace fs {
 
@@ -966,7 +966,7 @@ int MSFileSystemForIface::Fstat(int FD, struct stat *Status) throw() {
 
 } // end namespace fs
 } // end namespace sys
-} // end namespace llvm
+} // end namespace llvm37
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // Blocked MSFileSystem implementation.
@@ -1004,7 +1004,7 @@ static int MSFileSystemBlockedErrnoT()
   return EBADF;
 }
 
-namespace llvm {
+namespace llvm37 {
 namespace sys  {
 namespace fs {
 
@@ -1170,14 +1170,14 @@ DWORD MSFileSystemBlocked::GetTempPathW(DWORD nBufferLength, LPWSTR lpBuffer) th
 
 } // end namespace fs
 } // end namespace sys
-} // end namespace llvm
+} // end namespace llvm37
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // Externally visible functions.
 
 _Use_decl_annotations_
-HRESULT CreateMSFileSystemForIface(IUnknown* pService, ::llvm::sys::fs::MSFileSystem** pResult) throw()
+HRESULT CreateMSFileSystemForIface(IUnknown* pService, ::llvm37::sys::fs::MSFileSystem** pResult) throw()
 {
   DXASSERT_NOMSG(pService != nullptr);
   DXASSERT_NOMSG(pResult != nullptr);
@@ -1186,15 +1186,15 @@ HRESULT CreateMSFileSystemForIface(IUnknown* pService, ::llvm::sys::fs::MSFileSy
   HRESULT hr = pService->QueryInterface(__uuidof(IDxcSystemAccess), (void**)&systemAccess);
   if (FAILED(hr)) return hr;
 
-  *pResult = new (std::nothrow) ::llvm::sys::fs::MSFileSystemForIface(systemAccess);
+  *pResult = new (std::nothrow) ::llvm37::sys::fs::MSFileSystemForIface(systemAccess);
   return (*pResult != nullptr) ? S_OK : E_OUTOFMEMORY;
 }
 
 _Use_decl_annotations_
-HRESULT CreateMSFileSystemBlocked(::llvm::sys::fs::MSFileSystem** pResult) throw()
+HRESULT CreateMSFileSystemBlocked(::llvm37::sys::fs::MSFileSystem** pResult) throw()
 {
   DXASSERT_NOMSG(pResult != nullptr);
-  *pResult = new (std::nothrow) ::llvm::sys::fs::MSFileSystemBlocked();
+  *pResult = new (std::nothrow) ::llvm37::sys::fs::MSFileSystemBlocked();
   return (*pResult != nullptr) ? S_OK : E_OUTOFMEMORY;
 }
 

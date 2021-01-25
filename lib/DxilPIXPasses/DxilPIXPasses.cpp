@@ -13,13 +13,13 @@
 #include "dxc/Support/Global.h"
 #include "dxc/Support/WinIncludes.h"
 
-#include "llvm/IR/LegacyPassManager.h"
-#include "llvm/Pass.h"
-#include "llvm/PassInfo.h"
-#include "llvm/Support/SourceMgr.h"
-#include "llvm/Transforms/IPO/PassManagerBuilder.h"
+#include "llvm37/IR/LegacyPassManager.h"
+#include "llvm37/Pass.h"
+#include "llvm37/PassInfo.h"
+#include "llvm37/Support/SourceMgr.h"
+#include "llvm37/Transforms/IPO/PassManagerBuilder.h"
 
-using namespace llvm;
+using namespace llvm37;
 using namespace hlsl;
 
 namespace hlsl {

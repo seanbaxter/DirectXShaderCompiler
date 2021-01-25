@@ -7,11 +7,11 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/DebugInfo/PDB/PDBSymbol.h"
-#include "llvm/DebugInfo/PDB/DIA/DIADataStream.h"
-#include "llvm/DebugInfo/PDB/DIA/DIAEnumDebugStreams.h"
+#include "llvm37/DebugInfo/PDB/PDBSymbol.h"
+#include "llvm37/DebugInfo/PDB/DIA/DIADataStream.h"
+#include "llvm37/DebugInfo/PDB/DIA/DIAEnumDebugStreams.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 DIAEnumDebugStreams::DIAEnumDebugStreams(
     CComPtr<IDiaEnumDebugStreams> DiaEnumerator)

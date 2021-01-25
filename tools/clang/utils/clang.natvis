@@ -14,9 +14,9 @@ mklink "%USERPROFILE%\Documents\Visual Studio 2015\Visualizers\llvm.natvis" %HLS
 -->
 <AutoVisualizer xmlns="http://schemas.microsoft.com/vstudio/debugger/natvis/2010">
   <Type Name="clang::IdentifierInfo">
-    <DisplayString Condition="Entry != 0">({((llvm::StringMapEntry&lt;clang::IdentifierInfo *&gt;*)Entry)+1,s})</DisplayString>
+    <DisplayString Condition="Entry != 0">({((llvm37::StringMapEntry&lt;clang::IdentifierInfo *&gt;*)Entry)+1,s})</DisplayString>
     <Expand>
-      <Item Condition="Entry != 0" Name="[Identifier]">((llvm::StringMapEntry&lt;clang::IdentifierInfo *&gt;*)Entry)+1,s</Item>
+      <Item Condition="Entry != 0" Name="[Identifier]">((llvm37::StringMapEntry&lt;clang::IdentifierInfo *&gt;*)Entry)+1,s</Item>
       <Item Name="Token Kind">(clang::tok::TokenKind)TokenID</Item>
     </Expand>
   </Type>

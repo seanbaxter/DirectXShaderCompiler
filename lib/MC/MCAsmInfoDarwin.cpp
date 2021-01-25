@@ -12,11 +12,11 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/MC/MCAsmInfoDarwin.h"
-#include "llvm/MC/MCContext.h"
-#include "llvm/MC/MCExpr.h"
-#include "llvm/MC/MCSectionMachO.h"
-using namespace llvm;
+#include "llvm37/MC/MCAsmInfoDarwin.h"
+#include "llvm37/MC/MCContext.h"
+#include "llvm37/MC/MCExpr.h"
+#include "llvm37/MC/MCSectionMachO.h"
+using namespace llvm37;
 
 bool MCAsmInfoDarwin::isSectionAtomizableBySymbols(
     const MCSection &Section) const {

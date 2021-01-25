@@ -7,14 +7,14 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Support/CrashRecoveryContext.h"
-#include "llvm/Config/config.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/ManagedStatic.h"
-#include "llvm/Support/Mutex.h"
-#include "llvm/Support/ThreadLocal.h"
+#include "llvm37/Support/CrashRecoveryContext.h"
+#include "llvm37/Config/config.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/ManagedStatic.h"
+#include "llvm37/Support/Mutex.h"
+#include "llvm37/Support/ThreadLocal.h"
 #include <setjmp.h>
-using namespace llvm;
+using namespace llvm37;
 
 namespace {
 
@@ -129,7 +129,7 @@ CrashRecoveryContext::unregisterCleanup(CrashRecoveryContextCleanup *cleanup) {
   delete cleanup;
 }
 
-#ifdef LLVM_ON_WIN32
+#ifdef LLVM37_ON_WIN32
 
 #include "Windows/WindowsSupport.h"
 

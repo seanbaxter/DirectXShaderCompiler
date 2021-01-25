@@ -11,14 +11,14 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/IR/TypeFinder.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/IR/BasicBlock.h"
-#include "llvm/IR/DerivedTypes.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/Metadata.h"
-#include "llvm/IR/Module.h"
-using namespace llvm;
+#include "llvm37/IR/TypeFinder.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/IR/BasicBlock.h"
+#include "llvm37/IR/DerivedTypes.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/Metadata.h"
+#include "llvm37/IR/Module.h"
+using namespace llvm37;
 
 void TypeFinder::run(const Module &M, bool onlyNamed) {
   OnlyNamed = onlyNamed;

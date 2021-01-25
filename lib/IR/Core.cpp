@@ -13,38 +13,38 @@
 //===----------------------------------------------------------------------===//
 
 #include "llvm-c/Core.h"
-#include "llvm/Bitcode/ReaderWriter.h"
-#include "llvm/IR/Attributes.h"
-#include "llvm/IR/CallSite.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/DerivedTypes.h"
-#include "llvm/IR/DiagnosticInfo.h"
-#include "llvm/IR/DiagnosticPrinter.h"
-#include "llvm/IR/GlobalAlias.h"
-#include "llvm/IR/GlobalVariable.h"
-#include "llvm/IR/IRBuilder.h"
-#include "llvm/IR/InlineAsm.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/LegacyPassManager.h"
-#include "llvm/IR/Module.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/FileSystem.h"
-#include "llvm/Support/ManagedStatic.h"
-#include "llvm/Support/MemoryBuffer.h"
-#include "llvm/Support/Threading.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/Bitcode/ReaderWriter.h"
+#include "llvm37/IR/Attributes.h"
+#include "llvm37/IR/CallSite.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/DerivedTypes.h"
+#include "llvm37/IR/DiagnosticInfo.h"
+#include "llvm37/IR/DiagnosticPrinter.h"
+#include "llvm37/IR/GlobalAlias.h"
+#include "llvm37/IR/GlobalVariable.h"
+#include "llvm37/IR/IRBuilder.h"
+#include "llvm37/IR/InlineAsm.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/LegacyPassManager.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/FileSystem.h"
+#include "llvm37/Support/ManagedStatic.h"
+#include "llvm37/Support/MemoryBuffer.h"
+#include "llvm37/Support/Threading.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <cassert>
 #include <cstdlib>
 #include <cstring>
 #include <system_error>
 
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "ir"
 
-void llvm::initializeCore(PassRegistry &Registry) {
+void llvm37::initializeCore(PassRegistry &Registry) {
   initializeDominatorTreeWrapperPassPass(Registry);
   initializePrintModulePassWrapperPass(Registry);
   initializePrintFunctionPassWrapperPass(Registry);
@@ -90,14 +90,14 @@ void LLVMContextSetDiagnosticHandler(LLVMContextRef C,
                                      LLVMDiagnosticHandler Handler,
                                      void *DiagnosticContext) {
   unwrap(C)->setDiagnosticHandler(
-      LLVM_EXTENSION reinterpret_cast<LLVMContext::DiagnosticHandlerTy>(Handler),
+      LLVM37_EXTENSION reinterpret_cast<LLVMContext::DiagnosticHandlerTy>(Handler),
       DiagnosticContext);
 }
 
 void LLVMContextSetYieldCallback(LLVMContextRef C, LLVMYieldCallback Callback,
                                  void *OpaqueHandle) {
   auto YieldCallback =
-    LLVM_EXTENSION reinterpret_cast<LLVMContext::YieldCallbackTy>(Callback);
+    LLVM37_EXTENSION reinterpret_cast<LLVMContext::YieldCallbackTy>(Callback);
   unwrap(C)->setYieldCallback(YieldCallback, OpaqueHandle);
 }
 
@@ -601,12 +601,12 @@ void LLVMSetMetadata(LLVMValueRef Inst, unsigned KindID, LLVMValueRef Val) {
 
 /*--.. Conversion functions ................................................--*/
 
-#define LLVM_DEFINE_VALUE_CAST(name)                                       \
+#define LLVM37_DEFINE_VALUE_CAST(name)                                       \
   LLVMValueRef LLVMIsA##name(LLVMValueRef Val) {                           \
     return wrap(static_cast<Value*>(dyn_cast_or_null<name>(unwrap(Val)))); \
   }
 
-LLVM_FOR_EACH_VALUE_SUBCLASS(LLVM_DEFINE_VALUE_CAST)
+LLVM37_FOR_EACH_VALUE_SUBCLASS(LLVM37_DEFINE_VALUE_CAST)
 
 LLVMValueRef LLVMIsAMDNode(LLVMValueRef Val) {
   if (auto *MD = dyn_cast_or_null<MetadataAsValue>(unwrap(Val)))
@@ -969,7 +969,7 @@ static LLVMOpcode map_to_llvmopcode(int opcode)
     switch (opcode) {
       default: llvm_unreachable("Unhandled Opcode.");
 #define HANDLE_INST(num, opc, clas) case num: return LLVM##opc;
-#include "llvm/IR/Instruction.def"
+#include "llvm37/IR/Instruction.def"
 #undef HANDLE_INST
     }
 }
@@ -978,7 +978,7 @@ static int map_from_llvmopcode(LLVMOpcode code)
 {
     switch (code) {
 #define HANDLE_INST(num, opc, clas) case LLVM##opc: return num;
-#include "llvm/IR/Instruction.def"
+#include "llvm37/IR/Instruction.def"
 #undef HANDLE_INST
     }
     llvm_unreachable("Unhandled Opcode.");

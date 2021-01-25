@@ -15,7 +15,7 @@ namespace hlsl {
   class DxilModule;
 }
 
-namespace llvm {
+namespace llvm37 {
   class Function;
 }
 
@@ -25,7 +25,7 @@ namespace hlsl {
   public:
     ShaderFlags();
 
-    static ShaderFlags CollectShaderFlags(const llvm::Function *F, const hlsl::DxilModule *M);
+    static ShaderFlags CollectShaderFlags(const llvm37::Function *F, const hlsl::DxilModule *M);
     unsigned GetGlobalFlags() const;
     uint64_t GetFeatureInfo() const;
     static uint64_t GetShaderFlagsRawForCollection(); // some flags are collected (eg use 64-bit), some provided (eg allow refactoring)

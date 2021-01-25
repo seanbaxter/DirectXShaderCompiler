@@ -13,16 +13,16 @@
 //===----------------------------------------------------------------------===//
 
 #include "yaml2obj.h"
-#include "llvm/ADT/ArrayRef.h"
-#include "llvm/MC/StringTableBuilder.h"
-#include "llvm/Object/ELFObjectFile.h"
-#include "llvm/Object/ELFYAML.h"
-#include "llvm/Support/ELF.h"
-#include "llvm/Support/MemoryBuffer.h"
-#include "llvm/Support/YAMLTraits.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/ArrayRef.h"
+#include "llvm37/MC/StringTableBuilder.h"
+#include "llvm37/Object/ELFObjectFile.h"
+#include "llvm37/Object/ELFYAML.h"
+#include "llvm37/Support/ELF.h"
+#include "llvm37/Support/MemoryBuffer.h"
+#include "llvm37/Support/YAMLTraits.h"
+#include "llvm37/Support/raw_ostream.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 // This class is used to build up a contiguous binary blob while keeping
 // track of an offset in the output (which notionally begins at
@@ -157,7 +157,7 @@ public:
 
 template <class ELFT>
 void ELFState<ELFT>::initELFHeader(Elf_Ehdr &Header) {
-  using namespace llvm::ELF;
+  using namespace llvm37::ELF;
   zero(Header);
   Header.e_ident[EI_MAG0] = 0x7f;
   Header.e_ident[EI_MAG1] = 'E';
@@ -352,7 +352,7 @@ ELFState<ELFT>::writeSectionContent(Elf_Shdr &SHeader,
 }
 
 static bool isMips64EL(const ELFYAML::Object &Doc) {
-  return Doc.Header.Machine == ELFYAML::ELF_EM(llvm::ELF::EM_MIPS) &&
+  return Doc.Header.Machine == ELFYAML::ELF_EM(llvm37::ELF::EM_MIPS) &&
          Doc.Header.Class == ELFYAML::ELF_ELFCLASS(ELF::ELFCLASS64) &&
          Doc.Header.Data == ELFYAML::ELF_ELFDATA(ELF::ELFDATA2LSB);
 }
@@ -362,11 +362,11 @@ bool
 ELFState<ELFT>::writeSectionContent(Elf_Shdr &SHeader,
                                     const ELFYAML::RelocationSection &Section,
                                     ContiguousBlobAccumulator &CBA) {
-  assert((Section.Type == llvm::ELF::SHT_REL ||
-          Section.Type == llvm::ELF::SHT_RELA) &&
+  assert((Section.Type == llvm37::ELF::SHT_REL ||
+          Section.Type == llvm37::ELF::SHT_RELA) &&
          "Section type is not SHT_REL nor SHT_RELA");
 
-  bool IsRela = Section.Type == llvm::ELF::SHT_RELA;
+  bool IsRela = Section.Type == llvm37::ELF::SHT_RELA;
   SHeader.sh_entsize = IsRela ? sizeof(Elf_Rela) : sizeof(Elf_Rel);
   SHeader.sh_size = SHeader.sh_entsize * Section.Relocations.size();
 
@@ -402,7 +402,7 @@ bool ELFState<ELFT>::writeSectionContent(Elf_Shdr &SHeader,
                                          const ELFYAML::Group &Section,
                                          ContiguousBlobAccumulator &CBA) {
   typedef typename object::ELFFile<ELFT>::Elf_Word Elf_Word;
-  assert(Section.Type == llvm::ELF::SHT_GROUP &&
+  assert(Section.Type == llvm37::ELF::SHT_GROUP &&
          "Section type is not SHT_GROUP");
 
   SHeader.sh_entsize = sizeof(Elf_Word);
@@ -414,7 +414,7 @@ bool ELFState<ELFT>::writeSectionContent(Elf_Shdr &SHeader,
     Elf_Word SIdx;
     unsigned int sectionIndex = 0;
     if (member.sectionNameOrType == "GRP_COMDAT")
-      sectionIndex = llvm::ELF::GRP_COMDAT;
+      sectionIndex = llvm37::ELF::GRP_COMDAT;
     else if (SN2I.lookup(member.sectionNameOrType, sectionIndex)) {
       errs() << "error: Unknown section referenced: '"
              << member.sectionNameOrType << "' at YAML section' "
@@ -431,7 +431,7 @@ template <class ELFT>
 bool ELFState<ELFT>::writeSectionContent(Elf_Shdr &SHeader,
                                          const ELFYAML::MipsABIFlags &Section,
                                          ContiguousBlobAccumulator &CBA) {
-  assert(Section.Type == llvm::ELF::SHT_MIPS_ABIFLAGS &&
+  assert(Section.Type == llvm37::ELF::SHT_MIPS_ABIFLAGS &&
          "Section type is not SHT_MIPS_ABIFLAGS");
 
   object::Elf_Mips_ABIFlags<ELFT> Flags;

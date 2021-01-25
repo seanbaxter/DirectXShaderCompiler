@@ -23,9 +23,9 @@
 #include "clang/Parse/Parser.h"
 #include "clang/Serialization/ASTReader.h"
 #include "clang/Serialization/ASTWriter.h"
-#include "llvm/Support/FileSystem.h"
-#include "llvm/Support/MemoryBuffer.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/Support/FileSystem.h"
+#include "llvm37/Support/MemoryBuffer.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <memory>
 #include <system_error>
 // HLSL Change Begin.
@@ -40,7 +40,7 @@ using namespace clang;
 
 std::unique_ptr<ASTConsumer>
 InitOnlyAction::CreateASTConsumer(CompilerInstance &CI, StringRef InFile) {
-  return llvm::make_unique<ASTConsumer>();
+  return llvm37::make_unique<ASTConsumer>();
 }
 
 void InitOnlyAction::ExecuteAction() {
@@ -97,7 +97,7 @@ GeneratePCHAction::CreateASTConsumer(CompilerInstance &CI, StringRef InFile) {
 
   auto Buffer = std::make_shared<PCHBuffer>();
   std::vector<std::unique_ptr<ASTConsumer>> Consumers;
-  Consumers.push_back(llvm::make_unique<PCHGenerator>(
+  Consumers.push_back(llvm37::make_unique<PCHGenerator>(
       CI.getPreprocessor(), OutputFile, nullptr, Sysroot, Buffer));
   Consumers.push_back(
       CI.getPCHContainerWriter().CreatePCHContainerGenerator(
@@ -105,7 +105,7 @@ GeneratePCHAction::CreateASTConsumer(CompilerInstance &CI, StringRef InFile) {
           CI.getPreprocessorOpts(), CI.getTargetOpts(), CI.getLangOpts(),
           InFile, OutputFile, OS, Buffer));
 
-  return llvm::make_unique<MultiplexConsumer>(std::move(Consumers));
+  return llvm37::make_unique<MultiplexConsumer>(std::move(Consumers));
 }
 
 raw_pwrite_stream *GeneratePCHAction::ComputeASTConsumerArguments(
@@ -143,14 +143,14 @@ GenerateModuleAction::CreateASTConsumer(CompilerInstance &CI,
 
   auto Buffer = std::make_shared<PCHBuffer>();
   std::vector<std::unique_ptr<ASTConsumer>> Consumers;
-  Consumers.push_back(llvm::make_unique<PCHGenerator>(
+  Consumers.push_back(llvm37::make_unique<PCHGenerator>(
       CI.getPreprocessor(), OutputFile, Module, Sysroot, Buffer));
   Consumers.push_back(
       CI.getPCHContainerWriter().CreatePCHContainerGenerator(
           CI.getDiagnostics(), CI.getHeaderSearchOpts(),
           CI.getPreprocessorOpts(), CI.getTargetOpts(), CI.getLangOpts(),
           InFile, OutputFile, OS, Buffer));
-  return llvm::make_unique<MultiplexConsumer>(std::move(Consumers));
+  return llvm37::make_unique<MultiplexConsumer>(std::move(Consumers));
 }
 
 static SmallVectorImpl<char> &
@@ -219,13 +219,13 @@ collectModuleHeaderIncludes(const LangOptions &LangOpts, FileManager &FileMgr,
     // Add all of the headers we find in this subdirectory.
     std::error_code EC;
     SmallString<128> DirNative;
-    llvm::sys::path::native(UmbrellaDir.Entry->getName(), DirNative);
-    for (llvm::sys::fs::recursive_directory_iterator Dir(DirNative, EC), 
+    llvm37::sys::path::native(UmbrellaDir.Entry->getName(), DirNative);
+    for (llvm37::sys::fs::recursive_directory_iterator Dir(DirNative, EC), 
                                                      DirEnd;
          Dir != DirEnd && !EC; Dir.increment(EC)) {
       // Check whether this entry has an extension typically associated with 
       // headers.
-      if (!llvm::StringSwitch<bool>(llvm::sys::path::extension(Dir->path()))
+      if (!llvm37::StringSwitch<bool>(llvm37::sys::path::extension(Dir->path()))
           .Cases(".h", ".H", ".hh", ".hpp", true)
           .Default(false))
         continue;
@@ -243,13 +243,13 @@ collectModuleHeaderIncludes(const LangOptions &LangOpts, FileManager &FileMgr,
 
       // Compute the relative path from the directory to this file.
       SmallVector<StringRef, 16> Components;
-      auto PathIt = llvm::sys::path::rbegin(Dir->path());
+      auto PathIt = llvm37::sys::path::rbegin(Dir->path());
       for (int I = 0; I != Dir.level() + 1; ++I, ++PathIt)
         Components.push_back(*PathIt);
       SmallString<128> RelativeHeader(UmbrellaDir.NameAsWritten);
       for (auto It = Components.rbegin(), End = Components.rend(); It != End;
            ++It)
-        llvm::sys::path::append(RelativeHeader, *It);
+        llvm37::sys::path::append(RelativeHeader, *It);
 
       // Include this header as part of the umbrella directory.
       Module->addTopHeader(Header);
@@ -365,8 +365,8 @@ bool GenerateModuleAction::BeginSourceFileAction(CompilerInstance &CI,
   // be resolved relative to the build directory of the module map file.
   CI.getPreprocessor().setMainFileDir(Module->Directory);
 
-  std::unique_ptr<llvm::MemoryBuffer> InputBuffer =
-      llvm::MemoryBuffer::getMemBufferCopy(HeaderContents,
+  std::unique_ptr<llvm37::MemoryBuffer> InputBuffer =
+      llvm37::MemoryBuffer::getMemBufferCopy(HeaderContents,
                                            Module::getModuleInputBufferName());
   // Ownership of InputBuffer will be transferred to the SourceManager.
   setCurrentInput(FrontendInputFile(InputBuffer.release(), getCurrentFileKind(),
@@ -405,19 +405,19 @@ raw_pwrite_stream *GenerateModuleAction::ComputeASTConsumerArguments(
 
 std::unique_ptr<ASTConsumer>
 SyntaxOnlyAction::CreateASTConsumer(CompilerInstance &CI, StringRef InFile) {
-  return llvm::make_unique<ASTConsumer>();
+  return llvm37::make_unique<ASTConsumer>();
 }
 
 #if 0 // HLSL Change Starts - no support for modules or PCH
 std::unique_ptr<ASTConsumer>
 DumpModuleInfoAction::CreateASTConsumer(CompilerInstance &CI,
                                         StringRef InFile) {
-  return llvm::make_unique<ASTConsumer>();
+  return llvm37::make_unique<ASTConsumer>();
 }
 
 std::unique_ptr<ASTConsumer>
 VerifyPCHAction::CreateASTConsumer(CompilerInstance &CI, StringRef InFile) {
-  return llvm::make_unique<ASTConsumer>();
+  return llvm37::make_unique<ASTConsumer>();
 }
 
 void VerifyPCHAction::ExecuteAction() {
@@ -443,10 +443,10 @@ namespace {
   /// \brief AST reader listener that dumps module information for a module
   /// file.
   class DumpModuleInfoListener : public ASTReaderListener {
-    llvm::raw_ostream &Out;
+    llvm37::raw_ostream &Out;
 
   public:
-    DumpModuleInfoListener(llvm::raw_ostream &Out) : Out(Out) { }
+    DumpModuleInfoListener(llvm37::raw_ostream &Out) : Out(Out) { }
 
 #define DUMP_BOOLEAN(Value, Text)                       \
     Out.indent(4) << Text << ": " << (Value? "Yes" : "No") << "\n"
@@ -575,14 +575,14 @@ namespace {
 
 void DumpModuleInfoAction::ExecuteAction() {
   // Set up the output file.
-  std::unique_ptr<llvm::raw_fd_ostream> OutFile;
+  std::unique_ptr<llvm37::raw_fd_ostream> OutFile;
   StringRef OutputFileName = getCompilerInstance().getFrontendOpts().OutputFile;
   if (!OutputFileName.empty() && OutputFileName != "-") {
     std::error_code EC;
-    OutFile.reset(new llvm::raw_fd_ostream(OutputFileName.str(), EC,
-                                           llvm::sys::fs::F_Text));
+    OutFile.reset(new llvm37::raw_fd_ostream(OutputFileName.str(), EC,
+                                           llvm37::sys::fs::F_Text));
   }
-  llvm::raw_ostream &Out = OutFile.get()? *OutFile.get() : llvm::outs();
+  llvm37::raw_ostream &Out = OutFile.get()? *OutFile.get() : llvm37::outs();
 
   Out << "Information for module file '" << getCurrentFile() << "':\n";
   DumpModuleInfoListener Listener(Out);
@@ -602,7 +602,7 @@ void DumpRawTokensAction::ExecuteAction() {
   SourceManager &SM = PP.getSourceManager();
 
   // Start lexing the specified input file.
-  const llvm::MemoryBuffer *FromFile = SM.getBuffer(SM.getMainFileID());
+  const llvm37::MemoryBuffer *FromFile = SM.getBuffer(SM.getMainFileID());
   Lexer RawLex(SM.getMainFileID(), FromFile, SM, PP.getLangOpts());
   RawLex.SetKeepWhitespaceMode(true);
 
@@ -610,7 +610,7 @@ void DumpRawTokensAction::ExecuteAction() {
   RawLex.LexFromRawLexer(RawTok);
   while (RawTok.isNot(tok::eof)) {
     PP.DumpToken(RawTok, true);
-    llvm::errs() << "\n";
+    llvm37::errs() << "\n";
     RawLex.LexFromRawLexer(RawTok);
   }
 }
@@ -623,7 +623,7 @@ void DumpTokensAction::ExecuteAction() {
   do {
     PP.Lex(Tok);
     PP.DumpToken(Tok, true);
-    llvm::errs() << "\n";
+    llvm37::errs() << "\n";
   } while (Tok.isNot(tok::eof));
 }
 
@@ -668,7 +668,7 @@ void PrintPreprocessedAction::ExecuteAction() {
   bool BinaryMode = true;
   bool InvalidFile = false;
   const SourceManager& SM = CI.getSourceManager();
-  const llvm::MemoryBuffer *Buffer = SM.getBuffer(SM.getMainFileID(), 
+  const llvm37::MemoryBuffer *Buffer = SM.getBuffer(SM.getMainFileID(), 
                                                      &InvalidFile);
   if (!InvalidFile) {
     const char *cur = Buffer->getBufferStart();
@@ -705,7 +705,7 @@ HLSLRootSignatureAction::HLSLRootSignatureAction(StringRef rootSigMacro,
                                                  unsigned major, unsigned minor)
     : HLSLRootSignatureMacro(rootSigMacro), rootSigMajor(major),
       rootSigMinor(minor) {
-  rootSigHandle = llvm::make_unique<hlsl::RootSignatureHandle>();
+  rootSigHandle = llvm37::make_unique<hlsl::RootSignatureHandle>();
 }
 
 void HLSLRootSignatureAction::ExecuteAction() {
@@ -785,7 +785,7 @@ void PrintPreambleAction::ExecuteAction() {
   case IK_PreprocessedObjC:
   case IK_PreprocessedObjCXX:
   case IK_AST:
-  case IK_LLVM_IR:
+  case IK_LLVM37_IR:
   case IK_HLSL: // HLSL Change
     // We can't do anything with these.
     return;
@@ -796,6 +796,6 @@ void PrintPreambleAction::ExecuteAction() {
   if (Buffer) {
     unsigned Preamble =
         Lexer::ComputePreamble((*Buffer)->getBuffer(), CI.getLangOpts()).first;
-    llvm::outs().write((*Buffer)->getBufferStart(), Preamble);
+    llvm37::outs().write((*Buffer)->getBufferStart(), Preamble);
   }
 }

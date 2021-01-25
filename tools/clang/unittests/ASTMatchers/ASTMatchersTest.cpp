@@ -12,8 +12,8 @@
 #include "clang/ASTMatchers/ASTMatchFinder.h"
 #include "clang/ASTMatchers/ASTMatchers.h"
 #include "clang/Tooling/Tooling.h"
-#include "llvm/ADT/Triple.h"
-#include "llvm/Support/Host.h"
+#include "llvm37/ADT/Triple.h"
+#include "llvm37/Support/Host.h"
 #include "gtest/gtest.h"
 
 namespace clang {
@@ -106,9 +106,9 @@ TEST(NameableDeclaration, REMatchesVariousDecls) {
 
 TEST(DeclarationMatcher, MatchClass) {
   DeclarationMatcher ClassMatcher(recordDecl());
-  llvm::Triple Triple(llvm::sys::getDefaultTargetTriple());
-  if (Triple.getOS() != llvm::Triple::Win32 ||
-      Triple.getEnvironment() != llvm::Triple::MSVC)
+  llvm37::Triple Triple(llvm37::sys::getDefaultTargetTriple());
+  if (Triple.getOS() != llvm37::Triple::Win32 ||
+      Triple.getEnvironment() != llvm37::Triple::MSVC)
     EXPECT_FALSE(matches("", ClassMatcher));
   else
     // Matches class type_info.
@@ -726,18 +726,18 @@ class VerifyIdIsBoundTo : public BoundNodesCallback {
 public:
   // Create an object that checks that a node of type \c T was bound to \c Id.
   // Does not check for a certain number of matches.
-  explicit VerifyIdIsBoundTo(llvm::StringRef Id)
+  explicit VerifyIdIsBoundTo(llvm37::StringRef Id)
     : Id(Id), ExpectedCount(-1), Count(0) {}
 
   // Create an object that checks that a node of type \c T was bound to \c Id.
   // Checks that there were exactly \c ExpectedCount matches.
-  VerifyIdIsBoundTo(llvm::StringRef Id, int ExpectedCount)
+  VerifyIdIsBoundTo(llvm37::StringRef Id, int ExpectedCount)
     : Id(Id), ExpectedCount(ExpectedCount), Count(0) {}
 
   // Create an object that checks that a node of type \c T was bound to \c Id.
   // Checks that there was exactly one match with the name \c ExpectedName.
   // Note that \c T must be a NamedDecl for this to work.
-  VerifyIdIsBoundTo(llvm::StringRef Id, llvm::StringRef ExpectedName,
+  VerifyIdIsBoundTo(llvm37::StringRef Id, llvm37::StringRef ExpectedName,
                     int ExpectedCount = 1)
       : Id(Id), ExpectedCount(ExpectedCount), Count(0),
         ExpectedName(ExpectedName) {}
@@ -764,7 +764,7 @@ public:
         Name = Named->getNameAsString();
       } else if (const NestedNameSpecifier *NNS =
                  Nodes->getNodeAs<NestedNameSpecifier>(Id)) {
-        llvm::raw_string_ostream OS(Name);
+        llvm37::raw_string_ostream OS(Name);
         NNS->print(OS, PrintingPolicy(LangOptions()));
       }
       BoundNodes::IDToNodeMap::const_iterator I = M.find(Id);
@@ -1423,8 +1423,8 @@ TEST(Function, MatchesFunctionDeclarations) {
   EXPECT_TRUE(matches("void f() { f(); }", CallFunctionF));
   EXPECT_TRUE(notMatches("void f() { }", CallFunctionF));
 
-  if (llvm::Triple(llvm::sys::getDefaultTargetTriple()).getOS() !=
-      llvm::Triple::Win32) {
+  if (llvm37::Triple(llvm37::sys::getDefaultTargetTriple()).getOS() !=
+      llvm37::Triple::Win32) {
     // FIXME: Make this work for MSVC.
     // Dependent contexts, but a non-dependent call.
     EXPECT_TRUE(matches("void f(); template <int N> void g() { f(); }",
@@ -2142,13 +2142,13 @@ TEST(Matcher, FloatLiterals) {
   EXPECT_TRUE(matches("double i = 5.0;", floatLiteral(equals(5.0))));
   EXPECT_TRUE(matches("double i = 5.0;", floatLiteral(equals(5.0f))));
   EXPECT_TRUE(
-      matches("double i = 5.0;", floatLiteral(equals(llvm::APFloat(5.0)))));
+      matches("double i = 5.0;", floatLiteral(equals(llvm37::APFloat(5.0)))));
 
   EXPECT_TRUE(notMatches("float i = 10;", HasFloatLiteral));
   EXPECT_TRUE(notMatches("double i = 5.0;", floatLiteral(equals(6.0))));
   EXPECT_TRUE(notMatches("double i = 5.0;", floatLiteral(equals(6.0f))));
   EXPECT_TRUE(
-      notMatches("double i = 5.0;", floatLiteral(equals(llvm::APFloat(6.0)))));
+      notMatches("double i = 5.0;", floatLiteral(equals(llvm37::APFloat(6.0)))));
 }
 
 TEST(Matcher, NullPtrLiteral) {
@@ -4001,8 +4001,8 @@ TEST(TypeMatching, MatchesVariableArrayType) {
 }
 
 TEST(TypeMatching, MatchesAtomicTypes) {
-  if (llvm::Triple(llvm::sys::getDefaultTargetTriple()).getOS() !=
-      llvm::Triple::Win32) {
+  if (llvm37::Triple(llvm37::sys::getDefaultTargetTriple()).getOS() !=
+      llvm37::Triple::Win32) {
     // FIXME: Make this work for MSVC.
     EXPECT_TRUE(matches("_Atomic(int) i;", atomicType()));
 
@@ -4493,7 +4493,7 @@ TEST(IsEqualTo, MatchesNodesByIdentity) {
 
 TEST(MatchFinder, CheckProfiling) {
   MatchFinder::MatchFinderOptions Options;
-  llvm::StringMap<llvm::TimeRecord> Records;
+  llvm37::StringMap<llvm37::TimeRecord> Records;
   Options.CheckProfiling.emplace(Records);
   MatchFinder Finder(std::move(Options));
 
@@ -4688,7 +4688,7 @@ TEST(TypeDefDeclMatcher, Match) {
 }
 
 // FIXME: Figure out how to specify paths so the following tests pass on Windows.
-#ifndef LLVM_ON_WIN32
+#ifndef LLVM37_ON_WIN32
 
 TEST(Matcher, IsExpansionInMainFileMatcher) {
   EXPECT_TRUE(matches("class X {};",
@@ -4733,7 +4733,7 @@ TEST(Matcher, IsExpansionInFileMatching) {
       "-isystem/", M));
 }
 
-#endif // LLVM_ON_WIN32
+#endif // LLVM37_ON_WIN32
 
   
 TEST(ObjCMessageExprMatcher, SimpleExprs) {

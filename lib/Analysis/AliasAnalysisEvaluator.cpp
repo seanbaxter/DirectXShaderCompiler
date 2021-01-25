@@ -17,19 +17,19 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Analysis/Passes.h"
-#include "llvm/ADT/SetVector.h"
-#include "llvm/Analysis/AliasAnalysis.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/DerivedTypes.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/InstIterator.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/Pass.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/raw_ostream.h"
-using namespace llvm;
+#include "llvm37/Analysis/Passes.h"
+#include "llvm37/ADT/SetVector.h"
+#include "llvm37/Analysis/AliasAnalysis.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/DerivedTypes.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/InstIterator.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/Pass.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/raw_ostream.h"
+using namespace llvm37;
 
 static cl::opt<bool> PrintAll("print-all-alias-modref-info", cl::ReallyHidden);
 
@@ -85,7 +85,7 @@ INITIALIZE_AG_DEPENDENCY(AliasAnalysis)
 INITIALIZE_PASS_END(AAEval, "aa-eval",
                 "Exhaustive Alias Analysis Precision Evaluator", false, true)
 
-FunctionPass *llvm::createAAEvalPass() { return new AAEval(); }
+FunctionPass *llvm37::createAAEvalPass() { return new AAEval(); }
 
 static void PrintResults(const char *Msg, bool P, const Value *V1,
                          const Value *V2, const Module *M) {

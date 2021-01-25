@@ -11,24 +11,24 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/CodeGen/GCs.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/CodeGen/AsmPrinter.h"
-#include "llvm/CodeGen/GCMetadataPrinter.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/Mangler.h"
-#include "llvm/IR/Module.h"
-#include "llvm/MC/MCAsmInfo.h"
-#include "llvm/MC/MCContext.h"
-#include "llvm/MC/MCStreamer.h"
-#include "llvm/MC/MCSymbol.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/FormattedStream.h"
-#include "llvm/Target/TargetLoweringObjectFile.h"
-#include "llvm/Target/TargetMachine.h"
-#include "llvm/Target/TargetSubtargetInfo.h"
+#include "llvm37/CodeGen/GCs.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/CodeGen/AsmPrinter.h"
+#include "llvm37/CodeGen/GCMetadataPrinter.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/IR/Mangler.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/MC/MCAsmInfo.h"
+#include "llvm37/MC/MCContext.h"
+#include "llvm37/MC/MCStreamer.h"
+#include "llvm37/MC/MCSymbol.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/FormattedStream.h"
+#include "llvm37/Target/TargetLoweringObjectFile.h"
+#include "llvm37/Target/TargetMachine.h"
+#include "llvm37/Target/TargetSubtargetInfo.h"
 #include <cctype>
-using namespace llvm;
+using namespace llvm37;
 
 namespace {
 
@@ -42,7 +42,7 @@ public:
 static GCMetadataPrinterRegistry::Add<OcamlGCMetadataPrinter>
     Y("ocaml", "ocaml 3.10-compatible collector");
 
-void llvm::linkOcamlGCPrinter() {}
+void llvm37::linkOcamlGCPrinter() {}
 
 static void EmitCamlGlobal(const Module &M, AsmPrinter &AP, const char *Id) {
   const std::string &MId = M.getModuleIdentifier();

@@ -35,9 +35,9 @@
 #include "clang/Sema/SemaHLSL.h"    // HLSL Change
 #include "clang/Sema/ScopeInfo.h"
 #include "clang/Sema/Template.h"
-#include "llvm/ADT/SmallPtrSet.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/Support/ErrorHandling.h"
+#include "llvm37/ADT/SmallPtrSet.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/Support/ErrorHandling.h"
 
 using namespace clang;
 
@@ -1041,7 +1041,7 @@ TypeResult Sema::actOnObjCProtocolQualifierType(
   // Form id<protocol-list>.
   QualType Result = Context.getObjCObjectType(
                       Context.ObjCBuiltinIdTy, { },
-                      llvm::makeArrayRef(
+                      llvm37::makeArrayRef(
                         (ObjCProtocolDecl * const *)protocols.data(),
                         protocols.size()),
                       false);
@@ -1111,7 +1111,7 @@ TypeResult Sema::actOnObjCTypeArgsAndProtocolQualifiers(
       T, BaseTypeInfo->getTypeLoc().getSourceRange().getBegin(),
       TypeArgsLAngleLoc, ActualTypeArgInfos, TypeArgsRAngleLoc,
       ProtocolLAngleLoc,
-      llvm::makeArrayRef((ObjCProtocolDecl * const *)Protocols.data(),
+      llvm37::makeArrayRef((ObjCProtocolDecl * const *)Protocols.data(),
                          Protocols.size()),
       ProtocolLocs, ProtocolRAngleLoc,
       /*FailOnError=*/false);
@@ -1926,7 +1926,7 @@ QualType Sema::BuildReferenceType(QualType T, bool SpelledAsLValue,
 
 /// Check whether the specified array size makes the array type a VLA.  If so,
 /// return true, if not, return the size of the array in SizeVal.
-static bool isArraySizeVLA(Sema &S, Expr *ArraySize, llvm::APSInt &SizeVal) {
+static bool isArraySizeVLA(Sema &S, Expr *ArraySize, llvm37::APSInt &SizeVal) {
   // If the size is an ICE, it certainly isn't a VLA. If we're in a GNU mode
   // (like gnu99, but not c99) accept any evaluatable value as an extension.
   class VLADiagnoser : public Sema::VerifyICEDiagnoser {
@@ -2059,7 +2059,7 @@ QualType Sema::BuildArrayType(QualType T, ArrayType::ArraySizeModifier ASM,
     return QualType();
   }
 
-  llvm::APSInt ConstVal(Context.getTypeSize(Context.getSizeType()));
+  llvm37::APSInt ConstVal(Context.getTypeSize(Context.getSizeType()));
   if (!ArraySize) {
     if (ASM == ArrayType::Star)
       T = Context.getVariableArrayType(T, nullptr, ASM, Quals, Brackets);
@@ -2186,7 +2186,7 @@ QualType Sema::BuildExtVectorType(QualType T, Expr *ArraySize,
   }
 
   if (!ArraySize->isTypeDependent() && !ArraySize->isValueDependent()) {
-    llvm::APSInt vecSize(32);
+    llvm37::APSInt vecSize(32);
     if (!ArraySize->isIntegerConstantExpr(vecSize, Context)) {
       Diag(AttrLoc, diag::err_attribute_argument_type)
         << "ext_vector_type" << AANT_ArgumentIntegerConstant
@@ -5023,7 +5023,7 @@ static void HandleAddressSpaceTypeAttribute(QualType &Type,
       return;
     }
     Expr *ASArgExpr = static_cast<Expr *>(Attr.getArgAsExpr(0));
-    llvm::APSInt addrSpace(32);
+    llvm37::APSInt addrSpace(32);
     if (ASArgExpr->isTypeDependent() || ASArgExpr->isValueDependent() ||
         !ASArgExpr->isIntegerConstantExpr(addrSpace, S.Context)) {
       S.Diag(Attr.getLoc(), diag::err_attribute_argument_type)
@@ -5043,7 +5043,7 @@ static void HandleAddressSpaceTypeAttribute(QualType &Type,
       }
       addrSpace.setIsSigned(false);
     }
-    llvm::APSInt max(addrSpace.getBitWidth());
+    llvm37::APSInt max(addrSpace.getBitWidth());
     max = Qualifiers::MaxAddressSpace;
     if (addrSpace > max) {
       S.Diag(Attr.getLoc(), diag::err_attribute_address_space_too_high)
@@ -5881,7 +5881,7 @@ static AttributedType::Kind getCCTypeAttrKind(AttributeList &Attr) {
       Str = cast<StringLiteral>(Attr.getArgAsExpr(0))->getString();
     else
       Str = Attr.getArgAsIdent(0)->Ident->getName();
-    return llvm::StringSwitch<AttributedType::Kind>(Str)
+    return llvm37::StringSwitch<AttributedType::Kind>(Str)
         .Case("aapcs", AttributedType::attr_pcs)
         .Case("aapcs-vfp", AttributedType::attr_pcs_vfp);
   }
@@ -6071,7 +6071,7 @@ static void HandleVectorSizeAttr(QualType& CurType, const AttributeList &Attr,
     return;
   }
   Expr *sizeExpr = static_cast<Expr *>(Attr.getArgAsExpr(0));
-  llvm::APSInt vecSize(32);
+  llvm37::APSInt vecSize(32);
   if (sizeExpr->isTypeDependent() || sizeExpr->isValueDependent() ||
       !sizeExpr->isIntegerConstantExpr(vecSize, S.Context)) {
     S.Diag(Attr.getLoc(), diag::err_attribute_argument_type)
@@ -6161,12 +6161,12 @@ static bool isPermittedNeonBaseType(QualType &Ty,
   if (!BTy)
     return false;
 
-  llvm::Triple Triple = S.Context.getTargetInfo().getTriple();
+  llvm37::Triple Triple = S.Context.getTargetInfo().getTriple();
 
   // Signed poly is mathematically wrong, but has been baked into some ABIs by
   // now.
-  bool IsPolyUnsigned = Triple.getArch() == llvm::Triple::aarch64 ||
-                        Triple.getArch() == llvm::Triple::aarch64_be;
+  bool IsPolyUnsigned = Triple.getArch() == llvm37::Triple::aarch64 ||
+                        Triple.getArch() == llvm37::Triple::aarch64_be;
   if (VecKind == VectorType::NeonPolyVector) {
     if (IsPolyUnsigned) {
       // AArch64 polynomial vectors are unsigned and support poly64.
@@ -6183,8 +6183,8 @@ static bool isPermittedNeonBaseType(QualType &Ty,
 
   // Non-polynomial vector types: the usual suspects are allowed, as well as
   // float64_t on AArch64.
-  bool Is64Bit = Triple.getArch() == llvm::Triple::aarch64 ||
-                 Triple.getArch() == llvm::Triple::aarch64_be;
+  bool Is64Bit = Triple.getArch() == llvm37::Triple::aarch64 ||
+                 Triple.getArch() == llvm37::Triple::aarch64_be;
 
   if (Is64Bit && BTy->getKind() == BuiltinType::Double)
     return true;
@@ -6228,7 +6228,7 @@ static void HandleNeonVectorTypeAttr(QualType& CurType,
   }
   // The number of elements must be an ICE.
   Expr *numEltsExpr = static_cast<Expr *>(Attr.getArgAsExpr(0));
-  llvm::APSInt numEltsInt(32);
+  llvm37::APSInt numEltsInt(32);
   if (numEltsExpr->isTypeDependent() || numEltsExpr->isValueDependent() ||
       !numEltsExpr->isIntegerConstantExpr(numEltsInt, S.Context)) {
     S.Diag(Attr.getLoc(), diag::err_attribute_argument_type)

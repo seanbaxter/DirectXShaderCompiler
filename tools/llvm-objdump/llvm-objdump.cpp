@@ -17,87 +17,87 @@
 //===----------------------------------------------------------------------===//
 
 #include "llvm-objdump.h"
-#include "llvm/ADT/Optional.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/StringExtras.h"
-#include "llvm/ADT/Triple.h"
-#include "llvm/CodeGen/FaultMaps.h"
-#include "llvm/MC/MCAsmInfo.h"
-#include "llvm/MC/MCContext.h"
-#include "llvm/MC/MCDisassembler.h"
-#include "llvm/MC/MCInst.h"
-#include "llvm/MC/MCInstPrinter.h"
-#include "llvm/MC/MCInstrAnalysis.h"
-#include "llvm/MC/MCInstrInfo.h"
-#include "llvm/MC/MCObjectFileInfo.h"
-#include "llvm/MC/MCRegisterInfo.h"
-#include "llvm/MC/MCRelocationInfo.h"
-#include "llvm/MC/MCSubtargetInfo.h"
-#include "llvm/Object/Archive.h"
-#include "llvm/Object/ELFObjectFile.h"
-#include "llvm/Object/COFF.h"
-#include "llvm/Object/MachO.h"
-#include "llvm/Object/ObjectFile.h"
-#include "llvm/Support/Casting.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/Errc.h"
-#include "llvm/Support/FileSystem.h"
-#include "llvm/Support/Format.h"
-#include "llvm/Support/GraphWriter.h"
-#include "llvm/Support/Host.h"
-#include "llvm/Support/ManagedStatic.h"
-#include "llvm/Support/MemoryBuffer.h"
-#include "llvm/Support/PrettyStackTrace.h"
-#include "llvm/Support/Signals.h"
-#include "llvm/Support/SourceMgr.h"
-#include "llvm/Support/TargetRegistry.h"
-#include "llvm/Support/TargetSelect.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/Optional.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/StringExtras.h"
+#include "llvm37/ADT/Triple.h"
+#include "llvm37/CodeGen/FaultMaps.h"
+#include "llvm37/MC/MCAsmInfo.h"
+#include "llvm37/MC/MCContext.h"
+#include "llvm37/MC/MCDisassembler.h"
+#include "llvm37/MC/MCInst.h"
+#include "llvm37/MC/MCInstPrinter.h"
+#include "llvm37/MC/MCInstrAnalysis.h"
+#include "llvm37/MC/MCInstrInfo.h"
+#include "llvm37/MC/MCObjectFileInfo.h"
+#include "llvm37/MC/MCRegisterInfo.h"
+#include "llvm37/MC/MCRelocationInfo.h"
+#include "llvm37/MC/MCSubtargetInfo.h"
+#include "llvm37/Object/Archive.h"
+#include "llvm37/Object/ELFObjectFile.h"
+#include "llvm37/Object/COFF.h"
+#include "llvm37/Object/MachO.h"
+#include "llvm37/Object/ObjectFile.h"
+#include "llvm37/Support/Casting.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/Errc.h"
+#include "llvm37/Support/FileSystem.h"
+#include "llvm37/Support/Format.h"
+#include "llvm37/Support/GraphWriter.h"
+#include "llvm37/Support/Host.h"
+#include "llvm37/Support/ManagedStatic.h"
+#include "llvm37/Support/MemoryBuffer.h"
+#include "llvm37/Support/PrettyStackTrace.h"
+#include "llvm37/Support/Signals.h"
+#include "llvm37/Support/SourceMgr.h"
+#include "llvm37/Support/TargetRegistry.h"
+#include "llvm37/Support/TargetSelect.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <algorithm>
 #include <cctype>
 #include <cstring>
 #include <system_error>
 
-using namespace llvm;
+using namespace llvm37;
 using namespace object;
 
 static cl::list<std::string>
 InputFilenames(cl::Positional, cl::desc("<input object files>"),cl::ZeroOrMore);
 
 cl::opt<bool>
-llvm::Disassemble("disassemble",
+llvm37::Disassemble("disassemble",
   cl::desc("Display assembler mnemonics for the machine instructions"));
 static cl::alias
 Disassembled("d", cl::desc("Alias for --disassemble"),
              cl::aliasopt(Disassemble));
 
 cl::opt<bool>
-llvm::Relocations("r", cl::desc("Display the relocation entries in the file"));
+llvm37::Relocations("r", cl::desc("Display the relocation entries in the file"));
 
 cl::opt<bool>
-llvm::SectionContents("s", cl::desc("Display the content of each section"));
+llvm37::SectionContents("s", cl::desc("Display the content of each section"));
 
 cl::opt<bool>
-llvm::SymbolTable("t", cl::desc("Display the symbol table"));
+llvm37::SymbolTable("t", cl::desc("Display the symbol table"));
 
 cl::opt<bool>
-llvm::ExportsTrie("exports-trie", cl::desc("Display mach-o exported symbols"));
+llvm37::ExportsTrie("exports-trie", cl::desc("Display mach-o exported symbols"));
 
 cl::opt<bool>
-llvm::Rebase("rebase", cl::desc("Display mach-o rebasing info"));
+llvm37::Rebase("rebase", cl::desc("Display mach-o rebasing info"));
 
 cl::opt<bool>
-llvm::Bind("bind", cl::desc("Display mach-o binding info"));
+llvm37::Bind("bind", cl::desc("Display mach-o binding info"));
 
 cl::opt<bool>
-llvm::LazyBind("lazy-bind", cl::desc("Display mach-o lazy binding info"));
+llvm37::LazyBind("lazy-bind", cl::desc("Display mach-o lazy binding info"));
 
 cl::opt<bool>
-llvm::WeakBind("weak-bind", cl::desc("Display mach-o weak binding info"));
+llvm37::WeakBind("weak-bind", cl::desc("Display mach-o weak binding info"));
 
 cl::opt<bool>
-llvm::RawClangAST("raw-clang-ast",
+llvm37::RawClangAST("raw-clang-ast",
     cl::desc("Dump the raw binary contents of the clang AST section"));
 
 static cl::opt<bool>
@@ -106,21 +106,21 @@ static cl::alias
 MachOm("m", cl::desc("Alias for --macho"), cl::aliasopt(MachOOpt));
 
 cl::opt<std::string>
-llvm::TripleName("triple", cl::desc("Target triple to disassemble for, "
+llvm37::TripleName("triple", cl::desc("Target triple to disassemble for, "
                                     "see -version for available targets"));
 
 cl::opt<std::string>
-llvm::MCPU("mcpu",
+llvm37::MCPU("mcpu",
      cl::desc("Target a specific cpu type (-mcpu=help for details)"),
      cl::value_desc("cpu-name"),
      cl::init(""));
 
 cl::opt<std::string>
-llvm::ArchName("arch-name", cl::desc("Target arch to disassemble for, "
+llvm37::ArchName("arch-name", cl::desc("Target arch to disassemble for, "
                                 "see -version for available targets"));
 
 cl::opt<bool>
-llvm::SectionHeaders("section-headers", cl::desc("Display summaries of the "
+llvm37::SectionHeaders("section-headers", cl::desc("Display summaries of the "
                                                  "headers for each section."));
 static cl::alias
 SectionHeadersShort("headers", cl::desc("Alias for --section-headers"),
@@ -130,25 +130,25 @@ SectionHeadersShorter("h", cl::desc("Alias for --section-headers"),
                       cl::aliasopt(SectionHeaders));
 
 cl::list<std::string>
-llvm::MAttrs("mattr",
+llvm37::MAttrs("mattr",
   cl::CommaSeparated,
   cl::desc("Target specific attributes"),
   cl::value_desc("a1,+a2,-a3,..."));
 
 cl::opt<bool>
-llvm::NoShowRawInsn("no-show-raw-insn", cl::desc("When disassembling "
+llvm37::NoShowRawInsn("no-show-raw-insn", cl::desc("When disassembling "
                                                  "instructions, do not print "
                                                  "the instruction bytes."));
 
 cl::opt<bool>
-llvm::UnwindInfo("unwind-info", cl::desc("Display unwind information"));
+llvm37::UnwindInfo("unwind-info", cl::desc("Display unwind information"));
 
 static cl::alias
 UnwindInfoShort("u", cl::desc("Alias for --unwind-info"),
                 cl::aliasopt(UnwindInfo));
 
 cl::opt<bool>
-llvm::PrivateHeaders("private-headers",
+llvm37::PrivateHeaders("private-headers",
                      cl::desc("Display format specific file headers"));
 
 static cl::alias
@@ -156,7 +156,7 @@ PrivateHeadersShort("p", cl::desc("Alias for --private-headers"),
                     cl::aliasopt(PrivateHeaders));
 
 cl::opt<bool>
-    llvm::PrintImmHex("print-imm-hex",
+    llvm37::PrintImmHex("print-imm-hex",
                       cl::desc("Use hex format for immediate values"));
 
 cl::opt<bool> PrintFaultMaps("fault-map-section",
@@ -165,7 +165,7 @@ cl::opt<bool> PrintFaultMaps("fault-map-section",
 static StringRef ToolName;
 static int ReturnValue = EXIT_SUCCESS;
 
-bool llvm::error(std::error_code EC) {
+bool llvm37::error(std::error_code EC) {
   if (!EC)
     return false;
 
@@ -183,7 +183,7 @@ static void report_error(StringRef File, std::error_code EC) {
 
 static const Target *getTarget(const ObjectFile *Obj = nullptr) {
   // Figure out the target triple.
-  llvm::Triple TheTriple("unknown-unknown-unknown");
+  llvm37::Triple TheTriple("unknown-unknown-unknown");
   if (TripleName.empty()) {
     if (Obj) {
       TheTriple.setArch(Triple::ArchType(Obj->getArch()));
@@ -215,7 +215,7 @@ static const Target *getTarget(const ObjectFile *Obj = nullptr) {
   return TheTarget;
 }
 
-bool llvm::RelocAddressLess(RelocationRef a, RelocationRef b) {
+bool llvm37::RelocAddressLess(RelocationRef a, RelocationRef b) {
   return a.getOffset() < b.getOffset();
 }
 
@@ -996,7 +996,7 @@ static void DisassembleObject(const ObjectFile *Obj, bool InlineRelocs) {
   }
 }
 
-void llvm::PrintRelocations(const ObjectFile *Obj) {
+void llvm37::PrintRelocations(const ObjectFile *Obj) {
   StringRef Fmt = Obj->getBytesInAddress() > 4 ? "%016" PRIx64 :
                                                  "%08" PRIx64;
   // Regular objdump doesn't print relocations in non-relocatable object
@@ -1028,7 +1028,7 @@ void llvm::PrintRelocations(const ObjectFile *Obj) {
   }
 }
 
-void llvm::PrintSectionHeaders(const ObjectFile *Obj) {
+void llvm37::PrintSectionHeaders(const ObjectFile *Obj) {
   outs() << "Sections:\n"
             "Idx Name          Size      Address          Type\n";
   unsigned i = 0;
@@ -1049,7 +1049,7 @@ void llvm::PrintSectionHeaders(const ObjectFile *Obj) {
   }
 }
 
-void llvm::PrintSectionContents(const ObjectFile *Obj) {
+void llvm37::PrintSectionContents(const ObjectFile *Obj) {
   std::error_code EC;
   for (const SectionRef &Section : Obj->sections()) {
     StringRef Name;
@@ -1152,7 +1152,7 @@ static void PrintCOFFSymbolTable(const COFFObjectFile *coff) {
   }
 }
 
-void llvm::PrintSymbolTable(const ObjectFile *o) {
+void llvm37::PrintSymbolTable(const ObjectFile *o) {
   outs() << "SYMBOL TABLE:\n";
 
   if (const COFFObjectFile *coff = dyn_cast<const COFFObjectFile>(o)) {
@@ -1257,7 +1257,7 @@ static void PrintUnwindInfo(const ObjectFile *o) {
   }
 }
 
-void llvm::printExportsTrie(const ObjectFile *o) {
+void llvm37::printExportsTrie(const ObjectFile *o) {
   outs() << "Exports trie:\n";
   if (const MachOObjectFile *MachO = dyn_cast<MachOObjectFile>(o))
     printMachOExportsTrie(MachO);
@@ -1268,7 +1268,7 @@ void llvm::printExportsTrie(const ObjectFile *o) {
   }
 }
 
-void llvm::printRebaseTable(const ObjectFile *o) {
+void llvm37::printRebaseTable(const ObjectFile *o) {
   outs() << "Rebase table:\n";
   if (const MachOObjectFile *MachO = dyn_cast<MachOObjectFile>(o))
     printMachORebaseTable(MachO);
@@ -1279,7 +1279,7 @@ void llvm::printRebaseTable(const ObjectFile *o) {
   }
 }
 
-void llvm::printBindTable(const ObjectFile *o) {
+void llvm37::printBindTable(const ObjectFile *o) {
   outs() << "Bind table:\n";
   if (const MachOObjectFile *MachO = dyn_cast<MachOObjectFile>(o))
     printMachOBindTable(MachO);
@@ -1290,7 +1290,7 @@ void llvm::printBindTable(const ObjectFile *o) {
   }
 }
 
-void llvm::printLazyBindTable(const ObjectFile *o) {
+void llvm37::printLazyBindTable(const ObjectFile *o) {
   outs() << "Lazy bind table:\n";
   if (const MachOObjectFile *MachO = dyn_cast<MachOObjectFile>(o))
     printMachOLazyBindTable(MachO);
@@ -1301,7 +1301,7 @@ void llvm::printLazyBindTable(const ObjectFile *o) {
   }
 }
 
-void llvm::printWeakBindTable(const ObjectFile *o) {
+void llvm37::printWeakBindTable(const ObjectFile *o) {
   outs() << "Weak bind table:\n";
   if (const MachOObjectFile *MachO = dyn_cast<MachOObjectFile>(o))
     printMachOWeakBindTable(MachO);
@@ -1314,7 +1314,7 @@ void llvm::printWeakBindTable(const ObjectFile *o) {
 
 /// Dump the raw contents of the __clangast section so the output can be piped
 /// into llvm-bcanalyzer.
-void llvm::printRawClangAST(const ObjectFile *Obj) {
+void llvm37::printRawClangAST(const ObjectFile *Obj) {
   if (outs().is_displayed()) {
     errs() << "The -raw-clang-ast option will dump the raw binary contents of "
               "the clang ast section.\n"
@@ -1498,10 +1498,10 @@ int __cdecl main(int argc, char **argv) {
   llvm_shutdown_obj Y;  // Call llvm_shutdown() on exit.
 
   // Initialize targets and assembly printers/parsers.
-  llvm::InitializeAllTargetInfos();
-  llvm::InitializeAllTargetMCs();
-  llvm::InitializeAllAsmParsers();
-  llvm::InitializeAllDisassemblers();
+  llvm37::InitializeAllTargetInfos();
+  llvm37::InitializeAllTargetMCs();
+  llvm37::InitializeAllAsmParsers();
+  llvm37::InitializeAllDisassemblers();
 
   // Register the target printer for --version.
   cl::AddExtraVersionPrinter(TargetRegistry::printRegisteredTargetsForVersion);

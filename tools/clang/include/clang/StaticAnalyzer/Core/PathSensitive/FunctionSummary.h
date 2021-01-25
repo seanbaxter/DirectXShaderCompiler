@@ -11,14 +11,14 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_STATICANALYZER_CORE_PATHSENSITIVE_FUNCTIONSUMMARY_H
-#define LLVM_CLANG_STATICANALYZER_CORE_PATHSENSITIVE_FUNCTIONSUMMARY_H
+#ifndef LLVM37_CLANG_STATICANALYZER_CORE_PATHSENSITIVE_FUNCTIONSUMMARY_H
+#define LLVM37_CLANG_STATICANALYZER_CORE_PATHSENSITIVE_FUNCTIONSUMMARY_H
 
 #include "clang/Basic/LLVM.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/DenseSet.h"
-#include "llvm/ADT/Optional.h"
-#include "llvm/ADT/SmallBitVector.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/DenseSet.h"
+#include "llvm37/ADT/Optional.h"
+#include "llvm37/ADT/SmallBitVector.h"
 #include <deque>
 
 namespace clang {
@@ -26,13 +26,13 @@ class Decl;
 
 namespace ento {
 typedef std::deque<Decl*> SetOfDecls;
-typedef llvm::DenseSet<const Decl*> SetOfConstDecls;
+typedef llvm37::DenseSet<const Decl*> SetOfConstDecls;
 
 class FunctionSummariesTy {
   class FunctionSummary {
   public:
     /// Marks the IDs of the basic blocks visited during the analyzes.
-    llvm::SmallBitVector VisitedBasicBlocks;
+    llvm37::SmallBitVector VisitedBasicBlocks;
 
     /// Total number of blocks in the function.
     unsigned TotalBasicBlocks : 30;
@@ -53,7 +53,7 @@ class FunctionSummariesTy {
       TimesInlined(0) {}
   };
 
-  typedef llvm::DenseMap<const Decl *, FunctionSummary> MapTy;
+  typedef llvm37::DenseMap<const Decl *, FunctionSummary> MapTy;
   MapTy Map;
 
 public:
@@ -93,7 +93,7 @@ public:
 
   void markVisitedBasicBlock(unsigned ID, const Decl* D, unsigned TotalIDs) {
     MapTy::iterator I = findOrInsertSummary(D);
-    llvm::SmallBitVector &Blocks = I->second.VisitedBasicBlocks;
+    llvm37::SmallBitVector &Blocks = I->second.VisitedBasicBlocks;
     assert(ID < TotalIDs);
     if (TotalIDs > Blocks.size()) {
       Blocks.resize(TotalIDs);

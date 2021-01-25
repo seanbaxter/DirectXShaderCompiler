@@ -10,13 +10,13 @@
 //
 //===----------------------------------------------------------------------===/
 
-#ifndef LLVM_CLANG_SEMA_TEMPLATE_H
-#define LLVM_CLANG_SEMA_TEMPLATE_H
+#ifndef LLVM37_CLANG_SEMA_TEMPLATE_H
+#define LLVM37_CLANG_SEMA_TEMPLATE_H
 
 #include "clang/AST/DeclTemplate.h"
 #include "clang/AST/DeclVisitor.h"
 #include "clang/Sema/Sema.h"
-#include "llvm/ADT/SmallVector.h"
+#include "llvm37/ADT/SmallVector.h"
 #include <cassert>
 #include <utility>
 
@@ -153,7 +153,7 @@ namespace clang {
     /// \brief Construct an integral non-type template argument that
     /// has been deduced, possibly from an array bound.
     DeducedTemplateArgument(ASTContext &Ctx,
-                            const llvm::APSInt &Value,
+                            const llvm37::APSInt &Value,
                             QualType ValueType,
                             bool DeducedFromArrayBound)
       : TemplateArgument(Ctx, Value, ValueType),
@@ -186,8 +186,8 @@ namespace clang {
     /// this template instantiation.
     Sema &SemaRef;
 
-    typedef llvm::SmallDenseMap<
-        const Decl *, llvm::PointerUnion<Decl *, DeclArgumentPack *>, 4>
+    typedef llvm37::SmallDenseMap<
+        const Decl *, llvm37::PointerUnion<Decl *, DeclArgumentPack *>, 4>
     LocalDeclsMap;
 
     /// \brief A mapping from local declarations that occur
@@ -294,7 +294,7 @@ namespace clang {
       for (LocalDeclsMap::iterator I = LocalDecls.begin(), E = LocalDecls.end();
            I != E; ++I) {
         const Decl *D = I->first;
-        llvm::PointerUnion<Decl *, DeclArgumentPack *> &Stored =
+        llvm37::PointerUnion<Decl *, DeclArgumentPack *> &Stored =
           newScope->LocalDecls[D];
         if (I->second.is<Decl *>()) {
           Stored = I->second.get<Decl *>();
@@ -329,7 +329,7 @@ namespace clang {
     /// \returns A pointer to the declaration or argument pack of declarations
     /// to which the declaration \c D is instantiated, if found. Otherwise,
     /// returns NULL.
-    llvm::PointerUnion<Decl *, DeclArgumentPack *> *
+    llvm37::PointerUnion<Decl *, DeclArgumentPack *> *
     findInstantiationOf(const Decl *D);
 
     void InstantiatedLocal(const Decl *D, Decl *Inst);
@@ -517,4 +517,4 @@ namespace clang {
   };  
 }
 
-#endif // LLVM_CLANG_SEMA_TEMPLATE_H
+#endif // LLVM37_CLANG_SEMA_TEMPLATE_H

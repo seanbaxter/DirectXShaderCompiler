@@ -6,14 +6,14 @@
 //                                                                           //
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef LLVM_CLANG_AST_HLSLBUILTINTYPEDECLBUILDER_H
-#define LLVM_CLANG_AST_HLSLBUILTINTYPEDECLBUILDER_H
+#ifndef LLVM37_CLANG_AST_HLSLBUILTINTYPEDECLBUILDER_H
+#define LLVM37_CLANG_AST_HLSLBUILTINTYPEDECLBUILDER_H
 
 #include "clang/AST/Decl.h"
 #include "clang/AST/Type.h"
-#include "llvm/ADT/ArrayRef.h"
-#include "llvm/ADT/Optional.h"
-#include "llvm/ADT/StringRef.h"
+#include "llvm37/ADT/ArrayRef.h"
+#include "llvm37/ADT/Optional.h"
+#include "llvm37/ADT/StringRef.h"
 
 namespace clang {
   class ASTContext;
@@ -27,17 +27,17 @@ namespace hlsl {
 // Helper to declare a builtin HLSL type in the clang AST with minimal boilerplate.
 class BuiltinTypeDeclBuilder final {
 public:
-  BuiltinTypeDeclBuilder(clang::DeclContext* declContext, llvm::StringRef name,
+  BuiltinTypeDeclBuilder(clang::DeclContext* declContext, llvm37::StringRef name,
     clang::TagDecl::TagKind tagKind = clang::TagDecl::TagKind::TTK_Class);
 
-  clang::TemplateTypeParmDecl* addTypeTemplateParam(llvm::StringRef name, clang::TypeSourceInfo* defaultValue = nullptr);
-  clang::TemplateTypeParmDecl* addTypeTemplateParam(llvm::StringRef name, clang::QualType defaultValue);
-  clang::NonTypeTemplateParmDecl* addIntegerTemplateParam(llvm::StringRef name, clang::QualType type,
-    llvm::Optional<int64_t> defaultValue = llvm::None);
+  clang::TemplateTypeParmDecl* addTypeTemplateParam(llvm37::StringRef name, clang::TypeSourceInfo* defaultValue = nullptr);
+  clang::TemplateTypeParmDecl* addTypeTemplateParam(llvm37::StringRef name, clang::QualType defaultValue);
+  clang::NonTypeTemplateParmDecl* addIntegerTemplateParam(llvm37::StringRef name, clang::QualType type,
+    llvm37::Optional<int64_t> defaultValue = llvm37::None);
 
   void startDefinition();
 
-  clang::FieldDecl* addField(llvm::StringRef name, clang::QualType type,
+  clang::FieldDecl* addField(llvm37::StringRef name, clang::QualType type,
     clang::AccessSpecifier access = clang::AccessSpecifier::AS_private);
 
   clang::CXXRecordDecl* completeDefinition();
@@ -48,7 +48,7 @@ public:
 private:
   clang::CXXRecordDecl* m_recordDecl = nullptr;
   clang::ClassTemplateDecl* m_templateDecl = nullptr;
-  llvm::SmallVector<clang::NamedDecl*, 2> m_templateParams;
+  llvm37::SmallVector<clang::NamedDecl*, 2> m_templateParams;
 };
 } // end hlsl namespace
 #endif

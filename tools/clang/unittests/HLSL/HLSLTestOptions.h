@@ -13,8 +13,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_UNITTESTS_HLSL_TEST_OPTIONS_H
-#define LLVM_CLANG_UNITTESTS_HLSL_TEST_OPTIONS_H
+#ifndef LLVM37_CLANG_UNITTESTS_HLSL_TEST_OPTIONS_H
+#define LLVM37_CLANG_UNITTESTS_HLSL_TEST_OPTIONS_H
 
 #include <string>
 

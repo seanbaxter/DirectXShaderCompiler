@@ -14,18 +14,18 @@
 #include "clang/Driver/DriverDiagnostic.h"
 #include "clang/Driver/Options.h"
 #include "clang/Driver/ToolChain.h"
-#include "llvm/ADT/StringExtras.h"
-#include "llvm/ADT/StringSwitch.h"
-#include "llvm/Support/FileSystem.h"
-#include "llvm/Support/Path.h"
-#include "llvm/Support/SpecialCaseList.h"
+#include "llvm37/ADT/StringExtras.h"
+#include "llvm37/ADT/StringSwitch.h"
+#include "llvm37/Support/FileSystem.h"
+#include "llvm37/Support/Path.h"
+#include "llvm37/Support/SpecialCaseList.h"
 #include <memory>
 //                                                                           //
 ///////////////////////////////////////////////////////////////////////////////
 using namespace clang;
 using namespace clang::SanitizerKind;
 using namespace clang::driver;
-using namespace llvm::opt;
+using namespace llvm37::opt;
 
 enum : SanitizerMask {
   NeedsUbsanRt = Undefined | Integer | CFI,
@@ -55,26 +55,26 @@ enum CoverageFeature {
 
 /// Parse a -fsanitize= or -fno-sanitize= argument's values, diagnosing any
 /// invalid components. Returns a SanitizerMask.
-static SanitizerMask parseArgValues(const Driver &D, const llvm::opt::Arg *A,
+static SanitizerMask parseArgValues(const Driver &D, const llvm37::opt::Arg *A,
                                     bool DiagnoseErrors);
 
 /// Parse -f(no-)?sanitize-coverage= flag values, diagnosing any invalid
 /// components. Returns OR of members of \c CoverageFeature enumeration.
-static int parseCoverageFeatures(const Driver &D, const llvm::opt::Arg *A);
+static int parseCoverageFeatures(const Driver &D, const llvm37::opt::Arg *A);
 
 /// Produce an argument string from ArgList \p Args, which shows how it
 /// provides some sanitizer kind from \p Mask. For example, the argument list
 /// "-fsanitize=thread,vptr -fsanitize=address" with mask \c NeedsUbsanRt
 /// would produce "-fsanitize=vptr".
 static std::string lastArgumentForMask(const Driver &D,
-                                       const llvm::opt::ArgList &Args,
+                                       const llvm37::opt::ArgList &Args,
                                        SanitizerMask Mask);
 
 /// Produce an argument string from argument \p A, which shows how it provides
 /// a value in \p Mask. For instance, the argument
 /// "-fsanitize=address,alignment" with mask \c NeedsUbsanRt would produce
 /// "-fsanitize=alignment".
-static std::string describeSanitizeArg(const llvm::opt::Arg *A,
+static std::string describeSanitizeArg(const llvm37::opt::Arg *A,
                                        SanitizerMask Mask);
 
 /// Produce a string containing comma-separated names of sanitizers in \p
@@ -95,7 +95,7 @@ static bool getDefaultBlacklist(const Driver &D, SanitizerMask Kinds,
 
   if (BlacklistFile) {
     clang::SmallString<64> Path(D.ResourceDir);
-    llvm::sys::path::append(Path, BlacklistFile);
+    llvm37::sys::path::append(Path, BlacklistFile);
     BLPath = Path.str();
     return true;
   }
@@ -114,7 +114,7 @@ static SanitizerMask setGroupBits(SanitizerMask Kinds) {
 }
 
 static SanitizerMask parseSanitizeTrapArgs(const Driver &D,
-                                           const llvm::opt::ArgList &Args) {
+                                           const llvm37::opt::ArgList &Args) {
   SanitizerMask TrapRemove = 0; // During the loop below, the accumulated set of
                                 // sanitizers disabled by the current sanitizer
                                 // argument or any argument after it.
@@ -186,7 +186,7 @@ void SanitizerArgs::clear() {
 }
 
 SanitizerArgs::SanitizerArgs(const ToolChain &TC,
-                             const llvm::opt::ArgList &Args) {
+                             const llvm37::opt::ArgList &Args) {
   clear();
   SanitizerMask AllRemove = 0;  // During the loop below, the accumulated set of
                                 // sanitizers disabled by the current sanitizer
@@ -246,7 +246,7 @@ SanitizerArgs::SanitizerArgs(const ToolChain &TC,
           // explicitly enabled
           D.Diag(diag::warn_drv_disabling_vptr_no_rtti_default);
         else {
-          const llvm::opt::Arg *NoRTTIArg = TC.getRTTIArg();
+          const llvm37::opt::Arg *NoRTTIArg = TC.getRTTIArg();
           assert(NoRTTIArg &&
                  "RTTI disabled explicitly but we have no argument!");
           D.Diag(diag::err_drv_argument_not_allowed_with)
@@ -375,7 +375,7 @@ SanitizerArgs::SanitizerArgs(const ToolChain &TC,
   // Add default blacklist from resource directory.
   {
     std::string BLPath;
-    if (getDefaultBlacklist(D, Kinds, BLPath) && llvm::sys::fs::exists(BLPath))
+    if (getDefaultBlacklist(D, Kinds, BLPath) && llvm37::sys::fs::exists(BLPath))
       BlacklistFiles.push_back(BLPath);
   }
   // Parse -f(no-)sanitize-blacklist options.
@@ -383,7 +383,7 @@ SanitizerArgs::SanitizerArgs(const ToolChain &TC,
     if (Arg->getOption().matches(options::OPT_fsanitize_blacklist)) {
       Arg->claim();
       std::string BLPath = Arg->getValue();
-      if (llvm::sys::fs::exists(BLPath))
+      if (llvm37::sys::fs::exists(BLPath))
         BlacklistFiles.push_back(BLPath);
       else
         D.Diag(clang::diag::err_drv_no_such_file) << BLPath;
@@ -395,8 +395,8 @@ SanitizerArgs::SanitizerArgs(const ToolChain &TC,
   // Validate blacklists format.
   {
     std::string BLError;
-    std::unique_ptr<llvm::SpecialCaseList> SCL(
-        llvm::SpecialCaseList::create(BlacklistFiles, BLError));
+    std::unique_ptr<llvm37::SpecialCaseList> SCL(
+        llvm37::SpecialCaseList::create(BlacklistFiles, BLError));
     if (!SCL.get())
       D.Diag(clang::diag::err_drv_malformed_sanitizer_blacklist) << BLError;
   }
@@ -492,9 +492,9 @@ SanitizerArgs::SanitizerArgs(const ToolChain &TC,
   if (AllAddedKinds & Address) {
     AsanSharedRuntime =
         Args.hasArg(options::OPT_shared_libasan) ||
-        (TC.getTriple().getEnvironment() == llvm::Triple::Android);
+        (TC.getTriple().getEnvironment() == llvm37::Triple::Android);
     AsanZeroBaseShadow =
-        (TC.getTriple().getEnvironment() == llvm::Triple::Android);
+        (TC.getTriple().getEnvironment() == llvm37::Triple::Android);
     if (Arg *A =
             Args.getLastArg(options::OPT_fsanitize_address_field_padding)) {
         StringRef S = A->getValue();
@@ -543,8 +543,8 @@ static std::string toString(const clang::SanitizerSet &Sanitizers) {
   return Res;
 }
 
-void SanitizerArgs::addArgs(const ToolChain &TC, const llvm::opt::ArgList &Args,
-                            llvm::opt::ArgStringList &CmdArgs,
+void SanitizerArgs::addArgs(const ToolChain &TC, const llvm37::opt::ArgList &Args,
+                            llvm37::opt::ArgStringList &CmdArgs,
                             types::ID InputType) const {
   if (Sanitizers.empty())
     return;
@@ -566,14 +566,14 @@ void SanitizerArgs::addArgs(const ToolChain &TC, const llvm::opt::ArgList &Args,
 
   if (MsanTrackOrigins)
     CmdArgs.push_back(Args.MakeArgString("-fsanitize-memory-track-origins=" +
-                                         llvm::utostr(MsanTrackOrigins)));
+                                         llvm37::utostr(MsanTrackOrigins)));
 
   if (MsanUseAfterDtor)
     CmdArgs.push_back(Args.MakeArgString("-fsanitize-memory-use-after-dtor"));
 
   if (AsanFieldPadding)
     CmdArgs.push_back(Args.MakeArgString("-fsanitize-address-field-padding=" +
-                                         llvm::utostr(AsanFieldPadding)));
+                                         llvm37::utostr(AsanFieldPadding)));
   // Translate available CoverageFeatures to corresponding clang-cc1 flags.
   std::pair<int, const char *> CoverageFlags[] = {
     std::make_pair(CoverageFunc, "-fsanitize-coverage-type=1"),
@@ -609,7 +609,7 @@ void SanitizerArgs::addArgs(const ToolChain &TC, const llvm::opt::ArgList &Args,
   }
 }
 
-SanitizerMask parseArgValues(const Driver &D, const llvm::opt::Arg *A,
+SanitizerMask parseArgValues(const Driver &D, const llvm37::opt::Arg *A,
                              bool DiagnoseErrors) {
   assert((A->getOption().matches(options::OPT_fsanitize_EQ) ||
           A->getOption().matches(options::OPT_fno_sanitize_EQ) ||
@@ -638,13 +638,13 @@ SanitizerMask parseArgValues(const Driver &D, const llvm::opt::Arg *A,
   return Kinds;
 }
 
-int parseCoverageFeatures(const Driver &D, const llvm::opt::Arg *A) {
+int parseCoverageFeatures(const Driver &D, const llvm37::opt::Arg *A) {
   assert(A->getOption().matches(options::OPT_fsanitize_coverage) ||
          A->getOption().matches(options::OPT_fno_sanitize_coverage));
   int Features = 0;
   for (int i = 0, n = A->getNumValues(); i != n; ++i) {
     const char *Value = A->getValue(i);
-    int F = llvm::StringSwitch<int>(Value)
+    int F = llvm37::StringSwitch<int>(Value)
         .Case("func", CoverageFunc)
         .Case("bb", CoverageBB)
         .Case("edge", CoverageEdge)
@@ -661,9 +661,9 @@ int parseCoverageFeatures(const Driver &D, const llvm::opt::Arg *A) {
   return Features;
 }
 
-std::string lastArgumentForMask(const Driver &D, const llvm::opt::ArgList &Args,
+std::string lastArgumentForMask(const Driver &D, const llvm37::opt::ArgList &Args,
                                 SanitizerMask Mask) {
-  for (llvm::opt::ArgList::const_reverse_iterator I = Args.rbegin(),
+  for (llvm37::opt::ArgList::const_reverse_iterator I = Args.rbegin(),
                                                   E = Args.rend();
        I != E; ++I) {
     const auto *Arg = *I;
@@ -681,7 +681,7 @@ std::string lastArgumentForMask(const Driver &D, const llvm::opt::ArgList &Args,
   llvm_unreachable("arg list didn't provide expected value");
 }
 
-std::string describeSanitizeArg(const llvm::opt::Arg *A, SanitizerMask Mask) {
+std::string describeSanitizeArg(const llvm37::opt::Arg *A, SanitizerMask Mask) {
   assert(A->getOption().matches(options::OPT_fsanitize_EQ)
          && "Invalid argument in describeSanitizerArg!");
 

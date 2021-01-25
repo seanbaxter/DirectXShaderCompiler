@@ -7,13 +7,13 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_TOOLS_LLVMPDBDUMP_VARIABLEDUMPER_H
-#define LLVM_TOOLS_LLVMPDBDUMP_VARIABLEDUMPER_H
+#ifndef LLVM37_TOOLS_LLVMPDBDUMP_VARIABLEDUMPER_H
+#define LLVM37_TOOLS_LLVMPDBDUMP_VARIABLEDUMPER_H
 
-#include "llvm/DebugInfo/PDB/PDBSymDumper.h"
-#include "llvm/ADT/StringRef.h"
+#include "llvm37/DebugInfo/PDB/PDBSymDumper.h"
+#include "llvm37/ADT/StringRef.h"
 
-namespace llvm {
+namespace llvm37 {
 
 class LinePrinter;
 

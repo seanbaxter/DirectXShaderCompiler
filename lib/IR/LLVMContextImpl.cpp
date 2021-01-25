@@ -12,12 +12,12 @@
 //===----------------------------------------------------------------------===//
 
 #include "LLVMContextImpl.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/IR/Attributes.h"
-#include "llvm/IR/DiagnosticInfo.h"
-#include "llvm/IR/Module.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/IR/Attributes.h"
+#include "llvm37/IR/DiagnosticInfo.h"
+#include "llvm37/IR/Module.h"
 #include <algorithm>
-using namespace llvm;
+using namespace llvm37;
 
 LLVMContextImpl::LLVMContextImpl(LLVMContext &C)
   : TheTrueVal(nullptr), TheFalseVal(nullptr),
@@ -81,7 +81,7 @@ LLVMContextImpl::~LLVMContextImpl() {
 #define HANDLE_MDNODE_LEAF(CLASS)                                              \
   for (auto *I : CLASS##s)                                                     \
     I->dropAllReferences();
-#include "llvm/IR/Metadata.def"
+#include "llvm37/IR/Metadata.def"
 
   // Also drop references that come from the Value bridges.
   for (auto &Pair : ValuesAsMetadata)
@@ -95,7 +95,7 @@ LLVMContextImpl::~LLVMContextImpl() {
 #define HANDLE_MDNODE_LEAF(CLASS)                                              \
   for (CLASS *I : CLASS##s)                                                    \
     delete I;
-#include "llvm/IR/Metadata.def"
+#include "llvm37/IR/Metadata.def"
 
   // Free the constants.
   std::for_each(ExprConstants.map_begin(), ExprConstants.map_end(),
@@ -184,7 +184,7 @@ void Module::dropTriviallyDeadConstantArrays() {
   Context.pImpl->dropTriviallyDeadConstantArrays();
 }
 
-namespace llvm {
+namespace llvm37 {
 /// \brief Make MDOperand transparent for hashing.
 ///
 /// This overload of an implementation detail of the hashing library makes

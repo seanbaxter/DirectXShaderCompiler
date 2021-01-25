@@ -16,34 +16,34 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/CodeGen/Passes.h"
-#include "llvm/ADT/MapVector.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/SmallSet.h"
-#include "llvm/ADT/SetVector.h"
-#include "llvm/ADT/Triple.h"
-#include "llvm/ADT/TinyPtrVector.h"
-#include "llvm/Analysis/LibCallSemantics.h"
-#include "llvm/Analysis/TargetLibraryInfo.h"
-#include "llvm/CodeGen/WinEHFuncInfo.h"
-#include "llvm/IR/Dominators.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/IRBuilder.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/PatternMatch.h"
-#include "llvm/Pass.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Transforms/Utils/BasicBlockUtils.h"
-#include "llvm/Transforms/Utils/Cloning.h"
-#include "llvm/Transforms/Utils/Local.h"
-#include "llvm/Transforms/Utils/PromoteMemToReg.h"
+#include "llvm37/CodeGen/Passes.h"
+#include "llvm37/ADT/MapVector.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/SmallSet.h"
+#include "llvm37/ADT/SetVector.h"
+#include "llvm37/ADT/Triple.h"
+#include "llvm37/ADT/TinyPtrVector.h"
+#include "llvm37/Analysis/LibCallSemantics.h"
+#include "llvm37/Analysis/TargetLibraryInfo.h"
+#include "llvm37/CodeGen/WinEHFuncInfo.h"
+#include "llvm37/IR/Dominators.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/IRBuilder.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/PatternMatch.h"
+#include "llvm37/Pass.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Transforms/Utils/BasicBlockUtils.h"
+#include "llvm37/Transforms/Utils/Cloning.h"
+#include "llvm37/Transforms/Utils/Local.h"
+#include "llvm37/Transforms/Utils/PromoteMemToReg.h"
 #include <memory>
 
-using namespace llvm;
-using namespace llvm::PatternMatch;
+using namespace llvm37;
+using namespace llvm37::PatternMatch;
 
 #define DEBUG_TYPE "winehprepare"
 
@@ -356,7 +356,7 @@ char WinEHPrepare::ID = 0;
 INITIALIZE_TM_PASS(WinEHPrepare, "winehprepare", "Prepare Windows exceptions",
                    false, false)
 
-FunctionPass *llvm::createWinEHPass(const TargetMachine *TM) {
+FunctionPass *llvm37::createWinEHPass(const TargetMachine *TM) {
   return new WinEHPrepare(TM);
 }
 
@@ -1011,7 +1011,7 @@ bool WinEHPrepare::prepareExceptionHandlers(
       if (TempAlloca == getCatchObjectSentinel())
         continue; // Skip catch parameter sentinels.
       Function *HandlerFn = TempAlloca->getParent()->getParent();
-      llvm::Value *FP = HandlerToParentFP[HandlerFn];
+      llvm37::Value *FP = HandlerToParentFP[HandlerFn];
       assert(FP);
 
       // FIXME: Sink this localrecover into the blocks where it is used.
@@ -1019,7 +1019,7 @@ bool WinEHPrepare::prepareExceptionHandlers(
       Builder.SetCurrentDebugLocation(TempAlloca->getDebugLoc());
       Value *RecoverArgs[] = {
           Builder.CreateBitCast(&F, Int8PtrType, ""), FP,
-          llvm::ConstantInt::get(Int32Type, AllocasToEscape.size() - 1)};
+          llvm37::ConstantInt::get(Int32Type, AllocasToEscape.size() - 1)};
       Instruction *RecoveredAlloca =
           Builder.CreateCall(RecoverFrameFn, RecoverArgs);
 
@@ -1294,7 +1294,7 @@ static BasicBlock *createStubLandingPad(Function *Handler) {
   Handler->getBasicBlockList().push_back(StubBB);
   IRBuilder<> Builder(StubBB);
   LandingPadInst *LPad = Builder.CreateLandingPad(
-      llvm::StructType::get(Type::getInt8PtrTy(Context),
+      llvm37::StructType::get(Type::getInt8PtrTy(Context),
                             Type::getInt32Ty(Context), nullptr),
       0);
   // Insert a call to llvm.eh.actions so that we don't try to outline this lpad.
@@ -1931,7 +1931,7 @@ CloningDirector::CloningAction WinEHCleanupDirector::handleInvoke(
   VMap[Invoke] = NewCall;
 
   // Remap the operands.
-  llvm::RemapInstruction(NewCall, VMap, RF_None, nullptr, &Materializer);
+  llvm37::RemapInstruction(NewCall, VMap, RF_None, nullptr, &Materializer);
 
   // Insert an unconditional branch to the normal destination.
   BranchInst::Create(Invoke->getNormalDest(), NewBB);
@@ -2490,7 +2490,7 @@ void WinEHPrepare::findCleanupHandlers(LandingPadActions &Actions,
 
 // This is a public function, declared in WinEHFuncInfo.h and is also
 // referenced by WinEHNumbering in FunctionLoweringInfo.cpp.
-void llvm::parseEHActions(
+void llvm37::parseEHActions(
     const IntrinsicInst *II,
     SmallVectorImpl<std::unique_ptr<ActionHandler>> &Actions) {
   assert(II->getIntrinsicID() == Intrinsic::eh_actions &&
@@ -2876,7 +2876,7 @@ void WinEHNumbering::findActionRootLPads(const Function &F) {
   }
 }
 
-void llvm::calculateWinCXXEHStateNumbers(const Function *ParentFn,
+void llvm37::calculateWinCXXEHStateNumbers(const Function *ParentFn,
                                          WinEHFuncInfo &FuncInfo) {
   // Return if it's already been done.
   if (!FuncInfo.LandingPadStateMap.empty())

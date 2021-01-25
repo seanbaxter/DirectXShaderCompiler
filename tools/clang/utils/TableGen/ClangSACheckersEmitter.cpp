@@ -11,13 +11,13 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/ADT/DenseSet.h"
-#include "llvm/TableGen/Error.h"
-#include "llvm/TableGen/Record.h"
-#include "llvm/TableGen/TableGenBackend.h"
+#include "llvm37/ADT/DenseSet.h"
+#include "llvm37/TableGen/Error.h"
+#include "llvm37/TableGen/Record.h"
+#include "llvm37/TableGen/TableGenBackend.h"
 #include <map>
 #include <string>
-using namespace llvm;
+using namespace llvm37;
 
 //===----------------------------------------------------------------------===//
 // Static Analyzer Checkers Tables generation
@@ -71,8 +71,8 @@ static std::string getStringValue(const Record &R, StringRef field) {
 
 namespace {
 struct GroupInfo {
-  llvm::DenseSet<const Record*> Checkers;
-  llvm::DenseSet<const Record *> SubGroups;
+  llvm37::DenseSet<const Record*> Checkers;
+  llvm37::DenseSet<const Record *> SubGroups;
   bool Hidden;
   unsigned Index;
 
@@ -81,14 +81,14 @@ struct GroupInfo {
 }
 
 static void addPackageToCheckerGroup(const Record *package, const Record *group,
-                  llvm::DenseMap<const Record *, GroupInfo *> &recordGroupMap) {
-  llvm::DenseSet<const Record *> &checkers = recordGroupMap[package]->Checkers;
-  for (llvm::DenseSet<const Record *>::iterator
+                  llvm37::DenseMap<const Record *, GroupInfo *> &recordGroupMap) {
+  llvm37::DenseSet<const Record *> &checkers = recordGroupMap[package]->Checkers;
+  for (llvm37::DenseSet<const Record *>::iterator
          I = checkers.begin(), E = checkers.end(); I != E; ++I)
     recordGroupMap[group]->Checkers.insert(*I);
 
-  llvm::DenseSet<const Record *> &subGroups = recordGroupMap[package]->SubGroups;
-  for (llvm::DenseSet<const Record *>::iterator
+  llvm37::DenseSet<const Record *> &subGroups = recordGroupMap[package]->SubGroups;
+  for (llvm37::DenseSet<const Record *>::iterator
          I = subGroups.begin(), E = subGroups.end(); I != E; ++I)
     addPackageToCheckerGroup(*I, group, recordGroupMap);
 }
@@ -96,14 +96,14 @@ static void addPackageToCheckerGroup(const Record *package, const Record *group,
 namespace clang {
 void EmitClangSACheckers(RecordKeeper &Records, raw_ostream &OS) {
   std::vector<Record*> checkers = Records.getAllDerivedDefinitions("Checker");
-  llvm::DenseMap<const Record *, unsigned> checkerRecIndexMap;
+  llvm37::DenseMap<const Record *, unsigned> checkerRecIndexMap;
   for (unsigned i = 0, e = checkers.size(); i != e; ++i)
     checkerRecIndexMap[checkers[i]] = i;
 
   // Invert the mapping of checkers to package/group into a one to many
   // mapping of packages/groups to checkers.
   std::map<std::string, GroupInfo> groupInfoByName;
-  llvm::DenseMap<const Record *, GroupInfo *> recordGroupMap;
+  llvm37::DenseMap<const Record *, GroupInfo *> recordGroupMap;
 
   std::vector<Record*> packages = Records.getAllDerivedDefinitions("Package");
   for (unsigned i = 0, e = packages.size(); i != e; ++i) {
@@ -169,7 +169,7 @@ void EmitClangSACheckers(RecordKeeper &Records, raw_ostream &OS) {
       addPackageToCheckerGroup(packages[i], DI->getDef(), recordGroupMap);
 
   typedef std::map<std::string, const Record *> SortedRecords;
-  typedef llvm::DenseMap<const Record *, unsigned> RecToSortIndex;
+  typedef llvm37::DenseMap<const Record *, unsigned> RecToSortIndex;
 
   SortedRecords sortedGroups;
   RecToSortIndex groupToSortIndex;
@@ -261,12 +261,12 @@ void EmitClangSACheckers(RecordKeeper &Records, raw_ostream &OS) {
          I = groupInfoByName.begin(), E = groupInfoByName.end(); I != E; ++I) {
     maxLen = std::max(maxLen, (unsigned)I->first.size());
 
-    llvm::DenseSet<const Record *> &checkers = I->second.Checkers;
+    llvm37::DenseSet<const Record *> &checkers = I->second.Checkers;
     if (!checkers.empty()) {
       OS << "static const short CheckerArray" << I->second.Index << "[] = { ";
       // Make the output order deterministic.
       std::map<int, const Record *> sorted;
-      for (llvm::DenseSet<const Record *>::iterator
+      for (llvm37::DenseSet<const Record *>::iterator
              I = checkers.begin(), E = checkers.end(); I != E; ++I)
         sorted[(*I)->getID()] = *I;
 
@@ -276,12 +276,12 @@ void EmitClangSACheckers(RecordKeeper &Records, raw_ostream &OS) {
       OS << "-1 };\n";
     }
     
-    llvm::DenseSet<const Record *> &subGroups = I->second.SubGroups;
+    llvm37::DenseSet<const Record *> &subGroups = I->second.SubGroups;
     if (!subGroups.empty()) {
       OS << "static const short SubPackageArray" << I->second.Index << "[] = { ";
       // Make the output order deterministic.
       std::map<int, const Record *> sorted;
-      for (llvm::DenseSet<const Record *>::iterator
+      for (llvm37::DenseSet<const Record *>::iterator
              I = subGroups.begin(), E = subGroups.end(); I != E; ++I)
         sorted[(*I)->getID()] = *I;
 

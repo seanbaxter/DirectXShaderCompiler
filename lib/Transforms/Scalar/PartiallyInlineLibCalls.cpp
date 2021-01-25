@@ -13,16 +13,16 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Analysis/TargetTransformInfo.h"
-#include "llvm/IR/IRBuilder.h"
-#include "llvm/IR/Intrinsics.h"
-#include "llvm/Pass.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Analysis/TargetLibraryInfo.h"
-#include "llvm/Transforms/Scalar.h"
-#include "llvm/Transforms/Utils/BasicBlockUtils.h"
+#include "llvm37/Analysis/TargetTransformInfo.h"
+#include "llvm37/IR/IRBuilder.h"
+#include "llvm37/IR/Intrinsics.h"
+#include "llvm37/Pass.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Analysis/TargetLibraryInfo.h"
+#include "llvm37/Transforms/Scalar.h"
+#include "llvm37/Transforms/Utils/BasicBlockUtils.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "partially-inline-libcalls"
 
@@ -128,7 +128,7 @@ bool PartiallyInlineLibCalls::optimizeSQRT(CallInst *Call,
 
   // Move all instructions following Call to newly created block JoinBB.
   // Create phi and replace all uses.
-  BasicBlock *JoinBB = llvm::SplitBlock(&CurrBB, Call->getNextNode());
+  BasicBlock *JoinBB = llvm37::SplitBlock(&CurrBB, Call->getNextNode());
   IRBuilder<> Builder(JoinBB, JoinBB->begin());
   PHINode *Phi = Builder.CreatePHI(Call->getType(), 2);
   Call->replaceAllUsesWith(Phi);
@@ -158,6 +158,6 @@ bool PartiallyInlineLibCalls::optimizeSQRT(CallInst *Call,
   return true;
 }
 
-FunctionPass *llvm::createPartiallyInlineLibCallsPass() {
+FunctionPass *llvm37::createPartiallyInlineLibCallsPass() {
   return new PartiallyInlineLibCalls();
 }

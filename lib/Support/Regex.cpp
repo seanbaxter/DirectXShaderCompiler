@@ -11,13 +11,13 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Support/Regex.h"
+#include "llvm37/Support/Regex.h"
 #include "regex_impl.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/ADT/StringRef.h"
-#include "llvm/ADT/Twine.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/ADT/StringRef.h"
+#include "llvm37/ADT/Twine.h"
 #include <string>
-using namespace llvm;
+using namespace llvm37;
 
 Regex::Regex(StringRef regex, unsigned Flags) {
   unsigned flags = 0;

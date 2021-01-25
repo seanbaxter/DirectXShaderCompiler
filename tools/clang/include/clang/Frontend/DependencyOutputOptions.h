@@ -7,8 +7,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_FRONTEND_DEPENDENCYOUTPUTOPTIONS_H
-#define LLVM_CLANG_FRONTEND_DEPENDENCYOUTPUTOPTIONS_H
+#ifndef LLVM37_CLANG_FRONTEND_DEPENDENCYOUTPUTOPTIONS_H
+#define LLVM37_CLANG_FRONTEND_DEPENDENCYOUTPUTOPTIONS_H
 
 #include <string>
 #include <vector>

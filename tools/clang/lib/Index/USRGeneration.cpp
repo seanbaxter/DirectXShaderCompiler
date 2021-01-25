@@ -12,9 +12,9 @@
 #include "clang/AST/DeclTemplate.h"
 #include "clang/AST/DeclVisitor.h"
 #include "clang/Lex/PreprocessingRecord.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/Support/Path.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/Support/Path.h"
+#include "llvm37/Support/raw_ostream.h"
 
 using namespace clang;
 using namespace clang::index;
@@ -24,7 +24,7 @@ using namespace clang::index;
 //===----------------------------------------------------------------------===//
 
 /// \returns true on error.
-static bool printLoc(llvm::raw_ostream &OS, SourceLocation Loc,
+static bool printLoc(llvm37::raw_ostream &OS, SourceLocation Loc,
                      const SourceManager &SM, bool IncludeOffset) {
   if (Loc.isInvalid()) {
     return true;
@@ -33,7 +33,7 @@ static bool printLoc(llvm::raw_ostream &OS, SourceLocation Loc,
   const std::pair<FileID, unsigned> &Decomposed = SM.getDecomposedLoc(Loc);
   const FileEntry *FE = SM.getFileEntryForID(Decomposed.first);
   if (FE) {
-    OS << llvm::sys::path::filename(FE->getName());
+    OS << llvm37::sys::path::filename(FE->getName());
   } else {
     // This case really isn't interesting.
     return true;
@@ -50,12 +50,12 @@ static bool printLoc(llvm::raw_ostream &OS, SourceLocation Loc,
 namespace {
 class USRGenerator : public ConstDeclVisitor<USRGenerator> {
   SmallVectorImpl<char> &Buf;
-  llvm::raw_svector_ostream Out;
+  llvm37::raw_svector_ostream Out;
   bool IgnoreResults;
   ASTContext *Context;
   bool generatedLoc;
   
-  llvm::DenseMap<const Type *, unsigned> TypeSubstitutions;
+  llvm37::DenseMap<const Type *, unsigned> TypeSubstitutions;
   
 public:
   explicit USRGenerator(ASTContext *Ctx, SmallVectorImpl<char> &Buf)
@@ -649,7 +649,7 @@ void USRGenerator::VisitType(QualType T) {
 
     // If we have already seen this (non-built-in) type, use a substitution
     // encoding.
-    llvm::DenseMap<const Type *, unsigned>::iterator Substitution
+    llvm37::DenseMap<const Type *, unsigned>::iterator Substitution
       = TypeSubstitutions.find(T.getTypePtr());
     if (Substitution != TypeSubstitutions.end()) {
       Out << 'S' << Substitution->second << '_';
@@ -872,7 +872,7 @@ bool clang::index::generateUSRForMacro(const MacroDefinitionRecord *MD,
   if (!MD || MD->getLocation().isInvalid())
     return true;
 
-  llvm::raw_svector_ostream Out(Buf);
+  llvm37::raw_svector_ostream Out(Buf);
 
   // Assume that system headers are sane.  Don't put source location
   // information into the USR if the macro comes from a system header.

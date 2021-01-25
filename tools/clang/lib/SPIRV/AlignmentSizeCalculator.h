@@ -7,8 +7,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_LIB_SPIRV_ALIGNMENTSIZECALCULATOR_H
-#define LLVM_CLANG_LIB_SPIRV_ALIGNMENTSIZECALCULATOR_H
+#ifndef LLVM37_CLANG_LIB_SPIRV_ALIGNMENTSIZECALCULATOR_H
+#define LLVM37_CLANG_LIB_SPIRV_ALIGNMENTSIZECALCULATOR_H
 
 #include "dxc/Support/SPIRVOptions.h"
 #include "clang/AST/ASTContext.h"
@@ -37,7 +37,7 @@ public:
   /// size contains post-paddings required by the given type.
   std::pair<uint32_t, uint32_t>
   getAlignmentAndSize(QualType type, SpirvLayoutRule rule,
-                      llvm::Optional<bool> isRowMajor, uint32_t *stride);
+                      llvm37::Optional<bool> isRowMajor, uint32_t *stride);
 
   /// \brief Aligns currentOffset properly to allow packing vectors in the HLSL
   /// way: using the element type's alignment as the vector alignment, as long
@@ -66,4 +66,4 @@ private:
 } // end namespace spirv
 } // end namespace clang
 
-#endif // LLVM_CLANG_LIB_SPIRV_ALIGNMENTSIZECALCULATOR_H
+#endif // LLVM37_CLANG_LIB_SPIRV_ALIGNMENTSIZECALCULATOR_H

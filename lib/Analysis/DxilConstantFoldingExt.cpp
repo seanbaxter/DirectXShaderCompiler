@@ -14,11 +14,11 @@
 // in your own version. There should be no upstream changes to these definitions.
 //
 //===----------------------------------------------------------------------===//
-#include "llvm/Analysis/DxilConstantFolding.h"
-#include "llvm/IR/Constant.h"
-#include "llvm/ADT/StringRef.h"
-#include "llvm/ADT/ArrayRef.h"
-using namespace llvm;
+#include "llvm37/Analysis/DxilConstantFolding.h"
+#include "llvm37/IR/Constant.h"
+#include "llvm37/ADT/StringRef.h"
+#include "llvm37/ADT/ArrayRef.h"
+using namespace llvm37;
 
 Constant *hlsl::ConstantFoldScalarCallExt(StringRef Name, Type *Ty, ArrayRef<Constant *> RawOperands) {
   return nullptr;

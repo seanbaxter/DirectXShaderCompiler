@@ -14,10 +14,10 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/CodeGen/GCs.h"
-#include "llvm/CodeGen/GCStrategy.h"
+#include "llvm37/CodeGen/GCs.h"
+#include "llvm37/CodeGen/GCStrategy.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 namespace {
 class OcamlGC : public GCStrategy {
@@ -28,7 +28,7 @@ public:
 
 static GCRegistry::Add<OcamlGC> X("ocaml", "ocaml 3.10-compatible GC");
 
-void llvm::linkOcamlGC() {}
+void llvm37::linkOcamlGC() {}
 
 OcamlGC::OcamlGC() {
   NeededSafePoints = 1 << GC::PostCall;

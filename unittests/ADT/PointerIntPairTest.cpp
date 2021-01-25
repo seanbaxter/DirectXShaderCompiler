@@ -8,9 +8,9 @@
 //===----------------------------------------------------------------------===//
 
 #include "gtest/gtest.h"
-#include "llvm/ADT/PointerIntPair.h"
+#include "llvm37/ADT/PointerIntPair.h"
 #include <limits>
-using namespace llvm;
+using namespace llvm37;
 
 namespace {
 

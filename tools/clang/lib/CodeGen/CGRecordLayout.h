@@ -7,16 +7,16 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_LIB_CODEGEN_CGRECORDLAYOUT_H
-#define LLVM_CLANG_LIB_CODEGEN_CGRECORDLAYOUT_H
+#ifndef LLVM37_CLANG_LIB_CODEGEN_CGRECORDLAYOUT_H
+#define LLVM37_CLANG_LIB_CODEGEN_CGRECORDLAYOUT_H
 
 #include "clang/AST/CharUnits.h"
 #include "clang/AST/Decl.h"
 #include "clang/Basic/LLVM.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/IR/DerivedTypes.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/IR/DerivedTypes.h"
 
-namespace llvm {
+namespace llvm37 {
   class StructType;
 }
 
@@ -115,26 +115,26 @@ class CGRecordLayout {
 private:
   /// The LLVM type corresponding to this record layout; used when
   /// laying it out as a complete object.
-  llvm::StructType *CompleteObjectType;
+  llvm37::StructType *CompleteObjectType;
 
   /// The LLVM type for the non-virtual part of this record layout;
   /// used when laying it out as a base subobject.
-  llvm::StructType *BaseSubobjectType;
+  llvm37::StructType *BaseSubobjectType;
 
   /// Map from (non-bit-field) struct field to the corresponding llvm struct
   /// type field no. This info is populated by record builder.
-  llvm::DenseMap<const FieldDecl *, unsigned> FieldInfo;
+  llvm37::DenseMap<const FieldDecl *, unsigned> FieldInfo;
 
   /// Map from (bit-field) struct field to the corresponding llvm struct type
   /// field no. This info is populated by record builder.
-  llvm::DenseMap<const FieldDecl *, CGBitFieldInfo> BitFields;
+  llvm37::DenseMap<const FieldDecl *, CGBitFieldInfo> BitFields;
 
   // FIXME: Maybe we could use a CXXBaseSpecifier as the key and use a single
   // map for both virtual and non-virtual bases.
-  llvm::DenseMap<const CXXRecordDecl *, unsigned> NonVirtualBases;
+  llvm37::DenseMap<const CXXRecordDecl *, unsigned> NonVirtualBases;
 
   /// Map from virtual bases to their field index in the complete object.
-  llvm::DenseMap<const CXXRecordDecl *, unsigned> CompleteObjectVirtualBases;
+  llvm37::DenseMap<const CXXRecordDecl *, unsigned> CompleteObjectVirtualBases;
 
   /// False if any direct or indirect subobject of this class, when
   /// considered as a complete object, requires a non-zero bitpattern
@@ -147,8 +147,8 @@ private:
   bool IsZeroInitializableAsBase : 1;
 
 public:
-  CGRecordLayout(llvm::StructType *CompleteObjectType,
-                 llvm::StructType *BaseSubobjectType,
+  CGRecordLayout(llvm37::StructType *CompleteObjectType,
+                 llvm37::StructType *BaseSubobjectType,
                  bool IsZeroInitializable,
                  bool IsZeroInitializableAsBase)
     : CompleteObjectType(CompleteObjectType),
@@ -158,13 +158,13 @@ public:
 
   /// \brief Return the "complete object" LLVM type associated with
   /// this record.
-  llvm::StructType *getLLVMType() const {
+  llvm37::StructType *getLLVMType() const {
     return CompleteObjectType;
   }
 
   /// \brief Return the "base subobject" LLVM type associated with
   /// this record.
-  llvm::StructType *getBaseSubobjectLLVMType() const {
+  llvm37::StructType *getBaseSubobjectLLVMType() const {
     return BaseSubobjectType;
   }
 
@@ -180,7 +180,7 @@ public:
     return IsZeroInitializableAsBase;
   }
 
-  /// \brief Return llvm::StructType element number that corresponds to the
+  /// \brief Return llvm37::StructType element number that corresponds to the
   /// field FD.
   unsigned getLLVMFieldNo(const FieldDecl *FD) const {
     FD = FD->getCanonicalDecl();
@@ -204,7 +204,7 @@ public:
   const CGBitFieldInfo &getBitFieldInfo(const FieldDecl *FD) const {
     FD = FD->getCanonicalDecl();
     assert(FD->isBitField() && "Invalid call for non-bit-field decl!");
-    llvm::DenseMap<const FieldDecl *, CGBitFieldInfo>::const_iterator
+    llvm37::DenseMap<const FieldDecl *, CGBitFieldInfo>::const_iterator
       it = BitFields.find(FD);
     assert(it != BitFields.end() && "Unable to find bitfield info");
     return it->second;

@@ -21,11 +21,11 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/GlobalVariable.h"
-#include "llvm/IR/Metadata.h"
-using namespace llvm;
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/GlobalVariable.h"
+#include "llvm37/IR/Metadata.h"
+using namespace llvm37;
 
 //===----------------------------------------------------------------------===//
 /// DbgInfoIntrinsic - This is the common base class for debug info intrinsics

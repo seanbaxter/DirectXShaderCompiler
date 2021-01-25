@@ -9,13 +9,13 @@
 
 #include "dxc/HLSL/HLMatrixType.h"
 #include "dxc/Support/Global.h"
-#include "llvm/IR/IRBuilder.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/Type.h"
-#include "llvm/IR/DerivedTypes.h"
-#include "llvm/IR/Value.h"
+#include "llvm37/IR/IRBuilder.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/Type.h"
+#include "llvm37/IR/DerivedTypes.h"
+#include "llvm37/IR/Value.h"
 
-using namespace llvm;
+using namespace llvm37;
 using namespace hlsl;
 
 HLMatrixType::HLMatrixType(Type *RegReprElemTy, unsigned NumRows, unsigned NumColumns)
@@ -103,41 +103,41 @@ Value *HLMatrixType::emitLoweredVectorColToRow(Value *VecVal, IRBuilder<> &Build
 }
 
 bool HLMatrixType::isa(Type *Ty) {
-  StructType *StructTy = llvm::dyn_cast<StructType>(Ty);
+  StructType *StructTy = llvm37::dyn_cast<StructType>(Ty);
   return StructTy != nullptr && StructTy->getName().startswith(StructNamePrefix);
 }
 
 bool HLMatrixType::isMatrixPtr(Type *Ty) {
-  PointerType *PtrTy = llvm::dyn_cast<PointerType>(Ty);
+  PointerType *PtrTy = llvm37::dyn_cast<PointerType>(Ty);
   return PtrTy != nullptr && isa(PtrTy->getElementType());
 }
 
 bool HLMatrixType::isMatrixArray(Type *Ty) {
-  ArrayType *ArrayTy = llvm::dyn_cast<ArrayType>(Ty);
+  ArrayType *ArrayTy = llvm37::dyn_cast<ArrayType>(Ty);
   if (ArrayTy == nullptr) return false;
-  while (ArrayType *NestedArrayTy = llvm::dyn_cast<ArrayType>(ArrayTy->getElementType()))
+  while (ArrayType *NestedArrayTy = llvm37::dyn_cast<ArrayType>(ArrayTy->getElementType()))
     ArrayTy = NestedArrayTy;
   return isa(ArrayTy->getElementType());
 }
 
 bool HLMatrixType::isMatrixArrayPtr(Type *Ty) {
-  PointerType *PtrTy = llvm::dyn_cast<PointerType>(Ty);
+  PointerType *PtrTy = llvm37::dyn_cast<PointerType>(Ty);
   if (PtrTy == nullptr) return false;
   return isMatrixArray(PtrTy->getElementType());
 }
 
 bool HLMatrixType::isMatrixPtrOrArrayPtr(Type *Ty) {
-  PointerType *PtrTy = llvm::dyn_cast<PointerType>(Ty);
+  PointerType *PtrTy = llvm37::dyn_cast<PointerType>(Ty);
   if (PtrTy == nullptr) return false;
   Ty = PtrTy->getElementType();
-  while (ArrayType *ArrayTy = llvm::dyn_cast<ArrayType>(Ty))
+  while (ArrayType *ArrayTy = llvm37::dyn_cast<ArrayType>(Ty))
     Ty = Ty->getArrayElementType();
   return isa(Ty);
 }
 
 bool HLMatrixType::isMatrixOrPtrOrArrayPtr(Type *Ty) {
-  if (PointerType *PtrTy = llvm::dyn_cast<PointerType>(Ty)) Ty = PtrTy->getElementType();
-  while (ArrayType *ArrayTy = llvm::dyn_cast<ArrayType>(Ty)) Ty = ArrayTy->getElementType();
+  if (PointerType *PtrTy = llvm37::dyn_cast<PointerType>(Ty)) Ty = PtrTy->getElementType();
+  while (ArrayType *ArrayTy = llvm37::dyn_cast<ArrayType>(Ty)) Ty = ArrayTy->getElementType();
   return isa(Ty);
 }
 
@@ -145,13 +145,13 @@ bool HLMatrixType::isMatrixOrPtrOrArrayPtr(Type *Ty) {
 // If the type is not matrix-derived, the original type is returned.
 // Does not lower struct types containing matrices.
 Type *HLMatrixType::getLoweredType(Type *Ty, bool MemRepr) {
-  if (PointerType *PtrTy = llvm::dyn_cast<PointerType>(Ty)) {
+  if (PointerType *PtrTy = llvm37::dyn_cast<PointerType>(Ty)) {
     // Pointees are always in memory representation
     Type *LoweredElemTy = getLoweredType(PtrTy->getElementType(), /* MemRepr */ true);
     return LoweredElemTy == PtrTy->getElementType()
       ? Ty : PointerType::get(LoweredElemTy, PtrTy->getAddressSpace());
   }
-  else if (ArrayType *ArrayTy = llvm::dyn_cast<ArrayType>(Ty)) {
+  else if (ArrayType *ArrayTy = llvm37::dyn_cast<ArrayType>(Ty)) {
     // Arrays are always in memory and so their elements are in memory representation
     Type *LoweredElemTy = getLoweredType(ArrayTy->getElementType(), /* MemRepr */ true);
     return LoweredElemTy == ArrayTy->getElementType()
@@ -165,11 +165,11 @@ Type *HLMatrixType::getLoweredType(Type *Ty, bool MemRepr) {
 
 HLMatrixType HLMatrixType::cast(Type *Ty) {
   DXASSERT_NOMSG(isa(Ty));
-  StructType *StructTy = llvm::cast<StructType>(Ty);
+  StructType *StructTy = llvm37::cast<StructType>(Ty);
   DXASSERT_NOMSG(Ty->getNumContainedTypes() == 1);
-  ArrayType *RowArrayTy = llvm::cast<ArrayType>(StructTy->getElementType(0));
+  ArrayType *RowArrayTy = llvm37::cast<ArrayType>(StructTy->getElementType(0));
   DXASSERT_NOMSG(RowArrayTy->getNumElements() >= 1 && RowArrayTy->getNumElements() <= 4);
-  VectorType *RowTy = llvm::cast<VectorType>(RowArrayTy->getElementType());
+  VectorType *RowTy = llvm37::cast<VectorType>(RowArrayTy->getElementType());
   DXASSERT_NOMSG(RowTy->getNumElements() >= 1 && RowTy->getNumElements() <= 4);
   return HLMatrixType(RowTy->getElementType(), RowArrayTy->getNumElements(), RowTy->getNumElements());
 }

@@ -1,12 +1,12 @@
 
 #include "StreamWriter.h"
-#include "llvm/ADT/StringExtras.h"
-#include "llvm/Support/Format.h"
+#include "llvm37/ADT/StringExtras.h"
+#include "llvm37/Support/Format.h"
 #include <cctype>
 
-using namespace llvm::support;
+using namespace llvm37::support;
 
-namespace llvm {
+namespace llvm37 {
 
 raw_ostream &operator<<(raw_ostream &OS, const HexNumber& Value) {
   uint64_t N = Value.Value;
@@ -77,4 +77,4 @@ void StreamWriter::printBinaryImpl(StringRef Label, StringRef Str,
   }
 }
 
-} // namespace llvm
+} // namespace llvm37

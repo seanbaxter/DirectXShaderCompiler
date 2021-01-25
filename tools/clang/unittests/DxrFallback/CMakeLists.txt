@@ -1,6 +1,6 @@
 find_package(D3D12 REQUIRED)
 
-set(LLVM_LINK_COMPONENTS
+set(LLVM37_LINK_COMPONENTS
   analysis
   asmparser
   bitreader

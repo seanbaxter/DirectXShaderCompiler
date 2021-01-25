@@ -18,9 +18,9 @@
 #include "clang/StaticAnalyzer/Core/BugReporter/BugReporter.h"
 #include "clang/StaticAnalyzer/Core/Checker.h"
 #include "clang/StaticAnalyzer/Core/PathSensitive/AnalysisManager.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/Support/SaveAndRestore.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/Support/SaveAndRestore.h"
+#include "llvm37/Support/raw_ostream.h"
 
 using namespace clang;
 using namespace ento;
@@ -51,7 +51,7 @@ class WalkAST : public StmtVisitor<WalkAST> {
   };
 
   /// A DenseMap that records visited states of FunctionDecls.
-  llvm::DenseMap<const FunctionDecl *, Kind> VisitedFunctions;
+  llvm37::DenseMap<const FunctionDecl *, Kind> VisitedFunctions;
 
   /// The CallExpr whose body is currently being visited.  This is used for
   /// generating bug reports.  This is null while visiting the body of a
@@ -169,7 +169,7 @@ void WalkAST::VisitCXXMemberCallExpr(CallExpr *CE) {
 
 void WalkAST::ReportVirtualCall(const CallExpr *CE, bool isPure) {
   SmallString<100> buf;
-  llvm::raw_svector_ostream os(buf);
+  llvm37::raw_svector_ostream os(buf);
   
   os << "Call Path : ";
   // Name of current visiting CallExpr.

@@ -11,19 +11,19 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Analysis/LibCallAliasAnalysis.h"
-#include "llvm/Analysis/LibCallSemantics.h"
-#include "llvm/Analysis/Passes.h"
-#include "llvm/IR/Function.h"
-#include "llvm/Pass.h"
-using namespace llvm;
+#include "llvm37/Analysis/LibCallAliasAnalysis.h"
+#include "llvm37/Analysis/LibCallSemantics.h"
+#include "llvm37/Analysis/Passes.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/Pass.h"
+using namespace llvm37;
   
 // Register this pass...
 char LibCallAliasAnalysis::ID = 0;
 INITIALIZE_AG_PASS(LibCallAliasAnalysis, AliasAnalysis, "libcall-aa",
                    "LibCall Alias Analysis", false, true, false)
 
-FunctionPass *llvm::createLibCallAliasAnalysisPass(LibCallInfo *LCI) {
+FunctionPass *llvm37::createLibCallAliasAnalysisPass(LibCallInfo *LCI) {
   return new LibCallAliasAnalysis(LCI);
 }
 

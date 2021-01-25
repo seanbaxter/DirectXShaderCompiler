@@ -14,16 +14,16 @@
 #include "dxc/DXIL/DxilOperations.h"
 #include "dxc/DXIL/DxilInstructions.h"
 
-#include "llvm/Analysis/CallGraph.h"
-#include "llvm/IR/InstIterator.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/IRBuilder.h"
-#include "llvm/IR/LegacyPassManager.h"
-#include "llvm/IR/Module.h"
-#include "llvm/Linker/Linker.h"
-#include "llvm/Transforms/IPO.h"
-#include "llvm/Transforms/Utils/BasicBlockUtils.h"
-#include "llvm/Transforms/Utils/Cloning.h"
+#include "llvm37/Analysis/CallGraph.h"
+#include "llvm37/IR/InstIterator.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/IRBuilder.h"
+#include "llvm37/IR/LegacyPassManager.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/Linker/Linker.h"
+#include "llvm37/Transforms/IPO.h"
+#include "llvm37/Transforms/Utils/BasicBlockUtils.h"
+#include "llvm37/Transforms/Utils/Cloning.h"
 
 #include "FunctionBuilder.h"
 #include "LLVMUtils.h"
@@ -33,7 +33,7 @@
 #include <queue>
 
 using namespace hlsl;
-using namespace llvm;
+using namespace llvm37;
 
 static std::vector<Function*> getFunctionsWithPrefix(Module* mod, const std::string& prefix)
 {
@@ -121,7 +121,7 @@ V get(std::map<K, V>& theMap, const K& key, V defaultVal = static_cast<V>(nullpt
 }
 
 
-DxrFallbackCompiler::DxrFallbackCompiler(llvm::Module* mod, const std::vector<std::string>& shaderNames, unsigned maxAttributeSize, unsigned stackSizeInBytes, bool findCalledShaders /*= false*/)
+DxrFallbackCompiler::DxrFallbackCompiler(llvm37::Module* mod, const std::vector<std::string>& shaderNames, unsigned maxAttributeSize, unsigned stackSizeInBytes, bool findCalledShaders /*= false*/)
   : m_module(mod)
   , m_entryShaderNames(shaderNames)
   , m_stackSizeInBytes(stackSizeInBytes)

@@ -14,11 +14,11 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Support/DataStream.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/Support/FileSystem.h"
-#include "llvm/Support/Program.h"
+#include "llvm37/Support/DataStream.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/Support/FileSystem.h"
+#include "llvm37/Support/Program.h"
 #include <string>
 #include <system_error>
 #if !defined(_MSC_VER) && !defined(__MINGW32__)
@@ -26,7 +26,7 @@
 #else
 #include <io.h>
 #endif
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "Data-stream"
 
@@ -43,7 +43,7 @@ using namespace llvm;
 
 STATISTIC(NumStreamFetches, "Number of calls to Data stream fetch");
 
-namespace llvm {
+namespace llvm37 {
 DataStreamer::~DataStreamer() {}
 }
 
@@ -56,11 +56,11 @@ class DataFileStreamer : public DataStreamer {
 public:
   DataFileStreamer() : Fd(0) {}
   virtual ~DataFileStreamer() {
-    llvm::sys::fs::msf_close(Fd);  // HLSL Change - use msf_close
+    llvm37::sys::fs::msf_close(Fd);  // HLSL Change - use msf_close
   }
   size_t GetBytes(unsigned char *buf, size_t len) override {
     NumStreamFetches++;
-    return llvm::sys::fs::msf_read(Fd, buf, len);
+    return llvm37::sys::fs::msf_read(Fd, buf, len);
   }
 
   std::error_code OpenFile(const std::string &Filename) {
@@ -77,7 +77,7 @@ public:
 }
 
 std::unique_ptr<DataStreamer>
-llvm::getDataFileStreamer(const std::string &Filename, std::string *StrError) {
+llvm37::getDataFileStreamer(const std::string &Filename, std::string *StrError) {
   std::unique_ptr<DataFileStreamer> s = make_unique<DataFileStreamer>();
   if (std::error_code e = s->OpenFile(Filename)) {
     *StrError = std::string("Could not open ") + Filename + ": " +

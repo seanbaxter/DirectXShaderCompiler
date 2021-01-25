@@ -20,8 +20,8 @@
 #include "clang/StaticAnalyzer/Core/Checker.h"
 #include "clang/StaticAnalyzer/Core/CheckerManager.h"
 #include "clang/StaticAnalyzer/Core/PathSensitive/AnalysisManager.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/Support/raw_ostream.h"
 
 using namespace clang;
 using namespace ento;
@@ -29,7 +29,7 @@ using namespace ento;
 namespace {
 
 typedef std::pair<const TypeSourceInfo *, const CallExpr *> TypeCallPair;
-typedef llvm::PointerUnion<const Stmt *, const VarDecl *> ExprParent;
+typedef llvm37::PointerUnion<const Stmt *, const VarDecl *> ExprParent;
 
 class CastedAllocFinder
   : public ConstStmtVisitor<CastedAllocFinder, TypeCallPair> {
@@ -217,7 +217,7 @@ public:
         }
 
         SmallString<64> buf;
-        llvm::raw_svector_ostream OS(buf);
+        llvm37::raw_svector_ostream OS(buf);
 
         OS << "Result of ";
         const FunctionDecl *Callee = i->AllocCall->getDirectCallee();

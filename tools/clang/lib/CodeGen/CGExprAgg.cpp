@@ -19,10 +19,10 @@
 #include "clang/AST/DeclCXX.h"
 #include "clang/AST/DeclTemplate.h"
 #include "clang/AST/StmtVisitor.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/GlobalVariable.h"
-#include "llvm/IR/Intrinsics.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/GlobalVariable.h"
+#include "llvm37/IR/Intrinsics.h"
 using namespace clang;
 using namespace CodeGen;
 
@@ -85,7 +85,7 @@ public:
 
   void EmitMoveFromReturnSlot(const Expr *E, RValue Src);
 
-  void EmitArrayInit(llvm::Value *DestPtr, llvm::ArrayType *AType,
+  void EmitArrayInit(llvm37::Value *DestPtr, llvm37::ArrayType *AType,
                      QualType elementType, InitListExpr *E);
 
   AggValueSlot::NeedsGCBarriers_t needsGC(QualType T) {
@@ -297,7 +297,7 @@ void AggExprEmitter::EmitCopy(QualType type, const AggValueSlot &dest,
                               const AggValueSlot &src) {
   if (dest.requiresGCollection()) {
     CharUnits sz = CGF.getContext().getTypeSizeInChars(type);
-    llvm::Value *size = llvm::ConstantInt::get(CGF.SizeTy, sz.getQuantity());
+    llvm37::Value *size = llvm37::ConstantInt::get(CGF.SizeTy, sz.getQuantity());
     CGF.CGM.getObjCRuntime().EmitGCMemmoveCollectable(CGF,
                                                       dest.getAddr(),
                                                       src.getAddr(),
@@ -322,7 +322,7 @@ AggExprEmitter::VisitCXXStdInitializerListExpr(CXXStdInitializerListExpr *E) {
   ASTContext &Ctx = CGF.getContext();
   LValue Array = CGF.EmitLValue(E->getSubExpr());
   assert(Array.isSimple() && "initializer_list array not a simple lvalue");
-  llvm::Value *ArrayPtr = Array.getAddress();
+  llvm37::Value *ArrayPtr = Array.getAddress();
 
   const ConstantArrayType *ArrayType =
       Ctx.getAsConstantArrayType(E->getSubExpr()->getType());
@@ -348,9 +348,9 @@ AggExprEmitter::VisitCXXStdInitializerListExpr(CXXStdInitializerListExpr *E) {
   LValue DestLV = CGF.MakeAddrLValue(Dest.getAddr(), E->getType(),
                                      Dest.getAlignment());
   LValue Start = CGF.EmitLValueForFieldInitialization(DestLV, *Field);
-  llvm::Value *Zero = llvm::ConstantInt::get(CGF.PtrDiffTy, 0);
-  llvm::Value *IdxStart[] = { Zero, Zero };
-  llvm::Value *ArrayStart =
+  llvm37::Value *Zero = llvm37::ConstantInt::get(CGF.PtrDiffTy, 0);
+  llvm37::Value *IdxStart[] = { Zero, Zero };
+  llvm37::Value *ArrayStart =
       Builder.CreateInBoundsGEP(ArrayPtr, IdxStart, "arraystart");
   CGF.EmitStoreThroughLValue(RValue::get(ArrayStart), Start);
   ++Field;
@@ -360,14 +360,14 @@ AggExprEmitter::VisitCXXStdInitializerListExpr(CXXStdInitializerListExpr *E) {
     return;
   }
 
-  llvm::Value *Size = Builder.getInt(ArrayType->getSize());
+  llvm37::Value *Size = Builder.getInt(ArrayType->getSize());
   LValue EndOrLength = CGF.EmitLValueForFieldInitialization(DestLV, *Field);
   if (Field->getType()->isPointerType() &&
       Ctx.hasSameType(Field->getType()->getPointeeType(),
                       ArrayType->getElementType())) {
     // End pointer.
-    llvm::Value *IdxEnd[] = { Zero, Size };
-    llvm::Value *ArrayEnd =
+    llvm37::Value *IdxEnd[] = { Zero, Size };
+    llvm37::Value *ArrayEnd =
         Builder.CreateInBoundsGEP(ArrayPtr, IdxEnd, "arrayend");
     CGF.EmitStoreThroughLValue(RValue::get(ArrayEnd), EndOrLength);
   } else if (Ctx.hasSameType(Field->getType(), Ctx.getSizeType())) {
@@ -403,7 +403,7 @@ static bool isTrivialFiller(Expr *E) {
 }
 
 /// \brief Emit initialization of an array from an initializer list.
-void AggExprEmitter::EmitArrayInit(llvm::Value *DestPtr, llvm::ArrayType *AType,
+void AggExprEmitter::EmitArrayInit(llvm37::Value *DestPtr, llvm37::ArrayType *AType,
                                    QualType elementType, InitListExpr *E) {
   uint64_t NumInitElements = E->getNumInits();
 
@@ -421,18 +421,18 @@ void AggExprEmitter::EmitArrayInit(llvm::Value *DestPtr, llvm::ArrayType *AType,
 
   // DestPtr is an array*.  Construct an elementType* by drilling
   // down a level.
-  llvm::Value *zero = llvm::ConstantInt::get(CGF.SizeTy, 0);
-  llvm::Value *indices[] = { zero, zero };
-  llvm::Value *begin =
+  llvm37::Value *zero = llvm37::ConstantInt::get(CGF.SizeTy, 0);
+  llvm37::Value *indices[] = { zero, zero };
+  llvm37::Value *begin =
     Builder.CreateInBoundsGEP(DestPtr, indices, "arrayinit.begin");
 
   // Exception safety requires us to destroy all the
   // already-constructed members if an initializer throws.
   // For that, we'll need an EH cleanup.
   QualType::DestructionKind dtorKind = elementType.isDestructedType();
-  llvm::AllocaInst *endOfInit = nullptr;
+  llvm37::AllocaInst *endOfInit = nullptr;
   EHScopeStack::stable_iterator cleanup;
-  llvm::Instruction *cleanupDominator = nullptr;
+  llvm37::Instruction *cleanupDominator = nullptr;
   if (CGF.needsEHCleanup(dtorKind)) {
     // In principle we could tell the cleanup where we are more
     // directly, but the control flow can get so varied here that it
@@ -450,14 +450,14 @@ void AggExprEmitter::EmitArrayInit(llvm::Value *DestPtr, llvm::ArrayType *AType,
     dtorKind = QualType::DK_none;
   }
 
-  llvm::Value *one = llvm::ConstantInt::get(CGF.SizeTy, 1);
+  llvm37::Value *one = llvm37::ConstantInt::get(CGF.SizeTy, 1);
 
   // The 'current element to initialize'.  The invariants on this
   // variable are complicated.  Essentially, after each iteration of
   // the loop, it points to the last initialized element, except
   // that it points to the beginning of the array before any
   // elements have been initialized.
-  llvm::Value *element = begin;
+  llvm37::Value *element = begin;
 
   // Emit the explicit initializers.
   for (uint64_t i = 0; i != NumInitElements; ++i) {
@@ -496,16 +496,16 @@ void AggExprEmitter::EmitArrayInit(llvm::Value *DestPtr, llvm::ArrayType *AType,
     }
 
     // Compute the end of the array.
-    llvm::Value *end = Builder.CreateInBoundsGEP(begin,
-                      llvm::ConstantInt::get(CGF.SizeTy, NumArrayElements),
+    llvm37::Value *end = Builder.CreateInBoundsGEP(begin,
+                      llvm37::ConstantInt::get(CGF.SizeTy, NumArrayElements),
                                                  "arrayinit.end");
 
-    llvm::BasicBlock *entryBB = Builder.GetInsertBlock();
-    llvm::BasicBlock *bodyBB = CGF.createBasicBlock("arrayinit.body");
+    llvm37::BasicBlock *entryBB = Builder.GetInsertBlock();
+    llvm37::BasicBlock *bodyBB = CGF.createBasicBlock("arrayinit.body");
 
     // Jump into the body.
     CGF.EmitBlock(bodyBB);
-    llvm::PHINode *currentElement =
+    llvm37::PHINode *currentElement =
       Builder.CreatePHI(element->getType(), 2, "arrayinit.cur");
     currentElement->addIncoming(element, entryBB);
 
@@ -517,16 +517,16 @@ void AggExprEmitter::EmitArrayInit(llvm::Value *DestPtr, llvm::ArrayType *AType,
       EmitNullInitializationToLValue(elementLV);
 
     // Move on to the next element.
-    llvm::Value *nextElement =
+    llvm37::Value *nextElement =
       Builder.CreateInBoundsGEP(currentElement, one, "arrayinit.next");
 
     // Tell the EH cleanup that we finished with the last element.
     if (endOfInit) Builder.CreateStore(nextElement, endOfInit);
 
     // Leave the loop if we're done.
-    llvm::Value *done = Builder.CreateICmpEQ(nextElement, end,
+    llvm37::Value *done = Builder.CreateICmpEQ(nextElement, end,
                                              "arrayinit.done");
-    llvm::BasicBlock *endBB = CGF.createBasicBlock("arrayinit.end");
+    llvm37::BasicBlock *endBB = CGF.createBasicBlock("arrayinit.end");
     Builder.CreateCondBr(done, endBB, bodyBB);
     currentElement->addIncoming(nextElement, Builder.GetInsertBlock());
 
@@ -607,7 +607,7 @@ void AggExprEmitter::VisitCastExpr(CastExpr *E) {
     // GCC union extension
     QualType Ty = E->getSubExpr()->getType();
     QualType PtrTy = CGF.getContext().getPointerType(Ty);
-    llvm::Value *CastPtr = Builder.CreateBitCast(Dest.getAddr(),
+    llvm37::Value *CastPtr = Builder.CreateBitCast(Dest.getAddr(),
                                                  CGF.ConvertType(PtrTy));
     EmitInitializationToLValue(E->getSubExpr(),
                                CGF.MakeAddrLValue(CastPtr, Ty));
@@ -662,7 +662,7 @@ void AggExprEmitter::VisitCastExpr(CastExpr *E) {
           CGF.EmitNullInitialization(Dest.getAddr(), atomicType);
 
         // Build a GEP to refer to the subobject.
-        llvm::Value *valueAddr =
+        llvm37::Value *valueAddr =
             CGF.Builder.CreateStructGEP(nullptr, valueDest.getAddr(), 0);
         valueDest = AggValueSlot::forAddr(valueAddr,
                                           valueDest.getAlignment(),
@@ -683,7 +683,7 @@ void AggExprEmitter::VisitCastExpr(CastExpr *E) {
       CGF.CreateAggTemp(atomicType, "atomic-to-nonatomic.temp");
     CGF.EmitAggExpr(E->getSubExpr(), atomicSlot);
 
-    llvm::Value *valueAddr =
+    llvm37::Value *valueAddr =
         Builder.CreateStructGEP(nullptr, atomicSlot.getAddr(), 0);
     RValue rvalue = RValue::getAggregate(valueAddr, atomicSlot.isVolatile());
     return EmitFinalDestCopy(valueType, rvalue);
@@ -718,12 +718,12 @@ void AggExprEmitter::VisitCastExpr(CastExpr *E) {
 
     if (IntegerLiteral *IL = dyn_cast<IntegerLiteral>(E->getSubExpr())) {
       if (Dest.isIgnored()) return;
-      llvm::Value *SrcVal = llvm::ConstantInt::get(CGF.getLLVMContext(), IL->getValue());
+      llvm37::Value *SrcVal = llvm37::ConstantInt::get(CGF.getLLVMContext(), IL->getValue());
       CGF.CGM.getHLSLRuntime().EmitHLSLFlatConversion(
           CGF, SrcVal, Dest.getAddr(), E->getType(), Ty);
     } else if (FloatingLiteral *FL = dyn_cast<FloatingLiteral>(E->getSubExpr())) {
       if (Dest.isIgnored()) return;
-      llvm::Value *SrcVal = llvm::ConstantFP::get(CGF.getLLVMContext(), FL->getValue());
+      llvm37::Value *SrcVal = llvm37::ConstantFP::get(CGF.getLLVMContext(), FL->getValue());
       CGF.CGM.getHLSLRuntime().EmitHLSLFlatConversion(
           CGF, SrcVal, Dest.getAddr(), E->getType(), Ty);
     } else {
@@ -749,7 +749,7 @@ void AggExprEmitter::VisitCastExpr(CastExpr *E) {
           CGF, LV.getAddress(), Src->getType(), Dest.getAddr(), E->getType());
       } break;
       case TEK_Scalar: {
-        llvm::Value *SrcVal = CGF.EmitScalarExpr(Src);
+        llvm37::Value *SrcVal = CGF.EmitScalarExpr(Src);
 
         if (Dest.isIgnored()) return;
         CGF.CGM.getHLSLRuntime().EmitHLSLFlatConversion(
@@ -983,9 +983,9 @@ void AggExprEmitter::VisitBinAssign(const BinaryOperator *E) {
 
 void AggExprEmitter::
 VisitAbstractConditionalOperator(const AbstractConditionalOperator *E) {
-  llvm::BasicBlock *LHSBlock = CGF.createBasicBlock("cond.true");
-  llvm::BasicBlock *RHSBlock = CGF.createBasicBlock("cond.false");
-  llvm::BasicBlock *ContBlock = CGF.createBasicBlock("cond.end");
+  llvm37::BasicBlock *LHSBlock = CGF.createBasicBlock("cond.true");
+  llvm37::BasicBlock *RHSBlock = CGF.createBasicBlock("cond.false");
+  llvm37::BasicBlock *ContBlock = CGF.createBasicBlock("cond.end");
 
   // Bind the common expression if necessary.
   CodeGenFunction::OpaqueValueMapping binding(CGF, E);
@@ -1025,12 +1025,12 @@ void AggExprEmitter::VisitChooseExpr(const ChooseExpr *CE) {
 }
 
 void AggExprEmitter::VisitVAArgExpr(VAArgExpr *VE) {
-  llvm::Value *ArgValue = CGF.EmitVAListRef(VE->getSubExpr());
-  llvm::Value *ArgPtr = CGF.EmitVAArg(ArgValue, VE->getType());
+  llvm37::Value *ArgValue = CGF.EmitVAListRef(VE->getSubExpr());
+  llvm37::Value *ArgPtr = CGF.EmitVAArg(ArgValue, VE->getType());
 
   if (!ArgPtr) {
     // If EmitVAArg fails, we fall back to the LLVM instruction.
-    llvm::Value *Val =
+    llvm37::Value *Val =
         Builder.CreateVAArg(ArgValue, CGF.ConvertType(VE->getType()));
     if (!Dest.isIgnored())
       Builder.CreateStore(Val, Dest.getAddr());
@@ -1146,8 +1146,8 @@ AggExprEmitter::EmitInitializationToLValue(Expr *E, LValue LV) {
   case TEK_Scalar:
     // HLSL Change Begins.
     if (hlsl::IsHLSLMatType(LV.getType())) {
-      llvm::Value *V = CGF.EmitScalarExpr(E);
-      llvm::Value *Ptr = LV.getAddress();
+      llvm37::Value *V = CGF.EmitScalarExpr(E);
+      llvm37::Value *Ptr = LV.getAddress();
       CGF.CGM.getHLSLRuntime().EmitHLSLMatrixStore(CGF, V, Ptr, LV.getType());
     } else
     // HLSL Change Ends.
@@ -1171,7 +1171,7 @@ void AggExprEmitter::EmitNullInitializationToLValue(LValue lv) {
   
   if (CGF.hasScalarEvaluationKind(type)) {
     // For non-aggregates, we can store the appropriate null constant.
-    llvm::Value *null = CGF.CGM.EmitNullConstant(type);
+    llvm37::Value *null = CGF.CGM.EmitNullConstant(type);
     // Note that the following is not equivalent to
     // EmitStoreThroughBitfieldLValue for ARC types.
     if (lv.isBitField()) {
@@ -1195,10 +1195,10 @@ void AggExprEmitter::VisitInitListExpr(InitListExpr *E) {
   //
   // If we can, prefer a copy from a global; this is a lot less code for long
   // globals, and it's easier for the current optimizers to analyze.
-  if (llvm::Constant* C = CGF.CGM.EmitConstantExpr(E, E->getType(), &CGF)) {
-    llvm::GlobalVariable* GV =
-    new llvm::GlobalVariable(CGF.CGM.getModule(), C->getType(), true,
-                             llvm::GlobalValue::InternalLinkage, C, "");
+  if (llvm37::Constant* C = CGF.CGM.EmitConstantExpr(E, E->getType(), &CGF)) {
+    llvm37::GlobalVariable* GV =
+    new llvm37::GlobalVariable(CGF.CGM.getModule(), C->getType(), true,
+                             llvm37::GlobalValue::InternalLinkage, C, "");
     EmitFinalDestCopy(E->getType(), CGF.MakeAddrLValue(GV, E->getType()));
     return;
   }
@@ -1219,10 +1219,10 @@ void AggExprEmitter::VisitInitListExpr(InitListExpr *E) {
     QualType elementType =
         CGF.getContext().getAsArrayType(E->getType())->getElementType();
 
-    llvm::PointerType *APType =
-      cast<llvm::PointerType>(Dest.getAddr()->getType());
-    llvm::ArrayType *AType =
-      cast<llvm::ArrayType>(APType->getElementType());
+    llvm37::PointerType *APType =
+      cast<llvm37::PointerType>(Dest.getAddr()->getType());
+    llvm37::ArrayType *AType =
+      cast<llvm37::ArrayType>(APType->getElementType());
 
     EmitArrayInit(Dest.getAddr(), AType, elementType, E);
     return;
@@ -1291,7 +1291,7 @@ void AggExprEmitter::VisitInitListExpr(InitListExpr *E) {
   // We'll need to enter cleanup scopes in case any of the member
   // initializers throw an exception.
   SmallVector<EHScopeStack::stable_iterator, 16> cleanups;
-  llvm::Instruction *cleanupDominator = nullptr;
+  llvm37::Instruction *cleanupDominator = nullptr;
 
   // Here we iterate over the fields; this makes it simpler to both
   // default-initialize fields and skip over unnamed fields.
@@ -1346,8 +1346,8 @@ void AggExprEmitter::VisitInitListExpr(InitListExpr *E) {
     // If the GEP didn't get used because of a dead zero init or something
     // else, clean it up for -O0 builds and general tidiness.
     if (!pushedCleanup && LV.isSimple()) 
-      if (llvm::GetElementPtrInst *GEP =
-            dyn_cast<llvm::GetElementPtrInst>(LV.getAddress()))
+      if (llvm37::GetElementPtrInst *GEP =
+            dyn_cast<llvm37::GetElementPtrInst>(LV.getAddress()))
         if (GEP->use_empty())
           GEP->eraseFromParent();
   }
@@ -1467,10 +1467,10 @@ static void CheckAggExprForMemSetUse(AggValueSlot &Slot, const Expr *E,
     return;
   
   // Okay, it seems like a good idea to use an initial memset, emit the call.
-  llvm::Constant *SizeVal = CGF.Builder.getInt64(TypeInfo.first.getQuantity());
+  llvm37::Constant *SizeVal = CGF.Builder.getInt64(TypeInfo.first.getQuantity());
   CharUnits Align = TypeInfo.second;
 
-  llvm::Value *Loc = Slot.getAddr();
+  llvm37::Value *Loc = Slot.getAddr();
   
   Loc = CGF.Builder.CreateBitCast(Loc, CGF.Int8PtrTy);
   CGF.Builder.CreateMemSet(Loc, CGF.Builder.getInt8(0), SizeVal, 
@@ -1501,7 +1501,7 @@ void CodeGenFunction::EmitAggExpr(const Expr *E, AggValueSlot Slot) {
 
 LValue CodeGenFunction::EmitAggExprToLValue(const Expr *E) {
   assert(hasAggregateEvaluationKind(E->getType()) && "Invalid argument!");
-  llvm::Value *Temp = CreateMemTemp(E->getType());
+  llvm37::Value *Temp = CreateMemTemp(E->getType());
   LValue LV = MakeAddrLValue(Temp, E->getType());
   EmitAggExpr(E, AggValueSlot::forLValue(LV, AggValueSlot::IsNotDestructed,
                                          AggValueSlot::DoesNotNeedGCBarriers,
@@ -1509,8 +1509,8 @@ LValue CodeGenFunction::EmitAggExprToLValue(const Expr *E) {
   return LV;
 }
 
-void CodeGenFunction::EmitAggregateCopy(llvm::Value *DestPtr,
-                                        llvm::Value *SrcPtr, QualType Ty,
+void CodeGenFunction::EmitAggregateCopy(llvm37::Value *DestPtr,
+                                        llvm37::Value *SrcPtr, QualType Ty,
                                         bool isVolatile,
                                         CharUnits alignment,
                                         bool isAssignment) {
@@ -1562,7 +1562,7 @@ void CodeGenFunction::EmitAggregateCopy(llvm::Value *DestPtr,
   if (alignment.isZero())
     alignment = TypeInfo.second;
 
-  llvm::Value *SizeVal = nullptr;
+  llvm37::Value *SizeVal = nullptr;
   if (TypeInfo.first.isZero()) {
     // But note that getTypeInfo returns 0 for a VLA.
     if (auto *VAT = dyn_cast_or_null<VariableArrayType>(
@@ -1576,19 +1576,19 @@ void CodeGenFunction::EmitAggregateCopy(llvm::Value *DestPtr,
       assert(!TypeInfo.first.isZero());
       SizeVal = Builder.CreateNUWMul(
           SizeVal,
-          llvm::ConstantInt::get(SizeTy, TypeInfo.first.getQuantity()));
+          llvm37::ConstantInt::get(SizeTy, TypeInfo.first.getQuantity()));
       if (!isAssignment) {
         SizeVal = Builder.CreateNUWSub(
             SizeVal,
-            llvm::ConstantInt::get(SizeTy, TypeInfo.first.getQuantity()));
+            llvm37::ConstantInt::get(SizeTy, TypeInfo.first.getQuantity()));
         SizeVal = Builder.CreateNUWAdd(
-            SizeVal, llvm::ConstantInt::get(
+            SizeVal, llvm37::ConstantInt::get(
                          SizeTy, LastElementTypeInfo.first.getQuantity()));
       }
     }
   }
   if (!SizeVal) {
-    SizeVal = llvm::ConstantInt::get(SizeTy, TypeInfo.first.getQuantity());
+    SizeVal = llvm37::ConstantInt::get(SizeTy, TypeInfo.first.getQuantity());
   }
 
   // FIXME: If we have a volatile struct, the optimizer can remove what might
@@ -1604,14 +1604,14 @@ void CodeGenFunction::EmitAggregateCopy(llvm::Value *DestPtr,
   // we need to use a different call here.  We use isVolatile to indicate when
   // either the source or the destination is volatile.
 
-  llvm::PointerType *DPT = cast<llvm::PointerType>(DestPtr->getType());
-  llvm::Type *DBP =
-    llvm::Type::getInt8PtrTy(getLLVMContext(), DPT->getAddressSpace());
+  llvm37::PointerType *DPT = cast<llvm37::PointerType>(DestPtr->getType());
+  llvm37::Type *DBP =
+    llvm37::Type::getInt8PtrTy(getLLVMContext(), DPT->getAddressSpace());
   DestPtr = Builder.CreateBitCast(DestPtr, DBP);
 
-  llvm::PointerType *SPT = cast<llvm::PointerType>(SrcPtr->getType());
-  llvm::Type *SBP =
-    llvm::Type::getInt8PtrTy(getLLVMContext(), SPT->getAddressSpace());
+  llvm37::PointerType *SPT = cast<llvm37::PointerType>(SrcPtr->getType());
+  llvm37::Type *SBP =
+    llvm37::Type::getInt8PtrTy(getLLVMContext(), SPT->getAddressSpace());
   SrcPtr = Builder.CreateBitCast(SrcPtr, SBP);
 
   // Don't do any of the memmove_collectable tests if GC isn't set.
@@ -1638,7 +1638,7 @@ void CodeGenFunction::EmitAggregateCopy(llvm::Value *DestPtr,
   // Determine the metadata to describe the position of any padding in this
   // memcpy, as well as the TBAA tags for the members of the struct, in case
   // the optimizer wishes to expand it in to scalar memory operations.
-  llvm::MDNode *TBAAStructTag = CGM.getTBAAStructInfo(Ty);
+  llvm37::MDNode *TBAAStructTag = CGM.getTBAAStructInfo(Ty);
 
   Builder.CreateMemCpy(DestPtr, SrcPtr, SizeVal, alignment.getQuantity(),
                        isVolatile, /*TBAATag=*/nullptr, TBAAStructTag);

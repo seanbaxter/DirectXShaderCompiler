@@ -1,6 +1,6 @@
 #pragma once
 
-#include "llvm/IR/Module.h"
+#include "llvm37/IR/Module.h"
 
 #include <string>
 #include <vector>
@@ -16,7 +16,7 @@
 class FunctionBuilder
 {
 public:
-  FunctionBuilder(llvm::Module* mod, const std::string& name)
+  FunctionBuilder(llvm37::Module* mod, const std::string& name)
     : m_context(mod->getContext())
     , m_module(mod)
     , m_name(name)
@@ -25,89 +25,89 @@ public:
   FunctionBuilder& voidTy()
   {
     m_argNames.push_back("");
-    m_types.push_back(llvm::Type::getVoidTy(m_context));
+    m_types.push_back(llvm37::Type::getVoidTy(m_context));
     return *this;
   }
   FunctionBuilder& floatTy(const std::string& argName = "")
   {
     m_argNames.push_back(argName);
-    m_types.push_back(llvm::Type::getFloatTy(m_context));
+    m_types.push_back(llvm37::Type::getFloatTy(m_context));
     return *this;
   }
   FunctionBuilder& floatPtr(const std::string& argName = "")
   {
     m_argNames.push_back(argName);
-    m_types.push_back(llvm::Type::getFloatPtrTy(m_context));
+    m_types.push_back(llvm37::Type::getFloatPtrTy(m_context));
     return *this;
   }
   FunctionBuilder& doubleTy(const std::string& argName = "")
   {
     m_argNames.push_back(argName);
-    m_types.push_back(llvm::Type::getDoubleTy(m_context));
+    m_types.push_back(llvm37::Type::getDoubleTy(m_context));
     return *this;
   }
   FunctionBuilder& doublePtr(const std::string& argName = "")
   {
     m_argNames.push_back(argName);
-    m_types.push_back(llvm::Type::getDoublePtrTy(m_context));
+    m_types.push_back(llvm37::Type::getDoublePtrTy(m_context));
     return *this;
   }
   FunctionBuilder& i32(const std::string& argName = "")
   {
     m_argNames.push_back(argName);
-    m_types.push_back(llvm::Type::getInt32Ty(m_context));
+    m_types.push_back(llvm37::Type::getInt32Ty(m_context));
     return *this;
   }
   FunctionBuilder& i32Ptr(const std::string& argName = "")
   {
     m_argNames.push_back(argName);
-    m_types.push_back(llvm::Type::getInt32PtrTy(m_context));
+    m_types.push_back(llvm37::Type::getInt32PtrTy(m_context));
     return *this;
   }
   FunctionBuilder& i16(const std::string& argName = "")
   {
     m_argNames.push_back(argName);
-    m_types.push_back(llvm::Type::getInt16Ty(m_context));
+    m_types.push_back(llvm37::Type::getInt16Ty(m_context));
     return *this;
   }
   FunctionBuilder& i16Ptr(const std::string& argName = "")
   {
     m_argNames.push_back(argName);
-    m_types.push_back(llvm::Type::getInt16PtrTy(m_context));
+    m_types.push_back(llvm37::Type::getInt16PtrTy(m_context));
     return *this;
   }
   FunctionBuilder& i8(const std::string& argName = "")
   {
     m_argNames.push_back(argName);
-    m_types.push_back(llvm::Type::getInt8Ty(m_context));
+    m_types.push_back(llvm37::Type::getInt8Ty(m_context));
     return *this;
   }
   FunctionBuilder& i8Ptr(const std::string& argName = "")
   {
     m_argNames.push_back(argName);
-    m_types.push_back(llvm::Type::getInt8PtrTy(m_context));
+    m_types.push_back(llvm37::Type::getInt8PtrTy(m_context));
     return *this;
   }
   FunctionBuilder& i1(const std::string& argName = "")
   {
     m_argNames.push_back(argName);
-    m_types.push_back(llvm::Type::getInt1Ty(m_context));
+    m_types.push_back(llvm37::Type::getInt1Ty(m_context));
     return *this;
   }
   FunctionBuilder& i1Ptr(const std::string& argName = "")
   {
     m_argNames.push_back(argName);
-    m_types.push_back(llvm::Type::getInt1PtrTy(m_context));
+    m_types.push_back(llvm37::Type::getInt1PtrTy(m_context));
     return *this;
   }
 
-  FunctionBuilder& type(llvm::Type* ty, const std::string& argName = "")
+  FunctionBuilder& type(llvm37::Type* ty, const std::string& argName = "")
   {
     m_argNames.push_back(argName);
     m_types.push_back(ty);
     return *this;
   }
-  FunctionBuilder& types(const std::vector<llvm::Type*>& ty, const std::vector<std::string>& argNames)
+  FunctionBuilder& types(const std::vector<llvm37::Type*>& ty, const std::vector<std::string>& argNames)
   {
     if (argNames.empty())
       for (size_t i = 0; i < ty.size(); ++i)
@@ -116,9 +116,9 @@ public:
     return *this;
   }
 
-  llvm::Function* build()
+  llvm37::Function* build()
   {
-    using namespace llvm;
+    using namespace llvm37;
 
     Type*        retTy = m_types[0];
     AttributeSet attributes;
@@ -136,11 +136,11 @@ public:
   }
 
 private:
-  llvm::LLVMContext&       m_context;
-  llvm::Module*            m_module = nullptr;
+  llvm37::LLVMContext&       m_context;
+  llvm37::Module*            m_module = nullptr;
   std::string              m_name;
   std::vector<std::string> m_argNames;
-  std::vector<llvm::Type*> m_types;
+  std::vector<llvm37::Type*> m_types;
 
   // forbidden
   FunctionBuilder();

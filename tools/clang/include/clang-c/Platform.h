@@ -10,8 +10,8 @@
 |* This header provides platform specific macros (dllimport, deprecated, ...) *|
 |*                                                                            *|
 \*===----------------------------------------------------------------------===*/
-#ifndef LLVM_CLANG_C_PLATFORM_H
-#define LLVM_CLANG_C_PLATFORM_H
+#ifndef LLVM37_CLANG_C_PLATFORM_H
+#define LLVM37_CLANG_C_PLATFORM_H
 
 #ifdef __cplusplus
 extern "C" {

@@ -27,8 +27,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_TOOLING_TOOLING_H
-#define LLVM_CLANG_TOOLING_TOOLING_H
+#ifndef LLVM37_CLANG_TOOLING_TOOLING_H
+#define LLVM37_CLANG_TOOLING_TOOLING_H
 
 #include "clang/AST/ASTConsumer.h"
 #include "clang/Frontend/PCHContainerOperations.h"
@@ -40,9 +40,9 @@
 #include "clang/Lex/ModuleLoader.h"
 #include "clang/Tooling/ArgumentsAdjusters.h"
 #include "clang/Tooling/CompilationDatabase.h"
-#include "llvm/ADT/StringMap.h"
-#include "llvm/ADT/Twine.h"
-#include "llvm/Option/Option.h"
+#include "llvm37/ADT/StringMap.h"
+#include "llvm37/ADT/Twine.h"
+#include "llvm37/Option/Option.h"
 #include <memory>
 #include <string>
 #include <vector>
@@ -264,7 +264,7 @@ public:
   FileManager *Files;
   std::shared_ptr<PCHContainerOperations> PCHContainerOps;
   // Maps <file name> -> <file content>.
-  llvm::StringMap<StringRef> MappedFileContents;
+  llvm37::StringMap<StringRef> MappedFileContents;
   DiagnosticConsumer *DiagConsumer;
 };
 
@@ -331,7 +331,7 @@ class ClangTool {
   std::vector<std::string> SourcePaths;
   std::shared_ptr<PCHContainerOperations> PCHContainerOps;
 
-  llvm::IntrusiveRefCntPtr<FileManager> Files;
+  llvm37::IntrusiveRefCntPtr<FileManager> Files;
   // Contains a list of pairs (<file name>, <file content>).
   std::vector< std::pair<StringRef, StringRef> > MappedFileContents;
 
@@ -411,7 +411,7 @@ inline std::unique_ptr<FrontendActionFactory> newFrontendActionFactory(
 /// Otherwise, the returned path will contain the literal path-concatenation of
 /// the current directory and \c File.
 ///
-/// The difference to llvm::sys::fs::make_absolute is the canonicalization this
+/// The difference to llvm37::sys::fs::make_absolute is the canonicalization this
 /// does by removing "./" and computing native paths.
 ///
 /// \param File Either an absolute or relative path.
@@ -420,9 +420,9 @@ std::string getAbsolutePath(StringRef File);
 /// \brief Creates a \c CompilerInvocation.
 clang::CompilerInvocation *newInvocation(
     clang::DiagnosticsEngine *Diagnostics,
-    const llvm::opt::ArgStringList &CC1Args);
+    const llvm37::opt::ArgStringList &CC1Args);
 
 } // end namespace tooling
 } // end namespace clang
 
-#endif // LLVM_CLANG_TOOLING_TOOLING_H
+#endif // LLVM37_CLANG_TOOLING_TOOLING_H

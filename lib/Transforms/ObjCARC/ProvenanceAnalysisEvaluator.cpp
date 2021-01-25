@@ -8,17 +8,17 @@
 //===----------------------------------------------------------------------===//
 
 #include "ProvenanceAnalysis.h"
-#include "llvm/Pass.h"
-#include "llvm/ADT/SetVector.h"
-#include "llvm/Analysis/AliasAnalysis.h"
-#include "llvm/Analysis/Passes.h"
-#include "llvm/IR/InstIterator.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/Module.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/Pass.h"
+#include "llvm37/ADT/SetVector.h"
+#include "llvm37/Analysis/AliasAnalysis.h"
+#include "llvm37/Analysis/Passes.h"
+#include "llvm37/IR/InstIterator.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/Support/raw_ostream.h"
 
-using namespace llvm;
-using namespace llvm::objcarc;
+using namespace llvm37;
+using namespace llvm37::objcarc;
 
 namespace {
 class PAEval : public FunctionPass {
@@ -85,7 +85,7 @@ bool PAEval::runOnFunction(Function &F) {
   return false;
 }
 
-FunctionPass *llvm::createPAEvalPass() { return new PAEval(); }
+FunctionPass *llvm37::createPAEvalPass() { return new PAEval(); }
 
 INITIALIZE_PASS_BEGIN(PAEval, "pa-eval",
                       "Evaluate ProvenanceAnalysis on all pairs", false, true)

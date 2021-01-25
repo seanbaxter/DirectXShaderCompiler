@@ -12,12 +12,12 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_FRONTEND_TEXTDIAGNOSTICPRINTER_H
-#define LLVM_CLANG_FRONTEND_TEXTDIAGNOSTICPRINTER_H
+#ifndef LLVM37_CLANG_FRONTEND_TEXTDIAGNOSTICPRINTER_H
+#define LLVM37_CLANG_FRONTEND_TEXTDIAGNOSTICPRINTER_H
 
 #include "clang/Basic/Diagnostic.h"
 #include "clang/Basic/LLVM.h"
-#include "llvm/ADT/IntrusiveRefCntPtr.h"
+#include "llvm37/ADT/IntrusiveRefCntPtr.h"
 #include <memory>
 
 namespace clang {

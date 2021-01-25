@@ -12,7 +12,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-namespace llvm {
+namespace llvm37 {
 
 bool RPCChannel::createServer() { return false; }
 
@@ -26,4 +26,4 @@ void RPCChannel::Wait() {}
 
 RPCChannel::~RPCChannel() {}
 
-} // namespace llvm
+} // namespace llvm37

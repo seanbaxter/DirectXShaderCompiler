@@ -10,15 +10,15 @@
 #include "ToolChains.h"
 #include "clang/Driver/Driver.h"
 #include "clang/Driver/Options.h"
-#include "llvm/Option/ArgList.h"
-#include "llvm/Support/FileSystem.h"
-#include "llvm/Support/Path.h"
+#include "llvm37/Option/ArgList.h"
+#include "llvm37/Support/FileSystem.h"
+#include "llvm37/Support/Path.h"
 
 using namespace clang::diag;
 using namespace clang::driver;
 using namespace clang::driver::toolchains;
 using namespace clang;
-using namespace llvm::opt;
+using namespace llvm37::opt;
 
 namespace {
 // Simplified from Generic_GCC::GCCInstallationDetector::ScanLibDirForGCCTriple.
@@ -26,9 +26,9 @@ bool findGccVersion(StringRef LibDir, std::string &GccLibDir,
                     std::string &Ver) {
   Generic_GCC::GCCVersion Version = Generic_GCC::GCCVersion::Parse("0.0.0");
   std::error_code EC;
-  for (llvm::sys::fs::directory_iterator LI(LibDir, EC), LE; !EC && LI != LE;
+  for (llvm37::sys::fs::directory_iterator LI(LibDir, EC), LE; !EC && LI != LE;
        LI = LI.increment(EC)) {
-    StringRef VersionText = llvm::sys::path::filename(LI->path());
+    StringRef VersionText = llvm37::sys::path::filename(LI->path());
     Generic_GCC::GCCVersion CandidateVersion =
         Generic_GCC::GCCVersion::Parse(VersionText);
     if (CandidateVersion.Major == -1)
@@ -43,7 +43,7 @@ bool findGccVersion(StringRef LibDir, std::string &GccLibDir,
 }
 
 void MinGW::findGccLibDir() {
-  llvm::SmallVector<llvm::SmallString<32>, 2> Archs;
+  llvm37::SmallVector<llvm37::SmallString<32>, 2> Archs;
   Archs.emplace_back(getTriple().getArchName());
   Archs[0] += "-w64-mingw32";
   Archs.emplace_back("mingw32");
@@ -52,8 +52,8 @@ void MinGW::findGccLibDir() {
   // lib64: openSUSE Linux
   for (StringRef CandidateLib : {"lib", "lib64"}) {
     for (StringRef CandidateArch : Archs) {
-      llvm::SmallString<1024> LibDir(Base);
-      llvm::sys::path::append(LibDir, CandidateLib, "gcc", CandidateArch);
+      llvm37::SmallString<1024> LibDir(Base);
+      llvm37::sys::path::append(LibDir, CandidateLib, "gcc", CandidateArch);
       if (findGccVersion(LibDir, GccLibDir, Ver)) {
         Arch = CandidateArch;
         return;
@@ -62,21 +62,21 @@ void MinGW::findGccLibDir() {
   }
 }
 
-MinGW::MinGW(const Driver &D, const llvm::Triple &Triple, const ArgList &Args)
+MinGW::MinGW(const Driver &D, const llvm37::Triple &Triple, const ArgList &Args)
     : ToolChain(D, Triple, Args) {
   getProgramPaths().push_back(getDriver().getInstalledDir());
 
 // In Windows there aren't any standard install locations, we search
 // for gcc on the PATH. In Linux the base is always /usr.
-#ifdef LLVM_ON_WIN32
+#ifdef LLVM37_ON_WIN32
   if (getDriver().SysRoot.size())
     Base = getDriver().SysRoot;
-  else if (llvm::ErrorOr<std::string> GPPName =
-               llvm::sys::findProgramByName("gcc"))
-    Base = llvm::sys::path::parent_path(
-        llvm::sys::path::parent_path(GPPName.get()));
+  else if (llvm37::ErrorOr<std::string> GPPName =
+               llvm37::sys::findProgramByName("gcc"))
+    Base = llvm37::sys::path::parent_path(
+        llvm37::sys::path::parent_path(GPPName.get()));
   else
-    Base = llvm::sys::path::parent_path(getDriver().getInstalledDir());
+    Base = llvm37::sys::path::parent_path(getDriver().getInstalledDir());
 #else
   if (getDriver().SysRoot.size())
     Base = getDriver().SysRoot;
@@ -84,13 +84,13 @@ MinGW::MinGW(const Driver &D, const llvm::Triple &Triple, const ArgList &Args)
     Base = "/usr";
 #endif
 
-  Base += llvm::sys::path::get_separator();
+  Base += llvm37::sys::path::get_separator();
   findGccLibDir();
   // GccLibDir must precede Base/lib so that the
   // correct crtbegin.o ,cetend.o would be found.
   getFilePaths().push_back(GccLibDir);
   getFilePaths().push_back(
-      (Base + Arch + llvm::sys::path::get_separator() + "lib").str());
+      (Base + Arch + llvm37::sys::path::get_separator() + "lib").str());
   getFilePaths().push_back(Base + "lib");
   // openSUSE
   getFilePaths().push_back(Base + Arch + "/sys-root/mingw/lib");
@@ -120,19 +120,19 @@ Tool *MinGW::buildAssembler() const {
 Tool *MinGW::buildLinker() const { return new tools::MinGW::Linker(*this); }
 
 bool MinGW::IsUnwindTablesDefault() const {
-  return getArch() == llvm::Triple::x86_64;
+  return getArch() == llvm37::Triple::x86_64;
 }
 
-bool MinGW::isPICDefault() const { return getArch() == llvm::Triple::x86_64; }
+bool MinGW::isPICDefault() const { return getArch() == llvm37::Triple::x86_64; }
 
 bool MinGW::isPIEDefault() const { return false; }
 
 bool MinGW::isPICDefaultForced() const {
-  return getArch() == llvm::Triple::x86_64;
+  return getArch() == llvm37::Triple::x86_64;
 }
 
 bool MinGW::UseSEHExceptions() const {
-  return getArch() == llvm::Triple::x86_64;
+  return getArch() == llvm37::Triple::x86_64;
 }
 
 // Include directories for various hosts:
@@ -194,7 +194,7 @@ void MinGW::AddClangSystemIncludeArgs(const ArgList &DriverArgs,
 
   if (!DriverArgs.hasArg(options::OPT_nobuiltininc)) {
     SmallString<1024> P(getDriver().ResourceDir);
-    llvm::sys::path::append(P, "include");
+    llvm37::sys::path::append(P, "include");
     addSystemInclude(DriverArgs, CC1Args, P.str());
   }
 
@@ -202,8 +202,8 @@ void MinGW::AddClangSystemIncludeArgs(const ArgList &DriverArgs,
     return;
 
   if (GetRuntimeLibType(DriverArgs) == ToolChain::RLT_Libgcc) {
-    llvm::SmallString<1024> IncludeDir(GccLibDir);
-    llvm::sys::path::append(IncludeDir, "include");
+    llvm37::SmallString<1024> IncludeDir(GccLibDir);
+    llvm37::sys::path::append(IncludeDir, "include");
     addSystemInclude(DriverArgs, CC1Args, IncludeDir.c_str());
     IncludeDir += "-fixed";
     // openSUSE
@@ -212,7 +212,7 @@ void MinGW::AddClangSystemIncludeArgs(const ArgList &DriverArgs,
     addSystemInclude(DriverArgs, CC1Args, IncludeDir.c_str());
   }
   addSystemInclude(DriverArgs, CC1Args,
-                   Base + Arch + llvm::sys::path::get_separator() + "include");
+                   Base + Arch + llvm37::sys::path::get_separator() + "include");
   addSystemInclude(DriverArgs, CC1Args, Base + "include");
 }
 
@@ -225,23 +225,23 @@ void MinGW::AddClangCXXStdlibIncludeArgs(const ArgList &DriverArgs,
   switch (GetCXXStdlibType(DriverArgs)) {
   case ToolChain::CST_Libcxx:
     addSystemInclude(DriverArgs, CC1Args,
-                     Base + "include" + llvm::sys::path::get_separator() +
-                         "c++" + llvm::sys::path::get_separator() + "v1");
+                     Base + "include" + llvm37::sys::path::get_separator() +
+                         "c++" + llvm37::sys::path::get_separator() + "v1");
     break;
 
   case ToolChain::CST_Libstdcxx:
-    llvm::SmallVector<llvm::SmallString<1024>, 4> CppIncludeBases;
+    llvm37::SmallVector<llvm37::SmallString<1024>, 4> CppIncludeBases;
     CppIncludeBases.emplace_back(Base);
-    llvm::sys::path::append(CppIncludeBases[0], Arch, "include", "c++");
+    llvm37::sys::path::append(CppIncludeBases[0], Arch, "include", "c++");
     CppIncludeBases.emplace_back(Base);
-    llvm::sys::path::append(CppIncludeBases[1], Arch, "include", "c++", Ver);
+    llvm37::sys::path::append(CppIncludeBases[1], Arch, "include", "c++", Ver);
     CppIncludeBases.emplace_back(Base);
-    llvm::sys::path::append(CppIncludeBases[2], "include", "c++", Ver);
+    llvm37::sys::path::append(CppIncludeBases[2], "include", "c++", Ver);
     CppIncludeBases.emplace_back(GccLibDir);
-    llvm::sys::path::append(CppIncludeBases[3], "include", "c++");
+    llvm37::sys::path::append(CppIncludeBases[3], "include", "c++");
     for (auto &CppIncludeBase : CppIncludeBases) {
       addSystemInclude(DriverArgs, CC1Args, CppIncludeBase);
-      CppIncludeBase += llvm::sys::path::get_separator();
+      CppIncludeBase += llvm37::sys::path::get_separator();
       addSystemInclude(DriverArgs, CC1Args, CppIncludeBase + Arch);
       addSystemInclude(DriverArgs, CC1Args, CppIncludeBase + "backward");
     }

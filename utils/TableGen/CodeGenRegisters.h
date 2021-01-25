@@ -12,19 +12,19 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_UTILS_TABLEGEN_CODEGENREGISTERS_H
-#define LLVM_UTILS_TABLEGEN_CODEGENREGISTERS_H
+#ifndef LLVM37_UTILS_TABLEGEN_CODEGENREGISTERS_H
+#define LLVM37_UTILS_TABLEGEN_CODEGENREGISTERS_H
 
-#include "llvm/ADT/ArrayRef.h"
-#include "llvm/ADT/BitVector.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/SetVector.h"
-#include "llvm/ADT/SparseBitVector.h"
-#include "llvm/CodeGen/MachineValueType.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/TableGen/Record.h"
-#include "llvm/TableGen/SetTheory.h"
+#include "llvm37/ADT/ArrayRef.h"
+#include "llvm37/ADT/BitVector.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/SetVector.h"
+#include "llvm37/ADT/SparseBitVector.h"
+#include "llvm37/CodeGen/MachineValueType.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/TableGen/Record.h"
+#include "llvm37/TableGen/SetTheory.h"
 #include <cstdlib>
 #include <list>
 #include <map>
@@ -33,7 +33,7 @@
 #include <vector>
 #include <deque>
 
-namespace llvm {
+namespace llvm37 {
   class CodeGenRegBank;
 
   /// Used to encode a step in a register lane mask transformation.
@@ -76,7 +76,7 @@ namespace llvm {
 
     // Map of composite subreg indices.
     typedef std::map<CodeGenSubRegIndex *, CodeGenSubRegIndex *,
-                     deref<llvm::less>> CompMap;
+                     deref<llvm37::less>> CompMap;
 
     // Returns the subreg index that results from composing this with Idx.
     // Returns NULL if this and Idx don't compose.
@@ -132,7 +132,7 @@ namespace llvm {
     bool HasDisjunctSubRegs;
 
     // Map SubRegIndex -> Register.
-    typedef std::map<CodeGenSubRegIndex *, CodeGenRegister *, deref<llvm::less>>
+    typedef std::map<CodeGenSubRegIndex *, CodeGenRegister *, deref<llvm37::less>>
         SubRegMap;
 
     CodeGenRegister(Record *R, unsigned Enum);

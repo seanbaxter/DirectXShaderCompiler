@@ -30,34 +30,34 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Transforms/Scalar.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/Analysis/AliasAnalysis.h"
-#include "llvm/Analysis/AliasSetTracker.h"
-#include "llvm/Analysis/ConstantFolding.h"
-#include "llvm/Analysis/LoopInfo.h"
-#include "llvm/Analysis/LoopPass.h"
-#include "llvm/Analysis/ScalarEvolution.h"
-#include "llvm/Analysis/TargetLibraryInfo.h"
-#include "llvm/Analysis/ValueTracking.h"
-#include "llvm/IR/CFG.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/DerivedTypes.h"
-#include "llvm/IR/Dominators.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Metadata.h"
-#include "llvm/IR/PredIteratorCache.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Transforms/Utils/Local.h"
-#include "llvm/Transforms/Utils/LoopUtils.h"
-#include "llvm/Transforms/Utils/SSAUpdater.h"
+#include "llvm37/Transforms/Scalar.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/Analysis/AliasAnalysis.h"
+#include "llvm37/Analysis/AliasSetTracker.h"
+#include "llvm37/Analysis/ConstantFolding.h"
+#include "llvm37/Analysis/LoopInfo.h"
+#include "llvm37/Analysis/LoopPass.h"
+#include "llvm37/Analysis/ScalarEvolution.h"
+#include "llvm37/Analysis/TargetLibraryInfo.h"
+#include "llvm37/Analysis/ValueTracking.h"
+#include "llvm37/IR/CFG.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/IR/DerivedTypes.h"
+#include "llvm37/IR/Dominators.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/Metadata.h"
+#include "llvm37/IR/PredIteratorCache.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Transforms/Utils/Local.h"
+#include "llvm37/Transforms/Utils/LoopUtils.h"
+#include "llvm37/Transforms/Utils/SSAUpdater.h"
 #include <algorithm>
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "licm"
 
@@ -128,7 +128,7 @@ namespace {
       AU.addRequired<TargetLibraryInfoWrapperPass>();
     }
 
-    using llvm::Pass::doFinalization;
+    using llvm37::Pass::doFinalization;
 
     bool doFinalization() override {
       assert(LoopToAliasSetMap.empty() && "Didn't free loop alias sets");
@@ -173,7 +173,7 @@ INITIALIZE_PASS_DEPENDENCY(TargetLibraryInfoWrapperPass)
 INITIALIZE_AG_DEPENDENCY(AliasAnalysis)
 INITIALIZE_PASS_END(LICM, "licm", "Loop Invariant Code Motion", false, false)
 
-Pass *llvm::createLICMPass() { return new LICM(); }
+Pass *llvm37::createLICMPass() { return new LICM(); }
 
 /// Hoist expressions out of the specified loop. Note, alias info for inner
 /// loop is not preserved so it is not a good idea to run LICM multiple
@@ -298,7 +298,7 @@ bool LICM::runOnLoop(Loop *L, LPPassManager &LPM) {
 /// first order w.r.t the DominatorTree.  This allows us to visit uses before
 /// definitions, allowing us to sink a loop body in one pass without iteration.
 ///
-bool llvm::sinkRegion(DomTreeNode *N, AliasAnalysis *AA, LoopInfo *LI,
+bool llvm37::sinkRegion(DomTreeNode *N, AliasAnalysis *AA, LoopInfo *LI,
                       DominatorTree *DT, TargetLibraryInfo *TLI, Loop *CurLoop,
                       AliasSetTracker *CurAST, LICMSafetyInfo *SafetyInfo) {
 
@@ -356,7 +356,7 @@ bool llvm::sinkRegion(DomTreeNode *N, AliasAnalysis *AA, LoopInfo *LI,
 /// order w.r.t the DominatorTree.  This allows us to visit definitions before
 /// uses, allowing us to hoist a loop body in one pass without iteration.
 ///
-bool llvm::hoistRegion(DomTreeNode *N, AliasAnalysis *AA, LoopInfo *LI,
+bool llvm37::hoistRegion(DomTreeNode *N, AliasAnalysis *AA, LoopInfo *LI,
                        DominatorTree *DT, TargetLibraryInfo *TLI, Loop *CurLoop,
                        AliasSetTracker *CurAST, LICMSafetyInfo *SafetyInfo) {
   // Verify inputs.
@@ -408,7 +408,7 @@ bool llvm::hoistRegion(DomTreeNode *N, AliasAnalysis *AA, LoopInfo *LI,
 /// Computes loop safety information, checks loop body & header
 /// for the possiblity of may throw exception.
 ///
-void llvm::computeLICMSafetyInfo(LICMSafetyInfo * SafetyInfo, Loop * CurLoop) {
+void llvm37::computeLICMSafetyInfo(LICMSafetyInfo * SafetyInfo, Loop * CurLoop) {
   assert(CurLoop != nullptr && "CurLoop cant be null");
   BasicBlock *Header = CurLoop->getHeader();
   // Setting default safety values.
@@ -799,7 +799,7 @@ namespace {
 /// the stores in the loop, looking for stores to Must pointers which are
 /// loop invariant.
 ///
-bool llvm::promoteLoopAccessesToScalars(AliasSet &AS,
+bool llvm37::promoteLoopAccessesToScalars(AliasSet &AS,
                                         SmallVectorImpl<BasicBlock*>&ExitBlocks,
                                         SmallVectorImpl<Instruction*>&InsertPts,
                                         PredIteratorCache &PIC, LoopInfo *LI, 

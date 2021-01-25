@@ -14,20 +14,20 @@
 
 #include "clang/AST/StmtGraphTraits.h"
 #include "clang/AST/Decl.h"
-#include "llvm/Support/GraphWriter.h"
+#include "llvm37/Support/GraphWriter.h"
 
 using namespace clang;
 
 void Stmt::viewAST() const {
 #ifndef NDEBUG
-  llvm::ViewGraph(this,"AST");
+  llvm37::ViewGraph(this,"AST");
 #else
-  llvm::errs() << "Stmt::viewAST is only available in debug builds on "
+  llvm37::errs() << "Stmt::viewAST is only available in debug builds on "
                << "systems with Graphviz or gv!\n";
 #endif
 }
 
-namespace llvm {
+namespace llvm37 {
 template<>
 struct DOTGraphTraits<const Stmt*> : public DefaultDOTGraphTraits {
   DOTGraphTraits (bool isSimple=false) : DefaultDOTGraphTraits(isSimple) {}
@@ -36,7 +36,7 @@ struct DOTGraphTraits<const Stmt*> : public DefaultDOTGraphTraits {
 
 #ifndef NDEBUG
     std::string OutSStr;
-    llvm::raw_string_ostream Out(OutSStr);
+    llvm37::raw_string_ostream Out(OutSStr);
 
     if (Node)
       Out << Node->getStmtClassName();
@@ -59,4 +59,4 @@ struct DOTGraphTraits<const Stmt*> : public DefaultDOTGraphTraits {
 #endif
   }
 };
-} // end namespace llvm
+} // end namespace llvm37

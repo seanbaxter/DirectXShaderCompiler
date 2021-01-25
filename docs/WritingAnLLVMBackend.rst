@@ -199,7 +199,7 @@ simply return a class member.
 
 .. code-block:: c++
 
-  namespace llvm {
+  namespace llvm37 {
 
   class Module;
 
@@ -229,7 +229,7 @@ simply return a class member.
     virtual bool addPreEmitPass(PassManagerBase &PM, bool Fast);
   };
 
-  } // end namespace llvm
+  } // end namespace llvm37
 
 * ``getInstrInfo()``
 * ``getRegisterInfo()``
@@ -294,7 +294,7 @@ looks like this:
 
 .. code-block:: c++
 
-  Target llvm::TheSparcTarget;
+  Target llvm37::TheSparcTarget;
 
   extern "C" void LLVMInitializeSparcTargetInfo() {
     RegisterTarget<Triple::sparc, /*HasJIT=*/false>
@@ -928,7 +928,7 @@ TableGen will also generate a function called getNamedOperandIdx() which
 can be used to look up an operand's index in a MachineInstr based on its
 TableGen name.  Setting the UseNamedOperandTable bit in an instruction's
 TableGen definition will add all of its operands to an enumeration in the
-llvm::XXX:OpName namespace and also add an entry for it into the OperandMap
+llvm37::XXX:OpName namespace and also add an entry for it into the OperandMap
 table, which can be queried using getNamedOperandIdx()
 
 .. code-block:: llvm
@@ -969,7 +969,7 @@ Instruction Operand Types
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 TableGen will also generate an enumeration consisting of all named Operand
-types defined in the backend, in the llvm::XXX::OpTypes namespace.
+types defined in the backend, in the llvm37::XXX::OpTypes namespace.
 Some common immediate Operand types (for instance i8, i32, i64, f32, f64)
 are defined for all targets in ``include/llvm/Target/Target.td``, and are
 available in each Target's OpTypes enum.  Also, only named Operand types appear
@@ -1014,7 +1014,7 @@ Instruction Scheduling
 ----------------------
 
 Instruction itineraries can be queried using MCDesc::getSchedClass(). The
-value can be named by an enumemation in llvm::XXX::Sched namespace generated
+value can be named by an enumemation in llvm37::XXX::Sched namespace generated
 by TableGen in XXXGenInstrInfo.inc. The name of the schedule classes are
 the same as provided in XXXSchedule.td plus a default NoItinerary class.
 
@@ -1606,8 +1606,8 @@ headers that have declarations for the ``AsmPrinter`` and
 
 .. code-block:: c++
 
-  #include "llvm/CodeGen/AsmPrinter.h"
-  #include "llvm/CodeGen/MachineFunctionPass.h"
+  #include "llvm37/CodeGen/AsmPrinter.h"
+  #include "llvm37/CodeGen/MachineFunctionPass.h"
 
 As a ``FunctionPass``, ``AsmPrinter`` first calls ``doInitialization`` to set
 up the ``AsmPrinter``.  In ``SparcAsmPrinter``, a ``Mangler`` object is

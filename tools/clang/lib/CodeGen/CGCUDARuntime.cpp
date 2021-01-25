@@ -27,8 +27,8 @@ CGCUDARuntime::~CGCUDARuntime() {}
 RValue CGCUDARuntime::EmitCUDAKernelCallExpr(CodeGenFunction &CGF,
                                              const CUDAKernelCallExpr *E,
                                              ReturnValueSlot ReturnValue) {
-  llvm::BasicBlock *ConfigOKBlock = CGF.createBasicBlock("kcall.configok");
-  llvm::BasicBlock *ContBlock = CGF.createBasicBlock("kcall.end");
+  llvm37::BasicBlock *ConfigOKBlock = CGF.createBasicBlock("kcall.configok");
+  llvm37::BasicBlock *ContBlock = CGF.createBasicBlock("kcall.end");
 
   CodeGenFunction::ConditionalEvaluation eval(CGF);
   CGF.EmitBranchOnBoolExpr(E->getConfig(), ContBlock, ConfigOKBlock,
@@ -44,7 +44,7 @@ RValue CGCUDARuntime::EmitCUDAKernelCallExpr(CodeGenFunction &CGF,
     }
   }
 
-  llvm::Value *Callee = CGF.EmitScalarExpr(E->getCallee());
+  llvm37::Value *Callee = CGF.EmitScalarExpr(E->getCallee());
   CGF.EmitCall(E->getCallee()->getType(), Callee, E, ReturnValue, TargetDecl);
   CGF.EmitBranch(ContBlock);
 

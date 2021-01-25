@@ -7,13 +7,13 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_TOOLS_LLVM_READOBJ_WIN64EHDUMPER_H
-#define LLVM_TOOLS_LLVM_READOBJ_WIN64EHDUMPER_H
+#ifndef LLVM37_TOOLS_LLVM37_READOBJ_WIN64EHDUMPER_H
+#define LLVM37_TOOLS_LLVM37_READOBJ_WIN64EHDUMPER_H
 
 #include "StreamWriter.h"
-#include "llvm/Support/Win64EH.h"
+#include "llvm37/Support/Win64EH.h"
 
-namespace llvm {
+namespace llvm37 {
 namespace object {
 class COFFObjectFile;
 class SymbolRef;

@@ -17,9 +17,9 @@
 #include "clang/AST/ParentMap.h"
 #include "clang/Analysis/ProgramPoint.h"
 #include "clang/StaticAnalyzer/Core/PathSensitive/CheckerContext.h"
-#include "llvm/ADT/SmallSet.h"
-#include "llvm/ADT/StringExtras.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/SmallSet.h"
+#include "llvm37/ADT/StringExtras.h"
+#include "llvm37/Support/raw_ostream.h"
 
 using namespace clang;
 using namespace ento;
@@ -124,7 +124,7 @@ static bool isPointerToConst(QualType Ty) {
 // Try to retrieve the function declaration and find the function parameter
 // types which are pointers/references to a non-pointer const.
 // We will not invalidate the corresponding argument regions.
-static void findPtrToConstParams(llvm::SmallSet<unsigned, 4> &PreserveArgs,
+static void findPtrToConstParams(llvm37::SmallSet<unsigned, 4> &PreserveArgs,
                                  const CallEvent &Call) {
   unsigned Idx = 0;
   for (CallEvent::param_type_iterator I = Call.param_type_begin(),
@@ -150,7 +150,7 @@ ProgramStateRef CallEvent::invalidateRegions(unsigned BlockCount,
   getExtraInvalidatedValues(ValuesToInvalidate);
 
   // Indexes of arguments whose values will be preserved by the call.
-  llvm::SmallSet<unsigned, 4> PreserveArgs;
+  llvm37::SmallSet<unsigned, 4> PreserveArgs;
   if (!argumentsMayEscape())
     findPtrToConstParams(PreserveArgs, *this);
 
@@ -213,7 +213,7 @@ SVal CallEvent::getReturnValue() const {
   return getSVal(E);
 }
 
-LLVM_DUMP_METHOD void CallEvent::dump() const { dump(llvm::errs()); }
+LLVM37_DUMP_METHOD void CallEvent::dump() const { dump(llvm37::errs()); }
 
 void CallEvent::dump(raw_ostream &Out) const {
   ASTContext &Ctx = getState()->getStateManager().getContext();
@@ -664,7 +664,7 @@ SourceRange ObjCMethodCall::getSourceRange() const {
   llvm_unreachable("unknown message kind");
 }
 
-typedef llvm::PointerIntPair<const PseudoObjectExpr *, 2> ObjCMessageDataTy;
+typedef llvm37::PointerIntPair<const PseudoObjectExpr *, 2> ObjCMessageDataTy;
 
 const PseudoObjectExpr *ObjCMethodCall::getContainingPseudoObjectExpr() const {
   assert(Data && "Lazy lookup not yet performed.");
@@ -830,7 +830,7 @@ RuntimeDefinition ObjCMethodCall::getRuntimeDefinition() const {
         // need to release memory.
         typedef std::pair<const ObjCInterfaceDecl*, Selector>
                 PrivateMethodKey;
-        typedef llvm::DenseMap<PrivateMethodKey,
+        typedef llvm37::DenseMap<PrivateMethodKey,
                                Optional<const ObjCMethodDecl *> >
                 PrivateMethodCache;
 

@@ -83,7 +83,7 @@ bool WholeFileTest::parseInputFile() {
   return true;
 }
 
-void WholeFileTest::runWholeFileTest(llvm::StringRef filename,
+void WholeFileTest::runWholeFileTest(llvm37::StringRef filename,
                                      bool generateHeader,
                                      bool runSpirvValidation) {
   inputFilePath = utils::getAbsPathOfInputDataFile(filename);

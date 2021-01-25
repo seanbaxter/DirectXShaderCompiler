@@ -26,10 +26,10 @@
 #include "clang/Analysis/CFG.h"
 #include "clang/Basic/OperatorKinds.h"
 #include "clang/Basic/SourceLocation.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/Support/Compiler.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/Support/Compiler.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <memory>
 
 // TODO: Adjust states of args to constructors in the same way that arguments to
@@ -455,7 +455,7 @@ setStateForVarOrTmp(ConsumedStateMap *StateMap, const PropagationInfo &PInfo,
 
 class ConsumedStmtVisitor : public ConstStmtVisitor<ConsumedStmtVisitor> {
   
-  typedef llvm::DenseMap<const Stmt *, PropagationInfo> MapType;
+  typedef llvm37::DenseMap<const Stmt *, PropagationInfo> MapType;
   typedef std::pair<const Stmt *, PropagationInfo> PairType;
   typedef MapType::iterator InfoEntry;
   typedef MapType::const_iterator ConstInfoEntry;

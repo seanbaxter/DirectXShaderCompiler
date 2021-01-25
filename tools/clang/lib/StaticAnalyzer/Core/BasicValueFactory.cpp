@@ -20,13 +20,13 @@
 using namespace clang;
 using namespace ento;
 
-void CompoundValData::Profile(llvm::FoldingSetNodeID& ID, QualType T,
-                              llvm::ImmutableList<SVal> L) {
+void CompoundValData::Profile(llvm37::FoldingSetNodeID& ID, QualType T,
+                              llvm37::ImmutableList<SVal> L) {
   T.Profile(ID);
   ID.AddPointer(L.getInternalPointer());
 }
 
-void LazyCompoundValData::Profile(llvm::FoldingSetNodeID& ID,
+void LazyCompoundValData::Profile(llvm37::FoldingSetNodeID& ID,
                                   const StoreRef &store,
                                   const TypedValueRegion *region) {
   ID.AddPointer(store.getStore());
@@ -36,26 +36,26 @@ void LazyCompoundValData::Profile(llvm::FoldingSetNodeID& ID,
 typedef std::pair<SVal, uintptr_t> SValData;
 typedef std::pair<SVal, SVal> SValPair;
 
-namespace llvm {
+namespace llvm37 {
 template<> struct FoldingSetTrait<SValData> {
-  static inline void Profile(const SValData& X, llvm::FoldingSetNodeID& ID) {
+  static inline void Profile(const SValData& X, llvm37::FoldingSetNodeID& ID) {
     X.first.Profile(ID);
     ID.AddPointer( (void*) X.second);
   }
 };
 
 template<> struct FoldingSetTrait<SValPair> {
-  static inline void Profile(const SValPair& X, llvm::FoldingSetNodeID& ID) {
+  static inline void Profile(const SValPair& X, llvm37::FoldingSetNodeID& ID) {
     X.first.Profile(ID);
     X.second.Profile(ID);
   }
 };
 }
 
-typedef llvm::FoldingSet<llvm::FoldingSetNodeWrapper<SValData> >
+typedef llvm37::FoldingSet<llvm37::FoldingSetNodeWrapper<SValData> >
   PersistentSValsTy;
 
-typedef llvm::FoldingSet<llvm::FoldingSetNodeWrapper<SValPair> >
+typedef llvm37::FoldingSet<llvm37::FoldingSetNodeWrapper<SValPair> >
   PersistentSValPairsTy;
 
 BasicValueFactory::~BasicValueFactory() {
@@ -69,10 +69,10 @@ BasicValueFactory::~BasicValueFactory() {
   delete (PersistentSValPairsTy*) PersistentSValPairs;
 }
 
-const llvm::APSInt& BasicValueFactory::getValue(const llvm::APSInt& X) {
-  llvm::FoldingSetNodeID ID;
+const llvm37::APSInt& BasicValueFactory::getValue(const llvm37::APSInt& X) {
+  llvm37::FoldingSetNodeID ID;
   void *InsertPos;
-  typedef llvm::FoldingSetNodeWrapper<llvm::APSInt> FoldNodeTy;
+  typedef llvm37::FoldingSetNodeWrapper<llvm37::APSInt> FoldNodeTy;
 
   X.Profile(ID);
   FoldNodeTy* P = APSIntSet.FindNodeOrInsertPos(ID, InsertPos);
@@ -86,29 +86,29 @@ const llvm::APSInt& BasicValueFactory::getValue(const llvm::APSInt& X) {
   return *P;
 }
 
-const llvm::APSInt& BasicValueFactory::getValue(const llvm::APInt& X,
+const llvm37::APSInt& BasicValueFactory::getValue(const llvm37::APInt& X,
                                                 bool isUnsigned) {
-  llvm::APSInt V(X, isUnsigned);
+  llvm37::APSInt V(X, isUnsigned);
   return getValue(V);
 }
 
-const llvm::APSInt& BasicValueFactory::getValue(uint64_t X, unsigned BitWidth,
+const llvm37::APSInt& BasicValueFactory::getValue(uint64_t X, unsigned BitWidth,
                                            bool isUnsigned) {
-  llvm::APSInt V(BitWidth, isUnsigned);
+  llvm37::APSInt V(BitWidth, isUnsigned);
   V = X;
   return getValue(V);
 }
 
-const llvm::APSInt& BasicValueFactory::getValue(uint64_t X, QualType T) {
+const llvm37::APSInt& BasicValueFactory::getValue(uint64_t X, QualType T) {
 
   return getValue(getAPSIntType(T).getValue(X));
 }
 
 const CompoundValData*
 BasicValueFactory::getCompoundValData(QualType T,
-                                      llvm::ImmutableList<SVal> Vals) {
+                                      llvm37::ImmutableList<SVal> Vals) {
 
-  llvm::FoldingSetNodeID ID;
+  llvm37::FoldingSetNodeID ID;
   CompoundValData::Profile(ID, T, Vals);
   void *InsertPos;
 
@@ -126,7 +126,7 @@ BasicValueFactory::getCompoundValData(QualType T,
 const LazyCompoundValData*
 BasicValueFactory::getLazyCompoundValData(const StoreRef &store,
                                           const TypedValueRegion *region) {
-  llvm::FoldingSetNodeID ID;
+  llvm37::FoldingSetNodeID ID;
   LazyCompoundValData::Profile(ID, store, region);
   void *InsertPos;
 
@@ -142,9 +142,9 @@ BasicValueFactory::getLazyCompoundValData(const StoreRef &store,
   return D;
 }
 
-const llvm::APSInt*
+const llvm37::APSInt*
 BasicValueFactory::evalAPSInt(BinaryOperator::Opcode Op,
-                             const llvm::APSInt& V1, const llvm::APSInt& V2) {
+                             const llvm37::APSInt& V1, const llvm37::APSInt& V2) {
 
   switch (Op) {
     default:
@@ -243,14 +243,14 @@ BasicValueFactory::getPersistentSValWithData(const SVal& V, uintptr_t Data) {
   // Lazily create the folding set.
   if (!PersistentSVals) PersistentSVals = new PersistentSValsTy();
 
-  llvm::FoldingSetNodeID ID;
+  llvm37::FoldingSetNodeID ID;
   void *InsertPos;
   V.Profile(ID);
   ID.AddPointer((void*) Data);
 
   PersistentSValsTy& Map = *((PersistentSValsTy*) PersistentSVals);
 
-  typedef llvm::FoldingSetNodeWrapper<SValData> FoldNodeTy;
+  typedef llvm37::FoldingSetNodeWrapper<SValData> FoldNodeTy;
   FoldNodeTy* P = Map.FindNodeOrInsertPos(ID, InsertPos);
 
   if (!P) {
@@ -268,14 +268,14 @@ BasicValueFactory::getPersistentSValPair(const SVal& V1, const SVal& V2) {
   // Lazily create the folding set.
   if (!PersistentSValPairs) PersistentSValPairs = new PersistentSValPairsTy();
 
-  llvm::FoldingSetNodeID ID;
+  llvm37::FoldingSetNodeID ID;
   void *InsertPos;
   V1.Profile(ID);
   V2.Profile(ID);
 
   PersistentSValPairsTy& Map = *((PersistentSValPairsTy*) PersistentSValPairs);
 
-  typedef llvm::FoldingSetNodeWrapper<SValPair> FoldNodeTy;
+  typedef llvm37::FoldingSetNodeWrapper<SValPair> FoldNodeTy;
   FoldNodeTy* P = Map.FindNodeOrInsertPos(ID, InsertPos);
 
   if (!P) {

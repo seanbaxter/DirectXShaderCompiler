@@ -11,13 +11,13 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_AST_BASESUBOBJECT_H
-#define LLVM_CLANG_AST_BASESUBOBJECT_H
+#ifndef LLVM37_CLANG_AST_BASESUBOBJECT_H
+#define LLVM37_CLANG_AST_BASESUBOBJECT_H
 
 #include "clang/AST/CharUnits.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/Support/DataTypes.h"
-#include "llvm/Support/type_traits.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/Support/DataTypes.h"
+#include "llvm37/Support/type_traits.h"
 
 namespace clang {
   class CXXRecordDecl;
@@ -50,7 +50,7 @@ public:
 
 } // end namespace clang
 
-namespace llvm {
+namespace llvm37 {
 
 template<> struct DenseMapInfo<clang::BaseSubobject> {
   static clang::BaseSubobject getEmptyKey() {

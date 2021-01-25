@@ -12,11 +12,11 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_GR_SUMMARY
-#define LLVM_CLANG_GR_SUMMARY
+#ifndef LLVM37_CLANG_GR_SUMMARY
+#define LLVM37_CLANG_GR_SUMMARY
 
-#include "llvm/ADT/FoldingSet.h"
-#include "llvm/Support/Allocator.h"
+#include "llvm37/ADT/FoldingSet.h"
+#include "llvm37/Support/Allocator.h"
 
 namespace clang {
 

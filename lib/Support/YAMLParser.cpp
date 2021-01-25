@@ -11,19 +11,19 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Support/YAMLParser.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/ADT/StringExtras.h"
-#include "llvm/ADT/Twine.h"
-#include "llvm/ADT/ilist.h"
-#include "llvm/ADT/ilist_node.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/MemoryBuffer.h"
-#include "llvm/Support/SourceMgr.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/Support/YAMLParser.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/ADT/StringExtras.h"
+#include "llvm37/ADT/Twine.h"
+#include "llvm37/ADT/ilist.h"
+#include "llvm37/ADT/ilist_node.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/MemoryBuffer.h"
+#include "llvm37/Support/SourceMgr.h"
+#include "llvm37/Support/raw_ostream.h"
 
-using namespace llvm;
+using namespace llvm37;
 using namespace yaml;
 
 enum UnicodeEncodingForm {
@@ -95,7 +95,7 @@ static EncodingInfo getUnicodeEncoding(StringRef Input) {
   return std::make_pair(UEF_UTF8, 0);
 }
 
-namespace llvm {
+namespace llvm37 {
 namespace yaml {
 /// Pin the vtables to this file.
 void Node::anchor() {}
@@ -147,7 +147,7 @@ struct Token : ilist_node<Token> {
 }
 }
 
-namespace llvm {
+namespace llvm37 {
 template<>
 struct ilist_sentinel_traits<Token> {
   Token *createSentinel() const {
@@ -260,7 +260,7 @@ static UTF8Decoded decodeUTF8(StringRef Range) {
   return std::make_pair(0, 0);
 }
 
-namespace llvm {
+namespace llvm37 {
 namespace yaml {
 /// @brief Scans YAML tokens from a MemoryBuffer.
 class Scanner {
@@ -567,7 +567,7 @@ private:
 };
 
 } // end namespace yaml
-} // end namespace llvm
+} // end namespace llvm37
 
 /// encodeUTF8 - Encode \a UnicodeScalarValue in UTF-8 and append it to result.
 static void encodeUTF8( uint32_t UnicodeScalarValue
@@ -683,10 +683,10 @@ bool yaml::dumpTokens(StringRef Input, raw_ostream &OS) {
 }
 
 bool yaml::scanTokens(StringRef Input) {
-  llvm::SourceMgr SM;
-  llvm::yaml::Scanner scanner(Input, SM);
+  llvm37::SourceMgr SM;
+  llvm37::yaml::Scanner scanner(Input, SM);
   for (;;) {
-    llvm::yaml::Token T = scanner.getNext();
+    llvm37::yaml::Token T = scanner.getNext();
     if (T.Kind == Token::TK_StreamEnd)
       break;
     else if (T.Kind == Token::TK_Error)
@@ -1259,7 +1259,7 @@ bool Scanner::scanValue() {
 
 // Forbidding inlining improves performance by roughly 20%.
 // FIXME: Remove once llvm optimizes this to the faster version without hints.
-LLVM_ATTRIBUTE_NOINLINE static bool
+LLVM37_ATTRIBUTE_NOINLINE static bool
 wasEscaped(StringRef::iterator First, StringRef::iterator Position);
 
 // Returns whether a character at 'Position' was escaped with a leading '\'.

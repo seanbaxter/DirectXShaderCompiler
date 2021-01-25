@@ -12,9 +12,9 @@
 //===----------------------------------------------------------------------===//
 
 #include "Unix.h"
-#include "llvm/Support/DataTypes.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/Process.h"
+#include "llvm37/Support/DataTypes.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/Process.h"
 
 #ifdef HAVE_SYS_MMAN_H
 #include <sys/mman.h>
@@ -42,19 +42,19 @@ namespace {
 
 int getPosixProtectionFlags(unsigned Flags) {
   switch (Flags) {
-  case llvm::sys::Memory::MF_READ:
+  case llvm37::sys::Memory::MF_READ:
     return PROT_READ;
-  case llvm::sys::Memory::MF_WRITE:
+  case llvm37::sys::Memory::MF_WRITE:
     return PROT_WRITE;
-  case llvm::sys::Memory::MF_READ|llvm::sys::Memory::MF_WRITE:
+  case llvm37::sys::Memory::MF_READ|llvm37::sys::Memory::MF_WRITE:
     return PROT_READ | PROT_WRITE;
-  case llvm::sys::Memory::MF_READ|llvm::sys::Memory::MF_EXEC:
+  case llvm37::sys::Memory::MF_READ|llvm37::sys::Memory::MF_EXEC:
     return PROT_READ | PROT_EXEC;
-  case llvm::sys::Memory::MF_READ |
-	 llvm::sys::Memory::MF_WRITE |
-	 llvm::sys::Memory::MF_EXEC:
+  case llvm37::sys::Memory::MF_READ |
+	 llvm37::sys::Memory::MF_WRITE |
+	 llvm37::sys::Memory::MF_EXEC:
     return PROT_READ | PROT_WRITE | PROT_EXEC;
-  case llvm::sys::Memory::MF_EXEC:
+  case llvm37::sys::Memory::MF_EXEC:
 #if defined(__FreeBSD__)
     // On PowerPC, having an executable page that has no read permission
     // can have unintended consequences.  The function InvalidateInstruction-
@@ -76,7 +76,7 @@ int getPosixProtectionFlags(unsigned Flags) {
 
 } // namespace
 
-namespace llvm {
+namespace llvm37 {
 namespace sys {
 
 MemoryBlock
@@ -347,4 +347,4 @@ void Memory::InvalidateInstructionCache(const void *Addr,
 }
 
 } // namespace sys
-} // namespace llvm
+} // namespace llvm37

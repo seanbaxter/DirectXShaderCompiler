@@ -10,11 +10,11 @@
 /// \file
 /// \brief Defines the Objective-C statement AST node classes.
 
-#ifndef LLVM_CLANG_AST_STMTOBJC_H
-#define LLVM_CLANG_AST_STMTOBJC_H
+#ifndef LLVM37_CLANG_AST_STMTOBJC_H
+#define LLVM37_CLANG_AST_STMTOBJC_H
 
 #include "clang/AST/Stmt.h"
-#include "llvm/Support/Compiler.h"
+#include "llvm37/Support/Compiler.h"
 
 namespace clang {
 
@@ -55,8 +55,8 @@ public:
   SourceLocation getRParenLoc() const { return RParenLoc; }
   void setRParenLoc(SourceLocation Loc) { RParenLoc = Loc; }
 
-  SourceLocation getLocStart() const LLVM_READONLY { return ForLoc; }
-  SourceLocation getLocEnd() const LLVM_READONLY {
+  SourceLocation getLocStart() const LLVM37_READONLY { return ForLoc; }
+  SourceLocation getLocEnd() const LLVM37_READONLY {
     return SubExprs[BODY]->getLocEnd();
   }
 
@@ -104,8 +104,8 @@ public:
   SourceLocation getRParenLoc() const { return RParenLoc; }
   void setRParenLoc(SourceLocation Loc) { RParenLoc = Loc; }
 
-  SourceLocation getLocStart() const LLVM_READONLY { return AtCatchLoc; }
-  SourceLocation getLocEnd() const LLVM_READONLY { return Body->getLocEnd(); }
+  SourceLocation getLocStart() const LLVM37_READONLY { return AtCatchLoc; }
+  SourceLocation getLocEnd() const LLVM37_READONLY { return Body->getLocEnd(); }
 
   bool hasEllipsis() const { return getCatchParamDecl() == nullptr; }
 
@@ -133,8 +133,8 @@ public:
   Stmt *getFinallyBody() { return AtFinallyStmt; }
   void setFinallyBody(Stmt *S) { AtFinallyStmt = S; }
 
-  SourceLocation getLocStart() const LLVM_READONLY { return AtFinallyLoc; }
-  SourceLocation getLocEnd() const LLVM_READONLY {
+  SourceLocation getLocStart() const LLVM37_READONLY { return AtFinallyLoc; }
+  SourceLocation getLocEnd() const LLVM37_READONLY {
     return AtFinallyStmt->getLocEnd();
   }
 
@@ -238,8 +238,8 @@ public:
     getStmts()[1 + NumCatchStmts] = S; 
   }
 
-  SourceLocation getLocStart() const LLVM_READONLY { return AtTryLoc; }
-  SourceLocation getLocEnd() const LLVM_READONLY;
+  SourceLocation getLocStart() const LLVM37_READONLY { return AtTryLoc; }
+  SourceLocation getLocEnd() const LLVM37_READONLY;
 
   static bool classof(const Stmt *T) {
     return T->getStmtClass() == ObjCAtTryStmtClass;
@@ -295,8 +295,8 @@ public:
   }
   void setSynchExpr(Stmt *S) { SubStmts[SYNC_EXPR] = S; }
 
-  SourceLocation getLocStart() const LLVM_READONLY { return AtSynchronizedLoc; }
-  SourceLocation getLocEnd() const LLVM_READONLY {
+  SourceLocation getLocStart() const LLVM37_READONLY { return AtSynchronizedLoc; }
+  SourceLocation getLocEnd() const LLVM37_READONLY {
     return getSynchBody()->getLocEnd();
   }
 
@@ -329,8 +329,8 @@ public:
   SourceLocation getThrowLoc() { return AtThrowLoc; }
   void setThrowLoc(SourceLocation Loc) { AtThrowLoc = Loc; }
 
-  SourceLocation getLocStart() const LLVM_READONLY { return AtThrowLoc; }
-  SourceLocation getLocEnd() const LLVM_READONLY {
+  SourceLocation getLocStart() const LLVM37_READONLY { return AtThrowLoc; }
+  SourceLocation getLocEnd() const LLVM37_READONLY {
     return Throw ? Throw->getLocEnd() : AtThrowLoc;
   }
 
@@ -357,8 +357,8 @@ public:
   Stmt *getSubStmt() { return SubStmt; }
   void setSubStmt(Stmt *S) { SubStmt = S; }
 
-  SourceLocation getLocStart() const LLVM_READONLY { return AtLoc; }
-  SourceLocation getLocEnd() const LLVM_READONLY { return SubStmt->getLocEnd();}
+  SourceLocation getLocStart() const LLVM37_READONLY { return AtLoc; }
+  SourceLocation getLocEnd() const LLVM37_READONLY { return SubStmt->getLocEnd();}
 
   SourceLocation getAtLoc() const { return AtLoc; }
   void setAtLoc(SourceLocation Loc) { AtLoc = Loc; }

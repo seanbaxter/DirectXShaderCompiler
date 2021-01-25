@@ -11,14 +11,14 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_AST_STMTCXX_H
-#define LLVM_CLANG_AST_STMTCXX_H
+#ifndef LLVM37_CLANG_AST_STMTCXX_H
+#define LLVM37_CLANG_AST_STMTCXX_H
 
 #include "clang/AST/DeclarationName.h"
 #include "clang/AST/Expr.h"
 #include "clang/AST/NestedNameSpecifier.h"
 #include "clang/AST/Stmt.h"
-#include "llvm/Support/Compiler.h"
+#include "llvm37/Support/Compiler.h"
 
 namespace clang {
 
@@ -41,8 +41,8 @@ public:
   CXXCatchStmt(EmptyShell Empty)
   : Stmt(CXXCatchStmtClass), ExceptionDecl(nullptr), HandlerBlock(nullptr) {}
 
-  SourceLocation getLocStart() const LLVM_READONLY { return CatchLoc; }
-  SourceLocation getLocEnd() const LLVM_READONLY {
+  SourceLocation getLocStart() const LLVM37_READONLY { return CatchLoc; }
+  SourceLocation getLocEnd() const LLVM37_READONLY {
     return HandlerBlock->getLocEnd();
   }
 
@@ -85,8 +85,8 @@ public:
   static CXXTryStmt *Create(const ASTContext &C, EmptyShell Empty,
                             unsigned numHandlers);
 
-  SourceLocation getLocStart() const LLVM_READONLY { return getTryLoc(); }
-  SourceLocation getLocEnd() const LLVM_READONLY { return getEndLoc(); }
+  SourceLocation getLocStart() const LLVM37_READONLY { return getTryLoc(); }
+  SourceLocation getLocEnd() const LLVM37_READONLY { return getEndLoc(); }
 
   SourceLocation getTryLoc() const { return TryLoc; }
   SourceLocation getEndLoc() const {
@@ -189,8 +189,8 @@ public:
   SourceLocation getRParenLoc() const { return RParenLoc; }
   void setRParenLoc(SourceLocation Loc) { RParenLoc = Loc; }
 
-  SourceLocation getLocStart() const LLVM_READONLY { return ForLoc; }
-  SourceLocation getLocEnd() const LLVM_READONLY {
+  SourceLocation getLocStart() const LLVM37_READONLY { return ForLoc; }
+  SourceLocation getLocEnd() const LLVM37_READONLY {
     return SubExprs[BODY]->getLocEnd();
   }
 
@@ -275,8 +275,8 @@ public:
     return reinterpret_cast<CompoundStmt *>(SubStmt);
   }
 
-  SourceLocation getLocStart() const LLVM_READONLY { return KeywordLoc; }
-  SourceLocation getLocEnd() const LLVM_READONLY { return SubStmt->getLocEnd();}
+  SourceLocation getLocStart() const LLVM37_READONLY { return KeywordLoc; }
+  SourceLocation getLocEnd() const LLVM37_READONLY { return SubStmt->getLocEnd();}
 
   child_range children() {
     return child_range(&SubStmt, &SubStmt+1);

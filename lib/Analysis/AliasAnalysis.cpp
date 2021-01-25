@@ -24,21 +24,21 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Analysis/AliasAnalysis.h"
-#include "llvm/Analysis/CFG.h"
-#include "llvm/Analysis/CaptureTracking.h"
-#include "llvm/Analysis/TargetLibraryInfo.h"
-#include "llvm/Analysis/ValueTracking.h"
-#include "llvm/IR/BasicBlock.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/Dominators.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Type.h"
-#include "llvm/Pass.h"
-using namespace llvm;
+#include "llvm37/Analysis/AliasAnalysis.h"
+#include "llvm37/Analysis/CFG.h"
+#include "llvm37/Analysis/CaptureTracking.h"
+#include "llvm37/Analysis/TargetLibraryInfo.h"
+#include "llvm37/Analysis/ValueTracking.h"
+#include "llvm37/IR/BasicBlock.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/IR/Dominators.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/Type.h"
+#include "llvm37/Pass.h"
+using namespace llvm37;
 
 // Register the AliasAnalysis interface, providing a nice name to refer to.
 INITIALIZE_ANALYSIS_GROUP(AliasAnalysis, "Alias Analysis", NoAA)
@@ -364,7 +364,7 @@ AliasAnalysis::ModRefResult AliasAnalysis::callCapturesBefore(
   if (!CS.getInstruction() || CS.getInstruction() == Object)
     return AliasAnalysis::ModRef;
 
-  if (llvm::PointerMayBeCapturedBefore(Object, /* ReturnCaptures */ true,
+  if (llvm37::PointerMayBeCapturedBefore(Object, /* ReturnCaptures */ true,
                                        /* StoreCaptures */ true, I, DT,
                                        /* include Object */ true))
     return AliasAnalysis::ModRef;
@@ -458,7 +458,7 @@ bool AliasAnalysis::canInstructionRangeModRef(const Instruction &I1,
 
 /// isNoAliasCall - Return true if this pointer is returned by a noalias
 /// function.
-bool llvm::isNoAliasCall(const Value *V) {
+bool llvm37::isNoAliasCall(const Value *V) {
   if (isa<CallInst>(V) || isa<InvokeInst>(V))
     return ImmutableCallSite(cast<Instruction>(V))
       .paramHasAttr(0, Attribute::NoAlias);
@@ -467,7 +467,7 @@ bool llvm::isNoAliasCall(const Value *V) {
 
 /// isNoAliasArgument - Return true if this is an argument with the noalias
 /// attribute.
-bool llvm::isNoAliasArgument(const Value *V)
+bool llvm37::isNoAliasArgument(const Value *V)
 {
   if (const Argument *A = dyn_cast<Argument>(V))
     return A->hasNoAliasAttr();
@@ -481,7 +481,7 @@ bool llvm::isNoAliasArgument(const Value *V)
 ///    ByVal and NoAlias Arguments
 ///    NoAlias returns
 ///
-bool llvm::isIdentifiedObject(const Value *V) {
+bool llvm37::isIdentifiedObject(const Value *V) {
   if (isa<AllocaInst>(V))
     return true;
   if (isa<GlobalValue>(V) && !isa<GlobalAlias>(V))
@@ -498,7 +498,7 @@ bool llvm::isIdentifiedObject(const Value *V) {
 /// Further, an IdentifiedFunctionLocal can not alias with any function
 /// arguments other than itself, which is not necessarily true for
 /// IdentifiedObjects.
-bool llvm::isIdentifiedFunctionLocal(const Value *V)
+bool llvm37::isIdentifiedFunctionLocal(const Value *V)
 {
   return isa<AllocaInst>(V) || isNoAliasCall(V) || isNoAliasArgument(V);
 }

@@ -24,23 +24,23 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/ADT/StringExtras.h"
-#include "llvm/ADT/StringMap.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/TableGen/Error.h"
-#include "llvm/TableGen/Record.h"
-#include "llvm/TableGen/SetTheory.h"
-#include "llvm/TableGen/TableGenBackend.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/ADT/StringExtras.h"
+#include "llvm37/ADT/StringMap.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/TableGen/Error.h"
+#include "llvm37/TableGen/Record.h"
+#include "llvm37/TableGen/SetTheory.h"
+#include "llvm37/TableGen/TableGenBackend.h"
 #include <algorithm>
 #include <map>
 #include <sstream>
 #include <string>
 #include <vector>
-using namespace llvm;
+using namespace llvm37;
 
 namespace {
 
@@ -1647,12 +1647,12 @@ std::pair<Type, std::string> Intrinsic::DagEmitter::emitDagShuffle(DagInit *DI){
 
   SetTheory ST;
   SetTheory::RecSet Elts;
-  ST.addOperator("lowhalf", llvm::make_unique<LowHalf>());
-  ST.addOperator("highhalf", llvm::make_unique<HighHalf>());
+  ST.addOperator("lowhalf", llvm37::make_unique<LowHalf>());
+  ST.addOperator("highhalf", llvm37::make_unique<HighHalf>());
   ST.addOperator("rev",
-                 llvm::make_unique<Rev>(Arg1.first.getElementSizeInBits()));
+                 llvm37::make_unique<Rev>(Arg1.first.getElementSizeInBits()));
   ST.addExpander("MaskExpand",
-                 llvm::make_unique<MaskExpander>(Arg1.first.getNumElements()));
+                 llvm37::make_unique<MaskExpander>(Arg1.first.getNumElements()));
   ST.evaluate(DI->getArg(2), Elts, None);
 
   std::string S = "__builtin_shufflevector(" + Arg1.second + ", " + Arg2.second;

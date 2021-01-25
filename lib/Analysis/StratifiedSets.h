@@ -7,15 +7,15 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_ADT_STRATIFIEDSETS_H
-#define LLVM_ADT_STRATIFIEDSETS_H
+#ifndef LLVM37_ADT_STRATIFIEDSETS_H
+#define LLVM37_ADT_STRATIFIEDSETS_H
 
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/Optional.h"
-#include "llvm/ADT/SmallPtrSet.h"
-#include "llvm/ADT/SmallSet.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/Support/Compiler.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/Optional.h"
+#include "llvm37/ADT/SmallPtrSet.h"
+#include "llvm37/ADT/SmallSet.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/Support/Compiler.h"
 #include <bitset>
 #include <cassert>
 #include <cmath>
@@ -24,7 +24,7 @@
 #include <utility>
 #include <vector>
 
-namespace llvm {
+namespace llvm37 {
 // \brief An index into Stratified Sets.
 typedef unsigned StratifiedIndex;
 // NOTE: ^ This can't be a short -- bootstrapping clang has a case where
@@ -689,4 +689,4 @@ private:
   bool inbounds(StratifiedIndex N) const { return N < Links.size(); }
 };
 }
-#endif // LLVM_ADT_STRATIFIEDSETS_H
+#endif // LLVM37_ADT_STRATIFIEDSETS_H

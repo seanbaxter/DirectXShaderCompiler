@@ -21,11 +21,11 @@
 #include "clang/Lex/PPCallbacks.h"
 #include "clang/Lex/Preprocessor.h"
 #include "clang/Serialization/ASTReader.h"
-#include "llvm/ADT/StringSet.h"
-#include "llvm/ADT/StringSwitch.h"
-#include "llvm/Support/FileSystem.h"
-#include "llvm/Support/Path.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/StringSet.h"
+#include "llvm37/ADT/StringSwitch.h"
+#include "llvm37/Support/FileSystem.h"
+#include "llvm37/Support/Path.h"
+#include "llvm37/Support/raw_ostream.h"
 
 using namespace clang;
 
@@ -54,9 +54,9 @@ struct DepCollectorPPCallbacks : public PPCallbacks {
 
     // Remove leading "./" (or ".//" or "././" etc.)
     while (Filename.size() > 2 && Filename[0] == '.' &&
-           llvm::sys::path::is_separator(Filename[1])) {
+           llvm37::sys::path::is_separator(Filename[1])) {
       Filename = Filename.substr(1);
-      while (llvm::sys::path::is_separator(Filename[0]))
+      while (llvm37::sys::path::is_separator(Filename[0]))
         Filename = Filename.substr(1);
     }
 
@@ -118,7 +118,7 @@ void DependencyCollector::maybeAddDependency(StringRef Filename, bool FromModule
 }
 
 static bool isSpecialFilename(StringRef Filename) {
-  return llvm::StringSwitch<bool>(Filename)
+  return llvm37::StringSwitch<bool>(Filename)
       .Case("<built-in>", true)
       .Case("<stdin>", true)
       .Default(false);
@@ -134,11 +134,11 @@ bool DependencyCollector::sawDependency(StringRef Filename, bool FromModule,
 DependencyCollector::~DependencyCollector() { }
 void DependencyCollector::attachToPreprocessor(Preprocessor &PP) {
   PP.addPPCallbacks(
-      llvm::make_unique<DepCollectorPPCallbacks>(*this, PP.getSourceManager()));
+      llvm37::make_unique<DepCollectorPPCallbacks>(*this, PP.getSourceManager()));
 }
 #if 0 // HLSL Change Starts - no support for AST serialization
 void DependencyCollector::attachToASTReader(ASTReader &R) {
-  R.addListener(llvm::make_unique<DepCollectorASTListener>(*this));
+  R.addListener(llvm37::make_unique<DepCollectorASTListener>(*this));
 }
 #endif // HLSL Change Ends - no support for AST serialization
 
@@ -146,7 +146,7 @@ namespace {
 /// Private implementation for DependencyFileGenerator
 class DFGImpl : public PPCallbacks {
   std::vector<std::string> Files;
-  llvm::StringSet<> FilesSet;
+  llvm37::StringSet<> FilesSet;
   const Preprocessor *PP;
   std::string OutputFile;
   std::vector<std::string> Targets;
@@ -231,7 +231,7 @@ DependencyFileGenerator *DependencyFileGenerator::CreateAndAttachToPreprocessor(
 void DependencyFileGenerator::AttachToASTReader(ASTReader &R) {
   DFGImpl *I = reinterpret_cast<DFGImpl *>(Impl);
   assert(I && "missing implementation");
-  R.addListener(llvm::make_unique<DFGASTReaderListener>(*I));
+  R.addListener(llvm37::make_unique<DFGASTReaderListener>(*I));
 }
 #endif // HLSL Change Starts - no support for AST serialization
 
@@ -270,9 +270,9 @@ void DFGImpl::FileChanged(SourceLocation Loc,
 
   // Remove leading "./" (or ".//" or "././" etc.)
   while (Filename.size() > 2 && Filename[0] == '.' &&
-         llvm::sys::path::is_separator(Filename[1])) {
+         llvm37::sys::path::is_separator(Filename[1])) {
     Filename = Filename.substr(1);
-    while (llvm::sys::path::is_separator(Filename[0]))
+    while (llvm37::sys::path::is_separator(Filename[0]))
       Filename = Filename.substr(1);
   }
     
@@ -378,12 +378,12 @@ static void PrintFilename(raw_ostream &OS, StringRef Filename,
 
 void DFGImpl::OutputDependencyFile() {
   if (SeenMissingHeader) {
-    llvm::sys::fs::remove(OutputFile);
+    llvm37::sys::fs::remove(OutputFile);
     return;
   }
 
   std::error_code EC;
-  llvm::raw_fd_ostream OS(OutputFile, EC, llvm::sys::fs::F_Text);
+  llvm37::raw_fd_ostream OS(OutputFile, EC, llvm37::sys::fs::F_Text);
   if (EC) {
     PP->getDiagnostics().Report(diag::err_fe_error_opening) << OutputFile
                                                             << EC.message();
@@ -447,7 +447,7 @@ void DFGImpl::OutputDependencyFile() {
 }
 
 #if 0 // HLSL Change Starts - no support for AST serialization
-bool DFGASTReaderListener::visitInputFile(llvm::StringRef Filename,
+bool DFGASTReaderListener::visitInputFile(llvm37::StringRef Filename,
                                           bool IsSystem, bool IsOverridden) {
   assert(!IsSystem || needsSystemInputFileVisitation());
   if (IsOverridden)
@@ -457,7 +457,7 @@ bool DFGASTReaderListener::visitInputFile(llvm::StringRef Filename,
   return true;
 }
 
-void DFGASTReaderListener::visitModuleFile(llvm::StringRef Filename) {
+void DFGASTReaderListener::visitModuleFile(llvm37::StringRef Filename) {
   if (Parent.includeModuleFiles())
     Parent.AddFilename(Filename);
 }

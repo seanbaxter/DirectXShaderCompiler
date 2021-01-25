@@ -12,9 +12,9 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/CodeGen/GCStrategy.h"
+#include "llvm37/CodeGen/GCStrategy.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 GCStrategy::GCStrategy()
     : UseStatepoints(false), NeededSafePoints(0), CustomReadBarriers(false),

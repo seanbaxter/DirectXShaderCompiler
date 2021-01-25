@@ -28,18 +28,18 @@
 //===----------------------------------------------------------------------===//
 
 #include "SpillPlacement.h"
-#include "llvm/ADT/BitVector.h"
-#include "llvm/CodeGen/EdgeBundles.h"
-#include "llvm/CodeGen/MachineBasicBlock.h"
-#include "llvm/CodeGen/MachineBlockFrequencyInfo.h"
-#include "llvm/CodeGen/MachineFunction.h"
-#include "llvm/CodeGen/MachineLoopInfo.h"
-#include "llvm/CodeGen/Passes.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/Format.h"
-#include "llvm/Support/ManagedStatic.h"
+#include "llvm37/ADT/BitVector.h"
+#include "llvm37/CodeGen/EdgeBundles.h"
+#include "llvm37/CodeGen/MachineBasicBlock.h"
+#include "llvm37/CodeGen/MachineBlockFrequencyInfo.h"
+#include "llvm37/CodeGen/MachineFunction.h"
+#include "llvm37/CodeGen/MachineLoopInfo.h"
+#include "llvm37/CodeGen/Passes.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/Format.h"
+#include "llvm37/Support/ManagedStatic.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "spillplacement"
 
@@ -51,7 +51,7 @@ INITIALIZE_PASS_DEPENDENCY(MachineLoopInfo)
 INITIALIZE_PASS_END(SpillPlacement, "spill-code-placement",
                     "Spill Code Placement Analysis", true, true)
 
-char &llvm::SpillPlacementID = SpillPlacement::ID;
+char &llvm37::SpillPlacementID = SpillPlacement::ID;
 
 void SpillPlacement::getAnalysisUsage(AnalysisUsage &AU) const {
   AU.setPreservesAll();

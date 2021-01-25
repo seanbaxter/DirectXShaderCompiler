@@ -12,17 +12,17 @@
 //===----------------------------------------------------------------------===//
 
 #include "InstCombineInternal.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/Analysis/InstructionSimplify.h"
-#include "llvm/Analysis/MemoryBuiltins.h"
-#include "llvm/IR/CallSite.h"
-#include "llvm/IR/Dominators.h"
-#include "llvm/IR/PatternMatch.h"
-#include "llvm/IR/Statepoint.h"
-#include "llvm/Transforms/Utils/BuildLibCalls.h"
-#include "llvm/Transforms/Utils/Local.h"
-#include "llvm/Transforms/Utils/SimplifyLibCalls.h"
-using namespace llvm;
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/Analysis/InstructionSimplify.h"
+#include "llvm37/Analysis/MemoryBuiltins.h"
+#include "llvm37/IR/CallSite.h"
+#include "llvm37/IR/Dominators.h"
+#include "llvm37/IR/PatternMatch.h"
+#include "llvm37/IR/Statepoint.h"
+#include "llvm37/Transforms/Utils/BuildLibCalls.h"
+#include "llvm37/Transforms/Utils/Local.h"
+#include "llvm37/Transforms/Utils/SimplifyLibCalls.h"
+using namespace llvm37;
 using namespace PatternMatch;
 
 #define DEBUG_TYPE "instcombine"

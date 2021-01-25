@@ -11,9 +11,9 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Target/TargetSelectionDAGInfo.h"
-#include "llvm/Target/TargetMachine.h"
-using namespace llvm;
+#include "llvm37/Target/TargetSelectionDAGInfo.h"
+#include "llvm37/Target/TargetMachine.h"
+using namespace llvm37;
 
 TargetSelectionDAGInfo::~TargetSelectionDAGInfo() {
 }

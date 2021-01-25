@@ -7,18 +7,18 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Analysis/TargetTransformInfo.h"
-#include "llvm/Analysis/TargetTransformInfoImpl.h"
-#include "llvm/IR/CallSite.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/Instruction.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/Operator.h"
-#include "llvm/Support/ErrorHandling.h"
+#include "llvm37/Analysis/TargetTransformInfo.h"
+#include "llvm37/Analysis/TargetTransformInfoImpl.h"
+#include "llvm37/IR/CallSite.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/IR/Instruction.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/Operator.h"
+#include "llvm37/Support/ErrorHandling.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "tti"
 
@@ -333,6 +333,6 @@ TargetTransformInfo &TargetTransformInfoWrapperPass::getTTI(Function &F) {
 }
 
 ImmutablePass *
-llvm::createTargetTransformInfoWrapperPass(TargetIRAnalysis TIRA) {
+llvm37::createTargetTransformInfoWrapperPass(TargetIRAnalysis TIRA) {
   return new TargetTransformInfoWrapperPass(std::move(TIRA));
 }

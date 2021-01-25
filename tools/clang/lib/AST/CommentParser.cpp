@@ -13,11 +13,11 @@
 #include "clang/AST/CommentSema.h"
 #include "clang/Basic/CharInfo.h"
 #include "clang/Basic/SourceManager.h"
-#include "llvm/Support/ErrorHandling.h"
+#include "llvm37/Support/ErrorHandling.h"
 
 namespace clang {
 
-static inline bool isWhitespace(llvm::StringRef S) {
+static inline bool isWhitespace(llvm37::StringRef S) {
   for (StringRef::const_iterator I = S.begin(), E = S.end(); I != E; ++I) {
     if (!isWhitespace(*I))
       return false;
@@ -29,7 +29,7 @@ namespace comments {
 
 /// Re-lexes a sequence of tok::text tokens.
 class TextTokenRetokenizer {
-  llvm::BumpPtrAllocator &Allocator;
+  llvm37::BumpPtrAllocator &Allocator;
   Parser &P;
 
   /// This flag is set when there are no more tokens we can fetch from lexer.
@@ -144,7 +144,7 @@ class TextTokenRetokenizer {
   }
 
 public:
-  TextTokenRetokenizer(llvm::BumpPtrAllocator &Allocator, Parser &P):
+  TextTokenRetokenizer(llvm37::BumpPtrAllocator &Allocator, Parser &P):
       Allocator(Allocator), P(P), NoMoreInterestingTokens(false) {
     Pos.CurToken = 0;
     addToken();
@@ -246,7 +246,7 @@ public:
       Pos.CurToken++;
     }
 
-    P.putBack(llvm::makeArrayRef(Toks.begin() + Pos.CurToken, Toks.end()));
+    P.putBack(llvm37::makeArrayRef(Toks.begin() + Pos.CurToken, Toks.end()));
     Pos.CurToken = Toks.size();
 
     if (HavePartialTok)
@@ -254,7 +254,7 @@ public:
   }
 };
 
-Parser::Parser(Lexer &L, Sema &S, llvm::BumpPtrAllocator &Allocator,
+Parser::Parser(Lexer &L, Sema &S, llvm37::BumpPtrAllocator &Allocator,
                const SourceManager &SourceMgr, DiagnosticsEngine &Diags,
                const CommandTraits &Traits):
     L(L), S(S), Allocator(Allocator), SourceMgr(SourceMgr), Diags(Diags),
@@ -305,7 +305,7 @@ void Parser::parseBlockCommandArgs(BlockCommandComment *BC,
     ParsedArgs++;
   }
 
-  S.actOnBlockCommandArgs(BC, llvm::makeArrayRef(Args, ParsedArgs));
+  S.actOnBlockCommandArgs(BC, llvm37::makeArrayRef(Args, ParsedArgs));
 }
 
 BlockCommandComment *Parser::parseBlockCommand() {
@@ -474,7 +474,7 @@ HTMLStartTagComment *Parser::parseHTMLStartTag() {
 
     case tok::html_greater:
       S.actOnHTMLStartTagFinish(HST,
-                                S.copyArray(llvm::makeArrayRef(Attrs)),
+                                S.copyArray(llvm37::makeArrayRef(Attrs)),
                                 Tok.getLocation(),
                                 /* IsSelfClosing = */ false);
       consumeToken();
@@ -482,7 +482,7 @@ HTMLStartTagComment *Parser::parseHTMLStartTag() {
 
     case tok::html_slash_greater:
       S.actOnHTMLStartTagFinish(HST,
-                                S.copyArray(llvm::makeArrayRef(Attrs)),
+                                S.copyArray(llvm37::makeArrayRef(Attrs)),
                                 Tok.getLocation(),
                                 /* IsSelfClosing = */ true);
       consumeToken();
@@ -501,7 +501,7 @@ HTMLStartTagComment *Parser::parseHTMLStartTag() {
         continue;
 
       S.actOnHTMLStartTagFinish(HST,
-                                S.copyArray(llvm::makeArrayRef(Attrs)),
+                                S.copyArray(llvm37::makeArrayRef(Attrs)),
                                 SourceLocation(),
                                 /* IsSelfClosing = */ false);
       return HST;
@@ -509,7 +509,7 @@ HTMLStartTagComment *Parser::parseHTMLStartTag() {
     default:
       // Not a token from an HTML start tag.  Thus HTML tag prematurely ended.
       S.actOnHTMLStartTagFinish(HST,
-                                S.copyArray(llvm::makeArrayRef(Attrs)),
+                                S.copyArray(llvm37::makeArrayRef(Attrs)),
                                 SourceLocation(),
                                 /* IsSelfClosing = */ false);
       bool StartLineInvalid;
@@ -649,7 +649,7 @@ BlockContentComment *Parser::parseParagraphOrBlockCommand() {
     break;
   }
 
-  return S.actOnParagraphComment(S.copyArray(llvm::makeArrayRef(Content)));
+  return S.actOnParagraphComment(S.copyArray(llvm37::makeArrayRef(Content)));
 }
 
 VerbatimBlockComment *Parser::parseVerbatimBlock() {
@@ -688,12 +688,12 @@ VerbatimBlockComment *Parser::parseVerbatimBlock() {
     const CommandInfo *Info = Traits.getCommandInfo(Tok.getVerbatimBlockID());
     S.actOnVerbatimBlockFinish(VB, Tok.getLocation(),
                                Info->Name,
-                               S.copyArray(llvm::makeArrayRef(Lines)));
+                               S.copyArray(llvm37::makeArrayRef(Lines)));
     consumeToken();
   } else {
     // Unterminated \\verbatim block
     S.actOnVerbatimBlockFinish(VB, SourceLocation(), "",
-                               S.copyArray(llvm::makeArrayRef(Lines)));
+                               S.copyArray(llvm37::makeArrayRef(Lines)));
   }
 
   return VB;
@@ -769,7 +769,7 @@ FullComment *Parser::parseFullComment() {
     while (Tok.is(tok::newline))
       consumeToken();
   }
-  return S.actOnFullComment(S.copyArray(llvm::makeArrayRef(Blocks)));
+  return S.actOnFullComment(S.copyArray(llvm37::makeArrayRef(Blocks)));
 }
 
 } // end namespace comments

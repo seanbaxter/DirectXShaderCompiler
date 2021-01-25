@@ -12,12 +12,12 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_TOOLS_LLVM_MC_DISASSEMBLER_H
-#define LLVM_TOOLS_LLVM_MC_DISASSEMBLER_H
+#ifndef LLVM37_TOOLS_LLVM37_MC_DISASSEMBLER_H
+#define LLVM37_TOOLS_LLVM37_MC_DISASSEMBLER_H
 
 #include <string>
 
-namespace llvm {
+namespace llvm37 {
 
 class MemoryBuffer;
 class Target;
@@ -37,6 +37,6 @@ public:
                          raw_ostream &Out);
 };
 
-} // namespace llvm
+} // namespace llvm37
 
 #endif

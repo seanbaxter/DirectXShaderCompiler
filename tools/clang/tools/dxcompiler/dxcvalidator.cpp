@@ -9,17 +9,17 @@
 //                                                                           //
 ///////////////////////////////////////////////////////////////////////////////
 
-#include "llvm/Bitcode/ReaderWriter.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/DiagnosticPrinter.h"
+#include "llvm37/Bitcode/ReaderWriter.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/DiagnosticPrinter.h"
 
 #include "dxc/Support/WinIncludes.h"
 #include "dxc/DxilContainer/DxilContainer.h"
 #include "dxc/HLSL/DxilValidation.h"
 
 #include "dxc/Support/Global.h"
-#include "llvm/Support/FileSystem.h"
-#include "llvm/Support/MSFileSystem.h"
+#include "llvm37/Support/FileSystem.h"
+#include "llvm37/Support/MSFileSystem.h"
 #include "dxc/Support/microcom.h"
 #include "dxc/Support/FileIOHelper.h"
 #include "dxc/Support/dxcapi.impl.h"
@@ -33,7 +33,7 @@
 #include "clang/Basic/Version.h"
 #endif // SUPPORT_QUERY_GIT_COMMIT_INFO
 
-using namespace llvm;
+using namespace llvm37;
 using namespace hlsl;
 
 // Utility class for setting and restoring the diagnostic context so we may capture errors/warnings
@@ -42,7 +42,7 @@ struct DiagRestore {
   void *OrigDiagContext;
   LLVMContext::DiagnosticHandlerTy OrigHandler;
 
-  DiagRestore(llvm::LLVMContext &Ctx, void *DiagContext) : Ctx(Ctx) {
+  DiagRestore(llvm37::LLVMContext &Ctx, void *DiagContext) : Ctx(Ctx) {
     OrigHandler = Ctx.getDiagnosticHandler();
     OrigDiagContext = Ctx.getDiagnosticContext();
     Ctx.setDiagnosticHandler(PrintDiagnosticContext::PrintDiagnosticHandler,
@@ -66,8 +66,8 @@ private:
   HRESULT RunValidation(
     _In_ IDxcBlob *pShader,                       // Shader to validate.
     _In_ UINT32 Flags,                            // Validation flags.
-    _In_ llvm::Module *pModule,                   // Module to validate, if available.
-    _In_ llvm::Module *pDebugModule,              // Debug module to validate, if available
+    _In_ llvm37::Module *pModule,                   // Module to validate, if available.
+    _In_ llvm37::Module *pDebugModule,              // Debug module to validate, if available
     _In_ AbstractMemoryStream *pDiagStream);
 
   HRESULT RunRootSignatureValidation(
@@ -86,8 +86,8 @@ public:
   HRESULT ValidateWithOptModules(
     _In_ IDxcBlob *pShader,                       // Shader to validate.
     _In_ UINT32 Flags,                            // Validation flags.
-    _In_ llvm::Module *pModule,                   // Module to validate, if available.
-    _In_ llvm::Module *pDebugModule,              // Debug module to validate, if available
+    _In_ llvm37::Module *pModule,                   // Module to validate, if available.
+    _In_ llvm37::Module *pDebugModule,              // Debug module to validate, if available
     _COM_Outptr_ IDxcOperationResult **ppResult   // Validation output status, buffer, and errors
   );
 
@@ -125,8 +125,8 @@ HRESULT STDMETHODCALLTYPE DxcValidator::Validate(
 HRESULT DxcValidator::ValidateWithOptModules(
   _In_ IDxcBlob *pShader,                       // Shader to validate.
   _In_ UINT32 Flags,                            // Validation flags.
-  _In_ llvm::Module *pModule,                   // Module to validate, if available.
-  _In_ llvm::Module *pDebugModule,              // Debug module to validate, if available
+  _In_ llvm37::Module *pModule,                   // Module to validate, if available.
+  _In_ llvm37::Module *pDebugModule,              // Debug module to validate, if available
   _COM_Outptr_ IDxcOperationResult **ppResult   // Validation output status, buffer, and errors
 ) {
   *ppResult = nullptr;
@@ -204,8 +204,8 @@ HRESULT STDMETHODCALLTYPE DxcValidator::GetFlags(_Out_ UINT32 *pFlags) {
 HRESULT DxcValidator::RunValidation(
   _In_ IDxcBlob *pShader,
   _In_ UINT32 Flags,                            // Validation flags.
-  _In_ llvm::Module *pModule,                   // Module to validate, if available.
-  _In_ llvm::Module *pDebugModule,              // Debug module to validate, if available
+  _In_ llvm37::Module *pModule,                   // Module to validate, if available.
+  _In_ llvm37::Module *pDebugModule,              // Debug module to validate, if available
   _In_ AbstractMemoryStream *pDiagStream) {
 
   // Run validation may throw, but that indicates an inability to validate,
@@ -229,7 +229,7 @@ HRESULT DxcValidator::RunValidation(
     }
   }
 
-  llvm::DiagnosticPrinterRawOStream DiagPrinter(DiagStream);
+  llvm37::DiagnosticPrinterRawOStream DiagPrinter(DiagStream);
   PrintDiagnosticContext DiagContext(DiagPrinter);
   DiagRestore DR(pModule->getContext(), &DiagContext);
 
@@ -291,8 +291,8 @@ HRESULT DxcValidator::RunRootSignatureValidation(
 ///////////////////////////////////////////////////////////////////////////////
 
 HRESULT RunInternalValidator(_In_ IDxcValidator *pValidator,
-                             _In_ llvm::Module *pModule,
-                             _In_ llvm::Module *pDebugModule,
+                             _In_ llvm37::Module *pModule,
+                             _In_ llvm37::Module *pDebugModule,
                              _In_ IDxcBlob *pShader, UINT32 Flags,
                              _COM_Outptr_ IDxcOperationResult **ppResult) {
   DXASSERT_NOMSG(pValidator != nullptr);

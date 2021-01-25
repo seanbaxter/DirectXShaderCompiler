@@ -13,11 +13,11 @@
 #pragma warning(disable:4324)
 #endif
 
-#include "llvm/Support/AlignOf.h"
-#include "llvm/Support/Compiler.h"
+#include "llvm37/Support/AlignOf.h"
+#include "llvm37/Support/Compiler.h"
 #include "gtest/gtest.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 namespace {
 // Disable warnings about questionable type definitions.
@@ -39,10 +39,10 @@ namespace {
 #endif
 
 // Define some fixed alignment types to use in these tests.
-struct LLVM_ALIGNAS(1) A1 {};
-struct LLVM_ALIGNAS(2) A2 {};
-struct LLVM_ALIGNAS(4) A4 {};
-struct LLVM_ALIGNAS(8) A8 {};
+struct LLVM37_ALIGNAS(1) A1 {};
+struct LLVM37_ALIGNAS(2) A2 {};
+struct LLVM37_ALIGNAS(4) A4 {};
+struct LLVM37_ALIGNAS(8) A8 {};
 
 struct S1 {};
 struct S2 { char a; };
@@ -90,7 +90,7 @@ V7::~V7() {}
 V8::~V8() {}
 
 // Ensure alignment is a compile-time constant.
-char LLVM_ATTRIBUTE_UNUSED test_arr1
+char LLVM37_ATTRIBUTE_UNUSED test_arr1
   [AlignOf<char>::Alignment > 0]
   [AlignOf<short>::Alignment > 0]
   [AlignOf<int>::Alignment > 0]
@@ -103,19 +103,19 @@ char LLVM_ATTRIBUTE_UNUSED test_arr1
   [AlignOf<int *>::Alignment > 0]
   [AlignOf<double (*)(double)>::Alignment > 0]
   [AlignOf<double (S6::*)()>::Alignment > 0];
-char LLVM_ATTRIBUTE_UNUSED test_arr2
+char LLVM37_ATTRIBUTE_UNUSED test_arr2
   [AlignOf<A1>::Alignment > 0]
   [AlignOf<A2>::Alignment > 0]
   [AlignOf<A4>::Alignment > 0]
   [AlignOf<A8>::Alignment > 0];
-char LLVM_ATTRIBUTE_UNUSED test_arr3
+char LLVM37_ATTRIBUTE_UNUSED test_arr3
   [AlignOf<S1>::Alignment > 0]
   [AlignOf<S2>::Alignment > 0]
   [AlignOf<S3>::Alignment > 0]
   [AlignOf<S4>::Alignment > 0]
   [AlignOf<S5>::Alignment > 0]
   [AlignOf<S6>::Alignment > 0];
-char LLVM_ATTRIBUTE_UNUSED test_arr4
+char LLVM37_ATTRIBUTE_UNUSED test_arr4
   [AlignOf<D1>::Alignment > 0]
   [AlignOf<D2>::Alignment > 0]
   [AlignOf<D3>::Alignment > 0]
@@ -125,7 +125,7 @@ char LLVM_ATTRIBUTE_UNUSED test_arr4
   [AlignOf<D7>::Alignment > 0]
   [AlignOf<D8>::Alignment > 0]
   [AlignOf<D9>::Alignment > 0];
-char LLVM_ATTRIBUTE_UNUSED test_arr5
+char LLVM37_ATTRIBUTE_UNUSED test_arr5
   [AlignOf<V1>::Alignment > 0]
   [AlignOf<V2>::Alignment > 0]
   [AlignOf<V3>::Alignment > 0]

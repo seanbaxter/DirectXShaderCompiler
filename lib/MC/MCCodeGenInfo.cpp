@@ -12,8 +12,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/MC/MCCodeGenInfo.h"
-using namespace llvm;
+#include "llvm37/MC/MCCodeGenInfo.h"
+using namespace llvm37;
 
 void MCCodeGenInfo::initMCCodeGenInfo(Reloc::Model RM, CodeModel::Model CM,
                                       CodeGenOpt::Level OL) {

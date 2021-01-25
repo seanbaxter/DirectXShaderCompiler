@@ -8,8 +8,8 @@
 //===----------------------------------------------------------------------===//
 
 #include "RecordStreamer.h"
-#include "llvm/MC/MCSymbol.h"
-using namespace llvm;
+#include "llvm37/MC/MCSymbol.h"
+using namespace llvm37;
 
 void RecordStreamer::markDefined(const MCSymbol &Symbol) {
   State &S = Symbols[Symbol.getName()];

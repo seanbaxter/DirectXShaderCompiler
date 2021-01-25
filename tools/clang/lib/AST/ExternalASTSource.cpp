@@ -16,13 +16,13 @@
 #include "clang/AST/ExternalASTSource.h"
 #include "clang/AST/ASTContext.h"
 #include "clang/AST/DeclarationName.h"
-#include "llvm/Support/ErrorHandling.h"
+#include "llvm37/Support/ErrorHandling.h"
 
 using namespace clang;
 
 ExternalASTSource::~ExternalASTSource() { }
 
-llvm::Optional<ExternalASTSource::ASTSourceDescriptor>
+llvm37::Optional<ExternalASTSource::ASTSourceDescriptor>
 ExternalASTSource::getSourceDescriptor(unsigned ID) {
   return None;
 }
@@ -54,9 +54,9 @@ void ExternalASTSource::PrintStats() { }
 
 bool ExternalASTSource::layoutRecordType(
     const RecordDecl *Record, uint64_t &Size, uint64_t &Alignment,
-    llvm::DenseMap<const FieldDecl *, uint64_t> &FieldOffsets,
-    llvm::DenseMap<const CXXRecordDecl *, CharUnits> &BaseOffsets,
-    llvm::DenseMap<const CXXRecordDecl *, CharUnits> &VirtualBaseOffsets) {
+    llvm37::DenseMap<const FieldDecl *, uint64_t> &FieldOffsets,
+    llvm37::DenseMap<const CXXRecordDecl *, CharUnits> &BaseOffsets,
+    llvm37::DenseMap<const CXXRecordDecl *, CharUnits> &VirtualBaseOffsets) {
   return false;
 }
 
@@ -116,7 +116,7 @@ uint32_t ExternalASTSource::incrementGeneration(ASTContext &C) {
     // FIXME: Only bump the generation counter if the current generation number
     // has been observed?
     if (!++CurrentGeneration)
-      llvm::report_fatal_error("generation counter overflowed", false);
+      llvm37::report_fatal_error("generation counter overflowed", false);
   }
 
   return OldGeneration;

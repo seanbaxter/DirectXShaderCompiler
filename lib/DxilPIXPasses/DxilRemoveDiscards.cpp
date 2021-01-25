@@ -14,10 +14,10 @@
 #include "dxc/DxilPIXPasses/DxilPIXPasses.h"
 #include "dxc/HLSL/DxilGenerationPass.h"
 
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/PassManager.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/PassManager.h"
 
-using namespace llvm;
+using namespace llvm37;
 using namespace hlsl;
 
 class DxilRemoveDiscards : public ModulePass {
@@ -58,7 +58,7 @@ bool DxilRemoveDiscards::runOnModule(Module &M) {
 
 char DxilRemoveDiscards::ID = 0;
 
-ModulePass *llvm::createDxilRemoveDiscardsPass() {
+ModulePass *llvm37::createDxilRemoveDiscardsPass() {
   return new DxilRemoveDiscards();
 }
 

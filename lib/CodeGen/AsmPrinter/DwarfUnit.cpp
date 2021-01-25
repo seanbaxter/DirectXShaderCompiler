@@ -16,26 +16,26 @@
 #include "DwarfCompileUnit.h"
 #include "DwarfDebug.h"
 #include "DwarfExpression.h"
-#include "llvm/ADT/APFloat.h"
-#include "llvm/CodeGen/MachineFunction.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/DIBuilder.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/GlobalVariable.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/Mangler.h"
-#include "llvm/MC/MCAsmInfo.h"
-#include "llvm/MC/MCContext.h"
-#include "llvm/MC/MCSection.h"
-#include "llvm/MC/MCStreamer.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Target/TargetFrameLowering.h"
-#include "llvm/Target/TargetLoweringObjectFile.h"
-#include "llvm/Target/TargetMachine.h"
-#include "llvm/Target/TargetRegisterInfo.h"
-#include "llvm/Target/TargetSubtargetInfo.h"
+#include "llvm37/ADT/APFloat.h"
+#include "llvm37/CodeGen/MachineFunction.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/DIBuilder.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/IR/GlobalVariable.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/Mangler.h"
+#include "llvm37/MC/MCAsmInfo.h"
+#include "llvm37/MC/MCContext.h"
+#include "llvm37/MC/MCSection.h"
+#include "llvm37/MC/MCStreamer.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Target/TargetFrameLowering.h"
+#include "llvm37/Target/TargetLoweringObjectFile.h"
+#include "llvm37/Target/TargetMachine.h"
+#include "llvm37/Target/TargetRegisterInfo.h"
+#include "llvm37/Target/TargetSubtargetInfo.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "dwarfdebug"
 
@@ -1083,12 +1083,12 @@ DIE *DwarfUnit::getOrCreateModule(const DIModule *M) {
     addGlobalName(M->getName(), MDie, M->getScope());
   }
   if (!M->getConfigurationMacros().empty())
-    addString(MDie, dwarf::DW_AT_LLVM_config_macros,
+    addString(MDie, dwarf::DW_AT_LLVM37_config_macros,
               M->getConfigurationMacros());
   if (!M->getIncludePath().empty())
-    addString(MDie, dwarf::DW_AT_LLVM_include_path, M->getIncludePath());
+    addString(MDie, dwarf::DW_AT_LLVM37_include_path, M->getIncludePath());
   if (!M->getISysRoot().empty())
-    addString(MDie, dwarf::DW_AT_LLVM_isysroot, M->getISysRoot());
+    addString(MDie, dwarf::DW_AT_LLVM37_isysroot, M->getISysRoot());
   
   return &MDie;
 }

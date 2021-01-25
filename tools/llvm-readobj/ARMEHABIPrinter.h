@@ -7,21 +7,21 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_TOOLS_LLVM_READOBJ_ARMEHABIPRINTER_H
-#define LLVM_TOOLS_LLVM_READOBJ_ARMEHABIPRINTER_H
+#ifndef LLVM37_TOOLS_LLVM37_READOBJ_ARMEHABIPRINTER_H
+#define LLVM37_TOOLS_LLVM37_READOBJ_ARMEHABIPRINTER_H
 
 #include "Error.h"
 #include "StreamWriter.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/Object/ELF.h"
-#include "llvm/Object/ELFTypes.h"
-#include "llvm/Support/ARMEHABI.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/Endian.h"
-#include "llvm/Support/Format.h"
-#include "llvm/Support/type_traits.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/Object/ELF.h"
+#include "llvm37/Object/ELFTypes.h"
+#include "llvm37/Support/ARMEHABI.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/Endian.h"
+#include "llvm37/Support/Format.h"
+#include "llvm37/Support/type_traits.h"
 
-namespace llvm {
+namespace llvm37 {
 namespace ARM {
 namespace EHABI {
 

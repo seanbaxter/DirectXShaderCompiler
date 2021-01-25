@@ -12,12 +12,12 @@
 #pragma once
 
 #include "dxc/DXIL/DxilConstants.h"
-#include "llvm/ADT/ArrayRef.h"
+#include "llvm37/ADT/ArrayRef.h"
 #include <memory>
 #include <string>
 #include <vector>
 
-namespace llvm {
+namespace llvm37 {
 class LLVMContext;
 class Module;
 class Function;
@@ -302,27 +302,27 @@ public:
   /// Use this class to manipulate metadata of DXIL or high-level DX IR specific fields in the record.
   class ExtraPropertyHelper {
   public:
-    ExtraPropertyHelper(llvm::Module *pModule);
+    ExtraPropertyHelper(llvm37::Module *pModule);
     virtual ~ExtraPropertyHelper() {}
 
-    virtual void EmitSRVProperties(const DxilResource &SRV, std::vector<llvm::Metadata *> &MDVals) = 0;
-    virtual void LoadSRVProperties(const llvm::MDOperand &MDO, DxilResource &SRV) = 0;
+    virtual void EmitSRVProperties(const DxilResource &SRV, std::vector<llvm37::Metadata *> &MDVals) = 0;
+    virtual void LoadSRVProperties(const llvm37::MDOperand &MDO, DxilResource &SRV) = 0;
 
-    virtual void EmitUAVProperties(const DxilResource &UAV, std::vector<llvm::Metadata *> &MDVals) = 0;
-    virtual void LoadUAVProperties(const llvm::MDOperand &MDO, DxilResource &UAV) = 0;
+    virtual void EmitUAVProperties(const DxilResource &UAV, std::vector<llvm37::Metadata *> &MDVals) = 0;
+    virtual void LoadUAVProperties(const llvm37::MDOperand &MDO, DxilResource &UAV) = 0;
 
-    virtual void EmitCBufferProperties(const DxilCBuffer &CB, std::vector<llvm::Metadata *> &MDVals) = 0;
-    virtual void LoadCBufferProperties(const llvm::MDOperand &MDO, DxilCBuffer &CB) = 0;
+    virtual void EmitCBufferProperties(const DxilCBuffer &CB, std::vector<llvm37::Metadata *> &MDVals) = 0;
+    virtual void LoadCBufferProperties(const llvm37::MDOperand &MDO, DxilCBuffer &CB) = 0;
 
-    virtual void EmitSamplerProperties(const DxilSampler &S, std::vector<llvm::Metadata *> &MDVals) = 0;
-    virtual void LoadSamplerProperties(const llvm::MDOperand &MDO, DxilSampler &S) = 0;
+    virtual void EmitSamplerProperties(const DxilSampler &S, std::vector<llvm37::Metadata *> &MDVals) = 0;
+    virtual void LoadSamplerProperties(const llvm37::MDOperand &MDO, DxilSampler &S) = 0;
 
-    virtual void EmitSignatureElementProperties(const DxilSignatureElement &SE, std::vector<llvm::Metadata *> &MDVals) = 0;
-    virtual void LoadSignatureElementProperties(const llvm::MDOperand &MDO, DxilSignatureElement &SE) = 0;
+    virtual void EmitSignatureElementProperties(const DxilSignatureElement &SE, std::vector<llvm37::Metadata *> &MDVals) = 0;
+    virtual void LoadSignatureElementProperties(const llvm37::MDOperand &MDO, DxilSignatureElement &SE) = 0;
 
   protected:
-    llvm::LLVMContext &m_Ctx;
-    llvm::Module *m_pModule;
+    llvm37::LLVMContext &m_Ctx;
+    llvm37::Module *m_pModule;
 
   public:
     unsigned m_ValMajor, m_ValMinor;        // Reported validation version in DXIL
@@ -331,7 +331,7 @@ public:
   };
 
 public:
-  DxilMDHelper(llvm::Module *pModule, std::unique_ptr<ExtraPropertyHelper> EPH);
+  DxilMDHelper(llvm37::Module *pModule, std::unique_ptr<ExtraPropertyHelper> EPH);
   ~DxilMDHelper();
 
   void SetShaderModel(const ShaderModel *pSM);
@@ -354,74 +354,74 @@ public:
   void LoadDxilIntermediateOptions(uint32_t &flags);
 
   // Entry points.
-  void EmitDxilEntryPoints(std::vector<llvm::MDNode *> &MDEntries);
-  void UpdateDxilEntryPoints(std::vector<llvm::MDNode *> &MDEntries);
-  const llvm::NamedMDNode *GetDxilEntryPoints();
-  llvm::MDTuple *EmitDxilEntryPointTuple(llvm::Function *pFunc, const std::string &Name, llvm::MDTuple *pSignatures,
-                                         llvm::MDTuple *pResources, llvm::MDTuple *pProperties);
-  void GetDxilEntryPoint(const llvm::MDNode *MDO, llvm::Function *&pFunc, std::string &Name,
-                         const llvm::MDOperand *&pSignatures, const llvm::MDOperand *&pResources,
-                         const llvm::MDOperand *&pProperties);
+  void EmitDxilEntryPoints(std::vector<llvm37::MDNode *> &MDEntries);
+  void UpdateDxilEntryPoints(std::vector<llvm37::MDNode *> &MDEntries);
+  const llvm37::NamedMDNode *GetDxilEntryPoints();
+  llvm37::MDTuple *EmitDxilEntryPointTuple(llvm37::Function *pFunc, const std::string &Name, llvm37::MDTuple *pSignatures,
+                                         llvm37::MDTuple *pResources, llvm37::MDTuple *pProperties);
+  void GetDxilEntryPoint(const llvm37::MDNode *MDO, llvm37::Function *&pFunc, std::string &Name,
+                         const llvm37::MDOperand *&pSignatures, const llvm37::MDOperand *&pResources,
+                         const llvm37::MDOperand *&pProperties);
 
   // Signatures.
-  llvm::MDTuple *EmitDxilSignatures(const DxilEntrySignature &EntrySig);
-  void LoadDxilSignatures(const llvm::MDOperand &MDO,
+  llvm37::MDTuple *EmitDxilSignatures(const DxilEntrySignature &EntrySig);
+  void LoadDxilSignatures(const llvm37::MDOperand &MDO,
                           DxilEntrySignature &EntrySig);
-  llvm::MDTuple *EmitSignatureMetadata(const DxilSignature &Sig);
+  llvm37::MDTuple *EmitSignatureMetadata(const DxilSignature &Sig);
   void EmitRootSignature(std::vector<uint8_t> &SerializedRootSignature);
-  void LoadSignatureMetadata(const llvm::MDOperand &MDO, DxilSignature &Sig);
-  llvm::MDTuple *EmitSignatureElement(const DxilSignatureElement &SE);
-  void LoadSignatureElement(const llvm::MDOperand &MDO, DxilSignatureElement &SE);
+  void LoadSignatureMetadata(const llvm37::MDOperand &MDO, DxilSignature &Sig);
+  llvm37::MDTuple *EmitSignatureElement(const DxilSignatureElement &SE);
+  void LoadSignatureElement(const llvm37::MDOperand &MDO, DxilSignatureElement &SE);
   void LoadRootSignature(std::vector<uint8_t> &SerializedRootSignature);
 
   // Resources.
-  llvm::MDTuple *EmitDxilResourceTuple(llvm::MDTuple *pSRVs, llvm::MDTuple *pUAVs, 
-                                       llvm::MDTuple *pCBuffers, llvm::MDTuple *pSamplers);
-  void EmitDxilResources(llvm::MDTuple *pDxilResourceTuple);
-  void UpdateDxilResources(llvm::MDTuple *pDxilResourceTuple);
-  void GetDxilResources(const llvm::MDOperand &MDO, const llvm::MDTuple *&pSRVs, const llvm::MDTuple *&pUAVs, 
-                        const llvm::MDTuple *&pCBuffers, const llvm::MDTuple *&pSamplers);
-  void EmitDxilResourceBase(const DxilResourceBase &R, llvm::Metadata *ppMDVals[]);
-  void LoadDxilResourceBase(const llvm::MDOperand &MDO, DxilResourceBase &R);
-  llvm::MDTuple *EmitDxilSRV(const DxilResource &SRV);
-  void LoadDxilSRV(const llvm::MDOperand &MDO, DxilResource &SRV);
-  llvm::MDTuple *EmitDxilUAV(const DxilResource &UAV);
-  void LoadDxilUAV(const llvm::MDOperand &MDO, DxilResource &UAV);
-  llvm::MDTuple *EmitDxilCBuffer(const DxilCBuffer &CB);
-  void LoadDxilCBuffer(const llvm::MDOperand &MDO, DxilCBuffer &CB);
-  llvm::MDTuple *EmitDxilSampler(const DxilSampler &S);
-  void LoadDxilSampler(const llvm::MDOperand &MDO, DxilSampler &S);
-  const llvm::MDOperand &GetResourceClass(llvm::MDNode *MD, DXIL::ResourceClass &RC);
-  void LoadDxilResourceBaseFromMDNode(llvm::MDNode *MD, DxilResourceBase &R);
-  void LoadDxilResourceFromMDNode(llvm::MDNode *MD, DxilResource &R);
-  void LoadDxilSamplerFromMDNode(llvm::MDNode *MD, DxilSampler &S);
+  llvm37::MDTuple *EmitDxilResourceTuple(llvm37::MDTuple *pSRVs, llvm37::MDTuple *pUAVs, 
+                                       llvm37::MDTuple *pCBuffers, llvm37::MDTuple *pSamplers);
+  void EmitDxilResources(llvm37::MDTuple *pDxilResourceTuple);
+  void UpdateDxilResources(llvm37::MDTuple *pDxilResourceTuple);
+  void GetDxilResources(const llvm37::MDOperand &MDO, const llvm37::MDTuple *&pSRVs, const llvm37::MDTuple *&pUAVs, 
+                        const llvm37::MDTuple *&pCBuffers, const llvm37::MDTuple *&pSamplers);
+  void EmitDxilResourceBase(const DxilResourceBase &R, llvm37::Metadata *ppMDVals[]);
+  void LoadDxilResourceBase(const llvm37::MDOperand &MDO, DxilResourceBase &R);
+  llvm37::MDTuple *EmitDxilSRV(const DxilResource &SRV);
+  void LoadDxilSRV(const llvm37::MDOperand &MDO, DxilResource &SRV);
+  llvm37::MDTuple *EmitDxilUAV(const DxilResource &UAV);
+  void LoadDxilUAV(const llvm37::MDOperand &MDO, DxilResource &UAV);
+  llvm37::MDTuple *EmitDxilCBuffer(const DxilCBuffer &CB);
+  void LoadDxilCBuffer(const llvm37::MDOperand &MDO, DxilCBuffer &CB);
+  llvm37::MDTuple *EmitDxilSampler(const DxilSampler &S);
+  void LoadDxilSampler(const llvm37::MDOperand &MDO, DxilSampler &S);
+  const llvm37::MDOperand &GetResourceClass(llvm37::MDNode *MD, DXIL::ResourceClass &RC);
+  void LoadDxilResourceBaseFromMDNode(llvm37::MDNode *MD, DxilResourceBase &R);
+  void LoadDxilResourceFromMDNode(llvm37::MDNode *MD, DxilResource &R);
+  void LoadDxilSamplerFromMDNode(llvm37::MDNode *MD, DxilSampler &S);
 
   // Type system.
-  void EmitDxilTypeSystem(DxilTypeSystem &TypeSystem, std::vector<llvm::GlobalVariable *> &LLVMUsed);
-  void LoadDxilTypeSystemNode(const llvm::MDTuple &MDT, DxilTypeSystem &TypeSystem);
+  void EmitDxilTypeSystem(DxilTypeSystem &TypeSystem, std::vector<llvm37::GlobalVariable *> &LLVMUsed);
+  void LoadDxilTypeSystemNode(const llvm37::MDTuple &MDT, DxilTypeSystem &TypeSystem);
   void LoadDxilTypeSystem(DxilTypeSystem &TypeSystem);
-  llvm::Metadata *EmitDxilStructAnnotation(const DxilStructAnnotation &SA);
-  void LoadDxilStructAnnotation(const llvm::MDOperand &MDO, DxilStructAnnotation &SA);
-  llvm::Metadata *EmitDxilFieldAnnotation(const DxilFieldAnnotation &FA);
-  void LoadDxilFieldAnnotation(const llvm::MDOperand &MDO, DxilFieldAnnotation &FA);
-  llvm::Metadata *EmitDxilFunctionAnnotation(const DxilFunctionAnnotation &FA);
-  void LoadDxilFunctionAnnotation(const llvm::MDOperand &MDO, DxilFunctionAnnotation &FA);
-  llvm::Metadata *EmitDxilParamAnnotation(const DxilParameterAnnotation &PA);
-  void LoadDxilParamAnnotation(const llvm::MDOperand &MDO, DxilParameterAnnotation &PA);
-  llvm::Metadata *EmitDxilParamAnnotations(const DxilFunctionAnnotation &FA);
-  void LoadDxilParamAnnotations(const llvm::MDOperand &MDO, DxilFunctionAnnotation &FA);
-  llvm::Metadata *EmitDxilTemplateArgAnnotation(const DxilTemplateArgAnnotation &annotation);
-  void LoadDxilTemplateArgAnnotation(const llvm::MDOperand &MDO, DxilTemplateArgAnnotation &annotation);
+  llvm37::Metadata *EmitDxilStructAnnotation(const DxilStructAnnotation &SA);
+  void LoadDxilStructAnnotation(const llvm37::MDOperand &MDO, DxilStructAnnotation &SA);
+  llvm37::Metadata *EmitDxilFieldAnnotation(const DxilFieldAnnotation &FA);
+  void LoadDxilFieldAnnotation(const llvm37::MDOperand &MDO, DxilFieldAnnotation &FA);
+  llvm37::Metadata *EmitDxilFunctionAnnotation(const DxilFunctionAnnotation &FA);
+  void LoadDxilFunctionAnnotation(const llvm37::MDOperand &MDO, DxilFunctionAnnotation &FA);
+  llvm37::Metadata *EmitDxilParamAnnotation(const DxilParameterAnnotation &PA);
+  void LoadDxilParamAnnotation(const llvm37::MDOperand &MDO, DxilParameterAnnotation &PA);
+  llvm37::Metadata *EmitDxilParamAnnotations(const DxilFunctionAnnotation &FA);
+  void LoadDxilParamAnnotations(const llvm37::MDOperand &MDO, DxilFunctionAnnotation &FA);
+  llvm37::Metadata *EmitDxilTemplateArgAnnotation(const DxilTemplateArgAnnotation &annotation);
+  void LoadDxilTemplateArgAnnotation(const llvm37::MDOperand &MDO, DxilTemplateArgAnnotation &annotation);
 
   // Function props.
-  llvm::MDTuple *EmitDxilFunctionProps(const hlsl::DxilFunctionProps *props,
-                                       const llvm::Function *F);
-  const llvm::Function *LoadDxilFunctionProps(const llvm::MDTuple *pProps,
+  llvm37::MDTuple *EmitDxilFunctionProps(const hlsl::DxilFunctionProps *props,
+                                       const llvm37::Function *F);
+  const llvm37::Function *LoadDxilFunctionProps(const llvm37::MDTuple *pProps,
                                               hlsl::DxilFunctionProps *props);
-  llvm::MDTuple *EmitDxilEntryProperties(uint64_t rawShaderFlag,
+  llvm37::MDTuple *EmitDxilEntryProperties(uint64_t rawShaderFlag,
                                           const hlsl::DxilFunctionProps &props,
                                           uint32_t autoBindingSpace);
-  void LoadDxilEntryProperties(const llvm::MDOperand &MDO,
+  void LoadDxilEntryProperties(const llvm37::MDOperand &MDO,
                                 uint64_t &rawShaderFlag,
                                 hlsl::DxilFunctionProps &props,
                                 uint32_t &autoBindingSpace);
@@ -430,15 +430,15 @@ public:
   void EmitDxilViewIdState(std::vector<unsigned> &SerializedState);
   void LoadDxilViewIdState(std::vector<unsigned> &SerializedState);
   // Control flow hints.
-  static llvm::MDNode *EmitControlFlowHints(llvm::LLVMContext &Ctx, std::vector<DXIL::ControlFlowHint> &hints);
-  static unsigned GetControlFlowHintMask(const llvm::Instruction *I);
-  static bool HasControlFlowHintToPreventFlatten(const llvm::Instruction *I);
+  static llvm37::MDNode *EmitControlFlowHints(llvm37::LLVMContext &Ctx, std::vector<DXIL::ControlFlowHint> &hints);
+  static unsigned GetControlFlowHintMask(const llvm37::Instruction *I);
+  static bool HasControlFlowHintToPreventFlatten(const llvm37::Instruction *I);
 
   // Subobjects
   void EmitSubobjects(const DxilSubobjects &Subobjects);
   void LoadSubobjects(DxilSubobjects &Subobjects);
-  llvm::Metadata *EmitSubobject(const DxilSubobject &obj);
-  void LoadSubobject(const llvm::MDNode &MDO, DxilSubobjects &Subobjects);
+  llvm37::Metadata *EmitSubobject(const DxilSubobject &obj);
+  void LoadSubobject(const llvm37::MDNode &MDO, DxilSubobjects &Subobjects);
 
   // Extra metadata present
   bool HasExtraMetadata() { return m_bExtraMetadata; }
@@ -449,25 +449,25 @@ public:
 
   // Shader specific.
 private:
-  llvm::MDTuple *EmitDxilGSState(DXIL::InputPrimitive Primitive, unsigned MaxVertexCount, 
+  llvm37::MDTuple *EmitDxilGSState(DXIL::InputPrimitive Primitive, unsigned MaxVertexCount, 
                                  unsigned ActiveStreamMask, DXIL::PrimitiveTopology StreamPrimitiveTopology,
                                  unsigned GSInstanceCount);
-  void LoadDxilGSState(const llvm::MDOperand &MDO, DXIL::InputPrimitive &Primitive, unsigned &MaxVertexCount, 
+  void LoadDxilGSState(const llvm37::MDOperand &MDO, DXIL::InputPrimitive &Primitive, unsigned &MaxVertexCount, 
                        unsigned &ActiveStreamMask, DXIL::PrimitiveTopology &StreamPrimitiveTopology,
                        unsigned &GSInstanceCount);
 
-  llvm::MDTuple *EmitDxilDSState(DXIL::TessellatorDomain Domain, unsigned InputControlPointCount);
-  void LoadDxilDSState(const llvm::MDOperand &MDO, DXIL::TessellatorDomain &Domain, unsigned &InputControlPointCount);
+  llvm37::MDTuple *EmitDxilDSState(DXIL::TessellatorDomain Domain, unsigned InputControlPointCount);
+  void LoadDxilDSState(const llvm37::MDOperand &MDO, DXIL::TessellatorDomain &Domain, unsigned &InputControlPointCount);
 
-  llvm::MDTuple *EmitDxilHSState(llvm::Function *pPatchConstantFunction,
+  llvm37::MDTuple *EmitDxilHSState(llvm37::Function *pPatchConstantFunction,
                                  unsigned InputControlPointCount,
                                  unsigned OutputControlPointCount,
                                  DXIL::TessellatorDomain TessDomain,
                                  DXIL::TessellatorPartitioning TessPartitioning,
                                  DXIL::TessellatorOutputPrimitive TessOutputPrimitive,
                                  float MaxTessFactor);
-  void LoadDxilHSState(const llvm::MDOperand &MDO,
-                       llvm::Function *&pPatchConstantFunction,
+  void LoadDxilHSState(const llvm37::MDOperand &MDO,
+                       llvm37::Function *&pPatchConstantFunction,
                        unsigned &InputControlPointCount,
                        unsigned &OutputControlPointCount,
                        DXIL::TessellatorDomain &TessDomain,
@@ -475,65 +475,65 @@ private:
                        DXIL::TessellatorOutputPrimitive &TessOutputPrimitive,
                        float &MaxTessFactor);
 
-  llvm::MDTuple *EmitDxilMSState(const unsigned *NumThreads,
+  llvm37::MDTuple *EmitDxilMSState(const unsigned *NumThreads,
                                  unsigned MaxVertexCount,
                                  unsigned MaxPrimitiveCount,
                                  DXIL::MeshOutputTopology OutputTopology,
                                  unsigned payloadSizeInBytes);
-  void LoadDxilMSState(const llvm::MDOperand &MDO,
+  void LoadDxilMSState(const llvm37::MDOperand &MDO,
                        unsigned *NumThreads,
                        unsigned &MaxVertexCount,
                        unsigned &MaxPrimitiveCount,
                        DXIL::MeshOutputTopology &OutputTopology,
                        unsigned &payloadSizeInBytes);
 
-  llvm::MDTuple *EmitDxilASState(const unsigned *NumThreads, unsigned payloadSizeInBytes);
-  void LoadDxilASState(const llvm::MDOperand &MDO, unsigned *NumThreads, unsigned &payloadSizeInBytes);
+  llvm37::MDTuple *EmitDxilASState(const unsigned *NumThreads, unsigned payloadSizeInBytes);
+  void LoadDxilASState(const llvm37::MDOperand &MDO, unsigned *NumThreads, unsigned &payloadSizeInBytes);
 
-  void AddCounterIfNonZero(uint32_t value, llvm::StringRef name, std::vector<llvm::Metadata*> &MDVals);
-  void LoadCounterMD(const llvm::MDOperand &MDName, const llvm::MDOperand &MDValue, DxilCounters &counters) const;
+  void AddCounterIfNonZero(uint32_t value, llvm37::StringRef name, std::vector<llvm37::Metadata*> &MDVals);
+  void LoadCounterMD(const llvm37::MDOperand &MDName, const llvm37::MDOperand &MDValue, DxilCounters &counters) const;
 public:
   // Utility functions.
-  static bool IsKnownNamedMetaData(const llvm::NamedMDNode &Node);
-  static bool IsKnownMetadataID(llvm::LLVMContext &Ctx, unsigned ID);
-  static void GetKnownMetadataIDs(llvm::LLVMContext &Ctx, llvm::SmallVectorImpl<unsigned> *pIDs);
-  static void combineDxilMetadata(llvm::Instruction *K, const llvm::Instruction *J);
-  static llvm::ConstantAsMetadata *Int32ToConstMD(int32_t v, llvm::LLVMContext &Ctx);
-  llvm::ConstantAsMetadata *Int32ToConstMD(int32_t v);
-  static llvm::ConstantAsMetadata *Uint32ToConstMD(unsigned v, llvm::LLVMContext &Ctx);
-  llvm::ConstantAsMetadata *Uint32ToConstMD(unsigned v);
-  static llvm::ConstantAsMetadata *Uint64ToConstMD(uint64_t v, llvm::LLVMContext &Ctx);
-  llvm::ConstantAsMetadata *Uint64ToConstMD(uint64_t v);
-  llvm::ConstantAsMetadata *Int8ToConstMD(int8_t v);
-  llvm::ConstantAsMetadata *Uint8ToConstMD(uint8_t v);
-  static llvm::ConstantAsMetadata *BoolToConstMD(bool v, llvm::LLVMContext &Ctx);
-  llvm::ConstantAsMetadata *BoolToConstMD(bool v);
-  llvm::ConstantAsMetadata *FloatToConstMD(float v);
-  static int32_t ConstMDToInt32(const llvm::MDOperand &MDO);
-  static unsigned ConstMDToUint32(const llvm::MDOperand &MDO);
-  static uint64_t ConstMDToUint64(const llvm::MDOperand &MDO);
-  static int8_t ConstMDToInt8(const llvm::MDOperand &MDO);
-  static uint8_t ConstMDToUint8(const llvm::MDOperand &MDO);
-  static bool ConstMDToBool(const llvm::MDOperand &MDO);
-  static float ConstMDToFloat(const llvm::MDOperand &MDO);
-  static std::string StringMDToString(const llvm::MDOperand &MDO);
-  static llvm::StringRef StringMDToStringRef(const llvm::MDOperand &MDO);
-  static llvm::Value *ValueMDToValue(const llvm::MDOperand &MDO);
-  llvm::MDTuple *Uint32VectorToConstMDTuple(const std::vector<unsigned> &Vec);
-  void ConstMDTupleToUint32Vector(llvm::MDTuple *pTupleMD, std::vector<unsigned> &Vec);
-  static bool IsMarkedPrecise(const llvm::Instruction *inst);
-  static void MarkPrecise(llvm::Instruction *inst);
-  static bool IsMarkedNonUniform(const llvm::Instruction *inst);
-  static void MarkNonUniform(llvm::Instruction *inst);
-  static bool GetVariableDebugLayout(llvm::DbgDeclareInst *inst,
+  static bool IsKnownNamedMetaData(const llvm37::NamedMDNode &Node);
+  static bool IsKnownMetadataID(llvm37::LLVMContext &Ctx, unsigned ID);
+  static void GetKnownMetadataIDs(llvm37::LLVMContext &Ctx, llvm37::SmallVectorImpl<unsigned> *pIDs);
+  static void combineDxilMetadata(llvm37::Instruction *K, const llvm37::Instruction *J);
+  static llvm37::ConstantAsMetadata *Int32ToConstMD(int32_t v, llvm37::LLVMContext &Ctx);
+  llvm37::ConstantAsMetadata *Int32ToConstMD(int32_t v);
+  static llvm37::ConstantAsMetadata *Uint32ToConstMD(unsigned v, llvm37::LLVMContext &Ctx);
+  llvm37::ConstantAsMetadata *Uint32ToConstMD(unsigned v);
+  static llvm37::ConstantAsMetadata *Uint64ToConstMD(uint64_t v, llvm37::LLVMContext &Ctx);
+  llvm37::ConstantAsMetadata *Uint64ToConstMD(uint64_t v);
+  llvm37::ConstantAsMetadata *Int8ToConstMD(int8_t v);
+  llvm37::ConstantAsMetadata *Uint8ToConstMD(uint8_t v);
+  static llvm37::ConstantAsMetadata *BoolToConstMD(bool v, llvm37::LLVMContext &Ctx);
+  llvm37::ConstantAsMetadata *BoolToConstMD(bool v);
+  llvm37::ConstantAsMetadata *FloatToConstMD(float v);
+  static int32_t ConstMDToInt32(const llvm37::MDOperand &MDO);
+  static unsigned ConstMDToUint32(const llvm37::MDOperand &MDO);
+  static uint64_t ConstMDToUint64(const llvm37::MDOperand &MDO);
+  static int8_t ConstMDToInt8(const llvm37::MDOperand &MDO);
+  static uint8_t ConstMDToUint8(const llvm37::MDOperand &MDO);
+  static bool ConstMDToBool(const llvm37::MDOperand &MDO);
+  static float ConstMDToFloat(const llvm37::MDOperand &MDO);
+  static std::string StringMDToString(const llvm37::MDOperand &MDO);
+  static llvm37::StringRef StringMDToStringRef(const llvm37::MDOperand &MDO);
+  static llvm37::Value *ValueMDToValue(const llvm37::MDOperand &MDO);
+  llvm37::MDTuple *Uint32VectorToConstMDTuple(const std::vector<unsigned> &Vec);
+  void ConstMDTupleToUint32Vector(llvm37::MDTuple *pTupleMD, std::vector<unsigned> &Vec);
+  static bool IsMarkedPrecise(const llvm37::Instruction *inst);
+  static void MarkPrecise(llvm37::Instruction *inst);
+  static bool IsMarkedNonUniform(const llvm37::Instruction *inst);
+  static void MarkNonUniform(llvm37::Instruction *inst);
+  static bool GetVariableDebugLayout(llvm37::DbgDeclareInst *inst,
     unsigned &StartOffsetInBits, std::vector<DxilDIArrayDim> &ArrayDims);
-  static void SetVariableDebugLayout(llvm::DbgDeclareInst *inst,
+  static void SetVariableDebugLayout(llvm37::DbgDeclareInst *inst,
     unsigned StartOffsetInBits, const std::vector<DxilDIArrayDim> &ArrayDims);
-  static void CopyMetadata(llvm::Instruction &I, llvm::Instruction &SrcInst, llvm::ArrayRef<unsigned>WL = llvm::ArrayRef<unsigned>());
+  static void CopyMetadata(llvm37::Instruction &I, llvm37::Instruction &SrcInst, llvm37::ArrayRef<unsigned>WL = llvm37::ArrayRef<unsigned>());
 
 private:
-  llvm::LLVMContext &m_Ctx;
-  llvm::Module *m_pModule;
+  llvm37::LLVMContext &m_Ctx;
+  llvm37::Module *m_pModule;
   const ShaderModel *m_pSM;
   std::unique_ptr<ExtraPropertyHelper> m_ExtraPropertyHelper;
   unsigned m_ValMajor, m_ValMinor;        // Reported validation version in DXIL
@@ -548,23 +548,23 @@ private:
 /// Use this class to manipulate metadata of extra metadata record properties that are specific to DXIL.
 class DxilExtraPropertyHelper : public DxilMDHelper::ExtraPropertyHelper {
 public:
-  DxilExtraPropertyHelper(llvm::Module *pModule);
+  DxilExtraPropertyHelper(llvm37::Module *pModule);
   virtual ~DxilExtraPropertyHelper() {}
 
-  virtual void EmitSRVProperties(const DxilResource &SRV, std::vector<llvm::Metadata *> &MDVals);
-  virtual void LoadSRVProperties(const llvm::MDOperand &MDO, DxilResource &SRV);
+  virtual void EmitSRVProperties(const DxilResource &SRV, std::vector<llvm37::Metadata *> &MDVals);
+  virtual void LoadSRVProperties(const llvm37::MDOperand &MDO, DxilResource &SRV);
 
-  virtual void EmitUAVProperties(const DxilResource &UAV, std::vector<llvm::Metadata *> &MDVals);
-  virtual void LoadUAVProperties(const llvm::MDOperand &MDO, DxilResource &UAV);
+  virtual void EmitUAVProperties(const DxilResource &UAV, std::vector<llvm37::Metadata *> &MDVals);
+  virtual void LoadUAVProperties(const llvm37::MDOperand &MDO, DxilResource &UAV);
 
-  virtual void EmitCBufferProperties(const DxilCBuffer &CB, std::vector<llvm::Metadata *> &MDVals);
-  virtual void LoadCBufferProperties(const llvm::MDOperand &MDO, DxilCBuffer &CB);
+  virtual void EmitCBufferProperties(const DxilCBuffer &CB, std::vector<llvm37::Metadata *> &MDVals);
+  virtual void LoadCBufferProperties(const llvm37::MDOperand &MDO, DxilCBuffer &CB);
 
-  virtual void EmitSamplerProperties(const DxilSampler &S, std::vector<llvm::Metadata *> &MDVals);
-  virtual void LoadSamplerProperties(const llvm::MDOperand &MDO, DxilSampler &S);
+  virtual void EmitSamplerProperties(const DxilSampler &S, std::vector<llvm37::Metadata *> &MDVals);
+  virtual void LoadSamplerProperties(const llvm37::MDOperand &MDO, DxilSampler &S);
 
-  virtual void EmitSignatureElementProperties(const DxilSignatureElement &SE, std::vector<llvm::Metadata *> &MDVals);
-  virtual void LoadSignatureElementProperties(const llvm::MDOperand &MDO, DxilSignatureElement &SE);
+  virtual void EmitSignatureElementProperties(const DxilSignatureElement &SE, std::vector<llvm37::Metadata *> &MDVals);
+  virtual void LoadSignatureElementProperties(const llvm37::MDOperand &MDO, DxilSignatureElement &SE);
 };
 
 } // namespace hlsl

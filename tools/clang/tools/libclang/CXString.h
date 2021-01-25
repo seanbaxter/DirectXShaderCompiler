@@ -11,14 +11,14 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_TOOLS_LIBCLANG_CXSTRING_H
-#define LLVM_CLANG_TOOLS_LIBCLANG_CXSTRING_H
+#ifndef LLVM37_CLANG_TOOLS_LIBCLANG_CXSTRING_H
+#define LLVM37_CLANG_TOOLS_LIBCLANG_CXSTRING_H
 
 #include "clang-c/Index.h"
 #include "clang/Basic/LLVM.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/ADT/StringRef.h"
-#include "llvm/Support/Compiler.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/ADT/StringRef.h"
+#include "llvm37/Support/Compiler.h"
 #include <string>
 #include <vector>
 

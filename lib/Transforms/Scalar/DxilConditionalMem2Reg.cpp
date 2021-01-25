@@ -7,27 +7,27 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Pass.h"
-#include "llvm/Analysis/AssumptionCache.h"
-#include "llvm/Transforms/Scalar.h"
-#include "llvm/Transforms/Utils/PromoteMemToReg.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/IR/Dominators.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/IRBuilder.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/IR/LegacyPassManager.h"
-#include "llvm/IR/DebugInfo.h"
-#include "llvm/IR/DIBuilder.h"
+#include "llvm37/Pass.h"
+#include "llvm37/Analysis/AssumptionCache.h"
+#include "llvm37/Transforms/Scalar.h"
+#include "llvm37/Transforms/Utils/PromoteMemToReg.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/IR/Dominators.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/IRBuilder.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/IR/LegacyPassManager.h"
+#include "llvm37/IR/DebugInfo.h"
+#include "llvm37/IR/DIBuilder.h"
 
 #include "dxc/DXIL/DxilUtil.h"
 #include "dxc/HLSL/HLModule.h"
-#include "llvm/Analysis/DxilValueCache.h"
-#include "llvm/Analysis/ValueTracking.h"
+#include "llvm37/Analysis/DxilValueCache.h"
+#include "llvm37/Analysis/ValueTracking.h"
 
-using namespace llvm;
+using namespace llvm37;
 using namespace hlsl;
 
 static bool ContainsFloatingPointType(Type *Ty) {
@@ -424,7 +424,7 @@ public:
 };
 char DxilConditionalMem2Reg::ID;
 
-Pass *llvm::createDxilConditionalMem2RegPass(bool NoOpt) {
+Pass *llvm37::createDxilConditionalMem2RegPass(bool NoOpt) {
   return new DxilConditionalMem2Reg(NoOpt);
 }
 

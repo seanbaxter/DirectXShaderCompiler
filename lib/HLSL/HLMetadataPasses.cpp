@@ -9,10 +9,10 @@
 
 #include "dxc/HLSL/DxilGenerationPass.h"
 #include "dxc/HLSL/HLModule.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/PassManager.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/PassManager.h"
 
-using namespace llvm;
+using namespace llvm37;
 using namespace hlsl;
 
 namespace {
@@ -37,7 +37,7 @@ public:
 
 char HLEmitMetadata::ID = 0;
 
-ModulePass *llvm::createHLEmitMetadataPass() {
+ModulePass *llvm37::createHLEmitMetadataPass() {
   return new HLEmitMetadata();
 }
 
@@ -66,7 +66,7 @@ public:
 
 char HLEnsureMetadata::ID = 0;
 
-ModulePass *llvm::createHLEnsureMetadataPass() {
+ModulePass *llvm37::createHLEnsureMetadataPass() {
   return new HLEnsureMetadata();
 }
 

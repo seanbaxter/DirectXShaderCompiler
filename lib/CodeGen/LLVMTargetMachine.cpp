@@ -11,29 +11,29 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Target/TargetMachine.h"
-#include "llvm/Analysis/Passes.h"
-#include "llvm/CodeGen/AsmPrinter.h"
-#include "llvm/CodeGen/BasicTTIImpl.h"
-#include "llvm/CodeGen/MachineFunctionAnalysis.h"
-#include "llvm/CodeGen/MachineModuleInfo.h"
-#include "llvm/CodeGen/Passes.h"
-#include "llvm/IR/IRPrintingPasses.h"
-#include "llvm/IR/LegacyPassManager.h"
-#include "llvm/IR/Verifier.h"
-#include "llvm/MC/MCAsmInfo.h"
-#include "llvm/MC/MCContext.h"
-#include "llvm/MC/MCInstrInfo.h"
-#include "llvm/MC/MCStreamer.h"
-#include "llvm/MC/MCSubtargetInfo.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/FormattedStream.h"
-#include "llvm/Support/TargetRegistry.h"
-#include "llvm/Target/TargetLoweringObjectFile.h"
-#include "llvm/Target/TargetOptions.h"
-#include "llvm/Transforms/Scalar.h"
-using namespace llvm;
+#include "llvm37/Target/TargetMachine.h"
+#include "llvm37/Analysis/Passes.h"
+#include "llvm37/CodeGen/AsmPrinter.h"
+#include "llvm37/CodeGen/BasicTTIImpl.h"
+#include "llvm37/CodeGen/MachineFunctionAnalysis.h"
+#include "llvm37/CodeGen/MachineModuleInfo.h"
+#include "llvm37/CodeGen/Passes.h"
+#include "llvm37/IR/IRPrintingPasses.h"
+#include "llvm37/IR/LegacyPassManager.h"
+#include "llvm37/IR/Verifier.h"
+#include "llvm37/MC/MCAsmInfo.h"
+#include "llvm37/MC/MCContext.h"
+#include "llvm37/MC/MCInstrInfo.h"
+#include "llvm37/MC/MCStreamer.h"
+#include "llvm37/MC/MCSubtargetInfo.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/FormattedStream.h"
+#include "llvm37/Support/TargetRegistry.h"
+#include "llvm37/Target/TargetLoweringObjectFile.h"
+#include "llvm37/Target/TargetOptions.h"
+#include "llvm37/Transforms/Scalar.h"
+using namespace llvm37;
 
 // Enable or disable FastISel. Both options are needed, because
 // FastISel is enabled by default with -fast, and we wish to be
@@ -179,7 +179,7 @@ bool LLVMTargetMachine::addPassesToEmitFile(
 
     MCAsmBackend *MAB =
         getTarget().createMCAsmBackend(MRI, getTargetTriple().str(), TargetCPU);
-    auto FOut = llvm::make_unique<formatted_raw_ostream>(Out);
+    auto FOut = llvm37::make_unique<formatted_raw_ostream>(Out);
     MCStreamer *S = getTarget().createAsmStreamer(
         *Context, std::move(FOut), Options.MCOptions.AsmVerbose,
         Options.MCOptions.MCUseDwarfDirectory, InstPrinter, MCE, MAB,

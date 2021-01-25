@@ -25,25 +25,25 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/ADT/DenseSet.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/CodeGen/Passes.h"
-#include "llvm/CodeGen/MachineFunction.h"
-#include "llvm/CodeGen/MachineMemOperand.h"
-#include "llvm/CodeGen/MachineOperand.h"
-#include "llvm/CodeGen/MachineFunctionPass.h"
-#include "llvm/CodeGen/MachineInstrBuilder.h"
-#include "llvm/CodeGen/MachineRegisterInfo.h"
-#include "llvm/CodeGen/MachineModuleInfo.h"
-#include "llvm/IR/BasicBlock.h"
-#include "llvm/IR/Instruction.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Target/TargetSubtargetInfo.h"
-#include "llvm/Target/TargetInstrInfo.h"
+#include "llvm37/ADT/DenseSet.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/CodeGen/Passes.h"
+#include "llvm37/CodeGen/MachineFunction.h"
+#include "llvm37/CodeGen/MachineMemOperand.h"
+#include "llvm37/CodeGen/MachineOperand.h"
+#include "llvm37/CodeGen/MachineFunctionPass.h"
+#include "llvm37/CodeGen/MachineInstrBuilder.h"
+#include "llvm37/CodeGen/MachineRegisterInfo.h"
+#include "llvm37/CodeGen/MachineModuleInfo.h"
+#include "llvm37/IR/BasicBlock.h"
+#include "llvm37/IR/Instruction.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Target/TargetSubtargetInfo.h"
+#include "llvm37/Target/TargetInstrInfo.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 static cl::opt<unsigned> PageSize("imp-null-check-page-size",
                                   cl::desc("The page size of the target in "
@@ -336,7 +336,7 @@ void ImplicitNullChecks::rewriteNullChecks(
 }
 
 char ImplicitNullChecks::ID = 0;
-char &llvm::ImplicitNullChecksID = ImplicitNullChecks::ID;
+char &llvm37::ImplicitNullChecksID = ImplicitNullChecks::ID;
 INITIALIZE_PASS_BEGIN(ImplicitNullChecks, "implicit-null-checks",
                       "Implicit null checks", false, false)
 INITIALIZE_PASS_END(ImplicitNullChecks, "implicit-null-checks",

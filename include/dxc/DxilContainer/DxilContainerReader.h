@@ -11,7 +11,7 @@
 
 #pragma once
 
-#include "llvm/ADT/STLExtras.h"
+#include "llvm37/ADT/STLExtras.h"
 #include "dxc/Support/Global.h"
 #include "dxc/Support/WinIncludes.h"
 #include "dxc/DxilContainer/DxilContainer.h"

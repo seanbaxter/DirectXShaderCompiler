@@ -12,9 +12,9 @@
 #include "dxc/Support/WinIncludes.h"
 
 #include "dxc/Support/exception.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/DebugInfo.h"
-#include "llvm/IR/DebugInfoMetadata.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/DebugInfo.h"
+#include "llvm37/IR/DebugInfoMetadata.h"
 
 #include "DxcPixLiveVariables.h"
 #include "DxcPixDxilDebugInfo.h"
@@ -41,16 +41,16 @@ STDMETHODIMP dxil_debug_info::DxcPixDxilDebugInfo::GetFunctionName(
     _In_ DWORD InstructionOffset,
     _Outptr_result_z_ BSTR *ppFunctionName)
 {
-  llvm::Instruction *IP = FindInstruction(InstructionOffset);
+  llvm37::Instruction *IP = FindInstruction(InstructionOffset);
 
-  const llvm::DITypeIdentifierMap EmptyMap;
+  const llvm37::DITypeIdentifierMap EmptyMap;
 
-  if (const llvm::DebugLoc &DL = IP->getDebugLoc())
+  if (const llvm37::DebugLoc &DL = IP->getDebugLoc())
   {
-    auto *S = llvm::dyn_cast<llvm::DIScope>(DL.getScope());
-    while(S != nullptr && !llvm::isa<llvm::DICompileUnit>(S))
+    auto *S = llvm37::dyn_cast<llvm37::DIScope>(DL.getScope());
+    while(S != nullptr && !llvm37::isa<llvm37::DICompileUnit>(S))
     {
-      if (auto *SS = llvm::dyn_cast<llvm::DISubprogram>(S))
+      if (auto *SS = llvm37::dyn_cast<llvm37::DISubprogram>(S))
       {
         *ppFunctionName = CComBSTR(CA2W(SS->getName().data())).Detach();
         return S_OK;
@@ -69,10 +69,10 @@ STDMETHODIMP dxil_debug_info::DxcPixDxilDebugInfo::GetStackDepth(
     _Outptr_ DWORD *StackDepth
 )
 {
-  llvm::Instruction *IP = FindInstruction(InstructionOffset);
+  llvm37::Instruction *IP = FindInstruction(InstructionOffset);
 
   DWORD Depth = 0;
-  llvm::DebugLoc DL = IP->getDebugLoc();
+  llvm37::DebugLoc DL = IP->getDebugLoc();
   while (DL && DL.getInlinedAtScope() != nullptr)
   {
     DL = DL.getInlinedAt();
@@ -97,12 +97,12 @@ dxil_debug_info::DxcPixDxilDebugInfo::DxcPixDxilDebugInfo(
 
 dxil_debug_info::DxcPixDxilDebugInfo::~DxcPixDxilDebugInfo() = default;
 
-llvm::Module* dxil_debug_info::DxcPixDxilDebugInfo::GetModuleRef()
+llvm37::Module* dxil_debug_info::DxcPixDxilDebugInfo::GetModuleRef()
 {
   return &m_pSession->ModuleRef();
 }
 
-llvm::Instruction* dxil_debug_info::DxcPixDxilDebugInfo::FindInstruction(
+llvm37::Instruction* dxil_debug_info::DxcPixDxilDebugInfo::FindInstruction(
     DWORD InstructionOffset
 ) const
 {
@@ -113,7 +113,7 @@ llvm::Instruction* dxil_debug_info::DxcPixDxilDebugInfo::FindInstruction(
     throw hlsl::Exception(E_BOUNDS, "Out-of-bounds: Instruction offset");
   }
 
-  return const_cast<llvm::Instruction *>(it->second);
+  return const_cast<llvm37::Instruction *>(it->second);
 }
 
 STDMETHODIMP
@@ -132,7 +132,7 @@ dxil_debug_info::DxcPixDxilDebugInfo::SourceLocationsFromInstructionOffset(
     _In_ DWORD InstructionOffset,
     _COM_Outptr_ IDxcPixDxilSourceLocations **ppSourceLocations) {
 
-  llvm::Instruction *IP = FindInstruction(InstructionOffset);
+  llvm37::Instruction *IP = FindInstruction(InstructionOffset);
 
   return dxil_debug_info::NewDxcPixDxilDebugInfoObjectOrThrow<
       dxil_debug_info::DxcPixDxilSourceLocations>(
@@ -176,7 +176,7 @@ dxil_debug_info::DxcPixDxilInstructionOffsets::DxcPixDxilInstructionOffsets(
   auto files = pSession->Contents()->operands();
   for (const auto& file : files)
   {
-    auto candidateFilename = llvm::dyn_cast<llvm::MDString>(file->getOperand(0))
+    auto candidateFilename = llvm37::dyn_cast<llvm37::MDString>(file->getOperand(0))
         ->getString();
 
     if (CompareFilenames(FileName, candidateFilename.str().c_str()))
@@ -224,14 +224,14 @@ DWORD dxil_debug_info::DxcPixDxilInstructionOffsets::GetOffsetByIndex(DWORD Inde
 dxil_debug_info::DxcPixDxilSourceLocations::DxcPixDxilSourceLocations(
     IMalloc* pMalloc,
     dxil_dia::Session* pSession,
-    llvm::Instruction* IP)
+    llvm37::Instruction* IP)
 {
-    const llvm::DITypeIdentifierMap EmptyMap;
+    const llvm37::DITypeIdentifierMap EmptyMap;
 
-    if (const llvm::DebugLoc& DL = IP->getDebugLoc())
+    if (const llvm37::DebugLoc& DL = IP->getDebugLoc())
     {
-        auto* S = llvm::dyn_cast<llvm::DIScope>(DL.getScope());
-        while (S != nullptr && !llvm::isa<llvm::DIFile>(S))
+        auto* S = llvm37::dyn_cast<llvm37::DIScope>(DL.getScope());
+        while (S != nullptr && !llvm37::isa<llvm37::DIFile>(S))
         {
             S = S->getScope().resolve(EmptyMap);
         }

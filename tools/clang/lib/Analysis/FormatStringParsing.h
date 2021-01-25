@@ -1,11 +1,11 @@
 
-#ifndef LLVM_CLANG_LIB_ANALYSIS_FORMATSTRINGPARSING_H
-#define LLVM_CLANG_LIB_ANALYSIS_FORMATSTRINGPARSING_H
+#ifndef LLVM37_CLANG_LIB_ANALYSIS_FORMATSTRINGPARSING_H
+#define LLVM37_CLANG_LIB_ANALYSIS_FORMATSTRINGPARSING_H
 
 #include "clang/AST/ASTContext.h"
 #include "clang/AST/Type.h"
 #include "clang/Analysis/Analyses/FormatString.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/Support/raw_ostream.h"
 
 namespace clang {
 

@@ -7,12 +7,12 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Support/Regex.h"
-#include "llvm/ADT/SmallVector.h"
+#include "llvm37/Support/Regex.h"
+#include "llvm37/ADT/SmallVector.h"
 #include "gtest/gtest.h"
 #include <cstring>
 
-using namespace llvm;
+using namespace llvm37;
 namespace {
 
 class RegexTest : public ::testing::Test {

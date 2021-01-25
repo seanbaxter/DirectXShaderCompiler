@@ -18,10 +18,10 @@
 #include "clang/AST/DeclTemplate.h"
 #include "clang/Sema/Scope.h"
 #include "clang/Sema/Sema.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/ADT/Twine.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/ADT/Twine.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <algorithm>
 #include <cstring>
 #include <functional>
@@ -226,7 +226,7 @@ const char *CodeCompletionString::getAnnotation(unsigned AnnotationNr) const {
 
 std::string CodeCompletionString::getAsString() const {
   std::string Result;
-  llvm::raw_string_ostream OS(Result);
+  llvm37::raw_string_ostream OS(Result);
                           
   for (iterator C = begin(), CEnd = end(); C != CEnd; ++C) {
     switch (C->Kind) {
@@ -293,7 +293,7 @@ StringRef CodeCompletionTUInfo::getParentName(const DeclContext *DC) {
 
   {
     SmallString<128> S;
-    llvm::raw_svector_ostream OS(S);
+    llvm37::raw_svector_ostream OS(S);
     bool First = true;
     for (unsigned I = Contexts.size(); I != 0; --I) {
       if (First)
@@ -331,7 +331,7 @@ CodeCompletionString *CodeCompletionBuilder::TakeString() {
   void *Mem = getAllocator().Allocate(
                   sizeof(CodeCompletionString) + sizeof(Chunk) * Chunks.size()
                                     + sizeof(const char *) * Annotations.size(),
-                                 llvm::alignOf<CodeCompletionString>());
+                                 llvm37::alignOf<CodeCompletionString>());
   CodeCompletionString *Result 
     = new (Mem) CodeCompletionString(Chunks.data(), Chunks.size(),
                                      Priority, Availability,
@@ -490,7 +490,7 @@ PrintingCodeCompleteConsumer::ProcessCodeCompleteResults(Sema &SemaRef,
 // chunks.
 static std::string getOverloadAsString(const CodeCompletionString &CCS) {
   std::string Result;
-  llvm::raw_string_ostream OS(Result);
+  llvm37::raw_string_ostream OS(Result);
 
   for (auto &C : CCS) {
     switch (C.Kind) {

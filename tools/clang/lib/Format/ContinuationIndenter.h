@@ -13,13 +13,13 @@
 ///
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_LIB_FORMAT_CONTINUATIONINDENTER_H
-#define LLVM_CLANG_LIB_FORMAT_CONTINUATIONINDENTER_H
+#ifndef LLVM37_CLANG_LIB_FORMAT_CONTINUATIONINDENTER_H
+#define LLVM37_CLANG_LIB_FORMAT_CONTINUATIONINDENTER_H
 
 #include "Encoding.h"
 #include "FormatToken.h"
 #include "clang/Format/Format.h"
-#include "llvm/Support/Regex.h"
+#include "llvm37/Support/Regex.h"
 
 namespace clang {
 class SourceManager;
@@ -141,7 +141,7 @@ private:
   WhitespaceManager &Whitespaces;
   encoding::Encoding Encoding;
   bool BinPackInconclusiveFunctions;
-  llvm::Regex CommentPragmasRegex;
+  llvm37::Regex CommentPragmasRegex;
 };
 
 struct ParenState {

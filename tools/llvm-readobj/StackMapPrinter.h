@@ -7,12 +7,12 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_TOOLS_LLVM_READOBJ_STACKMAPPRINTER_H
-#define LLVM_TOOLS_LLVM_READOBJ_STACKMAPPRINTER_H
+#ifndef LLVM37_TOOLS_LLVM37_READOBJ_STACKMAPPRINTER_H
+#define LLVM37_TOOLS_LLVM37_READOBJ_STACKMAPPRINTER_H
 
-#include "llvm/Object/StackMapParser.h"
+#include "llvm37/Object/StackMapParser.h"
 
-namespace llvm {
+namespace llvm37 {
 
 // Pretty print a stackmap to the given ostream.
 template <typename OStreamT, typename StackMapParserT>

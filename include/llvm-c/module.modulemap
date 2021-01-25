@@ -1,4 +1,4 @@
-module LLVM_C {
+module LLVM37_C {
   umbrella "."
   module * { export * }
 }

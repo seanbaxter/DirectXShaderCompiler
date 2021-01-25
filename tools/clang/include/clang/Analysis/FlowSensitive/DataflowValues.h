@@ -13,12 +13,12 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_ANALYSES_DATAFLOW_VALUES
-#define LLVM_CLANG_ANALYSES_DATAFLOW_VALUES
+#ifndef LLVM37_CLANG_ANALYSES_DATAFLOW_VALUES
+#define LLVM37_CLANG_ANALYSES_DATAFLOW_VALUES
 
 #include "clang/Analysis/CFG.h"
 #include "clang/Analysis/ProgramPoint.h"
-#include "llvm/ADT/DenseMap.h"
+#include "llvm37/ADT/DenseMap.h"
 
 //===----------------------------------------------------------------------===//
 /// Dataflow Directional Tag Classes.  These are used for tag dispatching
@@ -49,9 +49,9 @@ public:
   typedef typename ValueTypes::ValTy               ValTy;
   typedef typename ValueTypes::AnalysisDataTy      AnalysisDataTy;
   typedef _AnalysisDirTag                          AnalysisDirTag;
-  typedef llvm::DenseMap<ProgramPoint, ValTy>      EdgeDataMapTy;
-  typedef llvm::DenseMap<const CFGBlock*, ValTy>   BlockDataMapTy;
-  typedef llvm::DenseMap<const Stmt*, ValTy>       StmtDataMapTy;
+  typedef llvm37::DenseMap<ProgramPoint, ValTy>      EdgeDataMapTy;
+  typedef llvm37::DenseMap<const CFGBlock*, ValTy>   BlockDataMapTy;
+  typedef llvm37::DenseMap<const Stmt*, ValTy>       StmtDataMapTy;
 
   //===--------------------------------------------------------------------===//
   // Predicates.

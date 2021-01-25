@@ -9,13 +9,13 @@
 
 #include "Win64EHDumper.h"
 #include "llvm-readobj.h"
-#include "llvm/Object/COFF.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/Format.h"
+#include "llvm37/Object/COFF.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/Format.h"
 
-using namespace llvm;
-using namespace llvm::object;
-using namespace llvm::Win64EH;
+using namespace llvm37;
+using namespace llvm37::object;
+using namespace llvm37::Win64EH;
 
 static const EnumEntry<unsigned> UnwindFlags[] = {
   { "ExceptionHandler", UNW_ExceptionHandler },
@@ -157,7 +157,7 @@ static std::error_code resolveRelocation(const Dumper::Context &Ctx,
   return std::error_code();
 }
 
-namespace llvm {
+namespace llvm37 {
 namespace Win64EH {
 void Dumper::printRuntimeFunctionEntry(const Context &Ctx,
                                        const coff_section *Section,

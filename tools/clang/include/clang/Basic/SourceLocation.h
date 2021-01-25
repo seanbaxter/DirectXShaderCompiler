@@ -12,18 +12,18 @@
 ///
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_BASIC_SOURCELOCATION_H
-#define LLVM_CLANG_BASIC_SOURCELOCATION_H
+#ifndef LLVM37_CLANG_BASIC_SOURCELOCATION_H
+#define LLVM37_CLANG_BASIC_SOURCELOCATION_H
 
 #include "clang/Basic/LLVM.h"
-#include "llvm/Support/Compiler.h"
-#include "llvm/Support/PointerLikeTypeTraits.h"
+#include "llvm37/Support/Compiler.h"
+#include "llvm37/Support/PointerLikeTypeTraits.h"
 #include <cassert>
 #include <functional>
 #include <string>
 #include <utility>
 
-namespace llvm {
+namespace llvm37 {
   class MemoryBuffer;
   template <typename T> struct DenseMapInfo;
   template <typename T> struct isPodLike;
@@ -392,7 +392,7 @@ public:
 
 }  // end namespace clang
 
-namespace llvm {
+namespace llvm37 {
   /// Define DenseMapInfo so that FileID's can be used as keys in DenseMap and
   /// DenseSets.
   template <>
@@ -431,6 +431,6 @@ namespace llvm {
     enum { NumLowBitsAvailable = 0 };
   };
 
-}  // end namespace llvm
+}  // end namespace llvm37
 
 #endif

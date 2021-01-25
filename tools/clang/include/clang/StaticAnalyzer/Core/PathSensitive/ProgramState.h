@@ -11,8 +11,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_STATICANALYZER_CORE_PATHSENSITIVE_PROGRAMSTATE_H
-#define LLVM_CLANG_STATICANALYZER_CORE_PATHSENSITIVE_PROGRAMSTATE_H
+#ifndef LLVM37_CLANG_STATICANALYZER_CORE_PATHSENSITIVE_PROGRAMSTATE_H
+#define LLVM37_CLANG_STATICANALYZER_CORE_PATHSENSITIVE_PROGRAMSTATE_H
 
 #include "clang/Basic/LLVM.h"
 #include "clang/StaticAnalyzer/Core/PathSensitive/ConstraintManager.h"
@@ -22,12 +22,12 @@
 #include "clang/StaticAnalyzer/Core/PathSensitive/SValBuilder.h"
 #include "clang/StaticAnalyzer/Core/PathSensitive/Store.h"
 #include "clang/StaticAnalyzer/Core/PathSensitive/TaintTag.h"
-#include "llvm/ADT/FoldingSet.h"
-#include "llvm/ADT/ImmutableMap.h"
-#include "llvm/ADT/PointerIntPair.h"
-#include "llvm/Support/Allocator.h"
+#include "llvm37/ADT/FoldingSet.h"
+#include "llvm37/ADT/ImmutableMap.h"
+#include "llvm37/ADT/PointerIntPair.h"
+#include "llvm37/Support/Allocator.h"
 
-namespace llvm {
+namespace llvm37 {
 class APSInt;
 }
 
@@ -70,10 +70,10 @@ template <typename T> struct ProgramStateTrait {
 ///  ProgramState is intended to be used as a functional object; that is,
 ///  once it is created and made "persistent" in a FoldingSet, its
 ///  values will never change.
-class ProgramState : public llvm::FoldingSetNode {
+class ProgramState : public llvm37::FoldingSetNode {
 public:
-  typedef llvm::ImmutableSet<llvm::APSInt*>                IntSetTy;
-  typedef llvm::ImmutableMap<void*, void*>                 GenericDataMap;
+  typedef llvm37::ImmutableSet<llvm37::APSInt*>                IntSetTy;
+  typedef llvm37::ImmutableMap<void*, void*>                 GenericDataMap;
 
 private:
   void operator=(const ProgramState& R) = delete;
@@ -130,7 +130,7 @@ public:
   /// Profile - Profile the contents of a ProgramState object for use in a
   ///  FoldingSet.  Two ProgramState objects are considered equal if they
   ///  have the same Environment, Store, and GenericDataMap.
-  static void Profile(llvm::FoldingSetNodeID& ID, const ProgramState *V) {
+  static void Profile(llvm37::FoldingSetNodeID& ID, const ProgramState *V) {
     V->Env.Profile(ID);
     ID.AddPointer(V->store);
     V->GDM.Profile(ID);
@@ -138,7 +138,7 @@ public:
 
   /// Profile - Used to profile the contents of this object for inclusion
   ///  in a FoldingSet.
-  void Profile(llvm::FoldingSetNodeID& ID) const {
+  void Profile(llvm37::FoldingSetNodeID& ID) const {
     Profile(ID, this);
   }
 
@@ -447,12 +447,12 @@ private:
 
   ProgramState::GenericDataMap::Factory     GDMFactory;
 
-  typedef llvm::DenseMap<void*,std::pair<void*,void (*)(void*)> > GDMContextsTy;
+  typedef llvm37::DenseMap<void*,std::pair<void*,void (*)(void*)> > GDMContextsTy;
   GDMContextsTy GDMContexts;
 
   /// StateSet - FoldingSet containing all the states created for analyzing
   ///  a particular function.  This is used to unique states.
-  llvm::FoldingSet<ProgramState> StateSet;
+  llvm37::FoldingSet<ProgramState> StateSet;
 
   /// Object that manages the data for all created SVals.
   std::unique_ptr<SValBuilder> svalBuilder;
@@ -461,7 +461,7 @@ private:
   std::unique_ptr<CallEventManager> CallEventMgr;
 
   /// A BumpPtrAllocator to allocate states.
-  llvm::BumpPtrAllocator &Alloc;
+  llvm37::BumpPtrAllocator &Alloc;
   
   /// A vector of ProgramStates that we can reuse.
   std::vector<ProgramState *> freeStates;
@@ -470,7 +470,7 @@ public:
   ProgramStateManager(ASTContext &Ctx,
                  StoreManagerCreator CreateStoreManager,
                  ConstraintManagerCreator CreateConstraintManager,
-                 llvm::BumpPtrAllocator& alloc,
+                 llvm37::BumpPtrAllocator& alloc,
                  SubEngine *subeng);
 
   ~ProgramStateManager();
@@ -495,7 +495,7 @@ public:
     return svalBuilder->getSymbolManager();
   }
 
-  llvm::BumpPtrAllocator& getAllocator() { return Alloc; }
+  llvm37::BumpPtrAllocator& getAllocator() { return Alloc; }
 
   MemRegionManager& getRegionManager() {
     return svalBuilder->getRegionManager();
@@ -600,7 +600,7 @@ public:
   }
 
   void *FindGDMContext(void *index,
-                       void *(*CreateContext)(llvm::BumpPtrAllocator&),
+                       void *(*CreateContext)(llvm37::BumpPtrAllocator&),
                        void  (*DeleteContext)(void*));
 
   template <typename T>
@@ -797,7 +797,7 @@ CB ProgramState::scanReachableSymbols(const MemRegion * const *beg,
 /// A Utility class that allows to visit the reachable symbols using a custom
 /// SymbolVisitor.
 class ScanReachableSymbols {
-  typedef llvm::DenseSet<const void*> VisitedItems;
+  typedef llvm37::DenseSet<const void*> VisitedItems;
 
   VisitedItems visited;
   ProgramStateRef state;

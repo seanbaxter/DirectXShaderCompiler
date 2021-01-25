@@ -10,8 +10,8 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef LLVM_CLANG_SEMA_SEMAHLSL_H
-#define LLVM_CLANG_SEMA_SEMAHLSL_H
+#ifndef LLVM37_CLANG_SEMA_SEMAHLSL_H
+#define LLVM37_CLANG_SEMA_SEMAHLSL_H
 
 #include "clang/AST/ASTContext.h"
 #include "clang/Sema/Sema.h"
@@ -60,13 +60,13 @@ clang::Sema::TemplateDeductionResult DeduceTemplateArgumentsForHLSL(
   clang::Sema*, 
   clang::FunctionTemplateDecl *, 
   clang::TemplateArgumentListInfo *, 
-  llvm::ArrayRef<clang::Expr *>, 
+  llvm37::ArrayRef<clang::Expr *>, 
   clang::FunctionDecl *&, 
   clang::sema::TemplateDeductionInfo &);
 
 void DiagnoseControlFlowConditionForHLSL(clang::Sema *self,
                                          clang::Expr *condExpr,
-                                         llvm::StringRef StmtName);
+                                         llvm37::StringRef StmtName);
 
 void DiagnosePackingOffset(
   clang::Sema* self,
@@ -207,9 +207,9 @@ clang::ImplicitConversionSequence TrySubscriptIndexInitialization(
   clang::QualType DestType);
 
 bool IsHLSLAttr(clang::attr::Kind AttrKind);
-void CustomPrintHLSLAttr(const clang::Attr *A, llvm::raw_ostream &Out, const clang::PrintingPolicy &Policy, unsigned int Indentation);
-void PrintClipPlaneIfPresent(clang::Expr *ClipPlane, llvm::raw_ostream &Out, const clang::PrintingPolicy &Policy);
-void Indent(unsigned int Indentation, llvm::raw_ostream &Out);
+void CustomPrintHLSLAttr(const clang::Attr *A, llvm37::raw_ostream &Out, const clang::PrintingPolicy &Policy, unsigned int Indentation);
+void PrintClipPlaneIfPresent(clang::Expr *ClipPlane, llvm37::raw_ostream &Out, const clang::PrintingPolicy &Policy);
+void Indent(unsigned int Indentation, llvm37::raw_ostream &Out);
 void GetHLSLAttributedTypes(
     _In_ clang::Sema *self, clang::QualType type,
     _Inout_opt_ const clang::AttributedType **ppMatrixOrientation,

@@ -13,7 +13,7 @@
 //===----------------------------------------------------------------------===//
 
 #include "clang/Lex/PPConditionalDirectiveRecord.h"
-#include "llvm/Support/Capacity.h"
+#include "llvm37/Support/Capacity.h"
 //                                                                           //
 ///////////////////////////////////////////////////////////////////////////////
 using namespace clang;
@@ -120,5 +120,5 @@ void PPConditionalDirectiveRecord::Endif(SourceLocation Loc,
 }
 
 size_t PPConditionalDirectiveRecord::getTotalMemory() const {
-  return llvm::capacity_in_bytes(CondDirectiveLocs);
+  return llvm37::capacity_in_bytes(CondDirectiveLocs);
 }

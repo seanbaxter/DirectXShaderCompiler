@@ -22,9 +22,9 @@
 #include "clang/AST/Type.h"
 #include "clang/AST/TypeVisitor.h"
 #include "clang/Basic/Specifiers.h"
-#include "llvm/ADT/APSInt.h"
-#include "llvm/ADT/StringExtras.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/APSInt.h"
+#include "llvm37/ADT/StringExtras.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <algorithm>
 using namespace clang;
 
@@ -75,7 +75,7 @@ bool QualType::isConstant(QualType T, ASTContext &Ctx) {
 
 unsigned ConstantArrayType::getNumAddressingBits(ASTContext &Context,
                                                  QualType ElementType,
-                                               const llvm::APInt &NumElements) {
+                                               const llvm37::APInt &NumElements) {
   uint64_t ElementSize = Context.getTypeSizeInChars(ElementType).getQuantity();
 
   // Fast path the common cases so we can avoid the conservative computation
@@ -84,8 +84,8 @@ unsigned ConstantArrayType::getNumAddressingBits(ASTContext &Context,
 
   // If the element size is a power of 2, we can directly compute the additional
   // number of addressing bits beyond those required for the element count.
-  if (llvm::isPowerOf2_64(ElementSize)) {
-    return NumElements.getActiveBits() + llvm::Log2_64(ElementSize);
+  if (llvm37::isPowerOf2_64(ElementSize)) {
+    return NumElements.getActiveBits() + llvm37::Log2_64(ElementSize);
   }
 
   // If both the element count and element size fit in 32-bits, we can do the
@@ -93,16 +93,16 @@ unsigned ConstantArrayType::getNumAddressingBits(ASTContext &Context,
   if ((ElementSize >> 32) == 0 && NumElements.getBitWidth() <= 64 &&
       (NumElements.getZExtValue() >> 32) == 0) {
     uint64_t TotalSize = NumElements.getZExtValue() * ElementSize;
-    return 64 - llvm::countLeadingZeros(TotalSize);
+    return 64 - llvm37::countLeadingZeros(TotalSize);
   }
 
   // Otherwise, use APSInt to handle arbitrary sized values.
-  llvm::APSInt SizeExtended(NumElements, true);
+  llvm37::APSInt SizeExtended(NumElements, true);
   unsigned SizeTypeBits = Context.getTypeSize(Context.getSizeType());
   SizeExtended = SizeExtended.extend(std::max(SizeTypeBits,
                                               SizeExtended.getBitWidth()) * 2);
 
-  llvm::APSInt TotalSize(llvm::APInt(SizeExtended.getBitWidth(), ElementSize));
+  llvm37::APSInt TotalSize(llvm37::APInt(SizeExtended.getBitWidth(), ElementSize));
   TotalSize *= SizeExtended;  
 
   return TotalSize.getActiveBits();
@@ -132,7 +132,7 @@ DependentSizedArrayType::DependentSizedArrayType(const ASTContext &Context,
 {
 }
 
-void DependentSizedArrayType::Profile(llvm::FoldingSetNodeID &ID,
+void DependentSizedArrayType::Profile(llvm37::FoldingSetNodeID &ID,
                                       const ASTContext &Context,
                                       QualType ET,
                                       ArraySizeModifier SizeMod,
@@ -161,7 +161,7 @@ DependentSizedExtVectorType::DependentSizedExtVectorType(const
 }
 
 void
-DependentSizedExtVectorType::Profile(llvm::FoldingSetNodeID &ID,
+DependentSizedExtVectorType::Profile(llvm37::FoldingSetNodeID &ID,
                                      const ASTContext &Context,
                                      QualType ElementType, Expr *SizeExpr) {
   ID.AddPointer(ElementType.getAsOpaquePtr());
@@ -837,10 +837,10 @@ public:
 
       if (exceptionChanged) {
         unsigned size = sizeof(QualType) * exceptionTypes.size();
-        void *mem = Ctx.Allocate(size, llvm::alignOf<QualType>());
+        void *mem = Ctx.Allocate(size, llvm37::alignOf<QualType>());
         memcpy(mem, exceptionTypes.data(), size);
         info.ExceptionSpec.Exceptions
-          = llvm::makeArrayRef((QualType *)mem, exceptionTypes.size());
+          = llvm37::makeArrayRef((QualType *)mem, exceptionTypes.size());
       }
     }
 
@@ -982,7 +982,7 @@ public:
       return QualType(T, 0);
 
     return Ctx.getObjCObjectType(baseType, typeArgs, 
-                                 llvm::makeArrayRef(T->qual_begin(),
+                                 llvm37::makeArrayRef(T->qual_begin(),
                                                     T->getNumProtocols()),
                                  T->isKindOfTypeAsWritten());
   }
@@ -1160,10 +1160,10 @@ QualType QualType::substObjCTypeArgs(
 
         if (exceptionChanged) {
           unsigned size = sizeof(QualType) * exceptionTypes.size();
-          void *mem = ctx.Allocate(size, llvm::alignOf<QualType>());
+          void *mem = ctx.Allocate(size, llvm37::alignOf<QualType>());
           memcpy(mem, exceptionTypes.data(), size);
           info.ExceptionSpec.Exceptions
-            = llvm::makeArrayRef((QualType *)mem, exceptionTypes.size());
+            = llvm37::makeArrayRef((QualType *)mem, exceptionTypes.size());
         }
       }
 
@@ -1313,7 +1313,7 @@ Optional<ArrayRef<QualType>> Type::getObjCSubstitutions(
   if (!curClassDecl) {
     // If we don't have a context type (e.g., this is "id" or some
     // variant thereof), substitute the bounds.
-    return llvm::ArrayRef<QualType>();
+    return llvm37::ArrayRef<QualType>();
   }
 
   // Follow the superclass chain until we've mapped the receiver type
@@ -1333,7 +1333,7 @@ Optional<ArrayRef<QualType>> Type::getObjCSubstitutions(
   // If we don't have a receiver type, or the receiver type does not
   // have type arguments, substitute in the defaults.
   if (!objectType || objectType->isUnspecialized()) {
-    return llvm::ArrayRef<QualType>();
+    return llvm37::ArrayRef<QualType>();
   }
 
   // The receiver type has the type arguments we want.
@@ -2451,7 +2451,7 @@ DependentTemplateSpecializationType::DependentTemplateSpecializationType(
 }
 
 void
-DependentTemplateSpecializationType::Profile(llvm::FoldingSetNodeID &ID,
+DependentTemplateSpecializationType::Profile(llvm37::FoldingSetNodeID &ID,
                                              const ASTContext &Context,
                                              ElaboratedTypeKeyword Keyword,
                                              NestedNameSpecifier *Qualifier,
@@ -2721,7 +2721,7 @@ FunctionProtoType::getNoexceptSpec(const ASTContext &ctx) const {
   if (noexceptExpr->isValueDependent())
     return NR_Dependent;
 
-  llvm::APSInt value;
+  llvm37::APSInt value;
   bool isICE = noexceptExpr->isIntegerConstantExpr(value, ctx, nullptr,
                                                    /*evaluated*/false);
   (void)isICE;
@@ -2763,7 +2763,7 @@ bool FunctionProtoType::isTemplateVariadic() const {
   return false;
 }
 
-void FunctionProtoType::Profile(llvm::FoldingSetNodeID &ID, QualType Result,
+void FunctionProtoType::Profile(llvm37::FoldingSetNodeID &ID, QualType Result,
                                 const QualType *ArgTys, unsigned NumParams,
                                 const ExtProtoInfo &epi,
                                 ArrayRef<hlsl::ParameterModifier> ParamMods, // HLSL Change
@@ -2826,7 +2826,7 @@ void FunctionProtoType::Profile(llvm::FoldingSetNodeID &ID, QualType Result,
   ID.AddBoolean(epi.HasTrailingReturn);
 }
 
-void FunctionProtoType::Profile(llvm::FoldingSetNodeID &ID,
+void FunctionProtoType::Profile(llvm37::FoldingSetNodeID &ID,
                                 const ASTContext &Ctx) {
   Profile(ID, getReturnType(), param_type_begin(), NumParams, getExtProtoInfo(), getParamMods(), // HLSL Change
           Ctx);
@@ -2855,7 +2855,7 @@ QualType TypeOfExprType::desugar() const {
   return QualType(this, 0);
 }
 
-void DependentTypeOfExprType::Profile(llvm::FoldingSetNodeID &ID,
+void DependentTypeOfExprType::Profile(llvm37::FoldingSetNodeID &ID,
                                       const ASTContext &Context, Expr *E) {
   E->Profile(ID, Context, true);
 }
@@ -2884,7 +2884,7 @@ QualType DecltypeType::desugar() const {
 DependentDecltypeType::DependentDecltypeType(const ASTContext &Context, Expr *E)
   : DecltypeType(E, Context.DependentTy), Context(Context) { }
 
-void DependentDecltypeType::Profile(llvm::FoldingSetNodeID &ID,
+void DependentDecltypeType::Profile(llvm37::FoldingSetNodeID &ID,
                                     const ASTContext &Context, Expr *E) {
   E->Profile(ID, Context, true);
 }
@@ -3016,11 +3016,11 @@ TemplateArgument SubstTemplateTypeParmPackType::getArgumentPack() const {
   return TemplateArgument(Arguments, NumArguments);
 }
 
-void SubstTemplateTypeParmPackType::Profile(llvm::FoldingSetNodeID &ID) {
+void SubstTemplateTypeParmPackType::Profile(llvm37::FoldingSetNodeID &ID) {
   Profile(ID, getReplacedParameter(), getArgumentPack());
 }
 
-void SubstTemplateTypeParmPackType::Profile(llvm::FoldingSetNodeID &ID,
+void SubstTemplateTypeParmPackType::Profile(llvm37::FoldingSetNodeID &ID,
                                            const TemplateTypeParmType *Replaced,
                                             const TemplateArgument &ArgPack) {
   ID.AddPointer(Replaced);
@@ -3098,7 +3098,7 @@ TemplateSpecializationType(TemplateName T,
 }
 
 void
-TemplateSpecializationType::Profile(llvm::FoldingSetNodeID &ID,
+TemplateSpecializationType::Profile(llvm37::FoldingSetNodeID &ID,
                                     TemplateName T,
                                     const TemplateArgument *Args,
                                     unsigned NumArgs,
@@ -3124,7 +3124,7 @@ QualifierCollector::apply(const ASTContext &Context, const Type *T) const {
   return Context.getQualifiedType(T, *this);
 }
 
-void ObjCObjectTypeImpl::Profile(llvm::FoldingSetNodeID &ID,
+void ObjCObjectTypeImpl::Profile(llvm37::FoldingSetNodeID &ID,
                                  QualType BaseType,
                                  ArrayRef<QualType> typeArgs,
                                  ArrayRef<ObjCProtocolDecl *> protocols,
@@ -3139,9 +3139,9 @@ void ObjCObjectTypeImpl::Profile(llvm::FoldingSetNodeID &ID,
   ID.AddBoolean(isKindOf);
 }
 
-void ObjCObjectTypeImpl::Profile(llvm::FoldingSetNodeID &ID) {
+void ObjCObjectTypeImpl::Profile(llvm37::FoldingSetNodeID &ID) {
   Profile(ID, getBaseType(), getTypeArgsAsWritten(),
-          llvm::makeArrayRef(qual_begin(), getNumProtocols()),
+          llvm37::makeArrayRef(qual_begin(), getNumProtocols()),
           isKindOfTypeAsWritten());
 }
 
@@ -3532,7 +3532,7 @@ bool Type::canHaveNullability() const {
   llvm_unreachable("bad type kind!");
 }
 
-llvm::Optional<NullabilityKind> AttributedType::getImmediateNullability() const {
+llvm37::Optional<NullabilityKind> AttributedType::getImmediateNullability() const {
   if (getAttrKind() == AttributedType::attr_nonnull)
     return NullabilityKind::NonNull;
   if (getAttrKind() == AttributedType::attr_nullable)

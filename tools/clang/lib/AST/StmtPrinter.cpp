@@ -22,8 +22,8 @@
 #include "clang/AST/PrettyPrinter.h"
 #include "clang/AST/StmtVisitor.h"
 #include "clang/Basic/CharInfo.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/Support/Format.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/Support/Format.h"
 #include "clang/Sema/SemaHLSL.h" // HLSL Change
 using namespace clang;
 
@@ -92,10 +92,10 @@ namespace  {
       else StmtVisitor<StmtPrinter>::Visit(S);
     }
 
-    void VisitStmt(Stmt *Node) LLVM_ATTRIBUTE_UNUSED {
+    void VisitStmt(Stmt *Node) LLVM37_ATTRIBUTE_UNUSED {
       Indent() << "<<unknown stmt type>>\n";
     }
-    void VisitExpr(Expr *Node) LLVM_ATTRIBUTE_UNUSED {
+    void VisitExpr(Expr *Node) LLVM37_ATTRIBUTE_UNUSED {
       OS << "<<unknown expr type>>";
     }
     void VisitCXXNamedCastExpr(CXXNamedCastExpr *Node);
@@ -1105,18 +1105,18 @@ void StmtPrinter::VisitCharacterLiteral(CharacterLiteral *Node) {
     // HLSL Change Begin
     if (Policy.LangOpts.HLSL && value > 255) {
       unsigned int truncVal = value & (~0xffffff00);
-      OS << "'\\x" << llvm::format("%02x", truncVal) << "'";
+      OS << "'\\x" << llvm37::format("%02x", truncVal) << "'";
     }
     else {
     // HLSL Change End
     if (value < 256 && isPrintable((unsigned char)value))
       OS << "'" << (char)value << "'";
     else if (value < 256)
-      OS << "'\\x" << llvm::format("%02x", value) << "'";
+      OS << "'\\x" << llvm37::format("%02x", value) << "'";
     else if (value <= 0xFFFF)
-      OS << "'\\u" << llvm::format("%04x", value) << "'";
+      OS << "'\\u" << llvm37::format("%04x", value) << "'";
     else
-      OS << "'\\U" << llvm::format("%08x", value) << "'";
+      OS << "'\\U" << llvm37::format("%08x", value) << "'";
     }
   }
 }
@@ -1976,7 +1976,7 @@ void StmtPrinter::VisitCXXNewExpr(CXXNewExpr *E) {
     OS << "(";
   std::string TypeS;
   if (Expr *Size = E->getArraySize()) {
-    llvm::raw_string_ostream s(TypeS);
+    llvm37::raw_string_ostream s(TypeS);
     s << '[';
     Size->printPretty(s, Helper, Policy);
     s << ']';
@@ -2353,7 +2353,7 @@ void StmtPrinter::VisitAsTypeExpr(AsTypeExpr *Node) {
 //===----------------------------------------------------------------------===//
 
 void Stmt::dumpPretty(const ASTContext &Context) const {
-  printPretty(llvm::errs(), nullptr, PrintingPolicy(Context.getLangOpts()));
+  printPretty(llvm37::errs(), nullptr, PrintingPolicy(Context.getLangOpts()));
 }
 
 void Stmt::printPretty(raw_ostream &OS,

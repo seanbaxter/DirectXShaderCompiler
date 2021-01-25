@@ -15,16 +15,16 @@
 #include "clang/Basic/AddressSpaces.h"
 #include "clang/Basic/CharInfo.h"
 #include "clang/Basic/LangOptions.h"
-#include "llvm/ADT/APFloat.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/Support/ErrorHandling.h"
+#include "llvm37/ADT/APFloat.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/Support/ErrorHandling.h"
 #include <cstdlib>
 using namespace clang;
 
 static const LangAS::Map DefaultAddrSpaceMap = { 0 };
 
 // TargetInfo Constructor.
-TargetInfo::TargetInfo(const llvm::Triple &T) : TargetOpts(), Triple(T) {
+TargetInfo::TargetInfo(const llvm37::Triple &T) : TargetOpts(), Triple(T) {
   // Set defaults.  Defaults are set for a 32-bit RISC platform, like PPC or
   // SPARC.  These should be overridden by concrete targets as needed.
   BigEndian = true;
@@ -67,10 +67,10 @@ TargetInfo::TargetInfo(const llvm::Triple &T) : TargetOpts(), Triple(T) {
   UseBitFieldTypeAlignment = true;
   UseZeroLengthBitfieldAlignment = false;
   ZeroLengthBitfieldBoundary = 0;
-  HalfFormat = &llvm::APFloat::IEEEhalf;
-  FloatFormat = &llvm::APFloat::IEEEsingle;
-  DoubleFormat = &llvm::APFloat::IEEEdouble;
-  LongDoubleFormat = &llvm::APFloat::IEEEdouble;
+  HalfFormat = &llvm37::APFloat::IEEEhalf;
+  FloatFormat = &llvm37::APFloat::IEEEsingle;
+  DoubleFormat = &llvm37::APFloat::IEEEdouble;
+  LongDoubleFormat = &llvm37::APFloat::IEEEdouble;
   DescriptionString = nullptr;
   UserLabelPrefix = "_";
   MCountName = "mcount";
@@ -216,12 +216,12 @@ TargetInfo::RealType TargetInfo::getRealTypeByWidth(unsigned BitWidth) const {
 
   switch (BitWidth) {
   case 96:
-    if (&getLongDoubleFormat() == &llvm::APFloat::x87DoubleExtended)
+    if (&getLongDoubleFormat() == &llvm37::APFloat::x87DoubleExtended)
       return LongDouble;
     break;
   case 128:
-    if (&getLongDoubleFormat() == &llvm::APFloat::PPCDoubleDouble ||
-        &getLongDoubleFormat() == &llvm::APFloat::IEEEquad)
+    if (&getLongDoubleFormat() == &llvm37::APFloat::PPCDoubleDouble ||
+        &getLongDoubleFormat() == &llvm37::APFloat::IEEEquad)
       return LongDouble;
     break;
   }
@@ -292,7 +292,7 @@ void TargetInfo::adjust(const LangOptions &Opts) {
     // to generating illegal code that uses 64bit doubles.
     if (DoubleWidth != FloatWidth) {
       DoubleWidth = DoubleAlign = 64;
-      DoubleFormat = &llvm::APFloat::IEEEdouble;
+      DoubleFormat = &llvm37::APFloat::IEEEdouble;
     }
     LongDoubleWidth = LongDoubleAlign = 128;
 
@@ -305,9 +305,9 @@ void TargetInfo::adjust(const LangOptions &Opts) {
     IntMaxType = SignedLongLong;
     Int64Type = SignedLong;
 
-    HalfFormat = &llvm::APFloat::IEEEhalf;
-    FloatFormat = &llvm::APFloat::IEEEsingle;
-    LongDoubleFormat = &llvm::APFloat::IEEEquad;
+    HalfFormat = &llvm37::APFloat::IEEEhalf;
+    FloatFormat = &llvm37::APFloat::IEEEsingle;
+    LongDoubleFormat = &llvm37::APFloat::IEEEquad;
   }
 }
 
@@ -364,7 +364,7 @@ bool TargetInfo::isValidGCCRegisterName(StringRef Name) const {
   unsigned NumAddlNames;
   getGCCAddlRegNames(AddlNames, NumAddlNames);
   for (unsigned i = 0; i < NumAddlNames; i++)
-    for (unsigned j = 0; j < llvm::array_lengthof(AddlNames[i].Names); j++) {
+    for (unsigned j = 0; j < llvm37::array_lengthof(AddlNames[i].Names); j++) {
       if (!AddlNames[i].Names[j])
 	break;
       // Make sure the register that the additional name is for is within
@@ -379,7 +379,7 @@ bool TargetInfo::isValidGCCRegisterName(StringRef Name) const {
 
   getGCCRegAliases(Aliases, NumAliases);
   for (unsigned i = 0; i < NumAliases; i++) {
-    for (unsigned j = 0 ; j < llvm::array_lengthof(Aliases[i].Aliases); j++) {
+    for (unsigned j = 0 ; j < llvm37::array_lengthof(Aliases[i].Aliases); j++) {
       if (!Aliases[i].Aliases[j])
         break;
       if (Aliases[i].Aliases[j] == Name)
@@ -417,7 +417,7 @@ TargetInfo::getNormalizedGCCRegisterName(StringRef Name) const {
   unsigned NumAddlNames;
   getGCCAddlRegNames(AddlNames, NumAddlNames);
   for (unsigned i = 0; i < NumAddlNames; i++)
-    for (unsigned j = 0; j < llvm::array_lengthof(AddlNames[i].Names); j++) {
+    for (unsigned j = 0; j < llvm37::array_lengthof(AddlNames[i].Names); j++) {
       if (!AddlNames[i].Names[j])
 	break;
       // Make sure the register that the additional name is for is within
@@ -432,7 +432,7 @@ TargetInfo::getNormalizedGCCRegisterName(StringRef Name) const {
 
   getGCCRegAliases(Aliases, NumAliases);
   for (unsigned i = 0; i < NumAliases; i++) {
-    for (unsigned j = 0 ; j < llvm::array_lengthof(Aliases[i].Aliases); j++) {
+    for (unsigned j = 0 ; j < llvm37::array_lengthof(Aliases[i].Aliases); j++) {
       if (!Aliases[i].Aliases[j])
         break;
       if (Aliases[i].Aliases[j] == Name)
@@ -651,9 +651,9 @@ bool TargetInfo::validateInputConstraint(ConstraintInfo *OutputConstraints,
   return true;
 }
 
-bool TargetCXXABI::tryParse(llvm::StringRef name) {
+bool TargetCXXABI::tryParse(llvm37::StringRef name) {
   const Kind unknown = static_cast<Kind>(-1);
-  Kind kind = llvm::StringSwitch<Kind>(name)
+  Kind kind = llvm37::StringSwitch<Kind>(name)
     .Case("arm", GenericARM)
     .Case("ios", iOS)
     .Case("itanium", GenericItanium)

@@ -17,8 +17,8 @@
 
 #include "dia2.h"
 
-#include "llvm/ADT/StringRef.h"
-#include "llvm/IR/Metadata.h"
+#include "llvm37/ADT/StringRef.h"
+#include "llvm37/IR/Metadata.h"
 
 #include "dxc/Support/Global.h"
 #include "dxc/Support/microcom.h"
@@ -44,9 +44,9 @@ public:
 
   SourceFile(IMalloc *pMalloc, Session *pSession, DWORD index);
 
-  llvm::MDTuple *NameContent() const;
+  llvm37::MDTuple *NameContent() const;
 
-  llvm::StringRef Name() const;
+  llvm37::StringRef Name() const;
 
   STDMETHODIMP get_uniqueId(
     /* [retval][out] */ DWORD *pRetVal) override;

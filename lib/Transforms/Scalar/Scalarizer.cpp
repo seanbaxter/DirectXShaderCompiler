@@ -14,17 +14,17 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/IR/IRBuilder.h"
-#include "llvm/IR/InstVisitor.h"
-#include "llvm/Pass.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Transforms/Scalar.h"
-#include "llvm/Transforms/Utils/BasicBlockUtils.h"
-#include "llvm/IR/DebugInfo.h" // HLSL Change -debug info in scalarizer.
-#include "llvm/IR/DIBuilder.h" // HLSL Change -debug info in scalarizer.
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/IR/IRBuilder.h"
+#include "llvm37/IR/InstVisitor.h"
+#include "llvm37/Pass.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Transforms/Scalar.h"
+#include "llvm37/Transforms/Utils/BasicBlockUtils.h"
+#include "llvm37/IR/DebugInfo.h" // HLSL Change -debug info in scalarizer.
+#include "llvm37/IR/DIBuilder.h" // HLSL Change -debug info in scalarizer.
 
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "scalarizer"
 
@@ -833,11 +833,11 @@ bool Scalarizer::finish() {
 }
 
 // HLSL Change Begin
-FunctionPass *llvm::createScalarizerPass(bool AllowFolding) {
+FunctionPass *llvm37::createScalarizerPass(bool AllowFolding) {
   Scalarizer *pass = new Scalarizer(AllowFolding);
   return pass;
 }
 // HLSL Change End
-FunctionPass *llvm::createScalarizerPass() {
+FunctionPass *llvm37::createScalarizerPass() {
   return new Scalarizer();
 }

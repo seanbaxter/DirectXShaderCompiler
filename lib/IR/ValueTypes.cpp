@@ -11,13 +11,13 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/CodeGen/ValueTypes.h"
-#include "llvm/ADT/StringExtras.h"
-#include "llvm/IR/DerivedTypes.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Type.h"
-#include "llvm/Support/ErrorHandling.h"
-using namespace llvm;
+#include "llvm37/CodeGen/ValueTypes.h"
+#include "llvm37/ADT/StringExtras.h"
+#include "llvm37/IR/DerivedTypes.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/Type.h"
+#include "llvm37/Support/ErrorHandling.h"
+using namespace llvm37;
 
 EVT EVT::changeExtendedVectorElementTypeToInteger() const {
   LLVMContext &Context = LLVMTy->getContext();

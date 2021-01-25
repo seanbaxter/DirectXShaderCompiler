@@ -7,16 +7,16 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/MC/MCExternalSymbolizer.h"
-#include "llvm/MC/MCContext.h"
-#include "llvm/MC/MCExpr.h"
-#include "llvm/MC/MCInst.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/MC/MCExternalSymbolizer.h"
+#include "llvm37/MC/MCContext.h"
+#include "llvm37/MC/MCExpr.h"
+#include "llvm37/MC/MCInst.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <cstring>
 
-using namespace llvm;
+using namespace llvm37;
 
-namespace llvm {
+namespace llvm37 {
 class Triple;
 }
 
@@ -187,7 +187,7 @@ void MCExternalSymbolizer::tryAddingPcLoadReferenceComment(raw_ostream &cStream,
   }
 }
 
-namespace llvm {
+namespace llvm37 {
 MCSymbolizer *createMCSymbolizer(const Triple &TT, LLVMOpInfoCallback GetOpInfo,
                                  LLVMSymbolLookupCallback SymbolLookUp,
                                  void *DisInfo, MCContext *Ctx,

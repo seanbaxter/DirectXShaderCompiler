@@ -24,7 +24,7 @@
 #include "dxc/dxcapi.h"
 #include "dxc/dxcisense.h"
 #include "dxc/Support/dxcapi.use.h"
-#include "llvm/Support/Atomic.h"
+#include "llvm37/Support/Atomic.h"
 
 inline HRESULT IFE(HRESULT hr) {
   if (FAILED(hr)) {
@@ -52,7 +52,7 @@ inline HRESULT GetFirstChildFromCursor(IDxcCursor *cursor,
 class TrivialDxcUnsavedFile : IDxcUnsavedFile
 {
 private:
-  volatile std::atomic<llvm::sys::cas_flag> m_dwRef;
+  volatile std::atomic<llvm37::sys::cas_flag> m_dwRef;
   LPCSTR m_fileName;
   LPCSTR m_contents;
   unsigned m_length;

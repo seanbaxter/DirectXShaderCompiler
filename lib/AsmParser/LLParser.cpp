@@ -12,25 +12,25 @@
 //===----------------------------------------------------------------------===//
 
 #include "LLParser.h"
-#include "llvm/ADT/SmallPtrSet.h"
-#include "llvm/AsmParser/SlotMapping.h"
-#include "llvm/IR/AutoUpgrade.h"
-#include "llvm/IR/CallingConv.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/DebugInfo.h"
-#include "llvm/IR/DebugInfoMetadata.h"
-#include "llvm/IR/DerivedTypes.h"
-#include "llvm/IR/InlineAsm.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/Operator.h"
-#include "llvm/IR/ValueSymbolTable.h"
-#include "llvm/Support/Dwarf.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/SaveAndRestore.h"
-#include "llvm/Support/raw_ostream.h"
-using namespace llvm;
+#include "llvm37/ADT/SmallPtrSet.h"
+#include "llvm37/AsmParser/SlotMapping.h"
+#include "llvm37/IR/AutoUpgrade.h"
+#include "llvm37/IR/CallingConv.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/DebugInfo.h"
+#include "llvm37/IR/DebugInfoMetadata.h"
+#include "llvm37/IR/DerivedTypes.h"
+#include "llvm37/IR/InlineAsm.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/Operator.h"
+#include "llvm37/IR/ValueSymbolTable.h"
+#include "llvm37/Support/Dwarf.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/SaveAndRestore.h"
+#include "llvm37/Support/raw_ostream.h"
+using namespace llvm37;
 
 static std::string getTypeString(Type *T) {
   std::string Result;
@@ -522,7 +522,7 @@ bool LLParser::parseComdat() {
 bool LLParser::ParseMDString(MDString *&Result) {
   std::string Str;
   if (ParseStringConstant(Str)) return true;
-  llvm::UpgradeMDStringConstant(Str);
+  llvm37::UpgradeMDStringConstant(Str);
   Result = MDString::get(Context, Str);
   return false;
 }
@@ -3112,7 +3112,7 @@ struct MDFieldList : public MDFieldImpl<SmallVector<Metadata *, 4>> {
 
 } // end namespace
 
-namespace llvm {
+namespace llvm37 {
 
 template <>
 bool LLParser::ParseMDField(LocTy Loc, StringRef Name,
@@ -3338,7 +3338,7 @@ bool LLParser::ParseMDField(LocTy Loc, StringRef Name, MDFieldList &Result) {
   return false;
 }
 
-} // end namespace llvm
+} // end namespace llvm37
 
 template <class ParserTy>
 bool LLParser::ParseMDFieldsImplBody(ParserTy parseField) {
@@ -3384,7 +3384,7 @@ bool LLParser::ParseSpecializedMDNode(MDNode *&N, bool IsDistinct) {
 #define HANDLE_SPECIALIZED_MDNODE_LEAF(CLASS)                                  \
   if (Lex.getStrVal() == #CLASS)                                               \
     return Parse##CLASS(N, IsDistinct);
-#include "llvm/IR/Metadata.def"
+#include "llvm37/IR/Metadata.def"
 
   return TokError("expected metadata type");
 }

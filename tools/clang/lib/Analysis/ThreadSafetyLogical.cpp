@@ -12,7 +12,7 @@
 
 #include "clang/Analysis/Analyses/ThreadSafetyLogical.h"
 
-using namespace llvm;
+using namespace llvm37;
 using namespace clang::threadSafety::lexpr;
 
 // Implication.  We implement De Morgan's Laws by maintaining LNeg and RNeg

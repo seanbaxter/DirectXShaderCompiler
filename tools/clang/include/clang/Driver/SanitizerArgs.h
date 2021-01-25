@@ -6,13 +6,13 @@
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
-#ifndef LLVM_CLANG_DRIVER_SANITIZERARGS_H
-#define LLVM_CLANG_DRIVER_SANITIZERARGS_H
+#ifndef LLVM37_CLANG_DRIVER_SANITIZERARGS_H
+#define LLVM37_CLANG_DRIVER_SANITIZERARGS_H
 
 #include "clang/Basic/Sanitizers.h"
 #include "clang/Driver/Types.h"
-#include "llvm/Option/Arg.h"
-#include "llvm/Option/ArgList.h"
+#include "llvm37/Option/Arg.h"
+#include "llvm37/Option/ArgList.h"
 #include <string>
 #include <vector>
 
@@ -37,7 +37,7 @@ class SanitizerArgs {
 
  public:
   /// Parses the sanitizer arguments from an argument list.
-  SanitizerArgs(const ToolChain &TC, const llvm::opt::ArgList &Args);
+  SanitizerArgs(const ToolChain &TC, const llvm37::opt::ArgList &Args);
 
   bool needsAsanRt() const { return Sanitizers.has(SanitizerKind::Address); }
   bool needsSharedAsanRt() const { return AsanSharedRuntime; }
@@ -56,8 +56,8 @@ class SanitizerArgs {
   bool requiresPIE() const;
   bool needsUnwindTables() const;
   bool linkCXXRuntimes() const { return LinkCXXRuntimes; }
-  void addArgs(const ToolChain &TC, const llvm::opt::ArgList &Args,
-               llvm::opt::ArgStringList &CmdArgs, types::ID InputType) const;
+  void addArgs(const ToolChain &TC, const llvm37::opt::ArgList &Args,
+               llvm37::opt::ArgStringList &CmdArgs, types::ID InputType) const;
 
  private:
   void clear();

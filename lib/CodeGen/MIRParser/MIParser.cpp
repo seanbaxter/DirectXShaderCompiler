@@ -13,19 +13,19 @@
 
 #include "MIParser.h"
 #include "MILexer.h"
-#include "llvm/ADT/StringMap.h"
-#include "llvm/AsmParser/SlotMapping.h"
-#include "llvm/CodeGen/MachineBasicBlock.h"
-#include "llvm/CodeGen/MachineFunction.h"
-#include "llvm/CodeGen/MachineInstr.h"
-#include "llvm/CodeGen/MachineInstrBuilder.h"
-#include "llvm/IR/Module.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Support/SourceMgr.h"
-#include "llvm/Target/TargetSubtargetInfo.h"
-#include "llvm/Target/TargetInstrInfo.h"
+#include "llvm37/ADT/StringMap.h"
+#include "llvm37/AsmParser/SlotMapping.h"
+#include "llvm37/CodeGen/MachineBasicBlock.h"
+#include "llvm37/CodeGen/MachineFunction.h"
+#include "llvm37/CodeGen/MachineInstr.h"
+#include "llvm37/CodeGen/MachineInstrBuilder.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Support/SourceMgr.h"
+#include "llvm37/Target/TargetSubtargetInfo.h"
+#include "llvm37/Target/TargetInstrInfo.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 namespace {
 
@@ -583,21 +583,21 @@ unsigned MIParser::getSubRegIndex(StringRef Name) {
   return SubRegInfo->getValue();
 }
 
-bool llvm::parseMachineInstr(MachineInstr *&MI, SourceMgr &SM,
+bool llvm37::parseMachineInstr(MachineInstr *&MI, SourceMgr &SM,
                              MachineFunction &MF, StringRef Src,
                              const PerFunctionMIParsingState &PFS,
                              const SlotMapping &IRSlots, SMDiagnostic &Error) {
   return MIParser(SM, MF, Error, Src, PFS, IRSlots).parse(MI);
 }
 
-bool llvm::parseMBBReference(MachineBasicBlock *&MBB, SourceMgr &SM,
+bool llvm37::parseMBBReference(MachineBasicBlock *&MBB, SourceMgr &SM,
                              MachineFunction &MF, StringRef Src,
                              const PerFunctionMIParsingState &PFS,
                              const SlotMapping &IRSlots, SMDiagnostic &Error) {
   return MIParser(SM, MF, Error, Src, PFS, IRSlots).parseMBB(MBB);
 }
 
-bool llvm::parseNamedRegisterReference(unsigned &Reg, SourceMgr &SM,
+bool llvm37::parseNamedRegisterReference(unsigned &Reg, SourceMgr &SM,
                                        MachineFunction &MF, StringRef Src,
                                        const PerFunctionMIParsingState &PFS,
                                        const SlotMapping &IRSlots,

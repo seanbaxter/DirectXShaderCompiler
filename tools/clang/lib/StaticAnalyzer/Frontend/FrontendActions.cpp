@@ -18,11 +18,11 @@ AnalysisAction::CreateASTConsumer(CompilerInstance &CI, StringRef InFile) {
   return CreateAnalysisConsumer(CI);
 }
 
-ParseModelFileAction::ParseModelFileAction(llvm::StringMap<Stmt *> &Bodies)
+ParseModelFileAction::ParseModelFileAction(llvm37::StringMap<Stmt *> &Bodies)
     : Bodies(Bodies) {}
 
 std::unique_ptr<ASTConsumer>
 ParseModelFileAction::CreateASTConsumer(CompilerInstance &CI,
                                         StringRef InFile) {
-  return llvm::make_unique<ModelConsumer>(Bodies);
+  return llvm37::make_unique<ModelConsumer>(Bodies);
 }

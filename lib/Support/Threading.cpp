@@ -12,23 +12,23 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Support/Threading.h"
-#include "llvm/Config/config.h"
-#include "llvm/Support/Atomic.h"
-#include "llvm/Support/Mutex.h"
+#include "llvm37/Support/Threading.h"
+#include "llvm37/Config/config.h"
+#include "llvm37/Support/Atomic.h"
+#include "llvm37/Support/Mutex.h"
 #include <cassert>
 
-using namespace llvm;
+using namespace llvm37;
 
-bool llvm::llvm_is_multithreaded() {
-#if LLVM_ENABLE_THREADS != 0
+bool llvm37::llvm_is_multithreaded() {
+#if LLVM37_ENABLE_THREADS != 0
   return true;
 #else
   return false;
 #endif
 }
 
-#if LLVM_ENABLE_THREADS != 0 && defined(HAVE_PTHREAD_H)
+#if LLVM37_ENABLE_THREADS != 0 && defined(HAVE_PTHREAD_H)
 #include <pthread.h>
 
 struct ThreadInfo {
@@ -41,7 +41,7 @@ static void *ExecuteOnThread_Dispatch(void *Arg) {
   return nullptr;
 }
 
-void llvm::llvm_execute_on_thread(void (*Fn)(void*), void *UserData,
+void llvm37::llvm_execute_on_thread(void (*Fn)(void*), void *UserData,
                                   unsigned RequestedStackSize) {
   ThreadInfo Info = { Fn, UserData };
   pthread_attr_t Attr;
@@ -67,7 +67,7 @@ void llvm::llvm_execute_on_thread(void (*Fn)(void*), void *UserData,
  error:
   ::pthread_attr_destroy(&Attr);
 }
-#elif LLVM_ENABLE_THREADS!=0 && defined(LLVM_ON_WIN32)
+#elif LLVM37_ENABLE_THREADS!=0 && defined(LLVM37_ON_WIN32)
 #include "Windows/WindowsSupport.h"
 #include <process.h>
 
@@ -83,7 +83,7 @@ static unsigned __stdcall ThreadCallback(void *param) {
   return 0;
 }
 
-void llvm::llvm_execute_on_thread(void (*Fn)(void*), void *UserData,
+void llvm37::llvm_execute_on_thread(void (*Fn)(void*), void *UserData,
                                   unsigned RequestedStackSize) {
   struct ThreadInfo param = { Fn, UserData };
 
@@ -103,7 +103,7 @@ void llvm::llvm_execute_on_thread(void (*Fn)(void*), void *UserData,
 }
 #else
 // Support for non-Win32, non-pthread implementation.
-void llvm::llvm_execute_on_thread(void (*Fn)(void*), void *UserData,
+void llvm37::llvm_execute_on_thread(void (*Fn)(void*), void *UserData,
                                   unsigned RequestedStackSize) {
   (void) RequestedStackSize;
   Fn(UserData);

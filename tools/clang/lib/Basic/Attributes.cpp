@@ -1,10 +1,10 @@
 #include "clang/Basic/Attributes.h"
 #include "clang/Basic/IdentifierTable.h"
-#include "llvm/ADT/StringSwitch.h"
+#include "llvm37/ADT/StringSwitch.h"
 using namespace clang;
 
 int clang::hasAttribute(AttrSyntax Syntax, const IdentifierInfo *Scope,
-                         const IdentifierInfo *Attr, const llvm::Triple &T,
+                         const IdentifierInfo *Attr, const llvm37::Triple &T,
                          const LangOptions &LangOpts) {
   StringRef Name = Attr->getName();
   // Normalize the attribute name, __foo__ becomes foo.

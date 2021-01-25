@@ -12,20 +12,20 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/ProfileData/CoverageMapping.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/Optional.h"
-#include "llvm/ADT/SmallBitVector.h"
-#include "llvm/ProfileData/CoverageMappingReader.h"
-#include "llvm/ProfileData/InstrProfReader.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/Errc.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/ManagedStatic.h"
-#include "llvm/Support/Path.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ProfileData/CoverageMapping.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/Optional.h"
+#include "llvm37/ADT/SmallBitVector.h"
+#include "llvm37/ProfileData/CoverageMappingReader.h"
+#include "llvm37/ProfileData/InstrProfReader.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/Errc.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/ManagedStatic.h"
+#include "llvm37/Support/Path.h"
+#include "llvm37/Support/raw_ostream.h"
 
-using namespace llvm;
+using namespace llvm37;
 using namespace coverage;
 
 #define DEBUG_TYPE "coverage-mapping"
@@ -59,7 +59,7 @@ void CounterExpressionBuilder::extractTerms(
 
 Counter CounterExpressionBuilder::simplify(Counter ExpressionTree) {
   // Gather constant terms.
-  llvm::SmallVector<std::pair<unsigned, int>, 32> Terms;
+  llvm37::SmallVector<std::pair<unsigned, int>, 32> Terms;
   extractTerms(ExpressionTree, +1, Terms);
 
   // If there are no terms, this is just a zero. The algorithm below assumes at
@@ -121,7 +121,7 @@ Counter CounterExpressionBuilder::subtract(Counter LHS, Counter RHS) {
 }
 
 void CounterMappingContext::dump(const Counter &C,
-                                 llvm::raw_ostream &OS) const {
+                                 llvm37::raw_ostream &OS) const {
   switch (C.getKind()) {
   case Counter::Zero:
     OS << '0';
@@ -501,7 +501,7 @@ CoverageMapping::getCoverageForExpansion(const ExpansionRecord &Expansion) {
 
 namespace {
 class CoverageMappingErrorCategoryType : public std::error_category {
-  const char *name() const LLVM_NOEXCEPT override { return "llvm.coveragemap"; }
+  const char *name() const LLVM37_NOEXCEPT override { return "llvm.coveragemap"; }
   std::string message(int IE) const override {
     auto E = static_cast<coveragemap_error>(IE);
     switch (E) {
@@ -525,6 +525,6 @@ class CoverageMappingErrorCategoryType : public std::error_category {
 
 static ManagedStatic<CoverageMappingErrorCategoryType> ErrorCategory;
 
-const std::error_category &llvm::coveragemap_category() {
+const std::error_category &llvm37::coveragemap_category() {
   return *ErrorCategory;
 }

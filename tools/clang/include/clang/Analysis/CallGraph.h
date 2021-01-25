@@ -14,14 +14,14 @@
 //  edges to all externally available functions.
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_ANALYSIS_CALLGRAPH_H
-#define LLVM_CLANG_ANALYSIS_CALLGRAPH_H
+#ifndef LLVM37_CLANG_ANALYSIS_CALLGRAPH_H
+#define LLVM37_CLANG_ANALYSIS_CALLGRAPH_H
 
 #include "clang/AST/DeclBase.h"
 #include "clang/AST/RecursiveASTVisitor.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/GraphTraits.h"
-#include "llvm/ADT/SetVector.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/GraphTraits.h"
+#include "llvm37/ADT/SetVector.h"
 
 namespace clang {
 class CallGraphNode;
@@ -34,7 +34,7 @@ class CallGraphNode;
 class CallGraph : public RecursiveASTVisitor<CallGraph> {
   friend class CallGraphNode;
 
-  typedef llvm::DenseMap<const Decl *, CallGraphNode *> FunctionMapTy;
+  typedef llvm37::DenseMap<const Decl *, CallGraphNode *> FunctionMapTy;
 
   /// FunctionMap owns all CallGraphNodes.
   FunctionMapTy FunctionMap;
@@ -83,8 +83,8 @@ public:
   /// Iterators through all the nodes of the graph that have no parent. These
   /// are the unreachable nodes, which are either unused or are due to us
   /// failing to add a call edge due to the analysis imprecision.
-  typedef llvm::SetVector<CallGraphNode *>::iterator nodes_iterator;
-  typedef llvm::SetVector<CallGraphNode *>::const_iterator const_nodes_iterator;
+  typedef llvm37::SetVector<CallGraphNode *>::iterator nodes_iterator;
+  typedef llvm37::SetVector<CallGraphNode *>::const_iterator const_nodes_iterator;
 
   void print(raw_ostream &os) const;
   void dump() const;
@@ -169,7 +169,7 @@ public:
 } // end clang namespace
 
 // Graph traits for iteration, viewing.
-namespace llvm {
+namespace llvm37 {
 template <> struct GraphTraits<clang::CallGraphNode*> {
   typedef clang::CallGraphNode NodeType;
   typedef clang::CallGraphNode::CallRecord CallRecordTy;

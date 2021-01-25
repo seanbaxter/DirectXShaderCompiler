@@ -11,14 +11,14 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_AST_APVALUE_H
-#define LLVM_CLANG_AST_APVALUE_H
+#ifndef LLVM37_CLANG_AST_APVALUE_H
+#define LLVM37_CLANG_AST_APVALUE_H
 
 #include "clang/Basic/LLVM.h"
-#include "llvm/ADT/APFloat.h"
-#include "llvm/ADT/APSInt.h"
-#include "llvm/ADT/PointerIntPair.h"
-#include "llvm/ADT/PointerUnion.h"
+#include "llvm37/ADT/APFloat.h"
+#include "llvm37/ADT/APSInt.h"
+#include "llvm37/ADT/PointerIntPair.h"
+#include "llvm37/ADT/PointerUnion.h"
 
 namespace clang {
   class AddrLabelExpr;
@@ -36,8 +36,8 @@ namespace clang {
 /// [APSInt] [APFloat], [Complex APSInt] [Complex APFloat], [Expr + Offset],
 /// [Vector: N * APValue], [Array: N * APValue]
 class APValue {
-  typedef llvm::APSInt APSInt;
-  typedef llvm::APFloat APFloat;
+  typedef llvm37::APSInt APSInt;
+  typedef llvm37::APFloat APFloat;
 public:
   enum ValueKind {
     Uninitialized,
@@ -53,8 +53,8 @@ public:
     MemberPointer,
     AddrLabelDiff
   };
-  typedef llvm::PointerUnion<const ValueDecl *, const Expr *> LValueBase;
-  typedef llvm::PointerIntPair<const Decl *, 1, bool> BaseOrMemberType;
+  typedef llvm37::PointerUnion<const ValueDecl *, const Expr *> LValueBase;
+  typedef llvm37::PointerIntPair<const Decl *, 1, bool> BaseOrMemberType;
   union LValuePathEntry {
     /// BaseOrMember - The FieldDecl or CXXRecordDecl indicating the next item
     /// in the path. An opaque value of type BaseOrMemberType.
@@ -109,7 +109,7 @@ private:
   struct MemberPointerData;
 
   // We ensure elsewhere that Data is big enough for LV and MemberPointerData.
-  typedef llvm::AlignedCharArrayUnion<void *, APSInt, APFloat, ComplexAPSInt,
+  typedef llvm37::AlignedCharArrayUnion<void *, APSInt, APFloat, ComplexAPSInt,
                                       ComplexAPFloat, Vec, Arr, StructData,
                                       UnionData, AddrLabelDiffData> DataType;
   static const size_t DataSize = sizeof(DataType);

@@ -24,9 +24,9 @@
 #include "clang/Sema/ParsedTemplate.h"
 #include "clang/Sema/PrettyDeclStackTrace.h"
 #include "clang/Sema/Scope.h"
-#include "llvm/ADT/SmallSet.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/ADT/StringSwitch.h"
+#include "llvm37/ADT/SmallSet.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/ADT/StringSwitch.h"
 #include "dxc/Support/Global.h"    // HLSL Change
 #include "clang/Sema/SemaHLSL.h"   // HLSL Change
 
@@ -75,7 +75,7 @@ TypeResult Parser::ParseTypeName(SourceRange *Range,
 /// require late parsing.
 static bool isAttributeLateParsed(const IdentifierInfo &II) {
 #define CLANG_ATTR_LATE_PARSED_LIST
-    return llvm::StringSwitch<bool>(II.getName())
+    return llvm37::StringSwitch<bool>(II.getName())
 #include "clang/Parse/AttrParserStringSwitches.inc"
         .Default(false);
 #undef CLANG_ATTR_LATE_PARSED_LIST
@@ -428,11 +428,11 @@ bool Parser::MaybeParseHLSLAttributes(std::vector<hlsl::UnusualAnnotation *> &ta
               Diag(Tok.getLocation(), diag::err_hlsl_unsupported_register_noninteger);
               r.setIsValid(false);
             } else {
-              llvm::APSInt intResult;
+              llvm37::APSInt intResult;
               if (evalResult.Val.isFloat()) {
                 bool isExact;
                 // TODO: consider what to do when convertToInteger fails
-                evalResult.Val.getFloat().convertToInteger(intResult, llvm::APFloat::roundingMode::rmTowardZero, &isExact);
+                evalResult.Val.getFloat().convertToInteger(intResult, llvm37::APFloat::roundingMode::rmTowardZero, &isExact);
               } else {
                 DXASSERT(evalResult.Val.isInt(), "otherwise prior test in this function should have failed");
                 intResult = evalResult.Val.getInt();
@@ -575,7 +575,7 @@ static StringRef normalizeAttrName(StringRef Name) {
 /// \brief Determine whether the given attribute has an identifier argument.
 static bool attributeHasIdentifierArg(const IdentifierInfo &II) {
 #define CLANG_ATTR_IDENTIFIER_ARG_LIST
-  return llvm::StringSwitch<bool>(normalizeAttrName(II.getName()))
+  return llvm37::StringSwitch<bool>(normalizeAttrName(II.getName()))
 #include "clang/Parse/AttrParserStringSwitches.inc"
            .Default(false);
 #undef CLANG_ATTR_IDENTIFIER_ARG_LIST
@@ -584,7 +584,7 @@ static bool attributeHasIdentifierArg(const IdentifierInfo &II) {
 /// \brief Determine whether the given attribute parses a type argument.
 static bool attributeIsTypeArgAttr(const IdentifierInfo &II) {
 #define CLANG_ATTR_TYPE_ARG_LIST
-  return llvm::StringSwitch<bool>(normalizeAttrName(II.getName()))
+  return llvm37::StringSwitch<bool>(normalizeAttrName(II.getName()))
 #include "clang/Parse/AttrParserStringSwitches.inc"
            .Default(false);
 #undef CLANG_ATTR_TYPE_ARG_LIST
@@ -594,7 +594,7 @@ static bool attributeIsTypeArgAttr(const IdentifierInfo &II) {
 /// in an unevaluated context or not.
 static bool attributeParsedArgsUnevaluated(const IdentifierInfo &II) {
 #define CLANG_ATTR_ARG_CONTEXT_LIST
-  return llvm::StringSwitch<bool>(normalizeAttrName(II.getName()))
+  return llvm37::StringSwitch<bool>(normalizeAttrName(II.getName()))
 #include "clang/Parse/AttrParserStringSwitches.inc"
            .Default(false);
 #undef CLANG_ATTR_ARG_CONTEXT_LIST
@@ -4240,7 +4240,7 @@ HLSLReservedKeyword:
 ///
 void Parser::ParseStructDeclaration(
     ParsingDeclSpec &DS,
-    llvm::function_ref<void(ParsingFieldDeclarator &)> FieldsCallback) {
+    llvm37::function_ref<void(ParsingFieldDeclarator &)> FieldsCallback) {
 
   if (Tok.is(tok::kw___extension__)) {
     // __extension__ silences extension warnings in the subexpression.
@@ -6136,7 +6136,7 @@ void Parser::ParseDirectDeclarator(Declarator &D) {
            diag::ext_abstract_pack_declarator_parens);
   } else {
     if (Tok.getKind() == tok::annot_pragma_parser_crash)
-      LLVM_BUILTIN_TRAP;
+      LLVM37_BUILTIN_TRAP;
     if (Tok.is(tok::l_square))
       return ParseMisplacedBracketDeclarator(D);
     if (D.getContext() == Declarator::MemberContext) {
@@ -6612,7 +6612,7 @@ void Parser::ParseFunctionDeclaratorIdentifierList(
     Diag(Tok, diag::ext_ident_list_in_param);
 
   // Maintain an efficient lookup of params we have seen so far.
-  llvm::SmallSet<const IdentifierInfo*, 16> ParamsSoFar;
+  llvm37::SmallSet<const IdentifierInfo*, 16> ParamsSoFar;
 
   do {
     // If this isn't an identifier, report the error and skip until ')'.

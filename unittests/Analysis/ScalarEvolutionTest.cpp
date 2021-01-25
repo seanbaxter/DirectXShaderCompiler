@@ -7,17 +7,17 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Analysis/ScalarEvolutionExpressions.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/Analysis/LoopInfo.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/GlobalVariable.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/LegacyPassManager.h"
+#include "llvm37/Analysis/ScalarEvolutionExpressions.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/Analysis/LoopInfo.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/GlobalVariable.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/LegacyPassManager.h"
 #include "gtest/gtest.h"
 
-namespace llvm {
+namespace llvm37 {
 namespace {
 
 // We use this fixture to ensure that we clean up ScalarEvolution before
@@ -231,4 +231,4 @@ TEST_F(ScalarEvolutionsTest, SCEVMultiplyAddRecs) {
 }
 
 }  // end anonymous namespace
-}  // end namespace llvm
+}  // end namespace llvm37

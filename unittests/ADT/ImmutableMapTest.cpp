@@ -8,9 +8,9 @@
 //===----------------------------------------------------------------------===//
 
 #include "gtest/gtest.h"
-#include "llvm/ADT/ImmutableMap.h"
+#include "llvm37/ADT/ImmutableMap.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 namespace {
 

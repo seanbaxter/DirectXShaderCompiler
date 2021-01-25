@@ -17,21 +17,21 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/StringMap.h"
-#include "llvm/ADT/StringRef.h"
-#include "llvm/ADT/Triple.h"
-#include "llvm/ADT/Twine.h"
-#include "llvm/Config/config.h"
-#include "llvm/Config/llvm-config.h"
-#include "llvm/Support/FileSystem.h"
-#include "llvm/Support/Path.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/StringMap.h"
+#include "llvm37/ADT/StringRef.h"
+#include "llvm37/ADT/Triple.h"
+#include "llvm37/ADT/Twine.h"
+#include "llvm37/Config/config.h"
+#include "llvm37/Config/llvm-config.h"
+#include "llvm37/Support/FileSystem.h"
+#include "llvm37/Support/Path.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <cstdlib>
 #include <set>
 #include <vector>
 
-using namespace llvm;
+using namespace llvm37;
 
 // Include the build time variables we can report to the user. This is generated
 // at build time from the BuildVariables.inc.in file by the build system.
@@ -110,7 +110,7 @@ static void ComputeLibsForComponents(const std::vector<StringRef> &Components,
 
     // Validate that the user supplied a valid component name.
     if (!ComponentMap.count(ComponentLower)) {
-      llvm::errs() << "llvm-config: unknown component name: " << Components[i]
+      llvm37::errs() << "llvm-config: unknown component name: " << Components[i]
                    << "\n";
       exit(1);
     }
@@ -168,7 +168,7 @@ std::string GetExecutablePath(const char *Argv0) {
   // This just needs to be some symbol in the binary; C++ doesn't
   // allow taking the address of ::main however.
   void *P = (void*) (intptr_t) GetExecutablePath;
-  return llvm::sys::fs::getMainExecutable(Argv0, P);
+  return llvm37::sys::fs::getMainExecutable(Argv0, P);
 }
 
 // HLSL Change: changed calling convention to __cdecl
@@ -184,12 +184,12 @@ int __cdecl main(int argc, char **argv) {
   // tree.
   bool IsInDevelopmentTree;
   enum { MakefileStyle, CMakeStyle, CMakeBuildModeStyle } DevelopmentTreeLayout;
-  llvm::SmallString<256> CurrentPath(GetExecutablePath(argv[0]));
+  llvm37::SmallString<256> CurrentPath(GetExecutablePath(argv[0]));
   std::string CurrentExecPrefix;
   std::string ActiveObjRoot;
 
   // If CMAKE_CFG_INTDIR is given, honor it as build mode.
-  char const *build_mode = LLVM_BUILDMODE;
+  char const *build_mode = LLVM37_BUILDMODE;
 #if defined(CMAKE_CFG_INTDIR)
   if (!(CMAKE_CFG_INTDIR[0] == '.' && CMAKE_CFG_INTDIR[1] == '\0'))
     build_mode = CMAKE_CFG_INTDIR;
@@ -204,27 +204,27 @@ int __cdecl main(int argc, char **argv) {
   // Check to see if we are inside a development tree by comparing to possible
   // locations (prefix style or CMake style).
   if (sys::fs::equivalent(CurrentExecPrefix,
-                          Twine(LLVM_OBJ_ROOT) + "/" + build_mode)) {
+                          Twine(LLVM37_OBJ_ROOT) + "/" + build_mode)) {
     IsInDevelopmentTree = true;
     DevelopmentTreeLayout = MakefileStyle;
 
     // If we are in a development tree, then check if we are in a BuildTools
     // directory. This indicates we are built for the build triple, but we
     // always want to provide information for the host triple.
-    if (sys::path::filename(LLVM_OBJ_ROOT) == "BuildTools") {
-      ActiveObjRoot = sys::path::parent_path(LLVM_OBJ_ROOT);
+    if (sys::path::filename(LLVM37_OBJ_ROOT) == "BuildTools") {
+      ActiveObjRoot = sys::path::parent_path(LLVM37_OBJ_ROOT);
     } else {
-      ActiveObjRoot = LLVM_OBJ_ROOT;
+      ActiveObjRoot = LLVM37_OBJ_ROOT;
     }
-  } else if (sys::fs::equivalent(CurrentExecPrefix, LLVM_OBJ_ROOT)) {
+  } else if (sys::fs::equivalent(CurrentExecPrefix, LLVM37_OBJ_ROOT)) {
     IsInDevelopmentTree = true;
     DevelopmentTreeLayout = CMakeStyle;
-    ActiveObjRoot = LLVM_OBJ_ROOT;
+    ActiveObjRoot = LLVM37_OBJ_ROOT;
   } else if (sys::fs::equivalent(CurrentExecPrefix,
-                                 Twine(LLVM_OBJ_ROOT) + "/bin")) {
+                                 Twine(LLVM37_OBJ_ROOT) + "/bin")) {
     IsInDevelopmentTree = true;
     DevelopmentTreeLayout = CMakeBuildModeStyle;
-    ActiveObjRoot = LLVM_OBJ_ROOT;
+    ActiveObjRoot = LLVM37_OBJ_ROOT;
   } else {
     IsInDevelopmentTree = false;
     DevelopmentTreeLayout = MakefileStyle; // Initialized to avoid warnings.
@@ -235,7 +235,7 @@ int __cdecl main(int argc, char **argv) {
   std::string ActivePrefix, ActiveBinDir, ActiveIncludeDir, ActiveLibDir;
   std::string ActiveIncludeOption;
   if (IsInDevelopmentTree) {
-    ActiveIncludeDir = std::string(LLVM_SRC_ROOT) + "/include";
+    ActiveIncludeDir = std::string(LLVM37_SRC_ROOT) + "/include";
     ActivePrefix = CurrentExecPrefix;
 
     // CMake organizes the products differently than a normal prefix style
@@ -245,17 +245,17 @@ int __cdecl main(int argc, char **argv) {
       ActivePrefix = ActiveObjRoot;
       ActiveBinDir = ActiveObjRoot + "/" + build_mode + "/bin";
       ActiveLibDir =
-          ActiveObjRoot + "/" + build_mode + "/lib" + LLVM_LIBDIR_SUFFIX;
+          ActiveObjRoot + "/" + build_mode + "/lib" + LLVM37_LIBDIR_SUFFIX;
       break;
     case CMakeStyle:
       ActiveBinDir = ActiveObjRoot + "/bin";
-      ActiveLibDir = ActiveObjRoot + "/lib" + LLVM_LIBDIR_SUFFIX;
+      ActiveLibDir = ActiveObjRoot + "/lib" + LLVM37_LIBDIR_SUFFIX;
       break;
     case CMakeBuildModeStyle:
       ActivePrefix = ActiveObjRoot;
       ActiveBinDir = ActiveObjRoot + "/bin/" + build_mode;
       ActiveLibDir =
-          ActiveObjRoot + "/lib" + LLVM_LIBDIR_SUFFIX + "/" + build_mode;
+          ActiveObjRoot + "/lib" + LLVM37_LIBDIR_SUFFIX + "/" + build_mode;
       break;
     }
 
@@ -266,7 +266,7 @@ int __cdecl main(int argc, char **argv) {
     ActivePrefix = CurrentExecPrefix;
     ActiveIncludeDir = ActivePrefix + "/include";
     ActiveBinDir = ActivePrefix + "/bin";
-    ActiveLibDir = ActivePrefix + "/lib" + LLVM_LIBDIR_SUFFIX;
+    ActiveLibDir = ActivePrefix + "/lib" + LLVM37_LIBDIR_SUFFIX;
     ActiveIncludeOption = "-I" + ActiveIncludeDir;
   }
 
@@ -287,13 +287,13 @@ int __cdecl main(int argc, char **argv) {
       } else if (Arg == "--libdir") {
         OS << ActiveLibDir << '\n';
       } else if (Arg == "--cppflags") {
-        OS << ActiveIncludeOption << ' ' << LLVM_CPPFLAGS << '\n';
+        OS << ActiveIncludeOption << ' ' << LLVM37_CPPFLAGS << '\n';
       } else if (Arg == "--cflags") {
-        OS << ActiveIncludeOption << ' ' << LLVM_CFLAGS << '\n';
+        OS << ActiveIncludeOption << ' ' << LLVM37_CFLAGS << '\n';
       } else if (Arg == "--cxxflags") {
-        OS << ActiveIncludeOption << ' ' << LLVM_CXXFLAGS << '\n';
+        OS << ActiveIncludeOption << ' ' << LLVM37_CXXFLAGS << '\n';
       } else if (Arg == "--ldflags") {
-        OS << "-L" << ActiveLibDir << ' ' << LLVM_LDFLAGS << '\n';
+        OS << "-L" << ActiveLibDir << ' ' << LLVM37_LDFLAGS << '\n';
       } else if (Arg == "--system-libs") {
         PrintSystemLibs = true;
       } else if (Arg == "--libs") {
@@ -313,9 +313,9 @@ int __cdecl main(int argc, char **argv) {
         }
         OS << '\n';
       } else if (Arg == "--targets-built") {
-        OS << LLVM_TARGETS_BUILT << '\n';
+        OS << LLVM37_TARGETS_BUILT << '\n';
       } else if (Arg == "--host-target") {
-        OS << Triple::normalize(LLVM_DEFAULT_TARGET_TRIPLE) << '\n';
+        OS << Triple::normalize(LLVM37_DEFAULT_TARGET_TRIPLE) << '\n';
       } else if (Arg == "--build-mode") {
         OS << build_mode << '\n';
       } else if (Arg == "--assertion-mode") {
@@ -327,7 +327,7 @@ int __cdecl main(int argc, char **argv) {
       } else if (Arg == "--obj-root") {
         OS << ActivePrefix << '\n';
       } else if (Arg == "--src-root") {
-        OS << LLVM_SRC_ROOT << '\n';
+        OS << LLVM37_SRC_ROOT << '\n';
       } else {
         usage();
       }
@@ -376,7 +376,7 @@ int __cdecl main(int argc, char **argv) {
     // Print SYSTEM_LIBS after --libs.
     // FIXME: Each LLVM component may have its dependent system libs.
     if (PrintSystemLibs)
-      OS << LLVM_SYSTEM_LIBS << '\n';
+      OS << LLVM37_SYSTEM_LIBS << '\n';
   } else if (!Components.empty()) {
     errs() << "llvm-config: error: components given, but unused\n\n";
     usage();

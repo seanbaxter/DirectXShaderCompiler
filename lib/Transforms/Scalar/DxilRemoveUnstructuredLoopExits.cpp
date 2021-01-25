@@ -115,17 +115,17 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Analysis/LoopPass.h"
-#include "llvm/Analysis/AssumptionCache.h"
-#include "llvm/Transforms/Scalar.h"
-#include "llvm/Transforms/Utils/Local.h"
-#include "llvm/Transforms/Utils/LoopUtils.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/Verifier.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/ADT/SetVector.h"
+#include "llvm37/Analysis/LoopPass.h"
+#include "llvm37/Analysis/AssumptionCache.h"
+#include "llvm37/Transforms/Scalar.h"
+#include "llvm37/Transforms/Utils/Local.h"
+#include "llvm37/Transforms/Utils/LoopUtils.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/Verifier.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/ADT/SetVector.h"
 #include "dxc/HLSL/DxilNoops.h"
 
 #include <unordered_map>
@@ -133,7 +133,7 @@
 
 #include "DxilRemoveUnstructuredLoopExits.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 static bool IsNoop(Instruction *inst);
 
@@ -216,7 +216,7 @@ struct Propagator {
         }
       } // If this is not the first iteration
 
-      for (BasicBlock *succ : llvm::successors(bb)) {
+      for (BasicBlock *succ : llvm37::successors(bb)) {
         // Don't propagate if block is not part of this loop.
         if (!L->contains(succ))
           continue;
@@ -226,7 +226,7 @@ struct Propagator {
           PHINode *phi = cached_phis[{ succ, pair.val }];
           if (!phi) {
             phi = PHINode::Create(pair.false_val->getType(), 0, "dx.struct_exit.prop", &*succ->begin());
-            for (BasicBlock *pred : llvm::predecessors(succ)) {
+            for (BasicBlock *pred : llvm37::predecessors(succ)) {
               phi->addIncoming(pair.false_val, pred);
             }
             cached_phis[{ succ, pair.val }] = phi;
@@ -333,7 +333,7 @@ static void SkipBlockWithBranch(BasicBlock *bb, Value *cond, Loop *L, LoopInfo *
 
 static unsigned GetNumPredecessors(BasicBlock *bb) {
   unsigned ret = 0;
-  for (BasicBlock *pred : llvm::predecessors(bb)) {
+  for (BasicBlock *pred : llvm37::predecessors(bb)) {
     (void)pred;
     ret++;
   }
@@ -490,7 +490,7 @@ static bool RemoveUnstructuredLoopExitsIteration(BasicBlock *exiting_block, Loop
         exit_cond_lcssa->setName("dx.struct_exit.exit_cond_lcssa");
       }
 
-      for (BasicBlock *pred : llvm::predecessors(latch_exit)) {
+      for (BasicBlock *pred : llvm37::predecessors(latch_exit)) {
         if (pred == new_exiting_block) {
           Value *incoming = prop.Get(info.val, new_exiting_block);
           assert(incoming);
@@ -525,7 +525,7 @@ static bool RemoveUnstructuredLoopExitsIteration(BasicBlock *exiting_block, Loop
   return true;
 }
 
-bool hlsl::RemoveUnstructuredLoopExits(llvm::Loop *L, llvm::LoopInfo *LI, llvm::DominatorTree *DT, std::unordered_set<llvm::BasicBlock *> *exclude_set) {
+bool hlsl::RemoveUnstructuredLoopExits(llvm37::Loop *L, llvm37::LoopInfo *LI, llvm37::DominatorTree *DT, std::unordered_set<llvm37::BasicBlock *> *exclude_set) {
   
   bool changed = false;
 
@@ -545,7 +545,7 @@ bool hlsl::RemoveUnstructuredLoopExits(llvm::Loop *L, llvm::LoopInfo *LI, llvm::
   for (;;) {
     // Recompute exiting block every time, since they could change between
     // iterations
-    llvm::SmallVector<BasicBlock *, 4> exiting_blocks;
+    llvm37::SmallVector<BasicBlock *, 4> exiting_blocks;
     L->getExitingBlocks(exiting_blocks);
 
     bool local_changed = false;

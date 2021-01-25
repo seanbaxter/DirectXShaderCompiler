@@ -7,12 +7,12 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Analysis/DominanceFrontier.h"
-#include "llvm/Analysis/DominanceFrontierImpl.h"
+#include "llvm37/Analysis/DominanceFrontier.h"
+#include "llvm37/Analysis/DominanceFrontierImpl.h"
 
-using namespace llvm;
+using namespace llvm37;
 
-namespace llvm {
+namespace llvm37 {
 template class DominanceFrontierBase<BasicBlock>;
 template class ForwardDominanceFrontierBase<BasicBlock>;
 }
@@ -50,7 +50,7 @@ void DominanceFrontier::print(raw_ostream &OS, const Module *) const {
   Base.print(OS);
 }
 
-#if !defined(NDEBUG) || defined(LLVM_ENABLE_DUMP)
+#if !defined(NDEBUG) || defined(LLVM37_ENABLE_DUMP)
 void DominanceFrontier::dump() const {
   print(dbgs());
 }

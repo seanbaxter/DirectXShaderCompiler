@@ -12,29 +12,29 @@
 // counts of loops easily.
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Transforms/Scalar.h"
-#include "llvm/ADT/SetVector.h"
-#include "llvm/Analysis/AssumptionCache.h"
-#include "llvm/Analysis/CodeMetrics.h"
-#include "llvm/Analysis/InstructionSimplify.h"
-#include "llvm/Analysis/LoopPass.h"
-#include "llvm/Analysis/ScalarEvolution.h"
-#include "llvm/Analysis/ScalarEvolutionExpressions.h"
-#include "llvm/Analysis/TargetTransformInfo.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/DiagnosticInfo.h"
-#include "llvm/IR/Dominators.h"
-#include "llvm/IR/InstVisitor.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/IR/Metadata.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Transforms/Utils/UnrollLoop.h"
+#include "llvm37/Transforms/Scalar.h"
+#include "llvm37/ADT/SetVector.h"
+#include "llvm37/Analysis/AssumptionCache.h"
+#include "llvm37/Analysis/CodeMetrics.h"
+#include "llvm37/Analysis/InstructionSimplify.h"
+#include "llvm37/Analysis/LoopPass.h"
+#include "llvm37/Analysis/ScalarEvolution.h"
+#include "llvm37/Analysis/ScalarEvolutionExpressions.h"
+#include "llvm37/Analysis/TargetTransformInfo.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/IR/DiagnosticInfo.h"
+#include "llvm37/IR/Dominators.h"
+#include "llvm37/IR/InstVisitor.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/IR/Metadata.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Transforms/Utils/UnrollLoop.h"
 #include "DxilRemoveUnstructuredLoopExits.h" // HLSL Change
 #include <climits>
 
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "loop-unroll"
 
@@ -267,13 +267,13 @@ INITIALIZE_PASS_DEPENDENCY(LCSSA)
 INITIALIZE_PASS_DEPENDENCY(ScalarEvolution)
 INITIALIZE_PASS_END(LoopUnroll, "loop-unroll", "Unroll loops", false, false)
 
-Pass *llvm::createLoopUnrollPass(int Threshold, int Count, int AllowPartial,
+Pass *llvm37::createLoopUnrollPass(int Threshold, int Count, int AllowPartial,
                                  int Runtime, /* HLSL Change */ bool StructurizeLoopExits) {
   return new LoopUnroll(Threshold, Count, AllowPartial, Runtime, /* HLSL Change */ StructurizeLoopExits);
 }
 
-Pass *llvm::createSimpleLoopUnrollPass() {
-  return llvm::createLoopUnrollPass(-1, -1, 0, 0);
+Pass *llvm37::createSimpleLoopUnrollPass() {
+  return llvm37::createLoopUnrollPass(-1, -1, 0, 0);
 }
 
 namespace {

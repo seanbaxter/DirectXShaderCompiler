@@ -17,10 +17,10 @@
 #include "clang/Lex/Preprocessor.h"
 #include "clang/Lex/TokenConcatenation.h"
 #include "clang/Rewrite/Core/Rewriter.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/MemoryBuffer.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/MemoryBuffer.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <memory>
 using namespace clang;
 
@@ -106,7 +106,7 @@ void html::HighlightRange(RewriteBuffer &RB, unsigned B, unsigned E,
 void html::EscapeText(Rewriter &R, FileID FID,
                       bool EscapeSpaces, bool ReplaceTabs) {
 
-  const llvm::MemoryBuffer *Buf = R.getSourceMgr().getBuffer(FID);
+  const llvm37::MemoryBuffer *Buf = R.getSourceMgr().getBuffer(FID);
   const char* C = Buf->getBufferStart();
   const char* FileEnd = Buf->getBufferEnd();
 
@@ -168,7 +168,7 @@ std::string html::EscapeText(StringRef s, bool EscapeSpaces, bool ReplaceTabs) {
 
   unsigned len = s.size();
   std::string Str;
-  llvm::raw_string_ostream os(Str);
+  llvm37::raw_string_ostream os(Str);
 
   for (unsigned i = 0 ; i < len; ++i) {
 
@@ -208,7 +208,7 @@ std::string html::EscapeText(StringRef s, bool EscapeSpaces, bool ReplaceTabs) {
 static void AddLineNumber(RewriteBuffer &RB, unsigned LineNo,
                           unsigned B, unsigned E) {
   SmallString<256> Str;
-  llvm::raw_svector_ostream OS(Str);
+  llvm37::raw_svector_ostream OS(Str);
 
   OS << "<tr><td class=\"num\" id=\"LN"
      << LineNo << "\">"
@@ -225,7 +225,7 @@ static void AddLineNumber(RewriteBuffer &RB, unsigned LineNo,
 
 void html::AddLineNumbers(Rewriter& R, FileID FID) {
 
-  const llvm::MemoryBuffer *Buf = R.getSourceMgr().getBuffer(FID);
+  const llvm37::MemoryBuffer *Buf = R.getSourceMgr().getBuffer(FID);
   const char* FileBeg = Buf->getBufferStart();
   const char* FileEnd = Buf->getBufferEnd();
   const char* C = FileBeg;
@@ -270,7 +270,7 @@ void html::AddLineNumbers(Rewriter& R, FileID FID) {
 void html::AddHeaderFooterInternalBuiltinCSS(Rewriter& R, FileID FID,
                                              const char *title) {
 
-  const llvm::MemoryBuffer *Buf = R.getSourceMgr().getBuffer(FID);
+  const llvm37::MemoryBuffer *Buf = R.getSourceMgr().getBuffer(FID);
   const char* FileStart = Buf->getBufferStart();
   const char* FileEnd = Buf->getBufferEnd();
 
@@ -278,7 +278,7 @@ void html::AddHeaderFooterInternalBuiltinCSS(Rewriter& R, FileID FID,
   SourceLocation EndLoc = StartLoc.getLocWithOffset(FileEnd-FileStart);
 
   std::string s;
-  llvm::raw_string_ostream os(s);
+  llvm37::raw_string_ostream os(s);
   os << "<!doctype html>\n" // Use HTML 5 doctype
         "<html>\n<head>\n";
 
@@ -358,7 +358,7 @@ void html::SyntaxHighlight(Rewriter &R, FileID FID, const Preprocessor &PP) {
   RewriteBuffer &RB = R.getEditBuffer(FID);
 
   const SourceManager &SM = PP.getSourceManager();
-  const llvm::MemoryBuffer *FromFile = SM.getBuffer(FID);
+  const llvm37::MemoryBuffer *FromFile = SM.getBuffer(FID);
   Lexer L(FID, FromFile, SM, PP.getLangOpts());
   const char *BufferStart = L.getBuffer().data();
 
@@ -448,7 +448,7 @@ void html::HighlightMacros(Rewriter &R, FileID FID, const Preprocessor& PP) {
   const SourceManager &SM = PP.getSourceManager();
   std::vector<Token> TokenStream;
 
-  const llvm::MemoryBuffer *FromFile = SM.getBuffer(FID);
+  const llvm37::MemoryBuffer *FromFile = SM.getBuffer(FID);
   Lexer L(FID, FromFile, SM, PP.getLangOpts());
 
   // Lex all the tokens in raw mode, to avoid entering #includes or expanding

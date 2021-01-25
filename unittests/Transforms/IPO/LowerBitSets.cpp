@@ -7,10 +7,10 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Transforms/IPO/LowerBitSets.h"
+#include "llvm37/Transforms/IPO/LowerBitSets.h"
 #include "gtest/gtest.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 TEST(LowerBitSets, BitSetBuilder) {
   struct {

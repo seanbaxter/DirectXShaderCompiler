@@ -13,13 +13,13 @@
 #include "clang/Basic/FileManager.h"
 #include "clang/Basic/SourceManager.h"
 #include "clang/Lex/Lexer.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/ADT/StringExtras.h"
-#include "llvm/Support/ConvertUTF.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/Locale.h"
-#include "llvm/Support/MemoryBuffer.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/ADT/StringExtras.h"
+#include "llvm37/Support/ConvertUTF.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/Locale.h"
+#include "llvm37/Support/MemoryBuffer.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <algorithm>
 
 using namespace clang;
@@ -133,15 +133,15 @@ printableTextForNextCharacter(StringRef SourceLine, size_t *i,
            && "we must be further along in the string now");
     *i += begin-original_begin;
 
-    if (!llvm::sys::locale::isPrint(c)) {
+    if (!llvm37::sys::locale::isPrint(c)) {
       // If next character is valid UTF-8, but not printable
       SmallString<16> expandedCP("<U+>");
       while (c) {
-        expandedCP.insert(expandedCP.begin()+3, llvm::hexdigit(c%16));
+        expandedCP.insert(expandedCP.begin()+3, llvm37::hexdigit(c%16));
         c/=16;
       }
       while (expandedCP.size() < 8)
-        expandedCP.insert(expandedCP.begin()+3, llvm::hexdigit(0));
+        expandedCP.insert(expandedCP.begin()+3, llvm37::hexdigit(0));
       return std::make_pair(expandedCP, false);
     }
 
@@ -153,8 +153,8 @@ printableTextForNextCharacter(StringRef SourceLine, size_t *i,
   // If next byte is not valid UTF-8 (and therefore not printable)
   SmallString<16> expandedByte("<XX>");
   unsigned char byte = SourceLine[*i];
-  expandedByte[1] = llvm::hexdigit(byte / 16);
-  expandedByte[2] = llvm::hexdigit(byte % 16);
+  expandedByte[1] = llvm37::hexdigit(byte / 16);
+  expandedByte[2] = llvm37::hexdigit(byte % 16);
   ++(*i);
   return std::make_pair(expandedByte, false);
 }
@@ -211,7 +211,7 @@ static void byteToColumn(StringRef SourceLine, unsigned TabStop,
     out[i] = columns;
     std::pair<SmallString<16>,bool> res
       = printableTextForNextCharacter(SourceLine, &i, TabStop);
-    columns += llvm::sys::locale::columnWidth(res.first);
+    columns += llvm37::sys::locale::columnWidth(res.first);
   }
   out.back() = columns;
 }
@@ -244,7 +244,7 @@ static void columnToByte(StringRef SourceLine, unsigned TabStop,
     out.back() = i;
     std::pair<SmallString<16>,bool> res
       = printableTextForNextCharacter(SourceLine, &i, TabStop);
-    columns += llvm::sys::locale::columnWidth(res.first);
+    columns += llvm37::sys::locale::columnWidth(res.first);
   }
   out.resize(columns+1, -1);
   out.back() = i;
@@ -324,7 +324,7 @@ static void selectInterestingSourceRegion(std::string &SourceLine,
                                           unsigned Columns,
                                           const SourceColumnMap &map) {
   unsigned CaretColumns = CaretLine.size();
-  unsigned FixItColumns = llvm::sys::locale::columnWidth(FixItInsertionLine);
+  unsigned FixItColumns = llvm37::sys::locale::columnWidth(FixItInsertionLine);
   unsigned MaxColumns = std::max(static_cast<unsigned>(map.columns()),
                                  std::max(CaretColumns, FixItColumns));
   // if the number of columns is less than the desired number we're done
@@ -367,7 +367,7 @@ static void selectInterestingSourceRegion(std::string &SourceLine,
     // characters.
     unsigned FixItStartCol = FixItStart;
     unsigned FixItEndCol
-      = llvm::sys::locale::columnWidth(FixItInsertionLine.substr(0, FixItEnd));
+      = llvm37::sys::locale::columnWidth(FixItInsertionLine.substr(0, FixItEnd));
 
     CaretStart = std::min(FixItStartCol, CaretStart);
     CaretEnd = std::max(FixItEndCol, CaretEnd);
@@ -1035,7 +1035,7 @@ static std::string buildFixItInsertionLine(unsigned LineNo,
                   FixItInsertionLine.end() - I->CodeToInsert.size());
 
         PrevHintEndCol =
-          HintCol + llvm::sys::locale::columnWidth(I->CodeToInsert);
+          HintCol + llvm37::sys::locale::columnWidth(I->CodeToInsert);
       } else {
         FixItInsertionLine.clear();
         break;

@@ -7,9 +7,9 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/MC/MCCodeEmitter.h"
+#include "llvm37/MC/MCCodeEmitter.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 MCCodeEmitter::MCCodeEmitter() {
 }

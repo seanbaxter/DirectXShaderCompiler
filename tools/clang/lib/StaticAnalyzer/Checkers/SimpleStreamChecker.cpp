@@ -42,7 +42,7 @@ public:
   bool operator==(const StreamState &X) const {
     return K == X.K;
   }
-  void Profile(llvm::FoldingSetNodeID &ID) const {
+  void Profile(llvm37::FoldingSetNodeID &ID) const {
     ID.AddInteger(K);
   }
 };
@@ -214,7 +214,7 @@ void SimpleStreamChecker::reportDoubleClose(SymbolRef FileDescSym,
     return;
 
   // Generate the report.
-  auto R = llvm::make_unique<BugReport>(*DoubleCloseBugType,
+  auto R = llvm37::make_unique<BugReport>(*DoubleCloseBugType,
       "Closing a previously closed file stream", ErrNode);
   R->addRange(Call.getSourceRange());
   R->markInteresting(FileDescSym);
@@ -227,7 +227,7 @@ void SimpleStreamChecker::reportLeaks(ArrayRef<SymbolRef> LeakedStreams,
   // Attach bug reports to the leak node.
   // TODO: Identify the leaked file descriptor.
   for (SymbolRef LeakedStream : LeakedStreams) {
-    auto R = llvm::make_unique<BugReport>(*LeakBugType,
+    auto R = llvm37::make_unique<BugReport>(*LeakBugType,
         "Opened file is never closed; potential resource leak", ErrNode);
     R->markInteresting(LeakedStream);
     C.emitReport(std::move(R));

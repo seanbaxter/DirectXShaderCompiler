@@ -11,32 +11,32 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/IR/Function.h"
+#include "llvm37/IR/Function.h"
 #include "LLVMContextImpl.h"
 #include "SymbolTableListTraitsImpl.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/StringExtras.h"
-#include "llvm/CodeGen/ValueTypes.h"
-#include "llvm/IR/CallSite.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/DerivedTypes.h"
-#include "llvm/IR/InstIterator.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/MDBuilder.h"
-#include "llvm/IR/Metadata.h"
-#include "llvm/IR/Module.h"
-#include "llvm/Support/ManagedStatic.h"
-#include "llvm/Support/RWMutex.h"
-#include "llvm/Support/StringPool.h"
-#include "llvm/Support/Threading.h"
-using namespace llvm;
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/StringExtras.h"
+#include "llvm37/CodeGen/ValueTypes.h"
+#include "llvm37/IR/CallSite.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/DerivedTypes.h"
+#include "llvm37/IR/InstIterator.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/MDBuilder.h"
+#include "llvm37/IR/Metadata.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/Support/ManagedStatic.h"
+#include "llvm37/Support/RWMutex.h"
+#include "llvm37/Support/StringPool.h"
+#include "llvm37/Support/Threading.h"
+using namespace llvm37;
 
 // Explicit instantiations of SymbolTableListTraits since some of the methods
 // are not in the public header file...
-template class llvm::SymbolTableListTraits<Argument, Function>;
-template class llvm::SymbolTableListTraits<BasicBlock, Function>;
+template class llvm37::SymbolTableListTraits<Argument, Function>;
+template class llvm37::SymbolTableListTraits<BasicBlock, Function>;
 
 //===----------------------------------------------------------------------===//
 // Argument Implementation
@@ -462,7 +462,7 @@ static Intrinsic::ID lookupIntrinsicID(const ValueName *ValName) {
   const char *Name = ValName->getKeyData();
 
 #define GET_FUNCTION_RECOGNIZER
-#include "llvm/IR/Intrinsics.gen"
+#include "llvm37/IR/Intrinsics.gen"
 #undef GET_FUNCTION_RECOGNIZER
 
   return Intrinsic::not_intrinsic;
@@ -494,10 +494,10 @@ void Function::recalculateIntrinsicID() {
 static std::string getMangledTypeStr(Type* Ty) {
   std::string Result;
   if (PointerType* PTyp = dyn_cast<PointerType>(Ty)) {
-    Result += "p" + llvm::utostr(PTyp->getAddressSpace()) +
+    Result += "p" + llvm37::utostr(PTyp->getAddressSpace()) +
       getMangledTypeStr(PTyp->getElementType());
   } else if (ArrayType* ATyp = dyn_cast<ArrayType>(Ty)) {
-    Result += "a" + llvm::utostr(ATyp->getNumElements()) +
+    Result += "a" + llvm37::utostr(ATyp->getNumElements()) +
       getMangledTypeStr(ATyp->getElementType());
   } else if (StructType* STyp = dyn_cast<StructType>(Ty)) {
     assert(!STyp->isLiteral() && "TODO: implement literal types");
@@ -520,7 +520,7 @@ std::string Intrinsic::getName(_In_range_(0, num_intrinsics-1) ID id, ArrayRef<T
   static const char * const Table[] = {
     "not_intrinsic",
 #define GET_INTRINSIC_NAME_TABLE
-#include "llvm/IR/Intrinsics.gen"
+#include "llvm37/IR/Intrinsics.gen"
 #undef GET_INTRINSIC_NAME_TABLE
   };
   if (Tys.empty())
@@ -721,7 +721,7 @@ static void DecodeIITType(unsigned &NextElt, ArrayRef<unsigned char> Infos,
 
 
 #define GET_INTRINSIC_GENERATOR_GLOBAL
-#include "llvm/IR/Intrinsics.gen"
+#include "llvm37/IR/Intrinsics.gen"
 #undef GET_INTRINSIC_GENERATOR_GLOBAL
 
 void Intrinsic::getIntrinsicInfoTableEntries(ID id,
@@ -859,7 +859,7 @@ FunctionType *Intrinsic::getType(LLVMContext &Context,
 
 bool Intrinsic::isOverloaded(ID id) {
 #define GET_INTRINSIC_OVERLOAD_TABLE
-#include "llvm/IR/Intrinsics.gen"
+#include "llvm37/IR/Intrinsics.gen"
 #undef GET_INTRINSIC_OVERLOAD_TABLE
 }
 
@@ -877,7 +877,7 @@ bool Intrinsic::isLeaf(ID id) {
 
 /// This defines the "Intrinsic::getAttributes(ID id)" method.
 #define GET_INTRINSIC_ATTRIBUTES
-#include "llvm/IR/Intrinsics.gen"
+#include "llvm37/IR/Intrinsics.gen"
 #undef GET_INTRINSIC_ATTRIBUTES
 
 Function *Intrinsic::getDeclaration(Module *M, ID id, ArrayRef<Type*> Tys) {
@@ -890,15 +890,15 @@ Function *Intrinsic::getDeclaration(Module *M, ID id, ArrayRef<Type*> Tys) {
 
 // This defines the "Intrinsic::getIntrinsicForGCCBuiltin()" method.
 //#pragma optimize("", off) // HLSL Change - comment out pragma optimize directive
-#define GET_LLVM_INTRINSIC_FOR_GCC_BUILTIN
-#include "llvm/IR/Intrinsics.gen"
-#undef GET_LLVM_INTRINSIC_FOR_GCC_BUILTIN
+#define GET_LLVM37_INTRINSIC_FOR_GCC_BUILTIN
+#include "llvm37/IR/Intrinsics.gen"
+#undef GET_LLVM37_INTRINSIC_FOR_GCC_BUILTIN
 //#pragma optimize("", on)  // HLSL Change - comment out pragma optimize directive
 
 // This defines the "Intrinsic::getIntrinsicForMSBuiltin()" method.
-#define GET_LLVM_INTRINSIC_FOR_MS_BUILTIN
-#include "llvm/IR/Intrinsics.gen"
-#undef GET_LLVM_INTRINSIC_FOR_MS_BUILTIN
+#define GET_LLVM37_INTRINSIC_FOR_MS_BUILTIN
+#include "llvm37/IR/Intrinsics.gen"
+#undef GET_LLVM37_INTRINSIC_FOR_MS_BUILTIN
 
 /// hasAddressTaken - returns true if there are any uses of this function
 /// other than direct calls or invokes to it.

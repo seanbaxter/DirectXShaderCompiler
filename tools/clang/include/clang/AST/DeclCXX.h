@@ -13,17 +13,17 @@
 ///
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_AST_DECLCXX_H
-#define LLVM_CLANG_AST_DECLCXX_H
+#ifndef LLVM37_CLANG_AST_DECLCXX_H
+#define LLVM37_CLANG_AST_DECLCXX_H
 
 #include "clang/AST/ASTUnresolvedSet.h"
 #include "clang/AST/Attr.h"
 #include "clang/AST/Decl.h"
 #include "clang/AST/Expr.h"
 #include "clang/AST/LambdaCapture.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/PointerIntPair.h"
-#include "llvm/Support/Compiler.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/PointerIntPair.h"
+#include "llvm37/Support/Compiler.h"
 
 namespace clang {
 
@@ -68,7 +68,7 @@ public:
 
 } // end namespace clang
 
-namespace llvm {
+namespace llvm37 {
   // Provide PointerLikeTypeTraits for non-cvr pointers.
   template<>
   class PointerLikeTypeTraits< ::clang::AnyFunctionDecl> {
@@ -84,7 +84,7 @@ namespace llvm {
     enum { NumLowBitsAvailable = 2 };
   };
 
-} // end namespace llvm
+} // end namespace llvm37
 
 namespace clang {
 
@@ -121,7 +121,7 @@ public:
   /// \brief Sets the location of the colon.
   void setColonLoc(SourceLocation CLoc) { ColonLoc = CLoc; }
 
-  SourceRange getSourceRange() const override LLVM_READONLY {
+  SourceRange getSourceRange() const override LLVM37_READONLY {
     return SourceRange(getAccessSpecifierLoc(), getColonLoc());
   }
 
@@ -198,9 +198,9 @@ public:
       Access(A), InheritConstructors(false), BaseTypeInfo(TInfo) { }
 
   /// \brief Retrieves the source range that contains the entire base specifier.
-  SourceRange getSourceRange() const LLVM_READONLY { return Range; }
-  SourceLocation getLocStart() const LLVM_READONLY { return Range.getBegin(); }
-  SourceLocation getLocEnd() const LLVM_READONLY { return Range.getEnd(); }
+  SourceRange getSourceRange() const LLVM37_READONLY { return Range; }
+  SourceLocation getLocStart() const LLVM37_READONLY { return Range.getBegin(); }
+  SourceLocation getLocEnd() const LLVM37_READONLY { return Range.getEnd(); }
 
   /// \brief Determines whether the base class is a virtual base class (or not).
   bool isVirtual() const { return Virtual; }
@@ -260,7 +260,7 @@ public:
 /// \brief A lazy pointer to the definition data for a declaration.
 /// FIXME: This is a little CXXRecordDecl-specific that the moment.
 template<typename Decl, typename T> class LazyDefinitionDataPtr {
-  llvm::PointerUnion<T *, Decl *> DataOrCanonicalDecl;
+  llvm37::PointerUnion<T *, Decl *> DataOrCanonicalDecl;
 
   LazyDefinitionDataPtr update() {
     if (Decl *Canon = DataOrCanonicalDecl.template dyn_cast<Decl*>()) {
@@ -610,7 +610,7 @@ class CXXRecordDecl : public RecordDecl {
   /// classes of class template specializations, this will be the
   /// MemberSpecializationInfo referring to the member class that was
   /// instantiated or specialized.
-  llvm::PointerUnion<ClassTemplateDecl*, MemberSpecializationInfo*>
+  llvm37::PointerUnion<ClassTemplateDecl*, MemberSpecializationInfo*>
     TemplateOrInstantiation;
 
   friend class DeclContext;
@@ -706,8 +706,8 @@ public:
   /// \brief Retrieves the number of base classes of this class.
   unsigned getNumBases() const { return data().NumBases; }
 
-  typedef llvm::iterator_range<base_class_iterator> base_class_range;
-  typedef llvm::iterator_range<base_class_const_iterator>
+  typedef llvm37::iterator_range<base_class_iterator> base_class_range;
+  typedef llvm37::iterator_range<base_class_const_iterator>
     base_class_const_range;
 
   base_class_range bases() {
@@ -749,7 +749,7 @@ public:
   /// all method members of the class, including non-instance methods,
   /// special methods, etc.
   typedef specific_decl_iterator<CXXMethodDecl> method_iterator;
-  typedef llvm::iterator_range<specific_decl_iterator<CXXMethodDecl>>
+  typedef llvm37::iterator_range<specific_decl_iterator<CXXMethodDecl>>
     method_range;
 
   method_range methods() const {
@@ -768,7 +768,7 @@ public:
 
   /// Iterator access to constructor members.
   typedef specific_decl_iterator<CXXConstructorDecl> ctor_iterator;
-  typedef llvm::iterator_range<specific_decl_iterator<CXXConstructorDecl>>
+  typedef llvm37::iterator_range<specific_decl_iterator<CXXConstructorDecl>>
     ctor_range;
 
   ctor_range ctors() const { return ctor_range(ctor_begin(), ctor_end()); }
@@ -783,7 +783,7 @@ public:
   /// An iterator over friend declarations.  All of these are defined
   /// in DeclFriend.h.
   class friend_iterator;
-  typedef llvm::iterator_range<friend_iterator> friend_range;
+  typedef llvm37::iterator_range<friend_iterator> friend_range;
 
   friend_range friends() const;
   friend_iterator friend_begin() const;
@@ -1061,11 +1061,11 @@ public:
   ///
   /// \note No entries will be added for init-captures, as they do not capture
   /// variables.
-  void getCaptureFields(llvm::DenseMap<const VarDecl *, FieldDecl *> &Captures,
+  void getCaptureFields(llvm37::DenseMap<const VarDecl *, FieldDecl *> &Captures,
                         FieldDecl *&ThisCapture) const;
 
   typedef const LambdaCapture *capture_const_iterator;
-  typedef llvm::iterator_range<capture_const_iterator> capture_const_range;
+  typedef llvm37::iterator_range<capture_const_iterator> capture_const_range;
 
   capture_const_range captures() const {
     return capture_const_range(captures_begin(), captures_end());
@@ -1093,7 +1093,7 @@ public:
 
   /// \brief Get all conversion functions visible in current class,
   /// including conversion function templates.
-  llvm::iterator_range<conversion_iterator> getVisibleConversionFunctions();
+  llvm37::iterator_range<conversion_iterator> getVisibleConversionFunctions();
 
   /// Determine whether this class is an aggregate (C++ [dcl.init.aggr]),
   /// which is a class with no user-declared constructors, no private
@@ -1902,7 +1902,7 @@ class CXXCtorInitializer {
   /// \brief Either the base class name/delegating constructor type (stored as
   /// a TypeSourceInfo*), an normal field (FieldDecl), or an anonymous field
   /// (IndirectFieldDecl*) being initialized.
-  llvm::PointerUnion3<TypeSourceInfo *, FieldDecl *, IndirectFieldDecl *>
+  llvm37::PointerUnion3<TypeSourceInfo *, FieldDecl *, IndirectFieldDecl *>
     Initializee;
 
   /// \brief The source location for the field name or, for a base initializer
@@ -2071,7 +2071,7 @@ public:
   SourceLocation getSourceLocation() const;
 
   /// \brief Determine the source range covering the entire initializer.
-  SourceRange getSourceRange() const LLVM_READONLY;
+  SourceRange getSourceRange() const LLVM37_READONLY;
 
   /// \brief Determine whether this initializer is explicitly written
   /// in the source code.
@@ -2126,7 +2126,7 @@ public:
   }
   ArrayRef<VarDecl *> getArrayIndexes() {
     assert(getNumArrayIndices() != 0 && "Getting indexes for non-array init");
-    return llvm::makeArrayRef(reinterpret_cast<VarDecl **>(this + 1),
+    return llvm37::makeArrayRef(reinterpret_cast<VarDecl **>(this + 1),
                               getNumArrayIndices());
   }
 
@@ -2194,8 +2194,8 @@ public:
   /// \brief Iterates through the member/base initializer list.
   typedef CXXCtorInitializer *const *init_const_iterator;
 
-  typedef llvm::iterator_range<init_iterator> init_range;
-  typedef llvm::iterator_range<init_const_iterator> init_const_range;
+  typedef llvm37::iterator_range<init_iterator> init_range;
+  typedef llvm37::iterator_range<init_const_iterator> init_const_range;
 
   init_range inits() { return init_range(init_begin(), init_end()); }
   init_const_range inits() const {
@@ -2524,7 +2524,7 @@ public:
     HasBraces = RBraceLoc.isValid();
   }
 
-  SourceLocation getLocEnd() const LLVM_READONLY {
+  SourceLocation getLocEnd() const LLVM37_READONLY {
     if (hasBraces())
       return getRBraceLoc();
     // No braces: get the end location of the (only) declaration in context
@@ -2532,7 +2532,7 @@ public:
     return decls_empty() ? getLocation() : decls_begin()->getLocEnd();
   }
 
-  SourceRange getSourceRange() const override LLVM_READONLY {
+  SourceRange getSourceRange() const override LLVM37_READONLY {
     return SourceRange(ExternLoc, getLocEnd());
   }
 
@@ -2639,7 +2639,7 @@ public:
                                     DeclContext *CommonAncestor);
   static UsingDirectiveDecl *CreateDeserialized(ASTContext &C, unsigned ID);
 
-  SourceRange getSourceRange() const override LLVM_READONLY {
+  SourceRange getSourceRange() const override LLVM37_READONLY {
     return SourceRange(UsingLoc, getLocation());
   }
 
@@ -2755,7 +2755,7 @@ public:
   /// may either be a NamespaceDecl or a NamespaceAliasDecl.
   NamedDecl *getAliasedNamespace() const { return Namespace; }
 
-  SourceRange getSourceRange() const override LLVM_READONLY {
+  SourceRange getSourceRange() const override LLVM37_READONLY {
     return SourceRange(NamespaceLoc, IdentLoc);
   }
 
@@ -2886,7 +2886,7 @@ class UsingDecl : public NamedDecl, public Mergeable<UsingDecl> {
   ///
   /// The bool member of the pair store whether this decl has the \c typename
   /// keyword.
-  llvm::PointerIntPair<UsingShadowDecl *, 1, bool> FirstUsingShadow;
+  llvm37::PointerIntPair<UsingShadowDecl *, 1, bool> FirstUsingShadow;
 
   UsingDecl(DeclContext *DC, SourceLocation UL,
             NestedNameSpecifierLoc QualifierLoc,
@@ -2963,7 +2963,7 @@ public:
     }
   };
 
-  typedef llvm::iterator_range<shadow_iterator> shadow_range;
+  typedef llvm37::iterator_range<shadow_iterator> shadow_range;
 
   shadow_range shadows() const {
     return shadow_range(shadow_begin(), shadow_end());
@@ -2990,7 +2990,7 @@ public:
 
   static UsingDecl *CreateDeserialized(ASTContext &C, unsigned ID);
 
-  SourceRange getSourceRange() const override LLVM_READONLY;
+  SourceRange getSourceRange() const override LLVM37_READONLY;
 
   /// Retrieves the canonical declaration of this declaration.
   UsingDecl *getCanonicalDecl() override { return getFirstDecl(); }
@@ -3069,7 +3069,7 @@ public:
   static UnresolvedUsingValueDecl *
   CreateDeserialized(ASTContext &C, unsigned ID);
 
-  SourceRange getSourceRange() const override LLVM_READONLY;
+  SourceRange getSourceRange() const override LLVM37_READONLY;
 
   /// Retrieves the canonical declaration of this declaration.
   UnresolvedUsingValueDecl *getCanonicalDecl() override {
@@ -3158,7 +3158,7 @@ public:
 /// \brief Represents a C++11 static_assert declaration.
 class StaticAssertDecl : public Decl {
   virtual void anchor();
-  llvm::PointerIntPair<Expr *, 1, bool> AssertExprAndFailed;
+  llvm37::PointerIntPair<Expr *, 1, bool> AssertExprAndFailed;
   StringLiteral *Message;
   SourceLocation RParenLoc;
 
@@ -3186,7 +3186,7 @@ public:
 
   SourceLocation getRParenLoc() const { return RParenLoc; }
 
-  SourceRange getSourceRange() const override LLVM_READONLY {
+  SourceRange getSourceRange() const override LLVM37_READONLY {
     return SourceRange(getLocation(), getRParenLoc());
   }
 

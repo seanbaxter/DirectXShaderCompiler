@@ -11,8 +11,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_AST_EXPR_H
-#define LLVM_CLANG_AST_EXPR_H
+#ifndef LLVM37_CLANG_AST_EXPR_H
+#define LLVM37_CLANG_AST_EXPR_H
 
 #include "clang/AST/APValue.h"
 #include "clang/AST/ASTVector.h"
@@ -25,11 +25,11 @@
 #include "clang/AST/HlslTypes.h" // HLSL Change
 #include "clang/Basic/CharInfo.h"
 #include "clang/Basic/TypeTraits.h"
-#include "llvm/ADT/APFloat.h"
-#include "llvm/ADT/APSInt.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/ADT/StringRef.h"
-#include "llvm/Support/Compiler.h"
+#include "llvm37/ADT/APFloat.h"
+#include "llvm37/ADT/APSInt.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/ADT/StringRef.h"
+#include "llvm37/Support/Compiler.h"
 
 namespace clang {
   class APValue;
@@ -225,7 +225,7 @@ public:
 
   /// getExprLoc - Return the preferred location for the arrow when diagnosing
   /// a problem with a generic expression.
-  SourceLocation getExprLoc() const LLVM_READONLY;
+  SourceLocation getExprLoc() const LLVM37_READONLY;
 
   /// isUnusedResultAWarning - Return true if this immediate expression should
   /// be warned about if the result is unused.  If so, fill in expr, location,
@@ -488,7 +488,7 @@ public:
   ///
   /// Note: This does not perform the implicit conversions required by C++11
   /// [expr.const]p5.
-  bool isIntegerConstantExpr(llvm::APSInt &Result, const ASTContext &Ctx,
+  bool isIntegerConstantExpr(llvm37::APSInt &Result, const ASTContext &Ctx,
                              SourceLocation *Loc = nullptr,
                              bool isEvaluated = true) const;
   bool isIntegerConstantExpr(const ASTContext &Ctx,
@@ -583,7 +583,7 @@ public:
 
   /// EvaluateAsInt - Return true if this is a constant which we can fold and
   /// convert to an integer, using any crazy technique that we want to.
-  bool EvaluateAsInt(llvm::APSInt &Result, const ASTContext &Ctx,
+  bool EvaluateAsInt(llvm37::APSInt &Result, const ASTContext &Ctx,
                      SideEffectsKind AllowSideEffects = SE_NoSideEffects) const;
 
   /// isEvaluatable - Call EvaluateAsRValue to see if this expression can be
@@ -607,7 +607,7 @@ public:
   /// EvaluateKnownConstInt - Call EvaluateAsRValue and return the folded
   /// integer. This must be called on an expression that constant folds to an
   /// integer.
-  llvm::APSInt EvaluateKnownConstInt(const ASTContext &Ctx,
+  llvm37::APSInt EvaluateKnownConstInt(const ASTContext &Ctx,
                     SmallVectorImpl<PartialDiagnosticAt> *Diag = nullptr) const;
 
   void EvaluateForOverflow(const ASTContext &Ctx) const;
@@ -691,15 +691,15 @@ public:
 
   /// IgnoreImpCasts - Skip past any implicit casts which might
   /// surround this expression.  Only skips ImplicitCastExprs.
-  Expr *IgnoreImpCasts() LLVM_READONLY;
+  Expr *IgnoreImpCasts() LLVM37_READONLY;
 
   /// IgnoreImplicit - Skip past any implicit AST nodes which might
   /// surround this expression.
-  Expr *IgnoreImplicit() LLVM_READONLY {
+  Expr *IgnoreImplicit() LLVM37_READONLY {
     return cast<Expr>(Stmt::IgnoreImplicit());
   }
 
-  const Expr *IgnoreImplicit() const LLVM_READONLY {
+  const Expr *IgnoreImplicit() const LLVM37_READONLY {
     return const_cast<Expr*>(this)->IgnoreImplicit();
   }
 
@@ -707,48 +707,48 @@ public:
   ///  its subexpression.  If that subexpression is also a ParenExpr,
   ///  then this method recursively returns its subexpression, and so forth.
   ///  Otherwise, the method returns the current Expr.
-  Expr *IgnoreParens() LLVM_READONLY;
+  Expr *IgnoreParens() LLVM37_READONLY;
 
   /// IgnoreParenCasts - Ignore parentheses and casts.  Strip off any ParenExpr
   /// or CastExprs, returning their operand.
-  Expr *IgnoreParenCasts() LLVM_READONLY;
+  Expr *IgnoreParenCasts() LLVM37_READONLY;
 
   /// Ignore casts.  Strip off any CastExprs, returning their operand.
-  Expr *IgnoreCasts() LLVM_READONLY;
+  Expr *IgnoreCasts() LLVM37_READONLY;
 
   /// IgnoreParenImpCasts - Ignore parentheses and implicit casts.  Strip off
   /// any ParenExpr or ImplicitCastExprs, returning their operand.
-  Expr *IgnoreParenImpCasts() LLVM_READONLY;
+  Expr *IgnoreParenImpCasts() LLVM37_READONLY;
 
   /// IgnoreConversionOperator - Ignore conversion operator. If this Expr is a
   /// call to a conversion operator, return the argument.
-  Expr *IgnoreConversionOperator() LLVM_READONLY;
+  Expr *IgnoreConversionOperator() LLVM37_READONLY;
 
-  const Expr *IgnoreConversionOperator() const LLVM_READONLY {
+  const Expr *IgnoreConversionOperator() const LLVM37_READONLY {
     return const_cast<Expr*>(this)->IgnoreConversionOperator();
   }
 
-  const Expr *IgnoreParenImpCasts() const LLVM_READONLY {
+  const Expr *IgnoreParenImpCasts() const LLVM37_READONLY {
     return const_cast<Expr*>(this)->IgnoreParenImpCasts();
   }
 
   /// Ignore parentheses and lvalue casts.  Strip off any ParenExpr and
   /// CastExprs that represent lvalue casts, returning their operand.
-  Expr *IgnoreParenLValueCasts() LLVM_READONLY;
+  Expr *IgnoreParenLValueCasts() LLVM37_READONLY;
 
-  const Expr *IgnoreParenLValueCasts() const LLVM_READONLY {
+  const Expr *IgnoreParenLValueCasts() const LLVM37_READONLY {
     return const_cast<Expr*>(this)->IgnoreParenLValueCasts();
   }
 
   /// IgnoreParenNoopCasts - Ignore parentheses and casts that do not change the
   /// value (including ptr->int casts of the same size).  Strip off any
   /// ParenExpr or CastExprs, returning their operand.
-  Expr *IgnoreParenNoopCasts(ASTContext &Ctx) LLVM_READONLY;
+  Expr *IgnoreParenNoopCasts(ASTContext &Ctx) LLVM37_READONLY;
 
   /// Ignore parentheses and derived-to-base casts.
-  Expr *ignoreParenBaseCasts() LLVM_READONLY;
+  Expr *ignoreParenBaseCasts() LLVM37_READONLY;
 
-  const Expr *ignoreParenBaseCasts() const LLVM_READONLY {
+  const Expr *ignoreParenBaseCasts() const LLVM37_READONLY {
     return const_cast<Expr*>(this)->ignoreParenBaseCasts();
   }
 
@@ -768,21 +768,21 @@ public:
   /// \brief Whether this expression is an implicit reference to 'this' in C++.
   bool isImplicitCXXThis() const;
 
-  const Expr *IgnoreImpCasts() const LLVM_READONLY {
+  const Expr *IgnoreImpCasts() const LLVM37_READONLY {
     return const_cast<Expr*>(this)->IgnoreImpCasts();
   }
-  const Expr *IgnoreParens() const LLVM_READONLY {
+  const Expr *IgnoreParens() const LLVM37_READONLY {
     return const_cast<Expr*>(this)->IgnoreParens();
   }
-  const Expr *IgnoreParenCasts() const LLVM_READONLY {
+  const Expr *IgnoreParenCasts() const LLVM37_READONLY {
     return const_cast<Expr*>(this)->IgnoreParenCasts();
   }
   /// Strip off casts, but keep parentheses.
-  const Expr *IgnoreCasts() const LLVM_READONLY {
+  const Expr *IgnoreCasts() const LLVM37_READONLY {
     return const_cast<Expr*>(this)->IgnoreCasts();
   }
 
-  const Expr *IgnoreParenNoopCasts(ASTContext &Ctx) const LLVM_READONLY {
+  const Expr *IgnoreParenNoopCasts(ASTContext &Ctx) const LLVM37_READONLY {
     return const_cast<Expr*>(this)->IgnoreParenNoopCasts(Ctx);
   }
 
@@ -849,13 +849,13 @@ public:
   /// \brief Retrieve the location of this expression.
   SourceLocation getLocation() const { return Loc; }
 
-  SourceLocation getLocStart() const LLVM_READONLY {
+  SourceLocation getLocStart() const LLVM37_READONLY {
     return SourceExpr ? SourceExpr->getLocStart() : Loc;
   }
-  SourceLocation getLocEnd() const LLVM_READONLY {
+  SourceLocation getLocEnd() const LLVM37_READONLY {
     return SourceExpr ? SourceExpr->getLocEnd() : Loc;
   }
-  SourceLocation getExprLoc() const LLVM_READONLY {
+  SourceLocation getExprLoc() const LLVM37_READONLY {
     if (SourceExpr) return SourceExpr->getExprLoc();
     return Loc;
   }
@@ -1005,8 +1005,8 @@ public:
 
   SourceLocation getLocation() const { return Loc; }
   void setLocation(SourceLocation L) { Loc = L; }
-  SourceLocation getLocStart() const LLVM_READONLY;
-  SourceLocation getLocEnd() const LLVM_READONLY;
+  SourceLocation getLocStart() const LLVM37_READONLY;
+  SourceLocation getLocEnd() const LLVM37_READONLY;
 
   /// \brief Determine whether this declaration reference was preceded by a
   /// C++ nested-name-specifier, e.g., \c N::foo.
@@ -1215,8 +1215,8 @@ public:
   static StringRef getIdentTypeName(IdentType IT);
   static std::string ComputeName(IdentType IT, const Decl *CurrentDecl);
 
-  SourceLocation getLocStart() const LLVM_READONLY { return Loc; }
-  SourceLocation getLocEnd() const LLVM_READONLY { return Loc; }
+  SourceLocation getLocStart() const LLVM37_READONLY { return Loc; }
+  SourceLocation getLocEnd() const LLVM37_READONLY { return Loc; }
 
   static bool classof(const Stmt *T) {
     return T->getStmtClass() == PredefinedExprClass;
@@ -1243,7 +1243,7 @@ class APNumericStorage {
   };
   unsigned BitWidth;
 
-  bool hasAllocation() const { return llvm::APInt::getNumWords(BitWidth) > 1; }
+  bool hasAllocation() const { return llvm37::APInt::getNumWords(BitWidth) > 1; }
 
   APNumericStorage(const APNumericStorage &) = delete;
   void operator=(const APNumericStorage &) = delete;
@@ -1251,30 +1251,30 @@ class APNumericStorage {
 protected:
   APNumericStorage() : VAL(0), BitWidth(0) { }
 
-  llvm::APInt getIntValue() const {
-    unsigned NumWords = llvm::APInt::getNumWords(BitWidth);
+  llvm37::APInt getIntValue() const {
+    unsigned NumWords = llvm37::APInt::getNumWords(BitWidth);
     if (NumWords > 1)
-      return llvm::APInt(BitWidth, NumWords, pVal);
+      return llvm37::APInt(BitWidth, NumWords, pVal);
     else
-      return llvm::APInt(BitWidth, VAL);
+      return llvm37::APInt(BitWidth, VAL);
   }
-  void setIntValue(const ASTContext &C, const llvm::APInt &Val);
+  void setIntValue(const ASTContext &C, const llvm37::APInt &Val);
 };
 
 class APIntStorage : private APNumericStorage {
 public:
-  llvm::APInt getValue() const { return getIntValue(); }
-  void setValue(const ASTContext &C, const llvm::APInt &Val) {
+  llvm37::APInt getValue() const { return getIntValue(); }
+  void setValue(const ASTContext &C, const llvm37::APInt &Val) {
     setIntValue(C, Val);
   }
 };
 
 class APFloatStorage : private APNumericStorage {
 public:
-  llvm::APFloat getValue(const llvm::fltSemantics &Semantics) const {
-    return llvm::APFloat(Semantics, getIntValue());
+  llvm37::APFloat getValue(const llvm37::fltSemantics &Semantics) const {
+    return llvm37::APFloat(Semantics, getIntValue());
   }
-  void setValue(const ASTContext &C, const llvm::APFloat &Val) {
+  void setValue(const ASTContext &C, const llvm37::APFloat &Val) {
     setIntValue(C, Val.bitcastToAPInt());
   }
 };
@@ -1289,20 +1289,20 @@ class IntegerLiteral : public Expr, public APIntStorage {
 public:
   // type should be IntTy, LongTy, LongLongTy, UnsignedIntTy, UnsignedLongTy,
   // or UnsignedLongLongTy
-  IntegerLiteral(const ASTContext &C, const llvm::APInt &V, QualType type,
+  IntegerLiteral(const ASTContext &C, const llvm37::APInt &V, QualType type,
                  SourceLocation l);
 
   /// \brief Returns a new integer literal with value 'V' and type 'type'.
   /// \param type - either IntTy, LongTy, LongLongTy, UnsignedIntTy,
   /// UnsignedLongTy, or UnsignedLongLongTy which should match the size of V
   /// \param V - the value that the returned integer literal contains.
-  static IntegerLiteral *Create(const ASTContext &C, const llvm::APInt &V,
+  static IntegerLiteral *Create(const ASTContext &C, const llvm37::APInt &V,
                                 QualType type, SourceLocation l);
   /// \brief Returns a new empty integer literal.
   static IntegerLiteral *Create(const ASTContext &C, EmptyShell Empty);
 
-  SourceLocation getLocStart() const LLVM_READONLY { return Loc; }
-  SourceLocation getLocEnd() const LLVM_READONLY { return Loc; }
+  SourceLocation getLocStart() const LLVM37_READONLY { return Loc; }
+  SourceLocation getLocEnd() const LLVM37_READONLY { return Loc; }
 
   /// \brief Retrieve the location of the literal.
   SourceLocation getLocation() const { return Loc; }
@@ -1347,8 +1347,8 @@ public:
     return static_cast<CharacterKind>(CharacterLiteralBits.Kind);
   }
 
-  SourceLocation getLocStart() const LLVM_READONLY { return Loc; }
-  SourceLocation getLocEnd() const LLVM_READONLY { return Loc; }
+  SourceLocation getLocStart() const LLVM37_READONLY { return Loc; }
+  SourceLocation getLocEnd() const LLVM37_READONLY { return Loc; }
 
   unsigned getValue() const { return Value; }
 
@@ -1367,21 +1367,21 @@ public:
 class FloatingLiteral : public Expr, private APFloatStorage {
   SourceLocation Loc;
 
-  FloatingLiteral(const ASTContext &C, const llvm::APFloat &V, bool isexact,
+  FloatingLiteral(const ASTContext &C, const llvm37::APFloat &V, bool isexact,
                   QualType Type, SourceLocation L);
 
   /// \brief Construct an empty floating-point literal.
   explicit FloatingLiteral(const ASTContext &C, EmptyShell Empty);
 
 public:
-  static FloatingLiteral *Create(const ASTContext &C, const llvm::APFloat &V,
+  static FloatingLiteral *Create(const ASTContext &C, const llvm37::APFloat &V,
                                  bool isexact, QualType Type, SourceLocation L);
   static FloatingLiteral *Create(const ASTContext &C, EmptyShell Empty);
 
-  llvm::APFloat getValue() const {
+  llvm37::APFloat getValue() const {
     return APFloatStorage::getValue(getSemantics());
   }
-  void setValue(const ASTContext &C, const llvm::APFloat &Val) {
+  void setValue(const ASTContext &C, const llvm37::APFloat &Val) {
     assert(&getSemantics() == &Val.getSemantics() && "Inconsistent semantics");
     APFloatStorage::setValue(C, Val);
   }
@@ -1399,10 +1399,10 @@ public:
   }
 
   /// Return the APFloat semantics this literal uses.
-  const llvm::fltSemantics &getSemantics() const;
+  const llvm37::fltSemantics &getSemantics() const;
 
   /// Set the APFloat semantics this literal uses.
-  void setSemantics(const llvm::fltSemantics &Sem);
+  void setSemantics(const llvm37::fltSemantics &Sem);
 
   bool isExact() const { return FloatingLiteralBits.IsExact; }
   void setExact(bool E) { FloatingLiteralBits.IsExact = E; }
@@ -1415,8 +1415,8 @@ public:
   SourceLocation getLocation() const { return Loc; }
   void setLocation(SourceLocation L) { Loc = L; }
 
-  SourceLocation getLocStart() const LLVM_READONLY { return Loc; }
-  SourceLocation getLocEnd() const LLVM_READONLY { return Loc; }
+  SourceLocation getLocStart() const LLVM37_READONLY { return Loc; }
+  SourceLocation getLocEnd() const LLVM37_READONLY { return Loc; }
 
   static bool classof(const Stmt *T) {
     return T->getStmtClass() == FloatingLiteralClass;
@@ -1447,8 +1447,8 @@ public:
   Expr *getSubExpr() { return cast<Expr>(Val); }
   void setSubExpr(Expr *E) { Val = E; }
 
-  SourceLocation getLocStart() const LLVM_READONLY { return Val->getLocStart(); }
-  SourceLocation getLocEnd() const LLVM_READONLY { return Val->getLocEnd(); }
+  SourceLocation getLocStart() const LLVM37_READONLY { return Val->getLocStart(); }
+  SourceLocation getLocEnd() const LLVM37_READONLY { return Val->getLocEnd(); }
 
   static bool classof(const Stmt *T) {
     return T->getStmtClass() == ImaginaryLiteralClass;
@@ -1608,8 +1608,8 @@ public:
   tokloc_iterator tokloc_begin() const { return TokLocs; }
   tokloc_iterator tokloc_end() const { return TokLocs+NumConcatenated; }
 
-  SourceLocation getLocStart() const LLVM_READONLY { return TokLocs[0]; }
-  SourceLocation getLocEnd() const LLVM_READONLY {
+  SourceLocation getLocStart() const LLVM37_READONLY { return TokLocs[0]; }
+  SourceLocation getLocEnd() const LLVM37_READONLY {
     return TokLocs[NumConcatenated - 1];
   }
 
@@ -1643,8 +1643,8 @@ public:
   Expr *getSubExpr() { return cast<Expr>(Val); }
   void setSubExpr(Expr *E) { Val = E; }
 
-  SourceLocation getLocStart() const LLVM_READONLY { return L; }
-  SourceLocation getLocEnd() const LLVM_READONLY { return R; }
+  SourceLocation getLocStart() const LLVM37_READONLY { return L; }
+  SourceLocation getLocEnd() const LLVM37_READONLY { return R; }
 
   /// \brief Get the location of the left parentheses '('.
   SourceLocation getLParen() const { return L; }
@@ -1756,13 +1756,13 @@ public:
   /// the given unary opcode.
   static OverloadedOperatorKind getOverloadedOperator(Opcode Opc);
 
-  SourceLocation getLocStart() const LLVM_READONLY {
+  SourceLocation getLocStart() const LLVM37_READONLY {
     return isPostfix() ? Val->getLocStart() : Loc;
   }
-  SourceLocation getLocEnd() const LLVM_READONLY {
+  SourceLocation getLocEnd() const LLVM37_READONLY {
     return isPostfix() ? Loc : Val->getLocEnd();
   }
-  SourceLocation getExprLoc() const LLVM_READONLY { return Loc; }
+  SourceLocation getExprLoc() const LLVM37_READONLY { return Loc; }
 
   static bool classof(const Stmt *T) {
     return T->getStmtClass() == UnaryOperatorClass;
@@ -1877,9 +1877,9 @@ public:
     /// the square brackets. For a field or identifier node, the source range
     /// contains the location of the period (if there is one) and the
     /// identifier.
-    SourceRange getSourceRange() const LLVM_READONLY { return Range; }
-    SourceLocation getLocStart() const LLVM_READONLY { return Range.getBegin(); }
-    SourceLocation getLocEnd() const LLVM_READONLY { return Range.getEnd(); }
+    SourceRange getSourceRange() const LLVM37_READONLY { return Range; }
+    SourceLocation getLocStart() const LLVM37_READONLY { return Range.getBegin(); }
+    SourceLocation getLocEnd() const LLVM37_READONLY { return Range.getEnd(); }
   };
 
 private:
@@ -1959,8 +1959,8 @@ public:
     return NumExprs;
   }
 
-  SourceLocation getLocStart() const LLVM_READONLY { return OperatorLoc; }
-  SourceLocation getLocEnd() const LLVM_READONLY { return RParenLoc; }
+  SourceLocation getLocStart() const LLVM37_READONLY { return OperatorLoc; }
+  SourceLocation getLocEnd() const LLVM37_READONLY { return RParenLoc; }
 
   static bool classof(const Stmt *T) {
     return T->getStmtClass() == OffsetOfExprClass;
@@ -2051,8 +2051,8 @@ public:
   SourceLocation getRParenLoc() const { return RParenLoc; }
   void setRParenLoc(SourceLocation L) { RParenLoc = L; }
 
-  SourceLocation getLocStart() const LLVM_READONLY { return OpLoc; }
-  SourceLocation getLocEnd() const LLVM_READONLY { return RParenLoc; }
+  SourceLocation getLocStart() const LLVM37_READONLY { return OpLoc; }
+  SourceLocation getLocEnd() const LLVM37_READONLY { return RParenLoc; }
 
   static bool classof(const Stmt *T) {
     return T->getStmtClass() == UnaryExprOrTypeTraitExprClass;
@@ -2124,15 +2124,15 @@ public:
     return cast<Expr>(getRHS()->getType()->isIntegerType() ? getRHS():getLHS());
   }
 
-  SourceLocation getLocStart() const LLVM_READONLY {
+  SourceLocation getLocStart() const LLVM37_READONLY {
     return getLHS()->getLocStart();
   }
-  SourceLocation getLocEnd() const LLVM_READONLY { return RBracketLoc; }
+  SourceLocation getLocEnd() const LLVM37_READONLY { return RBracketLoc; }
 
   SourceLocation getRBracketLoc() const { return RBracketLoc; }
   void setRBracketLoc(SourceLocation L) { RBracketLoc = L; }
 
-  SourceLocation getExprLoc() const LLVM_READONLY {
+  SourceLocation getExprLoc() const LLVM37_READONLY {
     return getBase()->getExprLoc();
   }
 
@@ -2239,8 +2239,8 @@ public:
 
   typedef ExprIterator arg_iterator;
   typedef ConstExprIterator const_arg_iterator;
-  typedef llvm::iterator_range<arg_iterator> arg_range;
-  typedef llvm::iterator_range<const_arg_iterator> arg_const_range;
+  typedef llvm37::iterator_range<arg_iterator> arg_range;
+  typedef llvm37::iterator_range<const_arg_iterator> arg_const_range;
 
   arg_range arguments() { return arg_range(arg_begin(), arg_end()); }
   arg_const_range arguments() const {
@@ -2263,7 +2263,7 @@ public:
   /// interface.  This provides efficient reverse iteration of the
   /// subexpressions.  This is currently used for CFG construction.
   ArrayRef<Stmt*> getRawSubExprs() {
-    return llvm::makeArrayRef(SubExprs,
+    return llvm37::makeArrayRef(SubExprs,
                               getNumPreArgs() + PREARGS_START + getNumArgs());
   }
 
@@ -2287,8 +2287,8 @@ public:
   SourceLocation getRParenLoc() const { return RParenLoc; }
   void setRParenLoc(SourceLocation L) { RParenLoc = L; }
 
-  SourceLocation getLocStart() const LLVM_READONLY;
-  SourceLocation getLocEnd() const LLVM_READONLY;
+  SourceLocation getLocStart() const LLVM37_READONLY;
+  SourceLocation getLocEnd() const LLVM37_READONLY;
 
   static bool classof(const Stmt *T) {
     return T->getStmtClass() >= firstCallExprConstant &&
@@ -2547,7 +2547,7 @@ public:
                                MemberLoc, MemberDNLoc);
   }
 
-  SourceLocation getOperatorLoc() const LLVM_READONLY { return OperatorLoc; }
+  SourceLocation getOperatorLoc() const LLVM37_READONLY { return OperatorLoc; }
 
   bool isArrow() const { return IsArrow; }
   void setArrow(bool A) { IsArrow = A; }
@@ -2557,10 +2557,10 @@ public:
   SourceLocation getMemberLoc() const { return MemberLoc; }
   void setMemberLoc(SourceLocation L) { MemberLoc = L; }
 
-  SourceLocation getLocStart() const LLVM_READONLY;
-  SourceLocation getLocEnd() const LLVM_READONLY;
+  SourceLocation getLocStart() const LLVM37_READONLY;
+  SourceLocation getLocEnd() const LLVM37_READONLY;
 
-  SourceLocation getExprLoc() const LLVM_READONLY { return MemberLoc; }
+  SourceLocation getExprLoc() const LLVM37_READONLY { return MemberLoc; }
 
   /// \brief Determine whether the base of this explicit is implicit.
   bool isImplicitAccess() const {
@@ -2601,7 +2601,7 @@ class CompoundLiteralExpr : public Expr {
   /// The type as written.  This can be an incomplete array type, in
   /// which case the actual expression type will be different.
   /// The int part of the pair stores whether this expr is file scope.
-  llvm::PointerIntPair<TypeSourceInfo *, 1, bool> TInfoAndScope;
+  llvm37::PointerIntPair<TypeSourceInfo *, 1, bool> TInfoAndScope;
   Stmt *Init;
 public:
   CompoundLiteralExpr(SourceLocation lparenloc, TypeSourceInfo *tinfo,
@@ -2635,7 +2635,7 @@ public:
     TInfoAndScope.setPointer(tinfo);
   }
 
-  SourceLocation getLocStart() const LLVM_READONLY {
+  SourceLocation getLocStart() const LLVM37_READONLY {
     // FIXME: Init should never be null.
     if (!Init)
       return SourceLocation();
@@ -2643,7 +2643,7 @@ public:
       return Init->getLocStart();
     return LParenLoc;
   }
-  SourceLocation getLocEnd() const LLVM_READONLY {
+  SourceLocation getLocEnd() const LLVM37_READONLY {
     // FIXME: Init should never be null.
     if (!Init)
       return SourceLocation();
@@ -2792,10 +2792,10 @@ public:
   static ImplicitCastExpr *CreateEmpty(const ASTContext &Context,
                                        unsigned PathSize);
 
-  SourceLocation getLocStart() const LLVM_READONLY {
+  SourceLocation getLocStart() const LLVM37_READONLY {
     return getSubExpr()->getLocStart();
   }
-  SourceLocation getLocEnd() const LLVM_READONLY {
+  SourceLocation getLocEnd() const LLVM37_READONLY {
     return getSubExpr()->getLocEnd();
   }
 
@@ -2891,8 +2891,8 @@ public:
   SourceLocation getRParenLoc() const { return RPLoc; }
   void setRParenLoc(SourceLocation L) { RPLoc = L; }
 
-  SourceLocation getLocStart() const LLVM_READONLY { return LPLoc; }
-  SourceLocation getLocEnd() const LLVM_READONLY {
+  SourceLocation getLocStart() const LLVM37_READONLY { return LPLoc; }
+  SourceLocation getLocEnd() const LLVM37_READONLY {
     return getSubExpr()->getLocEnd();
   }
 
@@ -2958,7 +2958,7 @@ public:
   explicit BinaryOperator(EmptyShell Empty)
     : Expr(BinaryOperatorClass, Empty), Opc(BO_Comma) { }
 
-  SourceLocation getExprLoc() const LLVM_READONLY { return OpLoc; }
+  SourceLocation getExprLoc() const LLVM37_READONLY { return OpLoc; }
   SourceLocation getOperatorLoc() const { return OpLoc; }
   void setOperatorLoc(SourceLocation L) { OpLoc = L; }
 
@@ -2970,10 +2970,10 @@ public:
   Expr *getRHS() const { return cast<Expr>(SubExprs[RHS]); }
   void setRHS(Expr *E) { SubExprs[RHS] = E; }
 
-  SourceLocation getLocStart() const LLVM_READONLY {
+  SourceLocation getLocStart() const LLVM37_READONLY {
     return getLHS()->getLocStart();
   }
-  SourceLocation getLocEnd() const LLVM_READONLY {
+  SourceLocation getLocEnd() const LLVM37_READONLY {
     return getRHS()->getLocEnd();
   }
 
@@ -3237,10 +3237,10 @@ public:
   Expr *getLHS() const { return cast<Expr>(SubExprs[LHS]); }
   Expr *getRHS() const { return cast<Expr>(SubExprs[RHS]); }
 
-  SourceLocation getLocStart() const LLVM_READONLY {
+  SourceLocation getLocStart() const LLVM37_READONLY {
     return getCond()->getLocStart();
   }
-  SourceLocation getLocEnd() const LLVM_READONLY {
+  SourceLocation getLocEnd() const LLVM37_READONLY {
     return getRHS()->getLocEnd();
   }
 
@@ -3322,10 +3322,10 @@ public:
     return cast<Expr>(SubExprs[RHS]);
   }
 
-  SourceLocation getLocStart() const LLVM_READONLY {
+  SourceLocation getLocStart() const LLVM37_READONLY {
     return getCommon()->getLocStart();
   }
-  SourceLocation getLocEnd() const LLVM_READONLY {
+  SourceLocation getLocEnd() const LLVM37_READONLY {
     return getFalseExpr()->getLocEnd();
   }
 
@@ -3377,8 +3377,8 @@ public:
   SourceLocation getLabelLoc() const { return LabelLoc; }
   void setLabelLoc(SourceLocation L) { LabelLoc = L; }
 
-  SourceLocation getLocStart() const LLVM_READONLY { return AmpAmpLoc; }
-  SourceLocation getLocEnd() const LLVM_READONLY { return LabelLoc; }
+  SourceLocation getLocStart() const LLVM37_READONLY { return AmpAmpLoc; }
+  SourceLocation getLocEnd() const LLVM37_READONLY { return LabelLoc; }
 
   LabelDecl *getLabel() const { return Label; }
   void setLabel(LabelDecl *L) { Label = L; }
@@ -3417,8 +3417,8 @@ public:
   const CompoundStmt *getSubStmt() const { return cast<CompoundStmt>(SubStmt); }
   void setSubStmt(CompoundStmt *S) { SubStmt = S; }
 
-  SourceLocation getLocStart() const LLVM_READONLY { return LParenLoc; }
-  SourceLocation getLocEnd() const LLVM_READONLY { return RParenLoc; }
+  SourceLocation getLocStart() const LLVM37_READONLY { return LParenLoc; }
+  SourceLocation getLocEnd() const LLVM37_READONLY { return RParenLoc; }
 
   SourceLocation getLParenLoc() const { return LParenLoc; }
   void setLParenLoc(SourceLocation L) { LParenLoc = L; }
@@ -3464,8 +3464,8 @@ public:
   SourceLocation getRParenLoc() const { return RParenLoc; }
   void setRParenLoc(SourceLocation L) { RParenLoc = L; }
 
-  SourceLocation getLocStart() const LLVM_READONLY { return BuiltinLoc; }
-  SourceLocation getLocEnd() const LLVM_READONLY { return RParenLoc; }
+  SourceLocation getLocStart() const LLVM37_READONLY { return BuiltinLoc; }
+  SourceLocation getLocEnd() const LLVM37_READONLY { return RParenLoc; }
 
   static bool classof(const Stmt *T) {
     return T->getStmtClass() == ShuffleVectorExprClass;
@@ -3491,7 +3491,7 @@ public:
 
   void setExprs(const ASTContext &C, ArrayRef<Expr *> Exprs);
 
-  llvm::APSInt getShuffleMaskIdx(const ASTContext &Ctx, unsigned N) const {
+  llvm37::APSInt getShuffleMaskIdx(const ASTContext &Ctx, unsigned N) const {
     assert((N < NumExprs - 2) && "Shuffle idx out of range!");
     return getExpr(N+2)->EvaluateKnownConstInt(Ctx);
   }
@@ -3545,8 +3545,8 @@ public:
   /// getRParenLoc - Return the location of final right parenthesis.
   SourceLocation getRParenLoc() const { return RParenLoc; }
 
-  SourceLocation getLocStart() const LLVM_READONLY { return BuiltinLoc; }
-  SourceLocation getLocEnd() const LLVM_READONLY { return RParenLoc; }
+  SourceLocation getLocStart() const LLVM37_READONLY { return BuiltinLoc; }
+  SourceLocation getLocEnd() const LLVM37_READONLY { return RParenLoc; }
 
   static bool classof(const Stmt *T) {
     return T->getStmtClass() == ConvertVectorExprClass;
@@ -3623,8 +3623,8 @@ public:
   SourceLocation getRParenLoc() const { return RParenLoc; }
   void setRParenLoc(SourceLocation L) { RParenLoc = L; }
 
-  SourceLocation getLocStart() const LLVM_READONLY { return BuiltinLoc; }
-  SourceLocation getLocEnd() const LLVM_READONLY { return RParenLoc; }
+  SourceLocation getLocStart() const LLVM37_READONLY { return BuiltinLoc; }
+  SourceLocation getLocEnd() const LLVM37_READONLY { return RParenLoc; }
 
   static bool classof(const Stmt *T) {
     return T->getStmtClass() == ChooseExprClass;
@@ -3659,8 +3659,8 @@ public:
   SourceLocation getTokenLocation() const { return TokenLoc; }
   void setTokenLocation(SourceLocation L) { TokenLoc = L; }
 
-  SourceLocation getLocStart() const LLVM_READONLY { return TokenLoc; }
-  SourceLocation getLocEnd() const LLVM_READONLY { return TokenLoc; }
+  SourceLocation getLocStart() const LLVM37_READONLY { return TokenLoc; }
+  SourceLocation getLocEnd() const LLVM37_READONLY { return TokenLoc; }
 
   static bool classof(const Stmt *T) {
     return T->getStmtClass() == GNUNullExprClass;
@@ -3704,8 +3704,8 @@ public:
   SourceLocation getRParenLoc() const { return RParenLoc; }
   void setRParenLoc(SourceLocation L) { RParenLoc = L; }
 
-  SourceLocation getLocStart() const LLVM_READONLY { return BuiltinLoc; }
-  SourceLocation getLocEnd() const LLVM_READONLY { return RParenLoc; }
+  SourceLocation getLocStart() const LLVM37_READONLY { return BuiltinLoc; }
+  SourceLocation getLocEnd() const LLVM37_READONLY { return RParenLoc; }
 
   static bool classof(const Stmt *T) {
     return T->getStmtClass() == VAArgExprClass;
@@ -3771,7 +3771,7 @@ class InitListExpr : public Expr {
   /// in semantic form. If not null, the pointer points to:
   ///   - the syntactic form, if this is in semantic form;
   ///   - the semantic form, if this is in syntactic form.
-  llvm::PointerIntPair<InitListExpr *, 1, bool> AltForm;
+  llvm37::PointerIntPair<InitListExpr *, 1, bool> AltForm;
 
   /// \brief Either:
   ///  If this initializer list initializes an array with more elements than
@@ -3780,7 +3780,7 @@ class InitListExpr : public Expr {
   /// Or
   ///  If this initializer list initializes a union, specifies which
   ///  field within the union will be initialized.
-  llvm::PointerUnion<Expr *, FieldDecl *> ArrayFillerOrUnionFieldInit;
+  llvm37::PointerUnion<Expr *, FieldDecl *> ArrayFillerOrUnionFieldInit;
 
 public:
   InitListExpr(const ASTContext &C, SourceLocation lbraceloc,
@@ -3910,8 +3910,8 @@ public:
     InitListExprBits.HadArrayRangeDesignator = ARD;
   }
 
-  SourceLocation getLocStart() const LLVM_READONLY;
-  SourceLocation getLocEnd() const LLVM_READONLY;
+  SourceLocation getLocStart() const LLVM37_READONLY;
+  SourceLocation getLocEnd() const LLVM37_READONLY;
 
   static bool classof(const Stmt *T) {
     return T->getStmtClass() == InitListExprClass;
@@ -4137,16 +4137,16 @@ public:
       return ArrayOrRange.Index;
     }
 
-    SourceLocation getLocStart() const LLVM_READONLY {
+    SourceLocation getLocStart() const LLVM37_READONLY {
       if (Kind == FieldDesignator)
         return getDotLoc().isInvalid()? getFieldLoc() : getDotLoc();
       else
         return getLBracketLoc();
     }
-    SourceLocation getLocEnd() const LLVM_READONLY {
+    SourceLocation getLocEnd() const LLVM37_READONLY {
       return Kind == FieldDesignator ? getFieldLoc() : getRBracketLoc();
     }
-    SourceRange getSourceRange() const LLVM_READONLY {
+    SourceRange getSourceRange() const LLVM37_READONLY {
       return SourceRange(getLocStart(), getLocEnd());
     }
   };
@@ -4177,12 +4177,12 @@ public:
     return Designators + NumDesignators;
   }
 
-  typedef llvm::iterator_range<designators_iterator> designators_range;
+  typedef llvm37::iterator_range<designators_iterator> designators_range;
   designators_range designators() {
     return designators_range(designators_begin(), designators_end());
   }
 
-  typedef llvm::iterator_range<const_designators_iterator>
+  typedef llvm37::iterator_range<const_designators_iterator>
           designators_const_range;
   designators_const_range designators() const {
     return designators_const_range(designators_begin(), designators_end());
@@ -4257,8 +4257,8 @@ public:
 
   SourceRange getDesignatorsSourceRange() const;
 
-  SourceLocation getLocStart() const LLVM_READONLY;
-  SourceLocation getLocEnd() const LLVM_READONLY;
+  SourceLocation getLocStart() const LLVM37_READONLY;
+  SourceLocation getLocEnd() const LLVM37_READONLY;
 
   static bool classof(const Stmt *T) {
     return T->getStmtClass() == DesignatedInitExprClass;
@@ -4293,8 +4293,8 @@ public:
     return T->getStmtClass() == NoInitExprClass;
   }
 
-  SourceLocation getLocStart() const LLVM_READONLY { return SourceLocation(); }
-  SourceLocation getLocEnd() const LLVM_READONLY { return SourceLocation(); }
+  SourceLocation getLocStart() const LLVM37_READONLY { return SourceLocation(); }
+  SourceLocation getLocEnd() const LLVM37_READONLY { return SourceLocation(); }
 
   // Iterators
   child_range children() { return child_range(); }
@@ -4323,8 +4323,8 @@ public:
   explicit DesignatedInitUpdateExpr(EmptyShell Empty)
     : Expr(DesignatedInitUpdateExprClass, Empty) { }
 
-  SourceLocation getLocStart() const LLVM_READONLY;
-  SourceLocation getLocEnd() const LLVM_READONLY;
+  SourceLocation getLocStart() const LLVM37_READONLY;
+  SourceLocation getLocEnd() const LLVM37_READONLY;
 
   static bool classof(const Stmt *T) {
     return T->getStmtClass() == DesignatedInitUpdateExprClass;
@@ -4367,8 +4367,8 @@ public:
     return T->getStmtClass() == ImplicitValueInitExprClass;
   }
 
-  SourceLocation getLocStart() const LLVM_READONLY { return SourceLocation(); }
-  SourceLocation getLocEnd() const LLVM_READONLY { return SourceLocation(); }
+  SourceLocation getLocStart() const LLVM37_READONLY { return SourceLocation(); }
+  SourceLocation getLocEnd() const LLVM37_READONLY { return SourceLocation(); }
 
   // Iterators
   child_range children() { return child_range(); }
@@ -4404,8 +4404,8 @@ public:
   SourceLocation getLParenLoc() const { return LParenLoc; }
   SourceLocation getRParenLoc() const { return RParenLoc; }
 
-  SourceLocation getLocStart() const LLVM_READONLY { return LParenLoc; }
-  SourceLocation getLocEnd() const LLVM_READONLY { return RParenLoc; }
+  SourceLocation getLocStart() const LLVM37_READONLY { return LParenLoc; }
+  SourceLocation getLocEnd() const LLVM37_READONLY { return RParenLoc; }
 
   static bool classof(const Stmt *T) {
     return T->getStmtClass() == ParenListExprClass;
@@ -4518,8 +4518,8 @@ public:
   const Expr *getResultExpr() const { return getAssocExpr(getResultIndex()); }
   Expr *getResultExpr() { return getAssocExpr(getResultIndex()); }
 
-  SourceLocation getLocStart() const LLVM_READONLY { return GenericLoc; }
-  SourceLocation getLocEnd() const LLVM_READONLY { return RParenLoc; }
+  SourceLocation getLocStart() const LLVM37_READONLY { return GenericLoc; }
+  SourceLocation getLocEnd() const LLVM37_READONLY { return RParenLoc; }
 
   static bool classof(const Stmt *T) {
     return T->getStmtClass() == GenericSelectionExprClass;
@@ -4584,10 +4584,10 @@ public:
   /// aggregate Constant of ConstantInt(s).
   void getEncodedElementAccess(SmallVectorImpl<unsigned> &Elts) const;
 
-  SourceLocation getLocStart() const LLVM_READONLY {
+  SourceLocation getLocStart() const LLVM37_READONLY {
     return getBase()->getLocStart();
   }
-  SourceLocation getLocEnd() const LLVM_READONLY { return AccessorLoc; }
+  SourceLocation getLocEnd() const LLVM37_READONLY { return AccessorLoc; }
 
   /// isArrow - Return true if the base expression is a pointer to vector,
   /// return false if the base expression is a vector.
@@ -4656,10 +4656,10 @@ public:
       Elts.push_back(col);
     }
   }
-  SourceLocation getLocStart() const LLVM_READONLY{
+  SourceLocation getLocStart() const LLVM37_READONLY{
     return getBase()->getLocStart();
   }
-  SourceLocation getLocEnd() const LLVM_READONLY{ return AccessorLoc; }
+  SourceLocation getLocEnd() const LLVM37_READONLY{ return AccessorLoc; }
 
   /// isArrow - Return true if the base expression is a pointer to vector,
   /// return false if the base expression is a vector.
@@ -4729,10 +4729,10 @@ public:
     }
   }
 
-  SourceLocation getLocStart() const LLVM_READONLY{
+  SourceLocation getLocStart() const LLVM37_READONLY{
     return getBase()->getLocStart();
   }
-  SourceLocation getLocEnd() const LLVM_READONLY{ return AccessorLoc; }
+  SourceLocation getLocEnd() const LLVM37_READONLY{ return AccessorLoc; }
 
   /// isArrow - Return true if the base expression is a pointer to vector,
   /// return false if the base expression is a vector.
@@ -4772,8 +4772,8 @@ public:
   const Stmt *getBody() const;
   Stmt *getBody();
 
-  SourceLocation getLocStart() const LLVM_READONLY { return getCaretLocation(); }
-  SourceLocation getLocEnd() const LLVM_READONLY { return getBody()->getLocEnd(); }
+  SourceLocation getLocStart() const LLVM37_READONLY { return getCaretLocation(); }
+  SourceLocation getLocEnd() const LLVM37_READONLY { return getBody()->getLocEnd(); }
 
   /// getFunctionType - Return the underlying function type for this block.
   const FunctionProtoType *getFunctionType() const;
@@ -4820,8 +4820,8 @@ public:
   /// getRParenLoc - Return the location of final right parenthesis.
   SourceLocation getRParenLoc() const { return RParenLoc; }
 
-  SourceLocation getLocStart() const LLVM_READONLY { return BuiltinLoc; }
-  SourceLocation getLocEnd() const LLVM_READONLY { return RParenLoc; }
+  SourceLocation getLocStart() const LLVM37_READONLY { return BuiltinLoc; }
+  SourceLocation getLocEnd() const LLVM37_READONLY { return RParenLoc; }
 
   static bool classof(const Stmt *T) {
     return T->getStmtClass() == AsTypeExprClass;
@@ -4947,14 +4947,14 @@ public:
     return const_cast<PseudoObjectExpr*>(this)->getSemanticExpr(index);
   }
 
-  SourceLocation getExprLoc() const LLVM_READONLY {
+  SourceLocation getExprLoc() const LLVM37_READONLY {
     return getSyntacticForm()->getExprLoc();
   }
 
-  SourceLocation getLocStart() const LLVM_READONLY {
+  SourceLocation getLocStart() const LLVM37_READONLY {
     return getSyntacticForm()->getLocStart();
   }
-  SourceLocation getLocEnd() const LLVM_READONLY {
+  SourceLocation getLocEnd() const LLVM37_READONLY {
     return getSyntacticForm()->getLocEnd();
   }
 
@@ -5059,8 +5059,8 @@ public:
   SourceLocation getBuiltinLoc() const { return BuiltinLoc; }
   SourceLocation getRParenLoc() const { return RParenLoc; }
 
-  SourceLocation getLocStart() const LLVM_READONLY { return BuiltinLoc; }
-  SourceLocation getLocEnd() const LLVM_READONLY { return RParenLoc; }
+  SourceLocation getLocStart() const LLVM37_READONLY { return BuiltinLoc; }
+  SourceLocation getLocEnd() const LLVM37_READONLY { return RParenLoc; }
 
   static bool classof(const Stmt *T) {
     return T->getStmtClass() == AtomicExprClass;
@@ -5086,8 +5086,8 @@ public:
   }
 
   child_range children() { return child_range(); }
-  SourceLocation getLocStart() const LLVM_READONLY { return SourceLocation(); }
-  SourceLocation getLocEnd() const LLVM_READONLY { return SourceLocation(); }
+  SourceLocation getLocStart() const LLVM37_READONLY { return SourceLocation(); }
+  SourceLocation getLocEnd() const LLVM37_READONLY { return SourceLocation(); }
 };
 }  // end namespace clang
 

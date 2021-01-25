@@ -11,19 +11,19 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_LIB_EXECUTIONENGINE_RUNTIMEDYLD_RUNTIMEDYLDMACHO_H
-#define LLVM_LIB_EXECUTIONENGINE_RUNTIMEDYLD_RUNTIMEDYLDMACHO_H
+#ifndef LLVM37_LIB_EXECUTIONENGINE_RUNTIMEDYLD_RUNTIMEDYLDMACHO_H
+#define LLVM37_LIB_EXECUTIONENGINE_RUNTIMEDYLD_RUNTIMEDYLDMACHO_H
 
 #include "RuntimeDyldImpl.h"
-#include "llvm/Object/MachO.h"
-#include "llvm/Support/Format.h"
+#include "llvm37/Object/MachO.h"
+#include "llvm37/Support/Format.h"
 
 #define DEBUG_TYPE "dyld"
 
-using namespace llvm;
-using namespace llvm::object;
+using namespace llvm37;
+using namespace llvm37::object;
 
-namespace llvm {
+namespace llvm37 {
 class RuntimeDyldMachO : public RuntimeDyldImpl {
 protected:
   struct SectionOffsetPair {
@@ -153,7 +153,7 @@ public:
   void registerEHFrames() override;
 };
 
-} // end namespace llvm
+} // end namespace llvm37
 
 #undef DEBUG_TYPE
 

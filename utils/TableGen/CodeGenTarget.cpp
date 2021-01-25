@@ -17,13 +17,13 @@
 #include "CodeGenTarget.h"
 #include "CodeGenIntrinsics.h"
 #include "CodeGenSchedule.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/StringExtras.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/TableGen/Error.h"
-#include "llvm/TableGen/Record.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/StringExtras.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/TableGen/Error.h"
+#include "llvm37/TableGen/Record.h"
 #include <algorithm>
-using namespace llvm;
+using namespace llvm37;
 
 static cl::opt<unsigned>
 AsmParserNum("asmparsernum", cl::init(0),
@@ -35,11 +35,11 @@ AsmWriterNum("asmwriternum", cl::init(0),
 
 /// getValueType - Return the MVT::SimpleValueType that the specified TableGen
 /// record corresponds to.
-MVT::SimpleValueType llvm::getValueType(Record *Rec) {
+MVT::SimpleValueType llvm37::getValueType(Record *Rec) {
   return (MVT::SimpleValueType)Rec->getValueAsInt("Value");
 }
 
-std::string llvm::getName(MVT::SimpleValueType T) {
+std::string llvm37::getName(MVT::SimpleValueType T) {
   switch (T) {
   case MVT::Other:   return "UNKNOWN";
   case MVT::iPTR:    return "TLI.getPointerTy()";
@@ -48,7 +48,7 @@ std::string llvm::getName(MVT::SimpleValueType T) {
   }
 }
 
-std::string llvm::getEnumName(MVT::SimpleValueType T) {
+std::string llvm37::getEnumName(MVT::SimpleValueType T) {
   switch (T) {
   case MVT::Other:    return "MVT::Other";
   case MVT::i1:       return "MVT::i1";
@@ -123,7 +123,7 @@ std::string llvm::getEnumName(MVT::SimpleValueType T) {
 /// getQualifiedName - Return the name of the specified record, with a
 /// namespace qualifier if the record contains one.
 ///
-std::string llvm::getQualifiedName(const Record *R) {
+std::string llvm37::getQualifiedName(const Record *R) {
   std::string Namespace;
   if (R->getValue("Namespace"))
      Namespace = R->getValueAsString("Namespace");
@@ -210,7 +210,7 @@ Record *CodeGenTarget::getAsmWriter() const {
 
 CodeGenRegBank &CodeGenTarget::getRegBank() const {
   if (!RegBank)
-    RegBank = llvm::make_unique<CodeGenRegBank>(Records);
+    RegBank = llvm37::make_unique<CodeGenRegBank>(Records);
   return *RegBank;
 }
 
@@ -260,7 +260,7 @@ void CodeGenTarget::ReadLegalValueTypes() const {
 
 CodeGenSchedModels &CodeGenTarget::getSchedModels() const {
   if (!SchedModels)
-    SchedModels = llvm::make_unique<CodeGenSchedModels>(Records, *this);
+    SchedModels = llvm37::make_unique<CodeGenSchedModels>(Records, *this);
   return *SchedModels;
 }
 
@@ -271,7 +271,7 @@ void CodeGenTarget::ReadInstructions() const {
 
   // Parse the instructions defined in the .td file.
   for (unsigned i = 0, e = Insts.size(); i != e; ++i)
-    Instructions[Insts[i]] = llvm::make_unique<CodeGenInstruction>(Insts[i]);
+    Instructions[Insts[i]] = llvm37::make_unique<CodeGenInstruction>(Insts[i]);
 }
 
 static const CodeGenInstruction *
@@ -421,7 +421,7 @@ ComplexPattern::ComplexPattern(Record *R) {
 // CodeGenIntrinsic Implementation
 //===----------------------------------------------------------------------===//
 
-std::vector<CodeGenIntrinsic> llvm::LoadIntrinsics(const RecordKeeper &RC,
+std::vector<CodeGenIntrinsic> llvm37::LoadIntrinsics(const RecordKeeper &RC,
                                                    bool TargetOnly) {
   std::vector<Record*> I = RC.getAllDerivedDefinitions("Intrinsic");
 

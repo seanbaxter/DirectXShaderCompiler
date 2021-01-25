@@ -11,17 +11,17 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_RUNTIME_DYLD_COFF_H
-#define LLVM_RUNTIME_DYLD_COFF_H
+#ifndef LLVM37_RUNTIME_DYLD_COFF_H
+#define LLVM37_RUNTIME_DYLD_COFF_H
 
 #include "RuntimeDyldImpl.h"
-#include "llvm/ADT/DenseMap.h"
+#include "llvm37/ADT/DenseMap.h"
 
 #define DEBUG_TYPE "dyld"
 
-using namespace llvm;
+using namespace llvm37;
 
-namespace llvm {
+namespace llvm37 {
 
 // Common base class for COFF dynamic linker support.
 // Concrete subclasses for each target can be found in ./Targets.
@@ -43,7 +43,7 @@ protected:
   uint64_t getSymbolOffset(const SymbolRef &Sym);
 };
 
-} // end namespace llvm
+} // end namespace llvm37
 
 #undef DEBUG_TYPE
 

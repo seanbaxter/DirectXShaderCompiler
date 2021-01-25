@@ -11,8 +11,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_LIB_SERIALIZATION_ASTCOMMON_H
-#define LLVM_CLANG_LIB_SERIALIZATION_ASTCOMMON_H
+#ifndef LLVM37_CLANG_LIB_SERIALIZATION_ASTCOMMON_H
+#define LLVM37_CLANG_LIB_SERIALIZATION_ASTCOMMON_H
 
 #include "clang/AST/ASTContext.h"
 #include "clang/AST/DeclFriend.h"

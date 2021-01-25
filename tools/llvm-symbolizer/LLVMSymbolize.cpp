@@ -12,21 +12,21 @@
 //===----------------------------------------------------------------------===//
 
 #include "LLVMSymbolize.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/Config/config.h"
-#include "llvm/DebugInfo/DWARF/DWARFContext.h"
-#include "llvm/DebugInfo/PDB/PDB.h"
-#include "llvm/DebugInfo/PDB/PDBContext.h"
-#include "llvm/Object/ELFObjectFile.h"
-#include "llvm/Object/MachO.h"
-#include "llvm/Object/SymbolSize.h"
-#include "llvm/Support/Casting.h"
-#include "llvm/Support/Compression.h"
-#include "llvm/Support/DataExtractor.h"
-#include "llvm/Support/Errc.h"
-#include "llvm/Support/FileSystem.h"
-#include "llvm/Support/MemoryBuffer.h"
-#include "llvm/Support/Path.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/Config/config.h"
+#include "llvm37/DebugInfo/DWARF/DWARFContext.h"
+#include "llvm37/DebugInfo/PDB/PDB.h"
+#include "llvm37/DebugInfo/PDB/PDBContext.h"
+#include "llvm37/Object/ELFObjectFile.h"
+#include "llvm37/Object/MachO.h"
+#include "llvm37/Object/SymbolSize.h"
+#include "llvm37/Support/Casting.h"
+#include "llvm37/Support/Compression.h"
+#include "llvm37/Support/DataExtractor.h"
+#include "llvm37/Support/Errc.h"
+#include "llvm37/Support/FileSystem.h"
+#include "llvm37/Support/MemoryBuffer.h"
+#include "llvm37/Support/Path.h"
 #include <sstream>
 #include <stdlib.h>
 
@@ -36,7 +36,7 @@
 #pragma comment(lib, "dbghelp.lib")
 #endif
 
-namespace llvm {
+namespace llvm37 {
 namespace symbolize {
 
 static bool error(std::error_code ec) {
@@ -271,24 +271,24 @@ static bool findDebugBinary(const std::string &OrigPath,
   }
 #endif
   SmallString<16> OrigDir(OrigRealPath);
-  llvm::sys::path::remove_filename(OrigDir);
+  llvm37::sys::path::remove_filename(OrigDir);
   SmallString<16> DebugPath = OrigDir;
   // Try /path/to/original_binary/debuglink_name
-  llvm::sys::path::append(DebugPath, DebuglinkName);
+  llvm37::sys::path::append(DebugPath, DebuglinkName);
   if (checkFileCRC(DebugPath, CRCHash)) {
     Result = DebugPath.str();
     return true;
   }
   // Try /path/to/original_binary/.debug/debuglink_name
   DebugPath = OrigRealPath;
-  llvm::sys::path::append(DebugPath, ".debug", DebuglinkName);
+  llvm37::sys::path::append(DebugPath, ".debug", DebuglinkName);
   if (checkFileCRC(DebugPath, CRCHash)) {
     Result = DebugPath.str();
     return true;
   }
   // Try /usr/lib/debug/path/to/original_binary/debuglink_name
   DebugPath = "/usr/lib/debug";
-  llvm::sys::path::append(DebugPath, llvm::sys::path::relative_path(OrigDir),
+  llvm37::sys::path::append(DebugPath, llvm37::sys::path::relative_path(OrigDir),
                           DebuglinkName);
   if (checkFileCRC(DebugPath, CRCHash)) {
     Result = DebugPath.str();
@@ -529,4 +529,4 @@ std::string LLVMSymbolizer::DemangleName(const std::string &Name) {
 }
 
 } // namespace symbolize
-} // namespace llvm
+} // namespace llvm37

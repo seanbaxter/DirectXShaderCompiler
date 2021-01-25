@@ -25,13 +25,13 @@ namespace spirv {
 
 SpirvBuilder::SpirvBuilder(ASTContext &ac, SpirvContext &ctx,
                            const SpirvCodeGenOptions &opt)
-    : astContext(ac), context(ctx), mod(llvm::make_unique<SpirvModule>()),
+    : astContext(ac), context(ctx), mod(llvm37::make_unique<SpirvModule>()),
       function(nullptr), spirvOptions(opt), builtinVars(), debugNone(nullptr),
       nullDebugExpr(nullptr), stringLiterals() {}
 
 SpirvFunction *SpirvBuilder::createSpirvFunction(QualType returnType,
                                                  SourceLocation loc,
-                                                 llvm::StringRef name,
+                                                 llvm37::StringRef name,
                                                  bool isPrecise,
                                                  bool isNoInline) {
   auto *fn =
@@ -42,7 +42,7 @@ SpirvFunction *SpirvBuilder::createSpirvFunction(QualType returnType,
 
 SpirvFunction *SpirvBuilder::beginFunction(QualType returnType,
                                            SourceLocation loc,
-                                           llvm::StringRef funcName,
+                                           llvm37::StringRef funcName,
                                            bool isPrecise, bool isNoInline,
                                            SpirvFunction *func) {
   assert(!function && "found nested function");
@@ -64,7 +64,7 @@ SpirvFunction *SpirvBuilder::beginFunction(QualType returnType,
 SpirvFunctionParameter *SpirvBuilder::addFnParam(QualType ptrType,
                                                  bool isPrecise,
                                                  SourceLocation loc,
-                                                 llvm::StringRef name) {
+                                                 llvm37::StringRef name) {
   assert(function && "found detached parameter");
   SpirvFunctionParameter *param = nullptr;
   if (isBindlessOpaqueArray(ptrType)) {
@@ -83,7 +83,7 @@ SpirvFunctionParameter *SpirvBuilder::addFnParam(QualType ptrType,
 }
 
 SpirvVariable *SpirvBuilder::addFnVar(QualType valueType, SourceLocation loc,
-                                      llvm::StringRef name, bool isPrecise,
+                                      llvm37::StringRef name, bool isPrecise,
                                       SpirvInstruction *init) {
   assert(function && "found detached local variable");
   SpirvVariable *var = nullptr;
@@ -109,7 +109,7 @@ void SpirvBuilder::endFunction() {
   insertPoint = nullptr;
 }
 
-SpirvBasicBlock *SpirvBuilder::createBasicBlock(llvm::StringRef name) {
+SpirvBasicBlock *SpirvBuilder::createBasicBlock(llvm37::StringRef name) {
   assert(function && "found detached basic block");
   auto *bb = new (context) SpirvBasicBlock(name);
   function->addBasicBlock(bb);
@@ -141,7 +141,7 @@ void SpirvBuilder::setContinueTarget(SpirvBasicBlock *continueLabel) {
 }
 
 SpirvCompositeConstruct *SpirvBuilder::createCompositeConstruct(
-    QualType resultType, llvm::ArrayRef<SpirvInstruction *> constituents,
+    QualType resultType, llvm37::ArrayRef<SpirvInstruction *> constituents,
     SourceLocation loc) {
   assert(insertPoint && "null insert point");
   auto *instruction =
@@ -155,7 +155,7 @@ SpirvCompositeConstruct *SpirvBuilder::createCompositeConstruct(
 
 SpirvCompositeExtract *SpirvBuilder::createCompositeExtract(
     QualType resultType, SpirvInstruction *composite,
-    llvm::ArrayRef<uint32_t> indexes, SourceLocation loc) {
+    llvm37::ArrayRef<uint32_t> indexes, SourceLocation loc) {
   assert(insertPoint && "null insert point");
   auto *instruction =
       new (context) SpirvCompositeExtract(resultType, loc, composite, indexes);
@@ -166,7 +166,7 @@ SpirvCompositeExtract *SpirvBuilder::createCompositeExtract(
 
 SpirvCompositeInsert *SpirvBuilder::createCompositeInsert(
     QualType resultType, SpirvInstruction *composite,
-    llvm::ArrayRef<uint32_t> indices, SpirvInstruction *object,
+    llvm37::ArrayRef<uint32_t> indices, SpirvInstruction *object,
     SourceLocation loc) {
   assert(insertPoint && "null insert point");
   auto *instruction = new (context)
@@ -177,7 +177,7 @@ SpirvCompositeInsert *SpirvBuilder::createCompositeInsert(
 
 SpirvVectorShuffle *SpirvBuilder::createVectorShuffle(
     QualType resultType, SpirvInstruction *vector1, SpirvInstruction *vector2,
-    llvm::ArrayRef<uint32_t> selectors, SourceLocation loc) {
+    llvm37::ArrayRef<uint32_t> selectors, SourceLocation loc) {
   assert(insertPoint && "null insert point");
   auto *instruction = new (context)
       SpirvVectorShuffle(resultType, loc, vector1, vector2, selectors);
@@ -255,7 +255,7 @@ void SpirvBuilder::createStore(SpirvInstruction *address,
 
 SpirvFunctionCall *
 SpirvBuilder::createFunctionCall(QualType returnType, SpirvFunction *func,
-                                 llvm::ArrayRef<SpirvInstruction *> params,
+                                 llvm37::ArrayRef<SpirvInstruction *> params,
                                  SourceLocation loc) {
   assert(insertPoint && "null insert point");
   auto *instruction =
@@ -279,7 +279,7 @@ SpirvBuilder::createFunctionCall(QualType returnType, SpirvFunction *func,
 
 SpirvAccessChain *
 SpirvBuilder::createAccessChain(QualType resultType, SpirvInstruction *base,
-                                llvm::ArrayRef<SpirvInstruction *> indexes,
+                                llvm37::ArrayRef<SpirvInstruction *> indexes,
                                 SourceLocation loc) {
   assert(insertPoint && "null insert point");
   auto *instruction =
@@ -339,7 +339,7 @@ SpirvNonUniformElect *SpirvBuilder::createGroupNonUniformElect(
 
 SpirvNonUniformUnaryOp *SpirvBuilder::createGroupNonUniformUnaryOp(
     SourceLocation loc, spv::Op op, QualType resultType, spv::Scope execScope,
-    SpirvInstruction *operand, llvm::Optional<spv::GroupOperation> groupOp) {
+    SpirvInstruction *operand, llvm37::Optional<spv::GroupOperation> groupOp) {
   assert(insertPoint && "null insert point");
   auto *instruction = new (context)
       SpirvNonUniformUnaryOp(op, resultType, loc, execScope, groupOp, operand);
@@ -645,7 +645,7 @@ SpirvSelect *SpirvBuilder::createSelect(QualType resultType,
 void SpirvBuilder::createSwitch(
     SpirvBasicBlock *mergeLabel, SpirvInstruction *selector,
     SpirvBasicBlock *defaultLabel,
-    llvm::ArrayRef<std::pair<uint32_t, SpirvBasicBlock *>> target,
+    llvm37::ArrayRef<std::pair<uint32_t, SpirvBasicBlock *>> target,
     SourceLocation loc) {
   assert(insertPoint && "null insert point");
   // Create the OpSelectioMerege.
@@ -719,7 +719,7 @@ void SpirvBuilder::createReturnValue(SpirvInstruction *value,
 
 SpirvInstruction *
 SpirvBuilder::createGLSLExtInst(QualType resultType, GLSLstd450 inst,
-                                llvm::ArrayRef<SpirvInstruction *> operands,
+                                llvm37::ArrayRef<SpirvInstruction *> operands,
                                 SourceLocation loc) {
   assert(insertPoint && "null insert point");
   auto *extInst = new (context) SpirvExtInst(
@@ -730,7 +730,7 @@ SpirvBuilder::createGLSLExtInst(QualType resultType, GLSLstd450 inst,
 
 SpirvInstruction *
 SpirvBuilder::createGLSLExtInst(const SpirvType *resultType, GLSLstd450 inst,
-                                llvm::ArrayRef<SpirvInstruction *> operands,
+                                llvm37::ArrayRef<SpirvInstruction *> operands,
                                 SourceLocation loc) {
   assert(insertPoint && "null insert point");
   auto *extInst = new (context) SpirvExtInst(
@@ -742,7 +742,7 @@ SpirvBuilder::createGLSLExtInst(const SpirvType *resultType, GLSLstd450 inst,
 
 SpirvInstruction *SpirvBuilder::createNonSemanticDebugPrintfExtInst(
     QualType resultType, NonSemanticDebugPrintfInstructions instId,
-    llvm::ArrayRef<SpirvInstruction *> operands, SourceLocation loc) {
+    llvm37::ArrayRef<SpirvInstruction *> operands, SourceLocation loc) {
   assert(insertPoint && "null insert point");
   auto *extInst = new (context)
       SpirvExtInst(resultType, loc, getExtInstSet("NonSemantic.DebugPrintf"),
@@ -753,7 +753,7 @@ SpirvInstruction *SpirvBuilder::createNonSemanticDebugPrintfExtInst(
 
 void SpirvBuilder::createBarrier(spv::Scope memoryScope,
                                  spv::MemorySemanticsMask memorySemantics,
-                                 llvm::Optional<spv::Scope> exec,
+                                 llvm37::Optional<spv::Scope> exec,
                                  SourceLocation loc) {
   assert(insertPoint && "null insert point");
   SpirvBarrier *barrier =
@@ -823,8 +823,8 @@ SpirvBuilder::createDemoteToHelperInvocationEXT(SourceLocation loc) {
   return inst;
 }
 
-SpirvDebugSource *SpirvBuilder::createDebugSource(llvm::StringRef file,
-                                                  llvm::StringRef text) {
+SpirvDebugSource *SpirvBuilder::createDebugSource(llvm37::StringRef file,
+                                                  llvm37::StringRef text) {
   auto *inst = new (context) SpirvDebugSource(file, text);
   mod->addDebugInfo(inst);
   return inst;
@@ -850,9 +850,9 @@ SpirvBuilder::createDebugLexicalBlock(SpirvDebugSource *source, uint32_t line,
 }
 
 SpirvDebugLocalVariable *SpirvBuilder::createDebugLocalVariable(
-    QualType debugQualType, llvm::StringRef varName, SpirvDebugSource *src,
+    QualType debugQualType, llvm37::StringRef varName, SpirvDebugSource *src,
     uint32_t line, uint32_t column, SpirvDebugInstruction *parentScope,
-    uint32_t flags, llvm::Optional<uint32_t> argNumber) {
+    uint32_t flags, llvm37::Optional<uint32_t> argNumber) {
   auto *inst = new (context) SpirvDebugLocalVariable(
       debugQualType, varName, src, line, column, parentScope, flags, argNumber);
   mod->addDebugInfo(inst);
@@ -860,10 +860,10 @@ SpirvDebugLocalVariable *SpirvBuilder::createDebugLocalVariable(
 }
 
 SpirvDebugGlobalVariable *SpirvBuilder::createDebugGlobalVariable(
-    QualType debugType, llvm::StringRef varName, SpirvDebugSource *src,
+    QualType debugType, llvm37::StringRef varName, SpirvDebugSource *src,
     uint32_t line, uint32_t column, SpirvDebugInstruction *parentScope,
-    llvm::StringRef linkageName, SpirvVariable *var, uint32_t flags,
-    llvm::Optional<SpirvInstruction *> staticMemberDebugType) {
+    llvm37::StringRef linkageName, SpirvVariable *var, uint32_t flags,
+    llvm37::Optional<SpirvInstruction *> staticMemberDebugType) {
   auto *inst = new (context) SpirvDebugGlobalVariable(
       debugType, varName, src, line, column, parentScope, linkageName, var,
       flags, staticMemberDebugType);
@@ -891,7 +891,7 @@ SpirvDebugExpression *SpirvBuilder::getOrCreateNullDebugExpression() {
 
 SpirvDebugDeclare *SpirvBuilder::createDebugDeclare(
     SpirvDebugLocalVariable *dbgVar, SpirvInstruction *var,
-    llvm::Optional<SpirvDebugExpression *> dbgExpr) {
+    llvm37::Optional<SpirvDebugExpression *> dbgExpr) {
   auto *decl = new (context)
       SpirvDebugDeclare(dbgVar, var,
                         dbgExpr.hasValue() ? dbgExpr.getValue()
@@ -907,9 +907,9 @@ SpirvDebugDeclare *SpirvBuilder::createDebugDeclare(
 }
 
 SpirvDebugFunction *SpirvBuilder::createDebugFunction(
-    const FunctionDecl *decl, llvm::StringRef name, SpirvDebugSource *src,
+    const FunctionDecl *decl, llvm37::StringRef name, SpirvDebugSource *src,
     uint32_t line, uint32_t column, SpirvDebugInstruction *parentScope,
-    llvm::StringRef linkageName, uint32_t flags, uint32_t scopeLine,
+    llvm37::StringRef linkageName, uint32_t flags, uint32_t scopeLine,
     SpirvFunction *fn) {
   auto *inst = new (context) SpirvDebugFunction(
       name, src, line, column, parentScope, linkageName, flags, scopeLine, fn);
@@ -946,11 +946,11 @@ void SpirvBuilder::createRaytracingTerminateKHR(spv::Op opcode,
   insertPoint->addInstruction(inst);
 }
 
-void SpirvBuilder::addModuleProcessed(llvm::StringRef process) {
+void SpirvBuilder::addModuleProcessed(llvm37::StringRef process) {
   mod->addModuleProcessed(new (context) SpirvModuleProcessed({}, process));
 }
 
-SpirvExtInstImport *SpirvBuilder::getExtInstSet(llvm::StringRef extName) {
+SpirvExtInstImport *SpirvBuilder::getExtInstSet(llvm37::StringRef extName) {
   SpirvExtInstImport *set = mod->getExtInstSet(extName);
   if (!set) {
     // The extended instruction set is likely required for several different
@@ -1009,8 +1009,8 @@ SpirvVariable *SpirvBuilder::addStageBuiltinVar(QualType type,
 
 SpirvVariable *
 SpirvBuilder::addModuleVar(QualType type, spv::StorageClass storageClass,
-                           bool isPrecise, llvm::StringRef name,
-                           llvm::Optional<SpirvInstruction *> init,
+                           bool isPrecise, llvm37::StringRef name,
+                           llvm37::Optional<SpirvInstruction *> init,
                            SourceLocation loc) {
   assert(storageClass != spv::StorageClass::Function);
   // Note: We store the underlying type in the variable, *not* the pointer type.
@@ -1024,7 +1024,7 @@ SpirvBuilder::addModuleVar(QualType type, spv::StorageClass storageClass,
 
 SpirvVariable *SpirvBuilder::addModuleVar(
     const SpirvType *type, spv::StorageClass storageClass, bool isPrecise,
-    llvm::StringRef name, llvm::Optional<SpirvInstruction *> init,
+    llvm37::StringRef name, llvm37::Optional<SpirvInstruction *> init,
     SourceLocation loc) {
   assert(storageClass != spv::StorageClass::Function);
   // Note: We store the underlying type in the variable, *not* the pointer type.
@@ -1096,8 +1096,8 @@ void SpirvBuilder::decorateCounterBuffer(SpirvInstruction *mainBuffer,
 }
 
 void SpirvBuilder::decorateHlslSemantic(SpirvInstruction *target,
-                                        llvm::StringRef semantic,
-                                        llvm::Optional<uint32_t> memberIdx) {
+                                        llvm37::StringRef semantic,
+                                        llvm37::Optional<uint32_t> memberIdx) {
   if (spirvOptions.enableReflect) {
     auto *decor = new (context) SpirvDecoration(
         target->getSourceLocation(), target,
@@ -1172,7 +1172,7 @@ void SpirvBuilder::decorateCoherent(SpirvInstruction *target,
   mod->addDecoration(decor);
 }
 
-SpirvConstant *SpirvBuilder::getConstantInt(QualType type, llvm::APInt value,
+SpirvConstant *SpirvBuilder::getConstantInt(QualType type, llvm37::APInt value,
                                             bool specConst) {
   // We do not reuse existing constant integers. Just create a new one.
   auto *intConst = new (context) SpirvConstantInteger(type, value, specConst);
@@ -1181,7 +1181,7 @@ SpirvConstant *SpirvBuilder::getConstantInt(QualType type, llvm::APInt value,
 }
 
 SpirvConstant *SpirvBuilder::getConstantFloat(QualType type,
-                                              llvm::APFloat value,
+                                              llvm37::APFloat value,
                                               bool specConst) {
   // We do not reuse existing constant floats. Just create a new one.
   auto *floatConst = new (context) SpirvConstantFloat(type, value, specConst);
@@ -1199,7 +1199,7 @@ SpirvConstant *SpirvBuilder::getConstantBool(bool value, bool specConst) {
 
 SpirvConstant *
 SpirvBuilder::getConstantComposite(QualType compositeType,
-                                   llvm::ArrayRef<SpirvConstant *> constituents,
+                                   llvm37::ArrayRef<SpirvConstant *> constituents,
                                    bool specConst) {
   // We do not care about making unique constants at this point.
   auto *compositeConst = new (context)
@@ -1215,7 +1215,7 @@ SpirvConstant *SpirvBuilder::getConstantNull(QualType type) {
   return nullConst;
 }
 
-SpirvString *SpirvBuilder::getString(llvm::StringRef str) {
+SpirvString *SpirvBuilder::getString(llvm37::StringRef str) {
   // Reuse an existing instruction if possible.
   auto iter = stringLiterals.find(str.str());
   if (iter != stringLiterals.end())

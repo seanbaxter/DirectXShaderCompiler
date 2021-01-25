@@ -11,15 +11,15 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_LIB_CODEGEN_CODEGENPGO_H
-#define LLVM_CLANG_LIB_CODEGEN_CODEGENPGO_H
+#ifndef LLVM37_CLANG_LIB_CODEGEN_CODEGENPGO_H
+#define LLVM37_CLANG_LIB_CODEGEN_CODEGENPGO_H
 
 #include "CGBuilder.h"
 #include "CodeGenModule.h"
 #include "CodeGenTypes.h"
 #include "clang/Frontend/CodeGenOptions.h"
-#include "llvm/ADT/StringMap.h"
-#include "llvm/Support/MemoryBuffer.h"
+#include "llvm37/ADT/StringMap.h"
+#include "llvm37/Support/MemoryBuffer.h"
 #include <memory>
 
 namespace clang {
@@ -30,12 +30,12 @@ class CodeGenPGO {
 private:
   CodeGenModule &CGM;
   std::string FuncName;
-  llvm::GlobalVariable *FuncNameVar;
+  llvm37::GlobalVariable *FuncNameVar;
 
   unsigned NumRegionCounters;
   uint64_t FunctionHash;
-  std::unique_ptr<llvm::DenseMap<const Stmt *, unsigned>> RegionCounterMap;
-  std::unique_ptr<llvm::DenseMap<const Stmt *, uint64_t>> StmtCountMap;
+  std::unique_ptr<llvm37::DenseMap<const Stmt *, unsigned>> RegionCounterMap;
+  std::unique_ptr<llvm37::DenseMap<const Stmt *, uint64_t>> StmtCountMap;
   std::vector<uint64_t> RegionCounts;
   uint64_t CurrentRegionCount;
   /// \brief A flag that is set to true when this function doesn't need
@@ -84,20 +84,20 @@ public:
   /// function. Does nothing if instrumentation is not enabled and either
   /// generates global variables or associates PGO data with each of the
   /// counters depending on whether we are generating or using instrumentation.
-  void assignRegionCounters(const Decl *D, llvm::Function *Fn);
+  void assignRegionCounters(const Decl *D, llvm37::Function *Fn);
   /// Emit a coverage mapping range with a counter zero
   /// for an unused declaration.
   void emitEmptyCounterMapping(const Decl *D, StringRef FuncName,
-                               llvm::GlobalValue::LinkageTypes Linkage);
+                               llvm37::GlobalValue::LinkageTypes Linkage);
 private:
-  void setFuncName(llvm::Function *Fn);
-  void setFuncName(StringRef Name, llvm::GlobalValue::LinkageTypes Linkage);
-  void createFuncNameVar(llvm::GlobalValue::LinkageTypes Linkage);
+  void setFuncName(llvm37::Function *Fn);
+  void setFuncName(StringRef Name, llvm37::GlobalValue::LinkageTypes Linkage);
+  void createFuncNameVar(llvm37::GlobalValue::LinkageTypes Linkage);
   void mapRegionCounters(const Decl *D);
   void computeRegionCounts(const Decl *D);
-  void applyFunctionAttributes(llvm::IndexedInstrProfReader *PGOReader,
-                               llvm::Function *Fn);
-  void loadRegionCounts(llvm::IndexedInstrProfReader *PGOReader,
+  void applyFunctionAttributes(llvm37::IndexedInstrProfReader *PGOReader,
+                               llvm37::Function *Fn);
+  void loadRegionCounts(llvm37::IndexedInstrProfReader *PGOReader,
                         bool IsInMainFile);
   void emitCounterVariables();
   void emitCounterRegionMapping(const Decl *D);

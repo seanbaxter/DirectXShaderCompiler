@@ -11,16 +11,16 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_LIB_EXECUTIONENGINE_RUNTIMEDYLD_TARGETS_RUNTIMEDYLDCOFF86_64_H
-#define LLVM_LIB_EXECUTIONENGINE_RUNTIMEDYLD_TARGETS_RUNTIMEDYLDCOFF86_64_H
+#ifndef LLVM37_LIB_EXECUTIONENGINE_RUNTIMEDYLD_TARGETS_RUNTIMEDYLDCOFF86_64_H
+#define LLVM37_LIB_EXECUTIONENGINE_RUNTIMEDYLD_TARGETS_RUNTIMEDYLDCOFF86_64_H
 
-#include "llvm/Object/COFF.h"
-#include "llvm/Support/COFF.h"
+#include "llvm37/Object/COFF.h"
+#include "llvm37/Support/COFF.h"
 #include "../RuntimeDyldCOFF.h"
 
 #define DEBUG_TYPE "dyld"
 
-namespace llvm {
+namespace llvm37 {
 
 class RuntimeDyldCOFFX86_64 : public RuntimeDyldCOFF {
 
@@ -209,7 +209,7 @@ public:
   }
 };
 
-} // end namespace llvm
+} // end namespace llvm37
 
 #undef DEBUG_TYPE
 

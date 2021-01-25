@@ -11,13 +11,13 @@
 
 #pragma once
 
-namespace llvm {
+namespace llvm37 {
 class ModulePass;
 class PassRegistry;
 
 /// \brief Create and return a pass that lower high level matrix.
 /// Note that this pass is designed for use with the legacy pass manager.
 ModulePass *createHLMatrixLowerPass();
-void initializeHLMatrixLowerPassPass(llvm::PassRegistry&);
+void initializeHLMatrixLowerPassPass(llvm37::PassRegistry&);
 
 }

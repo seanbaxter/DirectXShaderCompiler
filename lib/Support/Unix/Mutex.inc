@@ -16,7 +16,7 @@
 //===          is guaranteed to work on *all* UNIX variants.
 //===----------------------------------------------------------------------===//
 
-namespace llvm
+namespace llvm37
 {
 using namespace sys;
 

@@ -127,7 +127,7 @@ bool MacroInfo::isIdenticalTo(const MacroInfo &Other, Preprocessor &PP,
 }
 
 void MacroInfo::dump() const {
-  llvm::raw_ostream &Out = llvm::errs();
+  llvm37::raw_ostream &Out = llvm37::errs();
 
   // FIXME: Dump locations.
   Out << "MacroInfo " << this;
@@ -206,7 +206,7 @@ MacroDirective::findDirectiveAtLoc(SourceLocation L, SourceManager &SM) const {
 }
 
 void MacroDirective::dump() const {
-  llvm::raw_ostream &Out = llvm::errs();
+  llvm37::raw_ostream &Out = llvm37::errs();
 
   switch (getKind()) {
   case MD_Define: Out << "DefMacroDirective"; break;
@@ -236,6 +236,6 @@ ModuleMacro *ModuleMacro::create(Preprocessor &PP, Module *OwningModule,
                                  ArrayRef<ModuleMacro *> Overrides) {
   void *Mem = PP.getPreprocessorAllocator().Allocate(
       sizeof(ModuleMacro) + sizeof(ModuleMacro *) * Overrides.size(),
-      llvm::alignOf<ModuleMacro>());
+      llvm37::alignOf<ModuleMacro>());
   return new (Mem) ModuleMacro(OwningModule, II, Macro, Overrides);
 }

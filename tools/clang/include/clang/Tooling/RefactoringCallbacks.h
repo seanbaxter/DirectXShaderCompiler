@@ -26,8 +26,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_TOOLING_REFACTORINGCALLBACKS_H
-#define LLVM_CLANG_TOOLING_REFACTORINGCALLBACKS_H
+#ifndef LLVM37_CLANG_TOOLING_REFACTORINGCALLBACKS_H
+#define LLVM37_CLANG_TOOLING_REFACTORINGCALLBACKS_H
 
 #include "clang/ASTMatchers/ASTMatchFinder.h"
 #include "clang/Tooling/Refactoring.h"

@@ -21,7 +21,7 @@
 #include "dxc/Test/HlslTestUtils.h"
 #include "dxc/Test/DxcTestUtils.h"
 
-#include "llvm/Support/raw_os_ostream.h"
+#include "llvm37/Support/raw_os_ostream.h"
 #include "dxc/Support/Global.h"
 #include "dxc/Support/dxcapi.use.h"
 #include "dxc/Support/HLSLOptions.h"

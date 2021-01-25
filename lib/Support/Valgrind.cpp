@@ -13,8 +13,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Support/Valgrind.h"
-#include "llvm/Config/config.h"
+#include "llvm37/Support/Valgrind.h"
+#include "llvm37/Config/config.h"
 
 #if HAVE_VALGRIND_VALGRIND_H
 #include <valgrind/valgrind.h>
@@ -29,13 +29,13 @@ static bool InitNotUnderValgrind() {
 // Valgrind-provided macros.
 static const bool NotUnderValgrind = InitNotUnderValgrind();
 
-bool llvm::sys::RunningOnValgrind() {
+bool llvm37::sys::RunningOnValgrind() {
   if (NotUnderValgrind)
     return false;
   return RUNNING_ON_VALGRIND;
 }
 
-void llvm::sys::ValgrindDiscardTranslations(const void *Addr, size_t Len) {
+void llvm37::sys::ValgrindDiscardTranslations(const void *Addr, size_t Len) {
   if (NotUnderValgrind)
     return;
 
@@ -44,11 +44,11 @@ void llvm::sys::ValgrindDiscardTranslations(const void *Addr, size_t Len) {
 
 #else  // !HAVE_VALGRIND_VALGRIND_H
 
-bool llvm::sys::RunningOnValgrind() {
+bool llvm37::sys::RunningOnValgrind() {
   return false;
 }
 
-void llvm::sys::ValgrindDiscardTranslations(const void *Addr, size_t Len) {
+void llvm37::sys::ValgrindDiscardTranslations(const void *Addr, size_t Len) {
 }
 
 #endif  // !HAVE_VALGRIND_VALGRIND_H
@@ -58,17 +58,17 @@ void llvm::sys::ValgrindDiscardTranslations(const void *Addr, size_t Len) {
 // application or library may already be providing these definitions for the
 // same reason we are.
 // extern "C" {   // HLSL Change -Don't use c linkage.
-LLVM_ATTRIBUTE_WEAK void AnnotateHappensAfter(const char *file, int line,
+LLVM37_ATTRIBUTE_WEAK void AnnotateHappensAfter(const char *file, int line,
                                               const volatile void *cv);
 void AnnotateHappensAfter(const char *file, int line, const volatile void *cv) {
 }              
-LLVM_ATTRIBUTE_WEAK void AnnotateHappensBefore(const char *file, int line,
+LLVM37_ATTRIBUTE_WEAK void AnnotateHappensBefore(const char *file, int line,
                                                const volatile void *cv);
 void AnnotateHappensBefore(const char *file, int line,
                            const volatile void *cv) {}
-LLVM_ATTRIBUTE_WEAK void AnnotateIgnoreWritesBegin(const char *file, int line);
+LLVM37_ATTRIBUTE_WEAK void AnnotateIgnoreWritesBegin(const char *file, int line);
 void AnnotateIgnoreWritesBegin(const char *file, int line) {}
-LLVM_ATTRIBUTE_WEAK void AnnotateIgnoreWritesEnd(const char *file, int line);
+LLVM37_ATTRIBUTE_WEAK void AnnotateIgnoreWritesEnd(const char *file, int line);
 void AnnotateIgnoreWritesEnd(const char *file, int line) {}
 // }  // HLSL Change -Don't use c linkage.
 

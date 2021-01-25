@@ -11,13 +11,13 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/IR/Type.h"
+#include "llvm37/IR/Type.h"
 #include "LLVMContextImpl.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/IR/Module.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/IR/Module.h"
 #include <algorithm>
 #include <cstdarg>
-using namespace llvm;
+using namespace llvm37;
 
 //===----------------------------------------------------------------------===//
 //                         Type Class Implementation
@@ -502,13 +502,13 @@ StructType *StructType::get(Type *type, ...) {
   assert(type && "Cannot create a struct type with no elements with this");
   LLVMContext &Ctx = type->getContext();
   va_list ap;
-  SmallVector<llvm::Type*, 8> StructFields;
+  SmallVector<llvm37::Type*, 8> StructFields;
   va_start(ap, type);
   while (type) {
     StructFields.push_back(type);
-    type = va_arg(ap, llvm::Type*);
+    type = va_arg(ap, llvm37::Type*);
   }
-  auto *Ret = llvm::StructType::get(Ctx, StructFields);
+  auto *Ret = llvm37::StructType::get(Ctx, StructFields);
   va_end(ap);
   return Ret;
 }
@@ -545,13 +545,13 @@ StructType *StructType::create(StringRef Name, Type *type, ...) {
   assert(type && "Cannot create a struct type with no elements with this");
   LLVMContext &Ctx = type->getContext();
   va_list ap;
-  SmallVector<llvm::Type*, 8> StructFields;
+  SmallVector<llvm37::Type*, 8> StructFields;
   va_start(ap, type);
   while (type) {
     StructFields.push_back(type);
-    type = va_arg(ap, llvm::Type*);
+    type = va_arg(ap, llvm37::Type*);
   }
-  auto *Ret = llvm::StructType::create(Ctx, StructFields, Name);
+  auto *Ret = llvm37::StructType::create(Ctx, StructFields, Name);
   va_end(ap);
   return Ret;
 }
@@ -590,11 +590,11 @@ StringRef StructType::getName() const {
 void StructType::setBody(Type *type, ...) {
   assert(type && "Cannot create a struct type with no elements with this");
   va_list ap;
-  SmallVector<llvm::Type*, 8> StructFields;
+  SmallVector<llvm37::Type*, 8> StructFields;
   va_start(ap, type);
   while (type) {
     StructFields.push_back(type);
-    type = va_arg(ap, llvm::Type*);
+    type = va_arg(ap, llvm37::Type*);
   }
   setBody(StructFields);
   va_end(ap);

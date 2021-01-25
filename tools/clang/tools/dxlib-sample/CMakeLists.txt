@@ -11,8 +11,8 @@ set(SOURCES
   dxlib_sample.def
   )
 
-set( LLVM_LINK_COMPONENTS
-  ${LLVM_TARGETS_TO_BUILD}
+set( LLVM37_LINK_COMPONENTS
+  ${LLVM37_TARGETS_TO_BUILD}
   analysis
   ipa
   dxcsupport

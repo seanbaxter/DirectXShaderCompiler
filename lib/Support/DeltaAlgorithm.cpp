@@ -6,10 +6,10 @@
 // License. See LICENSE.TXT for details.
 //===----------------------------------------------------------------------===//
 
-#include "llvm/ADT/DeltaAlgorithm.h"
+#include "llvm37/ADT/DeltaAlgorithm.h"
 #include <algorithm>
 #include <iterator>
-using namespace llvm;
+using namespace llvm37;
 
 DeltaAlgorithm::~DeltaAlgorithm() {
 }

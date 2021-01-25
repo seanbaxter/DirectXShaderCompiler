@@ -12,18 +12,18 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_TOOLS_LLI_REMOTEMEMORYMANAGER_H
-#define LLVM_TOOLS_LLI_REMOTEMEMORYMANAGER_H
+#ifndef LLVM37_TOOLS_LLI_REMOTEMEMORYMANAGER_H
+#define LLVM37_TOOLS_LLI_REMOTEMEMORYMANAGER_H
 
 #include "RemoteTarget.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/ExecutionEngine/RTDyldMemoryManager.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/Memory.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/ExecutionEngine/RTDyldMemoryManager.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/Memory.h"
 #include <utility>
 
-namespace llvm {
+namespace llvm37 {
 
 class RemoteMemoryManager : public RTDyldMemoryManager {
 public:
@@ -96,6 +96,6 @@ public:
   void setRemoteTarget(RemoteTarget *T) { Target = T; }
 };
 
-} // end namespace llvm
+} // end namespace llvm37
 
 #endif

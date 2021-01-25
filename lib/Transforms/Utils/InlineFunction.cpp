@@ -12,36 +12,36 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Transforms/Utils/Cloning.h"
-#include "llvm/ADT/SmallSet.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/ADT/SetVector.h"
-#include "llvm/ADT/StringExtras.h"
-#include "llvm/Analysis/AliasAnalysis.h"
-#include "llvm/Analysis/AssumptionCache.h"
-#include "llvm/Analysis/CallGraph.h"
-#include "llvm/Analysis/CaptureTracking.h"
-#include "llvm/Analysis/InstructionSimplify.h"
-#include "llvm/Analysis/ValueTracking.h"
-#include "llvm/IR/Attributes.h"
-#include "llvm/IR/CallSite.h"
-#include "llvm/IR/CFG.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/DebugInfo.h"
-#include "llvm/IR/DerivedTypes.h"
-#include "llvm/IR/DIBuilder.h"
-#include "llvm/IR/Dominators.h"
-#include "llvm/IR/IRBuilder.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/IR/Intrinsics.h"
-#include "llvm/IR/MDBuilder.h"
-#include "llvm/IR/Module.h"
-#include "llvm/Transforms/Utils/Local.h"
-#include "llvm/Support/CommandLine.h"
+#include "llvm37/Transforms/Utils/Cloning.h"
+#include "llvm37/ADT/SmallSet.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/ADT/SetVector.h"
+#include "llvm37/ADT/StringExtras.h"
+#include "llvm37/Analysis/AliasAnalysis.h"
+#include "llvm37/Analysis/AssumptionCache.h"
+#include "llvm37/Analysis/CallGraph.h"
+#include "llvm37/Analysis/CaptureTracking.h"
+#include "llvm37/Analysis/InstructionSimplify.h"
+#include "llvm37/Analysis/ValueTracking.h"
+#include "llvm37/IR/Attributes.h"
+#include "llvm37/IR/CallSite.h"
+#include "llvm37/IR/CFG.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/IR/DebugInfo.h"
+#include "llvm37/IR/DerivedTypes.h"
+#include "llvm37/IR/DIBuilder.h"
+#include "llvm37/IR/Dominators.h"
+#include "llvm37/IR/IRBuilder.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/IR/Intrinsics.h"
+#include "llvm37/IR/MDBuilder.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/Transforms/Utils/Local.h"
+#include "llvm37/Support/CommandLine.h"
 #include <algorithm>
-using namespace llvm;
+using namespace llvm37;
 
 #if 0 // HLSL Change Starts - option pending
 static cl::opt<bool>
@@ -58,11 +58,11 @@ static const bool EnableNoAliasConversion = true;
 static const bool PreserveAlignmentAssumptions = true;
 #endif // HLSL Change Ends
 
-bool llvm::InlineFunction(CallInst *CI, InlineFunctionInfo &IFI,
+bool llvm37::InlineFunction(CallInst *CI, InlineFunctionInfo &IFI,
                           bool InsertLifetime) {
   return InlineFunction(CallSite(CI), IFI, InsertLifetime);
 }
-bool llvm::InlineFunction(InvokeInst *II, InlineFunctionInfo &IFI,
+bool llvm37::InlineFunction(InvokeInst *II, InlineFunctionInfo &IFI,
                           bool InsertLifetime) {
   return InlineFunction(CallSite(II), IFI, InsertLifetime);
 }
@@ -83,7 +83,7 @@ namespace {
       // If there are PHI nodes in the unwind destination block, we need to keep
       // track of which values came into them from the invoke before removing
       // the edge from this block.
-      llvm::BasicBlock *InvokeBB = II->getParent();
+      llvm37::BasicBlock *InvokeBB = II->getParent();
       BasicBlock::iterator I = OuterResumeDest->begin();
       for (; isa<PHINode>(I); ++I) {
         // Save the value to use for this edge.
@@ -882,7 +882,7 @@ static void fixupLineNumbers(Function *Fn, Function::iterator FI,
   // info is well-formed.
   if (!TheCallDL) {
     if (DISubprogram *Subprogram = getDISubprogram(Fn)) {
-      TheCallDL = DebugLoc(llvm::DILocation::get(Fn->getContext(), 0, 0, Subprogram));
+      TheCallDL = DebugLoc(llvm37::DILocation::get(Fn->getContext(), 0, 0, Subprogram));
       TheCall->setDebugLoc(TheCallDL);
     }
     else {
@@ -936,7 +936,7 @@ static void fixupLineNumbers(Function *Fn, Function::iterator FI,
 /// instruction 'call B' is inlined, and 'B' calls 'C', then the call to 'C' now
 /// exists in the instruction stream.  Similarly this will inline a recursive
 /// function by one level.
-bool llvm::InlineFunction(CallSite CS, InlineFunctionInfo &IFI,
+bool llvm37::InlineFunction(CallSite CS, InlineFunctionInfo &IFI,
                           bool InsertLifetime) {
   Instruction *TheCall = CS.getInstruction();
   assert(TheCall->getParent() && TheCall->getParent()->getParent() &&

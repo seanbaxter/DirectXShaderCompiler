@@ -12,10 +12,10 @@
 ///
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_BASIC_OPENMPKINDS_H
-#define LLVM_CLANG_BASIC_OPENMPKINDS_H
+#ifndef LLVM37_CLANG_BASIC_OPENMPKINDS_H
+#define LLVM37_CLANG_BASIC_OPENMPKINDS_H
 
-#include "llvm/ADT/StringRef.h"
+#include "llvm37/ADT/StringRef.h"
 
 namespace clang {
 
@@ -70,13 +70,13 @@ enum OpenMPDependClauseKind {
   OMPC_DEPEND_unknown
 };
 
-OpenMPDirectiveKind getOpenMPDirectiveKind(llvm::StringRef Str);
+OpenMPDirectiveKind getOpenMPDirectiveKind(llvm37::StringRef Str);
 const char *getOpenMPDirectiveName(OpenMPDirectiveKind Kind);
 
-OpenMPClauseKind getOpenMPClauseKind(llvm::StringRef Str);
+OpenMPClauseKind getOpenMPClauseKind(llvm37::StringRef Str);
 const char *getOpenMPClauseName(OpenMPClauseKind Kind);
 
-unsigned getOpenMPSimpleClauseType(OpenMPClauseKind Kind, llvm::StringRef Str);
+unsigned getOpenMPSimpleClauseType(OpenMPClauseKind Kind, llvm37::StringRef Str);
 const char *getOpenMPSimpleClauseTypeName(OpenMPClauseKind Kind, unsigned Type);
 
 bool isAllowedClauseForDirective(OpenMPDirectiveKind DKind,

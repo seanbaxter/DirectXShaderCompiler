@@ -11,7 +11,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-include "llvm/Option/OptParser.td"
+include "llvm37/Option/OptParser.td"
 
 /////////
 // Flags
@@ -423,10 +423,10 @@ def fauto_profile_EQ : Joined<["-"], "fauto-profile=">,
     Alias<fprofile_sample_use_EQ>;
 def fprofile_instr_generate : Flag<["-"], "fprofile-instr-generate">,
     Group<f_Group>, Flags<[CC1Option]>,
-    HelpText<"Generate instrumented code to collect execution counts into default.profraw file (overriden by '=' form of option or LLVM_PROFILE_FILE env var)">;
+    HelpText<"Generate instrumented code to collect execution counts into default.profraw file (overriden by '=' form of option or LLVM37_PROFILE_FILE env var)">;
 def fprofile_instr_generate_EQ : Joined<["-"], "fprofile-instr-generate=">,
     Group<f_Group>, Flags<[CC1Option]>, MetaVarName<"<file>">,
-    HelpText<"Generate instrumented code to collect execution counts into <file> (overridden by LLVM_PROFILE_FILE env var)">;
+    HelpText<"Generate instrumented code to collect execution counts into <file> (overridden by LLVM37_PROFILE_FILE env var)">;
 def fprofile_instr_use : Flag<["-"], "fprofile-instr-use">, Group<f_Group>,
     Flags<[DriverOption]>;
 def fprofile_instr_use_EQ : Joined<["-"], "fprofile-instr-use=">,
@@ -439,7 +439,7 @@ def fprofile_generate : Flag<["-"], "fprofile-generate">,
     Alias<fprofile_instr_generate>;
 def fprofile_generate_EQ : Joined<["-"], "fprofile-generate=">,
     Group<f_Group>, Flags<[DriverOption]>, MetaVarName<"<directory>">,
-    HelpText<"Generate instrumented code to collect execution counts into <directory>/default.profraw (overridden by LLVM_PROFILE_FILE env var)">;
+    HelpText<"Generate instrumented code to collect execution counts into <directory>/default.profraw (overridden by LLVM37_PROFILE_FILE env var)">;
 def fprofile_use : Flag<["-"], "fprofile-use">, Group<f_Group>,
     Alias<fprofile_instr_use>;
 def fprofile_use_EQ : Joined<["-"], "fprofile-use=">,

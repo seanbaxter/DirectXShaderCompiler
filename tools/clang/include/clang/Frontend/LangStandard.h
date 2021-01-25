@@ -7,11 +7,11 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_FRONTEND_LANGSTANDARD_H
-#define LLVM_CLANG_FRONTEND_LANGSTANDARD_H
+#ifndef LLVM37_CLANG_FRONTEND_LANGSTANDARD_H
+#define LLVM37_CLANG_FRONTEND_LANGSTANDARD_H
 
 #include "clang/Basic/LLVM.h"
-#include "llvm/ADT/StringRef.h"
+#include "llvm37/ADT/StringRef.h"
 
 namespace clang {
 

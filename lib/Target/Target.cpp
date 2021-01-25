@@ -14,15 +14,15 @@
 
 #include "llvm-c/Target.h"
 #include "llvm-c/Initialization.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Value.h"
-#include "llvm/InitializePasses.h"
-#include "llvm/IR/LegacyPassManager.h"
-#include "llvm/Analysis/TargetLibraryInfo.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/Value.h"
+#include "llvm37/InitializePasses.h"
+#include "llvm37/IR/LegacyPassManager.h"
+#include "llvm37/Analysis/TargetLibraryInfo.h"
 #include <cstring>
 
-using namespace llvm;
+using namespace llvm37;
 
 inline TargetLibraryInfoImpl *unwrap(LLVMTargetLibraryInfoRef P) {
   return reinterpret_cast<TargetLibraryInfoImpl*>(P);
@@ -33,7 +33,7 @@ inline LLVMTargetLibraryInfoRef wrap(const TargetLibraryInfoImpl *P) {
   return reinterpret_cast<LLVMTargetLibraryInfoRef>(X);
 }
 
-void llvm::initializeTarget(PassRegistry &Registry) {
+void llvm37::initializeTarget(PassRegistry &Registry) {
   initializeTargetLibraryInfoWrapperPassPass(Registry);
   initializeTargetTransformInfoWrapperPassPass(Registry);
 }

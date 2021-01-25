@@ -21,24 +21,24 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Transforms/Scalar/SimplifyCFG.h"
-#include "llvm/ADT/SmallPtrSet.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/Analysis/AssumptionCache.h"
-#include "llvm/Analysis/TargetTransformInfo.h"
-#include "llvm/IR/Attributes.h"
-#include "llvm/IR/CFG.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/IR/Module.h"
-#include "llvm/Pass.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Transforms/Utils/Local.h"
-#include "llvm/Transforms/Scalar.h"
-using namespace llvm;
+#include "llvm37/Transforms/Scalar/SimplifyCFG.h"
+#include "llvm37/ADT/SmallPtrSet.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/Analysis/AssumptionCache.h"
+#include "llvm37/Analysis/TargetTransformInfo.h"
+#include "llvm37/IR/Attributes.h"
+#include "llvm37/IR/CFG.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/Pass.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Transforms/Utils/Local.h"
+#include "llvm37/Transforms/Scalar.h"
+using namespace llvm37;
 
 #define DEBUG_TYPE "simplifycfg"
 
@@ -235,7 +235,7 @@ INITIALIZE_PASS_END(CFGSimplifyPass, "simplifycfg", "Simplify the CFG", false,
 
 // Public interface to the CFGSimplification pass
 FunctionPass *
-llvm::createCFGSimplificationPass(int Threshold,
+llvm37::createCFGSimplificationPass(int Threshold,
                                   std::function<bool(const Function &)> Ftor) {
   return new CFGSimplifyPass(Threshold, Ftor);
 }

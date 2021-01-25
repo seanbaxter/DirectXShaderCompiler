@@ -12,8 +12,8 @@
 ///
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_UNITTESTS_TOOLING_TESTVISITOR_H
-#define LLVM_CLANG_UNITTESTS_TOOLING_TESTVISITOR_H
+#ifndef LLVM37_CLANG_UNITTESTS_TOOLING_TESTVISITOR_H
+#define LLVM37_CLANG_UNITTESTS_TOOLING_TESTVISITOR_H
 
 #include "clang/AST/ASTConsumer.h"
 #include "clang/AST/ASTContext.h"
@@ -96,9 +96,9 @@ protected:
     TestAction(TestVisitor *Visitor) : Visitor(Visitor) {}
 
     std::unique_ptr<clang::ASTConsumer>
-    CreateASTConsumer(CompilerInstance &, llvm::StringRef dummy) override {
+    CreateASTConsumer(CompilerInstance &, llvm37::StringRef dummy) override {
       /// TestConsumer will be deleted by the framework calling us.
-      return llvm::make_unique<FindConsumer>(Visitor);
+      return llvm37::make_unique<FindConsumer>(Visitor);
     }
 
   protected:
@@ -208,7 +208,7 @@ protected:
         EXPECT_TRUE(!Found);
         Found = true;
       } else if (!Found && Candidate.PartiallyMatches(Name, Location)) {
-        llvm::raw_string_ostream Stream(PartialMatches);
+        llvm37::raw_string_ostream Stream(PartialMatches);
         Stream << ", partial match: \"" << Name << "\" at ";
         Location.print(Stream, SM);
       }

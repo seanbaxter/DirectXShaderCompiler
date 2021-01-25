@@ -12,9 +12,9 @@
 //===----------------------------------------------------------------------===//
 
 #include "gtest/gtest.h"
-#include "llvm/ADT/SmallPtrSet.h"
+#include "llvm37/ADT/SmallPtrSet.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 TEST(SmallPtrSetTest, Assignment) {
   int buf[8];

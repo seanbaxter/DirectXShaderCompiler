@@ -15,7 +15,7 @@
 #include "CXString.h"
 #include "clang/ARCMigrate/ARCMT.h"
 #include "clang/Frontend/TextDiagnosticBuffer.h"
-#include "llvm/Support/FileSystem.h"
+#include "llvm37/Support/FileSystem.h"
 
 using namespace clang;
 using namespace arcmt;
@@ -36,22 +36,22 @@ extern "C" {
 
 CXRemapping clang_getRemappings(const char *migrate_dir_path) {
 #ifndef CLANG_ENABLE_ARCMT
-  llvm::errs() << "error: feature not enabled in this build\n";
+  llvm37::errs() << "error: feature not enabled in this build\n";
   return nullptr;
 #else
   bool Logging = ::getenv("LIBCLANG_LOGGING");
 
   if (!migrate_dir_path) {
     if (Logging)
-      llvm::errs() << "clang_getRemappings was called with NULL parameter\n";
+      llvm37::errs() << "clang_getRemappings was called with NULL parameter\n";
     return nullptr;
   }
 
-  if (!llvm::sys::fs::exists(migrate_dir_path)) {
+  if (!llvm37::sys::fs::exists(migrate_dir_path)) {
     if (Logging) {
-      llvm::errs() << "Error by clang_getRemappings(\"" << migrate_dir_path
+      llvm37::errs() << "Error by clang_getRemappings(\"" << migrate_dir_path
                    << "\")\n";
-      llvm::errs() << "\"" << migrate_dir_path << "\" does not exist\n";
+      llvm37::errs() << "\"" << migrate_dir_path << "\" does not exist\n";
     }
     return nullptr;
   }
@@ -63,11 +63,11 @@ CXRemapping clang_getRemappings(const char *migrate_dir_path) {
 
   if (err) {
     if (Logging) {
-      llvm::errs() << "Error by clang_getRemappings(\"" << migrate_dir_path
+      llvm37::errs() << "Error by clang_getRemappings(\"" << migrate_dir_path
                    << "\")\n";
       for (TextDiagnosticBuffer::const_iterator
              I = diagBuffer.err_begin(), E = diagBuffer.err_end(); I != E; ++I)
-        llvm::errs() << I->second << '\n';
+        llvm37::errs() << I->second << '\n';
     }
     return nullptr;
   }
@@ -79,7 +79,7 @@ CXRemapping clang_getRemappings(const char *migrate_dir_path) {
 CXRemapping clang_getRemappingsFromFileList(const char **filePaths,
                                             unsigned numFiles) {
 #ifndef CLANG_ENABLE_ARCMT
-  llvm::errs() << "error: feature not enabled in this build\n";
+  llvm37::errs() << "error: feature not enabled in this build\n";
   return nullptr;
 #else
   bool Logging = ::getenv("LIBCLANG_LOGGING");
@@ -88,14 +88,14 @@ CXRemapping clang_getRemappingsFromFileList(const char **filePaths,
 
   if (numFiles == 0) {
     if (Logging)
-      llvm::errs() << "clang_getRemappingsFromFileList was called with "
+      llvm37::errs() << "clang_getRemappingsFromFileList was called with "
                       "numFiles=0\n";
     return remap.release();
   }
 
   if (!filePaths) {
     if (Logging)
-      llvm::errs() << "clang_getRemappingsFromFileList was called with "
+      llvm37::errs() << "clang_getRemappingsFromFileList was called with "
                       "NULL filePaths\n";
     return nullptr;
   }
@@ -108,10 +108,10 @@ CXRemapping clang_getRemappingsFromFileList(const char **filePaths,
 
   if (err) {
     if (Logging) {
-      llvm::errs() << "Error by clang_getRemappingsFromFileList\n";
+      llvm37::errs() << "Error by clang_getRemappingsFromFileList\n";
       for (TextDiagnosticBuffer::const_iterator
              I = diagBuffer.err_begin(), E = diagBuffer.err_end(); I != E; ++I)
-        llvm::errs() << I->second << '\n';
+        llvm37::errs() << I->second << '\n';
     }
     return remap.release();
   }

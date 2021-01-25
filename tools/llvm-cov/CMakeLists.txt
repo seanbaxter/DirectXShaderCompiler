@@ -1,4 +1,4 @@
-set(LLVM_LINK_COMPONENTS core support object profiledata)
+set(LLVM37_LINK_COMPONENTS core support object profiledata)
 
 add_llvm_tool(llvm-cov
   llvm-cov.cpp

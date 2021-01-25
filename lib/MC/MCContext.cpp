@@ -7,31 +7,31 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/MC/MCContext.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/ADT/Twine.h"
-#include "llvm/MC/MCAssembler.h"
-#include "llvm/MC/MCAsmInfo.h"
-#include "llvm/MC/MCDwarf.h"
-#include "llvm/MC/MCLabel.h"
-#include "llvm/MC/MCObjectFileInfo.h"
-#include "llvm/MC/MCRegisterInfo.h"
-#include "llvm/MC/MCSectionCOFF.h"
-#include "llvm/MC/MCSectionELF.h"
-#include "llvm/MC/MCSectionMachO.h"
-#include "llvm/MC/MCStreamer.h"
-#include "llvm/MC/MCSymbolCOFF.h"
-#include "llvm/MC/MCSymbolELF.h"
-#include "llvm/MC/MCSymbolMachO.h"
-#include "llvm/Support/ELF.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/FileSystem.h"
-#include "llvm/Support/MemoryBuffer.h"
-#include "llvm/Support/Signals.h"
-#include "llvm/Support/SourceMgr.h"
+#include "llvm37/MC/MCContext.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/ADT/Twine.h"
+#include "llvm37/MC/MCAssembler.h"
+#include "llvm37/MC/MCAsmInfo.h"
+#include "llvm37/MC/MCDwarf.h"
+#include "llvm37/MC/MCLabel.h"
+#include "llvm37/MC/MCObjectFileInfo.h"
+#include "llvm37/MC/MCRegisterInfo.h"
+#include "llvm37/MC/MCSectionCOFF.h"
+#include "llvm37/MC/MCSectionELF.h"
+#include "llvm37/MC/MCSectionMachO.h"
+#include "llvm37/MC/MCStreamer.h"
+#include "llvm37/MC/MCSymbolCOFF.h"
+#include "llvm37/MC/MCSymbolELF.h"
+#include "llvm37/MC/MCSymbolMachO.h"
+#include "llvm37/Support/ELF.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/FileSystem.h"
+#include "llvm37/Support/MemoryBuffer.h"
+#include "llvm37/Support/Signals.h"
+#include "llvm37/Support/SourceMgr.h"
 #include <map>
 
-using namespace llvm;
+using namespace llvm37;
 
 MCContext::MCContext(const MCAsmInfo *mai, const MCRegisterInfo *mri,
                      const MCObjectFileInfo *mofi, const SourceMgr *mgr,
@@ -43,7 +43,7 @@ MCContext::MCContext(const MCAsmInfo *mai, const MCRegisterInfo *mri,
       AllowTemporaryLabels(true), DwarfCompileUnitID(0),
       AutoReset(DoAutoReset) {
 
-  std::error_code EC = llvm::sys::fs::current_path(CompilationDir);
+  std::error_code EC = llvm37::sys::fs::current_path(CompilationDir);
   if (EC)
     CompilationDir.clear();
 

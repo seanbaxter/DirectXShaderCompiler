@@ -20,9 +20,9 @@
 #include "clang/AST/Expr.h"
 #include "clang/Basic/SourceManager.h"
 #include "clang/Serialization/ASTReader.h"
-#include "llvm/ADT/Twine.h"
-#include "llvm/Bitcode/BitstreamWriter.h"
-#include "llvm/Support/ErrorHandling.h"
+#include "llvm37/ADT/Twine.h"
+#include "llvm37/Bitcode/BitstreamWriter.h"
+#include "llvm37/Support/ErrorHandling.h"
 using namespace clang;
 using namespace serialization;
 
@@ -154,7 +154,7 @@ namespace clang {
         Record.push_back(CD->NumCtorInitializers);
         if (CD->NumCtorInitializers)
           Writer.AddCXXCtorInitializersRef(
-              llvm::makeArrayRef(CD->init_begin(), CD->init_end()), Record);
+              llvm37::makeArrayRef(CD->init_begin(), CD->init_end()), Record);
       }
       Writer.AddStmt(FD->getBody());
     }
@@ -238,7 +238,7 @@ void ASTDeclWriter::VisitDecl(Decl *D) {
   Record.push_back(D->isInvalidDecl());
   Record.push_back(D->hasAttrs());
   if (D->hasAttrs())
-    Writer.WriteAttributes(llvm::makeArrayRef(D->getAttrs().begin(),
+    Writer.WriteAttributes(llvm37::makeArrayRef(D->getAttrs().begin(),
                                               D->getAttrs().size()), Record);
   Record.push_back(D->isImplicit());
   Record.push_back(D->isUsed(false));
@@ -747,7 +747,7 @@ void ASTDeclWriter::VisitObjCImplementationDecl(ObjCImplementationDecl *D) {
   Record.push_back(D->NumIvarInitializers);
   if (D->NumIvarInitializers)
     Writer.AddCXXCtorInitializersRef(
-        llvm::makeArrayRef(D->init_begin(), D->init_end()), Record);
+        llvm37::makeArrayRef(D->init_begin(), D->init_end()), Record);
   Code = serialization::DECL_OBJC_IMPLEMENTATION;
 }
 
@@ -1251,7 +1251,7 @@ void ASTDeclWriter::VisitClassTemplateSpecializationDecl(
                                            ClassTemplateSpecializationDecl *D) {
   VisitCXXRecordDecl(D);
 
-  llvm::PointerUnion<ClassTemplateDecl *,
+  llvm37::PointerUnion<ClassTemplateDecl *,
                      ClassTemplatePartialSpecializationDecl *> InstFrom
     = D->getSpecializedTemplateOrPartial();
   if (Decl *InstFromD = InstFrom.dyn_cast<ClassTemplateDecl *>()) {
@@ -1310,7 +1310,7 @@ void ASTDeclWriter::VisitVarTemplateSpecializationDecl(
     VarTemplateSpecializationDecl *D) {
   VisitVarDecl(D);
 
-  llvm::PointerUnion<VarTemplateDecl *, VarTemplatePartialSpecializationDecl *>
+  llvm37::PointerUnion<VarTemplateDecl *, VarTemplatePartialSpecializationDecl *>
   InstFrom = D->getSpecializedTemplateOrPartial();
   if (Decl *InstFromD = InstFrom.dyn_cast<VarTemplateDecl *>()) {
     Writer.AddDeclRef(InstFromD, Record);
@@ -1549,7 +1549,7 @@ void ASTDeclWriter::VisitOMPThreadPrivateDecl(OMPThreadPrivateDecl *D) {
 //===----------------------------------------------------------------------===//
 
 void ASTWriter::WriteDeclAbbrevs() {
-  using namespace llvm;
+  using namespace llvm37;
 
   BitCodeAbbrev *Abv;
 
@@ -2080,7 +2080,7 @@ void ASTWriter::WriteDecl(ASTContext &Context, Decl *D) {
   if (DC) W.VisitDeclContext(DC, LexicalOffset, VisibleOffset);
 
   if (!W.Code)
-    llvm::report_fatal_error(StringRef("unexpected declaration kind '") +
+    llvm37::report_fatal_error(StringRef("unexpected declaration kind '") +
                             D->getDeclKindName() + "'");
   Stream.EmitRecord(W.Code, Record, W.AbbrevToUse);
 

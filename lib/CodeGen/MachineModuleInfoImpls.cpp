@@ -12,9 +12,9 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/CodeGen/MachineModuleInfoImpls.h"
-#include "llvm/MC/MCSymbol.h"
-using namespace llvm;
+#include "llvm37/CodeGen/MachineModuleInfoImpls.h"
+#include "llvm37/MC/MCSymbol.h"
+using namespace llvm37;
 
 //===----------------------------------------------------------------------===//
 // MachineModuleInfoMachO

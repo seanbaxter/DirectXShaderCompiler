@@ -13,7 +13,7 @@
 
 #include <functional>
 #include "dxc/DxilContainer/DxilContainer.h"
-#include "llvm/ADT/StringRef.h"
+#include "llvm37/ADT/StringRef.h"
 
 namespace hlsl {
 
@@ -49,7 +49,7 @@ DxilContainerWriter *NewDxilContainerWriter();
 void SerializeDxilContainerForModule(hlsl::DxilModule *pModule,
                                      AbstractMemoryStream *pModuleBitcode,
                                      AbstractMemoryStream *pStream,
-                                     llvm::StringRef DebugName,
+                                     llvm37::StringRef DebugName,
                                      SerializeDxilFlags Flags,
                                      DxilShaderHash *pShaderHashOut = nullptr,
                                      AbstractMemoryStream *pReflectionStreamOut = nullptr,

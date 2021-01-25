@@ -7,18 +7,18 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/AsmParser/Parser.h"
-#include "llvm/IR/BasicBlock.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/IRBuilder.h"
-#include "llvm/IR/Module.h"
-#include "llvm/Linker/Linker.h"
-#include "llvm/Support/SourceMgr.h"
+#include "llvm37/AsmParser/Parser.h"
+#include "llvm37/IR/BasicBlock.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/IRBuilder.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/Linker/Linker.h"
+#include "llvm37/Support/SourceMgr.h"
 #include "llvm-c/Linker.h"
 #include "gtest/gtest.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 namespace {
 
@@ -189,7 +189,7 @@ TEST_F(LinkModuleTest, TypeMerge) {
                       "@t2 = weak global %t zeroinitializer\n";
   std::unique_ptr<Module> M2 = parseAssemblyString(M2Str, Err, C);
 
-  Linker::LinkModules(M1.get(), M2.get(), [](const llvm::DiagnosticInfo &){});
+  Linker::LinkModules(M1.get(), M2.get(), [](const llvm37::DiagnosticInfo &){});
 
   EXPECT_EQ(M1->getNamedGlobal("t1")->getType(),
             M1->getNamedGlobal("t2")->getType());

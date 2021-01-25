@@ -34,28 +34,28 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Analysis/Lint.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/SmallSet.h"
-#include "llvm/Analysis/AliasAnalysis.h"
-#include "llvm/Analysis/AssumptionCache.h"
-#include "llvm/Analysis/ConstantFolding.h"
-#include "llvm/Analysis/InstructionSimplify.h"
-#include "llvm/Analysis/Loads.h"
-#include "llvm/Analysis/Passes.h"
-#include "llvm/Analysis/TargetLibraryInfo.h"
-#include "llvm/Analysis/ValueTracking.h"
-#include "llvm/IR/CallSite.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/Dominators.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/InstVisitor.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/IR/LegacyPassManager.h"
-#include "llvm/Pass.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/raw_ostream.h"
-using namespace llvm;
+#include "llvm37/Analysis/Lint.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/SmallSet.h"
+#include "llvm37/Analysis/AliasAnalysis.h"
+#include "llvm37/Analysis/AssumptionCache.h"
+#include "llvm37/Analysis/ConstantFolding.h"
+#include "llvm37/Analysis/InstructionSimplify.h"
+#include "llvm37/Analysis/Loads.h"
+#include "llvm37/Analysis/Passes.h"
+#include "llvm37/Analysis/TargetLibraryInfo.h"
+#include "llvm37/Analysis/ValueTracking.h"
+#include "llvm37/IR/CallSite.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/IR/Dominators.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/InstVisitor.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/IR/LegacyPassManager.h"
+#include "llvm37/Pass.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/raw_ostream.h"
+using namespace llvm37;
 
 namespace {
   namespace MemRef {
@@ -885,13 +885,13 @@ Value *Lint::findValueImpl(Value *V, const DataLayout &DL, bool OffsetOk,
 //  Implement the public interfaces to this file...
 //===----------------------------------------------------------------------===//
 
-FunctionPass *llvm::createLintPass() {
+FunctionPass *llvm37::createLintPass() {
   return new Lint();
 }
 
 /// lintFunction - Check a function for errors, printing messages on stderr.
 ///
-void llvm::lintFunction(const Function &f) {
+void llvm37::lintFunction(const Function &f) {
   Function &F = const_cast<Function&>(f);
   assert(!F.isDeclaration() && "Cannot lint external functions");
 
@@ -903,7 +903,7 @@ void llvm::lintFunction(const Function &f) {
 
 /// lintModule - Check a module for errors, printing messages on stderr.
 ///
-void llvm::lintModule(const Module &M) {
+void llvm37::lintModule(const Module &M) {
   legacy::PassManager PM;
   Lint *V = new Lint();
   PM.add(V);

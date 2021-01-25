@@ -59,7 +59,7 @@ bool validateSpirvBinary(spv_target_env env, std::vector<uint32_t> &binary,
   return spirvTools.Validate(binary.data(), binary.size(), options);
 }
 
-bool processRunCommandArgs(const llvm::StringRef runCommandLine,
+bool processRunCommandArgs(const llvm37::StringRef runCommandLine,
                            std::string *targetProfile, std::string *entryPoint,
                            spv_target_env *targetEnv,
                            std::vector<std::string> *restArgs) {
@@ -123,7 +123,7 @@ void convertIDxcBlobToUint32(const CComPtr<IDxcBlob> &blob,
   memcpy(binaryWords->data(), binaryStr.data(), binaryStr.size());
 }
 
-std::string getAbsPathOfInputDataFile(const llvm::StringRef filename) {
+std::string getAbsPathOfInputDataFile(const llvm37::StringRef filename) {
 
   std::string path = clang::spirv::testOptions::inputDataDir;
 
@@ -141,9 +141,9 @@ std::string getAbsPathOfInputDataFile(const llvm::StringRef filename) {
   return path;
 }
 
-bool runCompilerWithSpirvGeneration(const llvm::StringRef inputFilePath,
-                                    const llvm::StringRef entryPoint,
-                                    const llvm::StringRef targetProfile,
+bool runCompilerWithSpirvGeneration(const llvm37::StringRef inputFilePath,
+                                    const llvm37::StringRef entryPoint,
+                                    const llvm37::StringRef targetProfile,
                                     const std::vector<std::string> &restArgs,
                                     std::vector<uint32_t> *generatedBinary,
                                     std::string *errorMessages) {

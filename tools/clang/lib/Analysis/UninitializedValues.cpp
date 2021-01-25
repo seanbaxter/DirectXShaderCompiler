@@ -21,12 +21,12 @@
 #include "clang/Analysis/AnalysisContext.h"
 #include "clang/Analysis/CFG.h"
 #include "clang/Analysis/DomainSpecific/ObjCNoReturn.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/Optional.h"
-#include "llvm/ADT/PackedVector.h"
-#include "llvm/ADT/SmallBitVector.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/Support/SaveAndRestore.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/Optional.h"
+#include "llvm37/ADT/PackedVector.h"
+#include "llvm37/ADT/SmallBitVector.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/Support/SaveAndRestore.h"
 #include <utility>
 
 using namespace clang;
@@ -49,7 +49,7 @@ static bool isTrackedVar(const VarDecl *vd, const DeclContext *dc) {
 
 namespace {
 class DeclToIndex {
-  llvm::DenseMap<const VarDecl *, unsigned> map;
+  llvm37::DenseMap<const VarDecl *, unsigned> map;
 public:
   DeclToIndex() {}
   
@@ -76,7 +76,7 @@ void DeclToIndex::computeMap(const DeclContext &dc) {
 }
 
 Optional<unsigned> DeclToIndex::getValueIndex(const VarDecl *d) const {
-  llvm::DenseMap<const VarDecl *, unsigned>::const_iterator I = map.find(d);
+  llvm37::DenseMap<const VarDecl *, unsigned>::const_iterator I = map.find(d);
   if (I == map.end())
     return None;
   return I->second;
@@ -102,7 +102,7 @@ static bool isAlwaysUninit(const Value v) {
 
 namespace {
 
-typedef llvm::PackedVector<Value, 2, llvm::SmallBitVector> ValueVector;
+typedef llvm37::PackedVector<Value, 2, llvm37::SmallBitVector> ValueVector;
 
 class CFGBlockValues {
   const CFG &cfg;
@@ -157,11 +157,11 @@ void CFGBlockValues::computeSetOfDeclarations(const DeclContext &dc) {
 #if DEBUG_LOGGING
 static void printVector(const CFGBlock *block, ValueVector &bv,
                         unsigned num) {
-  llvm::errs() << block->getBlockID() << " :";
+  llvm37::errs() << block->getBlockID() << " :";
   for (unsigned i = 0; i < bv.size(); ++i) {
-    llvm::errs() << ' ' << bv[i];
+    llvm37::errs() << ' ' << bv[i];
   }
-  llvm::errs() << " : " << num << '\n';
+  llvm37::errs() << " : " << num << '\n';
 }
 #endif
 
@@ -207,7 +207,7 @@ namespace {
 class DataflowWorklist {
   PostOrderCFGView::iterator PO_I, PO_E;
   SmallVector<const CFGBlock *, 20> worklist;
-  llvm::BitVector enqueuedBlocks;
+  llvm37::BitVector enqueuedBlocks;
 public:
   DataflowWorklist(const CFG &cfg, PostOrderCFGView &view)
     : PO_I(view.begin()), PO_E(view.end()),
@@ -313,7 +313,7 @@ public:
 
 private:
   const DeclContext *DC;
-  llvm::DenseMap<const DeclRefExpr*, Class> Classification;
+  llvm37::DenseMap<const DeclRefExpr*, Class> Classification;
 
   bool isTrackedVar(const VarDecl *VD) const {
     return ::isTrackedVar(VD, DC);
@@ -333,7 +333,7 @@ public:
   void operator()(Stmt *S) { Visit(S); }
 
   Class get(const DeclRefExpr *DRE) const {
-    llvm::DenseMap<const DeclRefExpr*, Class>::const_iterator I
+    llvm37::DenseMap<const DeclRefExpr*, Class>::const_iterator I
         = Classification.find(DRE);
     if (I != Classification.end())
       return I->second;
@@ -801,7 +801,7 @@ void TransferFunctions::VisitObjCMessageExpr(ObjCMessageExpr *ME) {
 static bool runOnBlock(const CFGBlock *block, const CFG &cfg,
                        AnalysisDeclContext &ac, CFGBlockValues &vals,
                        const ClassifyRefs &classification,
-                       llvm::BitVector &wasAnalyzed,
+                       llvm37::BitVector &wasAnalyzed,
                        UninitVariablesHandler &handler) {
   wasAnalyzed[block->getBlockID()] = true;
   vals.resetScratch();
@@ -840,7 +840,7 @@ struct PruneBlocksHandler : public UninitVariablesHandler {
   ~PruneBlocksHandler() override {}
 
   /// Records if a CFGBlock had a potential use of an uninitialized variable.
-  llvm::BitVector hadUse;
+  llvm37::BitVector hadUse;
 
   /// Records if any CFGBlock had a potential use of an uninitialized variable.
   bool hadAnyUse;
@@ -891,9 +891,9 @@ void clang::runUninitializedVariablesAnalysis(
 
   // Proceed with the workist.
   DataflowWorklist worklist(cfg, *ac.getAnalysis<PostOrderCFGView>());
-  llvm::BitVector previouslyVisited(cfg.getNumBlockIDs());
+  llvm37::BitVector previouslyVisited(cfg.getNumBlockIDs());
   worklist.enqueueSuccessors(&cfg.getEntry());
-  llvm::BitVector wasAnalyzed(cfg.getNumBlockIDs(), false);
+  llvm37::BitVector wasAnalyzed(cfg.getNumBlockIDs(), false);
   wasAnalyzed[cfg.getEntry().getBlockID()] = true;
   PruneBlocksHandler PBH(cfg.getNumBlockIDs());
 

@@ -16,16 +16,16 @@
 #include "DxilTargetTransformInfo.h"
 #include "dxc/DXIL/DxilModule.h"
 #include "dxc/DXIL/DxilOperations.h"
-#include "llvm/CodeGen/BasicTTIImpl.h"
+#include "llvm37/CodeGen/BasicTTIImpl.h"
 
-using namespace llvm;
+using namespace llvm37;
 using namespace hlsl;
 
 #define DEBUG_TYPE "DXILtti"
 
 // For BasicTTImpl
 cl::opt<unsigned>
-    llvm::PartialUnrollingThreshold("partial-unrolling-threshold", cl::init(0),
+    llvm37::PartialUnrollingThreshold("partial-unrolling-threshold", cl::init(0),
                                     cl::desc("Threshold for partial unrolling"),
                                     cl::Hidden);
 

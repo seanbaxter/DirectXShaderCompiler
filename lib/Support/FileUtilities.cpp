@@ -12,16 +12,16 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Support/FileUtilities.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/Support/MemoryBuffer.h"
-#include "llvm/Support/Path.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/Support/FileUtilities.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/Support/MemoryBuffer.h"
+#include "llvm37/Support/Path.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <cctype>
 #include <cstdlib>
 #include <cstring>
 #include <system_error>
-using namespace llvm;
+using namespace llvm37;
 
 static bool isSignedChar(char C) {
   return (C == '+' || C == '-');
@@ -170,7 +170,7 @@ static bool CompareNumbers(const char *&F1P, const char *&F2P,
 /// error occurs, allowing the caller to distinguish between a failed diff and a
 /// file system error.
 ///
-int llvm::DiffFilesWithTolerance(StringRef NameA,
+int llvm37::DiffFilesWithTolerance(StringRef NameA,
                                  StringRef NameB,
                                  double AbsTol, double RelTol,
                                  std::string *Error) {

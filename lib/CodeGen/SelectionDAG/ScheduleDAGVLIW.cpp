@@ -18,22 +18,22 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/CodeGen/SchedulerRegistry.h"
+#include "llvm37/CodeGen/SchedulerRegistry.h"
 #include "ScheduleDAGSDNodes.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/CodeGen/LatencyPriorityQueue.h"
-#include "llvm/CodeGen/ResourcePriorityQueue.h"
-#include "llvm/CodeGen/ScheduleHazardRecognizer.h"
-#include "llvm/CodeGen/SelectionDAGISel.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Target/TargetInstrInfo.h"
-#include "llvm/Target/TargetRegisterInfo.h"
-#include "llvm/Target/TargetSubtargetInfo.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/CodeGen/LatencyPriorityQueue.h"
+#include "llvm37/CodeGen/ResourcePriorityQueue.h"
+#include "llvm37/CodeGen/ScheduleHazardRecognizer.h"
+#include "llvm37/CodeGen/SelectionDAGISel.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Target/TargetInstrInfo.h"
+#include "llvm37/Target/TargetRegisterInfo.h"
+#include "llvm37/Target/TargetSubtargetInfo.h"
 #include <climits>
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "pre-RA-sched"
 
@@ -274,6 +274,6 @@ void ScheduleDAGVLIW::listScheduleTopDown() {
 
 /// createVLIWDAGScheduler - This creates a top-down list scheduler.
 ScheduleDAGSDNodes *
-llvm::createVLIWDAGScheduler(SelectionDAGISel *IS, CodeGenOpt::Level) {
+llvm37::createVLIWDAGScheduler(SelectionDAGISel *IS, CodeGenOpt::Level) {
   return new ScheduleDAGVLIW(*IS->MF, IS->AA, new ResourcePriorityQueue(IS));
 }

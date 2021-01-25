@@ -1,6 +1,6 @@
 // RUN: llvm-tblgen -gen-disassembler -I %p/../../include %s | FileCheck %s
 
-include "llvm/Target/Target.td"
+include "llvm37/Target/Target.td"
 
 def archInstrInfo : InstrInfo { }
 

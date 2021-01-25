@@ -11,17 +11,17 @@
 #include "dxc/HLSL/HLOperations.h"
 #include "dxc/HLSL/HLMatrixType.h"
 #include "dxc/HlslIntrinsicOp.h"
-#include "llvm/IR/InstIterator.h"
-#include "llvm/IR/Instruction.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/IRBuilder.h"
-#include "llvm/IR/Intrinsics.h"
-#include "llvm/Transforms/Scalar.h"
+#include "llvm37/IR/InstIterator.h"
+#include "llvm37/IR/Instruction.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/IRBuilder.h"
+#include "llvm37/IR/Intrinsics.h"
+#include "llvm37/Transforms/Scalar.h"
 
 using namespace hlsl;
-using namespace llvm;
+using namespace llvm37;
 
 namespace {
 
@@ -83,7 +83,7 @@ bool HLExpandStoreIntrinsics::expand(CallInst* StoreCall) {
 void HLExpandStoreIntrinsics::emitElementStores(CallInst &OriginalCall,
     SmallVectorImpl<Value*>& GEPIndicesStack, Type *StackTopTy,
     unsigned OffsetFromBase) {
-  llvm::Module &Module = *OriginalCall.getModule();
+  llvm37::Module &Module = *OriginalCall.getModule();
   IRBuilder<> Builder(&OriginalCall);
 
   StructType* StructTy = dyn_cast<StructType>(StackTopTy);
@@ -131,7 +131,7 @@ void HLExpandStoreIntrinsics::emitElementStores(CallInst &OriginalCall,
 
 } // namespace
 
-FunctionPass *llvm::createHLExpandStoreIntrinsicsPass() { return new HLExpandStoreIntrinsics(); }
+FunctionPass *llvm37::createHLExpandStoreIntrinsicsPass() { return new HLExpandStoreIntrinsics(); }
 
 INITIALIZE_PASS(HLExpandStoreIntrinsics, "hl-expand-store-intrinsics",
                 "Expand HLSL store intrinsics", false, false)

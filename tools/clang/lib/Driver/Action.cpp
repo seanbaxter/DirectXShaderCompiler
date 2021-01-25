@@ -8,10 +8,10 @@
 //===----------------------------------------------------------------------===//
 
 #include "clang/Driver/Action.h"
-#include "llvm/Support/ErrorHandling.h"
+#include "llvm37/Support/ErrorHandling.h"
 #include <cassert>
 using namespace clang::driver;
-using namespace llvm::opt;
+using namespace llvm37::opt;
 
 Action::~Action() {
   if (OwnsInputs) {

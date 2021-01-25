@@ -13,23 +13,23 @@
 //===----------------------------------------------------------------------===//
 
 #include "DifferenceEngine.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/DenseSet.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/ADT/StringRef.h"
-#include "llvm/ADT/StringSet.h"
-#include "llvm/IR/CFG.h"
-#include "llvm/IR/CallSite.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/Module.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Support/type_traits.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/DenseSet.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/ADT/StringRef.h"
+#include "llvm37/ADT/StringSet.h"
+#include "llvm37/IR/CFG.h"
+#include "llvm37/IR/CallSite.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Support/type_traits.h"
 #include <utility>
 
-using namespace llvm;
+using namespace llvm37;
 
 namespace {
 
@@ -37,7 +37,7 @@ namespace {
 template <class T, class Sorter, unsigned InlineCapacity>
 class PriorityQueue {
   Sorter Precedes;
-  llvm::SmallVector<T, InlineCapacity> Storage;
+  llvm37::SmallVector<T, InlineCapacity> Storage;
 
 public:
   PriorityQueue(const Sorter &Precedes) : Precedes(Precedes) {}
@@ -476,7 +476,7 @@ struct DiffEntry {
   DiffEntry() : Cost(0) {}
 
   unsigned Cost;
-  llvm::SmallVector<char, 8> Path; // actually of DifferenceEngine::DiffChange
+  llvm37::SmallVector<char, 8> Path; // actually of DifferenceEngine::DiffChange
 };
 
 bool FunctionDifferenceEngine::matchForBlockDiff(Instruction *L,

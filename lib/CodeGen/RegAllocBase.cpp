@@ -14,25 +14,25 @@
 
 #include "RegAllocBase.h"
 #include "Spiller.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/CodeGen/LiveIntervalAnalysis.h"
-#include "llvm/CodeGen/LiveRangeEdit.h"
-#include "llvm/CodeGen/LiveRegMatrix.h"
-#include "llvm/CodeGen/MachineInstr.h"
-#include "llvm/CodeGen/MachineRegisterInfo.h"
-#include "llvm/CodeGen/VirtRegMap.h"
-#include "llvm/Target/TargetRegisterInfo.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/CodeGen/LiveIntervalAnalysis.h"
+#include "llvm37/CodeGen/LiveRangeEdit.h"
+#include "llvm37/CodeGen/LiveRegMatrix.h"
+#include "llvm37/CodeGen/MachineInstr.h"
+#include "llvm37/CodeGen/MachineRegisterInfo.h"
+#include "llvm37/CodeGen/VirtRegMap.h"
+#include "llvm37/Target/TargetRegisterInfo.h"
 #ifndef NDEBUG
-#include "llvm/ADT/SparseBitVector.h"
+#include "llvm37/ADT/SparseBitVector.h"
 #endif
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Support/Timer.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Support/Timer.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "regalloc"
 

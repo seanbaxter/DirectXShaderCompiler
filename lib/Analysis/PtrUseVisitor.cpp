@@ -11,9 +11,9 @@
 ///
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Analysis/PtrUseVisitor.h"
+#include "llvm37/Analysis/PtrUseVisitor.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 void detail::PtrUseVisitorBase::enqueueUsers(Instruction &I) {
   for (Use &U : I.uses()) {

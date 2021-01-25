@@ -15,21 +15,21 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/AsmParser/Parser.h"
-#include "llvm/Bitcode/ReaderWriter.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/Verifier.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/FileSystem.h"
-#include "llvm/Support/ManagedStatic.h"
-#include "llvm/Support/PrettyStackTrace.h"
-#include "llvm/Support/Signals.h"
-#include "llvm/Support/SourceMgr.h"
-#include "llvm/Support/SystemUtils.h"
-#include "llvm/Support/ToolOutputFile.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/AsmParser/Parser.h"
+#include "llvm37/Bitcode/ReaderWriter.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/Verifier.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/FileSystem.h"
+#include "llvm37/Support/ManagedStatic.h"
+#include "llvm37/Support/PrettyStackTrace.h"
+#include "llvm37/Support/Signals.h"
+#include "llvm37/Support/SourceMgr.h"
+#include "llvm37/Support/SystemUtils.h"
+#include "llvm37/Support/ToolOutputFile.h"
 #include <memory>
-using namespace llvm;
+using namespace llvm37;
 
 static cl::opt<std::string>
 InputFilename(cl::Positional, cl::desc("<input .llvm file>"), cl::init("-"));
@@ -86,8 +86,8 @@ static void WriteOutputFile(const Module *M) {
 // HLSL Change Starts
 #define NOMINMAX
 #include <windows.h>
-#include "llvm/Support/FileSystem.h"
-#include "llvm/Support/MSFileSystem.h"
+#include "llvm37/Support/FileSystem.h"
+#include "llvm37/Support/MSFileSystem.h"
 // HLSL Change Ends
 
 // HLSL Change: changed calling convention to __cdecl
@@ -96,13 +96,13 @@ int __cdecl main(int argc, char **argv) {
   // sys::PrintStackTraceOnErrorSignal(); // HLSL Change - disable this
   // PrettyStackTraceProgram X(argc, argv); // HLSL Change - disable this
   // HLSL Change Starts
-  llvm::sys::fs::MSFileSystem* msfPtr;
+  llvm37::sys::fs::MSFileSystem* msfPtr;
   HRESULT hr;
   if (!SUCCEEDED(hr = CreateMSFileSystemForDisk(&msfPtr)))
     return 1;
-  std::unique_ptr<llvm::sys::fs::MSFileSystem> msf(msfPtr);
-  llvm::sys::fs::AutoPerThreadSystem pts(msf.get());
-  llvm::STDStreamCloser stdStreamCloser;
+  std::unique_ptr<llvm37::sys::fs::MSFileSystem> msf(msfPtr);
+  llvm37::sys::fs::AutoPerThreadSystem pts(msf.get());
+  llvm37::STDStreamCloser stdStreamCloser;
   // HLSL Change Ends
 
   LLVMContext &Context = getGlobalContext();

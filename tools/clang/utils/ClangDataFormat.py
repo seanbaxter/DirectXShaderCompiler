@@ -24,7 +24,7 @@ import lldb
 def __lldb_init_module(debugger, internal_dict):
 	debugger.HandleCommand("type summary add -F ClangDataFormat.SourceLocation_summary clang::SourceLocation")
 	debugger.HandleCommand("type summary add -F ClangDataFormat.QualType_summary clang::QualType")
-	debugger.HandleCommand("type summary add -F ClangDataFormat.StringRef_summary llvm::StringRef")
+	debugger.HandleCommand("type summary add -F ClangDataFormat.StringRef_summary llvm37::StringRef")
 
 def SourceLocation_summary(srcloc, internal_dict):
 	return SourceLocation(srcloc).summary()
@@ -131,8 +131,8 @@ def findObject(typename, frame):
 		if not (ty.IsPointerType() or
 		        ty.IsReferenceType() or
 				# FIXME: lldb should provide something like getCanonicalType
-		        tyname.startswith("llvm::IntrusiveRefCntPtr<") or
-		        tyname.startswith("llvm::OwningPtr<")):
+		        tyname.startswith("llvm37::IntrusiveRefCntPtr<") or
+		        tyname.startswith("llvm37::OwningPtr<")):
 			return None
 		# FIXME: Hashing for SBTypes does not seem to work correctly, uses the typename instead,
 		# and not the canonical one unfortunately.

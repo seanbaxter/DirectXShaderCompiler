@@ -11,15 +11,15 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_STATICANALYZER_CORE_BUGREPORTER_PATHDIAGNOSTIC_H
-#define LLVM_CLANG_STATICANALYZER_CORE_BUGREPORTER_PATHDIAGNOSTIC_H
+#ifndef LLVM37_CLANG_STATICANALYZER_CORE_BUGREPORTER_PATHDIAGNOSTIC_H
+#define LLVM37_CLANG_STATICANALYZER_CORE_BUGREPORTER_PATHDIAGNOSTIC_H
 
 #include "clang/Analysis/ProgramPoint.h"
 #include "clang/Basic/SourceLocation.h"
-#include "llvm/ADT/FoldingSet.h"
-#include "llvm/ADT/IntrusiveRefCntPtr.h"
-#include "llvm/ADT/Optional.h"
-#include "llvm/ADT/PointerUnion.h"
+#include "llvm37/ADT/FoldingSet.h"
+#include "llvm37/ADT/IntrusiveRefCntPtr.h"
+#include "llvm37/ADT/Optional.h"
+#include "llvm37/ADT/PointerUnion.h"
 #include <deque>
 #include <iterator>
 #include <list>
@@ -54,9 +54,9 @@ class PathDiagnostic;
 
 class PathDiagnosticConsumer {
 public:
-  class PDFileEntry : public llvm::FoldingSetNode {
+  class PDFileEntry : public llvm37::FoldingSetNode {
   public:
-    PDFileEntry(llvm::FoldingSetNodeID &NodeID) : NodeID(NodeID) {}
+    PDFileEntry(llvm37::FoldingSetNodeID &NodeID) : NodeID(NodeID) {}
 
     typedef std::vector<std::pair<StringRef, StringRef> > ConsumerFiles;
     
@@ -64,15 +64,15 @@ public:
     ConsumerFiles files;
     
     /// \brief A precomputed hash tag used for uniquing PDFileEntry objects.
-    const llvm::FoldingSetNodeID NodeID;
+    const llvm37::FoldingSetNodeID NodeID;
 
     /// \brief Used for profiling in the FoldingSet.
-    void Profile(llvm::FoldingSetNodeID &ID) { ID = NodeID; }
+    void Profile(llvm37::FoldingSetNodeID &ID) { ID = NodeID; }
   };
   
   class FilesMade {
-    llvm::BumpPtrAllocator Alloc;
-    llvm::FoldingSet<PDFileEntry> Set;
+    llvm37::BumpPtrAllocator Alloc;
+    llvm37::FoldingSet<PDFileEntry> Set;
 
   public:
     ~FilesMade();
@@ -111,7 +111,7 @@ public:
 
 protected:
   bool flushed;
-  llvm::FoldingSet<PathDiagnostic> Diags;
+  llvm37::FoldingSet<PathDiagnostic> Diags;
 };
 
 //===----------------------------------------------------------------------===//
@@ -128,7 +128,7 @@ public:
   PathDiagnosticRange() : isPoint(false) {}
 };
 
-typedef llvm::PointerUnion<const LocationContext*, AnalysisDeclContext*>
+typedef llvm37::PointerUnion<const LocationContext*, AnalysisDeclContext*>
                                                    LocationOrAnalysisDeclContext;
 
 class PathDiagnosticLocation {
@@ -293,7 +293,7 @@ public:
 
   const SourceManager& getManager() const { assert(isValid()); return *SM; }
   
-  void Profile(llvm::FoldingSetNodeID &ID) const;
+  void Profile(llvm37::FoldingSetNodeID &ID) const;
 
   void dump() const;
 
@@ -324,7 +324,7 @@ public:
     End.flatten();
   }
   
-  void Profile(llvm::FoldingSetNodeID &ID) const {
+  void Profile(llvm37::FoldingSetNodeID &ID) const {
     Start.Profile(ID);
     End.Profile(ID);
   }
@@ -405,7 +405,7 @@ public:
   /// Return the SourceRanges associated with this PathDiagnosticPiece.
   ArrayRef<SourceRange> getRanges() const { return ranges; }
 
-  virtual void Profile(llvm::FoldingSetNodeID &ID) const;
+  virtual void Profile(llvm37::FoldingSetNodeID &ID) const;
 
   void setAsLastInMainSourceFile() {
     LastInMainSourceFile = true;
@@ -451,7 +451,7 @@ public:
   PathDiagnosticLocation getLocation() const override { return Pos; }
   void flattenLocations() override { Pos.flatten(); }
 
-  void Profile(llvm::FoldingSetNodeID &ID) const override;
+  void Profile(llvm37::FoldingSetNodeID &ID) const override;
 
   static bool classof(const PathDiagnosticPiece *P) {
     return P->getKind() == Event || P->getKind() == Macro;
@@ -613,7 +613,7 @@ public:
 
   void dump() const override;
 
-  void Profile(llvm::FoldingSetNodeID &ID) const override;
+  void Profile(llvm37::FoldingSetNodeID &ID) const override;
 
   static inline bool classof(const PathDiagnosticPiece *P) {
     return P->getKind() == Call;
@@ -683,7 +683,7 @@ public:
 
   void dump() const override;
 
-  void Profile(llvm::FoldingSetNodeID &ID) const override;
+  void Profile(llvm37::FoldingSetNodeID &ID) const override;
 };
 
 class PathDiagnosticMacroPiece : public PathDiagnosticSpotPiece {
@@ -709,13 +709,13 @@ public:
 
   void dump() const override;
 
-  void Profile(llvm::FoldingSetNodeID &ID) const override;
+  void Profile(llvm37::FoldingSetNodeID &ID) const override;
 };
 
 /// PathDiagnostic - PathDiagnostic objects represent a single path-sensitive
 ///  diagnostic.  It represents an ordered-collection of PathDiagnosticPieces,
 ///  each which represent the pieces of the path.
-class PathDiagnostic : public llvm::FoldingSetNode {
+class PathDiagnostic : public llvm37::FoldingSetNode {
   std::string CheckName;
   const Decl *DeclWithIssue;
   std::string BugType;
@@ -834,13 +834,13 @@ public:
   ///
   /// This can be used to merge diagnostics that refer to the same issue
   /// along different paths.
-  void Profile(llvm::FoldingSetNodeID &ID) const;
+  void Profile(llvm37::FoldingSetNodeID &ID) const;
 
   /// Profiles the diagnostic, including its path.
   ///
   /// Two diagnostics with the same issue along different paths will generate
   /// different profiles.
-  void FullProfile(llvm::FoldingSetNodeID &ID) const;
+  void FullProfile(llvm37::FoldingSetNodeID &ID) const;
 };  
 
 } // end GR namespace

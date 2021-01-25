@@ -7,12 +7,12 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/DebugInfo/DWARF/DWARFDebugArangeSet.h"
-#include "llvm/Support/Format.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/DebugInfo/DWARF/DWARFDebugArangeSet.h"
+#include "llvm37/Support/Format.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <algorithm>
 #include <cassert>
-using namespace llvm;
+using namespace llvm37;
 
 void DWARFDebugArangeSet::clear() {
   Offset = -1U;

@@ -8,10 +8,10 @@
 //===----------------------------------------------------------------------===//
 
 #include "clang-c/Index.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/FileSystem.h"
-#include "llvm/Support/Path.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/FileSystem.h"
+#include "llvm37/Support/Path.h"
+#include "llvm37/Support/raw_ostream.h"
 #include "gtest/gtest.h"
 #include <fstream>
 #include <set>
@@ -358,8 +358,8 @@ public:
   unsigned TUFlags;
 
   void SetUp() override {
-    llvm::SmallString<256> Dir;
-    ASSERT_FALSE(llvm::sys::fs::createUniqueDirectory("libclang-test", Dir));
+    llvm37::SmallString<256> Dir;
+    ASSERT_FALSE(llvm37::sys::fs::createUniqueDirectory("libclang-test", Dir));
     TestDir = Dir.str();
     TUFlags = CXTranslationUnit_DetailedPreprocessingRecord |
               clang_defaultEditingTranslationUnitOptions();
@@ -369,13 +369,13 @@ public:
     clang_disposeTranslationUnit(ClangTU);
     clang_disposeIndex(Index);
     for (const std::string &Path : Files)
-      llvm::sys::fs::remove(Path);
-    llvm::sys::fs::remove(TestDir);
+      llvm37::sys::fs::remove(Path);
+    llvm37::sys::fs::remove(TestDir);
   }
   void WriteFile(std::string &Filename, const std::string &Contents) {
-    if (!llvm::sys::path::is_absolute(Filename)) {
-      llvm::SmallString<256> Path(TestDir);
-      llvm::sys::path::append(Path, Filename);
+    if (!llvm37::sys::path::is_absolute(Filename)) {
+      llvm37::SmallString<256> Path(TestDir);
+      llvm37::sys::path::append(Path, Filename);
       Filename = Path.str();
       Files.insert(Filename);
     }
@@ -386,7 +386,7 @@ public:
     unsigned NumDiagnostics = clang_getNumDiagnostics(ClangTU);
     for (unsigned i = 0; i < NumDiagnostics; ++i) {
       auto Diag = clang_getDiagnostic(ClangTU, i);
-      DEBUG(llvm::dbgs() << clang_getCString(clang_formatDiagnostic(
+      DEBUG(llvm37::dbgs() << clang_getCString(clang_formatDiagnostic(
           Diag, clang_defaultDiagnosticDisplayOptions())) << "\n");
       clang_disposeDiagnostic(Diag);
     }
@@ -394,7 +394,7 @@ public:
   bool ReparseTU(unsigned num_unsaved_files, CXUnsavedFile* unsaved_files) {
     if (clang_reparseTranslationUnit(ClangTU, num_unsaved_files, unsaved_files,
                                      clang_defaultReparseOptions(ClangTU))) {
-      DEBUG(llvm::dbgs() << "Reparse failed\n");
+      DEBUG(llvm37::dbgs() << "Reparse failed\n");
       return false;
     }
     DisplayDiagnostics();

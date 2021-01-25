@@ -12,11 +12,11 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/ADT/SmallVector.h"
+#include "llvm37/ADT/SmallVector.h"
 #include "llvm-c/Object.h"
-#include "llvm/Object/ObjectFile.h"
+#include "llvm37/Object/ObjectFile.h"
 
-using namespace llvm;
+using namespace llvm37;
 using namespace object;
 
 inline OwningBinary<ObjectFile> *unwrap(LLVMObjectFileRef OF) {

@@ -7,8 +7,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/MC/MCTargetAsmParser.h"
-using namespace llvm;
+#include "llvm37/MC/MCTargetAsmParser.h"
+using namespace llvm37;
 
 MCTargetAsmParser::MCTargetAsmParser()
   : AvailableFeatures(0), ParsingInlineAsm(false)

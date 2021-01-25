@@ -13,9 +13,9 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Target/TargetLowering.h"
+#include "llvm37/Target/TargetLowering.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 //===----------------------------------------------------------------------===//
 //  TargetTransformInfo Helpers

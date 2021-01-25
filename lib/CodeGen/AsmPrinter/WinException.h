@@ -11,19 +11,19 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_LIB_CODEGEN_ASMPRINTER_WIN64EXCEPTION_H
-#define LLVM_LIB_CODEGEN_ASMPRINTER_WIN64EXCEPTION_H
+#ifndef LLVM37_LIB_CODEGEN_ASMPRINTER_WIN64EXCEPTION_H
+#define LLVM37_LIB_CODEGEN_ASMPRINTER_WIN64EXCEPTION_H
 
 #include "EHStreamer.h"
 
-namespace llvm {
+namespace llvm37 {
 class Function;
 class GlobalValue;
 class MachineFunction;
 class MCExpr;
 struct WinEHFuncInfo;
 
-class LLVM_LIBRARY_VISIBILITY WinException : public EHStreamer {
+class LLVM37_LIBRARY_VISIBILITY WinException : public EHStreamer {
   /// Per-function flag to indicate if personality info should be emitted.
   bool shouldEmitPersonality = false;
 

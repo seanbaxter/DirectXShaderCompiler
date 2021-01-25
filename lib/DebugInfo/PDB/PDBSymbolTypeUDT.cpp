@@ -7,13 +7,13 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/DebugInfo/PDB/PDBSymbolTypeUDT.h"
+#include "llvm37/DebugInfo/PDB/PDBSymbolTypeUDT.h"
 
-#include "llvm/DebugInfo/PDB/PDBSymDumper.h"
+#include "llvm37/DebugInfo/PDB/PDBSymDumper.h"
 
 #include <utility>
 
-using namespace llvm;
+using namespace llvm37;
 
 PDBSymbolTypeUDT::PDBSymbolTypeUDT(const IPDBSession &PDBSession,
                                    std::unique_ptr<IPDBRawSymbol> Symbol)

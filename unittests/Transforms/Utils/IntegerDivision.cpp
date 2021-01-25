@@ -7,15 +7,15 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Transforms/Utils/IntegerDivision.h"
-#include "llvm/IR/BasicBlock.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/GlobalValue.h"
-#include "llvm/IR/IRBuilder.h"
-#include "llvm/IR/Module.h"
+#include "llvm37/Transforms/Utils/IntegerDivision.h"
+#include "llvm37/IR/BasicBlock.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/GlobalValue.h"
+#include "llvm37/IR/IRBuilder.h"
+#include "llvm37/IR/Module.h"
 #include "gtest/gtest.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 namespace {
 

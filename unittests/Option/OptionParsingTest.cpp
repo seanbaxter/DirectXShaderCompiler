@@ -7,14 +7,14 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/Option/Arg.h"
-#include "llvm/Option/ArgList.h"
-#include "llvm/Option/Option.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/Option/Arg.h"
+#include "llvm37/Option/ArgList.h"
+#include "llvm37/Option/Option.h"
 #include "gtest/gtest.h"
 
-using namespace llvm;
-using namespace llvm::opt;
+using namespace llvm37;
+using namespace llvm37::opt;
 
 enum ID {
   OPT_INVALID = 0, // This is not an option ID.

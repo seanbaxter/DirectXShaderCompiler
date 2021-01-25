@@ -12,9 +12,9 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/CodeGen/MachinePostDominators.h"
+#include "llvm37/CodeGen/MachinePostDominators.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 char MachinePostDominatorTree::ID = 0;
 
@@ -50,6 +50,6 @@ MachinePostDominatorTree::getAnalysisUsage(AnalysisUsage &AU) const {
 }
 
 void
-MachinePostDominatorTree::print(llvm::raw_ostream &OS, const Module *M) const {
+MachinePostDominatorTree::print(llvm37::raw_ostream &OS, const Module *M) const {
   DT->print(OS);
 }

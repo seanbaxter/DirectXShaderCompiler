@@ -7848,7 +7848,7 @@ This instruction requires several arguments:
    -  The call is in tail position (ret immediately follows call and ret
       uses value of call or is void).
    -  Option ``-tailcallopt`` is enabled, or
-      ``llvm::GuaranteedTailCallOpt`` is ``true``.
+      ``llvm37::GuaranteedTailCallOpt`` is ``true``.
    -  `Platform-specific constraints are
       met. <CodeGenerator.html#tailcallopt>`_
 

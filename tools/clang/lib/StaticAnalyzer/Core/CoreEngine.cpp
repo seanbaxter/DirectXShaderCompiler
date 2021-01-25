@@ -18,9 +18,9 @@
 #include "clang/AST/StmtCXX.h"
 #include "clang/StaticAnalyzer/Core/PathSensitive/AnalysisManager.h"
 #include "clang/StaticAnalyzer/Core/PathSensitive/ExprEngine.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/Support/Casting.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/Support/Casting.h"
 
 using namespace clang;
 using namespace ento;

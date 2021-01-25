@@ -14,26 +14,26 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Transforms/Utils/SimplifyLibCalls.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/ADT/StringMap.h"
-#include "llvm/ADT/Triple.h"
-#include "llvm/Analysis/ValueTracking.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/DiagnosticInfo.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/IRBuilder.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/IR/Intrinsics.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/PatternMatch.h"
-#include "llvm/Support/Allocator.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Analysis/TargetLibraryInfo.h"
-#include "llvm/Transforms/Utils/BuildLibCalls.h"
+#include "llvm37/Transforms/Utils/SimplifyLibCalls.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/ADT/StringMap.h"
+#include "llvm37/ADT/Triple.h"
+#include "llvm37/Analysis/ValueTracking.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/IR/DiagnosticInfo.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/IRBuilder.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/IR/Intrinsics.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/PatternMatch.h"
+#include "llvm37/Support/Allocator.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Analysis/TargetLibraryInfo.h"
+#include "llvm37/Transforms/Utils/BuildLibCalls.h"
 
-using namespace llvm;
+using namespace llvm37;
 using namespace PatternMatch;
 
 #if 0 // HLSL Change Starts - option pending
@@ -1903,7 +1903,7 @@ Value *LibCallSimplifier::optimizeStringMemoryLibCall(CallInst *CI,
   if (TLI->getLibFunc(FuncName, Func) && TLI->has(Func)) {
     // Make sure we never change the calling convention.
     assert((ignoreCallingConv(Func) ||
-            CI->getCallingConv() == llvm::CallingConv::C) &&
+            CI->getCallingConv() == llvm37::CallingConv::C) &&
       "Optimizing string/memory libcall would change the calling convention");
     switch (Func) {
     case LibFunc::strcat:
@@ -1967,7 +1967,7 @@ Value *LibCallSimplifier::optimizeCall(CallInst *CI) {
   Function *Callee = CI->getCalledFunction();
   StringRef FuncName = Callee->getName();
   IRBuilder<> Builder(CI);
-  bool isCallingConvC = CI->getCallingConv() == llvm::CallingConv::C;
+  bool isCallingConvC = CI->getCallingConv() == llvm37::CallingConv::C;
 
   // Command-line parameter overrides function attribute.
   if (false) // HLSL Change - EnableUnsafeFPShrink.getNumOccurrences() > 0)
@@ -2343,7 +2343,7 @@ Value *FortifiedLibCallSimplifier::optimizeCall(CallInst *CI) {
   Function *Callee = CI->getCalledFunction();
   StringRef FuncName = Callee->getName();
   IRBuilder<> Builder(CI);
-  bool isCallingConvC = CI->getCallingConv() == llvm::CallingConv::C;
+  bool isCallingConvC = CI->getCallingConv() == llvm37::CallingConv::C;
 
   // First, check that this is a known library functions.
   if (!TLI->getLibFunc(FuncName, Func))

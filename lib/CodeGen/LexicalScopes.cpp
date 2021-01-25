@@ -14,15 +14,15 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/CodeGen/LexicalScopes.h"
-#include "llvm/CodeGen/MachineFunction.h"
-#include "llvm/CodeGen/MachineInstr.h"
-#include "llvm/IR/DebugInfo.h"
-#include "llvm/IR/Function.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/FormattedStream.h"
-using namespace llvm;
+#include "llvm37/CodeGen/LexicalScopes.h"
+#include "llvm37/CodeGen/MachineFunction.h"
+#include "llvm37/CodeGen/MachineInstr.h"
+#include "llvm37/IR/DebugInfo.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/FormattedStream.h"
+using namespace llvm37;
 
 #define DEBUG_TYPE "lexicalscopes"
 

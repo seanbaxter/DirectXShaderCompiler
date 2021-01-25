@@ -11,12 +11,12 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_TOOLS_LIBCLANG_CXCURSOR_H
-#define LLVM_CLANG_TOOLS_LIBCLANG_CXCURSOR_H
+#ifndef LLVM37_CLANG_TOOLS_LIBCLANG_CXCURSOR_H
+#define LLVM37_CLANG_TOOLS_LIBCLANG_CXCURSOR_H
 
 #include "clang-c/Index.h"
 #include "clang/Basic/SourceLocation.h"
-#include "llvm/ADT/PointerUnion.h"
+#include "llvm37/ADT/PointerUnion.h"
 #include <utility>
 
 namespace clang {
@@ -229,7 +229,7 @@ CXCursor MakeCursorOverloadedDeclRef(TemplateName Template,
                                      CXTranslationUnit TU);
 
 /// \brief Internal storage for an overloaded declaration reference cursor;
-typedef llvm::PointerUnion3<const OverloadExpr *, const Decl *,
+typedef llvm37::PointerUnion3<const OverloadExpr *, const Decl *,
                             OverloadedTemplateStorage *>
   OverloadedDeclRefStorage;
   

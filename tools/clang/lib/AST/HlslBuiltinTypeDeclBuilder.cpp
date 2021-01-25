@@ -59,7 +59,7 @@ NonTypeTemplateParmDecl* BuiltinTypeDeclBuilder::addIntegerTemplateParam(StringR
     astContext.getTrivialTypeSourceInfo(type));
   if (defaultValue.hasValue()) {
     Expr* defaultValueLiteral = IntegerLiteral::Create(
-      astContext, llvm::APInt(astContext.getIntWidth(type), defaultValue.getValue()), type, NoLoc);
+      astContext, llvm37::APInt(astContext.getIntWidth(type), defaultValue.getValue()), type, NoLoc);
     decl->setDefaultArgument(defaultValueLiteral);
   }
   m_templateParams.emplace_back(decl);

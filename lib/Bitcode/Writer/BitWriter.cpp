@@ -8,11 +8,11 @@
 //===----------------------------------------------------------------------===//
 
 #include "llvm-c/BitWriter.h"
-#include "llvm/Bitcode/ReaderWriter.h"
-#include "llvm/IR/Module.h"
-#include "llvm/Support/FileSystem.h"
-#include "llvm/Support/raw_ostream.h"
-using namespace llvm;
+#include "llvm37/Bitcode/ReaderWriter.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/Support/FileSystem.h"
+#include "llvm37/Support/raw_ostream.h"
+using namespace llvm37;
 
 
 /*===-- Operations on modules ---------------------------------------------===*/

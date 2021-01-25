@@ -16,7 +16,7 @@
 #include "dxc/DXIL/DxilConstants.h"
 #include "dxc/Support/WinAdapter.h"
 
-namespace llvm {
+namespace llvm37 {
 class Module;
 class LLVMContext;
 class raw_ostream;
@@ -281,84 +281,84 @@ enum class ValidationRule : unsigned {
 
 const char *GetValidationRuleText(ValidationRule value);
 void GetValidationVersion(_Out_ unsigned *pMajor, _Out_ unsigned *pMinor);
-HRESULT ValidateDxilModule(_In_ llvm::Module *pModule,
-                           _In_opt_ llvm::Module *pDebugModule);
+HRESULT ValidateDxilModule(_In_ llvm37::Module *pModule,
+                           _In_opt_ llvm37::Module *pDebugModule);
 
 // DXIL Container Verification Functions (return false on failure)
 
-bool VerifySignatureMatches(_In_ llvm::Module *pModule,
+bool VerifySignatureMatches(_In_ llvm37::Module *pModule,
                             hlsl::DXIL::SignatureKind SigKind,
                             _In_reads_bytes_(SigSize) const void *pSigData,
                             _In_ uint32_t SigSize);
 
 // PSV = data for Pipeline State Validation
-bool VerifyPSVMatches(_In_ llvm::Module *pModule,
+bool VerifyPSVMatches(_In_ llvm37::Module *pModule,
                       _In_reads_bytes_(PSVSize) const void *pPSVData,
                       _In_ uint32_t PSVSize);
 
 // PSV = data for Pipeline State Validation
-bool VerifyRDATMatches(_In_ llvm::Module *pModule,
+bool VerifyRDATMatches(_In_ llvm37::Module *pModule,
                        _In_reads_bytes_(RDATSize) const void *pRDATData,
                        _In_ uint32_t RDATSize);
 
-bool VerifyFeatureInfoMatches(_In_ llvm::Module *pModule,
+bool VerifyFeatureInfoMatches(_In_ llvm37::Module *pModule,
                               _In_reads_bytes_(FeatureInfoSize) const void *pFeatureInfoData,
                               _In_ uint32_t FeatureInfoSize);
 
 // Validate the container parts, assuming supplied module is valid, loaded from the container provided
 struct DxilContainerHeader;
-HRESULT ValidateDxilContainerParts(_In_ llvm::Module *pModule,
-                                   _In_opt_ llvm::Module *pDebugModule,
+HRESULT ValidateDxilContainerParts(_In_ llvm37::Module *pModule,
+                                   _In_opt_ llvm37::Module *pDebugModule,
                                    _In_reads_bytes_(ContainerSize) const DxilContainerHeader *pContainer,
                                    _In_ uint32_t ContainerSize);
 
 // Loads module, validating load, but not module.
 HRESULT ValidateLoadModule(_In_reads_bytes_(ILLength) const char *pIL,
                            _In_ uint32_t ILLength,
-                           _In_ std::unique_ptr<llvm::Module> &pModule,
-                           _In_ llvm::LLVMContext &Ctx,
-                           _In_ llvm::raw_ostream &DiagStream,
+                           _In_ std::unique_ptr<llvm37::Module> &pModule,
+                           _In_ llvm37::LLVMContext &Ctx,
+                           _In_ llvm37::raw_ostream &DiagStream,
                            _In_ unsigned bLazyLoad);
 
 // Loads module from container, validating load, but not module.
 HRESULT ValidateLoadModuleFromContainer(
     _In_reads_bytes_(ContainerSize) const void *pContainer,
-    _In_ uint32_t ContainerSize, _In_ std::unique_ptr<llvm::Module> &pModule,
-    _In_ std::unique_ptr<llvm::Module> &pDebugModule,
-    _In_ llvm::LLVMContext &Ctx, llvm::LLVMContext &DbgCtx,
-    _In_ llvm::raw_ostream &DiagStream);
+    _In_ uint32_t ContainerSize, _In_ std::unique_ptr<llvm37::Module> &pModule,
+    _In_ std::unique_ptr<llvm37::Module> &pDebugModule,
+    _In_ llvm37::LLVMContext &Ctx, llvm37::LLVMContext &DbgCtx,
+    _In_ llvm37::raw_ostream &DiagStream);
 // Lazy loads module from container, validating load, but not module.
 HRESULT ValidateLoadModuleFromContainerLazy(
     _In_reads_bytes_(ContainerSize) const void *pContainer,
-    _In_ uint32_t ContainerSize, _In_ std::unique_ptr<llvm::Module> &pModule,
-    _In_ std::unique_ptr<llvm::Module> &pDebugModule,
-    _In_ llvm::LLVMContext &Ctx, llvm::LLVMContext &DbgCtx,
-    _In_ llvm::raw_ostream &DiagStream);
+    _In_ uint32_t ContainerSize, _In_ std::unique_ptr<llvm37::Module> &pModule,
+    _In_ std::unique_ptr<llvm37::Module> &pDebugModule,
+    _In_ llvm37::LLVMContext &Ctx, llvm37::LLVMContext &DbgCtx,
+    _In_ llvm37::raw_ostream &DiagStream);
 
 // Load and validate Dxil module from bitcode.
 HRESULT ValidateDxilBitcode(_In_reads_bytes_(ILLength) const char *pIL,
                             _In_ uint32_t ILLength,
-                            _In_ llvm::raw_ostream &DiagStream);
+                            _In_ llvm37::raw_ostream &DiagStream);
 
 // Full container validation, including ValidateDxilModule
 HRESULT ValidateDxilContainer(_In_reads_bytes_(ContainerSize) const void *pContainer,
                               _In_ uint32_t ContainerSize,
-                              _In_ llvm::raw_ostream &DiagStream);
+                              _In_ llvm37::raw_ostream &DiagStream);
 
 class PrintDiagnosticContext {
 private:
-  llvm::DiagnosticPrinter &m_Printer;
+  llvm37::DiagnosticPrinter &m_Printer;
   bool m_errorsFound;
   bool m_warningsFound;
 
 public:
-  PrintDiagnosticContext(llvm::DiagnosticPrinter &printer);
+  PrintDiagnosticContext(llvm37::DiagnosticPrinter &printer);
 
   bool HasErrors() const;
   bool HasWarnings() const;
-  void Handle(const llvm::DiagnosticInfo &DI);
+  void Handle(const llvm37::DiagnosticInfo &DI);
 
-  static void PrintDiagnosticHandler(const llvm::DiagnosticInfo &DI,
+  static void PrintDiagnosticHandler(const llvm37::DiagnosticInfo &DI,
                                      void *Context);
 };
 }

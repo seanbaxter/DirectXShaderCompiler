@@ -13,8 +13,8 @@
 //  correctly capture semantic defines and root signature defines.           //
 //                                                                           //
 ///////////////////////////////////////////////////////////////////////////////
-#ifndef LLVM_CLANG_LEX_HLSLMACROEXPANDER_H
-#define LLVM_CLANG_LEX_HLSLMACROEXPANDER_H
+#ifndef LLVM37_CLANG_LEX_HLSLMACROEXPANDER_H
+#define LLVM37_CLANG_LEX_HLSLMACROEXPANDER_H
 
 #include "clang/Basic/SourceLocation.h"
 
@@ -27,7 +27,7 @@ namespace clang {
   class MacroInfo;
 }
 
-namespace llvm {
+namespace llvm37 {
   class StringRef;
 }
 
@@ -51,7 +51,7 @@ public:
 
   // Look in the preprocessor for a macro with the provided name.
   // Return nullptr if the macro could not be found.
-  static clang::MacroInfo *FindMacroInfo(clang::Preprocessor &PP, llvm::StringRef macroName);
+  static clang::MacroInfo *FindMacroInfo(clang::Preprocessor &PP, llvm37::StringRef macroName);
 
 private:
   clang::Preprocessor &PP;

@@ -11,36 +11,36 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/ADT/StringMap.h"
-#include "llvm/DebugInfo/DIContext.h"
-#include "llvm/DebugInfo/DWARF/DWARFContext.h"
-#include "llvm/ExecutionEngine/RTDyldMemoryManager.h"
-#include "llvm/ExecutionEngine/RuntimeDyld.h"
-#include "llvm/ExecutionEngine/RuntimeDyldChecker.h"
-#include "llvm/MC/MCAsmInfo.h"
-#include "llvm/MC/MCContext.h"
-#include "llvm/MC/MCDisassembler.h"
-#include "llvm/MC/MCInstPrinter.h"
-#include "llvm/MC/MCInstrInfo.h"
-#include "llvm/MC/MCRegisterInfo.h"
-#include "llvm/MC/MCSubtargetInfo.h"
-#include "llvm/Object/MachO.h"
-#include "llvm/Object/SymbolSize.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/DynamicLibrary.h"
-#include "llvm/Support/ManagedStatic.h"
-#include "llvm/Support/Memory.h"
-#include "llvm/Support/MemoryBuffer.h"
-#include "llvm/Support/PrettyStackTrace.h"
-#include "llvm/Support/Signals.h"
-#include "llvm/Support/TargetRegistry.h"
-#include "llvm/Support/TargetSelect.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/StringMap.h"
+#include "llvm37/DebugInfo/DIContext.h"
+#include "llvm37/DebugInfo/DWARF/DWARFContext.h"
+#include "llvm37/ExecutionEngine/RTDyldMemoryManager.h"
+#include "llvm37/ExecutionEngine/RuntimeDyld.h"
+#include "llvm37/ExecutionEngine/RuntimeDyldChecker.h"
+#include "llvm37/MC/MCAsmInfo.h"
+#include "llvm37/MC/MCContext.h"
+#include "llvm37/MC/MCDisassembler.h"
+#include "llvm37/MC/MCInstPrinter.h"
+#include "llvm37/MC/MCInstrInfo.h"
+#include "llvm37/MC/MCRegisterInfo.h"
+#include "llvm37/MC/MCSubtargetInfo.h"
+#include "llvm37/Object/MachO.h"
+#include "llvm37/Object/SymbolSize.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/DynamicLibrary.h"
+#include "llvm37/Support/ManagedStatic.h"
+#include "llvm37/Support/Memory.h"
+#include "llvm37/Support/MemoryBuffer.h"
+#include "llvm37/Support/PrettyStackTrace.h"
+#include "llvm37/Support/Signals.h"
+#include "llvm37/Support/TargetRegistry.h"
+#include "llvm37/Support/TargetSelect.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <list>
 #include <system_error>
 
-using namespace llvm;
-using namespace llvm::object;
+using namespace llvm37;
+using namespace llvm37::object;
 
 static cl::list<std::string>
 InputFileList(cl::Positional, cl::ZeroOrMore,
@@ -222,10 +222,10 @@ static void loadDylibs() {
     if (sys::fs::is_regular_file(Dylib)) {
       std::string ErrMsg;
       if (sys::DynamicLibrary::LoadLibraryPermanently(Dylib.c_str(), &ErrMsg))
-        llvm::errs() << "Error loading '" << Dylib << "': "
+        llvm37::errs() << "Error loading '" << Dylib << "': "
                      << ErrMsg << "\n";
     } else
-      llvm::errs() << "Dylib not found: '" << Dylib << "'.\n";
+      llvm37::errs() << "Dylib not found: '" << Dylib << "'.\n";
   }
 }
 
@@ -475,7 +475,7 @@ applySpecificSectionMappings(RuntimeDyldChecker &Checker) {
 //                            Defaults to zero. Set to something big
 //                            (e.g. 1 << 32) to stress-test stubs, GOTs, etc.
 //
-static void remapSectionsAndSymbols(const llvm::Triple &TargetTriple,
+static void remapSectionsAndSymbols(const llvm37::Triple &TargetTriple,
                                     TrivialMemoryManager &MemMgr,
                                     RuntimeDyldChecker &Checker) {
 
@@ -570,7 +570,7 @@ static int linkAndVerify() {
 
   // Check for missing triple.
   if (TripleName == "") {
-    llvm::errs() << "Error: -triple required when running in -verify mode.\n";
+    llvm37::errs() << "Error: -triple required when running in -verify mode.\n";
     return 1;
   }
 
@@ -580,7 +580,7 @@ static int linkAndVerify() {
   const Target *TheTarget =
     TargetRegistry::lookupTarget("", TheTriple, ErrorStr);
   if (!TheTarget) {
-    llvm::errs() << "Error accessing target '" << TripleName << "': "
+    llvm37::errs() << "Error accessing target '" << TripleName << "': "
                  << ErrorStr << "\n";
     return 1;
   }
@@ -615,7 +615,7 @@ static int linkAndVerify() {
   RuntimeDyld Dyld(MemMgr, MemMgr);
   Dyld.setProcessAllSections(true);
   RuntimeDyldChecker Checker(Dyld, Disassembler.get(), InstPrinter.get(),
-                             llvm::dbgs());
+                             llvm37::dbgs());
 
   // FIXME: Preserve buffers until resolveRelocations time to work around a bug
   //        in RuntimeDyldELF.
@@ -676,9 +676,9 @@ int __cdecl main(int argc, char **argv) { // HLSL Change - __cdecl
   ProgramName = argv[0];
   llvm_shutdown_obj Y;  // Call llvm_shutdown() on exit.
 
-  llvm::InitializeAllTargetInfos();
-  llvm::InitializeAllTargetMCs();
-  llvm::InitializeAllDisassemblers();
+  llvm37::InitializeAllTargetInfos();
+  llvm37::InitializeAllTargetMCs();
+  llvm37::InitializeAllDisassemblers();
 
   cl::ParseCommandLineOptions(argc, argv, "llvm MC-JIT tool\n");
 

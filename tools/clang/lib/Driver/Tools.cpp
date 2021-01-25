@@ -24,32 +24,32 @@
 #include "clang/Driver/SanitizerArgs.h"
 #include "clang/Driver/ToolChain.h"
 #include "clang/Driver/Util.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/ADT/StringExtras.h"
-#include "llvm/ADT/StringSwitch.h"
-#include "llvm/ADT/Twine.h"
-#include "llvm/Option/Arg.h"
-#include "llvm/Option/ArgList.h"
-#include "llvm/Option/Option.h"
-#include "llvm/Support/TargetParser.h"
-#include "llvm/Support/Compression.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/FileSystem.h"
-#include "llvm/Support/Host.h"
-#include "llvm/Support/Path.h"
-#include "llvm/Support/Process.h"
-#include "llvm/Support/Program.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/ADT/StringExtras.h"
+#include "llvm37/ADT/StringSwitch.h"
+#include "llvm37/ADT/Twine.h"
+#include "llvm37/Option/Arg.h"
+#include "llvm37/Option/ArgList.h"
+#include "llvm37/Option/Option.h"
+#include "llvm37/Support/TargetParser.h"
+#include "llvm37/Support/Compression.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/FileSystem.h"
+#include "llvm37/Support/Host.h"
+#include "llvm37/Support/Path.h"
+#include "llvm37/Support/Process.h"
+#include "llvm37/Support/Program.h"
+#include "llvm37/Support/raw_ostream.h"
 
-#ifdef LLVM_ON_UNIX
+#ifdef LLVM37_ON_UNIX
 #include <unistd.h> // For getuid().
 #endif
 
 using namespace clang::driver;
 using namespace clang::driver::tools;
 using namespace clang;
-using namespace llvm::opt;
+using namespace llvm37::opt;
 
 static void addAssemblerKPIC(const ArgList &Args, ArgStringList &CmdArgs) {
   Arg *LastPICArg = Args.getLastArg(options::OPT_fPIC, options::OPT_fno_PIC,
@@ -153,7 +153,7 @@ static void addDirectoryList(const ArgList &Args, ArgStringList &CmdArgs,
     return;
 
   StringRef::size_type Delim;
-  while ((Delim = Dirs.find(llvm::sys::EnvPathSeparator)) != StringRef::npos) {
+  while ((Delim = Dirs.find(llvm37::sys::EnvPathSeparator)) != StringRef::npos) {
     if (Delim == 0) { // Leading colon.
       if (CombinedArg) {
         CmdArgs.push_back(Args.MakeArgString(std::string(ArgName) + "."));
@@ -201,9 +201,9 @@ static void AddLinkerInputs(const ToolChain &TC, const InputInfoList &Inputs,
   for (const auto &II : Inputs) {
     if (!TC.HasNativeLLVMSupport()) {
       // Don't try to pass LLVM inputs unless we have native support.
-      if (II.getType() == types::TY_LLVM_IR ||
+      if (II.getType() == types::TY_LLVM37_IR ||
           II.getType() == types::TY_LTO_IR ||
-          II.getType() == types::TY_LLVM_BC || II.getType() == types::TY_LTO_BC)
+          II.getType() == types::TY_LLVM37_BC || II.getType() == types::TY_LTO_BC)
         D.Diag(diag::err_drv_no_linker_llvm_support) << TC.getTripleString();
     }
 
@@ -305,8 +305,8 @@ void Clang::AddPreprocessingOptions(Compilation &C, const JobAction &JA,
         //
         // FIXME: This should use the computed output file location.
         SmallString<128> P(Inputs[0].getBaseInput());
-        llvm::sys::path::replace_extension(P, "o");
-        DepTarget = Args.MakeArgString(llvm::sys::path::filename(P));
+        llvm37::sys::path::replace_extension(P, "o");
+        DepTarget = Args.MakeArgString(llvm37::sys::path::filename(P));
       }
 
       CmdArgs.push_back("-MT");
@@ -371,20 +371,20 @@ void Clang::AddPreprocessingOptions(Compilation &C, const JobAction &JA,
       // so that replace_extension does the right thing.
       P += ".dummy";
       if (UsePCH) {
-        llvm::sys::path::replace_extension(P, "pch");
-        if (llvm::sys::fs::exists(P))
+        llvm37::sys::path::replace_extension(P, "pch");
+        if (llvm37::sys::fs::exists(P))
           FoundPCH = true;
       }
 
       if (!FoundPCH) {
-        llvm::sys::path::replace_extension(P, "pth");
-        if (llvm::sys::fs::exists(P))
+        llvm37::sys::path::replace_extension(P, "pth");
+        if (llvm37::sys::fs::exists(P))
           FoundPTH = true;
       }
 
       if (!FoundPCH && !FoundPTH) {
-        llvm::sys::path::replace_extension(P, "gch");
-        if (llvm::sys::fs::exists(P)) {
+        llvm37::sys::path::replace_extension(P, "gch");
+        if (llvm37::sys::fs::exists(P)) {
           FoundPCH = UsePCH;
           FoundPTH = !UsePCH;
         }
@@ -463,41 +463,41 @@ void Clang::AddPreprocessingOptions(Compilation &C, const JobAction &JA,
 }
 
 // FIXME: Move to target hook.
-static bool isSignedCharDefault(const llvm::Triple &Triple) {
+static bool isSignedCharDefault(const llvm37::Triple &Triple) {
   switch (Triple.getArch()) {
   default:
     return true;
 
-  case llvm::Triple::aarch64:
-  case llvm::Triple::aarch64_be:
-  case llvm::Triple::arm:
-  case llvm::Triple::armeb:
-  case llvm::Triple::thumb:
-  case llvm::Triple::thumbeb:
+  case llvm37::Triple::aarch64:
+  case llvm37::Triple::aarch64_be:
+  case llvm37::Triple::arm:
+  case llvm37::Triple::armeb:
+  case llvm37::Triple::thumb:
+  case llvm37::Triple::thumbeb:
     if (Triple.isOSDarwin() || Triple.isOSWindows())
       return true;
     return false;
 
-  case llvm::Triple::ppc:
-  case llvm::Triple::ppc64:
+  case llvm37::Triple::ppc:
+  case llvm37::Triple::ppc64:
     if (Triple.isOSDarwin())
       return true;
     return false;
 
-  case llvm::Triple::hexagon:
-  case llvm::Triple::ppc64le:
-  case llvm::Triple::systemz:
-  case llvm::Triple::xcore:
+  case llvm37::Triple::hexagon:
+  case llvm37::Triple::ppc64le:
+  case llvm37::Triple::systemz:
+  case llvm37::Triple::xcore:
     return false;
   }
 }
 
-static bool isNoCommonDefault(const llvm::Triple &Triple) {
+static bool isNoCommonDefault(const llvm37::Triple &Triple) {
   switch (Triple.getArch()) {
   default:
     return false;
 
-  case llvm::Triple::xcore:
+  case llvm37::Triple::xcore:
     return true;
   }
 }
@@ -505,21 +505,21 @@ static bool isNoCommonDefault(const llvm::Triple &Triple) {
 // ARM tools start.
 
 // Get SubArch (vN).
-static int getARMSubArchVersionNumber(const llvm::Triple &Triple) {
-  llvm::StringRef Arch = Triple.getArchName();
-  return llvm::ARMTargetParser::parseArchVersion(Arch);
+static int getARMSubArchVersionNumber(const llvm37::Triple &Triple) {
+  llvm37::StringRef Arch = Triple.getArchName();
+  return llvm37::ARMTargetParser::parseArchVersion(Arch);
 }
 
 // True if M-profile.
-static bool isARMMProfile(const llvm::Triple &Triple) {
-  llvm::StringRef Arch = Triple.getArchName();
-  unsigned Profile = llvm::ARMTargetParser::parseArchProfile(Arch);
-  return Profile == llvm::ARM::PK_M;
+static bool isARMMProfile(const llvm37::Triple &Triple) {
+  llvm37::StringRef Arch = Triple.getArchName();
+  unsigned Profile = llvm37::ARMTargetParser::parseArchProfile(Arch);
+  return Profile == llvm37::ARM::PK_M;
 }
 
 // Get Arch/CPU from args.
-static void getARMArchCPUFromArgs(const ArgList &Args, llvm::StringRef &Arch,
-                                  llvm::StringRef &CPU, bool FromAs = false) {
+static void getARMArchCPUFromArgs(const ArgList &Args, llvm37::StringRef &Arch,
+                                  llvm37::StringRef &CPU, bool FromAs = false) {
   if (const Arg *A = Args.getLastArg(options::OPT_mcpu_EQ))
     CPU = A->getValue();
   if (const Arg *A = Args.getLastArg(options::OPT_march_EQ))
@@ -562,8 +562,8 @@ static void getARMHWDivFeatures(const Driver &D, const Arg *A,
 static void getARMFPUFeatures(const Driver &D, const Arg *A,
                               const ArgList &Args, StringRef FPU,
                               std::vector<const char *> &Features) {
-  unsigned FPUID = llvm::ARMTargetParser::parseFPU(FPU);
-  if (!llvm::ARMTargetParser::getFPUFeatures(FPUID, Features))
+  unsigned FPUID = llvm37::ARMTargetParser::parseFPU(FPU);
+  if (!llvm37::ARMTargetParser::getFPUFeatures(FPUID, Features))
     D.Diag(diag::err_drv_clang_unsupported) << A->getAsString(Args);
 }
 
@@ -571,17 +571,17 @@ static void getARMFPUFeatures(const Driver &D, const Arg *A,
 // getARMArch is used here instead of just checking the -march value in order
 // to handle -march=native correctly.
 static void checkARMArchName(const Driver &D, const Arg *A, const ArgList &Args,
-                             llvm::StringRef ArchName,
-                             const llvm::Triple &Triple) {
+                             llvm37::StringRef ArchName,
+                             const llvm37::Triple &Triple) {
   std::string MArch = arm::getARMArch(ArchName, Triple);
-  if (llvm::ARMTargetParser::parseArch(MArch) == llvm::ARM::AK_INVALID)
+  if (llvm37::ARMTargetParser::parseArch(MArch) == llvm37::ARM::AK_INVALID)
     D.Diag(diag::err_drv_clang_unsupported) << A->getAsString(Args);
 }
 
 // Check -mcpu=. Needs ArchName to handle -mcpu=generic.
 static void checkARMCPUName(const Driver &D, const Arg *A, const ArgList &Args,
-                            llvm::StringRef CPUName, llvm::StringRef ArchName,
-                            const llvm::Triple &Triple) {
+                            llvm37::StringRef CPUName, llvm37::StringRef ArchName,
+                            const llvm37::Triple &Triple) {
   std::string CPU = arm::getARMTargetCPU(CPUName, ArchName, Triple);
   std::string Arch = arm::getARMArch(ArchName, Triple);
   if (strcmp(arm::getLLVMArchSuffixForARM(CPU, Arch), "") == 0)
@@ -591,7 +591,7 @@ static void checkARMCPUName(const Driver &D, const Arg *A, const ArgList &Args,
 // Select the float ABI as determined by -msoft-float, -mhard-float, and
 // -mfloat-abi=.
 StringRef tools::arm::getARMFloatABI(const Driver &D, const ArgList &Args,
-                                     const llvm::Triple &Triple) {
+                                     const llvm37::Triple &Triple) {
   StringRef FloatABI;
   if (Arg *A =
           Args.getLastArg(options::OPT_msoft_float, options::OPT_mhard_float,
@@ -612,9 +612,9 @@ StringRef tools::arm::getARMFloatABI(const Driver &D, const ArgList &Args,
   // If unspecified, choose the default based on the platform.
   if (FloatABI.empty()) {
     switch (Triple.getOS()) {
-    case llvm::Triple::Darwin:
-    case llvm::Triple::MacOSX:
-    case llvm::Triple::IOS: {
+    case llvm37::Triple::Darwin:
+    case llvm37::Triple::MacOSX:
+    case llvm37::Triple::IOS: {
       // Darwin defaults to "softfp" for v6 and v7.
       //
       if (getARMSubArchVersionNumber(Triple) == 6 ||
@@ -626,13 +626,13 @@ StringRef tools::arm::getARMFloatABI(const Driver &D, const ArgList &Args,
     }
 
     // FIXME: this is invalid for WindowsCE
-    case llvm::Triple::Win32:
+    case llvm37::Triple::Win32:
       FloatABI = "hard";
       break;
 
-    case llvm::Triple::FreeBSD:
+    case llvm37::Triple::FreeBSD:
       switch (Triple.getEnvironment()) {
-      case llvm::Triple::GNUEABIHF:
+      case llvm37::Triple::GNUEABIHF:
         FloatABI = "hard";
         break;
       default:
@@ -644,20 +644,20 @@ StringRef tools::arm::getARMFloatABI(const Driver &D, const ArgList &Args,
 
     default:
       switch (Triple.getEnvironment()) {
-      case llvm::Triple::GNUEABIHF:
+      case llvm37::Triple::GNUEABIHF:
         FloatABI = "hard";
         break;
-      case llvm::Triple::GNUEABI:
+      case llvm37::Triple::GNUEABI:
         FloatABI = "softfp";
         break;
-      case llvm::Triple::EABIHF:
+      case llvm37::Triple::EABIHF:
         FloatABI = "hard";
         break;
-      case llvm::Triple::EABI:
+      case llvm37::Triple::EABI:
         // EABI is always AAPCS, and if it was not marked 'hard', it's softfp
         FloatABI = "softfp";
         break;
-      case llvm::Triple::Android: {
+      case llvm37::Triple::Android: {
         if (getARMSubArchVersionNumber(Triple) == 7)
           FloatABI = "softfp";
         else
@@ -667,7 +667,7 @@ StringRef tools::arm::getARMFloatABI(const Driver &D, const ArgList &Args,
       default:
         // Assume "soft", but warn the user we are guessing.
         FloatABI = "soft";
-        if (Triple.getOS() != llvm::Triple::UnknownOS ||
+        if (Triple.getOS() != llvm37::Triple::UnknownOS ||
             !Triple.isOSBinFormatMachO())
           D.Diag(diag::warn_drv_assuming_mfloat_abi_is) << "soft";
         break;
@@ -678,7 +678,7 @@ StringRef tools::arm::getARMFloatABI(const Driver &D, const ArgList &Args,
   return FloatABI;
 }
 
-static void getARMTargetFeatures(const Driver &D, const llvm::Triple &Triple,
+static void getARMTargetFeatures(const Driver &D, const llvm37::Triple &Triple,
                                  const ArgList &Args,
                                  std::vector<const char *> &Features,
                                  bool ForAS) {
@@ -795,7 +795,7 @@ static void getARMTargetFeatures(const Driver &D, const llvm::Triple &Triple,
       Features.push_back("-crc");
   }
 
-  if (Triple.getSubArch() == llvm::Triple::SubArchType::ARMSubArch_v8_1a) {
+  if (Triple.getSubArch() == llvm37::Triple::SubArchType::ARMSubArch_v8_1a) {
     Features.insert(Features.begin(), "+v8.1a");
   }
 
@@ -816,7 +816,7 @@ void Clang::AddARMTargetArgs(const ArgList &Args, ArgStringList &CmdArgs,
   const Driver &D = getToolChain().getDriver();
   // Get the effective triple, which takes into account the deployment target.
   std::string TripleStr = getToolChain().ComputeEffectiveClangTriple(Args);
-  llvm::Triple Triple(TripleStr);
+  llvm37::Triple Triple(TripleStr);
 
   // Select the ABI to use.
   //
@@ -828,8 +828,8 @@ void Clang::AddARMTargetArgs(const ArgList &Args, ArgStringList &CmdArgs,
   } else if (Triple.isOSBinFormatMachO()) {
     // The backend is hardwired to assume AAPCS for M-class processors, ensure
     // the frontend matches that.
-    if (Triple.getEnvironment() == llvm::Triple::EABI ||
-        Triple.getOS() == llvm::Triple::UnknownOS || isARMMProfile(Triple)) {
+    if (Triple.getEnvironment() == llvm37::Triple::EABI ||
+        Triple.getOS() == llvm37::Triple::UnknownOS || isARMMProfile(Triple)) {
       ABIName = "aapcs";
     } else {
       ABIName = "apcs-gnu";
@@ -840,17 +840,17 @@ void Clang::AddARMTargetArgs(const ArgList &Args, ArgStringList &CmdArgs,
   } else {
     // Select the default based on the platform.
     switch (Triple.getEnvironment()) {
-    case llvm::Triple::Android:
-    case llvm::Triple::GNUEABI:
-    case llvm::Triple::GNUEABIHF:
+    case llvm37::Triple::Android:
+    case llvm37::Triple::GNUEABI:
+    case llvm37::Triple::GNUEABIHF:
       ABIName = "aapcs-linux";
       break;
-    case llvm::Triple::EABIHF:
-    case llvm::Triple::EABI:
+    case llvm37::Triple::EABIHF:
+    case llvm37::Triple::EABI:
       ABIName = "aapcs";
       break;
     default:
-      if (Triple.getOS() == llvm::Triple::NetBSD)
+      if (Triple.getOS() == llvm37::Triple::NetBSD)
         ABIName = "apcs-gnu";
       else
         ABIName = "aapcs";
@@ -898,7 +898,7 @@ void Clang::AddARMTargetArgs(const ArgList &Args, ArgStringList &CmdArgs,
       if (A->getOption().matches(options::OPT_mno_unaligned_access))
         CmdArgs.push_back("-arm-strict-align");
       else {
-        if (Triple.getSubArch() == llvm::Triple::SubArchType::ARMSubArch_v6m)
+        if (Triple.getSubArch() == llvm37::Triple::SubArchType::ARMSubArch_v6m)
           D.Diag(diag::err_target_unsupported_unaligned) << "v6m";
         CmdArgs.push_back("-arm-no-strict-align");
       }
@@ -944,7 +944,7 @@ static std::string getAArch64TargetCPU(const ArgList &Args) {
 
   // Handle CPU name is 'native'.
   if (CPU == "native")
-    return llvm::sys::getHostCPUName();
+    return llvm37::sys::getHostCPUName();
   else if (CPU.size())
     return CPU;
 
@@ -959,7 +959,7 @@ static std::string getAArch64TargetCPU(const ArgList &Args) {
 void Clang::AddAArch64TargetArgs(const ArgList &Args,
                                  ArgStringList &CmdArgs) const {
   std::string TripleStr = getToolChain().ComputeEffectiveClangTriple(Args);
-  llvm::Triple Triple(TripleStr);
+  llvm37::Triple Triple(TripleStr);
 
   if (!Args.hasFlag(options::OPT_mred_zone, options::OPT_mno_red_zone, true) ||
       Args.hasArg(options::OPT_mkernel) ||
@@ -997,7 +997,7 @@ void Clang::AddAArch64TargetArgs(const ArgList &Args,
       CmdArgs.push_back("-aarch64-fix-cortex-a53-835769=1");
     else
       CmdArgs.push_back("-aarch64-fix-cortex-a53-835769=0");
-  } else if (Triple.getEnvironment() == llvm::Triple::Android) {
+  } else if (Triple.getEnvironment() == llvm37::Triple::Android) {
     // Enabled A53 errata (835769) workaround by default on android
     CmdArgs.push_back("-backend-option");
     CmdArgs.push_back("-aarch64-fix-cortex-a53-835769=1");
@@ -1021,21 +1021,21 @@ void Clang::AddAArch64TargetArgs(const ArgList &Args,
 
 // Get CPU and ABI names. They are not independent
 // so we have to calculate them together.
-void mips::getMipsCPUAndABI(const ArgList &Args, const llvm::Triple &Triple,
+void mips::getMipsCPUAndABI(const ArgList &Args, const llvm37::Triple &Triple,
                             StringRef &CPUName, StringRef &ABIName) {
   const char *DefMips32CPU = "mips32r2";
   const char *DefMips64CPU = "mips64r2";
 
   // MIPS32r6 is the default for mips(el)?-img-linux-gnu and MIPS64r6 is the
   // default for mips64(el)?-img-linux-gnu.
-  if (Triple.getVendor() == llvm::Triple::ImaginationTechnologies &&
-      Triple.getEnvironment() == llvm::Triple::GNU) {
+  if (Triple.getVendor() == llvm37::Triple::ImaginationTechnologies &&
+      Triple.getEnvironment() == llvm37::Triple::GNU) {
     DefMips32CPU = "mips32r6";
     DefMips64CPU = "mips64r6";
   }
 
   // MIPS3 is the default for mips64*-unknown-openbsd.
-  if (Triple.getOS() == llvm::Triple::OpenBSD)
+  if (Triple.getOS() == llvm37::Triple::OpenBSD)
     DefMips64CPU = "mips3";
 
   if (Arg *A = Args.getLastArg(options::OPT_march_EQ, options::OPT_mcpu_EQ))
@@ -1045,7 +1045,7 @@ void mips::getMipsCPUAndABI(const ArgList &Args, const llvm::Triple &Triple,
     ABIName = A->getValue();
     // Convert a GNU style Mips ABI name to the name
     // accepted by LLVM Mips backend.
-    ABIName = llvm::StringSwitch<llvm::StringRef>(ABIName)
+    ABIName = llvm37::StringSwitch<llvm37::StringRef>(ABIName)
                   .Case("32", "o32")
                   .Case("64", "n64")
                   .Default(ABIName);
@@ -1056,12 +1056,12 @@ void mips::getMipsCPUAndABI(const ArgList &Args, const llvm::Triple &Triple,
     switch (Triple.getArch()) {
     default:
       llvm_unreachable("Unexpected triple arch name");
-    case llvm::Triple::mips:
-    case llvm::Triple::mipsel:
+    case llvm37::Triple::mips:
+    case llvm37::Triple::mipsel:
       CPUName = DefMips32CPU;
       break;
-    case llvm::Triple::mips64:
-    case llvm::Triple::mips64el:
+    case llvm37::Triple::mips64:
+    case llvm37::Triple::mips64el:
       CPUName = DefMips64CPU;
       break;
     }
@@ -1069,8 +1069,8 @@ void mips::getMipsCPUAndABI(const ArgList &Args, const llvm::Triple &Triple,
 
   if (ABIName.empty()) {
     // Deduce ABI name from the target triple.
-    if (Triple.getArch() == llvm::Triple::mips ||
-        Triple.getArch() == llvm::Triple::mipsel)
+    if (Triple.getArch() == llvm37::Triple::mips ||
+        Triple.getArch() == llvm37::Triple::mipsel)
       ABIName = "o32";
     else
       ABIName = "n64";
@@ -1078,7 +1078,7 @@ void mips::getMipsCPUAndABI(const ArgList &Args, const llvm::Triple &Triple,
 
   if (CPUName.empty()) {
     // Deduce CPU name from ABI name.
-    CPUName = llvm::StringSwitch<const char *>(ABIName)
+    CPUName = llvm37::StringSwitch<const char *>(ABIName)
                   .Cases("o32", "eabi", DefMips32CPU)
                   .Cases("n32", "n64", DefMips64CPU)
                   .Default("");
@@ -1089,7 +1089,7 @@ void mips::getMipsCPUAndABI(const ArgList &Args, const llvm::Triple &Triple,
 
 // Convert ABI name to the GNU tools acceptable variant.
 static StringRef getGnuCompatibleMipsABIName(StringRef ABI) {
-  return llvm::StringSwitch<llvm::StringRef>(ABI)
+  return llvm37::StringSwitch<llvm37::StringRef>(ABI)
       .Case("o32", "32")
       .Case("n64", "64")
       .Default(ABI);
@@ -1138,7 +1138,7 @@ static void AddTargetFeature(const ArgList &Args,
   }
 }
 
-static void getMIPSTargetFeatures(const Driver &D, const llvm::Triple &Triple,
+static void getMIPSTargetFeatures(const Driver &D, const llvm37::Triple &Triple,
                                   const ArgList &Args,
                                   std::vector<const char *> &Features) {
   StringRef CPUName;
@@ -1216,7 +1216,7 @@ void Clang::AddMIPSTargetArgs(const ArgList &Args,
   const Driver &D = getToolChain().getDriver();
   StringRef CPUName;
   StringRef ABIName;
-  const llvm::Triple &Triple = getToolChain().getTriple();
+  const llvm37::Triple &Triple = getToolChain().getTriple();
   mips::getMipsCPUAndABI(Args, Triple, CPUName, ABIName);
 
   CmdArgs.push_back("-target-abi");
@@ -1273,14 +1273,14 @@ static std::string getPPCTargetCPU(const ArgList &Args) {
     StringRef CPUName = A->getValue();
 
     if (CPUName == "native") {
-      std::string CPU = llvm::sys::getHostCPUName();
+      std::string CPU = llvm37::sys::getHostCPUName();
       if (!CPU.empty() && CPU != "generic")
         return CPU;
       else
         return "";
     }
 
-    return llvm::StringSwitch<const char *>(CPUName)
+    return llvm37::StringSwitch<const char *>(CPUName)
         .Case("common", "generic")
         .Case("440", "440")
         .Case("440fp", "440")
@@ -1366,7 +1366,7 @@ void Clang::AddPPCTargetArgs(const ArgList &Args,
   const char *ABIName = nullptr;
   if (getToolChain().getTriple().isOSLinux())
     switch (getToolChain().getArch()) {
-    case llvm::Triple::ppc64: {
+    case llvm37::Triple::ppc64: {
       // When targeting a processor that supports QPX, or if QPX is
       // specifically enabled, default to using the ABI that supports QPX (so
       // long as it is not specifically disabled).
@@ -1382,7 +1382,7 @@ void Clang::AddPPCTargetArgs(const ArgList &Args,
       ABIName = "elfv1";
       break;
     }
-    case llvm::Triple::ppc64le:
+    case llvm37::Triple::ppc64le:
       ABIName = "elfv2";
       break;
     default:
@@ -1411,7 +1411,7 @@ bool ppc::hasPPCAbiArg(const ArgList &Args, const char *Value) {
 static std::string getR600TargetGPU(const ArgList &Args) {
   if (Arg *A = Args.getLastArg(options::OPT_mcpu_EQ)) {
     const char *GPUName = A->getValue();
-    return llvm::StringSwitch<const char *>(GPUName)
+    return llvm37::StringSwitch<const char *>(GPUName)
         .Cases("rv630", "rv635", "r600")
         .Cases("rv610", "rv620", "rs780", "rs880")
         .Case("rv740", "rv770")
@@ -1472,7 +1472,7 @@ static void getSystemZTargetFeatures(const ArgList &Args,
 }
 
 static const char *getX86TargetCPU(const ArgList &Args,
-                                   const llvm::Triple &Triple) {
+                                   const llvm37::Triple &Triple) {
   if (const Arg *A = Args.getLastArg(options::OPT_march_EQ)) {
     if (StringRef(A->getValue()) != "native") {
       if (Triple.isOSDarwin() && Triple.getArchName() == "x86_64h")
@@ -1486,7 +1486,7 @@ static const char *getX86TargetCPU(const ArgList &Args,
     //
     // FIXME: We should also incorporate the detected target features for use
     // with -native.
-    std::string CPU = llvm::sys::getHostCPUName();
+    std::string CPU = llvm37::sys::getHostCPUName();
     if (!CPU.empty() && CPU != "generic")
       return Args.MakeArgString(CPU);
   }
@@ -1495,8 +1495,8 @@ static const char *getX86TargetCPU(const ArgList &Args,
     // Mapping built by referring to X86TargetInfo::getDefaultFeatures().
     StringRef Arch = A->getValue();
     const char *CPU;
-    if (Triple.getArch() == llvm::Triple::x86) {
-      CPU = llvm::StringSwitch<const char *>(Arch)
+    if (Triple.getArch() == llvm37::Triple::x86) {
+      CPU = llvm37::StringSwitch<const char *>(Arch)
                 .Case("IA32", "i386")
                 .Case("SSE", "pentium3")
                 .Case("SSE2", "pentium4")
@@ -1504,7 +1504,7 @@ static const char *getX86TargetCPU(const ArgList &Args,
                 .Case("AVX2", "haswell")
                 .Default(nullptr);
     } else {
-      CPU = llvm::StringSwitch<const char *>(Arch)
+      CPU = llvm37::StringSwitch<const char *>(Arch)
                 .Case("AVX", "sandybridge")
                 .Case("AVX2", "haswell")
                 .Default(nullptr);
@@ -1515,11 +1515,11 @@ static const char *getX86TargetCPU(const ArgList &Args,
 
   // Select the default CPU if none was given (or detection failed).
 
-  if (Triple.getArch() != llvm::Triple::x86_64 &&
-      Triple.getArch() != llvm::Triple::x86)
+  if (Triple.getArch() != llvm37::Triple::x86_64 &&
+      Triple.getArch() != llvm37::Triple::x86)
     return nullptr; // This routine is only handling x86 targets.
 
-  bool Is64Bit = Triple.getArch() == llvm::Triple::x86_64;
+  bool Is64Bit = Triple.getArch() == llvm37::Triple::x86_64;
 
   // FIXME: Need target hooks.
   if (Triple.isOSDarwin()) {
@@ -1533,7 +1533,7 @@ static const char *getX86TargetCPU(const ArgList &Args,
     return "btver2";
 
   // On Android use targets compatible with gcc
-  if (Triple.getEnvironment() == llvm::Triple::Android)
+  if (Triple.getEnvironment() == llvm37::Triple::Android)
     return Is64Bit ? "x86-64" : "i686";
 
   // Everything else goes to x86-64 in 64-bit mode.
@@ -1541,13 +1541,13 @@ static const char *getX86TargetCPU(const ArgList &Args,
     return "x86-64";
 
   switch (Triple.getOS()) {
-  case llvm::Triple::FreeBSD:
-  case llvm::Triple::NetBSD:
-  case llvm::Triple::OpenBSD:
+  case llvm37::Triple::FreeBSD:
+  case llvm37::Triple::NetBSD:
+  case llvm37::Triple::OpenBSD:
     return "i486";
-  case llvm::Triple::Haiku:
+  case llvm37::Triple::Haiku:
     return "i586";
-  case llvm::Triple::Bitrig:
+  case llvm37::Triple::Bitrig:
     return "i686";
   default:
     // Fallback to p4.
@@ -1555,51 +1555,51 @@ static const char *getX86TargetCPU(const ArgList &Args,
   }
 }
 
-static std::string getCPUName(const ArgList &Args, const llvm::Triple &T,
+static std::string getCPUName(const ArgList &Args, const llvm37::Triple &T,
                               bool FromAs = false) {
   switch (T.getArch()) {
   default:
     return "";
 
-  case llvm::Triple::aarch64:
-  case llvm::Triple::aarch64_be:
+  case llvm37::Triple::aarch64:
+  case llvm37::Triple::aarch64_be:
     return getAArch64TargetCPU(Args);
 
-  case llvm::Triple::arm:
-  case llvm::Triple::armeb:
-  case llvm::Triple::thumb:
-  case llvm::Triple::thumbeb: {
+  case llvm37::Triple::arm:
+  case llvm37::Triple::armeb:
+  case llvm37::Triple::thumb:
+  case llvm37::Triple::thumbeb: {
     StringRef MArch, MCPU;
     getARMArchCPUFromArgs(Args, MArch, MCPU, FromAs);
     return arm::getARMTargetCPU(MCPU, MArch, T);
   }
-  case llvm::Triple::mips:
-  case llvm::Triple::mipsel:
-  case llvm::Triple::mips64:
-  case llvm::Triple::mips64el: {
+  case llvm37::Triple::mips:
+  case llvm37::Triple::mipsel:
+  case llvm37::Triple::mips64:
+  case llvm37::Triple::mips64el: {
     StringRef CPUName;
     StringRef ABIName;
     mips::getMipsCPUAndABI(Args, T, CPUName, ABIName);
     return CPUName;
   }
 
-  case llvm::Triple::nvptx:
-  case llvm::Triple::nvptx64:
+  case llvm37::Triple::nvptx:
+  case llvm37::Triple::nvptx64:
     if (const Arg *A = Args.getLastArg(options::OPT_march_EQ))
       return A->getValue();
     return "";
 
-  case llvm::Triple::ppc:
-  case llvm::Triple::ppc64:
-  case llvm::Triple::ppc64le: {
+  case llvm37::Triple::ppc:
+  case llvm37::Triple::ppc64:
+  case llvm37::Triple::ppc64le: {
     std::string TargetCPUName = getPPCTargetCPU(Args);
     // LLVM may default to generating code for the native CPU,
     // but, like gcc, we default to a more generic option for
     // each architecture. (except on Darwin)
     if (TargetCPUName.empty() && !T.isOSDarwin()) {
-      if (T.getArch() == llvm::Triple::ppc64)
+      if (T.getArch() == llvm37::Triple::ppc64)
         TargetCPUName = "ppc64";
-      else if (T.getArch() == llvm::Triple::ppc64le)
+      else if (T.getArch() == llvm37::Triple::ppc64le)
         TargetCPUName = "ppc64le";
       else
         TargetCPUName = "ppc";
@@ -1607,25 +1607,25 @@ static std::string getCPUName(const ArgList &Args, const llvm::Triple &T,
     return TargetCPUName;
   }
 
-  case llvm::Triple::sparc:
-  case llvm::Triple::sparcel:
-  case llvm::Triple::sparcv9:
+  case llvm37::Triple::sparc:
+  case llvm37::Triple::sparcel:
+  case llvm37::Triple::sparcv9:
     if (const Arg *A = Args.getLastArg(options::OPT_mcpu_EQ))
       return A->getValue();
     return "";
 
-  case llvm::Triple::x86:
-  case llvm::Triple::x86_64:
+  case llvm37::Triple::x86:
+  case llvm37::Triple::x86_64:
     return getX86TargetCPU(Args, T);
 
-  case llvm::Triple::hexagon:
+  case llvm37::Triple::hexagon:
     return "hexagon" + toolchains::Hexagon_TC::GetTargetCPU(Args).str();
 
-  case llvm::Triple::systemz:
+  case llvm37::Triple::systemz:
     return getSystemZTargetCPU(Args);
 
-  case llvm::Triple::r600:
-  case llvm::Triple::amdgcn:
+  case llvm37::Triple::r600:
+  case llvm37::Triple::amdgcn:
     return getR600TargetGPU(Args);
   }
 }
@@ -1716,7 +1716,7 @@ static void ParseMRecip(const Driver &D, const ArgList &Args,
   // Check each input value for validity, concatenate them all back together,
   // and pass through.
 
-  llvm::StringMap<bool> OptionStrings;
+  llvm37::StringMap<bool> OptionStrings;
   OptionStrings.insert(std::make_pair("divd", false));
   OptionStrings.insert(std::make_pair("divf", false));
   OptionStrings.insert(std::make_pair("vec-divd", false));
@@ -1739,7 +1739,7 @@ static void ParseMRecip(const Driver &D, const ArgList &Args,
       return;
 
     StringRef ValBase = Val.slice(0, RefStep);
-    llvm::StringMap<bool>::iterator OptionIter = OptionStrings.find(ValBase);
+    llvm37::StringMap<bool>::iterator OptionIter = OptionStrings.find(ValBase);
     if (OptionIter == OptionStrings.end()) {
       // Try again specifying float suffix.
       OptionIter = OptionStrings.find(ValBase.str() + 'f');
@@ -1780,14 +1780,14 @@ static void ParseMRecip(const Driver &D, const ArgList &Args,
   OutStrings.push_back(Args.MakeArgString(Out));
 }
 
-static void getX86TargetFeatures(const Driver &D, const llvm::Triple &Triple,
+static void getX86TargetFeatures(const Driver &D, const llvm37::Triple &Triple,
                                  const ArgList &Args,
                                  std::vector<const char *> &Features) {
   // If -march=native, autodetect the feature list.
   if (const Arg *A = Args.getLastArg(options::OPT_march_EQ)) {
     if (StringRef(A->getValue()) == "native") {
-      llvm::StringMap<bool> HostFeatures;
-      if (llvm::sys::getHostCPUFeatures(HostFeatures))
+      llvm37::StringMap<bool> HostFeatures;
+      if (llvm37::sys::getHostCPUFeatures(HostFeatures))
         for (auto &F : HostFeatures)
           Features.push_back(
               Args.MakeArgString((F.second ? "+" : "-") + F.first()));
@@ -1805,10 +1805,10 @@ static void getX86TargetFeatures(const Driver &D, const llvm::Triple &Triple,
     Features.push_back("-fsgsbase");
   }
 
-  const llvm::Triple::ArchType ArchType = Triple.getArch();
+  const llvm37::Triple::ArchType ArchType = Triple.getArch();
   // Add features to be compatible with gcc for Android.
-  if (Triple.getEnvironment() == llvm::Triple::Android) {
-    if (ArchType == llvm::Triple::x86_64) {
+  if (Triple.getEnvironment() == llvm37::Triple::Android) {
+    if (ArchType == llvm37::Triple::x86_64) {
       Features.push_back("+sse4.2");
       Features.push_back("+popcnt");
     } else
@@ -1820,14 +1820,14 @@ static void getX86TargetFeatures(const Driver &D, const llvm::Triple &Triple,
     StringRef Arch = A->getValue();
     bool ArchUsed = false;
     // First, look for flags that are shared in x86 and x86-64.
-    if (ArchType == llvm::Triple::x86_64 || ArchType == llvm::Triple::x86) {
+    if (ArchType == llvm37::Triple::x86_64 || ArchType == llvm37::Triple::x86) {
       if (Arch == "AVX" || Arch == "AVX2") {
         ArchUsed = true;
         Features.push_back(Args.MakeArgString("+" + Arch.lower()));
       }
     }
     // Then, look for x86-specific flags.
-    if (ArchType == llvm::Triple::x86) {
+    if (ArchType == llvm37::Triple::x86) {
       if (Arch == "IA32") {
         ArchUsed = true;
       } else if (Arch == "SSE" || Arch == "SSE2") {
@@ -1919,7 +1919,7 @@ static bool DecodeAArch64Features(const Driver &D, StringRef text,
   text.split(Split, StringRef("+"), -1, false);
 
   for (const StringRef Feature : Split) {
-    const char *result = llvm::StringSwitch<const char *>(Feature)
+    const char *result = llvm37::StringSwitch<const char *>(Feature)
                              .Case("fp", "+fp-armv8")
                              .Case("simd", "+neon")
                              .Case("crc", "+crc")
@@ -2001,7 +2001,7 @@ getAArch64MicroArchFeaturesFromMtune(const Driver &D, StringRef Mtune,
                                      std::vector<const char *> &Features) {
   // Handle CPU name is 'native'.
   if (Mtune == "native")
-    Mtune = llvm::sys::getHostCPUName();
+    Mtune = llvm37::sys::getHostCPUName();
   if (Mtune == "cyclone") {
     Features.push_back("+zcm");
     Features.push_back("+zcz");
@@ -2064,47 +2064,47 @@ static void getAArch64TargetFeatures(const Driver &D, const ArgList &Args,
   }
 }
 
-static void getTargetFeatures(const Driver &D, const llvm::Triple &Triple,
+static void getTargetFeatures(const Driver &D, const llvm37::Triple &Triple,
                               const ArgList &Args, ArgStringList &CmdArgs,
                               bool ForAS) {
   std::vector<const char *> Features;
   switch (Triple.getArch()) {
   default:
     break;
-  case llvm::Triple::mips:
-  case llvm::Triple::mipsel:
-  case llvm::Triple::mips64:
-  case llvm::Triple::mips64el:
+  case llvm37::Triple::mips:
+  case llvm37::Triple::mipsel:
+  case llvm37::Triple::mips64:
+  case llvm37::Triple::mips64el:
     getMIPSTargetFeatures(D, Triple, Args, Features);
     break;
 
-  case llvm::Triple::arm:
-  case llvm::Triple::armeb:
-  case llvm::Triple::thumb:
-  case llvm::Triple::thumbeb:
+  case llvm37::Triple::arm:
+  case llvm37::Triple::armeb:
+  case llvm37::Triple::thumb:
+  case llvm37::Triple::thumbeb:
     getARMTargetFeatures(D, Triple, Args, Features, ForAS);
     break;
 
-  case llvm::Triple::ppc:
-  case llvm::Triple::ppc64:
-  case llvm::Triple::ppc64le:
+  case llvm37::Triple::ppc:
+  case llvm37::Triple::ppc64:
+  case llvm37::Triple::ppc64le:
     getPPCTargetFeatures(Args, Features);
     break;
-  case llvm::Triple::systemz:
+  case llvm37::Triple::systemz:
     getSystemZTargetFeatures(Args, Features);
     break;
-  case llvm::Triple::aarch64:
-  case llvm::Triple::aarch64_be:
+  case llvm37::Triple::aarch64:
+  case llvm37::Triple::aarch64_be:
     getAArch64TargetFeatures(D, Args, Features);
     break;
-  case llvm::Triple::x86:
-  case llvm::Triple::x86_64:
+  case llvm37::Triple::x86:
+  case llvm37::Triple::x86_64:
     getX86TargetFeatures(D, Triple, Args, Features);
     break;
   }
 
   // Find the last of each feature.
-  llvm::StringMap<unsigned> LastOpt;
+  llvm37::StringMap<unsigned> LastOpt;
   for (unsigned I = 0, N = Features.size(); I < N; ++I) {
     const char *Name = Features[I];
     assert(Name[0] == '-' || Name[0] == '+');
@@ -2114,7 +2114,7 @@ static void getTargetFeatures(const Driver &D, const llvm::Triple &Triple,
   for (unsigned I = 0, N = Features.size(); I < N; ++I) {
     // If this feature was overridden, ignore it.
     const char *Name = Features[I];
-    llvm::StringMap<unsigned>::iterator LastI = LastOpt.find(Name + 1);
+    llvm37::StringMap<unsigned>::iterator LastI = LastOpt.find(Name + 1);
     assert(LastI != LastOpt.end());
     unsigned Last = LastI->second;
     if (Last != I)
@@ -2127,7 +2127,7 @@ static void getTargetFeatures(const Driver &D, const llvm::Triple &Triple,
 
 static bool
 shouldUseExceptionTablesForObjCExceptions(const ObjCRuntime &runtime,
-                                          const llvm::Triple &Triple) {
+                                          const llvm37::Triple &Triple) {
   // We use the zero-cost exception tables for Objective-C if the non-fragile
   // ABI is enabled or when compiling for x86_64 and ARM on Snow Leopard and
   // later.
@@ -2138,8 +2138,8 @@ shouldUseExceptionTablesForObjCExceptions(const ObjCRuntime &runtime,
     return false;
 
   return (!Triple.isMacOSXVersionLT(10, 5) &&
-          (Triple.getArch() == llvm::Triple::x86_64 ||
-           Triple.getArch() == llvm::Triple::arm));
+          (Triple.getArch() == llvm37::Triple::x86_64 ||
+           Triple.getArch() == llvm37::Triple::arm));
 }
 
 /// Adds exception related arguments to the driver command arguments. There's a
@@ -2151,7 +2151,7 @@ static void addExceptionArgs(const ArgList &Args, types::ID InputType,
                              const ObjCRuntime &objcRuntime,
                              ArgStringList &CmdArgs) {
   const Driver &D = TC.getDriver();
-  const llvm::Triple &Triple = TC.getTriple();
+  const llvm37::Triple &Triple = TC.getTriple();
 
   if (KernelOrKext) {
     // -mkernel and -fapple-kext imply no exceptions, so claim exception related
@@ -2182,7 +2182,7 @@ static void addExceptionArgs(const ArgList &Args, types::ID InputType,
   if (types::isCXX(InputType)) {
     // Disable C++ EH by default on XCore, PS4, and MSVC.
     // FIXME: Remove MSVC from this list once things work.
-    bool CXXExceptionsEnabled = Triple.getArch() != llvm::Triple::xcore &&
+    bool CXXExceptionsEnabled = Triple.getArch() != llvm37::Triple::xcore &&
                                 !Triple.isPS4CPU() &&
                                 !Triple.isWindowsMSVCEnvironment();
     Arg *ExceptionArg = Args.getLastArg(
@@ -2332,7 +2332,7 @@ static void CollectArgsForIntegratedAssembler(Compilation &C,
     }
   }
   if (CompressDebugSections) {
-    if (llvm::zlib::isAvailable())
+    if (llvm37::zlib::isAvailable())
       CmdArgs.push_back("-compress-debug-sections");
     else
       D.Diag(diag::warn_debug_compression_unavailable);
@@ -2342,9 +2342,9 @@ static void CollectArgsForIntegratedAssembler(Compilation &C,
 // Until ARM libraries are build separately, we have them all in one library
 static StringRef getArchNameForCompilerRTLib(const ToolChain &TC) {
   if (TC.getTriple().isWindowsMSVCEnvironment() &&
-      TC.getArch() == llvm::Triple::x86)
+      TC.getArch() == llvm37::Triple::x86)
     return "i386";
-  if (TC.getArch() == llvm::Triple::arm || TC.getArch() == llvm::Triple::armeb)
+  if (TC.getArch() == llvm37::Triple::arm || TC.getArch() == llvm37::Triple::armeb)
     return "arm";
   return TC.getArchName();
 }
@@ -2352,17 +2352,17 @@ static StringRef getArchNameForCompilerRTLib(const ToolChain &TC) {
 static SmallString<128> getCompilerRTLibDir(const ToolChain &TC) {
   // The runtimes are located in the OS-specific resource directory.
   SmallString<128> Res(TC.getDriver().ResourceDir);
-  const llvm::Triple &Triple = TC.getTriple();
+  const llvm37::Triple &Triple = TC.getTriple();
   // TC.getOS() yield "freebsd10.0" whereas "freebsd" is expected.
   StringRef OSLibName =
-      (Triple.getOS() == llvm::Triple::FreeBSD) ? "freebsd" : TC.getOS();
-  llvm::sys::path::append(Res, "lib", OSLibName);
+      (Triple.getOS() == llvm37::Triple::FreeBSD) ? "freebsd" : TC.getOS();
+  llvm37::sys::path::append(Res, "lib", OSLibName);
   return Res;
 }
 
 SmallString<128> tools::getCompilerRT(const ToolChain &TC, StringRef Component,
                                       bool Shared) {
-  const char *Env = TC.getTriple().getEnvironment() == llvm::Triple::Android
+  const char *Env = TC.getTriple().getEnvironment() == llvm37::Triple::Android
                         ? "-android"
                         : "";
 
@@ -2375,7 +2375,7 @@ SmallString<128> tools::getCompilerRT(const ToolChain &TC, StringRef Component,
       Shared ? (IsOSWindows ? ".dll" : ".so") : (IsITANMSVCWindows ? ".lib" : ".a");
 
   SmallString<128> Path = getCompilerRTLibDir(TC);
-  llvm::sys::path::append(Path, Prefix + Twine("clang_rt.") + Component + "-" +
+  llvm37::sys::path::append(Path, Prefix + Twine("clang_rt.") + Component + "-" +
                                     Arch + Env + Suffix);
 
   return Path;
@@ -2442,7 +2442,7 @@ static OpenMPRuntimeKind getOpenMPRuntime(const ToolChain &TC,
   if (A)
     RuntimeName = A->getValue();
 
-  auto RT = llvm::StringSwitch<OpenMPRuntimeKind>(RuntimeName)
+  auto RT = llvm37::StringSwitch<OpenMPRuntimeKind>(RuntimeName)
                 .Case("libomp", OMPRT_OMP)
                 .Case("libgomp", OMPRT_GOMP)
                 .Case("libiomp5", OMPRT_IOMP5)
@@ -2478,7 +2478,7 @@ static bool addSanitizerDynamicList(const ToolChain &TC, const ArgList &Args,
                                     ArgStringList &CmdArgs,
                                     StringRef Sanitizer) {
   SmallString<128> SanRT = getCompilerRT(TC, Sanitizer);
-  if (llvm::sys::fs::exists(SanRT + ".syms")) {
+  if (llvm37::sys::fs::exists(SanRT + ".syms")) {
     CmdArgs.push_back(Args.MakeArgString("--dynamic-list=" + SanRT + ".syms"));
     return true;
   }
@@ -2494,7 +2494,7 @@ static void linkSanitizerRuntimeDeps(const ToolChain &TC,
   CmdArgs.push_back("-lrt");
   CmdArgs.push_back("-lm");
   // There's no libdl on FreeBSD.
-  if (TC.getTriple().getOS() != llvm::Triple::FreeBSD)
+  if (TC.getTriple().getOS() != llvm37::Triple::FreeBSD)
     CmdArgs.push_back("-ldl");
 }
 
@@ -2511,7 +2511,7 @@ collectSanitizerRuntimes(const ToolChain &TC, const ArgList &Args,
 
   // Collect static runtimes.
   if (Args.hasArg(options::OPT_shared) ||
-      (TC.getTriple().getEnvironment() == llvm::Triple::Android)) {
+      (TC.getTriple().getEnvironment() == llvm37::Triple::Android)) {
     // Don't link static runtimes into DSOs or if compiling for Android.
     return;
   }
@@ -2580,22 +2580,22 @@ static bool areOptimizationsEnabled(const ArgList &Args) {
 }
 
 static bool shouldUseFramePointerForTarget(const ArgList &Args,
-                                           const llvm::Triple &Triple) {
+                                           const llvm37::Triple &Triple) {
   // XCore never wants frame pointers, regardless of OS.
-  if (Triple.getArch() == llvm::Triple::xcore) {
+  if (Triple.getArch() == llvm37::Triple::xcore) {
     return false;
   }
 
   if (Triple.isOSLinux()) {
     switch (Triple.getArch()) {
     // Don't use a frame pointer on linux if optimizing for certain targets.
-    case llvm::Triple::mips64:
-    case llvm::Triple::mips64el:
-    case llvm::Triple::mips:
-    case llvm::Triple::mipsel:
-    case llvm::Triple::systemz:
-    case llvm::Triple::x86:
-    case llvm::Triple::x86_64:
+    case llvm37::Triple::mips64:
+    case llvm37::Triple::mips64el:
+    case llvm37::Triple::mips:
+    case llvm37::Triple::mipsel:
+    case llvm37::Triple::systemz:
+    case llvm37::Triple::x86:
+    case llvm37::Triple::x86_64:
       return !areOptimizationsEnabled(Args);
     default:
       return true;
@@ -2604,7 +2604,7 @@ static bool shouldUseFramePointerForTarget(const ArgList &Args,
 
   if (Triple.isOSWindows()) {
     switch (Triple.getArch()) {
-    case llvm::Triple::x86:
+    case llvm37::Triple::x86:
       return !areOptimizationsEnabled(Args);
     default:
       // All other supported Windows ISAs use xdata unwind information, so frame
@@ -2617,7 +2617,7 @@ static bool shouldUseFramePointerForTarget(const ArgList &Args,
 }
 
 static bool shouldUseFramePointer(const ArgList &Args,
-                                  const llvm::Triple &Triple) {
+                                  const llvm37::Triple &Triple) {
   if (Arg *A = Args.getLastArg(options::OPT_fno_omit_frame_pointer,
                                options::OPT_fomit_frame_pointer))
     return A->getOption().matches(options::OPT_fno_omit_frame_pointer);
@@ -2626,7 +2626,7 @@ static bool shouldUseFramePointer(const ArgList &Args,
 }
 
 static bool shouldUseLeafFramePointer(const ArgList &Args,
-                                      const llvm::Triple &Triple) {
+                                      const llvm37::Triple &Triple) {
   if (Arg *A = Args.getLastArg(options::OPT_mno_omit_leaf_frame_pointer,
                                options::OPT_momit_leaf_frame_pointer))
     return A->getOption().matches(options::OPT_mno_omit_leaf_frame_pointer);
@@ -2640,7 +2640,7 @@ static bool shouldUseLeafFramePointer(const ArgList &Args,
 /// Add a CC1 option to specify the debug compilation directory.
 static void addDebugCompDirArg(const ArgList &Args, ArgStringList &CmdArgs) {
   SmallString<128> cwd;
-  if (!llvm::sys::fs::current_path(cwd)) {
+  if (!llvm37::sys::fs::current_path(cwd)) {
     CmdArgs.push_back("-fdebug-compilation-dir");
     CmdArgs.push_back(Args.MakeArgString(cwd));
   }
@@ -2650,14 +2650,14 @@ static const char *SplitDebugName(const ArgList &Args, const InputInfo &Input) {
   Arg *FinalOutput = Args.getLastArg(options::OPT_o);
   if (FinalOutput && Args.hasArg(options::OPT_c)) {
     SmallString<128> T(FinalOutput->getValue());
-    llvm::sys::path::replace_extension(T, "dwo");
+    llvm37::sys::path::replace_extension(T, "dwo");
     return Args.MakeArgString(T);
   } else {
     // Use the compilation dir.
     SmallString<128> T(
         Args.getLastArgValue(options::OPT_fdebug_compilation_dir));
-    SmallString<128> F(llvm::sys::path::stem(Input.getBaseInput()));
-    llvm::sys::path::replace_extension(F, "dwo");
+    SmallString<128> F(llvm37::sys::path::stem(Input.getBaseInput()));
+    llvm37::sys::path::replace_extension(F, "dwo");
     T += F;
     return Args.MakeArgString(F);
   }
@@ -2680,10 +2680,10 @@ static void SplitDebugInfo(const ToolChain &TC, Compilation &C, const Tool &T,
   const char *Exec = Args.MakeArgString(TC.GetProgramPath("objcopy"));
 
   // First extract the dwo sections.
-  C.addCommand(llvm::make_unique<Command>(JA, T, Exec, ExtractArgs));
+  C.addCommand(llvm37::make_unique<Command>(JA, T, Exec, ExtractArgs));
 
   // Then remove them from the original .o file.
-  C.addCommand(llvm::make_unique<Command>(JA, T, Exec, StripArgs));
+  C.addCommand(llvm37::make_unique<Command>(JA, T, Exec, StripArgs));
 }
 
 /// \brief Vectorize at all optimization levels greater than 1 except for -Oz.
@@ -2757,7 +2757,7 @@ static void claimNoWarnArgs(const ArgList &Args) {
 }
 
 static void appendUserToPath(SmallVectorImpl<char> &Result) {
-#ifdef LLVM_ON_UNIX
+#ifdef LLVM37_ON_UNIX
   const char *Username = getenv("LOGNAME");
 #else
   const char *Username = getenv("USERNAME");
@@ -2779,8 +2779,8 @@ static void appendUserToPath(SmallVectorImpl<char> &Result) {
   }
 
 // Fallback to user id.
-#ifdef LLVM_ON_UNIX
-  std::string UID = llvm::utostr(getuid());
+#ifdef LLVM37_ON_UNIX
+  std::string UID = llvm37::utostr(getuid());
 #else
   // FIXME: Windows seems to have an 'SID' that might work.
   std::string UID = "9999";
@@ -2789,8 +2789,8 @@ static void appendUserToPath(SmallVectorImpl<char> &Result) {
 }
 
 VersionTuple visualstudio::getMSVCVersion(const Driver *D,
-                                          const llvm::Triple &Triple,
-                                          const llvm::opt::ArgList &Args,
+                                          const llvm37::Triple &Triple,
+                                          const llvm37::opt::ArgList &Args,
                                           bool IsWindowsMSVC) {
   if (Args.hasFlag(options::OPT_fms_extensions, options::OPT_fno_ms_extensions,
                    IsWindowsMSVC) ||
@@ -2859,7 +2859,7 @@ static void addPGOAndCoverageFlags(Compilation &C, const Driver &D,
            ProfileGenerateArg->getOption().matches(
                options::OPT_fprofile_generate_EQ)) {
     SmallString<128> Path(ProfileGenerateArg->getValue());
-    llvm::sys::path::append(Path, "default.profraw");
+    llvm37::sys::path::append(Path, "default.profraw");
     CmdArgs.push_back(
         Args.MakeArgString(Twine("-fprofile-instr-generate=") + Path));
   } else
@@ -2874,8 +2874,8 @@ static void addPGOAndCoverageFlags(Compilation &C, const Driver &D,
                 options::OPT_fprofile_instr_use))) {
     SmallString<128> Path(
         ProfileUseArg->getNumValues() == 0 ? "" : ProfileUseArg->getValue());
-    if (Path.empty() || llvm::sys::fs::is_directory(Path))
-      llvm::sys::path::append(Path, "default.profdata");
+    if (Path.empty() || llvm37::sys::fs::is_directory(Path))
+      llvm37::sys::path::append(Path, "default.profdata");
     CmdArgs.push_back(Args.MakeArgString(Twine("-fprofile-instr-use=") + Path));
   }
 
@@ -2903,12 +2903,12 @@ static void addPGOAndCoverageFlags(Compilation &C, const Driver &D,
       if (Arg *FinalOutput = C.getArgs().getLastArg(options::OPT_o)) {
         CoverageFilename = FinalOutput->getValue();
       } else {
-        CoverageFilename = llvm::sys::path::filename(Output.getBaseInput());
+        CoverageFilename = llvm37::sys::path::filename(Output.getBaseInput());
       }
-      if (llvm::sys::path::is_relative(CoverageFilename)) {
+      if (llvm37::sys::path::is_relative(CoverageFilename)) {
         SmallString<128> Pwd;
-        if (!llvm::sys::fs::current_path(Pwd)) {
-          llvm::sys::path::append(Pwd, CoverageFilename);
+        if (!llvm37::sys::fs::current_path(Pwd)) {
+          llvm37::sys::path::append(Pwd, CoverageFilename);
           CoverageFilename.swap(Pwd);
         }
       }
@@ -2949,10 +2949,10 @@ void Clang::ConstructJob(Compilation &C, const JobAction &JA,
   std::string TripleStr = getToolChain().ComputeEffectiveClangTriple(Args);
   CmdArgs.push_back(Args.MakeArgString(TripleStr));
 
-  const llvm::Triple TT(TripleStr);
-  if (TT.isOSWindows() && (TT.getArch() == llvm::Triple::arm ||
-                           TT.getArch() == llvm::Triple::thumb)) {
-    unsigned Offset = TT.getArch() == llvm::Triple::arm ? 4 : 6;
+  const llvm37::Triple TT(TripleStr);
+  if (TT.isOSWindows() && (TT.getArch() == llvm37::Triple::arm ||
+                           TT.getArch() == llvm37::Triple::thumb)) {
+    unsigned Offset = TT.getArch() == llvm37::Triple::arm ? 4 : 6;
     unsigned Version;
     TT.getArchName().substr(Offset).getAsInteger(10, Version);
     if (Version < 7)
@@ -3010,10 +3010,10 @@ void Clang::ConstructJob(Compilation &C, const JobAction &JA,
     }
     if (JA.getType() == types::TY_Nothing) {
       CmdArgs.push_back("-fsyntax-only");
-    } else if (JA.getType() == types::TY_LLVM_IR ||
+    } else if (JA.getType() == types::TY_LLVM37_IR ||
                JA.getType() == types::TY_LTO_IR) {
       CmdArgs.push_back("-emit-llvm");
-    } else if (JA.getType() == types::TY_LLVM_BC ||
+    } else if (JA.getType() == types::TY_LLVM37_BC ||
                JA.getType() == types::TY_LTO_BC) {
       CmdArgs.push_back("-emit-llvm-bc");
     } else if (JA.getType() == types::TY_PP_Asm) {
@@ -3036,7 +3036,7 @@ void Clang::ConstructJob(Compilation &C, const JobAction &JA,
     // loading the bitcode up in 'opt' or 'llc' and running passes gives the
     // same result as running passes here.  For LTO, we don't need to preserve
     // the use-list order, since serialization to bitcode is part of the flow.
-    if (JA.getType() == types::TY_LLVM_BC)
+    if (JA.getType() == types::TY_LLVM37_BC)
       CmdArgs.push_back("-emit-llvm-uselists");
   }
 
@@ -3077,7 +3077,7 @@ void Clang::ConstructJob(Compilation &C, const JobAction &JA,
       if (!IsWindowsMSVC)
         CmdArgs.push_back("-analyzer-checker=unix");
 
-      if (getToolChain().getTriple().getVendor() == llvm::Triple::Apple)
+      if (getToolChain().getTriple().getVendor() == llvm37::Triple::Apple)
         CmdArgs.push_back("-analyzer-checker=osx");
 
       CmdArgs.push_back("-analyzer-checker=deadcode");
@@ -3119,22 +3119,22 @@ void Clang::ConstructJob(Compilation &C, const JobAction &JA,
   bool IsPICLevelTwo = PIC;
 
   // Android-specific defaults for PIC/PIE
-  if (getToolChain().getTriple().getEnvironment() == llvm::Triple::Android) {
+  if (getToolChain().getTriple().getEnvironment() == llvm37::Triple::Android) {
     switch (getToolChain().getArch()) {
-    case llvm::Triple::arm:
-    case llvm::Triple::armeb:
-    case llvm::Triple::thumb:
-    case llvm::Triple::thumbeb:
-    case llvm::Triple::aarch64:
-    case llvm::Triple::mips:
-    case llvm::Triple::mipsel:
-    case llvm::Triple::mips64:
-    case llvm::Triple::mips64el:
+    case llvm37::Triple::arm:
+    case llvm37::Triple::armeb:
+    case llvm37::Triple::thumb:
+    case llvm37::Triple::thumbeb:
+    case llvm37::Triple::aarch64:
+    case llvm37::Triple::mips:
+    case llvm37::Triple::mipsel:
+    case llvm37::Triple::mips64:
+    case llvm37::Triple::mips64el:
       PIC = true; // "-fpic"
       break;
 
-    case llvm::Triple::x86:
-    case llvm::Triple::x86_64:
+    case llvm37::Triple::x86:
+    case llvm37::Triple::x86_64:
       PIC = true; // "-fPIC"
       IsPICLevelTwo = true;
       break;
@@ -3145,19 +3145,19 @@ void Clang::ConstructJob(Compilation &C, const JobAction &JA,
   }
 
   // OpenBSD-specific defaults for PIE
-  if (getToolChain().getTriple().getOS() == llvm::Triple::OpenBSD) {
+  if (getToolChain().getTriple().getOS() == llvm37::Triple::OpenBSD) {
     switch (getToolChain().getArch()) {
-    case llvm::Triple::mips64:
-    case llvm::Triple::mips64el:
-    case llvm::Triple::sparcel:
-    case llvm::Triple::x86:
-    case llvm::Triple::x86_64:
+    case llvm37::Triple::mips64:
+    case llvm37::Triple::mips64el:
+    case llvm37::Triple::sparcel:
+    case llvm37::Triple::x86:
+    case llvm37::Triple::x86_64:
       IsPICLevelTwo = false; // "-fpie"
       break;
 
-    case llvm::Triple::ppc:
-    case llvm::Triple::sparc:
-    case llvm::Triple::sparcv9:
+    case llvm37::Triple::ppc:
+    case llvm37::Triple::sparc:
+    case llvm37::Triple::sparcv9:
       IsPICLevelTwo = true; // "-fPIE"
       break;
 
@@ -3205,7 +3205,7 @@ void Clang::ConstructJob(Compilation &C, const JobAction &JA,
 
   // Note that these flags are trump-cards. Regardless of the order w.r.t. the
   // PIC or PIE options above, if these show up, PIC is disabled.
-  llvm::Triple Triple(TripleStr);
+  llvm37::Triple Triple(TripleStr);
   if (KernelOrKext && (!Triple.isiOS() || Triple.isOSVersionLT(6)))
     PIC = PIE = false;
   if (Args.hasArg(options::OPT_static))
@@ -3284,7 +3284,7 @@ void Clang::ConstructJob(Compilation &C, const JobAction &JA,
 
   if (Arg *A = Args.getLastArg(options::OPT_fpcc_struct_return,
                                options::OPT_freg_struct_return)) {
-    if (getToolChain().getArch() != llvm::Triple::x86) {
+    if (getToolChain().getArch() != llvm37::Triple::x86) {
       D.Diag(diag::err_drv_unsupported_opt_for_target)
           << A->getSpelling() << getToolChain().getTriple().str();
     } else if (A->getOption().matches(options::OPT_fpcc_struct_return)) {
@@ -3550,43 +3550,43 @@ void Clang::ConstructJob(Compilation &C, const JobAction &JA,
   default:
     break;
 
-  case llvm::Triple::arm:
-  case llvm::Triple::armeb:
-  case llvm::Triple::thumb:
-  case llvm::Triple::thumbeb:
+  case llvm37::Triple::arm:
+  case llvm37::Triple::armeb:
+  case llvm37::Triple::thumb:
+  case llvm37::Triple::thumbeb:
     AddARMTargetArgs(Args, CmdArgs, KernelOrKext);
     break;
 
-  case llvm::Triple::aarch64:
-  case llvm::Triple::aarch64_be:
+  case llvm37::Triple::aarch64:
+  case llvm37::Triple::aarch64_be:
     AddAArch64TargetArgs(Args, CmdArgs);
     break;
 
-  case llvm::Triple::mips:
-  case llvm::Triple::mipsel:
-  case llvm::Triple::mips64:
-  case llvm::Triple::mips64el:
+  case llvm37::Triple::mips:
+  case llvm37::Triple::mipsel:
+  case llvm37::Triple::mips64:
+  case llvm37::Triple::mips64el:
     AddMIPSTargetArgs(Args, CmdArgs);
     break;
 
-  case llvm::Triple::ppc:
-  case llvm::Triple::ppc64:
-  case llvm::Triple::ppc64le:
+  case llvm37::Triple::ppc:
+  case llvm37::Triple::ppc64:
+  case llvm37::Triple::ppc64le:
     AddPPCTargetArgs(Args, CmdArgs);
     break;
 
-  case llvm::Triple::sparc:
-  case llvm::Triple::sparcel:
-  case llvm::Triple::sparcv9:
+  case llvm37::Triple::sparc:
+  case llvm37::Triple::sparcel:
+  case llvm37::Triple::sparcv9:
     AddSparcTargetArgs(Args, CmdArgs);
     break;
 
-  case llvm::Triple::x86:
-  case llvm::Triple::x86_64:
+  case llvm37::Triple::x86:
+  case llvm37::Triple::x86_64:
     AddX86TargetArgs(Args, CmdArgs);
     break;
 
-  case llvm::Triple::hexagon:
+  case llvm37::Triple::hexagon:
     AddHexagonTargetArgs(Args, CmdArgs);
     break;
   }
@@ -3610,7 +3610,7 @@ void Clang::ConstructJob(Compilation &C, const JobAction &JA,
   if (!Args.hasArg(options::OPT_fallow_unsupported)) {
     Arg *Unsupported;
     if (types::isCXX(InputType) && getToolChain().getTriple().isOSDarwin() &&
-        getToolChain().getArch() == llvm::Triple::x86) {
+        getToolChain().getArch() == llvm37::Triple::x86) {
       if ((Unsupported = Args.getLastArg(options::OPT_fapple_kext)) ||
           (Unsupported = Args.getLastArg(options::OPT_mkernel)))
         D.Diag(diag::err_drv_clang_unsupported_opt_cxx_darwin_i386)
@@ -3644,10 +3644,10 @@ void Clang::ConstructJob(Compilation &C, const JobAction &JA,
       // -gline-tables-only.
       CmdArgs.push_back("-gline-tables-only");
       // Default is dwarf-2 for Darwin, OpenBSD, FreeBSD and Solaris.
-      const llvm::Triple &Triple = getToolChain().getTriple();
-      if (Triple.isOSDarwin() || Triple.getOS() == llvm::Triple::OpenBSD ||
-          Triple.getOS() == llvm::Triple::FreeBSD ||
-          Triple.getOS() == llvm::Triple::Solaris)
+      const llvm37::Triple &Triple = getToolChain().getTriple();
+      if (Triple.isOSDarwin() || Triple.getOS() == llvm37::Triple::OpenBSD ||
+          Triple.getOS() == llvm37::Triple::FreeBSD ||
+          Triple.getOS() == llvm37::Triple::Solaris)
         CmdArgs.push_back("-gdwarf-2");
     } else if (A->getOption().matches(options::OPT_gdwarf_2))
       CmdArgs.push_back("-gdwarf-2");
@@ -3658,10 +3658,10 @@ void Clang::ConstructJob(Compilation &C, const JobAction &JA,
     else if (!A->getOption().matches(options::OPT_g0) &&
              !A->getOption().matches(options::OPT_ggdb0)) {
       // Default is dwarf-2 for Darwin, OpenBSD, FreeBSD and Solaris.
-      const llvm::Triple &Triple = getToolChain().getTriple();
-      if (Triple.isOSDarwin() || Triple.getOS() == llvm::Triple::OpenBSD ||
-          Triple.getOS() == llvm::Triple::FreeBSD ||
-          Triple.getOS() == llvm::Triple::Solaris)
+      const llvm37::Triple &Triple = getToolChain().getTriple();
+      if (Triple.isOSDarwin() || Triple.getOS() == llvm37::Triple::OpenBSD ||
+          Triple.getOS() == llvm37::Triple::FreeBSD ||
+          Triple.getOS() == llvm37::Triple::Solaris)
         CmdArgs.push_back("-gdwarf-2");
       else
         CmdArgs.push_back("-g");
@@ -3705,7 +3705,7 @@ void Clang::ConstructJob(Compilation &C, const JobAction &JA,
   }
 
   // CloudABI uses -ffunction-sections and -fdata-sections by default.
-  bool UseSeparateSections = Triple.getOS() == llvm::Triple::CloudABI;
+  bool UseSeparateSections = Triple.getOS() == llvm37::Triple::CloudABI;
 
   if (Args.hasFlag(options::OPT_ffunction_sections,
                    options::OPT_fno_function_sections, UseSeparateSections)) {
@@ -4017,7 +4017,7 @@ void Clang::ConstructJob(Compilation &C, const JobAction &JA,
   } else {
     // If -fmessage-length=N was not specified, determine whether this is a
     // terminal and, if so, implicitly define -fmessage-length appropriately.
-    unsigned N = llvm::sys::Process::StandardErrColumns();
+    unsigned N = llvm37::sys::Process::StandardErrColumns();
     CmdArgs.push_back(Args.MakeArgString(Twine(N)));
   }
 
@@ -4073,9 +4073,9 @@ void Clang::ConstructJob(Compilation &C, const JobAction &JA,
       // options and pass the right information to the frontend.
       if (!Args.hasFlag(options::OPT_fopenmp_use_tls,
                         options::OPT_fnoopenmp_use_tls,
-                        getToolChain().getArch() == llvm::Triple::ppc ||
-                            getToolChain().getArch() == llvm::Triple::ppc64 ||
-                            getToolChain().getArch() == llvm::Triple::ppc64le))
+                        getToolChain().getArch() == llvm37::Triple::ppc ||
+                            getToolChain().getArch() == llvm37::Triple::ppc64 ||
+                            getToolChain().getArch() == llvm37::Triple::ppc64le))
         CmdArgs.push_back("-fnoopenmp-use-tls");
       break;
     default:
@@ -4093,9 +4093,9 @@ void Clang::ConstructJob(Compilation &C, const JobAction &JA,
 
   // Report an error for -faltivec on anything other than PowerPC.
   if (const Arg *A = Args.getLastArg(options::OPT_faltivec)) {
-    const llvm::Triple::ArchType Arch = getToolChain().getArch();
-    if (!(Arch == llvm::Triple::ppc || Arch == llvm::Triple::ppc64 ||
-          Arch == llvm::Triple::ppc64le))
+    const llvm37::Triple::ArchType Arch = getToolChain().getArch();
+    if (!(Arch == llvm37::Triple::ppc || Arch == llvm37::Triple::ppc64 ||
+          Arch == llvm37::Triple::ppc64le))
       D.Diag(diag::err_drv_argument_only_allowed_with) << A->getAsString(Args)
                                                        << "ppc/ppc64/ppc64le";
   }
@@ -4218,8 +4218,8 @@ void Clang::ConstructJob(Compilation &C, const JobAction &JA,
       CmdArgs.push_back("-mstack-probe-size=0");
   }
 
-  if (getToolChain().getArch() == llvm::Triple::aarch64 ||
-      getToolChain().getArch() == llvm::Triple::aarch64_be)
+  if (getToolChain().getArch() == llvm37::Triple::aarch64 ||
+      getToolChain().getArch() == llvm37::Triple::aarch64_be)
     CmdArgs.push_back("-fallow-half-arguments-and-returns");
 
   if (Arg *A = Args.getLastArg(options::OPT_mrestrict_it,
@@ -4231,8 +4231,8 @@ void Clang::ConstructJob(Compilation &C, const JobAction &JA,
       CmdArgs.push_back("-backend-option");
       CmdArgs.push_back("-arm-no-restrict-it");
     }
-  } else if (TT.isOSWindows() && (TT.getArch() == llvm::Triple::arm ||
-                                  TT.getArch() == llvm::Triple::thumb)) {
+  } else if (TT.isOSWindows() && (TT.getArch() == llvm37::Triple::arm ||
+                                  TT.getArch() == llvm37::Triple::thumb)) {
     // Windows on ARM expects restricted IT blocks
     CmdArgs.push_back("-backend-option");
     CmdArgs.push_back("-arm-restrict-it");
@@ -4242,7 +4242,7 @@ void Clang::ConstructJob(Compilation &C, const JobAction &JA,
   // these by hand.
   if (Arg *A = Args.getLastArg(options::OPT_fprofile_sample_use_EQ)) {
     StringRef fname = A->getValue();
-    if (!llvm::sys::fs::exists(fname))
+    if (!llvm37::sys::fs::exists(fname))
       D.Diag(diag::err_drv_no_such_file) << fname;
     else
       A->render(Args, CmdArgs);
@@ -4337,14 +4337,14 @@ void Clang::ConstructJob(Compilation &C, const JobAction &JA,
       // When generating crash reports, we want to emit the modules along with
       // the reproduction sources, so we ignore any provided module path.
       Path = Output.getFilename();
-      llvm::sys::path::replace_extension(Path, ".cache");
-      llvm::sys::path::append(Path, "modules");
+      llvm37::sys::path::replace_extension(Path, ".cache");
+      llvm37::sys::path::append(Path, "modules");
     } else if (Path.empty()) {
       // No module path was provided: use the default.
-      llvm::sys::path::system_temp_directory(/*erasedOnReboot=*/false, Path);
-      llvm::sys::path::append(Path, "org.llvm.clang.");
+      llvm37::sys::path::system_temp_directory(/*erasedOnReboot=*/false, Path);
+      llvm37::sys::path::append(Path, "org.llvm.clang.");
       appendUserToPath(Path);
-      llvm::sys::path::append(Path, "ModuleCache");
+      llvm37::sys::path::append(Path, "ModuleCache");
     }
     const char Arg[] = "-fmodules-cache-path=";
     Path.insert(Path.begin(), Arg, Arg + strlen(Arg));
@@ -4355,11 +4355,11 @@ void Clang::ConstructJob(Compilation &C, const JobAction &JA,
   // dependency VFS alongside the output.
   if (HaveModules && C.isForDiagnostics()) {
     SmallString<128> VFSDir(Output.getFilename());
-    llvm::sys::path::replace_extension(VFSDir, ".cache");
+    llvm37::sys::path::replace_extension(VFSDir, ".cache");
     // Add the cache directory as a temp so the crash diagnostics pick it up.
     C.addTempFile(Args.MakeArgString(VFSDir));
 
-    llvm::sys::path::append(VFSDir, "vfs");
+    llvm37::sys::path::append(VFSDir, "vfs");
     CmdArgs.push_back("-module-dependency-dir");
     CmdArgs.push_back(Args.MakeArgString(VFSDir));
   }
@@ -4379,8 +4379,8 @@ void Clang::ConstructJob(Compilation &C, const JobAction &JA,
       D.Diag(diag::err_drv_argument_not_allowed_with)
           << A->getAsString(Args) << "-fbuild-session-timestamp";
 
-    llvm::sys::fs::file_status Status;
-    if (llvm::sys::fs::status(A->getValue(), Status))
+    llvm37::sys::fs::file_status Status;
+    if (llvm37::sys::fs::status(A->getValue(), Status))
       D.Diag(diag::err_drv_no_such_file) << A->getValue();
     CmdArgs.push_back(Args.MakeArgString(
         "-fbuild-session-timestamp=" +
@@ -4417,7 +4417,7 @@ void Clang::ConstructJob(Compilation &C, const JobAction &JA,
 
   // -fshort-enums=0 is default for all architectures except Hexagon.
   if (Args.hasFlag(options::OPT_fshort_enums, options::OPT_fno_short_enums,
-                   getToolChain().getArch() == llvm::Triple::hexagon))
+                   getToolChain().getArch() == llvm37::Triple::hexagon))
     CmdArgs.push_back("-fshort-enums");
 
   // -fsigned-char is default.
@@ -4436,8 +4436,8 @@ void Clang::ConstructJob(Compilation &C, const JobAction &JA,
   if (!Args.hasFlag(options::OPT_fuse_cxa_atexit,
                     options::OPT_fno_use_cxa_atexit,
                     !IsWindowsCygnus && !IsWindowsGNU &&
-                        getToolChain().getArch() != llvm::Triple::hexagon &&
-                        getToolChain().getArch() != llvm::Triple::xcore) ||
+                        getToolChain().getArch() != llvm37::Triple::hexagon &&
+                        getToolChain().getArch() != llvm37::Triple::xcore) ||
       KernelOrKext)
     CmdArgs.push_back("-fno-use-cxa-atexit");
 
@@ -4529,7 +4529,7 @@ void Clang::ConstructJob(Compilation &C, const JobAction &JA,
   // When ObjectiveC legacy runtime is in effect on MacOSX,
   // turn on the option to do Array/Dictionary subscripting
   // by default.
-  if (getToolChain().getArch() == llvm::Triple::x86 &&
+  if (getToolChain().getArch() == llvm37::Triple::x86 &&
       getToolChain().getTriple().isMacOSX() &&
       !getToolChain().getTriple().isMacOSXVersionLT(10, 7) &&
       objcRuntime.getKind() == ObjCRuntime::FragileMacOSX &&
@@ -4766,7 +4766,7 @@ void Clang::ConstructJob(Compilation &C, const JobAction &JA,
     }
   }
   if (ShowColors == Colors_On ||
-      (ShowColors == Colors_Auto && llvm::sys::Process::StandardErrHasColors()))
+      (ShowColors == Colors_Auto && llvm37::sys::Process::StandardErrHasColors()))
     CmdArgs.push_back("-fcolor-diagnostics");
 
 #ifdef MSFT_SUPPORTS_ANSI_ESCAPE_CODES
@@ -4847,7 +4847,7 @@ void Clang::ConstructJob(Compilation &C, const JobAction &JA,
   // le32-specific flags:
   //  -fno-math-builtin: clang should not convert math builtins to intrinsics
   //                     by default.
-  if (getToolChain().getArch() == llvm::Triple::le32) {
+  if (getToolChain().getArch() == llvm37::Triple::le32) {
     CmdArgs.push_back("-fno-math-builtin");
   }
 
@@ -4856,8 +4856,8 @@ void Clang::ConstructJob(Compilation &C, const JobAction &JA,
 // FIXME: This is disabled until clang -cc1 supports -fno-builtin-foo. PR4941.
 #if 0
   if (getToolChain().getTriple().isOSDarwin() &&
-      (getToolChain().getArch() == llvm::Triple::arm ||
-       getToolChain().getArch() == llvm::Triple::thumb)) {
+      (getToolChain().getArch() == llvm37::Triple::arm ||
+       getToolChain().getArch() == llvm37::Triple::thumb)) {
     if (!Args.hasArg(options::OPT_fbuiltin_strcat))
       CmdArgs.push_back("-fno-builtin-strcat");
     if (!Args.hasArg(options::OPT_fbuiltin_strcpy))
@@ -4991,10 +4991,10 @@ void Clang::ConstructJob(Compilation &C, const JobAction &JA,
       (InputType == types::TY_C || InputType == types::TY_CXX)) {
     auto CLCommand =
         getCLFallback()->GetCommand(C, JA, Output, Inputs, Args, LinkingOutput);
-    C.addCommand(llvm::make_unique<FallbackCommand>(JA, *this, Exec, CmdArgs,
+    C.addCommand(llvm37::make_unique<FallbackCommand>(JA, *this, Exec, CmdArgs,
                                                     std::move(CLCommand)));
   } else {
-    C.addCommand(llvm::make_unique<Command>(JA, *this, Exec, CmdArgs));
+    C.addCommand(llvm37::make_unique<Command>(JA, *this, Exec, CmdArgs));
   }
 
   // Handle the debug info splitting at object creation time if we're
@@ -5272,8 +5272,8 @@ void Clang::AddClangCLArgs(const ArgList &Args, ArgStringList &CmdArgs) const {
   }
 
   unsigned VolatileOptionID;
-  if (getToolChain().getArch() == llvm::Triple::x86_64 ||
-      getToolChain().getArch() == llvm::Triple::x86)
+  if (getToolChain().getArch() == llvm37::Triple::x86_64 ||
+      getToolChain().getArch() == llvm37::Triple::x86)
     VolatileOptionID = options::OPT__SLASH_volatile_ms;
   else
     VolatileOptionID = options::OPT__SLASH_volatile_iso;
@@ -5332,7 +5332,7 @@ void ClangAs::AddMIPSTargetArgs(const ArgList &Args,
                                 ArgStringList &CmdArgs) const {
   StringRef CPUName;
   StringRef ABIName;
-  const llvm::Triple &Triple = getToolChain().getTriple();
+  const llvm37::Triple &Triple = getToolChain().getTriple();
   mips::getMipsCPUAndABI(Args, Triple, CPUName, ABIName);
 
   CmdArgs.push_back("-target-abi");
@@ -5377,7 +5377,7 @@ void ClangAs::ConstructJob(Compilation &C, const JobAction &JA,
   CmdArgs.push_back(Clang::getBaseInputName(Args, Input));
 
   // Add the target cpu
-  const llvm::Triple Triple(TripleStr);
+  const llvm37::Triple Triple(TripleStr);
   std::string CPU = getCPUName(Args, Triple, /*FromAs*/ true);
   if (!CPU.empty()) {
     CmdArgs.push_back("-target-cpu");
@@ -5453,10 +5453,10 @@ void ClangAs::ConstructJob(Compilation &C, const JobAction &JA,
   default:
     break;
 
-  case llvm::Triple::mips:
-  case llvm::Triple::mipsel:
-  case llvm::Triple::mips64:
-  case llvm::Triple::mips64el:
+  case llvm37::Triple::mips:
+  case llvm37::Triple::mipsel:
+  case llvm37::Triple::mips64:
+  case llvm37::Triple::mips64el:
     AddMIPSTargetArgs(Args, CmdArgs);
     break;
   }
@@ -5482,7 +5482,7 @@ void ClangAs::ConstructJob(Compilation &C, const JobAction &JA,
   CmdArgs.push_back(Input.getFilename());
 
   const char *Exec = getToolChain().getDriver().getClangProgramPath();
-  C.addCommand(llvm::make_unique<Command>(JA, *this, Exec, CmdArgs));
+  C.addCommand(llvm37::make_unique<Command>(JA, *this, Exec, CmdArgs));
 
   // Handle the debug info splitting at object creation time if we're
   // creating an object.
@@ -5537,11 +5537,11 @@ void gcc::Common::ConstructJob(Compilation &C, const JobAction &JA,
   //
   // FIXME: The triple class should directly provide the information we want
   // here.
-  const llvm::Triple::ArchType Arch = getToolChain().getArch();
-  if (Arch == llvm::Triple::x86 || Arch == llvm::Triple::ppc)
+  const llvm37::Triple::ArchType Arch = getToolChain().getArch();
+  if (Arch == llvm37::Triple::x86 || Arch == llvm37::Triple::ppc)
     CmdArgs.push_back("-m32");
-  else if (Arch == llvm::Triple::x86_64 || Arch == llvm::Triple::ppc64 ||
-           Arch == llvm::Triple::ppc64le)
+  else if (Arch == llvm37::Triple::x86_64 || Arch == llvm37::Triple::ppc64 ||
+           Arch == llvm37::Triple::ppc64le)
     CmdArgs.push_back("-m64");
 
   if (Output.isFilename()) {
@@ -5564,8 +5564,8 @@ void gcc::Common::ConstructJob(Compilation &C, const JobAction &JA,
   // inputs into '-Wl,' options?
   for (const auto &II : Inputs) {
     // Don't try to pass LLVM or AST inputs to a generic gcc.
-    if (II.getType() == types::TY_LLVM_IR || II.getType() == types::TY_LTO_IR ||
-        II.getType() == types::TY_LLVM_BC || II.getType() == types::TY_LTO_BC)
+    if (II.getType() == types::TY_LLVM37_IR || II.getType() == types::TY_LTO_IR ||
+        II.getType() == types::TY_LLVM37_BC || II.getType() == types::TY_LTO_BC)
       D.Diag(diag::err_drv_no_linker_llvm_support)
           << getToolChain().getTripleString();
     else if (II.getType() == types::TY_AST)
@@ -5605,7 +5605,7 @@ void gcc::Common::ConstructJob(Compilation &C, const JobAction &JA,
     GCCName = "gcc";
 
   const char *Exec = Args.MakeArgString(getToolChain().GetProgramPath(GCCName));
-  C.addCommand(llvm::make_unique<Command>(JA, *this, Exec, CmdArgs));
+  C.addCommand(llvm37::make_unique<Command>(JA, *this, Exec, CmdArgs));
 }
 
 void gcc::Preprocessor::RenderExtraToolArgs(const JobAction &JA,
@@ -5619,9 +5619,9 @@ void gcc::Compiler::RenderExtraToolArgs(const JobAction &JA,
 
   switch (JA.getType()) {
   // If -flto, etc. are present then make sure not to force assembly output.
-  case types::TY_LLVM_IR:
+  case types::TY_LLVM37_IR:
   case types::TY_LTO_IR:
-  case types::TY_LLVM_BC:
+  case types::TY_LLVM37_BC:
   case types::TY_LTO_BC:
     CmdArgs.push_back("-c");
     break;
@@ -5683,8 +5683,8 @@ void hexagon::Assembler::ConstructJob(Compilation &C, const JobAction &JA,
   // inputs into '-Wl,' options?
   for (const auto &II : Inputs) {
     // Don't try to pass LLVM or AST inputs to a generic gcc.
-    if (II.getType() == types::TY_LLVM_IR || II.getType() == types::TY_LTO_IR ||
-        II.getType() == types::TY_LLVM_BC || II.getType() == types::TY_LTO_BC)
+    if (II.getType() == types::TY_LLVM37_IR || II.getType() == types::TY_LTO_IR ||
+        II.getType() == types::TY_LLVM37_BC || II.getType() == types::TY_LTO_BC)
       D.Diag(clang::diag::err_drv_no_linker_llvm_support)
           << getToolChain().getTripleString();
     else if (II.getType() == types::TY_AST)
@@ -5704,7 +5704,7 @@ void hexagon::Assembler::ConstructJob(Compilation &C, const JobAction &JA,
 
   const char *GCCName = "hexagon-as";
   const char *Exec = Args.MakeArgString(getToolChain().GetProgramPath(GCCName));
-  C.addCommand(llvm::make_unique<Command>(JA, *this, Exec, CmdArgs));
+  C.addCommand(llvm37::make_unique<Command>(JA, *this, Exec, CmdArgs));
 }
 
 void hexagon::Linker::RenderExtraToolArgs(const JobAction &JA,
@@ -5878,12 +5878,12 @@ void hexagon::Linker::ConstructJob(Compilation &C, const JobAction &JA,
                            LinkingOutput);
 
   std::string Linker = ToolChain.GetProgramPath("hexagon-ld");
-  C.addCommand(llvm::make_unique<Command>(JA, *this, Args.MakeArgString(Linker),
+  C.addCommand(llvm37::make_unique<Command>(JA, *this, Args.MakeArgString(Linker),
                                           CmdArgs));
 }
 // Hexagon tools end.
 
-const std::string arm::getARMArch(StringRef Arch, const llvm::Triple &Triple) {
+const std::string arm::getARMArch(StringRef Arch, const llvm37::Triple &Triple) {
   std::string MArch;
   if (!Arch.empty())
     MArch = Arch;
@@ -5893,7 +5893,7 @@ const std::string arm::getARMArch(StringRef Arch, const llvm::Triple &Triple) {
 
   // Handle -march=native.
   if (MArch == "native") {
-    std::string CPU = llvm::sys::getHostCPUName();
+    std::string CPU = llvm37::sys::getHostCPUName();
     if (CPU != "generic") {
       // Translate the native cpu into the architecture suffix for that CPU.
       const char *Suffix = arm::getLLVMArchSuffixForARM(CPU, MArch);
@@ -5909,7 +5909,7 @@ const std::string arm::getARMArch(StringRef Arch, const llvm::Triple &Triple) {
   return MArch;
 }
 /// Get the (LLVM) name of the minimum ARM CPU for the arch we are targeting.
-const char *arm::getARMCPUForMArch(StringRef Arch, const llvm::Triple &Triple) {
+const char *arm::getARMCPUForMArch(StringRef Arch, const llvm37::Triple &Triple) {
   std::string MArch = getARMArch(Arch, Triple);
   // getARMCPUForArch defaults to the triple if MArch is empty, but empty MArch
   // here means an -march=native that we can't handle, so instead return no CPU.
@@ -5927,14 +5927,14 @@ const char *arm::getARMCPUForMArch(StringRef Arch, const llvm::Triple &Triple) {
 
 /// getARMTargetCPU - Get the (LLVM) name of the ARM cpu we are targeting.
 std::string arm::getARMTargetCPU(StringRef CPU, StringRef Arch,
-                                 const llvm::Triple &Triple) {
+                                 const llvm37::Triple &Triple) {
   // FIXME: Warn on inconsistent use of -mcpu and -march.
   // If we have -mcpu=, use that.
   if (!CPU.empty()) {
     std::string MCPU = StringRef(CPU).lower();
     // Handle -mcpu=native.
     if (MCPU == "native")
-      return llvm::sys::getHostCPUName();
+      return llvm37::sys::getHostCPUName();
     else
       return MCPU;
   }
@@ -5947,17 +5947,17 @@ std::string arm::getARMTargetCPU(StringRef CPU, StringRef Arch,
 // FIXME: This is redundant with -mcpu, why does LLVM use this.
 const char *arm::getLLVMArchSuffixForARM(StringRef CPU, StringRef Arch) {
   if (CPU == "generic" &&
-      llvm::ARMTargetParser::parseArch(Arch) == llvm::ARM::AK_ARMV8_1A)
+      llvm37::ARMTargetParser::parseArch(Arch) == llvm37::ARM::AK_ARMV8_1A)
     return "v8.1a";
 
-  unsigned ArchKind = llvm::ARMTargetParser::parseCPUArch(CPU);
-  if (ArchKind == llvm::ARM::AK_INVALID)
+  unsigned ArchKind = llvm37::ARMTargetParser::parseCPUArch(CPU);
+  if (ArchKind == llvm37::ARM::AK_INVALID)
     return "";
-  return llvm::ARMTargetParser::getSubArch(ArchKind);
+  return llvm37::ARMTargetParser::getSubArch(ArchKind);
 }
 
 void arm::appendEBLinkFlags(const ArgList &Args, ArgStringList &CmdArgs,
-                            const llvm::Triple &Triple) {
+                            const llvm37::Triple &Triple) {
   if (Args.hasArg(options::OPT_r))
     return;
 
@@ -5968,7 +5968,7 @@ void arm::appendEBLinkFlags(const ArgList &Args, ArgStringList &CmdArgs,
 }
 
 mips::NanEncoding mips::getSupportedNanEncoding(StringRef &CPU) {
-  return (NanEncoding)llvm::StringSwitch<int>(CPU)
+  return (NanEncoding)llvm37::StringSwitch<int>(CPU)
       .Case("mips1", NanLegacy)
       .Case("mips2", NanLegacy)
       .Case("mips3", NanLegacy)
@@ -5997,25 +5997,25 @@ bool mips::isUCLibc(const ArgList &Args) {
   return A && A->getOption().matches(options::OPT_muclibc);
 }
 
-bool mips::isNaN2008(const ArgList &Args, const llvm::Triple &Triple) {
+bool mips::isNaN2008(const ArgList &Args, const llvm37::Triple &Triple) {
   if (Arg *NaNArg = Args.getLastArg(options::OPT_mnan_EQ))
-    return llvm::StringSwitch<bool>(NaNArg->getValue())
+    return llvm37::StringSwitch<bool>(NaNArg->getValue())
         .Case("2008", true)
         .Case("legacy", false)
         .Default(false);
 
   // NaN2008 is the default for MIPS32r6/MIPS64r6.
-  return llvm::StringSwitch<bool>(getCPUName(Args, Triple))
+  return llvm37::StringSwitch<bool>(getCPUName(Args, Triple))
       .Cases("mips32r6", "mips64r6", true)
       .Default(false);
 
   return false;
 }
 
-bool mips::isFPXXDefault(const llvm::Triple &Triple, StringRef CPUName,
+bool mips::isFPXXDefault(const llvm37::Triple &Triple, StringRef CPUName,
                          StringRef ABIName, StringRef FloatABI) {
-  if (Triple.getVendor() != llvm::Triple::ImaginationTechnologies &&
-      Triple.getVendor() != llvm::Triple::MipsTechnologies)
+  if (Triple.getVendor() != llvm37::Triple::ImaginationTechnologies &&
+      Triple.getVendor() != llvm37::Triple::MipsTechnologies)
     return false;
 
   if (ABIName != "32")
@@ -6026,14 +6026,14 @@ bool mips::isFPXXDefault(const llvm::Triple &Triple, StringRef CPUName,
   if (FloatABI == "soft")
     return false;
 
-  return llvm::StringSwitch<bool>(CPUName)
+  return llvm37::StringSwitch<bool>(CPUName)
       .Cases("mips2", "mips3", "mips4", "mips5", true)
       .Cases("mips32", "mips32r2", "mips32r3", "mips32r5", true)
       .Cases("mips64", "mips64r2", "mips64r3", "mips64r5", true)
       .Default(false);
 }
 
-bool mips::shouldUseFPXX(const ArgList &Args, const llvm::Triple &Triple,
+bool mips::shouldUseFPXX(const ArgList &Args, const llvm37::Triple &Triple,
                          StringRef CPUName, StringRef ABIName,
                          StringRef FloatABI) {
   bool UseFPXX = isFPXXDefault(Triple, CPUName, ABIName, FloatABI);
@@ -6047,7 +6047,7 @@ bool mips::shouldUseFPXX(const ArgList &Args, const llvm::Triple &Triple,
   return UseFPXX;
 }
 
-llvm::Triple::ArchType darwin::getArchTypeForMachOArchName(StringRef Str) {
+llvm37::Triple::ArchType darwin::getArchTypeForMachOArchName(StringRef Str) {
   // See arch(3) and llvm-gcc's driver-driver.c. We don't implement support for
   // archs which Darwin doesn't use.
 
@@ -6060,43 +6060,43 @@ llvm::Triple::ArchType darwin::getArchTypeForMachOArchName(StringRef Str) {
   // This code must be kept in sync with Clang's Darwin specific argument
   // translation.
 
-  return llvm::StringSwitch<llvm::Triple::ArchType>(Str)
-      .Cases("ppc", "ppc601", "ppc603", "ppc604", "ppc604e", llvm::Triple::ppc)
-      .Cases("ppc750", "ppc7400", "ppc7450", "ppc970", llvm::Triple::ppc)
-      .Case("ppc64", llvm::Triple::ppc64)
-      .Cases("i386", "i486", "i486SX", "i586", "i686", llvm::Triple::x86)
+  return llvm37::StringSwitch<llvm37::Triple::ArchType>(Str)
+      .Cases("ppc", "ppc601", "ppc603", "ppc604", "ppc604e", llvm37::Triple::ppc)
+      .Cases("ppc750", "ppc7400", "ppc7450", "ppc970", llvm37::Triple::ppc)
+      .Case("ppc64", llvm37::Triple::ppc64)
+      .Cases("i386", "i486", "i486SX", "i586", "i686", llvm37::Triple::x86)
       .Cases("pentium", "pentpro", "pentIIm3", "pentIIm5", "pentium4",
-             llvm::Triple::x86)
-      .Cases("x86_64", "x86_64h", llvm::Triple::x86_64)
+             llvm37::Triple::x86)
+      .Cases("x86_64", "x86_64h", llvm37::Triple::x86_64)
       // This is derived from the driver driver.
-      .Cases("arm", "armv4t", "armv5", "armv6", "armv6m", llvm::Triple::arm)
-      .Cases("armv7", "armv7em", "armv7k", "armv7m", llvm::Triple::arm)
-      .Cases("armv7s", "xscale", llvm::Triple::arm)
-      .Case("arm64", llvm::Triple::aarch64)
-      .Case("r600", llvm::Triple::r600)
-      .Case("amdgcn", llvm::Triple::amdgcn)
-      .Case("nvptx", llvm::Triple::nvptx)
-      .Case("nvptx64", llvm::Triple::nvptx64)
-      .Case("amdil", llvm::Triple::amdil)
-      .Case("spir", llvm::Triple::spir)
-      .Default(llvm::Triple::UnknownArch);
+      .Cases("arm", "armv4t", "armv5", "armv6", "armv6m", llvm37::Triple::arm)
+      .Cases("armv7", "armv7em", "armv7k", "armv7m", llvm37::Triple::arm)
+      .Cases("armv7s", "xscale", llvm37::Triple::arm)
+      .Case("arm64", llvm37::Triple::aarch64)
+      .Case("r600", llvm37::Triple::r600)
+      .Case("amdgcn", llvm37::Triple::amdgcn)
+      .Case("nvptx", llvm37::Triple::nvptx)
+      .Case("nvptx64", llvm37::Triple::nvptx64)
+      .Case("amdil", llvm37::Triple::amdil)
+      .Case("spir", llvm37::Triple::spir)
+      .Default(llvm37::Triple::UnknownArch);
 }
 
-void darwin::setTripleTypeForMachOArchName(llvm::Triple &T, StringRef Str) {
-  const llvm::Triple::ArchType Arch = getArchTypeForMachOArchName(Str);
+void darwin::setTripleTypeForMachOArchName(llvm37::Triple &T, StringRef Str) {
+  const llvm37::Triple::ArchType Arch = getArchTypeForMachOArchName(Str);
   T.setArch(Arch);
 
   if (Str == "x86_64h")
     T.setArchName(Str);
   else if (Str == "armv6m" || Str == "armv7m" || Str == "armv7em") {
-    T.setOS(llvm::Triple::UnknownOS);
-    T.setObjectFormat(llvm::Triple::MachO);
+    T.setOS(llvm37::Triple::UnknownOS);
+    T.setObjectFormat(llvm37::Triple::MachO);
   }
 }
 
 const char *Clang::getBaseInputName(const ArgList &Args,
                                     const InputInfo &Input) {
-  return Args.MakeArgString(llvm::sys::path::filename(Input.getBaseInput()));
+  return Args.MakeArgString(llvm37::sys::path::filename(Input.getBaseInput()));
 }
 
 const char *Clang::getBaseInputStem(const ArgList &Args,
@@ -6190,7 +6190,7 @@ void cloudabi::Linker::ConstructJob(Compilation &C, const JobAction &JA,
     CmdArgs.push_back(Args.MakeArgString(ToolChain.GetFilePath("crtend.o")));
 
   const char *Exec = Args.MakeArgString(ToolChain.GetLinkerPath());
-  C.addCommand(llvm::make_unique<Command>(JA, *this, Exec, CmdArgs));
+  C.addCommand(llvm37::make_unique<Command>(JA, *this, Exec, CmdArgs));
 }
 
 void darwin::Assembler::ConstructJob(Compilation &C, const JobAction &JA,
@@ -6216,7 +6216,7 @@ void darwin::Assembler::ConstructJob(Compilation &C, const JobAction &JA,
   // FIXME: at run-time detect assembler capabilities or rely on version
   // information forwarded by -target-assembler-version (future)
   if (Args.hasArg(options::OPT_fno_integrated_as)) {
-    const llvm::Triple &T(getToolChain().getTriple());
+    const llvm37::Triple &T(getToolChain().getTriple());
     if (!(T.isMacOSX() && T.isMacOSXVersionLT(10, 7)))
       CmdArgs.push_back("-Q");
   }
@@ -6234,12 +6234,12 @@ void darwin::Assembler::ConstructJob(Compilation &C, const JobAction &JA,
   AddMachOArch(Args, CmdArgs);
 
   // Use -force_cpusubtype_ALL on x86 by default.
-  if (getToolChain().getArch() == llvm::Triple::x86 ||
-      getToolChain().getArch() == llvm::Triple::x86_64 ||
+  if (getToolChain().getArch() == llvm37::Triple::x86 ||
+      getToolChain().getArch() == llvm37::Triple::x86_64 ||
       Args.hasArg(options::OPT_force__cpusubtype__ALL))
     CmdArgs.push_back("-force_cpusubtype_ALL");
 
-  if (getToolChain().getArch() != llvm::Triple::x86_64 &&
+  if (getToolChain().getArch() != llvm37::Triple::x86_64 &&
       (((Args.hasArg(options::OPT_mkernel) ||
          Args.hasArg(options::OPT_fapple_kext)) &&
         getMachOToolChain().isKernelStatic()) ||
@@ -6258,7 +6258,7 @@ void darwin::Assembler::ConstructJob(Compilation &C, const JobAction &JA,
   // asm_final spec is empty.
 
   const char *Exec = Args.MakeArgString(getToolChain().GetProgramPath("as"));
-  C.addCommand(llvm::make_unique<Command>(JA, *this, Exec, CmdArgs));
+  C.addCommand(llvm37::make_unique<Command>(JA, *this, Exec, CmdArgs));
 }
 
 void darwin::MachOTool::anchor() {}
@@ -6476,7 +6476,7 @@ void darwin::Linker::ConstructJob(Compilation &C, const JobAction &JA,
   // input files in a separate file, shortening the command line. To this end,
   // build a list of input file names that can be passed via a file with the
   // -filelist linker option.
-  llvm::opt::ArgStringList InputFileList;
+  llvm37::opt::ArgStringList InputFileList;
 
   // The logic here is derived from gcc's behavior; most of which
   // comes from specs (starting with link_command). Consult gcc for
@@ -6491,7 +6491,7 @@ void darwin::Linker::ConstructJob(Compilation &C, const JobAction &JA,
     const char *Exec =
         Args.MakeArgString(getToolChain().GetProgramPath("touch"));
     CmdArgs.push_back(Output.getFilename());
-    C.addCommand(llvm::make_unique<Command>(JA, *this, Exec, CmdArgs));
+    C.addCommand(llvm37::make_unique<Command>(JA, *this, Exec, CmdArgs));
     return;
   }
 
@@ -6627,7 +6627,7 @@ void darwin::Linker::ConstructJob(Compilation &C, const JobAction &JA,
 
   const char *Exec = Args.MakeArgString(getToolChain().GetLinkerPath());
   std::unique_ptr<Command> Cmd =
-      llvm::make_unique<Command>(JA, *this, Exec, CmdArgs);
+      llvm37::make_unique<Command>(JA, *this, Exec, CmdArgs);
   Cmd->setInputFileList(std::move(InputFileList));
   C.addCommand(std::move(Cmd));
 }
@@ -6651,7 +6651,7 @@ void darwin::Lipo::ConstructJob(Compilation &C, const JobAction &JA,
   }
 
   const char *Exec = Args.MakeArgString(getToolChain().GetProgramPath("lipo"));
-  C.addCommand(llvm::make_unique<Command>(JA, *this, Exec, CmdArgs));
+  C.addCommand(llvm37::make_unique<Command>(JA, *this, Exec, CmdArgs));
 }
 
 void darwin::Dsymutil::ConstructJob(Compilation &C, const JobAction &JA,
@@ -6671,7 +6671,7 @@ void darwin::Dsymutil::ConstructJob(Compilation &C, const JobAction &JA,
 
   const char *Exec =
       Args.MakeArgString(getToolChain().GetProgramPath("dsymutil"));
-  C.addCommand(llvm::make_unique<Command>(JA, *this, Exec, CmdArgs));
+  C.addCommand(llvm37::make_unique<Command>(JA, *this, Exec, CmdArgs));
 }
 
 void darwin::VerifyDebug::ConstructJob(Compilation &C, const JobAction &JA,
@@ -6694,7 +6694,7 @@ void darwin::VerifyDebug::ConstructJob(Compilation &C, const JobAction &JA,
 
   const char *Exec =
       Args.MakeArgString(getToolChain().GetProgramPath("dwarfdump"));
-  C.addCommand(llvm::make_unique<Command>(JA, *this, Exec, CmdArgs));
+  C.addCommand(llvm37::make_unique<Command>(JA, *this, Exec, CmdArgs));
 }
 
 void solaris::Assembler::ConstructJob(Compilation &C, const JobAction &JA,
@@ -6714,7 +6714,7 @@ void solaris::Assembler::ConstructJob(Compilation &C, const JobAction &JA,
     CmdArgs.push_back(II.getFilename());
 
   const char *Exec = Args.MakeArgString(getToolChain().GetProgramPath("as"));
-  C.addCommand(llvm::make_unique<Command>(JA, *this, Exec, CmdArgs));
+  C.addCommand(llvm37::make_unique<Command>(JA, *this, Exec, CmdArgs));
 }
 
 void solaris::Linker::ConstructJob(Compilation &C, const JobAction &JA,
@@ -6724,15 +6724,15 @@ void solaris::Linker::ConstructJob(Compilation &C, const JobAction &JA,
                                    const char *LinkingOutput) const {
   // FIXME: Find a real GCC, don't hard-code versions here
   std::string GCCLibPath = "/usr/gcc/4.5/lib/gcc/";
-  const llvm::Triple &T = getToolChain().getTriple();
+  const llvm37::Triple &T = getToolChain().getTriple();
   std::string LibPath = "/usr/lib/";
-  const llvm::Triple::ArchType Arch = T.getArch();
+  const llvm37::Triple::ArchType Arch = T.getArch();
   switch (Arch) {
-  case llvm::Triple::x86:
+  case llvm37::Triple::x86:
     GCCLibPath +=
         ("i386-" + T.getVendorName() + "-" + T.getOSName()).str() + "/4.5.2/";
     break;
-  case llvm::Triple::x86_64:
+  case llvm37::Triple::x86_64:
     GCCLibPath += ("i386-" + T.getVendorName() + "-" + T.getOSName()).str();
     GCCLibPath += "/4.5.2/amd64/";
     LibPath += "amd64/";
@@ -6818,7 +6818,7 @@ void solaris::Linker::ConstructJob(Compilation &C, const JobAction &JA,
   addProfileRT(getToolChain(), Args, CmdArgs);
 
   const char *Exec = Args.MakeArgString(getToolChain().GetLinkerPath());
-  C.addCommand(llvm::make_unique<Command>(JA, *this, Exec, CmdArgs));
+  C.addCommand(llvm37::make_unique<Command>(JA, *this, Exec, CmdArgs));
 }
 
 void openbsd::Assembler::ConstructJob(Compilation &C, const JobAction &JA,
@@ -6831,31 +6831,31 @@ void openbsd::Assembler::ConstructJob(Compilation &C, const JobAction &JA,
   bool NeedsKPIC = false;
 
   switch (getToolChain().getArch()) {
-  case llvm::Triple::x86:
+  case llvm37::Triple::x86:
     // When building 32-bit code on OpenBSD/amd64, we have to explicitly
     // instruct as in the base system to assemble 32-bit code.
     CmdArgs.push_back("--32");
     break;
 
-  case llvm::Triple::ppc:
+  case llvm37::Triple::ppc:
     CmdArgs.push_back("-mppc");
     CmdArgs.push_back("-many");
     break;
 
-  case llvm::Triple::sparc:
-  case llvm::Triple::sparcel:
+  case llvm37::Triple::sparc:
+  case llvm37::Triple::sparcel:
     CmdArgs.push_back("-32");
     NeedsKPIC = true;
     break;
 
-  case llvm::Triple::sparcv9:
+  case llvm37::Triple::sparcv9:
     CmdArgs.push_back("-64");
     CmdArgs.push_back("-Av9a");
     NeedsKPIC = true;
     break;
 
-  case llvm::Triple::mips64:
-  case llvm::Triple::mips64el: {
+  case llvm37::Triple::mips64:
+  case llvm37::Triple::mips64el: {
     StringRef CPUName;
     StringRef ABIName;
     mips::getMipsCPUAndABI(Args, getToolChain().getTriple(), CPUName, ABIName);
@@ -6863,7 +6863,7 @@ void openbsd::Assembler::ConstructJob(Compilation &C, const JobAction &JA,
     CmdArgs.push_back("-mabi");
     CmdArgs.push_back(getGnuCompatibleMipsABIName(ABIName).data());
 
-    if (getToolChain().getArch() == llvm::Triple::mips64)
+    if (getToolChain().getArch() == llvm37::Triple::mips64)
       CmdArgs.push_back("-EB");
     else
       CmdArgs.push_back("-EL");
@@ -6888,7 +6888,7 @@ void openbsd::Assembler::ConstructJob(Compilation &C, const JobAction &JA,
     CmdArgs.push_back(II.getFilename());
 
   const char *Exec = Args.MakeArgString(getToolChain().GetProgramPath("as"));
-  C.addCommand(llvm::make_unique<Command>(JA, *this, Exec, CmdArgs));
+  C.addCommand(llvm37::make_unique<Command>(JA, *this, Exec, CmdArgs));
 }
 
 void openbsd::Linker::ConstructJob(Compilation &C, const JobAction &JA,
@@ -6907,9 +6907,9 @@ void openbsd::Linker::ConstructJob(Compilation &C, const JobAction &JA,
   // handled somewhere else.
   Args.ClaimAllArgs(options::OPT_w);
 
-  if (getToolChain().getArch() == llvm::Triple::mips64)
+  if (getToolChain().getArch() == llvm37::Triple::mips64)
     CmdArgs.push_back("-EB");
-  else if (getToolChain().getArch() == llvm::Triple::mips64el)
+  else if (getToolChain().getArch() == llvm37::Triple::mips64el)
     CmdArgs.push_back("-EL");
 
   if ((!Args.hasArg(options::OPT_nostdlib)) &&
@@ -7018,7 +7018,7 @@ void openbsd::Linker::ConstructJob(Compilation &C, const JobAction &JA,
   }
 
   const char *Exec = Args.MakeArgString(getToolChain().GetLinkerPath());
-  C.addCommand(llvm::make_unique<Command>(JA, *this, Exec, CmdArgs));
+  C.addCommand(llvm37::make_unique<Command>(JA, *this, Exec, CmdArgs));
 }
 
 void bitrig::Assembler::ConstructJob(Compilation &C, const JobAction &JA,
@@ -7038,7 +7038,7 @@ void bitrig::Assembler::ConstructJob(Compilation &C, const JobAction &JA,
     CmdArgs.push_back(II.getFilename());
 
   const char *Exec = Args.MakeArgString(getToolChain().GetProgramPath("as"));
-  C.addCommand(llvm::make_unique<Command>(JA, *this, Exec, CmdArgs));
+  C.addCommand(llvm37::make_unique<Command>(JA, *this, Exec, CmdArgs));
 }
 
 void bitrig::Linker::ConstructJob(Compilation &C, const JobAction &JA,
@@ -7126,13 +7126,13 @@ void bitrig::Linker::ConstructJob(Compilation &C, const JobAction &JA,
 
     StringRef MyArch;
     switch (getToolChain().getArch()) {
-    case llvm::Triple::arm:
+    case llvm37::Triple::arm:
       MyArch = "arm";
       break;
-    case llvm::Triple::x86:
+    case llvm37::Triple::x86:
       MyArch = "i386";
       break;
-    case llvm::Triple::x86_64:
+    case llvm37::Triple::x86_64:
       MyArch = "amd64";
       break;
     default:
@@ -7152,7 +7152,7 @@ void bitrig::Linker::ConstructJob(Compilation &C, const JobAction &JA,
   }
 
   const char *Exec = Args.MakeArgString(getToolChain().GetLinkerPath());
-  C.addCommand(llvm::make_unique<Command>(JA, *this, Exec, CmdArgs));
+  C.addCommand(llvm37::make_unique<Command>(JA, *this, Exec, CmdArgs));
 }
 
 void freebsd::Assembler::ConstructJob(Compilation &C, const JobAction &JA,
@@ -7165,14 +7165,14 @@ void freebsd::Assembler::ConstructJob(Compilation &C, const JobAction &JA,
 
   // When building 32-bit code on FreeBSD/amd64, we have to explicitly
   // instruct as in the base system to assemble 32-bit code.
-  if (getToolChain().getArch() == llvm::Triple::x86)
+  if (getToolChain().getArch() == llvm37::Triple::x86)
     CmdArgs.push_back("--32");
-  else if (getToolChain().getArch() == llvm::Triple::ppc)
+  else if (getToolChain().getArch() == llvm37::Triple::ppc)
     CmdArgs.push_back("-a32");
-  else if (getToolChain().getArch() == llvm::Triple::mips ||
-           getToolChain().getArch() == llvm::Triple::mipsel ||
-           getToolChain().getArch() == llvm::Triple::mips64 ||
-           getToolChain().getArch() == llvm::Triple::mips64el) {
+  else if (getToolChain().getArch() == llvm37::Triple::mips ||
+           getToolChain().getArch() == llvm37::Triple::mipsel ||
+           getToolChain().getArch() == llvm37::Triple::mips64 ||
+           getToolChain().getArch() == llvm37::Triple::mips64el) {
     StringRef CPUName;
     StringRef ABIName;
     mips::getMipsCPUAndABI(Args, getToolChain().getTriple(), CPUName, ABIName);
@@ -7183,19 +7183,19 @@ void freebsd::Assembler::ConstructJob(Compilation &C, const JobAction &JA,
     CmdArgs.push_back("-mabi");
     CmdArgs.push_back(getGnuCompatibleMipsABIName(ABIName).data());
 
-    if (getToolChain().getArch() == llvm::Triple::mips ||
-        getToolChain().getArch() == llvm::Triple::mips64)
+    if (getToolChain().getArch() == llvm37::Triple::mips ||
+        getToolChain().getArch() == llvm37::Triple::mips64)
       CmdArgs.push_back("-EB");
     else
       CmdArgs.push_back("-EL");
 
     addAssemblerKPIC(Args, CmdArgs);
-  } else if (getToolChain().getArch() == llvm::Triple::arm ||
-             getToolChain().getArch() == llvm::Triple::armeb ||
-             getToolChain().getArch() == llvm::Triple::thumb ||
-             getToolChain().getArch() == llvm::Triple::thumbeb) {
+  } else if (getToolChain().getArch() == llvm37::Triple::arm ||
+             getToolChain().getArch() == llvm37::Triple::armeb ||
+             getToolChain().getArch() == llvm37::Triple::thumb ||
+             getToolChain().getArch() == llvm37::Triple::thumbeb) {
     const Driver &D = getToolChain().getDriver();
-    const llvm::Triple &Triple = getToolChain().getTriple();
+    const llvm37::Triple &Triple = getToolChain().getTriple();
     StringRef FloatABI = arm::getARMFloatABI(D, Args, Triple);
 
     if (FloatABI == "hard") {
@@ -7205,19 +7205,19 @@ void freebsd::Assembler::ConstructJob(Compilation &C, const JobAction &JA,
     }
 
     switch (getToolChain().getTriple().getEnvironment()) {
-    case llvm::Triple::GNUEABIHF:
-    case llvm::Triple::GNUEABI:
-    case llvm::Triple::EABI:
+    case llvm37::Triple::GNUEABIHF:
+    case llvm37::Triple::GNUEABI:
+    case llvm37::Triple::EABI:
       CmdArgs.push_back("-meabi=5");
       break;
 
     default:
       CmdArgs.push_back("-matpcs");
     }
-  } else if (getToolChain().getArch() == llvm::Triple::sparc ||
-             getToolChain().getArch() == llvm::Triple::sparcel ||
-             getToolChain().getArch() == llvm::Triple::sparcv9) {
-    if (getToolChain().getArch() == llvm::Triple::sparc)
+  } else if (getToolChain().getArch() == llvm37::Triple::sparc ||
+             getToolChain().getArch() == llvm37::Triple::sparcel ||
+             getToolChain().getArch() == llvm37::Triple::sparcv9) {
+    if (getToolChain().getArch() == llvm37::Triple::sparc)
       CmdArgs.push_back("-Av8plusa");
     else
       CmdArgs.push_back("-Av9a");
@@ -7234,7 +7234,7 @@ void freebsd::Assembler::ConstructJob(Compilation &C, const JobAction &JA,
     CmdArgs.push_back(II.getFilename());
 
   const char *Exec = Args.MakeArgString(getToolChain().GetProgramPath("as"));
-  C.addCommand(llvm::make_unique<Command>(JA, *this, Exec, CmdArgs));
+  C.addCommand(llvm37::make_unique<Command>(JA, *this, Exec, CmdArgs));
 }
 
 void freebsd::Linker::ConstructJob(Compilation &C, const JobAction &JA,
@@ -7245,7 +7245,7 @@ void freebsd::Linker::ConstructJob(Compilation &C, const JobAction &JA,
   const toolchains::FreeBSD &ToolChain =
       static_cast<const toolchains::FreeBSD &>(getToolChain());
   const Driver &D = ToolChain.getDriver();
-  const llvm::Triple::ArchType Arch = ToolChain.getArch();
+  const llvm37::Triple::ArchType Arch = ToolChain.getArch();
   const bool IsPIE =
       !Args.hasArg(options::OPT_shared) &&
       (Args.hasArg(options::OPT_pie) || ToolChain.isPIEDefault());
@@ -7278,8 +7278,8 @@ void freebsd::Linker::ConstructJob(Compilation &C, const JobAction &JA,
       CmdArgs.push_back("/libexec/ld-elf.so.1");
     }
     if (ToolChain.getTriple().getOSMajorVersion() >= 9) {
-      if (Arch == llvm::Triple::arm || Arch == llvm::Triple::sparc ||
-          Arch == llvm::Triple::x86 || Arch == llvm::Triple::x86_64) {
+      if (Arch == llvm37::Triple::arm || Arch == llvm37::Triple::sparc ||
+          Arch == llvm37::Triple::x86 || Arch == llvm37::Triple::x86_64) {
         CmdArgs.push_back("--hash-style=both");
       }
     }
@@ -7288,12 +7288,12 @@ void freebsd::Linker::ConstructJob(Compilation &C, const JobAction &JA,
 
   // When building 32-bit code on FreeBSD/amd64, we have to explicitly
   // instruct ld in the base system to link 32-bit code.
-  if (Arch == llvm::Triple::x86) {
+  if (Arch == llvm37::Triple::x86) {
     CmdArgs.push_back("-m");
     CmdArgs.push_back("elf_i386_fbsd");
   }
 
-  if (Arch == llvm::Triple::ppc) {
+  if (Arch == llvm37::Triple::ppc) {
     CmdArgs.push_back("-m");
     CmdArgs.push_back("elf32ppc_fbsd");
   }
@@ -7417,7 +7417,7 @@ void freebsd::Linker::ConstructJob(Compilation &C, const JobAction &JA,
   addProfileRT(ToolChain, Args, CmdArgs);
 
   const char *Exec = Args.MakeArgString(getToolChain().GetLinkerPath());
-  C.addCommand(llvm::make_unique<Command>(JA, *this, Exec, CmdArgs));
+  C.addCommand(llvm37::make_unique<Command>(JA, *this, Exec, CmdArgs));
 }
 
 void netbsd::Assembler::ConstructJob(Compilation &C, const JobAction &JA,
@@ -7431,13 +7431,13 @@ void netbsd::Assembler::ConstructJob(Compilation &C, const JobAction &JA,
   // GNU as needs different flags for creating the correct output format
   // on architectures with different ABIs or optional feature sets.
   switch (getToolChain().getArch()) {
-  case llvm::Triple::x86:
+  case llvm37::Triple::x86:
     CmdArgs.push_back("--32");
     break;
-  case llvm::Triple::arm:
-  case llvm::Triple::armeb:
-  case llvm::Triple::thumb:
-  case llvm::Triple::thumbeb: {
+  case llvm37::Triple::arm:
+  case llvm37::Triple::armeb:
+  case llvm37::Triple::thumb:
+  case llvm37::Triple::thumbeb: {
     StringRef MArch, MCPU;
     getARMArchCPUFromArgs(Args, MArch, MCPU, /*FromAs*/ true);
     std::string Arch =
@@ -7446,10 +7446,10 @@ void netbsd::Assembler::ConstructJob(Compilation &C, const JobAction &JA,
     break;
   }
 
-  case llvm::Triple::mips:
-  case llvm::Triple::mipsel:
-  case llvm::Triple::mips64:
-  case llvm::Triple::mips64el: {
+  case llvm37::Triple::mips:
+  case llvm37::Triple::mipsel:
+  case llvm37::Triple::mips64:
+  case llvm37::Triple::mips64el: {
     StringRef CPUName;
     StringRef ABIName;
     mips::getMipsCPUAndABI(Args, getToolChain().getTriple(), CPUName, ABIName);
@@ -7460,8 +7460,8 @@ void netbsd::Assembler::ConstructJob(Compilation &C, const JobAction &JA,
     CmdArgs.push_back("-mabi");
     CmdArgs.push_back(getGnuCompatibleMipsABIName(ABIName).data());
 
-    if (getToolChain().getArch() == llvm::Triple::mips ||
-        getToolChain().getArch() == llvm::Triple::mips64)
+    if (getToolChain().getArch() == llvm37::Triple::mips ||
+        getToolChain().getArch() == llvm37::Triple::mips64)
       CmdArgs.push_back("-EB");
     else
       CmdArgs.push_back("-EL");
@@ -7470,13 +7470,13 @@ void netbsd::Assembler::ConstructJob(Compilation &C, const JobAction &JA,
     break;
   }
 
-  case llvm::Triple::sparc:
-  case llvm::Triple::sparcel:
+  case llvm37::Triple::sparc:
+  case llvm37::Triple::sparcel:
     CmdArgs.push_back("-32");
     addAssemblerKPIC(Args, CmdArgs);
     break;
 
-  case llvm::Triple::sparcv9:
+  case llvm37::Triple::sparcv9:
     CmdArgs.push_back("-64");
     CmdArgs.push_back("-Av9");
     addAssemblerKPIC(Args, CmdArgs);
@@ -7495,7 +7495,7 @@ void netbsd::Assembler::ConstructJob(Compilation &C, const JobAction &JA,
     CmdArgs.push_back(II.getFilename());
 
   const char *Exec = Args.MakeArgString((getToolChain().GetProgramPath("as")));
-  C.addCommand(llvm::make_unique<Command>(JA, *this, Exec, CmdArgs));
+  C.addCommand(llvm37::make_unique<Command>(JA, *this, Exec, CmdArgs));
 }
 
 void netbsd::Linker::ConstructJob(Compilation &C, const JobAction &JA,
@@ -7526,20 +7526,20 @@ void netbsd::Linker::ConstructJob(Compilation &C, const JobAction &JA,
   // Many NetBSD architectures support more than one ABI.
   // Determine the correct emulation for ld.
   switch (getToolChain().getArch()) {
-  case llvm::Triple::x86:
+  case llvm37::Triple::x86:
     CmdArgs.push_back("-m");
     CmdArgs.push_back("elf_i386");
     break;
-  case llvm::Triple::arm:
-  case llvm::Triple::thumb:
+  case llvm37::Triple::arm:
+  case llvm37::Triple::thumb:
     CmdArgs.push_back("-m");
     switch (getToolChain().getTriple().getEnvironment()) {
-    case llvm::Triple::EABI:
-    case llvm::Triple::GNUEABI:
+    case llvm37::Triple::EABI:
+    case llvm37::Triple::GNUEABI:
       CmdArgs.push_back("armelf_nbsd_eabi");
       break;
-    case llvm::Triple::EABIHF:
-    case llvm::Triple::GNUEABIHF:
+    case llvm37::Triple::EABIHF:
+    case llvm37::Triple::GNUEABIHF:
       CmdArgs.push_back("armelf_nbsd_eabihf");
       break;
     default:
@@ -7547,19 +7547,19 @@ void netbsd::Linker::ConstructJob(Compilation &C, const JobAction &JA,
       break;
     }
     break;
-  case llvm::Triple::armeb:
-  case llvm::Triple::thumbeb:
+  case llvm37::Triple::armeb:
+  case llvm37::Triple::thumbeb:
     arm::appendEBLinkFlags(
         Args, CmdArgs,
-        llvm::Triple(getToolChain().ComputeEffectiveClangTriple(Args)));
+        llvm37::Triple(getToolChain().ComputeEffectiveClangTriple(Args)));
     CmdArgs.push_back("-m");
     switch (getToolChain().getTriple().getEnvironment()) {
-    case llvm::Triple::EABI:
-    case llvm::Triple::GNUEABI:
+    case llvm37::Triple::EABI:
+    case llvm37::Triple::GNUEABI:
       CmdArgs.push_back("armelfb_nbsd_eabi");
       break;
-    case llvm::Triple::EABIHF:
-    case llvm::Triple::GNUEABIHF:
+    case llvm37::Triple::EABIHF:
+    case llvm37::Triple::GNUEABIHF:
       CmdArgs.push_back("armelfb_nbsd_eabihf");
       break;
     default:
@@ -7567,39 +7567,39 @@ void netbsd::Linker::ConstructJob(Compilation &C, const JobAction &JA,
       break;
     }
     break;
-  case llvm::Triple::mips64:
-  case llvm::Triple::mips64el:
+  case llvm37::Triple::mips64:
+  case llvm37::Triple::mips64el:
     if (mips::hasMipsAbiArg(Args, "32")) {
       CmdArgs.push_back("-m");
-      if (getToolChain().getArch() == llvm::Triple::mips64)
+      if (getToolChain().getArch() == llvm37::Triple::mips64)
         CmdArgs.push_back("elf32btsmip");
       else
         CmdArgs.push_back("elf32ltsmip");
     } else if (mips::hasMipsAbiArg(Args, "64")) {
       CmdArgs.push_back("-m");
-      if (getToolChain().getArch() == llvm::Triple::mips64)
+      if (getToolChain().getArch() == llvm37::Triple::mips64)
         CmdArgs.push_back("elf64btsmip");
       else
         CmdArgs.push_back("elf64ltsmip");
     }
     break;
-  case llvm::Triple::ppc:
+  case llvm37::Triple::ppc:
     CmdArgs.push_back("-m");
     CmdArgs.push_back("elf32ppc_nbsd");
     break;
 
-  case llvm::Triple::ppc64:
-  case llvm::Triple::ppc64le:
+  case llvm37::Triple::ppc64:
+  case llvm37::Triple::ppc64le:
     CmdArgs.push_back("-m");
     CmdArgs.push_back("elf64ppc");
     break;
 
-  case llvm::Triple::sparc:
+  case llvm37::Triple::sparc:
     CmdArgs.push_back("-m");
     CmdArgs.push_back("elf32_sparc");
     break;
 
-  case llvm::Triple::sparcv9:
+  case llvm37::Triple::sparcv9:
     CmdArgs.push_back("-m");
     CmdArgs.push_back("elf64_sparc");
     break;
@@ -7647,16 +7647,16 @@ void netbsd::Linker::ConstructJob(Compilation &C, const JobAction &JA,
   bool useLibgcc = true;
   if (Major >= 7 || (Major == 6 && Minor == 99 && Micro >= 49) || Major == 0) {
     switch (getToolChain().getArch()) {
-    case llvm::Triple::aarch64:
-    case llvm::Triple::arm:
-    case llvm::Triple::armeb:
-    case llvm::Triple::thumb:
-    case llvm::Triple::thumbeb:
-    case llvm::Triple::ppc:
-    case llvm::Triple::ppc64:
-    case llvm::Triple::ppc64le:
-    case llvm::Triple::x86:
-    case llvm::Triple::x86_64:
+    case llvm37::Triple::aarch64:
+    case llvm37::Triple::arm:
+    case llvm37::Triple::armeb:
+    case llvm37::Triple::thumb:
+    case llvm37::Triple::thumbeb:
+    case llvm37::Triple::ppc:
+    case llvm37::Triple::ppc64:
+    case llvm37::Triple::ppc64le:
+    case llvm37::Triple::x86:
+    case llvm37::Triple::x86_64:
       useLibgcc = false;
       break;
     default:
@@ -7705,7 +7705,7 @@ void netbsd::Linker::ConstructJob(Compilation &C, const JobAction &JA,
   addProfileRT(getToolChain(), Args, CmdArgs);
 
   const char *Exec = Args.MakeArgString(getToolChain().GetLinkerPath());
-  C.addCommand(llvm::make_unique<Command>(JA, *this, Exec, CmdArgs));
+  C.addCommand(llvm37::make_unique<Command>(JA, *this, Exec, CmdArgs));
 }
 
 void gnutools::Assembler::ConstructJob(Compilation &C, const JobAction &JA,
@@ -7723,52 +7723,52 @@ void gnutools::Assembler::ConstructJob(Compilation &C, const JobAction &JA,
     break;
   // Add --32/--64 to make sure we get the format we want.
   // This is incomplete
-  case llvm::Triple::x86:
+  case llvm37::Triple::x86:
     CmdArgs.push_back("--32");
     break;
-  case llvm::Triple::x86_64:
-    if (getToolChain().getTriple().getEnvironment() == llvm::Triple::GNUX32)
+  case llvm37::Triple::x86_64:
+    if (getToolChain().getTriple().getEnvironment() == llvm37::Triple::GNUX32)
       CmdArgs.push_back("--x32");
     else
       CmdArgs.push_back("--64");
     break;
-  case llvm::Triple::ppc:
+  case llvm37::Triple::ppc:
     CmdArgs.push_back("-a32");
     CmdArgs.push_back("-mppc");
     CmdArgs.push_back("-many");
     break;
-  case llvm::Triple::ppc64:
+  case llvm37::Triple::ppc64:
     CmdArgs.push_back("-a64");
     CmdArgs.push_back("-mppc64");
     CmdArgs.push_back("-many");
     break;
-  case llvm::Triple::ppc64le:
+  case llvm37::Triple::ppc64le:
     CmdArgs.push_back("-a64");
     CmdArgs.push_back("-mppc64");
     CmdArgs.push_back("-many");
     CmdArgs.push_back("-mlittle-endian");
     break;
-  case llvm::Triple::sparc:
-  case llvm::Triple::sparcel:
+  case llvm37::Triple::sparc:
+  case llvm37::Triple::sparcel:
     CmdArgs.push_back("-32");
     CmdArgs.push_back("-Av8plusa");
     NeedsKPIC = true;
     break;
-  case llvm::Triple::sparcv9:
+  case llvm37::Triple::sparcv9:
     CmdArgs.push_back("-64");
     CmdArgs.push_back("-Av9a");
     NeedsKPIC = true;
     break;
-  case llvm::Triple::arm:
-  case llvm::Triple::armeb:
-  case llvm::Triple::thumb:
-  case llvm::Triple::thumbeb: {
-    const llvm::Triple &Triple = getToolChain().getTriple();
+  case llvm37::Triple::arm:
+  case llvm37::Triple::armeb:
+  case llvm37::Triple::thumb:
+  case llvm37::Triple::thumbeb: {
+    const llvm37::Triple &Triple = getToolChain().getTriple();
     switch (Triple.getSubArch()) {
-    case llvm::Triple::ARMSubArch_v7:
+    case llvm37::Triple::ARMSubArch_v7:
       CmdArgs.push_back("-mfpu=neon");
       break;
-    case llvm::Triple::ARMSubArch_v8:
+    case llvm37::Triple::ARMSubArch_v8:
       CmdArgs.push_back("-mfpu=crypto-neon-fp-armv8");
       break;
     default:
@@ -7777,7 +7777,7 @@ void gnutools::Assembler::ConstructJob(Compilation &C, const JobAction &JA,
 
     StringRef ARMFloatABI = tools::arm::getARMFloatABI(
         getToolChain().getDriver(), Args,
-        llvm::Triple(getToolChain().ComputeEffectiveClangTriple(Args)));
+        llvm37::Triple(getToolChain().ComputeEffectiveClangTriple(Args)));
     CmdArgs.push_back(Args.MakeArgString("-mfloat-abi=" + ARMFloatABI));
 
     Args.AddLastArg(CmdArgs, options::OPT_march_EQ);
@@ -7794,10 +7794,10 @@ void gnutools::Assembler::ConstructJob(Compilation &C, const JobAction &JA,
     Args.AddLastArg(CmdArgs, options::OPT_mfpu_EQ);
     break;
   }
-  case llvm::Triple::mips:
-  case llvm::Triple::mipsel:
-  case llvm::Triple::mips64:
-  case llvm::Triple::mips64el: {
+  case llvm37::Triple::mips:
+  case llvm37::Triple::mipsel:
+  case llvm37::Triple::mips64:
+  case llvm37::Triple::mips64el: {
     StringRef CPUName;
     StringRef ABIName;
     mips::getMipsCPUAndABI(Args, getToolChain().getTriple(), CPUName, ABIName);
@@ -7829,8 +7829,8 @@ void gnutools::Assembler::ConstructJob(Compilation &C, const JobAction &JA,
     // However, -mplt has no effect with the N64 ABI.
     CmdArgs.push_back(ABIName == "64" ? "-KPIC" : "-call_nonpic");
 
-    if (getToolChain().getArch() == llvm::Triple::mips ||
-        getToolChain().getArch() == llvm::Triple::mips64)
+    if (getToolChain().getArch() == llvm37::Triple::mips ||
+        getToolChain().getArch() == llvm37::Triple::mips64)
       CmdArgs.push_back("-EB");
     else
       CmdArgs.push_back("-EL");
@@ -7887,7 +7887,7 @@ void gnutools::Assembler::ConstructJob(Compilation &C, const JobAction &JA,
     NeedsKPIC = true;
     break;
   }
-  case llvm::Triple::systemz: {
+  case llvm37::Triple::systemz: {
     // Always pass an -march option, since our default of z10 is later
     // than the GNU assembler's default.
     StringRef CPUName = getSystemZTargetCPU(Args);
@@ -7908,7 +7908,7 @@ void gnutools::Assembler::ConstructJob(Compilation &C, const JobAction &JA,
     CmdArgs.push_back(II.getFilename());
 
   const char *Exec = Args.MakeArgString(getToolChain().GetProgramPath("as"));
-  C.addCommand(llvm::make_unique<Command>(JA, *this, Exec, CmdArgs));
+  C.addCommand(llvm37::make_unique<Command>(JA, *this, Exec, CmdArgs));
 
   // Handle the debug info splitting at object creation time if we're
   // creating an object.
@@ -7919,9 +7919,9 @@ void gnutools::Assembler::ConstructJob(Compilation &C, const JobAction &JA,
                    SplitDebugName(Args, Inputs[0]));
 }
 
-static void AddLibgcc(const llvm::Triple &Triple, const Driver &D,
+static void AddLibgcc(const llvm37::Triple &Triple, const Driver &D,
                       ArgStringList &CmdArgs, const ArgList &Args) {
-  bool isAndroid = Triple.getEnvironment() == llvm::Triple::Android;
+  bool isAndroid = Triple.getEnvironment() == llvm37::Triple::Android;
   bool isCygMing = Triple.isOSCygMing();
   bool StaticLibgcc = Args.hasArg(options::OPT_static_libgcc) ||
                       Args.hasArg(options::OPT_static);
@@ -7955,41 +7955,41 @@ static void AddLibgcc(const llvm::Triple &Triple, const Driver &D,
 
 static std::string getLinuxDynamicLinker(const ArgList &Args,
                                          const toolchains::Linux &ToolChain) {
-  const llvm::Triple::ArchType Arch = ToolChain.getArch();
+  const llvm37::Triple::ArchType Arch = ToolChain.getArch();
 
-  if (ToolChain.getTriple().getEnvironment() == llvm::Triple::Android) {
+  if (ToolChain.getTriple().getEnvironment() == llvm37::Triple::Android) {
     if (ToolChain.getTriple().isArch64Bit())
       return "/system/bin/linker64";
     else
       return "/system/bin/linker";
-  } else if (Arch == llvm::Triple::x86 || Arch == llvm::Triple::sparc ||
-             Arch == llvm::Triple::sparcel)
+  } else if (Arch == llvm37::Triple::x86 || Arch == llvm37::Triple::sparc ||
+             Arch == llvm37::Triple::sparcel)
     return "/lib/ld-linux.so.2";
-  else if (Arch == llvm::Triple::aarch64)
+  else if (Arch == llvm37::Triple::aarch64)
     return "/lib/ld-linux-aarch64.so.1";
-  else if (Arch == llvm::Triple::aarch64_be)
+  else if (Arch == llvm37::Triple::aarch64_be)
     return "/lib/ld-linux-aarch64_be.so.1";
-  else if (Arch == llvm::Triple::arm || Arch == llvm::Triple::thumb) {
-    if (ToolChain.getTriple().getEnvironment() == llvm::Triple::GNUEABIHF ||
+  else if (Arch == llvm37::Triple::arm || Arch == llvm37::Triple::thumb) {
+    if (ToolChain.getTriple().getEnvironment() == llvm37::Triple::GNUEABIHF ||
         tools::arm::getARMFloatABI(ToolChain.getDriver(), Args, ToolChain.getTriple()) == "hard")
       return "/lib/ld-linux-armhf.so.3";
     else
       return "/lib/ld-linux.so.3";
-  } else if (Arch == llvm::Triple::armeb || Arch == llvm::Triple::thumbeb) {
+  } else if (Arch == llvm37::Triple::armeb || Arch == llvm37::Triple::thumbeb) {
     // TODO: check which dynamic linker name.
-    if (ToolChain.getTriple().getEnvironment() == llvm::Triple::GNUEABIHF ||
+    if (ToolChain.getTriple().getEnvironment() == llvm37::Triple::GNUEABIHF ||
         tools::arm::getARMFloatABI(ToolChain.getDriver(), Args, ToolChain.getTriple()) == "hard")
       return "/lib/ld-linux-armhf.so.3";
     else
       return "/lib/ld-linux.so.3";
-  } else if (Arch == llvm::Triple::mips || Arch == llvm::Triple::mipsel ||
-             Arch == llvm::Triple::mips64 || Arch == llvm::Triple::mips64el) {
+  } else if (Arch == llvm37::Triple::mips || Arch == llvm37::Triple::mipsel ||
+             Arch == llvm37::Triple::mips64 || Arch == llvm37::Triple::mips64el) {
     StringRef CPUName;
     StringRef ABIName;
     mips::getMipsCPUAndABI(Args, ToolChain.getTriple(), CPUName, ABIName);
     bool IsNaN2008 = mips::isNaN2008(Args, ToolChain.getTriple());
 
-    StringRef LibDir = llvm::StringSwitch<llvm::StringRef>(ABIName)
+    StringRef LibDir = llvm37::StringSwitch<llvm37::StringRef>(ABIName)
                            .Case("o32", "/lib")
                            .Case("n32", "/lib32")
                            .Case("n64", "/lib64")
@@ -8001,22 +8001,22 @@ static std::string getLinuxDynamicLinker(const ArgList &Args,
       LibName = IsNaN2008 ? "ld-linux-mipsn8.so.1" : "ld.so.1";
 
     return (LibDir + "/" + LibName).str();
-  } else if (Arch == llvm::Triple::ppc)
+  } else if (Arch == llvm37::Triple::ppc)
     return "/lib/ld.so.1";
-  else if (Arch == llvm::Triple::ppc64) {
+  else if (Arch == llvm37::Triple::ppc64) {
     if (ppc::hasPPCAbiArg(Args, "elfv2"))
       return "/lib64/ld64.so.2";
     return "/lib64/ld64.so.1";
-  } else if (Arch == llvm::Triple::ppc64le) {
+  } else if (Arch == llvm37::Triple::ppc64le) {
     if (ppc::hasPPCAbiArg(Args, "elfv1"))
       return "/lib64/ld64.so.1";
     return "/lib64/ld64.so.2";
-  } else if (Arch == llvm::Triple::systemz)
+  } else if (Arch == llvm37::Triple::systemz)
     return "/lib64/ld64.so.1";
-  else if (Arch == llvm::Triple::sparcv9)
+  else if (Arch == llvm37::Triple::sparcv9)
     return "/lib64/ld-linux.so.2";
-  else if (Arch == llvm::Triple::x86_64 &&
-           ToolChain.getTriple().getEnvironment() == llvm::Triple::GNUX32)
+  else if (Arch == llvm37::Triple::x86_64 &&
+           ToolChain.getTriple().getEnvironment() == llvm37::Triple::GNUX32)
     return "/libx32/ld-linux-x32.so.2";
   else
     return "/lib64/ld-linux-x86-64.so.2";
@@ -8032,8 +8032,8 @@ static void AddRunTimeLibs(const ToolChain &TC, const Driver &D,
     switch (TC.getTriple().getOS()) {
     default:
       llvm_unreachable("unsupported OS");
-    case llvm::Triple::Win32:
-    case llvm::Triple::Linux:
+    case llvm37::Triple::Win32:
+    case llvm37::Triple::Linux:
       addClangRT(TC, Args, CmdArgs);
       break;
     }
@@ -8044,47 +8044,47 @@ static void AddRunTimeLibs(const ToolChain &TC, const Driver &D,
   }
 }
 
-static const char *getLDMOption(const llvm::Triple &T, const ArgList &Args) {
+static const char *getLDMOption(const llvm37::Triple &T, const ArgList &Args) {
   switch (T.getArch()) {
-  case llvm::Triple::x86:
+  case llvm37::Triple::x86:
     return "elf_i386";
-  case llvm::Triple::aarch64:
+  case llvm37::Triple::aarch64:
     return "aarch64linux";
-  case llvm::Triple::aarch64_be:
+  case llvm37::Triple::aarch64_be:
     return "aarch64_be_linux";
-  case llvm::Triple::arm:
-  case llvm::Triple::thumb:
+  case llvm37::Triple::arm:
+  case llvm37::Triple::thumb:
     return "armelf_linux_eabi";
-  case llvm::Triple::armeb:
-  case llvm::Triple::thumbeb:
+  case llvm37::Triple::armeb:
+  case llvm37::Triple::thumbeb:
     return "armebelf_linux_eabi"; /* TODO: check which NAME.  */
-  case llvm::Triple::ppc:
+  case llvm37::Triple::ppc:
     return "elf32ppclinux";
-  case llvm::Triple::ppc64:
+  case llvm37::Triple::ppc64:
     return "elf64ppc";
-  case llvm::Triple::ppc64le:
+  case llvm37::Triple::ppc64le:
     return "elf64lppc";
-  case llvm::Triple::sparc:
-  case llvm::Triple::sparcel:
+  case llvm37::Triple::sparc:
+  case llvm37::Triple::sparcel:
     return "elf32_sparc";
-  case llvm::Triple::sparcv9:
+  case llvm37::Triple::sparcv9:
     return "elf64_sparc";
-  case llvm::Triple::mips:
+  case llvm37::Triple::mips:
     return "elf32btsmip";
-  case llvm::Triple::mipsel:
+  case llvm37::Triple::mipsel:
     return "elf32ltsmip";
-  case llvm::Triple::mips64:
+  case llvm37::Triple::mips64:
     if (mips::hasMipsAbiArg(Args, "n32"))
       return "elf32btsmipn32";
     return "elf64btsmip";
-  case llvm::Triple::mips64el:
+  case llvm37::Triple::mips64el:
     if (mips::hasMipsAbiArg(Args, "n32"))
       return "elf32ltsmipn32";
     return "elf64ltsmip";
-  case llvm::Triple::systemz:
+  case llvm37::Triple::systemz:
     return "elf64_s390";
-  case llvm::Triple::x86_64:
-    if (T.getEnvironment() == llvm::Triple::GNUX32)
+  case llvm37::Triple::x86_64:
+    if (T.getEnvironment() == llvm37::Triple::GNUX32)
       return "elf32_x86_64";
     return "elf_x86_64";
   default:
@@ -8100,9 +8100,9 @@ void gnutools::Linker::ConstructJob(Compilation &C, const JobAction &JA,
   const toolchains::Linux &ToolChain =
       static_cast<const toolchains::Linux &>(getToolChain());
   const Driver &D = ToolChain.getDriver();
-  const llvm::Triple::ArchType Arch = ToolChain.getArch();
+  const llvm37::Triple::ArchType Arch = ToolChain.getArch();
   const bool isAndroid =
-      ToolChain.getTriple().getEnvironment() == llvm::Triple::Android;
+      ToolChain.getTriple().getEnvironment() == llvm37::Triple::Android;
   const bool IsPIE =
       !Args.hasArg(options::OPT_shared) && !Args.hasArg(options::OPT_static) &&
       (Args.hasArg(options::OPT_pie) || ToolChain.isPIEDefault());
@@ -8129,10 +8129,10 @@ void gnutools::Linker::ConstructJob(Compilation &C, const JobAction &JA,
   if (Args.hasArg(options::OPT_s))
     CmdArgs.push_back("-s");
 
-  if (Arch == llvm::Triple::armeb || Arch == llvm::Triple::thumbeb)
+  if (Arch == llvm37::Triple::armeb || Arch == llvm37::Triple::thumbeb)
     arm::appendEBLinkFlags(
         Args, CmdArgs,
-        llvm::Triple(getToolChain().ComputeEffectiveClangTriple(Args)));
+        llvm37::Triple(getToolChain().ComputeEffectiveClangTriple(Args)));
 
   for (const auto &Opt : ToolChain.ExtraOpts)
     CmdArgs.push_back(Opt.c_str());
@@ -8145,8 +8145,8 @@ void gnutools::Linker::ConstructJob(Compilation &C, const JobAction &JA,
   CmdArgs.push_back(getLDMOption(ToolChain.getTriple(), Args));
 
   if (Args.hasArg(options::OPT_static)) {
-    if (Arch == llvm::Triple::arm || Arch == llvm::Triple::armeb ||
-        Arch == llvm::Triple::thumb || Arch == llvm::Triple::thumbeb)
+    if (Arch == llvm37::Triple::arm || Arch == llvm37::Triple::armeb ||
+        Arch == llvm37::Triple::thumb || Arch == llvm37::Triple::thumbeb)
       CmdArgs.push_back("-Bstatic");
     else
       CmdArgs.push_back("-static");
@@ -8154,8 +8154,8 @@ void gnutools::Linker::ConstructJob(Compilation &C, const JobAction &JA,
     CmdArgs.push_back("-shared");
   }
 
-  if (Arch == llvm::Triple::arm || Arch == llvm::Triple::armeb ||
-      Arch == llvm::Triple::thumb || Arch == llvm::Triple::thumbeb ||
+  if (Arch == llvm37::Triple::arm || Arch == llvm37::Triple::armeb ||
+      Arch == llvm37::Triple::thumb || Arch == llvm37::Triple::thumbeb ||
       (!Args.hasArg(options::OPT_static) &&
        !Args.hasArg(options::OPT_shared))) {
     CmdArgs.push_back("-dynamic-linker");
@@ -8299,7 +8299,7 @@ void gnutools::Linker::ConstructJob(Compilation &C, const JobAction &JA,
   }
 
   C.addCommand(
-      llvm::make_unique<Command>(JA, *this, ToolChain.Linker.c_str(), CmdArgs));
+      llvm37::make_unique<Command>(JA, *this, ToolChain.Linker.c_str(), CmdArgs));
 }
 
 // NaCl ARM assembly (inline or standalone) can be written with a set of macros
@@ -8335,7 +8335,7 @@ void nacltools::Linker::ConstructJob(Compilation &C, const JobAction &JA,
   const toolchains::NaCl_TC &ToolChain =
       static_cast<const toolchains::NaCl_TC &>(getToolChain());
   const Driver &D = ToolChain.getDriver();
-  const llvm::Triple::ArchType Arch = ToolChain.getArch();
+  const llvm37::Triple::ArchType Arch = ToolChain.getArch();
   const bool IsStatic =
       !Args.hasArg(options::OPT_dynamic) && !Args.hasArg(options::OPT_shared);
 
@@ -8366,13 +8366,13 @@ void nacltools::Linker::ConstructJob(Compilation &C, const JobAction &JA,
     CmdArgs.push_back("--eh-frame-hdr");
 
   CmdArgs.push_back("-m");
-  if (Arch == llvm::Triple::x86)
+  if (Arch == llvm37::Triple::x86)
     CmdArgs.push_back("elf_i386_nacl");
-  else if (Arch == llvm::Triple::arm)
+  else if (Arch == llvm37::Triple::arm)
     CmdArgs.push_back("armelf_nacl");
-  else if (Arch == llvm::Triple::x86_64)
+  else if (Arch == llvm37::Triple::x86_64)
     CmdArgs.push_back("elf_x86_64_nacl");
-  else if (Arch == llvm::Triple::mipsel)
+  else if (Arch == llvm37::Triple::mipsel)
     CmdArgs.push_back("mipselelf_nacl");
   else
     D.Diag(diag::err_target_unsupported_arch) << ToolChain.getArchName()
@@ -8439,7 +8439,7 @@ void nacltools::Linker::ConstructJob(Compilation &C, const JobAction &JA,
         // without '-lnacl' it prefers symbols from libpthread.a over libnacl.a,
         // which is not a desired behaviour here.
         // See https://sourceware.org/ml/binutils/2015-03/msg00034.html
-        if (getToolChain().getArch() == llvm::Triple::mipsel)
+        if (getToolChain().getArch() == llvm37::Triple::mipsel)
           CmdArgs.push_back("-lnacl");
 
         CmdArgs.push_back("-lpthread");
@@ -8456,7 +8456,7 @@ void nacltools::Linker::ConstructJob(Compilation &C, const JobAction &JA,
       // Mips needs to create and use pnacl_legacy library that contains
       // definitions from bitcode/pnaclmm.c and definitions for
       // __nacl_tp_tls_offset() and __nacl_tp_tdb_offset().
-      if (getToolChain().getArch() == llvm::Triple::mipsel)
+      if (getToolChain().getArch() == llvm37::Triple::mipsel)
         CmdArgs.push_back("-lpnacl_legacy");
 
       CmdArgs.push_back("--end-group");
@@ -8475,7 +8475,7 @@ void nacltools::Linker::ConstructJob(Compilation &C, const JobAction &JA,
   }
 
   C.addCommand(
-      llvm::make_unique<Command>(JA, *this, ToolChain.Linker.c_str(), CmdArgs));
+      llvm37::make_unique<Command>(JA, *this, ToolChain.Linker.c_str(), CmdArgs));
 }
 
 void minix::Assembler::ConstructJob(Compilation &C, const JobAction &JA,
@@ -8495,7 +8495,7 @@ void minix::Assembler::ConstructJob(Compilation &C, const JobAction &JA,
     CmdArgs.push_back(II.getFilename());
 
   const char *Exec = Args.MakeArgString(getToolChain().GetProgramPath("as"));
-  C.addCommand(llvm::make_unique<Command>(JA, *this, Exec, CmdArgs));
+  C.addCommand(llvm37::make_unique<Command>(JA, *this, Exec, CmdArgs));
 }
 
 void minix::Linker::ConstructJob(Compilation &C, const JobAction &JA,
@@ -8550,7 +8550,7 @@ void minix::Linker::ConstructJob(Compilation &C, const JobAction &JA,
   }
 
   const char *Exec = Args.MakeArgString(getToolChain().GetLinkerPath());
-  C.addCommand(llvm::make_unique<Command>(JA, *this, Exec, CmdArgs));
+  C.addCommand(llvm37::make_unique<Command>(JA, *this, Exec, CmdArgs));
 }
 
 /// DragonFly Tools
@@ -8567,7 +8567,7 @@ void dragonfly::Assembler::ConstructJob(Compilation &C, const JobAction &JA,
 
   // When building 32-bit code on DragonFly/pc64, we have to explicitly
   // instruct as in the base system to assemble 32-bit code.
-  if (getToolChain().getArch() == llvm::Triple::x86)
+  if (getToolChain().getArch() == llvm37::Triple::x86)
     CmdArgs.push_back("--32");
 
   Args.AddAllArgValues(CmdArgs, options::OPT_Wa_COMMA, options::OPT_Xassembler);
@@ -8579,7 +8579,7 @@ void dragonfly::Assembler::ConstructJob(Compilation &C, const JobAction &JA,
     CmdArgs.push_back(II.getFilename());
 
   const char *Exec = Args.MakeArgString(getToolChain().GetProgramPath("as"));
-  C.addCommand(llvm::make_unique<Command>(JA, *this, Exec, CmdArgs));
+  C.addCommand(llvm37::make_unique<Command>(JA, *this, Exec, CmdArgs));
 }
 
 void dragonfly::Linker::ConstructJob(Compilation &C, const JobAction &JA,
@@ -8589,7 +8589,7 @@ void dragonfly::Linker::ConstructJob(Compilation &C, const JobAction &JA,
                                      const char *LinkingOutput) const {
   const Driver &D = getToolChain().getDriver();
   ArgStringList CmdArgs;
-  bool UseGCC47 = llvm::sys::fs::exists("/usr/lib/gcc47");
+  bool UseGCC47 = llvm37::sys::fs::exists("/usr/lib/gcc47");
 
   if (!D.SysRoot.empty())
     CmdArgs.push_back(Args.MakeArgString("--sysroot=" + D.SysRoot));
@@ -8611,7 +8611,7 @@ void dragonfly::Linker::ConstructJob(Compilation &C, const JobAction &JA,
 
   // When building 32-bit code on DragonFly/pc64, we have to explicitly
   // instruct ld in the base system to link 32-bit code.
-  if (getToolChain().getArch() == llvm::Triple::x86) {
+  if (getToolChain().getArch() == llvm37::Triple::x86) {
     CmdArgs.push_back("-m");
     CmdArgs.push_back("elf_i386");
   }
@@ -8724,7 +8724,7 @@ void dragonfly::Linker::ConstructJob(Compilation &C, const JobAction &JA,
   addProfileRT(getToolChain(), Args, CmdArgs);
 
   const char *Exec = Args.MakeArgString(getToolChain().GetLinkerPath());
-  C.addCommand(llvm::make_unique<Command>(JA, *this, Exec, CmdArgs));
+  C.addCommand(llvm37::make_unique<Command>(JA, *this, Exec, CmdArgs));
 }
 
 // Try to find Exe from a Visual Studio distribution.  This first tries to find
@@ -8739,8 +8739,8 @@ static std::string FindVisualStudioExecutable(const ToolChain &TC,
   if (MSVC.getVisualStudioBinariesFolder(ClangProgramPath,
                                          visualStudioBinDir)) {
     SmallString<128> FilePath(visualStudioBinDir);
-    llvm::sys::path::append(FilePath, Exe);
-    if (llvm::sys::fs::can_execute(FilePath.c_str()))
+    llvm37::sys::path::append(FilePath, Exe);
+    if (llvm37::sys::fs::can_execute(FilePath.c_str()))
       return FilePath.str();
   }
 
@@ -8764,7 +8764,7 @@ void visualstudio::Linker::ConstructJob(Compilation &C, const JobAction &JA,
       !Args.hasArg(options::OPT_nostartfiles) && !C.getDriver().IsCLMode())
     CmdArgs.push_back("-defaultlib:libcmt");
 
-  if (!llvm::sys::Process::GetEnv("LIB")) {
+  if (!llvm37::sys::Process::GetEnv("LIB")) {
     // If the VC environment hasn't been configured (perhaps because the user
     // did not run vcvarsall), try to build a consistent link environment.  If
     // the environment variable is set however, assume the user knows what
@@ -8773,16 +8773,16 @@ void visualstudio::Linker::ConstructJob(Compilation &C, const JobAction &JA,
     const auto &MSVC = static_cast<const toolchains::MSVCToolChain &>(TC);
     if (MSVC.getVisualStudioInstallDir(VisualStudioDir)) {
       SmallString<128> LibDir(VisualStudioDir);
-      llvm::sys::path::append(LibDir, "VC", "lib");
+      llvm37::sys::path::append(LibDir, "VC", "lib");
       switch (MSVC.getArch()) {
-      case llvm::Triple::x86:
+      case llvm37::Triple::x86:
         // x86 just puts the libraries directly in lib
         break;
-      case llvm::Triple::x86_64:
-        llvm::sys::path::append(LibDir, "amd64");
+      case llvm37::Triple::x86_64:
+        llvm37::sys::path::append(LibDir, "amd64");
         break;
-      case llvm::Triple::arm:
-        llvm::sys::path::append(LibDir, "arm");
+      case llvm37::Triple::arm:
+        llvm37::sys::path::append(LibDir, "arm");
         break;
       default:
         break;
@@ -8808,7 +8808,7 @@ void visualstudio::Linker::ConstructJob(Compilation &C, const JobAction &JA,
     CmdArgs.push_back(Args.MakeArgString("-dll"));
 
     SmallString<128> ImplibName(Output.getFilename());
-    llvm::sys::path::replace_extension(ImplibName, "lib");
+    llvm37::sys::path::replace_extension(ImplibName, "lib");
     CmdArgs.push_back(Args.MakeArgString(std::string("-implib:") + ImplibName));
   }
 
@@ -8867,7 +8867,7 @@ void visualstudio::Linker::ConstructJob(Compilation &C, const JobAction &JA,
   // We need to special case some linker paths.  In the case of lld, we need to
   // translate 'lld' into 'lld-link', and in the case of the regular msvc
   // linker, we need to use a special search algorithm.
-  llvm::SmallString<128> linkPath;
+  llvm37::SmallString<128> linkPath;
   StringRef Linker = Args.getLastArgValue(options::OPT_fuse_ld_EQ, "link");
   if (Linker.equals_lower("lld"))
     Linker = "lld-link";
@@ -8880,12 +8880,12 @@ void visualstudio::Linker::ConstructJob(Compilation &C, const JobAction &JA,
                                           C.getDriver().getClangProgramPath());
   } else {
     linkPath = Linker;
-    llvm::sys::path::replace_extension(linkPath, "exe");
+    llvm37::sys::path::replace_extension(linkPath, "exe");
     linkPath = TC.GetProgramPath(linkPath.c_str());
   }
 
   const char *Exec = Args.MakeArgString(linkPath);
-  C.addCommand(llvm::make_unique<Command>(JA, *this, Exec, CmdArgs));
+  C.addCommand(llvm37::make_unique<Command>(JA, *this, Exec, CmdArgs));
 }
 
 void visualstudio::Compiler::ConstructJob(Compilation &C, const JobAction &JA,
@@ -8979,7 +8979,7 @@ std::unique_ptr<Command> visualstudio::Compiler::GetCommand(
   const Driver &D = getToolChain().getDriver();
   std::string Exec = FindVisualStudioExecutable(getToolChain(), "cl.exe",
                                                 D.getClangProgramPath());
-  return llvm::make_unique<Command>(JA, *this, Args.MakeArgString(Exec),
+  return llvm37::make_unique<Command>(JA, *this, Args.MakeArgString(Exec),
                                     CmdArgs);
 }
 
@@ -8992,9 +8992,9 @@ void MinGW::Assembler::ConstructJob(Compilation &C, const JobAction &JA,
   claimNoWarnArgs(Args);
   ArgStringList CmdArgs;
 
-  if (getToolChain().getArch() == llvm::Triple::x86) {
+  if (getToolChain().getArch() == llvm37::Triple::x86) {
     CmdArgs.push_back("--32");
-  } else if (getToolChain().getArch() == llvm::Triple::x86_64) {
+  } else if (getToolChain().getArch() == llvm37::Triple::x86_64) {
     CmdArgs.push_back("--64");
   }
 
@@ -9007,7 +9007,7 @@ void MinGW::Assembler::ConstructJob(Compilation &C, const JobAction &JA,
     CmdArgs.push_back(II.getFilename());
 
   const char *Exec = Args.MakeArgString(getToolChain().GetProgramPath("as"));
-  C.addCommand(llvm::make_unique<Command>(JA, *this, Exec, CmdArgs));
+  C.addCommand(llvm37::make_unique<Command>(JA, *this, Exec, CmdArgs));
 
   if (Args.hasArg(options::OPT_gsplit_dwarf))
     SplitDebugInfo(getToolChain(), C, *this, JA, Args, Output,
@@ -9060,11 +9060,11 @@ void MinGW::Linker::ConstructJob(Compilation &C, const JobAction &JA,
     CmdArgs.push_back("-s");
 
   CmdArgs.push_back("-m");
-  if (TC.getArch() == llvm::Triple::x86)
+  if (TC.getArch() == llvm37::Triple::x86)
     CmdArgs.push_back("i386pe");
-  if (TC.getArch() == llvm::Triple::x86_64)
+  if (TC.getArch() == llvm37::Triple::x86_64)
     CmdArgs.push_back("i386pep");
-  if (TC.getArch() == llvm::Triple::arm)
+  if (TC.getArch() == llvm37::Triple::arm)
     CmdArgs.push_back("thumb2pe");
 
   if (Args.hasArg(options::OPT_mwindows)) {
@@ -9085,7 +9085,7 @@ void MinGW::Linker::ConstructJob(Compilation &C, const JobAction &JA,
     CmdArgs.push_back("-Bdynamic");
     if (Args.hasArg(options::OPT_mdll) || Args.hasArg(options::OPT_shared)) {
       CmdArgs.push_back("-e");
-      if (TC.getArch() == llvm::Triple::x86)
+      if (TC.getArch() == llvm37::Triple::x86)
         CmdArgs.push_back("_DllMainCRTStartup@12");
       else
         CmdArgs.push_back("DllMainCRTStartup");
@@ -9187,7 +9187,7 @@ void MinGW::Linker::ConstructJob(Compilation &C, const JobAction &JA,
     }
   }
   const char *Exec = Args.MakeArgString(TC.GetProgramPath(LinkerName.data()));
-  C.addCommand(llvm::make_unique<Command>(JA, *this, Exec, CmdArgs));
+  C.addCommand(llvm37::make_unique<Command>(JA, *this, Exec, CmdArgs));
 }
 
 /// XCore Tools
@@ -9223,7 +9223,7 @@ void XCore::Assembler::ConstructJob(Compilation &C, const JobAction &JA,
     CmdArgs.push_back(II.getFilename());
 
   const char *Exec = Args.MakeArgString(getToolChain().GetProgramPath("xcc"));
-  C.addCommand(llvm::make_unique<Command>(JA, *this, Exec, CmdArgs));
+  C.addCommand(llvm37::make_unique<Command>(JA, *this, Exec, CmdArgs));
 }
 
 void XCore::Linker::ConstructJob(Compilation &C, const JobAction &JA,
@@ -9251,7 +9251,7 @@ void XCore::Linker::ConstructJob(Compilation &C, const JobAction &JA,
   AddLinkerInputs(getToolChain(), Inputs, Args, CmdArgs);
 
   const char *Exec = Args.MakeArgString(getToolChain().GetProgramPath("xcc"));
-  C.addCommand(llvm::make_unique<Command>(JA, *this, Exec, CmdArgs));
+  C.addCommand(llvm37::make_unique<Command>(JA, *this, Exec, CmdArgs));
 }
 
 void CrossWindows::Assembler::ConstructJob(Compilation &C, const JobAction &JA,
@@ -9268,13 +9268,13 @@ void CrossWindows::Assembler::ConstructJob(Compilation &C, const JobAction &JA,
   switch (TC.getArch()) {
   default:
     llvm_unreachable("unsupported architecture");
-  case llvm::Triple::arm:
-  case llvm::Triple::thumb:
+  case llvm37::Triple::arm:
+  case llvm37::Triple::thumb:
     break;
-  case llvm::Triple::x86:
+  case llvm37::Triple::x86:
     CmdArgs.push_back("--32");
     break;
-  case llvm::Triple::x86_64:
+  case llvm37::Triple::x86_64:
     CmdArgs.push_back("--64");
     break;
   }
@@ -9290,7 +9290,7 @@ void CrossWindows::Assembler::ConstructJob(Compilation &C, const JobAction &JA,
   const std::string Assembler = TC.GetProgramPath("as");
   Exec = Args.MakeArgString(Assembler);
 
-  C.addCommand(llvm::make_unique<Command>(JA, *this, Exec, CmdArgs));
+  C.addCommand(llvm37::make_unique<Command>(JA, *this, Exec, CmdArgs));
 }
 
 void CrossWindows::Linker::ConstructJob(Compilation &C, const JobAction &JA,
@@ -9300,7 +9300,7 @@ void CrossWindows::Linker::ConstructJob(Compilation &C, const JobAction &JA,
                                         const char *LinkingOutput) const {
   const auto &TC =
       static_cast<const toolchains::CrossWindowsToolChain &>(getToolChain());
-  const llvm::Triple &T = TC.getTriple();
+  const llvm37::Triple &T = TC.getTriple();
   const Driver &D = TC.getDriver();
   SmallString<128> EntryPoint;
   ArgStringList CmdArgs;
@@ -9328,16 +9328,16 @@ void CrossWindows::Linker::ConstructJob(Compilation &C, const JobAction &JA,
   switch (TC.getArch()) {
   default:
     llvm_unreachable("unsupported architecture");
-  case llvm::Triple::arm:
-  case llvm::Triple::thumb:
+  case llvm37::Triple::arm:
+  case llvm37::Triple::thumb:
     // FIXME: this is incorrect for WinCE
     CmdArgs.push_back("thumb2pe");
     break;
-  case llvm::Triple::x86:
+  case llvm37::Triple::x86:
     CmdArgs.push_back("i386pe");
     EntryPoint.append("_");
     break;
-  case llvm::Triple::x86_64:
+  case llvm37::Triple::x86_64:
     CmdArgs.push_back("i386pep");
     break;
   }
@@ -9346,12 +9346,12 @@ void CrossWindows::Linker::ConstructJob(Compilation &C, const JobAction &JA,
     switch (T.getArch()) {
     default:
       llvm_unreachable("unsupported architecture");
-    case llvm::Triple::arm:
-    case llvm::Triple::thumb:
-    case llvm::Triple::x86_64:
+    case llvm37::Triple::arm:
+    case llvm37::Triple::thumb:
+    case llvm37::Triple::x86_64:
       EntryPoint.append("_DllMainCRTStartup");
       break;
-    case llvm::Triple::x86:
+    case llvm37::Triple::x86:
       EntryPoint.append("_DllMainCRTStartup@12");
       break;
     }
@@ -9386,7 +9386,7 @@ void CrossWindows::Linker::ConstructJob(Compilation &C, const JobAction &JA,
 
   if (Args.hasArg(options::OPT_shared) || Args.hasArg(options::OPT_rdynamic)) {
     SmallString<261> ImpLib(Output.getFilename());
-    llvm::sys::path::replace_extension(ImpLib, ".lib");
+    llvm37::sys::path::replace_extension(ImpLib, ".lib");
 
     CmdArgs.push_back("--out-implib");
     CmdArgs.push_back(Args.MakeArgString(ImpLib));
@@ -9432,7 +9432,7 @@ void CrossWindows::Linker::ConstructJob(Compilation &C, const JobAction &JA,
   const std::string Linker = TC.GetProgramPath("ld");
   Exec = Args.MakeArgString(Linker);
 
-  C.addCommand(llvm::make_unique<Command>(JA, *this, Exec, CmdArgs));
+  C.addCommand(llvm37::make_unique<Command>(JA, *this, Exec, CmdArgs));
 }
 
 void tools::SHAVE::Compiler::ConstructJob(Compilation &C, const JobAction &JA,
@@ -9477,7 +9477,7 @@ void tools::SHAVE::Compiler::ConstructJob(Compilation &C, const JobAction &JA,
   std::string Exec =
       Args.MakeArgString(getToolChain().GetProgramPath("moviCompile"));
   C.addCommand(
-      llvm::make_unique<Command>(JA, *this, Args.MakeArgString(Exec), CmdArgs));
+      llvm37::make_unique<Command>(JA, *this, Args.MakeArgString(Exec), CmdArgs));
 }
 
 void tools::SHAVE::Assembler::ConstructJob(Compilation &C, const JobAction &JA,
@@ -9509,5 +9509,5 @@ void tools::SHAVE::Assembler::ConstructJob(Compilation &C, const JobAction &JA,
   std::string Exec =
       Args.MakeArgString(getToolChain().GetProgramPath("moviAsm"));
   C.addCommand(
-      llvm::make_unique<Command>(JA, *this, Args.MakeArgString(Exec), CmdArgs));
+      llvm37::make_unique<Command>(JA, *this, Args.MakeArgString(Exec), CmdArgs));
 }

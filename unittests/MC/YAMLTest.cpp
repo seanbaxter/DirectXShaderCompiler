@@ -7,17 +7,17 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/MC/YAML.h"
-#include "llvm/Support/YAMLTraits.h"
+#include "llvm37/MC/YAML.h"
+#include "llvm37/Support/YAMLTraits.h"
 #include "gtest/gtest.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 struct BinaryHolder {
   yaml::BinaryRef Binary;
 };
 
-namespace llvm {
+namespace llvm37 {
 namespace yaml {
 template <>
 struct MappingTraits<BinaryHolder> {
@@ -26,12 +26,12 @@ struct MappingTraits<BinaryHolder> {
   }
 };
 } // end namespace yaml
-} // end namespace llvm
+} // end namespace llvm37
 
 TEST(ObjectYAML, BinaryRef) {
   BinaryHolder BH;
   SmallVector<char, 32> Buf;
-  llvm::raw_svector_ostream OS(Buf);
+  llvm37::raw_svector_ostream OS(Buf);
   yaml::Output YOut(OS);
   YOut << BH;
   EXPECT_NE(OS.str().find("''"), StringRef::npos);

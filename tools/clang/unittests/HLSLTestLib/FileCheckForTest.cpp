@@ -18,16 +18,16 @@
 //                                                                           //
 ///////////////////////////////////////////////////////////////////////////////
 
-#include "llvm/ADT/SmallString.h"
-#include "llvm/ADT/StringExtras.h"
-#include "llvm/ADT/StringMap.h"
-#include "llvm/ADT/StringSet.h"
-#include "llvm/Support/FileSystem.h"
-#include "llvm/Support/MemoryBuffer.h"
-#include "llvm/Support/Regex.h"
-#include "llvm/Support/Signals.h"
-#include "llvm/Support/SourceMgr.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/ADT/StringExtras.h"
+#include "llvm37/ADT/StringMap.h"
+#include "llvm37/ADT/StringSet.h"
+#include "llvm37/Support/FileSystem.h"
+#include "llvm37/Support/MemoryBuffer.h"
+#include "llvm37/Support/Regex.h"
+#include "llvm37/Support/Signals.h"
+#include "llvm37/Support/SourceMgr.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <algorithm>
 #include <cctype>
 #include <map>
@@ -37,11 +37,11 @@
 
 // HLSL Change
 #include <dxc/Support/WinIncludes.h>
-#include "llvm/Support/MSFileSystem.h"
+#include "llvm37/Support/MSFileSystem.h"
 #include "dxc/Test/DxcTestUtils.h"
 // End HLSL Change
 
-using namespace llvm;
+using namespace llvm37;
 
 typedef std::vector<std::string>::const_iterator prefix_iterator;
 
@@ -352,7 +352,7 @@ bool Pattern::EvaluateExpression(StringRef Expr, std::string &Value) const {
     if (Expr.getAsInteger(10, Offset))
       return false;
   }
-  Value = llvm::itostr(LineNumber + Offset);
+  Value = llvm37::itostr(LineNumber + Offset);
   return true;
 }
 
@@ -1115,10 +1115,10 @@ public:
   std::string InputForStdin;
   /// Output stream.
   std::string test_outs_str;
-  llvm::raw_string_ostream test_outs;
+  llvm37::raw_string_ostream test_outs;
   /// Error stream.
   std::string test_errs_str;
-  llvm::raw_string_ostream test_errs;
+  llvm37::raw_string_ostream test_errs;
 
   FileCheckForTestImpl() : test_outs(test_outs_str), test_errs(test_errs_str) {}
 
@@ -1303,12 +1303,12 @@ bool ReadCheckFile(SourceMgr &SM,
 
 int run_main() {
   // HLSL Change Starts
-  llvm::sys::fs::MSFileSystem* msfPtr;
+  llvm37::sys::fs::MSFileSystem* msfPtr;
   HRESULT hr;
   if (!SUCCEEDED(hr = CreateMSFileSystemForDisk(&msfPtr)))
     return 1;
-  std::unique_ptr<llvm::sys::fs::MSFileSystem> msf(msfPtr);
-  llvm::sys::fs::AutoPerThreadSystem pts(msf.get());
+  std::unique_ptr<llvm37::sys::fs::MSFileSystem> msf(msfPtr);
+  llvm37::sys::fs::AutoPerThreadSystem pts(msf.get());
   // HLSL Change Ends
 
   if (!ValidateCheckPrefixes()) {

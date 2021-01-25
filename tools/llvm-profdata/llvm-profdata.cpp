@@ -11,23 +11,23 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/ADT/StringRef.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/ProfileData/InstrProfReader.h"
-#include "llvm/ProfileData/InstrProfWriter.h"
-#include "llvm/ProfileData/SampleProfReader.h"
-#include "llvm/ProfileData/SampleProfWriter.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/FileSystem.h"
-#include "llvm/Support/Format.h"
-#include "llvm/Support/ManagedStatic.h"
-#include "llvm/Support/MemoryBuffer.h"
-#include "llvm/Support/Path.h"
-#include "llvm/Support/PrettyStackTrace.h"
-#include "llvm/Support/Signals.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/StringRef.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/ProfileData/InstrProfReader.h"
+#include "llvm37/ProfileData/InstrProfWriter.h"
+#include "llvm37/ProfileData/SampleProfReader.h"
+#include "llvm37/ProfileData/SampleProfWriter.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/FileSystem.h"
+#include "llvm37/Support/Format.h"
+#include "llvm37/Support/ManagedStatic.h"
+#include "llvm37/Support/MemoryBuffer.h"
+#include "llvm37/Support/Path.h"
+#include "llvm37/Support/PrettyStackTrace.h"
+#include "llvm37/Support/Signals.h"
+#include "llvm37/Support/raw_ostream.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 static void exitWithError(const Twine &Message, StringRef Whence = "") {
   errs() << "error: ";

@@ -13,10 +13,10 @@
 
 #include "CodeGenDAGPatterns.h"
 #include "DAGISelMatcher.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/TableGen/Record.h"
-#include "llvm/TableGen/TableGenBackend.h"
-using namespace llvm;
+#include "llvm37/Support/Debug.h"
+#include "llvm37/TableGen/Record.h"
+#include "llvm37/TableGen/TableGenBackend.h"
+using namespace llvm37;
 
 #define DEBUG_TYPE "dag-isel-emitter"
 
@@ -158,14 +158,14 @@ void DAGISelEmitter::run(raw_ostream &OS) {
   }
 
   std::unique_ptr<Matcher> TheMatcher =
-    llvm::make_unique<ScopeMatcher>(PatternMatchers);
+    llvm37::make_unique<ScopeMatcher>(PatternMatchers);
 
   OptimizeMatcher(TheMatcher, CGP);
   //Matcher->dump();
   EmitMatcherTable(TheMatcher.get(), CGP, OS);
 }
 
-namespace llvm {
+namespace llvm37 {
 
 void EmitDAGISel(RecordKeeper &RK, raw_ostream &OS) {
   DAGISelEmitter(RK).run(OS);

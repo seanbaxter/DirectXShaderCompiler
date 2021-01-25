@@ -719,8 +719,8 @@ bool isSameType(const ASTContext &astContext, QualType type1, QualType type2) {
   { // Two structures with identical fields
     if (const auto *structType1 = type1->getAs<RecordType>()) {
       if (const auto *structType2 = type2->getAs<RecordType>()) {
-        llvm::SmallVector<QualType, 4> fieldTypes1;
-        llvm::SmallVector<QualType, 4> fieldTypes2;
+        llvm37::SmallVector<QualType, 4> fieldTypes1;
+        llvm37::SmallVector<QualType, 4> fieldTypes2;
         for (const auto *field : structType1->getDecl()->fields())
           fieldTypes1.push_back(field->getType());
         for (const auto *field : structType2->getDecl()->fields())
@@ -745,7 +745,7 @@ bool isSameType(const ASTContext &astContext, QualType type1, QualType type2) {
   return false;
 }
 
-QualType desugarType(QualType type, llvm::Optional<bool> *isRowMajor) {
+QualType desugarType(QualType type, llvm37::Optional<bool> *isRowMajor) {
   if (const auto *attrType = type->getAs<AttributedType>()) {
     switch (auto kind = attrType->getAttrKind()) {
     // HLSL row-major is SPIR-V col-major
@@ -1059,7 +1059,7 @@ bool isRelaxedPrecisionType(QualType type, const SpirvCodeGenOptions &opts) {
 
   // Images with RelaxedPrecision sampled type.
   if (const auto *recordType = type->getAs<RecordType>()) {
-    const llvm::StringRef name = recordType->getDecl()->getName();
+    const llvm37::StringRef name = recordType->getDecl()->getName();
     if (name == "Texture1D" || name == "Texture2D" || name == "Texture3D" ||
         name == "TextureCube" || name == "Texture1DArray" ||
         name == "Texture2DArray" || name == "Texture2DMS" ||
@@ -1204,14 +1204,14 @@ QualType getHLSLMatrixType(ASTContext &astContext, Sema &S,
       TemplateArgument(elemType),
       TemplateArgument(
           astContext,
-          llvm::APSInt(
-              llvm::APInt(astContext.getIntWidth(astContext.IntTy), rows),
+          llvm37::APSInt(
+              llvm37::APInt(astContext.getIntWidth(astContext.IntTy), rows),
               false),
           astContext.IntTy),
       TemplateArgument(
           astContext,
-          llvm::APSInt(
-              llvm::APInt(astContext.getIntWidth(astContext.IntTy), columns),
+          llvm37::APSInt(
+              llvm37::APInt(astContext.getIntWidth(astContext.IntTy), columns),
               false),
           astContext.IntTy)};
 

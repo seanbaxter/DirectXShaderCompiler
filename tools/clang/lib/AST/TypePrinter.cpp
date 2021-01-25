@@ -20,10 +20,10 @@
 #include "clang/AST/Type.h"
 #include "clang/Basic/LangOptions.h"
 #include "clang/Basic/SourceManager.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/ADT/StringExtras.h"
-#include "llvm/Support/SaveAndRestore.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/ADT/StringExtras.h"
+#include "llvm37/Support/SaveAndRestore.h"
+#include "llvm37/Support/raw_ostream.h"
 using namespace clang;
 
 namespace {
@@ -1442,7 +1442,7 @@ TemplateSpecializationType::PrintTemplateArgumentList(
   for (unsigned Arg = 0; Arg < NumArgs; ++Arg) {
     // Print the argument into a string.
     SmallString<128> Buf;
-    llvm::raw_svector_ostream ArgOS(Buf);
+    llvm37::raw_svector_ostream ArgOS(Buf);
     if (Args[Arg].getKind() == TemplateArgument::Pack) {
       if (Args[Arg].pack_size() && Arg > 0)
         OS << ", ";
@@ -1493,7 +1493,7 @@ PrintTemplateArgumentList(raw_ostream &OS,
     
     // Print the argument into a string.
     SmallString<128> Buf;
-    llvm::raw_svector_ostream ArgOS(Buf);
+    llvm37::raw_svector_ostream ArgOS(Buf);
     if (Args[Arg].getArgument().getKind() == TemplateArgument::Pack) {
       PrintTemplateArgumentList(ArgOS,
                                 Args[Arg].getArgument().pack_begin(), 
@@ -1535,7 +1535,7 @@ std::string Qualifiers::getAsString() const {
 // space.
 std::string Qualifiers::getAsString(const PrintingPolicy &Policy) const {
   SmallString<64> Buf;
-  llvm::raw_svector_ostream StrOS(Buf);
+  llvm37::raw_svector_ostream StrOS(Buf);
   print(StrOS, Policy);
   return StrOS.str();
 }
@@ -1651,7 +1651,7 @@ void QualType::getAsStringInternal(const Type *ty, Qualifiers qs,
                                    std::string &buffer,
                                    const PrintingPolicy &policy) {
   SmallString<256> Buf;
-  llvm::raw_svector_ostream StrOS(Buf);
+  llvm37::raw_svector_ostream StrOS(Buf);
   TypePrinter(policy).print(ty, qs, StrOS, buffer);
   std::string str = StrOS.str();
   buffer.swap(str);

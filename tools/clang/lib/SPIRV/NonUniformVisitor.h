@@ -7,8 +7,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_LIB_SPIRV_NONUNIFORMVISITOR_H
-#define LLVM_CLANG_LIB_SPIRV_NONUNIFORMVISITOR_H
+#ifndef LLVM37_CLANG_LIB_SPIRV_NONUNIFORMVISITOR_H
+#define LLVM37_CLANG_LIB_SPIRV_NONUNIFORMVISITOR_H
 
 #include "clang/SPIRV/FeatureManager.h"
 #include "clang/SPIRV/SpirvContext.h"
@@ -55,4 +55,4 @@ private:
 } // end namespace spirv
 } // end namespace clang
 
-#endif // LLVM_CLANG_LIB_SPIRV_NONUNIFORMVISITOR_H
+#endif // LLVM37_CLANG_LIB_SPIRV_NONUNIFORMVISITOR_H

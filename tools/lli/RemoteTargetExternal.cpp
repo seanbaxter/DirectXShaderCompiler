@@ -12,19 +12,19 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Config/config.h"
+#include "llvm37/Config/config.h"
 #include "RemoteTarget.h"
 #include "RemoteTargetExternal.h"
-#include "llvm/ADT/StringRef.h"
-#include "llvm/Support/DataTypes.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/Format.h"
-#include "llvm/Support/Memory.h"
-#include "llvm/Support/Program.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/StringRef.h"
+#include "llvm37/Support/DataTypes.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/Format.h"
+#include "llvm37/Support/Memory.h"
+#include "llvm37/Support/Program.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <string>
 
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "lli"
 
@@ -318,10 +318,10 @@ void RemoteTargetExternal::AppendRead(void *Data, uint32_t Size) {
   Sizes.push_back(Size);
 }
 
-#ifdef LLVM_ON_UNIX
+#ifdef LLVM37_ON_UNIX
 #include "Unix/RPCChannel.inc"
 #endif
 
-#ifdef LLVM_ON_WIN32
+#ifdef LLVM37_ON_WIN32
 #include "Windows/RPCChannel.inc"
 #endif

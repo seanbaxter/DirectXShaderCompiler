@@ -5,8 +5,8 @@
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //===----------------------------------------------------------------------===//
-#ifndef LLVM_CLANG_SPIRV_SPIRVINSTRUCTION_H
-#define LLVM_CLANG_SPIRV_SPIRVINSTRUCTION_H
+#ifndef LLVM37_CLANG_SPIRV_SPIRVINSTRUCTION_H
+#define LLVM37_CLANG_SPIRV_SPIRVINSTRUCTION_H
 
 #include "dxc/Support/SPIRVOptions.h"
 #include "spirv/unified1/GLSL.std.450.h"
@@ -14,11 +14,11 @@
 #include "clang/AST/APValue.h"
 #include "clang/AST/Type.h"
 #include "clang/Basic/SourceLocation.h"
-#include "llvm/ADT/APFloat.h"
-#include "llvm/ADT/APInt.h"
-#include "llvm/ADT/Optional.h"
-#include "llvm/ADT/StringRef.h"
-#include "llvm/Support/Casting.h"
+#include "llvm37/ADT/APFloat.h"
+#include "llvm37/ADT/APInt.h"
+#include "llvm37/ADT/Optional.h"
+#include "llvm37/ADT/StringRef.h"
+#include "llvm37/Support/Casting.h"
 
 namespace clang {
 namespace spirv {
@@ -181,8 +181,8 @@ public:
 
   clang::SourceLocation getSourceLocation() const { return srcLoc; }
 
-  void setDebugName(llvm::StringRef name) { debugName = name; }
-  llvm::StringRef getDebugName() const { return debugName; }
+  void setDebugName(llvm37::StringRef name) { debugName = name; }
+  llvm37::StringRef getDebugName() const { return debugName; }
 
   bool isArithmeticInstruction() const;
 
@@ -272,7 +272,7 @@ private:
 /// \brief Extension instruction
 class SpirvExtension : public SpirvInstruction {
 public:
-  SpirvExtension(SourceLocation loc, llvm::StringRef extensionName);
+  SpirvExtension(SourceLocation loc, llvm37::StringRef extensionName);
 
   DEFINE_RELEASE_MEMORY_FOR_CLASS(SpirvExtension)
 
@@ -285,7 +285,7 @@ public:
 
   bool operator==(const SpirvExtension &that) const;
 
-  llvm::StringRef getExtensionName() const { return extName; }
+  llvm37::StringRef getExtensionName() const { return extName; }
 
 private:
   std::string extName;
@@ -294,7 +294,7 @@ private:
 /// \brief ExtInstImport instruction
 class SpirvExtInstImport : public SpirvInstruction {
 public:
-  SpirvExtInstImport(SourceLocation loc, llvm::StringRef extensionName);
+  SpirvExtInstImport(SourceLocation loc, llvm37::StringRef extensionName);
 
   DEFINE_RELEASE_MEMORY_FOR_CLASS(SpirvExtInstImport)
 
@@ -305,7 +305,7 @@ public:
 
   bool invokeVisitor(Visitor *v) override;
 
-  llvm::StringRef getExtendedInstSetName() const { return extName; }
+  llvm37::StringRef getExtendedInstSetName() const { return extName; }
 
 private:
   std::string extName;
@@ -337,8 +337,8 @@ private:
 class SpirvEntryPoint : public SpirvInstruction {
 public:
   SpirvEntryPoint(SourceLocation loc, spv::ExecutionModel executionModel,
-                  SpirvFunction *entryPoint, llvm::StringRef nameStr,
-                  llvm::ArrayRef<SpirvVariable *> iface);
+                  SpirvFunction *entryPoint, llvm37::StringRef nameStr,
+                  llvm37::ArrayRef<SpirvVariable *> iface);
 
   DEFINE_RELEASE_MEMORY_FOR_CLASS(SpirvEntryPoint)
 
@@ -351,21 +351,21 @@ public:
 
   spv::ExecutionModel getExecModel() const { return execModel; }
   SpirvFunction *getEntryPoint() const { return entryPoint; }
-  llvm::StringRef getEntryPointName() const { return name; }
-  llvm::ArrayRef<SpirvVariable *> getInterface() const { return interfaceVec; }
+  llvm37::StringRef getEntryPointName() const { return name; }
+  llvm37::ArrayRef<SpirvVariable *> getInterface() const { return interfaceVec; }
 
 private:
   spv::ExecutionModel execModel;
   SpirvFunction *entryPoint;
   std::string name;
-  llvm::SmallVector<SpirvVariable *, 8> interfaceVec;
+  llvm37::SmallVector<SpirvVariable *, 8> interfaceVec;
 };
 
 /// \brief OpExecutionMode and OpExecutionModeId instructions
 class SpirvExecutionMode : public SpirvInstruction {
 public:
   SpirvExecutionMode(SourceLocation loc, SpirvFunction *entryPointFunction,
-                     spv::ExecutionMode, llvm::ArrayRef<uint32_t> params,
+                     spv::ExecutionMode, llvm37::ArrayRef<uint32_t> params,
                      bool usesIdParams);
 
   DEFINE_RELEASE_MEMORY_FOR_CLASS(SpirvExecutionMode)
@@ -379,18 +379,18 @@ public:
 
   SpirvFunction *getEntryPoint() const { return entryPoint; }
   spv::ExecutionMode getExecutionMode() const { return execMode; }
-  llvm::ArrayRef<uint32_t> getParams() const { return params; }
+  llvm37::ArrayRef<uint32_t> getParams() const { return params; }
 
 private:
   SpirvFunction *entryPoint;
   spv::ExecutionMode execMode;
-  llvm::SmallVector<uint32_t, 4> params;
+  llvm37::SmallVector<uint32_t, 4> params;
 };
 
 /// \brief OpString instruction
 class SpirvString : public SpirvInstruction {
 public:
-  SpirvString(SourceLocation loc, llvm::StringRef stringLiteral);
+  SpirvString(SourceLocation loc, llvm37::StringRef stringLiteral);
 
   DEFINE_RELEASE_MEMORY_FOR_CLASS(SpirvString)
 
@@ -401,7 +401,7 @@ public:
 
   bool invokeVisitor(Visitor *v) override;
 
-  llvm::StringRef getString() const { return str; }
+  llvm37::StringRef getString() const { return str; }
 
 private:
   std::string str;
@@ -411,7 +411,7 @@ private:
 class SpirvSource : public SpirvInstruction {
 public:
   SpirvSource(SourceLocation loc, spv::SourceLanguage language, uint32_t ver,
-              SpirvString *file, llvm::StringRef src);
+              SpirvString *file, llvm37::StringRef src);
 
   DEFINE_RELEASE_MEMORY_FOR_CLASS(SpirvSource)
 
@@ -426,7 +426,7 @@ public:
   uint32_t getVersion() const { return version; }
   bool hasFile() const { return file != nullptr; }
   SpirvString *getFile() const { return file; }
-  llvm::StringRef getSource() const { return source; }
+  llvm37::StringRef getSource() const { return source; }
 
 private:
   spv::SourceLanguage lang;
@@ -438,7 +438,7 @@ private:
 /// \brief OpModuleProcessed instruction
 class SpirvModuleProcessed : public SpirvInstruction {
 public:
-  SpirvModuleProcessed(SourceLocation loc, llvm::StringRef processStr);
+  SpirvModuleProcessed(SourceLocation loc, llvm37::StringRef processStr);
 
   DEFINE_RELEASE_MEMORY_FOR_CLASS(SpirvModuleProcessed)
 
@@ -449,7 +449,7 @@ public:
 
   bool invokeVisitor(Visitor *v) override;
 
-  llvm::StringRef getProcess() const { return process; }
+  llvm37::StringRef getProcess() const { return process; }
 
 private:
   std::string process;
@@ -459,16 +459,16 @@ private:
 class SpirvDecoration : public SpirvInstruction {
 public:
   SpirvDecoration(SourceLocation loc, SpirvInstruction *target,
-                  spv::Decoration decor, llvm::ArrayRef<uint32_t> params = {},
-                  llvm::Optional<uint32_t> index = llvm::None);
+                  spv::Decoration decor, llvm37::ArrayRef<uint32_t> params = {},
+                  llvm37::Optional<uint32_t> index = llvm37::None);
   SpirvDecoration(SourceLocation loc, SpirvInstruction *target,
-                  spv::Decoration decor, llvm::StringRef stringParam,
-                  llvm::Optional<uint32_t> index = llvm::None);
+                  spv::Decoration decor, llvm37::StringRef stringParam,
+                  llvm37::Optional<uint32_t> index = llvm37::None);
 
   // Used for creating OpDecorateId instructions
   SpirvDecoration(SourceLocation loc, SpirvInstruction *target,
                   spv::Decoration decor,
-                  llvm::ArrayRef<SpirvInstruction *> params);
+                  llvm37::ArrayRef<SpirvInstruction *> params);
 
   DEFINE_RELEASE_MEMORY_FOR_CLASS(SpirvDecoration)
 
@@ -485,21 +485,21 @@ public:
   SpirvInstruction *getTarget() const { return target; }
 
   spv::Decoration getDecoration() const { return decoration; }
-  llvm::ArrayRef<uint32_t> getParams() const { return params; }
-  llvm::ArrayRef<SpirvInstruction *> getIdParams() const { return idParams; }
+  llvm37::ArrayRef<uint32_t> getParams() const { return params; }
+  llvm37::ArrayRef<SpirvInstruction *> getIdParams() const { return idParams; }
   bool isMemberDecoration() const { return index.hasValue(); }
   uint32_t getMemberIndex() const { return index.getValue(); }
 
 private:
   spv::Op getDecorateOpcode(spv::Decoration,
-                            const llvm::Optional<uint32_t> &memberIndex);
+                            const llvm37::Optional<uint32_t> &memberIndex);
 
 private:
   SpirvInstruction *target;
   spv::Decoration decoration;
-  llvm::Optional<uint32_t> index;
-  llvm::SmallVector<uint32_t, 4> params;
-  llvm::SmallVector<SpirvInstruction *, 4> idParams;
+  llvm37::Optional<uint32_t> index;
+  llvm37::SmallVector<uint32_t, 4> params;
+  llvm37::SmallVector<SpirvInstruction *, 4> idParams;
 };
 
 /// \brief OpVariable instruction
@@ -524,11 +524,11 @@ public:
   bool hasInitializer() const { return initializer != nullptr; }
   SpirvInstruction *getInitializer() const { return initializer; }
   bool hasBinding() const { return descriptorSet >= 0 || binding >= 0; }
-  llvm::StringRef getHlslUserType() const { return hlslUserType; }
+  llvm37::StringRef getHlslUserType() const { return hlslUserType; }
 
   void setDescriptorSetNo(int32_t dset) { descriptorSet = dset; }
   void setBindingNo(int32_t b) { binding = b; }
-  void setHlslUserType(llvm::StringRef userType) { hlslUserType = userType; }
+  void setHlslUserType(llvm37::StringRef userType) { hlslUserType = userType; }
 
 private:
   SpirvInstruction *initializer;
@@ -660,7 +660,7 @@ public:
            inst->getKind() <= IK_BranchConditional;
   }
 
-  virtual llvm::ArrayRef<SpirvBasicBlock *> getTargetBranches() const = 0;
+  virtual llvm37::ArrayRef<SpirvBasicBlock *> getTargetBranches() const = 0;
 
 protected:
   SpirvBranching(Kind kind, spv::Op opcode, SourceLocation loc);
@@ -684,7 +684,7 @@ public:
 
   // Returns all possible basic blocks that could be taken by the branching
   // instruction.
-  llvm::ArrayRef<SpirvBasicBlock *> getTargetBranches() const override {
+  llvm37::ArrayRef<SpirvBasicBlock *> getTargetBranches() const override {
     return {targetLabel};
   }
 
@@ -708,7 +708,7 @@ public:
 
   bool invokeVisitor(Visitor *v) override;
 
-  llvm::ArrayRef<SpirvBasicBlock *> getTargetBranches() const override {
+  llvm37::ArrayRef<SpirvBasicBlock *> getTargetBranches() const override {
     return {trueLabel, falseLabel};
   }
 
@@ -764,7 +764,7 @@ public:
   SpirvSwitch(
       SourceLocation loc, SpirvInstruction *selector,
       SpirvBasicBlock *defaultLabel,
-      llvm::ArrayRef<std::pair<uint32_t, SpirvBasicBlock *>> &targetsVec);
+      llvm37::ArrayRef<std::pair<uint32_t, SpirvBasicBlock *>> &targetsVec);
 
   DEFINE_RELEASE_MEMORY_FOR_CLASS(SpirvSwitch)
 
@@ -777,18 +777,18 @@ public:
 
   SpirvInstruction *getSelector() const { return selector; }
   SpirvBasicBlock *getDefaultLabel() const { return defaultLabel; }
-  llvm::ArrayRef<std::pair<uint32_t, SpirvBasicBlock *>> getTargets() const {
+  llvm37::ArrayRef<std::pair<uint32_t, SpirvBasicBlock *>> getTargets() const {
     return targets;
   }
   // Returns the branch label that will be taken for the given literal.
   SpirvBasicBlock *getTargetLabelForLiteral(uint32_t) const;
   // Returns all possible branches that could be taken by the switch statement.
-  llvm::ArrayRef<SpirvBasicBlock *> getTargetBranches() const override;
+  llvm37::ArrayRef<SpirvBasicBlock *> getTargetBranches() const override;
 
 private:
   SpirvInstruction *selector;
   SpirvBasicBlock *defaultLabel;
-  llvm::SmallVector<std::pair<uint32_t, SpirvBasicBlock *>, 4> targets;
+  llvm37::SmallVector<std::pair<uint32_t, SpirvBasicBlock *>, 4> targets;
 };
 
 /// \brief OpUnreachable instruction
@@ -814,7 +814,7 @@ class SpirvAccessChain : public SpirvInstruction {
 public:
   SpirvAccessChain(QualType resultType, SourceLocation loc,
                    SpirvInstruction *base,
-                   llvm::ArrayRef<SpirvInstruction *> indexVec);
+                   llvm37::ArrayRef<SpirvInstruction *> indexVec);
 
   DEFINE_RELEASE_MEMORY_FOR_CLASS(SpirvAccessChain)
 
@@ -826,11 +826,11 @@ public:
   bool invokeVisitor(Visitor *v) override;
 
   SpirvInstruction *getBase() const { return base; }
-  llvm::ArrayRef<SpirvInstruction *> getIndexes() const { return indices; }
+  llvm37::ArrayRef<SpirvInstruction *> getIndexes() const { return indices; }
 
 private:
   SpirvInstruction *base;
-  llvm::SmallVector<SpirvInstruction *, 4> indices;
+  llvm37::SmallVector<SpirvInstruction *, 4> indices;
 };
 
 /// \brief Atomic instructions.
@@ -902,7 +902,7 @@ class SpirvBarrier : public SpirvInstruction {
 public:
   SpirvBarrier(SourceLocation loc, spv::Scope memoryScope,
                spv::MemorySemanticsMask memorySemantics,
-               llvm::Optional<spv::Scope> executionScope = llvm::None);
+               llvm37::Optional<spv::Scope> executionScope = llvm37::None);
 
   DEFINE_RELEASE_MEMORY_FOR_CLASS(SpirvBarrier)
 
@@ -924,7 +924,7 @@ public:
 private:
   spv::Scope memoryScope;
   spv::MemorySemanticsMask memorySemantics;
-  llvm::Optional<spv::Scope> executionScope;
+  llvm37::Optional<spv::Scope> executionScope;
 };
 
 /// \brief Represents SPIR-V binary operation instructions.
@@ -1120,7 +1120,7 @@ private:
 /// \brief Represent OpConstant for integer values.
 class SpirvConstantInteger : public SpirvConstant {
 public:
-  SpirvConstantInteger(QualType type, llvm::APInt value,
+  SpirvConstantInteger(QualType type, llvm37::APInt value,
                        bool isSpecConst = false);
 
   DEFINE_RELEASE_MEMORY_FOR_CLASS(SpirvConstantInteger)
@@ -1134,15 +1134,15 @@ public:
 
   bool invokeVisitor(Visitor *v) override;
 
-  llvm::APInt getValue() const { return value; }
+  llvm37::APInt getValue() const { return value; }
 
 private:
-  llvm::APInt value;
+  llvm37::APInt value;
 };
 
 class SpirvConstantFloat : public SpirvConstant {
 public:
-  SpirvConstantFloat(QualType type, llvm::APFloat value,
+  SpirvConstantFloat(QualType type, llvm37::APFloat value,
                      bool isSpecConst = false);
 
   DEFINE_RELEASE_MEMORY_FOR_CLASS(SpirvConstantFloat)
@@ -1156,16 +1156,16 @@ public:
 
   bool invokeVisitor(Visitor *v) override;
 
-  llvm::APFloat getValue() const { return value; }
+  llvm37::APFloat getValue() const { return value; }
 
 private:
-  llvm::APFloat value;
+  llvm37::APFloat value;
 };
 
 class SpirvConstantComposite : public SpirvConstant {
 public:
   SpirvConstantComposite(QualType type,
-                         llvm::ArrayRef<SpirvConstant *> constituents,
+                         llvm37::ArrayRef<SpirvConstant *> constituents,
                          bool isSpecConst = false);
 
   DEFINE_RELEASE_MEMORY_FOR_CLASS(SpirvConstantComposite)
@@ -1177,12 +1177,12 @@ public:
 
   bool invokeVisitor(Visitor *v) override;
 
-  llvm::ArrayRef<SpirvConstant *> getConstituents() const {
+  llvm37::ArrayRef<SpirvConstant *> getConstituents() const {
     return constituents;
   }
 
 private:
-  llvm::SmallVector<SpirvConstant *, 4> constituents;
+  llvm37::SmallVector<SpirvConstant *, 4> constituents;
 };
 
 class SpirvConstantNull : public SpirvConstant {
@@ -1205,7 +1205,7 @@ public:
 class SpirvCompositeConstruct : public SpirvInstruction {
 public:
   SpirvCompositeConstruct(QualType resultType, SourceLocation loc,
-                          llvm::ArrayRef<SpirvInstruction *> constituentsVec);
+                          llvm37::ArrayRef<SpirvInstruction *> constituentsVec);
 
   DEFINE_RELEASE_MEMORY_FOR_CLASS(SpirvCompositeConstruct)
 
@@ -1216,12 +1216,12 @@ public:
 
   bool invokeVisitor(Visitor *v) override;
 
-  llvm::ArrayRef<SpirvInstruction *> getConstituents() const {
+  llvm37::ArrayRef<SpirvInstruction *> getConstituents() const {
     return consituents;
   }
 
 private:
-  llvm::SmallVector<SpirvInstruction *, 4> consituents;
+  llvm37::SmallVector<SpirvInstruction *, 4> consituents;
 };
 
 /// \brief Extraction instruction (OpCompositeExtract)
@@ -1229,7 +1229,7 @@ class SpirvCompositeExtract : public SpirvInstruction {
 public:
   SpirvCompositeExtract(QualType resultType, SourceLocation loc,
                         SpirvInstruction *composite,
-                        llvm::ArrayRef<uint32_t> indices);
+                        llvm37::ArrayRef<uint32_t> indices);
 
   DEFINE_RELEASE_MEMORY_FOR_CLASS(SpirvCompositeExtract)
 
@@ -1241,11 +1241,11 @@ public:
   bool invokeVisitor(Visitor *v) override;
 
   SpirvInstruction *getComposite() const { return composite; }
-  llvm::ArrayRef<uint32_t> getIndexes() const { return indices; }
+  llvm37::ArrayRef<uint32_t> getIndexes() const { return indices; }
 
 private:
   SpirvInstruction *composite;
-  llvm::SmallVector<uint32_t, 4> indices;
+  llvm37::SmallVector<uint32_t, 4> indices;
 };
 
 /// \brief Composite insertion instruction (OpCompositeInsert)
@@ -1253,7 +1253,7 @@ class SpirvCompositeInsert : public SpirvInstruction {
 public:
   SpirvCompositeInsert(QualType resultType, SourceLocation loc,
                        SpirvInstruction *composite, SpirvInstruction *object,
-                       llvm::ArrayRef<uint32_t> indices);
+                       llvm37::ArrayRef<uint32_t> indices);
 
   DEFINE_RELEASE_MEMORY_FOR_CLASS(SpirvCompositeInsert)
 
@@ -1266,12 +1266,12 @@ public:
 
   SpirvInstruction *getComposite() const { return composite; }
   SpirvInstruction *getObject() const { return object; }
-  llvm::ArrayRef<uint32_t> getIndexes() const { return indices; }
+  llvm37::ArrayRef<uint32_t> getIndexes() const { return indices; }
 
 private:
   SpirvInstruction *composite;
   SpirvInstruction *object;
-  llvm::SmallVector<uint32_t, 4> indices;
+  llvm37::SmallVector<uint32_t, 4> indices;
 };
 
 /// \brief EmitVertex instruction
@@ -1308,7 +1308,7 @@ public:
 class SpirvExtInst : public SpirvInstruction {
 public:
   SpirvExtInst(QualType resultType, SourceLocation loc, SpirvExtInstImport *set,
-               uint32_t inst, llvm::ArrayRef<SpirvInstruction *> operandsVec);
+               uint32_t inst, llvm37::ArrayRef<SpirvInstruction *> operandsVec);
 
   DEFINE_RELEASE_MEMORY_FOR_CLASS(SpirvExtInst)
 
@@ -1321,12 +1321,12 @@ public:
 
   SpirvExtInstImport *getInstructionSet() const { return instructionSet; }
   uint32_t getInstruction() const { return instruction; }
-  llvm::ArrayRef<SpirvInstruction *> getOperands() const { return operands; }
+  llvm37::ArrayRef<SpirvInstruction *> getOperands() const { return operands; }
 
 private:
   SpirvExtInstImport *instructionSet;
   uint32_t instruction;
-  llvm::SmallVector<SpirvInstruction *, 4> operands;
+  llvm37::SmallVector<SpirvInstruction *, 4> operands;
 };
 
 /// \brief OpFunctionCall instruction
@@ -1334,7 +1334,7 @@ class SpirvFunctionCall : public SpirvInstruction {
 public:
   SpirvFunctionCall(QualType resultType, SourceLocation loc,
                     SpirvFunction *function,
-                    llvm::ArrayRef<SpirvInstruction *> argsVec);
+                    llvm37::ArrayRef<SpirvInstruction *> argsVec);
 
   DEFINE_RELEASE_MEMORY_FOR_CLASS(SpirvFunctionCall)
 
@@ -1346,11 +1346,11 @@ public:
   bool invokeVisitor(Visitor *v) override;
 
   SpirvFunction *getFunction() const { return function; }
-  llvm::ArrayRef<SpirvInstruction *> getArgs() const { return args; }
+  llvm37::ArrayRef<SpirvInstruction *> getArgs() const { return args; }
 
 private:
   SpirvFunction *function;
-  llvm::SmallVector<SpirvInstruction *, 4> args;
+  llvm37::SmallVector<SpirvInstruction *, 4> args;
 };
 
 /// \brief Base for OpGroupNonUniform* instructions
@@ -1418,7 +1418,7 @@ class SpirvNonUniformUnaryOp : public SpirvGroupNonUniformOp {
 public:
   SpirvNonUniformUnaryOp(spv::Op opcode, QualType resultType,
                          SourceLocation loc, spv::Scope scope,
-                         llvm::Optional<spv::GroupOperation> group,
+                         llvm37::Optional<spv::GroupOperation> group,
                          SpirvInstruction *arg);
 
   DEFINE_RELEASE_MEMORY_FOR_CLASS(SpirvNonUniformUnaryOp)
@@ -1436,7 +1436,7 @@ public:
 
 private:
   SpirvInstruction *arg;
-  llvm::Optional<spv::GroupOperation> groupOp;
+  llvm37::Optional<spv::GroupOperation> groupOp;
 };
 
 /// \brief Image instructions.
@@ -1633,7 +1633,7 @@ private:
 class SpirvLoad : public SpirvInstruction {
 public:
   SpirvLoad(QualType resultType, SourceLocation loc, SpirvInstruction *pointer,
-            llvm::Optional<spv::MemoryAccessMask> mask = llvm::None);
+            llvm37::Optional<spv::MemoryAccessMask> mask = llvm37::None);
 
   DEFINE_RELEASE_MEMORY_FOR_CLASS(SpirvLoad)
 
@@ -1652,7 +1652,7 @@ public:
 
 private:
   SpirvInstruction *pointer;
-  llvm::Optional<spv::MemoryAccessMask> memoryAccess;
+  llvm37::Optional<spv::MemoryAccessMask> memoryAccess;
 };
 
 /// \brief OpCopyObject instruction
@@ -1781,7 +1781,7 @@ class SpirvStore : public SpirvInstruction {
 public:
   SpirvStore(SourceLocation loc, SpirvInstruction *pointer,
              SpirvInstruction *object,
-             llvm::Optional<spv::MemoryAccessMask> mask = llvm::None);
+             llvm37::Optional<spv::MemoryAccessMask> mask = llvm37::None);
 
   DEFINE_RELEASE_MEMORY_FOR_CLASS(SpirvStore)
 
@@ -1802,7 +1802,7 @@ public:
 private:
   SpirvInstruction *pointer;
   SpirvInstruction *object;
-  llvm::Optional<spv::MemoryAccessMask> memoryAccess;
+  llvm37::Optional<spv::MemoryAccessMask> memoryAccess;
 };
 
 /// \brief Represents SPIR-V unary operation instructions.
@@ -1869,7 +1869,7 @@ class SpirvVectorShuffle : public SpirvInstruction {
 public:
   SpirvVectorShuffle(QualType resultType, SourceLocation loc,
                      SpirvInstruction *vec1, SpirvInstruction *vec2,
-                     llvm::ArrayRef<uint32_t> componentsVec);
+                     llvm37::ArrayRef<uint32_t> componentsVec);
 
   DEFINE_RELEASE_MEMORY_FOR_CLASS(SpirvVectorShuffle)
 
@@ -1882,12 +1882,12 @@ public:
 
   SpirvInstruction *getVec1() const { return vec1; }
   SpirvInstruction *getVec2() const { return vec2; }
-  llvm::ArrayRef<uint32_t> getComponents() const { return components; }
+  llvm37::ArrayRef<uint32_t> getComponents() const { return components; }
 
 private:
   SpirvInstruction *vec1;
   SpirvInstruction *vec2;
-  llvm::SmallVector<uint32_t, 4> components;
+  llvm37::SmallVector<uint32_t, 4> components;
 };
 
 class SpirvArrayLength : public SpirvInstruction {
@@ -1919,7 +1919,7 @@ private:
 class SpirvRayTracingOpNV : public SpirvInstruction {
 public:
   SpirvRayTracingOpNV(QualType resultType, spv::Op opcode,
-                      llvm::ArrayRef<SpirvInstruction *> vecOperands,
+                      llvm37::ArrayRef<SpirvInstruction *> vecOperands,
                       SourceLocation loc);
 
   DEFINE_RELEASE_MEMORY_FOR_CLASS(SpirvRayTracingOpNV)
@@ -1931,16 +1931,16 @@ public:
 
   bool invokeVisitor(Visitor *v) override;
 
-  llvm::ArrayRef<SpirvInstruction *> getOperands() const { return operands; }
+  llvm37::ArrayRef<SpirvInstruction *> getOperands() const { return operands; }
 
 private:
-  llvm::SmallVector<SpirvInstruction *, 4> operands;
+  llvm37::SmallVector<SpirvInstruction *, 4> operands;
 };
 
 class SpirvRayQueryOpKHR : public SpirvInstruction {
 public:
   SpirvRayQueryOpKHR(QualType resultType, spv::Op opcode,
-                     llvm::ArrayRef<SpirvInstruction *> vecOperands, bool flags,
+                     llvm37::ArrayRef<SpirvInstruction *> vecOperands, bool flags,
                      SourceLocation loc);
 
   DEFINE_RELEASE_MEMORY_FOR_CLASS(SpirvRayQueryOpKHR)
@@ -1952,12 +1952,12 @@ public:
 
   bool invokeVisitor(Visitor *v) override;
 
-  llvm::ArrayRef<SpirvInstruction *> getOperands() const { return operands; }
+  llvm37::ArrayRef<SpirvInstruction *> getOperands() const { return operands; }
 
   bool hasCullFlags() const { return cullFlags; }
 
 private:
-  llvm::SmallVector<SpirvInstruction *, 4> operands;
+  llvm37::SmallVector<SpirvInstruction *, 4> operands;
   bool cullFlags;
 };
 
@@ -2057,7 +2057,7 @@ public:
 
 class SpirvDebugSource : public SpirvDebugInstruction {
 public:
-  SpirvDebugSource(llvm::StringRef file, llvm::StringRef text);
+  SpirvDebugSource(llvm37::StringRef file, llvm37::StringRef text);
 
   DEFINE_RELEASE_MEMORY_FOR_CLASS(SpirvDebugSource)
 
@@ -2067,8 +2067,8 @@ public:
 
   bool invokeVisitor(Visitor *v) override;
 
-  llvm::StringRef getFile() const { return file; }
-  llvm::StringRef getContent() const { return text; }
+  llvm37::StringRef getFile() const { return file; }
+  llvm37::StringRef getContent() const { return text; }
 
 private:
   std::string file;
@@ -2103,10 +2103,10 @@ private:
 // This class is not actually used. It can be cleaned up.
 class SpirvDebugFunctionDeclaration : public SpirvDebugInstruction {
 public:
-  SpirvDebugFunctionDeclaration(llvm::StringRef name, SpirvDebugSource *src,
+  SpirvDebugFunctionDeclaration(llvm37::StringRef name, SpirvDebugSource *src,
                                 uint32_t fnLine, uint32_t fnColumn,
                                 SpirvDebugInstruction *parentScope,
-                                llvm::StringRef linkageName, uint32_t flags);
+                                llvm37::StringRef linkageName, uint32_t flags);
 
   DEFINE_RELEASE_MEMORY_FOR_CLASS(SpirvDebugFunctionDeclaration)
 
@@ -2121,7 +2121,7 @@ public:
   uint32_t getColumn() const { return fnColumn; }
   void setParent(SpirvDebugInstruction *scope) { parentScope = scope; }
   SpirvDebugInstruction *getParentScope() const override { return parentScope; }
-  llvm::StringRef getLinkageName() const { return linkageName; }
+  llvm37::StringRef getLinkageName() const { return linkageName; }
   uint32_t getFlags() const { return flags; }
 
 private:
@@ -2139,10 +2139,10 @@ private:
 
 class SpirvDebugFunction : public SpirvDebugInstruction {
 public:
-  SpirvDebugFunction(llvm::StringRef name, SpirvDebugSource *src,
+  SpirvDebugFunction(llvm37::StringRef name, SpirvDebugSource *src,
                      uint32_t fnLine, uint32_t fnColumn,
                      SpirvDebugInstruction *parentScope,
-                     llvm::StringRef linkageName, uint32_t flags,
+                     llvm37::StringRef linkageName, uint32_t flags,
                      uint32_t scopeLine, SpirvFunction *fn);
 
   DEFINE_RELEASE_MEMORY_FOR_CLASS(SpirvDebugFunction)
@@ -2158,7 +2158,7 @@ public:
   uint32_t getColumn() const { return fnColumn; }
   void setParent(SpirvDebugInstruction *scope) { parentScope = scope; }
   SpirvDebugInstruction *getParentScope() const override { return parentScope; }
-  llvm::StringRef getLinkageName() const { return linkageName; }
+  llvm37::StringRef getLinkageName() const { return linkageName; }
   uint32_t getFlags() const { return flags; }
   uint32_t getScopeLine() const { return scopeLine; }
   SpirvFunction *getSpirvFunction() const { return fn; }
@@ -2199,10 +2199,10 @@ private:
 
 class SpirvDebugLocalVariable : public SpirvDebugInstruction {
 public:
-  SpirvDebugLocalVariable(QualType debugQualType, llvm::StringRef varName,
+  SpirvDebugLocalVariable(QualType debugQualType, llvm37::StringRef varName,
                           SpirvDebugSource *src, uint32_t line, uint32_t column,
                           SpirvDebugInstruction *parentScope, uint32_t flags,
-                          llvm::Optional<uint32_t> argNumber = llvm::None);
+                          llvm37::Optional<uint32_t> argNumber = llvm37::None);
 
   DEFINE_RELEASE_MEMORY_FOR_CLASS(SpirvDebugLocalVariable)
 
@@ -2217,7 +2217,7 @@ public:
   uint32_t getColumn() const { return column; }
   SpirvDebugInstruction *getParentScope() const override { return parentScope; }
   uint32_t getFlags() const { return flags; }
-  llvm::Optional<uint32_t> getArgNumber() const { return argNumber; }
+  llvm37::Optional<uint32_t> getArgNumber() const { return argNumber; }
 
 private:
   SpirvDebugSource *source;
@@ -2226,16 +2226,16 @@ private:
   SpirvDebugInstruction *parentScope;
   // TODO: Replace this with an enum, when it is available in SPIRV-Headers
   uint32_t flags;
-  llvm::Optional<uint32_t> argNumber;
+  llvm37::Optional<uint32_t> argNumber;
 };
 
 class SpirvDebugGlobalVariable : public SpirvDebugInstruction {
 public:
   SpirvDebugGlobalVariable(
-      QualType debugQualType, llvm::StringRef varName, SpirvDebugSource *src,
+      QualType debugQualType, llvm37::StringRef varName, SpirvDebugSource *src,
       uint32_t line, uint32_t column, SpirvDebugInstruction *parentScope,
-      llvm::StringRef linkageName, SpirvVariable *var, uint32_t flags,
-      llvm::Optional<SpirvInstruction *> staticMemberDebugType = llvm::None);
+      llvm37::StringRef linkageName, SpirvVariable *var, uint32_t flags,
+      llvm37::Optional<SpirvInstruction *> staticMemberDebugType = llvm37::None);
 
   DEFINE_RELEASE_MEMORY_FOR_CLASS(SpirvDebugGlobalVariable)
 
@@ -2249,10 +2249,10 @@ public:
   uint32_t getLine() const { return line; }
   uint32_t getColumn() const { return column; }
   SpirvDebugInstruction *getParentScope() const override { return parentScope; }
-  llvm::StringRef getLinkageName() const { return linkageName; }
+  llvm37::StringRef getLinkageName() const { return linkageName; }
   uint32_t getFlags() const { return flags; }
   SpirvInstruction *getVariable() const { return var; }
-  llvm::Optional<SpirvInstruction *> getStaticMemberDebugDecl() const {
+  llvm37::Optional<SpirvInstruction *> getStaticMemberDebugDecl() const {
     return staticMemberDebugDecl;
   }
 
@@ -2265,13 +2265,13 @@ private:
   SpirvVariable *var;
   // TODO: Replace this with an enum, when it is available in SPIRV-Headers
   uint32_t flags;
-  llvm::Optional<SpirvInstruction *> staticMemberDebugDecl;
+  llvm37::Optional<SpirvInstruction *> staticMemberDebugDecl;
 };
 
 class SpirvDebugOperation : public SpirvDebugInstruction {
 public:
   SpirvDebugOperation(uint32_t operationOpCode,
-                      llvm::ArrayRef<int32_t> operands = {});
+                      llvm37::ArrayRef<int32_t> operands = {});
 
   DEFINE_RELEASE_MEMORY_FOR_CLASS(SpirvDebugOperation)
 
@@ -2285,12 +2285,12 @@ public:
 
 private:
   uint32_t operationOpcode;
-  llvm::SmallVector<int32_t, 2> operands;
+  llvm37::SmallVector<int32_t, 2> operands;
 };
 
 class SpirvDebugExpression : public SpirvDebugInstruction {
 public:
-  SpirvDebugExpression(llvm::ArrayRef<SpirvDebugOperation *> operations = {});
+  SpirvDebugExpression(llvm37::ArrayRef<SpirvDebugOperation *> operations = {});
 
   DEFINE_RELEASE_MEMORY_FOR_CLASS(SpirvDebugExpression)
 
@@ -2300,12 +2300,12 @@ public:
 
   bool invokeVisitor(Visitor *v) override;
 
-  llvm::ArrayRef<SpirvDebugOperation *> getOperations() const {
+  llvm37::ArrayRef<SpirvDebugOperation *> getOperations() const {
     return operations;
   }
 
 private:
-  llvm::SmallVector<SpirvDebugOperation *, 4> operations;
+  llvm37::SmallVector<SpirvDebugOperation *, 4> operations;
 };
 
 class SpirvDebugDeclare : public SpirvDebugInstruction {
@@ -2421,7 +2421,7 @@ protected:
 /// Represents basic debug types, including boolean, float, integer.
 class SpirvDebugTypeBasic : public SpirvDebugType {
 public:
-  SpirvDebugTypeBasic(llvm::StringRef name, SpirvConstant *size,
+  SpirvDebugTypeBasic(llvm37::StringRef name, SpirvConstant *size,
                       uint32_t encoding);
 
   DEFINE_RELEASE_MEMORY_FOR_CLASS(SpirvDebugTypeBasic)
@@ -2454,7 +2454,7 @@ private:
 class SpirvDebugTypeArray : public SpirvDebugType {
 public:
   SpirvDebugTypeArray(SpirvDebugType *elemType,
-                      llvm::ArrayRef<uint32_t> elemCount);
+                      llvm37::ArrayRef<uint32_t> elemCount);
 
   DEFINE_RELEASE_MEMORY_FOR_CLASS(SpirvDebugTypeArray)
 
@@ -2465,7 +2465,7 @@ public:
   bool invokeVisitor(Visitor *v) override;
 
   SpirvDebugType *getElementType() const { return elementType; }
-  llvm::SmallVector<uint32_t, 2> &getElementCount() { return elementCount; }
+  llvm37::SmallVector<uint32_t, 2> &getElementCount() { return elementCount; }
 
   uint32_t getSizeInBits() const override {
     // TODO: avoid integer overflow
@@ -2477,7 +2477,7 @@ public:
 
 private:
   SpirvDebugType *elementType;
-  llvm::SmallVector<uint32_t, 2> elementCount;
+  llvm37::SmallVector<uint32_t, 2> elementCount;
 };
 
 /// Represents vector debug types
@@ -2510,7 +2510,7 @@ private:
 class SpirvDebugTypeFunction : public SpirvDebugType {
 public:
   SpirvDebugTypeFunction(uint32_t flags, SpirvDebugType *ret,
-                         llvm::ArrayRef<SpirvDebugType *> params);
+                         llvm37::ArrayRef<SpirvDebugType *> params);
 
   DEFINE_RELEASE_MEMORY_FOR_CLASS(SpirvDebugTypeFunction)
 
@@ -2522,7 +2522,7 @@ public:
 
   uint32_t getDebugFlags() const { return debugFlags; }
   SpirvDebugType *getReturnType() const { return returnType; }
-  llvm::ArrayRef<SpirvDebugType *> getParamTypes() const { return paramTypes; }
+  llvm37::ArrayRef<SpirvDebugType *> getParamTypes() const { return paramTypes; }
 
 private:
   // TODO: Replace uint32_t with enum in the SPIRV-Headers once it is available.
@@ -2531,13 +2531,13 @@ private:
   // the function. If the function has no return value, this operand is
   // OpTypeVoid, in which case we will use nullptr for this member.
   SpirvDebugType *returnType;
-  llvm::SmallVector<SpirvDebugType *, 4> paramTypes;
+  llvm37::SmallVector<SpirvDebugType *, 4> paramTypes;
 };
 
 /// Represents debug information for a template type parameter.
 class SpirvDebugTypeTemplateParameter : public SpirvDebugType {
 public:
-  SpirvDebugTypeTemplateParameter(llvm::StringRef name, SpirvDebugType *type,
+  SpirvDebugTypeTemplateParameter(llvm37::StringRef name, SpirvDebugType *type,
                                   SpirvInstruction *value,
                                   SpirvDebugSource *source, uint32_t line,
                                   uint32_t column);
@@ -2570,7 +2570,7 @@ class SpirvDebugTypeTemplate : public SpirvDebugType {
 public:
   SpirvDebugTypeTemplate(
       SpirvDebugInstruction *target,
-      const llvm::SmallVector<SpirvDebugTypeTemplateParameter *, 2> &params);
+      const llvm37::SmallVector<SpirvDebugTypeTemplateParameter *, 2> &params);
 
   DEFINE_RELEASE_MEMORY_FOR_CLASS(SpirvDebugTypeTemplate)
 
@@ -2580,7 +2580,7 @@ public:
 
   bool invokeVisitor(Visitor *v) override;
 
-  llvm::SmallVector<SpirvDebugTypeTemplateParameter *, 2> getParams() {
+  llvm37::SmallVector<SpirvDebugTypeTemplateParameter *, 2> getParams() {
     return params;
   }
   SpirvDebugInstruction *getTarget() const { return target; }
@@ -2595,7 +2595,7 @@ private:
   // or DebugTypeTemplateTemplateParameter.
   // TODO: change the type to SpirvDebugType * when we support
   // DebugTypeTemplateTemplateParameter.
-  llvm::SmallVector<SpirvDebugTypeTemplateParameter *, 2> params;
+  llvm37::SmallVector<SpirvDebugTypeTemplateParameter *, 2> params;
 };
 
 /// Represents the debug type of a struct/union/class member.
@@ -2603,7 +2603,7 @@ private:
 /// type.
 class SpirvDebugTypeMember : public SpirvDebugType {
 public:
-  SpirvDebugTypeMember(llvm::StringRef name, SpirvDebugType *type,
+  SpirvDebugTypeMember(llvm37::StringRef name, SpirvDebugType *type,
                        SpirvDebugSource *source, uint32_t line_,
                        uint32_t column_, SpirvDebugInstruction *parent,
                        uint32_t flags, uint32_t offsetInBits,
@@ -2644,10 +2644,10 @@ private:
 
 class SpirvDebugTypeComposite : public SpirvDebugType {
 public:
-  SpirvDebugTypeComposite(llvm::StringRef name, SpirvDebugSource *source,
+  SpirvDebugTypeComposite(llvm37::StringRef name, SpirvDebugSource *source,
                           uint32_t line, uint32_t column,
                           SpirvDebugInstruction *parent,
-                          llvm::StringRef linkageName, uint32_t flags,
+                          llvm37::StringRef linkageName, uint32_t flags,
                           uint32_t tag);
 
   DEFINE_RELEASE_MEMORY_FOR_CLASS(SpirvDebugTypeComposite)
@@ -2658,12 +2658,12 @@ public:
 
   bool invokeVisitor(Visitor *v) override;
 
-  llvm::SmallVector<SpirvDebugInstruction *, 4> getMembers() { return members; }
+  llvm37::SmallVector<SpirvDebugInstruction *, 4> getMembers() { return members; }
   void appendMember(SpirvDebugInstruction *member) {
     members.push_back(member);
   }
   void
-  setMembers(const llvm::SmallVector<SpirvDebugInstruction *, 4> &memberTypes) {
+  setMembers(const llvm37::SmallVector<SpirvDebugInstruction *, 4> &memberTypes) {
     members = memberTypes;
   }
 
@@ -2672,7 +2672,7 @@ public:
   SpirvDebugSource *getSource() const { return source; }
   uint32_t getLine() const { return line; }
   uint32_t getColumn() const { return column; }
-  llvm::StringRef getLinkageName() const { return linkageName; }
+  llvm37::StringRef getLinkageName() const { return linkageName; }
   uint32_t getDebugFlags() const { return debugFlags; }
 
   void setSizeInBits(uint32_t size_) { sizeInBits = size_; }
@@ -2712,7 +2712,7 @@ private:
   // Note: Members must be ids of DebugTypeMember, DebugFunction or
   // DebugTypeInheritance. Since DebugFunction may be a member, we cannot use a
   // vector of SpirvDebugType.
-  llvm::SmallVector<SpirvDebugInstruction *, 4> members;
+  llvm37::SmallVector<SpirvDebugInstruction *, 4> members;
 
   // When it is DebugTypeComposite for HLSL resource type i.e., opaque
   // type, we must put DebugInfoNone for Size operand.
@@ -2743,4 +2743,4 @@ private:
 } // namespace spirv
 } // namespace clang
 
-#endif // LLVM_CLANG_SPIRV_SPIRVINSTRUCTION_H
+#endif // LLVM37_CLANG_SPIRV_SPIRVINSTRUCTION_H

@@ -60,7 +60,7 @@ configure_lit_site_cfg(
   )
 
 include_directories(..)
-include_directories(${LLVM_MAIN_SRC_DIR}/utils/unittest/googletest/include)
+include_directories(${LLVM37_MAIN_SRC_DIR}/utils/unittest/googletest/include)
 
 add_executable(LLVMFuzzer-Unittest
   FuzzerUnittest.cpp

@@ -7,8 +7,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_FRONTEND_COMPILERINVOCATION_H_
-#define LLVM_CLANG_FRONTEND_COMPILERINVOCATION_H_
+#ifndef LLVM37_CLANG_FRONTEND_COMPILERINVOCATION_H_
+#define LLVM37_CLANG_FRONTEND_COMPILERINVOCATION_H_
 
 #include "clang/Basic/DiagnosticOptions.h"
 #include "clang/Basic/FileSystemOptions.h"
@@ -23,13 +23,13 @@
 #include "clang/Lex/HeaderSearchOptions.h"
 #include "clang/Lex/PreprocessorOptions.h"
 #include "clang/StaticAnalyzer/Core/AnalyzerOptions.h"
-#include "llvm/ADT/IntrusiveRefCntPtr.h"
-#include "llvm/ADT/StringMap.h"
-#include "llvm/ADT/StringRef.h"
+#include "llvm37/ADT/IntrusiveRefCntPtr.h"
+#include "llvm37/ADT/StringMap.h"
+#include "llvm37/ADT/StringRef.h"
 #include <string>
 #include <vector>
 
-namespace llvm {
+namespace llvm37 {
 namespace opt {
 class ArgList;
 }
@@ -46,7 +46,7 @@ class DiagnosticsEngine;
 ///
 /// When errors are encountered, return false and, if Diags is non-null,
 /// report the error(s).
-bool ParseDiagnosticArgs(DiagnosticOptions &Opts, llvm::opt::ArgList &Args,
+bool ParseDiagnosticArgs(DiagnosticOptions &Opts, llvm37::opt::ArgList &Args,
                          DiagnosticsEngine *Diags = nullptr);
 
 class CompilerInvocationBase : public RefCountedBase<CompilerInvocation> {

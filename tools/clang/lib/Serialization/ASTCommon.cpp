@@ -16,7 +16,7 @@
 #include "clang/AST/DeclObjC.h"
 #include "clang/Basic/IdentifierTable.h"
 #include "clang/Serialization/ASTDeserializationListener.h"
-#include "llvm/ADT/StringExtras.h"
+#include "llvm37/ADT/StringExtras.h"
 
 using namespace clang;
 
@@ -85,7 +85,7 @@ unsigned serialization::ComputeHash(Selector Sel) {
   unsigned R = 5381;
   for (unsigned I = 0; I != N; ++I)
     if (IdentifierInfo *II = Sel.getIdentifierInfoForSlot(I))
-      R = llvm::HashString(II->getName(), R);
+      R = llvm37::HashString(II->getName(), R);
   return R;
 }
 

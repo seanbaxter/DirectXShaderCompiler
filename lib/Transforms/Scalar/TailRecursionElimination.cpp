@@ -50,33 +50,33 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Transforms/Scalar.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/SmallPtrSet.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/Analysis/CFG.h"
-#include "llvm/Analysis/CaptureTracking.h"
-#include "llvm/Analysis/InlineCost.h"
-#include "llvm/Analysis/InstructionSimplify.h"
-#include "llvm/Analysis/Loads.h"
-#include "llvm/Analysis/TargetTransformInfo.h"
-#include "llvm/IR/CFG.h"
-#include "llvm/IR/CallSite.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/DerivedTypes.h"
-#include "llvm/IR/DiagnosticInfo.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/ValueHandle.h"
-#include "llvm/Pass.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Transforms/Utils/BasicBlockUtils.h"
-#include "llvm/Transforms/Utils/Local.h"
-using namespace llvm;
+#include "llvm37/Transforms/Scalar.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/SmallPtrSet.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/Analysis/CFG.h"
+#include "llvm37/Analysis/CaptureTracking.h"
+#include "llvm37/Analysis/InlineCost.h"
+#include "llvm37/Analysis/InstructionSimplify.h"
+#include "llvm37/Analysis/Loads.h"
+#include "llvm37/Analysis/TargetTransformInfo.h"
+#include "llvm37/IR/CFG.h"
+#include "llvm37/IR/CallSite.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/IR/DerivedTypes.h"
+#include "llvm37/IR/DiagnosticInfo.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/ValueHandle.h"
+#include "llvm37/Pass.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Transforms/Utils/BasicBlockUtils.h"
+#include "llvm37/Transforms/Utils/Local.h"
+using namespace llvm37;
 
 #define DEBUG_TYPE "tailcallelim"
 
@@ -130,7 +130,7 @@ INITIALIZE_PASS_END(TailCallElim, "tailcallelim",
                     "Tail Call Elimination", false, false)
 
 // Public interface to the TailCallElimination pass
-FunctionPass *llvm::createTailCallEliminationPass() {
+FunctionPass *llvm37::createTailCallEliminationPass() {
   return new TailCallElim();
 }
 

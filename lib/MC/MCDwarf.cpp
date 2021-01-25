@@ -7,27 +7,27 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/MC/MCDwarf.h"
-#include "llvm/ADT/Hashing.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/ADT/Twine.h"
-#include "llvm/Config/config.h"
-#include "llvm/MC/MCAsmInfo.h"
-#include "llvm/MC/MCContext.h"
-#include "llvm/MC/MCExpr.h"
-#include "llvm/MC/MCObjectFileInfo.h"
-#include "llvm/MC/MCObjectStreamer.h"
-#include "llvm/MC/MCRegisterInfo.h"
-#include "llvm/MC/MCSection.h"
-#include "llvm/MC/MCSymbol.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/LEB128.h"
-#include "llvm/Support/Path.h"
-#include "llvm/Support/SourceMgr.h"
-#include "llvm/Support/raw_ostream.h"
-using namespace llvm;
+#include "llvm37/MC/MCDwarf.h"
+#include "llvm37/ADT/Hashing.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/ADT/Twine.h"
+#include "llvm37/Config/config.h"
+#include "llvm37/MC/MCAsmInfo.h"
+#include "llvm37/MC/MCContext.h"
+#include "llvm37/MC/MCExpr.h"
+#include "llvm37/MC/MCObjectFileInfo.h"
+#include "llvm37/MC/MCObjectStreamer.h"
+#include "llvm37/MC/MCRegisterInfo.h"
+#include "llvm37/MC/MCSection.h"
+#include "llvm37/MC/MCSymbol.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/LEB128.h"
+#include "llvm37/Support/Path.h"
+#include "llvm37/Support/SourceMgr.h"
+#include "llvm37/Support/raw_ostream.h"
+using namespace llvm37;
 
 // Given a special op, return the address skip amount (in units of
 // DWARF2_LINE_MIN_INSN_LENGTH.
@@ -1463,7 +1463,7 @@ namespace {
   };
 }
 
-namespace llvm {
+namespace llvm37 {
   template <>
   struct DenseMapInfo<CIEKey> {
     static CIEKey getEmptyKey() {

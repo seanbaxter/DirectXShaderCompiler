@@ -18,23 +18,23 @@
 //===----------------------------------------------------------------------===//
 
 #include "ConstantFold.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/DerivedTypes.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/GetElementPtrTypeIterator.h"
-#include "llvm/IR/GlobalAlias.h"
-#include "llvm/IR/GlobalVariable.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/Operator.h"
-#include "llvm/IR/PatternMatch.h"
-#include "llvm/Support/Compiler.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/ManagedStatic.h"
-#include "llvm/Support/MathExtras.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/DerivedTypes.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/GetElementPtrTypeIterator.h"
+#include "llvm37/IR/GlobalAlias.h"
+#include "llvm37/IR/GlobalVariable.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/Operator.h"
+#include "llvm37/IR/PatternMatch.h"
+#include "llvm37/Support/Compiler.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/ManagedStatic.h"
+#include "llvm37/Support/MathExtras.h"
 #include <limits>
-using namespace llvm;
-using namespace llvm::PatternMatch;
+using namespace llvm37;
+using namespace llvm37::PatternMatch;
 
 //===----------------------------------------------------------------------===//
 //                ConstantFold*Instruction Implementations
@@ -521,7 +521,7 @@ static Constant *getFoldedOffsetOf(Type *Ty, Constant *FieldNo,
   return C;
 }
 
-Constant *llvm::ConstantFoldCastInstruction(unsigned opc, Constant *V,
+Constant *llvm37::ConstantFoldCastInstruction(unsigned opc, Constant *V,
                                             Type *DestTy) {
   if (isa<UndefValue>(V)) {
     // zext(undef) = 0, because the top bits will be zero.
@@ -724,7 +724,7 @@ Constant *llvm::ConstantFoldCastInstruction(unsigned opc, Constant *V,
   }
 }
 
-Constant *llvm::ConstantFoldSelectInstruction(Constant *Cond,
+Constant *llvm37::ConstantFoldSelectInstruction(Constant *Cond,
                                               Constant *V1, Constant *V2) {
   // Check for i1 and vector true/false conditions.
   if (Cond->isNullValue()) return V2;
@@ -779,7 +779,7 @@ Constant *llvm::ConstantFoldSelectInstruction(Constant *Cond,
   return nullptr;
 }
 
-Constant *llvm::ConstantFoldExtractElementInstruction(Constant *Val,
+Constant *llvm37::ConstantFoldExtractElementInstruction(Constant *Val,
                                                       Constant *Idx) {
   if (isa<UndefValue>(Val))  // ee(undef, x) -> undef
     return UndefValue::get(Val->getType()->getVectorElementType());
@@ -798,7 +798,7 @@ Constant *llvm::ConstantFoldExtractElementInstruction(Constant *Val,
   return nullptr;
 }
 
-Constant *llvm::ConstantFoldInsertElementInstruction(Constant *Val,
+Constant *llvm37::ConstantFoldInsertElementInstruction(Constant *Val,
                                                      Constant *Elt,
                                                      Constant *Idx) {
   if (isa<UndefValue>(Idx))
@@ -828,7 +828,7 @@ Constant *llvm::ConstantFoldInsertElementInstruction(Constant *Val,
   return ConstantVector::get(Result);
 }
 
-Constant *llvm::ConstantFoldShuffleVectorInstruction(Constant *V1,
+Constant *llvm37::ConstantFoldShuffleVectorInstruction(Constant *V1,
                                                      Constant *V2,
                                                      Constant *Mask) {
   unsigned MaskNumElts = Mask->getType()->getVectorNumElements();
@@ -869,7 +869,7 @@ Constant *llvm::ConstantFoldShuffleVectorInstruction(Constant *V1,
   return ConstantVector::get(Result);
 }
 
-Constant *llvm::ConstantFoldExtractValueInstruction(Constant *Agg,
+Constant *llvm37::ConstantFoldExtractValueInstruction(Constant *Agg,
                                                     ArrayRef<unsigned> Idxs) {
   // Base case: no indices, so return the entire value.
   if (Idxs.empty())
@@ -881,7 +881,7 @@ Constant *llvm::ConstantFoldExtractValueInstruction(Constant *Agg,
   return nullptr;
 }
 
-Constant *llvm::ConstantFoldInsertValueInstruction(Constant *Agg,
+Constant *llvm37::ConstantFoldInsertValueInstruction(Constant *Agg,
                                                    Constant *Val,
                                                    ArrayRef<unsigned> Idxs) {
   // Base case: no indices, so replace the entire value.
@@ -915,7 +915,7 @@ Constant *llvm::ConstantFoldInsertValueInstruction(Constant *Agg,
 }
 
 
-Constant *llvm::ConstantFoldBinaryInstruction(unsigned Opcode,
+Constant *llvm37::ConstantFoldBinaryInstruction(unsigned Opcode,
                                               Constant *C1, Constant *C2) {
   // Handle UndefValue up front.
   if (isa<UndefValue>(C1) || isa<UndefValue>(C2)) {
@@ -1657,7 +1657,7 @@ static ICmpInst::Predicate evaluateICmpRelation(Constant *V1, Constant *V2,
   return ICmpInst::BAD_ICMP_PREDICATE;
 }
 
-Constant *llvm::ConstantFoldCompareInstruction(unsigned short pred, 
+Constant *llvm37::ConstantFoldCompareInstruction(unsigned short pred, 
                                                Constant *C1, Constant *C2) {
   Type *ResultTy;
   if (VectorType *VT = dyn_cast<VectorType>(C1->getType()))
@@ -2235,7 +2235,7 @@ static Constant *ConstantFoldGetElementPtrImpl(Type *PointeeTy, Constant *C,
   return nullptr;
 }
 
-Constant *llvm::ConstantFoldGetElementPtr(Constant *C,
+Constant *llvm37::ConstantFoldGetElementPtr(Constant *C,
                                           bool inBounds,
                                           ArrayRef<Constant *> Idxs) {
   return ConstantFoldGetElementPtrImpl(
@@ -2243,7 +2243,7 @@ Constant *llvm::ConstantFoldGetElementPtr(Constant *C,
       inBounds, Idxs);
 }
 
-Constant *llvm::ConstantFoldGetElementPtr(Constant *C,
+Constant *llvm37::ConstantFoldGetElementPtr(Constant *C,
                                           bool inBounds,
                                           ArrayRef<Value *> Idxs) {
   return ConstantFoldGetElementPtrImpl(
@@ -2251,13 +2251,13 @@ Constant *llvm::ConstantFoldGetElementPtr(Constant *C,
       inBounds, Idxs);
 }
 
-Constant *llvm::ConstantFoldGetElementPtr(Type *Ty, Constant *C,
+Constant *llvm37::ConstantFoldGetElementPtr(Type *Ty, Constant *C,
                                           bool inBounds,
                                           ArrayRef<Constant *> Idxs) {
   return ConstantFoldGetElementPtrImpl(Ty, C, inBounds, Idxs);
 }
 
-Constant *llvm::ConstantFoldGetElementPtr(Type *Ty, Constant *C,
+Constant *llvm37::ConstantFoldGetElementPtr(Type *Ty, Constant *C,
                                           bool inBounds,
                                           ArrayRef<Value *> Idxs) {
   return ConstantFoldGetElementPtrImpl(Ty, C, inBounds, Idxs);

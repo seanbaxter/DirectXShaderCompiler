@@ -13,14 +13,14 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/CodeGen/LiveIntervalUnion.h"
-#include "llvm/ADT/SparseBitVector.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Target/TargetRegisterInfo.h"
+#include "llvm37/CodeGen/LiveIntervalUnion.h"
+#include "llvm37/ADT/SparseBitVector.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Target/TargetRegisterInfo.h"
 #include <algorithm>
 
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "regalloc"
 

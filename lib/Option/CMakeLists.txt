@@ -5,5 +5,5 @@ add_llvm_library(LLVMOption
   OptTable.cpp
 
   ADDITIONAL_HEADER_DIRS
-  ${LLVM_MAIN_INCLUDE_DIR}/llvm/Option
+  ${LLVM37_MAIN_INCLUDE_DIR}/llvm/Option
   )

@@ -7,21 +7,21 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Analysis/CFG.h"
-#include "llvm/Analysis/LoopInfo.h"
-#include "llvm/AsmParser/Parser.h"
-#include "llvm/IR/Dominators.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/InstIterator.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Module.h"
-#include "llvm/Pass.h"
-#include "llvm/IR/LegacyPassManager.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/SourceMgr.h"
+#include "llvm37/Analysis/CFG.h"
+#include "llvm37/Analysis/LoopInfo.h"
+#include "llvm37/AsmParser/Parser.h"
+#include "llvm37/IR/Dominators.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/InstIterator.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/Pass.h"
+#include "llvm37/IR/LegacyPassManager.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/SourceMgr.h"
 #include "gtest/gtest.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 namespace {
 

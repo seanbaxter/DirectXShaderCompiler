@@ -8,10 +8,10 @@
 //===----------------------------------------------------------------------===//
 
 #include "gtest/gtest.h"
-#include "llvm/ADT/PostOrderIterator.h"
-#include "llvm/IR/BasicBlock.h"
-#include "llvm/IR/CFG.h"
-using namespace llvm;
+#include "llvm37/ADT/PostOrderIterator.h"
+#include "llvm37/IR/BasicBlock.h"
+#include "llvm37/IR/CFG.h"
+using namespace llvm37;
 //                                                                           //
 ///////////////////////////////////////////////////////////////////////////////
 namespace {

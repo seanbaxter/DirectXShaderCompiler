@@ -7,25 +7,25 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Transforms/Utils/Cloning.h"
-#include "llvm/ADT/ArrayRef.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/SmallPtrSet.h"
-#include "llvm/IR/Argument.h"
-#include "llvm/IR/Constant.h"
-#include "llvm/IR/DIBuilder.h"
-#include "llvm/IR/DebugInfo.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/IRBuilder.h"
-#include "llvm/IR/InstIterator.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/Verifier.h"
+#include "llvm37/Transforms/Utils/Cloning.h"
+#include "llvm37/ADT/ArrayRef.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/SmallPtrSet.h"
+#include "llvm37/IR/Argument.h"
+#include "llvm37/IR/Constant.h"
+#include "llvm37/IR/DIBuilder.h"
+#include "llvm37/IR/DebugInfo.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/IRBuilder.h"
+#include "llvm37/IR/InstIterator.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/Verifier.h"
 #include "gtest/gtest.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 namespace {
 
@@ -439,7 +439,7 @@ protected:
     IBuilder.CreateRetVoid();
   }
 
-  void CreateNewModule() { NewM = llvm::CloneModule(OldM); }
+  void CreateNewModule() { NewM = llvm37::CloneModule(OldM); }
 
   LLVMContext C;
   Module *OldM;

@@ -12,8 +12,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_REWRITE_CORE_TOKENREWRITER_H
-#define LLVM_CLANG_REWRITE_CORE_TOKENREWRITER_H
+#ifndef LLVM37_CLANG_REWRITE_CORE_TOKENREWRITER_H
+#define LLVM37_CLANG_REWRITE_CORE_TOKENREWRITER_H
 
 #include "clang/Basic/SourceLocation.h"
 #include "clang/Lex/Token.h"

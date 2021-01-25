@@ -49,7 +49,7 @@
 #include "regcclass.h"
 #include "regcname.h"
 
-#include "llvm/Config/config.h"
+#include "llvm37/Config/config.h"
 #if HAVE_STDINT_H
 #include <stdint.h>
 #else

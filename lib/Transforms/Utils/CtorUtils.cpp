@@ -11,19 +11,19 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Transforms/Utils/CtorUtils.h"
-#include "llvm/ADT/BitVector.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/GlobalVariable.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/Module.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/Transforms/Utils/CtorUtils.h"
+#include "llvm37/ADT/BitVector.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/GlobalVariable.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/raw_ostream.h"
 
 #define DEBUG_TYPE "ctor_utils"
 
-namespace llvm {
+namespace llvm37 {
 
 namespace {
 /// Given a specified llvm.global_ctors list, remove the listed elements.

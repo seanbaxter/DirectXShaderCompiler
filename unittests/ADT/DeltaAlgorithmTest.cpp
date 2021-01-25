@@ -8,10 +8,10 @@
 //===----------------------------------------------------------------------===//
 
 #include "gtest/gtest.h"
-#include "llvm/ADT/DeltaAlgorithm.h"
+#include "llvm37/ADT/DeltaAlgorithm.h"
 #include <algorithm>
 #include <cstdarg>
-using namespace llvm;
+using namespace llvm37;
 
 namespace std {
 

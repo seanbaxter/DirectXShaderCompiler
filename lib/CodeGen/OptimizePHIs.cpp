@@ -12,16 +12,16 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/CodeGen/Passes.h"
-#include "llvm/ADT/SmallPtrSet.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/CodeGen/MachineFunctionPass.h"
-#include "llvm/CodeGen/MachineInstr.h"
-#include "llvm/CodeGen/MachineRegisterInfo.h"
-#include "llvm/IR/Function.h"
-#include "llvm/Target/TargetInstrInfo.h"
-#include "llvm/Target/TargetSubtargetInfo.h"
-using namespace llvm;
+#include "llvm37/CodeGen/Passes.h"
+#include "llvm37/ADT/SmallPtrSet.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/CodeGen/MachineFunctionPass.h"
+#include "llvm37/CodeGen/MachineInstr.h"
+#include "llvm37/CodeGen/MachineRegisterInfo.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/Target/TargetInstrInfo.h"
+#include "llvm37/Target/TargetSubtargetInfo.h"
+using namespace llvm37;
 
 #define DEBUG_TYPE "phi-opt"
 
@@ -58,7 +58,7 @@ namespace {
 }
 
 char OptimizePHIs::ID = 0;
-char &llvm::OptimizePHIsID = OptimizePHIs::ID;
+char &llvm37::OptimizePHIsID = OptimizePHIs::ID;
 INITIALIZE_PASS(OptimizePHIs, "opt-phis",
                 "Optimize machine instruction PHIs", false, false)
 

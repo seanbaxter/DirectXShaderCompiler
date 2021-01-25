@@ -12,17 +12,17 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/ProfileData/CoverageMappingReader.h"
-#include "llvm/ADT/DenseSet.h"
-#include "llvm/Object/MachOUniversal.h"
-#include "llvm/Object/ObjectFile.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/Endian.h"
-#include "llvm/Support/LEB128.h"
-#include "llvm/Support/MathExtras.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ProfileData/CoverageMappingReader.h"
+#include "llvm37/ADT/DenseSet.h"
+#include "llvm37/Object/MachOUniversal.h"
+#include "llvm37/Object/ObjectFile.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/Endian.h"
+#include "llvm37/Support/LEB128.h"
+#include "llvm37/Support/MathExtras.h"
+#include "llvm37/Support/raw_ostream.h"
 
-using namespace llvm;
+using namespace llvm37;
 using namespace coverage;
 using namespace object;
 
@@ -224,7 +224,7 @@ std::error_code RawCoverageMappingReader::readMappingRegionsSubArray(
 std::error_code RawCoverageMappingReader::read() {
 
   // Read the virtual file mapping.
-  llvm::SmallVector<unsigned, 8> VirtualFileMapping;
+  llvm37::SmallVector<unsigned, 8> VirtualFileMapping;
   uint64_t NumFileMappings;
   if (auto Err = readSize(NumFileMappings))
     return Err;
@@ -323,7 +323,7 @@ std::error_code readCoverageMappingData(
     std::vector<BinaryCoverageReader::ProfileMappingRecord> &Records,
     std::vector<StringRef> &Filenames) {
   using namespace support;
-  llvm::DenseSet<T> UniqueFunctionMappingData;
+  llvm37::DenseSet<T> UniqueFunctionMappingData;
 
   // Read the records in the coverage data section.
   for (const char *Buf = Data.data(), *End = Buf + Data.size(); Buf < End;) {

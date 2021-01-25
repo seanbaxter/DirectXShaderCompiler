@@ -13,14 +13,14 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Analysis/LoopAccessAnalysis.h"
-#include "llvm/Analysis/LoopInfo.h"
-#include "llvm/IR/Dominators.h"
-#include "llvm/Transforms/Utils/BasicBlockUtils.h"
-#include "llvm/Transforms/Utils/Cloning.h"
-#include "llvm/Transforms/Utils/LoopVersioning.h"
+#include "llvm37/Analysis/LoopAccessAnalysis.h"
+#include "llvm37/Analysis/LoopInfo.h"
+#include "llvm37/IR/Dominators.h"
+#include "llvm37/Transforms/Utils/BasicBlockUtils.h"
+#include "llvm37/Transforms/Utils/Cloning.h"
+#include "llvm37/Transforms/Utils/LoopVersioning.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 LoopVersioning::LoopVersioning(const LoopAccessInfo &LAI, Loop *L, LoopInfo *LI,
                                DominatorTree *DT,

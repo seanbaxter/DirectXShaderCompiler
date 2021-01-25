@@ -19,7 +19,7 @@
 #include "dxc/DXIL/DxilResource.h"
 #include "dxc/DXIL/DxilConstants.h"
 
-namespace llvm {
+namespace llvm37 {
 class Type;
 class LLVMContext;
 class Value;
@@ -75,7 +75,7 @@ DxilSampler::SamplerKind GetSamplerKind(D3D10_SB_SAMPLER_MODE Mode);
 unsigned GetRegIndex(unsigned Reg, unsigned Comp);
 
 DXIL::AtomicBinOpCode GetAtomicBinOp(D3D10_SB_OPCODE_TYPE DxbcOpCode);
-llvm::AtomicRMWInst::BinOp GetLlvmAtomicBinOp(D3D10_SB_OPCODE_TYPE DxbcOpCode);
+llvm37::AtomicRMWInst::BinOp GetLlvmAtomicBinOp(D3D10_SB_OPCODE_TYPE DxbcOpCode);
 bool AtomicBinOpHasReturn(D3D10_SB_OPCODE_TYPE DxbcOpCode);
 bool IsCompareExchAtomicBinOp(D3D10_SB_OPCODE_TYPE DxbcOpCode);
 
@@ -142,7 +142,7 @@ protected:
 /// Use this class to pass around DXBC register component values.
 class OperandValue {
   friend class OperandValueHelper;
-  typedef llvm::Value * PValue;
+  typedef llvm37::Value * PValue;
   PValue m_pVal[DXBC::kWidth];
 public:
   OperandValue();
@@ -162,7 +162,7 @@ public:
 ///    OperandValueHelper OVH(OpVal, Mask, Swizzle);
 ///    for (; !OVH.IsDone(); OVH.Advance()) {
 ///      BYTE Comp = OVH.GetComp();
-///      ...  // Create llvm::Value *pVal
+///      ...  // Create llvm37::Value *pVal
 ///      OHV.SetValue(pVal); // for all components with the same swizzle name
 ///      }
 class OperandValueHelper {
@@ -177,7 +177,7 @@ public:
   /// Advances the iterator to the next unique, active component.
   void Advance();
   /// Sets the value of all active components with the same swizzle name in OperandValue OpValue.
-  void SetValue(llvm::Value *pValue);
+  void SetValue(llvm37::Value *pValue);
 
 private:
   static const BYTE kBadComp = 0xFF;

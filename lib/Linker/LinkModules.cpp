@@ -11,28 +11,28 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Linker/Linker.h"
+#include "llvm37/Linker/Linker.h"
 #include "llvm-c/Linker.h"
-#include "llvm/ADT/Hashing.h"
-#include "llvm/ADT/Optional.h"
-#include "llvm/ADT/SetVector.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/ADT/Triple.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/DebugInfo.h"
-#include "llvm/IR/DiagnosticInfo.h"
-#include "llvm/IR/DiagnosticPrinter.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/TypeFinder.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Transforms/Utils/Cloning.h"
+#include "llvm37/ADT/Hashing.h"
+#include "llvm37/ADT/Optional.h"
+#include "llvm37/ADT/SetVector.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/ADT/Triple.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/DebugInfo.h"
+#include "llvm37/IR/DiagnosticInfo.h"
+#include "llvm37/IR/DiagnosticPrinter.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/TypeFinder.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Transforms/Utils/Cloning.h"
 #include <cctype>
 #include <tuple>
-using namespace llvm;
+using namespace llvm37;
 
 
 //===----------------------------------------------------------------------===//

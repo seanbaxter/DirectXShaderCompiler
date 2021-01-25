@@ -11,29 +11,29 @@
 #include "LinePrinter.h"
 #include "llvm-pdbdump.h"
 
-#include "llvm/DebugInfo/PDB/IPDBEnumChildren.h"
-#include "llvm/DebugInfo/PDB/IPDBSession.h"
-#include "llvm/DebugInfo/PDB/PDBExtras.h"
-#include "llvm/DebugInfo/PDB/PDBSymbol.h"
-#include "llvm/DebugInfo/PDB/PDBSymbolCompiland.h"
-#include "llvm/DebugInfo/PDB/PDBSymbolData.h"
-#include "llvm/DebugInfo/PDB/PDBSymbolFunc.h"
-#include "llvm/DebugInfo/PDB/PDBSymbolFuncDebugEnd.h"
-#include "llvm/DebugInfo/PDB/PDBSymbolFuncDebugStart.h"
-#include "llvm/DebugInfo/PDB/PDBSymbolLabel.h"
-#include "llvm/DebugInfo/PDB/PDBSymbolThunk.h"
-#include "llvm/DebugInfo/PDB/PDBSymbolTypeFunctionSig.h"
-#include "llvm/DebugInfo/PDB/PDBSymbolUnknown.h"
-#include "llvm/Support/Format.h"
-#include "llvm/Support/Path.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/DebugInfo/PDB/IPDBEnumChildren.h"
+#include "llvm37/DebugInfo/PDB/IPDBSession.h"
+#include "llvm37/DebugInfo/PDB/PDBExtras.h"
+#include "llvm37/DebugInfo/PDB/PDBSymbol.h"
+#include "llvm37/DebugInfo/PDB/PDBSymbolCompiland.h"
+#include "llvm37/DebugInfo/PDB/PDBSymbolData.h"
+#include "llvm37/DebugInfo/PDB/PDBSymbolFunc.h"
+#include "llvm37/DebugInfo/PDB/PDBSymbolFuncDebugEnd.h"
+#include "llvm37/DebugInfo/PDB/PDBSymbolFuncDebugStart.h"
+#include "llvm37/DebugInfo/PDB/PDBSymbolLabel.h"
+#include "llvm37/DebugInfo/PDB/PDBSymbolThunk.h"
+#include "llvm37/DebugInfo/PDB/PDBSymbolTypeFunctionSig.h"
+#include "llvm37/DebugInfo/PDB/PDBSymbolUnknown.h"
+#include "llvm37/Support/Format.h"
+#include "llvm37/Support/Path.h"
+#include "llvm37/Support/raw_ostream.h"
 
 #include "FunctionDumper.h"
 
 #include <utility>
 #include <vector>
 
-using namespace llvm;
+using namespace llvm37;
 
 CompilandDumper::CompilandDumper(LinePrinter &P)
     : PDBSymDumper(true), Printer(P) {}

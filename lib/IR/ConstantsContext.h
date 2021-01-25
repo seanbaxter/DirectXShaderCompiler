@@ -12,23 +12,23 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_LIB_IR_CONSTANTSCONTEXT_H
-#define LLVM_LIB_IR_CONSTANTSCONTEXT_H
+#ifndef LLVM37_LIB_IR_CONSTANTSCONTEXT_H
+#define LLVM37_LIB_IR_CONSTANTSCONTEXT_H
 
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/Hashing.h"
-#include "llvm/IR/InlineAsm.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/Operator.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/Hashing.h"
+#include "llvm37/IR/InlineAsm.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/Operator.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <map>
 #include <tuple>
 
 #define DEBUG_TYPE "ir"
 
-namespace llvm {
+namespace llvm37 {
 
 /// UnaryConstantExpr - This class is private to Constants.cpp, and is used
 /// behind the scenes to implement unary constant exprs.
@@ -633,6 +633,6 @@ public:
   void dump() const { DEBUG(dbgs() << "Constant.cpp: ConstantUniqueMap\n"); }
 };
 
-} // end namespace llvm
+} // end namespace llvm37
 
 #endif

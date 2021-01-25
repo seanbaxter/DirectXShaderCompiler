@@ -21,9 +21,9 @@
 #include "clang/StaticAnalyzer/Core/BugReporter/BugReporter.h"
 #include "clang/StaticAnalyzer/Core/Checker.h"
 #include "clang/StaticAnalyzer/Core/PathSensitive/AnalysisManager.h"
-#include "llvm/ADT/BitVector.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/Support/SaveAndRestore.h"
+#include "llvm37/ADT/BitVector.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/Support/SaveAndRestore.h"
 
 using namespace clang;
 using namespace ento;
@@ -34,7 +34,7 @@ namespace {
 class EHCodeVisitor : public RecursiveASTVisitor<EHCodeVisitor> {
 public:
   bool inEH;
-  llvm::DenseSet<const VarDecl *> &S;
+  llvm37::DenseSet<const VarDecl *> &S;
   
   bool TraverseObjCAtFinallyStmt(ObjCAtFinallyStmt *S) {
     SaveAndRestore<bool> inFinally(inEH, true);
@@ -58,7 +58,7 @@ public:
     return true;
   }
   
-  EHCodeVisitor(llvm::DenseSet<const VarDecl *> &S) :
+  EHCodeVisitor(llvm37::DenseSet<const VarDecl *> &S) :
   inEH(false), S(S) {}
 };
 
@@ -66,7 +66,7 @@ public:
 // AnalysisManager.
 class ReachableCode {
   const CFG &cfg;
-  llvm::BitVector reachable;
+  llvm37::BitVector reachable;
 public:
   ReachableCode(const CFG &cfg)
     : cfg(cfg), reachable(cfg.getNumBlockIDs(), false) {}
@@ -88,7 +88,7 @@ void ReachableCode::computeReachableBlocks() {
 
   while (!worklist.empty()) {
     const CFGBlock *block = worklist.pop_back_val();
-    llvm::BitVector::reference isReachable = reachable[block->getBlockID()];
+    llvm37::BitVector::reference isReachable = reachable[block->getBlockID()];
     if (isReachable)
       continue;
     isReachable = true;
@@ -127,10 +127,10 @@ class DeadStoreObs : public LiveVariables::Observer {
   const CheckerBase *Checker;
   AnalysisDeclContext* AC;
   ParentMap& Parents;
-  llvm::SmallPtrSet<const VarDecl*, 20> Escaped;
+  llvm37::SmallPtrSet<const VarDecl*, 20> Escaped;
   std::unique_ptr<ReachableCode> reachableCode;
   const CFGBlock *currentBlock;
-  std::unique_ptr<llvm::DenseSet<const VarDecl *>> InEH;
+  std::unique_ptr<llvm37::DenseSet<const VarDecl *>> InEH;
 
   enum DeadStoreKind { Standard, Enclosing, DeadIncrement, DeadInit };
 
@@ -138,7 +138,7 @@ public:
   DeadStoreObs(const CFG &cfg, ASTContext &ctx, BugReporter &br,
                const CheckerBase *checker, AnalysisDeclContext *ac,
                ParentMap &parents,
-               llvm::SmallPtrSet<const VarDecl *, 20> &escaped)
+               llvm37::SmallPtrSet<const VarDecl *, 20> &escaped)
       : cfg(cfg), Ctx(ctx), BR(br), Checker(checker), AC(ac), Parents(parents),
         Escaped(escaped), currentBlock(nullptr) {}
 
@@ -150,7 +150,7 @@ public:
     // Lazily construct the set that records which VarDecls are in
     // EH code.
     if (!InEH.get()) {
-      InEH.reset(new llvm::DenseSet<const VarDecl *>());
+      InEH.reset(new llvm37::DenseSet<const VarDecl *>());
       EHCodeVisitor V(*InEH.get());
       V.TraverseStmt(AC->getBody());
     }
@@ -177,7 +177,7 @@ public:
       return;
 
     SmallString<64> buf;
-    llvm::raw_svector_ostream os(buf);
+    llvm37::raw_svector_ostream os(buf);
     const char *BugType = nullptr;
 
     switch (dsk) {
@@ -395,7 +395,7 @@ public:
 namespace {
 class FindEscaped {
 public:
-  llvm::SmallPtrSet<const VarDecl*, 20> Escaped;
+  llvm37::SmallPtrSet<const VarDecl*, 20> Escaped;
 
   void operator()(const Stmt *S) {
     // Check for '&'. Any VarDecl whose address has been taken we treat as

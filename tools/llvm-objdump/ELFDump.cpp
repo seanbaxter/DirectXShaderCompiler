@@ -13,13 +13,13 @@
 //===----------------------------------------------------------------------===//
 
 #include "llvm-objdump.h"
-#include "llvm/Object/ELFObjectFile.h"
-#include "llvm/Support/Format.h"
-#include "llvm/Support/MathExtras.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/Object/ELFObjectFile.h"
+#include "llvm37/Support/Format.h"
+#include "llvm37/Support/MathExtras.h"
+#include "llvm37/Support/raw_ostream.h"
 
-using namespace llvm;
-using namespace llvm::object;
+using namespace llvm37;
+using namespace llvm37::object;
 
 template <class ELFT> void printProgramHeaders(const ELFFile<ELFT> *o) {
   typedef ELFFile<ELFT> ELFO;
@@ -75,7 +75,7 @@ template <class ELFT> void printProgramHeaders(const ELFFile<ELFT> *o) {
   outs() << "\n";
 }
 
-void llvm::printELFFileHeader(const object::ObjectFile *Obj) {
+void llvm37::printELFFileHeader(const object::ObjectFile *Obj) {
   // Little-endian 32-bit
   if (const ELF32LEObjectFile *ELFObj = dyn_cast<ELF32LEObjectFile>(Obj))
     printProgramHeaders(ELFObj->getELFFile());

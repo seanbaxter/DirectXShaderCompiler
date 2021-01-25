@@ -13,11 +13,11 @@
 ///
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_BASIC_TARGETCXXABI_H
-#define LLVM_CLANG_BASIC_TARGETCXXABI_H
+#ifndef LLVM37_CLANG_BASIC_TARGETCXXABI_H
+#define LLVM37_CLANG_BASIC_TARGETCXXABI_H
 
-#include "llvm/ADT/Triple.h"
-#include "llvm/Support/ErrorHandling.h"
+#include "llvm37/ADT/Triple.h"
+#include "llvm37/Support/ErrorHandling.h"
 
 namespace clang {
 
@@ -283,7 +283,7 @@ public:
   }
 
   /// Try to parse an ABI name, returning false on error.
-  bool tryParse(llvm::StringRef name);
+  bool tryParse(llvm37::StringRef name);
 
   friend bool operator==(const TargetCXXABI &left, const TargetCXXABI &right) {
     return left.getKind() == right.getKind();

@@ -11,14 +11,14 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_LIB_CODEGEN_CGCLEANUP_H
-#define LLVM_CLANG_LIB_CODEGEN_CGCLEANUP_H
+#ifndef LLVM37_CLANG_LIB_CODEGEN_CGCLEANUP_H
+#define LLVM37_CLANG_LIB_CODEGEN_CGCLEANUP_H
 
 #include "EHScopeStack.h"
-#include "llvm/ADT/SmallPtrSet.h"
-#include "llvm/ADT/SmallVector.h"
+#include "llvm37/ADT/SmallPtrSet.h"
+#include "llvm37/ADT/SmallVector.h"
 
-namespace llvm {
+namespace llvm37 {
 class BasicBlock;
 class Value;
 class ConstantInt;
@@ -30,8 +30,8 @@ namespace CodeGen {
 
 /// A protected scope for zero-cost EH handling.
 class EHScope {
-  llvm::BasicBlock *CachedLandingPad;
-  llvm::BasicBlock *CachedEHDispatchBlock;
+  llvm37::BasicBlock *CachedLandingPad;
+  llvm37::BasicBlock *CachedEHDispatchBlock;
 
   EHScopeStack::stable_iterator EnclosingEHScope;
 
@@ -106,24 +106,24 @@ public:
 
   Kind getKind() const { return static_cast<Kind>(CommonBits.Kind); }
 
-  llvm::BasicBlock *getCachedLandingPad() const {
+  llvm37::BasicBlock *getCachedLandingPad() const {
     return CachedLandingPad;
   }
 
-  void setCachedLandingPad(llvm::BasicBlock *block) {
+  void setCachedLandingPad(llvm37::BasicBlock *block) {
     CachedLandingPad = block;
   }
 
-  llvm::BasicBlock *getCachedEHDispatchBlock() const {
+  llvm37::BasicBlock *getCachedEHDispatchBlock() const {
     return CachedEHDispatchBlock;
   }
 
-  void setCachedEHDispatchBlock(llvm::BasicBlock *block) {
+  void setCachedEHDispatchBlock(llvm37::BasicBlock *block) {
     CachedEHDispatchBlock = block;
   }
 
   bool hasEHBranches() const {
-    if (llvm::BasicBlock *block = getCachedEHDispatchBlock())
+    if (llvm37::BasicBlock *block = getCachedEHDispatchBlock())
       return !block->use_empty();
     return false;
   }
@@ -148,10 +148,10 @@ public:
   struct Handler {
     /// A type info value, or null (C++ null, not an LLVM null pointer)
     /// for a catch-all.
-    llvm::Constant *Type;
+    llvm37::Constant *Type;
 
     /// The catch handler for this type.
-    llvm::BasicBlock *Block;
+    llvm37::BasicBlock *Block;
 
     bool isCatchAll() const { return Type == nullptr; }
   };
@@ -182,11 +182,11 @@ public:
     return CatchBits.NumHandlers;
   }
 
-  void setCatchAllHandler(unsigned I, llvm::BasicBlock *Block) {
+  void setCatchAllHandler(unsigned I, llvm37::BasicBlock *Block) {
     setHandler(I, /*catchall*/ nullptr, Block);
   }
 
-  void setHandler(unsigned I, llvm::Constant *Type, llvm::BasicBlock *Block) {
+  void setHandler(unsigned I, llvm37::Constant *Type, llvm37::BasicBlock *Block) {
     assert(I < getNumHandlers());
     getHandlers()[I].Type = Type;
     getHandlers()[I].Block = Block;
@@ -225,11 +225,11 @@ class EHCleanupScope : public EHScope {
 
   /// The dual entry/exit block along the normal edge.  This is lazily
   /// created if needed before the cleanup is popped.
-  llvm::BasicBlock *NormalBlock;
+  llvm37::BasicBlock *NormalBlock;
 
   /// An optional i1 variable indicating whether this cleanup has been
   /// activated yet.
-  llvm::AllocaInst *ActiveFlag;
+  llvm37::AllocaInst *ActiveFlag;
 
   /// Extra information required for cleanups that have resolved
   /// branches through them.  This has to be allocated on the side
@@ -237,10 +237,10 @@ class EHCleanupScope : public EHScope {
   /// movable.
   struct ExtInfo {
     /// The destinations of normal branch-afters and branch-throughs.
-    llvm::SmallPtrSet<llvm::BasicBlock*, 4> Branches;
+    llvm37::SmallPtrSet<llvm37::BasicBlock*, 4> Branches;
 
     /// Normal branch-afters.
-    SmallVector<std::pair<llvm::BasicBlock*,llvm::ConstantInt*>, 4>
+    SmallVector<std::pair<llvm37::BasicBlock*,llvm37::ConstantInt*>, 4>
       BranchAfters;
   };
   mutable struct ExtInfo *ExtInfo;
@@ -291,8 +291,8 @@ public:
   ~EHCleanupScope() = delete;
 
   bool isNormalCleanup() const { return CleanupBits.IsNormalCleanup; }
-  llvm::BasicBlock *getNormalBlock() const { return NormalBlock; }
-  void setNormalBlock(llvm::BasicBlock *BB) { NormalBlock = BB; }
+  llvm37::BasicBlock *getNormalBlock() const { return NormalBlock; }
+  void setNormalBlock(llvm37::BasicBlock *BB) { NormalBlock = BB; }
 
   bool isEHCleanup() const { return CleanupBits.IsEHCleanup; }
 
@@ -302,8 +302,8 @@ public:
   bool isLifetimeMarker() const { return CleanupBits.IsLifetimeMarker; }
   void setLifetimeMarker() { CleanupBits.IsLifetimeMarker = true; }
 
-  llvm::AllocaInst *getActiveFlag() const { return ActiveFlag; }
-  void setActiveFlag(llvm::AllocaInst *Var) { ActiveFlag = Var; }
+  llvm37::AllocaInst *getActiveFlag() const { return ActiveFlag; }
+  void setActiveFlag(llvm37::AllocaInst *Var) { ActiveFlag = Var; }
 
   void setTestFlagInNormalCleanup() {
     CleanupBits.TestFlagInNormalCleanup = true;
@@ -345,8 +345,8 @@ public:
   /// cleanup, guaranteed distinct from anything else threaded through
   /// it.  Therefore branch-afters usually force a switch after the
   /// cleanup.
-  void addBranchAfter(llvm::ConstantInt *Index,
-                      llvm::BasicBlock *Block) {
+  void addBranchAfter(llvm37::ConstantInt *Index,
+                      llvm37::BasicBlock *Block) {
     struct ExtInfo &ExtInfo = getExtInfo();
     if (ExtInfo.Branches.insert(Block).second)
       ExtInfo.BranchAfters.push_back(std::make_pair(Block, Index));
@@ -357,12 +357,12 @@ public:
     return ExtInfo ? ExtInfo->BranchAfters.size() : 0;
   }
 
-  llvm::BasicBlock *getBranchAfterBlock(unsigned I) const {
+  llvm37::BasicBlock *getBranchAfterBlock(unsigned I) const {
     assert(I < getNumBranchAfters());
     return ExtInfo->BranchAfters[I].first;
   }
 
-  llvm::ConstantInt *getBranchAfterIndex(unsigned I) const {
+  llvm37::ConstantInt *getBranchAfterIndex(unsigned I) const {
     assert(I < getNumBranchAfters());
     return ExtInfo->BranchAfters[I].second;
   }
@@ -382,7 +382,7 @@ public:
   /// branch-throughs usually don't force a switch after the cleanup.
   ///
   /// \return true if the branch-through was new to this scope
-  bool addBranchThrough(llvm::BasicBlock *Block) {
+  bool addBranchThrough(llvm37::BasicBlock *Block) {
     return getExtInfo().Branches.insert(Block).second;
   }
 
@@ -404,14 +404,14 @@ public:
 /// This is used to implement C++ exception specifications.
 class EHFilterScope : public EHScope {
   // Essentially ends in a flexible array member:
-  // llvm::Value *FilterTypes[0];
+  // llvm37::Value *FilterTypes[0];
 
-  llvm::Value **getFilters() {
-    return reinterpret_cast<llvm::Value**>(this+1);
+  llvm37::Value **getFilters() {
+    return reinterpret_cast<llvm37::Value**>(this+1);
   }
 
-  llvm::Value * const *getFilters() const {
-    return reinterpret_cast<llvm::Value* const *>(this+1);
+  llvm37::Value * const *getFilters() const {
+    return reinterpret_cast<llvm37::Value* const *>(this+1);
   }
 
 public:
@@ -421,17 +421,17 @@ public:
   }
 
   static size_t getSizeForNumFilters(unsigned numFilters) {
-    return sizeof(EHFilterScope) + numFilters * sizeof(llvm::Value*);
+    return sizeof(EHFilterScope) + numFilters * sizeof(llvm37::Value*);
   }
 
   unsigned getNumFilters() const { return FilterBits.NumFilters; }
 
-  void setFilter(unsigned i, llvm::Value *filterValue) {
+  void setFilter(unsigned i, llvm37::Value *filterValue) {
     assert(i < getNumFilters());
     getFilters()[i] = filterValue;
   }
 
-  llvm::Value *getFilter(unsigned i) const {
+  llvm37::Value *getFilter(unsigned i) const {
     assert(i < getNumFilters());
     return getFilters()[i];
   }

@@ -12,20 +12,20 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Transforms/Utils/ValueMapper.h"
-#include "llvm/IR/CallSite.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/InlineAsm.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/Metadata.h"
-using namespace llvm;
+#include "llvm37/Transforms/Utils/ValueMapper.h"
+#include "llvm37/IR/CallSite.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/InlineAsm.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/Metadata.h"
+using namespace llvm37;
 
 // Out of line method to get vtable etc for class.
 void ValueMapTypeRemapper::anchor() {}
 void ValueMaterializer::anchor() {}
 
-Value *llvm::MapValue(const Value *V, ValueToValueMapTy &VM, RemapFlags Flags,
+Value *llvm37::MapValue(const Value *V, ValueToValueMapTy &VM, RemapFlags Flags,
                       ValueMapTypeRemapper *TypeMapper,
                       ValueMaterializer *Materializer) {
   ValueToValueMapTy::iterator I = VM.find(V);
@@ -310,7 +310,7 @@ static Metadata *MapMetadataImpl(const Metadata *MD,
   return mapUniquedNode(Node, Cycles, VM, Flags, TypeMapper, Materializer);
 }
 
-Metadata *llvm::MapMetadata(const Metadata *MD, ValueToValueMapTy &VM,
+Metadata *llvm37::MapMetadata(const Metadata *MD, ValueToValueMapTy &VM,
                             RemapFlags Flags, ValueMapTypeRemapper *TypeMapper,
                             ValueMaterializer *Materializer) {
   SmallVector<MDNode *, 8> Cycles;
@@ -334,7 +334,7 @@ Metadata *llvm::MapMetadata(const Metadata *MD, ValueToValueMapTy &VM,
   return NewMD;
 }
 
-MDNode *llvm::MapMetadata(const MDNode *MD, ValueToValueMapTy &VM,
+MDNode *llvm37::MapMetadata(const MDNode *MD, ValueToValueMapTy &VM,
                           RemapFlags Flags, ValueMapTypeRemapper *TypeMapper,
                           ValueMaterializer *Materializer) {
   return cast<MDNode>(MapMetadata(static_cast<const Metadata *>(MD), VM, Flags,
@@ -344,7 +344,7 @@ MDNode *llvm::MapMetadata(const MDNode *MD, ValueToValueMapTy &VM,
 /// RemapInstruction - Convert the instruction operands from referencing the
 /// current values into those specified by VMap.
 ///
-void llvm::RemapInstruction(Instruction *I, ValueToValueMapTy &VMap,
+void llvm37::RemapInstruction(Instruction *I, ValueToValueMapTy &VMap,
                             RemapFlags Flags, ValueMapTypeRemapper *TypeMapper,
                             ValueMaterializer *Materializer){
   // Remap operands.

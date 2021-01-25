@@ -15,7 +15,7 @@
 #include "dxc/HLSL/HLOperationLowerExtension.h"
 #include "dxc/HlslIntrinsicOp.h"
 #include "dxc/DXIL/DxilOperations.h"
-#include "llvm/Support/Regex.h"
+#include "llvm37/Support/Regex.h"
 
 ///////////////////////////////////////////////////////////////////////////////
 // Support for test intrinsics.
@@ -153,7 +153,7 @@ struct Intrinsic {
 };
 const char * DEFAULT_NAME = "";
 
-// llvm::array_lengthof that returns a UINT instead of size_t
+// llvm37::array_lengthof that returns a UINT instead of size_t
 template <class T, std::size_t N>
 UINT countof(T(&)[N]) { return static_cast<UINT>(N); }
 
@@ -729,7 +729,7 @@ TEST_F(ExtensionTest, OptionFromDefineGVN) {
   std::string disassembly = c.Disassemble();
   // Verify that GVN is disabled by the presence
   // of the second sin(), which GVN would have removed
-  llvm::Regex regex("call float @dx.op.unary.f32.*\n.*call float @dx.op.unary.f32");
+  llvm37::Regex regex("call float @dx.op.unary.f32.*\n.*call float @dx.op.unary.f32");
   std::string regexErrors;
   VERIFY_IS_TRUE(regex.isValid(regexErrors));
   VERIFY_IS_TRUE(regex.match(disassembly));
@@ -759,7 +759,7 @@ TEST_F(ExtensionTest, OptionFromDefineStructurizeReturns) {
   // Verify that structurize returns is enabled by the presence
   // of the associated annotation. Just a simple test to
   // verify that it's on. No need to go into detail here
-  llvm::Regex regex("bReturned.* = alloca i1");
+  llvm37::Regex regex("bReturned.* = alloca i1");
   std::string regexErrors;
   VERIFY_IS_TRUE(regex.isValid(regexErrors));
   VERIFY_IS_TRUE(regex.match(disassembly));
@@ -958,7 +958,7 @@ TEST_F(ExtensionTest, ResourceExtensionIntrinsic) {
   // - return type is translated to dx.types.ResRet
   // - buffer is translated to dx.types.Handle
   // - vector is exploded
-  llvm::Regex regex("call %dx.types.ResRet.f32 @MyBufferOp\\(i32 12, %dx.types.Handle %.*, i32 1, i32 2\\)");
+  llvm37::Regex regex("call %dx.types.ResRet.f32 @MyBufferOp\\(i32 12, %dx.types.Handle %.*, i32 1, i32 2\\)");
   std::string regexErrors;
   VERIFY_IS_TRUE(regex.isValid(regexErrors));
   VERIFY_IS_TRUE(regex.match(disassembly));

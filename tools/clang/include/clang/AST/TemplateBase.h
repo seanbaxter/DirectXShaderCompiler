@@ -12,18 +12,18 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_AST_TEMPLATEBASE_H
-#define LLVM_CLANG_AST_TEMPLATEBASE_H
+#ifndef LLVM37_CLANG_AST_TEMPLATEBASE_H
+#define LLVM37_CLANG_AST_TEMPLATEBASE_H
 
 #include "clang/AST/TemplateName.h"
 #include "clang/AST/Type.h"
-#include "llvm/ADT/APSInt.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/ADT/iterator_range.h"
-#include "llvm/Support/Compiler.h"
-#include "llvm/Support/ErrorHandling.h"
+#include "llvm37/ADT/APSInt.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/ADT/iterator_range.h"
+#include "llvm37/Support/Compiler.h"
+#include "llvm37/Support/ErrorHandling.h"
 
-namespace llvm {
+namespace llvm37 {
   class FoldingSetNodeID;
 }
 
@@ -51,7 +51,7 @@ public:
     /// The template argument is a null pointer or null pointer to member that
     /// was provided for a non-type template parameter.
     NullPtr,
-    /// The template argument is an integral value stored in an llvm::APSInt
+    /// The template argument is an integral value stored in an llvm37::APSInt
     /// that was provided for an integral non-type template parameter.
     Integral,
     /// The template argument is a template name that was provided for a
@@ -141,7 +141,7 @@ public:
 
   /// \brief Construct an integral constant template argument. The memory to
   /// store the value is allocated with Ctx.
-  TemplateArgument(ASTContext &Ctx, const llvm::APSInt &Value, QualType Type);
+  TemplateArgument(ASTContext &Ctx, const llvm37::APSInt &Value, QualType Type);
 
   /// \brief Construct an integral constant template argument with the same
   /// value as Other but a different type.
@@ -281,9 +281,9 @@ public:
   
   /// \brief Retrieve the template argument as an integral value.
   // FIXME: Provide a way to read the integral data without copying the value.
-  llvm::APSInt getAsIntegral() const {
+  llvm37::APSInt getAsIntegral() const {
     assert(getKind() == Integral && "Unexpected kind");
-    using namespace llvm;
+    using namespace llvm37;
     if (Integer.BitWidth <= 64)
       return APSInt(APInt(Integer.BitWidth, Integer.VAL), Integer.IsUnsigned);
 
@@ -328,8 +328,8 @@ public:
 
   /// \brief Iterator range referencing all of the elements of a template
   /// argument pack.
-  llvm::iterator_range<pack_iterator> pack_elements() const {
-    return llvm::make_range(pack_begin(), pack_end());
+  llvm37::iterator_range<pack_iterator> pack_elements() const {
+    return llvm37::make_range(pack_begin(), pack_end());
   }
 
   /// \brief The number of template arguments in the given template argument
@@ -342,7 +342,7 @@ public:
   /// \brief Return the array of arguments in this template argument pack.
   ArrayRef<TemplateArgument> getPackAsArray() const {
     assert(getKind() == Pack);
-    return llvm::makeArrayRef(Args.Args, Args.NumArgs);
+    return llvm37::makeArrayRef(Args.Args, Args.NumArgs);
   }
 
   /// \brief Determines whether two template arguments are superficially the
@@ -357,7 +357,7 @@ public:
   void print(const PrintingPolicy &Policy, raw_ostream &Out) const;
              
   /// \brief Used to insert TemplateArguments into FoldingSets.
-  void Profile(llvm::FoldingSetNodeID &ID, const ASTContext &Context) const;
+  void Profile(llvm37::FoldingSetNodeID &ID, const ASTContext &Context) const;
 };
 
 /// Location information for a TemplateArgument.
@@ -461,7 +461,7 @@ public:
   }
 
   /// \brief - Fetches the full source range of the argument.
-  SourceRange getSourceRange() const LLVM_READONLY;
+  SourceRange getSourceRange() const LLVM37_READONLY;
 
   const TemplateArgument &getArgument() const {
     return Argument;
@@ -576,8 +576,8 @@ struct ASTTemplateArgumentListInfo {
 
     /// Force ASTTemplateArgumentListInfo to the right alignment
     /// for the following array of TemplateArgumentLocs.
-    llvm::AlignedCharArray<
-        llvm::AlignOf<TemplateArgumentLoc>::Alignment, 1> Aligner;
+    llvm37::AlignedCharArray<
+        llvm37::AlignOf<TemplateArgumentLoc>::Alignment, 1> Aligner;
   };
 
   /// \brief Retrieve the template arguments

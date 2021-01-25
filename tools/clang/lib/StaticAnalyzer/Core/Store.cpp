@@ -461,7 +461,7 @@ SVal StoreManager::getLValueElement(QualType elementType, NonLoc Offset,
   if (!BaseIdx.getAs<nonloc::ConcreteInt>())
     return UnknownVal();
 
-  const llvm::APSInt &BaseIdxI =
+  const llvm37::APSInt &BaseIdxI =
       BaseIdx.castAs<nonloc::ConcreteInt>().getValue();
 
   // Only allow non-integer offsets if the base region has no offset itself.
@@ -476,7 +476,7 @@ SVal StoreManager::getLValueElement(QualType elementType, NonLoc Offset,
                                                     Ctx));
   }
 
-  const llvm::APSInt& OffI = Offset.castAs<nonloc::ConcreteInt>().getValue();
+  const llvm37::APSInt& OffI = Offset.castAs<nonloc::ConcreteInt>().getValue();
   assert(BaseIdxI.isSigned());
 
   // Compute the new index.

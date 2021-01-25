@@ -7,11 +7,11 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Support/Dwarf.h"
+#include "llvm37/Support/Dwarf.h"
 #include "gtest/gtest.h"
 
-using namespace llvm;
-using namespace llvm::dwarf;
+using namespace llvm37;
+using namespace llvm37::dwarf;
 
 namespace {
 

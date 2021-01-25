@@ -11,29 +11,29 @@
 //
 
 
-#include "llvm/Pass.h"
+#include "llvm37/Pass.h"
 #include "dxc/DXIL/DxilConstants.h"
-#include "llvm/Analysis/DxilSimplify.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/GlobalVariable.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/Operator.h"
-#include "llvm/IR/CFG.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/IR/Dominators.h"
-#include "llvm/Transforms/Scalar.h"
-#include "llvm/Analysis/InstructionSimplify.h"
-#include "llvm/Analysis/ConstantFolding.h"
-#include "llvm/ADT/Statistic.h"
+#include "llvm37/Analysis/DxilSimplify.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/GlobalVariable.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/Operator.h"
+#include "llvm37/IR/CFG.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/IR/Dominators.h"
+#include "llvm37/Transforms/Scalar.h"
+#include "llvm37/Analysis/InstructionSimplify.h"
+#include "llvm37/Analysis/ConstantFolding.h"
+#include "llvm37/ADT/Statistic.h"
 
-#include "llvm/Analysis/DxilValueCache.h"
+#include "llvm37/Analysis/DxilValueCache.h"
 
 #include <unordered_set>
 
 #define DEBUG_TYPE "dxil-value-cache"
 
-using namespace llvm;
+using namespace llvm37;
 
 static
 bool IsConstantTrue(const Value *V) {
@@ -138,7 +138,7 @@ Value *DxilValueCache::ProcessAndSimplify_PHI(Instruction *I, DominatorTree *DT)
   // If we coulnd't deduce it, run the LLVM stock simplification to see
   // if we could do anything.
   if (!Simplified)
-    Simplified = llvm::SimplifyInstruction(I, I->getModule()->getDataLayout());
+    Simplified = llvm37::SimplifyInstruction(I, I->getModule()->getDataLayout());
 
   // One last step, to check if we have anything cached for whatever we
   // simplified to.
@@ -201,7 +201,7 @@ Value *DxilValueCache::ProcessAndSimplify_Load(Instruction *I, DominatorTree *DT
   Value *V = TryGetCachedValue(LI->getPointerOperand());
   if (Constant *ConstPtr = dyn_cast<Constant>(V)) {
     const DataLayout &DL = I->getModule()->getDataLayout();
-    return llvm::ConstantFoldLoadFromConstPtr(ConstPtr, DL);
+    return llvm37::ConstantFoldLoadFromConstPtr(ConstPtr, DL);
   }
   return nullptr;
 }
@@ -224,7 +224,7 @@ Value *DxilValueCache::SimplifyAndCacheResult(Instruction *I, DominatorTree *DT)
     SmallVector<Value *, 4> Ops;
     for (unsigned i = 0; i < I->getNumOperands(); i++)
       Ops.push_back(TryGetCachedValue(I->getOperand(i)));
-    Simplified = llvm::SimplifyGEPInst(Ops, DL, nullptr, DT);
+    Simplified = llvm37::SimplifyGEPInst(Ops, DL, nullptr, DT);
   }
   else if (Instruction::Call == I->getOpcode()) {
     Module *M = I->getModule();
@@ -233,8 +233,8 @@ Value *DxilValueCache::SimplifyAndCacheResult(Instruction *I, DominatorTree *DT)
     Function *CalledFunction = dyn_cast<Function>(Callee);
 
     if (CalledFunction && CalledFunction->getName() == hlsl::DXIL::kDxBreakFuncName) {
-      llvm::Type *i1Ty = llvm::Type::getInt1Ty(M->getContext());
-      Simplified = llvm::ConstantInt::get(i1Ty, 1);
+      llvm37::Type *i1Ty = llvm37::Type::getInt1Ty(M->getContext());
+      Simplified = llvm37::ConstantInt::get(i1Ty, 1);
     }
     else {
       SmallVector<Value *,16> Args;
@@ -246,14 +246,14 @@ Value *DxilValueCache::SimplifyAndCacheResult(Instruction *I, DominatorTree *DT)
         Simplified = hlsl::SimplifyDxilCall(CalledFunction, Args, CI, /* MayInsert */ false);
       }
       else {
-        Simplified = llvm::SimplifyCall(Callee, Args, DL, nullptr, DT);
+        Simplified = llvm37::SimplifyCall(Callee, Args, DL, nullptr, DT);
       }
     }
   }
   // The rest of the checks use LLVM stock simplifications
   else if (I->isBinaryOp()) {
     Simplified =
-      llvm::SimplifyBinOp(
+      llvm37::SimplifyBinOp(
         I->getOpcode(),
         TryGetCachedValue(I->getOperand(0)),
         TryGetCachedValue(I->getOperand(1)),
@@ -265,18 +265,18 @@ Value *DxilValueCache::SimplifyAndCacheResult(Instruction *I, DominatorTree *DT)
       Values.push_back(TryGetCachedValue(V));
     }
     Simplified =
-      llvm::SimplifyGEPInst(Values, DL, nullptr, DT, nullptr, nullptr);
+      llvm37::SimplifyGEPInst(Values, DL, nullptr, DT, nullptr, nullptr);
   }
   else if (CmpInst *Cmp = dyn_cast<CmpInst>(I)) {
     Simplified =
-      llvm::SimplifyCmpInst(Cmp->getPredicate(),
+      llvm37::SimplifyCmpInst(Cmp->getPredicate(),
         TryGetCachedValue(I->getOperand(0)),
         TryGetCachedValue(I->getOperand(1)),
         DL);
   }
   else if (SelectInst *Select = dyn_cast<SelectInst>(I)) {
     Simplified = 
-      llvm::SimplifySelectInst(
+      llvm37::SimplifySelectInst(
         TryGetCachedValue(Select->getCondition()),
         TryGetCachedValue(Select->getTrueValue()),
         TryGetCachedValue(Select->getFalseValue()),
@@ -285,14 +285,14 @@ Value *DxilValueCache::SimplifyAndCacheResult(Instruction *I, DominatorTree *DT)
   }
   else if (ExtractElementInst *IE = dyn_cast<ExtractElementInst>(I)) {
     Simplified =
-      llvm::SimplifyExtractElementInst(
+      llvm37::SimplifyExtractElementInst(
         TryGetCachedValue(IE->getVectorOperand()),
         TryGetCachedValue(IE->getIndexOperand()),
         DL, nullptr, DT);
   }
   else if (CastInst *Cast = dyn_cast<CastInst>(I)) {
     Simplified =
-      llvm::SimplifyCastInst(
+      llvm37::SimplifyCastInst(
         Cast->getOpcode(),
         TryGetCachedValue(Cast->getOperand(0)),
         Cast->getType(), DL);
@@ -351,7 +351,7 @@ void DxilValueCache::WeakValueMap::ResetUnknowns() {
   }
 }
 
-LLVM_DUMP_METHOD
+LLVM37_DUMP_METHOD
 void DxilValueCache::WeakValueMap::dump() const {
   for (auto It = Map.begin(), E = Map.end(); It != E; It++) {
     const Value *Key = It->first;
@@ -431,7 +431,7 @@ bool DxilValueCache::IsUnreachable(BasicBlock *BB, DominatorTree *DT) {
   return IsUnreachable_(BB);
 }
 
-LLVM_DUMP_METHOD
+LLVM37_DUMP_METHOD
 void DxilValueCache::dump() const {
   ValueMap.dump();
 }
@@ -543,7 +543,7 @@ Value *DxilValueCache::ProcessValue(Value *NewV, DominatorTree *DT) {
 
 char DxilValueCache::ID;
 
-Pass *llvm::createDxilValueCachePass() {
+Pass *llvm37::createDxilValueCachePass() {
   return new DxilValueCache();
 }
 

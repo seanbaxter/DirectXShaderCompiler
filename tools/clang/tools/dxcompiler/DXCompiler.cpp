@@ -9,12 +9,12 @@
 //                                                                           //
 ///////////////////////////////////////////////////////////////////////////////
 
-#include "llvm/Support/ManagedStatic.h"
-#include "llvm/Support/FileSystem.h"
+#include "llvm37/Support/ManagedStatic.h"
+#include "llvm37/Support/FileSystem.h"
 #include "dxc/Support/Global.h"
 #include "dxc/Support/WinIncludes.h"
 #include "dxc/Support/HLSLOptions.h"
-#ifdef LLVM_ON_WIN32
+#ifdef LLVM37_ON_WIN32
 #include "dxcetw.h"
 #endif
 #include "dxillib.h"
@@ -27,7 +27,7 @@ HRESULT SetupRegistryPassForPIX();
 // C++ exception specification ignored except to indicate a function is not __declspec(nothrow)
 #pragma warning( disable : 4290 )
 
-#ifdef LLVM_ON_WIN32
+#ifdef LLVM37_ON_WIN32
 // operator new and friends.
 void *  __CRTDECL operator new(std::size_t size) throw(std::bad_alloc) {
   void * ptr = DxcGetThreadMallocNoRef()->Alloc(size);
@@ -53,7 +53,7 @@ static HRESULT InitMaybeFail() throw() {
   IFC(DxcInitThreadMalloc());
   DxcSetThreadMallocToDefault();
   memSetup = true;
-  if (::llvm::sys::fs::SetupPerThreadFileSystem()) {
+  if (::llvm37::sys::fs::SetupPerThreadFileSystem()) {
     hr = E_FAIL;
     goto Cleanup;
   }
@@ -68,7 +68,7 @@ static HRESULT InitMaybeFail() throw() {
 Cleanup:
   if (FAILED(hr)) {
     if (fsSetup) {
-      ::llvm::sys::fs::CleanupPerThreadFileSystem();
+      ::llvm37::sys::fs::CleanupPerThreadFileSystem();
     }
     if (memSetup) {
       DxcClearThreadMalloc();
@@ -80,7 +80,7 @@ Cleanup:
   }
   return hr;
 }
-#if defined(LLVM_ON_UNIX)
+#if defined(LLVM37_ON_UNIX)
 HRESULT __attribute__ ((constructor)) DllMain() {
   return InitMaybeFail();
 }
@@ -88,12 +88,12 @@ HRESULT __attribute__ ((constructor)) DllMain() {
 void __attribute__ ((destructor)) DllShutdown() {
   DxcSetThreadMallocToDefault();
   ::hlsl::options::cleanupHlslOptTable();
-  ::llvm::sys::fs::CleanupPerThreadFileSystem();
-  ::llvm::llvm_shutdown();
+  ::llvm37::sys::fs::CleanupPerThreadFileSystem();
+  ::llvm37::llvm_shutdown();
   DxcClearThreadMalloc();
   DxcCleanupThreadMalloc();
 }
-#else // LLVM_ON_UNIX
+#else // LLVM37_ON_UNIX
 BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD Reason, LPVOID reserved) {
   BOOL result = TRUE;
   if (Reason == DLL_PROCESS_ATTACH) {
@@ -106,8 +106,8 @@ BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD Reason, LPVOID reserved) {
     DxcEtw_DXCompilerShutdown_Start();
     DxcSetThreadMallocToDefault();
     ::hlsl::options::cleanupHlslOptTable();
-    ::llvm::sys::fs::CleanupPerThreadFileSystem();
-    ::llvm::llvm_shutdown();
+    ::llvm37::sys::fs::CleanupPerThreadFileSystem();
+    ::llvm37::llvm_shutdown();
     if (reserved == NULL) { // FreeLibrary has been called or the DLL load failed
       DxilLibCleanup(DxilLibCleanUpType::UnloadLibrary);
     }
@@ -122,4 +122,4 @@ BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD Reason, LPVOID reserved) {
 
   return result;
 }
-#endif // LLVM_ON_UNIX
+#endif // LLVM37_ON_UNIX

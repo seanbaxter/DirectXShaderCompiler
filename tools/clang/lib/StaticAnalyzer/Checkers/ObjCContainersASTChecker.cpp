@@ -19,8 +19,8 @@
 #include "clang/StaticAnalyzer/Core/BugReporter/BugReporter.h"
 #include "clang/StaticAnalyzer/Core/Checker.h"
 #include "clang/StaticAnalyzer/Core/PathSensitive/AnalysisManager.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/Support/raw_ostream.h"
 //                                                                           //
 ///////////////////////////////////////////////////////////////////////////////
 using namespace clang;
@@ -132,11 +132,11 @@ void WalkAST::VisitCallExpr(CallExpr *CE) {
     assert(ArgNum == 1 || ArgNum == 2);
 
     SmallString<64> BufName;
-    llvm::raw_svector_ostream OsName(BufName);
+    llvm37::raw_svector_ostream OsName(BufName);
     OsName << " Invalid use of '" << Name << "'" ;
 
     SmallString<256> Buf;
-    llvm::raw_svector_ostream Os(Buf);
+    llvm37::raw_svector_ostream Os(Buf);
     // Use "second" and "third" since users will expect 1-based indexing
     // for parameter names when mentioned in prose.
     Os << " The "<< ((ArgNum == 1) ? "second" : "third") << " argument to '"

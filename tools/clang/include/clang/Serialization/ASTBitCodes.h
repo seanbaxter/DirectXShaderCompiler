@@ -14,13 +14,13 @@
 // respective lists.
 //
 //===----------------------------------------------------------------------===//
-#ifndef LLVM_CLANG_SERIALIZATION_ASTBITCODES_H
-#define LLVM_CLANG_SERIALIZATION_ASTBITCODES_H
+#ifndef LLVM37_CLANG_SERIALIZATION_ASTBITCODES_H
+#define LLVM37_CLANG_SERIALIZATION_ASTBITCODES_H
 
 #include "clang/AST/Type.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/Bitcode/BitCodes.h"
-#include "llvm/Support/DataTypes.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/Bitcode/BitCodes.h"
+#include "llvm37/Support/DataTypes.h"
 
 namespace clang {
   namespace serialization {
@@ -203,7 +203,7 @@ namespace clang {
     enum BlockIDs {
       /// \brief The AST block, which acts as a container around the
       /// full AST block.
-      AST_BLOCK_ID = llvm::bitc::FIRST_APPLICATION_BLOCKID,
+      AST_BLOCK_ID = llvm37::bitc::FIRST_APPLICATION_BLOCKID,
 
       /// \brief The block containing information about the source
       /// manager.

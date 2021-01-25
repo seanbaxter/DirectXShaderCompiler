@@ -12,16 +12,16 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/IR/GlobalValue.h"
-#include "llvm/ADT/SmallPtrSet.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/DerivedTypes.h"
-#include "llvm/IR/GlobalAlias.h"
-#include "llvm/IR/GlobalVariable.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/Operator.h"
-#include "llvm/Support/ErrorHandling.h"
-using namespace llvm;
+#include "llvm37/IR/GlobalValue.h"
+#include "llvm37/ADT/SmallPtrSet.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/DerivedTypes.h"
+#include "llvm37/IR/GlobalAlias.h"
+#include "llvm37/IR/GlobalVariable.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/Operator.h"
+#include "llvm37/Support/ErrorHandling.h"
+using namespace llvm37;
 
 //===----------------------------------------------------------------------===//
 //                            GlobalValue Class

@@ -12,22 +12,22 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/CodeGen/MachineSSAUpdater.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/CodeGen/MachineInstr.h"
-#include "llvm/CodeGen/MachineInstrBuilder.h"
-#include "llvm/CodeGen/MachineRegisterInfo.h"
-#include "llvm/Support/AlignOf.h"
-#include "llvm/Support/Allocator.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Target/TargetInstrInfo.h"
-#include "llvm/Target/TargetRegisterInfo.h"
-#include "llvm/Target/TargetSubtargetInfo.h"
-#include "llvm/Transforms/Utils/SSAUpdaterImpl.h"
-using namespace llvm;
+#include "llvm37/CodeGen/MachineSSAUpdater.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/CodeGen/MachineInstr.h"
+#include "llvm37/CodeGen/MachineInstrBuilder.h"
+#include "llvm37/CodeGen/MachineRegisterInfo.h"
+#include "llvm37/Support/AlignOf.h"
+#include "llvm37/Support/Allocator.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Target/TargetInstrInfo.h"
+#include "llvm37/Target/TargetRegisterInfo.h"
+#include "llvm37/Target/TargetSubtargetInfo.h"
+#include "llvm37/Transforms/Utils/SSAUpdaterImpl.h"
+using namespace llvm37;
 
 #define DEBUG_TYPE "machine-ssaupdater"
 
@@ -234,7 +234,7 @@ void MachineSSAUpdater::RewriteUse(MachineOperand &U) {
 
 /// SSAUpdaterTraits<MachineSSAUpdater> - Traits for the SSAUpdaterImpl
 /// template, specialized for MachineSSAUpdater.
-namespace llvm {
+namespace llvm37 {
 template<>
 class SSAUpdaterTraits<MachineSSAUpdater> {
 public:

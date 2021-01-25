@@ -12,27 +12,27 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Linker/Linker.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/Bitcode/ReaderWriter.h"
-#include "llvm/IR/AutoUpgrade.h"
-#include "llvm/IR/DiagnosticInfo.h"
-#include "llvm/IR/DiagnosticPrinter.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/Verifier.h"
-#include "llvm/IRReader/IRReader.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/FileSystem.h"
-#include "llvm/Support/ManagedStatic.h"
-#include "llvm/Support/Path.h"
-#include "llvm/Support/PrettyStackTrace.h"
-#include "llvm/Support/Signals.h"
-#include "llvm/Support/SourceMgr.h"
-#include "llvm/Support/SystemUtils.h"
-#include "llvm/Support/ToolOutputFile.h"
+#include "llvm37/Linker/Linker.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/Bitcode/ReaderWriter.h"
+#include "llvm37/IR/AutoUpgrade.h"
+#include "llvm37/IR/DiagnosticInfo.h"
+#include "llvm37/IR/DiagnosticPrinter.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/Verifier.h"
+#include "llvm37/IRReader/IRReader.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/FileSystem.h"
+#include "llvm37/Support/ManagedStatic.h"
+#include "llvm37/Support/Path.h"
+#include "llvm37/Support/PrettyStackTrace.h"
+#include "llvm37/Support/Signals.h"
+#include "llvm37/Support/SourceMgr.h"
+#include "llvm37/Support/SystemUtils.h"
+#include "llvm37/Support/ToolOutputFile.h"
 #include <memory>
-using namespace llvm;
+using namespace llvm37;
 
 static cl::list<std::string>
 InputFilenames(cl::Positional, cl::OneOrMore,

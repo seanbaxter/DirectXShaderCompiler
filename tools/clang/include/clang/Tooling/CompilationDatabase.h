@@ -25,13 +25,13 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_TOOLING_COMPILATIONDATABASE_H
-#define LLVM_CLANG_TOOLING_COMPILATIONDATABASE_H
+#ifndef LLVM37_CLANG_TOOLING_COMPILATIONDATABASE_H
+#define LLVM37_CLANG_TOOLING_COMPILATIONDATABASE_H
 
 #include "clang/Basic/LLVM.h"
-#include "llvm/ADT/ArrayRef.h"
-#include "llvm/ADT/StringRef.h"
-#include "llvm/ADT/Twine.h"
+#include "llvm37/ADT/ArrayRef.h"
+#include "llvm37/ADT/StringRef.h"
+#include "llvm37/ADT/Twine.h"
 #include <memory>
 #include <string>
 #include <vector>

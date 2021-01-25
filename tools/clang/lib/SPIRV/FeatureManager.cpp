@@ -10,7 +10,7 @@
 
 #include <sstream>
 
-#include "llvm/ADT/StringSwitch.h"
+#include "llvm37/ADT/StringSwitch.h"
 
 namespace clang {
 namespace spirv {
@@ -47,13 +47,13 @@ FeatureManager::FeatureManager(DiagnosticsEngine &de,
   }
 }
 
-bool FeatureManager::allowExtension(llvm::StringRef name) {
+bool FeatureManager::allowExtension(llvm37::StringRef name) {
   // Special case: If we are asked to allow "SPV_KHR" extension, it indicates
   // that we should allow using *all* KHR extensions.
   if (getExtensionSymbol(name) == Extension::KHR) {
     bool result = true;
     for (uint32_t i = 0; i < static_cast<uint32_t>(Extension::Unknown); ++i) {
-      llvm::StringRef extName(getExtensionName(static_cast<Extension>(i)));
+      llvm37::StringRef extName(getExtensionName(static_cast<Extension>(i)));
       if (isKHRExtension(extName))
         result = result && allowExtension(extName);
     }
@@ -81,7 +81,7 @@ void FeatureManager::allowAllKnownExtensions() {
       allowedExtensions.reset(ext);
 }
 
-bool FeatureManager::requestExtension(Extension ext, llvm::StringRef target,
+bool FeatureManager::requestExtension(Extension ext, llvm37::StringRef target,
                                       SourceLocation srcLoc) {
   if (allowedExtensions.test(static_cast<unsigned>(ext)))
     return true;
@@ -93,7 +93,7 @@ bool FeatureManager::requestExtension(Extension ext, llvm::StringRef target,
 }
 
 bool FeatureManager::requestTargetEnv(spv_target_env requestedEnv,
-                                      llvm::StringRef target,
+                                      llvm37::StringRef target,
                                       SourceLocation srcLoc) {
   if (targetEnv < requestedEnv) {
     emitError("%0 is required for %1 but not permitted to use", srcLoc)
@@ -107,8 +107,8 @@ bool FeatureManager::requestTargetEnv(spv_target_env requestedEnv,
   return true;
 }
 
-Extension FeatureManager::getExtensionSymbol(llvm::StringRef name) {
-  return llvm::StringSwitch<Extension>(name)
+Extension FeatureManager::getExtensionSymbol(llvm37::StringRef name) {
+  return llvm37::StringSwitch<Extension>(name)
       .Case("KHR", Extension::KHR)
       .Case("SPV_KHR_16bit_storage", Extension::KHR_16bit_storage)
       .Case("SPV_KHR_device_group", Extension::KHR_device_group)
@@ -195,7 +195,7 @@ const char *FeatureManager::getExtensionName(Extension symbol) {
   return "<unknown extension>";
 }
 
-bool FeatureManager::isKHRExtension(llvm::StringRef name) {
+bool FeatureManager::isKHRExtension(llvm37::StringRef name) {
   return name.startswith_lower("spv_khr_");
 }
 

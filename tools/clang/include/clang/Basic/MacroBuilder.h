@@ -12,12 +12,12 @@
 ///
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_BASIC_MACROBUILDER_H
-#define LLVM_CLANG_BASIC_MACROBUILDER_H
+#ifndef LLVM37_CLANG_BASIC_MACROBUILDER_H
+#define LLVM37_CLANG_BASIC_MACROBUILDER_H
 
 #include "clang/Basic/LLVM.h"
-#include "llvm/ADT/Twine.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/Twine.h"
+#include "llvm37/Support/raw_ostream.h"
 
 namespace clang {
 

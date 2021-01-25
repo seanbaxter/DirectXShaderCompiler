@@ -21,21 +21,21 @@
 #include "clang/AST/Expr.h"
 #include "clang/AST/RecordLayout.h"
 #include "clang/Frontend/CodeGenOptions.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/DerivedTypes.h"
-#include "llvm/IR/Type.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/MathExtras.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/IR/DerivedTypes.h"
+#include "llvm37/IR/Type.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/MathExtras.h"
+#include "llvm37/Support/raw_ostream.h"
 using namespace clang;
 using namespace CodeGen;
 
 namespace {
 /// The CGRecordLowering is responsible for lowering an ASTRecordLayout to an
-/// llvm::Type.  Some of the lowering is straightforward, some is not.  Here we
+/// llvm37::Type.  Some of the lowering is straightforward, some is not.  Here we
 /// detail some of the complexities and weirdnesses here.
 /// * LLVM does not have unions - Unions can, in theory be represented by any
-///   llvm::Type with correct size.  We choose a field via a specific heuristic
+///   llvm37::Type with correct size.  We choose a field via a specific heuristic
 ///   and add padding if necessary.
 /// * LLVM does not have bitfields - Bitfields are collected into contiguous
 ///   runs and allocated as a single storage type for the run.  ASTRecordLayout
@@ -78,15 +78,15 @@ struct CGRecordLowering {
   struct MemberInfo {
     CharUnits Offset;
     enum InfoKind { VFPtr, VBPtr, Field, Base, VBase, Scissor } Kind;
-    llvm::Type *Data;
+    llvm37::Type *Data;
     union {
       const FieldDecl *FD;
       const CXXRecordDecl *RD;
     };
-    MemberInfo(CharUnits Offset, InfoKind Kind, llvm::Type *Data,
+    MemberInfo(CharUnits Offset, InfoKind Kind, llvm37::Type *Data,
                const FieldDecl *FD = nullptr)
       : Offset(Offset), Kind(Kind), Data(Data), FD(FD) {}
-    MemberInfo(CharUnits Offset, InfoKind Kind, llvm::Type *Data,
+    MemberInfo(CharUnits Offset, InfoKind Kind, llvm37::Type *Data,
                const CXXRecordDecl *RD)
       : Offset(Offset), Kind(Kind), Data(Data), RD(RD) {}
     // MemberInfos are sorted so we define a < operator.
@@ -95,8 +95,8 @@ struct CGRecordLowering {
   // The constructor.
   CGRecordLowering(CodeGenTypes &Types, const RecordDecl *D, bool Packed);
   // Short helper routines.
-  /// \brief Constructs a MemberInfo instance from an offset and llvm::Type *.
-  MemberInfo StorageInfo(CharUnits Offset, llvm::Type *Data) {
+  /// \brief Constructs a MemberInfo instance from an offset and llvm37::Type *.
+  MemberInfo StorageInfo(CharUnits Offset, llvm37::Type *Data) {
     return MemberInfo(Offset, MemberInfo::Field, Data);
   }
 
@@ -118,38 +118,38 @@ struct CGRecordLowering {
     return !Context.getTargetInfo().getCXXABI().isMicrosoft();
   }
 
-  /// \brief Wraps llvm::Type::getIntNTy with some implicit arguments.
-  llvm::Type *getIntNType(uint64_t NumBits) {
-    return llvm::Type::getIntNTy(Types.getLLVMContext(),
-        (unsigned)llvm::RoundUpToAlignment(NumBits, 8));
+  /// \brief Wraps llvm37::Type::getIntNTy with some implicit arguments.
+  llvm37::Type *getIntNType(uint64_t NumBits) {
+    return llvm37::Type::getIntNTy(Types.getLLVMContext(),
+        (unsigned)llvm37::RoundUpToAlignment(NumBits, 8));
   }
   /// \brief Gets an llvm type of size NumBytes and alignment 1.
-  llvm::Type *getByteArrayType(CharUnits NumBytes) {
+  llvm37::Type *getByteArrayType(CharUnits NumBytes) {
     assert(!NumBytes.isZero() && "Empty byte arrays aren't allowed.");
-    llvm::Type *Type = llvm::Type::getInt8Ty(Types.getLLVMContext());
+    llvm37::Type *Type = llvm37::Type::getInt8Ty(Types.getLLVMContext());
     return NumBytes == CharUnits::One() ? Type :
-        (llvm::Type *)llvm::ArrayType::get(Type, NumBytes.getQuantity());
+        (llvm37::Type *)llvm37::ArrayType::get(Type, NumBytes.getQuantity());
   }
   /// \brief Gets the storage type for a field decl and handles storage
   /// for itanium bitfields that are smaller than their declared type.
-  llvm::Type *getStorageType(const FieldDecl *FD) {
-    llvm::Type *Type = Types.ConvertTypeForMem(FD->getType());
+  llvm37::Type *getStorageType(const FieldDecl *FD) {
+    llvm37::Type *Type = Types.ConvertTypeForMem(FD->getType());
     if (!FD->isBitField()) return Type;
     if (isDiscreteBitFieldABI()) return Type;
     return getIntNType(std::min(FD->getBitWidthValue(Context),
                              (unsigned)Context.toBits(getSize(Type))));
   }
   /// \brief Gets the llvm Basesubobject type from a CXXRecordDecl.
-  llvm::Type *getStorageType(const CXXRecordDecl *RD) {
+  llvm37::Type *getStorageType(const CXXRecordDecl *RD) {
     return Types.getCGRecordLayout(RD).getBaseSubobjectLLVMType();
   }
   CharUnits bitsToCharUnits(uint64_t BitOffset) {
     return Context.toCharUnitsFromBits(BitOffset);
   }
-  CharUnits getSize(llvm::Type *Type) {
+  CharUnits getSize(llvm37::Type *Type) {
     return CharUnits::fromQuantity(DataLayout.getTypeAllocSize(Type));
   }
-  CharUnits getAlignment(llvm::Type *Type) {
+  CharUnits getAlignment(llvm37::Type *Type) {
     return CharUnits::fromQuantity(DataLayout.getABITypeAlignment(Type));
   }
   bool isZeroInitializable(const FieldDecl *FD) {
@@ -167,7 +167,7 @@ struct CGRecordLowering {
   }
   // Layout routines.
   void setBitFieldInfo(const FieldDecl *FD, CharUnits StartOffset, 
-                       llvm::Type *StorageType);
+                       llvm37::Type *StorageType);
   /// \brief Lowers an ASTRecordLayout to a llvm type.
   void lower(bool NonVirtualBaseType);
   void lowerUnion();
@@ -196,15 +196,15 @@ struct CGRecordLowering {
   const RecordDecl *D;
   const CXXRecordDecl *RD;
   const ASTRecordLayout &Layout;
-  const llvm::DataLayout &DataLayout;
+  const llvm37::DataLayout &DataLayout;
   // Helpful intermediate data-structures.
   std::vector<MemberInfo> Members;
   // Output fields, consumed by CodeGenTypes::ComputeRecordLayout.
-  SmallVector<llvm::Type *, 16> FieldTypes;
-  llvm::DenseMap<const FieldDecl *, unsigned> Fields;
-  llvm::DenseMap<const FieldDecl *, CGBitFieldInfo> BitFields;
-  llvm::DenseMap<const CXXRecordDecl *, unsigned> NonVirtualBases;
-  llvm::DenseMap<const CXXRecordDecl *, unsigned> VirtualBases;
+  SmallVector<llvm37::Type *, 16> FieldTypes;
+  llvm37::DenseMap<const FieldDecl *, unsigned> Fields;
+  llvm37::DenseMap<const FieldDecl *, CGBitFieldInfo> BitFields;
+  llvm37::DenseMap<const CXXRecordDecl *, unsigned> NonVirtualBases;
+  llvm37::DenseMap<const CXXRecordDecl *, unsigned> VirtualBases;
   bool IsZeroInitializable : 1;
   bool IsZeroInitializableAsBase : 1;
   bool Packed : 1;
@@ -222,7 +222,7 @@ CGRecordLowering::CGRecordLowering(CodeGenTypes &Types, const RecordDecl *D,    
     IsZeroInitializableAsBase(true), Packed(Packed) {}
 
 void CGRecordLowering::setBitFieldInfo(
-    const FieldDecl *FD, CharUnits StartOffset, llvm::Type *StorageType) {
+    const FieldDecl *FD, CharUnits StartOffset, llvm37::Type *StorageType) {
   CGBitFieldInfo &Info = BitFields[FD->getCanonicalDecl()];
   Info.IsSigned = FD->getType()->isSignedIntegerOrEnumerationType();
   Info.Offset = (unsigned)(getFieldBitOffset(FD) - Context.toBits(StartOffset));
@@ -287,7 +287,7 @@ void CGRecordLowering::lower(bool NVBaseType) {
 
 void CGRecordLowering::lowerUnion() {
   CharUnits LayoutSize = Layout.getSize();
-  llvm::Type *StorageType = nullptr;
+  llvm37::Type *StorageType = nullptr;
   bool SeenNamedMember = false;
   // Iterate through the fields setting bitFieldInfo and the Fields array. Also
   // locate the "most appropriate" storage type.  The heuristic for finding the
@@ -299,13 +299,13 @@ void CGRecordLowering::lowerUnion() {
       // Skip 0 sized bitfields.
       if (Field->getBitWidthValue(Context) == 0)
         continue;
-      llvm::Type *FieldType = getStorageType(Field);
+      llvm37::Type *FieldType = getStorageType(Field);
       if (LayoutSize < getSize(FieldType))
         FieldType = getByteArrayType(LayoutSize);
       setBitFieldInfo(Field, CharUnits::Zero(), FieldType);
     }
     Fields[Field->getCanonicalDecl()] = 0;
-    llvm::Type *FieldType = getStorageType(Field);
+    llvm37::Type *FieldType = getStorageType(Field);
     // Compute zero-initializable status.
     // This union might not be zero initialized: it may contain a pointer to
     // data member which might have some exotic initialization sequence.
@@ -386,7 +386,7 @@ CGRecordLowering::accumulateBitFields(RecordDecl::field_iterator Field,
         Run = FieldEnd;
         continue;
       }
-      llvm::Type *Type = Types.ConvertTypeForMem(Field->getType());
+      llvm37::Type *Type = Types.ConvertTypeForMem(Field->getType());
       // If we don't have a run yet, or don't live within the previous run's
       // allocated storage then we allocate some storage and start a new run.
       if (Run == FieldEnd || BitOffset >= Tail) {
@@ -428,7 +428,7 @@ CGRecordLowering::accumulateBitFields(RecordDecl::field_iterator Field,
       continue;
     }
     // We've hit a break-point in the run and need to emit a storage field.
-    llvm::Type *Type = getIntNType(Tail - StartBitOffset);
+    llvm37::Type *Type = getIntNType(Tail - StartBitOffset);
     // Add the storage member to the record and set the bitfield info for all of
     // the bitfields in the run.  Bitfields get the offset of their storage but
     // come afterward and remain there after a stable sort.
@@ -465,11 +465,11 @@ void CGRecordLowering::accumulateBases() {
 void CGRecordLowering::accumulateVPtrs() {
   if (Layout.hasOwnVFPtr())
     Members.push_back(MemberInfo(CharUnits::Zero(), MemberInfo::VFPtr,
-        llvm::FunctionType::get(getIntNType(32), /*isVarArg=*/true)->
+        llvm37::FunctionType::get(getIntNType(32), /*isVarArg=*/true)->
             getPointerTo()->getPointerTo()));
   if (Layout.hasOwnVBPtr())
     Members.push_back(MemberInfo(Layout.getVBPtrOffset(), MemberInfo::VBPtr,
-        llvm::Type::getInt32PtrTy(Types.getLLVMContext())));
+        llvm37::Type::getInt32PtrTy(Types.getLLVMContext())));
 }
 
 void CGRecordLowering::accumulateVBases() {
@@ -557,8 +557,8 @@ void CGRecordLowering::clipTailPadding() {
     if (Member->Offset < Tail) {
       assert(Prior->Kind == MemberInfo::Field && !Prior->FD &&
              "Only storage fields have tail padding!");
-      Prior->Data = getByteArrayType(bitsToCharUnits(llvm::RoundUpToAlignment(
-          cast<llvm::IntegerType>(Prior->Data)->getIntegerBitWidth(), 8)));
+      Prior->Data = getByteArrayType(bitsToCharUnits(llvm37::RoundUpToAlignment(
+          cast<llvm37::IntegerType>(Prior->Data)->getIntegerBitWidth(), 8)));
     }
     if (Member->Data)
       Prior = Member;
@@ -653,7 +653,7 @@ CGBitFieldInfo CGBitFieldInfo::MakeInfo(CodeGenTypes &Types,
   // This function is vestigial from CGRecordLayoutBuilder days but is still 
   // used in GCObjCRuntime.cpp.  That usage has a "fixme" attached to it that
   // when addressed will allow for the removal of this function.
-  llvm::Type *Ty = Types.ConvertTypeForMem(FD->getType());
+  llvm37::Type *Ty = Types.ConvertTypeForMem(FD->getType());
   CharUnits TypeSizeInBytes =
     CharUnits::fromQuantity(Types.getDataLayout().getTypeAllocSize(Ty));
   uint64_t TypeSizeInBits = Types.getContext().toBits(TypeSizeInBytes);
@@ -685,19 +685,19 @@ CGBitFieldInfo CGBitFieldInfo::MakeInfo(CodeGenTypes &Types,
 }
 
 CGRecordLayout *CodeGenTypes::ComputeRecordLayout(const RecordDecl *D,
-                                                  llvm::StructType *Ty) {
+                                                  llvm37::StructType *Ty) {
   CGRecordLowering Builder(*this, D, /*Packed=*/false);
 
   Builder.lower(/*NonVirtualBaseType=*/false);
 
   // If we're in C++, compute the base subobject type.
-  llvm::StructType *BaseTy = nullptr;
+  llvm37::StructType *BaseTy = nullptr;
   if (isa<CXXRecordDecl>(D) && !D->isUnion() && !D->hasAttr<FinalAttr>()) {
     BaseTy = Ty;
     if (Builder.Layout.getNonVirtualSize() != Builder.Layout.getSize()) {
       CGRecordLowering BaseBuilder(*this, D, /*Packed=*/Builder.Packed);
       BaseBuilder.lower(/*NonVirtualBaseType=*/true);
-      BaseTy = llvm::StructType::create(
+      BaseTy = llvm37::StructType::create(
           getLLVMContext(), BaseBuilder.FieldTypes, "", BaseBuilder.Packed);
       addRecordTypeName(D, BaseTy, ".base");
       // BaseTy and Ty must agree on their packedness for getLLVMFieldNo to work
@@ -727,11 +727,11 @@ CGRecordLayout *CodeGenTypes::ComputeRecordLayout(const RecordDecl *D,
 
   // Dump the layout, if requested.
   if (getContext().getLangOpts().DumpRecordLayouts) {
-    llvm::outs() << "\n*** Dumping IRgen Record Layout\n";
-    llvm::outs() << "Record: ";
-    D->dump(llvm::outs());
-    llvm::outs() << "\nLayout: ";
-    RL->print(llvm::outs());
+    llvm37::outs() << "\n*** Dumping IRgen Record Layout\n";
+    llvm37::outs() << "Record: ";
+    D->dump(llvm37::outs());
+    llvm37::outs() << "\nLayout: ";
+    RL->print(llvm37::outs());
   }
 
 #ifndef NDEBUG
@@ -754,9 +754,9 @@ CGRecordLayout *CodeGenTypes::ComputeRecordLayout(const RecordDecl *D,
   }
                                      
   // Verify that the LLVM and AST field offsets agree.
-  llvm::StructType *ST =
-    dyn_cast<llvm::StructType>(RL->getLLVMType());
-  const llvm::StructLayout *SL = getDataLayout().getStructLayout(ST);
+  llvm37::StructType *ST =
+    dyn_cast<llvm37::StructType>(RL->getLLVMType());
+  const llvm37::StructLayout *SL = getDataLayout().getStructLayout(ST);
 
   const ASTRecordLayout &AST_RL = getContext().getASTRecordLayout(D);
   RecordDecl::field_iterator it = D->field_begin();
@@ -781,7 +781,7 @@ CGRecordLayout *CodeGenTypes::ComputeRecordLayout(const RecordDecl *D,
       continue;
 
     const CGBitFieldInfo &Info = RL->getBitFieldInfo(FD);
-    llvm::Type *ElementTy = ST->getTypeAtIndex(RL->getLLVMFieldNo(FD));
+    llvm37::Type *ElementTy = ST->getTypeAtIndex(RL->getLLVMFieldNo(FD));
 
     // Unions have overlapping elements dictating their layout, but for
     // non-unions we can verify that this section of the layout is the exact
@@ -825,7 +825,7 @@ void CGRecordLayout::print(raw_ostream &OS) const {
 
   // Print bit-field infos in declaration order.
   std::vector<std::pair<unsigned, const CGBitFieldInfo*> > BFIs;
-  for (llvm::DenseMap<const FieldDecl*, CGBitFieldInfo>::const_iterator
+  for (llvm37::DenseMap<const FieldDecl*, CGBitFieldInfo>::const_iterator
          it = BitFields.begin(), ie = BitFields.end();
        it != ie; ++it) {
     const RecordDecl *RD = it->first->getParent();
@@ -835,7 +835,7 @@ void CGRecordLayout::print(raw_ostream &OS) const {
       ++Index;
     BFIs.push_back(std::make_pair(Index, &it->second));
   }
-  llvm::array_pod_sort(BFIs.begin(), BFIs.end());
+  llvm37::array_pod_sort(BFIs.begin(), BFIs.end());
   for (unsigned i = 0, e = BFIs.size(); i != e; ++i) {
     OS.indent(4);
     BFIs[i].second->print(OS);
@@ -846,7 +846,7 @@ void CGRecordLayout::print(raw_ostream &OS) const {
 }
 
 void CGRecordLayout::dump() const {
-  print(llvm::errs());
+  print(llvm37::errs());
 }
 
 void CGBitFieldInfo::print(raw_ostream &OS) const {
@@ -859,5 +859,5 @@ void CGBitFieldInfo::print(raw_ostream &OS) const {
 }
 
 void CGBitFieldInfo::dump() const {
-  print(llvm::errs());
+  print(llvm37::errs());
 }

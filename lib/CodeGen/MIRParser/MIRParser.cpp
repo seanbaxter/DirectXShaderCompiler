@@ -12,34 +12,34 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/CodeGen/MIRParser/MIRParser.h"
+#include "llvm37/CodeGen/MIRParser/MIRParser.h"
 #include "MIParser.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/StringRef.h"
-#include "llvm/ADT/StringMap.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/AsmParser/Parser.h"
-#include "llvm/AsmParser/SlotMapping.h"
-#include "llvm/CodeGen/MachineFunction.h"
-#include "llvm/CodeGen/MachineFrameInfo.h"
-#include "llvm/CodeGen/MachineRegisterInfo.h"
-#include "llvm/CodeGen/MIRYamlMapping.h"
-#include "llvm/IR/BasicBlock.h"
-#include "llvm/IR/DiagnosticInfo.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/ValueSymbolTable.h"
-#include "llvm/Support/LineIterator.h"
-#include "llvm/Support/SMLoc.h"
-#include "llvm/Support/SourceMgr.h"
-#include "llvm/Support/MemoryBuffer.h"
-#include "llvm/Support/YAMLTraits.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/StringRef.h"
+#include "llvm37/ADT/StringMap.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/AsmParser/Parser.h"
+#include "llvm37/AsmParser/SlotMapping.h"
+#include "llvm37/CodeGen/MachineFunction.h"
+#include "llvm37/CodeGen/MachineFrameInfo.h"
+#include "llvm37/CodeGen/MachineRegisterInfo.h"
+#include "llvm37/CodeGen/MIRYamlMapping.h"
+#include "llvm37/IR/BasicBlock.h"
+#include "llvm37/IR/DiagnosticInfo.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/ValueSymbolTable.h"
+#include "llvm37/Support/LineIterator.h"
+#include "llvm37/Support/SMLoc.h"
+#include "llvm37/Support/SourceMgr.h"
+#include "llvm37/Support/MemoryBuffer.h"
+#include "llvm37/Support/YAMLTraits.h"
 #include <memory>
 
-using namespace llvm;
+using namespace llvm37;
 
-namespace llvm {
+namespace llvm37 {
 
 /// This class implements the parsing of LLVM IR that's embedded inside a MIR
 /// file.
@@ -132,7 +132,7 @@ private:
                                          StringRef Name);
 };
 
-} // end namespace llvm
+} // end namespace llvm37
 
 MIRParserImpl::MIRParserImpl(std::unique_ptr<MemoryBuffer> Contents,
                              StringRef Filename, LLVMContext &Context)
@@ -187,7 +187,7 @@ std::unique_ptr<Module> MIRParserImpl::parse() {
     if (In.error())
       return nullptr;
     // Create an empty module when the MIR file is empty.
-    return llvm::make_unique<Module>(Filename, Context);
+    return llvm37::make_unique<Module>(Filename, Context);
   }
 
   std::unique_ptr<Module> M;
@@ -208,7 +208,7 @@ std::unique_ptr<Module> MIRParserImpl::parse() {
       return M;
   } else {
     // Create an new, empty module.
-    M = llvm::make_unique<Module>(Filename, Context);
+    M = llvm37::make_unique<Module>(Filename, Context);
     NoLLVMIR = true;
   }
 
@@ -224,7 +224,7 @@ std::unique_ptr<Module> MIRParserImpl::parse() {
 
 bool MIRParserImpl::parseMachineFunction(yaml::Input &In, Module &M,
                                          bool NoLLVMIR) {
-  auto MF = llvm::make_unique<yaml::MachineFunction>();
+  auto MF = llvm37::make_unique<yaml::MachineFunction>();
   yaml::yamlize(In, *MF, false);
   if (In.error())
     return true;
@@ -492,7 +492,7 @@ bool MIRParser::initializeMachineFunction(MachineFunction &MF) {
   return Impl->initializeMachineFunction(MF);
 }
 
-std::unique_ptr<MIRParser> llvm::createMIRParserFromFile(StringRef Filename,
+std::unique_ptr<MIRParser> llvm37::createMIRParserFromFile(StringRef Filename,
                                                          SMDiagnostic &Error,
                                                          LLVMContext &Context) {
   auto FileOrErr = MemoryBuffer::getFile(Filename);
@@ -505,9 +505,9 @@ std::unique_ptr<MIRParser> llvm::createMIRParserFromFile(StringRef Filename,
 }
 
 std::unique_ptr<MIRParser>
-llvm::createMIRParser(std::unique_ptr<MemoryBuffer> Contents,
+llvm37::createMIRParser(std::unique_ptr<MemoryBuffer> Contents,
                       LLVMContext &Context) {
   auto Filename = Contents->getBufferIdentifier();
-  return llvm::make_unique<MIRParser>(
-      llvm::make_unique<MIRParserImpl>(std::move(Contents), Filename, Context));
+  return llvm37::make_unique<MIRParser>(
+      llvm37::make_unique<MIRParserImpl>(std::move(Contents), Filename, Context));
 }

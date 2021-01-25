@@ -12,13 +12,13 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Analysis/Interval.h"
-#include "llvm/IR/BasicBlock.h"
-#include "llvm/IR/CFG.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/Analysis/Interval.h"
+#include "llvm37/IR/BasicBlock.h"
+#include "llvm37/IR/CFG.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <algorithm>
 
-using namespace llvm;
+using namespace llvm37;
 
 //===----------------------------------------------------------------------===//
 // Interval Implementation

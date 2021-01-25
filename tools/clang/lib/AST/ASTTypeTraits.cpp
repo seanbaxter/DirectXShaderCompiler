@@ -109,7 +109,7 @@ ASTNodeKind ASTNodeKind::getFromNode(const Type &T) {
   llvm_unreachable("invalid type kind");
 }
 
-void DynTypedNode::print(llvm::raw_ostream &OS,
+void DynTypedNode::print(llvm37::raw_ostream &OS,
                          const PrintingPolicy &PP) const {
   if (const TemplateArgument *TA = get<TemplateArgument>())
     TA->print(PP, OS);
@@ -131,7 +131,7 @@ void DynTypedNode::print(llvm::raw_ostream &OS,
     OS << "Unable to print values of type " << NodeKind.asStringRef() << "\n";
 }
 
-void DynTypedNode::dump(llvm::raw_ostream &OS, SourceManager &SM) const {
+void DynTypedNode::dump(llvm37::raw_ostream &OS, SourceManager &SM) const {
   if (const Decl *D = get<Decl>())
     D->dump(OS);
   else if (const Stmt *S = get<Stmt>())

@@ -13,7 +13,7 @@
 namespace clang {
 namespace spirv {
 
-void CapabilityVisitor::addExtension(Extension ext, llvm::StringRef target,
+void CapabilityVisitor::addExtension(Extension ext, llvm37::StringRef target,
                                      SourceLocation loc) {
   featureManager.requestExtension(ext, target, loc);
   // Do not emit OpExtension if the given extension is natively supported in

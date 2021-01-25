@@ -11,8 +11,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_AST_ATTRITERATOR_H
-#define LLVM_CLANG_AST_ATTRITERATOR_H
+#ifndef LLVM37_CLANG_AST_ATTRITERATOR_H
+#define LLVM37_CLANG_AST_ATTRITERATOR_H
 
 #include "clang/Basic/LLVM.h"
 #include <iterator>

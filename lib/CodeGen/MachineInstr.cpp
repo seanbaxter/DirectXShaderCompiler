@@ -11,37 +11,37 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/CodeGen/MachineInstr.h"
-#include "llvm/ADT/FoldingSet.h"
-#include "llvm/ADT/Hashing.h"
-#include "llvm/Analysis/AliasAnalysis.h"
-#include "llvm/CodeGen/MachineConstantPool.h"
-#include "llvm/CodeGen/MachineFunction.h"
-#include "llvm/CodeGen/MachineMemOperand.h"
-#include "llvm/CodeGen/MachineModuleInfo.h"
-#include "llvm/CodeGen/MachineRegisterInfo.h"
-#include "llvm/CodeGen/PseudoSourceValue.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/DebugInfo.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/InlineAsm.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Metadata.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/ModuleSlotTracker.h"
-#include "llvm/IR/Type.h"
-#include "llvm/IR/Value.h"
-#include "llvm/MC/MCInstrDesc.h"
-#include "llvm/MC/MCSymbol.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/MathExtras.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Target/TargetInstrInfo.h"
-#include "llvm/Target/TargetMachine.h"
-#include "llvm/Target/TargetRegisterInfo.h"
-#include "llvm/Target/TargetSubtargetInfo.h"
-using namespace llvm;
+#include "llvm37/CodeGen/MachineInstr.h"
+#include "llvm37/ADT/FoldingSet.h"
+#include "llvm37/ADT/Hashing.h"
+#include "llvm37/Analysis/AliasAnalysis.h"
+#include "llvm37/CodeGen/MachineConstantPool.h"
+#include "llvm37/CodeGen/MachineFunction.h"
+#include "llvm37/CodeGen/MachineMemOperand.h"
+#include "llvm37/CodeGen/MachineModuleInfo.h"
+#include "llvm37/CodeGen/MachineRegisterInfo.h"
+#include "llvm37/CodeGen/PseudoSourceValue.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/DebugInfo.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/InlineAsm.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/Metadata.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/ModuleSlotTracker.h"
+#include "llvm37/IR/Type.h"
+#include "llvm37/IR/Value.h"
+#include "llvm37/MC/MCInstrDesc.h"
+#include "llvm37/MC/MCSymbol.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/MathExtras.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Target/TargetInstrInfo.h"
+#include "llvm37/Target/TargetMachine.h"
+#include "llvm37/Target/TargetRegisterInfo.h"
+#include "llvm37/Target/TargetSubtargetInfo.h"
+using namespace llvm37;
 
 //===----------------------------------------------------------------------===//
 // MachineOperand Implementation
@@ -254,7 +254,7 @@ bool MachineOperand::isIdenticalTo(const MachineOperand &Other) const {
 }
 
 // Note: this must stay exactly in sync with isIdenticalTo above.
-hash_code llvm::hash_value(const MachineOperand &MO) {
+hash_code llvm37::hash_value(const MachineOperand &MO) {
   switch (MO.getType()) {
   case MachineOperand::MO_Register:
     // Register operands don't have target flags.
@@ -1526,7 +1526,7 @@ void MachineInstr::copyImplicitOps(MachineFunction &MF,
 }
 
 void MachineInstr::dump() const {
-#if !defined(NDEBUG) || defined(LLVM_ENABLE_DUMP)
+#if !defined(NDEBUG) || defined(LLVM37_ENABLE_DUMP)
   dbgs() << "  " << *this;
 #endif
 }

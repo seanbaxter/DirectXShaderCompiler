@@ -7,11 +7,11 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_STATICANALYZER_CORE_CHECKEROPTINFO_H
-#define LLVM_CLANG_STATICANALYZER_CORE_CHECKEROPTINFO_H
+#ifndef LLVM37_CLANG_STATICANALYZER_CORE_CHECKEROPTINFO_H
+#define LLVM37_CLANG_STATICANALYZER_CORE_CHECKEROPTINFO_H
 
 #include "clang/Basic/LLVM.h"
-#include "llvm/ADT/StringRef.h"
+#include "llvm37/ADT/StringRef.h"
 
 namespace clang {
 namespace ento {

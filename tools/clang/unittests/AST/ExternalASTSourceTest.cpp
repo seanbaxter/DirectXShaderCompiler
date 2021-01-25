@@ -20,7 +20,7 @@
 #include "gtest/gtest.h"
 
 using namespace clang;
-using namespace llvm;
+using namespace llvm37;
 
 
 class TestFrontendAction : public ASTFrontendAction {
@@ -37,7 +37,7 @@ private:
 
   std::unique_ptr<ASTConsumer> CreateASTConsumer(CompilerInstance &CI,
                                                  StringRef InFile) override {
-    return llvm::make_unique<ASTConsumer>();
+    return llvm37::make_unique<ASTConsumer>();
   }
 
   IntrusiveRefCntPtr<ExternalASTSource> Source;

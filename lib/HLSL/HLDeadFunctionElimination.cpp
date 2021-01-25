@@ -10,11 +10,11 @@
 #include "dxc/DXIL/DxilUtil.h"
 #include "dxc/HLSL/DxilGenerationPass.h"
 #include "dxc/HLSL/HLModule.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/PassManager.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/PassManager.h"
 
-using namespace llvm;
+using namespace llvm37;
 using namespace hlsl;
 
 namespace {
@@ -46,7 +46,7 @@ public:
 
 char HLDeadFunctionElimination::ID = 0;
 
-ModulePass *llvm::createHLDeadFunctionEliminationPass() {
+ModulePass *llvm37::createHLDeadFunctionEliminationPass() {
   return new HLDeadFunctionElimination();
 }
 

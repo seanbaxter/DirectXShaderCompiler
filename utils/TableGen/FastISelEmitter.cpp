@@ -18,14 +18,14 @@
 //===----------------------------------------------------------------------===//
 
 #include "CodeGenDAGPatterns.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/ADT/StringSwitch.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/TableGen/Error.h"
-#include "llvm/TableGen/Record.h"
-#include "llvm/TableGen/TableGenBackend.h"
-using namespace llvm;
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/ADT/StringSwitch.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/TableGen/Error.h"
+#include "llvm37/TableGen/Record.h"
+#include "llvm37/TableGen/TableGenBackend.h"
+using namespace llvm37;
 
 
 /// InstructionMemo - This class holds additional information about an
@@ -870,7 +870,7 @@ void FastISelMap::printFunctionDefinitions(raw_ostream &OS) {
   // TODO: SignaturesWithConstantForms should be empty here.
 }
 
-namespace llvm {
+namespace llvm37 {
 
 void EmitFastISel(RecordKeeper &RK, raw_ostream &OS) {
   CodeGenDAGPatterns CGP(RK);

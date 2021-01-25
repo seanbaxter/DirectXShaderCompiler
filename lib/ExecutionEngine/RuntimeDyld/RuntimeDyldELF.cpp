@@ -13,20 +13,20 @@
 
 #include "RuntimeDyldELF.h"
 #include "RuntimeDyldCheckerImpl.h"
-#include "llvm/ADT/IntervalMap.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/StringRef.h"
-#include "llvm/ADT/Triple.h"
-#include "llvm/MC/MCStreamer.h"
-#include "llvm/Object/ELFObjectFile.h"
-#include "llvm/Object/ObjectFile.h"
-#include "llvm/Support/ELF.h"
-#include "llvm/Support/Endian.h"
-#include "llvm/Support/MemoryBuffer.h"
-#include "llvm/Support/TargetRegistry.h"
+#include "llvm37/ADT/IntervalMap.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/StringRef.h"
+#include "llvm37/ADT/Triple.h"
+#include "llvm37/MC/MCStreamer.h"
+#include "llvm37/Object/ELFObjectFile.h"
+#include "llvm37/Object/ObjectFile.h"
+#include "llvm37/Support/ELF.h"
+#include "llvm37/Support/Endian.h"
+#include "llvm37/Support/MemoryBuffer.h"
+#include "llvm37/Support/TargetRegistry.h"
 
-using namespace llvm;
-using namespace llvm::object;
+using namespace llvm37;
+using namespace llvm37::object;
 
 #define DEBUG_TYPE "dyld"
 
@@ -40,7 +40,7 @@ static inline std::error_code check(std::error_code Err) {
 namespace {
 
 template <class ELFT> class DyldELFObject : public ELFObjectFile<ELFT> {
-  LLVM_ELF_IMPORT_TYPES_ELFT(ELFT)
+  LLVM37_ELF_IMPORT_TYPES_ELFT(ELFT)
 
   typedef Elf_Shdr_Impl<ELFT> Elf_Shdr;
   typedef Elf_Sym_Impl<ELFT> Elf_Sym;
@@ -124,7 +124,7 @@ createRTDyldELFObject(MemoryBufferRef Buffer,
   typedef typename ELFDataTypeTypedefHelper<ELFT>::value_type addr_type;
 
   std::unique_ptr<DyldELFObject<ELFT>> Obj =
-    llvm::make_unique<DyldELFObject<ELFT>>(Buffer, ec);
+    llvm37::make_unique<DyldELFObject<ELFT>>(Buffer, ec);
 
   // Iterate over all sections in the object.
   for (const auto &Sec : Obj->sections()) {
@@ -183,7 +183,7 @@ LoadedELFObjectInfo::getObjectForDebug(const ObjectFile &Obj) const {
 
 } // namespace
 
-namespace llvm {
+namespace llvm37 {
 
 RuntimeDyldELF::RuntimeDyldELF(RuntimeDyld::MemoryManager &MemMgr,
                                RuntimeDyld::SymbolResolver &Resolver)
@@ -217,7 +217,7 @@ std::unique_ptr<RuntimeDyld::LoadedObjectInfo>
 RuntimeDyldELF::loadObject(const object::ObjectFile &O) {
   unsigned SectionStartIdx, SectionEndIdx;
   std::tie(SectionStartIdx, SectionEndIdx) = loadObjectImpl(O);
-  return llvm::make_unique<LoadedELFObjectInfo>(*this, SectionStartIdx,
+  return llvm37::make_unique<LoadedELFObjectInfo>(*this, SectionStartIdx,
                                                 SectionEndIdx);
 }
 
@@ -1746,4 +1746,4 @@ bool RuntimeDyldELF::isCompatibleFile(const object::ObjectFile &Obj) const {
   return Obj.isELF();
 }
 
-} // namespace llvm
+} // namespace llvm37

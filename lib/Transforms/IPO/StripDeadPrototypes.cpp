@@ -14,11 +14,11 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Transforms/IPO.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/IR/Module.h"
-#include "llvm/Pass.h"
-using namespace llvm;
+#include "llvm37/Transforms/IPO.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/Pass.h"
+using namespace llvm37;
 
 #define DEBUG_TYPE "strip-dead-prototypes"
 
@@ -69,6 +69,6 @@ bool StripDeadPrototypesPass::runOnModule(Module &M) {
   return MadeChange;
 }
 
-ModulePass *llvm::createStripDeadPrototypesPass() {
+ModulePass *llvm37::createStripDeadPrototypesPass() {
   return new StripDeadPrototypesPass();
 }

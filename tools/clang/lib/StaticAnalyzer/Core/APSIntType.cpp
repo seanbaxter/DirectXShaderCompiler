@@ -13,7 +13,7 @@ using namespace clang;
 using namespace ento;
 
 APSIntType::RangeTestResultKind
-APSIntType::testInRange(const llvm::APSInt &Value,
+APSIntType::testInRange(const llvm37::APSInt &Value,
                         bool AllowSignConversions) const {
 
   // Negative numbers cannot be losslessly converted to unsigned type.

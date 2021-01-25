@@ -12,10 +12,10 @@
 //===----------------------------------------------------------------------===//
 
 #include "InstCombineInternal.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/SmallPtrSet.h"
-#include "llvm/Analysis/InstructionSimplify.h"
-using namespace llvm;
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/SmallPtrSet.h"
+#include "llvm37/Analysis/InstructionSimplify.h"
+using namespace llvm37;
 
 #define DEBUG_TYPE "instcombine"
 
@@ -584,7 +584,7 @@ struct LoweredPHIRecord {
 };
 }
 
-namespace llvm {
+namespace llvm37 {
   template<>
   struct DenseMapInfo<LoweredPHIRecord> {
     static inline LoweredPHIRecord getEmptyKey() {

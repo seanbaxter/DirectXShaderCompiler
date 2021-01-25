@@ -11,8 +11,8 @@
 |*                                                                            *|
 \*===----------------------------------------------------------------------===*/
 
-#ifndef LLVM_CLANG_TOOLS_LIBCLANG_CINDEXDIAGNOSTIC_H
-#define LLVM_CLANG_TOOLS_LIBCLANG_CINDEXDIAGNOSTIC_H
+#ifndef LLVM37_CLANG_TOOLS_LIBCLANG_CINDEXDIAGNOSTIC_H
+#define LLVM37_CLANG_TOOLS_LIBCLANG_CINDEXDIAGNOSTIC_H
 
 #include "clang-c/Index.h"
 #include <memory>

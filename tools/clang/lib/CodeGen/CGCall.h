@@ -12,20 +12,20 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_LIB_CODEGEN_CGCALL_H
-#define LLVM_CLANG_LIB_CODEGEN_CGCALL_H
+#ifndef LLVM37_CLANG_LIB_CODEGEN_CGCALL_H
+#define LLVM37_CLANG_LIB_CODEGEN_CGCALL_H
 
 #include "CGValue.h"
 #include "EHScopeStack.h"
 #include "clang/AST/CanonicalType.h"
 #include "clang/AST/Type.h"
-#include "llvm/ADT/FoldingSet.h"
-#include "llvm/IR/Value.h"
+#include "llvm37/ADT/FoldingSet.h"
+#include "llvm37/IR/Value.h"
 
 // FIXME: Restructure so we don't have to expose so much stuff.
 #include "ABIInfo.h"
 
-namespace llvm {
+namespace llvm37 {
   class AttributeSet;
   class Function;
   class Type;
@@ -40,7 +40,7 @@ namespace clang {
   class VarDecl;
 
 namespace CodeGen {
-  typedef SmallVector<llvm::AttributeSet, 8> AttributeListType;
+  typedef SmallVector<llvm37::AttributeSet, 8> AttributeListType;
 
   struct CallArg {
     RValue RV;
@@ -64,10 +64,10 @@ namespace CodeGen {
       LValue Source;
 
       /// The temporary alloca.
-      llvm::Value *Temporary;
+      llvm37::Value *Temporary;
 
       /// A value to "use" after the writeback, or null.
-      llvm::Value *ToUse;
+      llvm37::Value *ToUse;
     };
 
     struct CallArgCleanup {
@@ -75,7 +75,7 @@ namespace CodeGen {
 
       /// The "is active" insertion point.  This instruction is temporary and
       /// will be removed after insertion.
-      llvm::Instruction *IsActiveIP;
+      llvm37::Instruction *IsActiveIP;
     };
 
     void add(RValue rvalue, QualType type, bool needscopy = false) {
@@ -92,8 +92,8 @@ namespace CodeGen {
 #endif // HLSL Change - no ObjC support
     }
 
-    void addWriteback(LValue srcLV, llvm::Value *temporary,
-                      llvm::Value *toUse) {
+    void addWriteback(LValue srcLV, llvm37::Value *temporary,
+                      llvm37::Value *toUse) {
 #if 0 // HLSL Change - no ObjC support
       Writeback writeback;
       writeback.Source = srcLV;
@@ -107,7 +107,7 @@ namespace CodeGen {
 
     bool hasWritebacks() const { return !Writebacks.empty(); }
 
-    typedef llvm::iterator_range<SmallVectorImpl<Writeback>::const_iterator>
+    typedef llvm37::iterator_range<SmallVectorImpl<Writeback>::const_iterator>
       writeback_const_range;
 
     writeback_const_range writebacks() const {
@@ -115,7 +115,7 @@ namespace CodeGen {
     }
 
     void addArgCleanupDeactivation(EHScopeStack::stable_iterator Cleanup,
-                                   llvm::Instruction *IsActiveIP) {
+                                   llvm37::Instruction *IsActiveIP) {
       CallArgCleanup ArgCleanup;
       ArgCleanup.Cleanup = Cleanup;
       ArgCleanup.IsActiveIP = IsActiveIP;
@@ -127,7 +127,7 @@ namespace CodeGen {
     }
 
     void allocateArgumentMemory(CodeGenFunction &CGF);
-    llvm::Instruction *getStackBase() const { return StackBase; }
+    llvm37::Instruction *getStackBase() const { return StackBase; }
     void freeArgumentMemory(CodeGenFunction &CGF) const;
 
     /// \brief Returns if we're using an inalloca struct to pass arguments in
@@ -143,10 +143,10 @@ namespace CodeGen {
     SmallVector<CallArgCleanup, 1> CleanupsToDeactivate;
 
     /// The stacksave call.  It dominates all of the argument evaluation.
-    llvm::CallInst *StackBase;
+    llvm37::CallInst *StackBase;
 
     /// The alloca holding the stackbase.  We need it to maintain SSA form.
-    llvm::AllocaInst *StackBaseMem;
+    llvm37::AllocaInst *StackBaseMem;
 
     /// The iterator pointing to the stack restore cleanup.  We manually run and
     /// deactivate this cleanup after the call in the unexceptional case because
@@ -163,7 +163,7 @@ namespace CodeGen {
   /// ReturnValueSlot - Contains the address where the return value of a 
   /// function can be stored, and whether the address is volatile or not.
   class ReturnValueSlot {
-    llvm::PointerIntPair<llvm::Value *, 2, unsigned int> Value;
+    llvm37::PointerIntPair<llvm37::Value *, 2, unsigned int> Value;
 
     // Return value slot flags
     enum Flags {
@@ -173,14 +173,14 @@ namespace CodeGen {
 
   public:
     ReturnValueSlot() {}
-    ReturnValueSlot(llvm::Value *Value, bool IsVolatile, bool IsUnused = false)
+    ReturnValueSlot(llvm37::Value *Value, bool IsVolatile, bool IsUnused = false)
       : Value(Value,
               (IsVolatile ? IS_VOLATILE : 0) | (IsUnused ? IS_UNUSED : 0)) {}
 
     bool isNull() const { return !getValue(); }
 
     bool isVolatile() const { return Value.getInt() & IS_VOLATILE; }
-    llvm::Value *getValue() const { return Value.getPointer(); }
+    llvm37::Value *getValue() const { return Value.getPointer(); }
     bool isUnused() const { return Value.getInt() & IS_UNUSED; }
   };
   

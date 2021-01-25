@@ -7,13 +7,13 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_LEX_HEADERSEARCHOPTIONS_H
-#define LLVM_CLANG_LEX_HEADERSEARCHOPTIONS_H
+#ifndef LLVM37_CLANG_LEX_HEADERSEARCHOPTIONS_H
+#define LLVM37_CLANG_LEX_HEADERSEARCHOPTIONS_H
 
 #include "clang/Basic/LLVM.h"
-#include "llvm/ADT/IntrusiveRefCntPtr.h"
-#include "llvm/ADT/SetVector.h"
-#include "llvm/ADT/StringRef.h"
+#include "llvm37/ADT/IntrusiveRefCntPtr.h"
+#include "llvm37/ADT/SetVector.h"
+#include "llvm37/ADT/StringRef.h"
 #include <string>
 #include <vector>
 
@@ -140,7 +140,7 @@ public:
 
   /// \brief The set of macro names that should be ignored for the purposes
   /// of computing the module hash.
-  llvm::SetVector<std::string> ModulesIgnoreMacros;
+  llvm37::SetVector<std::string> ModulesIgnoreMacros;
 
   /// \brief The set of user-provided virtual filesystem overlay files.
   std::vector<std::string> VFSOverlayFiles;

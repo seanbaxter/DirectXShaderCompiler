@@ -225,10 +225,10 @@ class db_instrhelp_gen:
         raise ValueError("Don't know how to describe type %s for operand %s." % (o.llvm_type, o.name))
 
     def op_const_expr(self, o):
-        return "(%s)(llvm::dyn_cast<llvm::ConstantInt>(Instr->getOperand(%d))->getZExtValue())" % (self.op_type(o), o.pos - 1)
+        return "(%s)(llvm37::dyn_cast<llvm37::ConstantInt>(Instr->getOperand(%d))->getZExtValue())" % (self.op_type(o), o.pos - 1)
     def op_set_const_expr(self, o):
         type_size = self.op_size(o)
-        return "llvm::Constant::getIntegerValue(llvm::IntegerType::get(Instr->getContext(), %d), llvm::APInt(%d, (uint64_t)val))" % (type_size, type_size)
+        return "llvm37::Constant::getIntegerValue(llvm37::IntegerType::get(Instr->getContext(), %d), llvm37::APInt(%d, (uint64_t)val))" % (type_size, type_size)
 
     def print_body(self):
         for i in self.db.instr:
@@ -242,21 +242,21 @@ class db_instrhelp_gen:
             if i.doc:
                 print("/// This instruction %s" % i.doc)
             print("struct %s {" % struct_name)
-            print("  llvm::Instruction *Instr;")
+            print("  llvm37::Instruction *Instr;")
             print("  // Construction and identification")
-            print("  %s(llvm::Instruction *pInstr) : Instr(pInstr) {}" % struct_name)
+            print("  %s(llvm37::Instruction *pInstr) : Instr(pInstr) {}" % struct_name)
             print("  operator bool() const {")
             if i.is_dxil_op:
                 op_name = i.fully_qualified_name()
                 print("    return %s(Instr, %s);" % (self.IsDxilOpFuncCallInst, op_name))
             else:
-                print("    return Instr->getOpcode() == llvm::Instruction::%s;" % i.name)
+                print("    return Instr->getOpcode() == llvm37::Instruction::%s;" % i.name)
             print("  }")
             print("  // Validation support")
             print("  bool isAllowed() const { return %s; }" % self.bool_lit(i.is_allowed))
             if i.is_dxil_op:
                 print("  bool isArgumentListValid() const {")
-                print("    if (%d != llvm::dyn_cast<llvm::CallInst>(Instr)->getNumArgOperands()) return false;" % (len(i.ops) - 1))
+                print("    if (%d != llvm37::dyn_cast<llvm37::CallInst>(Instr)->getNumArgOperands()) return false;" % (len(i.ops) - 1))
                 print("    return true;")
                 # TODO - check operand types
                 print("  }")
@@ -278,8 +278,8 @@ class db_instrhelp_gen:
                         if not AccessorsWritten:
                             print("  // Accessors")
                             AccessorsWritten = True
-                        print("  llvm::Value *get_%s() const { return Instr->getOperand(%d); }" % (o.name, o.pos - 1))
-                        print("  void set_%s(llvm::Value *val) { Instr->setOperand(%d, val); }" % (o.name, o.pos - 1))
+                        print("  llvm37::Value *get_%s() const { return Instr->getOperand(%d); }" % (o.name, o.pos - 1))
+                        print("  void set_%s(llvm37::Value *val) { Instr->setOperand(%d, val); }" % (o.name, o.pos - 1))
                         if o.is_const:
                             if o.llvm_type in self.llvm_type_map:
                                 print("  %s get_%s_val() const { return %s; }" % (self.op_type(o), o.name, self.op_const_expr(o)))
@@ -576,12 +576,12 @@ class db_valfns_gen:
 
     def op_const_expr(self, o):
         if o.llvm_type == "i8" or o.llvm_type == "u8":
-            return "(%s)(llvm::dyn_cast<llvm::ConstantInt>(Instr->getOperand(%d))->getZExtValue())" % (self.op_type(o), o.pos - 1)
+            return "(%s)(llvm37::dyn_cast<llvm37::ConstantInt>(Instr->getOperand(%d))->getZExtValue())" % (self.op_type(o), o.pos - 1)
         raise ValueError("Don't know how to describe type %s for operand %s." % (o.llvm_type, o.name))
 
     def print_body(self):
         llvm_instrs = [i for i in self.db.instr if i.is_allowed and not i.is_dxil_op]
-        print("static bool IsLLVMInstructionAllowed(llvm::Instruction &I) {")
+        print("static bool IsLLVMInstructionAllowed(llvm37::Instruction &I) {")
         self.print_comment("  // ", "Allow: %s" % ", ".join([i.name + "=" + str(i.llvm_id) for i in llvm_instrs]))
         print("  unsigned op = I.getOpcode();")
         print("  return %s;" % build_range_code("op", [i.llvm_id for i in llvm_instrs]))

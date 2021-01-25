@@ -11,17 +11,17 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_AST_DECLBASE_H
-#define LLVM_CLANG_AST_DECLBASE_H
+#ifndef LLVM37_CLANG_AST_DECLBASE_H
+#define LLVM37_CLANG_AST_DECLBASE_H
 
 #include "clang/AST/AttrIterator.h"
 #include "clang/AST/DeclarationName.h"
 #include "clang/Basic/Specifiers.h"
-#include "llvm/ADT/PointerUnion.h"
-#include "llvm/ADT/iterator.h"
-#include "llvm/ADT/iterator_range.h"
-#include "llvm/Support/Compiler.h"
-#include "llvm/Support/PrettyStackTrace.h"
+#include "llvm37/ADT/PointerUnion.h"
+#include "llvm37/ADT/iterator.h"
+#include "llvm37/ADT/iterator_range.h"
+#include "llvm37/Support/Compiler.h"
+#include "llvm37/Support/PrettyStackTrace.h"
 
 namespace clang {
 class ASTMutationListener;
@@ -205,7 +205,7 @@ protected:
   ///
   /// The extra two bits are used for the TopLevelDeclInObjCContainer and
   /// ModulePrivate bits.
-  llvm::PointerIntPair<Decl *, 2, unsigned> NextInContextAndBits;
+  llvm37::PointerIntPair<Decl *, 2, unsigned> NextInContextAndBits;
 
 private:
   friend class DeclContext;
@@ -229,7 +229,7 @@ private:
   ///   }
   ///   void A::f(); // SemanticDC == namespace 'A'
   ///                // LexicalDC == global namespace
-  llvm::PointerUnion<DeclContext*, MultipleDC*> DeclCtx;
+  llvm37::PointerUnion<DeclContext*, MultipleDC*> DeclCtx;
 
   inline bool isInSemaDC() const    { return DeclCtx.is<DeclContext*>(); }
   inline bool isOutOfSemaDC() const { return DeclCtx.is<MultipleDC*>(); }
@@ -359,13 +359,13 @@ protected:
 public:
 
   /// \brief Source range that this declaration covers.
-  virtual SourceRange getSourceRange() const LLVM_READONLY {
+  virtual SourceRange getSourceRange() const LLVM37_READONLY {
     return SourceRange(getLocation(), getLocation());
   }
-  SourceLocation getLocStart() const LLVM_READONLY {
+  SourceLocation getLocStart() const LLVM37_READONLY {
     return getSourceRange().getBegin();
   }
-  SourceLocation getLocEnd() const LLVM_READONLY {
+  SourceLocation getLocEnd() const LLVM37_READONLY {
     return getSourceRange().getEnd();
   }
 
@@ -406,7 +406,7 @@ public:
 
   bool isInStdNamespace() const;
 
-  ASTContext &getASTContext() const LLVM_READONLY;
+  ASTContext &getASTContext() const LLVM37_READONLY;
 
   void setAccess(AccessSpecifier AS) {
     Access = AS;
@@ -442,7 +442,7 @@ public:
   }
 
   typedef AttrVec::const_iterator attr_iterator;
-  typedef llvm::iterator_range<attr_iterator> attr_range;
+  typedef llvm37::iterator_range<attr_iterator> attr_range;
 
   attr_range attrs() const {
     return attr_range(attr_begin(), attr_end());
@@ -467,8 +467,8 @@ public:
   }
 
   template <typename T>
-  llvm::iterator_range<specific_attr_iterator<T>> specific_attrs() const {
-    return llvm::iterator_range<specific_attr_iterator<T>>(
+  llvm37::iterator_range<specific_attr_iterator<T>> specific_attrs() const {
+    return llvm37::iterator_range<specific_attr_iterator<T>>(
         specific_attr_begin<T>(), specific_attr_end<T>());
   }
 
@@ -796,7 +796,7 @@ public:
     }
   };
 
-  typedef llvm::iterator_range<redecl_iterator> redecl_range;
+  typedef llvm37::iterator_range<redecl_iterator> redecl_range;
 
   /// \brief Returns an iterator range for all the redeclarations of the same
   /// decl. It will iterate at least once (when this decl is the only one).
@@ -877,7 +877,7 @@ public:
 
   /// \brief Returns the function itself, or the templated function if this is a
   /// function template.
-  FunctionDecl *getAsFunction() LLVM_READONLY;
+  FunctionDecl *getAsFunction() LLVM37_READONLY;
 
   const FunctionDecl *getAsFunction() const {
     return const_cast<Decl *>(this)->getAsFunction();
@@ -1015,7 +1015,7 @@ inline bool declaresSameEntity(const Decl *D1, const Decl *D2) {
   
 /// PrettyStackTraceDecl - If a crash occurs, indicate that it happened when
 /// doing something to a specific decl.
-class PrettyStackTraceDecl : public llvm::PrettyStackTraceEntry {
+class PrettyStackTraceDecl : public llvm37::PrettyStackTraceEntry {
   const Decl *TheDecl;
   SourceLocation Loc;
   SourceManager &SM;
@@ -1048,7 +1048,7 @@ public:
       : Result(SingleElementDummyList), Single(Single) {}
 
   class iterator;
-  typedef llvm::iterator_adaptor_base<iterator, ResultTy::iterator,
+  typedef llvm37::iterator_adaptor_base<iterator, ResultTy::iterator,
                                       std::random_access_iterator_tag,
                                       NamedDecl *const> IteratorBase;
   class iterator : public IteratorBase {
@@ -1406,7 +1406,7 @@ public:
     }
   };
 
-  typedef llvm::iterator_range<decl_iterator> decl_range;
+  typedef llvm37::iterator_range<decl_iterator> decl_range;
 
   /// decls_begin/decls_end - Iterate over the declarations stored in
   /// this context.
@@ -1656,7 +1656,7 @@ public:
   /// of looking up every possible name.
   class all_lookups_iterator;
 
-  typedef llvm::iterator_range<all_lookups_iterator> lookups_range;
+  typedef llvm37::iterator_range<all_lookups_iterator> lookups_range;
 
   lookups_range lookups() const;
   lookups_range noload_lookups() const;
@@ -1672,7 +1672,7 @@ public:
   all_lookups_iterator noload_lookups_end() const;
 
   struct udir_iterator;
-  typedef llvm::iterator_adaptor_base<udir_iterator, lookup_iterator,
+  typedef llvm37::iterator_adaptor_base<udir_iterator, lookup_iterator,
                                       std::random_access_iterator_tag,
                                       UsingDirectiveDecl *> udir_iterator_base;
   struct udir_iterator : udir_iterator_base {
@@ -1680,13 +1680,13 @@ public:
     UsingDirectiveDecl *operator*() const;
   };
 
-  typedef llvm::iterator_range<udir_iterator> udir_range;
+  typedef llvm37::iterator_range<udir_iterator> udir_range;
 
   udir_range using_directives() const;
 
   // These are all defined in DependentDiagnostic.h.
   class ddiag_iterator;
-  typedef llvm::iterator_range<DeclContext::ddiag_iterator> ddiag_range;
+  typedef llvm37::iterator_range<DeclContext::ddiag_iterator> ddiag_range;
 
   inline ddiag_range ddiags() const;
 
@@ -1745,7 +1745,7 @@ public:
 
   void dumpDeclContext() const;
   void dumpLookups() const;
-  void dumpLookups(llvm::raw_ostream &OS, bool DumpDecls = false) const;
+  void dumpLookups(llvm37::raw_ostream &OS, bool DumpDecls = false) const;
 
 private:
   void reconcileExternalVisibleStorage() const;
@@ -1801,7 +1801,7 @@ struct cast_convert_decl_context<ToTy, true> {
 
 } // end clang.
 
-namespace llvm {
+namespace llvm37 {
 
 /// isa<T>(DeclContext*)
 template <typename To>
@@ -1868,6 +1868,6 @@ struct cast_convert_val< const ::clang::DeclContext, FromTy*, FromTy*> {
   }
 };
 
-} // end namespace llvm
+} // end namespace llvm37
 
 #endif

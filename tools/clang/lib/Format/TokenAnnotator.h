@@ -13,8 +13,8 @@
 ///
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_LIB_FORMAT_TOKENANNOTATOR_H
-#define LLVM_CLANG_LIB_FORMAT_TOKENANNOTATOR_H
+#ifndef LLVM37_CLANG_LIB_FORMAT_TOKENANNOTATOR_H
+#define LLVM37_CLANG_LIB_FORMAT_TOKENANNOTATOR_H
 
 #include "UnwrappedLineParser.h"
 #include "clang/Format/Format.h"

@@ -121,16 +121,16 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Analysis/Passes.h"
-#include "llvm/Analysis/AliasAnalysis.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Metadata.h"
-#include "llvm/IR/Module.h"
-#include "llvm/Pass.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/ADT/SetVector.h"
-using namespace llvm;
+#include "llvm37/Analysis/Passes.h"
+#include "llvm37/Analysis/AliasAnalysis.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/Metadata.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/Pass.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/ADT/SetVector.h"
+using namespace llvm37;
 
 // A handy option for disabling TBAA functionality. The same effect can also be
 // achieved by stripping the !tbaa tags from IR, but this option is sometimes
@@ -322,7 +322,7 @@ char TypeBasedAliasAnalysis::ID = 0;
 INITIALIZE_AG_PASS(TypeBasedAliasAnalysis, AliasAnalysis, "tbaa",
                    "Type-Based Alias Analysis", false, true, false)
 
-ImmutablePass *llvm::createTypeBasedAliasAnalysisPass() {
+ImmutablePass *llvm37::createTypeBasedAliasAnalysisPass() {
   return new TypeBasedAliasAnalysis();
 }
 

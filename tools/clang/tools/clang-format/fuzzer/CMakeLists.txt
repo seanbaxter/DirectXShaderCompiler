@@ -1,4 +1,4 @@
-set(LLVM_LINK_COMPONENTS support)
+set(LLVM37_LINK_COMPONENTS support)
 
 add_clang_executable(clang-format-fuzzer
   EXCLUDE_FROM_ALL

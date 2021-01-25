@@ -7,14 +7,14 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_LIB_CODEGEN_ABIINFO_H
-#define LLVM_CLANG_LIB_CODEGEN_ABIINFO_H
+#ifndef LLVM37_CLANG_LIB_CODEGEN_ABIINFO_H
+#define LLVM37_CLANG_LIB_CODEGEN_ABIINFO_H
 
 #include "clang/AST/Type.h"
-#include "llvm/IR/CallingConv.h"
-#include "llvm/IR/Type.h"
+#include "llvm37/IR/CallingConv.h"
+#include "llvm37/IR/Type.h"
 
-namespace llvm {
+namespace llvm37 {
   class Value;
   class LLVMContext;
   class DataLayout;
@@ -43,30 +43,30 @@ namespace clang {
   public:
     CodeGen::CodeGenTypes &CGT;
   protected:
-    llvm::CallingConv::ID RuntimeCC;
-    llvm::CallingConv::ID BuiltinCC;
+    llvm37::CallingConv::ID RuntimeCC;
+    llvm37::CallingConv::ID BuiltinCC;
   public:
     ABIInfo(CodeGen::CodeGenTypes &cgt)
       : CGT(cgt),
-        RuntimeCC(llvm::CallingConv::C),
-        BuiltinCC(llvm::CallingConv::C) {}
+        RuntimeCC(llvm37::CallingConv::C),
+        BuiltinCC(llvm37::CallingConv::C) {}
 
     virtual ~ABIInfo();
 
     CodeGen::CGCXXABI &getCXXABI() const;
     ASTContext &getContext() const;
-    llvm::LLVMContext &getVMContext() const;
-    const llvm::DataLayout &getDataLayout() const;
+    llvm37::LLVMContext &getVMContext() const;
+    const llvm37::DataLayout &getDataLayout() const;
     const TargetInfo &getTarget() const;
 
     /// Return the calling convention to use for system runtime
     /// functions.
-    llvm::CallingConv::ID getRuntimeCC() const {
+    llvm37::CallingConv::ID getRuntimeCC() const {
       return RuntimeCC;
     }
 
     /// Return the calling convention to use for compiler builtins
-    llvm::CallingConv::ID getBuiltinCC() const {
+    llvm37::CallingConv::ID getBuiltinCC() const {
       return BuiltinCC;
     }
 
@@ -79,7 +79,7 @@ namespace clang {
     // the ABI information any lower than CodeGen. Of course, for
     // VAArg handling it has to be at this level; there is no way to
     // abstract this out.
-    virtual llvm::Value *EmitVAArg(llvm::Value *VAListAddr, QualType Ty,
+    virtual llvm37::Value *EmitVAArg(llvm37::Value *VAListAddr, QualType Ty,
                                    CodeGen::CodeGenFunction &CGF) const = 0;
 
     virtual bool isHomogeneousAggregateBaseType(QualType Ty) const;

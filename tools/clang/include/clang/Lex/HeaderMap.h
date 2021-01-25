@@ -11,14 +11,14 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_LEX_HEADERMAP_H
-#define LLVM_CLANG_LEX_HEADERMAP_H
+#ifndef LLVM37_CLANG_LEX_HEADERMAP_H
+#define LLVM37_CLANG_LEX_HEADERMAP_H
 
 #include "clang/Basic/LLVM.h"
-#include "llvm/Support/Compiler.h"
+#include "llvm37/Support/Compiler.h"
 #include <memory>
 
-namespace llvm {
+namespace llvm37 {
   class MemoryBuffer;
 }
 namespace clang {
@@ -35,10 +35,10 @@ class HeaderMap {
   HeaderMap(const HeaderMap &) = delete;
   void operator=(const HeaderMap &) = delete;
 
-  std::unique_ptr<const llvm::MemoryBuffer> FileBuffer;
+  std::unique_ptr<const llvm37::MemoryBuffer> FileBuffer;
   bool NeedsBSwap;
 
-  HeaderMap(std::unique_ptr<const llvm::MemoryBuffer> File, bool BSwap)
+  HeaderMap(std::unique_ptr<const llvm37::MemoryBuffer> File, bool BSwap)
       : FileBuffer(std::move(File)), NeedsBSwap(BSwap) {}
 public:
   /// HeaderMap::Create - This attempts to load the specified file as a header

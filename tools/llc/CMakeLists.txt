@@ -1,5 +1,5 @@
-set(LLVM_LINK_COMPONENTS
-  ${LLVM_TARGETS_TO_BUILD}
+set(LLVM37_LINK_COMPONENTS
+  ${LLVM37_TARGETS_TO_BUILD}
   Analysis
   AsmPrinter
   CodeGen
@@ -14,7 +14,7 @@ set(LLVM_LINK_COMPONENTS
   )
 
 # Support plugins.
-set(LLVM_NO_DEAD_STRIP 1)
+set(LLVM37_NO_DEAD_STRIP 1)
 
 add_llvm_tool(llc
   llc.cpp

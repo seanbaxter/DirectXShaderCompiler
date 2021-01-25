@@ -10,11 +10,11 @@
 #include "dxc/DXIL/DxilCompType.h"
 #include "dxc/Support/Global.h"
 
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Type.h"
-#include "llvm/IR/DerivedTypes.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/Type.h"
+#include "llvm37/IR/DerivedTypes.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 
 namespace hlsl {
@@ -307,7 +307,7 @@ PointerType *CompType::GetLLVMPtrType(LLVMContext &Ctx, const unsigned AddrSpace
   return nullptr;
 }
 
-Type *CompType::GetLLVMBaseType(llvm::LLVMContext &Ctx) const {
+Type *CompType::GetLLVMBaseType(llvm37::LLVMContext &Ctx) const {
   return GetBaseCompType().GetLLVMType(Ctx);
 }
 

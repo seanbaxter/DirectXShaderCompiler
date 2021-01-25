@@ -21,8 +21,8 @@
 #include "clang/Sema/DeclSpec.h"
 #include "clang/Sema/Lookup.h"
 #include "clang/Sema/Template.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/Support/raw_ostream.h"
 using namespace clang;
 
 /// \brief Find the current instantiation that associated with the given type.
@@ -589,7 +589,7 @@ bool Sema::BuildCXXNestedNameSpecifier(Scope *S,
     Found.clear();
     if (TypoCorrection Corrected = CorrectTypo(
             Found.getLookupNameInfo(), Found.getLookupKind(), S, &SS,
-            llvm::make_unique<NestedNameSpecifierValidatorCCC>(*this),
+            llvm37::make_unique<NestedNameSpecifierValidatorCCC>(*this),
             CTK_ErrorRecovery, LookupCtx, EnteringContext)) {
       if (LookupCtx) {
         bool DroppedSpecifier =
@@ -958,7 +958,7 @@ void *Sema::SaveNestedNameSpecifierAnnotation(CXXScopeSpec &SS) {
 
   void *Mem = Context.Allocate((sizeof(NestedNameSpecifierAnnotation) +
                                                         SS.location_size()),
-                               llvm::alignOf<NestedNameSpecifierAnnotation>());
+                               llvm37::alignOf<NestedNameSpecifierAnnotation>());
   NestedNameSpecifierAnnotation *Annotation
     = new (Mem) NestedNameSpecifierAnnotation;
   Annotation->NNS = SS.getScopeRep();

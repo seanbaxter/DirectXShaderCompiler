@@ -12,10 +12,10 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/IR/MDBuilder.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/Metadata.h"
-using namespace llvm;
+#include "llvm37/IR/MDBuilder.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/Metadata.h"
+using namespace llvm37;
 
 MDString *MDBuilder::createString(StringRef Str) {
   return MDString::get(Context, Str);

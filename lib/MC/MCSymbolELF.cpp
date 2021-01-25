@@ -7,12 +7,12 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/MC/MCAssembler.h"
-#include "llvm/MC/MCSymbolELF.h"
-#include "llvm/MC/MCFixupKindInfo.h"
-#include "llvm/Support/ELF.h"
+#include "llvm37/MC/MCAssembler.h"
+#include "llvm37/MC/MCSymbolELF.h"
+#include "llvm37/MC/MCFixupKindInfo.h"
+#include "llvm37/Support/ELF.h"
 
-namespace llvm {
+namespace llvm37 {
 
 namespace {
 enum {

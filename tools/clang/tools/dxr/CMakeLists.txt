@@ -2,8 +2,8 @@
 # This file is distributed under the University of Illinois Open Source License. See LICENSE.TXT for details.
 # Builds dxr.exe
 
-set( LLVM_LINK_COMPONENTS
-  ${LLVM_TARGETS_TO_BUILD}
+set( LLVM37_LINK_COMPONENTS
+  ${LLVM37_TARGETS_TO_BUILD}
   dxcsupport
   Option     # option library
   Support    # For Atomic increment/decrement
@@ -22,7 +22,7 @@ target_link_libraries(dxr
 set_target_properties(dxr PROPERTIES VERSION ${CLANG_EXECUTABLE_VERSION})
 # set_target_properties(dxr PROPERTIES ENABLE_EXPORTS 1)
 
-include_directories(${LLVM_SOURCE_DIR}/tools/clang/tools)
+include_directories(${LLVM37_SOURCE_DIR}/tools/clang/tools)
 
 add_dependencies(dxr dxclib dxcompiler)
 

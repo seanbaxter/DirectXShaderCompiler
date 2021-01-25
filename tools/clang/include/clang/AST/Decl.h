@@ -11,8 +11,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_AST_DECL_H
-#define LLVM_CLANG_AST_DECL_H
+#ifndef LLVM37_CLANG_AST_DECL_H
+#define LLVM37_CLANG_AST_DECL_H
 
 #include "clang/AST/APValue.h"
 #include "clang/AST/DeclBase.h"
@@ -22,10 +22,10 @@
 #include "clang/AST/Type.h"
 #include "clang/Basic/Linkage.h"
 #include "clang/Basic/OperatorKinds.h"
-#include "llvm/ADT/ArrayRef.h"
-#include "llvm/ADT/Optional.h"
-#include "llvm/Support/Compiler.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/ArrayRef.h"
+#include "llvm37/ADT/Optional.h"
+#include "llvm37/Support/Compiler.h"
+#include "llvm37/Support/raw_ostream.h"
 
 // HLSL Change Starts
 namespace hlsl {
@@ -156,7 +156,7 @@ class NamedDecl : public Decl {
   ArrayRef<hlsl::UnusualAnnotation*> UnusualAnnotations; // HLSL Change
 
 private:
-  NamedDecl *getUnderlyingDeclImpl() LLVM_READONLY;
+  NamedDecl *getUnderlyingDeclImpl() LLVM37_READONLY;
 
 protected:
   NamedDecl(Kind DK, DeclContext *DC, SourceLocation L, DeclarationName N)
@@ -407,7 +407,7 @@ public:
   bool isGnuLocal() const { return LocStart != getLocation(); }
   void setLocStart(SourceLocation L) { LocStart = L; }
 
-  SourceRange getSourceRange() const override LLVM_READONLY {
+  SourceRange getSourceRange() const override LLVM37_READONLY {
     return SourceRange(LocStart, getLocation());
   }
 
@@ -436,7 +436,7 @@ class NamespaceDecl : public NamedDecl, public DeclContext,
   /// this namespace or to the first namespace in the chain (the latter case
   /// only when this is not the first in the chain), along with a 
   /// boolean value indicating whether this is an inline namespace.
-  llvm::PointerIntPair<NamespaceDecl *, 1, bool> AnonOrFirstNamespaceAndInline;
+  llvm37::PointerIntPair<NamespaceDecl *, 1, bool> AnonOrFirstNamespaceAndInline;
 
   NamespaceDecl(ASTContext &C, DeclContext *DC, bool Inline,
                 SourceLocation StartLoc, SourceLocation IdLoc,
@@ -526,11 +526,11 @@ public:
     return getOriginalNamespace();
   }
 
-  SourceRange getSourceRange() const override LLVM_READONLY {
+  SourceRange getSourceRange() const override LLVM37_READONLY {
     return SourceRange(LocStart, RBraceLoc);
   }
 
-  SourceLocation getLocStart() const LLVM_READONLY { return LocStart; }
+  SourceLocation getLocStart() const LLVM37_READONLY { return LocStart; }
   SourceLocation getRBraceLoc() const { return RBraceLoc; }
   void setLocStart(SourceLocation L) { LocStart = L; }
   void setRBraceLoc(SourceLocation L) { RBraceLoc = L; }
@@ -616,7 +616,7 @@ class DeclaratorDecl : public ValueDecl {
     TypeSourceInfo *TInfo;
   };
 
-  llvm::PointerUnion<TypeSourceInfo*, ExtInfo*> DeclInfo;
+  llvm37::PointerUnion<TypeSourceInfo*, ExtInfo*> DeclInfo;
 
   /// InnerLocStart - The start of the source range for this declaration,
   /// ignoring outer template declarations.
@@ -655,8 +655,8 @@ public:
   /// range taking into account any outer template declarations.
   SourceLocation getOuterLocStart() const;
 
-  SourceRange getSourceRange() const override LLVM_READONLY;
-  SourceLocation getLocStart() const LLVM_READONLY {
+  SourceRange getSourceRange() const override LLVM37_READONLY;
+  SourceLocation getLocStart() const LLVM37_READONLY {
     return getOuterLocStart();
   }
 
@@ -762,7 +762,7 @@ protected:
   /// default argument.
   struct UninstantiatedDefaultArgument;
 
-  typedef llvm::PointerUnion4<Stmt *, EvaluatedStmt *,
+  typedef llvm37::PointerUnion4<Stmt *, EvaluatedStmt *,
                               UnparsedDefaultArgument *,
                               UninstantiatedDefaultArgument *> InitType;
 
@@ -893,7 +893,7 @@ public:
 
   static VarDecl *CreateDeserialized(ASTContext &C, unsigned ID);
 
-  SourceRange getSourceRange() const override LLVM_READONLY;
+  SourceRange getSourceRange() const override LLVM37_READONLY;
 
   /// \brief Returns the storage class as written in the source. For the
   /// computed linkage of symbol, see getLinkage.
@@ -1394,7 +1394,7 @@ public:
 
   static ParmVarDecl *CreateDeserialized(ASTContext &C, unsigned ID);
 
-  SourceRange getSourceRange() const override LLVM_READONLY;
+  SourceRange getSourceRange() const override LLVM37_READONLY;
 
   void setObjCMethodScopeInfo(unsigned parameterIndex) {
     ParmVarDeclBits.IsObjCMethodParam = true;
@@ -1646,7 +1646,7 @@ private:
   /// FunctionTemplateSpecializationInfo, which contains information about
   /// the template being specialized and the template arguments involved in
   /// that specialization.
-  llvm::PointerUnion4<FunctionTemplateDecl *,
+  llvm37::PointerUnion4<FunctionTemplateDecl *,
                       MemberSpecializationInfo *,
                       FunctionTemplateSpecializationInfo *,
                       DependentFunctionTemplateSpecializationInfo *>
@@ -1770,7 +1770,7 @@ public:
 
   void setRangeEnd(SourceLocation E) { EndRangeLoc = E; }
 
-  SourceRange getSourceRange() const override LLVM_READONLY;
+  SourceRange getSourceRange() const override LLVM37_READONLY;
 
   /// \brief Returns true if the function has a body (definition). The
   /// function body might be in any of the (re-)declarations of this
@@ -1996,8 +1996,8 @@ public:
   unsigned param_size() const { return getNumParams(); }
   typedef ParmVarDecl **param_iterator;
   typedef ParmVarDecl * const *param_const_iterator;
-  typedef llvm::iterator_range<param_iterator> param_range;
-  typedef llvm::iterator_range<param_const_iterator> param_const_range;
+  typedef llvm37::iterator_range<param_iterator> param_range;
+  typedef llvm37::iterator_range<param_const_iterator> param_const_range;
 
   param_iterator param_begin() { return param_iterator(ParamInfo); }
   param_iterator param_end() {
@@ -2035,7 +2035,7 @@ public:
   // ArrayRef iterface to parameters.
   // FIXME: Should one day replace iterator interface.
   ArrayRef<ParmVarDecl*> parameters() const {
-    return llvm::makeArrayRef(ParamInfo, getNumParams());
+    return llvm37::makeArrayRef(ParamInfo, getNumParams());
   }
 
   ArrayRef<NamedDecl *> getDeclsInPrototypeScope() const {
@@ -2353,7 +2353,7 @@ class FieldDecl : public DeclaratorDecl, public Mergeable<FieldDecl> {
   /// ISK_InClassListInit, but the initializer is null, then this
   /// field has an in-class initializer which has not yet been parsed
   /// and attached.
-  llvm::PointerIntPair<void *, 2, InitStorageKind> InitStorage;
+  llvm37::PointerIntPair<void *, 2, InitStorageKind> InitStorage;
 protected:
   FieldDecl(Kind DK, DeclContext *DC, SourceLocation StartLoc,
             SourceLocation IdLoc, IdentifierInfo *Id,
@@ -2484,7 +2484,7 @@ public:
     return cast<RecordDecl>(getDeclContext());
   }
 
-  SourceRange getSourceRange() const override LLVM_READONLY;
+  SourceRange getSourceRange() const override LLVM37_READONLY;
 
   /// Retrieves the canonical declaration of this field.
   FieldDecl *getCanonicalDecl() override { return getFirstDecl(); }
@@ -2504,11 +2504,11 @@ public:
 /// TagType for the X EnumDecl.
 class EnumConstantDecl : public ValueDecl, public Mergeable<EnumConstantDecl> {
   Stmt *Init; // an integer constant expression
-  llvm::APSInt Val; // The value.
+  llvm37::APSInt Val; // The value.
 protected:
   EnumConstantDecl(DeclContext *DC, SourceLocation L,
                    IdentifierInfo *Id, QualType T, Expr *E,
-                   const llvm::APSInt &V)
+                   const llvm37::APSInt &V)
     : ValueDecl(EnumConstant, DC, L, Id, T), Init((Stmt*)E), Val(V) {}
 
 public:
@@ -2516,17 +2516,17 @@ public:
   static EnumConstantDecl *Create(ASTContext &C, EnumDecl *DC,
                                   SourceLocation L, IdentifierInfo *Id,
                                   QualType T, Expr *E,
-                                  const llvm::APSInt &V);
+                                  const llvm37::APSInt &V);
   static EnumConstantDecl *CreateDeserialized(ASTContext &C, unsigned ID);
   
   const Expr *getInitExpr() const { return (const Expr*) Init; }
   Expr *getInitExpr() { return (Expr*) Init; }
-  const llvm::APSInt &getInitVal() const { return Val; }
+  const llvm37::APSInt &getInitVal() const { return Val; }
 
   void setInitExpr(Expr *E) { Init = (Stmt*) E; }
-  void setInitVal(const llvm::APSInt &V) { Val = V; }
+  void setInitVal(const llvm37::APSInt &V) { Val = V; }
 
-  SourceRange getSourceRange() const override LLVM_READONLY;
+  SourceRange getSourceRange() const override LLVM37_READONLY;
 
   /// Retrieves the canonical declaration of this enumerator.
   EnumConstantDecl *getCanonicalDecl() override { return getFirstDecl(); }
@@ -2560,7 +2560,7 @@ public:
   static IndirectFieldDecl *CreateDeserialized(ASTContext &C, unsigned ID);
   
   typedef NamedDecl * const *chain_iterator;
-  typedef llvm::iterator_range<chain_iterator> chain_range;
+  typedef llvm37::iterator_range<chain_iterator> chain_range;
 
   chain_range chain() const { return chain_range(chain_begin(), chain_end()); }
   chain_iterator chain_begin() const { return chain_iterator(Chaining); }
@@ -2612,9 +2612,9 @@ public:
   const Type *getTypeForDecl() const { return TypeForDecl; }
   void setTypeForDecl(const Type *TD) { TypeForDecl = TD; }
 
-  SourceLocation getLocStart() const LLVM_READONLY { return LocStart; }
+  SourceLocation getLocStart() const LLVM37_READONLY { return LocStart; }
   void setLocStart(SourceLocation L) { LocStart = L; }
-  SourceRange getSourceRange() const override LLVM_READONLY {
+  SourceRange getSourceRange() const override LLVM37_READONLY {
     if (LocStart.isValid())
       return SourceRange(LocStart, getLocation());
     else
@@ -2631,7 +2631,7 @@ public:
 class TypedefNameDecl : public TypeDecl, public Redeclarable<TypedefNameDecl> {
   void anchor() override;
   typedef std::pair<TypeSourceInfo*, QualType> ModedTInfo;
-  llvm::PointerUnion<TypeSourceInfo*, ModedTInfo*> MaybeModedTInfo;
+  llvm37::PointerUnion<TypeSourceInfo*, ModedTInfo*> MaybeModedTInfo;
 
 protected:
   TypedefNameDecl(Kind DK, ASTContext &C, DeclContext *DC,
@@ -2711,7 +2711,7 @@ public:
                              IdentifierInfo *Id, TypeSourceInfo *TInfo);
   static TypedefDecl *CreateDeserialized(ASTContext &C, unsigned ID);
 
-  SourceRange getSourceRange() const override LLVM_READONLY;
+  SourceRange getSourceRange() const override LLVM37_READONLY;
 
   // Implement isa/cast/dyncast/etc.
   static bool classof(const Decl *D) { return classofKind(D->getKind()); }
@@ -2735,7 +2735,7 @@ public:
                                IdentifierInfo *Id, TypeSourceInfo *TInfo);
   static TypeAliasDecl *CreateDeserialized(ASTContext &C, unsigned ID);
 
-  SourceRange getSourceRange() const override LLVM_READONLY;
+  SourceRange getSourceRange() const override LLVM37_READONLY;
 
   TypeAliasTemplateDecl *getDescribedAliasTemplate() const { return Template; }
   void setDescribedAliasTemplate(TypeAliasTemplateDecl *TAT) { Template = TAT; }
@@ -2817,7 +2817,7 @@ private:
   /// declaration specifier for variables, it points to the first VarDecl (used
   /// for mangling);
   /// otherwise, it is a null (TypedefNameDecl) pointer.
-  llvm::PointerUnion<NamedDecl *, ExtInfo *> NamedDeclOrQualifier;
+  llvm37::PointerUnion<NamedDecl *, ExtInfo *> NamedDeclOrQualifier;
 
   bool hasExtInfo() const { return NamedDeclOrQualifier.is<ExtInfo *>(); }
   ExtInfo *getExtInfo() { return NamedDeclOrQualifier.get<ExtInfo *>(); }
@@ -2875,7 +2875,7 @@ public:
   /// getOuterLocStart - Return SourceLocation representing start of source
   /// range taking into account any outer template declarations.
   SourceLocation getOuterLocStart() const;
-  SourceRange getSourceRange() const override LLVM_READONLY;
+  SourceRange getSourceRange() const override LLVM37_READONLY;
 
   TagDecl *getCanonicalDecl() override;
   const TagDecl *getCanonicalDecl() const {
@@ -3060,7 +3060,7 @@ class EnumDecl : public TagDecl {
   /// we can get away with just storing a raw Type*, and thus save an
   /// extra pointer when TypeSourceInfo is needed.
 
-  llvm::PointerUnion<const Type*, TypeSourceInfo*> IntegerType;
+  llvm37::PointerUnion<const Type*, TypeSourceInfo*> IntegerType;
 
   /// PromotionType - The integer type that values of this type should
   /// promote to.  In C, enumerators are generally of an integer type
@@ -3136,7 +3136,7 @@ public:
   // enumerator_iterator - Iterates through the enumerators of this
   // enumeration.
   typedef specific_decl_iterator<EnumConstantDecl> enumerator_iterator;
-  typedef llvm::iterator_range<specific_decl_iterator<EnumConstantDecl>>
+  typedef llvm37::iterator_range<specific_decl_iterator<EnumConstantDecl>>
     enumerator_range;
 
   enumerator_range enumerators() const {
@@ -3189,7 +3189,7 @@ public:
 
   /// \brief Retrieve the source range that covers the underlying type if
   /// specified.
-  SourceRange getIntegerTypeRange() const LLVM_READONLY;
+  SourceRange getIntegerTypeRange() const LLVM37_READONLY;
 
   /// \brief Returns the width in bits required to store all the
   /// non-negative enumerators of this enum.
@@ -3399,7 +3399,7 @@ public:
   // the non-static data members of this class, ignoring any static
   // data members, functions, constructors, destructors, etc.
   typedef specific_decl_iterator<FieldDecl> field_iterator;
-  typedef llvm::iterator_range<specific_decl_iterator<FieldDecl>> field_range;
+  typedef llvm37::iterator_range<specific_decl_iterator<FieldDecl>> field_range;
 
   field_range fields() const { return field_range(field_begin(), field_end()); }
   field_iterator field_begin() const;
@@ -3459,7 +3459,7 @@ public:
   SourceLocation getAsmLoc() const { return getLocation(); }
   SourceLocation getRParenLoc() const { return RParenLoc; }
   void setRParenLoc(SourceLocation L) { RParenLoc = L; }
-  SourceRange getSourceRange() const override LLVM_READONLY {
+  SourceRange getSourceRange() const override LLVM37_READONLY {
     return SourceRange(getAsmLoc(), getRParenLoc());
   }
 
@@ -3486,7 +3486,7 @@ public:
     };
 
     /// The variable being captured.
-    llvm::PointerIntPair<VarDecl*, 2> VariableAndFlags;
+    llvm37::PointerIntPair<VarDecl*, 2> VariableAndFlags;
 
     /// The copy expression, expressed in terms of a DeclRef (or
     /// BlockDeclRef) to the captured variable.  Only required if the
@@ -3565,13 +3565,13 @@ public:
   unsigned param_size() const { return getNumParams(); }
   typedef ParmVarDecl **param_iterator;
   typedef ParmVarDecl * const *param_const_iterator;
-  typedef llvm::iterator_range<param_iterator> param_range;
-  typedef llvm::iterator_range<param_const_iterator> param_const_range;
+  typedef llvm37::iterator_range<param_iterator> param_range;
+  typedef llvm37::iterator_range<param_const_iterator> param_const_range;
 
   // ArrayRef access to formal parameters.
   // FIXME: Should eventual replace iterator access.
   ArrayRef<ParmVarDecl*> parameters() const {
-    return llvm::makeArrayRef(ParamInfo, param_size());
+    return llvm37::makeArrayRef(ParamInfo, param_size());
   }
 
   bool param_empty() const { return NumParams == 0; }
@@ -3612,8 +3612,8 @@ public:
 
   typedef const Capture *capture_iterator;
   typedef const Capture *capture_const_iterator;
-  typedef llvm::iterator_range<capture_iterator> capture_range;
-  typedef llvm::iterator_range<capture_const_iterator> capture_const_range;
+  typedef llvm37::iterator_range<capture_iterator> capture_range;
+  typedef llvm37::iterator_range<capture_const_iterator> capture_const_range;
 
   capture_range captures() {
     return capture_range(capture_begin(), capture_end());
@@ -3653,7 +3653,7 @@ public:
     ManglingContextDecl = Ctx;
   }
 
-  SourceRange getSourceRange() const override LLVM_READONLY;
+  SourceRange getSourceRange() const override LLVM37_READONLY;
 
   // Implement isa/cast/dyncast/etc.
   static bool classof(const Decl *D) { return classofKind(D->getKind()); }
@@ -3675,7 +3675,7 @@ private:
   /// \brief The position of context parameter in list of parameters.
   unsigned ContextParam;
   /// \brief The body of the outlined function.
-  llvm::PointerIntPair<Stmt *, 1, bool> BodyAndNothrow;
+  llvm37::PointerIntPair<Stmt *, 1, bool> BodyAndNothrow;
 
   explicit CapturedDecl(DeclContext *DC, unsigned NumParams)
     : Decl(Captured, DC, SourceLocation()), DeclContext(Captured),
@@ -3722,7 +3722,7 @@ public:
   unsigned getContextParamPosition() const { return ContextParam; }
 
   typedef ImplicitParamDecl **param_iterator;
-  typedef llvm::iterator_range<param_iterator> param_range;
+  typedef llvm37::iterator_range<param_iterator> param_range;
 
   /// \brief Retrieve an iterator pointing to the first parameter decl.
   param_iterator param_begin() const { return getParams(); }
@@ -3763,7 +3763,7 @@ class ImportDecl : public Decl {
   ///
   /// When the bit is false, we only have a single source location for the
   /// end of the import declaration.
-  llvm::PointerIntPair<Module *, 1, bool> ImportedAndComplete;
+  llvm37::PointerIntPair<Module *, 1, bool> ImportedAndComplete;
   
   /// \brief The next import in the list of imports local to the translation
   /// unit being parsed (not loaded from an AST file).
@@ -3807,7 +3807,7 @@ public:
   /// identifiers aren't available.
   ArrayRef<SourceLocation> getIdentifierLocs() const;
 
-  SourceRange getSourceRange() const override LLVM_READONLY;
+  SourceRange getSourceRange() const override LLVM37_READONLY;
 
   static bool classof(const Decl *D) { return classofKind(D->getKind()); }
   static bool classofKind(Kind K) { return K == Import; }
@@ -3854,11 +3854,11 @@ public:
     std::vector<hlsl::UnusualAnnotation *>& BufferAttributes,
     SourceLocation LBrace);
 
-  virtual SourceRange getSourceRange() const LLVM_READONLY{
+  virtual SourceRange getSourceRange() const LLVM37_READONLY{
     return SourceRange(getLocStart(), RBraceLoc);
   }
   const char *getDeclKindName() const;
-  SourceLocation getLocStart() const LLVM_READONLY{ return KwLoc; }
+  SourceLocation getLocStart() const LLVM37_READONLY{ return KwLoc; }
   SourceLocation getRBraceLoc() const { return RBraceLoc; }
   void setRBraceLoc(SourceLocation L) { RBraceLoc = L; }
   bool isCBuffer() const { return IsCBuffer; }

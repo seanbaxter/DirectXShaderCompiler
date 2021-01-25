@@ -12,23 +12,23 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Config/config.h"
-#include "llvm/CodeGen/MachineFunction.h"
-#include "llvm/ExecutionEngine/JITEventListener.h"
-#include "llvm/ExecutionEngine/OProfileWrapper.h"
-#include "llvm/ExecutionEngine/RuntimeDyld.h"
-#include "llvm/IR/DebugInfo.h"
-#include "llvm/IR/Function.h"
-#include "llvm/Object/ObjectFile.h"
-#include "llvm/Object/SymbolSize.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/Errno.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/Config/config.h"
+#include "llvm37/CodeGen/MachineFunction.h"
+#include "llvm37/ExecutionEngine/JITEventListener.h"
+#include "llvm37/ExecutionEngine/OProfileWrapper.h"
+#include "llvm37/ExecutionEngine/RuntimeDyld.h"
+#include "llvm37/IR/DebugInfo.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/Object/ObjectFile.h"
+#include "llvm37/Object/SymbolSize.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/Errno.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <dirent.h>
 #include <fcntl.h>
 
-using namespace llvm;
-using namespace llvm::object;
+using namespace llvm37;
+using namespace llvm37::object;
 
 #define DEBUG_TYPE "oprofile-jit-event-listener"
 
@@ -149,10 +149,10 @@ void OProfileJITEventListener::NotifyFreeingObject(const ObjectFile &Obj) {
 
 }  // anonymous namespace.
 
-namespace llvm {
+namespace llvm37 {
 JITEventListener *JITEventListener::createOProfileJITEventListener() {
-  return new OProfileJITEventListener(llvm::make_unique<OProfileWrapper>());
+  return new OProfileJITEventListener(llvm37::make_unique<OProfileWrapper>());
 }
 
-} // namespace llvm
+} // namespace llvm37
 

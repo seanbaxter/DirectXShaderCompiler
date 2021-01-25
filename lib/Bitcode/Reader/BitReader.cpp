@@ -8,16 +8,16 @@
 //===----------------------------------------------------------------------===//
 
 #include "llvm-c/BitReader.h"
-#include "llvm/Bitcode/ReaderWriter.h"
-#include "llvm/IR/DiagnosticPrinter.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Module.h"
-#include "llvm/Support/MemoryBuffer.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/Bitcode/ReaderWriter.h"
+#include "llvm37/IR/DiagnosticPrinter.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/Support/MemoryBuffer.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <cstring>
 #include <string>
 
-using namespace llvm;
+using namespace llvm37;
 
 /* Builds a module from the bitcode in the specified memory buffer, returning a
    reference to the module via the OutModule parameter. Returns 0 on success.

@@ -26,8 +26,8 @@
 #include "clang/Sema/Lookup.h"
 #include "clang/Sema/Scope.h"
 #include "clang/Sema/ScopeInfo.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/DenseSet.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/DenseSet.h"
 #include "TypeLocBuilder.h"
 
 using namespace clang;
@@ -484,7 +484,7 @@ ActOnSuperClassOfClassInterface(Scope *S,
     if (TypoCorrection Corrected = CorrectTypo(
             DeclarationNameInfo(SuperName, SuperLoc),
             LookupOrdinaryName, TUScope,
-            NULL, llvm::make_unique<ObjCInterfaceValidatorCCC>(IDecl),
+            NULL, llvm37::make_unique<ObjCInterfaceValidatorCCC>(IDecl),
             CTK_ErrorRecovery)) {
       diagnoseTypo(Corrected, PDiag(diag::err_undef_superclass_suggest)
                    << SuperName << ClassName);
@@ -683,7 +683,7 @@ ObjCTypeParamList *Sema::actOnObjCTypeParamList(Scope *S,
   // We do this now because Objective-C type parameters aren't pushed into
   // scope until later (after the instance variable block), but we want the
   // diagnostics to occur right after we parse the type parameter list.
-  llvm::SmallDenseMap<IdentifierInfo *, ObjCTypeParamDecl *> knownParams;
+  llvm37::SmallDenseMap<IdentifierInfo *, ObjCTypeParamDecl *> knownParams;
   for (auto typeParam : typeParams) {
     auto known = knownParams.find(typeParam->getIdentifier());
     if (known != knownParams.end()) {
@@ -1194,7 +1194,7 @@ Sema::FindProtocolDeclaration(bool WarnOnDeclarations, bool ForObjCContainer,
       TypoCorrection Corrected = CorrectTypo(
           DeclarationNameInfo(ProtocolId[i].first, ProtocolId[i].second),
           LookupObjCProtocolName, TUScope, nullptr,
-          llvm::make_unique<DeclFilterCCC<ObjCProtocolDecl>>(),
+          llvm37::make_unique<DeclFilterCCC<ObjCProtocolDecl>>(),
           CTK_ErrorRecovery);
       if ((PDecl = Corrected.getCorrectionDeclAs<ObjCProtocolDecl>()))
         diagnoseTypo(Corrected, PDiag(diag::err_undeclared_protocol_suggest)
@@ -1375,7 +1375,7 @@ void Sema::actOnObjCTypeArgsOrProtocolQualifiers(
     // protocol conformances are declared by the base class itself, in
     // which case we warn.
     if (allAreTypeNames && firstClassNameLoc.isValid()) {
-      llvm::SmallPtrSet<ObjCProtocolDecl*, 8> knownProtocols;
+      llvm37::SmallPtrSet<ObjCProtocolDecl*, 8> knownProtocols;
       Context.CollectInheritedProtocols(baseClass, knownProtocols);
       bool allProtocolsDeclared = true;
       for (auto proto : protocols) {
@@ -1414,7 +1414,7 @@ void Sema::actOnObjCTypeArgsOrProtocolQualifiers(
   // Objective-C class names. The latter is technically ill-formed,
   // but is probably something like \c NSArray<NSView *> missing the
   // \c*.
-  typedef llvm::PointerUnion<TypeDecl *, ObjCInterfaceDecl *> TypeOrClassDecl;
+  typedef llvm37::PointerUnion<TypeDecl *, ObjCInterfaceDecl *> TypeOrClassDecl;
   SmallVector<TypeOrClassDecl, 4> typeDecls;
   unsigned numTypeDeclsResolved = 0;
   for (unsigned i = 0, n = identifiers.size(); i != n; ++i) {
@@ -1567,7 +1567,7 @@ void Sema::actOnObjCTypeArgsOrProtocolQualifiers(
     TypoCorrection corrected = CorrectTypo(
         DeclarationNameInfo(identifiers[i], identifierLocs[i]), lookupKind, S,
         nullptr,
-        llvm::make_unique<ObjCTypeArgOrProtocolValidatorCCC>(Context,
+        llvm37::make_unique<ObjCTypeArgOrProtocolValidatorCCC>(Context,
                                                              lookupKind),
         CTK_ErrorRecovery);
     if (corrected) {
@@ -1634,7 +1634,7 @@ void Sema::DiagnoseClassExtensionDupMethods(ObjCCategoryDecl *CAT,
   if (!ID)
     return;  // Possibly due to previous error
 
-  llvm::DenseMap<Selector, const ObjCMethodDecl*> MethodMap;
+  llvm37::DenseMap<Selector, const ObjCMethodDecl*> MethodMap;
   for (auto *MD : ID->methods())
     MethodMap[MD->getSelector()] = MD;
 
@@ -1857,7 +1857,7 @@ Decl *Sema::ActOnStartClassImplementation(
     // typos in the class name.
     TypoCorrection Corrected = CorrectTypo(
         DeclarationNameInfo(ClassName, ClassLoc), LookupOrdinaryName, TUScope,
-        nullptr, llvm::make_unique<ObjCInterfaceValidatorCCC>(), CTK_NonError);
+        nullptr, llvm37::make_unique<ObjCInterfaceValidatorCCC>(), CTK_NonError);
     if (Corrected.getCorrectionDeclAs<ObjCInterfaceDecl>()) {
       // Suggest the (potentially) correct interface name. Don't provide a
       // code-modification hint or use the typo name for recovery, because
@@ -2515,7 +2515,7 @@ void Sema::WarnExactTypedMethods(ObjCMethodDecl *ImpMethodDecl,
 /// we used an immutable set to keep the table then it wouldn't add significant
 /// memory cost and it would be handy for lookups.
 
-typedef llvm::DenseSet<IdentifierInfo*> ProtocolNameSet;
+typedef llvm37::DenseSet<IdentifierInfo*> ProtocolNameSet;
 typedef std::unique_ptr<ProtocolNameSet> LazyProtocolNameSet;
 
 static void findProtocolsWithExplicitImpls(const ObjCProtocolDecl *PDecl,
@@ -3522,8 +3522,8 @@ Decl *Sema::ActOnAtEnd(Scope *S, SourceRange AtEnd, ArrayRef<Decl *> allMethods,
   bool checkIdenticalMethods = isa<ObjCImplementationDecl>(ClassDecl);
 
   // FIXME: Remove these and use the ObjCContainerDecl/DeclContext.
-  llvm::DenseMap<Selector, const ObjCMethodDecl*> InsMap;
-  llvm::DenseMap<Selector, const ObjCMethodDecl*> ClsMap;
+  llvm37::DenseMap<Selector, const ObjCMethodDecl*> InsMap;
+  llvm37::DenseMap<Selector, const ObjCMethodDecl*> ClsMap;
 
   for (unsigned i = 0, e = allMethods.size(); i != e; i++ ) {
     ObjCMethodDecl *Method =
@@ -3764,7 +3764,7 @@ class OverrideSearch {
 public:
   Sema &S;
   ObjCMethodDecl *Method;
-  llvm::SmallPtrSet<ObjCMethodDecl*, 4> Overridden;
+  llvm37::SmallPtrSet<ObjCMethodDecl*, 4> Overridden;
   bool Recursive;
 
 public:
@@ -3801,7 +3801,7 @@ public:
     }
   }
 
-  typedef llvm::SmallPtrSet<ObjCMethodDecl*, 128>::iterator iterator;
+  typedef llvm37::SmallPtrSet<ObjCMethodDecl*, 128>::iterator iterator;
   iterator begin() const { return Overridden.begin(); }
   iterator end() const { return Overridden.end(); }
 

@@ -11,14 +11,14 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_LIB_PROFILEDATA_INSTRPROFINDEXED_H
-#define LLVM_LIB_PROFILEDATA_INSTRPROFINDEXED_H
+#ifndef LLVM37_LIB_PROFILEDATA_INSTRPROFINDEXED_H
+#define LLVM37_LIB_PROFILEDATA_INSTRPROFINDEXED_H
 
-#include "llvm/Support/Endian.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/MD5.h"
+#include "llvm37/Support/Endian.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/MD5.h"
 
-namespace llvm {
+namespace llvm37 {
 
 namespace IndexedInstrProf {
 enum class HashT : uint32_t {
@@ -30,11 +30,11 @@ enum class HashT : uint32_t {
 static inline uint64_t MD5Hash(StringRef Str) {
   MD5 Hash;
   Hash.update(Str);
-  llvm::MD5::MD5Result Result;
+  llvm37::MD5::MD5Result Result;
   Hash.final(Result);
   // Return the least significant 8 bytes. Our MD5 implementation returns the
   // result in little endian, so we may need to swap bytes.
-  using namespace llvm::support;
+  using namespace llvm37::support;
   return endian::read<uint64_t, little, unaligned>(Result);
 }
 
@@ -51,6 +51,6 @@ const uint64_t Version = 2;
 const HashT HashType = HashT::MD5;
 }
 
-} // end namespace llvm
+} // end namespace llvm37
 
 #endif

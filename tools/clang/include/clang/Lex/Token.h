@@ -11,14 +11,14 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_LEX_TOKEN_H
-#define LLVM_CLANG_LEX_TOKEN_H
+#ifndef LLVM37_CLANG_LEX_TOKEN_H
+#define LLVM37_CLANG_LEX_TOKEN_H
 
 #include "clang/Basic/OperatorKinds.h"
 #include "clang/Basic/SourceLocation.h"
 #include "clang/Basic/TemplateKinds.h"
 #include "clang/Basic/TokenKinds.h"
-#include "llvm/ADT/StringRef.h"
+#include "llvm37/ADT/StringRef.h"
 #include <cstdlib>
 
 namespace clang {
@@ -344,9 +344,9 @@ struct PPConditionalInfo {
 
 }  // end namespace clang
 
-namespace llvm {
+namespace llvm37 {
   template <>
   struct isPodLike<clang::Token> { static const bool value = true; };
-}  // end namespace llvm
+}  // end namespace llvm37
 
 #endif

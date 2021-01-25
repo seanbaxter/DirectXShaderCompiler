@@ -19,8 +19,8 @@
 ///
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_SEMA_DELAYEDDIAGNOSTIC_H
-#define LLVM_CLANG_SEMA_DELAYEDDIAGNOSTIC_H
+#ifndef LLVM37_CLANG_SEMA_DELAYEDDIAGNOSTIC_H
+#define LLVM37_CLANG_SEMA_DELAYEDDIAGNOSTIC_H
 
 #include "clang/Sema/Sema.h"
 

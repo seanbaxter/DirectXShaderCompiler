@@ -11,12 +11,12 @@
 //
 //===----------------------------------------------------------------------===/
 
-#ifndef LLVM_CLANG_SEMA_TEMPLATEDEDUCTION_H
-#define LLVM_CLANG_SEMA_TEMPLATEDEDUCTION_H
+#ifndef LLVM37_CLANG_SEMA_TEMPLATEDEDUCTION_H
+#define LLVM37_CLANG_SEMA_TEMPLATEDEDUCTION_H
 
 #include "clang/AST/DeclTemplate.h"
 #include "clang/Basic/PartialDiagnostic.h"
-#include "llvm/ADT/SmallVector.h"
+#include "llvm37/ADT/SmallVector.h"
 
 namespace clang {
 

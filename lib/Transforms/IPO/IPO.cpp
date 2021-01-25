@@ -15,13 +15,13 @@
 
 #include "llvm-c/Initialization.h"
 #include "llvm-c/Transforms/IPO.h"
-#include "llvm/InitializePasses.h"
-#include "llvm/IR/LegacyPassManager.h"
-#include "llvm/Transforms/IPO.h"
+#include "llvm37/InitializePasses.h"
+#include "llvm37/IR/LegacyPassManager.h"
+#include "llvm37/Transforms/IPO.h"
 
-using namespace llvm;
+using namespace llvm37;
 
-void llvm::initializeIPO(PassRegistry &Registry) {
+void llvm37::initializeIPO(PassRegistry &Registry) {
   initializeArgPromotionPass(Registry);
   initializeConstantMergePass(Registry);
   initializeDAEPass(Registry);
@@ -74,7 +74,7 @@ void LLVMAddFunctionInliningPass(LLVMPassManagerRef PM) {
 }
 
 void LLVMAddAlwaysInlinerPass(LLVMPassManagerRef PM) {
-  unwrap(PM)->add(llvm::createAlwaysInlinerPass());
+  unwrap(PM)->add(llvm37::createAlwaysInlinerPass());
 }
 
 void LLVMAddGlobalDCEPass(LLVMPassManagerRef PM) {

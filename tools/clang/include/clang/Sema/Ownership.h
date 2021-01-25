@@ -11,12 +11,12 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_SEMA_OWNERSHIP_H
-#define LLVM_CLANG_SEMA_OWNERSHIP_H
+#ifndef LLVM37_CLANG_SEMA_OWNERSHIP_H
+#define LLVM37_CLANG_SEMA_OWNERSHIP_H
 
 #include "clang/Basic/LLVM.h"
-#include "llvm/ADT/ArrayRef.h"
-#include "llvm/ADT/PointerIntPair.h"
+#include "llvm37/ADT/ArrayRef.h"
+#include "llvm37/ADT/PointerIntPair.h"
 
 //===----------------------------------------------------------------------===//
 // OpaquePtr
@@ -47,7 +47,7 @@ namespace clang {
     void *Ptr;
     explicit OpaquePtr(void *Ptr) : Ptr(Ptr) {}
 
-    typedef llvm::PointerLikeTypeTraits<PtrTy> Traits;
+    typedef llvm37::PointerLikeTypeTraits<PtrTy> Traits;
 
   public:
     OpaquePtr() : Ptr(nullptr) {}
@@ -106,7 +106,7 @@ namespace clang {
   };
 }
 
-namespace llvm {
+namespace llvm37 {
   template <class T>
   class PointerLikeTypeTraits<clang::OpaquePtr<T> > {
   public:
@@ -180,7 +180,7 @@ namespace clang {
     // A pointer whose low bit is 1 if this result is invalid, 0
     // otherwise.
     uintptr_t PtrWithInvalid;
-    typedef llvm::PointerLikeTypeTraits<PtrTy> PtrTraits;
+    typedef llvm37::PointerLikeTypeTraits<PtrTy> PtrTraits;
   public:
     ActionResult(bool Invalid = false)
       : PtrWithInvalid(static_cast<uintptr_t>(Invalid)) { }

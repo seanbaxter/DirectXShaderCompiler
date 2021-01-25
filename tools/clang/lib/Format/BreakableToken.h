@@ -14,8 +14,8 @@
 ///
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_LIB_FORMAT_BREAKABLETOKEN_H
-#define LLVM_CLANG_LIB_FORMAT_BREAKABLETOKEN_H
+#ifndef LLVM37_CLANG_LIB_FORMAT_BREAKABLETOKEN_H
+#define LLVM37_CLANG_LIB_FORMAT_BREAKABLETOKEN_H
 
 #include "Encoding.h"
 #include "TokenAnnotator.h"

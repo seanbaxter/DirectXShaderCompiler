@@ -16,20 +16,20 @@
 
 #include "dxc/Support/dxcfilesystem.h"
 #include "lib_share_helper.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/StringSet.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Support/Path.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/StringSet.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Support/Path.h"
 #include <unordered_set>
 
 using namespace libshare;
 
 using namespace hlsl;
-using namespace llvm;
+using namespace llvm37;
 
 namespace dxcutil {
 bool IsAbsoluteOrCurDirRelative(const Twine &T) {
-  if (llvm::sys::path::is_absolute(T)) {
+  if (llvm37::sys::path::is_absolute(T)) {
     return true;
   }
   if (T.isSingleStringRef()) {
@@ -202,5 +202,5 @@ HRESULT IncludeToLibPreprocessorImpl::Preprocess(
 
 std::unique_ptr<IncludeToLibPreprocessor>
   IncludeToLibPreprocessor::CreateIncludeToLibPreprocessor(IDxcIncludeHandler *handler) {
-  return llvm::make_unique<IncludeToLibPreprocessorImpl>(handler);
+  return llvm37::make_unique<IncludeToLibPreprocessorImpl>(handler);
 }

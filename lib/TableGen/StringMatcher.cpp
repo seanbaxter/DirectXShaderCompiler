@@ -11,10 +11,10 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/TableGen/StringMatcher.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/TableGen/StringMatcher.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <map>
-using namespace llvm;
+using namespace llvm37;
 
 /// FindFirstNonCommonLetter - Find the first character in the keys of the
 /// string pairs that is not shared across the whole set of strings.  All

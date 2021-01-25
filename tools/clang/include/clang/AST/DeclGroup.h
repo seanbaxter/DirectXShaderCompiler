@@ -11,10 +11,10 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_AST_DECLGROUP_H
-#define LLVM_CLANG_AST_DECLGROUP_H
+#ifndef LLVM37_CLANG_AST_DECLGROUP_H
+#define LLVM37_CLANG_AST_DECLGROUP_H
 
-#include "llvm/Support/DataTypes.h"
+#include "llvm37/Support/DataTypes.h"
 #include <cassert>
 
 namespace clang {
@@ -136,7 +136,7 @@ public:
 
 } // end clang namespace
 
-namespace llvm {
+namespace llvm37 {
   // DeclGroupRef is "like a pointer", implement PointerLikeTypeTraits.
   template <typename T>
   class PointerLikeTypeTraits;

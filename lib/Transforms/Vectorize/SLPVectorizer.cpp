@@ -16,41 +16,41 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Transforms/Vectorize.h"
-#include "llvm/ADT/MapVector.h"
-#include "llvm/ADT/Optional.h"
-#include "llvm/ADT/PostOrderIterator.h"
-#include "llvm/ADT/SetVector.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/Analysis/AliasAnalysis.h"
-#include "llvm/Analysis/AssumptionCache.h"
-#include "llvm/Analysis/CodeMetrics.h"
-#include "llvm/Analysis/LoopInfo.h"
-#include "llvm/Analysis/ScalarEvolution.h"
-#include "llvm/Analysis/ScalarEvolutionExpressions.h"
-#include "llvm/Analysis/TargetTransformInfo.h"
-#include "llvm/Analysis/ValueTracking.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/Dominators.h"
-#include "llvm/IR/IRBuilder.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/NoFolder.h"
-#include "llvm/IR/Type.h"
-#include "llvm/IR/Value.h"
-#include "llvm/IR/Verifier.h"
-#include "llvm/Pass.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Analysis/VectorUtils.h"
+#include "llvm37/Transforms/Vectorize.h"
+#include "llvm37/ADT/MapVector.h"
+#include "llvm37/ADT/Optional.h"
+#include "llvm37/ADT/PostOrderIterator.h"
+#include "llvm37/ADT/SetVector.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/Analysis/AliasAnalysis.h"
+#include "llvm37/Analysis/AssumptionCache.h"
+#include "llvm37/Analysis/CodeMetrics.h"
+#include "llvm37/Analysis/LoopInfo.h"
+#include "llvm37/Analysis/ScalarEvolution.h"
+#include "llvm37/Analysis/ScalarEvolutionExpressions.h"
+#include "llvm37/Analysis/TargetTransformInfo.h"
+#include "llvm37/Analysis/ValueTracking.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/IR/Dominators.h"
+#include "llvm37/IR/IRBuilder.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/NoFolder.h"
+#include "llvm37/IR/Type.h"
+#include "llvm37/IR/Value.h"
+#include "llvm37/IR/Verifier.h"
+#include "llvm37/Pass.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Analysis/VectorUtils.h"
 #include <algorithm>
 #include <map>
 #include <memory>
 //                                                                           //
 ///////////////////////////////////////////////////////////////////////////////
-using namespace llvm;
+using namespace llvm37;
 
 #define SV_NAME "slp-vectorizer"
 #define DEBUG_TYPE "SLP"
@@ -507,12 +507,12 @@ private:
 
   /// This POD struct describes one external user in the vectorized tree.
   struct ExternalUser {
-    ExternalUser (Value *S, llvm::User *U, int L) :
+    ExternalUser (Value *S, llvm37::User *U, int L) :
       Scalar(S), User(U), Lane(L){};
     // Which scalar in our function.
     Value *Scalar;
     // Which user that uses the scalar.
-    llvm::User *User;
+    llvm37::User *User;
     // Which lane does the scalar belong to.
     int Lane;
   };
@@ -1073,7 +1073,7 @@ void BoUpSLP::buildTree_rec(ArrayRef<Value *> VL, unsigned Depth) {
 
   auto &BSRef = BlocksSchedules[BB];
   if (!BSRef) {
-    BSRef = llvm::make_unique<BlockScheduling>(BB);
+    BSRef = llvm37::make_unique<BlockScheduling>(BB);
   }
   BlockScheduling &BS = *BSRef.get();
 
@@ -2500,7 +2500,7 @@ Value *BoUpSLP::vectorizeTree() {
   for (UserList::iterator it = ExternalUses.begin(), e = ExternalUses.end();
        it != e; ++it) {
     Value *Scalar = it->Scalar;
-    llvm::User *User = it->User;
+    llvm37::User *User = it->User;
 
     // Skip users that we already RAUW. This happens when one instruction
     // has multiple uses of the same value.
@@ -2834,7 +2834,7 @@ void BoUpSLP::BlockScheduling::initScheduleData(Instruction *FromI,
       // Allocate a new ScheduleData for the instruction.
       if (ChunkPos >= ChunkSize) {
         ScheduleDataChunks.push_back(
-            llvm::make_unique<ScheduleData[]>(ChunkSize));
+            llvm37::make_unique<ScheduleData[]>(ChunkSize));
         ChunkPos = 0;
       }
       SD = &(ScheduleDataChunks.back()[ChunkPos++]);
@@ -4048,6 +4048,6 @@ INITIALIZE_PASS_DEPENDENCY(ScalarEvolution)
 INITIALIZE_PASS_DEPENDENCY(LoopSimplify)
 INITIALIZE_PASS_END(SLPVectorizer, SV_NAME, lv_name, false, false)
 
-namespace llvm {
+namespace llvm37 {
 Pass *createSLPVectorizerPass() { return new SLPVectorizer(); }
 }

@@ -12,8 +12,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_ANALYSIS_DOMAINSPECIFIC_OBJCNORETURN_H
-#define LLVM_CLANG_ANALYSIS_DOMAINSPECIFIC_OBJCNORETURN_H
+#ifndef LLVM37_CLANG_ANALYSIS_DOMAINSPECIFIC_OBJCNORETURN_H
+#define LLVM37_CLANG_ANALYSIS_DOMAINSPECIFIC_OBJCNORETURN_H
 
 #include "clang/Basic/IdentifierTable.h"
 

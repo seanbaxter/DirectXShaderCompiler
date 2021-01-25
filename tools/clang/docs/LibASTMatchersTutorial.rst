@@ -60,7 +60,7 @@ Okay. Now we'll build Clang!
 
       cd ~/clang-llvm
       mkdir build && cd build
-      cmake -G Ninja ../llvm -DLLVM_BUILD_TESTS=ON  # Enable tests; default is off.
+      cmake -G Ninja ../llvm -DLLVM37_BUILD_TESTS=ON  # Enable tests; default is off.
       ninja
       ninja check       # Test LLVM only.
       ninja clang-test  # Test Clang only.
@@ -110,8 +110,8 @@ CMakeLists.txt should have the following contents:
 
 ::
 
-      set(LLVM_LINK_COMPONENTS support)
-      set(LLVM_USED_LIBS clangTooling clangBasic clangAST)
+      set(LLVM37_LINK_COMPONENTS support)
+      set(LLVM37_USED_LIBS clangTooling clangBasic clangAST)
 
       add_clang_executable(loop-convert
         LoopConvert.cpp
@@ -134,15 +134,15 @@ documentation <LibTooling.html>`_.
       #include "clang/Frontend/FrontendActions.h"
       #include "clang/Tooling/CommonOptionsParser.h"
       #include "clang/Tooling/Tooling.h"
-      // Declares llvm::cl::extrahelp.
-      #include "llvm/Support/CommandLine.h"
+      // Declares llvm37::cl::extrahelp.
+      #include "llvm37/Support/CommandLine.h"
 
       using namespace clang::tooling;
-      using namespace llvm;
+      using namespace llvm37;
 
       // Apply a custom category to all command-line options so that they are the
       // only ones displayed.
-      static llvm::cl::OptionCategory MyToolCategory("my-tool options");
+      static llvm37::cl::OptionCategory MyToolCategory("my-tool options");
 
       // CommonOptionsParser declares HelpMessage with a description of the common
       // command-line options related to the compilation database and input files.
@@ -510,7 +510,7 @@ And change ``LoopPrinter::run`` to
 
         if (!areSameVariable(IncVar, CondVar) || !areSameVariable(IncVar, InitVar))
           return;
-        llvm::outs() << "Potential array-based loop discovered.\n";
+        llvm37::outs() << "Potential array-based loop discovered.\n";
       }
 
 Clang associates a ``VarDecl`` with each variable to represent the variable's
@@ -546,14 +546,14 @@ canonicalize expressions:
                               const Expr *Second) {
         if (!First || !Second)
           return false;
-        llvm::FoldingSetNodeID FirstID, SecondID;
+        llvm37::FoldingSetNodeID FirstID, SecondID;
         First->Profile(FirstID, *Context, true);
         Second->Profile(SecondID, *Context, true);
         return FirstID == SecondID;
       }
 
 This code relies on the comparison between two
-``llvm::FoldingSetNodeIDs``. As the documentation for
+``llvm37::FoldingSetNodeIDs``. As the documentation for
 ``Stmt::Profile()`` indicates, the ``Profile()`` member function builds
 a description of a node in the AST, based on its properties, along with
 those of its children. ``FoldingSetNodeID`` then serves as a hash we can

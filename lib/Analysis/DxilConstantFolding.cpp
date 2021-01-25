@@ -11,25 +11,25 @@
 //
 //
 //===----------------------------------------------------------------------===//
-#include "llvm/Analysis/DxilConstantFolding.h"
-#include "llvm/Analysis/ConstantFolding.h"
-#include "llvm/ADT/SmallPtrSet.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/ADT/StringMap.h"
-#include "llvm/Analysis/TargetLibraryInfo.h"
-#include "llvm/Analysis/ValueTracking.h"
-#include "llvm/Config/config.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/DerivedTypes.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/GetElementPtrTypeIterator.h"
-#include "llvm/IR/GlobalVariable.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/Intrinsics.h"
-#include "llvm/IR/Operator.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/MathExtras.h"
+#include "llvm37/Analysis/DxilConstantFolding.h"
+#include "llvm37/Analysis/ConstantFolding.h"
+#include "llvm37/ADT/SmallPtrSet.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/ADT/StringMap.h"
+#include "llvm37/Analysis/TargetLibraryInfo.h"
+#include "llvm37/Analysis/ValueTracking.h"
+#include "llvm37/Config/config.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/IR/DerivedTypes.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/GetElementPtrTypeIterator.h"
+#include "llvm37/IR/GlobalVariable.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/Intrinsics.h"
+#include "llvm37/IR/Operator.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/MathExtras.h"
 #include <cerrno>
 #include <cmath>
 #include <algorithm>
@@ -37,7 +37,7 @@
 
 #include "dxc/DXIL/DXIL.h"
 #include "dxc/HLSL/DxilConvergentName.h"
-using namespace llvm;
+using namespace llvm37;
 using namespace hlsl;
 
 namespace {
@@ -82,8 +82,8 @@ typedef std::function<APFloat::opStatus(APFloat&)> APFloatUnaryOp;
 ///
 /// Calls out to the llvm constant folding function to do the real work.
 static Constant *DxilConstantFoldFP(NativeFPUnaryOp NativeFP, ConstantFP *C, Type *Ty) {
-  double V = llvm::getValueAsDouble(C);
-  return llvm::ConstantFoldFP(NativeFP, V, Ty);
+  double V = llvm37::getValueAsDouble(C);
+  return llvm37::ConstantFoldFP(NativeFP, V, Ty);
 }
 
 // Constant fold using the provided function on APFloats.
@@ -290,15 +290,15 @@ static Constant *HLSLConstantFoldBfrev(ConstantInt *C, Type *Ty) {
   uint64_t result = 0;
   if (Ty == Type::getInt32Ty(Ty->getContext())) {
     uint32_t val = static_cast<uint32_t>(API.getLimitedValue());
-    result = llvm::reverseBits(val);
+    result = llvm37::reverseBits(val);
   }
   else if (Ty == Type::getInt16Ty(Ty->getContext())) {
     uint16_t val = static_cast<uint16_t>(API.getLimitedValue());
-    result = llvm::reverseBits(val);
+    result = llvm37::reverseBits(val);
   }
   else if (Ty == Type::getInt64Ty(Ty->getContext())) {
     uint64_t val = static_cast<uint64_t>(API.getLimitedValue());
-    result = llvm::reverseBits(val);
+    result = llvm37::reverseBits(val);
   }
   else {
     return nullptr;

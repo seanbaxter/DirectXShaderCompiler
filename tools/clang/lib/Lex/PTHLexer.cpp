@@ -20,10 +20,10 @@
 #include "clang/Lex/PTHManager.h"
 #include "clang/Lex/Preprocessor.h"
 #include "clang/Lex/Token.h"
-#include "llvm/ADT/StringExtras.h"
-#include "llvm/ADT/StringMap.h"
-#include "llvm/Support/EndianStream.h"
-#include "llvm/Support/MemoryBuffer.h"
+#include "llvm37/ADT/StringExtras.h"
+#include "llvm37/ADT/StringMap.h"
+#include "llvm37/Support/EndianStream.h"
+#include "llvm37/Support/MemoryBuffer.h"
 #include <memory>
 #include <system_error>
 using namespace clang;
@@ -46,7 +46,7 @@ bool PTHLexer::Lex(Token& Tok) {
   //===--------------------------------------==//
   // Read the raw token data.
   //===--------------------------------------==//
-  using namespace llvm::support;
+  using namespace llvm37::support;
 
   // Shadow CurPtr into an automatic variable.
   const unsigned char *CurPtrShadow = CurPtr;
@@ -186,7 +186,7 @@ void PTHLexer::DiscardToEndOfLine() {
 
 /// SkipBlock - Used by Preprocessor to skip the current conditional block.
 bool PTHLexer::SkipBlock() {
-  using namespace llvm::support;
+  using namespace llvm37::support;
   assert(CurPPCondPtr && "No cached PP conditional information.");
   assert(LastHashTokPtr && "No known '#' token.");
 
@@ -289,7 +289,7 @@ SourceLocation PTHLexer::getSourceLocation() {
   // handling a #included file.  Just read the necessary data from the token
   // data buffer to construct the SourceLocation object.
   // NOTE: This is a virtual function; hence it is defined out-of-line.
-  using namespace llvm::support;
+  using namespace llvm37::support;
 
   const unsigned char *OffsetPtr = CurPtr + (StoredTokenSize - 4);
   uint32_t Offset = endian::readNext<uint32_t, little, aligned>(OffsetPtr);
@@ -323,12 +323,12 @@ public:
   typedef unsigned offset_type;
 
   static hash_value_type ComputeHash(internal_key_type x) {
-    return llvm::HashString(x.second);
+    return llvm37::HashString(x.second);
   }
 
   static std::pair<unsigned, unsigned>
   ReadKeyDataLength(const unsigned char*& d) {
-    using namespace llvm::support;
+    using namespace llvm37::support;
     unsigned keyLen =
         (unsigned)endian::readNext<uint16_t, little, unaligned>(d);
     unsigned dataLen = (unsigned) *(d++);
@@ -359,7 +359,7 @@ public:
   static PTHFileData ReadData(const internal_key_type& k,
                               const unsigned char* d, unsigned) {
     assert(k.first == 0x1 && "Only file lookups can match!");
-    using namespace llvm::support;
+    using namespace llvm37::support;
     uint32_t x = endian::readNext<uint32_t, little, unaligned>(d);
     uint32_t y = endian::readNext<uint32_t, little, unaligned>(d);
     return PTHFileData(x, y);
@@ -381,7 +381,7 @@ public:
   }
 
   static hash_value_type ComputeHash(const internal_key_type& a) {
-    return llvm::HashString(StringRef(a.first, a.second));
+    return llvm37::HashString(StringRef(a.first, a.second));
   }
 
   // This hopefully will just get inlined and removed by the optimizer.
@@ -390,7 +390,7 @@ public:
 
   static std::pair<unsigned, unsigned>
   ReadKeyDataLength(const unsigned char*& d) {
-    using namespace llvm::support;
+    using namespace llvm37::support;
     return std::make_pair(
         (unsigned)endian::readNext<uint16_t, little, unaligned>(d),
         sizeof(uint32_t));
@@ -404,7 +404,7 @@ public:
 
   static uint32_t ReadData(const internal_key_type& k, const unsigned char* d,
                            unsigned) {
-    using namespace llvm::support;
+    using namespace llvm37::support;
     return endian::readNext<uint32_t, little, unaligned>(d);
   }
 };
@@ -414,9 +414,9 @@ public:
 //===----------------------------------------------------------------------===//
 
 PTHManager::PTHManager(
-    std::unique_ptr<const llvm::MemoryBuffer> buf,
+    std::unique_ptr<const llvm37::MemoryBuffer> buf,
     std::unique_ptr<PTHFileLookup> fileLookup, const unsigned char *idDataTable,
-    std::unique_ptr<IdentifierInfo *[], llvm::FreeDeleter> perIDCache,
+    std::unique_ptr<IdentifierInfo *[], llvm37::FreeDeleter> perIDCache,
     std::unique_ptr<PTHStringIdLookup> stringIdLookup, unsigned numIds,
     const unsigned char *spellingBase, const char *originalSourceFile)
     : Buf(std::move(buf)), PerIDCache(std::move(perIDCache)),
@@ -433,17 +433,17 @@ static void InvalidPTH(DiagnosticsEngine &Diags, const char *Msg) {
 
 PTHManager *PTHManager::Create(StringRef file, DiagnosticsEngine &Diags) {
   // Memory map the PTH file.
-  llvm::ErrorOr<std::unique_ptr<llvm::MemoryBuffer>> FileOrErr =
-      llvm::MemoryBuffer::getFile(file);
+  llvm37::ErrorOr<std::unique_ptr<llvm37::MemoryBuffer>> FileOrErr =
+      llvm37::MemoryBuffer::getFile(file);
 
   if (!FileOrErr) {
     // FIXME: Add ec.message() to this diag.
     Diags.Report(diag::err_invalid_pth_file) << file;
     return nullptr;
   }
-  std::unique_ptr<llvm::MemoryBuffer> File = std::move(FileOrErr.get());
+  std::unique_ptr<llvm37::MemoryBuffer> File = std::move(FileOrErr.get());
 
-  using namespace llvm::support;
+  using namespace llvm37::support;
 
   // Get the buffer ranges and check if there are at least three 32-bit
   // words at the end of the file.
@@ -534,7 +534,7 @@ PTHManager *PTHManager::Create(StringRef file, DiagnosticsEngine &Diags) {
   // Pre-allocate the persistent ID -> IdentifierInfo* cache.  We use calloc()
   // so that we in the best case only zero out memory once when the OS returns
   // us new pages.
-  std::unique_ptr<IdentifierInfo *[], llvm::FreeDeleter> PerIDCache;
+  std::unique_ptr<IdentifierInfo *[], llvm37::FreeDeleter> PerIDCache;
 
   if (NumIds) {
     PerIDCache.reset((IdentifierInfo **)calloc(NumIds, sizeof(PerIDCache[0])));
@@ -557,7 +557,7 @@ PTHManager *PTHManager::Create(StringRef file, DiagnosticsEngine &Diags) {
 }
 
 IdentifierInfo* PTHManager::LazilyCreateIdentifierInfo(unsigned PersistentID) {
-  using namespace llvm::support;
+  using namespace llvm37::support;
   // Look in the PTH file for the string data for the IdentifierInfo object.
   const unsigned char* TableEntry = IdDataTable + sizeof(uint32_t)*PersistentID;
   const unsigned char *IDData =
@@ -597,7 +597,7 @@ PTHLexer *PTHManager::CreateLexer(FileID FID) {
   if (!FE)
     return nullptr;
 
-  using namespace llvm::support;
+  using namespace llvm37::support;
 
   // Lookup the FileEntry object in our file lookup data structure.  It will
   // return a variant that indicates whether or not there is an offset within
@@ -632,10 +632,10 @@ public:
   const bool HasData;
   uint64_t Size;
   time_t ModTime;
-  llvm::sys::fs::UniqueID UniqueID;
+  llvm37::sys::fs::UniqueID UniqueID;
   bool IsDirectory;
 
-  PTHStatData(uint64_t Size, time_t ModTime, llvm::sys::fs::UniqueID UniqueID,
+  PTHStatData(uint64_t Size, time_t ModTime, llvm37::sys::fs::UniqueID UniqueID,
               bool IsDirectory)
       : HasData(true), Size(Size), ModTime(ModTime), UniqueID(UniqueID),
         IsDirectory(IsDirectory) {}
@@ -669,11 +669,11 @@ public:
         d += 4 * 2; // Skip the first 2 words.
       }
 
-      using namespace llvm::support;
+      using namespace llvm37::support;
 
       uint64_t File = endian::readNext<uint64_t, little, unaligned>(d);
       uint64_t Device = endian::readNext<uint64_t, little, unaligned>(d);
-      llvm::sys::fs::UniqueID UniqueID(Device, File);
+      llvm37::sys::fs::UniqueID UniqueID(Device, File);
       time_t ModTime = endian::readNext<uint64_t, little, unaligned>(d);
       uint64_t Size = endian::readNext<uint64_t, little, unaligned>(d);
       return data_type(Size, ModTime, UniqueID, IsDirectory);
@@ -687,7 +687,7 @@ public:
 
 namespace clang {
 class PTHStatCache : public FileSystemStatCache {
-  typedef llvm::OnDiskChainedHashTable<PTHStatLookupTrait> CacheTy;
+  typedef llvm37::OnDiskChainedHashTable<PTHStatLookupTrait> CacheTy;
   CacheTy Cache;
 
 public:
@@ -724,5 +724,5 @@ public:
 }
 
 std::unique_ptr<FileSystemStatCache> PTHManager::createStatCache() {
-  return llvm::make_unique<PTHStatCache>(*FileLookup);
+  return llvm37::make_unique<PTHStatCache>(*FileLookup);
 }

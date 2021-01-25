@@ -20,13 +20,13 @@
 #include "clang/Basic/Version.h"
 #include "clang/Format/Format.h"
 #include "clang/Rewrite/Core/Rewriter.h"
-#include "llvm/ADT/StringMap.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/FileSystem.h"
-#include "llvm/Support/Signals.h"
+#include "llvm37/ADT/StringMap.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/FileSystem.h"
+#include "llvm37/Support/Signals.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 static cl::opt<bool> Help("h", cl::desc("Alias for -help"), cl::Hidden);
 
@@ -126,18 +126,18 @@ static bool fillRanges(SourceManager &Sources, FileID ID,
                        std::vector<CharSourceRange> &Ranges) {
   if (!LineRanges.empty()) {
     if (!Offsets.empty() || !Lengths.empty()) {
-      llvm::errs() << "error: cannot use -lines with -offset/-length\n";
+      llvm37::errs() << "error: cannot use -lines with -offset/-length\n";
       return true;
     }
 
     for (unsigned i = 0, e = LineRanges.size(); i < e; ++i) {
       unsigned FromLine, ToLine;
       if (parseLineRange(LineRanges[i], FromLine, ToLine)) {
-        llvm::errs() << "error: invalid <start line>:<end line> pair\n";
+        llvm37::errs() << "error: invalid <start line>:<end line> pair\n";
         return true;
       }
       if (FromLine > ToLine) {
-        llvm::errs() << "error: start line should be less than end line\n";
+        llvm37::errs() << "error: start line should be less than end line\n";
         return true;
       }
       SourceLocation Start = Sources.translateLineCol(ID, FromLine, 1);
@@ -153,13 +153,13 @@ static bool fillRanges(SourceManager &Sources, FileID ID,
     Offsets.push_back(0);
   if (Offsets.size() != Lengths.size() &&
       !(Offsets.size() == 1 && Lengths.empty())) {
-    llvm::errs()
+    llvm37::errs()
         << "error: number of -offset and -length arguments must match.\n";
     return true;
   }
   for (unsigned i = 0, e = Offsets.size(); i != e; ++i) {
     if (Offsets[i] >= Code->getBufferSize()) {
-      llvm::errs() << "error: offset " << Offsets[i]
+      llvm37::errs() << "error: offset " << Offsets[i]
                    << " is outside the file\n";
       return true;
     }
@@ -168,7 +168,7 @@ static bool fillRanges(SourceManager &Sources, FileID ID,
     SourceLocation End;
     if (i < Lengths.size()) {
       if (Offsets[i] + Lengths[i] > Code->getBufferSize()) {
-        llvm::errs() << "error: invalid length " << Lengths[i]
+        llvm37::errs() << "error: invalid length " << Lengths[i]
                      << ", offset + length (" << Offsets[i] + Lengths[i]
                      << ") is outside the file.\n";
         return true;
@@ -186,20 +186,20 @@ static void outputReplacementXML(StringRef Text) {
   size_t From = 0;
   size_t Index;
   while ((Index = Text.find_first_of("\n\r", From)) != StringRef::npos) {
-    llvm::outs() << Text.substr(From, Index - From);
+    llvm37::outs() << Text.substr(From, Index - From);
     switch (Text[Index]) {
     case '\n':
-      llvm::outs() << "&#10;";
+      llvm37::outs() << "&#10;";
       break;
     case '\r':
-      llvm::outs() << "&#13;";
+      llvm37::outs() << "&#13;";
       break;
     default:
       llvm_unreachable("Unexpected character encountered!");
     }
     From = Index + 1;
   }
-  llvm::outs() << Text.substr(From);
+  llvm37::outs() << Text.substr(From);
 }
 
 // Returns true on error.
@@ -212,10 +212,10 @@ static bool format(StringRef FileName) {
   ErrorOr<std::unique_ptr<MemoryBuffer>> CodeOrErr =
       MemoryBuffer::getFileOrSTDIN(FileName);
   if (std::error_code EC = CodeOrErr.getError()) {
-    llvm::errs() << EC.message() << "\n";
+    llvm37::errs() << EC.message() << "\n";
     return true;
   }
-  std::unique_ptr<llvm::MemoryBuffer> Code = std::move(CodeOrErr.get());
+  std::unique_ptr<llvm37::MemoryBuffer> Code = std::move(CodeOrErr.get());
   if (Code->getBufferSize() == 0)
     return false; // Empty files are formatted correctly.
   FileID ID = createInMemoryFile(FileName, Code.get(), Sources, Files);
@@ -229,30 +229,30 @@ static bool format(StringRef FileName) {
   tooling::Replacements Replaces =
       reformat(FormatStyle, Sources, ID, Ranges, &IncompleteFormat);
   if (OutputXML) {
-    llvm::outs() << "<?xml version='1.0'?>\n<replacements "
+    llvm37::outs() << "<?xml version='1.0'?>\n<replacements "
                     "xml:space='preserve' incomplete_format='"
                  << (IncompleteFormat ? "true" : "false") << "'>\n";
     if (Cursor.getNumOccurrences() != 0)
-      llvm::outs() << "<cursor>"
+      llvm37::outs() << "<cursor>"
                    << tooling::shiftedCodePosition(Replaces, Cursor)
                    << "</cursor>\n";
 
     for (tooling::Replacements::const_iterator I = Replaces.begin(),
                                                E = Replaces.end();
          I != E; ++I) {
-      llvm::outs() << "<replacement "
+      llvm37::outs() << "<replacement "
                    << "offset='" << I->getOffset() << "' "
                    << "length='" << I->getLength() << "'>";
       outputReplacementXML(I->getReplacementText());
-      llvm::outs() << "</replacement>\n";
+      llvm37::outs() << "</replacement>\n";
     }
-    llvm::outs() << "</replacements>\n";
+    llvm37::outs() << "</replacements>\n";
   } else {
     Rewriter Rewrite(Sources, LangOptions());
     tooling::applyAllReplacements(Replaces, Rewrite);
     if (Inplace) {
       if (FileName == "-")
-        llvm::errs() << "error: cannot use -i when reading from stdin.\n";
+        llvm37::errs() << "error: cannot use -i when reading from stdin.\n";
       else if (Rewrite.overwriteChangedFiles())
         return true;
     } else {
@@ -276,7 +276,7 @@ static void PrintVersion() {
 }
 
 int main(int argc, const char **argv) {
-  llvm::sys::PrintStackTraceOnErrorSignal();
+  llvm37::sys::PrintStackTraceOnErrorSignal();
 
   cl::HideUnrelatedOptions(ClangFormatCategory);
 
@@ -298,7 +298,7 @@ int main(int argc, const char **argv) {
         clang::format::configurationAsText(clang::format::getStyle(
             Style, FileNames.empty() ? AssumeFilename : FileNames[0],
             FallbackStyle));
-    llvm::outs() << Config << "\n";
+    llvm37::outs() << Config << "\n";
     return 0;
   }
 
@@ -312,7 +312,7 @@ int main(int argc, const char **argv) {
     break;
   default:
     if (!Offsets.empty() || !Lengths.empty() || !LineRanges.empty()) {
-      llvm::errs() << "error: -offset, -length and -lines can only be used for "
+      llvm37::errs() << "error: -offset, -length and -lines can only be used for "
                       "single file.\n";
       return 1;
     }

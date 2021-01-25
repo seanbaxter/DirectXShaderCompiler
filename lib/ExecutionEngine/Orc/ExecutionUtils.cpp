@@ -7,14 +7,14 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/ExecutionEngine/Orc/ExecutionUtils.h"
+#include "llvm37/ExecutionEngine/Orc/ExecutionUtils.h"
 
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/GlobalVariable.h"
-#include "llvm/IR/Module.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/GlobalVariable.h"
+#include "llvm37/IR/Module.h"
 
-namespace llvm {
+namespace llvm37 {
 namespace orc {
 
 CtorDtorIterator::CtorDtorIterator(const GlobalVariable *GV, bool End)
@@ -99,4 +99,4 @@ int LocalCXXRuntimeOverrides::CXAAtExitOverride(DestructorPtr Destructor,
 }
 
 } // End namespace orc.
-} // End namespace llvm.
+} // End namespace llvm37.

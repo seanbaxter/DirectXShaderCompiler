@@ -16,12 +16,12 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_LIB_IR_CONSTANTFOLD_H
-#define LLVM_LIB_IR_CONSTANTFOLD_H
+#ifndef LLVM37_LIB_IR_CONSTANTFOLD_H
+#define LLVM37_LIB_IR_CONSTANTFOLD_H
 
-#include "llvm/ADT/ArrayRef.h"
+#include "llvm37/ADT/ArrayRef.h"
 
-namespace llvm {
+namespace llvm37 {
   class Value;
   class Constant;
   class Type;

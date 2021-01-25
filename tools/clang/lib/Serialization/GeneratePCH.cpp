@@ -18,7 +18,7 @@
 #include "clang/Basic/FileManager.h"
 #include "clang/Lex/Preprocessor.h"
 #include "clang/Sema/SemaConsumer.h"
-#include "llvm/Bitcode/BitstreamWriter.h"
+#include "llvm37/Bitcode/BitstreamWriter.h"
 #include <string>
 
 using namespace clang;

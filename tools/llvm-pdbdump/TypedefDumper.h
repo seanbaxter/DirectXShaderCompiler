@@ -7,12 +7,12 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_TOOLS_LLVMPDBDUMP_TYPEDEFDUMPER_H
-#define LLVM_TOOLS_LLVMPDBDUMP_TYPEDEFDUMPER_H
+#ifndef LLVM37_TOOLS_LLVMPDBDUMP_TYPEDEFDUMPER_H
+#define LLVM37_TOOLS_LLVMPDBDUMP_TYPEDEFDUMPER_H
 
-#include "llvm/DebugInfo/PDB/PDBSymDumper.h"
+#include "llvm37/DebugInfo/PDB/PDBSymDumper.h"
 
-namespace llvm {
+namespace llvm37 {
 
 class LinePrinter;
 

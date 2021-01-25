@@ -12,22 +12,22 @@
 //===----------------------------------------------------------------------===//
 
 #include "LLLexer.h"
-#include "llvm/ADT/StringExtras.h"
-#include "llvm/ADT/Twine.h"
-#include "llvm/AsmParser/Parser.h"
-#include "llvm/IR/DerivedTypes.h"
-#include "llvm/IR/Instruction.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/MathExtras.h"
-#include "llvm/Support/MemoryBuffer.h"
-#include "llvm/Support/SourceMgr.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/StringExtras.h"
+#include "llvm37/ADT/Twine.h"
+#include "llvm37/AsmParser/Parser.h"
+#include "llvm37/IR/DerivedTypes.h"
+#include "llvm37/IR/Instruction.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/MathExtras.h"
+#include "llvm37/Support/MemoryBuffer.h"
+#include "llvm37/Support/SourceMgr.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <cctype>
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
-using namespace llvm;
+using namespace llvm37;
 
 bool LLLexer::Error(LocTy ErrorLoc, const Twine &Msg) const {
   ErrorInfo = SM.GetMessage(ErrorLoc, SourceMgr::DK_Error, Msg);

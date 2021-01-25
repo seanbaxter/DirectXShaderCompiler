@@ -12,11 +12,11 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/IR/Dominators.h"
-#include "llvm/Analysis/LoopInfo.h"
-#include "llvm/Analysis/ScalarEvolutionExpressions.h"
-#include "llvm/Analysis/ScalarEvolutionNormalization.h"
-using namespace llvm;
+#include "llvm37/IR/Dominators.h"
+#include "llvm37/Analysis/LoopInfo.h"
+#include "llvm37/Analysis/ScalarEvolutionExpressions.h"
+#include "llvm37/Analysis/ScalarEvolutionNormalization.h"
+using namespace llvm37;
 
 /// IVUseShouldUsePostIncValue - We have discovered a "User" of an IV expression
 /// and now we need to decide whether the user should use the preinc or post-inc
@@ -242,7 +242,7 @@ TransformSubExpr(const SCEV *S, Instruction *User, Value *OperandValToReplace) {
 
 /// Top level driver for transforming an expression DAG into its requested
 /// post-inc form (either "Normalized" or "Denormalized").
-const SCEV *llvm::TransformForPostIncUse(TransformKind Kind,
+const SCEV *llvm37::TransformForPostIncUse(TransformKind Kind,
                                          const SCEV *S,
                                          Instruction *User,
                                          Value *OperandValToReplace,

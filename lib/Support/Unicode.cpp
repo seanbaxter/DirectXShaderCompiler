@@ -12,11 +12,11 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Support/Unicode.h"
-#include "llvm/Support/ConvertUTF.h"
-#include "llvm/Support/UnicodeCharRanges.h"
+#include "llvm37/Support/Unicode.h"
+#include "llvm37/Support/ConvertUTF.h"
+#include "llvm37/Support/UnicodeCharRanges.h"
 
-namespace llvm {
+namespace llvm37 {
 namespace sys {
 namespace unicode {
 
@@ -363,5 +363,5 @@ int columnWidthUTF8(StringRef Text) {
 
 } // namespace unicode
 } // namespace sys
-} // namespace llvm
+} // namespace llvm37
 

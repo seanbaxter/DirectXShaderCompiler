@@ -24,15 +24,15 @@
 #include "clang/Serialization/ASTDeserializationListener.h"
 #include "clang/Serialization/ASTReader.h"
 #include "clang/Serialization/GlobalModuleIndex.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/FileSystem.h"
-#include "llvm/Support/MemoryBuffer.h"
-#include "llvm/Support/Timer.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/FileSystem.h"
+#include "llvm37/Support/MemoryBuffer.h"
+#include "llvm37/Support/Timer.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <system_error>
 using namespace clang;
 
-template class llvm::Registry<clang::PluginASTAction>;
+template class llvm37::Registry<clang::PluginASTAction>;
 
 #if 0 // HLSL Change Starts - no support for AST serialization
 
@@ -87,10 +87,10 @@ public:
       : DelegatingDeserializationListener(Previous, DeletePrevious) {}
 
   void DeclRead(serialization::DeclID ID, const Decl *D) override {
-    llvm::outs() << "PCH DECL: " << D->getDeclKindName();
+    llvm37::outs() << "PCH DECL: " << D->getDeclKindName();
     if (const NamedDecl *ND = dyn_cast<NamedDecl>(D))
-      llvm::outs() << " - " << *ND;
-    llvm::outs() << "\n";
+      llvm37::outs() << " - " << *ND;
+    llvm37::outs() << "\n";
 
     DelegatingDeserializationListener::DeclRead(ID, D);
   }
@@ -169,7 +169,7 @@ FrontendAction::CreateWrappedASTConsumer(CompilerInstance &CI,
     }
   }
 
-  return llvm::make_unique<MultiplexConsumer>(std::move(Consumers));
+  return llvm37::make_unique<MultiplexConsumer>(std::move(Consumers));
 }
 
 bool FrontendAction::BeginSourceFile(CompilerInstance &CI,
@@ -246,7 +246,7 @@ bool FrontendAction::BeginSourceFile(CompilerInstance &CI,
     CI.createSourceManager(CI.getFileManager());
 
   // IR files bypass the rest of initialization.
-  if (Input.getKind() == IK_LLVM_IR) {
+  if (Input.getKind() == IK_LLVM37_IR) {
     assert(hasIRSupport() &&
            "This action does not have IR file support!");
 
@@ -276,9 +276,9 @@ bool FrontendAction::BeginSourceFile(CompilerInstance &CI,
     if (const DirectoryEntry *PCHDir = FileMgr.getDirectory(PCHInclude)) {
       std::error_code EC;
       SmallString<128> DirNative;
-      llvm::sys::path::native(PCHDir->getName(), DirNative);
+      llvm37::sys::path::native(PCHDir->getName(), DirNative);
       bool Found = false;
-      for (llvm::sys::fs::directory_iterator Dir(DirNative, EC), DirEnd;
+      for (llvm37::sys::fs::directory_iterator Dir(DirNative, EC), DirEnd;
            Dir != DirEnd && !EC; Dir.increment(EC)) {
         // Check whether this is an acceptable AST file.
         if (ASTReader::isAcceptableASTFile(
@@ -449,7 +449,7 @@ bool FrontendAction::Execute() {
   CompilerInstance &CI = getCompilerInstance();
 
   if (CI.hasFrontendTimer()) {
-    llvm::TimeRegion Timer(CI.getFrontendTimer());
+    llvm37::TimeRegion Timer(CI.getFrontendTimer());
     ExecuteAction();
   }
   else ExecuteAction();
@@ -496,12 +496,12 @@ void FrontendAction::EndSourceFile() {
   }
 
   if (CI.getFrontendOpts().ShowStats) {
-    llvm::errs() << "\nSTATISTICS FOR '" << getCurrentFile() << "':\n";
+    llvm37::errs() << "\nSTATISTICS FOR '" << getCurrentFile() << "':\n";
     CI.getPreprocessor().PrintStats();
     CI.getPreprocessor().getIdentifierTable().PrintStats();
     CI.getPreprocessor().getHeaderSearchInfo().PrintStats();
     CI.getSourceManager().PrintStats();
-    llvm::errs() << "\n";
+    llvm37::errs() << "\n";
   }
 
   // Cleanup the output streams, and erase the output files if instructed by the

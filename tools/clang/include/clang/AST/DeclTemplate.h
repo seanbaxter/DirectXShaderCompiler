@@ -12,14 +12,14 @@
 ///
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_AST_DECLTEMPLATE_H
-#define LLVM_CLANG_AST_DECLTEMPLATE_H
+#ifndef LLVM37_CLANG_AST_DECLTEMPLATE_H
+#define LLVM37_CLANG_AST_DECLTEMPLATE_H
 
 #include "clang/AST/DeclCXX.h"
 #include "clang/AST/Redeclarable.h"
 #include "clang/AST/TemplateBase.h"
-#include "llvm/ADT/PointerUnion.h"
-#include "llvm/Support/Compiler.h"
+#include "llvm37/ADT/PointerUnion.h"
+#include "llvm37/Support/Compiler.h"
 #include <limits>
 
 namespace clang {
@@ -38,7 +38,7 @@ class VarTemplateDecl;
 class VarTemplatePartialSpecializationDecl;
 
 /// \brief Stores a template parameter of any kind.
-typedef llvm::PointerUnion3<TemplateTypeParmDecl*, NonTypeTemplateParmDecl*,
+typedef llvm37::PointerUnion3<TemplateTypeParmDecl*, NonTypeTemplateParmDecl*,
                             TemplateTemplateParmDecl*> TemplateParameter;
 
 /// \brief Stores a list of template parameters for a TemplateDecl and its
@@ -87,10 +87,10 @@ public:
   unsigned size() const { return NumParams; }
 
   ArrayRef<NamedDecl*> asArray() {
-    return llvm::makeArrayRef(begin(), end());
+    return llvm37::makeArrayRef(begin(), end());
   }
   ArrayRef<const NamedDecl*> asArray() const {
-    return llvm::makeArrayRef(begin(), size());
+    return llvm37::makeArrayRef(begin(), size());
   }
 
   NamedDecl* getParam(unsigned Idx) {
@@ -127,7 +127,7 @@ public:
   SourceLocation getLAngleLoc() const { return LAngleLoc; }
   SourceLocation getRAngleLoc() const { return RAngleLoc; }
 
-  SourceRange getSourceRange() const LLVM_READONLY {
+  SourceRange getSourceRange() const LLVM37_READONLY {
     return SourceRange(TemplateLoc, RAngleLoc);
   }
 };
@@ -152,7 +152,7 @@ class TemplateArgumentList {
   ///
   /// The integer value will be non-zero to indicate that this
   /// template argument list does own the pointer.
-  llvm::PointerIntPair<const TemplateArgument *, 1> Arguments;
+  llvm37::PointerIntPair<const TemplateArgument *, 1> Arguments;
 
   /// \brief The number of template arguments in this template
   /// argument list.
@@ -204,7 +204,7 @@ public:
 
   /// \brief Produce this as an array ref.
   ArrayRef<TemplateArgument> asArray() const {
-    return llvm::makeArrayRef(data(), size());
+    return llvm37::makeArrayRef(data(), size());
   }
 
   /// \brief Retrieve the number of template arguments in this
@@ -239,7 +239,7 @@ class DefaultArgStorage {
   static_assert(sizeof(Chain) == sizeof(void *) * 2,
                 "non-pointer argument type?");
 
-  llvm::PointerUnion3<ArgType, ParmDecl*, Chain*> ValueOrInherited;
+  llvm37::PointerUnion3<ArgType, ParmDecl*, Chain*> ValueOrInherited;
 
   static ParmDecl *getParmOwningDefaultArg(ParmDecl *Parm) {
     const DefaultArgStorage &Storage = Parm->getDefaultArgStorage();
@@ -345,7 +345,7 @@ public:
     return K >= firstTemplate && K <= lastTemplate;
   }
 
-  SourceRange getSourceRange() const override LLVM_READONLY {
+  SourceRange getSourceRange() const override LLVM37_READONLY {
     return SourceRange(TemplateParams->getTemplateLoc(),
                        TemplatedDecl->getSourceRange().getEnd());
   }
@@ -368,7 +368,7 @@ public:
 /// \brief Provides information about a function template specialization,
 /// which is a FunctionDecl that has been explicitly specialization or
 /// instantiated from a function template.
-class FunctionTemplateSpecializationInfo : public llvm::FoldingSetNode {
+class FunctionTemplateSpecializationInfo : public llvm37::FoldingSetNode {
   FunctionTemplateSpecializationInfo(FunctionDecl *FD,
                                      FunctionTemplateDecl *Template,
                                      TemplateSpecializationKind TSK,
@@ -397,7 +397,7 @@ public:
   /// specialization was generated.
   ///
   /// The two bits contain the top 4 values of TemplateSpecializationKind.
-  llvm::PointerIntPair<FunctionTemplateDecl *, 2> Template;
+  llvm37::PointerIntPair<FunctionTemplateDecl *, 2> Template;
 
   /// \brief The template arguments used to produce the function template
   /// specialization from the function template.
@@ -461,13 +461,13 @@ public:
     PointOfInstantiation = POI;
   }
 
-  void Profile(llvm::FoldingSetNodeID &ID) {
+  void Profile(llvm37::FoldingSetNodeID &ID) {
     Profile(ID, TemplateArguments->asArray(),
             Function->getASTContext());
   }
 
   static void
-  Profile(llvm::FoldingSetNodeID &ID, ArrayRef<TemplateArgument> TemplateArgs,
+  Profile(llvm37::FoldingSetNodeID &ID, ArrayRef<TemplateArgument> TemplateArgs,
           ASTContext &Context) {
     ID.AddInteger(TemplateArgs.size());
     for (unsigned Arg = 0; Arg != TemplateArgs.size(); ++Arg)
@@ -481,7 +481,7 @@ public:
 class MemberSpecializationInfo {
   // The member declaration from which this member was instantiated, and the
   // manner in which the instantiation occurred (in the lower two bits).
-  llvm::PointerIntPair<NamedDecl *, 2> MemberAndTSK;
+  llvm37::PointerIntPair<NamedDecl *, 2> MemberAndTSK;
 
   // The point at which this member was first instantiated.
   SourceLocation PointOfInstantiation;
@@ -638,15 +638,15 @@ protected:
   template <typename EntryType, typename SETraits = SpecEntryTraits<EntryType>,
             typename DeclType = typename SETraits::DeclType>
   struct SpecIterator
-      : llvm::iterator_adaptor_base<
+      : llvm37::iterator_adaptor_base<
             SpecIterator<EntryType, SETraits, DeclType>,
-            typename llvm::FoldingSetVector<EntryType>::iterator,
-            typename std::iterator_traits<typename llvm::FoldingSetVector<
+            typename llvm37::FoldingSetVector<EntryType>::iterator,
+            typename std::iterator_traits<typename llvm37::FoldingSetVector<
                 EntryType>::iterator>::iterator_category,
             DeclType *, ptrdiff_t, DeclType *, DeclType *> {
     SpecIterator() {}
     explicit SpecIterator(
-        typename llvm::FoldingSetVector<EntryType>::iterator SetIter)
+        typename llvm37::FoldingSetVector<EntryType>::iterator SetIter)
         : SpecIterator::iterator_adaptor_base(std::move(SetIter)) {}
 
     DeclType *operator*() const {
@@ -657,16 +657,16 @@ protected:
 
   template <typename EntryType>
   static SpecIterator<EntryType>
-  makeSpecIterator(llvm::FoldingSetVector<EntryType> &Specs, bool isEnd) {
+  makeSpecIterator(llvm37::FoldingSetVector<EntryType> &Specs, bool isEnd) {
     return SpecIterator<EntryType>(isEnd ? Specs.end() : Specs.begin());
   }
 
   template <class EntryType> typename SpecEntryTraits<EntryType>::DeclType*
-  findSpecializationImpl(llvm::FoldingSetVector<EntryType> &Specs,
+  findSpecializationImpl(llvm37::FoldingSetVector<EntryType> &Specs,
                          ArrayRef<TemplateArgument> Args, void *&InsertPos);
 
   template <class Derived, class EntryType>
-  void addSpecializationImpl(llvm::FoldingSetVector<EntryType> &Specs,
+  void addSpecializationImpl(llvm37::FoldingSetVector<EntryType> &Specs,
                              EntryType *Entry, void *InsertPos);
 
   struct CommonBase {
@@ -677,7 +677,7 @@ protected:
     ///
     /// The boolean value indicates whether this template
     /// was explicitly specialized.
-    llvm::PointerIntPair<RedeclarableTemplateDecl*, 1, bool>
+    llvm37::PointerIntPair<RedeclarableTemplateDecl*, 1, bool>
       InstantiatedFromMember;
   };
 
@@ -829,7 +829,7 @@ protected:
 
     /// \brief The function template specializations for this function
     /// template, including explicit specializations and instantiations.
-    llvm::FoldingSetVector<FunctionTemplateSpecializationInfo> Specializations;
+    llvm37::FoldingSetVector<FunctionTemplateSpecializationInfo> Specializations;
 
     /// \brief The set of "injected" template arguments used within this
     /// function template.
@@ -864,7 +864,7 @@ protected:
 
   /// \brief Retrieve the set of function template specializations of this
   /// function template.
-  llvm::FoldingSetVector<FunctionTemplateSpecializationInfo> &
+  llvm37::FoldingSetVector<FunctionTemplateSpecializationInfo> &
   getSpecializations() const;
 
   /// \brief Add a specialization of this function template.
@@ -932,7 +932,7 @@ public:
   }
 
   typedef SpecIterator<FunctionTemplateSpecializationInfo> spec_iterator;
-  typedef llvm::iterator_range<spec_iterator> spec_range;
+  typedef llvm37::iterator_range<spec_iterator> spec_range;
 
   spec_range specializations() const {
     return spec_range(spec_begin(), spec_end());
@@ -1109,7 +1109,7 @@ public:
   /// \brief Returns whether this is a parameter pack.
   bool isParameterPack() const;
 
-  SourceRange getSourceRange() const override LLVM_READONLY;
+  SourceRange getSourceRange() const override LLVM37_READONLY;
 
   // Implement isa/cast/dyncast/etc.
   static bool classof(const Decl *D) { return classofKind(D->getKind()); }
@@ -1186,7 +1186,7 @@ public:
   using TemplateParmPosition::setPosition;
   using TemplateParmPosition::getIndex;
 
-  SourceRange getSourceRange() const override LLVM_READONLY;
+  SourceRange getSourceRange() const override LLVM37_READONLY;
 
   const DefArgStorage &getDefaultArgStorage() const { return DefaultArgument; }
 
@@ -1442,7 +1442,7 @@ public:
   /// \brief Removes the default argument of this template parameter.
   void removeDefaultArgument() { DefaultArgument.clear(); }
 
-  SourceRange getSourceRange() const override LLVM_READONLY {
+  SourceRange getSourceRange() const override LLVM37_READONLY {
     SourceLocation End = getLocation();
     if (hasDefaultArgument() && !defaultArgumentWasInherited())
       End = getDefaultArgument().getSourceRange().getEnd();
@@ -1471,7 +1471,7 @@ public:
 /// class array<bool> { }; // class template specialization array<bool>
 /// \endcode
 class ClassTemplateSpecializationDecl
-  : public CXXRecordDecl, public llvm::FoldingSetNode {
+  : public CXXRecordDecl, public llvm37::FoldingSetNode {
 
   /// \brief Structure that stores information about a class template
   /// specialization that was instantiated from a class template partial
@@ -1487,7 +1487,7 @@ class ClassTemplateSpecializationDecl
   };
 
   /// \brief The template that this specialization specializes
-  llvm::PointerUnion<ClassTemplateDecl *, SpecializedPartialSpecialization *>
+  llvm37::PointerUnion<ClassTemplateDecl *, SpecializedPartialSpecialization *>
     SpecializedTemplate;
 
   /// \brief Further info for explicit template specialization/instantiation.
@@ -1616,11 +1616,11 @@ public:
   /// a template (rather than an explicit specialization), return the
   /// class template or class template partial specialization from which it
   /// was instantiated.
-  llvm::PointerUnion<ClassTemplateDecl *,
+  llvm37::PointerUnion<ClassTemplateDecl *,
                      ClassTemplatePartialSpecializationDecl *>
   getInstantiatedFrom() const {
     if (!isTemplateInstantiation(getSpecializationKind()))
-      return llvm::PointerUnion<ClassTemplateDecl *,
+      return llvm37::PointerUnion<ClassTemplateDecl *,
                                 ClassTemplatePartialSpecializationDecl *>();
 
     return getSpecializedTemplateOrPartial();
@@ -1628,7 +1628,7 @@ public:
 
   /// \brief Retrieve the class template or class template partial
   /// specialization which was specialized by this.
-  llvm::PointerUnion<ClassTemplateDecl *,
+  llvm37::PointerUnion<ClassTemplateDecl *,
                      ClassTemplatePartialSpecializationDecl *>
   getSpecializedTemplateOrPartial() const {
     if (SpecializedPartialSpecialization *PartialSpec
@@ -1714,14 +1714,14 @@ public:
     return ExplicitInfo ? ExplicitInfo->TemplateKeywordLoc : SourceLocation();
   }
 
-  SourceRange getSourceRange() const override LLVM_READONLY;
+  SourceRange getSourceRange() const override LLVM37_READONLY;
 
-  void Profile(llvm::FoldingSetNodeID &ID) const {
+  void Profile(llvm37::FoldingSetNodeID &ID) const {
     Profile(ID, TemplateArgs->asArray(), getASTContext());
   }
 
   static void
-  Profile(llvm::FoldingSetNodeID &ID, ArrayRef<TemplateArgument> TemplateArgs,
+  Profile(llvm37::FoldingSetNodeID &ID, ArrayRef<TemplateArgument> TemplateArgs,
           ASTContext &Context) {
     ID.AddInteger(TemplateArgs.size());
     for (unsigned Arg = 0; Arg != TemplateArgs.size(); ++Arg)
@@ -1754,7 +1754,7 @@ class ClassTemplatePartialSpecializationDecl
   ///
   /// The boolean value will be true to indicate that this class template
   /// partial specialization was specialized at this level.
-  llvm::PointerIntPair<ClassTemplatePartialSpecializationDecl *, 1, bool>
+  llvm37::PointerIntPair<ClassTemplatePartialSpecializationDecl *, 1, bool>
       InstantiatedFromMember;
 
   ClassTemplatePartialSpecializationDecl(ASTContext &Context, TagKind TK,
@@ -1900,11 +1900,11 @@ protected:
 
     /// \brief The class template specializations for this class
     /// template, including explicit specializations and instantiations.
-    llvm::FoldingSetVector<ClassTemplateSpecializationDecl> Specializations;
+    llvm37::FoldingSetVector<ClassTemplateSpecializationDecl> Specializations;
 
     /// \brief The class template partial specializations for this class
     /// template.
-    llvm::FoldingSetVector<ClassTemplatePartialSpecializationDecl>
+    llvm37::FoldingSetVector<ClassTemplatePartialSpecializationDecl>
       PartialSpecializations;
 
     /// \brief The injected-class-name type for this class template.
@@ -1919,12 +1919,12 @@ protected:
   };
 
   /// \brief Retrieve the set of specializations of this class template.
-  llvm::FoldingSetVector<ClassTemplateSpecializationDecl> &
+  llvm37::FoldingSetVector<ClassTemplateSpecializationDecl> &
   getSpecializations() const;
 
   /// \brief Retrieve the set of partial specializations of this class
   /// template.
-  llvm::FoldingSetVector<ClassTemplatePartialSpecializationDecl> &
+  llvm37::FoldingSetVector<ClassTemplatePartialSpecializationDecl> &
   getPartialSpecializations();
 
   ClassTemplateDecl(ASTContext &C, DeclContext *DC, SourceLocation L,
@@ -2063,7 +2063,7 @@ public:
   QualType getInjectedClassNameSpecialization();
 
   typedef SpecIterator<ClassTemplateSpecializationDecl> spec_iterator;
-  typedef llvm::iterator_range<spec_iterator> spec_range;
+  typedef llvm37::iterator_range<spec_iterator> spec_range;
 
   spec_range specializations() const {
     return spec_range(spec_begin(), spec_end());
@@ -2101,7 +2101,7 @@ public:
 class FriendTemplateDecl : public Decl {
   virtual void anchor();
 public:
-  typedef llvm::PointerUnion<NamedDecl*,TypeSourceInfo*> FriendUnion;
+  typedef llvm37::PointerUnion<NamedDecl*,TypeSourceInfo*> FriendUnion;
 
 private:
   // The number of template parameters;  always non-zero.
@@ -2338,7 +2338,7 @@ inline AnyFunctionDecl::AnyFunctionDecl(FunctionTemplateDecl *FTD)
 /// constexpr float pi<float>; // variable template specialization pi<float>
 /// \endcode
 class VarTemplateSpecializationDecl : public VarDecl,
-                                      public llvm::FoldingSetNode {
+                                      public llvm37::FoldingSetNode {
 
   /// \brief Structure that stores information about a variable template
   /// specialization that was instantiated from a variable template partial
@@ -2354,7 +2354,7 @@ class VarTemplateSpecializationDecl : public VarDecl,
   };
 
   /// \brief The template that this specialization specializes.
-  llvm::PointerUnion<VarTemplateDecl *, SpecializedPartialSpecialization *>
+  llvm37::PointerUnion<VarTemplateDecl *, SpecializedPartialSpecialization *>
   SpecializedTemplate;
 
   /// \brief Further info for explicit template specialization/instantiation.
@@ -2471,12 +2471,12 @@ public:
   /// a template (rather than an explicit specialization), return the
   /// variable template or variable template partial specialization from which
   /// it was instantiated.
-  llvm::PointerUnion<VarTemplateDecl *, VarTemplatePartialSpecializationDecl *>
+  llvm37::PointerUnion<VarTemplateDecl *, VarTemplatePartialSpecializationDecl *>
   getInstantiatedFrom() const {
     if (getSpecializationKind() != TSK_ImplicitInstantiation &&
         getSpecializationKind() != TSK_ExplicitInstantiationDefinition &&
         getSpecializationKind() != TSK_ExplicitInstantiationDeclaration)
-      return llvm::PointerUnion<VarTemplateDecl *,
+      return llvm37::PointerUnion<VarTemplateDecl *,
                                 VarTemplatePartialSpecializationDecl *>();
 
     if (SpecializedPartialSpecialization *PartialSpec =
@@ -2488,7 +2488,7 @@ public:
 
   /// \brief Retrieve the variable template or variable template partial
   /// specialization which was specialized by this.
-  llvm::PointerUnion<VarTemplateDecl *, VarTemplatePartialSpecializationDecl *>
+  llvm37::PointerUnion<VarTemplateDecl *, VarTemplatePartialSpecializationDecl *>
   getSpecializedTemplateOrPartial() const {
     if (SpecializedPartialSpecialization *PartialSpec =
             SpecializedTemplate.dyn_cast<SpecializedPartialSpecialization *>())
@@ -2573,11 +2573,11 @@ public:
     return ExplicitInfo ? ExplicitInfo->TemplateKeywordLoc : SourceLocation();
   }
 
-  void Profile(llvm::FoldingSetNodeID &ID) const {
+  void Profile(llvm37::FoldingSetNodeID &ID) const {
     Profile(ID, TemplateArgs->asArray(), getASTContext());
   }
 
-  static void Profile(llvm::FoldingSetNodeID &ID,
+  static void Profile(llvm37::FoldingSetNodeID &ID,
                       ArrayRef<TemplateArgument> TemplateArgs,
                       ASTContext &Context) {
     ID.AddInteger(TemplateArgs.size());
@@ -2611,7 +2611,7 @@ class VarTemplatePartialSpecializationDecl
   ///
   /// The boolean value will be true to indicate that this variable template
   /// partial specialization was specialized at this level.
-  llvm::PointerIntPair<VarTemplatePartialSpecializationDecl *, 1, bool>
+  llvm37::PointerIntPair<VarTemplatePartialSpecializationDecl *, 1, bool>
   InstantiatedFromMember;
 
   VarTemplatePartialSpecializationDecl(
@@ -2738,11 +2738,11 @@ protected:
 
     /// \brief The variable template specializations for this variable
     /// template, including explicit specializations and instantiations.
-    llvm::FoldingSetVector<VarTemplateSpecializationDecl> Specializations;
+    llvm37::FoldingSetVector<VarTemplateSpecializationDecl> Specializations;
 
     /// \brief The variable template partial specializations for this variable
     /// template.
-    llvm::FoldingSetVector<VarTemplatePartialSpecializationDecl>
+    llvm37::FoldingSetVector<VarTemplatePartialSpecializationDecl>
     PartialSpecializations;
 
     /// \brief If non-null, points to an array of specializations (including
@@ -2754,12 +2754,12 @@ protected:
   };
 
   /// \brief Retrieve the set of specializations of this variable template.
-  llvm::FoldingSetVector<VarTemplateSpecializationDecl> &
+  llvm37::FoldingSetVector<VarTemplateSpecializationDecl> &
   getSpecializations() const;
 
   /// \brief Retrieve the set of partial specializations of this class
   /// template.
-  llvm::FoldingSetVector<VarTemplatePartialSpecializationDecl> &
+  llvm37::FoldingSetVector<VarTemplatePartialSpecializationDecl> &
   getPartialSpecializations();
 
   VarTemplateDecl(ASTContext &C, DeclContext *DC, SourceLocation L,
@@ -2871,7 +2871,7 @@ public:
       VarTemplatePartialSpecializationDecl *D);
 
   typedef SpecIterator<VarTemplateSpecializationDecl> spec_iterator;
-  typedef llvm::iterator_range<spec_iterator> spec_range;
+  typedef llvm37::iterator_range<spec_iterator> spec_range;
 
   spec_range specializations() const {
     return spec_range(spec_begin(), spec_end());

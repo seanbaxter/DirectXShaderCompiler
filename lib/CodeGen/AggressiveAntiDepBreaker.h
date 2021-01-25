@@ -14,26 +14,26 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_LIB_CODEGEN_AGGRESSIVEANTIDEPBREAKER_H
-#define LLVM_LIB_CODEGEN_AGGRESSIVEANTIDEPBREAKER_H
+#ifndef LLVM37_LIB_CODEGEN_AGGRESSIVEANTIDEPBREAKER_H
+#define LLVM37_LIB_CODEGEN_AGGRESSIVEANTIDEPBREAKER_H
 
 #include "AntiDepBreaker.h"
-#include "llvm/ADT/BitVector.h"
-#include "llvm/ADT/SmallSet.h"
-#include "llvm/CodeGen/MachineBasicBlock.h"
-#include "llvm/CodeGen/MachineFrameInfo.h"
-#include "llvm/CodeGen/MachineFunction.h"
-#include "llvm/CodeGen/MachineRegisterInfo.h"
-#include "llvm/CodeGen/ScheduleDAG.h"
-#include "llvm/Target/TargetRegisterInfo.h"
-#include "llvm/Target/TargetSubtargetInfo.h"
+#include "llvm37/ADT/BitVector.h"
+#include "llvm37/ADT/SmallSet.h"
+#include "llvm37/CodeGen/MachineBasicBlock.h"
+#include "llvm37/CodeGen/MachineFrameInfo.h"
+#include "llvm37/CodeGen/MachineFunction.h"
+#include "llvm37/CodeGen/MachineRegisterInfo.h"
+#include "llvm37/CodeGen/ScheduleDAG.h"
+#include "llvm37/Target/TargetRegisterInfo.h"
+#include "llvm37/Target/TargetSubtargetInfo.h"
 #include <map>
 
-namespace llvm {
+namespace llvm37 {
 class RegisterClassInfo;
 
   /// Contains all the state necessary for anti-dep breaking.
-class LLVM_LIBRARY_VISIBILITY AggressiveAntiDepState {
+class LLVM37_LIBRARY_VISIBILITY AggressiveAntiDepState {
   public:
     /// Information about a register reference within a liverange
     typedef struct {
@@ -108,7 +108,7 @@ class LLVM_LIBRARY_VISIBILITY AggressiveAntiDepState {
     bool IsLive(unsigned Reg);
   };
 
-  class LLVM_LIBRARY_VISIBILITY AggressiveAntiDepBreaker
+  class LLVM37_LIBRARY_VISIBILITY AggressiveAntiDepBreaker
       : public AntiDepBreaker {
     MachineFunction& MF;
     MachineRegisterInfo &MRI;

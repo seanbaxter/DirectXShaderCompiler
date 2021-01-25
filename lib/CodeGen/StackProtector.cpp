@@ -14,30 +14,30 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/CodeGen/StackProtector.h"
-#include "llvm/ADT/SmallPtrSet.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/Analysis/BranchProbabilityInfo.h"
-#include "llvm/Analysis/ValueTracking.h"
-#include "llvm/CodeGen/Analysis.h"
-#include "llvm/CodeGen/Passes.h"
-#include "llvm/IR/Attributes.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/DerivedTypes.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/GlobalValue.h"
-#include "llvm/IR/GlobalVariable.h"
-#include "llvm/IR/IRBuilder.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/IR/Intrinsics.h"
-#include "llvm/IR/MDBuilder.h"
-#include "llvm/IR/Module.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Target/TargetSubtargetInfo.h"
+#include "llvm37/CodeGen/StackProtector.h"
+#include "llvm37/ADT/SmallPtrSet.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/Analysis/BranchProbabilityInfo.h"
+#include "llvm37/Analysis/ValueTracking.h"
+#include "llvm37/CodeGen/Analysis.h"
+#include "llvm37/CodeGen/Passes.h"
+#include "llvm37/IR/Attributes.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/IR/DerivedTypes.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/GlobalValue.h"
+#include "llvm37/IR/GlobalVariable.h"
+#include "llvm37/IR/IRBuilder.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/IR/Intrinsics.h"
+#include "llvm37/IR/MDBuilder.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Target/TargetSubtargetInfo.h"
 #include <cstdlib>
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "stack-protector"
 
@@ -52,7 +52,7 @@ char StackProtector::ID = 0;
 INITIALIZE_PASS(StackProtector, "stack-protector", "Insert stack protectors",
                 false, true)
 
-FunctionPass *llvm::createStackProtectorPass(const TargetMachine *TM) {
+FunctionPass *llvm37::createStackProtectorPass(const TargetMachine *TM) {
   return new StackProtector(TM);
 }
 
@@ -264,8 +264,8 @@ static bool InstructionWillNotHaveChain(const Instruction *I) {
 /// Identify if RI has a previous instruction in the "Tail Position" and return
 /// it. Otherwise return 0.
 ///
-/// This is based off of the code in llvm::isInTailCallPosition. The difference
-/// is that it inverts the first part of llvm::isInTailCallPosition since
+/// This is based off of the code in llvm37::isInTailCallPosition. The difference
+/// is that it inverts the first part of llvm37::isInTailCallPosition since
 /// isInTailCallPosition is checking if a call is in a tail call position, and
 /// we are searching for an unknown tail call that might be in the tail call
 /// position. Once we find the call though, the code uses the same refactored

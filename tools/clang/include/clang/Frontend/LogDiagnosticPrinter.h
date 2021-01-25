@@ -7,13 +7,13 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_FRONTEND_LOGDIAGNOSTICPRINTER_H
-#define LLVM_CLANG_FRONTEND_LOGDIAGNOSTICPRINTER_H
+#ifndef LLVM37_CLANG_FRONTEND_LOGDIAGNOSTICPRINTER_H
+#define LLVM37_CLANG_FRONTEND_LOGDIAGNOSTICPRINTER_H
 
 #include "clang/Basic/Diagnostic.h"
 #include "clang/Basic/SourceLocation.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/ADT/StringRef.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/ADT/StringRef.h"
 
 namespace clang {
 class DiagnosticOptions;
@@ -43,7 +43,7 @@ class LogDiagnosticPrinter : public DiagnosticConsumer {
     DiagnosticsEngine::Level DiagnosticLevel;
   };
 
-  void EmitDiagEntry(llvm::raw_ostream &OS,
+  void EmitDiagEntry(llvm37::raw_ostream &OS,
                      const LogDiagnosticPrinter::DiagEntry &DE);
 
   // Conditional ownership (when StreamOwner is non-null, it's keeping OS

@@ -12,15 +12,15 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/CodeGen/Passes.h"
-#include "llvm/ADT/StringExtras.h"
-#include "llvm/CodeGen/GCStrategy.h"
-#include "llvm/IR/CallSite.h"
-#include "llvm/IR/IRBuilder.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/IR/Module.h"
+#include "llvm37/CodeGen/Passes.h"
+#include "llvm37/ADT/StringExtras.h"
+#include "llvm37/CodeGen/GCStrategy.h"
+#include "llvm37/IR/CallSite.h"
+#include "llvm37/IR/IRBuilder.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/IR/Module.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "shadowstackgclowering"
 
@@ -67,7 +67,7 @@ INITIALIZE_PASS_DEPENDENCY(GCModuleInfo)
 INITIALIZE_PASS_END(ShadowStackGCLowering, "shadow-stack-gc-lowering",
                     "Shadow Stack GC Lowering", false, false)
 
-FunctionPass *llvm::createShadowStackGCLoweringPass() { return new ShadowStackGCLowering(); }
+FunctionPass *llvm37::createShadowStackGCLoweringPass() { return new ShadowStackGCLowering(); }
 
 char ShadowStackGCLowering::ID = 0;
 

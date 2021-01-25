@@ -10,11 +10,11 @@
 #include "clang/Basic/FileManager.h"
 #include "clang/Basic/FileSystemOptions.h"
 #include "clang/Basic/FileSystemStatCache.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/Config/llvm-config.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/Config/llvm-config.h"
 #include "gtest/gtest.h"
 
-using namespace llvm;
+using namespace llvm37;
 using namespace clang;
 
 namespace {
@@ -26,14 +26,14 @@ class FakeStatCache : public FileSystemStatCache {
 private:
   // Maps a file/directory path to its desired stat result.  Anything
   // not in this map is considered to not exist in the file system.
-  llvm::StringMap<FileData, llvm::BumpPtrAllocator> StatCalls;
+  llvm37::StringMap<FileData, llvm37::BumpPtrAllocator> StatCalls;
 
   void InjectFileOrDirectory(const char *Path, ino_t INode, bool IsFile) {
     FileData Data;
     Data.Name = Path;
     Data.Size = 0;
     Data.ModTime = 0;
-    Data.UniqueID = llvm::sys::fs::UniqueID(1, INode);
+    Data.UniqueID = llvm37::sys::fs::UniqueID(1, INode);
     Data.IsDirectory = !IsFile;
     Data.IsNamedPipe = false;
     Data.InPCH = false;
@@ -98,7 +98,7 @@ TEST_F(FileManagerTest, NoVirtualDirectoryExistsBeforeAVirtualFileIsAdded) {
   // FileManager to report "file/directory doesn't exist".  This
   // avoids the possibility of the result of this test being affected
   // by what's in the real file system.
-  manager.addStatCache(llvm::make_unique<FakeStatCache>());
+  manager.addStatCache(llvm37::make_unique<FakeStatCache>());
 
   EXPECT_EQ(nullptr, manager.getDirectory("virtual/dir/foo"));
   EXPECT_EQ(nullptr, manager.getDirectory("virtual/dir"));
@@ -108,7 +108,7 @@ TEST_F(FileManagerTest, NoVirtualDirectoryExistsBeforeAVirtualFileIsAdded) {
 // When a virtual file is added, all of its ancestors should be created.
 TEST_F(FileManagerTest, getVirtualFileCreatesDirectoryEntriesForAncestors) {
   // Fake an empty real file system.
-  manager.addStatCache(llvm::make_unique<FakeStatCache>());
+  manager.addStatCache(llvm37::make_unique<FakeStatCache>());
 
   manager.getVirtualFile("virtual/dir/bar.h", 100, 0);
   EXPECT_EQ(nullptr, manager.getDirectory("virtual/dir/foo"));
@@ -125,11 +125,11 @@ TEST_F(FileManagerTest, getVirtualFileCreatesDirectoryEntriesForAncestors) {
 // getFile() returns non-NULL if a real file exists at the given path.
 TEST_F(FileManagerTest, getFileReturnsValidFileEntryForExistingRealFile) {
   // Inject fake files into the file system.
-  auto statCache = llvm::make_unique<FakeStatCache>();
+  auto statCache = llvm37::make_unique<FakeStatCache>();
   statCache->InjectDirectory("/tmp", 42);
   statCache->InjectFile("/tmp/test", 43);
 
-#ifdef LLVM_ON_WIN32
+#ifdef LLVM37_ON_WIN32
   const char *DirName = "C:.";
   const char *FileName = "C:test";
   statCache->InjectDirectory(DirName, 44);
@@ -146,7 +146,7 @@ TEST_F(FileManagerTest, getFileReturnsValidFileEntryForExistingRealFile) {
   ASSERT_TRUE(dir != nullptr);
   EXPECT_STREQ("/tmp", dir->getName());
 
-#ifdef LLVM_ON_WIN32
+#ifdef LLVM37_ON_WIN32
   file = manager.getFile(FileName);
   ASSERT_TRUE(file != NULL);
 
@@ -159,7 +159,7 @@ TEST_F(FileManagerTest, getFileReturnsValidFileEntryForExistingRealFile) {
 // getFile() returns non-NULL if a virtual file exists at the given path.
 TEST_F(FileManagerTest, getFileReturnsValidFileEntryForExistingVirtualFile) {
   // Fake an empty real file system.
-  manager.addStatCache(llvm::make_unique<FakeStatCache>());
+  manager.addStatCache(llvm37::make_unique<FakeStatCache>());
 
   manager.getVirtualFile("virtual/dir/bar.h", 100, 0);
   const FileEntry *file = manager.getFile("virtual/dir/bar.h");
@@ -176,7 +176,7 @@ TEST_F(FileManagerTest, getFileReturnsValidFileEntryForExistingVirtualFile) {
 TEST_F(FileManagerTest, getFileReturnsDifferentFileEntriesForDifferentFiles) {
   // Inject two fake files into the file system.  Different inodes
   // mean the files are not symlinked together.
-  auto statCache = llvm::make_unique<FakeStatCache>();
+  auto statCache = llvm37::make_unique<FakeStatCache>();
   statCache->InjectDirectory(".", 41);
   statCache->InjectFile("foo.cpp", 42);
   statCache->InjectFile("bar.cpp", 43);
@@ -193,7 +193,7 @@ TEST_F(FileManagerTest, getFileReturnsDifferentFileEntriesForDifferentFiles) {
 // exists at the given path.
 TEST_F(FileManagerTest, getFileReturnsNULLForNonexistentFile) {
   // Inject a fake foo.cpp into the file system.
-  auto statCache = llvm::make_unique<FakeStatCache>();
+  auto statCache = llvm37::make_unique<FakeStatCache>();
   statCache->InjectDirectory(".", 41);
   statCache->InjectFile("foo.cpp", 42);
   manager.addStatCache(std::move(statCache));
@@ -207,12 +207,12 @@ TEST_F(FileManagerTest, getFileReturnsNULLForNonexistentFile) {
 
 // The following tests apply to Unix-like system only.
 
-#ifndef LLVM_ON_WIN32
+#ifndef LLVM37_ON_WIN32
 
 // getFile() returns the same FileEntry for real files that are aliases.
 TEST_F(FileManagerTest, getFileReturnsSameFileEntryForAliasedRealFiles) {
   // Inject two real files with the same inode.
-  auto statCache = llvm::make_unique<FakeStatCache>();
+  auto statCache = llvm37::make_unique<FakeStatCache>();
   statCache->InjectDirectory("abc", 41);
   statCache->InjectFile("abc/foo.cpp", 42);
   statCache->InjectFile("abc/bar.cpp", 42);
@@ -225,7 +225,7 @@ TEST_F(FileManagerTest, getFileReturnsSameFileEntryForAliasedRealFiles) {
 // corresponding real files that are aliases.
 TEST_F(FileManagerTest, getFileReturnsSameFileEntryForAliasedVirtualFiles) {
   // Inject two real files with the same inode.
-  auto statCache = llvm::make_unique<FakeStatCache>();
+  auto statCache = llvm37::make_unique<FakeStatCache>();
   statCache->InjectDirectory("abc", 41);
   statCache->InjectFile("abc/foo.cpp", 42);
   statCache->InjectFile("abc/bar.cpp", 42);
@@ -238,14 +238,14 @@ TEST_F(FileManagerTest, getFileReturnsSameFileEntryForAliasedVirtualFiles) {
 }
 
 TEST_F(FileManagerTest, addRemoveStatCache) {
-  manager.addStatCache(llvm::make_unique<FakeStatCache>());
-  auto statCacheOwner = llvm::make_unique<FakeStatCache>();
+  manager.addStatCache(llvm37::make_unique<FakeStatCache>());
+  auto statCacheOwner = llvm37::make_unique<FakeStatCache>();
   auto *statCache = statCacheOwner.get();
   manager.addStatCache(std::move(statCacheOwner));
-  manager.addStatCache(llvm::make_unique<FakeStatCache>());
+  manager.addStatCache(llvm37::make_unique<FakeStatCache>());
   manager.removeStatCache(statCache);
 }
 
-#endif  // !LLVM_ON_WIN32
+#endif  // !LLVM37_ON_WIN32
 
 } // anonymous namespace

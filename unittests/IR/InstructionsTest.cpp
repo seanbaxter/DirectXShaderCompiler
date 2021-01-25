@@ -7,23 +7,23 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/IR/Instructions.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/Analysis/ValueTracking.h"
-#include "llvm/IR/BasicBlock.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/DerivedTypes.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/IRBuilder.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/MDBuilder.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/Operator.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/Analysis/ValueTracking.h"
+#include "llvm37/IR/BasicBlock.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/IR/DerivedTypes.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/IRBuilder.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/MDBuilder.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/Operator.h"
 #include "gtest/gtest.h"
 #include <memory>
 
-namespace llvm {
+namespace llvm37 {
 namespace {
 
 TEST(InstructionsTest, ReturnInst) {
@@ -519,6 +519,6 @@ TEST(InstructionsTest, CloneCall) {
 }
 
 }  // end anonymous namespace
-}  // end namespace llvm
+}  // end namespace llvm37
 
 

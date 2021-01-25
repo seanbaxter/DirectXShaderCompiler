@@ -12,20 +12,20 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_AST_UNRESOLVEDSET_H
-#define LLVM_CLANG_AST_UNRESOLVEDSET_H
+#ifndef LLVM37_CLANG_AST_UNRESOLVEDSET_H
+#define LLVM37_CLANG_AST_UNRESOLVEDSET_H
 
 #include "clang/AST/DeclAccessPair.h"
 #include "clang/Basic/LLVM.h"
-#include "llvm/ADT/ArrayRef.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/ADT/iterator.h"
+#include "llvm37/ADT/ArrayRef.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/ADT/iterator.h"
 
 namespace clang {
 
 /// The iterator over UnresolvedSets.  Serves as both the const and
 /// non-const iterator.
-class UnresolvedSetIterator : public llvm::iterator_adaptor_base<
+class UnresolvedSetIterator : public llvm37::iterator_adaptor_base<
                                   UnresolvedSetIterator, DeclAccessPair *,
                                   std::random_access_iterator_tag, NamedDecl *,
                                   std::ptrdiff_t, NamedDecl *, NamedDecl *> {

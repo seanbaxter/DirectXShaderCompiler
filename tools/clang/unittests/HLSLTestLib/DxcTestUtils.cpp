@@ -14,11 +14,11 @@
 #include "dxc/Test/HlslTestUtils.h"
 #include "dxc/Support/HLSLOptions.h"
 #include "dxc/Support/Global.h"
-#include "llvm/ADT/StringRef.h"
-#include "llvm/ADT/APInt.h"
-#include "llvm/Support/ManagedStatic.h"
-#include "llvm/Support/Regex.h"
-#include "llvm/Support/FileSystem.h"
+#include "llvm37/ADT/StringRef.h"
+#include "llvm37/ADT/APInt.h"
+#include "llvm37/Support/ManagedStatic.h"
+#include "llvm37/Support/Regex.h"
+#include "llvm37/Support/FileSystem.h"
 
 using namespace std;
 using namespace hlsl_test;
@@ -28,7 +28,7 @@ MODULE_CLEANUP(TestModuleCleanup)
 
 bool TestModuleSetup() {
   // Use this module-level function to set up LLVM dependencies.
-  if (llvm::sys::fs::SetupPerThreadFileSystem())
+  if (llvm37::sys::fs::SetupPerThreadFileSystem())
     return false;
   if (FAILED(DxcInitThreadMalloc()))
     return false;
@@ -45,10 +45,10 @@ bool TestModuleCleanup() {
   // In particular, clean up managed static allocations used by
   // parsing options with the LLVM library.
   ::hlsl::options::cleanupHlslOptTable();
-  ::llvm::llvm_shutdown();
+  ::llvm37::llvm_shutdown();
   DxcClearThreadMalloc();
   DxcCleanupThreadMalloc();
-  llvm::sys::fs::CleanupPerThreadFileSystem();
+  llvm37::sys::fs::CleanupPerThreadFileSystem();
   return true;
 }
 
@@ -61,13 +61,13 @@ void CheckOperationSucceeded(IDxcOperationResult *pResult, IDxcBlob **ppBlob) {
   VERIFY_SUCCEEDED(pResult->GetResult(ppBlob));
 }
 
-static bool CheckMsgs(llvm::StringRef text, llvm::ArrayRef<LPCSTR> pMsgs,
+static bool CheckMsgs(llvm37::StringRef text, llvm37::ArrayRef<LPCSTR> pMsgs,
                       bool bRegex) {
   const char *pStart = !text.empty() ? text.begin() : nullptr;
   const char *pEnd = !text.empty() ? text.end() : nullptr;
   for (auto pMsg : pMsgs) {
     if (bRegex) {
-      llvm::Regex RE(pMsg);
+      llvm37::Regex RE(pMsg);
       std::string reErrors;
       VERIFY_IS_TRUE(RE.isValid(reErrors));
       if (!RE.match(text)) {
@@ -91,17 +91,17 @@ static bool CheckMsgs(llvm::StringRef text, llvm::ArrayRef<LPCSTR> pMsgs,
 
 bool CheckMsgs(const LPCSTR pText, size_t TextCount, const LPCSTR *pErrorMsgs,
                size_t errorMsgCount, bool bRegex) {
-  return CheckMsgs(llvm::StringRef(pText, TextCount),
-                   llvm::ArrayRef<LPCSTR>(pErrorMsgs, errorMsgCount), bRegex);
+  return CheckMsgs(llvm37::StringRef(pText, TextCount),
+                   llvm37::ArrayRef<LPCSTR>(pErrorMsgs, errorMsgCount), bRegex);
 }
 
-static bool CheckNotMsgs(llvm::StringRef text, llvm::ArrayRef<LPCSTR> pMsgs,
+static bool CheckNotMsgs(llvm37::StringRef text, llvm37::ArrayRef<LPCSTR> pMsgs,
                          bool bRegex) {
   const char *pStart = !text.empty() ? text.begin() : nullptr;
   const char *pEnd = !text.empty() ? text.end() : nullptr;
   for (auto pMsg : pMsgs) {
     if (bRegex) {
-      llvm::Regex RE(pMsg);
+      llvm37::Regex RE(pMsg);
       std::string reErrors;
       VERIFY_IS_TRUE(RE.isValid(reErrors));
       if (RE.match(text)) {
@@ -126,12 +126,12 @@ static bool CheckNotMsgs(llvm::StringRef text, llvm::ArrayRef<LPCSTR> pMsgs,
 
 bool CheckNotMsgs(const LPCSTR pText, size_t TextCount, const LPCSTR *pErrorMsgs,
                   size_t errorMsgCount, bool bRegex) {
-  return CheckNotMsgs(llvm::StringRef(pText, TextCount),
-    llvm::ArrayRef<LPCSTR>(pErrorMsgs, errorMsgCount), bRegex);
+  return CheckNotMsgs(llvm37::StringRef(pText, TextCount),
+    llvm37::ArrayRef<LPCSTR>(pErrorMsgs, errorMsgCount), bRegex);
 }
 
 bool CheckOperationResultMsgs(IDxcOperationResult *pResult,
-                              llvm::ArrayRef<LPCSTR> pErrorMsgs,
+                              llvm37::ArrayRef<LPCSTR> pErrorMsgs,
                               bool maySucceedAnyway, bool bRegex) {
   HRESULT status;
   CComPtr<IDxcBlobEncoding> textBlob;
@@ -162,7 +162,7 @@ bool CheckOperationResultMsgs(IDxcOperationResult *pResult,
                               const LPCSTR *pErrorMsgs, size_t errorMsgCount,
                               bool maySucceedAnyway, bool bRegex) {
   return CheckOperationResultMsgs(
-      pResult, llvm::ArrayRef<LPCSTR>(pErrorMsgs, errorMsgCount),
+      pResult, llvm37::ArrayRef<LPCSTR>(pErrorMsgs, errorMsgCount),
       maySucceedAnyway, bRegex);
 }
 
@@ -383,16 +383,16 @@ HRESULT GetVersion(dxc::DxcDllSupport& DllSupport, REFCLSID clsid, unsigned &Maj
   return S_OK;
 }
 
-bool ParseTargetProfile(llvm::StringRef targetProfile, llvm::StringRef &outStage, unsigned &outMajor, unsigned &outMinor) {
+bool ParseTargetProfile(llvm37::StringRef targetProfile, llvm37::StringRef &outStage, unsigned &outMajor, unsigned &outMinor) {
   auto stage_model = targetProfile.split("_");
   auto major_minor = stage_model.second.split("_");
-  llvm::APInt major;
+  llvm37::APInt major;
   if (major_minor.first.getAsInteger(16, major))
     return false;
   if (major_minor.second.compare("x") == 0) {
     outMinor = 0xF;   // indicates offline target
   } else {
-    llvm::APInt minor;
+    llvm37::APInt minor;
     if (major_minor.second.getAsInteger(16, minor))
       return false;
     outMinor = (unsigned)minor.getLimitedValue();

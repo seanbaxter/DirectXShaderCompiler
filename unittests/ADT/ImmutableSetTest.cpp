@@ -8,9 +8,9 @@
 //===----------------------------------------------------------------------===//
 
 #include "gtest/gtest.h"
-#include "llvm/ADT/ImmutableSet.h"
+#include "llvm37/ADT/ImmutableSet.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 namespace {
 class ImmutableSetTest : public testing::Test {

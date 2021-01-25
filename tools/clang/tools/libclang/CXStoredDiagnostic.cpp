@@ -19,10 +19,10 @@
 
 #include "clang/Frontend/ASTUnit.h"
 #include "clang/Frontend/FrontendDiagnostic.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/ADT/Twine.h"
-#include "llvm/Support/MemoryBuffer.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/ADT/Twine.h"
+#include "llvm37/Support/MemoryBuffer.h"
+#include "llvm37/Support/raw_ostream.h"
 
 using namespace clang;
 using namespace clang::cxloc;

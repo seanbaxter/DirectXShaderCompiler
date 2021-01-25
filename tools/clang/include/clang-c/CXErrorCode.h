@@ -10,8 +10,8 @@
 |* This header provides the CXErrorCode enumerators.                          *|
 |*                                                                            *|
 \*===----------------------------------------------------------------------===*/
-#ifndef LLVM_CLANG_C_CXERRORCODE_H
-#define LLVM_CLANG_C_CXERRORCODE_H
+#ifndef LLVM37_CLANG_C_CXERRORCODE_H
+#define LLVM37_CLANG_C_CXERRORCODE_H
 
 #include "clang-c/Platform.h"
 

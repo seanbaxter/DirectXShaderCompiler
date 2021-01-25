@@ -4,7 +4,7 @@
 // emitting AssemblerPredicate conditions. In the example below, the invalid
 // code would be: "return ( && (Bits & arch::AssemblerCondition2));".
 
-include "llvm/Target/Target.td"
+include "llvm37/Target/Target.td"
 
 def archInstrInfo : InstrInfo { }
 

@@ -13,14 +13,14 @@
 ///
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_LIB_IR_ATTRIBUTEIMPL_H
-#define LLVM_LIB_IR_ATTRIBUTEIMPL_H
+#ifndef LLVM37_LIB_IR_ATTRIBUTEIMPL_H
+#define LLVM37_LIB_IR_ATTRIBUTEIMPL_H
 
-#include "llvm/ADT/FoldingSet.h"
-#include "llvm/IR/Attributes.h"
+#include "llvm37/ADT/FoldingSet.h"
+#include "llvm37/IR/Attributes.h"
 #include <string>
 
-namespace llvm {
+namespace llvm37 {
 
 class Constant;
 class LLVMContext;

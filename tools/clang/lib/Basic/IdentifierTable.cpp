@@ -17,11 +17,11 @@
 #include "clang/Basic/LangOptions.h"
 #include "clang/Basic/OperatorKinds.h"
 #include "clang/Basic/Specifiers.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/FoldingSet.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/FoldingSet.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <cstdio>
 
 using namespace clang;
@@ -319,7 +319,7 @@ void IdentifierTable::PrintStats() const {
   unsigned MaxIdentifierLength = 0;
 
   // TODO: Figure out maximum times an identifier had to probe for -stats.
-  for (llvm::StringMap<IdentifierInfo*, llvm::BumpPtrAllocator>::const_iterator
+  for (llvm37::StringMap<IdentifierInfo*, llvm37::BumpPtrAllocator>::const_iterator
        I = HashTable.begin(), E = HashTable.end(); I != E; ++I) {
     unsigned IdLen = I->getKeyLength();
     AverageIdentifierSize += IdLen;
@@ -344,7 +344,7 @@ void IdentifierTable::PrintStats() const {
 // SelectorTable Implementation
 //===----------------------------------------------------------------------===//
 
-unsigned llvm::DenseMapInfo<clang::Selector>::getHashValue(clang::Selector S) {
+unsigned llvm37::DenseMapInfo<clang::Selector>::getHashValue(clang::Selector S) {
   return DenseMapInfo<void*>::getHashValue(S.getAsOpaquePtr());
 }
 
@@ -354,7 +354,7 @@ namespace clang {
 /// to unique aggregate names (keyword selectors in ObjC parlance). Access to
 /// this class is provided strictly through Selector.
 class MultiKeywordSelector
-  : public DeclarationNameExtra, public llvm::FoldingSetNode {
+  : public DeclarationNameExtra, public llvm37::FoldingSetNode {
   MultiKeywordSelector(unsigned nKeys) {
     ExtraKindOrNumArgs = NUM_EXTRA_KINDS + nKeys;
   }
@@ -386,13 +386,13 @@ public:
     assert(i < getNumArgs() && "getIdentifierInfoForSlot(): illegal index");
     return keyword_begin()[i];
   }
-  static void Profile(llvm::FoldingSetNodeID &ID,
+  static void Profile(llvm37::FoldingSetNodeID &ID,
                       keyword_iterator ArgTys, unsigned NumArgs) {
     ID.AddInteger(NumArgs);
     for (unsigned i = 0; i != NumArgs; ++i)
       ID.AddPointer(ArgTys[i]);
   }
-  void Profile(llvm::FoldingSetNodeID &ID) {
+  void Profile(llvm37::FoldingSetNodeID &ID) {
     Profile(ID, keyword_begin(), getNumArgs());
   }
 };
@@ -426,7 +426,7 @@ StringRef Selector::getNameForSlot(unsigned int argIndex) const {
 
 std::string MultiKeywordSelector::getName() const {
   SmallString<256> Str;
-  llvm::raw_svector_ostream OS(Str);
+  llvm37::raw_svector_ostream OS(Str);
   for (keyword_iterator I = keyword_begin(), E = keyword_end(); I != E; ++I) {
     if (*I)
       OS << (*I)->getName();
@@ -457,7 +457,7 @@ std::string Selector::getAsString() const {
   return getMultiKeywordSelector()->getName();
 }
 
-void Selector::print(llvm::raw_ostream &OS) const {
+void Selector::print(llvm37::raw_ostream &OS) const {
   OS << getAsString();
 }
 
@@ -571,8 +571,8 @@ ObjCStringFormatFamily Selector::getStringFormatFamilyImpl(Selector sel) {
 
 namespace {
   struct SelectorTableImpl {
-    llvm::FoldingSet<MultiKeywordSelector> Table;
-    llvm::BumpPtrAllocator Allocator;
+    llvm37::FoldingSet<MultiKeywordSelector> Table;
+    llvm37::BumpPtrAllocator Allocator;
   };
 } // end anonymous namespace.
 
@@ -609,7 +609,7 @@ Selector SelectorTable::getSelector(unsigned nKeys, IdentifierInfo **IIV) {
   SelectorTableImpl &SelTabImpl = getSelectorTableImpl(Impl);
 
   // Unique selector, to guarantee there is one per name.
-  llvm::FoldingSetNodeID ID;
+  llvm37::FoldingSetNodeID ID;
   MultiKeywordSelector::Profile(ID, IIV, nKeys);
 
   void *InsertPos = nullptr;
@@ -622,7 +622,7 @@ Selector SelectorTable::getSelector(unsigned nKeys, IdentifierInfo **IIV) {
   unsigned Size = sizeof(MultiKeywordSelector) + nKeys*sizeof(IdentifierInfo *);
   MultiKeywordSelector *SI =
     (MultiKeywordSelector*)SelTabImpl.Allocator.Allocate(Size,
-                                         llvm::alignOf<MultiKeywordSelector>());
+                                         llvm37::alignOf<MultiKeywordSelector>());
   new (SI) MultiKeywordSelector(nKeys, IIV);
   SelTabImpl.Table.InsertNode(SI, InsertPos);
   return Selector(SI);

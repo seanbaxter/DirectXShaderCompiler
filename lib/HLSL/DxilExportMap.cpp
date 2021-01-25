@@ -13,18 +13,18 @@
 #include "dxc/DXIL/DxilUtil.h"
 #include "dxc/HLSL/DxilExportMap.h"
 #include "dxc/DXIL/DxilTypeSystem.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/ADT/StringRef.h"
-#include "llvm/ADT/StringSet.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/ADT/DenseSet.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/IR/Function.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/ADT/StringRef.h"
+#include "llvm37/ADT/StringSet.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/ADT/DenseSet.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/IR/Function.h"
 #include <string>
 #include <vector>
 #include <set>
 
-using namespace llvm;
+using namespace llvm37;
 using namespace hlsl;
 
 namespace hlsl {
@@ -37,25 +37,25 @@ bool ExportMap::empty() const {
   return m_ExportMap.empty();
 }
 
-bool ExportMap::ParseExports(const std::vector<std::string> &exportOpts, llvm::raw_ostream &errors) {
+bool ExportMap::ParseExports(const std::vector<std::string> &exportOpts, llvm37::raw_ostream &errors) {
   for (auto &str : exportOpts) {
-    llvm::StringRef exports = StoreString(str);
+    llvm37::StringRef exports = StoreString(str);
     size_t start = 0;
-    size_t end = llvm::StringRef::npos;
+    size_t end = llvm37::StringRef::npos;
     // def1;def2;...
     while (true) {
       end = exports.find_first_of(';', start);
-      llvm::StringRef exportDef = exports.slice(start, end);
+      llvm37::StringRef exportDef = exports.slice(start, end);
 
       // def: export1[[,export2,...]=internal]
-      llvm::StringRef internalName = exportDef;
+      llvm37::StringRef internalName = exportDef;
       size_t equals = exportDef.find_first_of('=');
-      if (equals != llvm::StringRef::npos) {
+      if (equals != llvm37::StringRef::npos) {
         internalName = exportDef.substr(equals + 1);
         size_t exportStart = 0;
         while (true) {
           size_t comma = exportDef.find_first_of(',', exportStart);
-          if (comma == llvm::StringRef::npos || comma > equals)
+          if (comma == llvm37::StringRef::npos || comma > equals)
             break;
           if (exportStart < comma)
             Add(exportDef.slice(exportStart, comma), internalName);
@@ -72,7 +72,7 @@ bool ExportMap::ParseExports(const std::vector<std::string> &exportOpts, llvm::r
           << "'.  Syntax is: export1[[,export2,...]=internal][;...]";
         return false;
       }
-      if (end == llvm::StringRef::npos)
+      if (end == llvm37::StringRef::npos)
         break;
       start = end + 1;
     }
@@ -80,18 +80,18 @@ bool ExportMap::ParseExports(const std::vector<std::string> &exportOpts, llvm::r
   return true;
 }
 
-void ExportMap::Add(llvm::StringRef exportName, llvm::StringRef internalName) {
+void ExportMap::Add(llvm37::StringRef exportName, llvm37::StringRef internalName) {
   // Incoming strings may be escaped (because they originally come from arguments)
   // Unescape them here, if necessary
   if (exportName.startswith("\\")) {
     std::string str;
-    llvm::raw_string_ostream os(str);
+    llvm37::raw_string_ostream os(str);
     PrintUnescapedString(exportName, os);
     exportName = StoreString(os.str());
   }
   if (internalName.startswith("\\")) {
     std::string str;
-    llvm::raw_string_ostream os(str);
+    llvm37::raw_string_ostream os(str);
     PrintUnescapedString(internalName, os);
     internalName = StoreString(os.str());
   }
@@ -102,7 +102,7 @@ void ExportMap::Add(llvm::StringRef exportName, llvm::StringRef internalName) {
   m_ExportMap[internalName].insert(exportName);
 }
 
-ExportMap::const_iterator ExportMap::GetExportsByName(llvm::StringRef Name) const {
+ExportMap::const_iterator ExportMap::GetExportsByName(llvm37::StringRef Name) const {
   ExportMap::const_iterator it = m_ExportMap.find(Name);
   StringRef unmangled = DemangleFunctionName(Name);
   if (it == end()) {
@@ -116,7 +116,7 @@ ExportMap::const_iterator ExportMap::GetExportsByName(llvm::StringRef Name) cons
   return it;
 }
 
-bool ExportMap::IsExported(llvm::StringRef original) const {
+bool ExportMap::IsExported(llvm37::StringRef original) const {
   if (m_ExportMap.empty())
     return true;
   return GetExportsByName(original) != end();
@@ -131,7 +131,7 @@ void ExportMap::BeginProcessing() {
   }
 }
 
-bool ExportMap::ProcessFunction(llvm::Function *F, bool collisionAvoidanceRenaming) {
+bool ExportMap::ProcessFunction(llvm37::Function *F, bool collisionAvoidanceRenaming) {
   // Skip if already added.  This can happen due to patch constant functions.
   if (m_RenameMap.find(F) != m_RenameMap.end())
     return true;
@@ -155,8 +155,8 @@ bool ExportMap::ProcessFunction(llvm::Function *F, bool collisionAvoidanceRenami
 
   // Add entry to m_RenameMap:
   auto &renames = m_RenameMap[F];
-  const llvm::StringSet<> &exportRenames = it->getValue();
-  llvm::StringRef internalName = it->getKey();
+  const llvm37::StringSet<> &exportRenames = it->getValue();
+  llvm37::StringRef internalName = it->getKey();
 
   // mark export used
   UseExport(internalName);
@@ -186,7 +186,7 @@ bool ExportMap::ProcessFunction(llvm::Function *F, bool collisionAvoidanceRenami
   return true;
 }
 
-void ExportMap::RegisterExportedFunction(llvm::Function *F) {
+void ExportMap::RegisterExportedFunction(llvm37::Function *F) {
   // Skip if already added
   if (m_RenameMap.find(F) != m_RenameMap.end())
     return;
@@ -196,12 +196,12 @@ void ExportMap::RegisterExportedFunction(llvm::Function *F) {
   ExportName(F->getName());
 }
 
-void ExportMap::UseExport(llvm::StringRef internalName) {
+void ExportMap::UseExport(llvm37::StringRef internalName) {
   auto it = m_UnusedExports.find(internalName);
   if (it != m_UnusedExports.end())
     m_UnusedExports.erase(it);
 }
-void ExportMap::ExportName(llvm::StringRef exportName) {
+void ExportMap::ExportName(llvm37::StringRef exportName) {
   auto result = m_ExportNames.insert(exportName);
   if (!result.second) {
     // Already present, report collision
@@ -213,7 +213,7 @@ bool ExportMap::EndProcessing() const {
   return m_UnusedExports.empty() && m_NameCollisions.empty();
 }
 
-llvm::StringRef ExportMap::StoreString(llvm::StringRef str) {
+llvm37::StringRef ExportMap::StoreString(llvm37::StringRef str) {
   return *m_StringStorage.insert(str).first;
 }
 

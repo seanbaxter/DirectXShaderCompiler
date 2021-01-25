@@ -11,14 +11,14 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/CodeGen/EdgeBundles.h"
-#include "llvm/CodeGen/MachineBasicBlock.h"
-#include "llvm/CodeGen/MachineFunction.h"
-#include "llvm/CodeGen/Passes.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/GraphWriter.h"
+#include "llvm37/CodeGen/EdgeBundles.h"
+#include "llvm37/CodeGen/MachineBasicBlock.h"
+#include "llvm37/CodeGen/MachineFunction.h"
+#include "llvm37/CodeGen/Passes.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/GraphWriter.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 static cl::opt<bool>
 ViewEdgeBundles("view-edge-bundles", cl::Hidden,
@@ -29,7 +29,7 @@ char EdgeBundles::ID = 0;
 INITIALIZE_PASS(EdgeBundles, "edge-bundles", "Bundle Machine CFG Edges",
                 /* cfg = */true, /* analysis = */ true)
 
-char &llvm::EdgeBundlesID = EdgeBundles::ID;
+char &llvm37::EdgeBundlesID = EdgeBundles::ID;
 
 void EdgeBundles::getAnalysisUsage(AnalysisUsage &AU) const {
   AU.setPreservesAll();
@@ -68,7 +68,7 @@ bool EdgeBundles::runOnMachineFunction(MachineFunction &mf) {
 }
 
 /// Specialize WriteGraph, the standard implementation won't work.
-namespace llvm {
+namespace llvm37 {
 template<>
 raw_ostream &WriteGraph<>(raw_ostream &O, const EdgeBundles &G,
                           bool ShortNames,

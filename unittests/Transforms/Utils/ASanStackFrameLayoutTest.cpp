@@ -7,13 +7,13 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Transforms/Utils/ASanStackFrameLayout.h"
-#include "llvm/ADT/ArrayRef.h"
+#include "llvm37/Transforms/Utils/ASanStackFrameLayout.h"
+#include "llvm37/ADT/ArrayRef.h"
 #include "gtest/gtest.h"
 #include <sstream>
 //                                                                           //
 ///////////////////////////////////////////////////////////////////////////////
-using namespace llvm;
+using namespace llvm37;
 
 static std::string
 ShadowBytesToString(ArrayRef<uint8_t> ShadowBytes) {

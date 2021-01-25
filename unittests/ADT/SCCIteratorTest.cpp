@@ -7,14 +7,14 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/ADT/SCCIterator.h"
-#include "llvm/ADT/GraphTraits.h"
+#include "llvm37/ADT/SCCIterator.h"
+#include "llvm37/ADT/GraphTraits.h"
 #include "gtest/gtest.h"
 #include <limits.h>
 
-using namespace llvm;
+using namespace llvm37;
 
-namespace llvm {
+namespace llvm37 {
 
 /// Graph<N> - A graph with N nodes.  Note that N can be at most 8.
 template <unsigned N>

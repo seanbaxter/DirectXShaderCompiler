@@ -11,13 +11,13 @@
 //  loading named modules.
 //
 //===----------------------------------------------------------------------===//
-#ifndef LLVM_CLANG_LEX_MODULELOADER_H
-#define LLVM_CLANG_LEX_MODULELOADER_H
+#ifndef LLVM37_CLANG_LEX_MODULELOADER_H
+#define LLVM37_CLANG_LEX_MODULELOADER_H
 
 #include "clang/Basic/Module.h"
 #include "clang/Basic/SourceLocation.h"
-#include "llvm/ADT/ArrayRef.h"
-#include "llvm/ADT/PointerIntPair.h"
+#include "llvm37/ADT/ArrayRef.h"
+#include "llvm37/ADT/PointerIntPair.h"
 
 namespace clang {
 
@@ -31,7 +31,7 @@ typedef ArrayRef<std::pair<IdentifierInfo *, SourceLocation> > ModuleIdPath;
 
 /// \brief Describes the result of attempting to load a module.
 class ModuleLoadResult {
-  llvm::PointerIntPair<Module *, 1, bool> Storage;
+  llvm37::PointerIntPair<Module *, 1, bool> Storage;
 
 public:
   ModuleLoadResult() : Storage() { }

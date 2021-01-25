@@ -24,32 +24,32 @@
 #include "dxc/DXIL/DxilFunctionProps.h"
 #include "dxc/DXIL/DxilUtil.h"
 #include "dxc/DXIL/DxilInstructions.h"
-#include "llvm/Analysis/ReducibilityAnalysis.h"
+#include "llvm37/Analysis/ReducibilityAnalysis.h"
 #include "dxc/DXIL/DxilEntryProps.h"
 #include "dxc/DXIL/DxilResourceProperties.h"
 
-#include "llvm/ADT/ArrayRef.h"
-#include "llvm/Analysis/CallGraph.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/Type.h"
-#include "llvm/IR/Operator.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/InstIterator.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/DiagnosticInfo.h"
-#include "llvm/IR/DiagnosticPrinter.h"
-#include "llvm/IR/Verifier.h"
-#include "llvm/IR/ModuleSlotTracker.h"
-#include "llvm/ADT/BitVector.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Support/MemoryBuffer.h"
-#include "llvm/Bitcode/ReaderWriter.h"
+#include "llvm37/ADT/ArrayRef.h"
+#include "llvm37/Analysis/CallGraph.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/Type.h"
+#include "llvm37/IR/Operator.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/InstIterator.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/DiagnosticInfo.h"
+#include "llvm37/IR/DiagnosticPrinter.h"
+#include "llvm37/IR/Verifier.h"
+#include "llvm37/IR/ModuleSlotTracker.h"
+#include "llvm37/ADT/BitVector.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Support/MemoryBuffer.h"
+#include "llvm37/Bitcode/ReaderWriter.h"
 #include <unordered_set>
-#include "llvm/Analysis/LoopInfo.h"
-#include "llvm/Analysis/ValueTracking.h"
-#include "llvm/IR/Dominators.h"
-#include "llvm/Analysis/PostDominators.h"
+#include "llvm37/Analysis/LoopInfo.h"
+#include "llvm37/Analysis/ValueTracking.h"
+#include "llvm37/IR/Dominators.h"
+#include "llvm37/Analysis/PostDominators.h"
 #include "dxc/HLSL/DxilSpanAllocator.h"
 #include "dxc/HLSL/DxilSignatureAllocator.h"
 #include "dxc/HLSL/DxilPackSignatureElement.h"
@@ -57,7 +57,7 @@
 #include <algorithm>
 #include <deque>
 
-using namespace llvm;
+using namespace llvm37;
 using namespace std;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -312,7 +312,7 @@ struct DiagRestore {
   void *OrigDiagContext;
   LLVMContext::DiagnosticHandlerTy OrigHandler;
 
-  DiagRestore(llvm::LLVMContext &Ctx, void *DiagContext) : Ctx(Ctx) {
+  DiagRestore(llvm37::LLVMContext &Ctx, void *DiagContext) : Ctx(Ctx) {
     OrigHandler = Ctx.getDiagnosticHandler();
     OrigDiagContext = Ctx.getDiagnosticContext();
     Ctx.setDiagnosticHandler(
@@ -340,10 +340,10 @@ bool PrintDiagnosticContext::HasWarnings() const { return m_warningsFound; }
 void PrintDiagnosticContext::Handle(const DiagnosticInfo &DI) {
   DI.print(m_Printer);
   switch (DI.getSeverity()) {
-  case llvm::DiagnosticSeverity::DS_Error:
+  case llvm37::DiagnosticSeverity::DS_Error:
     m_errorsFound = true;
     break;
-  case llvm::DiagnosticSeverity::DS_Warning:
+  case llvm37::DiagnosticSeverity::DS_Warning:
     m_warningsFound = true;
     break;
   default:
@@ -425,7 +425,7 @@ struct ValidationContext {
     for (Function &F : llvmModule.functions()) {
       if (DxilMod.HasDxilEntryProps(&F)) {
         DxilEntryProps &entryProps = DxilMod.GetDxilEntryProps(&F);
-        entryStatusMap[&F] = llvm::make_unique<EntryStatus>(entryProps);
+        entryStatusMap[&F] = llvm37::make_unique<EntryStatus>(entryProps);
       }
     }
 
@@ -706,8 +706,8 @@ struct ValidationContext {
     DXASSERT_NOMSG(I);
     if (pDebugModule) {
       // Look up the matching instruction in the debug module.
-      llvm::Function *Fn = I->getParent()->getParent();
-      llvm::Function *DbgFn = pDebugModule->getFunction(Fn->getName());
+      llvm37::Function *Fn = I->getParent()->getParent();
+      llvm37::Function *DbgFn = pDebugModule->getFunction(Fn->getName());
       if (DbgFn) {
         // Linear lookup, but then again, failing validation is rare.
         inst_iterator it = inst_begin(Fn);
@@ -2342,7 +2342,7 @@ static void ValidateDxilOperationCallInProfile(CallInst *CI,
                                                const ShaderModel *pSM,
                                                ValidationContext &ValCtx) {
   DXIL::ShaderKind shaderKind = pSM ? pSM->GetKind() : DXIL::ShaderKind::Invalid;
-  llvm::Function *F = CI->getParent()->getParent();
+  llvm37::Function *F = CI->getParent()->getParent();
   if (DXIL::ShaderKind::Library == shaderKind) {
     if (ValCtx.DxilMod.HasDxilFunctionProps(F))
       shaderKind = ValCtx.DxilMod.GetDxilFunctionProps(F).shaderKind;
@@ -2512,7 +2512,7 @@ static void ValidateDxilOperationCallInProfile(CallInst *CI,
   }
 }
 
-static bool IsDxilFunction(llvm::Function *F) {
+static bool IsDxilFunction(llvm37::Function *F) {
   unsigned argSize = F->arg_size();
   if (argSize < 1) {
     // Cannot be a DXIL operation.
@@ -2522,7 +2522,7 @@ static bool IsDxilFunction(llvm::Function *F) {
   return OP::IsDxilOpFunc(F);
 }
 
-static bool IsLifetimeIntrinsic(llvm::Function *F) {
+static bool IsLifetimeIntrinsic(llvm37::Function *F) {
   return (F->isIntrinsic() &&
           (F->getIntrinsicID() == Intrinsic::lifetime_start ||
            F->getIntrinsicID() == Intrinsic::lifetime_end));
@@ -2641,7 +2641,7 @@ static void ValidateExternalFunction(Function *F, ValidationContext &ValCtx) {
 
 ///////////////////////////////////////////////////////////////////////////////
 // Instruction validation functions.                                         //
-static bool IsLLVMInstructionAllowed(llvm::Instruction &I) {
+static bool IsLLVMInstructionAllowed(llvm37::Instruction &I) {
   unsigned op = I.getOpcode();
   /* <py::lines('OPCODE-ALLOWED')>hctdb_instrhelp.get_instrs_pred("op", lambda i: not i.is_dxil_op and i.is_allowed, "llvm_id")</py>*/
   // OPCODE-ALLOWED:BEGIN
@@ -2834,7 +2834,7 @@ static void ValidateMsIntrinsics(Function *F,
   for (auto b = F->begin(), bend = F->end(); b != bend; ++b) {
     bool foundSetMeshOutputCountsInCurrentBB = false;
     for (auto i = b->begin(), iend = b->end(); i != iend; ++i) {
-      llvm::Instruction &I = *i;
+      llvm37::Instruction &I = *i;
 
       // Calls to external functions.
       CallInst *CI = dyn_cast<CallInst>(&I);
@@ -3223,7 +3223,7 @@ static void ValidateFunctionBody(Function *F, ValidationContext &ValCtx) {
   CallInst *dispatchMesh = nullptr;
   for (auto b = F->begin(), bend = F->end(); b != bend; ++b) {
     for (auto i = b->begin(), iend = b->end(); i != iend; ++i) {
-      llvm::Instruction &I = *i;
+      llvm37::Instruction &I = *i;
 
       if (I.hasMetadata()) {
 
@@ -3864,7 +3864,7 @@ static void ValidateTypeAnnotation(ValidationContext &ValCtx) {
 static void ValidateBitcode(ValidationContext &ValCtx) {
   std::string diagStr;
   raw_string_ostream diagStream(diagStr);
-  if (llvm::verifyModule(ValCtx.M, &diagStream)) {
+  if (llvm37::verifyModule(ValCtx.M, &diagStream)) {
     ValCtx.EmitError(ValidationRule::BitcodeValid);
     dxilutil::EmitErrorOnContext(ValCtx.M.getContext(), diagStream.str());
   }
@@ -5640,8 +5640,8 @@ void GetValidationVersion(_Out_ unsigned *pMajor, _Out_ unsigned *pMinor) {
 }
 
 _Use_decl_annotations_ HRESULT ValidateDxilModule(
-    llvm::Module *pModule,
-    llvm::Module *pDebugModule) {
+    llvm37::Module *pModule,
+    llvm37::Module *pDebugModule) {
   DxilModule *pDxilModule = DxilModule::TryGetDxilModule(pModule);
   if (!pDxilModule) {
     return DXC_E_IR_VERIFICATION_FAILED;
@@ -5752,7 +5752,7 @@ static void VerifySignatureMatches(_In_ ValidationContext &ValCtx,
 }
 
 _Use_decl_annotations_
-bool VerifySignatureMatches(llvm::Module *pModule,
+bool VerifySignatureMatches(llvm37::Module *pModule,
                             DXIL::SignatureKind SigKind,
                             const void *pSigData,
                             uint32_t SigSize) {
@@ -5776,7 +5776,7 @@ static void VerifyPSVMatches(_In_ ValidationContext &ValCtx,
 }
 
 _Use_decl_annotations_
-bool VerifyPSVMatches(llvm::Module *pModule,
+bool VerifyPSVMatches(llvm37::Module *pModule,
                       const void *pPSVData,
                       uint32_t PSVSize) {
   ValidationContext ValCtx(*pModule, nullptr, pModule->GetOrCreateDxilModule());
@@ -5823,7 +5823,7 @@ static void VerifyRDATMatches(_In_ ValidationContext &ValCtx,
 }
 
 _Use_decl_annotations_
-bool VerifyRDATMatches(llvm::Module *pModule,
+bool VerifyRDATMatches(llvm37::Module *pModule,
                        const void *pRDATData,
                        uint32_t RDATSize) {
   ValidationContext ValCtx(*pModule, nullptr, pModule->GetOrCreateDxilModule());
@@ -5832,7 +5832,7 @@ bool VerifyRDATMatches(llvm::Module *pModule,
 }
 
 _Use_decl_annotations_
-bool VerifyFeatureInfoMatches(llvm::Module *pModule,
+bool VerifyFeatureInfoMatches(llvm37::Module *pModule,
                               const void *pFeatureInfoData,
                               uint32_t FeatureInfoSize) {
   ValidationContext ValCtx(*pModule, nullptr, pModule->GetOrCreateDxilModule());
@@ -5841,8 +5841,8 @@ bool VerifyFeatureInfoMatches(llvm::Module *pModule,
 }
 
 _Use_decl_annotations_
-HRESULT ValidateDxilContainerParts(llvm::Module *pModule,
-                                   llvm::Module *pDebugModule,
+HRESULT ValidateDxilContainerParts(llvm37::Module *pModule,
+                                   llvm37::Module *pDebugModule,
                                    const DxilContainerHeader *pContainer,
                                    uint32_t ContainerSize) {
 
@@ -6041,23 +6041,23 @@ static HRESULT FindDxilPart(_In_reads_bytes_(ContainerSize) const void *pContain
 _Use_decl_annotations_
 HRESULT ValidateLoadModule(const char *pIL,
                            uint32_t ILLength,
-                           unique_ptr<llvm::Module> &pModule,
+                           unique_ptr<llvm37::Module> &pModule,
                            LLVMContext &Ctx,
-                           llvm::raw_ostream &DiagStream,
+                           llvm37::raw_ostream &DiagStream,
                            unsigned bLazyLoad) {
 
-  llvm::DiagnosticPrinterRawOStream DiagPrinter(DiagStream);
+  llvm37::DiagnosticPrinterRawOStream DiagPrinter(DiagStream);
   PrintDiagnosticContext DiagContext(DiagPrinter);
   DiagRestore DR(Ctx, &DiagContext);
 
-  std::unique_ptr<llvm::MemoryBuffer> pBitcodeBuf;
-  pBitcodeBuf.reset(llvm::MemoryBuffer::getMemBuffer(
-      llvm::StringRef(pIL, ILLength), "", false).release());
+  std::unique_ptr<llvm37::MemoryBuffer> pBitcodeBuf;
+  pBitcodeBuf.reset(llvm37::MemoryBuffer::getMemBuffer(
+      llvm37::StringRef(pIL, ILLength), "", false).release());
 
   ErrorOr<std::unique_ptr<Module>> loadedModuleResult =
       bLazyLoad == 0?
-      llvm::parseBitcodeFile(pBitcodeBuf->getMemBufferRef(), Ctx, nullptr, true /*Track Bitstream*/) :
-      llvm::getLazyBitcodeModule(std::move(pBitcodeBuf), Ctx, nullptr, false, true /*Track Bitstream*/);
+      llvm37::parseBitcodeFile(pBitcodeBuf->getMemBufferRef(), Ctx, nullptr, true /*Track Bitstream*/) :
+      llvm37::getLazyBitcodeModule(std::move(pBitcodeBuf), Ctx, nullptr, false, true /*Track Bitstream*/);
 
   // DXIL disallows some LLVM bitcode constructs, like unaccounted-for sub-blocks.
   // These appear as warnings, which the validator should reject.
@@ -6071,12 +6071,12 @@ HRESULT ValidateLoadModule(const char *pIL,
 HRESULT ValidateDxilBitcode(
   _In_reads_bytes_(ILLength) const char *pIL,
   _In_ uint32_t ILLength,
-  _In_ llvm::raw_ostream &DiagStream) {
+  _In_ llvm37::raw_ostream &DiagStream) {
 
   LLVMContext Ctx;
-  std::unique_ptr<llvm::Module> pModule;
+  std::unique_ptr<llvm37::Module> pModule;
 
-  llvm::DiagnosticPrinterRawOStream DiagPrinter(DiagStream);
+  llvm37::DiagnosticPrinterRawOStream DiagPrinter(DiagStream);
   PrintDiagnosticContext DiagContext(DiagPrinter);
   Ctx.setDiagnosticHandler(PrintDiagnosticContext::PrintDiagnosticHandler,
                            &DiagContext, true);
@@ -6122,11 +6122,11 @@ HRESULT ValidateDxilBitcode(
 
 static HRESULT ValidateLoadModuleFromContainer(
     _In_reads_bytes_(ILLength) const void *pContainer,
-    _In_ uint32_t ContainerSize, _In_ std::unique_ptr<llvm::Module> &pModule,
-    _In_ std::unique_ptr<llvm::Module> &pDebugModule,
-    _In_ llvm::LLVMContext &Ctx, LLVMContext &DbgCtx,
-    _In_ llvm::raw_ostream &DiagStream, _In_ unsigned bLazyLoad) {
-  llvm::DiagnosticPrinterRawOStream DiagPrinter(DiagStream);
+    _In_ uint32_t ContainerSize, _In_ std::unique_ptr<llvm37::Module> &pModule,
+    _In_ std::unique_ptr<llvm37::Module> &pDebugModule,
+    _In_ llvm37::LLVMContext &Ctx, LLVMContext &DbgCtx,
+    _In_ llvm37::raw_ostream &DiagStream, _In_ unsigned bLazyLoad) {
+  llvm37::DiagnosticPrinterRawOStream DiagPrinter(DiagStream);
   PrintDiagnosticContext DiagContext(DiagPrinter);
   DiagRestore DR(Ctx, &DiagContext);
   DiagRestore DR2(DbgCtx, &DiagContext);
@@ -6165,10 +6165,10 @@ static HRESULT ValidateLoadModuleFromContainer(
 
 _Use_decl_annotations_ HRESULT ValidateLoadModuleFromContainer(
     _In_reads_bytes_(ContainerSize) const void *pContainer,
-    _In_ uint32_t ContainerSize, _In_ std::unique_ptr<llvm::Module> &pModule,
-    _In_ std::unique_ptr<llvm::Module> &pDebugModule,
-    _In_ llvm::LLVMContext &Ctx, llvm::LLVMContext &DbgCtx,
-    _In_ llvm::raw_ostream &DiagStream) {
+    _In_ uint32_t ContainerSize, _In_ std::unique_ptr<llvm37::Module> &pModule,
+    _In_ std::unique_ptr<llvm37::Module> &pDebugModule,
+    _In_ llvm37::LLVMContext &Ctx, llvm37::LLVMContext &DbgCtx,
+    _In_ llvm37::raw_ostream &DiagStream) {
   return ValidateLoadModuleFromContainer(pContainer, ContainerSize, pModule,
                                          pDebugModule, Ctx, DbgCtx, DiagStream,
                                          /*bLazyLoad*/ false);
@@ -6176,10 +6176,10 @@ _Use_decl_annotations_ HRESULT ValidateLoadModuleFromContainer(
 // Lazy loads module from container, validating load, but not module.
 _Use_decl_annotations_ HRESULT ValidateLoadModuleFromContainerLazy(
     _In_reads_bytes_(ContainerSize) const void *pContainer,
-    _In_ uint32_t ContainerSize, _In_ std::unique_ptr<llvm::Module> &pModule,
-    _In_ std::unique_ptr<llvm::Module> &pDebugModule,
-    _In_ llvm::LLVMContext &Ctx, llvm::LLVMContext &DbgCtx,
-    _In_ llvm::raw_ostream &DiagStream) {
+    _In_ uint32_t ContainerSize, _In_ std::unique_ptr<llvm37::Module> &pModule,
+    _In_ std::unique_ptr<llvm37::Module> &pDebugModule,
+    _In_ llvm37::LLVMContext &Ctx, llvm37::LLVMContext &DbgCtx,
+    _In_ llvm37::raw_ostream &DiagStream) {
   return ValidateLoadModuleFromContainer(pContainer, ContainerSize, pModule,
                                          pDebugModule, Ctx, DbgCtx, DiagStream,
                                          /*bLazyLoad*/ true);
@@ -6188,11 +6188,11 @@ _Use_decl_annotations_ HRESULT ValidateLoadModuleFromContainerLazy(
 _Use_decl_annotations_
 HRESULT ValidateDxilContainer(const void *pContainer,
                               uint32_t ContainerSize,
-                              llvm::raw_ostream &DiagStream) {
+                              llvm37::raw_ostream &DiagStream) {
   LLVMContext Ctx, DbgCtx;
-  std::unique_ptr<llvm::Module> pModule, pDebugModule;
+  std::unique_ptr<llvm37::Module> pModule, pDebugModule;
 
-  llvm::DiagnosticPrinterRawOStream DiagPrinter(DiagStream);
+  llvm37::DiagnosticPrinterRawOStream DiagPrinter(DiagStream);
   PrintDiagnosticContext DiagContext(DiagPrinter);
   Ctx.setDiagnosticHandler(PrintDiagnosticContext::PrintDiagnosticHandler,
                            &DiagContext, true);

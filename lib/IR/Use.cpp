@@ -7,12 +7,12 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/IR/Use.h"
-#include "llvm/IR/User.h"
-#include "llvm/IR/Value.h"
+#include "llvm37/IR/Use.h"
+#include "llvm37/IR/User.h"
+#include "llvm37/IR/Value.h"
 #include <new>
 
-namespace llvm {
+namespace llvm37 {
 
 void Use::swap(Use &RHS) {
   if (Val == RHS.Val)

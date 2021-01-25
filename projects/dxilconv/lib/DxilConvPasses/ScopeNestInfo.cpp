@@ -13,9 +13,9 @@
 #include "DxilConvPasses/ScopeNestInfo.h"
 #include "DxilConvPasses/ScopeNestIterator.h"
 
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/Support/raw_ostream.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 
 //----------------------- Scope Nest Info Implementation ---------------------//
@@ -77,7 +77,7 @@ INITIALIZE_PASS_BEGIN(ScopeNestInfoWrapperPass, "scopenestinfo", "Scope nest inf
 INITIALIZE_PASS_END(ScopeNestInfoWrapperPass,   "scopenestinfo",   "Scope nest info pass", true, true)
 
 
-FunctionPass *llvm::createScopeNestInfoWrapperPass() {
+FunctionPass *llvm37::createScopeNestInfoWrapperPass() {
     return new ScopeNestInfoWrapperPass();
 }
 

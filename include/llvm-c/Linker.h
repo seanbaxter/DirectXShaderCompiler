@@ -11,8 +11,8 @@
 |*                                                                            *|
 \*===----------------------------------------------------------------------===*/
 
-#ifndef LLVM_C_LINKER_H
-#define LLVM_C_LINKER_H
+#ifndef LLVM37_C_LINKER_H
+#define LLVM37_C_LINKER_H
 
 #include "llvm-c/Core.h"
 

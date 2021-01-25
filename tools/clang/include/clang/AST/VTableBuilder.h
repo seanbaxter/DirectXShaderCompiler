@@ -11,16 +11,16 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_AST_VTABLEBUILDER_H
-#define LLVM_CLANG_AST_VTABLEBUILDER_H
+#ifndef LLVM37_CLANG_AST_VTABLEBUILDER_H
+#define LLVM37_CLANG_AST_VTABLEBUILDER_H
 
 #include "clang/AST/BaseSubobject.h"
 #include "clang/AST/CXXInheritance.h"
 #include "clang/AST/GlobalDecl.h"
 #include "clang/AST/RecordLayout.h"
 #include "clang/Basic/ABI.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/SetVector.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/SetVector.h"
 #include <memory>
 #include <utility>
 
@@ -206,7 +206,7 @@ public:
   typedef const VTableComponent *vtable_component_iterator;
   typedef const VTableThunkTy *vtable_thunk_iterator;
 
-  typedef llvm::DenseMap<BaseSubobject, uint64_t> AddressPointsMapTy;
+  typedef llvm37::DenseMap<BaseSubobject, uint64_t> AddressPointsMapTy;
 private:
   uint64_t NumVTableComponents;
   std::unique_ptr<VTableComponent[]> VTableComponents;
@@ -276,7 +276,7 @@ public:
   virtual ~VTableContextBase() {}
 
 protected:
-  typedef llvm::DenseMap<const CXXMethodDecl *, ThunkInfoVectorTy> ThunksMapTy;
+  typedef llvm37::DenseMap<const CXXMethodDecl *, ThunkInfoVectorTy> ThunksMapTy;
 
   /// \brief Contains all thunks that a given method decl will need.
   ThunksMapTy Thunks;
@@ -311,10 +311,10 @@ private:
 
   /// \brief Contains the index (relative to the vtable address point)
   /// where the function pointer for a virtual function is stored.
-  typedef llvm::DenseMap<GlobalDecl, int64_t> MethodVTableIndicesTy;
+  typedef llvm37::DenseMap<GlobalDecl, int64_t> MethodVTableIndicesTy;
   MethodVTableIndicesTy MethodVTableIndices;
 
-  typedef llvm::DenseMap<const CXXRecordDecl *, const VTableLayout *>
+  typedef llvm37::DenseMap<const CXXRecordDecl *, const VTableLayout *>
     VTableLayoutMapTy;
   VTableLayoutMapTy VTableLayouts;
 
@@ -325,7 +325,7 @@ private:
   ///
   /// Contains the vtable offset (relative to the address point) in chars
   /// where the offsets for virtual bases of a class are stored.
-  typedef llvm::DenseMap<ClassPairTy, CharUnits>
+  typedef llvm37::DenseMap<ClassPairTy, CharUnits>
     VirtualBaseClassOffsetOffsetsMapTy;
   VirtualBaseClassOffsetOffsetsMapTy VirtualBaseClassOffsetOffsets;
 
@@ -429,11 +429,11 @@ typedef SmallVector<VPtrInfo *, 2> VPtrInfoVector;
 /// information on all virtual base tables and the path components that are used
 /// to mangle them.
 struct VirtualBaseInfo {
-  ~VirtualBaseInfo() { llvm::DeleteContainerPointers(VBPtrPaths); }
+  ~VirtualBaseInfo() { llvm37::DeleteContainerPointers(VBPtrPaths); }
 
   /// A map from virtual base to vbtable index for doing a conversion from the
   /// the derived class to the a base.
-  llvm::DenseMap<const CXXRecordDecl *, unsigned> VBTableIndices;
+  llvm37::DenseMap<const CXXRecordDecl *, unsigned> VBTableIndices;
 
   /// Information on all virtual base tables used when this record is the most
   /// derived class.
@@ -479,19 +479,19 @@ public:
 private:
   ASTContext &Context;
 
-  typedef llvm::DenseMap<GlobalDecl, MethodVFTableLocation>
+  typedef llvm37::DenseMap<GlobalDecl, MethodVFTableLocation>
     MethodVFTableLocationsTy;
   MethodVFTableLocationsTy MethodVFTableLocations;
 
-  typedef llvm::DenseMap<const CXXRecordDecl *, VPtrInfoVector *>
+  typedef llvm37::DenseMap<const CXXRecordDecl *, VPtrInfoVector *>
     VFPtrLocationsMapTy;
   VFPtrLocationsMapTy VFPtrLocations;
 
   typedef std::pair<const CXXRecordDecl *, CharUnits> VFTableIdTy;
-  typedef llvm::DenseMap<VFTableIdTy, const VTableLayout *> VFTableLayoutMapTy;
+  typedef llvm37::DenseMap<VFTableIdTy, const VTableLayout *> VFTableLayoutMapTy;
   VFTableLayoutMapTy VFTableLayouts;
 
-  llvm::DenseMap<const CXXRecordDecl *, VirtualBaseInfo *> VBaseInfo;
+  llvm37::DenseMap<const CXXRecordDecl *, VirtualBaseInfo *> VBaseInfo;
 
   void enumerateVFPtrs(const CXXRecordDecl *ForClass, VPtrInfoVector &Result);
 

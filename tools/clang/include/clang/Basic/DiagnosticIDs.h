@@ -12,12 +12,12 @@
 ///
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_BASIC_DIAGNOSTICIDS_H
-#define LLVM_CLANG_BASIC_DIAGNOSTICIDS_H
+#ifndef LLVM37_CLANG_BASIC_DIAGNOSTICIDS_H
+#define LLVM37_CLANG_BASIC_DIAGNOSTICIDS_H
 
 #include "clang/Basic/LLVM.h"
-#include "llvm/ADT/IntrusiveRefCntPtr.h"
-#include "llvm/ADT/StringRef.h"
+#include "llvm37/ADT/IntrusiveRefCntPtr.h"
+#include "llvm37/ADT/StringRef.h"
 
 namespace clang {
   class DiagnosticsEngine;
@@ -259,11 +259,11 @@ private:
   /// the diagnostic state. Can be null in order to query the latest state.
   DiagnosticIDs::Level
   getDiagnosticLevel(unsigned DiagID, SourceLocation Loc,
-                     const DiagnosticsEngine &Diag) const LLVM_READONLY;
+                     const DiagnosticsEngine &Diag) const LLVM37_READONLY;
 
   diag::Severity
   getDiagnosticSeverity(unsigned DiagID, SourceLocation Loc,
-                        const DiagnosticsEngine &Diag) const LLVM_READONLY;
+                        const DiagnosticsEngine &Diag) const LLVM37_READONLY;
 
   /// \brief Used to report a diagnostic that is finally fully formed.
   ///

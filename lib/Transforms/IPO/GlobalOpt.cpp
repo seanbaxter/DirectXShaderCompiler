@@ -13,39 +13,39 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Transforms/IPO.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/SmallPtrSet.h"
-#include "llvm/ADT/SmallSet.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/Analysis/ConstantFolding.h"
-#include "llvm/Analysis/MemoryBuiltins.h"
-#include "llvm/Analysis/TargetLibraryInfo.h"
-#include "llvm/IR/CallSite.h"
-#include "llvm/IR/CallingConv.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/DerivedTypes.h"
-#include "llvm/IR/GetElementPtrTypeIterator.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/Operator.h"
-#include "llvm/IR/ValueHandle.h"
-#include "llvm/Pass.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/MathExtras.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Transforms/Utils/CtorUtils.h"
-#include "llvm/Transforms/Utils/GlobalStatus.h"
-#include "llvm/Transforms/Utils/ModuleUtils.h"
+#include "llvm37/Transforms/IPO.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/SmallPtrSet.h"
+#include "llvm37/ADT/SmallSet.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/Analysis/ConstantFolding.h"
+#include "llvm37/Analysis/MemoryBuiltins.h"
+#include "llvm37/Analysis/TargetLibraryInfo.h"
+#include "llvm37/IR/CallSite.h"
+#include "llvm37/IR/CallingConv.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/IR/DerivedTypes.h"
+#include "llvm37/IR/GetElementPtrTypeIterator.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/Operator.h"
+#include "llvm37/IR/ValueHandle.h"
+#include "llvm37/Pass.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/MathExtras.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Transforms/Utils/CtorUtils.h"
+#include "llvm37/Transforms/Utils/GlobalStatus.h"
+#include "llvm37/Transforms/Utils/ModuleUtils.h"
 #include "dxc/DXIL/DxilModule.h" // HLSL Change - Entrypoint testing
 #include <algorithm>
 #include <deque>
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "globalopt"
 
@@ -99,7 +99,7 @@ INITIALIZE_PASS_DEPENDENCY(TargetLibraryInfoWrapperPass)
 INITIALIZE_PASS_END(GlobalOpt, "globalopt",
                 "Global Variable Optimizer", false, false)
 
-ModulePass *llvm::createGlobalOptimizerPass() { return new GlobalOpt(); }
+ModulePass *llvm37::createGlobalOptimizerPass() { return new GlobalOpt(); }
 
 /// isLeakCheckerRoot - Is this global variable possibly used by a leak checker
 /// as a root?  If so, we might not really want to eliminate the stores to it.
@@ -1724,8 +1724,8 @@ bool GlobalOpt::ProcessGlobal(GlobalVariable *GV,
 }
 
 // HLSL Change Begin
-static bool isEntryPoint(const llvm::Function* Func) {
-  const llvm::Module* Mod = Func->getParent();
+static bool isEntryPoint(const llvm37::Function* Func) {
+  const llvm37::Module* Mod = Func->getParent();
   return Mod->HasDxilModule()
     ? Mod->GetDxilModule().IsEntryOrPatchConstantFunction(Func)
     : Func->getName() == "main"; // Original logic for non-HLSL
@@ -2734,7 +2734,7 @@ static void setUsedInitializer(GlobalVariable &V,
   // Type of pointer to the array of pointers.
   PointerType *Int8PtrTy = Type::getInt8PtrTy(V.getContext(), 0);
 
-  SmallVector<llvm::Constant *, 8> UsedArray;
+  SmallVector<llvm37::Constant *, 8> UsedArray;
   for (GlobalValue *GV : Init) {
     Constant *Cast
       = ConstantExpr::getPointerBitCastOrAddrSpaceCast(GV, Int8PtrTy);
@@ -2747,8 +2747,8 @@ static void setUsedInitializer(GlobalVariable &V,
   Module *M = V.getParent();
   V.removeFromParent();
   GlobalVariable *NV =
-      new GlobalVariable(*M, ATy, false, llvm::GlobalValue::AppendingLinkage,
-                         llvm::ConstantArray::get(ATy, UsedArray), "");
+      new GlobalVariable(*M, ATy, false, llvm37::GlobalValue::AppendingLinkage,
+                         llvm37::ConstantArray::get(ATy, UsedArray), "");
   NV->takeName(&V);
   NV->setSection("llvm.metadata");
   delete &V;

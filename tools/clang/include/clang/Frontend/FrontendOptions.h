@@ -7,16 +7,16 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_FRONTEND_FRONTENDOPTIONS_H
-#define LLVM_CLANG_FRONTEND_FRONTENDOPTIONS_H
+#ifndef LLVM37_CLANG_FRONTEND_FRONTENDOPTIONS_H
+#define LLVM37_CLANG_FRONTEND_FRONTENDOPTIONS_H
 
 #include "clang/Frontend/CommandLineSourceLoc.h"
 #include "clang/Sema/CodeCompleteOptions.h"
-#include "llvm/ADT/StringRef.h"
+#include "llvm37/ADT/StringRef.h"
 #include <string>
 #include <vector>
 
-namespace llvm {
+namespace llvm37 {
 class MemoryBuffer;
 }
 
@@ -74,7 +74,7 @@ enum InputKind {
   IK_CUDA,
   IK_PreprocessedCuda,
   IK_AST,
-  IK_LLVM_IR
+  IK_LLVM37_IR
 };
 
   
@@ -83,7 +83,7 @@ class FrontendInputFile {
   /// \brief The file name, or "-" to read from standard input.
   std::string File;
 
-  llvm::MemoryBuffer *Buffer;
+  llvm37::MemoryBuffer *Buffer;
 
   /// \brief The kind of input, e.g., C source, AST file, LLVM IR.
   InputKind Kind;
@@ -95,7 +95,7 @@ public:
   FrontendInputFile() : Buffer(nullptr), Kind(IK_None) { }
   FrontendInputFile(StringRef File, InputKind Kind, bool IsSystem = false)
     : File(File.str()), Buffer(nullptr), Kind(Kind), IsSystem(IsSystem) { }
-  FrontendInputFile(llvm::MemoryBuffer *buffer, InputKind Kind,
+  FrontendInputFile(llvm37::MemoryBuffer *buffer, InputKind Kind,
                     bool IsSystem = false)
     : Buffer(buffer), Kind(Kind), IsSystem(IsSystem) { }
 
@@ -110,7 +110,7 @@ public:
     assert(isFile());
     return File;
   }
-  llvm::MemoryBuffer *getBuffer() const {
+  llvm37::MemoryBuffer *getBuffer() const {
     assert(isBuffer());
     return Buffer;
   }

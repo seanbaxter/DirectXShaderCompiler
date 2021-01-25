@@ -6,7 +6,7 @@ add_llvm_library(LLVMBitReader
   BitstreamReader.cpp
 
   ADDITIONAL_HEADER_DIRS
-  ${LLVM_MAIN_INCLUDE_DIR}/llvm/Bitcode
+  ${LLVM37_MAIN_INCLUDE_DIR}/llvm/Bitcode
   )
 
 add_dependencies(LLVMBitReader intrinsics_gen)

@@ -13,33 +13,33 @@
 //===----------------------------------------------------------------------===//
 
 #include "Disassembler.h"
-#include "llvm/MC/MCAsmBackend.h"
-#include "llvm/MC/MCAsmInfo.h"
-#include "llvm/MC/MCContext.h"
-#include "llvm/MC/MCInstPrinter.h"
-#include "llvm/MC/MCInstrInfo.h"
-#include "llvm/MC/MCObjectFileInfo.h"
-#include "llvm/MC/MCParser/AsmLexer.h"
-#include "llvm/MC/MCRegisterInfo.h"
-#include "llvm/MC/MCSectionMachO.h"
-#include "llvm/MC/MCStreamer.h"
-#include "llvm/MC/MCSubtargetInfo.h"
-#include "llvm/MC/MCTargetAsmParser.h"
-#include "llvm/MC/MCTargetOptionsCommandFlags.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/Compression.h"
-#include "llvm/Support/FileUtilities.h"
-#include "llvm/Support/FormattedStream.h"
-#include "llvm/Support/Host.h"
-#include "llvm/Support/ManagedStatic.h"
-#include "llvm/Support/MemoryBuffer.h"
-#include "llvm/Support/PrettyStackTrace.h"
-#include "llvm/Support/Signals.h"
-#include "llvm/Support/SourceMgr.h"
-#include "llvm/Support/TargetRegistry.h"
-#include "llvm/Support/TargetSelect.h"
-#include "llvm/Support/ToolOutputFile.h"
-using namespace llvm;
+#include "llvm37/MC/MCAsmBackend.h"
+#include "llvm37/MC/MCAsmInfo.h"
+#include "llvm37/MC/MCContext.h"
+#include "llvm37/MC/MCInstPrinter.h"
+#include "llvm37/MC/MCInstrInfo.h"
+#include "llvm37/MC/MCObjectFileInfo.h"
+#include "llvm37/MC/MCParser/AsmLexer.h"
+#include "llvm37/MC/MCRegisterInfo.h"
+#include "llvm37/MC/MCSectionMachO.h"
+#include "llvm37/MC/MCStreamer.h"
+#include "llvm37/MC/MCSubtargetInfo.h"
+#include "llvm37/MC/MCTargetAsmParser.h"
+#include "llvm37/MC/MCTargetOptionsCommandFlags.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/Compression.h"
+#include "llvm37/Support/FileUtilities.h"
+#include "llvm37/Support/FormattedStream.h"
+#include "llvm37/Support/Host.h"
+#include "llvm37/Support/ManagedStatic.h"
+#include "llvm37/Support/MemoryBuffer.h"
+#include "llvm37/Support/PrettyStackTrace.h"
+#include "llvm37/Support/Signals.h"
+#include "llvm37/Support/SourceMgr.h"
+#include "llvm37/Support/TargetRegistry.h"
+#include "llvm37/Support/TargetSelect.h"
+#include "llvm37/Support/ToolOutputFile.h"
+using namespace llvm37;
 
 static cl::opt<std::string>
 InputFilename(cl::Positional, cl::desc("<input file>"), cl::init("-"));
@@ -129,7 +129,7 @@ RelocModel("relocation-model",
                        "Relocatable external references, non-relocatable code"),
             clEnumValEnd));
 
-static cl::opt<llvm::CodeModel::Model>
+static cl::opt<llvm37::CodeModel::Model>
 CMModel("code-model",
         cl::desc("Choose code model"),
         cl::init(CodeModel::Default),
@@ -212,7 +212,7 @@ static std::unique_ptr<tool_output_file> GetOutputStream() {
     OutputFilename = "-";
 
   std::error_code EC;
-  auto Out = llvm::make_unique<tool_output_file>(OutputFilename, EC,
+  auto Out = llvm37::make_unique<tool_output_file>(OutputFilename, EC,
                                                  sys::fs::F_None);
   if (EC) {
     errs() << EC.message() << '\n';
@@ -373,10 +373,10 @@ int __cdecl main(int argc, char **argv) {
   llvm_shutdown_obj Y;  // Call llvm_shutdown() on exit.
 
   // Initialize targets and assembly printers/parsers.
-  llvm::InitializeAllTargetInfos();
-  llvm::InitializeAllTargetMCs();
-  llvm::InitializeAllAsmParsers();
-  llvm::InitializeAllDisassemblers();
+  llvm37::InitializeAllTargetInfos();
+  llvm37::InitializeAllTargetMCs();
+  llvm37::InitializeAllAsmParsers();
+  llvm37::InitializeAllDisassemblers();
 
   // Register the target printer for --version.
   cl::AddExtraVersionPrinter(TargetRegistry::printRegisteredTargetsForVersion);
@@ -491,7 +491,7 @@ int __cdecl main(int argc, char **argv) {
       CE = TheTarget->createMCCodeEmitter(*MCII, *MRI, Ctx);
       MAB = TheTarget->createMCAsmBackend(*MRI, TripleName, MCPU);
     }
-    auto FOut = llvm::make_unique<formatted_raw_ostream>(*OS);
+    auto FOut = llvm37::make_unique<formatted_raw_ostream>(*OS);
     Str.reset(TheTarget->createAsmStreamer(
         Ctx, std::move(FOut), /*asmverbose*/ true,
         /*useDwarfDirectory*/ true, IP, CE, MAB, ShowInst));

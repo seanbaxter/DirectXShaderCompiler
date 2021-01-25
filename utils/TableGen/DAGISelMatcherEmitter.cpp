@@ -13,13 +13,13 @@
 
 #include "DAGISelMatcher.h"
 #include "CodeGenDAGPatterns.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/ADT/StringMap.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/FormattedStream.h"
-#include "llvm/TableGen/Record.h"
-using namespace llvm;
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/ADT/StringMap.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/FormattedStream.h"
+#include "llvm37/TableGen/Record.h"
+using namespace llvm37;
 
 enum {
   CommentIndent = 30
@@ -803,7 +803,7 @@ void MatcherTableEmitter::EmitHistogram(const Matcher *M,
 }
 
 
-void llvm::EmitMatcherTable(const Matcher *TheMatcher,
+void llvm37::EmitMatcherTable(const Matcher *TheMatcher,
                             const CodeGenDAGPatterns &CGP,
                             raw_ostream &O) {
   formatted_raw_ostream OS(O);

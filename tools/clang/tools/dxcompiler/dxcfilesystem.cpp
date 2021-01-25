@@ -14,7 +14,7 @@
 #include "dxc/Support/Global.h"
 #include "dxc/Support/FileIOHelper.h"
 #include "dxc/dxcapi.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/Support/raw_ostream.h"
 #include "dxcutil.h"
 
 #include "dxc/Support/dxcfilesystem.h"
@@ -26,7 +26,7 @@
 #include <unistd.h>
 #endif
 
-using namespace llvm;
+using namespace llvm37;
 using namespace hlsl;
 
 // DxcArgsFileSystem
@@ -202,7 +202,7 @@ namespace dxcutil {
 /// files through an IDxcIncludeHandler).
 ///
 /// stdin/stdout/stderr are registered especially (given that they have a
-/// special role in llvm::ins/outs/errs and are defaults to various operations,
+/// special role in llvm37::ins/outs/errs and are defaults to various operations,
 /// it's not unexpected). The direct user of DxcArgsFileSystem can also register
 /// streams to capture output for specific files.
 ///
@@ -239,7 +239,7 @@ private:
     IncludedFile(std::wstring &&name, IDxcBlobUtf8 *pBlob, IStream *pStream)
       : Blob(pBlob), BlobStream(pStream), Name(name) { }
   };
-  llvm::SmallVector<IncludedFile, 4> m_includedFiles;
+  llvm37::SmallVector<IncludedFile, 4> m_includedFiles;
 
   static bool IsDirOf(LPCWSTR lpDir, size_t dirLen, const std::wstring &fileName) {
     if (fileName.size() <= dirLen) return false;

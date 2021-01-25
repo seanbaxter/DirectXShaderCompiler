@@ -203,7 +203,7 @@ GenericTaintChecker::TaintPropagationRule::getTaintPropagationRule(
   // value as tainted even if it's just a pointer, pointing to tainted data.
 
   // Check for exact name match for functions without builtin substitutes.
-  TaintPropagationRule Rule = llvm::StringSwitch<TaintPropagationRule>(Name)
+  TaintPropagationRule Rule = llvm37::StringSwitch<TaintPropagationRule>(Name)
     .Case("atoi", TaintPropagationRule(0, ReturnValueIndex))
     .Case("atol", TaintPropagationRule(0, ReturnValueIndex))
     .Case("atoll", TaintPropagationRule(0, ReturnValueIndex))
@@ -312,7 +312,7 @@ void GenericTaintChecker::addSourcesPre(const CallExpr *CE,
   }
 
   // Otherwise, check if we have custom pre-processing implemented.
-  FnCheck evalFunction = llvm::StringSwitch<FnCheck>(Name)
+  FnCheck evalFunction = llvm37::StringSwitch<FnCheck>(Name)
     .Case("fscanf", &GenericTaintChecker::preFscanf)
     .Default(nullptr);
   // Check and evaluate the call.
@@ -335,7 +335,7 @@ bool GenericTaintChecker::propagateFromPre(const CallExpr *CE,
   if (TaintArgs.isEmpty())
     return false;
 
-  for (llvm::ImmutableSet<unsigned>::iterator
+  for (llvm37::ImmutableSet<unsigned>::iterator
          I = TaintArgs.begin(), E = TaintArgs.end(); I != E; ++I) {
     unsigned ArgNum  = *I;
 
@@ -376,7 +376,7 @@ void GenericTaintChecker::addSourcesPost(const CallExpr *CE,
   StringRef Name = C.getCalleeName(FDecl);
   if (Name.empty())
     return;
-  FnCheck evalFunction = llvm::StringSwitch<FnCheck>(Name)
+  FnCheck evalFunction = llvm37::StringSwitch<FnCheck>(Name)
     .Case("scanf", &GenericTaintChecker::postScanf)
     // TODO: Add support for vfscanf & family.
     .Case("getchar", &GenericTaintChecker::postRetTaint)
@@ -642,7 +642,7 @@ bool GenericTaintChecker::generateReportIfTainted(const Expr *E,
   // Generate diagnostic.
   if (ExplodedNode *N = C.addTransition()) {
     initBugType();
-    auto report = llvm::make_unique<BugReport>(*BT, Msg, N);
+    auto report = llvm37::make_unique<BugReport>(*BT, Msg, N);
     report->addRange(E->getSourceRange());
     C.emitReport(std::move(report));
     return true;
@@ -670,7 +670,7 @@ bool GenericTaintChecker::checkSystemCall(const CallExpr *CE,
   // TODO: It might make sense to run this check on demand. In some cases, 
   // we should check if the environment has been cleansed here. We also might 
   // need to know if the user was reset before these calls(seteuid).
-  unsigned ArgNum = llvm::StringSwitch<unsigned>(Name)
+  unsigned ArgNum = llvm37::StringSwitch<unsigned>(Name)
     .Case("system", 0)
     .Case("popen", 0)
     .Case("execl", 0)

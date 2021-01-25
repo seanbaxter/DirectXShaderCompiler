@@ -15,28 +15,28 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Transforms/Scalar.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/SetVector.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/Analysis/AliasAnalysis.h"
-#include "llvm/Analysis/CaptureTracking.h"
-#include "llvm/Analysis/MemoryBuiltins.h"
-#include "llvm/Analysis/MemoryDependenceAnalysis.h"
-#include "llvm/Analysis/TargetLibraryInfo.h"
-#include "llvm/Analysis/ValueTracking.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/Dominators.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/GlobalVariable.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/Pass.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Transforms/Utils/Local.h"
-using namespace llvm;
+#include "llvm37/Transforms/Scalar.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/SetVector.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/Analysis/AliasAnalysis.h"
+#include "llvm37/Analysis/CaptureTracking.h"
+#include "llvm37/Analysis/MemoryBuiltins.h"
+#include "llvm37/Analysis/MemoryDependenceAnalysis.h"
+#include "llvm37/Analysis/TargetLibraryInfo.h"
+#include "llvm37/Analysis/ValueTracking.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/IR/Dominators.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/GlobalVariable.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/Pass.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Transforms/Utils/Local.h"
+using namespace llvm37;
 
 #define DEBUG_TYPE "dse"
 
@@ -103,7 +103,7 @@ INITIALIZE_PASS_DEPENDENCY(MemoryDependenceAnalysis)
 INITIALIZE_AG_DEPENDENCY(AliasAnalysis)
 INITIALIZE_PASS_END(DSE, "dse", "Dead Store Elimination", false, false)
 
-FunctionPass *llvm::createDeadStoreEliminationPass(unsigned ScanLimit) { return new DSE(ScanLimit); } // HLSL Change - add ScanLimit
+FunctionPass *llvm37::createDeadStoreEliminationPass(unsigned ScanLimit) { return new DSE(ScanLimit); } // HLSL Change - add ScanLimit
 
 //===----------------------------------------------------------------------===//
 // Helper functions
@@ -581,7 +581,7 @@ bool DSE::runOnBasicBlock(BasicBlock &BB) {
           // shortening it to not vector size is likely to be slower
           MemIntrinsic* DepIntrinsic = cast<MemIntrinsic>(DepWrite);
           unsigned DepWriteAlign = DepIntrinsic->getAlignment();
-          if (llvm::isPowerOf2_64(InstWriteOffset) ||
+          if (llvm37::isPowerOf2_64(InstWriteOffset) ||
               ((DepWriteAlign != 0) && InstWriteOffset % DepWriteAlign == 0)) {
 
             DEBUG(dbgs() << "DSE: Remove Dead Store:\n  OW END: "

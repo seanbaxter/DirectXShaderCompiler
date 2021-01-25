@@ -7,19 +7,19 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_TOOLS_LIBCLANG_CLOG_H
-#define LLVM_CLANG_TOOLS_LIBCLANG_CLOG_H
+#ifndef LLVM37_CLANG_TOOLS_LIBCLANG_CLOG_H
+#define LLVM37_CLANG_TOOLS_LIBCLANG_CLOG_H
 
 #include "clang-c/Index.h"
 #include "clang/Basic/LLVM.h"
-#include "llvm/ADT/IntrusiveRefCntPtr.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/ADT/StringRef.h"
-#include "llvm/Support/Compiler.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/IntrusiveRefCntPtr.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/ADT/StringRef.h"
+#include "llvm37/Support/Compiler.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <string>
 
-namespace llvm {
+namespace llvm37 {
 class format_object_base;
 }
 
@@ -42,7 +42,7 @@ class Logger : public RefCountedBase<Logger> {
   std::string Name;
   bool Trace;
   SmallString<64> Msg;
-  llvm::raw_svector_ostream LogOS;
+  llvm37::raw_svector_ostream LogOS;
 public:
   static const char *getEnvVar() {
     static const char *sCachedVar = ::getenv("LIBCLANG_LOGGING");
@@ -51,17 +51,17 @@ public:
   static bool isLoggingEnabled() { return getEnvVar() != nullptr; }
   static bool isStackTracingEnabled() {
     if (const char *EnvOpt = Logger::getEnvVar())
-      return llvm::StringRef(EnvOpt) == "2";
+      return llvm37::StringRef(EnvOpt) == "2";
     return false;
   }
-  static LogRef make(llvm::StringRef name,
+  static LogRef make(llvm37::StringRef name,
                      bool trace = isStackTracingEnabled()) {
     if (isLoggingEnabled())
       return new Logger(name, trace);
     return nullptr;
   }
 
-  explicit Logger(llvm::StringRef name, bool trace)
+  explicit Logger(llvm37::StringRef name, bool trace)
     : Name(name), Trace(trace), LogOS(Msg) { }
   ~Logger();
 
@@ -71,7 +71,7 @@ public:
   Logger &operator<<(CXSourceLocation);
   Logger &operator<<(CXSourceRange);
   Logger &operator<<(CXString);
-  Logger &operator<<(llvm::StringRef Str) { LogOS << Str; return *this; }
+  Logger &operator<<(llvm37::StringRef Str) { LogOS << Str; return *this; }
   Logger &operator<<(const char *Str) {
     if (Str)
       LogOS << Str;
@@ -84,7 +84,7 @@ public:
   Logger &operator<<(char C) { LogOS << C; return *this; }
   Logger &operator<<(unsigned char C) { LogOS << C; return *this; }
   Logger &operator<<(signed char C) { LogOS << C; return *this; }
-  Logger &operator<<(const llvm::format_object_base &Fmt);
+  Logger &operator<<(const llvm37::format_object_base &Fmt);
 };
 
 }
@@ -98,6 +98,6 @@ public:
 /// \endcode
 #define LOG_SECTION(NAME) \
     if (clang::cxindex::LogRef Log = clang::cxindex::Logger::make(NAME))
-#define LOG_FUNC_SECTION LOG_SECTION(LLVM_FUNCTION_NAME)
+#define LOG_FUNC_SECTION LOG_SECTION(LLVM37_FUNCTION_NAME)
 
 #endif

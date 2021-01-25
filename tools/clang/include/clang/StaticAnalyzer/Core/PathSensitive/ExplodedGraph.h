@@ -16,21 +16,21 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_STATICANALYZER_CORE_PATHSENSITIVE_EXPLODEDGRAPH_H
-#define LLVM_CLANG_STATICANALYZER_CORE_PATHSENSITIVE_EXPLODEDGRAPH_H
+#ifndef LLVM37_CLANG_STATICANALYZER_CORE_PATHSENSITIVE_EXPLODEDGRAPH_H
+#define LLVM37_CLANG_STATICANALYZER_CORE_PATHSENSITIVE_EXPLODEDGRAPH_H
 
 #include "clang/AST/Decl.h"
 #include "clang/Analysis/AnalysisContext.h"
 #include "clang/Analysis/ProgramPoint.h"
 #include "clang/Analysis/Support/BumpVector.h"
 #include "clang/StaticAnalyzer/Core/PathSensitive/ProgramState.h"
-#include "llvm/ADT/DepthFirstIterator.h"
-#include "llvm/ADT/FoldingSet.h"
-#include "llvm/ADT/GraphTraits.h"
-#include "llvm/ADT/SmallPtrSet.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/Support/Allocator.h"
-#include "llvm/Support/Casting.h"
+#include "llvm37/ADT/DepthFirstIterator.h"
+#include "llvm37/ADT/FoldingSet.h"
+#include "llvm37/ADT/GraphTraits.h"
+#include "llvm37/ADT/SmallPtrSet.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/Support/Allocator.h"
+#include "llvm37/Support/Casting.h"
 #include <memory>
 #include <vector>
 
@@ -52,7 +52,7 @@ class ExplodedGraph;
 // ExplodedNode is not constified all over the engine because we need to add
 // successors to it at any time after creating it.
 
-class ExplodedNode : public llvm::FoldingSetNode {
+class ExplodedNode : public llvm37::FoldingSetNode {
   friend class ExplodedGraph;
   friend class CoreEngine;
   friend class NodeBuilder;
@@ -154,11 +154,11 @@ public:
   const ProgramStateRef &getState() const { return State; }
 
   template <typename T>
-  Optional<T> getLocationAs() const LLVM_LVALUE_FUNCTION {
+  Optional<T> getLocationAs() const LLVM37_LVALUE_FUNCTION {
     return Location.getAs<T>();
   }
 
-  static void Profile(llvm::FoldingSetNodeID &ID,
+  static void Profile(llvm37::FoldingSetNodeID &ID,
                       const ProgramPoint &Loc,
                       const ProgramStateRef &state,
                       bool IsSink) {
@@ -167,7 +167,7 @@ public:
     ID.AddBoolean(IsSink);
   }
 
-  void Profile(llvm::FoldingSetNodeID& ID) const {
+  void Profile(llvm37::FoldingSetNodeID& ID) const {
     // We avoid copy constructors by not using accessors.
     Profile(ID, Location, State, isSink());
   }
@@ -242,7 +242,7 @@ private:
   void replacePredecessor(ExplodedNode *node) { Preds.replaceNode(node); }
 };
 
-typedef llvm::DenseMap<const ExplodedNode *, const ExplodedNode *>
+typedef llvm37::DenseMap<const ExplodedNode *, const ExplodedNode *>
         InterExplodedGraphMap;
 
 class ExplodedGraph {
@@ -263,7 +263,7 @@ protected:
   NodeVector EndNodes;
 
   /// Nodes - The nodes in the graph.
-  llvm::FoldingSet<ExplodedNode> Nodes;
+  llvm37::FoldingSet<ExplodedNode> Nodes;
 
   /// BVC - Allocator and context for allocating nodes and their predecessor
   /// and successor groups.
@@ -297,7 +297,7 @@ public:
                         bool* IsNew = nullptr);
 
   std::unique_ptr<ExplodedGraph> MakeEmptyGraph() const {
-    return llvm::make_unique<ExplodedGraph>();
+    return llvm37::make_unique<ExplodedGraph>();
   }
 
   /// addRoot - Add an untyped node to the set of roots.
@@ -324,7 +324,7 @@ public:
 
   // Iterators.
   typedef ExplodedNode                        NodeTy;
-  typedef llvm::FoldingSet<ExplodedNode>      AllNodesTy;
+  typedef llvm37::FoldingSet<ExplodedNode>      AllNodesTy;
   typedef NodeVector::iterator                roots_iterator;
   typedef NodeVector::const_iterator          const_roots_iterator;
   typedef NodeVector::iterator                eop_iterator;
@@ -356,10 +356,10 @@ public:
 
   const_eop_iterator eop_end() const { return EndNodes.end(); }
 
-  llvm::BumpPtrAllocator & getAllocator() { return BVC.getAllocator(); }
+  llvm37::BumpPtrAllocator & getAllocator() { return BVC.getAllocator(); }
   BumpVectorContext &getNodeAllocator() { return BVC; }
 
-  typedef llvm::DenseMap<const ExplodedNode*, ExplodedNode*> NodeMap;
+  typedef llvm37::DenseMap<const ExplodedNode*, ExplodedNode*> NodeMap;
 
   /// Creates a trimmed version of the graph that only contains paths leading
   /// to the given nodes.
@@ -396,7 +396,7 @@ private:
 };
 
 class ExplodedNodeSet {
-  typedef llvm::SmallPtrSet<ExplodedNode*,5> ImplTy;
+  typedef llvm37::SmallPtrSet<ExplodedNode*,5> ImplTy;
   ImplTy Impl;
 
 public:
@@ -440,11 +440,11 @@ public:
 
 // GraphTraits
 
-namespace llvm {
+namespace llvm37 {
   template<> struct GraphTraits<clang::ento::ExplodedNode*> {
     typedef clang::ento::ExplodedNode NodeType;
     typedef NodeType::succ_iterator  ChildIteratorType;
-    typedef llvm::df_iterator<NodeType*>      nodes_iterator;
+    typedef llvm37::df_iterator<NodeType*>      nodes_iterator;
 
     static inline NodeType* getEntryNode(NodeType* N) {
       return N;
@@ -470,7 +470,7 @@ namespace llvm {
   template<> struct GraphTraits<const clang::ento::ExplodedNode*> {
     typedef const clang::ento::ExplodedNode NodeType;
     typedef NodeType::const_succ_iterator   ChildIteratorType;
-    typedef llvm::df_iterator<NodeType*>       nodes_iterator;
+    typedef llvm37::df_iterator<NodeType*>       nodes_iterator;
 
     static inline NodeType* getEntryNode(NodeType* N) {
       return N;

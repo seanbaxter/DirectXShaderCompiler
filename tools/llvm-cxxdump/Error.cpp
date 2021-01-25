@@ -12,14 +12,14 @@
 //===----------------------------------------------------------------------===//
 
 #include "Error.h"
-#include "llvm/Support/ErrorHandling.h"
+#include "llvm37/Support/ErrorHandling.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 namespace {
 class cxxdump_error_category : public std::error_category {
 public:
-  const char *name() const LLVM_NOEXCEPT override { return "llvm.cxxdump"; }
+  const char *name() const LLVM37_NOEXCEPT override { return "llvm.cxxdump"; }
   std::string message(int ev) const override {
     switch (static_cast<cxxdump_error>(ev)) {
     case cxxdump_error::success:
@@ -35,9 +35,9 @@ public:
 };
 } // namespace
 
-namespace llvm {
+namespace llvm37 {
 const std::error_category &cxxdump_category() {
   static cxxdump_error_category o;
   return o;
 }
-} // namespace llvm
+} // namespace llvm37

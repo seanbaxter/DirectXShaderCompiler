@@ -21,11 +21,11 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/IR/InstrTypes.h"
-#include "llvm/IR/ConstantRange.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/raw_ostream.h"
-using namespace llvm;
+#include "llvm37/IR/InstrTypes.h"
+#include "llvm37/IR/ConstantRange.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/raw_ostream.h"
+using namespace llvm37;
 
 /// Initialize a full (the default) or empty set for the specified type.
 ///

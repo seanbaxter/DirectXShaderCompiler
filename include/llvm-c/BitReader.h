@@ -16,8 +16,8 @@
 |*                                                                            *|
 \*===----------------------------------------------------------------------===*/
 
-#ifndef LLVM_C_BITREADER_H
-#define LLVM_C_BITREADER_H
+#ifndef LLVM37_C_BITREADER_H
+#define LLVM37_C_BITREADER_H
 
 #include "llvm-c/Core.h"
 

@@ -1,6 +1,6 @@
 add_subdirectory(Rewrite)
 
-set(LLVM_LINK_COMPONENTS
+set(LLVM37_LINK_COMPONENTS
   BitReader
   Option
   Support

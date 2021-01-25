@@ -11,10 +11,10 @@
 |*                                                                            *|
 \*===----------------------------------------------------------------------===*/
 
-#ifndef LLVM_C_SUPPORT_H
-#define LLVM_C_SUPPORT_H
+#ifndef LLVM37_C_SUPPORT_H
+#define LLVM37_C_SUPPORT_H
 
-#include "llvm/Support/DataTypes.h"
+#include "llvm37/Support/DataTypes.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -31,7 +31,7 @@ typedef int LLVMBool;
 /**
  * Used to pass regions of memory through LLVM interfaces.
  *
- * @see llvm::MemoryBuffer
+ * @see llvm37::MemoryBuffer
  */
 typedef struct LLVMOpaqueMemoryBuffer *LLVMMemoryBufferRef;
 
@@ -53,7 +53,7 @@ LLVMBool LLVMLoadLibraryPermanently(const char* Filename);
  * cannot rely on any particular set of command line arguments being interpreted
  * the same way across LLVM versions.
  *
- * @see llvm::cl::ParseCommandLineOptions()
+ * @see llvm37::cl::ParseCommandLineOptions()
  */
 void LLVMParseCommandLineOptions(int argc, const char *const *argv,
                                  const char *Overview);

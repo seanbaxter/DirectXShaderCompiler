@@ -20,8 +20,8 @@
 #include "clang/StaticAnalyzer/Core/CheckerManager.h"
 #include "clang/StaticAnalyzer/Core/PathSensitive/CallEvent.h"
 #include "clang/StaticAnalyzer/Core/PathSensitive/CheckerContext.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/Support/raw_ostream.h"
 
 using namespace clang;
 using namespace ento;
@@ -94,7 +94,7 @@ void CallAndMessageChecker::emitBadCall(BugType *BT, CheckerContext &C,
   if (!N)
     return;
 
-  auto R = llvm::make_unique<BugReport>(*BT, BT->getName(), N);
+  auto R = llvm37::make_unique<BugReport>(*BT, BT->getName(), N);
   if (BadE) {
     R->addRange(BadE->getSourceRange());
     if (BadE->isGLValue())
@@ -164,7 +164,7 @@ bool CallAndMessageChecker::uninitRefOrPointer(CheckerContext &C,
     if (PSV.isUndef()) {
       if (ExplodedNode *N = C.generateSink()) {
         LazyInit_BT(BD, BT);
-        auto R = llvm::make_unique<BugReport>(*BT, Message, N);
+        auto R = llvm37::make_unique<BugReport>(*BT, Message, N);
         R->addRange(ArgRange);
         if (ArgEx) {
           bugreporter::trackNullOrUndefValue(N, ArgEx, *R);
@@ -199,7 +199,7 @@ bool CallAndMessageChecker::PreVisitProcessArg(CheckerContext &C,
       // Generate a report for this bug.
       StringRef Desc =
           describeUninitializedArgumentInCall(Call, IsFirstArgument);
-      auto R = llvm::make_unique<BugReport>(*BT, Desc, N);
+      auto R = llvm37::make_unique<BugReport>(*BT, Desc, N);
       R->addRange(ArgRange);
       if (ArgEx)
         bugreporter::trackNullOrUndefValue(N, ArgEx, *R);
@@ -261,7 +261,7 @@ bool CallAndMessageChecker::PreVisitProcessArg(CheckerContext &C,
       if (ExplodedNode *N = C.generateSink()) {
         LazyInit_BT(BD, BT);
         SmallString<512> Str;
-        llvm::raw_svector_ostream os(Str);
+        llvm37::raw_svector_ostream os(Str);
         os << "Passed-by-value struct argument contains uninitialized data";
 
         if (F.FieldChain.size() == 1)
@@ -281,7 +281,7 @@ bool CallAndMessageChecker::PreVisitProcessArg(CheckerContext &C,
         }
 
         // Generate a report for this bug.
-        auto R = llvm::make_unique<BugReport>(*BT, os.str(), N);
+        auto R = llvm37::make_unique<BugReport>(*BT, os.str(), N);
         R->addRange(ArgRange);
 
         // FIXME: enhance track back for uninitialized value for arbitrary
@@ -342,7 +342,7 @@ void CallAndMessageChecker::checkPreStmt(const CXXDeleteExpr *DE,
     else
       Desc = "Argument to 'delete' is uninitialized";
     BugType *BT = BT_cxx_delete_undef.get();
-    auto R = llvm::make_unique<BugReport>(*BT, Desc, N);
+    auto R = llvm37::make_unique<BugReport>(*BT, Desc, N);
     bugreporter::trackNullOrUndefValue(N, DE, *R);
     C.emitReport(std::move(R));
     return;
@@ -395,13 +395,13 @@ void CallAndMessageChecker::checkPreCall(const CallEvent &Call,
       LazyInit_BT("Function call with too few arguments", BT_call_few_args);
 
       SmallString<512> Str;
-      llvm::raw_svector_ostream os(Str);
+      llvm37::raw_svector_ostream os(Str);
       os << "Function taking " << Params << " argument"
          << (Params == 1 ? "" : "s") << " is called with less ("
          << Call.getNumArgs() << ")";
 
       C.emitReport(
-          llvm::make_unique<BugReport>(*BT_call_few_args, os.str(), N));
+          llvm37::make_unique<BugReport>(*BT_call_few_args, os.str(), N));
     }
   }
 
@@ -461,7 +461,7 @@ void CallAndMessageChecker::checkPreObjCMessage(const ObjCMethodCall &msg,
       }
       assert(BT && "Unknown message kind.");
 
-      auto R = llvm::make_unique<BugReport>(*BT, BT->getName(), N);
+      auto R = llvm37::make_unique<BugReport>(*BT, BT->getName(), N);
       const ObjCMessageExpr *ME = msg.getOriginExpr();
       R->addRange(ME->getReceiverRange());
 
@@ -500,7 +500,7 @@ void CallAndMessageChecker::emitNilReceiverBug(CheckerContext &C,
   QualType ResTy = msg.getResultType();
 
   SmallString<200> buf;
-  llvm::raw_svector_ostream os(buf);
+  llvm37::raw_svector_ostream os(buf);
   os << "The receiver of message '";
   ME->getSelector().print(os);
   os << "' is nil";
@@ -512,7 +512,7 @@ void CallAndMessageChecker::emitNilReceiverBug(CheckerContext &C,
     os << "' that will be garbage";
   }
 
-  auto report = llvm::make_unique<BugReport>(*BT_msg_ret, os.str(), N);
+  auto report = llvm37::make_unique<BugReport>(*BT_msg_ret, os.str(), N);
   report->addRange(ME->getReceiverRange());
   // FIXME: This won't track "self" in messages to super.
   if (const Expr *receiver = ME->getInstanceReceiver()) {
@@ -521,8 +521,8 @@ void CallAndMessageChecker::emitNilReceiverBug(CheckerContext &C,
   C.emitReport(std::move(report));
 }
 
-static bool supportsNilWithFloatRet(const llvm::Triple &triple) {
-  return (triple.getVendor() == llvm::Triple::Apple &&
+static bool supportsNilWithFloatRet(const llvm37::Triple &triple) {
+  return (triple.getVendor() == llvm37::Triple::Apple &&
           (triple.isiOS() || !triple.isMacOSXVersionLT(10,5)));
 }
 

@@ -7,11 +7,11 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Support/TargetRegistry.h"
-#include "llvm/Support/TargetSelect.h"
+#include "llvm37/Support/TargetRegistry.h"
+#include "llvm37/Support/TargetSelect.h"
 #include "gtest/gtest.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 namespace {
 
@@ -20,7 +20,7 @@ TEST(TargetRegistry, TargetHasArchType) {
   // else this would pass by accident if InitializeAllTargetInfos were omitted.
   int Count = 0;
 
-  llvm::InitializeAllTargetInfos();
+  llvm37::InitializeAllTargetInfos();
 
   for (const Target &T : TargetRegistry::targets()) {
     StringRef Name = T.getName();

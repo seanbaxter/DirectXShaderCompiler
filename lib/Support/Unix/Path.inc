@@ -60,11 +60,11 @@
 # define PATH_MAX 4096
 #endif
 
-#include "llvm/Support/MSFileSystem.h" // HLSL change
+#include "llvm37/Support/MSFileSystem.h" // HLSL change
 
-using namespace llvm;
+using namespace llvm37;
 
-namespace llvm {
+namespace llvm37 {
 namespace sys  {
 namespace fs {
 #if defined(__FreeBSD__) || defined (__NetBSD__) || defined(__Bitrig__) || \
@@ -190,10 +190,10 @@ std::error_code current_path(SmallVectorImpl<char> &result) {
   result.clear();
 
   const char *pwd = ::getenv("PWD");
-  llvm::sys::fs::file_status PWDStatus, DotStatus;
-  if (pwd && llvm::sys::path::is_absolute(pwd) &&
-      !llvm::sys::fs::status(pwd, PWDStatus) &&
-      !llvm::sys::fs::status(".", DotStatus) &&
+  llvm37::sys::fs::file_status PWDStatus, DotStatus;
+  if (pwd && llvm37::sys::path::is_absolute(pwd) &&
+      !llvm37::sys::fs::status(pwd, PWDStatus) &&
+      !llvm37::sys::fs::status(".", DotStatus) &&
       PWDStatus.getUniqueID() == DotStatus.getUniqueID()) {
     result.append(pwd, pwd + strlen(pwd));
     return std::error_code();
@@ -624,13 +624,13 @@ void system_temp_directory(bool ErasedOnReboot, SmallVectorImpl<char> &Result) {
 } // end namespace path
 
 } // end namespace sys
-} // end namespace llvm
+} // end namespace llvm37
 
 
 // The following is implementation of MSFileSystem for Unix.
 // This will make usages of MSFileSystem throughout DirectXShaderCompiler
 // compatible with Unix.
-namespace llvm {
+namespace llvm37 {
 namespace sys  {
 namespace fs {
 
@@ -707,4 +707,4 @@ int msf_setmode(int fd, int mode) throw() {
 
 } // namespace fs
 } // namespace sys
-} // namespace llvm
+} // namespace llvm37

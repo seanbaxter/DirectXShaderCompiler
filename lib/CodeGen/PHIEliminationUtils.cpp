@@ -8,18 +8,18 @@
 //===----------------------------------------------------------------------===//
 
 #include "PHIEliminationUtils.h"
-#include "llvm/ADT/SmallPtrSet.h"
-#include "llvm/CodeGen/MachineBasicBlock.h"
-#include "llvm/CodeGen/MachineFunction.h"
-#include "llvm/CodeGen/MachineRegisterInfo.h"
-using namespace llvm;
+#include "llvm37/ADT/SmallPtrSet.h"
+#include "llvm37/CodeGen/MachineBasicBlock.h"
+#include "llvm37/CodeGen/MachineFunction.h"
+#include "llvm37/CodeGen/MachineRegisterInfo.h"
+using namespace llvm37;
 
 // findCopyInsertPoint - Find a safe place in MBB to insert a copy from SrcReg
 // when following the CFG edge to SuccMBB. This needs to be after any def of
 // SrcReg, but before any subsequent point where control flow might jump out of
 // the basic block.
 MachineBasicBlock::iterator
-llvm::findPHICopyInsertPoint(MachineBasicBlock* MBB, MachineBasicBlock* SuccMBB,
+llvm37::findPHICopyInsertPoint(MachineBasicBlock* MBB, MachineBasicBlock* SuccMBB,
                              unsigned SrcReg) {
   // Handle the trivial case trivially.
   if (MBB->empty())

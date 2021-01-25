@@ -11,26 +11,26 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/TableGen/Record.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/FoldingSet.h"
-#include "llvm/ADT/Hashing.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/ADT/StringExtras.h"
-#include "llvm/ADT/StringMap.h"
-#include "llvm/Support/DataTypes.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/Format.h"
-#include "llvm/TableGen/Error.h"
+#include "llvm37/TableGen/Record.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/FoldingSet.h"
+#include "llvm37/ADT/Hashing.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/ADT/StringExtras.h"
+#include "llvm37/ADT/StringMap.h"
+#include "llvm37/Support/DataTypes.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/Format.h"
+#include "llvm37/TableGen/Error.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 //===----------------------------------------------------------------------===//
 //    std::string wrapper for DenseMap purposes
 //===----------------------------------------------------------------------===//
 
-namespace llvm {
+namespace llvm37 {
 
 /// TableGenStringKey - This is a wrapper for std::string suitable for
 /// using as a key to a DenseMap.  Because there isn't a particularly
@@ -48,7 +48,7 @@ public:
   const std::string &str() const { return data; }
 
   friend hash_code hash_value(const TableGenStringKey &Value) {
-    using llvm::hash_value;
+    using llvm37::hash_value;
     return hash_value(Value.str());
   }
 private:
@@ -66,7 +66,7 @@ template<> struct DenseMapInfo<TableGenStringKey> {
     return Tombstone;
   }
   static unsigned getHashValue(const TableGenStringKey& Val) {
-    using llvm::hash_value;
+    using llvm37::hash_value;
     return hash_value(Val);
   }
   static bool isEqual(const TableGenStringKey& LHS,
@@ -75,7 +75,7 @@ template<> struct DenseMapInfo<TableGenStringKey> {
   }
 };
 
-} // namespace llvm
+} // namespace llvm37
 
 //===----------------------------------------------------------------------===//
 //    Type implementations
@@ -177,7 +177,7 @@ bool RecordRecTy::typeIsConvertibleTo(const RecTy *RHS) const {
 /// resolveTypes - Find a common type that T1 and T2 convert to.
 /// Return null if no such type exists.
 ///
-RecTy *llvm::resolveTypes(RecTy *T1, RecTy *T2) {
+RecTy *llvm37::resolveTypes(RecTy *T1, RecTy *T2) {
   if (T1->typeIsConvertibleTo(T2))
     return T2;
   if (T2->typeIsConvertibleTo(T1))
@@ -1630,7 +1630,7 @@ void Record::resolveReferencesTo(const RecordVal *RV) {
 
 void Record::dump() const { errs() << *this; }
 
-raw_ostream &llvm::operator<<(raw_ostream &OS, const Record &R) {
+raw_ostream &llvm37::operator<<(raw_ostream &OS, const Record &R) {
   OS << R.getNameInitAsString();
 
   const std::vector<Init *> &TArgs = R.getTemplateArgs();
@@ -1874,7 +1874,7 @@ void MultiClass::dump() const {
 
 void RecordKeeper::dump() const { errs() << *this; }
 
-raw_ostream &llvm::operator<<(raw_ostream &OS, const RecordKeeper &RK) {
+raw_ostream &llvm37::operator<<(raw_ostream &OS, const RecordKeeper &RK) {
   OS << "------------- Classes -----------------\n";
   for (const auto &C : RK.getClasses())
     OS << "class " << *C.second;
@@ -1905,7 +1905,7 @@ RecordKeeper::getAllDerivedDefinitions(const std::string &ClassName) const {
 
 /// QualifyName - Return an Init with a qualifier prefix referring
 /// to CurRec's name.
-Init *llvm::QualifyName(Record &CurRec, MultiClass *CurMultiClass,
+Init *llvm37::QualifyName(Record &CurRec, MultiClass *CurMultiClass,
                         Init *Name, const std::string &Scoper) {
   RecTy *Type = cast<TypedInit>(Name)->getType();
 
@@ -1934,7 +1934,7 @@ Init *llvm::QualifyName(Record &CurRec, MultiClass *CurMultiClass,
 
 /// QualifyName - Return an Init with a qualifier prefix referring
 /// to CurRec's name.
-Init *llvm::QualifyName(Record &CurRec, MultiClass *CurMultiClass,
+Init *llvm37::QualifyName(Record &CurRec, MultiClass *CurMultiClass,
                         const std::string &Name,
                         const std::string &Scoper) {
   return QualifyName(CurRec, CurMultiClass, StringInit::get(Name), Scoper);

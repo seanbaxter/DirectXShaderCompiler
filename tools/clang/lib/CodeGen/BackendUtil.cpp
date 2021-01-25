@@ -14,38 +14,38 @@
 #include "clang/Frontend/CodeGenOptions.h"
 #include "clang/Frontend/FrontendDiagnostic.h"
 #include "clang/Frontend/Utils.h"
-#include "llvm/ADT/StringSwitch.h"
-#include "llvm/Analysis/TargetLibraryInfo.h"
-#include "llvm/Analysis/TargetTransformInfo.h"
-#include "llvm/Bitcode/BitcodeWriterPass.h"
-#include "llvm/CodeGen/RegAllocRegistry.h"
-#include "llvm/CodeGen/SchedulerRegistry.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/IRPrintingPasses.h"
-#include "llvm/IR/LegacyPassManager.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/Verifier.h"
-#include "llvm/MC/SubtargetFeature.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/PrettyStackTrace.h"
-#include "llvm/Support/TargetRegistry.h"
-#include "llvm/Support/Timer.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Target/TargetMachine.h"
-#include "llvm/Target/TargetOptions.h"
-#include "llvm/Target/TargetSubtargetInfo.h"
-#include "llvm/Transforms/IPO.h"
-#include "llvm/Transforms/IPO/PassManagerBuilder.h"
-#include "llvm/Transforms/Instrumentation.h"
-#include "llvm/Transforms/ObjCARC.h"
-#include "llvm/Transforms/Scalar.h"
-#include "llvm/Transforms/Utils/SymbolRewriter.h"
+#include "llvm37/ADT/StringSwitch.h"
+#include "llvm37/Analysis/TargetLibraryInfo.h"
+#include "llvm37/Analysis/TargetTransformInfo.h"
+#include "llvm37/Bitcode/BitcodeWriterPass.h"
+#include "llvm37/CodeGen/RegAllocRegistry.h"
+#include "llvm37/CodeGen/SchedulerRegistry.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/IR/IRPrintingPasses.h"
+#include "llvm37/IR/LegacyPassManager.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/Verifier.h"
+#include "llvm37/MC/SubtargetFeature.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/PrettyStackTrace.h"
+#include "llvm37/Support/TargetRegistry.h"
+#include "llvm37/Support/Timer.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Target/TargetMachine.h"
+#include "llvm37/Target/TargetOptions.h"
+#include "llvm37/Target/TargetSubtargetInfo.h"
+#include "llvm37/Transforms/IPO.h"
+#include "llvm37/Transforms/IPO/PassManagerBuilder.h"
+#include "llvm37/Transforms/Instrumentation.h"
+#include "llvm37/Transforms/ObjCARC.h"
+#include "llvm37/Transforms/Scalar.h"
+#include "llvm37/Transforms/Utils/SymbolRewriter.h"
 #include <memory>
 #include "dxc/HLSL/DxilGenerationPass.h" // HLSL Change
 #include "dxc/HLSL/HLMatrixLowerPass.h"  // HLSL Change
 
 using namespace clang;
-using namespace llvm;
+using namespace llvm37;
 
 namespace {
 
@@ -59,9 +59,9 @@ class EmitAssemblyHelper {
   std::string CodeGenPassesConfig;
   std::string PerModulePassesConfig;
   std::string PerFunctionPassesConfig;
-  mutable llvm::raw_string_ostream CodeGenPassesConfigOS;
-  mutable llvm::raw_string_ostream PerModulePassesConfigOS;
-  mutable llvm::raw_string_ostream PerFunctionPassesConfigOS;
+  mutable llvm37::raw_string_ostream CodeGenPassesConfigOS;
+  mutable llvm37::raw_string_ostream PerModulePassesConfigOS;
+  mutable llvm37::raw_string_ostream PerFunctionPassesConfigOS;
   // HLSL Changes End
 
   Timer CodeGenerationTime;
@@ -276,7 +276,7 @@ static void addDataFlowSanitizerPass(const PassManagerBuilder &Builder,
 
 #endif // MS_ENABLE_INSTR - HLSL Change
 
-static TargetLibraryInfoImpl *createTLII(llvm::Triple &TargetTriple,
+static TargetLibraryInfoImpl *createTLII(llvm37::Triple &TargetTriple,
                                          const CodeGenOptions &CodeGenOpts) {
   TargetLibraryInfoImpl *TLII = new TargetLibraryInfoImpl(TargetTriple);
   if (!CodeGenOpts.SimplifyLibCalls)
@@ -294,9 +294,9 @@ static TargetLibraryInfoImpl *createTLII(llvm::Triple &TargetTriple,
 
 static void addSymbolRewriterPass(const CodeGenOptions &Opts,
                                   legacy::PassManager *MPM) {
-  llvm::SymbolRewriter::RewriteDescriptorList DL;
+  llvm37::SymbolRewriter::RewriteDescriptorList DL;
 
-  llvm::SymbolRewriter::RewriteMapParser MapParser;
+  llvm37::SymbolRewriter::RewriteMapParser MapParser;
   for (const auto &MapFile : Opts.RewriteMapFiles)
     MapParser.parse(MapFile, &DL);
 
@@ -489,7 +489,7 @@ TargetMachine *EmitAssemblyHelper::CreateTargetMachine(bool MustCreateTM) {
   // Create the TargetMachine for generating code.
   std::string Error;
   std::string Triple = TheModule->getTargetTriple();
-  const llvm::Target *TheTarget = TargetRegistry::lookupTarget(Triple, Error);
+  const llvm37::Target *TheTarget = TargetRegistry::lookupTarget(Triple, Error);
   if (!TheTarget) {
     if (MustCreateTM)
       Diags.Report(diag::err_fe_unable_to_create_target) << Error;
@@ -497,15 +497,15 @@ TargetMachine *EmitAssemblyHelper::CreateTargetMachine(bool MustCreateTM) {
   }
 
   unsigned CodeModel =
-    llvm::StringSwitch<unsigned>(CodeGenOpts.CodeModel)
-      .Case("small", llvm::CodeModel::Small)
-      .Case("kernel", llvm::CodeModel::Kernel)
-      .Case("medium", llvm::CodeModel::Medium)
-      .Case("large", llvm::CodeModel::Large)
-      .Case("default", llvm::CodeModel::Default)
+    llvm37::StringSwitch<unsigned>(CodeGenOpts.CodeModel)
+      .Case("small", llvm37::CodeModel::Small)
+      .Case("kernel", llvm37::CodeModel::Kernel)
+      .Case("medium", llvm37::CodeModel::Medium)
+      .Case("large", llvm37::CodeModel::Large)
+      .Case("default", llvm37::CodeModel::Default)
       .Default(~0u);
   assert(CodeModel != ~0u && "invalid code model!");
-  llvm::CodeModel::Model CM = static_cast<llvm::CodeModel::Model>(CodeModel);
+  llvm37::CodeModel::Model CM = static_cast<llvm37::CodeModel::Model>(CodeModel);
 
 #if 0 // HLSL Change - no global state mutation on per-instance work
   SmallVector<const char *, 16> BackendArgs;
@@ -521,7 +521,7 @@ TargetMachine *EmitAssemblyHelper::CreateTargetMachine(bool MustCreateTM) {
   for (unsigned i = 0, e = CodeGenOpts.BackendOptions.size(); i != e; ++i)
     BackendArgs.push_back(CodeGenOpts.BackendOptions[i].c_str());
   BackendArgs.push_back(nullptr);
-  llvm::cl::ParseCommandLineOptions(BackendArgs.size() - 1,
+  llvm37::cl::ParseCommandLineOptions(BackendArgs.size() - 1,
                                     BackendArgs.data());
 #endif // HLSL Change
 
@@ -535,15 +535,15 @@ TargetMachine *EmitAssemblyHelper::CreateTargetMachine(bool MustCreateTM) {
 #endif // HLSL Change
   }
 
-  llvm::Reloc::Model RM = llvm::Reloc::Default;
+  llvm37::Reloc::Model RM = llvm37::Reloc::Default;
   if (CodeGenOpts.RelocationModel == "static") {
-    RM = llvm::Reloc::Static;
+    RM = llvm37::Reloc::Static;
   } else if (CodeGenOpts.RelocationModel == "pic") {
-    RM = llvm::Reloc::PIC_;
+    RM = llvm37::Reloc::PIC_;
   } else {
     assert(CodeGenOpts.RelocationModel == "dynamic-no-pic" &&
            "Invalid PIC model!");
-    RM = llvm::Reloc::DynamicNoPIC;
+    RM = llvm37::Reloc::DynamicNoPIC;
   }
 
   CodeGenOpt::Level OptLevel = CodeGenOpt::Default;
@@ -553,15 +553,15 @@ TargetMachine *EmitAssemblyHelper::CreateTargetMachine(bool MustCreateTM) {
   case 3: OptLevel = CodeGenOpt::Aggressive; break;
   }
 
-  llvm::TargetOptions Options;
+  llvm37::TargetOptions Options;
 
   if (!TargetOpts.Reciprocals.empty())
     Options.Reciprocals = TargetRecip(TargetOpts.Reciprocals);
 
   Options.ThreadModel =
-    llvm::StringSwitch<llvm::ThreadModel::Model>(CodeGenOpts.ThreadModel)
-      .Case("posix", llvm::ThreadModel::POSIX)
-      .Case("single", llvm::ThreadModel::Single);
+    llvm37::StringSwitch<llvm37::ThreadModel::Model>(CodeGenOpts.ThreadModel)
+      .Case("posix", llvm37::ThreadModel::POSIX)
+      .Case("single", llvm37::ThreadModel::Single);
 
   if (CodeGenOpts.DisableIntegratedAS)
     Options.DisableIntegratedAS = true;
@@ -574,24 +574,24 @@ TargetMachine *EmitAssemblyHelper::CreateTargetMachine(bool MustCreateTM) {
 
   // Set float ABI type.
   if (CodeGenOpts.FloatABI == "soft" || CodeGenOpts.FloatABI == "softfp")
-    Options.FloatABIType = llvm::FloatABI::Soft;
+    Options.FloatABIType = llvm37::FloatABI::Soft;
   else if (CodeGenOpts.FloatABI == "hard")
-    Options.FloatABIType = llvm::FloatABI::Hard;
+    Options.FloatABIType = llvm37::FloatABI::Hard;
   else {
     assert(CodeGenOpts.FloatABI.empty() && "Invalid float abi!");
-    Options.FloatABIType = llvm::FloatABI::Default;
+    Options.FloatABIType = llvm37::FloatABI::Default;
   }
 
   // Set FP fusion mode.
   switch (CodeGenOpts.getFPContractMode()) {
   case CodeGenOptions::FPC_Off:
-    Options.AllowFPOpFusion = llvm::FPOpFusion::Strict;
+    Options.AllowFPOpFusion = llvm37::FPOpFusion::Strict;
     break;
   case CodeGenOptions::FPC_On:
-    Options.AllowFPOpFusion = llvm::FPOpFusion::Standard;
+    Options.AllowFPOpFusion = llvm37::FPOpFusion::Standard;
     break;
   case CodeGenOptions::FPC_Fast:
-    Options.AllowFPOpFusion = llvm::FPOpFusion::Fast;
+    Options.AllowFPOpFusion = llvm37::FPOpFusion::Fast;
     break;
   }
 
@@ -628,7 +628,7 @@ bool EmitAssemblyHelper::AddEmitPasses(BackendAction Action,
   legacy::PassManager *PM = getCodeGenPasses();
 
   // Add LibraryInfo.
-  llvm::Triple TargetTriple(TheModule->getTargetTriple());
+  llvm37::Triple TargetTriple(TheModule->getTargetTriple());
   std::unique_ptr<TargetLibraryInfoImpl> TLII(
       createTLII(TargetTriple, CodeGenOpts));
   PM->add(new TargetLibraryInfoWrapperPass(*TLII));
@@ -662,7 +662,7 @@ bool EmitAssemblyHelper::AddEmitPasses(BackendAction Action,
 
 void EmitAssemblyHelper::EmitAssembly(BackendAction Action,
                                       raw_pwrite_stream *OS) {
-  TimeRegion Region(llvm::TimePassesIsEnabled ? &CodeGenerationTime : nullptr);
+  TimeRegion Region(llvm37::TimePassesIsEnabled ? &CodeGenerationTime : nullptr);
 
   bool UsesCodeGen = (Action != Backend_EmitNothing &&
                       Action != Backend_EmitBC &&

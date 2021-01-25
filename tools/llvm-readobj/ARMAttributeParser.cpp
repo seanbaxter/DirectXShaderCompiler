@@ -9,12 +9,12 @@
 
 #include "ARMAttributeParser.h"
 #include "StreamWriter.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/StringExtras.h"
-#include "llvm/Support/LEB128.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/StringExtras.h"
+#include "llvm37/Support/LEB128.h"
 
-using namespace llvm;
-using namespace llvm::ARMBuildAttrs;
+using namespace llvm37;
+using namespace llvm37::ARMBuildAttrs;
 
 
 static const EnumEntry<unsigned> TagNames[] = {
@@ -23,7 +23,7 @@ static const EnumEntry<unsigned> TagNames[] = {
   { "Tag_Symbol", ARMBuildAttrs::Symbol },
 };
 
-namespace llvm {
+namespace llvm37 {
 #define ATTRIBUTE_HANDLER(Attr_)                                                \
   { ARMBuildAttrs::Attr_, &ARMAttributeParser::Attr_ }
 

@@ -16,21 +16,21 @@
 //===----------------------------------------------------------------------===//
 
 #include "LLVMSymbolize.h"
-#include "llvm/ADT/StringRef.h"
-#include "llvm/Support/COM.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/FileSystem.h"
-#include "llvm/Support/ManagedStatic.h"
-#include "llvm/Support/Path.h"
-#include "llvm/Support/PrettyStackTrace.h"
-#include "llvm/Support/Signals.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/StringRef.h"
+#include "llvm37/Support/COM.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/FileSystem.h"
+#include "llvm37/Support/ManagedStatic.h"
+#include "llvm37/Support/Path.h"
+#include "llvm37/Support/PrettyStackTrace.h"
+#include "llvm37/Support/Signals.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <cstdio>
 #include <cstring>
 #include <string>
 
-using namespace llvm;
+using namespace llvm37;
 using namespace symbolize;
 
 static cl::opt<bool>
@@ -130,7 +130,7 @@ int __cdecl main(int argc, char **argv) {
   PrettyStackTraceProgram X(argc, argv);
   llvm_shutdown_obj Y; // Call llvm_shutdown() on exit.
 
-  llvm::sys::InitializeCOMRAII COM(llvm::sys::COMThreadingMode::MultiThreaded);
+  llvm37::sys::InitializeCOMRAII COM(llvm37::sys::COMThreadingMode::MultiThreaded);
 
   cl::ParseCommandLineOptions(argc, argv, "llvm-symbolizer\n");
   LLVMSymbolizer::Options Opts(ClPrintFunctions, ClUseSymbolTable,

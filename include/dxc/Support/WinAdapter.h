@@ -12,8 +12,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_SUPPORT_WIN_ADAPTER_H
-#define LLVM_SUPPORT_WIN_ADAPTER_H
+#ifndef LLVM37_SUPPORT_WIN_ADAPTER_H
+#define LLVM37_SUPPORT_WIN_ADAPTER_H
 
 #ifndef _WIN32
 
@@ -1031,4 +1031,4 @@ private:
 
 #endif // _WIN32
 
-#endif // LLVM_SUPPORT_WIN_ADAPTER_H
+#endif // LLVM37_SUPPORT_WIN_ADAPTER_H

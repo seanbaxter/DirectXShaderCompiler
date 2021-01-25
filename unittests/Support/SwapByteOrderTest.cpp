@@ -8,10 +8,10 @@
 //===----------------------------------------------------------------------===//
 
 #include "gtest/gtest.h"
-#include "llvm/Support/SwapByteOrder.h"
+#include "llvm37/Support/SwapByteOrder.h"
 #include <cstdlib>
 #include <ctime>
-using namespace llvm;
+using namespace llvm37;
 
 #undef max
 

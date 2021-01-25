@@ -16,7 +16,7 @@ add_llvm_library(LLVMDxilPIXPasses
 
 
   ADDITIONAL_HEADER_DIRS
-  ${LLVM_MAIN_INCLUDE_DIR}/llvm/IR
+  ${LLVM37_MAIN_INCLUDE_DIR}/llvm/IR
 )
 
 add_dependencies(LLVMDxilPIXPasses intrinsics_gen)

@@ -6,8 +6,8 @@
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
-#ifndef LLVM_CLANG_SPIRV_BITWISECAST_H
-#define LLVM_CLANG_SPIRV_BITWISECAST_H
+#ifndef LLVM37_CLANG_SPIRV_BITWISECAST_H
+#define LLVM37_CLANG_SPIRV_BITWISECAST_H
 
 #include <cstring>
 

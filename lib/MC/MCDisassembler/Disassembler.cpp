@@ -9,21 +9,21 @@
 
 #include "Disassembler.h"
 #include "llvm-c/Disassembler.h"
-#include "llvm/MC/MCAsmInfo.h"
-#include "llvm/MC/MCContext.h"
-#include "llvm/MC/MCDisassembler.h"
-#include "llvm/MC/MCInst.h"
-#include "llvm/MC/MCInstPrinter.h"
-#include "llvm/MC/MCInstrInfo.h"
-#include "llvm/MC/MCRegisterInfo.h"
-#include "llvm/MC/MCRelocationInfo.h"
-#include "llvm/MC/MCSubtargetInfo.h"
-#include "llvm/MC/MCSymbolizer.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/FormattedStream.h"
-#include "llvm/Support/TargetRegistry.h"
+#include "llvm37/MC/MCAsmInfo.h"
+#include "llvm37/MC/MCContext.h"
+#include "llvm37/MC/MCDisassembler.h"
+#include "llvm37/MC/MCInst.h"
+#include "llvm37/MC/MCInstPrinter.h"
+#include "llvm37/MC/MCInstrInfo.h"
+#include "llvm37/MC/MCRegisterInfo.h"
+#include "llvm37/MC/MCRelocationInfo.h"
+#include "llvm37/MC/MCSubtargetInfo.h"
+#include "llvm37/MC/MCSymbolizer.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/FormattedStream.h"
+#include "llvm37/Support/TargetRegistry.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 // LLVMCreateDisasm() creates a disassembler for the TripleName.  Symbolic
 // disassembly is supported by passing a block of information in the DisInfo

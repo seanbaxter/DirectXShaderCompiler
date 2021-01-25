@@ -13,42 +13,42 @@
 #include "dxc/DXIL/DXIL.h"
 #include "dxc/DxilContainer/DxilContainer.h"
 #include "dxc/DxilContainer/DxilContainerReader.h"
-#include "llvm/Analysis/ReducibilityAnalysis.h"
+#include "llvm37/Analysis/ReducibilityAnalysis.h"
 #include "dxc/Support/Global.h"
 
-#include "llvm/Support/Allocator.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Support/MemoryBuffer.h"
-#include "llvm/Support/ManagedStatic.h"
-#include "llvm/Support/PrettyStackTrace.h"
-#include "llvm/Support/Signals.h"
-#include "llvm/Support/SourceMgr.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/Path.h"
-#include "llvm/Support/Host.h"
-#include "llvm/Support/FileOutputBuffer.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/GlobalVariable.h"
-#include "llvm/IR/CFG.h"
-#include "llvm/IR/IRBuilder.h"
-#include "llvm/IR/InstVisitor.h"
-#include "llvm/Bitcode/ReaderWriter.h"
-#include "llvm/Bitcode/BitstreamWriter.h"
-#include "llvm/IR/LegacyPassManager.h"
-#include "llvm/IR/Verifier.h"
-#include "llvm/Transforms/Scalar.h"
-#include "llvm/Transforms/IPO/PassManagerBuilder.h"
+#include "llvm37/Support/Allocator.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Support/MemoryBuffer.h"
+#include "llvm37/Support/ManagedStatic.h"
+#include "llvm37/Support/PrettyStackTrace.h"
+#include "llvm37/Support/Signals.h"
+#include "llvm37/Support/SourceMgr.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/Path.h"
+#include "llvm37/Support/Host.h"
+#include "llvm37/Support/FileOutputBuffer.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/GlobalVariable.h"
+#include "llvm37/IR/CFG.h"
+#include "llvm37/IR/IRBuilder.h"
+#include "llvm37/IR/InstVisitor.h"
+#include "llvm37/Bitcode/ReaderWriter.h"
+#include "llvm37/Bitcode/BitstreamWriter.h"
+#include "llvm37/IR/LegacyPassManager.h"
+#include "llvm37/IR/Verifier.h"
+#include "llvm37/Transforms/Scalar.h"
+#include "llvm37/Transforms/IPO/PassManagerBuilder.h"
 
 #include <atlbase.h>
 #include "dxc/Support/microcom.h"
 #include "Support/DXIncludes.h"
 
-#include "llvm/Support/FileSystem.h"
-#include "llvm/Support/MSFileSystem.h"
+#include "llvm37/Support/FileSystem.h"
+#include "llvm37/Support/MSFileSystem.h"
 #include "dxc/Support/FileIOHelper.h"
 #include "dxc/dxcapi.h"
 
@@ -64,13 +64,13 @@
 #include <algorithm>
 
 #pragma once
-namespace llvm {
+namespace llvm37 {
 using legacy::PassManagerBase;
 using legacy::PassManager;
 using legacy::FunctionPassManager;
 }
 
-using namespace llvm;
+using namespace llvm37;
 using std::string;
 using std::wstring;
 using std::pair;

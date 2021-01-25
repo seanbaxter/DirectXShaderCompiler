@@ -11,18 +11,18 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_UTILS_TABLEGEN_CODEGENINSTRUCTION_H
-#define LLVM_UTILS_TABLEGEN_CODEGENINSTRUCTION_H
+#ifndef LLVM37_UTILS_TABLEGEN_CODEGENINSTRUCTION_H
+#define LLVM37_UTILS_TABLEGEN_CODEGENINSTRUCTION_H
 
-#include "llvm/ADT/ArrayRef.h"
-#include "llvm/ADT/StringRef.h"
-#include "llvm/CodeGen/MachineValueType.h"
-#include "llvm/Support/SMLoc.h"
+#include "llvm37/ADT/ArrayRef.h"
+#include "llvm37/ADT/StringRef.h"
+#include "llvm37/CodeGen/MachineValueType.h"
+#include "llvm37/Support/SMLoc.h"
 #include <string>
 #include <utility>
 #include <vector>
 
-namespace llvm {
+namespace llvm37 {
   class Record;
   class DagInit;
   class CodeGenTarget;

@@ -18,23 +18,23 @@
 #include "CoverageReport.h"
 #include "CoverageViewOptions.h"
 #include "SourceCoverageView.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/ADT/StringRef.h"
-#include "llvm/ADT/Triple.h"
-#include "llvm/ProfileData/CoverageMapping.h"
-#include "llvm/ProfileData/InstrProfReader.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/FileSystem.h"
-#include "llvm/Support/Format.h"
-#include "llvm/Support/ManagedStatic.h"
-#include "llvm/Support/Path.h"
-#include "llvm/Support/PrettyStackTrace.h"
-#include "llvm/Support/Process.h"
-#include "llvm/Support/Signals.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/ADT/StringRef.h"
+#include "llvm37/ADT/Triple.h"
+#include "llvm37/ProfileData/CoverageMapping.h"
+#include "llvm37/ProfileData/InstrProfReader.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/FileSystem.h"
+#include "llvm37/Support/Format.h"
+#include "llvm37/Support/ManagedStatic.h"
+#include "llvm37/Support/Path.h"
+#include "llvm37/Support/PrettyStackTrace.h"
+#include "llvm37/Support/Process.h"
+#include "llvm37/Support/Signals.h"
 #include <functional>
 #include <system_error>
 
-using namespace llvm;
+using namespace llvm37;
 using namespace coverage;
 
 namespace {
@@ -135,7 +135,7 @@ CodeCoverageTool::attachExpansionSubViews(SourceCoverageView &View,
       continue;
 
     auto SubViewExpansions = ExpansionCoverage.getExpansions();
-    auto SubView = llvm::make_unique<SourceCoverageView>(
+    auto SubView = llvm37::make_unique<SourceCoverageView>(
         SourceBuffer.get(), ViewOpts, std::move(ExpansionCoverage));
     attachExpansionSubViews(*SubView, SubViewExpansions, Coverage);
     View.addExpansion(Expansion.Region, std::move(SubView));
@@ -153,7 +153,7 @@ CodeCoverageTool::createFunctionView(const FunctionRecord &Function,
     return nullptr;
 
   auto Expansions = FunctionCoverage.getExpansions();
-  auto View = llvm::make_unique<SourceCoverageView>(
+  auto View = llvm37::make_unique<SourceCoverageView>(
       SourceBuffer.get(), ViewOpts, std::move(FunctionCoverage));
   attachExpansionSubViews(*View, Expansions, Coverage);
 
@@ -171,14 +171,14 @@ CodeCoverageTool::createSourceFileView(StringRef SourceFile,
     return nullptr;
 
   auto Expansions = FileCoverage.getExpansions();
-  auto View = llvm::make_unique<SourceCoverageView>(
+  auto View = llvm37::make_unique<SourceCoverageView>(
       SourceBuffer.get(), ViewOpts, std::move(FileCoverage));
   attachExpansionSubViews(*View, Expansions, Coverage);
 
   for (auto Function : Coverage.getInstantiations(SourceFile)) {
     auto SubViewCoverage = Coverage.getCoverageForFunction(*Function);
     auto SubViewExpansions = SubViewCoverage.getExpansions();
-    auto SubView = llvm::make_unique<SourceCoverageView>(
+    auto SubView = llvm37::make_unique<SourceCoverageView>(
         SourceBuffer.get(), ViewOpts, std::move(SubViewCoverage));
     attachExpansionSubViews(*SubView, SubViewExpansions, Coverage);
 
@@ -323,10 +323,10 @@ int CodeCoverageTool::run(Command Cmd, int argc, const char **argv) {
     if (!NameFilters.empty() || !NameRegexFilters.empty()) {
       auto NameFilterer = new CoverageFilters;
       for (const auto &Name : NameFilters)
-        NameFilterer->push_back(llvm::make_unique<NameCoverageFilter>(Name));
+        NameFilterer->push_back(llvm37::make_unique<NameCoverageFilter>(Name));
       for (const auto &Regex : NameRegexFilters)
         NameFilterer->push_back(
-            llvm::make_unique<NameRegexCoverageFilter>(Regex));
+            llvm37::make_unique<NameRegexCoverageFilter>(Regex));
       Filters.push_back(std::unique_ptr<CoverageFilter>(NameFilterer));
     }
     if (RegionCoverageLtFilter.getNumOccurrences() ||
@@ -335,22 +335,22 @@ int CodeCoverageTool::run(Command Cmd, int argc, const char **argv) {
         LineCoverageGtFilter.getNumOccurrences()) {
       auto StatFilterer = new CoverageFilters;
       if (RegionCoverageLtFilter.getNumOccurrences())
-        StatFilterer->push_back(llvm::make_unique<RegionCoverageFilter>(
+        StatFilterer->push_back(llvm37::make_unique<RegionCoverageFilter>(
             RegionCoverageFilter::LessThan, RegionCoverageLtFilter));
       if (RegionCoverageGtFilter.getNumOccurrences())
-        StatFilterer->push_back(llvm::make_unique<RegionCoverageFilter>(
+        StatFilterer->push_back(llvm37::make_unique<RegionCoverageFilter>(
             RegionCoverageFilter::GreaterThan, RegionCoverageGtFilter));
       if (LineCoverageLtFilter.getNumOccurrences())
-        StatFilterer->push_back(llvm::make_unique<LineCoverageFilter>(
+        StatFilterer->push_back(llvm37::make_unique<LineCoverageFilter>(
             LineCoverageFilter::LessThan, LineCoverageLtFilter));
       if (LineCoverageGtFilter.getNumOccurrences())
-        StatFilterer->push_back(llvm::make_unique<LineCoverageFilter>(
+        StatFilterer->push_back(llvm37::make_unique<LineCoverageFilter>(
             RegionCoverageFilter::GreaterThan, LineCoverageGtFilter));
       Filters.push_back(std::unique_ptr<CoverageFilter>(StatFilterer));
     }
 
     if (!Arch.empty() &&
-        Triple(Arch).getArch() == llvm::Triple::ArchType::UnknownArch) {
+        Triple(Arch).getArch() == llvm37::Triple::ArchType::UnknownArch) {
       errs() << "error: Unknown architecture: " << Arch << "\n";
       return 1;
     }
@@ -485,9 +485,9 @@ int CodeCoverageTool::report(int argc, const char **argv,
 
   CoverageReport Report(ViewOpts, std::move(Coverage));
   if (SourceFiles.empty())
-    Report.renderFileReports(llvm::outs());
+    Report.renderFileReports(llvm37::outs());
   else
-    Report.renderFunctionReports(SourceFiles, llvm::outs());
+    Report.renderFunctionReports(SourceFiles, llvm37::outs());
   return 0;
 }
 

@@ -21,14 +21,14 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_CODEGEN_CODEGENABITYPES_H
-#define LLVM_CLANG_CODEGEN_CODEGENABITYPES_H
+#ifndef LLVM37_CLANG_CODEGEN_CODEGENABITYPES_H
+#define LLVM37_CLANG_CODEGEN_CODEGENABITYPES_H
 
 #include "clang/AST/CanonicalType.h"
 #include "clang/AST/Type.h"
 #include "clang/CodeGen/CGFunctionInfo.h"
 
-namespace llvm {
+namespace llvm37 {
   class DataLayout;
   class Module;
 }
@@ -50,7 +50,7 @@ class CodeGenModule;
 class CodeGenABITypes
 {
 public:
-  CodeGenABITypes(ASTContext &C, llvm::Module &M, const llvm::DataLayout &TD,
+  CodeGenABITypes(ASTContext &C, llvm37::Module &M, const llvm37::DataLayout &TD,
                   CoverageSourceInfo *CoverageInfo = nullptr);
   ~CodeGenABITypes();
 

@@ -47,8 +47,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_ASTMATCHERS_ASTMATCHERSMACROS_H
-#define LLVM_CLANG_ASTMATCHERS_ASTMATCHERSMACROS_H
+#ifndef LLVM37_CLANG_ASTMATCHERS_ASTMATCHERSMACROS_H
+#define LLVM37_CLANG_ASTMATCHERS_ASTMATCHERSMACROS_H
 
 /// \brief AST_MATCHER_FUNCTION(ReturnType, DefineMatcher) { ... }
 /// defines a zero parameter function named DefineMatcher() that returns a

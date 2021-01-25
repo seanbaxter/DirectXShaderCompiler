@@ -16,35 +16,35 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/IR/Function.h"
-#include "llvm/IR/GlobalAlias.h"
-#include "llvm/IR/GlobalVariable.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/Object/Archive.h"
-#include "llvm/Object/COFF.h"
-#include "llvm/Object/ELFObjectFile.h"
-#include "llvm/Object/IRObjectFile.h"
-#include "llvm/Object/MachO.h"
-#include "llvm/Object/MachOUniversal.h"
-#include "llvm/Object/ObjectFile.h"
-#include "llvm/Support/COFF.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/FileSystem.h"
-#include "llvm/Support/Format.h"
-#include "llvm/Support/ManagedStatic.h"
-#include "llvm/Support/MemoryBuffer.h"
-#include "llvm/Support/PrettyStackTrace.h"
-#include "llvm/Support/Program.h"
-#include "llvm/Support/Signals.h"
-#include "llvm/Support/TargetSelect.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/GlobalAlias.h"
+#include "llvm37/IR/GlobalVariable.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/Object/Archive.h"
+#include "llvm37/Object/COFF.h"
+#include "llvm37/Object/ELFObjectFile.h"
+#include "llvm37/Object/IRObjectFile.h"
+#include "llvm37/Object/MachO.h"
+#include "llvm37/Object/MachOUniversal.h"
+#include "llvm37/Object/ObjectFile.h"
+#include "llvm37/Support/COFF.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/FileSystem.h"
+#include "llvm37/Support/Format.h"
+#include "llvm37/Support/ManagedStatic.h"
+#include "llvm37/Support/MemoryBuffer.h"
+#include "llvm37/Support/PrettyStackTrace.h"
+#include "llvm37/Support/Program.h"
+#include "llvm37/Support/Signals.h"
+#include "llvm37/Support/TargetSelect.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <algorithm>
 #include <cctype>
 #include <cerrno>
 #include <cstring>
 #include <system_error>
 #include <vector>
-using namespace llvm;
+using namespace llvm37;
 using namespace object;
 
 namespace {
@@ -1166,9 +1166,9 @@ int __cdecl  main(int argc, char **argv) {
   if (error(sys::ChangeStdinToBinary()))
     return 1;
 
-  llvm::InitializeAllTargetInfos();
-  llvm::InitializeAllTargetMCs();
-  llvm::InitializeAllAsmParsers();
+  llvm37::InitializeAllTargetInfos();
+  llvm37::InitializeAllTargetMCs();
+  llvm37::InitializeAllAsmParsers();
 
   ToolName = argv[0];
   if (BSDFormat)

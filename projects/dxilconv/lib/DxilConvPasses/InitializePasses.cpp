@@ -17,9 +17,9 @@
 #include "dxc/Support/WinIncludes.h"
 #include "dxc/Support/Global.h"
 
-#include "llvm/PassRegistry.h"
+#include "llvm37/PassRegistry.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 
 // Place to put our private pass initialization for opt.exe.

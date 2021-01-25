@@ -18,21 +18,21 @@ class SpirvTypeTest : public SpirvTestBase {};
 
 TEST_F(SpirvTypeTest, VoidType) {
   VoidType t;
-  EXPECT_TRUE(llvm::isa<VoidType>(t));
+  EXPECT_TRUE(llvm37::isa<VoidType>(t));
 }
 
 TEST_F(SpirvTypeTest, BoolType) {
   BoolType t;
-  EXPECT_TRUE(llvm::isa<BoolType>(t));
+  EXPECT_TRUE(llvm37::isa<BoolType>(t));
 }
 
 TEST_F(SpirvTypeTest, IntType) {
   IntegerType sint16(16, true);
   IntegerType uint32(32, false);
-  EXPECT_TRUE(llvm::isa<IntegerType>(sint16));
-  EXPECT_TRUE(llvm::isa<IntegerType>(uint32));
-  EXPECT_TRUE(llvm::isa<NumericalType>(sint16));
-  EXPECT_TRUE(llvm::isa<NumericalType>(uint32));
+  EXPECT_TRUE(llvm37::isa<IntegerType>(sint16));
+  EXPECT_TRUE(llvm37::isa<IntegerType>(uint32));
+  EXPECT_TRUE(llvm37::isa<NumericalType>(sint16));
+  EXPECT_TRUE(llvm37::isa<NumericalType>(uint32));
   EXPECT_EQ(16u, sint16.getBitwidth());
   EXPECT_EQ(32u, uint32.getBitwidth());
   EXPECT_EQ(true, sint16.isSignedInt());
@@ -41,15 +41,15 @@ TEST_F(SpirvTypeTest, IntType) {
 
 TEST_F(SpirvTypeTest, FloatType) {
   FloatType f16(16);
-  EXPECT_TRUE(llvm::isa<FloatType>(f16));
-  EXPECT_TRUE(llvm::isa<NumericalType>(f16));
+  EXPECT_TRUE(llvm37::isa<FloatType>(f16));
+  EXPECT_TRUE(llvm37::isa<NumericalType>(f16));
   EXPECT_EQ(16u, f16.getBitwidth());
 }
 
 TEST_F(SpirvTypeTest, VectorType) {
   FloatType f16(16);
   VectorType float3(&f16, 3);
-  EXPECT_TRUE(llvm::isa<VectorType>(float3));
+  EXPECT_TRUE(llvm37::isa<VectorType>(float3));
   EXPECT_EQ(&f16, float3.getElementType());
   EXPECT_EQ(3u, float3.getElementCount());
 }
@@ -59,7 +59,7 @@ TEST_F(SpirvTypeTest, MatrixType) {
   VectorType float3(&f16, 3);
   MatrixType mat2x3(&float3, 2);
 
-  EXPECT_TRUE(llvm::isa<MatrixType>(mat2x3));
+  EXPECT_TRUE(llvm37::isa<MatrixType>(mat2x3));
   EXPECT_EQ(&f16, float3.getElementType());
   EXPECT_EQ(2u, mat2x3.getVecCount());
   EXPECT_EQ(2u, mat2x3.numCols());
@@ -72,7 +72,7 @@ TEST_F(SpirvTypeTest, ImageType) {
                 /*isArrayed*/ false, /*isMultiSampled*/ true,
                 ImageType::WithSampler::No, spv::ImageFormat::R16f);
 
-  EXPECT_TRUE(llvm::isa<ImageType>(img));
+  EXPECT_TRUE(llvm37::isa<ImageType>(img));
   EXPECT_EQ(&f16, img.getSampledType());
   EXPECT_EQ(spv::Dim::Dim2D, img.getDimension());
   EXPECT_EQ(ImageType::WithDepth::Yes, img.getDepth());
@@ -87,7 +87,7 @@ TEST_F(SpirvTypeTest, ImageType) {
 
 TEST_F(SpirvTypeTest, SamplerType) {
   SamplerType t;
-  EXPECT_TRUE(llvm::isa<SamplerType>(t));
+  EXPECT_TRUE(llvm37::isa<SamplerType>(t));
   EXPECT_EQ(t.getName(), "type.sampler");
 }
 
@@ -98,7 +98,7 @@ TEST_F(SpirvTypeTest, SampledImageType) {
                 ImageType::WithSampler::No, spv::ImageFormat::R16f);
   SampledImageType s(&img);
 
-  EXPECT_TRUE(llvm::isa<SampledImageType>(s));
+  EXPECT_TRUE(llvm37::isa<SampledImageType>(s));
   EXPECT_EQ(s.getName(), "type.sampled.image");
   EXPECT_EQ(s.getImageType(), &img);
 }
@@ -106,7 +106,7 @@ TEST_F(SpirvTypeTest, SampledImageType) {
 TEST_F(SpirvTypeTest, ArrayType) {
   FloatType f16(16);
   ArrayType arr5(&f16, 5, 2);
-  EXPECT_TRUE(llvm::isa<ArrayType>(arr5));
+  EXPECT_TRUE(llvm37::isa<ArrayType>(arr5));
   EXPECT_EQ(arr5.getElementType(), &f16);
   EXPECT_EQ(arr5.getElementCount(), 5u);
   EXPECT_TRUE(arr5.getStride().hasValue());
@@ -116,7 +116,7 @@ TEST_F(SpirvTypeTest, ArrayType) {
 TEST_F(SpirvTypeTest, RuntimeArrayType) {
   FloatType f16(16);
   RuntimeArrayType ra(&f16, 2);
-  EXPECT_TRUE(llvm::isa<RuntimeArrayType>(ra));
+  EXPECT_TRUE(llvm37::isa<RuntimeArrayType>(ra));
   EXPECT_EQ(ra.getElementType(), &f16);
   EXPECT_TRUE(ra.getStride().hasValue());
   EXPECT_EQ(ra.getStride().getValue(), 2u);
@@ -133,7 +133,7 @@ TEST_F(SpirvTypeTest, StructType) {
   StructType s({field0, field1}, "some_struct", /*isReadOnly*/ true,
                StructInterfaceType::InternalStorage);
 
-  EXPECT_TRUE(llvm::isa<StructType>(s));
+  EXPECT_TRUE(llvm37::isa<StructType>(s));
   EXPECT_EQ(s.getName(), "some_struct");
   EXPECT_EQ(s.getStructName(), "some_struct");
 
@@ -148,7 +148,7 @@ TEST_F(SpirvTypeTest, StructType) {
 TEST_F(SpirvTypeTest, SpirvPointerType) {
   FloatType f16(16);
   SpirvPointerType ptr(&f16, spv::StorageClass::UniformConstant);
-  EXPECT_TRUE(llvm::isa<SpirvPointerType>(ptr));
+  EXPECT_TRUE(llvm37::isa<SpirvPointerType>(ptr));
   EXPECT_EQ(ptr.getStorageClass(), spv::StorageClass::UniformConstant);
   EXPECT_EQ(ptr.getPointeeType(), &f16);
 }
@@ -158,7 +158,7 @@ TEST_F(SpirvTypeTest, FunctionType) {
   IntegerType uint32(32, false);
   BoolType retType;
   FunctionType fnType(&retType, {&f16, &uint32});
-  EXPECT_TRUE(llvm::isa<FunctionType>(fnType));
+  EXPECT_TRUE(llvm37::isa<FunctionType>(fnType));
   EXPECT_EQ(fnType.getReturnType(), &retType);
   EXPECT_EQ(fnType.getParamTypes().size(), 2u);
   EXPECT_EQ(fnType.getParamTypes()[0], &f16);

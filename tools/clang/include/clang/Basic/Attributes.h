@@ -7,11 +7,11 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_BASIC_ATTRIBUTES_H
-#define LLVM_CLANG_BASIC_ATTRIBUTES_H
+#ifndef LLVM37_CLANG_BASIC_ATTRIBUTES_H
+#define LLVM37_CLANG_BASIC_ATTRIBUTES_H
 
 #include "clang/Basic/LangOptions.h"
-#include "llvm/ADT/Triple.h"
+#include "llvm37/ADT/Triple.h"
 
 namespace clang {
 
@@ -31,9 +31,9 @@ enum class AttrSyntax {
 /// \brief Return the version number associated with the attribute if we
 /// recognize and implement the attribute specified by the given information.
 int hasAttribute(AttrSyntax Syntax, const IdentifierInfo *Scope,
-                 const IdentifierInfo *Attr, const llvm::Triple &T,
+                 const IdentifierInfo *Attr, const llvm37::Triple &T,
                  const LangOptions &LangOpts);
 
 } // end namespace clang
 
-#endif // LLVM_CLANG_BASIC_ATTRIBUTES_H
+#endif // LLVM37_CLANG_BASIC_ATTRIBUTES_H

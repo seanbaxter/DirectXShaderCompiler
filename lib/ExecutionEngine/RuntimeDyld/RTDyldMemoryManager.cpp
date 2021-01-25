@@ -11,11 +11,11 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Config/config.h"
-#include "llvm/ExecutionEngine/RTDyldMemoryManager.h"
-#include "llvm/Support/Compiler.h"
-#include "llvm/Support/DynamicLibrary.h"
-#include "llvm/Support/ErrorHandling.h"
+#include "llvm37/Config/config.h"
+#include "llvm37/ExecutionEngine/RTDyldMemoryManager.h"
+#include "llvm37/Support/Compiler.h"
+#include "llvm37/Support/DynamicLibrary.h"
+#include "llvm37/Support/ErrorHandling.h"
 #include <cstdlib>
 
 #ifdef __linux__
@@ -28,7 +28,7 @@
   #include <unistd.h>
 #endif
 
-namespace llvm {
+namespace llvm37 {
 
 RTDyldMemoryManager::~RTDyldMemoryManager() {}
 
@@ -55,7 +55,7 @@ void __register_frame(void *p) {
   if (!Searched) {
     Searched = true;
     *(void **)&rf =
-        llvm::sys::DynamicLibrary::SearchForAddressOfSymbol("__register_frame");
+        llvm37::sys::DynamicLibrary::SearchForAddressOfSymbol("__register_frame");
   }
   if (rf)
     rf(p);
@@ -67,7 +67,7 @@ void __deregister_frame(void *p) {
 
   if (!Searched) {
     Searched = true;
-    *(void **)&df = llvm::sys::DynamicLibrary::SearchForAddressOfSymbol(
+    *(void **)&df = llvm37::sys::DynamicLibrary::SearchForAddressOfSymbol(
         "__deregister_frame");
   }
   if (df)
@@ -213,7 +213,7 @@ ARM_MATH_IMPORTS(ARM_MATH_DECL)
 
 #if defined(__linux__) && defined(__GLIBC__) && \
       (defined(__i386__) || defined(__x86_64__))
-extern "C" LLVM_ATTRIBUTE_WEAK void __morestack();
+extern "C" LLVM37_ATTRIBUTE_WEAK void __morestack();
 #endif
 
 uint64_t
@@ -291,4 +291,4 @@ void *RTDyldMemoryManager::getPointerToNamedFunction(const std::string &Name,
   return (void*)Addr;
 }
 
-} // namespace llvm
+} // namespace llvm37

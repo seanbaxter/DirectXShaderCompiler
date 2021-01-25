@@ -18,10 +18,10 @@
 #include "clang/Lex/HeaderSearch.h"
 #include "clang/Lex/LexDiagnostic.h"
 #include "clang/Lex/MacroInfo.h"
-#include "llvm/ADT/StringSwitch.h"
-#include "llvm/Support/FileSystem.h"
-#include "llvm/Support/MemoryBuffer.h"
-#include "llvm/Support/Path.h"
+#include "llvm37/ADT/StringSwitch.h"
+#include "llvm37/Support/FileSystem.h"
+#include "llvm37/Support/MemoryBuffer.h"
+#include "llvm37/Support/Path.h"
 using namespace clang;
 
 PPCallbacks::~PPCallbacks() {}
@@ -85,7 +85,7 @@ bool Preprocessor::EnterSourceFile(FileID FID, const DirectoryLookup *CurDir,
   
   // Get the MemoryBuffer for this FID, if it fails, we fail.
   bool Invalid = false;
-  const llvm::MemoryBuffer *InputFile = 
+  const llvm37::MemoryBuffer *InputFile = 
     getSourceManager().getBuffer(FID, Loc, &Invalid);
   if (Invalid) {
     SourceLocation FileStart = SourceMgr.getLocForStartOfFile(FID);
@@ -162,7 +162,7 @@ void Preprocessor::EnterMacro(Token &Tok, SourceLocation ILEnd,
                               MacroInfo *Macro, MacroArgs *Args) {
   std::unique_ptr<TokenLexer> TokLexer;
   if (NumCachedTokenLexers == 0) {
-    TokLexer = llvm::make_unique<TokenLexer>(Tok, ILEnd, Macro, Args, *this);
+    TokLexer = llvm37::make_unique<TokenLexer>(Tok, ILEnd, Macro, Args, *this);
   } else {
     TokLexer = std::move(TokenLexerCache[--NumCachedTokenLexers]);
     TokLexer->Init(Tok, ILEnd, Macro, Args);
@@ -212,7 +212,7 @@ void Preprocessor::EnterTokenStream(const Token *Toks, unsigned NumToks,
   // Create a macro expander to expand from the specified token stream.
   std::unique_ptr<TokenLexer> TokLexer;
   if (NumCachedTokenLexers == 0) {
-    TokLexer = llvm::make_unique<TokenLexer>(
+    TokLexer = llvm37::make_unique<TokenLexer>(
         Toks, NumToks, DisableMacroExpansion, OwnsTokens, *this);
   } else {
     TokLexer = std::move(TokenLexerCache[--NumCachedTokenLexers]);
@@ -240,13 +240,13 @@ static void computeRelativePath(FileManager &FM, const DirectoryEntry *Dir,
     if (const DirectoryEntry *CurDir = FM.getDirectory(Path)) {
       if (CurDir == Dir) {
         Result = FilePath.substr(Path.size());
-        llvm::sys::path::append(Result, 
-                                llvm::sys::path::filename(File->getName()));
+        llvm37::sys::path::append(Result, 
+                                llvm37::sys::path::filename(File->getName()));
         return;
       }
     }
     
-    Path = llvm::sys::path::parent_path(Path);
+    Path = llvm37::sys::path::parent_path(Path);
   }
   
   Result = File->getName();
@@ -490,11 +490,11 @@ bool Preprocessor::HandleEndOfFile(Token &Result, bool isEndOfMacro) {
         std::error_code EC;
         for (vfs::recursive_directory_iterator Entry(FS, Dir->getName(), EC), End;
              Entry != End && !EC; Entry.increment(EC)) {
-          using llvm::StringSwitch;
+          using llvm37::StringSwitch;
           
           // Check whether this entry has an extension typically associated with
           // headers.
-          if (!StringSwitch<bool>(llvm::sys::path::extension(Entry->getName()))
+          if (!StringSwitch<bool>(llvm37::sys::path::extension(Entry->getName()))
                  .Cases(".h", ".H", ".hh", ".hpp", true)
                  .Default(false))
             continue;

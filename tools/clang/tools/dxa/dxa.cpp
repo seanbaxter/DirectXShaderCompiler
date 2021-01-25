@@ -18,12 +18,12 @@
 #include "dxc/Support/HLSLOptions.h"
 #include "dxc/DxilContainer/DxilContainer.h"
 
-#include "llvm/Support/CommandLine.h"
+#include "llvm37/Support/CommandLine.h"
 #include <dia2.h>
 #include <intsafe.h>
 
-using namespace llvm;
-using namespace llvm::opt;
+using namespace llvm37;
+using namespace llvm37::opt;
 using namespace dxc;
 using namespace hlsl::options;
 

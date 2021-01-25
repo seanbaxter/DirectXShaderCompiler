@@ -10,11 +10,11 @@
 #include "ExternalSymbolDumper.h"
 #include "LinePrinter.h"
 
-#include "llvm/DebugInfo/PDB/PDBSymbolExe.h"
-#include "llvm/DebugInfo/PDB/PDBSymbolPublicSymbol.h"
-#include "llvm/Support/Format.h"
+#include "llvm37/DebugInfo/PDB/PDBSymbolExe.h"
+#include "llvm37/DebugInfo/PDB/PDBSymbolPublicSymbol.h"
+#include "llvm37/Support/Format.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 ExternalSymbolDumper::ExternalSymbolDumper(LinePrinter &P)
     : PDBSymDumper(true), Printer(P) {}

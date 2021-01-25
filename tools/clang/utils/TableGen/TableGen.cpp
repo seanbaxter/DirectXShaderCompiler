@@ -12,12 +12,12 @@
 //===----------------------------------------------------------------------===//
 
 #include "TableGenBackends.h" // Declares all backends.
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/PrettyStackTrace.h"
-#include "llvm/Support/Signals.h"
-#include "llvm/TableGen/Error.h"
-#include "llvm/TableGen/Main.h"
-#include "llvm/TableGen/Record.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/PrettyStackTrace.h"
+#include "llvm37/Support/Signals.h"
+#include "llvm37/TableGen/Error.h"
+#include "llvm37/TableGen/Main.h"
+#include "llvm37/TableGen/Record.h"
 
 // HLSL Change Starts
 #ifdef _WIN32
@@ -25,11 +25,11 @@
 #include <windows.h>
 #endif
 
-#include "llvm/Support/FileSystem.h"
-#include "llvm/Support/MSFileSystem.h"
+#include "llvm37/Support/FileSystem.h"
+#include "llvm37/Support/MSFileSystem.h"
 // HLSL Change Ends
 
-using namespace llvm;
+using namespace llvm37;
 using namespace clang;
 
 enum ActionType {
@@ -251,16 +251,16 @@ bool ClangTableGenMain(raw_ostream &OS, RecordKeeper &Records) {
 
 int main(int argc, char **argv) {
   // HLSL Change Starts
-  llvm::sys::fs::MSFileSystem* msfPtr;
+  llvm37::sys::fs::MSFileSystem* msfPtr;
   HRESULT hr;
-  if (std::error_code ec = llvm::sys::fs::SetupPerThreadFileSystem())
+  if (std::error_code ec = llvm37::sys::fs::SetupPerThreadFileSystem())
       return 1;
-  llvm::sys::fs::AutoCleanupPerThreadFileSystem auto_cleanup_fs;
+  llvm37::sys::fs::AutoCleanupPerThreadFileSystem auto_cleanup_fs;
   if (!SUCCEEDED(hr = CreateMSFileSystemForDisk(&msfPtr)))
     return 1;
-  std::unique_ptr<llvm::sys::fs::MSFileSystem> msf(msfPtr);
-  llvm::sys::fs::AutoPerThreadSystem pts(msf.get());
-  llvm::STDStreamCloser stdStreamCloser;
+  std::unique_ptr<llvm37::sys::fs::MSFileSystem> msf(msfPtr);
+  llvm37::sys::fs::AutoPerThreadSystem pts(msf.get());
+  llvm37::STDStreamCloser stdStreamCloser;
   // HLSL Change Ends
 
   // sys::PrintStackTraceOnErrorSignal(); // HLSL Change

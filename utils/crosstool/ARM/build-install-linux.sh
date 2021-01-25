@@ -33,16 +33,16 @@ readonly CROSS_TARGET_LD="${CODE_SOURCERY_BIN}/${CROSS_TARGET}-ld"
 
 readonly SYSROOT="${CODE_SOURCERY_ROOT}/${CROSS_TARGET}/libc"
 
-readonly LLVM_PKG_PATH="${LLVM_PKG_PATH:-${HOME}/llvm-project/snapshots}"
+readonly LLVM37_PKG_PATH="${LLVM37_PKG_PATH:-${HOME}/llvm-project/snapshots}"
 
 # Latest SVN revisions known to be working in this configuration.
-readonly LLVM_DEFAULT_REV="74530"
+readonly LLVM37_DEFAULT_REV="74530"
 readonly LLVMGCC_DEFAULT_REV="74535"
 
-readonly LLVM_PKG="llvm-${LLVM_SVN_REV:-${LLVM_DEFAULT_REV}}.tar.bz2"
-readonly LLVM_SRC_DIR="${SRC_ROOT}/llvm"
-readonly LLVM_OBJ_DIR="${OBJ_ROOT}/llvm"
-readonly LLVM_INSTALL_DIR="${INSTALL_ROOT}/${CROSS_TARGET}/llvm"
+readonly LLVM37_PKG="llvm-${LLVM37_SVN_REV:-${LLVM37_DEFAULT_REV}}.tar.bz2"
+readonly LLVM37_SRC_DIR="${SRC_ROOT}/llvm"
+readonly LLVM37_OBJ_DIR="${OBJ_ROOT}/llvm"
+readonly LLVM37_INSTALL_DIR="${INSTALL_ROOT}/${CROSS_TARGET}/llvm"
 
 readonly LLVMGCC_PKG="llvm-gcc-4.2-${LLVMGCC_SVN_REV:-${LLVMGCC_DEFAULT_REV}}.tar.bz2"
 readonly LLVMGCC_SRC_DIR="${SRC_ROOT}/llvm-gcc-4.2"
@@ -129,30 +129,30 @@ installCodeSourcery() {
 }
 
 installLLVM() {
-  if [[ -d ${LLVM_INSTALL_DIR} ]]; then
-    echo "LLVM install dir ${LLVM_INSTALL_DIR} exists; skipping."
+  if [[ -d ${LLVM37_INSTALL_DIR} ]]; then
+    echo "LLVM install dir ${LLVM37_INSTALL_DIR} exists; skipping."
     return
   fi
 
-  sudoCreateDir ${LLVM_INSTALL_DIR}
+  sudoCreateDir ${LLVM37_INSTALL_DIR}
 
   # Unpack LLVM tarball; should create the directory "llvm".
   cd ${SRC_ROOT}
-  runCommand "Unpacking LLVM" tar jxf ${LLVM_PKG_PATH}/${LLVM_PKG}
+  runCommand "Unpacking LLVM" tar jxf ${LLVM37_PKG_PATH}/${LLVM37_PKG}
 
   # Configure, build, and install LLVM.
-  createDir ${LLVM_OBJ_DIR}
-  cd ${LLVM_OBJ_DIR}
-  runAndLog "Configuring LLVM" ${LLVM_OBJ_DIR}/llvm-configure.log \
-      ${LLVM_SRC_DIR}/configure \
+  createDir ${LLVM37_OBJ_DIR}
+  cd ${LLVM37_OBJ_DIR}
+  runAndLog "Configuring LLVM" ${LLVM37_OBJ_DIR}/llvm-configure.log \
+      ${LLVM37_SRC_DIR}/configure \
       --disable-jit \
       --enable-optimized \
-      --prefix=${LLVM_INSTALL_DIR} \
+      --prefix=${LLVM37_INSTALL_DIR} \
       --target=${CROSS_TARGET} \
       --with-llvmgccdir=${LLVMGCC_INSTALL_DIR}
-  runAndLog "Building LLVM" ${LLVM_OBJ_DIR}/llvm-build.log \
+  runAndLog "Building LLVM" ${LLVM37_OBJ_DIR}/llvm-build.log \
       make ${MAKE_OPTS}
-  runAndLog "Installing LLVM" ${LLVM_OBJ_DIR}/llvm-install.log \
+  runAndLog "Installing LLVM" ${LLVM37_OBJ_DIR}/llvm-install.log \
       make ${MAKE_OPTS} install
 }
 
@@ -166,7 +166,7 @@ installLLVMGCC() {
 
   # Unpack LLVM-GCC tarball; should create the directory "llvm-gcc-4.2".
   cd ${SRC_ROOT}
-  runCommand "Unpacking LLVM-GCC" tar jxf ${LLVM_PKG_PATH}/${LLVMGCC_PKG}
+  runCommand "Unpacking LLVM-GCC" tar jxf ${LLVM37_PKG_PATH}/${LLVMGCC_PKG}
 
   # Configure, build, and install LLVM-GCC.
   createDir ${LLVMGCC_OBJ_DIR}
@@ -174,7 +174,7 @@ installLLVMGCC() {
   runAndLog "Configuring LLVM-GCC" ${LLVMGCC_OBJ_DIR}/llvmgcc-configure.log \
       ${LLVMGCC_SRC_DIR}/configure \
       --enable-languages=c,c++ \
-      --enable-llvm=${LLVM_INSTALL_DIR} \
+      --enable-llvm=${LLVM37_INSTALL_DIR} \
       --prefix=${LLVMGCC_INSTALL_DIR} \
       --program-prefix=llvm- \
       --target=${CROSS_TARGET} \

@@ -7,20 +7,20 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/IR/Dominators.h"
-#include "llvm/Analysis/PostDominators.h"
-#include "llvm/AsmParser/Parser.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/LegacyPassManager.h"
-#include "llvm/Support/SourceMgr.h"
+#include "llvm37/IR/Dominators.h"
+#include "llvm37/Analysis/PostDominators.h"
+#include "llvm37/AsmParser/Parser.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/LegacyPassManager.h"
+#include "llvm37/Support/SourceMgr.h"
 #include "gtest/gtest.h"
 
-using namespace llvm;
+using namespace llvm37;
 
-namespace llvm {
+namespace llvm37 {
   void initializeDPassPass(PassRegistry&);
 
   namespace {

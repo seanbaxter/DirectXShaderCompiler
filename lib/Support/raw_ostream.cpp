@@ -11,18 +11,18 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/ADT/StringExtras.h"
-#include "llvm/Config/config.h"
-#include "llvm/Support/Compiler.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/FileSystem.h"
-#include "llvm/Support/Format.h"
-#include "llvm/Support/MathExtras.h"
-#include "llvm/Support/Process.h"
-#include "llvm/Support/Program.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/ADT/StringExtras.h"
+#include "llvm37/Config/config.h"
+#include "llvm37/Support/Compiler.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/FileSystem.h"
+#include "llvm37/Support/Format.h"
+#include "llvm37/Support/MathExtras.h"
+#include "llvm37/Support/Process.h"
+#include "llvm37/Support/Program.h"
 #include <cctype>
 #include <cerrno>
 #include <ios>
@@ -58,7 +58,7 @@
 #endif
 #endif
 
-using namespace llvm;
+using namespace llvm37;
 
 raw_ostream::~raw_ostream() {
   // raw_ostream's subclasses should take care to flush the buffer
@@ -305,8 +305,8 @@ void raw_ostream::flush_nonempty() {
 
 raw_ostream &raw_ostream::write(unsigned char C) {
   // Group exceptional cases into a single branch.
-  if (LLVM_UNLIKELY(OutBufCur >= OutBufEnd)) {
-    if (LLVM_UNLIKELY(!OutBufStart)) {
+  if (LLVM37_UNLIKELY(OutBufCur >= OutBufEnd)) {
+    if (LLVM37_UNLIKELY(!OutBufStart)) {
       if (BufferMode == Unbuffered) {
         write_impl(reinterpret_cast<char*>(&C), 1);
         return *this;
@@ -325,8 +325,8 @@ raw_ostream &raw_ostream::write(unsigned char C) {
 
 raw_ostream &raw_ostream::write(const char *Ptr, size_t Size) {
   // Group exceptional cases into a single branch.
-  if (LLVM_UNLIKELY(size_t(OutBufEnd - OutBufCur) < Size)) {
-    if (LLVM_UNLIKELY(!OutBufStart)) {
+  if (LLVM37_UNLIKELY(size_t(OutBufEnd - OutBufCur) < Size)) {
+    if (LLVM37_UNLIKELY(!OutBufStart)) {
       if (BufferMode == Unbuffered) {
         write_impl(Ptr, Size);
         return *this;
@@ -341,7 +341,7 @@ raw_ostream &raw_ostream::write(const char *Ptr, size_t Size) {
     // If the buffer is empty at this point we have a string that is larger
     // than the buffer. Directly write the chunk that is a multiple of the
     // preferred buffer size and put the remainder in the buffer.
-    if (LLVM_UNLIKELY(OutBufCur == OutBufStart)) {
+    if (LLVM37_UNLIKELY(OutBufCur == OutBufStart)) {
       assert(NumBytes != 0 && "undefined behavior");
       size_t BytesToWrite = Size - (Size % NumBytes);
       write_impl(Ptr, BytesToWrite);
@@ -569,8 +569,8 @@ raw_fd_ostream::raw_fd_ostream(int fd, bool shouldClose, bool unbuffered)
   }
 
   // Get the starting position.
-  off_t loc = llvm::sys::fs::msf_lseek(FD, 0, SEEK_CUR);  // HLSL Change - msf_lseek
-#ifdef LLVM_ON_WIN32
+  off_t loc = llvm37::sys::fs::msf_lseek(FD, 0, SEEK_CUR);  // HLSL Change - msf_lseek
+#ifdef LLVM37_ON_WIN32
   // MSVCRT's _lseek(SEEK_CUR) doesn't return -1 for pipes.
   sys::fs::file_status Status;
   std::error_code EC = status(FD, Status);
@@ -616,8 +616,8 @@ void raw_fd_ostream::write_impl(const char *Ptr, size_t Size) {
     ssize_t ret;
 
     // Check whether we should attempt to use atomic writes.
-    if (LLVM_LIKELY(!UseAtomicWrites)) {
-      ret = llvm::sys::fs::msf_write(FD, Ptr, Size);
+    if (LLVM37_LIKELY(!UseAtomicWrites)) {
+      ret = llvm37::sys::fs::msf_write(FD, Ptr, Size);
     } else {
       // Use ::writev() where available.
 #if defined(HAVE_WRITEV)
@@ -625,7 +625,7 @@ void raw_fd_ostream::write_impl(const char *Ptr, size_t Size) {
       struct iovec IOV = {const_cast<void *>(Addr), Size };
       ret = ::writev(FD, &IOV, 1);
 #else
-      ret = llvm::sys::fs::msf_write(FD, Ptr, Size);
+      ret = llvm37::sys::fs::msf_write(FD, Ptr, Size);
 #endif
     }
 
@@ -669,7 +669,7 @@ void raw_fd_ostream::close() {
 
 uint64_t raw_fd_ostream::seek(uint64_t off) {
   flush();
-  pos = llvm::sys::fs::msf_lseek(FD, off, SEEK_SET);  // HLSL Change
+  pos = llvm37::sys::fs::msf_lseek(FD, off, SEEK_SET);  // HLSL Change
   if (pos == (uint64_t)-1)
     error_detected();
   return pos;
@@ -759,7 +759,7 @@ bool raw_fd_ostream::has_colors() const {
 
 /// outs() - This returns a reference to a raw_ostream for standard output.
 /// Use it like: outs() << "foo" << "bar";
-raw_ostream &llvm::outs() {
+raw_ostream &llvm37::outs() {
   // Set buffer settings to model stdout behavior.
   // Delete the file descriptor when the program exits, forcing error
   // detection. If you don't want this behavior, don't use outs().
@@ -771,14 +771,14 @@ raw_ostream &llvm::outs() {
 
 /// errs() - This returns a reference to a raw_ostream for standard error.
 /// Use it like: errs() << "foo" << "bar";
-raw_ostream &llvm::errs() {
+raw_ostream &llvm37::errs() {
   // Set standard error to be unbuffered by default.
   static raw_fd_ostream S(STDERR_FILENO, false, true);
   return S;
 }
 
 /// nulls() - This returns a reference to a raw_ostream which discards output.
-raw_ostream &llvm::nulls() {
+raw_ostream &llvm37::nulls() {
   static raw_null_ostream S;
   return S;
 }

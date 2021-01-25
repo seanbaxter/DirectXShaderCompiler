@@ -7,13 +7,13 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_COV_RENDERINGSUPPORT_H
-#define LLVM_COV_RENDERINGSUPPORT_H
+#ifndef LLVM37_COV_RENDERINGSUPPORT_H
+#define LLVM37_COV_RENDERINGSUPPORT_H
 
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <utility>
 
-namespace llvm {
+namespace llvm37 {
 
 /// \brief A helper class that resets the output stream's color if needed
 /// when destroyed.
@@ -57,4 +57,4 @@ inline ColoredRawOstream colored_ostream(raw_ostream &OS,
 }
 }
 
-#endif // LLVM_COV_RENDERINGSUPPORT_H
+#endif // LLVM37_COV_RENDERINGSUPPORT_H

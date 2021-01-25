@@ -11,10 +11,10 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/MC/MCSchedule.h"
+#include "llvm37/MC/MCSchedule.h"
 #include <type_traits>
 
-using namespace llvm;
+using namespace llvm37;
 
 static_assert(std::is_pod<MCSchedModel>::value,
               "We shouldn't have a static constructor here");

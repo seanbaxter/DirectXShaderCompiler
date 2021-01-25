@@ -10,15 +10,15 @@
 #include "dxc/DXIL/DxilCounters.h"
 #include "dxc/Support/Global.h"
 
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Operator.h"
-#include "llvm/IR/Module.h"
-#include "llvm/ADT/DenseMap.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/Operator.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/ADT/DenseMap.h"
 
 #include "dxc/DXIL/DxilOperations.h"
 #include "dxc/DXIL/DxilInstructions.h"
 
-using namespace llvm;
+using namespace llvm37;
 using namespace hlsl;
 using namespace hlsl::DXIL;
 
@@ -261,7 +261,7 @@ void CountLlvmOp(unsigned op, DxilCounters &counters) {
 
 } // namespace
 
-void CountInstructions(llvm::Module &M, DxilCounters& counters) {
+void CountInstructions(llvm37::Module &M, DxilCounters& counters) {
   const DataLayout &DL = M.getDataLayout();
   PointerInfoMap ptrInfoMap;
 
@@ -294,7 +294,7 @@ void CountInstructions(llvm::Module &M, DxilCounters& counters) {
           }
         } else if (CallInst *CI = dyn_cast<CallInst>(I)) {
           if (hlsl::OP::IsDxilOpFuncCallInst(CI)) {
-            unsigned opcode = (unsigned)llvm::cast<llvm::ConstantInt>(I->getOperand(0))->getZExtValue();
+            unsigned opcode = (unsigned)llvm37::cast<llvm37::ConstantInt>(I->getOperand(0))->getZExtValue();
             CountDxilOp(opcode, counters);
           }
         } else if (isa<LoadInst>(I) || isa<StoreInst>(I)) {
@@ -365,7 +365,7 @@ static int CounterOffsetByNameLess(const CounterOffsetByName &a, const CounterOf
   return a.name < b.name;
 }
 
-uint32_t *LookupByName(llvm::StringRef name, DxilCounters& counters) {
+uint32_t *LookupByName(llvm37::StringRef name, DxilCounters& counters) {
   CounterOffsetByName key = {name, nullptr};
   static const CounterOffsetByName *CounterEnd = CountersByName +_countof(CountersByName);
   auto result = std::lower_bound(CountersByName, CounterEnd, key, CounterOffsetByNameLess);

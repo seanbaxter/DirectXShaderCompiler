@@ -10,8 +10,8 @@
 //  This file defines the ASTMutationListener interface.
 //
 //===----------------------------------------------------------------------===//
-#ifndef LLVM_CLANG_AST_ASTMUTATIONLISTENER_H
-#define LLVM_CLANG_AST_ASTMUTATIONLISTENER_H
+#ifndef LLVM37_CLANG_AST_ASTMUTATIONLISTENER_H
+#define LLVM37_CLANG_AST_ASTMUTATIONLISTENER_H
 
 namespace clang {
   class Attr;

@@ -7,11 +7,11 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/ADT/SmallString.h"
-#include "llvm/Support/EndianStream.h"
-#include "llvm/Support/DataTypes.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/Support/EndianStream.h"
+#include "llvm37/Support/DataTypes.h"
 #include "gtest/gtest.h"
-using namespace llvm;
+using namespace llvm37;
 using namespace support;
 
 namespace {

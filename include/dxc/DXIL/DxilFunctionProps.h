@@ -13,7 +13,7 @@
 
 #include "dxc/DXIL/DxilConstants.h"
 
-namespace llvm {
+namespace llvm37 {
 class Function;
 class Constant;
 }
@@ -38,7 +38,7 @@ struct DxilFunctionProps {
     } GS;
     // Hull shader.
     struct {
-      llvm::Function *patchConstantFunc;
+      llvm37::Function *patchConstantFunc;
       DXIL::TessellatorDomain domain;
       DXIL::TessellatorPartitioning partition;
       DXIL::TessellatorOutputPrimitive outputPrimitive;
@@ -53,7 +53,7 @@ struct DxilFunctionProps {
     } DS;
     // Vertex shader.
     struct {
-      llvm::Constant *clipPlanes[DXIL::kNumClipPlanes];
+      llvm37::Constant *clipPlanes[DXIL::kNumClipPlanes];
     } VS;
     // Pixel shader.
     struct {

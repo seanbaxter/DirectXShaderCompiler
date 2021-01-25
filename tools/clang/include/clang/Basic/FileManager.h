@@ -12,22 +12,22 @@
 ///
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_BASIC_FILEMANAGER_H
-#define LLVM_CLANG_BASIC_FILEMANAGER_H
+#ifndef LLVM37_CLANG_BASIC_FILEMANAGER_H
+#define LLVM37_CLANG_BASIC_FILEMANAGER_H
 
 #include "clang/Basic/FileSystemOptions.h"
 #include "clang/Basic/LLVM.h"
 #include "clang/Basic/VirtualFileSystem.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/IntrusiveRefCntPtr.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/ADT/StringMap.h"
-#include "llvm/ADT/StringRef.h"
-#include "llvm/Support/Allocator.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/IntrusiveRefCntPtr.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/ADT/StringMap.h"
+#include "llvm37/ADT/StringRef.h"
+#include "llvm37/Support/Allocator.h"
 #include <memory>
 #include <map>
 
-namespace llvm {
+namespace llvm37 {
 class MemoryBuffer;
 }
 
@@ -56,7 +56,7 @@ class FileEntry {
   time_t ModTime;             // Modification time of file.
   const DirectoryEntry *Dir;  // Directory file lives in.
   unsigned UID;               // A unique (small) ID for the file.
-  llvm::sys::fs::UniqueID UniqueID;
+  llvm37::sys::fs::UniqueID UniqueID;
   bool IsNamedPipe;
   bool InPCH;
   bool IsValid;               // Is this \c FileEntry initialized and valid?
@@ -85,7 +85,7 @@ public:
   bool isValid() const { return IsValid; }
   off_t getSize() const { return Size; }
   unsigned getUID() const { return UID; }
-  const llvm::sys::fs::UniqueID &getUniqueID() const { return UniqueID; }
+  const llvm37::sys::fs::UniqueID &getUniqueID() const { return UniqueID; }
   bool isInPCH() const { return InPCH; }
   time_t getModificationTime() const { return ModTime; }
 
@@ -117,10 +117,10 @@ class FileManager : public RefCountedBase<FileManager> {
   FileSystemOptions FileSystemOpts;
 
   /// \brief Cache for existing real directories.
-  std::map<llvm::sys::fs::UniqueID, DirectoryEntry> UniqueRealDirs;
+  std::map<llvm37::sys::fs::UniqueID, DirectoryEntry> UniqueRealDirs;
 
   /// \brief Cache for existing real files.
-  std::map<llvm::sys::fs::UniqueID, FileEntry> UniqueRealFiles;
+  std::map<llvm37::sys::fs::UniqueID, FileEntry> UniqueRealFiles;
 
   /// \brief The virtual directories that we have allocated.
   ///
@@ -138,19 +138,19 @@ class FileManager : public RefCountedBase<FileManager> {
   /// for virtual directories/files are owned by
   /// VirtualDirectoryEntries/VirtualFileEntries above.
   ///
-  llvm::StringMap<DirectoryEntry*, llvm::BumpPtrAllocator> SeenDirEntries;
+  llvm37::StringMap<DirectoryEntry*, llvm37::BumpPtrAllocator> SeenDirEntries;
 
   /// \brief A cache that maps paths to file entries (either real or
   /// virtual) we have looked up.
   ///
   /// \see SeenDirEntries
-  llvm::StringMap<FileEntry*, llvm::BumpPtrAllocator> SeenFileEntries;
+  llvm37::StringMap<FileEntry*, llvm37::BumpPtrAllocator> SeenFileEntries;
 
   /// \brief The canonical names of directories.
-  llvm::DenseMap<const DirectoryEntry *, llvm::StringRef> CanonicalDirNames;
+  llvm37::DenseMap<const DirectoryEntry *, llvm37::StringRef> CanonicalDirNames;
 
   /// \brief Storage for canonical names that we have computed.
-  llvm::BumpPtrAllocator CanonicalNameStorage;
+  llvm37::BumpPtrAllocator CanonicalNameStorage;
 
   /// \brief Each FileEntry we create is assigned a unique ID #.
   ///
@@ -233,10 +233,10 @@ public:
 
   /// \brief Open the specified file as a MemoryBuffer, returning a new
   /// MemoryBuffer if successful, otherwise returning null.
-  llvm::ErrorOr<std::unique_ptr<llvm::MemoryBuffer>>
+  llvm37::ErrorOr<std::unique_ptr<llvm37::MemoryBuffer>>
   getBufferForFile(const FileEntry *Entry, bool isVolatile = false,
                    bool ShouldCloseOpenFile = true);
-  llvm::ErrorOr<std::unique_ptr<llvm::MemoryBuffer>>
+  llvm37::ErrorOr<std::unique_ptr<llvm37::MemoryBuffer>>
   getBufferForFile(StringRef Filename);
 
   /// \brief Get the 'stat' information for the given \p Path.

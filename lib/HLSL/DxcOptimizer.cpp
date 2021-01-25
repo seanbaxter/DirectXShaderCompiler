@@ -16,35 +16,35 @@
 #include "dxc/DxilContainer/DxilContainer.h"
 #include "dxc/Support/FileIOHelper.h"
 #include "dxc/DXIL/DxilModule.h"
-#include "llvm/Analysis/ReducibilityAnalysis.h"
+#include "llvm37/Analysis/ReducibilityAnalysis.h"
 #include "dxc/HLSL/HLMatrixLowerPass.h"
 #include "dxc/HLSL/DxilGenerationPass.h"
 #include "dxc/HLSL/ComputeViewIdState.h"
-#include "llvm/Analysis/DxilValueCache.h"
+#include "llvm37/Analysis/DxilValueCache.h"
 #include "dxc/DXIL/DxilUtil.h"
 #include "dxc/Support/dxcapi.impl.h"
 
-#include "llvm/Pass.h"
-#include "llvm/PassInfo.h"
-#include "llvm/Support/MemoryBuffer.h"
-#include "llvm/IRReader/IRReader.h"
-#include "llvm/Bitcode/ReaderWriter.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/SourceMgr.h"
-#include "llvm/IR/IRPrintingPasses.h"
-#include "llvm/IR/LegacyPassManager.h"
-#include "llvm/IR/Verifier.h"
-#include "llvm/Analysis/CFGPrinter.h"
-#include "llvm/Transforms/IPO/PassManagerBuilder.h"
+#include "llvm37/Pass.h"
+#include "llvm37/PassInfo.h"
+#include "llvm37/Support/MemoryBuffer.h"
+#include "llvm37/IRReader/IRReader.h"
+#include "llvm37/Bitcode/ReaderWriter.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/SourceMgr.h"
+#include "llvm37/IR/IRPrintingPasses.h"
+#include "llvm37/IR/LegacyPassManager.h"
+#include "llvm37/IR/Verifier.h"
+#include "llvm37/Analysis/CFGPrinter.h"
+#include "llvm37/Transforms/IPO/PassManagerBuilder.h"
 
 #include <algorithm>
 #include <list>   // should change this for string_table
 #include <vector>
 
-#include "llvm/PassPrinters/PassPrinters.h"
+#include "llvm37/PassPrinters/PassPrinters.h"
 
-using namespace llvm;
+using namespace llvm37;
 using namespace hlsl;
 
 inline static bool wcseq(LPCWSTR a, LPCWSTR b) {
@@ -538,7 +538,7 @@ public:
   }
 
   HRESULT Initialize();
-  const PassInfo *getPassByID(llvm::AnalysisID PassID);
+  const PassInfo *getPassByID(llvm37::AnalysisID PassID);
   const PassInfo *getPassByName(const char *pName);
   HRESULT STDMETHODCALLTYPE GetAvailablePassCount(_Out_ UINT32 *pCount) override {
     return AssignToOut<UINT32>(m_passes.size(), pCount);
@@ -550,7 +550,7 @@ public:
     _COM_Outptr_opt_ IDxcBlobEncoding **ppOutputText) override;
 };
 
-class CapturePassManager : public llvm::legacy::PassManagerBase {
+class CapturePassManager : public llvm37::legacy::PassManagerBase {
 private:
   SmallVector<Pass *, 64> Passes;
 public:
@@ -566,7 +566,7 @@ public:
   const char *getPassNameAt(size_t index) const {
     return Passes[index]->getPassName();
   }
-  llvm::AnalysisID getPassIDAt(size_t index) const {
+  llvm37::AnalysisID getPassIDAt(size_t index) const {
     return Passes[index]->getPassID();
   }
 };
@@ -590,7 +590,7 @@ HRESULT DxcOptimizer::Initialize() {
   return S_OK;
 }
 
-const PassInfo *DxcOptimizer::getPassByID(llvm::AnalysisID PassID) {
+const PassInfo *DxcOptimizer::getPassByID(llvm37::AnalysisID PassID) {
   return m_registry->getPassInfo(PassID);
 }
 
@@ -643,7 +643,7 @@ HRESULT STDMETHODCALLTYPE DxcOptimizer::RunOptimizer(
     std::string DiagStr;
     GetDxilProgramBitcode(pProgramHeader, &pBlobContent, &blobSize);
     M = hlsl::dxilutil::LoadModuleFromBitcode(
-      llvm::StringRef(pBlobContent, blobSize), Context, DiagStr);
+      llvm37::StringRef(pBlobContent, blobSize), Context, DiagStr);
   }
   else {
     StringRef bufStrRef(pBlobContent, blobSize);
@@ -721,7 +721,7 @@ HRESULT STDMETHODCALLTYPE DxcOptimizer::RunOptimizer(
           Banner += "\n";
         }
         if (pPassManager == &ModulePasses)
-          pPassManager->add(llvm::createPrintModulePass(outStream, Banner));
+          pPassManager->add(llvm37::createPrintModulePass(outStream, Banner));
         continue;
       }
 
@@ -750,7 +750,7 @@ HRESULT STDMETHODCALLTYPE DxcOptimizer::RunOptimizer(
         ++pCursor;
       }
       *pCursor = '\0';
-      const llvm::PassInfo *PassInf = getPassByName(pOptionNameStart);
+      const llvm37::PassInfo *PassInf = getPassByName(pOptionNameStart);
       if (!PassInf) {
         return E_INVALIDARG;
       }
@@ -822,7 +822,7 @@ HRESULT STDMETHODCALLTYPE DxcOptimizer::RunOptimizer(
     ModulePasses.add(createVerifierPass());
 
     if (OutputAssembly) {
-      ModulePasses.add(llvm::createPrintModulePass(outStream));
+      ModulePasses.add(llvm37::createPrintModulePass(outStream));
     }
 
     // Now that we have all of the passes ready, run them.

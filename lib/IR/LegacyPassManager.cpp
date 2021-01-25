@@ -11,24 +11,24 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/IRPrintingPasses.h"
-#include "llvm/IR/LegacyPassManager.h"
-#include "llvm/IR/LegacyPassManagers.h"
-#include "llvm/IR/LegacyPassNameParser.h"
-#include "llvm/IR/Module.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/ManagedStatic.h"
-#include "llvm/Support/Mutex.h"
-#include "llvm/Support/TimeValue.h"
-#include "llvm/Support/Timer.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/IRPrintingPasses.h"
+#include "llvm37/IR/LegacyPassManager.h"
+#include "llvm37/IR/LegacyPassManagers.h"
+#include "llvm37/IR/LegacyPassNameParser.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/ManagedStatic.h"
+#include "llvm37/Support/Mutex.h"
+#include "llvm37/Support/TimeValue.h"
+#include "llvm37/Support/Timer.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <algorithm>
 #include <map>
-using namespace llvm;
-using namespace llvm::legacy;
+using namespace llvm37;
+using namespace llvm37::legacy;
 
 // See PassManagers.h for Pass Manager infrastructure overview.
 
@@ -62,7 +62,7 @@ static const PassDebugLevel PassDebugging  = PassDebugLevel::Disabled;
 #endif // HLSL Change Ends
 
 namespace {
-typedef llvm::cl::list<const llvm::PassInfo *, bool, PassNameParser>
+typedef llvm37::cl::list<const llvm37::PassInfo *, bool, PassNameParser>
 PassOptionList;
 }
 
@@ -70,21 +70,21 @@ PassOptionList;
 // Print IR out before/after specified passes.
 static PassOptionList
 PrintBefore("print-before",
-            llvm::cl::desc("Print IR before specified passes"),
+            llvm37::cl::desc("Print IR before specified passes"),
             cl::Hidden);
 
 static PassOptionList
 PrintAfter("print-after",
-           llvm::cl::desc("Print IR after specified passes"),
+           llvm37::cl::desc("Print IR after specified passes"),
            cl::Hidden);
 
 static cl::opt<bool>
 PrintBeforeAll("print-before-all",
-               llvm::cl::desc("Print IR before each pass"),
+               llvm37::cl::desc("Print IR before each pass"),
                cl::init(false));
 static cl::opt<bool>
 PrintAfterAll("print-after-all",
-              llvm::cl::desc("Print IR after each pass"),
+              llvm37::cl::desc("Print IR after each pass"),
               cl::init(false));
 #endif // HLSL Change Ends
 
@@ -215,7 +215,7 @@ public:
 char BBPassManager::ID = 0;
 } // End anonymous namespace
 
-namespace llvm {
+namespace llvm37 {
 namespace legacy {
 //===----------------------------------------------------------------------===//
 // FunctionPassManagerImpl
@@ -316,8 +316,8 @@ public:
   /// whether any of the passes modifies the module, and if so, return true.
   bool runOnModule(Module &M);
 
-  using llvm::Pass::doInitialization;
-  using llvm::Pass::doFinalization;
+  using llvm37::Pass::doInitialization;
+  using llvm37::Pass::doFinalization;
 
   /// doInitialization - Run all of the initializers for the module passes.
   ///
@@ -381,7 +381,7 @@ public:
 char MPPassManager::ID = 0;
 } // End anonymous namespace
 
-namespace llvm {
+namespace llvm37 {
 namespace legacy {
 //===----------------------------------------------------------------------===//
 // PassManagerImpl
@@ -414,8 +414,8 @@ public:
   /// whether any of the passes modifies the module, and if so, return true.
   bool run(Module &M);
 
-  using llvm::Pass::doInitialization;
-  using llvm::Pass::doFinalization;
+  using llvm37::Pass::doInitialization;
+  using llvm37::Pass::doFinalization;
 
   /// doInitialization - Run all of the initializers for the module passes.
   ///
@@ -1788,7 +1788,7 @@ bool PassManager::run(Module &M) {
 //===----------------------------------------------------------------------===//
 // TimingInfo implementation
 
-bool llvm::TimePassesIsEnabled = false;
+bool llvm37::TimePassesIsEnabled = false;
 #if 0 // HLSL Change Starts - option pending
 static cl::opt<bool,true>
 EnableTiming("time-passes", cl::location(TimePassesIsEnabled),
@@ -1809,7 +1809,7 @@ void TimingInfo::createTheTimeInfo() {
 }
 
 /// If TimingInfo is enabled then start pass timer.
-Timer *llvm::getPassTimer(Pass *P) {
+Timer *llvm37::getPassTimer(Pass *P) {
   if (TheTimeInfo)
     return TheTimeInfo->getPassTimer(P);
   return nullptr;

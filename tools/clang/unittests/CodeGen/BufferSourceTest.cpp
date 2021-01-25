@@ -16,13 +16,13 @@
 #include "clang/Lex/Preprocessor.h"
 #include "clang/Parse/ParseAST.h"
 #include "clang/Sema/Sema.h"
-#include "llvm/ADT/Triple.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/Support/Host.h"
-#include "llvm/Support/MemoryBuffer.h"
+#include "llvm37/ADT/Triple.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/Support/Host.h"
+#include "llvm37/Support/MemoryBuffer.h"
 #include "gtest/gtest.h"
 
-using namespace llvm;
+using namespace llvm37;
 using namespace clang;
 
 namespace {
@@ -45,8 +45,8 @@ TEST(BufferSourceTest, EmitCXXGlobalInitFunc) {
     compiler.getLangOpts().CPlusPlus = 1;
     compiler.getLangOpts().CPlusPlus11 = 1;
 
-    compiler.getTargetOpts().Triple = llvm::Triple::normalize(
-        llvm::sys::getProcessTriple());
+    compiler.getTargetOpts().Triple = llvm37::Triple::normalize(
+        llvm37::sys::getProcessTriple());
     compiler.setTarget(clang::TargetInfo::CreateTargetInfo(
       compiler.getDiagnostics(),
       std::make_shared<clang::TargetOptions>(
@@ -65,13 +65,13 @@ TEST(BufferSourceTest, EmitCXXGlobalInitFunc) {
             compiler.getHeaderSearchOpts(),
             compiler.getPreprocessorOpts(),
             compiler.getCodeGenOpts(),
-            llvm::getGlobalContext())));
+            llvm37::getGlobalContext())));
 
     compiler.createSema(clang::TU_Prefix,NULL);
 
     clang::SourceManager &sm = compiler.getSourceManager();
     sm.setMainFileID(sm.createFileID(
-        llvm::MemoryBuffer::getMemBuffer(TestProgram), clang::SrcMgr::C_User));
+        llvm37::MemoryBuffer::getMemBuffer(TestProgram), clang::SrcMgr::C_User));
 
     clang::ParseAST(compiler.getSema(), false, false);
 }

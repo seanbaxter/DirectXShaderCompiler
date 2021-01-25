@@ -7,18 +7,18 @@
 //
 //===----------------------------------------------------------------------===/
 
-#include "llvm/DebugInfo/PDB/PDBContext.h"
-#include "llvm/DebugInfo/PDB/IPDBEnumChildren.h"
-#include "llvm/DebugInfo/PDB/IPDBLineNumber.h"
-#include "llvm/DebugInfo/PDB/IPDBSourceFile.h"
-#include "llvm/DebugInfo/PDB/PDBSymbol.h"
-#include "llvm/DebugInfo/PDB/PDBSymbolFunc.h"
-#include "llvm/DebugInfo/PDB/PDBSymbolData.h"
-#include "llvm/DebugInfo/PDB/PDBSymbolPublicSymbol.h"
-#include "llvm/Object/COFF.h"
+#include "llvm37/DebugInfo/PDB/PDBContext.h"
+#include "llvm37/DebugInfo/PDB/IPDBEnumChildren.h"
+#include "llvm37/DebugInfo/PDB/IPDBLineNumber.h"
+#include "llvm37/DebugInfo/PDB/IPDBSourceFile.h"
+#include "llvm37/DebugInfo/PDB/PDBSymbol.h"
+#include "llvm37/DebugInfo/PDB/PDBSymbolFunc.h"
+#include "llvm37/DebugInfo/PDB/PDBSymbolData.h"
+#include "llvm37/DebugInfo/PDB/PDBSymbolPublicSymbol.h"
+#include "llvm37/Object/COFF.h"
 
-using namespace llvm;
-using namespace llvm::object;
+using namespace llvm37;
+using namespace llvm37::object;
 
 PDBContext::PDBContext(const COFFObjectFile &Object,
                        std::unique_ptr<IPDBSession> PDBSession,

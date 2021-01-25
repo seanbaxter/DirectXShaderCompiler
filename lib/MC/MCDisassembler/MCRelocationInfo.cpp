@@ -7,12 +7,12 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/MC/MCRelocationInfo.h"
+#include "llvm37/MC/MCRelocationInfo.h"
 #include "llvm-c/Disassembler.h"
-#include "llvm/Object/ObjectFile.h"
-#include "llvm/Support/TargetRegistry.h"
+#include "llvm37/Object/ObjectFile.h"
+#include "llvm37/Support/TargetRegistry.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 MCRelocationInfo::MCRelocationInfo(MCContext &Ctx)
   : Ctx(Ctx) {
@@ -34,7 +34,7 @@ MCRelocationInfo::createExprForCAPIVariantKind(const MCExpr *SubExpr,
   return SubExpr;
 }
 
-MCRelocationInfo *llvm::createMCRelocationInfo(const Triple &TT,
+MCRelocationInfo *llvm37::createMCRelocationInfo(const Triple &TT,
                                                MCContext &Ctx) {
   return new MCRelocationInfo(Ctx);
 }

@@ -19,7 +19,7 @@ using namespace clang;
 
 SanitizerBlacklist::SanitizerBlacklist(
     const std::vector<std::string> &BlacklistPaths, SourceManager &SM)
-    : SCL(llvm::SpecialCaseList::createOrDie(BlacklistPaths)), SM(SM) {}
+    : SCL(llvm37::SpecialCaseList::createOrDie(BlacklistPaths)), SM(SM) {}
 
 bool SanitizerBlacklist::isBlacklistedGlobal(StringRef GlobalName,
                                              StringRef Category) const {

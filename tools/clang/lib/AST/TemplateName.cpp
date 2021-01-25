@@ -18,32 +18,32 @@
 #include "clang/AST/TemplateBase.h"
 #include "clang/Basic/Diagnostic.h"
 #include "clang/Basic/LangOptions.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/Support/raw_ostream.h"
 using namespace clang;
-using namespace llvm;
+using namespace llvm37;
 
 TemplateArgument 
 SubstTemplateTemplateParmPackStorage::getArgumentPack() const {
   return TemplateArgument(Arguments, size());
 }
 
-void SubstTemplateTemplateParmStorage::Profile(llvm::FoldingSetNodeID &ID) {
+void SubstTemplateTemplateParmStorage::Profile(llvm37::FoldingSetNodeID &ID) {
   Profile(ID, Parameter, Replacement);
 }
 
-void SubstTemplateTemplateParmStorage::Profile(llvm::FoldingSetNodeID &ID, 
+void SubstTemplateTemplateParmStorage::Profile(llvm37::FoldingSetNodeID &ID, 
                                            TemplateTemplateParmDecl *parameter,
                                                TemplateName replacement) {
   ID.AddPointer(parameter);
   ID.AddPointer(replacement.getAsVoidPointer());
 }
 
-void SubstTemplateTemplateParmPackStorage::Profile(llvm::FoldingSetNodeID &ID,
+void SubstTemplateTemplateParmPackStorage::Profile(llvm37::FoldingSetNodeID &ID,
                                                    ASTContext &Context) {
   Profile(ID, Context, Parameter, TemplateArgument(Arguments, size()));
 }
 
-void SubstTemplateTemplateParmPackStorage::Profile(llvm::FoldingSetNodeID &ID, 
+void SubstTemplateTemplateParmPackStorage::Profile(llvm37::FoldingSetNodeID &ID, 
                                                    ASTContext &Context,
                                            TemplateTemplateParmDecl *Parameter,
                                              const TemplateArgument &ArgPack) {
@@ -182,5 +182,5 @@ void TemplateName::dump(raw_ostream &OS) const {
 }
 
 void TemplateName::dump() const {
-  dump(llvm::errs());
+  dump(llvm37::errs());
 }

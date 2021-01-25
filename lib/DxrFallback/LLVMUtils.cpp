@@ -1,16 +1,16 @@
-#include "llvm/Analysis/CFGPrinter.h"  // needed for DOTGraphTraits<const Function*>
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/LegacyPassManager.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IRReader/IRReader.h"
-#include "llvm/Support/FileSystem.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Support/SourceMgr.h"
-#include "llvm/Support/GraphWriter.h"
+#include "llvm37/Analysis/CFGPrinter.h"  // needed for DOTGraphTraits<const Function*>
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/LegacyPassManager.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IRReader/IRReader.h"
+#include "llvm37/Support/FileSystem.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Support/SourceMgr.h"
+#include "llvm37/Support/GraphWriter.h"
 
 
-using namespace llvm;
+using namespace llvm37;
 
 std::vector<CallInst*> getCallsToFunction(Function* callee, const Function* caller)
 {
@@ -62,7 +62,7 @@ std::unique_ptr<Module> loadModuleFromAsmString(LLVMContext& context, const std:
   return mod;
 }
 
-void saveModuleToAsmFile(const llvm::Module* mod, const std::string& filename)
+void saveModuleToAsmFile(const llvm37::Module* mod, const std::string& filename)
 {
   std::error_code EC;
   raw_fd_ostream out(filename, EC, sys::fs::F_Text);
@@ -111,7 +111,7 @@ Function* getOrCreateFunction(const std::string& name, Module* mod, FunctionType
   return F;
 }
 
-void runPasses(llvm::Function* F, const std::vector<llvm::Pass*>& passes)
+void runPasses(llvm37::Function* F, const std::vector<llvm37::Pass*>& passes)
 {
   legacy::FunctionPassManager FPM(F->getParent());
   for (Pass* pass : passes)

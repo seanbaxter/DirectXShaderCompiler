@@ -12,27 +12,27 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Analysis/LazyValueInfo.h"
-#include "llvm/ADT/DenseSet.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/Analysis/AssumptionCache.h"
-#include "llvm/Analysis/ConstantFolding.h"
-#include "llvm/Analysis/TargetLibraryInfo.h"
-#include "llvm/Analysis/ValueTracking.h"
-#include "llvm/IR/CFG.h"
-#include "llvm/IR/ConstantRange.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/Dominators.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/IR/PatternMatch.h"
-#include "llvm/IR/ValueHandle.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/Analysis/LazyValueInfo.h"
+#include "llvm37/ADT/DenseSet.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/Analysis/AssumptionCache.h"
+#include "llvm37/Analysis/ConstantFolding.h"
+#include "llvm37/Analysis/TargetLibraryInfo.h"
+#include "llvm37/Analysis/ValueTracking.h"
+#include "llvm37/IR/CFG.h"
+#include "llvm37/IR/ConstantRange.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/IR/Dominators.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/IR/PatternMatch.h"
+#include "llvm37/IR/ValueHandle.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <map>
 #include <stack>
-using namespace llvm;
+using namespace llvm37;
 using namespace PatternMatch;
 
 #define DEBUG_TYPE "lazy-value-info"
@@ -45,7 +45,7 @@ INITIALIZE_PASS_DEPENDENCY(TargetLibraryInfoWrapperPass)
 INITIALIZE_PASS_END(LazyValueInfo, "lazy-value-info",
                 "Lazy Value Information Analysis", false, true)
 
-namespace llvm {
+namespace llvm37 {
   FunctionPass *createLazyValueInfoPass() { return new LazyValueInfo(); }
 }
 
@@ -270,9 +270,9 @@ public:
   
 } // end anonymous namespace.
 
-namespace llvm {
+namespace llvm37 {
 raw_ostream &operator<<(raw_ostream &OS, const LVILatticeVal &Val)
-    LLVM_ATTRIBUTE_USED;
+    LLVM37_ATTRIBUTE_USED;
 raw_ostream &operator<<(raw_ostream &OS, const LVILatticeVal &Val) {
   if (Val.isUndefined())
     return OS << "undefined";

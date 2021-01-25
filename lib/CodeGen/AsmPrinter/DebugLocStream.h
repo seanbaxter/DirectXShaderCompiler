@@ -7,14 +7,14 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_LIB_CODEGEN_ASMPRINTER_DEBUGLOCSTREAM_H
-#define LLVM_LIB_CODEGEN_ASMPRINTER_DEBUGLOCSTREAM_H
+#ifndef LLVM37_LIB_CODEGEN_ASMPRINTER_DEBUGLOCSTREAM_H
+#define LLVM37_LIB_CODEGEN_ASMPRINTER_DEBUGLOCSTREAM_H
 
-#include "llvm/ADT/ArrayRef.h"
-#include "llvm/ADT/SmallVector.h"
+#include "llvm37/ADT/ArrayRef.h"
+#include "llvm37/ADT/SmallVector.h"
 #include "ByteStreamer.h"
 
-namespace llvm {
+namespace llvm37 {
 
 class AsmPrinter;
 class DbgVariable;
@@ -188,6 +188,6 @@ public:
   BufferByteStreamer getStreamer() { return Locs.getStreamer(); }
 };
 
-} // namespace llvm
+} // namespace llvm37
 
 #endif

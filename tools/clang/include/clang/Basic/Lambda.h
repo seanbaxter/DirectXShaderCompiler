@@ -14,8 +14,8 @@
 //===----------------------------------------------------------------------===//
 
 
-#ifndef LLVM_CLANG_BASIC_LAMBDA_H
-#define LLVM_CLANG_BASIC_LAMBDA_H
+#ifndef LLVM37_CLANG_BASIC_LAMBDA_H
+#define LLVM37_CLANG_BASIC_LAMBDA_H
 
 namespace clang {
 
@@ -40,4 +40,4 @@ enum LambdaCaptureKind {
 
 } // end namespace clang
 
-#endif // LLVM_CLANG_BASIC_LAMBDA_H
+#endif // LLVM37_CLANG_BASIC_LAMBDA_H

@@ -12,26 +12,26 @@
 ///
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_LIB_TRANSFORMS_INSTCOMBINE_INSTCOMBINEINTERNAL_H
-#define LLVM_LIB_TRANSFORMS_INSTCOMBINE_INSTCOMBINEINTERNAL_H
+#ifndef LLVM37_LIB_TRANSFORMS_INSTCOMBINE_INSTCOMBINEINTERNAL_H
+#define LLVM37_LIB_TRANSFORMS_INSTCOMBINE_INSTCOMBINEINTERNAL_H
 
-#include "llvm/Analysis/AliasAnalysis.h"
-#include "llvm/Analysis/AssumptionCache.h"
-#include "llvm/Analysis/LoopInfo.h"
-#include "llvm/Analysis/TargetFolder.h"
-#include "llvm/Analysis/ValueTracking.h"
-#include "llvm/IR/Dominators.h"
-#include "llvm/IR/IRBuilder.h"
-#include "llvm/IR/InstVisitor.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/IR/Operator.h"
-#include "llvm/IR/PatternMatch.h"
-#include "llvm/Pass.h"
-#include "llvm/Transforms/InstCombine/InstCombineWorklist.h"
+#include "llvm37/Analysis/AliasAnalysis.h"
+#include "llvm37/Analysis/AssumptionCache.h"
+#include "llvm37/Analysis/LoopInfo.h"
+#include "llvm37/Analysis/TargetFolder.h"
+#include "llvm37/Analysis/ValueTracking.h"
+#include "llvm37/IR/Dominators.h"
+#include "llvm37/IR/IRBuilder.h"
+#include "llvm37/IR/InstVisitor.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/IR/Operator.h"
+#include "llvm37/IR/PatternMatch.h"
+#include "llvm37/Pass.h"
+#include "llvm37/Transforms/InstCombine/InstCombineWorklist.h"
 
 #define DEBUG_TYPE "instcombine"
 
-namespace llvm {
+namespace llvm37 {
 class CallSite;
 class DataLayout;
 class DominatorTree;
@@ -137,7 +137,7 @@ IntrinsicIDToOverflowCheckFlavor(unsigned ID) {
 
 /// \brief An IRBuilder inserter that adds new instructions to the instcombine
 /// worklist.
-class LLVM_LIBRARY_VISIBILITY InstCombineIRInserter
+class LLVM37_LIBRARY_VISIBILITY InstCombineIRInserter
     : public IRBuilderDefaultInserter<true> {
   InstCombineWorklist &Worklist;
   AssumptionCache *AC;
@@ -151,7 +151,7 @@ public:
     IRBuilderDefaultInserter<true>::InsertHelper(I, Name, BB, InsertPt);
     Worklist.Add(I);
 
-    using namespace llvm::PatternMatch;
+    using namespace llvm37::PatternMatch;
     if (match(I, m_Intrinsic<Intrinsic::assume>()))
       AC->registerAssumption(cast<CallInst>(I));
   }
@@ -162,7 +162,7 @@ public:
 /// This class provides both the logic to recursively visit instructions and
 /// combine them, as well as the pass infrastructure for running this as part
 /// of the LLVM pass pipeline.
-class LLVM_LIBRARY_VISIBILITY InstCombiner
+class LLVM37_LIBRARY_VISIBILITY InstCombiner
     : public InstVisitor<InstCombiner, Instruction *> {
   // FIXME: These members shouldn't be public.
 public:
@@ -463,30 +463,30 @@ public:
 
   void computeKnownBits(Value *V, APInt &KnownZero, APInt &KnownOne,
                         unsigned Depth, Instruction *CxtI) const {
-    return llvm::computeKnownBits(V, KnownZero, KnownOne, DL, Depth, AC, CxtI,
+    return llvm37::computeKnownBits(V, KnownZero, KnownOne, DL, Depth, AC, CxtI,
                                   DT);
   }
 
   bool MaskedValueIsZero(Value *V, const APInt &Mask, unsigned Depth = 0,
                          Instruction *CxtI = nullptr) const {
-    return llvm::MaskedValueIsZero(V, Mask, DL, Depth, AC, CxtI, DT);
+    return llvm37::MaskedValueIsZero(V, Mask, DL, Depth, AC, CxtI, DT);
   }
   unsigned ComputeNumSignBits(Value *Op, unsigned Depth = 0,
                               Instruction *CxtI = nullptr) const {
-    return llvm::ComputeNumSignBits(Op, DL, Depth, AC, CxtI, DT);
+    return llvm37::ComputeNumSignBits(Op, DL, Depth, AC, CxtI, DT);
   }
   void ComputeSignBit(Value *V, bool &KnownZero, bool &KnownOne,
                       unsigned Depth = 0, Instruction *CxtI = nullptr) const {
-    return llvm::ComputeSignBit(V, KnownZero, KnownOne, DL, Depth, AC, CxtI,
+    return llvm37::ComputeSignBit(V, KnownZero, KnownOne, DL, Depth, AC, CxtI,
                                 DT);
   }
   OverflowResult computeOverflowForUnsignedMul(Value *LHS, Value *RHS,
                                                const Instruction *CxtI) {
-    return llvm::computeOverflowForUnsignedMul(LHS, RHS, DL, AC, CxtI, DT);
+    return llvm37::computeOverflowForUnsignedMul(LHS, RHS, DL, AC, CxtI, DT);
   }
   OverflowResult computeOverflowForUnsignedAdd(Value *LHS, Value *RHS,
                                                const Instruction *CxtI) {
-    return llvm::computeOverflowForUnsignedAdd(LHS, RHS, DL, AC, CxtI, DT);
+    return llvm37::computeOverflowForUnsignedAdd(LHS, RHS, DL, AC, CxtI, DT);
   }
 
 private:
@@ -561,7 +561,7 @@ private:
   Value *Descale(Value *Val, APInt Scale, bool &NoSignedWrap);
 };
 
-} // end namespace llvm.
+} // end namespace llvm37.
 
 #undef DEBUG_TYPE
 

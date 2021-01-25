@@ -11,12 +11,12 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_REWRITE_CORE_REWRITEROPE_H
-#define LLVM_CLANG_REWRITE_CORE_REWRITEROPE_H
+#ifndef LLVM37_CLANG_REWRITE_CORE_REWRITEROPE_H
+#define LLVM37_CLANG_REWRITE_CORE_REWRITEROPE_H
 
-#include "llvm/ADT/IntrusiveRefCntPtr.h"
-#include "llvm/ADT/StringRef.h"
-#include "llvm/Support/Compiler.h"
+#include "llvm37/ADT/IntrusiveRefCntPtr.h"
+#include "llvm37/ADT/StringRef.h"
+#include "llvm37/Support/Compiler.h"
 #include <cassert>
 #include <cstddef>
 #include <cstring>
@@ -57,13 +57,13 @@ namespace clang {
   /// that both refer to the same underlying RopeRefCountString (just with
   /// different offsets) which is a nice constant time operation.
   struct RopePiece {
-    llvm::IntrusiveRefCntPtr<RopeRefCountString> StrData;
+    llvm37::IntrusiveRefCntPtr<RopeRefCountString> StrData;
     unsigned StartOffs;
     unsigned EndOffs;
 
     RopePiece() : StrData(nullptr), StartOffs(0), EndOffs(0) {}
 
-    RopePiece(llvm::IntrusiveRefCntPtr<RopeRefCountString> Str, unsigned Start,
+    RopePiece(llvm37::IntrusiveRefCntPtr<RopeRefCountString> Str, unsigned Start,
               unsigned End)
         : StrData(std::move(Str)), StartOffs(Start), EndOffs(End) {}
 
@@ -123,8 +123,8 @@ namespace clang {
       RopePieceBTreeIterator tmp = *this; ++*this; return tmp;
     }
 
-    llvm::StringRef piece() const {
-      return llvm::StringRef(&(*CurPiece)[0], CurPiece->size());
+    llvm37::StringRef piece() const {
+      return llvm37::StringRef(&(*CurPiece)[0], CurPiece->size());
     }
 
     void MoveToNextPiece();
@@ -167,7 +167,7 @@ class RewriteRope {
 
   /// We allocate space for string data out of a buffer of size AllocChunkSize.
   /// This keeps track of how much space is left.
-  llvm::IntrusiveRefCntPtr<RopeRefCountString> AllocBuffer;
+  llvm37::IntrusiveRefCntPtr<RopeRefCountString> AllocBuffer;
   unsigned AllocOffs;
   enum { AllocChunkSize = 4080 };
 

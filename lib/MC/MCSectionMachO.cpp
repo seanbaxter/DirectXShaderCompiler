@@ -7,11 +7,11 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/MC/MCSectionMachO.h"
-#include "llvm/MC/MCContext.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/MC/MCSectionMachO.h"
+#include "llvm37/MC/MCContext.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <cctype>
-using namespace llvm;
+using namespace llvm37;
 
 /// SectionTypeDescriptors - These are strings that describe the various section
 /// types.  This *must* be kept in order with and stay synchronized with the

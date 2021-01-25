@@ -21,13 +21,13 @@
 #include "dxc/HLSL/HLMatrixType.h"
 #include "dxc/DXIL/DxilConstants.h"
 #include "dxc/DXIL/DxilOperations.h"
-#include "llvm/IR/DiagnosticInfo.h"
-#include "llvm/IR/DiagnosticPrinter.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/IR/AssemblyAnnotationWriter.h"
-#include "llvm/IR/DebugInfoMetadata.h"
-#include "llvm/Support/FormattedStream.h"
-#include "llvm/Support/Format.h"
+#include "llvm37/IR/DiagnosticInfo.h"
+#include "llvm37/IR/DiagnosticPrinter.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/IR/AssemblyAnnotationWriter.h"
+#include "llvm37/IR/DebugInfoMetadata.h"
+#include "llvm37/Support/FormattedStream.h"
+#include "llvm37/Support/Format.h"
 #include <assert.h> // Needed for DxilPipelineStateValidation.h
 #include "dxc/DxilContainer/DxilPipelineStateValidation.h"
 #include "dxc/DxilContainer/DxilContainer.h"
@@ -39,7 +39,7 @@
 #include "dxc/DXIL/DxilInstructions.h"
 #include "dxc/DXIL/DxilResourceProperties.h"
 
-using namespace llvm;
+using namespace llvm37;
 using namespace hlsl;
 using namespace hlsl::DXIL;
 
@@ -486,7 +486,7 @@ void PrintResourceBindings(DxilModule &M, raw_string_ostream &OS,
 }
 
 void PrintOutputsDependentOnViewId(
-    llvm::raw_ostream &OS, llvm::StringRef comment, llvm::StringRef SetName,
+    llvm37::raw_ostream &OS, llvm37::StringRef comment, llvm37::StringRef SetName,
     unsigned NumOutputs,
     const DxilViewIdState::OutputsDependentOnViewIdType
         &OutputsDependentOnViewId) {
@@ -504,8 +504,8 @@ void PrintOutputsDependentOnViewId(
 }
 
 void PrintInputsContributingToOutputs(
-    llvm::raw_ostream &OS, llvm::StringRef comment,
-    llvm::StringRef InputSetName, llvm::StringRef OutputSetName,
+    llvm37::raw_ostream &OS, llvm37::StringRef comment,
+    llvm37::StringRef InputSetName, llvm37::StringRef OutputSetName,
     const DxilViewIdState::InputsContributingToOutputType
         &InputsContributingToOutputs) {
   OS << comment << " " << InputSetName << " contributing to computation of "
@@ -715,7 +715,7 @@ void PrintSubobjects(const DxilSubobjects &subobjects,
       break;
     }
     case DXIL::SubobjectKind::SubobjectToExportsAssociation: {
-      llvm::StringRef Subobject;
+      llvm37::StringRef Subobject;
       const char * const * Exports = nullptr;
       uint32_t NumExports;
       if (!obj.GetSubobjectToExportsAssociation(Subobject, Exports, NumExports)) {
@@ -791,7 +791,7 @@ void PrintStructLayout(StructType *ST, DxilTypeSystem &typeSys, const DataLayout
                        unsigned indent, unsigned arraySize,
                        unsigned sizeOfStruct = 0);
 
-void PrintTypeAndName(llvm::Type *Ty, DxilFieldAnnotation &annotation,
+void PrintTypeAndName(llvm37::Type *Ty, DxilFieldAnnotation &annotation,
                              std::string &StreamStr, unsigned arraySize, bool minPrecision) {
   raw_string_ostream Stream(StreamStr);
   while (Ty->isArrayTy())
@@ -824,7 +824,7 @@ void PrintTypeAndName(llvm::Type *Ty, DxilFieldAnnotation &annotation,
   Stream.flush();
 }
 
-void PrintFieldLayout(llvm::Type *Ty, DxilFieldAnnotation &annotation,
+void PrintFieldLayout(llvm37::Type *Ty, DxilFieldAnnotation &annotation,
                       DxilTypeSystem &typeSys, const DataLayout* DL,
                       raw_string_ostream &OS,
                       StringRef comment, unsigned offset,
@@ -834,7 +834,7 @@ void PrintFieldLayout(llvm::Type *Ty, DxilFieldAnnotation &annotation,
     PrintStructLayout(cast<StructType>(Ty), typeSys, DL, OS, comment,
                       annotation.GetFieldName(), offset, indent, offsetIndent);
   } else {
-    llvm::Type *EltTy = Ty;
+    llvm37::Type *EltTy = Ty;
     unsigned arraySize = 0;
     unsigned arrayLevel = 0;
     if (!HLMatrixType::isa(EltTy) && EltTy->isArrayTy()) {
@@ -951,10 +951,10 @@ void PrintStructBufferDefinition(DxilResource *buf,
   OS << comment << " Resource bind info for " << buf->GetGlobalName() << "\n";
   OS << comment << " {\n";
   OS << comment << "\n";
-  llvm::Type *RetTy = buf->GetRetType();
+  llvm37::Type *RetTy = buf->GetRetType();
   // Skip none struct type.
   if (!RetTy->isStructTy() || HLMatrixType::isa(RetTy)) {
-    llvm::Type *Ty = buf->GetGlobalSymbol()->getType()->getPointerElementType();
+    llvm37::Type *Ty = buf->GetGlobalSymbol()->getType()->getPointerElementType();
     // For resource array, use element type.
     if (Ty->isArrayTy())
       Ty = Ty->getArrayElementType();
@@ -993,7 +993,7 @@ void PrintStructBufferDefinition(DxilResource *buf,
 void PrintTBufferDefinition(DxilResource *buf, DxilTypeSystem &typeSys,
                                    raw_string_ostream &OS, StringRef comment) {
   const unsigned offsetIndent = 50;
-  llvm::Type *Ty = buf->GetGlobalSymbol()->getType()->getPointerElementType();
+  llvm37::Type *Ty = buf->GetGlobalSymbol()->getType()->getPointerElementType();
   // For TextureBuffer<> buf[2], the array size is in Resource binding count
   // part.
   if (Ty->isArrayTy())
@@ -1019,7 +1019,7 @@ void PrintTBufferDefinition(DxilResource *buf, DxilTypeSystem &typeSys,
 void PrintCBufferDefinition(DxilCBuffer *buf, DxilTypeSystem &typeSys,
                                    raw_string_ostream &OS, StringRef comment) {
   const unsigned offsetIndent = 50;
-  llvm::Type *Ty = buf->GetGlobalSymbol()->getType()->getPointerElementType();
+  llvm37::Type *Ty = buf->GetGlobalSymbol()->getType()->getPointerElementType();
   // For ConstantBuffer<> buf[2], the array size is in Resource binding count
   // part.
   if (Ty->isArrayTy())
@@ -1424,7 +1424,7 @@ void PrintResourceProperties(DxilResourceProperties &RP,
   }
 }
 
-class DxcAssemblyAnnotationWriter : public llvm::AssemblyAnnotationWriter {
+class DxcAssemblyAnnotationWriter : public llvm37::AssemblyAnnotationWriter {
 public:
   ~DxcAssemblyAnnotationWriter() {}
   void printInfoComment(const Value &V, formatted_raw_ostream &OS) override {
@@ -1872,17 +1872,17 @@ HRESULT Disassemble(IDxcBlob *pProgram, raw_string_ostream &Stream) {
   }
 
   std::string DiagStr;
-  llvm::LLVMContext llvmContext;
-  std::unique_ptr<llvm::Module> pModule(dxilutil::LoadModuleFromBitcode(
-    llvm::StringRef(pIL, pILLength), llvmContext, DiagStr));
+  llvm37::LLVMContext llvmContext;
+  std::unique_ptr<llvm37::Module> pModule(dxilutil::LoadModuleFromBitcode(
+    llvm37::StringRef(pIL, pILLength), llvmContext, DiagStr));
   if (pModule.get() == nullptr) {
     return DXC_E_IR_VERIFICATION_FAILED;
   }
 
-  std::unique_ptr<llvm::Module> pReflectionModule;
+  std::unique_ptr<llvm37::Module> pReflectionModule;
   if (pReflectionIL && pReflectionILLength) {
     pReflectionModule = dxilutil::LoadModuleFromBitcode(
-      llvm::StringRef(pReflectionIL, pReflectionILLength), llvmContext, DiagStr);
+      llvm37::StringRef(pReflectionIL, pReflectionILLength), llvmContext, DiagStr);
     if (pReflectionModule.get() == nullptr) {
       return DXC_E_IR_VERIFICATION_FAILED;
     }

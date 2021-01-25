@@ -414,11 +414,11 @@ class Builder(threading.Thread):
                       release=dict(),
                       paranoid=dict()),
             dragonegg=dict(debug=dict(GCC=self.cc,
-                                      LLVM_CONFIG=self.install_prefix + "/bin/llvm-config"),
+                                      LLVM37_CONFIG=self.install_prefix + "/bin/llvm-config"),
                            release=dict(GCC=self.cc,
-                                        LLVM_CONFIG=self.install_prefix + "/bin/llvm-config"),
+                                        LLVM37_CONFIG=self.install_prefix + "/bin/llvm-config"),
                            paranoid=dict(GCC=self.cc,
-                                         LLVM_CONFIG=self.install_prefix + "/bin/llvm-config")))
+                                         LLVM37_CONFIG=self.install_prefix + "/bin/llvm-config")))
 
         make_install_flags = dict(
             llvm=dict(debug=["install"],

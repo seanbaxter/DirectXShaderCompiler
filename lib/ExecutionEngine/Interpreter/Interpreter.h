@@ -11,19 +11,19 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_LIB_EXECUTIONENGINE_INTERPRETER_INTERPRETER_H
-#define LLVM_LIB_EXECUTIONENGINE_INTERPRETER_INTERPRETER_H
+#ifndef LLVM37_LIB_EXECUTIONENGINE_INTERPRETER_INTERPRETER_H
+#define LLVM37_LIB_EXECUTIONENGINE_INTERPRETER_INTERPRETER_H
 
-#include "llvm/ExecutionEngine/ExecutionEngine.h"
-#include "llvm/ExecutionEngine/GenericValue.h"
-#include "llvm/IR/CallSite.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/InstVisitor.h"
-#include "llvm/Support/DataTypes.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/raw_ostream.h"
-namespace llvm {
+#include "llvm37/ExecutionEngine/ExecutionEngine.h"
+#include "llvm37/ExecutionEngine/GenericValue.h"
+#include "llvm37/IR/CallSite.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/InstVisitor.h"
+#include "llvm37/Support/DataTypes.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/raw_ostream.h"
+namespace llvm37 {
 
 class IntrinsicLowering;
 struct FunctionInfo;
