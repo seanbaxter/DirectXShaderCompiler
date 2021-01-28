@@ -62,5 +62,5 @@ ModulePass *llvm37::createDxilRemoveDiscardsPass() {
   return new DxilRemoveDiscards();
 }
 
-INITIALIZE_PASS(DxilRemoveDiscards, "hlsl-dxil-remove-discards",
+INITIALIZELLVM37_PASS(DxilRemoveDiscards, "hlsl-dxil-remove-discards",
                 "HLSL DXIL Remove all discard instructions", false, false)

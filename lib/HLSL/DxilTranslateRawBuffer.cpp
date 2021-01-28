@@ -124,5 +124,5 @@ ModulePass *llvm37::createDxilTranslateRawBuffer() {
   return new DxilTranslateRawBuffer();
 }
 
-INITIALIZE_PASS(DxilTranslateRawBuffer, "hlsl-translate-dxil-raw-buffer",
+INITIALIZELLVM37_PASS(DxilTranslateRawBuffer, "hlsl-translate-dxil-raw-buffer",
                 "Translate raw buffer load", false, false)

@@ -166,10 +166,10 @@ public:
 } // end anonymous namespace
 
 char TwoAddressInstructionPass::ID = 0;
-INITIALIZE_PASS_BEGIN(TwoAddressInstructionPass, "twoaddressinstruction",
+INITIALIZELLVM37_PASS_BEGIN(TwoAddressInstructionPass, "twoaddressinstruction",
                 "Two-Address instruction pass", false, false)
-INITIALIZE_AG_DEPENDENCY(AliasAnalysis)
-INITIALIZE_PASS_END(TwoAddressInstructionPass, "twoaddressinstruction",
+INITIALIZELLVM37_AG_DEPENDENCY(AliasAnalysis)
+INITIALIZELLVM37_PASS_END(TwoAddressInstructionPass, "twoaddressinstruction",
                 "Two-Address instruction pass", false, false)
 
 char &llvm37::TwoAddressInstructionPassID = TwoAddressInstructionPass::ID;

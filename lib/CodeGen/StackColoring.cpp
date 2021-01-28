@@ -176,12 +176,12 @@ private:
 char StackColoring::ID = 0;
 char &llvm37::StackColoringID = StackColoring::ID;
 
-INITIALIZE_PASS_BEGIN(StackColoring,
+INITIALIZELLVM37_PASS_BEGIN(StackColoring,
                    "stack-coloring", "Merge disjoint stack slots", false, false)
-INITIALIZE_PASS_DEPENDENCY(MachineDominatorTree)
-INITIALIZE_PASS_DEPENDENCY(SlotIndexes)
-INITIALIZE_PASS_DEPENDENCY(StackProtector)
-INITIALIZE_PASS_END(StackColoring,
+INITIALIZELLVM37_PASS_DEPENDENCY(MachineDominatorTree)
+INITIALIZELLVM37_PASS_DEPENDENCY(SlotIndexes)
+INITIALIZELLVM37_PASS_DEPENDENCY(StackProtector)
+INITIALIZELLVM37_PASS_END(StackColoring,
                    "stack-coloring", "Merge disjoint stack slots", false, false)
 
 void StackColoring::getAnalysisUsage(AnalysisUsage &AU) const {

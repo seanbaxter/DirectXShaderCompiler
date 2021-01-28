@@ -385,6 +385,6 @@ ModulePass *llvm37::createDxilDxilPIXMeshShaderOutputInstrumentation()
   return new DxilPIXMeshShaderOutputInstrumentation();
 }
 
-INITIALIZE_PASS(DxilPIXMeshShaderOutputInstrumentation,
+INITIALIZELLVM37_PASS(DxilPIXMeshShaderOutputInstrumentation,
                 "hlsl-dxil-pix-meshshader-output-instrumentation",
                 "DXIL mesh shader output instrumentation for PIX", false, false)

@@ -52,7 +52,7 @@ namespace {
   char InstNamer::ID = 0;
 }
 
-INITIALIZE_PASS(InstNamer, "instnamer", 
+INITIALIZELLVM37_PASS(InstNamer, "instnamer", 
                 "Assign names to anonymous instructions", false, false)
 char &llvm37::InstructionNamerID = InstNamer::ID;
 //===----------------------------------------------------------------------===//

@@ -1284,17 +1284,17 @@ bool LoopInterchangeTransform::adjustLoopLinks() {
 }
 
 char LoopInterchange::ID = 0;
-INITIALIZE_PASS_BEGIN(LoopInterchange, "loop-interchange",
+INITIALIZELLVM37_PASS_BEGIN(LoopInterchange, "loop-interchange",
                       "Interchanges loops for cache reuse", false, false)
-INITIALIZE_AG_DEPENDENCY(AliasAnalysis)
-INITIALIZE_PASS_DEPENDENCY(DependenceAnalysis)
-INITIALIZE_PASS_DEPENDENCY(DominatorTreeWrapperPass)
-INITIALIZE_PASS_DEPENDENCY(ScalarEvolution)
-INITIALIZE_PASS_DEPENDENCY(LoopSimplify)
-INITIALIZE_PASS_DEPENDENCY(LCSSA)
-INITIALIZE_PASS_DEPENDENCY(LoopInfoWrapperPass)
+INITIALIZELLVM37_AG_DEPENDENCY(AliasAnalysis)
+INITIALIZELLVM37_PASS_DEPENDENCY(DependenceAnalysis)
+INITIALIZELLVM37_PASS_DEPENDENCY(DominatorTreeWrapperPass)
+INITIALIZELLVM37_PASS_DEPENDENCY(ScalarEvolution)
+INITIALIZELLVM37_PASS_DEPENDENCY(LoopSimplify)
+INITIALIZELLVM37_PASS_DEPENDENCY(LCSSA)
+INITIALIZELLVM37_PASS_DEPENDENCY(LoopInfoWrapperPass)
 
-INITIALIZE_PASS_END(LoopInterchange, "loop-interchange",
+INITIALIZELLVM37_PASS_END(LoopInterchange, "loop-interchange",
                     "Interchanges loops for cache reuse", false, false)
 
 Pass *llvm37::createLoopInterchangePass() { return new LoopInterchange(); }

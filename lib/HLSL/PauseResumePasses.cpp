@@ -127,12 +127,12 @@ ModulePass *llvm37::createResumePassesPass() {
   return new ResumePasses();
 }
 
-INITIALIZE_PASS(NoPausePasses,
+INITIALIZELLVM37_PASS(NoPausePasses,
                 "hlsl-passes-nopause",
                 "Clears metadata used for pause and resume", false, false)
-INITIALIZE_PASS(PausePasses,
+INITIALIZELLVM37_PASS(PausePasses,
                 "hlsl-passes-pause",
                 "Prepare to pause passes", false, false)
-INITIALIZE_PASS(ResumePasses,
+INITIALIZELLVM37_PASS(ResumePasses,
                 "hlsl-passes-resume",
                 "Prepare to resume passes", false, false)

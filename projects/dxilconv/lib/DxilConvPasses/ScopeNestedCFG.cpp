@@ -1858,10 +1858,10 @@ void ScopeNestedCFG::DumpIntSet(raw_ostream &s, set<unsigned> Set) {
 
 using namespace ScopeNestedCFGNS;
 
-INITIALIZE_PASS_BEGIN(ScopeNestedCFG, "scopenested", "Scope-nested CFG transformation", false, false)
-INITIALIZE_PASS_DEPENDENCY(ReducibilityAnalysis)
-INITIALIZE_PASS_DEPENDENCY(LoopInfoWrapperPass)
-INITIALIZE_PASS_END(ScopeNestedCFG, "scopenested", "Scope-nested CFG transformation", false, false)
+INITIALIZELLVM37_PASS_BEGIN(ScopeNestedCFG, "scopenested", "Scope-nested CFG transformation", false, false)
+INITIALIZELLVM37_PASS_DEPENDENCY(ReducibilityAnalysis)
+INITIALIZELLVM37_PASS_DEPENDENCY(LoopInfoWrapperPass)
+INITIALIZELLVM37_PASS_END(ScopeNestedCFG, "scopenested", "Scope-nested CFG transformation", false, false)
 
 namespace llvm37 {
 

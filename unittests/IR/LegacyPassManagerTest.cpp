@@ -537,12 +537,12 @@ namespace llvm37 {
   }
 }
 
-INITIALIZE_PASS(ModuleNDM, "mndm", "mndm", false, false)
-INITIALIZE_PASS_BEGIN(CGPass, "cgp","cgp", false, false)
-INITIALIZE_PASS_DEPENDENCY(CallGraphWrapperPass)
-INITIALIZE_PASS_END(CGPass, "cgp","cgp", false, false)
-INITIALIZE_PASS(FPass, "fp","fp", false, false)
-INITIALIZE_PASS_BEGIN(LPass, "lp","lp", false, false)
-INITIALIZE_PASS_DEPENDENCY(LoopInfoWrapperPass)
-INITIALIZE_PASS_END(LPass, "lp","lp", false, false)
-INITIALIZE_PASS(BPass, "bp","bp", false, false)
+INITIALIZELLVM37_PASS(ModuleNDM, "mndm", "mndm", false, false)
+INITIALIZELLVM37_PASS_BEGIN(CGPass, "cgp","cgp", false, false)
+INITIALIZELLVM37_PASS_DEPENDENCY(CallGraphWrapperPass)
+INITIALIZELLVM37_PASS_END(CGPass, "cgp","cgp", false, false)
+INITIALIZELLVM37_PASS(FPass, "fp","fp", false, false)
+INITIALIZELLVM37_PASS_BEGIN(LPass, "lp","lp", false, false)
+INITIALIZELLVM37_PASS_DEPENDENCY(LoopInfoWrapperPass)
+INITIALIZELLVM37_PASS_END(LPass, "lp","lp", false, false)
+INITIALIZELLVM37_PASS(BPass, "bp","bp", false, false)

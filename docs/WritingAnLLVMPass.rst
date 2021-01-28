@@ -876,7 +876,7 @@ apply.
 
 Although :ref:`Pass Registration <writing-an-llvm37-pass-registration>` is
 optional for normal passes, all analysis group implementations must be
-registered, and must use the :ref:`INITIALIZE_AG_PASS
+registered, and must use the :ref:`INITIALIZELLVM37_AG_PASS
 <writing-an-llvm37-pass-RegisterAnalysisGroup>` template to join the
 implementation pool.  Also, a default implementation of the interface **must**
 be registered with :ref:`RegisterAnalysisGroup
@@ -906,7 +906,7 @@ Using ``RegisterAnalysisGroup``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The ``RegisterAnalysisGroup`` template is used to register the analysis group
-itself, while the ``INITIALIZE_AG_PASS`` is used to add pass implementations to
+itself, while the ``INITIALIZELLVM37_AG_PASS`` is used to add pass implementations to
 the analysis group.  First, an analysis group should be registered, with a
 human readable name provided for it.  Unlike registration of passes, there is
 no command line argument to be specified for the Analysis Group Interface
@@ -923,14 +923,14 @@ implementations of the interface by using the following code:
 
   namespace {
     // Declare that we implement the AliasAnalysis interface
-    INITIALIZE_AG_PASS(FancyAA, AliasAnalysis , "somefancyaa",
+    INITIALIZELLVM37_AG_PASS(FancyAA, AliasAnalysis , "somefancyaa",
         "A more complex alias analysis implementation",
         false,  // Is CFG Only?
         true,   // Is Analysis?
         false); // Is default Analysis Group implementation?
   }
 
-This just shows a class ``FancyAA`` that uses the ``INITIALIZE_AG_PASS`` macro
+This just shows a class ``FancyAA`` that uses the ``INITIALIZELLVM37_AG_PASS`` macro
 both to register and to "join" the `AliasAnalysis
 <http://llvm37.org/doxygen/classllvm37_1_1AliasAnalysis.html>`_ analysis group.
 Every implementation of an analysis group should join using this macro.
@@ -939,7 +939,7 @@ Every implementation of an analysis group should join using this macro.
 
   namespace {
     // Declare that we implement the AliasAnalysis interface
-    INITIALIZE_AG_PASS(BasicAA, AliasAnalysis, "basicaa",
+    INITIALIZELLVM37_AG_PASS(BasicAA, AliasAnalysis, "basicaa",
         "Basic Alias Analysis (default AA impl)",
         false, // Is CFG Only?
         true,  // Is Analysis?
@@ -947,7 +947,7 @@ Every implementation of an analysis group should join using this macro.
   }
 
 Here we show how the default implementation is specified (using the final
-argument to the ``INITIALIZE_AG_PASS`` template).  There must be exactly one
+argument to the ``INITIALIZELLVM37_AG_PASS`` template).  There must be exactly one
 default implementation available at all times for an Analysis Group to be used.
 Only default implementation can derive from ``ImmutablePass``.  Here we declare
 that the `BasicAliasAnalysis

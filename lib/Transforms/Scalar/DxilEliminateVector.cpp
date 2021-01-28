@@ -224,4 +224,4 @@ Pass *llvm37::createDxilEliminateVectorPass() {
   return new DxilEliminateVector();
 }
 
-INITIALIZE_PASS(DxilEliminateVector, "dxil-elim-vector", "Dxil Eliminate Vectors", false, false)
+INITIALIZELLVM37_PASS(DxilEliminateVector, "dxil-elim-vector", "Dxil Eliminate Vectors", false, false)

@@ -133,5 +133,5 @@ void HLExpandStoreIntrinsics::emitElementStores(CallInst &OriginalCall,
 
 FunctionPass *llvm37::createHLExpandStoreIntrinsicsPass() { return new HLExpandStoreIntrinsics(); }
 
-INITIALIZE_PASS(HLExpandStoreIntrinsics, "hl-expand-store-intrinsics",
+INITIALIZELLVM37_PASS(HLExpandStoreIntrinsics, "hl-expand-store-intrinsics",
                 "Expand HLSL store intrinsics", false, false)

@@ -103,11 +103,11 @@ namespace {
 }
 
 char InstSimplifier::ID = 0;
-INITIALIZE_PASS_BEGIN(InstSimplifier, "instsimplify",
+INITIALIZELLVM37_PASS_BEGIN(InstSimplifier, "instsimplify",
                       "Remove redundant instructions", false, false)
-INITIALIZE_PASS_DEPENDENCY(AssumptionCacheTracker)
-INITIALIZE_PASS_DEPENDENCY(TargetLibraryInfoWrapperPass)
-INITIALIZE_PASS_END(InstSimplifier, "instsimplify",
+INITIALIZELLVM37_PASS_DEPENDENCY(AssumptionCacheTracker)
+INITIALIZELLVM37_PASS_DEPENDENCY(TargetLibraryInfoWrapperPass)
+INITIALIZELLVM37_PASS_END(InstSimplifier, "instsimplify",
                     "Remove redundant instructions", false, false)
 char &llvm37::InstructionSimplifierID = InstSimplifier::ID;
 

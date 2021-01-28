@@ -199,6 +199,6 @@ Pass *llvm37::createDxilRemoveDeadBlocksPass() {
   return new DxilRemoveDeadBlocks();
 }
 
-INITIALIZE_PASS_BEGIN(DxilRemoveDeadBlocks, "dxil-remove-dead-blocks", "DXIL Remove Dead Blocks", false, false)
-INITIALIZE_PASS_DEPENDENCY(DxilValueCache)
-INITIALIZE_PASS_END(DxilRemoveDeadBlocks, "dxil-remove-dead-blocks", "DXIL Remove Dead Blocks", false, false)
+INITIALIZELLVM37_PASS_BEGIN(DxilRemoveDeadBlocks, "dxil-remove-dead-blocks", "DXIL Remove Dead Blocks", false, false)
+INITIALIZELLVM37_PASS_DEPENDENCY(DxilValueCache)
+INITIALIZELLVM37_PASS_END(DxilRemoveDeadBlocks, "dxil-remove-dead-blocks", "DXIL Remove Dead Blocks", false, false)

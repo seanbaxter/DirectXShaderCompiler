@@ -886,4 +886,4 @@ ModulePass *llvm37::createDxilGenerationPass(bool NotOptimized, hlsl::HLSLExtens
   return dxilPass;
 }
 
-INITIALIZE_PASS(DxilGenerationPass, "dxilgen", "HLSL DXIL Generation", false, false)
+INITIALIZELLVM37_PASS(DxilGenerationPass, "dxilgen", "HLSL DXIL Generation", false, false)

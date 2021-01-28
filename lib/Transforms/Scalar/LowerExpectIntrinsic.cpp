@@ -194,7 +194,7 @@ public:
 }
 
 char LowerExpectIntrinsic::ID = 0;
-INITIALIZE_PASS(LowerExpectIntrinsic, "lower-expect",
+INITIALIZELLVM37_PASS(LowerExpectIntrinsic, "lower-expect",
                 "Lower 'expect' Intrinsics", false, false)
 
 FunctionPass *llvm37::createLowerExpectIntrinsicPass() {

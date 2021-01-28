@@ -117,7 +117,7 @@ private:
 
 // Register this pass...
 char ScopedNoAliasAA::ID = 0;
-INITIALIZE_AG_PASS(ScopedNoAliasAA, AliasAnalysis, "scoped-noalias",
+INITIALIZELLVM37_AG_PASS(ScopedNoAliasAA, AliasAnalysis, "scoped-noalias",
                    "Scoped NoAlias Alias Analysis", false, true, false)
 
 ImmutablePass *llvm37::createScopedNoAliasAAPass() {

@@ -315,6 +315,6 @@ FunctionPass *llvm37::createDxilPreserveAllOutputsPass() {
   return new DxilPreserveAllOutputs();
 }
 
-INITIALIZE_PASS(DxilPreserveAllOutputs,
+INITIALIZELLVM37_PASS(DxilPreserveAllOutputs,
                 "hlsl-dxil-preserve-all-outputs",
                 "DXIL preserve all outputs", false, false)

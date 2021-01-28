@@ -16,7 +16,7 @@
 using namespace llvm37;
 
 char IntervalPartition::ID = 0;
-INITIALIZE_PASS(IntervalPartition, "intervals",
+INITIALIZELLVM37_PASS(IntervalPartition, "intervals",
                 "Interval Partition Construction", true, true)
 
 //===----------------------------------------------------------------------===//

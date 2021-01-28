@@ -37,7 +37,7 @@ namespace {
 
 char UnpackMachineBundles::ID = 0;
 char &llvm37::UnpackMachineBundlesID = UnpackMachineBundles::ID;
-INITIALIZE_PASS(UnpackMachineBundles, "unpack-mi-bundles",
+INITIALIZELLVM37_PASS(UnpackMachineBundles, "unpack-mi-bundles",
                 "Unpack machine instruction bundles", false, false)
 
 bool UnpackMachineBundles::runOnMachineFunction(MachineFunction &MF) {
@@ -95,7 +95,7 @@ namespace {
 
 char FinalizeMachineBundles::ID = 0;
 char &llvm37::FinalizeMachineBundlesID = FinalizeMachineBundles::ID;
-INITIALIZE_PASS(FinalizeMachineBundles, "finalize-mi-bundles",
+INITIALIZELLVM37_PASS(FinalizeMachineBundles, "finalize-mi-bundles",
                 "Finalize machine instruction bundles", false, false)
 
 bool FinalizeMachineBundles::runOnMachineFunction(MachineFunction &MF) {

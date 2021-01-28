@@ -1322,8 +1322,8 @@ using namespace DxilCleanupNS;
 char &llvm37::DxilCleanupID = DxilCleanup::ID;
 
 
-INITIALIZE_PASS_BEGIN(DxilCleanup, "dxil-cleanup", "Optimize DXIL after conversion from DXBC", true, false)
-INITIALIZE_PASS_END  (DxilCleanup, "dxil-cleanup", "Optimize DXIL after conversion from DXBC", true, false)
+INITIALIZELLVM37_PASS_BEGIN(DxilCleanup, "dxil-cleanup", "Optimize DXIL after conversion from DXBC", true, false)
+INITIALIZELLVM37_PASS_END  (DxilCleanup, "dxil-cleanup", "Optimize DXIL after conversion from DXBC", true, false)
 
 namespace llvm37 {
 

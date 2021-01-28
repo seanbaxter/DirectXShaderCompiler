@@ -53,10 +53,10 @@ namespace {
 }
 
 char PruneEH::ID = 0;
-INITIALIZE_PASS_BEGIN(PruneEH, "prune-eh",
+INITIALIZELLVM37_PASS_BEGIN(PruneEH, "prune-eh",
                 "Remove unused exception handling info", false, false)
-INITIALIZE_PASS_DEPENDENCY(CallGraphWrapperPass)
-INITIALIZE_PASS_END(PruneEH, "prune-eh",
+INITIALIZELLVM37_PASS_DEPENDENCY(CallGraphWrapperPass)
+INITIALIZELLVM37_PASS_END(PruneEH, "prune-eh",
                 "Remove unused exception handling info", false, false)
 
 Pass *llvm37::createPruneEHPass() { return new PruneEH(); }

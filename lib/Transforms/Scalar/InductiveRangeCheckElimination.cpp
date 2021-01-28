@@ -224,7 +224,7 @@ public:
 char InductiveRangeCheckElimination::ID = 0;
 }
 
-INITIALIZE_PASS(InductiveRangeCheckElimination, "irce",
+INITIALIZELLVM37_PASS(InductiveRangeCheckElimination, "irce",
                 "Inductive range check elimination", false, false)
 
 const char *InductiveRangeCheck::rangeCheckKindToStr(

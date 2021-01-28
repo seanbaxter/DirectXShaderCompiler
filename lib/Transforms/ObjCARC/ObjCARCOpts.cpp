@@ -554,10 +554,10 @@ namespace {
 }
 
 char ObjCARCOpt::ID = 0;
-INITIALIZE_PASS_BEGIN(ObjCARCOpt,
+INITIALIZELLVM37_PASS_BEGIN(ObjCARCOpt,
                       "objc-arc", "ObjC ARC optimization", false, false)
-INITIALIZE_PASS_DEPENDENCY(ObjCARCAliasAnalysis)
-INITIALIZE_PASS_END(ObjCARCOpt,
+INITIALIZELLVM37_PASS_DEPENDENCY(ObjCARCAliasAnalysis)
+INITIALIZELLVM37_PASS_END(ObjCARCOpt,
                     "objc-arc", "ObjC ARC optimization", false, false)
 
 Pass *llvm37::createObjCARCOptPass() {

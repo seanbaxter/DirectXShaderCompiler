@@ -87,7 +87,7 @@ namespace {
 }
 
 char Float2Int::ID = 0;
-INITIALIZE_PASS(Float2Int, "float2int", "Float to int", false, false)
+INITIALIZELLVM37_PASS(Float2Int, "float2int", "Float to int", false, false)
 
 // Given a FCmp predicate, return a matching ICmp predicate if one
 // exists, otherwise return BAD_ICMP_PREDICATE.

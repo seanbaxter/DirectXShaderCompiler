@@ -308,7 +308,7 @@ TargetIRAnalysis::Result TargetIRAnalysis::getDefaultTTI(Function &F) {
 }
 
 // Register the basic pass.
-INITIALIZE_PASS(TargetTransformInfoWrapperPass, "tti",
+INITIALIZELLVM37_PASS(TargetTransformInfoWrapperPass, "tti",
                 "Target Transform Information", false, true)
 char TargetTransformInfoWrapperPass::ID = 0;
 

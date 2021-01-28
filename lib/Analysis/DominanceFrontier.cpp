@@ -19,10 +19,10 @@ template class ForwardDominanceFrontierBase<BasicBlock>;
 
 char DominanceFrontier::ID = 0;
 
-INITIALIZE_PASS_BEGIN(DominanceFrontier, "domfrontier",
+INITIALIZELLVM37_PASS_BEGIN(DominanceFrontier, "domfrontier",
                 "Dominance Frontier Construction", true, true)
-INITIALIZE_PASS_DEPENDENCY(DominatorTreeWrapperPass)
-INITIALIZE_PASS_END(DominanceFrontier, "domfrontier",
+INITIALIZELLVM37_PASS_DEPENDENCY(DominatorTreeWrapperPass)
+INITIALIZELLVM37_PASS_END(DominanceFrontier, "domfrontier",
                 "Dominance Frontier Construction", true, true)
 
 DominanceFrontier::DominanceFrontier()

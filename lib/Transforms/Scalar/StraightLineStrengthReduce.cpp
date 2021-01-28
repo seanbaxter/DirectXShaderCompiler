@@ -211,12 +211,12 @@ private:
 }  // anonymous namespace
 
 char StraightLineStrengthReduce::ID = 0;
-INITIALIZE_PASS_BEGIN(StraightLineStrengthReduce, "slsr",
+INITIALIZELLVM37_PASS_BEGIN(StraightLineStrengthReduce, "slsr",
                       "Straight line strength reduction", false, false)
-INITIALIZE_PASS_DEPENDENCY(DominatorTreeWrapperPass)
-INITIALIZE_PASS_DEPENDENCY(ScalarEvolution)
-INITIALIZE_PASS_DEPENDENCY(TargetTransformInfoWrapperPass)
-INITIALIZE_PASS_END(StraightLineStrengthReduce, "slsr",
+INITIALIZELLVM37_PASS_DEPENDENCY(DominatorTreeWrapperPass)
+INITIALIZELLVM37_PASS_DEPENDENCY(ScalarEvolution)
+INITIALIZELLVM37_PASS_DEPENDENCY(TargetTransformInfoWrapperPass)
+INITIALIZELLVM37_PASS_END(StraightLineStrengthReduce, "slsr",
                     "Straight line strength reduction", false, false)
 
 FunctionPass *llvm37::createStraightLineStrengthReducePass() {

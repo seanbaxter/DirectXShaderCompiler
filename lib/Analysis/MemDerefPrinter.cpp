@@ -40,9 +40,9 @@ namespace {
 }
 
 char MemDerefPrinter::ID = 0;
-INITIALIZE_PASS_BEGIN(MemDerefPrinter, "print-memderefs",
+INITIALIZELLVM37_PASS_BEGIN(MemDerefPrinter, "print-memderefs",
                       "Memory Dereferenciblity of pointers in function", false, true)
-INITIALIZE_PASS_END(MemDerefPrinter, "print-memderefs",
+INITIALIZELLVM37_PASS_END(MemDerefPrinter, "print-memderefs",
                     "Memory Dereferenciblity of pointers in function", false, true)
 
 FunctionPass *llvm37::createMemDerefPrinter() {

@@ -206,7 +206,7 @@ Value *DxilConvergentMark::FindConvergentOperand(Instruction *I) {
 
 } // namespace
 
-INITIALIZE_PASS(DxilConvergentMark, "hlsl-dxil-convergent-mark",
+INITIALIZELLVM37_PASS(DxilConvergentMark, "hlsl-dxil-convergent-mark",
                 "Mark convergent", false, false)
 
 ModulePass *llvm37::createDxilConvergentMarkPass() {
@@ -258,7 +258,7 @@ void DxilConvergentClear::ClearConvergent(Function *F) {
 
 } // namespace
 
-INITIALIZE_PASS(DxilConvergentClear, "hlsl-dxil-convergent-clear",
+INITIALIZELLVM37_PASS(DxilConvergentClear, "hlsl-dxil-convergent-clear",
                 "Clear convergent before dxil emit", false, false)
 
 ModulePass *llvm37::createDxilConvergentClearPass() {

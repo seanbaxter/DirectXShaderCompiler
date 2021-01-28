@@ -30,11 +30,11 @@ using namespace llvm37;
 char MachineTraceMetrics::ID = 0;
 char &llvm37::MachineTraceMetricsID = MachineTraceMetrics::ID;
 
-INITIALIZE_PASS_BEGIN(MachineTraceMetrics,
+INITIALIZELLVM37_PASS_BEGIN(MachineTraceMetrics,
                   "machine-trace-metrics", "Machine Trace Metrics", false, true)
-INITIALIZE_PASS_DEPENDENCY(MachineBranchProbabilityInfo)
-INITIALIZE_PASS_DEPENDENCY(MachineLoopInfo)
-INITIALIZE_PASS_END(MachineTraceMetrics,
+INITIALIZELLVM37_PASS_DEPENDENCY(MachineBranchProbabilityInfo)
+INITIALIZELLVM37_PASS_DEPENDENCY(MachineLoopInfo)
+INITIALIZELLVM37_PASS_END(MachineTraceMetrics,
                   "machine-trace-metrics", "Machine Trace Metrics", false, true)
 
 MachineTraceMetrics::MachineTraceMetrics()

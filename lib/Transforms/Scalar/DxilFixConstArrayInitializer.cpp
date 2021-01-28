@@ -177,4 +177,4 @@ Pass *llvm37::createDxilFixConstArrayInitializerPass() {
   return new DxilFixConstArrayInitializer();
 }
 
-INITIALIZE_PASS(DxilFixConstArrayInitializer, "dxil-fix-array-init", "Dxil Fix Array Initializer", false, false)
+INITIALIZELLVM37_PASS(DxilFixConstArrayInitializer, "dxil-fix-array-init", "Dxil Fix Array Initializer", false, false)

@@ -70,7 +70,7 @@ namespace {
 } // end anonymous namespace
 
 char InternalizePass::ID = 0;
-INITIALIZE_PASS(InternalizePass, "internalize",
+INITIALIZELLVM37_PASS(InternalizePass, "internalize",
                 "Internalize Global Symbols", false, false)
 
 InternalizePass::InternalizePass() : ModulePass(ID) {

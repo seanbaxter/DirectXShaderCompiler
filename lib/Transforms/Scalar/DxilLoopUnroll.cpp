@@ -1117,13 +1117,13 @@ Pass *llvm37::createDxilLoopUnrollPass(unsigned MaxIterationAttempt, bool OnlyWa
   return new DxilLoopUnroll(MaxIterationAttempt, OnlyWarnOnFail, StructurizeLoopExits);
 }
 
-INITIALIZE_PASS_BEGIN(DxilLoopUnroll, "dxil-loop-unroll", "Dxil Unroll loops", false, false)
-INITIALIZE_PASS_DEPENDENCY(LoopInfoWrapperPass)
-INITIALIZE_PASS_DEPENDENCY(AssumptionCacheTracker)
-INITIALIZE_PASS_DEPENDENCY(DominatorTreeWrapperPass)
-INITIALIZE_PASS_DEPENDENCY(ScalarEvolution)
-INITIALIZE_PASS_DEPENDENCY(LoopSimplify)
-INITIALIZE_PASS_DEPENDENCY(DxilValueCache)
-INITIALIZE_PASS_END(DxilLoopUnroll, "dxil-loop-unroll", "Dxil Unroll loops", false, false)
+INITIALIZELLVM37_PASS_BEGIN(DxilLoopUnroll, "dxil-loop-unroll", "Dxil Unroll loops", false, false)
+INITIALIZELLVM37_PASS_DEPENDENCY(LoopInfoWrapperPass)
+INITIALIZELLVM37_PASS_DEPENDENCY(AssumptionCacheTracker)
+INITIALIZELLVM37_PASS_DEPENDENCY(DominatorTreeWrapperPass)
+INITIALIZELLVM37_PASS_DEPENDENCY(ScalarEvolution)
+INITIALIZELLVM37_PASS_DEPENDENCY(LoopSimplify)
+INITIALIZELLVM37_PASS_DEPENDENCY(DxilValueCache)
+INITIALIZELLVM37_PASS_END(DxilLoopUnroll, "dxil-loop-unroll", "Dxil Unroll loops", false, false)
 
 

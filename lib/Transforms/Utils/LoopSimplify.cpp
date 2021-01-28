@@ -743,12 +743,12 @@ bool llvm37::simplifyLoop(Loop *L, DominatorTree *DT, LoopInfo *LI, Pass *PP,
   return Changed;
 }
 
-INITIALIZE_PASS_BEGIN(LoopSimplify, "loop-simplify",
+INITIALIZELLVM37_PASS_BEGIN(LoopSimplify, "loop-simplify",
                 "Canonicalize natural loops", false, false)
-INITIALIZE_PASS_DEPENDENCY(AssumptionCacheTracker)
-INITIALIZE_PASS_DEPENDENCY(DominatorTreeWrapperPass)
-INITIALIZE_PASS_DEPENDENCY(LoopInfoWrapperPass)
-INITIALIZE_PASS_END(LoopSimplify, "loop-simplify",
+INITIALIZELLVM37_PASS_DEPENDENCY(AssumptionCacheTracker)
+INITIALIZELLVM37_PASS_DEPENDENCY(DominatorTreeWrapperPass)
+INITIALIZELLVM37_PASS_DEPENDENCY(LoopInfoWrapperPass)
+INITIALIZELLVM37_PASS_END(LoopSimplify, "loop-simplify",
                 "Canonicalize natural loops", false, false)
 
 // Publicly exposed interface to pass...

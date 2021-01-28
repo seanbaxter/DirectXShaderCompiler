@@ -2767,17 +2767,17 @@ TEST_F(FormatTest, MacrosWithoutTrailingSemicolon) {
 }
 
 TEST_F(FormatTest, MacroCallsWithoutTrailingSemicolon) {
-  EXPECT_EQ("INITIALIZE_PASS_BEGIN(ScopDetection, \"polly-detect\")\n"
-            "INITIALIZE_AG_DEPENDENCY(AliasAnalysis)\n"
-            "INITIALIZE_PASS_DEPENDENCY(DominatorTree)\n"
+  EXPECT_EQ("INITIALIZELLVM37_PASS_BEGIN(ScopDetection, \"polly-detect\")\n"
+            "INITIALIZELLVM37_AG_DEPENDENCY(AliasAnalysis)\n"
+            "INITIALIZELLVM37_PASS_DEPENDENCY(DominatorTree)\n"
             "class X {};\n"
-            "INITIALIZE_PASS_END(ScopDetection, \"polly-detect\")\n"
+            "INITIALIZELLVM37_PASS_END(ScopDetection, \"polly-detect\")\n"
             "int *createScopDetectionPass() { return 0; }",
-            format("  INITIALIZE_PASS_BEGIN(ScopDetection, \"polly-detect\")\n"
-                   "  INITIALIZE_AG_DEPENDENCY(AliasAnalysis)\n"
-                   "  INITIALIZE_PASS_DEPENDENCY(DominatorTree)\n"
+            format("  INITIALIZELLVM37_PASS_BEGIN(ScopDetection, \"polly-detect\")\n"
+                   "  INITIALIZELLVM37_AG_DEPENDENCY(AliasAnalysis)\n"
+                   "  INITIALIZELLVM37_PASS_DEPENDENCY(DominatorTree)\n"
                    "  class X {};\n"
-                   "  INITIALIZE_PASS_END(ScopDetection, \"polly-detect\")\n"
+                   "  INITIALIZELLVM37_PASS_END(ScopDetection, \"polly-detect\")\n"
                    "  int *createScopDetectionPass() { return 0; }"));
   // FIXME: We could probably treat IPC_BEGIN_MESSAGE_MAP/IPC_END_MESSAGE_MAP as
   // braces, so that inner block is indented one level more.

@@ -104,7 +104,7 @@ namespace {
 }
 
 char LowerSwitch::ID = 0;
-INITIALIZE_PASS(LowerSwitch, "lowerswitch",
+INITIALIZELLVM37_PASS(LowerSwitch, "lowerswitch",
                 "Lower SwitchInst's to branches", false, false)
 
 // Publicly exposed interface to pass...

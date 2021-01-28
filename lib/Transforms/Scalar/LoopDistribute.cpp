@@ -791,11 +791,11 @@ private:
 char LoopDistribute::ID;
 static const char ldist_name[] = "Loop Distribition";
 
-INITIALIZE_PASS_BEGIN(LoopDistribute, LDIST_NAME, ldist_name, false, false)
-INITIALIZE_PASS_DEPENDENCY(LoopInfoWrapperPass)
-INITIALIZE_PASS_DEPENDENCY(LoopAccessAnalysis)
-INITIALIZE_PASS_DEPENDENCY(DominatorTreeWrapperPass)
-INITIALIZE_PASS_END(LoopDistribute, LDIST_NAME, ldist_name, false, false)
+INITIALIZELLVM37_PASS_BEGIN(LoopDistribute, LDIST_NAME, ldist_name, false, false)
+INITIALIZELLVM37_PASS_DEPENDENCY(LoopInfoWrapperPass)
+INITIALIZELLVM37_PASS_DEPENDENCY(LoopAccessAnalysis)
+INITIALIZELLVM37_PASS_DEPENDENCY(DominatorTreeWrapperPass)
+INITIALIZELLVM37_PASS_END(LoopDistribute, LDIST_NAME, ldist_name, false, false)
 
 namespace llvm37 {
 FunctionPass *createLoopDistributePass() { return new LoopDistribute(); }

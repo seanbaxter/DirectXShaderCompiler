@@ -97,11 +97,11 @@ namespace {
 }
 
 char DSE::ID = 0;
-INITIALIZE_PASS_BEGIN(DSE, "dse", "Dead Store Elimination", false, false)
-INITIALIZE_PASS_DEPENDENCY(DominatorTreeWrapperPass)
-INITIALIZE_PASS_DEPENDENCY(MemoryDependenceAnalysis)
-INITIALIZE_AG_DEPENDENCY(AliasAnalysis)
-INITIALIZE_PASS_END(DSE, "dse", "Dead Store Elimination", false, false)
+INITIALIZELLVM37_PASS_BEGIN(DSE, "dse", "Dead Store Elimination", false, false)
+INITIALIZELLVM37_PASS_DEPENDENCY(DominatorTreeWrapperPass)
+INITIALIZELLVM37_PASS_DEPENDENCY(MemoryDependenceAnalysis)
+INITIALIZELLVM37_AG_DEPENDENCY(AliasAnalysis)
+INITIALIZELLVM37_PASS_END(DSE, "dse", "Dead Store Elimination", false, false)
 
 FunctionPass *llvm37::createDeadStoreEliminationPass(unsigned ScanLimit) { return new DSE(ScanLimit); } // HLSL Change - add ScanLimit
 

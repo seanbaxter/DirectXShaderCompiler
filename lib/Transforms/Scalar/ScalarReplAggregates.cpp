@@ -226,17 +226,17 @@ namespace {
 char SROA_DT::ID = 0;
 char SROA_SSAUp::ID = 0;
 
-INITIALIZE_PASS_BEGIN(SROA_DT, "scalarrepl",
+INITIALIZELLVM37_PASS_BEGIN(SROA_DT, "scalarrepl",
                 "Scalar Replacement of Aggregates (DT)", false, false)
-INITIALIZE_PASS_DEPENDENCY(AssumptionCacheTracker)
-INITIALIZE_PASS_DEPENDENCY(DominatorTreeWrapperPass)
-INITIALIZE_PASS_END(SROA_DT, "scalarrepl",
+INITIALIZELLVM37_PASS_DEPENDENCY(AssumptionCacheTracker)
+INITIALIZELLVM37_PASS_DEPENDENCY(DominatorTreeWrapperPass)
+INITIALIZELLVM37_PASS_END(SROA_DT, "scalarrepl",
                 "Scalar Replacement of Aggregates (DT)", false, false)
 
-INITIALIZE_PASS_BEGIN(SROA_SSAUp, "scalarrepl-ssa",
+INITIALIZELLVM37_PASS_BEGIN(SROA_SSAUp, "scalarrepl-ssa",
                       "Scalar Replacement of Aggregates (SSAUp)", false, false)
-INITIALIZE_PASS_DEPENDENCY(AssumptionCacheTracker)
-INITIALIZE_PASS_END(SROA_SSAUp, "scalarrepl-ssa",
+INITIALIZELLVM37_PASS_DEPENDENCY(AssumptionCacheTracker)
+INITIALIZELLVM37_PASS_END(SROA_SSAUp, "scalarrepl-ssa",
                     "Scalar Replacement of Aggregates (SSAUp)", false, false)
 
 // Public interface to the ScalarReplAggregates pass

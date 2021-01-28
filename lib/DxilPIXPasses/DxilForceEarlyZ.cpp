@@ -42,7 +42,7 @@ char DxilForceEarlyZ::ID = 0;
 
 ModulePass *llvm37::createDxilForceEarlyZPass() { return new DxilForceEarlyZ(); }
 
-INITIALIZE_PASS(
+INITIALIZELLVM37_PASS(
     DxilForceEarlyZ, "hlsl-dxil-force-early-z",
     "HLSL DXIL Force the early Z global flag, if shader has no discard calls",
     false, false)

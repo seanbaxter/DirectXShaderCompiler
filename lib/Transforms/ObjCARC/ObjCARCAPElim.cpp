@@ -53,7 +53,7 @@ namespace {
 }
 
 char ObjCARCAPElim::ID = 0;
-INITIALIZE_PASS(ObjCARCAPElim,
+INITIALIZELLVM37_PASS(ObjCARCAPElim,
                 "objc-arc-apelim",
                 "ObjC ARC autorelease pool elimination",
                 false, false)

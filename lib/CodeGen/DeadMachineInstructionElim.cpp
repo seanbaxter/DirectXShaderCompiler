@@ -49,7 +49,7 @@ namespace {
 char DeadMachineInstructionElim::ID = 0;
 char &llvm37::DeadMachineInstructionElimID = DeadMachineInstructionElim::ID;
 
-INITIALIZE_PASS(DeadMachineInstructionElim, "dead-mi-elimination",
+INITIALIZELLVM37_PASS(DeadMachineInstructionElim, "dead-mi-elimination",
                 "Remove dead machine instructions", false, false)
 
 bool DeadMachineInstructionElim::isDead(const MachineInstr *MI) const {

@@ -50,10 +50,10 @@ namespace {
 }
 
 char ConstantPropagation::ID = 0;
-INITIALIZE_PASS_BEGIN(ConstantPropagation, "constprop",
+INITIALIZELLVM37_PASS_BEGIN(ConstantPropagation, "constprop",
                 "Simple constant propagation", false, false)
-INITIALIZE_PASS_DEPENDENCY(TargetLibraryInfoWrapperPass)
-INITIALIZE_PASS_END(ConstantPropagation, "constprop",
+INITIALIZELLVM37_PASS_DEPENDENCY(TargetLibraryInfoWrapperPass)
+INITIALIZELLVM37_PASS_END(ConstantPropagation, "constprop",
                 "Simple constant propagation", false, false)
 
 FunctionPass *llvm37::createConstantPropagationPass() {

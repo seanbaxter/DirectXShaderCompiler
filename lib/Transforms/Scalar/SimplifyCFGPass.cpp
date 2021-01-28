@@ -226,11 +226,11 @@ struct CFGSimplifyPass : public FunctionPass {
 }
 
 char CFGSimplifyPass::ID = 0;
-INITIALIZE_PASS_BEGIN(CFGSimplifyPass, "simplifycfg", "Simplify the CFG", false,
+INITIALIZELLVM37_PASS_BEGIN(CFGSimplifyPass, "simplifycfg", "Simplify the CFG", false,
                       false)
-INITIALIZE_PASS_DEPENDENCY(TargetTransformInfoWrapperPass)
-INITIALIZE_PASS_DEPENDENCY(AssumptionCacheTracker)
-INITIALIZE_PASS_END(CFGSimplifyPass, "simplifycfg", "Simplify the CFG", false,
+INITIALIZELLVM37_PASS_DEPENDENCY(TargetTransformInfoWrapperPass)
+INITIALIZELLVM37_PASS_DEPENDENCY(AssumptionCacheTracker)
+INITIALIZELLVM37_PASS_END(CFGSimplifyPass, "simplifycfg", "Simplify the CFG", false,
                     false)
 
 // Public interface to the CFGSimplification pass

@@ -150,8 +150,8 @@ bool NormalizeDxil::Run() {
 
 //----------------------- Pass Implementation ------------------------//
 char NormalizeDxilPass::ID = 0;
-INITIALIZE_PASS_BEGIN(NormalizeDxilPass, "normalizedxil", "Normalize dxil pass", false, false)
-INITIALIZE_PASS_END(NormalizeDxilPass, "normalizedxil", "Normalize dxil pass", false, false)
+INITIALIZELLVM37_PASS_BEGIN(NormalizeDxilPass, "normalizedxil", "Normalize dxil pass", false, false)
+INITIALIZELLVM37_PASS_END(NormalizeDxilPass, "normalizedxil", "Normalize dxil pass", false, false)
 
 
 FunctionPass *llvm37::createNormalizeDxilPass() {

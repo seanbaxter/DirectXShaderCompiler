@@ -90,9 +90,9 @@ namespace {
 }
 
 char AddDiscriminators::ID = 0;
-INITIALIZE_PASS_BEGIN(AddDiscriminators, "add-discriminators",
+INITIALIZELLVM37_PASS_BEGIN(AddDiscriminators, "add-discriminators",
                       "Add DWARF path discriminators", false, false)
-INITIALIZE_PASS_END(AddDiscriminators, "add-discriminators",
+INITIALIZELLVM37_PASS_END(AddDiscriminators, "add-discriminators",
                     "Add DWARF path discriminators", false, false)
 
 #ifdef HLSL_GLOBAL_OPT // HLSL Change Starts

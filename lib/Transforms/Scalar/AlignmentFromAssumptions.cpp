@@ -80,12 +80,12 @@ struct AlignmentFromAssumptions : public FunctionPass {
 
 char AlignmentFromAssumptions::ID = 0;
 static const char aip_name[] = "Alignment from assumptions";
-INITIALIZE_PASS_BEGIN(AlignmentFromAssumptions, AA_NAME,
+INITIALIZELLVM37_PASS_BEGIN(AlignmentFromAssumptions, AA_NAME,
                       aip_name, false, false)
-INITIALIZE_PASS_DEPENDENCY(AssumptionCacheTracker)
-INITIALIZE_PASS_DEPENDENCY(DominatorTreeWrapperPass)
-INITIALIZE_PASS_DEPENDENCY(ScalarEvolution)
-INITIALIZE_PASS_END(AlignmentFromAssumptions, AA_NAME,
+INITIALIZELLVM37_PASS_DEPENDENCY(AssumptionCacheTracker)
+INITIALIZELLVM37_PASS_DEPENDENCY(DominatorTreeWrapperPass)
+INITIALIZELLVM37_PASS_DEPENDENCY(ScalarEvolution)
+INITIALIZELLVM37_PASS_END(AlignmentFromAssumptions, AA_NAME,
                     aip_name, false, false)
 
 FunctionPass *llvm37::createAlignmentFromAssumptionsPass() {

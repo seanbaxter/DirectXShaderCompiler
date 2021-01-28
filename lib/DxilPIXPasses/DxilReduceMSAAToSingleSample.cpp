@@ -91,6 +91,6 @@ ModulePass *llvm37::createDxilReduceMSAAToSingleSamplePass() {
   return new DxilReduceMSAAToSingleSample();
 }
 
-INITIALIZE_PASS(DxilReduceMSAAToSingleSample, "hlsl-dxil-reduce-msaa-to-single",
+INITIALIZELLVM37_PASS(DxilReduceMSAAToSingleSample, "hlsl-dxil-reduce-msaa-to-single",
                 "HLSL DXIL Reduce all MSAA writes to single-sample writes",
                 false, false)

@@ -46,13 +46,13 @@ using namespace llvm37;
 
 char LiveIntervals::ID = 0;
 char &llvm37::LiveIntervalsID = LiveIntervals::ID;
-INITIALIZE_PASS_BEGIN(LiveIntervals, "liveintervals",
+INITIALIZELLVM37_PASS_BEGIN(LiveIntervals, "liveintervals",
                 "Live Interval Analysis", false, false)
-INITIALIZE_AG_DEPENDENCY(AliasAnalysis)
-INITIALIZE_PASS_DEPENDENCY(LiveVariables)
-INITIALIZE_PASS_DEPENDENCY(MachineDominatorTree)
-INITIALIZE_PASS_DEPENDENCY(SlotIndexes)
-INITIALIZE_PASS_END(LiveIntervals, "liveintervals",
+INITIALIZELLVM37_AG_DEPENDENCY(AliasAnalysis)
+INITIALIZELLVM37_PASS_DEPENDENCY(LiveVariables)
+INITIALIZELLVM37_PASS_DEPENDENCY(MachineDominatorTree)
+INITIALIZELLVM37_PASS_DEPENDENCY(SlotIndexes)
+INITIALIZELLVM37_PASS_END(LiveIntervals, "liveintervals",
                 "Live Interval Analysis", false, false)
 
 #ifndef NDEBUG

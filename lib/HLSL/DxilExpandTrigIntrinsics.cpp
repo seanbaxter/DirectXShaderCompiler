@@ -538,6 +538,6 @@ FunctionPass *llvm37::createDxilExpandTrigIntrinsicsPass() {
   return new DxilExpandTrigIntrinsics();
 }
 
-INITIALIZE_PASS(DxilExpandTrigIntrinsics,
+INITIALIZELLVM37_PASS(DxilExpandTrigIntrinsics,
                 "hlsl-dxil-expand-trig-intrinsics",
                 "DXIL expand trig intrinsics", false, false)

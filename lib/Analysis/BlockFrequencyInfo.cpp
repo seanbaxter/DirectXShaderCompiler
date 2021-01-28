@@ -105,11 +105,11 @@ struct DOTGraphTraits<BlockFrequencyInfo*> : public DefaultDOTGraphTraits {
 } // end namespace llvm37
 #endif
 
-INITIALIZE_PASS_BEGIN(BlockFrequencyInfo, "block-freq",
+INITIALIZELLVM37_PASS_BEGIN(BlockFrequencyInfo, "block-freq",
                       "Block Frequency Analysis", true, true)
-INITIALIZE_PASS_DEPENDENCY(BranchProbabilityInfo)
-INITIALIZE_PASS_DEPENDENCY(LoopInfoWrapperPass)
-INITIALIZE_PASS_END(BlockFrequencyInfo, "block-freq",
+INITIALIZELLVM37_PASS_DEPENDENCY(BranchProbabilityInfo)
+INITIALIZELLVM37_PASS_DEPENDENCY(LoopInfoWrapperPass)
+INITIALIZELLVM37_PASS_END(BlockFrequencyInfo, "block-freq",
                     "Block Frequency Analysis", true, true)
 
 char BlockFrequencyInfo::ID = 0;

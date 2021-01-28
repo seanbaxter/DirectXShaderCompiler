@@ -510,7 +510,7 @@ bool DynamicIndexingVectorToArray::HasVectorDynamicIndexing(Value *V) {
 
 char DynamicIndexingVectorToArray::ID = 0;
 
-INITIALIZE_PASS(DynamicIndexingVectorToArray, "dynamic-vector-to-array",
+INITIALIZELLVM37_PASS(DynamicIndexingVectorToArray, "dynamic-vector-to-array",
   "Replace dynamic indexing vector with array", false,
   false)
 
@@ -677,7 +677,7 @@ Constant *MultiDimArrayToOneDimArray::lowerInitVal(Constant *InitVal, Type *NewT
 
 char MultiDimArrayToOneDimArray::ID = 0;
 
-INITIALIZE_PASS(MultiDimArrayToOneDimArray, "multi-dim-one-dim",
+INITIALIZELLVM37_PASS(MultiDimArrayToOneDimArray, "multi-dim-one-dim",
   "Flatten multi-dim array into one-dim array", false,
   false)
 
@@ -855,7 +855,7 @@ void ResourceToHandle::lowerUseWithNewValue(Value *V, Value *NewV) {
 
 char ResourceToHandle::ID = 0;
 
-INITIALIZE_PASS(ResourceToHandle, "resource-handle",
+INITIALIZELLVM37_PASS(ResourceToHandle, "resource-handle",
   "Lower resource into handle", false,
   false)
 

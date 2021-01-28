@@ -19,7 +19,7 @@ using namespace llvm37;
 char MachinePostDominatorTree::ID = 0;
 
 //declare initializeMachinePostDominatorTreePass
-INITIALIZE_PASS(MachinePostDominatorTree, "machinepostdomtree",
+INITIALIZELLVM37_PASS(MachinePostDominatorTree, "machinepostdomtree",
                 "MachinePostDominator Tree Construction", true, true)
 
 MachinePostDominatorTree::MachinePostDominatorTree() : MachineFunctionPass(ID) {

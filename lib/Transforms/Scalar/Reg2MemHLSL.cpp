@@ -196,9 +196,9 @@ namespace {
 }
 
 char RegToMemHlsl::ID = 0;
-INITIALIZE_PASS_BEGIN(RegToMemHlsl, "reg2mem_hlsl", "Demote values with phi-node usage to stack slots",
+INITIALIZELLVM37_PASS_BEGIN(RegToMemHlsl, "reg2mem_hlsl", "Demote values with phi-node usage to stack slots",
                 false, false)
-INITIALIZE_PASS_END(RegToMemHlsl,   "reg2mem_hlsl", "Demote values with phi-node usage to stack slots",
+INITIALIZELLVM37_PASS_END(RegToMemHlsl,   "reg2mem_hlsl", "Demote values with phi-node usage to stack slots",
                 false, false)
 
 bool RegToMemHlsl::runOnFunction(Function &F) {

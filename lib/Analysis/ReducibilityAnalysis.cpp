@@ -233,8 +233,8 @@ using namespace ReducibilityAnalysisNS;
 char &llvm37::ReducibilityAnalysisID = ReducibilityAnalysis::ID;
 
 
-INITIALIZE_PASS_BEGIN(ReducibilityAnalysis, "red", "Reducibility Analysis", true, true)
-INITIALIZE_PASS_END(ReducibilityAnalysis, "red", "Reducibility Analysis", true, true)
+INITIALIZELLVM37_PASS_BEGIN(ReducibilityAnalysis, "red", "Reducibility Analysis", true, true)
+INITIALIZELLVM37_PASS_END(ReducibilityAnalysis, "red", "Reducibility Analysis", true, true)
 
 namespace llvm37 {
 

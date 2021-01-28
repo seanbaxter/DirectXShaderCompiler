@@ -357,14 +357,14 @@ void LUAnalysisCache::cloneData(const Loop *NewLoop, const Loop *OldLoop,
 }
 
 char LoopUnswitch::ID = 0;
-INITIALIZE_PASS_BEGIN(LoopUnswitch, "loop-unswitch", "Unswitch loops",
+INITIALIZELLVM37_PASS_BEGIN(LoopUnswitch, "loop-unswitch", "Unswitch loops",
                       false, false)
-INITIALIZE_PASS_DEPENDENCY(TargetTransformInfoWrapperPass)
-INITIALIZE_PASS_DEPENDENCY(AssumptionCacheTracker)
-INITIALIZE_PASS_DEPENDENCY(LoopSimplify)
-INITIALIZE_PASS_DEPENDENCY(LoopInfoWrapperPass)
-INITIALIZE_PASS_DEPENDENCY(LCSSA)
-INITIALIZE_PASS_END(LoopUnswitch, "loop-unswitch", "Unswitch loops",
+INITIALIZELLVM37_PASS_DEPENDENCY(TargetTransformInfoWrapperPass)
+INITIALIZELLVM37_PASS_DEPENDENCY(AssumptionCacheTracker)
+INITIALIZELLVM37_PASS_DEPENDENCY(LoopSimplify)
+INITIALIZELLVM37_PASS_DEPENDENCY(LoopInfoWrapperPass)
+INITIALIZELLVM37_PASS_DEPENDENCY(LCSSA)
+INITIALIZELLVM37_PASS_END(LoopUnswitch, "loop-unswitch", "Unswitch loops",
                       false, false)
 
 Pass *llvm37::createLoopUnswitchPass(bool Os) {

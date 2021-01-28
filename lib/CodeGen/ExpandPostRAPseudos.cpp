@@ -58,7 +58,7 @@ private:
 char ExpandPostRA::ID = 0;
 char &llvm37::ExpandPostRAPseudosID = ExpandPostRA::ID;
 
-INITIALIZE_PASS(ExpandPostRA, "postrapseudos",
+INITIALIZELLVM37_PASS(ExpandPostRA, "postrapseudos",
                 "Post-RA pseudo instruction expansion pass", false, false)
 
 /// TransferImplicitDefs - MI is a pseudo-instruction, and the lowered

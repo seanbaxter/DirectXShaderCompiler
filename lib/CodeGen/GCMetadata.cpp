@@ -40,7 +40,7 @@ public:
 };
 }
 
-INITIALIZE_PASS(GCModuleInfo, "collector-metadata",
+INITIALIZELLVM37_PASS(GCModuleInfo, "collector-metadata",
                 "Create Garbage Collector Module Metadata", false, false)
 
 // -----------------------------------------------------------------------------

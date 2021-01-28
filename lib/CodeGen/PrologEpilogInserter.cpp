@@ -105,13 +105,13 @@ WarnStackSize("warn-stack-size", cl::Hidden, cl::init((unsigned)-1),
               cl::desc("Warn for stack size bigger than the given"
                        " number"));
 
-INITIALIZE_PASS_BEGIN(PEI, "prologepilog",
+INITIALIZELLVM37_PASS_BEGIN(PEI, "prologepilog",
                 "Prologue/Epilogue Insertion", false, false)
-INITIALIZE_PASS_DEPENDENCY(MachineLoopInfo)
-INITIALIZE_PASS_DEPENDENCY(MachineDominatorTree)
-INITIALIZE_PASS_DEPENDENCY(StackProtector)
-INITIALIZE_PASS_DEPENDENCY(TargetPassConfig)
-INITIALIZE_PASS_END(PEI, "prologepilog",
+INITIALIZELLVM37_PASS_DEPENDENCY(MachineLoopInfo)
+INITIALIZELLVM37_PASS_DEPENDENCY(MachineDominatorTree)
+INITIALIZELLVM37_PASS_DEPENDENCY(StackProtector)
+INITIALIZELLVM37_PASS_DEPENDENCY(TargetPassConfig)
+INITIALIZELLVM37_PASS_END(PEI, "prologepilog",
                     "Prologue/Epilogue Insertion & Frame Finalization",
                     false, false)
 

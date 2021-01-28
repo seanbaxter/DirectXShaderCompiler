@@ -187,14 +187,14 @@ private:
 } // anonymous namespace
 
 char NaryReassociate::ID = 0;
-INITIALIZE_PASS_BEGIN(NaryReassociate, "nary-reassociate", "Nary reassociation",
+INITIALIZELLVM37_PASS_BEGIN(NaryReassociate, "nary-reassociate", "Nary reassociation",
                       false, false)
-INITIALIZE_PASS_DEPENDENCY(AssumptionCacheTracker)
-INITIALIZE_PASS_DEPENDENCY(DominatorTreeWrapperPass)
-INITIALIZE_PASS_DEPENDENCY(ScalarEvolution)
-INITIALIZE_PASS_DEPENDENCY(TargetLibraryInfoWrapperPass)
-INITIALIZE_PASS_DEPENDENCY(TargetTransformInfoWrapperPass)
-INITIALIZE_PASS_END(NaryReassociate, "nary-reassociate", "Nary reassociation",
+INITIALIZELLVM37_PASS_DEPENDENCY(AssumptionCacheTracker)
+INITIALIZELLVM37_PASS_DEPENDENCY(DominatorTreeWrapperPass)
+INITIALIZELLVM37_PASS_DEPENDENCY(ScalarEvolution)
+INITIALIZELLVM37_PASS_DEPENDENCY(TargetLibraryInfoWrapperPass)
+INITIALIZELLVM37_PASS_DEPENDENCY(TargetTransformInfoWrapperPass)
+INITIALIZELLVM37_PASS_END(NaryReassociate, "nary-reassociate", "Nary reassociation",
                     false, false)
 
 FunctionPass *llvm37::createNaryReassociatePass() {

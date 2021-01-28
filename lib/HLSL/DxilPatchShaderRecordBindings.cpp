@@ -215,7 +215,7 @@ ModulePass *llvm37::createDxilPatchShaderRecordBindingsPass() {
   return new DxilPatchShaderRecordBindings();
 }
 
-INITIALIZE_PASS(DxilPatchShaderRecordBindings, "hlsl-dxil-patch-shader-record-bindings", "Patch shader record bindings to instead pull from the fallback provided bindings", false, false)
+INITIALIZELLVM37_PASS(DxilPatchShaderRecordBindings, "hlsl-dxil-patch-shader-record-bindings", "Patch shader record bindings to instead pull from the fallback provided bindings", false, false)
 
 void DxilPatchShaderRecordBindings::applyOptions(PassOptions O) {
   for (const auto & option : O) {

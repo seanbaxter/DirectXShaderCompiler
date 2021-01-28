@@ -51,7 +51,7 @@ STATISTIC(NumIdCopies,   "Number of identity moves eliminated after rewriting");
 
 char VirtRegMap::ID = 0;
 
-INITIALIZE_PASS(VirtRegMap, "virtregmap", "Virtual Register Map", false, false)
+INITIALIZELLVM37_PASS(VirtRegMap, "virtregmap", "Virtual Register Map", false, false)
 
 bool VirtRegMap::runOnMachineFunction(MachineFunction &mf) {
   MRI = &mf.getRegInfo();
@@ -180,14 +180,14 @@ public:
 
 char &llvm37::VirtRegRewriterID = VirtRegRewriter::ID;
 
-INITIALIZE_PASS_BEGIN(VirtRegRewriter, "virtregrewriter",
+INITIALIZELLVM37_PASS_BEGIN(VirtRegRewriter, "virtregrewriter",
                       "Virtual Register Rewriter", false, false)
-INITIALIZE_PASS_DEPENDENCY(SlotIndexes)
-INITIALIZE_PASS_DEPENDENCY(LiveIntervals)
-INITIALIZE_PASS_DEPENDENCY(LiveDebugVariables)
-INITIALIZE_PASS_DEPENDENCY(LiveStacks)
-INITIALIZE_PASS_DEPENDENCY(VirtRegMap)
-INITIALIZE_PASS_END(VirtRegRewriter, "virtregrewriter",
+INITIALIZELLVM37_PASS_DEPENDENCY(SlotIndexes)
+INITIALIZELLVM37_PASS_DEPENDENCY(LiveIntervals)
+INITIALIZELLVM37_PASS_DEPENDENCY(LiveDebugVariables)
+INITIALIZELLVM37_PASS_DEPENDENCY(LiveStacks)
+INITIALIZELLVM37_PASS_DEPENDENCY(VirtRegMap)
+INITIALIZELLVM37_PASS_END(VirtRegRewriter, "virtregrewriter",
                     "Virtual Register Rewriter", false, false)
 
 char VirtRegRewriter::ID = 0;

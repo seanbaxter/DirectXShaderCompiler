@@ -126,6 +126,6 @@ ModulePass *llvm37::createDxilLegalizeEvalOperationsPass() {
   return new DxilLegalizeEvalOperations();
 }
 
-INITIALIZE_PASS(DxilLegalizeEvalOperations,
+INITIALIZELLVM37_PASS(DxilLegalizeEvalOperations,
                 "hlsl-dxil-legalize-eval-operations",
                 "DXIL legalize eval operations", false, false)

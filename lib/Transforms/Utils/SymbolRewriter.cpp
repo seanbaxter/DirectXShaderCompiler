@@ -542,7 +542,7 @@ void RewriteSymbols::loadAndParseMapFiles() {
 }
 }
 
-INITIALIZE_PASS(RewriteSymbols, "rewrite-symbols", "Rewrite Symbols", false,
+INITIALIZELLVM37_PASS(RewriteSymbols, "rewrite-symbols", "Rewrite Symbols", false,
                 false)
 
 ModulePass *llvm37::createRewriteSymbolsPass() { return new RewriteSymbols(); }

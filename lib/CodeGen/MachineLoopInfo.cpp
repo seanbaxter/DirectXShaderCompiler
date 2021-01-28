@@ -27,10 +27,10 @@ template class llvm37::LoopBase<MachineBasicBlock, MachineLoop>;
 template class llvm37::LoopInfoBase<MachineBasicBlock, MachineLoop>;
 
 char MachineLoopInfo::ID = 0;
-INITIALIZE_PASS_BEGIN(MachineLoopInfo, "machine-loops",
+INITIALIZELLVM37_PASS_BEGIN(MachineLoopInfo, "machine-loops",
                 "Machine Natural Loop Construction", true, true)
-INITIALIZE_PASS_DEPENDENCY(MachineDominatorTree)
-INITIALIZE_PASS_END(MachineLoopInfo, "machine-loops",
+INITIALIZELLVM37_PASS_DEPENDENCY(MachineDominatorTree)
+INITIALIZELLVM37_PASS_END(MachineLoopInfo, "machine-loops",
                 "Machine Natural Loop Construction", true, true)
 
 char &llvm37::MachineLoopInfoID = MachineLoopInfo::ID;

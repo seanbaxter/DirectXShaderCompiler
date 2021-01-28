@@ -43,10 +43,10 @@ using namespace llvm37;
 
 char LiveVariables::ID = 0;
 char &llvm37::LiveVariablesID = LiveVariables::ID;
-INITIALIZE_PASS_BEGIN(LiveVariables, "livevars",
+INITIALIZELLVM37_PASS_BEGIN(LiveVariables, "livevars",
                 "Live Variable Analysis", false, false)
-INITIALIZE_PASS_DEPENDENCY(UnreachableMachineBlockElim)
-INITIALIZE_PASS_END(LiveVariables, "livevars",
+INITIALIZELLVM37_PASS_DEPENDENCY(UnreachableMachineBlockElim)
+INITIALIZELLVM37_PASS_END(LiveVariables, "livevars",
                 "Live Variable Analysis", false, false)
 
 

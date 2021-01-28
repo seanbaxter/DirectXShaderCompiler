@@ -602,7 +602,7 @@ TargetLibraryInfoWrapperPass::TargetLibraryInfoWrapperPass(
 char TargetLibraryAnalysis::PassID;
 
 // Register the basic pass.
-INITIALIZE_PASS(TargetLibraryInfoWrapperPass, "targetlibinfo",
+INITIALIZELLVM37_PASS(TargetLibraryInfoWrapperPass, "targetlibinfo",
                 "Target Library Information", false, true)
 char TargetLibraryInfoWrapperPass::ID = 0;
 

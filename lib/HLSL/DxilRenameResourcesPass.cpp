@@ -70,6 +70,6 @@ ModulePass *llvm37::createDxilRenameResourcesPass() {
   return new DxilRenameResources();
 }
 
-INITIALIZE_PASS(DxilRenameResources,
+INITIALIZELLVM37_PASS(DxilRenameResources,
                 "dxil-rename-resources",
                 "DXIL rename resources", false, false)

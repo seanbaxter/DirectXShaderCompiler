@@ -738,13 +738,13 @@ bool SampleProfileLoader::emitAnnotations(Function &F) {
 }
 
 char SampleProfileLoader::ID = 0;
-INITIALIZE_PASS_BEGIN(SampleProfileLoader, "sample-profile",
+INITIALIZELLVM37_PASS_BEGIN(SampleProfileLoader, "sample-profile",
                       "Sample Profile loader", false, false)
-INITIALIZE_PASS_DEPENDENCY(DominatorTreeWrapperPass)
-INITIALIZE_PASS_DEPENDENCY(PostDominatorTree)
-INITIALIZE_PASS_DEPENDENCY(LoopInfoWrapperPass)
-INITIALIZE_PASS_DEPENDENCY(AddDiscriminators)
-INITIALIZE_PASS_END(SampleProfileLoader, "sample-profile",
+INITIALIZELLVM37_PASS_DEPENDENCY(DominatorTreeWrapperPass)
+INITIALIZELLVM37_PASS_DEPENDENCY(PostDominatorTree)
+INITIALIZELLVM37_PASS_DEPENDENCY(LoopInfoWrapperPass)
+INITIALIZELLVM37_PASS_DEPENDENCY(AddDiscriminators)
+INITIALIZELLVM37_PASS_END(SampleProfileLoader, "sample-profile",
                     "Sample Profile loader", false, false)
 
 bool SampleProfileLoader::doInitialization(Module &M) {

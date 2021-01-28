@@ -627,11 +627,11 @@ bool ObjCARCContract::runOnFunction(Function &F) {
 //===----------------------------------------------------------------------===//
 
 char ObjCARCContract::ID = 0;
-INITIALIZE_PASS_BEGIN(ObjCARCContract, "objc-arc-contract",
+INITIALIZELLVM37_PASS_BEGIN(ObjCARCContract, "objc-arc-contract",
                       "ObjC ARC contraction", false, false)
-INITIALIZE_AG_DEPENDENCY(AliasAnalysis)
-INITIALIZE_PASS_DEPENDENCY(DominatorTreeWrapperPass)
-INITIALIZE_PASS_END(ObjCARCContract, "objc-arc-contract",
+INITIALIZELLVM37_AG_DEPENDENCY(AliasAnalysis)
+INITIALIZELLVM37_PASS_DEPENDENCY(DominatorTreeWrapperPass)
+INITIALIZELLVM37_PASS_END(ObjCARCContract, "objc-arc-contract",
                     "ObjC ARC contraction", false, false)
 
 void ObjCARCContract::getAnalysisUsage(AnalysisUsage &AU) const {

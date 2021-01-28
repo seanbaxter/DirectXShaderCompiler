@@ -105,7 +105,7 @@ private:
 } // anonymous namespace
 
 char InstrProfiling::ID = 0;
-INITIALIZE_PASS(InstrProfiling, "instrprof",
+INITIALIZELLVM37_PASS(InstrProfiling, "instrprof",
                 "Frontend instrumentation-based coverage lowering.", false,
                 false)
 

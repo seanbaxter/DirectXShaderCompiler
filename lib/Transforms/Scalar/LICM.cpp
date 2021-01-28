@@ -163,15 +163,15 @@ namespace {
 }
 
 char LICM::ID = 0;
-INITIALIZE_PASS_BEGIN(LICM, "licm", "Loop Invariant Code Motion", false, false)
-INITIALIZE_PASS_DEPENDENCY(DominatorTreeWrapperPass)
-INITIALIZE_PASS_DEPENDENCY(LoopInfoWrapperPass)
-INITIALIZE_PASS_DEPENDENCY(LoopSimplify)
-INITIALIZE_PASS_DEPENDENCY(LCSSA)
-INITIALIZE_PASS_DEPENDENCY(ScalarEvolution)
-INITIALIZE_PASS_DEPENDENCY(TargetLibraryInfoWrapperPass)
-INITIALIZE_AG_DEPENDENCY(AliasAnalysis)
-INITIALIZE_PASS_END(LICM, "licm", "Loop Invariant Code Motion", false, false)
+INITIALIZELLVM37_PASS_BEGIN(LICM, "licm", "Loop Invariant Code Motion", false, false)
+INITIALIZELLVM37_PASS_DEPENDENCY(DominatorTreeWrapperPass)
+INITIALIZELLVM37_PASS_DEPENDENCY(LoopInfoWrapperPass)
+INITIALIZELLVM37_PASS_DEPENDENCY(LoopSimplify)
+INITIALIZELLVM37_PASS_DEPENDENCY(LCSSA)
+INITIALIZELLVM37_PASS_DEPENDENCY(ScalarEvolution)
+INITIALIZELLVM37_PASS_DEPENDENCY(TargetLibraryInfoWrapperPass)
+INITIALIZELLVM37_AG_DEPENDENCY(AliasAnalysis)
+INITIALIZELLVM37_PASS_END(LICM, "licm", "Loop Invariant Code Motion", false, false)
 
 Pass *llvm37::createLICMPass() { return new LICM(); }
 

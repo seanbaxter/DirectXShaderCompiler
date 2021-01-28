@@ -38,11 +38,11 @@ using namespace PatternMatch;
 #define DEBUG_TYPE "lazy-value-info"
 
 char LazyValueInfo::ID = 0;
-INITIALIZE_PASS_BEGIN(LazyValueInfo, "lazy-value-info",
+INITIALIZELLVM37_PASS_BEGIN(LazyValueInfo, "lazy-value-info",
                 "Lazy Value Information Analysis", false, true)
-INITIALIZE_PASS_DEPENDENCY(AssumptionCacheTracker)
-INITIALIZE_PASS_DEPENDENCY(TargetLibraryInfoWrapperPass)
-INITIALIZE_PASS_END(LazyValueInfo, "lazy-value-info",
+INITIALIZELLVM37_PASS_DEPENDENCY(AssumptionCacheTracker)
+INITIALIZELLVM37_PASS_DEPENDENCY(TargetLibraryInfoWrapperPass)
+INITIALIZELLVM37_PASS_END(LazyValueInfo, "lazy-value-info",
                 "Lazy Value Information Analysis", false, true)
 
 namespace llvm37 {

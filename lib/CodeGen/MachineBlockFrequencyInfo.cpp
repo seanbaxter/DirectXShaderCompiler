@@ -113,11 +113,11 @@ struct DOTGraphTraits<MachineBlockFrequencyInfo*> :
 } // end namespace llvm37
 #endif
 
-INITIALIZE_PASS_BEGIN(MachineBlockFrequencyInfo, "machine-block-freq",
+INITIALIZELLVM37_PASS_BEGIN(MachineBlockFrequencyInfo, "machine-block-freq",
                       "Machine Block Frequency Analysis", true, true)
-INITIALIZE_PASS_DEPENDENCY(MachineBranchProbabilityInfo)
-INITIALIZE_PASS_DEPENDENCY(MachineLoopInfo)
-INITIALIZE_PASS_END(MachineBlockFrequencyInfo, "machine-block-freq",
+INITIALIZELLVM37_PASS_DEPENDENCY(MachineBranchProbabilityInfo)
+INITIALIZELLVM37_PASS_DEPENDENCY(MachineLoopInfo)
+INITIALIZELLVM37_PASS_END(MachineBlockFrequencyInfo, "machine-block-freq",
                     "Machine Block Frequency Analysis", true, true)
 
 char MachineBlockFrequencyInfo::ID = 0;

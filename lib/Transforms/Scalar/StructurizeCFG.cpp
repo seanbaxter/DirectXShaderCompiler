@@ -262,12 +262,12 @@ public:
 
 char StructurizeCFG::ID = 0;
 
-INITIALIZE_PASS_BEGIN(StructurizeCFG, "structurizecfg", "Structurize the CFG",
+INITIALIZELLVM37_PASS_BEGIN(StructurizeCFG, "structurizecfg", "Structurize the CFG",
                       false, false)
-INITIALIZE_PASS_DEPENDENCY(LowerSwitch)
-INITIALIZE_PASS_DEPENDENCY(DominatorTreeWrapperPass)
-INITIALIZE_PASS_DEPENDENCY(RegionInfoPass)
-INITIALIZE_PASS_END(StructurizeCFG, "structurizecfg", "Structurize the CFG",
+INITIALIZELLVM37_PASS_DEPENDENCY(LowerSwitch)
+INITIALIZELLVM37_PASS_DEPENDENCY(DominatorTreeWrapperPass)
+INITIALIZELLVM37_PASS_DEPENDENCY(RegionInfoPass)
+INITIALIZELLVM37_PASS_END(StructurizeCFG, "structurizecfg", "Structurize the CFG",
                     false, false)
 
 /// \brief Initialize the types and constants used in the pass

@@ -163,7 +163,7 @@ namespace {
 
 
 char DAE::ID = 0;
-INITIALIZE_PASS(DAE, "deadargelim", "Dead Argument Elimination", false, false)
+INITIALIZELLVM37_PASS(DAE, "deadargelim", "Dead Argument Elimination", false, false)
 
 namespace {
   /// DAH - DeadArgumentHacking pass - Same as dead argument elimination, but
@@ -178,7 +178,7 @@ namespace {
 }
 
 char DAH::ID = 0;
-INITIALIZE_PASS(DAH, "deadarghaX0r", 
+INITIALIZELLVM37_PASS(DAH, "deadarghaX0r", 
                 "Dead Argument Hacking (BUGPOINT USE ONLY; DO NOT USE)",
                 false, false)
 

@@ -386,13 +386,13 @@ private:
 }  // anonymous namespace
 
 char SeparateConstOffsetFromGEP::ID = 0;
-INITIALIZE_PASS_BEGIN(
+INITIALIZELLVM37_PASS_BEGIN(
     SeparateConstOffsetFromGEP, "separate-const-offset-from-gep",
     "Split GEPs to a variadic base and a constant offset for better CSE", false,
     false)
-INITIALIZE_PASS_DEPENDENCY(DominatorTreeWrapperPass)
-INITIALIZE_PASS_DEPENDENCY(TargetTransformInfoWrapperPass)
-INITIALIZE_PASS_END(
+INITIALIZELLVM37_PASS_DEPENDENCY(DominatorTreeWrapperPass)
+INITIALIZELLVM37_PASS_DEPENDENCY(TargetTransformInfoWrapperPass)
+INITIALIZELLVM37_PASS_END(
     SeparateConstOffsetFromGEP, "separate-const-offset-from-gep",
     "Split GEPs to a variadic base and a constant offset for better CSE", false,
     false)

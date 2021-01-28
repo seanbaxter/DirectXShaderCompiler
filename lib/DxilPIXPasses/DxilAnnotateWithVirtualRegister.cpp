@@ -403,7 +403,7 @@ void DxilAnnotateWithVirtualRegister::PrintAllocaMember(llvm37::AllocaInst* pAll
 
 using namespace llvm37;
 
-INITIALIZE_PASS(DxilAnnotateWithVirtualRegister, DEBUG_TYPE,
+INITIALIZELLVM37_PASS(DxilAnnotateWithVirtualRegister, DEBUG_TYPE,
                 "Annotates each instruction in the DXIL module with a virtual "
                 "register number",
                 false, false)

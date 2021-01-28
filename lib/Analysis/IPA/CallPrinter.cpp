@@ -74,11 +74,11 @@ struct CallGraphPrinter : public DOTGraphTraitsModulePrinter<
 } // end anonymous namespace
 
 char CallGraphViewer::ID = 0;
-INITIALIZE_PASS(CallGraphViewer, "view-callgraph", "View call graph", false,
+INITIALIZELLVM37_PASS(CallGraphViewer, "view-callgraph", "View call graph", false,
                 false)
 
 char CallGraphPrinter::ID = 0;
-INITIALIZE_PASS(CallGraphPrinter, "dot-callgraph",
+INITIALIZELLVM37_PASS(CallGraphPrinter, "dot-callgraph",
                 "Print call graph to 'dot' file", false, false)
 
 // Create methods available outside of this file, to use them

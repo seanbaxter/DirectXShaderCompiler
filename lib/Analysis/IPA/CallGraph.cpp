@@ -269,7 +269,7 @@ bool CallGraphWrapperPass::runOnModule(Module &M) {
   return false;
 }
 
-INITIALIZE_PASS(CallGraphWrapperPass, "basiccg", "CallGraph Construction",
+INITIALIZELLVM37_PASS(CallGraphWrapperPass, "basiccg", "CallGraph Construction",
                 false, true)
 
 char CallGraphWrapperPass::ID = 0;

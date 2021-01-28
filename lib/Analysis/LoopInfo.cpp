@@ -693,10 +693,10 @@ PreservedAnalyses LoopPrinterPass::run(Function &F,
 //
 
 char LoopInfoWrapperPass::ID = 0;
-INITIALIZE_PASS_BEGIN(LoopInfoWrapperPass, "loops", "Natural Loop Information",
+INITIALIZELLVM37_PASS_BEGIN(LoopInfoWrapperPass, "loops", "Natural Loop Information",
                       true, true)
-INITIALIZE_PASS_DEPENDENCY(DominatorTreeWrapperPass)
-INITIALIZE_PASS_END(LoopInfoWrapperPass, "loops", "Natural Loop Information",
+INITIALIZELLVM37_PASS_DEPENDENCY(DominatorTreeWrapperPass)
+INITIALIZELLVM37_PASS_END(LoopInfoWrapperPass, "loops", "Natural Loop Information",
                     true, true)
 
 bool LoopInfoWrapperPass::runOnFunction(Function &) {

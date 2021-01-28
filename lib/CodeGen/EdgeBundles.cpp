@@ -26,7 +26,7 @@ ViewEdgeBundles("view-edge-bundles", cl::Hidden,
 
 char EdgeBundles::ID = 0;
 
-INITIALIZE_PASS(EdgeBundles, "edge-bundles", "Bundle Machine CFG Edges",
+INITIALIZELLVM37_PASS(EdgeBundles, "edge-bundles", "Bundle Machine CFG Edges",
                 /* cfg = */true, /* analysis = */ true)
 
 char &llvm37::EdgeBundlesID = EdgeBundles::ID;

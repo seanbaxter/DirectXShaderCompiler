@@ -885,9 +885,9 @@ public:
 
 char ComputeViewIdState::ID = 0;
 
-INITIALIZE_PASS_BEGIN(ComputeViewIdState, "viewid-state",
+INITIALIZELLVM37_PASS_BEGIN(ComputeViewIdState, "viewid-state",
                 "Compute information related to ViewID", true, true)
-INITIALIZE_PASS_END(ComputeViewIdState, "viewid-state",
+INITIALIZELLVM37_PASS_END(ComputeViewIdState, "viewid-state",
                 "Compute information related to ViewID", true, true)
 
 ComputeViewIdState::ComputeViewIdState() : ModulePass(ID) {

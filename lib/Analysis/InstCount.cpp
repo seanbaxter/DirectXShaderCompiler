@@ -67,7 +67,7 @@ namespace {
 }
 
 char InstCount::ID = 0;
-INITIALIZE_PASS(InstCount, "instcount",
+INITIALIZELLVM37_PASS(InstCount, "instcount",
                 "Counts the various types of Instructions", false, true)
 
 FunctionPass *llvm37::createInstCountPass() { return new InstCount(); }

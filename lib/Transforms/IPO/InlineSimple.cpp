@@ -74,13 +74,13 @@ static int computeThresholdFromOptLevels(unsigned OptLevel,
 } // end anonymous namespace
 
 char SimpleInliner::ID = 0;
-INITIALIZE_PASS_BEGIN(SimpleInliner, "inline",
+INITIALIZELLVM37_PASS_BEGIN(SimpleInliner, "inline",
                 "Function Integration/Inlining", false, false)
-INITIALIZE_AG_DEPENDENCY(AliasAnalysis)
-INITIALIZE_PASS_DEPENDENCY(AssumptionCacheTracker)
-INITIALIZE_PASS_DEPENDENCY(CallGraphWrapperPass)
-INITIALIZE_PASS_DEPENDENCY(InlineCostAnalysis)
-INITIALIZE_PASS_END(SimpleInliner, "inline",
+INITIALIZELLVM37_AG_DEPENDENCY(AliasAnalysis)
+INITIALIZELLVM37_PASS_DEPENDENCY(AssumptionCacheTracker)
+INITIALIZELLVM37_PASS_DEPENDENCY(CallGraphWrapperPass)
+INITIALIZELLVM37_PASS_DEPENDENCY(InlineCostAnalysis)
+INITIALIZELLVM37_PASS_END(SimpleInliner, "inline",
                 "Function Integration/Inlining", false, false)
 
 Pass *llvm37::createFunctionInliningPass() { return new SimpleInliner(); }

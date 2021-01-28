@@ -188,7 +188,7 @@ namespace {
 
 char &llvm37::PostRASchedulerID = PostRAScheduler::ID;
 
-INITIALIZE_PASS(PostRAScheduler, "post-RA-sched",
+INITIALIZELLVM37_PASS(PostRAScheduler, "post-RA-sched",
                 "Post RA top-down list latency scheduler", false, false)
 
 SchedulePostRATDList::SchedulePostRATDList(

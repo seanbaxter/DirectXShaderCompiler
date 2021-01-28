@@ -155,12 +155,12 @@ void RegionInfoPass::dump() const {
 
 char RegionInfoPass::ID = 0;
 
-INITIALIZE_PASS_BEGIN(RegionInfoPass, "regions",
+INITIALIZELLVM37_PASS_BEGIN(RegionInfoPass, "regions",
                 "Detect single entry single exit regions", true, true)
-INITIALIZE_PASS_DEPENDENCY(DominatorTreeWrapperPass)
-INITIALIZE_PASS_DEPENDENCY(PostDominatorTree)
-INITIALIZE_PASS_DEPENDENCY(DominanceFrontier)
-INITIALIZE_PASS_END(RegionInfoPass, "regions",
+INITIALIZELLVM37_PASS_DEPENDENCY(DominatorTreeWrapperPass)
+INITIALIZELLVM37_PASS_DEPENDENCY(PostDominatorTree)
+INITIALIZELLVM37_PASS_DEPENDENCY(DominanceFrontier)
+INITIALIZELLVM37_PASS_END(RegionInfoPass, "regions",
                 "Detect single entry single exit regions", true, true)
 
 // Create methods available outside of this file, to use them

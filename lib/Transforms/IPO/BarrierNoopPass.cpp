@@ -43,5 +43,5 @@ public:
 ModulePass *llvm37::createBarrierNoopPass() { return new BarrierNoop(); }
 
 char BarrierNoop::ID = 0;
-INITIALIZE_PASS(BarrierNoop, "barrier", "A No-Op Barrier Pass",
+INITIALIZELLVM37_PASS(BarrierNoop, "barrier", "A No-Op Barrier Pass",
                 false, false)

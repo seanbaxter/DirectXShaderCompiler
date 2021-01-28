@@ -98,7 +98,7 @@ namespace {
 }
 
 char StripSymbols::ID = 0;
-INITIALIZE_PASS(StripSymbols, "strip",
+INITIALIZELLVM37_PASS(StripSymbols, "strip",
                 "Strip all symbols from a module", false, false)
 
 ModulePass *llvm37::createStripSymbolsPass(bool OnlyDebugInfo) {
@@ -106,7 +106,7 @@ ModulePass *llvm37::createStripSymbolsPass(bool OnlyDebugInfo) {
 }
 
 char StripNonDebugSymbols::ID = 0;
-INITIALIZE_PASS(StripNonDebugSymbols, "strip-nondebug",
+INITIALIZELLVM37_PASS(StripNonDebugSymbols, "strip-nondebug",
                 "Strip all symbols, except dbg symbols, from a module",
                 false, false)
 
@@ -115,7 +115,7 @@ ModulePass *llvm37::createStripNonDebugSymbolsPass() {
 }
 
 char StripDebugDeclare::ID = 0;
-INITIALIZE_PASS(StripDebugDeclare, "strip-debug-declare",
+INITIALIZELLVM37_PASS(StripDebugDeclare, "strip-debug-declare",
                 "Strip all llvm37.dbg.declare intrinsics", false, false)
 
 ModulePass *llvm37::createStripDebugDeclarePass() {
@@ -123,7 +123,7 @@ ModulePass *llvm37::createStripDebugDeclarePass() {
 }
 
 char StripDeadDebugInfo::ID = 0;
-INITIALIZE_PASS(StripDeadDebugInfo, "strip-dead-debug-info",
+INITIALIZELLVM37_PASS(StripDeadDebugInfo, "strip-dead-debug-info",
                 "Strip debug info for unused symbols", false, false)
 
 ModulePass *llvm37::createStripDeadDebugInfoPass() {

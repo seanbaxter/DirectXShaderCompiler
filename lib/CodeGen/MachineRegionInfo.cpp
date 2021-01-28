@@ -120,12 +120,12 @@ void MachineRegionInfoPass::dump() const {
 
 char MachineRegionInfoPass::ID = 0;
 
-INITIALIZE_PASS_BEGIN(MachineRegionInfoPass, "regions",
+INITIALIZELLVM37_PASS_BEGIN(MachineRegionInfoPass, "regions",
                 "Detect single entry single exit regions", true, true)
-INITIALIZE_PASS_DEPENDENCY(MachineDominatorTree)
-INITIALIZE_PASS_DEPENDENCY(MachinePostDominatorTree)
-INITIALIZE_PASS_DEPENDENCY(MachineDominanceFrontier)
-INITIALIZE_PASS_END(MachineRegionInfoPass, "regions",
+INITIALIZELLVM37_PASS_DEPENDENCY(MachineDominatorTree)
+INITIALIZELLVM37_PASS_DEPENDENCY(MachinePostDominatorTree)
+INITIALIZELLVM37_PASS_DEPENDENCY(MachineDominanceFrontier)
+INITIALIZELLVM37_PASS_END(MachineRegionInfoPass, "regions",
                 "Detect single entry single exit regions", true, true)
 
 // Create methods available outside of this file, to use them

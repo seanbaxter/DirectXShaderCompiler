@@ -54,12 +54,12 @@ namespace {
 }
 
 char LoopExtractor::ID = 0;
-INITIALIZE_PASS_BEGIN(LoopExtractor, "loop-extract",
+INITIALIZELLVM37_PASS_BEGIN(LoopExtractor, "loop-extract",
                       "Extract loops into new functions", false, false)
-INITIALIZE_PASS_DEPENDENCY(BreakCriticalEdges)
-INITIALIZE_PASS_DEPENDENCY(LoopSimplify)
-INITIALIZE_PASS_DEPENDENCY(DominatorTreeWrapperPass)
-INITIALIZE_PASS_END(LoopExtractor, "loop-extract",
+INITIALIZELLVM37_PASS_DEPENDENCY(BreakCriticalEdges)
+INITIALIZELLVM37_PASS_DEPENDENCY(LoopSimplify)
+INITIALIZELLVM37_PASS_DEPENDENCY(DominatorTreeWrapperPass)
+INITIALIZELLVM37_PASS_END(LoopExtractor, "loop-extract",
                     "Extract loops into new functions", false, false)
 
 namespace {
@@ -71,7 +71,7 @@ namespace {
 } // End anonymous namespace
 
 char SingleLoopExtractor::ID = 0;
-INITIALIZE_PASS(SingleLoopExtractor, "loop-extract-single",
+INITIALIZELLVM37_PASS(SingleLoopExtractor, "loop-extract-single",
                 "Extract at most one loop into a new function", false, false)
 
 // createLoopExtractorPass - This pass extracts all natural loops from the
@@ -186,7 +186,7 @@ namespace {
 }
 
 char BlockExtractorPass::ID = 0;
-INITIALIZE_PASS(BlockExtractorPass, "extract-blocks",
+INITIALIZELLVM37_PASS(BlockExtractorPass, "extract-blocks",
                 "Extract Basic Blocks From Module (for bugpoint use)",
                 false, false)
 

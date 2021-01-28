@@ -52,7 +52,7 @@ namespace {
   public:
     static char ID; // Pass identification, replacement for typeid.
 
-    // INITIALIZE_TM_PASS requires a default constructor, but it isn't used in
+    // INITIALIZELLVM37_TM_PASS requires a default constructor, but it isn't used in
     // practice.
     DwarfEHPrepare()
         : FunctionPass(ID), TM(nullptr), RewindFunction(nullptr), DT(nullptr),
@@ -78,11 +78,11 @@ namespace {
 } // end anonymous namespace
 
 char DwarfEHPrepare::ID = 0;
-INITIALIZE_TM_PASS_BEGIN(DwarfEHPrepare, "dwarfehprepare",
+INITIALIZELLVM37_TM_PASS_BEGIN(DwarfEHPrepare, "dwarfehprepare",
                          "Prepare DWARF exceptions", false, false)
-INITIALIZE_PASS_DEPENDENCY(DominatorTreeWrapperPass)
-INITIALIZE_PASS_DEPENDENCY(TargetTransformInfoWrapperPass)
-INITIALIZE_TM_PASS_END(DwarfEHPrepare, "dwarfehprepare",
+INITIALIZELLVM37_PASS_DEPENDENCY(DominatorTreeWrapperPass)
+INITIALIZELLVM37_PASS_DEPENDENCY(TargetTransformInfoWrapperPass)
+INITIALIZELLVM37_TM_PASS_END(DwarfEHPrepare, "dwarfehprepare",
                        "Prepare DWARF exceptions", false, false)
 
 FunctionPass *llvm37::createDwarfEHPass(const TargetMachine *TM) {

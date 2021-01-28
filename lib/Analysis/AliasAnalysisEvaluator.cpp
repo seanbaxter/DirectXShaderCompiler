@@ -79,10 +79,10 @@ namespace {
 }
 
 char AAEval::ID = 0;
-INITIALIZE_PASS_BEGIN(AAEval, "aa-eval",
+INITIALIZELLVM37_PASS_BEGIN(AAEval, "aa-eval",
                 "Exhaustive Alias Analysis Precision Evaluator", false, true)
-INITIALIZE_AG_DEPENDENCY(AliasAnalysis)
-INITIALIZE_PASS_END(AAEval, "aa-eval",
+INITIALIZELLVM37_AG_DEPENDENCY(AliasAnalysis)
+INITIALIZELLVM37_PASS_END(AAEval, "aa-eval",
                 "Exhaustive Alias Analysis Precision Evaluator", false, true)
 
 FunctionPass *llvm37::createAAEvalPass() { return new AAEval(); }

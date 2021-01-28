@@ -95,11 +95,11 @@ namespace {
 }
 
 char ArgPromotion::ID = 0;
-INITIALIZE_PASS_BEGIN(ArgPromotion, "argpromotion",
+INITIALIZELLVM37_PASS_BEGIN(ArgPromotion, "argpromotion",
                 "Promote 'by reference' arguments to scalars", false, false)
-INITIALIZE_AG_DEPENDENCY(AliasAnalysis)
-INITIALIZE_PASS_DEPENDENCY(CallGraphWrapperPass)
-INITIALIZE_PASS_END(ArgPromotion, "argpromotion",
+INITIALIZELLVM37_AG_DEPENDENCY(AliasAnalysis)
+INITIALIZELLVM37_PASS_DEPENDENCY(CallGraphWrapperPass)
+INITIALIZELLVM37_PASS_END(ArgPromotion, "argpromotion",
                 "Promote 'by reference' arguments to scalars", false, false)
 
 Pass *llvm37::createArgumentPromotionPass(unsigned maxElements) {

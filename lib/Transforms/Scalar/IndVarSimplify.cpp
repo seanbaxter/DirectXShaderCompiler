@@ -151,14 +151,14 @@ namespace {
 }
 
 char IndVarSimplify::ID = 0;
-INITIALIZE_PASS_BEGIN(IndVarSimplify, "indvars",
+INITIALIZELLVM37_PASS_BEGIN(IndVarSimplify, "indvars",
                 "Induction Variable Simplification", false, false)
-INITIALIZE_PASS_DEPENDENCY(DominatorTreeWrapperPass)
-INITIALIZE_PASS_DEPENDENCY(LoopInfoWrapperPass)
-INITIALIZE_PASS_DEPENDENCY(ScalarEvolution)
-INITIALIZE_PASS_DEPENDENCY(LoopSimplify)
-INITIALIZE_PASS_DEPENDENCY(LCSSA)
-INITIALIZE_PASS_END(IndVarSimplify, "indvars",
+INITIALIZELLVM37_PASS_DEPENDENCY(DominatorTreeWrapperPass)
+INITIALIZELLVM37_PASS_DEPENDENCY(LoopInfoWrapperPass)
+INITIALIZELLVM37_PASS_DEPENDENCY(ScalarEvolution)
+INITIALIZELLVM37_PASS_DEPENDENCY(LoopSimplify)
+INITIALIZELLVM37_PASS_DEPENDENCY(LCSSA)
+INITIALIZELLVM37_PASS_END(IndVarSimplify, "indvars",
                 "Induction Variable Simplification", false, false)
 
 Pass *llvm37::createIndVarSimplifyPass() {

@@ -740,13 +740,13 @@ FunctionPass *llvm37::createGVNPass(bool NoLoads) {
   return new GVN(NoLoads);
 }
 
-INITIALIZE_PASS_BEGIN(GVN, "gvn", "Global Value Numbering", false, false)
-INITIALIZE_PASS_DEPENDENCY(AssumptionCacheTracker)
-INITIALIZE_PASS_DEPENDENCY(MemoryDependenceAnalysis)
-INITIALIZE_PASS_DEPENDENCY(DominatorTreeWrapperPass)
-INITIALIZE_PASS_DEPENDENCY(TargetLibraryInfoWrapperPass)
-INITIALIZE_AG_DEPENDENCY(AliasAnalysis)
-INITIALIZE_PASS_END(GVN, "gvn", "Global Value Numbering", false, false)
+INITIALIZELLVM37_PASS_BEGIN(GVN, "gvn", "Global Value Numbering", false, false)
+INITIALIZELLVM37_PASS_DEPENDENCY(AssumptionCacheTracker)
+INITIALIZELLVM37_PASS_DEPENDENCY(MemoryDependenceAnalysis)
+INITIALIZELLVM37_PASS_DEPENDENCY(DominatorTreeWrapperPass)
+INITIALIZELLVM37_PASS_DEPENDENCY(TargetLibraryInfoWrapperPass)
+INITIALIZELLVM37_AG_DEPENDENCY(AliasAnalysis)
+INITIALIZELLVM37_PASS_END(GVN, "gvn", "Global Value Numbering", false, false)
 
 #if !defined(NDEBUG) || defined(LLVM37_ENABLE_DUMP)
 void GVN::dump(DenseMap<uint32_t, Value*>& d) {

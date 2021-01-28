@@ -1600,7 +1600,7 @@ ModulePass *llvm37::createDxilLegalizeResources() {
   return new DxilLegalizeResources();
 }
 
-INITIALIZE_PASS(DxilLegalizeResources,
+INITIALIZELLVM37_PASS(DxilLegalizeResources,
   "hlsl-dxil-legalize-resources",
   "DXIL legalize resource use", false, false)
 
@@ -2589,9 +2589,9 @@ ModulePass *llvm37::createDxilLowerCreateHandleForLibPass() {
   return new DxilLowerCreateHandleForLib();
 }
 
-INITIALIZE_PASS_BEGIN(DxilLowerCreateHandleForLib, "hlsl-dxil-lower-handle-for-lib", "DXIL Lower createHandleForLib", false, false)
-INITIALIZE_PASS_DEPENDENCY(DxilValueCache)
-INITIALIZE_PASS_END(DxilLowerCreateHandleForLib, "hlsl-dxil-lower-handle-for-lib", "DXIL Lower createHandleForLib", false, false)
+INITIALIZELLVM37_PASS_BEGIN(DxilLowerCreateHandleForLib, "hlsl-dxil-lower-handle-for-lib", "DXIL Lower createHandleForLib", false, false)
+INITIALIZELLVM37_PASS_DEPENDENCY(DxilValueCache)
+INITIALIZELLVM37_PASS_END(DxilLowerCreateHandleForLib, "hlsl-dxil-lower-handle-for-lib", "DXIL Lower createHandleForLib", false, false)
 
 
 class DxilAllocateResourcesForLib : public ModulePass {
@@ -2636,4 +2636,4 @@ ModulePass *llvm37::createDxilAllocateResourcesForLibPass() {
   return new DxilAllocateResourcesForLib();
 }
 
-INITIALIZE_PASS(DxilAllocateResourcesForLib, "hlsl-dxil-allocate-resources-for-lib", "DXIL Allocate Resources For Library", false, false)
+INITIALIZELLVM37_PASS(DxilAllocateResourcesForLib, "hlsl-dxil-allocate-resources-for-lib", "DXIL Allocate Resources For Library", false, false)

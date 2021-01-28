@@ -65,13 +65,13 @@ public:
 }
 
 char AlwaysInliner::ID = 0;
-INITIALIZE_PASS_BEGIN(AlwaysInliner, "always-inline",
+INITIALIZELLVM37_PASS_BEGIN(AlwaysInliner, "always-inline",
                 "Inliner for always_inline functions", false, false)
-INITIALIZE_AG_DEPENDENCY(AliasAnalysis)
-INITIALIZE_PASS_DEPENDENCY(AssumptionCacheTracker)
-INITIALIZE_PASS_DEPENDENCY(CallGraphWrapperPass)
-INITIALIZE_PASS_DEPENDENCY(InlineCostAnalysis)
-INITIALIZE_PASS_END(AlwaysInliner, "always-inline",
+INITIALIZELLVM37_AG_DEPENDENCY(AliasAnalysis)
+INITIALIZELLVM37_PASS_DEPENDENCY(AssumptionCacheTracker)
+INITIALIZELLVM37_PASS_DEPENDENCY(CallGraphWrapperPass)
+INITIALIZELLVM37_PASS_DEPENDENCY(InlineCostAnalysis)
+INITIALIZELLVM37_PASS_END(AlwaysInliner, "always-inline",
                 "Inliner for always_inline functions", false, false)
 
 Pass *llvm37::createAlwaysInlinerPass() { return new AlwaysInliner(); }

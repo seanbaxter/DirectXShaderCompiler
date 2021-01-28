@@ -566,12 +566,12 @@ namespace {
 
 // Register this pass...
 char BasicAliasAnalysis::ID = 0;
-INITIALIZE_AG_PASS_BEGIN(BasicAliasAnalysis, AliasAnalysis, "basicaa",
+INITIALIZELLVM37_AG_PASS_BEGIN(BasicAliasAnalysis, AliasAnalysis, "basicaa",
                    "Basic Alias Analysis (stateless AA impl)",
                    false, true, false)
-INITIALIZE_PASS_DEPENDENCY(AssumptionCacheTracker)
-INITIALIZE_PASS_DEPENDENCY(TargetLibraryInfoWrapperPass)
-INITIALIZE_AG_PASS_END(BasicAliasAnalysis, AliasAnalysis, "basicaa",
+INITIALIZELLVM37_PASS_DEPENDENCY(AssumptionCacheTracker)
+INITIALIZELLVM37_PASS_DEPENDENCY(TargetLibraryInfoWrapperPass)
+INITIALIZELLVM37_AG_PASS_END(BasicAliasAnalysis, AliasAnalysis, "basicaa",
                    "Basic Alias Analysis (stateless AA impl)",
                    false, true, false)
 

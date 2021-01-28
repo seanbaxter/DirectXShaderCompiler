@@ -93,10 +93,10 @@ namespace {
 }
 
 char GlobalOpt::ID = 0;
-INITIALIZE_PASS_BEGIN(GlobalOpt, "globalopt",
+INITIALIZELLVM37_PASS_BEGIN(GlobalOpt, "globalopt",
                 "Global Variable Optimizer", false, false)
-INITIALIZE_PASS_DEPENDENCY(TargetLibraryInfoWrapperPass)
-INITIALIZE_PASS_END(GlobalOpt, "globalopt",
+INITIALIZELLVM37_PASS_DEPENDENCY(TargetLibraryInfoWrapperPass)
+INITIALIZELLVM37_PASS_END(GlobalOpt, "globalopt",
                 "Global Variable Optimizer", false, false)
 
 ModulePass *llvm37::createGlobalOptimizerPass() { return new GlobalOpt(); }

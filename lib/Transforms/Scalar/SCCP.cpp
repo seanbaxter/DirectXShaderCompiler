@@ -1520,7 +1520,7 @@ namespace {
 } // end anonymous namespace
 
 char SCCP::ID = 0;
-INITIALIZE_PASS(SCCP, "sccp",
+INITIALIZELLVM37_PASS(SCCP, "sccp",
                 "Sparse Conditional Constant Propagation", false, false)
 
 // createSCCPPass - This is the public interface to this file.
@@ -1649,11 +1649,11 @@ namespace {
 } // end anonymous namespace
 
 char IPSCCP::ID = 0;
-INITIALIZE_PASS_BEGIN(IPSCCP, "ipsccp",
+INITIALIZELLVM37_PASS_BEGIN(IPSCCP, "ipsccp",
                 "Interprocedural Sparse Conditional Constant Propagation",
                 false, false)
-INITIALIZE_PASS_DEPENDENCY(TargetLibraryInfoWrapperPass)
-INITIALIZE_PASS_END(IPSCCP, "ipsccp",
+INITIALIZELLVM37_PASS_DEPENDENCY(TargetLibraryInfoWrapperPass)
+INITIALIZELLVM37_PASS_END(IPSCCP, "ipsccp",
                 "Interprocedural Sparse Conditional Constant Propagation",
                 false, false)
 

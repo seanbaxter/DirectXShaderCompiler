@@ -123,10 +123,10 @@ namespace {
 }
 
 char TailCallElim::ID = 0;
-INITIALIZE_PASS_BEGIN(TailCallElim, "tailcallelim",
+INITIALIZELLVM37_PASS_BEGIN(TailCallElim, "tailcallelim",
                       "Tail Call Elimination", false, false)
-INITIALIZE_PASS_DEPENDENCY(TargetTransformInfoWrapperPass)
-INITIALIZE_PASS_END(TailCallElim, "tailcallelim",
+INITIALIZELLVM37_PASS_DEPENDENCY(TargetTransformInfoWrapperPass)
+INITIALIZELLVM37_PASS_END(TailCallElim, "tailcallelim",
                     "Tail Call Elimination", false, false)
 
 // Public interface to the TailCallElimination pass

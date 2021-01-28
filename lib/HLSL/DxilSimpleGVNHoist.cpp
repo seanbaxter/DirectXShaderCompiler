@@ -582,5 +582,5 @@ FunctionPass *llvm37::createDxilSimpleGVNHoistPass() {
   return new DxilSimpleGVNHoist();
 }
 
-INITIALIZE_PASS(DxilSimpleGVNHoist, "dxil-gvn-hoist",
+INITIALIZELLVM37_PASS(DxilSimpleGVNHoist, "dxil-gvn-hoist",
                 "DXIL simple gvn hoist", false, false)

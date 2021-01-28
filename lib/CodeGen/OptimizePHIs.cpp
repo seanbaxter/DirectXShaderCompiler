@@ -59,7 +59,7 @@ namespace {
 
 char OptimizePHIs::ID = 0;
 char &llvm37::OptimizePHIsID = OptimizePHIs::ID;
-INITIALIZE_PASS(OptimizePHIs, "opt-phis",
+INITIALIZELLVM37_PASS(OptimizePHIs, "opt-phis",
                 "Optimize machine instruction PHIs", false, false)
 
 bool OptimizePHIs::runOnMachineFunction(MachineFunction &Fn) {

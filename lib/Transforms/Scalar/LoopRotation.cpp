@@ -86,13 +86,13 @@ namespace {
 }
 
 char LoopRotate::ID = 0;
-INITIALIZE_PASS_BEGIN(LoopRotate, "loop-rotate", "Rotate Loops", false, false)
-INITIALIZE_PASS_DEPENDENCY(TargetTransformInfoWrapperPass)
-INITIALIZE_PASS_DEPENDENCY(AssumptionCacheTracker)
-INITIALIZE_PASS_DEPENDENCY(LoopInfoWrapperPass)
-INITIALIZE_PASS_DEPENDENCY(LoopSimplify)
-INITIALIZE_PASS_DEPENDENCY(LCSSA)
-INITIALIZE_PASS_END(LoopRotate, "loop-rotate", "Rotate Loops", false, false)
+INITIALIZELLVM37_PASS_BEGIN(LoopRotate, "loop-rotate", "Rotate Loops", false, false)
+INITIALIZELLVM37_PASS_DEPENDENCY(TargetTransformInfoWrapperPass)
+INITIALIZELLVM37_PASS_DEPENDENCY(AssumptionCacheTracker)
+INITIALIZELLVM37_PASS_DEPENDENCY(LoopInfoWrapperPass)
+INITIALIZELLVM37_PASS_DEPENDENCY(LoopSimplify)
+INITIALIZELLVM37_PASS_DEPENDENCY(LCSSA)
+INITIALIZELLVM37_PASS_END(LoopRotate, "loop-rotate", "Rotate Loops", false, false)
 
 Pass *llvm37::createLoopRotatePass(int MaxHeaderSize) {
   return new LoopRotate(MaxHeaderSize);

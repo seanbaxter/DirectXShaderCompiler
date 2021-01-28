@@ -3892,7 +3892,7 @@ constexpr const char *ContinuedPseudoSemantic = "*";
 
 char SROA_Parameter_HLSL::ID = 0;
 
-INITIALIZE_PASS(SROA_Parameter_HLSL, "scalarrepl-param-hlsl",
+INITIALIZELLVM37_PASS(SROA_Parameter_HLSL, "scalarrepl-param-hlsl",
   "Scalar Replacement of Aggregates HLSL (parameters)", false,
   false)
 
@@ -6033,7 +6033,7 @@ bool LowerStaticGlobalIntoAlloca::usedOnlyInEntry(
 
 char LowerStaticGlobalIntoAlloca::ID = 0;
 
-INITIALIZE_PASS(LowerStaticGlobalIntoAlloca, "static-global-to-alloca",
+INITIALIZELLVM37_PASS(LowerStaticGlobalIntoAlloca, "static-global-to-alloca",
   "Lower static global into Alloca", false,
   false)
 

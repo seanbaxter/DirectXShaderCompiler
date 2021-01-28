@@ -19,9 +19,9 @@
 
 using namespace llvm37;
 
-INITIALIZE_PASS_BEGIN(MachineBranchProbabilityInfo, "machine-branch-prob",
+INITIALIZELLVM37_PASS_BEGIN(MachineBranchProbabilityInfo, "machine-branch-prob",
                       "Machine Branch Probability Analysis", false, true)
-INITIALIZE_PASS_END(MachineBranchProbabilityInfo, "machine-branch-prob",
+INITIALIZELLVM37_PASS_END(MachineBranchProbabilityInfo, "machine-branch-prob",
                     "Machine Branch Probability Analysis", false, true)
 
 char MachineBranchProbabilityInfo::ID = 0;

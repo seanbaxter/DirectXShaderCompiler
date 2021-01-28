@@ -59,7 +59,7 @@ namespace {
 char MachineCopyPropagation::ID = 0;
 char &llvm37::MachineCopyPropagationID = MachineCopyPropagation::ID;
 
-INITIALIZE_PASS(MachineCopyPropagation, "machine-cp",
+INITIALIZELLVM37_PASS(MachineCopyPropagation, "machine-cp",
                 "Machine Copy Propagation Pass", false, false)
 
 void

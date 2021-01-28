@@ -39,10 +39,10 @@ private:
 }
 
 char FlattenCFGPass::ID = 0;
-INITIALIZE_PASS_BEGIN(FlattenCFGPass, "flattencfg", "Flatten the CFG", false,
+INITIALIZELLVM37_PASS_BEGIN(FlattenCFGPass, "flattencfg", "Flatten the CFG", false,
                       false)
-INITIALIZE_AG_DEPENDENCY(AliasAnalysis)
-INITIALIZE_PASS_END(FlattenCFGPass, "flattencfg", "Flatten the CFG", false,
+INITIALIZELLVM37_AG_DEPENDENCY(AliasAnalysis)
+INITIALIZELLVM37_PASS_END(FlattenCFGPass, "flattencfg", "Flatten the CFG", false,
                     false)
 
 // Public interface to the FlattenCFG pass

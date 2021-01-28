@@ -261,7 +261,7 @@ namespace {
 }
 
 char MachineVerifierPass::ID = 0;
-INITIALIZE_PASS(MachineVerifierPass, "machineverifier",
+INITIALIZELLVM37_PASS(MachineVerifierPass, "machineverifier",
                 "Verify generated machine code", false, false)
 
 FunctionPass *llvm37::createMachineVerifierPass(const std::string &Banner) {

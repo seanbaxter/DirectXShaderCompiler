@@ -311,12 +311,12 @@ namespace {
 
 char MachineLICM::ID = 0;
 char &llvm37::MachineLICMID = MachineLICM::ID;
-INITIALIZE_PASS_BEGIN(MachineLICM, "machinelicm",
+INITIALIZELLVM37_PASS_BEGIN(MachineLICM, "machinelicm",
                 "Machine Loop Invariant Code Motion", false, false)
-INITIALIZE_PASS_DEPENDENCY(MachineLoopInfo)
-INITIALIZE_PASS_DEPENDENCY(MachineDominatorTree)
-INITIALIZE_AG_DEPENDENCY(AliasAnalysis)
-INITIALIZE_PASS_END(MachineLICM, "machinelicm",
+INITIALIZELLVM37_PASS_DEPENDENCY(MachineLoopInfo)
+INITIALIZELLVM37_PASS_DEPENDENCY(MachineDominatorTree)
+INITIALIZELLVM37_AG_DEPENDENCY(AliasAnalysis)
+INITIALIZELLVM37_PASS_END(MachineLICM, "machinelicm",
                 "Machine Loop Invariant Code Motion", false, false)
 
 /// LoopIsOuterMostWithPredecessor - Test if the given loop is the outer-most

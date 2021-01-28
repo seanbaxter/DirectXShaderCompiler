@@ -1189,4 +1189,4 @@ ModulePass *llvm37::createDxilLoadMetadataPass() {
   return new DxilLoadMetadata();
 }
 
-INITIALIZE_PASS(DxilLoadMetadata, "hlsl-dxilload", "HLSL load DxilModule from metadata", false, false)
+INITIALIZELLVM37_PASS(DxilLoadMetadata, "hlsl-dxilload", "HLSL load DxilModule from metadata", false, false)

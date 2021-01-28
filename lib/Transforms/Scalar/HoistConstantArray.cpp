@@ -391,7 +391,7 @@ bool HoistConstantArray::runOnFunction(Function &F) {
 }
 
 char HoistConstantArray::ID = 0;
-INITIALIZE_PASS(HoistConstantArray, "hlsl-hca", "Hoist constant arrays", false, false)
+INITIALIZELLVM37_PASS(HoistConstantArray, "hlsl-hca", "Hoist constant arrays", false, false)
 
 bool HoistConstantArray::runOnModule(Module &M) {
   bool changed = false;

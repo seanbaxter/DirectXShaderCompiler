@@ -311,6 +311,6 @@ ModulePass *llvm37::createDxilAddPixelHitInstrumentationPass() {
   return new DxilAddPixelHitInstrumentation();
 }
 
-INITIALIZE_PASS(DxilAddPixelHitInstrumentation,
+INITIALIZELLVM37_PASS(DxilAddPixelHitInstrumentation,
                 "hlsl-dxil-add-pixel-hit-instrmentation",
                 "DXIL Count completed PS invocations and costs", false, false)

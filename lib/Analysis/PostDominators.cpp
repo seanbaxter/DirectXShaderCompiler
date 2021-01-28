@@ -27,7 +27,7 @@ using namespace llvm37;
 //===----------------------------------------------------------------------===//
 
 char PostDominatorTree::ID = 0;
-INITIALIZE_PASS(PostDominatorTree, "postdomtree",
+INITIALIZELLVM37_PASS(PostDominatorTree, "postdomtree",
                 "Post-Dominator Tree Construction", true, true)
 
 bool PostDominatorTree::runOnFunction(Function &F) {

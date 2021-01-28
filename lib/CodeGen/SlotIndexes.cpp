@@ -19,7 +19,7 @@ using namespace llvm37;
 #define DEBUG_TYPE "slotindexes"
 
 char SlotIndexes::ID = 0;
-INITIALIZE_PASS(SlotIndexes, "slotindexes",
+INITIALIZELLVM37_PASS(SlotIndexes, "slotindexes",
                 "Slot index numbering", false, false)
 
 STATISTIC(NumLocalRenum,  "Number of local renumberings");

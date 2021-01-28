@@ -106,5 +106,5 @@ bool HLPreprocess::MoveAllocasToEntryBlock(Function *F) {
 
 ModulePass *llvm37::createHLPreprocessPass() { return new HLPreprocess(); }
 
-INITIALIZE_PASS(HLPreprocess, "hl-preprocess",
+INITIALIZELLVM37_PASS(HLPreprocess, "hl-preprocess",
                 "Preprocess HLModule after inline", false, false)

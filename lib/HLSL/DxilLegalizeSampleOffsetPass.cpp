@@ -219,8 +219,8 @@ FunctionPass *llvm37::createDxilLegalizeSampleOffsetPass() {
   return new DxilLegalizeSampleOffsetPass();
 }
 
-INITIALIZE_PASS_BEGIN(DxilLegalizeSampleOffsetPass, "dxil-legalize-sample-offset",
+INITIALIZELLVM37_PASS_BEGIN(DxilLegalizeSampleOffsetPass, "dxil-legalize-sample-offset",
                 "DXIL legalize sample offset", false, false)
-INITIALIZE_PASS_DEPENDENCY(DxilValueCache)
-INITIALIZE_PASS_END(DxilLegalizeSampleOffsetPass, "dxil-legalize-sample-offset",
+INITIALIZELLVM37_PASS_DEPENDENCY(DxilValueCache)
+INITIALIZELLVM37_PASS_END(DxilLegalizeSampleOffsetPass, "dxil-legalize-sample-offset",
                 "DXIL legalize sample offset", false, false)

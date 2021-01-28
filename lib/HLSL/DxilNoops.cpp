@@ -431,7 +431,7 @@ Pass *llvm37::createDxilInsertPreservesPass(bool AllowPreserves) {
   return new DxilInsertPreserves(AllowPreserves);
 }
 
-INITIALIZE_PASS(DxilInsertPreserves, "dxil-insert-preserves", "Dxil Insert Preserves", false, false)
+INITIALIZELLVM37_PASS(DxilInsertPreserves, "dxil-insert-preserves", "Dxil Insert Preserves", false, false)
 
 
 //==========================================================
@@ -485,7 +485,7 @@ Pass *llvm37::createDxilPreserveToSelectPass() {
   return new DxilPreserveToSelect();
 }
 
-INITIALIZE_PASS(DxilPreserveToSelect, "dxil-preserves-to-select", "Dxil Preserves To Select", false, false)
+INITIALIZELLVM37_PASS(DxilPreserveToSelect, "dxil-preserves-to-select", "Dxil Preserves To Select", false, false)
 
 
 //==========================================================
@@ -554,7 +554,7 @@ Pass *llvm37::createDxilRewriteOutputArgDebugInfoPass() {
   return new DxilRewriteOutputArgDebugInfo();
 }
 
-INITIALIZE_PASS(DxilRewriteOutputArgDebugInfo, "dxil-rewrite-output-arg-debug-info", "Dxil Rewrite Output Arg Debug Info", false, false)
+INITIALIZELLVM37_PASS(DxilRewriteOutputArgDebugInfo, "dxil-rewrite-output-arg-debug-info", "Dxil Rewrite Output Arg Debug Info", false, false)
 
 
 //==========================================================
@@ -680,5 +680,5 @@ Pass *llvm37::createDxilFinalizePreservesPass() {
   return new DxilFinalizePreserves();
 }
 
-INITIALIZE_PASS(DxilFinalizePreserves, "dxil-finalize-preserves", "Dxil Finalize Preserves", false, false)
+INITIALIZELLVM37_PASS(DxilFinalizePreserves, "dxil-finalize-preserves", "Dxil Finalize Preserves", false, false)
 

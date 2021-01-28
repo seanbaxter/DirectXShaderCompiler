@@ -118,7 +118,7 @@ namespace {
 }
 
 char AliasAnalysisCounter::ID = 0;
-INITIALIZE_AG_PASS(AliasAnalysisCounter, AliasAnalysis, "count-aa",
+INITIALIZELLVM37_AG_PASS(AliasAnalysisCounter, AliasAnalysis, "count-aa",
                    "Count Alias Analysis Query Responses", false, true, false)
 
 ModulePass *llvm37::createAliasAnalysisCounterPass() {

@@ -745,19 +745,19 @@ FunctionPass *llvm37::createPlaceSafepointsPass() {
   return new PlaceSafepoints();
 }
 
-INITIALIZE_PASS_BEGIN(PlaceBackedgeSafepointsImpl,
+INITIALIZELLVM37_PASS_BEGIN(PlaceBackedgeSafepointsImpl,
                       "place-backedge-safepoints-impl",
                       "Place Backedge Safepoints", false, false)
-INITIALIZE_PASS_DEPENDENCY(ScalarEvolution)
-INITIALIZE_PASS_DEPENDENCY(DominatorTreeWrapperPass)
-INITIALIZE_PASS_DEPENDENCY(LoopInfoWrapperPass)
-INITIALIZE_PASS_END(PlaceBackedgeSafepointsImpl,
+INITIALIZELLVM37_PASS_DEPENDENCY(ScalarEvolution)
+INITIALIZELLVM37_PASS_DEPENDENCY(DominatorTreeWrapperPass)
+INITIALIZELLVM37_PASS_DEPENDENCY(LoopInfoWrapperPass)
+INITIALIZELLVM37_PASS_END(PlaceBackedgeSafepointsImpl,
                     "place-backedge-safepoints-impl",
                     "Place Backedge Safepoints", false, false)
 
-INITIALIZE_PASS_BEGIN(PlaceSafepoints, "place-safepoints", "Place Safepoints",
+INITIALIZELLVM37_PASS_BEGIN(PlaceSafepoints, "place-safepoints", "Place Safepoints",
                       false, false)
-INITIALIZE_PASS_END(PlaceSafepoints, "place-safepoints", "Place Safepoints",
+INITIALIZELLVM37_PASS_END(PlaceSafepoints, "place-safepoints", "Place Safepoints",
                     false, false)
 
 static bool isGCLeafFunction(const CallSite &CS) {

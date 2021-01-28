@@ -48,7 +48,7 @@ namespace {
   char PartiallyInlineLibCalls::ID = 0;
 }
 
-INITIALIZE_PASS(PartiallyInlineLibCalls, "partially-inline-libcalls",
+INITIALIZELLVM37_PASS(PartiallyInlineLibCalls, "partially-inline-libcalls",
                 "Partially inline calls to library functions", false, false)
 
 void PartiallyInlineLibCalls::getAnalysisUsage(AnalysisUsage &AU) const {

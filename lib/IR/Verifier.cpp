@@ -3701,7 +3701,7 @@ struct VerifierLegacyPass : public FunctionPass {
 }
 
 char VerifierLegacyPass::ID = 0;
-INITIALIZE_PASS(VerifierLegacyPass, "verify", "Module Verifier", false, false)
+INITIALIZELLVM37_PASS(VerifierLegacyPass, "verify", "Module Verifier", false, false)
 
 FunctionPass *llvm37::createVerifierPass(bool FatalErrors) {
   return new VerifierLegacyPass(FatalErrors);

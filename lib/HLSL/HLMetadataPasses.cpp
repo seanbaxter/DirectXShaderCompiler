@@ -41,7 +41,7 @@ ModulePass *llvm37::createHLEmitMetadataPass() {
   return new HLEmitMetadata();
 }
 
-INITIALIZE_PASS(HLEmitMetadata, "hlsl-hlemit", "HLSL High-Level Metadata Emit", false, false)
+INITIALIZELLVM37_PASS(HLEmitMetadata, "hlsl-hlemit", "HLSL High-Level Metadata Emit", false, false)
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -70,4 +70,4 @@ ModulePass *llvm37::createHLEnsureMetadataPass() {
   return new HLEnsureMetadata();
 }
 
-INITIALIZE_PASS(HLEnsureMetadata, "hlsl-hlensure", "HLSL High-Level Metadata Ensure", false, false)
+INITIALIZELLVM37_PASS(HLEnsureMetadata, "hlsl-hlensure", "HLSL High-Level Metadata Ensure", false, false)

@@ -692,12 +692,12 @@ struct FunctionStackPoisoner : public InstVisitor<FunctionStackPoisoner> {
 }  // namespace
 
 char AddressSanitizer::ID = 0;
-INITIALIZE_PASS_BEGIN(
+INITIALIZELLVM37_PASS_BEGIN(
     AddressSanitizer, "asan",
     "AddressSanitizer: detects use-after-free and out-of-bounds bugs.", false,
     false)
-INITIALIZE_PASS_DEPENDENCY(DominatorTreeWrapperPass)
-INITIALIZE_PASS_END(
+INITIALIZELLVM37_PASS_DEPENDENCY(DominatorTreeWrapperPass)
+INITIALIZELLVM37_PASS_END(
     AddressSanitizer, "asan",
     "AddressSanitizer: detects use-after-free and out-of-bounds bugs.", false,
     false)
@@ -706,7 +706,7 @@ FunctionPass *llvm37::createAddressSanitizerFunctionPass(bool CompileKernel) {
 }
 
 char AddressSanitizerModule::ID = 0;
-INITIALIZE_PASS(
+INITIALIZELLVM37_PASS(
     AddressSanitizerModule, "asan-module",
     "AddressSanitizer: detects use-after-free and out-of-bounds bugs."
     "ModulePass",

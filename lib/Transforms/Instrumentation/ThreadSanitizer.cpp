@@ -121,7 +121,7 @@ struct ThreadSanitizer : public FunctionPass {
 }  // namespace
 
 char ThreadSanitizer::ID = 0;
-INITIALIZE_PASS(ThreadSanitizer, "tsan",
+INITIALIZELLVM37_PASS(ThreadSanitizer, "tsan",
     "ThreadSanitizer: detects data races.",
     false, false)
 

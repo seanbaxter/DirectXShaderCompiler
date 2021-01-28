@@ -272,9 +272,9 @@ BasicBlockPass *llvm37::createLoadCombinePass() {
   return new LoadCombine();
 }
 
-INITIALIZE_PASS_BEGIN(LoadCombine, "load-combine", "Combine Adjacent Loads",
+INITIALIZELLVM37_PASS_BEGIN(LoadCombine, "load-combine", "Combine Adjacent Loads",
                       false, false)
-INITIALIZE_AG_DEPENDENCY(AliasAnalysis)
-INITIALIZE_PASS_END(LoadCombine, "load-combine", "Combine Adjacent Loads",
+INITIALIZELLVM37_AG_DEPENDENCY(AliasAnalysis)
+INITIALIZELLVM37_PASS_END(LoadCombine, "load-combine", "Combine Adjacent Loads",
                     false, false)
 

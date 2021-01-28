@@ -63,7 +63,7 @@ namespace {
 }
 
 char BreakCriticalEdges::ID = 0;
-INITIALIZE_PASS(BreakCriticalEdges, "break-crit-edges",
+INITIALIZELLVM37_PASS(BreakCriticalEdges, "break-crit-edges",
                 "Break critical edges in CFG", false, false)
 
 // Publicly exposed interface to pass...

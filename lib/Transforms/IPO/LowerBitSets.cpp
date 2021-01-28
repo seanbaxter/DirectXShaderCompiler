@@ -234,9 +234,9 @@ struct LowerBitSets : public ModulePass {
 
 } // namespace
 
-INITIALIZE_PASS_BEGIN(LowerBitSets, "lowerbitsets",
+INITIALIZELLVM37_PASS_BEGIN(LowerBitSets, "lowerbitsets",
                 "Lower bitset metadata", false, false)
-INITIALIZE_PASS_END(LowerBitSets, "lowerbitsets",
+INITIALIZELLVM37_PASS_END(LowerBitSets, "lowerbitsets",
                 "Lower bitset metadata", false, false)
 char LowerBitSets::ID = 0;
 

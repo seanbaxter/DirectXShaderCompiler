@@ -4040,13 +4040,13 @@ bool SLPVectorizer::vectorizeStoreChains(BoUpSLP &R) {
 
 char SLPVectorizer::ID = 0;
 static const char lv_name[] = "SLP Vectorizer";
-INITIALIZE_PASS_BEGIN(SLPVectorizer, SV_NAME, lv_name, false, false)
-INITIALIZE_AG_DEPENDENCY(AliasAnalysis)
-INITIALIZE_PASS_DEPENDENCY(TargetTransformInfoWrapperPass)
-INITIALIZE_PASS_DEPENDENCY(AssumptionCacheTracker)
-INITIALIZE_PASS_DEPENDENCY(ScalarEvolution)
-INITIALIZE_PASS_DEPENDENCY(LoopSimplify)
-INITIALIZE_PASS_END(SLPVectorizer, SV_NAME, lv_name, false, false)
+INITIALIZELLVM37_PASS_BEGIN(SLPVectorizer, SV_NAME, lv_name, false, false)
+INITIALIZELLVM37_AG_DEPENDENCY(AliasAnalysis)
+INITIALIZELLVM37_PASS_DEPENDENCY(TargetTransformInfoWrapperPass)
+INITIALIZELLVM37_PASS_DEPENDENCY(AssumptionCacheTracker)
+INITIALIZELLVM37_PASS_DEPENDENCY(ScalarEvolution)
+INITIALIZELLVM37_PASS_DEPENDENCY(LoopSimplify)
+INITIALIZELLVM37_PASS_END(SLPVectorizer, SV_NAME, lv_name, false, false)
 
 namespace llvm37 {
 Pass *createSLPVectorizerPass() { return new SLPVectorizer(); }

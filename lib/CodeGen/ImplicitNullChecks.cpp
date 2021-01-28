@@ -337,7 +337,7 @@ void ImplicitNullChecks::rewriteNullChecks(
 
 char ImplicitNullChecks::ID = 0;
 char &llvm37::ImplicitNullChecksID = ImplicitNullChecks::ID;
-INITIALIZE_PASS_BEGIN(ImplicitNullChecks, "implicit-null-checks",
+INITIALIZELLVM37_PASS_BEGIN(ImplicitNullChecks, "implicit-null-checks",
                       "Implicit null checks", false, false)
-INITIALIZE_PASS_END(ImplicitNullChecks, "implicit-null-checks",
+INITIALIZELLVM37_PASS_END(ImplicitNullChecks, "implicit-null-checks",
                     "Implicit null checks", false, false)

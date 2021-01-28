@@ -131,20 +131,20 @@ struct PostDomOnlyViewer
 } // end anonymous namespace
 
 char DomViewer::ID = 0;
-INITIALIZE_PASS(DomViewer, "view-dom",
+INITIALIZELLVM37_PASS(DomViewer, "view-dom",
                 "View dominance tree of function", false, false)
 
 char DomOnlyViewer::ID = 0;
-INITIALIZE_PASS(DomOnlyViewer, "view-dom-only",
+INITIALIZELLVM37_PASS(DomOnlyViewer, "view-dom-only",
                 "View dominance tree of function (with no function bodies)",
                 false, false)
 
 char PostDomViewer::ID = 0;
-INITIALIZE_PASS(PostDomViewer, "view-postdom",
+INITIALIZELLVM37_PASS(PostDomViewer, "view-postdom",
                 "View postdominance tree of function", false, false)
 
 char PostDomOnlyViewer::ID = 0;
-INITIALIZE_PASS(PostDomOnlyViewer, "view-postdom-only",
+INITIALIZELLVM37_PASS(PostDomOnlyViewer, "view-postdom-only",
                 "View postdominance tree of function "
                 "(with no function bodies)",
                 false, false)
@@ -196,23 +196,23 @@ struct PostDomOnlyPrinter
 
 
 char DomPrinter::ID = 0;
-INITIALIZE_PASS(DomPrinter, "dot-dom",
+INITIALIZELLVM37_PASS(DomPrinter, "dot-dom",
                 "Print dominance tree of function to 'dot' file",
                 false, false)
 
 char DomOnlyPrinter::ID = 0;
-INITIALIZE_PASS(DomOnlyPrinter, "dot-dom-only",
+INITIALIZELLVM37_PASS(DomOnlyPrinter, "dot-dom-only",
                 "Print dominance tree of function to 'dot' file "
                 "(with no function bodies)",
                 false, false)
 
 char PostDomPrinter::ID = 0;
-INITIALIZE_PASS(PostDomPrinter, "dot-postdom",
+INITIALIZELLVM37_PASS(PostDomPrinter, "dot-postdom",
                 "Print postdominance tree of function to 'dot' file",
                 false, false)
 
 char PostDomOnlyPrinter::ID = 0;
-INITIALIZE_PASS(PostDomOnlyPrinter, "dot-postdom-only",
+INITIALIZELLVM37_PASS(PostDomOnlyPrinter, "dot-postdom-only",
                 "Print postdominance tree of function to 'dot' file "
                 "(with no function bodies)",
                 false, false)

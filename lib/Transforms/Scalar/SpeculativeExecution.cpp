@@ -101,10 +101,10 @@ class SpeculativeExecution : public FunctionPass {
 } // namespace
 
 char SpeculativeExecution::ID = 0;
-INITIALIZE_PASS_BEGIN(SpeculativeExecution, "speculative-execution",
+INITIALIZELLVM37_PASS_BEGIN(SpeculativeExecution, "speculative-execution",
                       "Speculatively execute instructions", false, false)
-INITIALIZE_PASS_DEPENDENCY(TargetTransformInfoWrapperPass)
-INITIALIZE_PASS_END(SpeculativeExecution, "speculative-execution",
+INITIALIZELLVM37_PASS_DEPENDENCY(TargetTransformInfoWrapperPass)
+INITIALIZELLVM37_PASS_END(SpeculativeExecution, "speculative-execution",
                       "Speculatively execute instructions", false, false)
 
 void SpeculativeExecution::getAnalysisUsage(AnalysisUsage &AU) const {

@@ -41,7 +41,7 @@
 using namespace llvm37;
 
 // Register the AliasAnalysis interface, providing a nice name to refer to.
-INITIALIZE_ANALYSIS_GROUP(AliasAnalysis, "Alias Analysis", NoAA)
+INITIALIZELLVM37_ANALYSIS_GROUP(AliasAnalysis, "Alias Analysis", NoAA)
 char AliasAnalysis::ID = 0;
 
 //===----------------------------------------------------------------------===//

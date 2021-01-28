@@ -547,5 +547,5 @@ Pass *llvm37::createDxilValueCachePass() {
   return new DxilValueCache();
 }
 
-INITIALIZE_PASS(DxilValueCache, DEBUG_TYPE, "Dxil Value Cache", false, false)
+INITIALIZELLVM37_PASS(DxilValueCache, DEBUG_TYPE, "Dxil Value Cache", false, false)
 

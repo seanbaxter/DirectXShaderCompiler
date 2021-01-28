@@ -39,7 +39,7 @@ using namespace llvm37::objcarc;
 
 // Register this pass...
 char ObjCARCAliasAnalysis::ID = 0;
-INITIALIZE_AG_PASS(ObjCARCAliasAnalysis, AliasAnalysis, "objc-arc-aa",
+INITIALIZELLVM37_AG_PASS(ObjCARCAliasAnalysis, AliasAnalysis, "objc-arc-aa",
                    "ObjC-ARC-Based Alias Analysis", false, true, false)
 
 ImmutablePass *llvm37::createObjCARCAliasAnalysisPass() {

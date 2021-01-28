@@ -349,7 +349,7 @@ class DFSanVisitor : public InstVisitor<DFSanVisitor> {
 }
 
 char DataFlowSanitizer::ID;
-INITIALIZE_PASS(DataFlowSanitizer, "dfsan",
+INITIALIZELLVM37_PASS(DataFlowSanitizer, "dfsan",
                 "DataFlowSanitizer: dynamic data flow analysis.", false, false)
 
 ModulePass *

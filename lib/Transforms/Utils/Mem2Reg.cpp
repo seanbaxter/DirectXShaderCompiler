@@ -51,11 +51,11 @@ namespace {
 }  // end of anonymous namespace
 
 char PromotePass::ID = 0;
-INITIALIZE_PASS_BEGIN(PromotePass, "mem2reg", "Promote Memory to Register",
+INITIALIZELLVM37_PASS_BEGIN(PromotePass, "mem2reg", "Promote Memory to Register",
                 false, false)
-INITIALIZE_PASS_DEPENDENCY(AssumptionCacheTracker)
-INITIALIZE_PASS_DEPENDENCY(DominatorTreeWrapperPass)
-INITIALIZE_PASS_END(PromotePass, "mem2reg", "Promote Memory to Register",
+INITIALIZELLVM37_PASS_DEPENDENCY(AssumptionCacheTracker)
+INITIALIZELLVM37_PASS_DEPENDENCY(DominatorTreeWrapperPass)
+INITIALIZELLVM37_PASS_END(PromotePass, "mem2reg", "Promote Memory to Register",
                 false, false)
 
 bool PromotePass::runOnFunction(Function &F) {

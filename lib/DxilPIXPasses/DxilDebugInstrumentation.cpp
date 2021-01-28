@@ -1066,5 +1066,5 @@ ModulePass *llvm37::createDxilDebugInstrumentationPass() {
   return new DxilDebugInstrumentation();
 }
 
-INITIALIZE_PASS(DxilDebugInstrumentation, "hlsl-dxil-debug-instrumentation",
+INITIALIZELLVM37_PASS(DxilDebugInstrumentation, "hlsl-dxil-debug-instrumentation",
                 "HLSL DXIL debug instrumentation for PIX", false, false)

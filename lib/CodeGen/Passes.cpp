@@ -180,7 +180,7 @@ static IdentifyingPassPtr overridePass(AnalysisID StandardID,
 /// TargetPassConfig
 //===---------------------------------------------------------------------===//
 
-INITIALIZE_PASS(TargetPassConfig, "targetpassconfig",
+INITIALIZELLVM37_PASS(TargetPassConfig, "targetpassconfig",
                 "Target Pass Configuration", false, false)
 char TargetPassConfig::ID = 0;
 

@@ -63,11 +63,11 @@ namespace {
 } // end anonymous namespace
 
 char Sinking::ID = 0;
-INITIALIZE_PASS_BEGIN(Sinking, "sink", "Code sinking", false, false)
-INITIALIZE_PASS_DEPENDENCY(LoopInfoWrapperPass)
-INITIALIZE_PASS_DEPENDENCY(DominatorTreeWrapperPass)
-INITIALIZE_AG_DEPENDENCY(AliasAnalysis)
-INITIALIZE_PASS_END(Sinking, "sink", "Code sinking", false, false)
+INITIALIZELLVM37_PASS_BEGIN(Sinking, "sink", "Code sinking", false, false)
+INITIALIZELLVM37_PASS_DEPENDENCY(LoopInfoWrapperPass)
+INITIALIZELLVM37_PASS_DEPENDENCY(DominatorTreeWrapperPass)
+INITIALIZELLVM37_AG_DEPENDENCY(AliasAnalysis)
+INITIALIZELLVM37_PASS_END(Sinking, "sink", "Code sinking", false, false)
 
 FunctionPass *llvm37::createSinkingPass() { return new Sinking(); }
 

@@ -173,13 +173,13 @@ struct RegionPrinter
 char RegionPrinter::ID = 0;
 } //end anonymous namespace
 
-INITIALIZE_PASS(RegionPrinter, "dot-regions",
+INITIALIZELLVM37_PASS(RegionPrinter, "dot-regions",
                 "Print regions of function to 'dot' file", true, true)
 
-INITIALIZE_PASS(RegionViewer, "view-regions", "View regions of function",
+INITIALIZELLVM37_PASS(RegionViewer, "view-regions", "View regions of function",
                 true, true)
 
-INITIALIZE_PASS(RegionOnlyViewer, "view-regions-only",
+INITIALIZELLVM37_PASS(RegionOnlyViewer, "view-regions-only",
                 "View regions of function (with no function bodies)",
                 true, true)
 
@@ -197,7 +197,7 @@ struct RegionOnlyPrinter
 }
 
 char RegionOnlyPrinter::ID = 0;
-INITIALIZE_PASS(RegionOnlyPrinter, "dot-regions-only",
+INITIALIZELLVM37_PASS(RegionOnlyPrinter, "dot-regions-only",
                 "Print regions of function to 'dot' file "
                 "(with no function bodies)",
                 true, true)

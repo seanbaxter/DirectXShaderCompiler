@@ -61,10 +61,10 @@ private:
 };
 }
 
-INITIALIZE_PASS_BEGIN(ShadowStackGCLowering, "shadow-stack-gc-lowering",
+INITIALIZELLVM37_PASS_BEGIN(ShadowStackGCLowering, "shadow-stack-gc-lowering",
                       "Shadow Stack GC Lowering", false, false)
-INITIALIZE_PASS_DEPENDENCY(GCModuleInfo)
-INITIALIZE_PASS_END(ShadowStackGCLowering, "shadow-stack-gc-lowering",
+INITIALIZELLVM37_PASS_DEPENDENCY(GCModuleInfo)
+INITIALIZELLVM37_PASS_END(ShadowStackGCLowering, "shadow-stack-gc-lowering",
                     "Shadow Stack GC Lowering", false, false)
 
 FunctionPass *llvm37::createShadowStackGCLoweringPass() { return new ShadowStackGCLowering(); }

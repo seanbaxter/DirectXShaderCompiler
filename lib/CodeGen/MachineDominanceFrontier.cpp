@@ -23,10 +23,10 @@ template class ForwardDominanceFrontierBase<MachineBasicBlock>;
 
 char MachineDominanceFrontier::ID = 0;
 
-INITIALIZE_PASS_BEGIN(MachineDominanceFrontier, "machine-domfrontier",
+INITIALIZELLVM37_PASS_BEGIN(MachineDominanceFrontier, "machine-domfrontier",
                 "Machine Dominance Frontier Construction", true, true)
-INITIALIZE_PASS_DEPENDENCY(MachineDominatorTree)
-INITIALIZE_PASS_END(MachineDominanceFrontier, "machine-domfrontier",
+INITIALIZELLVM37_PASS_DEPENDENCY(MachineDominatorTree)
+INITIALIZELLVM37_PASS_END(MachineDominanceFrontier, "machine-domfrontier",
                 "Machine Dominance Frontier Construction", true, true)
 
 MachineDominanceFrontier::MachineDominanceFrontier()

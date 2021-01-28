@@ -118,12 +118,12 @@ static const bool Delinearize = false;
 //===----------------------------------------------------------------------===//
 // basics
 
-INITIALIZE_PASS_BEGIN(DependenceAnalysis, "da",
+INITIALIZELLVM37_PASS_BEGIN(DependenceAnalysis, "da",
                       "Dependence Analysis", true, true)
-INITIALIZE_PASS_DEPENDENCY(LoopInfoWrapperPass)
-INITIALIZE_PASS_DEPENDENCY(ScalarEvolution)
-INITIALIZE_AG_DEPENDENCY(AliasAnalysis)
-INITIALIZE_PASS_END(DependenceAnalysis, "da",
+INITIALIZELLVM37_PASS_DEPENDENCY(LoopInfoWrapperPass)
+INITIALIZELLVM37_PASS_DEPENDENCY(ScalarEvolution)
+INITIALIZELLVM37_AG_DEPENDENCY(AliasAnalysis)
+INITIALIZELLVM37_PASS_END(DependenceAnalysis, "da",
                     "Dependence Analysis", true, true)
 
 char DependenceAnalysis::ID = 0;

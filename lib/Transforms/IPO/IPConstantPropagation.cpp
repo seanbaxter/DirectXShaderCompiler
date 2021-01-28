@@ -48,7 +48,7 @@ namespace {
 }
 
 char IPCP::ID = 0;
-INITIALIZE_PASS(IPCP, "ipconstprop",
+INITIALIZELLVM37_PASS(IPCP, "ipconstprop",
                 "Interprocedural constant propagation", false, false)
 
 ModulePass *llvm37::createIPConstantPropagationPass() { return new IPCP(); }

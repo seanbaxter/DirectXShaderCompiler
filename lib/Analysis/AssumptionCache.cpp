@@ -135,6 +135,6 @@ AssumptionCacheTracker::AssumptionCacheTracker() : ImmutablePass(ID) {
 
 AssumptionCacheTracker::~AssumptionCacheTracker() {}
 
-INITIALIZE_PASS(AssumptionCacheTracker, "assumption-cache-tracker",
+INITIALIZELLVM37_PASS(AssumptionCacheTracker, "assumption-cache-tracker",
                 "Assumption Cache Tracker", false, true)
 char AssumptionCacheTracker::ID = 0;

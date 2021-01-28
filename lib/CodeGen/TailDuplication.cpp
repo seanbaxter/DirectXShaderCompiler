@@ -129,7 +129,7 @@ namespace {
 
 char &llvm37::TailDuplicateID = TailDuplicatePass::ID;
 
-INITIALIZE_PASS(TailDuplicatePass, "tailduplication", "Tail Duplication",
+INITIALIZELLVM37_PASS(TailDuplicatePass, "tailduplication", "Tail Duplication",
                 false, false)
 
 bool TailDuplicatePass::runOnMachineFunction(MachineFunction &MF) {

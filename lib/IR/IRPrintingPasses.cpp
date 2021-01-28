@@ -149,13 +149,13 @@ public:
 }
 
 char PrintModulePassWrapper::ID = 0;
-INITIALIZE_PASS(PrintModulePassWrapper, "print-module",
+INITIALIZELLVM37_PASS(PrintModulePassWrapper, "print-module",
                 "Print module to stderr", false, false)
 char PrintFunctionPassWrapper::ID = 0;
-INITIALIZE_PASS(PrintFunctionPassWrapper, "print-function",
+INITIALIZELLVM37_PASS(PrintFunctionPassWrapper, "print-function",
                 "Print function to stderr", false, false)
 char PrintBasicBlockPass::ID = 0;
-INITIALIZE_PASS(PrintBasicBlockPass, "print-bb", "Print BB to stderr", false,
+INITIALIZELLVM37_PASS(PrintBasicBlockPass, "print-bb", "Print BB to stderr", false,
                 false)
 
 ModulePass *llvm37::createPrintModulePass(llvm37::raw_ostream &OS,

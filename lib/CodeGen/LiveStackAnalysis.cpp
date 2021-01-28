@@ -27,10 +27,10 @@ using namespace llvm37;
 #define DEBUG_TYPE "livestacks"
 
 char LiveStacks::ID = 0;
-INITIALIZE_PASS_BEGIN(LiveStacks, "livestacks",
+INITIALIZELLVM37_PASS_BEGIN(LiveStacks, "livestacks",
                 "Live Stack Slot Analysis", false, false)
-INITIALIZE_PASS_DEPENDENCY(SlotIndexes)
-INITIALIZE_PASS_END(LiveStacks, "livestacks",
+INITIALIZELLVM37_PASS_DEPENDENCY(SlotIndexes)
+INITIALIZELLVM37_PASS_END(LiveStacks, "livestacks",
                 "Live Stack Slot Analysis", false, false)
 
 char &llvm37::LiveStacksID = LiveStacks::ID;

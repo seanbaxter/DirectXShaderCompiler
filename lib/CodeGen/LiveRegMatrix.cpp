@@ -30,11 +30,11 @@ STATISTIC(NumAssigned   , "Number of registers assigned");
 STATISTIC(NumUnassigned , "Number of registers unassigned");
 
 char LiveRegMatrix::ID = 0;
-INITIALIZE_PASS_BEGIN(LiveRegMatrix, "liveregmatrix",
+INITIALIZELLVM37_PASS_BEGIN(LiveRegMatrix, "liveregmatrix",
                       "Live Register Matrix", false, false)
-INITIALIZE_PASS_DEPENDENCY(LiveIntervals)
-INITIALIZE_PASS_DEPENDENCY(VirtRegMap)
-INITIALIZE_PASS_END(LiveRegMatrix, "liveregmatrix",
+INITIALIZELLVM37_PASS_DEPENDENCY(LiveIntervals)
+INITIALIZELLVM37_PASS_DEPENDENCY(VirtRegMap)
+INITIALIZELLVM37_PASS_END(LiveRegMatrix, "liveregmatrix",
                     "Live Register Matrix", false, false)
 
 LiveRegMatrix::LiveRegMatrix() : MachineFunctionPass(ID),

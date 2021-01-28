@@ -160,13 +160,13 @@ namespace {
 }
 
 char Lint::ID = 0;
-INITIALIZE_PASS_BEGIN(Lint, "lint", "Statically lint-checks LLVM37 IR",
+INITIALIZELLVM37_PASS_BEGIN(Lint, "lint", "Statically lint-checks LLVM37 IR",
                       false, true)
-INITIALIZE_PASS_DEPENDENCY(AssumptionCacheTracker)
-INITIALIZE_PASS_DEPENDENCY(TargetLibraryInfoWrapperPass)
-INITIALIZE_PASS_DEPENDENCY(DominatorTreeWrapperPass)
-INITIALIZE_AG_DEPENDENCY(AliasAnalysis)
-INITIALIZE_PASS_END(Lint, "lint", "Statically lint-checks LLVM37 IR",
+INITIALIZELLVM37_PASS_DEPENDENCY(AssumptionCacheTracker)
+INITIALIZELLVM37_PASS_DEPENDENCY(TargetLibraryInfoWrapperPass)
+INITIALIZELLVM37_PASS_DEPENDENCY(DominatorTreeWrapperPass)
+INITIALIZELLVM37_AG_DEPENDENCY(AliasAnalysis)
+INITIALIZELLVM37_PASS_END(Lint, "lint", "Statically lint-checks LLVM37 IR",
                     false, true)
 
 // Assert - We know that cond should be true, if not print an error message.

@@ -84,7 +84,7 @@ namespace {
 char BranchFolderPass::ID = 0;
 char &llvm37::BranchFolderPassID = BranchFolderPass::ID;
 
-INITIALIZE_PASS(BranchFolderPass, "branch-folder",
+INITIALIZELLVM37_PASS(BranchFolderPass, "branch-folder",
                 "Control Flow Optimizer", false, false)
 
 bool BranchFolderPass::runOnMachineFunction(MachineFunction &MF) {

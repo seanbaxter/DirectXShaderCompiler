@@ -322,5 +322,5 @@ ModulePass *llvm37::createHLLegalizeParameter() {
   return new HLLegalizeParameter();
 }
 
-INITIALIZE_PASS(HLLegalizeParameter, "hl-legalize-parameter",
+INITIALIZELLVM37_PASS(HLLegalizeParameter, "hl-legalize-parameter",
                 "Legalize parameter", false, false)

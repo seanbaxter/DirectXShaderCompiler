@@ -87,8 +87,8 @@ bool PAEval::runOnFunction(Function &F) {
 
 FunctionPass *llvm37::createPAEvalPass() { return new PAEval(); }
 
-INITIALIZE_PASS_BEGIN(PAEval, "pa-eval",
+INITIALIZELLVM37_PASS_BEGIN(PAEval, "pa-eval",
                       "Evaluate ProvenanceAnalysis on all pairs", false, true)
-INITIALIZE_AG_DEPENDENCY(AliasAnalysis)
-INITIALIZE_PASS_END(PAEval, "pa-eval",
+INITIALIZELLVM37_AG_DEPENDENCY(AliasAnalysis)
+INITIALIZELLVM37_PASS_END(PAEval, "pa-eval",
                     "Evaluate ProvenanceAnalysis on all pairs", false, true)

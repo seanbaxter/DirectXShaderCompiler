@@ -80,10 +80,10 @@ public:
 
 // -----------------------------------------------------------------------------
 
-INITIALIZE_PASS_BEGIN(LowerIntrinsics, "gc-lowering", "GC Lowering", false,
+INITIALIZELLVM37_PASS_BEGIN(LowerIntrinsics, "gc-lowering", "GC Lowering", false,
                       false)
-INITIALIZE_PASS_DEPENDENCY(GCModuleInfo)
-INITIALIZE_PASS_END(LowerIntrinsics, "gc-lowering", "GC Lowering", false, false)
+INITIALIZELLVM37_PASS_DEPENDENCY(GCModuleInfo)
+INITIALIZELLVM37_PASS_END(LowerIntrinsics, "gc-lowering", "GC Lowering", false, false)
 
 FunctionPass *llvm37::createGCLoweringPass() { return new LowerIntrinsics(); }
 
@@ -257,7 +257,7 @@ bool LowerIntrinsics::PerformDefaultLowering(Function &F, GCStrategy &S) {
 char GCMachineCodeAnalysis::ID = 0;
 char &llvm37::GCMachineCodeAnalysisID = GCMachineCodeAnalysis::ID;
 
-INITIALIZE_PASS(GCMachineCodeAnalysis, "gc-analysis",
+INITIALIZELLVM37_PASS(GCMachineCodeAnalysis, "gc-analysis",
                 "Analyze Machine Code For Garbage Collection", false, false)
 
 GCMachineCodeAnalysis::GCMachineCodeAnalysis() : MachineFunctionPass(ID) {}

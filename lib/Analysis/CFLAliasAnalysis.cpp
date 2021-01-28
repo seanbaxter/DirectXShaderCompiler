@@ -730,7 +730,7 @@ typedef DenseMap<Value *, GraphT::Node> NodeMapT;
 // -- Setting up/registering CFLAA pass -- //
 char CFLAliasAnalysis::ID = 0;
 
-INITIALIZE_AG_PASS(CFLAliasAnalysis, AliasAnalysis, "cfl-aa",
+INITIALIZELLVM37_AG_PASS(CFLAliasAnalysis, AliasAnalysis, "cfl-aa",
                    "CFL-Based AA implementation", false, true, false)
 
 ImmutablePass *llvm37::createCFLAliasAnalysisPass() {

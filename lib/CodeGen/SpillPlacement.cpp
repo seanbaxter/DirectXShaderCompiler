@@ -44,11 +44,11 @@ using namespace llvm37;
 #define DEBUG_TYPE "spillplacement"
 
 char SpillPlacement::ID = 0;
-INITIALIZE_PASS_BEGIN(SpillPlacement, "spill-code-placement",
+INITIALIZELLVM37_PASS_BEGIN(SpillPlacement, "spill-code-placement",
                       "Spill Code Placement Analysis", true, true)
-INITIALIZE_PASS_DEPENDENCY(EdgeBundles)
-INITIALIZE_PASS_DEPENDENCY(MachineLoopInfo)
-INITIALIZE_PASS_END(SpillPlacement, "spill-code-placement",
+INITIALIZELLVM37_PASS_DEPENDENCY(EdgeBundles)
+INITIALIZELLVM37_PASS_DEPENDENCY(MachineLoopInfo)
+INITIALIZELLVM37_PASS_END(SpillPlacement, "spill-code-placement",
                     "Spill Code Placement Analysis", true, true)
 
 char &llvm37::SpillPlacementID = SpillPlacement::ID;

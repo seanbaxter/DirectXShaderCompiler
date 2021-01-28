@@ -32,7 +32,7 @@ namespace {
 }
 
 char DxilLoopDeletion::ID = 0;
-INITIALIZE_PASS(DxilLoopDeletion, "dxil-loop-deletion",
+INITIALIZELLVM37_PASS(DxilLoopDeletion, "dxil-loop-deletion",
                 "Delete dead loops", false, false)
 
 FunctionPass *llvm37::createDxilLoopDeletionPass() { return new DxilLoopDeletion(); }

@@ -66,7 +66,7 @@ namespace {
 }
 
 char BoundsChecking::ID = 0;
-INITIALIZE_PASS(BoundsChecking, "bounds-checking", "Run-time bounds checking",
+INITIALIZELLVM37_PASS(BoundsChecking, "bounds-checking", "Run-time bounds checking",
                 false, false)
 
 

@@ -174,11 +174,11 @@ private:
 }
 
 char ConstantHoisting::ID = 0;
-INITIALIZE_PASS_BEGIN(ConstantHoisting, "consthoist", "Constant Hoisting",
+INITIALIZELLVM37_PASS_BEGIN(ConstantHoisting, "consthoist", "Constant Hoisting",
                       false, false)
-INITIALIZE_PASS_DEPENDENCY(DominatorTreeWrapperPass)
-INITIALIZE_PASS_DEPENDENCY(TargetTransformInfoWrapperPass)
-INITIALIZE_PASS_END(ConstantHoisting, "consthoist", "Constant Hoisting",
+INITIALIZELLVM37_PASS_DEPENDENCY(DominatorTreeWrapperPass)
+INITIALIZELLVM37_PASS_DEPENDENCY(TargetTransformInfoWrapperPass)
+INITIALIZELLVM37_PASS_END(ConstantHoisting, "consthoist", "Constant Hoisting",
                     false, false)
 
 FunctionPass *llvm37::createConstantHoistingPass() {

@@ -270,13 +270,13 @@ namespace {
 
 char &llvm37::RegisterCoalescerID = RegisterCoalescer::ID;
 
-INITIALIZE_PASS_BEGIN(RegisterCoalescer, "simple-register-coalescing",
+INITIALIZELLVM37_PASS_BEGIN(RegisterCoalescer, "simple-register-coalescing",
                       "Simple Register Coalescing", false, false)
-INITIALIZE_PASS_DEPENDENCY(LiveIntervals)
-INITIALIZE_PASS_DEPENDENCY(SlotIndexes)
-INITIALIZE_PASS_DEPENDENCY(MachineLoopInfo)
-INITIALIZE_AG_DEPENDENCY(AliasAnalysis)
-INITIALIZE_PASS_END(RegisterCoalescer, "simple-register-coalescing",
+INITIALIZELLVM37_PASS_DEPENDENCY(LiveIntervals)
+INITIALIZELLVM37_PASS_DEPENDENCY(SlotIndexes)
+INITIALIZELLVM37_PASS_DEPENDENCY(MachineLoopInfo)
+INITIALIZELLVM37_AG_DEPENDENCY(AliasAnalysis)
+INITIALIZELLVM37_PASS_END(RegisterCoalescer, "simple-register-coalescing",
                     "Simple Register Coalescing", false, false)
 
 char RegisterCoalescer::ID = 0;

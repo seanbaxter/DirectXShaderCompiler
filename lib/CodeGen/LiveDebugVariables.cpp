@@ -54,11 +54,11 @@ EnableLDV("live-debug-variables", cl::init(true),
 STATISTIC(NumInsertedDebugValues, "Number of DBG_VALUEs inserted");
 char LiveDebugVariables::ID = 0;
 
-INITIALIZE_PASS_BEGIN(LiveDebugVariables, "livedebugvars",
+INITIALIZELLVM37_PASS_BEGIN(LiveDebugVariables, "livedebugvars",
                 "Debug Variable Analysis", false, false)
-INITIALIZE_PASS_DEPENDENCY(MachineDominatorTree)
-INITIALIZE_PASS_DEPENDENCY(LiveIntervals)
-INITIALIZE_PASS_END(LiveDebugVariables, "livedebugvars",
+INITIALIZELLVM37_PASS_DEPENDENCY(MachineDominatorTree)
+INITIALIZELLVM37_PASS_DEPENDENCY(LiveIntervals)
+INITIALIZELLVM37_PASS_END(LiveDebugVariables, "livedebugvars",
                 "Debug Variable Analysis", false, false)
 
 void LiveDebugVariables::getAnalysisUsage(AnalysisUsage &AU) const {

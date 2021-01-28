@@ -165,12 +165,12 @@ FunctionPass *llvm37::createMergedLoadStoreMotionPass() {
   return new MergedLoadStoreMotion();
 }
 
-INITIALIZE_PASS_BEGIN(MergedLoadStoreMotion, "mldst-motion",
+INITIALIZELLVM37_PASS_BEGIN(MergedLoadStoreMotion, "mldst-motion",
                       "MergedLoadStoreMotion", false, false)
-INITIALIZE_PASS_DEPENDENCY(MemoryDependenceAnalysis)
-INITIALIZE_PASS_DEPENDENCY(TargetLibraryInfoWrapperPass)
-INITIALIZE_AG_DEPENDENCY(AliasAnalysis)
-INITIALIZE_PASS_END(MergedLoadStoreMotion, "mldst-motion",
+INITIALIZELLVM37_PASS_DEPENDENCY(MemoryDependenceAnalysis)
+INITIALIZELLVM37_PASS_DEPENDENCY(TargetLibraryInfoWrapperPass)
+INITIALIZELLVM37_AG_DEPENDENCY(AliasAnalysis)
+INITIALIZELLVM37_PASS_END(MergedLoadStoreMotion, "mldst-motion",
                     "MergedLoadStoreMotion", false, false)
 
 ///

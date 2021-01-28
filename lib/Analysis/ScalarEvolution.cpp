@@ -121,14 +121,14 @@ static const unsigned MaxBruteForceIterations = 100;
 static const bool VerifySCEV = false;
 #endif // HLSL Change Ends
 
-INITIALIZE_PASS_BEGIN(ScalarEvolution, "scalar-evolution",
+INITIALIZELLVM37_PASS_BEGIN(ScalarEvolution, "scalar-evolution",
                 "Scalar Evolution Analysis", false, true)
-INITIALIZE_PASS_DEPENDENCY(AssumptionCacheTracker)
-INITIALIZE_PASS_DEPENDENCY(LoopInfoWrapperPass)
-INITIALIZE_PASS_DEPENDENCY(DominatorTreeWrapperPass)
-INITIALIZE_PASS_DEPENDENCY(TargetLibraryInfoWrapperPass)
-INITIALIZE_PASS_DEPENDENCY(DxilValueCache) // HLSL Change
-INITIALIZE_PASS_END(ScalarEvolution, "scalar-evolution",
+INITIALIZELLVM37_PASS_DEPENDENCY(AssumptionCacheTracker)
+INITIALIZELLVM37_PASS_DEPENDENCY(LoopInfoWrapperPass)
+INITIALIZELLVM37_PASS_DEPENDENCY(DominatorTreeWrapperPass)
+INITIALIZELLVM37_PASS_DEPENDENCY(TargetLibraryInfoWrapperPass)
+INITIALIZELLVM37_PASS_DEPENDENCY(DxilValueCache) // HLSL Change
+INITIALIZELLVM37_PASS_END(ScalarEvolution, "scalar-evolution",
                 "Scalar Evolution Analysis", false, true)
 char ScalarEvolution::ID = 0;
 

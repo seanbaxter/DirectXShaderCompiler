@@ -356,4 +356,4 @@ ModulePass *llvm37::createDxilPrecisePropagatePass() {
   return new DxilPrecisePropagatePass();
 }
 
-INITIALIZE_PASS(DxilPrecisePropagatePass, "hlsl-dxil-precise", "DXIL precise attribute propagate", false, false)
+INITIALIZELLVM37_PASS(DxilPrecisePropagatePass, "hlsl-dxil-precise", "DXIL precise attribute propagate", false, false)

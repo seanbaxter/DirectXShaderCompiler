@@ -43,7 +43,7 @@ namespace {
 }
 
 char EliminateAvailableExternally::ID = 0;
-INITIALIZE_PASS(EliminateAvailableExternally, "elim-avail-extern",
+INITIALIZELLVM37_PASS(EliminateAvailableExternally, "elim-avail-extern",
                 "Eliminate Available Externally Globals", false, false)
 
 ModulePass *llvm37::createEliminateAvailableExternallyPass() {

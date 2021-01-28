@@ -1304,11 +1304,11 @@ void CallAnalyzer::dump() {
 }
 #endif
 
-INITIALIZE_PASS_BEGIN(InlineCostAnalysis, "inline-cost", "Inline Cost Analysis",
+INITIALIZELLVM37_PASS_BEGIN(InlineCostAnalysis, "inline-cost", "Inline Cost Analysis",
                       true, true)
-INITIALIZE_PASS_DEPENDENCY(TargetTransformInfoWrapperPass)
-INITIALIZE_PASS_DEPENDENCY(AssumptionCacheTracker)
-INITIALIZE_PASS_END(InlineCostAnalysis, "inline-cost", "Inline Cost Analysis",
+INITIALIZELLVM37_PASS_DEPENDENCY(TargetTransformInfoWrapperPass)
+INITIALIZELLVM37_PASS_DEPENDENCY(AssumptionCacheTracker)
+INITIALIZELLVM37_PASS_END(InlineCostAnalysis, "inline-cost", "Inline Cost Analysis",
                     true, true)
 
 char InlineCostAnalysis::ID = 0;

@@ -600,10 +600,10 @@ bool SafeStack::runOnFunction(Function &F) {
 } // end anonymous namespace
 
 char SafeStack::ID = 0;
-INITIALIZE_PASS_BEGIN(SafeStack, "safe-stack",
+INITIALIZELLVM37_PASS_BEGIN(SafeStack, "safe-stack",
                       "Safe Stack instrumentation pass", false, false)
-INITIALIZE_PASS_DEPENDENCY(TargetTransformInfoWrapperPass)
-INITIALIZE_PASS_END(SafeStack, "safe-stack", "Safe Stack instrumentation pass",
+INITIALIZELLVM37_PASS_DEPENDENCY(TargetTransformInfoWrapperPass)
+INITIALIZELLVM37_PASS_END(SafeStack, "safe-stack", "Safe Stack instrumentation pass",
                     false, false)
 
 FunctionPass *llvm37::createSafeStackPass() { return new SafeStack(); }

@@ -61,7 +61,7 @@ char InvalidateUndefResources::ID = 0;
 
 ModulePass *llvm37::createInvalidateUndefResourcesPass() { return new InvalidateUndefResources(); }
 
-INITIALIZE_PASS(InvalidateUndefResources, "invalidate-undef-resource", "Invalidate undef resources", false, false)
+INITIALIZELLVM37_PASS(InvalidateUndefResources, "invalidate-undef-resource", "Invalidate undef resources", false, false)
 
 bool InvalidateUndefResources::runOnModule(Module &M) {
   // Undef resources typically indicate uninitialized locals being used
@@ -108,7 +108,7 @@ char SimplifyInst::ID = 0;
 
 FunctionPass *llvm37::createSimplifyInstPass() { return new SimplifyInst(); }
 
-INITIALIZE_PASS(SimplifyInst, "simplify-inst", "Simplify Instructions", false, false)
+INITIALIZELLVM37_PASS(SimplifyInst, "simplify-inst", "Simplify Instructions", false, false)
 
 bool SimplifyInst::runOnFunction(Function &F) {
   for (Function::iterator BBI = F.begin(), BBE = F.end(); BBI != BBE; ++BBI) {
@@ -153,7 +153,7 @@ ModulePass *llvm37::createDxilDeadFunctionEliminationPass() {
   return new DxilDeadFunctionElimination();
 }
 
-INITIALIZE_PASS(DxilDeadFunctionElimination, "dxil-dfe", "Remove all unused function except entry from DxilModule", false, false)
+INITIALIZELLVM37_PASS(DxilDeadFunctionElimination, "dxil-dfe", "Remove all unused function except entry from DxilModule", false, false)
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -843,7 +843,7 @@ ModulePass *llvm37::createDxilFinalizeModulePass() {
   return new DxilFinalizeModule();
 }
 
-INITIALIZE_PASS(DxilFinalizeModule, "hlsl-dxilfinalize", "HLSL DXIL Finalize Module", false, false)
+INITIALIZELLVM37_PASS(DxilFinalizeModule, "hlsl-dxilfinalize", "HLSL DXIL Finalize Module", false, false)
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1065,7 +1065,7 @@ ModulePass *llvm37::createDxilCleanupAddrSpaceCastPass() {
   return new DxilCleanupAddrSpaceCast();
 }
 
-INITIALIZE_PASS(DxilCleanupAddrSpaceCast, "hlsl-dxil-cleanup-addrspacecast", "HLSL DXIL Cleanup Address Space Cast", false, false)
+INITIALIZELLVM37_PASS(DxilCleanupAddrSpaceCast, "hlsl-dxil-cleanup-addrspacecast", "HLSL DXIL Cleanup Address Space Cast", false, false)
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -1132,7 +1132,7 @@ ModulePass *llvm37::createDxilEmitMetadataPass() {
   return new DxilEmitMetadata();
 }
 
-INITIALIZE_PASS(DxilEmitMetadata, "hlsl-dxilemit", "HLSL DXIL Metadata Emit", false, false)
+INITIALIZELLVM37_PASS(DxilEmitMetadata, "hlsl-dxilemit", "HLSL DXIL Metadata Emit", false, false)
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -1239,7 +1239,7 @@ ModulePass *llvm37::createDxilValidateWaveSensitivityPass() {
   return new DxilValidateWaveSensitivity();
 }
 
-INITIALIZE_PASS(DxilValidateWaveSensitivity, "hlsl-validate-wave-sensitivity", "HLSL DXIL wave sensitiveity validation", false, false)
+INITIALIZELLVM37_PASS(DxilValidateWaveSensitivity, "hlsl-validate-wave-sensitivity", "HLSL DXIL wave sensitiveity validation", false, false)
 
 
 namespace {
@@ -1381,9 +1381,9 @@ public:
 
 char CleanupDxBreak::ID = 0;
 
-INITIALIZE_PASS_BEGIN(CleanupDxBreak, "hlsl-cleanup-dxbreak", "HLSL Remove unnecessary dx.break conditions", false, false)
-INITIALIZE_PASS_DEPENDENCY(LoopInfoWrapperPass)
-INITIALIZE_PASS_END(CleanupDxBreak, "hlsl-cleanup-dxbreak", "HLSL Remove unnecessary dx.break conditions", false, false)
+INITIALIZELLVM37_PASS_BEGIN(CleanupDxBreak, "hlsl-cleanup-dxbreak", "HLSL Remove unnecessary dx.break conditions", false, false)
+INITIALIZELLVM37_PASS_DEPENDENCY(LoopInfoWrapperPass)
+INITIALIZELLVM37_PASS_END(CleanupDxBreak, "hlsl-cleanup-dxbreak", "HLSL Remove unnecessary dx.break conditions", false, false)
 
 FunctionPass *llvm37::createCleanupDxBreakPass() {
   return new CleanupDxBreak();

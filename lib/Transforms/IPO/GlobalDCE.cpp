@@ -69,7 +69,7 @@ static bool isEmptyFunction(Function *F) {
 }
 
 char GlobalDCE::ID = 0;
-INITIALIZE_PASS(GlobalDCE, "globaldce",
+INITIALIZELLVM37_PASS(GlobalDCE, "globaldce",
                 "Dead Global Elimination", false, false)
 
 ModulePass *llvm37::createGlobalDCEPass() { return new GlobalDCE(); }

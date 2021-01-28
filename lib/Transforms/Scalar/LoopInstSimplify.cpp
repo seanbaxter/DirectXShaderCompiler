@@ -55,14 +55,14 @@ namespace {
 }
 
 char LoopInstSimplify::ID = 0;
-INITIALIZE_PASS_BEGIN(LoopInstSimplify, "loop-instsimplify",
+INITIALIZELLVM37_PASS_BEGIN(LoopInstSimplify, "loop-instsimplify",
                 "Simplify instructions in loops", false, false)
-INITIALIZE_PASS_DEPENDENCY(AssumptionCacheTracker)
-INITIALIZE_PASS_DEPENDENCY(TargetLibraryInfoWrapperPass)
-INITIALIZE_PASS_DEPENDENCY(DominatorTreeWrapperPass)
-INITIALIZE_PASS_DEPENDENCY(LoopInfoWrapperPass)
-INITIALIZE_PASS_DEPENDENCY(LCSSA)
-INITIALIZE_PASS_END(LoopInstSimplify, "loop-instsimplify",
+INITIALIZELLVM37_PASS_DEPENDENCY(AssumptionCacheTracker)
+INITIALIZELLVM37_PASS_DEPENDENCY(TargetLibraryInfoWrapperPass)
+INITIALIZELLVM37_PASS_DEPENDENCY(DominatorTreeWrapperPass)
+INITIALIZELLVM37_PASS_DEPENDENCY(LoopInfoWrapperPass)
+INITIALIZELLVM37_PASS_DEPENDENCY(LCSSA)
+INITIALIZELLVM37_PASS_END(LoopInstSimplify, "loop-instsimplify",
                 "Simplify instructions in loops", false, false)
 
 Pass *llvm37::createLoopInstSimplifyPass() {

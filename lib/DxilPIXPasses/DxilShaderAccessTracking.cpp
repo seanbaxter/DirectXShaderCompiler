@@ -610,6 +610,6 @@ ModulePass *llvm37::createDxilShaderAccessTrackingPass() {
   return new DxilShaderAccessTracking();
 }
 
-INITIALIZE_PASS(DxilShaderAccessTracking,
+INITIALIZELLVM37_PASS(DxilShaderAccessTracking,
                 "hlsl-dxil-pix-shader-access-instrumentation",
                 "HLSL DXIL shader access tracking for PIX", false, false)

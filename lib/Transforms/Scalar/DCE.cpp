@@ -64,7 +64,7 @@ namespace {
 }
 
 char DeadInstElimination::ID = 0;
-INITIALIZE_PASS(DeadInstElimination, "die",
+INITIALIZELLVM37_PASS(DeadInstElimination, "die",
                 "Dead Instruction Elimination", false, false)
 
 Pass *llvm37::createDeadInstEliminationPass() {
@@ -91,7 +91,7 @@ namespace {
 }
 
 char DCE::ID = 0;
-INITIALIZE_PASS(DCE, "dce", "Dead Code Elimination", false, false)
+INITIALIZELLVM37_PASS(DCE, "dce", "Dead Code Elimination", false, false)
 
 bool DCE::runOnFunction(Function &F) {
   if (skipOptnoneFunction(F))

@@ -353,7 +353,7 @@ private:
 } // end anonymous namespace
 
 char WinEHPrepare::ID = 0;
-INITIALIZE_TM_PASS(WinEHPrepare, "winehprepare", "Prepare Windows exceptions",
+INITIALIZELLVM37_TM_PASS(WinEHPrepare, "winehprepare", "Prepare Windows exceptions",
                    false, false)
 
 FunctionPass *llvm37::createWinEHPass(const TargetMachine *TM) {

@@ -27,10 +27,10 @@ using namespace llvm37;
 
 #define DEBUG_TYPE "branch-prob"
 
-INITIALIZE_PASS_BEGIN(BranchProbabilityInfo, "branch-prob",
+INITIALIZELLVM37_PASS_BEGIN(BranchProbabilityInfo, "branch-prob",
                       "Branch Probability Analysis", false, true)
-INITIALIZE_PASS_DEPENDENCY(LoopInfoWrapperPass)
-INITIALIZE_PASS_END(BranchProbabilityInfo, "branch-prob",
+INITIALIZELLVM37_PASS_DEPENDENCY(LoopInfoWrapperPass)
+INITIALIZELLVM37_PASS_END(BranchProbabilityInfo, "branch-prob",
                     "Branch Probability Analysis", false, true)
 
 char BranchProbabilityInfo::ID = 0;

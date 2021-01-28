@@ -253,7 +253,7 @@ namespace llvm37 {
   }
 }
 
-INITIALIZE_PASS_BEGIN(DPass, "dpass", "dpass", false, false)
-INITIALIZE_PASS_DEPENDENCY(DominatorTreeWrapperPass)
-INITIALIZE_PASS_DEPENDENCY(PostDominatorTree)
-INITIALIZE_PASS_END(DPass, "dpass", "dpass", false, false)
+INITIALIZELLVM37_PASS_BEGIN(DPass, "dpass", "dpass", false, false)
+INITIALIZELLVM37_PASS_DEPENDENCY(DominatorTreeWrapperPass)
+INITIALIZELLVM37_PASS_DEPENDENCY(PostDominatorTree)
+INITIALIZELLVM37_PASS_END(DPass, "dpass", "dpass", false, false)

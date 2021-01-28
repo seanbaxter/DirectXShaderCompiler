@@ -60,7 +60,7 @@ char MIRPrintingPass::ID = 0;
 } // end anonymous namespace
 
 char &llvm37::MIRPrintingPassID = MIRPrintingPass::ID;
-INITIALIZE_PASS(MIRPrintingPass, "mir-printer", "MIR Printer", false, false)
+INITIALIZELLVM37_PASS(MIRPrintingPass, "mir-printer", "MIR Printer", false, false)
 
 namespace llvm37 {
 

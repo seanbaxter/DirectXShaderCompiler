@@ -126,10 +126,10 @@ ModulePass *llvm37::createRewriteStatepointsForGCPass() {
   return new RewriteStatepointsForGC();
 }
 
-INITIALIZE_PASS_BEGIN(RewriteStatepointsForGC, "rewrite-statepoints-for-gc",
+INITIALIZELLVM37_PASS_BEGIN(RewriteStatepointsForGC, "rewrite-statepoints-for-gc",
                       "Make relocations explicit at statepoints", false, false)
-INITIALIZE_PASS_DEPENDENCY(DominatorTreeWrapperPass)
-INITIALIZE_PASS_END(RewriteStatepointsForGC, "rewrite-statepoints-for-gc",
+INITIALIZELLVM37_PASS_DEPENDENCY(DominatorTreeWrapperPass)
+INITIALIZELLVM37_PASS_END(RewriteStatepointsForGC, "rewrite-statepoints-for-gc",
                     "Make relocations explicit at statepoints", false, false)
 
 namespace {

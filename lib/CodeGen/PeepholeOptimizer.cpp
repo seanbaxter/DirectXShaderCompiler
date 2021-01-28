@@ -297,10 +297,10 @@ namespace {
 
 char PeepholeOptimizer::ID = 0;
 char &llvm37::PeepholeOptimizerID = PeepholeOptimizer::ID;
-INITIALIZE_PASS_BEGIN(PeepholeOptimizer, "peephole-opts",
+INITIALIZELLVM37_PASS_BEGIN(PeepholeOptimizer, "peephole-opts",
                 "Peephole Optimizations", false, false)
-INITIALIZE_PASS_DEPENDENCY(MachineDominatorTree)
-INITIALIZE_PASS_END(PeepholeOptimizer, "peephole-opts",
+INITIALIZELLVM37_PASS_DEPENDENCY(MachineDominatorTree)
+INITIALIZELLVM37_PASS_END(PeepholeOptimizer, "peephole-opts",
                 "Peephole Optimizations", false, false)
 
 /// optimizeExtInstr - If instruction is a copy-like instruction, i.e. it reads

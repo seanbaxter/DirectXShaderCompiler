@@ -50,7 +50,7 @@ namespace {
 }
 
 char CFGViewer::ID = 0;
-INITIALIZE_PASS(CFGViewer, "view-cfg", "View CFG of function", false, true)
+INITIALIZELLVM37_PASS(CFGViewer, "view-cfg", "View CFG of function", false, true)
 
 namespace {
   struct CFGOnlyViewer : public FunctionPass {
@@ -80,7 +80,7 @@ namespace {
 }
 
 char CFGOnlyViewer::ID = 0;
-INITIALIZE_PASS(CFGOnlyViewer, "view-cfg-only",
+INITIALIZELLVM37_PASS(CFGOnlyViewer, "view-cfg-only",
                 "View CFG of function (with no function bodies)", false, true)
 
 namespace {
@@ -122,7 +122,7 @@ namespace {
 }
 
 char CFGPrinter::ID = 0;
-INITIALIZE_PASS(CFGPrinter, "dot-cfg", "Print CFG of function to 'dot' file", 
+INITIALIZELLVM37_PASS(CFGPrinter, "dot-cfg", "Print CFG of function to 'dot' file", 
                 false, true)
 
 namespace {
@@ -162,7 +162,7 @@ namespace {
 }
 
 char CFGOnlyPrinter::ID = 0;
-INITIALIZE_PASS(CFGOnlyPrinter, "dot-cfg-only",
+INITIALIZELLVM37_PASS(CFGOnlyPrinter, "dot-cfg-only",
    "Print CFG of function to 'dot' file (with no function bodies)",
    false, true)
 

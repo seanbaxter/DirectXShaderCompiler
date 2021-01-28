@@ -59,10 +59,10 @@ namespace {
 }
 
 char CorrelatedValuePropagation::ID = 0;
-INITIALIZE_PASS_BEGIN(CorrelatedValuePropagation, "correlated-propagation",
+INITIALIZELLVM37_PASS_BEGIN(CorrelatedValuePropagation, "correlated-propagation",
                 "Value Propagation", false, false)
-INITIALIZE_PASS_DEPENDENCY(LazyValueInfo)
-INITIALIZE_PASS_END(CorrelatedValuePropagation, "correlated-propagation",
+INITIALIZELLVM37_PASS_DEPENDENCY(LazyValueInfo)
+INITIALIZELLVM37_PASS_END(CorrelatedValuePropagation, "correlated-propagation",
                 "Value Propagation", false, false)
 
 // Public interface to the Value Propagation pass

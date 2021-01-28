@@ -187,7 +187,7 @@ char HLMatrixLowerPass::ID = 0;
 
 ModulePass *llvm37::createHLMatrixLowerPass() { return new HLMatrixLowerPass(); }
 
-INITIALIZE_PASS(HLMatrixLowerPass, "hlmatrixlower", "HLSL High-Level Matrix Lower", false, false)
+INITIALIZELLVM37_PASS(HLMatrixLowerPass, "hlmatrixlower", "HLSL High-Level Matrix Lower", false, false)
 
 bool HLMatrixLowerPass::runOnModule(Module &M) {
   TempOverloadPool matToVecStubs(M, "hlmatrixlower.mat2vec");

@@ -68,8 +68,8 @@ namespace {
 // Register this pass.
 char CostModelAnalysis::ID = 0;
 static const char cm_name[] = "Cost Model Analysis";
-INITIALIZE_PASS_BEGIN(CostModelAnalysis, CM_NAME, cm_name, false, true)
-INITIALIZE_PASS_END  (CostModelAnalysis, CM_NAME, cm_name, false, true)
+INITIALIZELLVM37_PASS_BEGIN(CostModelAnalysis, CM_NAME, cm_name, false, true)
+INITIALIZELLVM37_PASS_END  (CostModelAnalysis, CM_NAME, cm_name, false, true)
 
 FunctionPass *llvm37::createCostModelAnalysisPass() {
   return new CostModelAnalysis();

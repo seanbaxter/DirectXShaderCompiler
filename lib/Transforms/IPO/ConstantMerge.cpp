@@ -56,7 +56,7 @@ namespace {
 }
 
 char ConstantMerge::ID = 0;
-INITIALIZE_PASS(ConstantMerge, "constmerge",
+INITIALIZELLVM37_PASS(ConstantMerge, "constmerge",
                 "Merge Duplicate Global Constants", false, false)
 
 ModulePass *llvm37::createConstantMergePass() { return new ConstantMerge(); }

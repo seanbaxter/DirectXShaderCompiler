@@ -25,7 +25,7 @@ template class DominatorTreeBase<MachineBasicBlock>;
 
 char MachineDominatorTree::ID = 0;
 
-INITIALIZE_PASS(MachineDominatorTree, "machinedomtree",
+INITIALIZELLVM37_PASS(MachineDominatorTree, "machinedomtree",
                 "MachineDominator Tree Construction", true, true)
 
 char &llvm37::MachineDominatorsID = MachineDominatorTree::ID;

@@ -267,9 +267,9 @@ namespace {
 
 char &llvm37::IfConverterID = IfConverter::ID;
 
-INITIALIZE_PASS_BEGIN(IfConverter, "if-converter", "If Converter", false, false)
-INITIALIZE_PASS_DEPENDENCY(MachineBranchProbabilityInfo)
-INITIALIZE_PASS_END(IfConverter, "if-converter", "If Converter", false, false)
+INITIALIZELLVM37_PASS_BEGIN(IfConverter, "if-converter", "If Converter", false, false)
+INITIALIZELLVM37_PASS_DEPENDENCY(MachineBranchProbabilityInfo)
+INITIALIZELLVM37_PASS_END(IfConverter, "if-converter", "If Converter", false, false)
 
 bool IfConverter::runOnMachineFunction(MachineFunction &MF) {
   if (PredicateFtor && !PredicateFtor(*MF.getFunction()))

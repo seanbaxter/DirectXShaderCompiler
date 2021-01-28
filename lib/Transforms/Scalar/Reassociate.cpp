@@ -227,7 +227,7 @@ XorOpnd::XorOpnd(Value *V) {
 }
 
 char Reassociate::ID = 0;
-INITIALIZE_PASS(Reassociate, "reassociate",
+INITIALIZELLVM37_PASS(Reassociate, "reassociate",
                 "Reassociate expressions", false, false)
 
 // Public interface to the Reassociate pass

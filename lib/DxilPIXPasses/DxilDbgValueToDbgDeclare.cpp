@@ -834,7 +834,7 @@ llvm37::DIExpression *VariableRegisters::GetDIExpression(
 
 using namespace llvm37;
 
-INITIALIZE_PASS(DxilDbgValueToDbgDeclare, DEBUG_TYPE,
+INITIALIZELLVM37_PASS(DxilDbgValueToDbgDeclare, DEBUG_TYPE,
                 "Converts calls to dbg.value to dbg.declare + stores to new virtual registers",
                 false, false)
 

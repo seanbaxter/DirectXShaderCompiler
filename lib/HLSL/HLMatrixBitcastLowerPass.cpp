@@ -247,4 +247,4 @@ void MatrixBitcastLowerPass::lowerMatrix(Instruction *M, Value *A) {
 char MatrixBitcastLowerPass::ID = 0;
 FunctionPass *llvm37::createMatrixBitcastLowerPass() { return new MatrixBitcastLowerPass(); }
 
-INITIALIZE_PASS(MatrixBitcastLowerPass, "matrixbitcastlower", "Matrix Bitcast lower", false, false)
+INITIALIZELLVM37_PASS(MatrixBitcastLowerPass, "matrixbitcastlower", "Matrix Bitcast lower", false, false)

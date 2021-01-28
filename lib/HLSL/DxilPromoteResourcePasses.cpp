@@ -140,12 +140,12 @@ FunctionPass *llvm37::createDxilPromoteLocalResources() {
   return new DxilPromoteLocalResources();
 }
 
-INITIALIZE_PASS_BEGIN(DxilPromoteLocalResources,
+INITIALIZELLVM37_PASS_BEGIN(DxilPromoteLocalResources,
                       "hlsl-dxil-promote-local-resources",
                       "DXIL promote local resource use", false, true)
-INITIALIZE_PASS_DEPENDENCY(AssumptionCacheTracker)
-INITIALIZE_PASS_DEPENDENCY(DominatorTreeWrapperPass)
-INITIALIZE_PASS_END(DxilPromoteLocalResources,
+INITIALIZELLVM37_PASS_DEPENDENCY(AssumptionCacheTracker)
+INITIALIZELLVM37_PASS_DEPENDENCY(DominatorTreeWrapperPass)
+INITIALIZELLVM37_PASS_END(DxilPromoteLocalResources,
                     "hlsl-dxil-promote-local-resources",
                     "DXIL promote local resource use", false, true)
 
@@ -230,7 +230,7 @@ ModulePass *llvm37::createDxilPromoteStaticResources() {
   return new DxilPromoteStaticResources();
 }
 
-INITIALIZE_PASS(DxilPromoteStaticResources,
+INITIALIZELLVM37_PASS(DxilPromoteStaticResources,
                 "hlsl-dxil-promote-static-resources",
                 "DXIL promote static resource use", false, false)
 
@@ -699,6 +699,6 @@ ModulePass *llvm37::createDxilMutateResourceToHandlePass() {
   return new DxilMutateResourceToHandle();
 }
 
-INITIALIZE_PASS(DxilMutateResourceToHandle,
+INITIALIZELLVM37_PASS(DxilMutateResourceToHandle,
                 "hlsl-dxil-resources-to-handle",
                 "Mutate resource to handle", false, false)

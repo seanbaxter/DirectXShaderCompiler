@@ -50,4 +50,4 @@ ModulePass *llvm37::createHLDeadFunctionEliminationPass() {
   return new HLDeadFunctionElimination();
 }
 
-INITIALIZE_PASS(HLDeadFunctionElimination, "hl-dfe", "Remove all unused function except entry from HLModule", false, false)
+INITIALIZELLVM37_PASS(HLDeadFunctionElimination, "hl-dfe", "Remove all unused function except entry from HLModule", false, false)

@@ -80,7 +80,7 @@ private:
 
 char StackMapLiveness::ID = 0;
 char &llvm37::StackMapLivenessID = StackMapLiveness::ID;
-INITIALIZE_PASS(StackMapLiveness, "stackmap-liveness",
+INITIALIZELLVM37_PASS(StackMapLiveness, "stackmap-liveness",
                 "StackMap Liveness Analysis", false, false)
 
 /// Default construct and initialize the pass.

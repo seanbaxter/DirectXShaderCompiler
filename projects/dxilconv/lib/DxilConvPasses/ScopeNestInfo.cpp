@@ -73,8 +73,8 @@ void ScopeNestInfo::Analyze(Function &F) {
 
 //----------------------- Wrapper Pass Implementation ------------------------//
 char ScopeNestInfoWrapperPass::ID = 0;
-INITIALIZE_PASS_BEGIN(ScopeNestInfoWrapperPass, "scopenestinfo", "Scope nest info pass", true, true)
-INITIALIZE_PASS_END(ScopeNestInfoWrapperPass,   "scopenestinfo",   "Scope nest info pass", true, true)
+INITIALIZELLVM37_PASS_BEGIN(ScopeNestInfoWrapperPass, "scopenestinfo", "Scope nest info pass", true, true)
+INITIALIZELLVM37_PASS_END(ScopeNestInfoWrapperPass,   "scopenestinfo",   "Scope nest info pass", true, true)
 
 
 FunctionPass *llvm37::createScopeNestInfoWrapperPass() {

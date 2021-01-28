@@ -57,11 +57,11 @@ static const unsigned int NumResultsLimit = 100;
 char MemoryDependenceAnalysis::ID = 0;
 
 // Register this pass...
-INITIALIZE_PASS_BEGIN(MemoryDependenceAnalysis, "memdep",
+INITIALIZELLVM37_PASS_BEGIN(MemoryDependenceAnalysis, "memdep",
                 "Memory Dependence Analysis", false, true)
-INITIALIZE_PASS_DEPENDENCY(AssumptionCacheTracker)
-INITIALIZE_AG_DEPENDENCY(AliasAnalysis)
-INITIALIZE_PASS_END(MemoryDependenceAnalysis, "memdep",
+INITIALIZELLVM37_PASS_DEPENDENCY(AssumptionCacheTracker)
+INITIALIZELLVM37_AG_DEPENDENCY(AliasAnalysis)
+INITIALIZELLVM37_PASS_END(MemoryDependenceAnalysis, "memdep",
                       "Memory Dependence Analysis", false, true)
 
 MemoryDependenceAnalysis::MemoryDependenceAnalysis()

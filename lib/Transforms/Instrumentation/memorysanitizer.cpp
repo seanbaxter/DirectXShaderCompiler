@@ -355,7 +355,7 @@ class MemorySanitizer : public FunctionPass {
 }  // namespace
 
 char MemorySanitizer::ID = 0;
-INITIALIZE_PASS(MemorySanitizer, "msan",
+INITIALIZELLVM37_PASS(MemorySanitizer, "msan",
                 "MemorySanitizer: detects uninitialized reads.",
                 false, false)
 

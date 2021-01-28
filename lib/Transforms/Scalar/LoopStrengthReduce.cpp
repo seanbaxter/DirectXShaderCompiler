@@ -4957,15 +4957,15 @@ private:
 }
 
 char LoopStrengthReduce::ID = 0;
-INITIALIZE_PASS_BEGIN(LoopStrengthReduce, "loop-reduce",
+INITIALIZELLVM37_PASS_BEGIN(LoopStrengthReduce, "loop-reduce",
                 "Loop Strength Reduction", false, false)
-INITIALIZE_PASS_DEPENDENCY(TargetTransformInfoWrapperPass)
-INITIALIZE_PASS_DEPENDENCY(DominatorTreeWrapperPass)
-INITIALIZE_PASS_DEPENDENCY(ScalarEvolution)
-INITIALIZE_PASS_DEPENDENCY(IVUsers)
-INITIALIZE_PASS_DEPENDENCY(LoopInfoWrapperPass)
-INITIALIZE_PASS_DEPENDENCY(LoopSimplify)
-INITIALIZE_PASS_END(LoopStrengthReduce, "loop-reduce",
+INITIALIZELLVM37_PASS_DEPENDENCY(TargetTransformInfoWrapperPass)
+INITIALIZELLVM37_PASS_DEPENDENCY(DominatorTreeWrapperPass)
+INITIALIZELLVM37_PASS_DEPENDENCY(ScalarEvolution)
+INITIALIZELLVM37_PASS_DEPENDENCY(IVUsers)
+INITIALIZELLVM37_PASS_DEPENDENCY(LoopInfoWrapperPass)
+INITIALIZELLVM37_PASS_DEPENDENCY(LoopSimplify)
+INITIALIZELLVM37_PASS_END(LoopStrengthReduce, "loop-reduce",
                 "Loop Strength Reduction", false, false)
 
 

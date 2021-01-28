@@ -90,7 +90,7 @@ private:
 } // end anonymous namespace.
 
 char InterleavedAccess::ID = 0;
-INITIALIZE_TM_PASS(InterleavedAccess, "interleaved-access",
+INITIALIZELLVM37_TM_PASS(InterleavedAccess, "interleaved-access",
     "Lower interleaved memory accesses to target specific intrinsics",
     false, false)
 

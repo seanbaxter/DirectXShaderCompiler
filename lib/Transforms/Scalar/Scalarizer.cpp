@@ -209,7 +209,7 @@ private:
 char Scalarizer::ID = 0;
 } // end anonymous namespace
 
-INITIALIZE_PASS_WITH_OPTIONS(Scalarizer, "scalarizer",
+INITIALIZELLVM37_PASS_WITH_OPTIONS(Scalarizer, "scalarizer",
                              "Scalarize vector operations", false, false)
 #if 0 // HLSL Change
 Scatterer::Scatterer(BasicBlock *bb, BasicBlock::iterator bbi, Value *v,

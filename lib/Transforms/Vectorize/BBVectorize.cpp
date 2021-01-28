@@ -3196,12 +3196,12 @@ namespace {
 
 char BBVectorize::ID = 0;
 static const char bb_vectorize_name[] = "Basic-Block Vectorization";
-INITIALIZE_PASS_BEGIN(BBVectorize, BBV_NAME, bb_vectorize_name, false, false)
-INITIALIZE_AG_DEPENDENCY(AliasAnalysis)
-INITIALIZE_PASS_DEPENDENCY(TargetTransformInfoWrapperPass)
-INITIALIZE_PASS_DEPENDENCY(DominatorTreeWrapperPass)
-INITIALIZE_PASS_DEPENDENCY(ScalarEvolution)
-INITIALIZE_PASS_END(BBVectorize, BBV_NAME, bb_vectorize_name, false, false)
+INITIALIZELLVM37_PASS_BEGIN(BBVectorize, BBV_NAME, bb_vectorize_name, false, false)
+INITIALIZELLVM37_AG_DEPENDENCY(AliasAnalysis)
+INITIALIZELLVM37_PASS_DEPENDENCY(TargetTransformInfoWrapperPass)
+INITIALIZELLVM37_PASS_DEPENDENCY(DominatorTreeWrapperPass)
+INITIALIZELLVM37_PASS_DEPENDENCY(ScalarEvolution)
+INITIALIZELLVM37_PASS_END(BBVectorize, BBV_NAME, bb_vectorize_name, false, false)
 
 BasicBlockPass *llvm37::createBBVectorizePass(const VectorizeConfig &C) {
   return new BBVectorize(C);

@@ -195,7 +195,7 @@ class TypePromotionTransaction;
 }
 
 char CodeGenPrepare::ID = 0;
-INITIALIZE_TM_PASS(CodeGenPrepare, "codegenprepare",
+INITIALIZELLVM37_TM_PASS(CodeGenPrepare, "codegenprepare",
                    "Optimize for code generation", false, false)
 
 FunctionPass *llvm37::createCodeGenPreparePass(const TargetMachine *TM) {

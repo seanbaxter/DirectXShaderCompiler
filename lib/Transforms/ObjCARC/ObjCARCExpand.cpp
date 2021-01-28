@@ -66,7 +66,7 @@ namespace {
 }
 
 char ObjCARCExpand::ID = 0;
-INITIALIZE_PASS(ObjCARCExpand,
+INITIALIZELLVM37_PASS(ObjCARCExpand,
                 "objc-arc-expand", "ObjC ARC expansion", false, false)
 
 Pass *llvm37::createObjCARCExpandPass() {

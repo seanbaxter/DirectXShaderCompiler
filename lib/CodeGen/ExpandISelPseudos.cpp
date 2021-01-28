@@ -41,7 +41,7 @@ namespace {
 
 char ExpandISelPseudos::ID = 0;
 char &llvm37::ExpandISelPseudosID = ExpandISelPseudos::ID;
-INITIALIZE_PASS(ExpandISelPseudos, "expand-isel-pseudos",
+INITIALIZELLVM37_PASS(ExpandISelPseudos, "expand-isel-pseudos",
                 "Expand ISel Pseudo-instructions", false, false)
 
 bool ExpandISelPseudos::runOnMachineFunction(MachineFunction &MF) {

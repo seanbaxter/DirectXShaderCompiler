@@ -108,11 +108,11 @@ namespace {
 
 char MachineCSE::ID = 0;
 char &llvm37::MachineCSEID = MachineCSE::ID;
-INITIALIZE_PASS_BEGIN(MachineCSE, "machine-cse",
+INITIALIZELLVM37_PASS_BEGIN(MachineCSE, "machine-cse",
                 "Machine Common Subexpression Elimination", false, false)
-INITIALIZE_PASS_DEPENDENCY(MachineDominatorTree)
-INITIALIZE_AG_DEPENDENCY(AliasAnalysis)
-INITIALIZE_PASS_END(MachineCSE, "machine-cse",
+INITIALIZELLVM37_PASS_DEPENDENCY(MachineDominatorTree)
+INITIALIZELLVM37_AG_DEPENDENCY(AliasAnalysis)
+INITIALIZELLVM37_PASS_END(MachineCSE, "machine-cse",
                 "Machine Common Subexpression Elimination", false, false)
 
 /// The source register of a COPY machine instruction can be propagated to all

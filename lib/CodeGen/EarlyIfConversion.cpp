@@ -616,12 +616,12 @@ private:
 char EarlyIfConverter::ID = 0;
 char &llvm37::EarlyIfConverterID = EarlyIfConverter::ID;
 
-INITIALIZE_PASS_BEGIN(EarlyIfConverter,
+INITIALIZELLVM37_PASS_BEGIN(EarlyIfConverter,
                       "early-ifcvt", "Early If Converter", false, false)
-INITIALIZE_PASS_DEPENDENCY(MachineBranchProbabilityInfo)
-INITIALIZE_PASS_DEPENDENCY(MachineDominatorTree)
-INITIALIZE_PASS_DEPENDENCY(MachineTraceMetrics)
-INITIALIZE_PASS_END(EarlyIfConverter,
+INITIALIZELLVM37_PASS_DEPENDENCY(MachineBranchProbabilityInfo)
+INITIALIZELLVM37_PASS_DEPENDENCY(MachineDominatorTree)
+INITIALIZELLVM37_PASS_DEPENDENCY(MachineTraceMetrics)
+INITIALIZELLVM37_PASS_END(EarlyIfConverter,
                       "early-ifcvt", "Early If Converter", false, false)
 
 void EarlyIfConverter::getAnalysisUsage(AnalysisUsage &AU) const {

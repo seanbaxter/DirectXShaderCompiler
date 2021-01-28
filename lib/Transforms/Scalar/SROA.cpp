@@ -1323,11 +1323,11 @@ FunctionPass *llvm37::createSROAPass(bool RequiresDomTree, bool SkipHLSLMat) {
   return new SROA(RequiresDomTree, SkipHLSLMat);
 }
 
-INITIALIZE_PASS_BEGIN(SROA, "sroa", "Scalar Replacement Of Aggregates", false,
+INITIALIZELLVM37_PASS_BEGIN(SROA, "sroa", "Scalar Replacement Of Aggregates", false,
                       false)
-INITIALIZE_PASS_DEPENDENCY(AssumptionCacheTracker)
-INITIALIZE_PASS_DEPENDENCY(DominatorTreeWrapperPass)
-INITIALIZE_PASS_END(SROA, "sroa", "Scalar Replacement Of Aggregates", false,
+INITIALIZELLVM37_PASS_DEPENDENCY(AssumptionCacheTracker)
+INITIALIZELLVM37_PASS_DEPENDENCY(DominatorTreeWrapperPass)
+INITIALIZELLVM37_PASS_END(SROA, "sroa", "Scalar Replacement Of Aggregates", false,
                     false)
 
 /// Walk the range of a partitioning looking for a common type to cover this

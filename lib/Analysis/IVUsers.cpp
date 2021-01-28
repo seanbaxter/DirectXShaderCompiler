@@ -34,13 +34,13 @@ using namespace llvm37;
 #define DEBUG_TYPE "iv-users"
 
 char IVUsers::ID = 0;
-INITIALIZE_PASS_BEGIN(IVUsers, "iv-users",
+INITIALIZELLVM37_PASS_BEGIN(IVUsers, "iv-users",
                       "Induction Variable Users", false, true)
-INITIALIZE_PASS_DEPENDENCY(AssumptionCacheTracker)
-INITIALIZE_PASS_DEPENDENCY(LoopInfoWrapperPass)
-INITIALIZE_PASS_DEPENDENCY(DominatorTreeWrapperPass)
-INITIALIZE_PASS_DEPENDENCY(ScalarEvolution)
-INITIALIZE_PASS_END(IVUsers, "iv-users",
+INITIALIZELLVM37_PASS_DEPENDENCY(AssumptionCacheTracker)
+INITIALIZELLVM37_PASS_DEPENDENCY(LoopInfoWrapperPass)
+INITIALIZELLVM37_PASS_DEPENDENCY(DominatorTreeWrapperPass)
+INITIALIZELLVM37_PASS_DEPENDENCY(ScalarEvolution)
+INITIALIZELLVM37_PASS_END(IVUsers, "iv-users",
                       "Induction Variable Users", false, true)
 
 Pass *llvm37::createIVUsersPass() {

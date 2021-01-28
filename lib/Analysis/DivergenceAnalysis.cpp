@@ -257,11 +257,11 @@ void DivergencePropagator::propagate() {
 
 // Register this pass.
 char DivergenceAnalysis::ID = 0;
-INITIALIZE_PASS_BEGIN(DivergenceAnalysis, "divergence", "Divergence Analysis",
+INITIALIZELLVM37_PASS_BEGIN(DivergenceAnalysis, "divergence", "Divergence Analysis",
                       false, true)
-INITIALIZE_PASS_DEPENDENCY(DominatorTreeWrapperPass)
-INITIALIZE_PASS_DEPENDENCY(PostDominatorTree)
-INITIALIZE_PASS_END(DivergenceAnalysis, "divergence", "Divergence Analysis",
+INITIALIZELLVM37_PASS_DEPENDENCY(DominatorTreeWrapperPass)
+INITIALIZELLVM37_PASS_DEPENDENCY(PostDominatorTree)
+INITIALIZELLVM37_PASS_END(DivergenceAnalysis, "divergence", "Divergence Analysis",
                     false, true)
 
 FunctionPass *llvm37::createDivergenceAnalysisPass() {

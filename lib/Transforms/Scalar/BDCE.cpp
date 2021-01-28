@@ -69,11 +69,11 @@ struct BDCE : public FunctionPass {
 }
 
 char BDCE::ID = 0;
-INITIALIZE_PASS_BEGIN(BDCE, "bdce", "Bit-Tracking Dead Code Elimination",
+INITIALIZELLVM37_PASS_BEGIN(BDCE, "bdce", "Bit-Tracking Dead Code Elimination",
                       false, false)
-INITIALIZE_PASS_DEPENDENCY(AssumptionCacheTracker)
-INITIALIZE_PASS_DEPENDENCY(DominatorTreeWrapperPass)
-INITIALIZE_PASS_END(BDCE, "bdce", "Bit-Tracking Dead Code Elimination",
+INITIALIZELLVM37_PASS_DEPENDENCY(AssumptionCacheTracker)
+INITIALIZELLVM37_PASS_DEPENDENCY(DominatorTreeWrapperPass)
+INITIALIZELLVM37_PASS_END(BDCE, "bdce", "Bit-Tracking Dead Code Elimination",
                     false, false)
 
 static bool isAlwaysLive(Instruction *I) {

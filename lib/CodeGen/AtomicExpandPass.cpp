@@ -59,7 +59,7 @@ namespace {
 
 char AtomicExpand::ID = 0;
 char &llvm37::AtomicExpandID = AtomicExpand::ID;
-INITIALIZE_TM_PASS(AtomicExpand, "atomic-expand",
+INITIALIZELLVM37_TM_PASS(AtomicExpand, "atomic-expand",
     "Expand Atomic calls in terms of either load-linked & store-conditional or cmpxchg",
     false, false)
 

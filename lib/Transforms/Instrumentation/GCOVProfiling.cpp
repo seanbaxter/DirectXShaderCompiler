@@ -142,7 +142,7 @@ namespace {
 }
 
 char GCOVProfiler::ID = 0;
-INITIALIZE_PASS(GCOVProfiler, "insert-gcov-profiling",
+INITIALIZELLVM37_PASS(GCOVProfiler, "insert-gcov-profiling",
                 "Insert instrumentation for GCOV profiling", false, false)
 
 ModulePass *llvm37::createGCOVProfilerPass(const GCOVOptions &Options) {

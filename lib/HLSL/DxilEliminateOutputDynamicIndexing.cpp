@@ -204,6 +204,6 @@ ModulePass *llvm37::createDxilEliminateOutputDynamicIndexingPass() {
   return new DxilEliminateOutputDynamicIndexing();
 }
 
-INITIALIZE_PASS(DxilEliminateOutputDynamicIndexing,
+INITIALIZELLVM37_PASS(DxilEliminateOutputDynamicIndexing,
                 "hlsl-dxil-eliminate-output-dynamic",
                 "DXIL eliminate output dynamic indexing", false, false)

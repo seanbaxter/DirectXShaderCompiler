@@ -139,9 +139,9 @@ void Delinearization::print(raw_ostream &O, const Module *) const {
 
 char Delinearization::ID = 0;
 static const char delinearization_name[] = "Delinearization";
-INITIALIZE_PASS_BEGIN(Delinearization, DL_NAME, delinearization_name, true,
+INITIALIZELLVM37_PASS_BEGIN(Delinearization, DL_NAME, delinearization_name, true,
                       true)
-INITIALIZE_PASS_DEPENDENCY(LoopInfoWrapperPass)
-INITIALIZE_PASS_END(Delinearization, DL_NAME, delinearization_name, true, true)
+INITIALIZELLVM37_PASS_DEPENDENCY(LoopInfoWrapperPass)
+INITIALIZELLVM37_PASS_END(Delinearization, DL_NAME, delinearization_name, true, true)
 
 FunctionPass *llvm37::createDelinearizationPass() { return new Delinearization; }

@@ -144,12 +144,12 @@ char MachineScheduler::ID = 0;
 
 char &llvm37::MachineSchedulerID = MachineScheduler::ID;
 
-INITIALIZE_PASS_BEGIN(MachineScheduler, "machine-scheduler",
+INITIALIZELLVM37_PASS_BEGIN(MachineScheduler, "machine-scheduler",
                       "Machine Instruction Scheduler", false, false)
-INITIALIZE_AG_DEPENDENCY(AliasAnalysis)
-INITIALIZE_PASS_DEPENDENCY(SlotIndexes)
-INITIALIZE_PASS_DEPENDENCY(LiveIntervals)
-INITIALIZE_PASS_END(MachineScheduler, "machine-scheduler",
+INITIALIZELLVM37_AG_DEPENDENCY(AliasAnalysis)
+INITIALIZELLVM37_PASS_DEPENDENCY(SlotIndexes)
+INITIALIZELLVM37_PASS_DEPENDENCY(LiveIntervals)
+INITIALIZELLVM37_PASS_END(MachineScheduler, "machine-scheduler",
                     "Machine Instruction Scheduler", false, false)
 
 MachineScheduler::MachineScheduler()
@@ -174,7 +174,7 @@ char PostMachineScheduler::ID = 0;
 
 char &llvm37::PostMachineSchedulerID = PostMachineScheduler::ID;
 
-INITIALIZE_PASS(PostMachineScheduler, "postmisched",
+INITIALIZELLVM37_PASS(PostMachineScheduler, "postmisched",
                 "PostRA Machine Instruction Scheduler", false, false)
 
 PostMachineScheduler::PostMachineScheduler()

@@ -86,7 +86,7 @@ ModulePass *llvm37::createDxilNoOptLegalizePass() {
   return new DxilNoOptLegalize();
 }
 
-INITIALIZE_PASS(DxilNoOptLegalize, "dxil-o0-legalize", "DXIL No-Opt Legalize", false, false)
+INITIALIZELLVM37_PASS(DxilNoOptLegalize, "dxil-o0-legalize", "DXIL No-Opt Legalize", false, false)
 
 
 
@@ -133,5 +133,5 @@ ModulePass *llvm37::createDxilNoOptSimplifyInstructionsPass() {
   return new DxilNoOptSimplifyInstructions();
 }
 
-INITIALIZE_PASS(DxilNoOptSimplifyInstructions, "dxil-o0-simplify-inst", "DXIL No-Opt Simplify Inst", false, false)
+INITIALIZELLVM37_PASS(DxilNoOptSimplifyInstructions, "dxil-o0-simplify-inst", "DXIL No-Opt Simplify Inst", false, false)
 

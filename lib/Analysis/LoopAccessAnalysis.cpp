@@ -1769,12 +1769,12 @@ char LoopAccessAnalysis::ID = 0;
 static const char laa_name[] = "Loop Access Analysis";
 #define LAA_NAME "loop-accesses"
 
-INITIALIZE_PASS_BEGIN(LoopAccessAnalysis, LAA_NAME, laa_name, false, true)
-INITIALIZE_AG_DEPENDENCY(AliasAnalysis)
-INITIALIZE_PASS_DEPENDENCY(ScalarEvolution)
-INITIALIZE_PASS_DEPENDENCY(DominatorTreeWrapperPass)
-INITIALIZE_PASS_DEPENDENCY(LoopInfoWrapperPass)
-INITIALIZE_PASS_END(LoopAccessAnalysis, LAA_NAME, laa_name, false, true)
+INITIALIZELLVM37_PASS_BEGIN(LoopAccessAnalysis, LAA_NAME, laa_name, false, true)
+INITIALIZELLVM37_AG_DEPENDENCY(AliasAnalysis)
+INITIALIZELLVM37_PASS_DEPENDENCY(ScalarEvolution)
+INITIALIZELLVM37_PASS_DEPENDENCY(DominatorTreeWrapperPass)
+INITIALIZELLVM37_PASS_DEPENDENCY(LoopInfoWrapperPass)
+INITIALIZELLVM37_PASS_END(LoopAccessAnalysis, LAA_NAME, laa_name, false, true)
 
 namespace llvm37 {
   Pass *createLAAPass() {

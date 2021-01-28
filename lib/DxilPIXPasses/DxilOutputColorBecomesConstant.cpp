@@ -272,5 +272,5 @@ ModulePass *llvm37::createDxilOutputColorBecomesConstantPass() {
   return new DxilOutputColorBecomesConstant();
 }
 
-INITIALIZE_PASS(DxilOutputColorBecomesConstant, "hlsl-dxil-constantColor",
+INITIALIZELLVM37_PASS(DxilOutputColorBecomesConstant, "hlsl-dxil-constantColor",
                 "DXIL Constant Color Mod", false, false)

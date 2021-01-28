@@ -53,7 +53,7 @@ namespace {
   };
 }
 char UnreachableBlockElim::ID = 0;
-INITIALIZE_PASS(UnreachableBlockElim, "unreachableblockelim",
+INITIALIZELLVM37_PASS(UnreachableBlockElim, "unreachableblockelim",
                 "Remove unreachable blocks from the CFG", false, false)
 
 FunctionPass *llvm37::createUnreachableBlockEliminationPass() {
@@ -104,7 +104,7 @@ namespace {
 }
 char UnreachableMachineBlockElim::ID = 0;
 
-INITIALIZE_PASS(UnreachableMachineBlockElim, "unreachable-mbb-elimination",
+INITIALIZELLVM37_PASS(UnreachableMachineBlockElim, "unreachable-mbb-elimination",
   "Remove unreachable machine basic blocks", false, false)
 
 char &llvm37::UnreachableMachineBlockElimID = UnreachableMachineBlockElim::ID;
