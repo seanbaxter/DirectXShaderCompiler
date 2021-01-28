@@ -1,6 +1,6 @@
 //===--- ClangCommentHTMLTagsEmitter.cpp - Generate HTML tag list for Clang -=//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -13,12 +13,12 @@
 //===----------------------------------------------------------------------===//
 
 #include "TableGenBackends.h"
-#include "llvm/TableGen/Record.h"
-#include "llvm/TableGen/StringMatcher.h"
-#include "llvm/TableGen/TableGenBackend.h"
+#include "llvm37/TableGen/Record.h"
+#include "llvm37/TableGen/StringMatcher.h"
+#include "llvm37/TableGen/TableGenBackend.h"
 #include <vector>
 
-using namespace llvm;
+using namespace llvm37;
 
 void clang::EmitClangCommentHTMLTags(RecordKeeper &Records, raw_ostream &OS) {
   std::vector<Record *> Tags = Records.getAllDerivedDefinitions("Tag");

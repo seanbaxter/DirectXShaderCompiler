@@ -1,33 +1,33 @@
-//===- llvm/unittest/IR/InstructionsTest.cpp - Instructions unit tests ----===//
+//===- llvm37/unittest/IR/InstructionsTest.cpp - Instructions unit tests ----===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/IR/Instructions.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/Analysis/ValueTracking.h"
-#include "llvm/IR/BasicBlock.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/DerivedTypes.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/IRBuilder.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/MDBuilder.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/Operator.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/Analysis/ValueTracking.h"
+#include "llvm37/IR/BasicBlock.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/IR/DerivedTypes.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/IRBuilder.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/MDBuilder.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/Operator.h"
 #include "gtest/gtest.h"
 #include <memory>
 
-namespace llvm {
+namespace llvm37 {
 namespace {
 
 TEST(InstructionsTest, ReturnInst) {
-  LLVMContext &C(getGlobalContext());
+  LLVM37Context &C(getGlobalContext());
 
   // test for PR6589
   const ReturnInst* r0 = ReturnInst::Create(C);
@@ -63,7 +63,7 @@ protected:
     F = Function::Create(FTy, Function::ExternalLinkage, "", M.get());
   }
 
-  LLVMContext Ctx;
+  LLVM37Context Ctx;
   std::unique_ptr<Module> M;
   SmallVector<Type *, 3> FArgTypes;
   Function *F;
@@ -103,7 +103,7 @@ TEST_F(ModuleWithFunctionTest, InvokeInst) {
 }
 
 TEST(InstructionsTest, BranchInst) {
-  LLVMContext &C(getGlobalContext());
+  LLVM37Context &C(getGlobalContext());
 
   // Make a BasicBlocks
   BasicBlock* bb0 = BasicBlock::Create(C);
@@ -169,7 +169,7 @@ TEST(InstructionsTest, BranchInst) {
 }
 
 TEST(InstructionsTest, CastInst) {
-  LLVMContext &C(getGlobalContext());
+  LLVM37Context &C(getGlobalContext());
 
   Type *Int8Ty = Type::getInt8Ty(C);
   Type *Int16Ty = Type::getInt16Ty(C);
@@ -288,7 +288,7 @@ TEST(InstructionsTest, CastInst) {
 }
 
 TEST(InstructionsTest, VectorGep) {
-  LLVMContext &C(getGlobalContext());
+  LLVM37Context &C(getGlobalContext());
 
   // Type Definitions
   Type *I8Ty = IntegerType::get(C, 8);
@@ -391,7 +391,7 @@ TEST(InstructionsTest, VectorGep) {
 }
 
 TEST(InstructionsTest, FPMathOperator) {
-  LLVMContext &Context = getGlobalContext();
+  LLVM37Context &Context = getGlobalContext();
   IRBuilder<> Builder(Context);
   MDBuilder MDHelper(Context);
   Instruction *I = Builder.CreatePHI(Builder.getDoubleTy(), 0);
@@ -406,7 +406,7 @@ TEST(InstructionsTest, FPMathOperator) {
 
 
 TEST(InstructionsTest, isEliminableCastPair) {
-  LLVMContext &C(getGlobalContext());
+  LLVM37Context &C(getGlobalContext());
 
   Type* Int16Ty = Type::getInt16Ty(C);
   Type* Int32Ty = Type::getInt32Ty(C);
@@ -486,7 +486,7 @@ TEST(InstructionsTest, isEliminableCastPair) {
 }
 
 TEST(InstructionsTest, CloneCall) {
-  LLVMContext &C(getGlobalContext());
+  LLVM37Context &C(getGlobalContext());
   Type *Int32Ty = Type::getInt32Ty(C);
   Type *ArgTys[] = {Int32Ty, Int32Ty, Int32Ty};
   Type *FnTy = FunctionType::get(Int32Ty, ArgTys, /*isVarArg=*/false);
@@ -519,6 +519,6 @@ TEST(InstructionsTest, CloneCall) {
 }
 
 }  // end anonymous namespace
-}  // end namespace llvm
+}  // end namespace llvm37
 
 

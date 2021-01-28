@@ -1,6 +1,6 @@
 //===- CIndexCXX.cpp - Clang-C Source Indexing Library --------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -47,7 +47,7 @@ enum CX_CXXAccessSpecifier clang_getCXXAccessSpecifier(CXCursor C) {
     case AS_none: return CX_CXXInvalidAccessSpecifier;
   }
 
-  llvm_unreachable("Invalid AccessSpecifier!");
+  llvm37_unreachable("Invalid AccessSpecifier!");
 }
 
 enum CXCursorKind clang_getTemplateCursorKind(CXCursor C) {
@@ -97,7 +97,7 @@ CXCursor clang_getSpecializedCursorTemplate(CXCursor C) {
       Template = PartialSpec->getSpecializedTemplate();
     else if (const ClassTemplateSpecializationDecl *ClassSpec 
                = dyn_cast<ClassTemplateSpecializationDecl>(CXXRecord)) {
-      llvm::PointerUnion<ClassTemplateDecl *,
+      llvm37::PointerUnion<ClassTemplateDecl *,
                          ClassTemplatePartialSpecializationDecl *> Result
         = ClassSpec->getSpecializedTemplateOrPartial();
       if (Result.is<ClassTemplateDecl *>())

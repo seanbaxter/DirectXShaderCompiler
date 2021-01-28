@@ -1,53 +1,53 @@
-RUN: yaml2obj %p/Inputs/COFF/i386.yaml | llvm-nm -a -S - \
+RUN: yaml2obj %p/Inputs/COFF/i386.yaml | llvm37-nm -a -S - \
 RUN:         | FileCheck %s -check-prefix COFF32
-RUN: yaml2obj %p/Inputs/COFF/x86-64.yaml | llvm-nm -a -S - \
+RUN: yaml2obj %p/Inputs/COFF/x86-64.yaml | llvm37-nm -a -S - \
 RUN:         | FileCheck %s -check-prefix COFF64
-RUN: llvm-nm %p/Inputs/trivial-object-test.elf-i386 \
+RUN: llvm37-nm %p/Inputs/trivial-object-test.elf-i386 \
 RUN:         | FileCheck %s -check-prefix ELF
-RUN: llvm-nm %p/Inputs/trivial-object-test.elf-i386 -S \
+RUN: llvm37-nm %p/Inputs/trivial-object-test.elf-i386 -S \
 RUN:         | FileCheck %s -check-prefix ELF-SIZE
-RUN: llvm-nm -o %p/Inputs/trivial-object-test.elf-i386 \
+RUN: llvm37-nm -o %p/Inputs/trivial-object-test.elf-i386 \
 RUN:         | FileCheck %s -check-prefix ELF-o
-RUN: llvm-nm -u %p/Inputs/trivial-object-test.elf-i386 \
+RUN: llvm37-nm -u %p/Inputs/trivial-object-test.elf-i386 \
 RUN:         | FileCheck %s -check-prefix ELF-u
-RUN: llvm-nm %p/Inputs/trivial-object-test.elf-x86-64 \
+RUN: llvm37-nm %p/Inputs/trivial-object-test.elf-x86-64 \
 RUN:         | FileCheck %s -check-prefix ELF64
-RUN: llvm-nm %p/Inputs/weak.elf-x86-64 \
+RUN: llvm37-nm %p/Inputs/weak.elf-x86-64 \
 RUN:         | FileCheck %s -check-prefix WEAK-ELF64
-RUN: llvm-nm %p/Inputs/absolute.elf-x86-64 \
+RUN: llvm37-nm %p/Inputs/absolute.elf-x86-64 \
 RUN:         | FileCheck %s -check-prefix ABSOLUTE-ELF64
-RUN: llvm-nm %p/Inputs/trivial-object-test.macho-i386 \
+RUN: llvm37-nm %p/Inputs/trivial-object-test.macho-i386 \
 RUN:         | FileCheck %s -check-prefix macho
-RUN: llvm-nm -U %p/Inputs/trivial-object-test.macho-i386 \
+RUN: llvm37-nm -U %p/Inputs/trivial-object-test.macho-i386 \
 RUN:         | FileCheck %s -check-prefix macho-U
-RUN: llvm-nm %p/Inputs/trivial-object-test.macho-x86-64 \
+RUN: llvm37-nm %p/Inputs/trivial-object-test.macho-x86-64 \
 RUN:         | FileCheck %s -check-prefix macho64
-RUN: llvm-nm %p/Inputs/macho-text-data-bss.macho-x86_64 \
+RUN: llvm37-nm %p/Inputs/macho-text-data-bss.macho-x86_64 \
 RUN:         | FileCheck %s -check-prefix macho-tdb
-RUN: llvm-nm -j %p/Inputs/macho-text-data-bss.macho-x86_64 \
+RUN: llvm37-nm -j %p/Inputs/macho-text-data-bss.macho-x86_64 \
 RUN:         | FileCheck %s -check-prefix macho-j
-RUN: llvm-nm -r %p/Inputs/macho-text-data-bss.macho-x86_64 \
+RUN: llvm37-nm -r %p/Inputs/macho-text-data-bss.macho-x86_64 \
 RUN:         | FileCheck %s -check-prefix macho-r
-RUN: llvm-nm %p/Inputs/macho-text-data-bss.macho-x86_64 -s __DATA __data \
+RUN: llvm37-nm %p/Inputs/macho-text-data-bss.macho-x86_64 -s __DATA __data \
 RUN:         | FileCheck %s -check-prefix macho-s
-RUN: llvm-nm -x %p/Inputs/macho-text-data-bss.macho-x86_64 \
+RUN: llvm37-nm -x %p/Inputs/macho-text-data-bss.macho-x86_64 \
 RUN:         | FileCheck %s -check-prefix macho-x
-RUN: llvm-nm -o %p/Inputs/macho-text-data-bss.macho-x86_64 \
+RUN: llvm37-nm -o %p/Inputs/macho-text-data-bss.macho-x86_64 \
 RUN:         | FileCheck %s -check-prefix macho-o
-RUN: llvm-nm -p -a %p/Inputs/macho-hello-g.macho-x86_64 \
+RUN: llvm37-nm -p -a %p/Inputs/macho-hello-g.macho-x86_64 \
 RUN:         | FileCheck %s -check-prefix macho-pa
-RUN: llvm-nm -u %p/Inputs/macho-hello-g.macho-x86_64 \
+RUN: llvm37-nm -u %p/Inputs/macho-hello-g.macho-x86_64 \
 RUN:         | FileCheck %s -check-prefix macho-u
-RUN: llvm-nm -S -a %p/Inputs/common.coff-i386 \
+RUN: llvm37-nm -S -a %p/Inputs/common.coff-i386 \
 RUN:         | FileCheck %s -check-prefix COFF-COMMON
-RUN: llvm-nm %p/Inputs/relocatable-with-section-address.elf-x86-64 \
+RUN: llvm37-nm %p/Inputs/relocatable-with-section-address.elf-x86-64 \
 RUN:         | FileCheck %s -check-prefix ELF-SEC-ADDR64
-RUN: llvm-nm %p/Inputs/thumb-symbols.elf.arm \
+RUN: llvm37-nm %p/Inputs/thumb-symbols.elf.arm \
 RUN:         | FileCheck %s -check-prefix ELF-THUMB
 RUN: mkdir -p %t
 RUN: cd %t
 RUN: cp %p/Inputs/trivial-object-test.macho-i386 a.out
-RUN: llvm-nm | FileCheck %s -check-prefix A-OUT
+RUN: llvm37-nm | FileCheck %s -check-prefix A-OUT
 
 
 COFF32: 00000000 d .data

@@ -1,13 +1,13 @@
 //===-- FrontendActions.h - Useful Frontend Actions -------------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
-#ifndef LLVM_CLANG_FRONTEND_FRONTENDACTIONS_H
-#define LLVM_CLANG_FRONTEND_FRONTENDACTIONS_H
+#ifndef LLVM37_CLANG_FRONTEND_FRONTENDACTIONS_H
+#define LLVM37_CLANG_FRONTEND_FRONTENDACTIONS_H
 
 #include "clang/Frontend/FrontendAction.h"
 #include <string>
@@ -256,9 +256,9 @@ protected:
   void ExecuteAction() override;
 
 public:
-  HLSLRootSignatureAction(llvm::StringRef rootSigMacro, unsigned major,
+  HLSLRootSignatureAction(llvm37::StringRef rootSigMacro, unsigned major,
                           unsigned minor);
-  /// Take the generated LLVM module, for use after the action has been run.
+  /// Take the generated LLVM37 module, for use after the action has been run.
   /// The result may be null on failure.
   std::unique_ptr<hlsl::RootSignatureHandle> takeRootSigHandle();
 };

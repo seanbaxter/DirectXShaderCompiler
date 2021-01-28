@@ -90,7 +90,7 @@ def main():
 
   if not stdout:
     print ('No output from clang-format (crashed?).\n' +
-        'Please report to bugs.llvm.org.')
+        'Please report to bugs.llvm37.org.')
   else:
     lines = stdout.split('\n')
     output = json.loads(lines[0])

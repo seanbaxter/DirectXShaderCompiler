@@ -12,7 +12,7 @@
 #pragma once
 #include "dxc/Support/WinIncludes.h"
 
-#include "llvm/ADT/StringRef.h"
+#include "llvm37/ADT/StringRef.h"
 
 namespace dxil_dia {
 // Single program, single compiland allows for some simplifications.
@@ -26,5 +26,5 @@ static constexpr DWORD HlslCompilandEnvDefinesId = 7;
 static constexpr DWORD HlslCompilandEnvArgumentsId = 8;
 
 HRESULT ENotImpl();
-HRESULT StringRefToBSTR(llvm::StringRef value, BSTR *pRetVal);
+HRESULT StringRefToBSTR(llvm37::StringRef value, BSTR *pRetVal);
 }  // namespace dxil_dia

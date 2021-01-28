@@ -1,6 +1,6 @@
-//=- llvm/CodeGen/DFAPacketizer.cpp - DFA Packetizer for VLIW -*- C++ -*-=====//
+//=- llvm37/CodeGen/DFAPacketizer.cpp - DFA Packetizer for VLIW -*- C++ -*-=====//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -23,13 +23,13 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/CodeGen/DFAPacketizer.h"
-#include "llvm/CodeGen/MachineInstr.h"
-#include "llvm/CodeGen/MachineInstrBundle.h"
-#include "llvm/CodeGen/ScheduleDAGInstrs.h"
-#include "llvm/MC/MCInstrItineraries.h"
-#include "llvm/Target/TargetInstrInfo.h"
-using namespace llvm;
+#include "llvm37/CodeGen/DFAPacketizer.h"
+#include "llvm37/CodeGen/MachineInstr.h"
+#include "llvm37/CodeGen/MachineInstrBundle.h"
+#include "llvm37/CodeGen/ScheduleDAGInstrs.h"
+#include "llvm37/MC/MCInstrItineraries.h"
+#include "llvm37/Target/TargetInstrInfo.h"
+using namespace llvm37;
 
 DFAPacketizer::DFAPacketizer(const InstrItineraryData *I, const int (*SIT)[2],
                              const unsigned *SET):
@@ -63,9 +63,9 @@ void DFAPacketizer::ReadTable(unsigned int state) {
 
 // canReserveResources - Check if the resources occupied by a MCInstrDesc
 // are available in the current state.
-bool DFAPacketizer::canReserveResources(const llvm::MCInstrDesc *MID) {
+bool DFAPacketizer::canReserveResources(const llvm37::MCInstrDesc *MID) {
   unsigned InsnClass = MID->getSchedClass();
-  const llvm::InstrStage *IS = InstrItins->beginStage(InsnClass);
+  const llvm37::InstrStage *IS = InstrItins->beginStage(InsnClass);
   unsigned FuncUnits = IS->getUnits();
   UnsignPair StateTrans = UnsignPair(CurrentState, FuncUnits);
   ReadTable(CurrentState);
@@ -75,9 +75,9 @@ bool DFAPacketizer::canReserveResources(const llvm::MCInstrDesc *MID) {
 
 // reserveResources - Reserve the resources occupied by a MCInstrDesc and
 // change the current state to reflect that change.
-void DFAPacketizer::reserveResources(const llvm::MCInstrDesc *MID) {
+void DFAPacketizer::reserveResources(const llvm37::MCInstrDesc *MID) {
   unsigned InsnClass = MID->getSchedClass();
-  const llvm::InstrStage *IS = InstrItins->beginStage(InsnClass);
+  const llvm37::InstrStage *IS = InstrItins->beginStage(InsnClass);
   unsigned FuncUnits = IS->getUnits();
   UnsignPair StateTrans = UnsignPair(CurrentState, FuncUnits);
   ReadTable(CurrentState);
@@ -88,19 +88,19 @@ void DFAPacketizer::reserveResources(const llvm::MCInstrDesc *MID) {
 
 // canReserveResources - Check if the resources occupied by a machine
 // instruction are available in the current state.
-bool DFAPacketizer::canReserveResources(llvm::MachineInstr *MI) {
-  const llvm::MCInstrDesc &MID = MI->getDesc();
+bool DFAPacketizer::canReserveResources(llvm37::MachineInstr *MI) {
+  const llvm37::MCInstrDesc &MID = MI->getDesc();
   return canReserveResources(&MID);
 }
 
 // reserveResources - Reserve the resources occupied by a machine
 // instruction and change the current state to reflect that change.
-void DFAPacketizer::reserveResources(llvm::MachineInstr *MI) {
-  const llvm::MCInstrDesc &MID = MI->getDesc();
+void DFAPacketizer::reserveResources(llvm37::MachineInstr *MI) {
+  const llvm37::MCInstrDesc &MID = MI->getDesc();
   reserveResources(&MID);
 }
 
-namespace llvm {
+namespace llvm37 {
 // DefaultVLIWScheduler - This class extends ScheduleDAGInstrs and overrides
 // Schedule method to build the dependence graph.
 class DefaultVLIWScheduler : public ScheduleDAGInstrs {

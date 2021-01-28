@@ -1,4 +1,4 @@
-set(LLVM_LINK_COMPONENTS
+set(LLVM37_LINK_COMPONENTS
   IPA
   Analysis
   AsmParser
@@ -6,7 +6,7 @@ set(LLVM_LINK_COMPONENTS
   Support
   )
 
-add_llvm_unittest(AnalysisTests
+add_llvm37_unittest(AnalysisTests
   AliasAnalysisTest.cpp
   CallGraphTest.cpp
   CFGTest.cpp

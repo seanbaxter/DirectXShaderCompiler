@@ -1,21 +1,21 @@
-llvm-nm - list LLVM bitcode and object file's symbol table
+llvm37-nm - list LLVM37 bitcode and object file's symbol table
 ==========================================================
 
 SYNOPSIS
 --------
 
-:program:`llvm-nm` [*options*] [*filenames...*]
+:program:`llvm37-nm` [*options*] [*filenames...*]
 
 DESCRIPTION
 -----------
 
-The :program:`llvm-nm` utility lists the names of symbols from the LLVM bitcode
+The :program:`llvm37-nm` utility lists the names of symbols from the LLVM37 bitcode
 files, object files, or :program:`ar` archives containing them, named on the
 command line.  Each symbol is listed along with some simple information about
 its provenance.  If no file name is specified, or *-* is used as a file name,
-:program:`llvm-nm` will process a file on its standard input stream.
+:program:`llvm37-nm` will process a file on its standard input stream.
 
-:program:`llvm-nm`'s default output format is the traditional BSD :program:`nm`
+:program:`llvm37-nm`'s default output format is the traditional BSD :program:`nm`
 output format.  Each such output record consists of an (optional) 8-digit
 hexadecimal address, followed by a type code character, followed by a name, for
 each symbol.  One record is printed per line; fields are separated by spaces.
@@ -55,16 +55,16 @@ D
 
  Something unrecognizable
 
-Because LLVM bitcode files typically contain objects that are not considered to
+Because LLVM37 bitcode files typically contain objects that are not considered to
 have addresses until they are linked into an executable image or dynamically
-compiled "just-in-time", :program:`llvm-nm` does not print an address for any
-symbol in an LLVM bitcode file, even symbols which are defined in the bitcode
+compiled "just-in-time", :program:`llvm37-nm` does not print an address for any
+symbol in an LLVM37 bitcode file, even symbols which are defined in the bitcode
 file.
 
 OPTIONS
 -------
 
-.. program:: llvm-nm
+.. program:: llvm37-nm
 
 .. option:: -B    (default)
 
@@ -129,18 +129,18 @@ OPTIONS
 BUGS
 ----
 
- * :program:`llvm-nm` cannot demangle C++ mangled names, like GNU :program:`nm`
+ * :program:`llvm37-nm` cannot demangle C++ mangled names, like GNU :program:`nm`
    can.
 
- * :program:`llvm-nm` does not support the full set of arguments that GNU
+ * :program:`llvm37-nm` does not support the full set of arguments that GNU
    :program:`nm` does.
 
 EXIT STATUS
 -----------
 
-:program:`llvm-nm` exits with an exit code of zero.
+:program:`llvm37-nm` exits with an exit code of zero.
 
 SEE ALSO
 --------
 
-llvm-dis, ar(1), nm(1)
+llvm37-dis, ar(1), nm(1)

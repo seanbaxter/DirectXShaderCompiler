@@ -9,7 +9,7 @@
 
 // FIXME: @compatibility_alias  AliasForTestPCH TestPCH;
 
-// http://llvm.org/PR12689
+// http://llvm37.org/PR12689
 @interface PR12689
 @end
 

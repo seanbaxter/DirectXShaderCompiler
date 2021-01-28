@@ -1,6 +1,6 @@
 //===--- Comment.h - Comment AST nodes --------------------------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,15 +11,15 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_AST_COMMENT_H
-#define LLVM_CLANG_AST_COMMENT_H
+#ifndef LLVM37_CLANG_AST_COMMENT_H
+#define LLVM37_CLANG_AST_COMMENT_H
 
 #include "clang/AST/CommentCommandTraits.h"
 #include "clang/AST/DeclObjC.h"
 #include "clang/AST/Type.h"
 #include "clang/Basic/SourceLocation.h"
-#include "llvm/ADT/ArrayRef.h"
-#include "llvm/ADT/StringRef.h"
+#include "llvm37/ADT/ArrayRef.h"
+#include "llvm37/ADT/StringRef.h"
 
 namespace clang {
 class Decl;
@@ -213,17 +213,17 @@ public:
   void dump(raw_ostream &OS, const CommandTraits *Traits,
             const SourceManager *SM) const;
 
-  SourceRange getSourceRange() const LLVM_READONLY { return Range; }
+  SourceRange getSourceRange() const LLVM37_READONLY { return Range; }
 
-  SourceLocation getLocStart() const LLVM_READONLY {
+  SourceLocation getLocStart() const LLVM37_READONLY {
     return Range.getBegin();
   }
 
-  SourceLocation getLocEnd() const LLVM_READONLY {
+  SourceLocation getLocEnd() const LLVM37_READONLY {
     return Range.getEnd();
   }
 
-  SourceLocation getLocation() const LLVM_READONLY { return Loc; }
+  SourceLocation getLocation() const LLVM37_READONLY { return Loc; }
 
   typedef Comment * const *child_iterator;
 
@@ -284,7 +284,7 @@ public:
 
   child_iterator child_end() const { return nullptr; }
 
-  StringRef getText() const LLVM_READONLY { return Text; }
+  StringRef getText() const LLVM37_READONLY { return Text; }
 
   bool isWhitespace() const {
     if (TextCommentBits.IsWhitespaceValid)
@@ -398,9 +398,9 @@ public:
            C->getCommentKind() <= LastHTMLTagCommentConstant;
   }
 
-  StringRef getTagName() const LLVM_READONLY { return TagName; }
+  StringRef getTagName() const LLVM37_READONLY { return TagName; }
 
-  SourceRange getTagNameSourceRange() const LLVM_READONLY {
+  SourceRange getTagNameSourceRange() const LLVM37_READONLY {
     SourceLocation L = getLocation();
     return SourceRange(L.getLocWithOffset(1),
                        L.getLocWithOffset(1 + TagName.size()));
@@ -692,7 +692,7 @@ public:
     }
   }
 
-  ParagraphComment *getParagraph() const LLVM_READONLY {
+  ParagraphComment *getParagraph() const LLVM37_READONLY {
     return Paragraph;
   }
 
@@ -707,7 +707,7 @@ public:
       setSourceRange(SourceRange(getLocStart(), NewLocEnd));
   }
 
-  CommandMarkerKind getCommandMarker() const LLVM_READONLY {
+  CommandMarkerKind getCommandMarker() const LLVM37_READONLY {
     return static_cast<CommandMarkerKind>(
         BlockCommandCommentBits.CommandMarker);
   }
@@ -748,11 +748,11 @@ public:
 
   static const char *getDirectionAsString(PassDirection D);
 
-  PassDirection getDirection() const LLVM_READONLY {
+  PassDirection getDirection() const LLVM37_READONLY {
     return static_cast<PassDirection>(ParamCommandCommentBits.Direction);
   }
 
-  bool isDirectionExplicit() const LLVM_READONLY {
+  bool isDirectionExplicit() const LLVM37_READONLY {
     return ParamCommandCommentBits.IsDirectionExplicit;
   }
 
@@ -775,11 +775,11 @@ public:
     return Args[0].Range;
   }
 
-  bool isParamIndexValid() const LLVM_READONLY {
+  bool isParamIndexValid() const LLVM37_READONLY {
     return ParamIndex != InvalidParamIndex;
   }
 
-  bool isVarArgParam() const LLVM_READONLY {
+  bool isVarArgParam() const LLVM37_READONLY {
     return ParamIndex == VarArgParamIndex;
   }
 
@@ -788,7 +788,7 @@ public:
     assert(isParamIndexValid());
   }
 
-  unsigned getParamIndex() const LLVM_READONLY {
+  unsigned getParamIndex() const LLVM37_READONLY {
     assert(isParamIndexValid());
     assert(!isVarArgParam());
     return ParamIndex;
@@ -845,7 +845,7 @@ public:
     return Args[0].Range;
   }
 
-  bool isPositionValid() const LLVM_READONLY {
+  bool isPositionValid() const LLVM37_READONLY {
     return !Position.empty();
   }
 
@@ -886,7 +886,7 @@ public:
 
   child_iterator child_end() const { return nullptr; }
 
-  StringRef getText() const LLVM_READONLY {
+  StringRef getText() const LLVM37_READONLY {
     return Text;
   }
 };
@@ -1084,11 +1084,11 @@ struct DeclInfo {
 
   void fill();
 
-  DeclKind getKind() const LLVM_READONLY {
+  DeclKind getKind() const LLVM37_READONLY {
     return static_cast<DeclKind>(Kind);
   }
 
-  TemplateDeclKind getTemplateKind() const LLVM_READONLY {
+  TemplateDeclKind getTemplateKind() const LLVM37_READONLY {
     return static_cast<TemplateDeclKind>(TemplateKind);
   }
 };
@@ -1122,11 +1122,11 @@ public:
     return reinterpret_cast<child_iterator>(Blocks.end()); 
   }
 
-  const Decl *getDecl() const LLVM_READONLY {
+  const Decl *getDecl() const LLVM37_READONLY {
     return ThisDeclInfo->CommentDecl;
   }
   
-  const DeclInfo *getDeclInfo() const LLVM_READONLY {
+  const DeclInfo *getDeclInfo() const LLVM37_READONLY {
     if (!ThisDeclInfo->IsFilled)
       ThisDeclInfo->fill();
     return ThisDeclInfo;

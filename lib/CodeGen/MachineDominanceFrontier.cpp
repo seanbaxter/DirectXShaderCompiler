@@ -1,21 +1,21 @@
 //===- MachineDominanceFrontier.cpp ---------------------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/CodeGen/MachineDominanceFrontier.h"
-#include "llvm/Analysis/DominanceFrontierImpl.h"
-#include "llvm/CodeGen/MachineDominators.h"
-#include "llvm/CodeGen/Passes.h"
+#include "llvm37/CodeGen/MachineDominanceFrontier.h"
+#include "llvm37/Analysis/DominanceFrontierImpl.h"
+#include "llvm37/CodeGen/MachineDominators.h"
+#include "llvm37/CodeGen/Passes.h"
 
 
-using namespace llvm;
+using namespace llvm37;
 
-namespace llvm {
+namespace llvm37 {
 template class DominanceFrontierBase<MachineBasicBlock>;
 template class ForwardDominanceFrontierBase<MachineBasicBlock>;
 }
@@ -35,7 +35,7 @@ MachineDominanceFrontier::MachineDominanceFrontier()
   initializeMachineDominanceFrontierPass(*PassRegistry::getPassRegistry());
 }
 
-char &llvm::MachineDominanceFrontierID = MachineDominanceFrontier::ID;
+char &llvm37::MachineDominanceFrontierID = MachineDominanceFrontier::ID;
 
 bool MachineDominanceFrontier::runOnMachineFunction(MachineFunction &) {
   releaseMemory();

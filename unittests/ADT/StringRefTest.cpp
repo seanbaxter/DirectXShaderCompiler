@@ -1,23 +1,23 @@
-//===- llvm/unittest/ADT/StringRefTest.cpp - StringRef unit tests ---------===//
+//===- llvm37/unittest/ADT/StringRefTest.cpp - StringRef unit tests ---------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/ADT/StringRef.h"
-#include "llvm/ADT/Hashing.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/ADT/StringExtras.h"
-#include "llvm/Support/Allocator.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/StringRef.h"
+#include "llvm37/ADT/Hashing.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/ADT/StringExtras.h"
+#include "llvm37/Support/Allocator.h"
+#include "llvm37/Support/raw_ostream.h"
 #include "gtest/gtest.h"
-using namespace llvm;
+using namespace llvm37;
 
-namespace llvm {
+namespace llvm37 {
 
 std::ostream &operator<<(std::ostream &OS, const StringRef &S) {
   OS << S.str();
@@ -78,7 +78,7 @@ TEST(StringRefTest, StringOps) {
   EXPECT_EQ( 0, StringRef("10").compare_numeric("10"));
   EXPECT_EQ( 0, StringRef("10a").compare_numeric("10a"));
   EXPECT_EQ( 1, StringRef("2").compare_numeric("1"));
-  EXPECT_EQ( 0, StringRef("llvm_v1i64_ty").compare_numeric("llvm_v1i64_ty"));
+  EXPECT_EQ( 0, StringRef("llvm37_v1i64_ty").compare_numeric("llvm37_v1i64_ty"));
   EXPECT_EQ( 1, StringRef("\xFF").compare_numeric("\1"));
   EXPECT_EQ( 1, StringRef("V16").compare_numeric("V1_q0"));
   EXPECT_EQ(-1, StringRef("V1_q0").compare_numeric("V16"));

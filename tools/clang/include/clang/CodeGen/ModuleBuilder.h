@@ -1,6 +1,6 @@
-//===--- CodeGen/ModuleBuilder.h - Build LLVM from ASTs ---------*- C++ -*-===//
+//===--- CodeGen/ModuleBuilder.h - Build LLVM37 from ASTs ---------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,14 +11,14 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_CODEGEN_MODULEBUILDER_H
-#define LLVM_CLANG_CODEGEN_MODULEBUILDER_H
+#ifndef LLVM37_CLANG_CODEGEN_MODULEBUILDER_H
+#define LLVM37_CLANG_CODEGEN_MODULEBUILDER_H
 
 #include "clang/AST/ASTConsumer.h"
 #include <string>
 
-namespace llvm {
-  class LLVMContext;
+namespace llvm37 {
+  class LLVM37Context;
   class Module;
 }
 
@@ -34,20 +34,20 @@ namespace clang {
   class CodeGenerator : public ASTConsumer {
     virtual void anchor();
   public:
-    virtual llvm::Module* GetModule() = 0;
-    virtual llvm::Module* ReleaseModule() = 0;
-    virtual const Decl *GetDeclForMangledName(llvm::StringRef MangledName) = 0;
+    virtual llvm37::Module* GetModule() = 0;
+    virtual llvm37::Module* ReleaseModule() = 0;
+    virtual const Decl *GetDeclForMangledName(llvm37::StringRef MangledName) = 0;
   };
 
-  /// CreateLLVMCodeGen - Create a CodeGenerator instance.
+  /// CreateLLVM37CodeGen - Create a CodeGenerator instance.
   /// It is the responsibility of the caller to call delete on
   /// the allocated CodeGenerator instance.
-  CodeGenerator *CreateLLVMCodeGen(DiagnosticsEngine &Diags,
+  CodeGenerator *CreateLLVM37CodeGen(DiagnosticsEngine &Diags,
                                    const std::string &ModuleName,
                                    const HeaderSearchOptions &HeaderSearchOpts,
                                    const PreprocessorOptions &PreprocessorOpts,
                                    const CodeGenOptions &CGO,
-                                   llvm::LLVMContext& C,
+                                   llvm37::LLVM37Context& C,
                                    CoverageSourceInfo *CoverageInfo = nullptr);
 }
 

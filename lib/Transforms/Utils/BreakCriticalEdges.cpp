@@ -1,6 +1,6 @@
 //===- BreakCriticalEdges.cpp - Critical Edge Elimination Pass ------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -15,20 +15,20 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Transforms/Scalar.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/Analysis/AliasAnalysis.h"
-#include "llvm/Analysis/CFG.h"
-#include "llvm/Analysis/LoopInfo.h"
-#include "llvm/IR/CFG.h"
-#include "llvm/IR/Dominators.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/Type.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Transforms/Utils/BasicBlockUtils.h"
-using namespace llvm;
+#include "llvm37/Transforms/Scalar.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/Analysis/AliasAnalysis.h"
+#include "llvm37/Analysis/CFG.h"
+#include "llvm37/Analysis/LoopInfo.h"
+#include "llvm37/IR/CFG.h"
+#include "llvm37/IR/Dominators.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/Type.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Transforms/Utils/BasicBlockUtils.h"
+using namespace llvm37;
 
 #define DEBUG_TYPE "break-crit-edges"
 
@@ -67,8 +67,8 @@ INITIALIZE_PASS(BreakCriticalEdges, "break-crit-edges",
                 "Break critical edges in CFG", false, false)
 
 // Publicly exposed interface to pass...
-char &llvm::BreakCriticalEdgesID = BreakCriticalEdges::ID;
-FunctionPass *llvm::createBreakCriticalEdgesPass() {
+char &llvm37::BreakCriticalEdgesID = BreakCriticalEdges::ID;
+FunctionPass *llvm37::createBreakCriticalEdgesPass() {
   return new BreakCriticalEdges();
 }
 
@@ -130,7 +130,7 @@ static void createPHIsForSplitLoopExit(ArrayRef<BasicBlock *> Preds,
 /// program because the address of the new block won't be the one that is jumped
 /// to.
 ///
-BasicBlock *llvm::SplitCriticalEdge(TerminatorInst *TI, unsigned SuccNum,
+BasicBlock *llvm37::SplitCriticalEdge(TerminatorInst *TI, unsigned SuccNum,
                                     const CriticalEdgeSplittingOptions &Options) {
   if (!isCriticalEdge(TI, SuccNum, Options.MergeIdenticalEdges))
     return nullptr;

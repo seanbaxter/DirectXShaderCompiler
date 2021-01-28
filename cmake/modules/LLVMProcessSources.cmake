@@ -1,10 +1,10 @@
 include(AddFileDependencies)
 include(CMakeParseArguments)
 
-function(llvm_replace_compiler_option var old new)
+function(llvm37_replace_compiler_option var old new)
   # Replaces a compiler option or switch `old' in `var' by `new'.
   # If `old' is not in `var', appends `new' to `var'.
-  # Example: llvm_replace_compiler_option(CMAKE_CXX_FLAGS_RELEASE "-O3" "-O2")
+  # Example: llvm37_replace_compiler_option(CMAKE_CXX_FLAGS_RELEASE "-O3" "-O2")
   # If the option already is on the variable, don't add it:
   if( "${${var}}" MATCHES "(^| )${new}($| )" )
     set(n "")
@@ -17,7 +17,7 @@ function(llvm_replace_compiler_option var old new)
     set( ${var} "${${var}} ${n}" )
   endif()
   set( ${var} "${${var}}" PARENT_SCOPE )
-endfunction(llvm_replace_compiler_option)
+endfunction(llvm37_replace_compiler_option)
 
 macro(add_td_sources srcs)
   file(GLOB tds *.td)
@@ -80,7 +80,7 @@ function(llvm_check_source_file_list)
     # Don't reject hidden files. Some editors create backups in the
     # same directory as the file.
     if (NOT "${fn}" MATCHES "^\\.")
-      list(FIND LLVM_OPTIONAL_SOURCES ${fn} idx)
+      list(FIND LLVM37_OPTIONAL_SOURCES ${fn} idx)
       if( idx LESS 0 )
         list(FIND listed_lower ${fn_lower} idx) # HLSL Change - case insensitive
         if( idx LESS 0 )

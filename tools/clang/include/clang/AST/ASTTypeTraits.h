@@ -1,6 +1,6 @@
 //===--- ASTTypeTraits.h ----------------------------------------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -13,8 +13,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_AST_ASTTYPETRAITS_H
-#define LLVM_CLANG_AST_ASTTYPETRAITS_H
+#ifndef LLVM37_CLANG_AST_ASTTYPETRAITS_H
+#define LLVM37_CLANG_AST_ASTTYPETRAITS_H
 
 #include "clang/AST/ASTFwd.h"
 #include "clang/AST/Decl.h"
@@ -23,10 +23,10 @@
 #include "clang/AST/TemplateBase.h"
 #include "clang/AST/TypeLoc.h"
 #include "clang/Basic/LLVM.h"
-#include "llvm/ADT/DenseMapInfo.h"
-#include "llvm/Support/AlignOf.h"
+#include "llvm37/ADT/DenseMapInfo.h"
+#include "llvm37/Support/AlignOf.h"
 
-namespace llvm {
+namespace llvm37 {
 
 class raw_ostream;
 
@@ -241,10 +241,10 @@ public:
   const void *getMemoizationData() const { return MemoizationData; }
 
   /// \brief Prints the node to the given output stream.
-  void print(llvm::raw_ostream &OS, const PrintingPolicy &PP) const;
+  void print(llvm37::raw_ostream &OS, const PrintingPolicy &PP) const;
 
   /// \brief Dumps the node to the given output stream.
-  void dump(llvm::raw_ostream &OS, SourceManager &SM) const;
+  void dump(llvm37::raw_ostream &OS, SourceManager &SM) const;
 
   /// \brief For nodes which represent textual entities in the source code,
   /// return their SourceRange.  For all other nodes, return SourceRange().
@@ -353,10 +353,10 @@ private:
   /// \c QualTypes, \c NestedNameSpecifierLocs, \c TypeLocs and
   /// \c TemplateArguments on the other hand do not have storage or unique
   /// pointers and thus need to be stored by value.
-  typedef llvm::AlignedCharArrayUnion<
+  typedef llvm37::AlignedCharArrayUnion<
       Decl *, Stmt *, Type *, NestedNameSpecifier *, CXXCtorInitializer *>
       KindsByPointer;
-  llvm::AlignedCharArrayUnion<KindsByPointer, TemplateArgument,
+  llvm37::AlignedCharArrayUnion<KindsByPointer, TemplateArgument,
                               NestedNameSpecifierLoc, QualType, TypeLoc>
       Storage;
 };
@@ -414,12 +414,12 @@ template <typename T, typename EnablerT> struct DynTypedNode::BaseConverter {
 } // end namespace ast_type_traits
 } // end namespace clang
 
-namespace llvm {
+namespace llvm37 {
 
 template <>
 struct DenseMapInfo<clang::ast_type_traits::ASTNodeKind>
     : clang::ast_type_traits::ASTNodeKind::DenseMapInfo {};
 
-}  // end namespace llvm
+}  // end namespace llvm37
 
 #endif

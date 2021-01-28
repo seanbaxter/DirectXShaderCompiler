@@ -1,4 +1,4 @@
-# RUN: llvm-mc -triple i386-unknown-unknown %s 2> %t.err | FileCheck %s
+# RUN: llvm37-mc -triple i386-unknown-unknown %s 2> %t.err | FileCheck %s
 # RUN: FileCheck --check-prefix=CHECK-WARNINGS %s < %t.err
 
 # CHECK: TEST0:

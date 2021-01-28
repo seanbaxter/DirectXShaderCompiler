@@ -25,7 +25,7 @@ for.body:
 ; CHECK: st.f32
   %inc = add nuw nsw i32 %i.06, 1
   %exitcond = icmp eq i32 %inc, 2
-  br i1 %exitcond, label %for.end, label %for.body, !llvm.loop !0
+  br i1 %exitcond, label %for.end, label %for.body, !llvm37.loop !0
 ; CHECK-NOT: ld.f32
 ; CHECK-NOT: st.f32
 

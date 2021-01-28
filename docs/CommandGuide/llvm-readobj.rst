@@ -1,22 +1,22 @@
-llvm-readobj - LLVM Object Reader
+llvm37-readobj - LLVM37 Object Reader
 =================================
 
 SYNOPSIS
 --------
 
-:program:`llvm-readobj` [*options*] [*input...*]
+:program:`llvm37-readobj` [*options*] [*input...*]
 
 DESCRIPTION
 -----------
 
-The :program:`llvm-readobj` tool displays low-level format-specific information
+The :program:`llvm37-readobj` tool displays low-level format-specific information
 about one or more object files. The tool and its output is primarily designed
 for use in FileCheck-based tests.
 
 OPTIONS
 -------
 
-If ``input`` is "``-``" or omitted, :program:`llvm-readobj` reads from standard
+If ``input`` is "``-``" or omitted, :program:`llvm37-readobj` reads from standard
 input. Otherwise, it will read from the specified ``filenames``.
 
 .. option:: -help
@@ -83,4 +83,4 @@ input. Otherwise, it will read from the specified ``filenames``.
 EXIT STATUS
 -----------
 
-:program:`llvm-readobj` returns 0.
+:program:`llvm37-readobj` returns 0.

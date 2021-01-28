@@ -1,15 +1,15 @@
 #!/usr/bin/python3
-##===- utils/llvmbuild - Build the LLVM project ----------------*-python-*-===##
+##===- utils/llvmbuild - Build the LLVM37 project ----------------*-python-*-===##
 #
-#                     The LLVM Compiler Infrastructure
+#                     The LLVM37 Compiler Infrastructure
 #
 # This file is distributed under the University of Illinois Open Source
 # License. See LICENSE.TXT for details.
 #
 ##===----------------------------------------------------------------------===##
 #
-# This script builds many different flavors of the LLVM ecosystem.  It
-# will build LLVM, Clang and dragonegg as well as run tests on them.
+# This script builds many different flavors of the LLVM37 ecosystem.  It
+# will build LLVM37, Clang and dragonegg as well as run tests on them.
 # This script is convenient to use to check builds and tests before
 # committing changes to the upstream repository
 #
@@ -17,22 +17,22 @@
 #
 # official
 #   dragonegg
-#   llvm
+#   llvm37
 #     tools
 #       clang
 # staging
 #   dragonegg
-#   llvm
+#   llvm37
 #     tools
 #       clang
 # commit
 #   dragonegg
-#   llvm
+#   llvm37
 #     tools
 #       clang
 #
 # In a typical workflow, the "official" tree always contains unchanged
-# sources from the main LLVM project repositories.  The "staging" tree
+# sources from the main LLVM37 project repositories.  The "staging" tree
 # is where local work is done.  A set of changes resides there waiting
 # to be moved upstream.  The "commit" tree is where changes from
 # "staging" make their way upstream.  Individual incremental changes
@@ -43,26 +43,26 @@
 # 
 # A build may be invoked as such:
 #
-# llvmbuild --src=~/llvm/commit --src=~/llvm/staging --src=~/llvm/official
+# llvmbuild --src=~/llvm37/commit --src=~/llvm37/staging --src=~/llvm37/official
 #   --build=debug --build=release --build=paranoid
 #   --prefix=/home/greened/install --builddir=/home/greened/build
 #
-# This will build the LLVM ecosystem, including LLVM, Clangand
+# This will build the LLVM37 ecosystem, including LLVM37, Clangand
 # dragonegg, putting build results in ~/build and installing tools in
-# ~/install.  llvm-compilers-check creates separate build and install
+# ~/install.  llvm37-compilers-check creates separate build and install
 # directories for each source/build flavor.  In the above example,
 # llvmbuild will build debug, release and paranoid (debug+checks)
 # flavors from each source tree (official, staging and commit) for a
 # total of nine builds.  All builds will be run in parallel.
 #
 # The user may control parallelism via the --jobs and --threads
-# switches.  --jobs tells llvm-compilers-checl the maximum total
+# switches.  --jobs tells llvm37-compilers-checl the maximum total
 # number of builds to activate in parallel.  The user may think of it
 # as equivalent to the GNU make -j switch.  --threads tells
-# llvm-compilers-check how many worker threads to use to accomplish
+# llvm37-compilers-check how many worker threads to use to accomplish
 # those builds.  If --threads is less than --jobs, --threads workers
 # will be launched and each one will pick a source/flavor combination
-# to build.  Then llvm-compilers-check will invoke GNU make with -j
+# to build.  Then llvm37-compilers-check will invoke GNU make with -j
 # (--jobs / --threads) to use up the remaining job capacity.  Once a
 # worker is finished with a build, it will pick another combination
 # off the list and start building it.
@@ -140,7 +140,7 @@ def add_options(parser):
     parser.add_option("--builddir",
                       help=("Root build directory [default: %default]"))
     parser.add_option("--extra-llvm-config-flags", default="",
-                      help=("Extra flags to pass to llvm configure [default: %default]"))
+                      help=("Extra flags to pass to llvm37 configure [default: %default]"))
     parser.add_option("--force-configure", default=False, action="store_true",
                       help=("Force reconfigure of all components"))
     parser.add_option("--no-dragonegg", default=False, action="store_true",
@@ -266,7 +266,7 @@ class Builder(threading.Thread):
         self.install_prefix = options.prefix
         self.options = options
         self.component_abbrev = dict(
-            llvm="llvm",
+            llvm37="llvm37",
             dragonegg="degg")
     def run(self):
         while True:
@@ -366,7 +366,7 @@ class Builder(threading.Thread):
         cxxroot = os.path.dirname(cxxroot)        # Remove the include
 
         configure_flags = dict(
-            llvm=dict(debug=["--prefix=" + self.install_prefix,
+            llvm37=dict(debug=["--prefix=" + self.install_prefix,
                              "--enable-assertions",
                              "--disable-optimized",
                              "--with-gcc-toolchain=" + cxxroot],
@@ -383,12 +383,12 @@ class Builder(threading.Thread):
                            paranoid=[]))
 
         if (self.options.enable_werror):
-            configure_flags["llvm"]["debug"].append("--enable-werror")
-            configure_flags["llvm"]["release"].append("--enable-werror")
-            configure_flags["llvm"]["paranoid"].append("--enable-werror")
+            configure_flags["llvm37"]["debug"].append("--enable-werror")
+            configure_flags["llvm37"]["release"].append("--enable-werror")
+            configure_flags["llvm37"]["paranoid"].append("--enable-werror")
 
         configure_env = dict(
-            llvm=dict(debug=dict(CC=self.cc,
+            llvm37=dict(debug=dict(CC=self.cc,
                                  CXX=self.cxx),
                       release=dict(CC=self.cc,
                                    CXX=self.cxx),
@@ -402,7 +402,7 @@ class Builder(threading.Thread):
                                          CXX=self.cxx)))
 
         make_flags = dict(
-            llvm=dict(debug=["-j" + str(self.jobs)],
+            llvm37=dict(debug=["-j" + str(self.jobs)],
                       release=["-j" + str(self.jobs)],
                       paranoid=["-j" + str(self.jobs)]),
             dragonegg=dict(debug=["-j" + str(self.jobs)],
@@ -410,18 +410,18 @@ class Builder(threading.Thread):
                            paranoid=["-j" + str(self.jobs)]))
 
         make_env = dict(
-            llvm=dict(debug=dict(),
+            llvm37=dict(debug=dict(),
                       release=dict(),
                       paranoid=dict()),
             dragonegg=dict(debug=dict(GCC=self.cc,
-                                      LLVM_CONFIG=self.install_prefix + "/bin/llvm-config"),
+                                      LLVM37_CONFIG=self.install_prefix + "/bin/llvm-config"),
                            release=dict(GCC=self.cc,
-                                        LLVM_CONFIG=self.install_prefix + "/bin/llvm-config"),
+                                        LLVM37_CONFIG=self.install_prefix + "/bin/llvm-config"),
                            paranoid=dict(GCC=self.cc,
-                                         LLVM_CONFIG=self.install_prefix + "/bin/llvm-config")))
+                                         LLVM37_CONFIG=self.install_prefix + "/bin/llvm-config")))
 
         make_install_flags = dict(
-            llvm=dict(debug=["install"],
+            llvm37=dict(debug=["install"],
                       release=["install"],
                       paranoid=["install"]),
             dragonegg=dict(debug=["install"],
@@ -429,7 +429,7 @@ class Builder(threading.Thread):
                            paranoid=["install"]))
 
         make_install_env = dict(
-            llvm=dict(debug=dict(),
+            llvm37=dict(debug=dict(),
                       release=dict(),
                       paranoid=dict()),
             dragonegg=dict(debug=dict(),
@@ -437,7 +437,7 @@ class Builder(threading.Thread):
                            paranoid=dict()))
 
         make_check_flags = dict(
-            llvm=dict(debug=["check"],
+            llvm37=dict(debug=["check"],
                       release=["check"],
                       paranoid=["check"]),
             dragonegg=dict(debug=["check"],
@@ -445,7 +445,7 @@ class Builder(threading.Thread):
                            paranoid=["check"]))
 
         make_check_env = dict(
-            llvm=dict(debug=dict(),
+            llvm37=dict(debug=dict(),
                       release=dict(),
                       paranoid=dict()),
             dragonegg=dict(debug=dict(),
@@ -524,7 +524,7 @@ class Builder(threading.Thread):
                           + str(builddir))
 
         configure_files = dict(
-            llvm=[(srcdir + "/configure", builddir + "/Makefile")],
+            llvm37=[(srcdir + "/configure", builddir + "/Makefile")],
             dragonegg=[(None,None)])
 
 
@@ -575,7 +575,7 @@ class Builder(threading.Thread):
 
 # Global constants
 build_abbrev = dict(debug="dbg", release="opt", paranoid="par")
-components = ["llvm", "dragonegg"]
+components = ["llvm37", "dragonegg"]
 
 # Parse options
 parser = optparse.OptionParser(version="%prog 1.0")

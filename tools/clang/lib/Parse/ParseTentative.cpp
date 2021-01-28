@@ -1,6 +1,6 @@
 //===--- ParseTentative.cpp - Ambiguity Resolution Parsing ----------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -1156,7 +1156,7 @@ Parser::isCXXDeclarationSpecifier(Parser::TPResult BracedCastResult,
       // this is ambiguous. Typo-correct to type and expression keywords and
       // to types and identifiers, in order to try to recover from errors.
       switch (TryAnnotateName(false /* no nested name specifier */,
-                              llvm::make_unique<TentativeParseCCC>(Next))) {
+                              llvm37::make_unique<TentativeParseCCC>(Next))) {
       case ANK_Error:
         return TPResult::Error;
       case ANK_TentativeDecl:

@@ -1,4 +1,4 @@
-// RUN: not llvm-mc -triple i386 %s 2>&1 | FileCheck %s
+// RUN: not llvm37-mc -triple i386 %s 2>&1 | FileCheck %s
 
 	.error 0
 // CHECK: error: .error argument must be a string

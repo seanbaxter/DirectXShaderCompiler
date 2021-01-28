@@ -1,13 +1,13 @@
-//==--- CodeGenABITypes.cpp - Convert Clang types to LLVM types for ABI ----==//
+//==--- CodeGenABITypes.cpp - Convert Clang types to LLVM37 types for ABI ----==//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 //
-// CodeGenABITypes is a simple interface for getting LLVM types for
+// CodeGenABITypes is a simple interface for getting LLVM37 types for
 // the parameters and the return value of a function given the Clang
 // types.
 //
@@ -27,8 +27,8 @@ using namespace clang;
 using namespace CodeGen;
 
 CodeGenABITypes::CodeGenABITypes(ASTContext &C,
-                                 llvm::Module &M,
-                                 const llvm::DataLayout &TD,
+                                 llvm37::Module &M,
+                                 const llvm37::DataLayout &TD,
                                  CoverageSourceInfo *CoverageInfo)
   : CGO(new CodeGenOptions),
     HSO(new HeaderSearchOptions),
@@ -71,7 +71,7 @@ CodeGenABITypes::arrangeFreeFunctionCall(CanQualType returnType,
                                          ArrayRef<CanQualType> argTypes,
                                          FunctionType::ExtInfo info,
                                          RequiredArgs args) {
-  return CGM->getTypes().arrangeLLVMFunctionInfo(
+  return CGM->getTypes().arrangeLLVM37FunctionInfo(
       returnType, /*IsInstanceMethod=*/false, /*IsChainCall=*/false, argTypes,
       info, args);
 }

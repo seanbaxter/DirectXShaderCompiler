@@ -12,20 +12,20 @@
 #include "DxilConvPasses/NormalizeDxil.h"
 #include "dxc/Support/Global.h"
 
-#include "llvm/IR/BasicBlock.h"
-#include "llvm/IR/Constant.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/Instruction.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/Dominators.h"
+#include "llvm37/IR/BasicBlock.h"
+#include "llvm37/IR/Constant.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/Instruction.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/Dominators.h"
 
 #include "dxc/DXIL/DXILOperations.h"
 #include "dxc/DXIL/DxilInstructions.h"
 
 #include <vector>
 
-using namespace llvm;
+using namespace llvm37;
 
 //----------------------- Normalize Implementation ------------------------//
 
@@ -154,7 +154,7 @@ INITIALIZE_PASS_BEGIN(NormalizeDxilPass, "normalizedxil", "Normalize dxil pass",
 INITIALIZE_PASS_END(NormalizeDxilPass, "normalizedxil", "Normalize dxil pass", false, false)
 
 
-FunctionPass *llvm::createNormalizeDxilPass() {
+FunctionPass *llvm37::createNormalizeDxilPass() {
   return new NormalizeDxilPass();
 }
 

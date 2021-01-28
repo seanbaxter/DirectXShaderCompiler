@@ -1,6 +1,6 @@
 //===- unittests/AST/CommentParser.cpp ------ Comment parser tests --------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -17,12 +17,12 @@
 #include "clang/Basic/DiagnosticOptions.h"
 #include "clang/Basic/FileManager.h"
 #include "clang/Basic/SourceManager.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/Support/Allocator.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/Support/Allocator.h"
 #include "gtest/gtest.h"
 #include <vector>
 
-using namespace llvm;
+using namespace llvm37;
 using namespace clang;
 
 namespace clang {
@@ -47,7 +47,7 @@ protected:
   IntrusiveRefCntPtr<DiagnosticIDs> DiagID;
   DiagnosticsEngine Diags;
   SourceManager SourceMgr;
-  llvm::BumpPtrAllocator Allocator;
+  llvm37::BumpPtrAllocator Allocator;
   CommandTraits Traits;
 
   FullComment *parseString(const char *Source);
@@ -65,8 +65,8 @@ FullComment *CommentParserTest::parseString(const char *Source) {
   FullComment *FC = P.parseFullComment();
 
   if (DEBUG) {
-    llvm::errs() << "=== Source:\n" << Source << "\n=== AST:\n";
-    FC->dump(llvm::errs(), &Traits, &SourceMgr);
+    llvm37::errs() << "=== Source:\n" << Source << "\n=== AST:\n";
+    FC->dump(llvm37::errs(), &Traits, &SourceMgr);
   }
 
   Token Tok;

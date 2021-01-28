@@ -1,4 +1,4 @@
-// RUN: %clang_cc1 -std=c++1y %s -verify -emit-llvm-only
+// RUN: %clang_cc1 -std=c++1y %s -verify -emit-llvm37-only
 
 namespace variadic_expansion {
   int f(int &, char &) { return 0; }

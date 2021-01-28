@@ -58,7 +58,7 @@ namespace MainNs
             /// </summary>
             HlslText,
             /// <summary>
-            /// LLVM source code.
+            /// LLVM37 source code.
             /// </summary>
             AsmText,
             /// <summary>
@@ -740,7 +740,7 @@ namespace MainNs
                                 case AsmRangeKind.Comment:
                                     color = Color.DarkGreen;
                                     break;
-                                case AsmRangeKind.LLVMTypeName:
+                                case AsmRangeKind.LLVM37TypeName:
                                 case AsmRangeKind.Keyword:
                                 case AsmRangeKind.Instruction:
                                     color = Color.Blue;

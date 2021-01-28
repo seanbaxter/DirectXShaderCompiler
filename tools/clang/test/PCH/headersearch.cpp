@@ -22,15 +22,15 @@
 // RUN: cp -R %t_orig %t_moved
 
 // Check diagnostic with location in original source:
-// RUN: %clang_cc1 -triple %itanium_abi_triple -include-pch all.h.pch -I%t_moved -I%t_moved/sub2 -Wpadded -emit-llvm-only %s 2> %t.stderr
+// RUN: %clang_cc1 -triple %itanium_abi_triple -include-pch all.h.pch -I%t_moved -I%t_moved/sub2 -Wpadded -emit-llvm37-only %s 2> %t.stderr
 // RUN: grep 'struct orig_sub' %t.stderr
 
 // Check diagnostic with 2nd location in original source:
-// RUN: not %clang_cc1 -triple %itanium_abi_triple -DREDECL -include-pch all.h.pch -I%t_moved -I%t_moved/sub2 -emit-llvm-only %s 2> %t.stderr
+// RUN: not %clang_cc1 -triple %itanium_abi_triple -DREDECL -include-pch all.h.pch -I%t_moved -I%t_moved/sub2 -emit-llvm37-only %s 2> %t.stderr
 // RUN: grep 'void foo' %t.stderr
 
 // Check diagnostic with instantiation location in original source:
-// RUN: not %clang_cc1 -triple %itanium_abi_triple -DINSTANTIATION -include-pch all.h.pch -I%t_moved -I%t_moved/sub2 -emit-llvm-only %s 2> %t.stderr
+// RUN: not %clang_cc1 -triple %itanium_abi_triple -DINSTANTIATION -include-pch all.h.pch -I%t_moved -I%t_moved/sub2 -emit-llvm37-only %s 2> %t.stderr
 // RUN: grep 'orig_sub2_1' %t.stderr
 
 void qq(orig_sub*) {all();}

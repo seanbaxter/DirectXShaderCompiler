@@ -1,4 +1,4 @@
-; RUN: llvm-link %s /dev/null -S -o - | FileCheck %s
+; RUN: llvm37-link %s /dev/null -S -o - | FileCheck %s
 
 $c = comdat largest
 

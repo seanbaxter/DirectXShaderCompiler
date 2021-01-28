@@ -1,6 +1,6 @@
 //===--- SemaCXXScopeSpec.cpp - Semantic Analysis for C++ scope specifiers-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -21,8 +21,8 @@
 #include "clang/Sema/DeclSpec.h"
 #include "clang/Sema/Lookup.h"
 #include "clang/Sema/Template.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/Support/raw_ostream.h"
 using namespace clang;
 
 /// \brief Find the current instantiation that associated with the given type.
@@ -131,7 +131,7 @@ DeclContext *Sema::computeDeclContext(const CXXScopeSpec &SS,
 
   switch (NNS->getKind()) {
   case NestedNameSpecifier::Identifier:
-    llvm_unreachable("Dependent nested-name-specifier has no DeclContext");
+    llvm37_unreachable("Dependent nested-name-specifier has no DeclContext");
 
   case NestedNameSpecifier::Namespace:
     return NNS->getAsNamespace();
@@ -153,7 +153,7 @@ DeclContext *Sema::computeDeclContext(const CXXScopeSpec &SS,
     return NNS->getAsRecordDecl();
   }
 
-  llvm_unreachable("Invalid NestedNameSpecifier::Kind!");
+  llvm37_unreachable("Invalid NestedNameSpecifier::Kind!");
 }
 
 bool Sema::isDependentScopeSpecifier(const CXXScopeSpec &SS) {
@@ -589,7 +589,7 @@ bool Sema::BuildCXXNestedNameSpecifier(Scope *S,
     Found.clear();
     if (TypoCorrection Corrected = CorrectTypo(
             Found.getLookupNameInfo(), Found.getLookupKind(), S, &SS,
-            llvm::make_unique<NestedNameSpecifierValidatorCCC>(*this),
+            llvm37::make_unique<NestedNameSpecifierValidatorCCC>(*this),
             CTK_ErrorRecovery, LookupCtx, EnteringContext)) {
       if (LookupCtx) {
         bool DroppedSpecifier =
@@ -718,7 +718,7 @@ bool Sema::BuildCXXNestedNameSpecifier(Scope *S,
         = TLB.push<SubstTemplateTypeParmPackTypeLoc>(T);
       TL.setNameLoc(IdentifierLoc);
     } else {
-      llvm_unreachable("Unhandled TypeDecl node in nested-name-specifier");
+      llvm37_unreachable("Unhandled TypeDecl node in nested-name-specifier");
     }
 
     if (T->isEnumeralType())
@@ -958,7 +958,7 @@ void *Sema::SaveNestedNameSpecifierAnnotation(CXXScopeSpec &SS) {
 
   void *Mem = Context.Allocate((sizeof(NestedNameSpecifierAnnotation) +
                                                         SS.location_size()),
-                               llvm::alignOf<NestedNameSpecifierAnnotation>());
+                               llvm37::alignOf<NestedNameSpecifierAnnotation>());
   NestedNameSpecifierAnnotation *Annotation
     = new (Mem) NestedNameSpecifierAnnotation;
   Annotation->NNS = SS.getScopeRep();
@@ -1014,7 +1014,7 @@ bool Sema::ShouldEnterDeclaratorScope(Scope *S, const CXXScopeSpec &SS) {
     return true;
   }
 
-  llvm_unreachable("Invalid NestedNameSpecifier::Kind!");
+  llvm37_unreachable("Invalid NestedNameSpecifier::Kind!");
 }
 
 /// ActOnCXXEnterDeclaratorScope - Called when a C++ scope specifier (global

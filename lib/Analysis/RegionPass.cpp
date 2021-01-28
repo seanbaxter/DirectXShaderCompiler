@@ -1,6 +1,6 @@
 //===- RegionPass.cpp - Region Pass and Region Pass Manager ---------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -14,12 +14,12 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Analysis/RegionPass.h"
-#include "llvm/Analysis/RegionIterator.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/Timer.h"
-#include "llvm/Support/raw_ostream.h"
-using namespace llvm;
+#include "llvm37/Analysis/RegionPass.h"
+#include "llvm37/Analysis/RegionIterator.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/Timer.h"
+#include "llvm37/Support/raw_ostream.h"
+using namespace llvm37;
 #define DEBUG_TYPE "regionpassmgr"
 
 //===----------------------------------------------------------------------===//

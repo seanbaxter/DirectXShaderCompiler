@@ -1,4 +1,4 @@
-// RUN: llvm-mc -triple x86_64-linux-gnu %s | FileCheck %s
+// RUN: llvm37-mc -triple x86_64-linux-gnu %s | FileCheck %s
 .macro abc arg:vararg=nop
   \arg
 .endm

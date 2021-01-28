@@ -1,6 +1,6 @@
 //===--- TargetCXXABI.h - C++ ABI Target Configuration ----------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -13,11 +13,11 @@
 ///
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_BASIC_TARGETCXXABI_H
-#define LLVM_CLANG_BASIC_TARGETCXXABI_H
+#ifndef LLVM37_CLANG_BASIC_TARGETCXXABI_H
+#define LLVM37_CLANG_BASIC_TARGETCXXABI_H
 
-#include "llvm/ADT/Triple.h"
-#include "llvm/Support/ErrorHandling.h"
+#include "llvm37/ADT/Triple.h"
+#include "llvm37/Support/ErrorHandling.h"
 
 namespace clang {
 
@@ -126,7 +126,7 @@ public:
     case Microsoft:
       return false;
     }
-    llvm_unreachable("bad ABI kind");
+    llvm37_unreachable("bad ABI kind");
   }
 
   /// \brief Is this ABI an MSVC-compatible ABI?
@@ -143,7 +143,7 @@ public:
     case Microsoft:
       return true;
     }
-    llvm_unreachable("bad ABI kind");
+    llvm37_unreachable("bad ABI kind");
   }
 
   /// \brief Is the default C++ member function calling convention
@@ -223,7 +223,7 @@ public:
     case GenericMIPS:
       return true;
     }
-    llvm_unreachable("bad ABI kind");
+    llvm37_unreachable("bad ABI kind");
   }
 
   /// When is record layout allowed to allocate objects in the tail
@@ -279,11 +279,11 @@ public:
     case Microsoft:
       return AlwaysUseTailPadding;
     }
-    llvm_unreachable("bad ABI kind");
+    llvm37_unreachable("bad ABI kind");
   }
 
   /// Try to parse an ABI name, returning false on error.
-  bool tryParse(llvm::StringRef name);
+  bool tryParse(llvm37::StringRef name);
 
   friend bool operator==(const TargetCXXABI &left, const TargetCXXABI &right) {
     return left.getKind() == right.getKind();

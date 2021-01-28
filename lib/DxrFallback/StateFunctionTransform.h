@@ -1,13 +1,13 @@
 #pragma once
 
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/SetVector.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/SetVector.h"
 
 #include <map>
 #include <string>
 #include <vector>
 
-namespace llvm
+namespace llvm37
 {
   class AllocaInst;
   class BasicBlock;
@@ -25,8 +25,8 @@ namespace llvm
 
 class LiveValues;
 
-typedef std::vector<llvm::BasicBlock*>  BasicBlockVector;
-typedef llvm::SetVector<llvm::Instruction*> InstructionSetVector;
+typedef std::vector<llvm37::BasicBlock*>  BasicBlockVector;
+typedef llvm37::SetVector<llvm37::Instruction*> InstructionSetVector;
 
 
 //==============================================================================
@@ -146,7 +146,7 @@ typedef llvm::SetVector<llvm::Instruction*> InstructionSetVector;
 // specified to SFT, which will redirect the defs from the args to corresponding
 // values on the stack.
 //
-// The following runtime (LLVM) functions are used by SFT (all sizes and offsets
+// The following runtime (LLVM37) functions are used by SFT (all sizes and offsets
 // are in terms of ints):
 //   void stackFramePush(<RuntimeDataTy> runtimeData, i32 size)
 //   void stackFramePop(<RuntimeDataTy> runtimeData, i32 size)
@@ -178,24 +178,24 @@ public:
   // functions that which have been or will be transformed to state functions, 
   // including func. The runtimeDataArgTy is the type to use for the first argument
   // in state functions.
-  StateFunctionTransform(llvm::Function* func, const std::vector<std::string>& candidateFuncNames, llvm::Type* runtimeDataArgTy);
+  StateFunctionTransform(llvm37::Function* func, const std::vector<std::string>& candidateFuncNames, llvm37::Type* runtimeDataArgTy);
 
   // Optional parameters to be specified before run()
   void setAttributeSize(int sizeInBytes); // needed for TraceRay()
   void setParameterInfo(const std::vector<ParameterSemanticType>& paramTypes, bool useCommittedAttr = true);
-  void setResourceGlobals(const std::set<llvm::Value*>& resources);
+  void setResourceGlobals(const std::set<llvm37::Value*>& resources);
 
-  static llvm::Function* createDummyRuntimeDataArgFunc(llvm::Module* M, llvm::Type* runtimeDataArgTy);
+  static llvm37::Function* createDummyRuntimeDataArgFunc(llvm37::Module* M, llvm37::Type* runtimeDataArgTy);
 
   // Generates state functions from func into the same module. The original function
   // is left only as a declaration.
-  void run(std::vector<llvm::Function*>& stateFunctions, _Out_ unsigned int &shaderStackSize);
+  void run(std::vector<llvm37::Function*>& stateFunctions, _Out_ unsigned int &shaderStackSize);
 
   // candidateFuncEntryStateIds corresponding to the candidateFuncNames passed to
   // the constructor. stateIDs are computed as candidateFuncEntryStateIds[functionIdx]
   // + substateIdx, where functionIdx and substateIdx come from the arguments to
   // the placeholder stateID function.
-  static void finalizeStateIds(llvm::Module* module, const std::vector<int>& candidateFuncEntryStateIds);
+  static void finalizeStateIds(llvm37::Module* module, const std::vector<int>& candidateFuncEntryStateIds);
 
   // Outputs detailed diagnostic information if set to true.
   void setVerbose(bool val);
@@ -205,7 +205,7 @@ public:
 
 private:
   // Function to transform
-  llvm::Function* m_function = nullptr;
+  llvm37::Function* m_function = nullptr;
 
   // Name of the function to transform
   std::string m_functionName;
@@ -218,78 +218,78 @@ private:
   // by the stateID placeholder function.
   const std::vector<std::string>& m_candidateFuncNames;
 
-  llvm::Type* m_runtimeDataArgTy = nullptr;
-  llvm::Value* m_runtimeDataArg = nullptr;     // set in init() and changeFunctionSignature()
-  llvm::Value* m_stackFrameSizeVal = nullptr;  // set in init() and preserveLiveValuesAcrossCallsites()
+  llvm37::Type* m_runtimeDataArgTy = nullptr;
+  llvm37::Value* m_runtimeDataArg = nullptr;     // set in init() and changeFunctionSignature()
+  llvm37::Value* m_stackFrameSizeVal = nullptr;  // set in init() and preserveLiveValuesAcrossCallsites()
 
   int m_attributeSizeInBytes = -1;
   std::vector<ParameterSemanticType> m_paramTypes;
   bool m_useCommittedAttr = false;
-  const std::set<llvm::Value*>* m_resources;
+  const std::set<llvm37::Value*>* m_resources;
 
-  std::vector<llvm::CallInst*> m_callSites;
+  std::vector<llvm37::CallInst*> m_callSites;
   std::vector<int> m_callSiteFunctionIdx;
-  std::vector<llvm::CallInst*> m_movePayloadToStackCalls;
-  std::vector<llvm::CallInst*> m_setPendingAttrCalls;
-  std::vector<llvm::ReturnInst*> m_returns;
+  std::vector<llvm37::CallInst*> m_movePayloadToStackCalls;
+  std::vector<llvm37::CallInst*> m_setPendingAttrCalls;
+  std::vector<llvm37::ReturnInst*> m_returns;
 
   bool m_verbose = false;
   std::string m_dumpFilename;
   unsigned int m_dumpId = 0;
 
-  llvm::Function* m_stackIntPtrFunc = nullptr;
+  llvm37::Function* m_stackIntPtrFunc = nullptr;
 
-  llvm::CallInst* m_stackFramePush = nullptr;
-  llvm::CallInst* m_stackFrameOffset = nullptr;
-  llvm::CallInst* m_payloadOffset = nullptr;          // Offset at beginning of function
-  llvm::CallInst* m_committedAttrOffset = nullptr;    // Offset at beginning of function
-  llvm::CallInst* m_pendingAttrOffset = nullptr;      // Offset at beginning of function
+  llvm37::CallInst* m_stackFramePush = nullptr;
+  llvm37::CallInst* m_stackFrameOffset = nullptr;
+  llvm37::CallInst* m_payloadOffset = nullptr;          // Offset at beginning of function
+  llvm37::CallInst* m_committedAttrOffset = nullptr;    // Offset at beginning of function
+  llvm37::CallInst* m_pendingAttrOffset = nullptr;      // Offset at beginning of function
 
   // Placeholder function taking constant values functionIdx and substate. 
   // These are later translated to a stateId by finalizeStateIds().
-  llvm::Function* m_dummyStateIdFunc = nullptr;
+  llvm37::Function* m_dummyStateIdFunc = nullptr;
 
   int m_maxCallerArgFrameSizeInBytes = 0;
   int m_traceFrameSizeInBytes = 0;
 
   // Functions used to abstract stack operations. These make intermediate stages
   // in the transform a little bit cleaner. 
-  std::map<llvm::FunctionType*, llvm::Function*> m_stackStoreFuncs;
-  std::map<llvm::FunctionType*, llvm::Function*> m_stackLoadFuncs;
-  std::map<llvm::FunctionType*, llvm::Function*> m_stackPtrFuncs;
+  std::map<llvm37::FunctionType*, llvm37::Function*> m_stackStoreFuncs;
+  std::map<llvm37::FunctionType*, llvm37::Function*> m_stackLoadFuncs;
+  std::map<llvm37::FunctionType*, llvm37::Function*> m_stackPtrFuncs;
 
   // Main stages of the transformation 
   void init();
   void findCallSitesIntrinsicsAndReturns();
   void changeCallingConvention();
   void preserveLiveValuesAcrossCallsites(_Out_ unsigned int &shaderStackSize);
-  void createSubstateFunctions(std::vector<llvm::Function*>& stateFunctions);
+  void createSubstateFunctions(std::vector<llvm37::Function*>& stateFunctions);
   void lowerStackFuncs();
 
-  llvm::Value* getDummyStateId(int functionIdx, int substate, llvm::Instruction* insertBefore);
+  llvm37::Value* getDummyStateId(int functionIdx, int substate, llvm37::Instruction* insertBefore);
 
   void allocateStackFrame();
   void allocateTraceFrame();
   void createArgFrames();
   void changeFunctionSignature();
 
-  void createStackStore(llvm::Value* baseOffset, llvm::Value* val, int offsetInBytes, llvm::Instruction* insertBefore);
-  llvm::Instruction* createStackLoad(llvm::Value* baseOffset, llvm::Value* val, int offsetInBytes, llvm::Instruction* insertBefore);
-  llvm::Instruction* createStackPtr(llvm::Value* baseOffset, llvm::Value* val, int offsetInBytes, llvm::Instruction* insertBefore);
-  llvm::Instruction* createStackPtr(llvm::Value* baseOffset, llvm::Type* valTy, llvm::Value* intIndex, llvm::Instruction* insertBefore);
+  void createStackStore(llvm37::Value* baseOffset, llvm37::Value* val, int offsetInBytes, llvm37::Instruction* insertBefore);
+  llvm37::Instruction* createStackLoad(llvm37::Value* baseOffset, llvm37::Value* val, int offsetInBytes, llvm37::Instruction* insertBefore);
+  llvm37::Instruction* createStackPtr(llvm37::Value* baseOffset, llvm37::Value* val, int offsetInBytes, llvm37::Instruction* insertBefore);
+  llvm37::Instruction* createStackPtr(llvm37::Value* baseOffset, llvm37::Type* valTy, llvm37::Value* intIndex, llvm37::Instruction* insertBefore);
   void rewriteDummyStackSize(uint64_t frameSizeInBytes);
 
   BasicBlockVector replaceCallSites();
-  llvm::Function* split(llvm::Function* baseFunc, llvm::BasicBlock* subStateEntryBlock, int substateIndex);
+  llvm37::Function* split(llvm37::Function* baseFunc, llvm37::BasicBlock* subStateEntryBlock, int substateIndex);
 
-  void flattenGepsOnValue(llvm::Value* val, llvm::Value* baseOffset, llvm::Value* offset);
-  void scalarizeVectorStackAccess(llvm::Instruction* vecPtr, llvm::Value* baseOffset, llvm::Value* offsetVal);
+  void flattenGepsOnValue(llvm37::Value* val, llvm37::Value* baseOffset, llvm37::Value* offset);
+  void scalarizeVectorStackAccess(llvm37::Instruction* vecPtr, llvm37::Value* baseOffset, llvm37::Value* offsetVal);
 
   // Diagnostic printing functions
-  llvm::raw_ostream& getOutputStream(const std::string functionName, const std::string& suffix, unsigned int dumpId);
-  void printFunction(const llvm::Function* function, const std::string& suffix, unsigned int dumpId);
+  llvm37::raw_ostream& getOutputStream(const std::string functionName, const std::string& suffix, unsigned int dumpId);
+  void printFunction(const llvm37::Function* function, const std::string& suffix, unsigned int dumpId);
   void printFunction(const std::string& suffix);
-  void printFunctions(const std::vector<llvm::Function*>& funcs, const char* suffix);
-  void printModule(const llvm::Module* module, const std::string& suffix);
+  void printFunctions(const std::vector<llvm37::Function*>& funcs, const char* suffix);
+  void printModule(const llvm37::Module* module, const std::string& suffix);
   void printSet(const InstructionSetVector& vals, const char* msg = nullptr);
 };

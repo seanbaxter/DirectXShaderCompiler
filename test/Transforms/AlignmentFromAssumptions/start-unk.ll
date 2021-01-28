@@ -6,10 +6,10 @@ target triple = "x86_64-unknown-linux-gnu"
 %type2 = type { [4 x i8] }
 
 ; Function Attrs: nounwind
-declare void @llvm.assume(i1) #0
+declare void @llvm37.assume(i1) #0
 
 ; Function Attrs: nounwind readnone
-declare i32 @llvm.bswap.i32(i32) #1
+declare i32 @llvm37.bswap.i32(i32) #1
 
 ; Function Attrs: nounwind uwtable
 define void @test1() unnamed_addr #2 align 2 {
@@ -77,13 +77,13 @@ if.then126:                                       ; preds = %if.end123
   %ptrint.i.i185 = ptrtoint %type1* undef to i64
   %maskedptr.i.i186 = and i64 %ptrint.i.i185, 1
   %maskcond.i.i187 = icmp eq i64 %maskedptr.i.i186, 0
-  tail call void @llvm.assume(i1 %maskcond.i.i187) #0
+  tail call void @llvm37.assume(i1 %maskcond.i.i187) #0
   %ret.0..sroa_cast.i.i188 = bitcast %type1* undef to i32*
   %ret.0.copyload.i.i189 = load i32, i32* %ret.0..sroa_cast.i.i188, align 2
 
 ; CHECK: load {{.*}} align 2
 
-  %0 = tail call i32 @llvm.bswap.i32(i32 %ret.0.copyload.i.i189) #0
+  %0 = tail call i32 @llvm37.bswap.i32(i32 %ret.0.copyload.i.i189) #0
   %conv131 = zext i32 %0 to i64
   %add.ptr132 = getelementptr inbounds i8, i8* undef, i64 %conv131
   %1 = bitcast i8* %add.ptr132 to %type1*

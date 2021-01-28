@@ -1,6 +1,6 @@
 /*===-- CXLoadedDiagnostic.h - Handling of persisent diags ------*- C++ -*-===*\
 |*                                                                            *|
-|*                     The LLVM Compiler Infrastructure                       *|
+|*                     The LLVM37 Compiler Infrastructure                       *|
 |*                                                                            *|
 |* This file is distributed under the University of Illinois Open Source      *|
 |* License. See LICENSE.TXT for details.                                      *|
@@ -11,11 +11,11 @@
 |*                                                                            *|
 \*===----------------------------------------------------------------------===*/
 
-#ifndef LLVM_CLANG_TOOLS_LIBCLANG_CXLOADEDDIAGNOSTIC_H
-#define LLVM_CLANG_TOOLS_LIBCLANG_CXLOADEDDIAGNOSTIC_H
+#ifndef LLVM37_CLANG_TOOLS_LIBCLANG_CXLOADEDDIAGNOSTIC_H
+#define LLVM37_CLANG_TOOLS_LIBCLANG_CXLOADEDDIAGNOSTIC_H
 
 #include "CIndexDiagnostic.h"
-#include "llvm/ADT/StringRef.h"
+#include "llvm37/ADT/StringRef.h"
 #include "clang/Basic/LLVM.h"
 #include <string>
 #include <vector>
@@ -84,8 +84,8 @@ public:
   std::vector<CXSourceRange> Ranges;
   std::vector<std::pair<CXSourceRange, const char *> > FixIts;
   const char *Spelling;
-  llvm::StringRef DiagOption;
-  llvm::StringRef CategoryText;
+  llvm37::StringRef DiagOption;
+  llvm37::StringRef CategoryText;
   unsigned severity;
   unsigned category;
 };

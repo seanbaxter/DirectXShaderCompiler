@@ -1,6 +1,6 @@
 //===- Chrootchecker.cpp -------- Basic security checks ----------*- C++ -*-==//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -19,7 +19,7 @@
 #include "clang/StaticAnalyzer/Core/PathSensitive/ProgramState.h"
 #include "clang/StaticAnalyzer/Core/PathSensitive/ProgramStateTrait.h"
 #include "clang/StaticAnalyzer/Core/PathSensitive/SymbolManager.h"
-#include "llvm/ADT/ImmutableMap.h"
+#include "llvm37/ADT/ImmutableMap.h"
 using namespace clang;
 using namespace ento;
 
@@ -145,7 +145,7 @@ void ChrootChecker::checkPreStmt(const CallExpr *CE, CheckerContext &C) const {
           BT_BreakJail.reset(new BuiltinBug(
               this, "Break out of jail", "No call of chdir(\"/\") immediately "
                                          "after chroot"));
-        C.emitReport(llvm::make_unique<BugReport>(
+        C.emitReport(llvm37::make_unique<BugReport>(
             *BT_BreakJail, BT_BreakJail->getDescription(), N));
       }
 

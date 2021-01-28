@@ -1,6 +1,6 @@
 //===- RegisterInfoEmitter.cpp - Generate a Register File Desc. -*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -16,18 +16,18 @@
 #include "CodeGenRegisters.h"
 #include "CodeGenTarget.h"
 #include "SequenceToOffsetTable.h"
-#include "llvm/ADT/BitVector.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/StringExtras.h"
-#include "llvm/ADT/Twine.h"
-#include "llvm/Support/Format.h"
-#include "llvm/TableGen/Error.h"
-#include "llvm/TableGen/Record.h"
-#include "llvm/TableGen/TableGenBackend.h"
+#include "llvm37/ADT/BitVector.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/StringExtras.h"
+#include "llvm37/ADT/Twine.h"
+#include "llvm37/Support/Format.h"
+#include "llvm37/TableGen/Error.h"
+#include "llvm37/TableGen/Record.h"
+#include "llvm37/TableGen/TableGenBackend.h"
 #include <algorithm>
 #include <set>
 #include <vector>
-using namespace llvm;
+using namespace llvm37;
 
 namespace {
 class RegisterInfoEmitter {
@@ -83,7 +83,7 @@ void RegisterInfoEmitter::runEnums(raw_ostream &OS,
   OS << "\n#ifdef GET_REGINFO_ENUM\n";
   OS << "#undef GET_REGINFO_ENUM\n";
 
-  OS << "namespace llvm {\n\n";
+  OS << "namespace llvm37 {\n\n";
 
   OS << "class MCRegisterClass;\n"
      << "extern const MCRegisterClass " << Namespace
@@ -152,7 +152,7 @@ void RegisterInfoEmitter::runEnums(raw_ostream &OS,
       OS << "}\n";
   }
 
-  OS << "} // End llvm namespace\n";
+  OS << "} // End llvm37 namespace\n";
   OS << "#endif // GET_REGINFO_ENUM\n\n";
 }
 
@@ -346,19 +346,19 @@ void RegisterInfoEmitter::EmitRegMappingTables(
 
   std::string Namespace = Regs.front().TheDef->getValueAsString("Namespace");
 
-  OS << "// " << Namespace << " Dwarf<->LLVM register mappings.\n";
+  OS << "// " << Namespace << " Dwarf<->LLVM37 register mappings.\n";
 
   // Emit reverse information about the dwarf register numbers.
   for (unsigned j = 0; j < 2; ++j) {
     for (unsigned i = 0, e = maxLength; i != e; ++i) {
-      OS << "extern const MCRegisterInfo::DwarfLLVMRegPair " << Namespace;
+      OS << "extern const MCRegisterInfo::DwarfLLVM37RegPair " << Namespace;
       OS << (j == 0 ? "DwarfFlavour" : "EHFlavour");
       OS << i << "Dwarf2L[]";
 
       if (!isCtor) {
         OS << " = {\n";
 
-        // Store the mapping sorted by the LLVM reg num so lookup can be done
+        // Store the mapping sorted by the LLVM37 reg num so lookup can be done
         // with a binary search.
         std::map<uint64_t, Record*> Dwarf2LMap;
         for (DwarfRegNumsMapTy::iterator
@@ -406,7 +406,7 @@ void RegisterInfoEmitter::EmitRegMappingTables(
   // Emit information about the dwarf register numbers.
   for (unsigned j = 0; j < 2; ++j) {
     for (unsigned i = 0, e = maxLength; i != e; ++i) {
-      OS << "extern const MCRegisterInfo::DwarfLLVMRegPair " << Namespace;
+      OS << "extern const MCRegisterInfo::DwarfLLVM37RegPair " << Namespace;
       OS << (j == 0 ? "DwarfFlavour" : "EHFlavour");
       OS << i << "L2Dwarf[]";
       if (!isCtor) {
@@ -465,7 +465,7 @@ void RegisterInfoEmitter::EmitRegMapping(
       OS << "EHFlavour";
     OS << ") {\n"
      << "  default:\n"
-     << "    llvm_unreachable(\"Unknown DWARF flavour\");\n";
+     << "    llvm37_unreachable(\"Unknown DWARF flavour\");\n";
 
     for (unsigned i = 0, e = maxLength; i != e; ++i) {
       OS << "  case " << i << ":\n";
@@ -476,7 +476,7 @@ void RegisterInfoEmitter::EmitRegMapping(
       raw_string_ostream(Tmp) << Namespace
                               << (j == 0 ? "DwarfFlavour" : "EHFlavour") << i
                               << "Dwarf2L";
-      OS << "mapDwarfRegsToLLVMRegs(" << Tmp << ", " << Tmp << "Size, ";
+      OS << "mapDwarfRegsToLLVM37Regs(" << Tmp << ", " << Tmp << "Size, ";
       if (j == 0)
           OS << "false";
         else
@@ -496,7 +496,7 @@ void RegisterInfoEmitter::EmitRegMapping(
       OS << "EHFlavour";
     OS << ") {\n"
        << "  default:\n"
-       << "    llvm_unreachable(\"Unknown DWARF flavour\");\n";
+       << "    llvm37_unreachable(\"Unknown DWARF flavour\");\n";
 
     for (unsigned i = 0, e = maxLength; i != e; ++i) {
       OS << "  case " << i << ":\n";
@@ -507,7 +507,7 @@ void RegisterInfoEmitter::EmitRegMapping(
       raw_string_ostream(Tmp) << Namespace
                               << (j == 0 ? "DwarfFlavour" : "EHFlavour") << i
                               << "L2Dwarf";
-      OS << "mapLLVMRegsToDwarfRegs(" << Tmp << ", " << Tmp << "Size, ";
+      OS << "mapLLVM37RegsToDwarfRegs(" << Tmp << ", " << Tmp << "Size, ";
       if (j == 0)
           OS << "false";
         else
@@ -808,7 +808,7 @@ RegisterInfoEmitter::runMCDesc(raw_ostream &OS, CodeGenTarget &Target,
   // Keep track of sub-register names as well. These are not differentially
   // encoded.
   typedef SmallVector<const CodeGenSubRegIndex*, 4> SubRegIdxVec;
-  SequenceToOffsetTable<SubRegIdxVec, deref<llvm::less>> SubRegIdxSeqs;
+  SequenceToOffsetTable<SubRegIdxVec, deref<llvm37::less>> SubRegIdxSeqs;
   SmallVector<SubRegIdxVec, 4> SubRegIdxLists(Regs.size());
 
   SequenceToOffsetTable<std::string> RegStrings;
@@ -881,7 +881,7 @@ RegisterInfoEmitter::runMCDesc(raw_ostream &OS, CodeGenTarget &Target,
   LaneMaskSeqs.layout();
   SubRegIdxSeqs.layout();
 
-  OS << "namespace llvm {\n\n";
+  OS << "namespace llvm37 {\n\n";
 
   const std::string &TargetName = Target.getName();
 
@@ -1051,7 +1051,7 @@ RegisterInfoEmitter::runMCDesc(raw_ostream &OS, CodeGenTarget &Target,
 
   OS << "}\n\n";
 
-  OS << "} // End llvm namespace\n";
+  OS << "} // End llvm37 namespace\n";
   OS << "#endif // GET_REGINFO_MC_DESC\n\n";
 }
 
@@ -1066,9 +1066,9 @@ RegisterInfoEmitter::runTargetHeader(raw_ostream &OS, CodeGenTarget &Target,
   const std::string &TargetName = Target.getName();
   std::string ClassName = TargetName + "GenRegisterInfo";
 
-  OS << "#include \"llvm/Target/TargetRegisterInfo.h\"\n\n";
+  OS << "#include \"llvm37/Target/TargetRegisterInfo.h\"\n\n";
 
-  OS << "namespace llvm {\n\n";
+  OS << "namespace llvm37 {\n\n";
 
   OS << "class " << TargetName << "FrameLowering;\n\n";
 
@@ -1117,7 +1117,7 @@ RegisterInfoEmitter::runTargetHeader(raw_ostream &OS, CodeGenTarget &Target,
     }
     OS << "} // end of namespace " << TargetName << "\n\n";
   }
-  OS << "} // End llvm namespace\n";
+  OS << "} // End llvm37 namespace\n";
   OS << "#endif // GET_REGINFO_HEADER\n\n";
 }
 
@@ -1132,7 +1132,7 @@ RegisterInfoEmitter::runTargetDesc(raw_ostream &OS, CodeGenTarget &Target,
   OS << "\n#ifdef GET_REGINFO_TARGET_DESC\n";
   OS << "#undef GET_REGINFO_TARGET_DESC\n";
 
-  OS << "namespace llvm {\n\n";
+  OS << "namespace llvm37 {\n\n";
 
   // Get access to MCRegisterClass data.
   OS << "extern const MCRegisterClass " << Target.getName()
@@ -1206,7 +1206,7 @@ RegisterInfoEmitter::runTargetDesc(raw_ostream &OS, CodeGenTarget &Target,
     // Compress the sub-reg index lists.
     typedef std::vector<const CodeGenSubRegIndex*> IdxList;
     SmallVector<IdxList, 8> SuperRegIdxLists(RegisterClasses.size());
-    SequenceToOffsetTable<IdxList, deref<llvm::less>> SuperRegIdxSeqs;
+    SequenceToOffsetTable<IdxList, deref<llvm37::less>> SuperRegIdxSeqs;
     BitVector MaskBV(RegisterClasses.size());
 
     for (const auto &RC : RegisterClasses) {
@@ -1479,7 +1479,7 @@ RegisterInfoEmitter::runTargetDesc(raw_ostream &OS, CodeGenTarget &Target,
      << "      MF.getSubtarget().getFrameLowering());\n"
      << "}\n\n";
 
-  OS << "} // End llvm namespace\n";
+  OS << "} // End llvm37 namespace\n";
   OS << "#endif // GET_REGINFO_TARGET_DESC\n\n";
 }
 
@@ -1494,10 +1494,10 @@ void RegisterInfoEmitter::run(raw_ostream &OS) {
   runTargetDesc(OS, Target, RegBank);
 }
 
-namespace llvm {
+namespace llvm37 {
 
 void EmitRegisterInfo(RecordKeeper &RK, raw_ostream &OS) {
   RegisterInfoEmitter(RK).run(OS);
 }
 
-} // End llvm namespace
+} // End llvm37 namespace

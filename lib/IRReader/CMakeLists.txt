@@ -1,8 +1,8 @@
-add_llvm_library(LLVMIRReader
+add_llvm_library(LLVM37IRReader
   IRReader.cpp
 
   ADDITIONAL_HEADER_DIRS
-  ${LLVM_MAIN_INCLUDE_DIR}/llvm/IRReader
+  ${LLVM37_MAIN_INCLUDE_DIR}/llvm37/IRReader
 
   DEPENDS
   intrinsics_gen

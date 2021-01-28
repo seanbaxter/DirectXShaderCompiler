@@ -32,7 +32,7 @@
 // Example:
 //    int x = threadIdx.x;
 // IR output:
-//  %0 = call i32 @llvm.ptx.read.tid.x() #3
+//  %0 = call i32 @llvm37.ptx.read.tid.x() #3
 // PTX output:
 //  mov.u32     %r2, %tid.x;
 

@@ -35,7 +35,7 @@ define <4 x float> @simple_select(<4 x float> %a, <4 x float> %b, <4 x i32> %c) 
   ret <4 x float> %rd
 }
 
-declare void @llvm.assume(i1) nounwind
+declare void @llvm37.assume(i1) nounwind
 
 ; This entire tree is ephemeral, don't vectorize any of it.
 define <4 x float> @simple_select_eph(<4 x float> %a, <4 x float> %b, <4 x i32> %c) #0 {
@@ -74,7 +74,7 @@ define <4 x float> @simple_select_eph(<4 x float> %a, <4 x float> %b, <4 x i32> 
   %q5 = fadd float %q2, %q3
   %q6 = fadd float %q4, %q5
   %qi = fcmp olt float %q6, %q5
-  call void @llvm.assume(i1 %qi)
+  call void @llvm37.assume(i1 %qi)
   ret <4 x float> undef
 }
 

@@ -1,6 +1,6 @@
 //===------- InitListHandler.cpp - Initializer List Handler -----*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -17,7 +17,7 @@
 #include <algorithm>
 #include <iterator>
 
-#include "llvm/ADT/SmallVector.h"
+#include "llvm37/ADT/SmallVector.h"
 
 namespace clang {
 namespace spirv {
@@ -117,7 +117,7 @@ void InitListHandler::decompose(SpirvInstruction *inst,
   }
   // The decompose method only supports scalar, vector, and matrix types.
   else {
-    llvm_unreachable(
+    llvm37_unreachable(
         "decompose() should only handle scalar or vector or matrix types");
   }
 }
@@ -142,7 +142,7 @@ bool InitListHandler::tryToSplitStruct() {
   const auto *structDecl = initType->getAsStructureType()->getDecl();
 
   // Create MemberExpr for each field of the struct
-  llvm::SmallVector<SpirvInstruction *, 4> fields;
+  llvm37::SmallVector<SpirvInstruction *, 4> fields;
   uint32_t i = 0;
   for (auto *field : structDecl->fields()) {
     auto *extract =
@@ -180,7 +180,7 @@ bool InitListHandler::tryToSplitConstantArray() {
   // Create ArraySubscriptExpr for each element of the array
   // TODO: It will generate lots of elements if the array size is very large.
   // But do we have a better solution?
-  llvm::SmallVector<SpirvInstruction *, 4> elements;
+  llvm37::SmallVector<SpirvInstruction *, 4> elements;
   for (uint32_t i = 0; i < size; ++i) {
     auto *extract = spvBuilder.createCompositeExtract(elemType, init, {i}, loc);
     elements.push_back(extract);
@@ -290,7 +290,7 @@ InitListHandler::createInitForVectorType(QualType elemType, uint32_t count,
   if (count == 1)
     return createInitForBuiltinType(elemType, srcLoc);
 
-  llvm::SmallVector<SpirvInstruction *, 4> elements;
+  llvm37::SmallVector<SpirvInstruction *, 4> elements;
   for (uint32_t i = 0; i < count; ++i) {
     // All elements are scalars, which should already be casted to the correct
     // type if necessary.
@@ -336,7 +336,7 @@ InitListHandler::createInitForMatrixType(QualType matrixType,
   if (colCount == 1)
     return createInitForVectorType(elemType, rowCount, srcLoc);
 
-  llvm::SmallVector<SpirvInstruction *, 4> vectors;
+  llvm37::SmallVector<SpirvInstruction *, 4> vectors;
   for (uint32_t i = 0; i < rowCount; ++i) {
     // All elements are vectors, which should already be casted to the correct
     // type if necessary.
@@ -374,7 +374,7 @@ InitListHandler::createInitForStructType(QualType type, SourceLocation srcLoc) {
     tryToSplitStruct();
   }
 
-  llvm::SmallVector<SpirvInstruction *, 4> fields;
+  llvm37::SmallVector<SpirvInstruction *, 4> fields;
   const RecordDecl *structDecl = type->getAsStructureType()->getDecl();
   for (const auto *field : structDecl->fields()) {
     fields.push_back(createInitForType(field->getType(), field->getLocation()));
@@ -419,7 +419,7 @@ InitListHandler::createInitForConstantArrayType(QualType type,
   // TODO: handle (unlikely) extra large array size?
   const auto size = static_cast<uint32_t>(arrType->getSize().getZExtValue());
 
-  llvm::SmallVector<SpirvInstruction *, 4> elements;
+  llvm37::SmallVector<SpirvInstruction *, 4> elements;
   for (uint32_t i = 0; i < size; ++i)
     elements.push_back(createInitForType(elemType, srcLoc));
 

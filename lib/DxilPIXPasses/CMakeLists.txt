@@ -1,6 +1,6 @@
 # Copyright (C) Microsoft Corporation. All rights reserved.
 # This file is distributed under the University of Illinois Open Source License. See LICENSE.TXT for details.
-add_llvm_library(LLVMDxilPIXPasses
+add_llvm_library(LLVM37DxilPIXPasses
   DxilAddPixelHitInstrumentation.cpp
   DxilAnnotateWithVirtualRegister.cpp
   DxilDbgValueToDbgDeclare.cpp
@@ -16,7 +16,7 @@ add_llvm_library(LLVMDxilPIXPasses
 
 
   ADDITIONAL_HEADER_DIRS
-  ${LLVM_MAIN_INCLUDE_DIR}/llvm/IR
+  ${LLVM37_MAIN_INCLUDE_DIR}/llvm37/IR
 )
 
-add_dependencies(LLVMDxilPIXPasses intrinsics_gen)
+add_dependencies(LLVM37DxilPIXPasses intrinsics_gen)

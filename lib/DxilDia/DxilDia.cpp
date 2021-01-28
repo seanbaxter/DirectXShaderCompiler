@@ -14,7 +14,7 @@
 #include "dxc/Support/Global.h"
 #include "dxc/Support/Unicode.h"
 
-HRESULT dxil_dia::StringRefToBSTR(llvm::StringRef value, BSTR *pRetVal) {
+HRESULT dxil_dia::StringRefToBSTR(llvm37::StringRef value, BSTR *pRetVal) {
   try {
     wchar_t *wide;
     size_t sideSize;

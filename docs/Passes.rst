@@ -28,7 +28,7 @@
     perl -e '$/ = undef; for (split(/\n/, <>)) { s:^ *///? ?::; print "  <p>\n" if !$on && $_ =~ /\S/; print "  </p>\n" if $on && $_ =~ /^\s*$/; print "  $_\n"; $on = ($_ =~ /\S/); } print "  </p>\n" if $on'
 
 ====================================
-LLVM's Analysis and Transform Passes
+LLVM37's Analysis and Transform Passes
 ====================================
 
 .. contents::
@@ -38,9 +38,9 @@ Introduction
 ============
 
 This document serves as a high level summary of the optimization features that
-LLVM provides.  Optimizations are implemented as Passes that traverse some
+LLVM37 provides.  Optimizations are implemented as Passes that traverse some
 portion of a program to either collect information or transform the program.
-The table below divides the passes that LLVM provides into three categories.
+The table below divides the passes that LLVM37 provides into three categories.
 Analysis passes compute information that other passes can use or for debugging
 or program visualization purposes.  Transform passes can use (or invalidate)
 the analysis passes.  Transform passes all mutate the program in some way.
@@ -53,7 +53,7 @@ description later in the document.
 Analysis Passes
 ===============
 
-This section describes the LLVM Analysis Passes.
+This section describes the LLVM37 Analysis Passes.
 
 ``-aa-eval``: Exhaustive Alias Analysis Precision Evaluator
 -----------------------------------------------------------
@@ -201,11 +201,11 @@ Interface for lazy computation of value constraint information.
 
 LibCall Alias Analysis.
 
-``-lint``: Statically lint-checks LLVM IR
+``-lint``: Statically lint-checks LLVM37 IR
 -----------------------------------------
 
 This pass statically checks for common and easily-identified constructs which
-produce undefined or likely unintended behavior in LLVM IR.
+produce undefined or likely unintended behavior in LLVM37 IR.
 
 It is not a guarantee of correctness, in two ways.  First, it isn't
 comprehensive.  There are checks which could be done statically which are not
@@ -370,7 +370,7 @@ required by the target ABI for various data types.
 Transform Passes
 ================
 
-This section describes the LLVM Transform Passes.
+This section describes the LLVM37 Transform Passes.
 
 ``-adce``: Aggressive Dead Code Elimination
 -------------------------------------------
@@ -405,7 +405,7 @@ large array or structure is unprofitable!
 
 Note that this transformation could also be done for arguments that are only
 stored to (returning the value instead), but does not currently.  This case
-would be best handled when and if LLVM starts supporting multiple return values
+would be best handled when and if LLVM37 starts supporting multiple return values
 from functions.
 
 ``-bb-vectorize``: Basic-Block Vectorization
@@ -462,13 +462,13 @@ This pass implements constant propagation and merging.  It looks for
 instructions involving only constant operands and replaces them with a constant
 value instead of an instruction.  For example:
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
   add i32 1, 2
 
 becomes
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
   i32 3
 
@@ -613,14 +613,14 @@ modify the CFG. This pass is where algebraic simplification happens.
 
 This pass combines things like:
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
   %Y = add i32 %X, 1
   %Z = add i32 %Y, 1
 
 into:
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
   %Z = add i32 %X, 2
 
@@ -646,7 +646,7 @@ This pass can also simplify calls to specific well-known function calls (e.g.
 runtime library functions).  For example, a call ``exit(3)`` that occurs within
 the ``main()`` function can be transformed into simply ``return 3``. Whether or
 not library calls are simplified is controlled by the
-:ref:`-functionattrs <passes-functionattrs>` pass and LLVM's knowledge of
+:ref:`-functionattrs <passes-functionattrs>` pass and LLVM37's knowledge of
 library calls on different targets.
 
 ``-internalize``: Internalize Global Symbols
@@ -711,7 +711,7 @@ into the right code:
   ... = X3 + 4              X4 = phi(X3)
                               ... = X4 + 4
 
-This is still valid LLVM; the extra phi nodes are purely redundant, and will be
+This is still valid LLVM37; the extra phi nodes are purely redundant, and will be
 trivially eliminated by ``InstCombine``.  The major benefit of this
 transformation is that it makes many other loop optimizations, such as
 ``LoopUnswitch``\ ing, simpler.
@@ -1041,7 +1041,7 @@ declarations and removes them.  Dead declarations are declarations of functions
 for which no implementation is available (i.e., declarations for unused library
 functions).
 
-``-strip-debug-declare``: Strip all ``llvm.dbg.declare`` intrinsics
+``-strip-debug-declare``: Strip all ``llvm37.dbg.declare`` intrinsics
 -------------------------------------------------------------------
 
 .. FIXME: this description is the same as for -strip
@@ -1097,7 +1097,7 @@ algorithm:
 Utility Passes
 ==============
 
-This section describes the LLVM Utility Passes.
+This section describes the LLVM37 Utility Passes.
 
 ``-deadarghaX0r``: Dead Argument Hacking (BUGPOINT USE ONLY; DO NOT USE)
 ------------------------------------------------------------------------
@@ -1124,9 +1124,9 @@ noisy.
 ``-verify``: Module Verifier
 ----------------------------
 
-Verifies an LLVM IR code.  This is useful to run after an optimization which is
-undergoing testing.  Note that llvm-as verifies its input before emitting
-bitcode, and also that malformed bitcode is likely to make LLVM crash.  All
+Verifies an LLVM37 IR code.  This is useful to run after an optimization which is
+undergoing testing.  Note that llvm37-as verifies its input before emitting
+bitcode, and also that malformed bitcode is likely to make LLVM37 crash.  All
 language front-ends are therefore encouraged to verify their output before
 performing optimizing transformations.
 

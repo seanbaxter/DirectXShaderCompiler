@@ -1,6 +1,6 @@
-//===-- llvm/ADT/APSInt.cpp - Arbitrary Precision Signed Int ---*- C++ -*--===//
+//===-- llvm37/ADT/APSInt.cpp - Arbitrary Precision Signed Int ---*- C++ -*--===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -12,10 +12,10 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/ADT/APSInt.h"
-#include "llvm/ADT/FoldingSet.h"
+#include "llvm37/ADT/APSInt.h"
+#include "llvm37/ADT/FoldingSet.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 APSInt::APSInt(StringRef Str) {
   assert(!Str.empty() && "Invalid string length");

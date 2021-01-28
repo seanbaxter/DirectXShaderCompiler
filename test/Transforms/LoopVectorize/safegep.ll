@@ -4,7 +4,7 @@ target datalayout = "e-p:32:32:32-S128-i1:8:8-i8:8:8-i16:16:16-i32:32:32-i64:32:
 
 ; We can vectorize this code because if the address computation would wrap then
 ; a load from 0 would take place which is undefined behaviour in address space 0
-; according to LLVM IR semantics.
+; according to LLVM37 IR semantics.
 
 ; PR16592
 

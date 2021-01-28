@@ -1,6 +1,6 @@
 //===- IdentifierResolver.cpp - Lexical Scope Name lookup -------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -75,7 +75,7 @@ void IdentifierResolver::IdDeclInfo::RemoveDecl(NamedDecl *D) {
     }
   }
 
-  llvm_unreachable("Didn't find this decl on its identifier's chain!");
+  llvm37_unreachable("Didn't find this decl on its identifier's chain!");
 }
 
 //===----------------------------------------------------------------------===//

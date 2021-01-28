@@ -1,6 +1,6 @@
 //===--- SpirvModule.cpp - SPIR-V Module Implementation ----------*- C++ -*-==//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -261,7 +261,7 @@ void SpirvModule::addExtInstSet(SpirvExtInstImport *set) {
   extInstSets.push_back(set);
 }
 
-SpirvExtInstImport *SpirvModule::getExtInstSet(llvm::StringRef name) {
+SpirvExtInstImport *SpirvModule::getExtInstSet(llvm37::StringRef name) {
   // We expect very few (usually 1) extended instruction sets to exist in the
   // module, so this is not expensive.
   auto found = std::find_if(extInstSets.begin(), extInstSets.end(),

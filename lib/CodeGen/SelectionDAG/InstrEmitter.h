@@ -1,6 +1,6 @@
 //===- InstrEmitter.h - Emit MachineInstrs for the SelectionDAG -*- C++ -*--==//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -13,20 +13,20 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_LIB_CODEGEN_SELECTIONDAG_INSTREMITTER_H
-#define LLVM_LIB_CODEGEN_SELECTIONDAG_INSTREMITTER_H
+#ifndef LLVM37_LIB_CODEGEN_SELECTIONDAG_INSTREMITTER_H
+#define LLVM37_LIB_CODEGEN_SELECTIONDAG_INSTREMITTER_H
 
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/CodeGen/MachineBasicBlock.h"
-#include "llvm/CodeGen/SelectionDAG.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/CodeGen/MachineBasicBlock.h"
+#include "llvm37/CodeGen/SelectionDAG.h"
 
-namespace llvm {
+namespace llvm37 {
 
 class MachineInstrBuilder;
 class MCInstrDesc;
 class SDDbgValue;
 
-class LLVM_LIBRARY_VISIBILITY InstrEmitter {
+class LLVM37_LIBRARY_VISIBILITY InstrEmitter {
   MachineFunction *MF;
   MachineRegisterInfo *MRI;
   const TargetInstrInfo *TII;

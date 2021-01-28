@@ -1,6 +1,6 @@
 //=== UndefResultChecker.cpp ------------------------------------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -18,8 +18,8 @@
 #include "clang/StaticAnalyzer/Core/CheckerManager.h"
 #include "clang/StaticAnalyzer/Core/PathSensitive/CheckerContext.h"
 #include "clang/StaticAnalyzer/Core/PathSensitive/ExprEngine.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/Support/raw_ostream.h"
 
 using namespace clang;
 using namespace ento;
@@ -59,7 +59,7 @@ void UndefResultChecker::checkPostStmt(const BinaryOperator *B,
           new BuiltinBug(this, "Result of operation is garbage or undefined"));
 
     SmallString<256> sbuf;
-    llvm::raw_svector_ostream OS(sbuf);
+    llvm37::raw_svector_ostream OS(sbuf);
     const Expr *Ex = nullptr;
     bool isLeft = true;
     
@@ -84,7 +84,7 @@ void UndefResultChecker::checkPostStmt(const BinaryOperator *B,
          << BinaryOperator::getOpcodeStr(B->getOpcode())
          << "' expression is undefined";
     }
-    auto report = llvm::make_unique<BugReport>(*BT, OS.str(), N);
+    auto report = llvm37::make_unique<BugReport>(*BT, OS.str(), N);
     if (Ex) {
       report->addRange(Ex->getSourceRange());
       bugreporter::trackNullOrUndefValue(N, Ex, *report);

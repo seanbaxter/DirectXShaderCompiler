@@ -1,28 +1,28 @@
 //===-- macho-dump.cpp - Mach Object Dumping Tool -------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 //
-// This is a testing tool for use with the MC/Mach-O LLVM components.
+// This is a testing tool for use with the MC/Mach-O LLVM37 components.
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Object/MachO.h"
-#include "llvm/ADT/StringExtras.h"
-#include "llvm/ADT/Twine.h"
-#include "llvm/Support/Casting.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/Format.h"
-#include "llvm/Support/ManagedStatic.h"
-#include "llvm/Support/MemoryBuffer.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/Object/MachO.h"
+#include "llvm37/ADT/StringExtras.h"
+#include "llvm37/ADT/Twine.h"
+#include "llvm37/Support/Casting.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/Format.h"
+#include "llvm37/Support/ManagedStatic.h"
+#include "llvm37/Support/MemoryBuffer.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <system_error>
-using namespace llvm;
-using namespace llvm::object;
+using namespace llvm37;
+using namespace llvm37::object;
 
 static cl::opt<std::string>
 InputFile(cl::Positional, cl::desc("<input file>"), cl::init("-"));
@@ -399,9 +399,9 @@ static void printHeader(const MachOObjectFile *Obj,
 // HLSL Change: changed calling convention to __cdecl
 int __cdecl main(int argc, char **argv) {
   ProgramName = argv[0];
-  llvm_shutdown_obj Y;  // Call llvm_shutdown() on exit.
+  llvm37_shutdown_obj Y;  // Call llvm37_shutdown() on exit.
 
-  cl::ParseCommandLineOptions(argc, argv, "llvm Mach-O dumping tool\n");
+  cl::ParseCommandLineOptions(argc, argv, "llvm37 Mach-O dumping tool\n");
 
   ErrorOr<OwningBinary<Binary>> BinaryOrErr = createBinary(InputFile);
   if (std::error_code EC = BinaryOrErr.getError())

@@ -1,6 +1,6 @@
 //= RValues.cpp - Abstract RValues for Path-Sens. Value Tracking -*- C++ -*-==//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -15,10 +15,10 @@
 #include "clang/StaticAnalyzer/Core/PathSensitive/ProgramState.h"
 #include "clang/AST/ExprObjC.h"
 #include "clang/Basic/IdentifierTable.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/Support/raw_ostream.h"
 using namespace clang;
 using namespace ento;
-using llvm::APSInt;
+using llvm37::APSInt;
 
 //===----------------------------------------------------------------------===//
 // Symbol iteration within an SVal.
@@ -195,7 +195,7 @@ bool SVal::isZeroConstant() const {
 SVal nonloc::ConcreteInt::evalBinOp(SValBuilder &svalBuilder,
                                     BinaryOperator::Opcode Op,
                                     const nonloc::ConcreteInt& R) const {
-  const llvm::APSInt* X =
+  const llvm37::APSInt* X =
     svalBuilder.getBasicValueFactory().evalAPSInt(Op, getValue(), R.getValue());
 
   if (X)
@@ -224,7 +224,7 @@ SVal loc::ConcreteInt::evalBinOp(BasicValueFactory& BasicVals,
 
   assert(BinaryOperator::isComparisonOp(Op) || Op == BO_Sub);
 
-  const llvm::APSInt *X = BasicVals.evalAPSInt(Op, getValue(), R.getValue());
+  const llvm37::APSInt *X = BasicVals.evalAPSInt(Op, getValue(), R.getValue());
 
   if (X)
     return nonloc::ConcreteInt(*X);
@@ -236,7 +236,7 @@ SVal loc::ConcreteInt::evalBinOp(BasicValueFactory& BasicVals,
 // Pretty-Printing.
 //===----------------------------------------------------------------------===//
 
-void SVal::dump() const { dumpToStream(llvm::errs()); }
+void SVal::dump() const { dumpToStream(llvm37::errs()); }
 
 void SVal::dumpToStream(raw_ostream &os) const {
   switch (getBaseKind()) {
@@ -317,6 +317,6 @@ void Loc::dumpToStream(raw_ostream &os) const {
       os << '&' << castAs<loc::MemRegionVal>().getRegion()->getString();
       break;
     default:
-      llvm_unreachable("Pretty-printing not implemented for this Loc.");
+      llvm37_unreachable("Pretty-printing not implemented for this Loc.");
   }
 }

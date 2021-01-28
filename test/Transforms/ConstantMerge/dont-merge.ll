@@ -35,7 +35,7 @@ define void @test2(i32** %P1, i32 addrspace(30)** %P2) {
 
 @T3A = internal constant i32 0
 @T3B = internal constant i32 0
-@llvm.used = appending global [2 x i32*] [i32* @T3A, i32* @T3B], section
+@llvm37.used = appending global [2 x i32*] [i32* @T3A, i32* @T3B], section
 "llvm.metadata"
 
 define void @test3() {

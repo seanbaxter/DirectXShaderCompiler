@@ -1,14 +1,14 @@
 //===- LoopVectorize.cpp - A Loop Vectorizer ------------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 //
-// This is the LLVM loop vectorizer. This pass modifies 'vectorizable' loops
-// and generates target-independent LLVM-IR.
+// This is the LLVM37 loop vectorizer. This pass modifies 'vectorizable' loops
+// and generates target-independent LLVM37-IR.
 // The vectorizer uses the TargetTransformInfo analysis to estimate the costs
 // of instructions in order to estimate the profitability of vectorization.
 //
@@ -46,64 +46,64 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Transforms/Vectorize.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/EquivalenceClasses.h"
-#include "llvm/ADT/Hashing.h"
-#include "llvm/ADT/MapVector.h"
-#include "llvm/ADT/SetVector.h"
-#include "llvm/ADT/SmallPtrSet.h"
-#include "llvm/ADT/SmallSet.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/ADT/StringExtras.h"
-#include "llvm/Analysis/AliasAnalysis.h"
-#include "llvm/Analysis/AliasSetTracker.h"
-#include "llvm/Analysis/AssumptionCache.h"
-#include "llvm/Analysis/BlockFrequencyInfo.h"
-#include "llvm/Analysis/CodeMetrics.h"
-#include "llvm/Analysis/LoopAccessAnalysis.h"
-#include "llvm/Analysis/LoopInfo.h"
-#include "llvm/Analysis/LoopIterator.h"
-#include "llvm/Analysis/LoopPass.h"
-#include "llvm/Analysis/ScalarEvolution.h"
-#include "llvm/Analysis/ScalarEvolutionExpander.h"
-#include "llvm/Analysis/ScalarEvolutionExpressions.h"
-#include "llvm/Analysis/TargetTransformInfo.h"
-#include "llvm/Analysis/ValueTracking.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/DebugInfo.h"
-#include "llvm/IR/DerivedTypes.h"
-#include "llvm/IR/DiagnosticInfo.h"
-#include "llvm/IR/Dominators.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/IRBuilder.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/PatternMatch.h"
-#include "llvm/IR/Type.h"
-#include "llvm/IR/Value.h"
-#include "llvm/IR/ValueHandle.h"
-#include "llvm/IR/Verifier.h"
-#include "llvm/Pass.h"
-#include "llvm/Support/BranchProbability.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Transforms/Scalar.h"
-#include "llvm/Transforms/Utils/BasicBlockUtils.h"
-#include "llvm/Transforms/Utils/Local.h"
-#include "llvm/Analysis/VectorUtils.h"
-#include "llvm/Transforms/Utils/LoopUtils.h"
+#include "llvm37/Transforms/Vectorize.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/EquivalenceClasses.h"
+#include "llvm37/ADT/Hashing.h"
+#include "llvm37/ADT/MapVector.h"
+#include "llvm37/ADT/SetVector.h"
+#include "llvm37/ADT/SmallPtrSet.h"
+#include "llvm37/ADT/SmallSet.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/ADT/StringExtras.h"
+#include "llvm37/Analysis/AliasAnalysis.h"
+#include "llvm37/Analysis/AliasSetTracker.h"
+#include "llvm37/Analysis/AssumptionCache.h"
+#include "llvm37/Analysis/BlockFrequencyInfo.h"
+#include "llvm37/Analysis/CodeMetrics.h"
+#include "llvm37/Analysis/LoopAccessAnalysis.h"
+#include "llvm37/Analysis/LoopInfo.h"
+#include "llvm37/Analysis/LoopIterator.h"
+#include "llvm37/Analysis/LoopPass.h"
+#include "llvm37/Analysis/ScalarEvolution.h"
+#include "llvm37/Analysis/ScalarEvolutionExpander.h"
+#include "llvm37/Analysis/ScalarEvolutionExpressions.h"
+#include "llvm37/Analysis/TargetTransformInfo.h"
+#include "llvm37/Analysis/ValueTracking.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/IR/DebugInfo.h"
+#include "llvm37/IR/DerivedTypes.h"
+#include "llvm37/IR/DiagnosticInfo.h"
+#include "llvm37/IR/Dominators.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/IRBuilder.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/PatternMatch.h"
+#include "llvm37/IR/Type.h"
+#include "llvm37/IR/Value.h"
+#include "llvm37/IR/ValueHandle.h"
+#include "llvm37/IR/Verifier.h"
+#include "llvm37/Pass.h"
+#include "llvm37/Support/BranchProbability.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Transforms/Scalar.h"
+#include "llvm37/Transforms/Utils/BasicBlockUtils.h"
+#include "llvm37/Transforms/Utils/Local.h"
+#include "llvm37/Analysis/VectorUtils.h"
+#include "llvm37/Transforms/Utils/LoopUtils.h"
 #include <algorithm>
 #include <map>
 #include <tuple>
 
-using namespace llvm;
-using namespace llvm::PatternMatch;
+using namespace llvm37;
+using namespace llvm37::PatternMatch;
 
 #define LV_NAME "loop-vectorize"
 #define DEBUG_TYPE LV_NAME
@@ -548,10 +548,10 @@ static void propagateMetadata(Instruction *To, const Instruction *From) {
     // on the condition, and thus actually aliased with some other
     // non-speculated memory access when the condition was false, this would be
     // caught by the runtime overlap checks).
-    if (Kind != LLVMContext::MD_tbaa &&
-        Kind != LLVMContext::MD_alias_scope &&
-        Kind != LLVMContext::MD_noalias &&
-        Kind != LLVMContext::MD_fpmath)
+    if (Kind != LLVM37Context::MD_tbaa &&
+        Kind != LLVM37Context::MD_alias_scope &&
+        Kind != LLVM37Context::MD_noalias &&
+        Kind != LLVM37Context::MD_fpmath)
       continue;
 
     To->setMetadata(Kind, M.second);
@@ -661,7 +661,7 @@ public:
       if (I.second == Instr)
         return I.first - SmallestKey;
 
-    llvm_unreachable("InterleaveGroup contains no such member");
+    llvm37_unreachable("InterleaveGroup contains no such member");
   }
 
   Instruction *getInsertPos() const { return InsertPos; }
@@ -864,7 +864,7 @@ public:
       case IK_NoInduction:
         return nullptr;
       }
-      llvm_unreachable("invalid enum");
+      llvm37_unreachable("invalid enum");
     }
 
     /// Start value.
@@ -1159,7 +1159,7 @@ private:
     LoopAccessReport::emitAnalysis(Message, TheFunction, TheLoop, LV_NAME);
   }
 
-  /// Values used only by @llvm.assume calls.
+  /// Values used only by @llvm37.assume calls.
   SmallPtrSet<const Value *, 32> EphValues;
 
   /// The loop that we evaluate.
@@ -1344,7 +1344,7 @@ private:
 
   /// Create a new hint from name / value pair.
   MDNode *createHintMetadata(StringRef Name, unsigned V) const {
-    LLVMContext &Context = TheLoop->getHeader()->getContext();
+    LLVM37Context &Context = TheLoop->getHeader()->getContext();
     Metadata *MDs[] = {MDString::get(Context, Name),
                        ConstantAsMetadata::get(
                            ConstantInt::get(Type::getInt32Ty(Context), V))};
@@ -1386,7 +1386,7 @@ private:
       MDs.push_back(createHintMetadata(Twine(Prefix(), H.Name).str(), H.Value));
 
     // Replace current metadata node with new one.
-    LLVMContext &Context = TheLoop->getHeader()->getContext();
+    LLVM37Context &Context = TheLoop->getHeader()->getContext();
     MDNode *NewLoopID = MDNode::get(Context, MDs);
     // Set operand 0 to refer to the loop id itself.
     NewLoopID->replaceOperandWith(0, NewLoopID);
@@ -1516,7 +1516,7 @@ struct LoopVectorize : public FunctionPass {
 
     if (!IsUnrollMetadata) {
       // Add runtime unroll disable metadata.
-      LLVMContext &Context = L->getHeader()->getContext();
+      LLVM37Context &Context = L->getHeader()->getContext();
       SmallVector<Metadata *, 1> DisableOperands;
       DisableOperands.push_back(
           MDString::get(Context, "llvm.loop.unroll.runtime.disable"));
@@ -2446,7 +2446,7 @@ InnerLoopVectorizer::addStrideCheck(Instruction *Loc) {
   // We have to do this trickery because the IRBuilder might fold the check to a
   // constant expression in which case there is no Instruction anchored in a
   // the block.
-  LLVMContext &Ctx = Loc->getContext();
+  LLVM37Context &Ctx = Loc->getContext();
   Instruction *TheCheck =
       BinaryOperator::CreateAnd(Check, ConstantInt::getTrue(Ctx));
   ChkBuilder.Insert(TheCheck, "stride.not.one");
@@ -2736,7 +2736,7 @@ void InnerLoopVectorizer::createEmptyLoop() {
     Value *EndValue = nullptr;
     switch (II.IK) {
     case LoopVectorizationLegality::IK_NoInduction:
-      llvm_unreachable("Unknown induction");
+      llvm37_unreachable("Unknown induction");
     case LoopVectorizationLegality::IK_IntInduction: {
       // Handle the integer induction counter.
       assert(OrigPhi->getType()->isIntegerTy() && "Invalid type");
@@ -3392,7 +3392,7 @@ void InnerLoopVectorizer::widenPHIInstruction(Instruction *PN,
   // which can be found from the original scalar operations.
   switch (II.IK) {
     case LoopVectorizationLegality::IK_NoInduction:
-      llvm_unreachable("Unknown induction");
+      llvm37_unreachable("Unknown induction");
     case LoopVectorizationLegality::IK_IntInduction: {
       assert(P->getType() == II.StartValue->getType() && "Types must match");
       Type *PhiTy = P->getType();
@@ -5251,7 +5251,7 @@ INITIALIZE_PASS_DEPENDENCY(LoopSimplify)
 INITIALIZE_PASS_DEPENDENCY(LoopAccessAnalysis)
 INITIALIZE_PASS_END(LoopVectorize, LV_NAME, lv_name, false, false)
 
-namespace llvm {
+namespace llvm37 {
   Pass *createLoopVectorizePass(bool NoUnrolling, bool AlwaysVectorize) {
     return new LoopVectorize(NoUnrolling, AlwaysVectorize);
   }

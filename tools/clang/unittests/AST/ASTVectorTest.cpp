@@ -1,6 +1,6 @@
 //===- unittests/AST/DeclTest.cpp --- Declaration tests -------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,7 +11,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Support/Compiler.h"
+#include "llvm37/Support/Compiler.h"
 #include "clang/AST/ASTContext.h"
 #include "clang/AST/ASTVector.h"
 #include "clang/Basic/Builtins.h"

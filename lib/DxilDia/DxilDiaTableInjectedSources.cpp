@@ -15,16 +15,16 @@
 #include "DxilDiaSession.h"
 #include "DxilDiaTable.h"
 
-llvm::MDTuple *dxil_dia::InjectedSource::NameContent() {
-  return llvm::cast<llvm::MDTuple>(m_pSession->Contents()->getOperand(m_index));
+llvm37::MDTuple *dxil_dia::InjectedSource::NameContent() {
+  return llvm37::cast<llvm37::MDTuple>(m_pSession->Contents()->getOperand(m_index));
 }
 
-llvm::StringRef dxil_dia::InjectedSource::Name() {
-  return llvm::dyn_cast<llvm::MDString>(NameContent()->getOperand(0))->getString();
+llvm37::StringRef dxil_dia::InjectedSource::Name() {
+  return llvm37::dyn_cast<llvm37::MDString>(NameContent()->getOperand(0))->getString();
 }
 
-llvm::StringRef dxil_dia::InjectedSource::Content() {
-  return llvm::dyn_cast<llvm::MDString>(NameContent()->getOperand(1))->getString();
+llvm37::StringRef dxil_dia::InjectedSource::Content() {
+  return llvm37::dyn_cast<llvm37::MDString>(NameContent()->getOperand(1))->getString();
 }
 
 STDMETHODIMP dxil_dia::InjectedSource::get_length(_Out_ ULONGLONG *pRetVal) {
@@ -89,10 +89,10 @@ HRESULT dxil_dia::InjectedSourcesTable::GetItem(DWORD index, IDiaInjectedSource 
   return S_OK;
 }
 
-void dxil_dia::InjectedSourcesTable::Init(llvm::StringRef filename) {
+void dxil_dia::InjectedSourcesTable::Init(llvm37::StringRef filename) {
   for (unsigned i = 0; i < m_pSession->Contents()->getNumOperands(); ++i) {
-    llvm::StringRef fn =
-      llvm::dyn_cast<llvm::MDString>(m_pSession->Contents()->getOperand(i)->getOperand(0))
+    llvm37::StringRef fn =
+      llvm37::dyn_cast<llvm37::MDString>(m_pSession->Contents()->getOperand(i)->getOperand(0))
       ->getString();
     if (fn.equals(filename)) {
       m_indexList.emplace_back(i);

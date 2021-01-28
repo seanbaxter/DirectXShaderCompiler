@@ -1,6 +1,6 @@
 //===- ConstantPools.cpp - ConstantPool class --*- C++ -*---------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,14 +11,14 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/ADT/MapVector.h"
-#include "llvm/MC/ConstantPools.h"
-#include "llvm/MC/MCContext.h"
-#include "llvm/MC/MCExpr.h"
-#include "llvm/MC/MCStreamer.h"
+#include "llvm37/ADT/MapVector.h"
+#include "llvm37/MC/ConstantPools.h"
+#include "llvm37/MC/MCContext.h"
+#include "llvm37/MC/MCExpr.h"
+#include "llvm37/MC/MCStreamer.h"
 //                                                                           //
 ///////////////////////////////////////////////////////////////////////////////
-using namespace llvm;
+using namespace llvm37;
 //
 // ConstantPool implementation
 //

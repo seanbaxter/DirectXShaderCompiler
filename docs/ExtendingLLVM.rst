@@ -1,29 +1,29 @@
 ============================================================
-Extending LLVM: Adding instructions, intrinsics, types, etc.
+Extending LLVM37: Adding instructions, intrinsics, types, etc.
 ============================================================
 
 Introduction and Warning
 ========================
 
 
-During the course of using LLVM, you may wish to customize it for your research
+During the course of using LLVM37, you may wish to customize it for your research
 project or for experimentation. At this point, you may realize that you need to
-add something to LLVM, whether it be a new fundamental type, a new intrinsic
+add something to LLVM37, whether it be a new fundamental type, a new intrinsic
 function, or a whole new instruction.
 
 When you come to this realization, stop and think. Do you really need to extend
-LLVM? Is it a new fundamental capability that LLVM does not support at its
-current incarnation or can it be synthesized from already pre-existing LLVM
-elements? If you are not sure, ask on the `LLVM-dev
-<http://lists.llvm.org/mailman/listinfo/llvm-dev>`_ list. The reason is that
-extending LLVM will get involved as you need to update all the different passes
-that you intend to use with your extension, and there are ``many`` LLVM analyses
+LLVM37? Is it a new fundamental capability that LLVM37 does not support at its
+current incarnation or can it be synthesized from already pre-existing LLVM37
+elements? If you are not sure, ask on the `LLVM37-dev
+<http://lists.llvm37.org/mailman/listinfo/llvm37-dev>`_ list. The reason is that
+extending LLVM37 will get involved as you need to update all the different passes
+that you intend to use with your extension, and there are ``many`` LLVM37 analyses
 and transformations, so it may be quite a bit of work.
 
 Adding an `intrinsic function`_ is far easier than adding an
 instruction, and is transparent to optimization passes.  If your added
 functionality can be expressed as a function call, an intrinsic function is the
-method of choice for LLVM extension.
+method of choice for LLVM37 extension.
 
 Before you invest a significant amount of effort into a non-trivial extension,
 **ask on the list** if what you are looking to do can be done with
@@ -35,30 +35,30 @@ it. You will save yourself a lot of time and effort by doing so.
 Adding a new intrinsic function
 ===============================
 
-Adding a new intrinsic function to LLVM is much easier than adding a new
-instruction.  Almost all extensions to LLVM should start as an intrinsic
+Adding a new intrinsic function to LLVM37 is much easier than adding a new
+instruction.  Almost all extensions to LLVM37 should start as an intrinsic
 function and then be turned into an instruction if warranted.
 
-#. ``llvm/docs/LangRef.html``:
+#. ``llvm37/docs/LangRef.html``:
 
    Document the intrinsic.  Decide whether it is code generator specific and
    what the restrictions are.  Talk to other people about it so that you are
    sure it's a good idea.
 
-#. ``llvm/include/llvm/IR/Intrinsics*.td``:
+#. ``llvm37/include/llvm37/IR/Intrinsics*.td``:
 
    Add an entry for your intrinsic.  Describe its memory access characteristics
    for optimization (this controls whether it will be DCE'd, CSE'd, etc). Note
-   that any intrinsic using the ``llvm_int_ty`` type for an argument will
+   that any intrinsic using the ``llvm37_int_ty`` type for an argument will
    be deemed by ``tblgen`` as overloaded and the corresponding suffix will
    be required on the intrinsic's name.
 
-#. ``llvm/lib/Analysis/ConstantFolding.cpp``:
+#. ``llvm37/lib/Analysis/ConstantFolding.cpp``:
 
    If it is possible to constant fold your intrinsic, add support to it in the
    ``canConstantFoldCallTo`` and ``ConstantFoldCall`` functions.
 
-#. ``llvm/test/*``:
+#. ``llvm37/test/*``:
 
    Add test cases for your test cases to the test suite
 
@@ -76,15 +76,15 @@ Add support to the .td file for the target(s) of your choice in
 Adding a new SelectionDAG node
 ==============================
 
-As with intrinsics, adding a new SelectionDAG node to LLVM is much easier than
+As with intrinsics, adding a new SelectionDAG node to LLVM37 is much easier than
 adding a new instruction.  New nodes are often added to help represent
-instructions common to many targets.  These nodes often map to an LLVM
+instructions common to many targets.  These nodes often map to an LLVM37
 instruction (add, sub) or intrinsic (byteswap, population count).  In other
 cases, new nodes have been added to allow many targets to perform a common task
 (converting between floating point and integer representation) or capture more
 complicated behavior in a single node (rotate).
 
-#. ``include/llvm/CodeGen/ISDOpcodes.h``:
+#. ``include/llvm37/CodeGen/ISDOpcodes.h``:
 
    Add an enum value for the new SelectionDAG node.
 
@@ -147,7 +147,7 @@ complicated behavior in a single node (rotate).
 
 #. ``lib/Target/TargetSelectionDAG.td``:
 
-   Most current targets supported by LLVM generate code using the DAGToDAG
+   Most current targets supported by LLVM37 generate code using the DAGToDAG
    method, where SelectionDAG nodes are pattern matched to target-specific
    nodes, which represent individual instructions.  In order for the targets to
    match an instruction to your new node, you must add a def for that node to
@@ -164,10 +164,10 @@ complicated behavior in a single node (rotate).
 
 #. TODO: document complex patterns.
 
-#. ``llvm/test/CodeGen/*``:
+#. ``llvm37/test/CodeGen/*``:
 
    Add test cases for your new node to the test suite.
-   ``llvm/test/CodeGen/X86/bswap.ll`` is a good example.
+   ``llvm37/test/CodeGen/X86/bswap.ll`` is a good example.
 
 Adding a new instruction
 ========================
@@ -178,50 +178,50 @@ Adding a new instruction
   to maintain compatibility with the previous version. Only add an instruction
   if it is absolutely necessary.
 
-#. ``llvm/include/llvm/IR/Instruction.def``:
+#. ``llvm37/include/llvm37/IR/Instruction.def``:
 
    add a number for your instruction and an enum name
 
-#. ``llvm/include/llvm/IR/Instructions.h``:
+#. ``llvm37/include/llvm37/IR/Instructions.h``:
 
    add a definition for the class that will represent your instruction
 
-#. ``llvm/include/llvm/IR/InstVisitor.h``:
+#. ``llvm37/include/llvm37/IR/InstVisitor.h``:
 
    add a prototype for a visitor to your new instruction type
 
-#. ``llvm/lib/AsmParser/LLLexer.cpp``:
+#. ``llvm37/lib/AsmParser/LLLexer.cpp``:
 
    add a new token to parse your instruction from assembly text file
 
-#. ``llvm/lib/AsmParser/LLParser.cpp``:
+#. ``llvm37/lib/AsmParser/LLParser.cpp``:
 
    add the grammar on how your instruction can be read and what it will
    construct as a result
 
-#. ``llvm/lib/Bitcode/Reader/BitcodeReader.cpp``:
+#. ``llvm37/lib/Bitcode/Reader/BitcodeReader.cpp``:
 
    add a case for your instruction and how it will be parsed from bitcode
 
-#. ``llvm/lib/Bitcode/Writer/BitcodeWriter.cpp``:
+#. ``llvm37/lib/Bitcode/Writer/BitcodeWriter.cpp``:
 
    add a case for your instruction and how it will be parsed from bitcode
 
-#. ``llvm/lib/IR/Instruction.cpp``:
+#. ``llvm37/lib/IR/Instruction.cpp``:
 
    add a case for how your instruction will be printed out to assembly
 
-#. ``llvm/lib/IR/Instructions.cpp``:
+#. ``llvm37/lib/IR/Instructions.cpp``:
 
-   implement the class you defined in ``llvm/include/llvm/Instructions.h``
+   implement the class you defined in ``llvm37/include/llvm37/Instructions.h``
 
 #. Test your instruction
 
-#. ``llvm/lib/Target/*``:
+#. ``llvm37/lib/Target/*``:
 
    add support for your instruction to code generators, or add a lowering pass.
 
-#. ``llvm/test/*``:
+#. ``llvm37/test/*``:
 
    add your test cases to the test suite.
 
@@ -234,94 +234,94 @@ Adding a new type
 .. warning::
 
   Adding new types changes the bitcode format, and will break compatibility with
-  currently-existing LLVM installations. Only add new types if it is absolutely
+  currently-existing LLVM37 installations. Only add new types if it is absolutely
   necessary.
 
 Adding a fundamental type
 -------------------------
 
-#. ``llvm/include/llvm/IR/Type.h``:
+#. ``llvm37/include/llvm37/IR/Type.h``:
 
    add enum for the new type; add static ``Type*`` for this type
 
-#. ``llvm/lib/IR/Type.cpp`` and ``llvm/lib/IR/ValueTypes.cpp``:
+#. ``llvm37/lib/IR/Type.cpp`` and ``llvm37/lib/IR/ValueTypes.cpp``:
 
    add mapping from ``TypeID`` => ``Type*``; initialize the static ``Type*``
 
-#. ``llvm/llvm/llvm-c/Core.cpp``:
+#. ``llvm37/llvm37/llvm37-c/Core.cpp``:
 
-   add enum ``LLVMTypeKind`` and modify
-   ``LLVMTypeKind LLVMGetTypeKind(LLVMTypeRef Ty)`` for the new type
+   add enum ``LLVM37TypeKind`` and modify
+   ``LLVM37TypeKind LLVM37GetTypeKind(LLVM37TypeRef Ty)`` for the new type
 
-#. ``llvm/include/llvm/IR/TypeBuilder.h``:
+#. ``llvm37/include/llvm37/IR/TypeBuilder.h``:
 
    add new class to represent new type in the hierarchy
 
-#. ``llvm/lib/AsmParser/LLLexer.cpp``:
+#. ``llvm37/lib/AsmParser/LLLexer.cpp``:
 
    add ability to parse in the type from text assembly
 
-#. ``llvm/lib/AsmParser/LLParser.cpp``:
+#. ``llvm37/lib/AsmParser/LLParser.cpp``:
 
    add a token for that type
 
-#. ``llvm/lib/Bitcode/Writer/BitcodeWriter.cpp``:
+#. ``llvm37/lib/Bitcode/Writer/BitcodeWriter.cpp``:
 
    modify ``static void WriteTypeTable(const ValueEnumerator &VE,
    BitstreamWriter &Stream)`` to serialize your type
 
-#. ``llvm/lib/Bitcode/Reader/BitcodeReader.cpp``:
+#. ``llvm37/lib/Bitcode/Reader/BitcodeReader.cpp``:
 
    modify ``bool BitcodeReader::ParseTypeType()`` to read your data type
 
-#. ``include/llvm/Bitcode/LLVMBitCodes.h``:
+#. ``include/llvm37/Bitcode/LLVMBitCodes.h``:
 
    add enum ``TypeCodes`` for the new type
 
 Adding a derived type
 ---------------------
 
-#. ``llvm/include/llvm/IR/Type.h``:
+#. ``llvm37/include/llvm37/IR/Type.h``:
 
    add enum for the new type; add a forward declaration of the type also
 
-#. ``llvm/include/llvm/IR/DerivedTypes.h``:
+#. ``llvm37/include/llvm37/IR/DerivedTypes.h``:
 
    add new class to represent new class in the hierarchy; add forward
    declaration to the TypeMap value type
 
-#. ``llvm/lib/IR/Type.cpp`` and ``llvm/lib/IR/ValueTypes.cpp``:
+#. ``llvm37/lib/IR/Type.cpp`` and ``llvm37/lib/IR/ValueTypes.cpp``:
 
    add support for derived type, notably `enum TypeID` and `is`, `get` methods.
 
-#. ``llvm/llvm/llvm-c/Core.cpp``:
+#. ``llvm37/llvm37/llvm37-c/Core.cpp``:
 
-   add enum ``LLVMTypeKind`` and modify
-   `LLVMTypeKind LLVMGetTypeKind(LLVMTypeRef Ty)` for the new type
+   add enum ``LLVM37TypeKind`` and modify
+   `LLVM37TypeKind LLVM37GetTypeKind(LLVM37TypeRef Ty)` for the new type
 
-#. ``llvm/include/llvm/IR/TypeBuilder.h``:
+#. ``llvm37/include/llvm37/IR/TypeBuilder.h``:
 
    add new class to represent new class in the hierarchy
 
-#. ``llvm/lib/AsmParser/LLLexer.cpp``:
+#. ``llvm37/lib/AsmParser/LLLexer.cpp``:
 
    modify ``lltok::Kind LLLexer::LexIdentifier()`` to add ability to
    parse in the type from text assembly
 
-#. ``llvm/lib/Bitcode/Writer/BitcodeWriter.cpp``:
+#. ``llvm37/lib/Bitcode/Writer/BitcodeWriter.cpp``:
 
    modify ``static void WriteTypeTable(const ValueEnumerator &VE,
    BitstreamWriter &Stream)`` to serialize your type
 
-#. ``llvm/lib/Bitcode/Reader/BitcodeReader.cpp``:
+#. ``llvm37/lib/Bitcode/Reader/BitcodeReader.cpp``:
 
    modify ``bool BitcodeReader::ParseTypeType()`` to read your data type
 
-#. ``include/llvm/Bitcode/LLVMBitCodes.h``:
+#. ``include/llvm37/Bitcode/LLVMBitCodes.h``:
 
    add enum ``TypeCodes`` for the new type
 
-#. ``llvm/lib/IR/AsmWriter.cpp``:
+#. ``llvm37/lib/IR/AsmWriter.cpp``:
 
    modify ``void TypePrinting::print(Type *Ty, raw_ostream &OS)``
    to output the new derived type

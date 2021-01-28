@@ -1,6 +1,6 @@
 //===- ProvenanceAnalysis.h - ObjC ARC Optimization ---*- C++ -*-----------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -17,17 +17,17 @@
 /// by name, and hardwires knowledge of their semantics.
 ///
 /// WARNING: This file knows about how certain Objective-C library functions are
-/// used. Naive LLVM IR transformations which would otherwise be
+/// used. Naive LLVM37 IR transformations which would otherwise be
 /// behavior-preserving may break these assumptions.
 ///
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_LIB_TRANSFORMS_OBJCARC_PROVENANCEANALYSIS_H
-#define LLVM_LIB_TRANSFORMS_OBJCARC_PROVENANCEANALYSIS_H
+#ifndef LLVM37_LIB_TRANSFORMS_OBJCARC_PROVENANCEANALYSIS_H
+#define LLVM37_LIB_TRANSFORMS_OBJCARC_PROVENANCEANALYSIS_H
 
-#include "llvm/ADT/DenseMap.h"
+#include "llvm37/ADT/DenseMap.h"
 
-namespace llvm {
+namespace llvm37 {
   class Value;
   class AliasAnalysis;
   class DataLayout;
@@ -35,7 +35,7 @@ namespace llvm {
   class SelectInst;
 }
 
-namespace llvm {
+namespace llvm37 {
 namespace objcarc {
 
 /// \brief This is similar to BasicAliasAnalysis, and it uses many of the same
@@ -76,6 +76,6 @@ public:
 };
 
 } // end namespace objcarc
-} // end namespace llvm
+} // end namespace llvm37
 
 #endif

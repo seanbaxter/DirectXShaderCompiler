@@ -1,17 +1,17 @@
 //===--- Types.h - Input & Temporary Driver Types ---------------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_DRIVER_TYPES_H
-#define LLVM_CLANG_DRIVER_TYPES_H
+#ifndef LLVM37_CLANG_DRIVER_TYPES_H
+#define LLVM37_CLANG_DRIVER_TYPES_H
 
 #include "clang/Driver/Phases.h"
-#include "llvm/ADT/SmallVector.h"
+#include "llvm37/ADT/SmallVector.h"
 
 namespace clang {
 namespace driver {
@@ -81,7 +81,7 @@ namespace types {
   /// done for type 'Id'.
   void getCompilationPhases(
     ID Id,
-    llvm::SmallVectorImpl<phases::ID> &Phases);
+    llvm37::SmallVectorImpl<phases::ID> &Phases);
 
   /// lookupCXXTypeForCType - Lookup CXX input type that corresponds to given
   /// C type (used for clang++ emulation of g++ behaviour)

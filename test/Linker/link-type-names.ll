@@ -1,5 +1,5 @@
 ; RUN: echo "%X = type { i32 } @G2 = global %X { i32 4 }" > %t.ll
-; RUN: llvm-link %s %t.ll -S | FileCheck %s
+; RUN: llvm37-link %s %t.ll -S | FileCheck %s
 ; PR11464
 
 %X = type { i32 }

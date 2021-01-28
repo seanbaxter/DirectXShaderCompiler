@@ -1,5 +1,5 @@
 ==============================================
-LLVM Atomic Instructions and Concurrency Guide
+LLVM37 Atomic Instructions and Concurrency Guide
 ==============================================
 
 .. contents::
@@ -8,7 +8,7 @@ LLVM Atomic Instructions and Concurrency Guide
 Introduction
 ============
 
-Historically, LLVM has not had very strong support for concurrency; some minimal
+Historically, LLVM37 has not had very strong support for concurrency; some minimal
 intrinsics were provided, and ``volatile`` was used in some cases to achieve
 rough semantics in the presence of concurrency.  However, this is changing;
 there are now new instructions which are well-defined in the presence of threads
@@ -41,7 +41,7 @@ pair of volatile stores. On the other hand, a non-volatile non-atomic load can
 be moved across a volatile load freely, but not an Acquire load.
 
 This document is intended to provide a guide to anyone either writing a frontend
-for LLVM or working on optimization passes for LLVM with a guide for how to deal
+for LLVM37 or working on optimization passes for LLVM37 with a guide for how to deal
 with instructions with special semantics in the presence of concurrency.  This
 is not intended to be a precise guide to the semantics; the details can get
 extremely complicated and unreadable, and are not usually necessary.
@@ -65,7 +65,7 @@ otherwise.  Take the following example:
 
 .. code-block:: c
 
- /* C code, for readability; run through clang -O2 -S -emit-llvm to get
+ /* C code, for readability; run through clang -O2 -S -emit-llvm37 to get
      equivalent IR */
   int x;
   void f(int* a) {
@@ -89,10 +89,10 @@ The following is equivalent in non-concurrent situations:
     x = xtemp;
   }
 
-However, LLVM is not allowed to transform the former to the latter: it could
+However, LLVM37 is not allowed to transform the former to the latter: it could
 indirectly introduce undefined behavior if another thread can access ``x`` at
 the same time. (This example is particularly of interest because before the
-concurrency model was implemented, LLVM would perform this transformation.)
+concurrency model was implemented, LLVM37 would perform this transformation.)
 
 Note that speculative loads are allowed; a load which is part of a race returns
 ``undef``, but does not have undefined behavior.
@@ -100,7 +100,7 @@ Note that speculative loads are allowed; a load which is part of a race returns
 Atomic instructions
 ===================
 
-For cases where simple loads and stores are not sufficient, LLVM provides
+For cases where simple loads and stores are not sufficient, LLVM37 provides
 various atomic instructions. The exact guarantees provided depend on the
 ordering; see `Atomic orderings`_.
 
@@ -173,7 +173,7 @@ Notes for code generation
   also expected to generate an i8 store as an i8 store, and not an instruction
   which writes to surrounding bytes.  (If you are writing a backend for an
   architecture which cannot satisfy these restrictions and cares about
-  concurrency, please send an email to llvm-dev.)
+  concurrency, please send an email to llvm37-dev.)
 
 Unordered
 ---------
@@ -422,7 +422,7 @@ lock-free ``cmpxchg``; such an operation can be used to implement all the other
 atomic operations which can be represented in IR up to that size.  Backends are
 expected to implement all those operations, but not operations which cannot be
 implemented in a lock-free manner.  It is expected that backends will give an
-error when given an operation which cannot be implemented.  (The LLVM code
+error when given an operation which cannot be implemented.  (The LLVM37 code
 generator is not very helpful here at the moment, but hopefully that will
 change.)
 

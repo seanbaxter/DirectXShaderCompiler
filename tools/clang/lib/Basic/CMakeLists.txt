@@ -1,4 +1,4 @@
-set(LLVM_LINK_COMPONENTS
+set(LLVM37_LINK_COMPONENTS
   Core
 #  MC # HLSL Change
   Support
@@ -22,13 +22,13 @@ macro(find_first_existing_vc_file out_var path)
     )
 endmacro()
 
-find_first_existing_vc_file(llvm_vc "${LLVM_MAIN_SRC_DIR}")
+find_first_existing_vc_file(llvm37_vc "${LLVM37_MAIN_SRC_DIR}")
 find_first_existing_vc_file(clang_vc "${CLANG_SOURCE_DIR}")
 
 # The VC revision include that we want to generate.
 set(version_inc "${CMAKE_CURRENT_BINARY_DIR}/SVNVersion.inc")
 
-set(get_svn_script "${LLVM_MAIN_SRC_DIR}/cmake/modules/GetSVN.cmake")
+set(get_svn_script "${LLVM37_MAIN_SRC_DIR}/cmake/modules/GetSVN.cmake")
 
 # HLSL Change Starts
 if (HLSL_ENABLE_FIXED_VER)
@@ -36,13 +36,13 @@ if (HLSL_ENABLE_FIXED_VER)
 endif (HLSL_ENABLE_FIXED_VER)
 # HLSL Change Ends
 
-if(DEFINED llvm_vc AND DEFINED clang_vc)
+if(DEFINED llvm37_vc AND DEFINED clang_vc)
   # Create custom target to generate the VC revision include.
   add_custom_command(OUTPUT "${version_inc}"
-    DEPENDS "${llvm_vc}" "${clang_vc}" "${get_svn_script}"
+    DEPENDS "${llvm37_vc}" "${clang_vc}" "${get_svn_script}"
     COMMAND
-    ${CMAKE_COMMAND} "-DFIRST_SOURCE_DIR=${LLVM_MAIN_SRC_DIR}"
-                     "-DFIRST_NAME=LLVM"
+    ${CMAKE_COMMAND} "-DFIRST_SOURCE_DIR=${LLVM37_MAIN_SRC_DIR}"
+                     "-DFIRST_NAME=LLVM37"
                      "-DSECOND_SOURCE_DIR=${CLANG_SOURCE_DIR}"
                      "-DSECOND_NAME=SVN"
                      "-DHEADER_FILE=${version_inc}"

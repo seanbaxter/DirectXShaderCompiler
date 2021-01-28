@@ -1,6 +1,6 @@
 //===--- ParseCXXInlineMethods.cpp - C++ class inline methods parsing------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -92,7 +92,7 @@ NamedDecl *Parser::ParseCXXInlineMethodDef(AccessSpecifier AS,
         DeclAsFunction->setRangeEnd(KWEndLoc);
       }
     } else {
-      llvm_unreachable("function definition after = not 'delete' or 'default'");
+      llvm37_unreachable("function definition after = not 'delete' or 'default'");
     }
 
     if (Tok.is(tok::comma)) {

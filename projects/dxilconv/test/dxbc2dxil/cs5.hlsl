@@ -1,5 +1,5 @@
 // RUN: %fxc /T cs_5_0 %s /Fo %t.dxbc
-// RUN: %dxbc2dxil %t.dxbc /no-dxil-cleanup /emit-llvm /o %t.ll.converted
+// RUN: %dxbc2dxil %t.dxbc /no-dxil-cleanup /emit-llvm37 /o %t.ll.converted
 // RUN: fc %b.ref %t.ll.converted
 
 RWByteAddressBuffer uav0;

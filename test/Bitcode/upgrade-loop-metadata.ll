@@ -1,6 +1,6 @@
 ; Test to make sure loop vectorizer metadata is automatically upgraded.
 ;
-; RUN: llvm-dis < %s.bc | FileCheck %s
+; RUN: llvm37-dis < %s.bc | FileCheck %s
 ; RUN: verify-uselistorder < %s.bc
 
 define void @_Z28loop_with_vectorize_metadatav() {
@@ -12,7 +12,7 @@ entry:
 for.cond:                                         ; preds = %for.inc, %entry
   %0 = load i32, i32* %i, align 4
   %cmp = icmp slt i32 %0, 16
-  br i1 %cmp, label %for.body, label %for.end, !llvm.loop !1
+  br i1 %cmp, label %for.body, label %for.end, !llvm37.loop !1
 
 for.body:                                         ; preds = %for.cond
   br label %for.inc

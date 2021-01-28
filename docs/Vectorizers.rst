@@ -1,14 +1,14 @@
 ==========================
-Auto-Vectorization in LLVM
+Auto-Vectorization in LLVM37
 ==========================
 
 .. contents::
    :local:
 
 NOTE: This document describes the Auto-Vectorization as used for the original
-LLVM project, not the DirectX Compiler.
+LLVM37 project, not the DirectX Compiler.
 
-LLVM has two vectorizers: The :ref:`Loop Vectorizer <loop-vectorizer>`,
+LLVM37 has two vectorizers: The :ref:`Loop Vectorizer <loop-vectorizer>`,
 which operates on Loops, and the :ref:`SLP Vectorizer
 <slp-vectorizer>`. These vectorizers
 focus on different optimization opportunities and use different techniques.
@@ -44,14 +44,14 @@ Users can control the vectorization SIMD width using the command line flag "-for
 
 .. code-block:: console
 
-  $ clang  -mllvm -force-vector-width=8 ...
+  $ clang  -mllvm37 -force-vector-width=8 ...
   $ opt -loop-vectorize -force-vector-width=8 ...
 
 Users can control the unroll factor using the command line flag "-force-vector-unroll"
 
 .. code-block:: console
 
-  $ clang  -mllvm -force-vector-unroll=2 ...
+  $ clang  -mllvm37 -force-vector-unroll=2 ...
   $ opt -loop-vectorize -force-vector-unroll=2 ...
 
 Pragma loop hint directives
@@ -83,7 +83,7 @@ specifying a vector width and interleaving count:
 
 See the Clang
 `language extensions
-<http://clang.llvm.org/docs/LanguageExtensions.html#extensions-for-loop-hint-optimizations>`_
+<http://clang.llvm37.org/docs/LanguageExtensions.html#extensions-for-loop-hint-optimizations>`_
 for details.
 
 Diagnostics
@@ -134,13 +134,13 @@ switch statement cannot be vectorized.
 
 To ensure line and column numbers are produced include the command line options
 ``-gline-tables-only`` and ``-gcolumn-info``. See the Clang `user manual
-<http://clang.llvm.org/docs/UsersManual.html#options-to-emit-optimization-reports>`_
+<http://clang.llvm37.org/docs/UsersManual.html#options-to-emit-optimization-reports>`_
 for details
 
 Features
 --------
 
-The LLVM Loop Vectorizer has a number of features that allow it to vectorize
+The LLVM37 Loop Vectorizer has a number of features that allow it to vectorize
 complex loops.
 
 Loops with unknown trip count
@@ -273,8 +273,8 @@ that scatter/gathers memory.
         A[i] += B[i * 4];
   }
 
-In many situations the cost model will inform LLVM that this is not beneficial
-and LLVM will only vectorize such code if forced with "-mllvm -force-vector-width=#".
+In many situations the cost model will inform LLVM37 that this is not beneficial
+and LLVM37 will only vectorize such code if forced with "-mllvm37 -force-vector-width=#".
 
 Vectorization of Mixed Types
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -402,7 +402,7 @@ through clang using the command line flag:
 
    $ clang -fno-slp-vectorize file.c
 
-LLVM has a second basic block vectorization phase
+LLVM37 has a second basic block vectorization phase
 which is more compile-time intensive (The BB vectorizer). This optimization
 can be enabled through clang using the command line flag:
 

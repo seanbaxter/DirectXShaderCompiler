@@ -14,7 +14,7 @@
 #include "dxc/Support/Global.h"
 #include "dxc/Support/FileIOHelper.h"
 #include "dxc/dxcapi.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/Support/raw_ostream.h"
 #include "dxcutil.h"
 
 #include "dxc/Support/dxcfilesystem.h"
@@ -26,7 +26,7 @@
 #include <unistd.h>
 #endif
 
-using namespace llvm;
+using namespace llvm37;
 using namespace hlsl;
 
 // DxcArgsFileSystem
@@ -196,21 +196,21 @@ void MakeAbsoluteOrCurDirRelativeW(LPCWSTR &Path, std::wstring &PathStorage) {
 namespace dxcutil {
 /// File system based on API arguments. Support being added incrementally.
 ///
-/// DxcArgsFileSystem emulates a file system to clang/llvm based on API
+/// DxcArgsFileSystem emulates a file system to clang/llvm37 based on API
 /// arguments. It can block certain functionality (like picking up the current
 /// directory), while adding other (like supporting an app's in-memory
 /// files through an IDxcIncludeHandler).
 ///
 /// stdin/stdout/stderr are registered especially (given that they have a
-/// special role in llvm::ins/outs/errs and are defaults to various operations,
+/// special role in llvm37::ins/outs/errs and are defaults to various operations,
 /// it's not unexpected). The direct user of DxcArgsFileSystem can also register
 /// streams to capture output for specific files.
 ///
 /// Support for IDxcIncludeHandler is somewhat tricky because the API is very
 /// minimal, to allow simple implementations, but that puts this class in the
-/// position of brokering between llvm/clang existing files (which probe for
+/// position of brokering between llvm37/clang existing files (which probe for
 /// files and directories in various patterns), and this simpler handler.
-/// The current approach is to minimize changes in llvm/clang and work around
+/// The current approach is to minimize changes in llvm37/clang and work around
 /// the absence of directory support in IDxcIncludeHandler by assuming all
 /// included paths already exist (the handler may reject those paths later on),
 /// and always querying for a file before its parent directory (so we can
@@ -239,7 +239,7 @@ private:
     IncludedFile(std::wstring &&name, IDxcBlobUtf8 *pBlob, IStream *pStream)
       : Blob(pBlob), BlobStream(pStream), Name(name) { }
   };
-  llvm::SmallVector<IncludedFile, 4> m_includedFiles;
+  llvm37::SmallVector<IncludedFile, 4> m_includedFiles;
 
   static bool IsDirOf(LPCWSTR lpDir, size_t dirLen, const std::wstring &fileName) {
     if (fileName.size() <= dirLen) return false;
@@ -747,7 +747,7 @@ public:
     memset(Status, 0, sizeof(*Status));
     switch (GetFileType(FileHandle)) {
       default:
-        llvm_unreachable("Don't know anything about this file type");
+        llvm37_unreachable("Don't know anything about this file type");
       case FILE_TYPE_DISK:
         break;
       case FILE_TYPE_CHAR:

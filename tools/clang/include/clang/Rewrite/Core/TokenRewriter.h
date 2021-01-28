@@ -1,6 +1,6 @@
 //===--- TokenRewriter.h - Token-based Rewriter -----------------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -12,8 +12,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_REWRITE_CORE_TOKENREWRITER_H
-#define LLVM_CLANG_REWRITE_CORE_TOKENREWRITER_H
+#ifndef LLVM37_CLANG_REWRITE_CORE_TOKENREWRITER_H
+#define LLVM37_CLANG_REWRITE_CORE_TOKENREWRITER_H
 
 #include "clang/Basic/SourceLocation.h"
 #include "clang/Lex/Token.h"

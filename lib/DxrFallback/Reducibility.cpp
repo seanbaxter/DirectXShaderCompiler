@@ -1,14 +1,14 @@
 #include "Reducibility.h"
 
-#include "llvm/ADT/SetVector.h"
-#include "llvm/IR/BasicBlock.h"
-#include "llvm/IR/CFG.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/LegacyPassManager.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Transforms/Utils/Cloning.h"
-#include "llvm/Transforms/Scalar.h"
+#include "llvm37/ADT/SetVector.h"
+#include "llvm37/IR/BasicBlock.h"
+#include "llvm37/IR/CFG.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/LegacyPassManager.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Transforms/Utils/Cloning.h"
+#include "llvm37/Transforms/Scalar.h"
 
 #include "LLVMUtils.h"
 
@@ -19,7 +19,7 @@
 #define DBGS errs
 //#define DBGS dbgs
 
-using namespace llvm;
+using namespace llvm37;
 
 struct Node
 {

@@ -23,11 +23,11 @@ target triple = "x86_64-apple-macosx10.7.0"
 
 define i32 @depth(double* nocapture %A, i32 %m) #0 {
 entry:
-  tail call void @llvm.dbg.value(metadata double* %A, i64 0, metadata !12, metadata !DIExpression()), !dbg !19
-  tail call void @llvm.dbg.value(metadata i32 %m, i64 0, metadata !13, metadata !DIExpression()), !dbg !19
-  tail call void @llvm.dbg.value(metadata i32 00, i64 0, metadata !14, metadata !DIExpression()), !dbg !21
-  tail call void @llvm.dbg.value(metadata i32 02, i64 0, metadata !15, metadata !DIExpression()), !dbg !21
-  tail call void @llvm.dbg.value(metadata i32 0, i64 0, metadata !16, metadata !DIExpression()), !dbg !23
+  tail call void @llvm37.dbg.value(metadata double* %A, i64 0, metadata !12, metadata !DIExpression()), !dbg !19
+  tail call void @llvm37.dbg.value(metadata i32 %m, i64 0, metadata !13, metadata !DIExpression()), !dbg !19
+  tail call void @llvm37.dbg.value(metadata i32 00, i64 0, metadata !14, metadata !DIExpression()), !dbg !21
+  tail call void @llvm37.dbg.value(metadata i32 02, i64 0, metadata !15, metadata !DIExpression()), !dbg !21
+  tail call void @llvm37.dbg.value(metadata i32 0, i64 0, metadata !16, metadata !DIExpression()), !dbg !23
   %cmp8 = icmp sgt i32 %m, 0, !dbg !23
   br i1 %cmp8, label %for.body.lr.ph, label %for.end, !dbg !23
 
@@ -49,15 +49,15 @@ for.end:                                          ; preds = %for.body.lr.ph, %en
 }
 
 ; Function Attrs: nounwind readnone
-declare void @llvm.dbg.value(metadata, i64, metadata, metadata) #1
+declare void @llvm37.dbg.value(metadata, i64, metadata, metadata) #1
 
 attributes #0 = { nounwind ssp uwtable "less-precise-fpmad"="false" "no-frame-pointer-elim"="true" "no-frame-pointer-elim-non-leaf"="true" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "stack-protector-buffer-size"="8" "unsafe-fp-math"="false" "use-soft-float"="false" }
 attributes #1 = { nounwind readnone }
 
-!llvm.dbg.cu = !{!0}
-!llvm.module.flags = !{!18, !32}
+!llvm37.dbg.cu = !{!0}
+!llvm37.module.flags = !{!18, !32}
 
-!0 = !DICompileUnit(language: DW_LANG_C99, producer: "clang version 3.4 (trunk 187335) (llvm/trunk 187335:187340M)", isOptimized: true, emissionKind: 0, file: !1, enums: !2, retainedTypes: !2, subprograms: !3, globals: !2, imports: !2)
+!0 = !DICompileUnit(language: DW_LANG_C99, producer: "clang version 3.4 (trunk 187335) (llvm37/trunk 187335:187340M)", isOptimized: true, emissionKind: 0, file: !1, enums: !2, retainedTypes: !2, subprograms: !3, globals: !2, imports: !2)
 !1 = !DIFile(filename: "file.c", directory: "/Users/nadav")
 !2 = !{}
 !3 = !{!4}

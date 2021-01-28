@@ -1,6 +1,6 @@
 //===--- utils/unittest/HLSL/TestMain.cpp - unittest driver --------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -10,7 +10,7 @@
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
 
-#include "llvm/Support/Signals.h"
+#include "llvm37/Support/Signals.h"
 
 #include "HLSLTestOptions.h"
 #include "dxc/Test/WEXAdapter.h"
@@ -106,7 +106,7 @@ const char *TestMainArgv0;
   }
 
 int main(int argc, char **argv) {
-  llvm::sys::PrintStackTraceOnErrorSignal(true /* Disable crash reporting */);
+  llvm37::sys::PrintStackTraceOnErrorSignal(true /* Disable crash reporting */);
 
   for (int i = 1; i < argc; ++i) {
     ARG_LIST(SAVE_ARG)

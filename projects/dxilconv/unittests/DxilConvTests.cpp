@@ -30,7 +30,7 @@
 #include "dxc/test/HlslTestUtils.h"
 #include "dxc/test/DxcTestUtils.h"
 
-#include "llvm/Support/raw_os_ostream.h"
+#include "llvm37/Support/raw_os_ostream.h"
 #include "dxc/Support/Global.h"
 #include "dxc/Support/dxcapi.use.h"
 #include "dxc/Support/microcom.h"
@@ -38,11 +38,11 @@
 #include "dxc/Support/Unicode.h"
 
 #include <fstream>
-#include "llvm/Support/FileSystem.h"
-#include "llvm/Support/MSFileSystem.h"
-#include "llvm/Support/Path.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/ADT/StringSwitch.h"
+#include "llvm37/Support/FileSystem.h"
+#include "llvm37/Support/MSFileSystem.h"
+#include "llvm37/Support/Path.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/ADT/StringSwitch.h"
 
 using namespace std;
 
@@ -80,18 +80,18 @@ private:
   }
 
   void DxilConvTestCheckBatchDir(std::wstring suitePath, std::string fileExt = ".hlsl", bool useRelativeFilename = false) {
-    using namespace llvm;
+    using namespace llvm37;
     using namespace WEX::TestExecution;
 
-    ::llvm::sys::fs::MSFileSystem *msfPtr;
+    ::llvm37::sys::fs::MSFileSystem *msfPtr;
     VERIFY_SUCCEEDED(CreateMSFileSystemForDisk(&msfPtr));
-    std::unique_ptr<::llvm::sys::fs::MSFileSystem> msf(msfPtr);
-    ::llvm::sys::fs::AutoPerThreadSystem pts(msf.get());
-    IFTLLVM(pts.error_code());
+    std::unique_ptr<::llvm37::sys::fs::MSFileSystem> msf(msfPtr);
+    ::llvm37::sys::fs::AutoPerThreadSystem pts(msf.get());
+    IFTLLVM37(pts.error_code());
 
     if (!useRelativeFilename) {
       CW2A pUtf8Filename(suitePath.c_str());
-      if (!llvm::sys::path::is_absolute(pUtf8Filename.m_psz)) {
+      if (!llvm37::sys::path::is_absolute(pUtf8Filename.m_psz)) {
         suitePath = hlsl_test::GetPathToHlslDataFile(suitePath.c_str());
       }
     }
@@ -100,12 +100,12 @@ private:
     unsigned numTestsRun = 0;
 
     std::error_code EC;
-    llvm::SmallString<128> DirNative;
-    llvm::StringRef filterExt(fileExt);
-    llvm::sys::path::native(utf8SuitePath.m_psz, DirNative);
-    for (llvm::sys::fs::recursive_directory_iterator Dir(DirNative, EC), DirEnd;
+    llvm37::SmallString<128> DirNative;
+    llvm37::StringRef filterExt(fileExt);
+    llvm37::sys::path::native(utf8SuitePath.m_psz, DirNative);
+    for (llvm37::sys::fs::recursive_directory_iterator Dir(DirNative, EC), DirEnd;
       Dir != DirEnd && !EC; Dir.increment(EC)) {
-      if (!llvm::sys::path::extension(Dir->path()).equals(filterExt)) {
+      if (!llvm37::sys::path::extension(Dir->path()).equals(filterExt)) {
         continue;
       }
       StringRef filename = Dir->path();
@@ -239,14 +239,14 @@ bool DxilConvTest::InitSupport() {
 }
 
 TEST_F(DxilConvTest, ManualFileCheckTest) {
-  using namespace llvm;
+  using namespace llvm37;
   using namespace WEX::TestExecution;
 
   WEX::Common::String value;
   VERIFY_SUCCEEDED(RuntimeParameters::TryGetValue(L"InputPath", value));
 
   std::wstring path = value;
-  if (!llvm::sys::path::is_absolute(CW2A(path.c_str()).m_psz)) {
+  if (!llvm37::sys::path::is_absolute(CW2A(path.c_str()).m_psz)) {
     path = hlsl_test::GetPathToHlslDataFile(path.c_str());
   }
 
@@ -254,12 +254,12 @@ TEST_F(DxilConvTest, ManualFileCheckTest) {
   {
     // Temporarily setup the filesystem for testing whether the path is a directory.
     // If it is, CodeGenTestCheckBatchDir will create its own instance.
-    llvm::sys::fs::MSFileSystem *msfPtr;
+    llvm37::sys::fs::MSFileSystem *msfPtr;
     VERIFY_SUCCEEDED(CreateMSFileSystemForDisk(&msfPtr));
-    std::unique_ptr<llvm::sys::fs::MSFileSystem> msf(msfPtr);
-    llvm::sys::fs::AutoPerThreadSystem pts(msf.get());
-    IFTLLVM(pts.error_code());
-    isDirectory = llvm::sys::fs::is_directory(CW2A(path.c_str()).m_psz);
+    std::unique_ptr<llvm37::sys::fs::MSFileSystem> msf(msfPtr);
+    llvm37::sys::fs::AutoPerThreadSystem pts(msf.get());
+    IFTLLVM37(pts.error_code());
+    isDirectory = llvm37::sys::fs::is_directory(CW2A(path.c_str()).m_psz);
   }
 
   if (isDirectory) {

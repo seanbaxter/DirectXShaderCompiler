@@ -1,6 +1,6 @@
 //===- DAGISelMatcherEmitter.cpp - Matcher Emitter ------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -13,13 +13,13 @@
 
 #include "DAGISelMatcher.h"
 #include "CodeGenDAGPatterns.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/ADT/StringMap.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/FormattedStream.h"
-#include "llvm/TableGen/Record.h"
-using namespace llvm;
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/ADT/StringMap.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/FormattedStream.h"
+#include "llvm37/TableGen/Record.h"
+using namespace llvm37;
 
 enum {
   CommentIndent = 30
@@ -590,7 +590,7 @@ EmitMatcher(const Matcher *N, unsigned Indent, unsigned CurrentIdx,
     return 2 + NumResultBytes;
   }
   }
-  llvm_unreachable("Unreachable");
+  llvm37_unreachable("Unreachable");
 }
 
 /// EmitMatcherList - Emit the bytes for the specified matcher subtree.
@@ -617,7 +617,7 @@ void MatcherTableEmitter::EmitPredicateFunctions(formatted_raw_ostream &OS) {
   if (!PatternPredicates.empty()) {
     OS << "bool CheckPatternPredicate(unsigned PredNo) const override {\n";
     OS << "  switch (PredNo) {\n";
-    OS << "  default: llvm_unreachable(\"Invalid predicate in table?\");\n";
+    OS << "  default: llvm37_unreachable(\"Invalid predicate in table?\");\n";
     for (unsigned i = 0, e = PatternPredicates.size(); i != e; ++i)
       OS << "  case " << i << ": return "  << PatternPredicates[i] << ";\n";
     OS << "  }\n";
@@ -636,7 +636,7 @@ void MatcherTableEmitter::EmitPredicateFunctions(formatted_raw_ostream &OS) {
     OS << "bool CheckNodePredicate(SDNode *Node,\n";
     OS << "                        unsigned PredNo) const override {\n";
     OS << "  switch (PredNo) {\n";
-    OS << "  default: llvm_unreachable(\"Invalid predicate in table?\");\n";
+    OS << "  default: llvm37_unreachable(\"Invalid predicate in table?\");\n";
     for (unsigned i = 0, e = NodePredicates.size(); i != e; ++i) {
       // Emit the predicate code corresponding to this pattern.
       TreePredicateFn PredFn = NodePredicates[i];
@@ -658,7 +658,7 @@ void MatcherTableEmitter::EmitPredicateFunctions(formatted_raw_ostream &OS) {
     OS << "         SmallVectorImpl<std::pair<SDValue, SDNode*> > &Result) override {\n";
     OS << "  unsigned NextRes = Result.size();\n";
     OS << "  switch (PatternNo) {\n";
-    OS << "  default: llvm_unreachable(\"Invalid pattern # in table?\");\n";
+    OS << "  default: llvm37_unreachable(\"Invalid pattern # in table?\");\n";
     for (unsigned i = 0, e = ComplexPatterns.size(); i != e; ++i) {
       const ComplexPattern &P = *ComplexPatterns[i];
       unsigned NumOps = P.getNumOperands();
@@ -696,7 +696,7 @@ void MatcherTableEmitter::EmitPredicateFunctions(formatted_raw_ostream &OS) {
   if (!NodeXForms.empty()) {
     OS << "SDValue RunSDNodeXForm(SDValue V, unsigned XFormNo) override {\n";
     OS << "  switch (XFormNo) {\n";
-    OS << "  default: llvm_unreachable(\"Invalid xform # in table?\");\n";
+    OS << "  default: llvm37_unreachable(\"Invalid xform # in table?\");\n";
 
     // FIXME: The node xform could take SDValue's instead of SDNode*'s.
     for (unsigned i = 0, e = NodeXForms.size(); i != e; ++i) {
@@ -803,7 +803,7 @@ void MatcherTableEmitter::EmitHistogram(const Matcher *M,
 }
 
 
-void llvm::EmitMatcherTable(const Matcher *TheMatcher,
+void llvm37::EmitMatcherTable(const Matcher *TheMatcher,
                             const CodeGenDAGPatterns &CGP,
                             raw_ostream &O) {
   formatted_raw_ostream OS(O);

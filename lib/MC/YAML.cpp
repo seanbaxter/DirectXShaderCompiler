@@ -1,6 +1,6 @@
 //===- YAML.cpp - YAMLIO utilities for object files -----------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -12,15 +12,15 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/MC/YAML.h"
-#include "llvm/ADT/StringExtras.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/MC/YAML.h"
+#include "llvm37/ADT/StringExtras.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <cctype>
 
-using namespace llvm;
+using namespace llvm37;
 
 void yaml::ScalarTraits<yaml::BinaryRef>::output(
-    const yaml::BinaryRef &Val, void *, llvm::raw_ostream &Out) {
+    const yaml::BinaryRef &Val, void *, llvm37::raw_ostream &Out) {
   Val.writeAsHex(Out);
 }
 

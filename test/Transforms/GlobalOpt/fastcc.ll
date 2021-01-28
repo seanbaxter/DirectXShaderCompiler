@@ -35,7 +35,7 @@ define void @call_things() {
   ret void
 }
 
-@llvm.used = appending global [1 x i8*] [
+@llvm37.used = appending global [1 x i8*] [
    i8* bitcast (i32(i32*)* @j to i8*)
 ], section "llvm.metadata"
 

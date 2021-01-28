@@ -8,7 +8,7 @@ RUN: echo -n bar. > 0123456789abcde
 RUN: echo -n zed. > 0123456789abcdef
 
 RUN: rm -f %t.a
-RUN: llvm-ar --format=gnu rc %t.a 0123456789abcde 0123456789abcdef
+RUN: llvm37-ar --format=gnu rc %t.a 0123456789abcde 0123456789abcdef
 RUN: cat %t.a | FileCheck -strict-whitespace %s
 
 CHECK:      !<arch>
@@ -19,7 +19,7 @@ CHECK-NEXT: bar./0              0           0     0     644     4         `
 CHECK-NEXT: zed.
 
 RUN: rm -f %t.a
-RUN: llvm-ar --format=bsd rc %t.a 0123456789abcde 0123456789abcdef
+RUN: llvm37-ar --format=bsd rc %t.a 0123456789abcde 0123456789abcdef
 RUN: cat %t.a | FileCheck -strict-whitespace --check-prefix=BSD %s
 
 BSD:      !<arch>

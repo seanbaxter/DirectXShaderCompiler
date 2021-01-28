@@ -1,13 +1,13 @@
 //===- Trace.cpp - Implementation of Trace class --------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 //
-// This class represents a single trace of LLVM basic blocks.  A trace is a
+// This class represents a single trace of LLVM37 basic blocks.  A trace is a
 // single entry, multiple exit, region of code that is often hot.  Trace-based
 // optimizations treat traces almost like they are a large, strange, basic
 // block: because the trace path is assumed to be hot, optimizations for the
@@ -15,11 +15,11 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Analysis/Trace.h"
-#include "llvm/IR/Function.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/raw_ostream.h"
-using namespace llvm;
+#include "llvm37/Analysis/Trace.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/raw_ostream.h"
+using namespace llvm37;
 
 Function *Trace::getFunction() const {
   return getEntryBasicBlock()->getParent();
@@ -42,7 +42,7 @@ void Trace::print(raw_ostream &O) const {
   O << "; Trace parent function: \n" << *F;
 }
 
-#if !defined(NDEBUG) || defined(LLVM_ENABLE_DUMP)
+#if !defined(NDEBUG) || defined(LLVM37_ENABLE_DUMP)
 /// dump - Debugger convenience method; writes trace to standard error
 /// output stream.
 ///

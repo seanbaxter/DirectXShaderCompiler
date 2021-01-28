@@ -1,6 +1,6 @@
-//===-- llvm/CodeGen/DwarfFile.cpp - Dwarf Debug Framework ----------------===//
+//===-- llvm37/CodeGen/DwarfFile.cpp - Dwarf Debug Framework ----------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -10,13 +10,13 @@
 #include "DwarfFile.h"
 #include "DwarfDebug.h"
 #include "DwarfUnit.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/MC/MCStreamer.h"
-#include "llvm/Support/LEB128.h"
-#include "llvm/Target/TargetLoweringObjectFile.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/MC/MCStreamer.h"
+#include "llvm37/Support/LEB128.h"
+#include "llvm37/Target/TargetLoweringObjectFile.h"
 
-namespace llvm {
+namespace llvm37 {
 DwarfFile::DwarfFile(AsmPrinter *AP, StringRef Pref, BumpPtrAllocator &DA)
     : Asm(AP), StrPool(DA, *Asm, Pref) {}
 

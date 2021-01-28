@@ -1,4 +1,4 @@
-# RUN: llvm-mc -triple i386-apple-darwin9 %s | FileCheck %s
+# RUN: llvm37-mc -triple i386-apple-darwin9 %s | FileCheck %s
 
 # CHECK: TEST0:
 # CHECK: .desc foo,16

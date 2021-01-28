@@ -1,6 +1,6 @@
 //===- ScopedNoAliasAA.cpp - Scoped No-Alias Alias Analysis ---------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -32,16 +32,16 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/ADT/SmallPtrSet.h"
-#include "llvm/Analysis/AliasAnalysis.h"
-#include "llvm/Analysis/Passes.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Metadata.h"
-#include "llvm/IR/Module.h"
-#include "llvm/Pass.h"
-#include "llvm/Support/CommandLine.h"
-using namespace llvm;
+#include "llvm37/ADT/SmallPtrSet.h"
+#include "llvm37/Analysis/AliasAnalysis.h"
+#include "llvm37/Analysis/Passes.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/Metadata.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/Pass.h"
+#include "llvm37/Support/CommandLine.h"
+using namespace llvm37;
 
 // A handy option for disabling scoped no-alias functionality. The same effect
 // can also be achieved by stripping the associated metadata tags from IR, but
@@ -120,7 +120,7 @@ char ScopedNoAliasAA::ID = 0;
 INITIALIZE_AG_PASS(ScopedNoAliasAA, AliasAnalysis, "scoped-noalias",
                    "Scoped NoAlias Alias Analysis", false, true, false)
 
-ImmutablePass *llvm::createScopedNoAliasAAPass() {
+ImmutablePass *llvm37::createScopedNoAliasAAPass() {
   return new ScopedNoAliasAA();
 }
 
@@ -225,11 +225,11 @@ ScopedNoAliasAA::getModRefInfo(ImmutableCallSite CS,
     return AliasAnalysis::getModRefInfo(CS, Loc);
 
   if (!mayAliasInScopes(Loc.AATags.Scope, CS.getInstruction()->getMetadata(
-                                              LLVMContext::MD_noalias)))
+                                              LLVM37Context::MD_noalias)))
     return NoModRef;
 
   if (!mayAliasInScopes(
-          CS.getInstruction()->getMetadata(LLVMContext::MD_alias_scope),
+          CS.getInstruction()->getMetadata(LLVM37Context::MD_alias_scope),
           Loc.AATags.NoAlias))
     return NoModRef;
 
@@ -242,13 +242,13 @@ ScopedNoAliasAA::getModRefInfo(ImmutableCallSite CS1, ImmutableCallSite CS2) {
     return AliasAnalysis::getModRefInfo(CS1, CS2);
 
   if (!mayAliasInScopes(
-          CS1.getInstruction()->getMetadata(LLVMContext::MD_alias_scope),
-          CS2.getInstruction()->getMetadata(LLVMContext::MD_noalias)))
+          CS1.getInstruction()->getMetadata(LLVM37Context::MD_alias_scope),
+          CS2.getInstruction()->getMetadata(LLVM37Context::MD_noalias)))
     return NoModRef;
 
   if (!mayAliasInScopes(
-          CS2.getInstruction()->getMetadata(LLVMContext::MD_alias_scope),
-          CS1.getInstruction()->getMetadata(LLVMContext::MD_noalias)))
+          CS2.getInstruction()->getMetadata(LLVM37Context::MD_alias_scope),
+          CS1.getInstruction()->getMetadata(LLVM37Context::MD_noalias)))
     return NoModRef;
 
   return AliasAnalysis::getModRefInfo(CS1, CS2);

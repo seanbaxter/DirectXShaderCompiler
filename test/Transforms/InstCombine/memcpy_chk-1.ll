@@ -20,7 +20,7 @@ define i8* @test_simplify1() {
   %dst = bitcast %struct.T1* @t1 to i8*
   %src = bitcast %struct.T2* @t2 to i8*
 
-; CHECK-NEXT: call void @llvm.memcpy.p0i8.p0i8.i64(i8* bitcast (%struct.T1* @t1 to i8*), i8* bitcast (%struct.T2* @t2 to i8*), i64 1824, i32 4, i1 false)
+; CHECK-NEXT: call void @llvm37.memcpy.p0i8.p0i8.i64(i8* bitcast (%struct.T1* @t1 to i8*), i8* bitcast (%struct.T2* @t2 to i8*), i64 1824, i32 4, i1 false)
 ; CHECK-NEXT: ret i8* bitcast (%struct.T1* @t1 to i8*)
   %ret = call i8* @__memcpy_chk(i8* %dst, i8* %src, i64 1824, i64 1824)
   ret i8* %ret
@@ -31,7 +31,7 @@ define i8* @test_simplify2() {
   %dst = bitcast %struct.T1* @t1 to i8*
   %src = bitcast %struct.T3* @t3 to i8*
 
-; CHECK-NEXT: call void @llvm.memcpy.p0i8.p0i8.i64(i8* bitcast (%struct.T1* @t1 to i8*), i8* bitcast (%struct.T3* @t3 to i8*), i64 1824, i32 4, i1 false)
+; CHECK-NEXT: call void @llvm37.memcpy.p0i8.p0i8.i64(i8* bitcast (%struct.T1* @t1 to i8*), i8* bitcast (%struct.T3* @t3 to i8*), i64 1824, i32 4, i1 false)
 ; CHECK-NEXT: ret i8* bitcast (%struct.T1* @t1 to i8*)
   %ret = call i8* @__memcpy_chk(i8* %dst, i8* %src, i64 1824, i64 2848)
   ret i8* %ret
@@ -68,7 +68,7 @@ define i8* @test_simplify_return_indcall(i8* ()* %alloc) {
 ; CHECK-NEXT: %dst = call i8* %alloc()
   %dst = call i8* %alloc()
 
-; CHECK-NEXT: call void @llvm.memcpy.p0i8.p0i8.i64
+; CHECK-NEXT: call void @llvm37.memcpy.p0i8.p0i8.i64
   %ret = call i8* @__memcpy_chk(i8* %dst, i8* %src, i64 1824, i64 1824)
 ; CHECK-NEXT: ret i8* %dst
   ret i8* %ret

@@ -1,69 +1,69 @@
 //===-- SelectionDAGBuilder.cpp - Selection-DAG building ------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 //
-// This implements routines for translating from LLVM IR into SelectionDAG IR.
+// This implements routines for translating from LLVM37 IR into SelectionDAG IR.
 //
 //===----------------------------------------------------------------------===//
 
 #include "SelectionDAGBuilder.h"
 #include "SDNodeDbgValue.h"
-#include "llvm/ADT/BitVector.h"
-#include "llvm/ADT/Optional.h"
-#include "llvm/ADT/SmallSet.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/Analysis/AliasAnalysis.h"
-#include "llvm/Analysis/BranchProbabilityInfo.h"
-#include "llvm/Analysis/ConstantFolding.h"
-#include "llvm/Analysis/TargetLibraryInfo.h"
-#include "llvm/Analysis/ValueTracking.h"
-#include "llvm/CodeGen/FastISel.h"
-#include "llvm/CodeGen/FunctionLoweringInfo.h"
-#include "llvm/CodeGen/GCMetadata.h"
-#include "llvm/CodeGen/GCStrategy.h"
-#include "llvm/CodeGen/MachineFrameInfo.h"
-#include "llvm/CodeGen/MachineFunction.h"
-#include "llvm/CodeGen/MachineInstrBuilder.h"
-#include "llvm/CodeGen/MachineJumpTableInfo.h"
-#include "llvm/CodeGen/MachineModuleInfo.h"
-#include "llvm/CodeGen/MachineRegisterInfo.h"
-#include "llvm/CodeGen/SelectionDAG.h"
-#include "llvm/CodeGen/StackMaps.h"
-#include "llvm/CodeGen/WinEHFuncInfo.h"
-#include "llvm/IR/CallingConv.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/DebugInfo.h"
-#include "llvm/IR/DerivedTypes.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/GlobalVariable.h"
-#include "llvm/IR/InlineAsm.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/IR/Intrinsics.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/Statepoint.h"
-#include "llvm/MC/MCSymbol.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/MathExtras.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Target/TargetFrameLowering.h"
-#include "llvm/Target/TargetInstrInfo.h"
-#include "llvm/Target/TargetIntrinsicInfo.h"
-#include "llvm/Target/TargetLowering.h"
-#include "llvm/Target/TargetOptions.h"
-#include "llvm/Target/TargetSelectionDAGInfo.h"
-#include "llvm/Target/TargetSubtargetInfo.h"
+#include "llvm37/ADT/BitVector.h"
+#include "llvm37/ADT/Optional.h"
+#include "llvm37/ADT/SmallSet.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/Analysis/AliasAnalysis.h"
+#include "llvm37/Analysis/BranchProbabilityInfo.h"
+#include "llvm37/Analysis/ConstantFolding.h"
+#include "llvm37/Analysis/TargetLibraryInfo.h"
+#include "llvm37/Analysis/ValueTracking.h"
+#include "llvm37/CodeGen/FastISel.h"
+#include "llvm37/CodeGen/FunctionLoweringInfo.h"
+#include "llvm37/CodeGen/GCMetadata.h"
+#include "llvm37/CodeGen/GCStrategy.h"
+#include "llvm37/CodeGen/MachineFrameInfo.h"
+#include "llvm37/CodeGen/MachineFunction.h"
+#include "llvm37/CodeGen/MachineInstrBuilder.h"
+#include "llvm37/CodeGen/MachineJumpTableInfo.h"
+#include "llvm37/CodeGen/MachineModuleInfo.h"
+#include "llvm37/CodeGen/MachineRegisterInfo.h"
+#include "llvm37/CodeGen/SelectionDAG.h"
+#include "llvm37/CodeGen/StackMaps.h"
+#include "llvm37/CodeGen/WinEHFuncInfo.h"
+#include "llvm37/IR/CallingConv.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/IR/DebugInfo.h"
+#include "llvm37/IR/DerivedTypes.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/GlobalVariable.h"
+#include "llvm37/IR/InlineAsm.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/IR/Intrinsics.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/Statepoint.h"
+#include "llvm37/MC/MCSymbol.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/MathExtras.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Target/TargetFrameLowering.h"
+#include "llvm37/Target/TargetInstrInfo.h"
+#include "llvm37/Target/TargetIntrinsicInfo.h"
+#include "llvm37/Target/TargetLowering.h"
+#include "llvm37/Target/TargetOptions.h"
+#include "llvm37/Target/TargetSelectionDAGInfo.h"
+#include "llvm37/Target/TargetSubtargetInfo.h"
 #include <algorithm>
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "isel"
 
@@ -91,7 +91,7 @@ EnableFMFInDAG("enable-fmf-dag", cl::init(false), cl::Hidden,
 //
 // MaxParallelChains default is arbitrarily high to avoid affecting
 // optimization, but could be lowered to improve compile time. Any ld-ld-st-st
-// sequence over this should have been converted to llvm.memcpy by the
+// sequence over this should have been converted to llvm37.memcpy by the
 // frontend. It easy to induce this behavior with .ll code such as:
 // %buffer = alloca [4096 x i8]
 // %data = load [4096 x i8]* %argPtr
@@ -222,10 +222,10 @@ static SDValue getCopyFromParts(SelectionDAG &DAG, SDLoc DL,
   if (PartEVT.getSizeInBits() == ValueVT.getSizeInBits())
     return DAG.getNode(ISD::BITCAST, DL, ValueVT, Val);
 
-  llvm_unreachable("Unknown mismatch!");
+  llvm37_unreachable("Unknown mismatch!");
 }
 
-static void diagnosePossiblyInvalidConstraint(LLVMContext &Ctx, const Value *V,
+static void diagnosePossiblyInvalidConstraint(LLVM37Context &Ctx, const Value *V,
                                               const Twine &ErrMsg) {
   const Instruction *I = dyn_cast_or_null<Instruction>(V);
   if (!V)
@@ -591,7 +591,7 @@ RegsForValue::RegsForValue(const SmallVector<unsigned, 4> &regs, MVT regvt,
                            EVT valuevt)
     : ValueVTs(1, valuevt), RegVTs(1, regvt), Regs(regs) {}
 
-RegsForValue::RegsForValue(LLVMContext &Context, const TargetLowering &TLI,
+RegsForValue::RegsForValue(LLVM37Context &Context, const TargetLowering &TLI,
                            const DataLayout &DL, unsigned Reg, Type *Ty) {
   ComputeValueVTs(TLI, DL, Ty, ValueVTs);
 
@@ -914,18 +914,18 @@ void SelectionDAGBuilder::visit(const Instruction &I) {
 }
 
 void SelectionDAGBuilder::visitPHI(const PHINode &) {
-  llvm_unreachable("SelectionDAGBuilder shouldn't visit PHI nodes!");
+  llvm37_unreachable("SelectionDAGBuilder shouldn't visit PHI nodes!");
 }
 
 void SelectionDAGBuilder::visit(unsigned Opcode, const User &I) {
   // Note: this doesn't use InstVisitor, because it has to work with
   // ConstantExpr's in addition to instructions.
   switch (Opcode) {
-  default: llvm_unreachable("Unknown instruction type encountered!");
+  default: llvm37_unreachable("Unknown instruction type encountered!");
     // Build the switch statement using the Instruction.def file.
 #define HANDLE_INST(NUM, OPCODE, CLASS) \
     case Instruction::OPCODE: visit##OPCODE((const CLASS&)I); break;
-#include "llvm/IR/Instruction.def"
+#include "llvm37/IR/Instruction.def"
   }
 }
 
@@ -1165,7 +1165,7 @@ SDValue SelectionDAGBuilder::getValueImpl(const Value *V) {
     return RFV.getCopyFromRegs(DAG, FuncInfo, getCurSDLoc(), Chain, nullptr, V);
   }
 
-  llvm_unreachable("Can't get register for value!");
+  llvm37_unreachable("Can't get register for value!");
 }
 
 void SelectionDAGBuilder::visitRet(const ReturnInst &I) {
@@ -1226,7 +1226,7 @@ void SelectionDAGBuilder::visitRet(const ReturnInst &I) {
                                                Attribute::ZExt))
         ExtendKind = ISD::ZERO_EXTEND;
 
-      LLVMContext &Context = F->getContext();
+      LLVM37Context &Context = F->getContext();
       bool RetInReg = F->getAttributes().hasAttribute(AttributeSet::ReturnIndex,
                                                       Attribute::InReg);
 
@@ -1391,7 +1391,7 @@ SelectionDAGBuilder::EmitBranchForMergedCondition(const Value *Cond,
           Condition = getFCmpCodeWithoutNaN(Condition);
       } else {
         (void)Condition; // silence warning.
-        llvm_unreachable("Unknown compare instruction");
+        llvm37_unreachable("Unknown compare instruction");
       }
 
       CaseBlock CB(Condition, BOp->getOperand(0), BOp->getOperand(1), nullptr,
@@ -1969,9 +1969,9 @@ void SelectionDAGBuilder::visitInvoke(const InvokeInst &I) {
   else if (Fn && Fn->isIntrinsic()) {
     switch (Fn->getIntrinsicID()) {
     default:
-      llvm_unreachable("Cannot invoke this intrinsic");
+      llvm37_unreachable("Cannot invoke this intrinsic");
     case Intrinsic::donothing:
-      // Ignore invokes to @llvm.donothing: jump directly to the next BB.
+      // Ignore invokes to @llvm37.donothing: jump directly to the next BB.
       break;
     case Intrinsic::experimental_patchpoint_void:
     case Intrinsic::experimental_patchpoint_i64:
@@ -2003,7 +2003,7 @@ void SelectionDAGBuilder::visitInvoke(const InvokeInst &I) {
 }
 
 void SelectionDAGBuilder::visitResume(const ResumeInst &RI) {
-  llvm_unreachable("SelectionDAGBuilder shouldn't visit resume instructions!");
+  llvm37_unreachable("SelectionDAGBuilder shouldn't visit resume instructions!");
 }
 
 void SelectionDAGBuilder::visitLandingPad(const LandingPadInst &LP) {
@@ -2296,7 +2296,7 @@ void SelectionDAGBuilder::visitSelect(const User &I) {
     }
 
     EVT VT = ValueVTs[0];
-    LLVMContext &Ctx = *DAG.getContext();
+    LLVM37Context &Ctx = *DAG.getContext();
     auto &TLI = DAG.getTargetLoweringInfo();
     while (TLI.getTypeAction(Ctx, VT) == TargetLoweringBase::TypeSplitVector)
       VT = TLI.getTypeToTransformTo(Ctx, VT);
@@ -2432,7 +2432,7 @@ void SelectionDAGBuilder::visitBitCast(const User &I) {
   if (DestVT != N.getValueType())
     setValue(&I, DAG.getNode(ISD::BITCAST, dl,
                              DestVT, N)); // convert types.
-  // Check if the original LLVM IR Operand was a ConstantInt, because getValue()
+  // Check if the original LLVM37 IR Operand was a ConstantInt, because getValue()
   // might fold any kind of constant expression to an integer constant and that
   // is not what we are looking for. Only regcognize a bitcast of a genuine
   // constant integer as an opaque constant.
@@ -2909,7 +2909,7 @@ void SelectionDAGBuilder::visitLoad(const LoadInst &I) {
   Type *Ty = I.getType();
 
   bool isVolatile = I.isVolatile();
-  bool isNonTemporal = I.getMetadata(LLVMContext::MD_nontemporal) != nullptr;
+  bool isNonTemporal = I.getMetadata(LLVM37Context::MD_nontemporal) != nullptr;
 
   // The IR notion of invariant_load only guarantees that all *non-faulting*
   // invariant loads result in the same value.  The MI notion of invariant load
@@ -2919,13 +2919,13 @@ void SelectionDAGBuilder::visitLoad(const LoadInst &I) {
   // with a guarantee that the location being loaded from is dereferenceable
   // throughout the function's lifetime.
 
-  bool isInvariant = I.getMetadata(LLVMContext::MD_invariant_load) != nullptr &&
+  bool isInvariant = I.getMetadata(LLVM37Context::MD_invariant_load) != nullptr &&
     isDereferenceablePointer(SV, *DAG.getTarget().getDataLayout());
   unsigned Alignment = I.getAlignment();
 
   AAMDNodes AAInfo;
   I.getAAMetadata(AAInfo);
-  const MDNode *Ranges = I.getMetadata(LLVMContext::MD_range);
+  const MDNode *Ranges = I.getMetadata(LLVM37Context::MD_range);
 
   const TargetLowering &TLI = DAG.getTargetLoweringInfo();
   SmallVector<EVT, 4> ValueVTs;
@@ -2964,7 +2964,7 @@ void SelectionDAGBuilder::visitLoad(const LoadInst &I) {
     // TokenFactor places arbitrary choke points on the scheduler. SD scheduling
     // could recover a bit by hoisting nodes upward in the chain by recognizing
     // they are side-effect free or do not alias. The optimizer should really
-    // avoid this case by converting large object/array copies to llvm.memcpy
+    // avoid this case by converting large object/array copies to llvm37.memcpy
     // (MaxParallelChains should always remain as failsafe).
     if (ChainI == MaxParallelChains) {
       assert(PendingLoads.empty() && "PendingLoads must be serialized first");
@@ -3023,7 +3023,7 @@ void SelectionDAGBuilder::visitStore(const StoreInst &I) {
   SmallVector<SDValue, 4> Chains(std::min(MaxParallelChains, NumValues));
   EVT PtrVT = Ptr.getValueType();
   bool isVolatile = I.isVolatile();
-  bool isNonTemporal = I.getMetadata(LLVMContext::MD_nontemporal) != nullptr;
+  bool isNonTemporal = I.getMetadata(LLVM37Context::MD_nontemporal) != nullptr;
   unsigned Alignment = I.getAlignment();
   SDLoc dl = getCurSDLoc();
 
@@ -3056,7 +3056,7 @@ void SelectionDAGBuilder::visitStore(const StoreInst &I) {
 void SelectionDAGBuilder::visitMaskedStore(const CallInst &I) {
   SDLoc sdl = getCurSDLoc();
 
-  // llvm.masked.store.*(Src0, Ptr, alignemt, Mask)
+  // llvm37.masked.store.*(Src0, Ptr, alignemt, Mask)
   Value  *PtrOperand = I.getArgOperand(1);
   SDValue Ptr = getValue(PtrOperand);
   SDValue Src0 = getValue(I.getArgOperand(0));
@@ -3135,7 +3135,7 @@ static bool getUniformBase(Value *& Ptr, SDValue& Base, SDValue& Index,
 void SelectionDAGBuilder::visitMaskedScatter(const CallInst &I) {
   SDLoc sdl = getCurSDLoc();
 
-  // llvm.masked.scatter.*(Src0, Ptrs, alignemt, Mask)
+  // llvm37.masked.scatter.*(Src0, Ptrs, alignemt, Mask)
   Value  *Ptr = I.getArgOperand(1);
   SDValue Src0 = getValue(I.getArgOperand(0));
   SDValue Mask = getValue(I.getArgOperand(3));
@@ -3172,7 +3172,7 @@ void SelectionDAGBuilder::visitMaskedScatter(const CallInst &I) {
 void SelectionDAGBuilder::visitMaskedLoad(const CallInst &I) {
   SDLoc sdl = getCurSDLoc();
 
-  // @llvm.masked.load.*(Ptr, alignment, Mask, Src0)
+  // @llvm37.masked.load.*(Ptr, alignment, Mask, Src0)
   Value  *PtrOperand = I.getArgOperand(0);
   SDValue Ptr = getValue(PtrOperand);
   SDValue Src0 = getValue(I.getArgOperand(3));
@@ -3186,7 +3186,7 @@ void SelectionDAGBuilder::visitMaskedLoad(const CallInst &I) {
 
   AAMDNodes AAInfo;
   I.getAAMetadata(AAInfo);
-  const MDNode *Ranges = I.getMetadata(LLVMContext::MD_range);
+  const MDNode *Ranges = I.getMetadata(LLVM37Context::MD_range);
 
   SDValue InChain = DAG.getRoot();
   if (AA->pointsToConstantMemory(MemoryLocation(
@@ -3211,7 +3211,7 @@ void SelectionDAGBuilder::visitMaskedLoad(const CallInst &I) {
 void SelectionDAGBuilder::visitMaskedGather(const CallInst &I) {
   SDLoc sdl = getCurSDLoc();
 
-  // @llvm.masked.gather.*(Ptrs, alignment, Mask, Src0)
+  // @llvm37.masked.gather.*(Ptrs, alignment, Mask, Src0)
   Value  *Ptr = I.getArgOperand(0);
   SDValue Src0 = getValue(I.getArgOperand(3));
   SDValue Mask = getValue(I.getArgOperand(2));
@@ -3224,7 +3224,7 @@ void SelectionDAGBuilder::visitMaskedGather(const CallInst &I) {
 
   AAMDNodes AAInfo;
   I.getAAMetadata(AAInfo);
-  const MDNode *Ranges = I.getMetadata(LLVMContext::MD_range);
+  const MDNode *Ranges = I.getMetadata(LLVM37Context::MD_range);
 
   SDValue Root = DAG.getRoot();
   SDValue Base;
@@ -3286,7 +3286,7 @@ void SelectionDAGBuilder::visitAtomicRMW(const AtomicRMWInst &I) {
   SDLoc dl = getCurSDLoc();
   ISD::NodeType NT;
   switch (I.getOperation()) {
-  default: llvm_unreachable("Unknown atomicrmw operation");
+  default: llvm37_unreachable("Unknown atomicrmw operation");
   case AtomicRMWInst::Xchg: NT = ISD::ATOMIC_SWAP; break;
   case AtomicRMWInst::Add:  NT = ISD::ATOMIC_LOAD_ADD; break;
   case AtomicRMWInst::Sub:  NT = ISD::ATOMIC_LOAD_SUB; break;
@@ -3938,7 +3938,7 @@ static SDValue expandPow(SDLoc dl, SDValue LHS, SDValue RHS,
 }
 
 
-/// ExpandPowI - Expand a llvm.powi intrinsic.
+/// ExpandPowI - Expand a llvm37.powi intrinsic.
 static SDValue ExpandPowI(SDLoc DL, SDValue LHS, SDValue RHS,
                           SelectionDAG &DAG) {
   // If RHS is a constant, we can expand this out to a multiplication tree,
@@ -4158,7 +4158,7 @@ SelectionDAGBuilder::visitIntrinsicCall(const CallInst &I, unsigned Intrinsic) {
     SDValue Op3 = getValue(I.getArgOperand(2));
     unsigned Align = cast<ConstantInt>(I.getArgOperand(3))->getZExtValue();
     if (!Align)
-      Align = 1; // @llvm.memcpy defines 0 and 1 to both mean no alignment.
+      Align = 1; // @llvm37.memcpy defines 0 and 1 to both mean no alignment.
     bool isVol = cast<ConstantInt>(I.getArgOperand(4))->getZExtValue();
     bool isTC = I.isTailCall() && isInTailCallPosition(&I, DAG.getTarget());
     SDValue MC = DAG.getMemcpy(getRoot(), sdl, Op1, Op2, Op3, Align, isVol,
@@ -4180,7 +4180,7 @@ SelectionDAGBuilder::visitIntrinsicCall(const CallInst &I, unsigned Intrinsic) {
     SDValue Op3 = getValue(I.getArgOperand(2));
     unsigned Align = cast<ConstantInt>(I.getArgOperand(3))->getZExtValue();
     if (!Align)
-      Align = 1; // @llvm.memset defines 0 and 1 to both mean no alignment.
+      Align = 1; // @llvm37.memset defines 0 and 1 to both mean no alignment.
     bool isVol = cast<ConstantInt>(I.getArgOperand(4))->getZExtValue();
     bool isTC = I.isTailCall() && isInTailCallPosition(&I, DAG.getTarget());
     SDValue MS = DAG.getMemset(getRoot(), sdl, Op1, Op2, Op3, Align, isVol,
@@ -4202,7 +4202,7 @@ SelectionDAGBuilder::visitIntrinsicCall(const CallInst &I, unsigned Intrinsic) {
     SDValue Op3 = getValue(I.getArgOperand(2));
     unsigned Align = cast<ConstantInt>(I.getArgOperand(3))->getZExtValue();
     if (!Align)
-      Align = 1; // @llvm.memmove defines 0 and 1 to both mean no alignment.
+      Align = 1; // @llvm37.memmove defines 0 and 1 to both mean no alignment.
     bool isVol = cast<ConstantInt>(I.getArgOperand(4))->getZExtValue();
     bool isTC = I.isTailCall() && isInTailCallPosition(&I, DAG.getTarget());
     SDValue MM = DAG.getMemmove(getRoot(), sdl, Op1, Op2, Op3, Align, isVol,
@@ -4475,7 +4475,7 @@ SelectionDAGBuilder::visitIntrinsicCall(const CallInst &I, unsigned Intrinsic) {
     case Intrinsic::x86_mmx_psrai_d:
       NewIntrinsic = Intrinsic::x86_mmx_psra_d;
       break;
-    default: llvm_unreachable("Impossible intrinsic");  // Can't reach here.
+    default: llvm37_unreachable("Impossible intrinsic");  // Can't reach here.
     }
 
     // The vector shift intrinsics with scalars uses 32b shift amounts but
@@ -4506,7 +4506,7 @@ SelectionDAGBuilder::visitIntrinsicCall(const CallInst &I, unsigned Intrinsic) {
   case Intrinsic::convertuu: {
     ISD::CvtCode Code = ISD::CVT_INVALID;
     switch (Intrinsic) {
-    default: llvm_unreachable("Impossible intrinsic");  // Can't reach here.
+    default: llvm37_unreachable("Impossible intrinsic");  // Can't reach here.
     case Intrinsic::convertff:  Code = ISD::CVT_FF; break;
     case Intrinsic::convertfsi: Code = ISD::CVT_FS; break;
     case Intrinsic::convertfui: Code = ISD::CVT_FU; break;
@@ -4563,7 +4563,7 @@ SelectionDAGBuilder::visitIntrinsicCall(const CallInst &I, unsigned Intrinsic) {
   case Intrinsic::round: {
     unsigned Opcode;
     switch (Intrinsic) {
-    default: llvm_unreachable("Impossible intrinsic");  // Can't reach here.
+    default: llvm37_unreachable("Impossible intrinsic");  // Can't reach here.
     case Intrinsic::sqrt:      Opcode = ISD::FSQRT;      break;
     case Intrinsic::fabs:      Opcode = ISD::FABS;       break;
     case Intrinsic::sin:       Opcode = ISD::FSIN;       break;
@@ -4812,7 +4812,7 @@ SelectionDAGBuilder::visitIntrinsicCall(const CallInst &I, unsigned Intrinsic) {
     return nullptr;
   case Intrinsic::gcread:
   case Intrinsic::gcwrite:
-    llvm_unreachable("GC failed to lower gcread/gcwrite intrinsics!");
+    llvm37_unreachable("GC failed to lower gcread/gcwrite intrinsics!");
   case Intrinsic::flt_rounds:
     setValue(&I, DAG.getNode(ISD::FLT_ROUNDS_, sdl, MVT::i32));
     return nullptr;
@@ -4857,7 +4857,7 @@ SelectionDAGBuilder::visitIntrinsicCall(const CallInst &I, unsigned Intrinsic) {
   case Intrinsic::smul_with_overflow: {
     ISD::NodeType Op;
     switch (Intrinsic) {
-    default: llvm_unreachable("Impossible intrinsic");  // Can't reach here.
+    default: llvm37_unreachable("Impossible intrinsic");  // Can't reach here.
     case Intrinsic::uadd_with_overflow: Op = ISD::UADDO; break;
     case Intrinsic::sadd_with_overflow: Op = ISD::SADDO; break;
     case Intrinsic::usub_with_overflow: Op = ISD::USUBO; break;
@@ -4979,7 +4979,7 @@ SelectionDAGBuilder::visitIntrinsicCall(const CallInst &I, unsigned Intrinsic) {
     return nullptr;
   }
   case Intrinsic::instrprof_increment:
-    llvm_unreachable("instrprof failed to lower an increment");
+    llvm37_unreachable("instrprof failed to lower an increment");
 
   case Intrinsic::localescape: {
     MachineFunction &MF = DAG.getMachineFunction();
@@ -5008,7 +5008,7 @@ SelectionDAGBuilder::visitIntrinsicCall(const CallInst &I, unsigned Intrinsic) {
   }
 
   case Intrinsic::localrecover: {
-    // i8* @llvm.localrecover(i8* %fn, i8* %fp, i32 %idx)
+    // i8* @llvm37.localrecover(i8* %fn, i8* %fp, i32 %idx)
     MachineFunction &MF = DAG.getMachineFunction();
     MVT PtrVT = TLI.getPointerTy(DAG.getDataLayout(), 0);
 
@@ -5036,7 +5036,7 @@ SelectionDAGBuilder::visitIntrinsicCall(const CallInst &I, unsigned Intrinsic) {
   }
   case Intrinsic::eh_begincatch:
   case Intrinsic::eh_endcatch:
-    llvm_unreachable("begin/end catch intrinsics not lowered in codegen");
+    llvm37_unreachable("begin/end catch intrinsics not lowered in codegen");
   case Intrinsic::eh_exceptioncode: {
     unsigned Reg = TLI.getExceptionPointerRegister();
     assert(Reg && "cannot get exception code on this platform");
@@ -5719,20 +5719,20 @@ public:
   /// getCallOperandValEVT - Return the EVT of the Value* that this operand
   /// corresponds to.  If there is no Value* for this operand, it returns
   /// MVT::Other.
-  EVT getCallOperandValEVT(LLVMContext &Context, const TargetLowering &TLI,
+  EVT getCallOperandValEVT(LLVM37Context &Context, const TargetLowering &TLI,
                            const DataLayout &DL) const {
     if (!CallOperandVal) return MVT::Other;
 
     if (isa<BasicBlock>(CallOperandVal))
       return TLI.getPointerTy(DL);
 
-    llvm::Type *OpTy = CallOperandVal->getType();
+    llvm37::Type *OpTy = CallOperandVal->getType();
 
     // FIXME: code duplicated from TargetLowering::ParseConstraints().
     // If this is an indirect operand, the operand is a pointer to the
     // accessed type.
     if (isIndirect) {
-      llvm::PointerType *PtrTy = dyn_cast<PointerType>(OpTy);
+      llvm37::PointerType *PtrTy = dyn_cast<PointerType>(OpTy);
       if (!PtrTy)
         report_fatal_error("Indirect operand for inline asm not a pointer!");
       OpTy = PtrTy->getElementType();
@@ -5780,7 +5780,7 @@ static void GetRegistersForValue(SelectionDAG &DAG,
                                  const TargetLowering &TLI,
                                  SDLoc DL,
                                  SDISelAsmOperandInfo &OpInfo) {
-  LLVMContext &Context = *DAG.getContext();
+  LLVM37Context &Context = *DAG.getContext();
 
   MachineFunction &MF = DAG.getMachineFunction();
   SmallVector<unsigned, 4> Regs;
@@ -5858,7 +5858,7 @@ static void GetRegistersForValue(SelectionDAG &DAG,
     return;
   }
 
-  // Otherwise, if this was a reference to an LLVM register class, create vregs
+  // Otherwise, if this was a reference to an LLVM37 register class, create vregs
   // for this reference.
   if (const TargetRegisterClass *RC = PhysReg.second) {
     RegVT = *RC->vt_begin();
@@ -6153,7 +6153,7 @@ void SelectionDAGBuilder::visitInlineAsm(ImmutableCallSite CS) {
       // Copy the output from the appropriate register.  Find a register that
       // we can use.
       if (OpInfo.AssignedRegs.Regs.empty()) {
-        LLVMContext &Ctx = *DAG.getContext();
+        LLVM37Context &Ctx = *DAG.getContext();
         Ctx.emitError(CS.getInstruction(),
                       "couldn't allocate output register for constraint '" +
                           Twine(OpInfo.ConstraintCode) + "'");
@@ -6209,7 +6209,7 @@ void SelectionDAGBuilder::visitInlineAsm(ImmutableCallSite CS) {
           // Add (OpFlag&0xffff)>>3 registers to MatchedRegs.
           if (OpInfo.isIndirect) {
             // This happens on gcc/testsuite/gcc.dg/pr8788-1.c
-            LLVMContext &Ctx = *DAG.getContext();
+            LLVM37Context &Ctx = *DAG.getContext();
             Ctx.emitError(CS.getInstruction(), "inline asm not supported yet:"
                                                " don't know how to handle tied "
                                                "indirect register inputs");
@@ -6226,7 +6226,7 @@ void SelectionDAGBuilder::visitInlineAsm(ImmutableCallSite CS) {
             if (const TargetRegisterClass *RC = TLI.getRegClassFor(RegVT))
               MatchedRegs.Regs.push_back(RegInfo.createVirtualRegister(RC));
             else {
-              LLVMContext &Ctx = *DAG.getContext();
+              LLVM37Context &Ctx = *DAG.getContext();
               Ctx.emitError(CS.getInstruction(),
                             "inline asm error: This value"
                             " type register class is not natively supported!");
@@ -6267,7 +6267,7 @@ void SelectionDAGBuilder::visitInlineAsm(ImmutableCallSite CS) {
         TLI.LowerAsmOperandForConstraint(InOperandVal, OpInfo.ConstraintCode,
                                           Ops, DAG);
         if (Ops.empty()) {
-          LLVMContext &Ctx = *DAG.getContext();
+          LLVM37Context &Ctx = *DAG.getContext();
           Ctx.emitError(CS.getInstruction(),
                         "invalid operand for inline asm constraint '" +
                             Twine(OpInfo.ConstraintCode) + "'");
@@ -6310,7 +6310,7 @@ void SelectionDAGBuilder::visitInlineAsm(ImmutableCallSite CS) {
 
       // TODO: Support this.
       if (OpInfo.isIndirect) {
-        LLVMContext &Ctx = *DAG.getContext();
+        LLVM37Context &Ctx = *DAG.getContext();
         Ctx.emitError(CS.getInstruction(),
                       "Don't know how to handle indirect register inputs yet "
                       "for constraint '" +
@@ -6320,7 +6320,7 @@ void SelectionDAGBuilder::visitInlineAsm(ImmutableCallSite CS) {
 
       // Copy the input into the appropriate registers.
       if (OpInfo.AssignedRegs.Regs.empty()) {
-        LLVMContext &Ctx = *DAG.getContext();
+        LLVM37Context &Ctx = *DAG.getContext();
         Ctx.emitError(CS.getInstruction(),
                       "couldn't allocate input reg for constraint '" +
                           Twine(OpInfo.ConstraintCode) + "'");
@@ -6508,7 +6508,7 @@ SelectionDAGBuilder::lowerCallOperands(ImmutableCallSite CS, unsigned ArgIdx,
 /// alloca in the entry block, then the runtime may assume that the alloca's
 /// StackMap location can be read immediately after compilation and that the
 /// location is valid at any point during execution (this is similar to the
-/// assumption made by the llvm.gcroot intrinsic). If the alloca's location were
+/// assumption made by the llvm37.gcroot intrinsic). If the alloca's location were
 /// only available in a register, then the runtime would need to trap when
 /// execution reaches the StackMap in order to read the alloca's location.
 static void addStackMapLiveVars(ImmutableCallSite CS, unsigned StartIdx,
@@ -6530,9 +6530,9 @@ static void addStackMapLiveVars(ImmutableCallSite CS, unsigned StartIdx,
   }
 }
 
-/// \brief Lower llvm.experimental.stackmap directly to its target opcode.
+/// \brief Lower llvm37.experimental.stackmap directly to its target opcode.
 void SelectionDAGBuilder::visitStackmap(const CallInst &CI) {
-  // void @llvm.experimental.stackmap(i32 <id>, i32 <numShadowBytes>,
+  // void @llvm37.experimental.stackmap(i32 <id>, i32 <numShadowBytes>,
   //                                  [live variables...])
 
   assert(CI.getType()->isVoidTy() && "Stackmap cannot return a value.");
@@ -6593,10 +6593,10 @@ void SelectionDAGBuilder::visitStackmap(const CallInst &CI) {
   FuncInfo.MF->getFrameInfo()->setHasStackMap();
 }
 
-/// \brief Lower llvm.experimental.patchpoint directly to its target opcode.
+/// \brief Lower llvm37.experimental.patchpoint directly to its target opcode.
 void SelectionDAGBuilder::visitPatchpoint(ImmutableCallSite CS,
                                           MachineBasicBlock *LandingPad) {
-  // void|i64 @llvm.experimental.patchpoint.void|i64(i64 <id>,
+  // void|i64 @llvm37.experimental.patchpoint.void|i64(i64 <id>,
   //                                                 i32 <numBytes>,
   //                                                 i8* <target>,
   //                                                 i32 <numArgs>,
@@ -7036,7 +7036,7 @@ void TargetLowering::LowerOperationWrapper(SDNode *N,
 }
 
 SDValue TargetLowering::LowerOperation(SDValue Op, SelectionDAG &DAG) const {
-  llvm_unreachable("LowerOperation not implemented for this target!");
+  llvm37_unreachable("LowerOperation not implemented for this target!");
 }
 
 void
@@ -7060,7 +7060,7 @@ SelectionDAGBuilder::CopyValueToVirtualRegister(const Value *V, unsigned Reg) {
   PendingExports.push_back(Chain);
 }
 
-#include "llvm/CodeGen/SelectionDAGISel.h"
+#include "llvm37/CodeGen/SelectionDAGISel.h"
 
 /// isOnlyUsedInEntryBlock - If the specified argument is only used in the
 /// entry block, return true.  This includes arguments used by switches, since
@@ -7223,7 +7223,7 @@ void SelectionDAGISel::LowerArguments(const Function &F) {
     DAG.setRoot(NewRoot);
 
     // i indexes lowered arguments.  Bump it past the hidden sret argument.
-    // Idx indexes LLVM arguments.  Don't touch it.
+    // Idx indexes LLVM37 arguments.  Don't touch it.
     ++i;
   }
 
@@ -7319,8 +7319,8 @@ void SelectionDAGISel::LowerArguments(const Function &F) {
 /// the end.
 ///
 void
-SelectionDAGBuilder::HandlePHINodesInSuccessorBlocks(const BasicBlock *LLVMBB) {
-  const TerminatorInst *TI = LLVMBB->getTerminator();
+SelectionDAGBuilder::HandlePHINodesInSuccessorBlocks(const BasicBlock *LLVM37BB) {
+  const TerminatorInst *TI = LLVM37BB->getTerminator();
 
   SmallPtrSet<MachineBasicBlock *, 4> SuccsHandled;
 
@@ -7338,7 +7338,7 @@ SelectionDAGBuilder::HandlePHINodesInSuccessorBlocks(const BasicBlock *LLVMBB) {
 
     MachineBasicBlock::iterator MBBI = SuccMBB->begin();
 
-    // At this point we know that there is a 1-1 correspondence between LLVM PHI
+    // At this point we know that there is a 1-1 correspondence between LLVM37 PHI
     // nodes and Machine PHI nodes, but the incoming operands have not been
     // emitted yet.
     for (BasicBlock::const_iterator I = SuccBB->begin();
@@ -7351,7 +7351,7 @@ SelectionDAGBuilder::HandlePHINodesInSuccessorBlocks(const BasicBlock *LLVMBB) {
         continue;
 
       unsigned Reg;
-      const Value *PHIOp = PN->getIncomingValueForBlock(LLVMBB);
+      const Value *PHIOp = PN->getIncomingValueForBlock(LLVM37BB);
 
       if (const Constant *C = dyn_cast<Constant>(PHIOp)) {
         unsigned &RegOut = ConstantsOut[C];

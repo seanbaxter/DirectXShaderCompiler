@@ -69,7 +69,7 @@ declare %dx.types.Handle @dx.op.createHandle(i32, i8, i32, i32, i1) #1
 attributes #0 = { nounwind }
 attributes #1 = { nounwind readonly }
 
-!llvm.ident = !{!0}
+!llvm37.ident = !{!0}
 !dx.version = !{!1}
 !dx.valver = !{!2}
 !dx.shaderModel = !{!3}

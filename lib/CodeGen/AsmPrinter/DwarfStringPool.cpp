@@ -1,6 +1,6 @@
-//===-- llvm/CodeGen/DwarfStringPool.cpp - Dwarf Debug Framework ----------===//
+//===-- llvm37/CodeGen/DwarfStringPool.cpp - Dwarf Debug Framework ----------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -8,11 +8,11 @@
 //===----------------------------------------------------------------------===//
 
 #include "DwarfStringPool.h"
-#include "llvm/CodeGen/AsmPrinter.h"
-#include "llvm/MC/MCAsmInfo.h"
-#include "llvm/MC/MCStreamer.h"
+#include "llvm37/CodeGen/AsmPrinter.h"
+#include "llvm37/MC/MCAsmInfo.h"
+#include "llvm37/MC/MCStreamer.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 DwarfStringPool::DwarfStringPool(BumpPtrAllocator &A, AsmPrinter &Asm,
                                  StringRef Prefix)

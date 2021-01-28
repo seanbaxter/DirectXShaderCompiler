@@ -1,4 +1,4 @@
-; RUN: llvm-link %s %p/unnamed-addr1-b.ll -S -o - | FileCheck %s
+; RUN: llvm37-link %s %p/unnamed-addr1-b.ll -S -o - | FileCheck %s
 
 ; Only in this file
 @global-a = common global i32 0

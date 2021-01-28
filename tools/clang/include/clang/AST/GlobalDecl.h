@@ -1,6 +1,6 @@
 //===--- GlobalDecl.h - Global declaration holder ---------------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -12,8 +12,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_AST_GLOBALDECL_H
-#define LLVM_CLANG_AST_GLOBALDECL_H
+#ifndef LLVM37_CLANG_AST_GLOBALDECL_H
+#define LLVM37_CLANG_AST_GLOBALDECL_H
 
 #include "clang/AST/DeclCXX.h"
 #include "clang/AST/DeclObjC.h"
@@ -26,7 +26,7 @@ namespace clang {
 /// a CXXDestructorDecl and the destructor type (Base, Complete) or
 /// a VarDecl, a FunctionDecl or a BlockDecl.
 class GlobalDecl {
-  llvm::PointerIntPair<const Decl*, 2> Value;
+  llvm37::PointerIntPair<const Decl*, 2> Value;
 
   void Init(const Decl *D) {
     assert(!isa<CXXConstructorDecl>(D) && "Use other ctor with ctor decls!");
@@ -90,7 +90,7 @@ public:
 
 } // end namespace clang
 
-namespace llvm {
+namespace llvm37 {
   template<class> struct DenseMapInfo;
 
   template<> struct DenseMapInfo<clang::GlobalDecl> {
@@ -120,6 +120,6 @@ namespace llvm {
   struct isPodLike<clang::GlobalDecl> {
     static const bool value = true;
   };
-} // end namespace llvm
+} // end namespace llvm37
 
 #endif

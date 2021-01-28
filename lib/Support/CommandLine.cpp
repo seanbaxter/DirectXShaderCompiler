@@ -1,6 +1,6 @@
 //===-- CommandLine.cpp - Command line parser implementation --------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -16,27 +16,27 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Support/CommandLine.h"
-#include "llvm-c/Support.h"
-#include "llvm/ADT/ArrayRef.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/SmallPtrSet.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/ADT/StringMap.h"
-#include "llvm/ADT/Twine.h"
-#include "llvm/Config/config.h"
-#include "llvm/Support/ConvertUTF.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/Host.h"
-#include "llvm/Support/ManagedStatic.h"
-#include "llvm/Support/MemoryBuffer.h"
-#include "llvm/Support/Path.h"
-#include "llvm/Support/StringSaver.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37-c/Support.h"
+#include "llvm37/ADT/ArrayRef.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/SmallPtrSet.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/ADT/StringMap.h"
+#include "llvm37/ADT/Twine.h"
+#include "llvm37/Config/config.h"
+#include "llvm37/Support/ConvertUTF.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/Host.h"
+#include "llvm37/Support/ManagedStatic.h"
+#include "llvm37/Support/MemoryBuffer.h"
+#include "llvm37/Support/Path.h"
+#include "llvm37/Support/StringSaver.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <cstdlib>
 #include <map>
-using namespace llvm;
+using namespace llvm37;
 using namespace cl;
 
 #define DEBUG_TYPE "commandline"
@@ -44,7 +44,7 @@ using namespace cl;
 //===----------------------------------------------------------------------===//
 // Template instantiations and anchors.
 //
-namespace llvm {
+namespace llvm37 {
 namespace cl {
 template class basic_parser<bool>;
 template class basic_parser<boolOrDefault>;
@@ -62,7 +62,7 @@ template class opt<std::string>;
 template class opt<char>;
 template class opt<bool>;
 }
-} // end namespace llvm::cl
+} // end namespace llvm37::cl
 
 // Pin the vtables to this file.
 void GenericOptionValue::anchor() {}
@@ -145,7 +145,7 @@ public:
     // Fail hard if there were errors. These are strictly unrecoverable and
     // indicate serious issues such as conflicting option names or an
     // incorrectly
-    // linked LLVM distribution.
+    // linked LLVM37 distribution.
     if (HadErrors)
       report_fatal_error("inconsistency in registered CommandLine options");
   }
@@ -234,7 +234,7 @@ void Option::setArgStr(const char *S) {
 }
 
 // Initialise the general option category.
-OptionCategory *llvm::cl::GeneralCategory; // HLSL Change - GeneralCategory is now a pointer
+OptionCategory *llvm37::cl::GeneralCategory; // HLSL Change - GeneralCategory is now a pointer
 
 void OptionCategory::registerCategory() {
   GlobalParser->registerCategory(this);
@@ -1035,7 +1035,7 @@ void CommandLineParser::ParseCommandLineOptions(int argc,
           ValNo++;
           break;
         default:
-          llvm_unreachable("Internal error, unexpected NumOccurrences flag in "
+          llvm37_unreachable("Internal error, unexpected NumOccurrences flag in "
                            "positional argument processing!");
         }
       }
@@ -1754,10 +1754,10 @@ class VersionPrinter {
 public:
   void print() {
     raw_ostream &OS = outs();
-    OS << "LLVM (http://llvm.org/):\n"
+    OS << "LLVM37 (http://llvm37.org/):\n"
        << "  " << PACKAGE_NAME << " version " << PACKAGE_VERSION;
-#ifdef LLVM_VERSION_INFO
-    OS << " " << LLVM_VERSION_INFO;
+#ifdef LLVM37_VERSION_INFO
+    OS << " " << LLVM37_VERSION_INFO;
 #endif
     OS << "\n  ";
 #ifndef __OPTIMIZE__
@@ -1804,7 +1804,7 @@ public:
 };
 } // End anonymous namespace
 
-// Define the --version option that prints out the LLVM version for the tool
+// Define the --version option that prints out the LLVM37 version for the tool
 static VersionPrinter VersionPrinterInstance;
 
 #if 0 // HLSL Change Starts
@@ -1870,7 +1870,7 @@ void cl::HideUnrelatedOptions(ArrayRef<const cl::OptionCategory *> Categories) {
   }
 }
 
-void LLVMParseCommandLineOptions(int argc, const char *const *argv,
+void LLVM37ParseCommandLineOptions(int argc, const char *const *argv,
                                  const char *Overview) {
-  llvm::cl::ParseCommandLineOptions(argc, argv, Overview);
+  llvm37::cl::ParseCommandLineOptions(argc, argv, Overview);
 }

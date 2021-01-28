@@ -9,16 +9,16 @@ Introduction
 ============
 
 This document describes the specifics of source level debuging with HLSL. The
-basic infrastructure is based on :doc:`Source Level Debugging with LLVM
+basic infrastructure is based on :doc:`Source Level Debugging with LLVM37
 <SourceLevelDebugging>`, so the focus here is on the specifics of DXIL
 programs compiled from HLSL.
 
 DXIL Debug Information Format
 =============================
 
-The debug information for an HLSL program in DXIL form is stored as an LLVM
+The debug information for an HLSL program in DXIL form is stored as an LLVM37
 module with debug information represented according to the :doc:`Source Level
-Debugging with LLVM <SourceLevelDebugging>` document.
+Debugging with LLVM37 <SourceLevelDebugging>` document.
 
 The :ref:`dxil_container_format` describes how a single data structure
 holds both a DXIL program, debug information, and other optional parts.
@@ -28,7 +28,7 @@ There are three parts that are associated with debug information.
 * DFCC_DXIL ('DXIL'). A valid DXIL program has no debug information. This is
   the program described by debug information.
 
-* DFCC_ShaderDebugInfoDXIL ('ILDB'). This is an LLVM module with debug
+* DFCC_ShaderDebugInfoDXIL ('ILDB'). This is an LLVM37 module with debug
   information. It's an augmented version of the original DXIL module. For
   historical reasons, this is sometimes referred to as 'the PDB of the
   program'.
@@ -40,8 +40,8 @@ Using Debug Information
 =======================
 
 The debug information can be used directly by looking up the debug information
-part and loading into an LLVM module. There is full fidelity with debug
-information via this mechanism, although it requires linking in the LLVM
+part and loading into an LLVM37 module. There is full fidelity with debug
+information via this mechanism, although it requires linking in the LLVM37
 supporting libraries.
 
 For compatibility, the dxcompiler.dll binary also exposes a limited

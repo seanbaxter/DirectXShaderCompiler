@@ -1,6 +1,6 @@
 //===- CXComment.cpp - libclang APIs for manipulating CXComments ----------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -18,9 +18,9 @@
 #include "clang-c/Documentation.h"
 #include "clang/AST/Decl.h"
 #include "clang/Index/CommentToXML.h"
-#include "llvm/ADT/StringExtras.h"
-#include "llvm/ADT/StringSwitch.h"
-#include "llvm/Support/ErrorHandling.h"
+#include "llvm37/ADT/StringExtras.h"
+#include "llvm37/ADT/StringSwitch.h"
+#include "llvm37/Support/ErrorHandling.h"
 #include <climits>
 
 using namespace clang;
@@ -87,7 +87,7 @@ enum CXCommentKind clang_Comment_getKind(CXComment CXC) {
   case Comment::FullCommentKind:
     return CXComment_FullComment;
   }
-  llvm_unreachable("unknown CommentKind");
+  llvm37_unreachable("unknown CommentKind");
 }
 
 unsigned clang_Comment_getNumChildren(CXComment CXC) {
@@ -164,7 +164,7 @@ clang_InlineCommandComment_getRenderKind(CXComment CXC) {
   case InlineCommandComment::RenderEmphasized:
     return CXCommentInlineCommandRenderKind_Emphasized;
   }
-  llvm_unreachable("unknown InlineCommandComment::RenderKind");
+  llvm37_unreachable("unknown InlineCommandComment::RenderKind");
 }
 
 unsigned clang_InlineCommandComment_getNumArgs(CXComment CXC) {
@@ -306,7 +306,7 @@ enum CXCommentParamPassDirection clang_ParamCommandComment_getDirection(
   case ParamCommandComment::InOut:
     return CXCommentParamPassDirection_InOut;
   }
-  llvm_unreachable("unknown ParamCommandComment::PassDirection");
+  llvm37_unreachable("unknown ParamCommandComment::PassDirection");
 }
 
 CXString clang_TParamCommandComment_getParamName(CXComment CXC) {

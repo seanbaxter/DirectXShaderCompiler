@@ -1,4 +1,4 @@
-; RUN: llvm-as %s -o - | llvm-nm - | FileCheck %s
+; RUN: llvm37-as %s -o - | llvm37-nm - | FileCheck %s
 
 target datalayout = "e-m:w-i64:64-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-pc-windows-msvc"

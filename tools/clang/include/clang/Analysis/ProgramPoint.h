@@ -1,6 +1,6 @@
 //==- ProgramPoint.h - Program Points for Path-Sensitive Analysis --*- C++ -*-//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -12,18 +12,18 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_ANALYSIS_PROGRAMPOINT_H
-#define LLVM_CLANG_ANALYSIS_PROGRAMPOINT_H
+#ifndef LLVM37_CLANG_ANALYSIS_PROGRAMPOINT_H
+#define LLVM37_CLANG_ANALYSIS_PROGRAMPOINT_H
 
 #include "clang/Analysis/AnalysisContext.h"
 #include "clang/Analysis/CFG.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/FoldingSet.h"
-#include "llvm/ADT/Optional.h"
-#include "llvm/ADT/PointerIntPair.h"
-#include "llvm/ADT/StringRef.h"
-#include "llvm/Support/Casting.h"
-#include "llvm/Support/DataTypes.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/FoldingSet.h"
+#include "llvm37/ADT/Optional.h"
+#include "llvm37/ADT/PointerIntPair.h"
+#include "llvm37/ADT/StringRef.h"
+#include "llvm37/Support/Casting.h"
+#include "llvm37/Support/DataTypes.h"
 #include <cassert>
 #include <string>
 #include <utility>
@@ -64,13 +64,13 @@ public:
 
 private:
   const void *Data1;
-  llvm::PointerIntPair<const void *, 2, unsigned> Data2;
+  llvm37::PointerIntPair<const void *, 2, unsigned> Data2;
 
   // The LocationContext could be NULL to allow ProgramPoint to be used in
   // context insensitive analysis.
-  llvm::PointerIntPair<const LocationContext *, 2, unsigned> L;
+  llvm37::PointerIntPair<const LocationContext *, 2, unsigned> L;
 
-  llvm::PointerIntPair<const ProgramPointTag *, 2, unsigned> Tag;
+  llvm37::PointerIntPair<const ProgramPointTag *, 2, unsigned> Tag;
 
 protected:
   ProgramPoint() {}
@@ -158,7 +158,7 @@ public:
 
   // For use with DenseMap.  This hash is probably slow.
   unsigned getHashValue() const {
-    llvm::FoldingSetNodeID ID;
+    llvm37::FoldingSetNodeID ID;
     Profile(ID);
     return ID.ComputeHash();
   }
@@ -177,7 +177,7 @@ public:
            Tag != RHS.Tag;
   }
 
-  void Profile(llvm::FoldingSetNodeID& ID) const {
+  void Profile(llvm37::FoldingSetNodeID& ID) const {
     ID.AddInteger((unsigned) getKind());
     ID.AddPointer(getData1());
     ID.AddPointer(getData2());
@@ -670,7 +670,7 @@ public:
 } // end namespace clang
 
 
-namespace llvm { // Traits specialization for DenseMap
+namespace llvm37 { // Traits specialization for DenseMap
 
 template <> struct DenseMapInfo<clang::ProgramPoint> {
 
@@ -700,6 +700,6 @@ static bool isEqual(const clang::ProgramPoint &L,
 template <>
 struct isPodLike<clang::ProgramPoint> { static const bool value = true; };
 
-} // end namespace llvm
+} // end namespace llvm37
 
 #endif

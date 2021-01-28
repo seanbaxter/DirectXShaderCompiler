@@ -20,13 +20,13 @@ target datalayout = "e-m:o-i64:64-f80:128-n8:16:32:64-S128"
 define void @_Z4testPiS_i(i32* nocapture %A, i32* nocapture %B, i32 %number) #0 {
 entry:
   %cmp25 = icmp sgt i32 %number, 0, !dbg !10
-  br i1 %cmp25, label %for.body.preheader, label %for.end15, !dbg !10, !llvm.loop !12
+  br i1 %cmp25, label %for.body.preheader, label %for.end15, !dbg !10, !llvm37.loop !12
 
 for.body.preheader:                               ; preds = %entry
   br label %for.body, !dbg !14
 
 for.cond5.preheader:                              ; preds = %for.body
-  br i1 %cmp25, label %for.body7.preheader, label %for.end15, !dbg !16, !llvm.loop !18
+  br i1 %cmp25, label %for.body7.preheader, label %for.end15, !dbg !16, !llvm37.loop !18
 
 for.body7.preheader:                              ; preds = %for.cond5.preheader
   br label %for.body7, !dbg !20
@@ -43,7 +43,7 @@ for.body:                                         ; preds = %for.body.preheader,
   %indvars.iv.next28 = add nuw nsw i64 %indvars.iv27, 1, !dbg !10
   %lftr.wideiv29 = trunc i64 %indvars.iv.next28 to i32, !dbg !10
   %exitcond30 = icmp eq i32 %lftr.wideiv29, %number, !dbg !10
-  br i1 %exitcond30, label %for.cond5.preheader, label %for.body, !dbg !10, !llvm.loop !12
+  br i1 %exitcond30, label %for.cond5.preheader, label %for.body, !dbg !10, !llvm37.loop !12
 
 for.body7:                                        ; preds = %for.body7.preheader, %for.body7
   %indvars.iv = phi i64 [ %indvars.iv.next, %for.body7 ], [ 0, %for.body7.preheader ]
@@ -57,7 +57,7 @@ for.body7:                                        ; preds = %for.body7.preheader
   %indvars.iv.next = add nuw nsw i64 %indvars.iv, 1, !dbg !16
   %lftr.wideiv = trunc i64 %indvars.iv.next to i32, !dbg !16
   %exitcond = icmp eq i32 %lftr.wideiv, %number, !dbg !16
-  br i1 %exitcond, label %for.end15.loopexit, label %for.body7, !dbg !16, !llvm.loop !18
+  br i1 %exitcond, label %for.end15.loopexit, label %for.body7, !dbg !16, !llvm37.loop !18
 
 for.end15.loopexit:                               ; preds = %for.body7
   br label %for.end15
@@ -68,9 +68,9 @@ for.end15:                                        ; preds = %for.end15.loopexit,
 
 attributes #0 = { nounwind }
 
-!llvm.dbg.cu = !{!0}
-!llvm.module.flags = !{!7, !8}
-!llvm.ident = !{!9}
+!llvm37.dbg.cu = !{!0}
+!llvm37.module.flags = !{!7, !8}
+!llvm37.ident = !{!9}
 
 !0 = !DICompileUnit(language: DW_LANG_C_plus_plus, producer: "clang version 3.5.0", isOptimized: true, emissionKind: 2, file: !1, enums: !2, retainedTypes: !2, subprograms: !3, globals: !2, imports: !2)
 !1 = !DIFile(filename: "no_array_bounds.cpp", directory: ".")

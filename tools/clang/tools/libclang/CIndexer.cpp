@@ -1,6 +1,6 @@
 //===- CIndex.cpp - Clang-C Source Indexing Library -----------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -19,12 +19,12 @@
 #include "clang/Basic/SourceManager.h"
 #include "clang/Basic/Version.h"
 #include "clang/Sema/CodeCompleteConsumer.h"
-#include "llvm/ADT/StringExtras.h"
-#include "llvm/Config/llvm-config.h"
-#include "llvm/Support/Compiler.h"
-#include "llvm/Support/MemoryBuffer.h"
-#include "llvm/Support/Program.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/StringExtras.h"
+#include "llvm37/Config/llvm-config.h"
+#include "llvm37/Support/Compiler.h"
+#include "llvm37/Support/MemoryBuffer.h"
+#include "llvm37/Support/Program.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <cstdio>
 #include <sstream>
 #include <vector>
@@ -32,10 +32,10 @@
 #ifdef __CYGWIN__
 #include <cygwin/version.h>
 #include <sys/cygwin.h>
-#define LLVM_ON_WIN32 1
+#define LLVM37_ON_WIN32 1
 #endif
 
-#ifdef LLVM_ON_WIN32
+#ifdef LLVM37_ON_WIN32
 #include <windows.h>
 #else
 #include <dlfcn.h>
@@ -55,7 +55,7 @@ const std::string &CIndexer::getClangResourcesPath() {
   SmallString<128> LibClangPath;
 
   // Find the location where this library lives (libclang.dylib).
-#ifdef LLVM_ON_WIN32
+#ifdef LLVM37_ON_WIN32
   MEMORY_BASIC_INFORMATION mbi;
   char path[MAX_PATH];
   VirtualQuery((void *)(uintptr_t)clang_createTranslationUnit, &mbi,
@@ -72,18 +72,18 @@ const std::string &CIndexer::getClangResourcesPath() {
 #endif
 #endif
 
-  LibClangPath += llvm::sys::path::parent_path(path);
+  LibClangPath += llvm37::sys::path::parent_path(path);
 #else
   // This silly cast below avoids a C++ warning.
   Dl_info info;
   if (dladdr((void *)(uintptr_t)clang_createTranslationUnit, &info) == 0)
-    llvm_unreachable("Call to dladdr() failed");
+    llvm37_unreachable("Call to dladdr() failed");
 
   // We now have the CIndex directory, locate clang relative to it.
-  LibClangPath += llvm::sys::path::parent_path(info.dli_fname);
+  LibClangPath += llvm37::sys::path::parent_path(info.dli_fname);
 #endif
 
-  llvm::sys::path::append(LibClangPath, "clang", CLANG_VERSION_STRING);
+  llvm37::sys::path::append(LibClangPath, "clang", CLANG_VERSION_STRING);
 
   // Cache our result.
   ResourcesPath = LibClangPath.str();

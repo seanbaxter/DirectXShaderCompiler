@@ -1,6 +1,6 @@
 //===--- Replacement.cpp - Framework for clang refactoring tools ----------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -19,9 +19,9 @@
 #include "clang/Lex/Lexer.h"
 #include "clang/Rewrite/Core/Rewriter.h"
 #include "clang/Tooling/Core/Replacement.h"
-#include "llvm/Support/FileSystem.h"
-#include "llvm/Support/Path.h"
-#include "llvm/Support/raw_os_ostream.h"
+#include "llvm37/Support/FileSystem.h"
+#include "llvm37/Support/Path.h"
+#include "llvm37/Support/raw_os_ostream.h"
 
 namespace clang {
 namespace tooling {
@@ -79,7 +79,7 @@ bool Replacement::apply(Rewriter &Rewrite) const {
 
 std::string Replacement::toString() const {
   std::string Result;
-  llvm::raw_string_ostream Stream(Result);
+  llvm37::raw_string_ostream Stream(Result);
   Stream << FilePath << ": " << ReplacementRange.getOffset() << ":+"
          << ReplacementRange.getLength() << ":\"" << ReplacementText << "\"";
   return Stream.str();
@@ -116,8 +116,8 @@ void Replacement::setFromSourceLocation(const SourceManager &Sources,
   if (Entry) {
     // Make FilePath absolute so replacements can be applied correctly when
     // relative paths for files are used.
-    llvm::SmallString<256> FilePath(Entry->getName());
-    std::error_code EC = llvm::sys::fs::make_absolute(FilePath);
+    llvm37::SmallString<256> FilePath(Entry->getName());
+    std::error_code EC = llvm37::sys::fs::make_absolute(FilePath);
     this->FilePath = EC ? FilePath.c_str() : Entry->getName();
   } else {
     this->FilePath = InvalidLocation;
@@ -271,8 +271,8 @@ std::string applyAllReplacements(StringRef Code, const Replacements &Replaces) {
       new DiagnosticOptions);
   SourceManager SourceMgr(Diagnostics, Files);
   Rewriter Rewrite(SourceMgr, LangOptions());
-  std::unique_ptr<llvm::MemoryBuffer> Buf =
-      llvm::MemoryBuffer::getMemBuffer(Code, "<stdin>");
+  std::unique_ptr<llvm37::MemoryBuffer> Buf =
+      llvm37::MemoryBuffer::getMemBuffer(Code, "<stdin>");
   const clang::FileEntry *Entry =
       Files.getVirtualFile("<stdin>", Buf->getBufferSize(), 0);
   SourceMgr.overrideFileContents(Entry, std::move(Buf));
@@ -286,7 +286,7 @@ std::string applyAllReplacements(StringRef Code, const Replacements &Replaces) {
       return "";
   }
   std::string Result;
-  llvm::raw_string_ostream OS(Result);
+  llvm37::raw_string_ostream OS(Result);
   Rewrite.getEditBuffer(ID).write(OS);
   OS.flush();
   return Result;

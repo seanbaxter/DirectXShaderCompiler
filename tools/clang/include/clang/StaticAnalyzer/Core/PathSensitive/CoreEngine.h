@@ -1,6 +1,6 @@
 //==- CoreEngine.h - Path-Sensitive Dataflow Engine ----------------*- C++ -*-//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -12,8 +12,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_STATICANALYZER_CORE_PATHSENSITIVE_COREENGINE_H
-#define LLVM_CLANG_STATICANALYZER_CORE_PATHSENSITIVE_COREENGINE_H
+#ifndef LLVM37_CLANG_STATICANALYZER_CORE_PATHSENSITIVE_COREENGINE_H
+#define LLVM37_CLANG_STATICANALYZER_CORE_PATHSENSITIVE_COREENGINE_H
 
 #include "clang/AST/Expr.h"
 #include "clang/Analysis/AnalysisContext.h"

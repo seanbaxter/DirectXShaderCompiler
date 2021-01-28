@@ -1,6 +1,6 @@
-//===- llvm/unittest/ADT/StringMapMap.cpp - StringMap unit tests ----------===//
+//===- llvm37/unittest/ADT/StringMapMap.cpp - StringMap unit tests ----------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -8,10 +8,10 @@
 //===----------------------------------------------------------------------===//
 
 #include "gtest/gtest.h"
-#include "llvm/ADT/StringMap.h"
-#include "llvm/Support/DataTypes.h"
+#include "llvm37/ADT/StringMap.h"
+#include "llvm37/Support/DataTypes.h"
 #include <tuple>
-using namespace llvm;
+using namespace llvm37;
 
 namespace {
 
@@ -139,7 +139,7 @@ TEST_F(StringMapTest, SmallFullMapTest) {
   // StringMap has a tricky corner case when the map is small (<8 buckets) and
   // it fills up through a balanced pattern of inserts and erases. This can
   // lead to inf-loops in some cases (PR13148) so we test it explicitly here.
-  llvm::StringMap<int> Map(2);
+  llvm37::StringMap<int> Map(2);
 
   Map["eins"] = 1;
   Map["zwei"] = 2;

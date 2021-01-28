@@ -1,6 +1,6 @@
 //===-- AttributeImpl.h - Attribute Internals -------------------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -9,21 +9,21 @@
 ///
 /// \file
 /// \brief This file defines various helper methods and classes used by
-/// LLVMContextImpl for creating and managing attributes.
+/// LLVM37ContextImpl for creating and managing attributes.
 ///
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_LIB_IR_ATTRIBUTEIMPL_H
-#define LLVM_LIB_IR_ATTRIBUTEIMPL_H
+#ifndef LLVM37_LIB_IR_ATTRIBUTEIMPL_H
+#define LLVM37_LIB_IR_ATTRIBUTEIMPL_H
 
-#include "llvm/ADT/FoldingSet.h"
-#include "llvm/IR/Attributes.h"
+#include "llvm37/ADT/FoldingSet.h"
+#include "llvm37/IR/Attributes.h"
 #include <string>
 
-namespace llvm {
+namespace llvm37 {
 
 class Constant;
-class LLVMContext;
+class LLVM37Context;
 
 //===----------------------------------------------------------------------===//
 /// \class
@@ -154,7 +154,7 @@ class AttributeSetNode : public FoldingSetNode {
   void operator=(const AttributeSetNode &) = delete;
   AttributeSetNode(const AttributeSetNode &) = delete;
 public:
-  static AttributeSetNode *get(LLVMContext &C, ArrayRef<Attribute> Attrs);
+  static AttributeSetNode *get(LLVM37Context &C, ArrayRef<Attribute> Attrs);
 
   bool hasAttribute(Attribute::AttrKind Kind) const;
   bool hasAttribute(StringRef Kind) const;
@@ -196,7 +196,7 @@ public:
   typedef std::pair<unsigned, AttributeSetNode*> IndexAttrPair;
 
 private:
-  LLVMContext &Context;
+  LLVM37Context &Context;
   unsigned NumAttrs; ///< Number of entries in this set.
 
   /// \brief Return a pointer to the IndexAttrPair for the specified slot.
@@ -208,7 +208,7 @@ private:
   void operator=(const AttributeSetImpl &) = delete;
   AttributeSetImpl(const AttributeSetImpl &) = delete;
 public:
-  AttributeSetImpl(LLVMContext &C,
+  AttributeSetImpl(LLVM37Context &C,
                    ArrayRef<std::pair<unsigned, AttributeSetNode *> > Attrs)
       : Context(C), NumAttrs(Attrs.size()) {
 
@@ -227,7 +227,7 @@ public:
   }
 
   /// \brief Get the context that created this AttributeSetImpl.
-  LLVMContext &getContext() { return Context; }
+  LLVM37Context &getContext() { return Context; }
 
   /// \brief Return the number of attributes this AttributeSet contains.
   unsigned getNumAttributes() const { return NumAttrs; }
@@ -278,6 +278,6 @@ static_assert(
         AlignOf<AttributeSetImpl::IndexAttrPair>::Alignment,
     "Alignment is insufficient for objects appended to AttributeSetImpl");
 
-} // end llvm namespace
+} // end llvm37 namespace
 
 #endif

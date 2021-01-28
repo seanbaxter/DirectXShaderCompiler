@@ -3,8 +3,8 @@
 ; RUN: echo save >> %t.mri
 ; RUN: echo end >> %t.mri
 
-; RUN: llvm-ar -M  < %t.mri
-; RUN: llvm-nm -M %t.a | FileCheck %s
+; RUN: llvm37-ar -M  < %t.mri
+; RUN: llvm37-nm -M %t.a | FileCheck %s
 
 ; CHECK:      Archive map
 ; CHECK-NEXT: main in trivial-object-test.elf-x86-64
@@ -20,8 +20,8 @@
 ; RUN: echo save >> %t2.mri
 ; RUN: echo end >> %t2.mri
 
-; RUN: llvm-ar -M  < %t2.mri
-; RUN: llvm-nm -M %t.a | FileCheck --check-prefix=NEW %s
+; RUN: llvm37-ar -M  < %t2.mri
+; RUN: llvm37-nm -M %t.a | FileCheck --check-prefix=NEW %s
 
 ; NEW: Archive map
 ; NEW-NEXT: foo in trivial-object-test2.elf-x86-64

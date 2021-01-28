@@ -1,30 +1,30 @@
 //===--- MixedTBAATest.cpp - Mixed TBAA unit tests ------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Analysis/Passes.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/MDBuilder.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/LegacyPassManager.h"
-#include "llvm/Support/CommandLine.h"
+#include "llvm37/Analysis/Passes.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/MDBuilder.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/LegacyPassManager.h"
+#include "llvm37/Support/CommandLine.h"
 #include "gtest/gtest.h"
 
-namespace llvm {
+namespace llvm37 {
 namespace {
 
 class MixedTBAATest : public testing::Test {
 protected:
   MixedTBAATest() : M("MixedTBAATest", C), MD(C) {}
 
-  LLVMContext C;
+  LLVM37Context C;
   Module M;
   MDBuilder MD;
   legacy::PassManager PM;
@@ -51,7 +51,7 @@ TEST_F(MixedTBAATest, MixedTBAA) {
     auto MD1 = MD.createTBAAScalarTypeNode("omnipotent char", RootMD);
     auto MD2 = MD.createTBAAScalarTypeNode("int", MD1);
     auto MD3 = MD.createTBAAStructTagNode(MD2, MD2, 0);
-    Store2->setMetadata(LLVMContext::MD_tbaa, MD3);
+    Store2->setMetadata(LLVM37Context::MD_tbaa, MD3);
   }
 
   // Old TBAA metadata
@@ -59,7 +59,7 @@ TEST_F(MixedTBAATest, MixedTBAA) {
     auto RootMD = MD.createTBAARoot("Simple C/C++ TBAA");
     auto MD1 = MD.createTBAANode("omnipotent char", RootMD);
     auto MD2 = MD.createTBAANode("int", MD1);
-    Store1->setMetadata(LLVMContext::MD_tbaa, MD2);
+    Store1->setMetadata(LLVM37Context::MD_tbaa, MD2);
   }
 
   // Run the TBAA eval pass on a mixture of path-aware and non-path-aware TBAA.
@@ -73,5 +73,5 @@ TEST_F(MixedTBAATest, MixedTBAA) {
 }
 
 } // end anonymous namspace
-} // end llvm namespace
+} // end llvm37 namespace
 

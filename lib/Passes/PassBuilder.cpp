@@ -1,6 +1,6 @@
 //===- Parsing, selection, and construction of pass pipelines -------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -15,25 +15,25 @@
 ///
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Passes/PassBuilder.h"
-#include "llvm/Analysis/AssumptionCache.h"
-#include "llvm/Analysis/CGSCCPassManager.h"
-#include "llvm/Analysis/LazyCallGraph.h"
-#include "llvm/Analysis/LoopInfo.h"
-#include "llvm/Analysis/TargetLibraryInfo.h"
-#include "llvm/Analysis/TargetTransformInfo.h"
-#include "llvm/IR/Dominators.h"
-#include "llvm/IR/IRPrintingPasses.h"
-#include "llvm/IR/PassManager.h"
-#include "llvm/IR/Verifier.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Target/TargetMachine.h"
-#include "llvm/Transforms/InstCombine/InstCombine.h"
-#include "llvm/Transforms/Scalar/EarlyCSE.h"
-#include "llvm/Transforms/Scalar/LowerExpectIntrinsic.h"
-#include "llvm/Transforms/Scalar/SimplifyCFG.h"
+#include "llvm37/Passes/PassBuilder.h"
+#include "llvm37/Analysis/AssumptionCache.h"
+#include "llvm37/Analysis/CGSCCPassManager.h"
+#include "llvm37/Analysis/LazyCallGraph.h"
+#include "llvm37/Analysis/LoopInfo.h"
+#include "llvm37/Analysis/TargetLibraryInfo.h"
+#include "llvm37/Analysis/TargetTransformInfo.h"
+#include "llvm37/IR/Dominators.h"
+#include "llvm37/IR/IRPrintingPasses.h"
+#include "llvm37/IR/PassManager.h"
+#include "llvm37/IR/Verifier.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Target/TargetMachine.h"
+#include "llvm37/Transforms/InstCombine/InstCombine.h"
+#include "llvm37/Transforms/Scalar/EarlyCSE.h"
+#include "llvm37/Transforms/Scalar/LowerExpectIntrinsic.h"
+#include "llvm37/Transforms/Scalar/SimplifyCFG.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 namespace {
 

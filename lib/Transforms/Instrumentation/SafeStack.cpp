@@ -1,50 +1,50 @@
 //===-- SafeStack.cpp - Safe Stack Insertion ------------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 //
-// This pass splits the stack into the safe stack (kept as-is for LLVM backend)
+// This pass splits the stack into the safe stack (kept as-is for LLVM37 backend)
 // and the unsafe stack (explicitly allocated and managed through the runtime
 // support library).
 //
-// http://clang.llvm.org/docs/SafeStack.html
+// http://clang.llvm37.org/docs/SafeStack.html
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Transforms/Instrumentation.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/ADT/Triple.h"
-#include "llvm/Analysis/AliasAnalysis.h"
-#include "llvm/Analysis/TargetTransformInfo.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/DerivedTypes.h"
-#include "llvm/IR/DIBuilder.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/InstIterator.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/IR/Intrinsics.h"
-#include "llvm/IR/IRBuilder.h"
-#include "llvm/IR/Module.h"
-#include "llvm/Pass.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/Format.h"
-#include "llvm/Support/MathExtras.h"
-#include "llvm/Support/raw_os_ostream.h"
-#include "llvm/Transforms/Utils/Local.h"
-#include "llvm/Transforms/Utils/ModuleUtils.h"
+#include "llvm37/Transforms/Instrumentation.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/ADT/Triple.h"
+#include "llvm37/Analysis/AliasAnalysis.h"
+#include "llvm37/Analysis/TargetTransformInfo.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/IR/DerivedTypes.h"
+#include "llvm37/IR/DIBuilder.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/InstIterator.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/IR/Intrinsics.h"
+#include "llvm37/IR/IRBuilder.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/Pass.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/Format.h"
+#include "llvm37/Support/MathExtras.h"
+#include "llvm37/Support/raw_os_ostream.h"
+#include "llvm37/Transforms/Utils/Local.h"
+#include "llvm37/Transforms/Utils/ModuleUtils.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "safestack"
 
-namespace llvm {
+namespace llvm37 {
 
 STATISTIC(NumFunctions, "Total number of functions");
 STATISTIC(NumUnsafeStackFunctions, "Number of functions with unsafe stack");
@@ -56,7 +56,7 @@ STATISTIC(NumUnsafeStaticAllocas, "Number of unsafe static allocas");
 STATISTIC(NumUnsafeDynamicAllocas, "Number of unsafe dynamic allocas");
 STATISTIC(NumUnsafeStackRestorePoints, "Number of setjmps and landingpads");
 
-} // namespace llvm
+} // namespace llvm37
 
 namespace {
 
@@ -127,7 +127,7 @@ bool IsSafeStackAlloca(const AllocaInst *AI) {
         // FIXME: add support for memset and memcpy intrinsics.
         ImmutableCallSite CS(I);
 
-        // LLVM 'nocapture' attribute is only set for arguments whose address
+        // LLVM37 'nocapture' attribute is only set for arguments whose address
         // is not stored, passed around, or used in any other non-trivial way.
         // We assume that passing a pointer to an object as a 'nocapture'
         // argument is safe.
@@ -300,7 +300,7 @@ void SafeStack::findInsts(Function &F,
       StackRestorePoints.push_back(LP);
     } else if (auto II = dyn_cast<IntrinsicInst>(&I)) {
       if (II->getIntrinsicID() == Intrinsic::gcroot)
-        llvm::report_fatal_error(
+        llvm37::report_fatal_error(
             "gcroot intrinsic not compatible with safestack attribute");
     }
   }
@@ -606,4 +606,4 @@ INITIALIZE_PASS_DEPENDENCY(TargetTransformInfoWrapperPass)
 INITIALIZE_PASS_END(SafeStack, "safe-stack", "Safe Stack instrumentation pass",
                     false, false)
 
-FunctionPass *llvm::createSafeStackPass() { return new SafeStack(); }
+FunctionPass *llvm37::createSafeStackPass() { return new SafeStack(); }

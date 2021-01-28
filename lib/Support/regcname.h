@@ -35,8 +35,8 @@
  *	@(#)cname.h	8.3 (Berkeley) 3/20/94
  */
 
-#ifndef LLVM_SUPPORT_REGCNAME_H
-#define LLVM_SUPPORT_REGCNAME_H
+#ifndef LLVM37_SUPPORT_REGCNAME_H
+#define LLVM37_SUPPORT_REGCNAME_H
 
 /* character-name table */
 static struct cname {

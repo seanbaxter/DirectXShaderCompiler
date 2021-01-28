@@ -32,7 +32,7 @@ Usage:
     Can also specify * to run all tests
 
 Environment variables - set these to ensure this tool works properly:
-    HLSL_SRC_DIR        - root path of HLSLonLLVM enlistment
+    HLSL_SRC_DIR        - root path of HLSLonLLVM37 enlistment
     HLSL_BLD_DIR        - path to projects and build output
     HLSL_FXC_PATH       - fxc.exe to use for comparison purposes
     HLSL_DIFF_TOOL      - tool to use for file comparison (optional)

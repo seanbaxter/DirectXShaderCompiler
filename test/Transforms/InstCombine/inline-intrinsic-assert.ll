@@ -1,6 +1,6 @@
 ; RUN: opt < %s -inline -instcombine -S | FileCheck %s
 
-; PR22857: http://llvm.org/bugs/show_bug.cgi?id=22857
+; PR22857: http://llvm37.org/bugs/show_bug.cgi?id=22857
 ; The inliner should not add an edge to an intrinsic and
 ; then assert that it did not add an edge to an intrinsic!
 
@@ -9,7 +9,7 @@ define float @foo(float %f1) #0 {
   ret float %call
 
 ; CHECK-LABEL: @foo(
-; CHECK-NEXT: call float @llvm.fabs.f32
+; CHECK-NEXT: call float @llvm37.fabs.f32
 ; CHECK-NEXT: ret float
 }
 

@@ -1,6 +1,6 @@
 //===------ OrcLazyJIT.cpp - Basic Orc-based JIT for lazy execution -------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -8,13 +8,13 @@
 //===----------------------------------------------------------------------===//
 
 #include "OrcLazyJIT.h"
-#include "llvm/ExecutionEngine/Orc/OrcTargetSupport.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/DynamicLibrary.h"
+#include "llvm37/ExecutionEngine/Orc/OrcTargetSupport.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/DynamicLibrary.h"
 #include <cstdio>
 #include <system_error>
 
-using namespace llvm;
+using namespace llvm37;
 
 namespace {
 
@@ -50,8 +50,8 @@ OrcLazyJIT::createCallbackManagerBuilder(Triple T) {
       typedef orc::JITCompileCallbackManager<IRDumpLayerT,
                                              orc::OrcX86_64> CCMgrT;
       return [](IRDumpLayerT &IRDumpLayer, RuntimeDyld::MemoryManager &MemMgr,
-                LLVMContext &Context) {
-               return llvm::make_unique<CCMgrT>(IRDumpLayer, MemMgr, Context, 0,
+                LLVM37Context &Context) {
+               return llvm37::make_unique<CCMgrT>(IRDumpLayer, MemMgr, Context, 0,
                                                 64);
              };
     }
@@ -105,13 +105,13 @@ OrcLazyJIT::TransformFtor OrcLazyJIT::createDebugDumper() {
              return M;
            };
   }
-  llvm_unreachable("Unknown DumpKind");
+  llvm37_unreachable("Unknown DumpKind");
 }
 
 // Defined in lli.cpp.
 CodeGenOpt::Level getOptLevel();
 
-int llvm::runOrcLazyJIT(std::unique_ptr<Module> M, int ArgC, char* ArgV[]) {
+int llvm37::runOrcLazyJIT(std::unique_ptr<Module> M, int ArgC, char* ArgV[]) {
   // Add the program's symbols into the JIT's search space.
   if (sys::DynamicLibrary::LoadLibraryPermanently(nullptr)) {
     errs() << "Error loading program symbols.\n";

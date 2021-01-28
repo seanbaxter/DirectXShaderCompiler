@@ -1,6 +1,6 @@
 //===--- TokenConcatenation.h - Token Concatenation Avoidance ---*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,8 +11,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_LEX_TOKENCONCATENATION_H
-#define LLVM_CLANG_LEX_TOKENCONCATENATION_H
+#ifndef LLVM37_CLANG_LEX_TOKENCONCATENATION_H
+#define LLVM37_CLANG_LEX_TOKENCONCATENATION_H
 
 #include "clang/Basic/TokenKinds.h"
 

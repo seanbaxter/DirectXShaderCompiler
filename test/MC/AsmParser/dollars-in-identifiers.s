@@ -1,4 +1,4 @@
-# RUN: llvm-mc -triple i386-unknown-unknown %s > %t
+# RUN: llvm37-mc -triple i386-unknown-unknown %s > %t
 # RUN: FileCheck < %t %s
 
 // CHECK: .globl $foo

@@ -6,11 +6,11 @@ target triple = "x86_64-apple-macosx"
 ; CHECK-LABEL: loop1:
 ; CHECK-NOT: zext
 ; CHECK: add nsw
-; CHECK: @llvm.sadd.with.overflow
+; CHECK: @llvm37.sadd.with.overflow
 ; CHECK-LABEL: loop2:
 ; CHECK-NOT: extractvalue
 ; CHECK: add nuw
-; CHECK: @llvm.sadd.with.overflow
+; CHECK: @llvm37.sadd.with.overflow
 ; CHECK-LABEL: loop3:
 ; CHECK-NOT: extractvalue
 ; CHECK: ret
@@ -30,13 +30,13 @@ loop1:
   %gep = getelementptr i64, i64* %a, i64 %zxt
   %v = load i64, i64* %gep, align 8
   %truncv = trunc i64 %v to i32
-  %adds = call { i32, i1 } @llvm.sadd.with.overflow.i32(i32 %s, i32 %truncv)
+  %adds = call { i32, i1 } @llvm37.sadd.with.overflow.i32(i32 %s, i32 %truncv)
   %ovflows = extractvalue { i32, i1 } %adds, 1
   br i1 %ovflows, label %exit, label %loop2
 
 loop2:
   %addsval = extractvalue { i32, i1 } %adds, 0
-  %i1 = call { i32, i1 } @llvm.sadd.with.overflow.i32(i32 %i, i32 1)
+  %i1 = call { i32, i1 } @llvm37.sadd.with.overflow.i32(i32 %i, i32 1)
   %i1check = extractvalue { i32, i1 } %i1, 1
   br i1 %i1check, label %exit, label %loop3
 
@@ -53,4 +53,4 @@ exit:
   unreachable
 }
 
-declare { i32, i1 } @llvm.sadd.with.overflow.i32(i32, i32)
+declare { i32, i1 } @llvm37.sadd.with.overflow.i32(i32, i32)

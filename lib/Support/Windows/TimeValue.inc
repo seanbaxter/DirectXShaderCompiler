@@ -1,6 +1,6 @@
 //===- Win32/TimeValue.cpp - Win32 TimeValue Implementation -----*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -12,13 +12,13 @@
 //===----------------------------------------------------------------------===//
 
 #include "WindowsSupport.h"
-#include "llvm/Support/Format.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/Support/Format.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <cctype>
 #include <time.h>
 
-using namespace llvm;
-using namespace llvm::sys;
+using namespace llvm37;
+using namespace llvm37::sys;
 
 //===----------------------------------------------------------------------===//
 //=== WARNING: Implementation here must contain only Win32 specific code.

@@ -1,6 +1,6 @@
-//===-- llvm/CodeGen/DwarfCompileUnit.h - Dwarf Compile Unit ---*- C++ -*--===//
+//===-- llvm37/CodeGen/DwarfCompileUnit.h - Dwarf Compile Unit ---*- C++ -*--===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,15 +11,15 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_LIB_CODEGEN_ASMPRINTER_DWARFCOMPILEUNIT_H
-#define LLVM_LIB_CODEGEN_ASMPRINTER_DWARFCOMPILEUNIT_H
+#ifndef LLVM37_LIB_CODEGEN_ASMPRINTER_DWARFCOMPILEUNIT_H
+#define LLVM37_LIB_CODEGEN_ASMPRINTER_DWARFCOMPILEUNIT_H
 
 #include "DwarfUnit.h"
-#include "llvm/ADT/StringRef.h"
-#include "llvm/IR/DebugInfo.h"
-#include "llvm/Support/Dwarf.h"
+#include "llvm37/ADT/StringRef.h"
+#include "llvm37/IR/DebugInfo.h"
+#include "llvm37/Support/Dwarf.h"
 
-namespace llvm {
+namespace llvm37 {
 
 class AsmPrinter;
 class DIE;
@@ -228,6 +228,6 @@ public:
   const MCSymbol *getBaseAddress() const { return BaseAddress; }
 };
 
-} // end llvm namespace
+} // end llvm37 namespace
 
 #endif

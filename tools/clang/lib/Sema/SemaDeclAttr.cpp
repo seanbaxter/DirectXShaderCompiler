@@ -1,6 +1,6 @@
 //===--- SemaDeclAttr.cpp - Declaration Attribute Handling ----------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -29,8 +29,8 @@
 #include "clang/Sema/DelayedDiagnostic.h"
 #include "clang/Sema/Lookup.h"
 #include "clang/Sema/Scope.h"
-#include "llvm/ADT/StringExtras.h"
-#include "llvm/Support/MathExtras.h"
+#include "llvm37/ADT/StringExtras.h"
+#include "llvm37/Support/MathExtras.h"
 #include "clang/Sema/SemaHLSL.h" // HLSL Change
 using namespace clang;
 using namespace sema;
@@ -218,7 +218,7 @@ static bool checkAttributeAtMostNumArgs(Sema &S, const AttributeList &Attr,
 static bool checkUInt32Argument(Sema &S, const AttributeList &Attr,
                                 const Expr *Expr, uint32_t &Val,
                                 unsigned Idx = UINT_MAX) {
-  llvm::APSInt I(32);
+  llvm37::APSInt I(32);
   if (Expr->isTypeDependent() || Expr->isValueDependent() ||
       !Expr->isIntegerConstantExpr(I, S.Context)) {
     if (Idx != UINT_MAX)
@@ -274,7 +274,7 @@ static bool checkFunctionOrMethodParameterIndex(Sema &S, const Decl *D,
   unsigned NumParams =
       (HP ? getFunctionOrMethodNumParams(D) : 0) + HasImplicitThisParam;
 
-  llvm::APSInt IdxInt;
+  llvm37::APSInt IdxInt;
   if (IdxExpr->isTypeDependent() || IdxExpr->isValueDependent() ||
       !IdxExpr->isIntegerConstantExpr(IdxInt, S.Context)) {
     S.Diag(Attr.getLoc(), diag::err_attribute_argument_n_type)
@@ -546,7 +546,7 @@ static void checkAttrArgsAreCapabilityObjs(Sema &S, Decl *D,
       IntegerLiteral *IL = dyn_cast<IntegerLiteral>(ArgExp);
       if(FD && IL) {
         unsigned int NumParams = FD->getNumParams();
-        llvm::APInt ArgValue = IL->getValue();
+        llvm37::APInt ArgValue = IL->getValue();
         uint64_t ParamIdxFromOne = ArgValue.getZExtValue();
         uint64_t ParamIdxFromZero = ParamIdxFromOne - 1;
         if(!ArgValue.isStrictlyPositive() || ParamIdxFromOne > NumParams) {
@@ -1213,7 +1213,7 @@ static void handleNonNullAttr(Sema &S, Decl *D, const AttributeList &Attr) {
 
   unsigned *Start = NonNullArgs.data();
   unsigned Size = NonNullArgs.size();
-  llvm::array_pod_sort(Start, Start + Size);
+  llvm37::array_pod_sort(Start, Start + Size);
   D->addAttr(::new (S.Context)
              NonNullAttr(Attr.getRange(), S.Context, Start, Size,
                          Attr.getAttributeSpellingListIndex()));
@@ -1277,7 +1277,7 @@ void Sema::AddAssumeAlignedAttr(SourceRange AttrRange, Decl *D, Expr *E,
   }
 
   if (!E->isValueDependent()) {
-    llvm::APSInt I(64);
+    llvm37::APSInt I(64);
     if (!E->isIntegerConstantExpr(I, Context)) {
       if (OE)
         Diag(AttrLoc, diag::err_attribute_argument_n_type)
@@ -1299,7 +1299,7 @@ void Sema::AddAssumeAlignedAttr(SourceRange AttrRange, Decl *D, Expr *E,
 
   if (OE) {
     if (!OE->isValueDependent()) {
-      llvm::APSInt I(64);
+      llvm37::APSInt I(64);
       if (!OE->isIntegerConstantExpr(I, Context)) {
         Diag(AttrLoc, diag::err_attribute_argument_n_type)
           << &TmpAttr << 2 << AANT_ArgumentIntegerConstant
@@ -1418,7 +1418,7 @@ static void handleOwnershipAttr(Sema &S, Decl *D, const AttributeList &AL) {
 
   unsigned* start = OwnershipArgs.data();
   unsigned size = OwnershipArgs.size();
-  llvm::array_pod_sort(start, start + size);
+  llvm37::array_pod_sort(start, start + size);
 
   D->addAttr(::new (S.Context)
              OwnershipAttr(AL.getLoc(), S.Context, Module, start, size,
@@ -2164,7 +2164,7 @@ static void handleSentinelAttr(Sema &S, Decl *D, const AttributeList &Attr) {
   unsigned sentinel = (unsigned)SentinelAttr::DefaultSentinel;
   if (Attr.getNumArgs() > 0) {
     Expr *E = Attr.getArgAsExpr(0);
-    llvm::APSInt Idx(32);
+    llvm37::APSInt Idx(32);
     if (E->isTypeDependent() || E->isValueDependent() ||
         !E->isIntegerConstantExpr(Idx, S.Context)) {
       S.Diag(Attr.getLoc(), diag::err_attribute_argument_n_type)
@@ -2185,7 +2185,7 @@ static void handleSentinelAttr(Sema &S, Decl *D, const AttributeList &Attr) {
   unsigned nullPos = (unsigned)SentinelAttr::DefaultNullPos;
   if (Attr.getNumArgs() > 1) {
     Expr *E = Attr.getArgAsExpr(1);
-    llvm::APSInt Idx(32);
+    llvm37::APSInt Idx(32);
     if (E->isTypeDependent() || E->isValueDependent() ||
         !E->isIntegerConstantExpr(Idx, S.Context)) {
       S.Diag(Attr.getLoc(), diag::err_attribute_argument_n_type)
@@ -2520,7 +2520,7 @@ static void handleFormatArgAttr(Sema &S, Decl *D, const AttributeList &Attr) {
   // We cannot use the Idx returned from checkFunctionOrMethodParameterIndex
   // because that has corrected for the implicit this parameter, and is zero-
   // based.  The attribute expects what the user wrote explicitly.
-  llvm::APSInt Val;
+  llvm37::APSInt Val;
   IdxExpr->EvaluateAsInt(Val, S.Context);
 
   D->addAttr(::new (S.Context)
@@ -2540,7 +2540,7 @@ enum FormatAttrKind {
 /// getFormatAttrKind - Map from format attribute names to supported format
 /// types.
 static FormatAttrKind getFormatAttrKind(StringRef Format) {
-  return llvm::StringSwitch<FormatAttrKind>(Format)
+  return llvm37::StringSwitch<FormatAttrKind>(Format)
     // Check for formats that get handled specially.
     .Case("NSString", NSStringFormat)
     .Case("CFString", CFStringFormat)
@@ -2849,7 +2849,7 @@ void Sema::AddAlignValueAttr(SourceRange AttrRange, Decl *D, Expr *E,
   else if (ValueDecl *VD = dyn_cast<ValueDecl>(D))
     T = VD->getType();
   else
-    llvm_unreachable("Unknown decl type for align_value");
+    llvm37_unreachable("Unknown decl type for align_value");
 
   if (!T->isDependentType() && !T->isAnyPointerType() &&
       !T->isReferenceType() && !T->isMemberPointerType()) {
@@ -2859,7 +2859,7 @@ void Sema::AddAlignValueAttr(SourceRange AttrRange, Decl *D, Expr *E,
   }
 
   if (!E->isValueDependent()) {
-    llvm::APSInt Alignment(32);
+    llvm37::APSInt Alignment(32);
     ExprResult ICE
       = VerifyIntegerConstantExpression(E, &Alignment,
           diag::err_align_value_attribute_argument_not_int,
@@ -2973,7 +2973,7 @@ void Sema::AddAlignedAttr(SourceRange AttrRange, Decl *D, Expr *E,
   }
 
   // FIXME: Cache the number on the Attr object?
-  llvm::APSInt Alignment(32);
+  llvm37::APSInt Alignment(32);
   ExprResult ICE
     = VerifyIntegerConstantExpression(E, &Alignment,
         diag::err_aligned_attribute_argument_not_int,
@@ -2987,7 +2987,7 @@ void Sema::AddAlignedAttr(SourceRange AttrRange, Decl *D, Expr *E,
   // C11 6.7.5p6:
   //   An alignment specification of zero has no effect.
   if (!(TmpAttr.isAlignas() && !Alignment)) {
-    if(!llvm::isPowerOf2_64(Alignment.getZExtValue())) {
+    if(!llvm37::isPowerOf2_64(Alignment.getZExtValue())) {
       Diag(AttrLoc, diag::err_alignment_not_power_of_two)
         << E->getSourceRange();
       return;
@@ -3430,7 +3430,7 @@ static void handleCallConvAttr(Sema &S, Decl *D, const AttributeList &Attr) {
       PCS = PcsAttr::AAPCS_VFP;
       break;
     default:
-      llvm_unreachable("unexpected calling convention in pcs attribute");
+      llvm37_unreachable("unexpected calling convention in pcs attribute");
     }
 
     D->addAttr(::new (S.Context)
@@ -3445,7 +3445,7 @@ static void handleCallConvAttr(Sema &S, Decl *D, const AttributeList &Attr) {
     return;
 
   default:
-    llvm_unreachable("unexpected attribute kind");
+    llvm37_unreachable("unexpected attribute kind");
   }
 }
 
@@ -3495,7 +3495,7 @@ bool Sema::CheckCallingConvAttr(const AttributeList &attr, CallingConv &CC,
     return true;
   }
   case AttributeList::AT_IntelOclBicc: CC = CC_IntelOclBicc; break;
-  default: llvm_unreachable("unexpected attribute kind");
+  default: llvm37_unreachable("unexpected attribute kind");
   }
 
   const TargetInfo &TI = Context.getTargetInfo();
@@ -3566,7 +3566,7 @@ static bool checkLaunchBoundsArgument(Sema &S, Expr *E,
   if (E->isValueDependent())
     return true;
 
-  llvm::APSInt I(64);
+  llvm37::APSInt I(64);
   if (!E->isIntegerConstantExpr(I, S.Context)) {
     S.Diag(E->getExprLoc(), diag::err_attribute_argument_n_type)
         << &Attr << Idx << AANT_ArgumentIntegerConstant << E->getSourceRange();
@@ -3759,7 +3759,7 @@ static void handleNSReturnsRetainedAttr(Sema &S, Decl *D,
   } else {
     AttributeDeclKind ExpectedDeclKind;
     switch (Attr.getKind()) {
-    default: llvm_unreachable("invalid ownership attribute");
+    default: llvm37_unreachable("invalid ownership attribute");
     case AttributeList::AT_NSReturnsRetained:
     case AttributeList::AT_NSReturnsAutoreleased:
     case AttributeList::AT_NSReturnsNotRetained:
@@ -3779,7 +3779,7 @@ static void handleNSReturnsRetainedAttr(Sema &S, Decl *D,
   bool typeOK;
   bool cf;
   switch (Attr.getKind()) {
-  default: llvm_unreachable("invalid ownership attribute");
+  default: llvm37_unreachable("invalid ownership attribute");
   case AttributeList::AT_NSReturnsRetained:
     typeOK = isValidSubjectOfNSReturnsRetainedAttribute(returnType);
     cf = false;
@@ -3823,7 +3823,7 @@ static void handleNSReturnsRetainedAttr(Sema &S, Decl *D,
 
   switch (Attr.getKind()) {
     default:
-      llvm_unreachable("invalid ownership attribute");
+      llvm37_unreachable("invalid ownership attribute");
     case AttributeList::AT_NSReturnsAutoreleased:
       D->addAttr(::new (S.Context) NSReturnsAutoreleasedAttr(
           Attr.getRange(), S.Context, Attr.getAttributeSpellingListIndex()));
@@ -4210,7 +4210,7 @@ static void handleMSP430InterruptAttr(Sema &S, Decl *D,
   // FIXME: Check for decl - it should be void ()(void).
 
   Expr *NumParamsExpr = static_cast<Expr *>(Attr.getArgAsExpr(0));
-  llvm::APSInt NumParams(32);
+  llvm37::APSInt NumParams(32);
   if (!NumParamsExpr->isIntegerConstantExpr(NumParams, S.Context)) {
     S.Diag(Attr.getLoc(), diag::err_attribute_argument_type)
       << Attr.getName() << AANT_ArgumentIntegerConstant
@@ -4234,7 +4234,7 @@ static void handleMSP430InterruptAttr(Sema &S, Decl *D,
 
 static void handleInterruptAttr(Sema &S, Decl *D, const AttributeList &Attr) {
   // Dispatch the interrupt attribute based on the current target.
-  if (S.Context.getTargetInfo().getTriple().getArch() == llvm::Triple::msp430)
+  if (S.Context.getTargetInfo().getTriple().getArch() == llvm37::Triple::msp430)
     handleMSP430InterruptAttr(S, D, Attr);
   else
     handleARMInterruptAttr(S, D, Attr);
@@ -4511,7 +4511,7 @@ static void handleNoSanitizeAttr(Sema &S, Decl *D, const AttributeList &Attr) {
 static void handleNoSanitizeSpecificAttr(Sema &S, Decl *D,
                                          const AttributeList &Attr) {
   std::string SanitizerName =
-      llvm::StringSwitch<std::string>(Attr.getName()->getName())
+      llvm37::StringSwitch<std::string>(Attr.getName()->getName())
           .Case("no_address_safety_analysis", "address")
           .Case("no_sanitize_address", "address")
           .Case("no_sanitize_thread", "thread")

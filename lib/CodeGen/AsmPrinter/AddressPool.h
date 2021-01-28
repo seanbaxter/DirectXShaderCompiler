@@ -1,18 +1,18 @@
-//===-- llvm/CodeGen/AddressPool.h - Dwarf Debug Framework -----*- C++ -*--===//
+//===-- llvm37/CodeGen/AddressPool.h - Dwarf Debug Framework -----*- C++ -*--===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_LIB_CODEGEN_ASMPRINTER_ADDRESSPOOL_H
-#define LLVM_LIB_CODEGEN_ASMPRINTER_ADDRESSPOOL_H
+#ifndef LLVM37_LIB_CODEGEN_ASMPRINTER_ADDRESSPOOL_H
+#define LLVM37_LIB_CODEGEN_ASMPRINTER_ADDRESSPOOL_H
 
-#include "llvm/ADT/DenseMap.h"
+#include "llvm37/ADT/DenseMap.h"
 
-namespace llvm {
+namespace llvm37 {
 class MCSection;
 class MCSymbol;
 class AsmPrinter;

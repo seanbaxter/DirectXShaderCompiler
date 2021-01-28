@@ -1,5 +1,5 @@
-; RUN: llvm-link %s %S/Inputs/unique-fwd-decl-order.ll -S -o - | FileCheck %s
-; RUN: llvm-link %S/Inputs/unique-fwd-decl-order.ll %s -S -o - | FileCheck %s
+; RUN: llvm37-link %s %S/Inputs/unique-fwd-decl-order.ll -S -o - | FileCheck %s
+; RUN: llvm37-link %S/Inputs/unique-fwd-decl-order.ll %s -S -o - | FileCheck %s
 
 ; This test exercises MDNode hashing.  For the nodes to be correctly uniqued,
 ; the hash of a to-be-created MDNode has to match the hash of an

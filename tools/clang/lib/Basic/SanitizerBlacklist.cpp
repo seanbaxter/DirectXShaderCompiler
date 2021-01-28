@@ -1,6 +1,6 @@
 //===--- SanitizerBlacklist.cpp - Blacklist for sanitizers ----------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -19,7 +19,7 @@ using namespace clang;
 
 SanitizerBlacklist::SanitizerBlacklist(
     const std::vector<std::string> &BlacklistPaths, SourceManager &SM)
-    : SCL(llvm::SpecialCaseList::createOrDie(BlacklistPaths)), SM(SM) {}
+    : SCL(llvm37::SpecialCaseList::createOrDie(BlacklistPaths)), SM(SM) {}
 
 bool SanitizerBlacklist::isBlacklistedGlobal(StringRef GlobalName,
                                              StringRef Category) const {

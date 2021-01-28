@@ -1,6 +1,6 @@
 //===--- CommentToXML.cpp - Convert comments to XML representation --------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -15,9 +15,9 @@
 #include "clang/AST/CommentVisitor.h"
 #include "clang/Format/Format.h"
 #include "clang/Index/USRGeneration.h"
-#include "llvm/ADT/StringExtras.h"
-#include "llvm/ADT/TinyPtrVector.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/StringExtras.h"
+#include "llvm37/ADT/TinyPtrVector.h"
+#include "llvm37/Support/raw_ostream.h"
 
 using namespace clang;
 using namespace clang::comments;
@@ -90,7 +90,7 @@ struct FullCommentParts {
   SmallVector<const BlockCommandComment *, 4> Returns;
   SmallVector<const ParamCommandComment *, 8> Params;
   SmallVector<const TParamCommandComment *, 4> TParams;
-  llvm::TinyPtrVector<const BlockCommandComment *> Exceptions;
+  llvm37::TinyPtrVector<const BlockCommandComment *> Exceptions;
   SmallVector<const BlockContentComment *, 8> MiscBlocks;
 };
 
@@ -182,7 +182,7 @@ FullCommentParts::FullCommentParts(const FullComment *C,
     case Comment::HTMLEndTagCommentKind:
     case Comment::VerbatimBlockLineCommentKind:
     case Comment::FullCommentKind:
-      llvm_unreachable("AST node of this kind can't be a child of "
+      llvm37_unreachable("AST node of this kind can't be a child of "
                        "a FullComment");
     }
   }
@@ -198,7 +198,7 @@ FullCommentParts::FullCommentParts(const FullComment *C,
 }
 
 void printHTMLStartTagComment(const HTMLStartTagComment *C,
-                              llvm::raw_svector_ostream &Result) {
+                              llvm37::raw_svector_ostream &Result) {
   Result << "<" << C->getTagName();
 
   if (C->getNumAttrs() != 0) {
@@ -255,7 +255,7 @@ public:
 private:
   const FullComment *FC;
   /// Output stream for HTML.
-  llvm::raw_svector_ostream Result;
+  llvm37::raw_svector_ostream Result;
 
   const CommandTraits &Traits;
 };
@@ -428,7 +428,7 @@ void CommentASTToHTMLConverter::visitVerbatimBlockComment(
 
 void CommentASTToHTMLConverter::visitVerbatimBlockLineComment(
                                   const VerbatimBlockLineComment *C) {
-  llvm_unreachable("should not see this AST node");
+  llvm37_unreachable("should not see this AST node");
 }
 
 void CommentASTToHTMLConverter::visitVerbatimLineComment(
@@ -571,7 +571,7 @@ private:
   const FullComment *FC;
 
   /// Output stream for XML.
-  llvm::raw_svector_ostream Result;
+  llvm37::raw_svector_ostream Result;
 
   const CommandTraits &Traits;
   const SourceManager &SM;
@@ -583,7 +583,7 @@ void getSourceTextOfDeclaration(const DeclInfo *ThisDecl,
                                 SmallVectorImpl<char> &Str) {
   ASTContext &Context = ThisDecl->CurrentDecl->getASTContext();
   const LangOptions &LangOpts = Context.getLangOpts();
-  llvm::raw_svector_ostream OS(Str);
+  llvm37::raw_svector_ostream OS(Str);
   PrintingPolicy PPolicy(LangOpts);
   PPolicy.PolishForDeclaration = true;
   PPolicy.TerseOutput = true;
@@ -601,7 +601,7 @@ void CommentASTToXMLConverter::formatTextOfDeclaration(
   // Form a unique in memory buffer name.
   SmallString<128> filename;
   filename += "xmldecl";
-  filename += llvm::utostr(FormatInMemoryUniqueId);
+  filename += llvm37::utostr(FormatInMemoryUniqueId);
   filename += ".xd";
   FileID ID = FormatRewriterContext.createInMemoryFile(filename, StringDecl);
   SourceLocation Start = FormatRewriterContext.Sources.getLocForStartOfFile(ID)
@@ -609,7 +609,7 @@ void CommentASTToXMLConverter::formatTextOfDeclaration(
   unsigned Length = Declaration.size();
 
   tooling::Replacements Replace = reformat(
-      format::getLLVMStyle(), FormatRewriterContext.Sources, ID,
+      format::getLLVM37Style(), FormatRewriterContext.Sources, ID,
       CharSourceRange::getCharRange(Start, Start.getLocWithOffset(Length)));
   applyAllReplacements(Replace, FormatRewriterContext.Rewrite);
   Declaration = FormatRewriterContext.getRewrittenText(ID);
@@ -669,7 +669,7 @@ void CommentASTToXMLConverter::visitHTMLStartTagComment(
   {
     SmallString<32> Tag;
     {
-      llvm::raw_svector_ostream TagOS(Tag);
+      llvm37::raw_svector_ostream TagOS(Tag);
       printHTMLStartTagComment(C, TagOS);
     }
     appendToResultWithCDATAEscaping(Tag);
@@ -811,7 +811,7 @@ void CommentASTToXMLConverter::visitVerbatimBlockComment(
 
 void CommentASTToXMLConverter::visitVerbatimBlockLineComment(
                                   const VerbatimBlockLineComment *C) {
-  llvm_unreachable("should not see this AST node");
+  llvm37_unreachable("should not see this AST node");
 }
 
 void CommentASTToXMLConverter::visitVerbatimLineComment(
@@ -845,7 +845,7 @@ void CommentASTToXMLConverter::visitFullComment(const FullComment *C) {
         Result << " templateKind=\"specialization\"";
         break;
       case DeclInfo::TemplatePartialSpecialization:
-        llvm_unreachable("partial specializations of functions "
+        llvm37_unreachable("partial specializations of functions "
                          "are not allowed in C++");
       }
       if (DI->IsInstanceMethod)

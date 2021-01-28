@@ -1,20 +1,20 @@
-; RUN: llvm-dis < %s.bc | FileCheck %s
+; RUN: llvm37-dis < %s.bc | FileCheck %s
 
 ; Check that metadata encoded in 3.5 is correctly understood going forward.
 ;
-; Bitcode assembled by llvm-as v3.5.0.
+; Bitcode assembled by llvm37-as v3.5.0.
 
 define void @foo(i32 %v) {
 ; CHECK: entry:
 entry:
-; CHECK-NEXT: call void @llvm.bar(metadata !0)
-  call void @llvm.bar(metadata !0)
+; CHECK-NEXT: call void @llvm37.bar(metadata !0)
+  call void @llvm37.bar(metadata !0)
 
 ; CHECK-NEXT: ret void, !baz !1
   ret void, !baz !1
 }
 
-declare void @llvm.bar(metadata)
+declare void @llvm37.bar(metadata)
 
 @global = global i32 0
 

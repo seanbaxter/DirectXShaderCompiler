@@ -1,4 +1,4 @@
-; RUN: opt < %s -adce -simplifycfg | llvm-dis
+; RUN: opt < %s -adce -simplifycfg | llvm37-dis
 
 define i32 @Test(i32 %A, i32 %B) {
 BB1:

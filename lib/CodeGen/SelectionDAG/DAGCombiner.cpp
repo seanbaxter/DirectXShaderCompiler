@@ -1,6 +1,6 @@
 //===-- DAGCombiner.cpp - Implement a DAG node combiner -------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -10,35 +10,35 @@
 // This pass combines dag nodes to form fewer, simpler DAG nodes.  It can be run
 // both before and after the DAG is legalized.
 //
-// This pass is not a substitute for the LLVM IR instcombine pass. This pass is
+// This pass is not a substitute for the LLVM37 IR instcombine pass. This pass is
 // primarily intended to handle simplification opportunities that are implicit
-// in the LLVM IR and exposed by the various codegen lowering phases.
+// in the LLVM37 IR and exposed by the various codegen lowering phases.
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/CodeGen/SelectionDAG.h"
-#include "llvm/ADT/SetVector.h"
-#include "llvm/ADT/SmallBitVector.h"
-#include "llvm/ADT/SmallPtrSet.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/Analysis/AliasAnalysis.h"
-#include "llvm/CodeGen/MachineFrameInfo.h"
-#include "llvm/CodeGen/MachineFunction.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/DerivedTypes.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/MathExtras.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Target/TargetLowering.h"
-#include "llvm/Target/TargetOptions.h"
-#include "llvm/Target/TargetRegisterInfo.h"
-#include "llvm/Target/TargetSubtargetInfo.h"
+#include "llvm37/CodeGen/SelectionDAG.h"
+#include "llvm37/ADT/SetVector.h"
+#include "llvm37/ADT/SmallBitVector.h"
+#include "llvm37/ADT/SmallPtrSet.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/Analysis/AliasAnalysis.h"
+#include "llvm37/CodeGen/MachineFrameInfo.h"
+#include "llvm37/CodeGen/MachineFunction.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/IR/DerivedTypes.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/MathExtras.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Target/TargetLowering.h"
+#include "llvm37/Target/TargetOptions.h"
+#include "llvm37/Target/TargetRegisterInfo.h"
+#include "llvm37/Target/TargetSubtargetInfo.h"
 #include <algorithm>
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "dagcombine"
 
@@ -607,7 +607,7 @@ static SDValue GetNegatedExpression(SDValue Op, SelectionDAG &DAG,
 
   assert(Depth <= 6 && "GetNegatedExpression doesn't match isNegatibleForFree");
   switch (Op.getOpcode()) {
-  default: llvm_unreachable("Unknown code");
+  default: llvm37_unreachable("Unknown code");
   case ISD::ConstantFP: {
     APFloat V = cast<ConstantFPSDNode>(Op)->getValueAPF();
     V.changeSign();
@@ -4013,7 +4013,7 @@ SDValue DAGCombiner::visitXOR(SDNode *N) {
         TLI.isCondCodeLegal(NotCC, LHS.getSimpleValueType())) {
       switch (N0.getOpcode()) {
       default:
-        llvm_unreachable("Unhandled SetCC Equivalent!");
+        llvm37_unreachable("Unhandled SetCC Equivalent!");
       case ISD::SETCC:
         return DAG.getSetCC(SDLoc(N), VT, LHS, RHS, NotCC);
       case ISD::SELECT_CC:
@@ -4509,7 +4509,7 @@ SDValue DAGCombiner::visitSRA(SDNode *N) {
     // Get the two constanst of the shifts, CN0 = m, CN = n.
     const ConstantSDNode *N01C = isConstOrConstSplat(N0.getOperand(1));
     if (N01C) {
-      LLVMContext &Ctx = *DAG.getContext();
+      LLVM37Context &Ctx = *DAG.getContext();
       // Determine what the truncate's result bitsize and type would be.
       EVT TruncVT = EVT::getIntegerVT(Ctx, OpSizeInBits - N1C->getZExtValue());
 
@@ -8284,8 +8284,8 @@ SDValue DAGCombiner::visitFDIV(SDNode *N) {
           (!LegalOperations ||
            // FIXME: custom lowering of ConstantFP might fail (see e.g. ARM
            // backend)... we should handle this gracefully after Legalize.
-           // TLI.isOperationLegalOrCustom(llvm::ISD::ConstantFP, VT) ||
-           TLI.isOperationLegal(llvm::ISD::ConstantFP, VT) ||
+           // TLI.isOperationLegalOrCustom(llvm37::ISD::ConstantFP, VT) ||
+           TLI.isOperationLegal(llvm37::ISD::ConstantFP, VT) ||
            TLI.isFPImmLegal(Recip, VT)))
         return DAG.getNode(ISD::FMUL, DL, VT, N0,
                            DAG.getConstantFP(Recip, DL, VT));
@@ -8498,7 +8498,7 @@ SDValue DAGCombiner::visitSINT_TO_FP(SDNode *N) {
   if (isConstantIntBuildVectorOrConstantInt(N0) &&
       // ...but only if the target supports immediate floating-point values
       (!LegalOperations ||
-       TLI.isOperationLegalOrCustom(llvm::ISD::ConstantFP, VT)))
+       TLI.isOperationLegalOrCustom(llvm37::ISD::ConstantFP, VT)))
     return DAG.getNode(ISD::SINT_TO_FP, SDLoc(N), VT, N0);
 
   // If the input is a legal type, and SINT_TO_FP is not legal on this target,
@@ -8516,7 +8516,7 @@ SDValue DAGCombiner::visitSINT_TO_FP(SDNode *N) {
     if (N0.getOpcode() == ISD::SETCC && N0.getValueType() == MVT::i1 &&
         !VT.isVector() &&
         (!LegalOperations ||
-         TLI.isOperationLegalOrCustom(llvm::ISD::ConstantFP, VT))) {
+         TLI.isOperationLegalOrCustom(llvm37::ISD::ConstantFP, VT))) {
       SDLoc DL(N);
       SDValue Ops[] =
         { N0.getOperand(0), N0.getOperand(1),
@@ -8530,7 +8530,7 @@ SDValue DAGCombiner::visitSINT_TO_FP(SDNode *N) {
     if (N0.getOpcode() == ISD::ZERO_EXTEND &&
         N0.getOperand(0).getOpcode() == ISD::SETCC &&!VT.isVector() &&
         (!LegalOperations ||
-         TLI.isOperationLegalOrCustom(llvm::ISD::ConstantFP, VT))) {
+         TLI.isOperationLegalOrCustom(llvm37::ISD::ConstantFP, VT))) {
       SDLoc DL(N);
       SDValue Ops[] =
         { N0.getOperand(0).getOperand(0), N0.getOperand(0).getOperand(1),
@@ -8552,7 +8552,7 @@ SDValue DAGCombiner::visitUINT_TO_FP(SDNode *N) {
   if (isConstantIntBuildVectorOrConstantInt(N0) &&
       // ...but only if the target supports immediate floating-point values
       (!LegalOperations ||
-       TLI.isOperationLegalOrCustom(llvm::ISD::ConstantFP, VT)))
+       TLI.isOperationLegalOrCustom(llvm37::ISD::ConstantFP, VT)))
     return DAG.getNode(ISD::UINT_TO_FP, SDLoc(N), VT, N0);
 
   // If the input is a legal type, and UINT_TO_FP is not legal on this target,
@@ -8570,7 +8570,7 @@ SDValue DAGCombiner::visitUINT_TO_FP(SDNode *N) {
 
     if (N0.getOpcode() == ISD::SETCC && !VT.isVector() &&
         (!LegalOperations ||
-         TLI.isOperationLegalOrCustom(llvm::ISD::ConstantFP, VT))) {
+         TLI.isOperationLegalOrCustom(llvm37::ISD::ConstantFP, VT))) {
       SDLoc DL(N);
       SDValue Ops[] =
         { N0.getOperand(0), N0.getOperand(1),
@@ -9815,7 +9815,7 @@ struct LoadedSlice {
   /// Note: This may not be the final type for the slice.
   EVT getLoadedType() const {
     assert(DAG && "Missing context");
-    LLVMContext &Ctxt = *DAG->getContext();
+    LLVM37Context &Ctxt = *DAG->getContext();
     return EVT::getIntegerVT(Ctxt, getLoadedSize() * 8);
   }
 
@@ -10161,7 +10161,7 @@ bool DAGCombiner::SliceUpLoad(SDNode *N) {
       return false;
 
     // The width of the type must be a power of 2 and greater than 8-bits.
-    // Otherwise the load cannot be represented in LLVM IR.
+    // Otherwise the load cannot be represented in LLVM37 IR.
     // Moreover, if we shifted with a non-8-bits multiple, the slice
     // will be across several bytes. We do not support that.
     unsigned Width = User->getValueSizeInBits(0);
@@ -10703,7 +10703,7 @@ bool DAGCombiner::MergeStoresOfConstantsOrVecElts(
       } else if (ConstantFPSDNode *C = dyn_cast<ConstantFPSDNode>(Val)) {
         StoreInt |= C->getValueAPF().bitcastToAPInt().zext(SizeInBits);
       } else {
-        llvm_unreachable("Invalid constant element type");
+        llvm37_unreachable("Invalid constant element type");
       }
     }
 
@@ -11236,7 +11236,7 @@ SDValue DAGCombiner::visitSTORE(SDNode *N) {
     if (Value.getOpcode() != ISD::TargetConstantFP) {
       SDValue Tmp;
       switch (CFP->getSimpleValueType(0).SimpleTy) {
-      default: llvm_unreachable("Unknown FP type");
+      default: llvm37_unreachable("Unknown FP type");
       case MVT::f16:    // We don't do this for these yet.
       case MVT::f80:
       case MVT::f128:

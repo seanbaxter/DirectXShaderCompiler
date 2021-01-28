@@ -24,7 +24,7 @@ define float @ld_st_shared_f32(i32 %i, float %v) {
   store float %v, float* addrspacecast (float addrspace(3)* @scalar to float*), align 4
 ; PTX: st.shared.f32 [scalar], %f{{[0-9]+}};
   ; use syncthreads to disable optimizations across components
-  call void @llvm.cuda.syncthreads()
+  call void @llvm37.cuda.syncthreads()
 ; PTX: bar.sync 0;
 
   ; cast; load
@@ -34,7 +34,7 @@ define float @ld_st_shared_f32(i32 %i, float %v) {
   ; cast; store
   store float %v, float* %2, align 4
 ; PTX: st.shared.f32 [scalar], %f{{[0-9]+}};
-  call void @llvm.cuda.syncthreads()
+  call void @llvm37.cuda.syncthreads()
 ; PTX: bar.sync 0;
 
   ; load gep cast
@@ -43,7 +43,7 @@ define float @ld_st_shared_f32(i32 %i, float %v) {
   ; store gep cast
   store float %v, float* getelementptr inbounds ([10 x float], [10 x float]* addrspacecast ([10 x float] addrspace(3)* @array to [10 x float]*), i32 0, i32 5), align 4
 ; PTX: st.shared.f32 [array+20], %f{{[0-9]+}};
-  call void @llvm.cuda.syncthreads()
+  call void @llvm37.cuda.syncthreads()
 ; PTX: bar.sync 0;
 
   ; gep cast; load
@@ -53,7 +53,7 @@ define float @ld_st_shared_f32(i32 %i, float %v) {
   ; gep cast; store
   store float %v, float* %5, align 4
 ; PTX: st.shared.f32 [array+20], %f{{[0-9]+}};
-  call void @llvm.cuda.syncthreads()
+  call void @llvm37.cuda.syncthreads()
 ; PTX: bar.sync 0;
 
   ; cast; gep; load
@@ -64,7 +64,7 @@ define float @ld_st_shared_f32(i32 %i, float %v) {
   ; cast; gep; store
   store float %v, float* %8, align 4
 ; PTX: st.shared.f32 [%{{(r|rl|rd)[0-9]+}}], %f{{[0-9]+}};
-  call void @llvm.cuda.syncthreads()
+  call void @llvm37.cuda.syncthreads()
 ; PTX: bar.sync 0;
 
   %sum2 = fadd float %1, %3
@@ -123,7 +123,7 @@ define void @rauw(float addrspace(1)* %input) {
 ; IR-NEXT: ret void
 }
 
-declare void @llvm.cuda.syncthreads() #3
+declare void @llvm37.cuda.syncthreads() #3
 
 attributes #3 = { noduplicate nounwind }
 

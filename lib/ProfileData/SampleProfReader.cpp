@@ -1,13 +1,13 @@
-//===- SampleProfReader.cpp - Read LLVM sample profile data ---------------===//
+//===- SampleProfReader.cpp - Read LLVM37 sample profile data ---------------===//
 //
-//                      The LLVM Compiler Infrastructure
+//                      The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 //
-// This file implements the class that reads LLVM sample profiles. It
+// This file implements the class that reads LLVM37 sample profiles. It
 // supports two file formats: text and binary. The textual representation
 // is useful for debugging and testing purposes. The binary representation
 // is more compact, resulting in smaller file sizes. However, they can
@@ -94,16 +94,16 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/ProfileData/SampleProfReader.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/ErrorOr.h"
-#include "llvm/Support/LEB128.h"
-#include "llvm/Support/LineIterator.h"
-#include "llvm/Support/MemoryBuffer.h"
-#include "llvm/Support/Regex.h"
+#include "llvm37/ProfileData/SampleProfReader.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/ErrorOr.h"
+#include "llvm37/Support/LEB128.h"
+#include "llvm37/Support/LineIterator.h"
+#include "llvm37/Support/MemoryBuffer.h"
+#include "llvm37/Support/Regex.h"
 
-using namespace llvm::sampleprof;
-using namespace llvm;
+using namespace llvm37::sampleprof;
+using namespace llvm37;
 
 /// \brief Print the samples collected for a function on stream \p OS.
 ///
@@ -376,11 +376,11 @@ setupMemoryBuffer(std::string Filename) {
 ///
 /// \param Reader The reader to instantiate according to \p Filename's format.
 ///
-/// \param C The LLVM context to use to emit diagnostics.
+/// \param C The LLVM37 context to use to emit diagnostics.
 ///
 /// \returns an error code indicating the status of the created reader.
 ErrorOr<std::unique_ptr<SampleProfileReader>>
-SampleProfileReader::create(StringRef Filename, LLVMContext &C) {
+SampleProfileReader::create(StringRef Filename, LLVM37Context &C) {
   auto BufferOrError = setupMemoryBuffer(Filename);
   if (std::error_code EC = BufferOrError.getError())
     return EC;

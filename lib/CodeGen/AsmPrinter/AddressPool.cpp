@@ -1,6 +1,6 @@
-//===-- llvm/CodeGen/AddressPool.cpp - Dwarf Debug Framework ---*- C++ -*--===//
+//===-- llvm37/CodeGen/AddressPool.cpp - Dwarf Debug Framework ---*- C++ -*--===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -8,11 +8,11 @@
 //===----------------------------------------------------------------------===//
 
 #include "AddressPool.h"
-#include "llvm/CodeGen/AsmPrinter.h"
-#include "llvm/MC/MCStreamer.h"
-#include "llvm/Target/TargetLoweringObjectFile.h"
+#include "llvm37/CodeGen/AsmPrinter.h"
+#include "llvm37/MC/MCStreamer.h"
+#include "llvm37/Target/TargetLoweringObjectFile.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 class MCExpr;
 

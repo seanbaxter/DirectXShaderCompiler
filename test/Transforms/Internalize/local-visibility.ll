@@ -3,7 +3,7 @@
 
 ; CHECK: @global = global i32 0
 @global = global i32 0
-@llvm.used = appending global [1 x i32*] [i32* @global]
+@llvm37.used = appending global [1 x i32*] [i32* @global]
 
 ; CHECK: @hidden.variable = internal global i32 0
 @hidden.variable = hidden global i32 0

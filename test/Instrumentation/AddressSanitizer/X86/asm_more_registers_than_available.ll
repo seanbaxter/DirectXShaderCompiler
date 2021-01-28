@@ -2,7 +2,7 @@
 ; RUN: FileCheck %s < %t.ll
 
 ; Don't do stack malloc on functions containing inline assembly on 64-bit
-; platforms. It makes LLVM run out of registers.
+; platforms. It makes LLVM37 run out of registers.
 
 ; CHECK-LABEL: define void @TestAbsenceOfStackMalloc(i8* %S, i32 %pS, i8* %D, i32 %pD, i32 %h)
 ; CHECK: %MyAlloca

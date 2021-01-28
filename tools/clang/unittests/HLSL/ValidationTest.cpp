@@ -15,9 +15,9 @@
 #include <string>
 #include <algorithm>
 
-#include "llvm/ADT/StringRef.h"
-#include "llvm/Support/Regex.h"
-#include "llvm/ADT/ArrayRef.h"
+#include "llvm37/ADT/StringRef.h"
+#include "llvm37/Support/Regex.h"
+#include "llvm37/ADT/ArrayRef.h"
 #include "dxc/DxilContainer/DxilContainer.h"
 #include "dxc/DxilContainer/DxilContainerAssembler.h"
 
@@ -310,7 +310,7 @@ public:
     }
   }
 
-  void CheckValidationMsgs(IDxcBlob *pBlob, llvm::ArrayRef<LPCSTR> pErrorMsgs, bool bRegex = false, UINT32 Flags = DxcValidatorFlags_Default) {
+  void CheckValidationMsgs(IDxcBlob *pBlob, llvm37::ArrayRef<LPCSTR> pErrorMsgs, bool bRegex = false, UINT32 Flags = DxcValidatorFlags_Default) {
     CComPtr<IDxcValidator> pValidator;
     CComPtr<IDxcOperationResult> pResult;
 
@@ -329,7 +329,7 @@ public:
     CheckOperationResultMsgs(pResult, pErrorMsgs, false, bRegex);
   }
 
-  void CheckValidationMsgs(const char *pBlob, size_t blobSize, llvm::ArrayRef<LPCSTR> pErrorMsgs, bool bRegex = false, UINT32 Flags = DxcValidatorFlags_Default) {
+  void CheckValidationMsgs(const char *pBlob, size_t blobSize, llvm37::ArrayRef<LPCSTR> pErrorMsgs, bool bRegex = false, UINT32 Flags = DxcValidatorFlags_Default) {
     CComPtr<IDxcLibrary> pLibrary;
     CComPtr<IDxcBlobEncoding> pBlobEncoding; // Encoding doesn't actually matter, it's binary.
     VERIFY_SUCCEEDED(m_dllSupport.CreateInstance(CLSID_DxcLibrary, &pLibrary));
@@ -348,7 +348,7 @@ public:
 
     wchar_t *pEntryName = L"main";
 
-    llvm::StringRef stage;
+    llvm37::StringRef stage;
     unsigned RequiredDxilMajor = 1, RequiredDxilMinor = 0;
     if (ParseTargetProfile(pShaderModel, stage, RequiredDxilMajor, RequiredDxilMinor)) {
       if (stage.compare("lib") == 0)
@@ -394,9 +394,9 @@ public:
   bool RewriteAssemblyCheckMsg(IDxcBlobEncoding *pSource, LPCSTR pShaderModel,
     LPCWSTR *pArguments, UINT32 argCount,
     const DxcDefine *pDefines, UINT32 defineCount,
-    llvm::ArrayRef<LPCSTR> pLookFors,
-    llvm::ArrayRef<LPCSTR> pReplacements,
-    llvm::ArrayRef<LPCSTR> pErrorMsgs,
+    llvm37::ArrayRef<LPCSTR> pLookFors,
+    llvm37::ArrayRef<LPCSTR> pReplacements,
+    llvm37::ArrayRef<LPCSTR> pErrorMsgs,
     bool bRegex = false) {
     CComPtr<IDxcBlob> pText;
     if (!RewriteAssemblyToText(pSource, pShaderModel, pArguments, argCount, pDefines, defineCount, pLookFors, pReplacements, &pText, bRegex))
@@ -419,9 +419,9 @@ public:
   void RewriteAssemblyCheckMsg(LPCSTR pSource, LPCSTR pShaderModel,
                                LPCWSTR *pArguments, UINT32 argCount,
                                const DxcDefine *pDefines, UINT32 defineCount,
-                               llvm::ArrayRef<LPCSTR> pLookFors,
-                               llvm::ArrayRef<LPCSTR> pReplacements,
-                               llvm::ArrayRef<LPCSTR> pErrorMsgs,
+                               llvm37::ArrayRef<LPCSTR> pLookFors,
+                               llvm37::ArrayRef<LPCSTR> pReplacements,
+                               llvm37::ArrayRef<LPCSTR> pErrorMsgs,
                                bool bRegex = false) {
     CComPtr<IDxcBlobEncoding> pSourceBlob;
     Utf8ToBlob(m_dllSupport, pSource, &pSourceBlob);
@@ -431,17 +431,17 @@ public:
   }
 
   void RewriteAssemblyCheckMsg(LPCSTR pSource, LPCSTR pShaderModel,
-    llvm::ArrayRef<LPCSTR> pLookFors, llvm::ArrayRef<LPCSTR> pReplacements,
-    llvm::ArrayRef<LPCSTR> pErrorMsgs, bool bRegex = false) {
+    llvm37::ArrayRef<LPCSTR> pLookFors, llvm37::ArrayRef<LPCSTR> pReplacements,
+    llvm37::ArrayRef<LPCSTR> pErrorMsgs, bool bRegex = false) {
     RewriteAssemblyCheckMsg(pSource, pShaderModel, nullptr, 0, nullptr, 0, pLookFors, pReplacements, pErrorMsgs, bRegex);
   }
 
   void RewriteAssemblyCheckMsg(LPCWSTR name, LPCSTR pShaderModel,
     LPCWSTR *pArguments, UINT32 argCount,
     const DxcDefine *pDefines, UINT32 defCount,
-    llvm::ArrayRef<LPCSTR> pLookFors,
-    llvm::ArrayRef<LPCSTR> pReplacements,
-    llvm::ArrayRef<LPCSTR> pErrorMsgs,
+    llvm37::ArrayRef<LPCSTR> pLookFors,
+    llvm37::ArrayRef<LPCSTR> pReplacements,
+    llvm37::ArrayRef<LPCSTR> pErrorMsgs,
     bool bRegex = false) {
     std::wstring fullPath = hlsl_test::GetPathToHlslDataFile(name);
     CComPtr<IDxcLibrary> pLibrary;
@@ -455,9 +455,9 @@ public:
   }
 
   void RewriteAssemblyCheckMsg(LPCWSTR name, LPCSTR pShaderModel,
-    llvm::ArrayRef<LPCSTR> pLookFors,
-    llvm::ArrayRef<LPCSTR> pReplacements,
-    llvm::ArrayRef<LPCSTR> pErrorMsgs,
+    llvm37::ArrayRef<LPCSTR> pLookFors,
+    llvm37::ArrayRef<LPCSTR> pReplacements,
+    llvm37::ArrayRef<LPCSTR> pErrorMsgs,
     bool bRegex = false) {
     RewriteAssemblyCheckMsg(name, pShaderModel, nullptr, 0, nullptr, 0,
       pLookFors, pReplacements, pErrorMsgs, bRegex);
@@ -466,8 +466,8 @@ public:
   bool RewriteAssemblyToText(IDxcBlobEncoding *pSource, LPCSTR pShaderModel,
                              LPCWSTR *pArguments, UINT32 argCount,
                              const DxcDefine *pDefines, UINT32 defineCount,
-                             llvm::ArrayRef<LPCSTR> pLookFors,
-                             llvm::ArrayRef<LPCSTR> pReplacements,
+                             llvm37::ArrayRef<LPCSTR> pLookFors,
+                             llvm37::ArrayRef<LPCSTR> pReplacements,
                              IDxcBlob **pBlob, bool bRegex = false) {
     CComPtr<IDxcBlob> pProgram;
     std::string disassembly;
@@ -484,7 +484,7 @@ public:
       LPCSTR pReplacement = pReplacements[i];
       if (pLookFor && *pLookFor) {
         if (bRegex) {
-          llvm::Regex RE(pLookFor);
+          llvm37::Regex RE(pLookFor);
           std::string reErrors;
           VERIFY_IS_TRUE(RE.isValid(reErrors));
           std::string replaced = RE.sub(pReplacement, disassembly, &reErrors);
@@ -519,8 +519,8 @@ public:
 
   // compile one or two sources, validate module from 1 with container parts from 2, check messages
   bool ReplaceContainerPartsCheckMsgs(LPCSTR pSource1, LPCSTR pSource2, LPCSTR pShaderModel,
-                                     llvm::ArrayRef<DxilFourCC> PartsToReplace,
-                                     llvm::ArrayRef<LPCSTR> pErrorMsgs) {
+                                     llvm37::ArrayRef<DxilFourCC> PartsToReplace,
+                                     llvm37::ArrayRef<LPCSTR> pErrorMsgs) {
     CComPtr<IDxcBlob> pProgram1, pProgram2;
     if (!CompileSource(pSource1, pShaderModel, &pProgram1))
       return false;
@@ -762,7 +762,7 @@ TEST_F(ValidationTest, DeadLoopFail) {
   if (m_ver.SkipIRSensitiveTest()) return;
   RewriteAssemblyCheckMsg(
       L"..\\DXILValidation\\loop1.hlsl", "ps_6_0",
-      {"br i1 %exitcond, label %for.end.loopexit, label %for.body, !llvm.loop !([0-9]+)",
+      {"br i1 %exitcond, label %for.end.loopexit, label %for.body, !llvm37.loop !([0-9]+)",
        "?%add(\\.lcssa)? = phi float \\[ %add, %for.body \\]",
        "!dx.entryPoints = !\\{!([0-9]+)\\}",
        "\\[ %add(\\.lcssa)?, %for.end.loopexit \\]"
@@ -1483,8 +1483,8 @@ TEST_F(ValidationTest, UDivByZero) {
 
 TEST_F(ValidationTest, UnusedMetadata) {
   RewriteAssemblyCheckMsg(L"..\\DXILValidation\\loop2.hlsl", "ps_6_0",
-                          ", !llvm.loop ",
-                          ", !llvm.loop2 ",
+                          ", !llvm37.loop ",
+                          ", !llvm37.loop2 ",
                           "All metadata must be used by dxil");
 }
 

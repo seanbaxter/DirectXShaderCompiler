@@ -1,6 +1,6 @@
 //===-------------------------- TargetRecip.cpp ---------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -14,13 +14,13 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/ADT/StringRef.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Target/TargetRecip.h"
+#include "llvm37/ADT/StringRef.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Target/TargetRecip.h"
 #include <map>
 
-using namespace llvm;
+using namespace llvm37;
 
 // These are the names of the individual reciprocal operations. These are
 // the key strings for queries and command-line inputs.
@@ -41,7 +41,7 @@ static const char *RecipOps[] = {
 // steps because custom settings may arrive via the command-line before target
 // defaults are set.
 TargetRecip::TargetRecip() {
-  unsigned NumStrings = llvm::array_lengthof(RecipOps);
+  unsigned NumStrings = llvm37::array_lengthof(RecipOps);
   for (unsigned i = 0; i < NumStrings; ++i)
     RecipMap.insert(std::make_pair(RecipOps[i], RecipParams()));
 }

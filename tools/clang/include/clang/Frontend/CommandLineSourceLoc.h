@@ -1,6 +1,6 @@
 //===--- CommandLineSourceLoc.h - Parsing for source locations-*- C++ -*---===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,12 +11,12 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_FRONTEND_COMMANDLINESOURCELOC_H
-#define LLVM_CLANG_FRONTEND_COMMANDLINESOURCELOC_H
+#ifndef LLVM37_CLANG_FRONTEND_COMMANDLINESOURCELOC_H
+#define LLVM37_CLANG_FRONTEND_COMMANDLINESOURCELOC_H
 
 #include "clang/Basic/LLVM.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/raw_ostream.h"
 
 namespace clang {
 
@@ -52,7 +52,7 @@ public:
 
 }
 
-namespace llvm {
+namespace llvm37 {
   namespace cl {
     /// \brief Command-line option parser that parses source locations.
     ///

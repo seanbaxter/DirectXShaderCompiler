@@ -105,6 +105,6 @@ for.end13:                                        ; preds = %for.cond
 
 attributes #0 = { nounwind uwtable "less-precise-fpmad"="false" "no-frame-pointer-elim"="true" "no-frame-pointer-elim-non-leaf" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+sse,+sse2" "unsafe-fp-math"="false" "use-soft-float"="false" }
 
-!llvm.ident = !{!0}
+!llvm37.ident = !{!0}
 
-!0 = !{!"clang version 3.7.0 (https://vaivaswatha@bitbucket.org/compilertree/amd_clang.git 93a05fb75ee3411d24e8b2b184fc766a5318403e) (https://vaivaswatha@bitbucket.org/compilertree/amd_llvm.git 166d93d26efc912b517739f64d054a435e8e95cd)"}
+!0 = !{!"clang version 3.7.0 (https://vaivaswatha@bitbucket.org/compilertree/amd_clang.git 93a05fb75ee3411d24e8b2b184fc766a5318403e) (https://vaivaswatha@bitbucket.org/compilertree/amd_llvm37.git 166d93d26efc912b517739f64d054a435e8e95cd)"}

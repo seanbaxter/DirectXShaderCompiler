@@ -1,5 +1,5 @@
 
-// RUN: not llvm-tblgen %s 2>&1 > %t
+// RUN: not llvm37-tblgen %s 2>&1 > %t
 // RUN: FileCheck %s < %t
 
 def a {

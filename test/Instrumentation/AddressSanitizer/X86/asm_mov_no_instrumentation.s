@@ -1,4 +1,4 @@
-# RUN: llvm-mc %s -triple=x86_64-unknown-linux-gnu -mcpu=corei7 -mattr=+sse2 | FileCheck %s
+# RUN: llvm37-mc %s -triple=x86_64-unknown-linux-gnu -mcpu=corei7 -mattr=+sse2 | FileCheck %s
 
 	.text
 	.globl	mov1b

@@ -1,6 +1,6 @@
 //===--- ContinuousRangeMap.h - Map with int range as key -------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -12,11 +12,11 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_SERIALIZATION_CONTINUOUSRANGEMAP_H
-#define LLVM_CLANG_SERIALIZATION_CONTINUOUSRANGEMAP_H
+#ifndef LLVM37_CLANG_SERIALIZATION_CONTINUOUSRANGEMAP_H
+#define LLVM37_CLANG_SERIALIZATION_CONTINUOUSRANGEMAP_H
 
 #include "clang/Basic/LLVM.h"
-#include "llvm/ADT/SmallVector.h"
+#include "llvm37/ADT/SmallVector.h"
 #include <algorithm>
 #include <utility>
 

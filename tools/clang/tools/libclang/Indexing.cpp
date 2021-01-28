@@ -1,6 +1,6 @@
 //===- CIndexHigh.cpp - Higher level API functions ------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -27,10 +27,10 @@
 #include "clang/Lex/PPConditionalDirectiveRecord.h"
 #include "clang/Lex/Preprocessor.h"
 #include "clang/Sema/SemaConsumer.h"
-#include "llvm/Support/CrashRecoveryContext.h"
-#include "llvm/Support/MemoryBuffer.h"
-#include "llvm/Support/Mutex.h"
-#include "llvm/Support/MutexGuard.h"
+#include "llvm37/Support/CrashRecoveryContext.h"
+#include "llvm37/Support/MemoryBuffer.h"
+#include "llvm37/Support/Mutex.h"
+#include "llvm37/Support/MutexGuard.h"
 #include <cstdio>
 
 using namespace clang;
@@ -45,7 +45,7 @@ namespace {
 // Skip Parsed Bodies
 //===----------------------------------------------------------------------===//
 
-#ifdef LLVM_ON_WIN32
+#ifdef LLVM37_ON_WIN32
 
 // FIXME: On windows it is disabled since current implementation depends on
 // file inodes.
@@ -89,15 +89,15 @@ public:
 ///   #3 is identified as the location of "#ifdef CAKE"
 ///
 class PPRegion {
-  llvm::sys::fs::UniqueID UniqueID;
+  llvm37::sys::fs::UniqueID UniqueID;
   time_t ModTime;
   unsigned Offset;
 public:
   PPRegion() : UniqueID(0, 0), ModTime(), Offset() {}
-  PPRegion(llvm::sys::fs::UniqueID UniqueID, unsigned offset, time_t modTime)
+  PPRegion(llvm37::sys::fs::UniqueID UniqueID, unsigned offset, time_t modTime)
       : UniqueID(UniqueID), ModTime(modTime), Offset(offset) {}
 
-  const llvm::sys::fs::UniqueID &getUniqueID() const { return UniqueID; }
+  const llvm37::sys::fs::UniqueID &getUniqueID() const { return UniqueID; }
   unsigned getOffset() const { return Offset; }
   time_t getModTime() const { return ModTime; }
 
@@ -109,11 +109,11 @@ public:
   }
 };
 
-typedef llvm::DenseSet<PPRegion> PPRegionSetTy;
+typedef llvm37::DenseSet<PPRegion> PPRegionSetTy;
 
 } // end anonymous namespace
 
-namespace llvm {
+namespace llvm37 {
   template <> struct isPodLike<PPRegion> {
     static const bool value = true;
   };
@@ -121,15 +121,15 @@ namespace llvm {
   template <>
   struct DenseMapInfo<PPRegion> {
     static inline PPRegion getEmptyKey() {
-      return PPRegion(llvm::sys::fs::UniqueID(0, 0), unsigned(-1), 0);
+      return PPRegion(llvm37::sys::fs::UniqueID(0, 0), unsigned(-1), 0);
     }
     static inline PPRegion getTombstoneKey() {
-      return PPRegion(llvm::sys::fs::UniqueID(0, 0), unsigned(-2), 0);
+      return PPRegion(llvm37::sys::fs::UniqueID(0, 0), unsigned(-2), 0);
     }
 
     static unsigned getHashValue(const PPRegion &S) {
-      llvm::FoldingSetNodeID ID;
-      const llvm::sys::fs::UniqueID &UniqueID = S.getUniqueID();
+      llvm37::FoldingSetNodeID ID;
+      const llvm37::sys::fs::UniqueID &UniqueID = S.getUniqueID();
       ID.AddInteger(UniqueID.getFile());
       ID.AddInteger(UniqueID.getDevice());
       ID.AddInteger(S.getOffset());
@@ -146,22 +146,22 @@ namespace llvm {
 namespace {
 
 class SessionSkipBodyData {
-  llvm::sys::Mutex Mux;
+  llvm37::sys::Mutex Mux;
   PPRegionSetTy ParsedRegions;
 
 public:
   SessionSkipBodyData() : Mux(/*recursive=*/false) {}
   ~SessionSkipBodyData() {
-    //llvm::errs() << "RegionData: " << Skipped.size() << " - " << Skipped.getMemorySize() << "\n";
+    //llvm37::errs() << "RegionData: " << Skipped.size() << " - " << Skipped.getMemorySize() << "\n";
   }
 
   void copyTo(PPRegionSetTy &Set) {
-    llvm::MutexGuard MG(Mux);
+    llvm37::MutexGuard MG(Mux);
     Set = ParsedRegions;
   }
 
   void update(ArrayRef<PPRegion> Regions) {
-    llvm::MutexGuard MG(Mux);
+    llvm37::MutexGuard MG(Mux);
     ParsedRegions.insert(Regions.begin(), Regions.end());
   }
 };
@@ -209,7 +209,7 @@ private:
     SourceLocation RegionLoc = PPRec.findConditionalDirectiveRegionLoc(Loc);
     if (RegionLoc.isInvalid()) {
       if (isParsedOnceInclude(FE)) {
-        const llvm::sys::fs::UniqueID &ID = FE->getUniqueID();
+        const llvm37::sys::fs::UniqueID &ID = FE->getUniqueID();
         return PPRegion(ID, 0, FE->getModificationTime());
       }
       return PPRegion();
@@ -223,13 +223,13 @@ private:
 
     if (RegionFID != FID) {
       if (isParsedOnceInclude(FE)) {
-        const llvm::sys::fs::UniqueID &ID = FE->getUniqueID();
+        const llvm37::sys::fs::UniqueID &ID = FE->getUniqueID();
         return PPRegion(ID, 0, FE->getModificationTime());
       }
       return PPRegion();
     }
 
-    const llvm::sys::fs::UniqueID &ID = FE->getUniqueID();
+    const llvm37::sys::fs::UniqueID &ID = FE->getUniqueID();
     return PPRegion(ID, RegionOffset, FE->getModificationTime());
   }
 
@@ -425,16 +425,16 @@ public:
 
     IndexCtx.setASTContext(CI.getASTContext());
     Preprocessor &PP = CI.getPreprocessor();
-    PP.addPPCallbacks(llvm::make_unique<IndexPPCallbacks>(PP, IndexCtx));
+    PP.addPPCallbacks(llvm37::make_unique<IndexPPCallbacks>(PP, IndexCtx));
     IndexCtx.setPreprocessor(PP);
 
     if (SKData) {
       auto *PPRec = new PPConditionalDirectiveRecord(PP.getSourceManager());
       PP.addPPCallbacks(std::unique_ptr<PPCallbacks>(PPRec));
-      SKCtrl = llvm::make_unique<TUSkipBodyControl>(*SKData, *PPRec, PP);
+      SKCtrl = llvm37::make_unique<TUSkipBodyControl>(*SKData, *PPRec, PP);
     }
 
-    return llvm::make_unique<IndexingConsumer>(IndexCtx, SKCtrl.get());
+    return llvm37::make_unique<IndexingConsumer>(IndexCtx, SKCtrl.get());
   }
 
   void EndSourceFileAction() override {
@@ -531,15 +531,15 @@ static void clang_indexSourceFile_Impl(void *UserData) {
                                               /*ShouldOwnClient=*/true));
 
   // Recover resources if we crash before exiting this function.
-  llvm::CrashRecoveryContextCleanupRegistrar<DiagnosticsEngine,
-    llvm::CrashRecoveryContextReleaseRefCleanup<DiagnosticsEngine> >
+  llvm37::CrashRecoveryContextCleanupRegistrar<DiagnosticsEngine,
+    llvm37::CrashRecoveryContextReleaseRefCleanup<DiagnosticsEngine> >
     DiagCleanup(Diags.get());
 
   std::unique_ptr<std::vector<const char *>> Args(
       new std::vector<const char *>());
 
   // Recover resources if we crash before exiting this method.
-  llvm::CrashRecoveryContextCleanupRegistrar<std::vector<const char*> >
+  llvm37::CrashRecoveryContextCleanupRegistrar<std::vector<const char*> >
     ArgsCleanup(Args.get());
   
   Args->insert(Args->end(), command_line_args,
@@ -560,23 +560,23 @@ static void clang_indexSourceFile_Impl(void *UserData) {
     return;
 
   // Recover resources if we crash before exiting this function.
-  llvm::CrashRecoveryContextCleanupRegistrar<CompilerInvocation,
-    llvm::CrashRecoveryContextReleaseRefCleanup<CompilerInvocation> >
+  llvm37::CrashRecoveryContextCleanupRegistrar<CompilerInvocation,
+    llvm37::CrashRecoveryContextReleaseRefCleanup<CompilerInvocation> >
     CInvokCleanup(CInvok.get());
 
   if (CInvok->getFrontendOpts().Inputs.empty())
     return;
 
-  typedef SmallVector<std::unique_ptr<llvm::MemoryBuffer>, 8> MemBufferOwner;
+  typedef SmallVector<std::unique_ptr<llvm37::MemoryBuffer>, 8> MemBufferOwner;
   std::unique_ptr<MemBufferOwner> BufOwner(new MemBufferOwner);
 
   // Recover resources if we crash before exiting this method.
-  llvm::CrashRecoveryContextCleanupRegistrar<MemBufferOwner> BufOwnerCleanup(
+  llvm37::CrashRecoveryContextCleanupRegistrar<MemBufferOwner> BufOwnerCleanup(
       BufOwner.get());
 
   for (auto &UF : ITUI->unsaved_files) {
-    std::unique_ptr<llvm::MemoryBuffer> MB =
-        llvm::MemoryBuffer::getMemBufferCopy(getContents(UF), UF.Filename);
+    std::unique_ptr<llvm37::MemoryBuffer> MB =
+        llvm37::MemoryBuffer::getMemBufferCopy(getContents(UF), UF.Filename);
     CInvok->getPreprocessorOpts().addRemappedFile(UF.Filename, MB.get());
     BufOwner->push_back(std::move(MB));
   }
@@ -603,7 +603,7 @@ static void clang_indexSourceFile_Impl(void *UserData) {
       new CXTUOwner(MakeCXTranslationUnit(CXXIdx, Unit)));
 
   // Recover resources if we crash before exiting this method.
-  llvm::CrashRecoveryContextCleanupRegistrar<CXTUOwner>
+  llvm37::CrashRecoveryContextCleanupRegistrar<CXTUOwner>
     CXTUCleanup(CXTU.get());
 
   // Enable the skip-parsed-bodies optimization only for C++; this may be
@@ -619,7 +619,7 @@ static void clang_indexSourceFile_Impl(void *UserData) {
                         SkipBodies ? IdxSession->SkipBodyData.get() : nullptr));
 
   // Recover resources if we crash before exiting this method.
-  llvm::CrashRecoveryContextCleanupRegistrar<IndexingFrontendAction>
+  llvm37::CrashRecoveryContextCleanupRegistrar<IndexingFrontendAction>
     IndexActionCleanup(IndexAction.get());
 
   bool Persistent = requestedToGetTU;
@@ -767,14 +767,14 @@ static void clang_indexTranslationUnit_Impl(void *UserData) {
   IndexCtx.reset(new IndexingContext(client_data, CB, index_options, TU));
 
   // Recover resources if we crash before exiting this method.
-  llvm::CrashRecoveryContextCleanupRegistrar<IndexingContext>
+  llvm37::CrashRecoveryContextCleanupRegistrar<IndexingContext>
     IndexCtxCleanup(IndexCtx.get());
 
   std::unique_ptr<IndexingConsumer> IndexConsumer;
   IndexConsumer.reset(new IndexingConsumer(*IndexCtx, nullptr));
 
   // Recover resources if we crash before exiting this method.
-  llvm::CrashRecoveryContextCleanupRegistrar<IndexingConsumer>
+  llvm37::CrashRecoveryContextCleanupRegistrar<IndexingConsumer>
     IndexConsumerCleanup(IndexConsumer.get());
 
   ASTUnit *Unit = cxtu::getASTUnit(TU);
@@ -980,7 +980,7 @@ int clang_indexSourceFile(CXIndexAction idxAction,
       source_filename,
       command_line_args,
       num_command_line_args,
-      llvm::makeArrayRef(unsaved_files, num_unsaved_files),
+      llvm37::makeArrayRef(unsaved_files, num_unsaved_files),
       out_TU,
       TU_options,
       result};
@@ -990,7 +990,7 @@ int clang_indexSourceFile(CXIndexAction idxAction,
     return result;
   }
 
-  llvm::CrashRecoveryContext CRC;
+  llvm37::CrashRecoveryContext CRC;
 
   if (!RunSafely(CRC, clang_indexSourceFile_Impl, &ITUI)) {
     fprintf(stderr, "libclang: crash detected during indexing source file: {\n");
@@ -1041,7 +1041,7 @@ int clang_indexTranslationUnit(CXIndexAction idxAction,
     return ITUI.result;
   }
 
-  llvm::CrashRecoveryContext CRC;
+  llvm37::CrashRecoveryContext CRC;
 
   if (!RunSafely(CRC, clang_indexTranslationUnit_Impl, &ITUI)) {
     fprintf(stderr, "libclang: crash detected during indexing TU\n");

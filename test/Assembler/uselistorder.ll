@@ -1,4 +1,4 @@
-; RUN: llvm-as < %s -disable-output 2>&1 | FileCheck %s -allow-empty
+; RUN: llvm37-as < %s -disable-output 2>&1 | FileCheck %s -allow-empty
 ; CHECK-NOT: error
 ; CHECK-NOT: warning
 ; RUN: verify-uselistorder < %s

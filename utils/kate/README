@@ -1,12 +1,12 @@
--*- llvm/utils/kate/README -*-
+-*- llvm37/utils/kate/README -*-
 
 These are syntax highlighting files for the Kate editor. Included are:
 
-* llvm.xml
+* llvm37.xml
 
   Syntax Highlighting Mode for the KDE Kate editor. To install just copy
   this file to ~/.kde/share/apps/katepart/syntax (or better yet, symlink it).
 
 Note: If you notice missing or incorrect syntax highlighting, please contact
-<llvm-bugs [at] lists.llvm.org>; if you wish to provide a patch to improve the
+<llvm37-bugs [at] lists.llvm37.org>; if you wish to provide a patch to improve the
 functionality, it will be most appreciated. Thank you.

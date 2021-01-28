@@ -1,4 +1,4 @@
-# RUN: llvm-mc -triple i386 -o - %s | FileCheck %s
+# RUN: llvm37-mc -triple i386 -o - %s | FileCheck %s
 
 	.macro required parameter:req
 		.long \parameter

@@ -1,4 +1,4 @@
-; RUN: llvm-as < %s | llvm-dis | grep byval
+; RUN: llvm37-as < %s | llvm37-dis | grep byval
 ; RUN: verify-uselistorder %s
 
 	%struct = type {  }

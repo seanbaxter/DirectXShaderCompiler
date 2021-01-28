@@ -11,9 +11,9 @@ define void @foo() nounwind ssp {
 
 declare i32 @printf(i8*, ...)
 
-!llvm.dbg.cu = !{!2}
-!llvm.module.flags = !{!10}
-!llvm.dbg.sp = !{!0}
+!llvm37.dbg.cu = !{!2}
+!llvm37.module.flags = !{!10}
+!llvm37.dbg.sp = !{!0}
 
 !0 = !DISubprogram(name: "foo", line: 4, isLocal: false, isDefinition: true, virtualIndex: 6, isOptimized: false, file: !8, scope: !1, type: !3, function: void ()* @foo)
 !1 = !DIFile(filename: "m.c", directory: "/private/tmp")

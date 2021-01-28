@@ -1,6 +1,6 @@
 //===- ELFObjectFile.cpp - ELF object file implementation -------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,10 +11,10 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Object/ELFObjectFile.h"
-#include "llvm/Support/MathExtras.h"
+#include "llvm37/Object/ELFObjectFile.h"
+#include "llvm37/Support/MathExtras.h"
 
-namespace llvm {
+namespace llvm37 {
 using namespace object;
 
 ELFObjectFileBase::ELFObjectFileBase(unsigned int Type, MemoryBufferRef Source)
@@ -55,4 +55,4 @@ ObjectFile::createELFObjectFile(MemoryBufferRef Obj) {
   return std::move(R);
 }
 
-} // end namespace llvm
+} // end namespace llvm37

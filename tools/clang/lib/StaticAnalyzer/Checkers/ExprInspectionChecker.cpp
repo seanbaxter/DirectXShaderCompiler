@@ -1,6 +1,6 @@
 //==- ExprInspectionChecker.cpp - Used for regression tests ------*- C++ -*-==//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,7 +11,7 @@
 #include "clang/StaticAnalyzer/Core/BugReporter/BugType.h"
 #include "clang/StaticAnalyzer/Core/Checker.h"
 #include "clang/StaticAnalyzer/Core/PathSensitive/CheckerContext.h"
-#include "llvm/ADT/StringSwitch.h"
+#include "llvm37/ADT/StringSwitch.h"
 
 using namespace clang;
 using namespace ento;
@@ -37,7 +37,7 @@ bool ExprInspectionChecker::evalCall(const CallExpr *CE,
                                      CheckerContext &C) const {
   // These checks should have no effect on the surrounding environment
   // (globals should not be invalidated, etc), hence the use of evalCall.
-  FnCheck Handler = llvm::StringSwitch<FnCheck>(C.getCalleeName(CE))
+  FnCheck Handler = llvm37::StringSwitch<FnCheck>(C.getCalleeName(CE))
     .Case("clang_analyzer_eval", &ExprInspectionChecker::analyzerEval)
     .Case("clang_analyzer_checkInlined",
           &ExprInspectionChecker::analyzerCheckInlined)
@@ -80,7 +80,7 @@ static const char *getArgumentValueString(const CallExpr *CE,
     if (StFalse)
       return "FALSE";
     else
-      llvm_unreachable("Invalid constraint; neither true or false.");
+      llvm37_unreachable("Invalid constraint; neither true or false.");
   }
 }
 
@@ -98,7 +98,7 @@ void ExprInspectionChecker::analyzerEval(const CallExpr *CE,
     BT.reset(new BugType(this, "Checking analyzer assumptions", "debug"));
 
   C.emitReport(
-      llvm::make_unique<BugReport>(*BT, getArgumentValueString(CE, C), N));
+      llvm37::make_unique<BugReport>(*BT, getArgumentValueString(CE, C), N));
 }
 
 void ExprInspectionChecker::analyzerWarnIfReached(const CallExpr *CE,
@@ -108,7 +108,7 @@ void ExprInspectionChecker::analyzerWarnIfReached(const CallExpr *CE,
   if (!BT)
     BT.reset(new BugType(this, "Checking analyzer assumptions", "debug"));
 
-  C.emitReport(llvm::make_unique<BugReport>(*BT, "REACHABLE", N));
+  C.emitReport(llvm37::make_unique<BugReport>(*BT, "REACHABLE", N));
 }
 
 void ExprInspectionChecker::analyzerCheckInlined(const CallExpr *CE,
@@ -128,12 +128,12 @@ void ExprInspectionChecker::analyzerCheckInlined(const CallExpr *CE,
     BT.reset(new BugType(this, "Checking analyzer assumptions", "debug"));
 
   C.emitReport(
-      llvm::make_unique<BugReport>(*BT, getArgumentValueString(CE, C), N));
+      llvm37::make_unique<BugReport>(*BT, getArgumentValueString(CE, C), N));
 }
 
 void ExprInspectionChecker::analyzerCrash(const CallExpr *CE,
                                           CheckerContext &C) const {
-  LLVM_BUILTIN_TRAP;
+  LLVM37_BUILTIN_TRAP;
 }
 
 void ento::registerExprInspectionChecker(CheckerManager &Mgr) {

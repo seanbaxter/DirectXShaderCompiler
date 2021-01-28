@@ -23,13 +23,13 @@ if(HAVE_DIA_SDK)
     DIA/DIASourceFile.cpp
     )
 
-    set(LIBPDB_ADDITIONAL_HEADER_DIRS "${LLVM_MAIN_INCLUDE_DIR}/llvm/DebugInfo/PDB/DIA")
+    set(LIBPDB_ADDITIONAL_HEADER_DIRS "${LLVM37_MAIN_INCLUDE_DIR}/llvm37/DebugInfo/PDB/DIA")
 
 endif()
 
-list(APPEND LIBPDB_ADDITIONAL_HEADER_DIRS "${LLVM_MAIN_INCLUDE_DIR}/llvm/DebugInfo/PDB")
+list(APPEND LIBPDB_ADDITIONAL_HEADER_DIRS "${LLVM37_MAIN_INCLUDE_DIR}/llvm37/DebugInfo/PDB")
 
-add_llvm_library(LLVMDebugInfoPDB
+add_llvm_library(LLVM37DebugInfoPDB
   IPDBSourceFile.cpp
   PDB.cpp
   PDBContext.cpp
@@ -74,4 +74,4 @@ add_llvm_library(LLVMDebugInfoPDB
   ${LIBPDB_ADDITIONAL_HEADER_DIRS}
   )
 
-target_link_libraries(LLVMDebugInfoPDB INTERFACE "${LIBPDB_ADDITIONAL_LIBRARIES}")
+target_link_libraries(LLVM37DebugInfoPDB INTERFACE "${LIBPDB_ADDITIONAL_LIBRARIES}")

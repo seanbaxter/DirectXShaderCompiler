@@ -1,6 +1,6 @@
 //===- SpirvInstruction.cpp - SPIR-V Instruction Representation -*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -161,7 +161,7 @@ bool SpirvCapability::operator==(const SpirvCapability &that) const {
 }
 
 SpirvExtension::SpirvExtension(SourceLocation loc,
-                               llvm::StringRef extensionName)
+                               llvm37::StringRef extensionName)
     : SpirvInstruction(IK_Extension, spv::Op::OpExtension, QualType(), loc),
       extName(extensionName) {}
 
@@ -170,7 +170,7 @@ bool SpirvExtension::operator==(const SpirvExtension &that) const {
 }
 
 SpirvExtInstImport::SpirvExtInstImport(SourceLocation loc,
-                                       llvm::StringRef extensionName)
+                                       llvm37::StringRef extensionName)
     : SpirvInstruction(IK_ExtInstImport, spv::Op::OpExtInstImport, QualType(),
                        loc),
       extName(extensionName) {}
@@ -184,8 +184,8 @@ SpirvMemoryModel::SpirvMemoryModel(spv::AddressingModel addrModel,
 SpirvEntryPoint::SpirvEntryPoint(SourceLocation loc,
                                  spv::ExecutionModel executionModel,
                                  SpirvFunction *entryPointFn,
-                                 llvm::StringRef nameStr,
-                                 llvm::ArrayRef<SpirvVariable *> iface)
+                                 llvm37::StringRef nameStr,
+                                 llvm37::ArrayRef<SpirvVariable *> iface)
     : SpirvInstruction(IK_EntryPoint, spv::Op::OpEntryPoint, QualType(), loc),
       execModel(executionModel), entryPoint(entryPointFn), name(nameStr),
       interfaceVec(iface.begin(), iface.end()) {}
@@ -193,7 +193,7 @@ SpirvEntryPoint::SpirvEntryPoint(SourceLocation loc,
 // OpExecutionMode and OpExecutionModeId instructions
 SpirvExecutionMode::SpirvExecutionMode(SourceLocation loc, SpirvFunction *entry,
                                        spv::ExecutionMode em,
-                                       llvm::ArrayRef<uint32_t> paramsVec,
+                                       llvm37::ArrayRef<uint32_t> paramsVec,
                                        bool usesIdParams)
     : SpirvInstruction(IK_ExecutionMode,
                        usesIdParams ? spv::Op::OpExecutionModeId
@@ -202,18 +202,18 @@ SpirvExecutionMode::SpirvExecutionMode(SourceLocation loc, SpirvFunction *entry,
       entryPoint(entry), execMode(em),
       params(paramsVec.begin(), paramsVec.end()) {}
 
-SpirvString::SpirvString(SourceLocation loc, llvm::StringRef stringLiteral)
+SpirvString::SpirvString(SourceLocation loc, llvm37::StringRef stringLiteral)
     : SpirvInstruction(IK_String, spv::Op::OpString, QualType(), loc),
       str(stringLiteral) {}
 
 SpirvSource::SpirvSource(SourceLocation loc, spv::SourceLanguage language,
                          uint32_t ver, SpirvString *fileString,
-                         llvm::StringRef src)
+                         llvm37::StringRef src)
     : SpirvInstruction(IK_Source, spv::Op::OpSource, QualType(), loc),
       lang(language), version(ver), file(fileString), source(src) {}
 
 SpirvModuleProcessed::SpirvModuleProcessed(SourceLocation loc,
-                                           llvm::StringRef processStr)
+                                           llvm37::StringRef processStr)
     : SpirvInstruction(IK_ModuleProcessed, spv::Op::OpModuleProcessed,
                        QualType(), loc),
       process(processStr) {}
@@ -221,8 +221,8 @@ SpirvModuleProcessed::SpirvModuleProcessed(SourceLocation loc,
 SpirvDecoration::SpirvDecoration(SourceLocation loc,
                                  SpirvInstruction *targetInst,
                                  spv::Decoration decor,
-                                 llvm::ArrayRef<uint32_t> p,
-                                 llvm::Optional<uint32_t> idx)
+                                 llvm37::ArrayRef<uint32_t> p,
+                                 llvm37::Optional<uint32_t> idx)
     : SpirvInstruction(IK_Decoration, getDecorateOpcode(decor, idx),
                        /*type*/ {}, loc),
       target(targetInst), decoration(decor), index(idx),
@@ -231,8 +231,8 @@ SpirvDecoration::SpirvDecoration(SourceLocation loc,
 SpirvDecoration::SpirvDecoration(SourceLocation loc,
                                  SpirvInstruction *targetInst,
                                  spv::Decoration decor,
-                                 llvm::StringRef strParam,
-                                 llvm::Optional<uint32_t> idx)
+                                 llvm37::StringRef strParam,
+                                 llvm37::Optional<uint32_t> idx)
     : SpirvInstruction(IK_Decoration, getDecorateOpcode(decor, idx),
                        /*type*/ {}, loc),
       target(targetInst), decoration(decor), index(idx), params(), idParams() {
@@ -243,14 +243,14 @@ SpirvDecoration::SpirvDecoration(SourceLocation loc,
 SpirvDecoration::SpirvDecoration(SourceLocation loc,
                                  SpirvInstruction *targetInst,
                                  spv::Decoration decor,
-                                 llvm::ArrayRef<SpirvInstruction *> ids)
+                                 llvm37::ArrayRef<SpirvInstruction *> ids)
     : SpirvInstruction(IK_Decoration, spv::Op::OpDecorateId,
                        /*type*/ {}, loc),
-      target(targetInst), decoration(decor), index(llvm::None), params(),
+      target(targetInst), decoration(decor), index(llvm37::None), params(),
       idParams(ids.begin(), ids.end()) {}
 
 spv::Op SpirvDecoration::getDecorateOpcode(
-    spv::Decoration decoration, const llvm::Optional<uint32_t> &memberIndex) {
+    spv::Decoration decoration, const llvm37::Optional<uint32_t> &memberIndex) {
   if (decoration == spv::Decoration::HlslSemanticGOOGLE ||
       decoration == spv::Decoration::UserTypeGOOGLE)
     return memberIndex.hasValue() ? spv::Op::OpMemberDecorateStringGOOGLE
@@ -348,7 +348,7 @@ SpirvReturn::SpirvReturn(SourceLocation loc, SpirvInstruction *retVal)
 SpirvSwitch::SpirvSwitch(
     SourceLocation loc, SpirvInstruction *selectorInst,
     SpirvBasicBlock *defaultLbl,
-    llvm::ArrayRef<std::pair<uint32_t, SpirvBasicBlock *>> &targetsVec)
+    llvm37::ArrayRef<std::pair<uint32_t, SpirvBasicBlock *>> &targetsVec)
     : SpirvBranching(IK_Switch, spv::Op::OpSwitch, loc), selector(selectorInst),
       defaultLabel(defaultLbl), targets(targetsVec.begin(), targetsVec.end()) {}
 
@@ -360,8 +360,8 @@ SpirvBasicBlock *SpirvSwitch::getTargetLabelForLiteral(uint32_t lit) const {
   return defaultLabel;
 }
 
-llvm::ArrayRef<SpirvBasicBlock *> SpirvSwitch::getTargetBranches() const {
-  llvm::SmallVector<SpirvBasicBlock *, 4> branches;
+llvm37::ArrayRef<SpirvBasicBlock *> SpirvSwitch::getTargetBranches() const {
+  llvm37::SmallVector<SpirvBasicBlock *, 4> branches;
   for (auto pair : targets)
     branches.push_back(pair.second);
   branches.push_back(defaultLabel);
@@ -373,7 +373,7 @@ SpirvUnreachable::SpirvUnreachable(SourceLocation loc)
 
 SpirvAccessChain::SpirvAccessChain(QualType resultType, SourceLocation loc,
                                    SpirvInstruction *baseInst,
-                                   llvm::ArrayRef<SpirvInstruction *> indexVec)
+                                   llvm37::ArrayRef<SpirvInstruction *> indexVec)
     : SpirvInstruction(IK_AccessChain, spv::Op::OpAccessChain, resultType, loc),
       base(baseInst), indices(indexVec.begin(), indexVec.end()) {}
 
@@ -411,7 +411,7 @@ SpirvAtomic::SpirvAtomic(spv::Op op, QualType resultType, SourceLocation loc,
 
 SpirvBarrier::SpirvBarrier(SourceLocation loc, spv::Scope memScope,
                            spv::MemorySemanticsMask memSemantics,
-                           llvm::Optional<spv::Scope> execScope)
+                           llvm37::Optional<spv::Scope> execScope)
     : SpirvInstruction(IK_Barrier,
                        execScope.hasValue() ? spv::Op::OpControlBarrier
                                             : spv::Op::OpMemoryBarrier,
@@ -452,7 +452,7 @@ SpirvBitFieldInsert::SpirvBitFieldInsert(QualType resultType,
 
 SpirvCompositeConstruct::SpirvCompositeConstruct(
     QualType resultType, SourceLocation loc,
-    llvm::ArrayRef<SpirvInstruction *> constituentsVec)
+    llvm37::ArrayRef<SpirvInstruction *> constituentsVec)
     : SpirvInstruction(IK_CompositeConstruct, spv::Op::OpCompositeConstruct,
                        resultType, loc),
       consituents(constituentsVec.begin(), constituentsVec.end()) {}
@@ -489,7 +489,7 @@ bool SpirvConstantBoolean::operator==(const SpirvConstantBoolean &that) const {
          value == that.value && opcode == that.opcode;
 }
 
-SpirvConstantInteger::SpirvConstantInteger(QualType type, llvm::APInt val,
+SpirvConstantInteger::SpirvConstantInteger(QualType type, llvm37::APInt val,
                                            bool isSpecConst)
     : SpirvConstant(IK_ConstantInteger,
                     isSpecConst ? spv::Op::OpSpecConstant : spv::Op::OpConstant,
@@ -503,7 +503,7 @@ bool SpirvConstantInteger::operator==(const SpirvConstantInteger &that) const {
          value == that.value && opcode == that.opcode;
 }
 
-SpirvConstantFloat::SpirvConstantFloat(QualType type, llvm::APFloat val,
+SpirvConstantFloat::SpirvConstantFloat(QualType type, llvm37::APFloat val,
                                        bool isSpecConst)
     : SpirvConstant(IK_ConstantFloat,
                     isSpecConst ? spv::Op::OpSpecConstant : spv::Op::OpConstant,
@@ -518,7 +518,7 @@ bool SpirvConstantFloat::operator==(const SpirvConstantFloat &that) const {
 }
 
 SpirvConstantComposite::SpirvConstantComposite(
-    QualType type, llvm::ArrayRef<SpirvConstant *> constituentsVec,
+    QualType type, llvm37::ArrayRef<SpirvConstant *> constituentsVec,
     bool isSpecConst)
     : SpirvConstant(IK_ConstantComposite,
                     isSpecConst ? spv::Op::OpSpecConstantComposite
@@ -537,7 +537,7 @@ bool SpirvConstantNull::operator==(const SpirvConstantNull &that) const {
 SpirvCompositeExtract::SpirvCompositeExtract(QualType resultType,
                                              SourceLocation loc,
                                              SpirvInstruction *compositeInst,
-                                             llvm::ArrayRef<uint32_t> indexVec)
+                                             llvm37::ArrayRef<uint32_t> indexVec)
     : SpirvInstruction(IK_CompositeExtract, spv::Op::OpCompositeExtract,
                        resultType, loc),
       composite(compositeInst), indices(indexVec.begin(), indexVec.end()) {}
@@ -546,7 +546,7 @@ SpirvCompositeInsert::SpirvCompositeInsert(QualType resultType,
                                            SourceLocation loc,
                                            SpirvInstruction *compositeInst,
                                            SpirvInstruction *objectInst,
-                                           llvm::ArrayRef<uint32_t> indexVec)
+                                           llvm37::ArrayRef<uint32_t> indexVec)
     : SpirvInstruction(IK_CompositeInsert, spv::Op::OpCompositeInsert,
                        resultType, loc),
       composite(compositeInst), object(objectInst),
@@ -561,14 +561,14 @@ SpirvEndPrimitive::SpirvEndPrimitive(SourceLocation loc)
 
 SpirvExtInst::SpirvExtInst(QualType resultType, SourceLocation loc,
                            SpirvExtInstImport *set, uint32_t inst,
-                           llvm::ArrayRef<SpirvInstruction *> operandsVec)
+                           llvm37::ArrayRef<SpirvInstruction *> operandsVec)
     : SpirvInstruction(IK_ExtInst, spv::Op::OpExtInst, resultType, loc),
       instructionSet(set), instruction(inst),
       operands(operandsVec.begin(), operandsVec.end()) {}
 
 SpirvFunctionCall::SpirvFunctionCall(QualType resultType, SourceLocation loc,
                                      SpirvFunction *fn,
-                                     llvm::ArrayRef<SpirvInstruction *> argsVec)
+                                     llvm37::ArrayRef<SpirvInstruction *> argsVec)
     : SpirvInstruction(IK_FunctionCall, spv::Op::OpFunctionCall, resultType,
                        loc),
       function(fn), args(argsVec.begin(), argsVec.end()) {}
@@ -603,7 +603,7 @@ SpirvNonUniformElect::SpirvNonUniformElect(QualType resultType,
 
 SpirvNonUniformUnaryOp::SpirvNonUniformUnaryOp(
     spv::Op op, QualType resultType, SourceLocation loc, spv::Scope scope,
-    llvm::Optional<spv::GroupOperation> group, SpirvInstruction *argInst)
+    llvm37::Optional<spv::GroupOperation> group, SpirvInstruction *argInst)
     : SpirvGroupNonUniformOp(IK_GroupNonUniformUnaryOp, op, resultType, loc,
                              scope),
       arg(argInst), groupOp(group) {
@@ -731,7 +731,7 @@ SpirvImageTexelPointer::SpirvImageTexelPointer(QualType resultType,
 
 SpirvLoad::SpirvLoad(QualType resultType, SourceLocation loc,
                      SpirvInstruction *pointerInst,
-                     llvm::Optional<spv::MemoryAccessMask> mask)
+                     llvm37::Optional<spv::MemoryAccessMask> mask)
     : SpirvInstruction(IK_Load, spv::Op::OpLoad, resultType, loc),
       pointer(pointerInst), memoryAccess(mask) {}
 
@@ -772,7 +772,7 @@ SpirvSpecConstantUnaryOp::SpirvSpecConstantUnaryOp(spv::Op specConstantOp,
 
 SpirvStore::SpirvStore(SourceLocation loc, SpirvInstruction *pointerInst,
                        SpirvInstruction *objectInst,
-                       llvm::Optional<spv::MemoryAccessMask> mask)
+                       llvm37::Optional<spv::MemoryAccessMask> mask)
     : SpirvInstruction(IK_Store, spv::Op::OpStore, QualType(), loc),
       pointer(pointerInst), object(objectInst), memoryAccess(mask) {}
 
@@ -791,7 +791,7 @@ bool SpirvUnaryOp::isConversionOp() const {
 SpirvVectorShuffle::SpirvVectorShuffle(QualType resultType, SourceLocation loc,
                                        SpirvInstruction *vec1Inst,
                                        SpirvInstruction *vec2Inst,
-                                       llvm::ArrayRef<uint32_t> componentsVec)
+                                       llvm37::ArrayRef<uint32_t> componentsVec)
     : SpirvInstruction(IK_VectorShuffle, spv::Op::OpVectorShuffle, resultType,
                        loc),
       vec1(vec1Inst), vec2(vec2Inst),
@@ -805,7 +805,7 @@ SpirvArrayLength::SpirvArrayLength(QualType resultType, SourceLocation loc,
 
 SpirvRayTracingOpNV::SpirvRayTracingOpNV(
     QualType resultType, spv::Op opcode,
-    llvm::ArrayRef<SpirvInstruction *> vecOperands, SourceLocation loc)
+    llvm37::ArrayRef<SpirvInstruction *> vecOperands, SourceLocation loc)
     : SpirvInstruction(IK_RayTracingOpNV, opcode, resultType, loc),
       operands(vecOperands.begin(), vecOperands.end()) {}
 
@@ -827,7 +827,7 @@ SpirvDebugInstruction::SpirvDebugInstruction(Kind kind, uint32_t opcode)
 SpirvDebugInfoNone::SpirvDebugInfoNone()
     : SpirvDebugInstruction(IK_DebugInfoNone, /*opcode*/ 0u) {}
 
-SpirvDebugSource::SpirvDebugSource(llvm::StringRef f, llvm::StringRef t)
+SpirvDebugSource::SpirvDebugSource(llvm37::StringRef f, llvm37::StringRef t)
     : SpirvDebugInstruction(IK_DebugSource, /*opcode*/ 35u), file(f), text(t) {}
 
 SpirvDebugCompilationUnit::SpirvDebugCompilationUnit(uint32_t spvVer,
@@ -838,8 +838,8 @@ SpirvDebugCompilationUnit::SpirvDebugCompilationUnit(uint32_t spvVer,
       lang(spv::SourceLanguage::HLSL) {}
 
 SpirvDebugFunction::SpirvDebugFunction(
-    llvm::StringRef name, SpirvDebugSource *src, uint32_t fline, uint32_t fcol,
-    SpirvDebugInstruction *parent, llvm::StringRef linkName, uint32_t flags_,
+    llvm37::StringRef name, SpirvDebugSource *src, uint32_t fline, uint32_t fcol,
+    SpirvDebugInstruction *parent, llvm37::StringRef linkName, uint32_t flags_,
     uint32_t bodyLine, SpirvFunction *func)
     : SpirvDebugInstruction(IK_DebugFunction, /*opcode*/ 20u), source(src),
       fnLine(fline), fnColumn(fcol), parentScope(parent), linkageName(linkName),
@@ -849,8 +849,8 @@ SpirvDebugFunction::SpirvDebugFunction(
 }
 
 SpirvDebugFunctionDeclaration::SpirvDebugFunctionDeclaration(
-    llvm::StringRef name, SpirvDebugSource *src, uint32_t fline, uint32_t fcol,
-    SpirvDebugInstruction *parent, llvm::StringRef linkName, uint32_t flags_)
+    llvm37::StringRef name, SpirvDebugSource *src, uint32_t fline, uint32_t fcol,
+    SpirvDebugInstruction *parent, llvm37::StringRef linkName, uint32_t flags_)
     : SpirvDebugInstruction(IK_DebugFunctionDecl, /*opcode*/ 19u), source(src),
       fnLine(fline), fnColumn(fcol), parentScope(parent), linkageName(linkName),
       flags(flags_) {
@@ -858,9 +858,9 @@ SpirvDebugFunctionDeclaration::SpirvDebugFunctionDeclaration(
 }
 
 SpirvDebugLocalVariable::SpirvDebugLocalVariable(
-    QualType debugQualType_, llvm::StringRef varName, SpirvDebugSource *src,
+    QualType debugQualType_, llvm37::StringRef varName, SpirvDebugSource *src,
     uint32_t lineNumber, uint32_t colNumber, SpirvDebugInstruction *parent,
-    uint32_t flags_, llvm::Optional<uint32_t> argNumber_)
+    uint32_t flags_, llvm37::Optional<uint32_t> argNumber_)
     : SpirvDebugInstruction(IK_DebugLocalVariable, /*opcode*/ 26u), source(src),
       line(lineNumber), column(colNumber), parentScope(parent), flags(flags_),
       argNumber(argNumber_) {
@@ -869,10 +869,10 @@ SpirvDebugLocalVariable::SpirvDebugLocalVariable(
 }
 
 SpirvDebugGlobalVariable::SpirvDebugGlobalVariable(
-    QualType debugQualType, llvm::StringRef varName, SpirvDebugSource *src,
+    QualType debugQualType, llvm37::StringRef varName, SpirvDebugSource *src,
     uint32_t line_, uint32_t column_, SpirvDebugInstruction *parent,
-    llvm::StringRef linkageName_, SpirvVariable *var_, uint32_t flags_,
-    llvm::Optional<SpirvInstruction *> staticMemberDebugDecl_)
+    llvm37::StringRef linkageName_, SpirvVariable *var_, uint32_t flags_,
+    llvm37::Optional<SpirvInstruction *> staticMemberDebugDecl_)
     : SpirvDebugInstruction(IK_DebugGlobalVariable, /*opcode*/ 18u),
       source(src), line(line_), column(column_), parentScope(parent),
       linkageName(linkageName_), var(var_), flags(flags_),
@@ -883,13 +883,13 @@ SpirvDebugGlobalVariable::SpirvDebugGlobalVariable(
 }
 
 SpirvDebugOperation::SpirvDebugOperation(uint32_t operationOpCode_,
-                                         llvm::ArrayRef<int32_t> operands_)
+                                         llvm37::ArrayRef<int32_t> operands_)
     : SpirvDebugInstruction(IK_DebugOperation, /*opcode*/ 30u),
       operationOpcode(operationOpCode_),
       operands(operands_.begin(), operands_.end()) {}
 
 SpirvDebugExpression::SpirvDebugExpression(
-    llvm::ArrayRef<SpirvDebugOperation *> operations_)
+    llvm37::ArrayRef<SpirvDebugOperation *> operations_)
     : SpirvDebugInstruction(IK_DebugExpression, /*opcode*/ 31u),
       operations(operations_.begin(), operations_.end()) {}
 
@@ -908,7 +908,7 @@ SpirvDebugLexicalBlock::SpirvDebugLexicalBlock(SpirvDebugSource *source_,
 SpirvDebugScope::SpirvDebugScope(SpirvDebugInstruction *scope_)
     : SpirvDebugInstruction(IK_DebugScope, /*opcode*/ 23u), scope(scope_) {}
 
-SpirvDebugTypeBasic::SpirvDebugTypeBasic(llvm::StringRef name,
+SpirvDebugTypeBasic::SpirvDebugTypeBasic(llvm37::StringRef name,
                                          SpirvConstant *size_,
                                          uint32_t encoding_)
     : SpirvDebugType(IK_DebugTypeBasic, /*opcode*/ 2u), size(size_),
@@ -923,7 +923,7 @@ uint32_t SpirvDebugTypeBasic::getSizeInBits() const {
 }
 
 SpirvDebugTypeArray::SpirvDebugTypeArray(SpirvDebugType *elemType,
-                                         llvm::ArrayRef<uint32_t> elemCount)
+                                         llvm37::ArrayRef<uint32_t> elemCount)
     : SpirvDebugType(IK_DebugTypeArray, /*opcode*/ 5u), elementType(elemType),
       elementCount(elemCount.begin(), elemCount.end()) {}
 
@@ -934,12 +934,12 @@ SpirvDebugTypeVector::SpirvDebugTypeVector(SpirvDebugType *elemType,
 
 SpirvDebugTypeFunction::SpirvDebugTypeFunction(
     uint32_t flags, SpirvDebugType *ret,
-    llvm::ArrayRef<SpirvDebugType *> params)
+    llvm37::ArrayRef<SpirvDebugType *> params)
     : SpirvDebugType(IK_DebugTypeFunction, /*opcode*/ 8u), debugFlags(flags),
       returnType(ret), paramTypes(params.begin(), params.end()) {}
 
 SpirvDebugTypeMember::SpirvDebugTypeMember(
-    llvm::StringRef name, SpirvDebugType *type, SpirvDebugSource *source_,
+    llvm37::StringRef name, SpirvDebugType *type, SpirvDebugSource *source_,
     uint32_t line_, uint32_t column_, SpirvDebugInstruction *parent_,
     uint32_t flags_, uint32_t offsetInBits_, uint32_t sizeInBits_,
     const APValue *value_)
@@ -952,9 +952,9 @@ SpirvDebugTypeMember::SpirvDebugTypeMember(
 }
 
 SpirvDebugTypeComposite::SpirvDebugTypeComposite(
-    llvm::StringRef name, SpirvDebugSource *source_, uint32_t line_,
+    llvm37::StringRef name, SpirvDebugSource *source_, uint32_t line_,
     uint32_t column_, SpirvDebugInstruction *parent_,
-    llvm::StringRef linkageName_, uint32_t flags_, uint32_t tag_)
+    llvm37::StringRef linkageName_, uint32_t flags_, uint32_t tag_)
     : SpirvDebugType(IK_DebugTypeComposite, /*opcode*/ 10u), source(source_),
       line(line_), column(column_), parent(parent_), linkageName(linkageName_),
       debugFlags(flags_), tag(tag_), debugNone(nullptr) {
@@ -963,12 +963,12 @@ SpirvDebugTypeComposite::SpirvDebugTypeComposite(
 
 SpirvDebugTypeTemplate::SpirvDebugTypeTemplate(
     SpirvDebugInstruction *target_,
-    const llvm::SmallVector<SpirvDebugTypeTemplateParameter *, 2> &params_)
+    const llvm37::SmallVector<SpirvDebugTypeTemplateParameter *, 2> &params_)
     : SpirvDebugType(IK_DebugTypeTemplate, /*opcode*/ 14u), target(target_),
       params(params_) {}
 
 SpirvDebugTypeTemplateParameter::SpirvDebugTypeTemplateParameter(
-    llvm::StringRef name, SpirvDebugType *type, SpirvInstruction *value_,
+    llvm37::StringRef name, SpirvDebugType *type, SpirvInstruction *value_,
     SpirvDebugSource *source_, uint32_t line_, uint32_t column_)
     : SpirvDebugType(IK_DebugTypeTemplateParameter, /*opcode*/ 15u),
       actualType(type), value(value_), source(source_), line(line_),
@@ -978,7 +978,7 @@ SpirvDebugTypeTemplateParameter::SpirvDebugTypeTemplateParameter(
 
 SpirvRayQueryOpKHR::SpirvRayQueryOpKHR(
     QualType resultType, spv::Op opcode,
-    llvm::ArrayRef<SpirvInstruction *> vecOperands, bool flags,
+    llvm37::ArrayRef<SpirvInstruction *> vecOperands, bool flags,
     SourceLocation loc)
     : SpirvInstruction(IK_RayQueryOpKHR, opcode, resultType, loc),
       operands(vecOperands.begin(), vecOperands.end()), cullFlags(flags) {}

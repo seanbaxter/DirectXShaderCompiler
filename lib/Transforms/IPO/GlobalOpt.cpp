@@ -1,6 +1,6 @@
 //===- GlobalOpt.cpp - Optimize Global Variables --------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -13,39 +13,39 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Transforms/IPO.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/SmallPtrSet.h"
-#include "llvm/ADT/SmallSet.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/Analysis/ConstantFolding.h"
-#include "llvm/Analysis/MemoryBuiltins.h"
-#include "llvm/Analysis/TargetLibraryInfo.h"
-#include "llvm/IR/CallSite.h"
-#include "llvm/IR/CallingConv.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/DerivedTypes.h"
-#include "llvm/IR/GetElementPtrTypeIterator.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/Operator.h"
-#include "llvm/IR/ValueHandle.h"
-#include "llvm/Pass.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/MathExtras.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Transforms/Utils/CtorUtils.h"
-#include "llvm/Transforms/Utils/GlobalStatus.h"
-#include "llvm/Transforms/Utils/ModuleUtils.h"
+#include "llvm37/Transforms/IPO.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/SmallPtrSet.h"
+#include "llvm37/ADT/SmallSet.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/Analysis/ConstantFolding.h"
+#include "llvm37/Analysis/MemoryBuiltins.h"
+#include "llvm37/Analysis/TargetLibraryInfo.h"
+#include "llvm37/IR/CallSite.h"
+#include "llvm37/IR/CallingConv.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/IR/DerivedTypes.h"
+#include "llvm37/IR/GetElementPtrTypeIterator.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/Operator.h"
+#include "llvm37/IR/ValueHandle.h"
+#include "llvm37/Pass.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/MathExtras.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Transforms/Utils/CtorUtils.h"
+#include "llvm37/Transforms/Utils/GlobalStatus.h"
+#include "llvm37/Transforms/Utils/ModuleUtils.h"
 #include "dxc/DXIL/DxilModule.h" // HLSL Change - Entrypoint testing
 #include <algorithm>
 #include <deque>
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "globalopt"
 
@@ -99,7 +99,7 @@ INITIALIZE_PASS_DEPENDENCY(TargetLibraryInfoWrapperPass)
 INITIALIZE_PASS_END(GlobalOpt, "globalopt",
                 "Global Variable Optimizer", false, false)
 
-ModulePass *llvm::createGlobalOptimizerPass() { return new GlobalOpt(); }
+ModulePass *llvm37::createGlobalOptimizerPass() { return new GlobalOpt(); }
 
 /// isLeakCheckerRoot - Is this global variable possibly used by a leak checker
 /// as a root?  If so, we might not really want to eliminate the stores to it.
@@ -108,7 +108,7 @@ static bool isLeakCheckerRoot(GlobalVariable *GV) {
   // a pointer.  There are two challenges; one is that we could have a struct
   // the has an inner member which is a pointer.  We recurse through the type to
   // detect these (up to a point).  The other is that we may actually be a union
-  // of a pointer and another type, and so our LLVM type is an integer which
+  // of a pointer and another type, and so our LLVM37 type is an integer which
   // gets converted into a pointer, or our type is an [i8 x #] with a pointer
   // potentially contained here.
 
@@ -907,7 +907,7 @@ OptimizeGlobalAddressOfMalloc(GlobalVariable *GV, CallInst *CI, Type *AllocTy,
                                LI->isUnordered() ? (Instruction*)ICI : LI);
       InitBoolUsed = true;
       switch (ICI->getPredicate()) {
-      default: llvm_unreachable("Unknown ICmp Predicate!");
+      default: llvm37_unreachable("Unknown ICmp Predicate!");
       case ICmpInst::ICMP_ULT:
       case ICmpInst::ICMP_SLT:   // X < null -> always false
         LV = ConstantInt::getFalse(GV->getContext());
@@ -1724,8 +1724,8 @@ bool GlobalOpt::ProcessGlobal(GlobalVariable *GV,
 }
 
 // HLSL Change Begin
-static bool isEntryPoint(const llvm::Function* Func) {
-  const llvm::Module* Mod = Func->getParent();
+static bool isEntryPoint(const llvm37::Function* Func) {
+  const llvm37::Module* Mod = Func->getParent();
   return Mod->HasDxilModule()
     ? Mod->GetDxilModule().IsEntryOrPatchConstantFunction(Func)
     : Func->getName() == "main"; // Original logic for non-HLSL
@@ -1873,7 +1873,7 @@ static void ChangeCalleesToFastCall(Function *F) {
   }
 }
 
-static AttributeSet StripNest(LLVMContext &C, const AttributeSet &Attrs) {
+static AttributeSet StripNest(LLVM37Context &C, const AttributeSet &Attrs) {
   for (unsigned i = 0, e = Attrs.getNumSlots(); i != e; ++i) {
     unsigned Index = Attrs.getSlotIndex(i);
     if (!Attrs.getSlotAttributes(i).hasAttribute(Index, Attribute::Nest))
@@ -2172,7 +2172,7 @@ static void CommitValueTo(Constant *Val, Constant *Addr) {
 
 namespace {
 
-/// Evaluator - This class evaluates LLVM IR, producing the Constant
+/// Evaluator - This class evaluates LLVM37 IR, producing the Constant
 /// representing each SSA instruction.  Changes to global variables are stored
 /// in a mapping that can be iterated over after the evaluation is complete.
 /// Once an evaluation call fails, the evaluation object should not be reused.
@@ -2734,7 +2734,7 @@ static void setUsedInitializer(GlobalVariable &V,
   // Type of pointer to the array of pointers.
   PointerType *Int8PtrTy = Type::getInt8PtrTy(V.getContext(), 0);
 
-  SmallVector<llvm::Constant *, 8> UsedArray;
+  SmallVector<llvm37::Constant *, 8> UsedArray;
   for (GlobalValue *GV : Init) {
     Constant *Cast
       = ConstantExpr::getPointerBitCastOrAddrSpaceCast(GV, Int8PtrTy);
@@ -2747,23 +2747,23 @@ static void setUsedInitializer(GlobalVariable &V,
   Module *M = V.getParent();
   V.removeFromParent();
   GlobalVariable *NV =
-      new GlobalVariable(*M, ATy, false, llvm::GlobalValue::AppendingLinkage,
-                         llvm::ConstantArray::get(ATy, UsedArray), "");
+      new GlobalVariable(*M, ATy, false, llvm37::GlobalValue::AppendingLinkage,
+                         llvm37::ConstantArray::get(ATy, UsedArray), "");
   NV->takeName(&V);
   NV->setSection("llvm.metadata");
   delete &V;
 }
 
 namespace {
-/// \brief An easy to access representation of llvm.used and llvm.compiler.used.
-class LLVMUsed {
+/// \brief An easy to access representation of llvm37.used and llvm37.compiler.used.
+class LLVM37Used {
   SmallPtrSet<GlobalValue *, 8> Used;
   SmallPtrSet<GlobalValue *, 8> CompilerUsed;
   GlobalVariable *UsedV;
   GlobalVariable *CompilerUsedV;
 
 public:
-  LLVMUsed(Module &M) {
+  LLVM37Used(Module &M) {
     UsedV = collectUsedGlobalVariables(M, Used, false);
     CompilerUsedV = collectUsedGlobalVariables(M, CompilerUsed, true);
   }
@@ -2799,45 +2799,45 @@ public:
 };
 }
 
-static bool hasUseOtherThanLLVMUsed(GlobalAlias &GA, const LLVMUsed &U) {
+static bool hasUseOtherThanLLVM37Used(GlobalAlias &GA, const LLVM37Used &U) {
   if (GA.use_empty()) // No use at all.
     return false;
 
   assert((!U.usedCount(&GA) || !U.compilerUsedCount(&GA)) &&
          "We should have removed the duplicated "
-         "element from llvm.compiler.used");
+         "element from llvm37.compiler.used");
   if (!GA.hasOneUse())
-    // Strictly more than one use. So at least one is not in llvm.used and
-    // llvm.compiler.used.
+    // Strictly more than one use. So at least one is not in llvm37.used and
+    // llvm37.compiler.used.
     return true;
 
-  // Exactly one use. Check if it is in llvm.used or llvm.compiler.used.
+  // Exactly one use. Check if it is in llvm37.used or llvm37.compiler.used.
   return !U.usedCount(&GA) && !U.compilerUsedCount(&GA);
 }
 
-static bool hasMoreThanOneUseOtherThanLLVMUsed(GlobalValue &V,
-                                               const LLVMUsed &U) {
+static bool hasMoreThanOneUseOtherThanLLVM37Used(GlobalValue &V,
+                                               const LLVM37Used &U) {
   unsigned N = 2;
   assert((!U.usedCount(&V) || !U.compilerUsedCount(&V)) &&
          "We should have removed the duplicated "
-         "element from llvm.compiler.used");
+         "element from llvm37.compiler.used");
   if (U.usedCount(&V) || U.compilerUsedCount(&V))
     ++N;
   return V.hasNUsesOrMore(N);
 }
 
-static bool mayHaveOtherReferences(GlobalAlias &GA, const LLVMUsed &U) {
+static bool mayHaveOtherReferences(GlobalAlias &GA, const LLVM37Used &U) {
   if (!GA.hasLocalLinkage())
     return true;
 
   return U.usedCount(&GA) || U.compilerUsedCount(&GA);
 }
 
-static bool hasUsesToReplace(GlobalAlias &GA, const LLVMUsed &U,
+static bool hasUsesToReplace(GlobalAlias &GA, const LLVM37Used &U,
                              bool &RenameTarget) {
   RenameTarget = false;
   bool Ret = false;
-  if (hasUseOtherThanLLVMUsed(GA, U))
+  if (hasUseOtherThanLLVM37Used(GA, U))
     Ret = true;
 
   // If the alias is externally visible, we may still be able to simplify it.
@@ -2858,7 +2858,7 @@ static bool hasUsesToReplace(GlobalAlias &GA, const LLVMUsed &U,
   // Do not perform the transform if multiple aliases potentially target the
   // aliasee. This check also ensures that it is safe to replace the section
   // and other attributes of the aliasee with those of the alias.
-  if (hasMoreThanOneUseOtherThanLLVMUsed(*Target, U))
+  if (hasMoreThanOneUseOtherThanLLVM37Used(*Target, U))
     return Ret;
 
   RenameTarget = true;
@@ -2867,7 +2867,7 @@ static bool hasUsesToReplace(GlobalAlias &GA, const LLVMUsed &U,
 
 bool GlobalOpt::OptimizeGlobalAliases(Module &M) {
   bool Changed = false;
-  LLVMUsed Used(M);
+  LLVM37Used Used(M);
 
   for (GlobalValue *GV : Used.used())
     Used.compilerUsedErase(GV);
@@ -3015,7 +3015,7 @@ bool GlobalOpt::OptimizeEmptyGlobalCXXDtors(Function *CXAAtExitFn) {
   for (auto I = CXAAtExitFn->user_begin(), E = CXAAtExitFn->user_end();
        I != E;) {
     // We're only interested in calls. Theoretically, we could handle invoke
-    // instructions as well, but neither llvm-gcc nor clang generate invokes
+    // instructions as well, but neither llvm37-gcc nor clang generate invokes
     // to __cxa_atexit.
     CallInst *CI = dyn_cast<CallInst>(*I++);
     if (!CI)

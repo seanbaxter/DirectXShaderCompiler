@@ -1,6 +1,6 @@
 //===--- Bitcode/Writer/BitcodeWriter.cpp - Bitcode Writer ----------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,28 +11,28 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Bitcode/ReaderWriter.h"
+#include "llvm37/Bitcode/ReaderWriter.h"
 #include "ValueEnumerator.h"
-#include "llvm/ADT/Triple.h"
-#include "llvm/Bitcode/BitstreamWriter.h"
-#include "llvm/Bitcode/LLVMBitCodes.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/DebugInfoMetadata.h"
-#include "llvm/IR/DerivedTypes.h"
-#include "llvm/IR/InlineAsm.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/Operator.h"
-#include "llvm/IR/UseListOrder.h"
-#include "llvm/IR/ValueSymbolTable.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/MathExtras.h"
-#include "llvm/Support/Program.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/Triple.h"
+#include "llvm37/Bitcode/BitstreamWriter.h"
+#include "llvm37/Bitcode/LLVMBitCodes.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/DebugInfoMetadata.h"
+#include "llvm37/IR/DerivedTypes.h"
+#include "llvm37/IR/InlineAsm.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/Operator.h"
+#include "llvm37/IR/UseListOrder.h"
+#include "llvm37/IR/ValueSymbolTable.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/MathExtras.h"
+#include "llvm37/Support/Program.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <cctype>
 #include <map>
-using namespace llvm;
+using namespace llvm37;
 
 /// These are manifest constants used by the bitcode writer. They do not need to
 /// be kept in sync with the reader, but need to be consistent within this file.
@@ -62,7 +62,7 @@ enum {
 
 static unsigned GetEncodedCastOpcode(unsigned Opcode) {
   switch (Opcode) {
-  default: llvm_unreachable("Unknown cast instruction!");
+  default: llvm37_unreachable("Unknown cast instruction!");
   case Instruction::Trunc   : return bitc::CAST_TRUNC;
   case Instruction::ZExt    : return bitc::CAST_ZEXT;
   case Instruction::SExt    : return bitc::CAST_SEXT;
@@ -81,7 +81,7 @@ static unsigned GetEncodedCastOpcode(unsigned Opcode) {
 
 static unsigned GetEncodedBinaryOpcode(unsigned Opcode) {
   switch (Opcode) {
-  default: llvm_unreachable("Unknown binary instruction!");
+  default: llvm37_unreachable("Unknown binary instruction!");
   case Instruction::Add:
   case Instruction::FAdd: return bitc::BINOP_ADD;
   case Instruction::Sub:
@@ -105,7 +105,7 @@ static unsigned GetEncodedBinaryOpcode(unsigned Opcode) {
 
 static unsigned GetEncodedRMWOperation(AtomicRMWInst::BinOp Op) {
   switch (Op) {
-  default: llvm_unreachable("Unknown RMW operation!");
+  default: llvm37_unreachable("Unknown RMW operation!");
   case AtomicRMWInst::Xchg: return bitc::RMW_XCHG;
   case AtomicRMWInst::Add: return bitc::RMW_ADD;
   case AtomicRMWInst::Sub: return bitc::RMW_SUB;
@@ -130,7 +130,7 @@ static unsigned GetEncodedOrdering(AtomicOrdering Ordering) {
   case AcquireRelease: return bitc::ORDERING_ACQREL;
   case SequentiallyConsistent: return bitc::ORDERING_SEQCST;
   }
-  llvm_unreachable("Invalid ordering");
+  llvm37_unreachable("Invalid ordering");
 }
 
 static unsigned GetEncodedSynchScope(SynchronizationScope SynchScope) {
@@ -138,7 +138,7 @@ static unsigned GetEncodedSynchScope(SynchronizationScope SynchScope) {
   case SingleThread: return bitc::SYNCHSCOPE_SINGLETHREAD;
   case CrossThread: return bitc::SYNCHSCOPE_CROSSTHREAD;
   }
-  llvm_unreachable("Invalid synch scope");
+  llvm37_unreachable("Invalid synch scope");
 }
 
 static void WriteStringRecord(unsigned Code, StringRef Str,
@@ -249,12 +249,12 @@ static uint64_t getAttrKindEncoding(Attribute::AttrKind Kind) {
   case Attribute::ZExt:
     return bitc::ATTR_KIND_Z_EXT;
   case Attribute::EndAttrKinds:
-    llvm_unreachable("Can not encode end-attribute kinds marker.");
+    llvm37_unreachable("Can not encode end-attribute kinds marker.");
   case Attribute::None:
-    llvm_unreachable("Can not encode none-attribute.");
+    llvm37_unreachable("Can not encode none-attribute.");
   }
 
-  llvm_unreachable("Trying to encode unknown attribute");
+  llvm37_unreachable("Trying to encode unknown attribute");
 }
 
 static void WriteAttributeGroupTable(const ValueEnumerator &VE,
@@ -510,7 +510,7 @@ static unsigned getEncodedLinkage(const GlobalValue &GV) {
   case GlobalValue::AvailableExternallyLinkage:
     return 12;
   }
-  llvm_unreachable("Invalid linkage");
+  llvm37_unreachable("Invalid linkage");
 }
 
 static unsigned getEncodedVisibility(const GlobalValue &GV) {
@@ -519,7 +519,7 @@ static unsigned getEncodedVisibility(const GlobalValue &GV) {
   case GlobalValue::HiddenVisibility:    return 1;
   case GlobalValue::ProtectedVisibility: return 2;
   }
-  llvm_unreachable("Invalid visibility");
+  llvm37_unreachable("Invalid visibility");
 }
 
 static unsigned getEncodedDLLStorageClass(const GlobalValue &GV) {
@@ -528,7 +528,7 @@ static unsigned getEncodedDLLStorageClass(const GlobalValue &GV) {
   case GlobalValue::DLLImportStorageClass: return 1;
   case GlobalValue::DLLExportStorageClass: return 2;
   }
-  llvm_unreachable("Invalid DLL storage class");
+  llvm37_unreachable("Invalid DLL storage class");
 }
 
 static unsigned getEncodedThreadLocalMode(const GlobalValue &GV) {
@@ -539,7 +539,7 @@ static unsigned getEncodedThreadLocalMode(const GlobalValue &GV) {
     case GlobalVariable::InitialExecTLSModel:    return 3;
     case GlobalVariable::LocalExecTLSModel:      return 4;
   }
-  llvm_unreachable("Invalid TLS model");
+  llvm37_unreachable("Invalid TLS model");
 }
 
 static unsigned getEncodedComdatSelectionKind(const Comdat &C) {
@@ -555,7 +555,7 @@ static unsigned getEncodedComdatSelectionKind(const Comdat &C) {
   case Comdat::SameSize:
     return bitc::COMDAT_SELECTION_KIND_SAME_SIZE;
   }
-  llvm_unreachable("Invalid selection kind");
+  llvm37_unreachable("Invalid selection kind");
 }
 
 static void writeComdats(const ValueEnumerator &VE, BitstreamWriter &Stream) {
@@ -1181,7 +1181,7 @@ static void WriteModuleMetadata(const Module *M,
 
   // Initialize MDNode abbreviations.
 #define HANDLE_MDNODE_LEAF(CLASS) unsigned CLASS##Abbrev = 0;
-#include "llvm/IR/Metadata.def"
+#include "llvm37/IR/Metadata.def"
 
   if (VE.hasDILocation()) {
     // Abbrev for METADATA_LOCATION.
@@ -1231,12 +1231,12 @@ static void WriteModuleMetadata(const Module *M,
 
       switch (N->getMetadataID()) {
       default:
-        llvm_unreachable("Invalid MDNode subclass");
+        llvm37_unreachable("Invalid MDNode subclass");
 #define HANDLE_MDNODE_LEAF(CLASS)                                              \
   case Metadata::CLASS##Kind:                                                  \
     Write##CLASS(cast<CLASS>(N), VE, Stream, Record, CLASS##Abbrev);           \
     continue;
-#include "llvm/IR/Metadata.def"
+#include "llvm37/IR/Metadata.def"
       }
     }
     if (const auto *MDC = dyn_cast<ConstantAsMetadata>(MD)) {
@@ -1620,7 +1620,7 @@ static void WriteConstants(unsigned FirstVal, unsigned LastVal,
 #ifndef NDEBUG
       C->dump();
 #endif
-      llvm_unreachable("Unknown constant!");
+      llvm37_unreachable("Unknown constant!");
     }
     Stream.EmitRecord(Code, Record, AbbrevToUse);
     Record.clear();
@@ -2206,7 +2206,7 @@ static void WriteBlockInfo(const ValueEnumerator &VE, BitstreamWriter &Stream) {
     Abbv->Add(BitCodeAbbrevOp(BitCodeAbbrevOp::Fixed, 8));
     if (Stream.EmitBlockInfoAbbrev(bitc::VALUE_SYMTAB_BLOCK_ID,
                                    Abbv.get()) != VST_ENTRY_8_ABBREV)
-      llvm_unreachable("Unexpected abbrev ordering!");
+      llvm37_unreachable("Unexpected abbrev ordering!");
   }
 
   { // 7-bit fixed width VST_ENTRY strings.
@@ -2217,7 +2217,7 @@ static void WriteBlockInfo(const ValueEnumerator &VE, BitstreamWriter &Stream) {
     Abbv->Add(BitCodeAbbrevOp(BitCodeAbbrevOp::Fixed, 7));
     if (Stream.EmitBlockInfoAbbrev(bitc::VALUE_SYMTAB_BLOCK_ID,
                                    Abbv.get()) != VST_ENTRY_7_ABBREV)
-      llvm_unreachable("Unexpected abbrev ordering!");
+      llvm37_unreachable("Unexpected abbrev ordering!");
   }
   { // 6-bit char6 VST_ENTRY strings.
     IntrusiveRefCntPtr<BitCodeAbbrev> Abbv = new BitCodeAbbrev();
@@ -2227,7 +2227,7 @@ static void WriteBlockInfo(const ValueEnumerator &VE, BitstreamWriter &Stream) {
     Abbv->Add(BitCodeAbbrevOp(BitCodeAbbrevOp::Char6));
     if (Stream.EmitBlockInfoAbbrev(bitc::VALUE_SYMTAB_BLOCK_ID,
                                    Abbv.get()) != VST_ENTRY_6_ABBREV)
-      llvm_unreachable("Unexpected abbrev ordering!");
+      llvm37_unreachable("Unexpected abbrev ordering!");
   }
   { // 6-bit char6 VST_BBENTRY strings.
     IntrusiveRefCntPtr<BitCodeAbbrev> Abbv = new BitCodeAbbrev();
@@ -2237,7 +2237,7 @@ static void WriteBlockInfo(const ValueEnumerator &VE, BitstreamWriter &Stream) {
     Abbv->Add(BitCodeAbbrevOp(BitCodeAbbrevOp::Char6));
     if (Stream.EmitBlockInfoAbbrev(bitc::VALUE_SYMTAB_BLOCK_ID,
                                    Abbv.get()) != VST_BBENTRY_6_ABBREV)
-      llvm_unreachable("Unexpected abbrev ordering!");
+      llvm37_unreachable("Unexpected abbrev ordering!");
   }
 
 
@@ -2249,7 +2249,7 @@ static void WriteBlockInfo(const ValueEnumerator &VE, BitstreamWriter &Stream) {
                               VE.computeBitsRequiredForTypeIndicies()));
     if (Stream.EmitBlockInfoAbbrev(bitc::CONSTANTS_BLOCK_ID,
                                    Abbv.get()) != CONSTANTS_SETTYPE_ABBREV)
-      llvm_unreachable("Unexpected abbrev ordering!");
+      llvm37_unreachable("Unexpected abbrev ordering!");
   }
 
   { // INTEGER abbrev for CONSTANTS_BLOCK.
@@ -2258,7 +2258,7 @@ static void WriteBlockInfo(const ValueEnumerator &VE, BitstreamWriter &Stream) {
     Abbv->Add(BitCodeAbbrevOp(BitCodeAbbrevOp::VBR, 8));
     if (Stream.EmitBlockInfoAbbrev(bitc::CONSTANTS_BLOCK_ID,
                                    Abbv.get()) != CONSTANTS_INTEGER_ABBREV)
-      llvm_unreachable("Unexpected abbrev ordering!");
+      llvm37_unreachable("Unexpected abbrev ordering!");
   }
 
   { // CE_CAST abbrev for CONSTANTS_BLOCK.
@@ -2271,14 +2271,14 @@ static void WriteBlockInfo(const ValueEnumerator &VE, BitstreamWriter &Stream) {
 
     if (Stream.EmitBlockInfoAbbrev(bitc::CONSTANTS_BLOCK_ID,
                                    Abbv.get()) != CONSTANTS_CE_CAST_Abbrev)
-      llvm_unreachable("Unexpected abbrev ordering!");
+      llvm37_unreachable("Unexpected abbrev ordering!");
   }
   { // NULL abbrev for CONSTANTS_BLOCK.
     IntrusiveRefCntPtr<BitCodeAbbrev> Abbv = new BitCodeAbbrev();
     Abbv->Add(BitCodeAbbrevOp(bitc::CST_CODE_NULL));
     if (Stream.EmitBlockInfoAbbrev(bitc::CONSTANTS_BLOCK_ID,
                                    Abbv.get()) != CONSTANTS_NULL_Abbrev)
-      llvm_unreachable("Unexpected abbrev ordering!");
+      llvm37_unreachable("Unexpected abbrev ordering!");
   }
 
   // FIXME: This should only use space for first class types!
@@ -2293,7 +2293,7 @@ static void WriteBlockInfo(const ValueEnumerator &VE, BitstreamWriter &Stream) {
     Abbv->Add(BitCodeAbbrevOp(BitCodeAbbrevOp::Fixed, 1)); // volatile
     if (Stream.EmitBlockInfoAbbrev(bitc::FUNCTION_BLOCK_ID,
                                    Abbv.get()) != FUNCTION_INST_LOAD_ABBREV)
-      llvm_unreachable("Unexpected abbrev ordering!");
+      llvm37_unreachable("Unexpected abbrev ordering!");
   }
   { // INST_BINOP abbrev for FUNCTION_BLOCK.
     IntrusiveRefCntPtr<BitCodeAbbrev> Abbv = new BitCodeAbbrev();
@@ -2303,7 +2303,7 @@ static void WriteBlockInfo(const ValueEnumerator &VE, BitstreamWriter &Stream) {
     Abbv->Add(BitCodeAbbrevOp(BitCodeAbbrevOp::Fixed, 4)); // opc
     if (Stream.EmitBlockInfoAbbrev(bitc::FUNCTION_BLOCK_ID,
                                    Abbv.get()) != FUNCTION_INST_BINOP_ABBREV)
-      llvm_unreachable("Unexpected abbrev ordering!");
+      llvm37_unreachable("Unexpected abbrev ordering!");
   }
   { // INST_BINOP_FLAGS abbrev for FUNCTION_BLOCK.
     IntrusiveRefCntPtr<BitCodeAbbrev> Abbv = new BitCodeAbbrev();
@@ -2314,7 +2314,7 @@ static void WriteBlockInfo(const ValueEnumerator &VE, BitstreamWriter &Stream) {
     Abbv->Add(BitCodeAbbrevOp(BitCodeAbbrevOp::Fixed, 7)); // flags
     if (Stream.EmitBlockInfoAbbrev(bitc::FUNCTION_BLOCK_ID,
                                    Abbv.get()) != FUNCTION_INST_BINOP_FLAGS_ABBREV)
-      llvm_unreachable("Unexpected abbrev ordering!");
+      llvm37_unreachable("Unexpected abbrev ordering!");
   }
   { // INST_CAST abbrev for FUNCTION_BLOCK.
     IntrusiveRefCntPtr<BitCodeAbbrev> Abbv = new BitCodeAbbrev();
@@ -2325,7 +2325,7 @@ static void WriteBlockInfo(const ValueEnumerator &VE, BitstreamWriter &Stream) {
     Abbv->Add(BitCodeAbbrevOp(BitCodeAbbrevOp::Fixed, 4));  // opc
     if (Stream.EmitBlockInfoAbbrev(bitc::FUNCTION_BLOCK_ID,
                                    Abbv.get()) != FUNCTION_INST_CAST_ABBREV)
-      llvm_unreachable("Unexpected abbrev ordering!");
+      llvm37_unreachable("Unexpected abbrev ordering!");
   }
 
   { // INST_RET abbrev for FUNCTION_BLOCK.
@@ -2333,7 +2333,7 @@ static void WriteBlockInfo(const ValueEnumerator &VE, BitstreamWriter &Stream) {
     Abbv->Add(BitCodeAbbrevOp(bitc::FUNC_CODE_INST_RET));
     if (Stream.EmitBlockInfoAbbrev(bitc::FUNCTION_BLOCK_ID,
                                    Abbv.get()) != FUNCTION_INST_RET_VOID_ABBREV)
-      llvm_unreachable("Unexpected abbrev ordering!");
+      llvm37_unreachable("Unexpected abbrev ordering!");
   }
   { // INST_RET abbrev for FUNCTION_BLOCK.
     IntrusiveRefCntPtr<BitCodeAbbrev> Abbv = new BitCodeAbbrev();
@@ -2341,14 +2341,14 @@ static void WriteBlockInfo(const ValueEnumerator &VE, BitstreamWriter &Stream) {
     Abbv->Add(BitCodeAbbrevOp(BitCodeAbbrevOp::VBR, 6)); // ValID
     if (Stream.EmitBlockInfoAbbrev(bitc::FUNCTION_BLOCK_ID,
                                    Abbv.get()) != FUNCTION_INST_RET_VAL_ABBREV)
-      llvm_unreachable("Unexpected abbrev ordering!");
+      llvm37_unreachable("Unexpected abbrev ordering!");
   }
   { // INST_UNREACHABLE abbrev for FUNCTION_BLOCK.
     IntrusiveRefCntPtr<BitCodeAbbrev> Abbv = new BitCodeAbbrev();
     Abbv->Add(BitCodeAbbrevOp(bitc::FUNC_CODE_INST_UNREACHABLE));
     if (Stream.EmitBlockInfoAbbrev(bitc::FUNCTION_BLOCK_ID,
                                    Abbv.get()) != FUNCTION_INST_UNREACHABLE_ABBREV)
-      llvm_unreachable("Unexpected abbrev ordering!");
+      llvm37_unreachable("Unexpected abbrev ordering!");
   }
   {
     IntrusiveRefCntPtr<BitCodeAbbrev> Abbv = new BitCodeAbbrev();
@@ -2360,7 +2360,7 @@ static void WriteBlockInfo(const ValueEnumerator &VE, BitstreamWriter &Stream) {
     Abbv->Add(BitCodeAbbrevOp(BitCodeAbbrevOp::VBR, 6));
     if (Stream.EmitBlockInfoAbbrev(bitc::FUNCTION_BLOCK_ID, Abbv.get()) !=
         FUNCTION_INST_GEP_ABBREV)
-      llvm_unreachable("Unexpected abbrev ordering!");
+      llvm37_unreachable("Unexpected abbrev ordering!");
   }
 
   Stream.ExitBlock();
@@ -2493,7 +2493,7 @@ static void EmitDarwinBCHeaderAndTrailer(SmallVectorImpl<char> &Buffer,
 
 /// WriteBitcodeToFile - Write the specified module to the specified output
 /// stream.
-void llvm::WriteBitcodeToFile(const Module *M, raw_ostream &Out,
+void llvm37::WriteBitcodeToFile(const Module *M, raw_ostream &Out,
                               bool ShouldPreserveUseListOrder) {
   SmallVector<char, 0> Buffer;
   Buffer.reserve(256*1024);

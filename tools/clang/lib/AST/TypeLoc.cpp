@@ -1,6 +1,6 @@
 //===--- TypeLoc.cpp - Type Source Info Wrapper -----------------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -15,11 +15,11 @@
 #include "clang/AST/ASTContext.h"
 #include "clang/AST/Expr.h"
 #include "clang/AST/TypeLocVisitor.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/raw_ostream.h"
 using namespace clang;
 
-static const unsigned TypeLocMaxDataAlign = llvm::alignOf<void *>();
+static const unsigned TypeLocMaxDataAlign = llvm37::alignOf<void *>();
 
 //===----------------------------------------------------------------------===//
 // TypeLoc Implementation
@@ -80,11 +80,11 @@ unsigned TypeLoc::getFullDataSizeForType(QualType Ty) {
   while (!TyLoc.isNull()) {
     unsigned Align = getLocalAlignmentForType(TyLoc.getType());
     MaxAlign = std::max(Align, MaxAlign);
-    Total = llvm::RoundUpToAlignment(Total, Align);
+    Total = llvm37::RoundUpToAlignment(Total, Align);
     Total += TypeSizer().Visit(TyLoc);
     TyLoc = TyLoc.getNextTypeLoc();
   }
-  Total = llvm::RoundUpToAlignment(Total, MaxAlign);
+  Total = llvm37::RoundUpToAlignment(Total, MaxAlign);
   return Total;
 }
 
@@ -150,10 +150,10 @@ void TypeLoc::copy(TypeLoc other) {
   // can memcpy because getFullDataSize() accurately reflects the
   // layout of the data.
   if (reinterpret_cast<uintptr_t>(Data)
-        == llvm::RoundUpToAlignment(reinterpret_cast<uintptr_t>(Data),
+        == llvm37::RoundUpToAlignment(reinterpret_cast<uintptr_t>(Data),
                                     TypeLocMaxDataAlign) &&
       reinterpret_cast<uintptr_t>(other.Data)
-        == llvm::RoundUpToAlignment(reinterpret_cast<uintptr_t>(other.Data),
+        == llvm37::RoundUpToAlignment(reinterpret_cast<uintptr_t>(other.Data),
                                     TypeLocMaxDataAlign)) {
     memcpy(Data, other.Data, getFullDataSize());
     return;
@@ -332,7 +332,7 @@ TypeSpecifierType BuiltinTypeLoc::getWrittenTypeSpec() const {
   case BuiltinType::Int8_4Packed:
   case BuiltinType::UInt8_4Packed:
   // HLSL Change Ends
-    llvm_unreachable("Builtin type needs extra local data!");
+    llvm37_unreachable("Builtin type needs extra local data!");
     // Fall through, if the impossible happens.
       
   case BuiltinType::NullPtr:
@@ -357,7 +357,7 @@ TypeSpecifierType BuiltinTypeLoc::getWrittenTypeSpec() const {
     return TST_unspecified;
   }
 
-  llvm_unreachable("Invalid BuiltinType Kind!");
+  llvm37_unreachable("Invalid BuiltinType Kind!");
 }
 
 TypeLoc TypeLoc::IgnoreParensImpl(TypeLoc TL) {
@@ -446,7 +446,7 @@ void TemplateSpecializationTypeLoc::initializeArgLocs(ASTContext &Context,
   for (unsigned i = 0, e = NumArgs; i != e; ++i) {
     switch (Args[i].getKind()) {
     case TemplateArgument::Null: 
-      llvm_unreachable("Impossible TemplateArgument");
+      llvm37_unreachable("Impossible TemplateArgument");
 
     case TemplateArgument::Integral:
     case TemplateArgument::Declaration:

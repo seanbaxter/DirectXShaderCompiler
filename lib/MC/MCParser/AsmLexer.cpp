@@ -1,6 +1,6 @@
 //===- AsmLexer.cpp - Lexer for Assembly Files ----------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,15 +11,15 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/MC/MCParser/AsmLexer.h"
-#include "llvm/MC/MCAsmInfo.h"
-#include "llvm/Support/MemoryBuffer.h"
-#include "llvm/Support/SMLoc.h"
+#include "llvm37/MC/MCParser/AsmLexer.h"
+#include "llvm37/MC/MCAsmInfo.h"
+#include "llvm37/Support/MemoryBuffer.h"
+#include "llvm37/Support/SMLoc.h"
 #include <cctype>
 #include <cerrno>
 #include <cstdio>
 #include <cstdlib>
-using namespace llvm;
+using namespace llvm37;
 
 AsmLexer::AsmLexer(const MCAsmInfo &MAI) : MAI(MAI) {
   CurPtr = nullptr;

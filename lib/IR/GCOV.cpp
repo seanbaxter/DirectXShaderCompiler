@@ -1,6 +1,6 @@
-//===- GCOV.cpp - LLVM coverage tool --------------------------------------===//
+//===- GCOV.cpp - LLVM37 coverage tool --------------------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -12,17 +12,17 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Support/GCOV.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/FileSystem.h"
-#include "llvm/Support/Format.h"
-#include "llvm/Support/MemoryObject.h"
-#include "llvm/Support/Path.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/Support/GCOV.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/FileSystem.h"
+#include "llvm37/Support/Format.h"
+#include "llvm37/Support/MemoryObject.h"
+#include "llvm37/Support/Path.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <algorithm>
 #include <system_error>
-using namespace llvm;
+using namespace llvm37;
 
 //===----------------------------------------------------------------------===//
 // GCOVFile implementation.
@@ -507,7 +507,7 @@ static std::string mangleCoveragePath(StringRef Filename, bool PreservePaths) {
   // This behaviour is defined by gcov in terms of text replacements, so it's
   // not likely to do anything useful on filesystems with different textual
   // conventions.
-  llvm::SmallString<256> Result("");
+  llvm37::SmallString<256> Result("");
   StringRef::iterator I, S, E;
   for (I = S = Filename.begin(), E = Filename.end(); I != E; ++I) {
     if (*I != '/')
@@ -552,14 +552,14 @@ std::string FileInfo::getCoveragePath(StringRef Filename,
 std::unique_ptr<raw_ostream>
 FileInfo::openCoveragePath(StringRef CoveragePath) {
   if (Options.NoOutput)
-    return llvm::make_unique<raw_null_ostream>();
+    return llvm37::make_unique<raw_null_ostream>();
 
   std::error_code EC;
-  auto OS = llvm::make_unique<raw_fd_ostream>(CoveragePath, EC,
+  auto OS = llvm37::make_unique<raw_fd_ostream>(CoveragePath, EC,
                                               sys::fs::F_Text);
   if (EC) {
     errs() << EC.message() << "\n";
-    return llvm::make_unique<raw_null_ostream>();
+    return llvm37::make_unique<raw_null_ostream>();
   }
   return std::move(OS);
 }

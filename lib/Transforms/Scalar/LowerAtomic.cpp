@@ -1,6 +1,6 @@
 //===- LowerAtomic.cpp - Lower atomic intrinsics --------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -12,12 +12,12 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Transforms/Scalar.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/IRBuilder.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/Pass.h"
-using namespace llvm;
+#include "llvm37/Transforms/Scalar.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/IRBuilder.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/Pass.h"
+using namespace llvm37;
 
 #define DEBUG_TYPE "loweratomic"
 
@@ -49,7 +49,7 @@ static bool LowerAtomicRMWInst(AtomicRMWInst *RMWI) {
   Value *Res = nullptr;
 
   switch (RMWI->getOperation()) {
-  default: llvm_unreachable("Unexpected RMW operation");
+  default: llvm37_unreachable("Unexpected RMW operation");
   case AtomicRMWInst::Xchg:
     Res = Val;
     break;
@@ -145,4 +145,4 @@ INITIALIZE_PASS(LowerAtomic, "loweratomic",
                 "Lower atomic intrinsics to non-atomic form",
                 false, false)
 
-Pass *llvm::createLowerAtomicPass() { return new LowerAtomic(); }
+Pass *llvm37::createLowerAtomicPass() { return new LowerAtomic(); }

@@ -12,9 +12,9 @@
 # "SECOND" are substituted with the names specified in the input variables.
 
 # Chop off cmake/modules/GetSVN.cmake 
-get_filename_component(LLVM_DIR "${CMAKE_SCRIPT_MODE_FILE}" PATH)
-get_filename_component(LLVM_DIR "${LLVM_DIR}" PATH)
-get_filename_component(LLVM_DIR "${LLVM_DIR}" PATH)
+get_filename_component(LLVM37_DIR "${CMAKE_SCRIPT_MODE_FILE}" PATH)
+get_filename_component(LLVM37_DIR "${LLVM37_DIR}" PATH)
+get_filename_component(LLVM37_DIR "${LLVM37_DIR}" PATH)
 
 # Handle strange terminals
 set(ENV{TERM} "dumb")

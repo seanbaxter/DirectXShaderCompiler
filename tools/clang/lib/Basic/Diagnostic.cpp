@@ -1,6 +1,6 @@
 //===--- Diagnostic.cpp - C Language Family Diagnostic Handling -----------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -16,11 +16,11 @@
 #include "clang/Basic/DiagnosticOptions.h"
 #include "clang/Basic/IdentifierTable.h"
 #include "clang/Basic/PartialDiagnostic.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/ADT/StringExtras.h"
-#include "llvm/Support/CrashRecoveryContext.h"
-#include "llvm/Support/Locale.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/ADT/StringExtras.h"
+#include "llvm37/Support/CrashRecoveryContext.h"
+#include "llvm37/Support/Locale.h"
+#include "llvm37/Support/raw_ostream.h"
 
 using namespace clang;
 
@@ -484,11 +484,11 @@ static void HandleOrdinalModifier(unsigned ValNo,
                                   SmallVectorImpl<char> &OutStr) {
   assert(ValNo != 0 && "ValNo must be strictly positive!");
 
-  llvm::raw_svector_ostream Out(OutStr);
+  llvm37::raw_svector_ostream Out(OutStr);
 
   // We could use text forms for the first N ordinals, but the numeric
   // forms are actually nicer in diagnostics because they stand out.
-  Out << ValNo << llvm::getOrdinalSuffix(ValNo);
+  Out << ValNo << llvm37::getOrdinalSuffix(ValNo);
 }
 
 
@@ -652,7 +652,7 @@ FormatDiagnostic(const char *DiagStr, const char *DiagEnd,
       getArgKind(0) == DiagnosticsEngine::ak_std_string) {
     const std::string &S = getArgStdStr(0);
     for (char c : S) {
-      if (llvm::sys::locale::isPrint(c) || c == '\t') {
+      if (llvm37::sys::locale::isPrint(c) || c == '\t') {
         OutStr.push_back(c);
       }
     }
@@ -789,7 +789,7 @@ FormatDiagnostic(const char *DiagStr, const char *DiagEnd,
         HandleOrdinalModifier((unsigned)Val, OutStr);
       } else {
         assert(ModifierLen == 0 && "Unknown integer modifier");
-        llvm::raw_svector_ostream(OutStr) << Val;
+        llvm37::raw_svector_ostream(OutStr) << Val;
       }
       break;
     }
@@ -807,7 +807,7 @@ FormatDiagnostic(const char *DiagStr, const char *DiagEnd,
         HandleOrdinalModifier(Val, OutStr);
       } else {
         assert(ModifierLen == 0 && "Unknown integer modifier");
-        llvm::raw_svector_ostream(OutStr) << Val;
+        llvm37::raw_svector_ostream(OutStr) << Val;
       }
       break;
     }
@@ -816,7 +816,7 @@ FormatDiagnostic(const char *DiagStr, const char *DiagEnd,
       tok::TokenKind Kind = static_cast<tok::TokenKind>(getRawArg(ArgNo));
       assert(ModifierLen == 0 && "No modifiers for token kinds yet");
 
-      llvm::raw_svector_ostream Out(OutStr);
+      llvm37::raw_svector_ostream Out(OutStr);
       if (const char *S = tok::getPunctuatorSpelling(Kind))
         // Quoted token spelling for punctuators.
         Out << '\'' << S << '\'';
@@ -845,7 +845,7 @@ FormatDiagnostic(const char *DiagStr, const char *DiagEnd,
         continue;
       }
 
-      llvm::raw_svector_ostream(OutStr) << '\'' << II->getName() << '\'';
+      llvm37::raw_svector_ostream(OutStr) << '\'' << II->getName() << '\'';
       break;
     }
     case DiagnosticsEngine::ak_qualtype:
@@ -1013,6 +1013,6 @@ PartialDiagnostic::StorageAllocator::~StorageAllocator() {
   // Don't assert if we are in a CrashRecovery context, as this invariant may
   // be invalidated during a crash.
   assert((NumFreeListEntries == NumCached || 
-          llvm::CrashRecoveryContext::isRecoveringFromCrash()) && 
+          llvm37::CrashRecoveryContext::isRecoveringFromCrash()) && 
          "A partial is on the lamb");
 }

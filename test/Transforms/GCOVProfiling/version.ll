@@ -12,9 +12,9 @@ define void @test() {
   ret void, !dbg !8
 }
 
-!llvm.gcov = !{!9}
-!llvm.dbg.cu = !{!0}
-!llvm.module.flags = !{!12}
+!llvm37.gcov = !{!9}
+!llvm37.dbg.cu = !{!0}
+!llvm37.module.flags = !{!12}
 
 !0 = !DICompileUnit(language: DW_LANG_C_plus_plus, producer: "clang version 3.3 (trunk 176994)", isOptimized: false, emissionKind: 0, file: !11, enums: !3, retainedTypes: !3, subprograms: !4, globals: !3)
 !2 = !DIFile(filename: "version", directory: "/usr/local/google/home/nlewycky")

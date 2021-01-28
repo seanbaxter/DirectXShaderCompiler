@@ -1,6 +1,6 @@
 //===-- TargetLowering.cpp - Implement the TargetLowering class -----------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,29 +11,29 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Target/TargetLowering.h"
-#include "llvm/ADT/BitVector.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/CodeGen/Analysis.h"
-#include "llvm/CodeGen/MachineFrameInfo.h"
-#include "llvm/CodeGen/MachineFunction.h"
-#include "llvm/CodeGen/MachineJumpTableInfo.h"
-#include "llvm/CodeGen/SelectionDAG.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/DerivedTypes.h"
-#include "llvm/IR/GlobalVariable.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/MC/MCAsmInfo.h"
-#include "llvm/MC/MCExpr.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/MathExtras.h"
-#include "llvm/Target/TargetLoweringObjectFile.h"
-#include "llvm/Target/TargetMachine.h"
-#include "llvm/Target/TargetRegisterInfo.h"
-#include "llvm/Target/TargetSubtargetInfo.h"
+#include "llvm37/Target/TargetLowering.h"
+#include "llvm37/ADT/BitVector.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/CodeGen/Analysis.h"
+#include "llvm37/CodeGen/MachineFrameInfo.h"
+#include "llvm37/CodeGen/MachineFunction.h"
+#include "llvm37/CodeGen/MachineJumpTableInfo.h"
+#include "llvm37/CodeGen/SelectionDAG.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/IR/DerivedTypes.h"
+#include "llvm37/IR/GlobalVariable.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/MC/MCAsmInfo.h"
+#include "llvm37/MC/MCExpr.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/MathExtras.h"
+#include "llvm37/Target/TargetLoweringObjectFile.h"
+#include "llvm37/Target/TargetMachine.h"
+#include "llvm37/Target/TargetRegisterInfo.h"
+#include "llvm37/Target/TargetSubtargetInfo.h"
 #include <cctype>
-using namespace llvm;
+using namespace llvm37;
 
 /// NOTE: The TargetMachine owns TLOF.
 TargetLowering::TargetLowering(const TargetMachine &tm)
@@ -195,7 +195,7 @@ void TargetLowering::softenSetCCOperands(SelectionDAG &DAG, EVT VT,
       LC2 = (VT == MVT::f32) ? RTLIB::OEQ_F32 :
             (VT == MVT::f64) ? RTLIB::OEQ_F64 : RTLIB::OEQ_F128;
       break;
-    default: llvm_unreachable("Do not know how to soften this setcc!");
+    default: llvm37_unreachable("Do not know how to soften this setcc!");
     }
   }
 
@@ -1212,7 +1212,7 @@ bool TargetLowering::isConstTrueVal(const SDNode *N) const {
     return CN->isAllOnesValue();
   }
 
-  llvm_unreachable("Invalid boolean contents");
+  llvm37_unreachable("Invalid boolean contents");
 }
 
 bool TargetLowering::isConstFalseVal(const SDNode *N) const {
@@ -1789,7 +1789,7 @@ TargetLowering::SimplifySetCC(EVT VT, SDValue N0, SDValue N1,
     if (CFP->getValueAPF().isNaN()) {
       // If an operand is known to be a nan, we can fold it.
       switch (ISD::getUnorderedFlavor(Cond)) {
-      default: llvm_unreachable("Unknown flavor!");
+      default: llvm37_unreachable("Unknown flavor!");
       case 0:  // Known false.
         return DAG.getConstant(0, dl, VT);
       case 1:  // Known true.
@@ -2025,7 +2025,7 @@ TargetLowering::SimplifySetCC(EVT VT, SDValue N0, SDValue N1,
   SDValue Temp;
   if (N0.getValueType() == MVT::i1 && foldBooleans) {
     switch (Cond) {
-    default: llvm_unreachable("Unknown integer setcc!");
+    default: llvm37_unreachable("Unknown integer setcc!");
     case ISD::SETEQ:  // X == Y  -> ~(X^Y)
       Temp = DAG.getNode(ISD::XOR, dl, MVT::i1, N0, N1);
       N0 = DAG.getNOT(dl, Temp, MVT::i1);
@@ -2359,9 +2359,9 @@ TargetLowering::ParseConstraints(const DataLayout &DL,
     }
 
     if (OpInfo.CallOperandVal) {
-      llvm::Type *OpTy = OpInfo.CallOperandVal->getType();
+      llvm37::Type *OpTy = OpInfo.CallOperandVal->getType();
       if (OpInfo.isIndirect) {
-        llvm::PointerType *PtrTy = dyn_cast<PointerType>(OpTy);
+        llvm37::PointerType *PtrTy = dyn_cast<PointerType>(OpTy);
         if (!PtrTy)
           report_fatal_error("Indirect operand for inline asm not a pointer!");
         OpTy = PtrTy->getElementType();
@@ -2505,7 +2505,7 @@ static unsigned getConstraintGenerality(TargetLowering::ConstraintType CT) {
   case TargetLowering::C_Memory:
     return 3;
   }
-  llvm_unreachable("Invalid constraint type");
+  llvm37_unreachable("Invalid constraint type");
 }
 
 /// Examine constraint type and operand type and determine a weight value.
@@ -2986,7 +2986,7 @@ bool TargetLowering::expandFP_TO_SINT(SDNode *Node, SDValue &Result,
 
   // Expand f32 -> i64 conversion
   // This algorithm comes from compiler-rt's implementation of fixsfdi:
-  // https://github.com/llvm-mirror/compiler-rt/blob/master/lib/builtins/fixsfdi.c
+  // https://github.com/llvm37-mirror/compiler-rt/blob/master/lib/builtins/fixsfdi.c
   EVT IntVT = EVT::getIntegerVT(*DAG.getContext(),
                                 VT.getSizeInBits());
   SDValue ExponentMask = DAG.getConstant(0x7F800000, dl, IntVT);

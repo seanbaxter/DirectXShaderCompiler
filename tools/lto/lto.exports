@@ -40,8 +40,8 @@ lto_codegen_optimize
 lto_codegen_compile_optimized
 lto_codegen_set_should_internalize
 lto_codegen_set_should_embed_uselists
-LLVMCreateDisasm
-LLVMCreateDisasmCPU
-LLVMDisasmDispose
-LLVMDisasmInstruction
-LLVMSetDisasmOptions
+LLVM37CreateDisasm
+LLVM37CreateDisasmCPU
+LLVM37DisasmDispose
+LLVM37DisasmInstruction
+LLVM37SetDisasmOptions

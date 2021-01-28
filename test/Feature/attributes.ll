@@ -1,5 +1,5 @@
-; RUN: llvm-as < %s | llvm-dis > %t1.ll
-; RUN: llvm-as %t1.ll -o - | llvm-dis > %t2.ll
+; RUN: llvm37-as < %s | llvm37-dis > %t1.ll
+; RUN: llvm37-as %t1.ll -o - | llvm37-dis > %t2.ll
 ; RUN: diff %t1.ll %t2.ll
 
 @.str = private unnamed_addr constant [14 x i8] c"hello world!\0A\00", align 1

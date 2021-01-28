@@ -1,6 +1,6 @@
 //===- ConstantProp.cpp - Code to perform Simple Constant Propagation -----===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -18,16 +18,16 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Transforms/Scalar.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/Analysis/ConstantFolding.h"
-#include "llvm/IR/Constant.h"
-#include "llvm/IR/InstIterator.h"
-#include "llvm/IR/Instruction.h"
-#include "llvm/Pass.h"
-#include "llvm/Analysis/TargetLibraryInfo.h"
+#include "llvm37/Transforms/Scalar.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/Analysis/ConstantFolding.h"
+#include "llvm37/IR/Constant.h"
+#include "llvm37/IR/InstIterator.h"
+#include "llvm37/IR/Instruction.h"
+#include "llvm37/Pass.h"
+#include "llvm37/Analysis/TargetLibraryInfo.h"
 #include <set>
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "constprop"
 
@@ -56,7 +56,7 @@ INITIALIZE_PASS_DEPENDENCY(TargetLibraryInfoWrapperPass)
 INITIALIZE_PASS_END(ConstantPropagation, "constprop",
                 "Simple constant propagation", false, false)
 
-FunctionPass *llvm::createConstantPropagationPass() {
+FunctionPass *llvm37::createConstantPropagationPass() {
   return new ConstantPropagation();
 }
 

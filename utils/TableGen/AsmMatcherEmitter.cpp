@@ -1,6 +1,6 @@
 //===- AsmMatcherEmitter.cpp - Generate an assembly matcher ---------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -97,26 +97,26 @@
 //===----------------------------------------------------------------------===//
 
 #include "CodeGenTarget.h"
-#include "llvm/ADT/PointerUnion.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/SmallPtrSet.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/ADT/StringExtras.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/TableGen/Error.h"
-#include "llvm/TableGen/Record.h"
-#include "llvm/TableGen/StringMatcher.h"
-#include "llvm/TableGen/StringToOffsetTable.h"
-#include "llvm/TableGen/TableGenBackend.h"
+#include "llvm37/ADT/PointerUnion.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/SmallPtrSet.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/ADT/StringExtras.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/TableGen/Error.h"
+#include "llvm37/TableGen/Record.h"
+#include "llvm37/TableGen/StringMatcher.h"
+#include "llvm37/TableGen/StringToOffsetTable.h"
+#include "llvm37/TableGen/TableGenBackend.h"
 #include <cassert>
 #include <cctype>
 #include <map>
 #include <set>
 #include <sstream>
 #include <forward_list>
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "asm-matcher-emitter"
 
@@ -279,7 +279,7 @@ public:
 
     switch (Kind) {
     case Invalid:
-      llvm_unreachable("Invalid kind!");
+      llvm37_unreachable("Invalid kind!");
 
     default:
       // This class precedes the RHS if it is a proper subset of the RHS.
@@ -1395,7 +1395,7 @@ void AsmMatcherInfo::buildInfo() {
     std::vector<Record*> AllInstAliases =
       Records.getAllDerivedDefinitions("InstAlias");
     for (unsigned i = 0, e = AllInstAliases.size(); i != e; ++i) {
-      auto Alias = llvm::make_unique<CodeGenInstAlias>(AllInstAliases[i],
+      auto Alias = llvm37::make_unique<CodeGenInstAlias>(AllInstAliases[i],
                                                        AsmVariantNo, Target);
 
       // If the tblgen -match-prefix option is specified (for tblgen hackers),
@@ -1741,7 +1741,7 @@ static void emitConvertFuncs(CodeGenTarget &Target, StringRef ClassName,
         << "  Inst.setOpcode(Opcode);\n"
         << "  for (const uint8_t *p = Converter; *p; p+= 2) {\n"
         << "    switch (*p) {\n"
-        << "    default: llvm_unreachable(\"invalid conversion entry!\");\n"
+        << "    default: llvm37_unreachable(\"invalid conversion entry!\");\n"
         << "    case CVT_Reg:\n"
         << "      static_cast<" << TargetOperandClass
         << "&>(*Operands[*(p + 1)]).addRegOperands(Inst, 1);\n"
@@ -1762,7 +1762,7 @@ static void emitConvertFuncs(CodeGenTarget &Target, StringRef ClassName,
        << "  const uint8_t *Converter = ConversionTable[Kind];\n"
        << "  for (const uint8_t *p = Converter; *p; p+= 2) {\n"
        << "    switch (*p) {\n"
-       << "    default: llvm_unreachable(\"invalid conversion entry!\");\n"
+       << "    default: llvm37_unreachable(\"invalid conversion entry!\");\n"
        << "    case CVT_Reg:\n"
        << "      Operands[*(p + 1)]->setMCOperandNum(NumMCOperands);\n"
        << "      Operands[*(p + 1)]->setConstraint(\"r\");\n"
@@ -2870,7 +2870,7 @@ void AsmMatcherEmitter::run(raw_ostream &OS) {
   OS << "  // Find the appropriate table for this asm variant.\n";
   OS << "  const MatchEntry *Start, *End;\n";
   OS << "  switch (VariantID) {\n";
-  OS << "  default: llvm_unreachable(\"invalid variant!\");\n";
+  OS << "  default: llvm37_unreachable(\"invalid variant!\");\n";
   for (unsigned VC = 0; VC != VariantCount; ++VC) {
     Record *AsmVariant = Target.getAsmParserVariant(VC);
     int AsmVariantNo = AsmVariant->getValueAsInt("Variant");
@@ -2923,7 +2923,7 @@ void AsmMatcherEmitter::run(raw_ostream &OS) {
   OS << "  // Find the appropriate table for this asm variant.\n";
   OS << "  const MatchEntry *Start, *End;\n";
   OS << "  switch (VariantID) {\n";
-  OS << "  default: llvm_unreachable(\"invalid variant!\");\n";
+  OS << "  default: llvm37_unreachable(\"invalid variant!\");\n";
   for (unsigned VC = 0; VC != VariantCount; ++VC) {
     Record *AsmVariant = Target.getAsmParserVariant(VC);
     int AsmVariantNo = AsmVariant->getValueAsInt("Variant");
@@ -3054,11 +3054,11 @@ void AsmMatcherEmitter::run(raw_ostream &OS) {
   OS << "#endif // GET_MATCHER_IMPLEMENTATION\n\n";
 }
 
-namespace llvm {
+namespace llvm37 {
 
 void EmitAsmMatcher(RecordKeeper &RK, raw_ostream &OS) {
   emitSourceFileHeader("Assembly Matcher Source Fragment", OS);
   AsmMatcherEmitter(RK).run(OS);
 }
 
-} // End llvm namespace
+} // End llvm37 namespace

@@ -1,18 +1,18 @@
 //===- LineIterator.cpp - Unit tests --------------------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Support/LineIterator.h"
-#include "llvm/Support/MemoryBuffer.h"
+#include "llvm37/Support/LineIterator.h"
+#include "llvm37/Support/MemoryBuffer.h"
 #include "gtest/gtest.h"
 
-using namespace llvm;
-using namespace llvm::sys;
+using namespace llvm37;
+using namespace llvm37::sys;
 
 namespace {
 

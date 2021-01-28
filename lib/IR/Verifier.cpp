@@ -1,6 +1,6 @@
 //===-- Verifier.cpp - Implement the Module Verifier -----------------------==//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -45,38 +45,38 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/IR/Verifier.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/SetVector.h"
-#include "llvm/ADT/SmallPtrSet.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/ADT/StringExtras.h"
-#include "llvm/IR/CFG.h"
-#include "llvm/IR/CallSite.h"
-#include "llvm/IR/CallingConv.h"
-#include "llvm/IR/ConstantRange.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/DebugInfo.h"
-#include "llvm/IR/DerivedTypes.h"
-#include "llvm/IR/Dominators.h"
-#include "llvm/IR/InlineAsm.h"
-#include "llvm/IR/InstIterator.h"
-#include "llvm/IR/InstVisitor.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Metadata.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/PassManager.h"
-#include "llvm/IR/Statepoint.h"
-#include "llvm/Pass.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/IR/Verifier.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/SetVector.h"
+#include "llvm37/ADT/SmallPtrSet.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/ADT/StringExtras.h"
+#include "llvm37/IR/CFG.h"
+#include "llvm37/IR/CallSite.h"
+#include "llvm37/IR/CallingConv.h"
+#include "llvm37/IR/ConstantRange.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/IR/DebugInfo.h"
+#include "llvm37/IR/DerivedTypes.h"
+#include "llvm37/IR/Dominators.h"
+#include "llvm37/IR/InlineAsm.h"
+#include "llvm37/IR/InstIterator.h"
+#include "llvm37/IR/InstVisitor.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/Metadata.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/PassManager.h"
+#include "llvm37/IR/Statepoint.h"
+#include "llvm37/Pass.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <algorithm>
 #include <cstdarg>
-using namespace llvm;
+using namespace llvm37;
 
 #if 0 // HLSL Change Starts - option pending
 static cl::opt<bool> VerifyDebugInfo("verify-debug-info", cl::init(true));
@@ -170,7 +170,7 @@ public:
 class Verifier : public InstVisitor<Verifier>, VerifierSupport {
   friend class InstVisitor<Verifier>;
 
-  LLVMContext *Context;
+  LLVM37Context *Context;
   DominatorTree DT;
 
   /// \brief When verifying a basic block, keep track of all of the
@@ -186,12 +186,12 @@ class Verifier : public InstVisitor<Verifier>, VerifierSupport {
   /// \brief Track unresolved string-based type references.
   SmallDenseMap<const MDString *, const MDNode *, 32> UnresolvedTypeRefs;
 
-  /// \brief Whether we've seen a call to @llvm.localescape in this function
+  /// \brief Whether we've seen a call to @llvm37.localescape in this function
   /// already.
   bool SawFrameEscape;
 
-  /// Stores the count of how many objects were passed to llvm.localescape for a
-  /// given function and the largest index passed to llvm.localrecover.
+  /// Stores the count of how many objects were passed to llvm37.localescape for a
+  /// given function and the largest index passed to llvm37.localrecover.
   DenseMap<Function *, std::pair<unsigned, unsigned>> FrameEscapeInfo;
 
 public:
@@ -302,7 +302,7 @@ private:
 
   template <class Ty> bool isValidMetadataArray(const MDTuple &N);
 #define HANDLE_SPECIALIZED_MDNODE_LEAF(CLASS) void visit##CLASS(const CLASS &N);
-#include "llvm/IR/Metadata.def"
+#include "llvm37/IR/Metadata.def"
   void visitDIScope(const DIScope &N);
   void visitDIDerivedTypeBase(const DIDerivedTypeBase &N);
   void visitDIVariable(const DIVariable &N);
@@ -476,7 +476,7 @@ void Verifier::visitGlobalVariable(const GlobalVariable &GV) {
       StructType *STy = dyn_cast<StructType>(ATy->getElementType());
       PointerType *FuncPtrTy =
           FunctionType::get(Type::getVoidTy(*Context), false)->getPointerTo();
-      // FIXME: Reject the 2-field form in LLVM 4.0.
+      // FIXME: Reject the 2-field form in LLVM37 4.0.
       Assert(STy &&
                  (STy->getNumElements() == 2 || STy->getNumElements() == 3) &&
                  STy->getTypeAtIndex(0u)->isIntegerTy(32) &&
@@ -508,8 +508,8 @@ void Verifier::visitGlobalVariable(const GlobalVariable &GV) {
           Value *V = Init->getOperand(i)->stripPointerCastsNoFollowAliases();
           Assert(isa<GlobalVariable>(V) || isa<Function>(V) ||
                      isa<GlobalAlias>(V),
-                 "invalid llvm.used member", V);
-          Assert(V->hasName(), "members of llvm.used must be named", V);
+                 "invalid llvm37.used member", V);
+          Assert(V->hasName(), "members of llvm37.used must be named", V);
         }
       }
     }
@@ -625,14 +625,14 @@ void Verifier::visitMDNode(const MDNode &MD) {
 
   switch (MD.getMetadataID()) {
   default:
-    llvm_unreachable("Invalid MDNode subclass");
+    llvm37_unreachable("Invalid MDNode subclass");
   case Metadata::MDTupleKind:
     break;
 #define HANDLE_SPECIALIZED_MDNODE_LEAF(CLASS)                                  \
   case Metadata::CLASS##Kind:                                                  \
     visit##CLASS(cast<CLASS>(MD));                                             \
     break;
-#include "llvm/IR/Metadata.def"
+#include "llvm37/IR/Metadata.def"
   }
 
   for (unsigned i = 0, e = MD.getNumOperands(); i != e; ++i) {
@@ -1119,14 +1119,14 @@ void Verifier::visitModuleIdents(const Module &M) {
   if (!Idents) 
     return;
   
-  // llvm.ident takes a list of metadata entry. Each entry has only one string.
-  // Scan each llvm.ident entry and make sure that this requirement is met.
+  // llvm37.ident takes a list of metadata entry. Each entry has only one string.
+  // Scan each llvm37.ident entry and make sure that this requirement is met.
   for (unsigned i = 0, e = Idents->getNumOperands(); i != e; ++i) {
     const MDNode *N = Idents->getOperand(i);
     Assert(N->getNumOperands() == 1,
-           "incorrect number of operands in llvm.ident metadata", N);
+           "incorrect number of operands in llvm37.ident metadata", N);
     Assert(dyn_cast_or_null<MDString>(N->getOperand(0)),
-           ("invalid value for llvm.ident metadata entry operand"
+           ("invalid value for llvm37.ident metadata entry operand"
             "(the operand should be a string)"),
            N->getOperand(0));
   } 
@@ -1479,7 +1479,7 @@ void Verifier::VerifyFunctionMetadata(
     return;
 
   for (unsigned i = 0; i < MDs.size(); i++) {
-    if (MDs[i].first == LLVMContext::MD_prof) {
+    if (MDs[i].first == LLVM37Context::MD_prof) {
       MDNode *MD = MDs[i].second;
       Assert(MD->getNumOperands() == 2,
              "!prof annotations should have exactly 2 operands", MD);
@@ -1673,8 +1673,8 @@ void Verifier::verifyFrameRecoverIndices() {
     unsigned EscapedObjectCount = Counts.second.first;
     unsigned MaxRecoveredIndex = Counts.second.second;
     Assert(MaxRecoveredIndex <= EscapedObjectCount,
-           "all indices passed to llvm.localrecover must be less than the "
-           "number of arguments passed ot llvm.localescape in the parent "
+           "all indices passed to llvm37.localrecover must be less than the "
+           "number of arguments passed ot llvm37.localescape in the parent "
            "function",
            F);
   }
@@ -1733,7 +1733,7 @@ void Verifier::visitFunction(const Function &F) {
     break;
   }
 
-  bool isLLVMdotName = F.getName().size() >= 5 &&
+  bool isLLVM37dotName = F.getName().size() >= 5 &&
                        F.getName().substr(0, 5) == "llvm.";
 
   // Check that the argument values match the function type for this function...
@@ -1745,7 +1745,7 @@ void Verifier::visitFunction(const Function &F) {
            FT->getParamType(i));
     Assert(I->getType()->isFirstClassType(),
            "Function arguments must have first-class types!", I);
-    if (!isLLVMdotName)
+    if (!isLLVM37dotName)
       Assert(!I->getType()->isMetadataTy(),
              "Function takes metadata but isn't an intrinsic", I, &F);
   }
@@ -1770,7 +1770,7 @@ void Verifier::visitFunction(const Function &F) {
   } else {
     // Verify that this function (which has a body) is not named "llvm.*".  It
     // is not legal to define intrinsics.
-    Assert(!isLLVMdotName, "llvm intrinsics cannot be defined!", &F);
+    Assert(!isLLVM37dotName, "llvm37 intrinsics cannot be defined!", &F);
 
     // Check the entry node
     const BasicBlock *Entry = &F.getEntryBlock();
@@ -2475,7 +2475,7 @@ void Verifier::visitBinaryOperator(BinaryOperator &B) {
            "Shift return type must be same as operands!", &B);
     break;
   default:
-    llvm_unreachable("Unknown BinaryOperator opcode!");
+    llvm37_unreachable("Unknown BinaryOperator opcode!");
   }
 
   visitInstruction(B);
@@ -2577,7 +2577,7 @@ static bool isContiguous(const ConstantRange &A, const ConstantRange &B) {
 void Verifier::visitRangeMetadata(Instruction& I,
                                   MDNode* Range, Type* Ty) {
   assert(Range &&
-         Range == I.getMetadata(LLVMContext::MD_range) &&
+         Range == I.getMetadata(LLVM37Context::MD_range) &&
          "precondition violation");
 
   unsigned NumOperands = Range->getNumOperands();
@@ -2944,7 +2944,7 @@ void Verifier::visitInstruction(Instruction &I) {
     }
   }
 
-  if (MDNode *MD = I.getMetadata(LLVMContext::MD_fpmath)) {
+  if (MDNode *MD = I.getMetadata(LLVM37Context::MD_fpmath)) {
     Assert(I.getType()->isFPOrFPVectorTy(),
            "fpmath requires a floating point result!", &I);
     Assert(MD->getNumOperands() == 1, "fpmath takes one operand!", &I);
@@ -2958,13 +2958,13 @@ void Verifier::visitInstruction(Instruction &I) {
     }
   }
 
-  if (MDNode *Range = I.getMetadata(LLVMContext::MD_range)) {
+  if (MDNode *Range = I.getMetadata(LLVM37Context::MD_range)) {
     Assert(isa<LoadInst>(I) || isa<CallInst>(I) || isa<InvokeInst>(I),
            "Ranges are only for loads, calls and invokes!", &I);
     visitRangeMetadata(I, Range, I.getType());
   }
 
-  if (I.getMetadata(LLVMContext::MD_nonnull)) {
+  if (I.getMetadata(LLVM37Context::MD_nonnull)) {
     Assert(I.getType()->isPointerTy(), "nonnull applies only to pointer types",
            &I);
     Assert(isa<LoadInst>(I),
@@ -3045,7 +3045,7 @@ bool Verifier::VerifyIntrinsicType(Type *Ty,
     case IITDescriptor::AK_AnyVector:  return !isa<VectorType>(Ty);
     case IITDescriptor::AK_AnyPointer: return !isa<PointerType>(Ty);
     }
-    llvm_unreachable("all argument kinds not covered");
+    llvm37_unreachable("all argument kinds not covered");
 
   case IITDescriptor::ExtendArgument: {
     // This may only be used when referring to a previous vector argument.
@@ -3121,7 +3121,7 @@ bool Verifier::VerifyIntrinsicType(Type *Ty,
            ReferenceType->getVectorElementType();
   }
   }
-  llvm_unreachable("unhandled");
+  llvm37_unreachable("unhandled");
 }
 
 /// \brief Verify if the intrinsic has variable arguments.
@@ -3204,19 +3204,19 @@ void Verifier::visitIntrinsicCallSite(Intrinsic::ID ID, CallSite CS) {
   switch (ID) {
   default:
     break;
-  case Intrinsic::ctlz:  // llvm.ctlz
-  case Intrinsic::cttz:  // llvm.cttz
+  case Intrinsic::ctlz:  // llvm37.ctlz
+  case Intrinsic::cttz:  // llvm37.cttz
     Assert(isa<ConstantInt>(CS.getArgOperand(1)),
            "is_zero_undef argument of bit counting intrinsics must be a "
            "constant int",
            CS);
     break;
-  case Intrinsic::dbg_declare: // llvm.dbg.declare
+  case Intrinsic::dbg_declare: // llvm37.dbg.declare
     Assert(isa<MetadataAsValue>(CS.getArgOperand(0)),
-           "invalid llvm.dbg.declare intrinsic call 1", CS);
+           "invalid llvm37.dbg.declare intrinsic call 1", CS);
     visitDbgIntrinsic("declare", cast<DbgDeclareInst>(*CS.getInstruction()));
     break;
-  case Intrinsic::dbg_value: // llvm.dbg.value
+  case Intrinsic::dbg_value: // llvm37.dbg.value
     visitDbgIntrinsic("value", cast<DbgValueInst>(*CS.getInstruction()));
     break;
   case Intrinsic::memcpy:
@@ -3264,7 +3264,7 @@ void Verifier::visitIntrinsicCallSite(Intrinsic::ID ID, CallSite CS) {
                isa<ConstantInt>(CS.getArgOperand(2)) &&
                cast<ConstantInt>(CS.getArgOperand(1))->getZExtValue() < 2 &&
                cast<ConstantInt>(CS.getArgOperand(2))->getZExtValue() < 4,
-           "invalid arguments to llvm.prefetch", CS);
+           "invalid arguments to llvm37.prefetch", CS);
     break;
   case Intrinsic::stackprotector:
     Assert(isa<AllocaInst>(CS.getArgOperand(1)->stripPointerCasts()),
@@ -3287,7 +3287,7 @@ void Verifier::visitIntrinsicCallSite(Intrinsic::ID ID, CallSite CS) {
     Assert(BB == &BB->getParent()->front(),
            "llvm.localescape used outside of entry block", CS);
     Assert(!SawFrameEscape,
-           "multiple calls to llvm.localescape in one function", CS);
+           "multiple calls to llvm37.localescape in one function", CS);
     for (Value *Arg : CS.args()) {
       if (isa<ConstantPointerNull>(Arg))
         continue; // Null values are allowed as placeholders.
@@ -3307,7 +3307,7 @@ void Verifier::visitIntrinsicCallSite(Intrinsic::ID ID, CallSite CS) {
            "argument must be function defined in this module",
            CS);
     auto *IdxArg = dyn_cast<ConstantInt>(CS.getArgOperand(2));
-    Assert(IdxArg, "idx argument of llvm.localrecover must be a constant int",
+    Assert(IdxArg, "idx argument of llvm37.localrecover must be a constant int",
            CS);
     auto &Entry = FrameEscapeInfo[Fn];
     Entry.second = unsigned(
@@ -3477,12 +3477,12 @@ void Verifier::visitDbgIntrinsic(StringRef Kind, DbgIntrinsicTy &DII) {
   auto *MD = cast<MetadataAsValue>(DII.getArgOperand(0))->getMetadata();
   Assert(isa<ValueAsMetadata>(MD) ||
              (isa<MDNode>(MD) && !cast<MDNode>(MD)->getNumOperands()),
-         "invalid llvm.dbg." + Kind + " intrinsic address/value", &DII, MD);
+         "invalid llvm37.dbg." + Kind + " intrinsic address/value", &DII, MD);
   Assert(isa<DILocalVariable>(DII.getRawVariable()),
-         "invalid llvm.dbg." + Kind + " intrinsic variable", &DII,
+         "invalid llvm37.dbg." + Kind + " intrinsic variable", &DII,
          DII.getRawVariable());
   Assert(isa<DIExpression>(DII.getRawExpression()),
-         "invalid llvm.dbg." + Kind + " intrinsic expression", &DII,
+         "invalid llvm37.dbg." + Kind + " intrinsic expression", &DII,
          DII.getRawExpression());
 
   // Ignore broken !dbg attachments; they're checked elsewhere.
@@ -3504,7 +3504,7 @@ void Verifier::visitDbgIntrinsic(StringRef Kind, DbgIntrinsicTy &DII) {
   if (!VarSP || !LocSP)
     return; // Broken scope chains are checked elsewhere.
 
-  Assert(VarSP == LocSP, "mismatched subprogram between llvm.dbg." + Kind +
+  Assert(VarSP == LocSP, "mismatched subprogram between llvm37.dbg." + Kind +
                              " variable and !dbg attachment",
          &DII, BB, F, Var, Var->getScope()->getSubprogram(), Loc,
          Loc->getScope()->getSubprogram());
@@ -3638,7 +3638,7 @@ void Verifier::verifyTypeRefs() {
 //  Implement the public interfaces to this file...
 //===----------------------------------------------------------------------===//
 
-bool llvm::verifyFunction(const Function &f, raw_ostream *OS) {
+bool llvm37::verifyFunction(const Function &f, raw_ostream *OS) {
   Function &F = const_cast<Function &>(f);
   assert(!F.isDeclaration() && "Cannot verify external functions");
 
@@ -3650,7 +3650,7 @@ bool llvm::verifyFunction(const Function &f, raw_ostream *OS) {
   return !V.verify(F);
 }
 
-bool llvm::verifyModule(const Module &M, raw_ostream *OS) {
+bool llvm37::verifyModule(const Module &M, raw_ostream *OS) {
   raw_null_ostream NullStr;
   Verifier V(OS ? *OS : NullStr);
 
@@ -3703,7 +3703,7 @@ struct VerifierLegacyPass : public FunctionPass {
 char VerifierLegacyPass::ID = 0;
 INITIALIZE_PASS(VerifierLegacyPass, "verify", "Module Verifier", false, false)
 
-FunctionPass *llvm::createVerifierPass(bool FatalErrors) {
+FunctionPass *llvm37::createVerifierPass(bool FatalErrors) {
   return new VerifierLegacyPass(FatalErrors);
 }
 

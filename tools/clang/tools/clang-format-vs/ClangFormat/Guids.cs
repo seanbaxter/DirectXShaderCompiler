@@ -1,7 +1,7 @@
 ﻿
 using System;
 
-namespace LLVM.ClangFormat
+namespace LLVM37.ClangFormat
 {
     static class GuidList
     {

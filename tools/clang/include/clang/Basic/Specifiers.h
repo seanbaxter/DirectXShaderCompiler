@@ -1,6 +1,6 @@
 //===--- Specifiers.h - Declaration and Type Specifiers ---------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -13,12 +13,12 @@
 ///
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_BASIC_SPECIFIERS_H
-#define LLVM_CLANG_BASIC_SPECIFIERS_H
+#ifndef LLVM37_CLANG_BASIC_SPECIFIERS_H
+#define LLVM37_CLANG_BASIC_SPECIFIERS_H
 
-#include "llvm/ADT/StringRef.h"
-#include "llvm/Support/DataTypes.h"
-#include "llvm/ADT/ArrayRef.h" // HLSL Change
+#include "llvm37/ADT/StringRef.h"
+#include "llvm37/Support/DataTypes.h"
+#include "llvm37/ADT/ArrayRef.h" // HLSL Change
 
 namespace clang {
   /// \brief Specifies the width of a type, e.g., short, long, or long long.
@@ -268,7 +268,7 @@ namespace clang {
   };
 
   /// Retrieve the spelling of the given nullability kind.
-  llvm::StringRef getNullabilitySpelling(NullabilityKind kind,
+  llvm37::StringRef getNullabilitySpelling(NullabilityKind kind,
                                          bool isContextSensitive = false);
 } // end namespace clang
 
@@ -310,4 +310,4 @@ namespace hlsl {
 
 // HLSL Change Ends
 
-#endif // LLVM_CLANG_BASIC_SPECIFIERS_H
+#endif // LLVM37_CLANG_BASIC_SPECIFIERS_H

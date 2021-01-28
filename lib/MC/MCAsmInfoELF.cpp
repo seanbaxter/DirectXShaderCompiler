@@ -1,6 +1,6 @@
 //===-- MCAsmInfoELF.cpp - ELF asm properties -------------------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -12,11 +12,11 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/MC/MCAsmInfoELF.h"
-#include "llvm/MC/MCContext.h"
-#include "llvm/MC/MCSectionELF.h"
-#include "llvm/Support/ELF.h"
-using namespace llvm;
+#include "llvm37/MC/MCAsmInfoELF.h"
+#include "llvm37/MC/MCContext.h"
+#include "llvm37/MC/MCSectionELF.h"
+#include "llvm37/Support/ELF.h"
+using namespace llvm37;
 
 void MCAsmInfoELF::anchor() { }
 

@@ -22,12 +22,12 @@ function(get_ext_project_build_command out_var target)
   endif()
 endfunction()
 
-set(COMPILER_RT_SRC_ROOT ${LLVM_MAIN_SRC_DIR}/projects/compiler-rt)
-if(LLVM_BUILD_EXTERNAL_COMPILER_RT AND EXISTS ${COMPILER_RT_SRC_ROOT}/)
+set(COMPILER_RT_SRC_ROOT ${LLVM37_MAIN_SRC_DIR}/projects/compiler-rt)
+if(LLVM37_BUILD_EXTERNAL_COMPILER_RT AND EXISTS ${COMPILER_RT_SRC_ROOT}/)
   if(CMAKE_GENERATOR MATCHES "Ninja")
     message(FATAL_ERROR
             "Ninja generator can't build compiler-rt as ExternalProject."
-            "Unset LLVM_BUILD_EXTERNAL_COMPILER_RT, or don't use Ninja."
+            "Unset LLVM37_BUILD_EXTERNAL_COMPILER_RT, or don't use Ninja."
             "See http://www.cmake.org/Bug/view.php?id=14771")
   endif()
 
@@ -37,14 +37,14 @@ if(LLVM_BUILD_EXTERNAL_COMPILER_RT AND EXISTS ${COMPILER_RT_SRC_ROOT}/)
   ExternalProject_Add(compiler-rt
     PREFIX ${COMPILER_RT_PREFIX}
     SOURCE_DIR ${COMPILER_RT_SRC_ROOT}
-    CMAKE_ARGS -DCMAKE_C_COMPILER=${LLVM_RUNTIME_OUTPUT_INTDIR}/clang
-               -DCMAKE_CXX_COMPILER=${LLVM_RUNTIME_OUTPUT_INTDIR}/clang++
+    CMAKE_ARGS -DCMAKE_C_COMPILER=${LLVM37_RUNTIME_OUTPUT_INTDIR}/clang
+               -DCMAKE_CXX_COMPILER=${LLVM37_RUNTIME_OUTPUT_INTDIR}/clang++
                -DCMAKE_BUILD_TYPE=Release
-               -DLLVM_CONFIG_PATH=${LLVM_RUNTIME_OUTPUT_INTDIR}/llvm-config
-               -DCOMPILER_RT_OUTPUT_DIR=${LLVM_LIBRARY_OUTPUT_INTDIR}/clang/${CLANG_VERSION}
-               -DCOMPILER_RT_EXEC_OUTPUT_DIR=${LLVM_RUNTIME_OUTPUT_INTDIR}
-               -DCOMPILER_RT_INSTALL_PATH=lib${LLVM_LIBDIR_SUFFIX}/clang/${CLANG_VERSION}
-               -DCOMPILER_RT_INCLUDE_TESTS=${LLVM_INCLUDE_TESTS}
+               -DLLVM37_CONFIG_PATH=${LLVM37_RUNTIME_OUTPUT_INTDIR}/llvm-config
+               -DCOMPILER_RT_OUTPUT_DIR=${LLVM37_LIBRARY_OUTPUT_INTDIR}/clang/${CLANG_VERSION}
+               -DCOMPILER_RT_EXEC_OUTPUT_DIR=${LLVM37_RUNTIME_OUTPUT_INTDIR}
+               -DCOMPILER_RT_INSTALL_PATH=lib${LLVM37_LIBDIR_SUFFIX}/clang/${CLANG_VERSION}
+               -DCOMPILER_RT_INCLUDE_TESTS=${LLVM37_INCLUDE_TESTS}
                -DCOMPILER_RT_ENABLE_WERROR=ON
     INSTALL_COMMAND ""
     STEP_TARGETS configure build
@@ -65,7 +65,7 @@ if(LLVM_BUILD_EXTERNAL_COMPILER_RT AND EXISTS ${COMPILER_RT_SRC_ROOT}/)
     COMMAND ${CMAKE_COMMAND} -E make_directory <BINARY_DIR>
     COMMENT "Clobberring compiler-rt build directory..."
     DEPENDERS configure
-    DEPENDS ${LLVM_RUNTIME_OUTPUT_INTDIR}/clang
+    DEPENDS ${LLVM37_RUNTIME_OUTPUT_INTDIR}/clang
   )
 
   ExternalProject_Get_Property(compiler-rt BINARY_DIR)
@@ -84,7 +84,7 @@ if(LLVM_BUILD_EXTERNAL_COMPILER_RT AND EXISTS ${COMPILER_RT_SRC_ROOT}/)
 
   # Add binaries that compiler-rt tests depend on.
   set(COMPILER_RT_TEST_DEPENDENCIES
-    FileCheck count not llvm-nm llvm-symbolizer)
+    FileCheck count not llvm37-nm llvm37-symbolizer)
 
   # Add top-level targets for various compiler-rt test suites.
   set(COMPILER_RT_TEST_SUITES check-asan check-asan-dynamic check-dfsan

@@ -1,6 +1,6 @@
 //===--- ExprClassification.cpp - Expression AST Node Implementation ------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -18,7 +18,7 @@
 #include "clang/AST/DeclTemplate.h"
 #include "clang/AST/ExprCXX.h"
 #include "clang/AST/ExprObjC.h"
-#include "llvm/Support/ErrorHandling.h"
+#include "llvm37/Support/ErrorHandling.h"
 using namespace clang;
 
 typedef Expr::Classification Cl;
@@ -97,7 +97,7 @@ static Cl::Kinds ClassifyExprValueKind(const LangOptions &Lang,
   case VK_XValue:
     return Cl::CL_XValue;
   }
-  llvm_unreachable("Invalid value category of implicit cast.");
+  llvm37_unreachable("Invalid value category of implicit cast.");
 }
 
 static Cl::Kinds ClassifyInternal(ASTContext &Ctx, const Expr *E) {
@@ -117,7 +117,7 @@ static Cl::Kinds ClassifyInternal(ASTContext &Ctx, const Expr *E) {
 #define STMT(Kind, Base) case Expr::Kind##Class:
 #define EXPR(Kind, Base)
 #include "clang/AST/StmtNodes.inc"
-    llvm_unreachable("cannot classify a statement");
+    llvm37_unreachable("cannot classify a statement");
 
     // First come the expressions that are always lvalues, unconditionally.
   case Expr::ObjCIsaExprClass:
@@ -427,7 +427,7 @@ static Cl::Kinds ClassifyInternal(ASTContext &Ctx, const Expr *E) {
     return ClassifyInternal(Ctx, cast<InitListExpr>(E)->getInit(0));
   }
 
-  llvm_unreachable("unhandled expression kind in classification");
+  llvm37_unreachable("unhandled expression kind in classification");
 }
 
 /// ClassifyDecl - Return the classification of an expression referencing the
@@ -677,7 +677,7 @@ Expr::LValueClassification Expr::ClassifyLValue(ASTContext &Ctx) const {
   case Cl::CL_ObjCMessageRValue: return LV_InvalidMessageExpression;
   case Cl::CL_PRValue: return LV_InvalidExpression;
   }
-  llvm_unreachable("Unhandled kind");
+  llvm37_unreachable("Unhandled kind");
 }
 
 Expr::isModifiableLvalueResult
@@ -703,17 +703,17 @@ Expr::isModifiableLvalue(ASTContext &Ctx, SourceLocation *Loc) const {
   }
   assert(VC.getKind() == Cl::CL_LValue && "Unhandled kind");
   switch (VC.getModifiable()) {
-  case Cl::CM_Untested: llvm_unreachable("Did not test modifiability");
+  case Cl::CM_Untested: llvm37_unreachable("Did not test modifiability");
   case Cl::CM_Modifiable: return MLV_Valid;
-  case Cl::CM_RValue: llvm_unreachable("CM_RValue and CL_LValue don't match");
+  case Cl::CM_RValue: llvm37_unreachable("CM_RValue and CL_LValue don't match");
   case Cl::CM_Function: return MLV_NotObjectType;
   case Cl::CM_LValueCast:
-    llvm_unreachable("CM_LValueCast and CL_LValue don't match");
+    llvm37_unreachable("CM_LValueCast and CL_LValue don't match");
   case Cl::CM_NoSetterProperty: return MLV_NoSetterProperty;
   case Cl::CM_ConstQualified: return MLV_ConstQualified;
   case Cl::CM_ConstAddrSpace: return MLV_ConstAddrSpace;
   case Cl::CM_ArrayType: return MLV_ArrayType;
   case Cl::CM_IncompleteType: return MLV_IncompleteType;
   }
-  llvm_unreachable("Unhandled modifiable type");
+  llvm37_unreachable("Unhandled modifiable type");
 }

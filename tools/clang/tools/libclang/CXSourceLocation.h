@@ -1,6 +1,6 @@
 //===- CXSourceLocation.h - CXSourceLocations Utilities ---------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,8 +11,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_TOOLS_LIBCLANG_CXSOURCELOCATION_H
-#define LLVM_CLANG_TOOLS_LIBCLANG_CXSOURCELOCATION_H
+#ifndef LLVM37_CLANG_TOOLS_LIBCLANG_CXSOURCELOCATION_H
+#define LLVM37_CLANG_TOOLS_LIBCLANG_CXSOURCELOCATION_H
 
 #include "clang-c/Index.h"
 #include "clang/AST/ASTContext.h"

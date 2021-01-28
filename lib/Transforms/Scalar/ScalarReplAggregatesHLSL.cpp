@@ -1,6 +1,6 @@
 //===- ScalarReplAggregatesHLSL.cpp - Scalar Replacement of Aggregates ----===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -14,41 +14,41 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/ADT/SetVector.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/ADT/DenseSet.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/Analysis/AssumptionCache.h"
-#include "llvm/Analysis/Loads.h"
-#include "llvm/Analysis/ValueTracking.h"
-#include "llvm/Analysis/PostDominators.h"
-#include "llvm/IR/CallSite.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/DIBuilder.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/DebugInfo.h"
-#include "llvm/IR/DerivedTypes.h"
-#include "llvm/IR/Dominators.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/GetElementPtrTypeIterator.h"
-#include "llvm/IR/GlobalVariable.h"
-#include "llvm/IR/IRBuilder.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/InstIterator.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/Operator.h"
-#include "llvm/Pass.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/MathExtras.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Transforms/Scalar.h"
-#include "llvm/Transforms/Utils/Local.h"
-#include "llvm/Transforms/Utils/PromoteMemToReg.h"
-#include "llvm/Transforms/Utils/SSAUpdater.h"
-#include "llvm/Transforms/Utils/Local.h"
+#include "llvm37/ADT/SetVector.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/ADT/DenseSet.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/Analysis/AssumptionCache.h"
+#include "llvm37/Analysis/Loads.h"
+#include "llvm37/Analysis/ValueTracking.h"
+#include "llvm37/Analysis/PostDominators.h"
+#include "llvm37/IR/CallSite.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/DIBuilder.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/IR/DebugInfo.h"
+#include "llvm37/IR/DerivedTypes.h"
+#include "llvm37/IR/Dominators.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/GetElementPtrTypeIterator.h"
+#include "llvm37/IR/GlobalVariable.h"
+#include "llvm37/IR/IRBuilder.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/InstIterator.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/Operator.h"
+#include "llvm37/Pass.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/MathExtras.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Transforms/Scalar.h"
+#include "llvm37/Transforms/Utils/Local.h"
+#include "llvm37/Transforms/Utils/PromoteMemToReg.h"
+#include "llvm37/Transforms/Utils/SSAUpdater.h"
+#include "llvm37/Transforms/Utils/Local.h"
 #include "dxc/HLSL/HLOperations.h"
 #include "dxc/DXIL/DxilConstants.h"
 #include "dxc/HLSL/HLModule.h"
@@ -66,7 +66,7 @@
 #include <unordered_set>
 #include <queue>
 
-using namespace llvm;
+using namespace llvm37;
 using namespace hlsl;
 #define DEBUG_TYPE "scalarreplhlsl"
 
@@ -159,7 +159,7 @@ static void addDebugInfoForElements(Value *ParentVal,
   DILocation *ParentDbgLocation;
   Instruction *DbgDeclareInsertPt = nullptr;
   if (isa<GlobalVariable>(ParentVal)) {
-    llvm_unreachable("Not implemented: sroa debug info propagation for global vars.");
+    llvm37_unreachable("Not implemented: sroa debug info propagation for global vars.");
   }
   else {
     if (AllocaInst *ParentAlloca = dyn_cast<AllocaInst>(ParentVal))
@@ -167,7 +167,7 @@ static void addDebugInfoForElements(Value *ParentVal,
     else
       ParentTy = cast<Argument>(ParentVal)->getType();
 
-    DbgDeclareInst *ParentDbgDeclare = llvm::FindAllocaDbgDeclare(ParentVal);
+    DbgDeclareInst *ParentDbgDeclare = llvm37::FindAllocaDbgDeclare(ParentVal);
     if (ParentDbgDeclare == nullptr) return;
 
     // Get the bit piece offset
@@ -186,7 +186,7 @@ static void addDebugInfoForElements(Value *ParentVal,
     if (DxilMDHelper::GetVariableDebugLayout(ParentDbgDeclare, ParentBitPieceOffsetFromMD, DIArrayDims)) {
       // The offset is redundant for local variables and only necessary for global variables.
       DXASSERT(ParentBitPieceOffsetFromMD == ParentBitPieceOffset,
-        "Bit piece offset mismatch between llvm.dbg.declare and DXIL metadata.");
+        "Bit piece offset mismatch between llvm37.dbg.declare and DXIL metadata.");
     }
   }
 
@@ -239,7 +239,7 @@ static void addDebugInfoForElements(Value *ParentVal,
       ElemBitPieceSize /= ArrayDim.NumElements;
 
     if (AllocaInst *ElemAlloca = dyn_cast<AllocaInst>(Elems[ElemIdx])) {
-      // Local variables get an @llvm.dbg.declare plus optional metadata for layout stride information.
+      // Local variables get an @llvm37.dbg.declare plus optional metadata for layout stride information.
       DIExpression *ElemDbgExpr = nullptr;
       if (ElemBitPieceOffset == 0 && DatLayout.getTypeAllocSizeInBits(ParentTy) == ElemBitPieceSize) {
         ElemDbgExpr = DbgBuilder->createExpression();
@@ -255,7 +255,7 @@ static void addDebugInfoForElements(Value *ParentVal,
       if (!DIArrayDims.empty()) DxilMDHelper::SetVariableDebugLayout(EltDDI, ElemBitPieceOffset, DIArrayDims);
     }
     else {
-      llvm_unreachable("Non-AllocaInst SROA'd elements.");
+      llvm37_unreachable("Non-AllocaInst SROA'd elements.");
     }
   }
 }
@@ -496,7 +496,7 @@ static Value *LoadVectorOrStructArray(ArrayType *AT, ArrayRef<Value *> NewElts,
                               SmallVector<Value *, 8> &idxList,
                               IRBuilder<> &Builder) {
   Type *EltTy = AT->getElementType();
-  Value *retVal = llvm::UndefValue::get(AT);
+  Value *retVal = llvm37::UndefValue::get(AT);
   Type *i32Ty = Type::getInt32Ty(EltTy->getContext());
 
   uint32_t arraySize = AT->getNumElements();
@@ -511,7 +511,7 @@ static Value *LoadVectorOrStructArray(ArrayType *AT, ArrayRef<Value *> NewElts,
       assert((EltTy->isVectorTy() ||
               EltTy->isStructTy()) && "must be a vector or struct type");
       bool isVectorTy = EltTy->isVectorTy();
-      Value *retVec = llvm::UndefValue::get(EltTy);
+      Value *retVec = llvm37::UndefValue::get(EltTy);
 
       if (isVectorTy) {
         for (uint32_t c = 0; c < EltTy->getVectorNumElements(); c++) {
@@ -580,13 +580,13 @@ namespace {
 
 // Simple struct to split memcpy into ld/st
 struct MemcpySplitter {
-  llvm::LLVMContext &m_context;
+  llvm37::LLVM37Context &m_context;
   DxilTypeSystem &m_typeSys;
 
 public:
-  MemcpySplitter(llvm::LLVMContext &context, DxilTypeSystem &typeSys)
+  MemcpySplitter(llvm37::LLVM37Context &context, DxilTypeSystem &typeSys)
       : m_context(context), m_typeSys(typeSys) {}
-  void Split(llvm::Function &F);
+  void Split(llvm37::Function &F);
 
   static void PatchMemCpyWithZeroIdxGEP(Module &M);
   static void PatchMemCpyWithZeroIdxGEP(MemCpyInst *MI, const DataLayout &DL);
@@ -598,19 +598,19 @@ public:
 
 // Copy data from srcPtr to destPtr.
 void SimplePtrCopy(Value *DestPtr, Value *SrcPtr,
-                   llvm::SmallVector<llvm::Value *, 16> &idxList,
+                   llvm37::SmallVector<llvm37::Value *, 16> &idxList,
                    IRBuilder<> &Builder) {
   if (idxList.size() > 1) {
     DestPtr = Builder.CreateInBoundsGEP(DestPtr, idxList);
     SrcPtr = Builder.CreateInBoundsGEP(SrcPtr, idxList);
   }
-  llvm::LoadInst *ld = Builder.CreateLoad(SrcPtr);
+  llvm37::LoadInst *ld = Builder.CreateLoad(SrcPtr);
   Builder.CreateStore(ld, DestPtr);
 }
 
 // Copy srcVal to destPtr.
 void SimpleValCopy(Value *DestPtr, Value *SrcVal,
-                   llvm::SmallVector<llvm::Value *, 16> &idxList,
+                   llvm37::SmallVector<llvm37::Value *, 16> &idxList,
                    IRBuilder<> &Builder) {
   Value *DestGEP = Builder.CreateInBoundsGEP(DestPtr, idxList);
   Value *Val = SrcVal;
@@ -627,7 +627,7 @@ void SimpleValCopy(Value *DestPtr, Value *SrcVal,
 }
 
 void SimpleCopy(Value *Dest, Value *Src,
-                llvm::SmallVector<llvm::Value *, 16> &idxList,
+                llvm37::SmallVector<llvm37::Value *, 16> &idxList,
                 IRBuilder<> &Builder) {
   if (Src->getType()->isPointerTy())
     SimplePtrCopy(Dest, Src, idxList, Builder);
@@ -740,8 +740,8 @@ void SplitCpy(Type *Ty, Value *Dest, Value *Src,
     if (STA && STA->IsEmptyStruct())
       return;
     for (uint32_t i = 0; i < ST->getNumElements(); i++) {
-      llvm::Type *ET = ST->getElementType(i);
-      Constant *idx = llvm::Constant::getIntegerValue(
+      llvm37::Type *ET = ST->getElementType(i);
+      Constant *idx = llvm37::Constant::getIntegerValue(
           IntegerType::get(Ty->getContext(), 32), APInt(32, i));
       idxList.emplace_back(idx);
       if (bEltMemCpy && IsMemCpyTy(ET, typeSys)) {
@@ -810,9 +810,9 @@ void SplitPtr(
       const DxilStructAnnotation *SA = TypeSys.GetStructAnnotation(ST);
 
       for (uint32_t i = 0; i < ST->getNumElements(); i++) {
-        llvm::Type *EltTy = ST->getElementType(i);
+        llvm37::Type *EltTy = ST->getElementType(i);
 
-        Constant *idx = llvm::Constant::getIntegerValue(
+        Constant *idx = llvm37::Constant::getIntegerValue(
             IntegerType::get(Ty->getContext(), 32), APInt(32, i));
         IdxList.emplace_back(idx);
 
@@ -1041,7 +1041,7 @@ void MemcpySplitter::SplitMemCpy(MemCpyInst *MI, const DataLayout &DL,
     }
   }
 
-  llvm::SmallVector<llvm::Value *, 16> idxList;
+  llvm37::SmallVector<llvm37::Value *, 16> idxList;
   // split
   // Matrix is treated as scalar type, will not use memcpy.
   // So use nullptr for fieldAnnotation should be safe here.
@@ -1051,7 +1051,7 @@ void MemcpySplitter::SplitMemCpy(MemCpyInst *MI, const DataLayout &DL,
   DeleteMemcpy(MI);
 }
 
-void MemcpySplitter::Split(llvm::Function &F) {
+void MemcpySplitter::Split(llvm37::Function &F) {
   const DataLayout &DL = F.getParent()->getDataLayout();
   SmallVector<Function *, 2> memcpys;
   for (Function &Fn : F.getParent()->functions()) {
@@ -1509,7 +1509,7 @@ bool isSafeAllocaToScalarRepl(AllocaInst *AI) {
 
   // Okay, we know all the users are promotable.  If the aggregate is a memcpy
   // source and destination, we have to be careful.  In particular, the memcpy
-  // could be moving around elements that live in structure padding of the LLVM
+  // could be moving around elements that live in structure padding of the LLVM37
   // types, but may actually be used.  In these cases, we refuse to promote the
   // struct.
   if (Info.isMemCpySrc && Info.isMemCpyDst &&
@@ -1639,7 +1639,7 @@ bool SROAGlobalAndAllocas(HLModule &HLM, bool bHasDbgInfo) {
       WorkList(size_cmp);
 
   // Flatten internal global.
-  llvm::SetVector<GlobalVariable *> staticGVs;
+  llvm37::SetVector<GlobalVariable *> staticGVs;
 
   DenseMap<GlobalVariable *, GVDbgOffset> GVDbgOffsetMap;
   for (GlobalVariable &GV : M.globals()) {
@@ -1738,7 +1738,7 @@ bool SROAGlobalAndAllocas(HLModule &HLM, bool bHasDbgInfo) {
         if (NewV != AI) {
           DXASSERT(AI->getNumUses() == 0, "must have zero users.");
           // Update debug declare.
-          if (DbgDeclareInst *DDI = llvm::FindAllocaDbgDeclare(AI)) {
+          if (DbgDeclareInst *DDI = llvm37::FindAllocaDbgDeclare(AI)) {
             DDI->setArgOperand(0, MetadataAsValue::get(NewV->getContext(), ValueAsMetadata::get(NewV)));
           }
           AI->eraseFromParent();
@@ -1950,7 +1950,7 @@ void SROA_Helper::RewriteForGEP(GEPOperator *GEP, IRBuilder<> &Builder) {
       // Add vector idx.
       NewArgs.push_back(GEPIt.getOperand());
     } else {
-      llvm_unreachable("should break from structTy");
+      llvm37_unreachable("should break from structTy");
     }
   }
 
@@ -2143,7 +2143,7 @@ void SROA_Helper::RewriteForLoad(LoadInst *LI) {
       }
     }
   } else {
-    llvm_unreachable("other type don't need rewrite");
+    llvm37_unreachable("other type don't need rewrite");
   }
 
   // Remove the use so that the caller can keep iterating over its other users
@@ -2223,7 +2223,7 @@ void SROA_Helper::RewriteForStore(StoreInst *SI) {
       }
     }
   } else {
-    llvm_unreachable("other type don't need rewrite");
+    llvm37_unreachable("other type don't need rewrite");
   }
 
   // Remove the use so that the caller can keep iterating over its other users
@@ -2436,7 +2436,7 @@ void SROA_Helper::RewriteBitCast(BitCastInst *BCI) {
   SrcTy = SrcTy->getPointerElementType();
 
   if (!DstTy->isStructTy()) {
-    // This is an llvm.lifetime.* intrinsic. Replace bitcast by a bitcast for each element.
+    // This is an llvm37.lifetime.* intrinsic. Replace bitcast by a bitcast for each element.
     SmallVector<IntrinsicInst*, 16> ToReplace;
 
     DXASSERT(onlyUsedByLifetimeMarkers(BCI),
@@ -3009,7 +3009,7 @@ bool SROA_Helper::DoScalarReplacement(GlobalVariable *GV,
     for (int i = 0, e = numTypes; i != e; ++i) {
       Type *EltTy = ST->getElementType(i);
       Constant *EltInit = GetEltInit(Ty, Init, i, EltTy);
-      GlobalVariable *EltGV = new llvm::GlobalVariable(
+      GlobalVariable *EltGV = new llvm37::GlobalVariable(
           *M, ST->getContainedType(i), /*IsConstant*/ isConst, linkage,
           /*InitVal*/ EltInit, GV->getName() + "." + Twine(i),
           /*InsertBefore*/ nullptr, TLMode, AddressSpace);
@@ -3030,7 +3030,7 @@ bool SROA_Helper::DoScalarReplacement(GlobalVariable *GV,
     //DxilStructAnnotation *SA = typeSys.GetStructAnnotation(ST);
     for (int i = 0, e = numElts; i != e; ++i) {
       Constant *EltInit = GetEltInit(Ty, Init, i, EltTy);
-      GlobalVariable *EltGV = new llvm::GlobalVariable(
+      GlobalVariable *EltGV = new llvm37::GlobalVariable(
           *M, EltTy, /*IsConstant*/ isConst, linkage,
           /*InitVal*/ EltInit, GV->getName() + "." + Twine(i),
           /*InsertBefore*/ nullptr, TLMode, AddressSpace);
@@ -3074,7 +3074,7 @@ bool SROA_Helper::DoScalarReplacement(GlobalVariable *GV,
         Type *EltTy =
             CreateNestArrayTy(ElST->getContainedType(i), nestArrayTys);
         Constant *EltInit = GetEltInit(Ty, Init, i, EltTy);
-        GlobalVariable *EltGV = new llvm::GlobalVariable(
+        GlobalVariable *EltGV = new llvm37::GlobalVariable(
             *M, EltTy, /*IsConstant*/ isConst, linkage,
             /*InitVal*/ EltInit, GV->getName() + "." + Twine(i),
             /*InsertBefore*/ nullptr, TLMode, AddressSpace);
@@ -3103,7 +3103,7 @@ bool SROA_Helper::DoScalarReplacement(GlobalVariable *GV,
 
       for (int i = 0, e = ElVT->getNumElements(); i != e; ++i) {
         Constant *EltInit = GetEltInit(Ty, Init, i, scalarArrayTy);
-        GlobalVariable *EltGV = new llvm::GlobalVariable(
+        GlobalVariable *EltGV = new llvm37::GlobalVariable(
             *M, scalarArrayTy, /*IsConstant*/ isConst, linkage,
             /*InitVal*/ EltInit, GV->getName() + "." + Twine(i),
             /*InsertBefore*/ nullptr, TLMode, AddressSpace);
@@ -3734,7 +3734,7 @@ public:
       }
 
       if (F.isDeclaration()) {
-        // Skip llvm intrinsic.
+        // Skip llvm37 intrinsic.
         if (F.isIntrinsic())
           continue;
         // Skip unused external function.
@@ -3812,7 +3812,7 @@ public:
         continue;
       Instruction *insertPt = nullptr;
       // SROA only potentially "incorrectly" inserts non-allocas into the entry block.
-      for (llvm::Instruction &I : F.getEntryBlock()) {
+      for (llvm37::Instruction &I : F.getEntryBlock()) {
         if (!insertPt) {
           // Find the first non-alloca to move the allocas above
           if (!isa<AllocaInst>(I) && !isa<DbgInfoIntrinsic>(I))
@@ -3853,7 +3853,7 @@ private:
                             IRBuilder<> &Builder);
   void allocateSemanticIndex(
     std::vector<DxilParameterAnnotation> &FlatAnnotationList,
-    unsigned startArgIndex, llvm::StringMap<Type *> &semanticTypeMap);
+    unsigned startArgIndex, llvm37::StringMap<Type *> &semanticTypeMap);
 
   //static std::vector<Value*> GetConstValueIdxList(IRBuilder<>& builder, std::vector<unsigned> idxlist);
   /// DeadInsts - Keep track of instructions we have made dead, so that
@@ -4062,7 +4062,7 @@ static unsigned AllocateSemanticIndex(
 
 void SROA_Parameter_HLSL::allocateSemanticIndex(
     std::vector<DxilParameterAnnotation> &FlatAnnotationList,
-    unsigned startArgIndex, llvm::StringMap<Type *> &semanticTypeMap) {
+    unsigned startArgIndex, llvm37::StringMap<Type *> &semanticTypeMap) {
   unsigned endArgIndex = FlatAnnotationList.size();
 
   // Allocate semantic index.
@@ -4412,7 +4412,7 @@ void SROA_Parameter_HLSL::replaceCastParameter(
     Builder.SetInsertPoint(I->getNextNode());
   }
 
-  if (DbgDeclareInst *DDI = llvm::FindAllocaDbgDeclare(OldParam)) {
+  if (DbgDeclareInst *DDI = llvm37::FindAllocaDbgDeclare(OldParam)) {
     // Add debug info to new param.
     DIBuilder DIB(*F.getParent(), /*AllowUnresolved*/ false);
     DIExpression *DDIExp = DDI->getExpression();
@@ -4643,7 +4643,7 @@ Value *SROA_Parameter_HLSL::castArgumentIfRequired(
 }
 
 struct AnnotatedValue {
-  llvm::Value *Value;
+  llvm37::Value *Value;
   DxilFieldAnnotation Annotation;
 };
 
@@ -4671,7 +4671,7 @@ void SROA_Parameter_HLSL::flattenArgument(
               inputQual == DxilParamInputQual::OutStream3;
 
   // Map from semantic string to type.
-  llvm::StringMap<Type *> semanticTypeMap;
+  llvm37::StringMap<Type *> semanticTypeMap;
   // Original semantic type.
   if (!semantic.empty()) {
     // Unwrap top-level array if primitive
@@ -4929,7 +4929,7 @@ void SROA_Parameter_HLSL::flattenArgument(
                   "Unexpected number of arguments for non-SROA'd StreamOutput.Append");
                 IRBuilder<> Builder(CI);
 
-                llvm::SmallVector<llvm::Value *, 16> idxList;
+                llvm37::SmallVector<llvm37::Value *, 16> idxList;
                 SplitCpy(firstDataPtr->getType(), outputVal, firstDataPtr, idxList, Builder, DL,
                           dxilTypeSys, &flatParamAnnotation);
 
@@ -4942,9 +4942,9 @@ void SROA_Parameter_HLSL::flattenArgument(
                 // Must be struct to be flatten.
                 IRBuilder<> Builder(CI);
 
-                llvm::SmallVector<llvm::Value *, 16> IdxList;
-                llvm::SmallVector<llvm::Value *, 16> EltPtrList;
-                llvm::SmallVector<const DxilFieldAnnotation*, 16> EltAnnotationList;
+                llvm37::SmallVector<llvm37::Value *, 16> IdxList;
+                llvm37::SmallVector<llvm37::Value *, 16> EltPtrList;
+                llvm37::SmallVector<const DxilFieldAnnotation*, 16> EltAnnotationList;
                 // split
                 SplitPtr(outputVal, IdxList, outputVal->getType(), flatParamAnnotation,
                   EltPtrList, EltAnnotationList, dxilTypeSys, Builder);
@@ -4957,7 +4957,7 @@ void SROA_Parameter_HLSL::flattenArgument(
                   Value *EltPtr = EltPtrList[i - HLOperandIndex::kStreamAppendDataOpIndex];
                   const DxilFieldAnnotation *EltAnnotation = EltAnnotationList[i - HLOperandIndex::kStreamAppendDataOpIndex];
 
-                  llvm::SmallVector<llvm::Value *, 16> IdxList;
+                  llvm37::SmallVector<llvm37::Value *, 16> IdxList;
                   SplitCpy(DataPtr->getType(), EltPtr, DataPtr, IdxList,
                             Builder, DL, dxilTypeSys, EltAnnotation);
                   CI->setArgOperand(i, EltPtr);
@@ -5009,7 +5009,7 @@ static bool IsUsedAsCallArg(Value *V) {
           group == HLOpcodeGroup::HLExtIntrinsic) {
         continue;
       }
-      // Skip llvm intrinsic.
+      // Skip llvm37 intrinsic.
       if (CalledF->isIntrinsic())
         continue;
 
@@ -5192,7 +5192,7 @@ static void InjectReturnAfterNoReturnPreserveOutput(HLModule &HLM) {
             TerminatorInst *Term = BB->getTerminator();
             Term->eraseFromParent();
             IRBuilder<> Builder(BB);
-            llvm::Type *RetTy = CI->getParent()->getParent()->getReturnType();
+            llvm37::Type *RetTy = CI->getParent()->getParent()->getReturnType();
             if (RetTy->isVoidTy())
               Builder.CreateRetVoid();
             else
@@ -5297,7 +5297,7 @@ static void LegalizeDxilInputOutputs(Function *F,
 
       // Copy input to temp.
       if (bStoreInputToTemp) {
-        llvm::SmallVector<llvm::Value *, 16> idxList;
+        llvm37::SmallVector<llvm37::Value *, 16> idxList;
         // split copy.
         SplitCpy(temp->getType(), temp, &arg, idxList, Builder, DL, typeSys,
                  &paramAnnotation);
@@ -5317,7 +5317,7 @@ static void LegalizeDxilInputOutputs(Function *F,
       for (auto It : outputTempMap) {
         Argument *output = It.first;
         Value *temp = It.second;
-        llvm::SmallVector<llvm::Value *, 16> idxList;
+        llvm37::SmallVector<llvm37::Value *, 16> idxList;
 
         DxilParameterAnnotation &paramAnnotation =
             EntryAnnotation->GetParameterAnnotation(output->getArgNo());
@@ -5359,7 +5359,7 @@ void SROA_Parameter_HLSL::createFlattenedFunction(Function *F) {
 
   std::deque<Value *> WorkList;
 
-  LLVMContext &Ctx = m_pHLModule->GetCtx();
+  LLVM37Context &Ctx = m_pHLModule->GetCtx();
   std::unique_ptr<BasicBlock> TmpBlockForFuncDecl;
   BasicBlock *EntryBlock;
   if (F->isDeclaration()) {
@@ -5389,7 +5389,7 @@ void SROA_Parameter_HLSL::createFlattenedFunction(Function *F) {
 
     DxilParameterAnnotation &paramAnnotation =
         funcAnnotation->GetParameterAnnotation(Arg.getArgNo());
-    DbgDeclareInst *DDI = llvm::FindAllocaDbgDeclare(&Arg);
+    DbgDeclareInst *DDI = llvm37::FindAllocaDbgDeclare(&Arg);
     flattenArgument(F, &Arg, bForParamTrue, paramAnnotation, FlatParamList,
                     FlatParamAnnotationList, EntryBlock, DDI);
 
@@ -5418,7 +5418,7 @@ void SROA_Parameter_HLSL::createFlattenedFunction(Function *F) {
         DITypeIdentifierMap EmptyMap;
         DIType * RetDIType = RetDITyRef.resolve(EmptyMap);
         DIBuilder DIB(*F->getParent(), /*AllowUnresolved*/ false);
-        DILocalVariable *RetVar = DIB.createLocalVariable(llvm::dwarf::Tag::DW_TAG_arg_variable, funcDI, F->getName().str() + ".Ret", funcDI->getFile(),
+        DILocalVariable *RetVar = DIB.createLocalVariable(llvm37::dwarf::Tag::DW_TAG_arg_variable, funcDI, F->getName().str() + ".Ret", funcDI->getFile(),
             funcDI->getLine(), RetDIType);
         DIExpression *Expr = DIB.createExpression();
         // TODO: how to get col?
@@ -5458,7 +5458,7 @@ void SROA_Parameter_HLSL::createFlattenedFunction(Function *F) {
       Builder.CreateStore(UndefValue::get(retType), retValAddr);
     }
 
-    DbgDeclareInst *DDI = llvm::FindAllocaDbgDeclare(retValAddr);
+    DbgDeclareInst *DDI = llvm37::FindAllocaDbgDeclare(retValAddr);
     flattenArgument(F, retValAddr, bForParamTrue,
                     funcAnnotation->GetRetTypeAnnotation(), FlatRetList,
                     FlatRetAnnotationList, EntryBlock, DDI);
@@ -5586,7 +5586,7 @@ void SROA_Parameter_HLSL::createFlattenedFunction(Function *F) {
   // ShaderProps.
   if (m_pHLModule->HasDxilFunctionProps(F)) {
     DxilFunctionProps &funcProps = m_pHLModule->GetDxilFunctionProps(F);
-    std::unique_ptr<DxilFunctionProps> flatFuncProps = llvm::make_unique<DxilFunctionProps>();
+    std::unique_ptr<DxilFunctionProps> flatFuncProps = llvm37::make_unique<DxilFunctionProps>();
     flatFuncProps->shaderKind = funcProps.shaderKind;
     flatFuncProps->ShaderProps = funcProps.ShaderProps;
     m_pHLModule->AddDxilFunctionProps(flatF, flatFuncProps);
@@ -5615,7 +5615,7 @@ void SROA_Parameter_HLSL::createFlattenedFunction(Function *F) {
     // Replace old parameters with flatF Arguments.
     auto argIter = flatF->arg_begin();
     auto flatArgIter = FlatParamList.begin();
-    LLVMContext &Context = F->getContext();
+    LLVM37Context &Context = F->getContext();
 
     // Parameter cast come from begining of entry block.
     IRBuilder<> Builder(dxilutil::FindAllocaInsertionPt(flatF));
@@ -5634,7 +5634,7 @@ void SROA_Parameter_HLSL::createFlattenedFunction(Function *F) {
       }
 
       // Update arg debug info.
-      DbgDeclareInst *DDI = llvm::FindAllocaDbgDeclare(flatArg);
+      DbgDeclareInst *DDI = llvm37::FindAllocaDbgDeclare(flatArg);
       if (DDI) {
         if (!flatArg->getType()->isPointerTy()) {
           // Create alloca to hold the debug info.
@@ -5686,7 +5686,7 @@ void SROA_Parameter_HLSL::replaceCall(Function *F, Function *flatF) {
 }
 
 // Public interface to the SROA_Parameter_HLSL pass
-ModulePass *llvm::createSROA_Parameter_HLSL() {
+ModulePass *llvm37::createSROA_Parameter_HLSL() {
   return new SROA_Parameter_HLSL();
 }
 
@@ -5912,7 +5912,7 @@ void PatchDebugInfo(DebugInfoFinder &DbgFinder, Function *F, GlobalVariable *GV,
   Name += DGV->getName();
   // Using arg_variable instead of auto_variable because arg variables can use
   // Subprogram as its scope, so we don't have to make one up for it.
-  llvm::dwarf::Tag Tag = llvm::dwarf::Tag::DW_TAG_arg_variable;
+  llvm37::dwarf::Tag Tag = llvm37::dwarf::Tag::DW_TAG_arg_variable;
 
   DIType *Ty = DGV->getType().resolve(EmptyMap);
   DXASSERT(Ty->getTag() != dwarf::DW_TAG_member, "Member type is not allowed for variables.");
@@ -6038,6 +6038,6 @@ INITIALIZE_PASS(LowerStaticGlobalIntoAlloca, "static-global-to-alloca",
   false)
 
 // Public interface to the LowerStaticGlobalIntoAlloca pass
-ModulePass *llvm::createLowerStaticGlobalIntoAlloca() {
+ModulePass *llvm37::createLowerStaticGlobalIntoAlloca() {
   return new LowerStaticGlobalIntoAlloca();
 }

@@ -1,6 +1,6 @@
-//===- llvm/unittest/ADT/DAGDeltaAlgorithmTest.cpp ------------------------===//
+//===- llvm37/unittest/ADT/DAGDeltaAlgorithmTest.cpp ------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -8,10 +8,10 @@
 //===----------------------------------------------------------------------===//
 
 #include "gtest/gtest.h"
-#include "llvm/ADT/DAGDeltaAlgorithm.h"
+#include "llvm37/ADT/DAGDeltaAlgorithm.h"
 #include <algorithm>
 #include <cstdarg>
-using namespace llvm;
+using namespace llvm37;
 
 namespace {
 

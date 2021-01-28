@@ -1,38 +1,38 @@
 //===- lib/Linker/LinkModules.cpp - Module Linker Implementation ----------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 //
-// This file implements the LLVM module linker.
+// This file implements the LLVM37 module linker.
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Linker/Linker.h"
-#include "llvm-c/Linker.h"
-#include "llvm/ADT/Hashing.h"
-#include "llvm/ADT/Optional.h"
-#include "llvm/ADT/SetVector.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/ADT/Triple.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/DebugInfo.h"
-#include "llvm/IR/DiagnosticInfo.h"
-#include "llvm/IR/DiagnosticPrinter.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/TypeFinder.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Transforms/Utils/Cloning.h"
+#include "llvm37/Linker/Linker.h"
+#include "llvm37-c/Linker.h"
+#include "llvm37/ADT/Hashing.h"
+#include "llvm37/ADT/Optional.h"
+#include "llvm37/ADT/SetVector.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/ADT/Triple.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/DebugInfo.h"
+#include "llvm37/IR/DiagnosticInfo.h"
+#include "llvm37/IR/DiagnosticPrinter.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/TypeFinder.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Transforms/Utils/Cloning.h"
 #include <cctype>
 #include <tuple>
-using namespace llvm;
+using namespace llvm37;
 
 
 //===----------------------------------------------------------------------===//
@@ -257,7 +257,7 @@ Type *TypeMapTy::get(Type *Ty, SmallPtrSet<StructType *, 8> &Visited) {
   if (*Entry)
     return *Entry;
 
-  // These are types that LLVM itself will unique.
+  // These are types that LLVM37 itself will unique.
   bool IsUniqued = !isa<StructType>(Ty) || cast<StructType>(Ty)->isLiteral();
 
 #ifndef NDEBUG
@@ -311,7 +311,7 @@ Type *TypeMapTy::get(Type *Ty, SmallPtrSet<StructType *, 8> &Visited) {
   // Otherwise, rebuild a modified type.
   switch (Ty->getTypeID()) {
   default:
-    llvm_unreachable("unknown derived type to remap");
+    llvm37_unreachable("unknown derived type to remap");
   case Type::ArrayTyID:
     return *Entry = ArrayType::get(ElementTypes[0],
                                    cast<ArrayType>(Ty)->getNumElements());
@@ -509,7 +509,7 @@ private:
 };
 }
 
-/// The LLVM SymbolTable class autorenames globals that conflict in the symbol
+/// The LLVM37 SymbolTable class autorenames globals that conflict in the symbol
 /// table. This is good for all clients except for us. Go through the trouble
 /// to force this back.
 static void forceRenaming(GlobalValue *GV, StringRef Name) {
@@ -696,7 +696,7 @@ bool ModuleLinker::computeResultingSelectionKind(StringRef ComdatName,
                          "': SameSize violated!");
       LinkFromSrc = false;
     } else {
-      llvm_unreachable("unknown selection kind");
+      llvm37_unreachable("unknown selection kind");
     }
     break;
   }
@@ -811,7 +811,7 @@ bool ModuleLinker::shouldLinkFromSource(bool &LinkFromSrc,
 /// Loop over all of the linked values to compute type mappings.  For example,
 /// if we link "extern Foo *x" and "Foo *x = NULL", then we have two struct
 /// types 'Foo' but one got renamed when the module was loaded into the same
-/// LLVMContext.
+/// LLVM37Context.
 void ModuleLinker::computeTypeMapping() {
   for (GlobalValue &SGV : SrcM->globals()) {
     GlobalValue *DGV = getLinkedToGlobal(&SGV);
@@ -841,7 +841,7 @@ void ModuleLinker::computeTypeMapping() {
 
   // Incorporate types by name, scanning all the types in the source module.
   // At this point, the destination module may have a type "%foo = { i32 }" for
-  // example.  When the source module got loaded into the same LLVMContext, if
+  // example.  When the source module got loaded into the same LLVM37Context, if
   // it had the same type, it would have been renamed to "%foo.42 = { i32 }".
   std::vector<StructType *> Types = SrcM->getIdentifiedStructTypes();
   for (StructType *ST : Types) {
@@ -861,7 +861,7 @@ void ModuleLinker::computeTypeMapping() {
       continue;
 
     // Don't use it if this actually came from the source module. They're in
-    // the same LLVMContext after all. Also don't use it unless the type is
+    // the same LLVM37Context after all. Also don't use it unless the type is
     // actually used in the destination module. This can happen in situations
     // like this:
     //
@@ -1405,7 +1405,7 @@ bool ModuleLinker::linkModuleFlagsMetadata() {
     // Perform the merge for standard behavior types.
     switch (SrcBehaviorValue) {
     case Module::Require:
-    case Module::Override: llvm_unreachable("not possible");
+    case Module::Override: llvm37_unreachable("not possible");
     case Module::Error: {
       // Emit an error if the values differ.
       if (SrcOp->getOperand(2) != DstOp->getOperand(2)) {
@@ -1796,14 +1796,14 @@ bool Linker::LinkModules(Module *Dest, Module *Src) {
 //===----------------------------------------------------------------------===//
 
 _Use_decl_annotations_
-LLVMBool LLVMLinkModules(LLVMModuleRef Dest, LLVMModuleRef Src,
-                         LLVMLinkerMode Unused, char **OutMessages) {
+LLVM37Bool LLVM37LinkModules(LLVM37ModuleRef Dest, LLVM37ModuleRef Src,
+                         LLVM37LinkerMode Unused, char **OutMessages) {
   Module *D = unwrap(Dest);
   std::string Message;
   raw_string_ostream Stream(Message);
   DiagnosticPrinterRawOStream DP(Stream);
 
-  LLVMBool Result = Linker::LinkModules(
+  LLVM37Bool Result = Linker::LinkModules(
       D, unwrap(Src), [&](const DiagnosticInfo &DI) { DI.print(DP); });
 
   if (OutMessages && Result) {

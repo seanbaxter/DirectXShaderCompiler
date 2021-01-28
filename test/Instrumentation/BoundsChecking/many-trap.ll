@@ -8,9 +8,9 @@ define void @f1(i64 %x) nounwind {
   %2 = load i128, i128* %1, align 4
   %3 = load i128, i128* %1, align 4
   ret void
-; CHECK: call void @llvm.trap()
-; CHECK: call void @llvm.trap()
-; CHECK-NOT: call void @llvm.trap()
-; SINGLE: call void @llvm.trap()
-; SINGLE-NOT: call void @llvm.trap()
+; CHECK: call void @llvm37.trap()
+; CHECK: call void @llvm37.trap()
+; CHECK-NOT: call void @llvm37.trap()
+; SINGLE: call void @llvm37.trap()
+; SINGLE-NOT: call void @llvm37.trap()
 }

@@ -1,4 +1,4 @@
-add_llvm_library(LLVMMCJIT
+add_llvm_library(LLVM37MCJIT
   MCJIT.cpp
 
   DEPENDS

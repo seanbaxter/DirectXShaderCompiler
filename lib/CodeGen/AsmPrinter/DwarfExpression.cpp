@@ -1,6 +1,6 @@
-//===-- llvm/CodeGen/DwarfExpression.cpp - Dwarf Debug Framework ----------===//
+//===-- llvm37/CodeGen/DwarfExpression.cpp - Dwarf Debug Framework ----------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -13,14 +13,14 @@
 
 #include "DwarfExpression.h"
 #include "DwarfDebug.h"
-#include "llvm/ADT/SmallBitVector.h"
-#include "llvm/CodeGen/AsmPrinter.h"
-#include "llvm/Support/Dwarf.h"
-#include "llvm/Target/TargetMachine.h"
-#include "llvm/Target/TargetRegisterInfo.h"
-#include "llvm/Target/TargetSubtargetInfo.h"
+#include "llvm37/ADT/SmallBitVector.h"
+#include "llvm37/CodeGen/AsmPrinter.h"
+#include "llvm37/Support/Dwarf.h"
+#include "llvm37/Target/TargetMachine.h"
+#include "llvm37/Target/TargetRegisterInfo.h"
+#include "llvm37/Target/TargetSubtargetInfo.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 void DwarfExpression::AddReg(int DwarfReg, const char *Comment) {
   assert(DwarfReg >= 0 && "invalid negative dwarf register number");
@@ -229,7 +229,7 @@ bool DwarfExpression::AddMachineRegExpression(const DIExpression *Expr,
       break;
   }
   default:
-    llvm_unreachable("unsupported operand");
+    llvm37_unreachable("unsupported operand");
   }
 
   if (!ValidReg)
@@ -259,7 +259,7 @@ void DwarfExpression::AddExpression(DIExpression::expr_op_iterator I,
       EmitOp(dwarf::DW_OP_deref);
       break;
     default:
-      llvm_unreachable("unhandled opcode found in expression");
+      llvm37_unreachable("unhandled opcode found in expression");
     }
   }
 }

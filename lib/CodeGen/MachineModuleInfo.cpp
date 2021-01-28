@@ -1,30 +1,30 @@
-//===-- llvm/CodeGen/MachineModuleInfo.cpp ----------------------*- C++ -*-===//
+//===-- llvm37/CodeGen/MachineModuleInfo.cpp ----------------------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/CodeGen/MachineModuleInfo.h"
-#include "llvm/ADT/PointerUnion.h"
-#include "llvm/Analysis/LibCallSemantics.h"
-#include "llvm/Analysis/ValueTracking.h"
-#include "llvm/CodeGen/MachineFunction.h"
-#include "llvm/CodeGen/MachineFunctionPass.h"
-#include "llvm/CodeGen/Passes.h"
-#include "llvm/CodeGen/WinEHFuncInfo.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/DerivedTypes.h"
-#include "llvm/IR/GlobalVariable.h"
-#include "llvm/IR/Module.h"
-#include "llvm/MC/MCObjectFileInfo.h"
-#include "llvm/MC/MCSymbol.h"
-#include "llvm/Support/Dwarf.h"
-#include "llvm/Support/ErrorHandling.h"
-using namespace llvm;
-using namespace llvm::dwarf;
+#include "llvm37/CodeGen/MachineModuleInfo.h"
+#include "llvm37/ADT/PointerUnion.h"
+#include "llvm37/Analysis/LibCallSemantics.h"
+#include "llvm37/Analysis/ValueTracking.h"
+#include "llvm37/CodeGen/MachineFunction.h"
+#include "llvm37/CodeGen/MachineFunctionPass.h"
+#include "llvm37/CodeGen/Passes.h"
+#include "llvm37/CodeGen/WinEHFuncInfo.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/DerivedTypes.h"
+#include "llvm37/IR/GlobalVariable.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/MC/MCObjectFileInfo.h"
+#include "llvm37/MC/MCSymbol.h"
+#include "llvm37/Support/Dwarf.h"
+#include "llvm37/Support/ErrorHandling.h"
+using namespace llvm37;
+using namespace llvm37::dwarf;
 
 // Handle the Pass registration stuff necessary to use DataLayout's.
 INITIALIZE_PASS(MachineModuleInfo, "machinemoduleinfo",
@@ -34,7 +34,7 @@ char MachineModuleInfo::ID = 0;
 // Out of line virtual method.
 MachineModuleInfoImpl::~MachineModuleInfoImpl() {}
 
-namespace llvm {
+namespace llvm37 {
 class MMIAddrLabelMapCallbackPtr : CallbackVH {
   MMIAddrLabelMap *Map;
 public:
@@ -195,9 +195,9 @@ MachineModuleInfo::MachineModuleInfo(const MCAsmInfo &MAI,
 
 MachineModuleInfo::MachineModuleInfo()
   : ImmutablePass(ID), Context(nullptr, nullptr, nullptr) {
-  llvm_unreachable("This MachineModuleInfo constructor should never be called, "
+  llvm37_unreachable("This MachineModuleInfo constructor should never be called, "
                    "MMI should always be explicitly constructed by "
-                   "LLVMTargetMachine");
+                   "LLVM37TargetMachine");
 }
 
 MachineModuleInfo::~MachineModuleInfo() {

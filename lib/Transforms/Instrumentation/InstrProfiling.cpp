@@ -1,6 +1,6 @@
 //===-- InstrProfiling.cpp - Frontend instrumentation based profiling -----===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -13,15 +13,15 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Transforms/Instrumentation.h"
+#include "llvm37/Transforms/Instrumentation.h"
 
-#include "llvm/ADT/Triple.h"
-#include "llvm/IR/IRBuilder.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/IR/Module.h"
-#include "llvm/Transforms/Utils/ModuleUtils.h"
+#include "llvm37/ADT/Triple.h"
+#include "llvm37/IR/IRBuilder.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/Transforms/Utils/ModuleUtils.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "instrprof"
 
@@ -58,22 +58,22 @@ private:
 
   /// Get the section name for the counter variables.
   StringRef getCountersSection() const {
-    return isMachO() ? "__DATA,__llvm_prf_cnts" : "__llvm_prf_cnts";
+    return isMachO() ? "__DATA,__llvm37_prf_cnts" : "__llvm37_prf_cnts";
   }
 
   /// Get the section name for the name variables.
   StringRef getNameSection() const {
-    return isMachO() ? "__DATA,__llvm_prf_names" : "__llvm_prf_names";
+    return isMachO() ? "__DATA,__llvm37_prf_names" : "__llvm37_prf_names";
   }
 
   /// Get the section name for the profile data variables.
   StringRef getDataSection() const {
-    return isMachO() ? "__DATA,__llvm_prf_data" : "__llvm_prf_data";
+    return isMachO() ? "__DATA,__llvm37_prf_data" : "__llvm37_prf_data";
   }
 
   /// Get the section name for the coverage mapping data.
   StringRef getCoverageSection() const {
-    return isMachO() ? "__DATA,__llvm_covmap" : "__llvm_covmap";
+    return isMachO() ? "__DATA,__llvm37_covmap" : "__llvm37_covmap";
   }
 
   /// Replace instrprof_increment with an increment of the appropriate value.
@@ -109,7 +109,7 @@ INITIALIZE_PASS(InstrProfiling, "instrprof",
                 "Frontend instrumentation-based coverage lowering.", false,
                 false)
 
-ModulePass *llvm::createInstrProfilingPass(const InstrProfOptions &Options) {
+ModulePass *llvm37::createInstrProfilingPass(const InstrProfOptions &Options) {
   return new InstrProfiling(Options);
 }
 
@@ -127,7 +127,7 @@ bool InstrProfiling::runOnModule(Module &M) {
           lowerIncrement(Inc);
           MadeChange = true;
         }
-  if (GlobalVariable *Coverage = M.getNamedGlobal("__llvm_coverage_mapping")) {
+  if (GlobalVariable *Coverage = M.getNamedGlobal("__llvm37_coverage_mapping")) {
     lowerCoverageData(Coverage);
     MadeChange = true;
   }
@@ -186,7 +186,7 @@ void InstrProfiling::lowerCoverageData(GlobalVariable *CoverageData) {
 static std::string getVarName(InstrProfIncrementInst *Inc, StringRef VarName) {
   auto *Arr = cast<ConstantDataArray>(Inc->getName()->getInitializer());
   StringRef Name = Arr->isCString() ? Arr->getAsCString() : Arr->getAsString();
-  return ("__llvm_profile_" + VarName + "_" + Name).str();
+  return ("__llvm37_profile_" + VarName + "_" + Name).str();
 }
 
 GlobalVariable *
@@ -205,7 +205,7 @@ InstrProfiling::getOrCreateRegionCounters(InstrProfIncrementInst *Inc) {
   Name->setComdat(Fn->getComdat());
 
   uint64_t NumCounters = Inc->getNumCounters()->getZExtValue();
-  LLVMContext &Ctx = M->getContext();
+  LLVM37Context &Ctx = M->getContext();
   ArrayType *CounterTy = ArrayType::get(Type::getInt64Ty(Ctx), NumCounters);
 
   // Create the counters variable.
@@ -258,7 +258,7 @@ void InstrProfiling::emitRegistration() {
   auto *VoidPtrTy = Type::getInt8PtrTy(M->getContext());
   auto *RegisterFTy = FunctionType::get(VoidTy, false);
   auto *RegisterF = Function::Create(RegisterFTy, GlobalValue::InternalLinkage,
-                                     "__llvm_profile_register_functions", M);
+                                     "__llvm37_profile_register_functions", M);
   RegisterF->setUnnamedAddr(true);
   if (Options.NoRedZone)
     RegisterF->addFnAttr(Attribute::NoRedZone);
@@ -266,7 +266,7 @@ void InstrProfiling::emitRegistration() {
   auto *RuntimeRegisterTy = FunctionType::get(VoidTy, VoidPtrTy, false);
   auto *RuntimeRegisterF =
       Function::Create(RuntimeRegisterTy, GlobalVariable::ExternalLinkage,
-                       "__llvm_profile_register_function", M);
+                       "__llvm37_profile_register_function", M);
 
   IRBuilder<> IRB(BasicBlock::Create(M->getContext(), "", RegisterF));
   for (Value *Data : UsedVars)
@@ -275,8 +275,8 @@ void InstrProfiling::emitRegistration() {
 }
 
 void InstrProfiling::emitRuntimeHook() {
-  const char *const RuntimeVarName = "__llvm_profile_runtime";
-  const char *const RuntimeUserName = "__llvm_profile_runtime_user";
+  const char *const RuntimeVarName = "__llvm37_profile_runtime";
+  const char *const RuntimeUserName = "__llvm37_profile_runtime_user";
 
   // If the module's provided its own runtime, we don't need to do anything.
   if (M->getGlobalVariable(RuntimeVarName))
@@ -309,14 +309,14 @@ void InstrProfiling::emitUses() {
   if (UsedVars.empty())
     return;
 
-  GlobalVariable *LLVMUsed = M->getGlobalVariable("llvm.used");
+  GlobalVariable *LLVM37Used = M->getGlobalVariable("llvm.used");
   std::vector<Constant *> MergedVars;
-  if (LLVMUsed) {
-    // Collect the existing members of llvm.used.
-    ConstantArray *Inits = cast<ConstantArray>(LLVMUsed->getInitializer());
+  if (LLVM37Used) {
+    // Collect the existing members of llvm37.used.
+    ConstantArray *Inits = cast<ConstantArray>(LLVM37Used->getInitializer());
     for (unsigned I = 0, E = Inits->getNumOperands(); I != E; ++I)
       MergedVars.push_back(Inits->getOperand(I));
-    LLVMUsed->eraseFromParent();
+    LLVM37Used->eraseFromParent();
   }
 
   Type *i8PTy = Type::getInt8PtrTy(M->getContext());
@@ -325,19 +325,19 @@ void InstrProfiling::emitUses() {
     MergedVars.push_back(
         ConstantExpr::getBitCast(cast<Constant>(Value), i8PTy));
 
-  // Recreate llvm.used.
+  // Recreate llvm37.used.
   ArrayType *ATy = ArrayType::get(i8PTy, MergedVars.size());
-  LLVMUsed =
+  LLVM37Used =
       new GlobalVariable(*M, ATy, false, GlobalValue::AppendingLinkage,
                          ConstantArray::get(ATy, MergedVars), "llvm.used");
 
-  LLVMUsed->setSection("llvm.metadata");
+  LLVM37Used->setSection("llvm.metadata");
 }
 
 void InstrProfiling::emitInitialization() {
   std::string InstrProfileOutput = Options.InstrProfileOutput;
 
-  Constant *RegisterF = M->getFunction("__llvm_profile_register_functions");
+  Constant *RegisterF = M->getFunction("__llvm37_profile_register_functions");
   if (!RegisterF && InstrProfileOutput.empty())
     return;
 
@@ -345,7 +345,7 @@ void InstrProfiling::emitInitialization() {
   auto *VoidTy = Type::getVoidTy(M->getContext());
   auto *F =
       Function::Create(FunctionType::get(VoidTy, false),
-                       GlobalValue::InternalLinkage, "__llvm_profile_init", M);
+                       GlobalValue::InternalLinkage, "__llvm37_profile_init", M);
   F->setUnnamedAddr(true);
   F->addFnAttr(Attribute::NoInline);
   if (Options.NoRedZone)
@@ -360,7 +360,7 @@ void InstrProfiling::emitInitialization() {
     auto *SetNameTy = FunctionType::get(VoidTy, Int8PtrTy, false);
     auto *SetNameF =
         Function::Create(SetNameTy, GlobalValue::ExternalLinkage,
-                         "__llvm_profile_override_default_filename", M);
+                         "__llvm37_profile_override_default_filename", M);
 
     // Create variable for profile name.
     Constant *ProfileNameConst =

@@ -215,7 +215,7 @@ latex_documents = [
 man_pages = []
 
 # Automatically derive the list of man pages from the contents of the command
-# guide subdirectory. This was copied from llvm/docs/conf.py.
+# guide subdirectory. This was copied from llvm37/docs/conf.py.
 basedir = os.path.dirname(__file__)
 man_page_authors = u'Maintained by Microsoft Corporation'
 command_guide_subpath = 'CommandGuide'

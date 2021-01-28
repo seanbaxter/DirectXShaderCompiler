@@ -1,6 +1,6 @@
 //===--- JSONCompilationDatabase.h - ----------------------------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -12,17 +12,17 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_TOOLING_JSONCOMPILATIONDATABASE_H
-#define LLVM_CLANG_TOOLING_JSONCOMPILATIONDATABASE_H
+#ifndef LLVM37_CLANG_TOOLING_JSONCOMPILATIONDATABASE_H
+#define LLVM37_CLANG_TOOLING_JSONCOMPILATIONDATABASE_H
 
 #include "clang/Basic/LLVM.h"
 #include "clang/Tooling/CompilationDatabase.h"
 #include "clang/Tooling/FileMatchTrie.h"
-#include "llvm/ADT/StringMap.h"
-#include "llvm/ADT/StringRef.h"
-#include "llvm/Support/MemoryBuffer.h"
-#include "llvm/Support/SourceMgr.h"
-#include "llvm/Support/YAMLParser.h"
+#include "llvm37/ADT/StringMap.h"
+#include "llvm37/ADT/StringRef.h"
+#include "llvm37/Support/MemoryBuffer.h"
+#include "llvm37/Support/SourceMgr.h"
+#include "llvm37/Support/YAMLParser.h"
 #include <memory>
 #include <string>
 #include <vector>
@@ -81,7 +81,7 @@ public:
 
 private:
   /// \brief Constructs a JSON compilation database on a memory buffer.
-  JSONCompilationDatabase(std::unique_ptr<llvm::MemoryBuffer> Database)
+  JSONCompilationDatabase(std::unique_ptr<llvm37::MemoryBuffer> Database)
       : Database(std::move(Database)),
         YAMLStream(this->Database->getBuffer(), SM) {}
 
@@ -93,21 +93,21 @@ private:
 
   // Tuple (directory, commandline) where 'commandline' pointing to the
   // corresponding nodes in the YAML stream.
-  typedef std::pair<llvm::yaml::ScalarNode*,
-                    llvm::yaml::ScalarNode*> CompileCommandRef;
+  typedef std::pair<llvm37::yaml::ScalarNode*,
+                    llvm37::yaml::ScalarNode*> CompileCommandRef;
 
   /// \brief Converts the given array of CompileCommandRefs to CompileCommands.
   void getCommands(ArrayRef<CompileCommandRef> CommandsRef,
                    std::vector<CompileCommand> &Commands) const;
 
   // Maps file paths to the compile command lines for that file.
-  llvm::StringMap< std::vector<CompileCommandRef> > IndexByFile;
+  llvm37::StringMap< std::vector<CompileCommandRef> > IndexByFile;
 
   FileMatchTrie MatchTrie;
 
-  std::unique_ptr<llvm::MemoryBuffer> Database;
-  llvm::SourceMgr SM;
-  llvm::yaml::Stream YAMLStream;
+  std::unique_ptr<llvm37::MemoryBuffer> Database;
+  llvm37::SourceMgr SM;
+  llvm37::yaml::Stream YAMLStream;
 };
 
 } // end namespace tooling

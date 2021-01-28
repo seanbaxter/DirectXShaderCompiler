@@ -18,7 +18,7 @@ for.body:                                         ; preds = %for.body, %entry
   store float %mul, float* %arrayidx, align 4
   %indvars.iv.next = add nuw nsw i64 %indvars.iv, 1
   %exitcond = icmp eq i64 %indvars.iv.next, 1024
-  br i1 %exitcond, label %for.end, label %for.body, !llvm.loop !0
+  br i1 %exitcond, label %for.end, label %for.body, !llvm37.loop !0
 
 for.end:                                          ; preds = %for.body
   ret void

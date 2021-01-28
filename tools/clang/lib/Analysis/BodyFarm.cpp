@@ -1,6 +1,6 @@
 //== BodyFarm.cpp  - Factory for conjuring up fake bodies ----------*- C++ -*-//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -18,7 +18,7 @@
 #include "clang/AST/Expr.h"
 #include "clang/AST/ExprObjC.h"
 #include "clang/Analysis/CodeInjector.h"
-#include "llvm/ADT/StringSwitch.h"
+#include "llvm37/ADT/StringSwitch.h"
 
 using namespace clang;
 
@@ -212,7 +212,7 @@ static Stmt *create_dispatch_once(ASTContext &C, const FunctionDecl *D) {
 
   // (2) Create the assignment to the predicate.
   IntegerLiteral *IL =
-    IntegerLiteral::Create(C, llvm::APInt(C.getTypeSize(C.IntTy), (uint64_t) 1),
+    IntegerLiteral::Create(C, llvm37::APInt(C.getTypeSize(C.IntTy), (uint64_t) 1),
                            C.IntTy, SourceLocation());
   BinaryOperator *B =
     M.makeAssignment(
@@ -375,7 +375,7 @@ Stmt *BodyFarm::getBody(const FunctionDecl *D) {
     FF = create_OSAtomicCompareAndSwap;
   }
   else {
-    FF = llvm::StringSwitch<FunctionFarmer>(Name)
+    FF = llvm37::StringSwitch<FunctionFarmer>(Name)
           .Case("dispatch_sync", create_dispatch_sync)
           .Case("dispatch_once", create_dispatch_once)
           .Default(nullptr);

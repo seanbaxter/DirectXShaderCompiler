@@ -24,7 +24,7 @@ entry:
 ; CHECK:   %ptrint = ptrtoint float* %a to i64
 ; CHECK:   %maskedptr = and i64 %ptrint, 127
 ; CHECK:   %maskcond = icmp eq i64 %maskedptr, 0
-; CHECK:   call void @llvm.assume(i1 %maskcond)
+; CHECK:   call void @llvm37.assume(i1 %maskcond)
 ; CHECK:   %0 = load float, float* %c, align 4
 ; CHECK:   %arrayidx.i = getelementptr inbounds float, float* %a, i64 5
 ; CHECK:   store float %0, float* %arrayidx.i, align 4
@@ -78,11 +78,11 @@ entry:
 ; CHECK:   %ptrint = ptrtoint float* %a to i64
 ; CHECK:   %maskedptr = and i64 %ptrint, 127
 ; CHECK:   %maskcond = icmp eq i64 %maskedptr, 0
-; CHECK:   call void @llvm.assume(i1 %maskcond)
+; CHECK:   call void @llvm37.assume(i1 %maskcond)
 ; CHECK:   %ptrint1 = ptrtoint float* %b to i64
 ; CHECK:   %maskedptr2 = and i64 %ptrint1, 127
 ; CHECK:   %maskcond3 = icmp eq i64 %maskedptr2, 0
-; CHECK:   call void @llvm.assume(i1 %maskcond3)
+; CHECK:   call void @llvm37.assume(i1 %maskcond3)
 ; CHECK:   %0 = load float, float* %c, align 4
 ; CHECK:   %arrayidx.i = getelementptr inbounds float, float* %a, i64 5
 ; CHECK:   store float %0, float* %arrayidx.i, align 4

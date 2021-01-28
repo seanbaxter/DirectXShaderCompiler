@@ -1,4 +1,4 @@
-llvm-ar - LLVM archiver
+llvm37-ar - LLVM37 archiver
 =======================
 
 
@@ -6,38 +6,38 @@ SYNOPSIS
 --------
 
 
-**llvm-ar** [-]{dmpqrtx}[Rabfikou] [relpos] [count] <archive> [files...]
+**llvm37-ar** [-]{dmpqrtx}[Rabfikou] [relpos] [count] <archive> [files...]
 
 
 DESCRIPTION
 -----------
 
 
-The **llvm-ar** command is similar to the common Unix utility, ``ar``. It
+The **llvm37-ar** command is similar to the common Unix utility, ``ar``. It
 archives several files together into a single file. The intent for this is
-to produce archive libraries by LLVM bitcode that can be linked into an
-LLVM program. However, the archive can contain any kind of file. By default,
-**llvm-ar** generates a symbol table that makes linking faster because
+to produce archive libraries by LLVM37 bitcode that can be linked into an
+LLVM37 program. However, the archive can contain any kind of file. By default,
+**llvm37-ar** generates a symbol table that makes linking faster because
 only the symbol table needs to be consulted, not each individual file member
 of the archive.
 
-The **llvm-ar** command can be used to *read* SVR4, GNU and BSD style archive
+The **llvm37-ar** command can be used to *read* SVR4, GNU and BSD style archive
 files. However, right now it can only write in the GNU format. If an
 SVR4 or BSD style archive is used with the ``r`` (replace) or ``q`` (quick
 update) operations, the archive will be reconstructed in GNU format.
 
-Here's where **llvm-ar** departs from previous ``ar`` implementations:
+Here's where **llvm37-ar** departs from previous ``ar`` implementations:
 
 
 *Symbol Table*
 
- Since **llvm-ar** supports bitcode files. The symbol table it creates
+ Since **llvm37-ar** supports bitcode files. The symbol table it creates
  is in GNU format and includes both native and bitcode files.
 
 
 *Long Paths*
 
- Currently **llvm-ar** can read GNU and BSD long file names, but only writes
+ Currently **llvm37-ar** can read GNU and BSD long file names, but only writes
  archives with the GNU format.
 
 
@@ -46,12 +46,12 @@ OPTIONS
 -------
 
 
-The options to **llvm-ar** are compatible with other ``ar`` implementations.
+The options to **llvm37-ar** are compatible with other ``ar`` implementations.
 However, there are a few modifiers (*R*) that are not found in other ``ar``
-implementations. The options to **llvm-ar** specify a single basic operation to
+implementations. The options to **llvm37-ar** specify a single basic operation to
 perform on the archive, a variety of modifiers for that operation, the name of
 the archive file, and an optional list of file names. These options are used to
-determine how **llvm-ar** should process the archive file.
+determine how **llvm37-ar** should process the archive file.
 
 The Operations and Modifiers are explained in the sections below. The minimal
 set of options is at least one operator and the name of the archive. Typically
@@ -99,7 +99,7 @@ q
  Quickly append files to the end of the archive.  This operation quickly adds the
  *files* to the archive without checking for duplicates that should be
  removed first. If no *files* are specified, the archive is not modified.
- Because of the way that **llvm-ar** constructs the archive file, its dubious
+ Because of the way that **llvm37-ar** constructs the archive file, its dubious
  whether the *q* operation is any faster than the *r* operation.
 
 
@@ -117,7 +117,7 @@ t[v]
 
  Print the table of contents. Without any modifiers, this operation just prints
  the names of the members to the standard output. With the *v* modifier,
- **llvm-ar** also prints out the file type (B=bitcode, S=symbol
+ **llvm37-ar** also prints out the file type (B=bitcode, S=symbol
  table, blank=regular file), the permission mode, the owner and group, the
  size, and the date. If any *files* are specified, the listing is only for
  those files. If no *files* are specified, the table of contents for the
@@ -168,7 +168,7 @@ section (above) to determine which modifiers are applicable to which operations.
 
 [o]
 
- When extracting files, this option will cause **llvm-ar** to preserve the
+ When extracting files, this option will cause **llvm37-ar** to preserve the
  original modification times of the files it writes.
 
 
@@ -190,8 +190,8 @@ The modifiers below may be applied to any operation.
 
 [c]
 
- For all operations, **llvm-ar** will always create the archive if it doesn't
- exist. Normally, **llvm-ar** will print a warning message indicating that the
+ For all operations, **llvm37-ar** will always create the archive if it doesn't
+ exist. Normally, **llvm37-ar** will print a warning message indicating that the
  archive is being created. Using this modifier turns off that warning.
 
 
@@ -207,7 +207,7 @@ The modifiers below may be applied to any operation.
 
 [S]
 
- This modifier is the opposite of the *s* modifier. It instructs **llvm-ar** to
+ This modifier is the opposite of the *s* modifier. It instructs **llvm37-ar** to
  not build the symbol table. If both *s* and *S* are used, the last modifier to
  occur in the options will prevail.
 
@@ -215,7 +215,7 @@ The modifiers below may be applied to any operation.
 
 [v]
 
- This modifier instructs **llvm-ar** to be verbose about what it is doing. Each
+ This modifier instructs **llvm37-ar** to be verbose about what it is doing. Each
  editing operation taken against the archive will produce a line of output saying
  what is being done.
 
@@ -227,11 +227,11 @@ STANDARDS
 ---------
 
 
-The **llvm-ar** utility is intended to provide a superset of the IEEE Std 1003.2
-(POSIX.2) functionality for ``ar``. **llvm-ar** can read both SVR4 and BSD4.4 (or
+The **llvm37-ar** utility is intended to provide a superset of the IEEE Std 1003.2
+(POSIX.2) functionality for ``ar``. **llvm37-ar** can read both SVR4 and BSD4.4 (or
 Mac OS X) archives. If the ``f`` modifier is given to the ``x`` or ``r`` operations
-then **llvm-ar** will write SVR4 compatible archives. Without this modifier,
-**llvm-ar** will write BSD4.4 compatible archives that have long names
+then **llvm37-ar** will write SVR4 compatible archives. Without this modifier,
+**llvm37-ar** will write BSD4.4 compatible archives that have long names
 immediately after the header and indicated using the "#1/ddd" notation for the
 name in the header.
 
@@ -240,9 +240,9 @@ FILE FORMAT
 -----------
 
 
-The file format for LLVM Archive files is similar to that of BSD 4.4 or Mac OSX
+The file format for LLVM37 Archive files is similar to that of BSD 4.4 or Mac OSX
 archive files. In fact, except for the symbol table, the ``ar`` commands on those
-operating systems should be able to read LLVM archive files. The details of the
+operating systems should be able to read LLVM37 archive files. The details of the
 file format follow.
 
 Each archive begins with the archive magic number which is the eight printable
@@ -354,7 +354,7 @@ EXIT STATUS
 -----------
 
 
-If **llvm-ar** succeeds, it will exit with 0.  A usage error, results
+If **llvm37-ar** succeeds, it will exit with 0.  A usage error, results
 in an exit code of 1. A hard (file system typically) error results in an
 exit code of 2. Miscellaneous or unknown errors result in an
 exit code of 3.

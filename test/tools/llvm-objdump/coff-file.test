@@ -1,6 +1,6 @@
-RUN: llvm-objdump -t %p/Inputs/file.obj.coff-arm | FileCheck %s
+RUN: llvm37-objdump -t %p/Inputs/file.obj.coff-arm | FileCheck %s
 
 CHECK: .file
-CHECK-NEXT: AUX /Users/compnerd/work/llvm/test/tools/llvm-readobj/Inputs/file.asm
+CHECK-NEXT: AUX /Users/compnerd/work/llvm37/test/tools/llvm37-readobj/Inputs/file.asm
 CHECK-NEXT: [{{[ 0-9]+}}]
 

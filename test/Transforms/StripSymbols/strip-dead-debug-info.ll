@@ -7,7 +7,7 @@
 @xyz = global i32 2
 
 ; Function Attrs: nounwind readnone
-declare void @llvm.dbg.value(metadata, i64, metadata, metadata) #0
+declare void @llvm37.dbg.value(metadata, i64, metadata, metadata) #0
 
 ; Function Attrs: nounwind readnone ssp
 define i32 @fn() #1 {
@@ -18,7 +18,7 @@ entry:
 ; Function Attrs: nounwind readonly ssp
 define i32 @foo(i32 %i) #2 {
 entry:
-  tail call void @llvm.dbg.value(metadata i32 %i, i64 0, metadata !15, metadata !DIExpression()), !dbg !20
+  tail call void @llvm37.dbg.value(metadata i32 %i, i64 0, metadata !15, metadata !DIExpression()), !dbg !20
   %.0 = load i32, i32* @xyz, align 4
   ret i32 %.0, !dbg !21
 }
@@ -27,10 +27,10 @@ attributes #0 = { nounwind readnone }
 attributes #1 = { nounwind readnone ssp }
 attributes #2 = { nounwind readonly ssp }
 
-!llvm.dbg.cu = !{!0}
-!llvm.module.flags = !{!25}
+!llvm37.dbg.cu = !{!0}
+!llvm37.module.flags = !{!25}
 
-!0 = !DICompileUnit(language: DW_LANG_C89, producer: "4.2.1 (Based on Apple Inc. build 5658) (LLVM build)", isOptimized: true, emissionKind: 1, file: !1, enums: !{}, retainedTypes: !{}, subprograms: !23, globals: !24)
+!0 = !DICompileUnit(language: DW_LANG_C89, producer: "4.2.1 (Based on Apple Inc. build 5658) (LLVM37 build)", isOptimized: true, emissionKind: 1, file: !1, enums: !{}, retainedTypes: !{}, subprograms: !23, globals: !24)
 !1 = !DIFile(filename: "g.c", directory: "/tmp/")
 !2 = !{null}
 !3 = !DISubprogram(name: "bar", line: 5, isLocal: true, isDefinition: true, virtualIndex: 6, isOptimized: true, file: !1, scope: null, type: !4)

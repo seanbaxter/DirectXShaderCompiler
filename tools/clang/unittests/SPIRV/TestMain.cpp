@@ -1,6 +1,6 @@
 //===--- utils/unittest/SPIRV/TestMain.cpp - unittest driver --------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -10,7 +10,7 @@
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
 
-#include "llvm/Support/Signals.h"
+#include "llvm37/Support/Signals.h"
 
 #include "SpirvTestOptions.h"
 #include "dxc/Support/Global.h"
@@ -96,7 +96,7 @@ private:
 const char *TestMainArgv0;
 
 int main(int argc, char **argv) {
-  llvm::sys::PrintStackTraceOnErrorSignal(true /* Disable crash reporting */);
+  llvm37::sys::PrintStackTraceOnErrorSignal(true /* Disable crash reporting */);
 
   for (int i = 1; i < argc; ++i) {
     if (std::string("--spirv-test-root") == argv[i]) {

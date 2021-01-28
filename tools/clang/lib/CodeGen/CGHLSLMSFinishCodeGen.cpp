@@ -9,19 +9,19 @@
 //                                                                           //
 ///////////////////////////////////////////////////////////////////////////////
 
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/ADT/StringRef.h"
-#include "llvm/Analysis/DxilValueCache.h"
-#include "llvm/IR/CFG.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/GetElementPtrTypeIterator.h"
-#include "llvm/IR/IRBuilder.h"
-#include "llvm/IR/InstIterator.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/Type.h"
-#include "llvm/Transforms/Utils/Cloning.h"
-#include "llvm/Transforms/Utils/ValueMapper.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/ADT/StringRef.h"
+#include "llvm37/Analysis/DxilValueCache.h"
+#include "llvm37/IR/CFG.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/GetElementPtrTypeIterator.h"
+#include "llvm37/IR/IRBuilder.h"
+#include "llvm37/IR/InstIterator.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/Type.h"
+#include "llvm37/Transforms/Utils/Cloning.h"
+#include "llvm37/Transforms/Utils/ValueMapper.h"
 
 #include "CodeGenModule.h"
 #include "clang/Basic/LangOptions.h"
@@ -47,14 +47,14 @@
 
 #include "CGHLSLMSHelper.h"
 
-using namespace llvm;
+using namespace llvm37;
 using namespace hlsl;
 using namespace CGHLSLMSHelper;
 
 namespace {
 
 Value *CreateHandleFromResPtr(Value *ResPtr, HLModule &HLM,
-                              llvm::Type *HandleTy, IRBuilder<> &Builder) {
+                              llvm37::Type *HandleTy, IRBuilder<> &Builder) {
   Module &M = *HLM.GetModule();
   // Load to make sure resource only have Ld/St use so mem2reg could remove
   // temp resource.
@@ -66,7 +66,7 @@ Value *CreateHandleFromResPtr(Value *ResPtr, HLModule &HLM,
 }
 
 CallInst *CreateAnnotateHandle(HLModule &HLM, Value *Handle,
-                            DxilResourceProperties &RP, llvm::Type *ResTy,
+                            DxilResourceProperties &RP, llvm37::Type *ResTy,
                             IRBuilder<> &Builder) {
   Constant *RPConstant = resource_helper::getAsConstant(
       RP, HLM.GetOP()->GetResourcePropertiesType(), *HLM.GetShaderModel());
@@ -119,13 +119,13 @@ void LowerDynamicCBVUseToHandle(
     Type *ResTy = ObjV->getType()->getPointerElementType();
     Handle = CreateAnnotateHandle(HLM, Handle, RP, ResTy, B);
     // Create cb subscript.
-    llvm::Type *opcodeTy = B.getInt32Ty();
-    llvm::Type *idxTy = opcodeTy;
+    llvm37::Type *opcodeTy = B.getInt32Ty();
+    llvm37::Type *idxTy = opcodeTy;
     Constant *zeroIdx = ConstantInt::get(opcodeTy, 0);
 
     Type *cbTy = BCI->getType();
-    llvm::FunctionType *SubscriptFuncTy =
-        llvm::FunctionType::get(cbTy, {opcodeTy, HandleTy, idxTy}, false);
+    llvm37::FunctionType *SubscriptFuncTy =
+        llvm37::FunctionType::get(cbTy, {opcodeTy, HandleTy, idxTy}, false);
 
     Function *subscriptFunc =
         GetOrCreateHLFunction(M, SubscriptFuncTy, HLOpcodeGroup::HLSubscript,
@@ -141,8 +141,8 @@ void LowerDynamicCBVUseToHandle(
   }
 }
 
-bool IsHLSLSamplerDescType(llvm::Type *Ty) {
-  if (llvm::StructType *ST = dyn_cast<llvm::StructType>(Ty)) {
+bool IsHLSLSamplerDescType(llvm37::Type *Ty) {
+  if (llvm37::StructType *ST = dyn_cast<llvm37::StructType>(Ty)) {
     if (!ST->hasName())
       return false;
     StringRef name = ST->getName();
@@ -160,8 +160,8 @@ static bool ConsumePrefix(StringRef &Str, StringRef Prefix) {
   return true;
 }
 
-bool IsHLSLBufferViewType(llvm::Type *Ty) {
-  if (llvm::StructType *ST = dyn_cast<llvm::StructType>(Ty)) {
+bool IsHLSLBufferViewType(llvm37::Type *Ty) {
+  if (llvm37::StructType *ST = dyn_cast<llvm37::StructType>(Ty)) {
     if (!ST->hasName())
       return false;
 
@@ -180,8 +180,8 @@ bool IsHLSLBufferViewType(llvm::Type *Ty) {
 
 void LowerGetResourceFromHeap(
     HLModule &HLM, std::vector<std::pair<Function *, unsigned>> &intrinsicMap) {
-  llvm::Module &M = *HLM.GetModule();
-  llvm::Type *HandleTy = HLM.GetOP()->GetHandleType();
+  llvm37::Module &M = *HLM.GetModule();
+  llvm37::Type *HandleTy = HLM.GetOP()->GetHandleType();
   unsigned GetResFromHeapOp =
       static_cast<unsigned>(IntrinsicOp::IOP_CreateResourceFromHeap);
   DenseMap<Instruction *, Instruction *> ResourcePtrToHandlePtrMap;
@@ -276,7 +276,7 @@ void ReplaceBoolVectorSubscript(CallInst *CI) {
       StoreInst *SI = cast<StoreInst>(user);
       Value *V = SI->getValueOperand();
       Value *cast =
-          Builder.CreateICmpNE(V, llvm::ConstantInt::get(V->getType(), 0));
+          Builder.CreateICmpNE(V, llvm37::ConstantInt::get(V->getType(), 0));
       Builder.CreateStore(cast, GEP);
       SI->eraseFromParent();
     }
@@ -293,19 +293,19 @@ void ReplaceBoolVectorSubscript(Function *F) {
 }
 
 // Add function body for intrinsic if possible.
-Function *CreateOpFunction(llvm::Module &M, Function *F,
-                           llvm::FunctionType *funcTy, HLOpcodeGroup group,
+Function *CreateOpFunction(llvm37::Module &M, Function *F,
+                           llvm37::FunctionType *funcTy, HLOpcodeGroup group,
                            unsigned opcode) {
   Function *opFunc = nullptr;
   AttributeSet attribs = F->getAttributes().getFnAttributes();
-  llvm::Type *opcodeTy = llvm::Type::getInt32Ty(M.getContext());
+  llvm37::Type *opcodeTy = llvm37::Type::getInt32Ty(M.getContext());
   if (group == HLOpcodeGroup::HLIntrinsic) {
     IntrinsicOp intriOp = static_cast<IntrinsicOp>(opcode);
     switch (intriOp) {
     case IntrinsicOp::MOP_Append:
     case IntrinsicOp::MOP_Consume: {
       bool bAppend = intriOp == IntrinsicOp::MOP_Append;
-      llvm::Type *handleTy = funcTy->getParamType(HLOperandIndex::kHandleOpIdx);
+      llvm37::Type *handleTy = funcTy->getParamType(HLOperandIndex::kHandleOpIdx);
       // Don't generate body for OutputStream::Append.
       if (bAppend && HLModule::IsStreamOutputPtrType(handleTy)) {
         opFunc = GetOrCreateHLFunction(M, funcTy, group, opcode, attribs);
@@ -314,39 +314,39 @@ Function *CreateOpFunction(llvm::Module &M, Function *F,
 
       opFunc = GetOrCreateHLFunctionWithBody(M, funcTy, group, opcode,
                                              bAppend ? "append" : "consume");
-      llvm::Type *counterTy = llvm::Type::getInt32Ty(M.getContext());
-      llvm::FunctionType *IncCounterFuncTy =
-          llvm::FunctionType::get(counterTy, {opcodeTy, handleTy}, false);
+      llvm37::Type *counterTy = llvm37::Type::getInt32Ty(M.getContext());
+      llvm37::FunctionType *IncCounterFuncTy =
+          llvm37::FunctionType::get(counterTy, {opcodeTy, handleTy}, false);
       unsigned counterOpcode =
           bAppend ? (unsigned)IntrinsicOp::MOP_IncrementCounter
                   : (unsigned)IntrinsicOp::MOP_DecrementCounter;
       Function *incCounterFunc = GetOrCreateHLFunction(
           M, IncCounterFuncTy, group, counterOpcode, attribs);
 
-      llvm::Type *idxTy = counterTy;
-      llvm::Type *valTy =
+      llvm37::Type *idxTy = counterTy;
+      llvm37::Type *valTy =
           bAppend ? funcTy->getParamType(HLOperandIndex::kAppendValOpIndex)
                   : funcTy->getReturnType();
 
       // Return type for subscript should be pointer type, hence in memory
       // representation
-      llvm::Type *subscriptTy = valTy;
+      llvm37::Type *subscriptTy = valTy;
       bool isBoolScalarOrVector = false;
       if (!subscriptTy->isPointerTy()) {
         if (subscriptTy->getScalarType()->isIntegerTy(1)) {
           isBoolScalarOrVector = true;
-          llvm::Type *memReprType =
-              llvm::IntegerType::get(subscriptTy->getContext(), 32);
+          llvm37::Type *memReprType =
+              llvm37::IntegerType::get(subscriptTy->getContext(), 32);
           subscriptTy =
               subscriptTy->isVectorTy()
-                  ? llvm::VectorType::get(memReprType,
+                  ? llvm37::VectorType::get(memReprType,
                                           subscriptTy->getVectorNumElements())
                   : memReprType;
         }
-        subscriptTy = llvm::PointerType::get(subscriptTy, 0);
+        subscriptTy = llvm37::PointerType::get(subscriptTy, 0);
       }
 
-      llvm::FunctionType *SubscriptFuncTy = llvm::FunctionType::get(
+      llvm37::FunctionType *SubscriptFuncTy = llvm37::FunctionType::get(
           subscriptTy, {opcodeTy, handleTy, idxTy}, false);
 
       Function *subscriptFunc = GetOrCreateHLFunction(
@@ -403,11 +403,11 @@ Function *CreateOpFunction(llvm::Module &M, Function *F,
     case IntrinsicOp::IOP_sincos: {
       opFunc =
           GetOrCreateHLFunctionWithBody(M, funcTy, group, opcode, "sincos");
-      llvm::Type *valTy =
+      llvm37::Type *valTy =
           funcTy->getParamType(HLOperandIndex::kTrinaryOpSrc0Idx);
 
-      llvm::FunctionType *sinFuncTy =
-          llvm::FunctionType::get(valTy, {opcodeTy, valTy}, false);
+      llvm37::FunctionType *sinFuncTy =
+          llvm37::FunctionType::get(valTy, {opcodeTy, valTy}, false);
       unsigned sinOp = static_cast<unsigned>(IntrinsicOp::IOP_sin);
       unsigned cosOp = static_cast<unsigned>(IntrinsicOp::IOP_cos);
       Function *sinFunc =
@@ -440,8 +440,8 @@ Function *CreateOpFunction(llvm::Module &M, Function *F,
       break;
     }
   } else if (group == HLOpcodeGroup::HLExtIntrinsic) {
-    llvm::StringRef fnName = F->getName();
-    llvm::StringRef groupName = GetHLOpcodeGroupNameByAttr(F);
+    llvm37::StringRef fnName = F->getName();
+    llvm37::StringRef groupName = GetHLOpcodeGroupNameByAttr(F);
     opFunc = GetOrCreateHLFunction(M, funcTy, group, &groupName, &fnName,
                                    opcode, attribs);
   } else {
@@ -521,19 +521,19 @@ DxilResourceProperties GetResourcePropsFromIntrinsicObjectArg(
 }
 
 void AddOpcodeParamForIntrinsic(
-    HLModule &HLM, Function *F, unsigned opcode, llvm::Type *HandleTy,
+    HLModule &HLM, Function *F, unsigned opcode, llvm37::Type *HandleTy,
     DxilObjectProperties &objectProperties) {
-  llvm::Module &M = *HLM.GetModule();
-  llvm::FunctionType *oldFuncTy = F->getFunctionType();
+  llvm37::Module &M = *HLM.GetModule();
+  llvm37::FunctionType *oldFuncTy = F->getFunctionType();
 
-  SmallVector<llvm::Type *, 4> paramTyList;
+  SmallVector<llvm37::Type *, 4> paramTyList;
   // Add the opcode param
-  llvm::Type *opcodeTy = llvm::Type::getInt32Ty(M.getContext());
+  llvm37::Type *opcodeTy = llvm37::Type::getInt32Ty(M.getContext());
   paramTyList.emplace_back(opcodeTy);
   paramTyList.append(oldFuncTy->param_begin(), oldFuncTy->param_end());
 
   for (unsigned i = 1; i < paramTyList.size(); i++) {
-    llvm::Type *Ty = paramTyList[i];
+    llvm37::Type *Ty = paramTyList[i];
     if (Ty->isPointerTy()) {
       Ty = Ty->getPointerElementType();
       if (dxilutil::IsHLSLResourceType(Ty)) {
@@ -548,13 +548,13 @@ void AddOpcodeParamForIntrinsic(
 
   if (group == HLOpcodeGroup::HLSubscript &&
       opcode == static_cast<unsigned>(HLSubscriptOpcode::VectorSubscript)) {
-    llvm::FunctionType *FT = F->getFunctionType();
-    llvm::Type *VecArgTy = FT->getParamType(0);
-    llvm::VectorType *VType =
-        cast<llvm::VectorType>(VecArgTy->getPointerElementType());
-    llvm::Type *Ty = VType->getElementType();
+    llvm37::FunctionType *FT = F->getFunctionType();
+    llvm37::Type *VecArgTy = FT->getParamType(0);
+    llvm37::VectorType *VType =
+        cast<llvm37::VectorType>(VecArgTy->getPointerElementType());
+    llvm37::Type *Ty = VType->getElementType();
     DXASSERT(Ty->isIntegerTy(), "Only bool could use VectorSubscript");
-    llvm::IntegerType *ITy = cast<IntegerType>(Ty);
+    llvm37::IntegerType *ITy = cast<IntegerType>(Ty);
 
     DXASSERT_LOCALVAR(ITy, ITy->getBitWidth() == 1,
                       "Only bool could use VectorSubscript");
@@ -569,7 +569,7 @@ void AddOpcodeParamForIntrinsic(
       group == HLOpcodeGroup::HLSubscript &&
       opcode == static_cast<unsigned>(HLSubscriptOpcode::DoubleSubscript);
 
-  llvm::Type *RetTy = oldFuncTy->getReturnType();
+  llvm37::Type *RetTy = oldFuncTy->getReturnType();
 
   if (isDoubleSubscriptFunc) {
     CallInst *doubleSub = cast<CallInst>(*F->user_begin());
@@ -586,7 +586,7 @@ void AddOpcodeParamForIntrinsic(
 
     Value *coord = secSub->getArgOperand(coordIdx);
 
-    llvm::Type *coordTy = coord->getType();
+    llvm37::Type *coordTy = coord->getType();
     paramTyList[HLOperandIndex::kSubscriptIndexOpIdx] = coordTy;
     // Add the sampleIdx or mipLevel parameter to the end.
     paramTyList.emplace_back(opcodeTy);
@@ -597,7 +597,7 @@ void AddOpcodeParamForIntrinsic(
     // Must be a GEP
     GEPOperator *objGEP = cast<GEPOperator>(objPtr);
     gep_type_iterator GEPIt = gep_type_begin(objGEP), E = gep_type_end(objGEP);
-    llvm::Type *resTy = nullptr;
+    llvm37::Type *resTy = nullptr;
     while (GEPIt != E) {
       if (dxilutil::IsHLSLResourceType(*GEPIt)) {
         resTy = *GEPIt;
@@ -613,8 +613,8 @@ void AddOpcodeParamForIntrinsic(
     RetTy = cast<StructType>(resTy)->getElementType(0)->getPointerTo();
   }
 
-  llvm::FunctionType *funcTy =
-      llvm::FunctionType::get(RetTy, paramTyList, oldFuncTy->isVarArg());
+  llvm37::FunctionType *funcTy =
+      llvm37::FunctionType::get(RetTy, paramTyList, oldFuncTy->isVarArg());
 
   Function *opFunc = CreateOpFunction(M, F, funcTy, group, opcode);
   StringRef lower = hlsl::GetHLLowerStrategy(F);
@@ -684,7 +684,7 @@ void AddOpcodeParamForIntrinsic(
 
     for (unsigned i = 1; i < opcodeParamList.size(); i++) {
       Value *arg = opcodeParamList[i];
-      llvm::Type *Ty = arg->getType();
+      llvm37::Type *Ty = arg->getType();
       if (Ty->isPointerTy()) {
         Ty = Ty->getPointerElementType();
         if (dxilutil::IsHLSLResourceType(Ty)) {
@@ -703,7 +703,7 @@ void AddOpcodeParamForIntrinsic(
             arg = GEP;
           }
 
-          llvm::Type *ResTy = arg->getType()->getPointerElementType();
+          llvm37::Type *ResTy = arg->getType()->getPointerElementType();
 
           Value *Handle = CreateHandleFromResPtr(arg, HLM, HandleTy, Builder);
           Handle = CreateAnnotateHandle(HLM, Handle, RP, ResTy, Builder);
@@ -735,7 +735,7 @@ void AddOpcodeParamForIntrinsic(
 void AddOpcodeParamForIntrinsics(
     HLModule &HLM, std::vector<std::pair<Function *, unsigned>> &intrinsicMap,
     DxilObjectProperties &objectProperties) {
-  llvm::Type *HandleTy = HLM.GetOP()->GetHandleType();
+  llvm37::Type *HandleTy = HLM.GetOP()->GetHandleType();
   for (auto mapIter : intrinsicMap) {
     Function *F = mapIter.first;
     if (F->user_empty()) {
@@ -802,14 +802,14 @@ bool GlobalHasStoreUser(GlobalVariable *GV) {
   return GlobalHasStoreUserRec(V, visited);
 }
 
-GlobalVariable *CreateStaticGlobal(llvm::Module *M, GlobalVariable *GV) {
+GlobalVariable *CreateStaticGlobal(llvm37::Module *M, GlobalVariable *GV) {
   Constant *GC = M->getOrInsertGlobal(GV->getName().str() + ".static.copy",
                                       GV->getType()->getPointerElementType());
   GlobalVariable *NGV = cast<GlobalVariable>(GC);
   if (GV->hasInitializer()) {
     NGV->setInitializer(GV->getInitializer());
   } else {
-    // The copy being static, it should be initialized per llvm rules
+    // The copy being static, it should be initialized per llvm37 rules
     NGV->setInitializer(
         Constant::getNullValue(GV->getType()->getPointerElementType()));
   }
@@ -818,7 +818,7 @@ GlobalVariable *CreateStaticGlobal(llvm::Module *M, GlobalVariable *GV) {
   return NGV;
 }
 
-void CreateWriteEnabledStaticGlobals(llvm::Module *M, llvm::Function *EF) {
+void CreateWriteEnabledStaticGlobals(llvm37::Module *M, llvm37::Function *EF) {
   std::vector<GlobalVariable *> worklist;
   for (GlobalVariable &GV : M->globals()) {
     if (!GV.isConstant() && GV.getLinkage() != GlobalValue::InternalLinkage &&
@@ -862,13 +862,13 @@ void SetEntryFunction(HLModule &HLM, Function *Entry,
   HLM.SetEntryFunction(Entry);
 }
 
-Function *CloneFunction(Function *Orig, const llvm::Twine &Name,
-                        llvm::Module *llvmModule, hlsl::DxilTypeSystem &TypeSys,
+Function *CloneFunction(Function *Orig, const llvm37::Twine &Name,
+                        llvm37::Module *llvm37Module, hlsl::DxilTypeSystem &TypeSys,
                         hlsl::DxilTypeSystem &SrcTypeSys) {
 
   Function *F = Function::Create(Orig->getFunctionType(),
                                  GlobalValue::LinkageTypes::ExternalLinkage,
-                                 Name, llvmModule);
+                                 Name, llvm37Module);
 
   SmallVector<ReturnInst *, 2> Returns;
   ValueToValueMapTy vmap;
@@ -878,7 +878,7 @@ Function *CloneFunction(Function *Orig, const llvm::Twine &Name,
     vmap[&param] = (entryParamIt++);
   }
 
-  llvm::CloneFunctionInto(F, Orig, vmap, /*ModuleLevelChagnes*/ false, Returns);
+  llvm37::CloneFunctionInto(F, Orig, vmap, /*ModuleLevelChagnes*/ false, Returns);
   TypeSys.CopyFunctionAnnotation(F, Orig, SrcTypeSys);
 
   return F;
@@ -1075,7 +1075,7 @@ void ReplaceConstStaticGlobals(
   for (auto &iter : staticConstGlobalInitListMap) {
     GlobalVariable *GV = iter.first;
     std::vector<Constant *> &InitList = iter.second;
-    LLVMContext &Ctx = GV->getContext();
+    LLVM37Context &Ctx = GV->getContext();
     // Do the replace.
     bool bPass = true;
     for (User *U : GV->users()) {
@@ -1104,7 +1104,7 @@ void ReplaceConstStaticGlobals(
 
 namespace {
 
-Value *CastLdValue(Value *Ptr, llvm::Type *FromTy, llvm::Type *ToTy,
+Value *CastLdValue(Value *Ptr, llvm37::Type *FromTy, llvm37::Type *ToTy,
                    IRBuilder<> &Builder) {
   if (ToTy->isVectorTy()) {
     unsigned vecSize = ToTy->getVectorNumElements();
@@ -1131,9 +1131,9 @@ Value *CastLdValue(Value *Ptr, llvm::Type *FromTy, llvm::Type *ToTy,
       int mask[] = {0};
       return Builder.CreateShuffleVector(V, V, mask);
     } else if (FromTy->isArrayTy()) {
-      llvm::Type *FromEltTy = FromTy->getArrayElementType();
+      llvm37::Type *FromEltTy = FromTy->getArrayElementType();
 
-      llvm::Type *ToEltTy = ToTy->getVectorElementType();
+      llvm37::Type *ToEltTy = ToTy->getVectorElementType();
       if (FromTy->getArrayNumElements() == vecSize && FromEltTy == ToEltTy) {
         // ArrayToVector.
         Value *NewLd = UndefValue::get(ToTy);
@@ -1157,7 +1157,7 @@ Value *CastLdValue(Value *Ptr, llvm::Type *FromTy, llvm::Type *ToTy,
   return nullptr;
 }
 
-Value *CastStValue(Value *Ptr, Value *V, llvm::Type *FromTy, llvm::Type *ToTy,
+Value *CastStValue(Value *Ptr, Value *V, llvm37::Type *FromTy, llvm37::Type *ToTy,
                    IRBuilder<> &Builder) {
   if (ToTy->isVectorTy()) {
     unsigned vecSize = ToTy->getVectorNumElements();
@@ -1173,9 +1173,9 @@ Value *CastStValue(Value *Ptr, Value *V, llvm::Type *FromTy, llvm::Type *ToTy,
       // Reported error at Sema::ImpCastExprToType.
       DXASSERT_NOMSG(0);
     } else if (FromTy->isArrayTy()) {
-      llvm::Type *FromEltTy = FromTy->getArrayElementType();
+      llvm37::Type *FromEltTy = FromTy->getArrayElementType();
 
-      llvm::Type *ToEltTy = ToTy->getVectorElementType();
+      llvm37::Type *ToEltTy = ToTy->getVectorElementType();
       if (FromTy->getArrayNumElements() == vecSize && FromEltTy == ToEltTy) {
         // ArrayToVector.
         Value *zeroIdx = Builder.getInt32(0);
@@ -1201,7 +1201,7 @@ Value *CastStValue(Value *Ptr, Value *V, llvm::Type *FromTy, llvm::Type *ToTy,
   return nullptr;
 }
 
-bool SimplifyBitCastLoad(LoadInst *LI, llvm::Type *FromTy, llvm::Type *ToTy,
+bool SimplifyBitCastLoad(LoadInst *LI, llvm37::Type *FromTy, llvm37::Type *ToTy,
                          Value *Ptr) {
   IRBuilder<> Builder(LI);
   // Cast FromLd to ToTy.
@@ -1214,7 +1214,7 @@ bool SimplifyBitCastLoad(LoadInst *LI, llvm::Type *FromTy, llvm::Type *ToTy,
   }
 }
 
-bool SimplifyBitCastStore(StoreInst *SI, llvm::Type *FromTy, llvm::Type *ToTy,
+bool SimplifyBitCastStore(StoreInst *SI, llvm37::Type *FromTy, llvm37::Type *ToTy,
                           Value *Ptr) {
   IRBuilder<> Builder(SI);
   Value *V = SI->getValueOperand();
@@ -1228,7 +1228,7 @@ bool SimplifyBitCastStore(StoreInst *SI, llvm::Type *FromTy, llvm::Type *ToTy,
   }
 }
 
-bool SimplifyBitCastGEP(GEPOperator *GEP, llvm::Type *FromTy, llvm::Type *ToTy,
+bool SimplifyBitCastGEP(GEPOperator *GEP, llvm37::Type *FromTy, llvm37::Type *ToTy,
                         Value *Ptr) {
   if (ToTy->isVectorTy()) {
     unsigned vecSize = ToTy->getVectorNumElements();
@@ -1239,7 +1239,7 @@ bool SimplifyBitCastGEP(GEPOperator *GEP, llvm::Type *FromTy, llvm::Type *ToTy,
     } else if (FromTy->isVectorTy() && vecSize == 1) {
       // VectorTrunc
       DXASSERT_NOMSG(
-          !isa<llvm::VectorType>(GEP->getType()->getPointerElementType()));
+          !isa<llvm37::VectorType>(GEP->getType()->getPointerElementType()));
       IRBuilder<> Builder(FromTy->getContext());
       if (Instruction *I = dyn_cast<Instruction>(GEP))
         Builder.SetInsertPoint(I);
@@ -1248,14 +1248,14 @@ bool SimplifyBitCastGEP(GEPOperator *GEP, llvm::Type *FromTy, llvm::Type *ToTy,
       GEP->replaceAllUsesWith(NewGEP);
       return true;
     } else if (FromTy->isArrayTy()) {
-      llvm::Type *FromEltTy = FromTy->getArrayElementType();
+      llvm37::Type *FromEltTy = FromTy->getArrayElementType();
 
-      llvm::Type *ToEltTy = ToTy->getVectorElementType();
+      llvm37::Type *ToEltTy = ToTy->getVectorElementType();
       if (FromTy->getArrayNumElements() == vecSize && FromEltTy == ToEltTy) {
         // ArrayToVector.
       }
     }
-  } else if (FromTy == llvm::Type::getInt1Ty(FromTy->getContext())) {
+  } else if (FromTy == llvm37::Type::getInt1Ty(FromTy->getContext())) {
     // BoolCast
   }
   return false;
@@ -1263,8 +1263,8 @@ bool SimplifyBitCastGEP(GEPOperator *GEP, llvm::Type *FromTy, llvm::Type *ToTy,
 typedef SmallPtrSet<Instruction *, 4> SmallInstSet;
 void SimplifyBitCast(BitCastOperator *BC, SmallInstSet &deadInsts) {
   Value *Ptr = BC->getOperand(0);
-  llvm::Type *FromTy = Ptr->getType();
-  llvm::Type *ToTy = BC->getType();
+  llvm37::Type *FromTy = Ptr->getType();
+  llvm37::Type *ToTy = BC->getType();
 
   if (!FromTy->isPointerTy() || !ToTy->isPointerTy())
     return;
@@ -1281,7 +1281,7 @@ void SimplifyBitCast(BitCastOperator *BC, SmallInstSet &deadInsts) {
 
     Value *zeroIdx = Builder.getInt32(0);
     unsigned nestLevel = 1;
-    while (llvm::StructType *ST = dyn_cast<llvm::StructType>(FromTy)) {
+    while (llvm37::StructType *ST = dyn_cast<llvm37::StructType>(FromTy)) {
       if (ST->getNumElements() == 0)
         break;
       FromTy = ST->getElementType(0);
@@ -1338,7 +1338,7 @@ typedef double(__cdecl *DoubleBinaryEvalFuncType)(double, double);
 
 Value *EvalUnaryIntrinsic(ConstantFP *fpV, FloatUnaryEvalFuncType floatEvalFunc,
                           DoubleUnaryEvalFuncType doubleEvalFunc) {
-  llvm::Type *Ty = fpV->getType();
+  llvm37::Type *Ty = fpV->getType();
   Value *Result = nullptr;
   if (Ty->isDoubleTy()) {
     double dV = fpV->getValueAPF().convertToDouble();
@@ -1357,7 +1357,7 @@ Value *EvalBinaryIntrinsic(Constant *cV0, Constant *cV1,
                            FloatBinaryEvalFuncType floatEvalFunc,
                            DoubleBinaryEvalFuncType doubleEvalFunc,
                            IntBinaryEvalFuncType intEvalFunc) {
-  llvm::Type *Ty = cV0->getType();
+  llvm37::Type *Ty = cV0->getType();
   Value *Result = nullptr;
   if (Ty->isDoubleTy()) {
     ConstantFP *fpV0 = cast<ConstantFP>(cV0);
@@ -1389,9 +1389,9 @@ Value *EvalBinaryIntrinsic(Constant *cV0, Constant *cV1,
 Value *EvalUnaryIntrinsic(CallInst *CI, FloatUnaryEvalFuncType floatEvalFunc,
                           DoubleUnaryEvalFuncType doubleEvalFunc) {
   Value *V = CI->getArgOperand(0);
-  llvm::Type *Ty = CI->getType();
+  llvm37::Type *Ty = CI->getType();
   Value *Result = nullptr;
-  if (llvm::VectorType *VT = dyn_cast<llvm::VectorType>(Ty)) {
+  if (llvm37::VectorType *VT = dyn_cast<llvm37::VectorType>(Ty)) {
     Result = UndefValue::get(Ty);
     Constant *CV = cast<Constant>(V);
     IRBuilder<> Builder(CI);
@@ -1414,9 +1414,9 @@ Value *EvalBinaryIntrinsic(CallInst *CI, FloatBinaryEvalFuncType floatEvalFunc,
                            IntBinaryEvalFuncType intEvalFunc = nullptr) {
   Value *V0 = CI->getArgOperand(0);
   Value *V1 = CI->getArgOperand(1);
-  llvm::Type *Ty = CI->getType();
+  llvm37::Type *Ty = CI->getType();
   Value *Result = nullptr;
-  if (llvm::VectorType *VT = dyn_cast<llvm::VectorType>(Ty)) {
+  if (llvm37::VectorType *VT = dyn_cast<llvm37::VectorType>(Ty)) {
     Result = UndefValue::get(Ty);
     Constant *CV0 = cast<Constant>(V0);
     Constant *CV1 = cast<Constant>(V1);
@@ -1476,7 +1476,7 @@ void SimpleTransformForHLDXIRInst(Instruction *I, SmallInstSet &deadInsts) {
   case Instruction::LShr:
   case Instruction::AShr:
   case Instruction::Shl: {
-    llvm::BinaryOperator *BO = cast<llvm::BinaryOperator>(I);
+    llvm37::BinaryOperator *BO = cast<llvm37::BinaryOperator>(I);
     Value *op2 = BO->getOperand(1);
     IntegerType *Ty = cast<IntegerType>(BO->getType()->getScalarType());
     unsigned bitWidth = Ty->getBitWidth();
@@ -1538,7 +1538,7 @@ Value *TryEvalIntrinsic(CallInst *CI, IntrinsicOp intriOp,
     Value *V1 = CI->getArgOperand(1);
     ConstantFP *fpV1 = cast<ConstantFP>(V1);
 
-    llvm::Type *Ty = CI->getType();
+    llvm37::Type *Ty = CI->getType();
     Value *Result = nullptr;
     if (Ty->isDoubleTy()) {
       double dV0 = fpV0->getValueAPF().convertToDouble();
@@ -1671,7 +1671,7 @@ Value *TryEvalIntrinsic(CallInst *CI, IntrinsicOp intriOp,
 }
 
 // Do simple transform to make later lower pass easier.
-void SimpleTransformForHLDXIR(llvm::Module *pM) {
+void SimpleTransformForHLDXIR(llvm37::Module *pM) {
   SmallInstSet deadInsts;
   for (Function &F : pM->functions()) {
     for (BasicBlock &BB : F.getBasicBlockList()) {
@@ -1740,7 +1740,7 @@ bool RetrieveLastElementType(Type *Ty, Type *&EltTy) {
 // Here the size is CB size.
 // Offset still needs to be aligned based on type since this
 // is the legacy cbuffer global path.
-unsigned AlignCBufferOffset(unsigned offset, unsigned size, llvm::Type *Ty,
+unsigned AlignCBufferOffset(unsigned offset, unsigned size, llvm37::Type *Ty,
                             bool bRowMajor, bool bMinPrecMode,
                             bool &bCurRowIsMinPrec) {
   DXASSERT(!(offset & 1), "otherwise we have an invalid offset.");
@@ -1805,7 +1805,7 @@ unsigned AllocateDxilConstantBuffer(
       continue;
 
     unsigned size = C->GetRangeSize();
-    llvm::Type *Ty = C->GetHLSLType()->getPointerElementType();
+    llvm37::Type *Ty = C->GetHLSLType()->getPointerElementType();
     auto fieldAnnotation = constVarAnnotationMap.at(C->GetGlobalSymbol());
     bool bRowMajor = HLMatrixType::isa(Ty)
                          ? fieldAnnotation.GetMatrixAnnotation().Orientation ==
@@ -1897,43 +1897,43 @@ void MarkUsedFunctionForConst(Value *V,
   }
 }
 
-bool CreateCBufferVariable(HLCBuffer &CB, HLModule &HLM, llvm::Type *HandleTy) {
+bool CreateCBufferVariable(HLCBuffer &CB, HLModule &HLM, llvm37::Type *HandleTy) {
   bool bUsed = false;
   // Build Struct for CBuffer.
-  SmallVector<llvm::Type *, 4> Elements;
+  SmallVector<llvm37::Type *, 4> Elements;
   for (const std::unique_ptr<DxilResourceBase> &C : CB.GetConstants()) {
     Value *GV = C->GetGlobalSymbol();
     if (!GV->use_empty())
       bUsed = true;
     // Global variable must be pointer type.
-    llvm::Type *Ty = C->GetHLSLType()->getPointerElementType();
+    llvm37::Type *Ty = C->GetHLSLType()->getPointerElementType();
     Elements.emplace_back(Ty);
   }
   // Don't create CBuffer variable for unused cbuffer.
   if (!bUsed)
     return false;
 
-  llvm::Module &M = *HLM.GetModule();
+  llvm37::Module &M = *HLM.GetModule();
 
   bool isCBArray = CB.IsArray();
-  llvm::GlobalVariable *cbGV = nullptr;
-  llvm::Type *cbTy = nullptr;
+  llvm37::GlobalVariable *cbGV = nullptr;
+  llvm37::Type *cbTy = nullptr;
 
   unsigned cbIndexDepth = 0;
   if (!isCBArray) {
     if (CB.IsView()) {
-      llvm::StructType *CBStructTy =
-          llvm::StructType::create(CB.GetResultType(), CB.GetGlobalName());
-      cbGV = new llvm::GlobalVariable(M, CBStructTy,
+      llvm37::StructType *CBStructTy =
+          llvm37::StructType::create(CB.GetResultType(), CB.GetGlobalName());
+      cbGV = new llvm37::GlobalVariable(M, CBStructTy,
                                       /*IsConstant*/ true,
-                                      llvm::GlobalValue::ExternalLinkage,
+                                      llvm37::GlobalValue::ExternalLinkage,
                                       /*InitVal*/ nullptr, CB.GetGlobalName());
       cbTy = cbGV->getType();
     } else {
-      llvm::StructType *CBStructTy =
-          llvm::StructType::create(Elements, CB.GetGlobalName());
-      cbGV = new llvm::GlobalVariable(M, CBStructTy, /*IsConstant*/ true,
-                                      llvm::GlobalValue::ExternalLinkage,
+      llvm37::StructType *CBStructTy =
+          llvm37::StructType::create(Elements, CB.GetGlobalName());
+      cbGV = new llvm37::GlobalVariable(M, CBStructTy, /*IsConstant*/ true,
+                                      llvm37::GlobalValue::ExternalLinkage,
                                       /*InitVal*/ nullptr, CB.GetGlobalName());
       cbTy = cbGV->getType();
     }
@@ -1942,7 +1942,7 @@ bool CreateCBufferVariable(HLCBuffer &CB, HLModule &HLM, llvm::Type *HandleTy) {
     // array.
     DXASSERT(CB.GetConstants().size() == 1,
              "ConstantBuffer should have 1 constant");
-    llvm::Type *CBEltTy =
+    llvm37::Type *CBEltTy =
         CB.GetConstants()[0]->GetHLSLType()->getPointerElementType()->getArrayElementType();
     cbIndexDepth = 1;
     while (CBEltTy->isArrayTy()) {
@@ -1951,29 +1951,29 @@ bool CreateCBufferVariable(HLCBuffer &CB, HLModule &HLM, llvm::Type *HandleTy) {
     }
 
     // Add one level struct type to match normal case.
-    llvm::StructType *CBStructTy =
-        llvm::StructType::create({CB.GetResultType()}, CB.GetGlobalName());
+    llvm37::StructType *CBStructTy =
+        llvm37::StructType::create({CB.GetResultType()}, CB.GetGlobalName());
 
-    llvm::ArrayType *CBArrayTy =
-        llvm::ArrayType::get(CBStructTy, CB.GetRangeSize());
-    cbGV = new llvm::GlobalVariable(M, CBArrayTy, /*IsConstant*/ true,
-                                    llvm::GlobalValue::ExternalLinkage,
+    llvm37::ArrayType *CBArrayTy =
+        llvm37::ArrayType::get(CBStructTy, CB.GetRangeSize());
+    cbGV = new llvm37::GlobalVariable(M, CBArrayTy, /*IsConstant*/ true,
+                                    llvm37::GlobalValue::ExternalLinkage,
                                     /*InitVal*/ nullptr, CB.GetGlobalName());
 
-    cbTy = llvm::PointerType::get(CBStructTy,
+    cbTy = llvm37::PointerType::get(CBStructTy,
                                   cbGV->getType()->getPointerAddressSpace());
   }
 
   CB.SetGlobalSymbol(cbGV);
 
-  llvm::Type *opcodeTy = llvm::Type::getInt32Ty(M.getContext());
-  llvm::Type *idxTy = opcodeTy;
+  llvm37::Type *opcodeTy = llvm37::Type::getInt32Ty(M.getContext());
+  llvm37::Type *idxTy = opcodeTy;
   Constant *zeroIdx = ConstantInt::get(opcodeTy, 0);
 
   Value *HandleArgs[] = {cbGV, zeroIdx};
 
-  llvm::FunctionType *SubscriptFuncTy =
-      llvm::FunctionType::get(cbTy, {opcodeTy, HandleTy, idxTy}, false);
+  llvm37::FunctionType *SubscriptFuncTy =
+      llvm37::FunctionType::get(cbTy, {opcodeTy, HandleTy, idxTy}, false);
 
   Function *subscriptFunc =
       GetOrCreateHLFunction(M, SubscriptFuncTy, HLOpcodeGroup::HLSubscript,
@@ -1982,8 +1982,8 @@ bool CreateCBufferVariable(HLCBuffer &CB, HLModule &HLM, llvm::Type *HandleTy) {
       ConstantInt::get(opcodeTy, (unsigned)HLSubscriptOpcode::CBufferSubscript);
   Value *args[] = {opArg, nullptr, zeroIdx};
 
-  llvm::LLVMContext &Context = M.getContext();
-  llvm::Type *i32Ty = llvm::Type::getInt32Ty(Context);
+  llvm37::LLVM37Context &Context = M.getContext();
+  llvm37::Type *i32Ty = llvm37::Type::getInt32Ty(Context);
   Value *zero = ConstantInt::get(i32Ty, (uint64_t)0);
 
   std::vector<Value *> indexArray(CB.GetConstants().size());
@@ -2047,7 +2047,7 @@ bool CreateCBufferVariable(HLCBuffer &CB, HLModule &HLM, llvm::Type *HandleTy) {
           IRBuilder<> *instBuilder = &Builder;
           std::unique_ptr<IRBuilder<>> B;
           if (I) {
-            B = llvm::make_unique<IRBuilder<>>(I);
+            B = llvm37::make_unique<IRBuilder<>>(I);
             instBuilder = B.get();
           }
 
@@ -2118,14 +2118,14 @@ void ConstructCBufferAnnotation(
     std::unordered_map<Constant *, DxilFieldAnnotation> &AnnotationMap) {
   Value *GV = CB.GetGlobalSymbol();
 
-  llvm::StructType *CBStructTy =
-      dyn_cast<llvm::StructType>(GV->getType()->getPointerElementType());
+  llvm37::StructType *CBStructTy =
+      dyn_cast<llvm37::StructType>(GV->getType()->getPointerElementType());
 
   if (!CBStructTy) {
     // For Array of ConstantBuffer.
-    llvm::ArrayType *CBArrayTy =
-        cast<llvm::ArrayType>(GV->getType()->getPointerElementType());
-    CBStructTy = cast<llvm::StructType>(CBArrayTy->getArrayElementType());
+    llvm37::ArrayType *CBArrayTy =
+        cast<llvm37::ArrayType>(GV->getType()->getPointerElementType());
+    CBStructTy = cast<llvm37::StructType>(CBArrayTy->getArrayElementType());
   }
 
   DxilStructAnnotation *CBAnnotation =
@@ -2145,17 +2145,17 @@ void ConstructCBufferAnnotation(
 }
 
 void ConstructCBuffer(
-    HLModule &HLM, llvm::Type *CBufferType,
+    HLModule &HLM, llvm37::Type *CBufferType,
     std::unordered_map<Constant *, DxilFieldAnnotation> &AnnotationMap) {
   DxilTypeSystem &dxilTypeSys = HLM.GetTypeSystem();
-  llvm::Type *HandleTy = HLM.GetOP()->GetHandleType();
+  llvm37::Type *HandleTy = HLM.GetOP()->GetHandleType();
   for (unsigned i = 0; i < HLM.GetCBuffers().size(); i++) {
     HLCBuffer &CB = *static_cast<HLCBuffer *>(&(HLM.GetCBuffer(i)));
     if (CB.GetConstants().size() == 0) {
       // Create Fake variable for cbuffer which is empty.
-      llvm::GlobalVariable *pGV = new llvm::GlobalVariable(
+      llvm37::GlobalVariable *pGV = new llvm37::GlobalVariable(
           *HLM.GetModule(), CBufferType, true,
-          llvm::GlobalValue::ExternalLinkage, nullptr, CB.GetGlobalName());
+          llvm37::GlobalValue::ExternalLinkage, nullptr, CB.GetGlobalName());
       CB.SetGlobalSymbol(pGV);
     } else {
       bool bCreated = CreateCBufferVariable(CB, HLM, HandleTy);
@@ -2163,9 +2163,9 @@ void ConstructCBuffer(
         ConstructCBufferAnnotation(CB, dxilTypeSys, AnnotationMap);
       else {
         // Create Fake variable for cbuffer which is unused.
-        llvm::GlobalVariable *pGV = new llvm::GlobalVariable(
+        llvm37::GlobalVariable *pGV = new llvm37::GlobalVariable(
             *HLM.GetModule(), CBufferType, true,
-            llvm::GlobalValue::ExternalLinkage, nullptr, CB.GetGlobalName());
+            llvm37::GlobalValue::ExternalLinkage, nullptr, CB.GetGlobalName());
         CB.SetGlobalSymbol(pGV);
       }
     }
@@ -2199,7 +2199,7 @@ unsigned AlignBufferOffsetInLegacy(unsigned offset, unsigned size,
 //  %flags) %gep = GEP %"RayQuery<flags>" %ptr, 0, 0 store i32* %gep, i32
 //  %handle ; and replace uses of %call with %ptr
 void TranslateRayQueryConstructor(HLModule &HLM) {
-  llvm::Module &M = *HLM.GetModule();
+  llvm37::Module &M = *HLM.GetModule();
   SmallVector<Function *, 4> Constructors;
   for (auto &F : M.functions()) {
     // Match templated RayQuery constructor instantiation by prefix and
@@ -2207,7 +2207,7 @@ void TranslateRayQueryConstructor(HLModule &HLM) {
     // HLSL.
     if (!F.getName().startswith("\01??0?$RayQuery@$"))
       continue;
-    llvm::Type *Ty = F.getReturnType();
+    llvm37::Type *Ty = F.getReturnType();
     if (!Ty->isPointerTy() ||
         !dxilutil::IsHLSLRayQueryType(Ty->getPointerElementType()))
       continue;
@@ -2217,22 +2217,22 @@ void TranslateRayQueryConstructor(HLModule &HLM) {
   }
 
   for (auto pConstructorFunc : Constructors) {
-    llvm::IntegerType *i32Ty = llvm::Type::getInt32Ty(M.getContext());
-    llvm::ConstantInt *i32Zero =
-        llvm::ConstantInt::get(i32Ty, (uint64_t)0, false);
-    llvm::FunctionType *funcTy =
-        llvm::FunctionType::get(i32Ty, {i32Ty, i32Ty}, false);
+    llvm37::IntegerType *i32Ty = llvm37::Type::getInt32Ty(M.getContext());
+    llvm37::ConstantInt *i32Zero =
+        llvm37::ConstantInt::get(i32Ty, (uint64_t)0, false);
+    llvm37::FunctionType *funcTy =
+        llvm37::FunctionType::get(i32Ty, {i32Ty, i32Ty}, false);
     unsigned opcode = (unsigned)IntrinsicOp::IOP_AllocateRayQuery;
-    llvm::ConstantInt *opVal = llvm::ConstantInt::get(i32Ty, opcode, false);
+    llvm37::ConstantInt *opVal = llvm37::ConstantInt::get(i32Ty, opcode, false);
     Function *opFunc =
         GetOrCreateHLFunction(M, funcTy, HLOpcodeGroup::HLIntrinsic, opcode);
 
     while (!pConstructorFunc->user_empty()) {
       Value *V = *pConstructorFunc->user_begin();
-      llvm::CallInst *CI = cast<CallInst>(V); // Must be call
-      llvm::Value *pThis = CI->getArgOperand(0);
-      llvm::StructType *pRQType =
-          cast<llvm::StructType>(pThis->getType()->getPointerElementType());
+      llvm37::CallInst *CI = cast<CallInst>(V); // Must be call
+      llvm37::Value *pThis = CI->getArgOperand(0);
+      llvm37::StructType *pRQType =
+          cast<llvm37::StructType>(pThis->getType()->getPointerElementType());
       DxilStructAnnotation *SA =
           HLM.GetTypeSystem().GetStructAnnotation(pRQType);
       DXASSERT(SA, "otherwise, could not find type annoation for RayQuery "
@@ -2240,12 +2240,12 @@ void TranslateRayQueryConstructor(HLModule &HLM) {
       DXASSERT(SA->GetNumTemplateArgs() == 1 &&
                    SA->GetTemplateArgAnnotation(0).IsIntegral(),
                "otherwise, RayQuery has changed, or lacks template args");
-      llvm::IRBuilder<> Builder(CI);
-      llvm::Value *rayFlags =
+      llvm37::IRBuilder<> Builder(CI);
+      llvm37::Value *rayFlags =
           Builder.getInt32(SA->GetTemplateArgAnnotation(0).GetIntegral());
-      llvm::Value *Call =
+      llvm37::Value *Call =
           Builder.CreateCall(opFunc, {opVal, rayFlags}, pThis->getName());
-      llvm::Value *GEP = Builder.CreateInBoundsGEP(pThis, {i32Zero, i32Zero});
+      llvm37::Value *GEP = Builder.CreateInBoundsGEP(pThis, {i32Zero, i32Zero});
       Builder.CreateStore(Call, GEP);
       CI->replaceAllUsesWith(pThis);
       CI->eraseFromParent();
@@ -2292,20 +2292,20 @@ bool BuildImmInit(Function *Ctor) {
   if (!GV)
     return false;
 
-  llvm::Type *Ty = GV->getType()->getElementType();
-  llvm::ArrayType *AT = dyn_cast<llvm::ArrayType>(Ty);
+  llvm37::Type *Ty = GV->getType()->getElementType();
+  llvm37::ArrayType *AT = dyn_cast<llvm37::ArrayType>(Ty);
   // TODO: support other types.
   if (!AT)
     return false;
   if (ImmList.size() != AT->getNumElements())
     return false;
-  Constant *Init = llvm::ConstantArray::get(AT, ImmList);
+  Constant *Init = llvm37::ConstantArray::get(AT, ImmList);
   GV->setInitializer(Init);
   return true;
 }
 
-void CallCtorFunctionsAtInsertPt(llvm::Module &M,
-                                 llvm::SmallVector<llvm::Function *, 2> &Ctors,
+void CallCtorFunctionsAtInsertPt(llvm37::Module &M,
+                                 llvm37::SmallVector<llvm37::Function *, 2> &Ctors,
                                  Instruction *InsertPt) {
   IRBuilder<> Builder(InsertPt);
   for (Function *Ctor : Ctors) {
@@ -2359,7 +2359,7 @@ void ReportInitStaticGlobalWithExternalFunction(
       clang::DiagnosticsEngine::Error,
       "Initializer for static global %0 makes disallowed call to external function.");
   std::string escaped;
-  llvm::raw_string_ostream os(escaped);
+  llvm37::raw_string_ostream os(escaped);
   size_t end = name.find_first_of('@');
   if (end != StringRef::npos)
     name = name.substr(0, end);
@@ -2374,8 +2374,8 @@ void ReportInitStaticGlobalWithExternalFunction(
 
 namespace CGHLSLMSHelper {
 
-void CollectCtorFunctions(llvm::Module &M, llvm::StringRef globalName,
-                          llvm::SmallVector<llvm::Function *, 2> &Ctors,
+void CollectCtorFunctions(llvm37::Module &M, llvm37::StringRef globalName,
+                          llvm37::SmallVector<llvm37::Function *, 2> &Ctors,
                           clang::CodeGen::CodeGenModule &CGM) {
   // add global call to entry func
   GlobalVariable *GV = M.getGlobalVariable(globalName);
@@ -2429,10 +2429,10 @@ void CollectCtorFunctions(llvm::Module &M, llvm::StringRef globalName,
   }
 }
 
-void ProcessCtorFunctions(llvm::Module &M,
-                          llvm::SmallVector<llvm::Function *, 2> &Ctors,
-                          llvm::Function *Entry,
-                          llvm::Function *PatchConstantFn) {
+void ProcessCtorFunctions(llvm37::Module &M,
+                          llvm37::SmallVector<llvm37::Function *, 2> &Ctors,
+                          llvm37::Function *Entry,
+                          llvm37::Function *PatchConstantFn) {
   if (PatchConstantFn) {
     // static globals are independent for entry function and patch constant
     // function. Update static global in entry function will not affect
@@ -2461,7 +2461,7 @@ void ProcessCtorFunctions(llvm::Module &M,
                               Entry->getEntryBlock().getFirstInsertionPt());
 }
 
-void FinishCBuffer(HLModule &HLM, llvm::Type *CBufferType,
+void FinishCBuffer(HLModule &HLM, llvm37::Type *CBufferType,
                    std::unordered_map<Constant *, DxilFieldAnnotation>
                        &constVarAnnotationMap) {
   // Allocate constant buffers.
@@ -2474,8 +2474,8 @@ void FinishCBuffer(HLModule &HLM, llvm::Type *CBufferType,
 
 void AddRegBindingsForResourceInConstantBuffer(
     HLModule &HLM,
-    llvm::DenseMap<llvm::Constant *,
-                   llvm::SmallVector<std::pair<DXIL::ResourceClass, unsigned>,
+    llvm37::DenseMap<llvm37::Constant *,
+                   llvm37::SmallVector<std::pair<DXIL::ResourceClass, unsigned>,
                                      1>> &constantRegBindingMap) {
   for (unsigned i = 0; i < HLM.GetCBuffers().size(); i++) {
     HLCBuffer &CB = *static_cast<HLCBuffer *>(&(HLM.GetCBuffer(i)));
@@ -2574,7 +2574,7 @@ void ReportDisallowedTypeInExportParam(clang::CodeGen ::CodeGenModule &CGM,
                             "Exported function %0 must not contain a "
                             "resource in parameter or return type.");
   std::string escaped;
-  llvm::raw_string_ostream os(escaped);
+  llvm37::raw_string_ostream os(escaped);
   dxilutil::PrintEscapedString(name, os);
   Diags.Report(DiagID) << os.str();
 }
@@ -2599,11 +2599,11 @@ void FinishClipPlane(HLModule &HLM, std::vector<Function *> &clipPlaneFuncList,
       if (bDebugInfo) {
         Builder.SetCurrentDebugLocation(debugInfoMap[clipPlane]);
       }
-      llvm::Type *Ty = clipPlane->getType()->getPointerElementType();
+      llvm37::Type *Ty = clipPlane->getType()->getPointerElementType();
       // Constant *zeroInit = ConstantFP::get(Ty, 0);
-      GlobalVariable *GV = new llvm::GlobalVariable(
+      GlobalVariable *GV = new llvm37::GlobalVariable(
           M, Ty, /*IsConstant*/ false, // constant false to store.
-          llvm::GlobalValue::ExternalLinkage,
+          llvm37::GlobalValue::ExternalLinkage,
           /*InitVal*/ nullptr, Twine("SV_ClipPlane") + Twine(i));
       Value *initVal = Builder.CreateLoad(clipPlane);
       Builder.CreateStore(initVal, GV);
@@ -2648,7 +2648,7 @@ void LowerExportFunctions(HLModule &HLM, clang::CodeGen::CodeGenModule &CGM,
             clang::DiagnosticsEngine::Error,
             "Export name collides with another export: %0");
         std::string escaped;
-        llvm::raw_string_ostream os(escaped);
+        llvm37::raw_string_ostream os(escaped);
         dxilutil::PrintEscapedString(name, os);
         Diags.Report(DiagID) << os.str();
       }
@@ -2658,7 +2658,7 @@ void LowerExportFunctions(HLModule &HLM, clang::CodeGen::CodeGenModule &CGM,
             Diags.getCustomDiagID(clang::DiagnosticsEngine::Error,
                                   "Could not find target for export: %0");
         std::string escaped;
-        llvm::raw_string_ostream os(escaped);
+        llvm37::raw_string_ostream os(escaped);
         dxilutil::PrintEscapedString(name, os);
         Diags.Report(DiagID) << os.str();
       }
@@ -2683,7 +2683,7 @@ void LowerExportFunctions(HLModule &HLM, clang::CodeGen::CodeGenModule &CGM,
         // add DxilFunctionProps if entry
         if (HLM.HasDxilFunctionProps(F)) {
           DxilFunctionProps &props = HLM.GetDxilFunctionProps(F);
-          auto newProps = llvm::make_unique<DxilFunctionProps>(props);
+          auto newProps = llvm37::make_unique<DxilFunctionProps>(props);
           HLM.AddDxilFunctionProps(pClone, newProps);
         }
       }
@@ -2695,7 +2695,7 @@ void CheckResourceParameters(HLModule &HLM,
                              clang::CodeGen::CodeGenModule &CGM) {
   Module &M = *HLM.GetModule();
   for (Function &f : M.functions()) {
-    // Skip llvm intrinsics, non-external linkage, entry/patch constant func,
+    // Skip llvm37 intrinsics, non-external linkage, entry/patch constant func,
     // and HL intrinsics
     if (!f.isIntrinsic() &&
         f.getLinkage() == GlobalValue::LinkageTypes::ExternalLinkage &&
@@ -2740,7 +2740,7 @@ void UpdateLinkage(HLModule &HLM, clang::CodeGen::CodeGenModule &CGM,
               clang::DiagnosticsEngine::Error,
               "External function used in non-library profile: %0");
           std::string escaped;
-          llvm::raw_string_ostream os(escaped);
+          llvm37::raw_string_ostream os(escaped);
           dxilutil::PrintEscapedString(f.getName(), os);
           Diags.Report(DiagID) << os.str();
           return;
@@ -2751,11 +2751,11 @@ void UpdateLinkage(HLModule &HLM, clang::CodeGen::CodeGenModule &CGM,
       }
     }
     // Skip no inline functions.
-    if (f.hasFnAttribute(llvm::Attribute::NoInline))
+    if (f.hasFnAttribute(llvm37::Attribute::NoInline))
       continue;
     // Always inline for used functions.
     if (!f.user_empty() && !f.isDeclaration())
-      f.addFnAttr(llvm::Attribute::AlwaysInline);
+      f.addFnAttr(llvm37::Attribute::AlwaysInline);
   }
 
   LowerExportFunctions(HLM, CGM, exportMap, entryFunctionMap);
@@ -2868,7 +2868,7 @@ void FinishIntrinsics(
 // Add the dx.break temporary intrinsic and create Call Instructions
 // to it for each branch that requires the artificial conditional.
 void AddDxBreak(Module &M,
-                const SmallVector<llvm::BranchInst *, 16> &DxBreaks) {
+                const SmallVector<llvm37::BranchInst *, 16> &DxBreaks) {
   if (DxBreaks.empty())
     return;
 
@@ -2893,22 +2893,22 @@ void AddDxBreak(Module &M,
 
   // Create the dx.break function
   FunctionType *FT =
-      llvm::FunctionType::get(llvm::Type::getInt1Ty(M.getContext()), false);
+      llvm37::FunctionType::get(llvm37::Type::getInt1Ty(M.getContext()), false);
   Function *func =
-      cast<llvm::Function>(M.getOrInsertFunction(DXIL::kDxBreakFuncName, FT));
+      cast<llvm37::Function>(M.getOrInsertFunction(DXIL::kDxBreakFuncName, FT));
   func->addFnAttr(Attribute::AttrKind::NoUnwind);
 
   // For all break branches recorded previously, if the function they are in
   // makes any use of a wave op, it may need to be artificially conditional.
   // Make it so now. The CleanupDxBreak pass will remove those that aren't
   // needed when more is known.
-  for (llvm::BranchInst *BI : DxBreaks) {
+  for (llvm37::BranchInst *BI : DxBreaks) {
     if (WaveUsers.count(BI->getParent()->getParent())) {
       CallInst *Call = CallInst::Create(FT, func, ArrayRef<Value *>(), "", BI);
       BI->setCondition(Call);
       if (!BI->getMetadata(DXIL::kDxBreakMDName)) {
         BI->setMetadata(DXIL::kDxBreakMDName,
-                        llvm::MDNode::get(BI->getContext(), {}));
+                        llvm37::MDNode::get(BI->getContext(), {}));
       }
     }
   }
@@ -3280,7 +3280,7 @@ void StructurizeMultiRet(Module &M, clang::CodeGen::CodeGenModule &CGM,
   }
 }
 
-bool DxilObjectProperties::AddResource(llvm::Value *V, const hlsl::DxilResourceProperties &RP) {
+bool DxilObjectProperties::AddResource(llvm37::Value *V, const hlsl::DxilResourceProperties &RP) {
   if (RP.isValid()) {
     DXASSERT(!GetResource(V).isValid() || GetResource(V) == RP, "otherwise, property conflict");
     resMap[V] = RP;
@@ -3288,10 +3288,10 @@ bool DxilObjectProperties::AddResource(llvm::Value *V, const hlsl::DxilResourceP
   }
   return false;
 }
-bool DxilObjectProperties::IsResource(llvm::Value *V) {
+bool DxilObjectProperties::IsResource(llvm37::Value *V) {
   return resMap.count(V) != 0;
 }
-hlsl::DxilResourceProperties DxilObjectProperties::GetResource(llvm::Value *V) {
+hlsl::DxilResourceProperties DxilObjectProperties::GetResource(llvm37::Value *V) {
   auto it = resMap.find(V);
   if (it != resMap.end())
     return it->second;

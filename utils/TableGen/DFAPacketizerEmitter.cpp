@@ -1,6 +1,6 @@
 //===- DFAPacketizerEmitter.cpp - Packetization DFA for a VLIW machine-----===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -16,14 +16,14 @@
 //===----------------------------------------------------------------------===//
 
 #include "CodeGenTarget.h"
-#include "llvm/ADT/DenseSet.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/TableGen/Record.h"
-#include "llvm/TableGen/TableGenBackend.h"
+#include "llvm37/ADT/DenseSet.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/TableGen/Record.h"
+#include "llvm37/TableGen/TableGenBackend.h"
 #include <list>
 #include <map>
 #include <string>
-using namespace llvm;
+using namespace llvm37;
 
 //
 // class DFAPacketizerEmitter: class that generates and prints out the DFA
@@ -270,7 +270,7 @@ void DFA::writeTableAndAPI(raw_ostream &OS, const std::string &TargetName) {
   // in DFAStateInputTable.
   std::vector<int> StateEntry(states.size());
 
-  OS << "namespace llvm {\n\n";
+  OS << "namespace llvm37 {\n\n";
   OS << "const int " << TargetName << "DFAStateInputTable[][2] = {\n";
 
   // Tracks the total valid transitions encountered so far. It is used
@@ -321,13 +321,13 @@ void DFA::writeTableAndAPI(raw_ostream &OS, const std::string &TargetName) {
   // Emit DFA Packetizer tables if the target is a VLIW machine.
   //
   std::string SubTargetClassName = TargetName + "GenSubtargetInfo";
-  OS << "\n" << "#include \"llvm/CodeGen/DFAPacketizer.h\"\n";
-  OS << "namespace llvm {\n";
+  OS << "\n" << "#include \"llvm37/CodeGen/DFAPacketizer.h\"\n";
+  OS << "namespace llvm37 {\n";
   OS << "DFAPacketizer *" << SubTargetClassName << "::"
      << "createDFAPacketizer(const InstrItineraryData *IID) const {\n"
      << "   return new DFAPacketizer(IID, " << TargetName
      << "DFAStateInputTable, " << TargetName << "DFAStateEntryTable);\n}\n\n";
-  OS << "} // End llvm namespace \n";
+  OS << "} // End llvm37 namespace \n";
 }
 
 
@@ -497,11 +497,11 @@ void DFAPacketizerEmitter::run(raw_ostream &OS) {
   D.writeTableAndAPI(OS, TargetName);
 }
 
-namespace llvm {
+namespace llvm37 {
 
 void EmitDFAPacketizer(RecordKeeper &RK, raw_ostream &OS) {
   emitSourceFileHeader("Target DFA Packetizer Tables", OS);
   DFAPacketizerEmitter(RK).run(OS);
 }
 
-} // End llvm namespace
+} // End llvm37 namespace

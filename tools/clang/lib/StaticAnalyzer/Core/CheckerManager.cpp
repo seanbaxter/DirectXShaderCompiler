@@ -1,6 +1,6 @@
 //===--- CheckerManager.cpp - Static Analyzer Checker Manager -------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -43,7 +43,7 @@ void CheckerManager::finishedCheckerRegistration() {
 #ifndef NDEBUG
   // Make sure that for every event that has listeners, there is at least
   // one dispatcher registered for it.
-  for (llvm::DenseMap<EventTag, EventInfo>::iterator
+  for (llvm37::DenseMap<EventTag, EventInfo>::iterator
          I = Events.begin(), E = Events.end(); I != E; ++I)
     assert(I->second.HasDispatcher && "No dispatcher registered for an event");
 #endif
@@ -579,7 +579,7 @@ void CheckerManager::runCheckersOnEndOfTranslationUnit(
 void CheckerManager::runCheckersForPrintState(raw_ostream &Out,
                                               ProgramStateRef State,
                                               const char *NL, const char *Sep) {
-  for (llvm::DenseMap<CheckerTag, CheckerRef>::iterator
+  for (llvm37::DenseMap<CheckerTag, CheckerRef>::iterator
         I = CheckerTags.begin(), E = CheckerTags.end(); I != E; ++I)
     I->second->printState(Out, State, NL, Sep);
 }

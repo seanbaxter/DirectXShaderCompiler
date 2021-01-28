@@ -1,6 +1,6 @@
 //===--- SemaPseudoObject.cpp - Semantic Analysis for Pseudo-Objects ------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -37,7 +37,7 @@
 #include "clang/Lex/Preprocessor.h"
 #include "clang/Sema/Initialization.h"
 #include "clang/Sema/ScopeInfo.h"
-#include "llvm/ADT/SmallString.h"
+#include "llvm37/ADT/SmallString.h"
 
 using namespace clang;
 using namespace sema;
@@ -49,26 +49,26 @@ using namespace sema;
 
 Sema::ObjCSubscriptKind
 Sema::CheckSubscriptingKind(Expr *FromE) {
-  llvm_unreachable("HLSL does not support ObjC constructs");
+  llvm37_unreachable("HLSL does not support ObjC constructs");
 }
 
 ExprResult Sema::checkPseudoObjectRValue(Expr *E) {
-  llvm_unreachable("HLSL does not support ObjC constructs");
+  llvm37_unreachable("HLSL does not support ObjC constructs");
 }
 
 ExprResult Sema::checkPseudoObjectIncDec(Scope *Sc, SourceLocation opcLoc,
   UnaryOperatorKind opcode, Expr *op) {
-  llvm_unreachable("HLSL does not support ObjC constructs");
+  llvm37_unreachable("HLSL does not support ObjC constructs");
 }
 
 ExprResult Sema::checkPseudoObjectAssignment(Scope *S, SourceLocation opcLoc,
   BinaryOperatorKind opcode,
   Expr *LHS, Expr *RHS) {
-  llvm_unreachable("HLSL does not support ObjC constructs");
+  llvm37_unreachable("HLSL does not support ObjC constructs");
 }
 
 Expr *Sema::recreateSyntacticForm(PseudoObjectExpr *E) {
-  llvm_unreachable("HLSL does not support ObjC constructs");
+  llvm37_unreachable("HLSL does not support ObjC constructs");
 }
 
 #else
@@ -153,7 +153,7 @@ namespace {
                                           rebuiltExpr->isValueDependent());
       }
 
-      llvm_unreachable("bad expression to rebuild!");
+      llvm37_unreachable("bad expression to rebuild!");
     }
   };
 
@@ -509,7 +509,7 @@ PseudoOpBuilder::buildIncDecOperation(Scope *Sc, SourceLocation opcLoc,
   }
 
   // Add or subtract a literal 1.
-  llvm::APInt oneV(S.Context.getTypeSize(S.Context.IntTy), 1);
+  llvm37::APInt oneV(S.Context.getTypeSize(S.Context.IntTy), 1);
   Expr *one = IntegerLiteral::Create(S.Context, oneV, S.Context.IntTy,
                                      GenericLoc);
 
@@ -1523,7 +1523,7 @@ ExprResult Sema::checkPseudoObjectRValue(Expr *E) {
     MSPropertyOpBuilder builder(*this, refExpr);
     return builder.buildRValueOperation(E);
   } else {
-    llvm_unreachable("unknown pseudo-object kind!");
+    llvm37_unreachable("unknown pseudo-object kind!");
   }
 }
 
@@ -1549,7 +1549,7 @@ ExprResult Sema::checkPseudoObjectIncDec(Scope *Sc, SourceLocation opcLoc,
     MSPropertyOpBuilder builder(*this, refExpr);
     return builder.buildIncDecOperation(Sc, opcLoc, opcode, op);
   } else {
-    llvm_unreachable("unknown pseudo-object kind!");
+    llvm37_unreachable("unknown pseudo-object kind!");
   }
 }
 
@@ -1582,7 +1582,7 @@ ExprResult Sema::checkPseudoObjectAssignment(Scope *S, SourceLocation opcLoc,
     MSPropertyOpBuilder builder(*this, refExpr);
     return builder.buildAssignmentOperation(S, opcLoc, opcode, LHS, RHS);
   } else {
-    llvm_unreachable("unknown pseudo-object kind!");
+    llvm37_unreachable("unknown pseudo-object kind!");
   }
 }
 
@@ -1611,7 +1611,7 @@ static Expr *stripOpaqueValuesFromPseudoObjectRef(Sema &S, Expr *E) {
     OpaqueValueExpr *baseOVE = cast<OpaqueValueExpr>(refExpr->getBaseExpr());
     return MSPropertyRefRebuilder(S, baseOVE->getSourceExpr()).rebuild(E);
   } else {
-    llvm_unreachable("unknown pseudo-object kind!");
+    llvm37_unreachable("unknown pseudo-object kind!");
   }
 }
 

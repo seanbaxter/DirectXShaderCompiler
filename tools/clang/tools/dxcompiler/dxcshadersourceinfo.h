@@ -12,7 +12,7 @@
 
 #include <vector>
 #include <stdint.h>
-#include "llvm/ADT/StringRef.h"
+#include "llvm37/ADT/StringRef.h"
 #include "dxc/DxilContainer/DxilContainer.h"
 
 namespace clang {
@@ -28,8 +28,8 @@ struct SourceInfoReader {
   Buffer m_UncompressedSources;
 
   struct Source {
-    llvm::StringRef Name;
-    llvm::StringRef Content;
+    llvm37::StringRef Name;
+    llvm37::StringRef Content;
   };
 
   struct ArgPair {
@@ -56,7 +56,7 @@ struct SourceInfoWriter {
   Buffer m_Buffer;
 
   const hlsl::DxilSourceInfo *GetPart() const;
-  void Write(llvm::StringRef targetProfile, llvm::StringRef entryPoint, clang::CodeGenOptions &cgOpts, clang::SourceManager &srcMgr);
+  void Write(llvm37::StringRef targetProfile, llvm37::StringRef entryPoint, clang::CodeGenOptions &cgOpts, clang::SourceManager &srcMgr);
 };
 
 } // namespace hlsl;

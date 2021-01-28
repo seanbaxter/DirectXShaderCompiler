@@ -56,7 +56,7 @@ void Foo::Baz() {
 }
 }
 
-// http://llvm.org/PR9160
+// http://llvm37.org/PR9160
 namespace PR9160 {
 struct V {
   V(int);

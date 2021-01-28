@@ -12,17 +12,17 @@
 #include "dxc/HLSL/HLModule.h"
 #include "dxc/HLSL/HLOperations.h"
 #include "dxc/HLSL/ControlDependence.h"
-#include "llvm/Pass.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/Instruction.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/Operator.h"
-#include "llvm/IR/Module.h"
-#include "llvm/Support/Casting.h"
+#include "llvm37/Pass.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/Instruction.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/Operator.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/Support/Casting.h"
 #include <unordered_set>
 #include <vector>
 
-using namespace llvm;
+using namespace llvm37;
 using namespace hlsl;
 
 namespace {
@@ -31,11 +31,11 @@ typedef std::unordered_set<Value *> ValueSet;
 
 struct FuncInfo {
   ControlDependence CtrlDep;
-  std::unique_ptr<llvm::DominatorTreeBase<llvm::BasicBlock>> pPostDom;
+  std::unique_ptr<llvm37::DominatorTreeBase<llvm37::BasicBlock>> pPostDom;
   void Init(Function *F);
   void Clear();
 };
-typedef std::unordered_map<llvm::Function *, std::unique_ptr<FuncInfo>> FuncInfoMap;
+typedef std::unordered_map<llvm37::Function *, std::unique_ptr<FuncInfo>> FuncInfoMap;
 
 class DxilPrecisePropagatePass : public ModulePass {
 public:
@@ -352,7 +352,7 @@ void DxilPrecisePropagatePass::PropagateCtrlDep(Instruction *I) {
   PropagateCtrlDep(I->getParent());
 }
 
-ModulePass *llvm::createDxilPrecisePropagatePass() {
+ModulePass *llvm37::createDxilPrecisePropagatePass() {
   return new DxilPrecisePropagatePass();
 }
 

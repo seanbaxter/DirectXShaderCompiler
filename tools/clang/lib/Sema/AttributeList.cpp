@@ -1,6 +1,6 @@
 //===--- AttributeList.cpp --------------------------------------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -18,8 +18,8 @@
 #include "clang/AST/Expr.h"
 #include "clang/Basic/IdentifierTable.h"
 #include "clang/Sema/SemaInternal.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/ADT/StringSwitch.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/ADT/StringSwitch.h"
 using namespace clang;
 
 IdentifierLoc *IdentifierLoc::create(ASTContext &Ctx, SourceLocation Loc,
@@ -62,7 +62,7 @@ void *AttributeFactory::allocate(size_t size) {
   }
 
   // Otherwise, allocate something new.
-  return Alloc.Allocate(size, llvm::AlignOf<AttributeFactory>::Alignment);
+  return Alloc.Allocate(size, llvm37::AlignOf<AttributeFactory>::Alignment);
 }
 
 void AttributeFactory::reclaimPool(AttributeList *cur) {
@@ -166,7 +166,7 @@ struct ParsedAttrInfo {
   bool (*DiagAppertainsToDecl)(Sema &S, const AttributeList &Attr,
                                const Decl *);
   bool (*DiagLangOpts)(Sema &S, const AttributeList &Attr);
-  bool (*ExistsInTarget)(const llvm::Triple &T);
+  bool (*ExistsInTarget)(const llvm37::Triple &T);
   unsigned (*SpellingIndexToSemanticSpelling)(const AttributeList &Attr);
 };
 
@@ -206,7 +206,7 @@ bool AttributeList::isTypeAttr() const {
   return getInfo(*this).IsType;
 }
 
-bool AttributeList::existsInTarget(const llvm::Triple &T) const {
+bool AttributeList::existsInTarget(const llvm37::Triple &T) const {
   return getInfo(*this).ExistsInTarget(T);
 }
 

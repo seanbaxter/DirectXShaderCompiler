@@ -4,22 +4,22 @@ target datalayout = "e-p:32:32:32-i1:8:8-i8:8:8-i16:16:16-i32:32:32-i64:64:64-f3
 
 define i32 @myctpop(i32 %a) {
 ; CHECK: popc.b32
-  %val = tail call i32 @llvm.ctpop.i32(i32 %a)
+  %val = tail call i32 @llvm37.ctpop.i32(i32 %a)
   ret i32 %val
 }
 
 define i16 @myctpop16(i16 %a) {
 ; CHECK: popc.b32
-  %val = tail call i16 @llvm.ctpop.i16(i16 %a)
+  %val = tail call i16 @llvm37.ctpop.i16(i16 %a)
   ret i16 %val
 }
 
 define i64 @myctpop64(i64 %a) {
 ; CHECK: popc.b64
-  %val = tail call i64 @llvm.ctpop.i64(i64 %a)
+  %val = tail call i64 @llvm37.ctpop.i64(i64 %a)
   ret i64 %val
 }
 
-declare i16 @llvm.ctpop.i16(i16)
-declare i32 @llvm.ctpop.i32(i32)
-declare i64 @llvm.ctpop.i64(i64)
+declare i16 @llvm37.ctpop.i16(i16)
+declare i32 @llvm37.ctpop.i32(i32)
+declare i64 @llvm37.ctpop.i64(i64)

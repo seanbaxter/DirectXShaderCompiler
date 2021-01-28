@@ -1,6 +1,6 @@
 //===--- Module.h - Describe a module ---------------------------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -12,24 +12,24 @@
 /// source code.
 ///
 //===----------------------------------------------------------------------===//
-#ifndef LLVM_CLANG_BASIC_MODULE_H
-#define LLVM_CLANG_BASIC_MODULE_H
+#ifndef LLVM37_CLANG_BASIC_MODULE_H
+#define LLVM37_CLANG_BASIC_MODULE_H
 
 #include "clang/Basic/SourceLocation.h"
-#include "llvm/ADT/ArrayRef.h"
-#include "llvm/ADT/DenseSet.h"
-#include "llvm/ADT/PointerIntPair.h"
-#include "llvm/ADT/PointerUnion.h"
-#include "llvm/ADT/SetVector.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/StringMap.h"
-#include "llvm/ADT/StringRef.h"
+#include "llvm37/ADT/ArrayRef.h"
+#include "llvm37/ADT/DenseSet.h"
+#include "llvm37/ADT/PointerIntPair.h"
+#include "llvm37/ADT/PointerUnion.h"
+#include "llvm37/ADT/SetVector.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/StringMap.h"
+#include "llvm37/ADT/StringRef.h"
 #include <string>
 #include <utility>
 #include <vector>
 
-namespace llvm {
+namespace llvm37 {
   class raw_ostream;
 }
 
@@ -64,7 +64,7 @@ public:
   const DirectoryEntry *Directory;
 
   /// \brief The umbrella header or directory.
-  llvm::PointerUnion<const DirectoryEntry *, const FileEntry *> Umbrella;
+  llvm37::PointerUnion<const DirectoryEntry *, const FileEntry *> Umbrella;
 
   /// \brief The module signature.
   uint64_t Signature;
@@ -78,20 +78,20 @@ private:
   
   /// \brief A mapping from the submodule name to the index into the 
   /// \c SubModules vector at which that submodule resides.
-  llvm::StringMap<unsigned> SubModuleIndex;
+  llvm37::StringMap<unsigned> SubModuleIndex;
 
   /// \brief The AST file if this is a top-level module which has a
   /// corresponding serialized AST file, or null otherwise.
   const FileEntry *ASTFile;
 
   /// \brief The top-level headers associated with this module.
-  llvm::SmallSetVector<const FileEntry *, 2> TopHeaders;
+  llvm37::SmallSetVector<const FileEntry *, 2> TopHeaders;
 
   /// \brief top-level header filenames that aren't resolved to FileEntries yet.
   std::vector<std::string> TopHeaderNames;
 
   /// \brief Cache of modules visible to lookup in this module.
-  mutable llvm::DenseSet<const Module*> VisibleModulesCache;
+  mutable llvm37::DenseSet<const Module*> VisibleModulesCache;
 
   /// The ID used when referencing this module within a VisibleModuleSet.
   unsigned VisibilityID;
@@ -217,13 +217,13 @@ public:
 
   /// \brief The set of modules imported by this module, and on which this
   /// module depends.
-  llvm::SmallSetVector<Module *, 2> Imports;
+  llvm37::SmallSetVector<Module *, 2> Imports;
   
   /// \brief Describes an exported module.
   ///
   /// The pointer is the module being re-exported, while the bit will be true
   /// to indicate that this is a wildcard export.
-  typedef llvm::PointerIntPair<Module *, 1, bool> ExportDecl;
+  typedef llvm37::PointerIntPair<Module *, 1, bool> ExportDecl;
   
   /// \brief The set of export declarations.
   SmallVector<ExportDecl, 2> Exports;
@@ -271,7 +271,7 @@ public:
 
   /// \brief The set of libraries or frameworks to link against when
   /// an entity from this module is used.
-  llvm::SmallVector<LinkLibrary, 2> LinkLibraries;
+  llvm37::SmallVector<LinkLibrary, 2> LinkLibraries;
 
   /// \brief The set of "configuration macros", which are macros that
   /// (intentionally) change how this module is built.
@@ -528,11 +528,11 @@ public:
 
   /// \brief A callback to call when a module is made visible (directly or
   /// indirectly) by a call to \ref setVisible.
-  typedef llvm::function_ref<void(Module *M)> VisibleCallback;
+  typedef llvm37::function_ref<void(Module *M)> VisibleCallback;
   /// \brief A callback to call when a module conflict is found. \p Path
   /// consists of a sequence of modules from the conflicting module to the one
   /// made visible, where each was exported by the next.
-  typedef llvm::function_ref<void(ArrayRef<Module *> Path,
+  typedef llvm37::function_ref<void(ArrayRef<Module *> Path,
                                   Module *Conflict, StringRef Message)>
       ConflictCallback;
   /// \brief Make a specific module visible.
@@ -552,4 +552,4 @@ private:
 } // end namespace clang
 
 
-#endif // LLVM_CLANG_BASIC_MODULE_H
+#endif // LLVM37_CLANG_BASIC_MODULE_H

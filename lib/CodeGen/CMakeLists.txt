@@ -1,4 +1,4 @@
-add_llvm_library(LLVMCodeGen
+add_llvm_library(LLVM37CodeGen
   AggressiveAntiDepBreaker.cpp
   AllocationOrder.cpp
   Analysis.cpp
@@ -32,7 +32,7 @@ add_llvm_library(LLVMCodeGen
   InterferenceCache.cpp
   InterleavedAccessPass.cpp
   IntrinsicLowering.cpp
-  LLVMTargetMachine.cpp
+  LLVM37TargetMachine.cpp
   LatencyPriorityQueue.cpp
   LexicalScopes.cpp
   LiveDebugVariables.cpp
@@ -126,11 +126,11 @@ add_llvm_library(LLVMCodeGen
 #  WinEHPrepare.cpp
 
   ADDITIONAL_HEADER_DIRS
-  ${LLVM_MAIN_INCLUDE_DIR}/llvm/CodeGen
-  ${LLVM_MAIN_INCLUDE_DIR}/llvm/CodeGen/PBQP
+  ${LLVM37_MAIN_INCLUDE_DIR}/llvm37/CodeGen
+  ${LLVM37_MAIN_INCLUDE_DIR}/llvm37/CodeGen/PBQP
   )
 
-add_dependencies(LLVMCodeGen intrinsics_gen)
+add_dependencies(LLVM37CodeGen intrinsics_gen)
 
 add_subdirectory(SelectionDAG)
 add_subdirectory(AsmPrinter)

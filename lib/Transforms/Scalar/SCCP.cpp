@@ -1,6 +1,6 @@
 //===- SCCP.cpp - Sparse Conditional Constant Propagation -----------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -17,29 +17,29 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Transforms/Scalar.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/DenseSet.h"
-#include "llvm/ADT/PointerIntPair.h"
-#include "llvm/ADT/SmallPtrSet.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/Analysis/ConstantFolding.h"
-#include "llvm/Analysis/TargetLibraryInfo.h"
-#include "llvm/IR/CallSite.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/DerivedTypes.h"
-#include "llvm/IR/InstVisitor.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/Pass.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Transforms/IPO.h"
-#include "llvm/Transforms/Utils/Local.h"
+#include "llvm37/Transforms/Scalar.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/DenseSet.h"
+#include "llvm37/ADT/PointerIntPair.h"
+#include "llvm37/ADT/SmallPtrSet.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/Analysis/ConstantFolding.h"
+#include "llvm37/Analysis/TargetLibraryInfo.h"
+#include "llvm37/IR/CallSite.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/IR/DerivedTypes.h"
+#include "llvm37/IR/InstVisitor.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/Pass.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Transforms/IPO.h"
+#include "llvm37/Transforms/Utils/Local.h"
 #include <algorithm>
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "sccp"
 
@@ -52,17 +52,17 @@ STATISTIC(IPNumGlobalConst, "Number of globals found to be constant by IPSCCP");
 
 namespace {
 /// LatticeVal class - This class represents the different lattice values that
-/// an LLVM value may occupy.  It is a simple class with value semantics.
+/// an LLVM37 value may occupy.  It is a simple class with value semantics.
 ///
 class LatticeVal {
   enum LatticeValueTy {
-    /// undefined - This LLVM Value has no known value yet.
+    /// undefined - This LLVM37 Value has no known value yet.
     undefined,
 
-    /// constant - This LLVM Value has a specific constant value.
+    /// constant - This LLVM37 Value has a specific constant value.
     constant,
 
-    /// forcedconstant - This LLVM Value was thought to be undef until
+    /// forcedconstant - This LLVM37 Value was thought to be undef until
     /// ResolvedUndefsIn.  This is treated just like 'constant', but if merged
     /// with another (different) constant, it goes to overdefined, instead of
     /// asserting.
@@ -503,7 +503,7 @@ private:
   void visitVAArgInst     (Instruction &I) { markAnythingOverdefined(&I); }
 
   void visitInstruction(Instruction &I) {
-    // If a new instruction is added to LLVM that we don't handle.
+    // If a new instruction is added to LLVM37 that we don't handle.
     dbgs() << "SCCP: Don't know how to handle: " << I << '\n';
     markAnythingOverdefined(&I);   // Just in case
   }
@@ -574,7 +574,7 @@ void SCCPSolver::getFeasibleSuccessors(TerminatorInst &TI,
 #ifndef NDEBUG
   dbgs() << "Unknown terminator instruction: " << TI << '\n';
 #endif
-  llvm_unreachable("SCCP: Don't know how to handle this terminator!");
+  llvm37_unreachable("SCCP: Don't know how to handle this terminator!");
 }
 
 
@@ -630,7 +630,7 @@ bool SCCPSolver::isEdgeFeasible(BasicBlock *From, BasicBlock *To) {
 #ifndef NDEBUG
   dbgs() << "Unknown terminator instruction: " << *TI << '\n';
 #endif
-  llvm_unreachable(nullptr);
+  llvm37_unreachable(nullptr);
 }
 
 // visit Implementations - Something changed in this instruction, either an
@@ -1524,7 +1524,7 @@ INITIALIZE_PASS(SCCP, "sccp",
                 "Sparse Conditional Constant Propagation", false, false)
 
 // createSCCPPass - This is the public interface to this file.
-FunctionPass *llvm::createSCCPPass() {
+FunctionPass *llvm37::createSCCPPass() {
   return new SCCP();
 }
 
@@ -1658,7 +1658,7 @@ INITIALIZE_PASS_END(IPSCCP, "ipsccp",
                 false, false)
 
 // createIPSCCPPass - This is the public interface to this file.
-ModulePass *llvm::createIPSCCPPass() {
+ModulePass *llvm37::createIPSCCPPass() {
   return new IPSCCP();
 }
 
@@ -1865,7 +1865,7 @@ bool IPSCCP::runOnModule(Module &M) {
           } else if (SwitchInst *SI = dyn_cast<SwitchInst>(I)) {
             assert(isa<UndefValue>(SI->getCondition()) && "Switch should fold");
           } else {
-            llvm_unreachable("Didn't fold away reference to block!");
+            llvm37_unreachable("Didn't fold away reference to block!");
           }
 #endif
 

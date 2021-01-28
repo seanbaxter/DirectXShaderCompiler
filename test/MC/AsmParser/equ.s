@@ -1,4 +1,4 @@
-// RUN: not llvm-mc -n -triple i386-unknown-unknown %s 2> %t
+// RUN: not llvm37-mc -n -triple i386-unknown-unknown %s 2> %t
 // RUN: FileCheck < %t %s
 
 .equ	a, 0

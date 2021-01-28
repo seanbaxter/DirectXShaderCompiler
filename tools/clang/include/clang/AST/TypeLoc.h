@@ -1,6 +1,6 @@
 //===--- TypeLoc.h - Type Source Info Wrapper -------------------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -12,14 +12,14 @@
 ///
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_AST_TYPELOC_H
-#define LLVM_CLANG_AST_TYPELOC_H
+#ifndef LLVM37_CLANG_AST_TYPELOC_H
+#define LLVM37_CLANG_AST_TYPELOC_H
 
 #include "clang/AST/Decl.h"
 #include "clang/AST/TemplateBase.h"
 #include "clang/AST/Type.h"
 #include "clang/Basic/Specifiers.h"
-#include "llvm/Support/Compiler.h"
+#include "llvm37/Support/Compiler.h"
 
 namespace clang {
   class ASTContext;
@@ -124,11 +124,11 @@ public:
   SourceLocation getEndLoc() const;
 
   /// \brief Get the full source range.
-  SourceRange getSourceRange() const LLVM_READONLY {
+  SourceRange getSourceRange() const LLVM37_READONLY {
     return SourceRange(getBeginLoc(), getEndLoc());
   }
-  SourceLocation getLocStart() const LLVM_READONLY { return getBeginLoc(); }
-  SourceLocation getLocEnd() const LLVM_READONLY { return getEndLoc(); }
+  SourceLocation getLocStart() const LLVM37_READONLY { return getBeginLoc(); }
+  SourceLocation getLocEnd() const LLVM37_READONLY { return getEndLoc(); }
 
   /// \brief Get the local source range.
   SourceRange getLocalSourceRange() const {
@@ -246,7 +246,7 @@ public:
     unsigned align =
         TypeLoc::getLocalAlignmentForType(QualType(getTypePtr(), 0));
     uintptr_t dataInt = reinterpret_cast<uintptr_t>(Data);
-    dataInt = llvm::RoundUpToAlignment(dataInt, align);
+    dataInt = llvm37::RoundUpToAlignment(dataInt, align);
     return UnqualTypeLoc(getTypePtr(), reinterpret_cast<void*>(dataInt));
   }
 
@@ -339,13 +339,13 @@ class ConcreteTypeLoc : public Base {
 
 public:
   unsigned getLocalDataAlignment() const {
-    return std::max(llvm::alignOf<LocalData>(),
+    return std::max(llvm37::alignOf<LocalData>(),
                     asDerived()->getExtraLocalDataAlignment());
   }
   unsigned getLocalDataSize() const {
     unsigned size = sizeof(LocalData);
     unsigned extraAlign = asDerived()->getExtraLocalDataAlignment();
-    size = llvm::RoundUpToAlignment(size, extraAlign);
+    size = llvm37::RoundUpToAlignment(size, extraAlign);
     size += asDerived()->getExtraLocalDataSize();
     return size;
   }
@@ -391,14 +391,14 @@ protected:
   void *getExtraLocalData() const {
     unsigned size = sizeof(LocalData);
     unsigned extraAlign = asDerived()->getExtraLocalDataAlignment();
-    size = llvm::RoundUpToAlignment(size, extraAlign);
+    size = llvm37::RoundUpToAlignment(size, extraAlign);
     return reinterpret_cast<char*>(Base::Data) + size;
   }
 
   void *getNonLocalData() const {
     uintptr_t data = reinterpret_cast<uintptr_t>(Base::Data);
     data += asDerived()->getLocalDataSize();
-    data = llvm::RoundUpToAlignment(data, getNextTypeAlign());
+    data = llvm37::RoundUpToAlignment(data, getNextTypeAlign());
     return reinterpret_cast<void*>(data);
   }
 
@@ -480,7 +480,7 @@ class TypeSpecTypeLoc : public ConcreteTypeLoc<UnqualTypeLoc,
                                                TypeSpecLocInfo> {
 public:
   enum { LocalDataSize = sizeof(TypeSpecLocInfo),
-         LocalDataAlignment = llvm::AlignOf<TypeSpecLocInfo>::Alignment };
+         LocalDataAlignment = llvm37::AlignOf<TypeSpecLocInfo>::Alignment };
 
   SourceLocation getNameLoc() const {
     return this->getLocalData()->NameLoc;
@@ -540,7 +540,7 @@ public:
   }
 
   unsigned getExtraLocalDataAlignment() const {
-    return needsExtraLocalData() ? llvm::alignOf<WrittenBuiltinSpecs>() : 1;
+    return needsExtraLocalData() ? llvm37::alignOf<WrittenBuiltinSpecs>() : 1;
   }
 
   SourceRange getLocalSourceRange() const {
@@ -915,7 +915,7 @@ public:
 
 
   ArrayRef<SourceLocation> getProtocolLocs() const {
-    return llvm::makeArrayRef(getProtocolLocArray(), getNumProtocols());
+    return llvm37::makeArrayRef(getProtocolLocArray(), getNumProtocols());
   }
 
   bool hasBaseTypeAsWritten() const {
@@ -948,10 +948,10 @@ public:
   }
 
   unsigned getExtraLocalDataAlignment() const {
-    assert(llvm::alignOf<ObjCObjectTypeLoc>()
-	     >= llvm::alignOf<TypeSourceInfo *>() &&
+    assert(llvm37::alignOf<ObjCObjectTypeLoc>()
+	     >= llvm37::alignOf<TypeSourceInfo *>() &&
 	   "not enough alignment for tail-allocated data");
-    return llvm::alignOf<TypeSourceInfo *>();
+    return llvm37::alignOf<TypeSourceInfo *>();
   }
 
   QualType getInnerType() const {
@@ -1278,7 +1278,7 @@ public:
   }
 
   ArrayRef<ParmVarDecl *> getParams() const {
-    return llvm::makeArrayRef(getParmArray(), getNumParams());
+    return llvm37::makeArrayRef(getParmArray(), getNumParams());
   }
 
   // ParmVarDecls* are stored after Info, one for each parameter.
@@ -1318,7 +1318,7 @@ public:
   }
 
   unsigned getExtraLocalDataAlignment() const {
-    return llvm::alignOf<ParmVarDecl*>();
+    return llvm37::alignOf<ParmVarDecl*>();
   }
 
   QualType getInnerType() const { return getTypePtr()->getReturnType(); }
@@ -1513,7 +1513,7 @@ public:
   }
 
   unsigned getExtraLocalDataAlignment() const {
-    return llvm::alignOf<TemplateArgumentLocInfo>();
+    return llvm37::alignOf<TemplateArgumentLocInfo>();
   }
 
 private:
@@ -1924,7 +1924,7 @@ public:
   }
 
   unsigned getExtraLocalDataAlignment() const {
-    return llvm::alignOf<TemplateArgumentLocInfo>();
+    return llvm37::alignOf<TemplateArgumentLocInfo>();
   }
 
 private:

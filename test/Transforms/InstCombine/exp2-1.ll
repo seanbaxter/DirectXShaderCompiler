@@ -76,14 +76,14 @@ define float @test_simplify8(i8 zeroext %x) {
   ret float %ret
 }
 
-declare double @llvm.exp2.f64(double)
-declare float @llvm.exp2.f32(float)
+declare double @llvm37.exp2.f64(double)
+declare float @llvm37.exp2.f32(float)
 
 define double @test_simplify9(i8 zeroext %x) {
 ; CHECK-LABEL: @test_simplify9(
 ; CHECK-WIN-LABEL: @test_simplify9(
   %conv = uitofp i8 %x to double
-  %ret = call double @llvm.exp2.f64(double %conv)
+  %ret = call double @llvm37.exp2.f64(double %conv)
 ; CHECK: call double @ldexp
 ; CHECK-WIN: call double @ldexp
   ret double %ret
@@ -93,7 +93,7 @@ define float @test_simplify10(i8 zeroext %x) {
 ; CHECK-LABEL: @test_simplify10(
 ; CHECK-WIN-LABEL: @test_simplify10(
   %conv = uitofp i8 %x to float
-  %ret = call float @llvm.exp2.f32(float %conv)
+  %ret = call float @llvm37.exp2.f32(float %conv)
 ; CHECK: call float @ldexpf
 ; CHECK-WIN-NOT: call float @ldexpf
   ret float %ret

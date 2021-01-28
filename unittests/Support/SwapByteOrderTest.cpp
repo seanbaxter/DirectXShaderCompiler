@@ -1,6 +1,6 @@
 //===- unittests/Support/SwapByteOrderTest.cpp - swap byte order test -----===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -8,10 +8,10 @@
 //===----------------------------------------------------------------------===//
 
 #include "gtest/gtest.h"
-#include "llvm/Support/SwapByteOrder.h"
+#include "llvm37/Support/SwapByteOrder.h"
 #include <cstdlib>
 #include <ctime>
-using namespace llvm;
+using namespace llvm37;
 
 #undef max
 

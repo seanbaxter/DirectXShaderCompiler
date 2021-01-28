@@ -1,23 +1,23 @@
 //===-- BitWriter.cpp -----------------------------------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm-c/BitWriter.h"
-#include "llvm/Bitcode/ReaderWriter.h"
-#include "llvm/IR/Module.h"
-#include "llvm/Support/FileSystem.h"
-#include "llvm/Support/raw_ostream.h"
-using namespace llvm;
+#include "llvm37-c/BitWriter.h"
+#include "llvm37/Bitcode/ReaderWriter.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/Support/FileSystem.h"
+#include "llvm37/Support/raw_ostream.h"
+using namespace llvm37;
 
 
 /*===-- Operations on modules ---------------------------------------------===*/
 
-int LLVMWriteBitcodeToFile(LLVMModuleRef M, const char *Path) {
+int LLVM37WriteBitcodeToFile(LLVM37ModuleRef M, const char *Path) {
   std::error_code EC;
   raw_fd_ostream OS(Path, EC, sys::fs::F_None);
 
@@ -28,7 +28,7 @@ int LLVMWriteBitcodeToFile(LLVMModuleRef M, const char *Path) {
   return 0;
 }
 
-int LLVMWriteBitcodeToFD(LLVMModuleRef M, int FD, int ShouldClose,
+int LLVM37WriteBitcodeToFD(LLVM37ModuleRef M, int FD, int ShouldClose,
                          int Unbuffered) {
   raw_fd_ostream OS(FD, ShouldClose, Unbuffered);
 
@@ -36,11 +36,11 @@ int LLVMWriteBitcodeToFD(LLVMModuleRef M, int FD, int ShouldClose,
   return 0;
 }
 
-int LLVMWriteBitcodeToFileHandle(LLVMModuleRef M, int FileHandle) {
-  return LLVMWriteBitcodeToFD(M, FileHandle, true, false);
+int LLVM37WriteBitcodeToFileHandle(LLVM37ModuleRef M, int FileHandle) {
+  return LLVM37WriteBitcodeToFD(M, FileHandle, true, false);
 }
 
-LLVMMemoryBufferRef LLVMWriteBitcodeToMemoryBuffer(LLVMModuleRef M) {
+LLVM37MemoryBufferRef LLVM37WriteBitcodeToMemoryBuffer(LLVM37ModuleRef M) {
   std::string Data;
   raw_string_ostream OS(Data);
 

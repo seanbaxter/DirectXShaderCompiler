@@ -2,12 +2,12 @@
 # options chosen via `add_definitions', so we need our own method for
 # using it on tools/llvm-config/CMakeLists.txt.
 
-# Beware that there is no implementation of remove_llvm_definitions.
+# Beware that there is no implementation of remove_llvm37_definitions.
 
 macro(add_llvm_definitions)
-  # We don't want no semicolons on LLVM_DEFINITIONS:
+  # We don't want no semicolons on LLVM37_DEFINITIONS:
   foreach(arg ${ARGN})
-    set(LLVM_DEFINITIONS "${LLVM_DEFINITIONS} ${arg}")
+    set(LLVM37_DEFINITIONS "${LLVM37_DEFINITIONS} ${arg}")
   endforeach(arg)
   add_definitions( ${ARGN} )
 endmacro(add_llvm_definitions)

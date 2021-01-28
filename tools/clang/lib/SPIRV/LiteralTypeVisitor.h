@@ -1,14 +1,14 @@
 //===--- LiteralTypeVisitor.h - Literal Type Visitor -------------*- C++ -*-==//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_LIB_SPIRV_LITERALTYPEVISITOR_H
-#define LLVM_CLANG_LIB_SPIRV_LITERALTYPEVISITOR_H
+#ifndef LLVM37_CLANG_LIB_SPIRV_LITERALTYPEVISITOR_H
+#define LLVM37_CLANG_LIB_SPIRV_LITERALTYPEVISITOR_H
 
 #include "clang/SPIRV/SpirvContext.h"
 #include "clang/SPIRV/SpirvVisitor.h"
@@ -76,7 +76,7 @@ private:
   bool canDeduceTypeFromLitType(QualType litType, QualType newType);
 
   bool updateTypeForCompositeMembers(
-      QualType compositeType, llvm::ArrayRef<SpirvInstruction *> constituents);
+      QualType compositeType, llvm37::ArrayRef<SpirvInstruction *> constituents);
 
   /// Returns true if the given constant integer instruction contains a value
   /// that cannot fit in 32 bits.
@@ -90,4 +90,4 @@ private:
 } // end namespace spirv
 } // end namespace clang
 
-#endif // LLVM_CLANG_LIB_SPIRV_LITERALTYPEVISITOR_H
+#endif // LLVM37_CLANG_LIB_SPIRV_LITERALTYPEVISITOR_H

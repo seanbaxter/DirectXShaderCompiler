@@ -1,6 +1,6 @@
 # Copyright (C) Microsoft Corporation. All rights reserved.
 # This file is distributed under the University of Illinois Open Source License. See LICENSE.TXT for details.
-add_llvm_library(LLVMDxilContainer
+add_llvm_library(LLVM37DxilContainer
   DxilContainer.cpp
   DxilContainerAssembler.cpp
   DxilContainerReader.cpp
@@ -8,7 +8,7 @@ add_llvm_library(LLVMDxilContainer
   DxilRuntimeReflection.cpp
 
   ADDITIONAL_HEADER_DIRS
-  ${LLVM_MAIN_INCLUDE_DIR}/llvm/IR
+  ${LLVM37_MAIN_INCLUDE_DIR}/llvm37/IR
 )
 
-add_dependencies(LLVMDxilContainer intrinsics_gen)
+add_dependencies(LLVM37DxilContainer intrinsics_gen)

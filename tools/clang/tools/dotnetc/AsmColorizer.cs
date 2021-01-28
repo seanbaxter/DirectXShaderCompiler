@@ -21,7 +21,7 @@ namespace MainNs
     {
         WS,
         Comment,
-        LLVMTypeName,
+        LLVM37TypeName,
         Keyword,
         Metadata,
         Punctuation,
@@ -102,13 +102,13 @@ namespace MainNs
 
             int intWidth;
             if (text[start] == 'i' && Int32.TryParse(text.Substring(start + 1, 1), out intWidth))
-                return AsmRangeKind.LLVMTypeName;
+                return AsmRangeKind.LLVM37TypeName;
 
             string val = text.Substring(start, end - start);
             if (Array.BinarySearch(Keywords, val, StringComparer.Ordinal) >= 0)
                 return AsmRangeKind.Keyword;
             if (Array.BinarySearch(TypeKeywords, val, StringComparer.Ordinal) >= 0)
-                return AsmRangeKind.LLVMTypeName;
+                return AsmRangeKind.LLVM37TypeName;
             if (Array.BinarySearch(InstKeywords, val, StringComparer.Ordinal) >= 0)
                 return AsmRangeKind.Instruction;
             // Pending: DWKEYWORD, a few others

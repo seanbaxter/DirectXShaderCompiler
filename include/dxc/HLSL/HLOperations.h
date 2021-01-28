@@ -11,10 +11,10 @@
 
 #pragma once
 
-#include "llvm/IR/IRBuilder.h"
+#include "llvm37/IR/IRBuilder.h"
 #include <string>
 
-namespace llvm {
+namespace llvm37 {
 class Argument;
 template<typename T> class ArrayRef;
 class AttributeSet;
@@ -120,16 +120,16 @@ enum class HLMatLoadStoreOpcode {
 
 extern const char * const HLPrefix;
 
-HLOpcodeGroup GetHLOpcodeGroup(llvm::Function *F);
-HLOpcodeGroup GetHLOpcodeGroupByName(const llvm::Function *F);
-llvm::StringRef GetHLOpcodeGroupNameByAttr(llvm::Function *F);
-llvm::StringRef GetHLLowerStrategy(llvm::Function *F);
-unsigned  GetHLOpcode(const llvm::CallInst *CI);
+HLOpcodeGroup GetHLOpcodeGroup(llvm37::Function *F);
+HLOpcodeGroup GetHLOpcodeGroupByName(const llvm37::Function *F);
+llvm37::StringRef GetHLOpcodeGroupNameByAttr(llvm37::Function *F);
+llvm37::StringRef GetHLLowerStrategy(llvm37::Function *F);
+unsigned  GetHLOpcode(const llvm37::CallInst *CI);
 unsigned  GetRowMajorOpcode(HLOpcodeGroup group, unsigned opcode);
-void SetHLLowerStrategy(llvm::Function *F, llvm::StringRef S);
+void SetHLLowerStrategy(llvm37::Function *F, llvm37::StringRef S);
 
-void SetHLWaveSensitive(llvm::Function *F);
-bool IsHLWaveSensitive(llvm::Function *F);
+void SetHLWaveSensitive(llvm37::Function *F);
+bool IsHLWaveSensitive(llvm37::Function *F);
 
 // For intrinsic opcode.
 bool HasUnsignedOpcode(unsigned opcode);
@@ -138,7 +138,7 @@ unsigned GetUnsignedOpcode(unsigned opcode);
 bool HasUnsignedOpcode(HLBinaryOpcode opcode);
 HLBinaryOpcode GetUnsignedOpcode(HLBinaryOpcode opcode);
 
-llvm::StringRef GetHLOpcodeGroupName(HLOpcodeGroup op);
+llvm37::StringRef GetHLOpcodeGroupName(HLOpcodeGroup op);
 
 namespace HLOperandIndex {
 // Opcode parameter.
@@ -384,40 +384,40 @@ const unsigned kDispatchMeshOpPayload = 4;
 
 } // namespace HLOperandIndex
 
-llvm::Function *GetOrCreateHLFunction(llvm::Module &M,
-                                      llvm::FunctionType *funcTy,
+llvm37::Function *GetOrCreateHLFunction(llvm37::Module &M,
+                                      llvm37::FunctionType *funcTy,
                                       HLOpcodeGroup group, unsigned opcode);
-llvm::Function *GetOrCreateHLFunction(llvm::Module &M,
-                                      llvm::FunctionType *funcTy,
+llvm37::Function *GetOrCreateHLFunction(llvm37::Module &M,
+                                      llvm37::FunctionType *funcTy,
                                       HLOpcodeGroup group,
-                                      llvm::StringRef *groupName,
-                                      llvm::StringRef *fnName,
+                                      llvm37::StringRef *groupName,
+                                      llvm37::StringRef *fnName,
                                       unsigned opcode);
 
-llvm::Function *GetOrCreateHLFunction(llvm::Module &M,
-                                      llvm::FunctionType *funcTy,
+llvm37::Function *GetOrCreateHLFunction(llvm37::Module &M,
+                                      llvm37::FunctionType *funcTy,
                                       HLOpcodeGroup group, unsigned opcode,
-                                      const llvm::AttributeSet &attribs);
-llvm::Function *GetOrCreateHLFunction(llvm::Module &M,
-                                      llvm::FunctionType *funcTy,
+                                      const llvm37::AttributeSet &attribs);
+llvm37::Function *GetOrCreateHLFunction(llvm37::Module &M,
+                                      llvm37::FunctionType *funcTy,
                                       HLOpcodeGroup group,
-                                      llvm::StringRef *groupName,
-                                      llvm::StringRef *fnName,
+                                      llvm37::StringRef *groupName,
+                                      llvm37::StringRef *fnName,
                                       unsigned opcode,
-                                      const llvm::AttributeSet &attribs);
+                                      const llvm37::AttributeSet &attribs);
 
-llvm::Function *GetOrCreateHLFunctionWithBody(llvm::Module &M,
-                                              llvm::FunctionType *funcTy,
+llvm37::Function *GetOrCreateHLFunctionWithBody(llvm37::Module &M,
+                                              llvm37::FunctionType *funcTy,
                                               HLOpcodeGroup group,
                                               unsigned opcode,
-                                              llvm::StringRef name);
+                                              llvm37::StringRef name);
 
-llvm::Value *callHLFunction(llvm::Module &Module, HLOpcodeGroup OpcodeGroup, unsigned Opcode,
-                            llvm::Type *RetTy, llvm::ArrayRef<llvm::Value*> Args,
-                            const llvm::AttributeSet &attribs, llvm::IRBuilder<> &Builder);
+llvm37::Value *callHLFunction(llvm37::Module &Module, HLOpcodeGroup OpcodeGroup, unsigned Opcode,
+                            llvm37::Type *RetTy, llvm37::ArrayRef<llvm37::Value*> Args,
+                            const llvm37::AttributeSet &attribs, llvm37::IRBuilder<> &Builder);
 
-llvm::Value *callHLFunction(llvm::Module &Module, HLOpcodeGroup OpcodeGroup, unsigned Opcode,
-                            llvm::Type *RetTy, llvm::ArrayRef<llvm::Value*> Args,
-                            llvm::IRBuilder<> &Builder);
+llvm37::Value *callHLFunction(llvm37::Module &Module, HLOpcodeGroup OpcodeGroup, unsigned Opcode,
+                            llvm37::Type *RetTy, llvm37::ArrayRef<llvm37::Value*> Args,
+                            llvm37::IRBuilder<> &Builder);
 
 } // namespace hlsl

@@ -10,7 +10,7 @@ taking the address of an aggregate argument that is being passed by
 value through memory.  Primarily, this feature is required for
 compatibility with the Microsoft C++ ABI.  Under that ABI, class
 instances that are passed by value are constructed directly into
-argument stack memory.  Prior to the addition of inalloca, calls in LLVM
+argument stack memory.  Prior to the addition of inalloca, calls in LLVM37
 were indivisible instructions.  There was no way to perform intermediate
 work, such as object construction, between the first stack adjustment
 and the final control transfer.  With inalloca, all arguments passed in
@@ -28,7 +28,7 @@ passing by value with a copy.
 Intended Usage
 ==============
 
-The example below is the intended LLVM IR lowering for some C++ code
+The example below is the intended LLVM37 IR lowering for some C++ code
 that passes two default-constructed ``Foo`` objects to ``g`` in the
 32-bit Microsoft C++ ABI.
 
@@ -41,7 +41,7 @@ that passes two default-constructed ``Foo`` objects to ``g`` in the
       g(Foo(), Foo());
     }
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
     %struct.Foo = type { i32, i32 }
     declare void @Foo_ctor(%struct.Foo* %this)
@@ -50,7 +50,7 @@ that passes two default-constructed ``Foo`` objects to ``g`` in the
 
     define void @f() {
     entry:
-      %base = call i8* @llvm.stacksave()
+      %base = call i8* @llvm37.stacksave()
       %memargs = alloca <{ %struct.Foo, %struct.Foo }>
       %b = getelementptr <{ %struct.Foo, %struct.Foo }>* %memargs, i32 1
       call void @Foo_ctor(%struct.Foo* %b)
@@ -62,17 +62,17 @@ that passes two default-constructed ``Foo`` objects to ``g`` in the
 
     invoke.cont:
       call void @g(<{ %struct.Foo, %struct.Foo }>* inalloca %memargs)
-      call void @llvm.stackrestore(i8* %base)
+      call void @llvm37.stackrestore(i8* %base)
       ...
 
     invoke.unwind:
       call void @Foo_dtor(%struct.Foo* %b)
-      call void @llvm.stackrestore(i8* %base)
+      call void @llvm37.stackrestore(i8* %base)
       ...
     }
 
 To avoid stack leaks, the frontend saves the current stack pointer with
-a call to :ref:`llvm.stacksave <int_stacksave>`.  Then, it allocates the
+a call to :ref:`llvm37.stacksave <int_stacksave>`.  Then, it allocates the
 argument stack space with alloca and calls the default constructor.  The
 default constructor could throw an exception, so the frontend has to
 create a landing pad.  The frontend has to destroy the already
@@ -133,7 +133,7 @@ Callee-cleanup Calling Conventions
 Another wrinkle is the existence of callee-cleanup conventions.  On
 Windows, all methods and many other functions adjust the stack to clear
 the memory used to pass their arguments.  In some sense, this means that
-the allocas are automatically cleared by the call.  However, LLVM
+the allocas are automatically cleared by the call.  However, LLVM37
 instead models this as a write of undef to all of the inalloca values
 passed to the call instead of a stack adjustment.  Frontends should
 still restore the stack pointer to avoid a stack leak.

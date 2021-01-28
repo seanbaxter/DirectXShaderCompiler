@@ -5,67 +5,67 @@ System Library
 Abstract
 ========
 
-NOTE: this document describes the System Library for the original LLVM
+NOTE: this document describes the System Library for the original LLVM37
 project, not the DirectX Compiler. While most of the library remains the same,
 there are some important changes. See HLSL Changes for some background on
 these.
 
-This document provides some details on LLVM's System Library, located in the
-source at ``lib/System`` and ``include/llvm/System``. The library's purpose is
-to shield LLVM from the differences between operating systems for the few
-services LLVM needs from the operating system. Much of LLVM is written using
+This document provides some details on LLVM37's System Library, located in the
+source at ``lib/System`` and ``include/llvm37/System``. The library's purpose is
+to shield LLVM37 from the differences between operating systems for the few
+services LLVM37 needs from the operating system. Much of LLVM37 is written using
 portability features of standard C++. However, in a few areas, system dependent
 facilities are needed and the System Library is the wrapper around those system
 calls.
 
-By centralizing LLVM's use of operating system interfaces, we make it possible
-for the LLVM tool chain and runtime libraries to be more easily ported to new
+By centralizing LLVM37's use of operating system interfaces, we make it possible
+for the LLVM37 tool chain and runtime libraries to be more easily ported to new
 platforms since (theoretically) only ``lib/System`` needs to be ported.  This
-library also unclutters the rest of LLVM from #ifdef use and special cases for
+library also unclutters the rest of LLVM37 from #ifdef use and special cases for
 specific operating systems. Such uses are replaced with simple calls to the
-interfaces provided in ``include/llvm/System``.
+interfaces provided in ``include/llvm37/System``.
 
 Note that the System Library is not intended to be a complete operating system
 wrapper (such as the Adaptive Communications Environment (ACE) or Apache
 Portable Runtime (APR)), but only provides the functionality necessary to
-support LLVM.
+support LLVM37.
 
 The System Library was written by Reid Spencer who formulated the design based
 on similar work originating from the eXtensible Programming System (XPS).
 Several people helped with the effort; especially, Jeff Cohen and Henrik Bach
 on the Win32 port.
 
-Keeping LLVM Portable
+Keeping LLVM37 Portable
 =====================
 
-In order to keep LLVM portable, LLVM developers should adhere to a set of
+In order to keep LLVM37 portable, LLVM37 developers should adhere to a set of
 portability rules associated with the System Library. Adherence to these rules
-should help the System Library achieve its goal of shielding LLVM from the
+should help the System Library achieve its goal of shielding LLVM37 from the
 variations in operating system interfaces and doing so efficiently.  The
 following sections define the rules needed to fulfill this objective.
 
 Don't Include System Headers
 ----------------------------
 
-Except in ``lib/System``, no LLVM source code should directly ``#include`` a
-system header. Care has been taken to remove all such ``#includes`` from LLVM
+Except in ``lib/System``, no LLVM37 source code should directly ``#include`` a
+system header. Care has been taken to remove all such ``#includes`` from LLVM37
 while ``lib/System`` was being developed.  Specifically this means that header
 files like "``unistd.h``", "``windows.h``", "``stdio.h``", and "``string.h``"
-are forbidden to be included by LLVM source code outside the implementation of
+are forbidden to be included by LLVM37 source code outside the implementation of
 ``lib/System``.
 
 To obtain system-dependent functionality, existing interfaces to the system
-found in ``include/llvm/System`` should be used. If an appropriate interface is
-not available, it should be added to ``include/llvm/System`` and implemented in
+found in ``include/llvm37/System`` should be used. If an appropriate interface is
+not available, it should be added to ``include/llvm37/System`` and implemented in
 ``lib/System`` for all supported platforms.
 
 Don't Expose System Headers
 ---------------------------
 
-The System Library must shield LLVM from **all** system headers. To obtain
-system level functionality, LLVM source must ``#include "llvm/System/Thing.h"``
+The System Library must shield LLVM37 from **all** system headers. To obtain
+system level functionality, LLVM37 source must ``#include "llvm37/System/Thing.h"``
 and nothing else. This means that ``Thing.h`` cannot expose any system header
-files. This protects LLVM from accidentally using system specific functionality
+files. This protects LLVM37 from accidentally using system specific functionality
 and only allows it via the ``lib/System`` interface.
 
 Use Standard C Headers
@@ -73,7 +73,7 @@ Use Standard C Headers
 
 The **standard** C headers (the ones beginning with "c") are allowed to be
 exposed through the ``lib/System`` interface. These headers and the things they
-declare are considered to be platform agnostic. LLVM source files may include
+declare are considered to be platform agnostic. LLVM37 source files may include
 them directly or obtain their inclusion through ``lib/System`` interfaces.
 
 Use Standard C++ Headers
@@ -82,17 +82,17 @@ Use Standard C++ Headers
 The **standard** C++ headers from the standard C++ library and standard
 template library may be exposed through the ``lib/System`` interface. These
 headers and the things they declare are considered to be platform agnostic.
-LLVM source files may include them or obtain their inclusion through
+LLVM37 source files may include them or obtain their inclusion through
 ``lib/System`` interfaces.
 
 High Level Interface
 --------------------
 
 The entry points specified in the interface of ``lib/System`` must be aimed at
-completing some reasonably high level task needed by LLVM. We do not want to
+completing some reasonably high level task needed by LLVM37. We do not want to
 simply wrap each operating system call. It would be preferable to wrap several
 operating system calls that are always used in conjunction with one another by
-LLVM.
+LLVM37.
 
 For example, consider what is needed to execute a program, wait for it to
 complete, and return its result code. On Unix, this involves the following
@@ -109,8 +109,8 @@ No Unused Functionality
 -----------------------
 
 There must be no functionality specified in the interface of ``lib/System``
-that isn't actually used by LLVM. We're not writing a general purpose operating
-system wrapper here, just enough to satisfy LLVM's needs. And, LLVM doesn't
+that isn't actually used by LLVM37. We're not writing a general purpose operating
+system wrapper here, just enough to satisfy LLVM37's needs. And, LLVM37 doesn't
 need much. This design goal aims to keep the ``lib/System`` interface small and
 understandable which should foster its actual use and adoption.
 
@@ -126,7 +126,7 @@ systems supported for a given class of operating system (e.g. Unix, Win32).
 No Virtual Methods
 ------------------
 
-The System Library interfaces can be called quite frequently by LLVM. In order
+The System Library interfaces can be called quite frequently by LLVM37. In order
 to make those calls as efficient as possible, we discourage the use of virtual
 methods. There is no need to use inheritance for implementation differences, it
 just adds complexity. The ``#include`` mechanism works just fine.
@@ -183,8 +183,8 @@ interface function, ``OpenFileForWriting`` is too low level. It should be
 this function would just create it and then open it for writing.
 
 This design principle needs to be maintained in ``lib/System`` because it
-avoids the propagation of soft error handling throughout the rest of LLVM.
-Hard errors will generally just cause a termination for an LLVM tool so don't
+avoids the propagation of soft error handling throughout the rest of LLVM37.
+Hard errors will generally just cause a termination for an LLVM37 tool so don't
 be bashful about throwing them.
 
 Rules of thumb:
@@ -194,7 +194,7 @@ Rules of thumb:
 #. If you're tempted to throw a soft error, re-think the interface.
 
 #. Handle internally the most common normal/good/soft error conditions
-   so the rest of LLVM doesn't have to.
+   so the rest of LLVM37 doesn't have to.
 
 No throw Specifications
 -----------------------
@@ -214,19 +214,19 @@ Implementations of the System Library interface are separated by their general
 class of operating system. Currently only Unix and Win32 classes are defined
 but more could be added for other operating system classifications.  To
 distinguish which implementation to compile, the code in ``lib/System`` uses
-the ``LLVM_ON_UNIX`` and ``LLVM_ON_WIN32`` ``#defines`` provided via configure
-through the ``llvm/Config/config.h`` file. Each source file in ``lib/System``,
+the ``LLVM37_ON_UNIX`` and ``LLVM37_ON_WIN32`` ``#defines`` provided via configure
+through the ``llvm37/Config/config.h`` file. Each source file in ``lib/System``,
 after implementing the generic (operating system independent) functionality
 needs to include the correct implementation using a set of
-``#if defined(LLVM_ON_XYZ)`` directives. For example, if we had
+``#if defined(LLVM37_ON_XYZ)`` directives. For example, if we had
 ``lib/System/File.cpp``, we'd expect to see in that file:
 
 .. code-block:: c++
 
-  #if defined(LLVM_ON_UNIX)
+  #if defined(LLVM37_ON_UNIX)
   #include "Unix/File.cpp"
   #endif
-  #if defined(LLVM_ON_WIN32)
+  #if defined(LLVM37_ON_WIN32)
   #include "Win32/File.cpp"
   #endif
 

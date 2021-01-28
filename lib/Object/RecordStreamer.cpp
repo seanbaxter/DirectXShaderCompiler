@@ -1,6 +1,6 @@
 //===-- RecordStreamer.cpp - Record asm definde and used symbols ----------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -8,8 +8,8 @@
 //===----------------------------------------------------------------------===//
 
 #include "RecordStreamer.h"
-#include "llvm/MC/MCSymbol.h"
-using namespace llvm;
+#include "llvm37/MC/MCSymbol.h"
+using namespace llvm37;
 
 void RecordStreamer::markDefined(const MCSymbol &Symbol) {
   State &S = Symbols[Symbol.getName()];

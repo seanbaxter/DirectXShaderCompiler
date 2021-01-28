@@ -1,6 +1,6 @@
 //===--- CodeCompleteConsumer.cpp - Code Completion Interface ---*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -18,10 +18,10 @@
 #include "clang/AST/DeclTemplate.h"
 #include "clang/Sema/Scope.h"
 #include "clang/Sema/Sema.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/ADT/Twine.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/ADT/Twine.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <algorithm>
 #include <cstring>
 #include <functional>
@@ -74,7 +74,7 @@ bool CodeCompletionContext::wantConstructorResults() const {
     return false;
   }
 
-  llvm_unreachable("Invalid CodeCompletionContext::Kind!");
+  llvm37_unreachable("Invalid CodeCompletionContext::Kind!");
 }
 
 //===----------------------------------------------------------------------===//
@@ -94,7 +94,7 @@ CodeCompletionString::Chunk::Chunk(ChunkKind Kind, const char *Text)
     break;
 
   case CK_Optional:
-    llvm_unreachable("Optional strings cannot be created from text");
+    llvm37_unreachable("Optional strings cannot be created from text");
       
   case CK_LeftParen:
     this->Text = "(";
@@ -226,7 +226,7 @@ const char *CodeCompletionString::getAnnotation(unsigned AnnotationNr) const {
 
 std::string CodeCompletionString::getAsString() const {
   std::string Result;
-  llvm::raw_string_ostream OS(Result);
+  llvm37::raw_string_ostream OS(Result);
                           
   for (iterator C = begin(), CEnd = end(); C != CEnd; ++C) {
     switch (C->Kind) {
@@ -293,7 +293,7 @@ StringRef CodeCompletionTUInfo::getParentName(const DeclContext *DC) {
 
   {
     SmallString<128> S;
-    llvm::raw_svector_ostream OS(S);
+    llvm37::raw_svector_ostream OS(S);
     bool First = true;
     for (unsigned I = Contexts.size(); I != 0; --I) {
       if (First)
@@ -331,7 +331,7 @@ CodeCompletionString *CodeCompletionBuilder::TakeString() {
   void *Mem = getAllocator().Allocate(
                   sizeof(CodeCompletionString) + sizeof(Chunk) * Chunks.size()
                                     + sizeof(const char *) * Annotations.size(),
-                                 llvm::alignOf<CodeCompletionString>());
+                                 llvm37::alignOf<CodeCompletionString>());
   CodeCompletionString *Result 
     = new (Mem) CodeCompletionString(Chunks.data(), Chunks.size(),
                                      Priority, Availability,
@@ -421,7 +421,7 @@ CodeCompleteConsumer::OverloadCandidate::getFunctionType() const {
     return Type;
   }
 
-  llvm_unreachable("Invalid CandidateKind!");
+  llvm37_unreachable("Invalid CandidateKind!");
 }
 
 //===----------------------------------------------------------------------===//
@@ -490,7 +490,7 @@ PrintingCodeCompleteConsumer::ProcessCodeCompleteResults(Sema &SemaRef,
 // chunks.
 static std::string getOverloadAsString(const CodeCompletionString &CCS) {
   std::string Result;
-  llvm::raw_string_ostream OS(Result);
+  llvm37::raw_string_ostream OS(Result);
 
   for (auto &C : CCS) {
     switch (C.Kind) {
@@ -579,7 +579,7 @@ void CodeCompletionResult::computeCursorKindAndAvailability(bool Accessible) {
 
   case RK_Macro:
   case RK_Keyword:
-    llvm_unreachable("Macro and keyword kinds are handled by the constructors");
+    llvm37_unreachable("Macro and keyword kinds are handled by the constructors");
   }
 
   if (!Accessible)

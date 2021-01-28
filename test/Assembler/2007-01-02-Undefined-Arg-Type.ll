@@ -1,5 +1,5 @@
 ; The assembler should catch an undefined argument type .
-; RUN: not llvm-as %s -o /dev/null 2>&1 | FileCheck %s
+; RUN: not llvm37-as %s -o /dev/null 2>&1 | FileCheck %s
 
 ; CHECK: use of undefined type named 'typedef.bc_struct'
 

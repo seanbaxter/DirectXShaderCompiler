@@ -1,6 +1,6 @@
 //===- AliasDebugger.cpp - Simple Alias Analysis Use Checker --------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -16,15 +16,15 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Analysis/Passes.h"
-#include "llvm/Analysis/AliasAnalysis.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/DerivedTypes.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/Module.h"
-#include "llvm/Pass.h"
+#include "llvm37/Analysis/Passes.h"
+#include "llvm37/Analysis/AliasAnalysis.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/DerivedTypes.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/Pass.h"
 #include <set>
-using namespace llvm;
+using namespace llvm37;
 
 namespace {
   
@@ -132,5 +132,5 @@ char AliasDebugger::ID = 0;
 INITIALIZE_AG_PASS(AliasDebugger, AliasAnalysis, "debug-aa",
                    "AA use debugger", false, true, false)
 
-Pass *llvm::createAliasDebugger() { return new AliasDebugger(); }
+Pass *llvm37::createAliasDebugger() { return new AliasDebugger(); }
 

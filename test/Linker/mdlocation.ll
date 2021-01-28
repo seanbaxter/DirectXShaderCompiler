@@ -1,4 +1,4 @@
-; RUN: llvm-link %s %S/Inputs/mdlocation.ll -o - -S | FileCheck %s
+; RUN: llvm37-link %s %S/Inputs/mdlocation.ll -o - -S | FileCheck %s
 
 ; Test that DILocations are remapped properly.
 

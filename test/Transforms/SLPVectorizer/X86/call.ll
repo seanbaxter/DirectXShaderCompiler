@@ -11,7 +11,7 @@ declare i64 @round(i64)
 
 
 ; CHECK: sin_libm
-; CHECK: call <2 x double> @llvm.sin.v2f64
+; CHECK: call <2 x double> @llvm37.sin.v2f64
 ; CHECK: ret void
 define void @sin_libm(double* %a, double* %b, double* %c) {
 entry:
@@ -32,7 +32,7 @@ entry:
 }
 
 ; CHECK: cos_libm
-; CHECK: call <2 x double> @llvm.cos.v2f64
+; CHECK: call <2 x double> @llvm37.cos.v2f64
 ; CHECK: ret void
 define void @cos_libm(double* %a, double* %b, double* %c) {
 entry:
@@ -53,7 +53,7 @@ entry:
 }
 
 ; CHECK: pow_libm
-; CHECK: call <2 x double> @llvm.pow.v2f64
+; CHECK: call <2 x double> @llvm37.pow.v2f64
 ; CHECK: ret void
 define void @pow_libm(double* %a, double* %b, double* %c) {
 entry:
@@ -75,7 +75,7 @@ entry:
 
 
 ; CHECK: exp2_libm
-; CHECK: call <2 x double> @llvm.exp2.v2f64
+; CHECK: call <2 x double> @llvm37.exp2.v2f64
 ; CHECK: ret void
 define void @exp2_libm(double* %a, double* %b, double* %c) {
 entry:
@@ -119,10 +119,10 @@ entry:
 }
 
 
-; CHECK: declare <2 x double> @llvm.sin.v2f64(<2 x double>) [[ATTR0:#[0-9]+]]
-; CHECK: declare <2 x double> @llvm.cos.v2f64(<2 x double>) [[ATTR0]]
-; CHECK: declare <2 x double> @llvm.pow.v2f64(<2 x double>, <2 x double>) [[ATTR0]]
-; CHECK: declare <2 x double> @llvm.exp2.v2f64(<2 x double>) [[ATTR0]]
+; CHECK: declare <2 x double> @llvm37.sin.v2f64(<2 x double>) [[ATTR0:#[0-9]+]]
+; CHECK: declare <2 x double> @llvm37.cos.v2f64(<2 x double>) [[ATTR0]]
+; CHECK: declare <2 x double> @llvm37.pow.v2f64(<2 x double>, <2 x double>) [[ATTR0]]
+; CHECK: declare <2 x double> @llvm37.exp2.v2f64(<2 x double>) [[ATTR0]]
 
 ; CHECK: attributes [[ATTR0]] = { nounwind readnone }
 

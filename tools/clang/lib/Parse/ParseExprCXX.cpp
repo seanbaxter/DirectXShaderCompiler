@@ -1,6 +1,6 @@
 //===--- ParseExprCXX.cpp - C++ Expression Parsing ------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -21,7 +21,7 @@
 #include "clang/Sema/DeclSpec.h"
 #include "clang/Sema/ParsedTemplate.h"
 #include "clang/Sema/Scope.h"
-#include "llvm/Support/ErrorHandling.h"
+#include "llvm37/Support/ErrorHandling.h"
 //                                                                           //
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -37,7 +37,7 @@ static int SelectDigraphErrorMessage(tok::TokenKind Kind) {
     case tok::kw_reinterpret_cast: return 3;
     case tok::kw_static_cast:      return 4;
     default:
-      llvm_unreachable("Unknown type for digraph error message.");
+      llvm37_unreachable("Unknown type for digraph error message.");
   }
 }
 
@@ -1210,7 +1210,7 @@ ExprResult Parser::ParseLambdaExpressionAfterIntroducer(
     case tok::arrow: TokKind = 1; break;
     case tok::kw___attribute:
     case tok::l_square: TokKind = 2; break;
-    default: llvm_unreachable("Unknown token kind");
+    default: llvm37_unreachable("Unknown token kind");
     }
 
     Diag(Tok, diag::err_lambda_missing_parens)
@@ -1309,7 +1309,7 @@ ExprResult Parser::ParseCXXCasts() {
   const char *CastName = nullptr; // For error messages
 
   switch (Kind) {
-  default: llvm_unreachable("Unknown C++ cast!");
+  default: llvm37_unreachable("Unknown C++ cast!");
   case tok::kw_const_cast:       CastName = "const_cast";       break;
   case tok::kw_dynamic_cast:     CastName = "dynamic_cast";     break;
   case tok::kw_reinterpret_cast: CastName = "reinterpret_cast"; break;
@@ -1843,9 +1843,9 @@ void Parser::ParseCXXSimpleTypeSpecifier(DeclSpec &DS) {
   switch (Tok.getKind()) {
   case tok::identifier:   // foo::bar
   case tok::coloncolon:   // ::foo::bar
-    llvm_unreachable("Annotation token should already be formed!");
+    llvm37_unreachable("Annotation token should already be formed!");
   default:
-    llvm_unreachable("Not a simple-type-specifier token!");
+    llvm37_unreachable("Not a simple-type-specifier token!");
 
   // type-name
   case tok::annot_typename: {
@@ -2918,7 +2918,7 @@ Parser::ParseCXXDeleteExpression(bool UseGlobal, SourceLocation Start) {
 
 static TypeTrait TypeTraitFromTokKind(tok::TokenKind kind) {
   switch (kind) {
-  default: llvm_unreachable("Not a known type trait");
+  default: llvm37_unreachable("Not a known type trait");
 #define TYPE_TRAIT_1(Spelling, Name, Key) \
 case tok::kw_ ## Spelling: return UTT_ ## Name;
 #define TYPE_TRAIT_2(Spelling, Name, Key) \
@@ -2932,7 +2932,7 @@ case tok::kw_ ## Spelling: return BTT_ ## Name;
 
 static ArrayTypeTrait ArrayTypeTraitFromTokKind(tok::TokenKind kind) {
   switch(kind) {
-  default: llvm_unreachable("Not a known binary type trait");
+  default: llvm37_unreachable("Not a known binary type trait");
   case tok::kw___array_rank:                 return ATT_ArrayRank;
   case tok::kw___array_extent:               return ATT_ArrayExtent;
   }
@@ -2940,7 +2940,7 @@ static ArrayTypeTrait ArrayTypeTraitFromTokKind(tok::TokenKind kind) {
 
 static ExpressionTrait ExpressionTraitFromTokKind(tok::TokenKind kind) {
   switch(kind) {
-  default: llvm_unreachable("Not a known unary expression trait.");
+  default: llvm37_unreachable("Not a known unary expression trait.");
   case tok::kw___is_lvalue_expr:             return ET_IsLValueExpr;
   case tok::kw___is_rvalue_expr:             return ET_IsRValueExpr;
   }
@@ -2948,7 +2948,7 @@ static ExpressionTrait ExpressionTraitFromTokKind(tok::TokenKind kind) {
 
 static unsigned TypeTraitArity(tok::TokenKind kind) {
   switch (kind) {
-    default: llvm_unreachable("Not a known type trait");
+    default: llvm37_unreachable("Not a known type trait");
 #define TYPE_TRAIT(N,Spelling,K) case tok::kw_##Spelling: return N;
 #include "clang/Basic/TokenKinds.def"
   }
@@ -3078,7 +3078,7 @@ ExprResult Parser::ParseArrayTypeTrait() {
                                        T.getCloseLocation());
   }
   }
-  llvm_unreachable("Invalid ArrayTypeTrait!");
+  llvm37_unreachable("Invalid ArrayTypeTrait!");
 }
 
 /// ParseExpressionTrait - Parse built-in expression-trait

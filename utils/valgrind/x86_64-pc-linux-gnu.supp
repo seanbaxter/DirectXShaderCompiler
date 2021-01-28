@@ -2,7 +2,7 @@
    False leak under RegisterPass
    Memcheck:Leak
    ...
-   fun:_ZN4llvm12PassRegistry12registerPassERKNS_8PassInfoE
+   fun:_ZN4llvm3712PassRegistry12registerPassERKNS_8PassInfoE
 }
 
 # Python false positives according to

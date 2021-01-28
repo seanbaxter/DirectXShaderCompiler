@@ -1,6 +1,6 @@
 //===- SetTheory.cpp - Generate ordered sets from DAG expressions ---------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -12,12 +12,12 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/TableGen/SetTheory.h"
-#include "llvm/Support/Format.h"
-#include "llvm/TableGen/Error.h"
-#include "llvm/TableGen/Record.h"
+#include "llvm37/TableGen/SetTheory.h"
+#include "llvm37/Support/Format.h"
+#include "llvm37/TableGen/Error.h"
+#include "llvm37/TableGen/Record.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 // Define the standard operators.
 namespace {
@@ -245,16 +245,16 @@ void SetTheory::Expander::anchor() {}
 
 
 SetTheory::SetTheory() {
-  addOperator("add", llvm::make_unique<AddOp>());
-  addOperator("sub", llvm::make_unique<SubOp>());
-  addOperator("and", llvm::make_unique<AndOp>());
-  addOperator("shl", llvm::make_unique<ShlOp>());
-  addOperator("trunc", llvm::make_unique<TruncOp>());
-  addOperator("rotl", llvm::make_unique<RotOp>(false));
-  addOperator("rotr", llvm::make_unique<RotOp>(true));
-  addOperator("decimate", llvm::make_unique<DecimateOp>());
-  addOperator("interleave", llvm::make_unique<InterleaveOp>());
-  addOperator("sequence", llvm::make_unique<SequenceOp>());
+  addOperator("add", llvm37::make_unique<AddOp>());
+  addOperator("sub", llvm37::make_unique<SubOp>());
+  addOperator("and", llvm37::make_unique<AndOp>());
+  addOperator("shl", llvm37::make_unique<ShlOp>());
+  addOperator("trunc", llvm37::make_unique<TruncOp>());
+  addOperator("rotl", llvm37::make_unique<RotOp>(false));
+  addOperator("rotr", llvm37::make_unique<RotOp>(true));
+  addOperator("decimate", llvm37::make_unique<DecimateOp>());
+  addOperator("interleave", llvm37::make_unique<InterleaveOp>());
+  addOperator("sequence", llvm37::make_unique<SequenceOp>());
 }
 
 void SetTheory::addOperator(StringRef Name, std::unique_ptr<Operator> Op) {
@@ -266,7 +266,7 @@ void SetTheory::addExpander(StringRef ClassName, std::unique_ptr<Expander> E) {
 }
 
 void SetTheory::addFieldExpander(StringRef ClassName, StringRef FieldName) {
-  addExpander(ClassName, llvm::make_unique<FieldExpander>(FieldName));
+  addExpander(ClassName, llvm37::make_unique<FieldExpander>(FieldName));
 }
 
 void SetTheory::evaluate(Init *Expr, RecSet &Elts, ArrayRef<SMLoc> Loc) {

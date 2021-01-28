@@ -1,6 +1,6 @@
 //===-- DeclarationName.cpp - Declaration names implementation --*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -19,10 +19,10 @@
 #include "clang/AST/TypeLoc.h"
 #include "clang/AST/TypeOrdering.h"
 #include "clang/Basic/IdentifierTable.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/FoldingSet.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/FoldingSet.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/raw_ostream.h"
 using namespace clang;
 //                                                                           //
 ///////////////////////////////////////////////////////////////////////////////
@@ -31,7 +31,7 @@ namespace clang {
 /// "special" kinds of declaration names in C++, e.g., constructors,
 /// destructors, and conversion functions.
 class CXXSpecialName
-  : public DeclarationNameExtra, public llvm::FoldingSetNode {
+  : public DeclarationNameExtra, public llvm37::FoldingSetNode {
 public:
   /// Type - The type associated with this declaration name.
   QualType Type;
@@ -40,7 +40,7 @@ public:
   /// name that can be used by the front end.
   void *FETokenInfo;
 
-  void Profile(llvm::FoldingSetNodeID &ID) {
+  void Profile(llvm37::FoldingSetNodeID &ID) {
     ID.AddInteger(ExtraKindOrNumArgs);
     ID.AddPointer(Type.getAsOpaquePtr());
   }
@@ -62,7 +62,7 @@ public:
 /// to allow Objective-C selectors, which are about a million times more common,
 /// to consume minimal memory.
 class CXXLiteralOperatorIdName
-  : public DeclarationNameExtra, public llvm::FoldingSetNode {
+  : public DeclarationNameExtra, public llvm37::FoldingSetNode {
 public:
   IdentifierInfo *ID;
 
@@ -70,7 +70,7 @@ public:
   /// name that can be used by the front end.
   void *FETokenInfo;
 
-  void Profile(llvm::FoldingSetNodeID &FSID) {
+  void Profile(llvm37::FoldingSetNodeID &FSID) {
     FSID.AddPointer(ID);
   }
 };
@@ -132,7 +132,7 @@ int DeclarationName::compare(DeclarationName LHS, DeclarationName RHS) {
     return 0;
   }
 
-  llvm_unreachable("Invalid DeclarationName Kind!");
+  llvm37_unreachable("Invalid DeclarationName Kind!");
 }
 
 raw_ostream &operator<<(raw_ostream &OS, DeclarationName N) {
@@ -206,7 +206,7 @@ raw_ostream &operator<<(raw_ostream &OS, DeclarationName N) {
     return OS << "<using-directive>";
   }
 
-  llvm_unreachable("Unexpected declaration name kind");
+  llvm37_unreachable("Unexpected declaration name kind");
 }
 
 } // end namespace clang
@@ -245,7 +245,7 @@ DeclarationName::NameKind DeclarationName::getNameKind() const {
   }
 
   // Can't actually get here.
-  llvm_unreachable("This should be unreachable!");
+  llvm37_unreachable("This should be unreachable!");
 }
 
 bool DeclarationName::isDependentName() const {
@@ -255,7 +255,7 @@ bool DeclarationName::isDependentName() const {
 
 std::string DeclarationName::getAsString() const {
   std::string Result;
-  llvm::raw_string_ostream OS(Result);
+  llvm37::raw_string_ostream OS(Result);
   OS << *this;
   return OS.str();
 }
@@ -287,7 +287,7 @@ IdentifierInfo *DeclarationName::getCXXLiteralIdentifier() const {
 void *DeclarationName::getFETokenInfoAsVoidSlow() const {
   switch (getNameKind()) {
   case Identifier:
-    llvm_unreachable("Handled by getFETokenInfo()");
+    llvm37_unreachable("Handled by getFETokenInfo()");
 
   case CXXConstructorName:
   case CXXDestructorName:
@@ -301,7 +301,7 @@ void *DeclarationName::getFETokenInfoAsVoidSlow() const {
     return getAsCXXLiteralOperatorIdName()->FETokenInfo;
 
   default:
-    llvm_unreachable("Declaration name has no FETokenInfo");
+    llvm37_unreachable("Declaration name has no FETokenInfo");
   }
 }
 
@@ -326,7 +326,7 @@ void DeclarationName::setFETokenInfo(void *T) {
     break;
 
   default:
-    llvm_unreachable("Declaration name has no FETokenInfo");
+    llvm37_unreachable("Declaration name has no FETokenInfo");
   }
 }
 
@@ -342,13 +342,13 @@ DeclarationName DeclarationName::getUsingDirectiveName() {
 }
 
 void DeclarationName::dump() const {
-  llvm::errs() << *this << '\n';
+  llvm37::errs() << *this << '\n';
 }
 
 DeclarationNameTable::DeclarationNameTable(const ASTContext &C) : Ctx(C) {
   // HLSL Change Starts - use std::unique_ptr to avoid leaks
-  std::unique_ptr<llvm::FoldingSet<CXXSpecialName> > CXXSpecialNamesImplPtr(new llvm::FoldingSet<CXXSpecialName>());
-  std::unique_ptr<llvm::FoldingSet<CXXLiteralOperatorIdName> > CXXLiteralOperatorNamesPtr(new llvm::FoldingSet<CXXLiteralOperatorIdName>());
+  std::unique_ptr<llvm37::FoldingSet<CXXSpecialName> > CXXSpecialNamesImplPtr(new llvm37::FoldingSet<CXXSpecialName>());
+  std::unique_ptr<llvm37::FoldingSet<CXXLiteralOperatorIdName> > CXXLiteralOperatorNamesPtr(new llvm37::FoldingSet<CXXLiteralOperatorIdName>());
 
   // Initialize the overloaded operator names.
   CXXOperatorNames = new (Ctx) CXXOperatorIdName[NUM_OVERLOADED_OPERATORS];
@@ -364,10 +364,10 @@ DeclarationNameTable::DeclarationNameTable(const ASTContext &C) : Ctx(C) {
 }
 
 DeclarationNameTable::~DeclarationNameTable() {
-  llvm::FoldingSet<CXXSpecialName> *SpecialNames =
-    static_cast<llvm::FoldingSet<CXXSpecialName>*>(CXXSpecialNamesImpl);
-  llvm::FoldingSet<CXXLiteralOperatorIdName> *LiteralNames
-    = static_cast<llvm::FoldingSet<CXXLiteralOperatorIdName>*>
+  llvm37::FoldingSet<CXXSpecialName> *SpecialNames =
+    static_cast<llvm37::FoldingSet<CXXSpecialName>*>(CXXSpecialNamesImpl);
+  llvm37::FoldingSet<CXXLiteralOperatorIdName> *LiteralNames
+    = static_cast<llvm37::FoldingSet<CXXLiteralOperatorIdName>*>
         (CXXLiteralOperatorNames);
 
   delete SpecialNames;
@@ -395,8 +395,8 @@ DeclarationNameTable::getCXXSpecialName(DeclarationName::NameKind Kind,
   assert(Kind >= DeclarationName::CXXConstructorName &&
          Kind <= DeclarationName::CXXConversionFunctionName &&
          "Kind must be a C++ special name kind");
-  llvm::FoldingSet<CXXSpecialName> *SpecialNames
-    = static_cast<llvm::FoldingSet<CXXSpecialName>*>(CXXSpecialNamesImpl);
+  llvm37::FoldingSet<CXXSpecialName> *SpecialNames
+    = static_cast<llvm37::FoldingSet<CXXSpecialName>*>(CXXSpecialNamesImpl);
 
   DeclarationNameExtra::ExtraKind EKind;
   switch (Kind) {
@@ -416,7 +416,7 @@ DeclarationNameTable::getCXXSpecialName(DeclarationName::NameKind Kind,
   }
 
   // Unique selector, to guarantee there is one per name.
-  llvm::FoldingSetNodeID ID;
+  llvm37::FoldingSetNodeID ID;
   ID.AddInteger(EKind);
   ID.AddPointer(Ty.getAsOpaquePtr());
 
@@ -440,11 +440,11 @@ DeclarationNameTable::getCXXOperatorName(OverloadedOperatorKind Op) {
 
 DeclarationName
 DeclarationNameTable::getCXXLiteralOperatorName(IdentifierInfo *II) {
-  llvm::FoldingSet<CXXLiteralOperatorIdName> *LiteralNames
-    = static_cast<llvm::FoldingSet<CXXLiteralOperatorIdName>*>
+  llvm37::FoldingSet<CXXLiteralOperatorIdName> *LiteralNames
+    = static_cast<llvm37::FoldingSet<CXXLiteralOperatorIdName>*>
                                                       (CXXLiteralOperatorNames);
 
-  llvm::FoldingSetNodeID ID;
+  llvm37::FoldingSetNodeID ID;
   ID.AddPointer(II);
 
   void *InsertPos = nullptr;
@@ -506,7 +506,7 @@ bool DeclarationNameInfo::containsUnexpandedParameterPack() const {
 
     return Name.getCXXNameType()->containsUnexpandedParameterPack();
   }
-  llvm_unreachable("All name kinds handled.");
+  llvm37_unreachable("All name kinds handled.");
 }
 
 bool DeclarationNameInfo::isInstantiationDependent() const {
@@ -528,12 +528,12 @@ bool DeclarationNameInfo::isInstantiationDependent() const {
     
     return Name.getCXXNameType()->isInstantiationDependentType();
   }
-  llvm_unreachable("All name kinds handled.");
+  llvm37_unreachable("All name kinds handled.");
 }
 
 std::string DeclarationNameInfo::getAsString() const {
   std::string Result;
-  llvm::raw_string_ostream OS(Result);
+  llvm37::raw_string_ostream OS(Result);
   printName(OS);
   return OS.str();
 }
@@ -568,7 +568,7 @@ void DeclarationNameInfo::printName(raw_ostream &OS) const {
       OS << Name;
     return;
   }
-  llvm_unreachable("Unexpected declaration name kind");
+  llvm37_unreachable("Unexpected declaration name kind");
 }
 
 SourceLocation DeclarationNameInfo::getEndLoc() const {
@@ -601,5 +601,5 @@ SourceLocation DeclarationNameInfo::getEndLoc() const {
   case DeclarationName::CXXUsingDirective:
     return NameLoc;
   }
-  llvm_unreachable("Unexpected declaration name kind");
+  llvm37_unreachable("Unexpected declaration name kind");
 }

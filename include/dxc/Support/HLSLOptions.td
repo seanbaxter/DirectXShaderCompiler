@@ -11,7 +11,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Include the common option parsing interfaces.                             //
 
-include "llvm/Option/OptParser.td"
+include "llvm37/Option/OptParser.td"
 
 //////////////////////////////////////////////////////////////////////////////
 // Flags
@@ -194,8 +194,8 @@ def imacros : JoinedOrSeparate<["-", "--"], "imacros">, Group<clang_i_Group>, Fl
   HelpText<"Include macros from file before parsing">, MetaVarName<"<file>">;
 def include_ : JoinedOrSeparate<["-", "--"], "include">, Group<clang_i_Group>, EnumName<"include">,
     MetaVarName<"<file>">, HelpText<"Include file before parsing">, Flags<[CoreOption]>;
-def mllvm : Separate<["-"], "mllvm">, Flags<[CoreOption]>,
-  HelpText<"Additional arguments to forward to LLVM's option processing">;
+def mllvm37 : Separate<["-"], "mllvm37">, Flags<[CoreOption]>,
+  HelpText<"Additional arguments to forward to LLVM37's option processing">;
 def mms_bitfields : Flag<["-"], "mms-bitfields">, Group<m_Group>, Flags<[CoreOption]>,
   HelpText<"Set the default structure layout to be compatible with the Microsoft compiler standard">;
 def o : JoinedOrSeparate<["-"], "o">, Flags<[DriverOption, RenderAsInput, CoreOption]>,
@@ -270,7 +270,7 @@ def encoding : Separate<["-", "/"], "encoding">, Group<hlslcomp_Group>, Flags<[C
 def validator_version : Separate<["-", "/"], "validator-version">, Group<hlslcomp_Group>, Flags<[CoreOption, HelpHidden]>,
   HelpText<"Override validator version for module.  Format: <major.minor> ; Default: DXIL.dll version or current internal version.">;
 def print_after_all : Flag<["-", "/"], "print-after-all">, Group<hlslcomp_Group>, Flags<[CoreOption, HelpHidden]>,
-  HelpText<"Print LLVM IR after each pass.">;
+  HelpText<"Print LLVM37 IR after each pass.">;
 def force_zero_store_lifetimes : Flag<["-", "/"], "force-zero-store-lifetimes">, Group<hlslcomp_Group>, Flags<[CoreOption, HelpHidden]>,
   HelpText<"Instead of generating lifetime intrinsics (SM >= 6.6) or storing undef (SM < 6.6), force fall back to storing zeroinitializer.">;
 def enable_lifetime_markers : Flag<["-", "/"], "enable-lifetime-markers">, Group<hlslcomp_Group>, Flags<[CoreOption]>,

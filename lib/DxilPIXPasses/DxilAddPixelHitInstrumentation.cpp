@@ -18,10 +18,10 @@
 #include "dxc/DxilPIXPasses/DxilPIXPasses.h"
 #include "dxc/HLSL/DxilGenerationPass.h"
 
-#include "llvm/IR/PassManager.h"
-#include "llvm/Transforms/Utils/Local.h"
+#include "llvm37/IR/PassManager.h"
+#include "llvm37/Transforms/Utils/Local.h"
 
-using namespace llvm;
+using namespace llvm37;
 using namespace hlsl;
 
 class DxilAddPixelHitInstrumentation : public ModulePass {
@@ -52,7 +52,7 @@ bool DxilAddPixelHitInstrumentation::runOnModule(Module &M) {
   // This pass adds instrumentation for pixel hit counting and pixel cost.
 
   DxilModule &DM = M.GetOrCreateDxilModule();
-  LLVMContext &Ctx = M.getContext();
+  LLVM37Context &Ctx = M.getContext();
   OP *HlslOP = DM.GetOP();
 
   // ForceEarlyZ is incompatible with the discard function (the Z has to be
@@ -79,7 +79,7 @@ bool DxilAddPixelHitInstrumentation::runOnModule(Module &M) {
   // If not present, we add it.
   if (SV_Position == InputElements.end()) {
     auto SVPosition =
-        llvm::make_unique<DxilSignatureElement>(DXIL::SigPointKind::PSIn);
+        llvm37::make_unique<DxilSignatureElement>(DXIL::SigPointKind::PSIn);
     SVPosition->Initialize("Position", hlsl::CompType::getF32(),
                            hlsl::DXIL::InterpolationMode::Linear, 1, 4,
                            SVPositionIndex == -1 ? 0 : SVPositionIndex, 0);
@@ -106,10 +106,10 @@ bool DxilAddPixelHitInstrumentation::runOnModule(Module &M) {
         static_cast<unsigned int>(DM.GetUAVs().size());
 
     // Set up a UAV with structure of a single int
-    SmallVector<llvm::Type *, 1> Elements{Type::getInt32Ty(Ctx)};
-    llvm::StructType *UAVStructTy =
-        llvm::StructType::create(Elements, "class.RWStructuredBuffer");
-    std::unique_ptr<DxilResource> pUAV = llvm::make_unique<DxilResource>();
+    SmallVector<llvm37::Type *, 1> Elements{Type::getInt32Ty(Ctx)};
+    llvm37::StructType *UAVStructTy =
+        llvm37::StructType::create(Elements, "class.RWStructuredBuffer");
+    std::unique_ptr<DxilResource> pUAV = llvm37::make_unique<DxilResource>();
     pUAV->SetGlobalName("PIX_CountUAVName");
     pUAV->SetGlobalSymbol(UndefValue::get(UAVStructTy->getPointerTo()));
     pUAV->SetID(UAVResourceHandle);
@@ -307,7 +307,7 @@ bool DxilAddPixelHitInstrumentation::runOnModule(Module &M) {
 
 char DxilAddPixelHitInstrumentation::ID = 0;
 
-ModulePass *llvm::createDxilAddPixelHitInstrumentationPass() {
+ModulePass *llvm37::createDxilAddPixelHitInstrumentationPass() {
   return new DxilAddPixelHitInstrumentation();
 }
 

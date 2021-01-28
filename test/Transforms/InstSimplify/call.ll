@@ -1,13 +1,13 @@
 ; RUN: opt < %s -instsimplify -S | FileCheck %s
 
-declare {i8, i1} @llvm.uadd.with.overflow.i8(i8 %a, i8 %b)
-declare {i8, i1} @llvm.usub.with.overflow.i8(i8 %a, i8 %b)
-declare {i8, i1} @llvm.ssub.with.overflow.i8(i8 %a, i8 %b)
-declare {i8, i1} @llvm.umul.with.overflow.i8(i8 %a, i8 %b)
+declare {i8, i1} @llvm37.uadd.with.overflow.i8(i8 %a, i8 %b)
+declare {i8, i1} @llvm37.usub.with.overflow.i8(i8 %a, i8 %b)
+declare {i8, i1} @llvm37.ssub.with.overflow.i8(i8 %a, i8 %b)
+declare {i8, i1} @llvm37.umul.with.overflow.i8(i8 %a, i8 %b)
 
 define i1 @test_uadd1() {
 ; CHECK-LABEL: @test_uadd1(
-  %x = call {i8, i1} @llvm.uadd.with.overflow.i8(i8 254, i8 3)
+  %x = call {i8, i1} @llvm37.uadd.with.overflow.i8(i8 254, i8 3)
   %overflow = extractvalue {i8, i1} %x, 1
   ret i1 %overflow
 ; CHECK-NEXT: ret i1 true
@@ -15,7 +15,7 @@ define i1 @test_uadd1() {
 
 define i8 @test_uadd2() {
 ; CHECK-LABEL: @test_uadd2(
-  %x = call {i8, i1} @llvm.uadd.with.overflow.i8(i8 254, i8 44)
+  %x = call {i8, i1} @llvm37.uadd.with.overflow.i8(i8 254, i8 44)
   %result = extractvalue {i8, i1} %x, 0
   ret i8 %result
 ; CHECK-NEXT: ret i8 42
@@ -23,39 +23,39 @@ define i8 @test_uadd2() {
 
 define {i8, i1} @test_usub1(i8 %V) {
 ; CHECK-LABEL: @test_usub1(
-  %x = call {i8, i1} @llvm.usub.with.overflow.i8(i8 %V, i8 %V)
+  %x = call {i8, i1} @llvm37.usub.with.overflow.i8(i8 %V, i8 %V)
   ret {i8, i1} %x
 ; CHECK-NEXT: ret { i8, i1 } zeroinitializer
 }
 
 define {i8, i1} @test_ssub1(i8 %V) {
 ; CHECK-LABEL: @test_ssub1(
-  %x = call {i8, i1} @llvm.ssub.with.overflow.i8(i8 %V, i8 %V)
+  %x = call {i8, i1} @llvm37.ssub.with.overflow.i8(i8 %V, i8 %V)
   ret {i8, i1} %x
 ; CHECK-NEXT: ret { i8, i1 } zeroinitializer
 }
 
 define {i8, i1} @test_umul1(i8 %V) {
 ; CHECK-LABEL: @test_umul1(
-  %x = call {i8, i1} @llvm.umul.with.overflow.i8(i8 %V, i8 0)
+  %x = call {i8, i1} @llvm37.umul.with.overflow.i8(i8 %V, i8 0)
   ret {i8, i1} %x
 ; CHECK-NEXT: ret { i8, i1 } zeroinitializer
 }
 
-declare i256 @llvm.cttz.i256(i256 %src, i1 %is_zero_undef)
+declare i256 @llvm37.cttz.i256(i256 %src, i1 %is_zero_undef)
 
 define i256 @test_cttz() {
 ; CHECK-LABEL: @test_cttz(
-  %x = call i256 @llvm.cttz.i256(i256 10, i1 false)
+  %x = call i256 @llvm37.cttz.i256(i256 10, i1 false)
   ret i256 %x
 ; CHECK-NEXT: ret i256 1
 }
 
-declare i256 @llvm.ctpop.i256(i256 %src)
+declare i256 @llvm37.ctpop.i256(i256 %src)
 
 define i256 @test_ctpop() {
 ; CHECK-LABEL: @test_ctpop(
-  %x = call i256 @llvm.ctpop.i256(i256 10)
+  %x = call i256 @llvm37.ctpop.i256(i256 10)
   ret i256 %x
 ; CHECK-NEXT: ret i256 2
 }
@@ -76,12 +76,12 @@ define float @test_fabs_libcall() {
 }
 
 
-declare float @llvm.fabs.f32(float) nounwind readnone
-declare float @llvm.floor.f32(float) nounwind readnone
-declare float @llvm.ceil.f32(float) nounwind readnone
-declare float @llvm.trunc.f32(float) nounwind readnone
-declare float @llvm.rint.f32(float) nounwind readnone
-declare float @llvm.nearbyint.f32(float) nounwind readnone
+declare float @llvm37.fabs.f32(float) nounwind readnone
+declare float @llvm37.floor.f32(float) nounwind readnone
+declare float @llvm37.ceil.f32(float) nounwind readnone
+declare float @llvm37.trunc.f32(float) nounwind readnone
+declare float @llvm37.rint.f32(float) nounwind readnone
+declare float @llvm37.nearbyint.f32(float) nounwind readnone
 
 ; Test idempotent intrinsics
 define float @test_idempotence(float %a) {
@@ -89,33 +89,33 @@ define float @test_idempotence(float %a) {
 
 ; CHECK: fabs
 ; CHECK-NOT: fabs
-  %a0 = call float @llvm.fabs.f32(float %a)
-  %a1 = call float @llvm.fabs.f32(float %a0)
+  %a0 = call float @llvm37.fabs.f32(float %a)
+  %a1 = call float @llvm37.fabs.f32(float %a0)
 
 ; CHECK: floor
 ; CHECK-NOT: floor
-  %b0 = call float @llvm.floor.f32(float %a)
-  %b1 = call float @llvm.floor.f32(float %b0)
+  %b0 = call float @llvm37.floor.f32(float %a)
+  %b1 = call float @llvm37.floor.f32(float %b0)
 
 ; CHECK: ceil
 ; CHECK-NOT: ceil
-  %c0 = call float @llvm.ceil.f32(float %a)
-  %c1 = call float @llvm.ceil.f32(float %c0)
+  %c0 = call float @llvm37.ceil.f32(float %a)
+  %c1 = call float @llvm37.ceil.f32(float %c0)
 
 ; CHECK: trunc
 ; CHECK-NOT: trunc
-  %d0 = call float @llvm.trunc.f32(float %a)
-  %d1 = call float @llvm.trunc.f32(float %d0)
+  %d0 = call float @llvm37.trunc.f32(float %a)
+  %d1 = call float @llvm37.trunc.f32(float %d0)
 
 ; CHECK: rint
 ; CHECK-NOT: rint
-  %e0 = call float @llvm.rint.f32(float %a)
-  %e1 = call float @llvm.rint.f32(float %e0)
+  %e0 = call float @llvm37.rint.f32(float %a)
+  %e1 = call float @llvm37.rint.f32(float %e0)
 
 ; CHECK: nearbyint
 ; CHECK-NOT: nearbyint
-  %f0 = call float @llvm.nearbyint.f32(float %a)
-  %f1 = call float @llvm.nearbyint.f32(float %f0)
+  %f0 = call float @llvm37.nearbyint.f32(float %a)
+  %f1 = call float @llvm37.nearbyint.f32(float %f0)
 
   %r0 = fadd float %a1, %b1
   %r1 = fadd float %r0, %c1

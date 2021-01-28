@@ -1,6 +1,6 @@
 //===- Consumed.h ----------------------------------------------*- C++ --*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -12,8 +12,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_ANALYSIS_ANALYSES_CONSUMED_H
-#define LLVM_CLANG_ANALYSIS_ANALYSES_CONSUMED_H
+#ifndef LLVM37_CLANG_ANALYSIS_ANALYSES_CONSUMED_H
+#define LLVM37_CLANG_ANALYSIS_ANALYSES_CONSUMED_H
 
 #include "clang/AST/DeclCXX.h"
 #include "clang/AST/ExprCXX.h"
@@ -130,8 +130,8 @@ namespace consumed {
 
   class ConsumedStateMap {
     
-    typedef llvm::DenseMap<const VarDecl *, ConsumedState> VarMapType;
-    typedef llvm::DenseMap<const CXXBindTemporaryExpr *, ConsumedState>
+    typedef llvm37::DenseMap<const VarDecl *, ConsumedState> VarMapType;
+    typedef llvm37::DenseMap<const CXXBindTemporaryExpr *, ConsumedState>
             TmpMapType;
     
   protected:
@@ -201,7 +201,7 @@ namespace consumed {
     
   public:
     ConsumedBlockInfo() { }
-    ~ConsumedBlockInfo() { llvm::DeleteContainerPointers(StateMapsArray); }
+    ~ConsumedBlockInfo() { llvm37::DeleteContainerPointers(StateMapsArray); }
 
     ConsumedBlockInfo(unsigned int NumBlocks, PostOrderCFGView *SortedGraph)
         : StateMapsArray(NumBlocks, nullptr), VisitOrder(NumBlocks, 0) {

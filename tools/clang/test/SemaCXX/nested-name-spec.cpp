@@ -267,7 +267,7 @@ namespace rdar7980179 {
 namespace alias = A;
 double *dp = (alias::C*)0; // expected-error{{cannot initialize a variable of type 'double *' with an rvalue of type 'alias::C *'}}
 
-// http://llvm.org/PR10109
+// http://llvm37.org/PR10109
 namespace PR10109 {
 template<typename T>
 struct A {

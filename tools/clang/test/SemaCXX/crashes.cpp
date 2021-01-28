@@ -42,7 +42,7 @@ struct {
 };
 }
 
-// http://llvm.org/PR8234
+// http://llvm37.org/PR8234
 namespace PR8234 {
 template<typename Signature>
 class callback

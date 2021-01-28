@@ -18,20 +18,20 @@ AST <IntroductionToTheClangAST>`
 Step 0: Obtaining Clang
 =======================
 
-As Clang is part of the LLVM project, you'll need to download LLVM's
-source code first. Both Clang and LLVM are maintained as Subversion
+As Clang is part of the LLVM37 project, you'll need to download LLVM37's
+source code first. Both Clang and LLVM37 are maintained as Subversion
 repositories, but we'll be accessing them through the git mirror. For
 further information, see the `getting started
-guide <http://llvm.org/docs/GettingStarted.html>`_.
+guide <http://llvm37.org/docs/GettingStarted.html>`_.
 
 .. code-block:: console
 
-      mkdir ~/clang-llvm && cd ~/clang-llvm
-      git clone http://llvm.org/git/llvm.git
-      cd llvm/tools
-      git clone http://llvm.org/git/clang.git
+      mkdir ~/clang-llvm37 && cd ~/clang-llvm37
+      git clone http://llvm37.org/git/llvm37.git
+      cd llvm37/tools
+      git clone http://llvm37.org/git/clang.git
       cd clang/tools
-      git clone http://llvm.org/git/clang-tools-extra.git extra
+      git clone http://llvm37.org/git/clang-tools-extra.git extra
 
 Next you need to obtain the CMake build system and Ninja build tool. You
 may already have CMake installed, but current binary versions of CMake
@@ -39,14 +39,14 @@ aren't built with Ninja support.
 
 .. code-block:: console
 
-      cd ~/clang-llvm
+      cd ~/clang-llvm37
       git clone https://github.com/martine/ninja.git
       cd ninja
       git checkout release
       ./bootstrap.py
       sudo cp ninja /usr/bin/
 
-      cd ~/clang-llvm
+      cd ~/clang-llvm37
       git clone git://cmake.org/stage/cmake.git
       cd cmake
       git checkout next
@@ -58,26 +58,26 @@ Okay. Now we'll build Clang!
 
 .. code-block:: console
 
-      cd ~/clang-llvm
+      cd ~/clang-llvm37
       mkdir build && cd build
-      cmake -G Ninja ../llvm -DLLVM_BUILD_TESTS=ON  # Enable tests; default is off.
+      cmake -G Ninja ../llvm37 -DLLVM37_BUILD_TESTS=ON  # Enable tests; default is off.
       ninja
-      ninja check       # Test LLVM only.
+      ninja check       # Test LLVM37 only.
       ninja clang-test  # Test Clang only.
       ninja install
 
 And we're live.
 
 All of the tests should pass, though there is a (very) small chance that
-you can catch LLVM and Clang out of sync. Running ``'git svn rebase'``
-in both the llvm and clang directories should fix any problems.
+you can catch LLVM37 and Clang out of sync. Running ``'git svn rebase'``
+in both the llvm37 and clang directories should fix any problems.
 
 Finally, we want to set Clang as its own compiler.
 
 .. code-block:: console
 
-      cd ~/clang-llvm/build
-      ccmake ../llvm
+      cd ~/clang-llvm37/build
+      ccmake ../llvm37
 
 The second command will bring up a GUI for configuring Clang. You need
 to set the entry for ``CMAKE_CXX_COMPILER``. Press ``'t'`` to turn on
@@ -101,7 +101,7 @@ live in the ``tools/extra`` repository.
 
 .. code-block:: console
 
-      cd ~/clang-llvm/llvm/tools/clang
+      cd ~/clang-llvm37/llvm37/tools/clang
       mkdir tools/extra/loop-convert
       echo 'add_subdirectory(loop-convert)' >> tools/extra/CMakeLists.txt
       vim tools/extra/loop-convert/CMakeLists.txt
@@ -110,8 +110,8 @@ CMakeLists.txt should have the following contents:
 
 ::
 
-      set(LLVM_LINK_COMPONENTS support)
-      set(LLVM_USED_LIBS clangTooling clangBasic clangAST)
+      set(LLVM37_LINK_COMPONENTS support)
+      set(LLVM37_USED_LIBS clangTooling clangBasic clangAST)
 
       add_clang_executable(loop-convert
         LoopConvert.cpp
@@ -134,15 +134,15 @@ documentation <LibTooling.html>`_.
       #include "clang/Frontend/FrontendActions.h"
       #include "clang/Tooling/CommonOptionsParser.h"
       #include "clang/Tooling/Tooling.h"
-      // Declares llvm::cl::extrahelp.
-      #include "llvm/Support/CommandLine.h"
+      // Declares llvm37::cl::extrahelp.
+      #include "llvm37/Support/CommandLine.h"
 
       using namespace clang::tooling;
-      using namespace llvm;
+      using namespace llvm37;
 
       // Apply a custom category to all command-line options so that they are the
       // only ones displayed.
-      static llvm::cl::OptionCategory MyToolCategory("my-tool options");
+      static llvm37::cl::OptionCategory MyToolCategory("my-tool options");
 
       // CommonOptionsParser declares HelpMessage with a description of the common
       // command-line options related to the compilation database and input files.
@@ -164,11 +164,11 @@ And that's it! You can compile our new tool by running ninja from the
 
 .. code-block:: console
 
-      cd ~/clang-llvm/build
+      cd ~/clang-llvm37/build
       ninja
 
 You should now be able to run the syntax checker, which is located in
-``~/clang-llvm/build/bin``, on any source file. Try it!
+``~/clang-llvm37/build/bin``, on any source file. Try it!
 
 .. code-block:: console
 
@@ -311,7 +311,7 @@ handiwork:
 
 .. code-block:: console
 
-      cd ~/clang-llvm/llvm/llvm_build/
+      cd ~/clang-llvm37/llvm37/llvm37_build/
       ninja loop-convert
       vim ~/test-files/simple-loops.cc
       bin/loop-convert ~/test-files/simple-loops.cc
@@ -510,7 +510,7 @@ And change ``LoopPrinter::run`` to
 
         if (!areSameVariable(IncVar, CondVar) || !areSameVariable(IncVar, InitVar))
           return;
-        llvm::outs() << "Potential array-based loop discovered.\n";
+        llvm37::outs() << "Potential array-based loop discovered.\n";
       }
 
 Clang associates a ``VarDecl`` with each variable to represent the variable's
@@ -546,14 +546,14 @@ canonicalize expressions:
                               const Expr *Second) {
         if (!First || !Second)
           return false;
-        llvm::FoldingSetNodeID FirstID, SecondID;
+        llvm37::FoldingSetNodeID FirstID, SecondID;
         First->Profile(FirstID, *Context, true);
         Second->Profile(SecondID, *Context, true);
         return FirstID == SecondID;
       }
 
 This code relies on the comparison between two
-``llvm::FoldingSetNodeIDs``. As the documentation for
+``llvm37::FoldingSetNodeIDs``. As the documentation for
 ``Stmt::Profile()`` indicates, the ``Profile()`` member function builds
 a description of a node in the AST, based on its properties, along with
 those of its children. ``FoldingSetNodeID`` then serves as a hash we can

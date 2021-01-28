@@ -14,13 +14,13 @@
 
 #include <memory>
 
-namespace llvm
+namespace llvm37
 {
 class AllocaInst;
 class DataLayout;
 class DbgDeclareInst;
 class DIExpression;
-}  // namespace llvm
+}  // namespace llvm37
 
 namespace dxil_debug_info
 {
@@ -35,9 +35,9 @@ public:
 
 std::unique_ptr<MemberIterator> CreateMemberIterator
 (
-  llvm::DbgDeclareInst *DbgDeclare, 
-  const llvm::DataLayout &DataLayout,
-  llvm::AllocaInst *Alloca, 
-  llvm::DIExpression *Expression
+  llvm37::DbgDeclareInst *DbgDeclare, 
+  const llvm37::DataLayout &DataLayout,
+  llvm37::AllocaInst *Alloca, 
+  llvm37::DIExpression *Expression
 );
 }  // namespace dxil_debug_info

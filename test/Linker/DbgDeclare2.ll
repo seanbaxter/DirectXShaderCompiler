@@ -11,10 +11,10 @@ entry:
   %argv.addr = alloca i8**, align 8
   %i = alloca i32, align 4
   store i32 %argc, i32* %argc.addr, align 4
-  call void @llvm.dbg.declare(metadata i32* %argc.addr, metadata !14, metadata !DIExpression()), !dbg !15
+  call void @llvm37.dbg.declare(metadata i32* %argc.addr, metadata !14, metadata !DIExpression()), !dbg !15
   store i8** %argv, i8*** %argv.addr, align 8
-  call void @llvm.dbg.declare(metadata i8*** %argv.addr, metadata !16, metadata !DIExpression()), !dbg !15
-  call void @llvm.dbg.declare(metadata i32* %i, metadata !17, metadata !DIExpression()), !dbg !20
+  call void @llvm37.dbg.declare(metadata i8*** %argv.addr, metadata !16, metadata !DIExpression()), !dbg !15
+  call void @llvm37.dbg.declare(metadata i32* %i, metadata !17, metadata !DIExpression()), !dbg !20
   store i32 0, i32* %i, align 4, !dbg !20
   br label %for.cond, !dbg !20
 
@@ -43,12 +43,12 @@ for.end:                                          ; preds = %for.cond
   ret void, !dbg !24
 }
 
-declare void @llvm.dbg.declare(metadata, metadata, metadata) nounwind readnone
+declare void @llvm37.dbg.declare(metadata, metadata, metadata) nounwind readnone
 
 declare i32 @puts(i8*)
 
-!llvm.dbg.cu = !{!0}
-!llvm.module.flags = !{!27}
+!llvm37.dbg.cu = !{!0}
+!llvm37.module.flags = !{!27}
 
 !0 = !DICompileUnit(language: DW_LANG_C_plus_plus, producer: "clang version 3.3 (trunk 173515)", isOptimized: true, emissionKind: 0, file: !25, enums: !2, retainedTypes: !2, subprograms: !3, globals: !2)
 !2 = !{}

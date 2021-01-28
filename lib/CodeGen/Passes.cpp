@@ -1,6 +1,6 @@
 //===-- Passes.cpp - Target independent code generation passes ------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -8,27 +8,27 @@
 //===----------------------------------------------------------------------===//
 //
 // This file defines interfaces to access the target independent code
-// generation passes provided by the LLVM backend.
+// generation passes provided by the LLVM37 backend.
 //
 //===---------------------------------------------------------------------===//
 
-#include "llvm/CodeGen/Passes.h"
-#include "llvm/Analysis/Passes.h"
-#include "llvm/CodeGen/MachineFunctionPass.h"
-#include "llvm/CodeGen/RegAllocRegistry.h"
-#include "llvm/IR/IRPrintingPasses.h"
-#include "llvm/IR/LegacyPassManager.h"
-#include "llvm/IR/Verifier.h"
-#include "llvm/MC/MCAsmInfo.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Transforms/Instrumentation.h"
-#include "llvm/Transforms/Scalar.h"
-#include "llvm/Transforms/Utils/SymbolRewriter.h"
+#include "llvm37/CodeGen/Passes.h"
+#include "llvm37/Analysis/Passes.h"
+#include "llvm37/CodeGen/MachineFunctionPass.h"
+#include "llvm37/CodeGen/RegAllocRegistry.h"
+#include "llvm37/IR/IRPrintingPasses.h"
+#include "llvm37/IR/LegacyPassManager.h"
+#include "llvm37/IR/Verifier.h"
+#include "llvm37/MC/MCAsmInfo.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Transforms/Instrumentation.h"
+#include "llvm37/Transforms/Scalar.h"
+#include "llvm37/Transforms/Utils/SymbolRewriter.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 static cl::opt<bool> DisablePostRA("disable-post-ra", cl::Hidden,
     cl::desc("Disable Post Regalloc"));
@@ -78,9 +78,9 @@ static cl::opt<bool> EnableImplicitNullChecks(
     cl::desc("Fold null checks into faulting memory operations"),
     cl::init(false));
 static cl::opt<bool> PrintLSR("print-lsr-output", cl::Hidden,
-    cl::desc("Print LLVM IR produced by the loop-reduce pass"));
+    cl::desc("Print LLVM37 IR produced by the loop-reduce pass"));
 static cl::opt<bool> PrintISelInput("print-isel-input", cl::Hidden,
-    cl::desc("Print LLVM IR input to isel pass"));
+    cl::desc("Print LLVM37 IR input to isel pass"));
 static cl::opt<bool> PrintGCInfo("print-gc", cl::Hidden,
     cl::desc("Dump garbage collector data"));
 static cl::opt<bool> VerifyMachineCode("verify-machineinstrs", cl::Hidden,
@@ -188,7 +188,7 @@ char TargetPassConfig::ID = 0;
 char TargetPassConfig::EarlyTailDuplicateID = 0;
 char TargetPassConfig::PostRAMachineLICMID = 0;
 
-namespace llvm {
+namespace llvm37 {
 class PassConfigImpl {
 public:
   // List of passes explicitly substituted by this target. Normally this is
@@ -204,7 +204,7 @@ public:
   /// is inserted after each instance of the first one.
   SmallVector<std::pair<AnalysisID, IdentifyingPassPtr>, 4> InsertedPasses;
 };
-} // namespace llvm
+} // namespace llvm37
 
 // Out of line virtual method.
 TargetPassConfig::~TargetPassConfig() {
@@ -246,13 +246,13 @@ void TargetPassConfig::insertPass(AnalysisID TargetPassID,
 /// addPassToEmitX methods for generating a pipeline of CodeGen passes.
 ///
 /// Targets may override this to extend TargetPassConfig.
-TargetPassConfig *LLVMTargetMachine::createPassConfig(PassManagerBase &PM) {
+TargetPassConfig *LLVM37TargetMachine::createPassConfig(PassManagerBase &PM) {
   return new TargetPassConfig(this, PM);
 }
 
 TargetPassConfig::TargetPassConfig()
   : ImmutablePass(ID), PM(nullptr) {
-  llvm_unreachable("TargetPassConfig should not be constructed on-the-fly");
+  llvm37_unreachable("TargetPassConfig should not be constructed on-the-fly");
 }
 
 // Helper to verify the analysis is really immutable.
@@ -349,7 +349,7 @@ AnalysisID TargetPassConfig::addPass(AnalysisID PassID, bool verifyAfter,
   else {
     P = Pass::createPass(FinalPtr.getID());
     if (!P)
-      llvm_unreachable("Pass ID not registered");
+      llvm37_unreachable("Pass ID not registered");
   }
   AnalysisID FinalID = P->getPassID();
   addPass(P, verifyAfter, printAfter); // Ends the lifetime of P.
@@ -372,7 +372,7 @@ void TargetPassConfig::addVerifyPass(const std::string &Banner) {
     PM->add(createMachineVerifierPass(Banner));
 }
 
-/// Add common target configurable passes that perform LLVM IR to IR transforms
+/// Add common target configurable passes that perform LLVM37 IR to IR transforms
 /// following machine independent optimization.
 void TargetPassConfig::addIRPasses() {
   // Basic AliasAnalysis support.
@@ -446,7 +446,7 @@ void TargetPassConfig::addPassesToHandleExceptions() {
   }
 }
 
-/// Add pass to prepare the LLVM IR for code generation. This should be done
+/// Add pass to prepare the LLVM37 IR for code generation. This should be done
 /// before exception handling preparation passes.
 void TargetPassConfig::addCodeGenPrepare() {
   if (getOptLevel() != CodeGenOpt::None && !DisableCGP)
@@ -454,7 +454,7 @@ void TargetPassConfig::addCodeGenPrepare() {
   addPass(createRewriteSymbolsPass());
 }
 
-/// Add common passes that perform LLVM IR to IR transforms in preparation for
+/// Add common passes that perform LLVM37 IR to IR transforms in preparation for
 /// instruction selection.
 void TargetPassConfig::addISelPrepare() {
   addPreISel();
@@ -466,9 +466,9 @@ void TargetPassConfig::addISelPrepare() {
 
   if (PrintISelInput)
     addPass(createPrintFunctionPass(
-        dbgs(), "\n\n*** Final LLVM Code input to ISel ***\n"));
+        dbgs(), "\n\n*** Final LLVM37 Code input to ISel ***\n"));
 
-  // All passes which modify the LLVM IR are now complete; run the verifier
+  // All passes which modify the LLVM37 IR are now complete; run the verifier
   // to ensure that the IR is valid.
   if (!DisableVerify)
     addPass(createVerifierPass());
@@ -476,7 +476,7 @@ void TargetPassConfig::addISelPrepare() {
 
 /// Add the complete set of target-independent postISel code generator passes.
 ///
-/// This can be read as the standard order of major LLVM CodeGen stages. Stages
+/// This can be read as the standard order of major LLVM37 CodeGen stages. Stages
 /// with nontrivial configuration or multiple passes are broken out below in
 /// add%Stage routines.
 ///
@@ -631,7 +631,7 @@ bool TargetPassConfig::getEnableShrinkWrap() const {
   case cl::BOU_FALSE:
     return false;
   }
-  llvm_unreachable("Invalid shrink-wrapping state");
+  llvm37_unreachable("Invalid shrink-wrapping state");
 }
 
 //===---------------------------------------------------------------------===//
@@ -644,7 +644,7 @@ bool TargetPassConfig::getOptimizeRegAlloc() const {
   case cl::BOU_TRUE:  return true;
   case cl::BOU_FALSE: return false;
   }
-  llvm_unreachable("Invalid optimize-regalloc state");
+  llvm37_unreachable("Invalid optimize-regalloc state");
 }
 
 /// RegisterRegAlloc's global Registry tracks allocator registration.

@@ -1,6 +1,6 @@
 //===- ObjCARCContract.cpp - ObjC ARC Optimization ------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -18,7 +18,7 @@
 /// by name, and hardwires knowledge of their semantics.
 ///
 /// WARNING: This file knows about how certain Objective-C library functions are
-/// used. Naive LLVM IR transformations which would otherwise be
+/// used. Naive LLVM37 IR transformations which would otherwise be
 /// behavior-preserving may break these assumptions.
 ///
 //===----------------------------------------------------------------------===//
@@ -30,15 +30,15 @@
 #include "ARCRuntimeEntryPoints.h"
 #include "DependencyAnalysis.h"
 #include "ProvenanceAnalysis.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/IR/Dominators.h"
-#include "llvm/IR/InlineAsm.h"
-#include "llvm/IR/Operator.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/IR/Dominators.h"
+#include "llvm37/IR/InlineAsm.h"
+#include "llvm37/IR/Operator.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/raw_ostream.h"
 
-using namespace llvm;
-using namespace llvm::objcarc;
+using namespace llvm37;
+using namespace llvm37::objcarc;
 
 #define DEBUG_TYPE "objc-arc-contract"
 
@@ -365,14 +365,14 @@ void ObjCARCContract::tryToContractReleaseIntoStoreStrong(Instruction *Release,
   ++NumStoreStrongs;
 
   DEBUG(
-      llvm::dbgs() << "    Contracting retain, release into objc_storeStrong.\n"
+      llvm37::dbgs() << "    Contracting retain, release into objc_storeStrong.\n"
                    << "        Old:\n"
                    << "            Store:   " << *Store << "\n"
                    << "            Release: " << *Release << "\n"
                    << "            Retain:  " << *Retain << "\n"
                    << "            Load:    " << *Load << "\n");
 
-  LLVMContext &C = Release->getContext();
+  LLVM37Context &C = Release->getContext();
   Type *I8X = PointerType::getUnqual(Type::getInt8Ty(C));
   Type *I8XX = PointerType::getUnqual(I8X);
 
@@ -391,7 +391,7 @@ void ObjCARCContract::tryToContractReleaseIntoStoreStrong(Instruction *Release,
   // we can set the tail flag once we know it's safe.
   StoreStrongCalls.insert(StoreStrong);
 
-  DEBUG(llvm::dbgs() << "        New Store Strong: " << *StoreStrong << "\n");
+  DEBUG(llvm37::dbgs() << "        New Store Strong: " << *StoreStrong << "\n");
 
   if (&*Iter == Store) ++Iter;
   Store->eraseFromParent();
@@ -516,7 +516,7 @@ bool ObjCARCContract::runOnFunction(Function &F) {
 
   PA.setAA(&getAnalysis<AliasAnalysis>());
 
-  DEBUG(llvm::dbgs() << "**** ObjCARC Contract ****\n");
+  DEBUG(llvm37::dbgs() << "**** ObjCARC Contract ****\n");
 
   // Track whether it's ok to mark objc_storeStrong calls with the "tail"
   // keyword. Be conservative if the function has variadic arguments.
@@ -640,7 +640,7 @@ void ObjCARCContract::getAnalysisUsage(AnalysisUsage &AU) const {
   AU.setPreservesCFG();
 }
 
-Pass *llvm::createObjCARCContractPass() { return new ObjCARCContract(); }
+Pass *llvm37::createObjCARCContractPass() { return new ObjCARCContract(); }
 
 bool ObjCARCContract::doInitialization(Module &M) {
   // If nothing in the Module uses ARC, don't do anything.

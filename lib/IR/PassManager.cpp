@@ -1,17 +1,17 @@
 //===- PassManager.cpp - Infrastructure for managing & running IR passes --===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/PassManager.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/PassManager.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 char FunctionAnalysisManagerModuleProxy::PassID;
 

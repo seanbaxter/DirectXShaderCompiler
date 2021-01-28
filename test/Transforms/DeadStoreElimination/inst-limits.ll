@@ -118,7 +118,7 @@ entry:
 
   ; Insert a meaningless dbg.value intrinsic; it should have no
   ; effect on the working of DSE in any way.
-  call void @llvm.dbg.value(metadata i32* undef, i64 0, metadata !10, metadata !DIExpression()), !dbg !DILocation(scope: !4)
+  call void @llvm37.dbg.value(metadata i32* undef, i64 0, metadata !10, metadata !DIExpression()), !dbg !DILocation(scope: !4)
 
   ; CHECK:  store i32 -1, i32* @x, align 4
   store i32 -1, i32* @x, align 4
@@ -240,10 +240,10 @@ entry:
 }
 
 ; Function Attrs: nounwind readnone
-declare void @llvm.dbg.value(metadata, i64, metadata, metadata)
+declare void @llvm37.dbg.value(metadata, i64, metadata, metadata)
 
-!llvm.dbg.cu = !{!0}
-!llvm.module.flags = !{!11, !13}
+!llvm37.dbg.cu = !{!0}
+!llvm37.module.flags = !{!11, !13}
 
 !0 = !DICompileUnit(language: DW_LANG_C_plus_plus, producer: "clang version 3.4", isOptimized: true, emissionKind: 0, file: !1, enums: !2, retainedTypes: !2, subprograms: !3, globals: !2, imports: !2)
 !1 = !DIFile(filename: "test.c", directory: "/home/tmp")

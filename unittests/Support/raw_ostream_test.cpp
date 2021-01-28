@@ -1,6 +1,6 @@
-//===- llvm/unittest/Support/raw_ostream_test.cpp - raw_ostream tests -----===//
+//===- llvm37/unittest/Support/raw_ostream_test.cpp - raw_ostream tests -----===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -8,17 +8,17 @@
 //===----------------------------------------------------------------------===//
 
 #include "gtest/gtest.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/Support/Format.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/Support/Format.h"
+#include "llvm37/Support/raw_ostream.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 namespace {
 
 template<typename T> std::string printToString(const T &Value) {
   std::string res;
-  llvm::raw_string_ostream(res) << Value;
+  llvm37::raw_string_ostream(res) << Value;
   return res;    
 }
 
@@ -31,7 +31,7 @@ template<typename T> std::string printToString(const T &Value,
   // get the buffer position right.
   SmallString<256> SVec;
   assert(BytesLeftInBuffer < 256 && "Invalid buffer count!");
-  llvm::raw_svector_ostream OS(SVec);
+  llvm37::raw_svector_ostream OS(SVec);
   unsigned StartIndex = 256 - BytesLeftInBuffer;
   for (unsigned i = 0; i != StartIndex; ++i)
     OS << '?';
@@ -41,7 +41,7 @@ template<typename T> std::string printToString(const T &Value,
 
 template<typename T> std::string printToStringUnbuffered(const T &Value) {
   std::string res;
-  llvm::raw_string_ostream OS(res);
+  llvm37::raw_string_ostream OS(res);
   OS.SetUnbuffered();
   OS << Value;
   return res;

@@ -9,7 +9,7 @@ if(NOT MSVC)
     )
 endif()
 
-if (LLVM_BUILD_STATIC)
+if (LLVM37_BUILD_STATIC)
   target_link_libraries(c-index-test
     libclang_static
   )

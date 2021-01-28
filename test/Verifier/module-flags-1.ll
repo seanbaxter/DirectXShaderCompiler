@@ -1,4 +1,4 @@
-; RUN: not llvm-as < %s -o /dev/null 2>&1 | FileCheck %s
+; RUN: not llvm37-as < %s -o /dev/null 2>&1 | FileCheck %s
 
 ; Check that module flags are structurally correct.
 ;
@@ -52,6 +52,6 @@
 !14 = !{i32 1, !"flag-1", i32 55}
 !15 = !{i32 3, !"bar", !{!"flag-1", i32 55}}
 
-!llvm.module.flags = !{
+!llvm37.module.flags = !{
   !0, !1, !2, !3, !4, !5, !6, !7, !8, !9, !10, !11, !12, !13, !14, !15,
   !16, !17, !18 }

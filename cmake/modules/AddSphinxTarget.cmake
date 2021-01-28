@@ -42,11 +42,11 @@ function (add_sphinx_target builder project)
                  "${SPHINX_DOC_TREE_DIR}")
   endif()
 
-  if (LLVM_BUILD_DOCS)
+  if (LLVM37_BUILD_DOCS)
     add_dependencies(sphinx ${SPHINX_TARGET_NAME})
 
     # Handle installation
-    if (NOT LLVM_INSTALL_TOOLCHAIN_ONLY)
+    if (NOT LLVM37_INSTALL_TOOLCHAIN_ONLY)
       if (builder STREQUAL man)
         # FIXME: We might not ship all the tools that these man pages describe
         install(DIRECTORY "${SPHINX_BUILD_DIR}/" # Slash indicates contents of

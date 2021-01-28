@@ -1,59 +1,59 @@
-//===- lli.cpp - LLVM Interpreter / Dynamic compiler ----------------------===//
+//===- lli.cpp - LLVM37 Interpreter / Dynamic compiler ----------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 //
-// This utility provides a simple wrapper around the LLVM Execution Engines,
-// which allow the direct execution of LLVM programs through a Just-In-Time
+// This utility provides a simple wrapper around the LLVM37 Execution Engines,
+// which allow the direct execution of LLVM37 programs through a Just-In-Time
 // compiler, or through an interpreter if no JIT is available for this platform.
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/IR/LLVMContext.h"
+#include "llvm37/IR/LLVMContext.h"
 #include "OrcLazyJIT.h"
 #include "RemoteMemoryManager.h"
 #include "RemoteTarget.h"
 #include "RemoteTargetExternal.h"
-#include "llvm/ADT/Triple.h"
-#include "llvm/Bitcode/ReaderWriter.h"
-#include "llvm/CodeGen/LinkAllCodegenComponents.h"
-#include "llvm/ExecutionEngine/GenericValue.h"
-#include "llvm/ExecutionEngine/Interpreter.h"
-#include "llvm/ExecutionEngine/JITEventListener.h"
-// #include "llvm/ExecutionEngine/MCJIT.h"    // HLSL Change
-#include "llvm/ExecutionEngine/ObjectCache.h"
-#include "llvm/ExecutionEngine/OrcMCJITReplacement.h"
-#include "llvm/ExecutionEngine/SectionMemoryManager.h"
-// #include "llvm/ExecutionEngine/SectionMemoryManager.h" // HLSL Change
-#include "llvm/IR/IRBuilder.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/Type.h"
-#include "llvm/IR/TypeBuilder.h"
-#include "llvm/IRReader/IRReader.h"
-#include "llvm/Object/Archive.h"
-#include "llvm/Object/ObjectFile.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/DynamicLibrary.h"
-#include "llvm/Support/Format.h"
-#include "llvm/Support/ManagedStatic.h"
-#include "llvm/Support/MathExtras.h"
-#include "llvm/Support/Memory.h"
-#include "llvm/Support/MemoryBuffer.h"
-#include "llvm/Support/Path.h"
-#include "llvm/Support/PluginLoader.h"
-#include "llvm/Support/PrettyStackTrace.h"
-#include "llvm/Support/Process.h"
-#include "llvm/Support/Program.h"
-#include "llvm/Support/Signals.h"
-#include "llvm/Support/SourceMgr.h"
-#include "llvm/Support/TargetSelect.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Transforms/Instrumentation.h"
+#include "llvm37/ADT/Triple.h"
+#include "llvm37/Bitcode/ReaderWriter.h"
+#include "llvm37/CodeGen/LinkAllCodegenComponents.h"
+#include "llvm37/ExecutionEngine/GenericValue.h"
+#include "llvm37/ExecutionEngine/Interpreter.h"
+#include "llvm37/ExecutionEngine/JITEventListener.h"
+// #include "llvm37/ExecutionEngine/MCJIT.h"    // HLSL Change
+#include "llvm37/ExecutionEngine/ObjectCache.h"
+#include "llvm37/ExecutionEngine/OrcMCJITReplacement.h"
+#include "llvm37/ExecutionEngine/SectionMemoryManager.h"
+// #include "llvm37/ExecutionEngine/SectionMemoryManager.h" // HLSL Change
+#include "llvm37/IR/IRBuilder.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/Type.h"
+#include "llvm37/IR/TypeBuilder.h"
+#include "llvm37/IRReader/IRReader.h"
+#include "llvm37/Object/Archive.h"
+#include "llvm37/Object/ObjectFile.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/DynamicLibrary.h"
+#include "llvm37/Support/Format.h"
+#include "llvm37/Support/ManagedStatic.h"
+#include "llvm37/Support/MathExtras.h"
+#include "llvm37/Support/Memory.h"
+#include "llvm37/Support/MemoryBuffer.h"
+#include "llvm37/Support/Path.h"
+#include "llvm37/Support/PluginLoader.h"
+#include "llvm37/Support/PrettyStackTrace.h"
+#include "llvm37/Support/Process.h"
+#include "llvm37/Support/Program.h"
+#include "llvm37/Support/Signals.h"
+#include "llvm37/Support/SourceMgr.h"
+#include "llvm37/Support/TargetSelect.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Transforms/Instrumentation.h"
 #include <cerrno>
 
 #ifdef __CYGWIN__
@@ -63,7 +63,7 @@
 #endif
 #endif
 
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "lli"
 
@@ -203,7 +203,7 @@ namespace {
                        "Relocatable external references, non-relocatable code"),
             clEnumValEnd));
 
-  cl::opt<llvm::CodeModel::Model>
+  cl::opt<llvm37::CodeModel::Model>
   CMModel("code-model",
           cl::desc("Choose code model"),
           cl::init(CodeModel::JITDefault),
@@ -224,7 +224,7 @@ namespace {
     cl::desc("Generate software floating point library calls"),
     cl::init(false));
 
-  cl::opt<llvm::FloatABI::ABIType>
+  cl::opt<llvm37::FloatABI::ABIType>
   FloatABIForCalls("float-abi",
                    cl::desc("Choose float ABI type"),
                    cl::init(FloatABI::Default),
@@ -324,7 +324,7 @@ static void __cdecl do_shutdown() {
   delete EE;
   if (CacheManager)
     delete CacheManager;
-  llvm_shutdown();
+  llvm37_shutdown();
 #endif
 }
 
@@ -334,7 +334,7 @@ static void __cdecl do_shutdown() {
 // currently handle external linking) we add a secondary module which defines
 // an empty '__main' function.
 static void addCygMingExtraModule(ExecutionEngine *EE,
-                                  LLVMContext &Context,
+                                  LLVM37Context &Context,
                                   StringRef TargetTripleStr) {
   IRBuilder<> Builder(Context);
   Triple TargetTriple(TargetTripleStr);
@@ -378,7 +378,7 @@ CodeGenOpt::Level getOptLevel() {
   case '2': return CodeGenOpt::Default;
   case '3': return CodeGenOpt::Aggressive;
   }
-  llvm_unreachable("Unrecognized opt level.");
+  llvm37_unreachable("Unrecognized opt level.");
 }
 
 //===----------------------------------------------------------------------===//
@@ -389,8 +389,8 @@ int __cdecl main(int argc, char **argv, char * const *envp) {
   sys::PrintStackTraceOnErrorSignal();
   PrettyStackTraceProgram X(argc, argv);
 
-  LLVMContext &Context = getGlobalContext();
-  atexit(do_shutdown);  // Call llvm_shutdown() on exit.
+  LLVM37Context &Context = getGlobalContext();
+  atexit(do_shutdown);  // Call llvm37_shutdown() on exit.
 
   // If we have a native target, initialize it to ensure it is linked in and
   // usable by the JIT.
@@ -399,7 +399,7 @@ int __cdecl main(int argc, char **argv, char * const *envp) {
   InitializeNativeTargetAsmParser();
 
   cl::ParseCommandLineOptions(argc, argv,
-                              "llvm interpreter & dynamic compiler\n");
+                              "llvm37 interpreter & dynamic compiler\n");
 
   // If the user doesn't want core files, disable them.
   if (DisableCoreFiles)
@@ -645,7 +645,7 @@ int __cdecl main(int argc, char **argv, char * const *envp) {
 
     std::unique_ptr<RemoteTarget> Target;
     if (!ChildExecPath.empty()) { // Remote execution on a child process
-#ifndef LLVM_ON_UNIX
+#ifndef LLVM37_ON_UNIX
       // FIXME: Remove this pointless fallback mode which causes tests to "pass"
       // on platforms where they should XFAIL.
       errs() << "Warning: host does not support external remote targets.\n"

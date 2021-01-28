@@ -1,10 +1,10 @@
-// RUN: llvm-tblgen -gen-disassembler -I %p/../../include %s | FileCheck %s
+// RUN: llvm37-tblgen -gen-disassembler -I %p/../../include %s | FileCheck %s
 
 // Check that we don't generate invalid code of the form "( && Cond2)" when
 // emitting AssemblerPredicate conditions. In the example below, the invalid
 // code would be: "return ( && (Bits & arch::AssemblerCondition2));".
 
-include "llvm/Target/Target.td"
+include "llvm37/Target/Target.td"
 
 def archInstrInfo : InstrInfo { }
 

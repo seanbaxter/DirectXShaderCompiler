@@ -1,34 +1,34 @@
-//==---- CodeGenABITypes.h - Convert Clang types to LLVM types for ABI -----==//
+//==---- CodeGenABITypes.h - Convert Clang types to LLVM37 types for ABI -----==//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 //
-// CodeGenABITypes is a simple interface for getting LLVM types for
+// CodeGenABITypes is a simple interface for getting LLVM37 types for
 // the parameters and the return value of a function given the Clang
 // types.
 //
 // The class is implemented as a public wrapper around the private
 // CodeGenTypes class in lib/CodeGen.
 //
-// It allows other clients, like LLDB, to determine the LLVM types that are
+// It allows other clients, like LLDB, to determine the LLVM37 types that are
 // actually used in function calls, which makes it possible to then determine
 // the acutal ABI locations (e.g. registers, stack locations, etc.) that
 // these parameters are stored in.
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_CODEGEN_CODEGENABITYPES_H
-#define LLVM_CLANG_CODEGEN_CODEGENABITYPES_H
+#ifndef LLVM37_CLANG_CODEGEN_CODEGENABITYPES_H
+#define LLVM37_CLANG_CODEGEN_CODEGENABITYPES_H
 
 #include "clang/AST/CanonicalType.h"
 #include "clang/AST/Type.h"
 #include "clang/CodeGen/CGFunctionInfo.h"
 
-namespace llvm {
+namespace llvm37 {
   class DataLayout;
   class Module;
 }
@@ -50,7 +50,7 @@ class CodeGenModule;
 class CodeGenABITypes
 {
 public:
-  CodeGenABITypes(ASTContext &C, llvm::Module &M, const llvm::DataLayout &TD,
+  CodeGenABITypes(ASTContext &C, llvm37::Module &M, const llvm37::DataLayout &TD,
                   CoverageSourceInfo *CoverageInfo = nullptr);
   ~CodeGenABITypes();
 

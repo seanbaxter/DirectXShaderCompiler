@@ -1,4 +1,4 @@
-add_llvm_library(LLVMObject
+add_llvm_library(LLVM37Object
   Archive.cpp
   ArchiveWriter.cpp
   Binary.cpp
@@ -18,7 +18,7 @@ add_llvm_library(LLVMObject
   SymbolSize.cpp
 
   ADDITIONAL_HEADER_DIRS
-  ${LLVM_MAIN_INCLUDE_DIR}/llvm/Object
+  ${LLVM37_MAIN_INCLUDE_DIR}/llvm37/Object
 
   DEPENDS
   intrinsics_gen

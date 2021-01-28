@@ -1,6 +1,6 @@
-// RUN: %clang_cc1 -x c++ -include %s -emit-llvm-only %s
+// RUN: %clang_cc1 -x c++ -include %s -emit-llvm37-only %s
 // RUN: %clang_cc1 -x c++ -emit-pch %s -o %t
-// RUN: %clang_cc1 -include-pch %t -emit-llvm-only %s
+// RUN: %clang_cc1 -include-pch %t -emit-llvm37-only %s
 
 #ifndef HEADER
 #define HEADER

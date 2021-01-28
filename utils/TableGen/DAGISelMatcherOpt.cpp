@@ -1,6 +1,6 @@
 //===- DAGISelMatcherOpt.cpp - Optimize a DAG Matcher ---------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -13,11 +13,11 @@
 
 #include "DAGISelMatcher.h"
 #include "CodeGenDAGPatterns.h"
-#include "llvm/ADT/DenseSet.h"
-#include "llvm/ADT/StringSet.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/raw_ostream.h"
-using namespace llvm;
+#include "llvm37/ADT/DenseSet.h"
+#include "llvm37/ADT/StringSet.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/raw_ostream.h"
+using namespace llvm37;
 
 #define DEBUG_TYPE "isel-opt"
 
@@ -512,7 +512,7 @@ static void FactorNodes(std::unique_ptr<Matcher> &MatcherPtr) {
 }
 
 void
-llvm::OptimizeMatcher(std::unique_ptr<Matcher> &MatcherPtr,
+llvm37::OptimizeMatcher(std::unique_ptr<Matcher> &MatcherPtr,
                       const CodeGenDAGPatterns &CGP) {
   ContractNodes(MatcherPtr, CGP);
   SinkPatternPredicates(MatcherPtr);

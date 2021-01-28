@@ -1,6 +1,6 @@
 //=== unittests/Sema/ExternalSemaSourceTest.cpp - ExternalSemaSource tests ===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -141,8 +141,8 @@ class ExternalSemaSourceInstaller : public clang::ASTFrontendAction {
 protected:
   std::unique_ptr<clang::ASTConsumer>
   CreateASTConsumer(clang::CompilerInstance &Compiler,
-                    llvm::StringRef /* dummy */) override {
-    return llvm::make_unique<clang::ASTConsumer>();
+                    llvm37::StringRef /* dummy */) override {
+    return llvm37::make_unique<clang::ASTConsumer>();
   }
 
   void ExecuteAction() override {

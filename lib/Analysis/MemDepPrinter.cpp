@@ -1,6 +1,6 @@
 //===- MemDepPrinter.cpp - Printer for MemoryDependenceAnalysis -----------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -10,15 +10,15 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Analysis/Passes.h"
-#include "llvm/ADT/SetVector.h"
-#include "llvm/Analysis/MemoryDependenceAnalysis.h"
-#include "llvm/IR/CallSite.h"
-#include "llvm/IR/InstIterator.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/raw_ostream.h"
-using namespace llvm;
+#include "llvm37/Analysis/Passes.h"
+#include "llvm37/ADT/SetVector.h"
+#include "llvm37/Analysis/MemoryDependenceAnalysis.h"
+#include "llvm37/IR/CallSite.h"
+#include "llvm37/IR/InstIterator.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/raw_ostream.h"
+using namespace llvm37;
 
 namespace {
   struct MemDepPrinter : public FunctionPass {
@@ -83,7 +83,7 @@ INITIALIZE_PASS_DEPENDENCY(MemoryDependenceAnalysis)
 INITIALIZE_PASS_END(MemDepPrinter, "print-memdeps",
                       "Print MemDeps of function", false, true)
 
-FunctionPass *llvm::createMemDepPrinter() {
+FunctionPass *llvm37::createMemDepPrinter() {
   return new MemDepPrinter();
 }
 

@@ -17,42 +17,42 @@
 #include "dxc/DXIL/DxilSampler.h"
 #include "dxc/DXIL/DxilUtil.h"
 #include "dxc/Support/Global.h"
-#include "llvm/ADT/DenseSet.h"
-#include "llvm/ADT/MapVector.h"
-#include "llvm/ADT/SetVector.h"
-#include "llvm/ADT/StringSet.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/IRBuilder.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/Module.h"
-#include "llvm/Transforms/Utils/Cloning.h"
-#include "llvm/ADT/StringMap.h"
-#include "llvm/ADT/SetVector.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/DenseSet.h"
+#include "llvm37/ADT/MapVector.h"
+#include "llvm37/ADT/SetVector.h"
+#include "llvm37/ADT/StringSet.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/IRBuilder.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/Transforms/Utils/Cloning.h"
+#include "llvm37/ADT/StringMap.h"
+#include "llvm37/ADT/SetVector.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <memory>
 #include <vector>
 
 #include "dxc/DxilContainer/DxilContainer.h"
-#include "llvm/IR/DiagnosticPrinter.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/DebugInfo.h"
+#include "llvm37/IR/DiagnosticPrinter.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/DebugInfo.h"
 
 #include "dxc/HLSL/DxilGenerationPass.h"
-#include "llvm/IR/LegacyPassManager.h"
-#include "llvm/Transforms/IPO.h"
-#include "llvm/Transforms/Scalar.h"
+#include "llvm37/IR/LegacyPassManager.h"
+#include "llvm37/Transforms/IPO.h"
+#include "llvm37/Transforms/Scalar.h"
 
 #include "dxc/HLSL/DxilExportMap.h"
 #include "dxc/HLSL/ComputeViewIdState.h"
 
-using namespace llvm;
+using namespace llvm37;
 using namespace hlsl;
 
 namespace {
 
 void CollectUsedFunctions(Constant *C,
-                          llvm::SetVector<Function *> &funcSet) {
+                          llvm37::SetVector<Function *> &funcSet) {
   for (User *U : C->users()) {
     if (Instruction *I = dyn_cast<Instruction>(U)) {
       funcSet.insert(I->getParent()->getParent());
@@ -66,7 +66,7 @@ void CollectUsedFunctions(Constant *C,
 template <class T>
 void AddResourceMap(
     const std::vector<std::unique_ptr<T>> &resTab, DXIL::ResourceClass resClass,
-    llvm::MapVector<const llvm::Constant *, DxilResourceBase *> &resMap,
+    llvm37::MapVector<const llvm37::Constant *, DxilResourceBase *> &resMap,
     DxilModule &DM) {
   for (auto &Res : resTab) {
     resMap[Res->GetGlobalSymbol()] = Res.get();
@@ -83,7 +83,7 @@ void CloneFunction(Function *F, Function *NewF, ValueToValueMapTy &vmap,
     vmap[&param] = (paramIt++);
   }
 
-  llvm::CloneFunctionInto(NewF, F, vmap, /*ModuleLevelChanges*/ true, Returns);
+  llvm37::CloneFunctionInto(NewF, F, vmap, /*ModuleLevelChanges*/ true, Returns);
   if (TypeSys) {
     if (SrcTypeSys == nullptr)
       SrcTypeSys = TypeSys;
@@ -101,26 +101,26 @@ void CloneFunction(Function *F, Function *NewF, ValueToValueMapTy &vmap,
 namespace {
 
 struct DxilFunctionLinkInfo {
-  DxilFunctionLinkInfo(llvm::Function *F);
-  llvm::Function *func;
+  DxilFunctionLinkInfo(llvm37::Function *F);
+  llvm37::Function *func;
   // SetVectors for deterministic iteration
-  llvm::SetVector<llvm::Function *> usedFunctions;
-  llvm::SetVector<llvm::GlobalVariable *> usedGVs;
+  llvm37::SetVector<llvm37::Function *> usedFunctions;
+  llvm37::SetVector<llvm37::GlobalVariable *> usedGVs;
 };
 
 // Library to link.
 class DxilLib {
 
 public:
-  DxilLib(std::unique_ptr<llvm::Module> pModule);
+  DxilLib(std::unique_ptr<llvm37::Module> pModule);
   virtual ~DxilLib() {}
   bool HasFunction(std::string &name);
-  llvm::StringMap<std::unique_ptr<DxilFunctionLinkInfo>> &GetFunctionTable() {
+  llvm37::StringMap<std::unique_ptr<DxilFunctionLinkInfo>> &GetFunctionTable() {
     return m_functionNameMap;
   }
-  bool IsInitFunc(llvm::Function *F);
-  bool IsResourceGlobal(const llvm::Constant *GV);
-  DxilResourceBase *GetResource(const llvm::Constant *GV);
+  bool IsInitFunc(llvm37::Function *F);
+  bool IsResourceGlobal(const llvm37::Constant *GV);
+  DxilResourceBase *GetResource(const llvm37::Constant *GV);
 
   DxilModule &GetDxilModule() { return m_DM; }
   void LazyLoadFunction(Function *F);
@@ -131,30 +131,30 @@ public:
   void FixIntrinsicOverloads();
 
 private:
-  std::unique_ptr<llvm::Module> m_pModule;
+  std::unique_ptr<llvm37::Module> m_pModule;
   DxilModule &m_DM;
   // Map from name to Link info for extern functions.
-  llvm::StringMap<std::unique_ptr<DxilFunctionLinkInfo>> m_functionNameMap;
+  llvm37::StringMap<std::unique_ptr<DxilFunctionLinkInfo>> m_functionNameMap;
   // Map from resource link global to resource. MapVector for deterministic iteration.
-  llvm::MapVector<const llvm::Constant *, DxilResourceBase *> m_resourceMap;
+  llvm37::MapVector<const llvm37::Constant *, DxilResourceBase *> m_resourceMap;
   // Set of initialize functions for global variable. SetVector for deterministic iteration.
-  llvm::SetVector<llvm::Function *> m_initFuncSet;
+  llvm37::SetVector<llvm37::Function *> m_initFuncSet;
 };
 
 struct DxilLinkJob;
 
 class DxilLinkerImpl : public hlsl::DxilLinker {
 public:
-  DxilLinkerImpl(LLVMContext &Ctx, unsigned valMajor, unsigned valMinor) : DxilLinker(Ctx, valMajor, valMinor) {}
+  DxilLinkerImpl(LLVM37Context &Ctx, unsigned valMajor, unsigned valMinor) : DxilLinker(Ctx, valMajor, valMinor) {}
   virtual ~DxilLinkerImpl() {}
   bool HasLibNameRegistered(StringRef name) override;
-  bool RegisterLib(StringRef name, std::unique_ptr<llvm::Module> pModule,
-                   std::unique_ptr<llvm::Module> pDebugModule) override;
+  bool RegisterLib(StringRef name, std::unique_ptr<llvm37::Module> pModule,
+                   std::unique_ptr<llvm37::Module> pDebugModule) override;
   bool AttachLib(StringRef name) override;
   bool DetachLib(StringRef name) override;
   void DetachAll() override;
 
-  std::unique_ptr<llvm::Module>
+  std::unique_ptr<llvm37::Module>
   Link(StringRef entry, StringRef profile, dxilutil::ExportMap &exportMap) override;
 
 private:
@@ -168,7 +168,7 @@ private:
   std::unordered_set<DxilLib *> m_attachedLibs;
   // Owner of all DxilLib.
   StringMap<std::unique_ptr<DxilLib>> m_LibMap;
-  llvm::StringMap<std::pair<DxilFunctionLinkInfo *, DxilLib *>>
+  llvm37::StringMap<std::pair<DxilFunctionLinkInfo *, DxilLib *>>
       m_functionNameMap;
 };
 
@@ -187,7 +187,7 @@ DxilFunctionLinkInfo::DxilFunctionLinkInfo(Function *F) : func(F) {
 // DxilLib methods.
 //
 
-DxilLib::DxilLib(std::unique_ptr<llvm::Module> pModule)
+DxilLib::DxilLib(std::unique_ptr<llvm37::Module> pModule)
     : m_pModule(std::move(pModule)), m_DM(m_pModule->GetOrCreateDxilModule()) {
   Module &M = *m_pModule;
   const std::string MID = (Twine(M.getModuleIdentifier()) + ".").str();
@@ -201,7 +201,7 @@ DxilLib::DxilLib(std::unique_ptr<llvm::Module> pModule)
       F.setName(MID + F.getName());
     }
     m_functionNameMap[F.getName()] =
-        llvm::make_unique<DxilFunctionLinkInfo>(&F);
+        llvm37::make_unique<DxilFunctionLinkInfo>(&F);
   }
 
   // Update internal global name.
@@ -276,7 +276,7 @@ void DxilLib::BuildGlobalUsage() {
 
   // Build used globals.
   for (GlobalVariable &GV : M.globals()) {
-    llvm::SetVector<Function *> funcSet;
+    llvm37::SetVector<Function *> funcSet;
     CollectUsedFunctions(&GV, funcSet);
     for (Function *F : funcSet) {
       DXASSERT(m_functionNameMap.count(F->getName()), "must exist in table");
@@ -304,7 +304,7 @@ void DxilLib::CollectUsedInitFunctions(SetVector<StringRef> &addedFunctionSet,
     // If function other than Ctor used GV of Ctor.
     // Add Ctor to usedFunctions for it.
     for (GlobalVariable *GV : linkInfo->usedGVs) {
-      llvm::SetVector<Function *> funcSet;
+      llvm37::SetVector<Function *> funcSet;
       CollectUsedFunctions(GV, funcSet);
       bool bAdded = false;
       for (Function *F : funcSet) {
@@ -327,11 +327,11 @@ bool DxilLib::HasFunction(std::string &name) {
   return m_functionNameMap.count(name);
 }
 
-bool DxilLib::IsInitFunc(llvm::Function *F) { return m_initFuncSet.count(F); }
-bool DxilLib::IsResourceGlobal(const llvm::Constant *GV) {
+bool DxilLib::IsInitFunc(llvm37::Function *F) { return m_initFuncSet.count(F); }
+bool DxilLib::IsResourceGlobal(const llvm37::Constant *GV) {
   return m_resourceMap.count(GV);
 }
-DxilResourceBase *DxilLib::GetResource(const llvm::Constant *GV) {
+DxilResourceBase *DxilLib::GetResource(const llvm37::Constant *GV) {
   if (IsResourceGlobal(GV))
     return m_resourceMap[GV];
   else
@@ -342,20 +342,20 @@ DxilResourceBase *DxilLib::GetResource(const llvm::Constant *GV) {
 namespace {
 // Create module from link defines.
 struct DxilLinkJob {
-  DxilLinkJob(LLVMContext &Ctx, dxilutil::ExportMap &exportMap,
+  DxilLinkJob(LLVM37Context &Ctx, dxilutil::ExportMap &exportMap,
               unsigned valMajor, unsigned valMinor)
       : m_ctx(Ctx), m_exportMap(exportMap), m_valMajor(valMajor),
         m_valMinor(valMinor) {}
-  std::unique_ptr<llvm::Module>
+  std::unique_ptr<llvm37::Module>
   Link(std::pair<DxilFunctionLinkInfo *, DxilLib *> &entryLinkPair,
        const ShaderModel *pSM);
-  std::unique_ptr<llvm::Module> LinkToLib(const ShaderModel *pSM);
-  void StripDeadDebugInfo(llvm::Module &M);
+  std::unique_ptr<llvm37::Module> LinkToLib(const ShaderModel *pSM);
+  void StripDeadDebugInfo(llvm37::Module &M);
   // Fix issues when link to different shader model.
-  void FixShaderModelMismatch(llvm::Module &M);
-  void RunPreparePass(llvm::Module &M);
+  void FixShaderModelMismatch(llvm37::Module &M);
+  void RunPreparePass(llvm37::Module &M);
   void AddFunction(std::pair<DxilFunctionLinkInfo *, DxilLib *> &linkPair);
-  void AddFunction(llvm::Function *F);
+  void AddFunction(llvm37::Function *F);
 
 private:
   void LinkNamedMDNodes(Module *pM, ValueToValueMapTy &vmap);
@@ -364,28 +364,28 @@ private:
   void EmitCtorListForLib(Module *pM);
   void CloneFunctions(ValueToValueMapTy &vmap);
   void AddFunctions(DxilModule &DM, ValueToValueMapTy &vmap);
-  bool AddResource(DxilResourceBase *res, llvm::GlobalVariable *GV);
+  bool AddResource(DxilResourceBase *res, llvm37::GlobalVariable *GV);
   void AddResourceToDM(DxilModule &DM);
-  llvm::MapVector<DxilFunctionLinkInfo *, DxilLib *> m_functionDefs;
+  llvm37::MapVector<DxilFunctionLinkInfo *, DxilLib *> m_functionDefs;
 
   // Function decls, in order added.
-  llvm::MapVector<llvm::StringRef,
-                  std::pair<llvm::SmallPtrSet<llvm::FunctionType *, 2>,
-                            llvm::SmallVector<llvm::Function *, 2>>>
+  llvm37::MapVector<llvm37::StringRef,
+                  std::pair<llvm37::SmallPtrSet<llvm37::FunctionType *, 2>,
+                            llvm37::SmallVector<llvm37::Function *, 2>>>
     m_functionDecls;
 
   // New created functions, in order added.
-  llvm::MapVector<llvm::StringRef, llvm::Function *> m_newFunctions;
+  llvm37::MapVector<llvm37::StringRef, llvm37::Function *> m_newFunctions;
 
   // New created globals, in order added.
-  llvm::MapVector<llvm::StringRef, llvm::GlobalVariable *> m_newGlobals;
+  llvm37::MapVector<llvm37::StringRef, llvm37::GlobalVariable *> m_newGlobals;
 
   // Map for resource, ordered by name.
-  std::map<llvm::StringRef,
-           std::pair<DxilResourceBase *, llvm::GlobalVariable *>>
+  std::map<llvm37::StringRef,
+           std::pair<DxilResourceBase *, llvm37::GlobalVariable *>>
     m_resourceMap;
 
-  LLVMContext &m_ctx;
+  LLVM37Context &m_ctx;
   dxilutil::ExportMap &m_exportMap;
   unsigned m_valMajor, m_valMinor;
 };
@@ -478,7 +478,7 @@ bool IsMatchedType(Type *Ty0, Type *Ty) {
 }
 } // namespace
 
-bool DxilLinkJob::AddResource(DxilResourceBase *res, llvm::GlobalVariable *GV) {
+bool DxilLinkJob::AddResource(DxilResourceBase *res, llvm37::GlobalVariable *GV) {
   if (m_resourceMap.count(res->GetGlobalName())) {
     DxilResourceBase *res0 = m_resourceMap[res->GetGlobalName()].first;
     Type *Ty0 = res0->GetHLSLType()->getPointerElementType();
@@ -506,7 +506,7 @@ void DxilLinkJob::AddResourceToDM(DxilModule &DM) {
     DxilResourceBase *basePtr = nullptr;
     switch (res->GetClass()) {
     case DXIL::ResourceClass::UAV: {
-      std::unique_ptr<DxilResource> pUAV = llvm::make_unique<DxilResource>();
+      std::unique_ptr<DxilResource> pUAV = llvm37::make_unique<DxilResource>();
       DxilResource *ptr = pUAV.get();
       // Copy the content.
       *ptr = *(static_cast<DxilResource *>(res));
@@ -514,7 +514,7 @@ void DxilLinkJob::AddResourceToDM(DxilModule &DM) {
       basePtr = &DM.GetUAV(ID);
     } break;
     case DXIL::ResourceClass::SRV: {
-      std::unique_ptr<DxilResource> pSRV = llvm::make_unique<DxilResource>();
+      std::unique_ptr<DxilResource> pSRV = llvm37::make_unique<DxilResource>();
       DxilResource *ptr = pSRV.get();
       // Copy the content.
       *ptr = *(static_cast<DxilResource *>(res));
@@ -522,7 +522,7 @@ void DxilLinkJob::AddResourceToDM(DxilModule &DM) {
       basePtr = &DM.GetSRV(ID);
     } break;
     case DXIL::ResourceClass::CBuffer: {
-      std::unique_ptr<DxilCBuffer> pCBuf = llvm::make_unique<DxilCBuffer>();
+      std::unique_ptr<DxilCBuffer> pCBuf = llvm37::make_unique<DxilCBuffer>();
       DxilCBuffer *ptr = pCBuf.get();
       // Copy the content.
       *ptr = *(static_cast<DxilCBuffer *>(res));
@@ -530,7 +530,7 @@ void DxilLinkJob::AddResourceToDM(DxilModule &DM) {
       basePtr = &DM.GetCBuffer(ID);
     } break;
     case DXIL::ResourceClass::Sampler: {
-      std::unique_ptr<DxilSampler> pSampler = llvm::make_unique<DxilSampler>();
+      std::unique_ptr<DxilSampler> pSampler = llvm37::make_unique<DxilSampler>();
       DxilSampler *ptr = pSampler.get();
       // Copy the content.
       *ptr = *(static_cast<DxilSampler *>(res));
@@ -546,11 +546,11 @@ void DxilLinkJob::AddResourceToDM(DxilModule &DM) {
     basePtr->SetID(ID);
 
     basePtr->SetGlobalSymbol(GV);
-    DM.GetLLVMUsed().push_back(GV);
+    DM.GetLLVM37Used().push_back(GV);
   }
   // Prevent global vars used for resources from being deleted through optimizations
   // while we still have hidden uses (pointers in resource vectors).
-  DM.EmitLLVMUsed();
+  DM.EmitLLVM37Used();
 }
 
 void DxilLinkJob::LinkNamedMDNodes(Module *pM, ValueToValueMapTy &vmap) {
@@ -701,8 +701,8 @@ void DxilLinkJob::AddFunctions(DxilModule &DM, ValueToValueMapTy &vmap) {
                                       F->getName(), pM);
     NewF->setAttributes(F->getAttributes());
 
-    if (!NewF->hasFnAttribute(llvm::Attribute::NoInline))
-      NewF->addFnAttr(llvm::Attribute::AlwaysInline);
+    if (!NewF->hasFnAttribute(llvm37::Attribute::NoInline))
+      NewF->addFnAttr(llvm37::Attribute::AlwaysInline);
 
     if (DxilFunctionAnnotation *funcAnnotation =
             tmpTypeSys.GetFunctionAnnotation(F)) {
@@ -740,7 +740,7 @@ DxilLinkJob::Link(std::pair<DxilFunctionLinkInfo *, DxilLib *> &entryLinkPair,
 
   // Create new module.
   std::unique_ptr<Module> pM =
-      llvm::make_unique<Module>(entryFunc->getName(), entryDM.GetCtx());
+      llvm37::make_unique<Module>(entryFunc->getName(), entryDM.GetCtx());
   // Set target.
   pM->setTargetTriple(entryDM.GetModule()->getTargetTriple());
   // Add dxil operation functions before create DxilModule.
@@ -766,21 +766,21 @@ DxilLinkJob::Link(std::pair<DxilFunctionLinkInfo *, DxilLib *> &entryLinkPair,
 
   DxilEntryPropsMap EntryPropMap;
   std::unique_ptr<DxilEntryProps> pProps =
-      llvm::make_unique<DxilEntryProps>(entryDM.GetDxilEntryProps(entryFunc));
+      llvm37::make_unique<DxilEntryProps>(entryDM.GetDxilEntryProps(entryFunc));
   EntryPropMap[NewEntryFunc] = std::move(pProps);
   DM.ResetEntryPropsMap(std::move(EntryPropMap));
 
 
-  if (NewEntryFunc->hasFnAttribute(llvm::Attribute::AlwaysInline))
-    NewEntryFunc->removeFnAttr(llvm::Attribute::AlwaysInline);
+  if (NewEntryFunc->hasFnAttribute(llvm37::Attribute::AlwaysInline))
+    NewEntryFunc->removeFnAttr(llvm37::Attribute::AlwaysInline);
   if (props.IsHS()) {
     Function *patchConstantFunc = props.ShaderProps.HS.patchConstantFunc;
     Function *newPatchConstantFunc =
         m_newFunctions[patchConstantFunc->getName()];
     props.ShaderProps.HS.patchConstantFunc = newPatchConstantFunc;
 
-    if (newPatchConstantFunc->hasFnAttribute(llvm::Attribute::AlwaysInline))
-      newPatchConstantFunc->removeFnAttr(llvm::Attribute::AlwaysInline);
+    if (newPatchConstantFunc->hasFnAttribute(llvm37::Attribute::AlwaysInline))
+      newPatchConstantFunc->removeFnAttr(llvm37::Attribute::AlwaysInline);
   }
   // Set EntryProps
   DM.SetShaderProperties(&props);
@@ -826,21 +826,21 @@ DxilLinkJob::Link(std::pair<DxilFunctionLinkInfo *, DxilLib *> &entryLinkPair,
 
 // Based on CodeGenModule::EmitCtorList.
 void DxilLinkJob::EmitCtorListForLib(Module *pM) {
-  LLVMContext &Ctx = pM->getContext();
+  LLVM37Context &Ctx = pM->getContext();
 
   Type *VoidTy = Type::getVoidTy(Ctx);
   Type *Int32Ty = Type::getInt32Ty(Ctx);
   Type *VoidPtrTy = Type::getInt8PtrTy(Ctx);
   // Ctor function type is void()*.
-  llvm::FunctionType *CtorFTy = llvm::FunctionType::get(VoidTy, false);
-  llvm::Type *CtorPFTy = llvm::PointerType::getUnqual(CtorFTy);
+  llvm37::FunctionType *CtorFTy = llvm37::FunctionType::get(VoidTy, false);
+  llvm37::Type *CtorPFTy = llvm37::PointerType::getUnqual(CtorFTy);
 
   // Get the type of a ctor entry, { i32, void ()*, i8* }.
-  llvm::StructType *CtorStructTy = llvm::StructType::get(
-      Int32Ty, llvm::PointerType::getUnqual(CtorFTy), VoidPtrTy, nullptr);
+  llvm37::StructType *CtorStructTy = llvm37::StructType::get(
+      Int32Ty, llvm37::PointerType::getUnqual(CtorFTy), VoidPtrTy, nullptr);
 
   // Construct the constructor and destructor arrays.
-  SmallVector<llvm::Constant *, 8> Ctors;
+  SmallVector<llvm37::Constant *, 8> Ctors;
 
   for (auto &it : m_functionDefs) {
     DxilFunctionLinkInfo *linkInfo = it.first;
@@ -850,20 +850,20 @@ void DxilLinkJob::EmitCtorListForLib(Module *pM) {
     if (pLib->IsInitFunc(F)) {
       Function *NewF = m_newFunctions[F->getName()];
 
-      llvm::Constant *S[] = {
-          llvm::ConstantInt::get(Int32Ty, 65535, false),
-          llvm::ConstantExpr::getBitCast(NewF, CtorPFTy),
-          (llvm::Constant::getNullValue(VoidPtrTy))};
-      Ctors.push_back(llvm::ConstantStruct::get(CtorStructTy, S));
+      llvm37::Constant *S[] = {
+          llvm37::ConstantInt::get(Int32Ty, 65535, false),
+          llvm37::ConstantExpr::getBitCast(NewF, CtorPFTy),
+          (llvm37::Constant::getNullValue(VoidPtrTy))};
+      Ctors.push_back(llvm37::ConstantStruct::get(CtorStructTy, S));
     }
   }
 
   if (!Ctors.empty()) {
     const StringRef GlobalName = "llvm.global_ctors";
-    llvm::ArrayType *AT = llvm::ArrayType::get(CtorStructTy, Ctors.size());
-    new llvm::GlobalVariable(*pM, AT, false,
-                             llvm::GlobalValue::AppendingLinkage,
-                             llvm::ConstantArray::get(AT, Ctors), GlobalName);
+    llvm37::ArrayType *AT = llvm37::ArrayType::get(CtorStructTy, Ctors.size());
+    new llvm37::GlobalVariable(*pM, AT, false,
+                             llvm37::GlobalValue::AppendingLinkage,
+                             llvm37::ConstantArray::get(AT, Ctors), GlobalName);
   }
 }
 
@@ -877,7 +877,7 @@ DxilLinkJob::LinkToLib(const ShaderModel *pSM) {
   DxilModule &tmpDM = pLib->GetDxilModule();
   // Create new module.
   std::unique_ptr<Module> pM =
-      llvm::make_unique<Module>("merged_lib", tmpDM.GetCtx());
+      llvm37::make_unique<Module>("merged_lib", tmpDM.GetCtx());
   // Set target.
   pM->setTargetTriple(tmpDM.GetModule()->getTargetTriple());
   // Add dxil operation functions and external decls before create DxilModule.
@@ -908,7 +908,7 @@ DxilLinkJob::LinkToLib(const ShaderModel *pSM) {
       Function *NewF = m_newFunctions[F->getName()];
       DxilEntryProps &props = tmpDM.GetDxilEntryProps(F);
       std::unique_ptr<DxilEntryProps> pProps =
-          llvm::make_unique<DxilEntryProps>(props);
+          llvm37::make_unique<DxilEntryProps>(props);
       EntryPropMap[NewF] = std::move(pProps);
     }
   }
@@ -955,13 +955,13 @@ DxilLinkJob::LinkToLib(const ShaderModel *pSM) {
     if(!m_exportMap.EndProcessing()) {
       for (auto &name : m_exportMap.GetNameCollisions()) {
         std::string escaped;
-        llvm::raw_string_ostream os(escaped);
+        llvm37::raw_string_ostream os(escaped);
         dxilutil::PrintEscapedString(name, os);
         m_ctx.emitError(Twine(kExportNameCollision) + os.str());
       }
       for (auto &name : m_exportMap.GetUnusedExports()) {
         std::string escaped;
-        llvm::raw_string_ostream os(escaped);
+        llvm37::raw_string_ostream os(escaped);
         dxilutil::PrintEscapedString(name, os);
         m_ctx.emitError(Twine(kExportFunctionMissing) + os.str());
       }
@@ -1009,7 +1009,7 @@ void DxilLinkJob::AddFunction(
   m_functionDefs[linkPair.first] = linkPair.second;
 }
 
-void DxilLinkJob::AddFunction(llvm::Function *F) {
+void DxilLinkJob::AddFunction(llvm37::Function *F) {
   // Rarely, DXIL op overloads could collide, due to different types with same name.
   // Later, we will rename these functions, but for now, we need to prevent clobbering
   // an existing entry.
@@ -1021,7 +1021,7 @@ void DxilLinkJob::AddFunction(llvm::Function *F) {
 // Clone of StripDeadDebugInfo::runOnModule.
 // Also remove function which not not in current Module.
 void DxilLinkJob::StripDeadDebugInfo(Module &M) {
-  LLVMContext &C = M.getContext();
+  LLVM37Context &C = M.getContext();
   // Find all debug info in F. This is actually overkill in terms of what we
   // want to do, but we want to try and be as resilient as possible in the face
   // of potential debug info changes by using the formal interfaces given to us
@@ -1209,7 +1209,7 @@ bool addAnnotHandle(Module &M, DxilModule &DM) {
 }
 } // namespace
 
-void DxilLinkJob::FixShaderModelMismatch(llvm::Module &M) {
+void DxilLinkJob::FixShaderModelMismatch(llvm37::Module &M) {
   // TODO: fix more issues.
   addAnnotHandle(M, M.GetDxilModule());
 }
@@ -1275,12 +1275,12 @@ bool DxilLinkerImpl::HasLibNameRegistered(StringRef name) {
 }
 
 bool DxilLinkerImpl::RegisterLib(StringRef name,
-                                 std::unique_ptr<llvm::Module> pModule,
-                                 std::unique_ptr<llvm::Module> pDebugModule) {
+                                 std::unique_ptr<llvm37::Module> pModule,
+                                 std::unique_ptr<llvm37::Module> pDebugModule) {
   if (m_LibMap.count(name))
     return false;
 
-  std::unique_ptr<llvm::Module> pM =
+  std::unique_ptr<llvm37::Module> pM =
       pDebugModule ? std::move(pDebugModule) : std::move(pModule);
 
   if (!pM)
@@ -1288,7 +1288,7 @@ bool DxilLinkerImpl::RegisterLib(StringRef name,
 
   pM->setModuleIdentifier(name);
   std::unique_ptr<DxilLib> pLib =
-      llvm::make_unique<DxilLib>(std::move(pM));
+      llvm37::make_unique<DxilLib>(std::move(pM));
   m_LibMap[name] = std::move(pLib);
   return true;
 }
@@ -1424,7 +1424,7 @@ bool DxilLinkerImpl::AddFunctions(SmallVector<StringRef, 4> &workList,
   return true;
 }
 
-std::unique_ptr<llvm::Module>
+std::unique_ptr<llvm37::Module>
 DxilLinkerImpl::Link(StringRef entry, StringRef profile, dxilutil::ExportMap &exportMap) {
   const ShaderModel *pSM = ShaderModel::GetByName(profile.data());
   DXIL::ShaderKind kind = pSM->GetKind();
@@ -1483,7 +1483,7 @@ DxilLinkerImpl::Link(StringRef entry, StringRef profile, dxilutil::ExportMap &ex
 
         addedFunctionSet.insert(name);
       }
-      // Add every dxil function and llvm intrinsic.
+      // Add every dxil function and llvm37 intrinsic.
       for (auto *pLib : libSet) {
         auto &DM = pLib->GetDxilModule();
         DM.GetOP();
@@ -1551,7 +1551,7 @@ DxilLinkerImpl::Link(StringRef entry, StringRef profile, dxilutil::ExportMap &ex
 
 namespace hlsl {
 
-DxilLinker *DxilLinker::CreateLinker(LLVMContext &Ctx, unsigned valMajor, unsigned valMinor) {
+DxilLinker *DxilLinker::CreateLinker(LLVM37Context &Ctx, unsigned valMajor, unsigned valMinor) {
   return new DxilLinkerImpl(Ctx, valMajor, valMinor);
 }
 } // namespace hlsl

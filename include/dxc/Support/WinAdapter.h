@@ -1,6 +1,6 @@
 //===- WinAdapter.h - Windows Adapter for non-Windows platforms -*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -12,8 +12,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_SUPPORT_WIN_ADAPTER_H
-#define LLVM_SUPPORT_WIN_ADAPTER_H
+#ifndef LLVM37_SUPPORT_WIN_ADAPTER_H
+#define LLVM37_SUPPORT_WIN_ADAPTER_H
 
 #ifndef _WIN32
 
@@ -1031,4 +1031,4 @@ private:
 
 #endif // _WIN32
 
-#endif // LLVM_SUPPORT_WIN_ADAPTER_H
+#endif // LLVM37_SUPPORT_WIN_ADAPTER_H

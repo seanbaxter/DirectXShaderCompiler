@@ -17,7 +17,7 @@
 // Essentially, the pass construct efficient SSA for DXBC r-registers and
 // performs the following:
 //   1. Removes TempRegStore/TempRegLoad calls, replacing DXBC registers with
-//      either temporary or global LLVM values.
+//      either temporary or global LLVM37 values.
 //   2. Minimizes the number of bitcasts induced by the lack of types in DXBC.
 //   3. Removes helper operations to support DXBC conditionals, translated to i1.
 //   4. Recovers doubles from pairs of 32-bit DXBC registers.
@@ -51,24 +51,24 @@
 #include "dxc/DXIL/DxilOperations.h"
 #include "dxc/DXIL/DxilInstructions.h"
 
-#include "llvm/Support/Casting.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/ADT/PostOrderIterator.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/BasicBlock.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/CFG.h"
-#include "llvm/IR/IRBuilder.h"
-#include "llvm/IR/LegacyPassManager.h"
-#include "llvm/IR/Verifier.h"
-#include "llvm/Transforms/Scalar.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/MapVector.h"
+#include "llvm37/Support/Casting.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/ADT/PostOrderIterator.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/BasicBlock.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/CFG.h"
+#include "llvm37/IR/IRBuilder.h"
+#include "llvm37/IR/LegacyPassManager.h"
+#include "llvm37/IR/Verifier.h"
+#include "llvm37/Transforms/Scalar.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/MapVector.h"
 
 #include <utility>
 #include <vector>
@@ -76,8 +76,8 @@
 #include <queue>
 #include <algorithm>
 
-using namespace llvm;
-using namespace llvm::legacy;
+using namespace llvm37;
+using namespace llvm37::legacy;
 using namespace hlsl;
 using std::string;
 using std::vector;
@@ -136,14 +136,14 @@ public:
     { DXASSERT_NOMSG(false); }
 
     unsigned GetCaseNumber() const;
-    void GuessType(LLVMContext &Ctx);
+    void GuessType(LLVM37Context &Ctx);
     bool operator<(const LiveRange &other) const;
   };
 
 private:
   const unsigned kRegCompAlignment = 4;
 
-  LLVMContext *m_pCtx;
+  LLVM37Context *m_pCtx;
   Module *m_pModule;
   DxilModule *m_pDxilModule;
 
@@ -269,7 +269,7 @@ void DxilCleanup::OptimizeIdxRegDecls() {
   }
 
   // 3. Collect x-register global decl usage stats and change type, if profitable.
-  llvm::SmallVector<GlobalVariable*, 4> GVWorklist;
+  llvm37::SmallVector<GlobalVariable*, 4> GVWorklist;
   for (auto itGV = m_pModule->global_begin(), endGV = m_pModule->global_end(); itGV != endGV; ) {
     GlobalVariable *pOldGV = itGV;
     ++itGV;
@@ -902,7 +902,7 @@ unsigned DxilCleanup::LiveRange::GetCaseNumber() const {
   return 3;   // Type is unknown yet. Postpone the decision until more live ranges have types.
 }
 
-void DxilCleanup::LiveRange::GuessType(LLVMContext &Ctx) {
+void DxilCleanup::LiveRange::GuessType(LLVM37Context &Ctx) {
   DXASSERT_NOMSG(pNewType == nullptr);
   bool bFlt = false;
   bool bInt = false;
@@ -1319,13 +1319,13 @@ bool DxilCleanup::IsDxilBitcast(Value *pValue) {
 using namespace DxilCleanupNS;
 
 // Publicly exposed interface to pass...
-char &llvm::DxilCleanupID = DxilCleanup::ID;
+char &llvm37::DxilCleanupID = DxilCleanup::ID;
 
 
 INITIALIZE_PASS_BEGIN(DxilCleanup, "dxil-cleanup", "Optimize DXIL after conversion from DXBC", true, false)
 INITIALIZE_PASS_END  (DxilCleanup, "dxil-cleanup", "Optimize DXIL after conversion from DXBC", true, false)
 
-namespace llvm {
+namespace llvm37 {
 
 ModulePass *createDxilCleanupPass() {
   return new DxilCleanup();

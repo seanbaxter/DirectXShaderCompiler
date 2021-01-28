@@ -1,6 +1,6 @@
 //===- AsmWriterInst.h - Classes encapsulating a printable inst -----------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -13,11 +13,11 @@
 
 #include "AsmWriterInst.h"
 #include "CodeGenTarget.h"
-#include "llvm/ADT/StringExtras.h"
-#include "llvm/TableGen/Error.h"
-#include "llvm/TableGen/Record.h"
+#include "llvm37/ADT/StringExtras.h"
+#include "llvm37/TableGen/Error.h"
+#include "llvm37/TableGen/Record.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 static bool isIdentChar(char C) {
   return (C >= 'a' && C <= 'z') ||

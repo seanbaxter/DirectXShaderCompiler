@@ -1,6 +1,6 @@
 //===--- CreateInvocationFromCommandLine.cpp - CompilerInvocation from Args ==//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -20,10 +20,10 @@
 #include "clang/Driver/Tool.h"
 #include "clang/Frontend/CompilerInstance.h"
 #include "clang/Frontend/FrontendDiagnostic.h"
-#include "llvm/Option/ArgList.h"
-#include "llvm/Support/Host.h"
+#include "llvm37/Option/ArgList.h"
+#include "llvm37/Support/Host.h"
 using namespace clang;
-using namespace llvm::opt;
+using namespace llvm37::opt;
 
 /// createInvocationFromCommandLine - Construct a compiler invocation object for
 /// a command line argument vector.
@@ -50,7 +50,7 @@ clang::createInvocationFromCommandLine(ArrayRef<const char *> ArgList,
   const SmallVector<const char *, 16> &CCArgs = Args;
 #else
   // FIXME: We shouldn't have to pass in the path info.
-  driver::Driver TheDriver("clang", llvm::sys::getDefaultTargetTriple(),
+  driver::Driver TheDriver("clang", llvm37::sys::getDefaultTargetTriple(),
                            *Diags);
 
   // Don't check that inputs exist, they may have been remapped.
@@ -60,7 +60,7 @@ clang::createInvocationFromCommandLine(ArrayRef<const char *> ArgList,
 
   // Just print the cc1 options if -### was present.
   if (C->getArgs().hasArg(driver::options::OPT__HASH_HASH_HASH)) {
-    C->getJobs().Print(llvm::errs(), "\n", true);
+    C->getJobs().Print(llvm37::errs(), "\n", true);
     return nullptr;
   }
 
@@ -85,7 +85,7 @@ clang::createInvocationFromCommandLine(ArrayRef<const char *> ArgList,
   if (Jobs.size() == 0 || !isa<driver::Command>(*Jobs.begin()) ||
       (Jobs.size() > 1 && !CudaCompilation)) {
     SmallString<256> Msg;
-    llvm::raw_svector_ostream OS(Msg);
+    llvm37::raw_svector_ostream OS(Msg);
     Jobs.Print(OS, "; ", true);
     Diags->Report(diag::err_fe_expected_compiler_job) << OS.str();
     return nullptr;

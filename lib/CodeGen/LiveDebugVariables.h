@@ -1,6 +1,6 @@
 //===- LiveDebugVariables.h - Tracking debug info variables ----*- c++ -*--===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -18,20 +18,20 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_LIB_CODEGEN_LIVEDEBUGVARIABLES_H
-#define LLVM_LIB_CODEGEN_LIVEDEBUGVARIABLES_H
+#ifndef LLVM37_LIB_CODEGEN_LIVEDEBUGVARIABLES_H
+#define LLVM37_LIB_CODEGEN_LIVEDEBUGVARIABLES_H
 
-#include "llvm/ADT/ArrayRef.h"
-#include "llvm/CodeGen/MachineFunctionPass.h"
-#include "llvm/IR/DebugInfo.h"
+#include "llvm37/ADT/ArrayRef.h"
+#include "llvm37/CodeGen/MachineFunctionPass.h"
+#include "llvm37/IR/DebugInfo.h"
 
-namespace llvm {
+namespace llvm37 {
 
 class LiveInterval;
 class LiveIntervals;
 class VirtRegMap;
 
-class LLVM_LIBRARY_VISIBILITY LiveDebugVariables : public MachineFunctionPass {
+class LLVM37_LIBRARY_VISIBILITY LiveDebugVariables : public MachineFunctionPass {
   void *pImpl;
   DenseMap<const Function *, DISubprogram *> FunctionDIs;
 
@@ -71,6 +71,6 @@ private:
 
 };
 
-} // namespace llvm
+} // namespace llvm37
 
 #endif

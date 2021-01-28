@@ -1,6 +1,6 @@
 //== SimpleConstraintManager.cpp --------------------------------*- C++ -*--==//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -104,7 +104,7 @@ SimpleConstraintManager::assumeAuxForSymbol(ProgramStateRef State,
   if (!T->isIntegralOrEnumerationType())
     return State;
 
-  const llvm::APSInt &zero = BVF.getValue(0, T);
+  const llvm37::APSInt &zero = BVF.getValue(0, T);
   if (Assumption)
     return assumeSymNE(State, Sym, zero, zero);
   else
@@ -125,7 +125,7 @@ ProgramStateRef SimpleConstraintManager::assumeAux(ProgramStateRef state,
 
   switch (Cond.getSubKind()) {
   default:
-    llvm_unreachable("'Assume' not implemented for this NonLoc");
+    llvm37_unreachable("'Assume' not implemented for this NonLoc");
 
   case nonloc::SymbolValKind: {
     nonloc::SymbolVal SV = Cond.castAs<nonloc::SymbolVal>();
@@ -166,7 +166,7 @@ ProgramStateRef SimpleConstraintManager::assumeAux(ProgramStateRef state,
       SymbolRef Subtraction = SymMgr.getSymSymExpr(SSE->getRHS(), BO_Sub,
                                                    SSE->getLHS(), DiffTy);
 
-      const llvm::APSInt &Zero = getBasicVals().getValue(0, DiffTy);
+      const llvm37::APSInt &Zero = getBasicVals().getValue(0, DiffTy);
       Op = BinaryOperator::reverseComparisonOp(Op);
       if (!Assumption)
         Op = BinaryOperator::negateComparisonOp(Op);
@@ -190,7 +190,7 @@ ProgramStateRef SimpleConstraintManager::assumeAux(ProgramStateRef state,
   } // end switch
 }
 
-static void computeAdjustment(SymbolRef &Sym, llvm::APSInt &Adjustment) {
+static void computeAdjustment(SymbolRef &Sym, llvm37::APSInt &Adjustment) {
   // Is it a "($sym+constant1)" expression?
   if (const SymIntExpr *SE = dyn_cast<SymIntExpr>(Sym)) {
     BinaryOperator::Opcode Op = SE->getOpcode();
@@ -210,7 +210,7 @@ static void computeAdjustment(SymbolRef &Sym, llvm::APSInt &Adjustment) {
 ProgramStateRef SimpleConstraintManager::assumeSymRel(ProgramStateRef state,
                                                      const SymExpr *LHS,
                                                      BinaryOperator::Opcode op,
-                                                     const llvm::APSInt& Int) {
+                                                     const llvm37::APSInt& Int) {
   assert(BinaryOperator::isComparisonOp(op) &&
          "Non-comparison ops should be rewritten as comparisons to zero.");
 
@@ -226,12 +226,12 @@ ProgramStateRef SimpleConstraintManager::assumeSymRel(ProgramStateRef state,
   // in modular arithmetic is [0, 1] U [UINT_MAX-1, UINT_MAX]. It's up to
   // the subclasses of SimpleConstraintManager to handle the adjustment.
   SymbolRef Sym = LHS;
-  llvm::APSInt Adjustment = WraparoundType.getZeroValue();
+  llvm37::APSInt Adjustment = WraparoundType.getZeroValue();
   computeAdjustment(Sym, Adjustment);
 
   // Convert the right-hand side integer as necessary.
   APSIntType ComparisonType = std::max(WraparoundType, APSIntType(Int));
-  llvm::APSInt ConvertedInt = ComparisonType.convert(Int);
+  llvm37::APSInt ConvertedInt = ComparisonType.convert(Int);
 
   // Prefer unsigned comparisons.
   if (ComparisonType.getBitWidth() == WraparoundType.getBitWidth() &&
@@ -240,7 +240,7 @@ ProgramStateRef SimpleConstraintManager::assumeSymRel(ProgramStateRef state,
 
   switch (op) {
   default:
-    llvm_unreachable("invalid operation not caught by assertion above");
+    llvm37_unreachable("invalid operation not caught by assertion above");
 
   case BO_EQ:
     return assumeSymEQ(state, Sym, ConvertedInt, Adjustment);

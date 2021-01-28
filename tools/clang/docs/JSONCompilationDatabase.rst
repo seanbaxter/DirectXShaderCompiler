@@ -59,7 +59,7 @@ Example:
 ::
 
     [
-      { "directory": "/home/user/llvm/build",
+      { "directory": "/home/user/llvm37/build",
         "command": "/usr/bin/clang++ -Irelative -DSOMEDEF=\"With spaces, quotes and \\-es.\" -c -o file.o file.cc",
         "file": "file.cc" },
       ...

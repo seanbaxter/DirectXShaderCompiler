@@ -13,15 +13,15 @@
 #include "dxc/DXIL/DxilSampler.h"
 #include "dxc/DXIL/DxilResource.h"
 
-#include "llvm/Support/Casting.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Type.h"
-#include "llvm/IR/Instructions.h"
+#include "llvm37/Support/Casting.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/Type.h"
+#include "llvm37/IR/Instructions.h"
 
 #include "Support/DXIncludes.h"
 #include "DxbcUtil.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 
 namespace hlsl {
@@ -262,7 +262,7 @@ void OperandValueHelper::Advance() {
   }
 }
 
-void OperandValueHelper::SetValue(llvm::Value *pValue) {
+void OperandValueHelper::SetValue(llvm37::Value *pValue) {
   DXASSERT(m_Index < DXBC::kWidth, "otherwise the client uses the instance after all unique components have been set");
   DXASSERT(m_pOpValue->m_pVal[m_Index] == nullptr, "otherwise the client tried to redefine a value, which is not the intended use");
   BYTE Comp = m_Components[m_Index];
@@ -560,25 +560,25 @@ DXIL::AtomicBinOpCode GetAtomicBinOp(D3D10_SB_OPCODE_TYPE DxbcOpCode) {
   return DXIL::AtomicBinOpCode::Invalid;
 }
 
-llvm::AtomicRMWInst::BinOp GetLlvmAtomicBinOp(D3D10_SB_OPCODE_TYPE DxbcOpCode) {
+llvm37::AtomicRMWInst::BinOp GetLlvmAtomicBinOp(D3D10_SB_OPCODE_TYPE DxbcOpCode) {
   switch (DxbcOpCode) {
-  case D3D11_SB_OPCODE_ATOMIC_IADD:           return llvm::AtomicRMWInst::Add;
-  case D3D11_SB_OPCODE_ATOMIC_AND:            return llvm::AtomicRMWInst::And;
-  case D3D11_SB_OPCODE_ATOMIC_OR:             return llvm::AtomicRMWInst::Or;
-  case D3D11_SB_OPCODE_ATOMIC_XOR:            return llvm::AtomicRMWInst::Xor;
-  case D3D11_SB_OPCODE_ATOMIC_IMAX:           return llvm::AtomicRMWInst::Max;
-  case D3D11_SB_OPCODE_ATOMIC_IMIN:           return llvm::AtomicRMWInst::Min;
-  case D3D11_SB_OPCODE_ATOMIC_UMAX:           return llvm::AtomicRMWInst::UMax;
-  case D3D11_SB_OPCODE_ATOMIC_UMIN:           return llvm::AtomicRMWInst::UMin;
-  case D3D11_SB_OPCODE_IMM_ATOMIC_EXCH:       return llvm::AtomicRMWInst::Xchg;
-  case D3D11_SB_OPCODE_IMM_ATOMIC_IADD:       return llvm::AtomicRMWInst::Add;
-  case D3D11_SB_OPCODE_IMM_ATOMIC_AND:        return llvm::AtomicRMWInst::And;
-  case D3D11_SB_OPCODE_IMM_ATOMIC_OR:         return llvm::AtomicRMWInst::Or;
-  case D3D11_SB_OPCODE_IMM_ATOMIC_XOR:        return llvm::AtomicRMWInst::Xor;
-  case D3D11_SB_OPCODE_IMM_ATOMIC_IMAX:       return llvm::AtomicRMWInst::Max;
-  case D3D11_SB_OPCODE_IMM_ATOMIC_IMIN:       return llvm::AtomicRMWInst::Min;
-  case D3D11_SB_OPCODE_IMM_ATOMIC_UMAX:       return llvm::AtomicRMWInst::UMax;
-  case D3D11_SB_OPCODE_IMM_ATOMIC_UMIN:       return llvm::AtomicRMWInst::UMin;
+  case D3D11_SB_OPCODE_ATOMIC_IADD:           return llvm37::AtomicRMWInst::Add;
+  case D3D11_SB_OPCODE_ATOMIC_AND:            return llvm37::AtomicRMWInst::And;
+  case D3D11_SB_OPCODE_ATOMIC_OR:             return llvm37::AtomicRMWInst::Or;
+  case D3D11_SB_OPCODE_ATOMIC_XOR:            return llvm37::AtomicRMWInst::Xor;
+  case D3D11_SB_OPCODE_ATOMIC_IMAX:           return llvm37::AtomicRMWInst::Max;
+  case D3D11_SB_OPCODE_ATOMIC_IMIN:           return llvm37::AtomicRMWInst::Min;
+  case D3D11_SB_OPCODE_ATOMIC_UMAX:           return llvm37::AtomicRMWInst::UMax;
+  case D3D11_SB_OPCODE_ATOMIC_UMIN:           return llvm37::AtomicRMWInst::UMin;
+  case D3D11_SB_OPCODE_IMM_ATOMIC_EXCH:       return llvm37::AtomicRMWInst::Xchg;
+  case D3D11_SB_OPCODE_IMM_ATOMIC_IADD:       return llvm37::AtomicRMWInst::Add;
+  case D3D11_SB_OPCODE_IMM_ATOMIC_AND:        return llvm37::AtomicRMWInst::And;
+  case D3D11_SB_OPCODE_IMM_ATOMIC_OR:         return llvm37::AtomicRMWInst::Or;
+  case D3D11_SB_OPCODE_IMM_ATOMIC_XOR:        return llvm37::AtomicRMWInst::Xor;
+  case D3D11_SB_OPCODE_IMM_ATOMIC_IMAX:       return llvm37::AtomicRMWInst::Max;
+  case D3D11_SB_OPCODE_IMM_ATOMIC_IMIN:       return llvm37::AtomicRMWInst::Min;
+  case D3D11_SB_OPCODE_IMM_ATOMIC_UMAX:       return llvm37::AtomicRMWInst::UMax;
+  case D3D11_SB_OPCODE_IMM_ATOMIC_UMIN:       return llvm37::AtomicRMWInst::UMin;
 
   case D3D11_SB_OPCODE_ATOMIC_CMP_STORE:
   case D3D11_SB_OPCODE_IMM_ATOMIC_CMP_EXCH:
@@ -586,7 +586,7 @@ llvm::AtomicRMWInst::BinOp GetLlvmAtomicBinOp(D3D10_SB_OPCODE_TYPE DxbcOpCode) {
                                               DXASSERT(false, "otherwise the caller did not pass the right OpCode");
   }
   
-  return llvm::AtomicRMWInst::BAD_BINOP;
+  return llvm37::AtomicRMWInst::BAD_BINOP;
 }
 
 bool AtomicBinOpHasReturn(D3D10_SB_OPCODE_TYPE DxbcOpCode) {

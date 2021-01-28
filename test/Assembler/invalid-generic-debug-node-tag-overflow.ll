@@ -1,4 +1,4 @@
-; RUN: not llvm-as < %s -disable-output 2>&1 | FileCheck %s
+; RUN: not llvm37-as < %s -disable-output 2>&1 | FileCheck %s
 
 ; CHECK-NOT: error:
 !0 = !GenericDINode(tag: 65535)

@@ -1,21 +1,21 @@
 //===--- Triple.cpp - Target triple helper class --------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/ADT/Triple.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/ADT/StringSwitch.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/TargetParser.h"
-#include "llvm/Support/Host.h"
+#include "llvm37/ADT/Triple.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/ADT/StringSwitch.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/TargetParser.h"
+#include "llvm37/Support/Host.h"
 #include <cstring>
-using namespace llvm;
+using namespace llvm37;
 
 const char *Triple::getArchTypeName(ArchType Kind) {
   switch (Kind) {
@@ -68,7 +68,7 @@ const char *Triple::getArchTypeName(ArchType Kind) {
   case wasm64:      return "wasm64";
   }
 
-  llvm_unreachable("Invalid ArchType!");
+  llvm37_unreachable("Invalid ArchType!");
 }
 
 const char *Triple::getArchTypePrefix(ArchType Kind) {
@@ -155,7 +155,7 @@ const char *Triple::getVendorTypeName(VendorType Kind) {
   case CSR: return "csr";
   }
 
-  llvm_unreachable("Invalid VendorType!");
+  llvm37_unreachable("Invalid VendorType!");
 }
 
 const char *Triple::getOSTypeName(OSType Kind) {
@@ -189,7 +189,7 @@ const char *Triple::getOSTypeName(OSType Kind) {
   case PS4: return "ps4";
   }
 
-  llvm_unreachable("Invalid OSType");
+  llvm37_unreachable("Invalid OSType");
 }
 
 const char *Triple::getEnvironmentTypeName(EnvironmentType Kind) {
@@ -208,7 +208,7 @@ const char *Triple::getEnvironmentTypeName(EnvironmentType Kind) {
   case Cygnus: return "cygnus";
   }
 
-  llvm_unreachable("Invalid EnvironmentType!");
+  llvm37_unreachable("Invalid EnvironmentType!");
 }
 
 static Triple::ArchType parseBPFArch(StringRef ArchName) {
@@ -226,7 +226,7 @@ static Triple::ArchType parseBPFArch(StringRef ArchName) {
   }
 }
 
-Triple::ArchType Triple::getArchTypeForLLVMName(StringRef Name) {
+Triple::ArchType Triple::getArchTypeForLLVM37Name(StringRef Name) {
   Triple::ArchType BPFArch(parseBPFArch(Name));
   return StringSwitch<Triple::ArchType>(Name)
     .Case("aarch64", aarch64)
@@ -529,7 +529,7 @@ static const char *getObjectFormatTypeName(Triple::ObjectFormatType Kind) {
   case Triple::ELF: return "elf";
   case Triple::MachO: return "macho";
   }
-  llvm_unreachable("unknown object format type");
+  llvm37_unreachable("unknown object format type");
 }
 
 static Triple::ObjectFormatType getDefaultFormat(const Triple &T) {
@@ -671,7 +671,7 @@ std::string Triple::normalize(StringRef Str) {
       bool Valid = false;
       StringRef Comp = Components[Idx];
       switch (Pos) {
-      default: llvm_unreachable("unexpected component type!");
+      default: llvm37_unreachable("unexpected component type!");
       case 0:
         Arch = parseArch(Comp);
         Valid = Arch != UnknownArch;
@@ -887,7 +887,7 @@ bool Triple::getMacOSXVersion(unsigned &Major, unsigned &Minor,
   getOSVersion(Major, Minor, Micro);
 
   switch (getOS()) {
-  default: llvm_unreachable("unexpected OS for Darwin triple");
+  default: llvm37_unreachable("unexpected OS for Darwin triple");
   case Darwin:
     // Default to darwin8, i.e., MacOSX 10.4.
     if (Major == 0)
@@ -924,7 +924,7 @@ bool Triple::getMacOSXVersion(unsigned &Major, unsigned &Minor,
 void Triple::getiOSVersion(unsigned &Major, unsigned &Minor,
                            unsigned &Micro) const {
   switch (getOS()) {
-  default: llvm_unreachable("unexpected OS for Darwin triple");
+  default: llvm37_unreachable("unexpected OS for Darwin triple");
   case Darwin:
   case MacOSX:
     // Ignore the version from the triple.  This is only handled because the
@@ -1008,61 +1008,61 @@ void Triple::setOSAndEnvironmentName(StringRef Str) {
   setTriple(getArchName() + "-" + getVendorName() + "-" + Str);
 }
 
-static unsigned getArchPointerBitWidth(llvm::Triple::ArchType Arch) {
+static unsigned getArchPointerBitWidth(llvm37::Triple::ArchType Arch) {
   switch (Arch) {
-  case llvm::Triple::UnknownArch:
+  case llvm37::Triple::UnknownArch:
     return 0;
 
-  case llvm::Triple::msp430:
+  case llvm37::Triple::msp430:
     return 16;
 
-  case llvm::Triple::arm:
-  case llvm::Triple::armeb:
-  case llvm::Triple::hexagon:
-  case llvm::Triple::le32:
-  case llvm::Triple::mips:
-  case llvm::Triple::mipsel:
-  case llvm::Triple::nvptx:
-  case llvm::Triple::ppc:
-  case llvm::Triple::r600:
-  case llvm::Triple::sparc:
-  case llvm::Triple::sparcel:
-  case llvm::Triple::tce:
-  case llvm::Triple::thumb:
-  case llvm::Triple::thumbeb:
-  case llvm::Triple::x86:
-  case llvm::Triple::xcore:
-  case llvm::Triple::amdil:
-  case llvm::Triple::hsail:
-  case llvm::Triple::spir:
-  case llvm::Triple::dxil:      // HLSL Change
-  case llvm::Triple::kalimba:
-  case llvm::Triple::shave:
-  case llvm::Triple::wasm32:
+  case llvm37::Triple::arm:
+  case llvm37::Triple::armeb:
+  case llvm37::Triple::hexagon:
+  case llvm37::Triple::le32:
+  case llvm37::Triple::mips:
+  case llvm37::Triple::mipsel:
+  case llvm37::Triple::nvptx:
+  case llvm37::Triple::ppc:
+  case llvm37::Triple::r600:
+  case llvm37::Triple::sparc:
+  case llvm37::Triple::sparcel:
+  case llvm37::Triple::tce:
+  case llvm37::Triple::thumb:
+  case llvm37::Triple::thumbeb:
+  case llvm37::Triple::x86:
+  case llvm37::Triple::xcore:
+  case llvm37::Triple::amdil:
+  case llvm37::Triple::hsail:
+  case llvm37::Triple::spir:
+  case llvm37::Triple::dxil:      // HLSL Change
+  case llvm37::Triple::kalimba:
+  case llvm37::Triple::shave:
+  case llvm37::Triple::wasm32:
     return 32;
 
-  case llvm::Triple::aarch64:
-  case llvm::Triple::aarch64_be:
-  case llvm::Triple::amdgcn:
-  case llvm::Triple::bpfel:
-  case llvm::Triple::bpfeb:
-  case llvm::Triple::le64:
-  case llvm::Triple::mips64:
-  case llvm::Triple::mips64el:
-  case llvm::Triple::nvptx64:
-  case llvm::Triple::ppc64:
-  case llvm::Triple::ppc64le:
-  case llvm::Triple::sparcv9:
-  case llvm::Triple::systemz:
-  case llvm::Triple::x86_64:
-  case llvm::Triple::amdil64:
-  case llvm::Triple::hsail64:
-  case llvm::Triple::spir64:
-  case llvm::Triple::dxil64:    // HLSL Change
-  case llvm::Triple::wasm64:
+  case llvm37::Triple::aarch64:
+  case llvm37::Triple::aarch64_be:
+  case llvm37::Triple::amdgcn:
+  case llvm37::Triple::bpfel:
+  case llvm37::Triple::bpfeb:
+  case llvm37::Triple::le64:
+  case llvm37::Triple::mips64:
+  case llvm37::Triple::mips64el:
+  case llvm37::Triple::nvptx64:
+  case llvm37::Triple::ppc64:
+  case llvm37::Triple::ppc64le:
+  case llvm37::Triple::sparcv9:
+  case llvm37::Triple::systemz:
+  case llvm37::Triple::x86_64:
+  case llvm37::Triple::amdil64:
+  case llvm37::Triple::hsail64:
+  case llvm37::Triple::spir64:
+  case llvm37::Triple::dxil64:    // HLSL Change
+  case llvm37::Triple::wasm64:
     return 64;
   }
-  llvm_unreachable("Invalid architecture value");
+  llvm37_unreachable("Invalid architecture value");
 }
 
 bool Triple::isArch64Bit() const {
@@ -1318,12 +1318,12 @@ const char *Triple::getARMCPUForArch(StringRef MArch) const {
 
   // Some defaults are forced.
   switch (getOS()) {
-  case llvm::Triple::FreeBSD:
-  case llvm::Triple::NetBSD:
+  case llvm37::Triple::FreeBSD:
+  case llvm37::Triple::NetBSD:
     if (!MArch.empty() && MArch == "v6")
       return "arm1176jzf-s";
     break;
-  case llvm::Triple::Win32:
+  case llvm37::Triple::Win32:
     // FIXME: this is invalid for WindowsCE
     return "cortex-a9";
   default:
@@ -1340,27 +1340,27 @@ const char *Triple::getARMCPUForArch(StringRef MArch) const {
   // If no specific architecture version is requested, return the minimum CPU
   // required by the OS and environment.
   switch (getOS()) {
-  case llvm::Triple::NetBSD:
+  case llvm37::Triple::NetBSD:
     switch (getEnvironment()) {
-    case llvm::Triple::GNUEABIHF:
-    case llvm::Triple::GNUEABI:
-    case llvm::Triple::EABIHF:
-    case llvm::Triple::EABI:
+    case llvm37::Triple::GNUEABIHF:
+    case llvm37::Triple::GNUEABI:
+    case llvm37::Triple::EABIHF:
+    case llvm37::Triple::EABI:
       return "arm926ej-s";
     default:
       return "strongarm";
     }
-  case llvm::Triple::NaCl:
+  case llvm37::Triple::NaCl:
     return "cortex-a8";
   default:
     switch (getEnvironment()) {
-    case llvm::Triple::EABIHF:
-    case llvm::Triple::GNUEABIHF:
+    case llvm37::Triple::EABIHF:
+    case llvm37::Triple::GNUEABIHF:
       return "arm1176jzf-s";
     default:
       return "arm7tdmi";
     }
   }
 
-  llvm_unreachable("invalid arch name");
+  llvm37_unreachable("invalid arch name");
 }

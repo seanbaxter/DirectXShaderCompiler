@@ -1,6 +1,6 @@
 //==- CFGReachabilityAnalysis.cpp - Basic reachability analysis --*- C++ -*-==//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -13,7 +13,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/ADT/SmallVector.h"
+#include "llvm37/ADT/SmallVector.h"
 #include "clang/Analysis/Analyses/CFGReachabilityAnalysis.h"
 #include "clang/Analysis/CFG.h"
 
@@ -41,7 +41,7 @@ bool CFGReverseBlockReachabilityAnalysis::isReachable(const CFGBlock *Src,
 // destination node.
 void CFGReverseBlockReachabilityAnalysis::mapReachability(const CFGBlock *Dst) {
   SmallVector<const CFGBlock *, 11> worklist;
-  llvm::BitVector visited(analyzed.size());
+  llvm37::BitVector visited(analyzed.size());
   
   ReachableSet &DstReachability = reachable[Dst->getBlockID()];
   DstReachability.resize(analyzed.size(), false);

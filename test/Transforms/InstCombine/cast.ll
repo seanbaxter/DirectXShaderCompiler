@@ -338,7 +338,7 @@ define i16 @test39(i16 %a) {
         %tmp.upgrd.3 = trunc i32 %tmp.upgrd.32 to i16
         ret i16 %tmp.upgrd.3
 ; CHECK-LABEL: @test39(
-; CHECK: %tmp.upgrd.32 = call i16 @llvm.bswap.i16(i16 %a)
+; CHECK: %tmp.upgrd.32 = call i16 @llvm37.bswap.i16(i16 %a)
 ; CHECK: ret i16 %tmp.upgrd.32
 }
 

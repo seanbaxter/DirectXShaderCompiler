@@ -1,6 +1,6 @@
 //===-- DWARFDebugInfoEntry.cpp -------------------------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -8,17 +8,17 @@
 //===----------------------------------------------------------------------===//
 
 #include "SyntaxHighlighting.h"
-#include "llvm/DebugInfo/DWARF/DWARFCompileUnit.h"
-#include "llvm/DebugInfo/DWARF/DWARFContext.h"
-#include "llvm/DebugInfo/DWARF/DWARFDebugAbbrev.h"
-#include "llvm/DebugInfo/DWARF/DWARFDebugInfoEntry.h"
-#include "llvm/DebugInfo/DWARF/DWARFFormValue.h"
-#include "llvm/Support/DataTypes.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/Dwarf.h"
-#include "llvm/Support/Format.h"
-#include "llvm/Support/raw_ostream.h"
-using namespace llvm;
+#include "llvm37/DebugInfo/DWARF/DWARFCompileUnit.h"
+#include "llvm37/DebugInfo/DWARF/DWARFContext.h"
+#include "llvm37/DebugInfo/DWARF/DWARFDebugAbbrev.h"
+#include "llvm37/DebugInfo/DWARF/DWARFDebugInfoEntry.h"
+#include "llvm37/DebugInfo/DWARF/DWARFFormValue.h"
+#include "llvm37/Support/DataTypes.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/Dwarf.h"
+#include "llvm37/Support/Format.h"
+#include "llvm37/Support/raw_ostream.h"
+using namespace llvm37;
 using namespace dwarf;
 using namespace syntax;
 

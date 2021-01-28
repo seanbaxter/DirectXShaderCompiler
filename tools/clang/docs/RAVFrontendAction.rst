@@ -29,7 +29,7 @@ unit.
       class FindNamedClassAction : public clang::ASTFrontendAction {
       public:
         virtual std::unique_ptr<clang::ASTConsumer> CreateASTConsumer(
-          clang::CompilerInstance &Compiler, llvm::StringRef InFile) {
+          clang::CompilerInstance &Compiler, llvm37::StringRef InFile) {
           return std::unique_ptr<clang::ASTConsumer>(
               new FindNamedClassConsumer);
         }
@@ -116,7 +116,7 @@ freshly created FindNamedClassConsumer:
 ::
 
       virtual std::unique_ptr<clang::ASTConsumer> CreateASTConsumer(
-        clang::CompilerInstance &Compiler, llvm::StringRef InFile) {
+        clang::CompilerInstance &Compiler, llvm37::StringRef InFile) {
         return std::unique_ptr<clang::ASTConsumer>(
             new FindNamedClassConsumer(&Compiler.getASTContext()));
       }
@@ -133,7 +133,7 @@ locations:
           // location and break it up into its line and column parts.
           FullSourceLoc FullLocation = Context->getFullLoc(Declaration->getLocStart());
           if (FullLocation.isValid())
-            llvm::outs() << "Found declaration at "
+            llvm37::outs() << "Found declaration at "
                          << FullLocation.getSpellingLineNumber() << ":"
                          << FullLocation.getSpellingColumnNumber() << "\n";
         }
@@ -165,7 +165,7 @@ Now we can combine all of the above into a small example program:
           if (Declaration->getQualifiedNameAsString() == "n::m::C") {
             FullSourceLoc FullLocation = Context->getFullLoc(Declaration->getLocStart());
             if (FullLocation.isValid())
-              llvm::outs() << "Found declaration at "
+              llvm37::outs() << "Found declaration at "
                            << FullLocation.getSpellingLineNumber() << ":"
                            << FullLocation.getSpellingColumnNumber() << "\n";
           }
@@ -191,7 +191,7 @@ Now we can combine all of the above into a small example program:
       class FindNamedClassAction : public clang::ASTFrontendAction {
       public:
         virtual std::unique_ptr<clang::ASTConsumer> CreateASTConsumer(
-          clang::CompilerInstance &Compiler, llvm::StringRef InFile) {
+          clang::CompilerInstance &Compiler, llvm37::StringRef InFile) {
           return std::unique_ptr<clang::ASTConsumer>(
               new FindNamedClassConsumer(&Compiler.getASTContext()));
         }
@@ -208,7 +208,7 @@ following CMakeLists.txt to link it:
 
 ::
 
-    set(LLVM_USED_LIBS clangTooling)
+    set(LLVM37_USED_LIBS clangTooling)
 
     add_clang_executable(find-class-decls FindClassDecls.cpp)
 

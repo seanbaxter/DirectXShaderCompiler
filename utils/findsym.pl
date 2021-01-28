@@ -17,7 +17,7 @@ my $Symbol = $ARGV[1];
 opendir DIR,$Directory;
 my @files = readdir DIR;
 closedir DIR;
-@objects = grep(/l?i?b?LLVM.*\.[oa]$/,sort(@files));
+@objects = grep(/l?i?b?LLVM37.*\.[oa]$/,sort(@files));
 
 # Gather definitions from the libraries
 foreach $lib (@objects) {

@@ -1,4 +1,4 @@
-set(LLVM_LINK_COMPONENTS support
+set(LLVM37_LINK_COMPONENTS support
   mcparser # HLSL Change - needed for 'no target' build
   hlsl  # HLSL Change
 )
@@ -18,7 +18,7 @@ target_link_libraries(clang-format
   ${CLANG_FORMAT_LIB_DEPS}
   )
 
-if( LLVM_USE_SANITIZE_COVERAGE )
+if( LLVM37_USE_SANITIZE_COVERAGE )
   add_subdirectory(fuzzer)
 endif()
 

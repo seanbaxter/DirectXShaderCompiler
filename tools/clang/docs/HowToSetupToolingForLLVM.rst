@@ -1,5 +1,5 @@
 ===================================
-How To Setup Clang Tooling For LLVM
+How To Setup Clang Tooling For LLVM37
 ===================================
 
 NOTE: this document applies to the original Clang project, not the DirectX
@@ -9,7 +9,7 @@ Clang Tooling provides infrastructure to write tools that need syntactic
 and semantic information about a program. This term also relates to a set
 of specific tools using this infrastructure (e.g. ``clang-check``). This
 document provides information on how to set up and use Clang Tooling for
-the LLVM source code.
+the LLVM37 source code.
 
 Introduction
 ============
@@ -25,17 +25,17 @@ build using CMake to use clang tools.
 Setup Clang Tooling Using CMake and Make
 ========================================
 
-If you intend to use make to build LLVM, you should have CMake 2.8.6 or
+If you intend to use make to build LLVM37, you should have CMake 2.8.6 or
 later installed (can be found `here <http://cmake.org>`_).
 
-First, you need to generate Makefiles for LLVM with CMake. You need to
+First, you need to generate Makefiles for LLVM37 with CMake. You need to
 make a build directory and run CMake from it:
 
 .. code-block:: console
 
   $ mkdir your/build/directory
   $ cd your/build/directory
-  $ cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON path/to/llvm/sources
+  $ cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON path/to/llvm37/sources
 
 If you want to use clang instead of GCC, you can add
 ``-DCMAKE_C_COMPILER=/path/to/clang -DCMAKE_CXX_COMPILER=/path/to/clang++``.
@@ -43,14 +43,14 @@ You can also use ``ccmake``, which provides a curses interface to configure
 CMake variables for lazy people.
 
 As a result, the new ``compile_commands.json`` file should appear in the
-current directory. You should link it to the LLVM source tree so that
+current directory. You should link it to the LLVM37 source tree so that
 Clang Tooling is able to use it:
 
 .. code-block:: console
 
-  $ ln -s $PWD/compile_commands.json path/to/llvm/source/
+  $ ln -s $PWD/compile_commands.json path/to/llvm37/source/
 
-Now you are ready to build and test LLVM using make:
+Now you are ready to build and test LLVM37 using make:
 
 .. code-block:: console
 
@@ -61,7 +61,7 @@ Using Clang Tools
 
 After you completed the previous steps, you are ready to run clang tools. If
 you have a recent clang installed, you should have ``clang-check`` in
-``$PATH``. Try to run it on any ``.cpp`` file inside the LLVM source tree:
+``$PATH``. Try to run it on any ``.cpp`` file inside the LLVM37 source tree:
 
 .. code-block:: console
 
@@ -124,7 +124,7 @@ Examples:
   $ clang-check tools/clang/tools/clang-check/ClangCheck.cpp -ast-dump -ast-dump-filter ActionFactory::newASTConsumer
   Processing: tools/clang/tools/clang-check/ClangCheck.cpp.
   Dumping ::ActionFactory::newASTConsumer:
-  clang::ASTConsumer *newASTConsumer() (CompoundStmt 0x44da290 </home/alexfh/local/llvm/tools/clang/tools/clang-check/ClangCheck.cpp:64:40, line:72:3>
+  clang::ASTConsumer *newASTConsumer() (CompoundStmt 0x44da290 </home/alexfh/local/llvm37/tools/clang/tools/clang-check/ClangCheck.cpp:64:40, line:72:3>
     (IfStmt 0x44d97c8 <line:65:5, line:66:45>
       <<<NULL>>>
         (ImplicitCastExpr 0x44d96d0 <line:65:9> '_Bool':'_Bool' <UserDefinedConversion>
@@ -138,7 +138,7 @@ Examples:
       if (this->ASTDump.operator _Bool())
           return clang::CreateASTDumper(this->ASTDumpFilter);
       if (this->ASTPrint.operator _Bool())
-          return clang::CreateASTPrinter(&llvm::outs(), this->ASTDumpFilter);
+          return clang::CreateASTPrinter(&llvm37::outs(), this->ASTDumpFilter);
       return new clang::ASTConsumer();
   }
 
@@ -170,14 +170,14 @@ inside ``$PATH``, say ``/usr/local/bin/``:
   $ sudo chmod a+rx /usr/local/bin/ninja
 
 After doing all of this, you'll need to generate Ninja build files for
-LLVM with CMake. You need to make a build directory and run CMake from
+LLVM37 with CMake. You need to make a build directory and run CMake from
 it:
 
 .. code-block:: console
 
   $ mkdir your/build/directory
   $ cd your/build/directory
-  $ cmake -G Ninja -DCMAKE_EXPORT_COMPILE_COMMANDS=ON path/to/llvm/sources
+  $ cmake -G Ninja -DCMAKE_EXPORT_COMPILE_COMMANDS=ON path/to/llvm37/sources
 
 If you want to use clang instead of GCC, you can add
 ``-DCMAKE_C_COMPILER=/path/to/clang -DCMAKE_CXX_COMPILER=/path/to/clang++``.
@@ -185,14 +185,14 @@ You can also use ``ccmake``, which provides a curses interface to configure
 CMake variables in an interactive manner.
 
 As a result, the new ``compile_commands.json`` file should appear in the
-current directory. You should link it to the LLVM source tree so that
+current directory. You should link it to the LLVM37 source tree so that
 Clang Tooling is able to use it:
 
 .. code-block:: console
 
-  $ ln -s $PWD/compile_commands.json path/to/llvm/source/
+  $ ln -s $PWD/compile_commands.json path/to/llvm37/source/
 
-Now you are ready to build and test LLVM using Ninja:
+Now you are ready to build and test LLVM37 using Ninja:
 
 .. code-block:: console
 

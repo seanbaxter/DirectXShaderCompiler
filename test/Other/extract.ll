@@ -1,10 +1,10 @@
-; RUN: llvm-extract -func foo -S < %s | FileCheck %s
-; RUN: llvm-extract -delete -func foo -S < %s | FileCheck --check-prefix=DELETE %s
-; RUN: llvm-as < %s > %t
-; RUN: llvm-extract -func foo -S %t | FileCheck %s
-; RUN: llvm-extract -delete -func foo -S %t | FileCheck --check-prefix=DELETE %s
+; RUN: llvm37-extract -func foo -S < %s | FileCheck %s
+; RUN: llvm37-extract -delete -func foo -S < %s | FileCheck --check-prefix=DELETE %s
+; RUN: llvm37-as < %s > %t
+; RUN: llvm37-extract -func foo -S %t | FileCheck %s
+; RUN: llvm37-extract -delete -func foo -S %t | FileCheck --check-prefix=DELETE %s
 
-; llvm-extract uses lazy bitcode loading, so make sure it correctly reads
+; llvm37-extract uses lazy bitcode loading, so make sure it correctly reads
 ; from bitcode files in addition to assembly files.
 
 ; CHECK: define hidden void @foo() comdat($x) {

@@ -1,6 +1,6 @@
 //== BoolAssignmentChecker.cpp - Boolean assignment checker -----*- C++ -*--==//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -35,7 +35,7 @@ void BoolAssignmentChecker::emitReport(ProgramStateRef state,
   if (ExplodedNode *N = C.addTransition(state)) {
     if (!BT)
       BT.reset(new BuiltinBug(this, "Assignment of a non-Boolean value"));
-    C.emitReport(llvm::make_unique<BugReport>(*BT, BT->getDescription(), N));
+    C.emitReport(llvm37::make_unique<BugReport>(*BT, BT->getDescription(), N));
   }
 }
 

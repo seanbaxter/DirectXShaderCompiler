@@ -1,23 +1,23 @@
 //===- Local.cpp - Unit tests for Local -----------------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Transforms/Utils/Local.h"
-#include "llvm/IR/BasicBlock.h"
-#include "llvm/IR/IRBuilder.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/LLVMContext.h"
+#include "llvm37/Transforms/Utils/Local.h"
+#include "llvm37/IR/BasicBlock.h"
+#include "llvm37/IR/IRBuilder.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/LLVMContext.h"
 #include "gtest/gtest.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 TEST(Local, RecursivelyDeleteDeadPHINodes) {
-  LLVMContext &C(getGlobalContext());
+  LLVM37Context &C(getGlobalContext());
 
   IRBuilder<> builder(C);
 

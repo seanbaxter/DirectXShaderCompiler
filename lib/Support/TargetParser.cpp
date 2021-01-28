@@ -1,6 +1,6 @@
 //===-- TargetParser - Parser for target features ---------------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -12,13 +12,13 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Support/ARMBuildAttributes.h"
-#include "llvm/Support/TargetParser.h"
-#include "llvm/ADT/StringExtras.h"
-#include "llvm/ADT/StringSwitch.h"
+#include "llvm37/Support/ARMBuildAttributes.h"
+#include "llvm37/Support/TargetParser.h"
+#include "llvm37/ADT/StringExtras.h"
+#include "llvm37/ADT/StringSwitch.h"
 #include <cctype>
 
-using namespace llvm;
+using namespace llvm37;
 
 namespace {
 

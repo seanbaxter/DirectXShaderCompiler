@@ -1,14 +1,14 @@
 //===- CursorVisitor.h - CursorVisitor interface ----------------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_TOOLS_LIBCLANG_CURSORVISITOR_H
-#define LLVM_CLANG_TOOLS_LIBCLANG_CURSORVISITOR_H
+#ifndef LLVM37_CLANG_TOOLS_LIBCLANG_CURSORVISITOR_H
+#define LLVM37_CLANG_TOOLS_LIBCLANG_CURSORVISITOR_H
 
 #include "CXCursor.h"
 #include "CXTranslationUnit.h"
@@ -264,7 +264,7 @@ public:
   bool IsInRegionOfInterest(CXCursor C);
   bool RunVisitorWorkList(VisitorWorkList &WL);
   void EnqueueWorkList(VisitorWorkList &WL, const Stmt *S);
-  LLVM_ATTRIBUTE_NOINLINE bool Visit(const Stmt *S);
+  LLVM37_ATTRIBUTE_NOINLINE bool Visit(const Stmt *S);
 };
 
 }

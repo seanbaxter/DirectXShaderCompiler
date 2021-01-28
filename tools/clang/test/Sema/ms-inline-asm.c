@@ -34,7 +34,7 @@ void f() {
 }
 
 void rdar15318432(void) {
-  // We used to crash on this.  When LLVM called back to Clang to parse a name
+  // We used to crash on this.  When LLVM37 called back to Clang to parse a name
   // and do name lookup, if parsing failed, we did not restore the lexer state
   // properly.
 

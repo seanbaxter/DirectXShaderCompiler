@@ -1,6 +1,6 @@
 //===- ConstantMerge.cpp - Merge duplicate global constants ---------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -17,18 +17,18 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Transforms/IPO.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/PointerIntPair.h"
-#include "llvm/ADT/SmallPtrSet.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/DerivedTypes.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/Operator.h"
-#include "llvm/Pass.h"
-using namespace llvm;
+#include "llvm37/Transforms/IPO.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/PointerIntPair.h"
+#include "llvm37/ADT/SmallPtrSet.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/IR/DerivedTypes.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/Operator.h"
+#include "llvm37/Pass.h"
+using namespace llvm37;
 
 #define DEBUG_TYPE "constmerge"
 
@@ -59,15 +59,15 @@ char ConstantMerge::ID = 0;
 INITIALIZE_PASS(ConstantMerge, "constmerge",
                 "Merge Duplicate Global Constants", false, false)
 
-ModulePass *llvm::createConstantMergePass() { return new ConstantMerge(); }
+ModulePass *llvm37::createConstantMergePass() { return new ConstantMerge(); }
 
 
 
-/// Find values that are marked as llvm.used.
-static void FindUsedValues(GlobalVariable *LLVMUsed,
+/// Find values that are marked as llvm37.used.
+static void FindUsedValues(GlobalVariable *LLVM37Used,
                            SmallPtrSetImpl<const GlobalValue*> &UsedValues) {
-  if (!LLVMUsed) return;
-  ConstantArray *Inits = cast<ConstantArray>(LLVMUsed->getInitializer());
+  if (!LLVM37Used) return;
+  ConstantArray *Inits = cast<ConstantArray>(LLVM37Used->getInitializer());
 
   for (unsigned i = 0, e = Inits->getNumOperands(); i != e; ++i) {
     Value *Operand = Inits->getOperand(i)->stripPointerCastsNoFollowAliases();

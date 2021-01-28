@@ -6,7 +6,7 @@
 // License. See LICENSE.TXT for details.                                     //
 //                                                                           //
 // Retrieves compilation info such as HLSL entry point, macro defs, etc.     //
-// from llvm debug metadata                                                  //
+// from llvm37 debug metadata                                                  //
 //                                                                           //
 ///////////////////////////////////////////////////////////////////////////////
 

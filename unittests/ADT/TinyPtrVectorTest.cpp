@@ -1,6 +1,6 @@
-//===- llvm/unittest/ADT/TinyPtrVectorTest.cpp ----------------------------===//
+//===- llvm37/unittest/ADT/TinyPtrVectorTest.cpp ----------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,17 +11,17 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/ADT/TinyPtrVector.h"
-#include "llvm/ADT/ArrayRef.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/Support/type_traits.h"
+#include "llvm37/ADT/TinyPtrVector.h"
+#include "llvm37/ADT/ArrayRef.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/Support/type_traits.h"
 #include "gtest/gtest.h"
 #include <algorithm>
 #include <list>
 #include <vector>
 
-using namespace llvm;
+using namespace llvm37;
 
 namespace {
 

@@ -1,4 +1,4 @@
-; RUN: not llvm-as < %s 2>&1 | grep "multiple definition"
+; RUN: not llvm37-as < %s 2>&1 | grep "multiple definition"
 
 define void @test() {
 	%tmp.1 = add i32 0, 1

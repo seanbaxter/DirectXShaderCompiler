@@ -9,8 +9,8 @@ entry:
   ret i32 2, !dbg !10
 }
 
-!llvm.dbg.cu = !{!0}
-!llvm.module.flags = !{!13}
+!llvm37.dbg.cu = !{!0}
+!llvm37.module.flags = !{!13}
 
 !0 = !DICompileUnit(language: DW_LANG_C99, producer: "clang version 3.0 (trunk 137954)", isOptimized: true, emissionKind: 0, file: !12, enums: !2, retainedTypes: !2, subprograms: !3, globals: !2)
 !1 = !{!2}

@@ -1,4 +1,4 @@
-; RUN: llvm-as < %s -o /dev/null
+; RUN: llvm37-as < %s -o /dev/null
 
 define i8 @f1(i8* %x) {
 entry:

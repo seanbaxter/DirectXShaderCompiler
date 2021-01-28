@@ -1,4 +1,4 @@
-// RUN: %clang_cc1 %s -triple nvptx-unknown-unknown -fcuda-is-device -emit-llvm -o - | FileCheck %s
+// RUN: %clang_cc1 %s -triple nvptx-unknown-unknown -fcuda-is-device -emit-llvm37 -o - | FileCheck %s
 
 #include "Inputs/cuda.h"
 

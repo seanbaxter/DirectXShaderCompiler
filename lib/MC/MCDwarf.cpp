@@ -1,33 +1,33 @@
 //===- lib/MC/MCDwarf.cpp - MCDwarf implementation ------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/MC/MCDwarf.h"
-#include "llvm/ADT/Hashing.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/ADT/Twine.h"
-#include "llvm/Config/config.h"
-#include "llvm/MC/MCAsmInfo.h"
-#include "llvm/MC/MCContext.h"
-#include "llvm/MC/MCExpr.h"
-#include "llvm/MC/MCObjectFileInfo.h"
-#include "llvm/MC/MCObjectStreamer.h"
-#include "llvm/MC/MCRegisterInfo.h"
-#include "llvm/MC/MCSection.h"
-#include "llvm/MC/MCSymbol.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/LEB128.h"
-#include "llvm/Support/Path.h"
-#include "llvm/Support/SourceMgr.h"
-#include "llvm/Support/raw_ostream.h"
-using namespace llvm;
+#include "llvm37/MC/MCDwarf.h"
+#include "llvm37/ADT/Hashing.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/ADT/Twine.h"
+#include "llvm37/Config/config.h"
+#include "llvm37/MC/MCAsmInfo.h"
+#include "llvm37/MC/MCContext.h"
+#include "llvm37/MC/MCExpr.h"
+#include "llvm37/MC/MCObjectFileInfo.h"
+#include "llvm37/MC/MCObjectStreamer.h"
+#include "llvm37/MC/MCRegisterInfo.h"
+#include "llvm37/MC/MCSection.h"
+#include "llvm37/MC/MCSymbol.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/LEB128.h"
+#include "llvm37/Support/Path.h"
+#include "llvm37/Support/SourceMgr.h"
+#include "llvm37/Support/raw_ostream.h"
+using namespace llvm37;
 
 // Given a special op, return the address skip amount (in units of
 // DWARF2_LINE_MIN_INSN_LENGTH.
@@ -745,7 +745,7 @@ static void EmitGenDwarfInfo(MCStreamer *MCOS,
   if (!DwarfDebugProducer.empty())
     MCOS->EmitBytes(DwarfDebugProducer);
   else
-    MCOS->EmitBytes(StringRef("llvm-mc (based on LLVM " PACKAGE_VERSION ")"));
+    MCOS->EmitBytes(StringRef("llvm37-mc (based on LLVM37 " PACKAGE_VERSION ")"));
   MCOS->EmitIntValue(0, 1); // NULL byte to terminate the string.
 
   // AT_language, a 4 byte value.  We use DW_LANG_Mips_Assembler as the dwarf2
@@ -956,7 +956,7 @@ static unsigned getSizeForEncoding(MCStreamer &streamer,
   MCContext &context = streamer.getContext();
   unsigned format = symbolEncoding & 0x0f;
   switch (format) {
-  default: llvm_unreachable("Unknown Encoding");
+  default: llvm37_unreachable("Unknown Encoding");
   case dwarf::DW_EH_PE_absptr:
   case dwarf::DW_EH_PE_signed:
     return context.getAsmInfo()->getPointerSize();
@@ -1047,8 +1047,8 @@ void FrameEmitterImpl::EmitCFIInstruction(MCObjectStreamer &Streamer,
     unsigned Reg1 = Instr.getRegister();
     unsigned Reg2 = Instr.getRegister2();
     if (!IsEH) {
-      Reg1 = MRI->getDwarfRegNum(MRI->getLLVMRegNum(Reg1, true), false);
-      Reg2 = MRI->getDwarfRegNum(MRI->getLLVMRegNum(Reg2, true), false);
+      Reg1 = MRI->getDwarfRegNum(MRI->getLLVM37RegNum(Reg1, true), false);
+      Reg2 = MRI->getDwarfRegNum(MRI->getLLVM37RegNum(Reg2, true), false);
     }
     Streamer.EmitIntValue(dwarf::DW_CFA_register, 1);
     Streamer.EmitULEB128IntValue(Reg1);
@@ -1084,7 +1084,7 @@ void FrameEmitterImpl::EmitCFIInstruction(MCObjectStreamer &Streamer,
   case MCCFIInstruction::OpDefCfa: {
     unsigned Reg = Instr.getRegister();
     if (!IsEH)
-      Reg = MRI->getDwarfRegNum(MRI->getLLVMRegNum(Reg, true), false);
+      Reg = MRI->getDwarfRegNum(MRI->getLLVM37RegNum(Reg, true), false);
     Streamer.EmitIntValue(dwarf::DW_CFA_def_cfa, 1);
     Streamer.EmitULEB128IntValue(Reg);
     CFAOffset = -Instr.getOffset();
@@ -1096,7 +1096,7 @@ void FrameEmitterImpl::EmitCFIInstruction(MCObjectStreamer &Streamer,
   case MCCFIInstruction::OpDefCfaRegister: {
     unsigned Reg = Instr.getRegister();
     if (!IsEH)
-      Reg = MRI->getDwarfRegNum(MRI->getLLVMRegNum(Reg, true), false);
+      Reg = MRI->getDwarfRegNum(MRI->getLLVM37RegNum(Reg, true), false);
     Streamer.EmitIntValue(dwarf::DW_CFA_def_cfa_register, 1);
     Streamer.EmitULEB128IntValue(Reg);
 
@@ -1110,7 +1110,7 @@ void FrameEmitterImpl::EmitCFIInstruction(MCObjectStreamer &Streamer,
 
     unsigned Reg = Instr.getRegister();
     if (!IsEH)
-      Reg = MRI->getDwarfRegNum(MRI->getLLVMRegNum(Reg, true), false);
+      Reg = MRI->getDwarfRegNum(MRI->getLLVM37RegNum(Reg, true), false);
 
     int Offset = Instr.getOffset();
     if (IsRelative)
@@ -1146,7 +1146,7 @@ void FrameEmitterImpl::EmitCFIInstruction(MCObjectStreamer &Streamer,
   case MCCFIInstruction::OpRestore: {
     unsigned Reg = Instr.getRegister();
     if (!IsEH)
-      Reg = MRI->getDwarfRegNum(MRI->getLLVMRegNum(Reg, true), false);
+      Reg = MRI->getDwarfRegNum(MRI->getLLVM37RegNum(Reg, true), false);
     Streamer.EmitIntValue(dwarf::DW_CFA_restore | Reg, 1);
     return;
   }
@@ -1154,7 +1154,7 @@ void FrameEmitterImpl::EmitCFIInstruction(MCObjectStreamer &Streamer,
     Streamer.EmitBytes(Instr.getValues());
     return;
   }
-  llvm_unreachable("Unhandled case in switch");
+  llvm37_unreachable("Unhandled case in switch");
 }
 
 /// Emit frame instructions to describe the layout of the frame.
@@ -1256,7 +1256,7 @@ static unsigned getCIEVersion(bool IsEH, unsigned DwarfVersion) {
   case 4:
     return 4;
   }
-  llvm_unreachable("Unknown version");
+  llvm37_unreachable("Unknown version");
 }
 
 const MCSymbol &FrameEmitterImpl::EmitCIE(MCObjectStreamer &streamer,
@@ -1463,7 +1463,7 @@ namespace {
   };
 }
 
-namespace llvm {
+namespace llvm37 {
   template <>
   struct DenseMapInfo<CIEKey> {
     static CIEKey getEmptyKey() {

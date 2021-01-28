@@ -1,4 +1,4 @@
-; RUN: not llvm-as -disable-output %s 2>&1 | FileCheck %s
+; RUN: not llvm37-as -disable-output %s 2>&1 | FileCheck %s
 
 ; CHECK: error: invalid cast opcode for cast from '%struct.Self1*' to '%struct.Self1 addrspace(1)*'
 

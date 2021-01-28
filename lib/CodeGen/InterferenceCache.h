@@ -1,6 +1,6 @@
 //===-- InterferenceCache.h - Caching per-block interference ---*- C++ -*--===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -12,16 +12,16 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_LIB_CODEGEN_INTERFERENCECACHE_H
-#define LLVM_LIB_CODEGEN_INTERFERENCECACHE_H
+#ifndef LLVM37_LIB_CODEGEN_INTERFERENCECACHE_H
+#define LLVM37_LIB_CODEGEN_INTERFERENCECACHE_H
 
-#include "llvm/CodeGen/LiveIntervalUnion.h"
+#include "llvm37/CodeGen/LiveIntervalUnion.h"
 
-namespace llvm {
+namespace llvm37 {
 
 class LiveIntervals;
 
-class LLVM_LIBRARY_VISIBILITY InterferenceCache {
+class LLVM37_LIBRARY_VISIBILITY InterferenceCache {
   const TargetRegisterInfo *TRI;
   LiveIntervalUnion *LIUArray;
   MachineFunction *MF;
@@ -233,6 +233,6 @@ public:
   friend class Cursor;
 };
 
-} // namespace llvm
+} // namespace llvm37
 
 #endif

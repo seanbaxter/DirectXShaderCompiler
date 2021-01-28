@@ -1,6 +1,6 @@
-//===- llvm/Support/Unix/Path.inc - Unix Path Implementation ----*- C++ -*-===//
+//===- llvm37/Support/Unix/Path.inc - Unix Path Implementation ----*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -60,11 +60,11 @@
 # define PATH_MAX 4096
 #endif
 
-#include "llvm/Support/MSFileSystem.h" // HLSL change
+#include "llvm37/Support/MSFileSystem.h" // HLSL change
 
-using namespace llvm;
+using namespace llvm37;
 
-namespace llvm {
+namespace llvm37 {
 namespace sys  {
 namespace fs {
 #if defined(__FreeBSD__) || defined (__NetBSD__) || defined(__Bitrig__) || \
@@ -190,10 +190,10 @@ std::error_code current_path(SmallVectorImpl<char> &result) {
   result.clear();
 
   const char *pwd = ::getenv("PWD");
-  llvm::sys::fs::file_status PWDStatus, DotStatus;
-  if (pwd && llvm::sys::path::is_absolute(pwd) &&
-      !llvm::sys::fs::status(pwd, PWDStatus) &&
-      !llvm::sys::fs::status(".", DotStatus) &&
+  llvm37::sys::fs::file_status PWDStatus, DotStatus;
+  if (pwd && llvm37::sys::path::is_absolute(pwd) &&
+      !llvm37::sys::fs::status(pwd, PWDStatus) &&
+      !llvm37::sys::fs::status(".", DotStatus) &&
       PWDStatus.getUniqueID() == DotStatus.getUniqueID()) {
     result.append(pwd, pwd + strlen(pwd));
     return std::error_code();
@@ -259,10 +259,10 @@ std::error_code remove(const Twine &path, bool IgnoreNonExisting) {
     return std::error_code();
   }
 
-  // Note: this check catches strange situations. In all cases, LLVM should
+  // Note: this check catches strange situations. In all cases, LLVM37 should
   // only be involved in the creation and deletion of regular files.  This
   // check ensures that what we're trying to erase is a regular file. It
-  // effectively prevents LLVM from erasing things like /dev/null, any block
+  // effectively prevents LLVM37 from erasing things like /dev/null, any block
   // special file, or other things that aren't "regular" files.
   if (!S_ISREG(buf.st_mode) && !S_ISDIR(buf.st_mode) && !S_ISLNK(buf.st_mode))
     return make_error_code(errc::operation_not_permitted);
@@ -304,7 +304,7 @@ static int convertAccessMode(AccessMode Mode) {
   case AccessMode::Execute:
     return R_OK | X_OK; // scripts also need R_OK.
   }
-  llvm_unreachable("invalid enum");
+  llvm37_unreachable("invalid enum");
 }
 
 std::error_code access(const Twine &Path, AccessMode Mode) {
@@ -624,13 +624,13 @@ void system_temp_directory(bool ErasedOnReboot, SmallVectorImpl<char> &Result) {
 } // end namespace path
 
 } // end namespace sys
-} // end namespace llvm
+} // end namespace llvm37
 
 
 // The following is implementation of MSFileSystem for Unix.
 // This will make usages of MSFileSystem throughout DirectXShaderCompiler
 // compatible with Unix.
-namespace llvm {
+namespace llvm37 {
 namespace sys  {
 namespace fs {
 
@@ -707,4 +707,4 @@ int msf_setmode(int fd, int mode) throw() {
 
 } // namespace fs
 } // namespace sys
-} // namespace llvm
+} // namespace llvm37

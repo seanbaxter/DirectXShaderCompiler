@@ -29,9 +29,9 @@ class Session;
 class DataSource : public IDiaDataSource {
 private:
   DXC_MICROCOM_TM_REF_FIELDS()
-  std::shared_ptr<llvm::Module> m_module;
-  std::shared_ptr<llvm::LLVMContext> m_context;
-  std::shared_ptr<llvm::DebugInfoFinder> m_finder;
+  std::shared_ptr<llvm37::Module> m_module;
+  std::shared_ptr<llvm37::LLVM37Context> m_context;
+  std::shared_ptr<llvm37::DebugInfoFinder> m_finder;
 
 public:
   DXC_MICROCOM_TM_ADDREF_RELEASE_IMPL()

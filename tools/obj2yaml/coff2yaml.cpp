@@ -1,6 +1,6 @@
 //===------ utils/obj2yaml.cpp - obj2yaml conversion tool -------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -8,12 +8,12 @@
 //===----------------------------------------------------------------------===//
 
 #include "obj2yaml.h"
-#include "llvm/Object/COFF.h"
-#include "llvm/Object/COFFYAML.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/YAMLTraits.h"
+#include "llvm37/Object/COFF.h"
+#include "llvm37/Object/COFFYAML.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/YAMLTraits.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 namespace {
 
@@ -257,7 +257,7 @@ void COFFDumper::dumpSymbols(unsigned NumSymbols) {
                 AuxData.data());
         dumpCLRTokenDefinition(&Sym, ObjCLRToken);
       } else {
-        llvm_unreachable("Unhandled auxiliary symbol!");
+        llvm37_unreachable("Unhandled auxiliary symbol!");
       }
     }
     Symbols.push_back(Sym);

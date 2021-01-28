@@ -5,7 +5,7 @@
 ; RUN: rm %T/global-ctor.gcno
 
 @x = global i32 0, align 4
-@llvm.global_ctors = appending global [1 x { i32, void ()*, i8* }] [{ i32, void ()*, i8* } { i32 65535, void ()* @_GLOBAL__sub_I_global-ctor.ll, i8* null }]
+@llvm37.global_ctors = appending global [1 x { i32, void ()*, i8* }] [{ i32, void ()*, i8* } { i32 65535, void ()* @_GLOBAL__sub_I_global-ctor.ll, i8* null }]
 
 ; Function Attrs: nounwind
 define internal void @__cxx_global_var_init() #0 section ".text.startup" {
@@ -33,10 +33,10 @@ entry:
 attributes #0 = { nounwind }
 attributes #1 = { "less-precise-fpmad"="false" "no-frame-pointer-elim"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-realign-stack" "stack-protector-buffer-size"="8" "unsafe-fp-math"="false" "use-soft-float"="false" }
 
-!llvm.dbg.cu = !{!0}
-!llvm.module.flags = !{!10, !11}
-!llvm.gcov = !{!16}
-!llvm.ident = !{!12}
+!llvm37.dbg.cu = !{!0}
+!llvm37.module.flags = !{!10, !11}
+!llvm37.gcov = !{!16}
+!llvm37.ident = !{!12}
 
 !0 = !DICompileUnit(language: DW_LANG_C_plus_plus, producer: "clang version 3.5.0 (trunk 210217)", isOptimized: false, emissionKind: 2, file: !1, enums: !2, retainedTypes: !2, subprograms: !3, globals: !2, imports: !2)
 !1 = !DIFile(filename: "<stdin>", directory: "/home/nlewycky")

@@ -1,6 +1,6 @@
 //===--- SemaFixItUtils.h - Sema FixIts -----------------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -10,8 +10,8 @@
 //  This file defines helper classes for generation of Sema FixItHints.
 //
 //===----------------------------------------------------------------------===//
-#ifndef LLVM_CLANG_SEMA_SEMAFIXITUTILS_H
-#define LLVM_CLANG_SEMA_SEMAFIXITUTILS_H
+#ifndef LLVM37_CLANG_SEMA_SEMAFIXITUTILS_H
+#define LLVM37_CLANG_SEMA_SEMAFIXITUTILS_H
 
 #include "clang/AST/Expr.h"
 

@@ -15,11 +15,11 @@ design decisions behind it.  This is meant for people interested in hacking on
 Clang, not for end-users.  The description below is categorized by libraries,
 and does not describe any of the clients of the libraries.
 
-LLVM Support Library
+LLVM37 Support Library
 ====================
 
-The LLVM ``libSupport`` library provides many underlying libraries and
-`data-structures <http://llvm.org/docs/ProgrammersManual.html>`_, including
+The LLVM37 ``libSupport`` library provides many underlying libraries and
+`data-structures <http://llvm37.org/docs/ProgrammersManual.html>`_, including
 command line option processing, various containers and a system abstraction
 layer, which is used for file system access.
 
@@ -508,7 +508,7 @@ token.  This concept maps directly to the "spelling location" for the token.
 ``SourceRange`` and ``CharSourceRange``
 ---------------------------------------
 
-.. mostly taken from http://lists.llvm.org/pipermail/cfe-dev/2010-August/010595.html
+.. mostly taken from http://lists.llvm37.org/pipermail/cfe-dev/2010-August/010595.html
 
 Clang represents most source ranges by [first, last], where "first" and "last"
 each point to the beginning of their respective tokens.  For example consider
@@ -536,7 +536,7 @@ Precompiled Headers
 Clang supports two implementations of precompiled headers.  The default
 implementation, precompiled headers (:doc:`PCH <PCHInternals>`) uses a
 serialized representation of Clang's internal data structures, encoded with the
-`LLVM bitstream format <http://llvm.org/docs/BitCodeFormat.html>`_.
+`LLVM37 bitstream format <http://llvm37.org/docs/BitCodeFormat.html>`_.
 Pretokenized headers (:doc:`PTH <PTHInternals>`), on the other hand, contain a
 serialized representation of the tokens encountered when preprocessing a header
 (and anything that header includes).
@@ -1035,7 +1035,7 @@ for the other kinds of names.  Two ``DeclarationName``\ s can be compared for
 equality (``==``, ``!=``) using a simple bitwise comparison, can be ordered
 with ``<``, ``>``, ``<=``, and ``>=`` (which provide a lexicographical ordering
 for normal identifiers but an unspecified ordering for other kinds of names),
-and can be placed into LLVM ``DenseMap``\ s and ``DenseSet``\ s.
+and can be placed into LLVM37 ``DenseMap``\ s and ``DenseSet``\ s.
 
 ``DeclarationName`` instances can be created in different ways depending on
 what kind of name the instance will store.  Normal identifiers
@@ -1613,8 +1613,8 @@ parsed constructs.
 The CodeGen Library
 ===================
 
-CodeGen takes an :ref:`AST <AST>` as input and produces `LLVM IR code
-<//llvm.org/docs/LangRef.html>`_ from it.
+CodeGen takes an :ref:`AST <AST>` as input and produces `LLVM37 IR code
+<//llvm37.org/docs/LangRef.html>`_ from it.
 
 How to change Clang
 ===================
@@ -1627,7 +1627,7 @@ various uses. For example, attributes may be used to alter the code generation
 for a program construct, or to provide extra semantic information for static
 analysis. This document explains how to add a custom attribute to Clang.
 Documentation on existing attributes can be found `here
-<//clang.llvm.org/docs/AttributeReference.html>`_.
+<//clang.llvm37.org/docs/AttributeReference.html>`_.
 
 Attribute Basics
 ^^^^^^^^^^^^^^^^
@@ -1664,7 +1664,7 @@ semantic checking for some attributes, etc.
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 The first step to adding a new attribute to Clang is to add its definition to
 `include/clang/Basic/Attr.td
-<http://llvm.org/viewvc/llvm-project/cfe/trunk/include/clang/Basic/Attr.td?view=markup>`_.
+<http://llvm37.org/viewvc/llvm37-project/cfe/trunk/include/clang/Basic/Attr.td?view=markup>`_.
 This tablegen definition must derive from the ``Attr`` (tablegen, not
 semantic) type, or one of its derivatives. Most attributes will derive from the
 ``InheritableAttr`` type, which specifies that the attribute can be inherited by
@@ -1726,10 +1726,10 @@ the ``SubjectList``. The diagnostics generated for subject list violations are
 either ``diag::warn_attribute_wrong_decl_type`` or
 ``diag::err_attribute_wrong_decl_type``, and the parameter enumeration is found
 in `include/clang/Sema/AttributeList.h
-<http://llvm.org/viewvc/llvm-project/cfe/trunk/include/clang/Sema/AttributeList.h?view=markup>`_
+<http://llvm37.org/viewvc/llvm37-project/cfe/trunk/include/clang/Sema/AttributeList.h?view=markup>`_
 If a previously unused Decl node is added to the ``SubjectList``, the logic used
 to automatically determine the diagnostic parameter in `utils/TableGen/ClangAttrEmitter.cpp
-<http://llvm.org/viewvc/llvm-project/cfe/trunk/utils/TableGen/ClangAttrEmitter.cpp?view=markup>`_
+<http://llvm37.org/viewvc/llvm37-project/cfe/trunk/utils/TableGen/ClangAttrEmitter.cpp?view=markup>`_
 may need to be updated.
 
 By default, all subjects in the SubjectList must either be a Decl node defined
@@ -1751,7 +1751,7 @@ All attributes must have some form of documentation associated with them.
 Documentation is table generated on the public web server by a server-side
 process that runs daily. Generally, the documentation for an attribute is a
 stand-alone definition in `include/clang/Basic/AttrDocs.td 
-<http://llvm.org/viewvc/llvm-project/cfe/trunk/include/clang/Basic/AttdDocs.td?view=markup>`_
+<http://llvm37.org/viewvc/llvm37-project/cfe/trunk/include/clang/Basic/AttdDocs.td?view=markup>`_
 that is named after the attribute being documented.
 
 If the attribute is not for public consumption, or is an implicitly-created
@@ -1802,7 +1802,7 @@ All arguments have a name and a flag that specifies whether the argument is
 optional. The associated C++ type of the argument is determined by the argument
 definition type. If the existing argument types are insufficient, new types can
 be created, but it requires modifying `utils/TableGen/ClangAttrEmitter.cpp
-<http://llvm.org/viewvc/llvm-project/cfe/trunk/utils/TableGen/ClangAttrEmitter.cpp?view=markup>`_
+<http://llvm37.org/viewvc/llvm37-project/cfe/trunk/utils/TableGen/ClangAttrEmitter.cpp?view=markup>`_
 to properly support the type.
 
 Other Properties
@@ -1814,7 +1814,7 @@ document, however a few deserve mention.
 If the parsed form of the attribute is more complex, or differs from the
 semantic form, the ``HasCustomParsing`` bit can be set to ``1`` for the class,
 and the parsing code in `Parser::ParseGNUAttributeArgs()
-<http://llvm.org/viewvc/llvm-project/cfe/trunk/lib/Parse/ParseDecl.cpp?view=markup>`_
+<http://llvm37.org/viewvc/llvm37-project/cfe/trunk/lib/Parse/ParseDecl.cpp?view=markup>`_
 can be updated for the special case. Note that this only applies to arguments
 with a GNU spelling -- attributes with a __declspec spelling currently ignore
 this flag and are handled by ``Parser::ParseMicrosoftDeclSpec``.
@@ -1882,7 +1882,7 @@ semantic attribute class object, with ``public`` access.
 Boilerplate
 ^^^^^^^^^^^
 All semantic processing of declaration attributes happens in `lib/Sema/SemaDeclAttr.cpp
-<http://llvm.org/viewvc/llvm-project/cfe/trunk/lib/Sema/SemaDeclAttr.cpp?view=markup>`_,
+<http://llvm37.org/viewvc/llvm37-project/cfe/trunk/lib/Sema/SemaDeclAttr.cpp?view=markup>`_,
 and generally starts in the ``ProcessDeclAttribute()`` function. If the
 attribute is a "simple" attribute -- meaning that it requires no custom semantic
 processing aside from what is automatically  provided, add a call to
@@ -1898,11 +1898,11 @@ correct minimum number of arguments are passed, etc.
 
 If the attribute adds additional warnings, define a ``DiagGroup`` in
 `include/clang/Basic/DiagnosticGroups.td
-<http://llvm.org/viewvc/llvm-project/cfe/trunk/include/clang/Basic/DiagnosticGroups.td?view=markup>`_
+<http://llvm37.org/viewvc/llvm37-project/cfe/trunk/include/clang/Basic/DiagnosticGroups.td?view=markup>`_
 named after the attribute's ``Spelling`` with "_"s replaced by "-"s. If there
 is only a single diagnostic, it is permissible to use ``InGroup<DiagGroup<"your-attribute">>``
 directly in `DiagnosticSemaKinds.td
-<http://llvm.org/viewvc/llvm-project/cfe/trunk/include/clang/Basic/DiagnosticSemaKinds.td?view=markup>`_
+<http://llvm37.org/viewvc/llvm37-project/cfe/trunk/include/clang/Basic/DiagnosticSemaKinds.td?view=markup>`_
 
 All semantic diagnostics generated for your attribute, including automatically-
 generated ones (such as subjects and argument counts), should have a
@@ -2027,7 +2027,7 @@ are similar.
      an argument?  Can you use the ternary operator?
 
 #. Teach code generation to create IR to your AST node.  This step is the first
-   (and only) that requires knowledge of LLVM IR.  There are several things to
+   (and only) that requires knowledge of LLVM37 IR.  There are several things to
    keep in mind:
 
    * Code generation is separated into scalar/aggregate/complex and
@@ -2036,9 +2036,9 @@ are similar.
      avoid duplication.
    * ``CodeGenFunction`` contains functions ``ConvertType`` and
      ``ConvertTypeForMem`` that convert Clang's types (``clang::Type*`` or
-     ``clang::QualType``) to LLVM types.  Use the former for values, and the
+     ``clang::QualType``) to LLVM37 types.  Use the former for values, and the
      later for memory locations: test with the C++ "``bool``" type to check
-     this.  If you find that you are having to use LLVM bitcasts to make the
+     this.  If you find that you are having to use LLVM37 bitcasts to make the
      subexpressions of your expression have the type that your expression
      expects, STOP!  Go fix semantic analysis and the AST so that you don't
      need these bitcasts.
@@ -2053,8 +2053,8 @@ are similar.
      to introduce a cleanup.  You shouldn't have to deal with
      exception-handling directly.
    * Testing is extremely important in IR generation.  Use ``clang -cc1
-     -emit-llvm`` and `FileCheck
-     <http://llvm.org/docs/CommandGuide/FileCheck.html>`_ to verify that you're
+     -emit-llvm37`` and `FileCheck
+     <http://llvm37.org/docs/CommandGuide/FileCheck.html>`_ to verify that you're
      generating the right IR.
 
 #. Teach template instantiation how to cope with your AST node, which requires

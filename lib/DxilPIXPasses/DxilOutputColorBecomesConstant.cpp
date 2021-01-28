@@ -16,11 +16,11 @@
 #include "dxc/HLSL/DxilGenerationPass.h"
 #include "dxc/HLSL/DxilSpanAllocator.h"
 
-#include "llvm/IR/PassManager.h"
-#include "llvm/Transforms/Utils/Local.h"
+#include "llvm37/IR/PassManager.h"
+#include "llvm37/Transforms/Utils/Local.h"
 #include <array>
 
-using namespace llvm;
+using namespace llvm37;
 using namespace hlsl;
 
 class DxilOutputColorBecomesConstant : public ModulePass {
@@ -100,7 +100,7 @@ bool DxilOutputColorBecomesConstant::runOnModule(Module &M) {
 
   DxilModule &DM = M.GetOrCreateDxilModule();
 
-  LLVMContext &Ctx = M.getContext();
+  LLVM37Context &Ctx = M.getContext();
 
   OP *HlslOP = DM.GetOP();
 
@@ -131,7 +131,7 @@ bool DxilOutputColorBecomesConstant::runOnModule(Module &M) {
   DXASSERT(!hasFloatOutputs || !hasIntOutputs,
            "Only one or the other type of output: float or int");
 
-  std::array<llvm::Value *, 4> ReplacementColors;
+  std::array<llvm37::Value *, 4> ReplacementColors;
 
   switch (Mode) {
   case FromLiteralConstant: {
@@ -151,12 +151,12 @@ bool DxilOutputColorBecomesConstant::runOnModule(Module &M) {
   case FromConstantBuffer: {
 
     // Setup a constant buffer with a single float4 in it:
-    SmallVector<llvm::Type *, 4> Elements{
+    SmallVector<llvm37::Type *, 4> Elements{
         Type::getFloatTy(Ctx), Type::getFloatTy(Ctx), Type::getFloatTy(Ctx),
         Type::getFloatTy(Ctx)};
-    llvm::StructType *CBStructTy =
-        llvm::StructType::create(Elements, "PIX_ConstantColorCB_Type");
-    std::unique_ptr<DxilCBuffer> pCBuf = llvm::make_unique<DxilCBuffer>();
+    llvm37::StructType *CBStructTy =
+        llvm37::StructType::create(Elements, "PIX_ConstantColorCB_Type");
+    std::unique_ptr<DxilCBuffer> pCBuf = llvm37::make_unique<DxilCBuffer>();
     pCBuf->SetGlobalName("PIX_ConstantColorCBName");
     pCBuf->SetGlobalSymbol(UndefValue::get(CBStructTy));
     pCBuf->SetID(0);
@@ -268,7 +268,7 @@ bool DxilOutputColorBecomesConstant::runOnModule(Module &M) {
 
 char DxilOutputColorBecomesConstant::ID = 0;
 
-ModulePass *llvm::createDxilOutputColorBecomesConstantPass() {
+ModulePass *llvm37::createDxilOutputColorBecomesConstantPass() {
   return new DxilOutputColorBecomesConstant();
 }
 

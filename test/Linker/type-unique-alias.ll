@@ -1,4 +1,4 @@
-; RUN: llvm-link -S %s %p/Inputs/type-unique-alias.ll | FileCheck %s
+; RUN: llvm37-link -S %s %p/Inputs/type-unique-alias.ll | FileCheck %s
 
 %t = type { i8 }
 

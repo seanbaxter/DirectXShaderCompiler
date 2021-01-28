@@ -1,5 +1,5 @@
 ======================================================
-How to set up LLVM-style RTTI for your class hierarchy
+How to set up LLVM37-style RTTI for your class hierarchy
 ======================================================
 
 .. contents::
@@ -7,14 +7,14 @@ How to set up LLVM-style RTTI for your class hierarchy
 Background
 ==========
 
-LLVM avoids using C++'s built in RTTI. Instead, it  pervasively uses its
+LLVM37 avoids using C++'s built in RTTI. Instead, it  pervasively uses its
 own hand-rolled form of RTTI which is much more efficient and flexible,
 although it requires a bit more work from you as a class author.
 
-A description of how to use LLVM-style RTTI from a client's perspective is
+A description of how to use LLVM37-style RTTI from a client's perspective is
 given in the `Programmer's Manual <ProgrammersManual.html#isa>`_. This
 document, in contrast, discusses the steps you need to take as a class
-hierarchy author to make LLVM-style RTTI available to your clients.
+hierarchy author to make LLVM37-style RTTI available to your clients.
 
 Before diving in, make sure that you are familiar with the Object Oriented
 Programming concept of "`is-a`_".
@@ -24,8 +24,8 @@ Programming concept of "`is-a`_".
 Basic Setup
 ===========
 
-This section describes how to set up the most basic form of LLVM-style RTTI
-(which is sufficient for 99.9% of the cases). We will set up LLVM-style
+This section describes how to set up the most basic form of LLVM37-style RTTI
+(which is sufficient for 99.9% of the cases). We will set up LLVM37-style
 RTTI for this class hierarchy:
 
 .. code-block:: c++
@@ -50,16 +50,16 @@ RTTI for this class hierarchy:
      double computeArea() override;
    };
 
-The most basic working setup for LLVM-style RTTI requires the following
+The most basic working setup for LLVM37-style RTTI requires the following
 steps:
 
 #. In the header where you declare ``Shape``, you will want to ``#include
-   "llvm/Support/Casting.h"``, which declares LLVM's RTTI templates. That
+   "llvm37/Support/Casting.h"``, which declares LLVM37's RTTI templates. That
    way your clients don't even have to think about it.
 
    .. code-block:: c++
 
-      #include "llvm/Support/Casting.h"
+      #include "llvm37/Support/Casting.h"
 
 #. In the base class, introduce an enum which discriminates all of the
    different concrete classes in the hierarchy, and stash the enum value
@@ -71,7 +71,7 @@ steps:
 
        class Shape {
        public:
-      +  /// Discriminator for LLVM-style RTTI (dyn_cast<> et al.)
+      +  /// Discriminator for LLVM37-style RTTI (dyn_cast<> et al.)
       +  enum ShapeKind {
       +    SK_Square,
       +    SK_Circle
@@ -92,7 +92,7 @@ steps:
 
    A common naming convention is that these enums are "kind"s, to avoid
    ambiguity with the words "type" or "class" which have overloaded meanings
-   in many contexts within LLVM. Sometimes there will be a natural name for
+   in many contexts within LLVM37. Sometimes there will be a natural name for
    it, like "opcode". Don't bikeshed over this; when in doubt use ``Kind``.
 
    You might wonder why the ``Kind`` enum doesn't have an entry for
@@ -101,7 +101,7 @@ steps:
    instances of exactly that class (only subclasses). See `Concrete Bases
    and Deeper Hierarchies`_ for information on how to deal with
    non-abstract bases. It's worth mentioning here that unlike
-   ``dynamic_cast<>``, LLVM-style RTTI can be used (and is often used) for
+   ``dynamic_cast<>``, LLVM37-style RTTI can be used (and is often used) for
    classes that don't have v-tables.
 
 #. Next, you need to make sure that the ``Kind`` gets initialized to the
@@ -115,7 +115,7 @@ steps:
 
        class Shape {
        public:
-         /// Discriminator for LLVM-style RTTI (dyn_cast<> et al.)
+         /// Discriminator for LLVM37-style RTTI (dyn_cast<> et al.)
          enum ShapeKind {
            SK_Square,
            SK_Circle
@@ -146,7 +146,7 @@ steps:
          double computeArea() override;
        };
 
-#. Finally, you need to inform LLVM's RTTI templates how to dynamically
+#. Finally, you need to inform LLVM37's RTTI templates how to dynamically
    determine the type of a class (i.e. whether the ``isa<>``/``dyn_cast<>``
    should succeed). The default "99.9% of use cases" way to accomplish this
    is through a small static member function ``classof``. In order to have
@@ -157,7 +157,7 @@ steps:
 
        class Shape {
        public:
-         /// Discriminator for LLVM-style RTTI (dyn_cast<> et al.)
+         /// Discriminator for LLVM37-style RTTI (dyn_cast<> et al.)
          enum ShapeKind {
            SK_Square,
            SK_Circle
@@ -236,7 +236,7 @@ steps:
    Bases and Deeper Hierarchies`_ for more information about how to extend
    this example to more general hierarchies.
 
-Although for this small example setting up LLVM-style RTTI seems like a lot
+Although for this small example setting up LLVM37-style RTTI seems like a lot
 of "boilerplate", if your classes are doing anything interesting then this
 will end up being a tiny fraction of the code.
 
@@ -377,11 +377,11 @@ contract for ``classof`` is "return ``true`` if the dynamic type of the
 argument is-a ``C``".  As long as your implementation fulfills this
 contract, you can tweak and optimize it as much as you want.
 
-For example, LLVM-style RTTI can work fine in the presence of
+For example, LLVM37-style RTTI can work fine in the presence of
 multiple-inheritance by defining an appropriate ``classof``.
 An example of this in practice is
-`Decl <http://clang.llvm.org/doxygen/classclang_1_1Decl.html>`_ vs.
-`DeclContext <http://clang.llvm.org/doxygen/classclang_1_1DeclContext.html>`_
+`Decl <http://clang.llvm37.org/doxygen/classclang_1_1Decl.html>`_ vs.
+`DeclContext <http://clang.llvm37.org/doxygen/classclang_1_1DeclContext.html>`_
 inside Clang.
 The ``Decl`` hierarchy is done very similarly to the example setup
 demonstrated in this tutorial.
@@ -396,7 +396,7 @@ returning true for ones that are known to be ``DeclContext``'s.
    Touch on some of the more advanced features, like ``isa_impl`` and
    ``simplify_type``. However, those two need reference documentation in
    the form of doxygen comments as well. We need the doxygen so that we can
-   say "for full details, see http://llvm.org/doxygen/..."
+   say "for full details, see http://llvm37.org/doxygen/..."
 
 Rules of Thumb
 ==============

@@ -33,7 +33,7 @@ define void @MyCPUID(i32 %fxn, i32* %out) sanitize_address {
   ret void
 }
 
-; We used to introduce stack mallocs for UAR detection, but that makes LLVM run
+; We used to introduce stack mallocs for UAR detection, but that makes LLVM37 run
 ; out of registers on 32-bit platforms. Therefore, we don't do stack malloc on
 ; such functions.
 

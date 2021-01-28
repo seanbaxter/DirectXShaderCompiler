@@ -1,4 +1,4 @@
-// RUN: llvm-mcmarkup %s | FileCheck %s
+// RUN: llvm37-mcmarkup %s | FileCheck %s
 
 	push	{<reg:r1>, <reg:r2>, <reg:r7>}
 	sub	<reg:sp>, <imm:#132>

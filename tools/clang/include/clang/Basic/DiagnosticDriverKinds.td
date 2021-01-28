@@ -1,6 +1,6 @@
 //==--- DiagnosticDriverKinds.td - libdriver diagnostics ------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -61,8 +61,8 @@ def err_drv_argument_not_allowed_with : Error<
   "invalid argument '%0' not allowed with '%1'">;
 def err_drv_invalid_version_number : Error<
   "invalid version number in '%0'">;
-def err_drv_no_linker_llvm_support : Error<
-  "'%0': unable to pass LLVM bit-code files to linker">;
+def err_drv_no_linker_llvm37_support : Error<
+  "'%0': unable to pass LLVM37 bit-code files to linker">;
 def err_drv_no_ast_support : Error<
   "'%0': unable to use AST files with this tool">;
 def err_drv_no_module_support : Error<
@@ -110,8 +110,8 @@ def err_drv_mg_requires_m_or_mm : Error<
   "option '-MG' requires '-M' or '-MM'">;
 def err_drv_unknown_objc_runtime : Error<
   "unknown or ill-formed Objective-C runtime '%0'">;
-def err_drv_emit_llvm_link : Error<
-   "-emit-llvm cannot be used when linking">;
+def err_drv_emit_llvm37_link : Error<
+   "-emit-llvm37 cannot be used when linking">;
 def err_drv_optimization_remark_pattern : Error<
   "%0 in '%1'">;
 def err_drv_no_neon_modifier : Error<"[no]neon is not accepted as modifier, please use [no]simd instead">;

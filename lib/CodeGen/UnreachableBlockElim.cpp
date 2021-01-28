@@ -1,6 +1,6 @@
 //===-- UnreachableBlockElim.cpp - Remove unreachable blocks for codegen --===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -8,35 +8,35 @@
 //===----------------------------------------------------------------------===//
 //
 // This pass is an extremely simple version of the SimplifyCFG pass.  Its sole
-// job is to delete LLVM basic blocks that are not reachable from the entry
+// job is to delete LLVM37 basic blocks that are not reachable from the entry
 // node.  To do this, it performs a simple depth first traversal of the CFG,
 // then deletes any unvisited nodes.
 //
 // Note that this pass is really a hack.  In particular, the instruction
 // selectors for various targets should just not generate code for unreachable
-// blocks.  Until LLVM has a more systematic way of defining instruction
+// blocks.  Until LLVM37 has a more systematic way of defining instruction
 // selectors, however, we cannot really expect them to handle additional
 // complexity.
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/CodeGen/Passes.h"
-#include "llvm/ADT/DepthFirstIterator.h"
-#include "llvm/ADT/SmallPtrSet.h"
-#include "llvm/CodeGen/MachineDominators.h"
-#include "llvm/CodeGen/MachineFunctionPass.h"
-#include "llvm/CodeGen/MachineLoopInfo.h"
-#include "llvm/CodeGen/MachineModuleInfo.h"
-#include "llvm/CodeGen/MachineRegisterInfo.h"
-#include "llvm/IR/CFG.h"
-#include "llvm/IR/Constant.h"
-#include "llvm/IR/Dominators.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/Type.h"
-#include "llvm/Pass.h"
-#include "llvm/Target/TargetInstrInfo.h"
-using namespace llvm;
+#include "llvm37/CodeGen/Passes.h"
+#include "llvm37/ADT/DepthFirstIterator.h"
+#include "llvm37/ADT/SmallPtrSet.h"
+#include "llvm37/CodeGen/MachineDominators.h"
+#include "llvm37/CodeGen/MachineFunctionPass.h"
+#include "llvm37/CodeGen/MachineLoopInfo.h"
+#include "llvm37/CodeGen/MachineModuleInfo.h"
+#include "llvm37/CodeGen/MachineRegisterInfo.h"
+#include "llvm37/IR/CFG.h"
+#include "llvm37/IR/Constant.h"
+#include "llvm37/IR/Dominators.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/Type.h"
+#include "llvm37/Pass.h"
+#include "llvm37/Target/TargetInstrInfo.h"
+using namespace llvm37;
 
 namespace {
   class UnreachableBlockElim : public FunctionPass {
@@ -56,7 +56,7 @@ char UnreachableBlockElim::ID = 0;
 INITIALIZE_PASS(UnreachableBlockElim, "unreachableblockelim",
                 "Remove unreachable blocks from the CFG", false, false)
 
-FunctionPass *llvm::createUnreachableBlockEliminationPass() {
+FunctionPass *llvm37::createUnreachableBlockEliminationPass() {
   return new UnreachableBlockElim();
 }
 
@@ -107,7 +107,7 @@ char UnreachableMachineBlockElim::ID = 0;
 INITIALIZE_PASS(UnreachableMachineBlockElim, "unreachable-mbb-elimination",
   "Remove unreachable machine basic blocks", false, false)
 
-char &llvm::UnreachableMachineBlockElimID = UnreachableMachineBlockElim::ID;
+char &llvm37::UnreachableMachineBlockElimID = UnreachableMachineBlockElim::ID;
 
 void UnreachableMachineBlockElim::getAnalysisUsage(AnalysisUsage &AU) const {
   AU.addPreserved<MachineLoopInfo>();

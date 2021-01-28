@@ -1,6 +1,6 @@
-//===- llvm/unittest/Support/CompressionTest.cpp - Compression tests ------===//
+//===- llvm37/unittest/Support/CompressionTest.cpp - Compression tests ------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,17 +11,17 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Support/Compression.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/ADT/StringRef.h"
-#include "llvm/Config/config.h"
+#include "llvm37/Support/Compression.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/ADT/StringRef.h"
+#include "llvm37/Config/config.h"
 #include "gtest/gtest.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 namespace {
 
-#if LLVM_ENABLE_ZLIB == 1 && HAVE_LIBZ
+#if LLVM37_ENABLE_ZLIB == 1 && HAVE_LIBZ
 
 void TestZlibCompression(StringRef Input, zlib::CompressionLevel Level) {
   SmallString<32> Compressed;

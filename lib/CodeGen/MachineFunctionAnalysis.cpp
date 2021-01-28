@@ -1,6 +1,6 @@
 //===-- MachineFunctionAnalysis.cpp ---------------------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,12 +11,12 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/CodeGen/MachineFunctionAnalysis.h"
-#include "llvm/CodeGen/GCMetadata.h"
-#include "llvm/CodeGen/MachineFunction.h"
-#include "llvm/CodeGen/MachineModuleInfo.h"
-#include "llvm/CodeGen/MachineFunctionInitializer.h"
-using namespace llvm;
+#include "llvm37/CodeGen/MachineFunctionAnalysis.h"
+#include "llvm37/CodeGen/GCMetadata.h"
+#include "llvm37/CodeGen/MachineFunction.h"
+#include "llvm37/CodeGen/MachineModuleInfo.h"
+#include "llvm37/CodeGen/MachineFunctionInitializer.h"
+using namespace llvm37;
 
 char MachineFunctionAnalysis::ID = 0;
 

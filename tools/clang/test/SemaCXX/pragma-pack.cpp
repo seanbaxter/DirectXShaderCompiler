@@ -34,7 +34,7 @@ int check[sizeof(Sub) == 13 ? 1 : -1];
 
 }
 
-namespace llvm_support_endian {
+namespace llvm37_support_endian {
 
 template<typename, bool> struct X;
 

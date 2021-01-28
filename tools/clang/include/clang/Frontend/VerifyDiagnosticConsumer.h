@@ -1,20 +1,20 @@
 //===- VerifyDiagnosticConsumer.h - Verifying Diagnostic Client -*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_FRONTEND_VERIFYDIAGNOSTICCONSUMER_H
-#define LLVM_CLANG_FRONTEND_VERIFYDIAGNOSTICCONSUMER_H
+#ifndef LLVM37_CLANG_FRONTEND_VERIFYDIAGNOSTICCONSUMER_H
+#define LLVM37_CLANG_FRONTEND_VERIFYDIAGNOSTICCONSUMER_H
 
 #include "clang/Basic/Diagnostic.h"
 #include "clang/Lex/Preprocessor.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/PointerIntPair.h"
-#include "llvm/ADT/STLExtras.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/PointerIntPair.h"
+#include "llvm37/ADT/STLExtras.h"
 #include <climits>
 #include <memory>
 
@@ -229,15 +229,15 @@ private:
 
   // These facilities are used for validation in debug builds.
   class UnparsedFileStatus {
-    llvm::PointerIntPair<const FileEntry *, 1, bool> Data;
+    llvm37::PointerIntPair<const FileEntry *, 1, bool> Data;
   public:
     UnparsedFileStatus(const FileEntry *File, bool FoundDirectives)
       : Data(File, FoundDirectives) {}
     const FileEntry *getFile() const { return Data.getPointer(); }
     bool foundDirectives() const { return Data.getInt(); }
   };
-  typedef llvm::DenseMap<FileID, const FileEntry *> ParsedFilesMap;
-  typedef llvm::DenseMap<FileID, UnparsedFileStatus> UnparsedFilesMap;
+  typedef llvm37::DenseMap<FileID, const FileEntry *> ParsedFilesMap;
+  typedef llvm37::DenseMap<FileID, UnparsedFileStatus> UnparsedFilesMap;
   ParsedFilesMap ParsedFiles;
   UnparsedFilesMap UnparsedFiles;
 

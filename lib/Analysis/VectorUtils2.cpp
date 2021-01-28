@@ -1,6 +1,6 @@
 //===----------- VectorUtils2.cpp - findScalarElement function -----------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -13,14 +13,14 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Analysis/VectorUtils.h"
-#include "llvm/IR/PatternMatch.h"
-#include "llvm/IR/Value.h"
+#include "llvm37/Analysis/VectorUtils.h"
+#include "llvm37/IR/PatternMatch.h"
+#include "llvm37/IR/Value.h"
 
 /// \brief Given a vector and an element number, see if the scalar value is
 /// already around as a register, for example if it were inserted then extracted
 /// from the vector.
-llvm::Value *llvm::findScalarElement(llvm::Value *V, unsigned EltNo) {
+llvm37::Value *llvm37::findScalarElement(llvm37::Value *V, unsigned EltNo) {
   assert(V->getType()->isVectorTy() && "Not looking at a vector?");
   VectorType *VTy = cast<VectorType>(V->getType());
   unsigned Width = VTy->getNumElements();
@@ -59,8 +59,8 @@ llvm::Value *llvm::findScalarElement(llvm::Value *V, unsigned EltNo) {
   // Extract a value from a vector add operation with a constant zero.
   Value *Val = nullptr; Constant *Con = nullptr;
   if (match(V,
-            llvm::PatternMatch::m_Add(llvm::PatternMatch::m_Value(Val),
-                                      llvm::PatternMatch::m_Constant(Con)))) {
+            llvm37::PatternMatch::m_Add(llvm37::PatternMatch::m_Value(Val),
+                                      llvm37::PatternMatch::m_Constant(Con)))) {
     if (Constant *Elt = Con->getAggregateElement(EltNo))
       if (Elt->isNullValue())
         return findScalarElement(Val, EltNo);

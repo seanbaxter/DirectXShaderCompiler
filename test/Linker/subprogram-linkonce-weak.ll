@@ -1,6 +1,6 @@
-; RUN: llvm-link %s %S/Inputs/subprogram-linkonce-weak.ll -S -o %t1
+; RUN: llvm37-link %s %S/Inputs/subprogram-linkonce-weak.ll -S -o %t1
 ; RUN: FileCheck %s -check-prefix=LW -check-prefix=CHECK <%t1
-; RUN: llvm-link %S/Inputs/subprogram-linkonce-weak.ll %s -S -o %t2
+; RUN: llvm37-link %S/Inputs/subprogram-linkonce-weak.ll %s -S -o %t2
 ; RUN: FileCheck %s -check-prefix=WL -check-prefix=CHECK <%t2
 
 ; This testcase tests the following flow:
@@ -44,13 +44,13 @@ entry:
   ret i32 %sum, !dbg !DILocation(line: 3, scope: !4)
 }
 
-!llvm.module.flags = !{!0}
+!llvm37.module.flags = !{!0}
 !0 = !{i32 2, !"Debug Info Version", i32 3}
 
-; CHECK-LABEL: !llvm.dbg.cu =
+; CHECK-LABEL: !llvm37.dbg.cu =
 ; LW-SAME: !{![[LCU:[0-9]+]], ![[WCU:[0-9]+]]}
 ; WL-SAME: !{![[WCU:[0-9]+]], ![[LCU:[0-9]+]]}
-!llvm.dbg.cu = !{!1}
+!llvm37.dbg.cu = !{!1}
 
 ; LW: ![[LCU]] = !DICompileUnit({{.*}} subprograms: ![[LSPs:[0-9]+]]
 ; LW: ![[LSPs]] = !{![[BARSP:[0-9]+]], ![[FOOSP:[0-9]+]]}
@@ -96,9 +96,9 @@ entry:
 ; Crasher for llc.
 ; REQUIRES: object-emission
 ; RUN: %llc_dwarf -filetype=obj -O0 %t1 -o %t1.o
-; RUN: llvm-dwarfdump %t1.o -debug-dump=all | FileCheck %s -check-prefix=DWLW -check-prefix=DW
+; RUN: llvm37-dwarfdump %t1.o -debug-dump=all | FileCheck %s -check-prefix=DWLW -check-prefix=DW
 ; RUN: %llc_dwarf -filetype=obj -O0 %t2 -o %t2.o
-; RUN: llvm-dwarfdump %t2.o -debug-dump=all | FileCheck %s -check-prefix=DWWL -check-prefix=DW
+; RUN: llvm37-dwarfdump %t2.o -debug-dump=all | FileCheck %s -check-prefix=DWWL -check-prefix=DW
 ; Check that the debug info for the discarded linkonce version of @foo doesn't
 ; reference any code, and that the other subprograms look correct.
 

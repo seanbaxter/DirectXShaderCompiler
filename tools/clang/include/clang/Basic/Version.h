@@ -1,6 +1,6 @@
 //===- Version.h - Clang Version Number -------------------------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -13,11 +13,11 @@
 ///
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_BASIC_VERSION_H
-#define LLVM_CLANG_BASIC_VERSION_H
+#ifndef LLVM37_CLANG_BASIC_VERSION_H
+#define LLVM37_CLANG_BASIC_VERSION_H
 
 #include "clang/Basic/Version.inc"
-#include "llvm/ADT/StringRef.h"
+#include "llvm37/ADT/StringRef.h"
 
 /// \brief Helper macro for CLANG_VERSION_STRING.
 #define CLANG_MAKE_VERSION_STRING2(X) #X
@@ -45,21 +45,21 @@ namespace clang {
   /// Clang was built.
   std::string getClangRepositoryPath();
 
-  /// \brief Retrieves the repository path from which LLVM was built.
+  /// \brief Retrieves the repository path from which LLVM37 was built.
   ///
-  /// This supports LLVM residing in a separate repository from clang.
-  std::string getLLVMRepositoryPath();
+  /// This supports LLVM37 residing in a separate repository from clang.
+  std::string getLLVM37RepositoryPath();
 
   /// \brief Retrieves the repository revision number (or identifer) from which
   /// this Clang was built.
   std::string getClangRevision();
 
   /// \brief Retrieves the repository revision number (or identifer) from which
-  /// LLVM was built.
+  /// LLVM37 was built.
   ///
-  /// If Clang and LLVM are in the same repository, this returns the same
+  /// If Clang and LLVM37 are in the same repository, this returns the same
   /// string as getClangRevision.
-  std::string getLLVMRevision();
+  std::string getLLVM37Revision();
 
   /// \brief Retrieves the full repository version that is an amalgamation of
   /// the information in getClangRepositoryPath() and getClangRevision().
@@ -71,7 +71,7 @@ namespace clang {
   std::string getClangFullVersion();
 
   /// \brief Like getClangFullVersion(), but with a custom tool name.
-  std::string getClangToolFullVersion(llvm::StringRef ToolName);
+  std::string getClangToolFullVersion(llvm37::StringRef ToolName);
 
   /// \brief Retrieves a string representing the complete clang version suitable
   /// for use in the CPP __VERSION__ macro, which includes the clang version
@@ -88,4 +88,4 @@ namespace clang {
   // HLSL Change Ends
 }
 
-#endif // LLVM_CLANG_BASIC_VERSION_H
+#endif // LLVM37_CLANG_BASIC_VERSION_H

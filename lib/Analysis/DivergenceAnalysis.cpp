@@ -1,6 +1,6 @@
 //===- DivergenceAnalysis.cpp --------- Divergence Analysis Implementation -==//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -64,21 +64,21 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Analysis/DivergenceAnalysis.h"
-#include "llvm/Analysis/Passes.h"
-#include "llvm/Analysis/PostDominators.h"
-#include "llvm/Analysis/TargetTransformInfo.h"
-#include "llvm/IR/Dominators.h"
-#include "llvm/IR/InstIterator.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/IR/Value.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Transforms/Scalar.h"
+#include "llvm37/Analysis/DivergenceAnalysis.h"
+#include "llvm37/Analysis/Passes.h"
+#include "llvm37/Analysis/PostDominators.h"
+#include "llvm37/Analysis/TargetTransformInfo.h"
+#include "llvm37/IR/Dominators.h"
+#include "llvm37/IR/InstIterator.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/IR/Value.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Transforms/Scalar.h"
 #include <vector>
-using namespace llvm;
+using namespace llvm37;
 
 namespace {
 
@@ -264,7 +264,7 @@ INITIALIZE_PASS_DEPENDENCY(PostDominatorTree)
 INITIALIZE_PASS_END(DivergenceAnalysis, "divergence", "Divergence Analysis",
                     false, true)
 
-FunctionPass *llvm::createDivergenceAnalysisPass() {
+FunctionPass *llvm37::createDivergenceAnalysisPass() {
   return new DivergenceAnalysis();
 }
 
@@ -305,7 +305,7 @@ void DivergenceAnalysis::print(raw_ostream &OS, const Module *) const {
                  dyn_cast<Instruction>(FirstDivergentValue)) {
     F = I->getParent()->getParent();
   } else {
-    llvm_unreachable("Only arguments and instructions can be divergent");
+    llvm37_unreachable("Only arguments and instructions can be divergent");
   }
 
   // Dumps all divergent values in F, arguments and then instructions.

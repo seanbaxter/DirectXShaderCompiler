@@ -1,6 +1,6 @@
 ;===- ./tools/LLVMBuild.txt ------------------------------------*- Conf -*--===;
 ;
-;                     The LLVM Compiler Infrastructure
+;                     The LLVM37 Compiler Infrastructure
 ;
 ; This file is distributed under the University of Illinois Open Source
 ; License. See LICENSE.TXT for details.
@@ -11,7 +11,7 @@
 ;
 ; For more information on the LLVMBuild system, please see:
 ;
-;   http://llvm.org/docs/LLVMBuild.html
+;   http://llvm37.org/docs/LLVMBuild.html
 ;
 ;===------------------------------------------------------------------------===;
 
@@ -20,23 +20,23 @@ subdirectories =
  dsymutil
  llc
  lli
- llvm-as
- llvm-bcanalyzer
- llvm-cov
- llvm-diff
- llvm-dis
- llvm-dwarfdump
- llvm-extract
- llvm-link
- llvm-lto
- llvm-mc
- llvm-mcmarkup
- llvm-nm
- llvm-objdump
- llvm-pdbdump
- llvm-profdata
- llvm-rtdyld
- llvm-size
+ llvm37-as
+ llvm37-bcanalyzer
+ llvm37-cov
+ llvm37-diff
+ llvm37-dis
+ llvm37-dwarfdump
+ llvm37-extract
+ llvm37-link
+ llvm37-lto
+ llvm37-mc
+ llvm37-mcmarkup
+ llvm37-nm
+ llvm37-objdump
+ llvm37-pdbdump
+ llvm37-profdata
+ llvm37-rtdyld
+ llvm37-size
  macho-dump
  opt
  verify-uselistorder
@@ -46,4 +46,4 @@ type = Group
 name = Tools
 parent = $ROOT
 
-; HLSL Changes: remove bugpoint, llvm-ar, llvm-jitlistener
+; HLSL Changes: remove bugpoint, llvm37-ar, llvm37-jitlistener

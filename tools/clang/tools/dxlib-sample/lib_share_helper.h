@@ -12,17 +12,17 @@
 #pragma once
 
 #include <memory>
-#include "llvm/ADT/StringRef.h"
+#include "llvm37/ADT/StringRef.h"
 #include <vector>
 #include <string>
 #include <functional>
 
-namespace llvm {
+namespace llvm37 {
   class Twine;
 }
 
 namespace dxcutil {
-bool IsAbsoluteOrCurDirRelative(const llvm::Twine &T);
+bool IsAbsoluteOrCurDirRelative(const llvm37::Twine &T);
 }
 
 namespace libshare {
@@ -50,7 +50,7 @@ class IncludeToLibPreprocessor {
 public:
   virtual ~IncludeToLibPreprocessor() {}
 
-  virtual void AddIncPath(llvm::StringRef path) = 0;
+  virtual void AddIncPath(llvm37::StringRef path) = 0;
   virtual HRESULT Preprocess(IDxcBlob *pSource, LPCWSTR pFilename,
                              LPCWSTR *pArguments, UINT32 argCount,
                              const DxcDefine *pDefines,

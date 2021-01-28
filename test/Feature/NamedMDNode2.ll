@@ -1,4 +1,4 @@
-; RUN: llvm-as < %s -o /dev/null
+; RUN: llvm37-as < %s -o /dev/null
 ; PR4654
 
 

@@ -1,10 +1,10 @@
-set(LLVM_LINK_COMPONENTS
+set(LLVM37_LINK_COMPONENTS
   Core
   Support
   TransformUtils
   )
 
-add_llvm_unittest(UtilsTests
+add_llvm37_unittest(UtilsTests
   ASanStackFrameLayoutTest.cpp
   Cloning.cpp
   IntegerDivision.cpp

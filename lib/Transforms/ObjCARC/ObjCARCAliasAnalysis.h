@@ -1,6 +1,6 @@
 //===- ObjCARCAliasAnalysis.h - ObjC ARC Optimization -*- C++ -*-----------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -15,18 +15,18 @@
 /// by name, and hardwires knowledge of their semantics.
 ///
 /// WARNING: This file knows about how certain Objective-C library functions are
-/// used. Naive LLVM IR transformations which would otherwise be
+/// used. Naive LLVM37 IR transformations which would otherwise be
 /// behavior-preserving may break these assumptions.
 ///
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_LIB_TRANSFORMS_OBJCARC_OBJCARCALIASANALYSIS_H
-#define LLVM_LIB_TRANSFORMS_OBJCARC_OBJCARCALIASANALYSIS_H
+#ifndef LLVM37_LIB_TRANSFORMS_OBJCARC_OBJCARCALIASANALYSIS_H
+#define LLVM37_LIB_TRANSFORMS_OBJCARC_OBJCARCALIASANALYSIS_H
 
-#include "llvm/Analysis/AliasAnalysis.h"
-#include "llvm/Pass.h"
+#include "llvm37/Analysis/AliasAnalysis.h"
+#include "llvm37/Pass.h"
 
-namespace llvm {
+namespace llvm37 {
 namespace objcarc {
 
   /// \brief This is a simple alias analysis implementation that uses knowledge
@@ -69,6 +69,6 @@ namespace objcarc {
   };
 
 } // namespace objcarc
-} // namespace llvm
+} // namespace llvm37
 
 #endif

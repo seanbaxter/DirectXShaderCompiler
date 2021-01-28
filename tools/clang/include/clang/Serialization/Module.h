@@ -1,6 +1,6 @@
 //===--- Module.h - Module description --------------------------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -12,19 +12,19 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_SERIALIZATION_MODULE_H
-#define LLVM_CLANG_SERIALIZATION_MODULE_H
+#ifndef LLVM37_CLANG_SERIALIZATION_MODULE_H
+#define LLVM37_CLANG_SERIALIZATION_MODULE_H
 
 #include "clang/Basic/SourceLocation.h"
 #include "clang/Serialization/ASTBitCodes.h"
 #include "clang/Serialization/ContinuousRangeMap.h"
-#include "llvm/ADT/SetVector.h"
-#include "llvm/Bitcode/BitstreamReader.h"
-#include "llvm/Support/Endian.h"
+#include "llvm37/ADT/SetVector.h"
+#include "llvm37/Bitcode/BitstreamReader.h"
+#include "llvm37/Support/Endian.h"
 #include <memory>
 #include <string>
 
-namespace llvm {
+namespace llvm37 {
 template <typename Info> class OnDiskChainedHashTable;
 template <typename Info> class OnDiskIterableChainedHashTable;
 }
@@ -55,7 +55,7 @@ struct DeclContextInfo {
   DeclContextInfo()
     : NameLookupTableData(), LexicalDecls(), NumLexicalDecls() {}
 
-  llvm::OnDiskIterableChainedHashTable<reader::ASTDeclContextNameLookupTrait>
+  llvm37::OnDiskIterableChainedHashTable<reader::ASTDeclContextNameLookupTrait>
     *NameLookupTableData; // an ASTDeclContextNameLookupTable.
   const KindDeclIDPair *LexicalDecls;
   unsigned NumLexicalDecls;
@@ -70,7 +70,7 @@ class InputFile {
     OutOfDate = 2,
     NotFound = 3
   };
-  llvm::PointerIntPair<const FileEntry *, 2, unsigned> Val;
+  llvm37::PointerIntPair<const FileEntry *, 2, unsigned> Val;
 
 public:
   InputFile() {}
@@ -171,7 +171,7 @@ public:
   
   /// \brief The memory buffer that stores the data associated with
   /// this AST file.
-  std::unique_ptr<llvm::MemoryBuffer> Buffer;
+  std::unique_ptr<llvm37::MemoryBuffer> Buffer;
 
   /// \brief The size of this file, in bits.
   uint64_t SizeInBits;
@@ -180,10 +180,10 @@ public:
   uint64_t GlobalBitOffset;
 
   /// \brief The bitstream reader from which we'll read the AST file.
-  llvm::BitstreamReader StreamFile;
+  llvm37::BitstreamReader StreamFile;
 
   /// \brief The main bitstream cursor for the main block.
-  llvm::BitstreamCursor Stream;
+  llvm37::BitstreamCursor Stream;
 
   /// \brief The source location where the module was explicitly or implicitly
   /// imported in the local translation unit.
@@ -204,10 +204,10 @@ public:
 
   // === Input Files ===
   /// \brief The cursor to the start of the input-files block.
-  llvm::BitstreamCursor InputFilesCursor;
+  llvm37::BitstreamCursor InputFilesCursor;
 
   /// \brief Offsets for all of the input file entries in the AST file.
-  const llvm::support::unaligned_uint64_t *InputFileOffsets;
+  const llvm37::support::unaligned_uint64_t *InputFileOffsets;
 
   /// \brief The input files that have been loaded from this AST file.
   std::vector<InputFile> InputFilesLoaded;
@@ -221,7 +221,7 @@ public:
   // === Source Locations ===
 
   /// \brief Cursor used to read source location entries.
-  llvm::BitstreamCursor SLocEntryCursor;
+  llvm37::BitstreamCursor SLocEntryCursor;
 
   /// \brief The number of source location entries in this AST file.
   unsigned LocalNumSLocEntries;
@@ -274,7 +274,7 @@ public:
 
   /// \brief The cursor to the start of the preprocessor block, which stores
   /// all of the macro definitions.
-  llvm::BitstreamCursor MacroCursor;
+  llvm37::BitstreamCursor MacroCursor;
 
   /// \brief The number of macros in this AST file.
   unsigned LocalNumMacros;
@@ -299,7 +299,7 @@ public:
 
   /// \brief The cursor to the start of the (optional) detailed preprocessing
   /// record block.
-  llvm::BitstreamCursor PreprocessorDetailCursor;
+  llvm37::BitstreamCursor PreprocessorDetailCursor;
 
   /// \brief The offset of the start of the preprocessor detail cursor.
   uint64_t PreprocessorDetailStartOffset;
@@ -374,7 +374,7 @@ public:
   /// DeclsCursor - This is a cursor to the start of the DECLS_BLOCK block. It
   /// has read all the abbreviations at the start of the block and is ready to
   /// jump around with these in context.
-  llvm::BitstreamCursor DeclsCursor;
+  llvm37::BitstreamCursor DeclsCursor;
 
   /// \brief The number of declarations in this AST file.
   unsigned LocalNumDecls;
@@ -396,7 +396,7 @@ public:
   /// This is effectively a reverse global-to-local mapping for declaration
   /// IDs, so that we can interpret a true global ID (for this translation unit)
   /// as a local ID (for this module file).
-  llvm::DenseMap<ModuleFile *, serialization::DeclID> GlobalToLocalDeclIDs;
+  llvm37::DenseMap<ModuleFile *, serialization::DeclID> GlobalToLocalDeclIDs;
 
   /// \brief The number of C++ base specifier sets in this AST file.
   unsigned LocalNumCXXBaseSpecifiers;
@@ -412,7 +412,7 @@ public:
   /// indexed by the C++ ctor initializer list ID minus 1.
   const uint32_t *CXXCtorInitializersOffsets;
 
-  typedef llvm::DenseMap<const DeclContext *, DeclContextInfo>
+  typedef llvm37::DenseMap<const DeclContext *, DeclContextInfo>
   DeclContextInfosMap;
 
   /// \brief Information about the lexical and visible declarations
@@ -467,10 +467,10 @@ public:
   SmallVector<uint64_t, 8> PragmaDiagMappings;
 
   /// \brief List of modules which depend on this module
-  llvm::SetVector<ModuleFile *> ImportedBy;
+  llvm37::SetVector<ModuleFile *> ImportedBy;
 
   /// \brief List of modules which this module depends on
-  llvm::SetVector<ModuleFile *> Imports;
+  llvm37::SetVector<ModuleFile *> Imports;
 
   /// \brief Determine whether this module was directly imported at
   /// any point during translation.

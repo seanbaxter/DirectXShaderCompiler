@@ -9,15 +9,15 @@
 //                                                                           //
 ///////////////////////////////////////////////////////////////////////////////
 
-#include "llvm/ADT/MapVector.h"
-#include "llvm/ADT/SetVector.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/DebugInfo.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/Bitcode/ReaderWriter.h"
-#include "llvm/Support/MD5.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/Transforms/Utils/Cloning.h"
+#include "llvm37/ADT/MapVector.h"
+#include "llvm37/ADT/SetVector.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/DebugInfo.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/Bitcode/ReaderWriter.h"
+#include "llvm37/Support/MD5.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/Transforms/Utils/Cloning.h"
 #include "dxc/DxilContainer/DxilContainer.h"
 #include "dxc/DXIL/DxilModule.h"
 #include "dxc/DXIL/DxilShaderModel.h"
@@ -39,7 +39,7 @@
 #include <algorithm>
 #include <functional>
 
-using namespace llvm;
+using namespace llvm37;
 using namespace hlsl;
 using namespace hlsl::RDAT;
 
@@ -179,7 +179,7 @@ private:
   bool m_bCompat_1_4;
   size_t m_fixedSize;
   typedef std::pair<const char *, uint32_t> NameOffsetPair;
-  typedef llvm::SmallMapVector<const char *, uint32_t, 8> NameOffsetMap;
+  typedef llvm37::SmallMapVector<const char *, uint32_t, 8> NameOffsetMap;
   uint32_t m_lastOffset;
   NameOffsetMap m_semanticNameOffsets;
   unsigned m_paramCount;
@@ -1074,8 +1074,8 @@ private:
   SmallVector<char, 1024> m_RDATBuffer;
 
   std::vector<std::unique_ptr<RDATPart>> m_Parts;
-  typedef llvm::SmallSetVector<uint32_t, 8> Indices;
-  typedef std::unordered_map<const llvm::Function *, Indices> FunctionIndexMap;
+  typedef llvm37::SmallSetVector<uint32_t, 8> Indices;
+  typedef std::unordered_map<const llvm37::Function *, Indices> FunctionIndexMap;
   FunctionIndexMap m_FuncToResNameOffset; // list of resources used
   FunctionIndexMap m_FuncToDependencies;  // list of unresolved functions used
 
@@ -1088,14 +1088,14 @@ private:
       {}
     unsigned minMajor, minMinor, mask;
   };
-  typedef std::unordered_map<const llvm::Function*, ShaderCompatInfo> FunctionShaderCompatMap;
+  typedef std::unordered_map<const llvm37::Function*, ShaderCompatInfo> FunctionShaderCompatMap;
   FunctionShaderCompatMap m_FuncToShaderCompat;
 
-  void UpdateFunctionToShaderCompat(const llvm::Function* dxilFunc) {
+  void UpdateFunctionToShaderCompat(const llvm37::Function* dxilFunc) {
     for (const auto &user : dxilFunc->users()) {
-      if (const llvm::CallInst *CI = dyn_cast<const llvm::CallInst>(user)) {
+      if (const llvm37::CallInst *CI = dyn_cast<const llvm37::CallInst>(user)) {
         // Find calling function
-        const llvm::Function *F = cast<const llvm::Function>(CI->getParent()->getParent());
+        const llvm37::Function *F = cast<const llvm37::Function>(CI->getParent()->getParent());
         // Insert or lookup info
         ShaderCompatInfo &info = m_FuncToShaderCompat[F];
         unsigned major, minor, mask;
@@ -1114,14 +1114,14 @@ private:
     }
   }
 
-  const llvm::Function *FindUsingFunction(const llvm::Value *User) {
-    if (const llvm::Instruction *I = dyn_cast<const llvm::Instruction>(User)) {
+  const llvm37::Function *FindUsingFunction(const llvm37::Value *User) {
+    if (const llvm37::Instruction *I = dyn_cast<const llvm37::Instruction>(User)) {
       // Instruction should be inside a basic block, which is in a function
-      return cast<const llvm::Function>(I->getParent()->getParent());
+      return cast<const llvm37::Function>(I->getParent()->getParent());
     }
     // User can be either instruction, constant, or operator. But User is an
     // operator only if constant is a scalar value, not resource pointer.
-    const llvm::Constant *CU = cast<const llvm::Constant>(User);
+    const llvm37::Constant *CU = cast<const llvm37::Constant>(User);
     if (!CU->user_empty())
       return FindUsingFunction(*CU->user_begin());
     else
@@ -1134,7 +1134,7 @@ private:
     if (var) {
       for (auto user : var->users()) {
         // Find the function.
-        const llvm::Function *F = FindUsingFunction(user);
+        const llvm37::Function *F = FindUsingFunction(user);
         if (!F)
           continue;
         if (m_FuncToResNameOffset.find(F) == m_FuncToResNameOffset.end()) {
@@ -1191,9 +1191,9 @@ private:
     }
   }
 
-  void UpdateFunctionDependency(llvm::Function *F) {
+  void UpdateFunctionDependency(llvm37::Function *F) {
     for (const auto &user : F->users()) {
-      const llvm::Function *userFunction = FindUsingFunction(user);
+      const llvm37::Function *userFunction = FindUsingFunction(user);
       uint32_t index = m_pStringBufferPart->Insert(F->getName());
       if (m_FuncToDependencies.find(userFunction) ==
           m_FuncToDependencies.end()) {
@@ -1325,7 +1325,7 @@ private:
         break;
       }
       case DXIL::SubobjectKind::SubobjectToExportsAssociation: {
-        llvm::StringRef Subobject;
+        llvm37::StringRef Subobject;
         const char * const * Exports;
         uint32_t NumExports;
         std::vector<uint32_t> ExportIndices;
@@ -1375,7 +1375,7 @@ private:
 
   void CreateParts() {
 #define ADD_PART(type) \
-    m_Parts.emplace_back(llvm::make_unique<type>()); \
+    m_Parts.emplace_back(llvm37::make_unique<type>()); \
     m_p##type = reinterpret_cast<type*>(m_Parts.back().get());
     ADD_PART(StringBufferPart);
     ADD_PART(ResourceTable);
@@ -1476,7 +1476,7 @@ private:
     }
   };
 
-  llvm::SmallVector<DxilPart, 8> m_Parts;
+  llvm37::SmallVector<DxilPart, 8> m_Parts;
 
 public:
   void AddPart(uint32_t FourCC, uint32_t Size, WriteFn Write) override {
@@ -1582,7 +1582,7 @@ public:
 void hlsl::SerializeDxilContainerForModule(DxilModule *pModule,
                                            AbstractMemoryStream *pModuleBitcode,
                                            AbstractMemoryStream *pFinalStream,
-                                           llvm::StringRef DebugName,
+                                           llvm37::StringRef DebugName,
                                            SerializeDxilFlags Flags,
                                            DxilShaderHash *pShaderHashOut,
                                            AbstractMemoryStream *pReflectionStreamOut,
@@ -1618,12 +1618,12 @@ void hlsl::SerializeDxilContainerForModule(DxilModule *pModule,
     DXIL::TessellatorDomain domain = DXIL::TessellatorDomain::Undefined;
     if (pModule->GetShaderModel()->IsHS() || pModule->GetShaderModel()->IsDS())
       domain = pModule->GetTessellatorDomain();
-    pInputSigWriter = llvm::make_unique<DxilProgramSignatureWriter>(
+    pInputSigWriter = llvm37::make_unique<DxilProgramSignatureWriter>(
         pModule->GetInputSignature(), domain,
         /*IsInput*/ true,
         /*UseMinPrecision*/ pModule->GetUseMinPrecision(),
         bCompat_1_4);
-    pOutputSigWriter = llvm::make_unique<DxilProgramSignatureWriter>(
+    pOutputSigWriter = llvm37::make_unique<DxilProgramSignatureWriter>(
         pModule->GetOutputSignature(), domain,
         /*IsInput*/ false,
         /*UseMinPrecision*/ pModule->GetUseMinPrecision(),
@@ -1638,7 +1638,7 @@ void hlsl::SerializeDxilContainerForModule(DxilModule *pModule,
                      pOutputSigWriter->write(pStream);
                    });
 
-    pPatchConstOrPrimSigWriter = llvm::make_unique<DxilProgramSignatureWriter>(
+    pPatchConstOrPrimSigWriter = llvm37::make_unique<DxilProgramSignatureWriter>(
         pModule->GetPatchConstOrPrimSignature(), domain,
         /*IsInput*/ pModule->GetShaderModel()->IsDS(),
         /*UseMinPrecision*/ pModule->GetUseMinPrecision(),
@@ -1663,7 +1663,7 @@ void hlsl::SerializeDxilContainerForModule(DxilModule *pModule,
     DXASSERT(pModule->GetSerializedRootSignature().empty(),
              "otherwise, library has root signature outside subobject definitions");
     // Write the DxilRuntimeData (RDAT) part.
-    pRDATWriter = llvm::make_unique<DxilRDATWriter>(*pModule);
+    pRDATWriter = llvm37::make_unique<DxilRDATWriter>(*pModule);
     writer.AddPart(
         DFCC_RuntimeData, pRDATWriter->size(),
         [&](AbstractMemoryStream *pStream) { pRDATWriter->write(pStream); });
@@ -1671,7 +1671,7 @@ void hlsl::SerializeDxilContainerForModule(DxilModule *pModule,
     pModule->ResetSubobjects(nullptr);
   } else {
     // Write the DxilPipelineStateValidation (PSV0) part.
-    pPSVWriter = llvm::make_unique<DxilPSVWriter>(*pModule);
+    pPSVWriter = llvm37::make_unique<DxilPSVWriter>(*pModule);
     writer.AddPart(
         DFCC_PipelineStateValidation, pPSVWriter->size(),
         [&](AbstractMemoryStream *pStream) { pPSVWriter->write(pStream); });
@@ -1718,7 +1718,7 @@ void hlsl::SerializeDxilContainerForModule(DxilModule *pModule,
       });
     }
 
-    llvm::StripDebugInfo(*pModule->GetModule());
+    llvm37::StripDebugInfo(*pModule->GetModule());
     pModule->StripDebugRelatedCode();
     bModuleStripped = true;
   } else {
@@ -1737,7 +1737,7 @@ void hlsl::SerializeDxilContainerForModule(DxilModule *pModule,
     pModule->ReEmitDxilResources();
     pModule->EmitDxilCounters();
 
-    reflectionModule.reset(llvm::CloneModule(pModule->GetModule()));
+    reflectionModule.reset(llvm37::CloneModule(pModule->GetModule()));
 
     // Now restore validator version on main module and re-emit metadata.
     pModule->SetValidatorVersion(ValMajor, ValMinor);
@@ -1812,7 +1812,7 @@ void hlsl::SerializeDxilContainerForModule(DxilModule *pModule,
     // If the debug name should be specific to the sources, base the name on the debug
     // bitcode, which will include the source references, line numbers, etc. Otherwise,
     // do it exclusively on the target shader bitcode.
-    llvm::MD5 md5;
+    llvm37::MD5 md5;
     if (Flags & SerializeDxilFlags::DebugNameDependOnSource) {
       md5.update(ArrayRef<uint8_t>(pModuleBitcode->GetPtr(), pModuleBitcode->GetPtrSize()));
       HashContent.Flags = (uint32_t)DxilShaderHashFlags::IncludesSource;

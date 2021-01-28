@@ -9,8 +9,8 @@
 //                                                                           //
 ///////////////////////////////////////////////////////////////////////////////
 
-#include "llvm/Support/ManagedStatic.h"
-#include "llvm/Support/FileSystem.h"
+#include "llvm37/Support/ManagedStatic.h"
+#include "llvm37/Support/FileSystem.h"
 #include "dxc/Support/Global.h"
 #include "dxc/Support/WinIncludes.h"
 #include "dxc/Support/HLSLOptions.h"
@@ -46,7 +46,7 @@ static HRESULT InitMaybeFail() throw() {
   IFC(DxcInitThreadMalloc());
   DxcSetThreadMallocToDefault();
   memSetup = true;
-  if (::llvm::sys::fs::SetupPerThreadFileSystem()) {
+  if (::llvm37::sys::fs::SetupPerThreadFileSystem()) {
     hr = E_FAIL;
     goto Cleanup;
   }
@@ -60,7 +60,7 @@ static HRESULT InitMaybeFail() throw() {
 Cleanup:
   if (FAILED(hr)) {
     if (fsSetup) {
-      ::llvm::sys::fs::CleanupPerThreadFileSystem();
+      ::llvm37::sys::fs::CleanupPerThreadFileSystem();
     }
     if (memSetup) {
       DxcClearThreadMalloc();
@@ -85,8 +85,8 @@ BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD Reason, LPVOID reserved) {
     DxcEtw_DXCompilerShutdown_Start();
     DxcSetThreadMallocToDefault();
     ::hlsl::options::cleanupHlslOptTable();
-    ::llvm::sys::fs::CleanupPerThreadFileSystem();
-    ::llvm::llvm_shutdown();
+    ::llvm37::sys::fs::CleanupPerThreadFileSystem();
+    ::llvm37::llvm37_shutdown();
     if (reserved == NULL) { // FreeLibrary has been called or the DLL load failed
       DxilLibCleanup(DxilLibCleanUpType::UnloadLibrary);
     }

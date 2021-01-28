@@ -1,5 +1,5 @@
-; RUN: llvm-link %s %p/2011-08-04-Metadata2.ll -o %t.bc
-; RUN: llvm-dis < %t.bc | FileCheck %s
+; RUN: llvm37-link %s %p/2011-08-04-Metadata2.ll -o %t.bc
+; RUN: llvm37-dis < %t.bc | FileCheck %s
 ; Test if internal global variable's debug info is merged appropriately or not.
 
 ; CHECK: !DIGlobalVariable(name: "x",
@@ -19,10 +19,10 @@ entry:
   ret void, !dbg !7
 }
 
-!llvm.dbg.cu = !{!0}
-!llvm.module.flags = !{!11}
-!llvm.dbg.sp = !{!1}
-!llvm.dbg.gv = !{!5}
+!llvm37.dbg.cu = !{!0}
+!llvm37.module.flags = !{!11}
+!llvm37.dbg.sp = !{!1}
+!llvm37.dbg.gv = !{!5}
 
 !0 = !DICompileUnit(language: DW_LANG_C99, producer: "clang version 3.0 ()", isOptimized: true, emissionKind: 0, file: !9, enums: !{}, retainedTypes: !{}, subprograms: !10)
 !1 = !DISubprogram(name: "foo", line: 3, isLocal: false, isDefinition: true, virtualIndex: 6, isOptimized: false, file: !9, scope: !2, type: !3, function: void ()* @foo)

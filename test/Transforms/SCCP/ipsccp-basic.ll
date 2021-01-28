@@ -239,11 +239,11 @@ define i64 @test11a() {
 
 define void @test11b() {
   %call1 = call i64 @test11a()
-  %call2 = call i64 @llvm.ctpop.i64(i64 %call1)
+  %call2 = call i64 @llvm37.ctpop.i64(i64 %call1)
   ret void
 ; CHECK-LABEL: define void @test11b
 ; CHECK: %[[call1:.*]] = call i64 @test11a()
-; CHECK: %[[call2:.*]] = call i64 @llvm.ctpop.i64(i64 0)
+; CHECK: %[[call2:.*]] = call i64 @llvm37.ctpop.i64(i64 0)
 }
 
-declare i64 @llvm.ctpop.i64(i64)
+declare i64 @llvm37.ctpop.i64(i64)

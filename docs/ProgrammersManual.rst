@@ -1,5 +1,5 @@
 ========================
-LLVM Programmer's Manual
+LLVM37 Programmer's Manual
 ========================
 
 .. contents::
@@ -14,25 +14,25 @@ Introduction
 ============
 
 This document is meant to highlight some of the important classes and interfaces
-available in the LLVM source-base.  This manual is not intended to explain what
-LLVM is, how it works, and what LLVM code looks like.  It assumes that you know
-the basics of LLVM and are interested in writing transformations or otherwise
+available in the LLVM37 source-base.  This manual is not intended to explain what
+LLVM37 is, how it works, and what LLVM37 code looks like.  It assumes that you know
+the basics of LLVM37 and are interested in writing transformations or otherwise
 analyzing or manipulating the code.
 
 This document should get you oriented so that you can find your way in the
-continuously growing source code that makes up the LLVM infrastructure.  Note
+continuously growing source code that makes up the LLVM37 infrastructure.  Note
 that this manual is not intended to serve as a replacement for reading the
 source code, so if you think there should be a method in one of these classes to
 do something, but it's not listed, check the source.  Links to the `doxygen
-<http://llvm.org/doxygen/>`__ sources are provided to make this as easy as
+<http://llvm37.org/doxygen/>`__ sources are provided to make this as easy as
 possible.
 
 The first section of this document describes general information that is useful
-to know when working in the LLVM infrastructure, and the second describes the
-Core LLVM classes.  In the future this manual will be extended with information
+to know when working in the LLVM37 infrastructure, and the second describes the
+Core LLVM37 classes.  In the future this manual will be extended with information
 describing how to use extension libraries, such as dominator information, CFG
 traversal routines, and useful utilities like the ``InstVisitor`` (`doxygen
-<http://llvm.org/doxygen/InstVisitor_8h-source.html>`__) template.
+<http://llvm37.org/doxygen/InstVisitor_8h-source.html>`__) template.
 
 .. _general:
 
@@ -40,14 +40,14 @@ General Information
 ===================
 
 This section contains general information that is useful if you are working in
-the LLVM source-base, but that isn't specific to any particular API.
+the LLVM37 source-base, but that isn't specific to any particular API.
 
 .. _stl:
 
 The C++ Standard Template Library
 ---------------------------------
 
-LLVM makes heavy use of the C++ Standard Template Library (STL), perhaps much
+LLVM37 makes heavy use of the C++ Standard Template Library (STL), perhaps much
 more than you are used to, or have seen before.  Because of this, you might want
 to do a little background reading in the techniques used and capabilities of the
 library.  There are many good pages that discuss the STL, and several books on
@@ -77,7 +77,7 @@ Here are some useful links:
    (even better, get the book)
    <http://www.mindview.net/Books/TICPP/ThinkingInCPP2e.html>`_.
 
-You are also encouraged to take a look at the :doc:`LLVM Coding Standards
+You are also encouraged to take a look at the :doc:`LLVM37 Coding Standards
 <CodingStandards>` guide which focuses on how to write maintainable code more
 than where to put your curly braces.
 
@@ -91,10 +91,10 @@ Other useful references
 
 .. _apis:
 
-Important and useful LLVM APIs
+Important and useful LLVM37 APIs
 ==============================
 
-Here we highlight some LLVM APIs that are generally useful and good to know
+Here we highlight some LLVM37 APIs that are generally useful and good to know
 about when writing transformations.
 
 .. _isa:
@@ -102,13 +102,13 @@ about when writing transformations.
 The ``isa<>``, ``cast<>`` and ``dyn_cast<>`` templates
 ------------------------------------------------------
 
-The LLVM source-base makes extensive use of a custom form of RTTI.  These
+The LLVM37 source-base makes extensive use of a custom form of RTTI.  These
 templates have many similarities to the C++ ``dynamic_cast<>`` operator, but
 they don't have some drawbacks (primarily stemming from the fact that
 ``dynamic_cast<>`` only works on classes that have a v-table).  Because they are
 used so often, you must know what they do and how they work.  All of these
-templates are defined in the ``llvm/Support/Casting.h`` (`doxygen
-<http://llvm.org/doxygen/Casting_8h-source.html>`__) file (note that you very
+templates are defined in the ``llvm37/Support/Casting.h`` (`doxygen
+<http://llvm37.org/doxygen/Casting_8h-source.html>`__) file (note that you very
 rarely have to include this file directly).
 
 ``isa<>``:
@@ -178,23 +178,23 @@ rarely have to include this file directly).
 
 These five templates can be used with any classes, whether they have a v-table
 or not.  If you want to add support for these templates, see the document
-:doc:`How to set up LLVM-style RTTI for your class hierarchy
-<HowToSetUpLLVMStyleRTTI>`
+:doc:`How to set up LLVM37-style RTTI for your class hierarchy
+<HowToSetUpLLVM37StyleRTTI>`
 
 .. _string_apis:
 
 Passing strings (the ``StringRef`` and ``Twine`` classes)
 ---------------------------------------------------------
 
-Although LLVM generally does not do much string manipulation, we do have several
+Although LLVM37 generally does not do much string manipulation, we do have several
 important APIs which take strings.  Two important examples are the Value class
 -- which has names for instructions, functions, etc. -- and the ``StringMap``
-class which is used extensively in LLVM and Clang.
+class which is used extensively in LLVM37 and Clang.
 
 These are generic classes, and they need to be able to accept strings which may
 have embedded null characters.  Therefore, they cannot simply take a ``const
 char *``, and taking a ``const std::string&`` requires clients to perform a heap
-allocation which is usually unnecessary.  Instead, many LLVM APIs use a
+allocation which is usually unnecessary.  Instead, many LLVM37 APIs use a
 ``StringRef`` or a ``const Twine&`` for passing strings efficiently.
 
 .. _StringRef:
@@ -224,22 +224,22 @@ and clients can call it using any one of:
 
 Similarly, APIs which need to return a string may return a ``StringRef``
 instance, which can be used directly or converted to an ``std::string`` using
-the ``str`` member function.  See ``llvm/ADT/StringRef.h`` (`doxygen
-<http://llvm.org/doxygen/classllvm_1_1StringRef_8h-source.html>`__) for more
+the ``str`` member function.  See ``llvm37/ADT/StringRef.h`` (`doxygen
+<http://llvm37.org/doxygen/classllvm37_1_1StringRef_8h-source.html>`__) for more
 information.
 
 You should rarely use the ``StringRef`` class directly, because it contains
 pointers to external memory it is not generally safe to store an instance of the
 class (unless you know that the external storage will not be freed).
-``StringRef`` is small and pervasive enough in LLVM that it should always be
+``StringRef`` is small and pervasive enough in LLVM37 that it should always be
 passed by value.
 
 The ``Twine`` class
 ^^^^^^^^^^^^^^^^^^^
 
-The ``Twine`` (`doxygen <http://llvm.org/doxygen/classllvm_1_1Twine.html>`__)
+The ``Twine`` (`doxygen <http://llvm37.org/doxygen/classllvm37_1_1Twine.html>`__)
 class is an efficient way for APIs to accept concatenated strings.  For example,
-a common LLVM paradigm is to name one instruction based on the name of another
+a common LLVM37 paradigm is to name one instruction based on the name of another
 instruction with a suffix, for example:
 
 .. code-block:: c++
@@ -254,8 +254,8 @@ the result of the plus operator applied to strings (i.e., a C strings, an
 of strings until it is actually required, at which point it can be efficiently
 rendered directly into a character array.  This avoids unnecessary heap
 allocation involved in constructing the temporary results of string
-concatenation.  See ``llvm/ADT/Twine.h`` (`doxygen
-<http://llvm.org/doxygen/Twine_8h_source.html>`__) and :ref:`here <dss_twine>`
+concatenation.  See ``llvm37/ADT/Twine.h`` (`doxygen
+<http://llvm37.org/doxygen/Twine_8h_source.html>`__) and :ref:`here <dss_twine>`
 for more information.
 
 As with a ``StringRef``, ``Twine`` objects point to external memory and should
@@ -295,7 +295,7 @@ The ``function_ref`` class template
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The ``function_ref``
-(`doxygen <http://llvm.org/doxygen/classllvm_1_1function_ref.html>`__) class
+(`doxygen <http://llvm37.org/doxygen/classllvm37_1_1function_ref.html>`__) class
 template represents a reference to a callable object, templated over the type
 of the callable. This is a good choice for passing a callback to a function,
 if you don't need to hold onto the callback after the function returns. In this
@@ -344,8 +344,8 @@ Naturally, because of this, you don't want to delete the debug printouts, but
 you don't want them to always be noisy.  A standard compromise is to comment
 them out, allowing you to enable them if you need them in the future.
 
-The ``llvm/Support/Debug.h`` (`doxygen
-<http://llvm.org/doxygen/Debug_8h-source.html>`__) file provides a macro named
+The ``llvm37/Support/Debug.h`` (`doxygen
+<http://llvm37.org/doxygen/Debug_8h-source.html>`__) file provides a macro named
 ``DEBUG()`` that is a much nicer solution to this problem.  Basically, you can
 put arbitrary code into the argument of the ``DEBUG`` macro, and it is only
 executed if '``opt``' (or any other tool) is run with the '``-debug``' command
@@ -417,7 +417,7 @@ Then you can run your pass like this:
 
 Of course, in practice, you should only set ``DEBUG_TYPE`` at the top of a file,
 to specify the debug type for the entire module (if you do this before you
-``#include "llvm/Support/Debug.h"``, you don't have to insert the ugly
+``#include "llvm37/Support/Debug.h"``, you don't have to insert the ugly
 ``#undef``'s).  Also, you should use names more meaningful than "foo" and "bar",
 because there is no system in place to ensure that names do not conflict.  If
 two different modules use the same string, they will all be turned on when the
@@ -426,7 +426,7 @@ instruction scheduling to be enabled with ``-debug-only=InstrSched``, even if
 the source lives in multiple files.
 
 For performance reasons, -debug-only is not available in optimized build
-(``--enable-optimized``) of LLVM.
+(``--enable-optimized``) of LLVM37.
 
 The ``DEBUG_WITH_TYPE`` macro is also available for situations where you would
 like to set ``DEBUG_TYPE``, but only for one specific ``DEBUG`` statement.  It
@@ -445,9 +445,9 @@ preceding example could be written as:
 The ``Statistic`` class & ``-stats`` option
 -------------------------------------------
 
-The ``llvm/ADT/Statistic.h`` (`doxygen
-<http://llvm.org/doxygen/Statistic_8h-source.html>`__) file provides a class
-named ``Statistic`` that is used as a unified way to keep track of what the LLVM
+The ``llvm37/ADT/Statistic.h`` (`doxygen
+<http://llvm37.org/doxygen/Statistic_8h-source.html>`__) file provides a class
+named ``Statistic`` that is used as a unified way to keep track of what the LLVM37
 compiler is doing and how effective various optimizations are.  It is useful to
 see what optimizations are contributing to making a particular program run
 faster.
@@ -488,7 +488,7 @@ gathered, use the '``-stats``' option:
   $ opt -stats -mypassname < program.bc > /dev/null
   ... statistics output ...
 
-Note that in order to use the '``-stats``' option, LLVM must be
+Note that in order to use the '``-stats``' option, LLVM37 must be
 compiled with assertions enabled.
 
 When running ``opt`` on a C file from the SPEC benchmark suite, it gives a
@@ -531,15 +531,15 @@ maintainable and useful.
 Viewing graphs while debugging code
 -----------------------------------
 
-Several of the important data structures in LLVM are graphs: for example CFGs
-made out of LLVM :ref:`BasicBlocks <BasicBlock>`, CFGs made out of LLVM
+Several of the important data structures in LLVM37 are graphs: for example CFGs
+made out of LLVM37 :ref:`BasicBlocks <BasicBlock>`, CFGs made out of LLVM37
 :ref:`MachineBasicBlocks <MachineBasicBlock>`, and :ref:`Instruction Selection
 DAGs <SelectionDAG>`.  In many cases, while debugging various parts of the
 compiler, it is nice to instantly visualize these graphs.
 
-LLVM provides several callbacks that are available in a debug build to do
+LLVM37 provides several callbacks that are available in a debug build to do
 exactly that.  If you call the ``Function::viewCFG()`` method, for example, the
-current LLVM tool will pop up a window containing the CFG for the function where
+current LLVM37 tool will pop up a window containing the CFG for the function where
 each basic block is a node in the graph, and each node contains the instructions
 in the block.  Similarly, there also exists ``Function::viewCFGOnly()`` (does
 not include the instructions), the ``MachineFunction::viewCFG()`` and
@@ -555,7 +555,7 @@ and install the Mac OS X `Graphviz program
 <http://www.pixelglow.com/graphviz/>`_ and add
 ``/Applications/Graphviz.app/Contents/MacOS/`` (or wherever you install it) to
 your path. The programs need not be present when configuring, building or
-running LLVM and can simply be installed when needed during an active debug
+running LLVM37 and can simply be installed when needed during an active debug
 session.
 
 ``SelectionDAG`` has been extended to make it easier to locate *interesting*
@@ -577,7 +577,7 @@ build to use these features.
 Picking the Right Data Structure for a Task
 ===========================================
 
-LLVM has a plethora of data structures in the ``llvm/ADT/`` directory, and we
+LLVM37 has a plethora of data structures in the ``llvm37/ADT/`` directory, and we
 commonly use STL data structures.  This section describes the trade-offs you
 should consider when you pick one.
 
@@ -632,13 +632,13 @@ needs.  Pick the first in this section that will do what you want.
 
 .. _dss_arrayref:
 
-llvm/ADT/ArrayRef.h
+llvm37/ADT/ArrayRef.h
 ^^^^^^^^^^^^^^^^^^^
 
-The ``llvm::ArrayRef`` class is the preferred class to use in an interface that
+The ``llvm37::ArrayRef`` class is the preferred class to use in an interface that
 accepts a sequential list of elements in memory and just reads from them.  By
 taking an ``ArrayRef``, the API can be passed a fixed size array, an
-``std::vector``, an ``llvm::SmallVector`` and anything else that is contiguous
+``std::vector``, an ``llvm37::SmallVector`` and anything else that is contiguous
 in memory.
 
 .. _dss_fixedarrays:
@@ -666,7 +666,7 @@ construct those elements actually used).
 
 .. _dss_tinyptrvector:
 
-llvm/ADT/TinyPtrVector.h
+llvm37/ADT/TinyPtrVector.h
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
 ``TinyPtrVector<Type>`` is a highly specialized collection class that is
@@ -678,7 +678,7 @@ Since this container is highly specialized, it is rarely used.
 
 .. _dss_smallvector:
 
-llvm/ADT/SmallVector.h
+llvm37/ADT/SmallVector.h
 ^^^^^^^^^^^^^^^^^^^^^^
 
 ``SmallVector<Type, N>`` is a simple class that looks and smells just like
@@ -797,7 +797,7 @@ in the list.
 
 .. _dss_ilist:
 
-llvm/ADT/ilist.h
+llvm37/ADT/ilist.h
 ^^^^^^^^^^^^^^^^
 
 ``ilist<T>`` implements an 'intrusive' doubly-linked list.  It is intrusive,
@@ -820,13 +820,13 @@ Related classes of interest are explained in the following subsections:
 
 * :ref:`iplist <dss_iplist>`
 
-* :ref:`llvm/ADT/ilist_node.h <dss_ilist_node>`
+* :ref:`llvm37/ADT/ilist_node.h <dss_ilist_node>`
 
 * :ref:`Sentinels <dss_ilist_sentinel>`
 
 .. _dss_packedvector:
 
-llvm/ADT/PackedVector.h
+llvm37/ADT/PackedVector.h
 ^^^^^^^^^^^^^^^^^^^^^^^
 
 Useful for storing a vector of values using only a few number of bits for each
@@ -876,7 +876,7 @@ variety of customizations.
 
 .. _dss_ilist_node:
 
-llvm/ADT/ilist_node.h
+llvm37/ADT/ilist_node.h
 ^^^^^^^^^^^^^^^^^^^^^
 
 ``ilist_node<T>`` implements the forward and backward links that are expected
@@ -937,7 +937,7 @@ String-like containers
 ----------------------
 
 There are a variety of ways to pass around and use strings in C and C++, and
-LLVM adds a few new options to choose from.  Pick the first option on this list
+LLVM37 adds a few new options to choose from.  Pick the first option on this list
 that will do what you need, they are ordered according to their relative cost.
 
 Note that it is generally preferred to *not* pass strings around as ``const
@@ -951,7 +951,7 @@ For more information on choosing string containers for APIs, please see
 
 .. _dss_stringref:
 
-llvm/ADT/StringRef.h
+llvm37/ADT/StringRef.h
 ^^^^^^^^^^^^^^^^^^^^
 
 The StringRef class is a simple value class that contains a pointer to a
@@ -993,7 +993,7 @@ into some string that it owns.
 
 .. _dss_twine:
 
-llvm/ADT/Twine.h
+llvm37/ADT/Twine.h
 ^^^^^^^^^^^^^^^^
 
 The Twine class is used as an intermediary datatype for APIs that want to take a
@@ -1034,7 +1034,7 @@ really well with StringRef.  Just be aware of their limitations.
 
 .. _dss_smallstring:
 
-llvm/ADT/SmallString.h
+llvm37/ADT/SmallString.h
 ^^^^^^^^^^^^^^^^^^^^^^
 
 SmallString is a subclass of :ref:`SmallVector <dss_smallvector>` that adds some
@@ -1098,7 +1098,7 @@ equal, use ``std::equal_range``).
 
 .. _dss_smallset:
 
-llvm/ADT/SmallSet.h
+llvm37/ADT/SmallSet.h
 ^^^^^^^^^^^^^^^^^^^
 
 If you have a set-like data structure that is usually small and whose elements
@@ -1117,7 +1117,7 @@ and erasing, but does not support iteration.
 
 .. _dss_smallptrset:
 
-llvm/ADT/SmallPtrSet.h
+llvm37/ADT/SmallPtrSet.h
 ^^^^^^^^^^^^^^^^^^^^^^
 
 ``SmallPtrSet`` has all the advantages of ``SmallSet`` (and a ``SmallSet`` of
@@ -1133,7 +1133,7 @@ iterators are not visited in sorted order.
 
 .. _dss_stringset:
 
-llvm/ADT/StringSet.h
+llvm37/ADT/StringSet.h
 ^^^^^^^^^^^^^^^^^^^^
 
 ``StringSet`` is a thin wrapper around :ref:`StringMap\<char\> <dss_stringmap>`,
@@ -1148,7 +1148,7 @@ copy-construction, which :ref:`SmallSet <dss_smallset>` and :ref:`SmallPtrSet
 
 .. _dss_denseset:
 
-llvm/ADT/DenseSet.h
+llvm37/ADT/DenseSet.h
 ^^^^^^^^^^^^^^^^^^^
 
 DenseSet is a simple quadratically probed hash table.  It excels at supporting
@@ -1160,7 +1160,7 @@ pointers).  Note that DenseSet has the same requirements for the value type that
 
 .. _dss_sparseset:
 
-llvm/ADT/SparseSet.h
+llvm37/ADT/SparseSet.h
 ^^^^^^^^^^^^^^^^^^^^
 
 SparseSet holds a small number of objects identified by unsigned keys of
@@ -1174,7 +1174,7 @@ data structures.
 
 .. _dss_sparsemultiset:
 
-llvm/ADT/SparseMultiSet.h
+llvm37/ADT/SparseMultiSet.h
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 SparseMultiSet adds multiset behavior to SparseSet, while retaining SparseSet's
@@ -1190,7 +1190,7 @@ building composite data structures.
 
 .. _dss_FoldingSet:
 
-llvm/ADT/FoldingSet.h
+llvm37/ADT/FoldingSet.h
 ^^^^^^^^^^^^^^^^^^^^^
 
 FoldingSet is an aggregate class that is really good at uniquing
@@ -1241,10 +1241,10 @@ std::set is almost never a good choice.
 
 .. _dss_setvector:
 
-llvm/ADT/SetVector.h
+llvm37/ADT/SetVector.h
 ^^^^^^^^^^^^^^^^^^^^
 
-LLVM's ``SetVector<Type>`` is an adapter class that combines your choice of a
+LLVM37's ``SetVector<Type>`` is an adapter class that combines your choice of a
 set-like container along with a :ref:`Sequential Container <ds_sequential>` The
 important property that this provides is efficient insertion with uniquing
 (duplicate elements are ignored) with iteration support.  It implements this by
@@ -1268,14 +1268,14 @@ faster.
 
 ``SetVector`` is an adapter class that defaults to using ``std::vector`` and a
 size 16 ``SmallSet`` for the underlying containers, so it is quite expensive.
-However, ``"llvm/ADT/SetVector.h"`` also provides a ``SmallSetVector`` class,
+However, ``"llvm37/ADT/SetVector.h"`` also provides a ``SmallSetVector`` class,
 which defaults to using a ``SmallVector`` and ``SmallSet`` of a specified size.
 If you use this, and if your sets are dynamically smaller than ``N``, you will
 save a lot of heap traffic.
 
 .. _dss_uniquevector:
 
-llvm/ADT/UniqueVector.h
+llvm37/ADT/UniqueVector.h
 ^^^^^^^^^^^^^^^^^^^^^^^
 
 UniqueVector is similar to :ref:`SetVector <dss_setvector>` but it retains a
@@ -1288,7 +1288,7 @@ produces a lot of malloc traffic.  It should be avoided.
 
 .. _dss_immutableset:
 
-llvm/ADT/ImmutableSet.h
+llvm37/ADT/ImmutableSet.h
 ^^^^^^^^^^^^^^^^^^^^^^^
 
 ImmutableSet is an immutable (functional) set implementation based on an AVL
@@ -1338,7 +1338,7 @@ vectors for sets.
 
 .. _dss_stringmap:
 
-llvm/ADT/StringMap.h
+llvm37/ADT/StringMap.h
 ^^^^^^^^^^^^^^^^^^^^
 
 Strings are commonly used as keys in maps, and they are difficult to support
@@ -1371,7 +1371,7 @@ any uses which require that should instead use a std::map.
 
 .. _dss_indexmap:
 
-llvm/ADT/IndexedMap.h
+llvm37/ADT/IndexedMap.h
 ^^^^^^^^^^^^^^^^^^^^^
 
 IndexedMap is a specialized container for mapping small dense integers (or
@@ -1379,13 +1379,13 @@ values that can be mapped to small dense integers) to some other type.  It is
 internally implemented as a vector with a mapping function that maps the keys
 to the dense integer range.
 
-This is useful for cases like virtual registers in the LLVM code generator: they
+This is useful for cases like virtual registers in the LLVM37 code generator: they
 have a dense mapping that is offset by a compile-time constant (the first
 virtual register ID).
 
 .. _dss_densemap:
 
-llvm/ADT/DenseMap.h
+llvm37/ADT/DenseMap.h
 ^^^^^^^^^^^^^^^^^^^
 
 DenseMap is a simple quadratically probed hash table.  It excels at supporting
@@ -1410,7 +1410,7 @@ type used.
 
 .. _dss_valuemap:
 
-llvm/IR/ValueMap.h
+llvm37/IR/ValueMap.h
 ^^^^^^^^^^^^^^^^^^^
 
 ValueMap is a wrapper around a :ref:`DenseMap <dss_densemap>` mapping
@@ -1422,7 +1422,7 @@ parameter to the ValueMap template.
 
 .. _dss_intervalmap:
 
-llvm/ADT/IntervalMap.h
+llvm37/ADT/IntervalMap.h
 ^^^^^^^^^^^^^^^^^^^^^^
 
 IntervalMap is a compact map for small keys and values.  It maps key intervals
@@ -1450,7 +1450,7 @@ another element takes place).
 
 .. _dss_mapvector:
 
-llvm/ADT/MapVector.h
+llvm37/ADT/MapVector.h
 ^^^^^^^^^^^^^^^^^^^^
 
 ``MapVector<KeyT,ValueT>`` provides a subset of the DenseMap interface.  The
@@ -1466,7 +1466,7 @@ necessary to remove elements, it's best to remove them in bulk using
 
 .. _dss_inteqclasses:
 
-llvm/ADT/IntEqClasses.h
+llvm37/ADT/IntEqClasses.h
 ^^^^^^^^^^^^^^^^^^^^^^^
 
 IntEqClasses provides a compact representation of equivalence classes of small
@@ -1482,7 +1482,7 @@ it can be edited again.
 
 .. _dss_immutablemap:
 
-llvm/ADT/ImmutableMap.h
+llvm37/ADT/ImmutableMap.h
 ^^^^^^^^^^^^^^^^^^^^^^^
 
 ImmutableMap is an immutable (functional) map implementation based on an AVL
@@ -1567,12 +1567,12 @@ testing/setting bits in a SparseBitVector is O(distance away from last set bit).
 Helpful Hints for Common Operations
 ===================================
 
-This section describes how to perform some very simple transformations of LLVM
+This section describes how to perform some very simple transformations of LLVM37
 code.  This is meant to give examples of common idioms used, showing the
-practical side of LLVM transformations.
+practical side of LLVM37 transformations.
 
 Because this is a "how-to" section, you should also read about the main classes
-that you will be working with.  The :ref:`Core LLVM Class Hierarchy Reference
+that you will be working with.  The :ref:`Core LLVM37 Class Hierarchy Reference
 <coreclasses>` contains details and descriptions of the main classes that you
 should know about.
 
@@ -1581,7 +1581,7 @@ should know about.
 Basic Inspection and Traversal Routines
 ---------------------------------------
 
-The LLVM compiler infrastructure have many different data structures that may be
+The LLVM37 compiler infrastructure have many different data structures that may be
 traversed.  Following the example of the C++ standard template library, the
 techniques used to traverse these various data structures are all basically the
 same.  For a enumerable sequence of values, the ``XXXbegin()`` function (or
@@ -1653,14 +1653,14 @@ Iterating over the ``Instruction`` in a ``Function``
 If you're finding that you commonly iterate over a ``Function``'s
 ``BasicBlock``\ s and then that ``BasicBlock``'s ``Instruction``\ s,
 ``InstIterator`` should be used instead.  You'll need to include
-``llvm/IR/InstIterator.h`` (`doxygen
-<http://llvm.org/doxygen/InstIterator_8h.html>`__) and then instantiate
+``llvm37/IR/InstIterator.h`` (`doxygen
+<http://llvm37.org/doxygen/InstIterator_8h.html>`__) and then instantiate
 ``InstIterator``\ s explicitly in your code.  Here's a small example that shows
 how to dump all instructions in a function to the standard error stream:
 
 .. code-block:: c++
 
-  #include "llvm/IR/InstIterator.h"
+  #include "llvm37/IR/InstIterator.h"
 
   // F is a pointer to a Function instance
   for (inst_iterator I = inst_begin(F), E = inst_end(F); I != E; ++I)
@@ -1698,7 +1698,7 @@ pointer from an iterator is very straight-forward.  Assuming that ``i`` is a
   Instruction* pinst = &*i; // Grab pointer to instruction reference
   const Instruction& inst = *j;
 
-However, the iterators you'll be working with in the LLVM framework are special:
+However, the iterators you'll be working with in the LLVM37 framework are special:
 they will automatically convert to a ptr-to-instance type whenever they need to.
 Instead of derferencing the iterator and then taking the address of the result,
 you can simply assign the iterator to the proper pointer type and you get the
@@ -1718,7 +1718,7 @@ is semantically equivalent to
 
 It's also possible to turn a class pointer into the corresponding iterator, and
 this is a constant time operation (very efficient).  The following code snippet
-illustrates use of the conversion constructors provided by LLVM iterators.  By
+illustrates use of the conversion constructors provided by LLVM37 iterators.  By
 using these, you can explicitly grab the iterator of something without actually
 obtaining it via iteration over some structure:
 
@@ -1737,7 +1737,7 @@ following code, where ``B`` is a ``BasicBlock``, from compiling:
 
 .. code-block:: c++
 
-  llvm::SmallVector<llvm::Instruction *, 16>(B->begin(), B->end());
+  llvm37::SmallVector<llvm37::Instruction *, 16>(B->begin(), B->end());
 
 Because of this, these implicit conversions may be removed some day, and
 ``operator*`` changed to return a pointer instead of a reference.
@@ -1804,8 +1804,8 @@ it did not deal with call sites generated by 'invoke' instructions.  In this,
 and in other situations, you may find that you want to treat ``CallInst``\ s and
 ``InvokeInst``\ s the same way, even though their most-specific common base
 class is ``Instruction``, which includes lots of less closely-related things.
-For these cases, LLVM provides a handy wrapper class called ``CallSite``
-(`doxygen <http://llvm.org/doxygen/classllvm_1_1CallSite.html>`__) It is
+For these cases, LLVM37 provides a handy wrapper class called ``CallSite``
+(`doxygen <http://llvm37.org/doxygen/classllvm37_1_1CallSite.html>`__) It is
 essentially a wrapper around an ``Instruction`` pointer, with some methods that
 provide functionality common to ``CallInst``\ s and ``InvokeInst``\ s.
 
@@ -1821,7 +1821,7 @@ Iterating over def-use & use-def chains
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Frequently, we might have an instance of the ``Value`` class (`doxygen
-<http://llvm.org/doxygen/classllvm_1_1Value.html>`__) and we want to determine
+<http://llvm37.org/doxygen/classllvm37_1_1Value.html>`__) and we want to determine
 which ``User`` s use the ``Value``.  The list of all ``User``\ s of a particular
 ``Value`` is called a *def-use* chain.  For example, let's say we have a
 ``Function*`` named ``F`` to a particular function ``foo``.  Finding all of the
@@ -1839,7 +1839,7 @@ chain of ``F``:
     }
 
 Alternatively, it's common to have an instance of the ``User`` Class (`doxygen
-<http://llvm.org/doxygen/classllvm_1_1User.html>`__) and need to know what
+<http://llvm37.org/doxygen/classllvm37_1_1User.html>`__) and need to know what
 ``Value``\ s are used by it.  The list of all ``Value``\ s used by a ``User`` is
 known as a *use-def* chain.  Instances of class ``Instruction`` are common
 ``User`` s, so we might want to iterate over all of the values that a particular
@@ -1868,12 +1868,12 @@ Iterating over predecessors & successors of blocks
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Iterating over the predecessors and successors of a block is quite easy with the
-routines defined in ``"llvm/IR/CFG.h"``.  Just use code like this to
+routines defined in ``"llvm37/IR/CFG.h"``.  Just use code like this to
 iterate over all predecessors of BB:
 
 .. code-block:: c++
 
-  #include "llvm/Support/CFG.h"
+  #include "llvm37/Support/CFG.h"
   BasicBlock *BB = ...;
 
   for (pred_iterator PI = pred_begin(BB), E = pred_end(BB); PI != E; ++PI) {
@@ -1888,7 +1888,7 @@ Similarly, to iterate over successors use ``succ_iterator/succ_begin/succ_end``.
 Making simple changes
 ---------------------
 
-There are some primitive transformation operations present in the LLVM
+There are some primitive transformation operations present in the LLVM37
 infrastructure that are worth knowing about.  When performing transformations,
 it's fairly common to manipulate the contents of basic blocks.  This section
 describes some of the common methods for doing so and gives example code.
@@ -1912,14 +1912,14 @@ will create an ``AllocaInst`` instance that represents the allocation of one
 integer in the current stack frame, at run time.  Each ``Instruction`` subclass
 is likely to have varying default parameters which change the semantics of the
 instruction, so refer to the `doxygen documentation for the subclass of
-Instruction <http://llvm.org/doxygen/classllvm_1_1Instruction.html>`_ that
+Instruction <http://llvm37.org/doxygen/classllvm37_1_1Instruction.html>`_ that
 you're interested in instantiating.
 
 *Naming values*
 
 It is very useful to name the values of instructions when you're able to, as
 this facilitates the debugging of your transformations.  If you end up looking
-at generated LLVM machine code, you definitely want to have logical names
+at generated LLVM37 machine code, you definitely want to have logical names
 associated with the results of instructions!  By supplying a value for the
 ``Name`` (default) parameter of the ``Instruction`` constructor, you associate a
 logical name with the result of the instruction's execution at run time.  For
@@ -2067,8 +2067,8 @@ Replacing an Instruction with another Value
 Replacing individual instructions
 """""""""""""""""""""""""""""""""
 
-Including "`llvm/Transforms/Utils/BasicBlockUtils.h
-<http://llvm.org/doxygen/BasicBlockUtils_8h-source.html>`_" permits use of two
+Including "`llvm37/Transforms/Utils/BasicBlockUtils.h
+<http://llvm37.org/doxygen/BasicBlockUtils_8h-source.html>`_" permits use of two
 very useful replace functions: ``ReplaceInstWithValue`` and
 ``ReplaceInstWithInst``.
 
@@ -2114,8 +2114,8 @@ Replacing multiple uses of Users and Values
 
 You can use ``Value::replaceAllUsesWith`` and ``User::replaceUsesOfWith`` to
 change more than one use at a time.  See the doxygen documentation for the
-`Value Class <http://llvm.org/doxygen/classllvm_1_1Value.html>`_ and `User Class
-<http://llvm.org/doxygen/classllvm_1_1User.html>`_, respectively, for more
+`Value Class <http://llvm37.org/doxygen/classllvm37_1_1Value.html>`_ and `User Class
+<http://llvm37.org/doxygen/classllvm37_1_1User.html>`_, respectively, for more
 information.
 
 .. _schanges_deletingGV:
@@ -2142,11 +2142,11 @@ How to Create Types
 
 In generating IR, you may need some complex types.  If you know these types
 statically, you can use ``TypeBuilder<...>::get()``, defined in
-``llvm/Support/TypeBuilder.h``, to retrieve them.  ``TypeBuilder`` has two forms
+``llvm37/Support/TypeBuilder.h``, to retrieve them.  ``TypeBuilder`` has two forms
 depending on whether you're building types for cross-compilation or native
 library use.  ``TypeBuilder<T, true>`` requires that ``T`` be independent of the
-host environment, meaning that it's built out of types from the ``llvm::types``
-(`doxygen <http://llvm.org/doxygen/namespacellvm_1_1types.html>`__) namespace
+host environment, meaning that it's built out of types from the ``llvm37::types``
+(`doxygen <http://llvm37.org/doxygen/namespacellvm37_1_1types.html>`__) namespace
 and pointers, functions, arrays, etc. built of those.  ``TypeBuilder<T, false>``
 additionally allows native C types whose size may depend on the host compiler.
 For example,
@@ -2164,36 +2164,36 @@ is easier to read and write than the equivalent
   FunctionType *ft = FunctionType::get(Type::Int8Ty, params, false);
 
 See the `class comment
-<http://llvm.org/doxygen/TypeBuilder_8h-source.html#l00001>`_ for more details.
+<http://llvm37.org/doxygen/TypeBuilder_8h-source.html#l00001>`_ for more details.
 
 .. _threading:
 
-Threads and LLVM
+Threads and LLVM37
 ================
 
-This section describes the interaction of the LLVM APIs with multithreading,
+This section describes the interaction of the LLVM37 APIs with multithreading,
 both on the part of client applications, and in the JIT, in the hosted
 application.
 
-Note that LLVM's support for multithreading is still relatively young.  Up
+Note that LLVM37's support for multithreading is still relatively young.  Up
 through version 2.5, the execution of threaded hosted applications was
 supported, but not threaded client access to the APIs.  While this use case is
 now supported, clients *must* adhere to the guidelines specified below to ensure
 proper operation in multithreaded mode.
 
-Note that, on Unix-like platforms, LLVM requires the presence of GCC's atomic
+Note that, on Unix-like platforms, LLVM37 requires the presence of GCC's atomic
 intrinsics in order to support threaded operation.  If you need a
-multhreading-capable LLVM on a platform without a suitably modern system
-compiler, consider compiling LLVM and LLVM-GCC in single-threaded mode, and
-using the resultant compiler to build a copy of LLVM with multithreading
+multhreading-capable LLVM37 on a platform without a suitably modern system
+compiler, consider compiling LLVM37 and LLVM37-GCC in single-threaded mode, and
+using the resultant compiler to build a copy of LLVM37 with multithreading
 support.
 
 .. _shutdown:
 
-Ending Execution with ``llvm_shutdown()``
+Ending Execution with ``llvm37_shutdown()``
 -----------------------------------------
 
-When you are done using the LLVM APIs, you should call ``llvm_shutdown()`` to
+When you are done using the LLVM37 APIs, you should call ``llvm37_shutdown()`` to
 deallocate memory used for internal structures.
 
 .. _managedstatic:
@@ -2201,28 +2201,28 @@ deallocate memory used for internal structures.
 Lazy Initialization with ``ManagedStatic``
 ------------------------------------------
 
-``ManagedStatic`` is a utility class in LLVM used to implement static
+``ManagedStatic`` is a utility class in LLVM37 used to implement static
 initialization of static resources, such as the global type tables.  In a
 single-threaded environment, it implements a simple lazy initialization scheme.
-When LLVM is compiled with support for multi-threading, however, it uses
+When LLVM37 is compiled with support for multi-threading, however, it uses
 double-checked locking to implement thread-safe lazy initialization.
 
-.. _llvmcontext:
+.. _llvm37context:
 
-Achieving Isolation with ``LLVMContext``
+Achieving Isolation with ``LLVM37Context``
 ----------------------------------------
 
-``LLVMContext`` is an opaque class in the LLVM API which clients can use to
-operate multiple, isolated instances of LLVM concurrently within the same
+``LLVM37Context`` is an opaque class in the LLVM37 API which clients can use to
+operate multiple, isolated instances of LLVM37 concurrently within the same
 address space.  For instance, in a hypothetical compile-server, the compilation
 of an individual translation unit is conceptually independent from all the
 others, and it would be desirable to be able to compile incoming translation
-units concurrently on independent server threads.  Fortunately, ``LLVMContext``
+units concurrently on independent server threads.  Fortunately, ``LLVM37Context``
 exists to enable just this kind of scenario!
 
-Conceptually, ``LLVMContext`` provides isolation.  Every LLVM entity
-(``Module``\ s, ``Value``\ s, ``Type``\ s, ``Constant``\ s, etc.) in LLVM's
-in-memory IR belongs to an ``LLVMContext``.  Entities in different contexts
+Conceptually, ``LLVM37Context`` provides isolation.  Every LLVM37 entity
+(``Module``\ s, ``Value``\ s, ``Type``\ s, ``Constant``\ s, etc.) in LLVM37's
+in-memory IR belongs to an ``LLVM37Context``.  Entities in different contexts
 *cannot* interact with each other: ``Module``\ s in different contexts cannot be
 linked together, ``Function``\ s cannot be added to ``Module``\ s in different
 contexts, etc.  What this means is that is is safe to compile on multiple
@@ -2230,15 +2230,15 @@ threads simultaneously, as long as no two threads operate on entities within the
 same context.
 
 In practice, very few places in the API require the explicit specification of a
-``LLVMContext``, other than the ``Type`` creation/lookup APIs.  Because every
+``LLVM37Context``, other than the ``Type`` creation/lookup APIs.  Because every
 ``Type`` carries a reference to its owning context, most other entities can
 determine what context they belong to by looking at their own ``Type``.  If you
-are adding new entities to LLVM IR, please try to maintain this interface
+are adding new entities to LLVM37 IR, please try to maintain this interface
 design.
 
-For clients that do *not* require the benefits of isolation, LLVM provides a
+For clients that do *not* require the benefits of isolation, LLVM37 provides a
 convenience API ``getGlobalContext()``.  This returns a global, lazily
-initialized ``LLVMContext`` that may be used in situations where isolation is
+initialized ``LLVM37Context`` that may be used in situations where isolation is
 not a concern.
 
 .. _jitthreading:
@@ -2246,19 +2246,19 @@ not a concern.
 Threads and the JIT
 -------------------
 
-LLVM's "eager" JIT compiler is safe to use in threaded programs.  Multiple
+LLVM37's "eager" JIT compiler is safe to use in threaded programs.  Multiple
 threads can call ``ExecutionEngine::getPointerToFunction()`` or
 ``ExecutionEngine::runFunction()`` concurrently, and multiple threads can run
 code output by the JIT concurrently.  The user must still ensure that only one
-thread accesses IR in a given ``LLVMContext`` while another thread might be
+thread accesses IR in a given ``LLVM37Context`` while another thread might be
 modifying it.  One way to do that is to always hold the JIT lock while accessing
 IR outside the JIT (the JIT *modifies* the IR by adding ``CallbackVH``\ s).
 Another way is to only call ``getPointerToFunction()`` from the
-``LLVMContext``'s thread.
+``LLVM37Context``'s thread.
 
 When the JIT is configured to compile lazily (using
 ``ExecutionEngine::DisableLazyCompilation(false)``), there is currently a `race
-condition <http://llvm.org/bugs/show_bug.cgi?id=5184>`_ in updating call sites
+condition <http://llvm37.org/bugs/show_bug.cgi?id=5184>`_ in updating call sites
 after a function is lazily-jitted.  It's still possible to use the lazy JIT in a
 threaded program if you ensure that only one thread at a time can call any
 particular lazy stub and that the JIT lock guards any IR access, but we suggest
@@ -2271,7 +2271,7 @@ Advanced Topics
 
 This section describes some of the advanced or obscure API's that most clients
 do not need to be aware of.  These API's tend manage the inner workings of the
-LLVM system, and only need to be accessed in unusual circumstances.
+LLVM37 system, and only need to be accessed in unusual circumstances.
 
 .. _SymbolTable:
 
@@ -2279,13 +2279,13 @@ The ``ValueSymbolTable`` class
 ------------------------------
 
 The ``ValueSymbolTable`` (`doxygen
-<http://llvm.org/doxygen/classllvm_1_1ValueSymbolTable.html>`__) class provides
+<http://llvm37.org/doxygen/classllvm37_1_1ValueSymbolTable.html>`__) class provides
 a symbol table that the :ref:`Function <c_Function>` and Module_ classes use for
 naming value definitions.  The symbol table can provide a name for any Value_.
 
 Note that the ``SymbolTable`` class should not be directly accessed by most
 clients.  It should only be used when iteration over the symbol table names
-themselves are required, which is very special purpose.  Note that not all LLVM
+themselves are required, which is very special purpose.  Note that not all LLVM37
 Value_\ s have names, and those without names (i.e. they have an empty name) do
 not exist in the symbol table.
 
@@ -2300,10 +2300,10 @@ autoinsert it into the appropriate symbol table.
 The ``User`` and owned ``Use`` classes' memory layout
 -----------------------------------------------------
 
-The ``User`` (`doxygen <http://llvm.org/doxygen/classllvm_1_1User.html>`__)
+The ``User`` (`doxygen <http://llvm37.org/doxygen/classllvm37_1_1User.html>`__)
 class provides a basis for expressing the ownership of ``User`` towards other
-`Value instance <http://llvm.org/doxygen/classllvm_1_1Value.html>`_\ s.  The
-``Use`` (`doxygen <http://llvm.org/doxygen/classllvm_1_1Use.html>`__) helper
+`Value instance <http://llvm37.org/doxygen/classllvm37_1_1Value.html>`_\ s.  The
+``Use`` (`doxygen <http://llvm37.org/doxygen/classllvm37_1_1Use.html>`__) helper
 class is employed to do the bookkeeping and to facilitate *O(1)* addition and
 removal.
 
@@ -2524,7 +2524,7 @@ generic programming (sometimes called "compile-time duck typing" or "static
 polymorphism"). For example, a template over some type parameter ``T`` can be
 instantiated across any particular implementation that conforms to the
 interface or *concept*. A good example here is the highly generic properties of
-any type which models a node in a directed graph. LLVM models these primarily
+any type which models a node in a directed graph. LLVM37 models these primarily
 through templates and generic programming. Such templates include the
 ``LoopInfoBase`` and ``DominatorTreeBase``. When this type of polymorphism
 truly needs **dynamic** dispatch you can generalize it using a technique
@@ -2557,48 +2557,48 @@ circumstances that require one technique or the other to be used.
 If you do need to introduce a type hierarchy, we prefer to use explicitly
 closed type hierarchies with manual tagged dispatch and/or RTTI rather than the
 open inheritance model and virtual dispatch that is more common in C++ code.
-This is because LLVM rarely encourages library consumers to extend its core
+This is because LLVM37 rarely encourages library consumers to extend its core
 types, and leverages the closed and tag-dispatched nature of its hierarchies to
 generate significantly more efficient code. We have also found that a large
 amount of our usage of type hierarchies fits better with tag-based pattern
-matching rather than dynamic dispatch across a common interface. Within LLVM we
+matching rather than dynamic dispatch across a common interface. Within LLVM37 we
 have built custom helpers to facilitate this design. See this document's
 section on :ref:`isa and dyn_cast <isa>` and our :doc:`detailed document
-<HowToSetUpLLVMStyleRTTI>` which describes how you can implement this
-pattern for use with the LLVM helpers.
+<HowToSetUpLLVM37StyleRTTI>` which describes how you can implement this
+pattern for use with the LLVM37 helpers.
 
 .. _abi_breaking_checks:
 
 ABI Breaking Checks
 -------------------
 
-Checks and asserts that alter the LLVM C++ ABI are predicated on the
-preprocessor symbol `LLVM_ENABLE_ABI_BREAKING_CHECKS` -- LLVM
-libraries built with `LLVM_ENABLE_ABI_BREAKING_CHECKS` are not ABI
-compatible LLVM libraries built without it defined.  By default,
-turning on assertions also turns on `LLVM_ENABLE_ABI_BREAKING_CHECKS`
+Checks and asserts that alter the LLVM37 C++ ABI are predicated on the
+preprocessor symbol `LLVM37_ENABLE_ABI_BREAKING_CHECKS` -- LLVM37
+libraries built with `LLVM37_ENABLE_ABI_BREAKING_CHECKS` are not ABI
+compatible LLVM37 libraries built without it defined.  By default,
+turning on assertions also turns on `LLVM37_ENABLE_ABI_BREAKING_CHECKS`
 so a default +Asserts build is not ABI compatible with a
 default -Asserts build.  Clients that want ABI compatibility
 between +Asserts and -Asserts builds should use the CMake or autoconf
-build systems to set `LLVM_ENABLE_ABI_BREAKING_CHECKS` independently
-of `LLVM_ENABLE_ASSERTIONS`.
+build systems to set `LLVM37_ENABLE_ABI_BREAKING_CHECKS` independently
+of `LLVM37_ENABLE_ASSERTIONS`.
 
 .. _coreclasses:
 
-The Core LLVM Class Hierarchy Reference
+The Core LLVM37 Class Hierarchy Reference
 =======================================
 
-``#include "llvm/IR/Type.h"``
+``#include "llvm37/IR/Type.h"``
 
-header source: `Type.h <http://llvm.org/doxygen/Type_8h-source.html>`_
+header source: `Type.h <http://llvm37.org/doxygen/Type_8h-source.html>`_
 
-doxygen info: `Type Clases <http://llvm.org/doxygen/classllvm_1_1Type.html>`_
+doxygen info: `Type Clases <http://llvm37.org/doxygen/classllvm37_1_1Type.html>`_
 
-The Core LLVM classes are the primary means of representing the program being
-inspected or transformed.  The core LLVM classes are defined in header files in
-the ``include/llvm/IR`` directory, and implemented in the ``lib/IR``
+The Core LLVM37 classes are the primary means of representing the program being
+inspected or transformed.  The core LLVM37 classes are defined in header files in
+the ``include/llvm37/IR`` directory, and implemented in the ``lib/IR``
 directory. It's worth noting that, for historical reasons, this library is
-called ``libLLVMCore.so``, not ``libLLVMIR.so`` as you might expect.
+called ``libLLVM37Core.so``, not ``libLLVM37IR.so`` as you might expect.
 
 .. _Type:
 
@@ -2692,14 +2692,14 @@ Important Derived Types
 The ``Module`` class
 --------------------
 
-``#include "llvm/IR/Module.h"``
+``#include "llvm37/IR/Module.h"``
 
-header source: `Module.h <http://llvm.org/doxygen/Module_8h-source.html>`_
+header source: `Module.h <http://llvm37.org/doxygen/Module_8h-source.html>`_
 
-doxygen info: `Module Class <http://llvm.org/doxygen/classllvm_1_1Module.html>`_
+doxygen info: `Module Class <http://llvm37.org/doxygen/classllvm37_1_1Module.html>`_
 
-The ``Module`` class represents the top level structure present in LLVM
-programs.  An LLVM module is effectively either a translation unit of the
+The ``Module`` class represents the top level structure present in LLVM37
+programs.  An LLVM37 module is effectively either a translation unit of the
 original program or a combination of several translation units merged by the
 linker.  The ``Module`` class keeps track of a list of :ref:`Function
 <c_Function>`\ s, a list of GlobalVariable_\ s, and a SymbolTable_.
@@ -2779,33 +2779,33 @@ Important Public Members of the ``Module`` class
 The ``Value`` class
 -------------------
 
-``#include "llvm/IR/Value.h"``
+``#include "llvm37/IR/Value.h"``
 
-header source: `Value.h <http://llvm.org/doxygen/Value_8h-source.html>`_
+header source: `Value.h <http://llvm37.org/doxygen/Value_8h-source.html>`_
 
-doxygen info: `Value Class <http://llvm.org/doxygen/classllvm_1_1Value.html>`_
+doxygen info: `Value Class <http://llvm37.org/doxygen/classllvm37_1_1Value.html>`_
 
-The ``Value`` class is the most important class in the LLVM Source base.  It
+The ``Value`` class is the most important class in the LLVM37 Source base.  It
 represents a typed value that may be used (among other things) as an operand to
 an instruction.  There are many different types of ``Value``\ s, such as
 Constant_\ s, Argument_\ s.  Even Instruction_\ s and :ref:`Function
 <c_Function>`\ s are ``Value``\ s.
 
-A particular ``Value`` may be used many times in the LLVM representation for a
+A particular ``Value`` may be used many times in the LLVM37 representation for a
 program.  For example, an incoming argument to a function (represented with an
 instance of the Argument_ class) is "used" by every instruction in the function
 that references the argument.  To keep track of this relationship, the ``Value``
 class keeps a list of all of the ``User``\ s that is using it (the User_ class
-is a base class for all nodes in the LLVM graph that can refer to ``Value``\ s).
-This use list is how LLVM represents def-use information in the program, and is
+is a base class for all nodes in the LLVM37 graph that can refer to ``Value``\ s).
+This use list is how LLVM37 represents def-use information in the program, and is
 accessible through the ``use_*`` methods, shown below.
 
-Because LLVM is a typed representation, every LLVM ``Value`` is typed, and this
-Type_ is available through the ``getType()`` method.  In addition, all LLVM
+Because LLVM37 is a typed representation, every LLVM37 ``Value`` is typed, and this
+Type_ is available through the ``getType()`` method.  In addition, all LLVM37
 values can be named.  The "name" of the ``Value`` is a symbolic string printed
-in the LLVM code:
+in the LLVM37 code:
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
   %foo = add i32 1, 2
 
@@ -2817,7 +2817,7 @@ be missing (an empty string), so names should **ONLY** be used for debugging
 used to keep track of values or map between them.  For this purpose, use a
 ``std::map`` of pointers to the ``Value`` itself instead.
 
-One important aspect of LLVM is that there is no distinction between an SSA
+One important aspect of LLVM37 is that there is no distinction between an SSA
 variable and the operation that produces it.  Because of this, any reference to
 the value produced by an instruction (or the value available as an incoming
 argument, for example) is represented as a direct pointer to the instance of the
@@ -2839,8 +2839,8 @@ Important Public Members of the ``Value`` class
   | ``use_iterator use_end()`` - Get an iterator to the end of the use-list.
   | ``User *use_back()`` - Returns the last element in the list.
 
-  These methods are the interface to access the def-use information in LLVM.
-  As with all other iterators in LLVM, the naming conventions follow the
+  These methods are the interface to access the def-use information in LLVM37.
+  As with all other iterators in LLVM37, the naming conventions follow the
   conventions defined by the STL_.
 
 * ``Type *getType() const``
@@ -2870,23 +2870,23 @@ Important Public Members of the ``Value`` class
 The ``User`` class
 ------------------
 
-``#include "llvm/IR/User.h"``
+``#include "llvm37/IR/User.h"``
 
-header source: `User.h <http://llvm.org/doxygen/User_8h-source.html>`_
+header source: `User.h <http://llvm37.org/doxygen/User_8h-source.html>`_
 
-doxygen info: `User Class <http://llvm.org/doxygen/classllvm_1_1User.html>`_
+doxygen info: `User Class <http://llvm37.org/doxygen/classllvm37_1_1User.html>`_
 
 Superclass: Value_
 
-The ``User`` class is the common base class of all LLVM nodes that may refer to
+The ``User`` class is the common base class of all LLVM37 nodes that may refer to
 ``Value``\ s.  It exposes a list of "Operands" that are all of the ``Value``\ s
 that the User is referring to.  The ``User`` class itself is a subclass of
 ``Value``.
 
-The operands of a ``User`` point directly to the LLVM ``Value`` that it refers
-to.  Because LLVM uses Static Single Assignment (SSA) form, there can only be
+The operands of a ``User`` point directly to the LLVM37 ``Value`` that it refers
+to.  Because LLVM37 uses Static Single Assignment (SSA) form, there can only be
 one definition referred to, allowing this direct connection.  This connection
-provides the use-def information in LLVM.
+provides the use-def information in LLVM37.
 
 .. _m_User:
 
@@ -2916,17 +2916,17 @@ interface and through an iterator based interface.
 The ``Instruction`` class
 -------------------------
 
-``#include "llvm/IR/Instruction.h"``
+``#include "llvm37/IR/Instruction.h"``
 
 header source: `Instruction.h
-<http://llvm.org/doxygen/Instruction_8h-source.html>`_
+<http://llvm37.org/doxygen/Instruction_8h-source.html>`_
 
 doxygen info: `Instruction Class
-<http://llvm.org/doxygen/classllvm_1_1Instruction.html>`_
+<http://llvm37.org/doxygen/classllvm37_1_1Instruction.html>`_
 
 Superclasses: User_, Value_
 
-The ``Instruction`` class is the common base class for all LLVM instructions.
+The ``Instruction`` class is the common base class for all LLVM37 instructions.
 It provides only a few methods, but is a very commonly used class.  The primary
 data tracked by the ``Instruction`` class itself is the opcode (instruction
 type) and the parent BasicBlock_ the ``Instruction`` is embedded into.  To
@@ -2936,14 +2936,14 @@ represent a specific type of instruction, one of many subclasses of
 Because the ``Instruction`` class subclasses the User_ class, its operands can
 be accessed in the same way as for other ``User``\ s (with the
 ``getOperand()``/``getNumOperands()`` and ``op_begin()``/``op_end()`` methods).
-An important file for the ``Instruction`` class is the ``llvm/Instruction.def``
+An important file for the ``Instruction`` class is the ``llvm37/Instruction.def``
 file.  This file contains some meta-data about the various different types of
-instructions in LLVM.  It describes the enum values that are used as opcodes
+instructions in LLVM37.  It describes the enum values that are used as opcodes
 (for example ``Instruction::Add`` and ``Instruction::ICmp``), as well as the
 concrete sub-classes of ``Instruction`` that implement the instruction (for
 example BinaryOperator_ and CmpInst_).  Unfortunately, the use of macros in this
 file confuses doxygen, so these enum values don't show up correctly in the
-`doxygen output <http://llvm.org/doxygen/classllvm_1_1Instruction.html>`_.
+`doxygen output <http://llvm37.org/doxygen/classllvm37_1_1Instruction.html>`_.
 
 .. _s_Instruction:
 
@@ -3064,18 +3064,18 @@ Important Subclasses of Constant
 The ``GlobalValue`` class
 -------------------------
 
-``#include "llvm/IR/GlobalValue.h"``
+``#include "llvm37/IR/GlobalValue.h"``
 
 header source: `GlobalValue.h
-<http://llvm.org/doxygen/GlobalValue_8h-source.html>`_
+<http://llvm37.org/doxygen/GlobalValue_8h-source.html>`_
 
 doxygen info: `GlobalValue Class
-<http://llvm.org/doxygen/classllvm_1_1GlobalValue.html>`_
+<http://llvm37.org/doxygen/classllvm37_1_1GlobalValue.html>`_
 
 Superclasses: Constant_, User_, Value_
 
 Global values ( GlobalVariable_\ s or :ref:`Function <c_Function>`\ s) are the
-only LLVM values that are visible in the bodies of all :ref:`Function
+only LLVM37 values that are visible in the bodies of all :ref:`Function
 <c_Function>`\ s.  Because they are visible at global scope, they are also
 subject to linking with other globals defined in different translation units.
 To control the linking process, ``GlobalValue``\ s know their linkage rules.
@@ -3099,7 +3099,7 @@ value of the ``GlobalVariable`` are the same, they have different types.  The
 ``GlobalVariable``'s type is ``[24 x i32]``.  The first element's type is
 ``i32.`` Because of this, accessing a global value requires you to dereference
 the pointer with ``GetElementPtrInst`` first, then its elements can be accessed.
-This is explained in the `LLVM Language Reference Manual
+This is explained in the `LLVM37 Language Reference Manual
 <LangRef.html#globalvars>`_.
 
 .. _m_GlobalValue:
@@ -3123,17 +3123,17 @@ Important Public Members of the ``GlobalValue`` class
 The ``Function`` class
 ----------------------
 
-``#include "llvm/IR/Function.h"``
+``#include "llvm37/IR/Function.h"``
 
-header source: `Function.h <http://llvm.org/doxygen/Function_8h-source.html>`_
+header source: `Function.h <http://llvm37.org/doxygen/Function_8h-source.html>`_
 
 doxygen info: `Function Class
-<http://llvm.org/doxygen/classllvm_1_1Function.html>`_
+<http://llvm37.org/doxygen/classllvm37_1_1Function.html>`_
 
 Superclasses: GlobalValue_, Constant_, User_, Value_
 
-The ``Function`` class represents a single procedure in LLVM.  It is actually
-one of the more complex classes in the LLVM hierarchy because it must keep track
+The ``Function`` class represents a single procedure in LLVM37.  It is actually
+one of the more complex classes in the LLVM37 hierarchy because it must keep track
 of a large amount of data.  The ``Function`` class keeps track of a list of
 BasicBlock_\ s, a list of formal Argument_\ s, and a SymbolTable_.
 
@@ -3141,7 +3141,7 @@ The list of BasicBlock_\ s is the most commonly used part of ``Function``
 objects.  The list imposes an implicit ordering of the blocks in the function,
 which indicate how the code will be laid out by the backend.  Additionally, the
 first BasicBlock_ is the implicit entry node for the ``Function``.  It is not
-legal in LLVM to explicitly branch to this initial block.  There are no implicit
+legal in LLVM37 to explicitly branch to this initial block.  There are no implicit
 exit nodes, and in fact there may be multiple exit nodes from a single
 ``Function``.  If the BasicBlock_ list is empty, this indicates that the
 ``Function`` is actually a function declaration: the actual body of the function
@@ -3152,7 +3152,7 @@ of the list of formal Argument_\ s that the function receives.  This container
 manages the lifetime of the Argument_ nodes, just like the BasicBlock_ list does
 for the BasicBlock_\ s.
 
-The SymbolTable_ is a very rarely used LLVM feature that is only used when you
+The SymbolTable_ is a very rarely used LLVM37 feature that is only used when you
 have to look up a value by name.  Aside from that, the SymbolTable_ is used
 internally to make sure that there are not conflicts between the names of
 Instruction_\ s, BasicBlock_\ s, or Argument_\ s in the function body.
@@ -3231,13 +3231,13 @@ Important Public Members of the ``Function``
 The ``GlobalVariable`` class
 ----------------------------
 
-``#include "llvm/IR/GlobalVariable.h"``
+``#include "llvm37/IR/GlobalVariable.h"``
 
 header source: `GlobalVariable.h
-<http://llvm.org/doxygen/GlobalVariable_8h-source.html>`_
+<http://llvm37.org/doxygen/GlobalVariable_8h-source.html>`_
 
 doxygen info: `GlobalVariable Class
-<http://llvm.org/doxygen/classllvm_1_1GlobalVariable.html>`_
+<http://llvm37.org/doxygen/classllvm37_1_1GlobalVariable.html>`_
 
 Superclasses: GlobalValue_, Constant_, User_, Value_
 
@@ -3266,7 +3266,7 @@ Important Public Members of the ``GlobalVariable`` class
   the resultant global variable will have internal linkage.  AppendingLinkage
   concatenates together all instances (in different translation units) of the
   variable into a single variable but is only applicable to arrays.  See the
-  `LLVM Language Reference <LangRef.html#modulestructure>`_ for further details
+  `LLVM37 Language Reference <LangRef.html#modulestructure>`_ for further details
   on linkage types.  Optionally an initializer, a name, and the module to put
   the variable into may be specified for the global variable as well.
 
@@ -3289,13 +3289,13 @@ Important Public Members of the ``GlobalVariable`` class
 The ``BasicBlock`` class
 ------------------------
 
-``#include "llvm/IR/BasicBlock.h"``
+``#include "llvm37/IR/BasicBlock.h"``
 
 header source: `BasicBlock.h
-<http://llvm.org/doxygen/BasicBlock_8h-source.html>`_
+<http://llvm37.org/doxygen/BasicBlock_8h-source.html>`_
 
 doxygen info: `BasicBlock Class
-<http://llvm.org/doxygen/classllvm_1_1BasicBlock.html>`_
+<http://llvm37.org/doxygen/classllvm37_1_1BasicBlock.html>`_
 
 Superclass: Value_
 

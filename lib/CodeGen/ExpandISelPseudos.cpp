@@ -1,6 +1,6 @@
-//===-- llvm/CodeGen/ExpandISelPseudos.cpp ----------------------*- C++ -*-===//
+//===-- llvm37/CodeGen/ExpandISelPseudos.cpp ----------------------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -14,13 +14,13 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/CodeGen/Passes.h"
-#include "llvm/CodeGen/MachineFunction.h"
-#include "llvm/CodeGen/MachineFunctionPass.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Target/TargetLowering.h"
-#include "llvm/Target/TargetSubtargetInfo.h"
-using namespace llvm;
+#include "llvm37/CodeGen/Passes.h"
+#include "llvm37/CodeGen/MachineFunction.h"
+#include "llvm37/CodeGen/MachineFunctionPass.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Target/TargetLowering.h"
+#include "llvm37/Target/TargetSubtargetInfo.h"
+using namespace llvm37;
 
 #define DEBUG_TYPE "expand-isel-pseudos"
 
@@ -40,7 +40,7 @@ namespace {
 } // end anonymous namespace
 
 char ExpandISelPseudos::ID = 0;
-char &llvm::ExpandISelPseudosID = ExpandISelPseudos::ID;
+char &llvm37::ExpandISelPseudosID = ExpandISelPseudos::ID;
 INITIALIZE_PASS(ExpandISelPseudos, "expand-isel-pseudos",
                 "Expand ISel Pseudo-instructions", false, false)
 

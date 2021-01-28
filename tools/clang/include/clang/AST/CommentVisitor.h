@@ -1,17 +1,17 @@
 //===--- CommentVisitor.h - Visitor for Comment subclasses ------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_AST_COMMENTVISITOR_H
-#define LLVM_CLANG_AST_COMMENTVISITOR_H
+#ifndef LLVM37_CLANG_AST_COMMENTVISITOR_H
+#define LLVM37_CLANG_AST_COMMENTVISITOR_H
 
 #include "clang/AST/Comment.h"
-#include "llvm/Support/ErrorHandling.h"
+#include "llvm37/Support/ErrorHandling.h"
 
 namespace clang {
 namespace comments {
@@ -31,7 +31,7 @@ public:
       return RetTy();
 
     switch (C->getCommentKind()) {
-    default: llvm_unreachable("Unknown comment kind!");
+    default: llvm37_unreachable("Unknown comment kind!");
 #define ABSTRACT_COMMENT(COMMENT)
 #define COMMENT(CLASS, PARENT) \
     case Comment::CLASS##Kind: DISPATCH(CLASS, CLASS);

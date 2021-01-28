@@ -1,6 +1,6 @@
 //===- CostModel.cpp ------ Cost Model Analysis ---------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -8,7 +8,7 @@
 //===----------------------------------------------------------------------===//
 //
 // This file defines the cost model analysis. It provides a very basic cost
-// estimation for LLVM-IR. This analysis uses the services of the codegen
+// estimation for LLVM37-IR. This analysis uses the services of the codegen
 // to approximate the cost of any IR instruction when lowered to machine
 // instructions. The cost results are unit-less and the cost number represents
 // the throughput of the machine assuming that all loads hit the cache, all
@@ -17,18 +17,18 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/Analysis/Passes.h"
-#include "llvm/Analysis/TargetTransformInfo.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/IR/Value.h"
-#include "llvm/Pass.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/raw_ostream.h"
-using namespace llvm;
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/Analysis/Passes.h"
+#include "llvm37/Analysis/TargetTransformInfo.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/IR/Value.h"
+#include "llvm37/Pass.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/raw_ostream.h"
+using namespace llvm37;
 
 #define CM_NAME "cost-model"
 #define DEBUG_TYPE CM_NAME
@@ -71,7 +71,7 @@ static const char cm_name[] = "Cost Model Analysis";
 INITIALIZE_PASS_BEGIN(CostModelAnalysis, CM_NAME, cm_name, false, true)
 INITIALIZE_PASS_END  (CostModelAnalysis, CM_NAME, cm_name, false, true)
 
-FunctionPass *llvm::createCostModelAnalysisPass() {
+FunctionPass *llvm37::createCostModelAnalysisPass() {
   return new CostModelAnalysis();
 }
 

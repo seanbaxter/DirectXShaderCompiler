@@ -1,6 +1,6 @@
 //===--- PreprocessingRecord.h - Record of Preprocessing --------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,18 +11,18 @@
 //  of what occurred during preprocessing.
 //
 //===----------------------------------------------------------------------===//
-#ifndef LLVM_CLANG_LEX_PREPROCESSINGRECORD_H
-#define LLVM_CLANG_LEX_PREPROCESSINGRECORD_H
+#ifndef LLVM37_CLANG_LEX_PREPROCESSINGRECORD_H
+#define LLVM37_CLANG_LEX_PREPROCESSINGRECORD_H
 
 #include "clang/Basic/IdentifierTable.h"
 #include "clang/Basic/SourceLocation.h"
 #include "clang/Lex/PPCallbacks.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/Optional.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/ADT/iterator.h"
-#include "llvm/Support/Allocator.h"
-#include "llvm/Support/Compiler.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/Optional.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/ADT/iterator.h"
+#include "llvm37/Support/Allocator.h"
+#include "llvm37/Support/Compiler.h"
 #include <vector>
 
 namespace clang {
@@ -90,7 +90,7 @@ namespace clang {
     
     /// \brief Retrieve the source range that covers this entire preprocessed 
     /// entity.
-    SourceRange getSourceRange() const LLVM_READONLY { return Range; }
+    SourceRange getSourceRange() const LLVM37_READONLY { return Range; }
 
     /// \brief Returns true if there was a problem loading the preprocessed
     /// entity.
@@ -160,7 +160,7 @@ namespace clang {
   class MacroExpansion : public PreprocessedEntity {
     /// \brief The definition of this macro or the name of the macro if it is
     /// a builtin macro.
-    llvm::PointerUnion<IdentifierInfo *, MacroDefinitionRecord *> NameOrDef;
+    llvm37::PointerUnion<IdentifierInfo *, MacroDefinitionRecord *> NameOrDef;
 
   public:
     MacroExpansion(IdentifierInfo *BuiltinName, SourceRange Range)
@@ -293,7 +293,7 @@ namespace clang {
     SourceManager &SourceMgr;
     
     /// \brief Allocator used to store preprocessing objects.
-    llvm::BumpPtrAllocator BumpAlloc;
+    llvm37::BumpPtrAllocator BumpAlloc;
 
     /// \brief The set of preprocessed entities in this record, in order they
     /// were seen.
@@ -331,7 +331,7 @@ namespace clang {
     }
 
     /// \brief Mapping from MacroInfo structures to their definitions.
-    llvm::DenseMap<const MacroInfo *, MacroDefinitionRecord *> MacroDefinitions;
+    llvm37::DenseMap<const MacroInfo *, MacroDefinitionRecord *> MacroDefinitions;
 
     /// \brief External source of preprocessed entities.
     ExternalPreprocessingRecordSource *ExternalSource;
@@ -396,7 +396,7 @@ namespace clang {
     /// We define this as a wrapping iterator around an int. The
     /// iterator_adaptor_base class forwards the iterator methods to basic
     /// integer arithmetic.
-    class iterator : public llvm::iterator_adaptor_base<
+    class iterator : public llvm37::iterator_adaptor_base<
                          iterator, int, std::random_access_iterator_tag,
                          PreprocessedEntity *, int, PreprocessedEntity *,
                          PreprocessedEntity *> {
@@ -441,11 +441,11 @@ namespace clang {
 
     /// \brief iterator range for the given range of loaded
     /// preprocessed entities.
-    llvm::iterator_range<iterator> getIteratorsForLoadedRange(unsigned start,
+    llvm37::iterator_range<iterator> getIteratorsForLoadedRange(unsigned start,
                                                               unsigned count) {
       unsigned end = start + count;
       assert(end <= LoadedPreprocessedEntities.size());
-      return llvm::make_range(
+      return llvm37::make_range(
           iterator(this, int(start) - LoadedPreprocessedEntities.size()),
           iterator(this, int(end) - LoadedPreprocessedEntities.size()));
     }
@@ -455,7 +455,7 @@ namespace clang {
     ///
     /// \param R the range to look for preprocessed entities.
     ///
-    llvm::iterator_range<iterator>
+    llvm37::iterator_range<iterator>
     getPreprocessedEntitiesInRange(SourceRange R);
 
     /// \brief Returns true if the preprocessed entity that \p PPEI iterator
@@ -535,4 +535,4 @@ inline void operator delete(void* ptr, clang::PreprocessingRecord& PR,
   PR.Deallocate(ptr);
 }
 
-#endif // LLVM_CLANG_LEX_PREPROCESSINGRECORD_H
+#endif // LLVM37_CLANG_LEX_PREPROCESSINGRECORD_H

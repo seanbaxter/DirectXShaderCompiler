@@ -5,4 +5,4 @@
 
 ; CHECK: @in_custom_section = internal dllexport global i8 42, section "CUSTOM"
 
-@llvm.used = appending global [1 x i8*] [i8* @in_custom_section], section "llvm.metadata"
+@llvm37.used = appending global [1 x i8*] [i8* @in_custom_section], section "llvm.metadata"

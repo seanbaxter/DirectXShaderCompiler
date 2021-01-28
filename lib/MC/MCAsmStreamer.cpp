@@ -1,38 +1,38 @@
 //===- lib/MC/MCAsmStreamer.cpp - Text Assembly Output --------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/MC/MCStreamer.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/ADT/StringExtras.h"
-#include "llvm/ADT/Twine.h"
-#include "llvm/MC/MCAsmBackend.h"
-#include "llvm/MC/MCAsmInfo.h"
-#include "llvm/MC/MCCodeEmitter.h"
-#include "llvm/MC/MCContext.h"
-#include "llvm/MC/MCExpr.h"
-#include "llvm/MC/MCFixupKindInfo.h"
-#include "llvm/MC/MCInst.h"
-#include "llvm/MC/MCInstPrinter.h"
-#include "llvm/MC/MCObjectFileInfo.h"
-#include "llvm/MC/MCRegisterInfo.h"
-#include "llvm/MC/MCSectionCOFF.h"
-#include "llvm/MC/MCSectionMachO.h"
-#include "llvm/MC/MCSymbolELF.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/Format.h"
-#include "llvm/Support/FormattedStream.h"
-#include "llvm/Support/MathExtras.h"
-#include "llvm/Support/Path.h"
+#include "llvm37/MC/MCStreamer.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/ADT/StringExtras.h"
+#include "llvm37/ADT/Twine.h"
+#include "llvm37/MC/MCAsmBackend.h"
+#include "llvm37/MC/MCAsmInfo.h"
+#include "llvm37/MC/MCCodeEmitter.h"
+#include "llvm37/MC/MCContext.h"
+#include "llvm37/MC/MCExpr.h"
+#include "llvm37/MC/MCFixupKindInfo.h"
+#include "llvm37/MC/MCInst.h"
+#include "llvm37/MC/MCInstPrinter.h"
+#include "llvm37/MC/MCObjectFileInfo.h"
+#include "llvm37/MC/MCRegisterInfo.h"
+#include "llvm37/MC/MCSectionCOFF.h"
+#include "llvm37/MC/MCSectionMachO.h"
+#include "llvm37/MC/MCSymbolELF.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/Format.h"
+#include "llvm37/Support/FormattedStream.h"
+#include "llvm37/Support/MathExtras.h"
+#include "llvm37/Support/Path.h"
 #include <cctype>
-using namespace llvm;
+using namespace llvm37;
 
 namespace {
 
@@ -414,7 +414,7 @@ void MCAsmStreamer::EmitWeakReference(MCSymbol *Alias, const MCSymbol *Symbol) {
 bool MCAsmStreamer::EmitSymbolAttribute(MCSymbol *Symbol,
                                         MCSymbolAttr Attribute) {
   switch (Attribute) {
-  case MCSA_Invalid: llvm_unreachable("Invalid symbol attribute");
+  case MCSA_Invalid: llvm37_unreachable("Invalid symbol attribute");
   case MCSA_ELF_TypeFunction:    /// .type _foo, STT_FUNC  # aka @function
   case MCSA_ELF_TypeIndFunction: /// .type _foo, STT_GNU_IFUNC
   case MCSA_ELF_TypeObject:      /// .type _foo, STT_OBJECT  # aka @object
@@ -563,7 +563,7 @@ void MCAsmStreamer::EmitLocalCommonSymbol(MCSymbol *Symbol, uint64_t Size,
   if (ByteAlign > 1) {
     switch (MAI->getLCOMMDirectiveAlignmentType()) {
     case LCOMM::NoAlignment:
-      llvm_unreachable("alignment not supported on .lcomm!");
+      llvm37_unreachable("alignment not supported on .lcomm!");
     case LCOMM::ByteAlignment:
       OS << ',' << ByteAlign;
       break;
@@ -802,7 +802,7 @@ void MCAsmStreamer::EmitValueToAlignment(unsigned ByteAlignment, int64_t Value,
   if (isPowerOf2_32(ByteAlignment)) {
     switch (ValueSize) {
     default:
-      llvm_unreachable("Invalid size for machine code value!");
+      llvm37_unreachable("Invalid size for machine code value!");
     case 1:
       OS << "\t.align\t";
       break;
@@ -813,7 +813,7 @@ void MCAsmStreamer::EmitValueToAlignment(unsigned ByteAlignment, int64_t Value,
       OS << ".p2alignl ";
       break;
     case 8:
-      llvm_unreachable("Unsupported alignment size!");
+      llvm37_unreachable("Unsupported alignment size!");
     }
 
     if (MAI->getAlignmentIsInBytes())
@@ -835,11 +835,11 @@ void MCAsmStreamer::EmitValueToAlignment(unsigned ByteAlignment, int64_t Value,
   // Non-power of two alignment.  This is not widely supported by assemblers.
   // FIXME: Parameterize this based on MAI.
   switch (ValueSize) {
-  default: llvm_unreachable("Invalid size for machine code value!");
+  default: llvm37_unreachable("Invalid size for machine code value!");
   case 1: OS << ".balign";  break;
   case 2: OS << ".balignw"; break;
   case 4: OS << ".balignl"; break;
-  case 8: llvm_unreachable("Unsupported alignment size!");
+  case 8: llvm37_unreachable("Unsupported alignment size!");
   }
 
   OS << ' ' << ByteAlignment;
@@ -993,8 +993,8 @@ void MCAsmStreamer::EmitCFIEndProcImpl(MCDwarfFrameInfo &Frame) {
 void MCAsmStreamer::EmitRegisterName(int64_t Register) {
   if (!MAI->useDwarfRegNumForCFI()) {
     const MCRegisterInfo *MRI = getContext().getRegisterInfo();
-    unsigned LLVMRegister = MRI->getLLVMRegNum(Register, true);
-    InstPrinter->printRegName(OS, LLVMRegister);
+    unsigned LLVM37Register = MRI->getLLVM37RegNum(Register, true);
+    InstPrinter->printRegName(OS, LLVM37Register);
   } else {
     OS << Register;
   }
@@ -1362,7 +1362,7 @@ void MCAsmStreamer::FinishImpl() {
   }
 }
 
-MCStreamer *llvm::createAsmStreamer(MCContext &Context,
+MCStreamer *llvm37::createAsmStreamer(MCContext &Context,
                                     std::unique_ptr<formatted_raw_ostream> OS,
                                     bool isVerboseAsm, bool useDwarfDirectory,
                                     MCInstPrinter *IP, MCCodeEmitter *CE,

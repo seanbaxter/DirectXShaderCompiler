@@ -1,6 +1,6 @@
 //===- lib/MC/ELFObjectWriter.cpp - ELF File Writer -----------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,30 +11,30 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/MC/MCELFObjectWriter.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/SmallPtrSet.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/ADT/StringMap.h"
-#include "llvm/MC/MCAsmBackend.h"
-#include "llvm/MC/MCAsmInfo.h"
-#include "llvm/MC/MCAsmLayout.h"
-#include "llvm/MC/MCAssembler.h"
-#include "llvm/MC/MCContext.h"
-#include "llvm/MC/MCExpr.h"
-#include "llvm/MC/MCFixupKindInfo.h"
-#include "llvm/MC/MCObjectWriter.h"
-#include "llvm/MC/MCSectionELF.h"
-#include "llvm/MC/MCSymbolELF.h"
-#include "llvm/MC/MCValue.h"
-#include "llvm/MC/StringTableBuilder.h"
-#include "llvm/Support/Compression.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/ELF.h"
-#include "llvm/Support/Endian.h"
-#include "llvm/Support/ErrorHandling.h"
+#include "llvm37/MC/MCELFObjectWriter.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/SmallPtrSet.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/ADT/StringMap.h"
+#include "llvm37/MC/MCAsmBackend.h"
+#include "llvm37/MC/MCAsmInfo.h"
+#include "llvm37/MC/MCAsmLayout.h"
+#include "llvm37/MC/MCAssembler.h"
+#include "llvm37/MC/MCContext.h"
+#include "llvm37/MC/MCExpr.h"
+#include "llvm37/MC/MCFixupKindInfo.h"
+#include "llvm37/MC/MCObjectWriter.h"
+#include "llvm37/MC/MCSectionELF.h"
+#include "llvm37/MC/MCSymbolELF.h"
+#include "llvm37/MC/MCValue.h"
+#include "llvm37/MC/StringTableBuilder.h"
+#include "llvm37/Support/Compression.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/ELF.h"
+#include "llvm37/Support/Endian.h"
+#include "llvm37/Support/ErrorHandling.h"
 #include <vector>
-using namespace llvm;
+using namespace llvm37;
 
 #undef  DEBUG_TYPE
 #define DEBUG_TYPE "reloc-info"
@@ -99,7 +99,7 @@ class ELFObjectWriter : public MCObjectWriter {
 
     DenseMap<const MCSymbolELF *, const MCSymbolELF *> Renames;
 
-    llvm::DenseMap<const MCSectionELF *, std::vector<ELFRelocationEntry>>
+    llvm37::DenseMap<const MCSectionELF *, std::vector<ELFRelocationEntry>>
         Relocations;
 
     /// @}
@@ -538,7 +538,7 @@ bool ELFObjectWriter::shouldRelocateWithSymbol(const MCAssembler &Asm,
   unsigned Binding = Sym->getBinding();
   switch(Binding) {
   default:
-    llvm_unreachable("Invalid Binding");
+    llvm37_unreachable("Invalid Binding");
   case ELF::STB_LOCAL:
     break;
   case ELF::STB_WEAK:
@@ -599,7 +599,7 @@ static bool isWeak(const MCSymbolELF &Sym) {
 
   switch (Sym.getBinding()) {
   default:
-    llvm_unreachable("Unknown binding");
+    llvm37_unreachable("Unknown binding");
   case ELF::STB_LOCAL:
     return false;
   case ELF::STB_GLOBAL:
@@ -974,7 +974,7 @@ getUncompressedData(const MCAsmLayout &Layout,
       Contents = &cast<MCDwarfCallFrameFragment>(F).getContents();
       break;
     default:
-      llvm_unreachable(
+      llvm37_unreachable(
           "Not expecting any other fragment types in a debug_* section");
     }
     UncompressedData.append(Contents->begin(), Contents->end());
@@ -1116,7 +1116,7 @@ void ELFObjectWriter::writeSection(const SectionIndexMapTy &SectionIndexMap,
     break;
 
   case ELF::SHT_DYNAMIC:
-    llvm_unreachable("SHT_DYNAMIC in a relocatable object");
+    llvm37_unreachable("SHT_DYNAMIC in a relocatable object");
 
   case ELF::SHT_REL:
   case ELF::SHT_RELA: {
@@ -1350,7 +1350,7 @@ bool ELFObjectWriter::isWeak(const MCSymbol &S) const {
   return Sec.getGroup();
 }
 
-MCObjectWriter *llvm::createELFObjectWriter(MCELFObjectTargetWriter *MOTW,
+MCObjectWriter *llvm37::createELFObjectWriter(MCELFObjectTargetWriter *MOTW,
                                             raw_pwrite_stream &OS,
                                             bool IsLittleEndian) {
   return new ELFObjectWriter(MOTW, OS, IsLittleEndian);

@@ -1,6 +1,6 @@
 //===--- ParsePragma.cpp - Language specific pragma parsing ---------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -19,7 +19,7 @@
 #include "clang/Parse/Parser.h"
 #include "clang/Sema/LoopHint.h"
 #include "clang/Sema/Scope.h"
-#include "llvm/ADT/StringSwitch.h"
+#include "llvm37/ADT/StringSwitch.h"
 using namespace clang;
 
 namespace {
@@ -480,7 +480,7 @@ StmtResult Parser::HandlePragmaCaptured()
 }
 
 namespace {
-  typedef llvm::PointerIntPair<IdentifierInfo *, 1, bool> OpenCLExtData;
+  typedef llvm37::PointerIntPair<IdentifierInfo *, 1, bool> OpenCLExtData;
 }
 
 void Parser::HandlePragmaOpenCLExtension() {
@@ -544,7 +544,7 @@ void Parser::HandlePragmaMSPragma() {
   // Figure out which #pragma we're dealing with.  The switch has no default
   // because lex shouldn't emit the annotation token for unrecognized pragmas.
   typedef bool (Parser::*PragmaHandler)(StringRef, SourceLocation);
-  PragmaHandler Handler = llvm::StringSwitch<PragmaHandler>(PragmaName)
+  PragmaHandler Handler = llvm37::StringSwitch<PragmaHandler>(PragmaName)
     .Case("data_seg", &Parser::HandlePragmaMSSegment)
     .Case("bss_seg", &Parser::HandlePragmaMSSegment)
     .Case("const_seg", &Parser::HandlePragmaMSSegment)
@@ -602,7 +602,7 @@ bool Parser::HandlePragmaMSSection(StringRef PragmaName,
       return false;
     }
     ASTContext::PragmaSectionFlag Flag =
-      llvm::StringSwitch<ASTContext::PragmaSectionFlag>(
+      llvm37::StringSwitch<ASTContext::PragmaSectionFlag>(
       Tok.getIdentifierInfo()->getName())
       .Case("read", ASTContext::PSF_Read)
       .Case("write", ASTContext::PSF_Write)
@@ -731,7 +731,7 @@ bool Parser::HandlePragmaMSSegment(StringRef PragmaName,
 bool Parser::HandlePragmaMSInitSeg(StringRef PragmaName,
                                    SourceLocation PragmaLocation) {
   assert(!getLangOpts().HLSL && "not supported in HLSL - unreachable"); // HLSL Change
-  if (getTargetInfo().getTriple().getEnvironment() != llvm::Triple::MSVC) {
+  if (getTargetInfo().getTriple().getEnvironment() != llvm37::Triple::MSVC) {
     PP.Diag(PragmaLocation, diag::warn_pragma_init_seg_unsupported_target);
     return false;
   }
@@ -744,7 +744,7 @@ bool Parser::HandlePragmaMSInitSeg(StringRef PragmaName,
   StringLiteral *SegmentName = nullptr;
   if (Tok.isAnyIdentifier()) {
     auto *II = Tok.getIdentifierInfo();
-    StringRef Section = llvm::StringSwitch<StringRef>(II->getName())
+    StringRef Section = llvm37::StringSwitch<StringRef>(II->getName())
                             .Case("compiler", "\".CRT$XCC\"")
                             .Case("lib", "\".CRT$XCL\"")
                             .Case("user", "\".CRT$XCU\"")
@@ -852,7 +852,7 @@ bool Parser::HandlePragmaLoopHint(LoopHint &Hint) {
   bool StateOption = false;
   if (OptionInfo) { // Pragma Unroll does not specify an option.
     OptionUnroll = OptionInfo->isStr("unroll");
-    StateOption = llvm::StringSwitch<bool>(OptionInfo->getName())
+    StateOption = llvm37::StringSwitch<bool>(OptionInfo->getName())
                       .Case("vectorize", true)
                       .Case("interleave", true)
                       .Case("unroll", true)
@@ -1077,7 +1077,7 @@ void PragmaPackHandler::HandlePragma(Preprocessor &PP,
 
   PragmaPackInfo *Info = 
     (PragmaPackInfo*) PP.getPreprocessorAllocator().Allocate(
-      sizeof(PragmaPackInfo), llvm::alignOf<PragmaPackInfo>());
+      sizeof(PragmaPackInfo), llvm37::alignOf<PragmaPackInfo>());
   new (Info) PragmaPackInfo();
   Info->Kind = Kind;
   Info->Name = Name;
@@ -1087,7 +1087,7 @@ void PragmaPackHandler::HandlePragma(Preprocessor &PP,
 
   Token *Toks = 
     (Token*) PP.getPreprocessorAllocator().Allocate(
-      sizeof(Token) * 1, llvm::alignOf<Token>());
+      sizeof(Token) * 1, llvm37::alignOf<Token>());
   new (Toks) Token();
   Toks[0].startToken();
   Toks[0].setKind(tok::annot_pragma_pack);
@@ -1133,7 +1133,7 @@ void PragmaMSStructHandler::HandlePragma(Preprocessor &PP,
 
   Token *Toks =
     (Token*) PP.getPreprocessorAllocator().Allocate(
-      sizeof(Token) * 1, llvm::alignOf<Token>());
+      sizeof(Token) * 1, llvm37::alignOf<Token>());
   new (Toks) Token();
   Toks[0].startToken();
   Toks[0].setKind(tok::annot_pragma_msstruct);
@@ -1205,7 +1205,7 @@ static void ParseAlignPragma(Preprocessor &PP, Token &FirstTok,
 
   Token *Toks =
     (Token*) PP.getPreprocessorAllocator().Allocate(
-      sizeof(Token) * 1, llvm::alignOf<Token>());
+      sizeof(Token) * 1, llvm37::alignOf<Token>());
   new (Toks) Token();
   Toks[0].startToken();
   Toks[0].setKind(tok::annot_pragma_align);
@@ -1299,7 +1299,7 @@ void PragmaUnusedHandler::HandlePragma(Preprocessor &PP,
 
   Token *Toks = 
     (Token*) PP.getPreprocessorAllocator().Allocate(
-      sizeof(Token) * 2 * Identifiers.size(), llvm::alignOf<Token>());
+      sizeof(Token) * 2 * Identifiers.size(), llvm37::alignOf<Token>());
   for (unsigned i=0; i != Identifiers.size(); i++) {
     Token &pragmaUnusedTok = Toks[2*i], &idTok = Toks[2*i+1];
     pragmaUnusedTok.startToken();
@@ -1351,7 +1351,7 @@ void PragmaWeakHandler::HandlePragma(Preprocessor &PP,
   if (HasAlias) {
     Token *Toks = 
       (Token*) PP.getPreprocessorAllocator().Allocate(
-        sizeof(Token) * 3, llvm::alignOf<Token>());
+        sizeof(Token) * 3, llvm37::alignOf<Token>());
     Token &pragmaUnusedTok = Toks[0];
     pragmaUnusedTok.startToken();
     pragmaUnusedTok.setKind(tok::annot_pragma_weakalias);
@@ -1364,7 +1364,7 @@ void PragmaWeakHandler::HandlePragma(Preprocessor &PP,
   } else {
     Token *Toks = 
       (Token*) PP.getPreprocessorAllocator().Allocate(
-        sizeof(Token) * 2, llvm::alignOf<Token>());
+        sizeof(Token) * 2, llvm37::alignOf<Token>());
     Token &pragmaUnusedTok = Toks[0];
     pragmaUnusedTok.startToken();
     pragmaUnusedTok.setKind(tok::annot_pragma_weak);
@@ -1411,7 +1411,7 @@ void PragmaRedefineExtnameHandler::HandlePragma(Preprocessor &PP,
 
   Token *Toks = 
     (Token*) PP.getPreprocessorAllocator().Allocate(
-      sizeof(Token) * 3, llvm::alignOf<Token>());
+      sizeof(Token) * 3, llvm37::alignOf<Token>());
   Token &pragmaRedefTok = Toks[0];
   pragmaRedefTok.startToken();
   pragmaRedefTok.setKind(tok::annot_pragma_redefine_extname);
@@ -1435,7 +1435,7 @@ PragmaFPContractHandler::HandlePragma(Preprocessor &PP,
 
   Token *Toks =
     (Token*) PP.getPreprocessorAllocator().Allocate(
-      sizeof(Token) * 1, llvm::alignOf<Token>());
+      sizeof(Token) * 1, llvm37::alignOf<Token>());
   new (Toks) Token();
   Toks[0].startToken();
   Toks[0].setKind(tok::annot_pragma_fp_contract);
@@ -1495,7 +1495,7 @@ PragmaOpenCLExtensionHandler::HandlePragma(Preprocessor &PP,
   OpenCLExtData data(ename, state);
   Token *Toks =
     (Token*) PP.getPreprocessorAllocator().Allocate(
-      sizeof(Token) * 1, llvm::alignOf<Token>());
+      sizeof(Token) * 1, llvm37::alignOf<Token>());
   new (Toks) Token();
   Toks[0].startToken();
   Toks[0].setKind(tok::annot_pragma_opencl_extension);
@@ -1869,7 +1869,7 @@ void PragmaCommentHandler::HandlePragma(Preprocessor &PP,
   // Verify that this is one of the 5 whitelisted options.
   IdentifierInfo *II = Tok.getIdentifierInfo();
   Sema::PragmaMSCommentKind Kind =
-    llvm::StringSwitch<Sema::PragmaMSCommentKind>(II->getName())
+    llvm37::StringSwitch<Sema::PragmaMSCommentKind>(II->getName())
     .Case("linker",   Sema::PCK_Linker)
     .Case("lib",      Sema::PCK_Lib)
     .Case("compiler", Sema::PCK_Compiler)
@@ -1997,7 +1997,7 @@ static bool ParseLoopHintValue(Preprocessor &PP, Token &Tok, Token PragmaName,
   ValueList.push_back(EOFTok); // Terminates expression for parsing.
 
   Token *TokenArray = (Token *)PP.getPreprocessorAllocator().Allocate(
-      ValueList.size() * sizeof(Token), llvm::alignOf<Token>());
+      ValueList.size() * sizeof(Token), llvm37::alignOf<Token>());
   std::copy(ValueList.begin(), ValueList.end(), TokenArray);
   Info.Toks = TokenArray;
   Info.TokSize = ValueList.size();
@@ -2033,9 +2033,9 @@ static bool ParseLoopHintValue(Preprocessor &PP, Token &Tok, Token PragmaName,
 ///  loop-hint-value:
 ///    constant-expression
 ///
-/// Specifying vectorize(enable) or vectorize_width(_value_) instructs llvm to
+/// Specifying vectorize(enable) or vectorize_width(_value_) instructs llvm37 to
 /// try vectorizing the instructions of the loop it precedes. Specifying
-/// interleave(enable) or interleave_count(_value_) instructs llvm to try
+/// interleave(enable) or interleave_count(_value_) instructs llvm37 to try
 /// interleaving multiple iterations of the loop it precedes. The width of the
 /// vector instructions is specified by vectorize_width() and the number of
 /// interleaved loop iterations is specified by interleave_count(). Specifying a
@@ -2044,9 +2044,9 @@ static bool ParseLoopHintValue(Preprocessor &PP, Token &Tok, Token PragmaName,
 /// only works on inner loops.
 ///
 /// The unroll and unroll_count directives control the concatenation
-/// unroller. Specifying unroll(full) instructs llvm to try to
+/// unroller. Specifying unroll(full) instructs llvm37 to try to
 /// unroll the loop completely, and unroll(disable) disables unrolling
-/// for the loop. Specifying unroll_count(_value_) instructs llvm to
+/// for the loop. Specifying unroll_count(_value_) instructs llvm37 to
 /// try to unroll the loop the number of times indicated by the value.
 void PragmaLoopHintHandler::HandlePragma(Preprocessor &PP,
                                          PragmaIntroducerKind Introducer,
@@ -2068,7 +2068,7 @@ void PragmaLoopHintHandler::HandlePragma(Preprocessor &PP,
     Token Option = Tok;
     IdentifierInfo *OptionInfo = Tok.getIdentifierInfo();
 
-    bool OptionValid = llvm::StringSwitch<bool>(OptionInfo->getName())
+    bool OptionValid = llvm37::StringSwitch<bool>(OptionInfo->getName())
                            .Case("vectorize", true)
                            .Case("interleave", true)
                            .Case("unroll", true)
@@ -2130,7 +2130,7 @@ void PragmaLoopHintHandler::HandlePragma(Preprocessor &PP,
 ///
 /// Loop unrolling hints can be specified with '#pragma unroll' or
 /// '#pragma nounroll'. '#pragma unroll' can take a numeric argument optionally
-/// contained in parentheses. With no argument the directive instructs llvm to
+/// contained in parentheses. With no argument the directive instructs llvm37 to
 /// try to unroll the loop completely. A positive integer argument can be
 /// specified to indicate the number of times the loop should be unrolled.  To
 /// maximize compatibility with other compilers the unroll count argument can be

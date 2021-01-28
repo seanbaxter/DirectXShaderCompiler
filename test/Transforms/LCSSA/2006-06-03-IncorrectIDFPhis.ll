@@ -3,7 +3,7 @@
 
         %struct.SetJmpMapEntry = type { i8*, i32, %struct.SetJmpMapEntry* }
 
-define void @__llvm_sjljeh_try_catching_longjmp_exception() {
+define void @__llvm37_sjljeh_try_catching_longjmp_exception() {
 entry:
         br i1 false, label %UnifiedReturnBlock, label %no_exit
 no_exit:                ; preds = %endif, %entry

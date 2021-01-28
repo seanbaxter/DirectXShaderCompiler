@@ -1,6 +1,6 @@
 //===-- ExternalFunctions.cpp - Implement External Functions --------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -20,15 +20,15 @@
 //===----------------------------------------------------------------------===//
 
 #include "Interpreter.h"
-#include "llvm/Config/config.h"     // Detect libffi
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/DerivedTypes.h"
-#include "llvm/IR/Module.h"
-#include "llvm/Support/DynamicLibrary.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/ManagedStatic.h"
-#include "llvm/Support/Mutex.h"
-#include "llvm/Support/UniqueLock.h"
+#include "llvm37/Config/config.h"     // Detect libffi
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/IR/DerivedTypes.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/Support/DynamicLibrary.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/ManagedStatic.h"
+#include "llvm37/Support/Mutex.h"
+#include "llvm37/Support/UniqueLock.h"
 #include <cmath>
 #include <csignal>
 #include <cstdio>
@@ -45,7 +45,7 @@
 #endif
 #endif
 
-using namespace llvm;
+using namespace llvm37;
 
 static ManagedStatic<sys::Mutex> FunctionsLock;
 
@@ -285,7 +285,7 @@ GenericValue Interpreter::callExternalFunction(Function *F,
     report_fatal_error("Tried to execute an unknown external function: " +
                        F->getName());
 #ifndef USE_LIBFFI
-  errs() << "Recompiling LLVM with --enable-libffi might help.\n";
+  errs() << "Recompiling LLVM37 with --enable-libffi might help.\n";
 #endif
   return GenericValue();
 }
@@ -481,7 +481,7 @@ static GenericValue lle_X_memset(FunctionType *FT,
   int val = (int)Args[1].IntVal.getSExtValue();
   size_t len = (size_t)Args[2].IntVal.getZExtValue();
   memset((void *)GVTOP(Args[0]), val, len);
-  // llvm.memset.* returns void, lle_X_* returns GenericValue,
+  // llvm37.memset.* returns void, lle_X_* returns GenericValue,
   // so here we return GenericValue with IntVal set to zero
   GenericValue GV;
   GV.IntVal = 0;
@@ -493,7 +493,7 @@ static GenericValue lle_X_memcpy(FunctionType *FT,
   memcpy(GVTOP(Args[0]), GVTOP(Args[1]),
          (size_t)(Args[2].IntVal.getLimitedValue()));
 
-  // llvm.memcpy* returns void, lle_X_* returns GenericValue,
+  // llvm37.memcpy* returns void, lle_X_* returns GenericValue,
   // so here we return GenericValue with IntVal set to zero
   GenericValue GV;
   GV.IntVal = 0;

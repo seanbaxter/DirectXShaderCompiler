@@ -1,6 +1,6 @@
 //=- DirectIvarAssignment.cpp - Check rules on ObjC properties -*- C++ ----*-==//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -28,7 +28,7 @@
 #include "clang/StaticAnalyzer/Core/BugReporter/BugReporter.h"
 #include "clang/StaticAnalyzer/Core/Checker.h"
 #include "clang/StaticAnalyzer/Core/PathSensitive/AnalysisManager.h"
-#include "llvm/ADT/DenseMap.h"
+#include "llvm37/ADT/DenseMap.h"
 
 using namespace clang;
 using namespace ento;
@@ -53,7 +53,7 @@ static bool DefaultMethodFilter(const ObjCMethodDecl *M) {
 class DirectIvarAssignment :
   public Checker<check::ASTDecl<ObjCImplementationDecl> > {
 
-  typedef llvm::DenseMap<const ObjCIvarDecl*,
+  typedef llvm37::DenseMap<const ObjCIvarDecl*,
                          const ObjCPropertyDecl*> IvarToPropertyMapTy;
 
   /// A helper class, which walks the AST and locates all assignments to ivars

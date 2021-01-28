@@ -1,6 +1,6 @@
 //===--- Registry.h - Matcher registry -----*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -14,15 +14,15 @@
 ///
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_ASTMATCHERS_DYNAMIC_REGISTRY_H
-#define LLVM_CLANG_ASTMATCHERS_DYNAMIC_REGISTRY_H
+#ifndef LLVM37_CLANG_ASTMATCHERS_DYNAMIC_REGISTRY_H
+#define LLVM37_CLANG_ASTMATCHERS_DYNAMIC_REGISTRY_H
 
 #include "clang/ASTMatchers/Dynamic/Diagnostics.h"
 #include "clang/ASTMatchers/Dynamic/VariantValue.h"
 #include "clang/Basic/LLVM.h"
-#include "llvm/ADT/ArrayRef.h"
-#include "llvm/ADT/Optional.h"
-#include "llvm/ADT/StringRef.h"
+#include "llvm37/ADT/ArrayRef.h"
+#include "llvm37/ADT/Optional.h"
+#include "llvm37/ADT/StringRef.h"
 
 namespace clang {
 namespace ast_matchers {
@@ -65,7 +65,7 @@ public:
   ///
   /// \return An opaque value which may be used to refer to the matcher
   /// constructor, or Optional<MatcherCtor>() if not found.
-  static llvm::Optional<MatcherCtor> lookupMatcherCtor(StringRef MatcherName);
+  static llvm37::Optional<MatcherCtor> lookupMatcherCtor(StringRef MatcherName);
 
   /// \brief Compute the list of completion types for \p Context.
   ///
@@ -76,7 +76,7 @@ public:
   /// the completion point in the argument list). An empty list requests
   /// completion for the root matcher.
   static std::vector<ArgKind> getAcceptedCompletionTypes(
-      llvm::ArrayRef<std::pair<MatcherCtor, unsigned>> Context);
+      llvm37::ArrayRef<std::pair<MatcherCtor, unsigned>> Context);
 
   /// \brief Compute the list of completions that match any of
   /// \p AcceptedTypes.
@@ -130,4 +130,4 @@ private:
 }  // namespace ast_matchers
 }  // namespace clang
 
-#endif  // LLVM_CLANG_AST_MATCHERS_DYNAMIC_REGISTRY_H
+#endif  // LLVM37_CLANG_AST_MATCHERS_DYNAMIC_REGISTRY_H

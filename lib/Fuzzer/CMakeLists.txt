@@ -1,8 +1,8 @@
 set(LIBFUZZER_FLAGS_BASE "${CMAKE_CXX_FLAGS_RELEASE}")
 # Disable the coverage and sanitizer instrumentation for the fuzzer itself.
 set(CMAKE_CXX_FLAGS_RELEASE "${LIBFUZZER_FLAGS_BASE} -O2 -fno-sanitize=all")
-if( LLVM_USE_SANITIZE_COVERAGE )
-  add_library(LLVMFuzzerNoMainObjects OBJECT
+if( LLVM37_USE_SANITIZE_COVERAGE )
+  add_library(LLVM37FuzzerNoMainObjects OBJECT
     FuzzerCrossOver.cpp
     FuzzerInterface.cpp
     FuzzerTraceState.cpp
@@ -14,15 +14,15 @@ if( LLVM_USE_SANITIZE_COVERAGE )
     FuzzerSHA1.cpp
     FuzzerUtil.cpp
     )
-  add_library(LLVMFuzzerNoMain STATIC
-    $<TARGET_OBJECTS:LLVMFuzzerNoMainObjects>
+  add_library(LLVM37FuzzerNoMain STATIC
+    $<TARGET_OBJECTS:LLVM37FuzzerNoMainObjects>
     )
-  add_library(LLVMFuzzer STATIC
+  add_library(LLVM37Fuzzer STATIC
     FuzzerMain.cpp
-    $<TARGET_OBJECTS:LLVMFuzzerNoMainObjects>
+    $<TARGET_OBJECTS:LLVM37FuzzerNoMainObjects>
     )
 
-  if( LLVM_INCLUDE_TESTS )
+  if( LLVM37_INCLUDE_TESTS )
     add_subdirectory(test)
   endif()
 endif()

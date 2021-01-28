@@ -1,2 +1,2 @@
-RUN: llvm-mc -disassemble %s
+RUN: llvm37-mc -disassemble %s
  

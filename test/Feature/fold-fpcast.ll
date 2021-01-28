@@ -1,4 +1,4 @@
-; RUN: llvm-as < %s | llvm-dis | not grep bitcast
+; RUN: llvm37-as < %s | llvm37-dis | not grep bitcast
 
 define i32 @test1() {
    ret i32 bitcast(float 0x400D9999A0000000 to i32)

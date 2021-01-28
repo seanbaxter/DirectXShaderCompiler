@@ -16,7 +16,7 @@
 #include "dxc/dxcapi.internal.h"
 #include <vector>
 
-namespace llvm {
+namespace llvm37 {
 class raw_string_ostream;
 class CallInst;
 class Value;
@@ -26,14 +26,14 @@ namespace hlsl {
 
 class DxcLangExtensionsCommonHelper {
 private:
-  llvm::SmallVector<std::string, 2> m_semanticDefines;
-  llvm::SmallVector<std::string, 2> m_semanticDefineExclusions;
-  llvm::SmallVector<std::string, 2> m_defines;
-  llvm::SmallVector<CComPtr<IDxcIntrinsicTable>, 2> m_intrinsicTables;
+  llvm37::SmallVector<std::string, 2> m_semanticDefines;
+  llvm37::SmallVector<std::string, 2> m_semanticDefineExclusions;
+  llvm37::SmallVector<std::string, 2> m_defines;
+  llvm37::SmallVector<CComPtr<IDxcIntrinsicTable>, 2> m_intrinsicTables;
   CComPtr<IDxcSemanticDefineValidator> m_semanticDefineValidator;
   std::string m_semanticDefineMetaDataName;
   std::string m_targetTriple;
-  HRESULT STDMETHODCALLTYPE RegisterIntoVector(LPCWSTR name, llvm::SmallVector<std::string, 2>& here)
+  HRESULT STDMETHODCALLTYPE RegisterIntoVector(LPCWSTR name, llvm37::SmallVector<std::string, 2>& here)
   {
     try {
       IFTPTR(name);
@@ -48,10 +48,10 @@ private:
   }
 
 public:
-  const llvm::SmallVector<std::string, 2>& GetSemanticDefines() const { return m_semanticDefines; }
-  const llvm::SmallVector<std::string, 2>& GetSemanticDefineExclusions() const { return m_semanticDefineExclusions; }
-  const llvm::SmallVector<std::string, 2>& GetDefines() const { return m_defines; }
-  llvm::SmallVector<CComPtr<IDxcIntrinsicTable>, 2>& GetIntrinsicTables(){ return m_intrinsicTables; }
+  const llvm37::SmallVector<std::string, 2>& GetSemanticDefines() const { return m_semanticDefines; }
+  const llvm37::SmallVector<std::string, 2>& GetSemanticDefineExclusions() const { return m_semanticDefineExclusions; }
+  const llvm37::SmallVector<std::string, 2>& GetDefines() const { return m_defines; }
+  llvm37::SmallVector<CComPtr<IDxcIntrinsicTable>, 2>& GetIntrinsicTables(){ return m_intrinsicTables; }
   const std::string &GetSemanticDefineMetadataName() { return m_semanticDefineMetaDataName; }
   const std::string &GetTargetTriple() { return m_targetTriple; }
 

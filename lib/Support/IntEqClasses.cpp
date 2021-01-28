@@ -1,6 +1,6 @@
-//===-- llvm/ADT/IntEqClasses.cpp - Equivalence Classes of Integers -------===//
+//===-- llvm37/ADT/IntEqClasses.cpp - Equivalence Classes of Integers -------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -18,9 +18,9 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/ADT/IntEqClasses.h"
+#include "llvm37/ADT/IntEqClasses.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 void IntEqClasses::grow(unsigned N) {
   assert(NumClasses == 0 && "grow() called after compress().");

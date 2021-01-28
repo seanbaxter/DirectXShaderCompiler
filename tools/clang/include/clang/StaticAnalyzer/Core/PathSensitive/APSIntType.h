@@ -1,16 +1,16 @@
 //== APSIntType.h - Simple record of the type of APSInts --------*- C++ -*--==//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_STATICANALYZER_CORE_PATHSENSITIVE_APSINTTYPE_H
-#define LLVM_CLANG_STATICANALYZER_CORE_PATHSENSITIVE_APSINTTYPE_H
+#ifndef LLVM37_CLANG_STATICANALYZER_CORE_PATHSENSITIVE_APSINTTYPE_H
+#define LLVM37_CLANG_STATICANALYZER_CORE_PATHSENSITIVE_APSINTTYPE_H
 
-#include "llvm/ADT/APSInt.h"
+#include "llvm37/ADT/APSInt.h"
 #include <tuple>
 
 namespace clang {
@@ -25,7 +25,7 @@ public:
   APSIntType(uint32_t Width, bool Unsigned)
     : BitWidth(Width), IsUnsigned(Unsigned) {}
 
-  /* implicit */ APSIntType(const llvm::APSInt &Value)
+  /* implicit */ APSIntType(const llvm37::APSInt &Value)
     : BitWidth(Value.getBitWidth()), IsUnsigned(Value.isUnsigned()) {}
 
   uint32_t getBitWidth() const { return BitWidth; }
@@ -35,7 +35,7 @@ public:
   ///
   /// This behaves like a C cast: converting 255u8 (0xFF) to s16 gives
   /// 255 (0x00FF), and converting -1s8 (0xFF) to u16 gives 65535 (0xFFFF).
-  void apply(llvm::APSInt &Value) const {
+  void apply(llvm37::APSInt &Value) const {
     // Note the order here. We extend first to preserve the sign, if this value
     // is signed, /then/ match the signedness of the result type.
     Value = Value.extOrTrunc(BitWidth);
@@ -46,29 +46,29 @@ public:
   /// type's bit width and signedness.
   ///
   /// \see apply
-  llvm::APSInt convert(const llvm::APSInt &Value) const LLVM_READONLY {
-    llvm::APSInt Result(Value, Value.isUnsigned());
+  llvm37::APSInt convert(const llvm37::APSInt &Value) const LLVM37_READONLY {
+    llvm37::APSInt Result(Value, Value.isUnsigned());
     apply(Result);
     return Result;
   }
 
   /// Returns an all-zero value for this type.
-  llvm::APSInt getZeroValue() const LLVM_READONLY {
-    return llvm::APSInt(BitWidth, IsUnsigned);
+  llvm37::APSInt getZeroValue() const LLVM37_READONLY {
+    return llvm37::APSInt(BitWidth, IsUnsigned);
   }
 
   /// Returns the minimum value for this type.
-  llvm::APSInt getMinValue() const LLVM_READONLY {
-    return llvm::APSInt::getMinValue(BitWidth, IsUnsigned);
+  llvm37::APSInt getMinValue() const LLVM37_READONLY {
+    return llvm37::APSInt::getMinValue(BitWidth, IsUnsigned);
   }
 
   /// Returns the maximum value for this type.
-  llvm::APSInt getMaxValue() const LLVM_READONLY {
-    return llvm::APSInt::getMaxValue(BitWidth, IsUnsigned);
+  llvm37::APSInt getMaxValue() const LLVM37_READONLY {
+    return llvm37::APSInt::getMaxValue(BitWidth, IsUnsigned);
   }
 
-  llvm::APSInt getValue(uint64_t RawValue) const LLVM_READONLY {
-    return (llvm::APSInt(BitWidth, IsUnsigned) = RawValue);
+  llvm37::APSInt getValue(uint64_t RawValue) const LLVM37_READONLY {
+    return (llvm37::APSInt(BitWidth, IsUnsigned) = RawValue);
   }
 
   /// Used to classify whether a value is representable using this type.
@@ -86,8 +86,8 @@ public:
   /// \param AllowMixedSign Whether or not to allow signedness conversions.
   ///                       This determines whether -1s8 is considered in range
   ///                       for 'unsigned char' (u8).
-  RangeTestResultKind testInRange(const llvm::APSInt &Val,
-                                  bool AllowMixedSign) const LLVM_READONLY;
+  RangeTestResultKind testInRange(const llvm37::APSInt &Val,
+                                  bool AllowMixedSign) const LLVM37_READONLY;
   
   bool operator==(const APSIntType &Other) const {
     return BitWidth == Other.BitWidth && IsUnsigned == Other.IsUnsigned;

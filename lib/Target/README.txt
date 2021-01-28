@@ -3,7 +3,7 @@ Target Independent Opportunities:
 //===---------------------------------------------------------------------===//
 
 We should recognized various "overflow detection" idioms and translate them into
-llvm.uadd.with.overflow and similar intrinsics.  Here is a multiply idiom:
+llvm37.uadd.with.overflow and similar intrinsics.  Here is a multiply idiom:
 
 unsigned int mul(unsigned int a,unsigned int b) {
  if ((unsigned long long)a*b>0xffffffff)
@@ -16,7 +16,7 @@ this can be implemented though.
 
 //===---------------------------------------------------------------------===//
 
-Get the C front-end to expand hypot(x,y) -> llvm.sqrt(x*x+y*y) when errno and
+Get the C front-end to expand hypot(x,y) -> llvm37.sqrt(x*x+y*y) when errno and
 precision don't matter (ffastmath).  Misc/mandel will like this. :)  This isn't
 safe in general, even on darwin.  See the libm implementation of hypot for
 examples (which special case when x/y are exactly zero to get signed zeros etc
@@ -48,7 +48,7 @@ int factorial(int X) {
  return X*X*X*X*X*X*X*X;
 }
 
-into llvm.powi calls, allowing the code generator to produce balanced
+into llvm37.powi calls, allowing the code generator to produce balanced
 multiplication trees.
 
 First, the intrinsic needs to be extended to support integers, and second the
@@ -106,7 +106,7 @@ for 1,2,4,8 bytes.
 //===---------------------------------------------------------------------===//
 
 It would be nice to revert this patch:
-http://lists.llvm.org/pipermail/llvm-commits/Week-of-Mon-20060213/031986.html
+http://lists.llvm37.org/pipermail/llvm37-commits/Week-of-Mon-20060213/031986.html
 
 And teach the dag combiner enough to simplify the code expanded before 
 legalize.  It seems plausible that this knowledge would let it simplify other
@@ -329,7 +329,7 @@ followed by an uncond branch to an exit block.
 ; This testcase is due to tail-duplication not wanting to copy the return
 ; instruction into the terminating blocks because there was other code
 ; optimized out of the function after the taildup happened.
-; RUN: llvm-as < %s | opt -tailcallelim | llvm-dis | not grep call
+; RUN: llvm37-as < %s | opt -tailcallelim | llvm37-dis | not grep call
 
 define i32 @t4(i32 %a) {
 entry:
@@ -375,7 +375,7 @@ they were associative.  "return foo() << 1" can be tail recursion eliminated.
 Argument promotion should promote arguments for recursive functions, like 
 this:
 
-; RUN: llvm-as < %s | opt -argpromotion | llvm-dis | grep x.val
+; RUN: llvm37-as < %s | opt -argpromotion | llvm37-dis | grep x.val
 
 define internal i32 @foo(i32* %x) {
 entry:
@@ -501,7 +501,7 @@ int test() {
 
 Clang compiles this into:
 
-  call void @llvm.memset.p0i8.i64(i8* %tmp, i8 0, i64 64, i32 16, i1 false)
+  call void @llvm37.memset.p0i8.i64(i8* %tmp, i8 0, i64 64, i32 16, i1 false)
   %0 = getelementptr [8 x i64]* %input, i64 0, i64 0
   store i64 1, i64* %0, align 16
   %1 = getelementptr [8 x i64]* %input, i64 0, i64 2
@@ -527,9 +527,9 @@ It would be better to have 4 movq's of 0 instead of the movaps's.
 
 //===---------------------------------------------------------------------===//
 
-http://llvm.org/PR717:
+http://llvm37.org/PR717:
 
-The following code should compile into "ret int undef". Instead, LLVM
+The following code should compile into "ret int undef". Instead, LLVM37
 produces "ret int 0":
 
 int f() {
@@ -647,7 +647,7 @@ http://gcc.gnu.org/bugzilla/attachment.cgi?id=4487
 Into code that runs the same speed in fast/slow modes, but both modes run 2x
 slower than when compile with GCC (either 4.0 or 4.2):
 
-$ llvm-g++ perf.cpp -O3 -fno-exceptions
+$ llvm37-g++ perf.cpp -O3 -fno-exceptions
 $ time ./a.out fast
 1.821u 0.003s 0:01.82 100.0%	0+0k 0+0io 0pf+0w
 
@@ -733,7 +733,7 @@ f (unsigned long a, unsigned long b, unsigned long c)
   return ((a & (c - 1)) != 0) | ((b & (c - 1)) != 0);
 }
 Both should combine to ((a|b) & (c-1)) != 0.  Currently not optimized with
-"clang -emit-llvm-bc | opt -O3".
+"clang -emit-llvm37-bc | opt -O3".
 
 //===---------------------------------------------------------------------===//
 
@@ -746,7 +746,7 @@ void clear_pmd_range(unsigned long start, unsigned long end)
 }
 The expression should optimize to something like
 "!((start|end)&~PMD_MASK). Currently not optimized with "clang
--emit-llvm-bc | opt -O3".
+-emit-llvm37-bc | opt -O3".
 
 //===---------------------------------------------------------------------===//
 
@@ -765,7 +765,7 @@ int f(int x, int y)
  return (abs(x)) >= 0;
 }
 This should optimize to x == INT_MIN. (With -fwrapv.)  Currently not
-optimized with "clang -emit-llvm-bc | opt -O3".
+optimized with "clang -emit-llvm37-bc | opt -O3".
 
 //===---------------------------------------------------------------------===//
 
@@ -802,7 +802,7 @@ rshift_gt (unsigned int a)
 }
 
 All should simplify to a single comparison.  All of these are
-currently not optimized with "clang -emit-llvm-bc | opt
+currently not optimized with "clang -emit-llvm37-bc | opt
 -O3".
 
 //===---------------------------------------------------------------------===//
@@ -810,110 +810,110 @@ currently not optimized with "clang -emit-llvm-bc | opt
 From GCC Bug 32605:
 int c(int* x) {return (char*)x+2 == (char*)x;}
 Should combine to 0.  Currently not optimized with "clang
--emit-llvm-bc | opt -O3" (although llc can optimize it).
+-emit-llvm37-bc | opt -O3" (although llc can optimize it).
 
 //===---------------------------------------------------------------------===//
 
 int a(unsigned b) {return ((b << 31) | (b << 30)) >> 31;}
 Should be combined to  "((b >> 1) | b) & 1".  Currently not optimized
-with "clang -emit-llvm-bc | opt -O3".
+with "clang -emit-llvm37-bc | opt -O3".
 
 //===---------------------------------------------------------------------===//
 
 unsigned a(unsigned x, unsigned y) { return x | (y & 1) | (y & 2);}
 Should combine to "x | (y & 3)".  Currently not optimized with "clang
--emit-llvm-bc | opt -O3".
+-emit-llvm37-bc | opt -O3".
 
 //===---------------------------------------------------------------------===//
 
 int a(int a, int b, int c) {return (~a & c) | ((c|a) & b);}
 Should fold to "(~a & c) | (a & b)".  Currently not optimized with
-"clang -emit-llvm-bc | opt -O3".
+"clang -emit-llvm37-bc | opt -O3".
 
 //===---------------------------------------------------------------------===//
 
 int a(int a,int b) {return (~(a|b))|a;}
 Should fold to "a|~b".  Currently not optimized with "clang
--emit-llvm-bc | opt -O3".
+-emit-llvm37-bc | opt -O3".
 
 //===---------------------------------------------------------------------===//
 
 int a(int a, int b) {return (a&&b) || (a&&!b);}
-Should fold to "a".  Currently not optimized with "clang -emit-llvm-bc
+Should fold to "a".  Currently not optimized with "clang -emit-llvm37-bc
 | opt -O3".
 
 //===---------------------------------------------------------------------===//
 
 int a(int a, int b, int c) {return (a&&b) || (!a&&c);}
 Should fold to "a ? b : c", or at least something sane.  Currently not
-optimized with "clang -emit-llvm-bc | opt -O3".
+optimized with "clang -emit-llvm37-bc | opt -O3".
 
 //===---------------------------------------------------------------------===//
 
 int a(int a, int b, int c) {return (a&&b) || (a&&c) || (a&&b&&c);}
 Should fold to a && (b || c).  Currently not optimized with "clang
--emit-llvm-bc | opt -O3".
+-emit-llvm37-bc | opt -O3".
 
 //===---------------------------------------------------------------------===//
 
 int a(int x) {return x | ((x & 8) ^ 8);}
 Should combine to x | 8.  Currently not optimized with "clang
--emit-llvm-bc | opt -O3".
+-emit-llvm37-bc | opt -O3".
 
 //===---------------------------------------------------------------------===//
 
 int a(int x) {return x ^ ((x & 8) ^ 8);}
 Should also combine to x | 8.  Currently not optimized with "clang
--emit-llvm-bc | opt -O3".
+-emit-llvm37-bc | opt -O3".
 
 //===---------------------------------------------------------------------===//
 
 int a(int x) {return ((x | -9) ^ 8) & x;}
 Should combine to x & -9.  Currently not optimized with "clang
--emit-llvm-bc | opt -O3".
+-emit-llvm37-bc | opt -O3".
 
 //===---------------------------------------------------------------------===//
 
 unsigned a(unsigned a) {return a * 0x11111111 >> 28 & 1;}
 Should combine to "a * 0x88888888 >> 31".  Currently not optimized
-with "clang -emit-llvm-bc | opt -O3".
+with "clang -emit-llvm37-bc | opt -O3".
 
 //===---------------------------------------------------------------------===//
 
 unsigned a(char* x) {if ((*x & 32) == 0) return b();}
 There's an unnecessary zext in the generated code with "clang
--emit-llvm-bc | opt -O3".
+-emit-llvm37-bc | opt -O3".
 
 //===---------------------------------------------------------------------===//
 
 unsigned a(unsigned long long x) {return 40 * (x >> 1);}
 Should combine to "20 * (((unsigned)x) & -2)".  Currently not
-optimized with "clang -emit-llvm-bc | opt -O3".
+optimized with "clang -emit-llvm37-bc | opt -O3".
 
 //===---------------------------------------------------------------------===//
 
 int g(int x) { return (x - 10) < 0; }
 Should combine to "x <= 9" (the sub has nsw).  Currently not
-optimized with "clang -emit-llvm-bc | opt -O3".
+optimized with "clang -emit-llvm37-bc | opt -O3".
 
 //===---------------------------------------------------------------------===//
 
 int g(int x) { return (x + 10) < 0; }
 Should combine to "x < -10" (the add has nsw).  Currently not
-optimized with "clang -emit-llvm-bc | opt -O3".
+optimized with "clang -emit-llvm37-bc | opt -O3".
 
 //===---------------------------------------------------------------------===//
 
 int f(int i, int j) { return i < j + 1; }
 int g(int i, int j) { return j > i - 1; }
 Should combine to "i <= j" (the add/sub has nsw).  Currently not
-optimized with "clang -emit-llvm-bc | opt -O3".
+optimized with "clang -emit-llvm37-bc | opt -O3".
 
 //===---------------------------------------------------------------------===//
 
 unsigned f(unsigned x) { return ((x & 7) + 1) & 15; }
 The & 15 part should be optimized away, it doesn't change the result. Currently
-not optimized with "clang -emit-llvm-bc | opt -O3".
+not optimized with "clang -emit-llvm37-bc | opt -O3".
 
 //===---------------------------------------------------------------------===//
 
@@ -1205,8 +1205,8 @@ SingleSource/Benchmarks/Misc/dt.c
 
 Interesting missed case because of control flow flattening (should be 2 loads):
 http://gcc.gnu.org/bugzilla/show_bug.cgi?id=26629
-With: llvm-gcc t2.c -S -o - -O0 -emit-llvm | llvm-as | 
-             opt -mem2reg -gvn -instcombine | llvm-dis
+With: llvm37-gcc t2.c -S -o - -O0 -emit-llvm37 | llvm37-as | 
+             opt -mem2reg -gvn -instcombine | llvm37-dis
 we miss it because we need 1) CRIT EDGE 2) MULTIPLE DIFFERENT
 VALS PRODUCED BY ONE BLOCK OVER DIFFERENT PATHS
 
@@ -1279,7 +1279,7 @@ case.
         %3073 = call i8* @strcpy(i8* %3072, i8* %3071) nounwind
         %strlen = call i32 @strlen(i8* %3072)    ; uses = 1
         %endptr = getelementptr [100 x i8]* %tempString, i32 0, i32 %strlen
-        call void @llvm.memcpy.i32(i8* %endptr, 
+        call void @llvm37.memcpy.i32(i8* %endptr, 
           i8* getelementptr ([5 x i8]* @"\01LC42", i32 0, i32 0), i32 5, i32 1)
         %3074 = call i32 @strlen(i8* %endptr) nounwind readonly 
         
@@ -1363,7 +1363,7 @@ This pattern repeats several times, basically doing:
 
 186.crafty has this interesting pattern with the "out.4543" variable:
 
-call void @llvm.memcpy.i32(
+call void @llvm37.memcpy.i32(
         i8* getelementptr ([10 x i8]* @out.4543, i32 0, i32 0),
        i8* getelementptr ([7 x i8]* @"\01LC28700", i32 0, i32 0), i32 7, i32 1) 
 %101 = call@printf(i8* ...   @out.4543, i32 0, i32 0)) nounwind 
@@ -1557,7 +1557,7 @@ int foo() {
 }
 
 This can be seen at:
-$ clang t.c -S -o - -mkernel -O0 -emit-llvm | opt -functionattrs -S
+$ clang t.c -S -o - -mkernel -O0 -emit-llvm37 | opt -functionattrs -S
 
 
 //===---------------------------------------------------------------------===//
@@ -1685,7 +1685,7 @@ entry:
 
 //===---------------------------------------------------------------------===//
 
-We should use DSE + llvm.lifetime.end to delete dead vtable pointer updates.
+We should use DSE + llvm37.lifetime.end to delete dead vtable pointer updates.
 See GCC PR34949
 
 Another interesting case is that something related could be used for variables
@@ -1711,10 +1711,10 @@ long foo(long x) {
   return x > 1 ? x : 1;
 }
 
-LLVM emits a comparison with 1 instead of 0. 0 would be equivalent
+LLVM37 emits a comparison with 1 instead of 0. 0 would be equivalent
 and cheaper on most targets.
 
-LLVM prefers comparisons with zero over non-zero in general, but in this
+LLVM37 prefers comparisons with zero over non-zero in general, but in this
 case it choses instead to keep the max operation obvious.
 
 //===---------------------------------------------------------------------===//
@@ -1826,16 +1826,16 @@ This code can be seen in viterbi:
 
   %64 = call noalias i8* @malloc(i64 %62) nounwind
 ...
-  %67 = call i64 @llvm.objectsize.i64(i8* %64, i1 false) nounwind
+  %67 = call i64 @llvm37.objectsize.i64(i8* %64, i1 false) nounwind
   %68 = call i8* @__memset_chk(i8* %64, i32 0, i64 %62, i64 %67) nounwind
 
-llvm.objectsize.i64 should be taught about malloc/calloc, allowing it to
+llvm37.objectsize.i64 should be taught about malloc/calloc, allowing it to
 fold to %62.  This is a security win (overflows of malloc will get caught)
 and also a performance win by exposing more memsets to the optimizer.
 
 This occurs several times in viterbi.
 
-Note that this would change the semantics of @llvm.objectsize which by its
+Note that this would change the semantics of @llvm37.objectsize which by its
 current definition always folds to a constant. We also should make sure that
 we remove checking in code like
 
@@ -1875,7 +1875,7 @@ memcpyopt should turn this:
 
 define i8* @test10(i32 %x) {
   %alloc = call noalias i8* @malloc(i32 %x) nounwind
-  call void @llvm.memset.p0i8.i32(i8* %alloc, i8 0, i32 %x, i32 1, i1 false)
+  call void @llvm37.memset.p0i8.i32(i8* %alloc, i8 0, i32 %x, i32 1, i1 false)
   ret i8* %alloc
 }
 
@@ -1941,7 +1941,7 @@ _ZNSt12_Vector_baseIiSaIiEEC2EmRKS0_.exit.i.i:    ; preds = %cond.true.i.i.i.i
   store i32* %0, i32** %tmp3.i.i.i.i.i, align 8, !tbaa !0
   %add.ptr.i.i.i = getelementptr inbounds i32* %0, i64 %conv
   store i32* %add.ptr.i.i.i, i32** %tmp4.i.i.i.i.i, align 8, !tbaa !0
-  call void @llvm.memset.p0i8.i64(i8* %call3.i.i.i.i.i, i8 0, i64 %mul.i.i.i.i.i, i32 4, i1 false)
+  call void @llvm37.memset.p0i8.i64(i8* %call3.i.i.i.i.i, i8 0, i64 %mul.i.i.i.i.i, i32 4, i1 false)
   br label %_ZNSt6vectorIiSaIiEEC1EmRKiRKS0_.exit
 
 This is just the handling the construction of the vector. Most surprising here
@@ -1967,7 +1967,7 @@ into:
 define void @_Z1fPci(i8* nocapture %a, i32 %n) nounwind {
 entry:
   %conv = sext i32 %n to i64
-  tail call void @llvm.memset.p0i8.i64(i8* %a, i8 0, i64 %conv, i32 1, i1 false)
+  tail call void @llvm37.memset.p0i8.i64(i8* %a, i8 0, i64 %conv, i32 1, i1 false)
   %cmp8 = icmp sgt i32 %n, 0
   br i1 %cmp8, label %for.body.lr.ph, label %for.end
 
@@ -1975,7 +1975,7 @@ for.body.lr.ph:                                   ; preds = %entry
   %tmp10 = add i32 %n, -1
   %tmp11 = zext i32 %tmp10 to i64
   %tmp12 = add i64 %tmp11, 1
-  call void @llvm.memset.p0i8.i64(i8* %a, i8 0, i64 %tmp12, i32 1, i1 false)
+  call void @llvm37.memset.p0i8.i64(i8* %a, i8 0, i64 %tmp12, i32 1, i1 false)
   ret void
 
 for.end:                                          ; preds = %entry
@@ -2081,7 +2081,7 @@ struct x testfunc() {
 }
 
 We currently compile this to:
-$ clang t.c -S -o - -O0 -emit-llvm | opt -scalarrepl -S
+$ clang t.c -S -o - -O0 -emit-llvm37 | opt -scalarrepl -S
 
 
 %struct.x = type { i8, [4 x i32] }

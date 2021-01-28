@@ -145,10 +145,10 @@ class db_docsref_gen:
             print("<ul>")
             for o in i.ops:
                 if o.pos == 0:
-                    print("<li>result: %s - %s</li>" % (o.llvm_type, o.doc))
+                    print("<li>result: %s - %s</li>" % (o.llvm37_type, o.doc))
                 else:
                     enum_desc = "" if o.enum_name == "" else " one of %s: %s" % (o.enum_name, ",".join(db.enum_idx[o.enum_name].value_names()))
-                    print("<li>%d - %s: %s%s%s</li>" % (o.pos - 1, o.name, o.llvm_type, "" if o.doc == "" else " - " + o.doc, enum_desc))
+                    print("<li>%d - %s: %s%s%s</li>" % (o.pos - 1, o.name, o.llvm37_type, "" if o.doc == "" else " - " + o.doc, enum_desc))
             print("</ul>")
             print("<div><a href='#Instructions'>(top)</a></div>")
 
@@ -180,7 +180,7 @@ class db_instrhelp_gen:
     def __init__(self, db):
         self.db = db
         TypeInfo = collections.namedtuple("TypeInfo", "name bits")
-        self.llvm_type_map = {
+        self.llvm37_type_map = {
             "i1": TypeInfo("bool", 1),
             "i8": TypeInfo("int8_t", 8),
             "u8": TypeInfo("uint8_t", 8),
@@ -216,19 +216,19 @@ class db_instrhelp_gen:
         return "true" if val else "false";
 
     def op_type(self, o):
-        if o.llvm_type in self.llvm_type_map:
-            return self.llvm_type_map[o.llvm_type].name
-        raise ValueError("Don't know how to describe type %s for operand %s." % (o.llvm_type, o.name))
+        if o.llvm37_type in self.llvm37_type_map:
+            return self.llvm37_type_map[o.llvm37_type].name
+        raise ValueError("Don't know how to describe type %s for operand %s." % (o.llvm37_type, o.name))
     def op_size(self, o):
-        if o.llvm_type in self.llvm_type_map:
-            return self.llvm_type_map[o.llvm_type].bits
-        raise ValueError("Don't know how to describe type %s for operand %s." % (o.llvm_type, o.name))
+        if o.llvm37_type in self.llvm37_type_map:
+            return self.llvm37_type_map[o.llvm37_type].bits
+        raise ValueError("Don't know how to describe type %s for operand %s." % (o.llvm37_type, o.name))
 
     def op_const_expr(self, o):
-        return "(%s)(llvm::dyn_cast<llvm::ConstantInt>(Instr->getOperand(%d))->getZExtValue())" % (self.op_type(o), o.pos - 1)
+        return "(%s)(llvm37::dyn_cast<llvm37::ConstantInt>(Instr->getOperand(%d))->getZExtValue())" % (self.op_type(o), o.pos - 1)
     def op_set_const_expr(self, o):
         type_size = self.op_size(o)
-        return "llvm::Constant::getIntegerValue(llvm::IntegerType::get(Instr->getContext(), %d), llvm::APInt(%d, (uint64_t)val))" % (type_size, type_size)
+        return "llvm37::Constant::getIntegerValue(llvm37::IntegerType::get(Instr->getContext(), %d), llvm37::APInt(%d, (uint64_t)val))" % (type_size, type_size)
 
     def print_body(self):
         for i in self.db.instr:
@@ -242,21 +242,21 @@ class db_instrhelp_gen:
             if i.doc:
                 print("/// This instruction %s" % i.doc)
             print("struct %s {" % struct_name)
-            print("  llvm::Instruction *Instr;")
+            print("  llvm37::Instruction *Instr;")
             print("  // Construction and identification")
-            print("  %s(llvm::Instruction *pInstr) : Instr(pInstr) {}" % struct_name)
+            print("  %s(llvm37::Instruction *pInstr) : Instr(pInstr) {}" % struct_name)
             print("  operator bool() const {")
             if i.is_dxil_op:
                 op_name = i.fully_qualified_name()
                 print("    return %s(Instr, %s);" % (self.IsDxilOpFuncCallInst, op_name))
             else:
-                print("    return Instr->getOpcode() == llvm::Instruction::%s;" % i.name)
+                print("    return Instr->getOpcode() == llvm37::Instruction::%s;" % i.name)
             print("  }")
             print("  // Validation support")
             print("  bool isAllowed() const { return %s; }" % self.bool_lit(i.is_allowed))
             if i.is_dxil_op:
                 print("  bool isArgumentListValid() const {")
-                print("    if (%d != llvm::dyn_cast<llvm::CallInst>(Instr)->getNumArgOperands()) return false;" % (len(i.ops) - 1))
+                print("    if (%d != llvm37::dyn_cast<llvm37::CallInst>(Instr)->getNumArgOperands()) return false;" % (len(i.ops) - 1))
                 print("    return true;")
                 # TODO - check operand types
                 print("  }")
@@ -278,10 +278,10 @@ class db_instrhelp_gen:
                         if not AccessorsWritten:
                             print("  // Accessors")
                             AccessorsWritten = True
-                        print("  llvm::Value *get_%s() const { return Instr->getOperand(%d); }" % (o.name, o.pos - 1))
-                        print("  void set_%s(llvm::Value *val) { Instr->setOperand(%d, val); }" % (o.name, o.pos - 1))
+                        print("  llvm37::Value *get_%s() const { return Instr->getOperand(%d); }" % (o.name, o.pos - 1))
+                        print("  void set_%s(llvm37::Value *val) { Instr->setOperand(%d, val); }" % (o.name, o.pos - 1))
                         if o.is_const:
-                            if o.llvm_type in self.llvm_type_map:
+                            if o.llvm37_type in self.llvm37_type_map:
                                 print("  %s get_%s_val() const { return %s; }" % (self.op_type(o), o.name, self.op_const_expr(o)))
                                 print("  void set_%s_val(%s val) { Instr->setOperand(%d, %s); }" % (o.name, self.op_type(o), o.pos - 1, self.op_set_const_expr(o)))
             print("};")
@@ -427,8 +427,8 @@ class db_oload_gen:
                 last_category = i.category
             line = "  case OpCode::{name:24}".format(name = i.name + ":")
             for index, o in enumerate(i.ops):
-                assert o.llvm_type in op_type_texts, "llvm type %s in instruction %s is unknown" % (o.llvm_type, i.name)
-                op_type_text = op_type_texts[o.llvm_type]
+                assert o.llvm37_type in op_type_texts, "llvm37 type %s in instruction %s is unknown" % (o.llvm37_type, i.name)
+                op_type_text = op_type_texts[o.llvm37_type]
                 if index == 0:
                     line = line + "{val:13}".format(val=op_type_text)
                 else:
@@ -451,7 +451,7 @@ class db_oload_gen:
         struct_list = []
 
         for instr in self.instrs:
-            ret_ty = instr.ops[0].llvm_type
+            ret_ty = instr.ops[0].llvm37_type
             # Skip case return type is overload type
             if (ret_ty == elt_ty):
                 continue
@@ -478,7 +478,7 @@ class db_oload_gen:
                 if (op.pos == 1):
                     continue
 
-                op_type = op.llvm_type
+                op_type = op.llvm37_type
                 if (op_type == elt_ty):
                     # Skip return op
                     index = index - 1
@@ -517,7 +517,7 @@ class db_oload_gen:
             "u": "Type::getInt32PtrTy(Ctx)",
             "o": "Type::getInt32PtrTy(Ctx)",
             }
-            assert ty in type_code_texts, "llvm type %s is unknown" % (ty)
+            assert ty in type_code_texts, "llvm37 type %s is unknown" % (ty)
             ty_code = type_code_texts[ty]
 
             if ty_code not in single_dict:
@@ -568,23 +568,23 @@ class db_valfns_gen:
         return "true" if val else "false";
 
     def op_type(self, o):
-        if o.llvm_type == "i8":
+        if o.llvm37_type == "i8":
             return "int8_t"
-        if o.llvm_type == "u8":
+        if o.llvm37_type == "u8":
             return "uint8_t"
-        raise ValueError("Don't know how to describe type %s for operand %s." % (o.llvm_type, o.name))
+        raise ValueError("Don't know how to describe type %s for operand %s." % (o.llvm37_type, o.name))
 
     def op_const_expr(self, o):
-        if o.llvm_type == "i8" or o.llvm_type == "u8":
-            return "(%s)(llvm::dyn_cast<llvm::ConstantInt>(Instr->getOperand(%d))->getZExtValue())" % (self.op_type(o), o.pos - 1)
-        raise ValueError("Don't know how to describe type %s for operand %s." % (o.llvm_type, o.name))
+        if o.llvm37_type == "i8" or o.llvm37_type == "u8":
+            return "(%s)(llvm37::dyn_cast<llvm37::ConstantInt>(Instr->getOperand(%d))->getZExtValue())" % (self.op_type(o), o.pos - 1)
+        raise ValueError("Don't know how to describe type %s for operand %s." % (o.llvm37_type, o.name))
 
     def print_body(self):
-        llvm_instrs = [i for i in self.db.instr if i.is_allowed and not i.is_dxil_op]
-        print("static bool IsLLVMInstructionAllowed(llvm::Instruction &I) {")
-        self.print_comment("  // ", "Allow: %s" % ", ".join([i.name + "=" + str(i.llvm_id) for i in llvm_instrs]))
+        llvm37_instrs = [i for i in self.db.instr if i.is_allowed and not i.is_dxil_op]
+        print("static bool IsLLVM37InstructionAllowed(llvm37::Instruction &I) {")
+        self.print_comment("  // ", "Allow: %s" % ", ".join([i.name + "=" + str(i.llvm37_id) for i in llvm37_instrs]))
         print("  unsigned op = I.getOpcode();")
-        print("  return %s;" % build_range_code("op", [i.llvm_id for i in llvm_instrs]))
+        print("  return %s;" % build_range_code("op", [i.llvm37_id for i in llvm37_instrs]))
         print("}")
         print("")
 
@@ -813,9 +813,9 @@ def get_instrs_pred(varname, pred, attr_name="dxil_opid"):
         pred_fn = lambda i: getattr(i, pred)
     else:
         pred_fn = pred
-    llvm_instrs = [i for i in db.instr if pred_fn(i)]
-    result = format_comment("// ", "Instructions: %s" % ", ".join([i.name + "=" + str(getattr(i, attr_name)) for i in llvm_instrs]))
-    result += "return %s;" % build_range_code(varname, [getattr(i, attr_name) for i in llvm_instrs])
+    llvm37_instrs = [i for i in db.instr if pred_fn(i)]
+    result = format_comment("// ", "Instructions: %s" % ", ".join([i.name + "=" + str(getattr(i, attr_name)) for i in llvm37_instrs]))
+    result += "return %s;" % build_range_code(varname, [getattr(i, attr_name) for i in llvm37_instrs])
     result += "\n"
     return result
 
@@ -827,18 +827,18 @@ def counter_pred(name, dxil_op=True):
 def get_counters():
     db = get_db_dxil()
     return db.counters
-def get_llvm_op_counters():
+def get_llvm37_op_counters():
     db = get_db_dxil()
-    return [c for c in db.counters if c in db.llvm_op_counters]
+    return [c for c in db.counters if c in db.llvm37_op_counters]
 def get_dxil_op_counters():
     db = get_db_dxil()
     return [c for c in db.counters if c in db.dxil_op_counters]
 
 def get_instrs_rst():
-    "Create an rst table of allowed LLVM instructions."
+    "Create an rst table of allowed LLVM37 instructions."
     db = get_db_dxil()
     instrs = [i for i in db.instr if i.is_allowed and not i.is_dxil_op]
-    instrs = sorted(instrs, key=lambda v : v.llvm_id)
+    instrs = sorted(instrs, key=lambda v : v.llvm37_id)
     rows = []
     rows.append(["Instruction", "Action", "Operand overloads"])
     for i in instrs:

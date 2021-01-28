@@ -1,24 +1,24 @@
-//===- TableGen.cpp - Top-Level TableGen implementation for LLVM ----------===//
+//===- TableGen.cpp - Top-Level TableGen implementation for LLVM37 ----------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 //
-// This file contains the main function for LLVM's TableGen.
+// This file contains the main function for LLVM37's TableGen.
 //
 //===----------------------------------------------------------------------===//
 
 #include "TableGenBackends.h" // Declares all backends.
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/PrettyStackTrace.h"
-#include "llvm/Support/Signals.h"
-#include "llvm/TableGen/Error.h"
-#include "llvm/TableGen/Main.h"
-#include "llvm/TableGen/Record.h"
-#include "llvm/TableGen/SetTheory.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/PrettyStackTrace.h"
+#include "llvm37/Support/Signals.h"
+#include "llvm37/TableGen/Error.h"
+#include "llvm37/TableGen/Main.h"
+#include "llvm37/TableGen/Record.h"
+#include "llvm37/TableGen/SetTheory.h"
 
 // HLSL Change Starts
 #ifdef _WIN32
@@ -26,11 +26,11 @@
 #include <windows.h>
 #endif
 
-#include "llvm/Support/FileSystem.h"
-#include "llvm/Support/MSFileSystem.h"
+#include "llvm37/Support/FileSystem.h"
+#include "llvm37/Support/MSFileSystem.h"
 // HLSL Change Ends
 
-using namespace llvm;
+using namespace llvm37;
 
 enum ActionType {
   PrintRecords,
@@ -101,7 +101,7 @@ namespace {
   Class("class", cl::desc("Print Enum list for this class"),
           cl::value_desc("class name"));
 
-bool LLVMTableGenMain(raw_ostream &OS, RecordKeeper &Records) {
+bool LLVM37TableGenMain(raw_ostream &OS, RecordKeeper &Records) {
   switch (Action) {
   case PrintRecords:
     OS << Records;           // No argument, dump all contents
@@ -183,22 +183,22 @@ bool LLVMTableGenMain(raw_ostream &OS, RecordKeeper &Records) {
 
 int main(int argc, char **argv) {
   // HLSL Change Starts
-  if (std::error_code ec = llvm::sys::fs::SetupPerThreadFileSystem())
+  if (std::error_code ec = llvm37::sys::fs::SetupPerThreadFileSystem())
       return 1;
-  llvm::sys::fs::AutoCleanupPerThreadFileSystem auto_cleanup_fs;
-  llvm::sys::fs::MSFileSystem* msfPtr;
+  llvm37::sys::fs::AutoCleanupPerThreadFileSystem auto_cleanup_fs;
+  llvm37::sys::fs::MSFileSystem* msfPtr;
   HRESULT hr;
   if (!SUCCEEDED(hr = CreateMSFileSystemForDisk(&msfPtr)))
     return 1;
-  std::unique_ptr<llvm::sys::fs::MSFileSystem> msf(msfPtr);
-  llvm::sys::fs::AutoPerThreadSystem pts(msf.get());
+  std::unique_ptr<llvm37::sys::fs::MSFileSystem> msf(msfPtr);
+  llvm37::sys::fs::AutoPerThreadSystem pts(msf.get());
   // HLSL Change Ends
 
   // sys::PrintStackTraceOnErrorSignal(); // HLSL Change
   // PrettyStackTraceProgram X(argc, argv); // HLSL Change
   cl::ParseCommandLineOptions(argc, argv);
 
-  return TableGenMain(argv[0], &LLVMTableGenMain);
+  return TableGenMain(argv[0], &LLVM37TableGenMain);
 }
 
 #ifdef __has_feature

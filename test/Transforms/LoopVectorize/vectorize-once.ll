@@ -11,7 +11,7 @@ target triple = "x86_64-apple-macosx10.8.0"
 ; This test checks that we add metadata to vectorized loops
 ; CHECK-LABEL: @_Z4foo1Pii(
 ; CHECK: <4 x i32>
-; CHECK: llvm.loop
+; CHECK: llvm37.loop
 ; CHECK: ret
 
 ; This test comes from the loop:
@@ -43,7 +43,7 @@ _ZSt10accumulateIPiiET0_T_S2_S1_.exit:            ; preds = %for.body.i, %entry
 ; This test checks that we don't vectorize loops that are marked with the "width" == 1 metadata.
 ; CHECK-LABEL: @_Z4foo2Pii(
 ; CHECK-NOT: <4 x i32>
-; CHECK: llvm.loop
+; CHECK: llvm37.loop
 ; CHECK: ret
 define i32 @_Z4foo2Pii(i32* %A, i32 %n) #0 {
 entry:
@@ -59,7 +59,7 @@ for.body.i:                                       ; preds = %entry, %for.body.i
   %add.i = add nsw i32 %0, %__init.addr.05.i
   %incdec.ptr.i = getelementptr inbounds i32, i32* %__first.addr.04.i, i64 1
   %cmp.i = icmp eq i32* %incdec.ptr.i, %add.ptr
-  br i1 %cmp.i, label %_ZSt10accumulateIPiiET0_T_S2_S1_.exit, label %for.body.i, !llvm.loop !0
+  br i1 %cmp.i, label %_ZSt10accumulateIPiiET0_T_S2_S1_.exit, label %for.body.i, !llvm37.loop !0
 
 _ZSt10accumulateIPiiET0_T_S2_S1_.exit:            ; preds = %for.body.i, %entry
   %__init.addr.0.lcssa.i = phi i32 [ 0, %entry ], [ %add.i, %for.body.i ]

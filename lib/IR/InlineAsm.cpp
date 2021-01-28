@@ -1,6 +1,6 @@
 //===-- InlineAsm.cpp - Implement the InlineAsm class ---------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,13 +11,13 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/IR/InlineAsm.h"
+#include "llvm37/IR/InlineAsm.h"
 #include "ConstantsContext.h"
 #include "LLVMContextImpl.h"
-#include "llvm/IR/DerivedTypes.h"
+#include "llvm37/IR/DerivedTypes.h"
 #include <algorithm>
 #include <cctype>
-using namespace llvm;
+using namespace llvm37;
 
 // Implement the first virtual method in this class in this file so the
 // InlineAsm vtable is emitted here.
@@ -30,7 +30,7 @@ InlineAsm *InlineAsm::get(FunctionType *Ty, StringRef AsmString,
                           bool isAlignStack, AsmDialect asmDialect) {
   InlineAsmKeyType Key(AsmString, Constraints, hasSideEffects, isAlignStack,
                        asmDialect);
-  LLVMContextImpl *pImpl = Ty->getContext().pImpl;
+  LLVM37ContextImpl *pImpl = Ty->getContext().pImpl;
   return pImpl->InlineAsms.getOrCreate(PointerType::getUnqual(Ty), Key);
 }
 

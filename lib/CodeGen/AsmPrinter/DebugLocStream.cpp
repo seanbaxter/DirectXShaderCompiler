@@ -1,6 +1,6 @@
 //===- DebugLocStream.cpp - DWARF debug_loc stream --------------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -9,9 +9,9 @@
 
 #include "DebugLocStream.h"
 #include "DwarfDebug.h"
-#include "llvm/CodeGen/AsmPrinter.h"
+#include "llvm37/CodeGen/AsmPrinter.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 bool DebugLocStream::finalizeList(AsmPrinter &Asm) {
   if (Lists.back().EntryOffset == Entries.size()) {

@@ -1,6 +1,6 @@
 //===- InstCombineCalls.cpp -----------------------------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -12,17 +12,17 @@
 //===----------------------------------------------------------------------===//
 
 #include "InstCombineInternal.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/Analysis/InstructionSimplify.h"
-#include "llvm/Analysis/MemoryBuiltins.h"
-#include "llvm/IR/CallSite.h"
-#include "llvm/IR/Dominators.h"
-#include "llvm/IR/PatternMatch.h"
-#include "llvm/IR/Statepoint.h"
-#include "llvm/Transforms/Utils/BuildLibCalls.h"
-#include "llvm/Transforms/Utils/Local.h"
-#include "llvm/Transforms/Utils/SimplifyLibCalls.h"
-using namespace llvm;
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/Analysis/InstructionSimplify.h"
+#include "llvm37/Analysis/MemoryBuiltins.h"
+#include "llvm37/IR/CallSite.h"
+#include "llvm37/IR/Dominators.h"
+#include "llvm37/IR/PatternMatch.h"
+#include "llvm37/IR/Statepoint.h"
+#include "llvm37/Transforms/Utils/BuildLibCalls.h"
+#include "llvm37/Transforms/Utils/Local.h"
+#include "llvm37/Transforms/Utils/SimplifyLibCalls.h"
+using namespace llvm37;
 using namespace PatternMatch;
 
 #define DEBUG_TYPE "instcombine"
@@ -119,7 +119,7 @@ Instruction *InstCombiner::SimplifyMemTransfer(MemIntrinsic *MI) {
 
         // If the memcpy has metadata describing the members, see if we can
         // get the TBAA tag describing our copy.
-        if (MDNode *M = MI->getMetadata(LLVMContext::MD_tbaa_struct)) {
+        if (MDNode *M = MI->getMetadata(LLVM37Context::MD_tbaa_struct)) {
           if (M->getNumOperands() == 3 && M->getOperand(0) &&
               mdconst::hasa<ConstantInt>(M->getOperand(0)) &&
               mdconst::extract<ConstantInt>(M->getOperand(0))->isNullValue() &&
@@ -144,11 +144,11 @@ Instruction *InstCombiner::SimplifyMemTransfer(MemIntrinsic *MI) {
   LoadInst *L = Builder->CreateLoad(Src, MI->isVolatile());
   L->setAlignment(SrcAlign);
   if (CopyMD)
-    L->setMetadata(LLVMContext::MD_tbaa, CopyMD);
+    L->setMetadata(LLVM37Context::MD_tbaa, CopyMD);
   StoreInst *S = Builder->CreateStore(L, Dest, MI->isVolatile());
   S->setAlignment(DstAlign);
   if (CopyMD)
-    S->setMetadata(LLVMContext::MD_tbaa, CopyMD);
+    S->setMetadata(LLVM37Context::MD_tbaa, CopyMD);
 
   // Set the size of the copy to 0, it will be deleted on the next iteration.
   MI->setArgOperand(2, Constant::getNullValue(MemOpLength->getType()));
@@ -1191,7 +1191,7 @@ Instruction *InstCombiner::visitCallInst(CallInst &CI) {
         LoadInst* LI = cast<LoadInst>(LHS);
         if (isValidAssumeForContext(II, LI, DT)) {
           MDNode *MD = MDNode::get(II->getContext(), None);
-          LI->setMetadata(LLVMContext::MD_nonnull, MD);
+          LI->setMetadata(LLVM37Context::MD_nonnull, MD);
           return EraseInstFromFunction(*II);
         }
       }
@@ -1373,8 +1373,8 @@ static IntrinsicInst *FindInitTrampolineFromBB(IntrinsicInst *AdjustTramp,
   return nullptr;
 }
 
-// Given a call to llvm.adjust.trampoline, find and return the corresponding
-// call to llvm.init.trampoline if the call to the trampoline can be optimized
+// Given a call to llvm37.adjust.trampoline, find and return the corresponding
+// call to llvm37.init.trampoline if the call to the trampoline can be optimized
 // to a direct call to a function.  Otherwise return NULL.
 //
 static IntrinsicInst *FindInitTrampoline(Value *Callee) {

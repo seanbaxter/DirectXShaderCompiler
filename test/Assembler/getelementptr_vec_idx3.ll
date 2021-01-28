@@ -1,4 +1,4 @@
-; RUN: not llvm-as < %s >/dev/null 2> %t
+; RUN: not llvm37-as < %s >/dev/null 2> %t
 ; RUN: FileCheck %s < %t
 ; Test that a vector GEP may be used with a scalar base, the result is a vector of pointers
 

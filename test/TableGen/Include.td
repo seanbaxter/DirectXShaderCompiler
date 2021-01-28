@@ -1,4 +1,4 @@
-// RUN: llvm-tblgen -I %p %s
+// RUN: llvm37-tblgen -I %p %s
 
 def BeforeInclude;
 

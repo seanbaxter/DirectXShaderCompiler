@@ -1,18 +1,18 @@
 //===-- User.cpp - Implement the User class -------------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/IR/User.h"
-#include "llvm/IR/Constant.h"
-#include "llvm/IR/GlobalValue.h"
-#include "llvm/IR/Operator.h"
+#include "llvm37/IR/User.h"
+#include "llvm37/IR/Constant.h"
+#include "llvm37/IR/GlobalValue.h"
+#include "llvm37/IR/Operator.h"
 
-namespace llvm {
+namespace llvm37 {
 class BasicBlock;
 
 //===----------------------------------------------------------------------===//
@@ -150,7 +150,7 @@ void User::operator delete(void *Usr, unsigned NumUserOperands) {
 //===----------------------------------------------------------------------===//
 
 Operator::~Operator() {
-  llvm_unreachable("should never destroy an Operator");
+  llvm37_unreachable("should never destroy an Operator");
 }
 
-} // End llvm namespace
+} // End llvm37 namespace

@@ -1,6 +1,6 @@
 //===-- UnrollLoop.cpp - Loop unrolling utilities -------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -16,27 +16,27 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Transforms/Utils/UnrollLoop.h"
-#include "llvm/ADT/SmallPtrSet.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/Analysis/AssumptionCache.h"
-#include "llvm/Analysis/InstructionSimplify.h"
-#include "llvm/Analysis/LoopIterator.h"
-#include "llvm/Analysis/LoopPass.h"
-#include "llvm/Analysis/ScalarEvolution.h"
-#include "llvm/IR/BasicBlock.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/DiagnosticInfo.h"
-#include "llvm/IR/Dominators.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Transforms/Utils/BasicBlockUtils.h"
-#include "llvm/Transforms/Utils/Cloning.h"
-#include "llvm/Transforms/Utils/Local.h"
-#include "llvm/Transforms/Utils/LoopUtils.h"
-#include "llvm/Transforms/Utils/SimplifyIndVar.h"
-using namespace llvm;
+#include "llvm37/Transforms/Utils/UnrollLoop.h"
+#include "llvm37/ADT/SmallPtrSet.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/Analysis/AssumptionCache.h"
+#include "llvm37/Analysis/InstructionSimplify.h"
+#include "llvm37/Analysis/LoopIterator.h"
+#include "llvm37/Analysis/LoopPass.h"
+#include "llvm37/Analysis/ScalarEvolution.h"
+#include "llvm37/IR/BasicBlock.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/IR/DiagnosticInfo.h"
+#include "llvm37/IR/Dominators.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Transforms/Utils/BasicBlockUtils.h"
+#include "llvm37/Transforms/Utils/Cloning.h"
+#include "llvm37/Transforms/Utils/Local.h"
+#include "llvm37/Transforms/Utils/LoopUtils.h"
+#include "llvm37/Transforms/Utils/SimplifyIndVar.h"
+using namespace llvm37;
 
 #define DEBUG_TYPE "loop-unroll"
 
@@ -160,7 +160,7 @@ FoldBlockIntoPredecessor(BasicBlock *BB, LoopInfo* LI, LPPassManager *LPM,
 ///
 /// This utility preserves LoopInfo. If DominatorTree or ScalarEvolution are
 /// available from the Pass it must also preserve those analyses.
-bool llvm::UnrollLoop(Loop *L, unsigned Count, unsigned TripCount,
+bool llvm37::UnrollLoop(Loop *L, unsigned Count, unsigned TripCount,
                       bool AllowRuntime, bool AllowExpensiveTripCount,
                       unsigned TripMultiple, LoopInfo *LI, Pass *PP,
                       LPPassManager *LPM, AssumptionCache *AC) {
@@ -251,7 +251,7 @@ bool llvm::UnrollLoop(Loop *L, unsigned Count, unsigned TripCount,
   // Report the unrolling decision.
   DebugLoc LoopLoc = L->getStartLoc();
   Function *F = Header->getParent();
-  LLVMContext &Ctx = F->getContext();
+  LLVM37Context &Ctx = F->getContext();
 
   if (CompletelyUnroll) {
     DEBUG(dbgs() << "COMPLETELY UNROLLING loop %" << Header->getName()
@@ -558,10 +558,10 @@ bool llvm::UnrollLoop(Loop *L, unsigned Count, unsigned TripCount,
   return true;
 }
 
-/// Given an llvm.loop loop id metadata node, returns the loop hint metadata
+/// Given an llvm37.loop loop id metadata node, returns the loop hint metadata
 /// node with the given name (for example, "llvm.loop.unroll.count"). If no
 /// such metadata node exists, then nullptr is returned.
-MDNode *llvm::GetUnrollMetadata(MDNode *LoopID, StringRef Name) {
+MDNode *llvm37::GetUnrollMetadata(MDNode *LoopID, StringRef Name) {
   // First operand should refer to the loop id itself.
   assert(LoopID->getNumOperands() > 0 && "requires at least one operand");
   assert(LoopID->getOperand(0) == LoopID && "invalid loop id");

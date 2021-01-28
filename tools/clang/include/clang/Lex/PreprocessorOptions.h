@@ -1,27 +1,27 @@
 //===--- PreprocessorOptions.h ----------------------------------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_LEX_PREPROCESSOROPTIONS_H_
-#define LLVM_CLANG_LEX_PREPROCESSOROPTIONS_H_
+#ifndef LLVM37_CLANG_LEX_PREPROCESSOROPTIONS_H_
+#define LLVM37_CLANG_LEX_PREPROCESSOROPTIONS_H_
 
 #include "clang/Basic/SourceLocation.h"
-#include "llvm/ADT/IntrusiveRefCntPtr.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/ADT/StringRef.h"
-#include "llvm/ADT/StringSet.h"
+#include "llvm37/ADT/IntrusiveRefCntPtr.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/ADT/StringRef.h"
+#include "llvm37/ADT/StringSet.h"
 #include <cassert>
 #include <set>
 #include <string>
 #include <utility>
 #include <vector>
 
-namespace llvm {
+namespace llvm37 {
   class MemoryBuffer;
 }
 
@@ -109,7 +109,7 @@ public:
   /// \brief The set of file-to-buffer remappings, which take existing files
   /// on the system (the first part of each pair) and gives them the contents
   /// of the specified memory buffer (the second part of each pair).
-  std::vector<std::pair<std::string, llvm::MemoryBuffer *>> RemappedFileBuffers;
+  std::vector<std::pair<std::string, llvm37::MemoryBuffer *>> RemappedFileBuffers;
 
   /// \brief Whether the compiler instance should retain (i.e., not free)
   /// the buffers associated with remapped files.
@@ -126,7 +126,7 @@ public:
     
   /// \brief Records the set of modules
   class FailedModulesSet : public RefCountedBase<FailedModulesSet> {
-    llvm::StringSet<> Failed;
+    llvm37::StringSet<> Failed;
 
   public:
     bool hasAlreadyFailed(StringRef mod) {
@@ -163,7 +163,7 @@ public:
     RemappedFiles.emplace_back(From, To);
   }
 
-  void addRemappedFile(StringRef From, llvm::MemoryBuffer *To) {
+  void addRemappedFile(StringRef From, llvm37::MemoryBuffer *To) {
     RemappedFileBuffers.emplace_back(From, To);
   }
 

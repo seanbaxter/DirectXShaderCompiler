@@ -1,6 +1,6 @@
 //===----- ScheduleDAGRRList.cpp - Reg pressure reduction list scheduler --===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -15,25 +15,25 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/CodeGen/SchedulerRegistry.h"
+#include "llvm37/CodeGen/SchedulerRegistry.h"
 #include "ScheduleDAGSDNodes.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/SmallSet.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/CodeGen/MachineRegisterInfo.h"
-#include "llvm/CodeGen/ScheduleHazardRecognizer.h"
-#include "llvm/CodeGen/SelectionDAGISel.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/InlineAsm.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Target/TargetInstrInfo.h"
-#include "llvm/Target/TargetLowering.h"
-#include "llvm/Target/TargetRegisterInfo.h"
-#include "llvm/Target/TargetSubtargetInfo.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/SmallSet.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/CodeGen/MachineRegisterInfo.h"
+#include "llvm37/CodeGen/ScheduleHazardRecognizer.h"
+#include "llvm37/CodeGen/SelectionDAGISel.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/IR/InlineAsm.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Target/TargetInstrInfo.h"
+#include "llvm37/Target/TargetLowering.h"
+#include "llvm37/Target/TargetRegisterInfo.h"
+#include "llvm37/Target/TargetSubtargetInfo.h"
 #include <climits>
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "pre-RA-sched"
 
@@ -370,7 +370,7 @@ void ScheduleDAGRRList::ReleasePred(SUnit *SU, const SDep *PredEdge) {
     dbgs() << "*** Scheduling failed! ***\n";
     PredSU->dump(this);
     dbgs() << " has been released too many times!\n";
-    llvm_unreachable(nullptr);
+    llvm37_unreachable(nullptr);
   }
 #endif
   --PredSU->NumSuccsLeft;
@@ -1798,7 +1798,7 @@ public:
     return V;
   }
 
-#if !defined(NDEBUG) || defined(LLVM_ENABLE_DUMP)
+#if !defined(NDEBUG) || defined(LLVM37_ENABLE_DUMP)
   void dump(ScheduleDAG *DAG) const override {
     // Emulate pop() without clobbering NodeQueueIds.
     std::vector<SUnit*> DumpQueue = Queue;
@@ -1937,7 +1937,7 @@ unsigned RegReductionPQBase::getNodePriority(const SUnit *SU) const {
 //===----------------------------------------------------------------------===//
 
 void RegReductionPQBase::dumpRegPressure() const {
-#if !defined(NDEBUG) || defined(LLVM_ENABLE_DUMP)
+#if !defined(NDEBUG) || defined(LLVM37_ENABLE_DUMP)
   for (TargetRegisterInfo::regclass_iterator I = TRI->regclass_begin(),
          E = TRI->regclass_end(); I != E; ++I) {
     const TargetRegisterClass *RC = *I;
@@ -2988,8 +2988,8 @@ void RegReductionPQBase::AddPseudoTwoAddrDeps() {
 //                         Public Constructor Functions
 //===----------------------------------------------------------------------===//
 
-llvm::ScheduleDAGSDNodes *
-llvm::createBURRListDAGScheduler(SelectionDAGISel *IS,
+llvm37::ScheduleDAGSDNodes *
+llvm37::createBURRListDAGScheduler(SelectionDAGISel *IS,
                                  CodeGenOpt::Level OptLevel) {
   const TargetSubtargetInfo &STI = IS->MF->getSubtarget();
   const TargetInstrInfo *TII = STI.getInstrInfo();
@@ -3002,8 +3002,8 @@ llvm::createBURRListDAGScheduler(SelectionDAGISel *IS,
   return SD;
 }
 
-llvm::ScheduleDAGSDNodes *
-llvm::createSourceListDAGScheduler(SelectionDAGISel *IS,
+llvm37::ScheduleDAGSDNodes *
+llvm37::createSourceListDAGScheduler(SelectionDAGISel *IS,
                                    CodeGenOpt::Level OptLevel) {
   const TargetSubtargetInfo &STI = IS->MF->getSubtarget();
   const TargetInstrInfo *TII = STI.getInstrInfo();
@@ -3016,8 +3016,8 @@ llvm::createSourceListDAGScheduler(SelectionDAGISel *IS,
   return SD;
 }
 
-llvm::ScheduleDAGSDNodes *
-llvm::createHybridListDAGScheduler(SelectionDAGISel *IS,
+llvm37::ScheduleDAGSDNodes *
+llvm37::createHybridListDAGScheduler(SelectionDAGISel *IS,
                                    CodeGenOpt::Level OptLevel) {
   const TargetSubtargetInfo &STI = IS->MF->getSubtarget();
   const TargetInstrInfo *TII = STI.getInstrInfo();
@@ -3032,8 +3032,8 @@ llvm::createHybridListDAGScheduler(SelectionDAGISel *IS,
   return SD;
 }
 
-llvm::ScheduleDAGSDNodes *
-llvm::createILPListDAGScheduler(SelectionDAGISel *IS,
+llvm37::ScheduleDAGSDNodes *
+llvm37::createILPListDAGScheduler(SelectionDAGISel *IS,
                                 CodeGenOpt::Level OptLevel) {
   const TargetSubtargetInfo &STI = IS->MF->getSubtarget();
   const TargetInstrInfo *TII = STI.getInstrInfo();

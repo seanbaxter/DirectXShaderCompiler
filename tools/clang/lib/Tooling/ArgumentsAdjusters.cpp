@@ -1,6 +1,6 @@
 //===--- ArgumentsAdjusters.cpp - Command line arguments adjuster ---------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -14,7 +14,7 @@
 
 #include "clang/Tooling/ArgumentsAdjusters.h"
 #include "clang/Basic/LLVM.h"
-#include "llvm/ADT/StringRef.h"
+#include "llvm37/ADT/StringRef.h"
 
 namespace clang {
 namespace tooling {

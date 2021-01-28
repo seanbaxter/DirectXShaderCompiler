@@ -1,6 +1,6 @@
 //===- circular_raw_ostream.cpp - Implement circular_raw_ostream ----------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,9 +11,9 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Support/circular_raw_ostream.h"
+#include "llvm37/Support/circular_raw_ostream.h"
 #include <algorithm>
-using namespace llvm;
+using namespace llvm37;
 
 void circular_raw_ostream::write_impl(const char *Ptr, size_t Size) {
   if (BufferSize == 0) {

@@ -1,4 +1,4 @@
-; RUN: opt < %s -loop-reduce | llvm-dis
+; RUN: opt < %s -loop-reduce | llvm37-dis
 ; PR3571
 
 target triple = "i386-pc-mingw32"

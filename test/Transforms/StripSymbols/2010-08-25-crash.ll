@@ -4,8 +4,8 @@ entry:
   ret i32 0, !dbg !8
 }
 
-!llvm.dbg.cu = !{!2}
-!llvm.module.flags = !{!14}
+!llvm37.dbg.cu = !{!2}
+!llvm37.module.flags = !{!14}
 
 !0 = !DISubprogram(name: "foo", linkageName: "foo", line: 3, isLocal: false, isDefinition: true, virtualIndex: 6, isOptimized: false, file: !10, scope: !1, type: !3, function: i32 ()* @foo)
 !1 = !DIFile(filename: "/tmp/a.c", directory: "/Volumes/Lalgate/clean/D.CW")

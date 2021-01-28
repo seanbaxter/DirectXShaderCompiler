@@ -1,6 +1,6 @@
 //===--- TokenLexer.cpp - Lex from a token stream -------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -18,7 +18,7 @@
 #include "clang/Lex/MacroInfo.h"
 #include "clang/Lex/Preprocessor.h"
 #include "clang/Lex/PreprocessorOptions.h" // HLSL Change
-#include "llvm/ADT/SmallString.h"
+#include "llvm37/ADT/SmallString.h"
 using namespace clang;
 
 

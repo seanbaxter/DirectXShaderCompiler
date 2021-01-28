@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
-#===-- test-release.sh - Test the LLVM release candidates ------------------===#
+#===-- test-release.sh - Test the LLVM37 release candidates ------------------===#
 #
-#                     The LLVM Compiler Infrastructure
+#                     The LLVM37 Compiler Infrastructure
 #
 # This file is distributed under the University of Illinois Open Source
 # License.
 #
 #===------------------------------------------------------------------------===#
 #
-# Download, build, and test the release candidate for an LLVM release.
+# Download, build, and test the release candidate for an LLVM37 release.
 #
 #===------------------------------------------------------------------------===#
 
@@ -19,7 +19,7 @@ else
 fi
 
 # Base SVN URL for the sources.
-Base_url="http://llvm.org/svn/llvm-project"
+Base_url="http://llvm37.org/svn/llvm37-project"
 
 Release=""
 Release_no_dot=""
@@ -175,7 +175,7 @@ if [ -z "$NumJobs" ]; then
 fi
 
 # Projects list
-projects="llvm cfe clang-tools-extra"
+projects="llvm37 cfe clang-tools-extra"
 if [ $do_rt = "yes" ]; then
   projects="$projects compiler-rt"
 fi
@@ -202,7 +202,7 @@ LogDir=$BuildDir/logs
 mkdir -p $LogDir
 
 # Final package name.
-Package=clang+llvm-$Release
+Package=clang+llvm37-$Release
 if [ $RC != "final" ]; then
   Package=$Package-$RC
 fi
@@ -262,15 +262,15 @@ function export_sources() {
     done
 
     echo "# Creating symlinks"
-    cd $BuildDir/llvm.src/tools
+    cd $BuildDir/llvm37.src/tools
     if [ ! -h clang ]; then
         ln -s ../../cfe.src clang
     fi
-    cd $BuildDir/llvm.src/tools/clang/tools
+    cd $BuildDir/llvm37.src/tools/clang/tools
     if [ ! -h extra ]; then
         ln -s ../../../../clang-tools-extra.src extra
     fi
-    cd $BuildDir/llvm.src/projects
+    cd $BuildDir/llvm37.src/projects
     if [ -d $BuildDir/test-suite.src ] && [ ! -h test-suite ]; then
         ln -s ../../test-suite.src test-suite
     fi
@@ -290,7 +290,7 @@ function export_sources() {
     cd $BuildDir
 }
 
-function configure_llvmCore() {
+function configure_llvm37Core() {
     Phase="$1"
     Flavor="$2"
     ObjDir="$3"
@@ -322,70 +322,70 @@ function configure_llvmCore() {
     echo "# Using C++ compiler: $cxx_compiler"
 
     cd $ObjDir
-    echo "# Configuring llvm $Release-$RC $Flavor"
+    echo "# Configuring llvm37 $Release-$RC $Flavor"
 
     if [ "$use_autoconf" = "yes" ]; then
         echo "#" env CC="$c_compiler" CXX="$cxx_compiler" \
-            $BuildDir/llvm.src/configure \
+            $BuildDir/llvm37.src/configure \
             $ConfigureFlags --disable-timestamps $ExtraConfigureFlags \
-            2>&1 | tee $LogDir/llvm.configure-Phase$Phase-$Flavor.log
+            2>&1 | tee $LogDir/llvm37.configure-Phase$Phase-$Flavor.log
         env CC="$c_compiler" CXX="$cxx_compiler" \
-            $BuildDir/llvm.src/configure \
+            $BuildDir/llvm37.src/configure \
             $ConfigureFlags --disable-timestamps $ExtraConfigureFlags \
-            2>&1 | tee $LogDir/llvm.configure-Phase$Phase-$Flavor.log
+            2>&1 | tee $LogDir/llvm37.configure-Phase$Phase-$Flavor.log
     else
         echo "#" env CC="$c_compiler" CXX="$cxx_compiler" \
             cmake -G "Unix Makefiles" \
-            -DCMAKE_BUILD_TYPE=$BuildType -DLLVM_ENABLE_ASSERTIONS=$Assertions \
-            -DLLVM_ENABLE_TIMESTAMPS=OFF -DLLVM_CONFIGTIME="(timestamp not enabled)" \
-            $ExtraConfigureFlags $BuildDir/llvm.src \
-            2>&1 | tee $LogDir/llvm.configure-Phase$Phase-$Flavor.log
+            -DCMAKE_BUILD_TYPE=$BuildType -DLLVM37_ENABLE_ASSERTIONS=$Assertions \
+            -DLLVM37_ENABLE_TIMESTAMPS=OFF -DLLVM37_CONFIGTIME="(timestamp not enabled)" \
+            $ExtraConfigureFlags $BuildDir/llvm37.src \
+            2>&1 | tee $LogDir/llvm37.configure-Phase$Phase-$Flavor.log
         env CC="$c_compiler" CXX="$cxx_compiler" \
             cmake -G "Unix Makefiles" \
-            -DCMAKE_BUILD_TYPE=$BuildType -DLLVM_ENABLE_ASSERTIONS=$Assertions \
-            -DLLVM_ENABLE_TIMESTAMPS=OFF -DLLVM_CONFIGTIME="(timestamp not enabled)" \
-            $ExtraConfigureFlags $BuildDir/llvm.src \
-            2>&1 | tee $LogDir/llvm.configure-Phase$Phase-$Flavor.log
+            -DCMAKE_BUILD_TYPE=$BuildType -DLLVM37_ENABLE_ASSERTIONS=$Assertions \
+            -DLLVM37_ENABLE_TIMESTAMPS=OFF -DLLVM37_CONFIGTIME="(timestamp not enabled)" \
+            $ExtraConfigureFlags $BuildDir/llvm37.src \
+            2>&1 | tee $LogDir/llvm37.configure-Phase$Phase-$Flavor.log
     fi
 
     cd $BuildDir
 }
 
-function build_llvmCore() {
+function build_llvm37Core() {
     Phase="$1"
     Flavor="$2"
     ObjDir="$3"
     DestDir="$4"
 
     cd $ObjDir
-    echo "# Compiling llvm $Release-$RC $Flavor"
+    echo "# Compiling llvm37 $Release-$RC $Flavor"
     echo "# ${MAKE} -j $NumJobs VERBOSE=1"
     ${MAKE} -j $NumJobs VERBOSE=1 \
-        2>&1 | tee $LogDir/llvm.make-Phase$Phase-$Flavor.log
+        2>&1 | tee $LogDir/llvm37.make-Phase$Phase-$Flavor.log
 
-    echo "# Installing llvm $Release-$RC $Flavor"
+    echo "# Installing llvm37 $Release-$RC $Flavor"
     echo "# ${MAKE} install"
     ${MAKE} install \
         DESTDIR="${DestDir}" \
-        2>&1 | tee $LogDir/llvm.install-Phase$Phase-$Flavor.log
+        2>&1 | tee $LogDir/llvm37.install-Phase$Phase-$Flavor.log
     cd $BuildDir
 }
 
-function test_llvmCore() {
+function test_llvm37Core() {
     Phase="$1"
     Flavor="$2"
     ObjDir="$3"
 
     cd $ObjDir
     if ! ( ${MAKE} -j $NumJobs -k check-all \
-        2>&1 | tee $LogDir/llvm.check-Phase$Phase-$Flavor.log ) ; then
+        2>&1 | tee $LogDir/llvm37.check-Phase$Phase-$Flavor.log ) ; then
       deferred_error $Phase $Flavor "check-all failed"
     fi
 
     if [ "$use_autoconf" = "yes" ]; then
         # In the cmake build, unit tests are run as part of check-all.
         if ! ( ${MAKE} -k unittests 2>&1 | \
-            tee $LogDir/llvm.unittests-Phase$Phase-$Flavor.log ) ; then
+            tee $LogDir/llvm37.unittests-Phase$Phase-$Flavor.log ) ; then
           deferred_error $Phase $Flavor "unittests failed"
         fi
     fi
@@ -417,13 +417,13 @@ function clean_RPATH() {
 function package_release() {
     cwd=`pwd`
     cd $BuildDir/Phase3/Release
-    mv llvmCore-$Release-$RC.install/usr/local $Package
+    mv llvm37Core-$Release-$RC.install/usr/local $Package
     if [ "$use_gzip" = "yes" ]; then
       tar cfz $BuildDir/$Package.tar.gz $Package
     else
       tar cfJ $BuildDir/$Package.tar.xz $Package
     fi
-    mv $Package llvmCore-$Release-$RC.install/usr/local
+    mv $Package llvm37Core-$Release-$RC.install/usr/local
     cd $cwd
 }
 
@@ -437,7 +437,7 @@ function build_OpenMP() {
     rm -rf $BuildDir/Phase3/openmp.install
     mkdir -p $BuildDir/Phase3/openmp
     cd $BuildDir/Phase3/openmp
-    clang=$BuildDir/Phase3/Release/llvmCore-$Release-$RC.install/usr/local/bin/clang
+    clang=$BuildDir/Phase3/Release/llvm37Core-$Release-$RC.install/usr/local/bin/clang
 
     echo "#" cmake -DCMAKE_C_COMPILER=${clang} -DCMAKE_CXX_COMPILER=${clang}++ \
             -DCMAKE_BUILD_TYPE=Release -DLIBOMP_MICRO_TESTS=on \
@@ -499,65 +499,65 @@ for Flavor in $Flavors ; do
 
     c_compiler="$CC"
     cxx_compiler="$CXX"
-    llvmCore_phase1_objdir=$BuildDir/Phase1/$Flavor/llvmCore-$Release-$RC.obj
-    llvmCore_phase1_destdir=$BuildDir/Phase1/$Flavor/llvmCore-$Release-$RC.install
+    llvm37Core_phase1_objdir=$BuildDir/Phase1/$Flavor/llvm37Core-$Release-$RC.obj
+    llvm37Core_phase1_destdir=$BuildDir/Phase1/$Flavor/llvm37Core-$Release-$RC.install
 
-    llvmCore_phase2_objdir=$BuildDir/Phase2/$Flavor/llvmCore-$Release-$RC.obj
-    llvmCore_phase2_destdir=$BuildDir/Phase2/$Flavor/llvmCore-$Release-$RC.install
+    llvm37Core_phase2_objdir=$BuildDir/Phase2/$Flavor/llvm37Core-$Release-$RC.obj
+    llvm37Core_phase2_destdir=$BuildDir/Phase2/$Flavor/llvm37Core-$Release-$RC.install
 
-    llvmCore_phase3_objdir=$BuildDir/Phase3/$Flavor/llvmCore-$Release-$RC.obj
-    llvmCore_phase3_destdir=$BuildDir/Phase3/$Flavor/llvmCore-$Release-$RC.install
+    llvm37Core_phase3_objdir=$BuildDir/Phase3/$Flavor/llvm37Core-$Release-$RC.obj
+    llvm37Core_phase3_destdir=$BuildDir/Phase3/$Flavor/llvm37Core-$Release-$RC.install
 
-    rm -rf $llvmCore_phase1_objdir
-    rm -rf $llvmCore_phase1_destdir
+    rm -rf $llvm37Core_phase1_objdir
+    rm -rf $llvm37Core_phase1_destdir
 
-    rm -rf $llvmCore_phase2_objdir
-    rm -rf $llvmCore_phase2_destdir
+    rm -rf $llvm37Core_phase2_objdir
+    rm -rf $llvm37Core_phase2_destdir
 
-    rm -rf $llvmCore_phase3_objdir
-    rm -rf $llvmCore_phase3_destdir
+    rm -rf $llvm37Core_phase3_objdir
+    rm -rf $llvm37Core_phase3_destdir
 
-    mkdir -p $llvmCore_phase1_objdir
-    mkdir -p $llvmCore_phase1_destdir
+    mkdir -p $llvm37Core_phase1_objdir
+    mkdir -p $llvm37Core_phase1_destdir
 
-    mkdir -p $llvmCore_phase2_objdir
-    mkdir -p $llvmCore_phase2_destdir
+    mkdir -p $llvm37Core_phase2_objdir
+    mkdir -p $llvm37Core_phase2_destdir
 
-    mkdir -p $llvmCore_phase3_objdir
-    mkdir -p $llvmCore_phase3_destdir
+    mkdir -p $llvm37Core_phase3_objdir
+    mkdir -p $llvm37Core_phase3_destdir
 
     ############################################################################
-    # Phase 1: Build llvmCore and clang
-    echo "# Phase 1: Building llvmCore"
-    configure_llvmCore 1 $Flavor $llvmCore_phase1_objdir
-    build_llvmCore 1 $Flavor \
-        $llvmCore_phase1_objdir $llvmCore_phase1_destdir
-    clean_RPATH $llvmCore_phase1_destdir/usr/local
+    # Phase 1: Build llvm37Core and clang
+    echo "# Phase 1: Building llvm37Core"
+    configure_llvm37Core 1 $Flavor $llvm37Core_phase1_objdir
+    build_llvm37Core 1 $Flavor \
+        $llvm37Core_phase1_objdir $llvm37Core_phase1_destdir
+    clean_RPATH $llvm37Core_phase1_destdir/usr/local
 
     ########################################################################
-    # Phase 2: Build llvmCore with newly built clang from phase 1.
-    c_compiler=$llvmCore_phase1_destdir/usr/local/bin/clang
-    cxx_compiler=$llvmCore_phase1_destdir/usr/local/bin/clang++
-    echo "# Phase 2: Building llvmCore"
-    configure_llvmCore 2 $Flavor $llvmCore_phase2_objdir
-    build_llvmCore 2 $Flavor \
-        $llvmCore_phase2_objdir $llvmCore_phase2_destdir
-    clean_RPATH $llvmCore_phase2_destdir/usr/local
+    # Phase 2: Build llvm37Core with newly built clang from phase 1.
+    c_compiler=$llvm37Core_phase1_destdir/usr/local/bin/clang
+    cxx_compiler=$llvm37Core_phase1_destdir/usr/local/bin/clang++
+    echo "# Phase 2: Building llvm37Core"
+    configure_llvm37Core 2 $Flavor $llvm37Core_phase2_objdir
+    build_llvm37Core 2 $Flavor \
+        $llvm37Core_phase2_objdir $llvm37Core_phase2_destdir
+    clean_RPATH $llvm37Core_phase2_destdir/usr/local
 
     ########################################################################
-    # Phase 3: Build llvmCore with newly built clang from phase 2.
-    c_compiler=$llvmCore_phase2_destdir/usr/local/bin/clang
-    cxx_compiler=$llvmCore_phase2_destdir/usr/local/bin/clang++
-    echo "# Phase 3: Building llvmCore"
-    configure_llvmCore 3 $Flavor $llvmCore_phase3_objdir
-    build_llvmCore 3 $Flavor \
-        $llvmCore_phase3_objdir $llvmCore_phase3_destdir
-    clean_RPATH $llvmCore_phase3_destdir/usr/local
+    # Phase 3: Build llvm37Core with newly built clang from phase 2.
+    c_compiler=$llvm37Core_phase2_destdir/usr/local/bin/clang
+    cxx_compiler=$llvm37Core_phase2_destdir/usr/local/bin/clang++
+    echo "# Phase 3: Building llvm37Core"
+    configure_llvm37Core 3 $Flavor $llvm37Core_phase3_objdir
+    build_llvm37Core 3 $Flavor \
+        $llvm37Core_phase3_objdir $llvm37Core_phase3_destdir
+    clean_RPATH $llvm37Core_phase3_destdir/usr/local
 
     ########################################################################
     # Testing: Test phase 3
     echo "# Testing - built with clang"
-    test_llvmCore 3 $Flavor $llvmCore_phase3_objdir
+    test_llvm37Core 3 $Flavor $llvm37Core_phase3_objdir
 
     ########################################################################
     # Compare .o files between Phase2 and Phase3 and report which ones
@@ -565,7 +565,7 @@ for Flavor in $Flavors ; do
     if [ "$do_compare" = "yes" ]; then
         echo
         echo "# Comparing Phase 2 and Phase 3 files"
-        for p2 in `find $llvmCore_phase2_objdir -name '*.o'` ; do
+        for p2 in `find $llvm37Core_phase2_objdir -name '*.o'` ; do
             p3=`echo $p2 | sed -e 's,Phase2,Phase3,'`
             # Substitute 'Phase2' for 'Phase3' in the Phase 2 object file in
             # case there are build paths in the debug info. On some systems,

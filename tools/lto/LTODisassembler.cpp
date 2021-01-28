@@ -1,6 +1,6 @@
 //===-- LTODisassembler.cpp - LTO Disassembler interface ------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -12,15 +12,15 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm-c/lto.h"
-#include "llvm/Support/TargetSelect.h"
+#include "llvm37-c/lto.h"
+#include "llvm37/Support/TargetSelect.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 void lto_initialize_disassembler() {
   // Initialize targets and assembly printers/parsers.
-  llvm::InitializeAllTargetInfos();
-  llvm::InitializeAllTargetMCs();
-  llvm::InitializeAllAsmParsers();
-  llvm::InitializeAllDisassemblers();
+  llvm37::InitializeAllTargetInfos();
+  llvm37::InitializeAllTargetMCs();
+  llvm37::InitializeAllAsmParsers();
+  llvm37::InitializeAllDisassemblers();
 }

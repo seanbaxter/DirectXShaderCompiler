@@ -1,6 +1,6 @@
 //===-- ShrinkWrap.cpp - Compute safe point for prolog/epilog insertion ---===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -47,33 +47,33 @@
 // MachineFrameInfo is updated this that information.
 //===----------------------------------------------------------------------===//
 
-#include "llvm/ADT/Statistic.h"
+#include "llvm37/ADT/Statistic.h"
 // To check for profitability.
-#include "llvm/CodeGen/MachineBlockFrequencyInfo.h"
+#include "llvm37/CodeGen/MachineBlockFrequencyInfo.h"
 // For property #1 for Save.
-#include "llvm/CodeGen/MachineDominators.h"
-#include "llvm/CodeGen/MachineFunctionPass.h"
+#include "llvm37/CodeGen/MachineDominators.h"
+#include "llvm37/CodeGen/MachineFunctionPass.h"
 // To record the result of the analysis.
-#include "llvm/CodeGen/MachineFrameInfo.h"
+#include "llvm37/CodeGen/MachineFrameInfo.h"
 // For property #2.
-#include "llvm/CodeGen/MachineLoopInfo.h"
+#include "llvm37/CodeGen/MachineLoopInfo.h"
 // For property #1 for Restore.
-#include "llvm/CodeGen/MachinePostDominators.h"
-#include "llvm/CodeGen/Passes.h"
+#include "llvm37/CodeGen/MachinePostDominators.h"
+#include "llvm37/CodeGen/Passes.h"
 // To know about callee-saved.
-#include "llvm/CodeGen/RegisterClassInfo.h"
-#include "llvm/Support/Debug.h"
+#include "llvm37/CodeGen/RegisterClassInfo.h"
+#include "llvm37/Support/Debug.h"
 // To query the target about frame lowering.
-#include "llvm/Target/TargetFrameLowering.h"
+#include "llvm37/Target/TargetFrameLowering.h"
 // To know about frame setup operation.
-#include "llvm/Target/TargetInstrInfo.h"
+#include "llvm37/Target/TargetInstrInfo.h"
 // To access TargetInstrInfo.
-#include "llvm/Target/TargetSubtargetInfo.h"
+#include "llvm37/Target/TargetSubtargetInfo.h"
 //                                                                           //
 ///////////////////////////////////////////////////////////////////////////////
 #define DEBUG_TYPE "shrink-wrap"
 
-using namespace llvm;
+using namespace llvm37;
 
 STATISTIC(NumFunc, "Number of functions");
 STATISTIC(NumCandidates, "Number of shrink-wrapping candidates");
@@ -177,7 +177,7 @@ public:
 } // End anonymous namespace.
 
 char ShrinkWrap::ID = 0;
-char &llvm::ShrinkWrapID = ShrinkWrap::ID;
+char &llvm37::ShrinkWrapID = ShrinkWrap::ID;
 
 INITIALIZE_PASS_BEGIN(ShrinkWrap, "shrink-wrap", "Shrink Wrap Pass", false,
                       false)

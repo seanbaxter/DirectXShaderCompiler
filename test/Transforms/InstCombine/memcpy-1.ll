@@ -6,12 +6,12 @@ target datalayout = "e-p:32:32:32-i1:8:8-i8:8:8-i16:16:16-i32:32:32-i64:32:64-f3
 
 declare i8* @memcpy(i8*, i8*, i32)
 
-; Check memcpy(mem1, mem2, size) -> llvm.memcpy(mem1, mem2, size, 1).
+; Check memcpy(mem1, mem2, size) -> llvm37.memcpy(mem1, mem2, size, 1).
 
 define i8* @test_simplify1(i8* %mem1, i8* %mem2, i32 %size) {
 ; CHECK-LABEL: @test_simplify1(
   %ret = call i8* @memcpy(i8* %mem1, i8* %mem2, i32 %size)
-; CHECK: call void @llvm.memcpy
+; CHECK: call void @llvm37.memcpy
   ret i8* %ret
 ; CHECK: ret i8* %mem1
 }

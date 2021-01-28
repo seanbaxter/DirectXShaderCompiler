@@ -1,17 +1,17 @@
 
-#include "llvm/CodeGen/MachineRegionInfo.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/Analysis/RegionInfoImpl.h"
-#include "llvm/CodeGen/MachinePostDominators.h"
+#include "llvm37/CodeGen/MachineRegionInfo.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/Analysis/RegionInfoImpl.h"
+#include "llvm37/CodeGen/MachinePostDominators.h"
 
 #define DEBUG_TYPE "region"
 
-using namespace llvm;
+using namespace llvm37;
 
 STATISTIC(numMachineRegions,       "The # of machine regions");
 STATISTIC(numMachineSimpleRegions, "The # of simple machine regions");
 
-namespace llvm {
+namespace llvm37 {
 template class RegionBase<RegionTraits<MachineFunction>>;
 template class RegionNodeBase<RegionTraits<MachineFunction>>;
 template class RegionInfoBase<RegionTraits<MachineFunction>>;
@@ -112,7 +112,7 @@ void MachineRegionInfoPass::print(raw_ostream &OS, const Module *) const {
   RI.print(OS);
 }
 
-#if !defined(NDEBUG) || defined(LLVM_ENABLE_DUMP)
+#if !defined(NDEBUG) || defined(LLVM37_ENABLE_DUMP)
 void MachineRegionInfoPass::dump() const {
   RI.dump();
 }
@@ -129,10 +129,10 @@ INITIALIZE_PASS_END(MachineRegionInfoPass, "regions",
                 "Detect single entry single exit regions", true, true)
 
 // Create methods available outside of this file, to use them
-// "include/llvm/LinkAllPasses.h". Otherwise the pass would be deleted by
+// "include/llvm37/LinkAllPasses.h". Otherwise the pass would be deleted by
 // the link time optimization.
 
-namespace llvm {
+namespace llvm37 {
   FunctionPass *createMachineRegionInfoPass() {
     return new MachineRegionInfoPass();
   }

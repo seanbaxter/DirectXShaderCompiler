@@ -1,19 +1,19 @@
 //===- lib/MC/MCNullStreamer.cpp - Dummy Streamer Implementation ----------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/MC/MCStreamer.h"
-#include "llvm/MC/MCContext.h"
-#include "llvm/MC/MCInst.h"
-#include "llvm/MC/MCSectionMachO.h"
-#include "llvm/MC/MCSymbol.h"
+#include "llvm37/MC/MCStreamer.h"
+#include "llvm37/MC/MCContext.h"
+#include "llvm37/MC/MCInst.h"
+#include "llvm37/MC/MCSectionMachO.h"
+#include "llvm37/MC/MCSymbol.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 namespace {
 
@@ -38,6 +38,6 @@ namespace {
 
 }
 
-MCStreamer *llvm::createNullStreamer(MCContext &Context) {
+MCStreamer *llvm37::createNullStreamer(MCContext &Context) {
   return new MCNullStreamer(Context);
 }

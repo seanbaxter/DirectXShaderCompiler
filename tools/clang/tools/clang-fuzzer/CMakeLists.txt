@@ -1,5 +1,5 @@
-if( LLVM_USE_SANITIZE_COVERAGE )
-  set(LLVM_LINK_COMPONENTS support)
+if( LLVM37_USE_SANITIZE_COVERAGE )
+  set(LLVM37_LINK_COMPONENTS support)
 
   add_clang_executable(clang-fuzzer
     EXCLUDE_FROM_ALL
@@ -15,6 +15,6 @@ if( LLVM_USE_SANITIZE_COVERAGE )
     clangRewriteFrontend
     clangStaticAnalyzerFrontend
     clangTooling
-    LLVMFuzzer
+    LLVM37Fuzzer
     )
 endif()

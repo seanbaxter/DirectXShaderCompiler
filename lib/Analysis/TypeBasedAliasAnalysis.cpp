@@ -1,6 +1,6 @@
 //===- TypeBasedAliasAnalysis.cpp - Type-Based Alias Analysis -------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -10,7 +10,7 @@
 // This file defines the TypeBasedAliasAnalysis pass, which implements
 // metadata-based TBAA.
 //
-// In LLVM IR, memory does not have types, so LLVM's own type system is not
+// In LLVM37 IR, memory does not have types, so LLVM37's own type system is not
 // suitable for doing TBAA. Instead, metadata is added to the IR to describe
 // a type system of a higher level language. This can be used to implement
 // typical C/C++ TBAA, but it can also be used to implement custom alias
@@ -43,7 +43,7 @@
 // If the third field is present, it's an integer which if equal to 1
 // indicates that the type is "constant" (meaning pointsToConstantMemory
 // should return true; see
-// http://llvm.org/docs/AliasAnalysis.html#OtherItfs).
+// http://llvm37.org/docs/AliasAnalysis.html#OtherItfs).
 //
 // With struct-path aware TBAA, the MDNodes attached to an instruction using
 // "!tbaa" are called path tag nodes.
@@ -117,20 +117,20 @@
 // Struct X has a double member, so the store to *x can alias the store to *p.
 // Currently it's not possible to precisely describe all the things struct X
 // aliases, so struct assignments must use conservative TBAA nodes. There's
-// no scheme for attaching metadata to @llvm.memcpy yet either.
+// no scheme for attaching metadata to @llvm37.memcpy yet either.
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Analysis/Passes.h"
-#include "llvm/Analysis/AliasAnalysis.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Metadata.h"
-#include "llvm/IR/Module.h"
-#include "llvm/Pass.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/ADT/SetVector.h"
-using namespace llvm;
+#include "llvm37/Analysis/Passes.h"
+#include "llvm37/Analysis/AliasAnalysis.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/Metadata.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/Pass.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/ADT/SetVector.h"
+using namespace llvm37;
 
 // A handy option for disabling TBAA functionality. The same effect can also be
 // achieved by stripping the !tbaa tags from IR, but this option is sometimes
@@ -322,7 +322,7 @@ char TypeBasedAliasAnalysis::ID = 0;
 INITIALIZE_AG_PASS(TypeBasedAliasAnalysis, AliasAnalysis, "tbaa",
                    "Type-Based Alias Analysis", false, true, false)
 
-ImmutablePass *llvm::createTypeBasedAliasAnalysisPass() {
+ImmutablePass *llvm37::createTypeBasedAliasAnalysisPass() {
   return new TypeBasedAliasAnalysis();
 }
 
@@ -504,7 +504,7 @@ TypeBasedAliasAnalysis::getModRefBehavior(ImmutableCallSite CS) {
 
   // If this is an "immutable" type, we can assume the call doesn't write
   // to memory.
-  if (const MDNode *M = CS.getInstruction()->getMetadata(LLVMContext::MD_tbaa))
+  if (const MDNode *M = CS.getInstruction()->getMetadata(LLVM37Context::MD_tbaa))
     if ((!isStructPathTBAA(M) && TBAANode(M).TypeIsImmutable()) ||
         (isStructPathTBAA(M) && TBAAStructTagNode(M).TypeIsImmutable()))
       Min = OnlyReadsMemory;
@@ -526,7 +526,7 @@ TypeBasedAliasAnalysis::getModRefInfo(ImmutableCallSite CS,
 
   if (const MDNode *L = Loc.AATags.TBAA)
     if (const MDNode *M =
-            CS.getInstruction()->getMetadata(LLVMContext::MD_tbaa))
+            CS.getInstruction()->getMetadata(LLVM37Context::MD_tbaa))
       if (!Aliases(L, M))
         return NoModRef;
 
@@ -540,9 +540,9 @@ TypeBasedAliasAnalysis::getModRefInfo(ImmutableCallSite CS1,
     return AliasAnalysis::getModRefInfo(CS1, CS2);
 
   if (const MDNode *M1 =
-          CS1.getInstruction()->getMetadata(LLVMContext::MD_tbaa))
+          CS1.getInstruction()->getMetadata(LLVM37Context::MD_tbaa))
     if (const MDNode *M2 =
-            CS2.getInstruction()->getMetadata(LLVMContext::MD_tbaa))
+            CS2.getInstruction()->getMetadata(LLVM37Context::MD_tbaa))
       if (!Aliases(M1, M2))
         return NoModRef;
 
@@ -631,20 +631,20 @@ MDNode *MDNode::getMostGenericTBAA(MDNode *A, MDNode *B) {
 void Instruction::getAAMetadata(AAMDNodes &N, bool Merge) const {
   if (Merge)
     N.TBAA =
-        MDNode::getMostGenericTBAA(N.TBAA, getMetadata(LLVMContext::MD_tbaa));
+        MDNode::getMostGenericTBAA(N.TBAA, getMetadata(LLVM37Context::MD_tbaa));
   else
-    N.TBAA = getMetadata(LLVMContext::MD_tbaa);
+    N.TBAA = getMetadata(LLVM37Context::MD_tbaa);
 
   if (Merge)
     N.Scope = MDNode::getMostGenericAliasScope(
-        N.Scope, getMetadata(LLVMContext::MD_alias_scope));
+        N.Scope, getMetadata(LLVM37Context::MD_alias_scope));
   else
-    N.Scope = getMetadata(LLVMContext::MD_alias_scope);
+    N.Scope = getMetadata(LLVM37Context::MD_alias_scope);
 
   if (Merge)
     N.NoAlias =
-        MDNode::intersect(N.NoAlias, getMetadata(LLVMContext::MD_noalias));
+        MDNode::intersect(N.NoAlias, getMetadata(LLVM37Context::MD_noalias));
   else
-    N.NoAlias = getMetadata(LLVMContext::MD_noalias);
+    N.NoAlias = getMetadata(LLVM37Context::MD_noalias);
 }
 

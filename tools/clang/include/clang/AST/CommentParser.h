@@ -1,6 +1,6 @@
 //===--- CommentParser.h - Doxygen comment parser ---------------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,14 +11,14 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_AST_COMMENTPARSER_H
-#define LLVM_CLANG_AST_COMMENTPARSER_H
+#ifndef LLVM37_CLANG_AST_COMMENTPARSER_H
+#define LLVM37_CLANG_AST_COMMENTPARSER_H
 
 #include "clang/AST/Comment.h"
 #include "clang/AST/CommentLexer.h"
 #include "clang/AST/CommentSema.h"
 #include "clang/Basic/Diagnostic.h"
-#include "llvm/Support/Allocator.h"
+#include "llvm37/Support/Allocator.h"
 
 namespace clang {
 class SourceManager;
@@ -38,7 +38,7 @@ class Parser {
   Sema &S;
 
   /// Allocator for anything that goes into AST nodes.
-  llvm::BumpPtrAllocator &Allocator;
+  llvm37::BumpPtrAllocator &Allocator;
 
   /// Source manager for the comment being parsed.
   const SourceManager &SourceMgr;
@@ -86,7 +86,7 @@ class Parser {
   }
 
 public:
-  Parser(Lexer &L, Sema &S, llvm::BumpPtrAllocator &Allocator,
+  Parser(Lexer &L, Sema &S, llvm37::BumpPtrAllocator &Allocator,
          const SourceManager &SourceMgr, DiagnosticsEngine &Diags,
          const CommandTraits &Traits);
 

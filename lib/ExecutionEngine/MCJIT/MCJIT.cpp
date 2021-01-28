@@ -1,6 +1,6 @@
 //===-- MCJIT.cpp - MC-based Just-in-Time Compiler ------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -8,26 +8,26 @@
 //===----------------------------------------------------------------------===//
 
 #include "MCJIT.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ExecutionEngine/GenericValue.h"
-#include "llvm/ExecutionEngine/JITEventListener.h"
-#include "llvm/ExecutionEngine/MCJIT.h"
-#include "llvm/ExecutionEngine/SectionMemoryManager.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/DerivedTypes.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/LegacyPassManager.h"
-#include "llvm/IR/Mangler.h"
-#include "llvm/IR/Module.h"
-#include "llvm/MC/MCAsmInfo.h"
-#include "llvm/Object/Archive.h"
-#include "llvm/Object/ObjectFile.h"
-#include "llvm/Support/DynamicLibrary.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/MemoryBuffer.h"
-#include "llvm/Support/MutexGuard.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ExecutionEngine/GenericValue.h"
+#include "llvm37/ExecutionEngine/JITEventListener.h"
+#include "llvm37/ExecutionEngine/MCJIT.h"
+#include "llvm37/ExecutionEngine/SectionMemoryManager.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/IR/DerivedTypes.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/LegacyPassManager.h"
+#include "llvm37/IR/Mangler.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/MC/MCAsmInfo.h"
+#include "llvm37/Object/Archive.h"
+#include "llvm37/Object/ObjectFile.h"
+#include "llvm37/Support/DynamicLibrary.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/MemoryBuffer.h"
+#include "llvm37/Support/MutexGuard.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 void ObjectCache::anchor() {}
 
@@ -39,7 +39,7 @@ static struct RegisterJIT {
 
 }
 
-extern "C" void LLVMLinkInMCJIT() {
+extern "C" void LLVM37LinkInMCJIT() {
 }
 
 ExecutionEngine*
@@ -532,7 +532,7 @@ GenericValue MCJIT::runFunction(Function *F, ArrayRef<GenericValue> ArgValues) {
   if (ArgValues.empty()) {
     GenericValue rv;
     switch (RetTy->getTypeID()) {
-    default: llvm_unreachable("Unknown return type for function call!");
+    default: llvm37_unreachable("Unknown return type for function call!");
     case Type::IntegerTyID: {
       unsigned BitWidth = cast<IntegerType>(RetTy)->getBitWidth();
       if (BitWidth == 1)
@@ -546,7 +546,7 @@ GenericValue MCJIT::runFunction(Function *F, ArrayRef<GenericValue> ArgValues) {
       else if (BitWidth <= 64)
         rv.IntVal = APInt(BitWidth, ((int64_t(*)())(intptr_t)FPtr)());
       else
-        llvm_unreachable("Integer types > 64 bits not supported");
+        llvm37_unreachable("Integer types > 64 bits not supported");
       return rv;
     }
     case Type::VoidTyID:
@@ -561,13 +561,13 @@ GenericValue MCJIT::runFunction(Function *F, ArrayRef<GenericValue> ArgValues) {
     case Type::X86_FP80TyID:
     case Type::FP128TyID:
     case Type::PPC_FP128TyID:
-      llvm_unreachable("long double not supported yet");
+      llvm37_unreachable("long double not supported yet");
     case Type::PointerTyID:
       return PTOGV(((void*(*)())(intptr_t)FPtr)());
     }
   }
 
-  llvm_unreachable("Full-featured argument passing not supported yet!");
+  llvm37_unreachable("Full-featured argument passing not supported yet!");
 }
 
 void *MCJIT::getPointerToNamedFunction(StringRef Name, bool AbortOnFailure) {

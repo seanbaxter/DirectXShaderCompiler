@@ -1,6 +1,6 @@
 //===--- APSIntType.cpp - Simple record of the type of APSInts ------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -13,7 +13,7 @@ using namespace clang;
 using namespace ento;
 
 APSIntType::RangeTestResultKind
-APSIntType::testInRange(const llvm::APSInt &Value,
+APSIntType::testInRange(const llvm37::APSInt &Value,
                         bool AllowSignConversions) const {
 
   // Negative numbers cannot be losslessly converted to unsigned type.

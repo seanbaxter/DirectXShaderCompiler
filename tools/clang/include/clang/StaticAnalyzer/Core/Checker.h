@@ -1,6 +1,6 @@
 //== Checker.h - Registration mechanism for checkers -------------*- C++ -*--=//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,13 +11,13 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_STATICANALYZER_CORE_CHECKER_H
-#define LLVM_CLANG_STATICANALYZER_CORE_CHECKER_H
+#ifndef LLVM37_CLANG_STATICANALYZER_CORE_CHECKER_H
+#define LLVM37_CLANG_STATICANALYZER_CORE_CHECKER_H
 
 #include "clang/Analysis/ProgramPoint.h"
 #include "clang/StaticAnalyzer/Core/CheckerManager.h"
 #include "clang/StaticAnalyzer/Core/PathSensitive/SVals.h"
-#include "llvm/Support/Casting.h"
+#include "llvm37/Support/Casting.h"
 
 namespace clang {
 namespace ento {

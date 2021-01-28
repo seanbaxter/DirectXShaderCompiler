@@ -21,7 +21,7 @@ def parse(file):
       print t
 
     if t[0] == 'PASS' or t[0] == 'FAIL' :
-      tmp = t[2].split('llvm-test/')
+      tmp = t[2].split('llvm37-test/')
       
       if DEBUG:
         print tmp

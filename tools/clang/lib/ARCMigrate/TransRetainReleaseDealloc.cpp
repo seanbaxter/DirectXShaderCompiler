@@ -1,6 +1,6 @@
 //===--- TransRetainReleaseDealloc.cpp - Transformations to ARC mode ------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -24,7 +24,7 @@
 #include "clang/Basic/SourceManager.h"
 #include "clang/Lex/Lexer.h"
 #include "clang/Sema/SemaDiagnostic.h"
-#include "llvm/ADT/StringSwitch.h"
+#include "llvm37/ADT/StringSwitch.h"
 
 using namespace clang;
 using namespace arcmt;
@@ -336,7 +336,7 @@ private:
     SourceManager &SM = Pass.Ctx.getSourceManager();
     StringRef MacroName = Lexer::getImmediateMacroName(Loc, SM,
                                                      Pass.Ctx.getLangOpts());
-    bool isGCDOrXPC = llvm::StringSwitch<bool>(MacroName)
+    bool isGCDOrXPC = llvm37::StringSwitch<bool>(MacroName)
         .Case("dispatch_retain", true)
         .Case("dispatch_release", true)
         .Case("xpc_retain", true)

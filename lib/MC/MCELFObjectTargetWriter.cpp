@@ -1,18 +1,18 @@
 //===-- MCELFObjectTargetWriter.cpp - ELF Target Writer Subclass ----------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/MC/MCELFObjectWriter.h"
-#include "llvm/MC/MCExpr.h"
-#include "llvm/MC/MCValue.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/MC/MCELFObjectWriter.h"
+#include "llvm37/MC/MCExpr.h"
+#include "llvm37/MC/MCValue.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 MCELFObjectTargetWriter::MCELFObjectTargetWriter(bool Is64Bit_,
                                                  uint8_t OSABI_,
@@ -40,7 +40,7 @@ static int __cdecl cmpRel(const ELFRelocationEntry *AP, const ELFRelocationEntry
     return B.Offset - A.Offset;
   if (B.Type != A.Type)
     return A.Type - B.Type;
-  //llvm_unreachable("ELFRelocs might be unstable!");
+  //llvm37_unreachable("ELFRelocs might be unstable!");
   return 0;
 }
 

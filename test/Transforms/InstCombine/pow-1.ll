@@ -156,10 +156,10 @@ define double @test_simplify16(double %x) {
 ; CHECK-NEXT: ret double [[RECIPROCAL]]
 }
 
-declare double @llvm.pow.f64(double %Val, double %Power)
+declare double @llvm37.pow.f64(double %Val, double %Power)
 define double @test_simplify17(double %x) {
 ; CHECK-LABEL: @test_simplify17(
-  %retval = call double @llvm.pow.f64(double %x, double 0.5)
+  %retval = call double @llvm37.pow.f64(double %x, double 0.5)
 ; CHECK-NEXT: [[SQRT:%[a-z0-9]+]] = call double @sqrt(double %x)
 ; CHECK-NEXT: [[FABS:%[a-z0-9]+]] = call double @fabs(double [[SQRT]])
 ; CHECK-NEXT: [[FCMP:%[a-z0-9]+]] = fcmp oeq double %x, 0xFFF0000000000000

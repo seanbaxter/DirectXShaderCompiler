@@ -1,6 +1,6 @@
-//===-- llvm/SymbolTableListTraitsImpl.h - Implementation ------*- C++ -*--===//
+//===-- llvm37/SymbolTableListTraitsImpl.h - Implementation ------*- C++ -*--===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -13,13 +13,13 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_LIB_IR_SYMBOLTABLELISTTRAITSIMPL_H
-#define LLVM_LIB_IR_SYMBOLTABLELISTTRAITSIMPL_H
+#ifndef LLVM37_LIB_IR_SYMBOLTABLELISTTRAITSIMPL_H
+#define LLVM37_LIB_IR_SYMBOLTABLELISTTRAITSIMPL_H
 
-#include "llvm/IR/SymbolTableListTraits.h"
-#include "llvm/IR/ValueSymbolTable.h"
+#include "llvm37/IR/SymbolTableListTraits.h"
+#include "llvm37/IR/ValueSymbolTable.h"
 
-namespace llvm {
+namespace llvm37 {
 
 /// setSymTabObject - This is called when (f.e.) the parent of a basic block
 /// changes.  This requires us to remove all the instruction symtab entries from
@@ -113,6 +113,6 @@ void SymbolTableListTraits<ValueSubClass,ItemParentClass>
   }
 }
 
-} // End llvm namespace
+} // End llvm37 namespace
 
 #endif

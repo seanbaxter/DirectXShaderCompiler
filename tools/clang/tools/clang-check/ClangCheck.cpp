@@ -1,6 +1,6 @@
 //===--- tools/clang-check/ClangCheck.cpp - Clang check tool --------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,8 +11,8 @@
 //  stored in a compilation database.
 //
 //  This tool uses the Clang Tooling infrastructure, see
-//    http://clang.llvm.org/docs/HowToSetupToolingForLLVM.html
-//  for details on setting it up with LLVM source tree.
+//    http://clang.llvm37.org/docs/HowToSetupToolingForLLVM.html
+//  for details on setting it up with LLVM37 source tree.
 //
 //===----------------------------------------------------------------------===//
 
@@ -26,15 +26,15 @@
 #include "clang/StaticAnalyzer/Frontend/FrontendActions.h"
 #include "clang/Tooling/CommonOptionsParser.h"
 #include "clang/Tooling/Tooling.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/Option/OptTable.h"
-#include "llvm/Support/Path.h"
-#include "llvm/Support/Signals.h"
-#include "llvm/Support/TargetSelect.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/Option/OptTable.h"
+#include "llvm37/Support/Path.h"
+#include "llvm37/Support/Signals.h"
+#include "llvm37/Support/TargetSelect.h"
 
 using namespace clang::driver;
 using namespace clang::tooling;
-using namespace llvm;
+using namespace llvm37;
 
 static cl::extrahelp CommonHelp(CommonOptionsParser::HelpMessage);
 static cl::extrahelp MoreHelp(
@@ -91,7 +91,7 @@ public:
   }
 
   std::string RewriteFilename(const std::string& filename, int &fd) override {
-    assert(llvm::sys::path::is_absolute(filename) &&
+    assert(llvm37::sys::path::is_absolute(filename) &&
            "clang-fixit expects absolute paths only.");
 
     // We don't need to do permission checking here since clang will diagnose
@@ -142,21 +142,21 @@ public:
       return clang::CreateASTDumper(ASTDumpFilter, /*DumpDecls=*/true,
                                     /*DumpLookups=*/false);
     if (ASTPrint)
-      return clang::CreateASTPrinter(&llvm::outs(), ASTDumpFilter);
-    return llvm::make_unique<clang::ASTConsumer>();
+      return clang::CreateASTPrinter(&llvm37::outs(), ASTDumpFilter);
+    return llvm37::make_unique<clang::ASTConsumer>();
   }
 };
 
 } // namespace
 
 int main(int argc, const char **argv) {
-  llvm::sys::PrintStackTraceOnErrorSignal();
+  llvm37::sys::PrintStackTraceOnErrorSignal();
 
   // Initialize targets for clang module support.
-  llvm::InitializeAllTargets();
-  llvm::InitializeAllTargetMCs();
-  llvm::InitializeAllAsmPrinters();
-  llvm::InitializeAllAsmParsers();
+  llvm37::InitializeAllTargets();
+  llvm37::InitializeAllTargetMCs();
+  llvm37::InitializeAllAsmPrinters();
+  llvm37::InitializeAllAsmParsers();
 
   CommonOptionsParser OptionsParser(argc, argv, ClangCheckCategory);
   ClangTool Tool(OptionsParser.getCompilations(),

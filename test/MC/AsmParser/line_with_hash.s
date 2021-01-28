@@ -1,4 +1,4 @@
-# RUN: llvm-mc -triple i386-unknown-unknown %s | FileCheck %s
+# RUN: llvm37-mc -triple i386-unknown-unknown %s | FileCheck %s
 
 // We used to incorrectly parse a line with only a # in it
 

@@ -1,13 +1,13 @@
 ; RUN: opt -S -instcombine <%s | FileCheck %s
 ; rdar://problem/16165191
-; llvm.compiler.used functions should not be renamed
+; llvm37.compiler.used functions should not be renamed
 
 target triple = "x86_64-apple-darwin11"
 
-@llvm.compiler.used = appending global [1 x i8*] [
+@llvm37.compiler.used = appending global [1 x i8*] [
   i8* bitcast (i32(i8*)* @puts to i8*)
   ], section "llvm.metadata"
-@llvm.used = appending global [1 x i8*] [
+@llvm37.used = appending global [1 x i8*] [
   i8* bitcast (i32(i32)* @uses_printf to i8*)
   ], section "llvm.metadata"
 

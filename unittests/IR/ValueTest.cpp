@@ -1,26 +1,26 @@
-//===- llvm/unittest/IR/ValueTest.cpp - Value unit tests ------------------===//
+//===- llvm37/unittest/IR/ValueTest.cpp - Value unit tests ------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/AsmParser/Parser.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/ModuleSlotTracker.h"
-#include "llvm/IR/Value.h"
-#include "llvm/Support/SourceMgr.h"
+#include "llvm37/AsmParser/Parser.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/ModuleSlotTracker.h"
+#include "llvm37/IR/Value.h"
+#include "llvm37/Support/SourceMgr.h"
 #include "gtest/gtest.h"
-using namespace llvm;
+using namespace llvm37;
 
 namespace {
 
 TEST(ValueTest, UsedInBasicBlock) {
-  LLVMContext C;
+  LLVM37Context C;
 
   const char *ModuleString = "define void @f(i32 %x, i32 %y) {\n"
                              "bb0:\n"
@@ -45,7 +45,7 @@ TEST(ValueTest, UsedInBasicBlock) {
 }
 
 TEST(GlobalTest, CreateAddressSpace) {
-  LLVMContext &Ctx = getGlobalContext();
+  LLVM37Context &Ctx = getGlobalContext();
   std::unique_ptr<Module> M(new Module("TestModule", Ctx));
   Type *Int8Ty = Type::getInt8Ty(Ctx);
   Type *Int32Ty = Type::getInt32Ty(Ctx);
@@ -92,7 +92,7 @@ TEST(GlobalTest, CreateAddressSpace) {
 #ifdef GTEST_HAS_DEATH_TEST
 #ifndef NDEBUG
 TEST(GlobalTest, AlignDeath) {
-  LLVMContext &Ctx = getGlobalContext();
+  LLVM37Context &Ctx = getGlobalContext();
   std::unique_ptr<Module> M(new Module("TestModule", Ctx));
   Type *Int32Ty = Type::getInt32Ty(Ctx);
   GlobalVariable *Var =
@@ -110,7 +110,7 @@ TEST(GlobalTest, AlignDeath) {
 TEST(ValueTest, printSlots) {
   // Check that Value::print() and Value::printAsOperand() work with and
   // without a slot tracker.
-  LLVMContext C;
+  LLVM37Context C;
 
   const char *ModuleString = "define void @f(i32 %x, i32 %y) {\n"
                              "entry:\n"

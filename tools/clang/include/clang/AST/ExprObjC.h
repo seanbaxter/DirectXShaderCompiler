@@ -1,6 +1,6 @@
 //===--- ExprObjC.h - Classes for representing ObjC expressions -*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,14 +11,14 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_AST_EXPROBJC_H
-#define LLVM_CLANG_AST_EXPROBJC_H
+#ifndef LLVM37_CLANG_AST_EXPROBJC_H
+#define LLVM37_CLANG_AST_EXPROBJC_H
 
 #include "clang/AST/DeclObjC.h"
 #include "clang/AST/Expr.h"
 #include "clang/AST/SelectorLocationsKind.h"
 #include "clang/Basic/IdentifierTable.h"
-#include "llvm/Support/Compiler.h"
+#include "llvm37/Support/Compiler.h"
 
 namespace clang {
   class IdentifierInfo;
@@ -44,8 +44,8 @@ public:
   SourceLocation getAtLoc() const { return AtLoc; }
   void setAtLoc(SourceLocation L) { AtLoc = L; }
 
-  SourceLocation getLocStart() const LLVM_READONLY { return AtLoc; }
-  SourceLocation getLocEnd() const LLVM_READONLY { return String->getLocEnd(); }
+  SourceLocation getLocStart() const LLVM37_READONLY { return AtLoc; }
+  SourceLocation getLocEnd() const LLVM37_READONLY { return String->getLocEnd(); }
 
   static bool classof(const Stmt *T) {
     return T->getStmtClass() == ObjCStringLiteralClass;
@@ -71,8 +71,8 @@ public:
   bool getValue() const { return Value; }
   void setValue(bool V) { Value = V; }
     
-  SourceLocation getLocStart() const LLVM_READONLY { return Loc; }
-  SourceLocation getLocEnd() const LLVM_READONLY { return Loc; }
+  SourceLocation getLocStart() const LLVM37_READONLY { return Loc; }
+  SourceLocation getLocEnd() const LLVM37_READONLY { return Loc; }
 
   SourceLocation getLocation() const { return Loc; }
   void setLocation(SourceLocation L) { Loc = L; }
@@ -112,9 +112,9 @@ public:
   
   SourceLocation getAtLoc() const { return Range.getBegin(); }
   
-  SourceLocation getLocStart() const LLVM_READONLY { return Range.getBegin(); }
-  SourceLocation getLocEnd() const LLVM_READONLY { return Range.getEnd(); }
-  SourceRange getSourceRange() const LLVM_READONLY {
+  SourceLocation getLocStart() const LLVM37_READONLY { return Range.getBegin(); }
+  SourceLocation getLocEnd() const LLVM37_READONLY { return Range.getEnd(); }
+  SourceRange getSourceRange() const LLVM37_READONLY {
     return Range;
   }
   
@@ -160,9 +160,9 @@ public:
   static ObjCArrayLiteral *CreateEmpty(const ASTContext &C,
                                        unsigned NumElements);
 
-  SourceLocation getLocStart() const LLVM_READONLY { return Range.getBegin(); }
-  SourceLocation getLocEnd() const LLVM_READONLY { return Range.getEnd(); }
-  SourceRange getSourceRange() const LLVM_READONLY { return Range; }
+  SourceLocation getLocStart() const LLVM37_READONLY { return Range.getBegin(); }
+  SourceLocation getLocEnd() const LLVM37_READONLY { return Range.getEnd(); }
+  SourceRange getSourceRange() const LLVM37_READONLY { return Range; }
 
   static bool classof(const Stmt *T) {
       return T->getStmtClass() == ObjCArrayLiteralClass;
@@ -223,7 +223,7 @@ struct ObjCDictionaryElement {
 };
 } // end namespace clang
 
-namespace llvm {
+namespace llvm37 {
 template <> struct isPodLike<clang::ObjCDictionaryElement> : std::true_type {};
 }
 
@@ -329,9 +329,9 @@ public:
   ObjCMethodDecl *getDictWithObjectsMethod() const
     { return DictWithObjectsMethod; }
 
-  SourceLocation getLocStart() const LLVM_READONLY { return Range.getBegin(); }
-  SourceLocation getLocEnd() const LLVM_READONLY { return Range.getEnd(); }
-  SourceRange getSourceRange() const LLVM_READONLY { return Range; }
+  SourceLocation getLocStart() const LLVM37_READONLY { return Range.getBegin(); }
+  SourceLocation getLocEnd() const LLVM37_READONLY { return Range.getEnd(); }
+  SourceRange getSourceRange() const LLVM37_READONLY { return Range; }
   
   static bool classof(const Stmt *T) {
       return T->getStmtClass() == ObjCDictionaryLiteralClass;
@@ -381,8 +381,8 @@ public:
     EncodedType = EncType; 
   }
 
-  SourceLocation getLocStart() const LLVM_READONLY { return AtLoc; }
-  SourceLocation getLocEnd() const LLVM_READONLY { return RParenLoc; }
+  SourceLocation getLocStart() const LLVM37_READONLY { return AtLoc; }
+  SourceLocation getLocEnd() const LLVM37_READONLY { return RParenLoc; }
 
   static bool classof(const Stmt *T) {
     return T->getStmtClass() == ObjCEncodeExprClass;
@@ -413,8 +413,8 @@ public:
   void setAtLoc(SourceLocation L) { AtLoc = L; }
   void setRParenLoc(SourceLocation L) { RParenLoc = L; }
 
-  SourceLocation getLocStart() const LLVM_READONLY { return AtLoc; }
-  SourceLocation getLocEnd() const LLVM_READONLY { return RParenLoc; }
+  SourceLocation getLocStart() const LLVM37_READONLY { return AtLoc; }
+  SourceLocation getLocEnd() const LLVM37_READONLY { return RParenLoc; }
 
   /// getNumArgs - Return the number of actual arguments to this call.
   unsigned getNumArgs() const { return SelName.getNumArgs(); }
@@ -456,8 +456,8 @@ public:
   void setAtLoc(SourceLocation L) { AtLoc = L; }
   void setRParenLoc(SourceLocation L) { RParenLoc = L; }
 
-  SourceLocation getLocStart() const LLVM_READONLY { return AtLoc; }
-  SourceLocation getLocEnd() const LLVM_READONLY { return RParenLoc; }
+  SourceLocation getLocStart() const LLVM37_READONLY { return AtLoc; }
+  SourceLocation getLocEnd() const LLVM37_READONLY { return RParenLoc; }
 
   static bool classof(const Stmt *T) {
     return T->getStmtClass() == ObjCProtocolExprClass;
@@ -513,10 +513,10 @@ public:
   SourceLocation getLocation() const { return Loc; }
   void setLocation(SourceLocation L) { Loc = L; }
 
-  SourceLocation getLocStart() const LLVM_READONLY {
+  SourceLocation getLocStart() const LLVM37_READONLY {
     return isFreeIvar() ? Loc : getBase()->getLocStart();
   }
-  SourceLocation getLocEnd() const LLVM_READONLY { return Loc; }
+  SourceLocation getLocEnd() const LLVM37_READONLY { return Loc; }
   
   SourceLocation getOpLoc() const { return OpLoc; }
   void setOpLoc(SourceLocation L) { OpLoc = L; }
@@ -537,7 +537,7 @@ private:
   /// pointer is an (optional) ObjCMethodDecl and Setter may be set.
   /// if the bool is false, this is an explicit property reference;
   /// the pointer is an ObjCPropertyDecl and Setter is always null.
-  llvm::PointerIntPair<NamedDecl*, 1, bool> PropertyOrGetter;
+  llvm37::PointerIntPair<NamedDecl*, 1, bool> PropertyOrGetter;
 
   /// \brief Indicates whether the property reference will result in a message
   /// to the getter, the setter, or both.
@@ -549,7 +549,7 @@ private:
   };
 
   /// \brief Contains the Setter method pointer and MethodRefFlags bit flags.
-  llvm::PointerIntPair<ObjCMethodDecl *, 2, unsigned> SetterAndMethodRefFlags;
+  llvm37::PointerIntPair<ObjCMethodDecl *, 2, unsigned> SetterAndMethodRefFlags;
 
   // FIXME: Maybe we should store the property identifier here,
   // because it's not rederivable from the other data when there's an
@@ -562,7 +562,7 @@ private:
   /// the location of the 'super' keyword.  When it's an interface,
   /// this is that interface.
   SourceLocation ReceiverLoc;
-  llvm::PointerUnion3<Stmt*, const Type*, ObjCInterfaceDecl*> Receiver;
+  llvm37::PointerUnion3<Stmt*, const Type*, ObjCInterfaceDecl*> Receiver;
   
 public:
   ObjCPropertyRefExpr(ObjCPropertyDecl *PD, QualType t,
@@ -698,10 +698,10 @@ public:
   /// Determine the type of the base, regardless of the kind of receiver.
   QualType getReceiverType(const ASTContext &ctx) const;
 
-  SourceLocation getLocStart() const LLVM_READONLY {
+  SourceLocation getLocStart() const LLVM37_READONLY {
     return isObjectReceiver() ? getBase()->getLocStart() :getReceiverLocation();
   }
-  SourceLocation getLocEnd() const LLVM_READONLY { return IdLoc; }
+  SourceLocation getLocEnd() const LLVM37_READONLY { return IdLoc; }
 
   static bool classof(const Stmt *T) {
     return T->getStmtClass() == ObjCPropertyRefExprClass;
@@ -797,10 +797,10 @@ public:
   SourceLocation getRBracket() const { return RBracket; }
   void setRBracket(SourceLocation RB) { RBracket = RB; }
 
-  SourceLocation getLocStart() const LLVM_READONLY {
+  SourceLocation getLocStart() const LLVM37_READONLY {
     return SubExprs[BASE]->getLocStart();
   }
-  SourceLocation getLocEnd() const LLVM_READONLY { return RBracket; }
+  SourceLocation getLocEnd() const LLVM37_READONLY { return RBracket; }
 
   static bool classof(const Stmt *T) {
     return T->getStmtClass() == ObjCSubscriptRefExprClass;
@@ -1316,7 +1316,7 @@ public:
     if (hasStandardSelLocs())
       return getStandardSelectorLoc(Index, getSelector(),
                                    getSelLocsKind() == SelLoc_StandardWithSpace,
-                               llvm::makeArrayRef(const_cast<Expr**>(getArgs()),
+                               llvm37::makeArrayRef(const_cast<Expr**>(getArgs()),
                                                   getNumArgs()),
                                    RBracLoc);
     return getStoredSelLocs()[Index];
@@ -1337,8 +1337,8 @@ public:
     LBracLoc = R.getBegin();
     RBracLoc = R.getEnd();
   }
-  SourceLocation getLocStart() const LLVM_READONLY { return LBracLoc; }
-  SourceLocation getLocEnd() const LLVM_READONLY { return RBracLoc; }
+  SourceLocation getLocStart() const LLVM37_READONLY { return LBracLoc; }
+  SourceLocation getLocEnd() const LLVM37_READONLY { return RBracLoc; }
 
   static bool classof(const Stmt *T) {
     return T->getStmtClass() == ObjCMessageExprClass;
@@ -1405,17 +1405,17 @@ public:
   SourceLocation getOpLoc() const { return OpLoc; }
   void setOpLoc(SourceLocation L) { OpLoc = L; }
 
-  SourceLocation getLocStart() const LLVM_READONLY {
+  SourceLocation getLocStart() const LLVM37_READONLY {
     return getBase()->getLocStart();
   }
   
-  SourceLocation getBaseLocEnd() const LLVM_READONLY {
+  SourceLocation getBaseLocEnd() const LLVM37_READONLY {
     return getBase()->getLocEnd();
   }
   
-  SourceLocation getLocEnd() const LLVM_READONLY { return IsaMemberLoc; }
+  SourceLocation getLocEnd() const LLVM37_READONLY { return IsaMemberLoc; }
 
-  SourceLocation getExprLoc() const LLVM_READONLY { return IsaMemberLoc; }
+  SourceLocation getExprLoc() const LLVM37_READONLY { return IsaMemberLoc; }
 
   static bool classof(const Stmt *T) {
     return T->getStmtClass() == ObjCIsaExprClass;
@@ -1483,12 +1483,12 @@ public:
   child_range children() { return child_range(&Operand, &Operand+1); }  
 
   // Source locations are determined by the subexpression.
-  SourceLocation getLocStart() const LLVM_READONLY {
+  SourceLocation getLocStart() const LLVM37_READONLY {
     return Operand->getLocStart();
   }
-  SourceLocation getLocEnd() const LLVM_READONLY { return Operand->getLocEnd();}
+  SourceLocation getLocEnd() const LLVM37_READONLY { return Operand->getLocEnd();}
 
-  SourceLocation getExprLoc() const LLVM_READONLY {
+  SourceLocation getExprLoc() const LLVM37_READONLY {
     return getSubExpr()->getExprLoc();
   }
 
@@ -1536,8 +1536,8 @@ public:
   /// \brief The location of the bridge keyword.
   SourceLocation getBridgeKeywordLoc() const { return BridgeKeywordLoc; }
   
-  SourceLocation getLocStart() const LLVM_READONLY { return LParenLoc; }
-  SourceLocation getLocEnd() const LLVM_READONLY {
+  SourceLocation getLocStart() const LLVM37_READONLY { return LParenLoc; }
+  SourceLocation getLocEnd() const LLVM37_READONLY {
     return getSubExpr()->getLocEnd();
   }
   

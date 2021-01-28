@@ -1,6 +1,6 @@
 //===- CIndexHigh.cpp - Higher level API functions ------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -14,7 +14,7 @@
 #include "CXTranslationUnit.h"
 #include "clang/AST/DeclObjC.h"
 #include "clang/Frontend/ASTUnit.h"
-#include "llvm/Support/Compiler.h"
+#include "llvm37/Support/Compiler.h"
 
 using namespace clang;
 using namespace cxcursor;
@@ -411,7 +411,7 @@ static bool findIncludesInFile(CXTranslationUnit TU, const FileEntry *File,
 
 CXResult clang_findReferencesInFile(CXCursor cursor, CXFile file,
                                     CXCursorAndRangeVisitor visitor) {
-  LogRef Log = Logger::make(LLVM_FUNCTION_NAME);
+  LogRef Log = Logger::make(LLVM37_FUNCTION_NAME);
 
   if (clang_Cursor_isNull(cursor)) {
     if (Log)
@@ -485,7 +485,7 @@ CXResult clang_findIncludesInFile(CXTranslationUnit TU, CXFile file,
     return CXResult_Invalid;
   }
 
-  LogRef Log = Logger::make(LLVM_FUNCTION_NAME);
+  LogRef Log = Logger::make(LLVM37_FUNCTION_NAME);
   if (!file) {
     if (Log)
       *Log << "Null file";

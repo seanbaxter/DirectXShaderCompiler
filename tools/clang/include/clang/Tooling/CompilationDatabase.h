@@ -1,6 +1,6 @@
 //===--- CompilationDatabase.h - --------------------------------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -25,13 +25,13 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_TOOLING_COMPILATIONDATABASE_H
-#define LLVM_CLANG_TOOLING_COMPILATIONDATABASE_H
+#ifndef LLVM37_CLANG_TOOLING_COMPILATIONDATABASE_H
+#define LLVM37_CLANG_TOOLING_COMPILATIONDATABASE_H
 
 #include "clang/Basic/LLVM.h"
-#include "llvm/ADT/ArrayRef.h"
-#include "llvm/ADT/StringRef.h"
-#include "llvm/ADT/Twine.h"
+#include "llvm37/ADT/ArrayRef.h"
+#include "llvm37/ADT/StringRef.h"
+#include "llvm37/ADT/Twine.h"
 #include <memory>
 #include <string>
 #include <vector>
@@ -163,7 +163,7 @@ public:
   ///
   /// Returns NULL in case "--" is not found.
   ///
-  /// The argument list is meant to be compatible with normal llvm command line
+  /// The argument list is meant to be compatible with normal llvm37 command line
   /// parsing in main methods.
   /// int main(int argc, char **argv) {
   ///   std::unique_ptr<FixedCompilationDatabase> Compilations(

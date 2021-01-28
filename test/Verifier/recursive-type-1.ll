@@ -1,4 +1,4 @@
-; RUN: not llvm-as %s -o /dev/null 2>&1 | FileCheck %s
+; RUN: not llvm37-as %s -o /dev/null 2>&1 | FileCheck %s
 
 %rt2 = type { i32, { i8, %rt2, i8 }, i32 }
 

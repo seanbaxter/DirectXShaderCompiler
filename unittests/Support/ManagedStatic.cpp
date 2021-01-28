@@ -1,15 +1,15 @@
-//===- llvm/unittest/Support/ManagedStatic.cpp - ManagedStatic tests ------===//
+//===- llvm37/unittest/Support/ManagedStatic.cpp - ManagedStatic tests ------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Support/ManagedStatic.h"
-#include "llvm/Config/config.h"
-#include "llvm/Support/Threading.h"
+#include "llvm37/Support/ManagedStatic.h"
+#include "llvm37/Config/config.h"
+#include "llvm37/Support/Threading.h"
 #ifdef HAVE_PTHREAD_H
 #include <pthread.h>
 #endif
@@ -17,14 +17,14 @@
 ///////////////////////////////////////////////////////////////////////////////
 #include "gtest/gtest.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 namespace {
 
-#if LLVM_ENABLE_THREADS != 0 && defined(HAVE_PTHREAD_H) && \
+#if LLVM37_ENABLE_THREADS != 0 && defined(HAVE_PTHREAD_H) && \
   !__has_feature(memory_sanitizer)
 namespace test1 {
-  llvm::ManagedStatic<int> ms;
+  llvm37::ManagedStatic<int> ms;
   void *helper(void*) {
     *ms;
     return nullptr;

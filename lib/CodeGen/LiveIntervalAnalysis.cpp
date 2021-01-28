@@ -1,6 +1,6 @@
 //===-- LiveIntervalAnalysis.cpp - Live Interval Analysis -----------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -15,37 +15,37 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/CodeGen/LiveIntervalAnalysis.h"
+#include "llvm37/CodeGen/LiveIntervalAnalysis.h"
 #include "LiveRangeCalc.h"
-#include "llvm/ADT/DenseSet.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/Analysis/AliasAnalysis.h"
-#include "llvm/CodeGen/LiveVariables.h"
-#include "llvm/CodeGen/MachineBlockFrequencyInfo.h"
-#include "llvm/CodeGen/MachineDominators.h"
-#include "llvm/CodeGen/MachineInstr.h"
-#include "llvm/CodeGen/MachineRegisterInfo.h"
-#include "llvm/CodeGen/Passes.h"
-#include "llvm/CodeGen/VirtRegMap.h"
-#include "llvm/IR/Value.h"
-#include "llvm/Support/BlockFrequency.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/Format.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Target/TargetInstrInfo.h"
-#include "llvm/Target/TargetRegisterInfo.h"
-#include "llvm/Target/TargetSubtargetInfo.h"
+#include "llvm37/ADT/DenseSet.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/Analysis/AliasAnalysis.h"
+#include "llvm37/CodeGen/LiveVariables.h"
+#include "llvm37/CodeGen/MachineBlockFrequencyInfo.h"
+#include "llvm37/CodeGen/MachineDominators.h"
+#include "llvm37/CodeGen/MachineInstr.h"
+#include "llvm37/CodeGen/MachineRegisterInfo.h"
+#include "llvm37/CodeGen/Passes.h"
+#include "llvm37/CodeGen/VirtRegMap.h"
+#include "llvm37/IR/Value.h"
+#include "llvm37/Support/BlockFrequency.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/Format.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Target/TargetInstrInfo.h"
+#include "llvm37/Target/TargetRegisterInfo.h"
+#include "llvm37/Target/TargetSubtargetInfo.h"
 #include <algorithm>
 #include <cmath>
 #include <limits>
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "regalloc"
 
 char LiveIntervals::ID = 0;
-char &llvm::LiveIntervalsID = LiveIntervals::ID;
+char &llvm37::LiveIntervalsID = LiveIntervals::ID;
 INITIALIZE_PASS_BEGIN(LiveIntervals, "liveintervals",
                 "Live Interval Analysis", false, false)
 INITIALIZE_AG_DEPENDENCY(AliasAnalysis)
@@ -67,7 +67,7 @@ static cl::opt<bool> EnableSubRegLiveness(
   "enable-subreg-liveness", cl::Hidden, cl::init(true),
   cl::desc("Enable subregister liveness tracking."));
 
-namespace llvm {
+namespace llvm37 {
 cl::opt<bool> UseSegmentSetForPhysRegs(
     "use-segment-set-for-physregs", cl::Hidden, cl::init(true),
     cl::desc(
@@ -180,7 +180,7 @@ void LiveIntervals::printInstrs(raw_ostream &OS) const {
   MF->print(OS, Indexes);
 }
 
-#if !defined(NDEBUG) || defined(LLVM_ENABLE_DUMP)
+#if !defined(NDEBUG) || defined(LLVM37_ENABLE_DUMP)
 void LiveIntervals::dumpInstrs() const {
   printInstrs(dbgs());
 }
@@ -188,7 +188,7 @@ void LiveIntervals::dumpInstrs() const {
 
 LiveInterval* LiveIntervals::createInterval(unsigned reg) {
   float Weight = TargetRegisterInfo::isPhysicalRegister(reg) ?
-                  llvm::huge_valf : 0.0F;
+                  llvm37::huge_valf : 0.0F;
   return new LiveInterval(reg, Weight);
 }
 

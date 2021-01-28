@@ -21,7 +21,7 @@ This library is intended primarily for in-process coverage-guided fuzz testing
   optimizations options (e.g. -O0, -O1, -O2) to diversify testing.
 * Build a test driver using the same options as the library.
   The test driver is a C/C++ file containing interesting calls to the library
-  inside a single function  ``extern "C" void LLVMFuzzerTestOneInput(const uint8_t *Data, size_t Size);``
+  inside a single function  ``extern "C" void LLVM37FuzzerTestOneInput(const uint8_t *Data, size_t Size);``
 * Link the Fuzzer, the library and the driver together into an executable
   using the same sanitizer options as for the library.
 * Collect the initial corpus of inputs for the
@@ -42,13 +42,13 @@ This library is intended primarily for in-process coverage-guided fuzz testing
 The Fuzzer is similar in concept to AFL_,
 but uses in-process Fuzzing, which is more fragile, more restrictive, but
 potentially much faster as it has no overhead for process start-up.
-It uses LLVM's SanitizerCoverage_ instrumentation to get in-process
+It uses LLVM37's SanitizerCoverage_ instrumentation to get in-process
 coverage-feedback
 
-The code resides in the LLVM repository, requires the fresh Clang compiler to build
-and is used to fuzz various parts of LLVM,
+The code resides in the LLVM37 repository, requires the fresh Clang compiler to build
+and is used to fuzz various parts of LLVM37,
 but the Fuzzer itself does not (and should not) depend on any
-part of LLVM and can be used for other projects w/o requiring the rest of LLVM.
+part of LLVM37 and can be used for other projects w/o requiring the rest of LLVM37.
 
 Flags
 =====
@@ -80,7 +80,7 @@ Toy example
 A simple function that does something interesting if it receives the input "HI!"::
 
   cat << EOF >> test_fuzzer.cc
-  extern "C" void LLVMFuzzerTestOneInput(const unsigned char *data, unsigned long size) {
+  extern "C" void LLVM37FuzzerTestOneInput(const unsigned char *data, unsigned long size) {
     if (size > 0 && data[0] == 'H')
       if (size > 1 && data[1] == 'I')
          if (size > 2 && data[2] == '!')
@@ -88,7 +88,7 @@ A simple function that does something interesting if it receives the input "HI!"
   }
   EOF
   # Get lib/Fuzzer. Assuming that you already have fresh clang in PATH.
-  svn co http://llvm.org/svn/llvm-project/llvm/trunk/lib/Fuzzer
+  svn co http://llvm37.org/svn/llvm37-project/llvm37/trunk/lib/Fuzzer
   # Build lib/Fuzzer files.
   clang -c -g -O2 -std=c++11 Fuzzer/*.cpp -IFuzzer
   # Build test_fuzzer.cc with asan and link against lib/Fuzzer.
@@ -107,7 +107,7 @@ Here we show how to use lib/Fuzzer on something real, yet simple: pcre2_::
   # Get PCRE2
   svn co svn://vcs.exim.org/pcre2/code/trunk pcre
   # Get lib/Fuzzer. Assuming that you already have fresh clang in PATH.
-  svn co http://llvm.org/svn/llvm-project/llvm/trunk/lib/Fuzzer
+  svn co http://llvm37.org/svn/llvm37-project/llvm37/trunk/lib/Fuzzer
   # Build PCRE2 with AddressSanitizer and coverage.
   (cd pcre; ./autogen.sh; CC="clang -fsanitize=address $COV_FLAGS" ./configure --prefix=`pwd`/../inst && make -j && make install)
   # Build lib/Fuzzer files.
@@ -116,7 +116,7 @@ Here we show how to use lib/Fuzzer on something real, yet simple: pcre2_::
   cat << EOF > pcre_fuzzer.cc
   #include <string.h>
   #include "pcre2posix.h"
-  extern "C" void LLVMFuzzerTestOneInput(const unsigned char *data, size_t size) {
+  extern "C" void LLVM37FuzzerTestOneInput(const unsigned char *data, size_t size) {
     if (size < 1) return;
     char *str = new char[size+1];
     memcpy(str, data, size);
@@ -204,7 +204,7 @@ to find Heartbleed with LibFuzzer::
   (cd openssl-1.0.1f/ && ./config &&
     make -j 32 CC="clang -g -fsanitize=address $COV_FLAGS")
   # Get and build LibFuzzer
-  svn co http://llvm.org/svn/llvm-project/llvm/trunk/lib/Fuzzer
+  svn co http://llvm37.org/svn/llvm37-project/llvm37/trunk/lib/Fuzzer
   clang -c -g -O2 -std=c++11 Fuzzer/*.cpp -IFuzzer
   # Get examples of key/pem files.
   git clone   https://github.com/hannob/selftls
@@ -224,7 +224,7 @@ to find Heartbleed with LibFuzzer::
     assert (SSL_CTX_use_PrivateKey_file(sctx, "server.key", SSL_FILETYPE_PEM));
     return 0;
   }
-  extern "C" void LLVMFuzzerTestOneInput(unsigned char *Data, size_t Size) {
+  extern "C" void LLVM37FuzzerTestOneInput(unsigned char *Data, size_t Size) {
     static int unused = Init();
     SSL *server = SSL_new(sctx);
     BIO *sinbio = BIO_new(BIO_s_mem());
@@ -280,14 +280,14 @@ Both fuzzers expect the test corpus to reside in a directory, one file per input
 You can run both fuzzers on the same corpus in parallel::
 
   ./afl-fuzz -i testcase_dir -o findings_dir /path/to/program -r @@
-  ./llvm-fuzz testcase_dir findings_dir  # Will write new tests to testcase_dir
+  ./llvm37-fuzz testcase_dir findings_dir  # Will write new tests to testcase_dir
 
 Periodically restart both fuzzers so that they can use each other's findings.
 
 How good is my fuzzer?
 ----------------------
 
-Once you implement your target function ``LLVMFuzzerTestOneInput`` and fuzz it to death,
+Once you implement your target function ``LLVM37FuzzerTestOneInput`` and fuzz it to death,
 you will want to know whether the function or the corpus can be improved further.
 One easy to use metric is, of course, code coverage.
 You can get the coverage for your corpus like this::
@@ -305,7 +305,7 @@ User-supplied mutators
 LibFuzzer allows to use custom (user-supplied) mutators,
 see FuzzerInterface.h_
 
-Fuzzing components of LLVM
+Fuzzing components of LLVM37
 ==========================
 
 clang-format-fuzzer
@@ -314,7 +314,7 @@ The inputs are random pieces of C++-like text.
 
 Build (make sure to use fresh clang as the host compiler)::
 
-    cmake -GNinja  -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ -DLLVM_USE_SANITIZER=Address -DLLVM_USE_SANITIZE_COVERAGE=YES -DCMAKE_BUILD_TYPE=Release /path/to/llvm
+    cmake -GNinja  -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ -DLLVM37_USE_SANITIZER=Address -DLLVM37_USE_SANITIZE_COVERAGE=YES -DCMAKE_BUILD_TYPE=Release /path/to/llvm37
     ninja clang-format-fuzzer
     mkdir CORPUS_DIR
     ./bin/clang-format-fuzzer CORPUS_DIR
@@ -323,21 +323,21 @@ Optionally build other kinds of binaries (asan+Debug, msan, ubsan, etc).
 
 TODO: commit the pre-fuzzed corpus to svn (?).
 
-Tracking bug: https://llvm.org/bugs/show_bug.cgi?id=23052
+Tracking bug: https://llvm37.org/bugs/show_bug.cgi?id=23052
 
 clang-fuzzer
 ------------
 
 The default behavior is very similar to ``clang-format-fuzzer``.
-Clang can also be fuzzed with Tokens_ using ``-tokens=$LLVM/lib/Fuzzer/cxx_fuzzer_tokens.txt`` option.
+Clang can also be fuzzed with Tokens_ using ``-tokens=$LLVM37/lib/Fuzzer/cxx_fuzzer_tokens.txt`` option.
 
-Tracking bug: https://llvm.org/bugs/show_bug.cgi?id=23057
+Tracking bug: https://llvm37.org/bugs/show_bug.cgi?id=23057
 
 Buildbot
 --------
 
-We have a buildbot that runs the above fuzzers for LLVM components
-24/7/365 at http://lab.llvm.org:8011/builders/sanitizer-x86_64-linux-fuzzer .
+We have a buildbot that runs the above fuzzers for LLVM37 components
+24/7/365 at http://lab.llvm37.org:8011/builders/sanitizer-x86_64-linux-fuzzer .
 
 Pre-fuzzed test inputs in git
 -----------------------------
@@ -346,27 +346,27 @@ The buildbot occumulates large test corpuses over time.
 The corpuses are stored in git on github and can be used like this::
 
   git clone https://github.com/kcc/fuzzing-with-sanitizers.git
-  bin/clang-format-fuzzer fuzzing-with-sanitizers/llvm/clang-format/C1
-  bin/clang-fuzzer        fuzzing-with-sanitizers/llvm/clang/C1/
-  bin/clang-fuzzer        fuzzing-with-sanitizers/llvm/clang/TOK1  -tokens=$LLVM/llvm/lib/Fuzzer/cxx_fuzzer_tokens.txt
+  bin/clang-format-fuzzer fuzzing-with-sanitizers/llvm37/clang-format/C1
+  bin/clang-fuzzer        fuzzing-with-sanitizers/llvm37/clang/C1/
+  bin/clang-fuzzer        fuzzing-with-sanitizers/llvm37/clang/TOK1  -tokens=$LLVM37/llvm37/lib/Fuzzer/cxx_fuzzer_tokens.txt
 
 
 FAQ
 =========================
 
-Q. Why Fuzzer does not use any of the LLVM support?
+Q. Why Fuzzer does not use any of the LLVM37 support?
 ---------------------------------------------------
 
 There are two reasons.
 
-First, we want this library to be used outside of the LLVM w/o users having to
-build the rest of LLVM. This may sound unconvincing for many LLVM folks,
-but in practice the need for building the whole LLVM frightens many potential
+First, we want this library to be used outside of the LLVM37 w/o users having to
+build the rest of LLVM37. This may sound unconvincing for many LLVM37 folks,
+but in practice the need for building the whole LLVM37 frightens many potential
 users -- and we want more users to use this code.
 
-Second, there is a subtle technical reason not to rely on the rest of LLVM, or
+Second, there is a subtle technical reason not to rely on the rest of LLVM37, or
 any other large body of code (maybe not even STL). When coverage instrumentation
-is enabled, it will also instrument the LLVM support code which will blow up the
+is enabled, it will also instrument the LLVM37 support code which will blow up the
 coverage set of the process (since the fuzzer is in-process). In other words, by
 using more external dependencies we will slow down the fuzzer while the main
 reason for it to exist is extreme speed.
@@ -411,8 +411,8 @@ Examples: regular expression matchers, text or binary format parsers.
 
 .. _AFL: http://lcamtuf.coredump.cx/afl/
 
-.. _SanitizerCoverage: http://clang.llvm.org/docs/SanitizerCoverage.html
+.. _SanitizerCoverage: http://clang.llvm37.org/docs/SanitizerCoverage.html
 
 .. _Heartbleed: http://en.wikipedia.org/wiki/Heartbleed
 
-.. _FuzzerInterface.h: https://github.com/llvm-mirror/llvm/blob/master/lib/Fuzzer/FuzzerInterface.h
+.. _FuzzerInterface.h: https://github.com/llvm37-mirror/llvm37/blob/master/lib/Fuzzer/FuzzerInterface.h

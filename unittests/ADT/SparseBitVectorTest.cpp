@@ -1,16 +1,16 @@
-//===- llvm/unittest/ADT/SparseBitVectorTest.cpp - SparseBitVector tests --===//
+//===- llvm37/unittest/ADT/SparseBitVectorTest.cpp - SparseBitVector tests --===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/ADT/SparseBitVector.h"
+#include "llvm37/ADT/SparseBitVector.h"
 #include "gtest/gtest.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 namespace {
 

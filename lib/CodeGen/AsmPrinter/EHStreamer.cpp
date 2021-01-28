@@ -1,6 +1,6 @@
 //===-- CodeGen/AsmPrinter/EHStreamer.cpp - Exception Directive Streamer --===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -12,18 +12,18 @@
 //===----------------------------------------------------------------------===//
 
 #include "EHStreamer.h"
-#include "llvm/CodeGen/AsmPrinter.h"
-#include "llvm/CodeGen/MachineFunction.h"
-#include "llvm/CodeGen/MachineInstr.h"
-#include "llvm/CodeGen/MachineModuleInfo.h"
-#include "llvm/IR/Function.h"
-#include "llvm/MC/MCAsmInfo.h"
-#include "llvm/MC/MCStreamer.h"
-#include "llvm/MC/MCSymbol.h"
-#include "llvm/Support/LEB128.h"
-#include "llvm/Target/TargetLoweringObjectFile.h"
+#include "llvm37/CodeGen/AsmPrinter.h"
+#include "llvm37/CodeGen/MachineFunction.h"
+#include "llvm37/CodeGen/MachineInstr.h"
+#include "llvm37/CodeGen/MachineModuleInfo.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/MC/MCAsmInfo.h"
+#include "llvm37/MC/MCStreamer.h"
+#include "llvm37/MC/MCSymbol.h"
+#include "llvm37/Support/LEB128.h"
+#include "llvm37/Target/TargetLoweringObjectFile.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 EHStreamer::EHStreamer(AsmPrinter *A) : Asm(A), MMI(Asm->MMI) {}
 

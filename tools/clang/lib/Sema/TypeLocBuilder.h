@@ -1,6 +1,6 @@
 //===--- TypeLocBuilder.h - Type Source Info collector ----------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -12,8 +12,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_LIB_SEMA_TYPELOCBUILDER_H
-#define LLVM_CLANG_LIB_SEMA_TYPELOCBUILDER_H
+#ifndef LLVM37_CLANG_LIB_SEMA_TYPELOCBUILDER_H
+#define LLVM37_CLANG_LIB_SEMA_TYPELOCBUILDER_H
 
 #include "clang/AST/ASTContext.h"
 #include "clang/AST/TypeLoc.h"
@@ -39,8 +39,8 @@ class TypeLocBuilder {
 #endif
     
   /// The inline buffer.
-  enum { BufferMaxAlignment = llvm::AlignOf<void*>::Alignment };
-  llvm::AlignedCharArray<BufferMaxAlignment, InlineCapacity> InlineBuffer;
+  enum { BufferMaxAlignment = llvm37::AlignOf<void*>::Alignment };
+  llvm37::AlignedCharArray<BufferMaxAlignment, InlineCapacity> InlineBuffer;
   unsigned NumBytesAtAlign4, NumBytesAtAlign8;
 
  public:

@@ -17,13 +17,13 @@
 #include "dxc/Support/FileIOHelper.h"
 #include "dxc/Support/dxcapi.impl.h"
 
-#include "llvm/Support/MSFileSystem.h"
-#include "llvm/Support/FileSystem.h"
+#include "llvm37/Support/MSFileSystem.h"
+#include "llvm37/Support/FileSystem.h"
 
-#include "llvm/Support/MemoryBuffer.h"
-#include "llvm/IR/DebugInfo.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Module.h"
+#include "llvm37/Support/MemoryBuffer.h"
+#include "llvm37/IR/DebugInfo.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/Module.h"
 
 #include "DxilDiaSession.h"
 
@@ -44,14 +44,14 @@ STDMETHODIMP dxil_dia::DataSource::get_lastError(BSTR *pRetVal) {
 
 namespace dxil_dia
 {
-std::unique_ptr<llvm::MemoryBuffer> getMemBufferFromBlob(_In_ IDxcBlob *pBlob,
-                                                         const llvm::Twine &BufferName) {
-  llvm::StringRef Data((LPSTR)pBlob->GetBufferPointer(), pBlob->GetBufferSize());
-  return llvm::MemoryBuffer::getMemBufferCopy(Data, BufferName);
+std::unique_ptr<llvm37::MemoryBuffer> getMemBufferFromBlob(_In_ IDxcBlob *pBlob,
+                                                         const llvm37::Twine &BufferName) {
+  llvm37::StringRef Data((LPSTR)pBlob->GetBufferPointer(), pBlob->GetBufferSize());
+  return llvm37::MemoryBuffer::getMemBufferCopy(Data, BufferName);
 }
 
-std::unique_ptr<llvm::MemoryBuffer> getMemBufferFromStream(_In_ IStream *pStream,
-                                                           const llvm::Twine &BufferName) {
+std::unique_ptr<llvm37::MemoryBuffer> getMemBufferFromStream(_In_ IStream *pStream,
+                                                           const llvm37::Twine &BufferName) {
   CComPtr<IDxcBlob> pBlob;
   if (SUCCEEDED(pStream->QueryInterface(&pBlob))) {
     return getMemBufferFromBlob(pBlob, BufferName);
@@ -60,8 +60,8 @@ std::unique_ptr<llvm::MemoryBuffer> getMemBufferFromStream(_In_ IStream *pStream
   STATSTG statstg;
   IFT(pStream->Stat(&statstg, STATFLAG_NONAME));
   size_t size = statstg.cbSize.LowPart;
-  std::unique_ptr<llvm::MemoryBuffer> result(
-    llvm::MemoryBuffer::getNewUninitMemBuffer(size, BufferName));
+  std::unique_ptr<llvm37::MemoryBuffer> result(
+    llvm37::MemoryBuffer::getNewUninitMemBuffer(size, BufferName));
   char *pBuffer = (char *)result.get()->getBufferStart();
   ULONG read;
   IFT(pStream->Read(pBuffer, size, &read));
@@ -77,12 +77,12 @@ STDMETHODIMP dxil_dia::DataSource::loadDataFromIStream(_In_ IStream *pInputIStre
     }
 
     // Setup filesystem because bitcode reader might emit warning
-    ::llvm::sys::fs::MSFileSystem* msfPtr;
+    ::llvm37::sys::fs::MSFileSystem* msfPtr;
     IFT(CreateMSFileSystemForDisk(&msfPtr));
-    std::unique_ptr<::llvm::sys::fs::MSFileSystem> msf(msfPtr);
+    std::unique_ptr<::llvm37::sys::fs::MSFileSystem> msf(msfPtr);
 
-    ::llvm::sys::fs::AutoPerThreadSystem pts(msf.get());
-    IFTLLVM(pts.error_code());
+    ::llvm37::sys::fs::AutoPerThreadSystem pts(msf.get());
+    IFTLLVM37(pts.error_code());
 
     CComPtr<IStream> pIStream = pInputIStream;
     CComPtr<IDxcBlob> pContainer;
@@ -104,14 +104,14 @@ STDMETHODIMP dxil_dia::DataSource::loadDataFromIStream(_In_ IStream *pInputIStre
     m_context.reset();
     m_finder.reset();
 
-    m_context = std::make_shared<llvm::LLVMContext>();
-    llvm::MemoryBuffer *pBitcodeBuffer;
-    std::unique_ptr<llvm::MemoryBuffer> pEmbeddedBuffer;
-    std::unique_ptr<llvm::MemoryBuffer> pBuffer =
+    m_context = std::make_shared<llvm37::LLVM37Context>();
+    llvm37::MemoryBuffer *pBitcodeBuffer;
+    std::unique_ptr<llvm37::MemoryBuffer> pEmbeddedBuffer;
+    std::unique_ptr<llvm37::MemoryBuffer> pBuffer =
       getMemBufferFromStream(pIStream, "data");
     size_t bufferSize = pBuffer->getBufferSize();
 
-    // The buffer can hold LLVM bitcode for a module, or the ILDB
+    // The buffer can hold LLVM37 bitcode for a module, or the ILDB
     // part from a container.
     if (bufferSize < sizeof(UINT32)) {
       return DXC_E_MALFORMED_CONTAINER;
@@ -132,18 +132,18 @@ STDMETHODIMP dxil_dia::DataSource::loadDataFromIStream(_In_ IStream *pInputIStre
       UINT32 BlobSize;
       const char *pBitcode = nullptr;
       hlsl::GetDxilProgramBitcode(pDxilProgramHeader, &pBitcode, &BlobSize);
-      std::unique_ptr<llvm::MemoryBuffer> p = llvm::MemoryBuffer::getMemBuffer(
-        llvm::StringRef(pBitcode, BlobSize), "data", false /* RequiresNullTerminator */);
+      std::unique_ptr<llvm37::MemoryBuffer> p = llvm37::MemoryBuffer::getMemBuffer(
+        llvm37::StringRef(pBitcode, BlobSize), "data", false /* RequiresNullTerminator */);
       pEmbeddedBuffer.swap(p);
       pBitcodeBuffer = pEmbeddedBuffer.get();
     }
 
     std::string DiagStr;
-    std::unique_ptr<llvm::Module> pModule = hlsl::dxilutil::LoadModuleFromBitcode(
+    std::unique_ptr<llvm37::Module> pModule = hlsl::dxilutil::LoadModuleFromBitcode(
       pBitcodeBuffer, *m_context.get(), DiagStr);
     if (!pModule.get())
       return E_FAIL;
-    m_finder = std::make_shared<llvm::DebugInfoFinder>();
+    m_finder = std::make_shared<llvm37::DebugInfoFinder>();
     m_finder->processModule(*pModule.get());
     m_module.reset(pModule.release());
   }
@@ -157,12 +157,12 @@ STDMETHODIMP dxil_dia::DataSource::openSession(_COM_Outptr_ IDiaSession **ppSess
   if (m_module.get() == nullptr)
     return E_FAIL;
 
-  ::llvm::sys::fs::MSFileSystem *msfPtr;
+  ::llvm37::sys::fs::MSFileSystem *msfPtr;
   IFT(CreateMSFileSystemForDisk(&msfPtr));
-  std::unique_ptr<::llvm::sys::fs::MSFileSystem> msf(msfPtr);
+  std::unique_ptr<::llvm37::sys::fs::MSFileSystem> msf(msfPtr);
 
-  ::llvm::sys::fs::AutoPerThreadSystem pts(msf.get());
-  IFTLLVM(pts.error_code());
+  ::llvm37::sys::fs::AutoPerThreadSystem pts(msf.get());
+  IFTLLVM37(pts.error_code());
 
   CComPtr<Session> pSession = Session::Alloc(DxcGetThreadMallocNoRef());
   IFROOM(pSession.p);

@@ -1,9 +1,9 @@
 // Test without PCH.
-// RUN: %clang_cc1 -std=c++11 -triple %itanium_abi_triple -fcxx-exceptions -fexceptions -include %s %s -emit-llvm -o - | FileCheck %s
+// RUN: %clang_cc1 -std=c++11 -triple %itanium_abi_triple -fcxx-exceptions -fexceptions -include %s %s -emit-llvm37 -o - | FileCheck %s
 //
 // Test with PCH.
 // RUN: %clang_cc1 -std=c++11 -triple %itanium_abi_triple -fcxx-exceptions -fexceptions -x c++-header %s -emit-pch -o %t
-// RUN: %clang_cc1 -std=c++11 -triple %itanium_abi_triple -fcxx-exceptions -fexceptions -include-pch %t %s -emit-llvm -o - | FileCheck %s
+// RUN: %clang_cc1 -std=c++11 -triple %itanium_abi_triple -fcxx-exceptions -fexceptions -include-pch %t %s -emit-llvm37 -o - | FileCheck %s
 
 #ifndef HEADER
 #define HEADER

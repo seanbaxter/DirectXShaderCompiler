@@ -1,6 +1,6 @@
 //===--- PtrState.cpp -----------------------------------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -10,11 +10,11 @@
 #include "PtrState.h"
 #include "DependencyAnalysis.h"
 #include "ObjCARC.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/raw_ostream.h"
 
-using namespace llvm;
-using namespace llvm::objcarc;
+using namespace llvm37;
+using namespace llvm37::objcarc;
 
 #define DEBUG_TYPE "objc-arc-ptr-state"
 
@@ -22,7 +22,7 @@ using namespace llvm::objcarc;
 //                                  Utility
 //===----------------------------------------------------------------------===//
 
-raw_ostream &llvm::objcarc::operator<<(raw_ostream &OS, const Sequence S) {
+raw_ostream &llvm37::objcarc::operator<<(raw_ostream &OS, const Sequence S) {
   switch (S) {
   case S_None:
     return OS << "S_None";
@@ -39,7 +39,7 @@ raw_ostream &llvm::objcarc::operator<<(raw_ostream &OS, const Sequence S) {
   case S_Stop:
     return OS << "S_Stop";
   }
-  llvm_unreachable("Unknown sequence type.");
+  llvm37_unreachable("Unknown sequence type.");
 }
 
 //===----------------------------------------------------------------------===//
@@ -207,9 +207,9 @@ bool BottomUpPtrState::MatchWithRetain() {
   case S_None:
     return false;
   case S_Retain:
-    llvm_unreachable("bottom-up pointer in retain state!");
+    llvm37_unreachable("bottom-up pointer in retain state!");
   }
-  llvm_unreachable("Sequence unknown enum value");
+  llvm37_unreachable("Sequence unknown enum value");
 }
 
 bool BottomUpPtrState::HandlePotentialAlterRefCount(Instruction *Inst,
@@ -235,9 +235,9 @@ bool BottomUpPtrState::HandlePotentialAlterRefCount(Instruction *Inst,
   case S_None:
     return false;
   case S_Retain:
-    llvm_unreachable("bottom-up pointer in retain state!");
+    llvm37_unreachable("bottom-up pointer in retain state!");
   }
-  llvm_unreachable("Sequence unknown enum value");
+  llvm37_unreachable("Sequence unknown enum value");
 }
 
 void BottomUpPtrState::HandlePotentialUse(BasicBlock *BB, Instruction *Inst,
@@ -285,7 +285,7 @@ void BottomUpPtrState::HandlePotentialUse(BasicBlock *BB, Instruction *Inst,
   case S_None:
     break;
   case S_Retain:
-    llvm_unreachable("bottom-up pointer in retain state!");
+    llvm37_unreachable("bottom-up pointer in retain state!");
   }
 }
 
@@ -342,9 +342,9 @@ bool TopDownPtrState::MatchWithRelease(ARCMDKindCache &Cache,
   case S_Stop:
   case S_Release:
   case S_MovableRelease:
-    llvm_unreachable("top-down pointer in bottom up state!");
+    llvm37_unreachable("top-down pointer in bottom up state!");
   }
-  llvm_unreachable("Sequence unknown enum value");
+  llvm37_unreachable("Sequence unknown enum value");
 }
 
 bool TopDownPtrState::HandlePotentialAlterRefCount(Instruction *Inst,
@@ -375,9 +375,9 @@ bool TopDownPtrState::HandlePotentialAlterRefCount(Instruction *Inst,
   case S_Stop:
   case S_Release:
   case S_MovableRelease:
-    llvm_unreachable("top-down pointer in release state!");
+    llvm37_unreachable("top-down pointer in release state!");
   }
-  llvm_unreachable("covered switch is not covered!?");
+  llvm37_unreachable("covered switch is not covered!?");
 }
 
 void TopDownPtrState::HandlePotentialUse(Instruction *Inst, const Value *Ptr,
@@ -399,6 +399,6 @@ void TopDownPtrState::HandlePotentialUse(Instruction *Inst, const Value *Ptr,
   case S_Stop:
   case S_Release:
   case S_MovableRelease:
-    llvm_unreachable("top-down pointer in release state!");
+    llvm37_unreachable("top-down pointer in release state!");
   }
 }

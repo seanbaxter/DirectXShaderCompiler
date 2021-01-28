@@ -1,6 +1,6 @@
 //===- CodeGenDAGPatterns.cpp - Read DAG patterns from .td file -----------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -13,17 +13,17 @@
 //===----------------------------------------------------------------------===//
 
 #include "CodeGenDAGPatterns.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/StringExtras.h"
-#include "llvm/ADT/Twine.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/TableGen/Error.h"
-#include "llvm/TableGen/Record.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/StringExtras.h"
+#include "llvm37/ADT/Twine.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/TableGen/Error.h"
+#include "llvm37/TableGen/Record.h"
 #include <algorithm>
 #include <cstdio>
 #include <set>
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "dag-patterns"
 
@@ -146,7 +146,7 @@ std::string EEVT::TypeSet::getName() const {
   std::string Result;
 
   for (unsigned i = 0, e = TypeVec.size(); i != e; ++i) {
-    std::string VTName = llvm::getEnumName(TypeVec[i]);
+    std::string VTName = llvm37::getEnumName(TypeVec[i]);
     // Strip off MVT:: prefix if present.
     if (VTName.substr(0,5) == "MVT::")
       VTName = VTName.substr(5);
@@ -849,7 +849,7 @@ std::string PatternToMatch::getPredicateCheck() const {
 #ifndef NDEBUG
         Def->dump();
 #endif
-        llvm_unreachable("Unknown predicate type!");
+        llvm37_unreachable("Unknown predicate type!");
       }
       if (!PredicateCheck.empty())
         PredicateCheck += " && ";
@@ -1042,7 +1042,7 @@ bool SDTypeConstraint::ApplyTypeConstraint(TreePatternNode *N,
       EnforceVectorSameNumElts(NodeToApply->getExtType(ResNo), TP);
   }
   }
-  llvm_unreachable("Invalid ConstraintType!");
+  llvm37_unreachable("Invalid ConstraintType!");
 }
 
 // Update the node type to match an instruction operand or result as specified
@@ -2431,7 +2431,7 @@ void CodeGenDAGPatterns::ParsePatternFragments(bool OutFrags) {
 
     DagInit *Tree = Fragments[i]->getValueAsDag("Fragment");
     TreePattern *P =
-        (PatternFragments[Fragments[i]] = llvm::make_unique<TreePattern>(
+        (PatternFragments[Fragments[i]] = llvm37::make_unique<TreePattern>(
              Fragments[i], Tree, !Fragments[i]->isSubClassOf("OutPatFrag"),
              *this)).get();
 

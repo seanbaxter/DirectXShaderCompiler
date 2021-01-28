@@ -1,4 +1,4 @@
-; RUN: llvm-as < %s | llvm-dis
+; RUN: llvm37-as < %s | llvm37-dis
 
 @foo = external global <4 x float>              ; <<4 x float>*> [#uses=1]
 @bar = external global <4 x float>              ; <<4 x float>*> [#uses=1]

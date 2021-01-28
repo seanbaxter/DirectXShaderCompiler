@@ -1,6 +1,6 @@
 // BugReporter.cpp - Generate PathDiagnostics for Bugs ------------*- C++ -*--//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -26,12 +26,12 @@
 #include "clang/StaticAnalyzer/Core/BugReporter/BugType.h"
 #include "clang/StaticAnalyzer/Core/BugReporter/PathDiagnostic.h"
 #include "clang/StaticAnalyzer/Core/PathSensitive/ExprEngine.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/IntrusiveRefCntPtr.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/IntrusiveRefCntPtr.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <memory>
 #include <queue>
 
@@ -147,7 +147,7 @@ static void removeRedundantMsgs(PathPieces &path) {
 
 /// A map from PathDiagnosticPiece to the LocationContext of the inlined
 /// function call it represents.
-typedef llvm::DenseMap<const PathPieces *, const LocationContext *>
+typedef llvm37::DenseMap<const PathPieces *, const LocationContext *>
         LocationContextMap;
 
 /// Recursively scan through a path and prune out calls and macros pieces
@@ -333,7 +333,7 @@ public:
 
   PathDiagnosticLocation ExecutionContinues(const ExplodedNode *N);
 
-  PathDiagnosticLocation ExecutionContinues(llvm::raw_string_ostream &os,
+  PathDiagnosticLocation ExecutionContinues(llvm37::raw_string_ostream &os,
                                             const ExplodedNode *N);
 
   BugReport *getBugReport() { return R; }
@@ -370,7 +370,7 @@ PathDiagnosticBuilder::ExecutionContinues(const ExplodedNode *N) {
 }
 
 PathDiagnosticLocation
-PathDiagnosticBuilder::ExecutionContinues(llvm::raw_string_ostream &os,
+PathDiagnosticBuilder::ExecutionContinues(llvm37::raw_string_ostream &os,
                                           const ExplodedNode *N) {
 
   // Slow, but probably doesn't matter.
@@ -636,7 +636,7 @@ static bool GenerateMinimalPathDiagnostic(
             break;
 
           std::string sbuf;
-          llvm::raw_string_ostream os(sbuf);
+          llvm37::raw_string_ostream os(sbuf);
           const PathDiagnosticLocation &End = PDB.getEnclosingStmtLocation(S);
 
           os << "Control jumps to line "
@@ -649,7 +649,7 @@ static bool GenerateMinimalPathDiagnostic(
         case Stmt::SwitchStmtClass: {
           // Figure out what case arm we took.
           std::string sbuf;
-          llvm::raw_string_ostream os(sbuf);
+          llvm37::raw_string_ostream os(sbuf);
 
           if (const Stmt *S = Dst->getLabel()) {
             PathDiagnosticLocation End(S, SMgr, LC);
@@ -709,7 +709,7 @@ static bool GenerateMinimalPathDiagnostic(
         case Stmt::BreakStmtClass:
         case Stmt::ContinueStmtClass: {
           std::string sbuf;
-          llvm::raw_string_ostream os(sbuf);
+          llvm37::raw_string_ostream os(sbuf);
           PathDiagnosticLocation End = PDB.ExecutionContinues(os, N);
           PD.getActivePath().push_front(new PathDiagnosticControlFlowPiece(
               Start, End, os.str()));
@@ -720,7 +720,7 @@ static bool GenerateMinimalPathDiagnostic(
         case Stmt::BinaryConditionalOperatorClass:
         case Stmt::ConditionalOperatorClass: {
           std::string sbuf;
-          llvm::raw_string_ostream os(sbuf);
+          llvm37::raw_string_ostream os(sbuf);
           os << "'?' condition is ";
 
           if (*(Src->succ_begin()+1) == Dst)
@@ -745,7 +745,7 @@ static bool GenerateMinimalPathDiagnostic(
 
           const BinaryOperator *B = cast<BinaryOperator>(T);
           std::string sbuf;
-          llvm::raw_string_ostream os(sbuf);
+          llvm37::raw_string_ostream os(sbuf);
           os << "Left side of '";
 
           if (B->getOpcode() == BO_LAnd) {
@@ -794,7 +794,7 @@ static bool GenerateMinimalPathDiagnostic(
         case Stmt::DoStmtClass:  {
           if (*(Src->succ_begin()) == Dst) {
             std::string sbuf;
-            llvm::raw_string_ostream os(sbuf);
+            llvm37::raw_string_ostream os(sbuf);
 
             os << "Loop condition is true. ";
             PathDiagnosticLocation End = PDB.ExecutionContinues(os, N);
@@ -822,7 +822,7 @@ static bool GenerateMinimalPathDiagnostic(
         case Stmt::ForStmtClass: {
           if (*(Src->succ_begin()+1) == Dst) {
             std::string sbuf;
-            llvm::raw_string_ostream os(sbuf);
+            llvm37::raw_string_ostream os(sbuf);
 
             os << "Loop condition is false. ";
             PathDiagnosticLocation End = PDB.ExecutionContinues(os, N);
@@ -1232,7 +1232,7 @@ void EdgeBuilder::addContext(const PathDiagnosticLocation &L) {
 // because the constraint solver sometimes simplifies certain symbolic values
 // into constants when appropriate, and this complicates reasoning about
 // interesting values.
-typedef llvm::DenseSet<const Expr *> InterestingExprs;
+typedef llvm37::DenseSet<const Expr *> InterestingExprs;
 
 static void reversePropagateIntererstingSymbols(BugReport &R,
                                                 InterestingExprs &IE,
@@ -1951,7 +1951,7 @@ static bool isIncrementOrInitInForLoop(const Stmt *S, const Stmt *FL) {
   return false;
 }
 
-typedef llvm::DenseSet<const PathDiagnosticCallPiece *>
+typedef llvm37::DenseSet<const PathDiagnosticCallPiece *>
         OptimizedCallsSet;
 
 /// Adds synthetic edges from top-level statements to their subexpressions.
@@ -2122,7 +2122,7 @@ static Optional<size_t> getLengthOnSingleLine(SourceManager &SM,
     return None;
 
   bool Invalid;
-  const llvm::MemoryBuffer *Buffer = SM.getBuffer(FID, &Invalid);
+  const llvm37::MemoryBuffer *Buffer = SM.getBuffer(FID, &Invalid);
   if (Invalid)
     return None;
 
@@ -2536,7 +2536,7 @@ void BugReport::addVisitor(std::unique_ptr<BugReporterVisitor> visitor) {
   if (!visitor)
     return;
 
-  llvm::FoldingSetNodeID ID;
+  llvm37::FoldingSetNodeID ID;
   visitor->Profile(ID);
   void *InsertPos;
 
@@ -2566,7 +2566,7 @@ const Decl *BugReport::getDeclWithIssue() const {
   return LC->getCurrentStackFrame()->getDecl();
 }
 
-void BugReport::Profile(llvm::FoldingSetNodeID& hash) const {
+void BugReport::Profile(llvm37::FoldingSetNodeID& hash) const {
   hash.AddPointer(&BT);
   hash.AddString(Description);
   PathDiagnosticLocation UL = getUniqueingLocation();
@@ -2700,21 +2700,21 @@ const Stmt *BugReport::getStmt() const {
   return S;
 }
 
-llvm::iterator_range<BugReport::ranges_iterator> BugReport::getRanges() {
+llvm37::iterator_range<BugReport::ranges_iterator> BugReport::getRanges() {
   // If no custom ranges, add the range of the statement corresponding to
   // the error node.
   if (Ranges.empty()) {
     if (const Expr *E = dyn_cast_or_null<Expr>(getStmt()))
       addRange(E->getSourceRange());
     else
-      return llvm::make_range(ranges_iterator(), ranges_iterator());
+      return llvm37::make_range(ranges_iterator(), ranges_iterator());
   }
 
   // User-specified absence of range info.
   if (Ranges.size() == 1 && !Ranges.begin()->isValid())
-    return llvm::make_range(ranges_iterator(), ranges_iterator());
+    return llvm37::make_range(ranges_iterator(), ranges_iterator());
 
-  return llvm::iterator_range<BugReport::ranges_iterator>(Ranges.begin(),
+  return llvm37::iterator_range<BugReport::ranges_iterator>(Ranges.begin(),
                                                           Ranges.end());
 }
 
@@ -2779,7 +2779,7 @@ void BugReporter::FlushReports() {
   // EmitBasicReport.
   // FIXME: There are leaks from checkers that assume that the BugTypes they
   // create will be destroyed by the BugReporter.
-  llvm::DeleteContainerSeconds(StrBugTypes);
+  llvm37::DeleteContainerSeconds(StrBugTypes);
 
   // Remove all references to the BugType objects.
   BugTypes = F.getEmptySet();
@@ -2804,7 +2804,7 @@ public:
 class TrimmedGraph {
   InterExplodedGraphMap InverseMap;
 
-  typedef llvm::DenseMap<const ExplodedNode *, unsigned> PriorityMapTy;
+  typedef llvm37::DenseMap<const ExplodedNode *, unsigned> PriorityMapTy;
   PriorityMapTy PriorityMap;
 
   typedef std::pair<const ExplodedNode *, size_t> NodeIndexPair;
@@ -2857,7 +2857,7 @@ TrimmedGraph::TrimmedGraph(const ExplodedGraph *OriginalGraph,
   // Find the (first) error node in the trimmed graph.  We just need to consult
   // the node map which maps from nodes in the original graph to nodes
   // in the new graph.
-  llvm::SmallPtrSet<const ExplodedNode *, 32> RemainingNodes;
+  llvm37::SmallPtrSet<const ExplodedNode *, 32> RemainingNodes;
 
   for (unsigned i = 0, count = Nodes.size(); i < count; ++i) {
     if (const ExplodedNode *NewNode = ForwardMap.lookup(Nodes[i])) {
@@ -2916,7 +2916,7 @@ bool TrimmedGraph::popNextReportGraph(ReportGraph &GraphWrapper) {
 
   // Create a new graph with a single path.  This is the graph
   // that will be returned to the caller.
-  auto GNew = llvm::make_unique<ExplodedGraph>();
+  auto GNew = llvm37::make_unique<ExplodedGraph>();
   GraphWrapper.BackMap.clear();
 
   // Now walk from the error node up the BFS path, always taking the
@@ -3104,9 +3104,9 @@ bool GRBugReporter::generatePathDiagnostic(PathDiagnostic& PD,
     const ExplodedNode *N = ErrorGraph.ErrorNode;
 
     // Register additional node visitors.
-    R->addVisitor(llvm::make_unique<NilReceiverBRVisitor>());
-    R->addVisitor(llvm::make_unique<ConditionBRVisitor>());
-    R->addVisitor(llvm::make_unique<LikelyFalsePositiveSuppressionBRVisitor>());
+    R->addVisitor(llvm37::make_unique<NilReceiverBRVisitor>());
+    R->addVisitor(llvm37::make_unique<ConditionBRVisitor>());
+    R->addVisitor(llvm37::make_unique<LikelyFalsePositiveSuppressionBRVisitor>());
 
     BugReport::VisitorList visitors;
     unsigned origReportConfigToken, finalReportConfigToken;
@@ -3243,7 +3243,7 @@ void BugReporter::emitReport(std::unique_ptr<BugReport> R) {
     return;
 
   // Compute the bug report's hash to determine its equivalence class.
-  llvm::FoldingSetNodeID ID;
+  llvm37::FoldingSetNodeID ID;
   R->Profile(ID);
 
   // Lookup the equivance class.  If there isn't one, create it.
@@ -3312,7 +3312,7 @@ FindReportInEquivalenceClass(BugReportEquivClass& EQ,
     if (!errorNode)
       continue;
     if (errorNode->isSink()) {
-      llvm_unreachable(
+      llvm37_unreachable(
            "BugType::isSuppressSink() should not be 'true' for sink end nodes");
     }
     // No successors?  By definition this nodes isn't post-dominated by a sink.
@@ -3327,7 +3327,7 @@ FindReportInEquivalenceClass(BugReportEquivClass& EQ,
     // successor.  Use a DFS worklist to find a non-sink end-of-path node.    
     typedef FRIEC_WLItem WLItem;
     typedef SmallVector<WLItem, 10> DFSWorkList;
-    llvm::DenseMap<const ExplodedNode *, unsigned> Visited;
+    llvm37::DenseMap<const ExplodedNode *, unsigned> Visited;
     
     DFSWorkList WL;
     WL.push_back(errorNode);
@@ -3424,7 +3424,7 @@ void BugReporter::FlushReport(BugReport *exampleReport,
   // of the issue.
   if (D->path.empty()) {
     PathDiagnosticLocation L = exampleReport->getLocation(getSourceManager());
-    auto piece = llvm::make_unique<PathDiagnosticEventPiece>(
+    auto piece = llvm37::make_unique<PathDiagnosticEventPiece>(
         L, exampleReport->getDescription());
     for (const SourceRange &Range : exampleReport->getRanges())
       piece->addRange(Range);
@@ -3457,7 +3457,7 @@ void BugReporter::EmitBasicReport(const Decl *DeclWithIssue,
 
   // 'BT' is owned by BugReporter.
   BugType *BT = getBugTypeForName(CheckName, name, category);
-  auto R = llvm::make_unique<BugReport>(*BT, str, Loc);
+  auto R = llvm37::make_unique<BugReport>(*BT, str, Loc);
   R->setDeclWithIssue(DeclWithIssue);
   for (ArrayRef<SourceRange>::iterator I = Ranges.begin(), E = Ranges.end();
        I != E; ++I)
@@ -3468,7 +3468,7 @@ void BugReporter::EmitBasicReport(const Decl *DeclWithIssue,
 BugType *BugReporter::getBugTypeForName(CheckName CheckName, StringRef name,
                                         StringRef category) {
   SmallString<136> fullDesc;
-  llvm::raw_svector_ostream(fullDesc) << CheckName.getName() << ":" << name
+  llvm37::raw_svector_ostream(fullDesc) << CheckName.getName() << ":" << name
                                       << ":" << category;
   BugType *&BT = StrBugTypes[fullDesc];
   if (!BT)
@@ -3476,76 +3476,76 @@ BugType *BugReporter::getBugTypeForName(CheckName CheckName, StringRef name,
   return BT;
 }
 
-LLVM_DUMP_METHOD void PathPieces::dump() const {
+LLVM37_DUMP_METHOD void PathPieces::dump() const {
   unsigned index = 0;
   for (PathPieces::const_iterator I = begin(), E = end(); I != E; ++I) {
-    llvm::errs() << "[" << index++ << "]  ";
+    llvm37::errs() << "[" << index++ << "]  ";
     (*I)->dump();
-    llvm::errs() << "\n";
+    llvm37::errs() << "\n";
   }
 }
 
 void PathDiagnosticCallPiece::dump() const {
-  llvm::errs() << "CALL\n--------------\n";
+  llvm37::errs() << "CALL\n--------------\n";
 
   if (const Stmt *SLoc = getLocStmt(getLocation()))
     SLoc->dump();
   else if (const NamedDecl *ND = dyn_cast<NamedDecl>(getCallee()))
-    llvm::errs() << *ND << "\n";
+    llvm37::errs() << *ND << "\n";
   else
     getLocation().dump();
 }
 
 void PathDiagnosticEventPiece::dump() const {
-  llvm::errs() << "EVENT\n--------------\n";
-  llvm::errs() << getString() << "\n";
-  llvm::errs() << " ---- at ----\n";
+  llvm37::errs() << "EVENT\n--------------\n";
+  llvm37::errs() << getString() << "\n";
+  llvm37::errs() << " ---- at ----\n";
   getLocation().dump();
 }
 
 void PathDiagnosticControlFlowPiece::dump() const {
-  llvm::errs() << "CONTROL\n--------------\n";
+  llvm37::errs() << "CONTROL\n--------------\n";
   getStartLocation().dump();
-  llvm::errs() << " ---- to ----\n";
+  llvm37::errs() << " ---- to ----\n";
   getEndLocation().dump();
 }
 
 void PathDiagnosticMacroPiece::dump() const {
-  llvm::errs() << "MACRO\n--------------\n";
+  llvm37::errs() << "MACRO\n--------------\n";
   // FIXME: Print which macro is being invoked.
 }
 
 void PathDiagnosticLocation::dump() const {
   if (!isValid()) {
-    llvm::errs() << "<INVALID>\n";
+    llvm37::errs() << "<INVALID>\n";
     return;
   }
 
   switch (K) {
   case RangeK:
     // FIXME: actually print the range.
-    llvm::errs() << "<range>\n";
+    llvm37::errs() << "<range>\n";
     break;
   case SingleLocK:
     asLocation().dump();
-    llvm::errs() << "\n";
+    llvm37::errs() << "\n";
     break;
   case StmtK:
     if (S)
       S->dump();
     else
-      llvm::errs() << "<NULL STMT>\n";
+      llvm37::errs() << "<NULL STMT>\n";
     break;
   case DeclK:
     if (const NamedDecl *ND = dyn_cast_or_null<NamedDecl>(D))
-      llvm::errs() << *ND << "\n";
+      llvm37::errs() << *ND << "\n";
     else if (isa<BlockDecl>(D))
       // FIXME: Make this nicer.
-      llvm::errs() << "<block>\n";
+      llvm37::errs() << "<block>\n";
     else if (D)
-      llvm::errs() << "<unknown decl>\n";
+      llvm37::errs() << "<unknown decl>\n";
     else
-      llvm::errs() << "<NULL DECL>\n";
+      llvm37::errs() << "<NULL DECL>\n";
     break;
   }
 }

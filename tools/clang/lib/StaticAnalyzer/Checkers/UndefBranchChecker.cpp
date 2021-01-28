@@ -1,6 +1,6 @@
 //=== UndefBranchChecker.cpp -----------------------------------*- C++ -*--===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -96,7 +96,7 @@ void UndefBranchChecker::checkBranchCondition(const Stmt *Condition,
       Ex = FindIt.FindExpr(Ex);
 
       // Emit the bug report.
-      auto R = llvm::make_unique<BugReport>(*BT, BT->getDescription(), N);
+      auto R = llvm37::make_unique<BugReport>(*BT, BT->getDescription(), N);
       bugreporter::trackNullOrUndefValue(N, Ex, *R);
       R->addRange(Ex->getSourceRange());
 

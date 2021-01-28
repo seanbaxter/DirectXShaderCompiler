@@ -1,6 +1,6 @@
 //===- ThreadSafety.h ------------------------------------------*- C++ --*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,17 +11,17 @@
 // A intra-procedural analysis for thread safety (e.g. deadlocks and race
 // conditions), based off of an annotation system.
 //
-// See http://clang.llvm.org/docs/LanguageExtensions.html#thread-safety-annotation-checking
+// See http://clang.llvm37.org/docs/LanguageExtensions.html#thread-safety-annotation-checking
 // for more information.
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_ANALYSIS_ANALYSES_THREADSAFETY_H
-#define LLVM_CLANG_ANALYSIS_ANALYSES_THREADSAFETY_H
+#ifndef LLVM37_CLANG_ANALYSIS_ANALYSES_THREADSAFETY_H
+#define LLVM37_CLANG_ANALYSIS_ANALYSES_THREADSAFETY_H
 
 #include "clang/Analysis/AnalysisContext.h"
 #include "clang/Basic/SourceLocation.h"
-#include "llvm/ADT/StringRef.h"
+#include "llvm37/ADT/StringRef.h"
 
 namespace clang {
 namespace threadSafety {

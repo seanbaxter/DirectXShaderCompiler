@@ -1,6 +1,6 @@
 //===-- Support/FoldingSet.cpp - Uniquing Hash Set --------------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -12,15 +12,15 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/ADT/FoldingSet.h"
-#include "llvm/ADT/Hashing.h"
-#include "llvm/Support/Allocator.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/Host.h"
-#include "llvm/Support/MathExtras.h"
+#include "llvm37/ADT/FoldingSet.h"
+#include "llvm37/ADT/Hashing.h"
+#include "llvm37/Support/Allocator.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/Host.h"
+#include "llvm37/Support/MathExtras.h"
 #include <cassert>
 #include <cstring>
-using namespace llvm;
+using namespace llvm37;
 
 //===----------------------------------------------------------------------===//
 // FoldingSetNodeIDRef Implementation
@@ -72,7 +72,7 @@ void FoldingSetNodeID::AddInteger(unsigned long I) {
   else if (sizeof(long) == sizeof(long long)) {
     AddInteger((unsigned long long)I);
   } else {
-    llvm_unreachable("unexpected sizeof(long)");
+    llvm37_unreachable("unexpected sizeof(long)");
   }
 }
 void FoldingSetNodeID::AddInteger(long long I) {

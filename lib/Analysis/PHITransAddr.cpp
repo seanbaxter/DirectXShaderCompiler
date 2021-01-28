@@ -1,6 +1,6 @@
 //===- PHITransAddr.cpp - PHI Translation for Addresses -------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,16 +11,16 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Analysis/PHITransAddr.h"
-#include "llvm/Analysis/InstructionSimplify.h"
-#include "llvm/Analysis/ValueTracking.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/Dominators.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/raw_ostream.h"
-using namespace llvm;
+#include "llvm37/Analysis/PHITransAddr.h"
+#include "llvm37/Analysis/InstructionSimplify.h"
+#include "llvm37/Analysis/ValueTracking.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/Dominators.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/raw_ostream.h"
+using namespace llvm37;
 
 static bool CanPHITrans(Instruction *Inst) {
   if (isa<PHINode>(Inst) ||
@@ -41,7 +41,7 @@ static bool CanPHITrans(Instruction *Inst) {
   return false;
 }
 
-#if !defined(NDEBUG) || defined(LLVM_ENABLE_DUMP)
+#if !defined(NDEBUG) || defined(LLVM37_ENABLE_DUMP)
 void PHITransAddr::dump() const {
   if (!Addr) {
     dbgs() << "PHITransAddr: null\n";
@@ -74,7 +74,7 @@ static bool VerifySubExpr(Value *Expr,
   if (!CanPHITrans(I)) {
     errs() << "Instruction in PHITransAddr is not phi-translatable:\n";
     errs() << *I << '\n';
-    llvm_unreachable("Either something is missing from InstInputs or "
+    llvm37_unreachable("Either something is missing from InstInputs or "
                      "CanPHITrans is wrong.");
   }
 
@@ -101,7 +101,7 @@ bool PHITransAddr::Verify() const {
     errs() << "PHITransAddr contains extra instructions:\n";
     for (unsigned i = 0, e = InstInputs.size(); i != e; ++i)
       errs() << "  InstInput #" << i << " is " << *InstInputs[i] << "\n";
-    llvm_unreachable("This is unexpected.");
+    llvm37_unreachable("This is unexpected.");
   }
 
   // a-ok.

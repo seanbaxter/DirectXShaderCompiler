@@ -1,4 +1,4 @@
-llvm-config - Print LLVM compilation options
+llvm-config - Print LLVM37 compilation options
 ============================================
 
 
@@ -13,9 +13,9 @@ DESCRIPTION
 -----------
 
 
-**llvm-config** makes it easier to build applications that use LLVM.  It can
+**llvm-config** makes it easier to build applications that use LLVM37.  It can
 print the compiler flags, linker flags and object libraries needed to link
-against LLVM.
+against LLVM37.
 
 
 EXAMPLES
@@ -40,7 +40,7 @@ OPTIONS
 
 **--version**
 
- Print the version number of LLVM.
+ Print the version number of LLVM37.
 
 
 
@@ -52,55 +52,55 @@ OPTIONS
 
 **--prefix**
 
- Print the installation prefix for LLVM.
+ Print the installation prefix for LLVM37.
 
 
 
 **--src-root**
 
- Print the source root from which LLVM was built.
+ Print the source root from which LLVM37 was built.
 
 
 
 **--obj-root**
 
- Print the object root used to build LLVM.
+ Print the object root used to build LLVM37.
 
 
 
 **--bindir**
 
- Print the installation directory for LLVM binaries.
+ Print the installation directory for LLVM37 binaries.
 
 
 
 **--includedir**
 
- Print the installation directory for LLVM headers.
+ Print the installation directory for LLVM37 headers.
 
 
 
 **--libdir**
 
- Print the installation directory for LLVM libraries.
+ Print the installation directory for LLVM37 libraries.
 
 
 
 **--cxxflags**
 
- Print the C++ compiler flags needed to use LLVM headers.
+ Print the C++ compiler flags needed to use LLVM37 headers.
 
 
 
 **--ldflags**
 
- Print the flags needed to link against LLVM libraries.
+ Print the flags needed to link against LLVM37 libraries.
 
 
 
 **--libs**
 
- Print all the libraries needed to link against the specified LLVM
+ Print all the libraries needed to link against the specified LLVM37
  *components*, including any dependencies.
 
 
@@ -109,7 +109,7 @@ OPTIONS
 
  Similar to **--libs**, but prints the bare filenames of the libraries
  without **-l** or pathnames.  Useful for linking against a not-yet-installed
- copy of LLVM.
+ copy of LLVM37.
 
 
 
@@ -129,13 +129,13 @@ OPTIONS
 
 **--targets-built**
 
- Print the component names for all targets supported by this copy of LLVM.
+ Print the component names for all targets supported by this copy of LLVM37.
 
 
 
 **--build-mode**
 
- Print the build mode used when LLVM was built (e.g. Debug or Release)
+ Print the build mode used when LLVM37 was built (e.g. Debug or Release)
 
 
 
@@ -145,13 +145,13 @@ COMPONENTS
 
 
 To print a list of all available components, run **llvm-config
---components**.  In most cases, components correspond directly to LLVM
+--components**.  In most cases, components correspond directly to LLVM37
 libraries.  Useful "virtual" components include:
 
 
 **all**
 
- Includes all LLVM libraries.  The default if no components are specified.
+ Includes all LLVM37 libraries.  The default if no components are specified.
 
 
 

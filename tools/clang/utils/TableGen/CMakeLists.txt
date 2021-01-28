@@ -1,4 +1,4 @@
-set(LLVM_LINK_COMPONENTS Support MSSupport) # HLSL Change
+set(LLVM37_LINK_COMPONENTS Support MSSupport) # HLSL Change
 
 add_tablegen(clang-tblgen CLANG
   ClangASTNodesEmitter.cpp

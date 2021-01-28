@@ -1,9 +1,9 @@
-add_llvm_library(LLVMLTO
+add_llvm_library(LLVM37LTO
   LTOModule.cpp
   LTOCodeGenerator.cpp
 
   ADDITIONAL_HEADER_DIRS
-  ${LLVM_MAIN_INCLUDE_DIR}/llvm/LTO
+  ${LLVM37_MAIN_INCLUDE_DIR}/llvm37/LTO
   )
 
-add_dependencies(LLVMLTO intrinsics_gen)
+add_dependencies(LLVM37LTO intrinsics_gen)

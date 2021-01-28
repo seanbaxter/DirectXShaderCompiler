@@ -1,34 +1,34 @@
-//===- AssumptionCache.cpp - Cache finding @llvm.assume calls -------------===//
+//===- AssumptionCache.cpp - Cache finding @llvm37.assume calls -------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 //
-// This file contains a pass that keeps track of @llvm.assume intrinsics in
+// This file contains a pass that keeps track of @llvm37.assume intrinsics in
 // the functions of a module.
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Analysis/AssumptionCache.h"
-#include "llvm/IR/CallSite.h"
-#include "llvm/IR/Dominators.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/IR/PassManager.h"
-#include "llvm/IR/PatternMatch.h"
-#include "llvm/Support/Debug.h"
-using namespace llvm;
-using namespace llvm::PatternMatch;
+#include "llvm37/Analysis/AssumptionCache.h"
+#include "llvm37/IR/CallSite.h"
+#include "llvm37/IR/Dominators.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/IR/PassManager.h"
+#include "llvm37/IR/PatternMatch.h"
+#include "llvm37/Support/Debug.h"
+using namespace llvm37;
+using namespace llvm37::PatternMatch;
 
 void AssumptionCache::scanFunction() {
   assert(!Scanned && "Tried to scan the function twice!");
   assert(AssumeHandles.empty() && "Already have assumes when scanning!");
 
-  // Go through all instructions in all blocks, add all calls to @llvm.assume
+  // Go through all instructions in all blocks, add all calls to @llvm37.assume
   // to this cache.
   for (BasicBlock &B : F)
     for (Instruction &II : B)
@@ -41,7 +41,7 @@ void AssumptionCache::scanFunction() {
 
 void AssumptionCache::registerAssumption(CallInst *CI) {
   assert(match(CI, m_Intrinsic<Intrinsic::assume>()) &&
-         "Registered call does not call @llvm.assume");
+         "Registered call does not call @llvm37.assume");
 
   // If we haven't scanned the function yet, just drop this assumption. It will
   // be found when we scan later.
@@ -52,9 +52,9 @@ void AssumptionCache::registerAssumption(CallInst *CI) {
 
 #ifndef NDEBUG
   assert(CI->getParent() &&
-         "Cannot register @llvm.assume call not in a basic block");
+         "Cannot register @llvm37.assume call not in a basic block");
   assert(&F == CI->getParent()->getParent() &&
-         "Cannot register @llvm.assume call not in this function");
+         "Cannot register @llvm37.assume call not in this function");
 
   // We expect the number of assumptions to be small, so in an asserts build
   // check that we don't accumulate duplicates and that all assumptions point
@@ -67,7 +67,7 @@ void AssumptionCache::registerAssumption(CallInst *CI) {
     assert(&F == cast<Instruction>(VH)->getParent()->getParent() &&
            "Cached assumption not inside this function!");
     assert(match(cast<CallInst>(VH), m_Intrinsic<Intrinsic::assume>()) &&
-           "Cached something other than a call to @llvm.assume!");
+           "Cached something other than a call to @llvm37.assume!");
     assert(AssumptionSet.insert(VH).second &&
            "Cache contains multiple copies of a call!");
   }
@@ -107,7 +107,7 @@ AssumptionCache &AssumptionCacheTracker::getAssumptionCache(Function &F) {
   // Ok, build a new cache by scanning the function, insert it and the value
   // handle into our map, and return the newly populated cache.
   auto IP = AssumptionCaches.insert(std::make_pair(
-      FunctionCallbackVH(&F, this), llvm::make_unique<AssumptionCache>(F)));
+      FunctionCallbackVH(&F, this), llvm37::make_unique<AssumptionCache>(F)));
   assert(IP.second && "Scanning function already in the map?");
   return *IP.first->second;
 }

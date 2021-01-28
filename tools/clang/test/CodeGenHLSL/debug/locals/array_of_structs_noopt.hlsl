@@ -7,8 +7,8 @@
 // CHECK-DAG: %[[intalloca:.*]] = alloca [2 x i32]
 // CHECK-DAG: %[[floatalloca:.*]] = alloca [2 x float]
 
-// CHECK-DAG: call void @llvm.dbg.declare(metadata [2 x i32]* %[[intalloca]], metadata !{{.*}}, metadata ![[intdiexpr:.*]]), !dbg !{{.*}}, !dx.dbg.varlayout ![[intlayout:.*]]
-// CHECK-DAG: call void @llvm.dbg.declare(metadata [2 x float]* %[[floatalloca]], metadata !{{.*}}, metadata ![[floatdiexpr:.*]]), !dbg !{{.*}}, !dx.dbg.varlayout ![[floatlayout:.*]]
+// CHECK-DAG: call void @llvm37.dbg.declare(metadata [2 x i32]* %[[intalloca]], metadata !{{.*}}, metadata ![[intdiexpr:.*]]), !dbg !{{.*}}, !dx.dbg.varlayout ![[intlayout:.*]]
+// CHECK-DAG: call void @llvm37.dbg.declare(metadata [2 x float]* %[[floatalloca]], metadata !{{.*}}, metadata ![[floatdiexpr:.*]]), !dbg !{{.*}}, !dx.dbg.varlayout ![[floatlayout:.*]]
 
 // Exclude quoted source file (see readme)
 // CHECK-LABEL: {{!"[^"]*\\0A[^"]*"}}

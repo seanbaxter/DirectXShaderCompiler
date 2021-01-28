@@ -1,22 +1,22 @@
 //===---------- PlistSupport.h - Plist Output Utilities ---------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_BASIC_PLISTSUPPORT_H
-#define LLVM_CLANG_BASIC_PLISTSUPPORT_H
+#ifndef LLVM37_CLANG_BASIC_PLISTSUPPORT_H
+#define LLVM37_CLANG_BASIC_PLISTSUPPORT_H
 
 #include "clang/Basic/FileManager.h"
 #include "clang/Basic/SourceManager.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/Support/raw_ostream.h"
 
 namespace clang {
 namespace markup {
-typedef llvm::DenseMap<FileID, unsigned> FIDMap;
+typedef llvm37::DenseMap<FileID, unsigned> FIDMap;
 
 inline void AddFID(FIDMap &FIDs, SmallVectorImpl<FileID> &V,
                    const SourceManager &SM, SourceLocation L) {

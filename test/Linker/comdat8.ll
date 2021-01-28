@@ -1,4 +1,4 @@
-; RUN: not llvm-link %s %p/Inputs/comdat8.ll -S -o - 2>&1 | FileCheck %s
+; RUN: not llvm37-link %s %p/Inputs/comdat8.ll -S -o - 2>&1 | FileCheck %s
 
 $c1 = comdat largest
 

@@ -1,6 +1,6 @@
 //===-- ExecutionEngineBindings.cpp - C bindings for EEs ------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,46 +11,46 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm-c/ExecutionEngine.h"
-#include "llvm/ExecutionEngine/ExecutionEngine.h"
-#include "llvm/ExecutionEngine/GenericValue.h"
-#include "llvm/ExecutionEngine/RTDyldMemoryManager.h"
-#include "llvm/IR/DerivedTypes.h"
-#include "llvm/IR/Module.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Target/TargetOptions.h"
+#include "llvm37-c/ExecutionEngine.h"
+#include "llvm37/ExecutionEngine/ExecutionEngine.h"
+#include "llvm37/ExecutionEngine/GenericValue.h"
+#include "llvm37/ExecutionEngine/RTDyldMemoryManager.h"
+#include "llvm37/IR/DerivedTypes.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Target/TargetOptions.h"
 #include <cstring>
 
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "jit"
 
 // Wrapping the C bindings types.
-DEFINE_SIMPLE_CONVERSION_FUNCTIONS(GenericValue, LLVMGenericValueRef)
+DEFINE_SIMPLE_CONVERSION_FUNCTIONS(GenericValue, LLVM37GenericValueRef)
 
 
-inline LLVMTargetMachineRef wrap(const TargetMachine *P) {
+inline LLVM37TargetMachineRef wrap(const TargetMachine *P) {
   return
-  reinterpret_cast<LLVMTargetMachineRef>(const_cast<TargetMachine*>(P));
+  reinterpret_cast<LLVM37TargetMachineRef>(const_cast<TargetMachine*>(P));
 }
 
 /*===-- Operations on generic values --------------------------------------===*/
 
-LLVMGenericValueRef LLVMCreateGenericValueOfInt(LLVMTypeRef Ty,
+LLVM37GenericValueRef LLVM37CreateGenericValueOfInt(LLVM37TypeRef Ty,
                                                 unsigned long long N,
-                                                LLVMBool IsSigned) {
+                                                LLVM37Bool IsSigned) {
   GenericValue *GenVal = new GenericValue();
   GenVal->IntVal = APInt(unwrap<IntegerType>(Ty)->getBitWidth(), N, IsSigned);
   return wrap(GenVal);
 }
 
-LLVMGenericValueRef LLVMCreateGenericValueOfPointer(void *P) {
+LLVM37GenericValueRef LLVM37CreateGenericValueOfPointer(void *P) {
   GenericValue *GenVal = new GenericValue();
   GenVal->PointerVal = P;
   return wrap(GenVal);
 }
 
-LLVMGenericValueRef LLVMCreateGenericValueOfFloat(LLVMTypeRef TyRef, double N) {
+LLVM37GenericValueRef LLVM37CreateGenericValueOfFloat(LLVM37TypeRef TyRef, double N) {
   GenericValue *GenVal = new GenericValue();
   switch (unwrap(TyRef)->getTypeID()) {
   case Type::FloatTyID:
@@ -60,17 +60,17 @@ LLVMGenericValueRef LLVMCreateGenericValueOfFloat(LLVMTypeRef TyRef, double N) {
     GenVal->DoubleVal = N;
     break;
   default:
-    llvm_unreachable("LLVMGenericValueToFloat supports only float and double.");
+    llvm37_unreachable("LLVM37GenericValueToFloat supports only float and double.");
   }
   return wrap(GenVal);
 }
 
-unsigned LLVMGenericValueIntWidth(LLVMGenericValueRef GenValRef) {
+unsigned LLVM37GenericValueIntWidth(LLVM37GenericValueRef GenValRef) {
   return unwrap(GenValRef)->IntVal.getBitWidth();
 }
 
-unsigned long long LLVMGenericValueToInt(LLVMGenericValueRef GenValRef,
-                                         LLVMBool IsSigned) {
+unsigned long long LLVM37GenericValueToInt(LLVM37GenericValueRef GenValRef,
+                                         LLVM37Bool IsSigned) {
   GenericValue *GenVal = unwrap(GenValRef);
   if (IsSigned)
     return GenVal->IntVal.getSExtValue();
@@ -78,29 +78,29 @@ unsigned long long LLVMGenericValueToInt(LLVMGenericValueRef GenValRef,
     return GenVal->IntVal.getZExtValue();
 }
 
-void *LLVMGenericValueToPointer(LLVMGenericValueRef GenVal) {
+void *LLVM37GenericValueToPointer(LLVM37GenericValueRef GenVal) {
   return unwrap(GenVal)->PointerVal;
 }
 
-double LLVMGenericValueToFloat(LLVMTypeRef TyRef, LLVMGenericValueRef GenVal) {
+double LLVM37GenericValueToFloat(LLVM37TypeRef TyRef, LLVM37GenericValueRef GenVal) {
   switch (unwrap(TyRef)->getTypeID()) {
   case Type::FloatTyID:
     return unwrap(GenVal)->FloatVal;
   case Type::DoubleTyID:
     return unwrap(GenVal)->DoubleVal;
   default:
-    llvm_unreachable("LLVMGenericValueToFloat supports only float and double.");
+    llvm37_unreachable("LLVM37GenericValueToFloat supports only float and double.");
   }
 }
 
-void LLVMDisposeGenericValue(LLVMGenericValueRef GenVal) {
+void LLVM37DisposeGenericValue(LLVM37GenericValueRef GenVal) {
   delete unwrap(GenVal);
 }
 
 /*===-- Operations on execution engines -----------------------------------===*/
 
-LLVMBool LLVMCreateExecutionEngineForModule(LLVMExecutionEngineRef *OutEE,
-                                            LLVMModuleRef M,
+LLVM37Bool LLVM37CreateExecutionEngineForModule(LLVM37ExecutionEngineRef *OutEE,
+                                            LLVM37ModuleRef M,
                                             char **OutError) {
   std::string Error;
   EngineBuilder builder(std::unique_ptr<Module>(unwrap(M)));
@@ -114,8 +114,8 @@ LLVMBool LLVMCreateExecutionEngineForModule(LLVMExecutionEngineRef *OutEE,
   return 1;
 }
 
-LLVMBool LLVMCreateInterpreterForModule(LLVMExecutionEngineRef *OutInterp,
-                                        LLVMModuleRef M,
+LLVM37Bool LLVM37CreateInterpreterForModule(LLVM37ExecutionEngineRef *OutInterp,
+                                        LLVM37ModuleRef M,
                                         char **OutError) {
   std::string Error;
   EngineBuilder builder(std::unique_ptr<Module>(unwrap(M)));
@@ -129,8 +129,8 @@ LLVMBool LLVMCreateInterpreterForModule(LLVMExecutionEngineRef *OutInterp,
   return 1;
 }
 
-LLVMBool LLVMCreateJITCompilerForModule(LLVMExecutionEngineRef *OutJIT,
-                                        LLVMModuleRef M,
+LLVM37Bool LLVM37CreateJITCompilerForModule(LLVM37ExecutionEngineRef *OutJIT,
+                                        LLVM37ModuleRef M,
                                         unsigned OptLevel,
                                         char **OutError) {
   std::string Error;
@@ -146,27 +146,27 @@ LLVMBool LLVMCreateJITCompilerForModule(LLVMExecutionEngineRef *OutJIT,
   return 1;
 }
 
-void LLVMInitializeMCJITCompilerOptions(LLVMMCJITCompilerOptions *PassedOptions,
+void LLVM37InitializeMCJITCompilerOptions(LLVM37MCJITCompilerOptions *PassedOptions,
                                         size_t SizeOfPassedOptions) {
-  LLVMMCJITCompilerOptions options;
+  LLVM37MCJITCompilerOptions options;
   memset(&options, 0, sizeof(options)); // Most fields are zero by default.
-  options.CodeModel = LLVMCodeModelJITDefault;
+  options.CodeModel = LLVM37CodeModelJITDefault;
   
   memcpy(PassedOptions, &options,
          std::min(sizeof(options), SizeOfPassedOptions));
 }
 
-LLVMBool LLVMCreateMCJITCompilerForModule(
-    LLVMExecutionEngineRef *OutJIT, LLVMModuleRef M,
-    LLVMMCJITCompilerOptions *PassedOptions, size_t SizeOfPassedOptions,
+LLVM37Bool LLVM37CreateMCJITCompilerForModule(
+    LLVM37ExecutionEngineRef *OutJIT, LLVM37ModuleRef M,
+    LLVM37MCJITCompilerOptions *PassedOptions, size_t SizeOfPassedOptions,
     char **OutError) {
-  LLVMMCJITCompilerOptions options;
+  LLVM37MCJITCompilerOptions options;
   // If the user passed a larger sized options struct, then they were compiled
-  // against a newer LLVM. Tell them that something is wrong.
+  // against a newer LLVM37. Tell them that something is wrong.
   if (SizeOfPassedOptions > sizeof(options)) {
     *OutError = strdup(
       "Refusing to use options struct that is larger than my own; assuming "
-      "LLVM library mismatch.");
+      "LLVM37 library mismatch.");
     return 1;
   }
   
@@ -174,7 +174,7 @@ LLVMBool LLVMCreateMCJITCompilerForModule(
   // any fields they didn't see are cleared. We must defend against fields being
   // set to the bitwise equivalent of zero, and assume that this means "do the
   // default" as if that option hadn't been available.
-  LLVMInitializeMCJITCompilerOptions(&options, sizeof(options));
+  LLVM37InitializeMCJITCompilerOptions(&options, sizeof(options));
   memcpy(&options, PassedOptions, SizeOfPassedOptions);
   
   TargetOptions targetOptions;
@@ -210,48 +210,48 @@ LLVMBool LLVMCreateMCJITCompilerForModule(
   return 1;
 }
 
-LLVMBool LLVMCreateExecutionEngine(LLVMExecutionEngineRef *OutEE,
-                                   LLVMModuleProviderRef MP,
+LLVM37Bool LLVM37CreateExecutionEngine(LLVM37ExecutionEngineRef *OutEE,
+                                   LLVM37ModuleProviderRef MP,
                                    char **OutError) {
   /* The module provider is now actually a module. */
-  return LLVMCreateExecutionEngineForModule(OutEE,
-                                            reinterpret_cast<LLVMModuleRef>(MP),
+  return LLVM37CreateExecutionEngineForModule(OutEE,
+                                            reinterpret_cast<LLVM37ModuleRef>(MP),
                                             OutError);
 }
 
-LLVMBool LLVMCreateInterpreter(LLVMExecutionEngineRef *OutInterp,
-                               LLVMModuleProviderRef MP,
+LLVM37Bool LLVM37CreateInterpreter(LLVM37ExecutionEngineRef *OutInterp,
+                               LLVM37ModuleProviderRef MP,
                                char **OutError) {
   /* The module provider is now actually a module. */
-  return LLVMCreateInterpreterForModule(OutInterp,
-                                        reinterpret_cast<LLVMModuleRef>(MP),
+  return LLVM37CreateInterpreterForModule(OutInterp,
+                                        reinterpret_cast<LLVM37ModuleRef>(MP),
                                         OutError);
 }
 
-LLVMBool LLVMCreateJITCompiler(LLVMExecutionEngineRef *OutJIT,
-                               LLVMModuleProviderRef MP,
+LLVM37Bool LLVM37CreateJITCompiler(LLVM37ExecutionEngineRef *OutJIT,
+                               LLVM37ModuleProviderRef MP,
                                unsigned OptLevel,
                                char **OutError) {
   /* The module provider is now actually a module. */
-  return LLVMCreateJITCompilerForModule(OutJIT,
-                                        reinterpret_cast<LLVMModuleRef>(MP),
+  return LLVM37CreateJITCompilerForModule(OutJIT,
+                                        reinterpret_cast<LLVM37ModuleRef>(MP),
                                         OptLevel, OutError);
 }
 
 
-void LLVMDisposeExecutionEngine(LLVMExecutionEngineRef EE) {
+void LLVM37DisposeExecutionEngine(LLVM37ExecutionEngineRef EE) {
   delete unwrap(EE);
 }
 
-void LLVMRunStaticConstructors(LLVMExecutionEngineRef EE) {
+void LLVM37RunStaticConstructors(LLVM37ExecutionEngineRef EE) {
   unwrap(EE)->runStaticConstructorsDestructors(false);
 }
 
-void LLVMRunStaticDestructors(LLVMExecutionEngineRef EE) {
+void LLVM37RunStaticDestructors(LLVM37ExecutionEngineRef EE) {
   unwrap(EE)->runStaticConstructorsDestructors(true);
 }
 
-int LLVMRunFunctionAsMain(LLVMExecutionEngineRef EE, LLVMValueRef F,
+int LLVM37RunFunctionAsMain(LLVM37ExecutionEngineRef EE, LLVM37ValueRef F,
                           unsigned ArgC, const char * const *ArgV,
                           const char * const *EnvP) {
   unwrap(EE)->finalizeObject();
@@ -260,9 +260,9 @@ int LLVMRunFunctionAsMain(LLVMExecutionEngineRef EE, LLVMValueRef F,
   return unwrap(EE)->runFunctionAsMain(unwrap<Function>(F), ArgVec, EnvP);
 }
 
-LLVMGenericValueRef LLVMRunFunction(LLVMExecutionEngineRef EE, LLVMValueRef F,
+LLVM37GenericValueRef LLVM37RunFunction(LLVM37ExecutionEngineRef EE, LLVM37ValueRef F,
                                     unsigned NumArgs,
-                                    LLVMGenericValueRef *Args) {
+                                    LLVM37GenericValueRef *Args) {
   unwrap(EE)->finalizeObject();
   
   std::vector<GenericValue> ArgVec;
@@ -275,36 +275,36 @@ LLVMGenericValueRef LLVMRunFunction(LLVMExecutionEngineRef EE, LLVMValueRef F,
   return wrap(Result);
 }
 
-void LLVMFreeMachineCodeForFunction(LLVMExecutionEngineRef EE, LLVMValueRef F) {
+void LLVM37FreeMachineCodeForFunction(LLVM37ExecutionEngineRef EE, LLVM37ValueRef F) {
 }
 
-void LLVMAddModule(LLVMExecutionEngineRef EE, LLVMModuleRef M){
+void LLVM37AddModule(LLVM37ExecutionEngineRef EE, LLVM37ModuleRef M){
   unwrap(EE)->addModule(std::unique_ptr<Module>(unwrap(M)));
 }
 
-void LLVMAddModuleProvider(LLVMExecutionEngineRef EE, LLVMModuleProviderRef MP){
+void LLVM37AddModuleProvider(LLVM37ExecutionEngineRef EE, LLVM37ModuleProviderRef MP){
   /* The module provider is now actually a module. */
-  LLVMAddModule(EE, reinterpret_cast<LLVMModuleRef>(MP));
+  LLVM37AddModule(EE, reinterpret_cast<LLVM37ModuleRef>(MP));
 }
 
-LLVMBool LLVMRemoveModule(LLVMExecutionEngineRef EE, LLVMModuleRef M,
-                          LLVMModuleRef *OutMod, char **OutError) {
+LLVM37Bool LLVM37RemoveModule(LLVM37ExecutionEngineRef EE, LLVM37ModuleRef M,
+                          LLVM37ModuleRef *OutMod, char **OutError) {
   Module *Mod = unwrap(M);
   unwrap(EE)->removeModule(Mod);
   *OutMod = wrap(Mod);
   return 0;
 }
 
-LLVMBool LLVMRemoveModuleProvider(LLVMExecutionEngineRef EE,
-                                  LLVMModuleProviderRef MP,
-                                  LLVMModuleRef *OutMod, char **OutError) {
+LLVM37Bool LLVM37RemoveModuleProvider(LLVM37ExecutionEngineRef EE,
+                                  LLVM37ModuleProviderRef MP,
+                                  LLVM37ModuleRef *OutMod, char **OutError) {
   /* The module provider is now actually a module. */
-  return LLVMRemoveModule(EE, reinterpret_cast<LLVMModuleRef>(MP), OutMod,
+  return LLVM37RemoveModule(EE, reinterpret_cast<LLVM37ModuleRef>(MP), OutMod,
                           OutError);
 }
 
-LLVMBool LLVMFindFunction(LLVMExecutionEngineRef EE, const char *Name,
-                          LLVMValueRef *OutFn) {
+LLVM37Bool LLVM37FindFunction(LLVM37ExecutionEngineRef EE, const char *Name,
+                          LLVM37ValueRef *OutFn) {
   if (Function *F = unwrap(EE)->FindFunctionNamed(Name)) {
     *OutFn = wrap(F);
     return 0;
@@ -312,36 +312,36 @@ LLVMBool LLVMFindFunction(LLVMExecutionEngineRef EE, const char *Name,
   return 1;
 }
 
-void *LLVMRecompileAndRelinkFunction(LLVMExecutionEngineRef EE,
-                                     LLVMValueRef Fn) {
+void *LLVM37RecompileAndRelinkFunction(LLVM37ExecutionEngineRef EE,
+                                     LLVM37ValueRef Fn) {
   return nullptr;
 }
 
-LLVMTargetDataRef LLVMGetExecutionEngineTargetData(LLVMExecutionEngineRef EE) {
+LLVM37TargetDataRef LLVM37GetExecutionEngineTargetData(LLVM37ExecutionEngineRef EE) {
   return wrap(unwrap(EE)->getDataLayout());
 }
 
-LLVMTargetMachineRef
-LLVMGetExecutionEngineTargetMachine(LLVMExecutionEngineRef EE) {
+LLVM37TargetMachineRef
+LLVM37GetExecutionEngineTargetMachine(LLVM37ExecutionEngineRef EE) {
   return wrap(unwrap(EE)->getTargetMachine());
 }
 
-void LLVMAddGlobalMapping(LLVMExecutionEngineRef EE, LLVMValueRef Global,
+void LLVM37AddGlobalMapping(LLVM37ExecutionEngineRef EE, LLVM37ValueRef Global,
                           void* Addr) {
   unwrap(EE)->addGlobalMapping(unwrap<GlobalValue>(Global), Addr);
 }
 
-void *LLVMGetPointerToGlobal(LLVMExecutionEngineRef EE, LLVMValueRef Global) {
+void *LLVM37GetPointerToGlobal(LLVM37ExecutionEngineRef EE, LLVM37ValueRef Global) {
   unwrap(EE)->finalizeObject();
   
   return unwrap(EE)->getPointerToGlobal(unwrap<GlobalValue>(Global));
 }
 
-uint64_t LLVMGetGlobalValueAddress(LLVMExecutionEngineRef EE, const char *Name) {
+uint64_t LLVM37GetGlobalValueAddress(LLVM37ExecutionEngineRef EE, const char *Name) {
   return unwrap(EE)->getGlobalValueAddress(Name);
 }
 
-uint64_t LLVMGetFunctionAddress(LLVMExecutionEngineRef EE, const char *Name) {
+uint64_t LLVM37GetFunctionAddress(LLVM37ExecutionEngineRef EE, const char *Name) {
   return unwrap(EE)->getFunctionAddress(Name);
 }
 
@@ -350,10 +350,10 @@ uint64_t LLVMGetFunctionAddress(LLVMExecutionEngineRef EE, const char *Name) {
 namespace {
 
 struct SimpleBindingMMFunctions {
-  LLVMMemoryManagerAllocateCodeSectionCallback AllocateCodeSection;
-  LLVMMemoryManagerAllocateDataSectionCallback AllocateDataSection;
-  LLVMMemoryManagerFinalizeMemoryCallback FinalizeMemory;
-  LLVMMemoryManagerDestroyCallback Destroy;
+  LLVM37MemoryManagerAllocateCodeSectionCallback AllocateCodeSection;
+  LLVM37MemoryManagerAllocateDataSectionCallback AllocateDataSection;
+  LLVM37MemoryManagerFinalizeMemoryCallback FinalizeMemory;
+  LLVM37MemoryManagerDestroyCallback Destroy;
 };
 
 class SimpleBindingMemoryManager : public RTDyldMemoryManager {
@@ -425,12 +425,12 @@ bool SimpleBindingMemoryManager::finalizeMemory(std::string *ErrMsg) {
 
 } // anonymous namespace
 
-LLVMMCJITMemoryManagerRef LLVMCreateSimpleMCJITMemoryManager(
+LLVM37MCJITMemoryManagerRef LLVM37CreateSimpleMCJITMemoryManager(
   void *Opaque,
-  LLVMMemoryManagerAllocateCodeSectionCallback AllocateCodeSection,
-  LLVMMemoryManagerAllocateDataSectionCallback AllocateDataSection,
-  LLVMMemoryManagerFinalizeMemoryCallback FinalizeMemory,
-  LLVMMemoryManagerDestroyCallback Destroy) {
+  LLVM37MemoryManagerAllocateCodeSectionCallback AllocateCodeSection,
+  LLVM37MemoryManagerAllocateDataSectionCallback AllocateDataSection,
+  LLVM37MemoryManagerFinalizeMemoryCallback FinalizeMemory,
+  LLVM37MemoryManagerDestroyCallback Destroy) {
   
   if (!AllocateCodeSection || !AllocateDataSection || !FinalizeMemory ||
       !Destroy)
@@ -444,7 +444,7 @@ LLVMMCJITMemoryManagerRef LLVMCreateSimpleMCJITMemoryManager(
   return wrap(new SimpleBindingMemoryManager(functions, Opaque));
 }
 
-void LLVMDisposeMCJITMemoryManager(LLVMMCJITMemoryManagerRef MM) {
+void LLVM37DisposeMCJITMemoryManager(LLVM37MCJITMemoryManagerRef MM) {
   delete unwrap(MM);
 }
 

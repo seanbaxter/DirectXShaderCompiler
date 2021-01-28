@@ -1,17 +1,17 @@
 //===- FileTestFixute.h ---- Test Fixture for File Check style tests ------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_UNITTESTS_SPIRV_FILE_TEST_FIXTURE_H
-#define LLVM_CLANG_UNITTESTS_SPIRV_FILE_TEST_FIXTURE_H
+#ifndef LLVM37_CLANG_UNITTESTS_SPIRV_FILE_TEST_FIXTURE_H
+#define LLVM37_CLANG_UNITTESTS_SPIRV_FILE_TEST_FIXTURE_H
 
 #include "spirv-tools/libspirv.h"
-#include "llvm/ADT/StringRef.h"
+#include "llvm37/ADT/StringRef.h"
 #include "gtest/gtest.h"
 
 namespace clang {
@@ -37,7 +37,7 @@ public:
   void setScalarLayout() { scalarLayout = true; }
 
   /// \brief Runs a File Test! (See class description for more info)
-  void runFileTest(llvm::StringRef path, Expect expect = Expect::Success,
+  void runFileTest(llvm37::StringRef path, Expect expect = Expect::Success,
                    bool runValidation = true);
 
 private:

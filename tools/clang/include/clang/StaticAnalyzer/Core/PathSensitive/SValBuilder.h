@@ -1,6 +1,6 @@
 // SValBuilder.h - Construction of SVals from evaluating expressions -*- C++ -*-
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -12,8 +12,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_STATICANALYZER_CORE_PATHSENSITIVE_SVALBUILDER_H
-#define LLVM_CLANG_STATICANALYZER_CORE_PATHSENSITIVE_SVALBUILDER_H
+#ifndef LLVM37_CLANG_STATICANALYZER_CORE_PATHSENSITIVE_SVALBUILDER_H
+#define LLVM37_CLANG_STATICANALYZER_CORE_PATHSENSITIVE_SVALBUILDER_H
 
 #include "clang/AST/ASTContext.h"
 #include "clang/AST/Expr.h"
@@ -59,7 +59,7 @@ public:
   virtual SVal dispatchCast(SVal val, QualType castTy) = 0;
 
 public:
-  SValBuilder(llvm::BumpPtrAllocator &alloc, ASTContext &context,
+  SValBuilder(llvm37::BumpPtrAllocator &alloc, ASTContext &context,
               ProgramStateManager &stateMgr)
     : Context(context), BasicVals(context, alloc),
       SymMgr(context, BasicVals, alloc),
@@ -106,7 +106,7 @@ public:
 
   /// Evaluates a given SVal. If the SVal has only one possible (integer) value,
   /// that value is returned. Otherwise, returns NULL.
-  virtual const llvm::APSInt *getKnownValue(ProgramStateRef state, SVal val) = 0;
+  virtual const llvm37::APSInt *getKnownValue(ProgramStateRef state, SVal val) = 0;
   
   /// Constructs a symbolic expression for two non-location values.
   SVal makeSymExprValNN(ProgramStateRef state, BinaryOperator::Opcode op,
@@ -209,7 +209,7 @@ public:
   /// If \p E is not a constant or cannot be modeled, returns \c None.
   Optional<SVal> getConstantVal(const Expr *E);
 
-  NonLoc makeCompoundVal(QualType type, llvm::ImmutableList<SVal> vals) {
+  NonLoc makeCompoundVal(QualType type, llvm37::ImmutableList<SVal> vals) {
     return nonloc::CompoundVal(BasicVals.getCompoundValData(type, vals));
   }
 
@@ -241,15 +241,15 @@ public:
 
   nonloc::ConcreteInt makeBoolVal(const CXXBoolLiteralExpr *boolean);
 
-  nonloc::ConcreteInt makeIntVal(const llvm::APSInt& integer) {
+  nonloc::ConcreteInt makeIntVal(const llvm37::APSInt& integer) {
     return nonloc::ConcreteInt(BasicVals.getValue(integer));
   }
 
-  loc::ConcreteInt makeIntLocVal(const llvm::APSInt &integer) {
+  loc::ConcreteInt makeIntLocVal(const llvm37::APSInt &integer) {
     return loc::ConcreteInt(BasicVals.getValue(integer));
   }
 
-  NonLoc makeIntVal(const llvm::APInt& integer, bool isUnsigned) {
+  NonLoc makeIntVal(const llvm37::APInt& integer, bool isUnsigned) {
     return nonloc::ConcreteInt(BasicVals.getValue(integer, isUnsigned));
   }
 
@@ -274,9 +274,9 @@ public:
   }
 
   NonLoc makeNonLoc(const SymExpr *lhs, BinaryOperator::Opcode op,
-                    const llvm::APSInt& rhs, QualType type);
+                    const llvm37::APSInt& rhs, QualType type);
 
-  NonLoc makeNonLoc(const llvm::APSInt& rhs, BinaryOperator::Opcode op,
+  NonLoc makeNonLoc(const llvm37::APSInt& rhs, BinaryOperator::Opcode op,
                     const SymExpr *lhs, QualType type);
 
   NonLoc makeNonLoc(const SymExpr *lhs, BinaryOperator::Opcode op,
@@ -309,7 +309,7 @@ public:
     return loc::GotoLabel(expr->getLabel());
   }
 
-  Loc makeLoc(const llvm::APSInt& integer) {
+  Loc makeLoc(const llvm37::APSInt& integer) {
     return loc::ConcreteInt(BasicVals.getValue(integer));
   }
 
@@ -322,7 +322,7 @@ public:
                                const StackFrameContext *SFC);
 };
 
-SValBuilder* createSimpleSValBuilder(llvm::BumpPtrAllocator &alloc,
+SValBuilder* createSimpleSValBuilder(llvm37::BumpPtrAllocator &alloc,
                                      ASTContext &context,
                                      ProgramStateManager &stateMgr);
 

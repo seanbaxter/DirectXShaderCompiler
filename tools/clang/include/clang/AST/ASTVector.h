@@ -1,6 +1,6 @@
 //===- ASTVector.h - Vector that uses ASTContext for allocation  --*- C++ -*-=//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -15,13 +15,13 @@
 // FIXME: Most of this is copy-and-paste from BumpVector.h and SmallVector.h.
 // We can refactor this core logic into something common.
 
-#ifndef LLVM_CLANG_AST_ASTVECTOR_H
-#define LLVM_CLANG_AST_ASTVECTOR_H
+#ifndef LLVM37_CLANG_AST_ASTVECTOR_H
+#define LLVM37_CLANG_AST_ASTVECTOR_H
 
 #include "clang/AST/AttrIterator.h"
-#include "llvm/ADT/PointerIntPair.h"
-#include "llvm/Support/Allocator.h"
-#include "llvm/Support/type_traits.h"
+#include "llvm37/ADT/PointerIntPair.h"
+#include "llvm37/Support/Allocator.h"
+#include "llvm37/Support/type_traits.h"
 #include <algorithm>
 #include <cstring>
 #include <memory>
@@ -33,7 +33,7 @@ template<typename T>
 class ASTVector {
 private:
   T *Begin, *End;
-  llvm::PointerIntPair<T*, 1, bool> Capacity;
+  llvm37::PointerIntPair<T*, 1, bool> Capacity;
 
   void setEnd(T *P) { this->End = P; }
 
@@ -381,7 +381,7 @@ void ASTVector<T>::grow(const ASTContext &C, size_t MinSize) {
     NewCapacity = MinSize;
 
   // Allocate the memory from the ASTContext.
-  T *NewElts = new (C, llvm::alignOf<T>()) T[NewCapacity];
+  T *NewElts = new (C, llvm37::alignOf<T>()) T[NewCapacity];
 
   // Copy the elements over.
   if (Begin != End) {

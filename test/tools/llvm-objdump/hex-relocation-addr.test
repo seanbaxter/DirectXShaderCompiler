@@ -1,5 +1,5 @@
 // This test checks that relocation addresses are printed in hex
-// RUN: llvm-objdump -r %p/Inputs/win64-unwind.exe.coff-x86_64.obj | FileCheck %s
+// RUN: llvm37-objdump -r %p/Inputs/win64-unwind.exe.coff-x86_64.obj | FileCheck %s
 
 CHECK: RELOCATION RECORDS FOR [.pdata]:
 CHECK-NEXT: 0 IMAGE_REL_AMD64_ADDR32NB func

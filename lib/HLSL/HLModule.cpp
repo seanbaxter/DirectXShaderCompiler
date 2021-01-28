@@ -17,36 +17,36 @@
 #include "dxc/DXIL/DxilUtil.h"
 #include "dxc/Support/WinAdapter.h"
 
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/IRBuilder.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Metadata.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/DebugInfo.h"
-#include "llvm/IR/DIBuilder.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/IR/GetElementPtrTypeIterator.h"
-#include "llvm/Analysis/ValueTracking.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/IRBuilder.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/Metadata.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/DebugInfo.h"
+#include "llvm37/IR/DIBuilder.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/IR/GetElementPtrTypeIterator.h"
+#include "llvm37/Analysis/ValueTracking.h"
 
-using namespace llvm;
+using namespace llvm37;
 using std::string;
 using std::vector;
 using std::unique_ptr;
 
 namespace hlsl {
 
-// Avoid dependency on HLModule from llvm::Module using this:
-void HLModule_RemoveGlobal(llvm::Module* M, llvm::GlobalObject* G) {
+// Avoid dependency on HLModule from llvm37::Module using this:
+void HLModule_RemoveGlobal(llvm37::Module* M, llvm37::GlobalObject* G) {
   if (M && G && M->HasHLModule()) {
-    if (llvm::GlobalVariable *GV = dyn_cast<llvm::GlobalVariable>(G))
+    if (llvm37::GlobalVariable *GV = dyn_cast<llvm37::GlobalVariable>(G))
       M->GetHLModule().RemoveGlobal(GV);
-    else if (llvm::Function *F = dyn_cast<llvm::Function>(G))
+    else if (llvm37::Function *F = dyn_cast<llvm37::Function>(G))
       M->GetHLModule().RemoveFunction(F);
   }
 }
-void HLModule_ResetModule(llvm::Module* M) {
+void HLModule_ResetModule(llvm37::Module* M) {
   if (M && M->HasHLModule())
     delete &M->GetHLModule();
   M->SetHLModule(nullptr);
@@ -61,8 +61,8 @@ HLModule::HLModule(Module *pModule)
     , m_pModule(pModule)
     , m_pEntryFunc(nullptr)
     , m_EntryName("")
-    , m_pMDHelper(llvm::make_unique<DxilMDHelper>(
-          pModule, llvm::make_unique<HLExtraPropertyHelper>(pModule)))
+    , m_pMDHelper(llvm37::make_unique<DxilMDHelper>(
+          pModule, llvm37::make_unique<HLExtraPropertyHelper>(pModule)))
     , m_pDebugInfoFinder(nullptr)
     , m_pSM(nullptr)
     , m_DxilMajor(DXIL::kDxilMajor)
@@ -70,15 +70,15 @@ HLModule::HLModule(Module *pModule)
     , m_ValMajor(0)
     , m_ValMinor(0)
     , m_Float32DenormMode(DXIL::Float32DenormMode::Any)
-    , m_pOP(llvm::make_unique<OP>(pModule->getContext(), pModule))
+    , m_pOP(llvm37::make_unique<OP>(pModule->getContext(), pModule))
     , m_AutoBindingSpace(UINT_MAX)
     , m_DefaultLinkage(DXIL::DefaultLinkage::Default)
-    , m_pTypeSystem(llvm::make_unique<DxilTypeSystem>(pModule)) {
+    , m_pTypeSystem(llvm37::make_unique<DxilTypeSystem>(pModule)) {
   DXASSERT_NOMSG(m_pModule != nullptr);
   m_pModule->pfnRemoveGlobal = &HLModule_RemoveGlobal;
   m_pModule->pfnResetHLModule = &HLModule_ResetModule;
 
-  // Pin LLVM dump methods. TODO: make debug-only.
+  // Pin LLVM37 dump methods. TODO: make debug-only.
   void (__thiscall Module::*pfnModuleDump)() const = &Module::dump;
   void (__thiscall Type::*pfnTypeDump)() const = &Type::dump;
   m_pUnused = (char *)&pfnModuleDump - (char *)&pfnTypeDump;
@@ -89,7 +89,7 @@ HLModule::~HLModule() {
     m_pModule->pfnRemoveGlobal = nullptr;
 }
 
-LLVMContext &HLModule::GetCtx() const { return m_Ctx; }
+LLVM37Context &HLModule::GetCtx() const { return m_Ctx; }
 Module *HLModule::GetModule() const { return m_pModule; }
 OP *HLModule::GetOP() const { return m_pOP.get(); }
 
@@ -249,7 +249,7 @@ const vector<unique_ptr<HLResource> > &HLModule::GetUAVs() const {
   return m_UAVs;
 }
 
-void HLModule::RemoveFunction(llvm::Function *F) {
+void HLModule::RemoveFunction(llvm37::Function *F) {
   DXASSERT_NOMSG(F != nullptr);
   m_DxilFunctionPropsMap.erase(F);
   if (m_pTypeSystem.get()->GetFunctionAnnotation(F))
@@ -283,7 +283,7 @@ namespace {
   }
 }
 
-void HLModule::RemoveGlobal(llvm::GlobalVariable *GV) {
+void HLModule::RemoveGlobal(llvm37::GlobalVariable *GV) {
   DXASSERT_NOMSG(GV != nullptr);
 
   // With legacy resource reservation, we must keep unused resources around
@@ -343,14 +343,14 @@ DxilFunctionPropsMap &&HLModule::ReleaseFunctionPropsMap() {
   return std::move(m_DxilFunctionPropsMap);
 }
 
-void HLModule::EmitLLVMUsed() {
-  if (m_LLVMUsed.empty())
+void HLModule::EmitLLVM37Used() {
+  if (m_LLVM37Used.empty())
     return;
 
-  vector<llvm::Constant*> GVs;
-  GVs.resize(m_LLVMUsed.size());
-  for (size_t i = 0, e = m_LLVMUsed.size(); i != e; i++) {
-    GVs[i] = ConstantExpr::getAddrSpaceCast(cast<llvm::Constant>(&*m_LLVMUsed[i]), Type::getInt8PtrTy(m_Ctx));
+  vector<llvm37::Constant*> GVs;
+  GVs.resize(m_LLVM37Used.size());
+  for (size_t i = 0, e = m_LLVM37Used.size(); i != e; i++) {
+    GVs[i] = ConstantExpr::getAddrSpaceCast(cast<llvm37::Constant>(&*m_LLVM37Used[i]), Type::getInt8PtrTy(m_Ctx));
   }
 
   ArrayType *pATy = ArrayType::get(Type::getInt8PtrTy(m_Ctx), GVs.size());
@@ -363,23 +363,23 @@ void HLModule::EmitLLVMUsed() {
   pGV->setSection("llvm.metadata");
 }
 
-vector<GlobalVariable* > &HLModule::GetLLVMUsed() {
-  return m_LLVMUsed;
+vector<GlobalVariable* > &HLModule::GetLLVM37Used() {
+  return m_LLVM37Used;
 }
 
-bool HLModule::HasDxilFunctionProps(llvm::Function *F) {
+bool HLModule::HasDxilFunctionProps(llvm37::Function *F) {
   return m_DxilFunctionPropsMap.find(F) != m_DxilFunctionPropsMap.end();
 }
-DxilFunctionProps &HLModule::GetDxilFunctionProps(llvm::Function *F)  {
+DxilFunctionProps &HLModule::GetDxilFunctionProps(llvm37::Function *F)  {
   DXASSERT(m_DxilFunctionPropsMap.count(F) != 0, "cannot find F in map");
   return *m_DxilFunctionPropsMap[F];
 }
-void HLModule::AddDxilFunctionProps(llvm::Function *F, std::unique_ptr<DxilFunctionProps> &info) {
+void HLModule::AddDxilFunctionProps(llvm37::Function *F, std::unique_ptr<DxilFunctionProps> &info) {
   DXASSERT(m_DxilFunctionPropsMap.count(F) == 0, "F already in map, info will be overwritten");
   DXASSERT_NOMSG(info->shaderKind != DXIL::ShaderKind::Invalid);
   m_DxilFunctionPropsMap[F] = std::move(info);
 }
-void HLModule::SetPatchConstantFunctionForHS(llvm::Function *hullShaderFunc, llvm::Function *patchConstantFunc) {
+void HLModule::SetPatchConstantFunctionForHS(llvm37::Function *hullShaderFunc, llvm37::Function *patchConstantFunc) {
   auto propIter = m_DxilFunctionPropsMap.find(hullShaderFunc);
   DXASSERT(propIter != m_DxilFunctionPropsMap.end(), "else Hull Shader missing function props");
   DxilFunctionProps &props = *(propIter->second);
@@ -390,16 +390,16 @@ void HLModule::SetPatchConstantFunctionForHS(llvm::Function *hullShaderFunc, llv
   if (patchConstantFunc)
     m_PatchConstantFunctions.insert(patchConstantFunc);
 }
-bool HLModule::IsGraphicsShader(llvm::Function *F) {
+bool HLModule::IsGraphicsShader(llvm37::Function *F) {
   return HasDxilFunctionProps(F) && GetDxilFunctionProps(F).IsGraphics();
 }
-bool HLModule::IsPatchConstantShader(llvm::Function *F) {
+bool HLModule::IsPatchConstantShader(llvm37::Function *F) {
   return m_PatchConstantFunctions.count(F) != 0;
 }
-bool HLModule::IsComputeShader(llvm::Function *F) {
+bool HLModule::IsComputeShader(llvm37::Function *F) {
   return HasDxilFunctionProps(F) && GetDxilFunctionProps(F).IsCS();
 }
-bool HLModule::IsEntryThatUsesSignatures(llvm::Function *F) {
+bool HLModule::IsEntryThatUsesSignatures(llvm37::Function *F) {
   auto propIter = m_DxilFunctionPropsMap.find(F);
   if (propIter != m_DxilFunctionPropsMap.end()) {
     DxilFunctionProps &props = *(propIter->second);
@@ -408,7 +408,7 @@ bool HLModule::IsEntryThatUsesSignatures(llvm::Function *F) {
   // Otherwise, return true if patch constant function
   return IsPatchConstantShader(F);
 }
-bool HLModule::IsEntry(llvm::Function *F) {
+bool HLModule::IsEntry(llvm37::Function *F) {
   auto propIter = m_DxilFunctionPropsMap.find(F);
   if (propIter != m_DxilFunctionPropsMap.end()) {
     DXASSERT(propIter->second->shaderKind != DXIL::ShaderKind::Invalid,
@@ -419,10 +419,10 @@ bool HLModule::IsEntry(llvm::Function *F) {
   return IsPatchConstantShader(F);
 }
 
-DxilFunctionAnnotation *HLModule::GetFunctionAnnotation(llvm::Function *F) {
+DxilFunctionAnnotation *HLModule::GetFunctionAnnotation(llvm37::Function *F) {
   return m_pTypeSystem->GetFunctionAnnotation(F);
 }
-DxilFunctionAnnotation *HLModule::AddFunctionAnnotation(llvm::Function *F) {
+DxilFunctionAnnotation *HLModule::AddFunctionAnnotation(llvm37::Function *F) {
   DXASSERT(m_pTypeSystem->GetFunctionAnnotation(F)==nullptr, "function annotation already exist");
   return m_pTypeSystem->AddFunctionAnnotation(F);
 }
@@ -455,8 +455,8 @@ void HLModule::EmitHLMetadata() {
   MDTuple *pMDResources = EmitHLResources();
   MDTuple *pMDProperties = EmitHLShaderProperties();
 
-  m_pMDHelper->EmitDxilTypeSystem(GetTypeSystem(), m_LLVMUsed);
-  EmitLLVMUsed();
+  m_pMDHelper->EmitDxilTypeSystem(GetTypeSystem(), m_LLVM37Used);
+  EmitLLVM37Used();
   MDTuple *const pNullMDSig = nullptr;
   MDTuple *pEntry = m_pMDHelper->EmitDxilEntryPointTuple(GetEntryFunction(), m_EntryName, pNullMDSig, pMDResources, pMDProperties);
   vector<MDNode *> Entries;
@@ -493,11 +493,11 @@ void HLModule::LoadHLMetadata() {
   m_pMDHelper->LoadDxilShaderModel(m_pSM);
   m_SerializedRootSignature.clear();
 
-  const llvm::NamedMDNode *pEntries = m_pMDHelper->GetDxilEntryPoints();
+  const llvm37::NamedMDNode *pEntries = m_pMDHelper->GetDxilEntryPoints();
 
   Function *pEntryFunc;
   string EntryName;
-  const llvm::MDOperand *pSignatures, *pResources, *pProperties;
+  const llvm37::MDOperand *pSignatures, *pResources, *pProperties;
   m_pMDHelper->GetDxilEntryPoint(pEntries->getOperand(0), pEntryFunc, EntryName, pSignatures, pResources, pProperties);
 
   SetEntryFunction(pEntryFunc);
@@ -515,7 +515,7 @@ void HLModule::LoadHLMetadata() {
       MDTuple *pProps = dyn_cast<MDTuple>(fnProps->getOperand(propIdx++));
 
       std::unique_ptr<hlsl::DxilFunctionProps> props =
-          llvm::make_unique<hlsl::DxilFunctionProps>();
+          llvm37::make_unique<hlsl::DxilFunctionProps>();
 
       const Function *F = m_pMDHelper->LoadDxilFunctionProps(pProps, props.get());
 
@@ -544,7 +544,7 @@ void HLModule::LoadHLMetadata() {
   }
 }
 
-void HLModule::ClearHLMetadata(llvm::Module &M) {
+void HLModule::ClearHLMetadata(llvm37::Module &M) {
   Module::named_metadata_iterator
     b = M.named_metadata_begin(),
     e = M.named_metadata_end();
@@ -617,8 +617,8 @@ MDTuple *HLModule::EmitHLResources() {
   }
 }
 
-void HLModule::LoadHLResources(const llvm::MDOperand &MDO) {
-  const llvm::MDTuple *pSRVs, *pUAVs, *pCBuffers, *pSamplers;
+void HLModule::LoadHLResources(const llvm37::MDOperand &MDO) {
+  const llvm37::MDTuple *pSRVs, *pUAVs, *pCBuffers, *pSamplers;
   m_pMDHelper->GetDxilResources(MDO, pSRVs, pUAVs, pCBuffers, pSamplers);
 
   // Load SRV records.
@@ -642,7 +642,7 @@ void HLModule::LoadHLResources(const llvm::MDOperand &MDO) {
   // Load CBuffer records.
   if (pCBuffers != nullptr) {
     for (unsigned i = 0; i < pCBuffers->getNumOperands(); i++) {
-      unique_ptr<DxilCBuffer> pCB = llvm::make_unique<DxilCBuffer>();
+      unique_ptr<DxilCBuffer> pCB = llvm37::make_unique<DxilCBuffer>();
       m_pMDHelper->LoadDxilCBuffer(pCBuffers->getOperand(i), *pCB);
       AddCBuffer(std::move(pCB));
     }
@@ -698,15 +698,15 @@ MDNode *HLModule::DxilCBufferToMDNode(const DxilCBuffer &CB) {
 void HLModule::LoadDxilResourceBaseFromMDNode(MDNode *MD, DxilResourceBase &R) {
   return m_pMDHelper->LoadDxilResourceBaseFromMDNode(MD, R);
 }
-void HLModule::LoadDxilResourceFromMDNode(llvm::MDNode *MD, DxilResource &R) {
+void HLModule::LoadDxilResourceFromMDNode(llvm37::MDNode *MD, DxilResource &R) {
   return m_pMDHelper->LoadDxilResourceFromMDNode(MD, R);
 }
-void HLModule::LoadDxilSamplerFromMDNode(llvm::MDNode *MD, DxilSampler &S) {
+void HLModule::LoadDxilSamplerFromMDNode(llvm37::MDNode *MD, DxilSampler &S) {
   return m_pMDHelper->LoadDxilSamplerFromMDNode(MD, S);
 }
 
 DxilResourceBase *
-HLModule::AddResourceWithGlobalVariableAndProps(llvm::Constant *GV,
+HLModule::AddResourceWithGlobalVariableAndProps(llvm37::Constant *GV,
                                                  DxilResourceProperties &RP) {
   DxilResource::Class RC = RP.getResourceClass();
   DxilResource::Kind RK = RP.getResourceKind();
@@ -717,7 +717,7 @@ HLModule::AddResourceWithGlobalVariableAndProps(llvm::Constant *GV,
   DxilResourceBase *R = nullptr;
   switch (RC) {
   case DxilResource::Class::Sampler: {
-    std::unique_ptr<DxilSampler> S = llvm::make_unique<DxilSampler>();
+    std::unique_ptr<DxilSampler> S = llvm37::make_unique<DxilSampler>();
     if (RP.Basic.SamplerCmpOrHasCounter)
       S->SetSamplerKind(DxilSampler::SamplerKind::Comparison);
     else
@@ -730,7 +730,7 @@ HLModule::AddResourceWithGlobalVariableAndProps(llvm::Constant *GV,
     AddSampler(std::move(S));
   } break;
   case DxilResource::Class::SRV: {
-    std::unique_ptr<HLResource> Res = llvm::make_unique<HLResource>();
+    std::unique_ptr<HLResource> Res = llvm37::make_unique<HLResource>();
     if (DXIL::IsTyped(RP.getResourceKind())) {
       Res->SetCompType(RP.Typed.CompType);
     } else if (DXIL::IsStructuredBuffer(RK)) {
@@ -745,7 +745,7 @@ HLModule::AddResourceWithGlobalVariableAndProps(llvm::Constant *GV,
     AddSRV(std::move(Res));
   } break;
   case DxilResource::Class::UAV: {
-    std::unique_ptr<HLResource> Res = llvm::make_unique<HLResource>();
+    std::unique_ptr<HLResource> Res = llvm37::make_unique<HLResource>();
     if (DXIL::IsTyped(RK)) {
       Res->SetCompType(RP.Typed.CompType);
     } else if (DXIL::IsStructuredBuffer(RK)) {
@@ -919,7 +919,7 @@ unsigned HLModule::GetBindingForResourceInCB(GetElementPtrInst *CbPtr,
 }
 
 // TODO: Don't check names.
-bool HLModule::IsStreamOutputType(llvm::Type *Ty) {
+bool HLModule::IsStreamOutputType(llvm37::Type *Ty) {
   if (StructType *ST = dyn_cast<StructType>(Ty)) {
     StringRef name = ST->getName();
     if (name.startswith("class.PointStream"))
@@ -932,7 +932,7 @@ bool HLModule::IsStreamOutputType(llvm::Type *Ty) {
   return false;
 }
 
-bool HLModule::IsStreamOutputPtrType(llvm::Type *Ty) {
+bool HLModule::IsStreamOutputPtrType(llvm37::Type *Ty) {
   if (!Ty->isPointerTy())
     return false;
   Ty = Ty->getPointerElementType();
@@ -1035,7 +1035,7 @@ static Value *MergeGEP(GEPOperator *SrcGEP, GetElementPtrInst *GEP) {
                                      SrcGEP->getOperand(0), Indices,
                                      GEP->getName());
   else
-    llvm_unreachable("must merge");
+    llvm37_unreachable("must merge");
 }
 
 void HLModule::MergeGepUse(Value *V) {
@@ -1082,24 +1082,24 @@ CallInst *HLModule::EmitHLOperationCall(IRBuilder<> &Builder,
                                            HLOpcodeGroup group, unsigned opcode,
                                            Type *RetType,
                                            ArrayRef<Value *> paramList,
-                                           llvm::Module &M);
+                                           llvm37::Module &M);
 
 template<typename BuilderTy>
 CallInst *HLModule::EmitHLOperationCall(BuilderTy &Builder,
                                            HLOpcodeGroup group, unsigned opcode,
                                            Type *RetType,
                                            ArrayRef<Value *> paramList,
-                                           llvm::Module &M) {
-  SmallVector<llvm::Type *, 4> paramTyList;
+                                           llvm37::Module &M) {
+  SmallVector<llvm37::Type *, 4> paramTyList;
   // Add the opcode param
-  llvm::Type *opcodeTy = llvm::Type::getInt32Ty(M.getContext());
+  llvm37::Type *opcodeTy = llvm37::Type::getInt32Ty(M.getContext());
   paramTyList.emplace_back(opcodeTy);
   for (Value *param : paramList) {
     paramTyList.emplace_back(param->getType());
   }
 
-  llvm::FunctionType *funcTy =
-      llvm::FunctionType::get(RetType, paramTyList, false);
+  llvm37::FunctionType *funcTy =
+      llvm37::FunctionType::get(RetType, paramTyList, false);
 
   Function *opFunc = GetOrCreateHLFunction(M, funcTy, group, opcode);
 
@@ -1112,7 +1112,7 @@ CallInst *HLModule::EmitHLOperationCall(BuilderTy &Builder,
 }
 
 unsigned HLModule::GetNumericCastOp(
-  llvm::Type *SrcTy, bool SrcIsUnsigned, llvm::Type *DstTy, bool DstIsUnsigned) {
+  llvm37::Type *SrcTy, bool SrcIsUnsigned, llvm37::Type *DstTy, bool DstIsUnsigned) {
   DXASSERT(SrcTy != DstTy, "No-op conversions are not casts and should have been handled by the callee.");
   uint32_t SrcBitSize = SrcTy->getScalarSizeInBits();
   uint32_t DstBitSize = DstTy->getScalarSizeInBits();
@@ -1160,7 +1160,7 @@ void HLModule::ClearPreciseAttributeWithMetadata(Instruction *I) {
 }
 
 static void MarkPreciseAttribute(Function *F) {
-  LLVMContext &Ctx = F->getContext();
+  LLVM37Context &Ctx = F->getContext();
   MDNode *preciseNode = MDNode::get(
       Ctx, {MDString::get(Ctx, DxilMDHelper::kDxilPreciseAttributeMDName)});
 
@@ -1169,7 +1169,7 @@ static void MarkPreciseAttribute(Function *F) {
 
 template<typename BuilderTy>
 void HLModule::MarkPreciseAttributeOnValWithFunctionCall(
-    llvm::Value *V, BuilderTy &Builder, llvm::Module &M) {
+    llvm37::Value *V, BuilderTy &Builder, llvm37::Module &M) {
   Type *Ty = V->getType();
   Type *EltTy = Ty->getScalarType();
 
@@ -1196,8 +1196,8 @@ void HLModule::MarkPreciseAttributeOnValWithFunctionCall(
     Builder.CreateCall(preciseFunc, {V});
 }
 
-void HLModule::MarkPreciseAttributeOnPtrWithFunctionCall(llvm::Value *Ptr,
-                                               llvm::Module &M) {
+void HLModule::MarkPreciseAttributeOnPtrWithFunctionCall(llvm37::Value *Ptr,
+                                               llvm37::Module &M) {
   for (User *U : Ptr->users()) {
     // Skip load inst.
     if (dyn_cast<LoadInst>(U))
@@ -1324,8 +1324,8 @@ void HLModule::CreateElementGlobalVariableDebugInfo(
 }
 
 void HLModule::UpdateGlobalVariableDebugInfo(
-    llvm::GlobalVariable *GV, llvm::DebugInfoFinder &DbgInfoFinder,
-    llvm::GlobalVariable *NewGV) {
+    llvm37::GlobalVariable *GV, llvm37::DebugInfoFinder &DbgInfoFinder,
+    llvm37::GlobalVariable *NewGV) {
   DIGlobalVariable *DIGV = dxilutil::FindGlobalVariableDebugInfo(GV, DbgInfoFinder);
   DXASSERT_NOMSG(DIGV);
   DIBuilder Builder(*GV->getParent());
@@ -1338,7 +1338,7 @@ void HLModule::UpdateGlobalVariableDebugInfo(
 
 DebugInfoFinder &HLModule::GetOrCreateDebugInfoFinder() {
   if (m_pDebugInfoFinder == nullptr) {
-    m_pDebugInfoFinder = llvm::make_unique<llvm::DebugInfoFinder>();
+    m_pDebugInfoFinder = llvm37::make_unique<llvm37::DebugInfoFinder>();
     m_pDebugInfoFinder->processModule(*m_pModule);
   }
   return *m_pDebugInfoFinder;
@@ -1366,7 +1366,7 @@ void HLModule::ResetSubobjects(DxilSubobjects *subobjects) {
 // Signature methods.
 //
 
-HLExtraPropertyHelper::HLExtraPropertyHelper(llvm::Module *pModule)
+HLExtraPropertyHelper::HLExtraPropertyHelper(llvm37::Module *pModule)
 : DxilExtraPropertyHelper(pModule) {
 }
 
@@ -1382,11 +1382,11 @@ void HLExtraPropertyHelper::LoadSignatureElementProperties(const MDOperand &MDO,
 
 } // namespace hlsl
 
-namespace llvm {
+namespace llvm37 {
 hlsl::HLModule &Module::GetOrCreateHLModule(bool skipInit) {
   std::unique_ptr<hlsl::HLModule> M;
   if (!HasHLModule()) {
-    M = llvm::make_unique<hlsl::HLModule>(this);
+    M = llvm37::make_unique<hlsl::HLModule>(this);
     if (!skipInit) {
       M->LoadHLMetadata();
     }

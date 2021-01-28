@@ -1,4 +1,4 @@
-llvm-dis - LLVM disassembler
+llvm37-dis - LLVM37 disassembler
 ============================
 
 
@@ -6,20 +6,20 @@ SYNOPSIS
 --------
 
 
-**llvm-dis** [*options*] [*filename*]
+**llvm37-dis** [*options*] [*filename*]
 
 
 DESCRIPTION
 -----------
 
 
-The **llvm-dis** command is the LLVM disassembler.  It takes an LLVM
-bitcode file and converts it into human-readable LLVM assembly language.
+The **llvm37-dis** command is the LLVM37 disassembler.  It takes an LLVM37
+bitcode file and converts it into human-readable LLVM37 assembly language.
 
-If filename is omitted or specified as ``-``, **llvm-dis** reads its
+If filename is omitted or specified as ``-``, **llvm37-dis** reads its
 input from standard input.
 
-If the input is being read from standard input, then **llvm-dis**
+If the input is being read from standard input, then **llvm37-dis**
 will send its output to standard output by default.  Otherwise, the
 output will be written to a file named after the input file, with
 a ``.ll`` suffix added (any existing ``.bc`` suffix will first be
@@ -34,9 +34,9 @@ OPTIONS
 
 **-f**
 
- Enable binary output on terminals.  Normally, **llvm-dis** will refuse to
+ Enable binary output on terminals.  Normally, **llvm37-dis** will refuse to
  write raw bitcode output if the output stream is a terminal. With this option,
- **llvm-dis** will write raw bitcode regardless of the output device.
+ **llvm37-dis** will write raw bitcode regardless of the output device.
 
 
 
@@ -58,7 +58,7 @@ EXIT STATUS
 -----------
 
 
-If **llvm-dis** succeeds, it will exit with 0.  Otherwise, if an error
+If **llvm37-dis** succeeds, it will exit with 0.  Otherwise, if an error
 occurs, it will exit with a non-zero value.
 
 
@@ -66,4 +66,4 @@ SEE ALSO
 --------
 
 
-llvm-as|llvm-as
+llvm37-as|llvm37-as

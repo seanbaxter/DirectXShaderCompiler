@@ -1,4 +1,4 @@
-; RUN: llvm-as < %s | llvm-dis | llvm-as > /dev/null
+; RUN: llvm37-as < %s | llvm37-dis | llvm37-as > /dev/null
 
         %v4f = type <4 x float>
 @foo = external global %v4f             ; <%v4f*> [#uses=1]

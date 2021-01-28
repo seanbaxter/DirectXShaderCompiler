@@ -12,8 +12,8 @@ target triple = "x86_64-apple-darwin10.2"
 
 define i32 @main() nounwind readonly {
   %diff1 = alloca i64                             ; <i64*> [#uses=2]
-; CHECK: call void @llvm.dbg.value(metadata i64 72,
-  call void @llvm.dbg.declare(metadata i64* %diff1, metadata !0, metadata !DIExpression()), !dbg !DILocation(scope: !1)
+; CHECK: call void @llvm37.dbg.value(metadata i64 72,
+  call void @llvm37.dbg.declare(metadata i64* %diff1, metadata !0, metadata !DIExpression()), !dbg !DILocation(scope: !1)
   store i64 72, i64* %diff1, align 8
   %v1 = load %struct.test*, %struct.test** @TestArrayPtr, align 8 ; <%struct.test*> [#uses=1]
   %v2 = ptrtoint %struct.test* %v1 to i64 ; <i64> [#uses=1]
@@ -22,7 +22,7 @@ define i32 @main() nounwind readonly {
   ret i32 4
 }
 
-declare void @llvm.dbg.declare(metadata, metadata, metadata) nounwind readnone
+declare void @llvm37.dbg.declare(metadata, metadata, metadata) nounwind readnone
 
 !7 = !{!1}
 !6 = !DICompileUnit(language: DW_LANG_C99, producer: "clang version 3.0 (trunk 131941)", isOptimized: true, emissionKind: 0, file: !8, enums: !9, retainedTypes: !9, subprograms: !7)
@@ -35,5 +35,5 @@ declare void @llvm.dbg.declare(metadata, metadata, metadata) nounwind readnone
 !8 = !DIFile(filename: "/d/j/debug-test.c", directory: "/Volumes/Data/b")
 !9 = !{i32 0}
 
-!llvm.module.flags = !{!10}
+!llvm37.module.flags = !{!10}
 !10 = !{i32 1, !"Debug Info Version", i32 3}

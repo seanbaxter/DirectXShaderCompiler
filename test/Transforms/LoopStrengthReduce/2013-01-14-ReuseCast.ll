@@ -27,29 +27,29 @@ bb:
   br i1 undef, label %bb87, label %.preheader
 
 .preheader:                                       ; preds = %bb10, %bb
-  br i1 undef, label %_ZNK4llvm9StringRef4findEcm.exit42.thread, label %bb10
+  br i1 undef, label %_ZNK4llvm379StringRef4findEcm.exit42.thread, label %bb10
 
 bb10:                                             ; preds = %.preheader
-  br i1 undef, label %_ZNK4llvm9StringRef4findEcm.exit42, label %.preheader
+  br i1 undef, label %_ZNK4llvm379StringRef4findEcm.exit42, label %.preheader
 
-_ZNK4llvm9StringRef4findEcm.exit42:               ; preds = %bb10
-  br i1 undef, label %_ZNK4llvm9StringRef4findEcm.exit42.thread, label %.lr.ph
+_ZNK4llvm379StringRef4findEcm.exit42:               ; preds = %bb10
+  br i1 undef, label %_ZNK4llvm379StringRef4findEcm.exit42.thread, label %.lr.ph
 
-_ZNK4llvm9StringRef4findEcm.exit42.thread:        ; preds = %_ZNK4llvm9StringRef4findEcm.exit42, %.preheader
+_ZNK4llvm379StringRef4findEcm.exit42.thread:        ; preds = %_ZNK4llvm379StringRef4findEcm.exit42, %.preheader
   unreachable
 
-.lr.ph:                                           ; preds = %_ZNK4llvm9StringRef4findEcm.exit42
+.lr.ph:                                           ; preds = %_ZNK4llvm379StringRef4findEcm.exit42
   br label %bb36
 
-_ZNK4llvm9StringRef4findEcm.exit.loopexit:        ; preds = %bb63
+_ZNK4llvm379StringRef4findEcm.exit.loopexit:        ; preds = %bb63
   %tmp21 = icmp eq i64 %i.0.i, -1
-  br i1 %tmp21, label %_ZNK4llvm9StringRef4findEcm.exit._crit_edge, label %bb36
+  br i1 %tmp21, label %_ZNK4llvm379StringRef4findEcm.exit._crit_edge, label %bb36
 
-_ZNK4llvm9StringRef4findEcm.exit._crit_edge:      ; preds = %bb61, %_ZNK4llvm9StringRef4findEcm.exit.loopexit
+_ZNK4llvm379StringRef4findEcm.exit._crit_edge:      ; preds = %bb61, %_ZNK4llvm379StringRef4findEcm.exit.loopexit
   unreachable
 
-bb36:                                             ; preds = %_ZNK4llvm9StringRef4findEcm.exit.loopexit, %.lr.ph
-  %loc.063 = phi i64 [ undef, %.lr.ph ], [ %i.0.i, %_ZNK4llvm9StringRef4findEcm.exit.loopexit ]
+bb36:                                             ; preds = %_ZNK4llvm379StringRef4findEcm.exit.loopexit, %.lr.ph
+  %loc.063 = phi i64 [ undef, %.lr.ph ], [ %i.0.i, %_ZNK4llvm379StringRef4findEcm.exit.loopexit ]
   switch i8 undef, label %bb57 [
     i8 10, label %bb48
     i8 13, label %bb48
@@ -69,13 +69,13 @@ bb58:                                             ; preds = %bb57, %bb48
 bb61:                                             ; preds = %bb63, %bb58
   %i.0.i = phi i64 [ %tmp60, %bb58 ], [ %tmp67, %bb63 ]
   %tmp62 = icmp eq i64 %i.0.i, %tmp7
-  br i1 %tmp62, label %_ZNK4llvm9StringRef4findEcm.exit._crit_edge, label %bb63
+  br i1 %tmp62, label %_ZNK4llvm379StringRef4findEcm.exit._crit_edge, label %bb63
 
 bb63:                                             ; preds = %bb61
   %tmp64 = getelementptr inbounds i8, i8* %tmp3, i64 %i.0.i
   %tmp65 = load i8, i8* %tmp64, align 1
   %tmp67 = add i64 %i.0.i, 1
-  br i1 undef, label %_ZNK4llvm9StringRef4findEcm.exit.loopexit, label %bb61
+  br i1 undef, label %_ZNK4llvm379StringRef4findEcm.exit.loopexit, label %bb61
 
 bb87:                                             ; preds = %bb
   ret void

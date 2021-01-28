@@ -1,9 +1,9 @@
-set(LLVM_LINK_COMPONENTS
+set(LLVM37_LINK_COMPONENTS
   BitWriter
   Core
   Support
   )
 
-add_llvm_example(ModuleMaker
+add_llvm37_example(ModuleMaker
   ModuleMaker.cpp
   )

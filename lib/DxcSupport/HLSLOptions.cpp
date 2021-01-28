@@ -8,12 +8,12 @@
 //                                                                           //
 ///////////////////////////////////////////////////////////////////////////////
 
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/Option/OptTable.h"
-#include "llvm/Option/Option.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Support/Path.h"
-#include "llvm/ADT/APInt.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/Option/OptTable.h"
+#include "llvm37/Option/Option.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Support/Path.h"
+#include "llvm37/ADT/APInt.h"
 #include "dxc/Support/Global.h"
 #include "dxc/Support/WinIncludes.h"
 #include "dxc/Support/HLSLOptions.h"
@@ -21,7 +21,7 @@
 #include "dxc/Support/dxcapi.use.h"
 #include "dxc/DXIL/DxilShaderModel.h"
 
-using namespace llvm::opt;
+using namespace llvm37::opt;
 using namespace dxc;
 using namespace hlsl;
 using namespace hlsl::options;
@@ -44,7 +44,7 @@ namespace {
   class HlslOptTable : public OptTable {
   public:
     HlslOptTable()
-      : OptTable(HlslInfoTable, llvm::array_lengthof(HlslInfoTable)) {}
+      : OptTable(HlslInfoTable, llvm37::array_lengthof(HlslInfoTable)) {}
   };
 
 }
@@ -68,7 +68,7 @@ const OptTable * hlsl::options::getHlslOptTable() {
   return g_HlslOptTable;
 }
 
-void DxcDefines::push_back(llvm::StringRef value) {
+void DxcDefines::push_back(llvm37::StringRef value) {
   // Skip empty defines.
   if (value.size() > 0) {
     DefineStrings.push_back(value);
@@ -77,7 +77,7 @@ void DxcDefines::push_back(llvm::StringRef value) {
 
 UINT32 DxcDefines::ComputeNumberOfWCharsNeededForDefines() {
   UINT32 wcharSize = 0;
-  for (llvm::StringRef &S : DefineStrings) {
+  for (llvm37::StringRef &S : DefineStrings) {
     DXASSERT(S.size() > 0,
              "else DxcDefines::push_back should not have added this");
     const int utf16Length = ::MultiByteToWideChar(
@@ -100,7 +100,7 @@ void DxcDefines::BuildDefines() {
   UINT32 remaining = wcharSize;
   LPWSTR pWriteCursor = DefineValues;
   for (size_t i = 0; i < DefineStrings.size(); ++i) {
-    llvm::StringRef &S = DefineStrings[i];
+    llvm37::StringRef &S = DefineStrings[i];
     DxcDefine &D = DefineVector[i];
     const int utf16Length =
         ::MultiByteToWideChar(CP_UTF8, MB_ERR_INVALID_CHARS, S.data(), S.size(),
@@ -151,13 +151,13 @@ bool DxcOpts::EmbedPDBName() {
 }
 
 bool DxcOpts::DebugFileIsDirectory() {
-  return !DebugFile.empty() && llvm::sys::path::is_separator(DebugFile[DebugFile.size() - 1]);
+  return !DebugFile.empty() && llvm37::sys::path::is_separator(DebugFile[DebugFile.size() - 1]);
 }
 
-llvm::StringRef DxcOpts::GetPDBName() {
+llvm37::StringRef DxcOpts::GetPDBName() {
   if (!DebugFileIsDirectory())
     return DebugFile;
-  return llvm::StringRef();
+  return llvm37::StringRef();
 }
 
 MainArgs::MainArgs(int argc, const wchar_t **argv, int skipArgCount) {
@@ -182,10 +182,10 @@ MainArgs::MainArgs(int argc, const char **argv, int skipArgCount) {
   }
 }
 
-MainArgs::MainArgs(llvm::ArrayRef<llvm::StringRef> args) {
+MainArgs::MainArgs(llvm37::ArrayRef<llvm37::StringRef> args) {
   Utf8StringVector.reserve(args.size());
   Utf8CharPtrVector.reserve(args.size());
-  for (llvm::StringRef str : args) {
+  for (llvm37::StringRef str : args) {
     Utf8StringVector.emplace_back(str.str());
     Utf8CharPtrVector.push_back(Utf8StringVector.back().data());
   }
@@ -203,12 +203,12 @@ MainArgs& MainArgs::operator=(const MainArgs &other) {
   return *this;
 }
 
-StringRefUtf16::StringRefUtf16(llvm::StringRef value) {
+StringRefUtf16::StringRefUtf16(llvm37::StringRef value) {
   if (!value.empty())
     m_value = Unicode::UTF8ToUTF16StringOrThrow(value.data());
 }
 
-static bool GetTargetVersionFromString(llvm::StringRef ref, unsigned *major, unsigned *minor) {
+static bool GetTargetVersionFromString(llvm37::StringRef ref, unsigned *major, unsigned *minor) {
   *major = *minor = -1;
   unsigned len = ref.size();
   if (len < 6 || len > 11) // length: ps_6_0 to rootsig_1_0
@@ -259,8 +259,8 @@ static void addDiagnosticArgs(ArgList &Args, OptSpecifier Group,
 /// Checks and collects the arguments for -fvk-{b|s|t|u}-shift into *shifts.
 static bool handleVkShiftArgs(const InputArgList &args, OptSpecifier id,
                               const char *name,
-                              llvm::SmallVectorImpl<int32_t> *shifts,
-                              llvm::raw_ostream &errors) {
+                              llvm37::SmallVectorImpl<int32_t> *shifts,
+                              llvm37::raw_ostream &errors) {
   const auto values = args.getAllArgValues(id);
 
   if (values.empty())
@@ -286,7 +286,7 @@ static bool handleVkShiftArgs(const InputArgList &args, OptSpecifier id,
       number = -1;
       setForAll = true;
     } else {
-      if (llvm::StringRef(val).getAsInteger(10, number)) {
+      if (llvm37::StringRef(val).getAsInteger(10, number)) {
         errors << "invalid -fvk-" << name << "-shift argument: " << val;
         return false;
       }
@@ -314,7 +314,7 @@ namespace options {
 /// validates reporting errors and warnings.
 int ReadDxcOpts(const OptTable *optionTable, unsigned flagsToInclude,
   const MainArgs &argStrings, DxcOpts &opts,
-  llvm::raw_ostream &errors) {
+  llvm37::raw_ostream &errors) {
   DXASSERT_NOMSG(optionTable != nullptr);
   opts.DefaultTextCodePage = DXC_CP_UTF8;
 
@@ -324,7 +324,7 @@ int ReadDxcOpts(const OptTable *optionTable, unsigned flagsToInclude,
 
   // Set DefaultTextCodePage early so it may influence error buffer
   // Default to UTF8 for compatibility
-  llvm::StringRef encoding = Args.getLastArgValue(OPT_encoding);
+  llvm37::StringRef encoding = Args.getLastArgValue(OPT_encoding);
   if (!encoding.empty()) {
     if (encoding.equals_lower("utf8")) {
       opts.DefaultTextCodePage = DXC_CP_UTF8;
@@ -416,7 +416,7 @@ int ReadDxcOpts(const OptTable *optionTable, unsigned flagsToInclude,
   }
 
   opts.EnableDX9CompatMode = Args.hasFlag(OPT_Gec, OPT_INVALID, false);
-  llvm::StringRef ver = Args.getLastArgValue(OPT_hlsl_version);
+  llvm37::StringRef ver = Args.getLastArgValue(OPT_hlsl_version);
   if (ver.empty()) {
     if (opts.EnableDX9CompatMode)
       opts.HLSLVersion = 2016; // Default to max supported version with /Gec flag
@@ -488,24 +488,24 @@ int ReadDxcOpts(const OptTable *optionTable, unsigned flagsToInclude,
   opts.VerifyRootSignatureSource = Args.getLastArgValue(OPT_verifyrootsignature);
   opts.RootSignatureDefine = Args.getLastArgValue(OPT_rootsig_define);
   opts.ScanLimit = 0;
-  llvm::StringRef limit = Args.getLastArgValue(OPT_memdep_block_scan_limit);
+  llvm37::StringRef limit = Args.getLastArgValue(OPT_memdep_block_scan_limit);
   if (!limit.empty())
     opts.ScanLimit = std::stoul(std::string(limit));
 
   for (std::string opt : Args.getAllArgValues(OPT_opt_disable))
-    opts.DxcOptimizationToggles[llvm::StringRef(opt).lower()] = false;
+    opts.DxcOptimizationToggles[llvm37::StringRef(opt).lower()] = false;
 
   for (std::string opt : Args.getAllArgValues(OPT_opt_enable)) {
-    if (!opts.DxcOptimizationToggles.insert ( {llvm::StringRef(opt).lower(), true} ).second) {
+    if (!opts.DxcOptimizationToggles.insert ( {llvm37::StringRef(opt).lower(), true} ).second) {
       errors << "Contradictory use of -opt-disable and -opt-enable with \""
-             << llvm::StringRef(opt).lower() << "\"";
+             << llvm37::StringRef(opt).lower() << "\"";
       return 1;
     }
   }
 
   std::vector<std::string> optSelects = Args.getAllArgValues(OPT_opt_select);
   for (unsigned i = 0; i + 1 < optSelects.size(); i+=2) {
-    std::string optimization = llvm::StringRef(optSelects[i]).lower();
+    std::string optimization = llvm37::StringRef(optSelects[i]).lower();
     std::string selection = optSelects[i+1];
     if (opts.DxcOptimizationSelects.count(optimization) &&
         selection.compare(opts.DxcOptimizationSelects[optimization])) {
@@ -539,7 +539,7 @@ int ReadDxcOpts(const OptTable *optionTable, unsigned flagsToInclude,
     }
   }
 
-  llvm::StringRef auto_binding_space = Args.getLastArgValue(OPT_auto_binding_space);
+  llvm37::StringRef auto_binding_space = Args.getLastArgValue(OPT_auto_binding_space);
   if (!auto_binding_space.empty()) {
     if (auto_binding_space.getAsInteger(10, opts.AutoBindingSpace)) {
       errors << "Unsupported value '" << auto_binding_space << "' for auto binding space.";
@@ -723,11 +723,11 @@ int ReadDxcOpts(const OptTable *optionTable, unsigned flagsToInclude,
     return 1;
   }
 
-  llvm::StringRef valVersionStr = Args.getLastArgValue(OPT_validator_version);
+  llvm37::StringRef valVersionStr = Args.getLastArgValue(OPT_validator_version);
   if (!valVersionStr.empty()) {
     // Parse "major.minor" version string
     auto verPair = valVersionStr.split(".");
-    llvm::APInt major, minor;
+    llvm37::APInt major, minor;
     if (verPair.first.getAsInteger(0, major) || verPair.second.getAsInteger(0, minor)) {
       errors << "Format of validator version is \"<major>.<minor>\" (ex: \"1.4\").";
       return 1;
@@ -827,7 +827,7 @@ int ReadDxcOpts(const OptTable *optionTable, unsigned flagsToInclude,
   if (Args.hasArg(OPT_fspv_debug_EQ)) {
     opts.DebugInfo = true;
     for (const Arg *A : Args.filtered(OPT_fspv_debug_EQ)) {
-      const llvm::StringRef v = A->getValue();
+      const llvm37::StringRef v = A->getValue();
       if (v == "file") {
         opts.SpirvOptions.debugInfoFile = true;
       } else if (v == "source") {
@@ -964,7 +964,7 @@ int ReadDxcOpts(const OptTable *optionTable, unsigned flagsToInclude,
 
 /// Sets up the specified DxcDllSupport instance as per the given options.
 int SetupDxcDllSupport(const DxcOpts &opts, dxc::DxcDllSupport &dxcSupport,
-                       llvm::raw_ostream &errors) {
+                       llvm37::raw_ostream &errors) {
   if (!opts.ExternalLib.empty()) {
     DXASSERT(!opts.ExternalFn.empty(), "else ReadDxcOpts should have failed");
     StringRefUtf16 externalLib(opts.ExternalLib);

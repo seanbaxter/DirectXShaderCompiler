@@ -1,5 +1,5 @@
 ===========================
-LLVM Branch Weight Metadata
+LLVM37 Branch Weight Metadata
 ===========================
 
 .. contents::
@@ -29,7 +29,7 @@ Supported Instructions
 Metadata is only assigned to the conditional branches. There are two extra
 operarands for the true and the false branch.
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
   !0 = metadata !{
     metadata !"branch_weights",
@@ -43,7 +43,7 @@ operarands for the true and the false branch.
 Branch weights are assigned to every case (including the ``default`` case which
 is always case #0).
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
   !0 = metadata !{
     metadata !"branch_weights",
@@ -56,7 +56,7 @@ is always case #0).
 
 Branch weights are assigned to every destination.
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
   !0 = metadata !{
     metadata !"branch_weights",
@@ -132,7 +132,7 @@ invoked.
 For example, in the code below, the instrumentation for function foo()
 indicates that it was called 2,590 times at runtime.
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
   define i32 @foo() !prof !1 {
     ret i32 0

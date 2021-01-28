@@ -1,4 +1,4 @@
-; RUN: llvm-link -o - -S %s | FileCheck %s
+; RUN: llvm37-link -o - -S %s | FileCheck %s
 ; Crasher for PR22456: MapMetadata() should resolve all cycles.
 
 ; CHECK: !named = !{!0}

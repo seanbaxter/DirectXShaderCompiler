@@ -1,6 +1,6 @@
 //===-- LoopUnswitch.cpp - Hoist loop-invariant conditionals in loop ------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -26,34 +26,34 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Transforms/Scalar.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/SmallPtrSet.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/Analysis/AssumptionCache.h"
-#include "llvm/Analysis/CodeMetrics.h"
-#include "llvm/Analysis/InstructionSimplify.h"
-#include "llvm/Analysis/LoopInfo.h"
-#include "llvm/Analysis/LoopPass.h"
-#include "llvm/Analysis/ScalarEvolution.h"
-#include "llvm/Analysis/TargetTransformInfo.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/DerivedTypes.h"
-#include "llvm/IR/Dominators.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/MDBuilder.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Transforms/Utils/BasicBlockUtils.h"
-#include "llvm/Transforms/Utils/Cloning.h"
-#include "llvm/Transforms/Utils/Local.h"
+#include "llvm37/Transforms/Scalar.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/SmallPtrSet.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/Analysis/AssumptionCache.h"
+#include "llvm37/Analysis/CodeMetrics.h"
+#include "llvm37/Analysis/InstructionSimplify.h"
+#include "llvm37/Analysis/LoopInfo.h"
+#include "llvm37/Analysis/LoopPass.h"
+#include "llvm37/Analysis/ScalarEvolution.h"
+#include "llvm37/Analysis/TargetTransformInfo.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/DerivedTypes.h"
+#include "llvm37/IR/Dominators.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/MDBuilder.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Transforms/Utils/BasicBlockUtils.h"
+#include "llvm37/Transforms/Utils/Cloning.h"
+#include "llvm37/Transforms/Utils/Local.h"
 #include <algorithm>
 #include <map>
 #include <set>
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "loop-unswitch"
 
@@ -367,7 +367,7 @@ INITIALIZE_PASS_DEPENDENCY(LCSSA)
 INITIALIZE_PASS_END(LoopUnswitch, "loop-unswitch", "Unswitch loops",
                       false, false)
 
-Pass *llvm::createLoopUnswitchPass(bool Os) {
+Pass *llvm37::createLoopUnswitchPass(bool Os) {
   return new LoopUnswitch(Os);
 }
 
@@ -454,7 +454,7 @@ bool LoopUnswitch::processCurrentLoop() {
   if (!currentLoop->hasDedicatedExits())
     return false;
 
-  LLVMContext &Context = loopHeader->getContext();
+  LLVM37Context &Context = loopHeader->getContext();
 
   // Probably we reach the quota of branches for this loop. If so
   // stop unswitching.
@@ -598,7 +598,7 @@ bool LoopUnswitch::IsTrivialUnswitchCondition(Value *Cond, Constant **Val,
                                        BasicBlock **LoopExit) {
   BasicBlock *Header = currentLoop->getHeader();
   TerminatorInst *HeaderTerm = Header->getTerminator();
-  LLVMContext &Context = Header->getContext();
+  LLVM37Context &Context = Header->getContext();
 
   BasicBlock *LoopExitBB = nullptr;
   if (BranchInst *BI = dyn_cast<BranchInst>(HeaderTerm)) {
@@ -730,7 +730,7 @@ static void copyMetadata(Instruction *DstInst, const Instruction *SrcInst,
     switch (MD.first) {
     default:
       break;
-    case LLVMContext::MD_prof:
+    case LLVM37Context::MD_prof:
       if (Swapped && MD.second->getNumOperands() == 3 &&
           isa<MDString>(MD.second->getOperand(0))) {
         MDString *MDName = cast<MDString>(MD.second->getOperand(0));
@@ -748,7 +748,7 @@ static void copyMetadata(Instruction *DstInst, const Instruction *SrcInst,
         }
       }
       // fallthrough.
-    case LLVMContext::MD_dbg:
+    case LLVM37Context::MD_dbg:
       DstInst->setMetadata(MD.first, MD.second);
     }
   }
@@ -1047,7 +1047,7 @@ void LoopUnswitch::RewriteLoopBodyWithConditionConstant(Loop *L, Value *LIC,
   // FOLD boolean conditions (X|LIC), (X&LIC).  Fold conditional branches,
   // selects, switches.
   std::vector<Instruction*> Worklist;
-  LLVMContext &Context = Val->getContext();
+  LLVM37Context &Context = Val->getContext();
 
   // If we know that LIC == Val, or that LIC == NotVal, just replace uses of LIC
   // in the loop with the appropriate one directly.

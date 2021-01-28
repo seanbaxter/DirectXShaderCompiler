@@ -1,20 +1,20 @@
 //===--- CrashRecoveryContext.cpp - Crash Recovery ------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Support/CrashRecoveryContext.h"
-#include "llvm/Config/config.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/ManagedStatic.h"
-#include "llvm/Support/Mutex.h"
-#include "llvm/Support/ThreadLocal.h"
+#include "llvm37/Support/CrashRecoveryContext.h"
+#include "llvm37/Config/config.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/ManagedStatic.h"
+#include "llvm37/Support/Mutex.h"
+#include "llvm37/Support/ThreadLocal.h"
 #include <setjmp.h>
-using namespace llvm;
+using namespace llvm37;
 
 namespace {
 
@@ -129,7 +129,7 @@ CrashRecoveryContext::unregisterCleanup(CrashRecoveryContextCleanup *cleanup) {
   delete cleanup;
 }
 
-#ifdef LLVM_ON_WIN32
+#ifdef LLVM37_ON_WIN32
 
 #include "Windows/WindowsSupport.h"
 
@@ -171,7 +171,7 @@ static LONG CALLBACK ExceptionHandler(PEXCEPTION_POINTERS ExceptionInfo)
 
   // Note that we don't actually get here because HandleCrash calls
   // longjmp, which means the HandleCrash function never returns.
-  llvm_unreachable("Handled the crash, should have longjmp'ed out of here");
+  llvm37_unreachable("Handled the crash, should have longjmp'ed out of here");
 }
 
 // Because the Enable and Disable calls are static, it means that
@@ -367,7 +367,7 @@ bool CrashRecoveryContext::RunSafelyOnThread(function_ref<void()> Fn,
                                              unsigned RequestedStackSize) {
   bool UseBackgroundPriority = hasThreadBackgroundPriority();
   RunSafelyOnThreadInfo Info = { Fn, this, UseBackgroundPriority, false };
-  llvm_execute_on_thread(RunSafelyOnThread_Dispatch, &Info, RequestedStackSize);
+  llvm37_execute_on_thread(RunSafelyOnThread_Dispatch, &Info, RequestedStackSize);
   if (CrashRecoveryContextImpl *CRC = (CrashRecoveryContextImpl *)Impl)
     CRC->setSwitchedThread();
   return Info.Result;

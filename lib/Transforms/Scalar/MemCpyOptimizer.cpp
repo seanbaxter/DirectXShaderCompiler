@@ -1,6 +1,6 @@
 //===- MemCpyOptimizer.cpp - Optimize use of memcpy and friends -----------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -12,26 +12,26 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Transforms/Scalar.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/Analysis/AliasAnalysis.h"
-#include "llvm/Analysis/AssumptionCache.h"
-#include "llvm/Analysis/MemoryDependenceAnalysis.h"
-#include "llvm/Analysis/TargetLibraryInfo.h"
-#include "llvm/Analysis/ValueTracking.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/Dominators.h"
-#include "llvm/IR/GetElementPtrTypeIterator.h"
-#include "llvm/IR/GlobalVariable.h"
-#include "llvm/IR/IRBuilder.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Transforms/Utils/Local.h"
+#include "llvm37/Transforms/Scalar.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/Analysis/AliasAnalysis.h"
+#include "llvm37/Analysis/AssumptionCache.h"
+#include "llvm37/Analysis/MemoryDependenceAnalysis.h"
+#include "llvm37/Analysis/TargetLibraryInfo.h"
+#include "llvm37/Analysis/ValueTracking.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/IR/Dominators.h"
+#include "llvm37/IR/GetElementPtrTypeIterator.h"
+#include "llvm37/IR/GlobalVariable.h"
+#include "llvm37/IR/IRBuilder.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Transforms/Utils/Local.h"
 #include <list>
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "memcpyopt"
 
@@ -176,7 +176,7 @@ bool MemsetRange::isProfitableToUseMemset(const DataLayout &DL) const {
   // For example, merging 4 i8 stores into an i32 store is useful almost always.
   // However, merging 2 32-bit stores isn't useful on a 32-bit architecture (the
   // memset will be split into 2 32-bit stores anyway) and doing so can
-  // pessimize the llvm optimizer.
+  // pessimize the llvm37 optimizer.
   //
   // Since we don't have perfect knowledge here, make some assumptions: assume
   // the maximum GPR width is the same size as the largest legal integer
@@ -358,7 +358,7 @@ namespace {
 }
 
 // createMemCpyOptPass - The public interface to this file...
-FunctionPass *llvm::createMemCpyOptPass() { return new MemCpyOpt(); }
+FunctionPass *llvm37::createMemCpyOptPass() { return new MemCpyOpt(); }
 
 INITIALIZE_PASS_BEGIN(MemCpyOpt, "memcpyopt", "MemCpy Optimization",
                       false, false)
@@ -750,9 +750,9 @@ bool MemCpyOpt::performCallSlotOptzn(Instruction *cpy,
   // FIXME: MD_tbaa_struct and MD_mem_parallel_loop_access should also be
   // handled here, but combineMetadata doesn't support them yet
   unsigned KnownIDs[] = {
-    LLVMContext::MD_tbaa,
-    LLVMContext::MD_alias_scope,
-    LLVMContext::MD_noalias,
+    LLVM37Context::MD_tbaa,
+    LLVM37Context::MD_alias_scope,
+    LLVM37Context::MD_noalias,
   };
   combineMetadata(C, cpy, KnownIDs);
 

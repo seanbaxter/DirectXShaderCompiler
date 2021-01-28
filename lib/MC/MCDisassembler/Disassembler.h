@@ -1,6 +1,6 @@
-//===------------- Disassembler.h - LLVM Disassembler -----------*- C++ -*-===//
+//===------------- Disassembler.h - LLVM37 Disassembler -----------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -14,15 +14,15 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_LIB_MC_MCDISASSEMBLER_DISASSEMBLER_H
-#define LLVM_LIB_MC_MCDISASSEMBLER_DISASSEMBLER_H
+#ifndef LLVM37_LIB_MC_MCDISASSEMBLER_DISASSEMBLER_H
+#define LLVM37_LIB_MC_MCDISASSEMBLER_DISASSEMBLER_H
 
-#include "llvm-c/Disassembler.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37-c/Disassembler.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <string>
 
-namespace llvm {
+namespace llvm37 {
 class MCContext;
 class MCAsmInfo;
 class MCDisassembler;
@@ -33,9 +33,9 @@ class MCSubtargetInfo;
 class Target;
 
 //
-// This is the disassembler context returned by LLVMCreateDisasm().
+// This is the disassembler context returned by LLVM37CreateDisasm().
 //
-class LLVMDisasmContext {
+class LLVM37DisasmContext {
 private:
   //
   // The passed parameters when the disassembler context is created.
@@ -47,31 +47,31 @@ private:
   // The Triple specific symbolic information type returned by GetOpInfo.
   int TagType;
   // The function to get the symbolic information for operands.
-  LLVMOpInfoCallback GetOpInfo;
+  LLVM37OpInfoCallback GetOpInfo;
   // The function to look up a symbol name.
-  LLVMSymbolLookupCallback SymbolLookUp;
+  LLVM37SymbolLookupCallback SymbolLookUp;
   //
-  // The objects created and saved by LLVMCreateDisasm() then used by
-  // LLVMDisasmInstruction().
+  // The objects created and saved by LLVM37CreateDisasm() then used by
+  // LLVM37DisasmInstruction().
   //
-  // The LLVM target corresponding to the disassembler.
-  // FIXME: using std::unique_ptr<const llvm::Target> causes a malloc error
-  //        when this LLVMDisasmContext is deleted.
+  // The LLVM37 target corresponding to the disassembler.
+  // FIXME: using std::unique_ptr<const llvm37::Target> causes a malloc error
+  //        when this LLVM37DisasmContext is deleted.
   const Target *TheTarget;
   // The assembly information for the target architecture.
-  std::unique_ptr<const llvm::MCAsmInfo> MAI;
+  std::unique_ptr<const llvm37::MCAsmInfo> MAI;
   // The register information for the target architecture.
-  std::unique_ptr<const llvm::MCRegisterInfo> MRI;
+  std::unique_ptr<const llvm37::MCRegisterInfo> MRI;
   // The subtarget information for the target architecture.
-  std::unique_ptr<const llvm::MCSubtargetInfo> MSI;
+  std::unique_ptr<const llvm37::MCSubtargetInfo> MSI;
   // The instruction information for the target architecture.
-  std::unique_ptr<const llvm::MCInstrInfo> MII;
+  std::unique_ptr<const llvm37::MCInstrInfo> MII;
   // The assembly context for creating symbols and MCExprs.
-  std::unique_ptr<const llvm::MCContext> Ctx;
+  std::unique_ptr<const llvm37::MCContext> Ctx;
   // The disassembler for the target architecture.
-  std::unique_ptr<const llvm::MCDisassembler> DisAsm;
+  std::unique_ptr<const llvm37::MCDisassembler> DisAsm;
   // The instruction printer for the target architecture.
-  std::unique_ptr<llvm::MCInstPrinter> IP;
+  std::unique_ptr<llvm37::MCInstPrinter> IP;
   // The options used to set up the disassembler.
   uint64_t Options;
   // The CPU string.
@@ -82,14 +82,14 @@ public:
   SmallString<128> CommentsToEmit;
   raw_svector_ostream CommentStream;
 
-  LLVMDisasmContext(std::string tripleName, void *disInfo, int tagType,
-                    LLVMOpInfoCallback getOpInfo,
-                    LLVMSymbolLookupCallback symbolLookUp,
+  LLVM37DisasmContext(std::string tripleName, void *disInfo, int tagType,
+                    LLVM37OpInfoCallback getOpInfo,
+                    LLVM37SymbolLookupCallback symbolLookUp,
                     const Target *theTarget, const MCAsmInfo *mAI,
                     const MCRegisterInfo *mRI,
                     const MCSubtargetInfo *mSI,
                     const MCInstrInfo *mII,
-                    llvm::MCContext *ctx, const MCDisassembler *disAsm,
+                    llvm37::MCContext *ctx, const MCDisassembler *disAsm,
                     MCInstPrinter *iP) : TripleName(tripleName),
                     DisInfo(disInfo), TagType(tagType), GetOpInfo(getOpInfo),
                     SymbolLookUp(symbolLookUp), TheTarget(theTarget),
@@ -106,8 +106,8 @@ public:
   const std::string &getTripleName() const { return TripleName; }
   void *getDisInfo() const { return DisInfo; }
   int getTagType() const { return TagType; }
-  LLVMOpInfoCallback getGetOpInfo() const { return GetOpInfo; }
-  LLVMSymbolLookupCallback getSymbolLookupCallback() const {
+  LLVM37OpInfoCallback getGetOpInfo() const { return GetOpInfo; }
+  LLVM37SymbolLookupCallback getSymbolLookupCallback() const {
     return SymbolLookUp;
   }
   const Target *getTarget() const { return TheTarget; }
@@ -124,6 +124,6 @@ public:
   void setCPU(const char *CPU) { this->CPU = CPU; }
 };
 
-} // namespace llvm
+} // namespace llvm37
 
 #endif

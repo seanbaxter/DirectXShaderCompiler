@@ -1,6 +1,6 @@
 //===-- ShadowStackGCLowering.cpp - Custom lowering for shadow-stack gc ---===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -12,15 +12,15 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/CodeGen/Passes.h"
-#include "llvm/ADT/StringExtras.h"
-#include "llvm/CodeGen/GCStrategy.h"
-#include "llvm/IR/CallSite.h"
-#include "llvm/IR/IRBuilder.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/IR/Module.h"
+#include "llvm37/CodeGen/Passes.h"
+#include "llvm37/ADT/StringExtras.h"
+#include "llvm37/CodeGen/GCStrategy.h"
+#include "llvm37/IR/CallSite.h"
+#include "llvm37/IR/IRBuilder.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/IR/Module.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "shadowstackgclowering"
 
@@ -52,10 +52,10 @@ private:
   Constant *GetFrameMap(Function &F);
   Type *GetConcreteStackEntryType(Function &F);
   void CollectRoots(Function &F);
-  static GetElementPtrInst *CreateGEP(LLVMContext &Context, IRBuilder<> &B,
+  static GetElementPtrInst *CreateGEP(LLVM37Context &Context, IRBuilder<> &B,
                                       Type *Ty, Value *BasePtr, int Idx1,
                                       const char *Name);
-  static GetElementPtrInst *CreateGEP(LLVMContext &Context, IRBuilder<> &B,
+  static GetElementPtrInst *CreateGEP(LLVM37Context &Context, IRBuilder<> &B,
                                       Type *Ty, Value *BasePtr, int Idx1, int Idx2,
                                       const char *Name);
 };
@@ -67,7 +67,7 @@ INITIALIZE_PASS_DEPENDENCY(GCModuleInfo)
 INITIALIZE_PASS_END(ShadowStackGCLowering, "shadow-stack-gc-lowering",
                     "Shadow Stack GC Lowering", false, false)
 
-FunctionPass *llvm::createShadowStackGCLoweringPass() { return new ShadowStackGCLowering(); }
+FunctionPass *llvm37::createShadowStackGCLoweringPass() { return new ShadowStackGCLowering(); }
 
 char ShadowStackGCLowering::ID = 0;
 
@@ -140,7 +140,7 @@ public:
         return nullptr;
 
       // Create a cleanup block.
-      LLVMContext &C = F.getContext();
+      LLVM37Context &C = F.getContext();
       BasicBlock *CleanupBB = BasicBlock::Create(C, CleanupBBName, &F);
       Type *ExnTy =
           StructType::get(Type::getInt8PtrTy(C), Type::getInt32Ty(C), nullptr);
@@ -223,8 +223,8 @@ Constant *ShadowStackGCLowering::GetFrameMap(Function &F) {
 
   Constant *FrameMap = ConstantStruct::get(STy, DescriptorElts);
 
-  // FIXME: Is this actually dangerous as WritingAnLLVMPass.html claims? Seems
-  //        that, short of multithreaded LLVM, it should be safe; all that is
+  // FIXME: Is this actually dangerous as WritingAnLLVM37Pass.html claims? Seems
+  //        that, short of multithreaded LLVM37, it should be safe; all that is
   //        necessary is that a simple Module::iterator loop not be invalidated.
   //        Appending to the GlobalVariable list is safe in that sense.
   //
@@ -297,13 +297,13 @@ bool ShadowStackGCLowering::doInitialization(Module &M) {
   PointerType *StackEntryPtrTy = PointerType::getUnqual(StackEntryTy);
 
   // Get the root chain if it already exists.
-  Head = M.getGlobalVariable("llvm_gc_root_chain");
+  Head = M.getGlobalVariable("llvm37_gc_root_chain");
   if (!Head) {
     // If the root chain does not exist, insert a new one with linkonce
     // linkage!
     Head = new GlobalVariable(
         M, StackEntryPtrTy, false, GlobalValue::LinkOnceAnyLinkage,
-        Constant::getNullValue(StackEntryPtrTy), "llvm_gc_root_chain");
+        Constant::getNullValue(StackEntryPtrTy), "llvm37_gc_root_chain");
   } else if (Head->hasExternalLinkage() && Head->isDeclaration()) {
     Head->setInitializer(Constant::getNullValue(StackEntryPtrTy));
     Head->setLinkage(GlobalValue::LinkOnceAnyLinkage);
@@ -346,7 +346,7 @@ void ShadowStackGCLowering::CollectRoots(Function &F) {
   Roots.insert(Roots.begin(), MetaRoots.begin(), MetaRoots.end());
 }
 
-GetElementPtrInst *ShadowStackGCLowering::CreateGEP(LLVMContext &Context,
+GetElementPtrInst *ShadowStackGCLowering::CreateGEP(LLVM37Context &Context,
                                                     IRBuilder<> &B, Type *Ty,
                                                     Value *BasePtr, int Idx,
                                                     int Idx2,
@@ -361,7 +361,7 @@ GetElementPtrInst *ShadowStackGCLowering::CreateGEP(LLVMContext &Context,
   return dyn_cast<GetElementPtrInst>(Val);
 }
 
-GetElementPtrInst *ShadowStackGCLowering::CreateGEP(LLVMContext &Context,
+GetElementPtrInst *ShadowStackGCLowering::CreateGEP(LLVM37Context &Context,
                                             IRBuilder<> &B, Type *Ty, Value *BasePtr,
                                             int Idx, const char *Name) {
   Value *Indices[] = {ConstantInt::get(Type::getInt32Ty(Context), 0),
@@ -380,9 +380,9 @@ bool ShadowStackGCLowering::runOnFunction(Function &F) {
       F.getGC() != std::string("shadow-stack"))
     return false;
   
-  LLVMContext &Context = F.getContext();
+  LLVM37Context &Context = F.getContext();
 
-  // Find calls to llvm.gcroot.
+  // Find calls to llvm37.gcroot.
   CollectRoots(F);
 
   // If there are no roots in this function, then there is no need to add a

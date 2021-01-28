@@ -1,13 +1,13 @@
 //===- AnalysisWrappers.cpp - Wrappers around non-pass analyses -----------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 //
-// This file defines pass wrappers around LLVM analyses that don't make sense to
+// This file defines pass wrappers around LLVM37 analyses that don't make sense to
 // be passes.  It provides a nice standard pass interface to these classes so
 // that they can be printed out by analyze.
 //
@@ -17,12 +17,12 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Analysis/CallGraph.h"
-#include "llvm/IR/CallSite.h"
-#include "llvm/IR/Module.h"
-#include "llvm/Pass.h"
-#include "llvm/Support/raw_ostream.h"
-using namespace llvm;
+#include "llvm37/Analysis/CallGraph.h"
+#include "llvm37/IR/CallSite.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/Pass.h"
+#include "llvm37/Support/raw_ostream.h"
+using namespace llvm37;
 
 namespace {
   /// ExternalFunctionsPassedConstants - This pass prints out call sites to

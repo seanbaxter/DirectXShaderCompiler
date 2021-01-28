@@ -10,15 +10,15 @@
 #include "dxc/DXIL/DxilCounters.h"
 #include "dxc/Support/Global.h"
 
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Operator.h"
-#include "llvm/IR/Module.h"
-#include "llvm/ADT/DenseMap.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/Operator.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/ADT/DenseMap.h"
 
 #include "dxc/DXIL/DxilOperations.h"
 #include "dxc/DXIL/DxilInstructions.h"
 
-using namespace llvm;
+using namespace llvm37;
 using namespace hlsl;
 using namespace hlsl::DXIL;
 
@@ -70,7 +70,7 @@ PointerInfo GetPointerInfo(Value* V, PointerInfoMap &ptrInfoMap) {
   } else if (AddrSpaceCastInst *AC = dyn_cast<AddrSpaceCastInst>(V)) {
     PI = GetPointerInfo(AC->getOperand(0), ptrInfoMap);
   } else if (ConstantExpr *CE = dyn_cast<ConstantExpr>(V)) {
-    if (CE->getOpcode() == LLVMAddrSpaceCast)
+    if (CE->getOpcode() == LLVM37AddrSpaceCast)
       PI = GetPointerInfo(AC->getOperand(0), ptrInfoMap);
   //} else if (PHINode *PN = dyn_cast<PHINode>(V)) {
   //  for (auto it = PN->value_op_begin(), e = PN->value_op_end(); it != e; ++it) {
@@ -110,19 +110,19 @@ def gen_count_dxil_op(counter):
             hctdb_instrhelp.get_instrs_pred("op", hctdb_instrhelp.counter_pred(counter, True))) +
           ['}'])
 
-def gen_count_llvm_op(counter):
+def gen_count_llvm37_op(counter):
   return (['bool CountLlvmOp_%s(unsigned op) {' % counter] +
           tab_lines(
-            hctdb_instrhelp.get_instrs_pred("op", hctdb_instrhelp.counter_pred(counter, False), 'llvm_id')) +
+            hctdb_instrhelp.get_instrs_pred("op", hctdb_instrhelp.counter_pred(counter, False), 'llvm37_id')) +
           ['}'])
 
 def gen_counter_functions():
   lines = ['// Counter functions for Dxil ops:']
   for counter in hctdb_instrhelp.get_dxil_op_counters():
     lines += gen_count_dxil_op(counter)
-  lines.append('// Counter functions for llvm ops:')
-  for counter in hctdb_instrhelp.get_llvm_op_counters():
-    lines += gen_count_llvm_op(counter)
+  lines.append('// Counter functions for llvm37 ops:')
+  for counter in hctdb_instrhelp.get_llvm37_op_counters():
+    lines += gen_count_llvm37_op(counter)
   return lines
 
 </py>*/
@@ -201,7 +201,7 @@ bool CountDxilOp_uints(unsigned op) {
   // UMad=49, Msad=50, Ubfe=52, Bfi=53, Dot4AddU8Packed=164
   return (30 <= op && op <= 34) || (39 <= op && op <= 40) || (42 <= op && op <= 45) || (49 <= op && op <= 50) || (52 <= op && op <= 53) || op == 164;
 }
-// Counter functions for llvm ops:
+// Counter functions for llvm37 ops:
 bool CountLlvmOp_atomic(unsigned op) {
   // Instructions: AtomicCmpXchg=31, AtomicRMW=32
   return (31 <= op && op <= 32);
@@ -249,19 +249,19 @@ void CountDxilOp(unsigned op, DxilCounters &counters) {
 }
 
 void CountLlvmOp(unsigned op, DxilCounters &counters) {
-  // <py::lines('COUNT-LLVM-OPS')>['if (CountLlvmOp_%s(op)) ++counters.%s;' % (c,c) for c in hctdb_instrhelp.get_llvm_op_counters()]</py>
-  // COUNT-LLVM-OPS:BEGIN
+  // <py::lines('COUNT-LLVM37-OPS')>['if (CountLlvmOp_%s(op)) ++counters.%s;' % (c,c) for c in hctdb_instrhelp.get_llvm37_op_counters()]</py>
+  // COUNT-LLVM37-OPS:BEGIN
   if (CountLlvmOp_atomic(op)) ++counters.atomic;
   if (CountLlvmOp_fence(op)) ++counters.fence;
   if (CountLlvmOp_floats(op)) ++counters.floats;
   if (CountLlvmOp_ints(op)) ++counters.ints;
   if (CountLlvmOp_uints(op)) ++counters.uints;
-  // COUNT-LLVM-OPS:END
+  // COUNT-LLVM37-OPS:END
 }
 
 } // namespace
 
-void CountInstructions(llvm::Module &M, DxilCounters& counters) {
+void CountInstructions(llvm37::Module &M, DxilCounters& counters) {
   const DataLayout &DL = M.getDataLayout();
   PointerInfoMap ptrInfoMap;
 
@@ -294,7 +294,7 @@ void CountInstructions(llvm::Module &M, DxilCounters& counters) {
           }
         } else if (CallInst *CI = dyn_cast<CallInst>(I)) {
           if (hlsl::OP::IsDxilOpFuncCallInst(CI)) {
-            unsigned opcode = (unsigned)llvm::cast<llvm::ConstantInt>(I->getOperand(0))->getZExtValue();
+            unsigned opcode = (unsigned)llvm37::cast<llvm37::ConstantInt>(I->getOperand(0))->getZExtValue();
             CountDxilOp(opcode, counters);
           }
         } else if (isa<LoadInst>(I) || isa<StoreInst>(I)) {
@@ -317,7 +317,7 @@ void CountInstructions(llvm::Module &M, DxilCounters& counters) {
             ++counters.branches;
           }
         } else {
-          // Count llvm ops:
+          // Count llvm37 ops:
           CountLlvmOp(I->getOpcode(), counters);
         }
       }
@@ -365,7 +365,7 @@ static int CounterOffsetByNameLess(const CounterOffsetByName &a, const CounterOf
   return a.name < b.name;
 }
 
-uint32_t *LookupByName(llvm::StringRef name, DxilCounters& counters) {
+uint32_t *LookupByName(llvm37::StringRef name, DxilCounters& counters) {
   CounterOffsetByName key = {name, nullptr};
   static const CounterOffsetByName *CounterEnd = CountersByName +_countof(CountersByName);
   auto result = std::lower_bound(CountersByName, CounterEnd, key, CounterOffsetByNameLess);

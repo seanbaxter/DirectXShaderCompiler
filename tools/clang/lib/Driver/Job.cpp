@@ -1,6 +1,6 @@
 //===--- Job.cpp - Command to Execute -------------------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -12,18 +12,18 @@
 #include "clang/Driver/Job.h"
 #include "clang/Driver/Tool.h"
 #include "clang/Driver/ToolChain.h"
-#include "llvm/ADT/ArrayRef.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/StringRef.h"
-#include "llvm/ADT/StringSet.h"
-#include "llvm/ADT/StringSwitch.h"
-#include "llvm/Support/Program.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/ArrayRef.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/StringRef.h"
+#include "llvm37/ADT/StringSet.h"
+#include "llvm37/ADT/StringSwitch.h"
+#include "llvm37/Support/Program.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <cassert>
 using namespace clang::driver;
-using llvm::raw_ostream;
-using llvm::StringRef;
-using llvm::ArrayRef;
+using llvm37::raw_ostream;
+using llvm37::StringRef;
+using llvm37::ArrayRef;
 
 Command::Command(const Action &Source, const Tool &Creator,
                  const char *Executable, const ArgStringList &Arguments)
@@ -33,7 +33,7 @@ Command::Command(const Action &Source, const Tool &Creator,
 static int skipArgs(const char *Flag, bool HaveCrashVFS) {
   // These flags are all of the form -Flag <Arg> and are treated as two
   // arguments.  Therefore, we need to skip the flag and the next argument.
-  bool Res = llvm::StringSwitch<bool>(Flag)
+  bool Res = llvm37::StringSwitch<bool>(Flag)
     .Cases("-I", "-MF", "-MT", "-MQ", true)
     .Cases("-o", "-coverage-file", "-dependency-file", true)
     .Cases("-fdebug-compilation-dir", "-idirafter", true)
@@ -53,7 +53,7 @@ static int skipArgs(const char *Flag, bool HaveCrashVFS) {
   // The remaining flags are treated as a single argument.
 
   // These flags are all of the form -Flag and have no second argument.
-  Res = llvm::StringSwitch<bool>(Flag)
+  Res = llvm37::StringSwitch<bool>(Flag)
     .Cases("-M", "-MM", "-MG", "-MP", "-MD", true)
     .Case("-MMD", true)
     .Default(false);
@@ -114,7 +114,7 @@ void Command::writeResponseFile(raw_ostream &OS) const {
 }
 
 void Command::buildArgvForResponseFile(
-    llvm::SmallVectorImpl<const char *> &Out) const {
+    llvm37::SmallVectorImpl<const char *> &Out) const {
   // When not a file list, all arguments are sent to the response file.
   // This leaves us to set the argv to a single parameter, requesting the tool
   // to read the response file.
@@ -124,7 +124,7 @@ void Command::buildArgvForResponseFile(
     return;
   }
 
-  llvm::StringSet<> Inputs;
+  llvm37::StringSet<> Inputs;
   for (const char *InputName : InputFileList)
     Inputs.insert(InputName);
   Out.push_back(Executable);
@@ -148,8 +148,8 @@ void Command::Print(raw_ostream &OS, const char *Terminator, bool Quote,
   OS << ' ';
   printArg(OS, Executable, /*Quote=*/true);
 
-  llvm::ArrayRef<const char *> Args = Arguments;
-  llvm::SmallVector<const char *, 128> ArgsRespFile;
+  llvm37::ArrayRef<const char *> Args = Arguments;
+  llvm37::SmallVector<const char *, 128> ArgsRespFile;
   if (ResponseFile != nullptr) {
     buildArgvForResponseFile(ArgsRespFile);
     Args = ArrayRef<const char *>(ArgsRespFile).slice(1); // no executable name
@@ -170,11 +170,11 @@ void Command::Print(raw_ostream &OS, const char *Terminator, bool Quote,
       if (int Skip = skipArgs(Arg, HaveCrashVFS)) {
         i += Skip - 1;
         continue;
-      } else if (llvm::sys::path::filename(Arg) == MainFilename &&
+      } else if (llvm37::sys::path::filename(Arg) == MainFilename &&
                  (i == 0 || StringRef(Args[i - 1]) != "-main-file-name")) {
         // Replace the input file name with the crashinfo's file name.
         OS << ' ';
-        StringRef ShortName = llvm::sys::path::filename(CrashInfo->Filename);
+        StringRef ShortName = llvm37::sys::path::filename(CrashInfo->Filename);
         printArg(OS, ShortName.str().c_str(), Quote);
         continue;
       }
@@ -220,7 +220,7 @@ int Command::Execute(const StringRef **Redirects, std::string *ErrMsg,
     Argv.append(Arguments.begin(), Arguments.end());
     Argv.push_back(nullptr);
 
-    return llvm::sys::ExecuteAndWait(Executable, Argv.data(), /*env*/ nullptr,
+    return llvm37::sys::ExecuteAndWait(Executable, Argv.data(), /*env*/ nullptr,
                                      Redirects, /*secondsToWait*/ 0,
                                      /*memoryLimit*/ 0, ErrMsg,
                                      ExecutionFailed);
@@ -229,7 +229,7 @@ int Command::Execute(const StringRef **Redirects, std::string *ErrMsg,
   // We need to put arguments in a response file (command is too large)
   // Open stream to store the response file contents
   std::string RespContents;
-  llvm::raw_string_ostream SS(RespContents);
+  llvm37::raw_string_ostream SS(RespContents);
 
   // Write file contents and build the Argv vector
   writeResponseFile(SS);
@@ -247,7 +247,7 @@ int Command::Execute(const StringRef **Redirects, std::string *ErrMsg,
     return -1;
   }
 
-  return llvm::sys::ExecuteAndWait(Executable, Argv.data(), /*env*/ nullptr,
+  return llvm37::sys::ExecuteAndWait(Executable, Argv.data(), /*env*/ nullptr,
                                    Redirects, /*secondsToWait*/ 0,
                                    /*memoryLimit*/ 0, ErrMsg, ExecutionFailed);
 #else

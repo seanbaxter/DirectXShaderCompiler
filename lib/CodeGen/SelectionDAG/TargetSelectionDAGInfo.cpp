@@ -1,6 +1,6 @@
 //===-- TargetSelectionDAGInfo.cpp - SelectionDAG Info --------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,9 +11,9 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Target/TargetSelectionDAGInfo.h"
-#include "llvm/Target/TargetMachine.h"
-using namespace llvm;
+#include "llvm37/Target/TargetSelectionDAGInfo.h"
+#include "llvm37/Target/TargetMachine.h"
+using namespace llvm37;
 
 TargetSelectionDAGInfo::~TargetSelectionDAGInfo() {
 }

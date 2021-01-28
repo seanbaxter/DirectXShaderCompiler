@@ -1,6 +1,6 @@
 //===--- ModuleMap.h - Describe the layout of modules -----------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -13,17 +13,17 @@
 //===----------------------------------------------------------------------===//
 
 
-#ifndef LLVM_CLANG_LEX_MODULEMAP_H
-#define LLVM_CLANG_LEX_MODULEMAP_H
+#ifndef LLVM37_CLANG_LEX_MODULEMAP_H
+#define LLVM37_CLANG_LEX_MODULEMAP_H
 
 #include "clang/Basic/LangOptions.h"
 #include "clang/Basic/Module.h"
 #include "clang/Basic/SourceManager.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/IntrusiveRefCntPtr.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/ADT/StringMap.h"
-#include "llvm/ADT/StringRef.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/IntrusiveRefCntPtr.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/ADT/StringMap.h"
+#include "llvm37/ADT/StringRef.h"
 #include <string>
 
 namespace clang {
@@ -62,7 +62,7 @@ public:
 
 private:
   /// \brief The top-level modules that are known.
-  llvm::StringMap<Module *> Modules;
+  llvm37::StringMap<Module *> Modules;
 
   /// \brief The number of modules we have created in total.
   unsigned NumCreatedModules;
@@ -88,7 +88,7 @@ public:
   /// \brief A header that is known to reside within a given module,
   /// whether it was included or excluded.
   class KnownHeader {
-    llvm::PointerIntPair<Module *, 2, ModuleHeaderRole> Storage;
+    llvm37::PointerIntPair<Module *, 2, ModuleHeaderRole> Storage;
 
   public:
     KnownHeader() : Storage(nullptr, NormalHeader) { }
@@ -112,10 +112,10 @@ public:
     }
   };
 
-  typedef llvm::SmallPtrSet<const FileEntry *, 1> AdditionalModMapsSet;
+  typedef llvm37::SmallPtrSet<const FileEntry *, 1> AdditionalModMapsSet;
 
 private:
-  typedef llvm::DenseMap<const FileEntry *, SmallVector<KnownHeader, 1> >
+  typedef llvm37::DenseMap<const FileEntry *, SmallVector<KnownHeader, 1> >
   HeadersMap;
 
   /// \brief Mapping from each header to the module that owns the contents of
@@ -128,7 +128,7 @@ private:
   /// This mapping is used to map headers that haven't explicitly been named
   /// in the module map over to the module that includes them via its umbrella
   /// header.
-  llvm::DenseMap<const DirectoryEntry *, Module *> UmbrellaDirs;
+  llvm37::DenseMap<const DirectoryEntry *, Module *> UmbrellaDirs;
 
   /// \brief The set of attributes that can be attached to a module.
   struct Attributes {
@@ -165,17 +165,17 @@ private:
 
   /// \brief A mapping from directories to information about inferring
   /// framework modules from within those directories.
-  llvm::DenseMap<const DirectoryEntry *, InferredDirectory> InferredDirectories;
+  llvm37::DenseMap<const DirectoryEntry *, InferredDirectory> InferredDirectories;
 
   /// A mapping from an inferred module to the module map that allowed the
   /// inference.
-  llvm::DenseMap<const Module *, const FileEntry *> InferredModuleAllowedBy;
+  llvm37::DenseMap<const Module *, const FileEntry *> InferredModuleAllowedBy;
 
-  llvm::DenseMap<const Module *, AdditionalModMapsSet> AdditionalModMaps;
+  llvm37::DenseMap<const Module *, AdditionalModMapsSet> AdditionalModMaps;
 
   /// \brief Describes whether we haved parsed a particular file as a module
   /// map.
-  llvm::DenseMap<const FileEntry *, bool> ParsedModuleMap;
+  llvm37::DenseMap<const FileEntry *, bool> ParsedModuleMap;
 
   friend class ModuleMapParser;
   
@@ -463,7 +463,7 @@ public:
   /// \brief Dump the contents of the module map, for debugging purposes.
   void dump();
   
-  typedef llvm::StringMap<Module *>::const_iterator module_iterator;
+  typedef llvm37::StringMap<Module *>::const_iterator module_iterator;
   module_iterator module_begin() const { return Modules.begin(); }
   module_iterator module_end()   const { return Modules.end(); }
 };

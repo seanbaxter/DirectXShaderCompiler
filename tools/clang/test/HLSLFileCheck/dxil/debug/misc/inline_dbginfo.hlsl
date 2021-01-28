@@ -1,7 +1,7 @@
 // RUN: %dxc -T ps_6_0 -E main -Zi %s | FileCheck %s
 
-// Make sure llvm.dbg.value exist.
-// CHECK: call void @llvm.dbg.value
+// Make sure llvm37.dbg.value exist.
+// CHECK: call void @llvm37.dbg.value
 
 // Exclude quoted source file (see readme)
 // CHECK-LABEL: {{!"[^"]*\\0A[^"]*"}}

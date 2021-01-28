@@ -19,14 +19,14 @@ exit:
 }
 
 define void @__main() {
-        call void @__llvm_getGlobalCtors( )
-        call void @__llvm_getGlobalDtors( )
+        call void @__llvm37_getGlobalCtors( )
+        call void @__llvm37_getGlobalDtors( )
         ret void
 }
 
 declare i32 @__gxx_personality_v0(...)
 
-declare void @__llvm_getGlobalCtors()
+declare void @__llvm37_getGlobalCtors()
 
-declare void @__llvm_getGlobalDtors()
+declare void @__llvm37_getGlobalDtors()
 

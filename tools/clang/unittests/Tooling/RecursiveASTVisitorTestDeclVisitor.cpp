@@ -1,6 +1,6 @@
 //===- unittest/Tooling/RecursiveASTVisitorTestDeclVisitor.cpp ------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -65,7 +65,7 @@ class NamedDeclVisitor
 public:
   bool VisitNamedDecl(NamedDecl *Decl) {
     std::string NameWithTemplateArgs;
-    llvm::raw_string_ostream OS(NameWithTemplateArgs);
+    llvm37::raw_string_ostream OS(NameWithTemplateArgs);
     Decl->getNameForDiagnostic(OS,
                                Decl->getASTContext().getPrintingPolicy(),
                                true);

@@ -13,23 +13,23 @@
 #include "dxc/DXIL/DxilOperations.h"
 #include "dxc/DXIL/DxilInstructions.h"
 
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/Operator.h"
-#include "llvm/Pass.h"
-#include "llvm/IR/LegacyPassManager.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/IR/CFG.h"
-#include "llvm/Analysis/CallGraph.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/Operator.h"
+#include "llvm37/Pass.h"
+#include "llvm37/IR/LegacyPassManager.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/IR/CFG.h"
+#include "llvm37/Analysis/CallGraph.h"
 
 #include <algorithm>
 
-using namespace llvm;
-using namespace llvm::legacy;
+using namespace llvm37;
+using namespace llvm37::legacy;
 using namespace hlsl;
-using llvm::legacy::PassManager;
-using llvm::legacy::FunctionPassManager;
+using llvm37::legacy::PassManager;
+using llvm37::legacy::FunctionPassManager;
 using std::vector;
 using std::unordered_set;
 using std::unordered_map;
@@ -52,7 +52,7 @@ const DxilViewIdState::InputsContributingToOutputType &DxilViewIdState::getPCInp
 namespace {
 
 void PrintOutputsDependentOnViewId(
-    llvm::raw_ostream &OS, llvm::StringRef SetName, unsigned NumOutputs,
+    llvm37::raw_ostream &OS, llvm37::StringRef SetName, unsigned NumOutputs,
     const DxilViewIdState::OutputsDependentOnViewIdType
         &OutputsDependentOnViewId) {
   OS << SetName << " dependent on ViewId: { ";
@@ -69,8 +69,8 @@ void PrintOutputsDependentOnViewId(
 }
 
 void PrintInputsContributingToOutputs(
-    llvm::raw_ostream &OS, llvm::StringRef InputSetName,
-    llvm::StringRef OutputSetName,
+    llvm37::raw_ostream &OS, llvm37::StringRef InputSetName,
+    llvm37::StringRef OutputSetName,
     const DxilViewIdState::InputsContributingToOutputType
         &InputsContributingToOutputs) {
   OS << InputSetName << " contributing to computation of " << OutputSetName
@@ -91,7 +91,7 @@ void PrintInputsContributingToOutputs(
 }
 } // namespace
 
-void DxilViewIdState::PrintSets(llvm::raw_ostream &OS) {
+void DxilViewIdState::PrintSets(llvm37::raw_ostream &OS) {
   const ShaderModel *pSM = m_pModule->GetShaderModel();
   OS << "ViewId state: \n";
 

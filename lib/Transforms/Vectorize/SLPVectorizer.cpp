@@ -1,6 +1,6 @@
 //===- SLPVectorizer.cpp - A bottom up SLP Vectorizer ---------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -16,41 +16,41 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Transforms/Vectorize.h"
-#include "llvm/ADT/MapVector.h"
-#include "llvm/ADT/Optional.h"
-#include "llvm/ADT/PostOrderIterator.h"
-#include "llvm/ADT/SetVector.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/Analysis/AliasAnalysis.h"
-#include "llvm/Analysis/AssumptionCache.h"
-#include "llvm/Analysis/CodeMetrics.h"
-#include "llvm/Analysis/LoopInfo.h"
-#include "llvm/Analysis/ScalarEvolution.h"
-#include "llvm/Analysis/ScalarEvolutionExpressions.h"
-#include "llvm/Analysis/TargetTransformInfo.h"
-#include "llvm/Analysis/ValueTracking.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/Dominators.h"
-#include "llvm/IR/IRBuilder.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/NoFolder.h"
-#include "llvm/IR/Type.h"
-#include "llvm/IR/Value.h"
-#include "llvm/IR/Verifier.h"
-#include "llvm/Pass.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Analysis/VectorUtils.h"
+#include "llvm37/Transforms/Vectorize.h"
+#include "llvm37/ADT/MapVector.h"
+#include "llvm37/ADT/Optional.h"
+#include "llvm37/ADT/PostOrderIterator.h"
+#include "llvm37/ADT/SetVector.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/Analysis/AliasAnalysis.h"
+#include "llvm37/Analysis/AssumptionCache.h"
+#include "llvm37/Analysis/CodeMetrics.h"
+#include "llvm37/Analysis/LoopInfo.h"
+#include "llvm37/Analysis/ScalarEvolution.h"
+#include "llvm37/Analysis/ScalarEvolutionExpressions.h"
+#include "llvm37/Analysis/TargetTransformInfo.h"
+#include "llvm37/Analysis/ValueTracking.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/IR/Dominators.h"
+#include "llvm37/IR/IRBuilder.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/NoFolder.h"
+#include "llvm37/IR/Type.h"
+#include "llvm37/IR/Value.h"
+#include "llvm37/IR/Verifier.h"
+#include "llvm37/Pass.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Analysis/VectorUtils.h"
 #include <algorithm>
 #include <map>
 #include <memory>
 //                                                                           //
 ///////////////////////////////////////////////////////////////////////////////
-using namespace llvm;
+using namespace llvm37;
 
 #define SV_NAME "slp-vectorizer"
 #define DEBUG_TYPE "SLP"
@@ -83,7 +83,7 @@ static const unsigned MinVecRegSize = 128;
 static const unsigned RecursionMaxDepth = 12;
 
 // Limit the number of alias checks. The limit is chosen so that
-// it has no negative effect on the llvm benchmarks.
+// it has no negative effect on the llvm37 benchmarks.
 static const unsigned AliasedCheckLimit = 10;
 
 // Another limit for the alias checks: The maximum distance between load/store
@@ -93,7 +93,7 @@ static const unsigned MaxMemDepDistance = 160;
 
 /// \brief Predicate for the element types that the SLP vectorizer supports.
 ///
-/// The most important thing to filter here are types which are invalid in LLVM
+/// The most important thing to filter here are types which are invalid in LLVM37
 /// vectors. We also filter target specific types which have absolutely no
 /// meaningful vectorization path such as x86_fp80 and ppc_f128. This just
 /// avoids spending time checking the cost model and realizing that they will
@@ -232,16 +232,16 @@ static Instruction *propagateMetadata(Instruction *I, ArrayRef<Value *> VL) {
       default:
         MD = nullptr; // Remove unknown metadata
         break;
-      case LLVMContext::MD_tbaa:
+      case LLVM37Context::MD_tbaa:
         MD = MDNode::getMostGenericTBAA(MD, IMD);
         break;
-      case LLVMContext::MD_alias_scope:
+      case LLVM37Context::MD_alias_scope:
         MD = MDNode::getMostGenericAliasScope(MD, IMD);
         break;
-      case LLVMContext::MD_noalias:
+      case LLVM37Context::MD_noalias:
         MD = MDNode::intersect(MD, IMD);
         break;
-      case LLVMContext::MD_fpmath:
+      case LLVM37Context::MD_fpmath:
         MD = MDNode::getMostGenericFPMath(MD, IMD);
         break;
       }
@@ -507,12 +507,12 @@ private:
 
   /// This POD struct describes one external user in the vectorized tree.
   struct ExternalUser {
-    ExternalUser (Value *S, llvm::User *U, int L) :
+    ExternalUser (Value *S, llvm37::User *U, int L) :
       Scalar(S), User(U), Lane(L){};
     // Which scalar in our function.
     Value *Scalar;
     // Which user that uses the scalar.
-    llvm::User *User;
+    llvm37::User *User;
     // Which lane does the scalar belong to.
     int Lane;
   };
@@ -568,7 +568,7 @@ private:
   /// This list holds pairs of (Internal Scalar : External User).
   UserList ExternalUses;
 
-  /// Values used only by @llvm.assume calls.
+  /// Values used only by @llvm37.assume calls.
   SmallPtrSet<const Value *, 32> EphValues;
 
   /// Holds all of the instructions that we gathered.
@@ -1073,7 +1073,7 @@ void BoUpSLP::buildTree_rec(ArrayRef<Value *> VL, unsigned Depth) {
 
   auto &BSRef = BlocksSchedules[BB];
   if (!BSRef) {
-    BSRef = llvm::make_unique<BlockScheduling>(BB);
+    BSRef = llvm37::make_unique<BlockScheduling>(BB);
   }
   BlockScheduling &BS = *BSRef.get();
 
@@ -1632,7 +1632,7 @@ int BoUpSLP::getEntryCost(TreeEntry *E) {
       return VecCost - ScalarCost;
     }
     default:
-      llvm_unreachable("Unknown instruction");
+      llvm37_unreachable("Unknown instruction");
   }
 }
 
@@ -2479,7 +2479,7 @@ Value *BoUpSLP::vectorizeTree(TreeEntry *E) {
       return V;
     }
     default:
-    llvm_unreachable("unknown inst");
+    llvm37_unreachable("unknown inst");
   }
   return nullptr;
 }
@@ -2500,7 +2500,7 @@ Value *BoUpSLP::vectorizeTree() {
   for (UserList::iterator it = ExternalUses.begin(), e = ExternalUses.end();
        it != e; ++it) {
     Value *Scalar = it->Scalar;
-    llvm::User *User = it->User;
+    llvm37::User *User = it->User;
 
     // Skip users that we already RAUW. This happens when one instruction
     // has multiple uses of the same value.
@@ -2834,7 +2834,7 @@ void BoUpSLP::BlockScheduling::initScheduleData(Instruction *FromI,
       // Allocate a new ScheduleData for the instruction.
       if (ChunkPos >= ChunkSize) {
         ScheduleDataChunks.push_back(
-            llvm::make_unique<ScheduleData[]>(ChunkSize));
+            llvm37::make_unique<ScheduleData[]>(ChunkSize));
         ChunkPos = 0;
       }
       SD = &(ScheduleDataChunks.back()[ChunkPos++]);
@@ -4048,6 +4048,6 @@ INITIALIZE_PASS_DEPENDENCY(ScalarEvolution)
 INITIALIZE_PASS_DEPENDENCY(LoopSimplify)
 INITIALIZE_PASS_END(SLPVectorizer, SV_NAME, lv_name, false, false)
 
-namespace llvm {
+namespace llvm37 {
 Pass *createSLPVectorizerPass() { return new SLPVectorizer(); }
 }

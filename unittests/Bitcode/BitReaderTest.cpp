@@ -1,29 +1,29 @@
-//===- llvm/unittest/Bitcode/BitReaderTest.cpp - Tests for BitReader ------===//
+//===- llvm37/unittest/Bitcode/BitReaderTest.cpp - Tests for BitReader ------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/ADT/SmallString.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/AsmParser/Parser.h"
-#include "llvm/Bitcode/BitstreamWriter.h"
-#include "llvm/Bitcode/ReaderWriter.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/Verifier.h"
-#include "llvm/Support/DataStream.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/MemoryBuffer.h"
-#include "llvm/Support/SourceMgr.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/AsmParser/Parser.h"
+#include "llvm37/Bitcode/BitstreamWriter.h"
+#include "llvm37/Bitcode/ReaderWriter.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/Verifier.h"
+#include "llvm37/Support/DataStream.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/MemoryBuffer.h"
+#include "llvm37/Support/SourceMgr.h"
 #include "gtest/gtest.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 namespace {
 
@@ -49,7 +49,7 @@ static void writeModuleToBuffer(std::unique_ptr<Module> Mod,
   WriteBitcodeToFile(Mod.get(), OS);
 }
 
-static std::unique_ptr<Module> getLazyModuleFromAssembly(LLVMContext &Context,
+static std::unique_ptr<Module> getLazyModuleFromAssembly(LLVM37Context &Context,
                                                          SmallString<1024> &Mem,
                                                          const char *Assembly) {
   writeModuleToBuffer(parseAssembly(Assembly), Mem);
@@ -78,12 +78,12 @@ public:
 };
 
 static std::unique_ptr<Module>
-getStreamedModuleFromAssembly(LLVMContext &Context, SmallString<1024> &Mem,
+getStreamedModuleFromAssembly(LLVM37Context &Context, SmallString<1024> &Mem,
                               const char *Assembly) {
   writeModuleToBuffer(parseAssembly(Assembly), Mem);
   std::unique_ptr<MemoryBuffer> Buffer =
       MemoryBuffer::getMemBuffer(Mem.str(), "test", false);
-  auto Streamer = llvm::make_unique<BufferDataStreamer>(std::move(Buffer));
+  auto Streamer = llvm37::make_unique<BufferDataStreamer>(std::move(Buffer));
   ErrorOr<std::unique_ptr<Module>> ModuleOrErr =
       getStreamedBitcodeModule("test", std::move(Streamer), Context);
   return std::move(ModuleOrErr.get());
@@ -92,7 +92,7 @@ getStreamedModuleFromAssembly(LLVMContext &Context, SmallString<1024> &Mem,
 TEST(BitReaderTest, MateralizeForwardRefWithStream) {
   SmallString<1024> Mem;
 
-  LLVMContext Context;
+  LLVM37Context Context;
   std::unique_ptr<Module> M = getStreamedModuleFromAssembly(
       Context, Mem, "@table = constant i8* blockaddress(@func, %bb)\n"
                     "define void @func() {\n"
@@ -106,7 +106,7 @@ TEST(BitReaderTest, MateralizeForwardRefWithStream) {
 TEST(BitReaderTest, DematerializeFunctionPreservesLinkageType) {
   SmallString<1024> Mem;
 
-  LLVMContext Context;
+  LLVM37Context Context;
   std::unique_ptr<Module> M = getLazyModuleFromAssembly(
       Context, Mem, "define internal i32 @func() {\n"
                       "ret i32 0\n"
@@ -130,7 +130,7 @@ TEST(BitReaderTest, DematerializeFunctionPreservesLinkageType) {
 // Tests that lazy evaluation can parse functions out of order.
 TEST(BitReaderTest, MaterializeFunctionsOutOfOrder) {
   SmallString<1024> Mem;
-  LLVMContext Context;
+  LLVM37Context Context;
   std::unique_ptr<Module> M = getLazyModuleFromAssembly(
       Context, Mem, "define void @f() {\n"
                     "  unreachable\n"
@@ -194,7 +194,7 @@ TEST(BitReaderTest, MaterializeFunctionsOutOfOrder) {
 TEST(BitReaderTest, MaterializeFunctionsForBlockAddr) { // PR11677
   SmallString<1024> Mem;
 
-  LLVMContext Context;
+  LLVM37Context Context;
   std::unique_ptr<Module> M = getLazyModuleFromAssembly(
       Context, Mem, "@table = constant i8* blockaddress(@func, %bb)\n"
                     "define void @func() {\n"
@@ -212,7 +212,7 @@ TEST(BitReaderTest, MaterializeFunctionsForBlockAddr) { // PR11677
 TEST(BitReaderTest, MaterializeFunctionsForBlockAddrInFunctionBefore) {
   SmallString<1024> Mem;
 
-  LLVMContext Context;
+  LLVM37Context Context;
   std::unique_ptr<Module> M = getLazyModuleFromAssembly(
       Context, Mem, "define i8* @before() {\n"
                     "  ret i8* blockaddress(@func, %bb)\n"
@@ -244,7 +244,7 @@ TEST(BitReaderTest, MaterializeFunctionsForBlockAddrInFunctionBefore) {
 TEST(BitReaderTest, MaterializeFunctionsForBlockAddrInFunctionAfter) {
   SmallString<1024> Mem;
 
-  LLVMContext Context;
+  LLVM37Context Context;
   std::unique_ptr<Module> M = getLazyModuleFromAssembly(
       Context, Mem, "define void @func() {\n"
                     "  unreachable\n"

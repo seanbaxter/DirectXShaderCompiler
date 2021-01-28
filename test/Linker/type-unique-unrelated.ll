@@ -1,4 +1,4 @@
-; RUN: llvm-link -S %s %p/Inputs/type-unique-unrelated2.ll %p/Inputs/type-unique-unrelated3.ll | FileCheck %s
+; RUN: llvm37-link -S %s %p/Inputs/type-unique-unrelated2.ll %p/Inputs/type-unique-unrelated3.ll | FileCheck %s
 
 ; CHECK: %t = type { i8* }
 

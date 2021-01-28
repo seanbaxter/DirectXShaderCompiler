@@ -1,6 +1,6 @@
 //== CStringSyntaxChecker.cpp - CoreFoundation containers API *- C++ -*-==//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -24,8 +24,8 @@
 #include "clang/StaticAnalyzer/Core/Checker.h"
 #include "clang/StaticAnalyzer/Core/PathSensitive/AnalysisManager.h"
 #include "clang/StaticAnalyzer/Core/PathSensitive/CheckerContext.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/Support/raw_ostream.h"
 using namespace clang;
 using namespace ento;
 
@@ -147,7 +147,7 @@ void WalkAST::VisitCallExpr(CallExpr *CE) {
       StringRef DstName = getPrintableName(DstArg);
 
       SmallString<256> S;
-      llvm::raw_svector_ostream os(S);
+      llvm37::raw_svector_ostream os(S);
       os << "Potential buffer overflow. ";
       if (!DstName.empty()) {
         os << "Replace with 'sizeof(" << DstName << ") "

@@ -1,17 +1,17 @@
 //===-- DebugLoc.cpp - Implement DebugLoc class ---------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/IR/DebugLoc.h"
+#include "llvm37/IR/DebugLoc.h"
 #include "LLVMContextImpl.h"
-#include "llvm/ADT/DenseMapInfo.h"
-#include "llvm/IR/DebugInfo.h"
-using namespace llvm;
+#include "llvm37/ADT/DenseMapInfo.h"
+#include "llvm37/IR/DebugInfo.h"
+using namespace llvm37;
 
 //===----------------------------------------------------------------------===//
 // DebugLoc Implementation

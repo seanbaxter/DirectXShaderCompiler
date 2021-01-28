@@ -2,7 +2,7 @@
 import re, string, sys, os, time
 
 DEBUG = 0
-testDirName = 'llvm-test'
+testDirName = 'llvm37-test'
 test      = ['compile', 'llc', 'jit', 'cbe']
 exectime     = ['llc-time', 'jit-time', 'cbe-time',]
 comptime     = ['llc', 'jit-comptime', 'compile']

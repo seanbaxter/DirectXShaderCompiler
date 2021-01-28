@@ -1,6 +1,6 @@
 //===-- GCRootLowering.cpp - Garbage collection infrastructure ------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,31 +11,31 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/CodeGen/GCMetadata.h"
-#include "llvm/CodeGen/GCStrategy.h"
-#include "llvm/CodeGen/MachineFrameInfo.h"
-#include "llvm/CodeGen/MachineFunctionPass.h"
-#include "llvm/CodeGen/MachineInstrBuilder.h"
-#include "llvm/CodeGen/MachineModuleInfo.h"
-#include "llvm/CodeGen/Passes.h"
-#include "llvm/IR/Dominators.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/IR/Module.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Target/TargetFrameLowering.h"
-#include "llvm/Target/TargetInstrInfo.h"
-#include "llvm/Target/TargetMachine.h"
-#include "llvm/Target/TargetRegisterInfo.h"
-#include "llvm/Target/TargetSubtargetInfo.h"
+#include "llvm37/CodeGen/GCMetadata.h"
+#include "llvm37/CodeGen/GCStrategy.h"
+#include "llvm37/CodeGen/MachineFrameInfo.h"
+#include "llvm37/CodeGen/MachineFunctionPass.h"
+#include "llvm37/CodeGen/MachineInstrBuilder.h"
+#include "llvm37/CodeGen/MachineModuleInfo.h"
+#include "llvm37/CodeGen/Passes.h"
+#include "llvm37/IR/Dominators.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Target/TargetFrameLowering.h"
+#include "llvm37/Target/TargetInstrInfo.h"
+#include "llvm37/Target/TargetMachine.h"
+#include "llvm37/Target/TargetRegisterInfo.h"
+#include "llvm37/Target/TargetSubtargetInfo.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 namespace {
 
-/// LowerIntrinsics - This pass rewrites calls to the llvm.gcread or
-/// llvm.gcwrite intrinsics, replacing them with simple loads and stores as
+/// LowerIntrinsics - This pass rewrites calls to the llvm37.gcread or
+/// llvm37.gcwrite intrinsics, replacing them with simple loads and stores as
 /// directed by the GCStrategy. It also performs automatic root initialization
 /// and custom intrinsic lowering.
 class LowerIntrinsics : public FunctionPass {
@@ -85,7 +85,7 @@ INITIALIZE_PASS_BEGIN(LowerIntrinsics, "gc-lowering", "GC Lowering", false,
 INITIALIZE_PASS_DEPENDENCY(GCModuleInfo)
 INITIALIZE_PASS_END(LowerIntrinsics, "gc-lowering", "GC Lowering", false, false)
 
-FunctionPass *llvm::createGCLoweringPass() { return new LowerIntrinsics(); }
+FunctionPass *llvm37::createGCLoweringPass() { return new LowerIntrinsics(); }
 
 char LowerIntrinsics::ID = 0;
 
@@ -139,7 +139,7 @@ static bool CouldBecomeSafePoint(Instruction *I) {
       isa<LoadInst>(I))
     return false;
 
-  // llvm.gcroot is safe because it doesn't do anything at runtime.
+  // llvm37.gcroot is safe because it doesn't do anything at runtime.
   if (CallInst *CI = dyn_cast<CallInst>(I))
     if (Function *F = CI->getCalledFunction())
       if (Intrinsic::ID IID = F->getIntrinsicID())
@@ -255,7 +255,7 @@ bool LowerIntrinsics::PerformDefaultLowering(Function &F, GCStrategy &S) {
 // -----------------------------------------------------------------------------
 
 char GCMachineCodeAnalysis::ID = 0;
-char &llvm::GCMachineCodeAnalysisID = GCMachineCodeAnalysis::ID;
+char &llvm37::GCMachineCodeAnalysisID = GCMachineCodeAnalysis::ID;
 
 INITIALIZE_PASS(GCMachineCodeAnalysis, "gc-analysis",
                 "Analyze Machine Code For Garbage Collection", false, false)

@@ -18,7 +18,7 @@ for.body:
   %indvars.iv = phi i64 [ 0, %entry ], [ %indvars.iv.next, %for.body ]
   %arrayidx = getelementptr inbounds double, double* %d, i64 %indvars.iv
   %0 = load double, double* %arrayidx, align 8
-  %1 = tail call double @llvm.pow.f64(double %0, double %t)
+  %1 = tail call double @llvm37.pow.f64(double %0, double %t)
   store double %1, double* %arrayidx, align 8
   %indvars.iv.next = add i64 %indvars.iv, 1
   %lftr.wideiv = trunc i64 %indvars.iv.next to i32
@@ -29,4 +29,4 @@ for.end:
   ret void
 }
 
-declare double @llvm.pow.f64(double, double)
+declare double @llvm37.pow.f64(double, double)

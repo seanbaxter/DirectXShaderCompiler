@@ -1,21 +1,21 @@
 //===- PDBSymbolCompilandEnv.cpp - compiland env variables ------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/DebugInfo/PDB/PDBSymbolCompilandEnv.h"
+#include "llvm37/DebugInfo/PDB/PDBSymbolCompilandEnv.h"
 
-#include "llvm/DebugInfo/PDB/IPDBRawSymbol.h"
-#include "llvm/DebugInfo/PDB/PDBSymbol.h"
-#include "llvm/DebugInfo/PDB/PDBSymDumper.h"
+#include "llvm37/DebugInfo/PDB/IPDBRawSymbol.h"
+#include "llvm37/DebugInfo/PDB/PDBSymbol.h"
+#include "llvm37/DebugInfo/PDB/PDBSymDumper.h"
 
 #include <utility>
 
-using namespace llvm;
+using namespace llvm37;
 
 PDBSymbolCompilandEnv::PDBSymbolCompilandEnv(
     const IPDBSession &PDBSession, std::unique_ptr<IPDBRawSymbol> Symbol)

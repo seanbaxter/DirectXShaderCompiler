@@ -1,6 +1,6 @@
 //== Store.cpp - Interface for maps from Locations to Values ----*- C++ -*--==//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -109,7 +109,7 @@ const MemRegion *StoreManager::castRegion(const MemRegion *R, QualType CastToTy)
     case MemRegion::GlobalInternalSpaceRegionKind:
     case MemRegion::GlobalSystemSpaceRegionKind:
     case MemRegion::GlobalImmutableSpaceRegionKind: {
-      llvm_unreachable("Invalid region cast");
+      llvm37_unreachable("Invalid region cast");
     }
 
     case MemRegion::FunctionTextRegionKind:
@@ -209,7 +209,7 @@ const MemRegion *StoreManager::castRegion(const MemRegion *R, QualType CastToTy)
     }
   }
 
-  llvm_unreachable("unreachable");
+  llvm37_unreachable("unreachable");
 }
 
 static bool regionMatchesCXXRecordType(SVal V, QualType Ty) {
@@ -409,7 +409,7 @@ SVal StoreManager::getLValueFieldOrIvar(const Decl *D, SVal Base) {
     return Base;
 
   default:
-    llvm_unreachable("Unhandled Base.");
+    llvm37_unreachable("Unhandled Base.");
   }
 
   // NOTE: We must have this check first because ObjCIvarDecl is a subclass
@@ -461,7 +461,7 @@ SVal StoreManager::getLValueElement(QualType elementType, NonLoc Offset,
   if (!BaseIdx.getAs<nonloc::ConcreteInt>())
     return UnknownVal();
 
-  const llvm::APSInt &BaseIdxI =
+  const llvm37::APSInt &BaseIdxI =
       BaseIdx.castAs<nonloc::ConcreteInt>().getValue();
 
   // Only allow non-integer offsets if the base region has no offset itself.
@@ -476,7 +476,7 @@ SVal StoreManager::getLValueElement(QualType elementType, NonLoc Offset,
                                                     Ctx));
   }
 
-  const llvm::APSInt& OffI = Offset.castAs<nonloc::ConcreteInt>().getValue();
+  const llvm37::APSInt& OffI = Offset.castAs<nonloc::ConcreteInt>().getValue();
   assert(BaseIdxI.isSigned());
 
   // Compute the new index.

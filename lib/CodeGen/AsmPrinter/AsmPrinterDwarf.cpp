@@ -1,6 +1,6 @@
 //===-- AsmPrinterDwarf.cpp - AsmPrinter Dwarf Support --------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -14,24 +14,24 @@
 #include "ByteStreamer.h"
 #include "DwarfDebug.h"
 #include "DwarfExpression.h"
-#include "llvm/ADT/Twine.h"
-#include "llvm/CodeGen/AsmPrinter.h"
-#include "llvm/CodeGen/DIE.h"
-#include "llvm/CodeGen/MachineFunction.h"
-#include "llvm/CodeGen/MachineModuleInfo.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/MC/MCAsmInfo.h"
-#include "llvm/MC/MCRegisterInfo.h"
-#include "llvm/MC/MCSection.h"
-#include "llvm/MC/MCStreamer.h"
-#include "llvm/MC/MCSymbol.h"
-#include "llvm/MC/MachineLocation.h"
-#include "llvm/Support/Dwarf.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Target/TargetLoweringObjectFile.h"
-#include "llvm/Target/TargetMachine.h"
-#include "llvm/Target/TargetSubtargetInfo.h"
-using namespace llvm;
+#include "llvm37/ADT/Twine.h"
+#include "llvm37/CodeGen/AsmPrinter.h"
+#include "llvm37/CodeGen/DIE.h"
+#include "llvm37/CodeGen/MachineFunction.h"
+#include "llvm37/CodeGen/MachineModuleInfo.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/MC/MCAsmInfo.h"
+#include "llvm37/MC/MCRegisterInfo.h"
+#include "llvm37/MC/MCSection.h"
+#include "llvm37/MC/MCStreamer.h"
+#include "llvm37/MC/MCSymbol.h"
+#include "llvm37/MC/MachineLocation.h"
+#include "llvm37/Support/Dwarf.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Target/TargetLoweringObjectFile.h"
+#include "llvm37/Target/TargetMachine.h"
+#include "llvm37/Target/TargetSubtargetInfo.h"
+using namespace llvm37;
 
 #define DEBUG_TYPE "asm-printer"
 
@@ -132,7 +132,7 @@ unsigned AsmPrinter::GetSizeOfEncodedValue(unsigned Encoding) const {
 
   switch (Encoding & 0x07) {
   default:
-    llvm_unreachable("Invalid encoded value.");
+    llvm37_unreachable("Invalid encoded value.");
   case dwarf::DW_EH_PE_absptr:
     return TM.getDataLayout()->getPointerSize();
   case dwarf::DW_EH_PE_udata2:
@@ -224,7 +224,7 @@ void AsmPrinter::EmitDwarfRegOp(ByteStreamer &Streamer,
 void AsmPrinter::emitCFIInstruction(const MCCFIInstruction &Inst) const {
   switch (Inst.getOperation()) {
   default:
-    llvm_unreachable("Unexpected instruction");
+    llvm37_unreachable("Unexpected instruction");
   case MCCFIInstruction::OpDefCfaOffset:
     OutStreamer->EmitCFIDefCfaOffset(Inst.getOffset());
     break;

@@ -1,4 +1,4 @@
-add_llvm_library(LLVMAsmPrinter
+add_llvm_library(LLVM37AsmPrinter
   AddressPool.cpp
   ARMException.cpp
   AsmPrinter.cpp
@@ -23,4 +23,4 @@ add_llvm_library(LLVMAsmPrinter
   WinCodeViewLineTables.cpp
   )
 
-add_dependencies(LLVMAsmPrinter intrinsics_gen)
+add_dependencies(LLVM37AsmPrinter intrinsics_gen)

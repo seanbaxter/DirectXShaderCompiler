@@ -10,7 +10,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include "dxc/Support/WinIncludes.h"
-#include "llvm/ADT/ArrayRef.h"
+#include "llvm37/ADT/ArrayRef.h"
 
 struct IDxcBlob;
 struct IStream;
@@ -21,6 +21,6 @@ namespace pdb {
 
   HRESULT LoadDataFromStream(IMalloc *pMalloc, IStream *pIStream, IDxcBlob **ppHash, IDxcBlob **ppContainer);
   HRESULT LoadDataFromStream(IMalloc *pMalloc, IStream *pIStream, IDxcBlob **pOutContainer);
-  HRESULT WriteDxilPDB(IMalloc *pMalloc, IDxcBlob *pContainer, llvm::ArrayRef<BYTE> HashData, IDxcBlob **ppOutBlob);
+  HRESULT WriteDxilPDB(IMalloc *pMalloc, IDxcBlob *pContainer, llvm37::ArrayRef<BYTE> HashData, IDxcBlob **ppOutBlob);
 }
 }

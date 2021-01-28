@@ -1,6 +1,6 @@
 //===- MILexer.h - Lexer for machine instructions -------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -12,15 +12,15 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_LIB_CODEGEN_MIRPARSER_MILEXER_H
-#define LLVM_LIB_CODEGEN_MIRPARSER_MILEXER_H
+#ifndef LLVM37_LIB_CODEGEN_MIRPARSER_MILEXER_H
+#define LLVM37_LIB_CODEGEN_MIRPARSER_MILEXER_H
 
-#include "llvm/ADT/APSInt.h"
-#include "llvm/ADT/StringRef.h"
-#include "llvm/ADT/STLExtras.h"
+#include "llvm37/ADT/APSInt.h"
+#include "llvm37/ADT/StringRef.h"
+#include "llvm37/ADT/STLExtras.h"
 #include <functional>
 
-namespace llvm {
+namespace llvm37 {
 
 class Twine;
 
@@ -106,6 +106,6 @@ StringRef lexMIToken(
     StringRef Source, MIToken &Token,
     function_ref<void(StringRef::iterator, const Twine &)> ErrorCallback);
 
-} // end namespace llvm
+} // end namespace llvm37
 
 #endif

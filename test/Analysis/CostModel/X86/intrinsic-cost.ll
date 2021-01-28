@@ -12,7 +12,7 @@ vector.body:                                      ; preds = %vector.body, %vecto
   %0 = getelementptr inbounds float, float* %f, i64 %index
   %1 = bitcast float* %0 to <4 x float>*
   %wide.load = load <4 x float>, <4 x float>* %1, align 4
-  %2 = call <4 x float> @llvm.ceil.v4f32(<4 x float> %wide.load)
+  %2 = call <4 x float> @llvm37.ceil.v4f32(<4 x float> %wide.load)
   store <4 x float> %2, <4 x float>* %1, align 4
   %index.next = add i64 %index, 4
   %3 = icmp eq i64 %index.next, 1024
@@ -22,14 +22,14 @@ for.end:                                          ; preds = %vector.body
   ret void
 
 ; CORE2: Printing analysis 'Cost Model Analysis' for function 'test1':
-; CORE2: Cost Model: Found an estimated cost of 46 for instruction:   %2 = call <4 x float> @llvm.ceil.v4f32(<4 x float> %wide.load)
+; CORE2: Cost Model: Found an estimated cost of 46 for instruction:   %2 = call <4 x float> @llvm37.ceil.v4f32(<4 x float> %wide.load)
 
 ; COREI7: Printing analysis 'Cost Model Analysis' for function 'test1':
-; COREI7: Cost Model: Found an estimated cost of 1 for instruction:   %2 = call <4 x float> @llvm.ceil.v4f32(<4 x float> %wide.load)
+; COREI7: Cost Model: Found an estimated cost of 1 for instruction:   %2 = call <4 x float> @llvm37.ceil.v4f32(<4 x float> %wide.load)
 
 }
 
-declare <4 x float> @llvm.ceil.v4f32(<4 x float>)  nounwind readnone
+declare <4 x float> @llvm37.ceil.v4f32(<4 x float>)  nounwind readnone
 
 define void @test2(float* nocapture %f) nounwind {
 vector.ph:
@@ -40,7 +40,7 @@ vector.body:                                      ; preds = %vector.body, %vecto
   %0 = getelementptr inbounds float, float* %f, i64 %index
   %1 = bitcast float* %0 to <4 x float>*
   %wide.load = load <4 x float>, <4 x float>* %1, align 4
-  %2 = call <4 x float> @llvm.nearbyint.v4f32(<4 x float> %wide.load)
+  %2 = call <4 x float> @llvm37.nearbyint.v4f32(<4 x float> %wide.load)
   store <4 x float> %2, <4 x float>* %1, align 4
   %index.next = add i64 %index, 4
   %3 = icmp eq i64 %index.next, 1024
@@ -50,14 +50,14 @@ for.end:                                          ; preds = %vector.body
   ret void
 
 ; CORE2: Printing analysis 'Cost Model Analysis' for function 'test2':
-; CORE2: Cost Model: Found an estimated cost of 46 for instruction:   %2 = call <4 x float> @llvm.nearbyint.v4f32(<4 x float> %wide.load)
+; CORE2: Cost Model: Found an estimated cost of 46 for instruction:   %2 = call <4 x float> @llvm37.nearbyint.v4f32(<4 x float> %wide.load)
 
 ; COREI7: Printing analysis 'Cost Model Analysis' for function 'test2':
-; COREI7: Cost Model: Found an estimated cost of 1 for instruction:   %2 = call <4 x float> @llvm.nearbyint.v4f32(<4 x float> %wide.load)
+; COREI7: Cost Model: Found an estimated cost of 1 for instruction:   %2 = call <4 x float> @llvm37.nearbyint.v4f32(<4 x float> %wide.load)
 
 }
 
-declare <4 x float> @llvm.nearbyint.v4f32(<4 x float>)  nounwind readnone
+declare <4 x float> @llvm37.nearbyint.v4f32(<4 x float>)  nounwind readnone
 
 define void @test3(float* nocapture %f, <4 x float> %b, <4 x float> %c) nounwind {
 vector.ph:
@@ -68,7 +68,7 @@ vector.body:                                      ; preds = %vector.body, %vecto
   %0 = getelementptr inbounds float, float* %f, i64 %index
   %1 = bitcast float* %0 to <4 x float>*
   %wide.load = load <4 x float>, <4 x float>* %1, align 4
-  %2 = call <4 x float> @llvm.fmuladd.v4f32(<4 x float> %wide.load, <4 x float> %b, <4 x float> %c)
+  %2 = call <4 x float> @llvm37.fmuladd.v4f32(<4 x float> %wide.load, <4 x float> %b, <4 x float> %c)
   store <4 x float> %2, <4 x float>* %1, align 4
   %index.next = add i64 %index, 4
   %3 = icmp eq i64 %index.next, 1024
@@ -78,11 +78,11 @@ for.end:                                          ; preds = %vector.body
   ret void
 
 ; CORE2: Printing analysis 'Cost Model Analysis' for function 'test3':
-; CORE2: Cost Model: Found an estimated cost of 4 for instruction: %2 = call <4 x float> @llvm.fmuladd.v4f32(<4 x float> %wide.load, <4 x float> %b, <4 x float> %c)
+; CORE2: Cost Model: Found an estimated cost of 4 for instruction: %2 = call <4 x float> @llvm37.fmuladd.v4f32(<4 x float> %wide.load, <4 x float> %b, <4 x float> %c)
 
 ; COREI7: Printing analysis 'Cost Model Analysis' for function 'test3':
-; COREI7: Cost Model: Found an estimated cost of 4 for instruction: %2 = call <4 x float> @llvm.fmuladd.v4f32(<4 x float> %wide.load, <4 x float> %b, <4 x float> %c)
+; COREI7: Cost Model: Found an estimated cost of 4 for instruction: %2 = call <4 x float> @llvm37.fmuladd.v4f32(<4 x float> %wide.load, <4 x float> %b, <4 x float> %c)
 
 }
 
-declare <4 x float> @llvm.fmuladd.v4f32(<4 x float>, <4 x float>, <4 x float>) nounwind readnone
+declare <4 x float> @llvm37.fmuladd.v4f32(<4 x float>, <4 x float>, <4 x float>) nounwind readnone

@@ -1,6 +1,6 @@
 //===-- SequenceToOffsetTable.h - Compress similar sequences ----*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -13,10 +13,10 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_UTILS_TABLEGEN_SEQUENCETOOFFSETTABLE_H
-#define LLVM_UTILS_TABLEGEN_SEQUENCETOOFFSETTABLE_H
+#ifndef LLVM37_UTILS_TABLEGEN_SEQUENCETOOFFSETTABLE_H
+#define LLVM37_UTILS_TABLEGEN_SEQUENCETOOFFSETTABLE_H
 
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <algorithm>
 #include <cassert>
 #include <cctype>
@@ -24,7 +24,7 @@
 #include <map>
 #include <vector>
 
-namespace llvm {
+namespace llvm37 {
 
 /// SequenceToOffsetTable - Collect a number of terminated sequences of T.
 /// Compute the layout of a table that contains all the sequences, possibly by
@@ -142,6 +142,6 @@ static inline void printChar(raw_ostream &OS, char C) {
   }
 }
 
-} // end namespace llvm
+} // end namespace llvm37
 
 #endif

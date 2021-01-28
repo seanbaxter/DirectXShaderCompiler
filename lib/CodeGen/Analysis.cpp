@@ -1,39 +1,39 @@
-//===-- Analysis.cpp - CodeGen LLVM IR Analysis Utilities -----------------===//
+//===-- Analysis.cpp - CodeGen LLVM37 IR Analysis Utilities -----------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 //
-// This file defines several CodeGen-specific LLVM IR analysis utilities.
+// This file defines several CodeGen-specific LLVM37 IR analysis utilities.
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/CodeGen/Analysis.h"
-#include "llvm/Analysis/ValueTracking.h"
-#include "llvm/CodeGen/MachineFunction.h"
-#include "llvm/CodeGen/SelectionDAG.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/DerivedTypes.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Module.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/MathExtras.h"
-#include "llvm/Target/TargetLowering.h"
-#include "llvm/Target/TargetSubtargetInfo.h"
-#include "llvm/Transforms/Utils/GlobalStatus.h"
+#include "llvm37/CodeGen/Analysis.h"
+#include "llvm37/Analysis/ValueTracking.h"
+#include "llvm37/CodeGen/MachineFunction.h"
+#include "llvm37/CodeGen/SelectionDAG.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/IR/DerivedTypes.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/MathExtras.h"
+#include "llvm37/Target/TargetLowering.h"
+#include "llvm37/Target/TargetSubtargetInfo.h"
+#include "llvm37/Transforms/Utils/GlobalStatus.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 /// Compute the linearized index of a member in a nested aggregate/struct/array
 /// by recursing and accumulating CurIndex as long as there are indices in the
 /// index list.
-unsigned llvm::ComputeLinearIndex(Type *Ty,
+unsigned llvm37::ComputeLinearIndex(Type *Ty,
                                   const unsigned *Indices,
                                   const unsigned *IndicesEnd,
                                   unsigned CurIndex) {
@@ -74,14 +74,14 @@ unsigned llvm::ComputeLinearIndex(Type *Ty,
   return CurIndex + 1;
 }
 
-/// ComputeValueVTs - Given an LLVM IR type, compute a sequence of
+/// ComputeValueVTs - Given an LLVM37 IR type, compute a sequence of
 /// EVTs that represent all the individual underlying
 /// non-aggregate types that comprise it.
 ///
 /// If Offsets is non-null, it points to a vector to be filled in
 /// with the in-memory offsets of each of the individual values.
 ///
-void llvm::ComputeValueVTs(const TargetLowering &TLI, const DataLayout &DL,
+void llvm37::ComputeValueVTs(const TargetLowering &TLI, const DataLayout &DL,
                            Type *Ty, SmallVectorImpl<EVT> &ValueVTs,
                            SmallVectorImpl<uint64_t> *Offsets,
                            uint64_t StartingOffset) {
@@ -108,14 +108,14 @@ void llvm::ComputeValueVTs(const TargetLowering &TLI, const DataLayout &DL,
   // Interpret void as zero return values.
   if (Ty->isVoidTy())
     return;
-  // Base case: we can get an EVT for this LLVM IR type.
+  // Base case: we can get an EVT for this LLVM37 IR type.
   ValueVTs.push_back(TLI.getValueType(DL, Ty));
   if (Offsets)
     Offsets->push_back(StartingOffset);
 }
 
 /// ExtractTypeInfo - Returns the type info, possibly bitcast, encoded in V.
-GlobalValue *llvm::ExtractTypeInfo(Value *V) {
+GlobalValue *llvm37::ExtractTypeInfo(Value *V) {
   V = V->stripPointerCasts();
   GlobalValue *GV = dyn_cast<GlobalValue>(V);
   GlobalVariable *Var = dyn_cast<GlobalVariable>(V);
@@ -136,7 +136,7 @@ GlobalValue *llvm::ExtractTypeInfo(Value *V) {
 /// hasInlineAsmMemConstraint - Return true if the inline asm instruction being
 /// processed uses a memory 'm' constraint.
 bool
-llvm::hasInlineAsmMemConstraint(InlineAsm::ConstraintInfoVector &CInfos,
+llvm37::hasInlineAsmMemConstraint(InlineAsm::ConstraintInfoVector &CInfos,
                                 const TargetLowering &TLI) {
   for (unsigned i = 0, e = CInfos.size(); i != e; ++i) {
     InlineAsm::ConstraintInfo &CI = CInfos[i];
@@ -155,10 +155,10 @@ llvm::hasInlineAsmMemConstraint(InlineAsm::ConstraintInfoVector &CInfos,
 }
 
 /// getFCmpCondCode - Return the ISD condition code corresponding to
-/// the given LLVM IR floating-point condition code.  This includes
+/// the given LLVM37 IR floating-point condition code.  This includes
 /// consideration of global floating-point math flags.
 ///
-ISD::CondCode llvm::getFCmpCondCode(FCmpInst::Predicate Pred) {
+ISD::CondCode llvm37::getFCmpCondCode(FCmpInst::Predicate Pred) {
   switch (Pred) {
   case FCmpInst::FCMP_FALSE: return ISD::SETFALSE;
   case FCmpInst::FCMP_OEQ:   return ISD::SETOEQ;
@@ -176,11 +176,11 @@ ISD::CondCode llvm::getFCmpCondCode(FCmpInst::Predicate Pred) {
   case FCmpInst::FCMP_ULE:   return ISD::SETULE;
   case FCmpInst::FCMP_UNE:   return ISD::SETUNE;
   case FCmpInst::FCMP_TRUE:  return ISD::SETTRUE;
-  default: llvm_unreachable("Invalid FCmp predicate opcode!");
+  default: llvm37_unreachable("Invalid FCmp predicate opcode!");
   }
 }
 
-ISD::CondCode llvm::getFCmpCodeWithoutNaN(ISD::CondCode CC) {
+ISD::CondCode llvm37::getFCmpCodeWithoutNaN(ISD::CondCode CC) {
   switch (CC) {
     case ISD::SETOEQ: case ISD::SETUEQ: return ISD::SETEQ;
     case ISD::SETONE: case ISD::SETUNE: return ISD::SETNE;
@@ -193,9 +193,9 @@ ISD::CondCode llvm::getFCmpCodeWithoutNaN(ISD::CondCode CC) {
 }
 
 /// getICmpCondCode - Return the ISD condition code corresponding to
-/// the given LLVM IR integer condition code.
+/// the given LLVM37 IR integer condition code.
 ///
-ISD::CondCode llvm::getICmpCondCode(ICmpInst::Predicate Pred) {
+ISD::CondCode llvm37::getICmpCondCode(ICmpInst::Predicate Pred) {
   switch (Pred) {
   case ICmpInst::ICMP_EQ:  return ISD::SETEQ;
   case ICmpInst::ICMP_NE:  return ISD::SETNE;
@@ -208,7 +208,7 @@ ISD::CondCode llvm::getICmpCondCode(ICmpInst::Predicate Pred) {
   case ICmpInst::ICMP_SGT: return ISD::SETGT;
   case ICmpInst::ICMP_UGT: return ISD::SETUGT;
   default:
-    llvm_unreachable("Invalid ICmp predicate opcode!");
+    llvm37_unreachable("Invalid ICmp predicate opcode!");
   }
 }
 
@@ -486,7 +486,7 @@ static bool nextRealType(SmallVectorImpl<CompositeType *> &SubTypes,
 /// between it and the return.
 ///
 /// This function only tests target-independent requirements.
-bool llvm::isInTailCallPosition(ImmutableCallSite CS, const TargetMachine &TM) {
+bool llvm37::isInTailCallPosition(ImmutableCallSite CS, const TargetMachine &TM) {
   const Instruction *I = CS.getInstruction();
   const BasicBlock *ExitBB = I->getParent();
   const TerminatorInst *Term = ExitBB->getTerminator();
@@ -524,7 +524,7 @@ bool llvm::isInTailCallPosition(ImmutableCallSite CS, const TargetMachine &TM) {
       F, I, Ret, *TM.getSubtargetImpl(*F)->getTargetLowering());
 }
 
-bool llvm::returnTypeIsEligibleForTailCall(const Function *F,
+bool llvm37::returnTypeIsEligibleForTailCall(const Function *F,
                                            const Instruction *I,
                                            const ReturnInst *Ret,
                                            const TargetLoweringBase &TLI) {
@@ -618,7 +618,7 @@ bool llvm::returnTypeIsEligibleForTailCall(const Function *F,
   return true;
 }
 
-bool llvm::canBeOmittedFromSymbolTable(const GlobalValue *GV) {
+bool llvm37::canBeOmittedFromSymbolTable(const GlobalValue *GV) {
   if (!GV->hasLinkOnceODRLinkage())
     return false;
 

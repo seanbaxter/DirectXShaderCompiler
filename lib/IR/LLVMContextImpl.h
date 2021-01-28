@@ -1,40 +1,40 @@
-//===-- LLVMContextImpl.h - The LLVMContextImpl opaque class ----*- C++ -*-===//
+//===-- LLVMContextImpl.h - The LLVM37ContextImpl opaque class ----*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 //
-//  This file declares LLVMContextImpl, the opaque implementation 
-//  of LLVMContext.
+//  This file declares LLVM37ContextImpl, the opaque implementation 
+//  of LLVM37Context.
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_LIB_IR_LLVMCONTEXTIMPL_H
-#define LLVM_LIB_IR_LLVMCONTEXTIMPL_H
+#ifndef LLVM37_LIB_IR_LLVM37CONTEXTIMPL_H
+#define LLVM37_LIB_IR_LLVM37CONTEXTIMPL_H
 
 #include "AttributeImpl.h"
 #include "ConstantsContext.h"
-#include "llvm/ADT/APFloat.h"
-#include "llvm/ADT/APInt.h"
-#include "llvm/ADT/ArrayRef.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/DenseSet.h"
-#include "llvm/ADT/FoldingSet.h"
-#include "llvm/ADT/Hashing.h"
-#include "llvm/ADT/SmallPtrSet.h"
-#include "llvm/ADT/StringMap.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/DebugInfoMetadata.h"
-#include "llvm/IR/DerivedTypes.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Metadata.h"
-#include "llvm/IR/ValueHandle.h"
+#include "llvm37/ADT/APFloat.h"
+#include "llvm37/ADT/APInt.h"
+#include "llvm37/ADT/ArrayRef.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/DenseSet.h"
+#include "llvm37/ADT/FoldingSet.h"
+#include "llvm37/ADT/Hashing.h"
+#include "llvm37/ADT/SmallPtrSet.h"
+#include "llvm37/ADT/StringMap.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/DebugInfoMetadata.h"
+#include "llvm37/IR/DerivedTypes.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/Metadata.h"
+#include "llvm37/IR/ValueHandle.h"
 #include <vector>
 
-namespace llvm {
+namespace llvm37 {
 
 class ConstantInt;
 class ConstantFP;
@@ -42,7 +42,7 @@ class DiagnosticInfoOptimizationRemark;
 class DiagnosticInfoOptimizationRemarkMissed;
 class DiagnosticInfoOptimizationRemarkAnalysis;
 class GCStrategy;
-class LLVMContext;
+class LLVM37Context;
 class Type;
 class Value;
 
@@ -881,7 +881,7 @@ template <class NodeTy> struct MDNodeInfo {
 };
 
 #define HANDLE_MDNODE_LEAF(CLASS) typedef MDNodeInfo<CLASS> CLASS##Info;
-#include "llvm/IR/Metadata.def"
+#include "llvm37/IR/Metadata.def"
 
 /// \brief Map-like storage for metadata attachments.
 class MDAttachmentMap {
@@ -921,20 +921,20 @@ public:
   }
 };
 
-class LLVMContextImpl {
+class LLVM37ContextImpl {
 public:
   /// OwnedModules - The set of modules instantiated in this context, and which
   /// will be automatically deleted if this context is deleted.
   SmallPtrSet<Module*, 4> OwnedModules;
   
-  LLVMContext::InlineAsmDiagHandlerTy InlineAsmDiagHandler;
+  LLVM37Context::InlineAsmDiagHandlerTy InlineAsmDiagHandler;
   void *InlineAsmDiagContext;
 
-  LLVMContext::DiagnosticHandlerTy DiagnosticHandler;
+  LLVM37Context::DiagnosticHandlerTy DiagnosticHandler;
   void *DiagnosticContext;
   bool RespectDiagnosticFilters;
 
-  LLVMContext::YieldCallbackTy YieldCallback;
+  LLVM37Context::YieldCallbackTy YieldCallback;
   void *YieldOpaqueHandle;
 
   typedef DenseMap<APInt, ConstantInt *, DenseMapAPIntKeyInfo> IntMapTy;
@@ -954,7 +954,7 @@ public:
   DenseMap<const Value*, ValueName*> ValueNames;
 
 #define HANDLE_MDNODE_LEAF(CLASS) DenseSet<CLASS *, CLASS##Info> CLASS##s;
-#include "llvm/IR/Metadata.def"
+#include "llvm37/IR/Metadata.def"
 
   // MDNodes may be uniqued or not uniqued.  When they're not uniqued, they
   // aren't in the MDNodeSet, but they're still shared between objects, so no
@@ -1047,8 +1047,8 @@ public:
   int getOrAddScopeRecordIdxEntry(MDNode *N, int ExistingIdx);
   int getOrAddScopeInlinedAtIdxEntry(MDNode *Scope, MDNode *IA,int ExistingIdx);
 
-  LLVMContextImpl(LLVMContext &C);
-  ~LLVMContextImpl();
+  LLVM37ContextImpl(LLVM37Context &C);
+  ~LLVM37ContextImpl();
 
   /// Destroy the ConstantArrays if they are not used.
   void dropTriviallyDeadConstantArrays();

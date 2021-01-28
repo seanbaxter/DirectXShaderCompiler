@@ -1,6 +1,6 @@
 //===- DisassemblerEmitter.cpp - Generate a disassembler ------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -10,12 +10,12 @@
 #include "CodeGenTarget.h"
 // #include "X86DisassemblerTables.h" // HLSL Change
 // #include "X86RecognizableInstr.h"  // HLSL Change
-#include "llvm/TableGen/Error.h"
-#include "llvm/TableGen/Record.h"
-#include "llvm/TableGen/TableGenBackend.h"
+#include "llvm37/TableGen/Error.h"
+#include "llvm37/TableGen/Record.h"
+#include "llvm37/TableGen/TableGenBackend.h"
 
-using namespace llvm;
-// using namespace llvm::X86Disassembler; // HLSL Change
+using namespace llvm37;
+// using namespace llvm37::X86Disassembler; // HLSL Change
 
 /// DisassemblerEmitter - Contains disassembler table emitters for various
 /// architectures.
@@ -53,7 +53,7 @@ using namespace llvm;
 /// follows in setTableFields() (X86DisassemblerTables.cpp)
 ///
 /// - If the current context is the native context for one of the instructions
-///   (that is, the attributes specified for it in the LLVM tables specify
+///   (that is, the attributes specified for it in the LLVM37 tables specify
 ///   precisely the current context), then it has priority.
 /// - If the current context isn't native for either of the instructions, then
 ///   the higher-priority context wins (that is, the one that is more specific).
@@ -93,7 +93,7 @@ using namespace llvm;
 /// X86RecognizableInstr.cpp contains the implementation for a single
 ///   instruction.
 
-namespace llvm {
+namespace llvm37 {
 
 extern void EmitFixedLenDecoder(RecordKeeper &RK, raw_ostream &OS,
                                 std::string PredicateNamespace,
@@ -149,4 +149,4 @@ void EmitDisassembler(RecordKeeper &Records, raw_ostream &OS) {
                       "MCDisassembler::Success", "MCDisassembler::Fail", "");
 }
 
-} // End llvm namespace
+} // End llvm37 namespace

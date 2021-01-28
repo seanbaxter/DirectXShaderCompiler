@@ -1,6 +1,6 @@
 //==--- Attr.td - attribute definitions -----------------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -439,14 +439,14 @@ def Availability : InheritableAttr {
               VersionArgument<"deprecated">, VersionArgument<"obsoleted">,
               BoolArgument<"unavailable">, StringArgument<"message">];
   let AdditionalMembers =
-[{static llvm::StringRef getPrettyPlatformName(llvm::StringRef Platform) {
-    return llvm::StringSwitch<llvm::StringRef>(Platform)
+[{static llvm37::StringRef getPrettyPlatformName(llvm37::StringRef Platform) {
+    return llvm37::StringSwitch<llvm37::StringRef>(Platform)
              .Case("android", "Android")
              .Case("ios", "iOS")
              .Case("macosx", "OS X")
              .Case("ios_app_extension", "iOS (App Extension)")
              .Case("macosx_app_extension", "OS X (App Extension)")
-             .Default(llvm::StringRef());
+             .Default(llvm37::StringRef());
 } }];
   let HasCustomParsing = 1;
   let DuplicatesAllowedWhileMerging = 1;
@@ -588,7 +588,7 @@ def CUDALaunchBounds : InheritableAttr {
                              "ExpectedFunctionOrMethod">;
   // An AST node is created for this attribute, but is not used by other parts
   // of the compiler. However, this node needs to exist in the AST because
-  // non-LLVM backends may be relying on the attribute's presence.
+  // non-LLVM37 backends may be relying on the attribute's presence.
   let Documentation = [Undocumented];
 }
 
@@ -1162,13 +1162,13 @@ def FlagEnum : InheritableAttr {
   let LangOpts = [COnly];
   let AdditionalMembers = [{
 private:
-    llvm::APInt FlagBits;
+    llvm37::APInt FlagBits;
 public:
-    llvm::APInt &getFlagBits() {
+    llvm37::APInt &getFlagBits() {
       return FlagBits;
     }
 
-    const llvm::APInt &getFlagBits() const {
+    const llvm37::APInt &getFlagBits() const {
       return FlagBits;
     }
 }];
@@ -2424,7 +2424,7 @@ def LoopHint : Attr {
     case Unroll: return "unroll";
     case UnrollCount: return "unroll_count";
     }
-    llvm_unreachable("Unhandled LoopHint option.");
+    llvm37_unreachable("Unhandled LoopHint option.");
   }
 
   void printPrettyPragma(raw_ostream &OS, const PrintingPolicy &Policy) const {
@@ -2448,7 +2448,7 @@ def LoopHint : Attr {
   // enclosing parentheses.
   std::string getValueString(const PrintingPolicy &Policy) const {
     std::string ValueName;
-    llvm::raw_string_ostream OS(ValueName);
+    llvm37::raw_string_ostream OS(ValueName);
     OS << "(";
     if (option == VectorizeWidth || option == InterleaveCount ||
         option == UnrollCount)

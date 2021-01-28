@@ -20,7 +20,7 @@
 #include "dxc/Support/WinAdapter.h"
 
 struct IDxcContainerReflection;
-namespace llvm { class Module; }
+namespace llvm37 { class Module; }
 
 namespace hlsl {
 
@@ -109,8 +109,8 @@ struct DxilShaderFeatureInfo {
 struct DxilBitcodeHeader {
   uint32_t DxilMagic;       // ACSII "DXIL".
   uint32_t DxilVersion;     // DXIL version.
-  uint32_t BitcodeOffset;   // Offset to LLVM bitcode (from start of header).
-  uint32_t BitcodeSize;     // Size of LLVM bitcode.
+  uint32_t BitcodeOffset;   // Offset to LLVM37 bitcode (from start of header).
+  uint32_t BitcodeSize;     // Size of LLVM37 bitcode.
 };
 static const uint32_t DxilMagicValue = 0x4C495844; // 'DXIL'
 

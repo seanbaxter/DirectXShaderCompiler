@@ -1,4 +1,4 @@
--*- llvm/utils/jedit/README -*-
+-*- llvm37/utils/jedit/README -*-
 
 These are syntax highlighting files for the jEdit editor. Included are:
 
@@ -10,5 +10,5 @@ These are syntax highlighting files for the jEdit editor. Included are:
   <MODE NAME="tablegen" FILE="tablegen.xml" FILE_NAME_GLOB="*.td" />
 
 Note: If you notice missing or incorrect syntax highlighting, please contact
-<llvm-bugs [at] lists.llvm.org>; if you wish to provide a patch to improve the
+<llvm37-bugs [at] lists.llvm37.org>; if you wish to provide a patch to improve the
 functionality, it will be most appreciated. Thank you.

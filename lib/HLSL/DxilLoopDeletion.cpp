@@ -1,6 +1,6 @@
 //===- DxilLoopDeletion.cpp - Dead Loop Deletion Pass -----------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -12,12 +12,12 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Transforms/Scalar.h"
-#include "llvm/IR/Function.h"
+#include "llvm37/Transforms/Scalar.h"
+#include "llvm37/IR/Function.h"
 #include "dxc/HLSL/DxilGenerationPass.h"
-#include "llvm/IR/LegacyPassManager.h"
+#include "llvm37/IR/LegacyPassManager.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 namespace {
   class DxilLoopDeletion : public FunctionPass {
@@ -35,7 +35,7 @@ char DxilLoopDeletion::ID = 0;
 INITIALIZE_PASS(DxilLoopDeletion, "dxil-loop-deletion",
                 "Delete dead loops", false, false)
 
-FunctionPass *llvm::createDxilLoopDeletionPass() { return new DxilLoopDeletion(); }
+FunctionPass *llvm37::createDxilLoopDeletionPass() { return new DxilLoopDeletion(); }
 
 bool DxilLoopDeletion::runOnFunction(Function &F) {
   // Run loop simplify first to make sure loop invariant is moved so loop

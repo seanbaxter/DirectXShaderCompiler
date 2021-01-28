@@ -1,6 +1,6 @@
 //===- ArchiveWriter.cpp - ar File Format implementation --------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,20 +11,20 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Object/ArchiveWriter.h"
-#include "llvm/ADT/ArrayRef.h"
-#include "llvm/ADT/StringRef.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/Object/Archive.h"
-#include "llvm/Object/ObjectFile.h"
-#include "llvm/Object/SymbolicFile.h"
-#include "llvm/Support/EndianStream.h"
-#include "llvm/Support/Errc.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/Format.h"
-#include "llvm/Support/Path.h"
-#include "llvm/Support/ToolOutputFile.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/Object/ArchiveWriter.h"
+#include "llvm37/ADT/ArrayRef.h"
+#include "llvm37/ADT/StringRef.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/Object/Archive.h"
+#include "llvm37/Object/ObjectFile.h"
+#include "llvm37/Object/SymbolicFile.h"
+#include "llvm37/Support/EndianStream.h"
+#include "llvm37/Support/Errc.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/Format.h"
+#include "llvm37/Support/Path.h"
+#include "llvm37/Support/ToolOutputFile.h"
+#include "llvm37/Support/raw_ostream.h"
 
 #if !defined(_MSC_VER) && !defined(__MINGW32__)
 #include <unistd.h>
@@ -32,7 +32,7 @@
 #include <io.h>
 #endif
 
-using namespace llvm;
+using namespace llvm37;
 
 NewArchiveIterator::NewArchiveIterator(object::Archive::child_iterator I,
                                        StringRef Name)
@@ -55,7 +55,7 @@ StringRef NewArchiveIterator::getNew() const {
   return NewFilename;
 }
 
-llvm::ErrorOr<int>
+llvm37::ErrorOr<int>
 NewArchiveIterator::getFD(sys::fs::file_status &NewStatus) const {
   assert(IsNewMember);
   int NewFD;
@@ -196,7 +196,7 @@ writeSymbolTable(raw_fd_ostream &Out, object::Archive::Kind Kind,
   unsigned BodyStartOffset = 0;
   SmallString<128> NameBuf;
   raw_svector_ostream NameOS(NameBuf);
-  LLVMContext Context;
+  LLVM37Context Context;
   for (unsigned MemberNum = 0, N = Members.size(); MemberNum < N; ++MemberNum) {
     MemoryBufferRef MemberBuffer = Buffers[MemberNum];
     ErrorOr<std::unique_ptr<object::SymbolicFile>> ObjOrErr =
@@ -268,7 +268,7 @@ writeSymbolTable(raw_fd_ostream &Out, object::Archive::Kind Kind,
   return BodyStartOffset + 4;
 }
 
-std::pair<StringRef, std::error_code> llvm::writeArchive(
+std::pair<StringRef, std::error_code> llvm37::writeArchive(
     StringRef ArcName, std::vector<NewArchiveIterator> &NewMembers,
     bool WriteSymtab, object::Archive::Kind Kind, bool Deterministic) {
   SmallString<128> TmpArchive;

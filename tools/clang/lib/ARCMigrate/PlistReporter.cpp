@@ -1,6 +1,6 @@
 //===--- PlistReporter.cpp - ARC Migrate Tool Plist Reporter ----*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -19,7 +19,7 @@ using namespace markup;
 static StringRef getLevelName(DiagnosticsEngine::Level Level) {
   switch (Level) {
   case DiagnosticsEngine::Ignored:
-    llvm_unreachable("ignored");
+    llvm37_unreachable("ignored");
   case DiagnosticsEngine::Note:
     return "note";
   case DiagnosticsEngine::Remark:
@@ -29,7 +29,7 @@ static StringRef getLevelName(DiagnosticsEngine::Level Level) {
   case DiagnosticsEngine::Error:
     return "error";
   }
-  llvm_unreachable("Invalid DiagnosticsEngine level!");
+  llvm37_unreachable("Invalid DiagnosticsEngine level!");
 }
 
 void arcmt::writeARCDiagsToPlist(const std::string &outPath,
@@ -57,9 +57,9 @@ void arcmt::writeARCDiagsToPlist(const std::string &outPath,
   }
 
   std::error_code EC;
-  llvm::raw_fd_ostream o(outPath, EC, llvm::sys::fs::F_Text);
+  llvm37::raw_fd_ostream o(outPath, EC, llvm37::sys::fs::F_Text);
   if (EC) {
-    llvm::errs() << "error: could not create file: " << outPath << '\n';
+    llvm37::errs() << "error: could not create file: " << outPath << '\n';
     return;
   }
 

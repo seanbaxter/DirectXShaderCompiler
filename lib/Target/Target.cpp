@@ -1,6 +1,6 @@
 //===-- Target.cpp --------------------------------------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -8,126 +8,126 @@
 //===----------------------------------------------------------------------===//
 //
 // This file implements the common infrastructure (including C bindings) for 
-// libLLVMTarget.a, which implements target information.
+// libLLVM37Target.a, which implements target information.
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm-c/Target.h"
-#include "llvm-c/Initialization.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Value.h"
-#include "llvm/InitializePasses.h"
-#include "llvm/IR/LegacyPassManager.h"
-#include "llvm/Analysis/TargetLibraryInfo.h"
+#include "llvm37-c/Target.h"
+#include "llvm37-c/Initialization.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/Value.h"
+#include "llvm37/InitializePasses.h"
+#include "llvm37/IR/LegacyPassManager.h"
+#include "llvm37/Analysis/TargetLibraryInfo.h"
 #include <cstring>
 
-using namespace llvm;
+using namespace llvm37;
 
-inline TargetLibraryInfoImpl *unwrap(LLVMTargetLibraryInfoRef P) {
+inline TargetLibraryInfoImpl *unwrap(LLVM37TargetLibraryInfoRef P) {
   return reinterpret_cast<TargetLibraryInfoImpl*>(P);
 }
 
-inline LLVMTargetLibraryInfoRef wrap(const TargetLibraryInfoImpl *P) {
+inline LLVM37TargetLibraryInfoRef wrap(const TargetLibraryInfoImpl *P) {
   TargetLibraryInfoImpl *X = const_cast<TargetLibraryInfoImpl*>(P);
-  return reinterpret_cast<LLVMTargetLibraryInfoRef>(X);
+  return reinterpret_cast<LLVM37TargetLibraryInfoRef>(X);
 }
 
-void llvm::initializeTarget(PassRegistry &Registry) {
+void llvm37::initializeTarget(PassRegistry &Registry) {
   initializeTargetLibraryInfoWrapperPassPass(Registry);
   initializeTargetTransformInfoWrapperPassPass(Registry);
 }
 
-void LLVMInitializeTarget(LLVMPassRegistryRef R) {
+void LLVM37InitializeTarget(LLVM37PassRegistryRef R) {
   initializeTarget(*unwrap(R));
 }
 
-LLVMTargetDataRef LLVMCreateTargetData(const char *StringRep) {
+LLVM37TargetDataRef LLVM37CreateTargetData(const char *StringRep) {
   return wrap(new DataLayout(StringRep));
 }
 
-void LLVMAddTargetData(LLVMTargetDataRef TD, LLVMPassManagerRef PM) {
+void LLVM37AddTargetData(LLVM37TargetDataRef TD, LLVM37PassManagerRef PM) {
 }
 
-void LLVMAddTargetLibraryInfo(LLVMTargetLibraryInfoRef TLI,
-                              LLVMPassManagerRef PM) {
+void LLVM37AddTargetLibraryInfo(LLVM37TargetLibraryInfoRef TLI,
+                              LLVM37PassManagerRef PM) {
   unwrap(PM)->add(new TargetLibraryInfoWrapperPass(*unwrap(TLI)));
 }
 
-char *LLVMCopyStringRepOfTargetData(LLVMTargetDataRef TD) {
+char *LLVM37CopyStringRepOfTargetData(LLVM37TargetDataRef TD) {
   std::string StringRep = unwrap(TD)->getStringRepresentation();
   return _strdup(StringRep.c_str()); // HLSL Change strdup to _strdup
 }
 
-LLVMByteOrdering LLVMByteOrder(LLVMTargetDataRef TD) {
-  return unwrap(TD)->isLittleEndian() ? LLVMLittleEndian : LLVMBigEndian;
+LLVM37ByteOrdering LLVM37ByteOrder(LLVM37TargetDataRef TD) {
+  return unwrap(TD)->isLittleEndian() ? LLVM37LittleEndian : LLVM37BigEndian;
 }
 
-unsigned LLVMPointerSize(LLVMTargetDataRef TD) {
+unsigned LLVM37PointerSize(LLVM37TargetDataRef TD) {
   return unwrap(TD)->getPointerSize(0);
 }
 
-unsigned LLVMPointerSizeForAS(LLVMTargetDataRef TD, unsigned AS) {
+unsigned LLVM37PointerSizeForAS(LLVM37TargetDataRef TD, unsigned AS) {
   return unwrap(TD)->getPointerSize(AS);
 }
 
-LLVMTypeRef LLVMIntPtrType(LLVMTargetDataRef TD) {
+LLVM37TypeRef LLVM37IntPtrType(LLVM37TargetDataRef TD) {
   return wrap(unwrap(TD)->getIntPtrType(getGlobalContext()));
 }
 
-LLVMTypeRef LLVMIntPtrTypeForAS(LLVMTargetDataRef TD, unsigned AS) {
+LLVM37TypeRef LLVM37IntPtrTypeForAS(LLVM37TargetDataRef TD, unsigned AS) {
   return wrap(unwrap(TD)->getIntPtrType(getGlobalContext(), AS));
 }
 
-LLVMTypeRef LLVMIntPtrTypeInContext(LLVMContextRef C, LLVMTargetDataRef TD) {
+LLVM37TypeRef LLVM37IntPtrTypeInContext(LLVM37ContextRef C, LLVM37TargetDataRef TD) {
   return wrap(unwrap(TD)->getIntPtrType(*unwrap(C)));
 }
 
-LLVMTypeRef LLVMIntPtrTypeForASInContext(LLVMContextRef C, LLVMTargetDataRef TD, unsigned AS) {
+LLVM37TypeRef LLVM37IntPtrTypeForASInContext(LLVM37ContextRef C, LLVM37TargetDataRef TD, unsigned AS) {
   return wrap(unwrap(TD)->getIntPtrType(*unwrap(C), AS));
 }
 
-unsigned long long LLVMSizeOfTypeInBits(LLVMTargetDataRef TD, LLVMTypeRef Ty) {
+unsigned long long LLVM37SizeOfTypeInBits(LLVM37TargetDataRef TD, LLVM37TypeRef Ty) {
   return unwrap(TD)->getTypeSizeInBits(unwrap(Ty));
 }
 
-unsigned long long LLVMStoreSizeOfType(LLVMTargetDataRef TD, LLVMTypeRef Ty) {
+unsigned long long LLVM37StoreSizeOfType(LLVM37TargetDataRef TD, LLVM37TypeRef Ty) {
   return unwrap(TD)->getTypeStoreSize(unwrap(Ty));
 }
 
-unsigned long long LLVMABISizeOfType(LLVMTargetDataRef TD, LLVMTypeRef Ty) {
+unsigned long long LLVM37ABISizeOfType(LLVM37TargetDataRef TD, LLVM37TypeRef Ty) {
   return unwrap(TD)->getTypeAllocSize(unwrap(Ty));
 }
 
-unsigned LLVMABIAlignmentOfType(LLVMTargetDataRef TD, LLVMTypeRef Ty) {
+unsigned LLVM37ABIAlignmentOfType(LLVM37TargetDataRef TD, LLVM37TypeRef Ty) {
   return unwrap(TD)->getABITypeAlignment(unwrap(Ty));
 }
 
-unsigned LLVMCallFrameAlignmentOfType(LLVMTargetDataRef TD, LLVMTypeRef Ty) {
+unsigned LLVM37CallFrameAlignmentOfType(LLVM37TargetDataRef TD, LLVM37TypeRef Ty) {
   return unwrap(TD)->getABITypeAlignment(unwrap(Ty));
 }
 
-unsigned LLVMPreferredAlignmentOfType(LLVMTargetDataRef TD, LLVMTypeRef Ty) {
+unsigned LLVM37PreferredAlignmentOfType(LLVM37TargetDataRef TD, LLVM37TypeRef Ty) {
   return unwrap(TD)->getPrefTypeAlignment(unwrap(Ty));
 }
 
-unsigned LLVMPreferredAlignmentOfGlobal(LLVMTargetDataRef TD,
-                                        LLVMValueRef GlobalVar) {
+unsigned LLVM37PreferredAlignmentOfGlobal(LLVM37TargetDataRef TD,
+                                        LLVM37ValueRef GlobalVar) {
   return unwrap(TD)->getPreferredAlignment(unwrap<GlobalVariable>(GlobalVar));
 }
 
-unsigned LLVMElementAtOffset(LLVMTargetDataRef TD, LLVMTypeRef StructTy,
+unsigned LLVM37ElementAtOffset(LLVM37TargetDataRef TD, LLVM37TypeRef StructTy,
                              unsigned long long Offset) {
   StructType *STy = unwrap<StructType>(StructTy);
   return unwrap(TD)->getStructLayout(STy)->getElementContainingOffset(Offset);
 }
 
-unsigned long long LLVMOffsetOfElement(LLVMTargetDataRef TD, LLVMTypeRef StructTy,
+unsigned long long LLVM37OffsetOfElement(LLVM37TargetDataRef TD, LLVM37TypeRef StructTy,
                                        unsigned Element) {
   StructType *STy = unwrap<StructType>(StructTy);
   return unwrap(TD)->getStructLayout(STy)->getElementOffset(Element);
 }
 
-void LLVMDisposeTargetData(LLVMTargetDataRef TD) {
+void LLVM37DisposeTargetData(LLVM37TargetDataRef TD) {
   delete unwrap(TD);
 }

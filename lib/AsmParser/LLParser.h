@@ -1,6 +1,6 @@
 //===-- LLParser.h - Parser Class -------------------------------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,21 +11,21 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_LIB_ASMPARSER_LLPARSER_H
-#define LLVM_LIB_ASMPARSER_LLPARSER_H
+#ifndef LLVM37_LIB_ASMPARSER_LLPARSER_H
+#define LLVM37_LIB_ASMPARSER_LLPARSER_H
 
 #include "LLLexer.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/StringMap.h"
-#include "llvm/IR/Attributes.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/Operator.h"
-#include "llvm/IR/Type.h"
-#include "llvm/IR/ValueHandle.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/StringMap.h"
+#include "llvm37/IR/Attributes.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/Operator.h"
+#include "llvm37/IR/Type.h"
+#include "llvm37/IR/ValueHandle.h"
 #include <map>
 
-namespace llvm {
+namespace llvm37 {
   class Module;
   class OpaqueType;
   class Function;
@@ -85,7 +85,7 @@ namespace llvm {
   public:
     typedef LLLexer::LocTy LocTy;
   private:
-    LLVMContext &Context;
+    LLVM37Context &Context;
     LLLexer Lex;
     Module *M;
     SlotMapping *Slots;
@@ -143,7 +143,7 @@ namespace llvm {
           Slots(Slots), BlockAddressPFS(nullptr) {}
     bool Run();
 
-    LLVMContext &getContext() { return Context; }
+    LLVM37Context &getContext() { return Context; }
 
   private:
 
@@ -410,7 +410,7 @@ namespace llvm {
 
 #define HANDLE_SPECIALIZED_MDNODE_LEAF(CLASS)                                  \
   bool Parse##CLASS(MDNode *&Result, bool IsDistinct);
-#include "llvm/IR/Metadata.def"
+#include "llvm37/IR/Metadata.def"
 
     // Function Parsing.
     struct ArgInfo {
@@ -472,6 +472,6 @@ namespace llvm {
     bool ParseUseListOrderIndexes(SmallVectorImpl<unsigned> &Indexes);
     bool sortUseListOrder(Value *V, ArrayRef<unsigned> Indexes, SMLoc Loc);
   };
-} // End llvm namespace
+} // End llvm37 namespace
 
 #endif

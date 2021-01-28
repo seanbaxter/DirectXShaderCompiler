@@ -1,6 +1,6 @@
 //===--- ObjectFilePCHContainerOperations.cpp -----------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -19,16 +19,16 @@
 #include "clang/CodeGen/BackendUtil.h"
 #include "clang/Frontend/CodeGenOptions.h"
 #include "clang/Serialization/ASTWriter.h"
-#include "llvm/ADT/StringRef.h"
-#include "llvm/Bitcode/BitstreamReader.h"
-#include "llvm/DebugInfo/DWARF/DWARFContext.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Module.h"
-#include "llvm/Object/COFF.h"
-#include "llvm/Object/ObjectFile.h"
-#include "llvm/Support/TargetRegistry.h"
+#include "llvm37/ADT/StringRef.h"
+#include "llvm37/Bitcode/BitstreamReader.h"
+#include "llvm37/DebugInfo/DWARF/DWARFContext.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/Object/COFF.h"
+#include "llvm37/Object/ObjectFile.h"
+#include "llvm37/Support/TargetRegistry.h"
 #include <memory>
 using namespace clang;
 
@@ -44,8 +44,8 @@ class PCHContainerGenerator : public ASTConsumer {
   CodeGenOptions CodeGenOpts;
   const TargetOptions TargetOpts;
   const LangOptions LangOpts;
-  std::unique_ptr<llvm::LLVMContext> VMContext;
-  std::unique_ptr<llvm::Module> M;
+  std::unique_ptr<llvm37::LLVM37Context> VMContext;
+  std::unique_ptr<llvm37::Module> M;
   std::unique_ptr<CodeGen::CodeGenModule> Builder;
   raw_pwrite_stream *OS;
   std::shared_ptr<PCHBuffer> Buffer;
@@ -72,8 +72,8 @@ public:
 
   void Initialize(ASTContext &Context) override {
     Ctx = &Context;
-    VMContext.reset(new llvm::LLVMContext());
-    M.reset(new llvm::Module(MainFileName, *VMContext));
+    VMContext.reset(new llvm37::LLVM37Context());
+    M.reset(new llvm37::Module(MainFileName, *VMContext));
     M->setDataLayout(Ctx->getTargetInfo().getTargetDescription());
     Builder.reset(new CodeGen::CodeGenModule(*Ctx, HeaderSearchOpts,
                                              PreprocessorOpts, CodeGenOpts, *M,
@@ -84,8 +84,8 @@ public:
   void HandleTranslationUnit(ASTContext &Ctx) override {
     assert(M && VMContext && Builder);
     // Delete these on function exit.
-    std::unique_ptr<llvm::LLVMContext> VMContext = std::move(this->VMContext);
-    std::unique_ptr<llvm::Module> M = std::move(this->M);
+    std::unique_ptr<llvm37::LLVM37Context> VMContext = std::move(this->VMContext);
+    std::unique_ptr<llvm37::Module> M = std::move(this->M);
     std::unique_ptr<CodeGen::CodeGenModule> Builder = std::move(this->Builder);
 
     if (Diags.hasErrorOccurred())
@@ -101,20 +101,20 @@ public:
     // Ensure the target exists.
     std::string Error;
     auto Triple = Ctx.getTargetInfo().getTriple();
-    if (!llvm::TargetRegistry::lookupTarget(Triple.getTriple(), Error))
-      llvm::report_fatal_error(Error);
+    if (!llvm37::TargetRegistry::lookupTarget(Triple.getTriple(), Error))
+      llvm37::report_fatal_error(Error);
 
     // Emit the serialized Clang AST into its own section.
     assert(Buffer->IsComplete && "serialization did not complete");
     auto &SerializedAST = Buffer->Data;
     auto Size = SerializedAST.size();
-    auto Int8Ty = llvm::Type::getInt8Ty(*VMContext);
-    auto *Ty = llvm::ArrayType::get(Int8Ty, Size);
-    auto *Data = llvm::ConstantDataArray::getString(
+    auto Int8Ty = llvm37::Type::getInt8Ty(*VMContext);
+    auto *Ty = llvm37::ArrayType::get(Int8Ty, Size);
+    auto *Data = llvm37::ConstantDataArray::getString(
         *VMContext, StringRef(SerializedAST.data(), Size),
         /*AddNull=*/false);
-    auto *ASTSym = new llvm::GlobalVariable(
-        *M, Ty, /*constant*/ true, llvm::GlobalVariable::InternalLinkage, Data,
+    auto *ASTSym = new llvm37::GlobalVariable(
+        *M, Ty, /*constant*/ true, llvm37::GlobalVariable::InternalLinkage, Data,
         "__clang_ast");
     // The on-disk hashtable needs to be aligned.
     ASTSym->setAlignment(8);
@@ -130,16 +130,16 @@ public:
 
     DEBUG({
       // Print the IR for the PCH container to the debug output.
-      llvm::SmallString<0> Buffer;
-      llvm::raw_svector_ostream OS(Buffer);
+      llvm37::SmallString<0> Buffer;
+      llvm37::raw_svector_ostream OS(Buffer);
       clang::EmitBackendOutput(Diags, CodeGenOpts, TargetOpts, LangOpts,
                                Ctx.getTargetInfo().getTargetDescription(),
                                M.get(), BackendAction::Backend_EmitLL, &OS);
       OS.flush();
-      llvm::dbgs() << Buffer;
+      llvm37::dbgs() << Buffer;
     });
 
-    // Use the LLVM backend to emit the pch container.
+    // Use the LLVM37 backend to emit the pch container.
     clang::EmitBackendOutput(Diags, CodeGenOpts, TargetOpts, LangOpts,
                              Ctx.getTargetInfo().getTargetDescription(),
                              M.get(), BackendAction::Backend_EmitObj, OS);
@@ -148,7 +148,7 @@ public:
     OS->flush();
 
     // Free the memory for the temporary buffer.
-    llvm::SmallVector<char, 0> Empty;
+    llvm37::SmallVector<char, 0> Empty;
     SerializedAST = std::move(Empty);
   }
 };
@@ -160,17 +160,17 @@ ObjectFilePCHContainerWriter::CreatePCHContainerGenerator(
     DiagnosticsEngine &Diags, const HeaderSearchOptions &HSO,
     const PreprocessorOptions &PPO, const TargetOptions &TO,
     const LangOptions &LO, const std::string &MainFileName,
-    const std::string &OutputFileName, llvm::raw_pwrite_stream *OS,
+    const std::string &OutputFileName, llvm37::raw_pwrite_stream *OS,
     std::shared_ptr<PCHBuffer> Buffer) const {
-  return llvm::make_unique<PCHContainerGenerator>(
+  return llvm37::make_unique<PCHContainerGenerator>(
       Diags, HSO, PPO, TO, LO, MainFileName, OutputFileName, OS, Buffer);
 }
 
 void ObjectFilePCHContainerReader::ExtractPCH(
-    llvm::MemoryBufferRef Buffer, llvm::BitstreamReader &StreamFile) const {
-  if (auto OF = llvm::object::ObjectFile::createObjectFile(Buffer)) {
+    llvm37::MemoryBufferRef Buffer, llvm37::BitstreamReader &StreamFile) const {
+  if (auto OF = llvm37::object::ObjectFile::createObjectFile(Buffer)) {
     auto *Obj = OF.get().get();
-    bool IsCOFF = isa<llvm::object::COFFObjectFile>(Obj);
+    bool IsCOFF = isa<llvm37::object::COFFObjectFile>(Obj);
     // Find the clang AST section in the container.
     for (auto &Section : OF->get()->sections()) {
       StringRef Name;

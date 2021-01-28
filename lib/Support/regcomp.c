@@ -49,7 +49,7 @@
 #include "regcclass.h"
 #include "regcname.h"
 
-#include "llvm/Config/config.h"
+#include "llvm37/Config/config.h"
 #if HAVE_STDINT_H
 #include <stdint.h>
 #else
@@ -159,10 +159,10 @@ static int never = 0;		/* for use in asserts; shuts lint up */
 #endif
 
 /*
- - llvm_regcomp - interface for parser and compilation
+ - llvm37_regcomp - interface for parser and compilation
  */
 int				/* 0 success, otherwise REG_something */
-llvm_regcomp(llvm_regex_t *preg, const char *pattern, int cflags)
+llvm37_regcomp(llvm37_regex_t *preg, const char *pattern, int cflags)
 {
 	struct parse pa;
 	struct re_guts *g;
@@ -247,14 +247,14 @@ llvm_regcomp(llvm_regex_t *preg, const char *pattern, int cflags)
 	preg->re_g = g;
 	preg->re_magic = MAGIC1;
 #ifndef REDEBUG
-	/* not debugging, so can't rely on the assert() in llvm_regexec() */
+	/* not debugging, so can't rely on the assert() in llvm37_regexec() */
 	if (g->iflags&REGEX_BAD)
 		SETERROR(REG_ASSERT);
 #endif
 
 	/* win or lose, we're done */
 	if (p->error != 0)	/* lose */
-		llvm_regfree(preg);
+		llvm37_regfree(preg);
 	return(p->error);
 }
 
@@ -1228,7 +1228,7 @@ mcadd( struct parse *p, cset *cs, const char *cp)
 	}
 	cs->multis = np;
 
-	llvm_strlcpy(cs->multis + oldend - 1, cp, cs->smultis - oldend + 1);
+	llvm37_strlcpy(cs->multis + oldend - 1, cp, cs->smultis - oldend + 1);
 }
 
 /*

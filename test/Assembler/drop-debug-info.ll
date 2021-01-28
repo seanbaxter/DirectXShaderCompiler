@@ -1,5 +1,5 @@
-; RUN: llvm-as < %s -o %t.bc 2>&1 >/dev/null | FileCheck -check-prefix=WARN %s
-; RUN: llvm-dis < %t.bc | FileCheck %s
+; RUN: llvm37-as < %s -o %t.bc 2>&1 >/dev/null | FileCheck -check-prefix=WARN %s
+; RUN: llvm37-dis < %t.bc | FileCheck %s
 ; RUN: verify-uselistorder < %t.bc
 
 define i32 @main() {
@@ -9,15 +9,15 @@ entry:
   ret i32 0, !dbg !12
 }
 
-!llvm.dbg.cu = !{!0}
-!llvm.module.flags = !{!9}
+!llvm37.dbg.cu = !{!0}
+!llvm37.module.flags = !{!9}
 
-!0 = !DICompileUnit(language: DW_LANG_C99, producer: "clang version 3.5 (trunk 195495) (llvm/trunk 195495:195504M)", isOptimized: false, emissionKind: 0, file: !1, enums: !2, retainedTypes: !2, subprograms: !3, globals: !2, imports: !2)
-!1 = !DIFile(filename: "../llvm/tools/clang/test/CodeGen/debug-info-version.c", directory: "/Users/manmanren/llvm_gmail/release")
+!0 = !DICompileUnit(language: DW_LANG_C99, producer: "clang version 3.5 (trunk 195495) (llvm37/trunk 195495:195504M)", isOptimized: false, emissionKind: 0, file: !1, enums: !2, retainedTypes: !2, subprograms: !3, globals: !2, imports: !2)
+!1 = !DIFile(filename: "../llvm37/tools/clang/test/CodeGen/debug-info-version.c", directory: "/Users/manmanren/llvm37_gmail/release")
 !2 = !{i32 0}
 !3 = !{!4}
 !4 = !DISubprogram(name: "main", line: 3, isLocal: false, isDefinition: true, virtualIndex: 6, flags: DIFlagPrototyped, isOptimized: false, scopeLine: 3, file: !1, scope: !5, type: !6, function: i32 ()* @main, variables: !2)
-!5 = !DIFile(filename: "../llvm/tools/clang/test/CodeGen/debug-info-version.c", directory: "/Users/manmanren/llvm_gmail/release")
+!5 = !DIFile(filename: "../llvm37/tools/clang/test/CodeGen/debug-info-version.c", directory: "/Users/manmanren/llvm37_gmail/release")
 !6 = !DISubroutineType(types: !7)
 !7 = !{!8}
 !8 = !DIBasicType(tag: DW_TAG_base_type, name: "int", size: 32, align: 32, encoding: DW_ATE_signed)
@@ -26,4 +26,4 @@ entry:
 
 ; WARN: warning: ignoring debug info with an invalid version (0)
 ; CHECK-NOT: !dbg
-; CHECK-NOT: !llvm.dbg.cu
+; CHECK-NOT: !llvm37.dbg.cu

@@ -1,26 +1,26 @@
-//===- llvm/unittest/IR/IRBuilderTest.cpp - IRBuilder tests ---------------===//
+//===- llvm37/unittest/IR/IRBuilderTest.cpp - IRBuilder tests ---------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/IR/IRBuilder.h"
-#include "llvm/IR/BasicBlock.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/DIBuilder.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/MDBuilder.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/NoFolder.h"
-#include "llvm/IR/Verifier.h"
+#include "llvm37/IR/IRBuilder.h"
+#include "llvm37/IR/BasicBlock.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/IR/DIBuilder.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/MDBuilder.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/NoFolder.h"
+#include "llvm37/IR/Verifier.h"
 #include "gtest/gtest.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 namespace {
 
@@ -41,7 +41,7 @@ protected:
     M.reset();
   }
 
-  LLVMContext Ctx;
+  LLVM37Context Ctx;
   std::unique_ptr<Module> M;
   Function *F;
   BasicBlock *BB;
@@ -99,7 +99,7 @@ TEST_F(IRBuilderTest, CreateCondBr) {
   EXPECT_EQ(2u, TI->getNumSuccessors());
   EXPECT_EQ(TBB, TI->getSuccessor(0));
   EXPECT_EQ(FBB, TI->getSuccessor(1));
-  EXPECT_EQ(Weights, TI->getMetadata(LLVMContext::MD_prof));
+  EXPECT_EQ(Weights, TI->getMetadata(LLVM37Context::MD_prof));
 }
 
 TEST_F(IRBuilderTest, LandingPadName) {
@@ -311,7 +311,7 @@ TEST_F(IRBuilderTest, DIBuilder) {
   DIBuilder DIB(*M);
   auto File = DIB.createFile("F.CBL", "/");
   auto CU = DIB.createCompileUnit(dwarf::DW_LANG_Cobol74, "F.CBL", "/",
-                                  "llvm-cobol74", true, "", 0);
+                                  "llvm37-cobol74", true, "", 0);
   auto Type = DIB.createSubroutineType(File, DIB.getOrCreateTypeArray(None));
   DIB.createFunction(CU, "foo", "", File, 1, Type, false, true, 1, 0, true, F);
   AllocaInst *I = Builder.CreateAlloca(Builder.getInt8Ty());

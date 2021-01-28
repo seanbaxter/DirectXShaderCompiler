@@ -1,21 +1,21 @@
-//===-- llvm/CodeGen/DebugLocEntry.h - Entry in debug_loc list -*- C++ -*--===//
+//===-- llvm37/CodeGen/DebugLocEntry.h - Entry in debug_loc list -*- C++ -*--===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_LIB_CODEGEN_ASMPRINTER_DEBUGLOCENTRY_H
-#define LLVM_LIB_CODEGEN_ASMPRINTER_DEBUGLOCENTRY_H
-#include "llvm/ADT/SmallString.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/DebugInfo.h"
-#include "llvm/MC/MCSymbol.h"
-#include "llvm/MC/MachineLocation.h"
+#ifndef LLVM37_LIB_CODEGEN_ASMPRINTER_DEBUGLOCENTRY_H
+#define LLVM37_LIB_CODEGEN_ASMPRINTER_DEBUGLOCENTRY_H
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/DebugInfo.h"
+#include "llvm37/MC/MCSymbol.h"
+#include "llvm37/MC/MachineLocation.h"
 
-namespace llvm {
+namespace llvm37 {
 class AsmPrinter;
 class DebugLocStream;
 
@@ -165,7 +165,7 @@ inline bool operator==(const DebugLocEntry::Value &A,
   case DebugLocEntry::Value::E_ConstantInt:
     return A.Constant.CIP == B.Constant.CIP;
   }
-  llvm_unreachable("unhandled EntryKind");
+  llvm37_unreachable("unhandled EntryKind");
 }
 
 /// \brief Compare two pieces based on their offset.

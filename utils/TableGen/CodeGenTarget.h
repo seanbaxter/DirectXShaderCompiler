@@ -1,6 +1,6 @@
 //===- CodeGenTarget.h - Target Class Wrapper -------------------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -14,16 +14,16 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_UTILS_TABLEGEN_CODEGENTARGET_H
-#define LLVM_UTILS_TABLEGEN_CODEGENTARGET_H
+#ifndef LLVM37_UTILS_TABLEGEN_CODEGENTARGET_H
+#define LLVM37_UTILS_TABLEGEN_CODEGENTARGET_H
 
 #include "CodeGenInstruction.h"
 #include "CodeGenRegisters.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/TableGen/Record.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/TableGen/Record.h"
 #include <algorithm>
 
-namespace llvm {
+namespace llvm37 {
 
 struct CodeGenRegister;
 class CodeGenSchedModels;
@@ -214,6 +214,6 @@ public:
   bool hasProperty(enum SDNP Prop) const { return Properties & (1 << Prop); }
 };
 
-} // End llvm namespace
+} // End llvm37 namespace
 
 #endif

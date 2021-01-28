@@ -1,25 +1,25 @@
 """
-LLDB Formatters for LLVM data types.
+LLDB Formatters for LLVM37 data types.
 
 Load into LLDB with 'command script import /path/to/lldbDataFormatters.py'
 """
 
 def __lldb_init_module(debugger, internal_dict):
-    debugger.HandleCommand('type category define -e llvm -l c++')
-    debugger.HandleCommand('type synthetic add -w llvm '
+    debugger.HandleCommand('type category define -e llvm37 -l c++')
+    debugger.HandleCommand('type synthetic add -w llvm37 '
                            '-l lldbDataFormatters.SmallVectorSynthProvider '
-                           '-x "^llvm::SmallVectorImpl<.+>$"')
-    debugger.HandleCommand('type synthetic add -w llvm '
+                           '-x "^llvm37::SmallVectorImpl<.+>$"')
+    debugger.HandleCommand('type synthetic add -w llvm37 '
                            '-l lldbDataFormatters.SmallVectorSynthProvider '
-                           '-x "^llvm::SmallVector<.+,.+>$"')
-    debugger.HandleCommand('type synthetic add -w llvm '
+                           '-x "^llvm37::SmallVector<.+,.+>$"')
+    debugger.HandleCommand('type synthetic add -w llvm37 '
                            '-l lldbDataFormatters.ArrayRefSynthProvider '
-                           '-x "^llvm::ArrayRef<.+>$"')
-    debugger.HandleCommand('type summary add -w llvm '
+                           '-x "^llvm37::ArrayRef<.+>$"')
+    debugger.HandleCommand('type summary add -w llvm37 '
                            '-F lldbDataFormatters.OptionalSummaryProvider '
-                           '-x "^llvm::Optional<.+>$"')
+                           '-x "^llvm37::Optional<.+>$"')
 
-# Pretty printer for llvm::SmallVector/llvm::SmallVectorImpl
+# Pretty printer for llvm37::SmallVector/llvm37::SmallVectorImpl
 class SmallVectorSynthProvider:
     def __init__(self, valobj, dict):
         self.valobj = valobj;
@@ -61,7 +61,7 @@ class SmallVectorSynthProvider:
         assert self.type_size != 0
 
 class ArrayRefSynthProvider:
-    """ Provider for llvm::ArrayRef """
+    """ Provider for llvm37::ArrayRef """
     def __init__(self, valobj, dict):
         self.valobj = valobj;
         self.update() # initialize this provider

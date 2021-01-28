@@ -37,9 +37,9 @@ if.end:                                           ; preds = %if.then, %entry
 
 attributes #0 = { nounwind uwtable "less-precise-fpmad"="false" "no-frame-pointer-elim"="true" "no-frame-pointer-elim-non-leaf" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "stack-protector-buffer-size"="8" "unsafe-fp-math"="false" "use-soft-float"="false" }
 
-!llvm.dbg.cu = !{!0}
-!llvm.module.flags = !{!7, !8}
-!llvm.ident = !{!9}
+!llvm37.dbg.cu = !{!0}
+!llvm37.module.flags = !{!7, !8}
+!llvm37.ident = !{!9}
 
 !0 = !DICompileUnit(language: DW_LANG_C99, producer: "clang version 3.5 ", isOptimized: false, emissionKind: 0, file: !1, enums: !2, retainedTypes: !2, subprograms: !3, globals: !2, imports: !2)
 !1 = !DIFile(filename: "basic.c", directory: ".")

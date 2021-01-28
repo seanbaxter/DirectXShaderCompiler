@@ -1,6 +1,6 @@
 //===- Archive.cpp - ar File Format implementation --------------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,17 +11,17 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Object/Archive.h"
-#include "llvm/ADT/APInt.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/ADT/Twine.h"
-#include "llvm/Support/Endian.h"
-#include "llvm/Support/MemoryBuffer.h"
-#include "llvm/Support/Path.h"
+#include "llvm37/Object/Archive.h"
+#include "llvm37/ADT/APInt.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/ADT/Twine.h"
+#include "llvm37/Support/Endian.h"
+#include "llvm37/Support/MemoryBuffer.h"
+#include "llvm37/Support/Path.h"
 
-using namespace llvm;
+using namespace llvm37;
 using namespace object;
-using namespace llvm::support::endian;
+using namespace llvm37::support::endian;
 
 static const char *const Magic = "!<arch>\n";
 static const char *const ThinMagic = "!<thin>\n";
@@ -34,26 +34,26 @@ StringRef ArchiveMemberHeader::getName() const {
     EndCond = ' ';
   else
     EndCond = '/';
-  llvm::StringRef::size_type end =
-      llvm::StringRef(Name, sizeof(Name)).find(EndCond);
-  if (end == llvm::StringRef::npos)
+  llvm37::StringRef::size_type end =
+      llvm37::StringRef(Name, sizeof(Name)).find(EndCond);
+  if (end == llvm37::StringRef::npos)
     end = sizeof(Name);
   assert(end <= sizeof(Name) && end > 0);
   // Don't include the EndCond if there is one.
-  return llvm::StringRef(Name, end);
+  return llvm37::StringRef(Name, end);
 }
 
 uint32_t ArchiveMemberHeader::getSize() const {
   uint32_t Ret;
-  if (llvm::StringRef(Size, sizeof(Size)).rtrim(" ").getAsInteger(10, Ret))
-    llvm_unreachable("Size is not a decimal number.");
+  if (llvm37::StringRef(Size, sizeof(Size)).rtrim(" ").getAsInteger(10, Ret))
+    llvm37_unreachable("Size is not a decimal number.");
   return Ret;
 }
 
 sys::fs::perms ArchiveMemberHeader::getAccessMode() const {
   unsigned Ret;
   if (StringRef(AccessMode, sizeof(AccessMode)).rtrim(" ").getAsInteger(8, Ret))
-    llvm_unreachable("Access mode is not an octal number.");
+    llvm37_unreachable("Access mode is not an octal number.");
   return static_cast<sys::fs::perms>(Ret);
 }
 
@@ -61,7 +61,7 @@ sys::TimeValue ArchiveMemberHeader::getLastModified() const {
   unsigned Seconds;
   if (StringRef(LastModified, sizeof(LastModified)).rtrim(" ")
           .getAsInteger(10, Seconds))
-    llvm_unreachable("Last modified time not a decimal number.");
+    llvm37_unreachable("Last modified time not a decimal number.");
 
   sys::TimeValue Ret;
   Ret.fromEpochTime(Seconds);
@@ -71,14 +71,14 @@ sys::TimeValue ArchiveMemberHeader::getLastModified() const {
 unsigned ArchiveMemberHeader::getUID() const {
   unsigned Ret;
   if (StringRef(UID, sizeof(UID)).rtrim(" ").getAsInteger(10, Ret))
-    llvm_unreachable("UID time not a decimal number.");
+    llvm37_unreachable("UID time not a decimal number.");
   return Ret;
 }
 
 unsigned ArchiveMemberHeader::getGID() const {
   unsigned Ret;
   if (StringRef(GID, sizeof(GID)).rtrim(" ").getAsInteger(10, Ret))
-    llvm_unreachable("GID time not a decimal number.");
+    llvm37_unreachable("GID time not a decimal number.");
   return Ret;
 }
 
@@ -101,7 +101,7 @@ Archive::Child::Child(const Archive *Parent, const char *Start)
   if (Name.startswith("#1/")) {
     uint64_t NameSize;
     if (Name.substr(3).rtrim(" ").getAsInteger(10, NameSize))
-      llvm_unreachable("Long name length is not an integer");
+      llvm37_unreachable("Long name length is not an integer");
     StartOfFile += NameSize;
   }
 }
@@ -167,7 +167,7 @@ ErrorOr<StringRef> Archive::Child::getName() const {
     // Get the offset.
     std::size_t offset;
     if (name.substr(1).rtrim(" ").getAsInteger(10, offset))
-      llvm_unreachable("Long name offset is not an integer");
+      llvm37_unreachable("Long name offset is not an integer");
     const char *addr = Parent->StringTable->Data.begin()
                        + sizeof(ArchiveMemberHeader)
                        + offset;
@@ -189,7 +189,7 @@ ErrorOr<StringRef> Archive::Child::getName() const {
   } else if (name.startswith("#1/")) {
     uint64_t name_size;
     if (name.substr(3).rtrim(" ").getAsInteger(10, name_size))
-      llvm_unreachable("Long name length is not an ingeter");
+      llvm37_unreachable("Long name length is not an ingeter");
     return Data.substr(sizeof(ArchiveMemberHeader), name_size)
         .rtrim(StringRef("\0", 1));
   }
@@ -211,7 +211,7 @@ ErrorOr<MemoryBufferRef> Archive::Child::getMemoryBufferRef() const {
 }
 
 ErrorOr<std::unique_ptr<Binary>>
-Archive::Child::getAsBinary(LLVMContext *Context) const {
+Archive::Child::getAsBinary(LLVM37Context *Context) const {
   ErrorOr<MemoryBufferRef> BuffOrErr = getMemoryBufferRef();
   if (std::error_code EC = BuffOrErr.getError())
     return EC;

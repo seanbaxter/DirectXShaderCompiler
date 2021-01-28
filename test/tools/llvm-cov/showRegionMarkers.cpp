@@ -1,4 +1,4 @@
-// RUN: llvm-profdata merge %S/Inputs/regionMarkers.proftext -o %t.profdata
+// RUN: llvm37-profdata merge %S/Inputs/regionMarkers.proftext -o %t.profdata
 
 int main() {                      // CHECK: Marker at [[@LINE]]:12 = 1.11M
   int x = 0;
@@ -22,4 +22,4 @@ int main() {                      // CHECK: Marker at [[@LINE]]:12 = 1.11M
   return 0;
 }
 
-// RUN: llvm-cov show %S/Inputs/regionMarkers.covmapping -instr-profile %t.profdata -show-regions -dump -filename-equivalence %s 2>&1 | FileCheck %s
+// RUN: llvm37-cov show %S/Inputs/regionMarkers.covmapping -instr-profile %t.profdata -show-regions -dump -filename-equivalence %s 2>&1 | FileCheck %s

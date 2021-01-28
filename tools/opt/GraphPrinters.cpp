@@ -1,6 +1,6 @@
 //===- GraphPrinters.cpp - DOT printers for various graph types -----------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -8,16 +8,16 @@
 //===----------------------------------------------------------------------===//
 //
 // This file defines several printers for various different types of graphs used
-// by the LLVM infrastructure.  It uses the generic graph interface to convert
+// by the LLVM37 infrastructure.  It uses the generic graph interface to convert
 // the graph into a .dot graph.  These graphs can then be processed with the
 // "dot" tool to convert them to postscript or some other suitable format.
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/IR/Dominators.h"
-#include "llvm/Pass.h"
+#include "llvm37/IR/Dominators.h"
+#include "llvm37/Pass.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 //===----------------------------------------------------------------------===//
 //                            DomInfoPrinter Pass

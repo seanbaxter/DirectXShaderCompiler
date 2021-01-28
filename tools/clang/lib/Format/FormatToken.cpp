@@ -1,6 +1,6 @@
 //===--- FormatToken.cpp - Format C++ code --------------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -16,8 +16,8 @@
 #include "FormatToken.h"
 #include "ContinuationIndenter.h"
 #include "clang/Format/Format.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/Support/Debug.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/Support/Debug.h"
 #include <climits>
 
 namespace clang {
@@ -33,7 +33,7 @@ LIST_TOKEN_TYPES
 
   if (Type < NUM_TOKEN_TYPES)
     return TokNames[Type];
-  llvm_unreachable("unknown TokenType");
+  llvm37_unreachable("unknown TokenType");
   return nullptr;
 }
 

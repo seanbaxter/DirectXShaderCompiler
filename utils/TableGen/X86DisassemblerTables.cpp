@@ -1,6 +1,6 @@
 //===- X86DisassemblerTables.cpp - Disassembler tables ----------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -16,12 +16,12 @@
 
 #include "X86DisassemblerTables.h"
 #include "X86DisassemblerShared.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/Format.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/Format.h"
 #include <map>
 
-using namespace llvm;
+using namespace llvm37;
 using namespace X86Disassembler;
 
 /// stringForContext - Returns a string containing the name of a particular
@@ -33,7 +33,7 @@ using namespace X86Disassembler;
 static inline const char* stringForContext(InstructionContext insnContext) {
   switch (insnContext) {
   default:
-    llvm_unreachable("Unhandled instruction class");
+    llvm37_unreachable("Unhandled instruction class");
 #define ENUM_ENTRY(n, r, d)   case n: return #n; break;
 #define ENUM_ENTRY_K_B(n, r, d) ENUM_ENTRY(n, r, d) ENUM_ENTRY(n##_K_B, r, d)\
         ENUM_ENTRY(n##_KZ, r, d) ENUM_ENTRY(n##_K, r, d) ENUM_ENTRY(n##_B, r, d)\
@@ -48,7 +48,7 @@ static inline const char* stringForContext(InstructionContext insnContext) {
 static inline const char* stringForOperandType(OperandType type) {
   switch (type) {
   default:
-    llvm_unreachable("Unhandled type");
+    llvm37_unreachable("Unhandled type");
 #define ENUM_ENTRY(i, d) case i: return #i;
   TYPES
 #undef ENUM_ENTRY
@@ -60,7 +60,7 @@ static inline const char* stringForOperandType(OperandType type) {
 static inline const char* stringForOperandEncoding(OperandEncoding encoding) {
   switch (encoding) {
   default:
-    llvm_unreachable("Unhandled encoding");
+    llvm37_unreachable("Unhandled encoding");
 #define ENUM_ENTRY(i, d) case i: return #i;
   ENCODINGS
 #undef ENUM_ENTRY
@@ -349,7 +349,7 @@ static inline bool inheritsFrom(InstructionContext child,
   default:
     errs() << "Unknown instruction class: " <<
       stringForContext((InstructionContext)parent) << "\n";
-    llvm_unreachable("Unknown instruction class");
+    llvm37_unreachable("Unknown instruction class");
   }
 }
 
@@ -435,7 +435,7 @@ static const char* stringForDecisionType(ModRMDecisionType dt) {
 #define ENUM_ENTRY(n) case n: return #n;
   switch (dt) {
     default:
-      llvm_unreachable("Unknown decision type");
+      llvm37_unreachable("Unknown decision type");
     MODRMTYPES
   };
 #undef ENUM_ENTRY
@@ -484,7 +484,7 @@ void DisassemblerTables::emitModRMDecision(raw_ostream &o1, raw_ostream &o2,
 
   switch (dt) {
     default:
-      llvm_unreachable("Unknown decision type");
+      llvm37_unreachable("Unknown decision type");
     case MODRM_ONEENTRY:
       ModRMDecision.push_back(decision.instructionIDs[0]);
       break;
@@ -536,7 +536,7 @@ void DisassemblerTables::emitModRMDecision(raw_ostream &o1, raw_ostream &o2,
 
   switch (dt) {
     default:
-      llvm_unreachable("Unknown decision type");
+      llvm37_unreachable("Unknown decision type");
     case MODRM_ONEENTRY:
       sEntryNumber += 1;
       break;

@@ -1,6 +1,6 @@
 //==- BlockCounter.h - ADT for counting block visits -------------*- C++ -*-//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -14,7 +14,7 @@
 //===----------------------------------------------------------------------===//
 
 #include "clang/StaticAnalyzer/Core/PathSensitive/BlockCounter.h"
-#include "llvm/ADT/ImmutableMap.h"
+#include "llvm37/ADT/ImmutableMap.h"
 
 using namespace clang;
 using namespace ento;
@@ -37,7 +37,7 @@ public:
     return std::tie(CallSite, BlockID) < std::tie(RHS.CallSite, RHS.BlockID);
   }
 
-  void Profile(llvm::FoldingSetNodeID &ID) const {
+  void Profile(llvm37::FoldingSetNodeID &ID) const {
     ID.AddPointer(CallSite);
     ID.AddInteger(BlockID);
   }
@@ -45,7 +45,7 @@ public:
 
 }
 
-typedef llvm::ImmutableMap<CountKey, unsigned> CountMap;
+typedef llvm37::ImmutableMap<CountKey, unsigned> CountMap;
 
 static inline CountMap GetMap(void *D) {
   return CountMap(static_cast<CountMap::TreeTy*>(D));
@@ -62,7 +62,7 @@ unsigned BlockCounter::getNumVisited(const StackFrameContext *CallSite,
   return T ? *T : 0;
 }
 
-BlockCounter::Factory::Factory(llvm::BumpPtrAllocator& Alloc) {
+BlockCounter::Factory::Factory(llvm37::BumpPtrAllocator& Alloc) {
   F = new CountMap::Factory(Alloc);
 }
 

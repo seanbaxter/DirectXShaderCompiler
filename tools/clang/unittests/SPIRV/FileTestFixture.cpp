@@ -1,6 +1,6 @@
 //===- FileTestFixture.cpp ------------- File Test Fixture Implementation -===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -60,7 +60,7 @@ bool FileTest::parseInputFile() {
   return true;
 }
 
-void FileTest::runFileTest(llvm::StringRef filename, Expect expect,
+void FileTest::runFileTest(llvm37::StringRef filename, Expect expect,
                            bool runValidation) {
   if (beforeHLSLLegalization)
     assert(runValidation);

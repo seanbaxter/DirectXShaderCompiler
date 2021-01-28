@@ -1,6 +1,6 @@
 //===- ProvenanceAnalysis.cpp - ObjC ARC Optimization ---------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -17,18 +17,18 @@
 /// by name, and hardwires knowledge of their semantics.
 ///
 /// WARNING: This file knows about how certain Objective-C library functions are
-/// used. Naive LLVM IR transformations which would otherwise be
+/// used. Naive LLVM37 IR transformations which would otherwise be
 /// behavior-preserving may break these assumptions.
 ///
 //===----------------------------------------------------------------------===//
 
 #include "ObjCARC.h"
 #include "ProvenanceAnalysis.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/SmallPtrSet.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/SmallPtrSet.h"
 
-using namespace llvm;
-using namespace llvm::objcarc;
+using namespace llvm37;
+using namespace llvm37::objcarc;
 
 bool ProvenanceAnalysis::relatedSelect(const SelectInst *A,
                                        const Value *B) {

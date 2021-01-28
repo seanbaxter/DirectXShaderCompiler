@@ -1,6 +1,6 @@
 //==--- InstrEmitter.cpp - Emit MachineInstrs for the SelectionDAG class ---==//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -15,20 +15,20 @@
 
 #include "InstrEmitter.h"
 #include "SDNodeDbgValue.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/CodeGen/MachineConstantPool.h"
-#include "llvm/CodeGen/MachineFunction.h"
-#include "llvm/CodeGen/MachineInstrBuilder.h"
-#include "llvm/CodeGen/MachineRegisterInfo.h"
-#include "llvm/CodeGen/StackMaps.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/MathExtras.h"
-#include "llvm/Target/TargetInstrInfo.h"
-#include "llvm/Target/TargetLowering.h"
-#include "llvm/Target/TargetSubtargetInfo.h"
-using namespace llvm;
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/CodeGen/MachineConstantPool.h"
+#include "llvm37/CodeGen/MachineFunction.h"
+#include "llvm37/CodeGen/MachineInstrBuilder.h"
+#include "llvm37/CodeGen/MachineRegisterInfo.h"
+#include "llvm37/CodeGen/StackMaps.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/MathExtras.h"
+#include "llvm37/Target/TargetInstrInfo.h"
+#include "llvm37/Target/TargetLowering.h"
+#include "llvm37/Target/TargetSubtargetInfo.h"
+using namespace llvm37;
 
 #define DEBUG_TYPE "instr-emitter"
 
@@ -570,7 +570,7 @@ void InstrEmitter::EmitSubregNode(SDNode *Node,
     MIB.addImm(SubIdx);
     MBB->insert(InsertPos, MIB);
   } else
-    llvm_unreachable("Node is not insert_subreg, extract_subreg, or subreg_to_reg");
+    llvm37_unreachable("Node is not insert_subreg, extract_subreg, or subreg_to_reg");
 
   SDValue Op(Node, 0);
   bool isNew = VRBaseMap.insert(std::make_pair(Op, VRBase)).second;
@@ -886,9 +886,9 @@ EmitSpecialNode(SDNode *Node, bool IsClone, bool IsCloned,
 #ifndef NDEBUG
     Node->dump();
 #endif
-    llvm_unreachable("This target-independent node should have been selected!");
+    llvm37_unreachable("This target-independent node should have been selected!");
   case ISD::EntryToken:
-    llvm_unreachable("EntryToken should have been excluded from the schedule!");
+    llvm37_unreachable("EntryToken should have been excluded from the schedule!");
   case ISD::MERGE_VALUES:
   case ISD::TokenFactor: // fall thru
     break;
@@ -969,7 +969,7 @@ EmitSpecialNode(SDNode *Node, bool IsClone, bool IsCloned,
       ++i;  // Skip the ID value.
 
       switch (InlineAsm::getKind(Flags)) {
-      default: llvm_unreachable("Bad flags!");
+      default: llvm37_unreachable("Bad flags!");
         case InlineAsm::Kind_RegDef:
         for (unsigned j = 0; j != NumVals; ++j, ++i) {
           unsigned Reg = cast<RegisterSDNode>(Node->getOperand(i))->getReg();

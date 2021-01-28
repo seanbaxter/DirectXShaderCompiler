@@ -1,6 +1,6 @@
-// RUN: %clang_cc1 -triple powerpc64-unknown-unknown -faltivec -ffreestanding -emit-llvm -o - %s | FileCheck %s
-// RUN: %clang_cc1 -triple powerpc64-unknown-unknown -faltivec -ffreestanding -emit-llvm -fno-lax-vector-conversions -o - %s | FileCheck %s
-// RUN: %clang_cc1 -triple powerpc64-unknown-unknown -faltivec -ffreestanding -emit-llvm -x c++ -o - %s | FileCheck %s
+// RUN: %clang_cc1 -triple powerpc64-unknown-unknown -faltivec -ffreestanding -emit-llvm37 -o - %s | FileCheck %s
+// RUN: %clang_cc1 -triple powerpc64-unknown-unknown -faltivec -ffreestanding -emit-llvm37 -fno-lax-vector-conversions -o - %s | FileCheck %s
+// RUN: %clang_cc1 -triple powerpc64-unknown-unknown -faltivec -ffreestanding -emit-llvm37 -x c++ -o - %s | FileCheck %s
 
 #include <altivec.h>
 
@@ -9,4 +9,4 @@
 
 // CHECK: target triple = "powerpc64-
 // CHECK-NEXT: {{^$}}
-// CHECK-NEXT: llvm.ident
+// CHECK-NEXT: llvm37.ident

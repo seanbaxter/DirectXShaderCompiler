@@ -1,6 +1,6 @@
 ﻿//===-- ClangFormatPackages.cs - VSPackage for clang-format ------*- C# -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -26,7 +26,7 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Xml.Linq;
 
-namespace LLVM.ClangFormat
+namespace LLVM37.ClangFormat
 {
     [ClassInterface(ClassInterfaceType.AutoDual)]
     [CLSCompliant(false), ComVisible(true)]
@@ -34,10 +34,10 @@ namespace LLVM.ClangFormat
     {
         private string style = "File";
 
-        [Category("LLVM/Clang")]
+        [Category("LLVM37/Clang")]
         [DisplayName("Style")]
         [Description("Coding style, currently supports:\n" +
-                     "  - Predefined styles ('LLVM', 'Google', 'Chromium', 'Mozilla').\n" +
+                     "  - Predefined styles ('LLVM37', 'Google', 'Chromium', 'Mozilla').\n" +
                      "  - 'File' to search for a YAML .clang-format or _clang-format\n" +
                      "    configuration file.\n" +
                      "  - A YAML configuration snippet.\n\n" +
@@ -46,8 +46,8 @@ namespace LLVM.ClangFormat
                      "  in the source file's directory and its parents.\n\n" +
                      "YAML configuration snippet:\n" +
                      "  The content of a .clang-format configuration file, as string.\n" +
-                     "  Example: '{BasedOnStyle: \"LLVM\", IndentWidth: 8}'\n\n" +
-                     "See also: http://clang.llvm.org/docs/ClangFormatStyleOptions.html.")]
+                     "  Example: '{BasedOnStyle: \"LLVM37\", IndentWidth: 8}'\n\n" +
+                     "See also: http://clang.llvm37.org/docs/ClangFormatStyleOptions.html.")]
         public string Style
         {
             get { return style; }
@@ -59,7 +59,7 @@ namespace LLVM.ClangFormat
     [InstalledProductRegistration("#110", "#112", "1.0", IconResourceID = 400)]
     [ProvideMenuResource("Menus.ctmenu", 1)]
     [Guid(GuidList.guidClangFormatPkgString)]
-    [ProvideOptionPage(typeof(OptionPageGrid), "LLVM/Clang", "ClangFormat", 0, 0, true)]
+    [ProvideOptionPage(typeof(OptionPageGrid), "LLVM37/Clang", "ClangFormat", 0, 0, true)]
     public sealed class ClangFormatPackage : Package
     {
         #region Package Members

@@ -1,6 +1,6 @@
 //===--- LiteralSupport.h ---------------------------------------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -12,16 +12,16 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_LEX_LITERALSUPPORT_H
-#define LLVM_CLANG_LEX_LITERALSUPPORT_H
+#ifndef LLVM37_CLANG_LEX_LITERALSUPPORT_H
+#define LLVM37_CLANG_LEX_LITERALSUPPORT_H
 
 #include "clang/Basic/CharInfo.h"
 #include "clang/Basic/LLVM.h"
 #include "clang/Basic/TokenKinds.h"
-#include "llvm/ADT/APFloat.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/ADT/StringRef.h"
-#include "llvm/Support/DataTypes.h"
+#include "llvm37/ADT/APFloat.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/ADT/StringRef.h"
+#include "llvm37/Support/DataTypes.h"
 
 namespace clang {
 
@@ -95,14 +95,14 @@ public:
   /// matches Val's input width.  If there is an overflow (i.e., if the unsigned
   /// value read is larger than the APInt's bits will hold), set Val to the low
   /// bits of the result and return true.  Otherwise, return false.
-  bool GetIntegerValue(llvm::APInt &Val);
+  bool GetIntegerValue(llvm37::APInt &Val);
 
   /// GetFloatValue - Convert this numeric literal to a floating value, using
   /// the specified APFloat fltSemantics (specifying float, double, etc).
   /// The optional bool isExact (passed-by-reference) has its value
   /// set to true if the returned APFloat can represent the number in the
   /// literal exactly, and false otherwise.
-  llvm::APFloat::opStatus GetFloatValue(llvm::APFloat &Result);
+  llvm37::APFloat::opStatus GetFloatValue(llvm37::APFloat &Result);
 
 private:
 

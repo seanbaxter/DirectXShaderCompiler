@@ -1,19 +1,19 @@
 
 if (DOXYGEN_FOUND)
-if (LLVM_ENABLE_DOXYGEN)
+if (LLVM37_ENABLE_DOXYGEN)
   set(abs_srcdir ${CMAKE_CURRENT_SOURCE_DIR})
   set(abs_builddir ${CMAKE_CURRENT_BINARY_DIR})
 
   if (HAVE_DOT)
-    set(DOT ${LLVM_PATH_DOT})
+    set(DOT ${LLVM37_PATH_DOT})
   endif()
 
-  if (LLVM_DOXYGEN_EXTERNAL_SEARCH)
+  if (LLVM37_DOXYGEN_EXTERNAL_SEARCH)
     set(enable_searchengine "YES")
-    set(searchengine_url "${LLVM_DOXYGEN_SEARCHENGINE_URL}")
+    set(searchengine_url "${LLVM37_DOXYGEN_SEARCHENGINE_URL}")
     set(enable_server_based_search "YES")
     set(enable_external_search "YES")
-    set(extra_search_mappings "${LLVM_DOXYGEN_SEARCH_MAPPINGS}")
+    set(extra_search_mappings "${LLVM37_DOXYGEN_SEARCH_MAPPINGS}")
   else()
     set(enable_searchengine "NO")
     set(searchengine_url "")
@@ -23,10 +23,10 @@ if (LLVM_ENABLE_DOXYGEN)
   endif()
 
   # If asked, configure doxygen for the creation of a Qt Compressed Help file.
-  if (LLVM_ENABLE_DOXYGEN_QT_HELP)
-    set(CLANG_DOXYGEN_QCH_FILENAME "org.llvm.clang.qch" CACHE STRING
+  if (LLVM37_ENABLE_DOXYGEN_QT_HELP)
+    set(CLANG_DOXYGEN_QCH_FILENAME "org.llvm37.clang.qch" CACHE STRING
       "Filename of the Qt Compressed help file")
-    set(CLANG_DOXYGEN_QHP_NAMESPACE "org.llvm.clang" CACHE STRING
+    set(CLANG_DOXYGEN_QHP_NAMESPACE "org.llvm37.clang" CACHE STRING
       "Namespace under which the intermediate Qt Help Project file lives")
     set(CLANG_DOXYGEN_QHP_CUST_FILTER_NAME "Clang ${CLANG_VERSION}" CACHE STRING
       "See http://qt-project.org/doc/qt-4.8/qthelpproject.html#custom-filters")
@@ -35,7 +35,7 @@ if (LLVM_ENABLE_DOXYGEN)
     set(clang_doxygen_generate_qhp "YES")
     set(clang_doxygen_qch_filename "${CLANG_DOXYGEN_QCH_FILENAME}")
     set(clang_doxygen_qhp_namespace "${CLANG_DOXYGEN_QHP_NAMESPACE}")
-    set(clang_doxygen_qhelpgenerator_path "${LLVM_DOXYGEN_QHELPGENERATOR_PATH}")
+    set(clang_doxygen_qhelpgenerator_path "${LLVM37_DOXYGEN_QHELPGENERATOR_PATH}")
     set(clang_doxygen_qhp_cust_filter_name "${CLANG_DOXYGEN_QHP_CUST_FILTER_NAME}")
     set(clang_doxygen_qhp_cust_filter_attrs "${CLANG_DOXYGEN_QHP_CUST_FILTER_ATTRS}")
   else()
@@ -47,9 +47,9 @@ if (LLVM_ENABLE_DOXYGEN)
     set(clang_doxygen_qhp_cust_filter_attrs "")
   endif()
 
-  option(LLVM_DOXYGEN_SVG
+  option(LLVM37_DOXYGEN_SVG
     "Use svg instead of png files for doxygen graphs." OFF)
-  if (LLVM_DOXYGEN_SVG)
+  if (LLVM37_DOXYGEN_SVG)
     set(DOT_IMAGE_FORMAT "svg")
   else()
     set(DOT_IMAGE_FORMAT "png")
@@ -79,18 +79,18 @@ if (LLVM_ENABLE_DOXYGEN)
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
     COMMENT "Generating clang doxygen documentation." VERBATIM)
 
-  if (LLVM_BUILD_DOCS)
+  if (LLVM37_BUILD_DOCS)
     add_dependencies(doxygen doxygen-clang)
   endif()
 
-  if (NOT LLVM_INSTALL_TOOLCHAIN_ONLY)
+  if (NOT LLVM37_INSTALL_TOOLCHAIN_ONLY)
     install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/doxygen/html
       DESTINATION docs/html)
   endif()
 endif()
 endif()
 
-if (LLVM_ENABLE_SPHINX)
+if (LLVM37_ENABLE_SPHINX)
   if (SPHINX_FOUND)
     include(AddSphinxTarget)
     if (${SPHINX_OUTPUT_HTML})

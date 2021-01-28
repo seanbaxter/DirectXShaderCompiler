@@ -4,7 +4,7 @@ target datalayout = "e-p:32:32:32-i1:8:32-i8:8:32-i16:16:32-i32:32:32-i64:32:32-
 target triple = "thumb-apple-darwin8"
 @replacementUnichar = internal global i16 -3		; <i16*> [#uses=2]
 @"L_OBJC_IMAGE_INFO" = internal global [2 x i32] zeroinitializer		; <[2 x i32]*> [#uses=1]
-@llvm.used = appending global [1 x i8*] [ i8* bitcast ([2 x i32]* @"L_OBJC_IMAGE_INFO" to i8*) ]		; <[1 x i8*]*> [#uses=0]
+@llvm37.used = appending global [1 x i8*] [ i8* bitcast ([2 x i32]* @"L_OBJC_IMAGE_INFO" to i8*) ]		; <[1 x i8*]*> [#uses=0]
 
 define zeroext i16 @__NSCharToUnicharCFWrapper(i8 zeroext  %ch)   {
 entry:

@@ -4,7 +4,7 @@
 ; Globalopt should be able to evaluate an invoke.
 ; CHECK: @tmp = global i32 1
 
-@llvm.global_ctors = appending global [1 x { i32, void ()* }] [{ i32, void ()* } { i32 65535, void ()* @_GLOBAL__I_a }]
+@llvm37.global_ctors = appending global [1 x { i32, void ()* }] [{ i32, void ()* } { i32 65535, void ()* @_GLOBAL__I_a }]
 @tmp = global i32 0
 
 define i32 @one() {

@@ -20,7 +20,7 @@
 #include "dxc/Support/dxcapi.impl.h"
 
 #include <algorithm>
-#include "llvm/ADT/SmallVector.h"
+#include "llvm37/ADT/SmallVector.h"
 
 // This declaration is used for the locally-linked validator.
 HRESULT CreateDxcValidator(_In_ REFIID riid, _Out_ LPVOID *ppv);

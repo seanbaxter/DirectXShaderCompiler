@@ -101,7 +101,7 @@ target triple = "powerpc-apple-darwin8"
 	%struct._GLVMFunction = type opaque
 	%struct._PPStreamToken = type { { i16, i8, i8, i32 } }
 
-define void @gldLLVMVecPointRender(%struct.GLDContextRec* %ctx) {
+define void @gldLLVM37VecPointRender(%struct.GLDContextRec* %ctx) {
 entry:
 	%tmp.uip = getelementptr %struct.GLDContextRec, %struct.GLDContextRec* %ctx, i32 0, i32 22		; <i32*> [#uses=1]
 	%tmp = load i32, i32* %tmp.uip		; <i32> [#uses=3]

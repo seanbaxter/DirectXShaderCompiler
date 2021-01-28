@@ -1,6 +1,6 @@
 //===-- ElimAvailExtern.cpp - DCE unreachable internal functions ----------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -12,15 +12,15 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Transforms/IPO.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/Module.h"
-#include "llvm/Transforms/Utils/CtorUtils.h"
-#include "llvm/Transforms/Utils/GlobalStatus.h"
-#include "llvm/Pass.h"
-using namespace llvm;
+#include "llvm37/Transforms/IPO.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/Transforms/Utils/CtorUtils.h"
+#include "llvm37/Transforms/Utils/GlobalStatus.h"
+#include "llvm37/Pass.h"
+using namespace llvm37;
 
 #define DEBUG_TYPE "elim-avail-extern"
 
@@ -46,7 +46,7 @@ char EliminateAvailableExternally::ID = 0;
 INITIALIZE_PASS(EliminateAvailableExternally, "elim-avail-extern",
                 "Eliminate Available Externally Globals", false, false)
 
-ModulePass *llvm::createEliminateAvailableExternallyPass() {
+ModulePass *llvm37::createEliminateAvailableExternallyPass() {
   return new EliminateAvailableExternally();
 }
 

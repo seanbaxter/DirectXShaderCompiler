@@ -1,8 +1,8 @@
-; RUN: llvm-as < %s >%t1
-; RUN: llvm-lto -o %t2 %t1
-; RUN: llvm-nm %t2 | FileCheck %s -check-prefix=NOEXPORT
-; RUN: llvm-lto -o %t3 -exported-symbol=main %t1
-; RUN: llvm-nm %t3 | FileCheck %s -check-prefix=EXPORT
+; RUN: llvm37-as < %s >%t1
+; RUN: llvm37-lto -o %t2 %t1
+; RUN: llvm37-nm %t2 | FileCheck %s -check-prefix=NOEXPORT
+; RUN: llvm37-lto -o %t3 -exported-symbol=main %t1
+; RUN: llvm37-nm %t3 | FileCheck %s -check-prefix=EXPORT
 
 target datalayout = "e-p:64:64:64-i1:8:8-i8:8:8-i16:16:16-i32:32:32-i64:64:64-f32:32:32-f64:64:64-v64:64:64-v128:128:128-a0:0:64-s0:64:64-f80:128:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
@@ -25,8 +25,8 @@ define i32 @main(i32 %argc, i8** %argv) {
   ret i32 0
 }
 
-; RUN: llvm-lto -o %t -dso-symbol=zed1 -dso-symbol=zed2 %t1 -O0
-; RUN: llvm-nm %t | FileCheck %s -check-prefix=ZED1_AND_ZED2
+; RUN: llvm37-lto -o %t -dso-symbol=zed1 -dso-symbol=zed2 %t1 -O0
+; RUN: llvm37-nm %t | FileCheck %s -check-prefix=ZED1_AND_ZED2
 ; ZED1_AND_ZED2: V zed1
 @zed1 = linkonce_odr global i32 42
 define i32* @get_zed1() {

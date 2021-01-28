@@ -1,6 +1,6 @@
 //===- DAGISelMatcher.cpp - Representation of DAG pattern matcher ---------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -10,10 +10,10 @@
 #include "DAGISelMatcher.h"
 #include "CodeGenDAGPatterns.h"
 #include "CodeGenTarget.h"
-#include "llvm/ADT/StringExtras.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/TableGen/Record.h"
-using namespace llvm;
+#include "llvm37/ADT/StringExtras.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/TableGen/Record.h"
+using namespace llvm37;
 
 void Matcher::anchor() { }
 

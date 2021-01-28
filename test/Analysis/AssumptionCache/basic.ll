@@ -2,7 +2,7 @@
 
 target datalayout = "e-i64:64-f80:128-n8:16:32:64-S128"
 
-declare void @llvm.assume(i1)
+declare void @llvm37.assume(i1)
 
 define void @test1(i32 %a) {
 ; CHECK-LABEL: Cached assumptions for function: test1
@@ -12,11 +12,11 @@ define void @test1(i32 %a) {
 
 entry:
   %cond1 = icmp ne i32 %a, 0
-  call void @llvm.assume(i1 %cond1)
+  call void @llvm37.assume(i1 %cond1)
   %cond2 = icmp slt i32 %a, 0
-  call void @llvm.assume(i1 %cond2)
+  call void @llvm37.assume(i1 %cond2)
   %cond3 = icmp sgt i32 %a, 0
-  call void @llvm.assume(i1 %cond3)
+  call void @llvm37.assume(i1 %cond3)
 
   ret void
 }

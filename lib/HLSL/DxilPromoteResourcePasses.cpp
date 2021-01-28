@@ -15,26 +15,26 @@
 #include "dxc/DXIL/DxilCBuffer.h"
 #include "dxc/DXIL/DxilOperations.h"
 #include "dxc/DXIL/DxilModule.h"
-#include "llvm/Pass.h"
-#include "llvm/Analysis/AssumptionCache.h"
-#include "llvm/ADT/DenseSet.h"
-#include "llvm/IR/Dominators.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/Instruction.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/Intrinsics.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/Attributes.h"
-#include "llvm/IR/DebugInfo.h"
-#include "llvm/IR/Operator.h"
+#include "llvm37/Pass.h"
+#include "llvm37/Analysis/AssumptionCache.h"
+#include "llvm37/ADT/DenseSet.h"
+#include "llvm37/IR/Dominators.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/Instruction.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/Intrinsics.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/Attributes.h"
+#include "llvm37/IR/DebugInfo.h"
+#include "llvm37/IR/Operator.h"
 
-#include "llvm/Transforms/Utils/PromoteMemToReg.h"
-#include "llvm/Transforms/Utils/SSAUpdater.h"
+#include "llvm37/Transforms/Utils/PromoteMemToReg.h"
+#include "llvm37/Transforms/Utils/SSAUpdater.h"
 #include <unordered_set>
 #include <vector>
 
-using namespace llvm;
+using namespace llvm37;
 using namespace hlsl;
 
 // Legalize resource use.
@@ -136,7 +136,7 @@ bool DxilPromoteLocalResources::PromoteLocalResource(Function &F) {
   return bModified;
 }
 
-FunctionPass *llvm::createDxilPromoteLocalResources() {
+FunctionPass *llvm37::createDxilPromoteLocalResources() {
   return new DxilPromoteLocalResources();
 }
 
@@ -226,7 +226,7 @@ bool DxilPromoteStaticResources::PromoteStaticGlobalResources(
   return bModified;
 }
 
-ModulePass *llvm::createDxilPromoteStaticResources() {
+ModulePass *llvm37::createDxilPromoteStaticResources() {
   return new DxilPromoteStaticResources();
 }
 
@@ -520,7 +520,7 @@ void DxilMutateResourceToHandle::collectCandidates(Module &M) {
         // Make sure only used for lifetime intrinsic.
         for (User *BCUser : BCO->users()) {
           if (ConstantArray *CA = dyn_cast<ConstantArray>(BCUser)) {
-            // For llvm.used.
+            // For llvm37.used.
             if (CA->hasOneUse()) {
               Value *CAUser = CA->user_back();
               if (GlobalVariable *GV = dyn_cast<GlobalVariable>(CAUser)) {
@@ -695,7 +695,7 @@ void DxilMutateResourceToHandle::mutateCandidates(Module &M) {
   }
 }
 
-ModulePass *llvm::createDxilMutateResourceToHandlePass() {
+ModulePass *llvm37::createDxilMutateResourceToHandlePass() {
   return new DxilMutateResourceToHandle();
 }
 

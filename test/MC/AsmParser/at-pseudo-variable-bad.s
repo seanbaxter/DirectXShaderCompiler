@@ -1,4 +1,4 @@
-# RUN: not llvm-mc -triple i386-unknown-unknown < %s 2>&1 | FileCheck %s
+# RUN: not llvm37-mc -triple i386-unknown-unknown < %s 2>&1 | FileCheck %s
 
 add  $1\@, %eax
 # CHECK: :[[@LINE-1]]:8: error: unexpected token in argument list

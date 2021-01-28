@@ -1,26 +1,26 @@
 ; RUN: opt -strip-debug < %s -S | FileCheck %s
 
-; CHECK-NOT: llvm.dbg
+; CHECK-NOT: llvm37.dbg
 
 @x = common global i32 0                          ; <i32*> [#uses=0]
 
 define void @foo() nounwind readnone optsize ssp {
 entry:
-  tail call void @llvm.dbg.value(metadata i32 0, i64 0, metadata !5, metadata !{}), !dbg !10
+  tail call void @llvm37.dbg.value(metadata i32 0, i64 0, metadata !5, metadata !{}), !dbg !10
   ret void, !dbg !11
 }
 
-declare void @llvm.dbg.value(metadata, i64, metadata, metadata) nounwind readnone
+declare void @llvm37.dbg.value(metadata, i64, metadata, metadata) nounwind readnone
 
-!llvm.dbg.cu = !{!2}
-!llvm.module.flags = !{!13}
-!llvm.dbg.sp = !{!0}
-!llvm.dbg.lv.foo = !{!5}
-!llvm.dbg.gv = !{!8}
+!llvm37.dbg.cu = !{!2}
+!llvm37.module.flags = !{!13}
+!llvm37.dbg.sp = !{!0}
+!llvm37.dbg.lv.foo = !{!5}
+!llvm37.dbg.gv = !{!8}
 
 !0 = !DISubprogram(name: "foo", linkageName: "foo", line: 2, isLocal: false, isDefinition: true, virtualIndex: 6, isOptimized: true, file: !12, scope: !1, type: !3, function: void ()* @foo)
 !1 = !DIFile(filename: "b.c", directory: "/tmp")
-!2 = !DICompileUnit(language: DW_LANG_C89, producer: "4.2.1 (Based on Apple Inc. build 5658) (LLVM build)", isOptimized: true, emissionKind: 0, file: !12, enums: !4, retainedTypes: !4)
+!2 = !DICompileUnit(language: DW_LANG_C89, producer: "4.2.1 (Based on Apple Inc. build 5658) (LLVM37 build)", isOptimized: true, emissionKind: 0, file: !12, enums: !4, retainedTypes: !4)
 !3 = !DISubroutineType(types: !4)
 !4 = !{null}
 !5 = !DILocalVariable(tag: DW_TAG_auto_variable, name: "y", line: 3, scope: !6, file: !1, type: !7)

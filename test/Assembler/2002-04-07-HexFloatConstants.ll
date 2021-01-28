@@ -6,8 +6,8 @@
 ; results!
 ;
 ; RUN: opt -constprop -S > %t.1 < %s
-; RUN: llvm-as < %s | llvm-dis | llvm-as | opt -constprop | \
-; RUN: llvm-dis > %t.2
+; RUN: llvm37-as < %s | llvm37-dis | llvm37-as | opt -constprop | \
+; RUN: llvm37-dis > %t.2
 ; RUN: diff %t.1 %t.2
 ; RUN: verify-uselistorder %s
 

@@ -62,7 +62,7 @@ def make_install_dir(path):
 
 ###
 
-class LLVMProjectInfo(object):
+class LLVM37ProjectInfo(object):
     @staticmethod
     def load_infos_from_path(llvmbuild_source_root):
         def recurse(subpath):
@@ -88,9 +88,9 @@ class LLVMProjectInfo(object):
     @staticmethod
     def load_from_path(source_root, llvmbuild_source_root):
         infos = list(
-            LLVMProjectInfo.load_infos_from_path(llvmbuild_source_root))
+            LLVM37ProjectInfo.load_infos_from_path(llvmbuild_source_root))
 
-        return LLVMProjectInfo(source_root, infos)
+        return LLVM37ProjectInfo(source_root, infos)
 
     def __init__(self, source_root, component_infos):
         # Store our simple ivars.
@@ -287,7 +287,7 @@ subdirectories = %s
             f.write("""\
 %s
 ;
-;                     The LLVM Compiler Infrastructure
+;                     The LLVM37 Compiler Infrastructure
 ;
 ; This file is distributed under the University of Illinois Open Source
 ; License. See LICENSE.TXT for details.
@@ -298,7 +298,7 @@ subdirectories = %s
 ;
 ; For more information on the LLVMBuild system, please see:
 ;
-;   http://llvm.org/docs/LLVMBuild.html
+;   http://llvm37.org/docs/LLVMBuild.html
 ;
 ;===------------------------------------------------------------------------===;
 
@@ -340,7 +340,7 @@ subdirectories = %s
 
             # Compute the llvm-config "component name". For historical reasons,
             # this is lowercased based on the library name.
-            llvmconfig_component_name = c.get_llvmconfig_component_name()
+            llvm37config_component_name = c.get_llvm37config_component_name()
 
             # Get the library name, or None for LibraryGroups.
             if c.type_name == 'Library' or c.type_name == 'OptionalLibrary':
@@ -351,17 +351,17 @@ subdirectories = %s
                 is_installed = True
 
             # Get the component names of all the required libraries.
-            required_llvmconfig_component_names = [
-                self.component_info_map[dep].get_llvmconfig_component_name()
+            required_llvm37config_component_names = [
+                self.component_info_map[dep].get_llvm37config_component_name()
                 for dep in c.required_libraries]
 
             # Insert the entries for library groups we should add to.
             for dep in c.add_to_library_groups:
-                entries[dep][2].append(llvmconfig_component_name)
+                entries[dep][2].append(llvm37config_component_name)
 
             # Add the entry.
-            entries[c.name] = (llvmconfig_component_name, library_name,
-                               required_llvmconfig_component_names,
+            entries[c.name] = (llvm37config_component_name, library_name,
+                               required_llvm37config_component_names,
                                is_installed)
 
         # Convert to a list of entries and sort by name.
@@ -483,7 +483,7 @@ subdirectories = %s
                 build_paths.add(p)
 
         # Gather the list of necessary sources by just finding all loaded
-        # modules that are inside the LLVM source tree.
+        # modules that are inside the LLVM37 source tree.
         for module in sys.modules.values():
             # Find the module path.
             if not hasattr(module, '__file__'):
@@ -519,14 +519,14 @@ subdirectories = %s
 
         # Write the header.
         header_fmt = '\
-#===-- %s - LLVMBuild Configuration for LLVM %s-*- CMake -*--===#'
+#===-- %s - LLVMBuild Configuration for LLVM37 %s-*- CMake -*--===#'
         header_name = os.path.basename(output_path)
         header_pad = '-' * (80 - len(header_fmt % (header_name, '')))
         header_string = header_fmt % (header_name, header_pad)
         f.write("""\
 %s
 #
-#                     The LLVM Compiler Infrastructure
+#                     The LLVM37 Compiler Infrastructure
 #
 # This file is distributed under the University of Illinois Open Source
 # License. See LICENSE.TXT for details.
@@ -586,7 +586,7 @@ endif(NOT HLSL_OFFICIAL_BUILD)
                 continue
 
             f.write("""\
-set_property(GLOBAL PROPERTY LLVMBUILD_LIB_DEPS_%s %s)\n""" % (
+set_property(GLOBAL PROPERTY LLVM37BUILD_LIB_DEPS_%s %s)\n""" % (
                 ci.get_prefixed_library_name(), " ".join(sorted(
                      dep.get_prefixed_library_name()
                      for dep in self.get_required_libraries_for_component(ci)))))
@@ -612,7 +612,7 @@ set_property(GLOBAL PROPERTY LLVMBUILD_LIB_DEPS_%s %s)\n""" % (
 # Explicit library dependency information.
 #
 # The following property assignments tell CMake about link
-# dependencies of libraries imported from LLVM.
+# dependencies of libraries imported from LLVM37.
 """)
         for ci in self.ordered_component_infos:
             # Skip optional components which are not enabled.
@@ -643,7 +643,7 @@ set_property(TARGET %s PROPERTY IMPORTED_LINK_INTERFACE_LIBRARIES %s)\n""" % (
 
         Generate a Makefile fragment which includes all of the collated
         LLVMBuild information in a format that is easily digestible by a
-        Makefile. The exact contents of this are closely tied to how the LLVM
+        Makefile. The exact contents of this are closely tied to how the LLVM37
         Makefiles integrate LLVMBuild, see Makefile.rules in the top-level.
         """
 
@@ -655,14 +655,14 @@ set_property(TARGET %s PROPERTY IMPORTED_LINK_INTERFACE_LIBRARIES %s)\n""" % (
 
         # Write the header.
         header_fmt = '\
-#===-- %s - LLVMBuild Configuration for LLVM %s-*- Makefile -*--===#'
+#===-- %s - LLVMBuild Configuration for LLVM37 %s-*- Makefile -*--===#'
         header_name = os.path.basename(output_path)
         header_pad = '-' * (80 - len(header_fmt % (header_name, '')))
         header_string = header_fmt % (header_name, header_pad)
         f.write("""\
 %s
 #
-#                     The LLVM Compiler Infrastructure
+#                     The LLVM37 Compiler Infrastructure
 #
 # This file is distributed under the University of Illinois Open Source
 # License. See LICENSE.TXT for details.
@@ -682,11 +682,11 @@ set_property(TARGET %s PROPERTY IMPORTED_LINK_INTERFACE_LIBRARIES %s)\n""" % (
         #
         # FIXME: Technically, we need to properly quote for Make here.
         f.write("""\
-# Clients must explicitly enable LLVMBUILD_INCLUDE_DEPENDENCIES to get
+# Clients must explicitly enable LLVM37BUILD_INCLUDE_DEPENDENCIES to get
 # these dependencies. This is a compromise to help improve the
 # performance of recursive Make systems.
 """)
-        f.write('ifeq ($(LLVMBUILD_INCLUDE_DEPENDENCIES),1)\n')
+        f.write('ifeq ($(LLVM37BUILD_INCLUDE_DEPENDENCIES),1)\n')
         f.write("# The dependencies for this Makefile fragment itself.\n")
         f.write("%s: \\\n" % (mk_quote_string_for_target(output_path),))
         for dep in dependencies:
@@ -820,7 +820,7 @@ def main():
 
     group = OptionGroup(parser, "Input Options")
     group.add_option("", "--source-root", dest="source_root", metavar="PATH",
-                      help="Path to the LLVM source (inferred if not given)",
+                      help="Path to the LLVM37 source (inferred if not given)",
                       action="store", default=None)
     group.add_option("", "--llvmbuild-source-root",
                      dest="llvmbuild_source_root",
@@ -885,24 +885,24 @@ given by --build-root) at the same SUBPATH""",
 
     (opts, args) = parser.parse_args()
 
-    # Determine the LLVM source path, if not given.
+    # Determine the LLVM37 source path, if not given.
     source_root = opts.source_root
     if source_root:
         if not os.path.exists(os.path.join(source_root, 'lib', 'IR',
                                            'Function.cpp')):
-            parser.error('invalid LLVM source root: %r' % source_root)
+            parser.error('invalid LLVM37 source root: %r' % source_root)
     else:
         llvmbuild_path = os.path.dirname(__file__)
-        llvm_build_path = os.path.dirname(llvmbuild_path)
-        utils_path = os.path.dirname(llvm_build_path)
+        llvm37_build_path = os.path.dirname(llvmbuild_path)
+        utils_path = os.path.dirname(llvm37_build_path)
         source_root = os.path.dirname(utils_path)
         if not os.path.exists(os.path.join(source_root, 'lib', 'IR',
                                            'Function.cpp')):
-            parser.error('unable to infer LLVM source root, please specify')
+            parser.error('unable to infer LLVM37 source root, please specify')
 
-    # Construct the LLVM project information.
+    # Construct the LLVM37 project information.
     llvmbuild_source_root = opts.llvmbuild_source_root or source_root
-    project_info = LLVMProjectInfo.load_from_path(
+    project_info = LLVM37ProjectInfo.load_from_path(
         source_root, llvmbuild_source_root)
 
     # Add the magic target based components.
@@ -948,19 +948,19 @@ given by --build-root) at the same SUBPATH""",
         available_targets = [ci for ci in project_info.component_infos
                              if ci.type_name == 'TargetGroup']
         substitutions = [
-            ("@LLVM_ENUM_TARGETS@",
-             ' '.join('LLVM_TARGET(%s)' % ci.name
+            ("@LLVM37_ENUM_TARGETS@",
+             ' '.join('LLVM37_TARGET(%s)' % ci.name
                       for ci in available_targets)),
-            ("@LLVM_ENUM_ASM_PRINTERS@",
-             ' '.join('LLVM_ASM_PRINTER(%s)' % ci.name
+            ("@LLVM37_ENUM_ASM_PRINTERS@",
+             ' '.join('LLVM37_ASM_PRINTER(%s)' % ci.name
                       for ci in available_targets
                       if ci.has_asmprinter)),
-            ("@LLVM_ENUM_ASM_PARSERS@",
-             ' '.join('LLVM_ASM_PARSER(%s)' % ci.name
+            ("@LLVM37_ENUM_ASM_PARSERS@",
+             ' '.join('LLVM37_ASM_PARSER(%s)' % ci.name
                       for ci in available_targets
                       if ci.has_asmparser)),
-            ("@LLVM_ENUM_DISASSEMBLERS@",
-             ' '.join('LLVM_DISASSEMBLER(%s)' % ci.name
+            ("@LLVM37_ENUM_DISASSEMBLERS@",
+             ' '.join('LLVM37_DISASSEMBLER(%s)' % ci.name
                       for ci in available_targets
                       if ci.has_disassembler))]
 

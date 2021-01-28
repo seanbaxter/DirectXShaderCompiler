@@ -1,6 +1,6 @@
-//===--- LLVM.h - Import various common LLVM datatypes ----------*- C++ -*-===//
+//===--- LLVM.h - Import various common LLVM37 datatypes ----------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -8,23 +8,23 @@
 //===----------------------------------------------------------------------===//
 //
 /// \file
-/// \brief Forward-declares and imports various common LLVM datatypes that
+/// \brief Forward-declares and imports various common LLVM37 datatypes that
 /// clang wants to use unqualified.
 ///
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_BASIC_LLVM_H
-#define LLVM_CLANG_BASIC_LLVM_H
+#ifndef LLVM37_CLANG_BASIC_LLVM37_H
+#define LLVM37_CLANG_BASIC_LLVM37_H
 
 // Do not proliferate #includes here, require clients to #include their
 // dependencies.
 // Casting.h has complex templates that cannot be easily forward declared.
-#include "llvm/Support/Casting.h"
+#include "llvm37/Support/Casting.h"
 // None.h includes an enumerator that is desired & cannot be forward declared
 // without a definition of NoneType.
-#include "llvm/ADT/None.h"
+#include "llvm37/ADT/None.h"
 
-namespace llvm {
+namespace llvm37 {
   // ADT's.
   class StringRef;
   class Twine;
@@ -52,32 +52,32 @@ namespace llvm {
 
 namespace clang {
   // Casting operators.
-  using llvm::isa;
-  using llvm::cast;
-  using llvm::dyn_cast;
-  using llvm::dyn_cast_or_null;
-  using llvm::cast_or_null;
+  using llvm37::isa;
+  using llvm37::cast;
+  using llvm37::dyn_cast;
+  using llvm37::dyn_cast_or_null;
+  using llvm37::cast_or_null;
   
   // ADT's.
-  using llvm::None;
-  using llvm::Optional;
-  using llvm::StringRef;
-  using llvm::Twine;
-  using llvm::ArrayRef;
-  using llvm::MutableArrayRef;
-  using llvm::SmallString;
-  using llvm::SmallVector;
-  using llvm::SmallVectorImpl;
-  using llvm::SaveAndRestore;
+  using llvm37::None;
+  using llvm37::Optional;
+  using llvm37::StringRef;
+  using llvm37::Twine;
+  using llvm37::ArrayRef;
+  using llvm37::MutableArrayRef;
+  using llvm37::SmallString;
+  using llvm37::SmallVector;
+  using llvm37::SmallVectorImpl;
+  using llvm37::SaveAndRestore;
 
   // Reference counting.
-  using llvm::IntrusiveRefCntPtr;
-  using llvm::IntrusiveRefCntPtrInfo;
-  using llvm::RefCountedBase;
-  using llvm::RefCountedBaseVPTR;
+  using llvm37::IntrusiveRefCntPtr;
+  using llvm37::IntrusiveRefCntPtrInfo;
+  using llvm37::RefCountedBase;
+  using llvm37::RefCountedBaseVPTR;
 
-  using llvm::raw_ostream;
-  using llvm::raw_pwrite_stream;
+  using llvm37::raw_ostream;
+  using llvm37::raw_pwrite_stream;
 } // end namespace clang.
 
 #endif

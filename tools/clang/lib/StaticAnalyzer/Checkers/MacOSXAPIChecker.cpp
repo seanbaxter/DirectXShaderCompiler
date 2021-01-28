@@ -1,6 +1,6 @@
 // MacOSXAPIChecker.h - Checks proper use of various MacOS X APIs --*- C++ -*-//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -22,9 +22,9 @@
 #include "clang/StaticAnalyzer/Core/CheckerManager.h"
 #include "clang/StaticAnalyzer/Core/PathSensitive/CheckerContext.h"
 #include "clang/StaticAnalyzer/Core/PathSensitive/ProgramStateTrait.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/ADT/StringSwitch.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/ADT/StringSwitch.h"
+#include "llvm37/Support/raw_ostream.h"
 
 using namespace clang;
 using namespace ento;
@@ -81,7 +81,7 @@ void MacOSXAPIChecker::CheckDispatchOnce(CheckerContext &C, const CallExpr *CE,
   }
   
   SmallString<256> S;
-  llvm::raw_svector_ostream os(S);
+  llvm37::raw_svector_ostream os(S);
   os << "Call to '" << FName << "' uses";
   if (const VarRegion *VR = dyn_cast<VarRegion>(R))
     os << " the local variable '" << VR->getDecl()->getName() << '\'';
@@ -92,7 +92,7 @@ void MacOSXAPIChecker::CheckDispatchOnce(CheckerContext &C, const CallExpr *CE,
   if (isa<VarRegion>(R) && isa<StackLocalsSpaceRegion>(R->getMemorySpace()))
     os << "  Perhaps you intended to declare the variable as 'static'?";
 
-  auto report = llvm::make_unique<BugReport>(*BT_dispatchOnce, os.str(), N);
+  auto report = llvm37::make_unique<BugReport>(*BT_dispatchOnce, os.str(), N);
   report->addRange(CE->getArg(0)->getSourceRange());
   C.emitReport(std::move(report));
 }
@@ -108,7 +108,7 @@ void MacOSXAPIChecker::checkPreStmt(const CallExpr *CE,
     return;
 
   SubChecker SC =
-    llvm::StringSwitch<SubChecker>(Name)
+    llvm37::StringSwitch<SubChecker>(Name)
       .Cases("dispatch_once",
              "_dispatch_once",
              "dispatch_once_f",

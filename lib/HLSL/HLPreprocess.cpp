@@ -9,14 +9,14 @@
 //                                                                           //
 ///////////////////////////////////////////////////////////////////////////////
 
-#include "llvm/IR/Function.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/IRBuilder.h"
-#include "llvm/IR/Intrinsics.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/IRBuilder.h"
+#include "llvm37/IR/Intrinsics.h"
 
 #include "dxc/HLSL/DxilGenerationPass.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 ///////////////////////////////////////////////////////////////////////////////
 // HLPreprocess.
@@ -104,7 +104,7 @@ bool HLPreprocess::MoveAllocasToEntryBlock(Function *F) {
 
 } // namespace
 
-ModulePass *llvm::createHLPreprocessPass() { return new HLPreprocess(); }
+ModulePass *llvm37::createHLPreprocessPass() { return new HLPreprocess(); }
 
 INITIALIZE_PASS(HLPreprocess, "hl-preprocess",
                 "Preprocess HLModule after inline", false, false)

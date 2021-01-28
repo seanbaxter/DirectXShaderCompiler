@@ -1,23 +1,23 @@
 //===--- ToolChains.h - ToolChain Implementations ---------------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_LIB_DRIVER_TOOLCHAINS_H
-#define LLVM_CLANG_LIB_DRIVER_TOOLCHAINS_H
+#ifndef LLVM37_CLANG_LIB_DRIVER_TOOLCHAINS_H
+#define LLVM37_CLANG_LIB_DRIVER_TOOLCHAINS_H
 
 #include "Tools.h"
 #include "clang/Basic/VersionTuple.h"
 #include "clang/Driver/Action.h"
 #include "clang/Driver/Multilib.h"
 #include "clang/Driver/ToolChain.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/Optional.h"
-#include "llvm/Support/Compiler.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/Optional.h"
+#include "llvm37/Support/Compiler.h"
 #include <set>
 #include <vector>
 
@@ -28,7 +28,7 @@ namespace toolchains {
 /// Generic_GCC - A tool chain using the 'gcc' command to perform
 /// all subcommands; this relies on gcc translating the majority of
 /// command line options.
-class LLVM_LIBRARY_VISIBILITY Generic_GCC : public ToolChain {
+class LLVM37_LIBRARY_VISIBILITY Generic_GCC : public ToolChain {
 public:
   /// \brief Struct to store and manipulate GCC versions.
   ///
@@ -77,7 +77,7 @@ public:
   /// Driver, and has logic for fuzzing that where appropriate.
   class GCCInstallationDetector {
     bool IsValid;
-    llvm::Triple GCCTriple;
+    llvm37::Triple GCCTriple;
 
     // FIXME: These might be better as path objects.
     std::string GCCInstallPath;
@@ -87,7 +87,7 @@ public:
     Multilib SelectedMultilib;
     /// On Biarch systems, this corresponds to the default multilib when
     /// targeting the non-default multilib. Otherwise, it is empty.
-    llvm::Optional<Multilib> BiarchSibling;
+    llvm37::Optional<Multilib> BiarchSibling;
 
     GCCVersion Version;
 
@@ -100,14 +100,14 @@ public:
 
   public:
     GCCInstallationDetector() : IsValid(false) {}
-    void init(const Driver &D, const llvm::Triple &TargetTriple,
-              const llvm::opt::ArgList &Args);
+    void init(const Driver &D, const llvm37::Triple &TargetTriple,
+              const llvm37::opt::ArgList &Args);
 
     /// \brief Check whether we detected a valid GCC install.
     bool isValid() const { return IsValid; }
 
     /// \brief Get the GCC triple for the detected install.
-    const llvm::Triple &getTriple() const { return GCCTriple; }
+    const llvm37::Triple &getTriple() const { return GCCTriple; }
 
     /// \brief Get the detected GCC installation path.
     StringRef getInstallPath() const { return GCCInstallPath; }
@@ -133,15 +133,15 @@ public:
 
   private:
     static void
-    CollectLibDirsAndTriples(const llvm::Triple &TargetTriple,
-                             const llvm::Triple &BiarchTriple,
+    CollectLibDirsAndTriples(const llvm37::Triple &TargetTriple,
+                             const llvm37::Triple &BiarchTriple,
                              SmallVectorImpl<StringRef> &LibDirs,
                              SmallVectorImpl<StringRef> &TripleAliases,
                              SmallVectorImpl<StringRef> &BiarchLibDirs,
                              SmallVectorImpl<StringRef> &BiarchTripleAliases);
 
-    void ScanLibDirForGCCTriple(const llvm::Triple &TargetArch,
-                                const llvm::opt::ArgList &Args,
+    void ScanLibDirForGCCTriple(const llvm37::Triple &TargetArch,
+                                const llvm37::opt::ArgList &Args,
                                 const std::string &LibDir,
                                 StringRef CandidateTriple,
                                 bool NeedsBiarchSuffix = false);
@@ -151,8 +151,8 @@ protected:
   GCCInstallationDetector GCCInstallation;
 
 public:
-  Generic_GCC(const Driver &D, const llvm::Triple &Triple,
-              const llvm::opt::ArgList &Args);
+  Generic_GCC(const Driver &D, const llvm37::Triple &Triple,
+              const llvm37::opt::ArgList &Args);
   ~Generic_GCC() override;
 
   void printVerboseInfo(raw_ostream &OS) const override;
@@ -184,7 +184,7 @@ private:
   mutable std::unique_ptr<tools::gcc::Compiler> Compile;
 };
 
-class LLVM_LIBRARY_VISIBILITY MachO : public ToolChain {
+class LLVM37_LIBRARY_VISIBILITY MachO : public ToolChain {
 protected:
   Tool *buildAssembler() const override;
   Tool *buildLinker() const override;
@@ -196,8 +196,8 @@ private:
   mutable std::unique_ptr<tools::darwin::VerifyDebug> VerifyDebug;
 
 public:
-  MachO(const Driver &D, const llvm::Triple &Triple,
-        const llvm::opt::ArgList &Args);
+  MachO(const Driver &D, const llvm37::Triple &Triple,
+        const llvm37::opt::ArgList &Args);
   ~MachO() override;
 
   /// @name MachO specific toolchain API
@@ -205,22 +205,22 @@ public:
 
   /// Get the "MachO" arch name for a particular compiler invocation. For
   /// example, Apple treats different ARM variations as distinct architectures.
-  StringRef getMachOArchName(const llvm::opt::ArgList &Args) const;
+  StringRef getMachOArchName(const llvm37::opt::ArgList &Args) const;
 
   /// Add the linker arguments to link the ARC runtime library.
-  virtual void AddLinkARCArgs(const llvm::opt::ArgList &Args,
-                              llvm::opt::ArgStringList &CmdArgs) const {}
+  virtual void AddLinkARCArgs(const llvm37::opt::ArgList &Args,
+                              llvm37::opt::ArgStringList &CmdArgs) const {}
 
   /// Add the linker arguments to link the compiler runtime library.
-  virtual void AddLinkRuntimeLibArgs(const llvm::opt::ArgList &Args,
-                                     llvm::opt::ArgStringList &CmdArgs) const;
+  virtual void AddLinkRuntimeLibArgs(const llvm37::opt::ArgList &Args,
+                                     llvm37::opt::ArgStringList &CmdArgs) const;
 
-  virtual void addStartObjectFileArgs(const llvm::opt::ArgList &Args,
-                                      llvm::opt::ArgStringList &CmdArgs) const {
+  virtual void addStartObjectFileArgs(const llvm37::opt::ArgList &Args,
+                                      llvm37::opt::ArgStringList &CmdArgs) const {
   }
 
-  virtual void addMinVersionArgs(const llvm::opt::ArgList &Args,
-                                 llvm::opt::ArgStringList &CmdArgs) const {}
+  virtual void addMinVersionArgs(const llvm37::opt::ArgList &Args,
+                                 llvm37::opt::ArgStringList &CmdArgs) const {}
 
   /// On some iOS platforms, kernel and kernel modules were built statically. Is
   /// this such a target?
@@ -229,15 +229,15 @@ public:
   /// Is the target either iOS or an iOS simulator?
   bool isTargetIOSBased() const { return false; }
 
-  void AddLinkRuntimeLib(const llvm::opt::ArgList &Args,
-                         llvm::opt::ArgStringList &CmdArgs,
+  void AddLinkRuntimeLib(const llvm37::opt::ArgList &Args,
+                         llvm37::opt::ArgStringList &CmdArgs,
                          StringRef DarwinLibName, bool AlwaysLink = false,
                          bool IsEmbedded = false, bool AddRPath = false) const;
 
   /// Add any profiling runtime libraries that are needed. This is essentially a
   /// MachO specific version of addProfileRT in Tools.cpp.
-  virtual void addProfileRTLibs(const llvm::opt::ArgList &Args,
-                                llvm::opt::ArgStringList &CmdArgs) const {
+  virtual void addProfileRTLibs(const llvm37::opt::ArgList &Args,
+                                llvm37::opt::ArgStringList &CmdArgs) const {
     // There aren't any profiling libs for embedded targets currently.
   }
 
@@ -245,15 +245,15 @@ public:
   /// @name ToolChain Implementation
   /// {
 
-  std::string ComputeEffectiveClangTriple(const llvm::opt::ArgList &Args,
+  std::string ComputeEffectiveClangTriple(const llvm37::opt::ArgList &Args,
                                           types::ID InputType) const override;
 
   types::ID LookupTypeForExtension(const char *Ext) const override;
 
-  bool HasNativeLLVMSupport() const override;
+  bool HasNativeLLVM37Support() const override;
 
-  llvm::opt::DerivedArgList *
-  TranslateArgs(const llvm::opt::DerivedArgList &Args,
+  llvm37::opt::DerivedArgList *
+  TranslateArgs(const llvm37::opt::DerivedArgList &Args,
                 const char *BoundArch) const override;
 
   bool IsBlocksDefault() const override {
@@ -272,7 +272,7 @@ public:
 
   bool IsObjCNonFragileABIDefault() const override {
     // Non-fragile ABI is default for everything but i386.
-    return getTriple().getArch() != llvm::Triple::x86;
+    return getTriple().getArch() != llvm37::Triple::x86;
   }
 
   bool UseObjCMixedDispatch() const override { return true; }
@@ -299,7 +299,7 @@ public:
 };
 
 /// Darwin - The base Darwin tool chain.
-class LLVM_LIBRARY_VISIBILITY Darwin : public MachO {
+class LLVM37_LIBRARY_VISIBILITY Darwin : public MachO {
 public:
   /// Whether the information on the target has been initialized.
   //
@@ -316,31 +316,31 @@ public:
   mutable VersionTuple TargetVersion;
 
 private:
-  void AddDeploymentTarget(llvm::opt::DerivedArgList &Args) const;
+  void AddDeploymentTarget(llvm37::opt::DerivedArgList &Args) const;
 
 public:
-  Darwin(const Driver &D, const llvm::Triple &Triple,
-         const llvm::opt::ArgList &Args);
+  Darwin(const Driver &D, const llvm37::Triple &Triple,
+         const llvm37::opt::ArgList &Args);
   ~Darwin() override;
 
-  std::string ComputeEffectiveClangTriple(const llvm::opt::ArgList &Args,
+  std::string ComputeEffectiveClangTriple(const llvm37::opt::ArgList &Args,
                                           types::ID InputType) const override;
 
   /// @name Apple Specific Toolchain Implementation
   /// {
 
-  void addMinVersionArgs(const llvm::opt::ArgList &Args,
-                         llvm::opt::ArgStringList &CmdArgs) const override;
+  void addMinVersionArgs(const llvm37::opt::ArgList &Args,
+                         llvm37::opt::ArgStringList &CmdArgs) const override;
 
-  void addStartObjectFileArgs(const llvm::opt::ArgList &Args,
-                              llvm::opt::ArgStringList &CmdArgs) const override;
+  void addStartObjectFileArgs(const llvm37::opt::ArgList &Args,
+                              llvm37::opt::ArgStringList &CmdArgs) const override;
 
   bool isKernelStatic() const override {
     return !isTargetIPhoneOS() || isIPhoneOSVersionLT(6, 0);
   }
 
-  void addProfileRTLibs(const llvm::opt::ArgList &Args,
-                        llvm::opt::ArgStringList &CmdArgs) const override;
+  void addProfileRTLibs(const llvm37::opt::ArgList &Args,
+                        llvm37::opt::ArgStringList &CmdArgs) const override;
 
 protected:
   /// }
@@ -411,8 +411,8 @@ public:
   // architecture should not get any special treatment.
   bool isCrossCompiling() const override { return false; }
 
-  llvm::opt::DerivedArgList *
-  TranslateArgs(const llvm::opt::DerivedArgList &Args,
+  llvm37::opt::DerivedArgList *
+  TranslateArgs(const llvm37::opt::DerivedArgList &Args,
                 const char *BoundArch) const override;
 
   ObjCRuntime getDefaultObjCRuntime(bool isNonFragile) const override;
@@ -448,65 +448,65 @@ public:
 };
 
 /// DarwinClang - The Darwin toolchain used by Clang.
-class LLVM_LIBRARY_VISIBILITY DarwinClang : public Darwin {
+class LLVM37_LIBRARY_VISIBILITY DarwinClang : public Darwin {
 public:
-  DarwinClang(const Driver &D, const llvm::Triple &Triple,
-              const llvm::opt::ArgList &Args);
+  DarwinClang(const Driver &D, const llvm37::Triple &Triple,
+              const llvm37::opt::ArgList &Args);
 
   /// @name Apple ToolChain Implementation
   /// {
 
-  void AddLinkRuntimeLibArgs(const llvm::opt::ArgList &Args,
-                             llvm::opt::ArgStringList &CmdArgs) const override;
+  void AddLinkRuntimeLibArgs(const llvm37::opt::ArgList &Args,
+                             llvm37::opt::ArgStringList &CmdArgs) const override;
 
-  void AddCXXStdlibLibArgs(const llvm::opt::ArgList &Args,
-                           llvm::opt::ArgStringList &CmdArgs) const override;
+  void AddCXXStdlibLibArgs(const llvm37::opt::ArgList &Args,
+                           llvm37::opt::ArgStringList &CmdArgs) const override;
 
-  void AddCCKextLibArgs(const llvm::opt::ArgList &Args,
-                        llvm::opt::ArgStringList &CmdArgs) const override;
+  void AddCCKextLibArgs(const llvm37::opt::ArgList &Args,
+                        llvm37::opt::ArgStringList &CmdArgs) const override;
 
-  void addClangWarningOptions(llvm::opt::ArgStringList &CC1Args) const override;
+  void addClangWarningOptions(llvm37::opt::ArgStringList &CC1Args) const override;
 
-  void AddLinkARCArgs(const llvm::opt::ArgList &Args,
-                      llvm::opt::ArgStringList &CmdArgs) const override;
+  void AddLinkARCArgs(const llvm37::opt::ArgList &Args,
+                      llvm37::opt::ArgStringList &CmdArgs) const override;
   /// }
 
 private:
-  void AddLinkSanitizerLibArgs(const llvm::opt::ArgList &Args,
-                               llvm::opt::ArgStringList &CmdArgs,
+  void AddLinkSanitizerLibArgs(const llvm37::opt::ArgList &Args,
+                               llvm37::opt::ArgStringList &CmdArgs,
                                StringRef Sanitizer) const;
 };
 
-class LLVM_LIBRARY_VISIBILITY Generic_ELF : public Generic_GCC {
+class LLVM37_LIBRARY_VISIBILITY Generic_ELF : public Generic_GCC {
   virtual void anchor();
 
 public:
-  Generic_ELF(const Driver &D, const llvm::Triple &Triple,
-              const llvm::opt::ArgList &Args)
+  Generic_ELF(const Driver &D, const llvm37::Triple &Triple,
+              const llvm37::opt::ArgList &Args)
       : Generic_GCC(D, Triple, Args) {}
 
-  void addClangTargetOptions(const llvm::opt::ArgList &DriverArgs,
-                             llvm::opt::ArgStringList &CC1Args) const override;
+  void addClangTargetOptions(const llvm37::opt::ArgList &DriverArgs,
+                             llvm37::opt::ArgStringList &CC1Args) const override;
 };
 
-class LLVM_LIBRARY_VISIBILITY CloudABI : public Generic_ELF {
+class LLVM37_LIBRARY_VISIBILITY CloudABI : public Generic_ELF {
 public:
-  CloudABI(const Driver &D, const llvm::Triple &Triple,
-           const llvm::opt::ArgList &Args);
-  bool HasNativeLLVMSupport() const override { return true; }
+  CloudABI(const Driver &D, const llvm37::Triple &Triple,
+           const llvm37::opt::ArgList &Args);
+  bool HasNativeLLVM37Support() const override { return true; }
 
   bool IsMathErrnoDefault() const override { return false; }
   bool IsObjCNonFragileABIDefault() const override { return true; }
 
   CXXStdlibType
-  GetCXXStdlibType(const llvm::opt::ArgList &Args) const override {
+  GetCXXStdlibType(const llvm37::opt::ArgList &Args) const override {
     return ToolChain::CST_Libcxx;
   }
   void AddClangCXXStdlibIncludeArgs(
-      const llvm::opt::ArgList &DriverArgs,
-      llvm::opt::ArgStringList &CC1Args) const override;
-  void AddCXXStdlibLibArgs(const llvm::opt::ArgList &Args,
-                           llvm::opt::ArgStringList &CmdArgs) const override;
+      const llvm37::opt::ArgList &DriverArgs,
+      llvm37::opt::ArgStringList &CC1Args) const override;
+  void AddCXXStdlibLibArgs(const llvm37::opt::ArgList &Args,
+                           llvm37::opt::ArgStringList &CmdArgs) const override;
 
   bool isPIEDefault() const override { return false; }
 
@@ -514,10 +514,10 @@ protected:
   Tool *buildLinker() const override;
 };
 
-class LLVM_LIBRARY_VISIBILITY Solaris : public Generic_GCC {
+class LLVM37_LIBRARY_VISIBILITY Solaris : public Generic_GCC {
 public:
-  Solaris(const Driver &D, const llvm::Triple &Triple,
-          const llvm::opt::ArgList &Args);
+  Solaris(const Driver &D, const llvm37::Triple &Triple,
+          const llvm37::opt::ArgList &Args);
 
   bool IsIntegratedAssemblerDefault() const override { return true; }
 
@@ -526,10 +526,10 @@ protected:
   Tool *buildLinker() const override;
 };
 
-class LLVM_LIBRARY_VISIBILITY MinGW : public ToolChain {
+class LLVM37_LIBRARY_VISIBILITY MinGW : public ToolChain {
 public:
-  MinGW(const Driver &D, const llvm::Triple &Triple,
-        const llvm::opt::ArgList &Args);
+  MinGW(const Driver &D, const llvm37::Triple &Triple,
+        const llvm37::opt::ArgList &Args);
 
   bool IsIntegratedAssemblerDefault() const override;
   bool IsUnwindTablesDefault() const override;
@@ -539,11 +539,11 @@ public:
   bool UseSEHExceptions() const;
 
   void
-  AddClangSystemIncludeArgs(const llvm::opt::ArgList &DriverArgs,
-                            llvm::opt::ArgStringList &CC1Args) const override;
+  AddClangSystemIncludeArgs(const llvm37::opt::ArgList &DriverArgs,
+                            llvm37::opt::ArgStringList &CC1Args) const override;
   void AddClangCXXStdlibIncludeArgs(
-      const llvm::opt::ArgList &DriverArgs,
-      llvm::opt::ArgStringList &CC1Args) const override;
+      const llvm37::opt::ArgList &DriverArgs,
+      llvm37::opt::ArgStringList &CC1Args) const override;
 
 protected:
   Tool *getTool(Action::ActionClass AC) const override;
@@ -560,10 +560,10 @@ private:
   void findGccLibDir();
 };
 
-class LLVM_LIBRARY_VISIBILITY OpenBSD : public Generic_ELF {
+class LLVM37_LIBRARY_VISIBILITY OpenBSD : public Generic_ELF {
 public:
-  OpenBSD(const Driver &D, const llvm::Triple &Triple,
-          const llvm::opt::ArgList &Args);
+  OpenBSD(const Driver &D, const llvm37::Triple &Triple,
+          const llvm37::opt::ArgList &Args);
 
   bool IsMathErrnoDefault() const override { return false; }
   bool IsObjCNonFragileABIDefault() const override { return true; }
@@ -578,20 +578,20 @@ protected:
   Tool *buildLinker() const override;
 };
 
-class LLVM_LIBRARY_VISIBILITY Bitrig : public Generic_ELF {
+class LLVM37_LIBRARY_VISIBILITY Bitrig : public Generic_ELF {
 public:
-  Bitrig(const Driver &D, const llvm::Triple &Triple,
-         const llvm::opt::ArgList &Args);
+  Bitrig(const Driver &D, const llvm37::Triple &Triple,
+         const llvm37::opt::ArgList &Args);
 
   bool IsMathErrnoDefault() const override { return false; }
   bool IsObjCNonFragileABIDefault() const override { return true; }
 
-  CXXStdlibType GetCXXStdlibType(const llvm::opt::ArgList &Args) const override;
+  CXXStdlibType GetCXXStdlibType(const llvm37::opt::ArgList &Args) const override;
   void AddClangCXXStdlibIncludeArgs(
-      const llvm::opt::ArgList &DriverArgs,
-      llvm::opt::ArgStringList &CC1Args) const override;
-  void AddCXXStdlibLibArgs(const llvm::opt::ArgList &Args,
-                           llvm::opt::ArgStringList &CmdArgs) const override;
+      const llvm37::opt::ArgList &DriverArgs,
+      llvm37::opt::ArgStringList &CC1Args) const override;
+  void AddCXXStdlibLibArgs(const llvm37::opt::ArgList &Args,
+                           llvm37::opt::ArgStringList &CmdArgs) const override;
   unsigned GetDefaultStackProtectorLevel(bool KernelOrKext) const override {
     return 1;
   }
@@ -601,19 +601,19 @@ protected:
   Tool *buildLinker() const override;
 };
 
-class LLVM_LIBRARY_VISIBILITY FreeBSD : public Generic_ELF {
+class LLVM37_LIBRARY_VISIBILITY FreeBSD : public Generic_ELF {
 public:
-  FreeBSD(const Driver &D, const llvm::Triple &Triple,
-          const llvm::opt::ArgList &Args);
-  bool HasNativeLLVMSupport() const override;
+  FreeBSD(const Driver &D, const llvm37::Triple &Triple,
+          const llvm37::opt::ArgList &Args);
+  bool HasNativeLLVM37Support() const override;
 
   bool IsMathErrnoDefault() const override { return false; }
   bool IsObjCNonFragileABIDefault() const override { return true; }
 
-  CXXStdlibType GetCXXStdlibType(const llvm::opt::ArgList &Args) const override;
+  CXXStdlibType GetCXXStdlibType(const llvm37::opt::ArgList &Args) const override;
   void AddClangCXXStdlibIncludeArgs(
-      const llvm::opt::ArgList &DriverArgs,
-      llvm::opt::ArgStringList &CC1Args) const override;
+      const llvm37::opt::ArgList &DriverArgs,
+      llvm37::opt::ArgStringList &CC1Args) const override;
 
   bool UseSjLjExceptions() const override;
   bool isPIEDefault() const override;
@@ -624,19 +624,19 @@ protected:
   Tool *buildLinker() const override;
 };
 
-class LLVM_LIBRARY_VISIBILITY NetBSD : public Generic_ELF {
+class LLVM37_LIBRARY_VISIBILITY NetBSD : public Generic_ELF {
 public:
-  NetBSD(const Driver &D, const llvm::Triple &Triple,
-         const llvm::opt::ArgList &Args);
+  NetBSD(const Driver &D, const llvm37::Triple &Triple,
+         const llvm37::opt::ArgList &Args);
 
   bool IsMathErrnoDefault() const override { return false; }
   bool IsObjCNonFragileABIDefault() const override { return true; }
 
-  CXXStdlibType GetCXXStdlibType(const llvm::opt::ArgList &Args) const override;
+  CXXStdlibType GetCXXStdlibType(const llvm37::opt::ArgList &Args) const override;
 
   void AddClangCXXStdlibIncludeArgs(
-      const llvm::opt::ArgList &DriverArgs,
-      llvm::opt::ArgStringList &CC1Args) const override;
+      const llvm37::opt::ArgList &DriverArgs,
+      llvm37::opt::ArgStringList &CC1Args) const override;
   bool IsUnwindTablesDefault() const override { return true; }
 
 protected:
@@ -644,20 +644,20 @@ protected:
   Tool *buildLinker() const override;
 };
 
-class LLVM_LIBRARY_VISIBILITY Minix : public Generic_ELF {
+class LLVM37_LIBRARY_VISIBILITY Minix : public Generic_ELF {
 public:
-  Minix(const Driver &D, const llvm::Triple &Triple,
-        const llvm::opt::ArgList &Args);
+  Minix(const Driver &D, const llvm37::Triple &Triple,
+        const llvm37::opt::ArgList &Args);
 
 protected:
   Tool *buildAssembler() const override;
   Tool *buildLinker() const override;
 };
 
-class LLVM_LIBRARY_VISIBILITY DragonFly : public Generic_ELF {
+class LLVM37_LIBRARY_VISIBILITY DragonFly : public Generic_ELF {
 public:
-  DragonFly(const Driver &D, const llvm::Triple &Triple,
-            const llvm::opt::ArgList &Args);
+  DragonFly(const Driver &D, const llvm37::Triple &Triple,
+            const llvm37::opt::ArgList &Args);
 
   bool IsMathErrnoDefault() const override { return false; }
 
@@ -666,19 +666,19 @@ protected:
   Tool *buildLinker() const override;
 };
 
-class LLVM_LIBRARY_VISIBILITY Linux : public Generic_ELF {
+class LLVM37_LIBRARY_VISIBILITY Linux : public Generic_ELF {
 public:
-  Linux(const Driver &D, const llvm::Triple &Triple,
-        const llvm::opt::ArgList &Args);
+  Linux(const Driver &D, const llvm37::Triple &Triple,
+        const llvm37::opt::ArgList &Args);
 
-  bool HasNativeLLVMSupport() const override;
+  bool HasNativeLLVM37Support() const override;
 
   void
-  AddClangSystemIncludeArgs(const llvm::opt::ArgList &DriverArgs,
-                            llvm::opt::ArgStringList &CC1Args) const override;
+  AddClangSystemIncludeArgs(const llvm37::opt::ArgList &DriverArgs,
+                            llvm37::opt::ArgStringList &CC1Args) const override;
   void AddClangCXXStdlibIncludeArgs(
-      const llvm::opt::ArgList &DriverArgs,
-      llvm::opt::ArgStringList &CC1Args) const override;
+      const llvm37::opt::ArgList &DriverArgs,
+      llvm37::opt::ArgStringList &CC1Args) const override;
   bool isPIEDefault() const override;
   SanitizerMask getSupportedSanitizers() const override;
 
@@ -695,74 +695,74 @@ private:
                                        StringRef GCCMultiarchTriple,
                                        StringRef TargetMultiarchTriple,
                                        Twine IncludeSuffix,
-                                       const llvm::opt::ArgList &DriverArgs,
-                                       llvm::opt::ArgStringList &CC1Args);
+                                       const llvm37::opt::ArgList &DriverArgs,
+                                       llvm37::opt::ArgStringList &CC1Args);
 
   std::string computeSysRoot() const;
 };
 
-class LLVM_LIBRARY_VISIBILITY CudaToolChain : public Linux {
+class LLVM37_LIBRARY_VISIBILITY CudaToolChain : public Linux {
 public:
-  CudaToolChain(const Driver &D, const llvm::Triple &Triple,
-                const llvm::opt::ArgList &Args);
+  CudaToolChain(const Driver &D, const llvm37::Triple &Triple,
+                const llvm37::opt::ArgList &Args);
 
-  llvm::opt::DerivedArgList *
-  TranslateArgs(const llvm::opt::DerivedArgList &Args,
+  llvm37::opt::DerivedArgList *
+  TranslateArgs(const llvm37::opt::DerivedArgList &Args,
                 const char *BoundArch) const override;
-  void addClangTargetOptions(const llvm::opt::ArgList &DriverArgs,
-                             llvm::opt::ArgStringList &CC1Args) const override;
+  void addClangTargetOptions(const llvm37::opt::ArgList &DriverArgs,
+                             llvm37::opt::ArgStringList &CC1Args) const override;
 };
 
-class LLVM_LIBRARY_VISIBILITY Hexagon_TC : public Linux {
+class LLVM37_LIBRARY_VISIBILITY Hexagon_TC : public Linux {
 protected:
   GCCVersion GCCLibAndIncVersion;
   Tool *buildAssembler() const override;
   Tool *buildLinker() const override;
 
 public:
-  Hexagon_TC(const Driver &D, const llvm::Triple &Triple,
-             const llvm::opt::ArgList &Args);
+  Hexagon_TC(const Driver &D, const llvm37::Triple &Triple,
+             const llvm37::opt::ArgList &Args);
   ~Hexagon_TC() override;
 
   void
-  AddClangSystemIncludeArgs(const llvm::opt::ArgList &DriverArgs,
-                            llvm::opt::ArgStringList &CC1Args) const override;
+  AddClangSystemIncludeArgs(const llvm37::opt::ArgList &DriverArgs,
+                            llvm37::opt::ArgStringList &CC1Args) const override;
   void AddClangCXXStdlibIncludeArgs(
-      const llvm::opt::ArgList &DriverArgs,
-      llvm::opt::ArgStringList &CC1Args) const override;
-  CXXStdlibType GetCXXStdlibType(const llvm::opt::ArgList &Args) const override;
+      const llvm37::opt::ArgList &DriverArgs,
+      llvm37::opt::ArgStringList &CC1Args) const override;
+  CXXStdlibType GetCXXStdlibType(const llvm37::opt::ArgList &Args) const override;
 
   StringRef GetGCCLibAndIncVersion() const { return GCCLibAndIncVersion.Text; }
 
   static std::string GetGnuDir(const std::string &InstalledDir,
-                               const llvm::opt::ArgList &Args);
+                               const llvm37::opt::ArgList &Args);
 
-  static StringRef GetTargetCPU(const llvm::opt::ArgList &Args);
+  static StringRef GetTargetCPU(const llvm37::opt::ArgList &Args);
 
-  static const char *GetSmallDataThreshold(const llvm::opt::ArgList &Args);
+  static const char *GetSmallDataThreshold(const llvm37::opt::ArgList &Args);
 
   static bool UsesG0(const char *smallDataThreshold);
 };
 
-class LLVM_LIBRARY_VISIBILITY NaCl_TC : public Generic_ELF {
+class LLVM37_LIBRARY_VISIBILITY NaCl_TC : public Generic_ELF {
 public:
-  NaCl_TC(const Driver &D, const llvm::Triple &Triple,
-          const llvm::opt::ArgList &Args);
+  NaCl_TC(const Driver &D, const llvm37::Triple &Triple,
+          const llvm37::opt::ArgList &Args);
 
   void
-  AddClangSystemIncludeArgs(const llvm::opt::ArgList &DriverArgs,
-                            llvm::opt::ArgStringList &CC1Args) const override;
+  AddClangSystemIncludeArgs(const llvm37::opt::ArgList &DriverArgs,
+                            llvm37::opt::ArgStringList &CC1Args) const override;
   void AddClangCXXStdlibIncludeArgs(
-      const llvm::opt::ArgList &DriverArgs,
-      llvm::opt::ArgStringList &CC1Args) const override;
+      const llvm37::opt::ArgList &DriverArgs,
+      llvm37::opt::ArgStringList &CC1Args) const override;
 
-  CXXStdlibType GetCXXStdlibType(const llvm::opt::ArgList &Args) const override;
+  CXXStdlibType GetCXXStdlibType(const llvm37::opt::ArgList &Args) const override;
 
-  void AddCXXStdlibLibArgs(const llvm::opt::ArgList &Args,
-                           llvm::opt::ArgStringList &CmdArgs) const override;
+  void AddCXXStdlibLibArgs(const llvm37::opt::ArgList &Args,
+                           llvm37::opt::ArgStringList &CmdArgs) const override;
 
   bool IsIntegratedAssemblerDefault() const override {
-    return getTriple().getArch() == llvm::Triple::mipsel;
+    return getTriple().getArch() == llvm37::Triple::mipsel;
   }
 
   // Get the path to the file containing NaCl's ARM macros. It lives in NaCl_TC
@@ -770,7 +770,7 @@ public:
   // and the toolchain outlives all the jobs.
   const char *GetNaClArmMacrosPath() const { return NaClArmMacrosPath.c_str(); }
 
-  std::string ComputeEffectiveClangTriple(const llvm::opt::ArgList &Args,
+  std::string ComputeEffectiveClangTriple(const llvm37::opt::ArgList &Args,
                                           types::ID InputType) const override;
   std::string Linker;
 
@@ -782,12 +782,12 @@ private:
   std::string NaClArmMacrosPath;
 };
 
-/// TCEToolChain - A tool chain using the llvm bitcode tools to perform
+/// TCEToolChain - A tool chain using the llvm37 bitcode tools to perform
 /// all subcommands. See http://tce.cs.tut.fi for our peculiar target.
-class LLVM_LIBRARY_VISIBILITY TCEToolChain : public ToolChain {
+class LLVM37_LIBRARY_VISIBILITY TCEToolChain : public ToolChain {
 public:
-  TCEToolChain(const Driver &D, const llvm::Triple &Triple,
-               const llvm::opt::ArgList &Args);
+  TCEToolChain(const Driver &D, const llvm37::Triple &Triple,
+               const llvm37::opt::ArgList &Args);
   ~TCEToolChain() override;
 
   bool IsMathErrnoDefault() const override;
@@ -796,10 +796,10 @@ public:
   bool isPICDefaultForced() const override;
 };
 
-class LLVM_LIBRARY_VISIBILITY MSVCToolChain : public ToolChain {
+class LLVM37_LIBRARY_VISIBILITY MSVCToolChain : public ToolChain {
 public:
-  MSVCToolChain(const Driver &D, const llvm::Triple &Triple,
-                const llvm::opt::ArgList &Args);
+  MSVCToolChain(const Driver &D, const llvm37::Triple &Triple,
+                const llvm37::opt::ArgList &Args);
 
   bool IsIntegratedAssemblerDefault() const override;
   bool IsUnwindTablesDefault() const override;
@@ -808,11 +808,11 @@ public:
   bool isPICDefaultForced() const override;
 
   void
-  AddClangSystemIncludeArgs(const llvm::opt::ArgList &DriverArgs,
-                            llvm::opt::ArgStringList &CC1Args) const override;
+  AddClangSystemIncludeArgs(const llvm37::opt::ArgList &DriverArgs,
+                            llvm37::opt::ArgStringList &CC1Args) const override;
   void AddClangCXXStdlibIncludeArgs(
-      const llvm::opt::ArgList &DriverArgs,
-      llvm::opt::ArgStringList &CC1Args) const override;
+      const llvm37::opt::ArgList &DriverArgs,
+      llvm37::opt::ArgStringList &CC1Args) const override;
 
   bool getWindowsSDKDir(std::string &path, int &major, int &minor) const;
   bool getWindowsSDKLibraryPath(std::string &path) const;
@@ -820,13 +820,13 @@ public:
   bool getVisualStudioBinariesFolder(const char *clangProgramPath,
                                      std::string &path) const;
 
-  std::string ComputeEffectiveClangTriple(const llvm::opt::ArgList &Args,
+  std::string ComputeEffectiveClangTriple(const llvm37::opt::ArgList &Args,
                                           types::ID InputType) const override;
   SanitizerMask getSupportedSanitizers() const override;
 
 protected:
-  void AddSystemIncludeWithSubfolder(const llvm::opt::ArgList &DriverArgs,
-                                     llvm::opt::ArgStringList &CC1Args,
+  void AddSystemIncludeWithSubfolder(const llvm37::opt::ArgList &DriverArgs,
+                                     llvm37::opt::ArgStringList &CC1Args,
                                      const std::string &folder,
                                      const char *subfolder) const;
 
@@ -834,10 +834,10 @@ protected:
   Tool *buildAssembler() const override;
 };
 
-class LLVM_LIBRARY_VISIBILITY CrossWindowsToolChain : public Generic_GCC {
+class LLVM37_LIBRARY_VISIBILITY CrossWindowsToolChain : public Generic_GCC {
 public:
-  CrossWindowsToolChain(const Driver &D, const llvm::Triple &T,
-                        const llvm::opt::ArgList &Args);
+  CrossWindowsToolChain(const Driver &D, const llvm37::Triple &T,
+                        const llvm37::opt::ArgList &Args);
 
   bool IsIntegratedAssemblerDefault() const override { return true; }
   bool IsUnwindTablesDefault() const override;
@@ -850,23 +850,23 @@ public:
   }
 
   void
-  AddClangSystemIncludeArgs(const llvm::opt::ArgList &DriverArgs,
-                            llvm::opt::ArgStringList &CC1Args) const override;
+  AddClangSystemIncludeArgs(const llvm37::opt::ArgList &DriverArgs,
+                            llvm37::opt::ArgStringList &CC1Args) const override;
   void AddClangCXXStdlibIncludeArgs(
-      const llvm::opt::ArgList &DriverArgs,
-      llvm::opt::ArgStringList &CC1Args) const override;
-  void AddCXXStdlibLibArgs(const llvm::opt::ArgList &Args,
-                           llvm::opt::ArgStringList &CmdArgs) const override;
+      const llvm37::opt::ArgList &DriverArgs,
+      llvm37::opt::ArgStringList &CC1Args) const override;
+  void AddCXXStdlibLibArgs(const llvm37::opt::ArgList &Args,
+                           llvm37::opt::ArgStringList &CmdArgs) const override;
 
 protected:
   Tool *buildLinker() const override;
   Tool *buildAssembler() const override;
 };
 
-class LLVM_LIBRARY_VISIBILITY XCore : public ToolChain {
+class LLVM37_LIBRARY_VISIBILITY XCore : public ToolChain {
 public:
-  XCore(const Driver &D, const llvm::Triple &Triple,
-        const llvm::opt::ArgList &Args);
+  XCore(const Driver &D, const llvm37::Triple &Triple,
+        const llvm37::opt::ArgList &Args);
 
 protected:
   Tool *buildAssembler() const override;
@@ -879,24 +879,24 @@ public:
   bool SupportsProfiling() const override;
   bool hasBlocksRuntime() const override;
   void
-  AddClangSystemIncludeArgs(const llvm::opt::ArgList &DriverArgs,
-                            llvm::opt::ArgStringList &CC1Args) const override;
-  void addClangTargetOptions(const llvm::opt::ArgList &DriverArgs,
-                             llvm::opt::ArgStringList &CC1Args) const override;
+  AddClangSystemIncludeArgs(const llvm37::opt::ArgList &DriverArgs,
+                            llvm37::opt::ArgStringList &CC1Args) const override;
+  void addClangTargetOptions(const llvm37::opt::ArgList &DriverArgs,
+                             llvm37::opt::ArgStringList &CC1Args) const override;
   void AddClangCXXStdlibIncludeArgs(
-      const llvm::opt::ArgList &DriverArgs,
-      llvm::opt::ArgStringList &CC1Args) const override;
-  void AddCXXStdlibLibArgs(const llvm::opt::ArgList &Args,
-                           llvm::opt::ArgStringList &CmdArgs) const override;
+      const llvm37::opt::ArgList &DriverArgs,
+      llvm37::opt::ArgStringList &CC1Args) const override;
+  void AddCXXStdlibLibArgs(const llvm37::opt::ArgList &Args,
+                           llvm37::opt::ArgStringList &CmdArgs) const override;
 };
 
 /// SHAVEToolChain - A tool chain using the compiler installed by the the
-// Movidius SDK into MV_TOOLS_DIR (which we assume will be copied to llvm's
+// Movidius SDK into MV_TOOLS_DIR (which we assume will be copied to llvm37's
 // installation dir) to perform all subcommands.
-class LLVM_LIBRARY_VISIBILITY SHAVEToolChain : public Generic_GCC {
+class LLVM37_LIBRARY_VISIBILITY SHAVEToolChain : public Generic_GCC {
 public:
-  SHAVEToolChain(const Driver &D, const llvm::Triple &Triple,
-                 const llvm::opt::ArgList &Args);
+  SHAVEToolChain(const Driver &D, const llvm37::Triple &Triple,
+                 const llvm37::opt::ArgList &Args);
   ~SHAVEToolChain() override;
 
   virtual Tool *SelectTool(const JobAction &JA) const override;

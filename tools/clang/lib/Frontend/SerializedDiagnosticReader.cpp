@@ -1,6 +1,6 @@
 //===--- SerializedDiagnosticReader.cpp - Reads diagnostics ---------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -10,8 +10,8 @@
 #include "clang/Frontend/SerializedDiagnosticReader.h"
 #include "clang/Basic/FileManager.h"
 #include "clang/Frontend/SerializedDiagnostics.h"
-#include "llvm/Support/ManagedStatic.h"
-#include "llvm/Support/MemoryBuffer.h"
+#include "llvm37/Support/ManagedStatic.h"
+#include "llvm37/Support/MemoryBuffer.h"
 
 using namespace clang;
 using namespace clang::serialized_diags;
@@ -25,11 +25,11 @@ std::error_code SerializedDiagnosticReader::readDiagnostics(StringRef File) {
   if (!Buffer)
     return SDError::CouldNotLoad;
 
-  llvm::BitstreamReader StreamFile;
+  llvm37::BitstreamReader StreamFile;
   StreamFile.init((const unsigned char *)(*Buffer)->getBufferStart(),
                   (const unsigned char *)(*Buffer)->getBufferEnd());
 
-  llvm::BitstreamCursor Stream(StreamFile);
+  llvm37::BitstreamCursor Stream(StreamFile);
 
   // Sniff for the signature.
   if (Stream.Read(8) != 'D' ||
@@ -40,12 +40,12 @@ std::error_code SerializedDiagnosticReader::readDiagnostics(StringRef File) {
 
   // Read the top level blocks.
   while (!Stream.AtEndOfStream()) {
-    if (Stream.ReadCode() != llvm::bitc::ENTER_SUBBLOCK)
+    if (Stream.ReadCode() != llvm37::bitc::ENTER_SUBBLOCK)
       return SDError::InvalidDiagnostics;
 
     std::error_code EC;
     switch (Stream.ReadSubBlockID()) {
-    case llvm::bitc::BLOCKINFO_BLOCK_ID:
+    case llvm37::bitc::BLOCKINFO_BLOCK_ID:
       if (Stream.ReadBlockInfoBlock())
         return SDError::MalformedBlockInfoBlock;
       continue;
@@ -72,29 +72,29 @@ enum class SerializedDiagnosticReader::Cursor {
   BlockBegin
 };
 
-llvm::ErrorOr<SerializedDiagnosticReader::Cursor>
+llvm37::ErrorOr<SerializedDiagnosticReader::Cursor>
 SerializedDiagnosticReader::skipUntilRecordOrBlock(
-    llvm::BitstreamCursor &Stream, unsigned &BlockOrRecordID) {
+    llvm37::BitstreamCursor &Stream, unsigned &BlockOrRecordID) {
   BlockOrRecordID = 0;
 
   while (!Stream.AtEndOfStream()) {
     unsigned Code = Stream.ReadCode();
 
-    switch ((llvm::bitc::FixedAbbrevIDs)Code) {
-    case llvm::bitc::ENTER_SUBBLOCK:
+    switch ((llvm37::bitc::FixedAbbrevIDs)Code) {
+    case llvm37::bitc::ENTER_SUBBLOCK:
       BlockOrRecordID = Stream.ReadSubBlockID();
       return Cursor::BlockBegin;
 
-    case llvm::bitc::END_BLOCK:
+    case llvm37::bitc::END_BLOCK:
       if (Stream.ReadBlockEnd())
         return SDError::InvalidDiagnostics;
       return Cursor::BlockEnd;
 
-    case llvm::bitc::DEFINE_ABBREV:
+    case llvm37::bitc::DEFINE_ABBREV:
       Stream.ReadAbbrevRecord();
       continue;
 
-    case llvm::bitc::UNABBREV_RECORD:
+    case llvm37::bitc::UNABBREV_RECORD:
       return SDError::UnsupportedConstruct;
 
     default:
@@ -108,7 +108,7 @@ SerializedDiagnosticReader::skipUntilRecordOrBlock(
 }
 
 std::error_code
-SerializedDiagnosticReader::readMetaBlock(llvm::BitstreamCursor &Stream) {
+SerializedDiagnosticReader::readMetaBlock(llvm37::BitstreamCursor &Stream) {
   if (Stream.EnterSubBlock(clang::serialized_diags::BLOCK_META))
     return SDError::MalformedMetadataBlock;
 
@@ -116,7 +116,7 @@ SerializedDiagnosticReader::readMetaBlock(llvm::BitstreamCursor &Stream) {
 
   while (true) {
     unsigned BlockOrCode = 0;
-    llvm::ErrorOr<Cursor> Res = skipUntilRecordOrBlock(Stream, BlockOrCode);
+    llvm37::ErrorOr<Cursor> Res = skipUntilRecordOrBlock(Stream, BlockOrCode);
     if (!Res)
       Res.getError();
 
@@ -146,7 +146,7 @@ SerializedDiagnosticReader::readMetaBlock(llvm::BitstreamCursor &Stream) {
 }
 
 std::error_code
-SerializedDiagnosticReader::readDiagnosticBlock(llvm::BitstreamCursor &Stream) {
+SerializedDiagnosticReader::readDiagnosticBlock(llvm37::BitstreamCursor &Stream) {
   if (Stream.EnterSubBlock(clang::serialized_diags::BLOCK_DIAG))
     return SDError::MalformedDiagnosticBlock;
 
@@ -157,7 +157,7 @@ SerializedDiagnosticReader::readDiagnosticBlock(llvm::BitstreamCursor &Stream) {
   SmallVector<uint64_t, 16> Record;
   while (true) {
     unsigned BlockOrCode = 0;
-    llvm::ErrorOr<Cursor> Res = skipUntilRecordOrBlock(Stream, BlockOrCode);
+    llvm37::ErrorOr<Cursor> Res = skipUntilRecordOrBlock(Stream, BlockOrCode);
     if (!Res)
       Res.getError();
 
@@ -251,7 +251,7 @@ SerializedDiagnosticReader::readDiagnosticBlock(llvm::BitstreamCursor &Stream) {
 
 namespace {
 class SDErrorCategoryType final : public std::error_category {
-  const char *name() const LLVM_NOEXCEPT override {
+  const char *name() const LLVM37_NOEXCEPT override {
     return "clang.serialized_diags";
   }
   std::string message(int IE) const override {
@@ -284,12 +284,12 @@ class SDErrorCategoryType final : public std::error_category {
     case SDError::HandlerFailed:
       return "Generic error occurred while handling a record";
     }
-    llvm_unreachable("Unknown error type!");
+    llvm37_unreachable("Unknown error type!");
   }
 };
 }
 
-static llvm::ManagedStatic<SDErrorCategoryType> ErrorCategory;
+static llvm37::ManagedStatic<SDErrorCategoryType> ErrorCategory;
 const std::error_category &clang::serialized_diags::SDErrorCategory() {
   return *ErrorCategory;
 }

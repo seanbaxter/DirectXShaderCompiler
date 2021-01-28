@@ -1,5 +1,5 @@
 =====================
-LLVM Coding Standards
+LLVM37 Coding Standards
 =====================
 
 .. contents::
@@ -8,16 +8,16 @@ LLVM Coding Standards
 Introduction
 ============
 
-NOTE: this document describes the coding standards for the original LLVM
+NOTE: this document describes the coding standards for the original LLVM37
 project, not the DirectX Compiler. The project as a whole uses different
 styles depending on the primary design goals of the component. See HLSL
 Changes for some background on these.
 
 This document attempts to describe a few coding standards that are being used in
-the LLVM source tree.  Although no coding standards should be regarded as
+the LLVM37 source tree.  Although no coding standards should be regarded as
 absolute requirements to be followed in all instances, coding standards are
 particularly important for large-scale code bases that follow a library-based
-design (like LLVM).
+design (like LLVM37).
 
 While this document may provide guidance for some mechanical formatting issues,
 whitespace, or other "microscopic details", these are not fixed standards.
@@ -33,7 +33,7 @@ Note that some code bases (e.g. ``libc++``) have really good reasons to deviate
 from the coding standards.  In the case of ``libc++``, this is because the
 naming and other conventions are dictated by the C++ standard.  If you think
 there is a specific good reason to deviate from the standards here, please bring
-it up on the LLVM-dev mailing list.
+it up on the LLVM37-dev mailing list.
 
 There are some conventions that are not uniformly followed in the code base
 (e.g. the naming convention).  This is because they are relatively new, and a
@@ -50,7 +50,7 @@ maintainability of our common source base.
 Languages, Libraries, and Standards
 ===================================
 
-Most source code in LLVM and other LLVM projects using these coding standards
+Most source code in LLVM37 and other LLVM37 projects using these coding standards
 is C++ code. There are some places where C code is used either due to
 environment restrictions, historical restrictions, or due to third-party source
 code imported into the tree. Generally, our preference is for standards
@@ -60,7 +60,7 @@ choice.
 C++ Standard Versions
 ---------------------
 
-LLVM, Clang, and LLD are currently written using C++11 conforming code,
+LLVM37, Clang, and LLD are currently written using C++11 conforming code,
 although we restrict ourselves to features which are available in the major
 toolchains supported as host compilers. The LLDB project is even more
 aggressive in the set of host compilers supported and thus uses still more
@@ -72,11 +72,11 @@ C++ Standard Library
 --------------------
 
 Use the C++ standard library facilities whenever they are available for
-a particular task. LLVM and related projects emphasize and rely on the standard
+a particular task. LLVM37 and related projects emphasize and rely on the standard
 library facilities for as much as possible. Common support libraries providing
 functionality missing from the standard library for which there are standard
 interfaces or active work on adding standard interfaces will often be
-implemented in the LLVM namespace following the expected standard interface.
+implemented in the LLVM37 namespace following the expected standard interface.
 
 There are some exceptions such as the standard I/O streams library which are
 avoided. Also, there is much more detailed information on these subjects in the
@@ -85,8 +85,8 @@ avoided. Also, there is much more detailed information on these subjects in the
 Supported C++11 Language and Library Features
 ---------------------------------------------
 
-While LLVM, Clang, and LLD use C++11, not all features are available in all of
-the toolchains which we support. The set of features supported for use in LLVM
+While LLVM37, Clang, and LLD use C++11, not all features are available in all of
+the toolchains which we support. The set of features supported for use in LLVM37
 is the intersection of those supported in MSVC 2013, GCC 4.7, and Clang 3.1.
 The ultimate definition of this set is what build bots with those respective
 toolchains accept. Don't argue with the build bots. However, we have some
@@ -94,7 +94,7 @@ guidance below to help you know what to expect.
 
 Each toolchain provides a good reference for what it accepts:
 
-* Clang: http://clang.llvm.org/cxx_status.html
+* Clang: http://clang.llvm37.org/cxx_status.html
 * GCC: http://gcc.gnu.org/projects/cxx0x.html
 * MSVC: http://msdn.microsoft.com/en-us/library/hh567368.aspx
 
@@ -190,7 +190,7 @@ working as expected until some build bot tells you otherwise. If you're in an
 uncertain area of one of the above points, but you cannot test on a Linux
 system, your best approach is to minimize your use of these features, and watch
 the Linux build bots to find out if your usage triggered a bug. For example, if
-you hit a type trait which doesn't work we can then add support to LLVM's
+you hit a type trait which doesn't work we can then add support to LLVM37's
 traits header to emulate it.
 
 .. _the libstdc++ manual:
@@ -241,9 +241,9 @@ tree.  The standard header looks like this:
 
 .. code-block:: c++
 
-  //===-- llvm/Instruction.h - Instruction class definition -------*- C++ -*-===//
+  //===-- llvm37/Instruction.h - Instruction class definition -------*- C++ -*-===//
   //
-  //                     The LLVM Compiler Infrastructure
+  //                     The LLVM37 Compiler Infrastructure
   //
   // This file is distributed under the University of Illinois Open Source
   // License. See LICENSE.TXT for details.
@@ -457,7 +457,7 @@ listed.  We prefer these ``#include``\s to be listed in this order:
 
 #. Main Module Header
 #. Local/Private Headers
-#. ``llvm/...``
+#. ``llvm37/...``
 #. System ``#include``\s
 
 and each category should be sorted lexicographically by the full path.
@@ -580,15 +580,15 @@ understood for formatting nested function calls. Examples:
 
   foo({a, b, c}, {1, 2, 3});
 
-  llvm::Constant *Mask[] = {
-      llvm::ConstantInt::get(llvm::Type::getInt32Ty(getLLVMContext()), 0),
-      llvm::ConstantInt::get(llvm::Type::getInt32Ty(getLLVMContext()), 1),
-      llvm::ConstantInt::get(llvm::Type::getInt32Ty(getLLVMContext()), 2)};
+  llvm37::Constant *Mask[] = {
+      llvm37::ConstantInt::get(llvm37::Type::getInt32Ty(getLLVM37Context()), 0),
+      llvm37::ConstantInt::get(llvm37::Type::getInt32Ty(getLLVM37Context()), 1),
+      llvm37::ConstantInt::get(llvm37::Type::getInt32Ty(getLLVM37Context()), 2)};
 
 This formatting scheme also makes it particularly easy to get predictable,
 consistent, and automatic formatting with tools like `Clang Format`_.
 
-.. _Clang Format: http://clang.llvm.org/docs/ClangFormat.html
+.. _Clang Format: http://clang.llvm37.org/docs/ClangFormat.html
 
 Language and Compiler Issues
 ----------------------------
@@ -643,17 +643,17 @@ which has a simple exposed API, and preferably be buried in ``libSystem``.
 Do not use RTTI or Exceptions
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-In an effort to reduce code and executable size, LLVM does not use RTTI
+In an effort to reduce code and executable size, LLVM37 does not use RTTI
 (e.g. ``dynamic_cast<>;``) or exceptions.  These two language features violate
 the general C++ principle of *"you only pay for what you use"*, causing
 executable bloat even if exceptions are never used in the code base, or if RTTI
 is never used for a class.  Because of this, we turn them off globally in the
 code.
 
-That said, LLVM does make extensive use of a hand-rolled form of RTTI that use
+That said, LLVM37 does make extensive use of a hand-rolled form of RTTI that use
 templates like :ref:`isa\<>, cast\<>, and dyn_cast\<> <isa>`.
 This form of RTTI is opt-in and can be
-:doc:`added to any class <HowToSetUpLLVMStyleRTTI>`. It is also
+:doc:`added to any class <HowToSetUpLLVM37StyleRTTI>`. It is also
 substantially more efficient than ``dynamic_cast<>``.
 
 .. _static constructor:
@@ -667,13 +667,13 @@ removed wherever possible.  Besides `well known problems
 <http://yosefk.com/c++fqa/ctors.html#fqa-10.12>`_ where the order of
 initialization is undefined between globals in different source files, the
 entire concept of static constructors is at odds with the common use case of
-LLVM as a library linked into a larger application.
+LLVM37 as a library linked into a larger application.
   
-Consider the use of LLVM as a JIT linked into another application (perhaps for
-`OpenGL, custom languages <http://llvm.org/Users.html>`_, `shaders in movies
-<http://llvm.org/devmtg/2010-11/Gritz-OpenShadingLang.pdf>`_, etc). Due to the
+Consider the use of LLVM37 as a JIT linked into another application (perhaps for
+`OpenGL, custom languages <http://llvm37.org/Users.html>`_, `shaders in movies
+<http://llvm37.org/devmtg/2010-11/Gritz-OpenShadingLang.pdf>`_, etc). Due to the
 design of static constructors, they must be executed at startup time of the
-entire application, regardless of whether or how LLVM is used in that larger
+entire application, regardless of whether or how LLVM37 is used in that larger
 application.  There are two problems with this:
 
 * The time to run the static constructors impacts startup time of applications
@@ -684,13 +684,13 @@ application.  There are two problems with this:
   amount of data that gets touched. In addition, touched/dirty pages put more
   pressure on the VM system on low-memory machines.
 
-We would really like for there to be zero cost for linking in an additional LLVM
+We would really like for there to be zero cost for linking in an additional LLVM37
 target or other library into an application, but static constructors violate
 this goal.
   
-That said, LLVM unfortunately does contain static constructors.  It would be a
-`great project <http://llvm.org/PR11944>`_ for someone to purge all static
-constructors from LLVM, and then enable the ``-Wglobal-constructors`` warning
+That said, LLVM37 unfortunately does contain static constructors.  It would be a
+`great project <http://llvm37.org/PR11944>`_ for someone to purge all static
+constructors from LLVM37, and then enable the ``-Wglobal-constructors`` warning
 flag (when building with Clang) to ensure we do not regress in the future.
 
 Use of ``class`` and ``struct`` Keywords
@@ -777,7 +777,7 @@ If you use a braced initializer list when initializing a variable, use an equals
 Use ``auto`` Type Deduction to Make Code More Readable
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Some are advocating a policy of "almost always ``auto``" in C++11, however LLVM
+Some are advocating a policy of "almost always ``auto``" in C++11, however LLVM37
 uses a more moderate stance. Use ``auto`` if and only if it makes the code more
 readable or easier to maintain. Don't "almost always" use ``auto``, but do use
 ``auto`` with initializers like ``cast<Foo>(...)`` or other places where the
@@ -819,7 +819,7 @@ A Public Header File **is** a Module
 
 C++ doesn't do too well in the modularity department.  There is no real
 encapsulation or data hiding (unless you use expensive protocol classes), but it
-is what we have to work with.  When you write a public header file (in the LLVM
+is what we have to work with.  When you write a public header file (in the LLVM37
 source tree, they live in the top level "``include``" directory), you are
 defining a module of functionality.
 
@@ -1217,15 +1217,15 @@ This has a few issues, the main one being that some compilers might not
 understand the assertion, or warn about a missing return in builds where
 assertions are compiled out.
 
-Today, we have something much better: ``llvm_unreachable``:
+Today, we have something much better: ``llvm37_unreachable``:
 
 .. code-block:: c++
 
-  llvm_unreachable("Invalid radix for integer literal");
+  llvm37_unreachable("Invalid radix for integer literal");
 
 When assertions are enabled, this will print the message if it's ever reached
 and then exit the program. When assertions are disabled (i.e. in release
-builds), ``llvm_unreachable`` becomes a hint to compilers to skip generating
+builds), ``llvm37_unreachable`` becomes a hint to compilers to skip generating
 code for this branch. If the compiler does not support this, it will fall back
 to the "abort" implementation.
 
@@ -1258,7 +1258,7 @@ this:
 Do Not Use ``using namespace std``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-In LLVM, we prefer to explicitly prefix all identifiers from the standard
+In LLVM37, we prefer to explicitly prefix all identifiers from the standard
 namespace with an "``std::``" prefix, rather than rely on "``using namespace
 std;``".
 
@@ -1270,17 +1270,17 @@ In implementation files (e.g. ``.cpp`` files), the rule is more of a stylistic
 rule, but is still important.  Basically, using explicit namespace prefixes
 makes the code **clearer**, because it is immediately obvious what facilities
 are being used and where they are coming from. And **more portable**, because
-namespace clashes cannot occur between LLVM code and other namespaces.  The
+namespace clashes cannot occur between LLVM37 code and other namespaces.  The
 portability rule is important because different standard library implementations
 expose different symbols (potentially ones they shouldn't), and future revisions
 to the C++ standard will add more symbols to the ``std`` namespace.  As such, we
-never use ``'using namespace std;'`` in LLVM.
+never use ``'using namespace std;'`` in LLVM37.
 
 The exception to the general rule (i.e. it's not an exception for the ``std``
 namespace) is for implementation files.  For example, all of the code in the
-LLVM project implements code that lives in the 'llvm' namespace.  As such, it is
+LLVM37 project implements code that lives in the 'llvm37' namespace.  As such, it is
 ok, and actually clearer, for the ``.cpp`` files to have a ``'using namespace
-llvm;'`` directive at the top, after the ``#include``\s.  This reduces
+llvm37;'`` directive at the top, after the ``#include``\s.  This reduces
 indentation in the body of the file for source editors that indent based on
 braces, and keeps the conceptual context cleaner.  The general form of this rule
 is that any ``.cpp`` file that implements code in any namespace may use that
@@ -1303,14 +1303,14 @@ does not cover every enumeration value. If you write a default label on a fully
 covered switch over an enumeration then the ``-Wswitch`` warning won't fire
 when new elements are added to that enumeration. To help avoid adding these
 kinds of defaults, Clang has the warning ``-Wcovered-switch-default`` which is
-off by default but turned on when building LLVM with a version of Clang that
+off by default but turned on when building LLVM37 with a version of Clang that
 supports the warning.
 
-A knock-on effect of this stylistic requirement is that when building LLVM with
+A knock-on effect of this stylistic requirement is that when building LLVM37 with
 GCC you may get warnings related to "control may reach end of non-void function"
 if you return from each case of a covered switch-over-enum because GCC assumes
 that the enum expression may take any representable value, not just those of
-individual enumerators. To suppress this warning, use ``llvm_unreachable`` after
+individual enumerators. To suppress this warning, use ``llvm37_unreachable`` after
 the switch.
 
 Don't evaluate ``end()`` every time through a loop
@@ -1380,15 +1380,15 @@ provides various APIs that are better performing for almost every use than
 .. note::
 
   New code should always use `raw_ostream`_ for writing, or the
-  ``llvm::MemoryBuffer`` API for reading files.
+  ``llvm37::MemoryBuffer`` API for reading files.
 
 .. _raw_ostream:
 
 Use ``raw_ostream``
 ^^^^^^^^^^^^^^^^^^^
 
-LLVM includes a lightweight, simple, and efficient stream implementation in
-``llvm/Support/raw_ostream.h``, which provides all of the common features of
+LLVM37 includes a lightweight, simple, and efficient stream implementation in
+``llvm37/Support/raw_ostream.h``, which provides all of the common features of
 ``std::ostream``.  All new code should use ``raw_ostream`` instead of
 ``ostream``.
 
@@ -1457,7 +1457,7 @@ macros.  For example, this is good:
 
   if (X) ...
   for (I = 0; I != 100; ++I) ...
-  while (LLVMRocks) ...
+  while (LLVM37Rocks) ...
 
   somefunc(42);
   assert(3 != 4 && "laws of math are failing me");
@@ -1470,7 +1470,7 @@ and this is bad:
 
   if(X) ...
   for(I = 0; I != 100; ++I) ...
-  while(LLVMRocks) ...
+  while(LLVM37Rocks) ...
 
   somefunc (42);
   assert (3 != 4 && "laws of math are failing me");
@@ -1519,7 +1519,7 @@ being closed by a ``}``.  For example:
 
 .. code-block:: c++
 
-  namespace llvm {
+  namespace llvm37 {
   namespace knowledge {
 
   /// This class represents things that Smith can have an intimate
@@ -1535,7 +1535,7 @@ being closed by a ``}``.  For example:
   };
 
   } // end namespace knowledge
-  } // end namespace llvm
+  } // end namespace llvm37
 
 
 Feel free to skip the closing comment when the namespace being closed is

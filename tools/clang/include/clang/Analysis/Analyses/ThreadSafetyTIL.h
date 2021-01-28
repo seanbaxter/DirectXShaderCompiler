@@ -1,16 +1,16 @@
 //===- ThreadSafetyTIL.h ---------------------------------------*- C++ --*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
-// License. See LICENSE.TXT in the llvm repository for details.
+// License. See LICENSE.TXT in the llvm37 repository for details.
 //
 //===----------------------------------------------------------------------===//
 //
 // This file defines a simple Typed Intermediate Language, or TIL, that is used
 // by the thread safety analysis (See ThreadSafety.cpp).  The TIL is intended
 // to be largely independent of clang, in the hope that the analysis can be
-// reused for other non-C++ languages.  All dependencies on clang/llvm should
+// reused for other non-C++ languages.  All dependencies on clang/llvm37 should
 // go in ThreadSafetyUtil.h.
 //
 // Thread safety analysis works by comparing mutex expressions, e.g.
@@ -44,8 +44,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_ANALYSIS_ANALYSES_THREADSAFETYTIL_H
-#define LLVM_CLANG_ANALYSIS_ANALYSES_THREADSAFETYTIL_H
+#ifndef LLVM37_CLANG_ANALYSIS_ANALYSES_THREADSAFETYTIL_H
+#define LLVM37_CLANG_ANALYSIS_ANALYSES_THREADSAFETYTIL_H
 
 // All clang include dependencies for this file must be put in
 // ThreadSafetyUtil.h.

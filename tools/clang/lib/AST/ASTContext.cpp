@@ -1,6 +1,6 @@
 //===--- ASTContext.cpp - Context to hold long-lived AST nodes ------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -33,13 +33,13 @@
 #include "clang/Basic/Builtins.h"
 #include "clang/Basic/SourceManager.h"
 #include "clang/Basic/TargetInfo.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/ADT/StringExtras.h"
-#include "llvm/ADT/Triple.h"
-#include "llvm/Support/Capacity.h"
-#include "llvm/Support/MathExtras.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Support/MathExtras.h" // HLSL Change
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/ADT/StringExtras.h"
+#include "llvm37/ADT/Triple.h"
+#include "llvm37/Support/Capacity.h"
+#include "llvm37/Support/MathExtras.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Support/MathExtras.h" // HLSL Change
 #include <map>
 
 using namespace clang;
@@ -302,7 +302,7 @@ const Decl *adjustDeclToTemplate(const Decl *D) {
             dyn_cast<ClassTemplateSpecializationDecl>(CRD)) {
       if (CTSD->getSpecializationKind() != TSK_ImplicitInstantiation)
         return D;
-      llvm::PointerUnion<ClassTemplateDecl *,
+      llvm37::PointerUnion<ClassTemplateDecl *,
                          ClassTemplatePartialSpecializationDecl *>
           PU = CTSD->getSpecializedTemplateOrPartial();
       return PU.is<ClassTemplateDecl*>() ?
@@ -337,7 +337,7 @@ const RawComment *ASTContext::getRawCommentForAnyRedecl(
 
   // Check whether we have cached a comment for this declaration already.
   {
-    llvm::DenseMap<const Decl *, RawCommentAndCacheFlags>::iterator Pos =
+    llvm37::DenseMap<const Decl *, RawCommentAndCacheFlags>::iterator Pos =
         RedeclComments.find(D);
     if (Pos != RedeclComments.end()) {
       const RawCommentAndCacheFlags &Raw = Pos->second;
@@ -353,7 +353,7 @@ const RawComment *ASTContext::getRawCommentForAnyRedecl(
   const RawComment *RC = nullptr;
   const Decl *OriginalDeclForRC = nullptr;
   for (auto I : D->redecls()) {
-    llvm::DenseMap<const Decl *, RawCommentAndCacheFlags>::iterator Pos =
+    llvm37::DenseMap<const Decl *, RawCommentAndCacheFlags>::iterator Pos =
         RedeclComments.find(I);
     if (Pos != RedeclComments.end()) {
       const RawCommentAndCacheFlags &Raw = Pos->second;
@@ -445,7 +445,7 @@ comments::FullComment *ASTContext::getCommentForDecl(
   D = adjustDeclToTemplate(D);
   
   const Decl *Canonical = D->getCanonicalDecl();
-  llvm::DenseMap<const Decl *, comments::FullComment *>::iterator Pos =
+  llvm37::DenseMap<const Decl *, comments::FullComment *>::iterator Pos =
       ParsedComments.find(Canonical);
   
   if (Pos != ParsedComments.end()) {
@@ -545,7 +545,7 @@ comments::FullComment *ASTContext::getCommentForDecl(
 }
 
 void 
-ASTContext::CanonicalTemplateTemplateParm::Profile(llvm::FoldingSetNodeID &ID, 
+ASTContext::CanonicalTemplateTemplateParm::Profile(llvm37::FoldingSetNodeID &ID, 
                                                TemplateTemplateParmDecl *Parm) {
   ID.AddInteger(Parm->getDepth());
   ID.AddInteger(Parm->getPosition());
@@ -588,7 +588,7 @@ TemplateTemplateParmDecl *
 ASTContext::getCanonicalTemplateTemplateParmDecl(
                                           TemplateTemplateParmDecl *TTP) const {
   // Check if we already have a canonical template template parameter.
-  llvm::FoldingSetNodeID ID;
+  llvm37::FoldingSetNodeID ID;
   CanonicalTemplateTemplateParm::Profile(ID, TTP);
   void *InsertPos = nullptr;
   CanonicalTemplateTemplateParm *Canonical
@@ -689,7 +689,7 @@ CXXABI *ASTContext::createCXXABI(const TargetInfo &T) {
   case TargetCXXABI::Microsoft:
     return CreateMicrosoftCXXABI(*this);
   }
-  llvm_unreachable("Invalid CXXABI type!");
+  llvm37_unreachable("Invalid CXXABI type!");
 }
 
 static const LangAS::Map *getAddressSpaceMap(const TargetInfo &T,
@@ -722,7 +722,7 @@ static bool isAddrSpaceMapManglingEnabled(const TargetInfo &TI,
   case LangOptions::ASMM_Off:
     return false;
   }
-  llvm_unreachable("getAddressSpaceMapMangling() doesn't cover anything.");
+  llvm37_unreachable("getAddressSpaceMapMangling() doesn't cover anything.");
 }
 
 ASTContext::ASTContext(LangOptions &LOpts, SourceManager &SM,
@@ -765,26 +765,26 @@ ASTContext::~ASTContext() {
 
   // ASTRecordLayout objects in ASTRecordLayouts must always be destroyed
   // because they can contain DenseMaps.
-  for (llvm::DenseMap<const ObjCContainerDecl*,
+  for (llvm37::DenseMap<const ObjCContainerDecl*,
        const ASTRecordLayout*>::iterator
        I = ObjCLayouts.begin(), E = ObjCLayouts.end(); I != E; )
     // Increment in loop to prevent using deallocated memory.
     if (ASTRecordLayout *R = const_cast<ASTRecordLayout*>((I++)->second))
       R->Destroy(*this);
 
-  for (llvm::DenseMap<const RecordDecl*, const ASTRecordLayout*>::iterator
+  for (llvm37::DenseMap<const RecordDecl*, const ASTRecordLayout*>::iterator
        I = ASTRecordLayouts.begin(), E = ASTRecordLayouts.end(); I != E; ) {
     // Increment in loop to prevent using deallocated memory.
     if (ASTRecordLayout *R = const_cast<ASTRecordLayout*>((I++)->second))
       R->Destroy(*this);
   }
   
-  for (llvm::DenseMap<const Decl*, AttrVec*>::iterator A = DeclAttrs.begin(),
+  for (llvm37::DenseMap<const Decl*, AttrVec*>::iterator A = DeclAttrs.begin(),
                                                     AEnd = DeclAttrs.end();
        A != AEnd; ++A)
     A->second->~AttrVec();
 
-  llvm::DeleteContainerSeconds(MangleNumberingContexts);
+  llvm37::DeleteContainerSeconds(MangleNumberingContexts);
 }
 
 void ASTContext::ReleaseParentMapEntries() {
@@ -809,8 +809,8 @@ ASTContext::setExternalSource(IntrusiveRefCntPtr<ExternalASTSource> Source) {
 }
 
 void ASTContext::PrintStats() const {
-  llvm::errs() << "\n*** AST Context Stats:\n";
-  llvm::errs() << "  " << Types.size() << " types total.\n";
+  llvm37::errs() << "\n*** AST Context Stats:\n";
+  llvm37::errs() << "  " << Types.size() << " types total.\n";
 
   unsigned counts[] = {
 #define TYPE(Name, Parent) 0,
@@ -835,39 +835,39 @@ void ASTContext::PrintStats() const {
   unsigned TotalBytes = 0;
 #define TYPE(Name, Parent)                                              \
   if (counts[Idx])                                                      \
-    llvm::errs() << "    " << counts[Idx] << " " << #Name               \
+    llvm37::errs() << "    " << counts[Idx] << " " << #Name               \
                  << " types\n";                                         \
   TotalBytes += counts[Idx] * sizeof(Name##Type);                       \
   ++Idx;
 #define ABSTRACT_TYPE(Name, Parent)
 #include "clang/AST/TypeNodes.def"
 
-  llvm::errs() << "Total bytes = " << TotalBytes << "\n";
+  llvm37::errs() << "Total bytes = " << TotalBytes << "\n";
 
   // Implicit special member functions.
-  llvm::errs() << NumImplicitDefaultConstructorsDeclared << "/"
+  llvm37::errs() << NumImplicitDefaultConstructorsDeclared << "/"
                << NumImplicitDefaultConstructors
                << " implicit default constructors created\n";
-  llvm::errs() << NumImplicitCopyConstructorsDeclared << "/"
+  llvm37::errs() << NumImplicitCopyConstructorsDeclared << "/"
                << NumImplicitCopyConstructors
                << " implicit copy constructors created\n";
   if (getLangOpts().CPlusPlus)
-    llvm::errs() << NumImplicitMoveConstructorsDeclared << "/"
+    llvm37::errs() << NumImplicitMoveConstructorsDeclared << "/"
                  << NumImplicitMoveConstructors
                  << " implicit move constructors created\n";
-  llvm::errs() << NumImplicitCopyAssignmentOperatorsDeclared << "/"
+  llvm37::errs() << NumImplicitCopyAssignmentOperatorsDeclared << "/"
                << NumImplicitCopyAssignmentOperators
                << " implicit copy assignment operators created\n";
   if (getLangOpts().CPlusPlus)
-    llvm::errs() << NumImplicitMoveAssignmentOperatorsDeclared << "/"
+    llvm37::errs() << NumImplicitMoveAssignmentOperatorsDeclared << "/"
                  << NumImplicitMoveAssignmentOperators
                  << " implicit move assignment operators created\n";
-  llvm::errs() << NumImplicitDestructorsDeclared << "/"
+  llvm37::errs() << NumImplicitDestructorsDeclared << "/"
                << NumImplicitDestructors
                << " implicit destructors created\n";
 
   if (ExternalSource) {
-    llvm::errs() << "\n";
+    llvm37::errs() << "\n";
     ExternalSource->PrintStats();
   }
 
@@ -892,7 +892,7 @@ void ASTContext::deduplicateMergedDefinitonsFor(NamedDecl *ND) {
     return;
 
   auto &Merged = It->second;
-  llvm::DenseSet<Module*> Found;
+  llvm37::DenseSet<Module*> Found;
   for (Module *&M : Merged)
     if (!Found.insert(M).second)
       M = nullptr;
@@ -1137,7 +1137,7 @@ AttrVec& ASTContext::getDeclAttrs(const Decl *D) {
 
 /// \brief Erase the attributes corresponding to the given declaration.
 void ASTContext::eraseDeclAttrs(const Decl *D) { 
-  llvm::DenseMap<const Decl*, AttrVec*>::iterator Pos = DeclAttrs.find(D);
+  llvm37::DenseMap<const Decl*, AttrVec*>::iterator Pos = DeclAttrs.find(D);
   if (Pos != DeclAttrs.end()) {
     Pos->second->~AttrVec();
     DeclAttrs.erase(Pos);
@@ -1154,7 +1154,7 @@ ASTContext::getInstantiatedFromStaticDataMember(const VarDecl *Var) {
 
 ASTContext::TemplateOrSpecializationInfo
 ASTContext::getTemplateOrSpecializationInfo(const VarDecl *Var) {
-  llvm::DenseMap<const VarDecl *, TemplateOrSpecializationInfo>::iterator Pos =
+  llvm37::DenseMap<const VarDecl *, TemplateOrSpecializationInfo>::iterator Pos =
       TemplateOrInstantiation.find(Var);
   if (Pos == TemplateOrInstantiation.end())
     return TemplateOrSpecializationInfo();
@@ -1183,7 +1183,7 @@ ASTContext::setTemplateOrSpecializationInfo(VarDecl *Inst,
 FunctionDecl *ASTContext::getClassScopeSpecializationPattern(
                                                      const FunctionDecl *FD){
   assert(FD && "Specialization is 0");
-  llvm::DenseMap<const FunctionDecl*, FunctionDecl *>::const_iterator Pos
+  llvm37::DenseMap<const FunctionDecl*, FunctionDecl *>::const_iterator Pos
     = ClassScopeSpecializationPattern.find(FD);
   if (Pos == ClassScopeSpecializationPattern.end())
     return nullptr;
@@ -1200,7 +1200,7 @@ void ASTContext::setClassScopeSpecializationPattern(FunctionDecl *FD,
 
 NamedDecl *
 ASTContext::getInstantiatedFromUsingDecl(UsingDecl *UUD) {
-  llvm::DenseMap<UsingDecl *, NamedDecl *>::const_iterator Pos
+  llvm37::DenseMap<UsingDecl *, NamedDecl *>::const_iterator Pos
     = InstantiatedFromUsingDecl.find(UUD);
   if (Pos == InstantiatedFromUsingDecl.end())
     return nullptr;
@@ -1220,7 +1220,7 @@ ASTContext::setInstantiatedFromUsingDecl(UsingDecl *Inst, NamedDecl *Pattern) {
 
 UsingShadowDecl *
 ASTContext::getInstantiatedFromUsingShadowDecl(UsingShadowDecl *Inst) {
-  llvm::DenseMap<UsingShadowDecl*, UsingShadowDecl*>::const_iterator Pos
+  llvm37::DenseMap<UsingShadowDecl*, UsingShadowDecl*>::const_iterator Pos
     = InstantiatedFromUsingShadowDecl.find(Inst);
   if (Pos == InstantiatedFromUsingShadowDecl.end())
     return nullptr;
@@ -1236,7 +1236,7 @@ ASTContext::setInstantiatedFromUsingShadowDecl(UsingShadowDecl *Inst,
 }
 
 FieldDecl *ASTContext::getInstantiatedFromUnnamedFieldDecl(FieldDecl *Field) {
-  llvm::DenseMap<FieldDecl *, FieldDecl *>::iterator Pos
+  llvm37::DenseMap<FieldDecl *, FieldDecl *>::iterator Pos
     = InstantiatedFromUnnamedFieldDecl.find(Field);
   if (Pos == InstantiatedFromUnnamedFieldDecl.end())
     return nullptr;
@@ -1256,7 +1256,7 @@ void ASTContext::setInstantiatedFromUnnamedFieldDecl(FieldDecl *Inst,
 
 ASTContext::overridden_cxx_method_iterator
 ASTContext::overridden_methods_begin(const CXXMethodDecl *Method) const {
-  llvm::DenseMap<const CXXMethodDecl *, CXXMethodVector>::const_iterator Pos
+  llvm37::DenseMap<const CXXMethodDecl *, CXXMethodVector>::const_iterator Pos
     = OverriddenMethods.find(Method->getCanonicalDecl());
   if (Pos == OverriddenMethods.end())
     return nullptr;
@@ -1266,7 +1266,7 @@ ASTContext::overridden_methods_begin(const CXXMethodDecl *Method) const {
 
 ASTContext::overridden_cxx_method_iterator
 ASTContext::overridden_methods_end(const CXXMethodDecl *Method) const {
-  llvm::DenseMap<const CXXMethodDecl *, CXXMethodVector>::const_iterator Pos
+  llvm37::DenseMap<const CXXMethodDecl *, CXXMethodVector>::const_iterator Pos
     = OverriddenMethods.find(Method->getCanonicalDecl());
   if (Pos == OverriddenMethods.end())
     return nullptr;
@@ -1276,7 +1276,7 @@ ASTContext::overridden_methods_end(const CXXMethodDecl *Method) const {
 
 unsigned
 ASTContext::overridden_methods_size(const CXXMethodDecl *Method) const {
-  llvm::DenseMap<const CXXMethodDecl *, CXXMethodVector>::const_iterator Pos
+  llvm37::DenseMap<const CXXMethodDecl *, CXXMethodVector>::const_iterator Pos
     = OverriddenMethods.find(Method->getCanonicalDecl());
   if (Pos == OverriddenMethods.end())
     return 0;
@@ -1329,11 +1329,11 @@ void ASTContext::addedLocalImportDecl(ImportDecl *Import) {
 
 /// getFloatTypeSemantics - Return the APFloat 'semantics' for the specified
 /// scalar floating point type.
-const llvm::fltSemantics &ASTContext::getFloatTypeSemantics(QualType T) const {
+const llvm37::fltSemantics &ASTContext::getFloatTypeSemantics(QualType T) const {
   const BuiltinType *BT = T->getAs<BuiltinType>();
   assert(BT && "Not a floating point type!");
   switch (BT->getKind()) {
-  default: llvm_unreachable("Not a floating point type!");
+  default: llvm37_unreachable("Not a floating point type!");
   // HLSL Change Starts
   case BuiltinType::Min10Float:
   case BuiltinType::Min16Float:
@@ -1474,7 +1474,7 @@ static getConstantArrayInfoInChars(const ASTContext &Context,
   unsigned Align = EltInfo.second.getQuantity();
   if (!Context.getTargetInfo().getCXXABI().isMicrosoft() ||
       Context.getTargetInfo().getPointerWidth(0) == 64)
-    Width = llvm::RoundUpToAlignment(Width, Align);
+    Width = llvm37::RoundUpToAlignment(Width, Align);
   return std::make_pair(CharUnits::fromQuantity(Width),
                         CharUnits::fromQuantity(Align));
 }
@@ -1540,7 +1540,7 @@ TypeInfo ASTContext::getTypeInfoImpl(const Type *T) const {
   assert(!T->isDependentType() && "should not see dependent types here");      \
   return getTypeInfo(cast<Class##Type>(T)->desugar().getTypePtr());
 #include "clang/AST/TypeNodes.def"
-    llvm_unreachable("Should not see dependent types");
+    llvm37_unreachable("Should not see dependent types");
 
   case Type::FunctionNoProto:
   case Type::FunctionProto:
@@ -1566,7 +1566,7 @@ TypeInfo ASTContext::getTypeInfoImpl(const Type *T) const {
     Align = EltInfo.Align;
     if (!getTargetInfo().getCXXABI().isMicrosoft() ||
         getTargetInfo().getPointerWidth(0) == 64)
-      Width = llvm::RoundUpToAlignment(Width, Align);
+      Width = llvm37::RoundUpToAlignment(Width, Align);
     break;
   }
   case Type::ExtVector:
@@ -1578,15 +1578,15 @@ TypeInfo ASTContext::getTypeInfoImpl(const Type *T) const {
     // HLSL Change Begins.
     // Vector align to its element.
     if (getLangOpts().HLSL) {
-      Width = llvm::RoundUpToAlignment(EltInfo.Width, EltInfo.Align) * VT->getNumElements(); // Match data layout's behaviour
+      Width = llvm37::RoundUpToAlignment(EltInfo.Width, EltInfo.Align) * VT->getNumElements(); // Match data layout's behaviour
       Align = EltInfo.Align;
     }
     // HLSL Change Ends.
     // If the alignment is not a power of 2, round up to the next power of 2.
     // This happens for non-power-of-2 length vectors.
     if (Align & (Align-1)) {
-      Align = llvm::NextPowerOf2(Align);
-      Width = llvm::RoundUpToAlignment(Width, Align);
+      Align = llvm37::NextPowerOf2(Align);
+      Width = llvm37::RoundUpToAlignment(Width, Align);
     }
     // Adjust the alignment based on the target max.
     uint64_t TargetVectorAlign = Target->getMaxVectorAlign();
@@ -1597,7 +1597,7 @@ TypeInfo ASTContext::getTypeInfoImpl(const Type *T) const {
 
   case Type::Builtin:
     switch (cast<BuiltinType>(T)->getKind()) {
-    default: llvm_unreachable("Unknown builtin type!");
+    default: llvm37_unreachable("Unknown builtin type!");
     case BuiltinType::Void:
       // GCC extension: alignof(void) = 8 bits.
       Width = 0;
@@ -1860,8 +1860,8 @@ TypeInfo ASTContext::getTypeInfoImpl(const Type *T) const {
     // favorable to atomic operations:
     if (Width != 0 && Width <= Target->getMaxAtomicPromoteWidth()) {
       // Round the size up to a power of 2.
-      if (!llvm::isPowerOf2_64(Width))
-        Width = llvm::NextPowerOf2(Width);
+      if (!llvm37::isPowerOf2_64(Width))
+        Width = llvm37::NextPowerOf2(Width);
 
       // Set the alignment equal to the size.
       Align = static_cast<unsigned>(Width);
@@ -1870,15 +1870,15 @@ TypeInfo ASTContext::getTypeInfoImpl(const Type *T) const {
 
   }
 
-  assert(llvm::isPowerOf2_32(Align) && "Alignment must be power of 2");
+  assert(llvm37::isPowerOf2_32(Align) && "Alignment must be power of 2");
   return TypeInfo(Width, Align, AlignIsRequired);
 }
 
 unsigned ASTContext::getOpenMPDefaultSimdAlign(QualType T) const {
   unsigned SimdAlign = getTargetInfo().getSimdDefaultAlign();
   // Target ppc64 with QPX: simd default alignment for pointer to double is 32.
-  if ((getTargetInfo().getTriple().getArch() == llvm::Triple::ppc64 ||
-       getTargetInfo().getTriple().getArch() == llvm::Triple::ppc64le) &&
+  if ((getTargetInfo().getTriple().getArch() == llvm37::Triple::ppc64 ||
+       getTargetInfo().getTriple().getArch() == llvm37::Triple::ppc64le) &&
       getTargetInfo().getABI() == "elfv1-qpx" &&
       T->isSpecificBuiltinType(BuiltinType::Double))
     SimdAlign = 256;
@@ -1927,7 +1927,7 @@ unsigned ASTContext::getPreferredTypeAlign(const Type *T) const {
   if (T->isMemberPointerType())
     return getPreferredTypeAlign(getPointerDiffType().getTypePtr());
 
-  if (Target->getTriple().getArch() == llvm::Triple::xcore)
+  if (Target->getTriple().getArch() == llvm37::Triple::xcore)
     return ABIAlign;  // Never overalign on XCore.
 
   // Double and long long should be naturally aligned if possible.
@@ -2000,7 +2000,7 @@ void ASTContext::DeepCollectObjCIvars(const ObjCInterfaceDecl *OI,
 /// CollectInheritedProtocols - Collect all protocols in current class and
 /// those inherited by it.
 void ASTContext::CollectInheritedProtocols(const Decl *CDecl,
-                          llvm::SmallPtrSet<ObjCProtocolDecl*, 8> &Protocols) {
+                          llvm37::SmallPtrSet<ObjCProtocolDecl*, 8> &Protocols) {
   if (const ObjCInterfaceDecl *OI = dyn_cast<ObjCInterfaceDecl>(CDecl)) {
     // We can use protocol_iterator here instead of
     // all_referenced_protocol_iterator since we are walking all categories.    
@@ -2066,7 +2066,7 @@ bool ASTContext::isSentinelNullExpr(const Expr *E) {
 
 /// \brief Get the implementation of ObjCInterfaceDecl,or NULL if none exists.
 ObjCImplementationDecl *ASTContext::getObjCImplementation(ObjCInterfaceDecl *D) {
-  llvm::DenseMap<ObjCContainerDecl*, ObjCImplDecl*>::iterator
+  llvm37::DenseMap<ObjCContainerDecl*, ObjCImplDecl*>::iterator
     I = ObjCImpls.find(D);
   if (I != ObjCImpls.end())
     return cast<ObjCImplementationDecl>(I->second);
@@ -2074,7 +2074,7 @@ ObjCImplementationDecl *ASTContext::getObjCImplementation(ObjCInterfaceDecl *D) 
 }
 /// \brief Get the implementation of ObjCCategoryDecl, or NULL if none exists.
 ObjCCategoryImplDecl *ASTContext::getObjCImplementation(ObjCCategoryDecl *D) {
-  llvm::DenseMap<ObjCContainerDecl*, ObjCImplDecl*>::iterator
+  llvm37::DenseMap<ObjCContainerDecl*, ObjCImplDecl*>::iterator
     I = ObjCImpls.find(D);
   if (I != ObjCImpls.end())
     return cast<ObjCCategoryImplDecl>(I->second);
@@ -2115,7 +2115,7 @@ Expr *ASTContext::getBlockVarCopyInits(const VarDecl*VD) {
   assert(VD && "Passed null params");
   assert(VD->hasAttr<BlocksAttr>() && 
          "getBlockVarCopyInits - not __block var");
-  llvm::DenseMap<const VarDecl*, Expr*>::iterator
+  llvm37::DenseMap<const VarDecl*, Expr*>::iterator
     I = BlockVarCopyInits.find(VD);
   return (I != BlockVarCopyInits.end()) ? cast<Expr>(I->second) : nullptr;
 }
@@ -2170,7 +2170,7 @@ ASTContext::getExtQualType(const Type *baseType, Qualifiers quals) const {
   quals.removeFastQualifiers();
 
   // Check if we've already instantiated this type.
-  llvm::FoldingSetNodeID ID;
+  llvm37::FoldingSetNodeID ID;
   ExtQuals::Profile(ID, baseType, quals);
   void *insertPos = nullptr;
   if (ExtQuals *eq = ExtQualNodes.FindNodeOrInsertPos(ID, insertPos)) {
@@ -2338,7 +2338,7 @@ void ASTContext::adjustExceptionSpec(
 QualType ASTContext::getComplexType(QualType T) const {
   // Unique pointers, to guarantee there is only one pointer of a particular
   // structure.
-  llvm::FoldingSetNodeID ID;
+  llvm37::FoldingSetNodeID ID;
   ComplexType::Profile(ID, T);
 
   void *InsertPos = nullptr;
@@ -2366,7 +2366,7 @@ QualType ASTContext::getComplexType(QualType T) const {
 QualType ASTContext::getPointerType(QualType T) const {
   // Unique pointers, to guarantee there is only one pointer of a particular
   // structure.
-  llvm::FoldingSetNodeID ID;
+  llvm37::FoldingSetNodeID ID;
   PointerType::Profile(ID, T);
 
   void *InsertPos = nullptr;
@@ -2390,7 +2390,7 @@ QualType ASTContext::getPointerType(QualType T) const {
 }
 
 QualType ASTContext::getAdjustedType(QualType Orig, QualType New) const {
-  llvm::FoldingSetNodeID ID;
+  llvm37::FoldingSetNodeID ID;
   AdjustedType::Profile(ID, Orig, New);
   void *InsertPos = nullptr;
   AdjustedType *AT = AdjustedTypes.FindNodeOrInsertPos(ID, InsertPos);
@@ -2432,7 +2432,7 @@ QualType ASTContext::getDecayedType(QualType T) const {
   if (T->isFunctionType())
     Decayed = getPointerType(T);
 
-  llvm::FoldingSetNodeID ID;
+  llvm37::FoldingSetNodeID ID;
   AdjustedType::Profile(ID, T, Decayed);
   void *InsertPos = nullptr;
   AdjustedType *AT = AdjustedTypes.FindNodeOrInsertPos(ID, InsertPos);
@@ -2459,7 +2459,7 @@ QualType ASTContext::getBlockPointerType(QualType T) const {
 
   // Unique pointers, to guarantee there is only one block of a particular
   // structure.
-  llvm::FoldingSetNodeID ID;
+  llvm37::FoldingSetNodeID ID;
   BlockPointerType::Profile(ID, T);
 
   void *InsertPos = nullptr;
@@ -2494,7 +2494,7 @@ ASTContext::getLValueReferenceType(QualType T, bool SpelledAsLValue) const {
   
   // Unique pointers, to guarantee there is only one pointer of a particular
   // structure.
-  llvm::FoldingSetNodeID ID;
+  llvm37::FoldingSetNodeID ID;
   ReferenceType::Profile(ID, T, SpelledAsLValue);
 
   void *InsertPos = nullptr;
@@ -2531,7 +2531,7 @@ ASTContext::getLValueReferenceType(QualType T, bool SpelledAsLValue) const {
 QualType ASTContext::getRValueReferenceType(QualType T) const {
   // Unique pointers, to guarantee there is only one pointer of a particular
   // structure.
-  llvm::FoldingSetNodeID ID;
+  llvm37::FoldingSetNodeID ID;
   ReferenceType::Profile(ID, T, false);
 
   void *InsertPos = nullptr;
@@ -2566,7 +2566,7 @@ QualType ASTContext::getRValueReferenceType(QualType T) const {
 QualType ASTContext::getMemberPointerType(QualType T, const Type *Cls) const {
   // Unique pointers, to guarantee there is only one pointer of a particular
   // structure.
-  llvm::FoldingSetNodeID ID;
+  llvm37::FoldingSetNodeID ID;
   MemberPointerType::Profile(ID, T, Cls);
 
   void *InsertPos = nullptr;
@@ -2595,7 +2595,7 @@ QualType ASTContext::getMemberPointerType(QualType T, const Type *Cls) const {
 /// getConstantArrayType - Return the unique reference to the type for an
 /// array of the specified element type.
 QualType ASTContext::getConstantArrayType(QualType EltTy,
-                                          const llvm::APInt &ArySizeIn,
+                                          const llvm37::APInt &ArySizeIn,
                                           ArrayType::ArraySizeModifier ASM,
                                           unsigned IndexTypeQuals) const {
   assert((EltTy->isDependentType() ||
@@ -2604,11 +2604,11 @@ QualType ASTContext::getConstantArrayType(QualType EltTy,
 
   // Convert the array size into a canonical width matching the pointer size for
   // the target.
-  llvm::APInt ArySize(ArySizeIn);
+  llvm37::APInt ArySize(ArySizeIn);
   ArySize =
     ArySize.zextOrTrunc(Target->getPointerWidth(getTargetAddressSpace(EltTy)));
 
-  llvm::FoldingSetNodeID ID;
+  llvm37::FoldingSetNodeID ID;
   ConstantArrayType::Profile(ID, EltTy, ArySize, ASM, IndexTypeQuals);
 
   void *InsertPos = nullptr;
@@ -2654,7 +2654,7 @@ QualType ASTContext::getVariableArrayDecayedType(QualType type) const {
 #define ABSTRACT_TYPE(Class, Base)
 #define NON_CANONICAL_TYPE(Class, Base) case Type::Class:
 #include "clang/AST/TypeNodes.def"
-    llvm_unreachable("didn't desugar past all non-canonical types?");
+    llvm37_unreachable("didn't desugar past all non-canonical types?");
 
   // These types should never be variably-modified.
   case Type::Builtin:
@@ -2680,7 +2680,7 @@ QualType ASTContext::getVariableArrayDecayedType(QualType type) const {
   case Type::SubstTemplateTypeParmPack:
   case Type::Auto:
   case Type::PackExpansion:
-    llvm_unreachable("type should never be variably-modified");
+    llvm37_unreachable("type should never be variably-modified");
 
   // These types can be variably-modified but should never need to
   // further decay.
@@ -2829,7 +2829,7 @@ QualType ASTContext::getDependentSizedArrayType(QualType elementType,
   SplitQualType canonElementType = getCanonicalType(elementType).split();
 
   void *insertPos = nullptr;
-  llvm::FoldingSetNodeID ID;
+  llvm37::FoldingSetNodeID ID;
   DependentSizedArrayType::Profile(ID, *this,
                                    QualType(canonElementType.Ty, 0),
                                    ASM, elementTypeQuals, numElements);
@@ -2870,7 +2870,7 @@ QualType ASTContext::getDependentSizedArrayType(QualType elementType,
 QualType ASTContext::getIncompleteArrayType(QualType elementType,
                                             ArrayType::ArraySizeModifier ASM,
                                             unsigned elementTypeQuals) const {
-  llvm::FoldingSetNodeID ID;
+  llvm37::FoldingSetNodeID ID;
   IncompleteArrayType::Profile(ID, elementType, ASM, elementTypeQuals);
 
   void *insertPos = nullptr;
@@ -2910,7 +2910,7 @@ QualType ASTContext::getVectorType(QualType vecType, unsigned NumElts,
   assert(vecType->isBuiltinType());
 
   // Check if we've already instantiated a vector of this type.
-  llvm::FoldingSetNodeID ID;
+  llvm37::FoldingSetNodeID ID;
   VectorType::Profile(ID, vecType, NumElts, Type::Vector, VecKind);
 
   void *InsertPos = nullptr;
@@ -2941,7 +2941,7 @@ ASTContext::getExtVectorType(QualType vecType, unsigned NumElts) const {
   assert(vecType->isBuiltinType() || vecType->isDependentType());
 
   // Check if we've already instantiated a vector of this type.
-  llvm::FoldingSetNodeID ID;
+  llvm37::FoldingSetNodeID ID;
   VectorType::Profile(ID, vecType, NumElts, Type::ExtVector,
                       VectorType::GenericVector);
   void *InsertPos = nullptr;
@@ -2969,7 +2969,7 @@ QualType
 ASTContext::getDependentSizedExtVectorType(QualType vecType,
                                            Expr *SizeExpr,
                                            SourceLocation AttrLoc) const {
-  llvm::FoldingSetNodeID ID;
+  llvm37::FoldingSetNodeID ID;
   DependentSizedExtVectorType::Profile(ID, *this, getCanonicalType(vecType),
                                        SizeExpr);
 
@@ -3016,7 +3016,7 @@ ASTContext::getFunctionNoProtoType(QualType ResultTy,
 
   // Unique functions, to guarantee there is only one function of a particular
   // structure.
-  llvm::FoldingSetNodeID ID;
+  llvm37::FoldingSetNodeID ID;
   FunctionNoProtoType::Profile(ID, ResultTy, Info);
 
   void *InsertPos = nullptr;
@@ -3057,7 +3057,7 @@ ASTContext::getFunctionType(QualType ResultTy, ArrayRef<QualType> ArgArray,
 
   // Unique functions, to guarantee there is only one function of a particular
   // structure.
-  llvm::FoldingSetNodeID ID;
+  llvm37::FoldingSetNodeID ID;
   FunctionProtoType::Profile(ID, ResultTy, ArgArray.begin(), NumArgs, EPI, ParamMods, // HLSL Change - param mods
                              *this);
 
@@ -3203,7 +3203,7 @@ QualType ASTContext::getTypeDeclTypeSlow(const TypeDecl *Decl) const {
     Decl->TypeForDecl = newType;
     Types.push_back(newType);
   } else
-    llvm_unreachable("TypeDecl without a type?");
+    llvm37_unreachable("TypeDecl without a type?");
 
   return QualType(Decl->TypeForDecl, 0);
 }
@@ -3253,7 +3253,7 @@ QualType ASTContext::getEnumType(const EnumDecl *Decl) const {
 QualType ASTContext::getAttributedType(AttributedType::Kind attrKind,
                                        QualType modifiedType,
                                        QualType equivalentType) {
-  llvm::FoldingSetNodeID id;
+  llvm37::FoldingSetNodeID id;
   AttributedType::Profile(id, attrKind, modifiedType, equivalentType);
 
   void *insertPos = nullptr;
@@ -3278,7 +3278,7 @@ ASTContext::getSubstTemplateTypeParmType(const TemplateTypeParmType *Parm,
   assert(Replacement.isCanonical()
          && "replacement types must always be canonical");
 
-  llvm::FoldingSetNodeID ID;
+  llvm37::FoldingSetNodeID ID;
   SubstTemplateTypeParmType::Profile(ID, Parm, Replacement);
   void *InsertPos = nullptr;
   SubstTemplateTypeParmType *SubstParm
@@ -3305,7 +3305,7 @@ QualType ASTContext::getSubstTemplateTypeParmPackType(
   }
 #endif
   
-  llvm::FoldingSetNodeID ID;
+  llvm37::FoldingSetNodeID ID;
   SubstTemplateTypeParmPackType::Profile(ID, Parm, ArgPack);
   void *InsertPos = nullptr;
   if (SubstTemplateTypeParmPackType *SubstParm
@@ -3334,7 +3334,7 @@ QualType ASTContext::getSubstTemplateTypeParmPackType(
 QualType ASTContext::getTemplateTypeParmType(unsigned Depth, unsigned Index,
                                              bool ParameterPack,
                                              TemplateTypeParmDecl *TTPDecl) const {
-  llvm::FoldingSetNodeID ID;
+  llvm37::FoldingSetNodeID ID;
   TemplateTypeParmType::Profile(ID, Depth, Index, ParameterPack, TTPDecl);
   void *InsertPos = nullptr;
   TemplateTypeParmType *TypeParm
@@ -3473,7 +3473,7 @@ ASTContext::getCanonicalTemplateSpecializationType(TemplateName Template,
 
   // Determine whether this canonical template specialization type already
   // exists.
-  llvm::FoldingSetNodeID ID;
+  llvm37::FoldingSetNodeID ID;
   TemplateSpecializationType::Profile(ID, CanonTemplate,
                                       CanonArgs.data(), NumArgs, *this);
 
@@ -3502,7 +3502,7 @@ QualType
 ASTContext::getElaboratedType(ElaboratedTypeKeyword Keyword,
                               NestedNameSpecifier *NNS,
                               QualType NamedType) const {
-  llvm::FoldingSetNodeID ID;
+  llvm37::FoldingSetNodeID ID;
   ElaboratedType::Profile(ID, Keyword, NNS, NamedType);
 
   void *InsertPos = nullptr;
@@ -3526,7 +3526,7 @@ ASTContext::getElaboratedType(ElaboratedTypeKeyword Keyword,
 
 QualType
 ASTContext::getParenType(QualType InnerType) const {
-  llvm::FoldingSetNodeID ID;
+  llvm37::FoldingSetNodeID ID;
   ParenType::Profile(ID, InnerType);
 
   void *InsertPos = nullptr;
@@ -3562,7 +3562,7 @@ QualType ASTContext::getDependentNameType(ElaboratedTypeKeyword Keyword,
       Canon = getDependentNameType(CanonKeyword, CanonNNS, Name);
   }
 
-  llvm::FoldingSetNodeID ID;
+  llvm37::FoldingSetNodeID ID;
   DependentNameType::Profile(ID, Keyword, NNS, Name);
 
   void *InsertPos = nullptr;
@@ -3602,7 +3602,7 @@ ASTContext::getDependentTemplateSpecializationType(
   assert((!NNS || NNS->isDependent()) && 
          "nested-name-specifier must be dependent");
 
-  llvm::FoldingSetNodeID ID;
+  llvm37::FoldingSetNodeID ID;
   DependentTemplateSpecializationType::Profile(ID, *this, Keyword, NNS,
                                                Name, NumArgs, Args);
 
@@ -3647,7 +3647,7 @@ ASTContext::getDependentTemplateSpecializationType(
 
 QualType ASTContext::getPackExpansionType(QualType Pattern,
                                           Optional<unsigned> NumExpansions) {
-  llvm::FoldingSetNodeID ID;
+  llvm37::FoldingSetNodeID ID;
   PackExpansionType::Profile(ID, Pattern, NumExpansions);
 
   assert(Pattern->containsUnexpandedParameterPack() &&
@@ -3706,7 +3706,7 @@ static void SortAndUniqueProtocols(ObjCProtocolDecl **Protocols,
   ObjCProtocolDecl **ProtocolsEnd = Protocols+NumProtocols;
 
   // Sort protocols, keyed by name.
-  llvm::array_pod_sort(Protocols, ProtocolsEnd, CmpProtocolNames);
+  llvm37::array_pod_sort(Protocols, ProtocolsEnd, CmpProtocolNames);
 
   // Canonicalize.
   for (unsigned I = 0, N = NumProtocols; I != N; ++I)
@@ -3721,7 +3721,7 @@ QualType ASTContext::getObjCObjectType(QualType BaseType,
                                        ObjCProtocolDecl * const *Protocols,
                                        unsigned NumProtocols) const {
   return getObjCObjectType(BaseType, { },
-                           llvm::makeArrayRef(Protocols, NumProtocols),
+                           llvm37::makeArrayRef(Protocols, NumProtocols),
                            /*isKindOf=*/false);
 }
 
@@ -3737,7 +3737,7 @@ QualType ASTContext::getObjCObjectType(
     return baseType;
 
   // Look in the folding set for an existing type.
-  llvm::FoldingSetNodeID ID;
+  llvm37::FoldingSetNodeID ID;
   ObjCObjectTypeImpl::Profile(ID, baseType, typeArgs, protocols, isKindOf);
   void *InsertPos = nullptr;
   if (ObjCObjectType *QT = ObjCObjectTypes.FindNodeOrInsertPos(ID, InsertPos))
@@ -3784,7 +3784,7 @@ QualType ASTContext::getObjCObjectType(
                                protocols.end());
       unsigned uniqueCount = protocols.size();
       SortAndUniqueProtocols(&canonProtocolsVec[0], uniqueCount);
-      canonProtocols = llvm::makeArrayRef(&canonProtocolsVec[0], uniqueCount);
+      canonProtocols = llvm37::makeArrayRef(&canonProtocolsVec[0], uniqueCount);
     } else {
       canonProtocols = protocols;
     }
@@ -3840,7 +3840,7 @@ bool ASTContext::QIdProtocolsAdoptObjCObjectProtocols(QualType QT,
     return false;
   if (!IDecl->hasDefinition())
     return false;
-  llvm::SmallPtrSet<ObjCProtocolDecl *, 8> InheritedProtocols;
+  llvm37::SmallPtrSet<ObjCProtocolDecl *, 8> InheritedProtocols;
   CollectInheritedProtocols(IDecl, InheritedProtocols);
   if (InheritedProtocols.empty())
     return false;
@@ -3878,7 +3878,7 @@ bool ASTContext::QIdProtocolsAdoptObjCObjectProtocols(QualType QT,
 /// getObjCObjectPointerType - Return a ObjCObjectPointerType type for
 /// the given object type.
 QualType ASTContext::getObjCObjectPointerType(QualType ObjectT) const {
-  llvm::FoldingSetNodeID ID;
+  llvm37::FoldingSetNodeID ID;
   ObjCObjectPointerType::Profile(ID, ObjectT);
 
   void *InsertPos = nullptr;
@@ -3937,7 +3937,7 @@ QualType ASTContext::getObjCInterfaceType(const ObjCInterfaceDecl *Decl,
 QualType ASTContext::getTypeOfExprType(Expr *tofExpr) const {
   TypeOfExprType *toe;
   if (tofExpr->isTypeDependent()) {
-    llvm::FoldingSetNodeID ID;
+    llvm37::FoldingSetNodeID ID;
     DependentTypeOfExprType::Profile(ID, *this, tofExpr);
 
     void *InsertPos = nullptr;
@@ -3988,7 +3988,7 @@ QualType ASTContext::getDecltypeType(Expr *e, QualType UnderlyingType) const {
   //   unique dependent type. Two such decltype-specifiers refer to the same
   //   type only if their expressions are equivalent (14.5.6.1).
   if (e->isInstantiationDependent()) {
-    llvm::FoldingSetNodeID ID;
+    llvm37::FoldingSetNodeID ID;
     DependentDecltypeType::Profile(ID, *this, e);
 
     void *InsertPos = nullptr;
@@ -4034,7 +4034,7 @@ QualType ASTContext::getAutoType(QualType DeducedType, bool IsDecltypeAuto,
 
   // Look in the folding set for an existing type.
   void *InsertPos = nullptr;
-  llvm::FoldingSetNodeID ID;
+  llvm37::FoldingSetNodeID ID;
   AutoType::Profile(ID, DeducedType, IsDecltypeAuto, IsDependent);
   if (AutoType *AT = AutoTypes.FindNodeOrInsertPos(ID, InsertPos))
     return QualType(AT, 0);
@@ -4053,7 +4053,7 @@ QualType ASTContext::getAutoType(QualType DeducedType, bool IsDecltypeAuto,
 QualType ASTContext::getAtomicType(QualType T) const {
   // Unique pointers, to guarantee there is only one pointer of a particular
   // structure.
-  llvm::FoldingSetNodeID ID;
+  llvm37::FoldingSetNodeID ID;
   AtomicType::Profile(ID, T);
 
   void *InsertPos = nullptr;
@@ -4326,7 +4326,7 @@ ASTContext::getNameForTemplate(TemplateName Name,
   }
   }
 
-  llvm_unreachable("bad template name kind!");
+  llvm37_unreachable("bad template name kind!");
 }
 
 TemplateName ASTContext::getCanonicalTemplateName(TemplateName Name) const {
@@ -4343,7 +4343,7 @@ TemplateName ASTContext::getCanonicalTemplateName(TemplateName Name) const {
   }
 
   case TemplateName::OverloadedTemplate:
-    llvm_unreachable("cannot canonicalize overloaded template");
+    llvm37_unreachable("cannot canonicalize overloaded template");
 
   case TemplateName::DependentTemplate: {
     DependentTemplateName *DTN = Name.getAsDependentTemplateName();
@@ -4368,7 +4368,7 @@ TemplateName ASTContext::getCanonicalTemplateName(TemplateName Name) const {
   }
   }
 
-  llvm_unreachable("bad template name!");
+  llvm37_unreachable("bad template name!");
 }
 
 bool ASTContext::hasSameTemplateName(TemplateName X, TemplateName Y) {
@@ -4426,7 +4426,7 @@ ASTContext::getCanonicalTemplateArgument(const TemplateArgument &Arg) const {
   }
 
   // Silence GCC warning
-  llvm_unreachable("Unhandled template argument kind");
+  llvm37_unreachable("Unhandled template argument kind");
 }
 
 NestedNameSpecifier *
@@ -4482,7 +4482,7 @@ ASTContext::getCanonicalNestedNameSpecifier(NestedNameSpecifier *NNS) const {
     return NNS;
   }
 
-  llvm_unreachable("Invalid NestedNameSpecifier::Kind!");
+  llvm37_unreachable("Invalid NestedNameSpecifier::Kind!");
 }
 
 
@@ -4627,7 +4627,7 @@ static FloatingRank getFloatingRank(QualType T) {
 
   assert(T->getAs<BuiltinType>() && "getFloatingRank(): not a floating type");
   switch (T->getAs<BuiltinType>()->getKind()) {
-  default: llvm_unreachable("getFloatingRank(): not a floating type");
+  default: llvm37_unreachable("getFloatingRank(): not a floating type");
   case BuiltinType::Half:       return HalfRank;
   case BuiltinType::Float:      return FloatRank;
   case BuiltinType::Double:     return DoubleRank;
@@ -4659,7 +4659,7 @@ QualType ASTContext::getFloatingTypeOfSizeWithinDomain(QualType Size,
     case Min10FloatRank:
     case Min16FloatRank:
     case HalfFloatRank:
-      llvm_unreachable("Complex type is not supported in HLSL.");
+      llvm37_unreachable("Complex type is not supported in HLSL.");
     // HLSL Changes end
     }
   }
@@ -4673,7 +4673,7 @@ QualType ASTContext::getFloatingTypeOfSizeWithinDomain(QualType Size,
   case DoubleRank:     return DoubleTy;
   case LongDoubleRank: return LongDoubleTy;
   }
-  llvm_unreachable("getFloatingRank(): illegal value for rank");
+  llvm37_unreachable("getFloatingRank(): illegal value for rank");
 }
 
 /// getFloatingTypeOrder - Compare the rank of the two specified floating
@@ -4698,7 +4698,7 @@ unsigned ASTContext::getIntegerRank(const Type *T) const {
   assert(T->isCanonicalUnqualified() && "T should be canonicalized");
 
   switch (cast<BuiltinType>(T)->getKind()) {
-  default: llvm_unreachable("getIntegerRank(): not a built-in integer");
+  default: llvm37_unreachable("getIntegerRank(): not a built-in integer");
   case BuiltinType::Bool:
     return 1 + (getIntWidth(BoolTy) << 3);
   case BuiltinType::Char_S:
@@ -4798,14 +4798,14 @@ QualType ASTContext::getPromotedIntegerType(QualType Promotable) const {
       uint64_t FromSize = getTypeSize(BT);
       QualType PromoteTypes[] = { IntTy, UnsignedIntTy, LongTy, UnsignedLongTy,
                                   LongLongTy, UnsignedLongLongTy };
-      for (size_t Idx = 0; Idx < llvm::array_lengthof(PromoteTypes); ++Idx) {
+      for (size_t Idx = 0; Idx < llvm37::array_lengthof(PromoteTypes); ++Idx) {
         uint64_t ToSize = getTypeSize(PromoteTypes[Idx]);
         if (FromSize < ToSize ||
             (FromSize == ToSize &&
              FromIsSigned == PromoteTypes[Idx]->isSignedIntegerType()))
           return PromoteTypes[Idx];
       }
-      llvm_unreachable("char type should fit into long long");
+      llvm37_unreachable("char type should fit into long long");
     }
   }
 
@@ -5039,7 +5039,7 @@ bool ASTContext::BlockRequiresCopying(QualType Ty,
     assert(getLangOpts().ObjCAutoRefCount);
     
     switch (lifetime) {
-      case Qualifiers::OCL_None: llvm_unreachable("impossible");
+      case Qualifiers::OCL_None: llvm37_unreachable("impossible");
         
       // These are just bits as far as the runtime is concerned.
       case Qualifiers::OCL_ExplicitNone:
@@ -5053,7 +5053,7 @@ bool ASTContext::BlockRequiresCopying(QualType Ty,
       case Qualifiers::OCL_Strong:
         return true;
     }
-    llvm_unreachable("fell out of lifetime switch!");
+    llvm37_unreachable("fell out of lifetime switch!");
   }
   return (Ty->isBlockPointerType() || isObjCNSObjectType(Ty) ||
           Ty->isObjCObjectPointerType());
@@ -5124,7 +5124,7 @@ bool ASTContext::isMSStaticDataMemberInlineDefinition(const VarDecl *VD) const {
 
 static inline 
 std::string charUnitsToString(const CharUnits &CU) {
-  return llvm::itostr(CU.getQuantity());
+  return llvm37::itostr(CU.getQuantity());
 }
 
 /// getObjCEncodingForBlock - Return the encoded type for this block
@@ -5483,7 +5483,7 @@ static char getObjCEncodingForPrimitiveKind(const ASTContext *C,
     case BuiltinType::ObjCId:
     case BuiltinType::ObjCClass:
     case BuiltinType::ObjCSel:
-      llvm_unreachable("@encoding ObjC primitive type");
+      llvm37_unreachable("@encoding ObjC primitive type");
 
     // OpenCL and placeholder types don't need @encodings.
     case BuiltinType::OCLImage1d:
@@ -5499,7 +5499,7 @@ static char getObjCEncodingForPrimitiveKind(const ASTContext *C,
 #define PLACEHOLDER_TYPE(KIND, ID) \
     case BuiltinType::KIND:
 #include "clang/AST/BuiltinTypes.def"
-      llvm_unreachable("invalid builtin type for @encode");
+      llvm37_unreachable("invalid builtin type for @encode");
     // HLSL Change Start
     case BuiltinType::Min12Int:
     case BuiltinType::Min10Float:
@@ -5511,10 +5511,10 @@ static char getObjCEncodingForPrimitiveKind(const ASTContext *C,
     case BuiltinType::LitFloat:
     case BuiltinType::Int8_4Packed:
     case BuiltinType::UInt8_4Packed:
-      llvm_unreachable("@encoding HLSL primitive type");
+      llvm37_unreachable("@encoding HLSL primitive type");
     // HLSL Change Ends
     }
-    llvm_unreachable("invalid BuiltinType::Kind value");
+    llvm37_unreachable("invalid BuiltinType::Kind value");
 }
 
 static char ObjCEncodingForEnumType(const ASTContext *C, const EnumType *ET) {
@@ -5551,7 +5551,7 @@ static void EncodeBitField(const ASTContext *Ctx, std::string& S,
   if (Ctx->getLangOpts().ObjCRuntime.isGNUFamily()) {
     const RecordDecl *RD = FD->getParent();
     const ASTRecordLayout &RL = Ctx->getASTRecordLayout(RD);
-    S += llvm::utostr(RL.getFieldOffset(FD->getFieldIndex()));
+    S += llvm37::utostr(RL.getFieldOffset(FD->getFieldIndex()));
     if (const EnumType *ET = T->getAs<EnumType>())
       S += ObjCEncodingForEnumType(Ctx, ET);
     else {
@@ -5559,7 +5559,7 @@ static void EncodeBitField(const ASTContext *Ctx, std::string& S,
       S += getObjCEncodingForPrimitiveKind(Ctx, BT->getKind());
     }
   }
-  S += llvm::utostr(FD->getBitWidthValue(*Ctx));
+  S += llvm37::utostr(FD->getBitWidthValue(*Ctx));
 }
 
 // FIXME: Use SmallString for accumulating string.
@@ -5687,7 +5687,7 @@ void ASTContext::getObjCEncodingForTypeImpl(QualType T, std::string& S,
       S += '[';
 
       if (const ConstantArrayType *CAT = dyn_cast<ConstantArrayType>(AT))
-        S += llvm::utostr(CAT->getSize().getZExtValue());
+        S += llvm37::utostr(CAT->getSize().getZExtValue());
       else {
         //Variable length arrays are encoded as a regular array with 0 elements.
         assert((isa<VariableArrayType>(AT) || isa<IncompleteArrayType>(AT)) &&
@@ -5718,7 +5718,7 @@ void ASTContext::getObjCEncodingForTypeImpl(QualType T, std::string& S,
       if (ClassTemplateSpecializationDecl *Spec
           = dyn_cast<ClassTemplateSpecializationDecl>(RDecl)) {
         const TemplateArgumentList &TemplateArgs = Spec->getTemplateArgs();
-        llvm::raw_string_ostream OS(S);
+        llvm37::raw_string_ostream OS(S);
         TemplateSpecializationType::PrintTemplateArgumentList(OS,
                                             TemplateArgs.data(),
                                             TemplateArgs.size(),
@@ -5930,9 +5930,9 @@ void ASTContext::getObjCEncodingForTypeImpl(QualType T, std::string& S,
 #define NON_CANONICAL_UNLESS_DEPENDENT_TYPE(KIND, BASE) \
   case Type::KIND:
 #include "clang/AST/TypeNodes.def"
-    llvm_unreachable("@encode for dependent type!");
+    llvm37_unreachable("@encode for dependent type!");
   }
-  llvm_unreachable("bad type kind!");
+  llvm37_unreachable("bad type kind!");
 }
 
 void ASTContext::getObjCEncodingForStructureImpl(RecordDecl *RDecl,
@@ -6270,7 +6270,7 @@ static TypedefDecl *CreatePowerABIBuiltinVaListDecl(const ASTContext *Context) {
     Context->getTypedefType(VaListTagTypedefDecl);
 
   // typedef __va_list_tag __builtin_va_list[1];
-  llvm::APInt Size(Context->getTypeSize(Context->getSizeType()), 1);
+  llvm37::APInt Size(Context->getTypeSize(Context->getSizeType()), 1);
   QualType VaListTagArrayType
     = Context->getConstantArrayType(VaListTagTypedefType,
                                     Size, ArrayType::Normal, 0);
@@ -6330,7 +6330,7 @@ CreateX86_64ABIBuiltinVaListDecl(const ASTContext *Context) {
     Context->getTypedefType(VaListTagTypedefDecl);
 
   // typedef __va_list_tag __builtin_va_list[1];
-  llvm::APInt Size(Context->getTypeSize(Context->getSizeType()), 1);
+  llvm37::APInt Size(Context->getTypeSize(Context->getSizeType()), 1);
   QualType VaListTagArrayType
     = Context->getConstantArrayType(VaListTagTypedefType,
                                       Size, ArrayType::Normal,0);
@@ -6339,7 +6339,7 @@ CreateX86_64ABIBuiltinVaListDecl(const ASTContext *Context) {
 
 static TypedefDecl *CreatePNaClABIBuiltinVaListDecl(const ASTContext *Context) {
   // typedef int __builtin_va_list[4];
-  llvm::APInt Size(Context->getTypeSize(Context->getSizeType()), 4);
+  llvm37::APInt Size(Context->getTypeSize(Context->getSizeType()), 4);
   QualType IntArrayType
     = Context->getConstantArrayType(Context->IntTy,
                     Size, ArrayType::Normal, 0);
@@ -6438,7 +6438,7 @@ CreateSystemZBuiltinVaListDecl(const ASTContext *Context) {
     Context->getTypedefType(VaListTagTypedefDecl);
 
   // typedef __va_list_tag __builtin_va_list[1];
-  llvm::APInt Size(Context->getTypeSize(Context->getSizeType()), 1);
+  llvm37::APInt Size(Context->getTypeSize(Context->getSizeType()), 1);
   QualType VaListTagArrayType
     = Context->getConstantArrayType(VaListTagTypedefType,
                                       Size, ArrayType::Normal,0);
@@ -6467,7 +6467,7 @@ static TypedefDecl *CreateVaListDecl(const ASTContext *Context,
     return CreateSystemZBuiltinVaListDecl(Context);
   }
 
-  llvm_unreachable("Unhandled __builtin_va_list type kind");
+  llvm37_unreachable("Unhandled __builtin_va_list type kind");
 }
 
 TypedefDecl *ASTContext::getBuiltinVaListDecl() const {
@@ -6528,14 +6528,14 @@ ASTContext::getQualifiedTemplateName(NestedNameSpecifier *NNS,
   assert(NNS && "Missing nested-name-specifier in qualified template name");
   
   // FIXME: Canonicalization?
-  llvm::FoldingSetNodeID ID;
+  llvm37::FoldingSetNodeID ID;
   QualifiedTemplateName::Profile(ID, NNS, TemplateKeyword, Template);
 
   void *InsertPos = nullptr;
   QualifiedTemplateName *QTN =
     QualifiedTemplateNames.FindNodeOrInsertPos(ID, InsertPos);
   if (!QTN) {
-    QTN = new (*this, llvm::alignOf<QualifiedTemplateName>())
+    QTN = new (*this, llvm37::alignOf<QualifiedTemplateName>())
         QualifiedTemplateName(NNS, TemplateKeyword, Template);
     QualifiedTemplateNames.InsertNode(QTN, InsertPos);
   }
@@ -6551,7 +6551,7 @@ ASTContext::getDependentTemplateName(NestedNameSpecifier *NNS,
   assert((!NNS || NNS->isDependent()) &&
          "Nested name specifier must be dependent");
 
-  llvm::FoldingSetNodeID ID;
+  llvm37::FoldingSetNodeID ID;
   DependentTemplateName::Profile(ID, NNS, Name);
 
   void *InsertPos = nullptr;
@@ -6563,11 +6563,11 @@ ASTContext::getDependentTemplateName(NestedNameSpecifier *NNS,
 
   NestedNameSpecifier *CanonNNS = getCanonicalNestedNameSpecifier(NNS);
   if (CanonNNS == NNS) {
-    QTN = new (*this, llvm::alignOf<DependentTemplateName>())
+    QTN = new (*this, llvm37::alignOf<DependentTemplateName>())
         DependentTemplateName(NNS, Name);
   } else {
     TemplateName Canon = getDependentTemplateName(CanonNNS, Name);
-    QTN = new (*this, llvm::alignOf<DependentTemplateName>())
+    QTN = new (*this, llvm37::alignOf<DependentTemplateName>())
         DependentTemplateName(NNS, Name, Canon);
     DependentTemplateName *CheckQTN =
       DependentTemplateNames.FindNodeOrInsertPos(ID, InsertPos);
@@ -6587,7 +6587,7 @@ ASTContext::getDependentTemplateName(NestedNameSpecifier *NNS,
   assert((!NNS || NNS->isDependent()) &&
          "Nested name specifier must be dependent");
   
-  llvm::FoldingSetNodeID ID;
+  llvm37::FoldingSetNodeID ID;
   DependentTemplateName::Profile(ID, NNS, Operator);
 
   void *InsertPos = nullptr;
@@ -6599,11 +6599,11 @@ ASTContext::getDependentTemplateName(NestedNameSpecifier *NNS,
   
   NestedNameSpecifier *CanonNNS = getCanonicalNestedNameSpecifier(NNS);
   if (CanonNNS == NNS) {
-    QTN = new (*this, llvm::alignOf<DependentTemplateName>())
+    QTN = new (*this, llvm37::alignOf<DependentTemplateName>())
         DependentTemplateName(NNS, Operator);
   } else {
     TemplateName Canon = getDependentTemplateName(CanonNNS, Operator);
-    QTN = new (*this, llvm::alignOf<DependentTemplateName>())
+    QTN = new (*this, llvm37::alignOf<DependentTemplateName>())
         DependentTemplateName(NNS, Operator, Canon);
     
     DependentTemplateName *CheckQTN
@@ -6619,7 +6619,7 @@ ASTContext::getDependentTemplateName(NestedNameSpecifier *NNS,
 TemplateName 
 ASTContext::getSubstTemplateTemplateParm(TemplateTemplateParmDecl *param,
                                          TemplateName replacement) const {
-  llvm::FoldingSetNodeID ID;
+  llvm37::FoldingSetNodeID ID;
   SubstTemplateTemplateParmStorage::Profile(ID, param, replacement);
 
   void *insertPos = nullptr;
@@ -6638,7 +6638,7 @@ TemplateName
 ASTContext::getSubstTemplateTemplateParmPack(TemplateTemplateParmDecl *Param,
                                        const TemplateArgument &ArgPack) const {
   ASTContext &Self = const_cast<ASTContext &>(*this);
-  llvm::FoldingSetNodeID ID;
+  llvm37::FoldingSetNodeID ID;
   SubstTemplateTemplateParmPackStorage::Profile(ID, Self, Param, ArgPack);
 
   void *InsertPos = nullptr;
@@ -6673,7 +6673,7 @@ CanQualType ASTContext::getFromTargetType(unsigned Type) const {
   case TargetInfo::UnsignedLongLong: return UnsignedLongLongTy;
   }
 
-  llvm_unreachable("Unhandled TargetInfo::IntType value");
+  llvm37_unreachable("Unhandled TargetInfo::IntType value");
 }
 
 //===----------------------------------------------------------------------===//
@@ -6880,7 +6880,7 @@ bool ASTContext::ObjCQualifiedIdTypesAreCompatible(QualType lhs, QualType rhs,
     // Static class's protocols, or its super class or category protocols
     // must be found, direct or indirect in rhs's qualifier list or it is a mismatch.
     if (ObjCInterfaceDecl *lhsID = lhsOPT->getInterfaceDecl()) {
-      llvm::SmallPtrSet<ObjCProtocolDecl *, 8> LHSInheritedProtocols;
+      llvm37::SmallPtrSet<ObjCProtocolDecl *, 8> LHSInheritedProtocols;
       CollectInheritedProtocols(lhsID, LHSInheritedProtocols);
       // This is rather dubious but matches gcc's behavior. If lhs has
       // no type qualifier and its class has no static protocol(s)
@@ -7010,7 +7010,7 @@ bool ASTContext::canAssignObjCInterfacesInBlockPointer(
 }
 
 /// Comparison routine for Objective-C protocols to be used with
-/// llvm::array_pod_sort.
+/// llvm37::array_pod_sort.
 static int __cdecl compareObjCProtocolsByName(ObjCProtocolDecl * const *lhs,  // HLSL Change - __cdecl
                                       ObjCProtocolDecl * const *rhs) {
   return (*lhs)->getName().compare((*rhs)->getName());
@@ -7035,7 +7035,7 @@ void getIntersectionOfProtocols(ASTContext &Context,
   assert(RHS->getInterface() && "RHS must have an interface base");
 
   // Add all of the protocols for the LHS.
-  llvm::SmallPtrSet<ObjCProtocolDecl *, 8> LHSProtocolSet;
+  llvm37::SmallPtrSet<ObjCProtocolDecl *, 8> LHSProtocolSet;
 
   // Start with the protocol qualifiers.
   for (auto proto : LHS->quals()) {
@@ -7046,7 +7046,7 @@ void getIntersectionOfProtocols(ASTContext &Context,
   Context.CollectInheritedProtocols(LHS->getInterface(), LHSProtocolSet);
 
   // Add all of the protocls for the RHS.
-  llvm::SmallPtrSet<ObjCProtocolDecl *, 8> RHSProtocolSet;
+  llvm37::SmallPtrSet<ObjCProtocolDecl *, 8> RHSProtocolSet;
 
   // Start with the protocol qualifiers.
   for (auto proto : RHS->quals()) {
@@ -7064,7 +7064,7 @@ void getIntersectionOfProtocols(ASTContext &Context,
 
   // Compute the set of protocols that is implied by either the common type or
   // the protocols within the intersection.
-  llvm::SmallPtrSet<ObjCProtocolDecl *, 8> ImpliedProtocols;
+  llvm37::SmallPtrSet<ObjCProtocolDecl *, 8> ImpliedProtocols;
   Context.CollectInheritedProtocols(CommonBase, ImpliedProtocols);
 
   // Remove any implied protocols from the list of inherited protocols.
@@ -7079,7 +7079,7 @@ void getIntersectionOfProtocols(ASTContext &Context,
   }
 
   // Sort the remaining protocols by name.
-  llvm::array_pod_sort(IntersectionSet.begin(), IntersectionSet.end(),
+  llvm37::array_pod_sort(IntersectionSet.begin(), IntersectionSet.end(),
                        compareObjCProtocolsByName);
 }
 
@@ -7158,7 +7158,7 @@ QualType ASTContext::areCommonBaseCompatible(
 
   // Follow the left-hand side up the class hierarchy until we either hit a
   // root or find the RHS. Record the ancestors in case we don't find it.
-  llvm::SmallDenseMap<const ObjCInterfaceDecl *, const ObjCObjectType *, 4>
+  llvm37::SmallDenseMap<const ObjCInterfaceDecl *, const ObjCObjectType *, 4>
     LHSAncestors;
   while (true) {
     // Record this ancestor. We'll need this if the common type isn't in the
@@ -7279,7 +7279,7 @@ bool ASTContext::canAssignObjCInterfaces(const ObjCObjectType *LHS,
     // ; i.e., SuperClass may implement at least one of the protocols
     // in LHS's protocol list. Example, SuperObj<P1> = lhs<P1,P2> is ok.
     // But not SuperObj<P1,P2,P3> = lhs<P1,P2>.
-    llvm::SmallPtrSet<ObjCProtocolDecl *, 8> SuperClassInheritedProtocols;
+    llvm37::SmallPtrSet<ObjCProtocolDecl *, 8> SuperClassInheritedProtocols;
     CollectInheritedProtocols(RHS->getInterface(), SuperClassInheritedProtocols);
     // Also, if RHS has explicit quelifiers, include them for comparing with LHS's
     // qualifiers.
@@ -7694,20 +7694,20 @@ QualType ASTContext::mergeTypes(QualType LHS, QualType RHS,
 #define NON_CANONICAL_TYPE(Class, Base) case Type::Class:
 #define DEPENDENT_TYPE(Class, Base) case Type::Class:
 #include "clang/AST/TypeNodes.def"
-    llvm_unreachable("Non-canonical and dependent types shouldn't get here");
+    llvm37_unreachable("Non-canonical and dependent types shouldn't get here");
 
   case Type::Auto:
   case Type::LValueReference:
   case Type::RValueReference:
   case Type::MemberPointer:
-    llvm_unreachable("C++ should never be in mergeTypes");
+    llvm37_unreachable("C++ should never be in mergeTypes");
 
   case Type::ObjCInterface:
   case Type::IncompleteArray:
   case Type::VariableArray:
   case Type::FunctionProto:
   case Type::ExtVector:
-    llvm_unreachable("Types are eliminated above");
+    llvm37_unreachable("Types are eliminated above");
 
   case Type::Pointer:
   {
@@ -7855,7 +7855,7 @@ QualType ASTContext::mergeTypes(QualType LHS, QualType RHS,
   }
   }
 
-  llvm_unreachable("Invalid Type::Class!");
+  llvm37_unreachable("Invalid Type::Class!");
 }
 
 bool ASTContext::FunctionTypesMatchOnNSConsumedAttrs(
@@ -7995,7 +7995,7 @@ QualType ASTContext::getCorrespondingUnsignedType(QualType T) const {
   case BuiltinType::LitInt:   // HLSL Change
     return UnsignedIntTy;
   default:
-    llvm_unreachable("Unexpected signed integer type");
+    llvm37_unreachable("Unexpected signed integer type");
   }
 }
 
@@ -8052,7 +8052,7 @@ static QualType DecodeTypeFromStr(const char *&Str, const ASTContext &Context,
       assert(HowLong == 0 && "Can't use both 'L' and 'W' modifiers!");
       switch (Context.getTargetInfo().getInt64Type()) {
       default:
-        llvm_unreachable("Unexpected integer type");
+        llvm37_unreachable("Unexpected integer type");
       case TargetInfo::SignedLong:
         HowLong = 1;
         break;
@@ -8067,7 +8067,7 @@ static QualType DecodeTypeFromStr(const char *&Str, const ASTContext &Context,
 
   // Read the base type.
   switch (*Str++) {
-  default: llvm_unreachable("Unknown builtin type letter!");
+  default: llvm37_unreachable("Unknown builtin type letter!");
   case 'v':
     assert(HowLong == 0 && !Signed && !Unsigned &&
            "Bad modifiers used with 'v'!");
@@ -8451,7 +8451,7 @@ static GVALinkage basicGVALinkageForVariable(const ASTContext &Context,
     return GVA_DiscardableODR;
   }
 
-  llvm_unreachable("Invalid Linkage!");
+  llvm37_unreachable("Invalid Linkage!");
 }
 
 GVALinkage ASTContext::GetGVALinkageForVariable(const VarDecl *VD) {
@@ -8586,26 +8586,26 @@ MangleContext *ASTContext::createMangleContext() {
   case TargetCXXABI::Microsoft:
     return MicrosoftMangleContext::create(*this, getDiagnostics());
   }
-  llvm_unreachable("Unsupported ABI");
+  llvm37_unreachable("Unsupported ABI");
 }
 
 CXXABI::~CXXABI() {}
 
 size_t ASTContext::getSideTableAllocatedMemory() const {
   return ASTRecordLayouts.getMemorySize() +
-         llvm::capacity_in_bytes(ObjCLayouts) +
-         llvm::capacity_in_bytes(KeyFunctions) +
-         llvm::capacity_in_bytes(ObjCImpls) +
-         llvm::capacity_in_bytes(BlockVarCopyInits) +
-         llvm::capacity_in_bytes(DeclAttrs) +
-         llvm::capacity_in_bytes(TemplateOrInstantiation) +
-         llvm::capacity_in_bytes(InstantiatedFromUsingDecl) +
-         llvm::capacity_in_bytes(InstantiatedFromUsingShadowDecl) +
-         llvm::capacity_in_bytes(InstantiatedFromUnnamedFieldDecl) +
-         llvm::capacity_in_bytes(OverriddenMethods) +
-         llvm::capacity_in_bytes(Types) +
-         llvm::capacity_in_bytes(VariableArrayTypes) +
-         llvm::capacity_in_bytes(ClassScopeSpecializationPattern);
+         llvm37::capacity_in_bytes(ObjCLayouts) +
+         llvm37::capacity_in_bytes(KeyFunctions) +
+         llvm37::capacity_in_bytes(ObjCImpls) +
+         llvm37::capacity_in_bytes(BlockVarCopyInits) +
+         llvm37::capacity_in_bytes(DeclAttrs) +
+         llvm37::capacity_in_bytes(TemplateOrInstantiation) +
+         llvm37::capacity_in_bytes(InstantiatedFromUsingDecl) +
+         llvm37::capacity_in_bytes(InstantiatedFromUsingShadowDecl) +
+         llvm37::capacity_in_bytes(InstantiatedFromUnnamedFieldDecl) +
+         llvm37::capacity_in_bytes(OverriddenMethods) +
+         llvm37::capacity_in_bytes(Types) +
+         llvm37::capacity_in_bytes(VariableArrayTypes) +
+         llvm37::capacity_in_bytes(ClassScopeSpecializationPattern);
 }
 
 /// getIntTypeForBitwidth -
@@ -8637,7 +8637,7 @@ QualType ASTContext::getRealTypeForBitwidth(unsigned DestWidth) const {
     return QualType();
   }
 
-  llvm_unreachable("Unhandled TargetInfo::RealType value");
+  llvm37_unreachable("Unhandled TargetInfo::RealType value");
 }
 
 void ASTContext::setManglingNumber(const NamedDecl *ND, unsigned Number) {
@@ -8646,7 +8646,7 @@ void ASTContext::setManglingNumber(const NamedDecl *ND, unsigned Number) {
 }
 
 unsigned ASTContext::getManglingNumber(const NamedDecl *ND) const {
-  llvm::DenseMap<const NamedDecl *, unsigned>::const_iterator I =
+  llvm37::DenseMap<const NamedDecl *, unsigned>::const_iterator I =
     MangleNumbers.find(ND);
   return I != MangleNumbers.end() ? I->second : 1;
 }
@@ -8657,7 +8657,7 @@ void ASTContext::setStaticLocalNumber(const VarDecl *VD, unsigned Number) {
 }
 
 unsigned ASTContext::getStaticLocalNumber(const VarDecl *VD) const {
-  llvm::DenseMap<const VarDecl *, unsigned>::const_iterator I =
+  llvm37::DenseMap<const VarDecl *, unsigned>::const_iterator I =
       StaticLocalNumbers.find(VD);
   return I != StaticLocalNumbers.end() ? I->second : 1;
 }
@@ -8719,13 +8719,13 @@ ASTContext::getMaterializedTemporaryValue(const MaterializeTemporaryExpr *E,
   if (MayCreate)
     return &MaterializedTemporaryValues[E];
 
-  llvm::DenseMap<const MaterializeTemporaryExpr *, APValue>::iterator I =
+  llvm37::DenseMap<const MaterializeTemporaryExpr *, APValue>::iterator I =
       MaterializedTemporaryValues.find(E);
   return I == MaterializedTemporaryValues.end() ? nullptr : &I->second;
 }
 
 bool ASTContext::AtomicUsesUnsupportedLibcall(const AtomicExpr *E) const {
-  const llvm::Triple &T = getTargetInfo().getTriple();
+  const llvm37::Triple &T = getTargetInfo().getTriple();
   if (!T.isOSDarwin())
     return false;
 
@@ -8838,7 +8838,7 @@ namespace {
     }
 
     ASTContext::ParentMap *Parents;
-    llvm::SmallVector<ast_type_traits::DynTypedNode, 16> ParentStack;
+    llvm37::SmallVector<ast_type_traits::DynTypedNode, 16> ParentStack;
 
     friend class RecursiveASTVisitor<ParentMapASTVisitor>;
   };
@@ -8861,7 +8861,7 @@ ASTContext::getParents(const ast_type_traits::DynTypedNode &Node) {
     return None;
   }
   if (auto *N = I->second.dyn_cast<ast_type_traits::DynTypedNode *>()) {
-    return llvm::makeArrayRef(N, 1);
+    return llvm37::makeArrayRef(N, 1);
   }
   return *I->second.get<ParentVector *>();
 }

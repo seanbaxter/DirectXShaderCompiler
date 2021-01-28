@@ -1,6 +1,6 @@
 //===--- ASTUnit.h - ASTUnit utility ----------------------------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,8 +11,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_FRONTEND_ASTUNIT_H
-#define LLVM_CLANG_FRONTEND_ASTUNIT_H
+#ifndef LLVM37_CLANG_FRONTEND_ASTUNIT_H
+#define LLVM37_CLANG_FRONTEND_ASTUNIT_H
 
 #include "clang-c/Index.h"
 #include "clang/AST/ASTContext.h"
@@ -26,11 +26,11 @@
 #include "clang/Lex/PreprocessingRecord.h"
 #include "clang/Sema/CodeCompleteConsumer.h"
 #include "clang/Serialization/ASTBitCodes.h"
-#include "llvm/ADT/IntrusiveRefCntPtr.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/ADT/StringMap.h"
-#include "llvm/Support/MD5.h"
-#include "llvm/Support/Path.h"
+#include "llvm37/ADT/IntrusiveRefCntPtr.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/ADT/StringMap.h"
+#include "llvm37/Support/MD5.h"
+#include "llvm37/Support/Path.h"
 #include <cassert>
 #include <map>
 #include <memory>
@@ -45,7 +45,7 @@ namespace hlsl {
 }
 // HLSL Change Ends
 
-namespace llvm {
+namespace llvm37 {
   class MemoryBuffer;
 }
 
@@ -154,7 +154,7 @@ private:
 
   /// \brief Sorted (by file offset) vector of pairs of file offset/Decl.
   typedef SmallVector<std::pair<unsigned, Decl *>, 64> LocDeclsTy;
-  typedef llvm::DenseMap<FileID, LocDeclsTy *> FileDeclsTy;
+  typedef llvm37::DenseMap<FileID, LocDeclsTy *> FileDeclsTy;
 
   /// \brief Map from FileID to the file-level declarations that it contains.
   /// The files and decls are only local (and non-preamble) ones.
@@ -248,11 +248,11 @@ public:
     /// Memory buffers have MD5 instead of modification time.  We don't
     /// compute MD5 for on-disk files because we hope that modification time is
     /// enough to tell if the file was changed.
-    llvm::MD5::MD5Result MD5;
+    llvm37::MD5::MD5Result MD5;
 
     static PreambleFileHash createForFile(off_t Size, time_t ModTime);
     static PreambleFileHash
-    createForMemoryBuffer(const llvm::MemoryBuffer *Buffer);
+    createForMemoryBuffer(const llvm37::MemoryBuffer *Buffer);
 
     friend bool operator==(const PreambleFileHash &LHS,
                            const PreambleFileHash &RHS);
@@ -279,17 +279,17 @@ private:
   ///
   /// If any of the files have changed from one compile to the next,
   /// the preamble must be thrown away.
-  llvm::StringMap<PreambleFileHash> FilesInPreamble;
+  llvm37::StringMap<PreambleFileHash> FilesInPreamble;
 
   /// \brief When non-NULL, this is the buffer used to store the contents of
   /// the main file when it has been padded for use with the precompiled
   /// preamble.
-  std::unique_ptr<llvm::MemoryBuffer> SavedMainFileBuffer;
+  std::unique_ptr<llvm37::MemoryBuffer> SavedMainFileBuffer;
 
   /// \brief When non-NULL, this is the buffer used to store the
   /// contents of the preamble when it has been padded to build the
   /// precompiled preamble.
-  std::unique_ptr<llvm::MemoryBuffer> PreambleBuffer;
+  std::unique_ptr<llvm37::MemoryBuffer> PreambleBuffer;
 
   /// \brief The number of warnings that occurred while parsing the preamble.
   ///
@@ -369,7 +369,7 @@ public:
   
   /// \brief Retrieve the mapping from formatted type names to unique type
   /// identifiers.
-  llvm::StringMap<unsigned> &getCachedCompletionTypes() { 
+  llvm37::StringMap<unsigned> &getCachedCompletionTypes() { 
     return CachedCompletionTypes; 
   }
   
@@ -398,7 +398,7 @@ private:
   
   /// \brief A mapping from the formatted type name to a unique number for that
   /// type, which is used for type equality comparisons.
-  llvm::StringMap<unsigned> CachedCompletionTypes;
+  llvm37::StringMap<unsigned> CachedCompletionTypes;
   
   /// \brief A string hash of the top-level declaration and macro definition 
   /// names processed the last time that we reparsed the file.
@@ -436,15 +436,15 @@ private:
 
   void CleanTemporaryFiles();
   bool Parse(std::shared_ptr<PCHContainerOperations> PCHContainerOps,
-             std::unique_ptr<llvm::MemoryBuffer> OverrideMainBuffer);
+             std::unique_ptr<llvm37::MemoryBuffer> OverrideMainBuffer);
 
   struct ComputedPreamble {
-    llvm::MemoryBuffer *Buffer;
-    std::unique_ptr<llvm::MemoryBuffer> Owner;
+    llvm37::MemoryBuffer *Buffer;
+    std::unique_ptr<llvm37::MemoryBuffer> Owner;
     unsigned Size;
     bool PreambleEndsAtStartOfLine;
-    ComputedPreamble(llvm::MemoryBuffer *Buffer,
-                     std::unique_ptr<llvm::MemoryBuffer> Owner, unsigned Size,
+    ComputedPreamble(llvm37::MemoryBuffer *Buffer,
+                     std::unique_ptr<llvm37::MemoryBuffer> Owner, unsigned Size,
                      bool PreambleEndsAtStartOfLine)
         : Buffer(Buffer), Owner(std::move(Owner)), Size(Size),
           PreambleEndsAtStartOfLine(PreambleEndsAtStartOfLine) {}
@@ -455,7 +455,7 @@ private:
   ComputedPreamble ComputePreamble(CompilerInvocation &Invocation,
                                    unsigned MaxLines);
 
-  std::unique_ptr<llvm::MemoryBuffer> getMainBufferWithPrecompiledPreamble(
+  std::unique_ptr<llvm37::MemoryBuffer> getMainBufferWithPrecompiledPreamble(
       std::shared_ptr<PCHContainerOperations> PCHContainerOps,
       const CompilerInvocation &PreambleInvocationIn, bool AllowRebuild = true,
       unsigned MaxLines = 0);
@@ -473,7 +473,7 @@ private:
   /// just about any usage.
   /// Becomes a noop in release mode; only useful for debug mode checking.
   class ConcurrencyState {
-    void *Mutex; // a llvm::sys::MutexImpl in debug;
+    void *Mutex; // a llvm37::sys::MutexImpl in debug;
 
   public:
     ConcurrencyState();
@@ -690,7 +690,7 @@ public:
   /// \brief Returns an iterator range for the local preprocessing entities
   /// of the local Preprocessor, if this is a parsed source file, or the loaded
   /// preprocessing entities of the primary module if this is an AST file.
-  llvm::iterator_range<PreprocessingRecord::iterator>
+  llvm37::iterator_range<PreprocessingRecord::iterator>
   getLocalPreprocessingEntities() const;
 
   /// \brief Type for a function iterating over a number of declarations.
@@ -710,7 +710,7 @@ public:
   /// module file.
   bool isModuleFile();
 
-  std::unique_ptr<llvm::MemoryBuffer>
+  std::unique_ptr<llvm37::MemoryBuffer>
   getBufferForFile(StringRef Filename, std::string *ErrorStr = nullptr);
 
   /// \brief Determine what kind of translation unit this AST represents.
@@ -718,7 +718,7 @@ public:
 
   /// \brief A mapping from a file name to the memory buffer that stores the
   /// remapped contents of that file.
-  typedef std::pair<std::string, llvm::MemoryBuffer *> RemappedFile;
+  typedef std::pair<std::string, llvm37::MemoryBuffer *> RemappedFile;
 
   /// \brief Create a ASTUnit. Gets ownership of the passed CompilerInvocation. 
   static ASTUnit *create(CompilerInvocation *CI,
@@ -726,11 +726,11 @@ public:
                          bool CaptureDiagnostics,
                          bool UserFilesAreVolatile);
 
-  // HLSL Change: Create a ASTUnit from an AST llvm::MemoryBuffer.
+  // HLSL Change: Create a ASTUnit from an AST llvm37::MemoryBuffer.
   static ASTUnit *LoadFromASTMemoryBuffer(const std::string &Filename,
     IntrusiveRefCntPtr<DiagnosticsEngine> Diags,
     const FileSystemOptions &FileSystemOpts,
-    llvm::MemoryBuffer *astBuffer);
+    llvm37::MemoryBuffer *astBuffer);
 
   /// \brief Create a ASTUnit from an AST file.
   ///
@@ -901,7 +901,7 @@ public:
                     DiagnosticsEngine &Diag, LangOptions &LangOpts,
                     SourceManager &SourceMgr, FileManager &FileMgr,
                     SmallVectorImpl<StoredDiagnostic> &StoredDiagnostics,
-                    SmallVectorImpl<const llvm::MemoryBuffer *> &OwnedBuffers);
+                    SmallVectorImpl<const llvm37::MemoryBuffer *> &OwnedBuffers);
 
   /// \brief Save this translation unit to a file with the given name.
   ///

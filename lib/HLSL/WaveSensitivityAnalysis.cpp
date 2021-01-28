@@ -21,25 +21,25 @@
 #include "dxc/HLSL/HLModule.h"
 #include "dxc/DXIL/DxilInstructions.h"
 
-#include "llvm/ADT/ArrayRef.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/Type.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/InstIterator.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/DiagnosticInfo.h"
-#include "llvm/IR/DiagnosticPrinter.h"
-#include "llvm/ADT/BitVector.h"
-#include "llvm/Analysis/PostDominators.h"
+#include "llvm37/ADT/ArrayRef.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/Type.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/InstIterator.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/DiagnosticInfo.h"
+#include "llvm37/IR/DiagnosticPrinter.h"
+#include "llvm37/ADT/BitVector.h"
+#include "llvm37/Analysis/PostDominators.h"
 
 #ifdef _WIN32
 #include <winerror.h>
 #endif
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <unordered_set>
 
-using namespace llvm;
+using namespace llvm37;
 using namespace std;
 
 namespace hlsl {

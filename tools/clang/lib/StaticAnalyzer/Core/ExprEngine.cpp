@@ -1,6 +1,6 @@
 //=-- ExprEngine.cpp - Path-Sensitive Expression-Level Dataflow ---*- C++ -*-=
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -26,17 +26,17 @@
 #include "clang/StaticAnalyzer/Core/CheckerManager.h"
 #include "clang/StaticAnalyzer/Core/PathSensitive/AnalysisManager.h"
 #include "clang/StaticAnalyzer/Core/PathSensitive/CallEvent.h"
-#include "llvm/ADT/ImmutableList.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/ImmutableList.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/Support/raw_ostream.h"
 
 #ifndef NDEBUG
-#include "llvm/Support/GraphWriter.h"
+#include "llvm37/Support/GraphWriter.h"
 #endif
 
 using namespace clang;
 using namespace ento;
-using llvm::APSInt;
+using llvm37::APSInt;
 
 #define DEBUG_TYPE "ExprEngine"
 
@@ -58,7 +58,7 @@ typedef std::pair<const CXXBindTemporaryExpr *, const StackFrameContext *>
 // The StackFrameContext assures that nested calls due to inlined recursive
 // functions do not interfere.
 REGISTER_TRAIT_WITH_PROGRAMSTATE(InitializedTemporariesSet,
-                                 llvm::ImmutableSet<CXXBindTemporaryContext>)
+                                 llvm37::ImmutableSet<CXXBindTemporaryContext>)
 
 //===----------------------------------------------------------------------===//
 // Engine construction and deletion.
@@ -555,7 +555,7 @@ void ExprEngine::ProcessImplicitDtor(const CFGImplicitDtor D,
     ProcessDeleteDtor(D.castAs<CFGDeleteDtor>(), Pred, Dst);
     break;
   default:
-    llvm_unreachable("Unexpected dtor kind.");
+    llvm37_unreachable("Unexpected dtor kind.");
   }
 
   // Enqueue the new nodes onto the work list.
@@ -777,9 +777,9 @@ void ExprEngine::Visit(const Stmt *S, ExplodedNode *Pred,
     }
     
     case Stmt::ParenExprClass:
-      llvm_unreachable("ParenExprs already handled.");
+      llvm37_unreachable("ParenExprs already handled.");
     case Stmt::GenericSelectionExprClass:
-      llvm_unreachable("GenericSelectionExprs already handled.");
+      llvm37_unreachable("GenericSelectionExprs already handled.");
     // Cases that should never be evaluated simply because they shouldn't
     // appear in the CFG.
     case Stmt::BreakStmtClass:
@@ -824,11 +824,11 @@ void ExprEngine::Visit(const Stmt *S, ExplodedNode *Pred,
     case Stmt::OMPTeamsDirectiveClass:
     case Stmt::OMPCancellationPointDirectiveClass:
     case Stmt::OMPCancelDirectiveClass:
-      llvm_unreachable("Stmt should not be in analyzer evaluation loop");
+      llvm37_unreachable("Stmt should not be in analyzer evaluation loop");
 
     case Stmt::ObjCSubscriptRefExprClass:
     case Stmt::ObjCPropertyRefExprClass:
-      llvm_unreachable("These are handled by PseudoObjectExpr");
+      llvm37_unreachable("These are handled by PseudoObjectExpr");
 
     case Stmt::GNUNullExprClass: {
       // GNU __null is a pointer-width integer, not an actual pointer.
@@ -927,7 +927,7 @@ void ExprEngine::Visit(const Stmt *S, ExplodedNode *Pred,
       else if (const CXXDefaultInitExpr *DefE = dyn_cast<CXXDefaultInitExpr>(S))
         ArgE = DefE->getExpr();
       else
-        llvm_unreachable("unknown constant wrapper kind");
+        llvm37_unreachable("unknown constant wrapper kind");
 
       bool IsTemporary = false;
       if (const MaterializeTemporaryExpr *MTE =
@@ -1516,7 +1516,7 @@ static const Stmt *ResolveCondition(const Stmt *Condition,
     assert(LastStmt == Condition || LastStmt == getRightmostLeaf(Condition));
     return LastStmt;
   }
-  llvm_unreachable("could not resolve condition");
+  llvm37_unreachable("could not resolve condition");
 }
 
 void ExprEngine::processBranch(const Stmt *Condition, const Stmt *Term,
@@ -1620,7 +1620,7 @@ void ExprEngine::processBranch(const Stmt *Condition, const Stmt *Term,
 /// The GDM component containing the set of global variables which have been
 /// previously initialized with explicit initializers.
 REGISTER_TRAIT_WITH_PROGRAMSTATE(InitializedGlobalsSet,
-                                 llvm::ImmutableSet<const VarDecl *>)
+                                 llvm37::ImmutableSet<const VarDecl *>)
 
 void ExprEngine::processStaticInitializer(const DeclStmt *DS,
                                           NodeBuilderContext &BuilderCtx,
@@ -1672,7 +1672,7 @@ void ExprEngine::processIndirectGoto(IndirectGotoNodeBuilder &builder) {
       }
     }
 
-    llvm_unreachable("No block with label.");
+    llvm37_unreachable("No block with label.");
   }
 
   if (V.getAs<loc::ConcreteInt>() || V.getAs<UndefinedVal>()) {
@@ -1693,13 +1693,13 @@ void ExprEngine::processIndirectGoto(IndirectGotoNodeBuilder &builder) {
 #if 0
 static bool stackFrameDoesNotContainInitializedTemporaries(ExplodedNode &Pred) {
   const StackFrameContext* Frame = Pred.getStackFrame();
-  const llvm::ImmutableSet<CXXBindTemporaryContext> &Set =
+  const llvm37::ImmutableSet<CXXBindTemporaryContext> &Set =
       Pred.getState()->get<InitializedTemporariesSet>();
   return std::find_if(Set.begin(), Set.end(),
                       [&](const CXXBindTemporaryContext &Ctx) {
                         if (Ctx.second == Frame) {
                           Ctx.first->dump();
-                          llvm::errs() << "\n";
+                          llvm37::errs() << "\n";
                         }
            return Ctx.second == Frame;
          }) == Set.end();
@@ -1764,11 +1764,11 @@ void ExprEngine::processSwitch(SwitchNodeBuilder& builder) {
     const CaseStmt *Case = I.getCase();
 
     // Evaluate the LHS of the case value.
-    llvm::APSInt V1 = Case->getLHS()->EvaluateKnownConstInt(getContext());
+    llvm37::APSInt V1 = Case->getLHS()->EvaluateKnownConstInt(getContext());
     assert(V1.getBitWidth() == getContext().getTypeSize(CondE->getType()));
 
     // Get the RHS of the case, if it exists.
-    llvm::APSInt V2;
+    llvm37::APSInt V2;
     if (const Expr *E = Case->getRHS())
       V2 = E->EvaluateKnownConstInt(getContext());
     else
@@ -1892,7 +1892,7 @@ void ExprEngine::VisitCommonDeclRefExpr(const Expr *Ex, const NamedDecl *D,
     return;
   }
 
-  llvm_unreachable("Support for this Decl not implemented.");
+  llvm37_unreachable("Support for this Decl not implemented.");
 }
 
 /// VisitArraySubscriptExpr - Transfer function for array accesses
@@ -1982,7 +1982,7 @@ void ExprEngine::VisitMemberExpr(const MemberExpr *M, ExplodedNode *Pred,
           const ImplicitCastExpr *PE =
             dyn_cast<ImplicitCastExpr>((*I)->getParentMap().getParent(M));
           if (!PE || PE->getCastKind() != CK_ArrayToPointerDecay) {
-            llvm_unreachable("should always be wrapped in ArrayToPointerDecay");
+            llvm37_unreachable("should always be wrapped in ArrayToPointerDecay");
           }
         }
 
@@ -2403,7 +2403,7 @@ void ExprEngine::VisitMSAsmStmt(const MSAsmStmt *A, ExplodedNode *Pred,
 static ExprEngine* GraphPrintCheckerState;
 static SourceManager* GraphPrintSourceManager;
 
-namespace llvm {
+namespace llvm37 {
 template<>
 struct DOTGraphTraits<ExplodedNode*> :
   public DefaultDOTGraphTraits {
@@ -2446,7 +2446,7 @@ struct DOTGraphTraits<ExplodedNode*> :
   static std::string getNodeLabel(const ExplodedNode *N, void*){
 
     std::string sbuf;
-    llvm::raw_string_ostream Out(sbuf);
+    llvm37::raw_string_ostream Out(sbuf);
 
     // Program Location.
     ProgramPoint Loc = N->getLocation();
@@ -2652,7 +2652,7 @@ struct DOTGraphTraits<ExplodedNode*> :
     return Out.str();
   }
 };
-} // end llvm namespace
+} // end llvm37 namespace
 #endif
 
 void ExprEngine::ViewGraph(bool trim) {
@@ -2678,7 +2678,7 @@ void ExprEngine::ViewGraph(bool trim) {
     GraphPrintCheckerState = this;
     GraphPrintSourceManager = &getContext().getSourceManager();
 
-    llvm::ViewGraph(*G.roots_begin(), "ExprEngine");
+    llvm37::ViewGraph(*G.roots_begin(), "ExprEngine");
 
     GraphPrintCheckerState = nullptr;
     GraphPrintSourceManager = nullptr;
@@ -2694,9 +2694,9 @@ void ExprEngine::ViewGraph(ArrayRef<const ExplodedNode*> Nodes) {
   std::unique_ptr<ExplodedGraph> TrimmedG(G.trim(Nodes));
 
   if (!TrimmedG.get())
-    llvm::errs() << "warning: Trimmed ExplodedGraph is empty.\n";
+    llvm37::errs() << "warning: Trimmed ExplodedGraph is empty.\n";
   else
-    llvm::ViewGraph(*TrimmedG->roots_begin(), "TrimmedExprEngine");
+    llvm37::ViewGraph(*TrimmedG->roots_begin(), "TrimmedExprEngine");
 
   GraphPrintCheckerState = nullptr;
   GraphPrintSourceManager = nullptr;

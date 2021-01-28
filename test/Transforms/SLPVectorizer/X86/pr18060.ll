@@ -17,7 +17,7 @@ entry:
   ]
 
 sw.default:                                       ; preds = %entry
-  call void @_Z25llvm_unreachable_internalv()
+  call void @_Z25llvm37_unreachable_internalv()
   unreachable
 
 sw.bb1:                                           ; preds = %entry
@@ -43,5 +43,5 @@ return:                                           ; preds = %sw.bb2, %entry, %en
 }
 
 ; Function Attrs: noreturn
-declare void @_Z25llvm_unreachable_internalv()
+declare void @_Z25llvm37_unreachable_internalv()
 

@@ -1,4 +1,4 @@
-// RUN: llvm-mc -triple x86_64-unknown-unknown %s | FileCheck %s
+// RUN: llvm37-mc -triple x86_64-unknown-unknown %s | FileCheck %s
 
 .irpc foo,123
         .long \foo

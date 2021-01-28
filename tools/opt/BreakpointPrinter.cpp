@@ -1,6 +1,6 @@
 //===- BreakpointPrinter.cpp - Breakpoint location printer ----------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -13,14 +13,14 @@
 //===----------------------------------------------------------------------===//
 
 #include "BreakpointPrinter.h"
-#include "llvm/ADT/StringSet.h"
-#include "llvm/IR/DebugInfo.h"
-#include "llvm/IR/Module.h"
-#include "llvm/Pass.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/StringSet.h"
+#include "llvm37/IR/DebugInfo.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/Pass.h"
+#include "llvm37/Support/raw_ostream.h"
 //                                                                           //
 ///////////////////////////////////////////////////////////////////////////////
-using namespace llvm;
+using namespace llvm37;
 
 namespace {
 
@@ -75,6 +75,6 @@ struct BreakpointPrinter : public ModulePass {
 char BreakpointPrinter::ID = 0;
 }
 
-ModulePass *llvm::createBreakpointPrinter(raw_ostream &out) {
+ModulePass *llvm37::createBreakpointPrinter(raw_ostream &out) {
   return new BreakpointPrinter(out);
 }

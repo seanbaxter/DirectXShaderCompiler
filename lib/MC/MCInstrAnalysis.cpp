@@ -1,14 +1,14 @@
 //===-- MCInstrAnalysis.cpp - InstrDesc target hooks ------------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/MC/MCInstrAnalysis.h"
-using namespace llvm;
+#include "llvm37/MC/MCInstrAnalysis.h"
+using namespace llvm37;
 
 bool MCInstrAnalysis::evaluateBranch(const MCInst &Inst, uint64_t Addr,
                                      uint64_t Size, uint64_t &Target) const {

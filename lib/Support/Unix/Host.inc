@@ -1,6 +1,6 @@
-//===- llvm/Support/Unix/Host.inc -------------------------------*- C++ -*-===//
+//===- llvm37/Support/Unix/Host.inc -------------------------------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -17,13 +17,13 @@
 //===----------------------------------------------------------------------===//
 
 #include "Unix.h"
-#include "llvm/ADT/StringRef.h"
-#include "llvm/Config/config.h"
+#include "llvm37/ADT/StringRef.h"
+#include "llvm37/Config/config.h"
 #include <cctype>
 #include <string>
 #include <sys/utsname.h>
 
-using namespace llvm;
+using namespace llvm37;
 
 static std::string getOSVersion() {
   struct utsname info;
@@ -35,7 +35,7 @@ static std::string getOSVersion() {
 }
 
 std::string sys::getDefaultTargetTriple() {
-  std::string TargetTripleString(LLVM_DEFAULT_TARGET_TRIPLE);
+  std::string TargetTripleString(LLVM37_DEFAULT_TARGET_TRIPLE);
 
   // On darwin, we want to update the version to match that of the
   // target.

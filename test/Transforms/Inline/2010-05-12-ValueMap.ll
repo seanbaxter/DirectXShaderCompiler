@@ -1,7 +1,7 @@
 ; RUN: opt -inline -mergefunc -disable-output < %s
 
 ; This tests for a bug where the inliner kept the functions in a ValueMap after
-; it had completed and a ModulePass started to run. LLVM would crash deleting
+; it had completed and a ModulePass started to run. LLVM37 would crash deleting
 ; a function that was still a key in the ValueMap.
 
 define internal fastcc void @list_Cdr1918() nounwind inlinehint {

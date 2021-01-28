@@ -1,17 +1,17 @@
 //===- ConstantRangeTest.cpp - ConstantRange tests ------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/IR/ConstantRange.h"
-#include "llvm/IR/Instructions.h"
+#include "llvm37/IR/ConstantRange.h"
+#include "llvm37/IR/Instructions.h"
 #include "gtest/gtest.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 namespace {
 
@@ -396,7 +396,7 @@ TEST_F(ConstantRangeTest, Multiply) {
   EXPECT_EQ(Some.multiply(Zero), Zero);
   EXPECT_EQ(Wrap.multiply(Zero), Zero);
 
-  // http://llvm.org/PR4545
+  // http://llvm37.org/PR4545
   EXPECT_EQ(ConstantRange(APInt(4, 1), APInt(4, 6)).multiply(
                 ConstantRange(APInt(4, 6), APInt(4, 2))),
             ConstantRange(4, /*isFullSet=*/true));

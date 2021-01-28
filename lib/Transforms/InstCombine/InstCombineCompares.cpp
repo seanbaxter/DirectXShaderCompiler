@@ -1,6 +1,6 @@
 //===- InstCombineCompares.cpp --------------------------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -12,21 +12,21 @@
 //===----------------------------------------------------------------------===//
 
 #include "InstCombineInternal.h"
-#include "llvm/ADT/APSInt.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/Analysis/ConstantFolding.h"
-#include "llvm/Analysis/InstructionSimplify.h"
-#include "llvm/Analysis/MemoryBuiltins.h"
-#include "llvm/IR/ConstantRange.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/GetElementPtrTypeIterator.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/IR/PatternMatch.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Analysis/TargetLibraryInfo.h"
+#include "llvm37/ADT/APSInt.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/Analysis/ConstantFolding.h"
+#include "llvm37/Analysis/InstructionSimplify.h"
+#include "llvm37/Analysis/MemoryBuiltins.h"
+#include "llvm37/IR/ConstantRange.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/IR/GetElementPtrTypeIterator.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/IR/PatternMatch.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Analysis/TargetLibraryInfo.h"
 
-using namespace llvm;
+using namespace llvm37;
 using namespace PatternMatch;
 
 #define DEBUG_TYPE "instcombine"
@@ -921,7 +921,7 @@ Instruction *InstCombiner::FoldICmpDivCst(ICmpInst &ICI, BinaryOperator *DivI,
 
   Value *X = DivI->getOperand(0);
   switch (Pred) {
-  default: llvm_unreachable("Unhandled icmp opcode!");
+  default: llvm37_unreachable("Unhandled icmp opcode!");
   case ICmpInst::ICMP_EQ:
     if (LoOverflow && HiOverflow)
       return ReplaceInstUsesWith(ICI, Builder->getFalse());
@@ -1303,7 +1303,7 @@ Instruction *InstCombiner::visitICmpInstWithInstAndIntCst(ICmpInst &ICI,
 
       // This seemingly simple opportunity to fold away a shift turns out to
       // be rather complicated. See PR17827
-      // ( http://llvm.org/bugs/show_bug.cgi?id=17827 ) for details.
+      // ( http://llvm37.org/bugs/show_bug.cgi?id=17827 ) for details.
       if (ShAmt) {
         bool CanFold = false;
         unsigned ShiftOpcode = Shift->getOpcode();
@@ -2048,13 +2048,13 @@ Instruction *InstCombiner::visitICmpInstWithCastAndCast(ICmpInst &ICI) {
 /// If this is of the form:
 ///   sum = a + b
 ///   if (sum+128 >u 255)
-/// Then replace it with llvm.sadd.with.overflow.i8.
+/// Then replace it with llvm37.sadd.with.overflow.i8.
 ///
 static Instruction *ProcessUGT_ADDCST_ADD(ICmpInst &I, Value *A, Value *B,
                                           ConstantInt *CI2, ConstantInt *CI1,
                                           InstCombiner &IC) {
   // The transformation we're trying to do here is to transform this into an
-  // llvm.sadd.with.overflow.  To do this, we have to replace the original add
+  // llvm37.sadd.with.overflow.  To do this, we have to replace the original add
   // with a narrower add, and discard the add-with-constant that is part of the
   // range check (if we can't eliminate it, this isn't profitable).
 
@@ -2085,7 +2085,7 @@ static Instruction *ProcessUGT_ADDCST_ADD(ICmpInst &I, Value *A, Value *B,
     return nullptr;
 
   // In order to replace the original add with a narrower
-  // llvm.sadd.with.overflow, the only uses allowed are the add-with-constant
+  // llvm37.sadd.with.overflow, the only uses allowed are the add-with-constant
   // and truncates that discard the high bits of the add.  Verify that this is
   // the case.
   Instruction *OrigAdd = cast<Instruction>(AddWithCst->getOperand(0));
@@ -2147,7 +2147,7 @@ bool InstCombiner::OptimizeOverflowCheck(OverflowCheckFlavor OCF, Value *LHS,
 
   switch (OCF) {
   case OCF_INVALID:
-    llvm_unreachable("bad overflow check kind!");
+    llvm37_unreachable("bad overflow check kind!");
 
   case OCF_UNSIGNED_ADD: {
     OverflowResult OR = computeOverflowForUnsignedAdd(LHS, RHS, &OrigI);
@@ -2416,7 +2416,7 @@ static Instruction *ProcessUMulZExtIdiom(ICmpInst &I, Value *MulVal,
         IC.Worklist.Add(Zext);
         IC.ReplaceInstUsesWith(*BO, Zext);
       } else {
-        llvm_unreachable("Unexpected Binary operation");
+        llvm37_unreachable("Unexpected Binary operation");
       }
       IC.Worklist.Add(cast<Instruction>(U));
     }
@@ -2446,7 +2446,7 @@ static Instruction *ProcessUMulZExtIdiom(ICmpInst &I, Value *MulVal,
     Inverse = true;
     break;
   default:
-    llvm_unreachable("Unexpected predicate");
+    llvm37_unreachable("Unexpected predicate");
   }
   if (Inverse) {
     Value *Res = Builder->CreateExtractValue(Call, 1);
@@ -2694,7 +2694,7 @@ Instruction *InstCombiner::visitICmpInst(ICmpInst &I) {
   // icmp's with boolean values can always be turned into bitwise operations
   if (Ty->isIntegerTy(1)) {
     switch (I.getPredicate()) {
-    default: llvm_unreachable("Invalid icmp instruction!");
+    default: llvm37_unreachable("Invalid icmp instruction!");
     case ICmpInst::ICMP_EQ: {               // icmp eq i1 A, B -> ~(A^B)
       Value *Xor = Builder->CreateXor(Op0, Op1, I.getName()+"tmp");
       return BinaryOperator::CreateNot(Xor);
@@ -2756,7 +2756,7 @@ Instruction *InstCombiner::visitICmpInst(ICmpInst &I) {
     // magic constants.
     //
     // sum = a + b
-    // if (sum+128 >u 255)  ...  -> llvm.sadd.with.overflow.i8
+    // if (sum+128 >u 255)  ...  -> llvm37.sadd.with.overflow.i8
     {
     ConstantInt *CI2;    // I = icmp ugt (add (add A, B), CI2), CI
     if (I.getPredicate() == ICmpInst::ICMP_UGT &&
@@ -2884,7 +2884,7 @@ Instruction *InstCombiner::visitICmpInst(ICmpInst &I) {
     // Based on the range information we know about the LHS, see if we can
     // simplify this comparison.  For example, (x&4) < 8 is always true.
     switch (I.getPredicate()) {
-    default: llvm_unreachable("Unknown icmp opcode!");
+    default: llvm37_unreachable("Unknown icmp opcode!");
     case ICmpInst::ICMP_EQ: {
       if (Op0Max.ult(Op1Min) || Op0Min.ugt(Op1Max))
         return ReplaceInstUsesWith(I, ConstantInt::getFalse(I.getType()));
@@ -3530,7 +3530,7 @@ Instruction *InstCombiner::visitICmpInst(ICmpInst &I) {
       }
     }
 
-    // (zext a) * (zext b)  --> llvm.umul.with.overflow.
+    // (zext a) * (zext b)  --> llvm37.umul.with.overflow.
     if (match(Op0, m_Mul(m_ZExt(m_Value(A)), m_ZExt(m_Value(B))))) {
       if (Instruction *R = ProcessUMulZExtIdiom(I, Op0, Op1, *this))
         return R;
@@ -3769,7 +3769,7 @@ Instruction *InstCombiner::FoldFCmp_IntToFP_Cst(FCmpInst &I,
 
   ICmpInst::Predicate Pred;
   switch (I.getPredicate()) {
-  default: llvm_unreachable("Unexpected predicate!");
+  default: llvm37_unreachable("Unexpected predicate!");
   case FCmpInst::FCMP_UEQ:
   case FCmpInst::FCMP_OEQ:
     Pred = ICmpInst::ICMP_EQ;
@@ -3872,7 +3872,7 @@ Instruction *InstCombiner::FoldFCmp_IntToFP_Cst(FCmpInst &I,
       // the compare predicate and sometimes the value.  RHSC is rounded towards
       // zero at this point.
       switch (Pred) {
-      default: llvm_unreachable("Unexpected integer comparison!");
+      default: llvm37_unreachable("Unexpected integer comparison!");
       case ICmpInst::ICMP_NE:  // (float)int != 4.4   --> true
         return ReplaceInstUsesWith(I, Builder->getTrue());
       case ICmpInst::ICMP_EQ:  // (float)int == 4.4   --> false
@@ -3956,7 +3956,7 @@ Instruction *InstCombiner::visitFCmpInst(FCmpInst &I) {
   // Simplify 'fcmp pred X, X'
   if (Op0 == Op1) {
     switch (I.getPredicate()) {
-    default: llvm_unreachable("Unknown predicate!");
+    default: llvm37_unreachable("Unknown predicate!");
     case FCmpInst::FCMP_UNO:    // True if unordered: isnan(X) | isnan(Y)
     case FCmpInst::FCMP_ULT:    // True if unordered or less than
     case FCmpInst::FCMP_UGT:    // True if unordered or greater than

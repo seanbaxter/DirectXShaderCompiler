@@ -1,6 +1,6 @@
 //===--- SemaExceptionSpec.cpp - C++ Exception Specifications ---*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -19,8 +19,8 @@
 #include "clang/AST/TypeLoc.h"
 #include "clang/Basic/Diagnostic.h"
 #include "clang/Basic/SourceManager.h"
-#include "llvm/ADT/SmallPtrSet.h"
-#include "llvm/ADT/SmallString.h"
+#include "llvm37/ADT/SmallPtrSet.h"
+#include "llvm37/ADT/SmallString.h"
 
 namespace clang {
 
@@ -53,7 +53,7 @@ bool Sema::isLibstdcxxEagerExceptionSpecHack(const Declarator &D) {
   if (!Context.getSourceManager().isInSystemHeader(D.getLocStart()))
     return false;
 
-  return llvm::StringSwitch<bool>(RD->getIdentifier()->getName())
+  return llvm37::StringSwitch<bool>(RD->getIdentifier()->getName())
       .Case("array", true)
       .Case("pair", true)
       .Case("priority_queue", true)
@@ -291,7 +291,7 @@ bool Sema::CheckEquivalentExceptionSpec(FunctionDecl *Old, FunctionDecl *New) {
 
   // Warn about the lack of exception specification.
   SmallString<128> ExceptionSpecString;
-  llvm::raw_svector_ostream OS(ExceptionSpecString);
+  llvm37::raw_svector_ostream OS(ExceptionSpecString);
   switch (OldProto->getExceptionSpecType()) {
   case EST_DynamicNone:
     OS << "throw()";
@@ -324,7 +324,7 @@ bool Sema::CheckEquivalentExceptionSpec(FunctionDecl *Old, FunctionDecl *New) {
     break;
 
   default:
-    llvm_unreachable("This spec type is compatible with none.");
+    llvm37_unreachable("This spec type is compatible with none.");
   }
   OS.flush();
 
@@ -544,7 +544,7 @@ bool Sema::CheckEquivalentExceptionSpec(const PartialDiagnostic &DiagID,
   bool Success = true;
   // Both have a dynamic exception spec. Collect the first set, then compare
   // to the second.
-  llvm::SmallPtrSet<CanQualType, 8> OldTypes, NewTypes;
+  llvm37::SmallPtrSet<CanQualType, 8> OldTypes, NewTypes;
   for (const auto &I : Old->exceptions())
     OldTypes.insert(Context.getCanonicalType(I).getUnqualifiedType());
 
@@ -719,9 +719,9 @@ bool Sema::CheckExceptionSpecSubset(
       case AR_accessible: break;
       case AR_inaccessible: continue;
       case AR_dependent:
-        llvm_unreachable("access check dependent for unprivileged context");
+        llvm37_unreachable("access check dependent for unprivileged context");
       case AR_delayed:
-        llvm_unreachable("access check delayed in non-declaration");
+        llvm37_unreachable("access check delayed in non-declaration");
       }
 
       Contained = true;
@@ -1167,7 +1167,7 @@ CanThrowResult Sema::canThrow(const Expr *E) {
     return CT_Cannot;
 
   case Expr::MSPropertyRefExprClass:
-    llvm_unreachable("Invalid class for expression");
+    llvm37_unreachable("Invalid class for expression");
 
 #define STMT(CLASS, PARENT) case Expr::CLASS##Class:
 #define STMT_RANGE(Base, First, Last)
@@ -1176,9 +1176,9 @@ CanThrowResult Sema::canThrow(const Expr *E) {
 #define ABSTRACT_STMT(STMT)
 #include "clang/AST/StmtNodes.inc"
   case Expr::NoStmtClass:
-    llvm_unreachable("Invalid class for expression");
+    llvm37_unreachable("Invalid class for expression");
   }
-  llvm_unreachable("Bogus StmtClass");
+  llvm37_unreachable("Bogus StmtClass");
 }
 
 } // end namespace clang

@@ -1,27 +1,27 @@
 //===- DxilFixConstArrayInitializer.cpp - Special Construct Initializer ------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Pass.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/GlobalVariable.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/Operator.h"
-#include "llvm/IR/CFG.h"
-#include "llvm/Transforms/Scalar.h"
+#include "llvm37/Pass.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/GlobalVariable.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/Operator.h"
+#include "llvm37/IR/CFG.h"
+#include "llvm37/Transforms/Scalar.h"
 #include "dxc/DXIL/DxilModule.h"
 #include "dxc/HLSL/HLModule.h"
 
 #include <unordered_map>
 #include <limits>
 
-using namespace llvm;
+using namespace llvm37;
 
 namespace {
 
@@ -173,7 +173,7 @@ bool DxilFixConstArrayInitializer::runOnModule(Module &M) {
 }
 
 
-Pass *llvm::createDxilFixConstArrayInitializerPass() {
+Pass *llvm37::createDxilFixConstArrayInitializerPass() {
   return new DxilFixConstArrayInitializer();
 }
 

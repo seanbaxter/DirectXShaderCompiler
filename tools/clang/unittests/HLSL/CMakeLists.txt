@@ -6,7 +6,7 @@ find_package(DiaSDK REQUIRED) # Used for constants and declarations.
 find_package(D3D12 REQUIRED) # Used for ExecutionTest.cpp.
 endif(WIN32)
 
-set( LLVM_LINK_COMPONENTS
+set( LLVM37_LINK_COMPONENTS
   support
   mssupport
   dxcsupport
@@ -86,7 +86,7 @@ if (WIN32)
 target_link_libraries(clang-hlsl-tests PRIVATE
   dxcompiler
   HLSLTestLib
-  LLVMDxilDia
+  LLVM37DxilDia
   ${TAEF_LIBRARIES}
   ${DIASDK_LIBRARIES}
   ${D3D12_LIBRARIES}
@@ -104,7 +104,7 @@ if(WIN32)
 include_directories(${TAEF_INCLUDE_DIRS})
 include_directories(${DIASDK_INCLUDE_DIRS})
 include_directories(${D3D12_INCLUDE_DIRS})
-include_directories(${LLVM_MAIN_INCLUDE_DIR}/dxc/Test)
+include_directories(${LLVM37_MAIN_INCLUDE_DIR}/dxc/Test)
 endif(WIN32)
 
 # Add includes to directly reference intrinsic tables.
@@ -117,7 +117,7 @@ install(TARGETS clang-hlsl-tests
   RUNTIME DESTINATION bin)
 else(WIN32)
 set_output_directory(clang-hlsl-tests
-  ${LLVM_RUNTIME_OUTPUT_INTDIR} ${LLVM_LIBRARY_OUTPUT_INTDIR})
+  ${LLVM37_RUNTIME_OUTPUT_INTDIR} ${LLVM37_LIBRARY_OUTPUT_INTDIR})
 endif(WIN32)
 
 if(WIN32)

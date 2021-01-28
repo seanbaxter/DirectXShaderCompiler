@@ -1,6 +1,6 @@
 //===- MetadataTracking.cpp - Implement metadata tracking -----------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,10 +11,10 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/IR/MetadataTracking.h"
-#include "llvm/IR/Metadata.h"
+#include "llvm37/IR/MetadataTracking.h"
+#include "llvm37/IR/Metadata.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 ReplaceableMetadataImpl *ReplaceableMetadataImpl::get(Metadata &MD) {
   if (auto *N = dyn_cast<MDNode>(&MD))

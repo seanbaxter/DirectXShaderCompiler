@@ -1,6 +1,6 @@
-//===- verify-uselistorder.cpp - The LLVM Modular Optimizer ---------------===//
+//===- verify-uselistorder.cpp - The LLVM37 Modular Optimizer ---------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -27,31 +27,31 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/DenseSet.h"
-#include "llvm/AsmParser/Parser.h"
-#include "llvm/Bitcode/ReaderWriter.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/UseListOrder.h"
-#include "llvm/IR/Verifier.h"
-#include "llvm/IRReader/IRReader.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/FileSystem.h"
-#include "llvm/Support/FileUtilities.h"
-#include "llvm/Support/ManagedStatic.h"
-#include "llvm/Support/MemoryBuffer.h"
-#include "llvm/Support/PrettyStackTrace.h"
-#include "llvm/Support/Signals.h"
-#include "llvm/Support/SourceMgr.h"
-#include "llvm/Support/SystemUtils.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/DenseSet.h"
+#include "llvm37/AsmParser/Parser.h"
+#include "llvm37/Bitcode/ReaderWriter.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/UseListOrder.h"
+#include "llvm37/IR/Verifier.h"
+#include "llvm37/IRReader/IRReader.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/FileSystem.h"
+#include "llvm37/Support/FileUtilities.h"
+#include "llvm37/Support/ManagedStatic.h"
+#include "llvm37/Support/MemoryBuffer.h"
+#include "llvm37/Support/PrettyStackTrace.h"
+#include "llvm37/Support/Signals.h"
+#include "llvm37/Support/SourceMgr.h"
+#include "llvm37/Support/SystemUtils.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <random>
 #include <vector>
 
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "uselistorder"
 
@@ -76,8 +76,8 @@ struct TempFile {
   bool init(const std::string &Ext);
   bool writeBitcode(const Module &M) const;
   bool writeAssembly(const Module &M) const;
-  std::unique_ptr<Module> readBitcode(LLVMContext &Context) const;
-  std::unique_ptr<Module> readAssembly(LLVMContext &Context) const;
+  std::unique_ptr<Module> readBitcode(LLVM37Context &Context) const;
+  std::unique_ptr<Module> readAssembly(LLVM37Context &Context) const;
 };
 
 struct ValueMapping {
@@ -148,7 +148,7 @@ bool TempFile::writeAssembly(const Module &M) const {
   return false;
 }
 
-std::unique_ptr<Module> TempFile::readBitcode(LLVMContext &Context) const {
+std::unique_ptr<Module> TempFile::readBitcode(LLVM37Context &Context) const {
   DEBUG(dbgs() << " - read bitcode\n");
   ErrorOr<std::unique_ptr<MemoryBuffer>> BufferOr =
       MemoryBuffer::getFile(Filename);
@@ -169,7 +169,7 @@ std::unique_ptr<Module> TempFile::readBitcode(LLVMContext &Context) const {
   return std::move(ModuleOr.get());
 }
 
-std::unique_ptr<Module> TempFile::readAssembly(LLVMContext &Context) const {
+std::unique_ptr<Module> TempFile::readAssembly(LLVM37Context &Context) const {
   DEBUG(dbgs() << " - read assembly\n");
   SMDiagnostic Err;
   std::unique_ptr<Module> M = parseAssemblyFile(Filename, Err, Context);
@@ -354,7 +354,7 @@ static void verifyBitcodeUseListOrder(const Module &M) {
   if (F.writeBitcode(M))
     report_fatal_error("failed to write bitcode");
 
-  LLVMContext Context;
+  LLVM37Context Context;
   verifyAfterRoundTrip(M, F.readBitcode(Context));
 }
 
@@ -366,7 +366,7 @@ static void verifyAssemblyUseListOrder(const Module &M) {
   if (F.writeAssembly(M))
     report_fatal_error("failed to write assembly");
 
-  LLVMContext Context;
+  LLVM37Context Context;
   verifyAfterRoundTrip(M, F.readAssembly(Context));
 }
 
@@ -518,16 +518,16 @@ static void reverseUseLists(Module &M) {
 
 int main(int argc, char **argv) {
   sys::PrintStackTraceOnErrorSignal();
-  llvm::PrettyStackTraceProgram X(argc, argv);
+  llvm37::PrettyStackTraceProgram X(argc, argv);
 
   // Enable debug stream buffering.
   EnableDebugBuffering = true;
 
-  llvm_shutdown_obj Y; // Call llvm_shutdown() on exit.
-  LLVMContext &Context = getGlobalContext();
+  llvm37_shutdown_obj Y; // Call llvm37_shutdown() on exit.
+  LLVM37Context &Context = getGlobalContext();
 
   cl::ParseCommandLineOptions(argc, argv,
-                              "llvm tool to verify use-list order\n");
+                              "llvm37 tool to verify use-list order\n");
 
   SMDiagnostic Err;
 

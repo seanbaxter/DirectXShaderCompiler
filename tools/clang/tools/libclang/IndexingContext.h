@@ -1,20 +1,20 @@
 //===- IndexingContext.h - Higher level API functions -----------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_TOOLS_LIBCLANG_INDEXINGCONTEXT_H
-#define LLVM_CLANG_TOOLS_LIBCLANG_INDEXINGCONTEXT_H
+#ifndef LLVM37_CLANG_TOOLS_LIBCLANG_INDEXINGCONTEXT_H
+#define LLVM37_CLANG_TOOLS_LIBCLANG_INDEXINGCONTEXT_H
 
 #include "CXCursor.h"
 #include "Index_Internal.h"
 #include "clang/AST/DeclGroup.h"
 #include "clang/AST/DeclObjC.h"
-#include "llvm/ADT/DenseSet.h"
+#include "llvm37/ADT/DenseSet.h"
 #include <deque>
 
 namespace clang {
@@ -280,21 +280,21 @@ class IndexingContext {
   unsigned IndexOptions;
   CXTranslationUnit CXTU;
   
-  typedef llvm::DenseMap<const FileEntry *, CXIdxClientFile> FileMapTy;
-  typedef llvm::DenseMap<const DeclContext *, CXIdxClientContainer>
+  typedef llvm37::DenseMap<const FileEntry *, CXIdxClientFile> FileMapTy;
+  typedef llvm37::DenseMap<const DeclContext *, CXIdxClientContainer>
     ContainerMapTy;
-  typedef llvm::DenseMap<const Decl *, CXIdxClientEntity> EntityMapTy;
+  typedef llvm37::DenseMap<const Decl *, CXIdxClientEntity> EntityMapTy;
 
   FileMapTy FileMap;
   ContainerMapTy ContainerMap;
   EntityMapTy EntityMap;
 
   typedef std::pair<const FileEntry *, const Decl *> RefFileOccurrence;
-  llvm::DenseSet<RefFileOccurrence> RefFileOccurrences;
+  llvm37::DenseSet<RefFileOccurrence> RefFileOccurrences;
 
   std::deque<DeclGroupRef> TUDeclsInObjCContainer;
   
-  llvm::BumpPtrAllocator StrScratch;
+  llvm37::BumpPtrAllocator StrScratch;
   unsigned StrAdapterCount;
   friend class ScratchAlloc;
 

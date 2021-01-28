@@ -1,6 +1,6 @@
 //== Store.h - Interface for maps from Locations to Values ------*- C++ -*--==//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,14 +11,14 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_STATICANALYZER_CORE_PATHSENSITIVE_STORE_H
-#define LLVM_CLANG_STATICANALYZER_CORE_PATHSENSITIVE_STORE_H
+#ifndef LLVM37_CLANG_STATICANALYZER_CORE_PATHSENSITIVE_STORE_H
+#define LLVM37_CLANG_STATICANALYZER_CORE_PATHSENSITIVE_STORE_H
 
 #include "clang/StaticAnalyzer/Core/PathSensitive/MemRegion.h"
 #include "clang/StaticAnalyzer/Core/PathSensitive/SValBuilder.h"
 #include "clang/StaticAnalyzer/Core/PathSensitive/StoreRef.h"
-#include "llvm/ADT/DenseSet.h"
-#include "llvm/ADT/Optional.h"
+#include "llvm37/ADT/DenseSet.h"
+#include "llvm37/ADT/Optional.h"
 
 namespace clang {
 
@@ -35,7 +35,7 @@ class ProgramState;
 class ProgramStateManager;
 class ScanReachableSymbols;
 
-typedef llvm::DenseSet<SymbolRef> InvalidatedSymbols;
+typedef llvm37::DenseSet<SymbolRef> InvalidatedSymbols;
 
 class StoreManager {
 protected:

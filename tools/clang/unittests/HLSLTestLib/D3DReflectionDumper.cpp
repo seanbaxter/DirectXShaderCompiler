@@ -19,7 +19,7 @@
 // Disable warning about value not being valid in enum
 #pragma warning( disable : 4063 )
 
-// Copied from llvm/ADT/StringExtras.h
+// Copied from llvm37/ADT/StringExtras.h
 static inline char hexdigit(unsigned X, bool LowerCase = false) {
   const char HexChar = LowerCase ? 'a' : 'A';
   return X < 10 ? '0' + X : HexChar + X - 10;

@@ -1,22 +1,22 @@
 //===- MemoryLocation.cpp - Memory location descriptions -------------------==//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Analysis/MemoryLocation.h"
-#include "llvm/Analysis/TargetLibraryInfo.h"
-#include "llvm/IR/BasicBlock.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/Type.h"
-using namespace llvm;
+#include "llvm37/Analysis/MemoryLocation.h"
+#include "llvm37/Analysis/TargetLibraryInfo.h"
+#include "llvm37/IR/BasicBlock.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/Type.h"
+using namespace llvm37;
 
 MemoryLocation MemoryLocation::get(const LoadInst *LI) {
   AAMDNodes AATags;
@@ -146,7 +146,7 @@ MemoryLocation MemoryLocation::getForArgument(ImmutableCallSite CS,
 #if 0 // HLSL Change - remove platform intrinsics
     case Intrinsic::arm_neon_vld1:
       assert(ArgIdx == 0 && "Invalid argument index");
-      // LLVM's vld1 and vst1 intrinsics currently only support a single
+      // LLVM37's vld1 and vst1 intrinsics currently only support a single
       // vector register.
       return MemoryLocation(Arg, DL.getTypeStoreSize(II->getType()), AATags);
 

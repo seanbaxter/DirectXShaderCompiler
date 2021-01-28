@@ -1,23 +1,23 @@
 //===-- ManagedStatic.cpp - Static Global wrapper -------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 //
-// This file implements the ManagedStatic class and llvm_shutdown().
+// This file implements the ManagedStatic class and llvm37_shutdown().
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Support/ManagedStatic.h"
-#include "llvm/Config/config.h"
-#include "llvm/Support/Atomic.h"
-#include "llvm/Support/Mutex.h"
-#include "llvm/Support/MutexGuard.h"
+#include "llvm37/Support/ManagedStatic.h"
+#include "llvm37/Config/config.h"
+#include "llvm37/Support/Atomic.h"
+#include "llvm37/Support/Mutex.h"
+#include "llvm37/Support/MutexGuard.h"
 #include <cassert>
-using namespace llvm;
+using namespace llvm37;
 
 static const ManagedStaticBase *StaticList = nullptr;
 
@@ -32,7 +32,7 @@ static sys::Mutex& getManagedStaticMutex() {
 void ManagedStaticBase::RegisterManagedStatic(void *(*Creator)(),
                                               void (*Deleter)(void*)) const {
   assert(Creator);
-  if (llvm_is_multithreaded()) {
+  if (llvm37_is_multithreaded()) {
     MutexGuard Lock(getManagedStaticMutex());
 
     if (!Ptr) {
@@ -81,8 +81,8 @@ void ManagedStaticBase::destroy() const {
   DeleterFn = nullptr;
 }
 
-/// llvm_shutdown - Deallocate and destroy all ManagedStatic variables.
-void llvm::llvm_shutdown() {
+/// llvm37_shutdown - Deallocate and destroy all ManagedStatic variables.
+void llvm37::llvm37_shutdown() {
   MutexGuard Lock(getManagedStaticMutex());
 
   while (StaticList)

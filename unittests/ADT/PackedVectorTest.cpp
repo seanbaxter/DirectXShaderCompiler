@@ -1,6 +1,6 @@
-//===- llvm/unittest/ADT/PackedVectorTest.cpp - PackedVector tests --------===//
+//===- llvm37/unittest/ADT/PackedVectorTest.cpp - PackedVector tests --------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -9,10 +9,10 @@
 
 #ifndef __ppc__
 
-#include "llvm/ADT/PackedVector.h"
+#include "llvm37/ADT/PackedVector.h"
 #include "gtest/gtest.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 namespace {
 

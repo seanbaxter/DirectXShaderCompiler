@@ -1,6 +1,6 @@
-//===- llvm/unittest/ADT/OptionalTest.cpp - Optional unit tests -----------===//
+//===- llvm37/unittest/ADT/OptionalTest.cpp - Optional unit tests -----------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -8,8 +8,8 @@
 //===----------------------------------------------------------------------===//
 
 #include "gtest/gtest.h"
-#include "llvm/ADT/Optional.h"
-using namespace llvm;
+#include "llvm37/ADT/Optional.h"
+using namespace llvm37;
 
 namespace {
 
@@ -356,7 +356,7 @@ TEST_F(OptionalTest, ImmovableEmplace) {
   EXPECT_EQ(0u, Immovable::Destructions);
 }
 
-#if LLVM_HAS_RVALUE_REFERENCE_THIS
+#if LLVM37_HAS_RVALUE_REFERENCE_THIS
 
 TEST_F(OptionalTest, MoveGetValueOr) {
   Optional<MoveOnly> A;
@@ -375,7 +375,7 @@ TEST_F(OptionalTest, MoveGetValueOr) {
   EXPECT_EQ(2u, MoveOnly::Destructions);
 }
 
-#endif // LLVM_HAS_RVALUE_REFERENCE_THIS
+#endif // LLVM37_HAS_RVALUE_REFERENCE_THIS
 
 } // end anonymous namespace
 

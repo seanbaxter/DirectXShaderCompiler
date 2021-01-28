@@ -1,6 +1,6 @@
 //== Environment.h - Map from Stmt* to Locations/Values ---------*- C++ -*--==//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,12 +11,12 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_STATICANALYZER_CORE_PATHSENSITIVE_ENVIRONMENT_H
-#define LLVM_CLANG_STATICANALYZER_CORE_PATHSENSITIVE_ENVIRONMENT_H
+#ifndef LLVM37_CLANG_STATICANALYZER_CORE_PATHSENSITIVE_ENVIRONMENT_H
+#define LLVM37_CLANG_STATICANALYZER_CORE_PATHSENSITIVE_ENVIRONMENT_H
 
 #include "clang/Analysis/AnalysisContext.h"
 #include "clang/StaticAnalyzer/Core/PathSensitive/SVals.h"
-#include "llvm/ADT/ImmutableMap.h"
+#include "llvm37/ADT/ImmutableMap.h"
 
 namespace clang {
 
@@ -40,13 +40,13 @@ public:
   const LocationContext *getLocationContext() const { return second; }
   
   /// Profile an EnvironmentEntry for inclusion in a FoldingSet.
-  static void Profile(llvm::FoldingSetNodeID &ID,
+  static void Profile(llvm37::FoldingSetNodeID &ID,
                       const EnvironmentEntry &E) {
     ID.AddPointer(E.getStmt());
     ID.AddPointer(E.getLocationContext());
   }
   
-  void Profile(llvm::FoldingSetNodeID &ID) const {
+  void Profile(llvm37::FoldingSetNodeID &ID) const {
     Profile(ID, *this);
   }
 };
@@ -57,7 +57,7 @@ private:
   friend class EnvironmentManager;
 
   // Type definitions.
-  typedef llvm::ImmutableMap<EnvironmentEntry, SVal> BindingsTy;
+  typedef llvm37::ImmutableMap<EnvironmentEntry, SVal> BindingsTy;
 
   // Data.
   BindingsTy ExprBindings;
@@ -78,13 +78,13 @@ public:
 
   /// Profile - Profile the contents of an Environment object for use
   ///  in a FoldingSet.
-  static void Profile(llvm::FoldingSetNodeID& ID, const Environment* env) {
+  static void Profile(llvm37::FoldingSetNodeID& ID, const Environment* env) {
     env->ExprBindings.Profile(ID);
   }
 
   /// Profile - Used to profile the contents of this object for inclusion
   ///  in a FoldingSet.
-  void Profile(llvm::FoldingSetNodeID& ID) const {
+  void Profile(llvm37::FoldingSetNodeID& ID) const {
     Profile(ID, this);
   }
 
@@ -105,7 +105,7 @@ private:
   FactoryTy F;
 
 public:
-  EnvironmentManager(llvm::BumpPtrAllocator& Allocator) : F(Allocator) {}
+  EnvironmentManager(llvm37::BumpPtrAllocator& Allocator) : F(Allocator) {}
 
   Environment getInitialEnvironment() {
     return Environment(F.getEmptyMap());

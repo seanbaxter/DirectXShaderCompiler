@@ -1,6 +1,6 @@
 //===--- ParseInit.cpp - Initializer Parsing ------------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -16,8 +16,8 @@
 #include "clang/Parse/ParseDiagnostic.h"
 #include "clang/Sema/Designator.h"
 #include "clang/Sema/Scope.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/Support/raw_ostream.h"
 using namespace clang;
 
 
@@ -138,7 +138,7 @@ ExprResult Parser::ParseInitializerWithPotentialDesignator() {
     const IdentifierInfo *FieldName = Tok.getIdentifierInfo();
 
     SmallString<256> NewSyntax;
-    llvm::raw_svector_ostream(NewSyntax) << '.' << FieldName->getName()
+    llvm37::raw_svector_ostream(NewSyntax) << '.' << FieldName->getName()
                                          << " = ";
 
     SourceLocation NameLoc = ConsumeToken(); // Eat the identifier.

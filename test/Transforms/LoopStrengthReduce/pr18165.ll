@@ -75,7 +75,7 @@ attributes #0 = { nounwind optsize ssp uwtable "less-precise-fpmad"="false" "no-
 attributes #1 = { nounwind optsize "less-precise-fpmad"="false" "no-frame-pointer-elim"="true" "no-frame-pointer-elim-non-leaf" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "stack-protector-buffer-size"="8" "unsafe-fp-math"="false" "use-soft-float"="false" }
 attributes #2 = { nounwind optsize }
 
-!llvm.ident = !{!0}
+!llvm37.ident = !{!0}
 
 !0 = !{!"clang version 3.5 "}
 !1 = !{!2, !3, i64 0}

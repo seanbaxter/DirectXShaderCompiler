@@ -34,7 +34,7 @@ namespace       clang {
   };
 }
 size_t magic_length(const char *s);
-namespace llvm {
+namespace llvm37 {
 class StringRef {
 public:
   typedef const char *iterator;
@@ -74,12 +74,12 @@ public:IdentifierInfo();
     const char *p = ((const actualtype *) this)->second - 2;
     return (((unsigned) p[0]) | (((unsigned) p[1]) << 8)) - 1;
   }
-  llvm::StringRef getName() const {
-    return llvm::StringRef(getNameStart(), getLength());
+  llvm37::StringRef getName() const {
+    return llvm37::StringRef(getNameStart(), getLength());
   }
 };
 }
-namespace llvm {
+namespace llvm37 {
 template < typename T, typename R = T > class StringSwitch {
   StringRef Str;
   const T *Result;
@@ -98,11 +98,11 @@ public:
 using namespace clang;
 
 AttributeList::Kind AttributeList::getKind(const IdentifierInfo * Name) {
-  llvm::StringRef AttrName = Name->getName();
+  llvm37::StringRef AttrName = Name->getName();
   if (AttrName.startswith("__") && AttrName.endswith("__"))
     AttrName = AttrName.substr(2, AttrName.size() - 4);
 
-  return llvm::StringSwitch < AttributeList::Kind > (AttrName)
+  return llvm37::StringSwitch < AttributeList::Kind > (AttrName)
     .Case("weak", AT_weak)
     .Case("weakref", AT_weakref)
     .Case("pure", AT_pure)
@@ -420,8 +420,8 @@ AttributeList::Kind AttributeList::getKind(const IdentifierInfo * Name) {
 // CHECK-tokens: Punctuation: ")" [36:34 - 36:35] FunctionDecl=magic_length:36:8
 // CHECK-tokens: Punctuation: ";" [36:35 - 36:36]
 // CHECK-tokens: Keyword: "namespace" [37:1 - 37:10]
-// CHECK-tokens: Identifier: "llvm" [37:11 - 37:15] Namespace=llvm:37:11 (Definition)
-// CHECK-tokens: Punctuation: "{" [37:16 - 37:17] Namespace=llvm:37:11 (Definition)
+// CHECK-tokens: Identifier: "llvm37" [37:11 - 37:15] Namespace=llvm37:37:11 (Definition)
+// CHECK-tokens: Punctuation: "{" [37:16 - 37:17] Namespace=llvm37:37:11 (Definition)
 // CHECK-tokens: Keyword: "class" [38:1 - 38:6] ClassDecl=StringRef:38:7 (Definition)
 // CHECK-tokens: Identifier: "StringRef" [38:7 - 38:16] ClassDecl=StringRef:38:7 (Definition)
 // CHECK-tokens: Punctuation: "{" [38:17 - 38:18] ClassDecl=StringRef:38:7 (Definition)
@@ -559,7 +559,7 @@ AttributeList::Kind AttributeList::getKind(const IdentifierInfo * Name) {
 // CHECK-tokens: Keyword: "bool" [52:3 - 52:7] CXXMethod=startswith:52:8 (Definition)
 // CHECK-tokens: Identifier: "startswith" [52:8 - 52:18] CXXMethod=startswith:52:8 (Definition)
 // CHECK-tokens: Punctuation: "(" [52:18 - 52:19] CXXMethod=startswith:52:8 (Definition)
-// CHECK-tokens: Identifier: "StringRef" [52:19 - 52:28] TypeRef=class llvm::StringRef:38:7
+// CHECK-tokens: Identifier: "StringRef" [52:19 - 52:28] TypeRef=class llvm37::StringRef:38:7
 // CHECK-tokens: Identifier: "Prefix" [52:29 - 52:35] ParmDecl=Prefix:52:29 (Definition)
 // CHECK-tokens: Punctuation: ")" [52:35 - 52:36] CXXMethod=startswith:52:8 (Definition)
 // CHECK-tokens: Keyword: "const" [52:37 - 52:42] CXXMethod=startswith:52:8 (Definition)
@@ -590,7 +590,7 @@ AttributeList::Kind AttributeList::getKind(const IdentifierInfo * Name) {
 // CHECK-tokens: Keyword: "bool" [56:3 - 56:7] CXXMethod=endswith:56:8 (Definition)
 // CHECK-tokens: Identifier: "endswith" [56:8 - 56:16] CXXMethod=endswith:56:8 (Definition)
 // CHECK-tokens: Punctuation: "(" [56:16 - 56:17] CXXMethod=endswith:56:8 (Definition)
-// CHECK-tokens: Identifier: "StringRef" [56:17 - 56:26] TypeRef=class llvm::StringRef:38:7
+// CHECK-tokens: Identifier: "StringRef" [56:17 - 56:26] TypeRef=class llvm37::StringRef:38:7
 // CHECK-tokens: Identifier: "Suffix" [56:27 - 56:33] ParmDecl=Suffix:56:27 (Definition)
 // CHECK-tokens: Punctuation: ")" [56:33 - 56:34] CXXMethod=endswith:56:8 (Definition)
 // CHECK-tokens: Keyword: "const" [56:35 - 56:40] CXXMethod=endswith:56:8 (Definition)
@@ -624,7 +624,7 @@ AttributeList::Kind AttributeList::getKind(const IdentifierInfo * Name) {
 // CHECK-tokens: Literal: "0" [58:68 - 58:69] IntegerLiteral=
 // CHECK-tokens: Punctuation: ";" [58:69 - 58:70] CompoundStmt=
 // CHECK-tokens: Punctuation: "}" [59:3 - 59:4] CompoundStmt=
-// CHECK-tokens: Identifier: "StringRef" [60:3 - 60:12] TypeRef=class llvm::StringRef:38:7
+// CHECK-tokens: Identifier: "StringRef" [60:3 - 60:12] TypeRef=class llvm37::StringRef:38:7
 // CHECK-tokens: Identifier: "substr" [60:13 - 60:19] CXXMethod=substr:60:13 (Definition)
 // CHECK-tokens: Punctuation: "(" [60:19 - 60:20] CXXMethod=substr:60:13 (Definition)
 // CHECK-tokens: Identifier: "size_t" [60:20 - 60:26] TypeRef=size_t:2:25
@@ -638,7 +638,7 @@ AttributeList::Kind AttributeList::getKind(const IdentifierInfo * Name) {
 // CHECK-tokens: Keyword: "const" [60:51 - 60:56] CXXMethod=substr:60:13 (Definition)
 // CHECK-tokens: Punctuation: "{" [60:57 - 60:58] CompoundStmt=
 // CHECK-tokens: Keyword: "return" [61:5 - 61:11] ReturnStmt=
-// CHECK-tokens: Identifier: "StringRef" [61:12 - 61:21] TypeRef=class llvm::StringRef:38:7
+// CHECK-tokens: Identifier: "StringRef" [61:12 - 61:21] TypeRef=class llvm37::StringRef:38:7
 // CHECK-tokens: Punctuation: "(" [61:21 - 61:22] CallExpr=StringRef:49:3
 // CHECK-tokens: Identifier: "Data" [61:22 - 61:26]  MemberRefExpr=Data:43:15
 // CHECK-tokens: Punctuation: "+" [61:27 - 61:28] BinaryOperator=
@@ -656,8 +656,8 @@ AttributeList::Kind AttributeList::getKind(const IdentifierInfo * Name) {
 // CHECK-tokens: Punctuation: ";" [61:59 - 61:60] CompoundStmt=
 // CHECK-tokens: Punctuation: "}" [62:3 - 62:4] CompoundStmt=
 // CHECK-tokens: Punctuation: "}" [63:1 - 63:2] ClassDecl=StringRef:38:7 (Definition)
-// CHECK-tokens: Punctuation: ";" [63:2 - 63:3] Namespace=llvm:37:11 (Definition)
-// CHECK-tokens: Punctuation: "}" [64:1 - 64:2] Namespace=llvm:37:11 (Definition)
+// CHECK-tokens: Punctuation: ";" [63:2 - 63:3] Namespace=llvm37:37:11 (Definition)
+// CHECK-tokens: Punctuation: "}" [64:1 - 64:2] Namespace=llvm37:37:11 (Definition)
 // CHECK-tokens: Keyword: "namespace" [65:1 - 65:10]
 // CHECK-tokens: Identifier: "clang" [65:11 - 65:16] Namespace=clang:65:11 (Definition)
 // CHECK-tokens: Punctuation: "{" [65:17 - 65:18] Namespace=clang:65:11 (Definition)
@@ -771,18 +771,18 @@ AttributeList::Kind AttributeList::getKind(const IdentifierInfo * Name) {
 // CHECK-tokens: Literal: "1" [75:61 - 75:62] IntegerLiteral=
 // CHECK-tokens: Punctuation: ";" [75:62 - 75:63] CompoundStmt=
 // CHECK-tokens: Punctuation: "}" [76:3 - 76:4] CompoundStmt=
-// CHECK-tokens: Identifier: "llvm" [77:3 - 77:7] NamespaceRef=llvm:37:11
+// CHECK-tokens: Identifier: "llvm37" [77:3 - 77:7] NamespaceRef=llvm37:37:11
 // CHECK-tokens: Punctuation: "::" [77:7 - 77:9] CXXMethod=getName:77:19 (Definition)
-// CHECK-tokens: Identifier: "StringRef" [77:9 - 77:18] TypeRef=class llvm::StringRef:38:7
+// CHECK-tokens: Identifier: "StringRef" [77:9 - 77:18] TypeRef=class llvm37::StringRef:38:7
 // CHECK-tokens: Identifier: "getName" [77:19 - 77:26] CXXMethod=getName:77:19 (Definition)
 // CHECK-tokens: Punctuation: "(" [77:26 - 77:27] CXXMethod=getName:77:19 (Definition)
 // CHECK-tokens: Punctuation: ")" [77:27 - 77:28] CXXMethod=getName:77:19 (Definition)
 // CHECK-tokens: Keyword: "const" [77:29 - 77:34] CXXMethod=getName:77:19 (Definition)
 // CHECK-tokens: Punctuation: "{" [77:35 - 77:36] CompoundStmt=
 // CHECK-tokens: Keyword: "return" [78:5 - 78:11] ReturnStmt=
-// CHECK-tokens: Identifier: "llvm" [78:12 - 78:16] NamespaceRef=llvm:37:11
+// CHECK-tokens: Identifier: "llvm37" [78:12 - 78:16] NamespaceRef=llvm37:37:11
 // CHECK-tokens: Punctuation: "::" [78:16 - 78:18] CallExpr=StringRef:49:3
-// CHECK-tokens: Identifier: "StringRef" [78:18 - 78:27] TypeRef=class llvm::StringRef:38:7
+// CHECK-tokens: Identifier: "StringRef" [78:18 - 78:27] TypeRef=class llvm37::StringRef:38:7
 // CHECK-tokens: Punctuation: "(" [78:27 - 78:28] CallExpr=StringRef:49:3
 // CHECK-tokens: Identifier: "getNameStart" [78:28 - 78:40] MemberRefExpr=getNameStart:68:15
 // CHECK-tokens: Punctuation: "(" [78:40 - 78:41] CallExpr=getNameStart:68:15
@@ -798,8 +798,8 @@ AttributeList::Kind AttributeList::getKind(const IdentifierInfo * Name) {
 // CHECK-tokens: Punctuation: ";" [80:2 - 80:3] Namespace=clang:65:11 (Definition)
 // CHECK-tokens: Punctuation: "}" [81:1 - 81:2] Namespace=clang:65:11 (Definition)
 // CHECK-tokens: Keyword: "namespace" [82:1 - 82:10]
-// CHECK-tokens: Identifier: "llvm" [82:11 - 82:15] Namespace=llvm:82:11 (Definition)
-// CHECK-tokens: Punctuation: "{" [82:16 - 82:17] Namespace=llvm:82:11 (Definition)
+// CHECK-tokens: Identifier: "llvm37" [82:11 - 82:15] Namespace=llvm37:82:11 (Definition)
+// CHECK-tokens: Punctuation: "{" [82:16 - 82:17] Namespace=llvm37:82:11 (Definition)
 // CHECK-tokens: Keyword: "template" [83:1 - 83:9] ClassTemplate=StringSwitch:83:47 (Definition)
 // CHECK-tokens: Punctuation: "<" [83:10 - 83:11] ClassTemplate=StringSwitch:83:47 (Definition)
 // CHECK-tokens: Keyword: "typename" [83:12 - 83:20] TemplateTypeParameter=T:83:21 (Definition)
@@ -813,7 +813,7 @@ AttributeList::Kind AttributeList::getKind(const IdentifierInfo * Name) {
 // CHECK-tokens: Keyword: "class" [83:41 - 83:46] ClassTemplate=StringSwitch:83:47 (Definition)
 // CHECK-tokens: Identifier: "StringSwitch" [83:47 - 83:59] ClassTemplate=StringSwitch:83:47 (Definition)
 // CHECK-tokens: Punctuation: "{" [83:60 - 83:61] ClassTemplate=StringSwitch:83:47 (Definition)
-// CHECK-tokens: Identifier: "StringRef" [84:3 - 84:12] TypeRef=class llvm::StringRef:38:7
+// CHECK-tokens: Identifier: "StringRef" [84:3 - 84:12] TypeRef=class llvm37::StringRef:38:7
 // CHECK-tokens: Identifier: "Str" [84:13 - 84:16] FieldDecl=Str:84:13 (Definition)
 // CHECK-tokens: Punctuation: ";" [84:16 - 84:17] ClassTemplate=StringSwitch:83:47 (Definition)
 // CHECK-tokens: Keyword: "const" [85:3 - 85:8] FieldDecl=Result:85:12 (Definition)
@@ -826,7 +826,7 @@ AttributeList::Kind AttributeList::getKind(const IdentifierInfo * Name) {
 // CHECK-tokens: Keyword: "explicit" [87:3 - 87:11] CXXConstructor=StringSwitch<T, R>:87:12 (Definition)
 // CHECK-tokens: Identifier: "StringSwitch" [87:12 - 87:24] CXXConstructor=StringSwitch<T, R>:87:12 (Definition)
 // CHECK-tokens: Punctuation: "(" [87:24 - 87:25] CXXConstructor=StringSwitch<T, R>:87:12 (Definition)
-// CHECK-tokens: Identifier: "StringRef" [87:25 - 87:34] TypeRef=class llvm::StringRef:38:7
+// CHECK-tokens: Identifier: "StringRef" [87:25 - 87:34] TypeRef=class llvm37::StringRef:38:7
 // CHECK-tokens: Identifier: "Str" [87:35 - 87:38] ParmDecl=Str:87:35 (Definition)
 // CHECK-tokens: Punctuation: ")" [87:38 - 87:39] CXXConstructor=StringSwitch<T, R>:87:12 (Definition)
 // CHECK-tokens: Punctuation: ":" [87:40 - 87:41] CXXConstructor=StringSwitch<T, R>:87:12 (Definition)
@@ -886,8 +886,8 @@ AttributeList::Kind AttributeList::getKind(const IdentifierInfo * Name) {
 // CHECK-tokens: Punctuation: ";" [93:17 - 93:18] CompoundStmt=
 // CHECK-tokens: Punctuation: "}" [94:3 - 94:4] CompoundStmt=
 // CHECK-tokens: Punctuation: "}" [95:1 - 95:2] ClassTemplate=StringSwitch:83:47 (Definition)
-// CHECK-tokens: Punctuation: ";" [95:2 - 95:3] Namespace=llvm:82:11 (Definition)
-// CHECK-tokens: Punctuation: "}" [96:1 - 96:2] Namespace=llvm:82:11 (Definition)
+// CHECK-tokens: Punctuation: ";" [95:2 - 95:3] Namespace=llvm37:82:11 (Definition)
+// CHECK-tokens: Punctuation: "}" [96:1 - 96:2] Namespace=llvm37:82:11 (Definition)
 // CHECK-tokens: Keyword: "using" [98:1 - 98:6] UsingDirective=:98:17
 // CHECK-tokens: Keyword: "namespace" [98:7 - 98:16] UsingDirective=:98:17
 // CHECK-tokens: Identifier: "clang" [98:17 - 98:22] NamespaceRef=clang:10:17
@@ -905,9 +905,9 @@ AttributeList::Kind AttributeList::getKind(const IdentifierInfo * Name) {
 // CHECK-tokens: Identifier: "Name" [100:67 - 100:71] ParmDecl=Name:100:67 (Definition)
 // CHECK-tokens: Punctuation: ")" [100:71 - 100:72] CXXMethod=getKind:100:36 (Definition) (static)
 // CHECK-tokens: Punctuation: "{" [100:73 - 100:74] CompoundStmt=
-// CHECK-tokens: Identifier: "llvm" [101:3 - 101:7] NamespaceRef=llvm:82:11
+// CHECK-tokens: Identifier: "llvm37" [101:3 - 101:7] NamespaceRef=llvm37:82:11
 // CHECK-tokens: Punctuation: "::" [101:7 - 101:9] VarDecl=AttrName:101:19 (Definition)
-// CHECK-tokens: Identifier: "StringRef" [101:9 - 101:18] TypeRef=class llvm::StringRef:38:7
+// CHECK-tokens: Identifier: "StringRef" [101:9 - 101:18] TypeRef=class llvm37::StringRef:38:7
 // CHECK-tokens: Identifier: "AttrName" [101:19 - 101:27] VarDecl=AttrName:101:19 (Definition)
 // CHECK-tokens: Punctuation: "=" [101:28 - 101:29] VarDecl=AttrName:101:19 (Definition)
 // CHECK-tokens: Identifier: "Name" [101:30 - 101:34] DeclRefExpr=Name:100:67
@@ -950,8 +950,8 @@ AttributeList::Kind AttributeList::getKind(const IdentifierInfo * Name) {
 // CHECK-tokens: Punctuation: ")" [103:54 - 103:55] CallExpr=substr:60:13
 // CHECK-tokens: Punctuation: ";" [103:55 - 103:56] CompoundStmt=
 // CHECK-tokens: Keyword: "return" [105:3 - 105:9] ReturnStmt=
-// FIXME: Missing "llvm" namespace reference below
-// CHECK-tokens: Identifier: "llvm" [105:10 - 105:14] NamespaceRef=llvm:82:11
+// FIXME: Missing "llvm37" namespace reference below
+// CHECK-tokens: Identifier: "llvm37" [105:10 - 105:14] NamespaceRef=llvm37:82:11
 // CHECK-tokens: Punctuation: "::" [105:14 - 105:16] CXXFunctionalCastExpr=
 // CHECK-tokens: Identifier: "StringSwitch" [105:16 - 105:28] TemplateRef=StringSwitch:83:47
 // CHECK-tokens: Punctuation: "<" [105:29 - 105:30] CXXFunctionalCastExpr=
@@ -1623,7 +1623,7 @@ AttributeList::Kind AttributeList::getKind(const IdentifierInfo * Name) {
 // CHECK: 36:8: FunctionDecl=magic_length:36:8 Extent=[36:1 - 36:35]
 // CHECK: 36:1: TypeRef=size_t:2:25 Extent=[36:1 - 36:7]
 // CHECK: 36:33: ParmDecl=s:36:33 (Definition) Extent=[36:21 - 36:34]
-// CHECK: 37:11: Namespace=llvm:37:11 (Definition) Extent=[37:1 - 64:2]
+// CHECK: 37:11: Namespace=llvm37:37:11 (Definition) Extent=[37:1 - 64:2]
 // CHECK: 38:7: ClassDecl=StringRef:38:7 (Definition) Extent=[38:1 - 63:2]
 // CHECK: 39:1: CXXAccessSpecifier=:39:1 (Definition) Extent=[39:1 - 39:8]
 // CHECK: 40:23: TypedefDecl=iterator:40:23 (Definition) Extent=[40:3 - 40:31]
@@ -1692,7 +1692,7 @@ AttributeList::Kind AttributeList::getKind(const IdentifierInfo * Name) {
 // CHECK: 51:32: MemberRefExpr=Length:44:10 Extent=[51:32 - 51:38]
 // CHECK: 52:8: CXXMethod=startswith:52:8 (Definition) (const) Extent=[52:3 - 55:4] [access=public]
 // CHECK: 52:29: ParmDecl=Prefix:52:29 (Definition) Extent=[52:19 - 52:35]
-// CHECK: 52:19: TypeRef=class llvm::StringRef:38:7 Extent=[52:19 - 52:28]
+// CHECK: 52:19: TypeRef=class llvm37::StringRef:38:7 Extent=[52:19 - 52:28]
 // CHECK: 52:43: CompoundStmt= Extent=[52:43 - 55:4]
 // CHECK: 53:5: ReturnStmt= Extent=[53:5 - 54:56]
 // CHECK: 53:12: BinaryOperator= Extent=[53:12 - 54:56]
@@ -1715,7 +1715,7 @@ AttributeList::Kind AttributeList::getKind(const IdentifierInfo * Name) {
 // CHECK: 54:55: IntegerLiteral= Extent=[54:55 - 54:56]
 // CHECK: 56:8: CXXMethod=endswith:56:8 (Definition) (const) Extent=[56:3 - 59:4] [access=public]
 // CHECK: 56:27: ParmDecl=Suffix:56:27 (Definition) Extent=[56:17 - 56:33]
-// CHECK: 56:17: TypeRef=class llvm::StringRef:38:7 Extent=[56:17 - 56:26]
+// CHECK: 56:17: TypeRef=class llvm37::StringRef:38:7 Extent=[56:17 - 56:26]
 // CHECK: 56:41: CompoundStmt= Extent=[56:41 - 59:4]
 // CHECK: 57:5: ReturnStmt= Extent=[57:5 - 58:69]
 // CHECK: 57:12: BinaryOperator= Extent=[57:12 - 58:69]
@@ -1741,7 +1741,7 @@ AttributeList::Kind AttributeList::getKind(const IdentifierInfo * Name) {
 // CHECK: 58:50: DeclRefExpr=Suffix:56:27 Extent=[58:50 - 58:56]
 // CHECK: 58:68: IntegerLiteral= Extent=[58:68 - 58:69]
 // CHECK: 60:13: CXXMethod=substr:60:13 (Definition) (const) Extent=[60:3 - 62:4] [access=public]
-// CHECK: 60:3: TypeRef=class llvm::StringRef:38:7 Extent=[60:3 - 60:12]
+// CHECK: 60:3: TypeRef=class llvm37::StringRef:38:7 Extent=[60:3 - 60:12]
 // CHECK: 60:27: ParmDecl=Start:60:27 (Definition) Extent=[60:20 - 60:32]
 // CHECK: 60:20: TypeRef=size_t:2:25 Extent=[60:20 - 60:26]
 // CHECK: 60:41: ParmDecl=N:60:41 (Definition) Extent=[60:34 - 60:49]
@@ -1752,7 +1752,7 @@ AttributeList::Kind AttributeList::getKind(const IdentifierInfo * Name) {
 // CHECK: 61:12: CallExpr= Extent=[61:12 - 61:59]
 // CHECK: 61:12: UnexposedExpr=StringRef:49:3 Extent=[61:12 - 61:59]
 // CHECK: 61:12: CallExpr=StringRef:49:3 Extent=[61:12 - 61:59]
-// CHECK: 61:12: TypeRef=class llvm::StringRef:38:7 Extent=[61:12 - 61:21]
+// CHECK: 61:12: TypeRef=class llvm37::StringRef:38:7 Extent=[61:12 - 61:21]
 // CHECK: 61:22: BinaryOperator= Extent=[61:22 - 61:34]
 // CHECK: 61:22: UnexposedExpr=Data:43:15 Extent=[61:22 - 61:26]
 // CHECK: 61:22: MemberRefExpr=Data:43:15 Extent=[61:22 - 61:26]
@@ -1831,17 +1831,17 @@ AttributeList::Kind AttributeList::getKind(const IdentifierInfo * Name) {
 // CHECK: 78:44: UnexposedExpr=getLength:72:12 Extent=[78:44 - 78:55]
 // CHECK: 78:44: CallExpr=getLength:72:12 Extent=[78:44 - 78:55]
 // CHECK: 78:44: MemberRefExpr=getLength:72:12 Extent=[78:44 - 78:53]
-// CHECK: 82:11: Namespace=llvm:82:11 (Definition) Extent=[82:1 - 96:2]
+// CHECK: 82:11: Namespace=llvm37:82:11 (Definition) Extent=[82:1 - 96:2]
 // CHECK: 83:47: ClassTemplate=StringSwitch:83:47 (Definition) Extent=[83:1 - 95:2]
 // CHECK: 83:21: TemplateTypeParameter=T:83:21 (Definition) Extent=[83:12 - 83:22]
 // CHECK: 83:33: TemplateTypeParameter=R:83:33 (Definition) Extent=[83:24 - 83:38]
 // CHECK: 84:13: FieldDecl=Str:84:13 (Definition) Extent=[84:3 - 84:16]
-// CHECK: 84:3: TypeRef=class llvm::StringRef:38:7 Extent=[84:3 - 84:12]
+// CHECK: 84:3: TypeRef=class llvm37::StringRef:38:7 Extent=[84:3 - 84:12]
 // CHECK: 85:12: FieldDecl=Result:85:12 (Definition) Extent=[85:3 - 85:18]
 // CHECK: 86:1: CXXAccessSpecifier=:86:1 (Definition) Extent=[86:1 - 86:8]
 // CHECK: 87:12: CXXConstructor=StringSwitch<T, R>:87:12 (Definition) Extent=[87:3 - 87:64]
 // CHECK: 87:35: ParmDecl=Str:87:35 (Definition) Extent=[87:25 - 87:38]
-// CHECK: 87:25: TypeRef=class llvm::StringRef:38:7 Extent=[87:25 - 87:34]
+// CHECK: 87:25: TypeRef=class llvm37::StringRef:38:7 Extent=[87:25 - 87:34]
 // CHECK: 87:42: MemberRef=Str:84:13 Extent=[87:42 - 87:45]
 // CHECK: 87:42: CallExpr=StringRef:38:7 Extent=[87:42 - 87:50]
 // CHECK: 87:46: DeclRefExpr=Str:87:35 Extent=[87:46 - 87:49]

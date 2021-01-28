@@ -1,6 +1,6 @@
 // RUN: %dxc -Zi -E main -T as_6_5 %s | FileCheck %s
 
-// CHECK: call void @llvm.dbg.value(metadata %struct.smallPayload{{.*}}*
+// CHECK: call void @llvm37.dbg.value(metadata %struct.smallPayload{{.*}}*
 
 // Exclude quoted source file (see readme)
 // CHECK-LABEL: {{!"[^"]*\\0A[^"]*"}}

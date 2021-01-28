@@ -1,6 +1,6 @@
 //===-- Globals.cpp - Implement the GlobalValue & GlobalVariable class ----===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -12,16 +12,16 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/IR/GlobalValue.h"
-#include "llvm/ADT/SmallPtrSet.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/DerivedTypes.h"
-#include "llvm/IR/GlobalAlias.h"
-#include "llvm/IR/GlobalVariable.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/Operator.h"
-#include "llvm/Support/ErrorHandling.h"
-using namespace llvm;
+#include "llvm37/IR/GlobalValue.h"
+#include "llvm37/ADT/SmallPtrSet.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/DerivedTypes.h"
+#include "llvm37/IR/GlobalAlias.h"
+#include "llvm37/IR/GlobalVariable.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/Operator.h"
+#include "llvm37/Support/ErrorHandling.h"
+using namespace llvm37;
 
 //===----------------------------------------------------------------------===//
 //                            GlobalValue Class
@@ -45,11 +45,11 @@ void GlobalValue::dematerialize() {
 /// Override destroyConstantImpl to make sure it doesn't get called on
 /// GlobalValue's because they shouldn't be treated like other constants.
 void GlobalValue::destroyConstantImpl() {
-  llvm_unreachable("You can't GV->destroyConstantImpl()!");
+  llvm37_unreachable("You can't GV->destroyConstantImpl()!");
 }
 
 Value *GlobalValue::handleOperandChangeImpl(Value *From, Value *To, Use *U) {
-  llvm_unreachable("Unsupported class for handleOperandChange()!");
+  llvm37_unreachable("Unsupported class for handleOperandChange()!");
 }
 
 /// copyAttributesFrom - copy all additional attributes (those not needed to

@@ -23,7 +23,7 @@ RUN: printf '\067\0\0\0\0\0\0\0' >> %t
 RUN: printf '\101\0\0\0\0\0\0\0' >> %t
 RUN: printf 'foobar' >> %t
 
-RUN: llvm-profdata show %t -all-functions -counts | FileCheck %s
+RUN: llvm37-profdata show %t -all-functions -counts | FileCheck %s
 
 CHECK: Counters:
 CHECK:   foo:

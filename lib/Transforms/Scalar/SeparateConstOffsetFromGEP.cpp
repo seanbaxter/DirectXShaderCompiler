@@ -1,6 +1,6 @@
 //===-- SeparateConstOffsetFromGEP.cpp - ------------------------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -27,7 +27,7 @@
 // gep %a, 0, %x + 1, %y; load
 // gep %a, 0, %x + 1, %y + 1; load
 //
-// LLVM's GVN does not use partial redundancy elimination yet, and is thus
+// LLVM37's GVN does not use partial redundancy elimination yet, and is thus
 // unable to reuse (gep %a, 0, %x, %y). As a result, this misoptimization incurs
 // significant slowdown in targets with limited addressing modes. For instance,
 // because the PTX target does not support the reg+reg addressing mode, the
@@ -156,24 +156,24 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Analysis/TargetTransformInfo.h"
-#include "llvm/Analysis/ValueTracking.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/Dominators.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/Operator.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Transforms/Scalar.h"
-#include "llvm/Transforms/Utils/Local.h"
-#include "llvm/Target/TargetMachine.h"
-#include "llvm/Target/TargetSubtargetInfo.h"
-#include "llvm/IR/IRBuilder.h"
+#include "llvm37/Analysis/TargetTransformInfo.h"
+#include "llvm37/Analysis/ValueTracking.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/IR/Dominators.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/Operator.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Transforms/Scalar.h"
+#include "llvm37/Transforms/Utils/Local.h"
+#include "llvm37/Target/TargetMachine.h"
+#include "llvm37/Target/TargetSubtargetInfo.h"
+#include "llvm37/IR/IRBuilder.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 static cl::opt<bool> DisableSeparateConstOffsetFromGEP(
     "disable-separate-const-offset-from-gep", cl::init(false),
@@ -362,9 +362,9 @@ private:
   /// pointer-size integer, we have
   ///   gep base, a + b = gep (gep base, a), b
   /// However, this equality may not hold if the size of a + b is smaller than
-  /// the pointer size, because LLVM conceptually sign-extends GEP indices to
+  /// the pointer size, because LLVM37 conceptually sign-extends GEP indices to
   /// pointer size before computing the address
-  /// (http://llvm.org/docs/LangRef.html#id181).
+  /// (http://llvm37.org/docs/LangRef.html#id181).
   ///
   /// This canonicalization is very likely already done in clang and
   /// instcombine. Therefore, the program will probably remain the same.
@@ -398,7 +398,7 @@ INITIALIZE_PASS_END(
     false)
 
 FunctionPass *
-llvm::createSeparateConstOffsetFromGEPPass(const TargetMachine *TM,
+llvm37::createSeparateConstOffsetFromGEPPass(const TargetMachine *TM,
                                            bool LowerGEP) {
   return new SeparateConstOffsetFromGEP(TM, LowerGEP);
 }
@@ -900,7 +900,7 @@ bool SeparateConstOffsetFromGEP::splitGEP(GetElementPtrInst *GEP) {
   // addr = gep float* addr2, i64 5
   //
   // If a is -4, although the old index b is in bounds, the new index a is
-  // off-bound. http://llvm.org/docs/LangRef.html#id181 says "if the
+  // off-bound. http://llvm37.org/docs/LangRef.html#id181 says "if the
   // inbounds keyword is not present, the offsets are added to the base
   // address with silently-wrapping two's complement arithmetic".
   // Therefore, the final code will be a semantically equivalent.
@@ -943,7 +943,7 @@ bool SeparateConstOffsetFromGEP::splitGEP(GetElementPtrInst *GEP) {
   //   ... %new.gep ...
   //
   // If AccumulativeByteOffset is not a multiple of sizeof(*%gep), we emit an
-  // uglygep (http://llvm.org/docs/GetElementPtr.html#what-s-an-uglygep):
+  // uglygep (http://llvm37.org/docs/GetElementPtr.html#what-s-an-uglygep):
   // bitcast %gep2 to i8*, add the offset, and bitcast the result back to the
   // type of %gep.
   //
@@ -1033,7 +1033,7 @@ void SeparateConstOffsetFromGEP::verifyNoDeadCode(Function &F) {
         std::string ErrMessage;
         raw_string_ostream RSO(ErrMessage);
         RSO << "Dead instruction detected!\n" << I << "\n";
-        llvm_unreachable(RSO.str().c_str());
+        llvm37_unreachable(RSO.str().c_str());
       }
     }
   }

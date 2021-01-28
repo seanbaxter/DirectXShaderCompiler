@@ -1,6 +1,6 @@
 //===- BlockFrequencyInfo.cpp - Block Frequency Analysis ------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,18 +11,18 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Analysis/BlockFrequencyInfo.h"
-#include "llvm/Analysis/BlockFrequencyInfoImpl.h"
-#include "llvm/Analysis/BranchProbabilityInfo.h"
-#include "llvm/Analysis/LoopInfo.h"
-#include "llvm/Analysis/Passes.h"
-#include "llvm/IR/CFG.h"
-#include "llvm/InitializePasses.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/GraphWriter.h"
+#include "llvm37/Analysis/BlockFrequencyInfo.h"
+#include "llvm37/Analysis/BlockFrequencyInfoImpl.h"
+#include "llvm37/Analysis/BranchProbabilityInfo.h"
+#include "llvm37/Analysis/LoopInfo.h"
+#include "llvm37/Analysis/Passes.h"
+#include "llvm37/IR/CFG.h"
+#include "llvm37/InitializePasses.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/GraphWriter.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "block-freq"
 
@@ -46,7 +46,7 @@ ViewBlockFreqPropagationDAG("view-block-freq-propagation-dags", cl::Hidden,
                        "integer fractional block frequency representation."),
             clEnumValEnd));
 
-namespace llvm {
+namespace llvm37 {
 
 template <>
 struct GraphTraits<BlockFrequencyInfo *> {
@@ -94,7 +94,7 @@ struct DOTGraphTraits<BlockFrequencyInfo*> : public DefaultDOTGraphTraits {
       OS << Graph->getBlockFreq(Node).getFrequency();
       break;
     case GVDT_None:
-      llvm_unreachable("If we are not supposed to render a graph we should "
+      llvm37_unreachable("If we are not supposed to render a graph we should "
                        "never reach this point.");
     }
 
@@ -102,7 +102,7 @@ struct DOTGraphTraits<BlockFrequencyInfo*> : public DefaultDOTGraphTraits {
   }
 };
 
-} // end namespace llvm
+} // end namespace llvm37
 #endif
 
 INITIALIZE_PASS_BEGIN(BlockFrequencyInfo, "block-freq",

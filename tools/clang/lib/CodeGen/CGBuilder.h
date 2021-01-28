@@ -1,16 +1,16 @@
 //===-- CGBuilder.h - Choose IRBuilder implementation  ----------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_LIB_CODEGEN_CGBUILDER_H
-#define LLVM_CLANG_LIB_CODEGEN_CGBUILDER_H
+#ifndef LLVM37_CLANG_LIB_CODEGEN_CGBUILDER_H
+#define LLVM37_CLANG_LIB_CODEGEN_CGBUILDER_H
 
-#include "llvm/IR/IRBuilder.h"
+#include "llvm37/IR/IRBuilder.h"
 
 namespace clang {
 namespace CodeGen {
@@ -22,16 +22,16 @@ class CodeGenFunction;
 /// instructions.
 template <bool PreserveNames>
 class CGBuilderInserter
-  : protected llvm::IRBuilderDefaultInserter<PreserveNames> {
+  : protected llvm37::IRBuilderDefaultInserter<PreserveNames> {
 public:
   CGBuilderInserter() : CGF(nullptr) {}
   explicit CGBuilderInserter(CodeGenFunction *CGF) : CGF(CGF) {}
 
 protected:
   /// \brief This forwards to CodeGenFunction::InsertHelper.
-  void InsertHelper(llvm::Instruction *I, const llvm::Twine &Name,
-                    llvm::BasicBlock *BB,
-                    llvm::BasicBlock::iterator InsertPt) const;
+  void InsertHelper(llvm37::Instruction *I, const llvm37::Twine &Name,
+                    llvm37::BasicBlock *BB,
+                    llvm37::BasicBlock::iterator InsertPt) const;
 private:
   void operator=(const CGBuilderInserter &) = delete;
 
@@ -45,7 +45,7 @@ private:
 #define PreserveNames true
 #endif
 typedef CGBuilderInserter<PreserveNames> CGBuilderInserterTy;
-typedef llvm::IRBuilder<PreserveNames, llvm::ConstantFolder,
+typedef llvm37::IRBuilder<PreserveNames, llvm37::ConstantFolder,
                         CGBuilderInserterTy> CGBuilderTy;
 #undef PreserveNames
 

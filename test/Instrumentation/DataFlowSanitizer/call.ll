@@ -6,7 +6,7 @@ target triple = "x86_64-unknown-linux-gnu"
 ; CHECK: @__dfsan_retval_tls = external thread_local(initialexec) global i16
 
 declare i32 @f(i32)
-declare float @llvm.sqrt.f32(float)
+declare float @llvm37.sqrt.f32(float)
 
 ; CHECK: @"dfs$call"
 define i32 @call() {
@@ -16,7 +16,7 @@ define i32 @call() {
   %r = call i32 @f(i32 0)
 
   ; CHECK-NOT: store{{.*}}__dfsan_arg_tls
-  %i = call float @llvm.sqrt.f32(float -1.0)
+  %i = call float @llvm37.sqrt.f32(float -1.0)
 
   ; CHECK: store{{.*}}__dfsan_retval_tls
   ; CHECK: ret i32

@@ -1,6 +1,6 @@
-//===--- CodeGenPGO.cpp - PGO Instrumentation for LLVM CodeGen --*- C++ -*-===//
+//===--- CodeGenPGO.cpp - PGO Instrumentation for LLVM37 CodeGen --*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -16,18 +16,18 @@
 #include "CoverageMappingGen.h"
 #include "clang/AST/RecursiveASTVisitor.h"
 #include "clang/AST/StmtVisitor.h"
-#include "llvm/IR/Intrinsics.h"
-#include "llvm/IR/MDBuilder.h"
-#include "llvm/ProfileData/InstrProfReader.h"
-#include "llvm/Support/Endian.h"
-#include "llvm/Support/FileSystem.h"
-#include "llvm/Support/MD5.h"
+#include "llvm37/IR/Intrinsics.h"
+#include "llvm37/IR/MDBuilder.h"
+#include "llvm37/ProfileData/InstrProfReader.h"
+#include "llvm37/Support/Endian.h"
+#include "llvm37/Support/FileSystem.h"
+#include "llvm37/Support/MD5.h"
 
 using namespace clang;
 using namespace CodeGen;
 
 void CodeGenPGO::setFuncName(StringRef Name,
-                             llvm::GlobalValue::LinkageTypes Linkage) {
+                             llvm37::GlobalValue::LinkageTypes Linkage) {
   StringRef RawFuncName = Name;
 
   // Function names may be prefixed with a binary '1' to indicate
@@ -37,7 +37,7 @@ void CodeGenPGO::setFuncName(StringRef Name,
     RawFuncName = RawFuncName.substr(1);
 
   FuncName = RawFuncName;
-  if (llvm::GlobalValue::isLocalLinkage(Linkage)) {
+  if (llvm37::GlobalValue::isLocalLinkage(Linkage)) {
     // For local symbols, prepend the main file name to distinguish them.
     // Do not include the full path in the file name since there's no guarantee
     // that it will stay the same, e.g., if the files are checked out from
@@ -53,31 +53,31 @@ void CodeGenPGO::setFuncName(StringRef Name,
     createFuncNameVar(Linkage);
 }
 
-void CodeGenPGO::setFuncName(llvm::Function *Fn) {
+void CodeGenPGO::setFuncName(llvm37::Function *Fn) {
   setFuncName(Fn->getName(), Fn->getLinkage());
 }
 
-void CodeGenPGO::createFuncNameVar(llvm::GlobalValue::LinkageTypes Linkage) {
+void CodeGenPGO::createFuncNameVar(llvm37::GlobalValue::LinkageTypes Linkage) {
   // We generally want to match the function's linkage, but available_externally
   // and extern_weak both have the wrong semantics, and anything that doesn't
   // need to link across compilation units doesn't need to be visible at all.
-  if (Linkage == llvm::GlobalValue::ExternalWeakLinkage)
-    Linkage = llvm::GlobalValue::LinkOnceAnyLinkage;
-  else if (Linkage == llvm::GlobalValue::AvailableExternallyLinkage)
-    Linkage = llvm::GlobalValue::LinkOnceODRLinkage;
-  else if (Linkage == llvm::GlobalValue::InternalLinkage ||
-           Linkage == llvm::GlobalValue::ExternalLinkage)
-    Linkage = llvm::GlobalValue::PrivateLinkage;
+  if (Linkage == llvm37::GlobalValue::ExternalWeakLinkage)
+    Linkage = llvm37::GlobalValue::LinkOnceAnyLinkage;
+  else if (Linkage == llvm37::GlobalValue::AvailableExternallyLinkage)
+    Linkage = llvm37::GlobalValue::LinkOnceODRLinkage;
+  else if (Linkage == llvm37::GlobalValue::InternalLinkage ||
+           Linkage == llvm37::GlobalValue::ExternalLinkage)
+    Linkage = llvm37::GlobalValue::PrivateLinkage;
 
   auto *Value =
-      llvm::ConstantDataArray::getString(CGM.getLLVMContext(), FuncName, false);
+      llvm37::ConstantDataArray::getString(CGM.getLLVM37Context(), FuncName, false);
   FuncNameVar =
-      new llvm::GlobalVariable(CGM.getModule(), Value->getType(), true, Linkage,
-                               Value, "__llvm_profile_name_" + FuncName);
+      new llvm37::GlobalVariable(CGM.getModule(), Value->getType(), true, Linkage,
+                               Value, "__llvm37_profile_name_" + FuncName);
 
   // Hide the symbol so that we correctly get a copy for each executable.
-  if (!llvm::GlobalValue::isLocalLinkage(FuncNameVar->getLinkage()))
-    FuncNameVar->setVisibility(llvm::GlobalValue::HiddenVisibility);
+  if (!llvm37::GlobalValue::isLocalLinkage(FuncNameVar->getLinkage()))
+    FuncNameVar->setVisibility(llvm37::GlobalValue::HiddenVisibility);
 }
 
 namespace {
@@ -94,7 +94,7 @@ namespace {
 class PGOHash {
   uint64_t Working;
   unsigned Count;
-  llvm::MD5 MD5;
+  llvm37::MD5 MD5;
 
   static const int NumBitsPerType = 6;
   static const unsigned NumTypesPerWord = sizeof(uint64_t) * 8 / NumBitsPerType;
@@ -149,9 +149,9 @@ struct MapRegionCounters : public RecursiveASTVisitor<MapRegionCounters> {
   /// The function hash.
   PGOHash Hash;
   /// The map of statements to counters.
-  llvm::DenseMap<const Stmt *, unsigned> &CounterMap;
+  llvm37::DenseMap<const Stmt *, unsigned> &CounterMap;
 
-  MapRegionCounters(llvm::DenseMap<const Stmt *, unsigned> &CounterMap)
+  MapRegionCounters(llvm37::DenseMap<const Stmt *, unsigned> &CounterMap)
       : NextCounter(0), CounterMap(CounterMap) {}
 
   // Blocks and lambdas are handled as separate functions, so we need not
@@ -246,7 +246,7 @@ struct ComputeRegionCounts : public ConstStmtVisitor<ComputeRegionCounts> {
   uint64_t CurrentCount;
 
   /// The map of statements to count values.
-  llvm::DenseMap<const Stmt *, uint64_t> &CountMap;
+  llvm37::DenseMap<const Stmt *, uint64_t> &CountMap;
 
   /// BreakContinueStack - Keep counts of breaks and continues inside loops.
   struct BreakContinue {
@@ -256,7 +256,7 @@ struct ComputeRegionCounts : public ConstStmtVisitor<ComputeRegionCounts> {
   };
   SmallVector<BreakContinue, 8> BreakContinueStack;
 
-  ComputeRegionCounts(llvm::DenseMap<const Stmt *, uint64_t> &CountMap,
+  ComputeRegionCounts(llvm37::DenseMap<const Stmt *, uint64_t> &CountMap,
                       CodeGenPGO &PGO)
       : PGO(PGO), RecordNextStmtCount(false), CountMap(CountMap) {}
 
@@ -613,9 +613,9 @@ void PGOHash::combine(HashType Type) {
 
   // Pass through MD5 if enough work has built up.
   if (Count && Count % NumTypesPerWord == 0) {
-    using namespace llvm::support;
+    using namespace llvm37::support;
     uint64_t Swapped = endian::byte_swap<uint64_t, little>(Working);
-    MD5.update(llvm::makeArrayRef((uint8_t *)&Swapped, sizeof(Swapped)));
+    MD5.update(llvm37::makeArrayRef((uint8_t *)&Swapped, sizeof(Swapped)));
     Working = 0;
   }
 
@@ -637,9 +637,9 @@ uint64_t PGOHash::finalize() {
     MD5.update(Working);
 
   // Finalize the MD5 and return the hash.
-  llvm::MD5::MD5Result Result;
+  llvm37::MD5::MD5Result Result;
   MD5.final(Result);
-  using namespace llvm::support;
+  using namespace llvm37::support;
   return endian::read<uint64_t, little, unaligned>(Result);
 }
 
@@ -657,9 +657,9 @@ void CodeGenPGO::checkGlobalDecl(GlobalDecl GD) {
   }
 }
 
-void CodeGenPGO::assignRegionCounters(const Decl *D, llvm::Function *Fn) {
+void CodeGenPGO::assignRegionCounters(const Decl *D, llvm37::Function *Fn) {
   bool InstrumentRegions = CGM.getCodeGenOpts().ProfileInstrGenerate;
-  llvm::IndexedInstrProfReader *PGOReader = CGM.getPGOReader();
+  llvm37::IndexedInstrProfReader *PGOReader = CGM.getPGOReader();
   if (!InstrumentRegions && !PGOReader)
     return;
   if (D->isImplicit())
@@ -679,7 +679,7 @@ void CodeGenPGO::assignRegionCounters(const Decl *D, llvm::Function *Fn) {
 }
 
 void CodeGenPGO::mapRegionCounters(const Decl *D) {
-  RegionCounterMap.reset(new llvm::DenseMap<const Stmt *, unsigned>);
+  RegionCounterMap.reset(new llvm37::DenseMap<const Stmt *, unsigned>);
   MapRegionCounters Walker(*RegionCounterMap);
   if (const FunctionDecl *FD = dyn_cast_or_null<FunctionDecl>(D))
     Walker.TraverseDecl(const_cast<FunctionDecl *>(FD));
@@ -703,7 +703,7 @@ void CodeGenPGO::emitCounterRegionMapping(const Decl *D) {
     return;
 
   std::string CoverageMapping;
-  llvm::raw_string_ostream OS(CoverageMapping);
+  llvm37::raw_string_ostream OS(CoverageMapping);
   CoverageMappingGen MappingGen(*CGM.getCoverageMapping(),
                                 CGM.getContext().getSourceManager(),
                                 CGM.getLangOpts(), RegionCounterMap.get());
@@ -719,7 +719,7 @@ void CodeGenPGO::emitCounterRegionMapping(const Decl *D) {
 
 void
 CodeGenPGO::emitEmptyCounterMapping(const Decl *D, StringRef Name,
-                                    llvm::GlobalValue::LinkageTypes Linkage) {
+                                    llvm37::GlobalValue::LinkageTypes Linkage) {
   if (SkipCoverageMapping)
     return;
   // Don't map the functions inside the system headers
@@ -728,7 +728,7 @@ CodeGenPGO::emitEmptyCounterMapping(const Decl *D, StringRef Name,
     return;
 
   std::string CoverageMapping;
-  llvm::raw_string_ostream OS(CoverageMapping);
+  llvm37::raw_string_ostream OS(CoverageMapping);
   CoverageMappingGen MappingGen(*CGM.getCoverageMapping(),
                                 CGM.getContext().getSourceManager(),
                                 CGM.getLangOpts());
@@ -744,7 +744,7 @@ CodeGenPGO::emitEmptyCounterMapping(const Decl *D, StringRef Name,
 }
 
 void CodeGenPGO::computeRegionCounts(const Decl *D) {
-  StmtCountMap.reset(new llvm::DenseMap<const Stmt *, uint64_t>);
+  StmtCountMap.reset(new llvm37::DenseMap<const Stmt *, uint64_t>);
   ComputeRegionCounts Walker(*StmtCountMap, *this);
   if (const FunctionDecl *FD = dyn_cast_or_null<FunctionDecl>(D))
     Walker.VisitFunctionDecl(FD);
@@ -757,8 +757,8 @@ void CodeGenPGO::computeRegionCounts(const Decl *D) {
 }
 
 void
-CodeGenPGO::applyFunctionAttributes(llvm::IndexedInstrProfReader *PGOReader,
-                                    llvm::Function *Fn) {
+CodeGenPGO::applyFunctionAttributes(llvm37::IndexedInstrProfReader *PGOReader,
+                                    llvm37::Function *Fn) {
   if (!haveRegionCounts())
     return;
 
@@ -767,11 +767,11 @@ CodeGenPGO::applyFunctionAttributes(llvm::IndexedInstrProfReader *PGOReader,
   if (FunctionCount >= (uint64_t)(0.3 * (double)MaxFunctionCount))
     // Turn on InlineHint attribute for hot functions.
     // FIXME: 30% is from preliminary tuning on SPEC, it may not be optimal.
-    Fn->addFnAttr(llvm::Attribute::InlineHint);
+    Fn->addFnAttr(llvm37::Attribute::InlineHint);
   else if (FunctionCount <= (uint64_t)(0.01 * (double)MaxFunctionCount))
     // Turn on Cold attribute for cold functions.
     // FIXME: 1% is from preliminary tuning on SPEC, it may not be optimal.
-    Fn->addFnAttr(llvm::Attribute::Cold);
+    Fn->addFnAttr(llvm37::Attribute::Cold);
 
   Fn->setEntryCount(FunctionCount);
 }
@@ -783,25 +783,25 @@ void CodeGenPGO::emitCounterIncrement(CGBuilderTy &Builder, const Stmt *S) {
     return;
 
   unsigned Counter = (*RegionCounterMap)[S];
-  auto *I8PtrTy = llvm::Type::getInt8PtrTy(CGM.getLLVMContext());
-  Builder.CreateCall(CGM.getIntrinsic(llvm::Intrinsic::instrprof_increment),
-                     {llvm::ConstantExpr::getBitCast(FuncNameVar, I8PtrTy),
+  auto *I8PtrTy = llvm37::Type::getInt8PtrTy(CGM.getLLVM37Context());
+  Builder.CreateCall(CGM.getIntrinsic(llvm37::Intrinsic::instrprof_increment),
+                     {llvm37::ConstantExpr::getBitCast(FuncNameVar, I8PtrTy),
                       Builder.getInt64(FunctionHash),
                       Builder.getInt32(NumRegionCounters),
                       Builder.getInt32(Counter)});
 }
 
-void CodeGenPGO::loadRegionCounts(llvm::IndexedInstrProfReader *PGOReader,
+void CodeGenPGO::loadRegionCounts(llvm37::IndexedInstrProfReader *PGOReader,
                                   bool IsInMainFile) {
   CGM.getPGOStats().addVisited(IsInMainFile);
   RegionCounts.clear();
   if (std::error_code EC =
           PGOReader->getFunctionCounts(FuncName, FunctionHash, RegionCounts)) {
-    if (EC == llvm::instrprof_error::unknown_function)
+    if (EC == llvm37::instrprof_error::unknown_function)
       CGM.getPGOStats().addMissing(IsInMainFile);
-    else if (EC == llvm::instrprof_error::hash_mismatch)
+    else if (EC == llvm37::instrprof_error::hash_mismatch)
       CGM.getPGOStats().addMismatched(IsInMainFile);
-    else if (EC == llvm::instrprof_error::malformed)
+    else if (EC == llvm37::instrprof_error::malformed)
       // TODO: Consider a more specific warning for this case.
       CGM.getPGOStats().addMismatched(IsInMainFile);
     RegionCounts.clear();
@@ -832,7 +832,7 @@ static uint32_t scaleBranchWeight(uint64_t Weight, uint64_t Scale) {
   return Scaled;
 }
 
-llvm::MDNode *CodeGenFunction::createProfileWeights(uint64_t TrueCount,
+llvm37::MDNode *CodeGenFunction::createProfileWeights(uint64_t TrueCount,
                                                     uint64_t FalseCount) {
   // Check for empty weights.
   if (!TrueCount && !FalseCount)
@@ -841,12 +841,12 @@ llvm::MDNode *CodeGenFunction::createProfileWeights(uint64_t TrueCount,
   // Calculate how to scale down to 32-bits.
   uint64_t Scale = calculateWeightScale(std::max(TrueCount, FalseCount));
 
-  llvm::MDBuilder MDHelper(CGM.getLLVMContext());
+  llvm37::MDBuilder MDHelper(CGM.getLLVM37Context());
   return MDHelper.createBranchWeights(scaleBranchWeight(TrueCount, Scale),
                                       scaleBranchWeight(FalseCount, Scale));
 }
 
-llvm::MDNode *
+llvm37::MDNode *
 CodeGenFunction::createProfileWeights(ArrayRef<uint64_t> Weights) {
   // We need at least two elements to create meaningful weights.
   if (Weights.size() < 2)
@@ -865,11 +865,11 @@ CodeGenFunction::createProfileWeights(ArrayRef<uint64_t> Weights) {
   for (uint64_t W : Weights)
     ScaledWeights.push_back(scaleBranchWeight(W, Scale));
 
-  llvm::MDBuilder MDHelper(CGM.getLLVMContext());
+  llvm37::MDBuilder MDHelper(CGM.getLLVM37Context());
   return MDHelper.createBranchWeights(ScaledWeights);
 }
 
-llvm::MDNode *CodeGenFunction::createProfileWeightsForLoop(const Stmt *Cond,
+llvm37::MDNode *CodeGenFunction::createProfileWeightsForLoop(const Stmt *Cond,
                                                            uint64_t LoopCount) {
   if (!PGO.haveRegionCounts())
     return nullptr;

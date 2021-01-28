@@ -1,6 +1,6 @@
-//===- llvm/Support/DiagnosticInfo.cpp - Diagnostic Definitions -*- C++ -*-===//
+//===- llvm37/Support/DiagnosticInfo.cpp - Diagnostic Definitions -*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -9,25 +9,25 @@
 //
 // This file defines the different classes involved in low level diagnostics.
 //
-// Diagnostics reporting is still done as part of the LLVMContext.
+// Diagnostics reporting is still done as part of the LLVM37Context.
 //===----------------------------------------------------------------------===//
 
 #include "LLVMContextImpl.h"
-#include "llvm/ADT/Twine.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/DebugInfo.h"
-#include "llvm/IR/DiagnosticInfo.h"
-#include "llvm/IR/DiagnosticPrinter.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/Instruction.h"
-#include "llvm/IR/Metadata.h"
-#include "llvm/IR/Module.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/Regex.h"
+#include "llvm37/ADT/Twine.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/DebugInfo.h"
+#include "llvm37/IR/DiagnosticInfo.h"
+#include "llvm37/IR/DiagnosticPrinter.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/Instruction.h"
+#include "llvm37/IR/Metadata.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/Regex.h"
 #include <atomic>
 #include <string>
 
-using namespace llvm;
+using namespace llvm37;
 
 namespace {
 
@@ -103,7 +103,7 @@ static PassRemarksOptNull PassRemarksAnalysisOptLoc;
 }
 #endif
 
-int llvm::getNextAvailablePluginDiagnosticKind() {
+int llvm37::getNextAvailablePluginDiagnosticKind() {
   static std::atomic<int> PluginKindID(DK_FirstPluginKind);
   return ++PluginKindID;
 }
@@ -191,20 +191,20 @@ void DiagnosticInfoMIRParser::print(DiagnosticPrinter &DP) const {
   DP << Diagnostic;
 }
 
-void llvm::emitOptimizationRemark(LLVMContext &Ctx, const char *PassName,
+void llvm37::emitOptimizationRemark(LLVM37Context &Ctx, const char *PassName,
                                   const Function &Fn, const DebugLoc &DLoc,
                                   const Twine &Msg) {
   Ctx.diagnose(DiagnosticInfoOptimizationRemark(PassName, Fn, DLoc, Msg));
 }
 
-void llvm::emitOptimizationRemarkMissed(LLVMContext &Ctx, const char *PassName,
+void llvm37::emitOptimizationRemarkMissed(LLVM37Context &Ctx, const char *PassName,
                                         const Function &Fn,
                                         const DebugLoc &DLoc,
                                         const Twine &Msg) {
   Ctx.diagnose(DiagnosticInfoOptimizationRemarkMissed(PassName, Fn, DLoc, Msg));
 }
 
-void llvm::emitOptimizationRemarkAnalysis(LLVMContext &Ctx,
+void llvm37::emitOptimizationRemarkAnalysis(LLVM37Context &Ctx,
                                           const char *PassName,
                                           const Function &Fn,
                                           const DebugLoc &DLoc,
@@ -218,13 +218,13 @@ bool DiagnosticInfoOptimizationFailure::isEnabled() const {
   return getSeverity() == DS_Warning;
 }
 
-void llvm::emitLoopVectorizeWarning(LLVMContext &Ctx, const Function &Fn,
+void llvm37::emitLoopVectorizeWarning(LLVM37Context &Ctx, const Function &Fn,
                                     const DebugLoc &DLoc, const Twine &Msg) {
   Ctx.diagnose(DiagnosticInfoOptimizationFailure(
       Fn, DLoc, Twine("loop not vectorized: " + Msg)));
 }
 
-void llvm::emitLoopInterleaveWarning(LLVMContext &Ctx, const Function &Fn,
+void llvm37::emitLoopInterleaveWarning(LLVM37Context &Ctx, const Function &Fn,
                                      const DebugLoc &DLoc, const Twine &Msg) {
   Ctx.diagnose(DiagnosticInfoOptimizationFailure(
       Fn, DLoc, Twine("loop not interleaved: " + Msg)));

@@ -17,8 +17,8 @@ BUNDLE_SIZE_POW2 = 4
 BUNDLE_SIZE = 2 ** BUNDLE_SIZE_POW2
 
 PREAMBLE = '''
-# RUN: llvm-mc -filetype=obj -triple i386-pc-linux-gnu %s -o - \\
-# RUN:   | llvm-objdump -triple i386 -disassemble -no-show-raw-insn - | FileCheck %s
+# RUN: llvm37-mc -filetype=obj -triple i386-pc-linux-gnu %s -o - \\
+# RUN:   | llvm37-objdump -triple i386 -disassemble -no-show-raw-insn - | FileCheck %s
 
 # !!! This test is auto-generated from utils/testgen/mc-bundling-x86-gen.py !!!
 #     It tests that bundle-aligned grouping works correctly in MC. Read the

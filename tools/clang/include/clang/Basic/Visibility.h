@@ -1,6 +1,6 @@
 //===--- Visibility.h - Visibility enumeration and utilities ----*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -12,8 +12,8 @@
 /// functions.
 ///
 //===----------------------------------------------------------------------===//
-#ifndef LLVM_CLANG_BASIC_VISIBILITY_H
-#define LLVM_CLANG_BASIC_VISIBILITY_H
+#ifndef LLVM37_CLANG_BASIC_VISIBILITY_H
+#define LLVM37_CLANG_BASIC_VISIBILITY_H
 
 #include "clang/Basic/Linkage.h"
 
@@ -138,4 +138,4 @@ public:
 };
 }
 
-#endif // LLVM_CLANG_BASIC_VISIBILITY_H
+#endif // LLVM37_CLANG_BASIC_VISIBILITY_H

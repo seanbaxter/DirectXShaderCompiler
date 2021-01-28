@@ -110,7 +110,7 @@ lpad:                                             ; preds = %for.body
           catch i8* bitcast (i8** @_ZTIi to i8*)
   %1 = extractvalue { i8*, i32 } %0, 0
   %2 = extractvalue { i8*, i32 } %0, 1
-  %3 = tail call i32 @llvm.eh.typeid.for(i8* bitcast (i8** @_ZTIi to i8*)) nounwind
+  %3 = tail call i32 @llvm37.eh.typeid.for(i8* bitcast (i8** @_ZTIi to i8*)) nounwind
   %matches = icmp eq i32 %2, %3
   br i1 %matches, label %catch, label %eh.resume
 
@@ -193,7 +193,7 @@ declare void @_Z3fooi(i32)
 
 declare i32 @__gxx_personality_v0(...)
 
-declare i32 @llvm.eh.typeid.for(i8*) nounwind readnone
+declare i32 @llvm37.eh.typeid.for(i8*) nounwind readnone
 
 declare i8* @__cxa_begin_catch(i8*)
 

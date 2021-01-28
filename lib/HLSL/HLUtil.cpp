@@ -15,12 +15,12 @@
 
 #include "dxc/Support/Global.h"
 
-#include "llvm/IR/Operator.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/IR/GetElementPtrTypeIterator.h"
+#include "llvm37/IR/Operator.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/IR/GetElementPtrTypeIterator.h"
 
-using namespace llvm;
+using namespace llvm37;
 using namespace hlsl;
 using namespace hlsl::hlutil;
 
@@ -196,7 +196,7 @@ void PointerStatus::analyze(DxilTypeSystem &typeSys, bool bStructElt) {
   analyzePointer(Ptr, *this, typeSys, bStructElt, bLoadStoreOnly);
 }
 
-PointerStatus::PointerStatus(llvm::Value *ptr, unsigned size, bool bLdStOnly)
+PointerStatus::PointerStatus(llvm37::Value *ptr, unsigned size, bool bLdStOnly)
     : storedType(StoredType::NotStored), loadedType(LoadedType::NotLoaded),
       StoredOnceValue(nullptr), StoringMemcpy(nullptr), LoadingMemcpy(nullptr),
       AccessingFunction(nullptr), HasMultipleAccessingFunctions(false),

@@ -17,7 +17,7 @@
 #include "dxc/HLSL/DxilPackSignatureElement.h"
 
 using namespace hlsl;
-using namespace llvm;
+using namespace llvm37;
 
 namespace hlsl {
 unsigned PackDxilSignature(DxilSignature &sig, DXIL::PackingStrategy packing) {

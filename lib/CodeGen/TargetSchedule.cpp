@@ -1,6 +1,6 @@
-//===-- llvm/Target/TargetSchedule.cpp - Sched Machine Model ----*- C++ -*-===//
+//===-- llvm37/Target/TargetSchedule.cpp - Sched Machine Model ----*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -12,14 +12,14 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/CodeGen/TargetSchedule.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Target/TargetInstrInfo.h"
-#include "llvm/Target/TargetRegisterInfo.h"
-#include "llvm/Target/TargetSubtargetInfo.h"
+#include "llvm37/CodeGen/TargetSchedule.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Target/TargetInstrInfo.h"
+#include "llvm37/Target/TargetRegisterInfo.h"
+#include "llvm37/Target/TargetSubtargetInfo.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 static cl::opt<bool> EnableSchedModel("schedmodel", cl::Hidden, cl::init(true),
   cl::desc("Use TargetSchedModel for latency lookup"));
@@ -246,7 +246,7 @@ unsigned TargetSchedModel::computeInstrLatency(unsigned Opcode) const {
   if (SCDesc->isValid() && !SCDesc->isVariant())
     return computeInstrLatency(*SCDesc);
 
-  llvm_unreachable("No MI sched latency");
+  llvm37_unreachable("No MI sched latency");
 }
 
 unsigned

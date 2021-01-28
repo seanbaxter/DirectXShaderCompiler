@@ -1,6 +1,6 @@
 //===- tools/dsymutil/DwarfLinker.cpp - Dwarf debug info linker -----------===//
 //
-//                             The LLVM Linker
+//                             The LLVM37 Linker
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,35 +11,35 @@
 #include "BinaryHolder.h"
 #include "DebugMap.h"
 #include "dsymutil.h"
-#include "llvm/ADT/IntervalMap.h"
-#include "llvm/ADT/StringMap.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/CodeGen/AsmPrinter.h"
-#include "llvm/CodeGen/DIE.h"
-#include "llvm/DebugInfo/DWARF/DWARFContext.h"
-#include "llvm/DebugInfo/DWARF/DWARFDebugInfoEntry.h"
-#include "llvm/DebugInfo/DWARF/DWARFFormValue.h"
-#include "llvm/MC/MCAsmBackend.h"
-#include "llvm/MC/MCAsmInfo.h"
-#include "llvm/MC/MCContext.h"
-#include "llvm/MC/MCCodeEmitter.h"
-#include "llvm/MC/MCDwarf.h"
-#include "llvm/MC/MCInstrInfo.h"
-#include "llvm/MC/MCObjectFileInfo.h"
-#include "llvm/MC/MCRegisterInfo.h"
-#include "llvm/MC/MCStreamer.h"
-#include "llvm/MC/MCSubtargetInfo.h"
-#include "llvm/Object/MachO.h"
-#include "llvm/Support/Dwarf.h"
-#include "llvm/Support/LEB128.h"
-#include "llvm/Support/TargetRegistry.h"
-#include "llvm/Target/TargetMachine.h"
-#include "llvm/Target/TargetOptions.h"
+#include "llvm37/ADT/IntervalMap.h"
+#include "llvm37/ADT/StringMap.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/CodeGen/AsmPrinter.h"
+#include "llvm37/CodeGen/DIE.h"
+#include "llvm37/DebugInfo/DWARF/DWARFContext.h"
+#include "llvm37/DebugInfo/DWARF/DWARFDebugInfoEntry.h"
+#include "llvm37/DebugInfo/DWARF/DWARFFormValue.h"
+#include "llvm37/MC/MCAsmBackend.h"
+#include "llvm37/MC/MCAsmInfo.h"
+#include "llvm37/MC/MCContext.h"
+#include "llvm37/MC/MCCodeEmitter.h"
+#include "llvm37/MC/MCDwarf.h"
+#include "llvm37/MC/MCInstrInfo.h"
+#include "llvm37/MC/MCObjectFileInfo.h"
+#include "llvm37/MC/MCRegisterInfo.h"
+#include "llvm37/MC/MCStreamer.h"
+#include "llvm37/MC/MCSubtargetInfo.h"
+#include "llvm37/Object/MachO.h"
+#include "llvm37/Support/Dwarf.h"
+#include "llvm37/Support/LEB128.h"
+#include "llvm37/Support/TargetRegistry.h"
+#include "llvm37/Target/TargetMachine.h"
+#include "llvm37/Target/TargetOptions.h"
 #include <string>
 #include <tuple>
 //                                                                           //
 ///////////////////////////////////////////////////////////////////////////////
-namespace llvm {
+namespace llvm37 {
 namespace dsymutil {
 
 namespace {
@@ -108,7 +108,7 @@ public:
         NextUnitOffset(RHS.NextUnitOffset), RangeAlloc(), Ranges(RangeAlloc) {
     // The CompileUnit container has been 'reserve()'d with the right
     // size. We cannot move the IntervalMap anyway.
-    llvm_unreachable("CompileUnits should not be moved.");
+    llvm37_unreachable("CompileUnits should not be moved.");
   }
 
   DWARFUnit &getOrigUnit() const { return OrigUnit; }
@@ -541,7 +541,7 @@ bool DwarfStreamer::init(Triple TheTriple, StringRef OutputFilename) {
   // Create the output file.
   std::error_code EC;
   OutFile =
-      llvm::make_unique<raw_fd_ostream>(OutputFilename, EC, sys::fs::F_None);
+      llvm37::make_unique<raw_fd_ostream>(OutputFilename, EC, sys::fs::F_None);
   if (EC)
     return error(Twine(OutputFilename) + ": " + EC.message(), Context);
 
@@ -1366,7 +1366,7 @@ bool DwarfLinker::createStreamer(Triple TheTriple, StringRef OutputFilename) {
   if (Options.NoOutput)
     return true;
 
-  Streamer = llvm::make_unique<DwarfStreamer>();
+  Streamer = llvm37::make_unique<DwarfStreamer>();
   return Streamer->init(TheTriple, OutputFilename);
 }
 
@@ -1395,7 +1395,7 @@ static bool dieNeedsChildrenToBeMeaningful(uint32_t Tag) {
   case dwarf::DW_TAG_union_type:
     return true;
   }
-  llvm_unreachable("Invalid Tag");
+  llvm37_unreachable("Invalid Tag");
 }
 
 void DwarfLinker::startDebugObject(DWARFContext &Dwarf, DebugMapObject &Obj) {
@@ -2366,7 +2366,7 @@ static void patchStmtList(DIE &Die, DIEInteger Offset) {
       return;
     }
 
-  llvm_unreachable("Didn't find DW_AT_stmt_list in cloned DIE!");
+  llvm37_unreachable("Didn't find DW_AT_stmt_list in cloned DIE!");
 }
 
 /// \brief Extract the line table for \p Unit from \p OrigDwarf, and
@@ -2480,7 +2480,7 @@ void DwarfLinker::patchLineTableForUnit(CompileUnit &Unit,
 
   // Finished extracting, now emit the line tables.
   uint32_t PrologueEnd = StmtList + 10 + LineTable.Prologue.PrologueLength;
-  // FIXME: LLVM hardcodes it's prologue values. We just copy the
+  // FIXME: LLVM37 hardcodes it's prologue values. We just copy the
   // prologue over and that works because we act as both producer and
   // consumer. It would be nicer to have a real configurable line
   // table emitter.

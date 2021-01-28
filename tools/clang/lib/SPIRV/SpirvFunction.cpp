@@ -1,6 +1,6 @@
 //===--- SpirvFunction.cpp - SPIR-V Function Implementation ------*- C++ -*-==//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -16,7 +16,7 @@ namespace clang {
 namespace spirv {
 
 SpirvFunction::SpirvFunction(QualType returnType, SourceLocation loc,
-                             llvm::StringRef name, bool isPrecise,
+                             llvm37::StringRef name, bool isPrecise,
                              bool isNoInline)
     : functionId(0), astReturnType(returnType), returnType(nullptr),
       fnType(nullptr), relaxedPrecision(false), precise(isPrecise),

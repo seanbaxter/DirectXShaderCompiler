@@ -1,4 +1,4 @@
-; RUN: not llvm-as < %s 2>&1 | FileCheck %s
+; RUN: not llvm37-as < %s 2>&1 | FileCheck %s
 ; CHECK: assembly parsed, but does not verify as correct
 ; PR7316
 
@@ -13,9 +13,9 @@ L.0:
 	%2 = bitcast [16 x i8]* %1 to [0 x i8]*
 	%3 = getelementptr [16 x i8], [16 x i8]* @bb
 	%4 = bitcast [16 x i8]* %3 to [0 x i8]*
-	call void @llvm.memcpy.i32([0 x i8]* %2, [0 x i8]* %4, i32 16, i32 1)
+	call void @llvm37.memcpy.i32([0 x i8]* %2, [0 x i8]* %4, i32 16, i32 1)
 	br label %return
 return:
 	ret void
 }
-declare void @llvm.memcpy.i32([0 x i8]*, [0 x i8]*, i32, i32) nounwind
+declare void @llvm37.memcpy.i32([0 x i8]*, [0 x i8]*, i32, i32) nounwind

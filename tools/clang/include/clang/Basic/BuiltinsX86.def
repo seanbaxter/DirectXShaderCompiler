@@ -1,6 +1,6 @@
 //===--- BuiltinsX86.def - X86 Builtin function database --------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -16,7 +16,7 @@
 // MMX/SSE/etc is turned on. We should do this too.
 
 // FIXME: Ideally we would be able to pull this information from what
-// LLVM already knows about X86 builtins. We need to match the LLVM
+// LLVM37 already knows about X86 builtins. We need to match the LLVM37
 // definition anyway, since code generation will lower to the
 // intrinsic if one exists.
 

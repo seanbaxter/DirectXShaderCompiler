@@ -14,15 +14,15 @@
 #include "dxc/DXIL/DxilModule.h"
 #include "dxc/DXIL/DxilInstructions.h"
 
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/ADT/ArrayRef.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/Type.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/Instructions.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/ADT/ArrayRef.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/Type.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/Instructions.h"
 
-using namespace llvm;
+using namespace llvm37;
 using std::vector;
 using std::string;
 
@@ -460,7 +460,7 @@ const char *OP::GetOverloadTypeName(unsigned TypeSlot) {
   return m_OverloadTypeName[TypeSlot];
 }
 
-llvm::StringRef OP::GetTypeName(Type *Ty, std::string &str) {
+llvm37::StringRef OP::GetTypeName(Type *Ty, std::string &str) {
   unsigned TypeSlot = OP::GetTypeSlot(Ty);
   if (TypeSlot < kUserDefineTypeSlot) {
     return GetOverloadTypeName(TypeSlot);
@@ -480,7 +480,7 @@ llvm::StringRef OP::GetTypeName(Type *Ty, std::string &str) {
   }
 }
 
-llvm::StringRef OP::ConstructOverloadName(Type *Ty, DXIL::OpCode opCode,
+llvm37::StringRef OP::ConstructOverloadName(Type *Ty, DXIL::OpCode opCode,
                                           std::string &funcNameStorage) {
   if (Ty == Type::getVoidTy(Ty->getContext())) {
     funcNameStorage = (Twine(OP::m_NamePrefix) + Twine(GetOpCodeClassName(opCode))).str();
@@ -512,7 +512,7 @@ const char *OP::GetOpCodeClassName(OpCode opCode) {
   return m_OpCodeProps[(unsigned)opCode].pOpCodeClassName;
 }
 
-llvm::Attribute::AttrKind OP::GetMemAccessAttr(OpCode opCode) {
+llvm37::Attribute::AttrKind OP::GetMemAccessAttr(OpCode opCode) {
   DXASSERT(0 <= (unsigned)opCode && opCode < OpCode::NumOpCodes, "otherwise caller passed OOB index");
   return m_OpCodeProps[(unsigned)opCode].FuncAttr;
 }
@@ -536,7 +536,7 @@ bool OP::IsDxilOpFuncName(StringRef name) {
   return name.startswith(OP::m_NamePrefix);
 }
 
-bool OP::IsDxilOpFunc(const llvm::Function *F) {
+bool OP::IsDxilOpFunc(const llvm37::Function *F) {
   // Test for null to allow IsDxilOpFunc(Call.getCalledFunc()) to be resilient to indirect calls
   if (F == nullptr || !F->hasName())
     return false;
@@ -547,14 +547,14 @@ bool OP::IsDxilOpTypeName(StringRef name) {
   return name.startswith(m_TypePrefix) || name.startswith(m_MatrixTypePrefix);
 }
 
-bool OP::IsDxilOpType(llvm::StructType *ST) {
+bool OP::IsDxilOpType(llvm37::StructType *ST) {
   if (!ST->hasName())
     return false;
   StringRef Name = ST->getName();
   return IsDxilOpTypeName(Name);
 }
 
-bool OP::IsDupDxilOpType(llvm::StructType *ST) {
+bool OP::IsDupDxilOpType(llvm37::StructType *ST) {
   if (!ST->hasName())
     return false;
   StringRef Name = ST->getName();
@@ -567,7 +567,7 @@ bool OP::IsDupDxilOpType(llvm::StructType *ST) {
   return true;
 }
 
-StructType *OP::GetOriginalDxilOpType(llvm::StructType *ST, llvm::Module &M) {
+StructType *OP::GetOriginalDxilOpType(llvm37::StructType *ST, llvm37::Module &M) {
   DXASSERT(IsDupDxilOpType(ST), "else should not call GetOriginalDxilOpType");
   StringRef Name = ST->getName();
   size_t DotPos = Name.rfind('.');
@@ -578,20 +578,20 @@ StructType *OP::GetOriginalDxilOpType(llvm::StructType *ST, llvm::Module &M) {
   return OriginalST;
 }
 
-bool OP::IsDxilOpFuncCallInst(const llvm::Instruction *I) {
+bool OP::IsDxilOpFuncCallInst(const llvm37::Instruction *I) {
   const CallInst *CI = dyn_cast<CallInst>(I);
   if (CI == nullptr) return false;
   return IsDxilOpFunc(CI->getCalledFunction());
 }
 
-bool OP::IsDxilOpFuncCallInst(const llvm::Instruction *I, OpCode opcode) {
+bool OP::IsDxilOpFuncCallInst(const llvm37::Instruction *I, OpCode opcode) {
   if (!IsDxilOpFuncCallInst(I)) return false;
-  return llvm::cast<llvm::ConstantInt>(I->getOperand(0))->getZExtValue() == (unsigned)opcode;
+  return llvm37::cast<llvm37::ConstantInt>(I->getOperand(0))->getZExtValue() == (unsigned)opcode;
 }
 
-OP::OpCode OP::GetDxilOpFuncCallInst(const llvm::Instruction *I) {
+OP::OpCode OP::GetDxilOpFuncCallInst(const llvm37::Instruction *I) {
   DXASSERT(IsDxilOpFuncCallInst(I), "else caller didn't call IsDxilOpFuncCallInst to check");
-  return (OP::OpCode)llvm::cast<llvm::ConstantInt>(I->getOperand(0))->getZExtValue();
+  return (OP::OpCode)llvm37::cast<llvm37::ConstantInt>(I->getOperand(0))->getZExtValue();
 }
 
 bool OP::IsDxilOpWave(OpCode C) {
@@ -850,7 +850,7 @@ void OP::GetMinShaderModelAndMask(OpCode C, bool bWithTranslation,
   // OPCODE-SMMASK:END
 }
 
-void OP::GetMinShaderModelAndMask(const llvm::CallInst *CI, bool bWithTranslation,
+void OP::GetMinShaderModelAndMask(const llvm37::CallInst *CI, bool bWithTranslation,
                                   unsigned valMajor, unsigned valMinor,
                                   unsigned &major, unsigned &minor,
                                   unsigned &mask) {
@@ -908,7 +908,7 @@ void OP::GetMinShaderModelAndMask(const llvm::CallInst *CI, bool bWithTranslatio
 #undef SFLAG
 
 
-static Type *GetOrCreateStructType(LLVMContext &Ctx, ArrayRef<Type*> types, StringRef Name, Module *pModule) {
+static Type *GetOrCreateStructType(LLVM37Context &Ctx, ArrayRef<Type*> types, StringRef Name, Module *pModule) {
   if (StructType *ST = pModule->getTypeByName(Name)) {
     // TODO: validate the exist type match types if needed.
     return ST;
@@ -921,7 +921,7 @@ static Type *GetOrCreateStructType(LLVMContext &Ctx, ArrayRef<Type*> types, Stri
 //
 //  OP methods.
 //
-OP::OP(LLVMContext &Ctx, Module *pModule)
+OP::OP(LLVM37Context &Ctx, Module *pModule)
 : m_Ctx(Ctx)
 , m_pModule(pModule)
 , m_LowPrecisionMode(DXIL::LowPrecisionMode::Undefined) {
@@ -1001,7 +1001,7 @@ void OP::FixOverloadNames() {
     if (F.isDeclaration() && OP::IsDxilOpFunc(&F) && !F.user_empty()) {
       CallInst *CI = cast<CallInst>(*F.user_begin());
       DXIL::OpCode opCode = OP::GetDxilOpFuncCallInst(CI);
-      llvm::Type *Ty = OP::GetOverloadType(opCode, &F);
+      llvm37::Type *Ty = OP::GetOverloadType(opCode, &F);
       if (isa<StructType>(Ty)) {
         std::string funcName;
         if (OP::ConstructOverloadName(Ty, opCode, funcName).compare(F.getName()) != 0) {
@@ -1012,7 +1012,7 @@ void OP::FixOverloadNames() {
   }
 }
 
-void OP::UpdateCache(OpCodeClass opClass, Type * Ty, llvm::Function *F) {
+void OP::UpdateCache(OpCodeClass opClass, Type * Ty, llvm37::Function *F) {
   m_OpCodeClassCache[(unsigned)opClass].pOverloads[Ty] = F;
   m_FunctionToOpClass[F] = opClass;
 }
@@ -1454,7 +1454,7 @@ Function *OP::GetOpFunc(OpCode opCode, Type *pOverloadType) {
   return F;
 }
 
-const SmallMapVector<llvm::Type *, llvm::Function *, 8> &
+const SmallMapVector<llvm37::Type *, llvm37::Function *, 8> &
 OP::GetOpFuncList(OpCode opCode) const {
   DXASSERT(0 <= (unsigned)opCode && opCode < OpCode::NumOpCodes,
            "otherwise caller passed OOB OpCode");
@@ -1467,7 +1467,7 @@ OP::GetOpFuncList(OpCode opCode) const {
 bool OP::IsDxilOpUsed(OpCode opcode) const {
   auto &FnList = GetOpFuncList(opcode);
   for (auto &it : FnList) {
-    llvm::Function *F = it.second;
+    llvm37::Function *F = it.second;
     if (!F) {
       continue;
     }
@@ -1518,15 +1518,15 @@ void OP::SetMinPrecision(bool bMinPrecision) {
   m_LowPrecisionMode = mode;
 }
 
-uint64_t OP::GetAllocSizeForType(llvm::Type *Ty) {
+uint64_t OP::GetAllocSizeForType(llvm37::Type *Ty) {
   return m_pModule->getDataLayout().getTypeAllocSize(Ty);
 }
 
-llvm::Type *OP::GetOverloadType(OpCode opCode, llvm::Function *F) {
+llvm37::Type *OP::GetOverloadType(OpCode opCode, llvm37::Function *F) {
   DXASSERT(F, "not work on nullptr");
   Type *Ty = F->getReturnType();
   FunctionType *FT = F->getFunctionType();
-  LLVMContext &Ctx = F->getContext();
+  LLVM37Context &Ctx = F->getContext();
 /* <py::lines('OPCODE-OLOAD-TYPES')>hctdb_instrhelp.get_funcs_oload_type()</py>*/
   switch (opCode) {            // return     OpCode
   // OPCODE-OLOAD-TYPES:BEGIN
@@ -1756,7 +1756,7 @@ Type *OP::GetFourI16Type() const {
   return m_pFourI16Type;
 }
 
-bool OP::IsResRetType(llvm::Type *Ty) {
+bool OP::IsResRetType(llvm37::Type *Ty) {
   for (Type *ResTy : m_pResRetType) {
     if (Ty == ResTy)
       return true;
@@ -1820,7 +1820,7 @@ Type *OP::GetVectorType(unsigned numElements, Type *pOverloadType) {
 
 //------------------------------------------------------------------------------
 //
-//  LLVM utility methods.
+//  LLVM37 utility methods.
 //
 Constant *OP::GetI1Const(bool v) {
   return Constant::getIntegerValue(IntegerType::get(m_Ctx, 1), APInt(1, v));

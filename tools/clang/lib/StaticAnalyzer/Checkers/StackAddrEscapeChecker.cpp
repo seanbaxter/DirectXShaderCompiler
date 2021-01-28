@@ -1,6 +1,6 @@
 //=== StackAddrEscapeChecker.cpp ----------------------------------*- C++ -*--//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -20,8 +20,8 @@
 #include "clang/StaticAnalyzer/Core/CheckerManager.h"
 #include "clang/StaticAnalyzer/Core/PathSensitive/CheckerContext.h"
 #include "clang/StaticAnalyzer/Core/PathSensitive/ProgramState.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/Support/raw_ostream.h"
 using namespace clang;
 using namespace ento;
 
@@ -86,7 +86,7 @@ SourceRange StackAddrEscapeChecker::genName(raw_ostream &os, const MemRegion *R,
     range = TOR->getExpr()->getSourceRange();
   }
   else {
-    llvm_unreachable("Invalid region in ReturnStackAddressChecker.");
+    llvm37_unreachable("Invalid region in ReturnStackAddressChecker.");
   } 
   
   return range;
@@ -105,10 +105,10 @@ void StackAddrEscapeChecker::EmitStackError(CheckerContext &C, const MemRegion *
 
   // Generate a report for this bug.
   SmallString<512> buf;
-  llvm::raw_svector_ostream os(buf);
+  llvm37::raw_svector_ostream os(buf);
   SourceRange range = genName(os, R, C.getASTContext());
   os << " returned to caller";
-  auto report = llvm::make_unique<BugReport>(*BT_returnstack, os.str(), N);
+  auto report = llvm37::make_unique<BugReport>(*BT_returnstack, os.str(), N);
   report->addRange(RetE->getSourceRange());
   if (range.isValid())
     report->addRange(range);
@@ -225,13 +225,13 @@ void StackAddrEscapeChecker::checkEndFunction(CheckerContext &Ctx) const {
   for (unsigned i = 0, e = cb.V.size(); i != e; ++i) {
     // Generate a report for this bug.
     SmallString<512> buf;
-    llvm::raw_svector_ostream os(buf);
+    llvm37::raw_svector_ostream os(buf);
     SourceRange range = genName(os, cb.V[i].second, Ctx.getASTContext());
     os << " is still referred to by the global variable '";
     const VarRegion *VR = cast<VarRegion>(cb.V[i].first->getBaseRegion());
     os << *VR->getDecl()
        << "' upon returning to the caller.  This will be a dangling reference";
-    auto report = llvm::make_unique<BugReport>(*BT_stackleak, os.str(), N);
+    auto report = llvm37::make_unique<BugReport>(*BT_stackleak, os.str(), N);
     if (range.isValid())
       report->addRange(range);
 

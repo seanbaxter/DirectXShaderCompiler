@@ -2,9 +2,9 @@
 ; RUN: llc < %s -march=nvptx -mcpu=sm_35 | FileCheck --check-prefix=SM35 %s
 
 
-declare i32 @llvm.nvvm.rotate.b32(i32, i32)
-declare i64 @llvm.nvvm.rotate.b64(i64, i32)
-declare i64 @llvm.nvvm.rotate.right.b64(i64, i32)
+declare i32 @llvm37.nvvm.rotate.b32(i32, i32)
+declare i64 @llvm37.nvvm.rotate.b64(i64, i32)
+declare i64 @llvm37.nvvm.rotate.right.b64(i64, i32)
 
 ; SM20: rotate32
 ; SM35: rotate32
@@ -14,7 +14,7 @@ define i32 @rotate32(i32 %a, i32 %b) {
 ; SM20: shr.b32
 ; SM20: add.u32
 ; SM35: shf.l.wrap.b32
-  %val = tail call i32 @llvm.nvvm.rotate.b32(i32 %a, i32 %b)
+  %val = tail call i32 @llvm37.nvvm.rotate.b32(i32 %a, i32 %b)
   ret i32 %val
 }
 
@@ -27,7 +27,7 @@ define i64 @rotate64(i64 %a, i32 %b) {
 ; SM20: add.u64
 ; SM35: shf.l.wrap.b32
 ; SM35: shf.l.wrap.b32
-  %val = tail call i64 @llvm.nvvm.rotate.b64(i64 %a, i32 %b)
+  %val = tail call i64 @llvm37.nvvm.rotate.b64(i64 %a, i32 %b)
   ret i64 %val
 }
 
@@ -40,7 +40,7 @@ define i64 @rotateright64(i64 %a, i32 %b) {
 ; SM20: add.u64
 ; SM35: shf.r.wrap.b32
 ; SM35: shf.r.wrap.b32
-  %val = tail call i64 @llvm.nvvm.rotate.right.b64(i64 %a, i32 %b)
+  %val = tail call i64 @llvm37.nvvm.rotate.right.b64(i64 %a, i32 %b)
   ret i64 %val
 }
 

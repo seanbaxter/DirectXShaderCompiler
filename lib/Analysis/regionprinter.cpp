@@ -1,6 +1,6 @@
 //===- RegionPrinter.cpp - Print regions tree pass ------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -9,19 +9,19 @@
 // Print out the region tree of a function using dotty/graphviz.
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Analysis/Passes.h"
-#include "llvm/ADT/DepthFirstIterator.h"
-#include "llvm/ADT/PostOrderIterator.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/Analysis/DOTGraphTraitsPass.h"
-#include "llvm/Analysis/RegionInfo.h"
-#include "llvm/Analysis/RegionIterator.h"
-#include "llvm/Analysis/RegionPrinter.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/Analysis/Passes.h"
+#include "llvm37/ADT/DepthFirstIterator.h"
+#include "llvm37/ADT/PostOrderIterator.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/Analysis/DOTGraphTraitsPass.h"
+#include "llvm37/Analysis/RegionInfo.h"
+#include "llvm37/Analysis/RegionIterator.h"
+#include "llvm37/Analysis/RegionPrinter.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/raw_ostream.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 //===----------------------------------------------------------------------===//
 /// onlySimpleRegion - Show only the simple regions in the RegionViewer.
@@ -31,7 +31,7 @@ onlySimpleRegions("only-simple-regions",
                   cl::Hidden,
                   cl::init(false));
 
-namespace llvm {
+namespace llvm37 {
 template<>
 struct DOTGraphTraits<RegionNode*> : public DefaultDOTGraphTraits {
 
@@ -140,7 +140,7 @@ struct DOTGraphTraits<RegionInfoPass*> : public DOTGraphTraits<RegionNode*> {
     printRegionCluster(*RI.getTopLevelRegion(), GW, 4);
   }
 };
-} //end namespace llvm
+} //end namespace llvm37
 
 namespace {
 
@@ -202,19 +202,19 @@ INITIALIZE_PASS(RegionOnlyPrinter, "dot-regions-only",
                 "(with no function bodies)",
                 true, true)
 
-FunctionPass* llvm::createRegionViewerPass() {
+FunctionPass* llvm37::createRegionViewerPass() {
   return new RegionViewer();
 }
 
-FunctionPass* llvm::createRegionOnlyViewerPass() {
+FunctionPass* llvm37::createRegionOnlyViewerPass() {
   return new RegionOnlyViewer();
 }
 
-FunctionPass* llvm::createRegionPrinterPass() {
+FunctionPass* llvm37::createRegionPrinterPass() {
   return new RegionPrinter();
 }
 
-FunctionPass* llvm::createRegionOnlyPrinterPass() {
+FunctionPass* llvm37::createRegionOnlyPrinterPass() {
   return new RegionOnlyPrinter();
 }
 

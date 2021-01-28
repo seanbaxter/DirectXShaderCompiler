@@ -1,6 +1,6 @@
 //===--- ModuleManager.cpp - Module Manager ---------------------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -12,13 +12,13 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_SERIALIZATION_MODULEMANAGER_H
-#define LLVM_CLANG_SERIALIZATION_MODULEMANAGER_H
+#ifndef LLVM37_CLANG_SERIALIZATION_MODULEMANAGER_H
+#define LLVM37_CLANG_SERIALIZATION_MODULEMANAGER_H
 
 #include "clang/Basic/FileManager.h"
 #include "clang/Serialization/Module.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/SmallPtrSet.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/SmallPtrSet.h"
 
 namespace clang { 
 
@@ -39,9 +39,9 @@ class ModuleManager {
   SmallVector<ModuleFile *, 2> Roots;
   
   /// \brief All loaded modules, indexed by name.
-  llvm::DenseMap<const FileEntry *, ModuleFile *> Modules;
+  llvm37::DenseMap<const FileEntry *, ModuleFile *> Modules;
 
-  typedef llvm::SetVector<const FileEntry *> AdditionalKnownModuleFileSet;
+  typedef llvm37::SetVector<const FileEntry *> AdditionalKnownModuleFileSet;
 
   /// \brief Additional module files that are known but not loaded. Tracked
   /// here so that we can re-export them if necessary.
@@ -55,7 +55,7 @@ class ModuleManager {
   const PCHContainerReader &PCHContainerRdr;
 
   /// \brief A lookup of in-memory (virtual file) buffers
-  llvm::DenseMap<const FileEntry *, std::unique_ptr<llvm::MemoryBuffer>>
+  llvm37::DenseMap<const FileEntry *, std::unique_ptr<llvm37::MemoryBuffer>>
       InMemoryBuffers;
 
   /// \brief The visitation order.
@@ -157,7 +157,7 @@ public:
   ModuleFile *lookup(const FileEntry *File);
 
   /// \brief Returns the in-memory (virtual file) buffer with the given name
-  std::unique_ptr<llvm::MemoryBuffer> lookupBuffer(StringRef Name);
+  std::unique_ptr<llvm37::MemoryBuffer> lookupBuffer(StringRef Name);
   
   /// \brief Number of modules loaded
   unsigned size() const { return Chain.size(); }
@@ -174,7 +174,7 @@ public:
     OutOfDate
   };
 
-  typedef ASTFileSignature(*ASTFileSignatureReader)(llvm::BitstreamReader &);
+  typedef ASTFileSignature(*ASTFileSignatureReader)(llvm37::BitstreamReader &);
 
   /// \brief Attempts to create a new module and add it to the list of known
   /// modules.
@@ -221,12 +221,12 @@ public:
 
   /// \brief Remove the given set of modules.
   void removeModules(ModuleIterator first, ModuleIterator last,
-                     llvm::SmallPtrSetImpl<ModuleFile *> &LoadedSuccessfully,
+                     llvm37::SmallPtrSetImpl<ModuleFile *> &LoadedSuccessfully,
                      ModuleMap *modMap);
 
   /// \brief Add an in-memory buffer the list of known buffers
   void addInMemoryBuffer(StringRef FileName,
-                         std::unique_ptr<llvm::MemoryBuffer> Buffer);
+                         std::unique_ptr<llvm37::MemoryBuffer> Buffer);
 
   /// \brief Set the global module index.
   void setGlobalIndex(GlobalModuleIndex *Index);
@@ -242,9 +242,9 @@ public:
 
   /// \brief Get a list of additional module files that are not currently
   /// loaded but are considered to be part of the current compilation.
-  llvm::iterator_range<AdditionalKnownModuleFileSet::const_iterator>
+  llvm37::iterator_range<AdditionalKnownModuleFileSet::const_iterator>
   getAdditionalKnownModuleFiles() {
-    return llvm::make_range(AdditionalKnownModuleFiles.begin(),
+    return llvm37::make_range(AdditionalKnownModuleFiles.begin(),
                             AdditionalKnownModuleFiles.end());
   }
 
@@ -272,7 +272,7 @@ public:
   /// Any module that is known to both the global module index and the module
   /// manager that is *not* in this set can be skipped.
   void visit(bool (*Visitor)(ModuleFile &M, void *UserData), void *UserData,
-             llvm::SmallPtrSetImpl<ModuleFile *> *ModuleFilesHit = nullptr);
+             llvm37::SmallPtrSetImpl<ModuleFile *> *ModuleFilesHit = nullptr);
 
   /// \brief Control DFS behavior during preorder visitation.
   enum DFSPreorderControl {

@@ -22,12 +22,12 @@
 #include "dxc/dxctools.h"
 #include "dxc/Support/dxcapi.use.h"
 #include "dxc/Support/HLSLOptions.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/Support/raw_ostream.h"
 
 inline bool wcsieq(LPCWSTR a, LPCWSTR b) { return _wcsicmp(a, b) == 0; }
 
 using namespace dxc;
-using namespace llvm::opt;
+using namespace llvm37::opt;
 using namespace hlsl::options;
 
 
@@ -125,7 +125,7 @@ int __cdecl wmain(int argc, const wchar_t **argv_) {
     // Read options and check errors.
     {
       std::string errorString;
-      llvm::raw_string_ostream errorStream(errorString);
+      llvm37::raw_string_ostream errorStream(errorString);
       int optResult =
           ReadDxcOpts(optionTable, DxrFlags, argStrings, dxcOpts, errorStream);
       errorStream.flush();
@@ -145,7 +145,7 @@ int __cdecl wmain(int argc, const wchar_t **argv_) {
     // Setup a helper DLL.
     {
       std::string dllErrorString;
-      llvm::raw_string_ostream dllErrorStream(dllErrorString);
+      llvm37::raw_string_ostream dllErrorStream(dllErrorString);
       int dllResult = SetupDxcDllSupport(dxcOpts, dxcSupport, dllErrorStream);
       dllErrorStream.flush();
       if (dllErrorString.size()) {
@@ -159,9 +159,9 @@ int __cdecl wmain(int argc, const wchar_t **argv_) {
     // Handle help request, which overrides any other processing.
     if (dxcOpts.ShowHelp) {
       std::string helpString;
-      llvm::raw_string_ostream helpStream(helpString);
+      llvm37::raw_string_ostream helpStream(helpString);
       std::string version;
-      llvm::raw_string_ostream versionStream(version);
+      llvm37::raw_string_ostream versionStream(version);
       WriteDxCompilerVersionInfo(versionStream,
         dxcOpts.ExternalLib.empty() ? (LPCSTR)nullptr : dxcOpts.ExternalLib.data(),
         dxcOpts.ExternalFn.empty() ? (LPCSTR)nullptr : dxcOpts.ExternalFn.data(),

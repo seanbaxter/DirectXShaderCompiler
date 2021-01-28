@@ -1,6 +1,6 @@
-//===- llvm/ADT/SmallVector.cpp - 'Normally small' vectors ----------------===//
+//===- llvm37/ADT/SmallVector.cpp - 'Normally small' vectors ----------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,8 +11,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/ADT/SmallVector.h"
-using namespace llvm;
+#include "llvm37/ADT/SmallVector.h"
+using namespace llvm37;
 
 /// grow_pod - This is an implementation of the grow() method which only works
 /// on POD-like datatypes and is out of line to reduce code duplication.

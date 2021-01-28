@@ -1,6 +1,6 @@
 //===--- ASTCommon.cpp - Common stuff for ASTReader/ASTWriter----*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -16,7 +16,7 @@
 #include "clang/AST/DeclObjC.h"
 #include "clang/Basic/IdentifierTable.h"
 #include "clang/Serialization/ASTDeserializationListener.h"
-#include "llvm/ADT/StringExtras.h"
+#include "llvm37/ADT/StringExtras.h"
 
 using namespace clang;
 
@@ -85,7 +85,7 @@ unsigned serialization::ComputeHash(Selector Sel) {
   unsigned R = 5381;
   for (unsigned I = 0; I != N; ++I)
     if (IdentifierInfo *II = Sel.getIdentifierInfoForSlot(I))
-      R = llvm::HashString(II->getName(), R);
+      R = llvm37::HashString(II->getName(), R);
   return R;
 }
 
@@ -142,10 +142,10 @@ serialization::getDefinitiveDeclContext(const DeclContext *DC) {
     return nullptr;
 
   default:
-    llvm_unreachable("Unhandled DeclContext in AST reader");
+    llvm37_unreachable("Unhandled DeclContext in AST reader");
   }
   
-  llvm_unreachable("Unhandled decl kind");
+  llvm37_unreachable("Unhandled decl kind");
 }
 
 bool serialization::isRedeclarableDeclKind(unsigned Kind) {
@@ -225,7 +225,7 @@ bool serialization::isRedeclarableDeclKind(unsigned Kind) {
     return false;
   }
 
-  llvm_unreachable("Unhandled declaration kind");
+  llvm37_unreachable("Unhandled declaration kind");
 }
 
 bool serialization::needsAnonymousDeclarationNumber(const NamedDecl *D) {

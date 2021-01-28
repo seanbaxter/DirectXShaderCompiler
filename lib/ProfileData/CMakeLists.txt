@@ -1,4 +1,4 @@
-add_llvm_library(LLVMProfileData
+add_llvm_library(LLVM37ProfileData
   InstrProf.cpp
   InstrProfReader.cpp
   InstrProfWriter.cpp
@@ -10,7 +10,7 @@ add_llvm_library(LLVMProfileData
   SampleProfWriter.cpp
 
   ADDITIONAL_HEADER_DIRS
-  ${LLVM_MAIN_INCLUDE_DIR}/llvm/ProfileData
+  ${LLVM37_MAIN_INCLUDE_DIR}/llvm37/ProfileData
 
   DEPENDS
   intrinsics_gen

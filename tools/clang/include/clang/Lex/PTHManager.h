@@ -1,6 +1,6 @@
 //===--- PTHManager.h - Manager object for PTH processing -------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,20 +11,20 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_LEX_PTHMANAGER_H
-#define LLVM_CLANG_LEX_PTHMANAGER_H
+#ifndef LLVM37_CLANG_LEX_PTHMANAGER_H
+#define LLVM37_CLANG_LEX_PTHMANAGER_H
 
 #include "clang/Basic/Diagnostic.h"
 #include "clang/Basic/IdentifierTable.h"
 #include "clang/Basic/LangOptions.h"
 #include "clang/Lex/PTHLexer.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/Support/Allocator.h"
-#include "llvm/Support/OnDiskHashTable.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/Support/Allocator.h"
+#include "llvm37/Support/OnDiskHashTable.h"
 #include <string>
 
-namespace llvm {
+namespace llvm37 {
   class MemoryBuffer;
 }
 
@@ -42,18 +42,18 @@ class PTHManager : public IdentifierInfoLookup {
 
   class PTHStringLookupTrait;
   class PTHFileLookupTrait;
-  typedef llvm::OnDiskChainedHashTable<PTHStringLookupTrait> PTHStringIdLookup;
-  typedef llvm::OnDiskChainedHashTable<PTHFileLookupTrait> PTHFileLookup;
+  typedef llvm37::OnDiskChainedHashTable<PTHStringLookupTrait> PTHStringIdLookup;
+  typedef llvm37::OnDiskChainedHashTable<PTHFileLookupTrait> PTHFileLookup;
 
   /// The memory mapped PTH file.
-  std::unique_ptr<const llvm::MemoryBuffer> Buf;
+  std::unique_ptr<const llvm37::MemoryBuffer> Buf;
 
   /// Alloc - Allocator used for IdentifierInfo objects.
-  llvm::BumpPtrAllocator Alloc;
+  llvm37::BumpPtrAllocator Alloc;
 
   /// IdMap - A lazily generated cache mapping from persistent identifiers to
   ///  IdentifierInfo*.
-  std::unique_ptr<IdentifierInfo *[], llvm::FreeDeleter> PerIDCache;
+  std::unique_ptr<IdentifierInfo *[], llvm37::FreeDeleter> PerIDCache;
 
   /// FileLookup - Abstract data structure used for mapping between files
   ///  and token data in the PTH file.
@@ -85,10 +85,10 @@ class PTHManager : public IdentifierInfoLookup {
 
   /// This constructor is intended to only be called by the static 'Create'
   /// method.
-  PTHManager(std::unique_ptr<const llvm::MemoryBuffer> buf,
+  PTHManager(std::unique_ptr<const llvm37::MemoryBuffer> buf,
              std::unique_ptr<PTHFileLookup> fileLookup,
              const unsigned char *idDataTable,
-             std::unique_ptr<IdentifierInfo *[], llvm::FreeDeleter> perIDCache,
+             std::unique_ptr<IdentifierInfo *[], llvm37::FreeDeleter> perIDCache,
              std::unique_ptr<PTHStringIdLookup> stringIdLookup, unsigned numIds,
              const unsigned char *spellingBase, const char *originalSourceFile);
 

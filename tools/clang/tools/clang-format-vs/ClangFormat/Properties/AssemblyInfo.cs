@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("ClangFormat")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("LLVM")]
+[assembly: AssemblyCompany("LLVM37")]
 [assembly: AssemblyProduct("ClangFormat")]
 [assembly: AssemblyCopyright("")]
 [assembly: AssemblyTrademark("")]

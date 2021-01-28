@@ -1,6 +1,6 @@
 //===--- DataRecursiveASTVisitor.h - Data-Recursive AST Visitor -*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,8 +11,8 @@
 //  traverses the entire AST, using data recursion for Stmts/Exprs.
 //
 //===----------------------------------------------------------------------===//
-#ifndef LLVM_CLANG_AST_DATARECURSIVEASTVISITOR_H
-#define LLVM_CLANG_AST_DATARECURSIVEASTVISITOR_H
+#ifndef LLVM37_CLANG_AST_DATARECURSIVEASTVISITOR_H
+#define LLVM37_CLANG_AST_DATARECURSIVEASTVISITOR_H
 
 #include "clang/AST/Attr.h"
 #include "clang/AST/Decl.h"
@@ -487,7 +487,7 @@ bool RecursiveASTVisitor<Derived>::TraverseStmt(Stmt *S) {
   break
 
     // If we have a binary expr, dispatch to the subcode of the binop.  A smart
-    // optimizer (e.g. LLVM) will fold this comparison into the switch stmt
+    // optimizer (e.g. LLVM37) will fold this comparison into the switch stmt
     // below.
     if (BinaryOperator *BinOp = dyn_cast<BinaryOperator>(S)) {
       switch (BinOp->getOpcode()) {
@@ -1883,7 +1883,7 @@ DEF_TRAVERSE_DECL(ParmVarDecl, {
 // though sometimes the range is empty).  Each individual Traverse*
 // method only needs to worry about children other than those.  To see
 // what children() does for a given class, see, e.g.,
-//   http://clang.llvm.org/doxygen/Stmt_8cpp_source.html
+//   http://clang.llvm37.org/doxygen/Stmt_8cpp_source.html
 
 // This macro makes available a variable S, the passed-in stmt.
 #define DEF_TRAVERSE_STMT(STMT, CODE)                                          \
@@ -2685,9 +2685,9 @@ bool RecursiveASTVisitor<Derived>::VisitOMPDependClause(OMPDependClause *C) {
 // create new types, and recurse on the types (TypeLocs?) of those.
 // Candidates:
 //
-//    http://clang.llvm.org/doxygen/classclang_1_1CXXTypeidExpr.html
-//    http://clang.llvm.org/doxygen/classclang_1_1UnaryExprOrTypeTraitExpr.html
-//    http://clang.llvm.org/doxygen/classclang_1_1TypesCompatibleExpr.html
+//    http://clang.llvm37.org/doxygen/classclang_1_1CXXTypeidExpr.html
+//    http://clang.llvm37.org/doxygen/classclang_1_1UnaryExprOrTypeTraitExpr.html
+//    http://clang.llvm37.org/doxygen/classclang_1_1TypesCompatibleExpr.html
 //    Every class that has getQualifier.
 
 #undef DEF_TRAVERSE_STMT
@@ -2698,4 +2698,4 @@ bool RecursiveASTVisitor<Derived>::VisitOMPDependClause(OMPDependClause *C) {
 
 } // end namespace clang
 
-#endif // LLVM_CLANG_LIBCLANG_RECURSIVEASTVISITOR_H
+#endif // LLVM37_CLANG_LIBCLANG_RECURSIVEASTVISITOR_H

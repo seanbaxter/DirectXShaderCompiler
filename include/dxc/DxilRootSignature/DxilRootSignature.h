@@ -21,7 +21,7 @@
 struct IDxcBlob;
 struct IDxcBlobEncoding;
 
-namespace llvm {
+namespace llvm37 {
   class raw_ostream;
 }
 
@@ -373,11 +373,11 @@ bool VerifyRootSignatureWithShaderPSV(_In_ const DxilVersionedRootSignatureDesc 
                                       _In_ DXIL::ShaderKind ShaderKind,
                                       _In_reads_bytes_(PSVSize) const void *pPSVData,
                                       _In_ uint32_t PSVSize,
-                                      _In_ llvm::raw_ostream &DiagStream);
+                                      _In_ llvm37::raw_ostream &DiagStream);
 
 // standalone verification
 bool VerifyRootSignature(_In_ const DxilVersionedRootSignatureDesc *pDesc,
-                         _In_ llvm::raw_ostream &DiagStream,
+                         _In_ llvm37::raw_ostream &DiagStream,
                          _In_ bool bAllowReservedRegisterSpace);
 
 } // namespace hlsl

@@ -3,7 +3,7 @@
 ; of the loop with a closed-form computation, making the loop dead.
 ;
 ; RUN: opt < %s -indvars -loop-deletion -simplifycfg | \
-; RUN:   llvm-dis | not grep br
+; RUN:   llvm37-dis | not grep br
 
 define i32 @polynomial_constant() {
 ; <label>:0

@@ -1,6 +1,6 @@
 //===- TGLexer.h - Lexer for TableGen Files ---------------------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,17 +11,17 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_LIB_TABLEGEN_TGLEXER_H
-#define LLVM_LIB_TABLEGEN_TGLEXER_H
+#ifndef LLVM37_LIB_TABLEGEN_TGLEXER_H
+#define LLVM37_LIB_TABLEGEN_TGLEXER_H
 
-#include "llvm/ADT/StringRef.h"
-#include "llvm/Support/DataTypes.h"
-#include "llvm/Support/SMLoc.h"
+#include "llvm37/ADT/StringRef.h"
+#include "llvm37/Support/DataTypes.h"
+#include "llvm37/Support/SMLoc.h"
 #include <cassert>
 #include <map>
 #include <string>
 
-namespace llvm {
+namespace llvm37 {
 class SourceMgr;
 class SMLoc;
 class Twine;
@@ -135,6 +135,6 @@ private:
   tgtok::TokKind LexExclaim();
 };
   
-} // end namespace llvm
+} // end namespace llvm37
 
 #endif

@@ -1,6 +1,6 @@
 ; RUN: opt -S -loop-unroll < %s | FileCheck %s
 
-; LLVM should not try to fully unroll this loop.
+; LLVM37 should not try to fully unroll this loop.
 
 declare void @f()
 declare void @g()

@@ -1,6 +1,6 @@
 //=== VLASizeChecker.cpp - Undefined dereference checker --------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -20,9 +20,9 @@
 #include "clang/StaticAnalyzer/Core/Checker.h"
 #include "clang/StaticAnalyzer/Core/CheckerManager.h"
 #include "clang/StaticAnalyzer/Core/PathSensitive/CheckerContext.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/Support/raw_ostream.h"
 
 using namespace clang;
 using namespace ento;
@@ -55,7 +55,7 @@ void VLASizeChecker::reportBug(VLASize_Kind Kind,
         this, "Dangerous variable-length array (VLA) declaration"));
 
   SmallString<256> buf;
-  llvm::raw_svector_ostream os(buf);
+  llvm37::raw_svector_ostream os(buf);
   os << "Declared variable-length array (VLA) ";
   switch (Kind) {
   case VLA_Garbage:
@@ -72,7 +72,7 @@ void VLASizeChecker::reportBug(VLASize_Kind Kind,
     break;
   }
 
-  auto report = llvm::make_unique<BugReport>(*BT, os.str(), N);
+  auto report = llvm37::make_unique<BugReport>(*BT, os.str(), N);
   report->addRange(SizeE->getSourceRange());
   bugreporter::trackNullOrUndefValue(N, SizeE, *report);
   C.emitReport(std::move(report));

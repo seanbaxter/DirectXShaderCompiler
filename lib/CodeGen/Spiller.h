@@ -1,16 +1,16 @@
-//===-- llvm/CodeGen/Spiller.h - Spiller -*- C++ -*------------------------===//
+//===-- llvm37/CodeGen/Spiller.h - Spiller -*- C++ -*------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_LIB_CODEGEN_SPILLER_H
-#define LLVM_LIB_CODEGEN_SPILLER_H
+#ifndef LLVM37_LIB_CODEGEN_SPILLER_H
+#define LLVM37_LIB_CODEGEN_SPILLER_H
 
-namespace llvm {
+namespace llvm37 {
 
   class LiveRangeEdit;
   class MachineFunction;

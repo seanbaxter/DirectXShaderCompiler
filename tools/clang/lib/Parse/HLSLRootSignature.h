@@ -13,7 +13,7 @@
 #include "dxc/DXIL/DXIL.h"
 #include "dxc/DxilRootSignature/DxilRootSignature.h"
 
-namespace llvm {
+namespace llvm37 {
 class raw_ostream;
 }
 
@@ -233,7 +233,7 @@ public:
     RootSignatureParser(RootSignatureTokenizer *pTokenizer,
                         DxilRootSignatureVersion DefaultVersion,
                         DxilRootSignatureCompilationFlags Flags,
-                        llvm::raw_ostream &OS);
+                        llvm37::raw_ostream &OS);
 
     HRESULT Parse(DxilVersionedRootSignatureDesc **ppRootSignature);
 
@@ -243,7 +243,7 @@ private:
     RootSignatureTokenizer *m_pTokenizer;
     DxilRootSignatureVersion m_Version;
     DxilRootSignatureCompilationFlags m_CompilationFlags;
-    llvm::raw_ostream &m_OS;
+    llvm37::raw_ostream &m_OS;
 
     HRESULT GetAndMatchToken(TokenType & Token, TokenType::Type Type);
     HRESULT Error(uint32_t uErrorNum, const char * pError, ...);

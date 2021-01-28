@@ -17,7 +17,7 @@ target triple = "i386-pc-linux-gnu"
 @g_260 = internal global i32 1		; <i32*> [#uses=2]
 @g_221 = internal global i16 -17503		; <i16*> [#uses=3]
 @g_267 = internal global i16 1		; <i16*> [#uses=1]
-@llvm.used = appending global [1 x i8*] [ i8* bitcast (i32 (i32, i32, i16, i32, i8, i32)* @func_44 to i8*) ], section "llvm.metadata"		; <[1 x i8*]*> [#uses=0]
+@llvm37.used = appending global [1 x i8*] [ i8* bitcast (i32 (i32, i32, i16, i32, i8, i32)* @func_44 to i8*) ], section "llvm.metadata"		; <[1 x i8*]*> [#uses=0]
 
 define i32 @func_44(i32 %p_45, i32 %p_46, i16 zeroext  %p_48, i32 %p_49, i8 zeroext  %p_50, i32 %p_52) nounwind  {
 entry:

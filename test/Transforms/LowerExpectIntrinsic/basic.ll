@@ -11,10 +11,10 @@ entry:
   %cmp = icmp sgt i32 %tmp, 1
   %conv = zext i1 %cmp to i32
   %conv1 = sext i32 %conv to i64
-  %expval = call i64 @llvm.expect.i64(i64 %conv1, i64 1)
+  %expval = call i64 @llvm37.expect.i64(i64 %conv1, i64 1)
   %tobool = icmp ne i64 %expval, 0
 ; CHECK: !prof !0
-; CHECK-NOT: @llvm.expect
+; CHECK-NOT: @llvm37.expect
   br i1 %tobool, label %if.then, label %if.end
 
 if.then:                                          ; preds = %entry
@@ -31,7 +31,7 @@ return:                                           ; preds = %if.end, %if.then
   ret i32 %0
 }
 
-declare i64 @llvm.expect.i64(i64, i64) nounwind readnone
+declare i64 @llvm37.expect.i64(i64, i64) nounwind readnone
 
 declare i32 @f(...)
 
@@ -43,10 +43,10 @@ entry:
   store i32 %x, i32* %x.addr, align 4
   %tmp = load i32, i32* %x.addr, align 4
   %conv = sext i32 %tmp to i64
-  %expval = call i64 @llvm.expect.i64(i64 %conv, i64 1)
+  %expval = call i64 @llvm37.expect.i64(i64 %conv, i64 1)
   %tobool = icmp ne i64 %expval, 0
 ; CHECK: !prof !0
-; CHECK-NOT: @llvm.expect
+; CHECK-NOT: @llvm37.expect
   br i1 %tobool, label %if.then, label %if.end
 
 if.then:                                          ; preds = %entry
@@ -74,10 +74,10 @@ entry:
   %lnot = xor i1 %tobool, true
   %lnot.ext = zext i1 %lnot to i32
   %conv = sext i32 %lnot.ext to i64
-  %expval = call i64 @llvm.expect.i64(i64 %conv, i64 1)
+  %expval = call i64 @llvm37.expect.i64(i64 %conv, i64 1)
   %tobool1 = icmp ne i64 %expval, 0
 ; CHECK: !prof !0
-; CHECK-NOT: @llvm.expect
+; CHECK-NOT: @llvm37.expect
   br i1 %tobool1, label %if.then, label %if.end
 
 if.then:                                          ; preds = %entry
@@ -106,10 +106,10 @@ entry:
   %lnot1 = xor i1 %lnot, true
   %lnot.ext = zext i1 %lnot1 to i32
   %conv = sext i32 %lnot.ext to i64
-  %expval = call i64 @llvm.expect.i64(i64 %conv, i64 1)
+  %expval = call i64 @llvm37.expect.i64(i64 %conv, i64 1)
   %tobool2 = icmp ne i64 %expval, 0
 ; CHECK: !prof !0
-; CHECK-NOT: @llvm.expect
+; CHECK-NOT: @llvm37.expect
   br i1 %tobool2, label %if.then, label %if.end
 
 if.then:                                          ; preds = %entry
@@ -136,10 +136,10 @@ entry:
   %cmp = icmp slt i32 %tmp, 0
   %conv = zext i1 %cmp to i32
   %conv1 = sext i32 %conv to i64
-  %expval = call i64 @llvm.expect.i64(i64 %conv1, i64 0)
+  %expval = call i64 @llvm37.expect.i64(i64 %conv1, i64 0)
   %tobool = icmp ne i64 %expval, 0
 ; CHECK: !prof !1
-; CHECK-NOT: @llvm.expect
+; CHECK-NOT: @llvm37.expect
   br i1 %tobool, label %if.then, label %if.end
 
 if.then:                                          ; preds = %entry
@@ -164,9 +164,9 @@ entry:
   store i32 %x, i32* %x.addr, align 4
   %tmp = load i32, i32* %x.addr, align 4
   %conv = sext i32 %tmp to i64
-  %expval = call i64 @llvm.expect.i64(i64 %conv, i64 1)
+  %expval = call i64 @llvm37.expect.i64(i64 %conv, i64 1)
 ; CHECK: !prof !2
-; CHECK-NOT: @llvm.expect
+; CHECK-NOT: @llvm37.expect
   switch i64 %expval, label %sw.epilog [
     i64 1, label %sw.bb
     i64 2, label %sw.bb
@@ -193,9 +193,9 @@ entry:
   store i32 %x, i32* %x.addr, align 4
   %tmp = load i32, i32* %x.addr, align 4
   %conv = sext i32 %tmp to i64
-  %expval = call i64 @llvm.expect.i64(i64 %conv, i64 1)
+  %expval = call i64 @llvm37.expect.i64(i64 %conv, i64 1)
 ; CHECK: !prof !3
-; CHECK-NOT: @llvm.expect
+; CHECK-NOT: @llvm37.expect
   switch i64 %expval, label %sw.epilog [
     i64 2, label %sw.bb
     i64 3, label %sw.bb
@@ -224,10 +224,10 @@ entry:
   %tmp = load i32, i32* %x.addr, align 4
   %cmp = icmp sgt i32 %tmp, 1
   %conv = zext i1 %cmp to i32
-  %expval = call i32 @llvm.expect.i32(i32 %conv, i32 1)
+  %expval = call i32 @llvm37.expect.i32(i32 %conv, i32 1)
   %tobool = icmp ne i32 %expval, 0
 ; CHECK: !prof !0
-; CHECK-NOT: @llvm.expect
+; CHECK-NOT: @llvm37.expect
   br i1 %tobool, label %if.then, label %if.end
 
 if.then:                                          ; preds = %entry
@@ -244,7 +244,7 @@ return:                                           ; preds = %if.end, %if.then
   ret i32 %0
 }
 
-declare i32 @llvm.expect.i32(i32, i32) nounwind readnone
+declare i32 @llvm37.expect.i32(i32, i32) nounwind readnone
 
 ; CHECK-LABEL: @test9(
 define i32 @test9(i32 %x) nounwind uwtable ssp {
@@ -254,9 +254,9 @@ entry:
   store i32 %x, i32* %x.addr, align 4
   %tmp = load i32, i32* %x.addr, align 4
   %cmp = icmp sgt i32 %tmp, 1
-  %expval = call i1 @llvm.expect.i1(i1 %cmp, i1 1)
+  %expval = call i1 @llvm37.expect.i1(i1 %cmp, i1 1)
 ; CHECK: !prof !0
-; CHECK-NOT: @llvm.expect
+; CHECK-NOT: @llvm37.expect
   br i1 %expval, label %if.then, label %if.end
 
 if.then:                                          ; preds = %entry
@@ -273,7 +273,7 @@ return:                                           ; preds = %if.end, %if.then
   ret i32 %0
 }
 
-declare i1 @llvm.expect.i1(i1, i1) nounwind readnone
+declare i1 @llvm37.expect.i1(i1, i1) nounwind readnone
 
 ; CHECK: !0 = !{!"branch_weights", i32 64, i32 4}
 ; CHECK: !1 = !{!"branch_weights", i32 4, i32 64}

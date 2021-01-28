@@ -1,34 +1,34 @@
 //===- lib/CodeGen/MachineTraceMetrics.cpp ----------------------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/CodeGen/MachineTraceMetrics.h"
-#include "llvm/ADT/PostOrderIterator.h"
-#include "llvm/ADT/SparseSet.h"
-#include "llvm/CodeGen/MachineBasicBlock.h"
-#include "llvm/CodeGen/MachineBranchProbabilityInfo.h"
-#include "llvm/CodeGen/MachineLoopInfo.h"
-#include "llvm/CodeGen/MachineRegisterInfo.h"
-#include "llvm/CodeGen/Passes.h"
-#include "llvm/MC/MCSubtargetInfo.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/Format.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Target/TargetInstrInfo.h"
-#include "llvm/Target/TargetRegisterInfo.h"
-#include "llvm/Target/TargetSubtargetInfo.h"
+#include "llvm37/CodeGen/MachineTraceMetrics.h"
+#include "llvm37/ADT/PostOrderIterator.h"
+#include "llvm37/ADT/SparseSet.h"
+#include "llvm37/CodeGen/MachineBasicBlock.h"
+#include "llvm37/CodeGen/MachineBranchProbabilityInfo.h"
+#include "llvm37/CodeGen/MachineLoopInfo.h"
+#include "llvm37/CodeGen/MachineRegisterInfo.h"
+#include "llvm37/CodeGen/Passes.h"
+#include "llvm37/MC/MCSubtargetInfo.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/Format.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Target/TargetInstrInfo.h"
+#include "llvm37/Target/TargetRegisterInfo.h"
+#include "llvm37/Target/TargetSubtargetInfo.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "machine-trace-metrics"
 
 char MachineTraceMetrics::ID = 0;
-char &llvm::MachineTraceMetricsID = MachineTraceMetrics::ID;
+char &llvm37::MachineTraceMetricsID = MachineTraceMetrics::ID;
 
 INITIALIZE_PASS_BEGIN(MachineTraceMetrics,
                   "machine-trace-metrics", "Machine Trace Metrics", false, true)
@@ -373,7 +373,7 @@ MachineTraceMetrics::getEnsemble(MachineTraceMetrics::Strategy strategy) {
   // Allocate new Ensemble on demand.
   switch (strategy) {
   case TS_MinInstrCount: return (E = new MinInstrCountEnsemble(this));
-  default: llvm_unreachable("Invalid trace strategy enum");
+  default: llvm37_unreachable("Invalid trace strategy enum");
   }
 }
 
@@ -418,7 +418,7 @@ struct LoopBounds {
 
 // Specialize po_iterator_storage in order to prune the post-order traversal so
 // it is limited to the current loop and doesn't traverse the loop back edges.
-namespace llvm {
+namespace llvm37 {
 template<>
 class po_iterator_storage<LoopBounds, true> {
   LoopBounds &LB;

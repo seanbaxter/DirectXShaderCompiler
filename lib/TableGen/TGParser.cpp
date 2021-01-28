@@ -1,6 +1,6 @@
 //===- TGParser.cpp - Parser for TableGen Files ---------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -12,20 +12,20 @@
 //===----------------------------------------------------------------------===//
 
 #include "TGParser.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/ADT/StringExtras.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/TableGen/Record.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/ADT/StringExtras.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/TableGen/Record.h"
 #include <algorithm>
 #include <sstream>
-using namespace llvm;
+using namespace llvm37;
 
 //===----------------------------------------------------------------------===//
 // Support Code for the Semantic Actions.
 //===----------------------------------------------------------------------===//
 
-namespace llvm {
+namespace llvm37 {
 struct SubClassReference {
   SMRange RefRange;
   Record *Rec;
@@ -55,7 +55,7 @@ void SubMultiClassReference::dump() const {
     TA->dump();
 }
 
-} // end namespace llvm
+} // end namespace llvm37
 
 bool TGParser::AddValue(Record *CurRec, SMLoc Loc, const RecordVal &RV) {
   if (!CurRec)
@@ -779,7 +779,7 @@ Init *TGParser::ParseOperation(Record *CurRec, RecTy *ItemType) {
     RecTy *Type = nullptr;
 
     switch (Lex.getCode()) {
-    default: llvm_unreachable("Unhandled code!");
+    default: llvm37_unreachable("Unhandled code!");
     case tgtok::XCast:
       Lex.Lex();  // eat the operation
       Code = UnOpInit::CAST;
@@ -890,7 +890,7 @@ Init *TGParser::ParseOperation(Record *CurRec, RecTy *ItemType) {
     RecTy *Type = nullptr;
 
     switch (OpTok) {
-    default: llvm_unreachable("Unhandled code!");
+    default: llvm37_unreachable("Unhandled code!");
     case tgtok::XConcat: Code = BinOpInit::CONCAT;Type = DagRecTy::get(); break;
     case tgtok::XADD:    Code = BinOpInit::ADD;   Type = IntRecTy::get(); break;
     case tgtok::XAND:    Code = BinOpInit::AND;   Type = IntRecTy::get(); break;
@@ -973,7 +973,7 @@ Init *TGParser::ParseOperation(Record *CurRec, RecTy *ItemType) {
     tgtok::TokKind LexCode = Lex.getCode();
     Lex.Lex();  // eat the operation
     switch (LexCode) {
-    default: llvm_unreachable("Unhandled code!");
+    default: llvm37_unreachable("Unhandled code!");
     case tgtok::XIf:
       Code = TernOpInit::IF;
       break;
@@ -1020,7 +1020,7 @@ Init *TGParser::ParseOperation(Record *CurRec, RecTy *ItemType) {
     Lex.Lex();  // eat the ')'
 
     switch (LexCode) {
-    default: llvm_unreachable("Unhandled code!");
+    default: llvm37_unreachable("Unhandled code!");
     case tgtok::XIf: {
       RecTy *MHSTy = nullptr;
       RecTy *RHSTy = nullptr;
@@ -1208,7 +1208,7 @@ Init *TGParser::ParseSimpleValue(Record *CurRec, RecTy *ItemType,
     SMLoc EndLoc = Lex.getLoc();
 
     // Create the new record, set it as CurRec temporarily.
-    auto NewRecOwner = llvm::make_unique<Record>(GetNewAnonymousName(), NameLoc,
+    auto NewRecOwner = llvm37::make_unique<Record>(GetNewAnonymousName(), NameLoc,
                                                  Records, /*IsAnonymous=*/true);
     Record *NewRec = NewRecOwner.get(); // Keep a copy since we may release.
     SubClassReference SCRef;
@@ -1420,7 +1420,7 @@ Init *TGParser::ParseSimpleValue(Record *CurRec, RecTy *ItemType,
       Lex.Lex();  // eat the VarName.
     }
 
-    std::vector<std::pair<llvm::Init*, std::string> > DagArgs;
+    std::vector<std::pair<llvm37::Init*, std::string> > DagArgs;
     if (Lex.getCode() != tgtok::r_paren) {
       DagArgs = ParseDagArgList(CurRec);
       if (DagArgs.empty()) return nullptr;
@@ -1592,9 +1592,9 @@ Init *TGParser::ParseValue(Record *CurRec, RecTy *ItemType, IDParseMode Mode) {
 ///    DagArg     ::= VARNAME
 ///    DagArgList ::= DagArg
 ///    DagArgList ::= DagArgList ',' DagArg
-std::vector<std::pair<llvm::Init*, std::string> >
+std::vector<std::pair<llvm37::Init*, std::string> >
 TGParser::ParseDagArgList(Record *CurRec) {
-  std::vector<std::pair<llvm::Init*, std::string> > Result;
+  std::vector<std::pair<llvm37::Init*, std::string> > Result;
 
   while (1) {
     // DagArg ::= VARNAME
@@ -1606,14 +1606,14 @@ TGParser::ParseDagArgList(Record *CurRec) {
       // DagArg ::= Value (':' VARNAME)?
       Init *Val = ParseValue(CurRec);
       if (!Val)
-        return std::vector<std::pair<llvm::Init*, std::string> >();
+        return std::vector<std::pair<llvm37::Init*, std::string> >();
 
       // If the variable name is present, add it.
       std::string VarName;
       if (Lex.getCode() == tgtok::colon) {
         if (Lex.Lex() != tgtok::VarName) { // eat the ':'
           TokError("expected variable name in dag literal");
-          return std::vector<std::pair<llvm::Init*, std::string> >();
+          return std::vector<std::pair<llvm37::Init*, std::string> >();
         }
         VarName = Lex.getCurStrVal();
         Lex.Lex();  // eat the VarName.
@@ -1992,7 +1992,7 @@ bool TGParser::ParseDef(MultiClass *CurMultiClass) {
   if (Name)
     CurRecOwner = make_unique<Record>(Name, DefLoc, Records);
   else
-    CurRecOwner = llvm::make_unique<Record>(GetNewAnonymousName(), DefLoc,
+    CurRecOwner = llvm37::make_unique<Record>(GetNewAnonymousName(), DefLoc,
                                             Records, /*IsAnonymous=*/true);
   Record *CurRec = CurRecOwner.get(); // Keep a copy since we may release.
 
@@ -2123,7 +2123,7 @@ bool TGParser::ParseClass() {
   } else {
     // If this is the first reference to this class, create and add it.
     auto NewRec =
-        llvm::make_unique<Record>(Lex.getCurStrVal(), Lex.getLoc(), Records);
+        llvm37::make_unique<Record>(Lex.getCurStrVal(), Lex.getLoc(), Records);
     CurRec = NewRec.get();
     Records.addClass(std::move(NewRec));
   }
@@ -2245,7 +2245,7 @@ bool TGParser::ParseMultiClass() {
 
   auto Result =
     MultiClasses.insert(std::make_pair(Name,
-                    llvm::make_unique<MultiClass>(Name, Lex.getLoc(),Records)));
+                    llvm37::make_unique<MultiClass>(Name, Lex.getLoc(),Records)));
 
   if (!Result.second)
     return TokError("multiclass '" + Name + "' already defined");

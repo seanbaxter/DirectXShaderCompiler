@@ -1,6 +1,6 @@
 ;RUN: opt < %s -instcombine -S | grep zext
 
-; Make sure the uint isn't removed.  Instcombine in llvm 1.9 was dropping the 
+; Make sure the uint isn't removed.  Instcombine in llvm37 1.9 was dropping the 
 ; uint cast which was causing a sign extend. This only affected code with 
 ; pointers in the high half of memory, so it wasn't noticed much
 ; compile a kernel though...

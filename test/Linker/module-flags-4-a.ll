@@ -1,4 +1,4 @@
-; RUN: not llvm-link %s %p/module-flags-4-b.ll -S -o - 2>&1 | FileCheck %s
+; RUN: not llvm37-link %s %p/module-flags-4-b.ll -S -o - 2>&1 | FileCheck %s
 
 ; Test 'require' error.
 
@@ -7,4 +7,4 @@
 !0 = !{ i32 1, !"foo", i32 37 }
 !1 = !{ i32 1, !"bar", i32 927 }
 
-!llvm.module.flags = !{ !0, !1 }
+!llvm37.module.flags = !{ !0, !1 }

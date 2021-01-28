@@ -1,17 +1,17 @@
 //===-- DataExtractor.cpp -------------------------------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Support/DataExtractor.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/Host.h"
-#include "llvm/Support/SwapByteOrder.h"
-using namespace llvm;
+#include "llvm37/Support/DataExtractor.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/Host.h"
+#include "llvm37/Support/SwapByteOrder.h"
+using namespace llvm37;
 
 template <typename T>
 static T getU(uint32_t *offset_ptr, const DataExtractor *de,
@@ -100,7 +100,7 @@ DataExtractor::getUnsigned(uint32_t *offset_ptr, uint32_t byte_size) const {
   case 8:
     return getU64(offset_ptr);
   }
-  llvm_unreachable("getUnsigned unhandled case!");
+  llvm37_unreachable("getUnsigned unhandled case!");
 }
 
 int64_t
@@ -115,7 +115,7 @@ DataExtractor::getSigned(uint32_t *offset_ptr, uint32_t byte_size) const {
   case 8:
     return (int64_t)getU64(offset_ptr);
   }
-  llvm_unreachable("getSigned unhandled case!");
+  llvm37_unreachable("getSigned unhandled case!");
 }
 
 const char *DataExtractor::getCStr(uint32_t *offset_ptr) const {

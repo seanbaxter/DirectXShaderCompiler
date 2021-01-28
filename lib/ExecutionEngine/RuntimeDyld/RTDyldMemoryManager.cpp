@@ -1,6 +1,6 @@
 //===-- RTDyldMemoryManager.cpp - Memory manager for MC-JIT -----*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,11 +11,11 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Config/config.h"
-#include "llvm/ExecutionEngine/RTDyldMemoryManager.h"
-#include "llvm/Support/Compiler.h"
-#include "llvm/Support/DynamicLibrary.h"
-#include "llvm/Support/ErrorHandling.h"
+#include "llvm37/Config/config.h"
+#include "llvm37/ExecutionEngine/RTDyldMemoryManager.h"
+#include "llvm37/Support/Compiler.h"
+#include "llvm37/Support/DynamicLibrary.h"
+#include "llvm37/Support/ErrorHandling.h"
 #include <cstdlib>
 
 #ifdef __linux__
@@ -28,7 +28,7 @@
   #include <unistd.h>
 #endif
 
-namespace llvm {
+namespace llvm37 {
 
 RTDyldMemoryManager::~RTDyldMemoryManager() {}
 
@@ -46,7 +46,7 @@ extern "C" void __deregister_frame(void *);
 #else
 // The building compiler does not have __(de)register_frame but
 // it may be found at runtime in a dynamically-loaded library.
-// For example, this happens when building LLVM with Visual C++
+// For example, this happens when building LLVM37 with Visual C++
 // but using the MingW runtime.
 void __register_frame(void *p) {
   static bool Searched = false;
@@ -55,7 +55,7 @@ void __register_frame(void *p) {
   if (!Searched) {
     Searched = true;
     *(void **)&rf =
-        llvm::sys::DynamicLibrary::SearchForAddressOfSymbol("__register_frame");
+        llvm37::sys::DynamicLibrary::SearchForAddressOfSymbol("__register_frame");
   }
   if (rf)
     rf(p);
@@ -67,7 +67,7 @@ void __deregister_frame(void *p) {
 
   if (!Searched) {
     Searched = true;
-    *(void **)&df = llvm::sys::DynamicLibrary::SearchForAddressOfSymbol(
+    *(void **)&df = llvm37::sys::DynamicLibrary::SearchForAddressOfSymbol(
         "__deregister_frame");
   }
   if (df)
@@ -98,7 +98,7 @@ void RTDyldMemoryManager::registerEHFrames(uint8_t *Addr,
                                            uint64_t LoadAddr,
                                            size_t Size) {
   // On OS X OS X __register_frame takes a single FDE as an argument.
-  // See http://lists.llvm.org/pipermail/llvm-dev/2013-April/061768.html
+  // See http://lists.llvm37.org/pipermail/llvm37-dev/2013-April/061768.html
   const char *P = (const char *)Addr;
   const char *End = P + Size;
   do  {
@@ -146,7 +146,7 @@ static int jit_noop() {
 // in libgcc_s.so so can be found by normal dynamic lookup.
 #if defined(__BIONIC__) && defined(__arm__)
 // List of functions which are statically linked on Android and can be generated
-// by LLVM. This is done as a nested macro which is used once to declare the
+// by LLVM37. This is done as a nested macro which is used once to declare the
 // imported functions with ARM_MATH_DECL and once to compare them to the
 // user-requested symbol in getSymbolAddress with ARM_MATH_CHECK. The test
 // assumes that all functions start with __aeabi_ and getSymbolAddress must be
@@ -213,7 +213,7 @@ ARM_MATH_IMPORTS(ARM_MATH_DECL)
 
 #if defined(__linux__) && defined(__GLIBC__) && \
       (defined(__i386__) || defined(__x86_64__))
-extern "C" LLVM_ATTRIBUTE_WEAK void __morestack();
+extern "C" LLVM37_ATTRIBUTE_WEAK void __morestack();
 #endif
 
 uint64_t
@@ -230,7 +230,7 @@ RTDyldMemoryManager::getSymbolAddressInProcess(const std::string &Name) {
   // strategy of making these functions work differently when inlined vs. when
   // not inlined, and hiding their real definitions in a separate archive file
   // that the dynamic linker can't see. For more info, search for
-  // 'libc_nonshared.a' on Google, or read http://llvm.org/PR274.
+  // 'libc_nonshared.a' on Google, or read http://llvm37.org/PR274.
   if (Name == "stat") return (uint64_t)&stat;
   if (Name == "fstat") return (uint64_t)&fstat;
   if (Name == "lstat") return (uint64_t)&lstat;
@@ -291,4 +291,4 @@ void *RTDyldMemoryManager::getPointerToNamedFunction(const std::string &Name,
   return (void*)Addr;
 }
 
-} // namespace llvm
+} // namespace llvm37

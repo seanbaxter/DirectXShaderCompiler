@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# LLVM documentation build configuration file.
+# LLVM37 documentation build configuration file.
 #
 # This file is execfile()d with the current directory set to its containing dir.
 #

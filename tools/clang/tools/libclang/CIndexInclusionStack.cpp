@@ -1,6 +1,6 @@
 //===- CIndexInclusionStack.cpp - Clang-C Source Indexing Library ---------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -17,8 +17,8 @@
 #include "CXTranslationUnit.h"
 #include "clang/AST/DeclVisitor.h"
 #include "clang/Frontend/ASTUnit.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/Support/raw_ostream.h"
 using namespace clang;
 
 // extern "C" {                // HLSL Change -Don't use c linkage.

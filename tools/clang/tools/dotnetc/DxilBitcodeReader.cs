@@ -228,7 +228,7 @@ namespace MainNs
         private List<BlockInfo> BlockInfoRecords = new List<BlockInfo>();
 
         /// This is set to true if we don't care about the block/record name
-        /// information in the BlockInfo block. Only llvm-bcanalyzer uses this.
+        /// information in the BlockInfo block. Only llvm37-bcanalyzer uses this.
         public bool IgnoreBlockInfoNames; // always set to false for bitstream visualization
 
         public DxilBitstreamReader(byte[] bytes, int startOffset, int length)
@@ -1746,7 +1746,7 @@ break;
                             for (int i = 0, e = Record.size(); i != e; i += 2)
                             {
                                 //AttrBuilder B;
-                                //decodeLLVMAttributesForBitcode(B, Record[i + 1]);
+                                //decodeLLVM37AttributesForBitcode(B, Record[i + 1]);
                                 //Attrs.push_back(AttributeSet::get(Context, Record[i], B));
                             }
 
@@ -2065,7 +2065,7 @@ break;
                         }
                     case TYPE_CODE_FUNCTION_OLD:
                         {
-                            // FIXME: attrid is dead, remove it in LLVM 4.0
+                            // FIXME: attrid is dead, remove it in LLVM37 4.0
                             // FUNCTION: [vararg, attrid, retty, paramty x N]
                             if (Record.size() < 3)
                                 throw error("Invalid record");
@@ -2634,7 +2634,7 @@ break;
                                     return error("Invalid record");
                                 Op1 = ValueList.getConstantFwdRef(Record[3], IdxTy);
                             }
-                            else // TODO: Remove with llvm 4.0
+                            else // TODO: Remove with llvm37 4.0
                                 Op1 = ValueList.getConstantFwdRef(Record[2], Type::getInt32Ty(Context));
                             if (!Op1)
                                 return error("Invalid record");
@@ -2658,7 +2658,7 @@ break;
                                     return error("Invalid record");
                                 Op2 = ValueList.getConstantFwdRef(Record[3], IdxTy);
                             }
-                            else // TODO: Remove with llvm 4.0
+                            else // TODO: Remove with llvm37 4.0
                                 Op2 = ValueList.getConstantFwdRef(Record[2], Type::getInt32Ty(Context));
                             if (!Op2)
                                 return error("Invalid record");

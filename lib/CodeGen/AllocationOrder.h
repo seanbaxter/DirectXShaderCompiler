@@ -1,6 +1,6 @@
-//===-- llvm/CodeGen/AllocationOrder.h - Allocation Order -*- C++ -*-------===//
+//===-- llvm37/CodeGen/AllocationOrder.h - Allocation Order -*- C++ -*-------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -14,18 +14,18 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_LIB_CODEGEN_ALLOCATIONORDER_H
-#define LLVM_LIB_CODEGEN_ALLOCATIONORDER_H
+#ifndef LLVM37_LIB_CODEGEN_ALLOCATIONORDER_H
+#define LLVM37_LIB_CODEGEN_ALLOCATIONORDER_H
 
-#include "llvm/ADT/ArrayRef.h"
-#include "llvm/MC/MCRegisterInfo.h"
+#include "llvm37/ADT/ArrayRef.h"
+#include "llvm37/MC/MCRegisterInfo.h"
 
-namespace llvm {
+namespace llvm37 {
 
 class RegisterClassInfo;
 class VirtRegMap;
 
-class LLVM_LIBRARY_VISIBILITY AllocationOrder {
+class LLVM37_LIBRARY_VISIBILITY AllocationOrder {
   SmallVector<MCPhysReg, 16> Hints;
   ArrayRef<MCPhysReg> Order;
   int Pos;
@@ -82,6 +82,6 @@ public:
   }
 };
 
-} // end namespace llvm
+} // end namespace llvm37
 
 #endif

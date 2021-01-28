@@ -1,6 +1,6 @@
 //===--- CodeGenOptions.def - Code generation option database ------ C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -46,7 +46,7 @@ CODEGENOPT(UniqueSectionNames, 1, 1) ///< Set for -funique-section-names.
 CODEGENOPT(DisableFPElim     , 1, 0) ///< Set when -fomit-frame-pointer is enabled.
 CODEGENOPT(DisableFree       , 1, 0) ///< Don't free memory.
 CODEGENOPT(DisableGCov       , 1, 0) ///< Don't run the GCov pass, for testing.
-CODEGENOPT(DisableLLVMOpts   , 1, 0) ///< Don't run any optimizations, for use in
+CODEGENOPT(DisableLLVM37Opts   , 1, 0) ///< Don't run any optimizations, for use in
                                      ///< getting .bc files that correspond to the
                                      ///< internal state before optimizations are
                                      ///< done.
@@ -145,7 +145,7 @@ CODEGENOPT(VectorizeSLP      , 1, 0) ///< Run SLP vectorizer.
 CODEGENOPT(UseRegisterSizedBitfieldAccess , 1, 0)
 
 CODEGENOPT(VerifyModule      , 1, 1) ///< Control whether the module should be run
-                                     ///< through the LLVM Verifier.
+                                     ///< through the LLVM37 Verifier.
 
 CODEGENOPT(StackRealignment  , 1, 0) ///< Control whether to permit stack
                                      ///< realignment.
@@ -158,7 +158,7 @@ VALUE_CODEGENOPT(StackProbeSize    , 32, 4096) ///< Overrides default stack
 CODEGENOPT(DebugColumnInfo, 1, 0) ///< Whether or not to use column information
                                   ///< in debug info.
 
-CODEGENOPT(EmitLLVMUseLists, 1, 0) ///< Control whether to serialize use-lists.
+CODEGENOPT(EmitLLVM37UseLists, 1, 0) ///< Control whether to serialize use-lists.
 
 /// The user specified number of registers to be used for integral arguments,
 /// or 0 if unspecified.

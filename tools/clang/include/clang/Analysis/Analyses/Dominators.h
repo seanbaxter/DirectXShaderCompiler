@@ -1,6 +1,6 @@
 //==- Dominators.h - Implementation of dominators tree for Clang CFG C++ -*-==//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,26 +11,26 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_ANALYSIS_ANALYSES_DOMINATORS_H
-#define LLVM_CLANG_ANALYSIS_ANALYSES_DOMINATORS_H
+#ifndef LLVM37_CLANG_ANALYSIS_ANALYSES_DOMINATORS_H
+#define LLVM37_CLANG_ANALYSIS_ANALYSES_DOMINATORS_H
 
 #include "clang/Analysis/AnalysisContext.h"
 #include "clang/Analysis/CFG.h"
-#include "llvm/ADT/GraphTraits.h"
-#include "llvm/Support/GenericDomTree.h"
-#include "llvm/Support/GenericDomTreeConstruction.h"
+#include "llvm37/ADT/GraphTraits.h"
+#include "llvm37/Support/GenericDomTree.h"
+#include "llvm37/Support/GenericDomTreeConstruction.h"
 
 // FIXME: There is no good reason for the domtree to require a print method
-// which accepts an LLVM Module, so remove this (and the method's argument that
+// which accepts an LLVM37 Module, so remove this (and the method's argument that
 // needs it) when that is fixed.
-namespace llvm {
+namespace llvm37 {
 class Module;
 }
 
 namespace clang {
 
 class CFGBlock;
-typedef llvm::DomTreeNodeBase<CFGBlock> DomTreeNode;
+typedef llvm37::DomTreeNodeBase<CFGBlock> DomTreeNode;
 
 /// \brief Concrete subclass of DominatorTreeBase for Clang
 /// This class implements the dominators tree functionality given a Clang CFG.
@@ -38,15 +38,15 @@ typedef llvm::DomTreeNodeBase<CFGBlock> DomTreeNode;
 class DominatorTree : public ManagedAnalysis {
   virtual void anchor();
 public:
-  llvm::DominatorTreeBase<CFGBlock>* DT;
+  llvm37::DominatorTreeBase<CFGBlock>* DT;
 
   DominatorTree() {
-    DT = new llvm::DominatorTreeBase<CFGBlock>(false);
+    DT = new llvm37::DominatorTreeBase<CFGBlock>(false);
   }
 
   ~DominatorTree() override { delete DT; }
 
-  llvm::DominatorTreeBase<CFGBlock>& getBase() { return *DT; }
+  llvm37::DominatorTreeBase<CFGBlock>& getBase() { return *DT; }
 
   /// \brief This method returns the root CFGBlock of the dominators tree.
   ///
@@ -89,15 +89,15 @@ public:
   /// mainly used for debug purposes.
   ///
   void dump() {
-    llvm::errs() << "Immediate dominance tree (Node#,IDom#):\n";
+    llvm37::errs() << "Immediate dominance tree (Node#,IDom#):\n";
     for (CFG::const_iterator I = cfg->begin(),
         E = cfg->end(); I != E; ++I) {
       if(DT->getNode(*I)->getIDom())
-        llvm::errs() << "(" << (*I)->getBlockID()
+        llvm37::errs() << "(" << (*I)->getBlockID()
                      << ","
                      << DT->getNode(*I)->getIDom()->getBlock()->getBlockID()
                      << ")\n";
-      else llvm::errs() << "(" << (*I)->getBlockID()
+      else llvm37::errs() << "(" << (*I)->getBlockID()
                         << "," << (*I)->getBlockID() << ")\n";
     }
   }
@@ -151,7 +151,7 @@ public:
 
   /// \brief This method converts the dominator tree to human readable form.
   ///
-  virtual void print(raw_ostream &OS, const llvm::Module* M= nullptr) const {
+  virtual void print(raw_ostream &OS, const llvm37::Module* M= nullptr) const {
     DT->print(OS);
   }
 
@@ -165,7 +165,7 @@ private:
 /// DominatorTree GraphTraits specialization so the DominatorTree can be
 /// iterable by generic graph iterators.
 ///
-namespace llvm {
+namespace llvm37 {
 template <> struct GraphTraits< ::clang::DomTreeNode* > {
   typedef ::clang::DomTreeNode NodeType;
   typedef NodeType::iterator  ChildIteratorType;
@@ -205,6 +205,6 @@ template <> struct GraphTraits< ::clang::DominatorTree* >
     return df_end(getEntryNode(N));
   }
 };
-} // end namespace llvm
+} // end namespace llvm37
 
 #endif

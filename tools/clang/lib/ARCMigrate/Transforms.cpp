@@ -1,6 +1,6 @@
 //===--- Transforms.cpp - Transformations to ARC mode ---------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -19,8 +19,8 @@
 #include "clang/Lex/Preprocessor.h"
 #include "clang/Sema/Sema.h"
 #include "clang/Sema/SemaDiagnostic.h"
-#include "llvm/ADT/DenseSet.h"
-#include "llvm/ADT/StringSwitch.h"
+#include "llvm37/ADT/DenseSet.h"
+#include "llvm37/ADT/StringSwitch.h"
 #include <map>
 
 using namespace clang;

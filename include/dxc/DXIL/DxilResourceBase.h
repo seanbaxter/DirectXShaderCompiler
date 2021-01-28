@@ -15,7 +15,7 @@
 
 #include "DxilConstants.h"
 
-namespace llvm {
+namespace llvm37 {
 class Value;
 class Constant;
 class Type;
@@ -41,10 +41,10 @@ public:
   unsigned GetLowerBound() const;
   unsigned GetUpperBound() const;
   unsigned GetRangeSize() const;
-  llvm::Constant *GetGlobalSymbol() const;
-  llvm::Type *GetHLSLType() const;
+  llvm37::Constant *GetGlobalSymbol() const;
+  llvm37::Type *GetHLSLType() const;
   const std::string &GetGlobalName() const;
-  llvm::Value *GetHandle() const;
+  llvm37::Value *GetHandle() const;
   bool IsAllocated() const;
   bool IsUnbounded() const;
 
@@ -52,10 +52,10 @@ public:
   void SetSpaceID(unsigned SpaceID);
   void SetLowerBound(unsigned LB);
   void SetRangeSize(unsigned RangeSize);
-  void SetGlobalSymbol(llvm::Constant *pGV);
+  void SetGlobalSymbol(llvm37::Constant *pGV);
   void SetGlobalName(const std::string &Name);
-  void SetHandle(llvm::Value *pHandle);
-  void SetHLSLType(llvm::Type *Ty);
+  void SetHandle(llvm37::Value *pHandle);
+  void SetHLSLType(llvm37::Type *Ty);
 
   // TODO: check whether we can make this a protected method.
   void SetID(unsigned ID);
@@ -76,10 +76,10 @@ private:
   unsigned m_SpaceID;             // Root signature space.
   unsigned m_LowerBound;          // Range lower bound.
   unsigned m_RangeSize;           // Range size in entries.
-  llvm::Constant *m_pSymbol;      // Global variable.
+  llvm37::Constant *m_pSymbol;      // Global variable.
   std::string m_Name;             // Unmangled name of the global variable.
-  llvm::Value *m_pHandle;         // Cached resource handle for SM5.0- (and maybe SM5.1).
-  llvm::Type *m_pHLSLTy;           // The original hlsl type for reflection.
+  llvm37::Value *m_pHandle;         // Cached resource handle for SM5.0- (and maybe SM5.1).
+  llvm37::Type *m_pHLSLTy;           // The original hlsl type for reflection.
 };
 
 const char *GetResourceKindName(DXIL::ResourceKind K);

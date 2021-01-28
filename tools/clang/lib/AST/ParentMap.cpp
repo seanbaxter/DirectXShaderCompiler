@@ -1,6 +1,6 @@
 //===--- ParentMap.cpp - Mappings from Stmts to their Parents ---*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -15,11 +15,11 @@
 #include "clang/AST/Decl.h"
 #include "clang/AST/Expr.h"
 #include "clang/AST/ExprCXX.h"
-#include "llvm/ADT/DenseMap.h"
+#include "llvm37/ADT/DenseMap.h"
 
 using namespace clang;
 
-typedef llvm::DenseMap<Stmt*, Stmt*> MapTy;
+typedef llvm37::DenseMap<Stmt*, Stmt*> MapTy;
 
 enum OpaqueValueMode {
   OV_Transparent,

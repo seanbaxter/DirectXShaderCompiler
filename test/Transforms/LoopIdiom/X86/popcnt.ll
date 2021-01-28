@@ -11,7 +11,7 @@
 ;}
 ; 
 ; CHECK: entry
-; CHECK: llvm.ctpop.i64
+; CHECK: llvm37.ctpop.i64
 ; CHECK: ret
 define i32 @popcount(i64 %a) nounwind uwtable readnone ssp {
 entry:
@@ -44,7 +44,7 @@ while.end:                                        ; preds = %while.body, %entry
 ;    return c + mydata1 + mydata2;
 ;}
 ; CHECK: entry
-; CHECK: llvm.ctpop.i64
+; CHECK: llvm37.ctpop.i64
 ; CHECK: ret
 define i32 @popcount2(i64 %a, i32 %mydata1, i32 %mydata2) nounwind uwtable readnone ssp {
 entry:

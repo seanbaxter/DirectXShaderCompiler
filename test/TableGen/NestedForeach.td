@@ -1,4 +1,4 @@
-// RUN: llvm-tblgen %s | FileCheck %s
+// RUN: llvm37-tblgen %s | FileCheck %s
 
 class Droid<string series, int release, string model, int patchlevel> {
   string Series = series;

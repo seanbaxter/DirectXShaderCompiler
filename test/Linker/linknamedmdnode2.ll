@@ -3,4 +3,4 @@
 ; RUN: true
 
 !0 = !{i32 41}
-!llvm.stuff = !{!0}
+!llvm37.stuff = !{!0}

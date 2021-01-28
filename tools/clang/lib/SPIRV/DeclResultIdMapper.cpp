@@ -1,6 +1,6 @@
 //===--- DeclResultIdMapper.cpp - DeclResultIdMapper impl --------*- C++ -*-==//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -16,10 +16,10 @@
 #include "clang/AST/Expr.h"
 #include "clang/AST/HlslTypes.h"
 #include "clang/SPIRV/AstTypeProbe.h"
-#include "llvm/ADT/SmallBitVector.h"
-#include "llvm/ADT/StringMap.h"
-#include "llvm/ADT/StringSet.h"
-#include "llvm/Support/Casting.h"
+#include "llvm37/ADT/SmallBitVector.h"
+#include "llvm37/ADT/StringMap.h"
+#include "llvm37/ADT/StringSet.h"
+#include "llvm37/Support/Casting.h"
 
 #include "AlignmentSizeCalculator.h"
 #include "SpirvEmitter.h"
@@ -42,7 +42,7 @@ uint32_t getVkBindingAttrSet(const VKBindingAttr *attr, uint32_t defaultSet) {
 /// the decl does not have one.
 hlsl::ConstantPacking *getPackOffset(const clang::NamedDecl *decl) {
   for (auto *annotation : decl->getUnusualAnnotations())
-    if (auto *packing = llvm::dyn_cast<hlsl::ConstantPacking>(annotation))
+    if (auto *packing = llvm37::dyn_cast<hlsl::ConstantPacking>(annotation))
       return packing;
   return nullptr;
 }
@@ -89,7 +89,7 @@ uint32_t getNumBindingsUsedByResourceType(QualType type) {
     return sumOfMemberBindings * arrayFactor;
   }
 
-  llvm_unreachable(
+  llvm37_unreachable(
       "getNumBindingsUsedByResourceType was called with unknown resource type");
 }
 
@@ -102,7 +102,7 @@ QualType getUintTypeWithSourceComponents(const ASTContext &astContext,
   if (isVectorType(sourceType, nullptr, &elemCount)) {
     return astContext.getExtVectorType(astContext.UnsignedIntTy, elemCount);
   }
-  llvm_unreachable("only scalar and vector types are supported in "
+  llvm37_unreachable("only scalar and vector types are supported in "
                    "getUintTypeWithSourceComponents");
 }
 
@@ -188,7 +188,7 @@ uint32_t getLocationCount(const ASTContext &astContext, QualType type) {
     return 0;
   }
 
-  llvm_unreachable(
+  llvm37_unreachable(
       "calculating number of occupied locations for type unimplemented");
   return 0;
 }
@@ -240,7 +240,7 @@ bool shouldSkipInStructLayout(const Decl *decl) {
 }
 
 void collectDeclsInField(const Decl *field,
-                         llvm::SmallVector<const Decl *, 4> *decls) {
+                         llvm37::SmallVector<const Decl *, 4> *decls) {
 
   // Case of nested namespaces.
   if (const auto *nsDecl = dyn_cast<NamespaceDecl>(field)) {
@@ -259,9 +259,9 @@ void collectDeclsInField(const Decl *field,
   decls->push_back(field);
 }
 
-llvm::SmallVector<const Decl *, 4>
+llvm37::SmallVector<const Decl *, 4>
 collectDeclsInDeclContext(const DeclContext *declContext) {
-  llvm::SmallVector<const Decl *, 4> decls;
+  llvm37::SmallVector<const Decl *, 4> decls;
   for (const auto *field : declContext->decls()) {
     collectDeclsInField(field, &decls);
   }
@@ -426,7 +426,7 @@ SpirvInstruction *CounterIdAliasPair::get(SpirvBuilder &builder,
 }
 
 const CounterIdAliasPair *
-CounterVarFields::get(const llvm::SmallVectorImpl<uint32_t> &indices) const {
+CounterVarFields::get(const llvm37::SmallVectorImpl<uint32_t> &indices) const {
   for (const auto &field : fields)
     if (field.indices == indices)
       return &field.counterVar;
@@ -448,20 +448,20 @@ bool CounterVarFields::assign(const CounterVarFields &srcFields,
 }
 
 bool CounterVarFields::assign(const CounterVarFields &srcFields,
-                              const llvm::SmallVector<uint32_t, 4> &dstPrefix,
-                              const llvm::SmallVector<uint32_t, 4> &srcPrefix,
+                              const llvm37::SmallVector<uint32_t, 4> &dstPrefix,
+                              const llvm37::SmallVector<uint32_t, 4> &srcPrefix,
                               SpirvBuilder &builder,
                               SpirvContext &context) const {
   if (dstPrefix.empty() && srcPrefix.empty())
     return assign(srcFields, builder, context);
 
-  llvm::SmallVector<uint32_t, 4> srcIndices = srcPrefix;
+  llvm37::SmallVector<uint32_t, 4> srcIndices = srcPrefix;
 
   // If whole has the given prefix, appends all elements after the prefix in
   // whole to srcIndices.
   const auto applyDiff =
-      [&srcIndices](const llvm::SmallVector<uint32_t, 4> &whole,
-                    const llvm::SmallVector<uint32_t, 4> &prefix) -> bool {
+      [&srcIndices](const llvm37::SmallVector<uint32_t, 4> &whole,
+                    const llvm37::SmallVector<uint32_t, 4> &prefix) -> bool {
     uint32_t i = 0;
     for (; i < prefix.size(); ++i)
       if (whole[i] != prefix[i]) {
@@ -492,8 +492,8 @@ bool CounterVarFields::assign(const CounterVarFields &srcFields,
 SemanticInfo DeclResultIdMapper::getStageVarSemantic(const NamedDecl *decl) {
   for (auto *annotation : decl->getUnusualAnnotations()) {
     if (auto *sema = dyn_cast<hlsl::SemanticDecl>(annotation)) {
-      llvm::StringRef semanticStr = sema->SemanticName;
-      llvm::StringRef semanticName;
+      llvm37::StringRef semanticStr = sema->SemanticName;
+      llvm37::StringRef semanticName;
       uint32_t index = 0;
       hlsl::Semantic::DecomposeNameAndIndex(semanticStr, &semanticName, &index);
       const auto *semantic = hlsl::Semantic::GetByName(semanticName);
@@ -528,7 +528,7 @@ bool DeclResultIdMapper::createStageOutputVar(const DeclaratorDecl *decl,
       }
       arraySize = arraySize * verticesPerPrim;
       QualType arrayType = astContext.getConstantArrayType(
-          astContext.UnsignedIntTy, llvm::APInt(32, arraySize),
+          astContext.UnsignedIntTy, llvm37::APInt(32, arraySize),
           clang::ArrayType::Normal, 0);
       stageVarInstructions[cast<DeclaratorDecl>(decl)] = getBuiltinVar(
           spv::BuiltIn::PrimitiveIndicesNV, arrayType, decl->getLocation());
@@ -555,7 +555,7 @@ bool DeclResultIdMapper::createStageOutputVar(const DeclaratorDecl *decl,
       storedValue == nullptr || spvContext.isGS() || spvContext.isMS();
 
   return createStageVars(sigPoint, decl, /*asInput=*/false, type, arraySize,
-                         "out.var", llvm::None, &storedValue, noWriteBack,
+                         "out.var", llvm37::None, &storedValue, noWriteBack,
                          &inheritSemantic);
 }
 
@@ -610,7 +610,7 @@ bool DeclResultIdMapper::createStageInputVar(const ParmVarDecl *paramDecl,
                                   type, "in.var", loadedValue);
   } else {
     return createStageVars(sigPoint, paramDecl, /*asInput=*/true, type,
-                           arraySize, "in.var", llvm::None, loadedValue,
+                           arraySize, "in.var", llvm37::None, loadedValue,
                            /*noWriteBack=*/false, &inheritSemantic);
   }
 }
@@ -647,7 +647,7 @@ SpirvInstruction *DeclResultIdMapper::getDeclEvalInfo(const ValueDecl *decl,
       return spvBuilder.createAccessChain(
           valueType, info->instr,
           {spvBuilder.getConstantInt(
-              astContext.IntTy, llvm::APInt(32, info->indexInCTBuffer, true))},
+              astContext.IntTy, llvm37::APInt(32, info->indexInCTBuffer, true))},
           loc);
     } else if (auto *type = info->instr->getResultType()) {
       const auto *ptrTy = dyn_cast<HybridPointerType>(type);
@@ -722,7 +722,7 @@ void DeclResultIdMapper::createCounterVarForDecl(const DeclaratorDecl *decl) {
 
 SpirvVariable *
 DeclResultIdMapper::createFnVar(const VarDecl *var,
-                                llvm::Optional<SpirvInstruction *> init) {
+                                llvm37::Optional<SpirvInstruction *> init) {
   const auto type = getTypeOrFnRetType(var);
   const auto loc = var->getLocation();
   const auto name = var->getName();
@@ -764,7 +764,7 @@ SpirvDebugGlobalVariable *DeclResultIdMapper::createDebugGlobalVariable(
 
 SpirvVariable *
 DeclResultIdMapper::createFileVar(const VarDecl *var,
-                                  llvm::Optional<SpirvInstruction *> init) {
+                                  llvm37::Optional<SpirvInstruction *> init) {
   const auto type = getTypeOrFnRetType(var);
   const auto loc = var->getLocation();
   const auto name = var->getName();
@@ -844,7 +844,7 @@ SpirvVariable *DeclResultIdMapper::createExternVar(const VarDecl *var) {
 
   const auto name = var->getName();
   SpirvVariable *varInstr = spvBuilder.addModuleVar(
-      type, storageClass, var->hasAttr<HLSLPreciseAttr>(), name, llvm::None,
+      type, storageClass, var->hasAttr<HLSLPreciseAttr>(), name, llvm37::None,
       loc);
   varInstr->setLayoutRule(rule);
   DeclSpirvInfo info(varInstr);
@@ -898,7 +898,7 @@ DeclResultIdMapper::createOrUpdateStringVar(const VarDecl *var) {
 
 SpirvVariable *DeclResultIdMapper::createStructOrStructArrayVarOfExplicitLayout(
     const DeclContext *decl, int arraySize, const ContextUsageKind usageKind,
-    llvm::StringRef typeName, llvm::StringRef varName) {
+    llvm37::StringRef typeName, llvm37::StringRef varName) {
   // cbuffers are translated into OpTypeStruct with Block decoration.
   // tbuffers are translated into OpTypeStruct with BufferBlock decoration.
   // Push constants are translated into OpTypeStruct with Block decoration.
@@ -916,7 +916,7 @@ SpirvVariable *DeclResultIdMapper::createStructOrStructArrayVarOfExplicitLayout(
   const auto &declGroup = collectDeclsInDeclContext(decl);
 
   // Collect the type and name for each field
-  llvm::SmallVector<HybridStructType::FieldInfo, 4> fields;
+  llvm37::SmallVector<HybridStructType::FieldInfo, 4> fields;
   for (const auto *subDecl : declGroup) {
     // The field can only be FieldDecl (for normal structs) or VarDecl (for
     // HLSLBufferDecls).
@@ -948,10 +948,10 @@ SpirvVariable *DeclResultIdMapper::createStructOrStructArrayVarOfExplicitLayout(
   // Make an array if requested.
   if (arraySize > 0) {
     resultType = spvContext.getArrayType(resultType, arraySize,
-                                         /*ArrayStride*/ llvm::None);
+                                         /*ArrayStride*/ llvm37::None);
   } else if (arraySize == -1) {
     resultType =
-        spvContext.getRuntimeArrayType(resultType, /*ArrayStride*/ llvm::None);
+        spvContext.getRuntimeArrayType(resultType, /*ArrayStride*/ llvm37::None);
   }
 
   // Register the <type-id> for this decl
@@ -1232,7 +1232,7 @@ SpirvFunction *DeclResultIdMapper::getOrRegisterFn(const FunctionDecl *fn) {
 }
 
 const CounterIdAliasPair *DeclResultIdMapper::getCounterIdAliasPair(
-    const DeclaratorDecl *decl, const llvm::SmallVector<uint32_t, 4> *indices) {
+    const DeclaratorDecl *decl, const llvm37::SmallVector<uint32_t, 4> *indices) {
   if (!decl)
     return nullptr;
 
@@ -1271,7 +1271,7 @@ void DeclResultIdMapper::registerSpecConstant(const VarDecl *decl,
 
 void DeclResultIdMapper::createCounterVar(
     const DeclaratorDecl *decl, SpirvInstruction *declInstr, bool isAlias,
-    const llvm::SmallVector<uint32_t, 4> *indices) {
+    const llvm37::SmallVector<uint32_t, 4> *indices) {
   std::string counterName = "counter.var." + decl->getName().str();
   if (indices) {
     // Append field indices to the name
@@ -1314,7 +1314,7 @@ void DeclResultIdMapper::createCounterVar(
 
 void DeclResultIdMapper::createFieldCounterVars(
     const DeclaratorDecl *rootDecl, const DeclaratorDecl *decl,
-    llvm::SmallVector<uint32_t, 4> *indices) {
+    llvm37::SmallVector<uint32_t, 4> *indices) {
   const QualType type = getTypeOrFnRetType(decl);
   const auto *recordType = type->getAs<RecordType>();
   assert(recordType);
@@ -1351,7 +1351,7 @@ std::vector<SpirvVariable *> DeclResultIdMapper::collectStageVars() const {
   for (auto var : glPerVertex.getStageOutVars())
     vars.push_back(var);
 
-  llvm::DenseSet<SpirvInstruction *> seenVars;
+  llvm37::DenseSet<SpirvInstruction *> seenVars;
   for (const auto &var : stageVars) {
     auto *instr = var.getSpirvInstr();
     if (seenVars.count(instr) == 0) {
@@ -1413,7 +1413,7 @@ public:
   }
 
 private:
-  llvm::SmallBitVector usedLocs[kMaxIndex]; ///< All previously used locations
+  llvm37::SmallBitVector usedLocs[kMaxIndex]; ///< All previously used locations
   uint32_t nextLoc[kMaxIndex];              ///< Next available location
 };
 
@@ -1483,12 +1483,12 @@ public:
 
 private:
   ///< set number -> set of used binding number
-  llvm::DenseMap<uint32_t, std::set<uint32_t>> usedBindings;
+  llvm37::DenseMap<uint32_t, std::set<uint32_t>> usedBindings;
 };
 } // namespace
 
 bool DeclResultIdMapper::checkSemanticDuplication(bool forInput) {
-  llvm::StringSet<> seenSemantics;
+  llvm37::StringSet<> seenSemantics;
   bool success = true;
   for (const auto &var : stageVars) {
     auto s = var.getSemanticStr();
@@ -1635,7 +1635,7 @@ namespace {
 /// sets.
 class BindingShiftMapper {
 public:
-  explicit BindingShiftMapper(const llvm::SmallVectorImpl<int32_t> &shifts)
+  explicit BindingShiftMapper(const llvm37::SmallVectorImpl<int32_t> &shifts)
       : masterShift(0) {
     assert(shifts.size() % 2 == 0);
     if (shifts.size() == 2 && shifts[1] == -1) {
@@ -1656,7 +1656,7 @@ public:
 
 private:
   uint32_t masterShift; /// Shift amount applies to all sets.
-  llvm::DenseMap<int32_t, int32_t> perSetShift;
+  llvm37::DenseMap<int32_t, int32_t> perSetShift;
 };
 
 /// A class for maintaining the mapping from source code register attributes to
@@ -1709,7 +1709,7 @@ public:
   }
 
 private:
-  llvm::StringMap<std::pair<int, int>> mapping;
+  llvm37::StringMap<std::pair<int, int>> mapping;
 };
 } // namespace
 
@@ -1882,7 +1882,7 @@ bool DeclResultIdMapper::decorateResourceBindings() {
           // For setting packing offset. Does not affect binding.
           break;
         default:
-          llvm_unreachable("unknown register type found");
+          llvm37_unreachable("unknown register type found");
         }
 
         tryToDecorate(var, set, binding);
@@ -1916,7 +1916,7 @@ bool DeclResultIdMapper::decorateResourceBindings() {
           bindingShiftMapper = &uShiftMapper;
           break;
         default:
-          llvm_unreachable("unknown register type found");
+          llvm37_unreachable("unknown register type found");
         }
       }
     }
@@ -1993,8 +1993,8 @@ bool DeclResultIdMapper::decorateResourceCoherent() {
 
 bool DeclResultIdMapper::createStageVars(
     const hlsl::SigPoint *sigPoint, const NamedDecl *decl, bool asInput,
-    QualType type, uint32_t arraySize, const llvm::StringRef namePrefix,
-    llvm::Optional<SpirvInstruction *> invocationId, SpirvInstruction **value,
+    QualType type, uint32_t arraySize, const llvm37::StringRef namePrefix,
+    llvm37::Optional<SpirvInstruction *> invocationId, SpirvInstruction **value,
     bool noWriteBack, SemanticInfo *inheritSemantic) {
   assert(value);
   // invocationId should only be used for handling HS per-vertex output.
@@ -2063,7 +2063,7 @@ bool DeclResultIdMapper::createStageVars(
       case hlsl::SigPoint::Kind::MSIn:
       case hlsl::SigPoint::Kind::ASIn:
         if (const auto *builtinAttr = decl->getAttr<VKBuiltInAttr>()) {
-          const llvm::StringRef builtin = builtinAttr->getBuiltIn();
+          const llvm37::StringRef builtin = builtinAttr->getBuiltIn();
           if (builtin == "DrawIndex") {
             break;
           }
@@ -2116,15 +2116,15 @@ bool DeclResultIdMapper::createStageVars(
       break;
     case hlsl::Semantic::Kind::TessFactor:
       evalType = astContext.getConstantArrayType(
-          astContext.FloatTy, llvm::APInt(32, 4), clang::ArrayType::Normal, 0);
+          astContext.FloatTy, llvm37::APInt(32, 4), clang::ArrayType::Normal, 0);
       break;
     case hlsl::Semantic::Kind::InsideTessFactor:
       evalType = astContext.getConstantArrayType(
-          astContext.FloatTy, llvm::APInt(32, 2), clang::ArrayType::Normal, 0);
+          astContext.FloatTy, llvm37::APInt(32, 2), clang::ArrayType::Normal, 0);
       break;
     case hlsl::Semantic::Kind::Coverage:
       evalType = astContext.getConstantArrayType(astContext.UnsignedIntTy,
-                                                 llvm::APInt(32, 1),
+                                                 llvm37::APInt(32, 1),
                                                  clang::ArrayType::Normal, 0);
       break;
     case hlsl::Semantic::Kind::InnerCoverage:
@@ -2162,7 +2162,7 @@ bool DeclResultIdMapper::createStageVars(
     // Handle the extra arrayness
     if (arraySize != 0) {
       evalType = astContext.getConstantArrayType(
-          evalType, llvm::APInt(32, arraySize), clang::ArrayType::Normal, 0);
+          evalType, llvm37::APInt(32, arraySize), clang::ArrayType::Normal, 0);
     }
 
     StageVar stageVar(
@@ -2280,10 +2280,10 @@ bool DeclResultIdMapper::createStageVars(
       // relevant indexes must be loaded.
       if (semanticKind == hlsl::Semantic::Kind::TessFactor &&
           hlsl::GetArraySize(type) != 4) {
-        llvm::SmallVector<SpirvInstruction *, 4> components;
+        llvm37::SmallVector<SpirvInstruction *, 4> components;
         const auto tessFactorSize = hlsl::GetArraySize(type);
         const auto arrType = astContext.getConstantArrayType(
-            astContext.FloatTy, llvm::APInt(32, tessFactorSize),
+            astContext.FloatTy, llvm37::APInt(32, tessFactorSize),
             clang::ArrayType::Normal, 0);
         for (uint32_t i = 0; i < tessFactorSize; ++i)
           components.push_back(spvBuilder.createCompositeExtract(
@@ -2303,7 +2303,7 @@ bool DeclResultIdMapper::createStageVars(
                                                    {0}, thisSemantic.loc);
         if (type->isArrayType()) { // float[1]
           const auto arrType = astContext.getConstantArrayType(
-              astContext.FloatTy, llvm::APInt(32, 1), clang::ArrayType::Normal,
+              astContext.FloatTy, llvm37::APInt(32, 1), clang::ArrayType::Normal,
               0);
           *value = spvBuilder.createCompositeConstruct(arrType, {*value},
                                                        thisSemantic.loc);
@@ -2339,9 +2339,9 @@ bool DeclResultIdMapper::createStageVars(
       // be any odd (i.e. bit 0 set) non-zero value)."
       else if (semanticKind == hlsl::Semantic::Kind::InnerCoverage) {
         const auto constOne = spvBuilder.getConstantInt(
-            astContext.UnsignedIntTy, llvm::APInt(32, 1));
+            astContext.UnsignedIntTy, llvm37::APInt(32, 1));
         const auto constZero = spvBuilder.getConstantInt(
-            astContext.UnsignedIntTy, llvm::APInt(32, 0));
+            astContext.UnsignedIntTy, llvm37::APInt(32, 0));
         *value = spvBuilder.createSelect(astContext.UnsignedIntTy, *value,
                                          constOne, constZero, thisSemantic.loc);
       }
@@ -2358,7 +2358,7 @@ bool DeclResultIdMapper::createStageVars(
         const auto z = spvBuilder.createBinaryOp(
             spv::Op::OpFSub, astContext.FloatTy,
             spvBuilder.getConstantFloat(astContext.FloatTy,
-                                        llvm::APFloat(1.0f)),
+                                        llvm37::APFloat(1.0f)),
             xy, thisSemantic.loc);
         *value = spvBuilder.createCompositeConstruct(
             astContext.getExtVectorType(astContext.FloatTy, 3), {x, y, z},
@@ -2396,7 +2396,7 @@ bool DeclResultIdMapper::createStageVars(
         const auto y = spvBuilder.createCompositeExtract(
             astContext.IntTy, *value, {1}, thisSemantic.loc);
         const auto constTwo =
-            spvBuilder.getConstantInt(astContext.IntTy, llvm::APInt(32, 2));
+            spvBuilder.getConstantInt(astContext.IntTy, llvm37::APInt(32, 2));
         *value = spvBuilder.createBinaryOp(
             spv::Op::OpBitwiseOr, astContext.UnsignedIntTy,
             spvBuilder.createBinaryOp(spv::Op::OpShiftLeftLogical,
@@ -2436,7 +2436,7 @@ bool DeclResultIdMapper::createStageVars(
           ptr = spvBuilder.createAccessChain(
               astContext.FloatTy, varInstr,
               {spvBuilder.getConstantInt(astContext.UnsignedIntTy,
-                                         llvm::APInt(32, i))},
+                                         llvm37::APInt(32, i))},
               thisSemantic.loc);
           spvBuilder.createStore(
               ptr,
@@ -2456,7 +2456,7 @@ bool DeclResultIdMapper::createStageVars(
         ptr = spvBuilder.createAccessChain(
             astContext.FloatTy, varInstr,
             spvBuilder.getConstantInt(astContext.UnsignedIntTy,
-                                      llvm::APInt(32, 0)),
+                                      llvm37::APInt(32, 0)),
             thisSemantic.loc);
         if (type->isArrayType()) // float[1]
           *value = spvBuilder.createCompositeExtract(astContext.FloatTy, *value,
@@ -2469,7 +2469,7 @@ bool DeclResultIdMapper::createStageVars(
         ptr = spvBuilder.createAccessChain(
             type, varInstr,
             spvBuilder.getConstantInt(astContext.UnsignedIntTy,
-                                      llvm::APInt(32, 0)),
+                                      llvm37::APInt(32, 0)),
             thisSemantic.loc);
         ptr->setStorageClass(spv::StorageClass::Output);
         spvBuilder.createStore(ptr, *value, thisSemantic.loc);
@@ -2520,7 +2520,7 @@ bool DeclResultIdMapper::createStageVars(
   if (asInput) {
     // If this decl translates into multiple stage input variables, we need to
     // load their values into a composite.
-    llvm::SmallVector<SpirvInstruction *, 4> subValues;
+    llvm37::SmallVector<SpirvInstruction *, 4> subValues;
 
     // If we have base classes, we need to handle them first.
     if (const auto *cxxDecl = type->getAsCXXRecordDecl()) {
@@ -2557,12 +2557,12 @@ bool DeclResultIdMapper::createStageVars(
     // of them.
     const auto structType = type;
     const auto arrayType = astContext.getConstantArrayType(
-        structType, llvm::APInt(32, arraySize), clang::ArrayType::Normal, 0);
+        structType, llvm37::APInt(32, arraySize), clang::ArrayType::Normal, 0);
 
-    llvm::SmallVector<SpirvInstruction *, 16> arrayElements;
+    llvm37::SmallVector<SpirvInstruction *, 16> arrayElements;
 
     for (uint32_t arrayIndex = 0; arrayIndex < arraySize; ++arrayIndex) {
-      llvm::SmallVector<SpirvInstruction *, 8> fields;
+      llvm37::SmallVector<SpirvInstruction *, 8> fields;
 
       // If we have base classes, we need to handle them first.
       if (const auto *cxxDecl = type->getAsCXXRecordDecl()) {
@@ -2640,7 +2640,7 @@ bool DeclResultIdMapper::createStageVars(
 
 bool DeclResultIdMapper::createPayloadStageVars(
     const hlsl::SigPoint *sigPoint, spv::StorageClass sc, const NamedDecl *decl,
-    bool asInput, QualType type, const llvm::StringRef namePrefix,
+    bool asInput, QualType type, const llvm37::StringRef namePrefix,
     SpirvInstruction **value, uint32_t payloadMemOffset) {
   assert(spvContext.isMS() || spvContext.isAS());
   assert(value);
@@ -2683,7 +2683,7 @@ bool DeclResultIdMapper::createPayloadStageVars(
   // This decl translates into multiple stage input/output payload variables
   // and we need to load/store these individual member variables.
   const auto *structDecl = type->getAs<RecordType>()->getDecl();
-  llvm::SmallVector<SpirvInstruction *, 4> subValues;
+  llvm37::SmallVector<SpirvInstruction *, 4> subValues;
   AlignmentSizeCalculator alignmentCalc(astContext, spirvOptions);
   uint32_t nextMemberOffset = 0;
 
@@ -2695,7 +2695,7 @@ bool DeclResultIdMapper::createPayloadStageVars(
     // The next avaiable offset after laying out the previous members.
     std::tie(memberAlignment, memberSize) = alignmentCalc.getAlignmentAndSize(
         field->getType(), spirvOptions.ampPayloadLayoutRule,
-        /*isRowMajor*/ llvm::None, &stride);
+        /*isRowMajor*/ llvm37::None, &stride);
     alignmentCalc.alignUsingHLSLRelaxedLayout(
         field->getType(), memberSize, memberAlignment, &nextMemberOffset);
 
@@ -2748,7 +2748,7 @@ bool DeclResultIdMapper::writeBackOutputStream(const NamedDecl *decl,
     // Handle SV_ClipDistance, and SV_CullDistance
     if (glPerVertex.tryToAccess(
             hlsl::DXIL::SigPointKind::GSOut, semanticInfo.semantic->GetKind(),
-            semanticInfo.index, llvm::None, &value,
+            semanticInfo.index, llvm37::None, &value,
             /*noWriteBack=*/false, /*vecComponent=*/nullptr, loc))
       return true;
 
@@ -2838,7 +2838,7 @@ DeclResultIdMapper::invertWIfRequested(SpirvInstruction *position,
                                                         position, {3}, loc);
     const auto newW = spvBuilder.createBinaryOp(
         spv::Op::OpFDiv, astContext.FloatTy,
-        spvBuilder.getConstantFloat(astContext.FloatTy, llvm::APFloat(1.0f)),
+        spvBuilder.getConstantFloat(astContext.FloatTy, llvm37::APFloat(1.0f)),
         oldW, loc);
     position = spvBuilder.createCompositeInsert(
         astContext.getExtVectorType(astContext.FloatTy, 4), position, {3}, newW,
@@ -2948,7 +2948,7 @@ SpirvVariable *DeclResultIdMapper::getBuiltinVar(spv::BuiltIn builtIn,
 }
 
 SpirvVariable *DeclResultIdMapper::createSpirvIntermediateOutputStageVar(
-    const NamedDecl *decl, const llvm::StringRef name, QualType type) {
+    const NamedDecl *decl, const llvm37::StringRef name, QualType type) {
   const auto *semantic = hlsl::Semantic::GetByName(name);
   SemanticInfo thisSemantic{name, semantic, name, 0, decl->getLocation()};
 
@@ -2981,7 +2981,7 @@ SpirvVariable *DeclResultIdMapper::createSpirvIntermediateOutputStageVar(
 }
 
 SpirvVariable *DeclResultIdMapper::createSpirvStageVar(
-    StageVar *stageVar, const NamedDecl *decl, const llvm::StringRef name,
+    StageVar *stageVar, const NamedDecl *decl, const llvm37::StringRef name,
     SourceLocation srcLoc) {
   using spv::BuiltIn;
 
@@ -2999,7 +2999,7 @@ SpirvVariable *DeclResultIdMapper::createSpirvStageVar(
   // [[vk::builtin(...)]] takes precedence.
   if (const auto *builtinAttr = stageVar->getBuiltInAttr()) {
     const auto spvBuiltIn =
-        llvm::StringSwitch<BuiltIn>(builtinAttr->getBuiltIn())
+        llvm37::StringSwitch<BuiltIn>(builtinAttr->getBuiltIn())
             .Case("PointSize", BuiltIn::PointSize)
             .Case("HelperInvocation", BuiltIn::HelperInvocation)
             .Case("BaseVertex", BuiltIn::BaseVertex)
@@ -3044,7 +3044,7 @@ SpirvVariable *DeclResultIdMapper::createSpirvStageVar(
       return spvBuilder.addStageBuiltinVar(type, sc, BuiltIn::FragCoord,
                                            isPrecise, srcLoc);
     default:
-      llvm_unreachable("invalid usage of SV_Position sneaked in");
+      llvm37_unreachable("invalid usage of SV_Position sneaked in");
     }
   }
   // According to DXIL spec, the VertexID SV can only be used by VSIn.
@@ -3075,7 +3075,7 @@ SpirvVariable *DeclResultIdMapper::createSpirvStageVar(
     case hlsl::SigPoint::Kind::PSIn:
       return spvBuilder.addStageIOVar(type, sc, name.str(), isPrecise, srcLoc);
     default:
-      llvm_unreachable("invalid usage of SV_InstanceID sneaked in");
+      llvm37_unreachable("invalid usage of SV_InstanceID sneaked in");
     }
   }
   // According to DXIL spec, the Depth{|GreaterEqual|LessEqual} SV can only be
@@ -3117,9 +3117,9 @@ SpirvVariable *DeclResultIdMapper::createSpirvStageVar(
     case hlsl::SigPoint::Kind::GSOut:
     case hlsl::SigPoint::Kind::PSIn:
     case hlsl::SigPoint::Kind::MSOut:
-      llvm_unreachable("should be handled in gl_PerVertex struct");
+      llvm37_unreachable("should be handled in gl_PerVertex struct");
     default:
-      llvm_unreachable(
+      llvm37_unreachable(
           "invalid usage of SV_ClipDistance/SV_CullDistance sneaked in");
     }
   }
@@ -3135,7 +3135,7 @@ SpirvVariable *DeclResultIdMapper::createSpirvStageVar(
       return spvBuilder.addStageBuiltinVar(type, sc, BuiltIn::FrontFacing,
                                            isPrecise, srcLoc);
     default:
-      llvm_unreachable("invalid usage of SV_IsFrontFace sneaked in");
+      llvm37_unreachable("invalid usage of SV_IsFrontFace sneaked in");
     }
   }
   // According to DXIL spec, the Target SV can only be used by PSOut.
@@ -3293,7 +3293,7 @@ SpirvVariable *DeclResultIdMapper::createSpirvStageVar(
       return spvBuilder.addStageBuiltinVar(type, sc, BuiltIn::Layer, isPrecise,
                                            srcLoc);
     default:
-      llvm_unreachable("invalid usage of SV_RenderTargetArrayIndex sneaked in");
+      llvm37_unreachable("invalid usage of SV_RenderTargetArrayIndex sneaked in");
     }
   }
   // According to DXIL spec, the ViewportArrayIndex SV can only be used by
@@ -3322,7 +3322,7 @@ SpirvVariable *DeclResultIdMapper::createSpirvStageVar(
       return spvBuilder.addStageBuiltinVar(type, sc, BuiltIn::ViewportIndex,
                                            isPrecise, srcLoc);
     default:
-      llvm_unreachable("invalid usage of SV_ViewportArrayIndex sneaked in");
+      llvm37_unreachable("invalid usage of SV_ViewportArrayIndex sneaked in");
     }
   }
   // According to DXIL spec, the Coverage SV can only be used by PSIn and PSOut.
@@ -3427,7 +3427,7 @@ bool DeclResultIdMapper::validateVKBuiltins(const NamedDecl *decl,
       success = false;
     }
 
-    const llvm::StringRef builtin = builtinAttr->getBuiltIn();
+    const llvm37::StringRef builtin = builtinAttr->getBuiltIn();
 
     if (builtin == "HelperInvocation") {
       if (!declType->isBooleanType()) {
@@ -3546,7 +3546,7 @@ DeclResultIdMapper::getStorageClassForSigPoint(const hlsl::SigPoint *sigPoint) {
       sc = spv::StorageClass::Input;
       break;
     default:
-      llvm_unreachable("Found invalid SigPoint kind for semantic");
+      llvm37_unreachable("Found invalid SigPoint kind for semantic");
     }
     break;
   }
@@ -3565,12 +3565,12 @@ DeclResultIdMapper::getStorageClassForSigPoint(const hlsl::SigPoint *sigPoint) {
       sc = spv::StorageClass::Input;
       break;
     default:
-      llvm_unreachable("Found invalid SigPoint kind for semantic");
+      llvm37_unreachable("Found invalid SigPoint kind for semantic");
     }
     break;
   }
   default:
-    llvm_unreachable("Found invalid SigPoint kind for semantic");
+    llvm37_unreachable("Found invalid SigPoint kind for semantic");
   }
   return sc;
 }
@@ -3634,7 +3634,7 @@ bool DeclResultIdMapper::getImplicitRegisterType(const ResourceVar &var,
         return true;
       }
     } else {
-      llvm::StringRef hlslUserType = var.getSpirvInstr()->getHlslUserType();
+      llvm37::StringRef hlslUserType = var.getSpirvInstr()->getHlslUserType();
       // b - for constant buffer views (CBV)
       if (var.isGlobalsBuffer() || hlslUserType == "cbuffer" ||
           hlslUserType == "ConstantBuffer") {
@@ -3701,7 +3701,7 @@ DeclResultIdMapper::createHullMainOutputPatch(const ParmVarDecl *param,
                                               const QualType retType,
                                               uint32_t numOutputControlPoints) {
   const QualType hullMainRetType = astContext.getConstantArrayType(
-      retType, llvm::APInt(32, numOutputControlPoints),
+      retType, llvm37::APInt(32, numOutputControlPoints),
       clang::ArrayType::Normal, 0);
   SpirvInstruction *hullMainOutputPatch = createSpirvIntermediateOutputStageVar(
       param, "temp.var.hullMainRetVal", hullMainRetType);

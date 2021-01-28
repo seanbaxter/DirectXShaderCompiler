@@ -118,7 +118,7 @@ entry:
   %call13 = tail call signext i32 @foo(i32 signext 4) #0
   %and14 = and i32 %call13, 128
   %or15 = or i32 %or12, %and14
-  %bs = tail call i32 @llvm.bswap.i32(i32 %or15) #0
+  %bs = tail call i32 @llvm37.bswap.i32(i32 %or15) #0
   %shr = ashr i32 %bs, 4
   ret i32 %shr
 
@@ -133,7 +133,7 @@ entry:
 }
 
 ; Function Attrs: nounwind readnone
-declare i32 @llvm.bswap.i32(i32) #0
+declare i32 @llvm37.bswap.i32(i32) #0
 
 ; Function Attrs: nounwind readnone
 define signext i32 @tar2(i32 signext %x) #0 {

@@ -1,6 +1,6 @@
 //===- unittest/Format/FormatTestProto.cpp --------------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -9,7 +9,7 @@
 
 #include "FormatTestUtils.h"
 #include "clang/Format/Format.h"
-#include "llvm/Support/Debug.h"
+#include "llvm37/Support/Debug.h"
 #include "gtest/gtest.h"
 
 #define DEBUG_TYPE "format-test"
@@ -19,25 +19,25 @@ namespace format {
 
 class FormatTestProto : public ::testing::Test {
 protected:
-  static std::string format(llvm::StringRef Code, unsigned Offset,
+  static std::string format(llvm37::StringRef Code, unsigned Offset,
                             unsigned Length, const FormatStyle &Style) {
-    DEBUG(llvm::errs() << "---\n");
-    DEBUG(llvm::errs() << Code << "\n\n");
+    DEBUG(llvm37::errs() << "---\n");
+    DEBUG(llvm37::errs() << Code << "\n\n");
     std::vector<tooling::Range> Ranges(1, tooling::Range(Offset, Length));
     tooling::Replacements Replaces = reformat(Style, Code, Ranges);
     std::string Result = applyAllReplacements(Code, Replaces);
     EXPECT_NE("", Result);
-    DEBUG(llvm::errs() << "\n" << Result << "\n\n");
+    DEBUG(llvm37::errs() << "\n" << Result << "\n\n");
     return Result;
   }
 
-  static std::string format(llvm::StringRef Code) {
+  static std::string format(llvm37::StringRef Code) {
     FormatStyle Style = getGoogleStyle(FormatStyle::LK_Proto);
     Style.ColumnLimit = 60; // To make writing tests easier.
     return format(Code, 0, Code.size(), Style);
   }
 
-  static void verifyFormat(llvm::StringRef Code) {
+  static void verifyFormat(llvm37::StringRef Code) {
     EXPECT_EQ(Code.str(), format(test::messUp(Code)));
   }
 };

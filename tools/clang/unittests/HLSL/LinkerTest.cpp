@@ -11,10 +11,10 @@
 #include <memory>
 #include <vector>
 #include <string>
-#include "llvm/ADT/ArrayRef.h"
+#include "llvm37/ADT/ArrayRef.h"
 #include "dxc/Test/CompilationResult.h"
 #include "dxc/Test/HLSLTestData.h"
-#include "llvm/Support/ManagedStatic.h"
+#include "llvm37/Support/ManagedStatic.h"
 
 #include <fstream>
 
@@ -25,7 +25,7 @@
 
 using namespace std;
 using namespace hlsl;
-using namespace llvm;
+using namespace llvm37;
 
 // The test fixture.
 class LinkerTest
@@ -77,7 +77,7 @@ public:
   }
 
   void CompileLib(LPCWSTR filename, IDxcBlob **pResultBlob,
-                  llvm::ArrayRef<LPCWSTR> pArguments = {},
+                  llvm37::ArrayRef<LPCWSTR> pArguments = {},
                   LPCWSTR pShaderTarget = L"lib_6_x") {
     std::wstring fullPath = hlsl_test::GetPathToHlslDataFile(filename);
     CComPtr<IDxcBlobEncoding> pSource;
@@ -122,9 +122,9 @@ public:
   }
 
   void Link(LPCWSTR pEntryName, LPCWSTR pShaderModel, IDxcLinker *pLinker,
-            ArrayRef<LPCWSTR> libNames, llvm::ArrayRef<LPCSTR> pCheckMsgs,
-            llvm::ArrayRef<LPCSTR> pCheckNotMsgs,
-            llvm::ArrayRef<LPCWSTR> pArguments = {},
+            ArrayRef<LPCWSTR> libNames, llvm37::ArrayRef<LPCSTR> pCheckMsgs,
+            llvm37::ArrayRef<LPCSTR> pCheckNotMsgs,
+            llvm37::ArrayRef<LPCWSTR> pArguments = {},
             bool bRegEx = false) {
     CComPtr<IDxcOperationResult> pResult;
     VERIFY_SUCCEEDED(pLinker->Link(pEntryName, pShaderModel, libNames.data(),
@@ -146,8 +146,8 @@ public:
   }
 
   void LinkCheckMsg(LPCWSTR pEntryName, LPCWSTR pShaderModel, IDxcLinker *pLinker,
-            ArrayRef<LPCWSTR> libNames, llvm::ArrayRef<LPCSTR> pErrorMsgs,
-            llvm::ArrayRef<LPCWSTR> pArguments = {}) {
+            ArrayRef<LPCWSTR> libNames, llvm37::ArrayRef<LPCSTR> pErrorMsgs,
+            llvm37::ArrayRef<LPCWSTR> pArguments = {}) {
     CComPtr<IDxcOperationResult> pResult;
     VERIFY_SUCCEEDED(pLinker->Link(pEntryName, pShaderModel,
                                    libNames.data(), libNames.size(),
@@ -471,7 +471,7 @@ TEST_F(LinkerTest, RunLinkToLib) {
   LPCWSTR libName2 = L"test";
   RegisterDxcModule(libName2, pLib, pLinker);
 
-  Link(L"", L"lib_6_3", pLinker, {libName, libName2}, {"!llvm.dbg.cu"}, {}, option);
+  Link(L"", L"lib_6_3", pLinker, {libName, libName2}, {"!llvm37.dbg.cu"}, {}, option);
 }
 
 TEST_F(LinkerTest, RunLinkToLibExport) {
@@ -785,7 +785,7 @@ TEST_F(LinkerTest, RunLinkToLibWithGlobalCtor) {
   RegisterDxcModule(libName2, pLib1, pLinker);
   // Make sure global_ctors created for lib to lib.
   Link(L"", L"lib_6_3", pLinker, {libName, libName2},
-       {"@llvm.global_ctors = appending global [1 x { i32, void ()*, i8* }] [{ "
+       {"@llvm37.global_ctors = appending global [1 x { i32, void ()*, i8* }] [{ "
         "i32, void ()*, i8* } { i32 65535, void ()* "
         "@foo._GLOBAL__sub_I_lib_static_cb_init.hlsl, i8* null }]"},
        {},

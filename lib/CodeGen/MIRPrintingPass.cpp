@@ -1,29 +1,29 @@
 //===- MIRPrintingPass.cpp - Pass that prints out using the MIR format ----===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 //
-// This file implements a pass that prints out the LLVM module using the MIR
+// This file implements a pass that prints out the LLVM37 module using the MIR
 // serialization format.
 //
 //===----------------------------------------------------------------------===//
 
 #include "MIRPrinter.h"
-#include "llvm/CodeGen/Passes.h"
-#include "llvm/CodeGen/MachineFunctionPass.h"
-#include "llvm/CodeGen/MIRYamlMapping.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/CodeGen/Passes.h"
+#include "llvm37/CodeGen/MachineFunctionPass.h"
+#include "llvm37/CodeGen/MIRYamlMapping.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/raw_ostream.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 namespace {
 
-/// This pass prints out the LLVM IR to an output stream using the MIR
+/// This pass prints out the LLVM37 IR to an output stream using the MIR
 /// serialization format.
 struct MIRPrintingPass : public MachineFunctionPass {
   static char ID;
@@ -59,13 +59,13 @@ char MIRPrintingPass::ID = 0;
 
 } // end anonymous namespace
 
-char &llvm::MIRPrintingPassID = MIRPrintingPass::ID;
+char &llvm37::MIRPrintingPassID = MIRPrintingPass::ID;
 INITIALIZE_PASS(MIRPrintingPass, "mir-printer", "MIR Printer", false, false)
 
-namespace llvm {
+namespace llvm37 {
 
 MachineFunctionPass *createPrintMIRPass(raw_ostream &OS) {
   return new MIRPrintingPass(OS);
 }
 
-} // end namespace llvm
+} // end namespace llvm37

@@ -1,6 +1,6 @@
 ; RUN: opt < %s -tbaa -basicaa -aa-eval -evaluate-aa-metadata -print-no-aliases -print-may-aliases -disable-output 2>&1 | FileCheck %s
 
-; Generated with "clang -cc1 -disable-llvm-optzns -O1 -emit-llvm"
+; Generated with "clang -cc1 -disable-llvm37-optzns -O1 -emit-llvm37"
 ; #include <new>
 ; struct Foo { long i; };
 ; struct Bar { void *p; };

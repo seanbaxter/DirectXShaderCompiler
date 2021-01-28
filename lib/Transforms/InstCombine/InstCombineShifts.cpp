@@ -1,6 +1,6 @@
 //===- InstCombineShifts.cpp ----------------------------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -12,11 +12,11 @@
 //===----------------------------------------------------------------------===//
 
 #include "InstCombineInternal.h"
-#include "llvm/Analysis/ConstantFolding.h"
-#include "llvm/Analysis/InstructionSimplify.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/IR/PatternMatch.h"
-using namespace llvm;
+#include "llvm37/Analysis/ConstantFolding.h"
+#include "llvm37/Analysis/InstructionSimplify.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/IR/PatternMatch.h"
+using namespace llvm37;
 using namespace PatternMatch;
 
 #define DEBUG_TYPE "instcombine"
@@ -204,7 +204,7 @@ static Value *GetShiftedValue(Value *V, unsigned NumBits, bool isLeftShift,
   IC.Worklist.Add(I);
 
   switch (I->getOpcode()) {
-  default: llvm_unreachable("Inconsistency with CanEvaluateShifted");
+  default: llvm37_unreachable("Inconsistency with CanEvaluateShifted");
   case Instruction::And:
   case Instruction::Or:
   case Instruction::Xor:

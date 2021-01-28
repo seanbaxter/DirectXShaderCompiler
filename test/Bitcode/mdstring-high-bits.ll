@@ -1,4 +1,4 @@
-; RUN: llvm-as < %s | llvm-dis | FileCheck %s
+; RUN: llvm37-as < %s | llvm37-dis | FileCheck %s
 
 ; PR21882: confirm we don't crash when high bits are set in a character in a
 ; metadata string.

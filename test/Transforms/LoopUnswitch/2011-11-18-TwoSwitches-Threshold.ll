@@ -5,7 +5,7 @@
 ; STATS: 1 loop-simplify - Number of pre-header or exit blocks inserted
 ; STATS: 1 loop-unswitch - Number of switches unswitched
 
-; ModuleID = '../llvm/test/Transforms/LoopUnswitch/2011-11-18-TwoSwitches.ll'
+; ModuleID = '../llvm37/test/Transforms/LoopUnswitch/2011-11-18-TwoSwitches.ll'
 
 ; CHECK:        %1 = icmp eq i32 %c, 1
 ; CHECK-NEXT:   br i1 %1, label %.split.us, label %..split_crit_edge

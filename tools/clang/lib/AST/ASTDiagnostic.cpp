@@ -1,6 +1,6 @@
 //===--- ASTDiagnostic.cpp - Diagnostic Printing Hooks for AST Nodes ------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -20,8 +20,8 @@
 #include "clang/AST/ExprCXX.h"
 #include "clang/AST/TemplateBase.h"
 #include "clang/AST/Type.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/Support/raw_ostream.h"
 //                                                                           //
 ///////////////////////////////////////////////////////////////////////////////
 using namespace clang;
@@ -148,7 +148,7 @@ break; \
     if (Ty->getBaseType().getTypePtr() != Ty && !ShouldAKA) {
       QualType BaseType = Desugar(Context, Ty->getBaseType(), ShouldAKA);
       QT = Context.getObjCObjectType(BaseType, Ty->getTypeArgsAsWritten(),
-                                     llvm::makeArrayRef(Ty->qual_begin(),
+                                     llvm37::makeArrayRef(Ty->qual_begin(),
                                                         Ty->getNumProtocols()),
                                      Ty->isKindOfTypeAsWritten());
     }
@@ -256,7 +256,7 @@ ConvertTypeToDiagnosticString(ASTContext &Context, QualType Ty,
     if (Ty->isVectorType()) {
       const VectorType *VTy = Ty->getAs<VectorType>();
       std::string DecoratedString;
-      llvm::raw_string_ostream OS(DecoratedString);
+      llvm37::raw_string_ostream OS(DecoratedString);
       const char *Values = VTy->getNumElements() > 1 ? "values" : "value";
       OS << "'" << S << "' (vector of " << VTy->getNumElements() << " '"
          << VTy->getElementType().getAsString(Context.getPrintingPolicy())
@@ -286,11 +286,11 @@ void clang::FormatASTNodeDiagnosticArgument(
   ASTContext &Context = *static_cast<ASTContext*>(Cookie);
   
   size_t OldEnd = Output.size();
-  llvm::raw_svector_ostream OS(Output);
+  llvm37::raw_svector_ostream OS(Output);
   bool NeedQuotes = true;
   
   switch (Kind) {
-    default: llvm_unreachable("unknown ArgumentKind");
+    default: llvm37_unreachable("unknown ArgumentKind");
     case DiagnosticsEngine::ak_qualtype_pair: {
       TemplateDiffTypes &TDT = *reinterpret_cast<TemplateDiffTypes*>(Val);
       QualType FromType =
@@ -500,7 +500,7 @@ class TemplateDiff {
       Qualifiers FromQual, ToQual;
 
       /// FromInt, ToInt - APSInt's for integral arguments.
-      llvm::APSInt FromInt, ToInt;
+      llvm37::APSInt FromInt, ToInt;
 
       /// IsValidFromInt, IsValidToInt - Whether the APSInt's are valid.
       bool IsValidFromInt, IsValidToInt;
@@ -567,7 +567,7 @@ class TemplateDiff {
     }
 
     /// SetNode - Set FromInt and ToInt of the current node.
-    void SetNode(llvm::APSInt FromInt, llvm::APSInt ToInt,
+    void SetNode(llvm37::APSInt FromInt, llvm37::APSInt ToInt,
                  bool IsValidFromInt, bool IsValidToInt) {
       FlatTree[CurrentNode].FromInt = FromInt;
       FlatTree[CurrentNode].ToInt = ToInt;
@@ -670,7 +670,7 @@ class TemplateDiff {
     }
 
     /// GetNode - Gets the FromInt and ToInt.
-    void GetNode(llvm::APSInt &FromInt, llvm::APSInt &ToInt,
+    void GetNode(llvm37::APSInt &FromInt, llvm37::APSInt &ToInt,
                  bool &IsValidFromInt, bool &IsValidToInt) {
       FromInt = FlatTree[ReadNode].FromInt;
       ToInt = FlatTree[ReadNode].ToInt;
@@ -956,7 +956,7 @@ class TemplateDiff {
   static void InitializeNonTypeDiffVariables(
       ASTContext &Context, const TSTiterator &Iter,
       NonTypeTemplateParmDecl *Default, bool &HasInt, bool &HasValueDecl,
-      bool &IsNullPtr, Expr *&E, llvm::APSInt &Value, ValueDecl *&VD) {
+      bool &IsNullPtr, Expr *&E, llvm37::APSInt &Value, ValueDecl *&VD) {
     HasInt = !Iter.isEnd() && Iter->getKind() == TemplateArgument::Integral;
 
     HasValueDecl =
@@ -1004,7 +1004,7 @@ class TemplateDiff {
                     NonTypeTemplateParmDecl *FromDefaultNonTypeDecl,
                     NonTypeTemplateParmDecl *ToDefaultNonTypeDecl) {
     Expr *FromExpr = nullptr, *ToExpr = nullptr;
-    llvm::APSInt FromInt, ToInt;
+    llvm37::APSInt FromInt, ToInt;
     ValueDecl *FromValueDecl = nullptr, *ToValueDecl = nullptr;
     bool HasFromInt = false, HasToInt = false, HasFromValueDecl = false,
          HasToValueDecl = false, FromNullPtr = false, ToNullPtr = false;
@@ -1239,7 +1239,7 @@ class TemplateDiff {
   /// APSInt to size of IntegerType to match the behavior in
   /// Sema::CheckTemplateArgument
   static bool GetInt(ASTContext &Context, const TSTiterator &Iter,
-                     Expr *ArgExpr, llvm::APSInt &Int, QualType IntegerType) {
+                     Expr *ArgExpr, llvm37::APSInt &Int, QualType IntegerType) {
     // Default, value-depenedent expressions require fetching
     // from the desugared TemplateArgument, otherwise expression needs to
     // be evaluatable.
@@ -1254,7 +1254,7 @@ class TemplateDiff {
           Int = Int.extOrTrunc(Context.getTypeSize(IntegerType));
           return true;
         default:
-          llvm_unreachable("Unexpected template argument kind");
+          llvm37_unreachable("Unexpected template argument kind");
       }
     } else if (ArgExpr->isEvaluatable(Context)) {
       Int = ArgExpr->EvaluateKnownConstInt(Context);
@@ -1278,7 +1278,7 @@ class TemplateDiff {
           ArgExpr = Iter.getDesugar().getAsExpr();
           return cast<DeclRefExpr>(ArgExpr)->getDecl();
         default:
-          llvm_unreachable("Unexpected template argument kind");
+          llvm37_unreachable("Unexpected template argument kind");
       }
     DeclRefExpr *DRE = dyn_cast<DeclRefExpr>(ArgExpr);
     if (!DRE) {
@@ -1351,7 +1351,7 @@ class TemplateDiff {
     Expr::EvalResult FromResult, ToResult;
     if (!FromExpr->EvaluateAsRValue(FromResult, Context) ||
         !ToExpr->EvaluateAsRValue(ToResult, Context)) {
-      llvm::FoldingSetNodeID FromID, ToID;
+      llvm37::FoldingSetNodeID FromID, ToID;
       FromExpr->Profile(FromID, Context, true);
       ToExpr->Profile(ToID, Context, true);
       return FromID == ToID;
@@ -1378,7 +1378,7 @@ class TemplateDiff {
       case APValue::MemberPointer:
         return FromVal.getMemberPointerDecl() == ToVal.getMemberPointerDecl();
       default:
-        llvm_unreachable("Unknown template argument expression.");
+        llvm37_unreachable("Unknown template argument expression.");
     }
   }
 
@@ -1398,7 +1398,7 @@ class TemplateDiff {
     // arguments.
     switch (Tree.GetKind()) {
       case DiffTree::Invalid:
-        llvm_unreachable("Template diffing failed with bad DiffNode");
+        llvm37_unreachable("Template diffing failed with bad DiffNode");
       case DiffTree::Type: {
         QualType FromType, ToType;
         Tree.GetNode(FromType, ToType);
@@ -1421,7 +1421,7 @@ class TemplateDiff {
         return;
       }
       case DiffTree::Integer: {
-        llvm::APSInt FromInt, ToInt;
+        llvm37::APSInt FromInt, ToInt;
         Expr *FromExpr, *ToExpr;
         bool IsValidFromInt, IsValidToInt;
         Tree.GetNode(FromExpr, ToExpr);
@@ -1635,7 +1635,7 @@ class TemplateDiff {
 
   /// PrintAPSInt - Handles printing of integral arguments, highlighting
   /// argument differences.
-  void PrintAPSInt(llvm::APSInt FromInt, llvm::APSInt ToInt,
+  void PrintAPSInt(llvm37::APSInt FromInt, llvm37::APSInt ToInt,
                    bool IsValidFromInt, bool IsValidToInt, Expr *FromExpr,
                    Expr *ToExpr, bool FromDefault, bool ToDefault, bool Same) {
     assert((IsValidFromInt || IsValidToInt) &&
@@ -1657,7 +1657,7 @@ class TemplateDiff {
 
   /// PrintAPSInt - If valid, print the APSInt.  If the expression is
   /// gives more information, print it too.
-  void PrintAPSInt(llvm::APSInt Val, Expr *E, bool Valid) {
+  void PrintAPSInt(llvm37::APSInt Val, Expr *E, bool Valid) {
     Bold();
     if (Valid) {
       if (HasExtraInfo(E)) {

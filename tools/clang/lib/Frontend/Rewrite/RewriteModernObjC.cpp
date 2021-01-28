@@ -1,6 +1,6 @@
 //===--- RewriteObjC.cpp - Playground for the code rewriter ---------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -23,17 +23,17 @@
 #include "clang/Basic/TargetInfo.h"
 #include "clang/Lex/Lexer.h"
 #include "clang/Rewrite/Core/Rewriter.h"
-#include "llvm/ADT/DenseSet.h"
-#include "llvm/ADT/SmallPtrSet.h"
-#include "llvm/ADT/StringExtras.h"
-#include "llvm/Support/MemoryBuffer.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/DenseSet.h"
+#include "llvm37/ADT/SmallPtrSet.h"
+#include "llvm37/ADT/StringExtras.h"
+#include "llvm37/Support/MemoryBuffer.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <memory>
 
 #ifdef CLANG_ENABLE_OBJC_REWRITER
 
 using namespace clang;
-using llvm::utostr;
+using llvm37::utostr;
 
 namespace {
   class RewriteModernObjC : public ASTConsumer {
@@ -110,10 +110,10 @@ namespace {
     /* Misc. containers needed for meta-data rewrite. */
     SmallVector<ObjCImplementationDecl *, 8> ClassImplementation;
     SmallVector<ObjCCategoryImplDecl *, 8> CategoryImplementation;
-    llvm::SmallPtrSet<ObjCInterfaceDecl*, 8> ObjCSynthesizedStructs;
-    llvm::SmallPtrSet<ObjCProtocolDecl*, 8> ObjCSynthesizedProtocols;
-    llvm::SmallPtrSet<ObjCInterfaceDecl*, 8> ObjCWrittenInterfaces;
-    llvm::SmallPtrSet<TagDecl*, 32> GlobalDefinedTags;
+    llvm37::SmallPtrSet<ObjCInterfaceDecl*, 8> ObjCSynthesizedStructs;
+    llvm37::SmallPtrSet<ObjCProtocolDecl*, 8> ObjCSynthesizedProtocols;
+    llvm37::SmallPtrSet<ObjCInterfaceDecl*, 8> ObjCWrittenInterfaces;
+    llvm37::SmallPtrSet<TagDecl*, 32> GlobalDefinedTags;
     SmallVector<ObjCInterfaceDecl*, 32> ObjCInterfacesSeen;
     /// DefinedNonLazyClasses - List of defined "non-lazy" classes.
     SmallVector<ObjCInterfaceDecl*, 8> DefinedNonLazyClasses;
@@ -124,9 +124,9 @@ namespace {
     SmallVector<Stmt *, 32> Stmts;
     SmallVector<int, 8> ObjCBcLabelNo;
     // Remember all the @protocol(<expr>) expressions.
-    llvm::SmallPtrSet<ObjCProtocolDecl *, 32> ProtocolExprDecls;
+    llvm37::SmallPtrSet<ObjCProtocolDecl *, 32> ProtocolExprDecls;
     
-    llvm::DenseSet<uint64_t> CopyDestroyCache;
+    llvm37::DenseSet<uint64_t> CopyDestroyCache;
 
     // Block expressions.
     SmallVector<BlockExpr *, 32> Blocks;
@@ -138,29 +138,29 @@ namespace {
     
     // Block related declarations.
     SmallVector<ValueDecl *, 8> BlockByCopyDecls;
-    llvm::SmallPtrSet<ValueDecl *, 8> BlockByCopyDeclsPtrSet;
+    llvm37::SmallPtrSet<ValueDecl *, 8> BlockByCopyDeclsPtrSet;
     SmallVector<ValueDecl *, 8> BlockByRefDecls;
-    llvm::SmallPtrSet<ValueDecl *, 8> BlockByRefDeclsPtrSet;
-    llvm::DenseMap<ValueDecl *, unsigned> BlockByRefDeclNo;
-    llvm::SmallPtrSet<ValueDecl *, 8> ImportedBlockDecls;
-    llvm::SmallPtrSet<VarDecl *, 8> ImportedLocalExternalDecls;
+    llvm37::SmallPtrSet<ValueDecl *, 8> BlockByRefDeclsPtrSet;
+    llvm37::DenseMap<ValueDecl *, unsigned> BlockByRefDeclNo;
+    llvm37::SmallPtrSet<ValueDecl *, 8> ImportedBlockDecls;
+    llvm37::SmallPtrSet<VarDecl *, 8> ImportedLocalExternalDecls;
     
-    llvm::DenseMap<BlockExpr *, std::string> RewrittenBlockExprs;
-    llvm::DenseMap<ObjCInterfaceDecl *, 
-                    llvm::SmallPtrSet<ObjCIvarDecl *, 8> > ReferencedIvars;
+    llvm37::DenseMap<BlockExpr *, std::string> RewrittenBlockExprs;
+    llvm37::DenseMap<ObjCInterfaceDecl *, 
+                    llvm37::SmallPtrSet<ObjCIvarDecl *, 8> > ReferencedIvars;
     
     // ivar bitfield grouping containers
-    llvm::DenseSet<const ObjCInterfaceDecl *> ObjCInterefaceHasBitfieldGroups;
-    llvm::DenseMap<const ObjCIvarDecl* , unsigned> IvarGroupNumber;
+    llvm37::DenseSet<const ObjCInterfaceDecl *> ObjCInterefaceHasBitfieldGroups;
+    llvm37::DenseMap<const ObjCIvarDecl* , unsigned> IvarGroupNumber;
     // This container maps an <class, group number for ivar> tuple to the type
     // of the struct where the bitfield belongs.
-    llvm::DenseMap<std::pair<const ObjCInterfaceDecl*, unsigned>, QualType> GroupRecordType;
+    llvm37::DenseMap<std::pair<const ObjCInterfaceDecl*, unsigned>, QualType> GroupRecordType;
     SmallVector<FunctionDecl*, 32> FunctionDefinitionsSeen;
     
     // This maps an original source AST to it's rewritten form. This allows
     // us to avoid rewriting the same node twice (which is very uncommon).
     // This is needed to support some of the exotic property rewriting.
-    llvm::DenseMap<Stmt *, Stmt *> ReplacedNodes;
+    llvm37::DenseMap<Stmt *, Stmt *> ReplacedNodes;
 
     // Needed for header files being rewritten
     bool IsHeader;
@@ -185,7 +185,7 @@ namespace {
     void InitializeCommon(ASTContext &context);
 
   public:
-    llvm::DenseMap<ObjCMethodDecl*, std::string> MethodInternalNames;
+    llvm37::DenseMap<ObjCMethodDecl*, std::string> MethodInternalNames;
     // Top Level Driver code.
     bool HandleTopLevelDecl(DeclGroupRef D) override {
       for (DeclGroupRef::iterator I = D.begin(), E = D.end(); I != E; ++I) {
@@ -271,7 +271,7 @@ namespace {
       }
       // Get the new text.
       std::string SStr;
-      llvm::raw_string_ostream S(SStr);
+      llvm37::raw_string_ostream S(SStr);
       New->printPretty(S, nullptr, PrintingPolicy(LangOpts));
       const std::string &Str = S.str();
 
@@ -497,7 +497,7 @@ namespace {
     void GetBlockDeclRefExprs(Stmt *S);
     void GetInnerBlockDeclRefExprs(Stmt *S,
                 SmallVectorImpl<DeclRefExpr *> &InnerBlockDeclRefs,
-                llvm::SmallPtrSetImpl<const DeclContext *> &InnerContexts);
+                llvm37::SmallPtrSetImpl<const DeclContext *> &InnerContexts);
 
     // We avoid calling Type::isBlockPointerType(), since it operates on the
     // canonical type. We only care if the top-level type is a closure pointer.
@@ -602,7 +602,7 @@ namespace {
 
     StringLiteral *getStringLiteral(StringRef Str) {
       QualType StrType = Context->getConstantArrayType(
-          Context->CharTy, llvm::APInt(32, Str.size() + 1), ArrayType::Normal,
+          Context->CharTy, llvm37::APInt(32, Str.size() + 1), ArrayType::Normal,
           0);
       return StringLiteral::Create(*Context, Str, StringLiteral::Ascii,
                                    /*Pascal=*/false, StrType, SourceLocation());
@@ -667,7 +667,7 @@ RewriteModernObjC::RewriteModernObjC(std::string inFile, raw_ostream* OS,
 std::unique_ptr<ASTConsumer> clang::CreateModernObjCRewriter(
     const std::string &InFile, raw_ostream *OS, DiagnosticsEngine &Diags,
     const LangOptions &LOpts, bool SilenceRewriteMacroWarning, bool LineInfo) {
-  return llvm::make_unique<RewriteModernObjC>(
+  return llvm37::make_unique<RewriteModernObjC>(
       InFile, OS, Diags, LOpts, SilenceRewriteMacroWarning, LineInfo);
 }
 
@@ -704,7 +704,7 @@ void RewriteModernObjC::InitializeCommon(ASTContext &context) {
 
   // Get the ID and start/end of the main file.
   MainFileID = SM->getMainFileID();
-  const llvm::MemoryBuffer *MainBuf = SM->getBuffer(MainFileID);
+  const llvm37::MemoryBuffer *MainBuf = SM->getBuffer(MainFileID);
   MainFileStart = MainBuf->getBufferStart();
   MainFileEnd = MainBuf->getBufferEnd();
 
@@ -878,7 +878,7 @@ RewriteModernObjC::getIvarAccessString(ObjCIvarDecl *D) {
       unsigned UnsignedIntSize = 
       static_cast<unsigned>(Context->getTypeSize(Context->UnsignedIntTy));
       Expr *Zero = IntegerLiteral::Create(*Context,
-                                          llvm::APInt(UnsignedIntSize, 0),
+                                          llvm37::APInt(UnsignedIntSize, 0),
                                           Context->UnsignedIntTy, SourceLocation());
       Zero = NoTypeInfoCStyleCastExpr(Context, PtrStructIMPL, CK_BitCast, Zero);
       ParenExpr *PE = new (Context) ParenExpr(SourceLocation(), SourceLocation(),
@@ -1198,7 +1198,7 @@ void RewriteModernObjC::RewriteProtocolDecl(ObjCProtocolDecl *PDecl) {
 void RewriteModernObjC::RewriteForwardProtocolDecl(DeclGroupRef D) {
   SourceLocation LocStart = (*D.begin())->getLocStart();
   if (LocStart.isInvalid())
-    llvm_unreachable("Invalid SourceLocation");
+    llvm37_unreachable("Invalid SourceLocation");
   // FIXME: handle forward protocol that are declared across multiple lines.
   ReplaceText(LocStart, 0, "// ");
 }
@@ -1207,7 +1207,7 @@ void
 RewriteModernObjC::RewriteForwardProtocolDecl(const SmallVectorImpl<Decl *> &DG) {
   SourceLocation LocStart = DG[0]->getLocStart();
   if (LocStart.isInvalid())
-    llvm_unreachable("Invalid SourceLocation");
+    llvm37_unreachable("Invalid SourceLocation");
   // FIXME: handle forward protocol that are declared across multiple lines.
   ReplaceText(LocStart, 0, "// ");
 }
@@ -1216,7 +1216,7 @@ void
 RewriteModernObjC::RewriteLinkageSpec(LinkageSpecDecl *LSD) {
   SourceLocation LocStart = LSD->getExternLoc();
   if (LocStart.isInvalid())
-    llvm_unreachable("Invalid extern SourceLocation");
+    llvm37_unreachable("Invalid extern SourceLocation");
   
   ReplaceText(LocStart, 0, "// ");
   if (!LSD->hasBraces())
@@ -1224,7 +1224,7 @@ RewriteModernObjC::RewriteLinkageSpec(LinkageSpecDecl *LSD) {
   // FIXME. We don't rewrite well if '{' is not on same line as 'extern'.
   SourceLocation LocRBrace = LSD->getRBraceLoc();
   if (LocRBrace.isInvalid())
-    llvm_unreachable("Invalid rbrace SourceLocation");
+    llvm37_unreachable("Invalid rbrace SourceLocation");
   ReplaceText(LocRBrace, 0, "// ");
 }
 
@@ -2130,7 +2130,7 @@ CallExpr *RewriteModernObjC::SynthesizeCallToFunctionDecl(
   const FunctionType *FT = msgSendType->getAs<FunctionType>();
 
   CallExpr *Exp =  
-    new (Context) CallExpr(*Context, ICE, llvm::makeArrayRef(args, nargs),
+    new (Context) CallExpr(*Context, ICE, llvm37::makeArrayRef(args, nargs),
                            FT->getCallResultType(*Context),
                            VK_RValue, EndLoc);
   return Exp;
@@ -2598,7 +2598,7 @@ Stmt *RewriteModernObjC::RewriteObjCStringLiteral(ObjCStringLiteral *Exp) {
   Preamble += "0x000007c8,"; // utf8_str
   // The pretty printer for StringLiteral handles escape characters properly.
   std::string prettyBufS;
-  llvm::raw_string_ostream prettyBuf(prettyBufS);
+  llvm37::raw_string_ostream prettyBuf(prettyBufS);
   Exp->getString()->printPretty(prettyBuf, nullptr, PrintingPolicy(LangOpts));
   Preamble += prettyBuf.str();
   Preamble += ",";
@@ -2626,7 +2626,7 @@ Stmt *RewriteModernObjC::RewriteObjCBoolLiteralExpr(ObjCBoolLiteralExpr *Exp) {
     static_cast<unsigned>(Context->getTypeSize(Context->IntTy));
   
   Expr *FlagExp = IntegerLiteral::Create(*Context, 
-                                         llvm::APInt(IntSize, Exp->getValue()), 
+                                         llvm37::APInt(IntSize, Exp->getValue()), 
                                          Context->IntTy, Exp->getLocation());
   CastExpr *cast = NoTypeInfoCStyleCastExpr(Context, Context->ObjCBuiltinBoolTy,
                                             CK_BitCast, FlagExp);
@@ -2752,7 +2752,7 @@ Stmt *RewriteModernObjC::RewriteObjCArrayLiteralExpr(ObjCArrayLiteral *Exp) {
   unsigned UnsignedIntSize = 
     static_cast<unsigned>(Context->getTypeSize(Context->UnsignedIntTy));
   Expr *count = IntegerLiteral::Create(*Context,
-                                       llvm::APInt(UnsignedIntSize, NumElements),
+                                       llvm37::APInt(UnsignedIntSize, NumElements),
                                        Context->UnsignedIntTy, SourceLocation());
   InitExprs.push_back(count);
   for (unsigned i = 0; i < NumElements; i++)
@@ -2810,7 +2810,7 @@ Stmt *RewriteModernObjC::RewriteObjCArrayLiteralExpr(ObjCArrayLiteral *Exp) {
   
   // (NSUInteger)cnt
   Expr *cnt = IntegerLiteral::Create(*Context,
-                                     llvm::APInt(UnsignedIntSize, NumElements),
+                                     llvm37::APInt(UnsignedIntSize, NumElements),
                                      Context->UnsignedIntTy, SourceLocation());
   MsgExprs.push_back(cnt);
   
@@ -2881,7 +2881,7 @@ Stmt *RewriteModernObjC::RewriteObjCDictionaryLiteralExpr(ObjCDictionaryLiteral 
   unsigned UnsignedIntSize = 
     static_cast<unsigned>(Context->getTypeSize(Context->UnsignedIntTy));
   Expr *count = IntegerLiteral::Create(*Context,
-                                       llvm::APInt(UnsignedIntSize, NumElements),
+                                       llvm37::APInt(UnsignedIntSize, NumElements),
                                        Context->UnsignedIntTy, SourceLocation());
   KeyExprs.push_back(count);
   ValueExprs.push_back(count);
@@ -2963,7 +2963,7 @@ Stmt *RewriteModernObjC::RewriteObjCDictionaryLiteralExpr(ObjCDictionaryLiteral 
   
   // (NSUInteger)cnt
   Expr *cnt = IntegerLiteral::Create(*Context,
-                                     llvm::APInt(UnsignedIntSize, NumElements),
+                                     llvm37::APInt(UnsignedIntSize, NumElements),
                                      Context->UnsignedIntTy, SourceLocation());
   MsgExprs.push_back(cnt);
   
@@ -3762,7 +3762,7 @@ bool RewriteModernObjC::RewriteObjCFieldDeclType(QualType &Type,
       Result += " {\n";
       for (const auto *EC : ED->enumerators()) {
         Result += "\t"; Result += EC->getName(); Result += " = ";
-        llvm::APSInt Val = EC->getInitVal();
+        llvm37::APSInt Val = EC->getInitVal();
         Result += Val.toString(10);
         Result += ",\n";
       }
@@ -3796,7 +3796,7 @@ void RewriteModernObjC::RewriteObjCFieldDecl(FieldDecl *fieldDecl,
     do {
       if (const ConstantArrayType *CAT = dyn_cast<ConstantArrayType>(AT)) {
         Result += "[";
-        llvm::APInt Dim = CAT->getSize();
+        llvm37::APInt Dim = CAT->getSize();
         Result += utostr(Dim.getZExtValue());
         Result += "]";
       }
@@ -4036,7 +4036,7 @@ void RewriteModernObjC::RewriteObjCInternalStruct(ObjCInterfaceDecl *CDecl,
   ReplaceText(LocStart, endBuf-startBuf, Result);
   // Mark this struct as having been generated.
   if (!ObjCSynthesizedStructs.insert(CDecl).second)
-    llvm_unreachable("struct already synthesize- RewriteObjCInternalStruct");
+    llvm37_unreachable("struct already synthesize- RewriteObjCInternalStruct");
 }
 
 /// RewriteIvarOffsetSymbols - Rewrite ivar offset symbols of those ivars which
@@ -4045,11 +4045,11 @@ void RewriteModernObjC::RewriteIvarOffsetSymbols(ObjCInterfaceDecl *CDecl,
                                                   std::string &Result) {
   // write out ivar offset symbols which have been referenced in an ivar
   // access expression.
-  llvm::SmallPtrSet<ObjCIvarDecl *, 8> Ivars = ReferencedIvars[CDecl];
+  llvm37::SmallPtrSet<ObjCIvarDecl *, 8> Ivars = ReferencedIvars[CDecl];
   if (Ivars.empty())
     return;
   
-  llvm::DenseSet<std::pair<const ObjCInterfaceDecl*, unsigned> > GroupSymbolOutput;
+  llvm37::DenseSet<std::pair<const ObjCInterfaceDecl*, unsigned> > GroupSymbolOutput;
   for (ObjCIvarDecl *IvarDecl : Ivars) {
     const ObjCInterfaceDecl *IDecl = IvarDecl->getContainingInterface();
     unsigned GroupNo = 0;
@@ -4504,7 +4504,7 @@ void RewriteModernObjC::SynthesizeBlockLiterals(SourceLocation FunLocStart,
     globalBuf += Tag; globalBuf += " ";
     std::string SStr;
   
-    llvm::raw_string_ostream constructorExprBuf(SStr);
+    llvm37::raw_string_ostream constructorExprBuf(SStr);
     GlobalConstructionExp->printPretty(constructorExprBuf, nullptr,
                                        PrintingPolicy(LangOpts));
     globalBuf += constructorExprBuf.str();
@@ -4568,7 +4568,7 @@ void RewriteModernObjC::GetBlockDeclRefExprs(Stmt *S) {
 
 void RewriteModernObjC::GetInnerBlockDeclRefExprs(Stmt *S,
                 SmallVectorImpl<DeclRefExpr *> &InnerBlockDeclRefs,
-                llvm::SmallPtrSetImpl<const DeclContext *> &InnerContexts) {
+                llvm37::SmallPtrSetImpl<const DeclContext *> &InnerContexts) {
   for (Stmt *SubStmt : S->children())
     if (SubStmt) {
       if (BlockExpr *CBE = dyn_cast<BlockExpr>(SubStmt)) {
@@ -4979,7 +4979,7 @@ void RewriteModernObjC::RewriteBlockPointerDecl(NamedDecl *ND) {
   else if (FieldDecl *FD = dyn_cast<FieldDecl>(ND))
     DeclT = FD->getType();
   else
-    llvm_unreachable("RewriteBlockPointerDecl(): Decl type not yet handled");
+    llvm37_unreachable("RewriteBlockPointerDecl(): Decl type not yet handled");
 
   const char *startBuf = SM->getCharacterData(DeclLoc);
   const char *endBuf = startBuf;
@@ -5492,7 +5492,7 @@ Stmt *RewriteModernObjC::SynthBlockInitExpr(BlockExpr *Exp,
     int flag = (BLOCK_HAS_COPY_DISPOSE | BLOCK_HAS_DESCRIPTOR);
     unsigned IntSize = 
       static_cast<unsigned>(Context->getTypeSize(Context->IntTy));
-    Expr *FlagExp = IntegerLiteral::Create(*Context, llvm::APInt(IntSize, flag), 
+    Expr *FlagExp = IntegerLiteral::Create(*Context, llvm37::APInt(IntSize, flag), 
                                            Context->IntTy, SourceLocation());
     InitExprs.push_back(FlagExp);
   }
@@ -5571,7 +5571,7 @@ Stmt *RewriteModernObjC::RewriteFunctionBodyOrGlobalInitializer(Stmt *S) {
 
   if (BlockExpr *BE = dyn_cast<BlockExpr>(S)) {
     SmallVector<DeclRefExpr *, 8> InnerBlockDeclRefs;
-    llvm::SmallPtrSet<const DeclContext *, 8> InnerContexts;
+    llvm37::SmallPtrSet<const DeclContext *, 8> InnerContexts;
     InnerContexts.insert(BE->getBlockDecl());
     ImportedLocalExternalDecls.clear();
     GetInnerBlockDeclRefExprs(BE->getBody(),
@@ -5762,7 +5762,7 @@ Stmt *RewriteModernObjC::RewriteFunctionBodyOrGlobalInitializer(Stmt *S) {
                                                    SourceLocation());
     // Get the new text.
     std::string SStr;
-    llvm::raw_string_ostream Buf(SStr);
+    llvm37::raw_string_ostream Buf(SStr);
     Replacement->printPretty(Buf);
     const std::string &Str = Buf.str();
 
@@ -5972,7 +5972,7 @@ void RewriteModernObjC::HandleTranslationUnit(ASTContext &C) {
     //printf("Changed:\n");
     *OutFile << std::string(RewriteBuf->begin(), RewriteBuf->end());
   } else {
-    llvm::errs() << "No changes\n";
+    llvm37::errs() << "No changes\n";
   }
 
   if (ClassImplementation.size() || CategoryImplementation.size() ||
@@ -6270,13 +6270,13 @@ void RewriteModernObjC::RewriteIvarOffsetComputation(ObjCIvarDecl *ivar,
 ///   const struct _prop_list_t *properties;
 /// }
 
-/// MessageRefTy - LLVM for:
+/// MessageRefTy - LLVM37 for:
 /// struct _message_ref_t {
 ///   IMP messenger;
 ///   SEL name;
 /// };
 
-/// SuperMessageRefTy - LLVM for:
+/// SuperMessageRefTy - LLVM37 for:
 /// struct _super_message_ref_t {
 ///   SUPER_IMP messenger;
 ///   SEL name;
@@ -6326,8 +6326,8 @@ static void WriteModernMetadataDeclarations(ASTContext *Context, std::string &Re
   Result += "\tunsigned int flags;\n";
   Result += "\tunsigned int instanceStart;\n";
   Result += "\tunsigned int instanceSize;\n";
-  const llvm::Triple &Triple(Context->getTargetInfo().getTriple());
-  if (Triple.getArch() == llvm::Triple::x86_64)
+  const llvm37::Triple &Triple(Context->getTargetInfo().getTriple());
+  if (Triple.getArch() == llvm37::Triple::x86_64)
     Result += "\tunsigned int reserved;\n";
   Result += "\tconst unsigned char *ivarLayout;\n";
   Result += "\tconst char *name;\n";
@@ -6525,12 +6525,12 @@ static void Write__class_ro_t_initializer(ASTContext *Context, std::string &Resu
   Result += VarName; Result += ClassName;
   Result += " __attribute__ ((used, section (\"__DATA,__objc_const\"))) = {\n";
   Result += "\t"; 
-  Result += llvm::utostr(flags); Result += ", "; 
+  Result += llvm37::utostr(flags); Result += ", "; 
   Result += InstanceStart; Result += ", ";
   Result += InstanceSize; Result += ", \n";
   Result += "\t";
-  const llvm::Triple &Triple(Context->getTargetInfo().getTriple());
-  if (Triple.getArch() == llvm::Triple::x86_64)
+  const llvm37::Triple &Triple(Context->getTargetInfo().getTriple());
+  if (Triple.getArch() == llvm37::Triple::x86_64)
     // uint32_t const reserved; // only when building for 64bit targets
     Result += "(unsigned int)0, \n\t";
   // const uint8_t * const ivarLayout;
@@ -6930,10 +6930,10 @@ static void Write__ivar_list_t_initializer(RewriteModernObjC &RewriteObj,
       // FIXME. this alignment represents the host alignment and need be changed to
       // represent the target alignment.
       unsigned Align = Context->getTypeAlign(IVQT)/8;
-      Align = llvm::Log2_32(Align);
-      Result += llvm::utostr(Align); Result += ", ";
+      Align = llvm37::Log2_32(Align);
+      Result += llvm37::utostr(Align); Result += ", ";
       CharUnits Size = Context->getTypeSizeInChars(IVQT);
-      Result += llvm::utostr(Size.getQuantity());
+      Result += llvm37::utostr(Size.getQuantity());
       if (i  == e-1)
         Result += "}}\n";
       else
@@ -7090,7 +7090,7 @@ void RewriteModernObjC::RewriteObjCProtocolMetaData(ObjCProtocolDecl *PDecl,
     
   // Mark this protocol as having been generated.
   if (!ObjCSynthesizedProtocols.insert(PDecl->getCanonicalDecl()).second)
-    llvm_unreachable("protocol already synthesized");
+    llvm37_unreachable("protocol already synthesized");
   
 }
 
@@ -7346,7 +7346,7 @@ void RewriteModernObjC::RewriteMetaDataIntoBuffer(std::string &Result) {
     if (LangOpts.MicrosoftExt)
       Result += "__declspec(allocate(\".objc_classlist$B\")) ";
     Result += "static struct _class_t *L_OBJC_LABEL_CLASS_$ [";
-    Result += llvm::utostr(ClsDefCount); Result += "]";
+    Result += llvm37::utostr(ClsDefCount); Result += "]";
     Result += 
       " __attribute__((used, section (\"__DATA, __objc_classlist,"
       "regular,no_dead_strip\")))= {\n";
@@ -7373,7 +7373,7 @@ void RewriteModernObjC::RewriteMetaDataIntoBuffer(std::string &Result) {
     if (LangOpts.MicrosoftExt)
       Result += "__declspec(allocate(\".objc_catlist$B\")) ";
     Result += "static struct _category_t *L_OBJC_LABEL_CATEGORY_$ [";
-    Result += llvm::utostr(CatDefCount); Result += "]";
+    Result += llvm37::utostr(CatDefCount); Result += "]";
     Result += 
     " __attribute__((used, section (\"__DATA, __objc_catlist,"
     "regular,no_dead_strip\")))= {\n";
@@ -7670,7 +7670,7 @@ Stmt *RewriteModernObjC::RewriteObjCIvarRefExpr(ObjCIvarRefExpr *IV) {
           unsigned UnsignedIntSize = 
             static_cast<unsigned>(Context->getTypeSize(Context->UnsignedIntTy));
           Expr *Zero = IntegerLiteral::Create(*Context,
-                                              llvm::APInt(UnsignedIntSize, 0),
+                                              llvm37::APInt(UnsignedIntSize, 0),
                                               Context->UnsignedIntTy, SourceLocation());
           Zero = NoTypeInfoCStyleCastExpr(Context, PtrStructIMPL, CK_BitCast, Zero);
           ParenExpr *PE = new (Context) ParenExpr(SourceLocation(), SourceLocation(),

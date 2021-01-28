@@ -1,6 +1,6 @@
-//===- llvm/unittest/DebugInfo/PDB/PDBApiTest.cpp -------------------------===//
+//===- llvm37/unittest/DebugInfo/PDB/PDBApiTest.cpp -------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -9,47 +9,47 @@
 
 #include <unordered_map>
 
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/DebugInfo/PDB/IPDBEnumChildren.h"
-#include "llvm/DebugInfo/PDB/IPDBRawSymbol.h"
-#include "llvm/DebugInfo/PDB/IPDBSession.h"
-#include "llvm/DebugInfo/PDB/IPDBSourceFile.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/DebugInfo/PDB/IPDBEnumChildren.h"
+#include "llvm37/DebugInfo/PDB/IPDBRawSymbol.h"
+#include "llvm37/DebugInfo/PDB/IPDBSession.h"
+#include "llvm37/DebugInfo/PDB/IPDBSourceFile.h"
 
-#include "llvm/DebugInfo/PDB/PDBSymbol.h"
-#include "llvm/DebugInfo/PDB/PDBSymbolAnnotation.h"
-#include "llvm/DebugInfo/PDB/PDBSymbolBlock.h"
-#include "llvm/DebugInfo/PDB/PDBSymbolCompiland.h"
-#include "llvm/DebugInfo/PDB/PDBSymbolCompilandDetails.h"
-#include "llvm/DebugInfo/PDB/PDBSymbolCompilandEnv.h"
-#include "llvm/DebugInfo/PDB/PDBSymbolCustom.h"
-#include "llvm/DebugInfo/PDB/PDBSymbolData.h"
-#include "llvm/DebugInfo/PDB/PDBSymbolExe.h"
-#include "llvm/DebugInfo/PDB/PDBSymbolFunc.h"
-#include "llvm/DebugInfo/PDB/PDBSymbolFuncDebugEnd.h"
-#include "llvm/DebugInfo/PDB/PDBSymbolFuncDebugStart.h"
-#include "llvm/DebugInfo/PDB/PDBSymbolLabel.h"
-#include "llvm/DebugInfo/PDB/PDBSymbolPublicSymbol.h"
-#include "llvm/DebugInfo/PDB/PDBSymbolThunk.h"
-#include "llvm/DebugInfo/PDB/PDBSymbolTypeArray.h"
-#include "llvm/DebugInfo/PDB/PDBSymbolTypeBaseClass.h"
-#include "llvm/DebugInfo/PDB/PDBSymbolTypeBuiltin.h"
-#include "llvm/DebugInfo/PDB/PDBSymbolTypeCustom.h"
-#include "llvm/DebugInfo/PDB/PDBSymbolTypeDimension.h"
-#include "llvm/DebugInfo/PDB/PDBSymbolTypeEnum.h"
-#include "llvm/DebugInfo/PDB/PDBSymbolTypeFriend.h"
-#include "llvm/DebugInfo/PDB/PDBSymbolTypeFunctionArg.h"
-#include "llvm/DebugInfo/PDB/PDBSymbolTypeFunctionSig.h"
-#include "llvm/DebugInfo/PDB/PDBSymbolTypeManaged.h"
-#include "llvm/DebugInfo/PDB/PDBSymbolTypePointer.h"
-#include "llvm/DebugInfo/PDB/PDBSymbolTypeTypedef.h"
-#include "llvm/DebugInfo/PDB/PDBSymbolTypeUDT.h"
-#include "llvm/DebugInfo/PDB/PDBSymbolTypeVTable.h"
-#include "llvm/DebugInfo/PDB/PDBSymbolTypeVTableShape.h"
-#include "llvm/DebugInfo/PDB/PDBSymbolUnknown.h"
-#include "llvm/DebugInfo/PDB/PDBSymbolUsingNamespace.h"
-#include "llvm/DebugInfo/PDB/PDBTypes.h"
+#include "llvm37/DebugInfo/PDB/PDBSymbol.h"
+#include "llvm37/DebugInfo/PDB/PDBSymbolAnnotation.h"
+#include "llvm37/DebugInfo/PDB/PDBSymbolBlock.h"
+#include "llvm37/DebugInfo/PDB/PDBSymbolCompiland.h"
+#include "llvm37/DebugInfo/PDB/PDBSymbolCompilandDetails.h"
+#include "llvm37/DebugInfo/PDB/PDBSymbolCompilandEnv.h"
+#include "llvm37/DebugInfo/PDB/PDBSymbolCustom.h"
+#include "llvm37/DebugInfo/PDB/PDBSymbolData.h"
+#include "llvm37/DebugInfo/PDB/PDBSymbolExe.h"
+#include "llvm37/DebugInfo/PDB/PDBSymbolFunc.h"
+#include "llvm37/DebugInfo/PDB/PDBSymbolFuncDebugEnd.h"
+#include "llvm37/DebugInfo/PDB/PDBSymbolFuncDebugStart.h"
+#include "llvm37/DebugInfo/PDB/PDBSymbolLabel.h"
+#include "llvm37/DebugInfo/PDB/PDBSymbolPublicSymbol.h"
+#include "llvm37/DebugInfo/PDB/PDBSymbolThunk.h"
+#include "llvm37/DebugInfo/PDB/PDBSymbolTypeArray.h"
+#include "llvm37/DebugInfo/PDB/PDBSymbolTypeBaseClass.h"
+#include "llvm37/DebugInfo/PDB/PDBSymbolTypeBuiltin.h"
+#include "llvm37/DebugInfo/PDB/PDBSymbolTypeCustom.h"
+#include "llvm37/DebugInfo/PDB/PDBSymbolTypeDimension.h"
+#include "llvm37/DebugInfo/PDB/PDBSymbolTypeEnum.h"
+#include "llvm37/DebugInfo/PDB/PDBSymbolTypeFriend.h"
+#include "llvm37/DebugInfo/PDB/PDBSymbolTypeFunctionArg.h"
+#include "llvm37/DebugInfo/PDB/PDBSymbolTypeFunctionSig.h"
+#include "llvm37/DebugInfo/PDB/PDBSymbolTypeManaged.h"
+#include "llvm37/DebugInfo/PDB/PDBSymbolTypePointer.h"
+#include "llvm37/DebugInfo/PDB/PDBSymbolTypeTypedef.h"
+#include "llvm37/DebugInfo/PDB/PDBSymbolTypeUDT.h"
+#include "llvm37/DebugInfo/PDB/PDBSymbolTypeVTable.h"
+#include "llvm37/DebugInfo/PDB/PDBSymbolTypeVTableShape.h"
+#include "llvm37/DebugInfo/PDB/PDBSymbolUnknown.h"
+#include "llvm37/DebugInfo/PDB/PDBSymbolUsingNamespace.h"
+#include "llvm37/DebugInfo/PDB/PDBTypes.h"
 #include "gtest/gtest.h"
-using namespace llvm;
+using namespace llvm37;
 
 namespace {
 
@@ -121,7 +121,7 @@ public:
     return nullptr;
   }
 
-  void getDataBytes(llvm::SmallVector<uint8_t, 32> &bytes) const override {}
+  void getDataBytes(llvm37::SmallVector<uint8_t, 32> &bytes) const override {}
   void getFrontEndVersion(VersionInfo &Version) const override {}
   void getBackEndVersion(VersionInfo &Version) const override {}
 
@@ -333,7 +333,7 @@ public:
 
   template <class ExpectedType> void VerifyDyncast(PDB_SymType Tag) {
     for (auto item = SymbolMap.begin(); item != SymbolMap.end(); ++item) {
-      EXPECT_EQ(item->first == Tag, llvm::isa<ExpectedType>(*item->second));
+      EXPECT_EQ(item->first == Tag, llvm37::isa<ExpectedType>(*item->second));
     }
   }
 
@@ -343,7 +343,7 @@ public:
       if (item->first == PDB_SymType::None || item->first >= PDB_SymType::Max)
         should_match = true;
 
-      EXPECT_EQ(should_match, llvm::isa<PDBSymbolUnknown>(*item->second));
+      EXPECT_EQ(should_match, llvm37::isa<PDBSymbolUnknown>(*item->second));
     }
   }
 
@@ -351,7 +351,7 @@ private:
   std::unique_ptr<IPDBSession> Session;
 
   void InsertItemWithTag(PDB_SymType Tag) {
-    auto RawSymbol = llvm::make_unique<MockRawSymbol>(Tag);
+    auto RawSymbol = llvm37::make_unique<MockRawSymbol>(Tag);
     auto Symbol = PDBSymbol::create(*Session, std::move(RawSymbol));
     SymbolMap.insert(std::make_pair(Tag, std::move(Symbol)));
   }

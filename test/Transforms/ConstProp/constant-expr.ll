@@ -1,4 +1,4 @@
-; RUN: llvm-as < %s | llvm-dis | FileCheck %s
+; RUN: llvm37-as < %s | llvm37-dis | FileCheck %s
 
 @X = external global i8
 @Y = external global i8
@@ -63,7 +63,7 @@
 
 ; PR6096
 
-; No check line. This used to crash llvm-as.
+; No check line. This used to crash llvm37-as.
 @T6 = global <2 x i1> fcmp ole (<2 x float> fdiv (<2 x float> undef, <2 x float> <float 1.000000e+00, float 1.000000e+00>), <2 x float> zeroinitializer)
 
 

@@ -1,6 +1,6 @@
 //===--- ScopeInfo.cpp - Information about a semantic context -------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -227,7 +227,7 @@ void LambdaScopeInfo::getPotentialVariableCapture(unsigned Idx, VarDecl *&VD,
   else if (MemberExpr *ME = dyn_cast<MemberExpr>(E))
     VD = dyn_cast<VarDecl>(ME->getMemberDecl());
   else
-    llvm_unreachable("Only DeclRefExprs or MemberExprs should be added for "
+    llvm37_unreachable("Only DeclRefExprs or MemberExprs should be added for "
     "potential captures");
   assert(VD);
 }

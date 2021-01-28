@@ -1,6 +1,6 @@
 //===--- ParseStmt.cpp - Statement and Block Parser -----------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -23,7 +23,7 @@
 #include "clang/Sema/PrettyDeclStackTrace.h"
 #include "clang/Sema/Scope.h"
 #include "clang/Sema/TypoCorrection.h"
-#include "llvm/ADT/SmallString.h"
+#include "llvm37/ADT/SmallString.h"
 using namespace clang;
 
 //===----------------------------------------------------------------------===//
@@ -218,7 +218,7 @@ Retry:
       // Try to limit which sets of keywords should be included in typo
       // correction based on what the next token is.
       if (TryAnnotateName(/*IsAddressOfOperand*/ false,
-                          llvm::make_unique<StatementFilterCCC>(Next)) ==
+                          llvm37::make_unique<StatementFilterCCC>(Next)) ==
           ANK_Error) {
         // Handle errors here by skipping up to the next semicolon or '}', and
         // eat the semicolon if that's what stopped us.
@@ -2242,7 +2242,7 @@ void Parser::ParseMicrosoftIfExistsStatement(StmtVector &Stmts) {
     break;
 
   case IEB_Dependent:
-    llvm_unreachable("Dependent case handled above");
+    llvm37_unreachable("Dependent case handled above");
 
   case IEB_Skip:
     Braces.skipToEnd();

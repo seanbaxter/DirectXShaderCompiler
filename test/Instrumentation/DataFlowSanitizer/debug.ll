@@ -17,9 +17,9 @@ entry:
 
 attributes #0 = { nounwind uwtable "less-precise-fpmad"="false" "no-frame-pointer-elim"="true" "no-frame-pointer-elim-non-leaf" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "stack-protector-buffer-size"="8" "unsafe-fp-math"="false" "use-soft-float"="false" }
 
-!llvm.dbg.cu = !{!0}
-!llvm.module.flags = !{!9, !10}
-!llvm.ident = !{!11}
+!llvm37.dbg.cu = !{!0}
+!llvm37.module.flags = !{!9, !10}
+!llvm37.ident = !{!11}
 
 !0 = !DICompileUnit(language: DW_LANG_C_plus_plus, producer: "clang version 3.6.0 ", isOptimized: false, emissionKind: 1, file: !1, enums: !2, retainedTypes: !2, subprograms: !3, globals: !2, imports: !2)
 !1 = !DIFile(filename: "debug.cpp", directory: "/tmp/dbginfo")

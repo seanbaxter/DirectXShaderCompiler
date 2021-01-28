@@ -1,4 +1,4 @@
-; RUN: not llvm-as -disable-output <%s 2>&1 | FileCheck %s
+; RUN: not llvm37-as -disable-output <%s 2>&1 | FileCheck %s
 
 define void @foo() {
 entry:
@@ -14,5 +14,5 @@ exit:
 ; CHECK-NEXT: ![[LOC]] = !{}
 }
 
-!llvm.module.flags = !{!0}
+!llvm37.module.flags = !{!0}
 !0 = !{i32 2, !"Debug Info Version", i32 3}

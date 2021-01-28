@@ -1,6 +1,6 @@
 //===--- PrintPreprocessedOutput.cpp - Implement the -E mode --------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -22,11 +22,11 @@
 #include "clang/Lex/Pragma.h"
 #include "clang/Lex/Preprocessor.h"
 #include "clang/Lex/TokenConcatenation.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/ADT/StringRef.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/ADT/StringRef.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <cstdio>
 using namespace clang;
 
@@ -383,7 +383,7 @@ void PrintPPOutputPPCallbacks::MacroUndefined(const Token &MacroNameTok,
   setEmittedDirectiveOnThisLine();
 }
 
-static void outputPrintable(llvm::raw_ostream& OS,
+static void outputPrintable(llvm37::raw_ostream& OS,
                                              const std::string &Str) {
     for (unsigned i = 0, e = Str.size(); i != e; ++i) {
       unsigned char Char = Str[i];
@@ -717,7 +717,7 @@ static void DoPrintMacros(Preprocessor &PP, raw_ostream *OS) {
     if (MD && MD->isDefined())
       MacrosByID.push_back(id_macro_pair(I->first, MD->getMacroInfo()));
   }
-  llvm::array_pod_sort(MacrosByID.begin(), MacrosByID.end(), MacroIDCompare);
+  llvm37::array_pod_sort(MacrosByID.begin(), MacrosByID.end(), MacroIDCompare);
 
   for (unsigned i = 0, e = MacrosByID.size(); i != e; ++i) {
     MacroInfo &MI = *MacrosByID[i].second;

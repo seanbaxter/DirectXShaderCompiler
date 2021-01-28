@@ -1,6 +1,6 @@
 //==- CoreEngine.cpp - Path-Sensitive Dataflow Engine ------------*- C++ -*-//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -18,9 +18,9 @@
 #include "clang/AST/StmtCXX.h"
 #include "clang/StaticAnalyzer/Core/PathSensitive/AnalysisManager.h"
 #include "clang/StaticAnalyzer/Core/PathSensitive/ExprEngine.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/Support/Casting.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/Support/Casting.h"
 
 using namespace clang;
 using namespace ento;
@@ -345,7 +345,7 @@ void CoreEngine::HandleBlockExit(const CFGBlock * B, ExplodedNode *Pred) {
   if (const Stmt *Term = B->getTerminator()) {
     switch (Term->getStmtClass()) {
       default:
-        llvm_unreachable("Analysis for this terminator not implemented.");
+        llvm37_unreachable("Analysis for this terminator not implemented.");
 
       case Stmt::CXXBindTemporaryExprClass:
         HandleCleanupTemporaryBranch(

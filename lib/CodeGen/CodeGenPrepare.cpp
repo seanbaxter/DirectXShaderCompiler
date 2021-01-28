@@ -1,6 +1,6 @@
 //===- CodeGenPrepare.cpp - Prepare a function for code generation --------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -13,42 +13,42 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/CodeGen/Passes.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/SmallSet.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/Analysis/InstructionSimplify.h"
-#include "llvm/Analysis/TargetLibraryInfo.h"
-#include "llvm/Analysis/TargetTransformInfo.h"
-#include "llvm/IR/CallSite.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/DerivedTypes.h"
-#include "llvm/IR/Dominators.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/GetElementPtrTypeIterator.h"
-#include "llvm/IR/IRBuilder.h"
-#include "llvm/IR/InlineAsm.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/IR/MDBuilder.h"
-#include "llvm/IR/PatternMatch.h"
-#include "llvm/IR/Statepoint.h"
-#include "llvm/IR/ValueHandle.h"
-#include "llvm/IR/ValueMap.h"
-#include "llvm/Pass.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Target/TargetLowering.h"
-#include "llvm/Target/TargetSubtargetInfo.h"
-#include "llvm/Transforms/Utils/BasicBlockUtils.h"
-#include "llvm/Transforms/Utils/BuildLibCalls.h"
-#include "llvm/Transforms/Utils/BypassSlowDivision.h"
-#include "llvm/Transforms/Utils/Local.h"
-#include "llvm/Transforms/Utils/SimplifyLibCalls.h"
-using namespace llvm;
-using namespace llvm::PatternMatch;
+#include "llvm37/CodeGen/Passes.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/SmallSet.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/Analysis/InstructionSimplify.h"
+#include "llvm37/Analysis/TargetLibraryInfo.h"
+#include "llvm37/Analysis/TargetTransformInfo.h"
+#include "llvm37/IR/CallSite.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/IR/DerivedTypes.h"
+#include "llvm37/IR/Dominators.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/GetElementPtrTypeIterator.h"
+#include "llvm37/IR/IRBuilder.h"
+#include "llvm37/IR/InlineAsm.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/IR/MDBuilder.h"
+#include "llvm37/IR/PatternMatch.h"
+#include "llvm37/IR/Statepoint.h"
+#include "llvm37/IR/ValueHandle.h"
+#include "llvm37/IR/ValueMap.h"
+#include "llvm37/Pass.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Target/TargetLowering.h"
+#include "llvm37/Target/TargetSubtargetInfo.h"
+#include "llvm37/Transforms/Utils/BasicBlockUtils.h"
+#include "llvm37/Transforms/Utils/BuildLibCalls.h"
+#include "llvm37/Transforms/Utils/BypassSlowDivision.h"
+#include "llvm37/Transforms/Utils/Local.h"
+#include "llvm37/Transforms/Utils/SimplifyLibCalls.h"
+using namespace llvm37;
+using namespace llvm37::PatternMatch;
 
 #define DEBUG_TYPE "codegenprepare"
 
@@ -198,7 +198,7 @@ char CodeGenPrepare::ID = 0;
 INITIALIZE_TM_PASS(CodeGenPrepare, "codegenprepare",
                    "Optimize for code generation", false, false)
 
-FunctionPass *llvm::createCodeGenPreparePass(const TargetMachine *TM) {
+FunctionPass *llvm37::createCodeGenPreparePass(const TargetMachine *TM) {
   return new CodeGenPrepare(TM);
 }
 
@@ -233,8 +233,8 @@ bool CodeGenPrepare::runOnFunction(Function &F) {
   // unconditional branch.
   EverMadeChange |= EliminateMostlyEmptyBlocks(F);
 
-  // llvm.dbg.value is far away from the value then iSel may not be able
-  // handle it properly. iSel will drop llvm.dbg.value if it can not
+  // llvm37.dbg.value is far away from the value then iSel may not be able
+  // handle it properly. iSel will drop llvm37.dbg.value if it can not
   // find a node corresponding to the value.
   EverMadeChange |= PlaceDbgValues(F);
 
@@ -616,12 +616,12 @@ simplifyRelocatesOffABase(IntrinsicInst *RelocatedBase,
     // cases like this:
     // bb1:
     //  ...
-    //  %g1 = call coldcc i8 addrspace(1)* @llvm.experimental.gc.relocate.p1i8(...)
+    //  %g1 = call coldcc i8 addrspace(1)* @llvm37.experimental.gc.relocate.p1i8(...)
     //  br label %merge
     //
     // bb2:
     //  ...
-    //  %g2 = call coldcc i8 addrspace(1)* @llvm.experimental.gc.relocate.p1i8(...)
+    //  %g2 = call coldcc i8 addrspace(1)* @llvm37.experimental.gc.relocate.p1i8(...)
     //  br label %merge
     //
     // merge:
@@ -790,7 +790,7 @@ static bool OptimizeNoopCopyExpression(CastInst *CI, const TargetLowering &TLI,
 }
 
 /// CombineUAddWithOverflow - try to combine CI into a call to the
-/// llvm.uadd.with.overflow intrinsic if possible.
+/// llvm37.uadd.with.overflow intrinsic if possible.
 ///
 /// Return true if any changes were made.
 static bool CombineUAddWithOverflow(CmpInst *CI) {
@@ -1090,7 +1090,7 @@ static bool OptimizeExtractBits(BinaryOperator *ShiftI, ConstantInt *CI,
 }
 
 //  ScalarizeMaskedLoad() translates masked load intrinsic, like 
-// <16 x i32 > @llvm.masked.load( <16 x i32>* %addr, i32 align,
+// <16 x i32 > @llvm37.masked.load( <16 x i32>* %addr, i32 align,
 //                               <16 x i1> %mask, <16 x i32> %passthru)
 // to a chain of basic blocks, whith loading element one-by-one if
 // the appropriate mask bit is set
@@ -1209,7 +1209,7 @@ static void ScalarizeMaskedLoad(CallInst *CI) {
 }
 
 //  ScalarizeMaskedStore() translates masked store intrinsic, like
-// void @llvm.masked.store(<16 x i32> %src, <16 x i32>* %addr, i32 align,
+// void @llvm37.masked.store(<16 x i32> %src, <16 x i32>* %addr, i32 align,
 //                               <16 x i1> %mask)
 // to a chain of basic blocks, that stores element one-by-one if
 // the appropriate mask bit is set
@@ -1300,7 +1300,7 @@ bool CodeGenPrepare::OptimizeCallInst(CallInst *CI, bool& ModifiedDT) {
 
   // Lower inline assembly if we can.
   // If we found an inline asm expession, and if the target knows how to
-  // lower it to normal LLVM code, do so now.
+  // lower it to normal LLVM37 code, do so now.
   if (TLI && isa<InlineAsm>(CI->getCalledValue())) {
     if (TLI->ExpandInlineAsm(CI)) {
       // Avoid invalidating the iterator.
@@ -1364,7 +1364,7 @@ bool CodeGenPrepare::OptimizeCallInst(CallInst *CI, bool& ModifiedDT) {
     switch (II->getIntrinsicID()) {
     default: break;
     case Intrinsic::objectsize: {
-      // Lower all uses of llvm.objectsize.*
+      // Lower all uses of llvm37.objectsize.*
       bool Min = (cast<ConstantInt>(II->getArgOperand(1))->getZExtValue() == 1);
       Type *ReturnTy = CI->getType();
       Constant *RetVal = ConstantInt::get(ReturnTy, Min ? 0 : -1ULL);
@@ -1505,7 +1505,7 @@ bool CodeGenPrepare::DupRetToEnableTailCallOpts(BasicBlock *BB) {
     return false;
 
   // It's not safe to eliminate the sign / zero extension of the return value.
-  // See llvm::isInTailCallPosition().
+  // See llvm37::isInTailCallPosition().
   const Function *F = BB->getParent();
   AttributeSet CallerAttrs = F->getAttributes();
   if (CallerAttrs.hasAttribute(AttributeSet::ReturnIndex, Attribute::ZExt) ||
@@ -1653,7 +1653,7 @@ void ExtAddrMode::print(raw_ostream &OS) const {
   OS << ']';
 }
 
-#if !defined(NDEBUG) || defined(LLVM_ENABLE_DUMP)
+#if !defined(NDEBUG) || defined(LLVM37_ENABLE_DUMP)
 void ExtAddrMode::dump() const {
   print(dbgs());
   dbgs() << '\n';
@@ -2483,7 +2483,7 @@ TypePromotionHelper::Action TypePromotionHelper::getAction(
 }
 
 Value *TypePromotionHelper::promoteOperandForTruncAndAnyExt(
-    llvm::Instruction *SExt, TypePromotionTransaction &TPT,
+    llvm37::Instruction *SExt, TypePromotionTransaction &TPT,
     InstrToOrigTy &PromotedInsts, unsigned &CreatedInstsCost,
     SmallVectorImpl<Instruction *> *Exts,
     SmallVectorImpl<Instruction *> *Truncs, const TargetLowering &TLI) {
@@ -4192,7 +4192,7 @@ class VectorPromoteHelper {
     case Instruction::FRem:
       return !Use->hasNoNaNs();
     }
-    llvm_unreachable(nullptr);
+    llvm37_unreachable(nullptr);
   }
 
 public:
@@ -4310,7 +4310,7 @@ void VectorPromoteHelper::promoteImpl(Instruction *ToBePromoted) {
           isa<UndefValue>(Val) ||
               canCauseUndefinedBehavior(ToBePromoted, U.getOperandNo()));
     } else
-      llvm_unreachable("Did you modified shouldPromote and forgot to update "
+      llvm37_unreachable("Did you modified shouldPromote and forgot to update "
                        "this?");
     ToBePromoted->setOperand(U.getOperandNo(), NewVal);
   }
@@ -4501,8 +4501,8 @@ bool CodeGenPrepare::OptimizeBlock(BasicBlock &BB, bool& ModifiedDT) {
   return MadeChange;
 }
 
-// llvm.dbg.value is far away from the value then iSel may not be able
-// handle it properly. iSel will drop llvm.dbg.value if it can not
+// llvm37.dbg.value is far away from the value then iSel may not be able
+// handle it properly. iSel will drop llvm37.dbg.value if it can not
 // find a node corresponding to the value.
 bool CodeGenPrepare::PlaceDbgValues(Function &F) {
   bool MadeChange = false;
@@ -4610,7 +4610,7 @@ static bool extractBranchMetadata(BranchInst *BI,
                                   uint64_t &ProbTrue, uint64_t &ProbFalse) {
   assert(BI->isConditional() &&
          "Looking for probabilities on unconditional branch?");
-  auto *ProfileData = BI->getMetadata(LLVMContext::MD_prof);
+  auto *ProfileData = BI->getMetadata(LLVM37Context::MD_prof);
   if (!ProfileData || ProfileData->getNumOperands() != 3)
     return false;
 
@@ -4775,13 +4775,13 @@ bool CodeGenPrepare::splitBranchCondition(Function &F) {
         uint64_t NewTrueWeight = TrueWeight;
         uint64_t NewFalseWeight = TrueWeight + 2 * FalseWeight;
         scaleWeights(NewTrueWeight, NewFalseWeight);
-        Br1->setMetadata(LLVMContext::MD_prof, MDBuilder(Br1->getContext())
+        Br1->setMetadata(LLVM37Context::MD_prof, MDBuilder(Br1->getContext())
                          .createBranchWeights(TrueWeight, FalseWeight));
 
         NewTrueWeight = TrueWeight;
         NewFalseWeight = 2 * FalseWeight;
         scaleWeights(NewTrueWeight, NewFalseWeight);
-        Br2->setMetadata(LLVMContext::MD_prof, MDBuilder(Br2->getContext())
+        Br2->setMetadata(LLVM37Context::MD_prof, MDBuilder(Br2->getContext())
                          .createBranchWeights(TrueWeight, FalseWeight));
       }
     } else {
@@ -4808,13 +4808,13 @@ bool CodeGenPrepare::splitBranchCondition(Function &F) {
         uint64_t NewTrueWeight = 2 * TrueWeight + FalseWeight;
         uint64_t NewFalseWeight = FalseWeight;
         scaleWeights(NewTrueWeight, NewFalseWeight);
-        Br1->setMetadata(LLVMContext::MD_prof, MDBuilder(Br1->getContext())
+        Br1->setMetadata(LLVM37Context::MD_prof, MDBuilder(Br1->getContext())
                          .createBranchWeights(TrueWeight, FalseWeight));
 
         NewTrueWeight = 2 * TrueWeight;
         NewFalseWeight = FalseWeight;
         scaleWeights(NewTrueWeight, NewFalseWeight);
-        Br2->setMetadata(LLVMContext::MD_prof, MDBuilder(Br2->getContext())
+        Br2->setMetadata(LLVM37Context::MD_prof, MDBuilder(Br2->getContext())
                          .createBranchWeights(TrueWeight, FalseWeight));
       }
     }

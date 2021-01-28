@@ -1,6 +1,6 @@
-set(LLVM_OPTIONAL_SOURCES regioninfo.cpp regionprinter.cpp) # HLSL Change - ignore file
+set(LLVM37_OPTIONAL_SOURCES regioninfo.cpp regionprinter.cpp) # HLSL Change - ignore file
 
-add_llvm_library(LLVMAnalysis
+add_llvm_library(LLVM37Analysis
   AliasAnalysis.cpp
   AliasAnalysisCounter.cpp
   AliasAnalysisEvaluator.cpp
@@ -73,9 +73,9 @@ add_llvm_library(LLVMAnalysis
   VectorUtils2.cpp
 
   ADDITIONAL_HEADER_DIRS
-  ${LLVM_MAIN_INCLUDE_DIR}/llvm/Analysis
+  ${LLVM37_MAIN_INCLUDE_DIR}/llvm37/Analysis
   )
 
-add_dependencies(LLVMAnalysis intrinsics_gen)
+add_dependencies(LLVM37Analysis intrinsics_gen)
 
 add_subdirectory(IPA)

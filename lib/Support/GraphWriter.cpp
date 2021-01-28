@@ -1,6 +1,6 @@
 //===-- GraphWriter.cpp - Implements GraphWriter support routines ---------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,12 +11,12 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Support/GraphWriter.h"
-#include "llvm/Config/config.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/FileSystem.h"
-#include "llvm/Support/Program.h"
-using namespace llvm;
+#include "llvm37/Support/GraphWriter.h"
+#include "llvm37/Config/config.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/FileSystem.h"
+#include "llvm37/Support/Program.h"
+using namespace llvm37;
 
 #if 0 // HLSL Change Starts - option pending
 static cl::opt<bool> ViewBackground("view-background", cl::Hidden,
@@ -25,7 +25,7 @@ static cl::opt<bool> ViewBackground("view-background", cl::Hidden,
 static const bool ViewBackground = false;
 #endif // HLSL Change Ends
 
-std::string llvm::DOT::EscapeString(const std::string &Label) {
+std::string llvm37::DOT::EscapeString(const std::string &Label) {
   std::string Str(Label);
   for (unsigned i = 0; i != Str.length(); ++i)
   switch (Str[i]) {
@@ -59,7 +59,7 @@ std::string llvm::DOT::EscapeString(const std::string &Label) {
 
 /// \brief Get a color string for this node number. Simply round-robin selects
 /// from a reasonable number of colors.
-StringRef llvm::DOT::getColorString(unsigned ColorNumber) {
+StringRef llvm37::DOT::getColorString(unsigned ColorNumber) {
   static const int NumColors = 20;
   static const char* Colors[NumColors] = {
     "aaaaaa", "aa0000", "00aa00", "aa5500", "0055ff", "aa00aa", "00aaaa",
@@ -68,7 +68,7 @@ StringRef llvm::DOT::getColorString(unsigned ColorNumber) {
   return Colors[ColorNumber % NumColors];
 }
 
-std::string llvm::createGraphFilename(const Twine &Name, int &FD) {
+std::string llvm37::createGraphFilename(const Twine &Name, int &FD) {
   FD = -1;
   SmallString<128> Filename;
   std::error_code EC = sys::fs::createTemporaryFile(Name, "dot", FD, Filename);
@@ -137,10 +137,10 @@ static const char *getProgramName(GraphProgram::Name program) {
   case GraphProgram::CIRCO:
     return "circo";
   }
-  llvm_unreachable("bad kind");
+  llvm37_unreachable("bad kind");
 }
 
-bool llvm::DisplayGraph(StringRef FilenameRef, bool wait,
+bool llvm37::DisplayGraph(StringRef FilenameRef, bool wait,
                         GraphProgram::Name program) {
   std::string Filename = FilenameRef;
   std::string ErrMsg;
@@ -246,7 +246,7 @@ bool llvm::DisplayGraph(StringRef FilenameRef, bool wait,
       args.push_back(PSFilename.c_str());
       break;
     case PSV_None:
-      llvm_unreachable("Invalid viewer");
+      llvm37_unreachable("Invalid viewer");
     }
     args.push_back(nullptr);
 
@@ -262,7 +262,7 @@ bool llvm::DisplayGraph(StringRef FilenameRef, bool wait,
     args.push_back(nullptr);
 
 // Dotty spawns another app and doesn't wait until it returns
-#ifdef LLVM_ON_WIN32
+#ifdef LLVM37_ON_WIN32
     wait = false;
 #endif
     errs() << "Running 'dotty' program... ";

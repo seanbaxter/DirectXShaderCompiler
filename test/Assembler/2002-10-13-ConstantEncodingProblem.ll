@@ -1,4 +1,4 @@
-; RUN: llvm-as < %s | llvm-dis
+; RUN: llvm37-as < %s | llvm37-dis
 ; RUN: verify-uselistorder %s
 
 %Domain = type { %Domain**, %Domain* }

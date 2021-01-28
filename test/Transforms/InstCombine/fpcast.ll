@@ -16,8 +16,8 @@ define i8 @test2() {
 ; CHECK: test3
 define half @test3(float %a) {
 ; CHECK: fptrunc
-; CHECK: llvm.fabs.f16
-  %b = call float @llvm.fabs.f32(float %a)
+; CHECK: llvm37.fabs.f16
+  %b = call float @llvm37.fabs.f32(float %a)
   %c = fptrunc float %b to half
   ret half %c
 }
@@ -52,7 +52,7 @@ define half @test5(float %a, float %b, float %c) {
   ret half %f
 }
 
-declare float @llvm.fabs.f32(float) nounwind readonly
+declare float @llvm37.fabs.f32(float) nounwind readonly
 
 define <1 x float> @test6(<1 x double> %V) {
   %frem = frem <1 x double> %V, %V

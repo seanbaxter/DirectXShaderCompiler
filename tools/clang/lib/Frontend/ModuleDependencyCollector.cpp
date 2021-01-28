@@ -1,6 +1,6 @@
 //===--- ModuleDependencyCollector.cpp - Collect module dependencies ------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -13,11 +13,11 @@
 
 #include "clang/Frontend/Utils.h"
 #include "clang/Serialization/ASTReader.h"
-#include "llvm/ADT/StringSet.h"
-#include "llvm/ADT/iterator_range.h"
-#include "llvm/Support/FileSystem.h"
-#include "llvm/Support/Path.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/StringSet.h"
+#include "llvm37/ADT/iterator_range.h"
+#include "llvm37/Support/FileSystem.h"
+#include "llvm37/Support/Path.h"
+#include "llvm37/Support/raw_ostream.h"
 
 using namespace clang;
 
@@ -38,7 +38,7 @@ public:
 }
 
 void ModuleDependencyCollector::attachToASTReader(ASTReader &R) {
-  R.addListener(llvm::make_unique<ModuleDependencyListener>(*this));
+  R.addListener(llvm37::make_unique<ModuleDependencyListener>(*this));
 }
 
 void ModuleDependencyCollector::writeFileMap() {
@@ -46,10 +46,10 @@ void ModuleDependencyCollector::writeFileMap() {
     return;
 
   SmallString<256> Dest = getDest();
-  llvm::sys::path::append(Dest, "vfs.yaml");
+  llvm37::sys::path::append(Dest, "vfs.yaml");
 
   std::error_code EC;
-  llvm::raw_fd_ostream OS(Dest, EC, llvm::sys::fs::F_Text);
+  llvm37::raw_fd_ostream OS(Dest, EC, llvm37::sys::fs::F_Text);
   if (EC) {
     setHasErrors();
     return;
@@ -58,7 +58,7 @@ void ModuleDependencyCollector::writeFileMap() {
 }
 
 std::error_code ModuleDependencyListener::copyToRoot(StringRef Src) {
-  using namespace llvm::sys;
+  using namespace llvm37::sys;
 
   // We need an absolute path to append to the root.
   SmallString<256> AbsoluteSrc = Src;

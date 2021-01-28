@@ -1,6 +1,6 @@
 //===--- CaptureTracking.cpp - Determine whether a pointer is captured ----===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -16,17 +16,17 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/ADT/SmallSet.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/Analysis/AliasAnalysis.h"
-#include "llvm/Analysis/CFG.h"
-#include "llvm/Analysis/CaptureTracking.h"
-#include "llvm/IR/CallSite.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/Dominators.h"
-#include "llvm/IR/Instructions.h"
+#include "llvm37/ADT/SmallSet.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/Analysis/AliasAnalysis.h"
+#include "llvm37/Analysis/CFG.h"
+#include "llvm37/Analysis/CaptureTracking.h"
+#include "llvm37/IR/CallSite.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/Dominators.h"
+#include "llvm37/IR/Instructions.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 CaptureTracker::~CaptureTracker() {}
 
@@ -214,7 +214,7 @@ namespace {
 /// counts as capturing it or not.  The boolean StoreCaptures specified whether
 /// storing the value (or part of it) into memory anywhere automatically
 /// counts as capturing it or not.
-bool llvm::PointerMayBeCaptured(const Value *V,
+bool llvm37::PointerMayBeCaptured(const Value *V,
                                 bool ReturnCaptures, bool StoreCaptures) {
   assert(!isa<GlobalValue>(V) &&
          "It doesn't make sense to ask whether a global is captured.");
@@ -239,7 +239,7 @@ bool llvm::PointerMayBeCaptured(const Value *V,
 /// it or not.  The boolean StoreCaptures specified whether storing the value
 /// (or part of it) into memory anywhere automatically counts as capturing it
 /// or not.
-bool llvm::PointerMayBeCapturedBefore(const Value *V, bool ReturnCaptures,
+bool llvm37::PointerMayBeCapturedBefore(const Value *V, bool ReturnCaptures,
                                       bool StoreCaptures, const Instruction *I,
                                       DominatorTree *DT, bool IncludeI) {
   assert(!isa<GlobalValue>(V) &&
@@ -261,7 +261,7 @@ bool llvm::PointerMayBeCapturedBefore(const Value *V, bool ReturnCaptures,
 /// that path, and remove this threshold.
 static int const Threshold = 20;
 
-void llvm::PointerMayBeCaptured(const Value *V, CaptureTracker *Tracker) {
+void llvm37::PointerMayBeCaptured(const Value *V, CaptureTracker *Tracker) {
   assert(V->getType()->isPointerTy() && "Capture is for pointers only!");
   SmallVector<const Use *, Threshold> Worklist;
   SmallSet<const Use *, Threshold> Visited;

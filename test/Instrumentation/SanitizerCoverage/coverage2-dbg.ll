@@ -7,7 +7,7 @@
 ; 2:     if (a)
 ; 3:         *a = 0;
 ; 4: }
-; clang++ if.cc -O3 -g -S -emit-llvm
+; clang++ if.cc -O3 -g -S -emit-llvm37
 ; and add sanitize_address to @_Z3fooPi
 
 
@@ -27,7 +27,7 @@ target triple = "x86_64-unknown-linux-gnu"
 
 define void @_Z3fooPi(i32* %a) #0 {
 entry:
-  tail call void @llvm.dbg.value(metadata i32* %a, i64 0, metadata !11, metadata !DIExpression()), !dbg !15
+  tail call void @llvm37.dbg.value(metadata i32* %a, i64 0, metadata !11, metadata !DIExpression()), !dbg !15
   %tobool = icmp eq i32* %a, null, !dbg !16
   br i1 %tobool, label %if.end, label %if.then, !dbg !16
 
@@ -40,14 +40,14 @@ if.end:                                           ; preds = %entry, %if.then
 }
 
 ; Function Attrs: nounwind readnone
-declare void @llvm.dbg.value(metadata, i64, metadata, metadata) #1
+declare void @llvm37.dbg.value(metadata, i64, metadata, metadata) #1
 
 attributes #0 = { nounwind uwtable "less-precise-fpmad"="false" "no-frame-pointer-elim"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "stack-protector-buffer-size"="8" "unsafe-fp-math"="false" "use-soft-float"="false" sanitize_address}
 attributes #1 = { nounwind readnone }
 
-!llvm.dbg.cu = !{!0}
-!llvm.module.flags = !{!12, !13}
-!llvm.ident = !{!14}
+!llvm37.dbg.cu = !{!0}
+!llvm37.module.flags = !{!12, !13}
+!llvm37.ident = !{!14}
 
 !0 = !DICompileUnit(language: DW_LANG_C_plus_plus, producer: "clang version 3.6.0 (217079)", isOptimized: true, emissionKind: 1, file: !1, enums: !2, retainedTypes: !2, subprograms: !3, globals: !2, imports: !2)
 !1 = !DIFile(filename: "if.cc", directory: "FOO")

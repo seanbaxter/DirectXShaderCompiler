@@ -1,14 +1,14 @@
 //===-- CompilerInstance.h - Clang Compiler Instance ------------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_FRONTEND_COMPILERINSTANCE_H_
-#define LLVM_CLANG_FRONTEND_COMPILERINSTANCE_H_
+#ifndef LLVM37_CLANG_FRONTEND_COMPILERINSTANCE_H_
+#define LLVM37_CLANG_FRONTEND_COMPILERINSTANCE_H_
 
 #include "clang/AST/ASTConsumer.h"
 #include "clang/Frontend/PCHContainerOperations.h"
@@ -17,17 +17,17 @@
 #include "clang/Frontend/CompilerInvocation.h"
 #include "clang/Frontend/Utils.h"
 #include "clang/Lex/ModuleLoader.h"
-#include "llvm/ADT/ArrayRef.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/IntrusiveRefCntPtr.h"
-#include "llvm/ADT/StringRef.h"
+#include "llvm37/ADT/ArrayRef.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/IntrusiveRefCntPtr.h"
+#include "llvm37/ADT/StringRef.h"
 #include <cassert>
 #include <list>
 #include <memory>
 #include <string>
 #include <utility>
 
-namespace llvm {
+namespace llvm37 {
 class raw_fd_ostream;
 class Timer;
 class TimerGroup;
@@ -119,10 +119,10 @@ class CompilerInstance : public ModuleLoader {
   std::unique_ptr<Sema> TheSema;
 
   /// \brief The frontend timer group.
-  std::unique_ptr<llvm::TimerGroup> FrontendTimerGroup;
+  std::unique_ptr<llvm37::TimerGroup> FrontendTimerGroup;
 
   /// \brief The frontend timer.
-  std::unique_ptr<llvm::Timer> FrontendTimer;
+  std::unique_ptr<llvm37::Timer> FrontendTimer;
 
 #if 0 // HLSL Change Starts - no support for modules or PCH
   /// \brief The ASTReader, if one exists.
@@ -144,14 +144,14 @@ class CompilerInstance : public ModuleLoader {
 #if 0 // HLSL Change Start - no support for modules
   /// \brief The set of top-level modules that has already been loaded,
   /// along with the module map
-  llvm::DenseMap<const IdentifierInfo *, Module *> KnownModules;
+  llvm37::DenseMap<const IdentifierInfo *, Module *> KnownModules;
 
   /// \brief Module names that have an override for the target file.
-  llvm::StringMap<std::string> ModuleFileOverrides;
+  llvm37::StringMap<std::string> ModuleFileOverrides;
 
   /// \brief Module files that we've explicitly loaded via \ref loadModuleFile,
   /// and their dependencies.
-  llvm::StringSet<> ExplicitlyLoadedModuleFiles;
+  llvm37::StringSet<> ExplicitlyLoadedModuleFiles;
 
   /// \brief The location of the module-import keyword for the last module
   /// import. 
@@ -195,13 +195,13 @@ class CompilerInstance : public ModuleLoader {
   /// If the output doesn't support seeking (terminal, pipe). we switch
   /// the stream to a buffer_ostream. These are the buffer and the original
   /// stream.
-  std::unique_ptr<llvm::raw_fd_ostream> NonSeekStream;
+  std::unique_ptr<llvm37::raw_fd_ostream> NonSeekStream;
 
   /// The list of active output files.
   std::list<OutputFile> OutputFiles;
 
-  /// The output stream to override llvm::outs if needed.
-  llvm::raw_ostream* OutStream; // HLSL Change
+  /// The output stream to override llvm37::outs if needed.
+  llvm37::raw_ostream* OutStream; // HLSL Change
 
   CompilerInstance(const CompilerInstance &) = delete;
   void operator=(const CompilerInstance &) = delete;
@@ -215,8 +215,8 @@ public:
   // HLSL Change Starts
   hlsl::DxcLangExtensionsHelperApply *HlslLangExtensions = nullptr;
   bool WriteDefaultOutputDirectly = false; // HLSL Change
-  llvm::raw_ostream* getOutStream() { return OutStream; }
-  void setOutStream(llvm::raw_ostream *OS) { OutStream = OS; }
+  llvm37::raw_ostream* getOutStream() { return OutStream; }
+  void setOutStream(llvm37::raw_ostream *OS) { OutStream = OS; }
   // HLSL Change Ends
 
   /// @name High-Level Operations
@@ -236,10 +236,10 @@ public:
   ///  - No other CompilerInstance state should have been initialized (this is
   ///    an unchecked error).
   ///
-  ///  - Clients should have initialized any LLVM target features that may be
+  ///  - Clients should have initialized any LLVM37 target features that may be
   ///    required.
   ///
-  ///  - Clients should eventually call llvm_shutdown() upon the completion of
+  ///  - Clients should eventually call llvm37_shutdown() upon the completion of
   ///    this routine to ensure that any managed objects are properly destroyed.
   ///
   /// Note that this routine may write output to 'stderr'.
@@ -250,7 +250,7 @@ public:
   // FIXME: This function should take the stream to write any debugging /
   // verbose output to as an argument.
   //
-  // FIXME: Eliminate the llvm_shutdown requirement, that should either be part
+  // FIXME: Eliminate the llvm37_shutdown requirement, that should either be part
   // of the context or else not CompilerInstance specific.
   bool ExecuteAction(FrontendAction &Act);
 
@@ -550,7 +550,7 @@ public:
     if (!Writer) {
       if (Diagnostics)
         Diagnostics->Report(diag::err_module_format_unhandled) << Format;
-      llvm::report_fatal_error("unknown module format");
+      llvm37::report_fatal_error("unknown module format");
     }
     return *Writer;
   }
@@ -566,7 +566,7 @@ public:
     if (!Reader) {
       if (Diagnostics)
         Diagnostics->Report(diag::err_module_format_unhandled) << Format;
-      llvm::report_fatal_error("unknown module format");
+      llvm37::report_fatal_error("unknown module format");
     }
     return *Reader;
   }
@@ -593,7 +593,7 @@ public:
 
   bool hasFrontendTimer() const { return (bool)FrontendTimer; }
 
-  llvm::Timer &getFrontendTimer() const {
+  llvm37::Timer &getFrontendTimer() const {
     assert(FrontendTimer && "Compiler instance has no frontend timer!");
     return *FrontendTimer;
   }
@@ -743,7 +743,7 @@ public:
   /// \param Extension - The extension to use for derived output names.
   /// \param Binary - The mode to open the file in.
   /// \param RemoveFileOnSignal - Whether the file should be registered with
-  /// llvm::sys::RemoveFileOnSignal. Note that this is not safe for
+  /// llvm37::sys::RemoveFileOnSignal. Note that this is not safe for
   /// multithreaded use, as the underlying signal mechanism is not reentrant
   /// \param UseTemporary - Create a new temporary file that must be renamed to
   /// OutputPath in the end.
@@ -760,7 +760,7 @@ public:
                    bool CreateMissingDirectories, std::string *ResultPathName,
                    std::string *TempPathName);
 
-  llvm::raw_null_ostream *createNullOutputFile();
+  llvm37::raw_null_ostream *createNullOutputFile();
 
   /// }
   /// @name Initialization Utility Methods

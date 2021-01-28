@@ -1,7 +1,7 @@
 ; This test checks to make sure that constant exprs don't fold in some simple
 ; situations
 
-; RUN: llvm-as < %s | llvm-dis | FileCheck %s
+; RUN: llvm37-as < %s | llvm37-dis | FileCheck %s
 ; RUN: verify-uselistorder %s
 
 ; Even give it a datalayout, to tempt folding as much as possible.

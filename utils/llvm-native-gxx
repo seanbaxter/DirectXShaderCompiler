@@ -1,6 +1,6 @@
 #!/usr/bin/perl
-# Wrapper around LLVM tools to generate a native .o from llvm-gxx using an
-# LLVM back-end (CBE by default).
+# Wrapper around LLVM37 tools to generate a native .o from llvm37-gxx using an
+# LLVM37 back-end (CBE by default).
 
 # set up defaults.
 $Verbose = 0;
@@ -15,12 +15,12 @@ sub boldprint {
 }
 
 # process command-line options.
-# most of these are passed on to llvm-gxx.
+# most of these are passed on to llvm37-gxx.
 $GCCOptions = "";
 for ($i = 0; $i <= $#ARGV; ++$i) {	
-	if ($ARGV[$i] =~ /-mllvm-backend=([a-z0-9]*)/) {
+	if ($ARGV[$i] =~ /-mllvm37-backend=([a-z0-9]*)/) {
 		$Backend = $1;
-		if ($ProgramName =~ /llvm-native-gxx/) {
+		if ($ProgramName =~ /llvm37-native-gxx/) {
 			splice (@ARGV, $i, 1);
 			--$i;
 		}
@@ -53,7 +53,7 @@ for ($i = 0; $i <= $#ARGV; ++$i) {
 sub GetDefaultOutputFileName {
 	my $DefaultOutputFileBase;
 
-	if ($ProgramName =~ /llvm-native-gxx/) {
+	if ($ProgramName =~ /llvm37-native-gxx/) {
 		$DefaultOutputFileBase = $LastCFile;
 	} elsif ($ProgramName =~ /native-build/) {
 		$DefaultOutputFileBase = $BytecodeFiles[0];
@@ -69,7 +69,7 @@ sub GetDefaultOutputFileName {
 	print "Warning: defaulting output file name ",
 		"based on '$DefaultOutputFileBase'\n" if $Verbose;
 
-	if ($ProgramName =~ /llvm-native-gxx/) {
+	if ($ProgramName =~ /llvm37-native-gxx/) {
 		$def =~ s/\.(c|cpp|cc|i|ii|C)$/.o/;
 	} elsif ($ProgramName =~ /native-build/) {
 		$def =~ s/\.bc$/.$Backend/;
@@ -96,11 +96,11 @@ sub LinkBytecodeFilesIntoTemporary {
 	my $BCFiles = join (" ", @BytecodeFiles);
 	my $LinkedBCFile;
 	if ($SaveTemps) {
-		$LinkedBCFile = "${FinalOutputFileName}.llvm.bc";
+		$LinkedBCFile = "${FinalOutputFileName}.llvm37.bc";
 	} else {
-		$LinkedBCFile = "/tmp/nativebuild-$$.llvm.bc";
+		$LinkedBCFile = "/tmp/nativebuild-$$.llvm37.bc";
 	}
-	run "llvm-link -o $LinkedBCFile $BCFiles";
+	run "llvm37-link -o $LinkedBCFile $BCFiles";
 	return $LinkedBCFile;
 }
 
@@ -131,12 +131,12 @@ sub CompileBytecodeToNative {
 }
 
 sub CompileCToNative {
-	my ($LLVMGCCCommand, $Backend, $OutputFile) = @_;
-	run $LLVMGCCCommand;
+	my ($LLVM37GCCCommand, $Backend, $OutputFile) = @_;
+	run $LLVM37GCCCommand;
 	if ($PreprocessOnly) {
 		return;
 	}
-	my $BCFile = "${OutputFile}.llvm.bc";
+	my $BCFile = "${OutputFile}.llvm37.bc";
 	if ($CompileDontLink) {
 		run "mv ${OutputFile} $BCFile";
 	} else { # gccld messes with the output file name
@@ -155,7 +155,7 @@ sub CompileCToNative {
 		$NativeGCCOptions = "-c";
 	}
 	run "gcc $NativeGCCOptions $GeneratedCode -o $OutputFile";
-	run "rm ${OutputFile}.llvm.bc $GeneratedCode"
+	run "rm ${OutputFile}.llvm37.bc $GeneratedCode"
 		unless $SaveTemps;
 }
 
@@ -166,10 +166,10 @@ print "Output file is $OutputFile\n" if $Verbose;
 if ($ProgramName eq /native-build/) {
 	my $LinkedBCFile = LinkBytecodeFilesIntoTemporary (@BytecodeFiles);
 	CompileBytecodeToNative ($LinkedBCFile, $Backend, $OutputFile);
-} elsif ($ProgramName =~ /llvm-native-gxx/) {
-	# build the llvm-gxx command line.
-	$LLVMGCCCommand = join (" ", ("llvm-g++", @ARGV));
-	CompileCToNative ($LLVMGCCCommand, $Backend, $OutputFile);
+} elsif ($ProgramName =~ /llvm37-native-gxx/) {
+	# build the llvm37-gxx command line.
+	$LLVM37GCCCommand = join (" ", ("llvm37-g++", @ARGV));
+	CompileCToNative ($LLVM37GCCCommand, $Backend, $OutputFile);
 }
 
 # we're done.
@@ -181,19 +181,19 @@ __END__
 
 =head1 NAME
 
-llvm-native-gxx
+llvm37-native-gxx
 
 =head1 SYNOPSIS
 
-llvm-native-g++ [OPTIONS...] FILE
+llvm37-native-g++ [OPTIONS...] FILE
 
 native-build [OPTIONS...] FILE
 
 =head1 DESCRIPTION
 
-llvm-native-g++ is a wrapper around the LLVM command-line tools which generates
-a native object (.o) file by compiling FILE with llvm-g++, and then running 
-an LLVM back-end (CBE by default) over the resulting bitcode, and then
+llvm37-native-g++ is a wrapper around the LLVM37 command-line tools which generates
+a native object (.o) file by compiling FILE with llvm37-g++, and then running 
+an LLVM37 back-end (CBE by default) over the resulting bitcode, and then
 compiling the resulting code to a native object file.
 
 If called as "native-build", it compiles bitcode to native code, and takes
@@ -201,41 +201,41 @@ different options.
 
 =head1 OPTIONS
 
-llvm-native-g++ takes the same options as llvm-gcc. All options
-except -mllvm-backend=... are passed on to llvm-g++.
+llvm37-native-g++ takes the same options as llvm37-gcc. All options
+except -mllvm37-backend=... are passed on to llvm37-g++.
 
 =over 4
 
-=item -mllvm-backend=BACKEND
+=item -mllvm37-backend=BACKEND
 
 Use BACKEND for native code generation. 
 
 =item -v
 
-Print command lines that llvm-native-g++ runs.
+Print command lines that llvm37-native-g++ runs.
 
 =item -o FILE
 
-llvm-native-g++ tries to guess the name of the llvm-g++ output file by looking
+llvm37-native-g++ tries to guess the name of the llvm37-g++ output file by looking
 for this option in the command line. If it can't find it, it finds the last C
 or C++ source file named on the command line, and turns its suffix into .o. See
 BUGS.
 
 =item -save-temps
 
-Save temporary files used by llvm-native-g++ (and llvm-g++, and g++).
+Save temporary files used by llvm37-native-g++ (and llvm37-g++, and g++).
 
 =back
 
 =head1 BUGS
 
-llvm-native-g++ only handles the case where llvm-g++ compiles a single
-file per invocation.  llvm-native-g++ has weak command-line argument
+llvm37-native-g++ only handles the case where llvm37-g++ compiles a single
+file per invocation.  llvm37-native-g++ has weak command-line argument
 parsing and is a poor substitute for making g++/g++.c do this stuff.
 
 This manual page does not adequately document native-build mode.
 
-llvm-native-g++ is pretty gross because it represents the blind merging of two
+llvm37-native-g++ is pretty gross because it represents the blind merging of two
 other scripts that predated it. It could use some code clean-up.
 
 =head1 SEE ALSO

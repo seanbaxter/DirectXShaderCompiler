@@ -1,6 +1,6 @@
-; RUN: llvm-as < %s | llvm-dis > %t1.ll
+; RUN: llvm37-as < %s | llvm37-dis > %t1.ll
 ; RUN: FileCheck %s < %t1.ll
-; RUN: llvm-as < %t1.ll | llvm-dis > %t2.ll
+; RUN: llvm37-as < %t1.ll | llvm37-dis > %t2.ll
 ; RUN: diff %t1.ll %t2.ll
 ; RUN: opt -O3 -S < %t1.ll | FileCheck %s
 

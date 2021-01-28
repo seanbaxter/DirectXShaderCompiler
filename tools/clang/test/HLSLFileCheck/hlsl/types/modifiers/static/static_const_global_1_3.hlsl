@@ -1,7 +1,7 @@
 // RUN: %dxc -T lib_6_3 -validator-version 1.3 -auto-binding-space 11 %s | FileCheck %s
 
-// CHECK-NOT: llvm.global_ctors
-// CHECK: !llvm.ident
+// CHECK-NOT: llvm37.global_ctors
+// CHECK: !llvm37.ident
 
 cbuffer A {
   float a;

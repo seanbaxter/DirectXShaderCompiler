@@ -12,9 +12,9 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #pragma once
-#include "llvm/Pass.h"
+#include "llvm37/Pass.h"
 #include "dxc/HLSL/ControlDependence.h"
-#include "llvm/Support/GenericDomTree.h"
+#include "llvm37/Support/GenericDomTree.h"
 
 #include <memory>
 #include <bitset>
@@ -23,7 +23,7 @@
 #include <set>
 #include <map>
 
-namespace llvm {
+namespace llvm37 {
   class Module;
   class Function;
   class BasicBlock;
@@ -92,7 +92,7 @@ public:
   const std::vector<unsigned> &
   GetSerialized() const; // returns previously serialized data
   void Deserialize(const unsigned *pData, unsigned DataSizeInUINTs);
-  void PrintSets(llvm::raw_ostream &OS);
+  void PrintSets(llvm37::raw_ostream &OS);
 
 private:
   DxilModule *m_pModule;
@@ -104,9 +104,9 @@ private:
 } // end of hlsl namespace
 
 
-namespace llvm {
+namespace llvm37 {
 
-void initializeComputeViewIdStatePass(llvm::PassRegistry &);
-llvm::ModulePass *createComputeViewIdStatePass();
+void initializeComputeViewIdStatePass(llvm37::PassRegistry &);
+llvm37::ModulePass *createComputeViewIdStatePass();
 
-} // end of llvm namespace
+} // end of llvm37 namespace

@@ -1,25 +1,25 @@
 #!/bin/sh
-##===- utils/llvmdo - Counts Lines Of Code -------------------*- Script -*-===##
+##===- utils/llvm37do - Counts Lines Of Code -------------------*- Script -*-===##
 # 
-#                     The LLVM Compiler Infrastructure
+#                     The LLVM37 Compiler Infrastructure
 #
 # This file is distributed under the University of Illinois Open Source
 # License. See LICENSE.TXT for details.
 # 
 ##===----------------------------------------------------------------------===##
 #
-# This script is a general purpose "apply" function for the source files in LLVM
+# This script is a general purpose "apply" function for the source files in LLVM37
 # It uses "find" to locate all the source files and then applies the user's 
 # command to them. As such, this command is often not used by itself much but
-# the other find related tools (countloc.sh,llvmgrep,getsrcs.sh,userloc.sh) are
+# the other find related tools (countloc.sh,llvm37grep,getsrcs.sh,userloc.sh) are
 # all based on this script.  This script defines "what is a source file" in 
-# LLVM and so should be maintained if new directories, new file extensions, 
-# etc. are used in LLVM as it progresses.
+# LLVM37 and so should be maintained if new directories, new file extensions, 
+# etc. are used in LLVM37 as it progresses.
 #
 # Usage:
-#  llvmdo [-topdir DIR] [-dirs "DIRNAMES..."] [-code-only] PROGRAM ARGS...
+#  llvm37do [-topdir DIR] [-dirs "DIRNAMES..."] [-code-only] PROGRAM ARGS...
 #
-# The -topdir option allows you to specify the llvm source root directly. If it
+# The -topdir option allows you to specify the llvm37 source root directly. If it
 # is not specified then it will be obtained with llvm-config which must be built
 # and in your path.
 #
@@ -38,7 +38,7 @@
 ##===----------------------------------------------------------------------===##
 
 if test $# -lt 1 ; then
-  echo "Usage: llvmdo [-topdir DIR] [-dirs "DIRNAMES..."] [-code-only] PROGRAM ARGS..."
+  echo "Usage: llvm37do [-topdir DIR] [-dirs "DIRNAMES..."] [-code-only] PROGRAM ARGS..."
   exit 1
 fi
 
@@ -50,10 +50,10 @@ else
 fi
 
 if test "$1" = "-dirs" ; then
-  LLVMDO_DIRS="$2"
+  LLVM37DO_DIRS="$2"
   shift ; shift
-elif test -z "$LLVMDO_DIRS" ; then
-  LLVMDO_DIRS="include lib tools utils runtime autoconf docs test examples projects cmake"
+elif test -z "$LLVM37DO_DIRS" ; then
+  LLVM37DO_DIRS="include lib tools utils runtime autoconf docs test examples projects cmake"
 fi
 
 if test "$1" = "-code-only" ; then
@@ -87,7 +87,7 @@ paths_to_ignore="\
   -path docs/img/* -o \
   -path */.libs/* -o \
   -path lib/Support/bzip2/* -o \
-  -path projects/llvm-test/* \
+  -path projects/llvm37-test/* \
 "
 files_to_match="\
      -name *.ac \
@@ -124,14 +124,14 @@ files_to_match="\
   -o -name *.y \
   -o -name Make* \
   -o -name *.cmake \
-  -o -name llvmdo \
-  -o -name llvmgrep \
+  -o -name llvm37do \
+  -o -name llvm37grep \
   -o -name check-each-file \
   -o -name codgen-diff \
-  -o -name llvm-native-gcc \
-  -o -name llvm-native-gxx \
-  -o -name makellvm \
-  -o -path include/llvm/ADT/ilist \
+  -o -name llvm37-native-gcc \
+  -o -name llvm37-native-gxx \
+  -o -name makellvm37 \
+  -o -path include/llvm37/ADT/ilist \
   -o -path test/\*.ll \
   -o -path test/Scripts/not \
   -o -path runtime/\*.ll \
@@ -175,10 +175,10 @@ if test -d "$TOPDIR" ; then
   # Turn off file name generation (globbing) so that substitution of the
   # variables doesn't cause the shell to create lists of file names
   set -f
-  $find_prog $LLVMDO_DIRS -type f \
+  $find_prog $LLVM37DO_DIRS -type f \
     \( $paths_to_ignore \) -prune \
     -o \( \( $files_to_match \) \! \( $files_to_ignore \) \
     -exec $PROGRAM "$@" {} \; \)
 else
-  echo "Can't find LLVM top directory in $TOPDIR"
+  echo "Can't find LLVM37 top directory in $TOPDIR"
 fi

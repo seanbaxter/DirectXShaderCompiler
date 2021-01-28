@@ -1,6 +1,6 @@
 //===- CodeMetrics.cpp - Code cost measurements ---------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,21 +11,21 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Analysis/AssumptionCache.h"
-#include "llvm/Analysis/CodeMetrics.h"
-#include "llvm/Analysis/LoopInfo.h"
-#include "llvm/Analysis/TargetTransformInfo.h"
-#include "llvm/Analysis/ValueTracking.h"
-#include "llvm/IR/CallSite.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/Analysis/AssumptionCache.h"
+#include "llvm37/Analysis/CodeMetrics.h"
+#include "llvm37/Analysis/LoopInfo.h"
+#include "llvm37/Analysis/TargetTransformInfo.h"
+#include "llvm37/Analysis/ValueTracking.h"
+#include "llvm37/IR/CallSite.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/raw_ostream.h"
 
 #define DEBUG_TYPE "code-metrics"
 
-using namespace llvm;
+using namespace llvm37;
 
 static void completeEphemeralValues(SmallVector<const Value *, 16> &WorkSet,
                                     SmallPtrSetImpl<const Value*> &EphValues) {
@@ -79,7 +79,7 @@ void CodeMetrics::collectEphemeralValues(
 
     // Filter out call sites outside of the loop so we don't to a function's
     // worth of work for each of its loops (and, in the common case, ephemeral
-    // values in the loop are likely due to @llvm.assume calls in the loop).
+    // values in the loop are likely due to @llvm37.assume calls in the loop).
     if (!L->contains(I->getParent()))
       continue;
 

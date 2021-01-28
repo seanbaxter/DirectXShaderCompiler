@@ -1,17 +1,17 @@
 //===--- InputInfo.h - Input Source & Type Information ----------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_LIB_DRIVER_INPUTINFO_H
-#define LLVM_CLANG_LIB_DRIVER_INPUTINFO_H
+#ifndef LLVM37_CLANG_LIB_DRIVER_INPUTINFO_H
+#define LLVM37_CLANG_LIB_DRIVER_INPUTINFO_H
 
 #include "clang/Driver/Types.h"
-#include "llvm/Option/Arg.h"
+#include "llvm37/Option/Arg.h"
 #include <cassert>
 #include <string>
 
@@ -35,7 +35,7 @@ class InputInfo {
 
   union {
     const char *Filename;
-    const llvm::opt::Arg *InputArg;
+    const llvm37::opt::Arg *InputArg;
   } Data;
   Class Kind;
   types::ID Type;
@@ -50,7 +50,7 @@ public:
     : Kind(Filename), Type(_Type), BaseInput(_BaseInput) {
     Data.Filename = _Filename;
   }
-  InputInfo(const llvm::opt::Arg *_InputArg, types::ID _Type,
+  InputInfo(const llvm37::opt::Arg *_InputArg, types::ID _Type,
             const char *_BaseInput)
       : Kind(InputArg), Type(_Type), BaseInput(_BaseInput) {
     Data.InputArg = _InputArg;
@@ -66,7 +66,7 @@ public:
     assert(isFilename() && "Invalid accessor.");
     return Data.Filename;
   }
-  const llvm::opt::Arg &getInputArg() const {
+  const llvm37::opt::Arg &getInputArg() const {
     assert(isInputArg() && "Invalid accessor.");
     return *Data.InputArg;
   }

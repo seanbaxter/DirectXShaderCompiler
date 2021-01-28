@@ -31,7 +31,7 @@ The files which should be kept around for failure investigations:
 Assumptions (TODO: shouldn't need to assume these.):   
    The script is being run from the Repository Directory.
    The compiler for scan-build and scan-build are in the PATH.
-   export PATH=/Users/zaks/workspace/c2llvm/build/Release+Asserts/bin:$PATH
+   export PATH=/Users/zaks/workspace/c2llvm37/build/Release+Asserts/bin:$PATH
 
 For more logging, set the  env variables:
    zaks:TI zaks$ export CCC_ANALYZER_LOG=1

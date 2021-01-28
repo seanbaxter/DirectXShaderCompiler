@@ -1,6 +1,6 @@
 //===-- Interpreter.h ------------------------------------------*- C++ -*--===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,19 +11,19 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_LIB_EXECUTIONENGINE_INTERPRETER_INTERPRETER_H
-#define LLVM_LIB_EXECUTIONENGINE_INTERPRETER_INTERPRETER_H
+#ifndef LLVM37_LIB_EXECUTIONENGINE_INTERPRETER_INTERPRETER_H
+#define LLVM37_LIB_EXECUTIONENGINE_INTERPRETER_INTERPRETER_H
 
-#include "llvm/ExecutionEngine/ExecutionEngine.h"
-#include "llvm/ExecutionEngine/GenericValue.h"
-#include "llvm/IR/CallSite.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/InstVisitor.h"
-#include "llvm/Support/DataTypes.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/raw_ostream.h"
-namespace llvm {
+#include "llvm37/ExecutionEngine/ExecutionEngine.h"
+#include "llvm37/ExecutionEngine/GenericValue.h"
+#include "llvm37/IR/CallSite.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/InstVisitor.h"
+#include "llvm37/Support/DataTypes.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/raw_ostream.h"
+namespace llvm37 {
 
 class IntrinsicLowering;
 struct FunctionInfo;
@@ -68,7 +68,7 @@ struct ExecutionContext {
   BasicBlock::iterator  CurInst;    // The next instruction to execute
   CallSite             Caller;     // Holds the call that called subframes.
                                    // NULL if main func or debugger invoked fn
-  std::map<Value *, GenericValue> Values; // LLVM values used in this invocation
+  std::map<Value *, GenericValue> Values; // LLVM37 values used in this invocation
   std::vector<GenericValue>  VarArgs; // Values passed through an ellipsis
   AllocaHolder Allocas;            // Track memory allocated by alloca
 
@@ -154,7 +154,7 @@ public:
   void visitStoreInst(StoreInst &I);
   void visitGetElementPtrInst(GetElementPtrInst &I);
   void visitPHINode(PHINode &PN) { 
-    llvm_unreachable("PHI nodes already handled!"); 
+    llvm37_unreachable("PHI nodes already handled!"); 
   }
   void visitTruncInst(TruncInst &I);
   void visitZExtInst(ZExtInst &I);
@@ -190,7 +190,7 @@ public:
 
   void visitInstruction(Instruction &I) {
     errs() << I << "\n";
-    llvm_unreachable("Instruction not interpretable yet!");
+    llvm37_unreachable("Instruction not interpretable yet!");
   }
 
   GenericValue callExternalFunction(Function *F,
@@ -251,6 +251,6 @@ private:  // Helper functions
 
 };
 
-} // End llvm namespace
+} // End llvm37 namespace
 
 #endif

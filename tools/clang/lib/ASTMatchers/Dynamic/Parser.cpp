@@ -1,6 +1,6 @@
 //===--- Parser.cpp - Matcher expression parser -----*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -15,9 +15,9 @@
 #include "clang/ASTMatchers/Dynamic/Parser.h"
 #include "clang/ASTMatchers/Dynamic/Registry.h"
 #include "clang/Basic/CharInfo.h"
-#include "llvm/ADT/Optional.h"
-#include "llvm/ADT/Twine.h"
-#include "llvm/Support/ManagedStatic.h"
+#include "llvm37/ADT/Optional.h"
+#include "llvm37/ADT/Twine.h"
+#include "llvm37/Support/ManagedStatic.h"
 #include <string>
 #include <vector>
 
@@ -260,12 +260,12 @@ private:
 Parser::Sema::~Sema() {}
 
 std::vector<ArgKind> Parser::Sema::getAcceptedCompletionTypes(
-    llvm::ArrayRef<std::pair<MatcherCtor, unsigned>> Context) {
+    llvm37::ArrayRef<std::pair<MatcherCtor, unsigned>> Context) {
   return std::vector<ArgKind>();
 }
 
 std::vector<MatcherCompletion>
-Parser::Sema::getMatcherCompletions(llvm::ArrayRef<ArgKind> AcceptedTypes) {
+Parser::Sema::getMatcherCompletions(llvm37::ArrayRef<ArgKind> AcceptedTypes) {
   return std::vector<MatcherCompletion>();
 }
 
@@ -332,7 +332,7 @@ bool Parser::parseMatcherExpressionImpl(const TokenInfo &NameToken,
     return false;
   }
 
-  llvm::Optional<MatcherCtor> Ctor = S->lookupMatcherCtor(NameToken.Text);
+  llvm37::Optional<MatcherCtor> Ctor = S->lookupMatcherCtor(NameToken.Text);
 
   if (!Ctor) {
     Error->addError(NameToken.Range, Error->ET_RegistryMatcherNotFound)
@@ -516,10 +516,10 @@ bool Parser::parseExpressionImpl(VariantValue *Value) {
     return false;
   }
 
-  llvm_unreachable("Unknown token kind.");
+  llvm37_unreachable("Unknown token kind.");
 }
 
-static llvm::ManagedStatic<Parser::RegistrySema> DefaultRegistrySema;
+static llvm37::ManagedStatic<Parser::RegistrySema> DefaultRegistrySema;
 
 Parser::Parser(CodeTokenizer *Tokenizer, Sema *S,
                const NamedValueMap *NamedValues, Diagnostics *Error)
@@ -528,7 +528,7 @@ Parser::Parser(CodeTokenizer *Tokenizer, Sema *S,
 
 Parser::RegistrySema::~RegistrySema() {}
 
-llvm::Optional<MatcherCtor>
+llvm37::Optional<MatcherCtor>
 Parser::RegistrySema::lookupMatcherCtor(StringRef MatcherName) {
   return Registry::lookupMatcherCtor(MatcherName);
 }
@@ -588,18 +588,18 @@ Parser::completeExpression(StringRef Code, unsigned CompletionOffset, Sema *S,
   return P.Completions;
 }
 
-llvm::Optional<DynTypedMatcher>
+llvm37::Optional<DynTypedMatcher>
 Parser::parseMatcherExpression(StringRef Code, Sema *S,
                                const NamedValueMap *NamedValues,
                                Diagnostics *Error) {
   VariantValue Value;
   if (!parseExpression(Code, S, NamedValues, &Value, Error))
-    return llvm::Optional<DynTypedMatcher>();
+    return llvm37::Optional<DynTypedMatcher>();
   if (!Value.isMatcher()) {
     Error->addError(SourceRange(), Error->ET_ParserNotAMatcher);
-    return llvm::Optional<DynTypedMatcher>();
+    return llvm37::Optional<DynTypedMatcher>();
   }
-  llvm::Optional<DynTypedMatcher> Result =
+  llvm37::Optional<DynTypedMatcher> Result =
       Value.getMatcher().getSingleMatcher();
   if (!Result.hasValue()) {
     Error->addError(SourceRange(), Error->ET_ParserOverloadedType)

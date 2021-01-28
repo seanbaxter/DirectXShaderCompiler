@@ -1,6 +1,6 @@
 //===--- DiagnosticOptions.cpp - C Language Family Diagnostic Handling ----===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -12,7 +12,7 @@
 //===----------------------------------------------------------------------===//
 
 #include "clang/Basic/DiagnosticOptions.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/Support/raw_ostream.h"
 
 namespace clang {
 

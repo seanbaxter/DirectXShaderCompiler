@@ -1,6 +1,6 @@
 //= UnixAPIChecker.h - Checks preconditions for various Unix APIs --*- C++ -*-//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -18,11 +18,11 @@
 #include "clang/StaticAnalyzer/Core/Checker.h"
 #include "clang/StaticAnalyzer/Core/CheckerManager.h"
 #include "clang/StaticAnalyzer/Core/PathSensitive/CheckerContext.h"
-#include "llvm/ADT/Optional.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/ADT/StringSwitch.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/Optional.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/ADT/StringSwitch.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <fcntl.h>
 
 using namespace clang;
@@ -83,7 +83,7 @@ void UnixAPIChecker::ReportOpenBug(CheckerContext &C,
 
   LazyInitialize(BT_open, "Improper use of 'open'");
 
-  auto Report = llvm::make_unique<BugReport>(*BT_open, Msg, N);
+  auto Report = llvm37::make_unique<BugReport>(*BT_open, Msg, N);
   Report->addRange(SR);
   C.emitReport(std::move(Report));
 }
@@ -115,7 +115,7 @@ void UnixAPIChecker::CheckOpen(CheckerContext &C, const CallExpr *CE) const {
   // of querying this information from the checking environment.
   if (!Val_O_CREAT.hasValue()) {
     if (C.getASTContext().getTargetInfo().getTriple().getVendor() 
-                                                      == llvm::Triple::Apple)
+                                                      == llvm37::Triple::Apple)
       Val_O_CREAT = 0x0200;
     else {
       // FIXME: We need a more general way of getting the O_CREAT value.
@@ -187,7 +187,7 @@ void UnixAPIChecker::CheckPthreadOnce(CheckerContext &C,
     return;
 
   SmallString<256> S;
-  llvm::raw_svector_ostream os(S);
+  llvm37::raw_svector_ostream os(S);
   os << "Call to 'pthread_once' uses";
   if (const VarRegion *VR = dyn_cast<VarRegion>(R))
     os << " the local variable '" << VR->getDecl()->getName() << '\'';
@@ -200,7 +200,7 @@ void UnixAPIChecker::CheckPthreadOnce(CheckerContext &C,
 
   LazyInitialize(BT_pthreadOnce, "Improper use of 'pthread_once'");
 
-  auto report = llvm::make_unique<BugReport>(*BT_pthreadOnce, os.str(), N);
+  auto report = llvm37::make_unique<BugReport>(*BT_pthreadOnce, os.str(), N);
   report->addRange(CE->getArg(0)->getSourceRange());
   C.emitReport(std::move(report));
 }
@@ -239,9 +239,9 @@ bool UnixAPIChecker::ReportZeroByteAllocation(CheckerContext &C,
                  "Undefined allocation of 0 bytes (CERT MEM04-C; CWE-131)");
 
   SmallString<256> S;
-  llvm::raw_svector_ostream os(S);    
+  llvm37::raw_svector_ostream os(S);    
   os << "Call to '" << fn_name << "' has an allocation size of 0 bytes";
-  auto report = llvm::make_unique<BugReport>(*BT_mallocZero, os.str(), N);
+  auto report = llvm37::make_unique<BugReport>(*BT_mallocZero, os.str(), N);
 
   report->addRange(arg->getSourceRange());
   bugreporter::trackNullOrUndefValue(N, arg, *report);
@@ -358,7 +358,7 @@ void UnixAPIChecker::checkPreStmt(const CallExpr *CE,
     return;
 
   SubChecker SC =
-    llvm::StringSwitch<SubChecker>(FName)
+    llvm37::StringSwitch<SubChecker>(FName)
       .Case("open", &UnixAPIChecker::CheckOpen)
       .Case("pthread_once", &UnixAPIChecker::CheckPthreadOnce)
       .Case("calloc", &UnixAPIChecker::CheckCallocZero)

@@ -1,6 +1,6 @@
 //===-- MemorySanitizer.cpp - detector of uninitialized reads -------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -89,32 +89,32 @@
 /// value. It implements the store part as a simple atomic store by storing a
 /// clean shadow.
 
-#include "llvm/Transforms/Instrumentation.h"
-#include "llvm/ADT/DepthFirstIterator.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/ADT/StringExtras.h"
-#include "llvm/ADT/Triple.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/IRBuilder.h"
-#include "llvm/IR/InlineAsm.h"
-#include "llvm/IR/InstVisitor.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/MDBuilder.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/Type.h"
-#include "llvm/IR/ValueMap.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/Compiler.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Transforms/Utils/BasicBlockUtils.h"
-#include "llvm/Transforms/Utils/Local.h"
-#include "llvm/Transforms/Utils/ModuleUtils.h"
+#include "llvm37/Transforms/Instrumentation.h"
+#include "llvm37/ADT/DepthFirstIterator.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/ADT/StringExtras.h"
+#include "llvm37/ADT/Triple.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/IRBuilder.h"
+#include "llvm37/IR/InlineAsm.h"
+#include "llvm37/IR/InstVisitor.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/MDBuilder.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/Type.h"
+#include "llvm37/IR/ValueMap.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/Compiler.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Transforms/Utils/BasicBlockUtils.h"
+#include "llvm37/Transforms/Utils/Local.h"
+#include "llvm37/Transforms/Utils/ModuleUtils.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "msan"
 
@@ -300,7 +300,7 @@ class MemorySanitizer : public FunctionPass {
   /// \brief Track origins (allocation points) of uninitialized values.
   int TrackOrigins;
 
-  LLVMContext *C;
+  LLVM37Context *C;
   Type *IntptrTy;
   Type *OriginTy;
   /// \brief Thread-local shadow storage for function parameters.
@@ -359,7 +359,7 @@ INITIALIZE_PASS(MemorySanitizer, "msan",
                 "MemorySanitizer: detects uninitialized reads.",
                 false, false)
 
-FunctionPass *llvm::createMemorySanitizerPass(int TrackOrigins) {
+FunctionPass *llvm37::createMemorySanitizerPass(int TrackOrigins) {
   return new MemorySanitizer(TrackOrigins);
 }
 
@@ -1014,7 +1014,7 @@ struct MemorySanitizerVisitor : public InstVisitor<MemorySanitizerVisitor> {
         Vals.push_back(getPoisonedShadow(ST->getElementType(i)));
       return ConstantStruct::get(ST, Vals);
     }
-    llvm_unreachable("Unexpected shadow type");
+    llvm37_unreachable("Unexpected shadow type");
   }
 
   /// \brief Create a dirty shadow for a given value.
@@ -1195,7 +1195,7 @@ struct MemorySanitizerVisitor : public InstVisitor<MemorySanitizerVisitor> {
       case SequentiallyConsistent:
         return SequentiallyConsistent;
     }
-    llvm_unreachable("Unknown ordering");
+    llvm37_unreachable("Unknown ordering");
   }
 
   AtomicOrdering addAcquireOrdering(AtomicOrdering a) {
@@ -1212,7 +1212,7 @@ struct MemorySanitizerVisitor : public InstVisitor<MemorySanitizerVisitor> {
       case SequentiallyConsistent:
         return SequentiallyConsistent;
     }
-    llvm_unreachable("Unknown ordering");
+    llvm37_unreachable("Unknown ordering");
   }
 
   // ------------------- Visitors.
@@ -1805,9 +1805,9 @@ struct MemorySanitizerVisitor : public InstVisitor<MemorySanitizerVisitor> {
   void visitAShr(BinaryOperator &I) { handleShift(I); }
   void visitLShr(BinaryOperator &I) { handleShift(I); }
 
-  /// \brief Instrument llvm.memmove
+  /// \brief Instrument llvm37.memmove
   ///
-  /// At this point we don't know if llvm.memmove will be inlined or not.
+  /// At this point we don't know if llvm37.memmove will be inlined or not.
   /// If we don't instrument it and it gets inlined,
   /// our interceptor will not kick in and we will lose the memmove.
   /// If we instrument the call here, but it does not get inlined,
@@ -1872,7 +1872,7 @@ struct MemorySanitizerVisitor : public InstVisitor<MemorySanitizerVisitor> {
     const int UnknownModRefBehavior = IK_WritesMemory;
 #define GET_INTRINSIC_MODREF_BEHAVIOR
 #define ModRefBehavior IntrinsicKind
-#include "llvm/IR/Intrinsics.gen"
+#include "llvm37/IR/Intrinsics.gen"
 #undef ModRefBehavior
 #undef GET_INTRINSIC_MODREF_BEHAVIOR
   }
@@ -1969,7 +1969,7 @@ struct MemorySanitizerVisitor : public InstVisitor<MemorySanitizerVisitor> {
   /// ModRefBehaviour and apply special intrumentation when we are reasonably
   /// sure that we know what the intrinsic does.
   ///
-  /// We special-case intrinsics where this approach fails. See llvm.bswap
+  /// We special-case intrinsics where this approach fails. See llvm37.bswap
   /// handling as an example of that.
   bool handleUnknownIntrinsic(IntrinsicInst &I) {
     unsigned NumArgOperands = I.getNumArgOperands();
@@ -2048,7 +2048,7 @@ struct MemorySanitizerVisitor : public InstVisitor<MemorySanitizerVisitor> {
       CopyOp = nullptr;
       break;
     default:
-      llvm_unreachable("Cvt intrinsic with unsupported number of arguments.");
+      llvm37_unreachable("Cvt intrinsic with unsupported number of arguments.");
     }
 
     // The first *NumUsedElements* elements of ConvertOp are converted to the
@@ -2147,30 +2147,30 @@ struct MemorySanitizerVisitor : public InstVisitor<MemorySanitizerVisitor> {
   // intrinsic.
   Intrinsic::ID getSignedPackIntrinsic(Intrinsic::ID id) {
     switch (id) {
-      case llvm::Intrinsic::x86_sse2_packsswb_128:
-      case llvm::Intrinsic::x86_sse2_packuswb_128:
-        return llvm::Intrinsic::x86_sse2_packsswb_128;
+      case llvm37::Intrinsic::x86_sse2_packsswb_128:
+      case llvm37::Intrinsic::x86_sse2_packuswb_128:
+        return llvm37::Intrinsic::x86_sse2_packsswb_128;
 
-      case llvm::Intrinsic::x86_sse2_packssdw_128:
-      case llvm::Intrinsic::x86_sse41_packusdw:
-        return llvm::Intrinsic::x86_sse2_packssdw_128;
+      case llvm37::Intrinsic::x86_sse2_packssdw_128:
+      case llvm37::Intrinsic::x86_sse41_packusdw:
+        return llvm37::Intrinsic::x86_sse2_packssdw_128;
 
-      case llvm::Intrinsic::x86_avx2_packsswb:
-      case llvm::Intrinsic::x86_avx2_packuswb:
-        return llvm::Intrinsic::x86_avx2_packsswb;
+      case llvm37::Intrinsic::x86_avx2_packsswb:
+      case llvm37::Intrinsic::x86_avx2_packuswb:
+        return llvm37::Intrinsic::x86_avx2_packsswb;
 
-      case llvm::Intrinsic::x86_avx2_packssdw:
-      case llvm::Intrinsic::x86_avx2_packusdw:
-        return llvm::Intrinsic::x86_avx2_packssdw;
+      case llvm37::Intrinsic::x86_avx2_packssdw:
+      case llvm37::Intrinsic::x86_avx2_packusdw:
+        return llvm37::Intrinsic::x86_avx2_packssdw;
 
-      case llvm::Intrinsic::x86_mmx_packsswb:
-      case llvm::Intrinsic::x86_mmx_packuswb:
-        return llvm::Intrinsic::x86_mmx_packsswb;
+      case llvm37::Intrinsic::x86_mmx_packsswb:
+      case llvm37::Intrinsic::x86_mmx_packuswb:
+        return llvm37::Intrinsic::x86_mmx_packsswb;
 
-      case llvm::Intrinsic::x86_mmx_packssdw:
-        return llvm::Intrinsic::x86_mmx_packssdw;
+      case llvm37::Intrinsic::x86_mmx_packssdw:
+        return llvm37::Intrinsic::x86_mmx_packssdw;
       default:
-        llvm_unreachable("unexpected intrinsic id");
+        llvm37_unreachable("unexpected intrinsic id");
     }
   }
 
@@ -2198,9 +2198,9 @@ struct MemorySanitizerVisitor : public InstVisitor<MemorySanitizerVisitor> {
       S2 = IRB.CreateBitCast(S2, T);
     }
     Value *S1_ext = IRB.CreateSExt(
-        IRB.CreateICmpNE(S1, llvm::Constant::getNullValue(T)), T);
+        IRB.CreateICmpNE(S1, llvm37::Constant::getNullValue(T)), T);
     Value *S2_ext = IRB.CreateSExt(
-        IRB.CreateICmpNE(S2, llvm::Constant::getNullValue(T)), T);
+        IRB.CreateICmpNE(S2, llvm37::Constant::getNullValue(T)), T);
     if (isX86_MMX) {
       Type *X86_MMXTy = Type::getX86_MMXTy(*MS.C);
       S1_ext = IRB.CreateBitCast(S1_ext, X86_MMXTy);
@@ -2253,144 +2253,144 @@ struct MemorySanitizerVisitor : public InstVisitor<MemorySanitizerVisitor> {
 
   void visitIntrinsicInst(IntrinsicInst &I) {
     switch (I.getIntrinsicID()) {
-    case llvm::Intrinsic::bswap:
+    case llvm37::Intrinsic::bswap:
       handleBswap(I);
       break;
-    case llvm::Intrinsic::x86_avx512_cvtsd2usi64:
-    case llvm::Intrinsic::x86_avx512_cvtsd2usi:
-    case llvm::Intrinsic::x86_avx512_cvtss2usi64:
-    case llvm::Intrinsic::x86_avx512_cvtss2usi:
-    case llvm::Intrinsic::x86_avx512_cvttss2usi64:
-    case llvm::Intrinsic::x86_avx512_cvttss2usi:
-    case llvm::Intrinsic::x86_avx512_cvttsd2usi64:
-    case llvm::Intrinsic::x86_avx512_cvttsd2usi:
-    case llvm::Intrinsic::x86_avx512_cvtusi2sd:
-    case llvm::Intrinsic::x86_avx512_cvtusi2ss:
-    case llvm::Intrinsic::x86_avx512_cvtusi642sd:
-    case llvm::Intrinsic::x86_avx512_cvtusi642ss:
-    case llvm::Intrinsic::x86_sse2_cvtsd2si64:
-    case llvm::Intrinsic::x86_sse2_cvtsd2si:
-    case llvm::Intrinsic::x86_sse2_cvtsd2ss:
-    case llvm::Intrinsic::x86_sse2_cvtsi2sd:
-    case llvm::Intrinsic::x86_sse2_cvtsi642sd:
-    case llvm::Intrinsic::x86_sse2_cvtss2sd:
-    case llvm::Intrinsic::x86_sse2_cvttsd2si64:
-    case llvm::Intrinsic::x86_sse2_cvttsd2si:
-    case llvm::Intrinsic::x86_sse_cvtsi2ss:
-    case llvm::Intrinsic::x86_sse_cvtsi642ss:
-    case llvm::Intrinsic::x86_sse_cvtss2si64:
-    case llvm::Intrinsic::x86_sse_cvtss2si:
-    case llvm::Intrinsic::x86_sse_cvttss2si64:
-    case llvm::Intrinsic::x86_sse_cvttss2si:
+    case llvm37::Intrinsic::x86_avx512_cvtsd2usi64:
+    case llvm37::Intrinsic::x86_avx512_cvtsd2usi:
+    case llvm37::Intrinsic::x86_avx512_cvtss2usi64:
+    case llvm37::Intrinsic::x86_avx512_cvtss2usi:
+    case llvm37::Intrinsic::x86_avx512_cvttss2usi64:
+    case llvm37::Intrinsic::x86_avx512_cvttss2usi:
+    case llvm37::Intrinsic::x86_avx512_cvttsd2usi64:
+    case llvm37::Intrinsic::x86_avx512_cvttsd2usi:
+    case llvm37::Intrinsic::x86_avx512_cvtusi2sd:
+    case llvm37::Intrinsic::x86_avx512_cvtusi2ss:
+    case llvm37::Intrinsic::x86_avx512_cvtusi642sd:
+    case llvm37::Intrinsic::x86_avx512_cvtusi642ss:
+    case llvm37::Intrinsic::x86_sse2_cvtsd2si64:
+    case llvm37::Intrinsic::x86_sse2_cvtsd2si:
+    case llvm37::Intrinsic::x86_sse2_cvtsd2ss:
+    case llvm37::Intrinsic::x86_sse2_cvtsi2sd:
+    case llvm37::Intrinsic::x86_sse2_cvtsi642sd:
+    case llvm37::Intrinsic::x86_sse2_cvtss2sd:
+    case llvm37::Intrinsic::x86_sse2_cvttsd2si64:
+    case llvm37::Intrinsic::x86_sse2_cvttsd2si:
+    case llvm37::Intrinsic::x86_sse_cvtsi2ss:
+    case llvm37::Intrinsic::x86_sse_cvtsi642ss:
+    case llvm37::Intrinsic::x86_sse_cvtss2si64:
+    case llvm37::Intrinsic::x86_sse_cvtss2si:
+    case llvm37::Intrinsic::x86_sse_cvttss2si64:
+    case llvm37::Intrinsic::x86_sse_cvttss2si:
       handleVectorConvertIntrinsic(I, 1);
       break;
-    case llvm::Intrinsic::x86_sse2_cvtdq2pd:
-    case llvm::Intrinsic::x86_sse2_cvtps2pd:
-    case llvm::Intrinsic::x86_sse_cvtps2pi:
-    case llvm::Intrinsic::x86_sse_cvttps2pi:
+    case llvm37::Intrinsic::x86_sse2_cvtdq2pd:
+    case llvm37::Intrinsic::x86_sse2_cvtps2pd:
+    case llvm37::Intrinsic::x86_sse_cvtps2pi:
+    case llvm37::Intrinsic::x86_sse_cvttps2pi:
       handleVectorConvertIntrinsic(I, 2);
       break;
-    case llvm::Intrinsic::x86_avx2_psll_w:
-    case llvm::Intrinsic::x86_avx2_psll_d:
-    case llvm::Intrinsic::x86_avx2_psll_q:
-    case llvm::Intrinsic::x86_avx2_pslli_w:
-    case llvm::Intrinsic::x86_avx2_pslli_d:
-    case llvm::Intrinsic::x86_avx2_pslli_q:
-    case llvm::Intrinsic::x86_avx2_psrl_w:
-    case llvm::Intrinsic::x86_avx2_psrl_d:
-    case llvm::Intrinsic::x86_avx2_psrl_q:
-    case llvm::Intrinsic::x86_avx2_psra_w:
-    case llvm::Intrinsic::x86_avx2_psra_d:
-    case llvm::Intrinsic::x86_avx2_psrli_w:
-    case llvm::Intrinsic::x86_avx2_psrli_d:
-    case llvm::Intrinsic::x86_avx2_psrli_q:
-    case llvm::Intrinsic::x86_avx2_psrai_w:
-    case llvm::Intrinsic::x86_avx2_psrai_d:
-    case llvm::Intrinsic::x86_sse2_psll_w:
-    case llvm::Intrinsic::x86_sse2_psll_d:
-    case llvm::Intrinsic::x86_sse2_psll_q:
-    case llvm::Intrinsic::x86_sse2_pslli_w:
-    case llvm::Intrinsic::x86_sse2_pslli_d:
-    case llvm::Intrinsic::x86_sse2_pslli_q:
-    case llvm::Intrinsic::x86_sse2_psrl_w:
-    case llvm::Intrinsic::x86_sse2_psrl_d:
-    case llvm::Intrinsic::x86_sse2_psrl_q:
-    case llvm::Intrinsic::x86_sse2_psra_w:
-    case llvm::Intrinsic::x86_sse2_psra_d:
-    case llvm::Intrinsic::x86_sse2_psrli_w:
-    case llvm::Intrinsic::x86_sse2_psrli_d:
-    case llvm::Intrinsic::x86_sse2_psrli_q:
-    case llvm::Intrinsic::x86_sse2_psrai_w:
-    case llvm::Intrinsic::x86_sse2_psrai_d:
-    case llvm::Intrinsic::x86_mmx_psll_w:
-    case llvm::Intrinsic::x86_mmx_psll_d:
-    case llvm::Intrinsic::x86_mmx_psll_q:
-    case llvm::Intrinsic::x86_mmx_pslli_w:
-    case llvm::Intrinsic::x86_mmx_pslli_d:
-    case llvm::Intrinsic::x86_mmx_pslli_q:
-    case llvm::Intrinsic::x86_mmx_psrl_w:
-    case llvm::Intrinsic::x86_mmx_psrl_d:
-    case llvm::Intrinsic::x86_mmx_psrl_q:
-    case llvm::Intrinsic::x86_mmx_psra_w:
-    case llvm::Intrinsic::x86_mmx_psra_d:
-    case llvm::Intrinsic::x86_mmx_psrli_w:
-    case llvm::Intrinsic::x86_mmx_psrli_d:
-    case llvm::Intrinsic::x86_mmx_psrli_q:
-    case llvm::Intrinsic::x86_mmx_psrai_w:
-    case llvm::Intrinsic::x86_mmx_psrai_d:
+    case llvm37::Intrinsic::x86_avx2_psll_w:
+    case llvm37::Intrinsic::x86_avx2_psll_d:
+    case llvm37::Intrinsic::x86_avx2_psll_q:
+    case llvm37::Intrinsic::x86_avx2_pslli_w:
+    case llvm37::Intrinsic::x86_avx2_pslli_d:
+    case llvm37::Intrinsic::x86_avx2_pslli_q:
+    case llvm37::Intrinsic::x86_avx2_psrl_w:
+    case llvm37::Intrinsic::x86_avx2_psrl_d:
+    case llvm37::Intrinsic::x86_avx2_psrl_q:
+    case llvm37::Intrinsic::x86_avx2_psra_w:
+    case llvm37::Intrinsic::x86_avx2_psra_d:
+    case llvm37::Intrinsic::x86_avx2_psrli_w:
+    case llvm37::Intrinsic::x86_avx2_psrli_d:
+    case llvm37::Intrinsic::x86_avx2_psrli_q:
+    case llvm37::Intrinsic::x86_avx2_psrai_w:
+    case llvm37::Intrinsic::x86_avx2_psrai_d:
+    case llvm37::Intrinsic::x86_sse2_psll_w:
+    case llvm37::Intrinsic::x86_sse2_psll_d:
+    case llvm37::Intrinsic::x86_sse2_psll_q:
+    case llvm37::Intrinsic::x86_sse2_pslli_w:
+    case llvm37::Intrinsic::x86_sse2_pslli_d:
+    case llvm37::Intrinsic::x86_sse2_pslli_q:
+    case llvm37::Intrinsic::x86_sse2_psrl_w:
+    case llvm37::Intrinsic::x86_sse2_psrl_d:
+    case llvm37::Intrinsic::x86_sse2_psrl_q:
+    case llvm37::Intrinsic::x86_sse2_psra_w:
+    case llvm37::Intrinsic::x86_sse2_psra_d:
+    case llvm37::Intrinsic::x86_sse2_psrli_w:
+    case llvm37::Intrinsic::x86_sse2_psrli_d:
+    case llvm37::Intrinsic::x86_sse2_psrli_q:
+    case llvm37::Intrinsic::x86_sse2_psrai_w:
+    case llvm37::Intrinsic::x86_sse2_psrai_d:
+    case llvm37::Intrinsic::x86_mmx_psll_w:
+    case llvm37::Intrinsic::x86_mmx_psll_d:
+    case llvm37::Intrinsic::x86_mmx_psll_q:
+    case llvm37::Intrinsic::x86_mmx_pslli_w:
+    case llvm37::Intrinsic::x86_mmx_pslli_d:
+    case llvm37::Intrinsic::x86_mmx_pslli_q:
+    case llvm37::Intrinsic::x86_mmx_psrl_w:
+    case llvm37::Intrinsic::x86_mmx_psrl_d:
+    case llvm37::Intrinsic::x86_mmx_psrl_q:
+    case llvm37::Intrinsic::x86_mmx_psra_w:
+    case llvm37::Intrinsic::x86_mmx_psra_d:
+    case llvm37::Intrinsic::x86_mmx_psrli_w:
+    case llvm37::Intrinsic::x86_mmx_psrli_d:
+    case llvm37::Intrinsic::x86_mmx_psrli_q:
+    case llvm37::Intrinsic::x86_mmx_psrai_w:
+    case llvm37::Intrinsic::x86_mmx_psrai_d:
       handleVectorShiftIntrinsic(I, /* Variable */ false);
       break;
-    case llvm::Intrinsic::x86_avx2_psllv_d:
-    case llvm::Intrinsic::x86_avx2_psllv_d_256:
-    case llvm::Intrinsic::x86_avx2_psllv_q:
-    case llvm::Intrinsic::x86_avx2_psllv_q_256:
-    case llvm::Intrinsic::x86_avx2_psrlv_d:
-    case llvm::Intrinsic::x86_avx2_psrlv_d_256:
-    case llvm::Intrinsic::x86_avx2_psrlv_q:
-    case llvm::Intrinsic::x86_avx2_psrlv_q_256:
-    case llvm::Intrinsic::x86_avx2_psrav_d:
-    case llvm::Intrinsic::x86_avx2_psrav_d_256:
+    case llvm37::Intrinsic::x86_avx2_psllv_d:
+    case llvm37::Intrinsic::x86_avx2_psllv_d_256:
+    case llvm37::Intrinsic::x86_avx2_psllv_q:
+    case llvm37::Intrinsic::x86_avx2_psllv_q_256:
+    case llvm37::Intrinsic::x86_avx2_psrlv_d:
+    case llvm37::Intrinsic::x86_avx2_psrlv_d_256:
+    case llvm37::Intrinsic::x86_avx2_psrlv_q:
+    case llvm37::Intrinsic::x86_avx2_psrlv_q_256:
+    case llvm37::Intrinsic::x86_avx2_psrav_d:
+    case llvm37::Intrinsic::x86_avx2_psrav_d_256:
       handleVectorShiftIntrinsic(I, /* Variable */ true);
       break;
 
-    case llvm::Intrinsic::x86_sse2_packsswb_128:
-    case llvm::Intrinsic::x86_sse2_packssdw_128:
-    case llvm::Intrinsic::x86_sse2_packuswb_128:
-    case llvm::Intrinsic::x86_sse41_packusdw:
-    case llvm::Intrinsic::x86_avx2_packsswb:
-    case llvm::Intrinsic::x86_avx2_packssdw:
-    case llvm::Intrinsic::x86_avx2_packuswb:
-    case llvm::Intrinsic::x86_avx2_packusdw:
+    case llvm37::Intrinsic::x86_sse2_packsswb_128:
+    case llvm37::Intrinsic::x86_sse2_packssdw_128:
+    case llvm37::Intrinsic::x86_sse2_packuswb_128:
+    case llvm37::Intrinsic::x86_sse41_packusdw:
+    case llvm37::Intrinsic::x86_avx2_packsswb:
+    case llvm37::Intrinsic::x86_avx2_packssdw:
+    case llvm37::Intrinsic::x86_avx2_packuswb:
+    case llvm37::Intrinsic::x86_avx2_packusdw:
       handleVectorPackIntrinsic(I);
       break;
 
-    case llvm::Intrinsic::x86_mmx_packsswb:
-    case llvm::Intrinsic::x86_mmx_packuswb:
+    case llvm37::Intrinsic::x86_mmx_packsswb:
+    case llvm37::Intrinsic::x86_mmx_packuswb:
       handleVectorPackIntrinsic(I, 16);
       break;
 
-    case llvm::Intrinsic::x86_mmx_packssdw:
+    case llvm37::Intrinsic::x86_mmx_packssdw:
       handleVectorPackIntrinsic(I, 32);
       break;
 
-    case llvm::Intrinsic::x86_mmx_psad_bw:
-    case llvm::Intrinsic::x86_sse2_psad_bw:
-    case llvm::Intrinsic::x86_avx2_psad_bw:
+    case llvm37::Intrinsic::x86_mmx_psad_bw:
+    case llvm37::Intrinsic::x86_sse2_psad_bw:
+    case llvm37::Intrinsic::x86_avx2_psad_bw:
       handleVectorSadIntrinsic(I);
       break;
 
-    case llvm::Intrinsic::x86_sse2_pmadd_wd:
-    case llvm::Intrinsic::x86_avx2_pmadd_wd:
-    case llvm::Intrinsic::x86_ssse3_pmadd_ub_sw_128:
-    case llvm::Intrinsic::x86_avx2_pmadd_ub_sw:
+    case llvm37::Intrinsic::x86_sse2_pmadd_wd:
+    case llvm37::Intrinsic::x86_avx2_pmadd_wd:
+    case llvm37::Intrinsic::x86_ssse3_pmadd_ub_sw_128:
+    case llvm37::Intrinsic::x86_avx2_pmadd_ub_sw:
       handleVectorPmaddIntrinsic(I);
       break;
 
-    case llvm::Intrinsic::x86_ssse3_pmadd_ub_sw:
+    case llvm37::Intrinsic::x86_ssse3_pmadd_ub_sw:
       handleVectorPmaddIntrinsic(I, 8);
       break;
 
-    case llvm::Intrinsic::x86_mmx_pmadd_wd:
+    case llvm37::Intrinsic::x86_mmx_pmadd_wd:
       handleVectorPmaddIntrinsic(I, 16);
       break;
 
@@ -2995,11 +2995,11 @@ VarArgHelper *CreateVarArgHelper(Function &Func, MemorySanitizer &Msan,
                                  MemorySanitizerVisitor &Visitor) {
   // VarArg handling is only implemented on AMD64. False positives are possible
   // on other platforms.
-  llvm::Triple TargetTriple(Func.getParent()->getTargetTriple());
-  if (TargetTriple.getArch() == llvm::Triple::x86_64)
+  llvm37::Triple TargetTriple(Func.getParent()->getTargetTriple());
+  if (TargetTriple.getArch() == llvm37::Triple::x86_64)
     return new VarArgAMD64Helper(Func, Msan, Visitor);
-  else if (TargetTriple.getArch() == llvm::Triple::mips64 ||
-           TargetTriple.getArch() == llvm::Triple::mips64el)
+  else if (TargetTriple.getArch() == llvm37::Triple::mips64 ||
+           TargetTriple.getArch() == llvm37::Triple::mips64el)
     return new VarArgMIPS64Helper(Func, Msan, Visitor);
   else
     return new VarArgNoOpHelper(Func, Msan, Visitor);

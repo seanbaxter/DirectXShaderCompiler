@@ -1,6 +1,6 @@
 //===-- SelectionDAG.cpp - Implement the SelectionDAG data structures -----===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,47 +11,47 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/CodeGen/SelectionDAG.h"
+#include "llvm37/CodeGen/SelectionDAG.h"
 #include "SDNodeDbgValue.h"
-#include "llvm/ADT/SetVector.h"
-#include "llvm/ADT/SmallPtrSet.h"
-#include "llvm/ADT/SmallSet.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/ADT/StringExtras.h"
-#include "llvm/Analysis/ValueTracking.h"
-#include "llvm/CodeGen/MachineBasicBlock.h"
-#include "llvm/CodeGen/MachineConstantPool.h"
-#include "llvm/CodeGen/MachineFrameInfo.h"
-#include "llvm/CodeGen/MachineModuleInfo.h"
-#include "llvm/IR/CallingConv.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/DebugInfo.h"
-#include "llvm/IR/DerivedTypes.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/GlobalAlias.h"
-#include "llvm/IR/GlobalVariable.h"
-#include "llvm/IR/Intrinsics.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/ManagedStatic.h"
-#include "llvm/Support/MathExtras.h"
-#include "llvm/Support/Mutex.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Target/TargetInstrInfo.h"
-#include "llvm/Target/TargetIntrinsicInfo.h"
-#include "llvm/Target/TargetLowering.h"
-#include "llvm/Target/TargetMachine.h"
-#include "llvm/Target/TargetOptions.h"
-#include "llvm/Target/TargetRegisterInfo.h"
-#include "llvm/Target/TargetSelectionDAGInfo.h"
-#include "llvm/Target/TargetSubtargetInfo.h"
+#include "llvm37/ADT/SetVector.h"
+#include "llvm37/ADT/SmallPtrSet.h"
+#include "llvm37/ADT/SmallSet.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/ADT/StringExtras.h"
+#include "llvm37/Analysis/ValueTracking.h"
+#include "llvm37/CodeGen/MachineBasicBlock.h"
+#include "llvm37/CodeGen/MachineConstantPool.h"
+#include "llvm37/CodeGen/MachineFrameInfo.h"
+#include "llvm37/CodeGen/MachineModuleInfo.h"
+#include "llvm37/IR/CallingConv.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/IR/DebugInfo.h"
+#include "llvm37/IR/DerivedTypes.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/GlobalAlias.h"
+#include "llvm37/IR/GlobalVariable.h"
+#include "llvm37/IR/Intrinsics.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/ManagedStatic.h"
+#include "llvm37/Support/MathExtras.h"
+#include "llvm37/Support/Mutex.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Target/TargetInstrInfo.h"
+#include "llvm37/Target/TargetIntrinsicInfo.h"
+#include "llvm37/Target/TargetLowering.h"
+#include "llvm37/Target/TargetMachine.h"
+#include "llvm37/Target/TargetOptions.h"
+#include "llvm37/Target/TargetRegisterInfo.h"
+#include "llvm37/Target/TargetSelectionDAGInfo.h"
+#include "llvm37/Target/TargetSubtargetInfo.h"
 #include <algorithm>
 #include <cmath>
 #include <utility>
 
-using namespace llvm;
+using namespace llvm37;
 
 /// makeVTList - Return an instance of the SDVTList struct initialized with the
 /// specified members.
@@ -260,7 +260,7 @@ ISD::NodeType ISD::getExtForLoadExtType(bool IsFP, ISD::LoadExtType ExtType) {
     break;
   }
 
-  llvm_unreachable("Invalid LoadExtType");
+  llvm37_unreachable("Invalid LoadExtType");
 }
 
 /// getSetCCSwappedOperands - Return the operation corresponding to (Y op X)
@@ -296,7 +296,7 @@ ISD::CondCode ISD::getSetCCInverse(ISD::CondCode Op, bool isInteger) {
 /// if the operation does not depend on the sign of the input (setne and seteq).
 static int isSignedOp(ISD::CondCode Opcode) {
   switch (Opcode) {
-  default: llvm_unreachable("Illegal integer setcc operation!");
+  default: llvm37_unreachable("Illegal integer setcc operation!");
   case ISD::SETEQ:
   case ISD::SETNE: return 0;
   case ISD::SETLT:
@@ -430,7 +430,7 @@ static void AddNodeIDCustom(FoldingSetNodeID &ID, const SDNode *N) {
   case ISD::TargetExternalSymbol:
   case ISD::ExternalSymbol:
   case ISD::MCSymbol:
-    llvm_unreachable("Should only be used on nodes with operands");
+    llvm37_unreachable("Should only be used on nodes with operands");
   default: break;  // Normal nodes don't need extra info.
   case ISD::TargetConstant:
   case ISD::Constant: {
@@ -824,7 +824,7 @@ bool SelectionDAG::RemoveNodeFromCSEMaps(SDNode *N) {
       !N->isMachineOpcode() && !doNotCSE(N)) {
     N->dump(this);
     dbgs() << "\n";
-    llvm_unreachable("Node is not in map!");
+    llvm37_unreachable("Node is not in map!");
   }
 #endif
   return Erased;
@@ -982,7 +982,7 @@ SDNode *SelectionDAG::FindNodeOrInsertPos(const FoldingSetNodeID &ID,
     default: break;
     case ISD::Constant:
     case ISD::ConstantFP:
-      llvm_unreachable("Querying for Constant and ConstantFP nodes requires "
+      llvm37_unreachable("Querying for Constant and ConstantFP nodes requires "
                        "debug location.  Use another overload.");
     }
   }
@@ -1291,7 +1291,7 @@ SDValue SelectionDAG::getConstantFP(double Val, SDLoc DL, EVT VT,
                 &ignored);
     return getConstantFP(apf, DL, VT, isTarget);
   } else
-    llvm_unreachable("Unsupported type in getConstantFP");
+    llvm37_unreachable("Unsupported type in getConstantFP");
 }
 
 SDValue SelectionDAG::getGlobalAddress(const GlobalValue *GV, SDLoc DL,
@@ -1921,7 +1921,7 @@ SDValue SelectionDAG::FoldSetCC(EVT VT, SDValue N1,
       const APInt &C1 = N1C->getAPIntValue();
 
       switch (Cond) {
-      default: llvm_unreachable("Unknown integer setcc!");
+      default: llvm37_unreachable("Unknown integer setcc!");
       case ISD::SETEQ:  return getConstant(C1 == C2, dl, VT);
       case ISD::SETNE:  return getConstant(C1 != C2, dl, VT);
       case ISD::SETULT: return getConstant(C1.ult(C2), dl, VT);
@@ -3003,7 +3003,7 @@ SDValue SelectionDAG::getNode(unsigned Opcode, SDLoc DL,
   case ISD::MERGE_VALUES:
   case ISD::CONCAT_VECTORS:
     return Operand;         // Factor, merge or concat of one node?  No need.
-  case ISD::FP_ROUND: llvm_unreachable("Invalid method to make FP_ROUND node");
+  case ISD::FP_ROUND: llvm37_unreachable("Invalid method to make FP_ROUND node");
   case ISD::FP_EXTEND:
     assert(VT.isFloatingPoint() &&
            Operand.getValueType().isFloatingPoint() && "Invalid FP cast!");
@@ -3841,7 +3841,7 @@ SDValue SelectionDAG::getNode(unsigned Opcode, SDLoc DL, EVT VT,
     if (N2 == N3) return N2;   // select C, X, X -> X
     break;
   case ISD::VECTOR_SHUFFLE:
-    llvm_unreachable("should use getVectorShuffle constructor!");
+    llvm37_unreachable("should use getVectorShuffle constructor!");
   case ISD::INSERT_SUBVECTOR: {
     SDValue Index = N3;
     if (VT.isSimple() && N1.getValueType().isSimple()
@@ -3993,7 +3993,7 @@ static SDValue getMemsetStringVal(EVT VT, SDLoc dl, SelectionDAG &DAG,
                                          EVT::getVectorVT(*DAG.getContext(),
                                                           EltVT, NumElts)));
     } else
-      llvm_unreachable("Expected type!");
+      llvm37_unreachable("Expected type!");
   }
 
   assert(!VT.isVector() && "Can't handle vector type here!");
@@ -4361,7 +4361,7 @@ static SDValue getMemmoveLoadsAndStores(SelectionDAG &DAG, SDLoc dl,
 /// \returns New head in the control flow, if lowering was successful, empty
 /// SDValue otherwise.
 ///
-/// The function tries to replace 'llvm.memset' intrinsic with several store
+/// The function tries to replace 'llvm37.memset' intrinsic with several store
 /// operations and value calculation code. This is usually profitable for small
 /// memory size.
 static SDValue getMemsetStores(SelectionDAG &DAG, SDLoc dl,
@@ -6501,7 +6501,7 @@ unsigned SelectionDAG::AssignTopologicalOrder() {
       dbgs() << "Checking if this is due to cycles\n";
       checkForCycles(this, true);
 #endif
-      llvm_unreachable(nullptr);
+      llvm37_unreachable(nullptr);
     }
   }
 
@@ -6906,7 +6906,7 @@ unsigned SelectionDAG::InferPtrAlignment(SDValue Ptr) const {
   if (TLI->isGAPlusOffset(Ptr.getNode(), GV, GVOffset)) {
     unsigned PtrWidth = getDataLayout().getPointerTypeSizeInBits(GV->getType());
     APInt KnownZero(PtrWidth, 0), KnownOne(PtrWidth, 0);
-    llvm::computeKnownBits(const_cast<GlobalValue *>(GV), KnownZero, KnownOne,
+    llvm37::computeKnownBits(const_cast<GlobalValue *>(GV), KnownZero, KnownOne,
                            getDataLayout());
     unsigned AlignBits = KnownZero.countTrailingOnes();
     unsigned Align = AlignBits ? 1 << std::min(31U, AlignBits) : 0;
@@ -7130,7 +7130,7 @@ bool ShuffleVectorSDNode::isSplatMask(const int *Mask, EVT VT) {
 static void checkForCyclesHelper(const SDNode *N,
                                  SmallPtrSetImpl<const SDNode*> &Visited,
                                  SmallPtrSetImpl<const SDNode*> &Checked,
-                                 const llvm::SelectionDAG *DAG) {
+                                 const llvm37::SelectionDAG *DAG) {
   // If this node has already been checked, don't check it again.
   if (Checked.count(N))
     return;
@@ -7152,8 +7152,8 @@ static void checkForCyclesHelper(const SDNode *N,
 }
 #endif
 
-void llvm::checkForCycles(const llvm::SDNode *N,
-                          const llvm::SelectionDAG *DAG,
+void llvm37::checkForCycles(const llvm37::SDNode *N,
+                          const llvm37::SelectionDAG *DAG,
                           bool force) {
 #ifndef NDEBUG
   bool check = force;
@@ -7169,6 +7169,6 @@ void llvm::checkForCycles(const llvm::SDNode *N,
 #endif  // !NDEBUG
 }
 
-void llvm::checkForCycles(const llvm::SelectionDAG *DAG, bool force) {
+void llvm37::checkForCycles(const llvm37::SelectionDAG *DAG, bool force) {
   checkForCycles(DAG->getRoot().getNode(), DAG, force);
 }

@@ -1,6 +1,6 @@
 //===- InlineFunction.cpp - Code to perform function inlining -------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -12,36 +12,36 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Transforms/Utils/Cloning.h"
-#include "llvm/ADT/SmallSet.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/ADT/SetVector.h"
-#include "llvm/ADT/StringExtras.h"
-#include "llvm/Analysis/AliasAnalysis.h"
-#include "llvm/Analysis/AssumptionCache.h"
-#include "llvm/Analysis/CallGraph.h"
-#include "llvm/Analysis/CaptureTracking.h"
-#include "llvm/Analysis/InstructionSimplify.h"
-#include "llvm/Analysis/ValueTracking.h"
-#include "llvm/IR/Attributes.h"
-#include "llvm/IR/CallSite.h"
-#include "llvm/IR/CFG.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/DebugInfo.h"
-#include "llvm/IR/DerivedTypes.h"
-#include "llvm/IR/DIBuilder.h"
-#include "llvm/IR/Dominators.h"
-#include "llvm/IR/IRBuilder.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/IR/Intrinsics.h"
-#include "llvm/IR/MDBuilder.h"
-#include "llvm/IR/Module.h"
-#include "llvm/Transforms/Utils/Local.h"
-#include "llvm/Support/CommandLine.h"
+#include "llvm37/Transforms/Utils/Cloning.h"
+#include "llvm37/ADT/SmallSet.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/ADT/SetVector.h"
+#include "llvm37/ADT/StringExtras.h"
+#include "llvm37/Analysis/AliasAnalysis.h"
+#include "llvm37/Analysis/AssumptionCache.h"
+#include "llvm37/Analysis/CallGraph.h"
+#include "llvm37/Analysis/CaptureTracking.h"
+#include "llvm37/Analysis/InstructionSimplify.h"
+#include "llvm37/Analysis/ValueTracking.h"
+#include "llvm37/IR/Attributes.h"
+#include "llvm37/IR/CallSite.h"
+#include "llvm37/IR/CFG.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/IR/DebugInfo.h"
+#include "llvm37/IR/DerivedTypes.h"
+#include "llvm37/IR/DIBuilder.h"
+#include "llvm37/IR/Dominators.h"
+#include "llvm37/IR/IRBuilder.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/IR/Intrinsics.h"
+#include "llvm37/IR/MDBuilder.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/Transforms/Utils/Local.h"
+#include "llvm37/Support/CommandLine.h"
 #include <algorithm>
-using namespace llvm;
+using namespace llvm37;
 
 #if 0 // HLSL Change Starts - option pending
 static cl::opt<bool>
@@ -58,11 +58,11 @@ static const bool EnableNoAliasConversion = true;
 static const bool PreserveAlignmentAssumptions = true;
 #endif // HLSL Change Ends
 
-bool llvm::InlineFunction(CallInst *CI, InlineFunctionInfo &IFI,
+bool llvm37::InlineFunction(CallInst *CI, InlineFunctionInfo &IFI,
                           bool InsertLifetime) {
   return InlineFunction(CallSite(CI), IFI, InsertLifetime);
 }
-bool llvm::InlineFunction(InvokeInst *II, InlineFunctionInfo &IFI,
+bool llvm37::InlineFunction(InvokeInst *II, InlineFunctionInfo &IFI,
                           bool InsertLifetime) {
   return InlineFunction(CallSite(II), IFI, InsertLifetime);
 }
@@ -83,7 +83,7 @@ namespace {
       // If there are PHI nodes in the unwind destination block, we need to keep
       // track of which values came into them from the invoke before removing
       // the edge from this block.
-      llvm::BasicBlock *InvokeBB = II->getParent();
+      llvm37::BasicBlock *InvokeBB = II->getParent();
       BasicBlock::iterator I = OuterResumeDest->begin();
       for (; isa<PHINode>(I); ++I) {
         // Save the value to use for this edge.
@@ -302,9 +302,9 @@ static void CloneAliasScopeMetadata(CallSite CS, ValueToValueMapTy &VMap) {
   for (Function::const_iterator I = CalledFunc->begin(), IE = CalledFunc->end();
        I != IE; ++I)
     for (BasicBlock::const_iterator J = I->begin(), JE = I->end(); J != JE; ++J) {
-      if (const MDNode *M = J->getMetadata(LLVMContext::MD_alias_scope))
+      if (const MDNode *M = J->getMetadata(LLVM37Context::MD_alias_scope))
         MD.insert(M);
-      if (const MDNode *M = J->getMetadata(LLVMContext::MD_noalias))
+      if (const MDNode *M = J->getMetadata(LLVM37Context::MD_noalias))
         MD.insert(M);
     }
 
@@ -364,33 +364,33 @@ static void CloneAliasScopeMetadata(CallSite CS, ValueToValueMapTy &VMap) {
     if (!NI)
       continue;
 
-    if (MDNode *M = NI->getMetadata(LLVMContext::MD_alias_scope)) {
+    if (MDNode *M = NI->getMetadata(LLVM37Context::MD_alias_scope)) {
       MDNode *NewMD = MDMap[M];
       // If the call site also had alias scope metadata (a list of scopes to
       // which instructions inside it might belong), propagate those scopes to
       // the inlined instructions.
       if (MDNode *CSM =
-              CS.getInstruction()->getMetadata(LLVMContext::MD_alias_scope))
+              CS.getInstruction()->getMetadata(LLVM37Context::MD_alias_scope))
         NewMD = MDNode::concatenate(NewMD, CSM);
-      NI->setMetadata(LLVMContext::MD_alias_scope, NewMD);
+      NI->setMetadata(LLVM37Context::MD_alias_scope, NewMD);
     } else if (NI->mayReadOrWriteMemory()) {
       if (MDNode *M =
-              CS.getInstruction()->getMetadata(LLVMContext::MD_alias_scope))
-        NI->setMetadata(LLVMContext::MD_alias_scope, M);
+              CS.getInstruction()->getMetadata(LLVM37Context::MD_alias_scope))
+        NI->setMetadata(LLVM37Context::MD_alias_scope, M);
     }
 
-    if (MDNode *M = NI->getMetadata(LLVMContext::MD_noalias)) {
+    if (MDNode *M = NI->getMetadata(LLVM37Context::MD_noalias)) {
       MDNode *NewMD = MDMap[M];
       // If the call site also had noalias metadata (a list of scopes with
       // which instructions inside it don't alias), propagate those scopes to
       // the inlined instructions.
       if (MDNode *CSM =
-              CS.getInstruction()->getMetadata(LLVMContext::MD_noalias))
+              CS.getInstruction()->getMetadata(LLVM37Context::MD_noalias))
         NewMD = MDNode::concatenate(NewMD, CSM);
-      NI->setMetadata(LLVMContext::MD_noalias, NewMD);
+      NI->setMetadata(LLVM37Context::MD_noalias, NewMD);
     } else if (NI->mayReadOrWriteMemory()) {
-      if (MDNode *M = CS.getInstruction()->getMetadata(LLVMContext::MD_noalias))
-        NI->setMetadata(LLVMContext::MD_noalias, M);
+      if (MDNode *M = CS.getInstruction()->getMetadata(LLVM37Context::MD_noalias))
+        NI->setMetadata(LLVM37Context::MD_noalias, M);
     }
   }
 }
@@ -589,9 +589,9 @@ static void AddAliasScopeMetadata(CallSite CS, ValueToValueMapTy &VMap,
       }
 
       if (!NoAliases.empty())
-        NI->setMetadata(LLVMContext::MD_noalias,
+        NI->setMetadata(LLVM37Context::MD_noalias,
                         MDNode::concatenate(
-                            NI->getMetadata(LLVMContext::MD_noalias),
+                            NI->getMetadata(LLVM37Context::MD_noalias),
                             MDNode::get(CalledFunc->getContext(), NoAliases)));
 
       // Next, we want to figure out all of the sets to which we might belong.
@@ -616,15 +616,15 @@ static void AddAliasScopeMetadata(CallSite CS, ValueToValueMapTy &VMap,
 
       if (!Scopes.empty())
         NI->setMetadata(
-            LLVMContext::MD_alias_scope,
-            MDNode::concatenate(NI->getMetadata(LLVMContext::MD_alias_scope),
+            LLVM37Context::MD_alias_scope,
+            MDNode::concatenate(NI->getMetadata(LLVM37Context::MD_alias_scope),
                                 MDNode::get(CalledFunc->getContext(), Scopes)));
     }
   }
 }
 
 /// If the inlined function has non-byval align arguments, then
-/// add @llvm.assume-based alignment assumptions to preserve this information.
+/// add @llvm37.assume-based alignment assumptions to preserve this information.
 static void AddAlignmentAssumptions(CallSite CS, InlineFunctionInfo &IFI) {
   if (!PreserveAlignmentAssumptions)
     return;
@@ -835,7 +835,7 @@ static bool hasLifetimeMarkers(AllocaInst *AI) {
 /// Rebuild the entire inlined-at chain for this instruction so that the top of
 /// the chain now is inlined-at the new call site.
 static DebugLoc
-updateInlinedAtInfo(DebugLoc DL, DILocation *InlinedAtNode, LLVMContext &Ctx,
+updateInlinedAtInfo(DebugLoc DL, DILocation *InlinedAtNode, LLVM37Context &Ctx,
                     DenseMap<const DILocation *, DILocation *> &IANodes) {
   SmallVector<DILocation *, 3> InlinedAtLocations;
   DILocation *Last = InlinedAtNode;
@@ -882,7 +882,7 @@ static void fixupLineNumbers(Function *Fn, Function::iterator FI,
   // info is well-formed.
   if (!TheCallDL) {
     if (DISubprogram *Subprogram = getDISubprogram(Fn)) {
-      TheCallDL = DebugLoc(llvm::DILocation::get(Fn->getContext(), 0, 0, Subprogram));
+      TheCallDL = DebugLoc(llvm37::DILocation::get(Fn->getContext(), 0, 0, Subprogram));
       TheCall->setDebugLoc(TheCallDL);
     }
     else {
@@ -936,7 +936,7 @@ static void fixupLineNumbers(Function *Fn, Function::iterator FI,
 /// instruction 'call B' is inlined, and 'B' calls 'C', then the call to 'C' now
 /// exists in the instruction stream.  Similarly this will inline a recursive
 /// function by one level.
-bool llvm::InlineFunction(CallSite CS, InlineFunctionInfo &IFI,
+bool llvm37::InlineFunction(CallSite CS, InlineFunctionInfo &IFI,
                           bool InsertLifetime) {
   Instruction *TheCall = CS.getInstruction();
   assert(TheCall->getParent() && TheCall->getParent()->getParent() &&
@@ -1190,7 +1190,7 @@ bool llvm::InlineFunction(CallSite CS, InlineFunctionInfo &IFI,
 
       builder.CreateLifetimeStart(AI, AllocaSize);
       for (ReturnInst *RI : Returns) {
-        // Don't insert llvm.lifetime.end calls between a musttail call and a
+        // Don't insert llvm37.lifetime.end calls between a musttail call and a
         // return.  The return kills all local allocas.
         if (InlinedMustTailCalls &&
             RI->getParent()->getTerminatingMustTailCall())
@@ -1201,21 +1201,21 @@ bool llvm::InlineFunction(CallSite CS, InlineFunctionInfo &IFI,
   }
 
   // If the inlined code contained dynamic alloca instructions, wrap the inlined
-  // code with llvm.stacksave/llvm.stackrestore intrinsics.
+  // code with llvm37.stacksave/llvm37.stackrestore intrinsics.
   if (InlinedFunctionInfo.ContainsDynamicAllocas) {
     Module *M = Caller->getParent();
     // Get the two intrinsics we care about.
     Function *StackSave = Intrinsic::getDeclaration(M, Intrinsic::stacksave);
     Function *StackRestore=Intrinsic::getDeclaration(M,Intrinsic::stackrestore);
 
-    // Insert the llvm.stacksave.
+    // Insert the llvm37.stacksave.
     CallInst *SavedPtr = IRBuilder<>(FirstNewBlock, FirstNewBlock->begin())
                              .CreateCall(StackSave, {}, "savedstack");
 
-    // Insert a call to llvm.stackrestore before any return instructions in the
+    // Insert a call to llvm37.stackrestore before any return instructions in the
     // inlined function.
     for (ReturnInst *RI : Returns) {
-      // Don't insert llvm.stackrestore calls between a musttail call and a
+      // Don't insert llvm37.stackrestore calls between a musttail call and a
       // return.  The return will restore the stack pointer.
       if (InlinedMustTailCalls && RI->getParent()->getTerminatingMustTailCall())
         continue;

@@ -3,7 +3,7 @@ target datalayout = "e-p:64:64:64-i1:8:8-i8:8:8-i16:16:16-i32:32:32-i64:64:64-f3
 target triple = "x86_64-apple-darwin10.0.0"
 
 ; CHECK-LABEL: @memset(
-; CHECK-NOT: llvm.memset
+; CHECK-NOT: llvm37.memset
 define i8* @memset(i8* %b, i32 %c, i64 %len) nounwind uwtable ssp {
 entry:
   %cmp1 = icmp ult i64 0, %len

@@ -1,6 +1,6 @@
 //===--- ParseExpr.cpp - Expression Parsing -------------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -29,8 +29,8 @@
 #include "clang/Sema/ParsedTemplate.h"
 #include "clang/Sema/Scope.h"
 #include "clang/Sema/TypoCorrection.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/ADT/SmallVector.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/ADT/SmallVector.h"
 using namespace clang;
 
 /// \brief Simple precedence-based parser for binary/ternary operators.
@@ -886,7 +886,7 @@ HLSLReservedKeyword:
         // If we find that this is in fact the name of a type trait,
         // update the token kind in place and parse again to treat it as
         // the appropriate kind of type trait.
-        llvm::SmallDenseMap<IdentifierInfo *, tok::TokenKind>::iterator Known
+        llvm37::SmallDenseMap<IdentifierInfo *, tok::TokenKind>::iterator Known
           = RevertibleTypeTraits.find(II);
         if (Known != RevertibleTypeTraits.end()) {
           Tok.setKind(Known->second);
@@ -992,7 +992,7 @@ HLSLReservedKeyword:
     CXXScopeSpec ScopeSpec;
     SourceLocation TemplateKWLoc;
     Token Replacement;
-    auto Validator = llvm::make_unique<CastExpressionIdValidator>(
+    auto Validator = llvm37::make_unique<CastExpressionIdValidator>(
         Tok, isTypeCast != NotTypeCast, isTypeCast != IsTypeCast);
     Validator->IsAddressOfOperand = isAddressOfOperand;
     if (Tok.isOneOf(tok::periodstar, tok::arrowstar)) {
@@ -2044,7 +2044,7 @@ ExprResult Parser::ParseBuiltinPrimaryExpression() {
   // TODO: Build AST.
 
   switch (T) {
-  default: llvm_unreachable("Not a builtin primary expression!");
+  default: llvm37_unreachable("Not a builtin primary expression!");
   case tok::kw___builtin_va_arg: {
     ExprResult Expr(ParseAssignmentExpression());
 

@@ -12,7 +12,7 @@
 ; CHECK: DW_TAG_variable
 ; CHECK: DW_AT_type [DW_FORM_ref_addr] {{.*}}[[BASE]])
 
-; Make sure llvm-link only generates a single copy of the struct.
+; Make sure llvm37-link only generates a single copy of the struct.
 ; LINK: DW_TAG_structure_type
 ; LINK-NOT: DW_TAG_structure_type
 
@@ -49,21 +49,21 @@ entry:
   %a.addr = alloca i32, align 4
   %t = alloca %struct.Base, align 8
   store i32 %a, i32* %a.addr, align 4
-  call void @llvm.dbg.declare(metadata i32* %a.addr, metadata !17, metadata !DIExpression()), !dbg !18
-  call void @llvm.dbg.declare(metadata %struct.Base* %t, metadata !19, metadata !DIExpression()), !dbg !20
+  call void @llvm37.dbg.declare(metadata i32* %a.addr, metadata !17, metadata !DIExpression()), !dbg !18
+  call void @llvm37.dbg.declare(metadata %struct.Base* %t, metadata !19, metadata !DIExpression()), !dbg !20
   ret void, !dbg !21
 }
 
 ; Function Attrs: nounwind readnone
-declare void @llvm.dbg.declare(metadata, metadata, metadata) #1
+declare void @llvm37.dbg.declare(metadata, metadata, metadata) #1
 
 attributes #0 = { nounwind ssp uwtable "less-precise-fpmad"="false" "no-frame-pointer-elim"="true" "no-frame-pointer-elim-non-leaf" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "stack-protector-buffer-size"="8" "unsafe-fp-math"="false" "use-soft-float"="false" }
 attributes #1 = { nounwind readnone }
 
-!llvm.dbg.cu = !{!0}
-!llvm.module.flags = !{!16, !22}
+!llvm37.dbg.cu = !{!0}
+!llvm37.module.flags = !{!16, !22}
 
-!0 = !DICompileUnit(language: DW_LANG_C_plus_plus, producer: "clang version 3.4 (http://llvm.org/git/clang.git 8a3f9e46cb988d2c664395b21910091e3730ae82) (http://llvm.org/git/llvm.git 4699e9549358bc77824a59114548eecc3f7c523c)", isOptimized: false, emissionKind: 0, file: !1, enums: !2, retainedTypes: !3, subprograms: !11, globals: !2, imports: !2)
+!0 = !DICompileUnit(language: DW_LANG_C_plus_plus, producer: "clang version 3.4 (http://llvm37.org/git/clang.git 8a3f9e46cb988d2c664395b21910091e3730ae82) (http://llvm37.org/git/llvm37.git 4699e9549358bc77824a59114548eecc3f7c523c)", isOptimized: false, emissionKind: 0, file: !1, enums: !2, retainedTypes: !3, subprograms: !11, globals: !2, imports: !2)
 !1 = !DIFile(filename: "foo.cpp", directory: ".")
 !2 = !{}
 !3 = !{!4}

@@ -1,9 +1,9 @@
 ; REQUIRES: object-emission
 
-; RUN: llvm-link %s %p/type-unique-simple-b.ll -S -o %t
+; RUN: llvm37-link %s %p/type-unique-simple-b.ll -S -o %t
 ; RUN: cat %t | FileCheck %s -check-prefix=LINK
 ; RUN: %llc_dwarf -filetype=obj -O0 < %t > %t2
-; RUN: llvm-dwarfdump -debug-dump=info %t2 | FileCheck %s
+; RUN: llvm37-dwarfdump -debug-dump=info %t2 | FileCheck %s
 
 ; Make sure the backend generates a single DIE and uses ref_addr.
 ; CHECK: 0x[[BASE:.*]]: DW_TAG_structure_type
@@ -19,7 +19,7 @@
 ; CHECK: DW_TAG_variable
 ; CHECK: DW_AT_type [DW_FORM_ref_addr] {{.*}}[[BASE]])
 
-; Make sure llvm-link only generates a single copy of the struct.
+; Make sure llvm37-link only generates a single copy of the struct.
 ; LINK: DW_TAG_structure_type
 ; LINK-NOT: DW_TAG_structure_type
 ; Content of header files:
@@ -54,21 +54,21 @@ entry:
   %a.addr = alloca i32, align 4
   %t = alloca %struct.Base, align 4
   store i32 %a, i32* %a.addr, align 4
-  call void @llvm.dbg.declare(metadata i32* %a.addr, metadata !15, metadata !DIExpression()), !dbg !16
-  call void @llvm.dbg.declare(metadata %struct.Base* %t, metadata !17, metadata !DIExpression()), !dbg !18
+  call void @llvm37.dbg.declare(metadata i32* %a.addr, metadata !15, metadata !DIExpression()), !dbg !16
+  call void @llvm37.dbg.declare(metadata %struct.Base* %t, metadata !17, metadata !DIExpression()), !dbg !18
   ret void, !dbg !19
 }
 
 ; Function Attrs: nounwind readnone
-declare void @llvm.dbg.declare(metadata, metadata, metadata) #1
+declare void @llvm37.dbg.declare(metadata, metadata, metadata) #1
 
 attributes #0 = { nounwind ssp uwtable "less-precise-fpmad"="false" "no-frame-pointer-elim"="true" "no-frame-pointer-elim-non-leaf" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "stack-protector-buffer-size"="8" "unsafe-fp-math"="false" "use-soft-float"="false" }
 attributes #1 = { nounwind readnone }
 
-!llvm.dbg.cu = !{!0}
-!llvm.module.flags = !{!14, !20}
+!llvm37.dbg.cu = !{!0}
+!llvm37.module.flags = !{!14, !20}
 
-!0 = !DICompileUnit(language: DW_LANG_C_plus_plus, producer: "clang version 3.4 (http://llvm.org/git/clang.git c23b1db6268c8e7ce64026d57d1510c1aac200a0) (http://llvm.org/git/llvm.git 09b98fe3978eddefc2145adc1056cf21580ce945)", isOptimized: false, emissionKind: 0, file: !1, enums: !2, retainedTypes: !3, subprograms: !9, globals: !2, imports: !2)
+!0 = !DICompileUnit(language: DW_LANG_C_plus_plus, producer: "clang version 3.4 (http://llvm37.org/git/clang.git c23b1db6268c8e7ce64026d57d1510c1aac200a0) (http://llvm37.org/git/llvm37.git 09b98fe3978eddefc2145adc1056cf21580ce945)", isOptimized: false, emissionKind: 0, file: !1, enums: !2, retainedTypes: !3, subprograms: !9, globals: !2, imports: !2)
 !1 = !DIFile(filename: "foo.cpp", directory: "/Users/mren/c_testing/type_unique_air/simple")
 !2 = !{}
 !3 = !{!4}

@@ -1,6 +1,6 @@
 //===--- PPDirectives.cpp - Directive Handling for Preprocessor -----------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -23,10 +23,10 @@
 #include "clang/Lex/MacroInfo.h"
 #include "clang/Lex/ModuleLoader.h"
 #include "clang/Lex/Pragma.h"
-#include "llvm/ADT/APInt.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/Path.h"
-#include "llvm/Support/SaveAndRestore.h"
+#include "llvm37/ADT/APInt.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/Path.h"
+#include "llvm37/Support/SaveAndRestore.h"
 #include "clang/Lex/PreprocessorOptions.h" // HLSL Change - ignore line directives.
 using namespace clang;
 
@@ -49,7 +49,7 @@ MacroInfo *Preprocessor::AllocateMacroInfo(SourceLocation L) {
 
 MacroInfo *Preprocessor::AllocateDeserializedMacroInfo(SourceLocation L,
                                                        unsigned SubModuleID) {
-  static_assert(llvm::AlignOf<MacroInfo>::Alignment >= sizeof(SubModuleID),
+  static_assert(llvm37::AlignOf<MacroInfo>::Alignment >= sizeof(SubModuleID),
                 "alignment for MacroInfo is less than the ID");
   DeserializedMacroInfoChain *MIChain =
       BP.Allocate<DeserializedMacroInfoChain>();
@@ -1494,7 +1494,7 @@ static void diagnoseAutoModuleImport(
     break;
       
   default:
-    llvm_unreachable("unknown include directive kind");
+    llvm37_unreachable("unknown include directive kind");
   }
 
   CharSourceRange ReplaceRange(SourceRange(HashLoc, PathEnd),
@@ -1614,8 +1614,8 @@ void Preprocessor::HandleIncludeDirective(SourceLocation HashLoc,
   SmallString<128> NormalizedPath;
   if (LangOpts.MSVCCompat || LangOpts.HLSL) { // HLSL Change: use MSVC compat behavior
     NormalizedPath = Filename.str();
-#ifndef LLVM_ON_WIN32
-    llvm::sys::path::native(NormalizedPath);
+#ifndef LLVM37_ON_WIN32
+    llvm37::sys::path::native(NormalizedPath);
 #endif
   }
   const FileEntry *File = LookupFile(

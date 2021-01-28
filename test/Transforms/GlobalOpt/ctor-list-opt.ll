@@ -1,7 +1,7 @@
 ; RUN: opt < %s -globalopt -S | FileCheck %s
 ; CHECK-NOT: CTOR
 %ini = type { i32, void()*, i8* }
-@llvm.global_ctors = appending global [11 x %ini] [
+@llvm37.global_ctors = appending global [11 x %ini] [
 	%ini { i32 65535, void ()* @CTOR1, i8* null },
 	%ini { i32 65535, void ()* @CTOR1, i8* null },
 	%ini { i32 65535, void ()* @CTOR2, i8* null },

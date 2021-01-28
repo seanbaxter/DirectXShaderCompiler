@@ -5,7 +5,7 @@ target triple = "powerpc64-unknown-linux-gnu"
 define i64 @test1(i64 %A) {
 ; CHECK-LABEL: @test1(
 ; CHECK: [[ICMP:%[A-Za-z0-9]+]] = icmp eq i64 %A, 0
-; CHECK-NEXT: [[CTLZ:%[A-Za-z0-9]+]] = tail call i64 @llvm.ctlz.i64(i64 %A, i1 true)
+; CHECK-NEXT: [[CTLZ:%[A-Za-z0-9]+]] = tail call i64 @llvm37.ctlz.i64(i64 %A, i1 true)
 ; CHECK-NEXT: [[SEL:%[A-Za-z0-9.]+]] = select i1 [[ICMP]], i64 64, i64 [[CTLZ]]
 ; CHECK-NEXT: ret i64 [[SEL]]
 entry:
@@ -13,7 +13,7 @@ entry:
   br i1 %tobool, label %cond.end, label %cond.true
 
 cond.true:                                        ; preds = %entry
-  %0 = tail call i64 @llvm.ctlz.i64(i64 %A, i1 true)
+  %0 = tail call i64 @llvm37.ctlz.i64(i64 %A, i1 true)
   br label %cond.end
 
 cond.end:                                         ; preds = %entry, %cond.true
@@ -24,7 +24,7 @@ cond.end:                                         ; preds = %entry, %cond.true
 define i64 @test1b(i64 %A) {
 ; CHECK-LABEL: @test1b(
 ; CHECK: [[ICMP:%[A-Za-z0-9]+]] = icmp eq i64 %A, 0
-; CHECK-NEXT: [[CTTZ:%[A-Za-z0-9]+]] = tail call i64 @llvm.cttz.i64(i64 %A, i1 true)
+; CHECK-NEXT: [[CTTZ:%[A-Za-z0-9]+]] = tail call i64 @llvm37.cttz.i64(i64 %A, i1 true)
 ; CHECK-NEXT: [[SEL:%[A-Za-z0-9.]+]] = select i1 [[ICMP]], i64 64, i64 [[CTLZ]]
 ; CHECK-NEXT: ret i64 [[SEL]]
 entry:
@@ -32,7 +32,7 @@ entry:
   br i1 %tobool, label %cond.end, label %cond.true
 
 cond.true:                                        ; preds = %entry
-  %0 = tail call i64 @llvm.cttz.i64(i64 %A, i1 true)
+  %0 = tail call i64 @llvm37.cttz.i64(i64 %A, i1 true)
   br label %cond.end
 
 cond.end:                                         ; preds = %entry, %cond.true
@@ -40,6 +40,6 @@ cond.end:                                         ; preds = %entry, %cond.true
   ret i64 %cond
 }
 
-declare i64 @llvm.ctlz.i64(i64, i1)
-declare i64 @llvm.cttz.i64(i64, i1)
+declare i64 @llvm37.ctlz.i64(i64, i1)
+declare i64 @llvm37.cttz.i64(i64, i1)
 

@@ -1,6 +1,6 @@
 //===- CodeGenDAGPatterns.h - Read DAG patterns from .td file ---*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -12,20 +12,20 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_UTILS_TABLEGEN_CODEGENDAGPATTERNS_H
-#define LLVM_UTILS_TABLEGEN_CODEGENDAGPATTERNS_H
+#ifndef LLVM37_UTILS_TABLEGEN_CODEGENDAGPATTERNS_H
+#define LLVM37_UTILS_TABLEGEN_CODEGENDAGPATTERNS_H
 
 #include "CodeGenIntrinsics.h"
 #include "CodeGenTarget.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/ADT/StringMap.h"
-#include "llvm/Support/ErrorHandling.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/ADT/StringMap.h"
+#include "llvm37/Support/ErrorHandling.h"
 #include <algorithm>
 #include <map>
 #include <set>
 #include <vector>
 
-namespace llvm {
+namespace llvm37 {
   class Record;
   class Init;
   class ListInit;
@@ -765,7 +765,7 @@ public:
       if (Intrinsics[i].TheDef == R) return Intrinsics[i];
     for (unsigned i = 0, e = TgtIntrinsics.size(); i != e; ++i)
       if (TgtIntrinsics[i].TheDef == R) return TgtIntrinsics[i];
-    llvm_unreachable("Unknown intrinsic!");
+    llvm37_unreachable("Unknown intrinsic!");
   }
 
   const CodeGenIntrinsic &getIntrinsicInfo(unsigned IID) const {
@@ -773,7 +773,7 @@ public:
       return Intrinsics[IID-1];
     if (IID-Intrinsics.size()-1 < TgtIntrinsics.size())
       return TgtIntrinsics[IID-Intrinsics.size()-1];
-    llvm_unreachable("Bad intrinsic ID!");
+    llvm37_unreachable("Bad intrinsic ID!");
   }
 
   unsigned getIntrinsicID(Record *R) const {
@@ -781,7 +781,7 @@ public:
       if (Intrinsics[i].TheDef == R) return i;
     for (unsigned i = 0, e = TgtIntrinsics.size(); i != e; ++i)
       if (TgtIntrinsics[i].TheDef == R) return i + Intrinsics.size();
-    llvm_unreachable("Unknown intrinsic!");
+    llvm37_unreachable("Unknown intrinsic!");
   }
 
   const DAGDefaultOperand &getDefaultOperand(Record *R) const {
@@ -853,6 +853,6 @@ private:
                                    TreePatternNode*> &InstResults,
                                    std::vector<Record*> &InstImpResults);
 };
-} // end namespace llvm
+} // end namespace llvm37
 
 #endif

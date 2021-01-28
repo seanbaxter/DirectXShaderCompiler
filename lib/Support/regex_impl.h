@@ -41,20 +41,20 @@
 #include "dxc/Support/WinAdapter.h" // HLSL Change
 #include <sys/types.h>
 
-typedef off_t llvm_regoff_t;
+typedef off_t llvm37_regoff_t;
 typedef struct {
-  llvm_regoff_t rm_so;		/* start of match */
-  llvm_regoff_t rm_eo;		/* end of match */
-} llvm_regmatch_t;
+  llvm37_regoff_t rm_so;		/* start of match */
+  llvm37_regoff_t rm_eo;		/* end of match */
+} llvm37_regmatch_t;
 
-typedef struct llvm_regex {
+typedef struct llvm37_regex {
   int re_magic;
   size_t re_nsub;		/* number of parenthesized subexpressions */
   const char *re_endp;	/* end pointer for REG_PEND */
   struct re_guts *re_g;	/* none of your business :-) */
-} llvm_regex_t;
+} llvm37_regex_t;
 
-/* llvm_regcomp() flags */
+/* llvm37_regcomp() flags */
 #define	REG_BASIC	0000
 #define	REG_EXTENDED	0001
 #define	REG_ICASE	0002
@@ -64,7 +64,7 @@ typedef struct llvm_regex {
 #define	REG_PEND	0040
 #define	REG_DUMP	0200
 
-/* llvm_regerror() flags */
+/* llvm37_regerror() flags */
 #define	REG_NOMATCH	 1
 #define	REG_BADPAT	 2
 #define	REG_ECOLLATE	 3
@@ -84,7 +84,7 @@ typedef struct llvm_regex {
 #define	REG_ATOI	255	/* convert name to number (!) */
 #define	REG_ITOA	0400	/* convert number to name (!) */
 
-/* llvm_regexec() flags */
+/* llvm37_regexec() flags */
 #define	REG_NOTBOL	00001
 #define	REG_NOTEOL	00002
 #define	REG_STARTEND	00004
@@ -96,21 +96,21 @@ typedef struct llvm_regex {
 extern "C" {
 #endif
 
-int	llvm_regcomp(llvm_regex_t *, const char *, int);
-int	llvm_regexec(const llvm_regex_t *, const char *, size_t, 
-                     llvm_regmatch_t [], int);
-void	llvm_regfree(llvm_regex_t *);
+int	llvm37_regcomp(llvm37_regex_t *, const char *, int);
+int	llvm37_regexec(const llvm37_regex_t *, const char *, size_t, 
+                     llvm37_regmatch_t [], int);
+void	llvm37_regfree(llvm37_regex_t *);
 
-//size_t	llvm_regerror(int, const llvm_regex_t *, char *, size_t);
-//size_t  llvm_strlcpy(char *dst, const char *src, size_t siz);
+//size_t	llvm37_regerror(int, const llvm37_regex_t *, char *, size_t);
+//size_t  llvm37_strlcpy(char *dst, const char *src, size_t siz);
 
-size_t	llvm_regerror(
+size_t	llvm37_regerror(
 	int errcode,
-	const llvm_regex_t *preg,
+	const llvm37_regex_t *preg,
 	_Out_writes_all_(errbuf_size) char *errbuf,
 	size_t errbuf_size);
 
-size_t  llvm_strlcpy(
+size_t  llvm37_strlcpy(
 	_Out_writes_z_(siz) char *dst,
 	_In_z_ const char *src,
 	size_t siz);

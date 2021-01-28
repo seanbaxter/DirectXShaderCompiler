@@ -387,6 +387,6 @@ for.exit:
 ; CHECK: !7 = !{!"branch_weights", i32 17, i32 9, i32 8, i32 7, i32 17}
 ; CHECK: !8 = !{!"branch_weights", i32 24, i32 33}
 ; CHECK: !9 = !{!"branch_weights", i32 8, i32 33}
-;; The false weight prints out as a negative integer here, but inside llvm, we
+;; The false weight prints out as a negative integer here, but inside llvm37, we
 ;; treat the weight as an unsigned integer.
 ; CHECK: !10 = !{!"branch_weights", i32 112017436, i32 -735157296}

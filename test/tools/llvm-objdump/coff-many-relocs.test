@@ -1,5 +1,5 @@
-// Test that llvm-objdump can handle IMAGE_SCN_LNK_NRELOC_OVFL.
-// RUN: llvm-objdump -r %p/Inputs/many-relocs.obj-i386 | FileCheck %s
+// Test that llvm37-objdump can handle IMAGE_SCN_LNK_NRELOC_OVFL.
+// RUN: llvm37-objdump -r %p/Inputs/many-relocs.obj-i386 | FileCheck %s
 
 CHECK:      RELOCATION RECORDS FOR [.text]:
 CHECK-NEXT: IMAGE_REL_I386_DIR16 foo

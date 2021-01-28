@@ -1,20 +1,20 @@
 //===----- RuntimeDyldMachOARM.h ---- MachO/ARM specific code. ----*- C++ -*-=//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_LIB_EXECUTIONENGINE_RUNTIMEDYLD_TARGETS_RUNTIMEDYLDMACHOARM_H
-#define LLVM_LIB_EXECUTIONENGINE_RUNTIMEDYLD_TARGETS_RUNTIMEDYLDMACHOARM_H
+#ifndef LLVM37_LIB_EXECUTIONENGINE_RUNTIMEDYLD_TARGETS_RUNTIMEDYLDMACHOARM_H
+#define LLVM37_LIB_EXECUTIONENGINE_RUNTIMEDYLD_TARGETS_RUNTIMEDYLDMACHOARM_H
 
 #include "../RuntimeDyldMachO.h"
 
 #define DEBUG_TYPE "dyld"
 
-namespace llvm {
+namespace llvm37 {
 
 class RuntimeDyldMachOARM
     : public RuntimeDyldMachOCRTPBase<RuntimeDyldMachOARM> {
@@ -107,7 +107,7 @@ public:
 
     switch (RE.RelType) {
     default:
-      llvm_unreachable("Invalid relocation type!");
+      llvm37_unreachable("Invalid relocation type!");
     case MachO::ARM_RELOC_VANILLA:
       writeBytesUnaligned(Value + RE.Addend, LocalAddress, 1 << RE.Size);
       break;
@@ -215,7 +215,7 @@ private:
     // Bit 1 indicates arm (b1 == 0) or thumb (b1 == 1).
     unsigned HalfDiffKindBits = MachO.getAnyRelocationLength(RE);
     if (HalfDiffKindBits & 0x2)
-      llvm_unreachable("Thumb not yet supported.");
+      llvm37_unreachable("Thumb not yet supported.");
 
     SectionEntry &Section = Sections[SectionID];
     uint32_t RelocType = MachO.getAnyRelocationType(RE);

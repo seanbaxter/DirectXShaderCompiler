@@ -44,7 +44,7 @@ define void @test_simplify2() {
   %src = getelementptr [1 x i8], [1 x i8]* @null, i32 0, i32 0
 
   call i8* @strncpy(i8* %dst, i8* %src, i32 32)
-; CHECK: call void @llvm.memset.p0i8.i32
+; CHECK: call void @llvm37.memset.p0i8.i32
   ret void
 }
 
@@ -68,7 +68,7 @@ define void @test_simplify4() {
   %src = getelementptr [6 x i8], [6 x i8]* @hello, i32 0, i32 0
 
   call i8* @strncpy(i8* %dst, i8* %src, i32 6)
-; CHECK: call void @llvm.memcpy.p0i8.p0i8.i32
+; CHECK: call void @llvm37.memcpy.p0i8.p0i8.i32
   ret void
 }
 

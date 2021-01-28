@@ -14,16 +14,16 @@
 #include "dxc/DXIL/DxilOperations.h"
 #include "dxc/DXIL/DxilInstructions.h"
 
-#include "llvm/Analysis/CallGraph.h"
-#include "llvm/IR/InstIterator.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/IRBuilder.h"
-#include "llvm/IR/LegacyPassManager.h"
-#include "llvm/IR/Module.h"
-#include "llvm/Linker/Linker.h"
-#include "llvm/Transforms/IPO.h"
-#include "llvm/Transforms/Utils/BasicBlockUtils.h"
-#include "llvm/Transforms/Utils/Cloning.h"
+#include "llvm37/Analysis/CallGraph.h"
+#include "llvm37/IR/InstIterator.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/IRBuilder.h"
+#include "llvm37/IR/LegacyPassManager.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/Linker/Linker.h"
+#include "llvm37/Transforms/IPO.h"
+#include "llvm37/Transforms/Utils/BasicBlockUtils.h"
+#include "llvm37/Transforms/Utils/Cloning.h"
 
 #include "FunctionBuilder.h"
 #include "LLVMUtils.h"
@@ -33,7 +33,7 @@
 #include <queue>
 
 using namespace hlsl;
-using namespace llvm;
+using namespace llvm37;
 
 static std::vector<Function*> getFunctionsWithPrefix(Module* mod, const std::string& prefix)
 {
@@ -50,7 +50,7 @@ static std::vector<Function*> getFunctionsWithPrefix(Module* mod, const std::str
 
 static bool inlineFunc(CallInst* call, Function* Fimpl)
 {
-  // Note. LLVM inlining may not be sufficient if the function references DX 
+  // Note. LLVM37 inlining may not be sufficient if the function references DX 
   // resources because the corresponding metadata is not created if the function
   // comes from another module.
 
@@ -121,7 +121,7 @@ V get(std::map<K, V>& theMap, const K& key, V defaultVal = static_cast<V>(nullpt
 }
 
 
-DxrFallbackCompiler::DxrFallbackCompiler(llvm::Module* mod, const std::vector<std::string>& shaderNames, unsigned maxAttributeSize, unsigned stackSizeInBytes, bool findCalledShaders /*= false*/)
+DxrFallbackCompiler::DxrFallbackCompiler(llvm37::Module* mod, const std::vector<std::string>& shaderNames, unsigned maxAttributeSize, unsigned stackSizeInBytes, bool findCalledShaders /*= false*/)
   : m_module(mod)
   , m_entryShaderNames(shaderNames)
   , m_stackSizeInBytes(stackSizeInBytes)
@@ -352,7 +352,7 @@ void DxrFallbackCompiler::lowerReportHit()
   Function* reportHitFunc = m_module->getFunction("\x1?Fallback_ReportHit@@YAHMI@Z");
   assert(reportHitFunc && "ReportHit() implementation not found");
 
-  LLVMContext& C = m_module->getContext();
+  LLVM37Context& C = m_module->getContext();
   for (CallInst* call : callsToReportHit)
   {
     // Wrap attribute arguments in Fallback_SetPendingAttr() call
@@ -412,7 +412,7 @@ void DxrFallbackCompiler::lowerTraceRay(Type* runtimeDataArgTy)
   assert(dummyRuntimeDataArgFunc && "dummyRuntimeDataArg function could not be created.");
 
   // Process calls
-  LLVMContext& C = m_module->getContext();
+  LLVM37Context& C = m_module->getContext();
   Type* int32Ty = Type::getInt32Ty(C);
   std::map<FunctionType*, Function*> movePayloadToStackFuncs;
   std::map<Function*, AllocaInst*> funcToSpillAlloca;
@@ -557,7 +557,7 @@ void DxrFallbackCompiler::createLaunchParams(Function* func)
   Function* rewrite_setLaunchParams = mod->getFunction("rewrite_setLaunchParams");
   CallInst* call = dyn_cast<CallInst>(*rewrite_setLaunchParams->user_begin());
 
-  LLVMContext& context = mod->getContext();
+  LLVM37Context& context = mod->getContext();
   Instruction* insertBefore = call;
 
   Function* DTidFunc = FunctionBuilder(mod, "dx.op.threadId.i32").i32().i32().i32().build();
@@ -589,7 +589,7 @@ void DxrFallbackCompiler::createStateDispatch(Function* func, const IntToFuncMap
 
 void DxrFallbackCompiler::createStack(Function* func)
 {
-  LLVMContext& context = func->getContext();
+  LLVM37Context& context = func->getContext();
 
   // We would like to allocate the properly sized stack here, but DXIL doesn't
   // allow bitcasts between objects of different sizes. So we have to use the
@@ -619,7 +619,7 @@ static bool expandFloat3(std::vector<Value*>& args, Value* arg, Instruction* ins
   if (!argTy || argTy->getVectorNumElements() != 3)
     return false;
 
-  LLVMContext& C = arg->getContext();
+  LLVM37Context& C = arg->getContext();
   args.push_back(ExtractElementInst::Create(arg, makeInt32(0, C), "vec.x", insertBefore));
   args.push_back(ExtractElementInst::Create(arg, makeInt32(1, C), "vec.y", insertBefore));
   args.push_back(ExtractElementInst::Create(arg, makeInt32(2, C), "vec.z", insertBefore));
@@ -651,7 +651,7 @@ void DxrFallbackCompiler::lowerIntrinsics()
 
 
   // Replace intrinsics in anyhit shaders with their pending versions
-  LLVMContext& C = m_module->getContext();
+  LLVM37Context& C = m_module->getContext();
   std::map<std::string, Function*> pendingIntrinsics;
   std::string pendingPrefixes[] = { "fb_dxop_pending_",  "fb_Fallback_Pending" };
   for (auto& F : intrinsics)
@@ -753,7 +753,7 @@ Type* DxrFallbackCompiler::getRuntimeDataArgType()
 
 Function* DxrFallbackCompiler::createDispatchFunction(const IntToFuncMap &stateFunctionMap, Type* runtimeDataArgTy)
 {
-  LLVMContext& context = m_module->getContext();
+  LLVM37Context& context = m_module->getContext();
   FunctionType* stateFuncTy = FunctionType::get(Type::getInt32Ty(context), { runtimeDataArgTy }, false);
 
   Function* dispatchFunc = FunctionBuilder(m_module, "dispatch").i32().type(runtimeDataArgTy, "runtimeData").i32("stateID").build();
@@ -842,7 +842,7 @@ void DxrFallbackCompiler::resizeStack(Function* F, unsigned sizeInBytes)
     return;
 
   // Create a new stack
-  LLVMContext& C = F->getContext();
+  LLVM37Context& C = F->getContext();
   ArrayType* newStackTy = ArrayType::get(Type::getInt32Ty(C), sizeInBytes / sizeof(int));
   AllocaInst* newStack = new AllocaInst(newStackTy, "", stack);
   newStack->takeName(stack);

@@ -1,4 +1,4 @@
-llc - LLVM static compiler
+llc - LLVM37 static compiler
 ==========================
 
 SYNOPSIS
@@ -9,7 +9,7 @@ SYNOPSIS
 DESCRIPTION
 -----------
 
-The :program:`llc` command compiles LLVM source inputs into assembly language
+The :program:`llc` command compiles LLVM37 source inputs into assembly language
 for a specified architecture.  The assembly language output can then be passed
 through a native assembler and linker to generate a native executable.
 
@@ -21,8 +21,8 @@ OPTIONS
 -------
 
 If ``filename`` is "``-``" or omitted, :program:`llc` reads from standard input.
-Otherwise, it will from ``filename``.  Inputs can be in either the LLVM assembly
-language format (``.ll``) or the LLVM bitcode format (``.bc``).
+Otherwise, it will from ``filename``.  Inputs can be in either the LLVM37 assembly
+language format (``.ll``) or the LLVM37 bitcode format (``.bc``).
 
 If the :option:`-o` option is omitted, then :program:`llc` will send its output
 to standard output if the input is from standard input.  If the :option:`-o`
@@ -67,7 +67,7 @@ End-user Options
 
  .. code-block:: none
 
-   llvm-as < /dev/null | llc -march=xyz -mcpu=help
+   llvm37-as < /dev/null | llc -march=xyz -mcpu=help
 
 .. option:: -filetype=<output file type>
 
@@ -85,7 +85,7 @@ End-user Options
 
  .. code-block:: none
 
-   llvm-as < /dev/null | llc -march=xyz -mattr=help
+   llvm37-as < /dev/null | llc -march=xyz -mattr=help
 
 .. option:: --disable-fp-elim
 
@@ -124,7 +124,7 @@ End-user Options
 .. option:: --load=<dso_path>
 
  Dynamically load ``dso_path`` (a path to a dynamically shared object) that
- implements an LLVM target.  This will permit the target name to be used with
+ implements an LLVM37 target.  This will permit the target name to be used with
  the :option:`-march` option so that code can be generated for that target.
 
 Tuning/Configuration Options

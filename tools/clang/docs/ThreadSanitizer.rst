@@ -15,7 +15,7 @@ ThreadSanitizer is about **5x-10x**.
 How to build
 ------------
 
-Build LLVM/Clang with `CMake <http://llvm.org/docs/CMake.html>`_.
+Build LLVM37/Clang with `CMake <http://llvm37.org/docs/CMake.html>`_.
 
 Supported Platforms
 -------------------
@@ -129,7 +129,7 @@ Current Status
 
 ThreadSanitizer is in beta stage.  It is known to work on large C++ programs
 using pthreads, but we do not promise anything (yet).  C++11 threading is
-supported with llvm libc++.  The test suite is integrated into CMake build
+supported with llvm37 libc++.  The test suite is integrated into CMake build
 and can be run with ``make check-tsan`` command.
 
 We are actively working on enhancing the tool --- stay tuned.  Any help,

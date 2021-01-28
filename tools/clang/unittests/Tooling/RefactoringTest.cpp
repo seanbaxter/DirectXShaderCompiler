@@ -1,6 +1,6 @@
 //===- unittest/Tooling/RefactoringTest.cpp - Refactoring unit tests ------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -24,8 +24,8 @@
 #include "clang/Rewrite/Core/Rewriter.h"
 #include "clang/Tooling/Refactoring.h"
 #include "clang/Tooling/Tooling.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/Support/Path.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/Support/Path.h"
 #include "gtest/gtest.h"
 
 namespace clang {
@@ -34,7 +34,7 @@ namespace tooling {
 class ReplacementTest : public ::testing::Test {
  protected:
   Replacement createReplacement(SourceLocation Start, unsigned Length,
-                                llvm::StringRef ReplacementText) {
+                                llvm37::StringRef ReplacementText) {
     return Replacement(Context.Sources, Start, Length, ReplacementText);
   }
 
@@ -214,24 +214,24 @@ public:
    FlushRewrittenFilesTest() {}
 
    ~FlushRewrittenFilesTest() override {
-    for (llvm::StringMap<std::string>::iterator I = TemporaryFiles.begin(),
+    for (llvm37::StringMap<std::string>::iterator I = TemporaryFiles.begin(),
                                                 E = TemporaryFiles.end();
          I != E; ++I) {
-      llvm::StringRef Name = I->second;
-      std::error_code EC = llvm::sys::fs::remove(Name);
+      llvm37::StringRef Name = I->second;
+      std::error_code EC = llvm37::sys::fs::remove(Name);
       (void)EC;
       assert(!EC);
     }
   }
 
-  FileID createFile(llvm::StringRef Name, llvm::StringRef Content) {
+  FileID createFile(llvm37::StringRef Name, llvm37::StringRef Content) {
     SmallString<1024> Path;
     int FD;
-    std::error_code EC = llvm::sys::fs::createTemporaryFile(Name, "", FD, Path);
+    std::error_code EC = llvm37::sys::fs::createTemporaryFile(Name, "", FD, Path);
     assert(!EC);
     (void)EC;
 
-    llvm::raw_fd_ostream OutStream(FD, true);
+    llvm37::raw_fd_ostream OutStream(FD, true);
     OutStream << Content;
     OutStream.close();
     const FileEntry *File = Context.Files.getFile(Path);
@@ -244,7 +244,7 @@ public:
     return Context.Sources.createFileID(File, SourceLocation(), SrcMgr::C_User);
   }
 
-  std::string getFileContentFromDisk(llvm::StringRef Name) {
+  std::string getFileContentFromDisk(llvm37::StringRef Name) {
     std::string Path = TemporaryFiles.lookup(Name);
     assert(!Path.empty());
     // We need to read directly from the FileManager without relaying through
@@ -256,7 +256,7 @@ public:
     return (*FileBuffer)->getBuffer();
   }
 
-  llvm::StringMap<std::string> TemporaryFiles;
+  llvm37::StringMap<std::string> TemporaryFiles;
   RewriterTestContext Context;
 };
 
@@ -302,11 +302,11 @@ private:
 
     std::unique_ptr<clang::ASTConsumer>
     CreateASTConsumer(clang::CompilerInstance &compiler,
-                      llvm::StringRef dummy) override {
+                      llvm37::StringRef dummy) override {
       Visitor->SM = &compiler.getSourceManager();
       Visitor->Context = &compiler.getASTContext();
       /// TestConsumer will be deleted by the framework calling us.
-      return llvm::make_unique<FindConsumer>(Visitor);
+      return llvm37::make_unique<FindConsumer>(Visitor);
     }
 
   private:

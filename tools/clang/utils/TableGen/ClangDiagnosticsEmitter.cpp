@@ -1,6 +1,6 @@
 //=- ClangDiagnosticsEmitter.cpp - Generate Clang diagnostics tables -*- C++ -*-
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,27 +11,27 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/ADT/DenseSet.h"
-#include "llvm/ADT/Optional.h"
-#include "llvm/ADT/PointerUnion.h"
-#include "llvm/ADT/SetVector.h"
-#include "llvm/ADT/SmallPtrSet.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/ADT/StringMap.h"
-#include "llvm/ADT/Twine.h"
-#include "llvm/Support/Compiler.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/TableGen/Error.h"
-#include "llvm/TableGen/Record.h"
-#include "llvm/TableGen/StringToOffsetTable.h"
-#include "llvm/TableGen/TableGenBackend.h"
+#include "llvm37/ADT/DenseSet.h"
+#include "llvm37/ADT/Optional.h"
+#include "llvm37/ADT/PointerUnion.h"
+#include "llvm37/ADT/SetVector.h"
+#include "llvm37/ADT/SmallPtrSet.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/ADT/StringMap.h"
+#include "llvm37/ADT/Twine.h"
+#include "llvm37/Support/Compiler.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/TableGen/Error.h"
+#include "llvm37/TableGen/Record.h"
+#include "llvm37/TableGen/StringToOffsetTable.h"
+#include "llvm37/TableGen/TableGenBackend.h"
 #include <algorithm>
 #include <cctype>
 #include <functional>
 #include <map>
 #include <set>
-using namespace llvm;
+using namespace llvm37;
 
 //===----------------------------------------------------------------------===//
 // Diagnostic category computation code.
@@ -287,19 +287,19 @@ static void groupDiagnostics(const std::vector<Record*> &Diags,
 //===----------------------------------------------------------------------===//
 
 typedef std::vector<const Record *> RecordVec;
-typedef llvm::DenseSet<const Record *> RecordSet;
-typedef llvm::PointerUnion<RecordVec*, RecordSet*> VecOrSet;
+typedef llvm37::DenseSet<const Record *> RecordSet;
+typedef llvm37::PointerUnion<RecordVec*, RecordSet*> VecOrSet;
 
 namespace {
 class InferPedantic {
-  typedef llvm::DenseMap<const Record*,
+  typedef llvm37::DenseMap<const Record*,
                          std::pair<unsigned, Optional<unsigned> > > GMap;
 
   DiagGroupParentMap &DiagGroupParents;
   const std::vector<Record*> &Diags;
   const std::vector<Record*> DiagGroups;
   std::map<std::string, GroupInfo> &DiagsInGroup;
-  llvm::DenseSet<const Record*> DiagsSet;
+  llvm37::DenseSet<const Record*> DiagsSet;
   GMap GroupCount;
 public:
   InferPedantic(DiagGroupParentMap &DiagGroupParents,
@@ -319,7 +319,7 @@ public:
 private:
   /// Determine whether a group is a subgroup of another group.
   bool isSubGroupOfGroup(const Record *Group,
-                         llvm::StringRef RootGroupName);
+                         llvm37::StringRef RootGroupName);
 
   /// Determine if the diagnostic is an extension.
   bool isExtension(const Record *Diag);
@@ -337,7 +337,7 @@ private:
 } // end anonymous namespace
 
 bool InferPedantic::isSubGroupOfGroup(const Record *Group,
-                                      llvm::StringRef GName) {
+                                      llvm37::StringRef GName) {
 
   const std::string &GroupName = Group->getValueAsString("GroupName");
   if (GName == GroupName)
@@ -587,11 +587,11 @@ void EmitClangDiagsDefs(RecordKeeper &Records, raw_ostream &OS,
 // Warning Group Tables generation
 //===----------------------------------------------------------------------===//
 
-static std::string getDiagCategoryEnum(llvm::StringRef name) {
+static std::string getDiagCategoryEnum(llvm37::StringRef name) {
   if (name.empty())
     return "DiagCat_None";
-  SmallString<256> enumName = llvm::StringRef("DiagCat_");
-  for (llvm::StringRef::iterator I = name.begin(), E = name.end(); I != E; ++I)
+  SmallString<256> enumName = llvm37::StringRef("DiagCat_");
+  for (llvm37::StringRef::iterator I = name.begin(), E = name.end(); I != E; ++I)
     enumName += isalnum(*I) ? *I : '_';
   return enumName.str();
 }

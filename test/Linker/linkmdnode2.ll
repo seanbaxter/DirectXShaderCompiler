@@ -4,10 +4,10 @@
 
 !22 = !{i32 42, !"foobar"}
 
-declare i8 @llvm.something(metadata %a)
+declare i8 @llvm37.something(metadata %a)
 define void @foo1() {
   ;; Intrinsic using MDNode and MDString
-  %x = call i8 @llvm.something(metadata !22)
+  %x = call i8 @llvm37.something(metadata !22)
   ret void
 }
 

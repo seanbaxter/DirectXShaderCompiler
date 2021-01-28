@@ -1,6 +1,6 @@
 //===- InstCombineLoadStoreAlloca.cpp -------------------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -12,16 +12,16 @@
 //===----------------------------------------------------------------------===//
 
 #include "InstCombineInternal.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/Analysis/Loads.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/IR/MDBuilder.h"
-#include "llvm/Transforms/Utils/BasicBlockUtils.h"
-#include "llvm/Transforms/Utils/Local.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/Analysis/Loads.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/IR/MDBuilder.h"
+#include "llvm37/Transforms/Utils/BasicBlockUtils.h"
+#include "llvm37/Transforms/Utils/Local.h"
 #include "dxc/DXIL/DxilOperations.h"   // HLSL Change - avoid unpack for dxil types.
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "instcombine"
 
@@ -333,25 +333,25 @@ static LoadInst *combineLoadToNewType(InstCombiner &IC, LoadInst &LI, Type *NewT
     // routine is supposed to clone a load instruction changing *only its type*.
     // The only metadata it makes sense to drop is metadata which is invalidated
     // when the pointer type changes. This should essentially never be the case
-    // in LLVM, but we explicitly switch over only known metadata to be
-    // conservatively correct. If you are adding metadata to LLVM which pertains
+    // in LLVM37, but we explicitly switch over only known metadata to be
+    // conservatively correct. If you are adding metadata to LLVM37 which pertains
     // to loads, you almost certainly want to add it here.
     switch (ID) {
-    case LLVMContext::MD_dbg:
-    case LLVMContext::MD_tbaa:
-    case LLVMContext::MD_prof:
-    case LLVMContext::MD_fpmath:
-    case LLVMContext::MD_tbaa_struct:
-    case LLVMContext::MD_invariant_load:
-    case LLVMContext::MD_alias_scope:
-    case LLVMContext::MD_noalias:
-    case LLVMContext::MD_nontemporal:
-    case LLVMContext::MD_mem_parallel_loop_access:
+    case LLVM37Context::MD_dbg:
+    case LLVM37Context::MD_tbaa:
+    case LLVM37Context::MD_prof:
+    case LLVM37Context::MD_fpmath:
+    case LLVM37Context::MD_tbaa_struct:
+    case LLVM37Context::MD_invariant_load:
+    case LLVM37Context::MD_alias_scope:
+    case LLVM37Context::MD_noalias:
+    case LLVM37Context::MD_nontemporal:
+    case LLVM37Context::MD_mem_parallel_loop_access:
       // All of these directly apply.
       NewLoad->setMetadata(ID, N);
       break;
 
-    case LLVMContext::MD_nonnull:
+    case LLVM37Context::MD_nonnull:
       // This only directly applies if the new type is also a pointer.
       if (NewTy->isPointerTy()) {
         NewLoad->setMetadata(ID, N);
@@ -364,12 +364,12 @@ static LoadInst *combineLoadToNewType(InstCombiner &IC, LoadInst &LI, Type *NewT
             ConstantPointerNull::get(cast<PointerType>(Ptr->getType())), ITy);
         auto *NonNullInt =
             ConstantExpr::getAdd(NullInt, ConstantInt::get(ITy, 1));
-        NewLoad->setMetadata(LLVMContext::MD_range,
+        NewLoad->setMetadata(LLVM37Context::MD_range,
                              MDB.createRange(NonNullInt, NullInt));
       }
       break;
 
-    case LLVMContext::MD_range:
+    case LLVM37Context::MD_range:
       // FIXME: It would be nice to propagate this in some way, but the type
       // conversions make it hard. If the new type is a pointer, we could
       // translate it to !nonnull metadata.
@@ -398,27 +398,27 @@ static StoreInst *combineStoreToNewValue(InstCombiner &IC, StoreInst &SI, Value 
     // routine is supposed to clone a store instruction changing *only its
     // type*. The only metadata it makes sense to drop is metadata which is
     // invalidated when the pointer type changes. This should essentially
-    // never be the case in LLVM, but we explicitly switch over only known
+    // never be the case in LLVM37, but we explicitly switch over only known
     // metadata to be conservatively correct. If you are adding metadata to
-    // LLVM which pertains to stores, you almost certainly want to add it
+    // LLVM37 which pertains to stores, you almost certainly want to add it
     // here.
     switch (ID) {
-    case LLVMContext::MD_dbg:
-    case LLVMContext::MD_tbaa:
-    case LLVMContext::MD_prof:
-    case LLVMContext::MD_fpmath:
-    case LLVMContext::MD_tbaa_struct:
-    case LLVMContext::MD_alias_scope:
-    case LLVMContext::MD_noalias:
-    case LLVMContext::MD_nontemporal:
-    case LLVMContext::MD_mem_parallel_loop_access:
+    case LLVM37Context::MD_dbg:
+    case LLVM37Context::MD_tbaa:
+    case LLVM37Context::MD_prof:
+    case LLVM37Context::MD_fpmath:
+    case LLVM37Context::MD_tbaa_struct:
+    case LLVM37Context::MD_alias_scope:
+    case LLVM37Context::MD_noalias:
+    case LLVM37Context::MD_nontemporal:
+    case LLVM37Context::MD_mem_parallel_loop_access:
       // All of these directly apply.
       NewStore->setMetadata(ID, N);
       break;
 
-    case LLVMContext::MD_invariant_load:
-    case LLVMContext::MD_nonnull:
-    case LLVMContext::MD_range:
+    case LLVM37Context::MD_invariant_load:
+    case LLVM37Context::MD_nonnull:
+    case LLVM37Context::MD_range:
       // These don't apply for stores.
       break;
     }
@@ -442,7 +442,7 @@ static StoreInst *combineStoreToNewValue(InstCombiner &IC, StoreInst &SI, Value 
 ///
 /// Currently, we also refuse to change the precise type used for an atomic load
 /// or a volatile load. This is debatable, and might be reasonable to change
-/// later. However, it is risky in case some backend or other part of LLVM is
+/// later. However, it is risky in case some backend or other part of LLVM37 is
 /// relying on the exact type loaded to select appropriate atomic operations.
 static Instruction *combineLoadToOperationType(InstCombiner &IC, LoadInst &LI) {
 #if 0 // HLSL Change - bitcast to i32* won't help HLSL.
@@ -761,12 +761,12 @@ Instruction *InstCombiner::visitLoadInst(LoadInst &LI) {
                                                      6, AA, &AATags)) {
     if (LoadInst *NLI = dyn_cast<LoadInst>(AvailableVal)) {
       unsigned KnownIDs[] = {
-        LLVMContext::MD_tbaa,
-        LLVMContext::MD_alias_scope,
-        LLVMContext::MD_noalias,
-        LLVMContext::MD_range,
-        LLVMContext::MD_invariant_load,
-        LLVMContext::MD_nonnull,
+        LLVM37Context::MD_tbaa,
+        LLVM37Context::MD_alias_scope,
+        LLVM37Context::MD_noalias,
+        LLVM37Context::MD_range,
+        LLVM37Context::MD_invariant_load,
+        LLVM37Context::MD_nonnull,
       };
       combineMetadata(NLI, &LI, KnownIDs);
     };
@@ -859,7 +859,7 @@ Instruction *InstCombiner::visitLoadInst(LoadInst &LI) {
 ///
 /// Currently, we also refuse to change the precise type used for an atomic or
 /// volatile store. This is debatable, and might be reasonable to change later.
-/// However, it is risky in case some backend or other part of LLVM is relying
+/// However, it is risky in case some backend or other part of LLVM37 is relying
 /// on the exact type stored to select appropriate atomic operations.
 ///
 /// \returns true if the store was successfully combined away. This indicates

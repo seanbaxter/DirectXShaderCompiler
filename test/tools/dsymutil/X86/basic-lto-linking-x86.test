@@ -1,6 +1,6 @@
 REQUIRES: shell
-RUN: llvm-dsymutil -o - -oso-prepend-path=%p/.. %p/../Inputs/basic-lto.macho.x86_64 | llvm-dwarfdump - | FileCheck %s
-RUN: llvm-dsymutil -oso-prepend-path=%p/.. -dump-debug-map %p/../Inputs/basic-lto.macho.x86_64 | llvm-dsymutil -o - -y - | llvm-dwarfdump - | FileCheck %s
+RUN: llvm37-dsymutil -o - -oso-prepend-path=%p/.. %p/../Inputs/basic-lto.macho.x86_64 | llvm37-dwarfdump - | FileCheck %s
+RUN: llvm37-dsymutil -oso-prepend-path=%p/.. -dump-debug-map %p/../Inputs/basic-lto.macho.x86_64 | llvm37-dsymutil -o - -y - | llvm37-dwarfdump - | FileCheck %s
 
 CHECK: file format Mach-O 64-bit x86-64
 
@@ -9,7 +9,7 @@ CHECK: debug_info contents
 CHECK:  Compile Unit:
 
 CHECK:  DW_TAG_compile_unit [1] *
-CHECK:    DW_AT_producer [DW_FORM_strp]     ( .debug_str[0x00000001] = "Apple LLVM version 6.0 (clang-600.0.39) (based on LLVM 3.5svn)")
+CHECK:    DW_AT_producer [DW_FORM_strp]     ( .debug_str[0x00000001] = "Apple LLVM37 version 6.0 (clang-600.0.39) (based on LLVM37 3.5svn)")
 CHECK:    DW_AT_language [DW_FORM_data2]	(DW_LANG_C99)
 CHECK:    DW_AT_name [DW_FORM_strp] ( .debug_str[0x00000040] = "basic1.c")
 CHECK:    DW_AT_stmt_list [DW_FORM_data4]   (0x00000000)
@@ -54,7 +54,7 @@ CHECK:    NULL
 CHECK:  Compile Unit:
 
 CHECK:  DW_TAG_compile_unit [1] *
-CHECK:    DW_AT_producer [DW_FORM_strp]     ( .debug_str[0x00000001] = "Apple LLVM version 6.0 (clang-600.0.39) (based on LLVM 3.5svn)")
+CHECK:    DW_AT_producer [DW_FORM_strp]     ( .debug_str[0x00000001] = "Apple LLVM37 version 6.0 (clang-600.0.39) (based on LLVM37 3.5svn)")
 CHECK:    DW_AT_name [DW_FORM_strp] ( .debug_str[0x00000069] = "basic2.c")
 CHECK:    DW_AT_stmt_list [DW_FORM_data4]   (0x0000003e)
 CHECK:    DW_AT_comp_dir [DW_FORM_strp]     ( .debug_str[0x00000049] = "/Inputs")
@@ -93,7 +93,7 @@ CHECK:    NULL
 CHECK:  Compile Unit:
 
 CHECK:  DW_TAG_compile_unit [1] *
-CHECK:    DW_AT_producer [DW_FORM_strp]     ( .debug_str[0x00000001] = "Apple LLVM version 6.0 (clang-600.0.39) (based on LLVM 3.5svn)")
+CHECK:    DW_AT_producer [DW_FORM_strp]     ( .debug_str[0x00000001] = "Apple LLVM37 version 6.0 (clang-600.0.39) (based on LLVM37 3.5svn)")
 CHECK:    DW_AT_name [DW_FORM_strp] ( .debug_str[0x0000008e] = "basic3.c")
 CHECK:    DW_AT_stmt_list [DW_FORM_data4]   (0x0000007e)
 CHECK:    DW_AT_comp_dir [DW_FORM_strp]     ( .debug_str[0x00000049] = "/Inputs")

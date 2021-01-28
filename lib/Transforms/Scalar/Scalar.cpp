@@ -1,32 +1,32 @@
 //===-- Scalar.cpp --------------------------------------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 //
-// This file implements common infrastructure for libLLVMScalarOpts.a, which
-// implements several scalar transformations over the LLVM intermediate
+// This file implements common infrastructure for libLLVM37ScalarOpts.a, which
+// implements several scalar transformations over the LLVM37 intermediate
 // representation, including the C bindings for that library.
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Transforms/Scalar.h"
-#include "llvm-c/Initialization.h"
-#include "llvm-c/Transforms/Scalar.h"
-#include "llvm/Analysis/Passes.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/Verifier.h"
-#include "llvm/InitializePasses.h"
-#include "llvm/IR/LegacyPassManager.h"
+#include "llvm37/Transforms/Scalar.h"
+#include "llvm37-c/Initialization.h"
+#include "llvm37-c/Transforms/Scalar.h"
+#include "llvm37/Analysis/Passes.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/IR/Verifier.h"
+#include "llvm37/InitializePasses.h"
+#include "llvm37/IR/LegacyPassManager.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 /// initializeScalarOptsPasses - Initialize all passes linked into the
 /// ScalarOpts library.
-void llvm::initializeScalarOpts(PassRegistry &Registry) {
+void llvm37::initializeScalarOpts(PassRegistry &Registry) {
   initializeADCEPass(Registry);
   initializeBDCEPass(Registry);
   initializeAlignmentFromAssumptionsPass(Registry);
@@ -84,165 +84,165 @@ void llvm::initializeScalarOpts(PassRegistry &Registry) {
   initializeLoopDistributePass(Registry);
 }
 
-void LLVMInitializeScalarOpts(LLVMPassRegistryRef R) {
+void LLVM37InitializeScalarOpts(LLVM37PassRegistryRef R) {
   initializeScalarOpts(*unwrap(R));
 }
 
-void LLVMAddAggressiveDCEPass(LLVMPassManagerRef PM) {
+void LLVM37AddAggressiveDCEPass(LLVM37PassManagerRef PM) {
   unwrap(PM)->add(createAggressiveDCEPass());
 }
 
-void LLVMAddBitTrackingDCEPass(LLVMPassManagerRef PM) {
+void LLVM37AddBitTrackingDCEPass(LLVM37PassManagerRef PM) {
   unwrap(PM)->add(createBitTrackingDCEPass());
 }
 
-void LLVMAddAlignmentFromAssumptionsPass(LLVMPassManagerRef PM) {
+void LLVM37AddAlignmentFromAssumptionsPass(LLVM37PassManagerRef PM) {
   unwrap(PM)->add(createAlignmentFromAssumptionsPass());
 }
 
-void LLVMAddCFGSimplificationPass(LLVMPassManagerRef PM) {
+void LLVM37AddCFGSimplificationPass(LLVM37PassManagerRef PM) {
   unwrap(PM)->add(createCFGSimplificationPass());
 }
 
-void LLVMAddDeadStoreEliminationPass(LLVMPassManagerRef PM) {
+void LLVM37AddDeadStoreEliminationPass(LLVM37PassManagerRef PM) {
   unwrap(PM)->add(createDeadStoreEliminationPass());
 }
 
-void LLVMAddScalarizerPass(LLVMPassManagerRef PM) {
+void LLVM37AddScalarizerPass(LLVM37PassManagerRef PM) {
   unwrap(PM)->add(createScalarizerPass());
 }
 
-void LLVMAddGVNPass(LLVMPassManagerRef PM) {
+void LLVM37AddGVNPass(LLVM37PassManagerRef PM) {
   unwrap(PM)->add(createGVNPass());
 }
 
-void LLVMAddMergedLoadStoreMotionPass(LLVMPassManagerRef PM) {
+void LLVM37AddMergedLoadStoreMotionPass(LLVM37PassManagerRef PM) {
   unwrap(PM)->add(createMergedLoadStoreMotionPass());
 }
 
-void LLVMAddIndVarSimplifyPass(LLVMPassManagerRef PM) {
+void LLVM37AddIndVarSimplifyPass(LLVM37PassManagerRef PM) {
   unwrap(PM)->add(createIndVarSimplifyPass());
 }
 
-void LLVMAddInstructionCombiningPass(LLVMPassManagerRef PM) {
+void LLVM37AddInstructionCombiningPass(LLVM37PassManagerRef PM) {
   unwrap(PM)->add(createInstructionCombiningPass());
 }
 
-void LLVMAddJumpThreadingPass(LLVMPassManagerRef PM) {
+void LLVM37AddJumpThreadingPass(LLVM37PassManagerRef PM) {
   unwrap(PM)->add(createJumpThreadingPass());
 }
 
-void LLVMAddLICMPass(LLVMPassManagerRef PM) {
+void LLVM37AddLICMPass(LLVM37PassManagerRef PM) {
   unwrap(PM)->add(createLICMPass());
 }
 
-void LLVMAddLoopDeletionPass(LLVMPassManagerRef PM) {
+void LLVM37AddLoopDeletionPass(LLVM37PassManagerRef PM) {
   unwrap(PM)->add(createLoopDeletionPass());
 }
 
-void LLVMAddLoopIdiomPass(LLVMPassManagerRef PM) {
+void LLVM37AddLoopIdiomPass(LLVM37PassManagerRef PM) {
   unwrap(PM)->add(createLoopIdiomPass());
 }
 
-void LLVMAddLoopRotatePass(LLVMPassManagerRef PM) {
+void LLVM37AddLoopRotatePass(LLVM37PassManagerRef PM) {
   unwrap(PM)->add(createLoopRotatePass());
 }
 
-void LLVMAddLoopRerollPass(LLVMPassManagerRef PM) {
+void LLVM37AddLoopRerollPass(LLVM37PassManagerRef PM) {
   unwrap(PM)->add(createLoopRerollPass());
 }
 
-void LLVMAddLoopUnrollPass(LLVMPassManagerRef PM) {
+void LLVM37AddLoopUnrollPass(LLVM37PassManagerRef PM) {
   unwrap(PM)->add(createLoopUnrollPass());
 }
 
-void LLVMAddLoopUnswitchPass(LLVMPassManagerRef PM) {
+void LLVM37AddLoopUnswitchPass(LLVM37PassManagerRef PM) {
   unwrap(PM)->add(createLoopUnswitchPass());
 }
 
-void LLVMAddMemCpyOptPass(LLVMPassManagerRef PM) {
+void LLVM37AddMemCpyOptPass(LLVM37PassManagerRef PM) {
   unwrap(PM)->add(createMemCpyOptPass());
 }
 
-void LLVMAddPartiallyInlineLibCallsPass(LLVMPassManagerRef PM) {
+void LLVM37AddPartiallyInlineLibCallsPass(LLVM37PassManagerRef PM) {
   unwrap(PM)->add(createPartiallyInlineLibCallsPass());
 }
 
-void LLVMAddLowerSwitchPass(LLVMPassManagerRef PM) {
+void LLVM37AddLowerSwitchPass(LLVM37PassManagerRef PM) {
   unwrap(PM)->add(createLowerSwitchPass());
 }
 
-void LLVMAddPromoteMemoryToRegisterPass(LLVMPassManagerRef PM) {
+void LLVM37AddPromoteMemoryToRegisterPass(LLVM37PassManagerRef PM) {
   unwrap(PM)->add(createPromoteMemoryToRegisterPass());
 }
 
-void LLVMAddReassociatePass(LLVMPassManagerRef PM) {
+void LLVM37AddReassociatePass(LLVM37PassManagerRef PM) {
   unwrap(PM)->add(createReassociatePass());
 }
 
-void LLVMAddSCCPPass(LLVMPassManagerRef PM) {
+void LLVM37AddSCCPPass(LLVM37PassManagerRef PM) {
   unwrap(PM)->add(createSCCPPass());
 }
 
-void LLVMAddScalarReplAggregatesPass(LLVMPassManagerRef PM) {
+void LLVM37AddScalarReplAggregatesPass(LLVM37PassManagerRef PM) {
   unwrap(PM)->add(createScalarReplAggregatesPass());
 }
 
-void LLVMAddScalarReplAggregatesPassSSA(LLVMPassManagerRef PM) {
+void LLVM37AddScalarReplAggregatesPassSSA(LLVM37PassManagerRef PM) {
   unwrap(PM)->add(createScalarReplAggregatesPass(-1, false));
 }
 
-void LLVMAddScalarReplAggregatesPassWithThreshold(LLVMPassManagerRef PM,
+void LLVM37AddScalarReplAggregatesPassWithThreshold(LLVM37PassManagerRef PM,
                                                   int Threshold) {
   unwrap(PM)->add(createScalarReplAggregatesPass(Threshold));
 }
 
-void LLVMAddSimplifyLibCallsPass(LLVMPassManagerRef PM) {
+void LLVM37AddSimplifyLibCallsPass(LLVM37PassManagerRef PM) {
   // NOTE: The simplify-libcalls pass has been removed.
 }
 
-void LLVMAddTailCallEliminationPass(LLVMPassManagerRef PM) {
+void LLVM37AddTailCallEliminationPass(LLVM37PassManagerRef PM) {
   unwrap(PM)->add(createTailCallEliminationPass());
 }
 
-void LLVMAddConstantPropagationPass(LLVMPassManagerRef PM) {
+void LLVM37AddConstantPropagationPass(LLVM37PassManagerRef PM) {
   unwrap(PM)->add(createConstantPropagationPass());
 }
 
-void LLVMAddDemoteMemoryToRegisterPass(LLVMPassManagerRef PM) {
+void LLVM37AddDemoteMemoryToRegisterPass(LLVM37PassManagerRef PM) {
   unwrap(PM)->add(createDemoteRegisterToMemoryPass());
 }
 
 // HLSL Change start
-void LLVMAddDemoteMemoryToRegisterHlslPass(LLVMPassManagerRef PM) {
+void LLVM37AddDemoteMemoryToRegisterHlslPass(LLVM37PassManagerRef PM) {
   unwrap(PM)->add(createDemoteRegisterToMemoryHlslPass());
 }
 // HLSL Change end
 
-void LLVMAddVerifierPass(LLVMPassManagerRef PM) {
+void LLVM37AddVerifierPass(LLVM37PassManagerRef PM) {
   unwrap(PM)->add(createVerifierPass());
 }
 
-void LLVMAddCorrelatedValuePropagationPass(LLVMPassManagerRef PM) {
+void LLVM37AddCorrelatedValuePropagationPass(LLVM37PassManagerRef PM) {
   unwrap(PM)->add(createCorrelatedValuePropagationPass());
 }
 
-void LLVMAddEarlyCSEPass(LLVMPassManagerRef PM) {
+void LLVM37AddEarlyCSEPass(LLVM37PassManagerRef PM) {
   unwrap(PM)->add(createEarlyCSEPass());
 }
 
-void LLVMAddTypeBasedAliasAnalysisPass(LLVMPassManagerRef PM) {
+void LLVM37AddTypeBasedAliasAnalysisPass(LLVM37PassManagerRef PM) {
   unwrap(PM)->add(createTypeBasedAliasAnalysisPass());
 }
 
-void LLVMAddScopedNoAliasAAPass(LLVMPassManagerRef PM) {
+void LLVM37AddScopedNoAliasAAPass(LLVM37PassManagerRef PM) {
   unwrap(PM)->add(createScopedNoAliasAAPass());
 }
 
-void LLVMAddBasicAliasAnalysisPass(LLVMPassManagerRef PM) {
+void LLVM37AddBasicAliasAnalysisPass(LLVM37PassManagerRef PM) {
   unwrap(PM)->add(createBasicAliasAnalysisPass());
 }
 
-void LLVMAddLowerExpectIntrinsicPass(LLVMPassManagerRef PM) {
+void LLVM37AddLowerExpectIntrinsicPass(LLVM37PassManagerRef PM) {
   unwrap(PM)->add(createLowerExpectIntrinsicPass());
 }

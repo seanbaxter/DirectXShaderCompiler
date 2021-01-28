@@ -1,6 +1,6 @@
-//=- RPCChannel.inc - LLVM out-of-process JIT execution for Windows --=//
+//=- RPCChannel.inc - LLVM37 out-of-process JIT execution for Windows --=//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -12,7 +12,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-namespace llvm {
+namespace llvm37 {
 
 bool RPCChannel::createServer() { return false; }
 
@@ -26,4 +26,4 @@ void RPCChannel::Wait() {}
 
 RPCChannel::~RPCChannel() {}
 
-} // namespace llvm
+} // namespace llvm37

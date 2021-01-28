@@ -1,5 +1,5 @@
-; RUN: llvm-link %s %S/Inputs/metadata-function.ll -S | FileCheck %s
-; RUN: llvm-link %S/Inputs/metadata-function.ll %s -S | FileCheck %s
+; RUN: llvm37-link %s %S/Inputs/metadata-function.ll -S | FileCheck %s
+; RUN: llvm37-link %S/Inputs/metadata-function.ll %s -S | FileCheck %s
 
 ; CHECK-DAG: define weak void @foo() !weak ![[B:[0-9]+]] {
 define linkonce void @foo() !linkonce !0 {

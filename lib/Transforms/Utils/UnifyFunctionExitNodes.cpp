@@ -1,6 +1,6 @@
 //===- UnifyFunctionExitNodes.cpp - Make all functions have a single exit -===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -14,20 +14,20 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Transforms/Utils/UnifyFunctionExitNodes.h"
-#include "llvm/ADT/StringExtras.h"
-#include "llvm/IR/BasicBlock.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/Type.h"
-#include "llvm/Transforms/Scalar.h"
-using namespace llvm;
+#include "llvm37/Transforms/Utils/UnifyFunctionExitNodes.h"
+#include "llvm37/ADT/StringExtras.h"
+#include "llvm37/IR/BasicBlock.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/Type.h"
+#include "llvm37/Transforms/Scalar.h"
+using namespace llvm37;
 
 char UnifyFunctionExitNodes::ID = 0;
 INITIALIZE_PASS(UnifyFunctionExitNodes, "mergereturn",
                 "Unify function exit nodes", false, false)
 
-Pass *llvm::createUnifyFunctionExitNodesPass() {
+Pass *llvm37::createUnifyFunctionExitNodesPass() {
   return new UnifyFunctionExitNodes();
 }
 

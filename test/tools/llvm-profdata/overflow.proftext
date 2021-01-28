@@ -1,4 +1,4 @@
-# RUN: llvm-profdata merge %s -o %t.out 2>&1 | FileCheck %s
+# RUN: llvm37-profdata merge %s -o %t.out 2>&1 | FileCheck %s
 # CHECK: overflow.proftext: overflow: Counter overflow
 
 overflow

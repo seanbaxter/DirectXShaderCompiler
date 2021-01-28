@@ -1,6 +1,6 @@
 //===-- LiveStackAnalysis.cpp - Live Stack Slot Analysis ------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -13,16 +13,16 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/CodeGen/LiveStackAnalysis.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/CodeGen/LiveIntervalAnalysis.h"
-#include "llvm/CodeGen/Passes.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Target/TargetRegisterInfo.h"
-#include "llvm/Target/TargetSubtargetInfo.h"
+#include "llvm37/CodeGen/LiveStackAnalysis.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/CodeGen/LiveIntervalAnalysis.h"
+#include "llvm37/CodeGen/Passes.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Target/TargetRegisterInfo.h"
+#include "llvm37/Target/TargetSubtargetInfo.h"
 #include <limits>
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "livestacks"
 
@@ -33,7 +33,7 @@ INITIALIZE_PASS_DEPENDENCY(SlotIndexes)
 INITIALIZE_PASS_END(LiveStacks, "livestacks",
                 "Live Stack Slot Analysis", false, false)
 
-char &llvm::LiveStacksID = LiveStacks::ID;
+char &llvm37::LiveStacksID = LiveStacks::ID;
 
 void LiveStacks::getAnalysisUsage(AnalysisUsage &AU) const {
   AU.setPreservesAll();

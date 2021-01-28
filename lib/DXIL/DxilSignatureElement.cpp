@@ -44,7 +44,7 @@ DxilSignatureElement::DxilSignatureElement(DXIL::SigPointKind sigPointKind)
 DxilSignatureElement::~DxilSignatureElement() {
 }
 
-void DxilSignatureElement::Initialize(llvm::StringRef Name, const CompType &ElementType, 
+void DxilSignatureElement::Initialize(llvm37::StringRef Name, const CompType &ElementType, 
                                       const InterpolationMode &InterpMode, 
                                       unsigned Rows, unsigned Cols, 
                                       int StartRow, int StartCol,
@@ -183,7 +183,7 @@ DXIL::SemanticInterpretationKind DxilSignatureElement::GetInterpretation() const
   return SigPoint::GetInterpretation(m_pSemantic->GetKind(), m_sigPointKind, ShaderModel::kHighestMajor, ShaderModel::kHighestMinor);
 }
 
-llvm::StringRef DxilSignatureElement::GetSemanticName() const {
+llvm37::StringRef DxilSignatureElement::GetSemanticName() const {
   return m_SemanticName;
 }
 unsigned DxilSignatureElement::GetSemanticStartIndex() const {

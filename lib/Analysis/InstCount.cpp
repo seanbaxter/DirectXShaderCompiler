@@ -1,6 +1,6 @@
 //===-- InstCount.cpp - Collects the count of all instructions ------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,15 +11,15 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Analysis/Passes.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/InstVisitor.h"
-#include "llvm/Pass.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/raw_ostream.h"
-using namespace llvm;
+#include "llvm37/Analysis/Passes.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/InstVisitor.h"
+#include "llvm37/Pass.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/raw_ostream.h"
+using namespace llvm37;
 
 #define DEBUG_TYPE "instcount"
 
@@ -31,7 +31,7 @@ STATISTIC(TotalMemInst, "Number of memory instructions");
 #define HANDLE_INST(N, OPCODE, CLASS) \
   STATISTIC(Num ## OPCODE ## Inst, "Number of " #OPCODE " insts");
 
-#include "llvm/IR/Instruction.def"
+#include "llvm37/IR/Instruction.def"
 
 
 namespace {
@@ -44,11 +44,11 @@ namespace {
 #define HANDLE_INST(N, OPCODE, CLASS) \
     void visit##OPCODE(CLASS &) { ++Num##OPCODE##Inst; ++TotalInsts; }
 
-#include "llvm/IR/Instruction.def"
+#include "llvm37/IR/Instruction.def"
 
     void visitInstruction(Instruction &I) {
       errs() << "Instruction Count does not know about " << I;
-      llvm_unreachable(nullptr);
+      llvm37_unreachable(nullptr);
     }
   public:
     static char ID; // Pass identification, replacement for typeid
@@ -70,7 +70,7 @@ char InstCount::ID = 0;
 INITIALIZE_PASS(InstCount, "instcount",
                 "Counts the various types of Instructions", false, true)
 
-FunctionPass *llvm::createInstCountPass() { return new InstCount(); }
+FunctionPass *llvm37::createInstCountPass() { return new InstCount(); }
 
 // InstCount::run - This is the main Analysis entry point for a
 // function.

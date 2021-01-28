@@ -1,6 +1,6 @@
 //===-- ConstantRange.cpp - ConstantRange implementation ------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -21,11 +21,11 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/IR/InstrTypes.h"
-#include "llvm/IR/ConstantRange.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/raw_ostream.h"
-using namespace llvm;
+#include "llvm37/IR/InstrTypes.h"
+#include "llvm37/IR/ConstantRange.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/raw_ostream.h"
+using namespace llvm37;
 
 /// Initialize a full (the default) or empty set for the specified type.
 ///
@@ -57,7 +57,7 @@ ConstantRange ConstantRange::makeAllowedICmpRegion(CmpInst::Predicate Pred,
   uint32_t W = CR.getBitWidth();
   switch (Pred) {
   default:
-    llvm_unreachable("Invalid ICmp predicate to makeAllowedICmpRegion()");
+    llvm37_unreachable("Invalid ICmp predicate to makeAllowedICmpRegion()");
     case CmpInst::ICMP_EQ:
       return CR;
     case CmpInst::ICMP_NE:

@@ -1,6 +1,6 @@
 //===--- Scalarizer.cpp - Scalarize vector operations ---------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -14,17 +14,17 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/IR/IRBuilder.h"
-#include "llvm/IR/InstVisitor.h"
-#include "llvm/Pass.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Transforms/Scalar.h"
-#include "llvm/Transforms/Utils/BasicBlockUtils.h"
-#include "llvm/IR/DebugInfo.h" // HLSL Change -debug info in scalarizer.
-#include "llvm/IR/DIBuilder.h" // HLSL Change -debug info in scalarizer.
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/IR/IRBuilder.h"
+#include "llvm37/IR/InstVisitor.h"
+#include "llvm37/Pass.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Transforms/Scalar.h"
+#include "llvm37/Transforms/Utils/BasicBlockUtils.h"
+#include "llvm37/IR/DebugInfo.h" // HLSL Change -debug info in scalarizer.
+#include "llvm37/IR/DIBuilder.h" // HLSL Change -debug info in scalarizer.
 
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "scalarizer"
 
@@ -381,12 +381,12 @@ void Scalarizer::gather(Instruction *Op, const ValueVector &CV) {
 // Return true if it is safe to transfer the given metadata tag from
 // vector to scalar instructions.
 bool Scalarizer::canTransferMetadata(unsigned Tag) {
-  return (Tag == LLVMContext::MD_tbaa
-          || Tag == LLVMContext::MD_fpmath
-          || Tag == LLVMContext::MD_tbaa_struct
-          || Tag == LLVMContext::MD_invariant_load
-          || Tag == LLVMContext::MD_alias_scope
-          || Tag == LLVMContext::MD_noalias
+  return (Tag == LLVM37Context::MD_tbaa
+          || Tag == LLVM37Context::MD_fpmath
+          || Tag == LLVM37Context::MD_tbaa_struct
+          || Tag == LLVM37Context::MD_invariant_load
+          || Tag == LLVM37Context::MD_alias_scope
+          || Tag == LLVM37Context::MD_noalias
           || Tag == ParallelLoopAccessMDKind);
 }
 
@@ -626,7 +626,7 @@ bool Scalarizer::visitShuffleVectorInst(ShuffleVectorInst &SVI) {
       Res[I] = Op0[Selector];
     else
       Res[I] = Op1[Selector - Op0.size()];
-    // HLSL Change Begins: (fix bug in upstream llvm)
+    // HLSL Change Begins: (fix bug in upstream llvm37)
     if (ExtractElementInst *EA = dyn_cast<ExtractElementInst>(Res[I])) {
       // Clone extractelement here, since it is associated with another inst.
       // Otherwise it will be added to our Gather, and after the incoming
@@ -727,7 +727,7 @@ bool Scalarizer::finish() {
     return false;
   // HLSL Change Begins.
   Module &M = *Gathered.front().first->getModule();
-  LLVMContext &Ctx = M.getContext();
+  LLVM37Context &Ctx = M.getContext();
   const DataLayout &DL = M.getDataLayout();
   bool HasDbgInfo = getDebugMetadataVersionFromModule(M) != 0;
   // Map from an extract element inst to a Value which replaced it.
@@ -833,11 +833,11 @@ bool Scalarizer::finish() {
 }
 
 // HLSL Change Begin
-FunctionPass *llvm::createScalarizerPass(bool AllowFolding) {
+FunctionPass *llvm37::createScalarizerPass(bool AllowFolding) {
   Scalarizer *pass = new Scalarizer(AllowFolding);
   return pass;
 }
 // HLSL Change End
-FunctionPass *llvm::createScalarizerPass() {
+FunctionPass *llvm37::createScalarizerPass() {
   return new Scalarizer();
 }

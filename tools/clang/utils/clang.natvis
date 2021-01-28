@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-Visual Studio 2012 Native Debugging Visualizers for LLVM
+Visual Studio 2012 Native Debugging Visualizers for LLVM37
 
 Put this file into "%USERPROFILE%\Documents\Visual Studio 2015\Visualizers", creating the directory if necessary,
 or create a symbolic link so it updates automatically.
 
 mklink "%USERPROFILE%\Documents\Visual Studio 2015\Visualizers\clang.natvis" %HLSL_SRC_DIR%\tools\clang\utils\clang.natvis
 
-LLVM types are also used, those can be added with this command.
+LLVM37 types are also used, those can be added with this command.
 
-mklink "%USERPROFILE%\Documents\Visual Studio 2015\Visualizers\llvm.natvis" %HLSL_SRC_DIR%\utils\llvm.natvis
+mklink "%USERPROFILE%\Documents\Visual Studio 2015\Visualizers\llvm37.natvis" %HLSL_SRC_DIR%\utils\llvm37.natvis
 
 -->
 <AutoVisualizer xmlns="http://schemas.microsoft.com/vstudio/debugger/natvis/2010">
   <Type Name="clang::IdentifierInfo">
-    <DisplayString Condition="Entry != 0">({((llvm::StringMapEntry&lt;clang::IdentifierInfo *&gt;*)Entry)+1,s})</DisplayString>
+    <DisplayString Condition="Entry != 0">({((llvm37::StringMapEntry&lt;clang::IdentifierInfo *&gt;*)Entry)+1,s})</DisplayString>
     <Expand>
-      <Item Condition="Entry != 0" Name="[Identifier]">((llvm::StringMapEntry&lt;clang::IdentifierInfo *&gt;*)Entry)+1,s</Item>
+      <Item Condition="Entry != 0" Name="[Identifier]">((llvm37::StringMapEntry&lt;clang::IdentifierInfo *&gt;*)Entry)+1,s</Item>
       <Item Name="Token Kind">(clang::tok::TokenKind)TokenID</Item>
     </Expand>
   </Type>

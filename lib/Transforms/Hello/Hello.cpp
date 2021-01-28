@@ -1,22 +1,22 @@
-//===- Hello.cpp - Example code from "Writing an LLVM Pass" ---------------===//
+//===- Hello.cpp - Example code from "Writing an LLVM37 Pass" ---------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 //
-// This file implements two versions of the LLVM "Hello World" pass described
-// in docs/WritingAnLLVMPass.html
+// This file implements two versions of the LLVM37 "Hello World" pass described
+// in docs/WritingAnLLVM37Pass.html
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/ADT/Statistic.h"
-#include "llvm/IR/Function.h"
-#include "llvm/Pass.h"
-#include "llvm/Support/raw_ostream.h"
-using namespace llvm;
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/Pass.h"
+#include "llvm37/Support/raw_ostream.h"
+using namespace llvm37;
 
 #define DEBUG_TYPE "hello"
 

@@ -1,21 +1,21 @@
-//===- llvm/unittest/IR/AttributesTest.cpp - Attributes unit tests --------===//
+//===- llvm37/unittest/IR/AttributesTest.cpp - Attributes unit tests --------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/IR/Attributes.h"
-#include "llvm/IR/LLVMContext.h"
+#include "llvm37/IR/Attributes.h"
+#include "llvm37/IR/LLVMContext.h"
 #include "gtest/gtest.h"
-using namespace llvm;
+using namespace llvm37;
 
 namespace {
 
 TEST(Attributes, Uniquing) {
-  LLVMContext C;
+  LLVM37Context C;
 
   Attribute AttrA = Attribute::get(C, Attribute::AlwaysInline);
   Attribute AttrB = Attribute::get(C, Attribute::AlwaysInline);
@@ -32,7 +32,7 @@ TEST(Attributes, Uniquing) {
 }
 
 TEST(Attributes, Ordering) {
-  LLVMContext C;
+  LLVM37Context C;
 
   AttributeSet ASs[] = {
     AttributeSet::get(C, 2, Attribute::ZExt),

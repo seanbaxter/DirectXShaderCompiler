@@ -1,6 +1,6 @@
 //===- Scope.cpp - Lexical scope information --------------------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -14,7 +14,7 @@
 
 #include "clang/Sema/Scope.h"
 #include "clang/AST/Decl.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/Support/raw_ostream.h"
 
 using namespace clang;
 
@@ -130,7 +130,7 @@ void Scope::mergeNRVOIntoParent() {
     getParent()->addNRVOCandidate(NRVO.getPointer());
 }
 
-void Scope::dump() const { dumpImpl(llvm::errs()); }
+void Scope::dump() const { dumpImpl(llvm37::errs()); }
 
 void Scope::dumpImpl(raw_ostream &OS) const {
   unsigned Flags = getFlags();

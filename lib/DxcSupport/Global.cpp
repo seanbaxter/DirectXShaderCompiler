@@ -16,9 +16,9 @@
 #include "dxc/Support/WinIncludes.h"
 
 
-void CheckLLVMErrorCode(const std::error_code &ec) {
+void CheckLLVM37ErrorCode(const std::error_code &ec) {
   if (ec) {
-    DXASSERT(ec.category() == std::system_category(), "unexpected LLVM exception code");
+    DXASSERT(ec.category() == std::system_category(), "unexpected LLVM37 exception code");
     throw hlsl::Exception(HRESULT_FROM_WIN32(ec.value()));
   }
 }

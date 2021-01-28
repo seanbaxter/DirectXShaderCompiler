@@ -1,6 +1,6 @@
 //===--- ASTReaderDecl.cpp - Decl Deserialization ---------------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -25,7 +25,7 @@
 #include "clang/Sema/IdentifierResolver.h"
 #include "clang/Sema/Sema.h"
 #include "clang/Sema/SemaDiagnostic.h"
-#include "llvm/Support/SaveAndRestore.h"
+#include "llvm37/Support/SaveAndRestore.h"
 using namespace clang;
 using namespace clang::serialization;
 
@@ -433,8 +433,8 @@ public:
 };
 }
 template<typename DeclT>
-llvm::iterator_range<MergedRedeclIterator<DeclT>> merged_redecls(DeclT *D) {
-  return llvm::iterator_range<MergedRedeclIterator<DeclT>>(
+llvm37::iterator_range<MergedRedeclIterator<DeclT>> merged_redecls(DeclT *D) {
+  return llvm37::iterator_range<MergedRedeclIterator<DeclT>>(
       MergedRedeclIterator<DeclT>(D),
       MergedRedeclIterator<DeclT>());
 }
@@ -557,7 +557,7 @@ void ASTDeclReader::VisitDecl(Decl *D) {
 }
 
 void ASTDeclReader::VisitTranslationUnitDecl(TranslationUnitDecl *TU) {
-  llvm_unreachable("Translation units are not serialized");
+  llvm37_unreachable("Translation units are not serialized");
 }
 
 void ASTDeclReader::VisitNamedDecl(NamedDecl *ND) {
@@ -630,7 +630,7 @@ ASTDeclReader::RedeclarableResult ASTDeclReader::VisitTagDecl(TagDecl *TD) {
     NamedDeclForTagDecl = ReadDeclID(Record, Idx);
     break;
   default:
-    llvm_unreachable("unexpected tag info kind");
+    llvm37_unreachable("unexpected tag info kind");
   }
 
   if (!isa<CXXRecordDecl>(TD))
@@ -814,7 +814,7 @@ void ASTDeclReader::VisitFunctionDecl(FunctionDecl *FD) {
       // FunctionTemplateSpecializationInfo's Profile().
       // We avoid getASTContext because a decl in the parent hierarchy may
       // be initializing.
-      llvm::FoldingSetNodeID ID;
+      llvm37::FoldingSetNodeID ID;
       FunctionTemplateSpecializationInfo::Profile(ID, TemplArgs, C);
       void *InsertPos = nullptr;
       FunctionTemplateDecl::Common *CommonPtr = CanonTemplate->getCommonPtr();
@@ -2245,7 +2245,7 @@ void ASTDeclReader::mergeRedeclarable(Redeclarable<T> *DBase,
 /// instantiations.
 template<typename T> static T assert_cast(T t) { return t; }
 template<typename T> static T assert_cast(...) {
-  llvm_unreachable("bad assert_cast");
+  llvm37_unreachable("bad assert_cast");
 }
 
 /// \brief Merge together the pattern declarations from two template
@@ -2287,7 +2287,7 @@ void ASTDeclReader::mergeTemplatePattern(RedeclarableTemplateDecl *D,
   if (auto *DAlias = dyn_cast<TypeAliasDecl>(DPattern))
     return mergeRedeclarable(DAlias, cast<TypedefNameDecl>(ExistingPattern),
                              Result);
-  llvm_unreachable("merged an unknown kind of redeclarable template");
+  llvm37_unreachable("merged an unknown kind of redeclarable template");
 }
 
 /// \brief Attempts to merge the given declaration (D) with another declaration
@@ -2897,7 +2897,7 @@ Decl *ASTDeclReader::getMostRecentDeclImpl(Redeclarable<DeclT> *D) {
   return D->RedeclLink.getLatestNotUpdated();
 }
 Decl *ASTDeclReader::getMostRecentDeclImpl(...) {
-  llvm_unreachable("getMostRecentDecl on non-redeclarable declaration");
+  llvm37_unreachable("getMostRecentDecl on non-redeclarable declaration");
 }
 
 Decl *ASTDeclReader::getMostRecentDecl(Decl *D) {
@@ -2910,7 +2910,7 @@ Decl *ASTDeclReader::getMostRecentDecl(Decl *D) {
     return getMostRecentDeclImpl(cast<TYPE##Decl>(D));
 #include "clang/AST/DeclNodes.inc"
   }
-  llvm_unreachable("unknown decl kind");
+  llvm37_unreachable("unknown decl kind");
 }
 
 Decl *ASTReader::getMostRecentExistingDecl(Decl *D) {
@@ -2971,7 +2971,7 @@ void ASTDeclReader::attachPreviousDeclImpl(ASTReader &Reader,
 }
 }
 void ASTDeclReader::attachPreviousDeclImpl(ASTReader &Reader, ...) {
-  llvm_unreachable("attachPreviousDecl on non-redeclarable declaration");
+  llvm37_unreachable("attachPreviousDecl on non-redeclarable declaration");
 }
 
 /// Inherit the default template argument from \p From to \p To. Returns
@@ -3050,7 +3050,7 @@ void ASTDeclReader::attachLatestDeclImpl(Redeclarable<DeclT> *D, Decl *Latest) {
   D->RedeclLink.setLatest(cast<DeclT>(Latest));
 }
 void ASTDeclReader::attachLatestDeclImpl(...) {
-  llvm_unreachable("attachLatestDecl on non-redeclarable declaration");
+  llvm37_unreachable("attachLatestDecl on non-redeclarable declaration");
 }
 
 void ASTDeclReader::attachLatestDecl(Decl *D, Decl *Latest) {
@@ -3071,7 +3071,7 @@ void ASTDeclReader::markIncompleteDeclChainImpl(Redeclarable<DeclT> *D) {
   D->RedeclLink.markIncomplete();
 }
 void ASTDeclReader::markIncompleteDeclChainImpl(...) {
-  llvm_unreachable("markIncompleteDeclChain on non-redeclarable declaration");
+  llvm37_unreachable("markIncompleteDeclChain on non-redeclarable declaration");
 }
 
 void ASTReader::markIncompleteDeclChain(Decl *D) {
@@ -3090,7 +3090,7 @@ Decl *ASTReader::ReadDeclRecord(DeclID ID) {
   unsigned Index = ID - NUM_PREDEF_DECL_IDS;
   unsigned RawLocation = 0;
   RecordLocation Loc = DeclCursorForID(ID, RawLocation);
-  llvm::BitstreamCursor &DeclsCursor = Loc.F->DeclsCursor;
+  llvm37::BitstreamCursor &DeclsCursor = Loc.F->DeclsCursor;
   // Keep track of where we are in the stream, then jump back there
   // after reading this declaration.
   SavedStreamPosition SavedPosition(DeclsCursor);
@@ -3110,7 +3110,7 @@ Decl *ASTReader::ReadDeclRecord(DeclID ID) {
   switch ((DeclCode)DeclsCursor.readRecord(Code, Record)) {
   case DECL_CONTEXT_LEXICAL:
   case DECL_CONTEXT_VISIBLE:
-    llvm_unreachable("Record cannot be de-serialized with ReadDeclRecord");
+    llvm37_unreachable("Record cannot be de-serialized with ReadDeclRecord");
   case DECL_TYPEDEF:
     D = TypedefDecl::CreateDeserialized(Context, ID);
     break;
@@ -3383,7 +3383,7 @@ void ASTReader::loadDeclUpdateRecords(serialization::DeclID ID, Decl *D) {
          I = UpdateOffsets.begin(), E = UpdateOffsets.end(); I != E; ++I) {
       ModuleFile *F = I->first;
       uint64_t Offset = I->second;
-      llvm::BitstreamCursor &Cursor = F->DeclsCursor;
+      llvm37::BitstreamCursor &Cursor = F->DeclsCursor;
       SavedStreamPosition SavedPosition(Cursor);
       Cursor.JumpToBit(Offset);
       RecordData Record;
@@ -3413,13 +3413,13 @@ namespace {
   class RedeclChainVisitor {
     ASTReader &Reader;
     SmallVectorImpl<DeclID> &SearchDecls;
-    llvm::SmallPtrSetImpl<Decl *> &Deserialized;
+    llvm37::SmallPtrSetImpl<Decl *> &Deserialized;
     GlobalDeclID CanonID;
     SmallVector<Decl *, 4> Chain;
 
   public:
     RedeclChainVisitor(ASTReader &Reader, SmallVectorImpl<DeclID> &SearchDecls,
-                       llvm::SmallPtrSetImpl<Decl *> &Deserialized,
+                       llvm37::SmallPtrSetImpl<Decl *> &Deserialized,
                        GlobalDeclID CanonID)
       : Reader(Reader), SearchDecls(SearchDecls), Deserialized(Deserialized),
         CanonID(CanonID) {
@@ -3566,10 +3566,10 @@ namespace {
     ASTReader &Reader;
     serialization::GlobalDeclID InterfaceID;
     ObjCInterfaceDecl *Interface;
-    llvm::SmallPtrSetImpl<ObjCCategoryDecl *> &Deserialized;
+    llvm37::SmallPtrSetImpl<ObjCCategoryDecl *> &Deserialized;
     unsigned PreviousGeneration;
     ObjCCategoryDecl *Tail;
-    llvm::DenseMap<DeclarationName, ObjCCategoryDecl *> NameCategoryMap;
+    llvm37::DenseMap<DeclarationName, ObjCCategoryDecl *> NameCategoryMap;
     
     void add(ObjCCategoryDecl *Cat) {
       // Only process each category once.
@@ -3614,7 +3614,7 @@ namespace {
     ObjCCategoriesVisitor(ASTReader &Reader,
                           serialization::GlobalDeclID InterfaceID,
                           ObjCInterfaceDecl *Interface,
-                        llvm::SmallPtrSetImpl<ObjCCategoryDecl *> &Deserialized,
+                        llvm37::SmallPtrSetImpl<ObjCCategoryDecl *> &Deserialized,
                           unsigned PreviousGeneration)
       : Reader(Reader), InterfaceID(InterfaceID), Interface(Interface),
         Deserialized(Deserialized), PreviousGeneration(PreviousGeneration),

@@ -1,6 +1,6 @@
 //===--- NSAPI.cpp - NSFoundation APIs ------------------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,7 +11,7 @@
 #include "clang/AST/ASTContext.h"
 #include "clang/AST/DeclObjC.h"
 #include "clang/AST/Expr.h"
-#include "llvm/ADT/StringSwitch.h"
+#include "llvm37/ADT/StringSwitch.h"
 
 using namespace clang;
 
@@ -486,7 +486,7 @@ StringRef NSAPI::GetNSIntegralKind(QualType T) const {
   
   while (const TypedefType *TDT = T->getAs<TypedefType>()) {
     StringRef NSIntegralResust =
-      llvm::StringSwitch<StringRef>(
+      llvm37::StringSwitch<StringRef>(
         TDT->getDecl()->getDeclName().getAsIdentifierInfo()->getName())
     .Case("int8_t", "int8_t")
     .Case("int16_t", "int16_t")

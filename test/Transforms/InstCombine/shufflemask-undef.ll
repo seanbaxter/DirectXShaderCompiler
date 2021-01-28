@@ -78,18 +78,18 @@ bb266.i:
 	fmul <4 x float> %5, zeroinitializer		; <<4 x float>>:6 [#uses=2]
 	fmul <4 x float> %6, %6		; <<4 x float>>:7 [#uses=1]
 	fadd <4 x float> zeroinitializer, %7		; <<4 x float>>:8 [#uses=1]
-	call <4 x float> @llvm.x86.sse.max.ps( <4 x float> zeroinitializer, <4 x float> %8 ) nounwind readnone		; <<4 x float>>:9 [#uses=1]
+	call <4 x float> @llvm37.x86.sse.max.ps( <4 x float> zeroinitializer, <4 x float> %8 ) nounwind readnone		; <<4 x float>>:9 [#uses=1]
 	%phitmp40 = bitcast <4 x float> %9 to <4 x i32>		; <<4 x i32>> [#uses=1]
 	%tmp4109.i = and <4 x i32> %phitmp40, < i32 8388607, i32 8388607, i32 8388607, i32 8388607 >		; <<4 x i32>> [#uses=1]
 	%tmp4116.i = or <4 x i32> %tmp4109.i, < i32 1065353216, i32 1065353216, i32 1065353216, i32 1065353216 >		; <<4 x i32>> [#uses=1]
 	%tmp4117.i = bitcast <4 x i32> %tmp4116.i to <4 x float>		; <<4 x float>> [#uses=1]
 	fadd <4 x float> %tmp4117.i, zeroinitializer		; <<4 x float>>:10 [#uses=1]
 	fmul <4 x float> %10, < float 5.000000e-01, float 5.000000e-01, float 5.000000e-01, float 5.000000e-01 >		; <<4 x float>>:11 [#uses=1]
-	call <4 x float> @llvm.x86.sse.max.ps( <4 x float> %11, <4 x float> zeroinitializer ) nounwind readnone		; <<4 x float>>:12 [#uses=1]
-	call <4 x float> @llvm.x86.sse.min.ps( <4 x float> %12, <4 x float> zeroinitializer ) nounwind readnone		; <<4 x float>>:13 [#uses=1]
-	%tmp4170.i = call <4 x float> @llvm.x86.sse.cmp.ps( <4 x float> %13, <4 x float> zeroinitializer, i8 2 ) nounwind		; <<4 x float>> [#uses=1]
+	call <4 x float> @llvm37.x86.sse.max.ps( <4 x float> %11, <4 x float> zeroinitializer ) nounwind readnone		; <<4 x float>>:12 [#uses=1]
+	call <4 x float> @llvm37.x86.sse.min.ps( <4 x float> %12, <4 x float> zeroinitializer ) nounwind readnone		; <<4 x float>>:13 [#uses=1]
+	%tmp4170.i = call <4 x float> @llvm37.x86.sse.cmp.ps( <4 x float> %13, <4 x float> zeroinitializer, i8 2 ) nounwind		; <<4 x float>> [#uses=1]
 	bitcast <4 x float> %tmp4170.i to <16 x i8>		; <<16 x i8>>:14 [#uses=1]
-	call i32 @llvm.x86.sse2.pmovmskb.128( <16 x i8> %14 ) nounwind readnone		; <i32>:15 [#uses=1]
+	call i32 @llvm37.x86.sse2.pmovmskb.128( <16 x i8> %14 ) nounwind readnone		; <i32>:15 [#uses=1]
 	icmp eq i32 %15, 0		; <i1>:16 [#uses=1]
 	br i1 %16, label %bb5574.i, label %bb4521.i
 
@@ -100,10 +100,10 @@ bb5574.i:		; preds = %bb266.i
 	unreachable
 }
 
-declare <4 x float> @llvm.x86.sse.cmp.ps(<4 x float>, <4 x float>, i8) nounwind readnone
+declare <4 x float> @llvm37.x86.sse.cmp.ps(<4 x float>, <4 x float>, i8) nounwind readnone
 
-declare i32 @llvm.x86.sse2.pmovmskb.128(<16 x i8>) nounwind readnone
+declare i32 @llvm37.x86.sse2.pmovmskb.128(<16 x i8>) nounwind readnone
 
-declare <4 x float> @llvm.x86.sse.max.ps(<4 x float>, <4 x float>) nounwind readnone
+declare <4 x float> @llvm37.x86.sse.max.ps(<4 x float>, <4 x float>) nounwind readnone
 
-declare <4 x float> @llvm.x86.sse.min.ps(<4 x float>, <4 x float>) nounwind readnone
+declare <4 x float> @llvm37.x86.sse.min.ps(<4 x float>, <4 x float>) nounwind readnone

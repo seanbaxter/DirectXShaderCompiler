@@ -1,6 +1,6 @@
-RUN: llvm-readobj -r -expand-relocs %p/Inputs/hello-world.elf-x86-64 \
+RUN: llvm37-readobj -r -expand-relocs %p/Inputs/hello-world.elf-x86-64 \
 RUN:   | FileCheck %s
-RUN: llvm-readobj -dyn-relocations -expand-relocs \
+RUN: llvm37-readobj -dyn-relocations -expand-relocs \
 RUN:   %p/Inputs/hello-world.elf-x86-64 | FileCheck %s --check-prefix=DYN
 
 // CHECK:     Relocations [

@@ -1,4 +1,4 @@
-// RUN: llvm-tblgen %s
+// RUN: llvm37-tblgen %s
 
 def {
   bit A = 1;

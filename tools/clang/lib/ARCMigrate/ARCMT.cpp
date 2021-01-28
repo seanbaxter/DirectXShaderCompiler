@@ -1,6 +1,6 @@
 //===--- ARCMT.cpp - Migration to ARC mode --------------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -19,8 +19,8 @@
 #include "clang/Rewrite/Core/Rewriter.h"
 #include "clang/Sema/SemaDiagnostic.h"
 #include "clang/Serialization/ASTReader.h"
-#include "llvm/ADT/Triple.h"
-#include "llvm/Support/MemoryBuffer.h"
+#include "llvm37/ADT/Triple.h"
+#include "llvm37/Support/MemoryBuffer.h"
 using namespace clang;
 using namespace arcmt;
 
@@ -148,15 +148,15 @@ static bool HasARCRuntime(CompilerInvocation &origCI) {
   // This duplicates some functionality from Darwin::AddDeploymentTarget
   // but this function is well defined, so keep it decoupled from the driver
   // and avoid unrelated complications.
-  llvm::Triple triple(origCI.getTargetOpts().Triple);
+  llvm37::Triple triple(origCI.getTargetOpts().Triple);
 
   if (triple.isiOS())
     return triple.getOSMajorVersion() >= 5;
 
-  if (triple.getOS() == llvm::Triple::Darwin)
+  if (triple.getOS() == llvm37::Triple::Darwin)
     return triple.getOSMajorVersion() >= 11;
 
-  if (triple.getOS() == llvm::Triple::MacOSX) {
+  if (triple.getOS() == llvm37::Triple::MacOSX) {
     unsigned Major, Minor, Micro;
     triple.getOSVersion(Major, Minor, Micro);
     return Major > 10 || (Major == 10 && Minor >= 7);
@@ -214,7 +214,7 @@ createInvocationForMigration(CompilerInvocation &origCI,
 static void emitPremigrationErrors(const CapturedDiagList &arcDiags,
                                    DiagnosticOptions *diagOpts,
                                    Preprocessor &PP) {
-  TextDiagnosticPrinter printer(llvm::errs(), diagOpts);
+  TextDiagnosticPrinter printer(llvm37::errs(), diagOpts);
   IntrusiveRefCntPtr<DiagnosticIDs> DiagID(new DiagnosticIDs());
   IntrusiveRefCntPtr<DiagnosticsEngine> Diags(
       new DiagnosticsEngine(DiagID, diagOpts, &printer,
@@ -450,8 +450,8 @@ public:
   std::unique_ptr<ASTConsumer> CreateASTConsumer(CompilerInstance &CI,
                                                  StringRef InFile) override {
     CI.getPreprocessor().addPPCallbacks(
-               llvm::make_unique<ARCMTMacroTrackerPPCallbacks>(ARCMTMacroLocs));
-    return llvm::make_unique<ASTConsumer>();
+               llvm37::make_unique<ARCMTMacroTrackerPPCallbacks>(ARCMTMacroLocs));
+    return llvm37::make_unique<ASTConsumer>();
   }
 };
 
@@ -598,11 +598,11 @@ bool MigrationProcess::applyTransform(TransformFn trans,
     std::string newFname = file->getName();
     newFname += "-trans";
     SmallString<512> newText;
-    llvm::raw_svector_ostream vecOS(newText);
+    llvm37::raw_svector_ostream vecOS(newText);
     buf.write(vecOS);
     vecOS.flush();
-    std::unique_ptr<llvm::MemoryBuffer> memBuf(
-        llvm::MemoryBuffer::getMemBufferCopy(
+    std::unique_ptr<llvm37::MemoryBuffer> memBuf(
+        llvm37::MemoryBuffer::getMemBufferCopy(
             StringRef(newText.data(), newText.size()), newFname));
     SmallString<64> filePath(file->getName());
     Unit->getFileManager().FixupRelativePath(filePath);

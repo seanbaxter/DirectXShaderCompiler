@@ -1,4 +1,4 @@
-// RUN: llvm-mc -triple i386-apple-darwin %s
+// RUN: llvm37-mc -triple i386-apple-darwin %s
 
 .macro check_expr
   .if ($0) != ($1)

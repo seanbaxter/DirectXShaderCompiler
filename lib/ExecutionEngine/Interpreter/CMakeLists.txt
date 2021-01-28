@@ -6,14 +6,14 @@ if( FFI_INCLUDE_PATH )
   include_directories( ${FFI_INCLUDE_PATH} )
 endif()
 
-add_llvm_library(LLVMInterpreter
+add_llvm_library(LLVM37Interpreter
   Execution.cpp
   ExternalFunctions.cpp
   Interpreter.cpp
   )
 
-if( LLVM_ENABLE_FFI )
-  target_link_libraries( LLVMInterpreter PRIVATE ${FFI_LIBRARY_PATH} )
+if( LLVM37_ENABLE_FFI )
+  target_link_libraries( LLVM37Interpreter PRIVATE ${FFI_LIBRARY_PATH} )
 endif()
 
-add_dependencies(LLVMInterpreter intrinsics_gen)
+add_dependencies(LLVM37Interpreter intrinsics_gen)

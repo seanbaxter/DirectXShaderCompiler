@@ -1,6 +1,6 @@
 /*===-- clang-c/Platform.h - C Index platform decls   -------------*- C -*-===*\
 |*                                                                            *|
-|*                     The LLVM Compiler Infrastructure                       *|
+|*                     The LLVM37 Compiler Infrastructure                       *|
 |*                                                                            *|
 |* This file is distributed under the University of Illinois Open Source      *|
 |* License. See LICENSE.TXT for details.                                      *|
@@ -10,8 +10,8 @@
 |* This header provides platform specific macros (dllimport, deprecated, ...) *|
 |*                                                                            *|
 \*===----------------------------------------------------------------------===*/
-#ifndef LLVM_CLANG_C_PLATFORM_H
-#define LLVM_CLANG_C_PLATFORM_H
+#ifndef LLVM37_CLANG_C_PLATFORM_H
+#define LLVM37_CLANG_C_PLATFORM_H
 
 #ifdef __cplusplus
 extern "C" {

@@ -1,4 +1,4 @@
-; RUN: not llvm-as < %s 2>&1 | FileCheck %s
+; RUN: not llvm37-as < %s 2>&1 | FileCheck %s
 ; CHECK: PHI nodes not grouped at top
 
 define i32 @test(i32 %i, i32 %j, i1 %c) {

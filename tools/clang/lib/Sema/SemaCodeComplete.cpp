@@ -1,6 +1,6 @@
 //===---------------- SemaCodeComplete.cpp - Code Completion ----*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -25,13 +25,13 @@
 #include "clang/Sema/Overload.h"
 #include "clang/Sema/Scope.h"
 #include "clang/Sema/ScopeInfo.h"
-#include "llvm/ADT/DenseSet.h"
-#include "llvm/ADT/SmallBitVector.h"
-#include "llvm/ADT/SmallPtrSet.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/ADT/StringExtras.h"
-#include "llvm/ADT/StringSwitch.h"
-#include "llvm/ADT/Twine.h"
+#include "llvm37/ADT/DenseSet.h"
+#include "llvm37/ADT/SmallBitVector.h"
+#include "llvm37/ADT/SmallPtrSet.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/ADT/StringExtras.h"
+#include "llvm37/ADT/StringSwitch.h"
+#include "llvm37/ADT/Twine.h"
 #include <list>
 #include <map>
 #include <vector>
@@ -59,7 +59,7 @@ namespace {
     /// \brief A record of all of the declarations we have found and placed
     /// into the result set, used to ensure that no declaration ever gets into
     /// the result set twice.
-    llvm::SmallPtrSet<const Decl*, 16> AllDeclsFound;
+    llvm37::SmallPtrSet<const Decl*, 16> AllDeclsFound;
     
     typedef std::pair<const NamedDecl *, unsigned> DeclIndexPair;
 
@@ -71,7 +71,7 @@ namespace {
 
       /// \brief Contains either the solitary NamedDecl * or a vector
       /// of (declaration, index) pairs.
-      llvm::PointerUnion<const NamedDecl *, DeclIndexPairVector*> DeclOrVector;
+      llvm37::PointerUnion<const NamedDecl *, DeclIndexPairVector*> DeclOrVector;
 
       /// \brief When the entry contains a single declaration, this is
       /// the index associated with that entry.
@@ -119,7 +119,7 @@ namespace {
     /// \brief A mapping from declaration names to the declarations that have
     /// this name within a particular scope and their index within the list of
     /// results.
-    typedef llvm::DenseMap<DeclarationName, ShadowMapEntry> ShadowMap;
+    typedef llvm37::DenseMap<DeclarationName, ShadowMapEntry> ShadowMap;
     
     /// \brief The semantic analysis object for which results are being 
     /// produced.
@@ -347,7 +347,7 @@ namespace {
 }
 
 class ResultBuilder::ShadowMapEntry::iterator {
-  llvm::PointerUnion<const NamedDecl *, const DeclIndexPair *> DeclOrIterator;
+  llvm37::PointerUnion<const NamedDecl *, const DeclIndexPair *> DeclOrIterator;
   unsigned SingleDeclIndex;
 
 public:
@@ -1448,7 +1448,7 @@ static bool WantTypesInContext(Sema::ParserCompletionContext CCC,
     return LangOpts.CPlusPlus || LangOpts.ObjC1 || LangOpts.C99;
   }
 
-  llvm_unreachable("Invalid ParserCompletionContext!");
+  llvm37_unreachable("Invalid ParserCompletionContext!");
 }
 
 static PrintingPolicy getCompletionPrintingPolicy(const ASTContext &Context,
@@ -2445,7 +2445,7 @@ AddQualifierToCompletionString(CodeCompletionBuilder &Result,
   
   std::string PrintedNNS;
   {
-    llvm::raw_string_ostream OS(PrintedNNS);
+    llvm37::raw_string_ostream OS(PrintedNNS);
     Qualifier->print(OS, Policy);
   }
   if (QualifierIsInformative)
@@ -2718,7 +2718,7 @@ CodeCompletionResult::CreateCodeCompletionString(ASTContext &Ctx,
 
     // Figure out which template parameters are deduced (or have default
     // arguments).
-    llvm::SmallBitVector Deduced;
+    llvm37::SmallBitVector Deduced;
     Sema::MarkDeducedTemplateParameters(Ctx, FunTmpl, Deduced);
     unsigned LastDeducibleArgument;
     for (LastDeducibleArgument = Deduced.size(); LastDeducibleArgument > 0;
@@ -3188,7 +3188,7 @@ static enum CodeCompletionContext::Kind mapCodeCompletionContext(Sema &S,
     return CodeCompletionContext::CCC_Type;
   }
 
-  llvm_unreachable("Invalid ParserCompletionContext!");
+  llvm37_unreachable("Invalid ParserCompletionContext!");
 }
 
 /// \brief If we're in a C++ virtual member function, add completion results
@@ -3234,7 +3234,7 @@ static void MaybeAddOverrideCalls(Sema &S, DeclContext *InContext,
                                    Overridden->getDeclContext());
       if (NNS) {
         std::string Str;
-        llvm::raw_string_ostream OS(Str);
+        llvm37::raw_string_ostream OS(Str);
         NNS->print(OS, Policy);
         Builder.AddTextChunk(Results.getAllocator().CopyString(OS.str()));
       }
@@ -3541,7 +3541,7 @@ void Sema::CodeCompletePostfixExpression(Scope *S, ExprResult E) {
 
 /// \brief The set of properties that have already been added, referenced by
 /// property name.
-typedef llvm::SmallPtrSet<IdentifierInfo*, 16> AddedPropertiesSet;
+typedef llvm37::SmallPtrSet<IdentifierInfo*, 16> AddedPropertiesSet;
 
 /// \brief Retrieve the container definition, if any?
 static ObjCContainerDecl *getContainerDef(ObjCContainerDecl *Container) {
@@ -3779,7 +3779,7 @@ void Sema::CodeCompleteTag(Scope *S, unsigned TagSpec) {
     break;
     
   default:
-    llvm_unreachable("Unknown type specifier kind in CodeCompleteTag");
+    llvm37_unreachable("Unknown type specifier kind in CodeCompleteTag");
   }
   
   ResultBuilder Results(*this, CodeCompleter->getAllocator(),
@@ -3845,7 +3845,7 @@ void Sema::CodeCompleteCase(Scope *S) {
   // FIXME: Ideally, we would also be able to look *past* the code-completion
   // token, in case we are code-completing in the middle of the switch and not
   // at the end. However, we aren't able to do so at the moment.
-  llvm::SmallPtrSet<EnumConstantDecl *, 8> EnumeratorsSeen;
+  llvm37::SmallPtrSet<EnumConstantDecl *, 8> EnumeratorsSeen;
   NestedNameSpecifier *Qualifier = nullptr;
   for (SwitchCase *SC = Switch->getSwitchCaseList(); SC; 
        SC = SC->getNextSwitchCase()) {
@@ -4426,8 +4426,8 @@ void Sema::CodeCompleteConstructorInitializer(
   Results.EnterNewScope();
   
   // Fill in any already-initialized fields or base classes.
-  llvm::SmallPtrSet<FieldDecl *, 4> InitializedFields;
-  llvm::SmallPtrSet<CanQualType, 4> InitializedBases;
+  llvm37::SmallPtrSet<FieldDecl *, 4> InitializedFields;
+  llvm37::SmallPtrSet<CanQualType, 4> InitializedBases;
   for (unsigned I = 0, E = Initializers.size(); I != E; ++I) {
     if (Initializers[I]->isBaseInitializer())
       InitializedBases.insert(
@@ -4540,7 +4540,7 @@ void Sema::CodeCompleteLambdaIntroducer(Scope *S, LambdaIntroducer &Intro,
   Results.EnterNewScope();
 
   // Note what has already been captured.
-  llvm::SmallPtrSet<IdentifierInfo *, 4> Known;
+  llvm37::SmallPtrSet<IdentifierInfo *, 4> Known;
   bool IncludedThis = false;
   for (const auto &C : Intro.Captures) {
     if (C.Kind == LCK_This) {
@@ -4989,7 +4989,7 @@ static bool isAcceptableObjCMethod(ObjCMethodDecl *Method,
 namespace {
   /// \brief A set of selectors, which is used to avoid introducing multiple 
   /// completions with the same selector into the result set.
-  typedef llvm::SmallPtrSet<Selector, 16> VisitedSelectorSet;
+  typedef llvm37::SmallPtrSet<Selector, 16> VisitedSelectorSet;
 }
 
 /// \brief Add all of the Objective-C methods in the given Objective-C 
@@ -5285,7 +5285,7 @@ static ObjCInterfaceDecl *GetAssumedMessageSendExprType(Expr *E) {
 
   ObjCInterfaceDecl *Super = IFace->getSuperClass();
   if (Method->isInstanceMethod())
-    return llvm::StringSwitch<ObjCInterfaceDecl *>(Id->getName())
+    return llvm37::StringSwitch<ObjCInterfaceDecl *>(Id->getName())
       .Case("retain", IFace)
       .Case("strong", IFace)
       .Case("autorelease", IFace)
@@ -5300,7 +5300,7 @@ static ObjCInterfaceDecl *GetAssumedMessageSendExprType(Expr *E) {
       .Case("superclass", Super)
       .Default(nullptr);
 
-  return llvm::StringSwitch<ObjCInterfaceDecl *>(Id->getName())
+  return llvm37::StringSwitch<ObjCInterfaceDecl *>(Id->getName())
     .Case("new", IFace)
     .Case("alloc", IFace)
     .Case("allocWithZone", IFace)
@@ -6069,7 +6069,7 @@ void Sema::CodeCompleteObjCInterfaceCategory(Scope *S,
   
   // Ignore any categories we find that have already been implemented by this
   // interface.
-  llvm::SmallPtrSet<IdentifierInfo *, 16> CategoryNames;
+  llvm37::SmallPtrSet<IdentifierInfo *, 16> CategoryNames;
   NamedDecl *CurClass
     = LookupSingleName(TUScope, ClassName, ClassNameLoc, LookupOrdinaryName);
   if (ObjCInterfaceDecl *Class = dyn_cast_or_null<ObjCInterfaceDecl>(CurClass)){
@@ -6114,7 +6114,7 @@ void Sema::CodeCompleteObjCImplementationCategory(Scope *S,
   // Add all of the categories that have have corresponding interface 
   // declarations in this class and any of its superclasses, except for
   // already-implemented categories in the class itself.
-  llvm::SmallPtrSet<IdentifierInfo *, 16> CategoryNames;
+  llvm37::SmallPtrSet<IdentifierInfo *, 16> CategoryNames;
   Results.EnterNewScope();
   bool IgnoreImplemented = true;
   while (Class) {
@@ -6270,8 +6270,8 @@ void Sema::CodeCompleteObjCPropertySynthesizeIvar(Scope *S,
 
 // Mapping from selectors to the methods that implement that selector, along
 // with the "in original class" flag.
-typedef llvm::DenseMap<
-    Selector, llvm::PointerIntPair<ObjCMethodDecl *, 1, bool> > KnownMethodsMap;
+typedef llvm37::DenseMap<
+    Selector, llvm37::PointerIntPair<ObjCMethodDecl *, 1, bool> > KnownMethodsMap;
 
 /// \brief Find all of the methods that reside in the given container
 /// (and its superclasses, protocols, etc.) that meet the given

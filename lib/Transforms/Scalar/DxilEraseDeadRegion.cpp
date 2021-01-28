@@ -1,6 +1,6 @@
 //===- DxilEraseDeadRegion.cpp - Heuristically Remove Dead Region ---------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -17,22 +17,22 @@
 //   5. Remove all blocks in the region (excluding original block and ancestor)
 //
 
-#include "llvm/Pass.h"
-#include "llvm/Analysis/CFG.h"
-#include "llvm/Analysis/PostDominators.h"
-#include "llvm/Transforms/Scalar.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/BasicBlock.h"
+#include "llvm37/Pass.h"
+#include "llvm37/Analysis/CFG.h"
+#include "llvm37/Analysis/PostDominators.h"
+#include "llvm37/Transforms/Scalar.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/BasicBlock.h"
 
 #include "dxc/DXIL/DxilOperations.h"
 
 #include <unordered_map>
 #include <unordered_set>
 
-using namespace llvm;
+using namespace llvm37;
 using namespace hlsl;
 
 struct DxilEraseDeadRegion : public FunctionPass {
@@ -236,7 +236,7 @@ struct DxilEraseDeadRegion : public FunctionPass {
 
 char DxilEraseDeadRegion::ID;
 
-Pass *llvm::createDxilEraseDeadRegionPass() {
+Pass *llvm37::createDxilEraseDeadRegionPass() {
   return new DxilEraseDeadRegion();
 }
 

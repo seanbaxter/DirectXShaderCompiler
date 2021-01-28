@@ -15,13 +15,13 @@
 #include "dxc/DxilContainer/DxilContainerReader.h"
 #include "dxc/DXIL/DxilConstants.h"
 
-#include "llvm/Support/Path.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Support/MemoryBuffer.h"
-#include "llvm/Support/ManagedStatic.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Module.h"
-#include "llvm/Bitcode/ReaderWriter.h"
+#include "llvm37/Support/Path.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Support/MemoryBuffer.h"
+#include "llvm37/Support/ManagedStatic.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/Bitcode/ReaderWriter.h"
 
 #include <atlbase.h>
 #include "dxc/Support/microcom.h"
@@ -34,7 +34,7 @@
 
 #include <fstream>
 
-using namespace llvm;
+using namespace llvm37;
 using std::string;
 using std::wstring;
 using std::unique_ptr;
@@ -53,7 +53,7 @@ protected:
   wstring m_OutputFile;
   bool m_bUsage;
   bool m_bDisasmDxbc;
-  bool m_bEmitLLVM;
+  bool m_bEmitLLVM37;
   bool m_bEmitBC;
   wstring m_ExtraOptions;
 
@@ -72,7 +72,7 @@ private:
 Converter::Converter()
 : m_bUsage(false)
 , m_bDisasmDxbc(false)
-, m_bEmitLLVM(false)
+, m_bEmitLLVM37(false)
 , m_bEmitBC(false)
 , m_pfnDXCompiler_DxcCreateInstance(nullptr)
 , m_pfnDxilConv_DxcCreateInstance(nullptr) {
@@ -88,8 +88,8 @@ void Converter::PrintUsage() {
 
   wprintf(L"   /o <file_name>               output file name\n");
   wprintf(L"   /disasm-dxbc                 print DXBC disassembly and exit\n");
-  wprintf(L"   /emit-llvm                   print DXIL disassembly and exit\n");
-  wprintf(L"   /emit-bc                     emit LLVM bitcode rather than DXIL container\n");
+  wprintf(L"   /emit-llvm37                   print DXIL disassembly and exit\n");
+  wprintf(L"   /emit-bc                     emit LLVM37 bitcode rather than DXIL container\n");
   wprintf(L"\n");
 }
 
@@ -131,8 +131,8 @@ void Converter::ParseCommandLine(int NumArgs, _In_z_count_(NumArgs + 1) wchar_t 
       else if (CheckOption(ppArgs[iArg], L"disasm-dxbc")) {
         m_bDisasmDxbc = true;
       }
-      else if (CheckOption(ppArgs[iArg], L"emit-llvm")) {
-        m_bEmitLLVM = true;
+      else if (CheckOption(ppArgs[iArg], L"emit-llvm37")) {
+        m_bEmitLLVM37 = true;
       }
       else if (CheckOption(ppArgs[iArg], L"emit-bc")) {
         m_bEmitBC = true;
@@ -155,10 +155,10 @@ void Converter::ParseCommandLine(int NumArgs, _In_z_count_(NumArgs + 1) wchar_t 
     }
 
     if (!bSeenInputFile) CmdLineError(L"must specify input file name");
-    if (!bSeenOutputFile && !(m_bDisasmDxbc || m_bEmitLLVM))
+    if (!bSeenOutputFile && !(m_bDisasmDxbc || m_bEmitLLVM37))
       CmdLineError(L"cannot output binary to the console; must specify output file name");
-    if ((m_bDisasmDxbc?1:0) + (m_bEmitLLVM?1:0) + (m_bEmitBC?1:0) > 1)
-      CmdLineError(L"/disasm-dxbc, /emit-llvm and /emit-bc are mutually exclusive");
+    if ((m_bDisasmDxbc?1:0) + (m_bEmitLLVM37?1:0) + (m_bEmitBC?1:0) > 1)
+      CmdLineError(L"/disasm-dxbc, /emit-llvm37 and /emit-bc are mutually exclusive");
   }
   catch(const wstring &Msg) {
     wprintf(L"%s: %s\n", ppArgs[0], Msg.c_str());
@@ -240,7 +240,7 @@ void Converter::Run() {
   // Determine output.
   const void *pOutput = pDxil;  // DXIL blob (in DXBC container).
   UINT32 OutputSize = DxilSize;
-  if (m_bEmitLLVM || m_bEmitBC) {
+  if (m_bEmitLLVM37 || m_bEmitBC) {
     // Retrieve DXIL.
     hlsl::DxilContainerReader dxilReader;
     IFT(dxilReader.Load(pDxil, DxilSize));
@@ -253,7 +253,7 @@ void Converter::Run() {
     UINT32 DxilBlobSize;
     IFTBOOL(dxilReader.GetPartContent(uDxilBlob, (const void **)&pDxilBlob, &DxilBlobSize) == S_OK, DXC_E_INCORRECT_DXBC);
 
-    // Retrieve LLVM bitcode.
+    // Retrieve LLVM37 bitcode.
     const hlsl::DxilProgramHeader *pHeader = (const hlsl::DxilProgramHeader *)pDxilBlob;
     const char *pBitcode = hlsl::GetDxilBitcodeData(pHeader);
     UINT32 BitcodeSize = hlsl::GetDxilBitcodeSize(pHeader);
@@ -262,8 +262,8 @@ void Converter::Run() {
     IFTBOOL(hlsl::DXIL::GetDxilVersionMajor(pHeader->BitcodeHeader.DxilVersion) == 1, DXC_E_INCORRECT_DXBC);
     IFTBOOL(hlsl::DXIL::GetDxilVersionMinor(pHeader->BitcodeHeader.DxilVersion) == 0, DXC_E_INCORRECT_DXBC);
 
-    if (m_bEmitLLVM) {
-      // Disassemble LLVM module and exit.
+    if (m_bEmitLLVM37) {
+      // Disassemble LLVM37 module and exit.
       unique_ptr<MemoryBuffer> pBitcodeBuf(MemoryBuffer::getMemBuffer(StringRef(pBitcode, BitcodeSize), "", false));
       ErrorOr<std::unique_ptr<Module>> pModule(parseBitcodeFile(pBitcodeBuf->getMemBufferRef(), getGlobalContext()));
       if (std::error_code ec = pModule.getError()) {
@@ -285,7 +285,7 @@ void Converter::Run() {
       return;
     }
     else if (m_bEmitBC) {
-      // Emit only LLVM IR, e.g., to disassemble with llvm-dis.exe.
+      // Emit only LLVM37 IR, e.g., to disassemble with llvm37-dis.exe.
       pOutput = pBitcode;
       OutputSize = BitcodeSize;
     }
@@ -334,7 +334,7 @@ HRESULT Converter::GetDxcCreateInstance(LPCWSTR dllFileName, DxcCreateInstancePr
 }
 
 int __cdecl wmain(int argc, _In_z_count_(argc + 1) wchar_t **argv) {
-  llvm_shutdown_obj Y;
+  llvm37_shutdown_obj Y;
 
   try {
     Converter C;

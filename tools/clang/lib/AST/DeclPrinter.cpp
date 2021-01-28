@@ -1,6 +1,6 @@
 //===--- DeclPrinter.cpp - Printing implementation for Decl ASTs ----------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -22,7 +22,7 @@
 #include "clang/AST/ExprCXX.h"
 #include "clang/AST/PrettyPrinter.h"
 #include "clang/Basic/Module.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/Support/raw_ostream.h"
 #include "clang/Sema/SemaHLSL.h"  // HLSL Change
 using namespace clang;
 //                                                                           //
@@ -140,7 +140,7 @@ static QualType GetBaseType(QualType T) {
     else if (const ReferenceType *RTy = BaseType->getAs<ReferenceType>())
       BaseType = RTy->getPointeeType();
     else
-      llvm_unreachable("Unknown declarator!");
+      llvm37_unreachable("Unknown declarator!");
   }
   return BaseType;
 }
@@ -216,14 +216,14 @@ void Decl::printGroup(Decl** Begin, unsigned NumDecls,
   }
 }
 
-LLVM_DUMP_METHOD void DeclContext::dumpDeclContext() const {
+LLVM37_DUMP_METHOD void DeclContext::dumpDeclContext() const {
   // Get the translation unit
   const DeclContext *DC = this;
   while (!DC->isTranslationUnit())
     DC = DC->getParent();
   
   ASTContext &Ctx = cast<TranslationUnitDecl>(DC)->getASTContext();
-  DeclPrinter Printer(llvm::errs(), Ctx.getPrintingPolicy(), 0);
+  DeclPrinter Printer(llvm37::errs(), Ctx.getPrintingPolicy(), 0);
   Printer.VisitDeclContext(const_cast<DeclContext *>(this), /*Indent=*/false);
 }
 
@@ -268,7 +268,7 @@ void DeclPrinter::ProcessDeclGroup(SmallVectorImpl<Decl*>& Decls) {
 
 void DeclPrinter::Print(AccessSpecifier AS) {
   switch(AS) {
-  case AS_none:      llvm_unreachable("No access specifier!");
+  case AS_none:      llvm37_unreachable("No access specifier!");
   case AS_public:    Out << "public"; break;
   case AS_protected: Out << "protected"; break;
   case AS_private:   Out << "private"; break;
@@ -464,7 +464,7 @@ void DeclPrinter::VisitFunctionDecl(FunctionDecl *D) {
     case SC_Static: Out << "static "; break;
     case SC_PrivateExtern: Out << "__private_extern__ "; break;
     case SC_Auto: case SC_Register: case SC_OpenCLWorkGroupLocal:
-      llvm_unreachable("invalid for functions");
+      llvm37_unreachable("invalid for functions");
     }
 
     if (D->isInlineSpecified())  Out << "inline ";
@@ -507,7 +507,7 @@ void DeclPrinter::VisitFunctionDecl(FunctionDecl *D) {
 
     Proto += "(";
     if (FT) {
-      llvm::raw_string_ostream POut(Proto);
+      llvm37::raw_string_ostream POut(Proto);
       DeclPrinter ParamPrinter(POut, SubPolicy, Indentation);
       for (unsigned i = 0, e = D->getNumParams(); i != e; ++i) {
         if (Policy.HLSLSuppressUniformParameters &&
@@ -568,7 +568,7 @@ void DeclPrinter::VisitFunctionDecl(FunctionDecl *D) {
       Proto += " noexcept";
       if (FT->getExceptionSpecType() == EST_ComputedNoexcept) {
         Proto += "(";
-        llvm::raw_string_ostream EOut(Proto);
+        llvm37::raw_string_ostream EOut(Proto);
         FT->getNoexceptExpr()->printPretty(EOut, nullptr, SubPolicy,
                                            Indentation);
         EOut.flush();

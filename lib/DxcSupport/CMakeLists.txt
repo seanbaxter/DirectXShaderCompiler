@@ -1,6 +1,6 @@
 # Copyright (C) Microsoft Corporation. All rights reserved.
 # This file is distributed under the University of Illinois Open Source License. See LICENSE.TXT for details.
-add_llvm_library(LLVMDxcSupport
+add_llvm_library(LLVM37DxcSupport
   dxcapi.use.cpp
   dxcmem.cpp
   FileIOHelper.cpp
@@ -11,4 +11,4 @@ add_llvm_library(LLVMDxcSupport
   WinFunctions.cpp
   )
 
-add_dependencies(LLVMDxcSupport TablegenHLSLOptions)
+add_dependencies(LLVM37DxcSupport TablegenHLSLOptions)

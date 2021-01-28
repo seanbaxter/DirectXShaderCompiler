@@ -1,6 +1,6 @@
 // FormatString.cpp - Common stuff for handling printf/scanf formats -*- C++ -*-
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -273,7 +273,7 @@ ArgType::matchesType(ASTContext &C, QualType argTy) const {
 
   switch (K) {
     case InvalidTy:
-      llvm_unreachable("ArgType must be valid");
+      llvm37_unreachable("ArgType must be valid");
 
     case UnknownTy:
       return Match;
@@ -409,16 +409,16 @@ ArgType::matchesType(ASTContext &C, QualType argTy) const {
     }
   }
 
-  llvm_unreachable("Invalid ArgType Kind!");
+  llvm37_unreachable("Invalid ArgType Kind!");
 }
 
 QualType ArgType::getRepresentativeType(ASTContext &C) const {
   QualType Res;
   switch (K) {
     case InvalidTy:
-      llvm_unreachable("No representative type for Invalid ArgType");
+      llvm37_unreachable("No representative type for Invalid ArgType");
     case UnknownTy:
-      llvm_unreachable("No representative type for Unknown ArgType");
+      llvm37_unreachable("No representative type for Unknown ArgType");
     case AnyCharTy:
       Res = C.CharTy;
       break;
@@ -772,7 +772,7 @@ bool FormatSpecifier::hasValidLengthModifier(const TargetInfo &Target) const {
           return false;
       }
   }
-  llvm_unreachable("Invalid LengthModifier Kind!");
+  llvm37_unreachable("Invalid LengthModifier Kind!");
 }
 
 bool FormatSpecifier::hasStandardLengthModifier() const {
@@ -796,7 +796,7 @@ bool FormatSpecifier::hasStandardLengthModifier() const {
     case LengthModifier::AsWide:
       return false;
   }
-  llvm_unreachable("Invalid LengthModifier Kind!");
+  llvm37_unreachable("Invalid LengthModifier Kind!");
 }
 
 bool FormatSpecifier::hasStandardConversionSpecifier(
@@ -839,7 +839,7 @@ bool FormatSpecifier::hasStandardConversionSpecifier(
     case ConversionSpecifier::ZArg:
       return false;
   }
-  llvm_unreachable("Invalid ConversionSpecifier Kind!");
+  llvm37_unreachable("Invalid ConversionSpecifier Kind!");
 }
 
 bool FormatSpecifier::hasStandardLengthConversionCombination() const {

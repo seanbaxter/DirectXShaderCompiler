@@ -111,7 +111,7 @@ bb.false:
   ret i32 %sub
 }
 
-declare {i8, i1} @llvm.uadd.with.overflow.i8(i8 %a, i8 %b)
+declare {i8, i1} @llvm37.uadd.with.overflow.i8(i8 %a, i8 %b)
 
 define i8 @caller4(i8 %z) {
 ; Check that we can constant fold through intrinsics such as the
@@ -129,7 +129,7 @@ entry:
 }
 
 define i8 @callee4(i8 %x, i8 %y, i8 %z) {
-  %uadd = call {i8, i1} @llvm.uadd.with.overflow.i8(i8 %x, i8 %y)
+  %uadd = call {i8, i1} @llvm37.uadd.with.overflow.i8(i8 %x, i8 %y)
   %o = extractvalue {i8, i1} %uadd, 1
   br i1 %o, label %bb.true, label %bb.false
 

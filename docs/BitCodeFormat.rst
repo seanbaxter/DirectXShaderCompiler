@@ -2,7 +2,7 @@
    :format: html
 
 ========================
-LLVM Bitcode File Format
+LLVM37 Bitcode File Format
 ========================
 
 .. contents::
@@ -11,15 +11,15 @@ LLVM Bitcode File Format
 Abstract
 ========
 
-This document describes the LLVM bitstream file format and the encoding of the
-LLVM IR into it.
+This document describes the LLVM37 bitstream file format and the encoding of the
+LLVM37 IR into it.
 
 Overview
 ========
 
-What is commonly known as the LLVM bitcode file format (also, sometimes
+What is commonly known as the LLVM37 bitcode file format (also, sometimes
 anachronistically known as bytecode) is actually two things: a `bitstream
-container format`_ and an `encoding of LLVM IR`_ into the container format.
+container format`_ and an `encoding of LLVM37 IR`_ into the container format.
 
 The bitstream format is an abstract encoding of structured data, very similar to
 XML in some ways.  Like XML, bitstream files contain tags, and nested
@@ -28,12 +28,12 @@ Unlike XML, the bitstream format is a binary encoding, and unlike XML it
 provides a mechanism for the file to self-describe "abbreviations", which are
 effectively size optimizations for the content.
 
-LLVM IR files may be optionally embedded into a `wrapper`_ structure, or in a
+LLVM37 IR files may be optionally embedded into a `wrapper`_ structure, or in a
 `native object file`_. Both of these mechanisms make it easy to embed extra
-data along with LLVM IR files.
+data along with LLVM37 IR files.
 
-This document first describes the LLVM bitstream format, describes the wrapper
-format, then describes the record structure used by LLVM IR files.
+This document first describes the LLVM37 bitstream format, describes the wrapper
+format, then describes the record structure used by LLVM37 IR files.
 
 .. _bitstream container format:
 
@@ -53,7 +53,7 @@ structure.  This structure consists of the following concepts:
 
 * Abbreviations, which specify compression optimizations for the file.
 
-Note that the :doc:`llvm-bcanalyzer <CommandGuide/llvm-bcanalyzer>` tool can be
+Note that the :doc:`llvm37-bcanalyzer <CommandGuide/llvm37-bcanalyzer>` tool can be
 used to dump and inspect arbitrary bitstreams, which is very useful for
 understanding the encoding.
 
@@ -166,14 +166,14 @@ Blocks
 ------
 
 Blocks in a bitstream denote nested regions of the stream, and are identified by
-a content-specific id number (for example, LLVM IR uses an ID of 12 to represent
+a content-specific id number (for example, LLVM37 IR uses an ID of 12 to represent
 function bodies).  Block IDs 0-7 are reserved for `standard blocks`_ whose
 meaning is defined by Bitcode; block IDs 8 and greater are application
 specific. Nested blocks capture the hierarchical structure of the data encoded
 in it, and various properties are associated with blocks as the file is parsed.
 Block definitions allow the reader to efficiently skip blocks in constant time
 if the reader wants a summary of blocks, or if it wants to efficiently skip data
-it does not understand.  The LLVM IR reader uses this mechanism to skip function
+it does not understand.  The LLVM37 IR reader uses this mechanism to skip function
 bodies, lazily reading them on demand.
 
 When reading and encoding the stream, several properties are maintained for the
@@ -229,7 +229,7 @@ Data Records
 Data records consist of a record code and a number of (up to) 64-bit integer
 values.  The interpretation of the code and values is application specific and
 may vary between different block types.  Records can be encoded either using an
-unabbrev record, or with an abbreviation.  In the LLVM IR format, for example,
+unabbrev record, or with an abbreviation.  In the LLVM37 IR format, for example,
 there is a record which encodes the target triple of a module.  The code is
 ``MODULE_CODE_TRIPLE``, and the values of the record are the ASCII codes for the
 characters in the string.
@@ -247,7 +247,7 @@ An ``UNABBREV_RECORD`` provides a default fallback encoding, which is both
 completely general and extremely inefficient.  It can describe an arbitrary
 record by emitting the code and operands as VBRs.
 
-For example, emitting an LLVM IR target triple as an unabbreviated record
+For example, emitting an LLVM37 IR target triple as an unabbreviated record
 requires emitting the ``UNABBREV_RECORD`` abbrevid, a vbr6 for the
 ``MODULE_CODE_TRIPLE`` code, a vbr6 for the length of the string, which is equal
 to the number of operands, and a vbr6 for each character.  Because there are no
@@ -287,8 +287,8 @@ emitted.
 Abbreviations can be determined dynamically per client, per file. Because the
 abbreviations are stored in the bitstream itself, different streams of the same
 format can contain different sets of abbreviations according to the needs of the
-specific stream.  As a concrete example, LLVM IR files usually emit an
-abbreviation for binary operators.  If a specific LLVM module contained no or
+specific stream.  As a concrete example, LLVM37 IR files usually emit an
+abbreviation for binary operators.  If a specific LLVM37 module contained no or
 few binary operators, the abbreviation does not need to be emitted.
 
 .. _DEFINE_ABBREV:
@@ -356,7 +356,7 @@ The possible operand encodings are:
   in the mapped in file and poke directly at it.  A blob may only occur as the
   last operand of an abbreviation.
 
-For example, target triples in LLVM modules are encoded as a record of the form
+For example, target triples in LLVM37 modules are encoded as a record of the form
 ``[TRIPLE, 'a', 'b', 'c', 'd']``.  Consider if the bitstream emitted the
 following abbrev entry:
 
@@ -377,7 +377,7 @@ These values are:
 
 #. The first value, 4, is the abbreviation ID for this abbreviation.
 
-#. The second value, 2, is the record code for ``TRIPLE`` records within LLVM IR
+#. The second value, 2, is the record code for ``TRIPLE`` records within LLVM37 IR
    file ``MODULE_BLOCK`` blocks.
 
 #. The third value, 4, is the length of the array.
@@ -429,11 +429,11 @@ IDs as described in `DEFINE_ABBREV`_.
 
 The ``BLOCKNAME`` record (code 2) can optionally occur in this block.  The
 elements of the record are the bytes of the string name of the block.
-llvm-bcanalyzer can use this to dump out bitcode files symbolically.
+llvm37-bcanalyzer can use this to dump out bitcode files symbolically.
 
 The ``SETRECORDNAME`` record (code 3) can also optionally occur in this block.
 The first operand value is a record ID number, and the rest of the elements of
-the record are the bytes for the string name of the record.  llvm-bcanalyzer can
+the record are the bytes for the string name of the record.  llvm37-bcanalyzer can
 use this to dump out bitcode files symbolically.
 
 Note that although the data in ``BLOCKINFO`` blocks is described as "metadata,"
@@ -445,7 +445,7 @@ corresponding blocks.  It is not safe to skip them.
 Bitcode Wrapper Format
 ======================
 
-Bitcode files for LLVM IR may optionally be wrapped in a simple wrapper
+Bitcode files for LLVM37 IR may optionally be wrapped in a simple wrapper
 structure.  This structure contains a simple header that indicates the offset
 and size of the embedded BC file.  This allows additional information to be
 stored alongside the BC file.  The structure of this file header is:
@@ -466,20 +466,20 @@ encode the CPU of the target.
 Native Object File Wrapper Format
 =================================
 
-Bitcode files for LLVM IR may also be wrapped in a native object file
+Bitcode files for LLVM37 IR may also be wrapped in a native object file
 (i.e. ELF, COFF, Mach-O).  The bitcode must be stored in a section of the
-object file named ``.llvmbc``.  This wrapper format is useful for accommodating
+object file named ``.llvm37bc``.  This wrapper format is useful for accommodating
 LTO in compilation pipelines where intermediate objects must be native object
 files which contain metadata in other sections.
 
 Not all tools support this format.
 
-.. _encoding of LLVM IR:
+.. _encoding of LLVM37 IR:
 
-LLVM IR Encoding
+LLVM37 IR Encoding
 ================
 
-LLVM IR is encoded into a bitstream by defining blocks and records.  It uses
+LLVM37 IR is encoded into a bitstream by defining blocks and records.  It uses
 blocks for things like constant pools, functions, symbol tables, etc.  It uses
 records for things like instructions, global variable descriptors, type
 descriptions, etc.  This document does not describe the set of abbreviations
@@ -489,10 +489,10 @@ reader is not allowed to build in any knowledge of this.
 Basics
 ------
 
-LLVM IR Magic Number
+LLVM37 IR Magic Number
 ^^^^^^^^^^^^^^^^^^^^
 
-The magic number for LLVM IR files is:
+The magic number for LLVM37 IR files is:
 
 :raw-html:`<tt><blockquote>`
 [0x0\ :sub:`4`, 0xC\ :sub:`4`, 0xE\ :sub:`4`, 0xD\ :sub:`4`]
@@ -523,10 +523,10 @@ efficiently. Signed VBR encoding is used in ``CST_CODE_INTEGER`` and
 ``CST_CODE_WIDE_INTEGER`` records within ``CONSTANTS_BLOCK`` blocks.
 It is also used for phi instruction operands in `MODULE_CODE_VERSION`_ 1.
 
-LLVM IR Blocks
+LLVM37 IR Blocks
 ^^^^^^^^^^^^^^
 
-LLVM IR is defined with the following blocks:
+LLVM37 IR is defined with the following blocks:
 
 * 8 --- `MODULE_BLOCK`_ --- This is the top-level block that contains the entire
   module, and describes a variety of per-module information.
@@ -554,7 +554,7 @@ LLVM IR is defined with the following blocks:
 MODULE_BLOCK Contents
 ---------------------
 
-The ``MODULE_BLOCK`` block (id 8) is the top-level block for LLVM bitcode files,
+The ``MODULE_BLOCK`` block (id 8) is the top-level block for LLVM37 bitcode files,
 and each bitcode file must contain exactly one. In addition to records
 (described below) containing information about the module, a ``MODULE_BLOCK``
 block may contain the following sub-blocks:
@@ -595,7 +595,7 @@ will be encoded as 1.
 
 For example, instead of
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
   #n = load #n-1
   #n+1 = icmp eq #n, #const0
@@ -603,7 +603,7 @@ For example, instead of
 
 version 1 will encode the instructions as
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
   #n = load #1
   #n+1 = icmp eq #1, (#n+1)-#const0
@@ -898,7 +898,7 @@ TYPE_BLOCK Contents
 -------------------
 
 The ``TYPE_BLOCK`` block (id 10) contains records which constitute a table of
-type operator entries used to represent types referenced within an LLVM
+type operator entries used to represent types referenced within an LLVM37
 module. Each record (with the exception of `NUMENTRY`_) generates a single type
 table entry, which may be referenced by 0-based index from instructions,
 constants, metadata, type symbol table entries, or other type operator records.

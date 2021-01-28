@@ -1,6 +1,6 @@
 //===-- MachineSink.cpp - Sinking for machine instructions ----------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,29 +11,29 @@
 // they aren't executed on paths where their results aren't needed.
 //
 // This pass is not intended to be a replacement or a complete alternative
-// for an LLVM-IR-level sinking pass. It is only designed to sink simple
+// for an LLVM37-IR-level sinking pass. It is only designed to sink simple
 // constructs that are not exposed before lowering and instruction selection.
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/CodeGen/Passes.h"
-#include "llvm/ADT/SetVector.h"
-#include "llvm/ADT/SmallSet.h"
-#include "llvm/ADT/SparseBitVector.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/Analysis/AliasAnalysis.h"
-#include "llvm/CodeGen/MachineBlockFrequencyInfo.h"
-#include "llvm/CodeGen/MachineDominators.h"
-#include "llvm/CodeGen/MachineLoopInfo.h"
-#include "llvm/CodeGen/MachinePostDominators.h"
-#include "llvm/CodeGen/MachineRegisterInfo.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Target/TargetInstrInfo.h"
-#include "llvm/Target/TargetRegisterInfo.h"
-#include "llvm/Target/TargetSubtargetInfo.h"
-using namespace llvm;
+#include "llvm37/CodeGen/Passes.h"
+#include "llvm37/ADT/SetVector.h"
+#include "llvm37/ADT/SmallSet.h"
+#include "llvm37/ADT/SparseBitVector.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/Analysis/AliasAnalysis.h"
+#include "llvm37/CodeGen/MachineBlockFrequencyInfo.h"
+#include "llvm37/CodeGen/MachineDominators.h"
+#include "llvm37/CodeGen/MachineLoopInfo.h"
+#include "llvm37/CodeGen/MachinePostDominators.h"
+#include "llvm37/CodeGen/MachineRegisterInfo.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Target/TargetInstrInfo.h"
+#include "llvm37/Target/TargetRegisterInfo.h"
+#include "llvm37/Target/TargetSubtargetInfo.h"
+using namespace llvm37;
 
 #define DEBUG_TYPE "machine-sink"
 
@@ -145,7 +145,7 @@ namespace {
 } // end anonymous namespace
 
 char MachineSinking::ID = 0;
-char &llvm::MachineSinkingID = MachineSinking::ID;
+char &llvm37::MachineSinkingID = MachineSinking::ID;
 INITIALIZE_PASS_BEGIN(MachineSinking, "machine-sink",
                 "Machine code sinking", false, false)
 INITIALIZE_PASS_DEPENDENCY(MachineDominatorTree)
@@ -208,7 +208,7 @@ MachineSinking::AllUsesDominatedByBlock(unsigned Reg,
   // into and they are all PHI nodes. In this case, machine-sink must break
   // the critical edge first. e.g.
   //
-  // BB#1: derived from LLVM BB %bb4.preheader
+  // BB#1: derived from LLVM37 BB %bb4.preheader
   //   Predecessors according to CFG: BB#0
   //     ...
   //     %reg16385<def> = DEC64_32r %reg16437, %EFLAGS<imp-def,dead>
@@ -216,7 +216,7 @@ MachineSinking::AllUsesDominatedByBlock(unsigned Reg,
   //     JE_4 <BB#37>, %EFLAGS<imp-use>
   //   Successors according to CFG: BB#37 BB#2
   //
-  // BB#2: derived from LLVM BB %bb.nph
+  // BB#2: derived from LLVM37 BB %bb.nph
   //   Predecessors according to CFG: BB#0 BB#1
   //     %reg16386<def> = PHI %reg16434, <BB#0>, %reg16385, <BB#1>
   BreakPHIEdge = true;

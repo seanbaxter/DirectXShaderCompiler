@@ -1,6 +1,6 @@
 //===--- Tooling.cpp - Running clang standalone tools ---------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -23,16 +23,16 @@
 #include "clang/Frontend/TextDiagnosticPrinter.h"
 #include "clang/Tooling/ArgumentsAdjusters.h"
 #include "clang/Tooling/CompilationDatabase.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/Config/llvm-config.h"
-#include "llvm/Option/Option.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/FileSystem.h"
-#include "llvm/Support/Host.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/Config/llvm-config.h"
+#include "llvm37/Option/Option.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/FileSystem.h"
+#include "llvm37/Support/Host.h"
+#include "llvm37/Support/raw_ostream.h"
 
 // For chdir, see the comment in ClangTool::run for more information.
-#ifdef LLVM_ON_WIN32
+#ifdef LLVM37_ON_WIN32
 #  include <direct.h>
 #else
 #  include <unistd.h>
@@ -55,7 +55,7 @@ FrontendActionFactory::~FrontendActionFactory() {}
 static clang::driver::Driver *newDriver(clang::DiagnosticsEngine *Diagnostics,
                                         const char *BinaryName) {
   clang::driver::Driver *CompilerDriver = new clang::driver::Driver(
-      BinaryName, llvm::sys::getDefaultTargetTriple(), *Diagnostics);
+      BinaryName, llvm37::sys::getDefaultTargetTriple(), *Diagnostics);
   CompilerDriver->setTitle("clang_based_tool");
   return CompilerDriver;
 }
@@ -63,7 +63,7 @@ static clang::driver::Driver *newDriver(clang::DiagnosticsEngine *Diagnostics,
 /// \brief Retrieves the clang CC1 specific flags out of the compilation's jobs.
 ///
 /// Returns NULL on error.
-static const llvm::opt::ArgStringList *getCC1Arguments(
+static const llvm37::opt::ArgStringList *getCC1Arguments(
     clang::DiagnosticsEngine *Diagnostics,
     clang::driver::Compilation *Compilation) {
   // We expect to get back exactly one Command job, if we didn't something
@@ -71,7 +71,7 @@ static const llvm::opt::ArgStringList *getCC1Arguments(
   const clang::driver::JobList &Jobs = Compilation->getJobs();
   if (Jobs.size() != 1 || !isa<clang::driver::Command>(*Jobs.begin())) {
     SmallString<256> error_msg;
-    llvm::raw_svector_ostream error_stream(error_msg);
+    llvm37::raw_svector_ostream error_stream(error_msg);
     Jobs.Print(error_stream, "; ", true);
     Diagnostics->Report(clang::diag::err_fe_expected_compiler_job)
         << error_stream.str();
@@ -92,7 +92,7 @@ static const llvm::opt::ArgStringList *getCC1Arguments(
 /// \brief Returns a clang build invocation initialized from the CC1 flags.
 clang::CompilerInvocation *newInvocation(
     clang::DiagnosticsEngine *Diagnostics,
-    const llvm::opt::ArgStringList &CC1Args) {
+    const llvm37::opt::ArgStringList &CC1Args) {
   assert(!CC1Args.empty() && "Must at least contain the program name!");
   clang::CompilerInvocation *Invocation = new clang::CompilerInvocation;
   clang::CompilerInvocation::CreateFromArgs(
@@ -130,7 +130,7 @@ bool runToolOnCodeWithArgs(
 
   SmallString<16> FileNameStorage;
   StringRef FileNameRef = FileName.toNullTerminatedStringRef(FileNameStorage);
-  llvm::IntrusiveRefCntPtr<FileManager> Files(
+  llvm37::IntrusiveRefCntPtr<FileManager> Files(
       new FileManager(FileSystemOptions()));
   ToolInvocation Invocation(getSyntaxOnlyToolArgs(Args, FileNameRef),
                             ToolAction, Files.get(), PCHContainerOps);
@@ -155,10 +155,10 @@ std::string getAbsolutePath(StringRef File) {
   }
 
   SmallString<1024> AbsolutePath = RelativePath;
-  std::error_code EC = llvm::sys::fs::make_absolute(AbsolutePath);
+  std::error_code EC = llvm37::sys::fs::make_absolute(AbsolutePath);
   assert(!EC);
   (void)EC;
-  llvm::sys::path::native(AbsolutePath);
+  llvm37::sys::path::native(AbsolutePath);
   return AbsolutePath.str();
 }
 
@@ -195,7 +195,7 @@ ToolInvocation::~ToolInvocation() {
 
 void ToolInvocation::mapVirtualFile(StringRef FilePath, StringRef Content) {
   SmallString<1024> PathStorage;
-  llvm::sys::path::native(FilePath, PathStorage);
+  llvm37::sys::path::native(FilePath, PathStorage);
   MappedFileContents[PathStorage] = Content;
 }
 
@@ -206,7 +206,7 @@ bool ToolInvocation::run() {
   const char *const BinaryName = Argv[0];
   IntrusiveRefCntPtr<DiagnosticOptions> DiagOpts = new DiagnosticOptions();
   TextDiagnosticPrinter DiagnosticPrinter(
-      llvm::errs(), &*DiagOpts);
+      llvm37::errs(), &*DiagOpts);
   DiagnosticsEngine Diagnostics(
       IntrusiveRefCntPtr<clang::DiagnosticIDs>(new DiagnosticIDs()), &*DiagOpts,
       DiagConsumer ? DiagConsumer : &DiagnosticPrinter, false);
@@ -216,8 +216,8 @@ bool ToolInvocation::run() {
   // Since the input might only be virtual, don't check whether it exists.
   Driver->setCheckInputsExist(false);
   const std::unique_ptr<clang::driver::Compilation> Compilation(
-      Driver->BuildCompilation(llvm::makeArrayRef(Argv)));
-  const llvm::opt::ArgStringList *const CC1Args = getCC1Arguments(
+      Driver->BuildCompilation(llvm37::makeArrayRef(Argv)));
+  const llvm37::opt::ArgStringList *const CC1Args = getCC1Arguments(
       &Diagnostics, Compilation.get());
   if (!CC1Args) {
     return false;
@@ -226,8 +226,8 @@ bool ToolInvocation::run() {
       newInvocation(&Diagnostics, *CC1Args));
   for (const auto &It : MappedFileContents) {
     // Inject the code as the given file name into the preprocessor options.
-    std::unique_ptr<llvm::MemoryBuffer> Input =
-        llvm::MemoryBuffer::getMemBuffer(It.getValue());
+    std::unique_ptr<llvm37::MemoryBuffer> Input =
+        llvm37::MemoryBuffer::getMemBuffer(It.getValue());
     Invocation->getPreprocessorOpts().addRemappedFile(It.getKey(),
                                                       Input.release());
   }
@@ -241,9 +241,9 @@ bool ToolInvocation::runInvocation(
     std::shared_ptr<PCHContainerOperations> PCHContainerOps) {
   // Show the invocation, with -v.
   if (Invocation->getHeaderSearchOpts().Verbose) {
-    llvm::errs() << "clang Invocation:\n";
-    Compilation->getJobs().Print(llvm::errs(), "\n", true);
-    llvm::errs() << "\n";
+    llvm37::errs() << "clang Invocation:\n";
+    Compilation->getJobs().Print(llvm37::errs(), "\n", true);
+    llvm37::errs() << "\n";
   }
 
   return Action->runInvocation(Invocation, Files, PCHContainerOps,
@@ -314,11 +314,11 @@ int ClangTool::run(ToolAction *Action) {
   // first argument, thus allowing ClangTool and runToolOnCode to just
   // pass in made-up names here. Make sure this works on other platforms.
   std::string MainExecutable =
-      llvm::sys::fs::getMainExecutable("clang_tool", &StaticSymbol);
+      llvm37::sys::fs::getMainExecutable("clang_tool", &StaticSymbol);
 
-  llvm::SmallString<128> InitialDirectory;
-  if (std::error_code EC = llvm::sys::fs::current_path(InitialDirectory))
-    llvm::report_fatal_error("Cannot detect current path: " +
+  llvm37::SmallString<128> InitialDirectory;
+  if (std::error_code EC = llvm37::sys::fs::current_path(InitialDirectory))
+    llvm37::report_fatal_error("Cannot detect current path: " +
                              Twine(EC.message()));
   bool ProcessingFailed = false;
   for (const auto &SourcePath : SourcePaths) {
@@ -339,7 +339,7 @@ int ClangTool::run(ToolAction *Action) {
       // about the .cc files that were not found, and the use case where I
       // specify all files I want to run over explicitly, where this should
       // be an error. We'll want to add an option for this.
-      llvm::errs() << "Skipping " << File << ". Compile command not found.\n";
+      llvm37::errs() << "Skipping " << File << ". Compile command not found.\n";
       continue;
     }
     for (CompileCommand &CompileCommand : CompileCommandsForFile) {
@@ -351,7 +351,7 @@ int ClangTool::run(ToolAction *Action) {
       // switched during runtime of the tool. Fixing this depends on having a
       // file system abstraction that allows openat() style interactions.
       if (chdir(CompileCommand.Directory.c_str()))
-        llvm::report_fatal_error("Cannot chdir into \"" +
+        llvm37::report_fatal_error("Cannot chdir into \"" +
                                  Twine(CompileCommand.Directory) + "\n!");
       std::vector<std::string> CommandLine = CompileCommand.CommandLine;
       if (ArgsAdjuster)
@@ -360,7 +360,7 @@ int ClangTool::run(ToolAction *Action) {
       CommandLine[0] = MainExecutable;
       // FIXME: We need a callback mechanism for the tool writer to output a
       // customized message for each file.
-      DEBUG({ llvm::dbgs() << "Processing: " << File << ".\n"; });
+      DEBUG({ llvm37::dbgs() << "Processing: " << File << ".\n"; });
       ToolInvocation Invocation(std::move(CommandLine), Action, Files.get(),
                                 PCHContainerOps);
       Invocation.setDiagnosticConsumer(DiagConsumer);
@@ -368,13 +368,13 @@ int ClangTool::run(ToolAction *Action) {
         Invocation.mapVirtualFile(MappedFile.first, MappedFile.second);
       if (!Invocation.run()) {
         // FIXME: Diagnostics should be used instead.
-        llvm::errs() << "Error while processing " << File << ".\n";
+        llvm37::errs() << "Error while processing " << File << ".\n";
         ProcessingFailed = true;
       }
       // Return to the initial directory to correctly resolve next file by
       // relative path.
       if (chdir(InitialDirectory.c_str()))
-        llvm::report_fatal_error("Cannot chdir into \"" +
+        llvm37::report_fatal_error("Cannot chdir into \"" +
                                  Twine(InitialDirectory) + "\n!");
     }
   }

@@ -76,7 +76,7 @@ private:
 
 ///////////////////////////////////////////////////////////////////////////////
 // Error handling support.
-void CheckLLVMErrorCode(const std::error_code &ec);
+void CheckLLVM37ErrorCode(const std::error_code &ec);
 
 
 /******************************************************************************
@@ -88,7 +88,7 @@ void CheckLLVMErrorCode(const std::error_code &ec);
 #define SAFE_DELETE_ARRAY(p)  { delete [](p); p = nullptr; }
 #define SAFE_DELETE(p)        { delete (p); p = nullptr;  }
 
-// VH is used in other DXC projects, but it's also a typedef in llvm.
+// VH is used in other DXC projects, but it's also a typedef in llvm37.
 // Use the IFC (IfFailedCleanup) set of conventions.
 #define IFC(x)      { hr = (x); if (DXC_FAILED(hr)) goto Cleanup; }
 #define IFR(x)      { HRESULT __hr = (x); if (DXC_FAILED(__hr)) return __hr; }
@@ -102,7 +102,7 @@ void CheckLLVMErrorCode(const std::error_code &ec);
 #define IFTOOM(x)   { if (nullptr == (x)) { throw ::hlsl::Exception(E_OUTOFMEMORY); }}
 #define IFTPTR(x)   { if (nullptr == (x)) { throw ::hlsl::Exception(E_POINTER); }}
 #define IFTARG(x)   { if (!(x)) { throw ::hlsl::Exception(E_INVALIDARG); }}
-#define IFTLLVM(x)  { CheckLLVMErrorCode(x); }
+#define IFTLLVM37(x)  { CheckLLVM37ErrorCode(x); }
 #define IFTMSG(x, msg) { HRESULT __hr = (x); if (DXC_FAILED(__hr)) throw ::hlsl::Exception(__hr, msg); }
 #define IFTBOOLMSG(x, y, msg) { if (!(x)) throw ::hlsl::Exception(y, msg); }
 

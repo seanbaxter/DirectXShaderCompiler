@@ -1,6 +1,6 @@
-//===- llvm/unittest/ADT/SmallVectorTest.cpp ------------------------------===//
+//===- llvm37/unittest/ADT/SmallVectorTest.cpp ------------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,14 +11,14 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/ADT/ArrayRef.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/Support/Compiler.h"
+#include "llvm37/ADT/ArrayRef.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/Support/Compiler.h"
 #include "gtest/gtest.h"
 #include <list>
 #include <stdarg.h>
 
-using namespace llvm;
+using namespace llvm37;
 
 namespace {
 
@@ -126,7 +126,7 @@ public:
     return c0.getValue() == c1.getValue();
   }
 
-  friend bool LLVM_ATTRIBUTE_UNUSED
+  friend bool LLVM37_ATTRIBUTE_UNUSED
   operator!=(const Constructable & c0, const Constructable & c1) {
     return c0.getValue() != c1.getValue();
   }
@@ -149,7 +149,7 @@ private:
   NonCopyable &operator=(const NonCopyable &) = delete;
 };
 
-LLVM_ATTRIBUTE_USED void CompileTest() {
+LLVM37_ATTRIBUTE_USED void CompileTest() {
   SmallVector<NonCopyable, 0> V;
   V.resize(42);
 }

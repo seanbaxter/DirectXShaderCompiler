@@ -1,6 +1,6 @@
 //===- CodeGenSchedule.cpp - Scheduling MachineModels ---------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -14,12 +14,12 @@
 
 #include "CodeGenSchedule.h"
 #include "CodeGenTarget.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/Regex.h"
-#include "llvm/TableGen/Error.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/Regex.h"
+#include "llvm37/TableGen/Error.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "subtarget-emitter"
 
@@ -93,8 +93,8 @@ CodeGenSchedModels::CodeGenSchedModels(RecordKeeper &RK,
 
   // Allow Set evaluation to recognize the dags used in InstRW records:
   // (instrs Op1, Op1...)
-  Sets.addOperator("instrs", llvm::make_unique<InstrsOp>());
-  Sets.addOperator("instregex", llvm::make_unique<InstRegexOp>(Target));
+  Sets.addOperator("instrs", llvm37::make_unique<InstrsOp>());
+  Sets.addOperator("instregex", llvm37::make_unique<InstRegexOp>(Target));
 
   // Instantiate a CodeGenProcModel for each SchedMachineModel with the values
   // that are explicitly referenced in tablegen records. Resources associated
@@ -364,7 +364,7 @@ bool CodeGenSchedModels::hasReadOfWrite(Record *WriteDef) const {
   return false;
 }
 
-namespace llvm {
+namespace llvm37 {
 void splitSchedReadWrites(const RecVec &RWDefs,
                           RecVec &WriteDefs, RecVec &ReadDefs) {
   for (RecIter RWI = RWDefs.begin(), RWE = RWDefs.end(); RWI != RWE; ++RWI) {
@@ -376,7 +376,7 @@ void splitSchedReadWrites(const RecVec &RWDefs,
     }
   }
 }
-} // namespace llvm
+} // namespace llvm37
 
 // Split the SchedReadWrites defs and call findRWs for each list.
 void CodeGenSchedModels::findRWs(const RecVec &RWDefs,

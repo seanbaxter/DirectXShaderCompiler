@@ -1,6 +1,6 @@
 //===- CodeGenTarget.cpp - CodeGen Target Class Wrapper -------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -17,13 +17,13 @@
 #include "CodeGenTarget.h"
 #include "CodeGenIntrinsics.h"
 #include "CodeGenSchedule.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/StringExtras.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/TableGen/Error.h"
-#include "llvm/TableGen/Record.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/StringExtras.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/TableGen/Error.h"
+#include "llvm37/TableGen/Record.h"
 #include <algorithm>
-using namespace llvm;
+using namespace llvm37;
 
 static cl::opt<unsigned>
 AsmParserNum("asmparsernum", cl::init(0),
@@ -35,11 +35,11 @@ AsmWriterNum("asmwriternum", cl::init(0),
 
 /// getValueType - Return the MVT::SimpleValueType that the specified TableGen
 /// record corresponds to.
-MVT::SimpleValueType llvm::getValueType(Record *Rec) {
+MVT::SimpleValueType llvm37::getValueType(Record *Rec) {
   return (MVT::SimpleValueType)Rec->getValueAsInt("Value");
 }
 
-std::string llvm::getName(MVT::SimpleValueType T) {
+std::string llvm37::getName(MVT::SimpleValueType T) {
   switch (T) {
   case MVT::Other:   return "UNKNOWN";
   case MVT::iPTR:    return "TLI.getPointerTy()";
@@ -48,7 +48,7 @@ std::string llvm::getName(MVT::SimpleValueType T) {
   }
 }
 
-std::string llvm::getEnumName(MVT::SimpleValueType T) {
+std::string llvm37::getEnumName(MVT::SimpleValueType T) {
   switch (T) {
   case MVT::Other:    return "MVT::Other";
   case MVT::i1:       return "MVT::i1";
@@ -116,14 +116,14 @@ std::string llvm::getEnumName(MVT::SimpleValueType T) {
   case MVT::iPTR:     return "MVT::iPTR";
   case MVT::iPTRAny:  return "MVT::iPTRAny";
   case MVT::Untyped:  return "MVT::Untyped";
-  default: llvm_unreachable("ILLEGAL VALUE TYPE!");
+  default: llvm37_unreachable("ILLEGAL VALUE TYPE!");
   }
 }
 
 /// getQualifiedName - Return the name of the specified record, with a
 /// namespace qualifier if the record contains one.
 ///
-std::string llvm::getQualifiedName(const Record *R) {
+std::string llvm37::getQualifiedName(const Record *R) {
   std::string Namespace;
   if (R->getValue("Namespace"))
      Namespace = R->getValueAsString("Namespace");
@@ -210,7 +210,7 @@ Record *CodeGenTarget::getAsmWriter() const {
 
 CodeGenRegBank &CodeGenTarget::getRegBank() const {
   if (!RegBank)
-    RegBank = llvm::make_unique<CodeGenRegBank>(Records);
+    RegBank = llvm37::make_unique<CodeGenRegBank>(Records);
   return *RegBank;
 }
 
@@ -260,7 +260,7 @@ void CodeGenTarget::ReadLegalValueTypes() const {
 
 CodeGenSchedModels &CodeGenTarget::getSchedModels() const {
   if (!SchedModels)
-    SchedModels = llvm::make_unique<CodeGenSchedModels>(Records, *this);
+    SchedModels = llvm37::make_unique<CodeGenSchedModels>(Records, *this);
   return *SchedModels;
 }
 
@@ -271,7 +271,7 @@ void CodeGenTarget::ReadInstructions() const {
 
   // Parse the instructions defined in the .td file.
   for (unsigned i = 0, e = Insts.size(); i != e; ++i)
-    Instructions[Insts[i]] = llvm::make_unique<CodeGenInstruction>(Insts[i]);
+    Instructions[Insts[i]] = llvm37::make_unique<CodeGenInstruction>(Insts[i]);
 }
 
 static const CodeGenInstruction *
@@ -421,7 +421,7 @@ ComplexPattern::ComplexPattern(Record *R) {
 // CodeGenIntrinsic Implementation
 //===----------------------------------------------------------------------===//
 
-std::vector<CodeGenIntrinsic> llvm::LoadIntrinsics(const RecordKeeper &RC,
+std::vector<CodeGenIntrinsic> llvm37::LoadIntrinsics(const RecordKeeper &RC,
                                                    bool TargetOnly) {
   std::vector<Record*> I = RC.getAllDerivedDefinitions("Intrinsic");
 
@@ -458,7 +458,7 @@ CodeGenIntrinsic::CodeGenIntrinsic(Record *R) {
     MSBuiltinName = R->getValueAsString("MSBuiltinName");
 
   TargetPrefix = R->getValueAsString("TargetPrefix");
-  Name = R->getValueAsString("LLVMName");
+  Name = R->getValueAsString("LLVM37Name");
 
   if (Name == "") {
     // If an explicit name isn't specified, derive one from the DefName.
@@ -470,7 +470,7 @@ CodeGenIntrinsic::CodeGenIntrinsic(Record *R) {
     // Verify it starts with "llvm.".
     if (Name.size() <= 5 ||
         std::string(Name.begin(), Name.begin() + 5) != "llvm.")
-      PrintFatalError("Intrinsic '" + DefName + "'s name does not start with 'llvm.'!");
+      PrintFatalError("Intrinsic '" + DefName + "'s name does not start with 'llvm37.'!");
   }
 
   // If TargetPrefix is specified, make sure that Name starts with
@@ -479,7 +479,7 @@ CodeGenIntrinsic::CodeGenIntrinsic(Record *R) {
     if (Name.size() < 6+TargetPrefix.size() ||
         std::string(Name.begin() + 5, Name.begin() + 6 + TargetPrefix.size())
         != (TargetPrefix + "."))
-      PrintFatalError("Intrinsic '" + DefName + "' does not start with 'llvm." +
+      PrintFatalError("Intrinsic '" + DefName + "' does not start with 'llvm37." +
         TargetPrefix + ".'!");
   }
 
@@ -488,9 +488,9 @@ CodeGenIntrinsic::CodeGenIntrinsic(Record *R) {
   ListInit *TypeList = R->getValueAsListInit("RetTypes");
   for (unsigned i = 0, e = TypeList->size(); i != e; ++i) {
     Record *TyEl = TypeList->getElementAsRecord(i);
-    assert(TyEl->isSubClassOf("LLVMType") && "Expected a type!");
+    assert(TyEl->isSubClassOf("LLVM37Type") && "Expected a type!");
     MVT::SimpleValueType VT;
-    if (TyEl->isSubClassOf("LLVMMatchType")) {
+    if (TyEl->isSubClassOf("LLVM37MatchType")) {
       unsigned MatchTy = TyEl->getValueAsInt("Number");
       assert(MatchTy < OverloadedVTs.size() &&
              "Invalid matching number!");
@@ -498,8 +498,8 @@ CodeGenIntrinsic::CodeGenIntrinsic(Record *R) {
       // It only makes sense to use the extended and truncated vector element
       // variants with iAny types; otherwise, if the intrinsic is not
       // overloaded, all the types can be specified directly.
-      assert(((!TyEl->isSubClassOf("LLVMExtendedType") &&
-               !TyEl->isSubClassOf("LLVMTruncatedType")) ||
+      assert(((!TyEl->isSubClassOf("LLVM37ExtendedType") &&
+               !TyEl->isSubClassOf("LLVM37TruncatedType")) ||
               VT == MVT::iAny || VT == MVT::vAny) &&
              "Expected iAny or vAny type");
     } else {
@@ -522,9 +522,9 @@ CodeGenIntrinsic::CodeGenIntrinsic(Record *R) {
   TypeList = R->getValueAsListInit("ParamTypes");
   for (unsigned i = 0, e = TypeList->size(); i != e; ++i) {
     Record *TyEl = TypeList->getElementAsRecord(i);
-    assert(TyEl->isSubClassOf("LLVMType") && "Expected a type!");
+    assert(TyEl->isSubClassOf("LLVM37Type") && "Expected a type!");
     MVT::SimpleValueType VT;
-    if (TyEl->isSubClassOf("LLVMMatchType")) {
+    if (TyEl->isSubClassOf("LLVM37MatchType")) {
       unsigned MatchTy = TyEl->getValueAsInt("Number");
       assert(MatchTy < OverloadedVTs.size() &&
              "Invalid matching number!");
@@ -532,10 +532,10 @@ CodeGenIntrinsic::CodeGenIntrinsic(Record *R) {
       // It only makes sense to use the extended and truncated vector element
       // variants with iAny types; otherwise, if the intrinsic is not
       // overloaded, all the types can be specified directly.
-      assert(((!TyEl->isSubClassOf("LLVMExtendedType") &&
-               !TyEl->isSubClassOf("LLVMTruncatedType") &&
-               !TyEl->isSubClassOf("LLVMVectorSameWidth") &&
-               !TyEl->isSubClassOf("LLVMPointerToElt")) ||
+      assert(((!TyEl->isSubClassOf("LLVM37ExtendedType") &&
+               !TyEl->isSubClassOf("LLVM37TruncatedType") &&
+               !TyEl->isSubClassOf("LLVM37VectorSameWidth") &&
+               !TyEl->isSubClassOf("LLVM37PointerToElt")) ||
               VT == MVT::iAny || VT == MVT::vAny) &&
              "Expected iAny or vAny type");
     } else
@@ -589,7 +589,7 @@ CodeGenIntrinsic::CodeGenIntrinsic(Record *R) {
       unsigned ArgNo = Property->getValueAsInt("ArgNo");
       ArgumentAttributes.push_back(std::make_pair(ArgNo, ReadNone));
     } else
-      llvm_unreachable("Unknown property!");
+      llvm37_unreachable("Unknown property!");
   }
 
   // Sort the argument attributes for later benefit.

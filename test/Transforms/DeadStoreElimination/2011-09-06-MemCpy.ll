@@ -5,9 +5,9 @@ target triple = "x86_64-unknown-linux-gnu"
 %struct.pair.162 = type { %struct.BasicBlock*, i32, [4 x i8] }
 %struct.BasicBlock = type { %struct.Value, %struct.ilist_node.24, %struct.iplist.22, %struct.Function* }
 %struct.Value = type { i32 (...)**, i8, i8, i16, %struct.Type*, %struct.Use*, %struct.StringMapEntry* }
-%struct.Type = type { %struct.LLVMContext*, i8, [3 x i8], i32, {}* }
-%struct.LLVMContext = type { %struct.LLVMContextImpl* }
-%struct.LLVMContextImpl = type opaque
+%struct.Type = type { %struct.LLVM37Context*, i8, [3 x i8], i32, {}* }
+%struct.LLVM37Context = type { %struct.LLVM37ContextImpl* }
+%struct.LLVM37ContextImpl = type opaque
 %struct.Use = type { %struct.Value*, %struct.Use*, %struct.PointerIntPair }
 %struct.PointerIntPair = type { i64 }
 %struct.StringMapEntry = type opaque
@@ -21,7 +21,7 @@ target triple = "x86_64-unknown-linux-gnu"
 %struct.DebugLoc = type { i32, i32 }
 %struct.Function = type { %struct.GlobalValue, %struct.ilist_node.14, %struct.iplist.4, %struct.iplist, %struct.ValueSymbolTable*, %struct.AttrListPtr }
 %struct.GlobalValue = type <{ [52 x i8], [4 x i8], %struct.Module*, i8, i16, [5 x i8], %struct.basic_string }>
-%struct.Module = type { %struct.LLVMContext*, %struct.iplist.20, %struct.iplist.16, %struct.iplist.12, %struct.vector.2, %struct.ilist, %struct.basic_string, %struct.ValueSymbolTable*, %struct.OwningPtr, %struct.basic_string, %struct.basic_string, %struct.basic_string, i8* }
+%struct.Module = type { %struct.LLVM37Context*, %struct.iplist.20, %struct.iplist.16, %struct.iplist.12, %struct.vector.2, %struct.ilist, %struct.basic_string, %struct.ValueSymbolTable*, %struct.OwningPtr, %struct.basic_string, %struct.basic_string, %struct.basic_string, i8* }
 %struct.iplist.20 = type { %struct.ilist_traits.19, %struct.GlobalVariable* }
 %struct.ilist_traits.19 = type { %struct.ilist_node.18 }
 %struct.ilist_node.18 = type { %struct.ilist_half_node.17, %struct.GlobalVariable* }
@@ -60,12 +60,12 @@ target triple = "x86_64-unknown-linux-gnu"
 %struct.AttrListPtr = type { %struct.AttributeListImpl* }
 %struct.AttributeListImpl = type opaque
 
-declare void @llvm.memcpy.p0i8.p0i8.i64(i8* nocapture, i8* nocapture, i64, i32, i1) nounwind
+declare void @llvm37.memcpy.p0i8.p0i8.i64(i8* nocapture, i8* nocapture, i64, i32, i1) nounwind
 
-; CHECK: _ZSt9iter_swapIPSt4pairIPN4llvm10BasicBlockEjES5_EvT_T0_
+; CHECK: _ZSt9iter_swapIPSt4pairIPN4llvm3710BasicBlockEjES5_EvT_T0_
 ; CHECK: store
 ; CHECK: ret void
-define void @_ZSt9iter_swapIPSt4pairIPN4llvm10BasicBlockEjES5_EvT_T0_(%struct.pair.162* %__a, %struct.pair.162* %__b) nounwind uwtable inlinehint {
+define void @_ZSt9iter_swapIPSt4pairIPN4llvm3710BasicBlockEjES5_EvT_T0_(%struct.pair.162* %__a, %struct.pair.162* %__b) nounwind uwtable inlinehint {
 entry:
   %memtmp = alloca %struct.pair.162, align 8
   %0 = getelementptr inbounds %struct.pair.162, %struct.pair.162* %memtmp, i64 0, i32 0
@@ -78,8 +78,8 @@ entry:
   store i32 %5, i32* %3, align 8
   %6 = bitcast %struct.pair.162* %__a to i8*
   %7 = bitcast %struct.pair.162* %__b to i8*
-  call void @llvm.memcpy.p0i8.p0i8.i64(i8* %6, i8* %7, i64 12, i32 1, i1 false)
+  call void @llvm37.memcpy.p0i8.p0i8.i64(i8* %6, i8* %7, i64 12, i32 1, i1 false)
   %8 = bitcast %struct.pair.162* %memtmp to i8*
-  call void @llvm.memcpy.p0i8.p0i8.i64(i8* %7, i8* %8, i64 12, i32 1, i1 false)
+  call void @llvm37.memcpy.p0i8.p0i8.i64(i8* %7, i8* %8, i64 12, i32 1, i1 false)
   ret void
 }

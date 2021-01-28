@@ -1,6 +1,6 @@
 //===--- MacroArgs.cpp - Formal argument info for Macros ------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -15,8 +15,8 @@
 #include "clang/Lex/LexDiagnostic.h"
 #include "clang/Lex/MacroInfo.h"
 #include "clang/Lex/Preprocessor.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/Support/SaveAndRestore.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/Support/SaveAndRestore.h"
 #include <algorithm>
 
 using namespace clang;

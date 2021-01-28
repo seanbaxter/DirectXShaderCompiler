@@ -1,12 +1,12 @@
-HOWTO create an LLVM crosstool from x86_64/Linux to ARM/Linux
+HOWTO create an LLVM37 crosstool from x86_64/Linux to ARM/Linux
 =============================================================
 
-1. % llvm/utils/crosstool/create-snapshots.sh
+1. % llvm37/utils/crosstool/create-snapshots.sh
 
-   This will create llvm-[REV_L].tar.bz2 and llvm-gcc-4.2-[REV_G].tar.bz2,
+   This will create llvm37-[REV_L].tar.bz2 and llvm37-gcc-4.2-[REV_G].tar.bz2,
    where:
-     REV_L is the revision at which "llvm" was checked out, and
-     REV_G is the revision at which "llvm-gcc-4.2" was checked out
+     REV_L is the revision at which "llvm37" was checked out, and
+     REV_G is the revision at which "llvm37-gcc-4.2" was checked out
 
    Note that REV_L might REV_G might not be the same revision.
 
@@ -31,7 +31,7 @@ HOWTO create an LLVM crosstool from x86_64/Linux to ARM/Linux
 
    % env INSTALL_ROOT=[dir to install in] \
          CODE_SOURCERY_PKG_PATH=[dir where you downloaded CodeSourcery tarball] \
-         LLVM_PKG_PATH=[dir where you stored your LLVM and LLVM-GCC snapshots] \
-         LLVM_SVN_REV=${REV_L} \
-         LLVMGCC_SVN_REV=${REV_G} \
+         LLVM37_PKG_PATH=[dir where you stored your LLVM37 and LLVM37-GCC snapshots] \
+         LLVM37_SVN_REV=${REV_L} \
+         LLVM37GCC_SVN_REV=${REV_G} \
          build-install-linux.sh

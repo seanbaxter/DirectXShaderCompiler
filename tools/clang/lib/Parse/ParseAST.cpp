@@ -1,6 +1,6 @@
 //===--- ParseAST.cpp - Provide the clang::ParseAST method ----------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -23,7 +23,7 @@
 #include "clang/Sema/Sema.h"
 #include "clang/Sema/SemaConsumer.h"
 #include "clang/Sema/SemaHLSL.h" // HLSL Change
-#include "llvm/Support/CrashRecoveryContext.h"
+#include "llvm37/Support/CrashRecoveryContext.h"
 #include <cstdio>
 #include <memory>
 
@@ -32,7 +32,7 @@ using namespace clang;
 namespace {
 
 /// If a crash happens while the parser is active, an entry is printed for it.
-class PrettyStackTraceParserEntry : public llvm::PrettyStackTraceEntry {
+class PrettyStackTraceParserEntry : public llvm37::PrettyStackTraceEntry {
   const Parser &P;
 public:
   PrettyStackTraceParserEntry(const Parser &p) : P(p) {}
@@ -92,7 +92,7 @@ void clang::ParseAST(Preprocessor &PP, ASTConsumer *Consumer,
       new Sema(PP, Ctx, *Consumer, TUKind, CompletionConsumer));
 
   // Recover resources if we crash before exiting this method.
-  llvm::CrashRecoveryContextCleanupRegistrar<Sema> CleanupSema(S.get());
+  llvm37::CrashRecoveryContextCleanupRegistrar<Sema> CleanupSema(S.get());
   
   ParseAST(*S.get(), PrintStats, SkipFunctionBodies);
 }
@@ -117,7 +117,7 @@ void clang::ParseAST(Sema &S, bool PrintStats, bool SkipFunctionBodies) {
   PrettyStackTraceParserEntry CrashInfo(P);
 
   // Recover resources if we crash before exiting this method.
-  llvm::CrashRecoveryContextCleanupRegistrar<Parser>
+  llvm37::CrashRecoveryContextCleanupRegistrar<Parser>
     CleanupParser(ParseOP.get());
 
   S.getPreprocessor().EnterMainSourceFile();
@@ -161,7 +161,7 @@ void clang::ParseAST(Sema &S, bool PrintStats, bool SkipFunctionBodies) {
 
   std::swap(OldCollectStats, S.CollectStats);
   if (PrintStats) {
-    llvm::errs() << "\nSTATISTICS:\n";
+    llvm37::errs() << "\nSTATISTICS:\n";
     P.getActions().PrintStats();
     S.getASTContext().PrintStats();
     Decl::PrintStats();

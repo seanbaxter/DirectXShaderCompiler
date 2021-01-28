@@ -42,7 +42,7 @@ Parsing and Semantic Analysis
 
 Code Generation and Optimization
     This stage translates an AST into low-level intermediate code (known as
-    "LLVM IR") and ultimately to machine code.  This phase is responsible for
+    "LLVM37 IR") and ultimately to machine code.  This phase is responsible for
     optimizing the generated code and handling target-specific code generation.
     The output of this stage is typically called a ".s" file or "assembly" file.
 
@@ -64,7 +64,7 @@ Linker
 
 The Clang Static Analyzer is a tool that scans source code to try to find bugs
 through code analysis.  This tool uses many parts of Clang and is built into
-the same driver.  Please see <http://clang-analyzer.llvm.org> for more details
+the same driver.  Please see <http://clang-analyzer.llvm37.org> for more details
 on how to use the static analyzer.
 
 OPTIONS
@@ -83,7 +83,7 @@ Stage Selection Options
 
 .. option:: -S
 
- Run the previous stages as well as LLVM generation and optimization stages
+ Run the previous stages as well as LLVM37 generation and optimization stages
  and target-specific code generation, producing an assembly file.
 
 .. option:: -c
@@ -305,11 +305,11 @@ Code Generation Options
   model can be overridden with the tls_model attribute. The compiler will try
   to choose a more efficient model if possible.
 
-.. option:: -flto, -emit-llvm
+.. option:: -flto, -emit-llvm37
 
-  Generate output files in LLVM formats, suitable for link time optimization.
-  When used with :option:`-S` this generates LLVM intermediate language
-  assembly files, otherwise this generates LLVM bitcode format object files
+  Generate output files in LLVM37 formats, suitable for link time optimization.
+  When used with :option:`-S` this generates LLVM37 intermediate language
+  assembly files, otherwise this generates LLVM37 bitcode format object files
   (which may be passed to the linker depending on the stage selection options).
 
 Driver Options
@@ -477,7 +477,7 @@ ENVIRONMENT
 BUGS
 ----
 
-To report bugs, please visit <http://llvm.org/bugs/>.  Most bug reports should
+To report bugs, please visit <http://llvm37.org/bugs/>.  Most bug reports should
 include preprocessed source files (use the :option:`-E` option) and the full
 output of the compiler, along with information to reproduce.
 

@@ -1,13 +1,13 @@
-//===--- CodeGenTypes.cpp - Type translation for LLVM CodeGen -------------===//
+//===--- CodeGenTypes.cpp - Type translation for LLVM37 CodeGen -------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 //
-// This is the code that handles AST -> LLVM type lowering.
+// This is the code that handles AST -> LLVM37 type lowering.
 //
 //===----------------------------------------------------------------------===//
 
@@ -24,9 +24,9 @@
 #include "clang/AST/Expr.h"
 #include "clang/AST/RecordLayout.h"
 #include "clang/CodeGen/CGFunctionInfo.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/DerivedTypes.h"
-#include "llvm/IR/Module.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/IR/DerivedTypes.h"
+#include "llvm37/IR/Module.h"
 #include "CodeGenModule.h" // HLSL Change
 #include "CGHLSLRuntime.h" // HLSL Change
 using namespace clang;
@@ -41,18 +41,18 @@ CodeGenTypes::CodeGenTypes(CodeGenModule &cgm)
 }
 
 CodeGenTypes::~CodeGenTypes() {
-  llvm::DeleteContainerSeconds(CGRecordLayouts);
+  llvm37::DeleteContainerSeconds(CGRecordLayouts);
 
-  for (llvm::FoldingSet<CGFunctionInfo>::iterator
+  for (llvm37::FoldingSet<CGFunctionInfo>::iterator
        I = FunctionInfos.begin(), E = FunctionInfos.end(); I != E; )
     delete &*I++;
 }
 
 void CodeGenTypes::addRecordTypeName(const RecordDecl *RD,
-                                     llvm::StructType *Ty,
+                                     llvm37::StructType *Ty,
                                      StringRef suffix) {
   SmallString<256> TypeName;
-  llvm::raw_svector_ostream OS(TypeName);
+  llvm37::raw_svector_ostream OS(TypeName);
   OS << RD->getKindName() << '.';
   
   // Name the codegen type after the typedef name
@@ -104,11 +104,11 @@ void CodeGenTypes::addRecordTypeName(const RecordDecl *RD,
   Ty->setName(OS.str());
 }
 
-/// ConvertTypeForMem - Convert type T into a llvm::Type.  This differs from
+/// ConvertTypeForMem - Convert type T into a llvm37::Type.  This differs from
 /// ConvertType in that it is used to convert to the memory representation for
 /// a type.  For example, the scalar representation for _Bool is i1, but the
 /// memory representation is usually i8 or i32, depending on the target.
-llvm::Type *CodeGenTypes::ConvertTypeForMem(QualType T) {
+llvm37::Type *CodeGenTypes::ConvertTypeForMem(QualType T) {
   // HLSL Change Starts
   if (hlsl::IsHLSLVecType(T)) {
     // Vectors of bools in memory should become vectors of
@@ -117,14 +117,14 @@ llvm::Type *CodeGenTypes::ConvertTypeForMem(QualType T) {
     // which is fine otherwise a bool1x1 matrix would become
     // [n x <m x i32>] since array elements always have memory representation.
     QualType ElemT = hlsl::GetElementTypeOrType(T);
-    return llvm::VectorType::get(ConvertTypeForMem(ElemT), hlsl::GetHLSLVecSize(T));
+    return llvm37::VectorType::get(ConvertTypeForMem(ElemT), hlsl::GetHLSLVecSize(T));
   }
 
-  llvm::Type *R = ConvertType(T);
+  llvm37::Type *R = ConvertType(T);
 
   if (R->isIntegerTy(1)) {
     // Bools have a different representation in memory
-    return llvm::IntegerType::get(getLLVMContext(), (unsigned)Context.getTypeSize(T));
+    return llvm37::IntegerType::get(getLLVM37Context(), (unsigned)Context.getTypeSize(T));
   }
 
   return R;
@@ -135,14 +135,14 @@ llvm::Type *CodeGenTypes::ConvertTypeForMem(QualType T) {
 /// isRecordLayoutComplete - Return true if the specified type is already
 /// completely laid out.
 bool CodeGenTypes::isRecordLayoutComplete(const Type *Ty) const {
-  llvm::DenseMap<const Type*, llvm::StructType *>::const_iterator I = 
+  llvm37::DenseMap<const Type*, llvm37::StructType *>::const_iterator I = 
   RecordDeclTypes.find(Ty);
   return I != RecordDeclTypes.end() && !I->second->isOpaque();
 }
 
 static bool
 isSafeToConvert(QualType T, CodeGenTypes &CGT,
-                llvm::SmallPtrSet<const RecordDecl*, 16> &AlreadyChecked);
+                llvm37::SmallPtrSet<const RecordDecl*, 16> &AlreadyChecked);
 
 
 /// isSafeToConvert - Return true if it is safe to convert the specified record
@@ -150,7 +150,7 @@ isSafeToConvert(QualType T, CodeGenTypes &CGT,
 /// recursive compilation mess.
 static bool 
 isSafeToConvert(const RecordDecl *RD, CodeGenTypes &CGT,
-                llvm::SmallPtrSet<const RecordDecl*, 16> &AlreadyChecked) {
+                llvm37::SmallPtrSet<const RecordDecl*, 16> &AlreadyChecked) {
   // If we have already checked this type (maybe the same type is used by-value
   // multiple times in multiple structure fields, don't check again.
   if (!AlreadyChecked.insert(RD).second)
@@ -191,7 +191,7 @@ isSafeToConvert(const RecordDecl *RD, CodeGenTypes &CGT,
 /// recursively safe to convert.
 static bool
 isSafeToConvert(QualType T, CodeGenTypes &CGT,
-                llvm::SmallPtrSet<const RecordDecl*, 16> &AlreadyChecked) {
+                llvm37::SmallPtrSet<const RecordDecl*, 16> &AlreadyChecked) {
   // Strip off atomic type sugar.
   if (const auto *AT = T->getAs<AtomicType>())
     T = AT->getValueType();
@@ -218,7 +218,7 @@ static bool isSafeToConvert(const RecordDecl *RD, CodeGenTypes &CGT) {
   // If no structs are being laid out, we can certainly do this one.
   if (CGT.noRecordsBeingLaidOut()) return true;
   
-  llvm::SmallPtrSet<const RecordDecl*, 16> AlreadyChecked;
+  llvm37::SmallPtrSet<const RecordDecl*, 16> AlreadyChecked;
   return isSafeToConvert(RD, CGT, AlreadyChecked);
 }
 
@@ -311,30 +311,30 @@ void CodeGenTypes::UpdateCompletedType(const TagDecl *TD) {
     DI->completeType(RD);
 }
 
-static llvm::Type *getTypeForFormat(llvm::LLVMContext &VMContext,
-                                    const llvm::fltSemantics &format,
+static llvm37::Type *getTypeForFormat(llvm37::LLVM37Context &VMContext,
+                                    const llvm37::fltSemantics &format,
                                     bool UseNativeHalf = false) {
-  if (&format == &llvm::APFloat::IEEEhalf) {
+  if (&format == &llvm37::APFloat::IEEEhalf) {
     if (UseNativeHalf)
-      return llvm::Type::getHalfTy(VMContext);
+      return llvm37::Type::getHalfTy(VMContext);
     else
-      return llvm::Type::getInt16Ty(VMContext);
+      return llvm37::Type::getInt16Ty(VMContext);
   }
-  if (&format == &llvm::APFloat::IEEEsingle)
-    return llvm::Type::getFloatTy(VMContext);
-  if (&format == &llvm::APFloat::IEEEdouble)
-    return llvm::Type::getDoubleTy(VMContext);
-  if (&format == &llvm::APFloat::IEEEquad)
-    return llvm::Type::getFP128Ty(VMContext);
-  if (&format == &llvm::APFloat::PPCDoubleDouble)
-    return llvm::Type::getPPC_FP128Ty(VMContext);
-  if (&format == &llvm::APFloat::x87DoubleExtended)
-    return llvm::Type::getX86_FP80Ty(VMContext);
-  llvm_unreachable("Unknown float format!");
+  if (&format == &llvm37::APFloat::IEEEsingle)
+    return llvm37::Type::getFloatTy(VMContext);
+  if (&format == &llvm37::APFloat::IEEEdouble)
+    return llvm37::Type::getDoubleTy(VMContext);
+  if (&format == &llvm37::APFloat::IEEEquad)
+    return llvm37::Type::getFP128Ty(VMContext);
+  if (&format == &llvm37::APFloat::PPCDoubleDouble)
+    return llvm37::Type::getPPC_FP128Ty(VMContext);
+  if (&format == &llvm37::APFloat::x87DoubleExtended)
+    return llvm37::Type::getX86_FP80Ty(VMContext);
+  llvm37_unreachable("Unknown float format!");
 }
 
-/// ConvertType - Convert the specified type to its LLVM form.
-llvm::Type *CodeGenTypes::ConvertType(QualType T) {
+/// ConvertType - Convert the specified type to its LLVM37 form.
+llvm37::Type *CodeGenTypes::ConvertType(QualType T) {
   T = Context.getCanonicalType(T);
 
   const Type *Ty = T.getTypePtr();
@@ -354,7 +354,7 @@ llvm::Type *CodeGenTypes::ConvertType(QualType T) {
         QualType eltTy = hlsl::GetHLSLOutputPatchElementType(T);
         unsigned count = hlsl::GetHLSLOutputPatchCount(T);
         Ty = getContext()
-                 .getConstantArrayType(eltTy, llvm::APInt(32, count),
+                 .getConstantArrayType(eltTy, llvm37::APInt(32, count),
                                        ArrayType::ArraySizeModifier::Normal, 0)
                  .getTypePtr();
       } else if (hlsl::IsHLSLInputPatchType(T)) {
@@ -362,7 +362,7 @@ llvm::Type *CodeGenTypes::ConvertType(QualType T) {
         QualType eltTy = hlsl::GetHLSLOutputPatchElementType(T);
         unsigned count = hlsl::GetHLSLOutputPatchCount(T);
         Ty = getContext()
-                 .getConstantArrayType(eltTy, llvm::APInt(32, count),
+                 .getConstantArrayType(eltTy, llvm37::APInt(32, count),
                                        ArrayType::ArraySizeModifier::Normal, 0)
                  .getTypePtr();
       }
@@ -374,13 +374,13 @@ llvm::Type *CodeGenTypes::ConvertType(QualType T) {
       return ConvertRecordDeclType(RT->getDecl());
   }
   // See if type is already cached.
-  llvm::DenseMap<const Type *, llvm::Type *>::iterator TCI = TypeCache.find(Ty);
+  llvm37::DenseMap<const Type *, llvm37::Type *>::iterator TCI = TypeCache.find(Ty);
   // If type is found in map then use it. Otherwise, convert type T.
   if (TCI != TypeCache.end())
     return TCI->second;
 
   // If we don't have it in the cache, convert it now.
-  llvm::Type *ResultType = nullptr;
+  llvm37::Type *ResultType = nullptr;
   switch (Ty->getTypeClass()) {
   case Type::Record: // Handled above.
 #define TYPE(Class, Base)
@@ -389,7 +389,7 @@ llvm::Type *CodeGenTypes::ConvertType(QualType T) {
 #define DEPENDENT_TYPE(Class, Base) case Type::Class:
 #define NON_CANONICAL_UNLESS_DEPENDENT_TYPE(Class, Base) case Type::Class:
 #include "clang/AST/TypeNodes.def"
-    llvm_unreachable("Non-canonical or dependent types aren't possible.");
+    llvm37_unreachable("Non-canonical or dependent types aren't possible.");
 
   case Type::Builtin: {
     switch (cast<BuiltinType>(Ty)->getKind()) {
@@ -397,14 +397,14 @@ llvm::Type *CodeGenTypes::ConvertType(QualType T) {
     case BuiltinType::ObjCId:
     case BuiltinType::ObjCClass:
     case BuiltinType::ObjCSel:
-      // LLVM void type can only be used as the result of a function call.  Just
+      // LLVM37 void type can only be used as the result of a function call.  Just
       // map to the same as char.
-      ResultType = llvm::Type::getInt8Ty(getLLVMContext());
+      ResultType = llvm37::Type::getInt8Ty(getLLVM37Context());
       break;
 
     case BuiltinType::Bool:
       // Note that we always return bool as i1 for use as a scalar type.
-      ResultType = llvm::Type::getInt1Ty(getLLVMContext());
+      ResultType = llvm37::Type::getInt1Ty(getLLVM37Context());
       break;
 
     case BuiltinType::Char_S:
@@ -431,7 +431,7 @@ llvm::Type *CodeGenTypes::ConvertType(QualType T) {
     // HLSL Change Ends
     case BuiltinType::Char16:
     case BuiltinType::Char32:
-      ResultType = llvm::IntegerType::get(getLLVMContext(),
+      ResultType = llvm37::IntegerType::get(getLLVM37Context(),
                                  static_cast<unsigned>(Context.getTypeSize(T)));
       break;
     // HLSL Change Starts
@@ -443,7 +443,7 @@ llvm::Type *CodeGenTypes::ConvertType(QualType T) {
     case BuiltinType::Half:
       // Half FP can either be storage-only (lowered to i16) or native.
       ResultType =
-          getTypeForFormat(getLLVMContext(), Context.getFloatTypeSemantics(T),
+          getTypeForFormat(getLLVM37Context(), Context.getFloatTypeSemantics(T),
                            Context.getLangOpts().NativeHalfType ||
                                Context.getLangOpts().HalfArgsAndReturns);
       break;
@@ -452,19 +452,19 @@ llvm::Type *CodeGenTypes::ConvertType(QualType T) {
     case BuiltinType::Float:
     case BuiltinType::Double:
     case BuiltinType::LongDouble:
-      ResultType = getTypeForFormat(getLLVMContext(),
+      ResultType = getTypeForFormat(getLLVM37Context(),
                                     Context.getFloatTypeSemantics(T),
                                     /* UseNativeHalf = */ false);
       break;
 
     case BuiltinType::NullPtr:
       // Model std::nullptr_t as i8*
-      ResultType = llvm::Type::getInt8PtrTy(getLLVMContext());
+      ResultType = llvm37::Type::getInt8PtrTy(getLLVM37Context());
       break;
         
     case BuiltinType::UInt128:
     case BuiltinType::Int128:
-      ResultType = llvm::IntegerType::get(getLLVMContext(), 128);
+      ResultType = llvm37::IntegerType::get(getLLVM37Context(), 128);
       break;
 
     case BuiltinType::OCLImage1d:
@@ -483,34 +483,34 @@ llvm::Type *CodeGenTypes::ConvertType(QualType T) {
 #define PLACEHOLDER_TYPE(Id, SingletonId) \
     case BuiltinType::Id:
 #include "clang/AST/BuiltinTypes.def"
-      llvm_unreachable("Unexpected placeholder builtin type!");
+      llvm37_unreachable("Unexpected placeholder builtin type!");
     }
     break;
   }
   case Type::Auto:
-    llvm_unreachable("Unexpected undeduced auto type!");
+    llvm37_unreachable("Unexpected undeduced auto type!");
   case Type::Complex: {
-    llvm::Type *EltTy = ConvertType(cast<ComplexType>(Ty)->getElementType());
-    ResultType = llvm::StructType::get(EltTy, EltTy, nullptr);
+    llvm37::Type *EltTy = ConvertType(cast<ComplexType>(Ty)->getElementType());
+    ResultType = llvm37::StructType::get(EltTy, EltTy, nullptr);
     break;
   }
   case Type::LValueReference:
   case Type::RValueReference: {
     const ReferenceType *RTy = cast<ReferenceType>(Ty);
     QualType ETy = RTy->getPointeeType();
-    llvm::Type *PointeeType = ConvertTypeForMem(ETy);
+    llvm37::Type *PointeeType = ConvertTypeForMem(ETy);
     unsigned AS = Context.getTargetAddressSpace(ETy);
-    ResultType = llvm::PointerType::get(PointeeType, AS);
+    ResultType = llvm37::PointerType::get(PointeeType, AS);
     break;
   }
   case Type::Pointer: {
     const PointerType *PTy = cast<PointerType>(Ty);
     QualType ETy = PTy->getPointeeType();
-    llvm::Type *PointeeType = ConvertTypeForMem(ETy);
+    llvm37::Type *PointeeType = ConvertTypeForMem(ETy);
     if (PointeeType->isVoidTy())
-      PointeeType = llvm::Type::getInt8Ty(getLLVMContext());
+      PointeeType = llvm37::Type::getInt8Ty(getLLVM37Context());
     unsigned AS = Context.getTargetAddressSpace(ETy);
-    ResultType = llvm::PointerType::get(PointeeType, AS);
+    ResultType = llvm37::PointerType::get(PointeeType, AS);
     break;
   }
 
@@ -532,29 +532,29 @@ llvm::Type *CodeGenTypes::ConvertType(QualType T) {
     ResultType = ConvertTypeForMem(A->getElementType());
     if (!ResultType->isSized()) {
       SkippedLayout = true;
-      ResultType = llvm::Type::getInt8Ty(getLLVMContext());
+      ResultType = llvm37::Type::getInt8Ty(getLLVM37Context());
     }
-    ResultType = llvm::ArrayType::get(ResultType, 0);
+    ResultType = llvm37::ArrayType::get(ResultType, 0);
     break;
   }
   case Type::ConstantArray: {
     const ConstantArrayType *A = cast<ConstantArrayType>(Ty);
-    llvm::Type *EltTy = ConvertTypeForMem(A->getElementType());
+    llvm37::Type *EltTy = ConvertTypeForMem(A->getElementType());
     
     // Lower arrays of undefined struct type to arrays of i8 just to have a 
     // concrete type.
     if (!EltTy->isSized()) {
       SkippedLayout = true;
-      EltTy = llvm::Type::getInt8Ty(getLLVMContext());
+      EltTy = llvm37::Type::getInt8Ty(getLLVM37Context());
     }
 
-    ResultType = llvm::ArrayType::get(EltTy, A->getSize().getZExtValue());
+    ResultType = llvm37::ArrayType::get(EltTy, A->getSize().getZExtValue());
     break;
   }
   case Type::ExtVector:
   case Type::Vector: {
     const VectorType *VT = cast<VectorType>(Ty);
-    ResultType = llvm::VectorType::get(ConvertType(VT->getElementType()),
+    ResultType = llvm37::VectorType::get(ConvertType(VT->getElementType()),
                                        VT->getNumElements());
     break;
   }
@@ -577,7 +577,7 @@ llvm::Type *CodeGenTypes::ConvertType(QualType T) {
             ConvertRecordDeclType(RT->getDecl());
 
       // Return a placeholder type.
-      ResultType = llvm::StructType::get(getLLVMContext());
+      ResultType = llvm37::StructType::get(getLLVM37Context());
 
       SkippedLayout = true;
       break;
@@ -587,7 +587,7 @@ llvm::Type *CodeGenTypes::ConvertType(QualType T) {
     // to recursively convert any pointed-to structs.  Converting directly-used
     // structs is ok though.
     if (!RecordsBeingLaidOut.insert(Ty).second) {
-      ResultType = llvm::StructType::get(getLLVMContext());
+      ResultType = llvm37::StructType::get(getLLVM37Context());
       
       SkippedLayout = true;
       break;
@@ -609,7 +609,7 @@ llvm::Type *CodeGenTypes::ConvertType(QualType T) {
     // don't recurse into it again.
     if (FunctionsBeingProcessed.count(FI)) {
 
-      ResultType = llvm::StructType::get(getLLVMContext());
+      ResultType = llvm37::StructType::get(getLLVM37Context());
       SkippedLayout = true;
     } else {
 
@@ -636,18 +636,18 @@ llvm::Type *CodeGenTypes::ConvertType(QualType T) {
     // Objective-C interfaces are always opaque (outside of the
     // runtime, which can do whatever it likes); we never refine
     // these.
-    llvm::Type *&T = InterfaceTypes[cast<ObjCInterfaceType>(Ty)];
+    llvm37::Type *&T = InterfaceTypes[cast<ObjCInterfaceType>(Ty)];
     if (!T)
-      T = llvm::StructType::create(getLLVMContext());
+      T = llvm37::StructType::create(getLLVM37Context());
     ResultType = T;
     break;
   }
 
   case Type::ObjCObjectPointer: {
-    // Protocol qualifications do not influence the LLVM type, we just return a
+    // Protocol qualifications do not influence the LLVM37 type, we just return a
     // pointer to the underlying interface type. We don't need to worry about
     // recursive conversion.
-    llvm::Type *T =
+    llvm37::Type *T =
       ConvertTypeForMem(cast<ObjCObjectPointerType>(Ty)->getPointeeType());
     ResultType = T->getPointerTo();
     break;
@@ -660,21 +660,21 @@ llvm::Type *CodeGenTypes::ConvertType(QualType T) {
     // Return a placeholder 'i32' type.  This can be changed later when the
     // type is defined (see UpdateCompletedType), but is likely to be the
     // "right" answer.
-    ResultType = llvm::Type::getInt32Ty(getLLVMContext());
+    ResultType = llvm37::Type::getInt32Ty(getLLVM37Context());
     break;
   }
 
   case Type::BlockPointer: {
     const QualType FTy = cast<BlockPointerType>(Ty)->getPointeeType();
-    llvm::Type *PointeeType = ConvertTypeForMem(FTy);
+    llvm37::Type *PointeeType = ConvertTypeForMem(FTy);
     unsigned AS = Context.getTargetAddressSpace(FTy);
-    ResultType = llvm::PointerType::get(PointeeType, AS);
+    ResultType = llvm37::PointerType::get(PointeeType, AS);
     break;
   }
 
   case Type::MemberPointer: {
     if (!getCXXABI().isMemberPointerConvertible(cast<MemberPointerType>(Ty)))
-      return llvm::StructType::create(getLLVMContext());
+      return llvm37::StructType::create(getLLVM37Context());
     ResultType = 
       getCXXABI().ConvertMemberPointerType(cast<MemberPointerType>(Ty));
     break;
@@ -689,12 +689,12 @@ llvm::Type *CodeGenTypes::ConvertType(QualType T) {
     uint64_t atomicSize = Context.getTypeSize(Ty);
     if (valueSize != atomicSize) {
       assert(valueSize < atomicSize);
-      llvm::Type *elts[] = {
+      llvm37::Type *elts[] = {
         ResultType,
-        llvm::ArrayType::get(CGM.Int8Ty, (atomicSize - valueSize) / 8)
+        llvm37::ArrayType::get(CGM.Int8Ty, (atomicSize - valueSize) / 8)
       };
-      ResultType = llvm::StructType::get(getLLVMContext(),
-                                         llvm::makeArrayRef(elts));
+      ResultType = llvm37::StructType::get(getLLVM37Context(),
+                                         llvm37::makeArrayRef(elts));
     }
     break;
   }
@@ -715,21 +715,21 @@ bool CodeGenModule::isPaddedAtomicType(const AtomicType *type) {
 }
 
 /// ConvertRecordDeclType - Lay out a tagged decl type like struct or union.
-llvm::StructType *CodeGenTypes::ConvertRecordDeclType(const RecordDecl *RD) {
+llvm37::StructType *CodeGenTypes::ConvertRecordDeclType(const RecordDecl *RD) {
   // TagDecl's are not necessarily unique, instead use the (clang)
   // type connected to the decl.
   const Type *Key = Context.getTagDeclType(RD).getTypePtr();
 
-  llvm::StructType *&Entry = RecordDeclTypes[Key];
+  llvm37::StructType *&Entry = RecordDeclTypes[Key];
 
   // If we don't have a StructType at all yet, create the forward declaration.
   if (!Entry) {
-    Entry = llvm::StructType::create(getLLVMContext());
+    Entry = llvm37::StructType::create(getLLVM37Context());
     addRecordTypeName(RD, Entry, "");
   }
-  llvm::StructType *Ty = Entry;
+  llvm37::StructType *Ty = Entry;
 
-  // If this is still a forward declaration, or the LLVM type is already
+  // If this is still a forward declaration, or the LLVM37 type is already
   // complete, there's nothing more to do.
   RD = RD->getDefinition();
   if (!RD || !RD->isCompleteDefinition() || !Ty->isOpaque())

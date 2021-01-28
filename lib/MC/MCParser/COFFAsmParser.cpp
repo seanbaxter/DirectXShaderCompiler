@@ -1,26 +1,26 @@
 //===- COFFAsmParser.cpp - COFF Assembly Parser ---------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/MC/MCParser/MCAsmParserExtension.h"
-#include "llvm/ADT/StringSwitch.h"
-#include "llvm/ADT/Twine.h"
-#include "llvm/MC/MCAsmInfo.h"
-#include "llvm/MC/MCContext.h"
-#include "llvm/MC/MCExpr.h"
-#include "llvm/MC/MCObjectFileInfo.h"
-#include "llvm/MC/MCParser/MCAsmLexer.h"
-#include "llvm/MC/MCRegisterInfo.h"
-#include "llvm/MC/MCSectionCOFF.h"
-#include "llvm/MC/MCStreamer.h"
-#include "llvm/MC/MCTargetAsmParser.h"
-#include "llvm/Support/COFF.h"
-using namespace llvm;
+#include "llvm37/MC/MCParser/MCAsmParserExtension.h"
+#include "llvm37/ADT/StringSwitch.h"
+#include "llvm37/ADT/Twine.h"
+#include "llvm37/MC/MCAsmInfo.h"
+#include "llvm37/MC/MCContext.h"
+#include "llvm37/MC/MCExpr.h"
+#include "llvm37/MC/MCObjectFileInfo.h"
+#include "llvm37/MC/MCParser/MCAsmLexer.h"
+#include "llvm37/MC/MCRegisterInfo.h"
+#include "llvm37/MC/MCSectionCOFF.h"
+#include "llvm37/MC/MCStreamer.h"
+#include "llvm37/MC/MCTargetAsmParser.h"
+#include "llvm37/Support/COFF.h"
+using namespace llvm37;
 
 namespace {
 
@@ -753,8 +753,8 @@ bool COFFAsmParser::ParseSEHRegisterNumber(unsigned &RegNo) {
   if (getLexer().is(AsmToken::Percent)) {
     const MCRegisterInfo *MRI = getContext().getRegisterInfo();
     SMLoc endLoc;
-    unsigned LLVMRegNo;
-    if (getParser().getTargetParser().ParseRegister(LLVMRegNo,startLoc,endLoc))
+    unsigned LLVM37RegNo;
+    if (getParser().getTargetParser().ParseRegister(LLVM37RegNo,startLoc,endLoc))
       return true;
 
 #if 0
@@ -765,13 +765,13 @@ bool COFFAsmParser::ParseSEHRegisterNumber(unsigned &RegNo) {
     const unsigned *NVRegs = TAI.getCalleeSavedRegs();
     unsigned i;
     for (i = 0; NVRegs[i] != 0; ++i)
-      if (NVRegs[i] == LLVMRegNo)
+      if (NVRegs[i] == LLVM37RegNo)
         break;
     if (NVRegs[i] == 0)
       return Error(startLoc, "expected non-volatile register");
 #endif
 
-    int SEHRegNo = MRI->getSEHRegNum(LLVMRegNo);
+    int SEHRegNo = MRI->getSEHRegNum(LLVM37RegNo);
     if (SEHRegNo < 0)
       return Error(startLoc,"register can't be represented in SEH unwind info");
     RegNo = SEHRegNo;
@@ -788,7 +788,7 @@ bool COFFAsmParser::ParseSEHRegisterNumber(unsigned &RegNo) {
   return false;
 }
 
-namespace llvm {
+namespace llvm37 {
 
 MCAsmParserExtension *createCOFFAsmParser() {
   return new COFFAsmParser;

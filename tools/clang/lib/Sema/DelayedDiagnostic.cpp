@@ -1,6 +1,6 @@
 //===--- DelayedDiagnostic.cpp - Delayed declarator diagnostics -*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -38,7 +38,7 @@ DelayedDiagnostic::makeAvailability(Sema::AvailabilityDiagnostic AD,
       DD.Kind = Unavailable;
       break;
     case Sema::AD_Partial:
-      llvm_unreachable("AD_Partial diags should not be delayed");
+      llvm37_unreachable("AD_Partial diags should not be delayed");
   }
   DD.Triggered = false;
   DD.Loc = Loc;

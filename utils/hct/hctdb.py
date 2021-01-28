@@ -60,8 +60,8 @@ class db_dxil_inst(object):
     "A representation for a DXIL instruction"
     def __init__(self, name, **kwargs):
         self.name = name                # short, unique name
-        self.llvm_id = 0                # ID of LLVM instruction
-        self.llvm_name = ""             # name of LLVM instruction type
+        self.llvm37_id = 0                # ID of LLVM37 instruction
+        self.llvm37_name = ""             # name of LLVM37 instruction type
         self.is_bb_terminator = False   # whether this is a basic block terminator
         self.is_binary = False          # whether this is an arithmetic binary/logical operator
         self.is_memory = False          # whether this is a memory manipulator operator
@@ -109,9 +109,9 @@ class db_dxil_metadata(object):
 
 class db_dxil_param(object):
     "The parameter description for a DXIL instruction"
-    def __init__(self, pos, llvm_type, name, doc, **kwargs):
+    def __init__(self, pos, llvm37_type, name, doc, **kwargs):
         self.pos = pos                  # position in parameter list
-        self.llvm_type = llvm_type      # llvm type name, $o for overload, $r for resource type, $cb for legacy cbuffer, $u4 for u4 struct
+        self.llvm37_type = llvm37_type      # llvm37 type name, $o for overload, $r for resource type, $cb for legacy cbuffer, $u4 for u4 struct
         self.name = name                # short, unique name
         self.doc = doc                  # the documentation description of this parameter
         self.is_const = False           # whether this argument requires a constant value in the IR
@@ -178,8 +178,8 @@ class db_dxil(object):
         # starting with extra ones specified here
         self.counters = extra_counters
 
-        self.populate_llvm_instructions()
-        self.call_instr = self.get_instr_by_llvm_name("CallInst")
+        self.populate_llvm37_instructions()
+        self.call_instr = self.get_instr_by_llvm37_name("CallInst")
         self.populate_dxil_operations()
         self.build_indices()
         self.populate_extended_docs()
@@ -213,7 +213,7 @@ class db_dxil(object):
         # Build enumeration from instructions
         OpCodeEnum = db_dxil_enum("OpCode", "Enumeration for operations specified by DXIL")
         class_dict = {}
-        class_dict["LlvmInst"] = "LLVM Instructions"
+        class_dict["LlvmInst"] = "LLVM37 Instructions"
         for i in self.instr:
             if i.is_dxil_op:
                 v = db_dxil_enum_value(i.dxil_op, i.dxil_opid, i.doc)
@@ -453,9 +453,9 @@ class db_dxil(object):
             self.name_idx[i].category = "Helper Lanes"
             self.name_idx[i].shader_model = 6,6
 
-    def populate_llvm_instructions(self):
-        # Add instructions that map to LLVM instructions.
-        # This is basically include\llvm\IR\Instruction.def
+    def populate_llvm37_instructions(self):
+        # Add instructions that map to LLVM37 instructions.
+        # This is basically include\llvm37\IR\Instruction.def
         #
         # Some instructions don't have their operands defined here because they are
         # very specific and expanding generality isn't worth it; for example,
@@ -471,66 +471,66 @@ class db_dxil(object):
         oload_binary_params = [retoload_param,
                                db_dxil_param(1, "$o", "a", "first value"),
                                db_dxil_param(2, "$o", "b", "second value")]
-        self.add_llvm_instr("TERM", 1, "Ret", "ReturnInst", "returns a value (possibly void), from a function.", oload_all_arith_v, [retoload_param])
-        self.add_llvm_instr("TERM", 2, "Br", "BranchInst", "branches (conditional or unconditional)", "", [])
-        self.add_llvm_instr("TERM", 3, "Switch", "SwitchInst", "performs a multiway switch", "", [])
-        self.add_llvm_instr("TERM", 4, "IndirectBr", "IndirectBrInst", "branches indirectly", "", [])
-        self.add_llvm_instr("TERM", 5, "Invoke", "InvokeInst", "invokes function with normal and exceptional returns", "", [])
-        self.add_llvm_instr("TERM", 6, "Resume", "ResumeInst", "resumes the propagation of an exception", "", [])
-        self.add_llvm_instr("TERM", 7, "Unreachable", "UnreachableInst", "is unreachable", "", [])
+        self.add_llvm37_instr("TERM", 1, "Ret", "ReturnInst", "returns a value (possibly void), from a function.", oload_all_arith_v, [retoload_param])
+        self.add_llvm37_instr("TERM", 2, "Br", "BranchInst", "branches (conditional or unconditional)", "", [])
+        self.add_llvm37_instr("TERM", 3, "Switch", "SwitchInst", "performs a multiway switch", "", [])
+        self.add_llvm37_instr("TERM", 4, "IndirectBr", "IndirectBrInst", "branches indirectly", "", [])
+        self.add_llvm37_instr("TERM", 5, "Invoke", "InvokeInst", "invokes function with normal and exceptional returns", "", [])
+        self.add_llvm37_instr("TERM", 6, "Resume", "ResumeInst", "resumes the propagation of an exception", "", [])
+        self.add_llvm37_instr("TERM", 7, "Unreachable", "UnreachableInst", "is unreachable", "", [])
 
-        self.add_llvm_instr("BINARY",  8, "Add"  , "BinaryOperator", "returns the sum of its two operands", oload_int_arith, oload_binary_params, counters=('ints',))
-        self.add_llvm_instr("BINARY",  9, "FAdd" , "BinaryOperator", "returns the sum of its two operands", oload_float_arith, oload_binary_params, counters=('floats',))
-        self.add_llvm_instr("BINARY", 10, "Sub"  , "BinaryOperator", "returns the difference of its two operands", oload_int_arith, oload_binary_params, counters=('ints',))
-        self.add_llvm_instr("BINARY", 11, "FSub" , "BinaryOperator", "returns the difference of its two operands", oload_float_arith, oload_binary_params, counters=('floats',))
-        self.add_llvm_instr("BINARY", 12, "Mul"  , "BinaryOperator", "returns the product of its two operands", oload_int_arith, oload_binary_params, counters=('ints',))
-        self.add_llvm_instr("BINARY", 13, "FMul" , "BinaryOperator", "returns the product of its two operands", oload_float_arith, oload_binary_params, counters=('floats',))
-        self.add_llvm_instr("BINARY", 14, "UDiv" , "BinaryOperator", "returns the quotient of its two unsigned operands", oload_int_arith, oload_binary_params, counters=('uints',))
-        self.add_llvm_instr("BINARY", 15, "SDiv" , "BinaryOperator", "returns the quotient of its two signed operands", oload_int_arith, oload_binary_params, counters=('ints',))
-        self.add_llvm_instr("BINARY", 16, "FDiv" , "BinaryOperator", "returns the quotient of its two operands", oload_float_arith, oload_binary_params, counters=('floats',))
-        self.add_llvm_instr("BINARY", 17, "URem" , "BinaryOperator", "returns the remainder from the unsigned division of its two operands", oload_int_arith, oload_binary_params, counters=('uints',))
-        self.add_llvm_instr("BINARY", 18, "SRem" , "BinaryOperator", "returns the remainder from the signed division of its two operands", oload_int_arith, oload_binary_params, counters=('ints',))
-        self.add_llvm_instr("BINARY", 19, "FRem" , "BinaryOperator", "returns the remainder from the division of its two operands", oload_float_arith, oload_binary_params, counters=('floats',))
+        self.add_llvm37_instr("BINARY",  8, "Add"  , "BinaryOperator", "returns the sum of its two operands", oload_int_arith, oload_binary_params, counters=('ints',))
+        self.add_llvm37_instr("BINARY",  9, "FAdd" , "BinaryOperator", "returns the sum of its two operands", oload_float_arith, oload_binary_params, counters=('floats',))
+        self.add_llvm37_instr("BINARY", 10, "Sub"  , "BinaryOperator", "returns the difference of its two operands", oload_int_arith, oload_binary_params, counters=('ints',))
+        self.add_llvm37_instr("BINARY", 11, "FSub" , "BinaryOperator", "returns the difference of its two operands", oload_float_arith, oload_binary_params, counters=('floats',))
+        self.add_llvm37_instr("BINARY", 12, "Mul"  , "BinaryOperator", "returns the product of its two operands", oload_int_arith, oload_binary_params, counters=('ints',))
+        self.add_llvm37_instr("BINARY", 13, "FMul" , "BinaryOperator", "returns the product of its two operands", oload_float_arith, oload_binary_params, counters=('floats',))
+        self.add_llvm37_instr("BINARY", 14, "UDiv" , "BinaryOperator", "returns the quotient of its two unsigned operands", oload_int_arith, oload_binary_params, counters=('uints',))
+        self.add_llvm37_instr("BINARY", 15, "SDiv" , "BinaryOperator", "returns the quotient of its two signed operands", oload_int_arith, oload_binary_params, counters=('ints',))
+        self.add_llvm37_instr("BINARY", 16, "FDiv" , "BinaryOperator", "returns the quotient of its two operands", oload_float_arith, oload_binary_params, counters=('floats',))
+        self.add_llvm37_instr("BINARY", 17, "URem" , "BinaryOperator", "returns the remainder from the unsigned division of its two operands", oload_int_arith, oload_binary_params, counters=('uints',))
+        self.add_llvm37_instr("BINARY", 18, "SRem" , "BinaryOperator", "returns the remainder from the signed division of its two operands", oload_int_arith, oload_binary_params, counters=('ints',))
+        self.add_llvm37_instr("BINARY", 19, "FRem" , "BinaryOperator", "returns the remainder from the division of its two operands", oload_float_arith, oload_binary_params, counters=('floats',))
 
-        self.add_llvm_instr("BINARY", 20, "Shl", "BinaryOperator", "shifts left (logical)", oload_int_arith, oload_binary_params, counters=('uints',))
-        self.add_llvm_instr("BINARY", 21, "LShr", "BinaryOperator", "shifts right (logical), with zero bit fill", oload_int_arith, oload_binary_params, counters=('uints',))
-        self.add_llvm_instr("BINARY", 22, "AShr", "BinaryOperator", "shifts right (arithmetic), with 'a' operand sign bit fill", oload_int_arith, oload_binary_params, counters=('ints',))
-        self.add_llvm_instr("BINARY", 23, "And", "BinaryOperator", "returns a  bitwise logical and of its two operands", oload_int_arith_b, oload_binary_params, counters=('uints',))
-        self.add_llvm_instr("BINARY", 24, "Or", "BinaryOperator", "returns a bitwise logical or of its two operands", oload_int_arith_b, oload_binary_params, counters=('uints',))
-        self.add_llvm_instr("BINARY", 25, "Xor", "BinaryOperator", "returns a bitwise logical xor of its two operands", oload_int_arith_b, oload_binary_params, counters=('uints',))
+        self.add_llvm37_instr("BINARY", 20, "Shl", "BinaryOperator", "shifts left (logical)", oload_int_arith, oload_binary_params, counters=('uints',))
+        self.add_llvm37_instr("BINARY", 21, "LShr", "BinaryOperator", "shifts right (logical), with zero bit fill", oload_int_arith, oload_binary_params, counters=('uints',))
+        self.add_llvm37_instr("BINARY", 22, "AShr", "BinaryOperator", "shifts right (arithmetic), with 'a' operand sign bit fill", oload_int_arith, oload_binary_params, counters=('ints',))
+        self.add_llvm37_instr("BINARY", 23, "And", "BinaryOperator", "returns a  bitwise logical and of its two operands", oload_int_arith_b, oload_binary_params, counters=('uints',))
+        self.add_llvm37_instr("BINARY", 24, "Or", "BinaryOperator", "returns a bitwise logical or of its two operands", oload_int_arith_b, oload_binary_params, counters=('uints',))
+        self.add_llvm37_instr("BINARY", 25, "Xor", "BinaryOperator", "returns a bitwise logical xor of its two operands", oload_int_arith_b, oload_binary_params, counters=('uints',))
 
-        self.add_llvm_instr("MEMORY", 26, "Alloca", "AllocaInst", "allocates memory on the stack frame of the currently executing function", "", [])
-        self.add_llvm_instr("MEMORY", 27, "Load", "LoadInst", "reads from memory", "", [])
-        self.add_llvm_instr("MEMORY", 28, "Store", "StoreInst", "writes to memory", "", [])
-        self.add_llvm_instr("MEMORY", 29, "GetElementPtr", "GetElementPtrInst", "gets the address of a subelement of an aggregate value", "", [])
-        self.add_llvm_instr("MEMORY", 30, "Fence", "FenceInst", "introduces happens-before edges between operations", "", [], counters=('fence',))
-        self.add_llvm_instr("MEMORY", 31, "AtomicCmpXchg", "AtomicCmpXchgInst" , "atomically modifies memory", "", [], counters=('atomic',))
-        self.add_llvm_instr("MEMORY", 32, "AtomicRMW", "AtomicRMWInst", "atomically modifies memory", "", [], counters=('atomic',))
+        self.add_llvm37_instr("MEMORY", 26, "Alloca", "AllocaInst", "allocates memory on the stack frame of the currently executing function", "", [])
+        self.add_llvm37_instr("MEMORY", 27, "Load", "LoadInst", "reads from memory", "", [])
+        self.add_llvm37_instr("MEMORY", 28, "Store", "StoreInst", "writes to memory", "", [])
+        self.add_llvm37_instr("MEMORY", 29, "GetElementPtr", "GetElementPtrInst", "gets the address of a subelement of an aggregate value", "", [])
+        self.add_llvm37_instr("MEMORY", 30, "Fence", "FenceInst", "introduces happens-before edges between operations", "", [], counters=('fence',))
+        self.add_llvm37_instr("MEMORY", 31, "AtomicCmpXchg", "AtomicCmpXchgInst" , "atomically modifies memory", "", [], counters=('atomic',))
+        self.add_llvm37_instr("MEMORY", 32, "AtomicRMW", "AtomicRMWInst", "atomically modifies memory", "", [], counters=('atomic',))
 
-        self.add_llvm_instr("CAST", 33, "Trunc", "TruncInst", "truncates an integer", oload_int_arith_b, oload_cast_params, counters=('ints',))
-        self.add_llvm_instr("CAST", 34, "ZExt", "ZExtInst", "zero extends an integer", oload_int_arith_b, oload_cast_params, counters=('uints',))
-        self.add_llvm_instr("CAST", 35, "SExt", "SExtInst", "sign extends an integer", oload_int_arith_b, oload_cast_params, counters=('ints',))
-        self.add_llvm_instr("CAST", 36, "FPToUI", "FPToUIInst", "converts a floating point to UInt", oload_all_arith, oload_cast_params, counters=('floats',))
-        self.add_llvm_instr("CAST", 37, "FPToSI", "FPToSIInst", "converts a floating point to SInt", oload_all_arith, oload_cast_params, counters=('floats',))
-        self.add_llvm_instr("CAST", 38, "UIToFP", "UIToFPInst", "converts a UInt to floating point", oload_all_arith, oload_cast_params, counters=('floats',))
-        self.add_llvm_instr("CAST", 39, "SIToFP" , "SIToFPInst", "converts a SInt to floating point", oload_all_arith, oload_cast_params, counters=('floats',))
-        self.add_llvm_instr("CAST", 40, "FPTrunc", "FPTruncInst", "truncates a floating point", oload_float_arith, oload_cast_params, counters=('floats',))
-        self.add_llvm_instr("CAST", 41, "FPExt", "FPExtInst", "extends a floating point", oload_float_arith, oload_cast_params, counters=('floats',))
-        self.add_llvm_instr("CAST", 42, "PtrToInt", "PtrToIntInst", "converts a pointer to integer", "i", oload_cast_params)
-        self.add_llvm_instr("CAST", 43, "IntToPtr", "IntToPtrInst", "converts an integer to Pointer", "i", oload_cast_params)
-        self.add_llvm_instr("CAST", 44, "BitCast", "BitCastInst", "performs a bit-preserving type cast", oload_all_arith, oload_cast_params)
-        self.add_llvm_instr("CAST", 45, "AddrSpaceCast", "AddrSpaceCastInst", "casts a value addrspace", "", oload_cast_params)
+        self.add_llvm37_instr("CAST", 33, "Trunc", "TruncInst", "truncates an integer", oload_int_arith_b, oload_cast_params, counters=('ints',))
+        self.add_llvm37_instr("CAST", 34, "ZExt", "ZExtInst", "zero extends an integer", oload_int_arith_b, oload_cast_params, counters=('uints',))
+        self.add_llvm37_instr("CAST", 35, "SExt", "SExtInst", "sign extends an integer", oload_int_arith_b, oload_cast_params, counters=('ints',))
+        self.add_llvm37_instr("CAST", 36, "FPToUI", "FPToUIInst", "converts a floating point to UInt", oload_all_arith, oload_cast_params, counters=('floats',))
+        self.add_llvm37_instr("CAST", 37, "FPToSI", "FPToSIInst", "converts a floating point to SInt", oload_all_arith, oload_cast_params, counters=('floats',))
+        self.add_llvm37_instr("CAST", 38, "UIToFP", "UIToFPInst", "converts a UInt to floating point", oload_all_arith, oload_cast_params, counters=('floats',))
+        self.add_llvm37_instr("CAST", 39, "SIToFP" , "SIToFPInst", "converts a SInt to floating point", oload_all_arith, oload_cast_params, counters=('floats',))
+        self.add_llvm37_instr("CAST", 40, "FPTrunc", "FPTruncInst", "truncates a floating point", oload_float_arith, oload_cast_params, counters=('floats',))
+        self.add_llvm37_instr("CAST", 41, "FPExt", "FPExtInst", "extends a floating point", oload_float_arith, oload_cast_params, counters=('floats',))
+        self.add_llvm37_instr("CAST", 42, "PtrToInt", "PtrToIntInst", "converts a pointer to integer", "i", oload_cast_params)
+        self.add_llvm37_instr("CAST", 43, "IntToPtr", "IntToPtrInst", "converts an integer to Pointer", "i", oload_cast_params)
+        self.add_llvm37_instr("CAST", 44, "BitCast", "BitCastInst", "performs a bit-preserving type cast", oload_all_arith, oload_cast_params)
+        self.add_llvm37_instr("CAST", 45, "AddrSpaceCast", "AddrSpaceCastInst", "casts a value addrspace", "", oload_cast_params)
 
-        self.add_llvm_instr("OTHER", 46, "ICmp", "ICmpInst", "compares integers", oload_int_arith_b, oload_binary_params, counters=('ints',))
-        self.add_llvm_instr("OTHER", 47, "FCmp", "FCmpInst", "compares floating points", oload_float_arith, oload_binary_params, counters=('floats',))
-        self.add_llvm_instr("OTHER", 48, "PHI", "PHINode", "is a PHI node instruction", "", [])
-        self.add_llvm_instr("OTHER", 49, "Call", "CallInst", "calls a function", "", [])
-        self.add_llvm_instr("OTHER", 50, "Select", "SelectInst", "selects an instruction", "", [])
-        self.add_llvm_instr("OTHER", 51, "UserOp1", "Instruction", "may be used internally in a pass", "", [])
-        self.add_llvm_instr("OTHER", 52, "UserOp2", "Instruction", "internal to passes only", "", [])
-        self.add_llvm_instr("OTHER", 53, "VAArg", "VAArgInst", "vaarg instruction", "", [])
-        self.add_llvm_instr("OTHER", 57, "ExtractValue", "ExtractValueInst", "extracts from aggregate", "", [])
-        self.add_llvm_instr("OTHER", 59, "LandingPad", "LandingPadInst", "represents a landing pad", "", [])
+        self.add_llvm37_instr("OTHER", 46, "ICmp", "ICmpInst", "compares integers", oload_int_arith_b, oload_binary_params, counters=('ints',))
+        self.add_llvm37_instr("OTHER", 47, "FCmp", "FCmpInst", "compares floating points", oload_float_arith, oload_binary_params, counters=('floats',))
+        self.add_llvm37_instr("OTHER", 48, "PHI", "PHINode", "is a PHI node instruction", "", [])
+        self.add_llvm37_instr("OTHER", 49, "Call", "CallInst", "calls a function", "", [])
+        self.add_llvm37_instr("OTHER", 50, "Select", "SelectInst", "selects an instruction", "", [])
+        self.add_llvm37_instr("OTHER", 51, "UserOp1", "Instruction", "may be used internally in a pass", "", [])
+        self.add_llvm37_instr("OTHER", 52, "UserOp2", "Instruction", "internal to passes only", "", [])
+        self.add_llvm37_instr("OTHER", 53, "VAArg", "VAArgInst", "vaarg instruction", "", [])
+        self.add_llvm37_instr("OTHER", 57, "ExtractValue", "ExtractValueInst", "extracts from aggregate", "", [])
+        self.add_llvm37_instr("OTHER", 59, "LandingPad", "LandingPadInst", "represents a landing pad", "", [])
     
     def populate_dxil_operations(self):
         # $o in a parameter type means the overload type
@@ -953,7 +953,7 @@ class db_dxil(object):
             db_dxil_param(0, "u32", "", "number of sampling locations for a render target")])
         next_op_idx += 1
 
-        # Atomics. Note that on TGSM, atomics are performed with LLVM instructions.
+        # Atomics. Note that on TGSM, atomics are performed with LLVM37 instructions.
         self.add_dxil_op("AtomicBinOp", next_op_idx, "AtomicBinOp", "performs an atomic operation on two operands", "li", "", [
             db_dxil_param(0, "$o", "", "the original value in the location updated"),
             db_dxil_param(2, "res", "handle", "typed int or uint UAV handle"),
@@ -1897,7 +1897,7 @@ class db_dxil(object):
         def calc_oload_sig(inst):
             result = ""
             for o in inst.ops:
-                result += o.llvm_type
+                result += o.llvm37_type
             return result
         for k, g in instr_grouped_by_class:
             group = list(g)
@@ -1972,7 +1972,7 @@ class db_dxil(object):
                 apass.args.append(db_dxil_pass_arg(o['n'], ident=o.get('i'), type_name=o.get('t'), is_ctor_param=o.get('c'), doc=o.get('d')))
             p.append(apass)
 
-        category_lib = "llvm"
+        category_lib = "llvm37"
         # Add discriminators is a DWARF 4 thing, useful for the profiler.
         # Consider removing lib\Transforms\Utils\AddDiscriminators.cpp altogether
         add_pass("add-discriminators", "AddDiscriminators", "Add DWARF path discriminators",
@@ -1984,13 +1984,13 @@ class db_dxil(object):
             {'n':"sample-profile-max-propagate-iterations", 'i':"SampleProfileMaxPropagateIterations", 't':"unsigned"}])
         # inline and always-inline share a base class - those are the arguments we document for each of them.
         inliner_args = [
-            {'n':'InsertLifetime', 't':'bool', 'c':1, 'd':'Insert @llvm.lifetime intrinsics'},
-            {'n':'InlineThreshold', 't':'unsigned', 'c':1, 'd':'Insert @llvm.lifetime intrinsics'}]
+            {'n':'InsertLifetime', 't':'bool', 'c':1, 'd':'Insert @llvm37.lifetime intrinsics'},
+            {'n':'InlineThreshold', 't':'unsigned', 'c':1, 'd':'Insert @llvm37.lifetime intrinsics'}]
         add_pass("inline", "SimpleInliner", "Function Integration/Inlining", inliner_args)
 #            {'n':"OptLevel", 't':"unsigned", 'c':1},
 #            {'n':"SizeOptLevel", 't':'unsigned', 'c':1}
         add_pass('always-inline', 'AlwaysInliner', 'Inliner for always_inline functions', inliner_args)
-#            {'n':'InsertLifetime', 't':'bool', 'c':1, 'd':'Insert @llvm.lifetime intrinsics'}
+#            {'n':'InsertLifetime', 't':'bool', 'c':1, 'd':'Insert @llvm37.lifetime intrinsics'}
         # Consider a review of the target-specific wrapper.
         add_pass("tti", "TargetTransformInfoWrapperPass", "Target Transform Information", [
             {'n':'TIRA', 't':'TargetIRAnalysis', 'c':1}])
@@ -2075,7 +2075,7 @@ class db_dxil(object):
             {'n':'parameter1','t':'int','c':1},
             {'n':'parameter2','t':'int','c':1}])
         add_pass('dxil-annotate-with-virtual-regs', 'DxilAnnotateWithVirtualRegister', 'Annotates each instruction in the DXIL module with a virtual register number', [])
-        add_pass('dxil-dbg-value-to-dbg-declare', 'DxilDbgValueToDbgDeclare', 'Converts llvm.dbg.value uses to llvm.dbg.declare.', [])
+        add_pass('dxil-dbg-value-to-dbg-declare', 'DxilDbgValueToDbgDeclare', 'Converts llvm37.dbg.value uses to llvm37.dbg.declare.', [])
         add_pass('hlsl-dxil-reduce-msaa-to-single', 'DxilReduceMSAAToSingleSample', 'HLSL DXIL Reduce all MSAA reads to single-sample reads', [])
 
         category_lib="dxil_gen"
@@ -2144,7 +2144,7 @@ class db_dxil(object):
             ])
         add_pass('hlsl-dxil-resources-to-handle', 'DxilMutateResourceToHandle', 'Mutate resource to handle',[])
 
-        category_lib="llvm"
+        category_lib="llvm37"
         add_pass('ipsccp', 'IPSCCP', 'Interprocedural Sparse Conditional Constant Propagation', [])
         add_pass('globalopt', 'GlobalOpt', 'Global Variable Optimizer', [])
         add_pass('deadargelim', 'DAE', 'Dead Argument Elimination', [])
@@ -2169,7 +2169,7 @@ class db_dxil(object):
         add_pass('loop-unswitch', 'LoopUnswitch', 'Unswitch loops', [
             {'n':'Os', 't':'bool', 'c':1, 'd':'Optimize for size'},
             {'n':'loop-unswitch-threshold', 'i':'Threshold', 't':'unsigned', 'd':'Max loop size to unswitch'}])
-        # C:\nobackup\work\HLSLonLLVM\lib\Transforms\IPO\PassManagerBuilder.cpp:353
+        # C:\nobackup\work\HLSLonLLVM37\lib\Transforms\IPO\PassManagerBuilder.cpp:353
         add_pass('indvars', 'IndVarSimplify', "Induction Variable Simplification", [])
         add_pass('loop-idiom', 'LoopIdiomRecognize', "Recognize loop idioms", [])
         add_pass('dxil-loop-unroll', 'DxilLoopUnroll', 'DxilLoopUnroll', [
@@ -2694,16 +2694,16 @@ class db_dxil(object):
         self.enums.append(valrule_enum)
 
     def populate_counters(self):
-        self.llvm_op_counters = set()
+        self.llvm37_op_counters = set()
         self.dxil_op_counters = set()
         for i in self.instr:
             counters = getattr(i, 'props', {}).get('counters', ())
             if i.dxil_opid:
                 self.dxil_op_counters.update(counters)
             else:
-                self.llvm_op_counters.update(counters)
+                self.llvm37_op_counters.update(counters)
         counter_set = set(self.counters)
-        counter_set.update(self.llvm_op_counters)
+        counter_set.update(self.llvm37_op_counters)
         counter_set.update(self.dxil_op_counters)
         self.counters = list(sorted(counter_set))
 
@@ -2713,8 +2713,8 @@ class db_dxil(object):
     def add_valrule_msg(self, name, desc, err_msg):
         self.val_rules.append(db_dxil_valrule(name, len(self.val_rules), err_msg=err_msg, doc=desc))
 
-    def add_llvm_instr(self, kind, llvm_id, name, llvm_name, doc, oload_types, op_params, **props):
-        i = db_dxil_inst(name, llvm_id=llvm_id, llvm_name=llvm_name, doc=doc, ops=op_params, oload_types=oload_types)
+    def add_llvm37_instr(self, kind, llvm37_id, name, llvm37_name, doc, oload_types, op_params, **props):
+        i = db_dxil_inst(name, llvm37_id=llvm37_id, llvm37_name=llvm37_name, doc=doc, ops=op_params, oload_types=oload_types)
         if kind == "TERM": i.is_bb_terminator=True
         if kind == "BINARY": i.is_binary=True
         if kind == "MEMORY": i.is_memory=True
@@ -2726,7 +2726,7 @@ class db_dxil(object):
         # The return value is parameter 0, insert the opcode as 1.
         op_params.insert(1, self.opcode_param)
         i = db_dxil_inst(name,
-                         llvm_id=self.call_instr.llvm_id, llvm_name=self.call_instr.llvm_name,
+                         llvm37_id=self.call_instr.llvm37_id, llvm37_name=self.call_instr.llvm37_name,
                          dxil_op=name, dxil_opid=code_id, doc=doc, ops=op_params, dxil_class=code_class,
                          oload_types=oload_types, fn_attr=fn_attr)
         i.props = props
@@ -2735,14 +2735,14 @@ class db_dxil(object):
         # The return value is parameter 0, insert the opcode as 1.
         op_params = [db_dxil_param(0, "v", "", "reserved"), self.opcode_param]
         i = db_dxil_inst(name,
-                         llvm_id=self.call_instr.llvm_id, llvm_name=self.call_instr.llvm_name,
+                         llvm37_id=self.call_instr.llvm37_id, llvm37_name=self.call_instr.llvm37_name,
                          dxil_op=name, dxil_opid=code_id, doc="reserved", ops=op_params, dxil_class="Reserved",
                          oload_types="v", fn_attr="")
         self.instr.append(i)
 
-    def get_instr_by_llvm_name(self, llvm_name):
-        "Return the instruction with the given LLVM name"
-        return next(i for i in self.instr if i.llvm_name == llvm_name)
+    def get_instr_by_llvm37_name(self, llvm37_name):
+        "Return the instruction with the given LLVM37 name"
+        return next(i for i in self.instr if i.llvm37_name == llvm37_name)
     def get_dxil_insts(self):
         for i in self.instr:
             if i.dxil_op != "":

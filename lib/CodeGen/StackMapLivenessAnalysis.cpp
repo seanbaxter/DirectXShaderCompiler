@@ -1,6 +1,6 @@
 //===-- StackMapLivenessAnalysis.cpp - StackMap live Out Analysis ----------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -13,19 +13,19 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/ADT/Statistic.h"
-#include "llvm/CodeGen/LivePhysRegs.h"
-#include "llvm/CodeGen/MachineFrameInfo.h"
-#include "llvm/CodeGen/MachineFunction.h"
-#include "llvm/CodeGen/MachineFunctionAnalysis.h"
-#include "llvm/CodeGen/MachineFunctionPass.h"
-#include "llvm/CodeGen/Passes.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Target/TargetSubtargetInfo.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/CodeGen/LivePhysRegs.h"
+#include "llvm37/CodeGen/MachineFrameInfo.h"
+#include "llvm37/CodeGen/MachineFunction.h"
+#include "llvm37/CodeGen/MachineFunctionAnalysis.h"
+#include "llvm37/CodeGen/MachineFunctionPass.h"
+#include "llvm37/CodeGen/Passes.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Target/TargetSubtargetInfo.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "stackmaps"
 
@@ -79,7 +79,7 @@ private:
 } // namespace
 
 char StackMapLiveness::ID = 0;
-char &llvm::StackMapLivenessID = StackMapLiveness::ID;
+char &llvm37::StackMapLivenessID = StackMapLiveness::ID;
 INITIALIZE_PASS(StackMapLiveness, "stackmap-liveness",
                 "StackMap Liveness Analysis", false, false)
 

@@ -1,6 +1,6 @@
 //===-- GlobalDCE.cpp - DCE unreachable internal functions ----------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -15,17 +15,17 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Transforms/IPO.h"
-#include "llvm/ADT/SmallPtrSet.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/Module.h"
-#include "llvm/Transforms/Utils/CtorUtils.h"
-#include "llvm/Transforms/Utils/GlobalStatus.h"
-#include "llvm/Pass.h"
+#include "llvm37/Transforms/IPO.h"
+#include "llvm37/ADT/SmallPtrSet.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/Transforms/Utils/CtorUtils.h"
+#include "llvm37/Transforms/Utils/GlobalStatus.h"
+#include "llvm37/Pass.h"
 #include <unordered_map>
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "globaldce"
 
@@ -72,7 +72,7 @@ char GlobalDCE::ID = 0;
 INITIALIZE_PASS(GlobalDCE, "globaldce",
                 "Dead Global Elimination", false, false)
 
-ModulePass *llvm::createGlobalDCEPass() { return new GlobalDCE(); }
+ModulePass *llvm37::createGlobalDCEPass() { return new GlobalDCE(); }
 
 bool GlobalDCE::runOnModule(Module &M) {
   bool Changed = false;

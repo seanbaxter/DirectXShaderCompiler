@@ -1,6 +1,6 @@
 //===- DAGISelMatcherGen.cpp - Matcher generator --------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -10,13 +10,13 @@
 #include "DAGISelMatcher.h"
 #include "CodeGenDAGPatterns.h"
 #include "CodeGenRegisters.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/ADT/StringMap.h"
-#include "llvm/TableGen/Error.h"
-#include "llvm/TableGen/Record.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/ADT/StringMap.h"
+#include "llvm37/TableGen/Error.h"
+#include "llvm37/TableGen/Record.h"
 #include <utility>
-using namespace llvm;
+using namespace llvm37;
 
 
 /// getRegisterValueType - Look up and return the ValueType of the specified
@@ -1000,7 +1000,7 @@ void MatcherGen::EmitResultCode() {
 
 /// ConvertPatternToMatcher - Create the matcher for the specified pattern with
 /// the specified variant.  If the variant number is invalid, this returns null.
-Matcher *llvm::ConvertPatternToMatcher(const PatternToMatch &Pattern,
+Matcher *llvm37::ConvertPatternToMatcher(const PatternToMatch &Pattern,
                                        unsigned Variant,
                                        const CodeGenDAGPatterns &CGP) {
   MatcherGen Gen(Pattern, CGP);

@@ -1,6 +1,6 @@
 //===-- SpirvType.cpp - SPIR-V Type Hierarchy -------------------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -167,8 +167,8 @@ bool RuntimeArrayType::operator==(const RuntimeArrayType &that) const {
          (!stride.hasValue() || stride.getValue() == that.stride.getValue());
 }
 
-StructType::StructType(llvm::ArrayRef<StructType::FieldInfo> fieldsVec,
-                       llvm::StringRef name, bool isReadOnly,
+StructType::StructType(llvm37::ArrayRef<StructType::FieldInfo> fieldsVec,
+                       llvm37::StringRef name, bool isReadOnly,
                        StructInterfaceType iface)
     : SpirvType(TK_Struct, name), fields(fieldsVec.begin(), fieldsVec.end()),
       readOnly(isReadOnly), interfaceType(iface) {}
@@ -199,14 +199,14 @@ bool StructType::operator==(const StructType &that) const {
 }
 
 HybridStructType::HybridStructType(
-    llvm::ArrayRef<HybridStructType::FieldInfo> fieldsVec, llvm::StringRef name,
+    llvm37::ArrayRef<HybridStructType::FieldInfo> fieldsVec, llvm37::StringRef name,
     bool isReadOnly, StructInterfaceType iface)
     : HybridType(TK_HybridStruct, name),
       fields(fieldsVec.begin(), fieldsVec.end()), readOnly(isReadOnly),
       interfaceType(iface) {}
 
 FunctionType::FunctionType(const SpirvType *ret,
-                           llvm::ArrayRef<const SpirvType *> param)
+                           llvm37::ArrayRef<const SpirvType *> param)
     : SpirvType(TK_Function), returnType(ret),
       paramTypes(param.begin(), param.end()) {
   // Make sure

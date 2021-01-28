@@ -1,6 +1,6 @@
 //===-- LegalizeVectorOps.cpp - Implement SelectionDAG::LegalizeVectors ---===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -27,9 +27,9 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/CodeGen/SelectionDAG.h"
-#include "llvm/Target/TargetLowering.h"
-using namespace llvm;
+#include "llvm37/CodeGen/SelectionDAG.h"
+#include "llvm37/Target/TargetLowering.h"
+using namespace llvm37;
 
 namespace {
 class VectorLegalizer {
@@ -203,7 +203,7 @@ SDValue VectorLegalizer::LegalizeOp(SDValue Op) {
     if (LD->getMemoryVT().isVector() && ExtType != ISD::NON_EXTLOAD)
       switch (TLI.getLoadExtAction(LD->getExtensionType(), LD->getValueType(0),
                                    LD->getMemoryVT())) {
-      default: llvm_unreachable("This action is not supported yet!");
+      default: llvm37_unreachable("This action is not supported yet!");
       case TargetLowering::Legal:
         return TranslateLegalizeResults(Op, Result);
       case TargetLowering::Custom:
@@ -232,7 +232,7 @@ SDValue VectorLegalizer::LegalizeOp(SDValue Op) {
     MVT ValVT = ST->getValue().getSimpleValueType();
     if (StVT.isVector() && ST->isTruncatingStore())
       switch (TLI.getTruncStoreAction(ValVT, StVT.getSimpleVT())) {
-      default: llvm_unreachable("This action is not supported yet!");
+      default: llvm37_unreachable("This action is not supported yet!");
       case TargetLowering::Legal:
         return TranslateLegalizeResults(Op, Result);
       case TargetLowering::Custom: {
@@ -586,7 +586,7 @@ SDValue VectorLegalizer::ExpandLoad(SDValue Op) {
         Lo = DAG.getNode(ISD::OR, dl, WideVT, Lo, Hi);
 
       switch (ExtType) {
-      default: llvm_unreachable("Unknown extended-load op!");
+      default: llvm37_unreachable("Unknown extended-load op!");
       case ISD::EXTLOAD:
         Lo = DAG.getAnyExtOrTrunc(Lo, dl, DstEltVT);
         break;

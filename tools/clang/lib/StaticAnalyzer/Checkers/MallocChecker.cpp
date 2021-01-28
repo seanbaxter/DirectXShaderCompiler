@@ -1,6 +1,6 @@
 //=== MallocChecker.cpp - A malloc/free checker -------------------*- C++ -*--//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -26,10 +26,10 @@
 #include "clang/StaticAnalyzer/Core/PathSensitive/ProgramState.h"
 #include "clang/StaticAnalyzer/Core/PathSensitive/ProgramStateTrait.h"
 #include "clang/StaticAnalyzer/Core/PathSensitive/SymbolManager.h"
-#include "llvm/ADT/ImmutableMap.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/ADT/StringExtras.h"
+#include "llvm37/ADT/ImmutableMap.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/ADT/StringExtras.h"
 #include <climits>
 
 using namespace clang;
@@ -104,7 +104,7 @@ public:
     return RefState(Escaped, RS->getStmt(), RS->getAllocationFamily());
   }
 
-  void Profile(llvm::FoldingSetNodeID &ID) const {
+  void Profile(llvm37::FoldingSetNodeID &ID) const {
     ID.AddInteger(K);
     ID.AddPointer(S);
     ID.AddInteger(Family);
@@ -121,7 +121,7 @@ public:
     }
   }
 
-  LLVM_DUMP_METHOD void dump() const { dump(llvm::errs()); }
+  LLVM37_DUMP_METHOD void dump() const { dump(llvm37::errs()); }
 };
 
 enum ReallocPairKind {
@@ -142,7 +142,7 @@ struct ReallocPair {
 
   ReallocPair(SymbolRef S, ReallocPairKind K) :
     ReallocatedSym(S), Kind(K) {}
-  void Profile(llvm::FoldingSetNodeID &ID) const {
+  void Profile(llvm37::FoldingSetNodeID &ID) const {
     ID.AddInteger(Kind);
     ID.AddPointer(ReallocatedSym);
   }
@@ -287,7 +287,7 @@ private:
 
   // Check if this malloc() for special flags. At present that means M_ZERO or
   // __GFP_ZERO (in which case, treat it like calloc).
-  llvm::Optional<ProgramStateRef>
+  llvm37::Optional<ProgramStateRef>
   performKernelMalloc(const CallExpr *CE, CheckerContext &C,
                       const ProgramStateRef &State) const;
 
@@ -416,7 +416,7 @@ private:
 
     ~MallocBugVisitor() override {}
 
-    void Profile(llvm::FoldingSetNodeID &ID) const override {
+    void Profile(llvm37::FoldingSetNodeID &ID) const override {
       static int X = 0;
       ID.AddPointer(&X);
       ID.AddPointer(Sym);
@@ -474,7 +474,7 @@ private:
         PathDiagnosticLocation::createEndOfPath(EndPathNode,
                                                 BRC.getSourceManager());
       // Do not add the statement itself as a range in case of leak.
-      return llvm::make_unique<PathDiagnosticEventPiece>(L, BR.getDescription(),
+      return llvm37::make_unique<PathDiagnosticEventPiece>(L, BR.getDescription(),
                                                          false);
     }
 
@@ -491,9 +491,9 @@ private:
         ++ArgIndex;
 
         SmallString<200> buf;
-        llvm::raw_svector_ostream os(buf);
+        llvm37::raw_svector_ostream os(buf);
 
-        os << "Reallocation of " << ArgIndex << llvm::getOrdinalSuffix(ArgIndex)
+        os << "Reallocation of " << ArgIndex << llvm37::getOrdinalSuffix(ArgIndex)
            << " parameter failed";
 
         return os.str();
@@ -657,7 +657,7 @@ bool MallocChecker::isStandardNewDelete(const FunctionDecl *FD,
   return true;
 }
 
-llvm::Optional<ProgramStateRef> MallocChecker::performKernelMalloc(
+llvm37::Optional<ProgramStateRef> MallocChecker::performKernelMalloc(
   const CallExpr *CE, CheckerContext &C, const ProgramStateRef &State) const {
   // 3-argument malloc(), as commonly used in {Free,Net,Open}BSD Kernels:
   //
@@ -676,16 +676,16 @@ llvm::Optional<ProgramStateRef> MallocChecker::performKernelMalloc(
   // code could be shared.
 
   ASTContext &Ctx = C.getASTContext();
-  llvm::Triple::OSType OS = Ctx.getTargetInfo().getTriple().getOS();
+  llvm37::Triple::OSType OS = Ctx.getTargetInfo().getTriple().getOS();
 
   if (!KernelZeroFlagVal.hasValue()) {
-    if (OS == llvm::Triple::FreeBSD)
+    if (OS == llvm37::Triple::FreeBSD)
       KernelZeroFlagVal = 0x0100;
-    else if (OS == llvm::Triple::NetBSD)
+    else if (OS == llvm37::Triple::NetBSD)
       KernelZeroFlagVal = 0x0002;
-    else if (OS == llvm::Triple::OpenBSD)
+    else if (OS == llvm37::Triple::OpenBSD)
       KernelZeroFlagVal = 0x0008;
-    else if (OS == llvm::Triple::Linux)
+    else if (OS == llvm37::Triple::Linux)
       // __GFP_ZERO
       KernelZeroFlagVal = 0x8000;
     else
@@ -758,7 +758,7 @@ void MallocChecker::checkPostStmt(const CallExpr *CE, CheckerContext &C) const {
         if (CE->getNumArgs() == 1)
           State = ProcessZeroAllocation(C, CE, 0, State);
       } else if (CE->getNumArgs() == 3) {
-        llvm::Optional<ProgramStateRef> MaybeState =
+        llvm37::Optional<ProgramStateRef> MaybeState =
           performKernelMalloc(CE, C, State);
         if (MaybeState.hasValue())
           State = MaybeState.getValue();
@@ -766,7 +766,7 @@ void MallocChecker::checkPostStmt(const CallExpr *CE, CheckerContext &C) const {
           State = MallocMemAux(C, CE, CE->getArg(0), UndefinedVal(), State);
       }
     } else if (FunI == II_kmalloc) {
-      llvm::Optional<ProgramStateRef> MaybeState =
+      llvm37::Optional<ProgramStateRef> MaybeState =
         performKernelMalloc(CE, C, State);
       if (MaybeState.hasValue())
         State = MaybeState.getValue();
@@ -816,7 +816,7 @@ void MallocChecker::checkPostStmt(const CallExpr *CE, CheckerContext &C) const {
       else if (K == OO_Delete || K == OO_Array_Delete)
         State = FreeMemAux(C, CE, State, 0, false, ReleasedAllocatedMemory);
       else
-        llvm_unreachable("not a new/delete operator");
+        llvm37_unreachable("not a new/delete operator");
     } else if (FunI == II_if_nameindex) {
       // Should we model this differently? We can allocate a fixed number of
       // elements with zeros in the last one.
@@ -866,7 +866,7 @@ ProgramStateRef MallocChecker::ProcessZeroAllocation(CheckerContext &C,
       return State;
   }
   else
-    llvm_unreachable("not a CallExpr or CXXNewExpr");
+    llvm37_unreachable("not a CallExpr or CXXNewExpr");
 
   assert(Arg);
 
@@ -1279,7 +1279,7 @@ void MallocChecker::printExpectedAllocName(raw_ostream &os, CheckerContext &C,
     case AF_CXXNewArray: os << "'new[]'"; return;
     case AF_IfNameIndex: os << "'if_nameindex()'"; return;
     case AF_Alloca:
-    case AF_None: llvm_unreachable("not a deallocation expression");
+    case AF_None: llvm37_unreachable("not a deallocation expression");
   }
 }
 
@@ -1291,7 +1291,7 @@ void MallocChecker::printExpectedDeallocName(raw_ostream &os,
     case AF_CXXNewArray: os << "'delete[]'"; return;
     case AF_IfNameIndex: os << "'if_freenameindex()'"; return;
     case AF_Alloca:
-    case AF_None: llvm_unreachable("suspicious argument");
+    case AF_None: llvm37_unreachable("suspicious argument");
   }
 }
 
@@ -1471,10 +1471,10 @@ MallocChecker::getCheckIfTracked(AllocationFamily Family,
     return Optional<MallocChecker::CheckKind>();
   }
   case AF_None: {
-    llvm_unreachable("no family");
+    llvm37_unreachable("no family");
   }
   }
-  llvm_unreachable("unhandled family");
+  llvm37_unreachable("unhandled family");
 }
 
 Optional<MallocChecker::CheckKind>
@@ -1599,7 +1599,7 @@ void MallocChecker::ReportBadFree(CheckerContext &C, SVal ArgVal,
           new BugType(CheckNames[*CheckKind], "Bad free", "Memory Error"));
 
     SmallString<100> buf;
-    llvm::raw_svector_ostream os(buf);
+    llvm37::raw_svector_ostream os(buf);
 
     const MemRegion *MR = ArgVal.getAsRegion();
     while (const ElementRegion *ER = dyn_cast_or_null<ElementRegion>(MR))
@@ -1619,7 +1619,7 @@ void MallocChecker::ReportBadFree(CheckerContext &C, SVal ArgVal,
 
     printExpectedAllocName(os, C, DeallocExpr);
 
-    auto R = llvm::make_unique<BugReport>(*BT_BadFree[*CheckKind], os.str(), N);
+    auto R = llvm37::make_unique<BugReport>(*BT_BadFree[*CheckKind], os.str(), N);
     R->markInteresting(MR);
     R->addRange(Range);
     C.emitReport(std::move(R));
@@ -1643,7 +1643,7 @@ void MallocChecker::ReportFreeAlloca(CheckerContext &C, SVal ArgVal,
       BT_FreeAlloca[*CheckKind].reset(
           new BugType(CheckNames[*CheckKind], "Free alloca()", "Memory Error"));
 
-    auto R = llvm::make_unique<BugReport>(
+    auto R = llvm37::make_unique<BugReport>(
         *BT_FreeAlloca[*CheckKind],
         "Memory allocated by alloca() should not be deallocated", N);
     R->markInteresting(ArgVal.getAsRegion());
@@ -1669,13 +1669,13 @@ void MallocChecker::ReportMismatchedDealloc(CheckerContext &C,
                       "Bad deallocator", "Memory Error"));
 
     SmallString<100> buf;
-    llvm::raw_svector_ostream os(buf);
+    llvm37::raw_svector_ostream os(buf);
 
     const Expr *AllocExpr = cast<Expr>(RS->getStmt());
     SmallString<20> AllocBuf;
-    llvm::raw_svector_ostream AllocOs(AllocBuf);
+    llvm37::raw_svector_ostream AllocOs(AllocBuf);
     SmallString<20> DeallocBuf;
-    llvm::raw_svector_ostream DeallocOs(DeallocBuf);
+    llvm37::raw_svector_ostream DeallocOs(DeallocBuf);
 
     if (OwnershipTransferred) {
       if (printAllocDeallocName(DeallocOs, C, DeallocExpr))
@@ -1699,10 +1699,10 @@ void MallocChecker::ReportMismatchedDealloc(CheckerContext &C,
         os << ", not " << DeallocOs.str();
     }
 
-    auto R = llvm::make_unique<BugReport>(*BT_MismatchedDealloc, os.str(), N);
+    auto R = llvm37::make_unique<BugReport>(*BT_MismatchedDealloc, os.str(), N);
     R->markInteresting(Sym);
     R->addRange(Range);
-    R->addVisitor(llvm::make_unique<MallocBugVisitor>(Sym));
+    R->addVisitor(llvm37::make_unique<MallocBugVisitor>(Sym));
     C.emitReport(std::move(R));
   }
 }
@@ -1730,9 +1730,9 @@ void MallocChecker::ReportOffsetFree(CheckerContext &C, SVal ArgVal,
         new BugType(CheckNames[*CheckKind], "Offset free", "Memory Error"));
 
   SmallString<100> buf;
-  llvm::raw_svector_ostream os(buf);
+  llvm37::raw_svector_ostream os(buf);
   SmallString<20> AllocNameBuf;
-  llvm::raw_svector_ostream AllocNameOs(AllocNameBuf);
+  llvm37::raw_svector_ostream AllocNameOs(AllocNameBuf);
 
   const MemRegion *MR = ArgVal.getAsRegion();
   assert(MR && "Only MemRegion based symbols can have offset free errors");
@@ -1758,7 +1758,7 @@ void MallocChecker::ReportOffsetFree(CheckerContext &C, SVal ArgVal,
   else
     os << "allocated memory";
 
-  auto R = llvm::make_unique<BugReport>(*BT_OffsetFree[*CheckKind], os.str(), N);
+  auto R = llvm37::make_unique<BugReport>(*BT_OffsetFree[*CheckKind], os.str(), N);
   R->markInteresting(MR->getBaseRegion());
   R->addRange(Range);
   C.emitReport(std::move(R));
@@ -1780,12 +1780,12 @@ void MallocChecker::ReportUseAfterFree(CheckerContext &C, SourceRange Range,
       BT_UseFree[*CheckKind].reset(new BugType(
           CheckNames[*CheckKind], "Use-after-free", "Memory Error"));
 
-    auto R = llvm::make_unique<BugReport>(*BT_UseFree[*CheckKind],
+    auto R = llvm37::make_unique<BugReport>(*BT_UseFree[*CheckKind],
                                          "Use of memory after it is freed", N);
 
     R->markInteresting(Sym);
     R->addRange(Range);
-    R->addVisitor(llvm::make_unique<MallocBugVisitor>(Sym));
+    R->addVisitor(llvm37::make_unique<MallocBugVisitor>(Sym));
     C.emitReport(std::move(R));
   }
 }
@@ -1807,7 +1807,7 @@ void MallocChecker::ReportDoubleFree(CheckerContext &C, SourceRange Range,
       BT_DoubleFree[*CheckKind].reset(
           new BugType(CheckNames[*CheckKind], "Double free", "Memory Error"));
 
-    auto R = llvm::make_unique<BugReport>(
+    auto R = llvm37::make_unique<BugReport>(
         *BT_DoubleFree[*CheckKind],
         (Released ? "Attempt to free released memory"
                   : "Attempt to free non-owned memory"),
@@ -1816,7 +1816,7 @@ void MallocChecker::ReportDoubleFree(CheckerContext &C, SourceRange Range,
     R->markInteresting(Sym);
     if (PrevSym)
       R->markInteresting(PrevSym);
-    R->addVisitor(llvm::make_unique<MallocBugVisitor>(Sym));
+    R->addVisitor(llvm37::make_unique<MallocBugVisitor>(Sym));
     C.emitReport(std::move(R));
   }
 }
@@ -1835,11 +1835,11 @@ void MallocChecker::ReportDoubleDelete(CheckerContext &C, SymbolRef Sym) const {
       BT_DoubleDelete.reset(new BugType(CheckNames[CK_NewDeleteChecker],
                                         "Double delete", "Memory Error"));
 
-    auto R = llvm::make_unique<BugReport>(
+    auto R = llvm37::make_unique<BugReport>(
         *BT_DoubleDelete, "Attempt to delete released memory", N);
 
     R->markInteresting(Sym);
-    R->addVisitor(llvm::make_unique<MallocBugVisitor>(Sym));
+    R->addVisitor(llvm37::make_unique<MallocBugVisitor>(Sym));
     C.emitReport(std::move(R));
   }
 }
@@ -1862,13 +1862,13 @@ void MallocChecker::ReportUseZeroAllocated(CheckerContext &C,
       BT_UseZerroAllocated[*CheckKind].reset(new BugType(
           CheckNames[*CheckKind], "Use of zero allocated", "Memory Error"));
 
-    auto R = llvm::make_unique<BugReport>(*BT_UseZerroAllocated[*CheckKind],
+    auto R = llvm37::make_unique<BugReport>(*BT_UseZerroAllocated[*CheckKind],
                                          "Use of zero-allocated memory", N);
 
     R->addRange(Range);
     if (Sym) {
       R->markInteresting(Sym);
-      R->addVisitor(llvm::make_unique<MallocBugVisitor>(Sym));
+      R->addVisitor(llvm37::make_unique<MallocBugVisitor>(Sym));
     }
     C.emitReport(std::move(R));
   }
@@ -2092,7 +2092,7 @@ void MallocChecker::reportLeak(SymbolRef Sym, ExplodedNode *N,
                                               AllocNode->getLocationContext());
 
   SmallString<200> buf;
-  llvm::raw_svector_ostream os(buf);
+  llvm37::raw_svector_ostream os(buf);
   if (Region && Region->canPrintPretty()) {
     os << "Potential leak of memory pointed to by ";
     Region->printPretty(os);
@@ -2100,11 +2100,11 @@ void MallocChecker::reportLeak(SymbolRef Sym, ExplodedNode *N,
     os << "Potential memory leak";
   }
 
-  auto R = llvm::make_unique<BugReport>(
+  auto R = llvm37::make_unique<BugReport>(
       *BT_Leak[*CheckKind], os.str(), N, LocUsedForUniqueing,
       AllocNode->getLocationContext()->getDecl());
   R->markInteresting(Sym);
-  R->addVisitor(llvm::make_unique<MallocBugVisitor>(Sym, true));
+  R->addVisitor(llvm37::make_unique<MallocBugVisitor>(Sym, true));
   C.emitReport(std::move(R));
 }
 

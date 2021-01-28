@@ -1,6 +1,6 @@
-//===-- llvm/Support/FormattedStream.cpp - Formatted streams ----*- C++ -*-===//
+//===-- llvm37/Support/FormattedStream.cpp - Formatted streams ----*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,12 +11,12 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/FormattedStream.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/FormattedStream.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <algorithm>
 
-using namespace llvm;
+using namespace llvm37;
 
 /// UpdatePosition - Examine the given char sequence and figure out which
 /// column we end up in after output, and how many line breaks are contained.
@@ -87,21 +87,21 @@ void formatted_raw_ostream::write_impl(const char *Ptr, size_t Size) {
 
 /// fouts() - This returns a reference to a formatted_raw_ostream for
 /// standard output.  Use it like: fouts() << "foo" << "bar";
-formatted_raw_ostream &llvm::fouts() {
+formatted_raw_ostream &llvm37::fouts() {
   static formatted_raw_ostream S(outs());
   return S;
 }
 
 /// ferrs() - This returns a reference to a formatted_raw_ostream for
 /// standard error.  Use it like: ferrs() << "foo" << "bar";
-formatted_raw_ostream &llvm::ferrs() {
+formatted_raw_ostream &llvm37::ferrs() {
   static formatted_raw_ostream S(errs());
   return S;
 }
 
 /// fdbgs() - This returns a reference to a formatted_raw_ostream for
 /// the debug stream.  Use it like: fdbgs() << "foo" << "bar";
-formatted_raw_ostream &llvm::fdbgs() {
+formatted_raw_ostream &llvm37::fdbgs() {
   static formatted_raw_ostream S(dbgs());
   return S;
 }

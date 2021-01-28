@@ -12,9 +12,9 @@
 #include "dxc/DXIL/DxilModule.h"
 #include "dxc/DxilPIXPasses/DxilPIXPasses.h"
 #include "dxc/HLSL/DxilGenerationPass.h"
-#include "llvm/IR/Module.h"
+#include "llvm37/IR/Module.h"
 
-using namespace llvm;
+using namespace llvm37;
 using namespace hlsl;
 
 class DxilForceEarlyZ : public ModulePass {
@@ -40,7 +40,7 @@ bool DxilForceEarlyZ::runOnModule(Module &M) {
 
 char DxilForceEarlyZ::ID = 0;
 
-ModulePass *llvm::createDxilForceEarlyZPass() { return new DxilForceEarlyZ(); }
+ModulePass *llvm37::createDxilForceEarlyZPass() { return new DxilForceEarlyZ(); }
 
 INITIALIZE_PASS(
     DxilForceEarlyZ, "hlsl-dxil-force-early-z",

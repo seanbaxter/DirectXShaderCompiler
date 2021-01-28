@@ -2,15 +2,15 @@
 # check-each-file
 # Used to narrow down a miscompilation to one .o file from a list. Please read
 # the usage procedure, below, for command-line syntax (or run it with --help).
-# This script depends on the llvm-native-gcc script.
+# This script depends on the llvm37-native-gcc script.
 
 if [ x$1 = x--make-linker-script ]
 then
 	program=$2
 	linker=./link-$program
-	echo "Building $program with llvm-native-gcc"
+	echo "Building $program with llvm37-native-gcc"
 	rm -f $program
-	gmake -e $program CC=llvm-native-gcc CXX=llvm-native-gxx
+	gmake -e $program CC=llvm37-native-gcc CXX=llvm37-native-gxx
 	echo "Erasing $program and re-linking it" 
 	rm -f $program
 	echo "rm -f $program" > $linker
@@ -110,17 +110,17 @@ then
 fi
 
 files=`cat $checkfiles`
-echo "Recompiling everything with llvm-native-gcc"
+echo "Recompiling everything with llvm37-native-gcc"
 for f in $files
 do
 	rm -f $f
-	gmake $f CC=llvm-native-gcc CXX=llvm-native-gxx
+	gmake $f CC=llvm37-native-gcc CXX=llvm37-native-gxx
 done
 rm -f $program
 $linker
 if $checker
 then
-	echo "Sorry, I can't help you, $program is OK when compiled with llvm-native-gcc"
+	echo "Sorry, I can't help you, $program is OK when compiled with llvm37-native-gcc"
 	exit 1
 fi
 for f in $files

@@ -24,7 +24,7 @@ public:
     // make_error_condition must not be typo corrected to error_condition
     // even though the first declaration of make_error_condition has not
     // yet been encountered. This was a bug in the first version of the type
-    // name typo correction patch that wasn't noticed until building LLVM with
+    // name typo correction patch that wasn't noticed until building LLVM37 with
     // Clang failed.
     *this = make_error_condition(_e);
   }

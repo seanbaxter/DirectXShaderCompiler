@@ -1,6 +1,6 @@
 //===-- BumpVector.h - Vector-like ADT that uses bump allocation --*- C++ -*-=//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -16,12 +16,12 @@
 // refactor this core logic into something common that is shared between
 // the two.  The main thing that is different is the allocation strategy.
 
-#ifndef LLVM_CLANG_ANALYSIS_SUPPORT_BUMPVECTOR_H
-#define LLVM_CLANG_ANALYSIS_SUPPORT_BUMPVECTOR_H
+#ifndef LLVM37_CLANG_ANALYSIS_SUPPORT_BUMPVECTOR_H
+#define LLVM37_CLANG_ANALYSIS_SUPPORT_BUMPVECTOR_H
 
-#include "llvm/ADT/PointerIntPair.h"
-#include "llvm/Support/Allocator.h"
-#include "llvm/Support/type_traits.h"
+#include "llvm37/ADT/PointerIntPair.h"
+#include "llvm37/Support/Allocator.h"
+#include "llvm37/Support/type_traits.h"
 #include <algorithm>
 #include <cstring>
 #include <iterator>
@@ -30,23 +30,23 @@
 namespace clang {
   
 class BumpVectorContext {
-  llvm::PointerIntPair<llvm::BumpPtrAllocator*, 1> Alloc;
+  llvm37::PointerIntPair<llvm37::BumpPtrAllocator*, 1> Alloc;
 public:
   /// Construct a new BumpVectorContext that creates a new BumpPtrAllocator
   /// and destroys it when the BumpVectorContext object is destroyed.
-  BumpVectorContext() : Alloc(new llvm::BumpPtrAllocator(), 1) {}
+  BumpVectorContext() : Alloc(new llvm37::BumpPtrAllocator(), 1) {}
   
   /// Construct a new BumpVectorContext that reuses an existing
   /// BumpPtrAllocator.  This BumpPtrAllocator is not destroyed when the
   /// BumpVectorContext object is destroyed.
-  BumpVectorContext(llvm::BumpPtrAllocator &A) : Alloc(&A, 0) {}
+  BumpVectorContext(llvm37::BumpPtrAllocator &A) : Alloc(&A, 0) {}
   
   ~BumpVectorContext() {
     if (Alloc.getInt())
       delete Alloc.getPointer();
   }
   
-  llvm::BumpPtrAllocator &getAllocator() { return *Alloc.getPointer(); }
+  llvm37::BumpPtrAllocator &getAllocator() { return *Alloc.getPointer(); }
 };
   
 template<typename T>

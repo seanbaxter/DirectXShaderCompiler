@@ -1,14 +1,14 @@
 ﻿# Copyright (C) Microsoft Corporation. All rights reserved.
 # This file is distributed under the University of Illinois Open Source License. See LICENSE.TXT for details.
 
-set(LLVM_LINK_COMPONENTS
-  ${LLVM_TARGETS_TO_BUILD}
+set(LLVM37_LINK_COMPONENTS
+  ${LLVM37_TARGETS_TO_BUILD}
   analysis
   asmparser
-#  asmprinter # no support for LLVM codegen
+#  asmprinter # no support for LLVM37 codegen
   bitreader
   bitwriter
-#  codegen # no support for LLVM codegen
+#  codegen # no support for LLVM37 codegen
   core
 #  debuginfodwarf # no support for DWARF files (IR debug info is OK)
 #  debuginfopdb # no support for PDB files
@@ -26,14 +26,14 @@ set(LLVM_LINK_COMPONENTS
 #  lineeditor
   linker
   lto
-#  mirparser # no support for LLVM codegen
+#  mirparser # no support for LLVM37 codegen
   mssupport
 #  object # no support for object files (coff, elf)
   option
 #  passes
   profiledata
   scalaropts
-#  selectiondag # no support for LLVM codegen
+#  selectiondag # no support for LLVM37 codegen
   support
   target
   transformutils
@@ -102,7 +102,7 @@ set(LIBRARIES
 if(WIN32)
   set(LIBRARIES
     ${LIBRARIES} 
-    LLVMDxilDia)
+    LLVM37DxilDia)
 endif(WIN32)
 
 set(GENERATED_HEADERS
@@ -130,7 +130,7 @@ target_link_libraries(dxcompiler PRIVATE ${LIBRARIES})
 if (ENABLE_SPIRV_CODEGEN)
   target_link_libraries(dxcompiler PRIVATE clangSPIRV)
 endif (ENABLE_SPIRV_CODEGEN)
-include_directories(AFTER ${LLVM_INCLUDE_DIR}/dxc/Tracing ${DIASDK_INCLUDE_DIRS})
+include_directories(AFTER ${LLVM37_INCLUDE_DIR}/dxc/Tracing ${DIASDK_INCLUDE_DIRS})
 
 set_target_properties(dxcompiler
   PROPERTIES

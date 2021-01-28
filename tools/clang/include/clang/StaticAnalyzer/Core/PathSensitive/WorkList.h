@@ -1,6 +1,6 @@
 //==- WorkList.h - Worklist class used by CoreEngine ---------------*- C++ -*-//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -12,8 +12,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_STATICANALYZER_CORE_PATHSENSITIVE_WORKLIST_H
-#define LLVM_CLANG_STATICANALYZER_CORE_PATHSENSITIVE_WORKLIST_H
+#ifndef LLVM37_CLANG_STATICANALYZER_CORE_PATHSENSITIVE_WORKLIST_H
+#define LLVM37_CLANG_STATICANALYZER_CORE_PATHSENSITIVE_WORKLIST_H
 
 #include "clang/StaticAnalyzer/Core/PathSensitive/BlockCounter.h"
 #include "clang/StaticAnalyzer/Core/PathSensitive/ExplodedGraph.h"

@@ -1,6 +1,6 @@
 //===-- lib/Codegen/MachineRegisterInfo.cpp -------------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,15 +11,15 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/CodeGen/MachineRegisterInfo.h"
-#include "llvm/CodeGen/MachineInstrBuilder.h"
-#include "llvm/IR/Function.h"
-#include "llvm/Support/raw_os_ostream.h"
-#include "llvm/Target/TargetInstrInfo.h"
-#include "llvm/Target/TargetMachine.h"
-#include "llvm/Target/TargetSubtargetInfo.h"
+#include "llvm37/CodeGen/MachineRegisterInfo.h"
+#include "llvm37/CodeGen/MachineInstrBuilder.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/Support/raw_os_ostream.h"
+#include "llvm37/Target/TargetInstrInfo.h"
+#include "llvm37/Target/TargetMachine.h"
+#include "llvm37/Target/TargetSubtargetInfo.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 // Pin the vtable to this file.
 void MachineRegisterInfo::Delegate::anchor() {}
@@ -113,7 +113,7 @@ void MachineRegisterInfo::clearVirtRegs() {
     if (!VRegInfo[Reg].second)
       continue;
     verifyUseList(Reg);
-    llvm_unreachable("Remaining virtual register operands");
+    llvm37_unreachable("Remaining virtual register operands");
   }
 #endif
   VRegInfo.clear();
@@ -278,7 +278,7 @@ void MachineRegisterInfo::moveOperands(MachineOperand *Dst,
 }
 
 /// replaceRegWith - Replace all instances of FromReg with ToReg in the
-/// machine function.  This is like llvm-level X->replaceAllUsesWith(Y),
+/// machine function.  This is like llvm37-level X->replaceAllUsesWith(Y),
 /// except that it also changes any definitions of the register as well.
 /// If ToReg is a physical register we apply the sub register to obtain the
 /// final/proper physical register.

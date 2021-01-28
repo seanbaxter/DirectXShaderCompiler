@@ -29,23 +29,23 @@ set(CustomMainTests
 set(TestBinaries)
 
 foreach(Test ${Tests})
-  add_executable(LLVMFuzzer-${Test}
+  add_executable(LLVM37Fuzzer-${Test}
     ${Test}.cpp
     )
-  target_link_libraries(LLVMFuzzer-${Test}
-    LLVMFuzzer
+  target_link_libraries(LLVM37Fuzzer-${Test}
+    LLVM37Fuzzer
     )
-  set(TestBinaries ${TestBinaries} LLVMFuzzer-${Test})
+  set(TestBinaries ${TestBinaries} LLVM37Fuzzer-${Test})
 endforeach()
 
 foreach(Test ${CustomMainTests})
-  add_executable(LLVMFuzzer-${Test}
+  add_executable(LLVM37Fuzzer-${Test}
     ${Test}.cpp
     )
-  target_link_libraries(LLVMFuzzer-${Test}
-    LLVMFuzzerNoMain
+  target_link_libraries(LLVM37Fuzzer-${Test}
+    LLVM37FuzzerNoMain
     )
-  set(TestBinaries ${TestBinaries} LLVMFuzzer-${Test})
+  set(TestBinaries ${TestBinaries} LLVM37Fuzzer-${Test})
 endforeach()
 
 
@@ -60,24 +60,24 @@ configure_lit_site_cfg(
   )
 
 include_directories(..)
-include_directories(${LLVM_MAIN_SRC_DIR}/utils/unittest/googletest/include)
+include_directories(${LLVM37_MAIN_SRC_DIR}/utils/unittest/googletest/include)
 
-add_executable(LLVMFuzzer-Unittest
+add_executable(LLVM37Fuzzer-Unittest
   FuzzerUnittest.cpp
-  $<TARGET_OBJECTS:LLVMFuzzerNoMainObjects>
+  $<TARGET_OBJECTS:LLVM37FuzzerNoMainObjects>
   )
 
-target_link_libraries(LLVMFuzzer-Unittest
+target_link_libraries(LLVM37Fuzzer-Unittest
   gtest
   gtest_main
   )
 
-set(TestBinaries ${TestBinaries} LLVMFuzzer-Unittest)
+set(TestBinaries ${TestBinaries} LLVM37Fuzzer-Unittest)
 
 add_subdirectory(dfsan)
 
 foreach(Test ${DFSanTests})
-  set(TestBinaries ${TestBinaries} LLVMFuzzer-${Test}-DFSan)
+  set(TestBinaries ${TestBinaries} LLVM37Fuzzer-${Test}-DFSan)
 endforeach()
 
 

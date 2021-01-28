@@ -28,7 +28,7 @@ for.body:                                         ; preds = %for.body, %entry
   %9 = add nsw i32 %8, 4
   %10 = add nsw i32 %9, 4
   %ca = icmp sgt i32 %10, -7
-  call void @llvm.assume(i1 %ca)
+  call void @llvm37.assume(i1 %ca)
 
   %add = add nsw i32 %0, %sum.01
   %indvars.iv.next = add i64 %indvars.iv, 1
@@ -40,5 +40,5 @@ for.end:                                          ; preds = %for.body
   ret i32 %add
 }
 
-declare void @llvm.assume(i1) nounwind
+declare void @llvm37.assume(i1) nounwind
 

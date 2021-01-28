@@ -6,7 +6,7 @@ entry:
   %ptrint = ptrtoint i32* %a to i64
   %maskedptr = and i64 %ptrint, 31
   %maskcond = icmp eq i64 %maskedptr, 0
-  tail call void @llvm.assume(i1 %maskcond)
+  tail call void @llvm37.assume(i1 %maskcond)
   %0 = load i32, i32* %a, align 4
   ret i32 %0
 
@@ -21,7 +21,7 @@ entry:
   %offsetptr = add i64 %ptrint, 24
   %maskedptr = and i64 %offsetptr, 31
   %maskcond = icmp eq i64 %maskedptr, 0
-  tail call void @llvm.assume(i1 %maskcond)
+  tail call void @llvm37.assume(i1 %maskcond)
   %arrayidx = getelementptr inbounds i32, i32* %a, i64 2
   %0 = load i32, i32* %arrayidx, align 4
   ret i32 %0
@@ -37,7 +37,7 @@ entry:
   %offsetptr = add i64 %ptrint, 28
   %maskedptr = and i64 %offsetptr, 31
   %maskcond = icmp eq i64 %maskedptr, 0
-  tail call void @llvm.assume(i1 %maskcond)
+  tail call void @llvm37.assume(i1 %maskcond)
   %arrayidx = getelementptr inbounds i32, i32* %a, i64 -1
   %0 = load i32, i32* %arrayidx, align 4
   ret i32 %0
@@ -52,7 +52,7 @@ entry:
   %ptrint = ptrtoint i32* %a to i64
   %maskedptr = and i64 %ptrint, 31
   %maskcond = icmp eq i64 %maskedptr, 0
-  tail call void @llvm.assume(i1 %maskcond)
+  tail call void @llvm37.assume(i1 %maskcond)
   %0 = load i32, i32* %a, align 4
   ret i32 %0
 
@@ -66,7 +66,7 @@ entry:
   %ptrint = ptrtoint i32* %a to i64
   %maskedptr = and i64 %ptrint, 31
   %maskcond = icmp eq i64 %maskedptr, 0
-  tail call void @llvm.assume(i1 %maskcond)
+  tail call void @llvm37.assume(i1 %maskcond)
   br label %for.body
 
 for.body:                                         ; preds = %entry, %for.body
@@ -94,7 +94,7 @@ entry:
   %ptrint = ptrtoint i32* %a to i64
   %maskedptr = and i64 %ptrint, 31
   %maskcond = icmp eq i64 %maskedptr, 0
-  tail call void @llvm.assume(i1 %maskcond)
+  tail call void @llvm37.assume(i1 %maskcond)
   br label %for.body
 
 for.body:                                         ; preds = %entry, %for.body
@@ -122,7 +122,7 @@ entry:
   %ptrint = ptrtoint i32* %a to i64
   %maskedptr = and i64 %ptrint, 31
   %maskcond = icmp eq i64 %maskedptr, 0
-  tail call void @llvm.assume(i1 %maskcond)
+  tail call void @llvm37.assume(i1 %maskcond)
   br label %for.body
 
 for.body:                                         ; preds = %entry, %for.body
@@ -150,7 +150,7 @@ entry:
   %ptrint = ptrtoint i32* %a to i64
   %maskedptr = and i64 %ptrint, 31
   %maskcond = icmp eq i64 %maskedptr, 0
-  tail call void @llvm.assume(i1 %maskcond)
+  tail call void @llvm37.assume(i1 %maskcond)
   br label %for.body
 
 for.body:                                         ; preds = %entry, %for.body
@@ -178,13 +178,13 @@ entry:
   %ptrint = ptrtoint i32* %a to i64
   %maskedptr = and i64 %ptrint, 31
   %maskcond = icmp eq i64 %maskedptr, 0
-  tail call void @llvm.assume(i1 %maskcond)
+  tail call void @llvm37.assume(i1 %maskcond)
   %0 = bitcast i32* %a to i8*
-  tail call void @llvm.memset.p0i8.i64(i8* %0, i8 0, i64 64, i32 4, i1 false)
+  tail call void @llvm37.memset.p0i8.i64(i8* %0, i8 0, i64 64, i32 4, i1 false)
   ret i32 undef
 
 ; CHECK-LABEL: @moo
-; CHECK: @llvm.memset.p0i8.i64(i8* %0, i8 0, i64 64, i32 32, i1 false)
+; CHECK: @llvm37.memset.p0i8.i64(i8* %0, i8 0, i64 64, i32 32, i1 false)
 ; CHECK: ret i32 undef
 }
 
@@ -193,23 +193,23 @@ entry:
   %ptrint = ptrtoint i32* %a to i64
   %maskedptr = and i64 %ptrint, 31
   %maskcond = icmp eq i64 %maskedptr, 0
-  tail call void @llvm.assume(i1 %maskcond)
+  tail call void @llvm37.assume(i1 %maskcond)
   %ptrint1 = ptrtoint i32* %b to i64
   %maskedptr3 = and i64 %ptrint1, 127
   %maskcond4 = icmp eq i64 %maskedptr3, 0
-  tail call void @llvm.assume(i1 %maskcond4)
+  tail call void @llvm37.assume(i1 %maskcond4)
   %0 = bitcast i32* %a to i8*
   %1 = bitcast i32* %b to i8*
-  tail call void @llvm.memcpy.p0i8.p0i8.i64(i8* %0, i8* %1, i64 64, i32 4, i1 false)
+  tail call void @llvm37.memcpy.p0i8.p0i8.i64(i8* %0, i8* %1, i64 64, i32 4, i1 false)
   ret i32 undef
 
 ; CHECK-LABEL: @moo2
-; CHECK: @llvm.memcpy.p0i8.p0i8.i64(i8* %0, i8* %1, i64 64, i32 32, i1 false)
+; CHECK: @llvm37.memcpy.p0i8.p0i8.i64(i8* %0, i8* %1, i64 64, i32 32, i1 false)
 ; CHECK: ret i32 undef
 }
 
-declare void @llvm.assume(i1) nounwind
+declare void @llvm37.assume(i1) nounwind
 
-declare void @llvm.memset.p0i8.i64(i8* nocapture, i8, i64, i32, i1) nounwind
-declare void @llvm.memcpy.p0i8.p0i8.i64(i8* nocapture, i8* nocapture, i64, i32, i1) nounwind
+declare void @llvm37.memset.p0i8.i64(i8* nocapture, i8, i64, i32, i1) nounwind
+declare void @llvm37.memcpy.p0i8.p0i8.i64(i8* nocapture, i8* nocapture, i64, i32, i1) nounwind
 

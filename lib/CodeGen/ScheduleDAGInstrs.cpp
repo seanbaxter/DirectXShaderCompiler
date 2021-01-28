@@ -1,6 +1,6 @@
 //===---- ScheduleDAGInstrs.cpp - MachineInstr Rescheduling ---------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -12,33 +12,33 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/CodeGen/ScheduleDAGInstrs.h"
-#include "llvm/ADT/MapVector.h"
-#include "llvm/ADT/SmallPtrSet.h"
-#include "llvm/ADT/SmallSet.h"
-#include "llvm/Analysis/AliasAnalysis.h"
-#include "llvm/Analysis/ValueTracking.h"
-#include "llvm/CodeGen/LiveIntervalAnalysis.h"
-#include "llvm/CodeGen/MachineFunctionPass.h"
-#include "llvm/CodeGen/MachineFrameInfo.h"
-#include "llvm/CodeGen/MachineInstrBuilder.h"
-#include "llvm/CodeGen/MachineMemOperand.h"
-#include "llvm/CodeGen/MachineRegisterInfo.h"
-#include "llvm/CodeGen/PseudoSourceValue.h"
-#include "llvm/CodeGen/RegisterPressure.h"
-#include "llvm/CodeGen/ScheduleDFS.h"
-#include "llvm/IR/Operator.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/Format.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Target/TargetInstrInfo.h"
-#include "llvm/Target/TargetMachine.h"
-#include "llvm/Target/TargetRegisterInfo.h"
-#include "llvm/Target/TargetSubtargetInfo.h"
+#include "llvm37/CodeGen/ScheduleDAGInstrs.h"
+#include "llvm37/ADT/MapVector.h"
+#include "llvm37/ADT/SmallPtrSet.h"
+#include "llvm37/ADT/SmallSet.h"
+#include "llvm37/Analysis/AliasAnalysis.h"
+#include "llvm37/Analysis/ValueTracking.h"
+#include "llvm37/CodeGen/LiveIntervalAnalysis.h"
+#include "llvm37/CodeGen/MachineFunctionPass.h"
+#include "llvm37/CodeGen/MachineFrameInfo.h"
+#include "llvm37/CodeGen/MachineInstrBuilder.h"
+#include "llvm37/CodeGen/MachineMemOperand.h"
+#include "llvm37/CodeGen/MachineRegisterInfo.h"
+#include "llvm37/CodeGen/PseudoSourceValue.h"
+#include "llvm37/CodeGen/RegisterPressure.h"
+#include "llvm37/CodeGen/ScheduleDFS.h"
+#include "llvm37/IR/Operator.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/Format.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Target/TargetInstrInfo.h"
+#include "llvm37/Target/TargetMachine.h"
+#include "llvm37/Target/TargetRegisterInfo.h"
+#include "llvm37/Target/TargetSubtargetInfo.h"
 #include <queue>
 
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "misched"
 
@@ -150,7 +150,7 @@ static void getUnderlyingObjectsForInstr(const MachineInstr *MI,
     if (MFI->hasTailCall())
       return;
 
-    // For now, ignore PseudoSourceValues which may alias LLVM IR values
+    // For now, ignore PseudoSourceValues which may alias LLVM37 IR values
     // because the code that uses this function has no way to cope with
     // such aliases.
     if (!PSV->isAliased(MFI)) {
@@ -487,7 +487,7 @@ static inline bool isUnsafeMemoryObject(MachineInstr *MI,
 
   if ((*MI->memoperands_begin())->getPseudoValue()) {
     // Similarly to getUnderlyingObjectForInstr:
-    // For now, ignore PseudoSourceValues which may alias LLVM IR values
+    // For now, ignore PseudoSourceValues which may alias LLVM37 IR values
     // because the code that uses this function has no way to cope with
     // such aliases.
     return true;
@@ -554,7 +554,7 @@ static bool MIsNeedChainEdge(AliasAnalysis *AA, const MachineFrameInfo *MFI,
   // The following interface to AA is fashioned after DAGCombiner::isAlias
   // and operates with MachineMemOperand offset with some important
   // assumptions:
-  //   - LLVM fundamentally assumes flat address spaces.
+  //   - LLVM37 fundamentally assumes flat address spaces.
   //   - MachineOperand offset can *only* result from legalization and
   //     cannot affect queries other than the trivial case of overlap
   //     checking.
@@ -1263,7 +1263,7 @@ void ScheduleDAGInstrs::fixupKills(MachineBasicBlock *MBB) {
 }
 
 void ScheduleDAGInstrs::dumpNode(const SUnit *SU) const {
-#if !defined(NDEBUG) || defined(LLVM_ENABLE_DUMP)
+#if !defined(NDEBUG) || defined(LLVM37_ENABLE_DUMP)
   SU->getInstr()->dump();
 #endif
 }
@@ -1290,7 +1290,7 @@ std::string ScheduleDAGInstrs::getDAGName() const {
 // SchedDFSResult Implementation
 //===----------------------------------------------------------------------===//
 
-namespace llvm {
+namespace llvm37 {
 /// \brief Internal state used to compute SchedDFSResult.
 class SchedDFSImpl {
   SchedDFSResult &R;
@@ -1481,7 +1481,7 @@ protected:
     } while (FromTree != SchedDFSResult::InvalidSubtreeID);
   }
 };
-} // namespace llvm
+} // namespace llvm37
 
 namespace {
 /// \brief Manage the stack used by a reverse depth-first search over the DAG.
@@ -1523,7 +1523,7 @@ static bool hasDataSucc(const SUnit *SU) {
 /// search from this root.
 void SchedDFSResult::compute(ArrayRef<SUnit> SUnits) {
   if (!IsBottomUp)
-    llvm_unreachable("Top-down ILP metric is unimplemnted");
+    llvm37_unreachable("Top-down ILP metric is unimplemnted");
 
   SchedDFSImpl Impl(*this);
   for (ArrayRef<SUnit>::const_iterator
@@ -1580,7 +1580,7 @@ void SchedDFSResult::scheduleTree(unsigned SubtreeID) {
   }
 }
 
-LLVM_DUMP_METHOD
+LLVM37_DUMP_METHOD
 void ILPValue::print(raw_ostream &OS) const {
   OS << InstrCount << " / " << Length << " = ";
   if (!Length)
@@ -1589,17 +1589,17 @@ void ILPValue::print(raw_ostream &OS) const {
     OS << format("%g", ((double)InstrCount / Length));
 }
 
-LLVM_DUMP_METHOD
+LLVM37_DUMP_METHOD
 void ILPValue::dump() const {
   dbgs() << *this << '\n';
 }
 
-namespace llvm {
+namespace llvm37 {
 
-LLVM_DUMP_METHOD
+LLVM37_DUMP_METHOD
 raw_ostream &operator<<(raw_ostream &OS, const ILPValue &Val) {
   Val.print(OS);
   return OS;
 }
 
-} // namespace llvm
+} // namespace llvm37

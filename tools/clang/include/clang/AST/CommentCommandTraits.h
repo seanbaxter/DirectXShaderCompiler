@@ -1,6 +1,6 @@
 //===--- CommentCommandTraits.h - Comment command properties ----*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -13,15 +13,15 @@
 //===----------------------------------------------------------------------===//
 
 
-#ifndef LLVM_CLANG_AST_COMMENTCOMMANDTRAITS_H
-#define LLVM_CLANG_AST_COMMENTCOMMANDTRAITS_H
+#ifndef LLVM37_CLANG_AST_COMMENTCOMMANDTRAITS_H
+#define LLVM37_CLANG_AST_COMMENTCOMMANDTRAITS_H
 
 #include "clang/Basic/CommentOptions.h"
 #include "clang/Basic/LLVM.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/ADT/StringRef.h"
-#include "llvm/Support/Allocator.h"
-#include "llvm/Support/ErrorHandling.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/ADT/StringRef.h"
+#include "llvm37/Support/Allocator.h"
+#include "llvm37/Support/ErrorHandling.h"
 
 namespace clang {
 namespace comments {
@@ -134,7 +134,7 @@ public:
     KCI_Last
   };
 
-  CommandTraits(llvm::BumpPtrAllocator &Allocator,
+  CommandTraits(llvm37::BumpPtrAllocator &Allocator,
                 const CommentOptions &CommentOptions);
 
   void registerCommentOptions(const CommentOptions &CommentOptions);
@@ -146,7 +146,7 @@ public:
   const CommandInfo *getCommandInfo(StringRef Name) const {
     if (const CommandInfo *Info = getCommandInfoOrNULL(Name))
       return Info;
-    llvm_unreachable("the command should be known");
+    llvm37_unreachable("the command should be known");
   }
 
   const CommandInfo *getTypoCorrectCommandInfo(StringRef Typo) const;
@@ -177,7 +177,7 @@ private:
   unsigned NextID;
 
   /// Allocator for CommandInfo objects.
-  llvm::BumpPtrAllocator &Allocator;
+  llvm37::BumpPtrAllocator &Allocator;
 
   SmallVector<CommandInfo *, 4> RegisteredCommands;
 };

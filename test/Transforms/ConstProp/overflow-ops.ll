@@ -1,13 +1,13 @@
 ; RUN: opt < %s -constprop -S | FileCheck %s
 
 
-declare {i8, i1} @llvm.uadd.with.overflow.i8(i8, i8)
-declare {i8, i1} @llvm.usub.with.overflow.i8(i8, i8)
-declare {i8, i1} @llvm.umul.with.overflow.i8(i8, i8)
+declare {i8, i1} @llvm37.uadd.with.overflow.i8(i8, i8)
+declare {i8, i1} @llvm37.usub.with.overflow.i8(i8, i8)
+declare {i8, i1} @llvm37.umul.with.overflow.i8(i8, i8)
 
-declare {i8, i1} @llvm.sadd.with.overflow.i8(i8, i8)
-declare {i8, i1} @llvm.ssub.with.overflow.i8(i8, i8)
-declare {i8, i1} @llvm.smul.with.overflow.i8(i8, i8)
+declare {i8, i1} @llvm37.sadd.with.overflow.i8(i8, i8)
+declare {i8, i1} @llvm37.ssub.with.overflow.i8(i8, i8)
+declare {i8, i1} @llvm37.smul.with.overflow.i8(i8, i8)
 
 ;;-----------------------------
 ;; uadd
@@ -15,7 +15,7 @@ declare {i8, i1} @llvm.smul.with.overflow.i8(i8, i8)
 
 define {i8, i1} @uadd_1() nounwind {
 entry:
-  %t = call {i8, i1} @llvm.uadd.with.overflow.i8(i8 42, i8 100)
+  %t = call {i8, i1} @llvm37.uadd.with.overflow.i8(i8 42, i8 100)
   ret {i8, i1} %t
 
 ; CHECK-LABEL: @uadd_1(
@@ -24,7 +24,7 @@ entry:
 
 define {i8, i1} @uadd_2() nounwind {
 entry:
-  %t = call {i8, i1} @llvm.uadd.with.overflow.i8(i8 142, i8 120)
+  %t = call {i8, i1} @llvm37.uadd.with.overflow.i8(i8 142, i8 120)
   ret {i8, i1} %t
 
 ; CHECK-LABEL: @uadd_2(
@@ -37,7 +37,7 @@ entry:
 
 define {i8, i1} @usub_1() nounwind {
 entry:
-  %t = call {i8, i1} @llvm.usub.with.overflow.i8(i8 4, i8 2)
+  %t = call {i8, i1} @llvm37.usub.with.overflow.i8(i8 4, i8 2)
   ret {i8, i1} %t
 
 ; CHECK-LABEL: @usub_1(
@@ -46,7 +46,7 @@ entry:
 
 define {i8, i1} @usub_2() nounwind {
 entry:
-  %t = call {i8, i1} @llvm.usub.with.overflow.i8(i8 4, i8 6)
+  %t = call {i8, i1} @llvm37.usub.with.overflow.i8(i8 4, i8 6)
   ret {i8, i1} %t
 
 ; CHECK-LABEL: @usub_2(
@@ -59,7 +59,7 @@ entry:
 
 define {i8, i1} @umul_1() nounwind {
 entry:
-  %t = call {i8, i1} @llvm.umul.with.overflow.i8(i8 100, i8 3)
+  %t = call {i8, i1} @llvm37.umul.with.overflow.i8(i8 100, i8 3)
   ret {i8, i1} %t
 
 ; CHECK-LABEL: @umul_1(
@@ -68,7 +68,7 @@ entry:
 
 define {i8, i1} @umul_2() nounwind {
 entry:
-  %t = call {i8, i1} @llvm.umul.with.overflow.i8(i8 100, i8 2)
+  %t = call {i8, i1} @llvm37.umul.with.overflow.i8(i8 100, i8 2)
   ret {i8, i1} %t
 
 ; CHECK-LABEL: @umul_2(
@@ -81,7 +81,7 @@ entry:
 
 define {i8, i1} @sadd_1() nounwind {
 entry:
-  %t = call {i8, i1} @llvm.sadd.with.overflow.i8(i8 42, i8 2)
+  %t = call {i8, i1} @llvm37.sadd.with.overflow.i8(i8 42, i8 2)
   ret {i8, i1} %t
 
 ; CHECK-LABEL: @sadd_1(
@@ -90,7 +90,7 @@ entry:
 
 define {i8, i1} @sadd_2() nounwind {
 entry:
-  %t = call {i8, i1} @llvm.sadd.with.overflow.i8(i8 120, i8 10)
+  %t = call {i8, i1} @llvm37.sadd.with.overflow.i8(i8 120, i8 10)
   ret {i8, i1} %t
 
 ; CHECK-LABEL: @sadd_2(
@@ -99,7 +99,7 @@ entry:
 
 define {i8, i1} @sadd_3() nounwind {
 entry:
-  %t = call {i8, i1} @llvm.sadd.with.overflow.i8(i8 -120, i8 10)
+  %t = call {i8, i1} @llvm37.sadd.with.overflow.i8(i8 -120, i8 10)
   ret {i8, i1} %t
 
 ; CHECK-LABEL: @sadd_3(
@@ -108,7 +108,7 @@ entry:
 
 define {i8, i1} @sadd_4() nounwind {
 entry:
-  %t = call {i8, i1} @llvm.sadd.with.overflow.i8(i8 -120, i8 -10)
+  %t = call {i8, i1} @llvm37.sadd.with.overflow.i8(i8 -120, i8 -10)
   ret {i8, i1} %t
 
 ; CHECK-LABEL: @sadd_4(
@@ -117,7 +117,7 @@ entry:
 
 define {i8, i1} @sadd_5() nounwind {
 entry:
-  %t = call {i8, i1} @llvm.sadd.with.overflow.i8(i8 2, i8 -10)
+  %t = call {i8, i1} @llvm37.sadd.with.overflow.i8(i8 2, i8 -10)
   ret {i8, i1} %t
 
 ; CHECK-LABEL: @sadd_5(
@@ -131,7 +131,7 @@ entry:
 
 define {i8, i1} @ssub_1() nounwind {
 entry:
-  %t = call {i8, i1} @llvm.ssub.with.overflow.i8(i8 4, i8 2)
+  %t = call {i8, i1} @llvm37.ssub.with.overflow.i8(i8 4, i8 2)
   ret {i8, i1} %t
 
 ; CHECK-LABEL: @ssub_1(
@@ -140,7 +140,7 @@ entry:
 
 define {i8, i1} @ssub_2() nounwind {
 entry:
-  %t = call {i8, i1} @llvm.ssub.with.overflow.i8(i8 4, i8 6)
+  %t = call {i8, i1} @llvm37.ssub.with.overflow.i8(i8 4, i8 6)
   ret {i8, i1} %t
 
 ; CHECK-LABEL: @ssub_2(
@@ -149,7 +149,7 @@ entry:
 
 define {i8, i1} @ssub_3() nounwind {
 entry:
-  %t = call {i8, i1} @llvm.ssub.with.overflow.i8(i8 -10, i8 120)
+  %t = call {i8, i1} @llvm37.ssub.with.overflow.i8(i8 -10, i8 120)
   ret {i8, i1} %t
 
 ; CHECK-LABEL: @ssub_3(
@@ -158,7 +158,7 @@ entry:
 
 define {i8, i1} @ssub_3b() nounwind {
 entry:
-  %t = call {i8, i1} @llvm.ssub.with.overflow.i8(i8 -10, i8 10)
+  %t = call {i8, i1} @llvm37.ssub.with.overflow.i8(i8 -10, i8 10)
   ret {i8, i1} %t
 
 ; CHECK-LABEL: @ssub_3b(
@@ -167,7 +167,7 @@ entry:
 
 define {i8, i1} @ssub_4() nounwind {
 entry:
-  %t = call {i8, i1} @llvm.ssub.with.overflow.i8(i8 120, i8 -10)
+  %t = call {i8, i1} @llvm37.ssub.with.overflow.i8(i8 120, i8 -10)
   ret {i8, i1} %t
 
 ; CHECK-LABEL: @ssub_4(
@@ -176,7 +176,7 @@ entry:
 
 define {i8, i1} @ssub_4b() nounwind {
 entry:
-  %t = call {i8, i1} @llvm.ssub.with.overflow.i8(i8 20, i8 -10)
+  %t = call {i8, i1} @llvm37.ssub.with.overflow.i8(i8 20, i8 -10)
   ret {i8, i1} %t
 
 ; CHECK-LABEL: @ssub_4b(
@@ -185,7 +185,7 @@ entry:
 
 define {i8, i1} @ssub_5() nounwind {
 entry:
-  %t = call {i8, i1} @llvm.ssub.with.overflow.i8(i8 -20, i8 -10)
+  %t = call {i8, i1} @llvm37.ssub.with.overflow.i8(i8 -20, i8 -10)
   ret {i8, i1} %t
 
 ; CHECK-LABEL: @ssub_5(
@@ -199,7 +199,7 @@ entry:
 ; rdar://8501501
 define {i8, i1} @smul_1() nounwind {
 entry:
-  %t = call {i8, i1} @llvm.smul.with.overflow.i8(i8 -20, i8 -10)
+  %t = call {i8, i1} @llvm37.smul.with.overflow.i8(i8 -20, i8 -10)
   ret {i8, i1} %t
 
 ; CHECK-LABEL: @smul_1(

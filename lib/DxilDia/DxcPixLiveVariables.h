@@ -19,13 +19,13 @@
 
 #include "DxcPixDxilDebugInfo.h"
 
-namespace llvm
+namespace llvm37
 {
 class DIVariable;
 class Instruction;
 class Module;
 class Value;
-}  // namespace llvm
+}  // namespace llvm37
 
 namespace dxil_debug_info
 {
@@ -39,17 +39,17 @@ struct VariableInfo
   // Location is the dxil alloca register where this variable lives.
   struct Location
   {
-    llvm::Value *m_V = nullptr;
+    llvm37::Value *m_V = nullptr;
     unsigned m_FragmentIndex = 0;
   };
 
   explicit VariableInfo(
-      llvm::DIVariable *Variable
+      llvm37::DIVariable *Variable
   ) : m_Variable(Variable)
   {
   }
 
-  llvm::DIVariable *m_Variable;
+  llvm37::DIVariable *m_Variable;
 
   std::map<OffsetInBits, Location> m_ValueLocationMap;
 
@@ -67,7 +67,7 @@ public:
   void Clear();
 
   HRESULT GetLiveVariablesAtInstruction(
-    llvm::Instruction *Instr,
+    llvm37::Instruction *Instr,
     IDxcPixDxilLiveVariables **Result) const;
 
 private:

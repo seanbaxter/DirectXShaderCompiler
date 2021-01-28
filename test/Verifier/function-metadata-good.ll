@@ -1,4 +1,4 @@
-; RUN: llvm-as < %s -o /dev/null 2>&1
+; RUN: llvm37-as < %s -o /dev/null 2>&1
 
 ; Function foo() is called 2,304 times at runtime.
 define i32 @foo() !prof !0 {

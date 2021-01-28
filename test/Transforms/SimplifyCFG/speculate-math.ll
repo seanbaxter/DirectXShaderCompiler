@@ -1,11 +1,11 @@
 ; RUN: opt -S -simplifycfg -phi-node-folding-threshold=2 < %s | FileCheck %s
 
-declare float @llvm.sqrt.f32(float) nounwind readonly
-declare float @llvm.fma.f32(float, float, float) nounwind readonly
-declare float @llvm.fmuladd.f32(float, float, float) nounwind readonly
-declare float @llvm.fabs.f32(float) nounwind readonly
-declare float @llvm.minnum.f32(float, float) nounwind readonly
-declare float @llvm.maxnum.f32(float, float) nounwind readonly
+declare float @llvm37.sqrt.f32(float) nounwind readonly
+declare float @llvm37.fma.f32(float, float, float) nounwind readonly
+declare float @llvm37.fmuladd.f32(float, float, float) nounwind readonly
+declare float @llvm37.fabs.f32(float) nounwind readonly
+declare float @llvm37.minnum.f32(float, float) nounwind readonly
+declare float @llvm37.maxnum.f32(float, float) nounwind readonly
 
 ; CHECK-LABEL: @sqrt_test(
 ; CHECK: select
@@ -15,7 +15,7 @@ entry:
   br i1 %cmp.i, label %test_sqrt.exit, label %cond.else.i
 
 cond.else.i:                                      ; preds = %entry
-  %0 = tail call float @llvm.sqrt.f32(float %a) nounwind readnone
+  %0 = tail call float @llvm37.sqrt.f32(float %a) nounwind readnone
   br label %test_sqrt.exit
 
 test_sqrt.exit:                                   ; preds = %cond.else.i, %entry
@@ -32,7 +32,7 @@ entry:
   br i1 %cmp.i, label %test_fabs.exit, label %cond.else.i
 
 cond.else.i:                                      ; preds = %entry
-  %0 = tail call float @llvm.fabs.f32(float %a) nounwind readnone
+  %0 = tail call float @llvm37.fabs.f32(float %a) nounwind readnone
   br label %test_fabs.exit
 
 test_fabs.exit:                                   ; preds = %cond.else.i, %entry
@@ -49,7 +49,7 @@ entry:
   br i1 %cmp.i, label %test_fma.exit, label %cond.else.i
 
 cond.else.i:                                      ; preds = %entry
-  %0 = tail call float @llvm.fma.f32(float %a, float %b, float %c) nounwind readnone
+  %0 = tail call float @llvm37.fma.f32(float %a, float %b, float %c) nounwind readnone
   br label %test_fma.exit
 
 test_fma.exit:                                   ; preds = %cond.else.i, %entry
@@ -66,7 +66,7 @@ entry:
   br i1 %cmp.i, label %test_fmuladd.exit, label %cond.else.i
 
 cond.else.i:                                      ; preds = %entry
-  %0 = tail call float @llvm.fmuladd.f32(float %a, float %b, float %c) nounwind readnone
+  %0 = tail call float @llvm37.fmuladd.f32(float %a, float %b, float %c) nounwind readnone
   br label %test_fmuladd.exit
 
 test_fmuladd.exit:                                   ; preds = %cond.else.i, %entry
@@ -83,7 +83,7 @@ entry:
   br i1 %cmp.i, label %test_minnum.exit, label %cond.else.i
 
 cond.else.i:                                      ; preds = %entry
-  %0 = tail call float @llvm.minnum.f32(float %a, float %b) nounwind readnone
+  %0 = tail call float @llvm37.minnum.f32(float %a, float %b) nounwind readnone
   br label %test_minnum.exit
 
 test_minnum.exit:                                   ; preds = %cond.else.i, %entry
@@ -100,7 +100,7 @@ entry:
   br i1 %cmp.i, label %test_maxnum.exit, label %cond.else.i
 
 cond.else.i:                                      ; preds = %entry
-  %0 = tail call float @llvm.maxnum.f32(float %a, float %b) nounwind readnone
+  %0 = tail call float @llvm37.maxnum.f32(float %a, float %b) nounwind readnone
   br label %test_maxnum.exit
 
 test_maxnum.exit:                                   ; preds = %cond.else.i, %entry

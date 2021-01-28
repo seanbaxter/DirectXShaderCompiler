@@ -1,6 +1,6 @@
 //===- Dominators.cpp - Dominator Calculation -----------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -14,20 +14,20 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/IR/Dominators.h"
-#include "llvm/ADT/DepthFirstIterator.h"
-#include "llvm/ADT/SmallPtrSet.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/IR/CFG.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/PassManager.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/Compiler.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/GenericDomTreeConstruction.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/IR/Dominators.h"
+#include "llvm37/ADT/DepthFirstIterator.h"
+#include "llvm37/ADT/SmallPtrSet.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/IR/CFG.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/PassManager.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/Compiler.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/GenericDomTreeConstruction.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <algorithm>
-using namespace llvm;
+using namespace llvm37;
 
 // Always verify dominfo if expensive checking is enabled.
 #ifdef XDEBUG
@@ -64,12 +64,12 @@ bool BasicBlockEdge::isSingleEdge() const {
 //
 //===----------------------------------------------------------------------===//
 
-template class llvm::DomTreeNodeBase<BasicBlock>;
-template class llvm::DominatorTreeBase<BasicBlock>;
+template class llvm37::DomTreeNodeBase<BasicBlock>;
+template class llvm37::DominatorTreeBase<BasicBlock>;
 
-template void llvm::Calculate<Function, BasicBlock *>(
+template void llvm37::Calculate<Function, BasicBlock *>(
     DominatorTreeBase<GraphTraits<BasicBlock *>::NodeType> &DT, Function &F);
-template void llvm::Calculate<Function, Inverse<BasicBlock *>>(
+template void llvm37::Calculate<Function, Inverse<BasicBlock *>>(
     DominatorTreeBase<GraphTraits<Inverse<BasicBlock *>>::NodeType> &DT,
     Function &F);
 

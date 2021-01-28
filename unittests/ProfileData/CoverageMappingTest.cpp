@@ -1,23 +1,23 @@
 //===- unittest/ProfileData/CoverageMappingTest.cpp -------------------------=//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/ProfileData/CoverageMapping.h"
-#include "llvm/ProfileData/CoverageMappingReader.h"
-#include "llvm/ProfileData/CoverageMappingWriter.h"
-#include "llvm/ProfileData/InstrProfReader.h"
-#include "llvm/ProfileData/InstrProfWriter.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ProfileData/CoverageMapping.h"
+#include "llvm37/ProfileData/CoverageMappingReader.h"
+#include "llvm37/ProfileData/CoverageMappingWriter.h"
+#include "llvm37/ProfileData/InstrProfReader.h"
+#include "llvm37/ProfileData/InstrProfWriter.h"
+#include "llvm37/Support/raw_ostream.h"
 #include "gtest/gtest.h"
 
 #include <sstream>
 
-using namespace llvm;
+using namespace llvm37;
 using namespace coverage;
 
 static ::testing::AssertionResult NoError(std::error_code EC) {
@@ -27,7 +27,7 @@ static ::testing::AssertionResult NoError(std::error_code EC) {
                                        << ": " << EC.message();
 }
 
-namespace llvm {
+namespace llvm37 {
 namespace coverage {
 void PrintTo(const Counter &C, ::std::ostream *os) {
   if (C.isZero())
@@ -119,7 +119,7 @@ struct CoverageMappingTest : ::testing::Test {
     for (const auto &E : Files)
       FileIDs.push_back(E.getValue());
     std::string Coverage;
-    llvm::raw_string_ostream OS(Coverage);
+    llvm37::raw_string_ostream OS(Coverage);
     CoverageMappingWriter(FileIDs, None, InputCMRs).write(OS);
     return OS.str();
   }

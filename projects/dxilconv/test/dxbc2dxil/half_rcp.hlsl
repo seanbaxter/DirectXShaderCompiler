@@ -1,5 +1,5 @@
 // RUN: %fxc /T ps_5_0 /Od %s /Fo %t.dxbc
-// RUN: %dxbc2dxil %t.dxbc /emit-llvm /o %t.ll.converted
+// RUN: %dxbc2dxil %t.dxbc /emit-llvm37 /o %t.ll.converted
 // RUN: fc %b.ref %t.ll.converted
 
 float main(float4 pos : SV_POSITION) : SV_Target

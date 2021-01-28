@@ -1,6 +1,6 @@
 //===- tools/dsymutil/DebugMap.cpp - Generic debug map representation -----===//
 //
-//                             The LLVM Linker
+//                             The LLVM37 Linker
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -9,18 +9,18 @@
 
 #include "DebugMap.h"
 #include "BinaryHolder.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/iterator_range.h"
-#include "llvm/Support/DataTypes.h"
-#include "llvm/Support/Format.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/iterator_range.h"
+#include "llvm37/Support/DataTypes.h"
+#include "llvm37/Support/Format.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <algorithm>
 //                                                                           //
 ///////////////////////////////////////////////////////////////////////////////
-namespace llvm {
+namespace llvm37 {
 namespace dsymutil {
 
-using namespace llvm::object;
+using namespace llvm37::object;
 
 DebugMapObject::DebugMapObject(StringRef ObjectFilename)
     : Filename(ObjectFilename) {}
@@ -37,7 +37,7 @@ bool DebugMapObject::addSymbol(StringRef Name, uint64_t ObjectAddress,
 
 void DebugMapObject::print(raw_ostream &OS) const {
   OS << getObjectFilename() << ":\n";
-  // Sort the symbols in alphabetical order, like llvm-nm (and to get
+  // Sort the symbols in alphabetical order, like llvm37-nm (and to get
   // deterministic output for testing).
   typedef std::pair<StringRef, SymbolMapping> Entry;
   std::vector<Entry> Entries;
@@ -147,7 +147,7 @@ void MappingTraits<dsymutil::DebugMapObject>::mapping(
 }
 
 void ScalarTraits<Triple>::output(const Triple &val, void *,
-                                  llvm::raw_ostream &out) {
+                                  llvm37::raw_ostream &out) {
   out << val.str();
 }
 
@@ -209,11 +209,11 @@ MappingTraits<dsymutil::DebugMapObject>::YamlDMO::denormalize(IO &IO) {
   sys::path::append(Path, Filename);
   auto ErrOrObjectFile = BinHolder.GetObjectFile(Path);
   if (auto EC = ErrOrObjectFile.getError()) {
-    llvm::errs() << "warning: Unable to open " << Path << " " << EC.message()
+    llvm37::errs() << "warning: Unable to open " << Path << " " << EC.message()
                  << '\n';
   } else {
     // Rewrite the object file symbol addresses in the debug map. The
-    // YAML input is mainly used to test llvm-dsymutil without
+    // YAML input is mainly used to test llvm37-dsymutil without
     // requiring binaries checked-in. If we generate the object files
     // during the test, we can't hardcode the symbols addresses, so
     // look them up here and rewrite them.

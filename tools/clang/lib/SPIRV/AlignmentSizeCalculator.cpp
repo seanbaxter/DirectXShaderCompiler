@@ -1,6 +1,6 @@
 //===--- AlignmentSizeCalculator.cpp -- Alignemnt And Size Calc --*- C++ -*-==//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -47,7 +47,7 @@ void AlignmentSizeCalculator::alignUsingHLSLRelaxedLayout(
   if (fieldIsVecType) {
     uint32_t scalarAlignment = 0;
     std::tie(scalarAlignment, std::ignore) = getAlignmentAndSize(
-        vecElemType, SpirvLayoutRule::Void, /*isRowMajor*/ llvm::None, nullptr);
+        vecElemType, SpirvLayoutRule::Void, /*isRowMajor*/ llvm37::None, nullptr);
     if (scalarAlignment <= 4)
       fieldAlignment = scalarAlignment;
   }
@@ -64,7 +64,7 @@ void AlignmentSizeCalculator::alignUsingHLSLRelaxedLayout(
 }
 
 std::pair<uint32_t, uint32_t> AlignmentSizeCalculator::getAlignmentAndSize(
-    QualType type, SpirvLayoutRule rule, llvm::Optional<bool> isRowMajor,
+    QualType type, SpirvLayoutRule rule, llvm37::Optional<bool> isRowMajor,
     uint32_t *stride) {
   // std140 layout rules:
 

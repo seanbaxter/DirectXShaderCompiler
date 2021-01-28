@@ -1,4 +1,4 @@
-// RUN: %clang_cc1 -emit-llvm %s -o - -fcuda-is-device -triple nvptx-unknown-unknown | FileCheck %s
+// RUN: %clang_cc1 -emit-llvm37 %s -o - -fcuda-is-device -triple nvptx-unknown-unknown | FileCheck %s
 
 // Verifies Clang emits correct address spaces and addrspacecast instructions
 // for CUDA code.

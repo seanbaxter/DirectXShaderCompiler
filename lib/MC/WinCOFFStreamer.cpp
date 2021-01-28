@@ -1,6 +1,6 @@
-//===-- llvm/MC/WinCOFFStreamer.cpp -----------------------------*- C++ -*-===//
+//===-- llvm37/MC/WinCOFFStreamer.cpp -----------------------------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,32 +11,32 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/MC/MCAsmBackend.h"
-#include "llvm/MC/MCAsmLayout.h"
-#include "llvm/MC/MCAssembler.h"
-#include "llvm/MC/MCCodeEmitter.h"
-#include "llvm/MC/MCContext.h"
-#include "llvm/MC/MCExpr.h"
-#include "llvm/MC/MCObjectFileInfo.h"
-#include "llvm/MC/MCObjectStreamer.h"
-#include "llvm/MC/MCSection.h"
-#include "llvm/MC/MCSectionCOFF.h"
-#include "llvm/MC/MCStreamer.h"
-#include "llvm/MC/MCSymbolCOFF.h"
-#include "llvm/MC/MCValue.h"
-#include "llvm/MC/MCWinCOFFStreamer.h"
-#include "llvm/Support/COFF.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/MathExtras.h"
-#include "llvm/Support/TargetRegistry.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/MC/MCAsmBackend.h"
+#include "llvm37/MC/MCAsmLayout.h"
+#include "llvm37/MC/MCAssembler.h"
+#include "llvm37/MC/MCCodeEmitter.h"
+#include "llvm37/MC/MCContext.h"
+#include "llvm37/MC/MCExpr.h"
+#include "llvm37/MC/MCObjectFileInfo.h"
+#include "llvm37/MC/MCObjectStreamer.h"
+#include "llvm37/MC/MCSection.h"
+#include "llvm37/MC/MCSectionCOFF.h"
+#include "llvm37/MC/MCStreamer.h"
+#include "llvm37/MC/MCSymbolCOFF.h"
+#include "llvm37/MC/MCValue.h"
+#include "llvm37/MC/MCWinCOFFStreamer.h"
+#include "llvm37/Support/COFF.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/MathExtras.h"
+#include "llvm37/Support/TargetRegistry.h"
+#include "llvm37/Support/raw_ostream.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "WinCOFFStreamer"
 
-namespace llvm {
+namespace llvm37 {
 MCWinCOFFStreamer::MCWinCOFFStreamer(MCContext &Context, MCAsmBackend &MAB,
                                      MCCodeEmitter &CE, raw_pwrite_stream &OS)
     : MCObjectStreamer(Context, MAB, OS, &CE), CurSymbol(nullptr) {}
@@ -82,11 +82,11 @@ void MCWinCOFFStreamer::EmitLabel(MCSymbol *Symbol) {
 }
 
 void MCWinCOFFStreamer::EmitAssemblerFlag(MCAssemblerFlag Flag) {
-  llvm_unreachable("not implemented");
+  llvm37_unreachable("not implemented");
 }
 
 void MCWinCOFFStreamer::EmitThumbFunc(MCSymbol *Func) {
-  llvm_unreachable("not implemented");
+  llvm37_unreachable("not implemented");
 }
 
 bool MCWinCOFFStreamer::EmitSymbolAttribute(MCSymbol *Symbol,
@@ -114,7 +114,7 @@ bool MCWinCOFFStreamer::EmitSymbolAttribute(MCSymbol *Symbol,
 }
 
 void MCWinCOFFStreamer::EmitSymbolDesc(MCSymbol *Symbol, unsigned DescValue) {
-  llvm_unreachable("not implemented");
+  llvm37_unreachable("not implemented");
 }
 
 void MCWinCOFFStreamer::BeginCOFFSymbolDef(MCSymbol const *Symbol) {
@@ -262,12 +262,12 @@ void MCWinCOFFStreamer::EmitLocalCommonSymbol(MCSymbol *Symbol, uint64_t Size,
 
 void MCWinCOFFStreamer::EmitZerofill(MCSection *Section, MCSymbol *Symbol,
                                      uint64_t Size, unsigned ByteAlignment) {
-  llvm_unreachable("not implemented");
+  llvm37_unreachable("not implemented");
 }
 
 void MCWinCOFFStreamer::EmitTBSSSymbol(MCSection *Section, MCSymbol *Symbol,
                                        uint64_t Size, unsigned ByteAlignment) {
-  llvm_unreachable("not implemented");
+  llvm37_unreachable("not implemented");
 }
 
 void MCWinCOFFStreamer::EmitFileDirective(StringRef Filename) {
@@ -276,18 +276,18 @@ void MCWinCOFFStreamer::EmitFileDirective(StringRef Filename) {
 
 // TODO: Implement this if you want to emit .comment section in COFF obj files.
 void MCWinCOFFStreamer::EmitIdent(StringRef IdentString) {
-  llvm_unreachable("not implemented");
+  llvm37_unreachable("not implemented");
 }
 
 void MCWinCOFFStreamer::EmitWinEHHandlerData() {
-  llvm_unreachable("not implemented");
+  llvm37_unreachable("not implemented");
 }
 
 void MCWinCOFFStreamer::FinishImpl() {
   MCObjectStreamer::FinishImpl();
 }
 
-LLVM_ATTRIBUTE_NORETURN
+LLVM37_ATTRIBUTE_NORETURN
 void MCWinCOFFStreamer::FatalError(const Twine &Msg) const {
   getContext().reportFatalError(SMLoc(), Msg);
 }

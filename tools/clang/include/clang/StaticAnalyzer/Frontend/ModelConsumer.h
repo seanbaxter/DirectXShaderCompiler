@@ -1,6 +1,6 @@
 //===-- ModelConsumer.h -----------------------------------------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -13,11 +13,11 @@
 ///
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_GR_MODELCONSUMER_H
-#define LLVM_CLANG_GR_MODELCONSUMER_H
+#ifndef LLVM37_CLANG_GR_MODELCONSUMER_H
+#define LLVM37_CLANG_GR_MODELCONSUMER_H
 
 #include "clang/AST/ASTConsumer.h"
-#include "llvm/ADT/StringMap.h"
+#include "llvm37/ADT/StringMap.h"
 
 namespace clang {
 
@@ -31,12 +31,12 @@ namespace ento {
 /// from a model file.
 class ModelConsumer : public ASTConsumer {
 public:
-  ModelConsumer(llvm::StringMap<Stmt *> &Bodies);
+  ModelConsumer(llvm37::StringMap<Stmt *> &Bodies);
 
   bool HandleTopLevelDecl(DeclGroupRef D) override;
 
 private:
-  llvm::StringMap<Stmt *> &Bodies;
+  llvm37::StringMap<Stmt *> &Bodies;
 };
 }
 }

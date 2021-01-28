@@ -1,5 +1,5 @@
-# RUN: llvm-mc -triple i386-pc-linux-gnu -filetype=obj -o %t %s
-# RUN: llvm-readobj -s < %t | FileCheck %s
+# RUN: llvm37-mc -triple i386-pc-linux-gnu -filetype=obj -o %t %s
+# RUN: llvm37-readobj -s < %t | FileCheck %s
 .section .nobits
 .byte 1
 .section .nobits2

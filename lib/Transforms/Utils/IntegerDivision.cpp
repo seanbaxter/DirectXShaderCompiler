@@ -1,6 +1,6 @@
 //===-- IntegerDivision.cpp - Expand integer division ---------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -14,14 +14,14 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Transforms/Utils/IntegerDivision.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/IRBuilder.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/Intrinsics.h"
+#include "llvm37/Transforms/Utils/IntegerDivision.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/IRBuilder.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/Intrinsics.h"
 #include <utility>
 
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "integer-division"
 
@@ -239,8 +239,8 @@ static Value *generateUnsignedDivisionCode(Value *Dividend, Value *Divisor,
   // ;   %ret0_1      = icmp eq i32 %divisor, 0
   // ;   %ret0_2      = icmp eq i32 %dividend, 0
   // ;   %ret0_3      = or i1 %ret0_1, %ret0_2
-  // ;   %tmp0        = tail call i32 @llvm.ctlz.i32(i32 %divisor, i1 true)
-  // ;   %tmp1        = tail call i32 @llvm.ctlz.i32(i32 %dividend, i1 true)
+  // ;   %tmp0        = tail call i32 @llvm37.ctlz.i32(i32 %divisor, i1 true)
+  // ;   %tmp1        = tail call i32 @llvm37.ctlz.i32(i32 %dividend, i1 true)
   // ;   %sr          = sub nsw i32 %tmp0, %tmp1
   // ;   %ret0_4      = icmp ugt i32 %sr, 31
   // ;   %ret0        = or i1 %ret0_3, %ret0_4
@@ -373,7 +373,7 @@ static Value *generateUnsignedDivisionCode(Value *Dividend, Value *Divisor,
 /// scalar division.
 ///
 /// @brief Replace Rem with generated code.
-bool llvm::expandRemainder(BinaryOperator *Rem) {
+bool llvm37::expandRemainder(BinaryOperator *Rem) {
   assert((Rem->getOpcode() == Instruction::SRem ||
           Rem->getOpcode() == Instruction::URem) &&
          "Trying to expand remainder from a non-remainder function");
@@ -382,12 +382,12 @@ bool llvm::expandRemainder(BinaryOperator *Rem) {
 
   Type *RemTy = Rem->getType();
   if (RemTy->isVectorTy())
-    llvm_unreachable("Div over vectors not supported");
+    llvm37_unreachable("Div over vectors not supported");
 
   unsigned RemTyBitWidth = RemTy->getIntegerBitWidth();
 
   if (RemTyBitWidth != 32 && RemTyBitWidth != 64)
-    llvm_unreachable("Div of bitwidth other than 32 or 64 not supported");
+    llvm37_unreachable("Div of bitwidth other than 32 or 64 not supported");
 
   // First prepare the sign if it's a signed remainder
   if (Rem->getOpcode() == Instruction::SRem) {
@@ -433,7 +433,7 @@ bool llvm::expandRemainder(BinaryOperator *Rem) {
 /// 32bit and 64bit scalar division.
 ///
 /// @brief Replace Div with generated code.
-bool llvm::expandDivision(BinaryOperator *Div) {
+bool llvm37::expandDivision(BinaryOperator *Div) {
   assert((Div->getOpcode() == Instruction::SDiv ||
           Div->getOpcode() == Instruction::UDiv) &&
          "Trying to expand division from a non-division function");
@@ -442,12 +442,12 @@ bool llvm::expandDivision(BinaryOperator *Div) {
 
   Type *DivTy = Div->getType();
   if (DivTy->isVectorTy())
-    llvm_unreachable("Div over vectors not supported");
+    llvm37_unreachable("Div over vectors not supported");
 
   unsigned DivTyBitWidth = DivTy->getIntegerBitWidth();
 
   if (DivTyBitWidth != 32 && DivTyBitWidth != 64)
-    llvm_unreachable("Div of bitwidth other than 32 or 64 not supported");
+    llvm37_unreachable("Div of bitwidth other than 32 or 64 not supported");
 
   // First prepare the sign if it's a signed division
   if (Div->getOpcode() == Instruction::SDiv) {
@@ -486,19 +486,19 @@ bool llvm::expandDivision(BinaryOperator *Div) {
 /// arithmetic.
 ///
 /// @brief Replace Rem with emulation code.
-bool llvm::expandRemainderUpTo32Bits(BinaryOperator *Rem) {
+bool llvm37::expandRemainderUpTo32Bits(BinaryOperator *Rem) {
   assert((Rem->getOpcode() == Instruction::SRem ||
           Rem->getOpcode() == Instruction::URem) &&
           "Trying to expand remainder from a non-remainder function");
 
   Type *RemTy = Rem->getType();
   if (RemTy->isVectorTy())
-    llvm_unreachable("Div over vectors not supported");
+    llvm37_unreachable("Div over vectors not supported");
 
   unsigned RemTyBitWidth = RemTy->getIntegerBitWidth();
 
   if (RemTyBitWidth > 32) 
-    llvm_unreachable("Div of bitwidth greater than 32 not supported");
+    llvm37_unreachable("Div of bitwidth greater than 32 not supported");
 
   if (RemTyBitWidth == 32) 
     return expandRemainder(Rem);
@@ -536,19 +536,19 @@ bool llvm::expandRemainderUpTo32Bits(BinaryOperator *Rem) {
 /// outputs to operate in 64 bits.
 ///
 /// @brief Replace Rem with emulation code.
-bool llvm::expandRemainderUpTo64Bits(BinaryOperator *Rem) {
+bool llvm37::expandRemainderUpTo64Bits(BinaryOperator *Rem) {
   assert((Rem->getOpcode() == Instruction::SRem ||
           Rem->getOpcode() == Instruction::URem) &&
           "Trying to expand remainder from a non-remainder function");
 
   Type *RemTy = Rem->getType();
   if (RemTy->isVectorTy())
-    llvm_unreachable("Div over vectors not supported");
+    llvm37_unreachable("Div over vectors not supported");
 
   unsigned RemTyBitWidth = RemTy->getIntegerBitWidth();
 
   if (RemTyBitWidth > 64) 
-    llvm_unreachable("Div of bitwidth greater than 64 not supported");
+    llvm37_unreachable("Div of bitwidth greater than 64 not supported");
 
   if (RemTyBitWidth == 64) 
     return expandRemainder(Rem);
@@ -587,19 +587,19 @@ bool llvm::expandRemainderUpTo64Bits(BinaryOperator *Rem) {
 /// or very little support for smaller than 32 bit integer arithmetic.
 ///
 /// @brief Replace Div with emulation code.
-bool llvm::expandDivisionUpTo32Bits(BinaryOperator *Div) {
+bool llvm37::expandDivisionUpTo32Bits(BinaryOperator *Div) {
   assert((Div->getOpcode() == Instruction::SDiv ||
           Div->getOpcode() == Instruction::UDiv) &&
           "Trying to expand division from a non-division function");
 
   Type *DivTy = Div->getType();
   if (DivTy->isVectorTy())
-    llvm_unreachable("Div over vectors not supported");
+    llvm37_unreachable("Div over vectors not supported");
 
   unsigned DivTyBitWidth = DivTy->getIntegerBitWidth();
 
   if (DivTyBitWidth > 32)
-    llvm_unreachable("Div of bitwidth greater than 32 not supported");
+    llvm37_unreachable("Div of bitwidth greater than 32 not supported");
 
   if (DivTyBitWidth == 32)
     return expandDivision(Div);
@@ -637,19 +637,19 @@ bool llvm::expandDivisionUpTo32Bits(BinaryOperator *Div) {
 /// in 64 bits.
 ///
 /// @brief Replace Div with emulation code.
-bool llvm::expandDivisionUpTo64Bits(BinaryOperator *Div) {
+bool llvm37::expandDivisionUpTo64Bits(BinaryOperator *Div) {
   assert((Div->getOpcode() == Instruction::SDiv ||
           Div->getOpcode() == Instruction::UDiv) &&
           "Trying to expand division from a non-division function");
 
   Type *DivTy = Div->getType();
   if (DivTy->isVectorTy())
-    llvm_unreachable("Div over vectors not supported");
+    llvm37_unreachable("Div over vectors not supported");
 
   unsigned DivTyBitWidth = DivTy->getIntegerBitWidth();
 
   if (DivTyBitWidth > 64)
-    llvm_unreachable("Div of bitwidth greater than 64 not supported");
+    llvm37_unreachable("Div of bitwidth greater than 64 not supported");
 
   if (DivTyBitWidth == 64)
     return expandDivision(Div);

@@ -1,6 +1,6 @@
 //===- TableGenBackends.h - Declarations for Clang TableGen Backends ------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -9,22 +9,22 @@
 //
 // This file contains the declarations for all of the Clang TableGen
 // backends. A "TableGen backend" is just a function. See
-// "$LLVM_ROOT/utils/TableGen/TableGenBackends.h" for more info.
+// "$LLVM37_ROOT/utils/TableGen/TableGenBackends.h" for more info.
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_UTILS_TABLEGEN_TABLEGENBACKENDS_H
-#define LLVM_CLANG_UTILS_TABLEGEN_TABLEGENBACKENDS_H
+#ifndef LLVM37_CLANG_UTILS_TABLEGEN_TABLEGENBACKENDS_H
+#define LLVM37_CLANG_UTILS_TABLEGEN_TABLEGENBACKENDS_H
 
 #include <string>
 
-namespace llvm {
+namespace llvm37 {
   class raw_ostream;
   class RecordKeeper;
 }
 
-using llvm::raw_ostream;
-using llvm::RecordKeeper;
+using llvm37::raw_ostream;
+using llvm37::RecordKeeper;
 
 namespace clang {
 

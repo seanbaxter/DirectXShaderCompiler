@@ -97,7 +97,7 @@ class Regen:
         return "\n".join(check_lines)
 
 def parse_args():
-    default_opt = os.path.join(os.environ["OBJECT_ROOT"], "onecoreuap\\windows\\directx\\dxg\\opensource\\llvm\\src\\tools\\opt", os.environ["_BuildAlt"], "opt.exe")
+    default_opt = os.path.join(os.environ["OBJECT_ROOT"], "onecoreuap\\windows\\directx\\dxg\\opensource\\llvm37\\src\\tools\\opt", os.environ["_BuildAlt"], "opt.exe")
 
     parser = argparse.ArgumentParser(description="regenerate check lines in test")
     parser.add_argument("--opt", default=default_opt,

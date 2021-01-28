@@ -16,19 +16,19 @@
 #include "dxc/HLSL/HLOperations.h"
 #include "dxc/HlslIntrinsicOp.h"
 
-#include "llvm/ADT/StringRef.h"
-#include "llvm/IR/IRBuilder.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/Module.h"
-#include "llvm/Support/raw_os_ostream.h"
-#include "llvm/Support/YAMLParser.h"
-#include "llvm/Support/SourceMgr.h"
-#include "llvm/ADT/SmallString.h"
+#include "llvm37/ADT/StringRef.h"
+#include "llvm37/IR/IRBuilder.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/Support/raw_os_ostream.h"
+#include "llvm37/Support/YAMLParser.h"
+#include "llvm37/Support/SourceMgr.h"
+#include "llvm37/ADT/SmallString.h"
 
-using namespace llvm;
+using namespace llvm37;
 using namespace hlsl;
 
-LLVM_ATTRIBUTE_NORETURN static void ThrowExtensionError(StringRef Details)
+LLVM37_ATTRIBUTE_NORETURN static void ThrowExtensionError(StringRef Details)
 {
     std::string Msg = (Twine("Error in dxc extension api: ") + Details).str();
     throw hlsl::Exception(DXC_E_EXTENSION_ERROR, Msg);
@@ -56,7 +56,7 @@ ExtensionLowering::Strategy ExtensionLowering::GetStrategy(StringRef strategy) {
   return Strategy::Unknown;
 }
 
-llvm::StringRef ExtensionLowering::GetStrategyName(Strategy strategy) {
+llvm37::StringRef ExtensionLowering::GetStrategyName(Strategy strategy) {
   switch (strategy) {
     case Strategy::NoTranslation: return "n";
     case Strategy::Replicate:     return "r";
@@ -84,7 +84,7 @@ ExtensionLowering::ExtensionLowering(StringRef strategy, HLSLExtensionsCodegenHe
     m_extraStrategyInfo = ParseExtraStrategyInfo(strategy);
   }
 
-llvm::Value *ExtensionLowering::Translate(llvm::CallInst *CI) {
+llvm37::Value *ExtensionLowering::Translate(llvm37::CallInst *CI) {
   switch (m_strategy) {
   case Strategy::NoTranslation: return NoTranslation(CI);
   case Strategy::Replicate:     return Replicate(CI);
@@ -96,7 +96,7 @@ llvm::Value *ExtensionLowering::Translate(llvm::CallInst *CI) {
   return Unknown(CI);
 }
 
-llvm::Value *ExtensionLowering::Unknown(CallInst *CI) {
+llvm37::Value *ExtensionLowering::Unknown(CallInst *CI) {
   assert(false && "unknown translation strategy");
   return nullptr;
 }
@@ -205,7 +205,7 @@ class NoTranslationTypeTranslator : public FunctionTypeTranslator {
   }
 };
 
-llvm::Value *ExtensionLowering::NoTranslation(CallInst *CI) {
+llvm37::Value *ExtensionLowering::NoTranslation(CallInst *CI) {
   Function *NoTranslationFunction = FunctionTranslator::GetLoweredFunction<NoTranslationTypeTranslator>(CI, *this);
   if (!NoTranslationFunction)
     return nullptr;
@@ -223,7 +223,7 @@ enum {
 // Find the vector size that will be used for replication.
 // The function call will be replicated once for each element of the vector
 // size.
-static unsigned GetReplicatedVectorSize(llvm::CallInst *CI) {
+static unsigned GetReplicatedVectorSize(llvm37::CallInst *CI) {
   unsigned commonVectorSize = NO_COMMON_VECTOR_SIZE;
   Type *RetTy = CI->getType();
   if (RetTy->isVectorTy())
@@ -343,7 +343,7 @@ private:
     if (m_CI->getType()->isVoidTy())
       return m_ReplicatedCalls.back();
 
-    Value *retVal = llvm::UndefValue::get(m_CI->getType());
+    Value *retVal = llvm37::UndefValue::get(m_CI->getType());
     for (unsigned i = 0; i < m_ReplicatedCalls.size(); ++i)
       retVal = m_Builder.CreateInsertElement(retVal, m_ReplicatedCalls[i], i);
 
@@ -757,13 +757,13 @@ private:
     struct OptionalTypeSpec
     {
         const char* TypeName;
-        Type *LLVMType;
+        Type *LLVM37Type;
     };
 
     // These are the supported optional types for generating dxil parameters
     // that have no matching argument in the high-level intrinsic overload.
     // See [Argument Translation Format] for details.
-    void InitOptionalTypes(LLVMContext &Ctx)
+    void InitOptionalTypes(LLVM37Context &Ctx)
     {
         // Table of supported optional types.
         // Keep in sync with m_OptionalTypes small vector size to avoid
@@ -796,7 +796,7 @@ private:
         {
             if (OptionalTypeInfo == O.TypeName)
             {
-                return O.LLVMType;
+                return O.LLVM37Type;
             }
         }
             
@@ -826,10 +826,10 @@ private:
 
     // Convert the lowering info to a machine-friendly format.
     // Note that we use the YAML parser to parse the JSON since JSON
-    // is a subset of YAML (and this llvm has no JSON parser).
+    // is a subset of YAML (and this llvm37 has no JSON parser).
     //
     // See [Custom Lowering Info Format] for details.
-    std::map<ResourceKindName, std::vector<DxilArgInfo>> ParseLoweringInfo(StringRef LoweringInfo, LLVMContext &Ctx)
+    std::map<ResourceKindName, std::vector<DxilArgInfo>> ParseLoweringInfo(StringRef LoweringInfo, LLVM37Context &Ctx)
     {
         InitOptionalTypes(Ctx);
         std::map<ResourceKindName, std::vector<DxilArgInfo>> LoweringInfoMap;
@@ -838,29 +838,29 @@ private:
         yaml::Stream YAMLStream(LoweringInfo, SM);
 
         // Make sure we have a valid json input.
-        llvm::yaml::document_iterator I = YAMLStream.begin();
+        llvm37::yaml::document_iterator I = YAMLStream.begin();
         if (I == YAMLStream.end()) {
             ThrowExtensionError("Found empty resource lowering JSON.");
         }
-        llvm::yaml::Node *Root = I->getRoot();
+        llvm37::yaml::Node *Root = I->getRoot();
         if (!Root) {
             ThrowExtensionError("Error parsing resource lowering JSON.");
         }
 
         // Parse the top level map object.
-        llvm::yaml::MappingNode *Object = dyn_cast<llvm::yaml::MappingNode>(Root);
+        llvm37::yaml::MappingNode *Object = dyn_cast<llvm37::yaml::MappingNode>(Root);
         if (!Object) {
             ThrowExtensionError("Expected map in top level of resource lowering JSON.");
         }
 
         // Parse all key/value pairs from the map.
-        for (llvm::yaml::MappingNode::iterator KVI = Object->begin(),
+        for (llvm37::yaml::MappingNode::iterator KVI = Object->begin(),
             KVE = Object->end();
             KVI != KVE; ++KVI) 
         {
             // Parse key.
-            llvm::yaml::ScalarNode *KeyString =
-                dyn_cast_or_null<llvm::yaml::ScalarNode>((*KVI).getKey());
+            llvm37::yaml::ScalarNode *KeyString =
+                dyn_cast_or_null<llvm37::yaml::ScalarNode>((*KVI).getKey());
             if (!KeyString) {
                 ThrowExtensionError("Expected string as key in resource lowering info JSON map.");
             }
@@ -868,8 +868,8 @@ private:
             StringRef Key = KeyString->getValue(KeyStorage);
 
             // Parse value.
-            llvm::yaml::ScalarNode *ValueString =
-                dyn_cast_or_null<llvm::yaml::ScalarNode>((*KVI).getValue());
+            llvm37::yaml::ScalarNode *ValueString =
+                dyn_cast_or_null<llvm37::yaml::ScalarNode>((*KVI).getValue());
             if (!ValueString) {
                 ThrowExtensionError("Expected string as value in resource lowering info JSON map.");
             }
@@ -886,7 +886,7 @@ private:
 
     // Parse the dxail argument translation info.
     // See [Argument Translation Format] for details.
-    std::vector<DxilArgInfo> ParseDxilArgInfo(StringRef ArgSpec, LLVMContext &Ctx)
+    std::vector<DxilArgInfo> ParseDxilArgInfo(StringRef ArgSpec, LLVM37Context &Ctx)
     {
         std::vector<DxilArgInfo> Args;
 
@@ -1168,7 +1168,7 @@ private:
 
   static std::string GetTypeName(Type *ty) {
       std::string typeName;
-      llvm::raw_string_ostream os(typeName);
+      llvm37::raw_string_ostream os(typeName);
       ty->print(os);
       os.flush();
       return typeName;
@@ -1192,7 +1192,7 @@ private:
   }
 };
 
-std::string ExtensionLowering::GetExtensionName(llvm::CallInst *CI) {
+std::string ExtensionLowering::GetExtensionName(llvm37::CallInst *CI) {
   ExtensionName name(CI, m_strategy, m_helper);
   return name.Get();
 }

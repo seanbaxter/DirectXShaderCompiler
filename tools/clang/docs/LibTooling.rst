@@ -9,8 +9,8 @@ LibTooling is a library to support writing standalone tools based on Clang.
 This document will provide a basic walkthrough of how to write a tool using
 LibTooling.
 
-For the information on how to setup Clang Tooling for LLVM see
-:doc:`HowToSetupToolingForLLVM`
+For the information on how to setup Clang Tooling for LLVM37 see
+:doc:`HowToSetupToolingForLLVM37`
 
 Introduction
 ------------
@@ -63,13 +63,13 @@ and automatic location of the compilation database using source files paths.
 .. code-block:: c++
 
   #include "clang/Tooling/CommonOptionsParser.h"
-  #include "llvm/Support/CommandLine.h"
+  #include "llvm37/Support/CommandLine.h"
 
   using namespace clang::tooling;
 
   // Apply a custom category to all command-line options so that they are the
   // only ones displayed.
-  static llvm::cl::OptionCategory MyToolCategory("my-tool options");
+  static llvm37::cl::OptionCategory MyToolCategory("my-tool options");
 
   int main(int argc, const char **argv) {
     // CommonOptionsParser constructor will parse arguments and create a
@@ -117,11 +117,11 @@ version of this example tool is also checked into the clang tree at
   #include "clang/Frontend/FrontendActions.h"
   #include "clang/Tooling/CommonOptionsParser.h"
   #include "clang/Tooling/Tooling.h"
-  // Declares llvm::cl::extrahelp.
-  #include "llvm/Support/CommandLine.h"
+  // Declares llvm37::cl::extrahelp.
+  #include "llvm37/Support/CommandLine.h"
 
   using namespace clang::tooling;
-  using namespace llvm;
+  using namespace llvm37;
 
   // Apply a custom category to all command-line options so that they are the
   // only ones displayed.
@@ -148,13 +148,13 @@ Running the tool on some code
 When you check out and build clang, clang-check is already built and available
 to you in bin/clang-check inside your build directory.
 
-You can run clang-check on a file in the llvm repository by specifying all the
+You can run clang-check on a file in the llvm37 repository by specifying all the
 needed parameters after a "``--``" separator:
 
 .. code-block:: bash
 
-  $ cd /path/to/source/llvm
-  $ export BD=/path/to/build/llvm
+  $ cd /path/to/source/llvm37
+  $ export BD=/path/to/build/llvm37
   $ $BD/bin/clang-check tools/clang/tools/clang-check/ClangCheck.cpp -- \
         clang++ -D__STDC_CONSTANT_MACROS -D__STDC_LIMIT_MACROS \
         -Itools/clang/include -I$BD/include -Iinclude \
@@ -176,8 +176,8 @@ arguments:
 
 .. code-block:: bash
 
-  $ cd /path/to/source/llvm
-  $ export BD=/path/to/build/llvm
+  $ cd /path/to/source/llvm37
+  $ export BD=/path/to/build/llvm37
   $ $BD/bin/clang-check -p $BD tools/clang/tools/clang-check/ClangCheck.cpp
 
 
@@ -189,7 +189,7 @@ Builtin includes
 Clang tools need their builtin headers and search for them the same way Clang
 does.  Thus, the default location to look for builtin headers is in a path
 ``$(dirname /path/to/tool)/../lib/clang/3.3/include`` relative to the tool
-binary.  This works out-of-the-box for tools running from llvm's toplevel
+binary.  This works out-of-the-box for tools running from llvm37's toplevel
 binary directory after building clang-headers, or if the tool is running from
 the binary directory of a clang install next to the clang binary.
 
@@ -201,4 +201,4 @@ Linking
 
 For a list of libraries to link, look at one of the tools' Makefiles (for
 example `clang-check/Makefile
-<http://llvm.org/viewvc/llvm-project/cfe/trunk/tools/clang-check/Makefile?view=markup>`_).
+<http://llvm37.org/viewvc/llvm37-project/cfe/trunk/tools/clang-check/Makefile?view=markup>`_).

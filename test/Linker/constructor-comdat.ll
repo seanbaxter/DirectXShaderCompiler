@@ -1,5 +1,5 @@
-; RUN: llvm-link %s %p/Inputs/constructor-comdat.ll -S -o - 2>&1 | FileCheck %s
-; RUN: llvm-link %p/Inputs/constructor-comdat.ll %s -S -o - 2>&1 | FileCheck %s
+; RUN: llvm37-link %s %p/Inputs/constructor-comdat.ll -S -o - 2>&1 | FileCheck %s
+; RUN: llvm37-link %p/Inputs/constructor-comdat.ll %s -S -o - 2>&1 | FileCheck %s
 
 $_ZN3fooIiEC5Ev = comdat any
 ; CHECK: $_ZN3fooIiEC5Ev = comdat any

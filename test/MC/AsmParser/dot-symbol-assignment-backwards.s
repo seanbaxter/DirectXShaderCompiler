@@ -1,4 +1,4 @@
-# RUN: not llvm-mc -filetype=obj -triple i386-unknown-unknown %s 2> %t
+# RUN: not llvm37-mc -filetype=obj -triple i386-unknown-unknown %s 2> %t
 # RUN: FileCheck -input-file %t %s
 
 . = 0x10
@@ -7,6 +7,6 @@
 . = . + 10
 	.byte 2
 
-# CHECK: LLVM ERROR: invalid .org offset '24' (at offset '28')
+# CHECK: LLVM37 ERROR: invalid .org offset '24' (at offset '28')
 . = 0x18
 	.byte 3

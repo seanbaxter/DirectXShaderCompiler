@@ -1,6 +1,6 @@
 //== TaintManager.h - Managing taint --------------------------- -*- C++ -*--=//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,14 +11,14 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_STATICANALYZER_CORE_PATHSENSITIVE_TAINTMANAGER_H
-#define LLVM_CLANG_STATICANALYZER_CORE_PATHSENSITIVE_TAINTMANAGER_H
+#ifndef LLVM37_CLANG_STATICANALYZER_CORE_PATHSENSITIVE_TAINTMANAGER_H
+#define LLVM37_CLANG_STATICANALYZER_CORE_PATHSENSITIVE_TAINTMANAGER_H
 
 #include "clang/StaticAnalyzer/Core/BugReporter/PathDiagnostic.h"
 #include "clang/StaticAnalyzer/Core/PathSensitive/ProgramState.h"
 #include "clang/StaticAnalyzer/Core/PathSensitive/ProgramStateTrait.h"
 #include "clang/StaticAnalyzer/Core/PathSensitive/TaintTag.h"
-#include "llvm/ADT/ImmutableMap.h"
+#include "llvm37/ADT/ImmutableMap.h"
 
 namespace clang {
 namespace ento {
@@ -29,7 +29,7 @@ namespace ento {
 // FIXME: This does not use the nice trait macros because it must be accessible
 // from multiple translation units.
 struct TaintMap {};
-typedef llvm::ImmutableMap<SymbolRef, TaintTagType> TaintMapImpl;
+typedef llvm37::ImmutableMap<SymbolRef, TaintTagType> TaintMapImpl;
 template<> struct ProgramStateTrait<TaintMap>
     :  public ProgramStatePartialTrait<TaintMapImpl> {
   static void *GDMIndex() { static int index = 0; return &index; }

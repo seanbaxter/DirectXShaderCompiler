@@ -1,6 +1,6 @@
 //===- PrettyStackTrace.cpp - Pretty Crash Handling -----------------------===//
 // 
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -12,20 +12,20 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Support/PrettyStackTrace.h"
-#include "llvm-c/Core.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/Config/config.h"     // Get autoconf configuration settings
-#include "llvm/Support/Compiler.h"
-#include "llvm/Support/Signals.h"
-#include "llvm/Support/Watchdog.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/Support/PrettyStackTrace.h"
+#include "llvm37-c/Core.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/Config/config.h"     // Get autoconf configuration settings
+#include "llvm37/Support/Compiler.h"
+#include "llvm37/Support/Signals.h"
+#include "llvm37/Support/Watchdog.h"
+#include "llvm37/Support/raw_ostream.h"
 
 #ifdef HAVE_CRASHREPORTERCLIENT_H
 #include <CrashReporterClient.h>
 #endif
 
-using namespace llvm;
+using namespace llvm37;
 
 // If backtrace support is not enabled, compile out support for pretty stack
 // traces.  This has the secondary effect of not requiring thread local storage
@@ -36,7 +36,7 @@ using namespace llvm;
 // objects, but we *really* cannot tolerate destructors running and do not want
 // to pay any overhead of synchronizing. As a consequence, we use a raw
 // thread-local variable.
-static LLVM_THREAD_LOCAL const PrettyStackTraceEntry *PrettyStackTraceHead =
+static LLVM37_THREAD_LOCAL const PrettyStackTraceEntry *PrettyStackTraceHead =
     nullptr;
 
 static unsigned PrintStack(const PrettyStackTraceEntry *Entry, raw_ostream &OS){
@@ -66,7 +66,7 @@ static void PrintCurStackTrace(raw_ostream &OS) {
 
 // Integrate with crash reporter libraries.
 #if defined (__APPLE__) && HAVE_CRASHREPORTERCLIENT_H
-//  If any clients of llvm try to link to libCrashReporterClient.a themselves,
+//  If any clients of llvm37 try to link to libCrashReporterClient.a themselves,
 //  only one crash info struct will be used.
 extern "C" {
 CRASH_REPORTER_CLIENT_HIDDEN 
@@ -146,7 +146,7 @@ static bool RegisterCrashPrinter() {
 }
 #endif
 
-void llvm::EnablePrettyStackTrace() {
+void llvm37::EnablePrettyStackTrace() {
 #if defined(HAVE_BACKTRACE) && defined(ENABLE_BACKTRACES)
   // The first time this is called, we register the crash printer.
   static bool HandlerRegistered = RegisterCrashPrinter();
@@ -154,6 +154,6 @@ void llvm::EnablePrettyStackTrace() {
 #endif
 }
 
-void LLVMEnablePrettyStackTrace() {
+void LLVM37EnablePrettyStackTrace() {
   EnablePrettyStackTrace();
 }

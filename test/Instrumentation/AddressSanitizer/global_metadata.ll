@@ -9,7 +9,7 @@ target triple = "x86_64-unknown-linux-gnu"
 @blacklisted_global = global i32 0, align 4
 @_ZZ4funcvE10static_var = internal global i32 0, align 4
 @.str = private unnamed_addr constant [14 x i8] c"Hello, world!\00", align 1
-@llvm.global_ctors = appending global [1 x { i32, void ()*, i8* }] [{ i32, void ()*, i8* } { i32 65535, void ()* @_GLOBAL__sub_I_asan_globals.cpp, i8* null }]
+@llvm37.global_ctors = appending global [1 x { i32, void ()*, i8* }] [{ i32, void ()*, i8* } { i32 65535, void ()* @_GLOBAL__sub_I_asan_globals.cpp, i8* null }]
 
 ; Check that globals were instrumented:
 ; CHECK: @global = global { i32, [60 x i8] } zeroinitializer, align 32
@@ -50,8 +50,8 @@ entry:
 attributes #0 = { nounwind sanitize_address }
 attributes #1 = { nounwind sanitize_address "less-precise-fpmad"="false" "no-frame-pointer-elim"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-realign-stack" "stack-protector-buffer-size"="8" "unsafe-fp-math"="false" "use-soft-float"="false" }
 
-!llvm.asan.globals = !{!0, !1, !2, !3, !4}
-!llvm.ident = !{!5}
+!llvm37.asan.globals = !{!0, !1, !2, !3, !4}
+!llvm37.ident = !{!5}
 
 !0 = !{i32* @global, !6, !"global", i1 false, i1 false}
 !1 = !{i32* @dyn_init_global, !7, !"dyn_init_global", i1 true, i1 false}

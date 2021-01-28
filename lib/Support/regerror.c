@@ -52,7 +52,7 @@
 #endif
 
 static const char *regatoi(
-	const llvm_regex_t *preg,
+	const llvm37_regex_t *preg,
 	_Out_writes_all_(localbufsize) char *localbuf,
 	int localbufsize
 	);
@@ -62,7 +62,7 @@ static struct rerr {
 	const char *name;
 	const char *explain;
 } rerrs[] = {
-	{ REG_NOMATCH,	"REG_NOMATCH",	"llvm_regexec() failed to match" },
+	{ REG_NOMATCH,	"REG_NOMATCH",	"llvm37_regexec() failed to match" },
 	{ REG_BADPAT,	"REG_BADPAT",	"invalid regular expression" },
 	{ REG_ECOLLATE,	"REG_ECOLLATE",	"invalid collating element" },
 	{ REG_ECTYPE,	"REG_ECTYPE",	"invalid character class" },
@@ -82,12 +82,12 @@ static struct rerr {
 };
 
 /*
- - llvm_regerror - the interface to error numbers
- = extern size_t llvm_regerror(int, const llvm_regex_t *, char *, size_t);
+ - llvm37_regerror - the interface to error numbers
+ = extern size_t llvm37_regerror(int, const llvm37_regex_t *, char *, size_t);
  */
 /* ARGSUSED */
 size_t
-llvm_regerror(int errcode, const llvm_regex_t *preg, _Out_writes_all_(errbuf_size) char *errbuf, size_t errbuf_size)
+llvm37_regerror(int errcode, const llvm37_regex_t *preg, _Out_writes_all_(errbuf_size) char *errbuf, size_t errbuf_size)
 {
 	struct rerr *r;
 	size_t len;
@@ -106,7 +106,7 @@ llvm_regerror(int errcode, const llvm_regex_t *preg, _Out_writes_all_(errbuf_siz
 		if (errcode&REG_ITOA) {
 			if (r->code != 0) {
 				assert(strlen(r->name) < sizeof(convbuf));
-				(void) llvm_strlcpy(convbuf, r->name, sizeof convbuf);
+				(void) llvm37_strlcpy(convbuf, r->name, sizeof convbuf);
 			} else
                           // Begin HLSL Change
 #ifdef _WIN32
@@ -124,7 +124,7 @@ llvm_regerror(int errcode, const llvm_regex_t *preg, _Out_writes_all_(errbuf_siz
 
 	len = strlen(s) + 1;
 	if (errbuf_size > 0) {
-		llvm_strlcpy(errbuf, s, errbuf_size);
+		llvm37_strlcpy(errbuf, s, errbuf_size);
 	}
 
 	return(len);
@@ -135,7 +135,7 @@ llvm_regerror(int errcode, const llvm_regex_t *preg, _Out_writes_all_(errbuf_siz
  */
 static const char *
 regatoi(
-	const llvm_regex_t *preg, 
+	const llvm37_regex_t *preg, 
 	_Out_writes_all_(localbufsize) char *localbuf,
 	int localbufsize)
 {

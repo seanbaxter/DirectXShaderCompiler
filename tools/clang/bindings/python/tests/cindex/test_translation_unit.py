@@ -114,7 +114,7 @@ def test_save_translation_errors():
 
     tu = get_tu('int foo();')
 
-    path = '/does/not/exist/llvm-test.ast'
+    path = '/does/not/exist/llvm37-test.ast'
     assert not os.path.exists(os.path.dirname(path))
 
     try:

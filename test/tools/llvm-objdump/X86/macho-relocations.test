@@ -1,4 +1,4 @@
-RUN: llvm-objdump -macho -r %p/Inputs/hello.obj.macho-x86_64 | FileCheck %s
+RUN: llvm37-objdump -macho -r %p/Inputs/hello.obj.macho-x86_64 | FileCheck %s
 
 CHECK: RELOCATION RECORDS FOR [__text]:
 CHECK: 0000000000000027 X86_64_RELOC_BRANCH _printf

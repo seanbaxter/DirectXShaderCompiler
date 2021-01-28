@@ -61,7 +61,7 @@ define void @test_load_cast_combine_loop(float* %src, i32* %dst, i32 %n) {
 ; Ensure (cast (load (...))) -> (load (cast (...))) preserves loop access
 ; metadata.
 ; CHECK-LABEL: @test_load_cast_combine_loop(
-; CHECK: load i32, i32* %{{.*}}, !llvm.mem.parallel_loop_access !1
+; CHECK: load i32, i32* %{{.*}}, !llvm37.mem.parallel_loop_access !1
 entry:
   br label %loop
 
@@ -69,12 +69,12 @@ loop:
   %i = phi i32 [ 0, %entry ], [ %i.next, %loop ]
   %src.gep = getelementptr inbounds float, float* %src, i32 %i
   %dst.gep = getelementptr inbounds i32, i32* %dst, i32 %i
-  %l = load float, float* %src.gep, !llvm.mem.parallel_loop_access !1
+  %l = load float, float* %src.gep, !llvm37.mem.parallel_loop_access !1
   %c = bitcast float %l to i32
   store i32 %c, i32* %dst.gep
   %i.next = add i32 %i, 1
   %cmp = icmp slt i32 %i.next, %n
-  br i1 %cmp, label %loop, label %exit, !llvm.loop !1
+  br i1 %cmp, label %loop, label %exit, !llvm37.loop !1
 
 exit:
   ret void

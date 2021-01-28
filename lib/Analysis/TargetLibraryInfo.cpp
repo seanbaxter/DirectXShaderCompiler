@@ -1,6 +1,6 @@
 //===-- TargetLibraryInfo.cpp - Runtime library information ----------------==//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,10 +11,10 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Analysis/TargetLibraryInfo.h"
-#include "llvm/ADT/Triple.h"
-#include "llvm/Support/CommandLine.h"
-using namespace llvm;
+#include "llvm37/Analysis/TargetLibraryInfo.h"
+#include "llvm37/ADT/Triple.h"
+#include "llvm37/Support/CommandLine.h"
+using namespace llvm37;
 
 #if 0 // HLSL Change Starts - option pending
 static cl::opt<TargetLibraryInfoImpl::VectorLibrary> ClVectorLibrary(
@@ -31,7 +31,7 @@ static const TargetLibraryInfoImpl::VectorLibrary ClVectorLibrary = TargetLibrar
 
 const char *const TargetLibraryInfoImpl::StandardNames[LibFunc::NumLibFuncs] = {
 #define TLI_DEFINE_STRING
-#include "llvm/Analysis/TargetLibraryInfo.def"
+#include "llvm37/Analysis/TargetLibraryInfo.def"
 };
 
 static bool hasSinCosPiStret(const Triple &T) {
@@ -61,7 +61,7 @@ static void initialize(TargetLibraryInfoImpl &TLI, const Triple &T,
   // Verify that the StandardNames array is in alphabetical order.
   for (unsigned F = 1; F < LibFunc::NumLibFuncs; ++F) {
     if (strcmp(StandardNames[F-1], StandardNames[F]) >= 0)
-      llvm_unreachable("TargetLibraryInfoImpl function names must be sorted");
+      llvm37_unreachable("TargetLibraryInfoImpl function names must be sorted");
   }
 #endif // !NDEBUG
 

@@ -1,6 +1,6 @@
 //===--- DeclGroup.cpp - Classes for representing groups of Decls -*- C++ -*-==//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -14,15 +14,15 @@
 #include "clang/AST/DeclGroup.h"
 #include "clang/AST/ASTContext.h"
 #include "clang/AST/Decl.h"
-#include "llvm/Support/Allocator.h"
+#include "llvm37/Support/Allocator.h"
 using namespace clang;
 
 DeclGroup* DeclGroup::Create(ASTContext &C, Decl **Decls, unsigned NumDecls) {
-  static_assert(sizeof(DeclGroup) % llvm::AlignOf<void *>::Alignment == 0,
+  static_assert(sizeof(DeclGroup) % llvm37::AlignOf<void *>::Alignment == 0,
                 "Trailing data is unaligned!");
   assert(NumDecls > 1 && "Invalid DeclGroup");
   unsigned Size = sizeof(DeclGroup) + sizeof(Decl*) * NumDecls;
-  void* Mem = C.Allocate(Size, llvm::AlignOf<DeclGroup>::Alignment);
+  void* Mem = C.Allocate(Size, llvm37::AlignOf<DeclGroup>::Alignment);
   new (Mem) DeclGroup(NumDecls, Decls);
   return static_cast<DeclGroup*>(Mem);
 }

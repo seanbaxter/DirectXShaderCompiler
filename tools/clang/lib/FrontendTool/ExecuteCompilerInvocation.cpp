@@ -1,6 +1,6 @@
 //===--- ExecuteCompilerInvocation.cpp ------------------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -24,12 +24,12 @@
 #include "clang/Frontend/Utils.h"
 #include "clang/Rewrite/Frontend/FrontendActions.h"
 #include "clang/StaticAnalyzer/Frontend/FrontendActions.h"
-#include "llvm/Option/OptTable.h"
-#include "llvm/Option/Option.h"
-#include "llvm/Support/DynamicLibrary.h"
-#include "llvm/Support/ErrorHandling.h"
+#include "llvm37/Option/OptTable.h"
+#include "llvm37/Option/Option.h"
+#include "llvm37/Support/DynamicLibrary.h"
+#include "llvm37/Support/ErrorHandling.h"
 using namespace clang;
-using namespace llvm::opt;
+using namespace llvm37::opt;
 
 static FrontendAction *CreateFrontendBaseAction(CompilerInstance &CI) {
   using namespace clang::frontend;
@@ -46,8 +46,8 @@ static FrontendAction *CreateFrontendBaseAction(CompilerInstance &CI) {
   case EmitAssembly:           return new EmitAssemblyAction();
   case EmitBC:                 return new EmitBCAction();
   case EmitHTML:               return new HTMLPrintAction();
-  case EmitLLVM:               return new EmitLLVMAction();
-  case EmitLLVMOnly:           return new EmitLLVMOnlyAction();
+  case EmitLLVM37:               return new EmitLLVM37Action();
+  case EmitLLVM37Only:           return new EmitLLVM37OnlyAction();
   case EmitCodeGenOnly:        return new EmitCodeGenOnlyAction();
   case EmitObj:                return new EmitObjAction();
   case FixIt:                  return new FixItAction();
@@ -109,7 +109,7 @@ static FrontendAction *CreateFrontendBaseAction(CompilerInstance &CI) {
   CI.getDiagnostics().Report(diag::err_fe_action_not_available) << Action;
   return 0;
 #else
-  llvm_unreachable("Invalid program action!");
+  llvm37_unreachable("Invalid program action!");
 #endif
 }
 
@@ -167,8 +167,8 @@ bool clang::ExecuteCompilerInvocation(CompilerInstance *Clang) {
   // Honor -help.
   if (Clang->getFrontendOpts().ShowHelp) {
     std::unique_ptr<OptTable> Opts(driver::createDriverOptTable());
-    Opts->PrintHelp(llvm::outs(), "clang -cc1",
-                    "LLVM 'Clang' Compiler: http://clang.llvm.org", "",
+    Opts->PrintHelp(llvm37::outs(), "clang -cc1",
+                    "LLVM37 'Clang' Compiler: http://clang.llvm37.org", "",
                     /*Include=*/ driver::options::CC1Option, /*Exclude=*/ 0);
     return true;
   }
@@ -177,7 +177,7 @@ bool clang::ExecuteCompilerInvocation(CompilerInstance *Clang) {
   //
   // FIXME: Use a better -version message?
   if (Clang->getFrontendOpts().ShowVersion) {
-    llvm::cl::PrintVersionMessage();
+    llvm37::cl::PrintVersionMessage();
     return true;
   }
 
@@ -186,30 +186,30 @@ bool clang::ExecuteCompilerInvocation(CompilerInstance *Clang) {
          e = Clang->getFrontendOpts().Plugins.size(); i != e; ++i) {
     const std::string &Path = Clang->getFrontendOpts().Plugins[i];
     std::string Error;
-    if (llvm::sys::DynamicLibrary::LoadLibraryPermanently(Path.c_str(), &Error))
+    if (llvm37::sys::DynamicLibrary::LoadLibraryPermanently(Path.c_str(), &Error))
       Clang->getDiagnostics().Report(diag::err_fe_unable_to_load_plugin)
         << Path << Error;
   }
 
-  // Honor -mllvm.
+  // Honor -mllvm37.
   //
   // FIXME: Remove this, one day.
   // This should happen AFTER plugins have been loaded!
-  if (!Clang->getFrontendOpts().LLVMArgs.empty()) {
-    unsigned NumArgs = Clang->getFrontendOpts().LLVMArgs.size();
-    auto Args = llvm::make_unique<const char*[]>(NumArgs + 2);
-    Args[0] = "clang (LLVM option parsing)";
+  if (!Clang->getFrontendOpts().LLVM37Args.empty()) {
+    unsigned NumArgs = Clang->getFrontendOpts().LLVM37Args.size();
+    auto Args = llvm37::make_unique<const char*[]>(NumArgs + 2);
+    Args[0] = "clang (LLVM37 option parsing)";
     for (unsigned i = 0; i != NumArgs; ++i)
-      Args[i + 1] = Clang->getFrontendOpts().LLVMArgs[i].c_str();
+      Args[i + 1] = Clang->getFrontendOpts().LLVM37Args[i].c_str();
     Args[NumArgs + 1] = nullptr;
-    llvm::cl::ParseCommandLineOptions(NumArgs + 1, Args.get());
+    llvm37::cl::ParseCommandLineOptions(NumArgs + 1, Args.get());
   }
 
 #ifdef CLANG_ENABLE_STATIC_ANALYZER
   // Honor -analyzer-checker-help.
   // This should happen AFTER plugins have been loaded!
   if (Clang->getAnalyzerOpts()->ShowCheckerHelp) {
-    ento::printCheckerHelp(llvm::outs(), Clang->getFrontendOpts().Plugins);
+    ento::printCheckerHelp(llvm37::outs(), Clang->getFrontendOpts().Plugins);
     return true;
   }
 #endif

@@ -1,46 +1,46 @@
 //===-- FunctionLoweringInfo.cpp ------------------------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 //
-// This implements routines for translating functions from LLVM IR into
+// This implements routines for translating functions from LLVM37 IR into
 // Machine IR.
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/CodeGen/FunctionLoweringInfo.h"
-#include "llvm/ADT/PostOrderIterator.h"
-#include "llvm/CodeGen/Analysis.h"
-#include "llvm/CodeGen/MachineFrameInfo.h"
-#include "llvm/CodeGen/MachineFunction.h"
-#include "llvm/CodeGen/MachineInstrBuilder.h"
-#include "llvm/CodeGen/MachineModuleInfo.h"
-#include "llvm/CodeGen/MachineRegisterInfo.h"
-#include "llvm/CodeGen/WinEHFuncInfo.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/DebugInfo.h"
-#include "llvm/IR/DerivedTypes.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Module.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/MathExtras.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Target/TargetFrameLowering.h"
-#include "llvm/Target/TargetInstrInfo.h"
-#include "llvm/Target/TargetLowering.h"
-#include "llvm/Target/TargetOptions.h"
-#include "llvm/Target/TargetRegisterInfo.h"
-#include "llvm/Target/TargetSubtargetInfo.h"
+#include "llvm37/CodeGen/FunctionLoweringInfo.h"
+#include "llvm37/ADT/PostOrderIterator.h"
+#include "llvm37/CodeGen/Analysis.h"
+#include "llvm37/CodeGen/MachineFrameInfo.h"
+#include "llvm37/CodeGen/MachineFunction.h"
+#include "llvm37/CodeGen/MachineInstrBuilder.h"
+#include "llvm37/CodeGen/MachineModuleInfo.h"
+#include "llvm37/CodeGen/MachineRegisterInfo.h"
+#include "llvm37/CodeGen/WinEHFuncInfo.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/IR/DebugInfo.h"
+#include "llvm37/IR/DerivedTypes.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/MathExtras.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Target/TargetFrameLowering.h"
+#include "llvm37/Target/TargetInstrInfo.h"
+#include "llvm37/Target/TargetLowering.h"
+#include "llvm37/Target/TargetOptions.h"
+#include "llvm37/Target/TargetRegisterInfo.h"
+#include "llvm37/Target/TargetSubtargetInfo.h"
 #include <algorithm>
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "function-lowering-info"
 
@@ -155,7 +155,7 @@ void FunctionLoweringInfo::set(const Function &fn, MachineFunction &mf,
         }
       }
 
-      // Look for calls to the @llvm.va_start intrinsic. We can omit some
+      // Look for calls to the @llvm37.va_start intrinsic. We can omit some
       // prologue boilerplate for variadic functions that don't examine their
       // arguments.
       if (const auto *II = dyn_cast<IntrinsicInst>(I)) {
@@ -177,7 +177,7 @@ void FunctionLoweringInfo::set(const Function &fn, MachineFunction &mf,
             !StaticAllocaMap.count(cast<AllocaInst>(I)))
           InitializeRegForValue(I);
 
-      // Collect llvm.dbg.declare information. This is done now instead of
+      // Collect llvm37.dbg.declare information. This is done now instead of
       // during the initial isel pass through the IR so that it is done
       // in a predictable order.
       if (const DbgDeclareInst *DI = dyn_cast<DbgDeclareInst>(I)) {
@@ -208,7 +208,7 @@ void FunctionLoweringInfo::set(const Function &fn, MachineFunction &mf,
       PreferredExtendType[I] = getPreferredExtendForValue(I);
     }
 
-  // Create an initial MachineBasicBlock for each LLVM BasicBlock in F.  This
+  // Create an initial MachineBasicBlock for each LLVM37 BasicBlock in F.  This
   // also creates the initial PHI MachineInstrs, though none of the input
   // operands are populated.
   for (BB = Fn->begin(); BB != EB; ++BB) {
@@ -222,7 +222,7 @@ void FunctionLoweringInfo::set(const Function &fn, MachineFunction &mf,
     if (BB->hasAddressTaken())
       MBB->setHasAddressTaken();
 
-    // Create Machine PHI nodes for LLVM PHI nodes, lowering them as
+    // Create Machine PHI nodes for LLVM37 PHI nodes, lowering them as
     // appropriate.
     for (BasicBlock::const_iterator I = BB->begin();
          const PHINode *PN = dyn_cast<PHINode>(I); ++I) {
@@ -292,7 +292,7 @@ void FunctionLoweringInfo::addSEHHandlersForLPads(
     ArrayRef<const LandingPadInst *> LPads) {
   MachineModuleInfo &MMI = MF->getMMI();
 
-  // Iterate over all landing pads with llvm.eh.actions calls.
+  // Iterate over all landing pads with llvm37.eh.actions calls.
   for (const LandingPadInst *LP : LPads) {
     const IntrinsicInst *ActionsCall =
         dyn_cast<IntrinsicInst>(LP->getNextNode());
@@ -300,7 +300,7 @@ void FunctionLoweringInfo::addSEHHandlersForLPads(
         ActionsCall->getIntrinsicID() != Intrinsic::eh_actions)
       continue;
 
-    // Parse the llvm.eh.actions call we found.
+    // Parse the llvm37.eh.actions call we found.
     MachineBasicBlock *LPadMBB = MBBMap[LP->getParent()];
     SmallVector<std::unique_ptr<ActionHandler>, 4> Actions;
     parseEHActions(ActionsCall, Actions);
@@ -525,7 +525,7 @@ int FunctionLoweringInfo::getArgumentFrameIndex(const Argument *A) {
 /// usesVAFloatArgument flag if so. This flag is used to emit an undefined
 /// reference to _fltused on Windows, which will link in MSVCRT's
 /// floating-point support.
-void llvm::ComputeUsesVAFloatArgument(const CallInst &I,
+void llvm37::ComputeUsesVAFloatArgument(const CallInst &I,
                                       MachineModuleInfo *MMI)
 {
   FunctionType *FT = cast<FunctionType>(
@@ -545,7 +545,7 @@ void llvm::ComputeUsesVAFloatArgument(const CallInst &I,
 
 /// AddLandingPadInfo - Extract the exception handling information from the
 /// landingpad instruction and add them to the specified machine module info.
-void llvm::AddLandingPadInfo(const LandingPadInst &I, MachineModuleInfo &MMI,
+void llvm37::AddLandingPadInfo(const LandingPadInst &I, MachineModuleInfo &MMI,
                              MachineBasicBlock *MBB) {
   MMI.addPersonality(
       MBB,

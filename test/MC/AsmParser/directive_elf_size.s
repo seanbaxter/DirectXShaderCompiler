@@ -1,4 +1,4 @@
-# RUN: llvm-mc -triple i386-pc-linux-gnu %s | FileCheck %s
+# RUN: llvm37-mc -triple i386-pc-linux-gnu %s | FileCheck %s
 
 a:
 	ret

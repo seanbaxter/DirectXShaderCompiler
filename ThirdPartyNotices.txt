@@ -10,10 +10,10 @@ such components are set forth below. Microsoft reserves all rights not
 expressly granted herein, whether by implication, estoppel or otherwise.
 
 
-* LLVM
+* LLVM37
 
 ==============================================================================
-LLVM Release License
+LLVM37 Release License
 ==============================================================================
 University of Illinois/NCSA
 Open Source License
@@ -23,11 +23,11 @@ All rights reserved.
 
 Developed by:
 
-    LLVM Team
+    LLVM37 Team
 
     University of Illinois at Urbana-Champaign
 
-    http://llvm.org
+    http://llvm37.org
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
 this software and associated documentation files (the "Software"), to deal with
@@ -43,7 +43,7 @@ so, subject to the following conditions:
       this list of conditions and the following disclaimers in the
       documentation and/or other materials provided with the distribution.
 
-    * Neither the names of the LLVM Team, University of Illinois at
+    * Neither the names of the LLVM37 Team, University of Illinois at
       Urbana-Champaign, nor the names of its contributors may be used to
       endorse or promote products derived from this Software without specific
       prior written permission.
@@ -57,16 +57,16 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS WITH THE
 SOFTWARE.
 
 ==============================================================================
-Copyrights and Licenses for Third Party Software Distributed with LLVM:
+Copyrights and Licenses for Third Party Software Distributed with LLVM37:
 ==============================================================================
-The LLVM software contains code written by third parties.  Such software will
+The LLVM37 software contains code written by third parties.  Such software will
 have its own individual LICENSE.TXT file in the directory in which it appears.
 This file will describe the copyrights, license, and restrictions which apply
 to that code.
 
 The disclaimer of warranty in the University of Illinois Open Source License
-applies to all code in the LLVM Distribution, and nothing in any of the
-other licenses gives permission to use the names of the LLVM Team or the
+applies to all code in the LLVM37 Distribution, and nothing in any of the
+other licenses gives permission to use the names of the LLVM37 Team or the
 University of Illinois to endorse or promote products derived from this
 Software.
 
@@ -75,15 +75,15 @@ licenses, and/or restrictions:
 
 Program             Directory
 -------             ---------
-OpenBSD regex       llvm/lib/Support/{reg*, COPYRIGHT.regex}
-pyyaml tests        llvm/test/YAMLParser/{*.data, LICENSE.TXT}
-md5 contributions   llvm/lib/Support/MD5.cpp llvm/include/llvm/Support/MD5.h
+OpenBSD regex       llvm37/lib/Support/{reg*, COPYRIGHT.regex}
+pyyaml tests        llvm37/test/YAMLParser/{*.data, LICENSE.TXT}
+md5 contributions   llvm37/lib/Support/MD5.cpp llvm37/include/llvm37/Support/MD5.h
 
 
 * tools\clang
 
 ==============================================================================
-LLVM Release License
+LLVM37 Release License
 ==============================================================================
 University of Illinois/NCSA
 Open Source License
@@ -93,11 +93,11 @@ All rights reserved.
 
 Developed by:
 
-    LLVM Team
+    LLVM37 Team
 
     University of Illinois at Urbana-Champaign
 
-    http://llvm.org
+    http://llvm37.org
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
 this software and associated documentation files (the "Software"), to deal with
@@ -113,7 +113,7 @@ so, subject to the following conditions:
       this list of conditions and the following disclaimers in the
       documentation and/or other materials provided with the distribution.
 
-    * Neither the names of the LLVM Team, University of Illinois at
+    * Neither the names of the LLVM37 Team, University of Illinois at
       Urbana-Champaign, nor the names of its contributors may be used to
       endorse or promote products derived from this Software without specific
       prior written permission.
@@ -127,14 +127,14 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS WITH THE
 SOFTWARE.
 
 ==============================================================================
-The LLVM software contains code written by third parties.  Such software will
+The LLVM37 software contains code written by third parties.  Such software will
 have its own individual LICENSE.TXT file in the directory in which it appears.
 This file will describe the copyrights, license, and restrictions which apply
 to that code.
 
 The disclaimer of warranty in the University of Illinois Open Source License
-applies to all code in the LLVM Distribution, and nothing in any of the
-other licenses gives permission to use the names of the LLVM Team or the
+applies to all code in the LLVM37 Distribution, and nothing in any of the
+other licenses gives permission to use the names of the LLVM37 Team or the
 University of Illinois to endorse or promote products derived from this
 Software.
 
@@ -161,11 +161,11 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
-* include\llvm\Support
+* include\llvm37\Support
 
-LLVM System Interface Library
+LLVM37 System Interface Library
 -------------------------------------------------------------------------------
-The LLVM System Interface Library is licensed under the Illinois Open Source
+The LLVM37 System Interface Library is licensed under the Illinois Open Source
 License and has the following additional copyright:
 
 Copyright (C) 2004 eXtensible Systems, Inc.

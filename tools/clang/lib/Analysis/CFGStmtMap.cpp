@@ -1,6 +1,6 @@
 //===--- CFGStmtMap.h - Map from Stmt* to CFGBlock* -----------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -12,14 +12,14 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/ADT/DenseMap.h"
+#include "llvm37/ADT/DenseMap.h"
 #include "clang/AST/ParentMap.h"
 #include "clang/Analysis/CFG.h"
 #include "clang/Analysis/CFGStmtMap.h"
 
 using namespace clang;
 
-typedef llvm::DenseMap<const Stmt*, CFGBlock*> SMap;
+typedef llvm37::DenseMap<const Stmt*, CFGBlock*> SMap;
 static SMap *AsMap(void *m) { return (SMap*) m; }
 
 CFGStmtMap::~CFGStmtMap() { delete AsMap(M); }

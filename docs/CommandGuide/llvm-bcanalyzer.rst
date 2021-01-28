@@ -1,46 +1,46 @@
-llvm-bcanalyzer - LLVM bitcode analyzer
+llvm37-bcanalyzer - LLVM37 bitcode analyzer
 =======================================
 
 SYNOPSIS
 --------
 
-:program:`llvm-bcanalyzer` [*options*] [*filename*]
+:program:`llvm37-bcanalyzer` [*options*] [*filename*]
 
 DESCRIPTION
 -----------
 
-The :program:`llvm-bcanalyzer` command is a small utility for analyzing bitcode
+The :program:`llvm37-bcanalyzer` command is a small utility for analyzing bitcode
 files.  The tool reads a bitcode file (such as generated with the
-:program:`llvm-as` tool) and produces a statistical report on the contents of
+:program:`llvm37-as` tool) and produces a statistical report on the contents of
 the bitcode file.  The tool can also dump a low level but human readable
 version of the bitcode file.  This tool is probably not of much interest or
 utility except for those working directly with the bitcode file format.  Most
-LLVM users can just ignore this tool.
+LLVM37 users can just ignore this tool.
 
-If *filename* is omitted or is ``-``, then :program:`llvm-bcanalyzer` reads its
+If *filename* is omitted or is ``-``, then :program:`llvm37-bcanalyzer` reads its
 input from standard input.  This is useful for combining the tool into a
 pipeline.  Output is written to the standard output.
 
 OPTIONS
 -------
 
-.. program:: llvm-bcanalyzer
+.. program:: llvm37-bcanalyzer
 
 .. option:: -nodetails
 
- Causes :program:`llvm-bcanalyzer` to abbreviate its output by writing out only
+ Causes :program:`llvm37-bcanalyzer` to abbreviate its output by writing out only
  a module level summary.  The details for individual functions are not
  displayed.
 
 .. option:: -dump
 
- Causes :program:`llvm-bcanalyzer` to dump the bitcode in a human readable
- format.  This format is significantly different from LLVM assembly and
+ Causes :program:`llvm37-bcanalyzer` to dump the bitcode in a human readable
+ format.  This format is significantly different from LLVM37 assembly and
  provides details about the encoding of the bitcode file.
 
 .. option:: -verify
 
- Causes :program:`llvm-bcanalyzer` to verify the module produced by reading the
+ Causes :program:`llvm37-bcanalyzer` to verify the module produced by reading the
  bitcode.  This ensures that the statistics generated are based on a consistent
  module.
 
@@ -51,13 +51,13 @@ OPTIONS
 EXIT STATUS
 -----------
 
-If :program:`llvm-bcanalyzer` succeeds, it will exit with 0.  Otherwise, if an
+If :program:`llvm37-bcanalyzer` succeeds, it will exit with 0.  Otherwise, if an
 error occurs, it will exit with a non-zero value, usually 1.
 
 SUMMARY OUTPUT DEFINITIONS
 --------------------------
 
-The following items are always printed by llvm-bcanalyzer.  They comprize the
+The following items are always printed by llvm37-bcanalyzer.  They comprize the
 summary output.
 
 **Bitcode Analysis Of Module**
@@ -67,7 +67,7 @@ summary output.
 
 **Bitcode Version Number**
 
- The bitcode version (not LLVM version) of the file read by the analyzer.
+ The bitcode version (not LLVM37 version) of the file read by the analyzer.
 
 **File Size**
 
@@ -301,5 +301,5 @@ The detailed output provides additional information on a per-function basis.
 SEE ALSO
 --------
 
-:doc:`/CommandGuide/llvm-dis`, :doc:`/BitCodeFormat`
+:doc:`/CommandGuide/llvm37-dis`, :doc:`/BitCodeFormat`
 

@@ -1,4 +1,4 @@
-; RUN: llvm-as < %s | llvm-dis | not grep getelementptr
+; RUN: llvm37-as < %s | llvm37-dis | not grep getelementptr
 ; RUN: verify-uselistorder %s
 
 @A = external global { float }          ; <{ float }*> [#uses=2]

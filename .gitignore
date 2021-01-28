@@ -57,7 +57,7 @@ build.x86
 # External projects that are tracked independently.
 external/*
 # Clang, which is tracked independently.
-# HLSL Change - track clang together with llvm in this git repo
+# HLSL Change - track clang together with llvm37 in this git repo
 # tools/clang
 # LLDB, which is tracked independently.
 tools/lldb
@@ -75,5 +75,5 @@ WexLogFileOutput/*
 #==============================================================================#
 # Files created in tree by the Go bindings.
 #==============================================================================#
-bindings/go/llvm/llvm_config.go
-bindings/go/llvm/workdir
+bindings/go/llvm37/llvm37_config.go
+bindings/go/llvm37/workdir

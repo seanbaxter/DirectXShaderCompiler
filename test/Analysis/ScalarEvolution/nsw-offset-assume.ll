@@ -11,7 +11,7 @@ define void @foo(i32 %no, double* nocapture %d, double* nocapture %q) nounwind {
 entry:
   %n = and i32 %no, 4294967294
   %0 = icmp sgt i32 %n, 0                         ; <i1> [#uses=1]
-  tail call void @llvm.assume(i1 %0)
+  tail call void @llvm37.assume(i1 %0)
   br label %bb.nph
 
 bb.nph:                                           ; preds = %entry
@@ -75,7 +75,7 @@ return:                                           ; preds = %bb1.return_crit_edg
   ret void
 }
 
-declare void @llvm.assume(i1) nounwind
+declare void @llvm37.assume(i1) nounwind
 
 ; Note: Without the preheader assume, there is an 'smax' in the
 ; backedge-taken count expression:

@@ -1,6 +1,6 @@
 //===- AsmParser.cpp - Parser for Assembly Files --------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,40 +11,40 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/ADT/APFloat.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/ADT/StringMap.h"
-#include "llvm/ADT/Twine.h"
-#include "llvm/MC/MCAsmInfo.h"
-#include "llvm/MC/MCContext.h"
-#include "llvm/MC/MCDwarf.h"
-#include "llvm/MC/MCExpr.h"
-#include "llvm/MC/MCInstPrinter.h"
-#include "llvm/MC/MCInstrInfo.h"
-#include "llvm/MC/MCObjectFileInfo.h"
-#include "llvm/MC/MCParser/AsmCond.h"
-#include "llvm/MC/MCParser/AsmLexer.h"
-#include "llvm/MC/MCParser/MCAsmParser.h"
-#include "llvm/MC/MCParser/MCAsmParserUtils.h"
-#include "llvm/MC/MCParser/MCParsedAsmOperand.h"
-#include "llvm/MC/MCRegisterInfo.h"
-#include "llvm/MC/MCSectionMachO.h"
-#include "llvm/MC/MCStreamer.h"
-#include "llvm/MC/MCSymbol.h"
-#include "llvm/MC/MCTargetAsmParser.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/MathExtras.h"
-#include "llvm/Support/MemoryBuffer.h"
-#include "llvm/Support/SourceMgr.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/APFloat.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/ADT/StringMap.h"
+#include "llvm37/ADT/Twine.h"
+#include "llvm37/MC/MCAsmInfo.h"
+#include "llvm37/MC/MCContext.h"
+#include "llvm37/MC/MCDwarf.h"
+#include "llvm37/MC/MCExpr.h"
+#include "llvm37/MC/MCInstPrinter.h"
+#include "llvm37/MC/MCInstrInfo.h"
+#include "llvm37/MC/MCObjectFileInfo.h"
+#include "llvm37/MC/MCParser/AsmCond.h"
+#include "llvm37/MC/MCParser/AsmLexer.h"
+#include "llvm37/MC/MCParser/MCAsmParser.h"
+#include "llvm37/MC/MCParser/MCAsmParserUtils.h"
+#include "llvm37/MC/MCParser/MCParsedAsmOperand.h"
+#include "llvm37/MC/MCRegisterInfo.h"
+#include "llvm37/MC/MCSectionMachO.h"
+#include "llvm37/MC/MCStreamer.h"
+#include "llvm37/MC/MCSymbol.h"
+#include "llvm37/MC/MCTargetAsmParser.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/MathExtras.h"
+#include "llvm37/Support/MemoryBuffer.h"
+#include "llvm37/Support/SourceMgr.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <cctype>
 #include <deque>
 #include <set>
 #include <string>
 #include <vector>
-using namespace llvm;
+using namespace llvm37;
 
 MCAsmParserSemaCallback::~MCAsmParserSemaCallback() {}
 
@@ -489,7 +489,7 @@ private:
 };
 }
 
-namespace llvm {
+namespace llvm37 {
 
 extern MCAsmParserExtension *createDarwinAsmParser();
 extern MCAsmParserExtension *createELFAsmParser();
@@ -1012,7 +1012,7 @@ AsmParser::applyModifierToExpr(const MCExpr *E,
   }
   }
 
-  llvm_unreachable("Invalid expression kind!");
+  llvm37_unreachable("Invalid expression kind!");
 }
 
 /// \brief Parse an expression and return it.
@@ -3854,7 +3854,7 @@ bool AsmParser::parseDirectiveIf(SMLoc DirectiveLoc, DirectiveKind DirKind) {
 
     switch (DirKind) {
     default:
-      llvm_unreachable("unsupported directive");
+      llvm37_unreachable("unsupported directive");
     case DK_IF:
     case DK_IFNE:
       break;
@@ -4533,7 +4533,7 @@ static int __cdecl rewritesSort(const AsmRewrite *AsmRewriteA,
   if (AsmRewritePrecedence[AsmRewriteA->Kind] <
       AsmRewritePrecedence[AsmRewriteB->Kind])
     return 1;
-  llvm_unreachable("Unstable rewrite sort.");
+  llvm37_unreachable("Unstable rewrite sort.");
 }
 
 bool AsmParser::parseMSInlineAsm(
@@ -4740,7 +4740,7 @@ bool AsmParser::parseMSInlineAsm(
   return false;
 }
 
-namespace llvm {
+namespace llvm37 {
 namespace MCParserUtils {
 
 /// Returns whether the given symbol is used anywhere in the given expression,
@@ -4767,7 +4767,7 @@ static bool isSymbolUsedInExpression(const MCSymbol *Sym, const MCExpr *Value) {
         Sym, static_cast<const MCUnaryExpr *>(Value)->getSubExpr());
   }
 
-  llvm_unreachable("Unknown expr kind!");
+  llvm37_unreachable("Unknown expr kind!");
 }
 
 bool parseAssignmentExpression(StringRef Name, bool allow_redef,
@@ -4835,10 +4835,10 @@ bool parseAssignmentExpression(StringRef Name, bool allow_redef,
 }
 
 } // namespace MCParserUtils
-} // namespace llvm
+} // namespace llvm37
 
 /// \brief Create an MCAsmParser instance.
-MCAsmParser *llvm::createMCAsmParser(SourceMgr &SM, MCContext &C,
+MCAsmParser *llvm37::createMCAsmParser(SourceMgr &SM, MCContext &C,
                                      MCStreamer &Out, const MCAsmInfo &MAI) {
   return new AsmParser(SM, C, Out, MAI);
 }

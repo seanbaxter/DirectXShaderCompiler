@@ -1122,7 +1122,7 @@ specified for the subsequent loop. The directive allows vectorization,
 interleaving, and unrolling to be enabled or disabled. Vector width as well
 as interleave and unrolling count can be manually specified. See
 `language extensions
-<http://clang.llvm.org/docs/LanguageExtensions.html#extensions-for-loop-hint-optimizations>`_
+<http://clang.llvm37.org/docs/LanguageExtensions.html#extensions-for-loop-hint-optimizations>`_
 for details.
 
 
@@ -1177,7 +1177,7 @@ Specifying ``#pragma nounroll`` indicates that the loop should not be unrolled:
 ``#pragma clang loop unroll_count(_value_)`` respectively. ``#pragma nounroll``
 is equivalent to ``#pragma clang loop unroll(disable)``.  See
 `language extensions
-<http://clang.llvm.org/docs/LanguageExtensions.html#extensions-for-loop-hint-optimizations>`_
+<http://clang.llvm37.org/docs/LanguageExtensions.html#extensions-for-loop-hint-optimizations>`_
 for further details including limitations of the unroll hints.
 
 

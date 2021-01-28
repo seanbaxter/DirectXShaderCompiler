@@ -1986,7 +1986,7 @@ entry:
 ; CHECK-LABEL: atomic_thread_fence_seq_cst
 ; CHECK: call void @__tsan_atomic_thread_fence(i32 5), !dbg
 
-!llvm.module.flags = !{!0, !1, !2}
+!llvm37.module.flags = !{!0, !1, !2}
 !0 = !{i32 2, !"Dwarf Version", i32 4}
 !1 = !{i32 2, !"Debug Info Version", i32 3}
 !2 = !{i32 1, !"PIC Level", i32 2}

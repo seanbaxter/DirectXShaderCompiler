@@ -1,6 +1,6 @@
-//===----- RemoteTargetExternal.h - LLVM out-of-process JIT execution -----===//
+//===----- RemoteTargetExternal.h - LLVM37 out-of-process JIT execution -----===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -12,21 +12,21 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_TOOLS_LLI_REMOTETARGETEXTERNAL_H
-#define LLVM_TOOLS_LLI_REMOTETARGETEXTERNAL_H
+#ifndef LLVM37_TOOLS_LLI_REMOTETARGETEXTERNAL_H
+#define LLVM37_TOOLS_LLI_REMOTETARGETEXTERNAL_H
 
 #include "RPCChannel.h"
 #include "RemoteTarget.h"
 #include "RemoteTargetMessage.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/ADT/StringRef.h"
-#include "llvm/Config/config.h"
-#include "llvm/Support/DataTypes.h"
-#include "llvm/Support/Memory.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/ADT/StringRef.h"
+#include "llvm37/Config/config.h"
+#include "llvm37/Support/DataTypes.h"
+#include "llvm37/Support/Memory.h"
 #include <stdlib.h>
 #include <string>
 
-namespace llvm {
+namespace llvm37 {
 
 class RemoteTargetExternal : public RemoteTarget {
   RPCChannel RPC;
@@ -138,6 +138,6 @@ private:
   void AppendRead(void *Data, uint32_t Size);
 };
 
-} // end namespace llvm
+} // end namespace llvm37
 
 #endif

@@ -16,9 +16,9 @@
 #include <map>
 #include "dxc/dxcapi.h"
 #include "dxc/Support/dxcapi.use.h"
-#include "llvm/ADT/ArrayRef.h"
-#include "llvm/ADT/StringRef.h"
-#include "llvm/ADT/StringMap.h"
+#include "llvm37/ADT/ArrayRef.h"
+#include "llvm37/ADT/StringRef.h"
+#include "llvm37/ADT/StringMap.h"
 
 namespace hlsl {
 namespace options {
@@ -48,7 +48,7 @@ public:
   bool AllowEmptyInput;
 
   /// VariableTable - This holds all the current filecheck variables.
-  llvm::StringMap<std::string> VariableTable;
+  llvm37::StringMap<std::string> VariableTable;
 
   /// String to read in place of standard input.
   std::string InputForStdin;
@@ -155,7 +155,7 @@ std::string BlobToUtf8(_In_ IDxcBlob *pBlob);
 std::wstring BlobToUtf16(_In_ IDxcBlob *pBlob);
 void CheckOperationSucceeded(IDxcOperationResult *pResult, IDxcBlob **ppBlob);
 bool CheckOperationResultMsgs(IDxcOperationResult *pResult,
-                              llvm::ArrayRef<LPCSTR> pErrorMsgs,
+                              llvm37::ArrayRef<LPCSTR> pErrorMsgs,
                               bool maySucceedAnyway, bool bRegex);
 bool CheckOperationResultMsgs(IDxcOperationResult *pResult,
                               const LPCSTR *pErrorMsgs, size_t errorMsgCount,
@@ -182,7 +182,7 @@ void VerifyCompileOK(dxc::DxcDllSupport &dllSupport, LPCSTR pText,
                      _Outptr_ IDxcBlob **ppResult);
 
 HRESULT GetVersion(dxc::DxcDllSupport& DllSupport, REFCLSID clsid, unsigned &Major, unsigned &Minor);
-bool ParseTargetProfile(llvm::StringRef targetProfile, llvm::StringRef &outStage, unsigned &outMajor, unsigned &outMinor);
+bool ParseTargetProfile(llvm37::StringRef targetProfile, llvm37::StringRef &outStage, unsigned &outMajor, unsigned &outMinor);
 
 class VersionSupportInfo {
 private:

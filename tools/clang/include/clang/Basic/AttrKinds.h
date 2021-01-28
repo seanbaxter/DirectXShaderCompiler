@@ -1,6 +1,6 @@
 //===----- Attr.h - Enum values for C Attribute Kinds ----------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -12,8 +12,8 @@
 ///
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_BASIC_ATTRKINDS_H
-#define LLVM_CLANG_BASIC_ATTRKINDS_H
+#ifndef LLVM37_CLANG_BASIC_ATTRKINDS_H
+#define LLVM37_CLANG_BASIC_ATTRKINDS_H
 
 namespace clang {
 

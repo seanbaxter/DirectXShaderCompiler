@@ -1,4 +1,4 @@
-// RUN: llvm-tblgen %s -o -
+// RUN: llvm37-tblgen %s -o -
 // XFAIL: vg_leak
 
 class bar {

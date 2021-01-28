@@ -1,6 +1,6 @@
 //===- unittests/AST/CommentLexer.cpp ------ Comment lexer tests ----------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -14,11 +14,11 @@
 #include "clang/Basic/DiagnosticOptions.h"
 #include "clang/Basic/FileManager.h"
 #include "clang/Basic/SourceManager.h"
-#include "llvm/ADT/STLExtras.h"
+#include "llvm37/ADT/STLExtras.h"
 #include "gtest/gtest.h"
 #include <vector>
 
-using namespace llvm;
+using namespace llvm37;
 using namespace clang;
 
 namespace clang {
@@ -40,7 +40,7 @@ protected:
   IntrusiveRefCntPtr<DiagnosticIDs> DiagID;
   DiagnosticsEngine Diags;
   SourceManager SourceMgr;
-  llvm::BumpPtrAllocator Allocator;
+  llvm37::BumpPtrAllocator Allocator;
   CommandTraits Traits;
 
   void lexString(const char *Source, std::vector<Token> &Toks);

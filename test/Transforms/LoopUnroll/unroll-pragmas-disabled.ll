@@ -12,7 +12,7 @@ target triple = "x86_64-unknown-linux-gnu"
 ; metadata should be untouched.
 ;
 ; CHECK-LABEL: @unroll_count_4(
-; CHECK: br i1 {{.*}}, label {{.*}}, label {{.*}}, !llvm.loop ![[LOOP_1:.*]]
+; CHECK: br i1 {{.*}}, label {{.*}}, label {{.*}}, !llvm37.loop ![[LOOP_1:.*]]
 define void @unroll_count_4(i32* nocapture %a) {
 entry:
   br label %for.body
@@ -25,7 +25,7 @@ for.body:                                         ; preds = %for.body, %entry
   store i32 %inc, i32* %arrayidx, align 4
   %indvars.iv.next = add nuw nsw i64 %indvars.iv, 1
   %exitcond = icmp eq i64 %indvars.iv.next, 64
-  br i1 %exitcond, label %for.end, label %for.body, !llvm.loop !1
+  br i1 %exitcond, label %for.end, label %for.body, !llvm37.loop !1
 
 for.end:                                          ; preds = %for.body
   ret void
@@ -43,11 +43,11 @@ for.end:                                          ; preds = %for.body
 ; after unrolling.
 ;
 ; CHECK-LABEL: @unroll_full(
-; CHECK: br i1 {{.*}}, label {{.*}}, label {{.*}}, !llvm.loop ![[LOOP_2:.*]]
+; CHECK: br i1 {{.*}}, label {{.*}}, label {{.*}}, !llvm37.loop ![[LOOP_2:.*]]
 define void @unroll_full(i32* nocapture %a, i32 %b) {
 entry:
   %cmp3 = icmp sgt i32 %b, 0
-  br i1 %cmp3, label %for.body, label %for.end, !llvm.loop !5
+  br i1 %cmp3, label %for.body, label %for.end, !llvm37.loop !5
 
 for.body:                                         ; preds = %entry, %for.body
   %indvars.iv = phi i64 [ %indvars.iv.next, %for.body ], [ 0, %entry ]
@@ -58,7 +58,7 @@ for.body:                                         ; preds = %entry, %for.body
   %indvars.iv.next = add nuw nsw i64 %indvars.iv, 1
   %lftr.wideiv = trunc i64 %indvars.iv.next to i32
   %exitcond = icmp eq i32 %lftr.wideiv, %b
-  br i1 %exitcond, label %for.end, label %for.body, !llvm.loop !5
+  br i1 %exitcond, label %for.end, label %for.body, !llvm37.loop !5
 
 for.end:                                          ; preds = %for.body, %entry
   ret void
@@ -71,7 +71,7 @@ for.end:                                          ; preds = %for.body, %entry
 ; Unroll metadata should not change.
 ;
 ; CHECK-LABEL: @unroll_disable(
-; CHECK: br i1 {{.*}}, label {{.*}}, label {{.*}}, !llvm.loop ![[LOOP_3:.*]]
+; CHECK: br i1 {{.*}}, label {{.*}}, label {{.*}}, !llvm37.loop ![[LOOP_3:.*]]
 define void @unroll_disable(i32* nocapture %a) {
 entry:
   br label %for.body
@@ -84,7 +84,7 @@ for.body:                                         ; preds = %for.body, %entry
   store i32 %inc, i32* %arrayidx, align 4
   %indvars.iv.next = add nuw nsw i64 %indvars.iv, 1
   %exitcond = icmp eq i64 %indvars.iv.next, 64
-  br i1 %exitcond, label %for.end, label %for.body, !llvm.loop !7
+  br i1 %exitcond, label %for.end, label %for.body, !llvm37.loop !7
 
 for.end:                                          ; preds = %for.body
   ret void
@@ -92,18 +92,18 @@ for.end:                                          ; preds = %for.body
 !7 = !{!7, !8}
 !8 = !{!"llvm.loop.unroll.disable"}
 
-; This function contains two loops which share the same llvm.loop metadata node
-; with an llvm.loop.unroll.count 2 hint.  Both loops should be unrolled.  This
+; This function contains two loops which share the same llvm37.loop metadata node
+; with an llvm37.loop.unroll.count 2 hint.  Both loops should be unrolled.  This
 ; verifies that adding disable metadata to a loop after unrolling doesn't affect
-; other loops which previously shared the same llvm.loop metadata.
+; other loops which previously shared the same llvm37.loop metadata.
 ;
 ; CHECK-LABEL: @shared_metadata(
 ; CHECK: store i32
 ; CHECK: store i32
-; CHECK: br i1 {{.*}}, label {{.*}}, label {{.*}}, !llvm.loop ![[LOOP_4:.*]]
+; CHECK: br i1 {{.*}}, label {{.*}}, label {{.*}}, !llvm37.loop ![[LOOP_4:.*]]
 ; CHECK: store i32
 ; CHECK: store i32
-; CHECK: br i1 {{.*}}, label {{.*}}, label {{.*}}, !llvm.loop ![[LOOP_5:.*]]
+; CHECK: br i1 {{.*}}, label {{.*}}, label {{.*}}, !llvm37.loop ![[LOOP_5:.*]]
 define void @shared_metadata(i32* nocapture %List) #0 {
 entry:
   br label %for.body3
@@ -116,7 +116,7 @@ for.body3:                                        ; preds = %for.body3, %entry
   store i32 %add4, i32* %arrayidx, align 4
   %indvars.iv.next = add nuw nsw i64 %indvars.iv, 1
   %exitcond = icmp eq i64 %indvars.iv.next, 4
-  br i1 %exitcond, label %for.body3.1.preheader, label %for.body3, !llvm.loop !9
+  br i1 %exitcond, label %for.body3.1.preheader, label %for.body3, !llvm37.loop !9
 
 for.body3.1.preheader:                            ; preds = %for.body3
   br label %for.body3.1
@@ -129,7 +129,7 @@ for.body3.1:                                      ; preds = %for.body3.1.prehead
   %add4.1 = add nsw i32 %2, 10
   store i32 %add4.1, i32* %arrayidx.1, align 4
   %exitcond.1 = icmp eq i64 %1, 4
-  br i1 %exitcond.1, label %for.inc5.1, label %for.body3.1, !llvm.loop !9
+  br i1 %exitcond.1, label %for.inc5.1, label %for.body3.1, !llvm37.loop !9
 
 for.inc5.1:                                       ; preds = %for.body3.1
   ret void

@@ -1,5 +1,5 @@
 ; Bug 12870380
-; Make sure dxil cleanup pass generates valid llvm ir.
+; Make sure dxil cleanup pass generates valid llvm37 ir.
 ; RUN: %opt-exe %s -S -dxil-cleanup -verify -o %t.ll.converted
 ; RUN: fc %t.ll.converted %b.ref
 
@@ -14,7 +14,7 @@
 %dx.types.i8x32 = type { [32 x i8] }
 
 @TGSM0 = internal addrspace(3) global [2048 x i8] undef, align 4
-@llvm.used = appending global [1 x i8*] [i8* addrspacecast (i8 addrspace(3)* getelementptr inbounds ([2048 x i8], [2048 x i8] addrspace(3)* @TGSM0, i32 0, i32 0) to i8*)], section "llvm.metadata"
+@llvm37.used = appending global [1 x i8*] [i8* addrspacecast (i8 addrspace(3)* getelementptr inbounds ([2048 x i8], [2048 x i8] addrspace(3)* @TGSM0, i32 0, i32 0) to i8*)], section "llvm.metadata"
 
 define void @main() {
 entry:
@@ -1146,7 +1146,7 @@ attributes #2 = { nounwind }
 !dx.shaderModel = !{!1}
 !dx.resources = !{!2}
 !dx.entryPoints = !{!14}
-!llvm.ident = !{!17}
+!llvm37.ident = !{!17}
 
 !0 = !{i32 1, i32 0}
 !1 = !{!"cs", i32 6, i32 0}

@@ -1,6 +1,6 @@
 //===- BBVectorize.cpp - A Basic-Block Vectorizer -------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -15,40 +15,40 @@
 //===----------------------------------------------------------------------===//
 
 #define BBV_NAME "bb-vectorize"
-#include "llvm/Transforms/Vectorize.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/DenseSet.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/SmallSet.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/ADT/StringExtras.h"
-#include "llvm/Analysis/AliasAnalysis.h"
-#include "llvm/Analysis/AliasSetTracker.h"
-#include "llvm/Analysis/ScalarEvolution.h"
-#include "llvm/Analysis/ScalarEvolutionExpressions.h"
-#include "llvm/Analysis/TargetTransformInfo.h"
-#include "llvm/Analysis/ValueTracking.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/DerivedTypes.h"
-#include "llvm/IR/Dominators.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/IR/Intrinsics.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Metadata.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/Type.h"
-#include "llvm/IR/ValueHandle.h"
-#include "llvm/Pass.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Transforms/Utils/Local.h"
+#include "llvm37/Transforms/Vectorize.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/DenseSet.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/SmallSet.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/ADT/StringExtras.h"
+#include "llvm37/Analysis/AliasAnalysis.h"
+#include "llvm37/Analysis/AliasSetTracker.h"
+#include "llvm37/Analysis/ScalarEvolution.h"
+#include "llvm37/Analysis/ScalarEvolutionExpressions.h"
+#include "llvm37/Analysis/TargetTransformInfo.h"
+#include "llvm37/Analysis/ValueTracking.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/IR/DerivedTypes.h"
+#include "llvm37/IR/Dominators.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/IR/Intrinsics.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/Metadata.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/Type.h"
+#include "llvm37/IR/ValueHandle.h"
+#include "llvm37/Pass.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Transforms/Utils/Local.h"
 #include <algorithm>
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE BBV_NAME
 
@@ -342,30 +342,30 @@ namespace {
              int &BestEffSize, Value *II, std::vector<Value *>&JJ,
              bool UseCycleCheck);
 
-    Value *getReplacementPointerInput(LLVMContext& Context, Instruction *I,
+    Value *getReplacementPointerInput(LLVM37Context& Context, Instruction *I,
                      Instruction *J, unsigned o);
 
-    void fillNewShuffleMask(LLVMContext& Context, Instruction *J,
+    void fillNewShuffleMask(LLVM37Context& Context, Instruction *J,
                      unsigned MaskOffset, unsigned NumInElem,
                      unsigned NumInElem1, unsigned IdxOffset,
                      std::vector<Constant*> &Mask);
 
-    Value *getReplacementShuffleMask(LLVMContext& Context, Instruction *I,
+    Value *getReplacementShuffleMask(LLVM37Context& Context, Instruction *I,
                      Instruction *J);
 
-    bool expandIEChain(LLVMContext& Context, Instruction *I, Instruction *J,
+    bool expandIEChain(LLVM37Context& Context, Instruction *I, Instruction *J,
                        unsigned o, Value *&LOp, unsigned numElemL,
                        Type *ArgTypeL, Type *ArgTypeR, bool IBeforeJ,
                        unsigned IdxOff = 0);
 
-    Value *getReplacementInput(LLVMContext& Context, Instruction *I,
+    Value *getReplacementInput(LLVM37Context& Context, Instruction *I,
                      Instruction *J, unsigned o, bool IBeforeJ);
 
-    void getReplacementInputsForPair(LLVMContext& Context, Instruction *I,
+    void getReplacementInputsForPair(LLVM37Context& Context, Instruction *I,
                      Instruction *J, SmallVectorImpl<Value *> &ReplacedOperands,
                      bool IBeforeJ);
 
-    void replaceOutputsOfPair(LLVMContext& Context, Instruction *I,
+    void replaceOutputsOfPair(LLVM37Context& Context, Instruction *I,
                      Instruction *J, Instruction *K,
                      Instruction *&InsertionPt, Instruction *&K1,
                      Instruction *&K2);
@@ -1256,7 +1256,7 @@ namespace {
         if (Config.FastDep) {
           // Note: For this heuristic to be effective, independent operations
           // must tend to be intermixed. This is likely to be true from some
-          // kinds of grouped loop unrolling (but not the generic LLVM pass),
+          // kinds of grouped loop unrolling (but not the generic LLVM37 pass),
           // but otherwise may require some kind of reordering pass.
 
           // When using fast dependency analysis,
@@ -2285,7 +2285,7 @@ namespace {
 
   // Returns the value that is to be used as the pointer input to the vector
   // instruction that fuses I with J.
-  Value *BBVectorize::getReplacementPointerInput(LLVMContext& Context,
+  Value *BBVectorize::getReplacementPointerInput(LLVM37Context& Context,
                      Instruction *I, Instruction *J, unsigned o) {
     Value *IPtr, *JPtr;
     unsigned IAlignment, JAlignment, IAddressSpace, JAddressSpace;
@@ -2310,7 +2310,7 @@ namespace {
                         /* insert before */ I);
   }
 
-  void BBVectorize::fillNewShuffleMask(LLVMContext& Context, Instruction *J,
+  void BBVectorize::fillNewShuffleMask(LLVM37Context& Context, Instruction *J,
                      unsigned MaskOffset, unsigned NumInElem,
                      unsigned NumInElem1, unsigned IdxOffset,
                      std::vector<Constant*> &Mask) {
@@ -2332,7 +2332,7 @@ namespace {
 
   // Returns the value that is to be used as the vector-shuffle mask to the
   // vector instruction that fuses I with J.
-  Value *BBVectorize::getReplacementShuffleMask(LLVMContext& Context,
+  Value *BBVectorize::getReplacementShuffleMask(LLVM37Context& Context,
                      Instruction *I, Instruction *J) {
     // This is the shuffle mask. We need to append the second
     // mask to the first, and the numbers need to be adjusted.
@@ -2373,7 +2373,7 @@ namespace {
     return ConstantVector::get(Mask);
   }
 
-  bool BBVectorize::expandIEChain(LLVMContext& Context, Instruction *I,
+  bool BBVectorize::expandIEChain(LLVM37Context& Context, Instruction *I,
                                   Instruction *J, unsigned o, Value *&LOp,
                                   unsigned numElemL,
                                   Type *ArgTypeL, Type *ArgTypeH,
@@ -2422,7 +2422,7 @@ namespace {
 
   // Returns the value to be used as the specified operand of the vector
   // instruction that fuses I with J.
-  Value *BBVectorize::getReplacementInput(LLVMContext& Context, Instruction *I,
+  Value *BBVectorize::getReplacementInput(LLVM37Context& Context, Instruction *I,
                      Instruction *J, unsigned o, bool IBeforeJ) {
     Value *CV0 = ConstantInt::get(Type::getInt32Ty(Context), 0);
     Value *CV1 = ConstantInt::get(Type::getInt32Ty(Context), 1);
@@ -2754,7 +2754,7 @@ namespace {
 
   // This function creates an array of values that will be used as the inputs
   // to the vector instruction that fuses I with J.
-  void BBVectorize::getReplacementInputsForPair(LLVMContext& Context,
+  void BBVectorize::getReplacementInputsForPair(LLVM37Context& Context,
                      Instruction *I, Instruction *J,
                      SmallVectorImpl<Value *> &ReplacedOperands,
                      bool IBeforeJ) {
@@ -2802,7 +2802,7 @@ namespace {
   // original I and J instructions. These are generally vector shuffles
   // or extracts. In many cases, these will end up being unused and, thus,
   // eliminated by later passes.
-  void BBVectorize::replaceOutputsOfPair(LLVMContext& Context, Instruction *I,
+  void BBVectorize::replaceOutputsOfPair(LLVM37Context& Context, Instruction *I,
                      Instruction *J, Instruction *K,
                      Instruction *&InsertionPt,
                      Instruction *&K1, Instruction *&K2) {
@@ -2970,7 +2970,7 @@ namespace {
              DenseMap<VPPair, unsigned> &PairConnectionTypes,
              DenseMap<ValuePair, std::vector<ValuePair> > &ConnectedPairs,
              DenseMap<ValuePair, std::vector<ValuePair> > &ConnectedPairDeps) {
-    LLVMContext& Context = BB.getContext();
+    LLVM37Context& Context = BB.getContext();
 
     // During the vectorization process, the order of the pairs to be fused
     // could be flipped. So we'll add each pair, flipped, into the ChosenPairs
@@ -3117,10 +3117,10 @@ namespace {
         K->mutateType(getVecTypeForPair(L->getType(), H->getType()));
 
       unsigned KnownIDs[] = {
-        LLVMContext::MD_tbaa,
-        LLVMContext::MD_alias_scope,
-        LLVMContext::MD_noalias,
-        LLVMContext::MD_fpmath
+        LLVM37Context::MD_tbaa,
+        LLVM37Context::MD_alias_scope,
+        LLVM37Context::MD_noalias,
+        LLVM37Context::MD_fpmath
       };
       combineMetadata(K, H, KnownIDs);
       K->intersectOptionalDataWith(H);
@@ -3203,12 +3203,12 @@ INITIALIZE_PASS_DEPENDENCY(DominatorTreeWrapperPass)
 INITIALIZE_PASS_DEPENDENCY(ScalarEvolution)
 INITIALIZE_PASS_END(BBVectorize, BBV_NAME, bb_vectorize_name, false, false)
 
-BasicBlockPass *llvm::createBBVectorizePass(const VectorizeConfig &C) {
+BasicBlockPass *llvm37::createBBVectorizePass(const VectorizeConfig &C) {
   return new BBVectorize(C);
 }
 
 bool
-llvm::vectorizeBasicBlock(Pass *P, BasicBlock &BB, const VectorizeConfig &C) {
+llvm37::vectorizeBasicBlock(Pass *P, BasicBlock &BB, const VectorizeConfig &C) {
   BBVectorize BBVectorizer(P, *BB.getParent(), C);
   return BBVectorizer.vectorizeBB(BB);
 }

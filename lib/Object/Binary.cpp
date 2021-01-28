@@ -1,6 +1,6 @@
 //===- Binary.cpp - A generic binary file -----------------------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,18 +11,18 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Object/Binary.h"
-#include "llvm/ADT/StringRef.h"
-#include "llvm/Support/FileSystem.h"
-#include "llvm/Support/MemoryBuffer.h"
-#include "llvm/Support/Path.h"
+#include "llvm37/Object/Binary.h"
+#include "llvm37/ADT/StringRef.h"
+#include "llvm37/Support/FileSystem.h"
+#include "llvm37/Support/MemoryBuffer.h"
+#include "llvm37/Support/Path.h"
 
 // Include headers for createBinary.
-#include "llvm/Object/Archive.h"
-#include "llvm/Object/MachOUniversal.h"
-#include "llvm/Object/ObjectFile.h"
+#include "llvm37/Object/Archive.h"
+#include "llvm37/Object/MachOUniversal.h"
+#include "llvm37/Object/ObjectFile.h"
 
-using namespace llvm;
+using namespace llvm37;
 using namespace object;
 
 Binary::~Binary() {}
@@ -37,7 +37,7 @@ StringRef Binary::getFileName() const { return Data.getBufferIdentifier(); }
 MemoryBufferRef Binary::getMemoryBufferRef() const { return Data; }
 
 ErrorOr<std::unique_ptr<Binary>> object::createBinary(MemoryBufferRef Buffer,
-                                                      LLVMContext *Context) {
+                                                      LLVM37Context *Context) {
   sys::fs::file_magic Type = sys::fs::identify_magic(Buffer.getBuffer());
 
   switch (Type) {
@@ -71,7 +71,7 @@ ErrorOr<std::unique_ptr<Binary>> object::createBinary(MemoryBufferRef Buffer,
       // Unrecognized object file format.
       return object_error::invalid_file_type;
   }
-  llvm_unreachable("Unexpected Binary File Type");
+  llvm37_unreachable("Unexpected Binary File Type");
 }
 
 ErrorOr<OwningBinary<Binary>> object::createBinary(StringRef Path) {

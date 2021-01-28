@@ -9,7 +9,7 @@ each call site) that a vtable pointer is in the set of valid vtable pointers
 for the type of the class or its derived classes.
 
 To use the mechanism, a client creates a global metadata node named
-``llvm.bitsets``.  Each element is a metadata node with three elements:
+``llvm37.bitsets``.  Each element is a metadata node with three elements:
 the first is a metadata string containing an identifier for the bitset,
 the second is a global variable and the third is a byte offset into the
 global variable.
@@ -19,7 +19,7 @@ memory addresses referenced from the elements of the bitset metadata. The pass
 will lay out the referenced globals consecutively, so their definitions must
 be available at LTO time. The `GlobalLayoutBuilder`_ class is responsible for
 laying out the globals efficiently to minimize the sizes of the underlying
-bitsets. An intrinsic, :ref:`llvm.bitset.test <bitset.test>`, generates code
+bitsets. An intrinsic, :ref:`llvm37.bitset.test <bitset.test>`, generates code
 to test whether a given pointer is a member of a bitset.
 
 :Example:
@@ -33,7 +33,7 @@ to test whether a given pointer is a member of a bitset.
     @c = internal global i32 0
     @d = internal global [2 x i32] [i32 0, i32 0]
 
-    !llvm.bitsets = !{!0, !1, !2, !3, !4}
+    !llvm37.bitsets = !{!0, !1, !2, !3, !4}
 
     !0 = !{!"bitset1", i32* @a, i32 0}
     !1 = !{!"bitset1", i32* @b, i32 0}
@@ -41,17 +41,17 @@ to test whether a given pointer is a member of a bitset.
     !3 = !{!"bitset2", i32* @c, i32 0}
     !4 = !{!"bitset2", i32* @d, i32 4}
 
-    declare i1 @llvm.bitset.test(i8* %ptr, metadata %bitset) nounwind readnone
+    declare i1 @llvm37.bitset.test(i8* %ptr, metadata %bitset) nounwind readnone
 
     define i1 @foo(i32* %p) {
       %pi8 = bitcast i32* %p to i8*
-      %x = call i1 @llvm.bitset.test(i8* %pi8, metadata !"bitset1")
+      %x = call i1 @llvm37.bitset.test(i8* %pi8, metadata !"bitset1")
       ret i1 %x
     }
 
     define i1 @bar(i32* %p) {
       %pi8 = bitcast i32* %p to i8*
-      %x = call i1 @llvm.bitset.test(i8* %pi8, metadata !"bitset2")
+      %x = call i1 @llvm37.bitset.test(i8* %pi8, metadata !"bitset2")
       ret i1 %x
     }
 
@@ -67,4 +67,4 @@ to test whether a given pointer is a member of a bitset.
       ret void
     }
 
-.. _GlobalLayoutBuilder: http://llvm.org/klaus/llvm/blob/master/include/llvm/Transforms/IPO/LowerBitSets.h
+.. _GlobalLayoutBuilder: http://llvm37.org/klaus/llvm37/blob/master/include/llvm37/Transforms/IPO/LowerBitSets.h

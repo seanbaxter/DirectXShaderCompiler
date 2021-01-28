@@ -1,6 +1,6 @@
 //===- YAMLBench - Benchmark the YAMLParser implementation ----------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -12,18 +12,18 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/ADT/SmallString.h"
-#include "llvm/Support/Casting.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/MemoryBuffer.h"
-#include "llvm/Support/SourceMgr.h"
-#include "llvm/Support/Timer.h"
-#include "llvm/Support/Process.h"
-#include "llvm/Support/YAMLParser.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/Support/Casting.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/MemoryBuffer.h"
+#include "llvm37/Support/SourceMgr.h"
+#include "llvm37/Support/Timer.h"
+#include "llvm37/Support/Process.h"
+#include "llvm37/Support/YAMLParser.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <system_error>
 
-using namespace llvm;
+using namespace llvm37;
 
 static cl::opt<bool>
   DumpTokens( "tokens"
@@ -142,30 +142,30 @@ static void dumpStream(yaml::Stream &stream) {
   }
 }
 
-static void benchmark( llvm::TimerGroup &Group
-                     , llvm::StringRef Name
-                     , llvm::StringRef JSONText) {
-  llvm::Timer BaseLine((Name + ": Loop").str(), Group);
+static void benchmark( llvm37::TimerGroup &Group
+                     , llvm37::StringRef Name
+                     , llvm37::StringRef JSONText) {
+  llvm37::Timer BaseLine((Name + ": Loop").str(), Group);
   BaseLine.startTimer();
   char C = 0;
-  for (llvm::StringRef::iterator I = JSONText.begin(),
+  for (llvm37::StringRef::iterator I = JSONText.begin(),
                                  E = JSONText.end();
        I != E; ++I) { C += *I; }
   BaseLine.stopTimer();
   volatile char DontOptimizeOut = C; (void)DontOptimizeOut;
 
-  llvm::Timer Tokenizing((Name + ": Tokenizing").str(), Group);
+  llvm37::Timer Tokenizing((Name + ": Tokenizing").str(), Group);
   Tokenizing.startTimer();
   {
     yaml::scanTokens(JSONText);
   }
   Tokenizing.stopTimer();
 
-  llvm::Timer Parsing((Name + ": Parsing").str(), Group);
+  llvm37::Timer Parsing((Name + ": Parsing").str(), Group);
   Parsing.startTimer();
   {
-    llvm::SourceMgr SM;
-    llvm::yaml::Stream stream(JSONText, SM);
+    llvm37::SourceMgr SM;
+    llvm37::yaml::Stream stream(JSONText, SM);
     stream.skip();
   }
   Parsing.stopTimer();
@@ -173,7 +173,7 @@ static void benchmark( llvm::TimerGroup &Group
 
 static std::string createJSONText(size_t MemoryMB, unsigned ValueSize) {
   std::string JSONText;
-  llvm::raw_string_ostream Stream(JSONText);
+  llvm37::raw_string_ostream Stream(JSONText);
   Stream << "[\n";
   size_t MemoryBytes = MemoryMB * 1024 * 1024;
   while (JSONText.size() < MemoryBytes) {
@@ -192,7 +192,7 @@ static std::string createJSONText(size_t MemoryMB, unsigned ValueSize) {
 }
 
 int main(int argc, char **argv) {
-  llvm::cl::ParseCommandLineOptions(argc, argv);
+  llvm37::cl::ParseCommandLineOptions(argc, argv);
   bool ShowColors = UseColor == cl::BOU_UNSET
                         ? sys::Process::StandardOutHasColors()
                         : UseColor == cl::BOU_TRUE;
@@ -203,7 +203,7 @@ int main(int argc, char **argv) {
       return 1;
     MemoryBuffer &Buf = *BufOrErr.get();
 
-    llvm::SourceMgr sm;
+    llvm37::SourceMgr sm;
     if (DumpTokens) {
       yaml::dumpTokens(Buf.getBuffer(), outs());
     }
@@ -217,10 +217,10 @@ int main(int argc, char **argv) {
   }
 
   if (Verify) {
-    llvm::TimerGroup Group("YAML parser benchmark");
+    llvm37::TimerGroup Group("YAML parser benchmark");
     benchmark(Group, "Fast", createJSONText(10, 500));
   } else if (!DumpCanonical && !DumpTokens) {
-    llvm::TimerGroup Group("YAML parser benchmark");
+    llvm37::TimerGroup Group("YAML parser benchmark");
     benchmark(Group, "Small Values", createJSONText(MemoryLimitMB, 5));
     benchmark(Group, "Medium Values", createJSONText(MemoryLimitMB, 500));
     benchmark(Group, "Large Values", createJSONText(MemoryLimitMB, 50000));

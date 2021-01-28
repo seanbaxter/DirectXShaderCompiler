@@ -1,6 +1,6 @@
 //===--- APValue.cpp - Union class for APFloat/APSInt/Complex -------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -18,14 +18,14 @@
 #include "clang/AST/Expr.h"
 #include "clang/AST/Type.h"
 #include "clang/Basic/Diagnostic.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/raw_ostream.h"
 using namespace clang;
 
 namespace {
   struct LVBase {
-    llvm::PointerIntPair<APValue::LValueBase, 1, bool> BaseAndIsOnePastTheEnd;
+    llvm37::PointerIntPair<APValue::LValueBase, 1, bool> BaseAndIsOnePastTheEnd;
     CharUnits Offset;
     unsigned PathLength;
     unsigned CallIndex;
@@ -68,7 +68,7 @@ struct APValue::LV : LVBase {
 
 namespace {
   struct MemberPointerBase {
-    llvm::PointerIntPair<const ValueDecl*, 1, bool> MemberAndIsDerivedMember;
+    llvm37::PointerIntPair<const ValueDecl*, 1, bool> MemberAndIsDerivedMember;
     unsigned PathLength;
   };
 }
@@ -244,7 +244,7 @@ bool APValue::needsCleanup() const {
     return reinterpret_cast<const MemberPointerData *>(Data.buffer)
         ->hasPathPtr();
   }
-  llvm_unreachable("Unknown APValue kind!");
+  llvm37_unreachable("Unknown APValue kind!");
 }
 
 void APValue::swap(APValue &RHS) {
@@ -256,14 +256,14 @@ void APValue::swap(APValue &RHS) {
 }
 
 void APValue::dump() const {
-  dump(llvm::errs());
-  llvm::errs() << '\n';
+  dump(llvm37::errs());
+  llvm37::errs() << '\n';
 }
 
-static double GetApproxValue(const llvm::APFloat &F) {
-  llvm::APFloat V = F;
+static double GetApproxValue(const llvm37::APFloat &F) {
+  llvm37::APFloat V = F;
   bool ignored;
-  V.convert(llvm::APFloat::IEEEdouble, llvm::APFloat::rmNearestTiesToEven,
+  V.convert(llvm37::APFloat::IEEEdouble, llvm37::APFloat::rmNearestTiesToEven,
             &ignored);
   return V.convertToDouble();
 }
@@ -338,7 +338,7 @@ void APValue::dump(raw_ostream &OS) const {
     OS << "AddrLabelDiff: <todo>";
     return;
   }
-  llvm_unreachable("Unknown APValue kind!");
+  llvm37_unreachable("Unknown APValue kind!");
 }
 
 void APValue::printPretty(raw_ostream &Out, ASTContext &Ctx, QualType Ty) const{
@@ -539,12 +539,12 @@ void APValue::printPretty(raw_ostream &Out, ASTContext &Ctx, QualType Ty) const{
     Out << "&&" << getAddrLabelDiffRHS()->getLabel()->getName();
     return;
   }
-  llvm_unreachable("Unknown APValue kind!");
+  llvm37_unreachable("Unknown APValue kind!");
 }
 
 std::string APValue::getAsString(ASTContext &Ctx, QualType Ty) const {
   std::string Result;
-  llvm::raw_string_ostream Out(Result);
+  llvm37::raw_string_ostream Out(Result);
   printPretty(Out, Ctx, Ty);
   Out.flush();
   return Result;
@@ -573,7 +573,7 @@ bool APValue::hasLValuePath() const {
 ArrayRef<APValue::LValuePathEntry> APValue::getLValuePath() const {
   assert(isLValue() && hasLValuePath() && "Invalid accessor");
   const LV &LVal = *((const LV*)(const char*)Data.buffer);
-  return llvm::makeArrayRef(LVal.getPath(), LVal.PathLength);
+  return llvm37::makeArrayRef(LVal.getPath(), LVal.PathLength);
 }
 
 unsigned APValue::getLValueCallIndex() const {
@@ -623,7 +623,7 @@ ArrayRef<const CXXRecordDecl*> APValue::getMemberPointerPath() const {
   assert(isMemberPointer() && "Invalid accessor");
   const MemberPointerData &MPD =
       *((const MemberPointerData *)(const char *)Data.buffer);
-  return llvm::makeArrayRef(MPD.getPath(), MPD.PathLength);
+  return llvm37::makeArrayRef(MPD.getPath(), MPD.PathLength);
 }
 
 void APValue::MakeLValue() {

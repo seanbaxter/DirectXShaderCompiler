@@ -11,11 +11,11 @@
 
 #include "dxc/HLSL/DxilGenerationPass.h"
 
-#include "llvm/Pass.h"
-#include "llvm/IR/Metadata.h"
-#include "llvm/IR/Module.h"
+#include "llvm37/Pass.h"
+#include "llvm37/IR/Metadata.h"
+#include "llvm37/IR/Module.h"
 
-using namespace llvm;
+using namespace llvm37;
 using namespace hlsl;
 
 static const char kPauseResumeMDName[] = "pauseresume";
@@ -44,7 +44,7 @@ void GetPauseResumePasses(Module &M, StringRef &pause, StringRef &resume) {
 }
 
 void SetPauseResumePasses(Module &M, StringRef pause, StringRef resume) {
-  LLVMContext &Ctx = M.getContext();
+  LLVM37Context &Ctx = M.getContext();
   NamedMDNode *N = M.getOrInsertNamedMetadata(kPauseResumeMDName);
   Metadata *MDs[kPauseResumeNumFields];
   MDs[(int)kPauseResumePassNameToPause] = MDString::get(Ctx, pause);
@@ -117,13 +117,13 @@ char ResumePasses::ID = 0;
 
 }
 
-ModulePass *llvm::createNoPausePassesPass() {
+ModulePass *llvm37::createNoPausePassesPass() {
   return new NoPausePasses();
 }
-ModulePass *llvm::createPausePassesPass() {
+ModulePass *llvm37::createPausePassesPass() {
   return new PausePasses();
 }
-ModulePass *llvm::createResumePassesPass() {
+ModulePass *llvm37::createResumePassesPass() {
   return new ResumePasses();
 }
 

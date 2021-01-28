@@ -74,28 +74,28 @@ non-zero value.
 TUTORIAL
 --------
 
-FileCheck is typically used from LLVM regression tests, being invoked on the RUN
+FileCheck is typically used from LLVM37 regression tests, being invoked on the RUN
 line of the test.  A simple example of using FileCheck from a RUN line looks
 like this:
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
-   ; RUN: llvm-as < %s | llc -march=x86-64 | FileCheck %s
+   ; RUN: llvm37-as < %s | llc -march=x86-64 | FileCheck %s
 
-This syntax says to pipe the current file ("``%s``") into ``llvm-as``, pipe
+This syntax says to pipe the current file ("``%s``") into ``llvm37-as``, pipe
 that into ``llc``, then pipe the output of ``llc`` into ``FileCheck``.  This
 means that FileCheck will be verifying its standard input (the llc output)
 against the filename argument specified (the original ``.ll`` file specified by
 "``%s``").  To see how this works, let's look at the rest of the ``.ll`` file
 (after the RUN line):
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
    define void @sub1(i32* %p, i32 %v) {
    entry:
    ; CHECK: sub1:
    ; CHECK: subl
-           %0 = tail call i32 @llvm.atomic.load.sub.i32.p0i32(i32* %p, i32 %v)
+           %0 = tail call i32 @llvm37.atomic.load.sub.i32.p0i32(i32* %p, i32 %v)
            ret void
    }
 
@@ -103,12 +103,12 @@ against the filename argument specified (the original ``.ll`` file specified by
    entry:
    ; CHECK: inc4:
    ; CHECK: incq
-           %0 = tail call i64 @llvm.atomic.load.add.i64.p0i64(i64* %p, i64 1)
+           %0 = tail call i64 @llvm37.atomic.load.add.i64.p0i64(i64* %p, i64 1)
            ret void
    }
 
 Here you can see some "``CHECK:``" lines specified in comments.  Now you can
-see how the file is piped into ``llvm-as``, then ``llc``, and the machine code
+see how the file is piped into ``llvm37-as``, then ``llc``, and the machine code
 output is what we are verifying.  FileCheck checks the machine code output to
 verify that it matches what the "``CHECK:``" lines specify.
 
@@ -132,11 +132,11 @@ configurations to be driven from one `.ll` file.  This is useful in many
 circumstances, for example, testing different architectural variants with
 :program:`llc`.  Here's a simple example:
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
-   ; RUN: llvm-as < %s | llc -mtriple=i686-apple-darwin9 -mattr=sse41 \
+   ; RUN: llvm37-as < %s | llc -mtriple=i686-apple-darwin9 -mattr=sse41 \
    ; RUN:              | FileCheck %s -check-prefix=X32
-   ; RUN: llvm-as < %s | llc -mtriple=x86_64-apple-darwin9 -mattr=sse41 \
+   ; RUN: llvm37-as < %s | llc -mtriple=x86_64-apple-darwin9 -mattr=sse41 \
    ; RUN:              | FileCheck %s -check-prefix=X64
 
    define <4 x i32> @pinsrd_1(i32 %s, <4 x i32> %tmp) nounwind {
@@ -161,7 +161,7 @@ this case, you can use "``CHECK:``" and "``CHECK-NEXT:``" directives to specify
 this.  If you specified a custom check prefix, just use "``<PREFIX>-NEXT:``".
 For example, something like this works as you'd expect:
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
    define void @t2(<2 x double>* %r, <2 x double>* %A, double %B) {
  	%tmp3 = load <2 x double>* %A, align 16
@@ -198,7 +198,7 @@ check prefix, just use "``<PREFIX>-SAME:``".
 
 For example, the following works like you'd expect:
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
    !0 = !DILocation(line: 5, scope: !1, inlinedAt: !2)
 
@@ -218,7 +218,7 @@ between two matches (or before the first match, or after the last match).  For
 example, to verify that a load is removed by a transformation, a test like this
 can be used:
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
    define i8 @coerce_offset0(i32 %V, i32* %P) {
      store i32 %V, i32* %P
@@ -244,7 +244,7 @@ in the natural order:
 
 .. code-block:: c++
 
-    // RUN: %clang_cc1 %s -emit-llvm -o - | FileCheck %s
+    // RUN: %clang_cc1 %s -emit-llvm37 -o - | FileCheck %s
 
     struct Foo { virtual void method(); };
     Foo f;  // emit vtable
@@ -260,7 +260,7 @@ the surrounding ``CHECK-DAG:`` directives cannot be reordered, i.e. all
 occurrences matching ``CHECK-DAG:`` before ``CHECK-NOT:`` must not fall behind
 occurrences matching ``CHECK-DAG:`` after ``CHECK-NOT:``. For example,
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
    ; CHECK-DAG: BEFORE
    ; CHECK-NOT: NOT
@@ -273,7 +273,7 @@ orderings of a DAG with edges from the definition of a variable to its use.
 It's useful, e.g., when your test cases need to match different output
 sequences from the instruction scheduler. For example,
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
    ; CHECK-DAG: add [[REG1:r[0-9]+]], r1, r2
    ; CHECK-DAG: add [[REG2:r[0-9]+]], r3, r4
@@ -286,7 +286,7 @@ be aware that the definition rule can match `after` its use.
 
 So, for instance, the code below will pass:
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
   ; CHECK-DAG: vmov.32 [[REG2:d[0-9]+]][0]
   ; CHECK-DAG: vmov.32 [[REG2]][1]
@@ -295,7 +295,7 @@ So, for instance, the code below will pass:
 
 While this other code, will not:
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
   ; CHECK-DAG: vmov.32 [[REG2:d[0-9]+]][0]
   ; CHECK-DAG: vmov.32 [[REG2]][1]
@@ -329,7 +329,7 @@ the input stream into separate blocks, each of which is processed independently,
 preventing a ``CHECK:`` directive in one block matching a line in another block.
 For example,
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
   define %struct.C* @C_ctor_base(%struct.C* %this, i32 %x) {
   entry:
@@ -373,7 +373,7 @@ string matching for a majority of what we do, FileCheck has been designed to
 support mixing and matching fixed string matching with regular expressions.
 This allows you to write things like this:
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
    ; CHECK: movhpd	{{[0-9]+}}(%esp), {{%xmm[0-7]}}
 
@@ -395,7 +395,7 @@ but verify that that register is used consistently later.  To do this,
 :program:`FileCheck` allows named variables to be defined and substituted into
 patterns.  Here is a simple example:
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
    ; CHECK: test5:
    ; CHECK:    notw	[[REGISTER:%[a-z]+]]
@@ -412,7 +412,7 @@ then it is a definition of the variable; otherwise, it is a use.
 get the latest value.  Variables can also be used later on the same line they
 were defined on. For example:
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
     ; CHECK: op [[REG:r[0-9]+]], [[REG]]
 

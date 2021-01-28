@@ -1,20 +1,20 @@
-//===- llvm/unittest/ADT/ValueMapTest.cpp - ValueMap unit tests -*- C++ -*-===//
+//===- llvm37/unittest/ADT/ValueMapTest.cpp - ValueMap unit tests -*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/IR/ValueMap.h"
-#include "llvm/Config/llvm-config.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/LLVMContext.h"
+#include "llvm37/IR/ValueMap.h"
+#include "llvm37/Config/llvm-config.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/LLVMContext.h"
 #include "gtest/gtest.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 namespace {
 
@@ -195,7 +195,7 @@ struct LockMutex : ValueMapConfig<KeyT, MutexT> {
   static MutexT *getMutex(const ExtraData &Data) { return Data.M; }
 };
 // FIXME: These tests started failing on Windows.
-#if LLVM_ENABLE_THREADS && !defined(LLVM_ON_WIN32)
+#if LLVM37_ENABLE_THREADS && !defined(LLVM37_ON_WIN32)
 TYPED_TEST(ValueMapTest, LocksMutex) {
   sys::Mutex M(false);  // Not recursive.
   bool CalledRAUW = false, CalledDeleted = false;

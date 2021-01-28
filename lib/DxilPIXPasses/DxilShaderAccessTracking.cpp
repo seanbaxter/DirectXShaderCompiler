@@ -18,16 +18,16 @@
 #include "dxc/HLSL/DxilGenerationPass.h"
 #include "dxc/HLSL/DxilSpanAllocator.h"
 
-#include "llvm/IR/PassManager.h"
-#include "llvm/Support/FormattedStream.h"
-#include "llvm/Transforms/Utils/Local.h"
+#include "llvm37/IR/PassManager.h"
+#include "llvm37/Support/FormattedStream.h"
+#include "llvm37/Transforms/Utils/Local.h"
 #include <deque>
 
 #ifdef _WIN32
 #include <winerror.h>
 #endif
 
-using namespace llvm;
+using namespace llvm37;
 using namespace hlsl;
 
 void ThrowIf(bool a) {
@@ -160,16 +160,16 @@ public:
   void applyOptions(PassOptions O) override;
 
 private:
-  void EmitAccess(LLVMContext &Ctx, OP *HlslOP, IRBuilder<> &, Value *slot,
+  void EmitAccess(LLVM37Context &Ctx, OP *HlslOP, IRBuilder<> &, Value *slot,
                   ShaderAccessFlags access);
   bool EmitResourceAccess(DxilResourceAndClass &res, Instruction *instruction,
-                          OP *HlslOP, LLVMContext &Ctx,
+                          OP *HlslOP, LLVM37Context &Ctx,
                           ShaderAccessFlags readWrite);
 
 private:
   bool m_CheckForDynamicIndexing = false;
   std::map<RegisterTypeAndSpace, SlotRange> m_slotAssignments;
-  std::map<llvm::Function *, CallInst *> m_FunctionToUAVHandle;
+  std::map<llvm37::Function *, CallInst *> m_FunctionToUAVHandle;
   std::set<RSRegisterIdentifier> m_DynamicallyIndexedBindPoints;
 };
 
@@ -267,7 +267,7 @@ void DxilShaderAccessTracking::applyOptions(PassOptions O) {
   }
 }
 
-void DxilShaderAccessTracking::EmitAccess(LLVMContext &Ctx, OP *HlslOP,
+void DxilShaderAccessTracking::EmitAccess(LLVM37Context &Ctx, OP *HlslOP,
                                           IRBuilder<> &Builder,
                                           Value *ByteIndex,
                                           ShaderAccessFlags access) {
@@ -304,7 +304,7 @@ void DxilShaderAccessTracking::EmitAccess(LLVMContext &Ctx, OP *HlslOP,
 
 bool DxilShaderAccessTracking::EmitResourceAccess(DxilResourceAndClass &res,
                                                   Instruction *instruction,
-                                                  OP *HlslOP, LLVMContext &Ctx,
+                                                  OP *HlslOP, LLVM37Context &Ctx,
                                                   ShaderAccessFlags readWrite) {
 
   RegisterTypeAndSpace typeAndSpace{RegisterTypeFromResourceClass(res.resClass),
@@ -410,7 +410,7 @@ bool DxilShaderAccessTracking::runOnModule(Module &M) {
   // This pass adds instrumentation for shader access to resources
 
   DxilModule &DM = M.GetOrCreateDxilModule();
-  LLVMContext &Ctx = M.getContext();
+  LLVM37Context &Ctx = M.getContext();
   OP *HlslOP = DM.GetOP();
 
   bool Modified = false;
@@ -448,7 +448,7 @@ bool DxilShaderAccessTracking::runOnModule(Module &M) {
         }
       }
 
-      for (llvm::Function &F : M.functions()) {
+      for (llvm37::Function &F : M.functions()) {
         if (!F.getBasicBlockList().empty()) {
           IRBuilder<> Builder(F.getEntryBlock().getFirstInsertionPt());
 
@@ -456,11 +456,11 @@ bool DxilShaderAccessTracking::runOnModule(Module &M) {
               static_cast<unsigned int>(DM.GetUAVs().size());
 
           // Set up a UAV with structure of a single int
-          SmallVector<llvm::Type *, 1> Elements{Type::getInt32Ty(Ctx)};
-          llvm::StructType *UAVStructTy =
-              llvm::StructType::create(Elements, "class.RWStructuredBuffer");
+          SmallVector<llvm37::Type *, 1> Elements{Type::getInt32Ty(Ctx)};
+          llvm37::StructType *UAVStructTy =
+              llvm37::StructType::create(Elements, "class.RWStructuredBuffer");
           std::unique_ptr<DxilResource> pUAV =
-              llvm::make_unique<DxilResource>();
+              llvm37::make_unique<DxilResource>();
           pUAV->SetGlobalName("PIX_CountUAVName");
           pUAV->SetGlobalSymbol(UndefValue::get(UAVStructTy->getPointerTo()));
           pUAV->SetID(UAVResourceHandle);
@@ -512,7 +512,7 @@ bool DxilShaderAccessTracking::runOnModule(Module &M) {
       DM.ReEmitDxilResources();
     }
 
-    for (llvm::Function &F : M.functions()) {
+    for (llvm37::Function &F : M.functions()) {
       // Only used DXIL intrinsics:
       if (!F.isDeclaration() || F.isIntrinsic() || F.use_empty() ||
           !OP::IsDxilOpFunc(&F))
@@ -540,7 +540,7 @@ bool DxilShaderAccessTracking::runOnModule(Module &M) {
         // Base Read/Write on function attribute - should match for all normal
         // resource operations
         ShaderAccessFlags readWrite = ShaderAccessFlags::Write;
-        if (OP::GetMemAccessAttr(opCode) == llvm::Attribute::AttrKind::ReadOnly)
+        if (OP::GetMemAccessAttr(opCode) == llvm37::Attribute::AttrKind::ReadOnly)
           readWrite = ShaderAccessFlags::Read;
 
         // Special cases
@@ -606,7 +606,7 @@ bool DxilShaderAccessTracking::runOnModule(Module &M) {
 
 char DxilShaderAccessTracking::ID = 0;
 
-ModulePass *llvm::createDxilShaderAccessTrackingPass() {
+ModulePass *llvm37::createDxilShaderAccessTrackingPass() {
   return new DxilShaderAccessTracking();
 }
 

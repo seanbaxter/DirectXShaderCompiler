@@ -1,7 +1,7 @@
 #!/bin/sh
-##===- utils/llvmgrep - Counts Lines Of Code -----------------*- Script -*-===##
+##===- utils/llvm37grep - Counts Lines Of Code -----------------*- Script -*-===##
 # 
-#                     The LLVM Compiler Infrastructure
+#                     The LLVM37 Compiler Infrastructure
 #
 # This file is distributed under the University of Illinois Open Source
 # License. See LICENSE.TXT for details.
@@ -14,7 +14,7 @@
 # for. It should be quoted to escape shell interpretation of the pattern's
 # special characters.
 #
-# Note that the implementation is based on llvmdo. See that script for more
+# Note that the implementation is based on llvm37do. See that script for more
 # details.
 ##===----------------------------------------------------------------------===##
 
@@ -32,8 +32,8 @@ if test -d "$TOPDIR" ; then
     Linux|Darwin) grep_cmd="egrep -H -n" ;;
     *) grep_cmd="egrep -l -n" ;;
   esac
-  ./utils/llvmdo -topdir "$TOPDIR" \
+  ./utils/llvm37do -topdir "$TOPDIR" \
     -dirs "include lib tools utils docs examples test unittests projects cmake" $grep_cmd "$*"
 else
-  echo "Can't find LLVM top directory"
+  echo "Can't find LLVM37 top directory"
 fi

@@ -1,6 +1,6 @@
 //===------- MicrosoftCXXABI.cpp - AST support for the Microsoft C++ ABI --===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -28,7 +28,7 @@ namespace {
 /// \brief Numbers things which need to correspond across multiple TUs.
 /// Typically these are things like static locals, lambdas, or blocks.
 class MicrosoftNumberingContext : public MangleNumberingContext {
-  llvm::DenseMap<const Type *, unsigned> ManglingNumbers;
+  llvm37::DenseMap<const Type *, unsigned> ManglingNumbers;
   unsigned LambdaManglingNumber;
   unsigned StaticLocalNumber;
   unsigned StaticThreadlocalNumber;
@@ -66,8 +66,8 @@ public:
 
 class MicrosoftCXXABI : public CXXABI {
   ASTContext &Context;
-  llvm::SmallDenseMap<CXXRecordDecl *, CXXConstructorDecl *> RecordToCopyCtor;
-  llvm::SmallDenseMap<std::pair<const CXXConstructorDecl *, unsigned>, Expr *>
+  llvm37::SmallDenseMap<CXXRecordDecl *, CXXConstructorDecl *> RecordToCopyCtor;
+  llvm37::SmallDenseMap<std::pair<const CXXConstructorDecl *, unsigned>, Expr *>
       CtorToDefaultArgExpr;
 
 public:
@@ -78,7 +78,7 @@ public:
 
   CallingConv getDefaultMethodCallConv(bool isVariadic) const override {
     if (!isVariadic &&
-        Context.getTargetInfo().getTriple().getArch() == llvm::Triple::x86)
+        Context.getTargetInfo().getTriple().getArch() == llvm37::Triple::x86)
       return CC_X86ThisCall;
     return CC_C;
   }
@@ -239,7 +239,7 @@ std::pair<uint64_t, unsigned> MicrosoftCXXABI::getMemberPointerWidthAndAlign(
     Align = Target.getIntAlign();
 
   if (Target.getTriple().isArch64Bit())
-    Width = llvm::RoundUpToAlignment(Width, Align);
+    Width = llvm37::RoundUpToAlignment(Width, Align);
   return std::make_pair(Width, Align);
 }
 

@@ -1,15 +1,15 @@
 //===- BitstreamReader.cpp - BitstreamReader implementation ---------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Bitcode/BitstreamReader.h"
+#include "llvm37/Bitcode/BitstreamReader.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 //===----------------------------------------------------------------------===//
 //  BitstreamCursor implementation
@@ -59,7 +59,7 @@ static uint64_t readAbbreviatedField(BitstreamCursor &Cursor,
   switch (Op.getEncoding()) {
   case BitCodeAbbrevOp::Array:
   case BitCodeAbbrevOp::Blob:
-    llvm_unreachable("Should not reach here");
+    llvm37_unreachable("Should not reach here");
   case BitCodeAbbrevOp::Fixed:
     assert((unsigned)Op.getEncodingData() <= Cursor.MaxChunkSize);
     return Cursor.Read((unsigned)Op.getEncodingData());
@@ -69,7 +69,7 @@ static uint64_t readAbbreviatedField(BitstreamCursor &Cursor,
   case BitCodeAbbrevOp::Char6:
     return BitCodeAbbrevOp::DecodeChar6(Cursor.Read(6));
   }
-  llvm_unreachable("invalid abbreviation encoding");
+  llvm37_unreachable("invalid abbreviation encoding");
 }
 
 static void skipAbbreviatedField(BitstreamCursor &Cursor,
@@ -80,7 +80,7 @@ static void skipAbbreviatedField(BitstreamCursor &Cursor,
   switch (Op.getEncoding()) {
   case BitCodeAbbrevOp::Array:
   case BitCodeAbbrevOp::Blob:
-    llvm_unreachable("Should not reach here");
+    llvm37_unreachable("Should not reach here");
   case BitCodeAbbrevOp::Fixed:
     assert((unsigned)Op.getEncodingData() <= Cursor.MaxChunkSize);
     Cursor.Read((unsigned)Op.getEncodingData());
@@ -139,7 +139,7 @@ void BitstreamCursor::skipRecord(unsigned AbbrevID) {
         switch (EltEnc.getEncoding()) {
         case BitCodeAbbrevOp::Array:
         case BitCodeAbbrevOp::Blob:
-          llvm_unreachable("Should not reach here");
+          llvm37_unreachable("Should not reach here");
         case BitCodeAbbrevOp::Fixed:
           assert((unsigned)Op.getEncodingData() <= Cursor.MaxChunkSize);
           Cursor.JumpToBit(CurBit + NumElts * Op.getEncodingData());
@@ -225,7 +225,7 @@ void BitstreamCursor::AddRecordElements(BitCodeAbbrevOp::Encoding enc, uint64_t 
     }
   }
   else {
-    llvm_unreachable("Unknown kind of thing");
+    llvm37_unreachable("Unknown kind of thing");
   }
 }
 // HLSL Change - End
@@ -433,12 +433,12 @@ bool BitstreamCursor::ReadBlockInfoBlock(unsigned *pCount) {
     BitstreamEntry Entry = advanceSkippingSubblocks(AF_DontAutoprocessAbbrevs, pCount);
 
     switch (Entry.Kind) {
-    case llvm::BitstreamEntry::SubBlock: // Handled for us already.
-    case llvm::BitstreamEntry::Error:
+    case llvm37::BitstreamEntry::SubBlock: // Handled for us already.
+    case llvm37::BitstreamEntry::Error:
       return true;
-    case llvm::BitstreamEntry::EndBlock:
+    case llvm37::BitstreamEntry::EndBlock:
       return false;
-    case llvm::BitstreamEntry::Record:
+    case llvm37::BitstreamEntry::Record:
       // The interesting case.
       break;
     }

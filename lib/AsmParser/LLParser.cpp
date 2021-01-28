@@ -1,6 +1,6 @@
 //===-- LLParser.cpp - Parser Class ---------------------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -12,25 +12,25 @@
 //===----------------------------------------------------------------------===//
 
 #include "LLParser.h"
-#include "llvm/ADT/SmallPtrSet.h"
-#include "llvm/AsmParser/SlotMapping.h"
-#include "llvm/IR/AutoUpgrade.h"
-#include "llvm/IR/CallingConv.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/DebugInfo.h"
-#include "llvm/IR/DebugInfoMetadata.h"
-#include "llvm/IR/DerivedTypes.h"
-#include "llvm/IR/InlineAsm.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/Operator.h"
-#include "llvm/IR/ValueSymbolTable.h"
-#include "llvm/Support/Dwarf.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/SaveAndRestore.h"
-#include "llvm/Support/raw_ostream.h"
-using namespace llvm;
+#include "llvm37/ADT/SmallPtrSet.h"
+#include "llvm37/AsmParser/SlotMapping.h"
+#include "llvm37/IR/AutoUpgrade.h"
+#include "llvm37/IR/CallingConv.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/DebugInfo.h"
+#include "llvm37/IR/DebugInfoMetadata.h"
+#include "llvm37/IR/DerivedTypes.h"
+#include "llvm37/IR/InlineAsm.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/Operator.h"
+#include "llvm37/IR/ValueSymbolTable.h"
+#include "llvm37/Support/Dwarf.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/SaveAndRestore.h"
+#include "llvm37/Support/raw_ostream.h"
+using namespace llvm37;
 
 static std::string getTypeString(Type *T) {
   std::string Result;
@@ -109,7 +109,7 @@ bool LLParser::ValidateEndOfModule() {
                                               FnAttrs));
       II->setAttributes(AS);
     } else {
-      llvm_unreachable("invalid object with forward attribute group reference");
+      llvm37_unreachable("invalid object with forward attribute group reference");
     }
   }
 
@@ -522,7 +522,7 @@ bool LLParser::parseComdat() {
 bool LLParser::ParseMDString(MDString *&Result) {
   std::string Str;
   if (ParseStringConstant(Str)) return true;
-  llvm::UpgradeMDStringConstant(Str);
+  llvm37::UpgradeMDStringConstant(Str);
   Result = MDString::get(Context, Str);
   return false;
 }
@@ -1536,7 +1536,7 @@ bool LLParser::ParseInstructionMetadata(Instruction &Inst) {
       return true;
 
     Inst.setMetadata(MDK, N);
-    if (MDK == LLVMContext::MD_tbaa)
+    if (MDK == LLVM37Context::MD_tbaa)
       InstsWithTBAATag.push_back(&Inst);
 
     // If this is the end of the list, we're done.
@@ -2799,7 +2799,7 @@ bool LLParser::ParseValID(ValID &ID, PerFunctionState *PFS) {
       if (!Val0->getType()->isFPOrFPVectorTy())
         return Error(ID.Loc, "constexpr requires fp operands");
       break;
-    default: llvm_unreachable("Unknown binary operator!");
+    default: llvm37_unreachable("Unknown binary operator!");
     }
     unsigned Flags = 0;
     if (NUW)   Flags |= OverflowingBinaryOperator::NoUnsignedWrap;
@@ -3112,7 +3112,7 @@ struct MDFieldList : public MDFieldImpl<SmallVector<Metadata *, 4>> {
 
 } // end namespace
 
-namespace llvm {
+namespace llvm37 {
 
 template <>
 bool LLParser::ParseMDField(LocTy Loc, StringRef Name,
@@ -3338,7 +3338,7 @@ bool LLParser::ParseMDField(LocTy Loc, StringRef Name, MDFieldList &Result) {
   return false;
 }
 
-} // end namespace llvm
+} // end namespace llvm37
 
 template <class ParserTy>
 bool LLParser::ParseMDFieldsImplBody(ParserTy parseField) {
@@ -3384,7 +3384,7 @@ bool LLParser::ParseSpecializedMDNode(MDNode *&N, bool IsDistinct) {
 #define HANDLE_SPECIALIZED_MDNODE_LEAF(CLASS)                                  \
   if (Lex.getStrVal() == #CLASS)                                               \
     return Parse##CLASS(N, IsDistinct);
-#include "llvm/IR/Metadata.def"
+#include "llvm37/IR/Metadata.def"
 
   return TokError("expected metadata type");
 }
@@ -4062,7 +4062,7 @@ bool LLParser::ConvertValIDToValue(Type *Ty, ValID &ID, Value *&V,
       return Error(ID.Loc, "constant expression type mismatch");
     return false;
   }
-  llvm_unreachable("Invalid ValID");
+  llvm37_unreachable("Invalid ValID");
 }
 
 bool LLParser::ParseValue(Type *Ty, Value *&V, PerFunctionState *PFS) {
@@ -4445,7 +4445,7 @@ bool LLParser::ParseBasicBlock(PerFunctionState &PFS) {
     }
 
     switch (ParseInstruction(Inst, BB, PFS)) {
-    default: llvm_unreachable("Unknown ParseInstruction result!");
+    default: llvm37_unreachable("Unknown ParseInstruction result!");
     case InstError: return true;
     case InstNormal:
       BB->getInstList().push_back(Inst);
@@ -4824,7 +4824,7 @@ bool LLParser::ParseInvoke(Instruction *&Inst, PerFunctionState &PFS) {
       ParamTypes.push_back(ArgList[i].V->getType());
 
     if (!FunctionType::isValidReturnType(RetType))
-      return Error(RetTypeLoc, "Invalid result type for LLVM function");
+      return Error(RetTypeLoc, "Invalid result type for LLVM37 function");
 
     Ty = FunctionType::get(RetType, ParamTypes, false);
   }
@@ -4919,7 +4919,7 @@ bool LLParser::ParseArithmetic(Instruction *&Inst, PerFunctionState &PFS,
 
   bool Valid;
   switch (OperandType) {
-  default: llvm_unreachable("Unknown operand type!");
+  default: llvm37_unreachable("Unknown operand type!");
   case 0: // int or FP.
     Valid = LHS->getType()->isIntOrIntVectorTy() ||
             LHS->getType()->isFPOrFPVectorTy();
@@ -5237,7 +5237,7 @@ bool LLParser::ParseCall(Instruction *&Inst, PerFunctionState &PFS,
       ParamTypes.push_back(ArgList[i].V->getType());
 
     if (!FunctionType::isValidReturnType(RetType))
-      return Error(RetTypeLoc, "Invalid result type for LLVM function");
+      return Error(RetTypeLoc, "Invalid result type for LLVM37 function");
 
     Ty = FunctionType::get(RetType, ParamTypes, false);
   }

@@ -32,7 +32,7 @@ matrix:
           sources: ubuntu-toolchain-r-test
           packages: ninja-build g++-5
       env: DXC_BUILD_TYPE=Release
-    # Configuration for AddressSanitizer (https://clang.llvm.org/docs/AddressSanitizer.html)
+    # Configuration for AddressSanitizer (https://clang.llvm37.org/docs/AddressSanitizer.html)
     - os: linux
       compiler: clang
       env:
@@ -74,7 +74,7 @@ before_script:
   - git submodule update --init
   - if [ ${CC} = gcc ]; then CC=gcc-5; CXX=g++-5; CXX_FLAGS=; else CXX_FLAGS=-Werror; fi
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then ulimit -Sn 1024; fi
-  - if [[ ${BUILD_CONFIG} = ASAN ]]; then ADDITIONAL_CMAKE_FLAGS="-DLLVM_USE_SANITIZER=Address -DSPIRV_USE_SANITIZER=address"; fi
+  - if [[ ${BUILD_CONFIG} = ASAN ]]; then ADDITIONAL_CMAKE_FLAGS="-DLLVM37_USE_SANITIZER=Address -DSPIRV_USE_SANITIZER=address"; fi
 
 script:
   - mkdir build && cd build

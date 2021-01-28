@@ -1,6 +1,6 @@
 //===- DebugInfoMetadata.cpp - Implement debug info metadata --------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,15 +11,15 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/IR/DebugInfoMetadata.h"
+#include "llvm37/IR/DebugInfoMetadata.h"
 #include "LLVMContextImpl.h"
 #include "MetadataImpl.h"
-#include "llvm/ADT/StringSwitch.h"
-#include "llvm/IR/Function.h"
+#include "llvm37/ADT/StringSwitch.h"
+#include "llvm37/IR/Function.h"
 
-using namespace llvm;
+using namespace llvm37;
 
-DILocation::DILocation(LLVMContext &C, StorageType Storage, unsigned Line,
+DILocation::DILocation(LLVM37Context &C, StorageType Storage, unsigned Line,
                        unsigned Column, ArrayRef<Metadata *> MDs)
     : MDNode(C, DILocationKind, Storage, MDs) {
   assert((MDs.size() == 1 || MDs.size() == 2) &&
@@ -38,7 +38,7 @@ static void adjustColumn(unsigned &Column) {
     Column = 0;
 }
 
-DILocation *DILocation::getImpl(LLVMContext &Context, unsigned Line,
+DILocation *DILocation::getImpl(LLVM37Context &Context, unsigned Line,
                                 unsigned Column, Metadata *Scope,
                                 Metadata *InlinedAt, StorageType Storage,
                                 bool ShouldCreate) {
@@ -78,7 +78,7 @@ unsigned DILocation::computeNewDiscriminator() const {
   // The discriminator should instead be calculated from local information
   // where it's actually needed.  This logic should be moved to
   // AddDiscriminators::runOnFunction(), where it doesn't pollute the
-  // LLVMContext.
+  // LLVM37Context.
   std::pair<const char *, unsigned> Key(getFilename().data(), getLine());
   return ++getContext().pImpl->DiscriminatorTable[Key];
 }
@@ -86,7 +86,7 @@ unsigned DILocation::computeNewDiscriminator() const {
 unsigned DINode::getFlag(StringRef Flag) {
   return StringSwitch<unsigned>(Flag)
 #define HANDLE_DI_FLAG(ID, NAME) .Case("DIFlag" #NAME, Flag##NAME)
-#include "llvm/IR/DebugInfoFlags.def"
+#include "llvm37/IR/DebugInfoFlags.def"
       .Default(0);
 }
 
@@ -97,7 +97,7 @@ const char *DINode::getFlagString(unsigned Flag) {
 #define HANDLE_DI_FLAG(ID, NAME)                                               \
   case Flag##NAME:                                                             \
     return "DIFlag" #NAME;
-#include "llvm/IR/DebugInfoFlags.def"
+#include "llvm37/IR/DebugInfoFlags.def"
   }
 }
 
@@ -120,7 +120,7 @@ unsigned DINode::splitFlags(unsigned Flags,
     SplitFlags.push_back(Bit);                                                 \
     Flags &= ~Bit;                                                             \
   }
-#include "llvm/IR/DebugInfoFlags.def"
+#include "llvm37/IR/DebugInfoFlags.def"
 
   return Flags;
 }
@@ -173,7 +173,7 @@ static bool isCanonical(const MDString *S) {
 }
 #endif
 
-GenericDINode *GenericDINode::getImpl(LLVMContext &Context, unsigned Tag,
+GenericDINode *GenericDINode::getImpl(LLVM37Context &Context, unsigned Tag,
                                       MDString *Header,
                                       ArrayRef<Metadata *> DwarfOps,
                                       StorageType Storage, bool ShouldCreate) {
@@ -228,13 +228,13 @@ void GenericDINode::recalculateHash() {
                        CLASS(Context, Storage, OPS),                           \
                    Storage, Context.pImpl->CLASS##s)
 
-DISubrange *DISubrange::getImpl(LLVMContext &Context, int64_t Count, int64_t Lo,
+DISubrange *DISubrange::getImpl(LLVM37Context &Context, int64_t Count, int64_t Lo,
                                 StorageType Storage, bool ShouldCreate) {
   DEFINE_GETIMPL_LOOKUP(DISubrange, (Count, Lo));
   DEFINE_GETIMPL_STORE_NO_OPS(DISubrange, (Count, Lo));
 }
 
-DIEnumerator *DIEnumerator::getImpl(LLVMContext &Context, int64_t Value,
+DIEnumerator *DIEnumerator::getImpl(LLVM37Context &Context, int64_t Value,
                                     MDString *Name, StorageType Storage,
                                     bool ShouldCreate) {
   assert(isCanonical(Name) && "Expected canonical MDString");
@@ -243,7 +243,7 @@ DIEnumerator *DIEnumerator::getImpl(LLVMContext &Context, int64_t Value,
   DEFINE_GETIMPL_STORE(DIEnumerator, (Value), Ops);
 }
 
-DIBasicType *DIBasicType::getImpl(LLVMContext &Context, unsigned Tag,
+DIBasicType *DIBasicType::getImpl(LLVM37Context &Context, unsigned Tag,
                                   MDString *Name, uint64_t SizeInBits,
                                   uint64_t AlignInBits, unsigned Encoding,
                                   StorageType Storage, bool ShouldCreate) {
@@ -256,7 +256,7 @@ DIBasicType *DIBasicType::getImpl(LLVMContext &Context, unsigned Tag,
 }
 
 DIDerivedType *DIDerivedType::getImpl(
-    LLVMContext &Context, unsigned Tag, MDString *Name, Metadata *File,
+    LLVM37Context &Context, unsigned Tag, MDString *Name, Metadata *File,
     unsigned Line, Metadata *Scope, Metadata *BaseType, uint64_t SizeInBits,
     uint64_t AlignInBits, uint64_t OffsetInBits, unsigned Flags,
     Metadata *ExtraData, StorageType Storage, bool ShouldCreate) {
@@ -271,7 +271,7 @@ DIDerivedType *DIDerivedType::getImpl(
 }
 
 DICompositeType *DICompositeType::getImpl(
-    LLVMContext &Context, unsigned Tag, MDString *Name, Metadata *File,
+    LLVM37Context &Context, unsigned Tag, MDString *Name, Metadata *File,
     unsigned Line, Metadata *Scope, Metadata *BaseType, uint64_t SizeInBits,
     uint64_t AlignInBits, uint64_t OffsetInBits, unsigned Flags,
     Metadata *Elements, unsigned RuntimeLang, Metadata *VTableHolder,
@@ -290,7 +290,7 @@ DICompositeType *DICompositeType::getImpl(
                        Ops);
 }
 
-DISubroutineType *DISubroutineType::getImpl(LLVMContext &Context,
+DISubroutineType *DISubroutineType::getImpl(LLVM37Context &Context,
                                             unsigned Flags, Metadata *TypeArray,
                                             StorageType Storage,
                                             bool ShouldCreate) {
@@ -300,7 +300,7 @@ DISubroutineType *DISubroutineType::getImpl(LLVMContext &Context,
   DEFINE_GETIMPL_STORE(DISubroutineType, (Flags), Ops);
 }
 
-DIFile *DIFile::getImpl(LLVMContext &Context, MDString *Filename,
+DIFile *DIFile::getImpl(LLVM37Context &Context, MDString *Filename,
                         MDString *Directory, StorageType Storage,
                         bool ShouldCreate) {
   assert(isCanonical(Filename) && "Expected canonical MDString");
@@ -311,7 +311,7 @@ DIFile *DIFile::getImpl(LLVMContext &Context, MDString *Filename,
 }
 
 DICompileUnit *DICompileUnit::getImpl(
-    LLVMContext &Context, unsigned SourceLanguage, Metadata *File,
+    LLVM37Context &Context, unsigned SourceLanguage, Metadata *File,
     MDString *Producer, bool IsOptimized, MDString *Flags,
     unsigned RuntimeVersion, MDString *SplitDebugFilename,
     unsigned EmissionKind, Metadata *EnumTypes, Metadata *RetainedTypes,
@@ -341,7 +341,7 @@ DISubprogram *DILocalScope::getSubprogram() const {
 }
 
 DISubprogram *DISubprogram::getImpl(
-    LLVMContext &Context, Metadata *Scope, MDString *Name,
+    LLVM37Context &Context, Metadata *Scope, MDString *Name,
     MDString *LinkageName, Metadata *File, unsigned Line, Metadata *Type,
     bool IsLocalToUnit, bool IsDefinition, unsigned ScopeLine,
     Metadata *ContainingType, unsigned Virtuality, unsigned VirtualIndex,
@@ -385,7 +385,7 @@ void DISubprogram::replaceFunction(Function *F) {
                     : static_cast<ConstantAsMetadata *>(nullptr));
 }
 
-DILexicalBlock *DILexicalBlock::getImpl(LLVMContext &Context, Metadata *Scope,
+DILexicalBlock *DILexicalBlock::getImpl(LLVM37Context &Context, Metadata *Scope,
                                         Metadata *File, unsigned Line,
                                         unsigned Column, StorageType Storage,
                                         bool ShouldCreate) {
@@ -395,7 +395,7 @@ DILexicalBlock *DILexicalBlock::getImpl(LLVMContext &Context, Metadata *Scope,
   DEFINE_GETIMPL_STORE(DILexicalBlock, (Line, Column), Ops);
 }
 
-DILexicalBlockFile *DILexicalBlockFile::getImpl(LLVMContext &Context,
+DILexicalBlockFile *DILexicalBlockFile::getImpl(LLVM37Context &Context,
                                                 Metadata *Scope, Metadata *File,
                                                 unsigned Discriminator,
                                                 StorageType Storage,
@@ -406,7 +406,7 @@ DILexicalBlockFile *DILexicalBlockFile::getImpl(LLVMContext &Context,
   DEFINE_GETIMPL_STORE(DILexicalBlockFile, (Discriminator), Ops);
 }
 
-DINamespace *DINamespace::getImpl(LLVMContext &Context, Metadata *Scope,
+DINamespace *DINamespace::getImpl(LLVM37Context &Context, Metadata *Scope,
                                   Metadata *File, MDString *Name, unsigned Line,
                                   StorageType Storage, bool ShouldCreate) {
   assert(isCanonical(Name) && "Expected canonical MDString");
@@ -415,7 +415,7 @@ DINamespace *DINamespace::getImpl(LLVMContext &Context, Metadata *Scope,
   DEFINE_GETIMPL_STORE(DINamespace, (Line), Ops);
 }
 
-DIModule *DIModule::getImpl(LLVMContext &Context, Metadata *Scope,
+DIModule *DIModule::getImpl(LLVM37Context &Context, Metadata *Scope,
                             MDString *Name, MDString *ConfigurationMacros,
                             MDString *IncludePath, MDString *ISysRoot,
                             StorageType Storage, bool ShouldCreate) {
@@ -427,7 +427,7 @@ DIModule *DIModule::getImpl(LLVMContext &Context, Metadata *Scope,
   DEFINE_GETIMPL_STORE_NO_CONSTRUCTOR_ARGS(DIModule, Ops);
 }
 
-DITemplateTypeParameter *DITemplateTypeParameter::getImpl(LLVMContext &Context,
+DITemplateTypeParameter *DITemplateTypeParameter::getImpl(LLVM37Context &Context,
                                                           MDString *Name,
                                                           Metadata *Type,
                                                           StorageType Storage,
@@ -439,7 +439,7 @@ DITemplateTypeParameter *DITemplateTypeParameter::getImpl(LLVMContext &Context,
 }
 
 DITemplateValueParameter *DITemplateValueParameter::getImpl(
-    LLVMContext &Context, unsigned Tag, MDString *Name, Metadata *Type,
+    LLVM37Context &Context, unsigned Tag, MDString *Name, Metadata *Type,
     Metadata *Value, StorageType Storage, bool ShouldCreate) {
   assert(isCanonical(Name) && "Expected canonical MDString");
   DEFINE_GETIMPL_LOOKUP(DITemplateValueParameter,
@@ -449,7 +449,7 @@ DITemplateValueParameter *DITemplateValueParameter::getImpl(
 }
 
 DIGlobalVariable *
-DIGlobalVariable::getImpl(LLVMContext &Context, Metadata *Scope, MDString *Name,
+DIGlobalVariable::getImpl(LLVM37Context &Context, Metadata *Scope, MDString *Name,
                           MDString *LinkageName, Metadata *File, unsigned Line,
                           Metadata *Type, bool IsLocalToUnit, bool IsDefinition,
                           Metadata *Variable,
@@ -467,7 +467,7 @@ DIGlobalVariable::getImpl(LLVMContext &Context, Metadata *Scope, MDString *Name,
                        Ops);
 }
 
-DILocalVariable *DILocalVariable::getImpl(LLVMContext &Context, unsigned Tag,
+DILocalVariable *DILocalVariable::getImpl(LLVM37Context &Context, unsigned Tag,
                                           Metadata *Scope, MDString *Name,
                                           Metadata *File, unsigned Line,
                                           Metadata *Type, unsigned Arg,
@@ -484,7 +484,7 @@ DILocalVariable *DILocalVariable::getImpl(LLVMContext &Context, unsigned Tag,
   DEFINE_GETIMPL_STORE(DILocalVariable, (Tag, Line, Arg, Flags), Ops);
 }
 
-DIExpression *DIExpression::getImpl(LLVMContext &Context,
+DIExpression *DIExpression::getImpl(LLVM37Context &Context,
                                     ArrayRef<uint64_t> Elements,
                                     StorageType Storage, bool ShouldCreate) {
   DEFINE_GETIMPL_LOOKUP(DIExpression, (Elements));
@@ -542,7 +542,7 @@ uint64_t DIExpression::getBitPieceSize() const {
 }
 
 DIObjCProperty *DIObjCProperty::getImpl(
-    LLVMContext &Context, MDString *Name, Metadata *File, unsigned Line,
+    LLVM37Context &Context, MDString *Name, Metadata *File, unsigned Line,
     MDString *GetterName, MDString *SetterName, unsigned Attributes,
     Metadata *Type, StorageType Storage, bool ShouldCreate) {
   assert(isCanonical(Name) && "Expected canonical MDString");
@@ -555,7 +555,7 @@ DIObjCProperty *DIObjCProperty::getImpl(
   DEFINE_GETIMPL_STORE(DIObjCProperty, (Line, Attributes), Ops);
 }
 
-DIImportedEntity *DIImportedEntity::getImpl(LLVMContext &Context, unsigned Tag,
+DIImportedEntity *DIImportedEntity::getImpl(LLVM37Context &Context, unsigned Tag,
                                             Metadata *Scope, Metadata *Entity,
                                             unsigned Line, MDString *Name,
                                             StorageType Storage,

@@ -1,6 +1,6 @@
 //===--- GeneratePCH.cpp - Sema Consumer for PCH Generation -----*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -18,7 +18,7 @@
 #include "clang/Basic/FileManager.h"
 #include "clang/Lex/Preprocessor.h"
 #include "clang/Sema/SemaConsumer.h"
-#include "llvm/Bitcode/BitstreamWriter.h"
+#include "llvm37/Bitcode/BitstreamWriter.h"
 #include <string>
 
 using namespace clang;

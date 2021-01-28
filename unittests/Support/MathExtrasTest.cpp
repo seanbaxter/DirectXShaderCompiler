@@ -1,6 +1,6 @@
 //===- unittests/Support/MathExtrasTest.cpp - math utils tests ------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -8,9 +8,9 @@
 //===----------------------------------------------------------------------===//
 
 #include "gtest/gtest.h"
-#include "llvm/Support/MathExtras.h"
+#include "llvm37/Support/MathExtras.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 namespace {
 

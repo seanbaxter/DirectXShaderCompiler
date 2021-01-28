@@ -1,6 +1,6 @@
 //===- InstCombineMulDivRem.cpp -------------------------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -13,10 +13,10 @@
 //===----------------------------------------------------------------------===//
 
 #include "InstCombineInternal.h"
-#include "llvm/Analysis/InstructionSimplify.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/IR/PatternMatch.h"
-using namespace llvm;
+#include "llvm37/Analysis/InstructionSimplify.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/IR/PatternMatch.h"
+using namespace llvm37;
 using namespace PatternMatch;
 
 #define DEBUG_TYPE "instcombine"
@@ -1127,7 +1127,7 @@ Instruction *InstCombiner::visitSDiv(BinaryOperator &I) {
     // sdiv X, C  -->  ashr exact X, log2(C)
     if (I.isExact() && RHS->getValue().isNonNegative() &&
         RHS->getValue().isPowerOf2()) {
-      Value *ShAmt = llvm::ConstantInt::get(RHS->getType(),
+      Value *ShAmt = llvm37::ConstantInt::get(RHS->getType(),
                                             RHS->getValue().exactLogBase2());
       return BinaryOperator::CreateExactAShr(Op0, ShAmt, I.getName());
     }

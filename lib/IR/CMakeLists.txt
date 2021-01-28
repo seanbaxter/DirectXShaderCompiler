@@ -1,4 +1,4 @@
-add_llvm_library(LLVMCore
+add_llvm_library(LLVM37Core
   AsmWriter.cpp
   Attributes.cpp
   AutoUpgrade.cpp
@@ -49,7 +49,7 @@ add_llvm_library(LLVMCore
   Verifier.cpp
 
   ADDITIONAL_HEADER_DIRS
-  ${LLVM_MAIN_INCLUDE_DIR}/llvm/IR
+  ${LLVM37_MAIN_INCLUDE_DIR}/llvm37/IR
   )
 
-add_dependencies(LLVMCore intrinsics_gen)
+add_dependencies(LLVM37Core intrinsics_gen)

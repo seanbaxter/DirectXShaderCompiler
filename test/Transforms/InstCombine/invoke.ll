@@ -3,7 +3,7 @@ target datalayout = "e-p:64:64:64-i1:8:8-i8:8:8-i16:16:16-i32:32:32-i64:64:64-f3
 
 declare i32 @__gxx_personality_v0(...)
 declare void @__cxa_call_unexpected(i8*)
-declare i64 @llvm.objectsize.i64(i8*, i1) nounwind readonly
+declare i64 @llvm37.objectsize.i64(i8*, i1) nounwind readonly
 declare i8* @_Znwm(i64)
 
 
@@ -16,7 +16,7 @@ entry:
 
 invoke.cont:
 ; CHECK: ret i64 0
-  %0 = tail call i64 @llvm.objectsize.i64(i8* %call, i1 false)
+  %0 = tail call i64 @llvm37.objectsize.i64(i8* %call, i1 false)
   ret i64 %0
 
 lpad:
@@ -36,7 +36,7 @@ entry:
 
 invoke.cont:
 ; CHECK: ret i64 0
-  %0 = tail call i64 @llvm.objectsize.i64(i8* %call, i1 false)
+  %0 = tail call i64 @llvm37.objectsize.i64(i8* %call, i1 false)
   ret i64 %0
 
 lpad:
@@ -49,7 +49,7 @@ lpad:
 
 ; CHECK-LABEL: @f3(
 define void @f3() nounwind uwtable ssp personality i8* bitcast (i32 (...)* @__gxx_personality_v0 to i8*) {
-; CHECK: invoke void @llvm.donothing()
+; CHECK: invoke void @llvm37.donothing()
   %call = invoke noalias i8* @_Znwm(i64 13)
           to label %invoke.cont unwind label %lpad
 

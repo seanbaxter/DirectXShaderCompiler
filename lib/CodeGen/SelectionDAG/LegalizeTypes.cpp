@@ -1,6 +1,6 @@
 //===-- LegalizeTypes.cpp - Common code for DAG type legalizer ------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -14,13 +14,13 @@
 //===----------------------------------------------------------------------===//
 
 #include "LegalizeTypes.h"
-#include "llvm/ADT/SetVector.h"
-#include "llvm/IR/CallingConv.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/raw_ostream.h"
-using namespace llvm;
+#include "llvm37/ADT/SetVector.h"
+#include "llvm37/IR/CallingConv.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/raw_ostream.h"
+using namespace llvm37;
 
 #define DEBUG_TYPE "legalize-types"
 
@@ -161,7 +161,7 @@ void DAGTypeLegalizer::PerformExpensiveChecks() {
         if (Mapped & 128)
           dbgs() << " WidenedVectors";
         dbgs() << "\n";
-        llvm_unreachable(nullptr);
+        llvm37_unreachable(nullptr);
       }
     }
   }
@@ -443,7 +443,7 @@ NodeDone:
 
     if (Failed) {
       I->dump(&DAG); dbgs() << "\n";
-      llvm_unreachable(nullptr);
+      llvm37_unreachable(nullptr);
     }
   }
 #endif

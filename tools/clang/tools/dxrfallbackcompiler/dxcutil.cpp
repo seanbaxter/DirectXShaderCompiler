@@ -17,21 +17,21 @@
 #include "dxcutil.h"
 #include "dxillib.h"
 #include "clang/Basic/Diagnostic.h"
-#include "llvm/Bitcode/ReaderWriter.h"
-#include "llvm/IR/DiagnosticInfo.h"
-#include "llvm/IR/DiagnosticPrinter.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Module.h"
-#include "llvm/Support/MemoryBuffer.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Transforms/Utils/Cloning.h"
+#include "llvm37/Bitcode/ReaderWriter.h"
+#include "llvm37/IR/DiagnosticInfo.h"
+#include "llvm37/IR/DiagnosticPrinter.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/Support/MemoryBuffer.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Transforms/Utils/Cloning.h"
 #include "dxc/Support/dxcapi.impl.h"
 #include "dxc/Support/HLSLOptions.h"
 #include "dxc/DXIL/DxilModule.h"
 
-#include "llvm/Support/Path.h"
+#include "llvm37/Support/Path.h"
 
-using namespace llvm;
+using namespace llvm37;
 using namespace hlsl;
 
 // This declaration is used for the locally-linked validator.
@@ -41,8 +41,8 @@ HRESULT CreateDxcValidator(_In_ REFIID riid, _Out_ LPVOID *ppv);
 // kept internal because the layout of the module class may change based
 // on changes across modules, or picking a different compiler version or CRT.
 HRESULT RunInternalValidator(_In_ IDxcValidator *pValidator,
-                             _In_ llvm::Module *pModule,
-                             _In_ llvm::Module *pDebugModule,
+                             _In_ llvm37::Module *pModule,
+                             _In_ llvm37::Module *pDebugModule,
                              _In_ IDxcBlob *pShader, UINT32 Flags,
                              _In_ IDxcOperationResult **ppResult);
 
@@ -65,13 +65,13 @@ bool CreateValidator(CComPtr<IDxcValidator> &pValidator) {
 
 namespace dxcutil {
 
-AssembleInputs::AssembleInputs(std::unique_ptr<llvm::Module> &&pM,
+AssembleInputs::AssembleInputs(std::unique_ptr<llvm37::Module> &&pM,
                 CComPtr<IDxcBlob> &pOutputContainerBlob,
                 IMalloc *pMalloc,
                 hlsl::SerializeDxilFlags SerializeFlags,
                 CComPtr<hlsl::AbstractMemoryStream> &pModuleBitcode,
                 bool bDebugInfo,
-                llvm::StringRef DebugName,
+                llvm37::StringRef DebugName,
                 clang::DiagnosticsEngine *pDiag,
                 hlsl::DxilShaderHash *pShaderHashOut,
                 AbstractMemoryStream *pReflectionOut,
@@ -121,7 +121,7 @@ void ReadOptsAndValidate(hlsl::options::MainArgs &mainArgs,
                          AbstractMemoryStream *pOutputStream,
                          _COM_Outptr_ IDxcOperationResult **ppResult,
                          bool &finished) {
-  const llvm::opt::OptTable *table = ::options::getHlslOptTable();
+  const llvm37::opt::OptTable *table = ::options::getHlslOptTable();
   raw_stream_ostream outStream(pOutputStream);
   if (0 != hlsl::options::ReadDxcOpts(table, hlsl::options::CompilerFlags,
                                       mainArgs, opts, outStream)) {
@@ -145,7 +145,7 @@ HRESULT ValidateAndAssembleToContainer(AssembleInputs &inputs) {
 
   // If we have debug info, this will be a clone of the module before debug info is stripped.
   // This is used with internal validator to provide more useful error messages.
-  std::unique_ptr<llvm::Module> llvmModuleWithDebugInfo;
+  std::unique_ptr<llvm37::Module> llvm37ModuleWithDebugInfo;
 
   CComPtr<IDxcValidator> pValidator;
   bool bInternalValidator = CreateValidator(pValidator);
@@ -167,7 +167,7 @@ HRESULT ValidateAndAssembleToContainer(AssembleInputs &inputs) {
     // info will be stripped from the orginal module, but preserved in the cloned
     // module.
     if (inputs.bDebugInfo) {
-      llvmModuleWithDebugInfo.reset(llvm::CloneModule(inputs.pM.get()));
+      llvm37ModuleWithDebugInfo.reset(llvm37::CloneModule(inputs.pM.get()));
     }
   }
 
@@ -200,7 +200,7 @@ HRESULT ValidateAndAssembleToContainer(AssembleInputs &inputs) {
   // dxil.dll can be released.
   if (bInternalValidator) {
     IFT(RunInternalValidator(pValidator, inputs.pM.get(),
-                             llvmModuleWithDebugInfo.get(), inputs.pOutputContainerBlob,
+                             llvm37ModuleWithDebugInfo.get(), inputs.pOutputContainerBlob,
                              DxcValidatorFlags_InPlaceEdit, &pValResult));
   } else {
     IFT(pValidator->Validate(inputs.pOutputContainerBlob, DxcValidatorFlags_InPlaceEdit,
@@ -288,8 +288,8 @@ void CreateOperationResultFromOutputs(
     pResultBlob, pErrorStream, warnings, hasErrorOccurred, ppResult);
 }
 
-bool IsAbsoluteOrCurDirRelative(const llvm::Twine &T) {
-  if (llvm::sys::path::is_absolute(T)) {
+bool IsAbsoluteOrCurDirRelative(const llvm37::Twine &T) {
+  if (llvm37::sys::path::is_absolute(T)) {
     return true;
   }
   if (T.isSingleStringRef()) {

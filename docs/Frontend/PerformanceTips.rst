@@ -10,15 +10,15 @@ Abstract
 ========
 
 The intended audience of this document is developers of language frontends 
-targeting LLVM IR. This document is home to a collection of tips on how to 
-generate IR that optimizes well.  As with any optimizer, LLVM has its strengths
+targeting LLVM37 IR. This document is home to a collection of tips on how to 
+generate IR that optimizes well.  As with any optimizer, LLVM37 has its strengths
 and weaknesses.  In some cases, surprisingly small changes in the source IR 
 can have a large effect on the generated code.  
 
 Avoid loads and stores of large aggregate type
 ================================================
 
-LLVM currently does not optimize well loads and stores of large :ref:`aggregate
+LLVM37 currently does not optimize well loads and stores of large :ref:`aggregate
 types <t_aggregate>` (i.e. structs and arrays).  As an alternative, consider 
 loading individual fields from memory.
 
@@ -30,18 +30,18 @@ Prefer zext over sext when legal
 ==================================
 
 On some architectures (X86_64 is one), sign extension can involve an extra 
-instruction whereas zero extension can be folded into a load.  LLVM will try to
+instruction whereas zero extension can be folded into a load.  LLVM37 will try to
 replace a sext with a zext when it can be proven safe, but if you have 
 information in your source language about the range of a integer value, it can 
 be profitable to use a zext rather than a sext.  
 
 Alternatively, you can :ref:`specify the range of the value using metadata 
-<range-metadata>` and LLVM can do the sext to zext conversion for you.
+<range-metadata>` and LLVM37 can do the sext to zext conversion for you.
 
 Zext GEP indices to machine register width
 ============================================
 
-Internally, LLVM often promotes the width of GEP indices to machine register
+Internally, LLVM37 often promotes the width of GEP indices to machine register
 width.  When it does so, it will default to using sign extension (sext) 
 operations for safety.  If your source language provides information about 
 the range of the index, you may wish to manually extend indices to machine 
@@ -120,7 +120,7 @@ Other things to consider
 #. When generating code for loops, try to avoid terminating the header block of
    the loop earlier than necessary.  If the terminator of the loop header 
    block is a loop exiting conditional branch, the effectiveness of LICM will
-   be limited for loads not in the header.  (This is due to the fact that LLVM 
+   be limited for loads not in the header.  (This is due to the fact that LLVM37 
    may not know such a load is safe to speculatively execute and thus can't 
    lift an otherwise loop invariant load unless it can prove the exiting 
    condition is not taken.)  It can be profitable, in some cases, to emit such 

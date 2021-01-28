@@ -5,7 +5,7 @@
 // This file is distributed under the University of Illinois Open Source     //
 // License. See LICENSE.TXT for details.                                     //
 //                                                                           //
-// Defines DXC's PIX api for exposing llvm::DIVariables.                     //
+// Defines DXC's PIX api for exposing llvm37::DIVariables.                     //
 //                                                                           //
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -15,8 +15,8 @@
 #include "dxc/dxcpix.h"
 #include "dxc/Support/microcom.h"
 #include "dxc/Support/Global.h"
-#include "llvm/IR/DebugInfo.h"
-#include "llvm/IR/DebugInfoMetadata.h"
+#include "llvm37/IR/DebugInfo.h"
+#include "llvm37/IR/DebugInfoMetadata.h"
 
 #include "DxcPixBase.h"
 #include "DxcPixDxilDebugInfo.h"
@@ -37,7 +37,7 @@ class DxcPixVariable : public IDxcPixVariable
   CComPtr<DxcPixDxilDebugInfo> m_pDxilDebugInfo;
   T *m_pVariable;
   VariableInfo const *m_pVarInfo;
-  llvm::DIType *m_pType;
+  llvm37::DIType *m_pType;
 
   DxcPixVariable(
       IMalloc *pMalloc,
@@ -49,7 +49,7 @@ class DxcPixVariable : public IDxcPixVariable
     , m_pVariable(pVariable)
     , m_pVarInfo(pVarInfo)
   {
-    const llvm::DITypeIdentifierMap EmptyMap;
+    const llvm37::DITypeIdentifierMap EmptyMap;
     m_pType = m_pVariable->getType().resolve(EmptyMap);
   }
 
@@ -127,8 +127,8 @@ private:
 #ifndef NDEBUG
     for (auto VarAndInfo : m_LiveVars)
     {
-        assert(llvm::isa<llvm::DIGlobalVariable>(VarAndInfo->m_Variable) ||
-               llvm::isa<llvm::DILocalVariable>(VarAndInfo->m_Variable));
+        assert(llvm37::isa<llvm37::DIGlobalVariable>(VarAndInfo->m_Variable) ||
+               llvm37::isa<llvm37::DILocalVariable>(VarAndInfo->m_Variable));
     }
 #endif  // !NDEBUG
   }
@@ -169,18 +169,18 @@ STDMETHODIMP dxil_debug_info::DxcPixDxilLiveVariables::CreateDxcPixVariable(
     VariableInfo const* VarInfo) const
 {
   auto *Var = VarInfo->m_Variable;
-  if (auto *DILV = llvm::dyn_cast<llvm::DILocalVariable>(Var))
+  if (auto *DILV = llvm37::dyn_cast<llvm37::DILocalVariable>(Var))
   {
-    return NewDxcPixDxilDebugInfoObjectOrThrow<DxcPixVariable<llvm::DILocalVariable>>(
+    return NewDxcPixDxilDebugInfoObjectOrThrow<DxcPixVariable<llvm37::DILocalVariable>>(
         ppVariable,
         m_pMalloc,
         m_pDxilDebugInfo,
         DILV,
         VarInfo);
   }
-  else if (auto *DIGV = llvm::dyn_cast<llvm::DIGlobalVariable>(Var))
+  else if (auto *DIGV = llvm37::dyn_cast<llvm37::DIGlobalVariable>(Var))
   {
-    return NewDxcPixDxilDebugInfoObjectOrThrow<DxcPixVariable<llvm::DIGlobalVariable>>(
+    return NewDxcPixDxilDebugInfoObjectOrThrow<DxcPixVariable<llvm37::DIGlobalVariable>>(
         ppVariable,
         m_pMalloc,
         m_pDxilDebugInfo,

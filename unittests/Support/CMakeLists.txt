@@ -1,9 +1,9 @@
-set(LLVM_LINK_COMPONENTS
-  ${LLVM_TARGETS_TO_BUILD}
+set(LLVM37_LINK_COMPONENTS
+  ${LLVM37_TARGETS_TO_BUILD}
   Support
   )
 
-add_llvm_unittest(SupportTests
+add_llvm37_unittest(SupportTests
   AlignOfTest.cpp
   AllocatorTest.cpp
   ArrayRecyclerTest.cpp
@@ -50,6 +50,6 @@ add_llvm_unittest(SupportTests
   )
 
 # ManagedStatic.cpp uses <pthread>.
-if(LLVM_ENABLE_THREADS AND HAVE_LIBPTHREAD)
+if(LLVM37_ENABLE_THREADS AND HAVE_LIBPTHREAD)
   target_link_libraries(SupportTests pthread)
 endif()

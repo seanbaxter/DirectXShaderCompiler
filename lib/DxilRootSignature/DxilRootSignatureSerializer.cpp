@@ -17,8 +17,8 @@
 #include "dxc/Support/FileIOHelper.h"
 #include "dxc/dxcapi.h"
 
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/IR/DiagnosticPrinter.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/IR/DiagnosticPrinter.h"
 
 #include <string>
 #include <algorithm>
@@ -28,7 +28,7 @@
 
 #include "DxilRootSignatureHelper.h"
 
-using namespace llvm;
+using namespace llvm37;
 using std::string;
 
 namespace hlsl {

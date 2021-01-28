@@ -1,6 +1,6 @@
-//===- llvm/Support/Options.cpp - Debug options support ---------*- C++ -*-===//
+//===- llvm37/Support/Options.cpp - Debug options support ---------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -12,10 +12,10 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Support/Options.h"
-#include "llvm/Support/ManagedStatic.h"
+#include "llvm37/Support/Options.h"
+#include "llvm37/Support/ManagedStatic.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 OptionRegistry::~OptionRegistry() {
   for (auto IT = Options.begin(); IT != Options.end(); ++IT)

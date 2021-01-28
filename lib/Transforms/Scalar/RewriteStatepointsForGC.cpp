@@ -1,6 +1,6 @@
 //===- RewriteStatepointsForGC.cpp - Make GC relocations explicit ---------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -12,39 +12,39 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Pass.h"
-#include "llvm/Analysis/CFG.h"
-#include "llvm/Analysis/TargetTransformInfo.h"
-#include "llvm/ADT/SetOperations.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/ADT/DenseSet.h"
-#include "llvm/ADT/SetVector.h"
-#include "llvm/ADT/StringRef.h"
-#include "llvm/IR/BasicBlock.h"
-#include "llvm/IR/CallSite.h"
-#include "llvm/IR/Dominators.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/IRBuilder.h"
-#include "llvm/IR/InstIterator.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/Intrinsics.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/MDBuilder.h"
-#include "llvm/IR/Statepoint.h"
-#include "llvm/IR/Value.h"
-#include "llvm/IR/Verifier.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Transforms/Scalar.h"
-#include "llvm/Transforms/Utils/BasicBlockUtils.h"
-#include "llvm/Transforms/Utils/Cloning.h"
-#include "llvm/Transforms/Utils/Local.h"
-#include "llvm/Transforms/Utils/PromoteMemToReg.h"
+#include "llvm37/Pass.h"
+#include "llvm37/Analysis/CFG.h"
+#include "llvm37/Analysis/TargetTransformInfo.h"
+#include "llvm37/ADT/SetOperations.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/ADT/DenseSet.h"
+#include "llvm37/ADT/SetVector.h"
+#include "llvm37/ADT/StringRef.h"
+#include "llvm37/IR/BasicBlock.h"
+#include "llvm37/IR/CallSite.h"
+#include "llvm37/IR/Dominators.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/IRBuilder.h"
+#include "llvm37/IR/InstIterator.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/Intrinsics.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/MDBuilder.h"
+#include "llvm37/IR/Statepoint.h"
+#include "llvm37/IR/Value.h"
+#include "llvm37/IR/Verifier.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Transforms/Scalar.h"
+#include "llvm37/Transforms/Utils/BasicBlockUtils.h"
+#include "llvm37/Transforms/Utils/Cloning.h"
+#include "llvm37/Transforms/Utils/Local.h"
+#include "llvm37/Transforms/Utils/PromoteMemToReg.h"
 
 #define DEBUG_TYPE "rewrite-statepoints-for-gc"
 
-using namespace llvm;
+using namespace llvm37;
 
 // Print tracing output
 static cl::opt<bool> TraceLSP("trace-rewrite-statepoints", cl::Hidden,
@@ -122,7 +122,7 @@ struct RewriteStatepointsForGC : public ModulePass {
 
 char RewriteStatepointsForGC::ID = 0;
 
-ModulePass *llvm::createRewriteStatepointsForGCPass() {
+ModulePass *llvm37::createRewriteStatepointsForGCPass() {
   return new RewriteStatepointsForGC();
 }
 
@@ -160,7 +160,7 @@ struct GCPtrLivenessData {
 // base relation will remain.  Internally, we add a mixture of the two
 // types, then update all the second type to the first type
 typedef DenseMap<Value *, Value *> DefiningValueMapTy;
-typedef DenseSet<llvm::Value *> StatepointLiveSetTy;
+typedef DenseSet<llvm37::Value *> StatepointLiveSetTy;
 typedef DenseMap<Instruction *, Value *> RematerializedValueMapTy;
 
 struct PartiallyConstructedSafepointRecord {
@@ -168,7 +168,7 @@ struct PartiallyConstructedSafepointRecord {
   StatepointLiveSetTy liveset;
 
   /// Mapping from live pointers to a base-defining-value
-  DenseMap<llvm::Value *, llvm::Value *> PointerToBase;
+  DenseMap<llvm37::Value *, llvm37::Value *> PointerToBase;
 
   /// The *new* gc.statepoint instruction itself.  This produces the token
   /// that normal path gc.relocates and the gc.result are tied to.
@@ -247,7 +247,7 @@ static bool isUnhandledGCPointerType(Type *Ty) {
 }
 #endif
 
-static bool order_by_name(llvm::Value *a, llvm::Value *b) {
+static bool order_by_name(llvm37::Value *a, llvm37::Value *b) {
   if (a->hasName() && b->hasName()) {
     return -1 == a->getName().compare(b->getName());
   } else if (a->hasName() && !b->hasName()) {
@@ -487,18 +487,18 @@ static Value *findBaseDefiningValue(Value *I) {
     case Intrinsic::experimental_gc_statepoint:
     case Intrinsic::experimental_gc_result_float:
     case Intrinsic::experimental_gc_result_int:
-      llvm_unreachable("these don't produce pointers");
+      llvm37_unreachable("these don't produce pointers");
     case Intrinsic::experimental_gc_relocate: {
       // Rerunning safepoint insertion after safepoints are already
       // inserted is not supported.  It could probably be made to work,
       // but why are you doing this?  There's no good reason.
-      llvm_unreachable("repeat safepoint insertion is not supported");
+      llvm37_unreachable("repeat safepoint insertion is not supported");
     }
     case Intrinsic::gcroot:
       // Currently, this mechanism hasn't been extended to work with gcroot.
       // There's no reason it couldn't be, but I haven't thought about the
       // implications much.
-      llvm_unreachable(
+      llvm37_unreachable(
           "interaction with the gcroot mechanism is not supported");
     }
   }
@@ -689,7 +689,7 @@ private:
     case PhiState::Conflict:
       return stateA;
     }
-    llvm_unreachable("only three states!");
+    llvm37_unreachable("only three states!");
   }
 };
 }
@@ -919,7 +919,7 @@ static Value *findBasePointer(Value *I, DefiningValueMapTy &cache) {
           // values incoming from the same basic block may be
           // different is by being different bitcasts of the same
           // value.  A cleanup that remains TODO is changing
-          // findBaseOrBDV to return an llvm::Value of the correct
+          // findBaseOrBDV to return an llvm37::Value of the correct
           // type (and still remain pure).  This will remove the
           // need to add bitcasts.
           assert(base->stripPointerCasts() == oldBase->stripPointerCasts() &&
@@ -1024,7 +1024,7 @@ static Value *findBasePointer(Value *I, DefiningValueMapTy &cache) {
 // pointer was a base pointer.
 static void
 findBasePointers(const StatepointLiveSetTy &live,
-                 DenseMap<llvm::Value *, llvm::Value *> &PointerToBase,
+                 DenseMap<llvm37::Value *, llvm37::Value *> &PointerToBase,
                  DominatorTree *DT, DefiningValueMapTy &DVCache) {
   // For the naming of values inserted to be deterministic - which makes for
   // much cleaner and more stable tests - we need to assign an order to the
@@ -1056,7 +1056,7 @@ findBasePointers(const StatepointLiveSetTy &live,
 static void findBasePointers(DominatorTree &DT, DefiningValueMapTy &DVCache,
                              const CallSite &CS,
                              PartiallyConstructedSafepointRecord &result) {
-  DenseMap<llvm::Value *, llvm::Value *> PointerToBase;
+  DenseMap<llvm37::Value *, llvm37::Value *> PointerToBase;
   findBasePointers(result.liveset, PointerToBase, &DT, DVCache);
 
   if (PrintBasePointers) {
@@ -1173,9 +1173,9 @@ static AttributeSet legalizeCallAttributes(AttributeSet AS) {
 ///   statepointToken - statepoint instruction to which relocates should be
 ///   bound.
 ///   Builder - Llvm IR builder to be used to construct new calls.
-static void CreateGCRelocates(ArrayRef<llvm::Value *> LiveVariables,
+static void CreateGCRelocates(ArrayRef<llvm37::Value *> LiveVariables,
                               const int LiveStart,
-                              ArrayRef<llvm::Value *> BasePtrs,
+                              ArrayRef<llvm37::Value *> BasePtrs,
                               Instruction *StatepointToken,
                               IRBuilder<> Builder) {
   SmallVector<Instruction *, 64> NewDefs;
@@ -1190,7 +1190,7 @@ static void CreateGCRelocates(ArrayRef<llvm::Value *> LiveVariables,
     // greatly and makes it much more readable.
     SmallVector<Type *, 1> Types;                 // one per 'any' type
     // All gc_relocate are set to i8 addrspace(1)* type. This could help avoid
-    // cases where the actual value's type mangling is not supported by llvm. A
+    // cases where the actual value's type mangling is not supported by llvm37. A
     // bitcast is added later to convert gc_relocate to the actual value's type.
     Types.push_back(Type::getInt8PtrTy(M->getContext(), 1));
     Value *GCRelocateDecl = Intrinsic::getDeclaration(
@@ -1221,8 +1221,8 @@ static void CreateGCRelocates(ArrayRef<llvm::Value *> LiveVariables,
 
 static void
 makeStatepointExplicitImpl(const CallSite &CS, /* to replace */
-                           const SmallVectorImpl<llvm::Value *> &basePtrs,
-                           const SmallVectorImpl<llvm::Value *> &liveVariables,
+                           const SmallVectorImpl<llvm37::Value *> &basePtrs,
+                           const SmallVectorImpl<llvm37::Value *> &liveVariables,
                            Pass *P,
                            PartiallyConstructedSafepointRecord &result) {
   assert(basePtrs.size() == liveVariables.size());
@@ -1249,7 +1249,7 @@ makeStatepointExplicitImpl(const CallSite &CS, /* to replace */
   IRBuilder<> Builder(insertBefore);
   // Copy all of the arguments from the original statepoint - this includes the
   // target, call args, and deopt args
-  SmallVector<llvm::Value *, 64> args;
+  SmallVector<llvm37::Value *, 64> args;
   args.insert(args.end(), CS.arg_begin(), CS.arg_end());
   // TODO: Clear the 'needs rewrite' flag
 
@@ -1950,7 +1950,7 @@ chainToBasePointerCost(SmallVectorImpl<Instruction*> &Chain,
         Cost += 2;
 
     } else {
-      llvm_unreachable("unsupported instruciton type during rematerialization");
+      llvm37_unreachable("unsupported instruciton type during rematerialization");
     }
   }
 
@@ -2287,7 +2287,7 @@ static bool insertParsePoints(Function &F, DominatorTree &DT, Pass *P,
 
 // Handles both return values and arguments for Functions and CallSites.
 template <typename AttrHolder>
-static void RemoveDerefAttrAtIndex(LLVMContext &Ctx, AttrHolder &AH,
+static void RemoveDerefAttrAtIndex(LLVM37Context &Ctx, AttrHolder &AH,
                                    unsigned Index) {
   AttrBuilder R;
   if (AH.getDereferenceableBytes(Index))
@@ -2304,7 +2304,7 @@ static void RemoveDerefAttrAtIndex(LLVMContext &Ctx, AttrHolder &AH,
 
 void
 RewriteStatepointsForGC::stripDereferenceabilityInfoFromPrototype(Function &F) {
-  LLVMContext &Ctx = F.getContext();
+  LLVM37Context &Ctx = F.getContext();
 
   for (Argument &A : F.args())
     if (isa<PointerType>(A.getType()))
@@ -2318,11 +2318,11 @@ void RewriteStatepointsForGC::stripDereferenceabilityInfoFromBody(Function &F) {
   if (F.empty())
     return;
 
-  LLVMContext &Ctx = F.getContext();
+  LLVM37Context &Ctx = F.getContext();
   MDBuilder Builder(Ctx);
 
   for (Instruction &I : inst_range(F)) {
-    if (const MDNode *MD = I.getMetadata(LLVMContext::MD_tbaa)) {
+    if (const MDNode *MD = I.getMetadata(LLVM37Context::MD_tbaa)) {
       assert(MD->getNumOperands() < 5 && "unrecognized metadata shape!");
       bool IsImmutableTBAA =
           MD->getNumOperands() == 4 &&
@@ -2338,7 +2338,7 @@ void RewriteStatepointsForGC::stripDereferenceabilityInfoFromBody(Function &F) {
 
       MDNode *MutableTBAA =
           Builder.createTBAAStructTagNode(Base, Access, Offset);
-      I.setMetadata(LLVMContext::MD_tbaa, MutableTBAA);
+      I.setMetadata(LLVM37Context::MD_tbaa, MutableTBAA);
     }
 
     if (CallSite CS = CallSite(&I)) {
@@ -2462,7 +2462,7 @@ static void computeLiveInValues(BasicBlock::reverse_iterator rbegin,
       if (isHandledGCPointerType(V->getType()) && !isa<Constant>(V)) {
         // The choice to exclude all things constant here is slightly subtle.
         // There are two idependent reasons:
-        // - We assume that things which are constant (from LLVM's definition)
+        // - We assume that things which are constant (from LLVM37's definition)
         // do not move at runtime.  For example, the address of a global
         // variable is fixed, even though it's contents may not be.
         // - Second, we can't disallow arbitrary inttoptr constants even
@@ -2507,7 +2507,7 @@ static void checkBasicSSA(DominatorTree &DT, DenseSet<Value *> &Live,
                           TerminatorInst *TI, bool TermOkay = false) {
   for (Value *V : Live) {
     if (auto *I = dyn_cast<Instruction>(V)) {
-      // The terminator can be a member of the LiveOut set.  LLVM's definition
+      // The terminator can be a member of the LiveOut set.  LLVM37's definition
       // of instruction dominance states that V does not dominate itself.  As
       // such, we need to special case this to allow it.
       if (TermOkay && TI == I)

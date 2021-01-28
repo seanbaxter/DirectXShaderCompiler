@@ -1,6 +1,6 @@
 //===--- DiagnosticRenderer.cpp - Diagnostic Pretty-Printing --------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -15,11 +15,11 @@
 #include "clang/Edit/EditedSource.h"
 #include "clang/Edit/EditsReceiver.h"
 #include "clang/Lex/Lexer.h"
-#include "llvm/ADT/SmallSet.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/MemoryBuffer.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/SmallSet.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/MemoryBuffer.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <algorithm>
 using namespace clang;
 
@@ -339,7 +339,7 @@ static void mapDiagnosticRanges(
     // Find the common parent for the beginning and end of the range.
 
     // First, crawl the expansion chain for the beginning of the range.
-    llvm::SmallDenseMap<FileID, SourceLocation> BeginLocsMap;
+    llvm37::SmallDenseMap<FileID, SourceLocation> BeginLocsMap;
     while (Begin.isMacroID() && BeginFileID != EndFileID) {
       BeginLocsMap[BeginFileID] = Begin;
       Begin = SM->getImmediateExpansionRange(Begin).first;
@@ -439,7 +439,7 @@ void DiagnosticRenderer::emitMacroExpansions(SourceLocation Loc,
     // Tell the user that we've skipped contexts.
     if (OnMacroInst == MacroSkipStart) {
       SmallString<200> MessageStorage;
-      llvm::raw_svector_ostream Message(MessageStorage);
+      llvm37::raw_svector_ostream Message(MessageStorage);
       Message << "(skipping " << (MacroSkipEnd - MacroSkipStart)
               << " expansions in backtrace; use -fmacro-backtrace-limit=0 to "
                  "see all)";
@@ -462,7 +462,7 @@ void DiagnosticRenderer::emitMacroExpansions(SourceLocation Loc,
   mapDiagnosticRanges(Loc, Ranges, SpellingRanges, &SM);
 
   SmallString<100> MessageStorage;
-  llvm::raw_svector_ostream Message(MessageStorage);
+  llvm37::raw_svector_ostream Message(MessageStorage);
   StringRef MacroName = getImmediateMacroName(Loc, SM, LangOpts);
   if (MacroName.empty())
     Message << "expanded from here";
@@ -479,7 +479,7 @@ void DiagnosticNoteRenderer::emitIncludeLocation(SourceLocation Loc,
                                                  const SourceManager &SM) {
   // Generate a note indicating the include location.
   SmallString<200> MessageStorage;
-  llvm::raw_svector_ostream Message(MessageStorage);
+  llvm37::raw_svector_ostream Message(MessageStorage);
   Message << "in file included from " << PLoc.getFilename() << ':'
           << PLoc.getLine() << ":";
   emitNote(Loc, Message.str(), &SM);
@@ -491,7 +491,7 @@ void DiagnosticNoteRenderer::emitImportLocation(SourceLocation Loc,
                                                 const SourceManager &SM) {
   // Generate a note indicating the include location.
   SmallString<200> MessageStorage;
-  llvm::raw_svector_ostream Message(MessageStorage);
+  llvm37::raw_svector_ostream Message(MessageStorage);
   Message << "in module '" << ModuleName << "' imported from "
           << PLoc.getFilename() << ':' << PLoc.getLine() << ":";
   emitNote(Loc, Message.str(), &SM);
@@ -504,7 +504,7 @@ DiagnosticNoteRenderer::emitBuildingModuleLocation(SourceLocation Loc,
                                                    const SourceManager &SM) {
   // Generate a note indicating the include location.
   SmallString<200> MessageStorage;
-  llvm::raw_svector_ostream Message(MessageStorage);
+  llvm37::raw_svector_ostream Message(MessageStorage);
   if (PLoc.getFilename())
     Message << "while building module '" << ModuleName << "' imported from "
             << PLoc.getFilename() << ':' << PLoc.getLine() << ":";

@@ -1,13 +1,13 @@
 ; RUN: opt < %s -simplifycfg -S | not grep "br label"
 
-	%llvm.dbg.anchor.type = type { i32, i32 }
-	%llvm.dbg.basictype.type = type { i32, { }*, i8*, { }*, i32, i64, i64, i64, i32, i32 }
-	%llvm.dbg.compile_unit.type = type { i32, { }*, i32, i8*, i8*, i8*, i1, i1, i8* }
-	%llvm.dbg.composite.type = type { i32, { }*, i8*, { }*, i32, i64, i64, i64, i32, { }*, { }* }
-	%llvm.dbg.derivedtype.type = type { i32, { }*, i8*, { }*, i32, i64, i64, i64, i32, { }* }
-	%llvm.dbg.global_variable.type = type { i32, { }*, { }*, i8*, i8*, i8*, { }*, i32, { }*, i1, i1, { }* }
-	%llvm.dbg.subprogram.type = type { i32, { }*, { }*, i8*, i8*, i8*, { }*, i32, { }*, i1, i1 }
-	%llvm.dbg.subrange.type = type { i32, i64, i64 }
+	%llvm37.dbg.anchor.type = type { i32, i32 }
+	%llvm37.dbg.basictype.type = type { i32, { }*, i8*, { }*, i32, i64, i64, i64, i32, i32 }
+	%llvm37.dbg.compile_unit.type = type { i32, { }*, i32, i8*, i8*, i8*, i1, i1, i8* }
+	%llvm37.dbg.composite.type = type { i32, { }*, i8*, { }*, i32, i64, i64, i64, i32, { }*, { }* }
+	%llvm37.dbg.derivedtype.type = type { i32, { }*, i8*, { }*, i32, i64, i64, i64, i32, { }* }
+	%llvm37.dbg.global_variable.type = type { i32, { }*, { }*, i8*, i8*, i8*, { }*, i32, { }*, i1, i1, { }* }
+	%llvm37.dbg.subprogram.type = type { i32, { }*, { }*, i8*, i8*, i8*, { }*, i32, { }*, i1, i1 }
+	%llvm37.dbg.subrange.type = type { i32, i64, i64 }
 	%struct.Group = type { %struct.Scene, %struct.Sphere, %"struct.std::list<Scene*,std::allocator<Scene*> >" }
 	%struct.Ray = type { %struct.Vec, %struct.Vec }
 	%struct.Scene = type { i32 (...)** }
@@ -44,11 +44,11 @@
 	%"struct.std::num_put<char,std::ostreambuf_iterator<char, std::char_traits<char> > >" = type { %"struct.std::locale::facet" }
 	%"struct.std::numeric_limits<double>" = type <{ i8 }>
 	%"struct.std::type_info" = type { i32 (...)**, i8* }
-@llvm.dbg.subprogram947 = external constant %llvm.dbg.subprogram.type		; <%llvm.dbg.subprogram.type*> [#uses=1]
+@llvm37.dbg.subprogram947 = external constant %llvm37.dbg.subprogram.type		; <%llvm37.dbg.subprogram.type*> [#uses=1]
 
-declare void @llvm.dbg.func.start({ }*) nounwind
+declare void @llvm37.dbg.func.start({ }*) nounwind
 
-declare void @llvm.dbg.region.end({ }*) nounwind
+declare void @llvm37.dbg.region.end({ }*) nounwind
 
 declare void @_ZN9__gnu_cxx13new_allocatorIP5SceneED2Ev(%struct.__false_type*) nounwind
 
@@ -56,7 +56,7 @@ define void @_ZNSaIP5SceneED1Ev(%struct.__false_type* %this) nounwind {
 entry:
 	%this_addr = alloca %struct.__false_type*		; <%struct.__false_type**> [#uses=2]
 	%"alloca point" = bitcast i32 0 to i32		; <i32> [#uses=0]
-	call void @llvm.dbg.func.start({ }* bitcast (%llvm.dbg.subprogram.type* @llvm.dbg.subprogram947 to { }*))
+	call void @llvm37.dbg.func.start({ }* bitcast (%llvm37.dbg.subprogram.type* @llvm37.dbg.subprogram947 to { }*))
 	store %struct.__false_type* %this, %struct.__false_type** %this_addr
 	%0 = load %struct.__false_type*, %struct.__false_type** %this_addr, align 4		; <%struct.__false_type*> [#uses=1]
 	call void @_ZN9__gnu_cxx13new_allocatorIP5SceneED2Ev(%struct.__false_type* %0) nounwind
@@ -66,6 +66,6 @@ bb:		; preds = %entry
 	br label %return
 
 return:		; preds = %bb
-	call void @llvm.dbg.region.end({ }* bitcast (%llvm.dbg.subprogram.type* @llvm.dbg.subprogram947 to { }*))
+	call void @llvm37.dbg.region.end({ }* bitcast (%llvm37.dbg.subprogram.type* @llvm37.dbg.subprogram947 to { }*))
 	ret void
 }

@@ -91,7 +91,7 @@ if.end:
 !5 = !{!6, !6, i64 0}
 !6 = !{!"int", !3, i64 0}
 
-!llvm.module.flags = !{!7, !8, !9}
+!llvm37.module.flags = !{!7, !8, !9}
 !7 = !{i32 2, !"Dwarf Version", i32 4}
 !8 = !{i32 2, !"Debug Info Version", i32 3}
 !9 = !{i32 1, !"PIC Level", i32 2}

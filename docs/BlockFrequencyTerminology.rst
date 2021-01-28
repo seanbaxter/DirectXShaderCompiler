@@ -1,5 +1,5 @@
 ================================
-LLVM Block Frequency Terminology
+LLVM37 Block Frequency Terminology
 ================================
 
 .. contents::
@@ -29,7 +29,7 @@ the sum of the weights on the predecessor's outgoing edges.
 
 For example, consider this IR:
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
    define void @foo() {
        ; ...

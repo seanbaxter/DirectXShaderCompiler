@@ -1,6 +1,6 @@
 //===------- SemaTemplate.cpp - Semantic Analysis for C++ Templates -------===/
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -29,9 +29,9 @@
 #include "clang/Sema/Template.h"
 #include "clang/Sema/TemplateDeduction.h"
 #include "clang/Sema/SemaHLSL.h" // HLSL Change
-#include "llvm/ADT/SmallBitVector.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/ADT/StringExtras.h"
+#include "llvm37/ADT/SmallBitVector.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/ADT/StringExtras.h"
 using namespace clang;
 using namespace sema;
 
@@ -89,7 +89,7 @@ static NamedDecl *isAcceptableTemplateName(ASTContext &Context,
 void Sema::FilterAcceptableTemplateNames(LookupResult &R, 
                                          bool AllowFunctionTemplates) {
   // The set of class templates we've already seen.
-  llvm::SmallPtrSet<ClassTemplateDecl *, 8> ClassTemplates;
+  llvm37::SmallPtrSet<ClassTemplateDecl *, 8> ClassTemplates;
   LookupResult::Filter filter = R.makeFilter();
   while (filter.hasNext()) {
     NamedDecl *Orig = filter.next();
@@ -326,7 +326,7 @@ void Sema::LookupTemplateName(LookupResult &Found,
     DeclarationName Name = Found.getLookupName();
     Found.clear();
     // Simple filter callback that, for keywords, only accepts the C++ *_cast
-    auto FilterCCC = llvm::make_unique<CorrectionCandidateCallback>();
+    auto FilterCCC = llvm37::make_unique<CorrectionCandidateCallback>();
     FilterCCC->WantTypeSpecifiers = false;
     FilterCCC->WantExpressionKeywords = false;
     FilterCCC->WantRemainingKeywords = false;
@@ -521,7 +521,7 @@ static TemplateArgumentLoc translateTemplateArgument(Sema &SemaRef,
   }
   }
 
-  llvm_unreachable("Unhandled parsed template argument");
+  llvm37_unreachable("Unhandled parsed template argument");
 }
 
 /// \brief Translates template arguments as provided by the parser
@@ -1240,7 +1240,7 @@ static bool DiagnoseDefaultTemplateArgument(Sema &S,
     // declaration (and it is a definition). Strange!
   }
 
-  llvm_unreachable("Invalid TemplateParamListContext!");
+  llvm37_unreachable("Invalid TemplateParamListContext!");
 }
 
 /// \brief Check for unexpanded parameter packs within the template parameters
@@ -2397,7 +2397,7 @@ static bool isTemplateArgumentTemplateParameter(
             Arg.getAsTemplateOrTemplatePattern().getAsTemplateDecl());
     return TTP && TTP->getDepth() == Depth && TTP->getIndex() == Index;
   }
-  llvm_unreachable("unexpected kind of template argument");
+  llvm37_unreachable("unexpected kind of template argument");
 }
 
 static bool isSameAsPrimaryTemplate(TemplateParameterList *Params,
@@ -2585,7 +2585,7 @@ DeclResult Sema::ActOnVarTemplateSpecialization(
     // partial specialization are deducible from the template
     // arguments. If not, this variable template partial specialization
     // will never be used.
-    llvm::SmallBitVector DeducibleParams(TemplateParams->size());
+    llvm37::SmallBitVector DeducibleParams(TemplateParams->size());
     MarkUsedTemplateParameters(Partial->getTemplateArgs(), true,
                                TemplateParams->getDepth(), DeducibleParams);
 
@@ -3023,7 +3023,7 @@ TemplateNameKind Sema::ActOnDependentTemplateName(Scope *S,
     return TNK_Function_template;
 
   case UnqualifiedId::IK_LiteralOperatorId:
-    llvm_unreachable("literal operator id cannot have a dependent scope");
+    llvm37_unreachable("literal operator id cannot have a dependent scope");
 
   default:
     break;
@@ -3469,7 +3469,7 @@ bool Sema::CheckTemplateArgument(NamedDecl *Param,
 
     switch (Arg.getArgument().getKind()) {
     case TemplateArgument::Null:
-      llvm_unreachable("Should never see a NULL template argument here");
+      llvm37_unreachable("Should never see a NULL template argument here");
 
     case TemplateArgument::Expression: {
       TemplateArgument Result;
@@ -3571,7 +3571,7 @@ bool Sema::CheckTemplateArgument(NamedDecl *Param,
     }
 
     case TemplateArgument::Pack:
-      llvm_unreachable("Caller must expand template argument packs");
+      llvm37_unreachable("Caller must expand template argument packs");
     }
 
     return false;
@@ -3604,7 +3604,7 @@ bool Sema::CheckTemplateArgument(NamedDecl *Param,
 
   switch (Arg.getArgument().getKind()) {
   case TemplateArgument::Null:
-    llvm_unreachable("Should never see a NULL template argument here");
+    llvm37_unreachable("Should never see a NULL template argument here");
 
   case TemplateArgument::Template:
   case TemplateArgument::TemplateExpansion:
@@ -3623,14 +3623,14 @@ bool Sema::CheckTemplateArgument(NamedDecl *Param,
     return true;
 
   case TemplateArgument::Declaration:
-    llvm_unreachable("Declaration argument with template template parameter");
+    llvm37_unreachable("Declaration argument with template template parameter");
   case TemplateArgument::Integral:
-    llvm_unreachable("Integral argument with template template parameter");
+    llvm37_unreachable("Integral argument with template template parameter");
   case TemplateArgument::NullPtr:
-    llvm_unreachable("Null pointer argument with template template parameter");
+    llvm37_unreachable("Null pointer argument with template template parameter");
 
   case TemplateArgument::Pack:
-    llvm_unreachable("Caller must expand template argument packs");
+    llvm37_unreachable("Caller must expand template argument packs");
   }
 
   return false;
@@ -3702,7 +3702,7 @@ static bool diagnoseMissingArgument(Sema &S, SourceLocation Loc,
 
   // If there's a default argument that's not visible, diagnose that we're
   // missing a module import.
-  llvm::SmallVector<Module*, 8> Modules;
+  llvm37::SmallVector<Module*, 8> Modules;
   if (D->hasDefaultArgument() && !S.hasVisibleDefaultArgument(D, &Modules)) {
     S.diagnoseMissingImport(Loc, cast<NamedDecl>(TD),
                             D->getDefaultArgumentLoc(), Modules,
@@ -4207,7 +4207,7 @@ bool UnnamedLocalNoLinkageFinder::VisitNestedNameSpecifier(
   case NestedNameSpecifier::TypeSpecWithTemplate:
     return Visit(QualType(NNS->getAsType(), 0));
   }
-  llvm_unreachable("Invalid NestedNameSpecifier::Kind!");
+  llvm37_unreachable("Invalid NestedNameSpecifier::Kind!");
 }
 
 
@@ -4967,7 +4967,7 @@ ExprResult Sema::CheckTemplateArgument(NonTypeTemplateParmDecl *Param,
     case APValue::Array:
     case APValue::Struct:
     case APValue::Union:
-      llvm_unreachable("invalid kind for template argument");
+      llvm37_unreachable("invalid kind for template argument");
     }
 
     return ArgResult.get();
@@ -5006,7 +5006,7 @@ ExprResult Sema::CheckTemplateArgument(NonTypeTemplateParmDecl *Param,
       //     -- for a non-type template-parameter of integral or enumeration
       //        type, a converted constant expression of the type of the
       //        template-parameter; or
-      llvm::APSInt Value;
+      llvm37::APSInt Value;
       ExprResult ArgResult =
         CheckConvertedConstantExpression(Arg, ParamType, Value,
                                          CCEK_TemplateArg);
@@ -5041,7 +5041,7 @@ ExprResult Sema::CheckTemplateArgument(NonTypeTemplateParmDecl *Param,
     //        type; or
     //     -- the name of a non-type template-parameter; or
     SourceLocation NonConstantLoc;
-    llvm::APSInt Value;
+    llvm37::APSInt Value;
     if (!ArgType->isIntegralOrEnumerationType()) {
       Diag(Arg->getLocStart(),
            diag::err_template_arg_not_integral_or_enumeral)
@@ -5112,7 +5112,7 @@ ExprResult Sema::CheckTemplateArgument(NonTypeTemplateParmDecl *Param,
         Value = Value.extOrTrunc(AllowedBits);
       Value.setIsSigned(IntegerType->isSignedIntegerOrEnumerationType());
     } else {
-      llvm::APSInt OldValue = Value;
+      llvm37::APSInt OldValue = Value;
       
       // Coerce the template argument's value to the value it will have
       // based on the template parameter's type.
@@ -5924,7 +5924,7 @@ static bool CheckTemplateSpecializationScope(Sema &S,
       S.Diag(Loc, Diag) << EntityKind << Specialized
                         << cast<NamedDecl>(SpecializedContext);
     } else
-      llvm_unreachable("unexpected namespace context for specialization");
+      llvm37_unreachable("unexpected namespace context for specialization");
 
     S.Diag(Specialized->getLocation(), diag::note_specialized_entity);
   } else if ((!PrevDecl ||
@@ -6350,7 +6350,7 @@ Sema::ActOnClassTemplateSpecialization(Scope *S, unsigned TagSpec,
     // partial specialization are deducible from the template
     // arguments. If not, this class template partial specialization
     // will never be used.
-    llvm::SmallBitVector DeducibleParams(TemplateParams->size());
+    llvm37::SmallBitVector DeducibleParams(TemplateParams->size());
     MarkUsedTemplateParameters(Partial->getTemplateArgs(), true,
                                TemplateParams->getDepth(),
                                DeducibleParams);
@@ -6749,7 +6749,7 @@ Sema::CheckSpecializationInstantiationRedecl(SourceLocation NewLoc,
     }
   }
 
-  llvm_unreachable("Missing specialization/instantiation case?");
+  llvm37_unreachable("Missing specialization/instantiation case?");
 }
 
 /// \brief Perform semantic analysis for the given dependent function
@@ -8379,7 +8379,7 @@ Sema::getTemplateArgumentBindingsText(const TemplateParameterList *Params,
                                       const TemplateArgument *Args,
                                       unsigned NumArgs) {
   SmallString<128> Str;
-  llvm::raw_svector_ostream Out(Str);
+  llvm37::raw_svector_ostream Out(Str);
 
   if (!Params || Params->size() == 0 || NumArgs == 0)
     return std::string();

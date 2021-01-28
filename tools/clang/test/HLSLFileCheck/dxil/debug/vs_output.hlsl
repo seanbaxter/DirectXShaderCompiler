@@ -1,8 +1,8 @@
 // RUN: %dxc /T vs_6_0 /E BezierVS /DDX12 /Od /Zi %s | FileCheck %s
 
-// CHECK-DAG: call void @llvm.dbg.value(metadata float %{{.+}}, i64 0, metadata !{{[0-9]+}}, metadata !{{[0-9]+}}), !dbg !{{[0-9]+}} ; var:"output" !DIExpression(DW_OP_bit_piece, 0, 32)
-// CHECK-DAG: call void @llvm.dbg.value(metadata float %{{.+}}, i64 0, metadata !{{[0-9]+}}, metadata !{{[0-9]+}}), !dbg !{{[0-9]+}} ; var:"output" !DIExpression(DW_OP_bit_piece, 32, 32)
-// CHECK-DAG: call void @llvm.dbg.value(metadata float %{{.+}}, i64 0, metadata !{{[0-9]+}}, metadata !{{[0-9]+}}), !dbg !{{[0-9]+}} ; var:"output" !DIExpression(DW_OP_bit_piece, 64, 32)
+// CHECK-DAG: call void @llvm37.dbg.value(metadata float %{{.+}}, i64 0, metadata !{{[0-9]+}}, metadata !{{[0-9]+}}), !dbg !{{[0-9]+}} ; var:"output" !DIExpression(DW_OP_bit_piece, 0, 32)
+// CHECK-DAG: call void @llvm37.dbg.value(metadata float %{{.+}}, i64 0, metadata !{{[0-9]+}}, metadata !{{[0-9]+}}), !dbg !{{[0-9]+}} ; var:"output" !DIExpression(DW_OP_bit_piece, 32, 32)
+// CHECK-DAG: call void @llvm37.dbg.value(metadata float %{{.+}}, i64 0, metadata !{{[0-9]+}}, metadata !{{[0-9]+}}), !dbg !{{[0-9]+}} ; var:"output" !DIExpression(DW_OP_bit_piece, 64, 32)
 
 //--------------------------------------------------------------------------------------
 // SimpleBezier.hlsl

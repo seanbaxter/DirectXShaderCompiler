@@ -1,14 +1,14 @@
 #!/bin/sh
-#===-- tag.sh - Tag the LLVM release candidates ----------------------------===#
+#===-- tag.sh - Tag the LLVM37 release candidates ----------------------------===#
 #
-#                     The LLVM Compiler Infrastructure
+#                     The LLVM37 Compiler Infrastructure
 #
 # This file is distributed under the University of Illinois Open Source
 # License.
 #
 #===------------------------------------------------------------------------===#
 #
-# Create branches and release candidates for the LLVM release.
+# Create branches and release candidates for the LLVM37 release.
 #
 #===------------------------------------------------------------------------===#
 
@@ -17,11 +17,11 @@ set -e
 release=""
 rc=""
 rebranch="no"
-projects="llvm cfe test-suite compiler-rt libcxx libcxxabi clang-tools-extra polly lldb lld openmp libunwind"
+projects="llvm37 cfe test-suite compiler-rt libcxx libcxxabi clang-tools-extra polly lldb lld openmp libunwind"
 dryrun=""
 revision="HEAD"
 
-base_url="https://llvm.org/svn/llvm-project"
+base_url="https://llvm37.org/svn/llvm37-project"
 
 function usage() {
     echo "usage: `basename $0` -release <num> [-rebranch] [-revision <num>] [-dry-run]"

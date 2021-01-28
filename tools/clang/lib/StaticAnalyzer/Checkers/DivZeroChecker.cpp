@@ -1,6 +1,6 @@
 //== DivZeroChecker.cpp - Division by zero checker --------------*- C++ -*--==//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -39,7 +39,7 @@ void DivZeroChecker::reportBug(const char *Msg,
     if (!BT)
       BT.reset(new BuiltinBug(this, "Division by zero"));
 
-    auto R = llvm::make_unique<BugReport>(*BT, Msg, N);
+    auto R = llvm37::make_unique<BugReport>(*BT, Msg, N);
     bugreporter::trackNullOrUndefValue(N, bugreporter::GetDenomExpr(N), *R);
     C.emitReport(std::move(R));
   }

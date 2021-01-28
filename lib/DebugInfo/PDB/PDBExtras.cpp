@@ -1,17 +1,17 @@
 //===- PDBExtras.cpp - helper functions and classes for PDBs -----*- C++-*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/DebugInfo/PDB/PDBExtras.h"
+#include "llvm37/DebugInfo/PDB/PDBExtras.h"
 
-#include "llvm/ADT/ArrayRef.h"
+#include "llvm37/ADT/ArrayRef.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 #define CASE_OUTPUT_ENUM_CLASS_STR(Class, Value, Str, Stream)                  \
   case Class::Value:                                                           \
@@ -21,7 +21,7 @@ using namespace llvm;
 #define CASE_OUTPUT_ENUM_CLASS_NAME(Class, Value, Stream)                      \
   CASE_OUTPUT_ENUM_CLASS_STR(Class, Value, #Value, Stream)
 
-raw_ostream &llvm::operator<<(raw_ostream &OS, const PDB_VariantType &Type) {
+raw_ostream &llvm37::operator<<(raw_ostream &OS, const PDB_VariantType &Type) {
   switch (Type) {
     CASE_OUTPUT_ENUM_CLASS_NAME(PDB_VariantType, Bool, OS)
     CASE_OUTPUT_ENUM_CLASS_NAME(PDB_VariantType, Single, OS)
@@ -40,7 +40,7 @@ raw_ostream &llvm::operator<<(raw_ostream &OS, const PDB_VariantType &Type) {
   return OS;
 }
 
-raw_ostream &llvm::operator<<(raw_ostream &OS, const PDB_CallingConv &Conv) {
+raw_ostream &llvm37::operator<<(raw_ostream &OS, const PDB_CallingConv &Conv) {
   OS << "__";
   switch (Conv) {
     CASE_OUTPUT_ENUM_CLASS_STR(PDB_CallingConv, NearCdecl, "cdecl", OS)
@@ -75,7 +75,7 @@ raw_ostream &llvm::operator<<(raw_ostream &OS, const PDB_CallingConv &Conv) {
   return OS;
 }
 
-raw_ostream &llvm::operator<<(raw_ostream &OS, const PDB_DataKind &Data) {
+raw_ostream &llvm37::operator<<(raw_ostream &OS, const PDB_DataKind &Data) {
   switch (Data) {
     CASE_OUTPUT_ENUM_CLASS_STR(PDB_DataKind, Unknown, "unknown", OS)
     CASE_OUTPUT_ENUM_CLASS_STR(PDB_DataKind, Local, "local", OS)
@@ -91,7 +91,7 @@ raw_ostream &llvm::operator<<(raw_ostream &OS, const PDB_DataKind &Data) {
   return OS;
 }
 
-raw_ostream &llvm::operator<<(raw_ostream &OS, const PDB_RegisterId &Reg) {
+raw_ostream &llvm37::operator<<(raw_ostream &OS, const PDB_RegisterId &Reg) {
   switch (Reg) {
     CASE_OUTPUT_ENUM_CLASS_NAME(PDB_RegisterId, AL, OS)
     CASE_OUTPUT_ENUM_CLASS_NAME(PDB_RegisterId, CL, OS)
@@ -146,7 +146,7 @@ raw_ostream &llvm::operator<<(raw_ostream &OS, const PDB_RegisterId &Reg) {
   return OS;
 }
 
-raw_ostream &llvm::operator<<(raw_ostream &OS, const PDB_LocType &Loc) {
+raw_ostream &llvm37::operator<<(raw_ostream &OS, const PDB_LocType &Loc) {
   switch (Loc) {
     CASE_OUTPUT_ENUM_CLASS_STR(PDB_LocType, Static, "static", OS)
     CASE_OUTPUT_ENUM_CLASS_STR(PDB_LocType, TLS, "tls", OS)
@@ -164,7 +164,7 @@ raw_ostream &llvm::operator<<(raw_ostream &OS, const PDB_LocType &Loc) {
   return OS;
 }
 
-raw_ostream &llvm::operator<<(raw_ostream &OS, const PDB_ThunkOrdinal &Thunk) {
+raw_ostream &llvm37::operator<<(raw_ostream &OS, const PDB_ThunkOrdinal &Thunk) {
   switch (Thunk) {
     CASE_OUTPUT_ENUM_CLASS_NAME(PDB_ThunkOrdinal, BranchIsland, OS)
     CASE_OUTPUT_ENUM_CLASS_NAME(PDB_ThunkOrdinal, Pcode, OS)
@@ -177,7 +177,7 @@ raw_ostream &llvm::operator<<(raw_ostream &OS, const PDB_ThunkOrdinal &Thunk) {
   return OS;
 }
 
-raw_ostream &llvm::operator<<(raw_ostream &OS, const PDB_Checksum &Checksum) {
+raw_ostream &llvm37::operator<<(raw_ostream &OS, const PDB_Checksum &Checksum) {
   switch (Checksum) {
     CASE_OUTPUT_ENUM_CLASS_NAME(PDB_Checksum, None, OS)
     CASE_OUTPUT_ENUM_CLASS_NAME(PDB_Checksum, MD5, OS)
@@ -186,7 +186,7 @@ raw_ostream &llvm::operator<<(raw_ostream &OS, const PDB_Checksum &Checksum) {
   return OS;
 }
 
-raw_ostream &llvm::operator<<(raw_ostream &OS, const PDB_Lang &Lang) {
+raw_ostream &llvm37::operator<<(raw_ostream &OS, const PDB_Lang &Lang) {
   switch (Lang) {
     CASE_OUTPUT_ENUM_CLASS_NAME(PDB_Lang, C, OS)
     CASE_OUTPUT_ENUM_CLASS_STR(PDB_Lang, Cpp, "C++", OS)
@@ -209,7 +209,7 @@ raw_ostream &llvm::operator<<(raw_ostream &OS, const PDB_Lang &Lang) {
   return OS;
 }
 
-raw_ostream &llvm::operator<<(raw_ostream &OS, const PDB_SymType &Tag) {
+raw_ostream &llvm37::operator<<(raw_ostream &OS, const PDB_SymType &Tag) {
   switch (Tag) {
     CASE_OUTPUT_ENUM_CLASS_NAME(PDB_SymType, Exe, OS)
     CASE_OUTPUT_ENUM_CLASS_NAME(PDB_SymType, Compiland, OS)
@@ -247,7 +247,7 @@ raw_ostream &llvm::operator<<(raw_ostream &OS, const PDB_SymType &Tag) {
   return OS;
 }
 
-raw_ostream &llvm::operator<<(raw_ostream &OS, const PDB_MemberAccess &Access) {
+raw_ostream &llvm37::operator<<(raw_ostream &OS, const PDB_MemberAccess &Access) {
   switch (Access) {
     CASE_OUTPUT_ENUM_CLASS_STR(PDB_MemberAccess, Public, "public", OS)
     CASE_OUTPUT_ENUM_CLASS_STR(PDB_MemberAccess, Protected, "protected", OS)
@@ -256,7 +256,7 @@ raw_ostream &llvm::operator<<(raw_ostream &OS, const PDB_MemberAccess &Access) {
   return OS;
 }
 
-raw_ostream &llvm::operator<<(raw_ostream &OS, const PDB_UdtType &Type) {
+raw_ostream &llvm37::operator<<(raw_ostream &OS, const PDB_UdtType &Type) {
   switch (Type) {
     CASE_OUTPUT_ENUM_CLASS_STR(PDB_UdtType, Class, "class", OS)
     CASE_OUTPUT_ENUM_CLASS_STR(PDB_UdtType, Struct, "struct", OS)
@@ -266,7 +266,7 @@ raw_ostream &llvm::operator<<(raw_ostream &OS, const PDB_UdtType &Type) {
   return OS;
 }
 
-raw_ostream &llvm::operator<<(raw_ostream &OS, const PDB_UniqueId &Id) {
+raw_ostream &llvm37::operator<<(raw_ostream &OS, const PDB_UniqueId &Id) {
   static const char *Lookup = "0123456789ABCDEF";
 
   static_assert(sizeof(PDB_UniqueId) == 16, "Expected 16-byte GUID");
@@ -285,7 +285,7 @@ raw_ostream &llvm::operator<<(raw_ostream &OS, const PDB_UniqueId &Id) {
   return OS;
 }
 
-raw_ostream &llvm::operator<<(raw_ostream &OS, const Variant &Value) {
+raw_ostream &llvm37::operator<<(raw_ostream &OS, const Variant &Value) {
   switch (Value.Type) {
     case PDB_VariantType::Bool:
       OS << (Value.Bool ? "true" : "false");
@@ -326,12 +326,12 @@ raw_ostream &llvm::operator<<(raw_ostream &OS, const Variant &Value) {
   return OS;
 }
 
-raw_ostream &llvm::operator<<(raw_ostream &OS, const VersionInfo &Version) {
+raw_ostream &llvm37::operator<<(raw_ostream &OS, const VersionInfo &Version) {
   OS << Version.Major << "." << Version.Minor << "." << Version.Build;
   return OS;
 }
 
-raw_ostream &llvm::operator<<(raw_ostream &OS, const TagStats &Stats) {
+raw_ostream &llvm37::operator<<(raw_ostream &OS, const TagStats &Stats) {
   for (auto Tag : Stats) {
     OS << Tag.first << ":" << Tag.second << " ";
   }

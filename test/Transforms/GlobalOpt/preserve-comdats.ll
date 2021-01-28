@@ -7,11 +7,11 @@ $comdat_global = comdat any
 ; CHECK: @comdat_global = weak_odr global i8 0, comdat{{$}}
 ; CHECK: @simple_global = internal global i8 42
 
-@llvm.global_ctors = appending global [2 x { i32, void ()*, i8* }] [
+@llvm37.global_ctors = appending global [2 x { i32, void ()*, i8* }] [
     { i32, void ()*, i8* } { i32 65535, void ()* @init_comdat_global, i8* @comdat_global },
     { i32, void ()*, i8* } { i32 65535, void ()* @init_simple_global, i8* null }
 ]
-; CHECK: @llvm.global_ctors = appending global [1 x { i32, void ()*, i8* }]
+; CHECK: @llvm37.global_ctors = appending global [1 x { i32, void ()*, i8* }]
 ; CHECK: [{ i32, void ()*, i8* } { i32 65535, void ()* @init_comdat_global, i8* @comdat_global }]
 
 define void @init_comdat_global() {

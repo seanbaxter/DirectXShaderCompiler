@@ -1,22 +1,22 @@
 //===--- FrontendOptions.h --------------------------------------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_FRONTEND_FRONTENDOPTIONS_H
-#define LLVM_CLANG_FRONTEND_FRONTENDOPTIONS_H
+#ifndef LLVM37_CLANG_FRONTEND_FRONTENDOPTIONS_H
+#define LLVM37_CLANG_FRONTEND_FRONTENDOPTIONS_H
 
 #include "clang/Frontend/CommandLineSourceLoc.h"
 #include "clang/Sema/CodeCompleteOptions.h"
-#include "llvm/ADT/StringRef.h"
+#include "llvm37/ADT/StringRef.h"
 #include <string>
 #include <vector>
 
-namespace llvm {
+namespace llvm37 {
 class MemoryBuffer;
 }
 
@@ -33,8 +33,8 @@ namespace frontend {
     EmitAssembly,           ///< Emit a .s file.
     EmitBC,                 ///< Emit a .bc file.
     EmitHTML,               ///< Translate input source into HTML.
-    EmitLLVM,               ///< Emit a .ll file.
-    EmitLLVMOnly,           ///< Generate LLVM IR, but do not emit anything.
+    EmitLLVM37,               ///< Emit a .ll file.
+    EmitLLVM37Only,           ///< Generate LLVM37 IR, but do not emit anything.
     EmitCodeGenOnly,        ///< Generate machine code, but don't emit anything.
     EmitObj,                ///< Emit a .o file.
     FixIt,                  ///< Parse and apply any fixits to the source.
@@ -74,7 +74,7 @@ enum InputKind {
   IK_CUDA,
   IK_PreprocessedCuda,
   IK_AST,
-  IK_LLVM_IR
+  IK_LLVM37_IR
 };
 
   
@@ -83,9 +83,9 @@ class FrontendInputFile {
   /// \brief The file name, or "-" to read from standard input.
   std::string File;
 
-  llvm::MemoryBuffer *Buffer;
+  llvm37::MemoryBuffer *Buffer;
 
-  /// \brief The kind of input, e.g., C source, AST file, LLVM IR.
+  /// \brief The kind of input, e.g., C source, AST file, LLVM37 IR.
   InputKind Kind;
 
   /// \brief Whether we're dealing with a 'system' input (vs. a 'user' input).
@@ -95,7 +95,7 @@ public:
   FrontendInputFile() : Buffer(nullptr), Kind(IK_None) { }
   FrontendInputFile(StringRef File, InputKind Kind, bool IsSystem = false)
     : File(File.str()), Buffer(nullptr), Kind(Kind), IsSystem(IsSystem) { }
-  FrontendInputFile(llvm::MemoryBuffer *buffer, InputKind Kind,
+  FrontendInputFile(llvm37::MemoryBuffer *buffer, InputKind Kind,
                     bool IsSystem = false)
     : Buffer(buffer), Kind(Kind), IsSystem(IsSystem) { }
 
@@ -110,7 +110,7 @@ public:
     assert(isFile());
     return File;
   }
-  llvm::MemoryBuffer *getBuffer() const {
+  llvm37::MemoryBuffer *getBuffer() const {
     assert(isBuffer());
     return Buffer;
   }
@@ -245,9 +245,9 @@ public:
   /// \brief The list of AST files to merge.
   std::vector<std::string> ASTMergeFiles;
 
-  /// \brief A list of arguments to forward to LLVM's option processing; this
+  /// \brief A list of arguments to forward to LLVM37's option processing; this
   /// should only be used for debugging and experimental features.
-  std::vector<std::string> LLVMArgs;
+  std::vector<std::string> LLVM37Args;
 
   /// \brief File name of the file that will provide record layouts
   /// (in the format produced by -fdump-record-layouts).

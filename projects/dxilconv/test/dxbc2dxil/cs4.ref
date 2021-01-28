@@ -6,7 +6,7 @@
 %dx.types.i8x16 = type { [16 x i8] }
 
 @TGSM0 = internal addrspace(3) global [7680 x i8] undef, align 4
-@llvm.used = appending global [1 x i8*] [i8* addrspacecast (i8 addrspace(3)* getelementptr inbounds ([7680 x i8], [7680 x i8] addrspace(3)* @TGSM0, i32 0, i32 0) to i8*)], section "llvm.metadata"
+@llvm37.used = appending global [1 x i8*] [i8* addrspacecast (i8 addrspace(3)* getelementptr inbounds ([7680 x i8], [7680 x i8] addrspace(3)* @TGSM0, i32 0, i32 0) to i8*)], section "llvm.metadata"
 
 define void @main() {
 entry:
@@ -137,7 +137,7 @@ attributes #3 = { noduplicate nounwind }
 !dx.shaderModel = !{!1}
 !dx.resources = !{!2}
 !dx.entryPoints = !{!7}
-!llvm.ident = !{!10}
+!llvm37.ident = !{!10}
 
 !0 = !{i32 1, i32 0}
 !1 = !{!"cs", i32 6, i32 0}

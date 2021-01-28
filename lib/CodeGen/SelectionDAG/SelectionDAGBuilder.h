@@ -1,33 +1,33 @@
 //===-- SelectionDAGBuilder.h - Selection-DAG building --------*- C++ -*---===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 //
-// This implements routines for translating from LLVM IR into SelectionDAG IR.
+// This implements routines for translating from LLVM37 IR into SelectionDAG IR.
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_LIB_CODEGEN_SELECTIONDAG_SELECTIONDAGBUILDER_H
-#define LLVM_LIB_CODEGEN_SELECTIONDAG_SELECTIONDAGBUILDER_H
+#ifndef LLVM37_LIB_CODEGEN_SELECTIONDAG_SELECTIONDAGBUILDER_H
+#define LLVM37_LIB_CODEGEN_SELECTIONDAG_SELECTIONDAGBUILDER_H
 
 #include "StatepointLowering.h"
-#include "llvm/ADT/APInt.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/CodeGen/Analysis.h"
-#include "llvm/CodeGen/SelectionDAG.h"
-#include "llvm/CodeGen/SelectionDAGNodes.h"
-#include "llvm/IR/CallSite.h"
-#include "llvm/IR/Statepoint.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Target/TargetLowering.h"
+#include "llvm37/ADT/APInt.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/CodeGen/Analysis.h"
+#include "llvm37/CodeGen/SelectionDAG.h"
+#include "llvm37/CodeGen/SelectionDAGNodes.h"
+#include "llvm37/IR/CallSite.h"
+#include "llvm37/IR/Statepoint.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Target/TargetLowering.h"
 #include <vector>
 
-namespace llvm {
+namespace llvm37 {
 
 class AddrSpaceCastInst;
 class AliasAnalysis;
@@ -368,7 +368,7 @@ private:
   /// High Level Overview of SelectionDAG Stack Protector Generation:
   ///
   /// Previously, generation of stack protectors was done exclusively in the
-  /// pre-SelectionDAG Codegen LLVM IR Pass "Stack Protector". This necessitated
+  /// pre-SelectionDAG Codegen LLVM37 IR Pass "Stack Protector". This necessitated
   /// splitting basic blocks at the IR level to create the success/failure basic
   /// blocks in the tail of the basic block in question. As a result of this,
   /// calls that would have qualified for the sibling call optimization were no
@@ -438,7 +438,7 @@ private:
   ///        protector is required/which BB we insert the stack protector check
   ///        in by reusing the logic already therein. If we wish to generate a
   ///        stack protector check in a basic block, we place a special IR
-  ///        intrinsic called llvm.stackprotectorcheck right before the BB's
+  ///        intrinsic called llvm37.stackprotectorcheck right before the BB's
   ///        returninst or if there is a callinst that could potentially be
   ///        sibling call optimized, before the call inst.
   ///
@@ -608,7 +608,7 @@ public:
   ///
   bool HasTailCall;
 
-  LLVMContext *Context;
+  LLVM37Context *Context;
 
   SelectionDAGBuilder(SelectionDAG &dag, FunctionLoweringInfo &funcinfo,
                       CodeGenOpt::Level ol)
@@ -850,16 +850,16 @@ private:
   void visitGCResult(const CallInst &I);
 
   void visitUserOp1(const Instruction &I) {
-    llvm_unreachable("UserOp1 should not exist at instruction selection time!");
+    llvm37_unreachable("UserOp1 should not exist at instruction selection time!");
   }
   void visitUserOp2(const Instruction &I) {
-    llvm_unreachable("UserOp2 should not exist at instruction selection time!");
+    llvm37_unreachable("UserOp2 should not exist at instruction selection time!");
   }
 
   void processIntegerCallValue(const Instruction &I,
                                SDValue Value, bool IsSigned);
 
-  void HandlePHINodesInSuccessorBlocks(const BasicBlock *LLVMBB);
+  void HandlePHINodesInSuccessorBlocks(const BasicBlock *LLVM37BB);
 
   /// EmitFuncArgumentDbgValue - If V is an function argument then create
   /// corresponding DBG_VALUE machine instruction for it now. At the end of
@@ -913,7 +913,7 @@ struct RegsForValue {
 
   RegsForValue(const SmallVector<unsigned, 4> &regs, MVT regvt, EVT valuevt);
 
-  RegsForValue(LLVMContext &Context, const TargetLowering &TLI,
+  RegsForValue(LLVM37Context &Context, const TargetLowering &TLI,
                const DataLayout &DL, unsigned Reg, Type *Ty);
 
   /// append - Add the specified values to this one.
@@ -951,6 +951,6 @@ struct RegsForValue {
                             std::vector<SDValue> &Ops) const;
 };
 
-} // end namespace llvm
+} // end namespace llvm37
 
 #endif

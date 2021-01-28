@@ -1,5 +1,5 @@
 ==============================
-LLVM Language Reference Manual
+LLVM37 Language Reference Manual
 ==============================
 
 .. contents::
@@ -9,32 +9,32 @@ LLVM Language Reference Manual
 Abstract
 ========
 
-This document is a reference manual for the LLVM assembly language. LLVM
+This document is a reference manual for the LLVM37 assembly language. LLVM37
 is a Static Single Assignment (SSA) based representation that provides
 type safety, low-level operations, flexibility, and the capability of
 representing 'all' high-level languages cleanly. It is the common code
-representation used throughout all phases of the LLVM compilation
+representation used throughout all phases of the LLVM37 compilation
 strategy.
 
 Introduction
 ============
 
-The LLVM code representation is designed to be used in three different
+The LLVM37 code representation is designed to be used in three different
 forms: as an in-memory compiler IR, as an on-disk bitcode representation
 (suitable for fast loading by a Just-In-Time compiler), and as a human
-readable assembly language representation. This allows LLVM to provide a
+readable assembly language representation. This allows LLVM37 to provide a
 powerful intermediate representation for efficient compiler
 transformations and analysis, while providing a natural means to debug
-and visualize the transformations. The three different forms of LLVM are
+and visualize the transformations. The three different forms of LLVM37 are
 all equivalent. This document describes the human readable
 representation and notation.
 
-The LLVM representation aims to be light-weight and low-level while
+The LLVM37 representation aims to be light-weight and low-level while
 being expressive, typed, and extensible at the same time. It aims to be
 a "universal IR" of sorts, by being at a low enough level that
 high-level ideas may be cleanly mapped to it (similar to how
 microprocessors are "universal IR's", allowing many source languages to
-be mapped to them). By providing type information, LLVM can be used as
+be mapped to them). By providing type information, LLVM37 can be used as
 the target of optimizations: for example, through pointer analysis, it
 can be proven that a C automatic variable is never accessed outside of
 the current function, allowing it to be promoted to a simple SSA value
@@ -45,18 +45,18 @@ instead of a memory location.
 Well-Formedness
 ---------------
 
-It is important to note that this document describes 'well formed' LLVM
+It is important to note that this document describes 'well formed' LLVM37
 assembly language. There is a difference between what the parser accepts
 and what is considered 'well formed'. For example, the following
 instruction is syntactically okay, but not well formed:
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
     %x = add i32 1, %x
 
 because the definition of ``%x`` does not dominate all of its uses. The
-LLVM infrastructure provides a verification pass that may be used to
-verify that an LLVM module is well formed. This pass is automatically
+LLVM37 infrastructure provides a verification pass that may be used to
+verify that an LLVM37 module is well formed. This pass is automatically
 run by the parser after parsing input assembly and by the optimizer
 before it outputs bitcode. The violations pointed out by the verifier
 pass indicate bugs in transformation passes or input to the parser.
@@ -66,7 +66,7 @@ pass indicate bugs in transformation passes or input to the parser.
 Identifiers
 ===========
 
-LLVM identifiers come in two basic types: global and local. Global
+LLVM37 identifiers come in two basic types: global and local. Global
 identifiers (functions, global variables) begin with the ``'@'``
 character. Local identifiers (register names, types) begin with the
 ``'%'`` character. Additionally, there are three different formats for
@@ -85,45 +85,45 @@ identifiers, for different purposes:
    their prefix. For example, ``%12``, ``@2``, ``%44``.
 #. Constants, which are described in the section  Constants_ below.
 
-LLVM requires that values start with a prefix for two reasons: Compilers
+LLVM37 requires that values start with a prefix for two reasons: Compilers
 don't need to worry about name clashes with reserved words, and the set
 of reserved words may be expanded in the future without penalty.
 Additionally, unnamed identifiers allow a compiler to quickly come up
 with a temporary variable without having to avoid symbol table
 conflicts.
 
-Reserved words in LLVM are very similar to reserved words in other
+Reserved words in LLVM37 are very similar to reserved words in other
 languages. There are keywords for different opcodes ('``add``',
 '``bitcast``', '``ret``', etc...), for primitive type names ('``void``',
 '``i32``', etc...), and others. These reserved words cannot conflict
 with variable names, because none of them start with a prefix character
 (``'%'`` or ``'@'``).
 
-Here is an example of LLVM code to multiply the integer variable
+Here is an example of LLVM37 code to multiply the integer variable
 '``%X``' by 8:
 
 The easy way:
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
     %result = mul i32 %X, 8
 
 After strength reduction:
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
     %result = shl i32 %X, 3
 
 And the hard way:
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
     %0 = add i32 %X, %X           ; yields i32:%0
     %1 = add i32 %0, %0           ; yields i32:%1
     %result = add i32 %1, %1
 
 This last way of multiplying ``%X`` by 8 illustrates several important
-lexical features of LLVM:
+lexical features of LLVM37:
 
 #. Comments are delimited with a '``;``' and go until the end of line.
 #. Unnamed temporaries are created when the result of a computation is
@@ -144,14 +144,14 @@ High Level Structure
 Module Structure
 ----------------
 
-LLVM programs are composed of ``Module``'s, each of which is a
+LLVM37 programs are composed of ``Module``'s, each of which is a
 translation unit of the input programs. Each module consists of
 functions, global variables, and symbol table entries. Modules may be
-combined together with the LLVM linker, which merges function (and
+combined together with the LLVM37 linker, which merges function (and
 global variable) definitions, resolves forward declarations, and merges
 symbol table entries. Here is an example of the "hello world" module:
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
     ; Declare the string constant as a global constant.
     @.str = private unnamed_addr constant [13 x i8] c"hello world\0A\00"
@@ -205,7 +205,7 @@ linkage:
     corresponds to the notion of the '``static``' keyword in C.
 ``available_externally``
     Globals with "``available_externally``" linkage are never emitted
-    into the object file corresponding to the LLVM module. They exist to
+    into the object file corresponding to the LLVM37 module. They exist to
     allow inlining and other optimizations to take place given knowledge
     of the definition of the global, which is known to be somewhere
     outside the module. Globals with ``available_externally`` linkage
@@ -246,7 +246,7 @@ linkage:
     "``appending``" linkage may only be applied to global variables of
     pointer to array type. When two global variables with appending
     linkage are linked together, the two global arrays are appended
-    together. This is the LLVM, typesafe, equivalent of having the
+    together. This is the LLVM37, typesafe, equivalent of having the
     system linker append together "sections" with identical names when
     .o files are linked.
 ``extern_weak``
@@ -274,11 +274,11 @@ other than ``external`` or ``extern_weak``.
 Calling Conventions
 -------------------
 
-LLVM :ref:`functions <functionstructure>`, :ref:`calls <i_call>` and
+LLVM37 :ref:`functions <functionstructure>`, :ref:`calls <i_call>` and
 :ref:`invokes <i_invoke>` can all have an optional calling convention
 specified for the call. The calling convention of any pair of dynamic
 caller/callee must match, or the behavior of the program is undefined.
-The following calling conventions are supported by LLVM, and more may be
+The following calling conventions are supported by LLVM37, and more may be
 added in the future:
 
 "``ccc``" - The C calling convention
@@ -350,7 +350,7 @@ added in the future:
     sequence in place of a call site. This convention forces the call
     arguments into registers but allows them to be dynamically
     allocated. This can currently only be used with calls to
-    llvm.experimental.patchpoint because only this intrinsic records
+    llvm37.experimental.patchpoint because only this intrinsic records
     the location of its arguments in a side table. See :doc:`StackMaps`.
 "``preserve_mostcc``" - The `PreserveMost` calling convention
     This calling convention attempts to make the code in the caller as
@@ -499,19 +499,19 @@ the alias is accessed. It will not have any effect in the aliasee.
 Structure Types
 ---------------
 
-LLVM IR allows you to specify both "identified" and "literal" :ref:`structure
+LLVM37 IR allows you to specify both "identified" and "literal" :ref:`structure
 types <t_struct>`.  Literal types are uniqued structurally, but identified types
 are never uniqued.  An :ref:`opaque structural type <t_opaque>` can also be used
 to forward declare a type that is not yet available.
 
 An example of a identified structure specification is:
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
     %mytype = type { %mytype*, i32 }
 
-Prior to the LLVM 3.0 release, identified types were structurally uniqued.  Only
-literal types are uniqued in recent versions of LLVM.
+Prior to the LLVM37 3.0 release, identified types were structurally uniqued.  Only
+literal types are uniqued in recent versions of LLVM37.
 
 .. _globalvars:
 
@@ -536,7 +536,7 @@ section of an executable, etc). Note that variables that need runtime
 initialization cannot be marked ``constant`` as there is a store to the
 variable.
 
-LLVM explicitly allows *declarations* of global variables to be marked
+LLVM37 explicitly allows *declarations* of global variables to be marked
 constant, even if the final definition of the global is not. This
 capability can be used to enable slightly better optimization of the
 program, but requires the language definition to guarantee that
@@ -546,7 +546,7 @@ units that do not include the definition.
 As SSA values, global variables define pointer values that are in scope
 (i.e. they dominate) all basic blocks in the program. Global variables
 always define a pointer to their "content" type because they describe a
-region of memory, and all memory objects in LLVM are accessed through
+region of memory, and all memory objects in LLVM37 are accessed through
 pointers.
 
 Global variables can be marked with ``unnamed_addr`` which indicates
@@ -562,7 +562,7 @@ may affect how optimizations are performed and/or what target
 instructions are used to access the variable. The default address space
 is zero. The address space qualifier must precede any other attributes.
 
-LLVM allows an explicit section to be specified for globals. If the
+LLVM37 allows an explicit section to be specified for globals. If the
 target supports it, it will emit globals to the section specified.
 Additionally, the global can placed in a comdat if the target has the necessary
 support.
@@ -572,7 +572,7 @@ variables defined within the module are not modified from their
 initial values before the start of the global initializer.  This is
 true even for variables potentially accessible from outside the
 module, including those with external linkage or appearing in
-``@llvm.used`` or dllexported variables. This assumption may be suppressed
+``@llvm37.used`` or dllexported variables. This assumption may be suppressed
 by marking the variable with ``externally_initialized``.
 
 An explicit alignment may be specified for a global, which must be a
@@ -602,20 +602,20 @@ Syntax::
 For example, the following defines a global in a numbered address space
 with an initializer, section, and alignment:
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
     @G = addrspace(5) constant float 1.0, section "foo", align 4
 
 The following example just declares a global variable
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
    @G = external global i32
 
 The following example defines a thread-local global with the
 ``initialexec`` TLS model:
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
     @G = thread_local(initialexec) global i32 0, align 4
 
@@ -624,7 +624,7 @@ The following example defines a thread-local global with the
 Functions
 ---------
 
-LLVM function definitions consist of the "``define``" keyword, an
+LLVM37 function definitions consist of the "``define``" keyword, an
 optional :ref:`linkage type <linkage>`, an optional :ref:`visibility
 style <visibility>`, an optional :ref:`DLL storage class <dllstorageclass>`,
 an optional :ref:`calling convention <callingconv>`,
@@ -639,7 +639,7 @@ an optional :ref:`prologue <prologuedata>`,
 an optional :ref:`personality <personalityfn>`,
 an opening curly brace, a list of basic blocks, and a closing curly brace.
 
-LLVM function declarations consist of the "``declare``" keyword, an
+LLVM37 function declarations consist of the "``declare``" keyword, an
 optional :ref:`linkage type <linkage>`, an optional :ref:`visibility
 style <visibility>`, an optional :ref:`DLL storage class <dllstorageclass>`,
 an optional :ref:`calling convention <callingconv>`,
@@ -665,7 +665,7 @@ to have predecessor basic blocks (i.e. there can not be any branches to
 the entry block of a function). Because the block can have no
 predecessors, it also cannot have any :ref:`PHI nodes <i_phi>`.
 
-LLVM allows an explicit section to be specified for functions. If the
+LLVM37 allows an explicit section to be specified for functions. If the
 target supports it, it will emit functions to the section specified.
 Additionally, the function can be placed in a COMDAT.
 
@@ -775,7 +775,7 @@ Note that the Mach-O platform doesn't support COMDATs and ELF only supports
 Here is an example of a COMDAT group where a function will only be selected if
 the COMDAT key's section is the largest:
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
    $foo = comdat largest
    @foo = global i32 2, comdat($foo)
@@ -787,7 +787,7 @@ the COMDAT key's section is the largest:
 As a syntactic sugar the ``$name`` can be omitted if the name is the same as
 the global name:
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
   $foo = comdat any
   @foo = global i32 2, comdat
@@ -811,7 +811,7 @@ if a collision occurs in the symbol table.
 The combined use of COMDATS and section attributes may yield surprising results.
 For example:
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
    $foo = comdat any
    $bar = comdat any
@@ -868,7 +868,7 @@ Parameter attributes are simple keywords that follow the type specified.
 If multiple parameter attributes are needed, they are space separated.
 For example:
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
     declare i32 @printf(i8* noalias nocapture, ...)
     declare i32 @atoi(i8 zeroext)
@@ -901,7 +901,7 @@ Currently, only the following parameter attributes are defined:
     value to the function. The attribute implies that a hidden copy of
     the pointee is made between the caller and the callee, so the callee
     is unable to modify the value in the caller. This attribute is only
-    valid on LLVM pointer arguments. It is generally used to pass
+    valid on LLVM37 pointer arguments. It is generally used to pass
     structs and arrays by value, but is also valid on pointers to
     scalars. The copy is considered to belong to the caller not the
     callee (for example, ``readonly`` functions should not write to
@@ -929,7 +929,7 @@ Currently, only the following parameter attributes are defined:
     the call may deallocate it.  The ``inalloca`` attribute cannot be
     used in conjunction with other attributes that affect argument
     storage, like ``inreg``, ``nest``, ``sret``, or ``byval``.  The
-    ``inalloca`` attribute also disables LLVM's implicit lowering of
+    ``inalloca`` attribute also disables LLVM37's implicit lowering of
     large aggregate return values, which means that frontend authors
     must lower them with ``sret`` pointers.
 
@@ -937,7 +937,7 @@ Currently, only the following parameter attributes are defined:
     been the most recent stack allocation that is still live, or the
     results are undefined.  It is possible to allocate additional stack
     space after an argument allocation and before its call site, but it
-    must be cleared off with :ref:`llvm.stackrestore
+    must be cleared off with :ref:`llvm37.stackrestore
     <int_stackrestore>`.
 
     See :doc:`InAlloca` for more information on how to use this
@@ -975,7 +975,7 @@ Currently, only the following parameter attributes are defined:
     to the definition of ``restrict`` in C99 for function arguments.
 
     For function return values, C99's ``restrict`` is not meaningful,
-    while LLVM's ``noalias`` is. Furthermore, the semantics of the ``noalias``
+    while LLVM37's ``noalias`` is. Furthermore, the semantics of the ``noalias``
     attribute on return values are stronger than the semantics of the attribute
     when used on function arguments. On function return values, the ``noalias``
     attribute indicates that the function acts like a system memory allocation
@@ -1006,7 +1006,7 @@ Currently, only the following parameter attributes are defined:
 ``nonnull``
     This indicates that the parameter or return pointer is not null. This
     attribute may only be applied to pointer typed parameters. This is not
-    checked or enforced by LLVM, the caller must ensure that the pointer
+    checked or enforced by LLVM37, the caller must ensure that the pointer
     passed in is non-null, or the callee must ensure that the returned pointer
     is non-null.
 
@@ -1042,14 +1042,14 @@ Garbage Collector Strategy Names
 Each function may specify a garbage collector strategy name, which is simply a
 string:
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
     define void @f() gc "name" { ... }
 
-The supported values of *name* includes those :ref:`built in to LLVM
+The supported values of *name* includes those :ref:`built in to LLVM37
 <builtin-gc-strategies>` and any provided by loaded plugins.  Specifying a GC
 strategy will cause the compiler to alter its output in order to support the
-named garbage collection algorithm.  Note that LLVM itself does not contain a
+named garbage collection algorithm.  Note that LLVM37 itself does not contain a
 garbage collector, this functionality is restricted to generating machine code
 which can interoperate with a collector provided externally.
 
@@ -1071,13 +1071,13 @@ index -1.  This implies that the IR symbol points just past the end of
 the prefix data. For instance, take the example of a function annotated
 with a single ``i32``,
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
     define void @f() prefix i32 123 { ... }
 
 The prefix data can be referenced as,
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
     %0 = bitcast void* () @f to i32*
     %a = getelementptr inbounds i32, i32* %0, i32 -1
@@ -1116,7 +1116,7 @@ makes the format of the prologue data highly target dependent.
 A trivial example of valid prologue data for the x86 architecture is ``i8 144``,
 which encodes the ``nop`` instruction:
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
     define void @f() prologue i8 144 { ... }
 
@@ -1124,7 +1124,7 @@ Generally prologue data can be formed by encoding a relative branch instruction
 which skips the metadata, as in this example of valid prologue data for the
 x86_64 architecture, where the first two bytes encode ``jmp .+10``:
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
     %0 = type <{ i8, i8, i8* }>
 
@@ -1161,7 +1161,7 @@ different groups are merged.
 Here is an example of attribute groups for a function that should always be
 inlined, has a stack alignment of 4, and which shouldn't use SSE instructions:
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
    ; Target-independent attributes:
    attributes #0 = { alwaysinline alignstack=4 }
@@ -1186,7 +1186,7 @@ Function attributes are simple keywords that follow the type specified.
 If multiple attributes are needed, they are space separated. For
 example:
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
     define void @f() noinline { ... }
     define void @f() alwaysinline { ... }
@@ -1243,7 +1243,7 @@ example:
     function. This can have very system-specific consequences.
 ``nobuiltin``
     This indicates that the callee function at a call site is not recognized as
-    a built-in function. LLVM will retain the original call and not replace it
+    a built-in function. LLVM37 will retain the original call and not replace it
     with equivalent code based on the semantics of the built-in function, unless
     the call site uses the ``builtin`` attribute. This is valid at call sites
     and on function declarations and definitions.
@@ -1280,7 +1280,7 @@ example:
     exception. If the function does raise an exception, its runtime
     behavior is undefined. However, functions marked nounwind may still
     trap or generate asynchronous exceptions. Exception handling schemes
-    that are recognized by LLVM to handle asynchronous exceptions, such
+    that are recognized by LLVM37 to handle asynchronous exceptions, such
     as SEH, will still provide their implementation defined semantics.
 ``optnone``
     This function attribute indicates that the function is not optimized
@@ -1341,7 +1341,7 @@ example:
     functions.
 ``safestack``
     This attribute indicates that
-    `SafeStack <http://clang.llvm.org/docs/SafeStack.html>`_
+    `SafeStack <http://clang.llvm37.org/docs/SafeStack.html>`_
     protection is enabled for this function.
 
     If a function that has a ``safestack`` attribute is inlined into a
@@ -1442,10 +1442,10 @@ Module-Level Inline Assembly
 
 Modules may contain "module-level inline asm" blocks, which corresponds
 to the GCC "file scope inline asm" blocks. These blocks are internally
-concatenated by LLVM and treated as a single unit, but may be separated
+concatenated by LLVM37 and treated as a single unit, but may be separated
 in the ``.ll`` file if desired. The syntax is very simple:
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
     module asm "inline asm code goes here"
     module asm "more can go here"
@@ -1454,7 +1454,7 @@ The strings can contain any character by escaping non-printable
 characters. The escape sequence used is simply "\\xx" where "xx" is the
 two digit hex code for the number.
 
-Note that the assembly string *must* be parseable by LLVM's integrated assembler
+Note that the assembly string *must* be parseable by LLVM37's integrated assembler
 (unless it is disabled), even when emitting a ``.s`` file.
 
 .. _langref_datalayout:
@@ -1466,7 +1466,7 @@ A module may specify a target specific data layout string that specifies
 how data is to be laid out in memory. The syntax for the data layout is
 simply:
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
     target datalayout = "layout specification"
 
@@ -1512,7 +1512,7 @@ as follows:
 ``a:<abi>:<pref>``
     This specifies the alignment for an object of aggregate type.
 ``m:<mangling>``
-    If present, specifies that llvm names are mangled in the output. The
+    If present, specifies that llvm37 names are mangled in the output. The
     options are
 
     * ``e``: ELF mangling: Private symbols get a ``.L`` prefix.
@@ -1532,7 +1532,7 @@ On every specification that takes a ``<abi>:<pref>``, specifying the
 ``<pref>`` alignment is optional. If omitted, the preceding ``:``
 should be omitted too and ``<pref>`` will be equal to ``<abi>``.
 
-When constructing the data layout for a given target, LLVM starts with a
+When constructing the data layout for a given target, LLVM37 starts with a
 default set of specifications which are then (possibly) overridden by
 the specifications in the ``datalayout`` keyword. The default
 specifications are given in this list:
@@ -1556,7 +1556,7 @@ specifications are given in this list:
 -  ``v128:128:128`` - 128-bit vector is 128-bit aligned
 -  ``a:0:64`` - aggregates are 64-bit aligned
 
-When LLVM is determining the alignment for a given type, it uses the
+When LLVM37 is determining the alignment for a given type, it uses the
 following rules:
 
 #. If the type sought is an exact match for one of the specifications,
@@ -1595,7 +1595,7 @@ Target Triple
 A module may specify a target triple string that describes the target
 host. The syntax for the target triple is simply:
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
     target triple = "x86_64-apple-macosx10.7.0"
 
@@ -1630,10 +1630,10 @@ to the following rules:
 -  A null pointer in the default address-space is associated with no
    address.
 -  An integer constant other than zero or a pointer value returned from
-   a function not defined within LLVM may be associated with address
+   a function not defined within LLVM37 may be associated with address
    ranges allocated through mechanisms other than those provided by
-   LLVM. Such ranges shall not overlap with any ranges of addresses
-   allocated by mechanisms provided by LLVM.
+   LLVM37. Such ranges shall not overlap with any ranges of addresses
+   allocated by mechanisms provided by LLVM37.
 
 A pointer value is *based* on another pointer value according to the
 following rules:
@@ -1650,14 +1650,14 @@ following rules:
 Note that this definition of *"based"* is intentionally similar to the
 definition of *"based"* in C99, though it is slightly weaker.
 
-LLVM IR does not associate types with memory. The result type of a
+LLVM37 IR does not associate types with memory. The result type of a
 ``load`` merely indicates the size and alignment of the memory from
 which to load, as well as the interpretation of the value. The first
 operand type of a ``store`` similarly only indicates the size and
 alignment of the store.
 
 Consequently, type-based alias analysis, aka TBAA, aka
-``-fstrict-aliasing``, is not applicable to general unadorned LLVM IR.
+``-fstrict-aliasing``, is not applicable to general unadorned LLVM37 IR.
 :ref:`Metadata <metadata>` may be used to encode additional information
 which specialized optimization passes may use to implement type-based
 alias analysis.
@@ -1668,7 +1668,7 @@ Volatile Memory Accesses
 ------------------------
 
 Certain memory accesses, such as :ref:`load <i_load>`'s,
-:ref:`store <i_store>`'s, and :ref:`llvm.memcpy <int_memcpy>`'s may be
+:ref:`store <i_store>`'s, and :ref:`llvm37.memcpy <int_memcpy>`'s may be
 marked ``volatile``. The optimizers must not change the number of
 volatile operations or change their order of execution relative to other
 volatile operations. The optimizers *may* change the order of volatile
@@ -1676,7 +1676,7 @@ operations relative to non-volatile operations. This is not Java's
 "volatile" and has no cross-thread synchronization behavior.
 
 IR-level volatile loads and stores cannot safely be optimized into
-llvm.memcpy or llvm.memmove intrinsics even when those intrinsics are
+llvm37.memcpy or llvm37.memmove intrinsics even when those intrinsics are
 flagged volatile. Likewise, the backend should never split or merge
 target-legal volatile load/store instructions.
 
@@ -1695,9 +1695,9 @@ target-legal volatile load/store instructions.
 Memory Model for Concurrent Operations
 --------------------------------------
 
-The LLVM IR does not define any way to start parallel threads of
+The LLVM37 IR does not define any way to start parallel threads of
 execution or to register signal handlers. Nonetheless, there are
-platform-specific ways to create them, and we define LLVM IR's behavior
+platform-specific ways to create them, and we define LLVM37 IR's behavior
 in their presence. This model is inspired by the C++0x memory model.
 
 For a more informal introduction to this model, see the :doc:`Atomics`.
@@ -1843,7 +1843,7 @@ handlers).
 Fast-Math Flags
 ---------------
 
-LLVM IR floating-point binary ops (:ref:`fadd <i_fadd>`,
+LLVM37 IR floating-point binary ops (:ref:`fadd <i_fadd>`,
 :ref:`fsub <i_fsub>`, :ref:`fmul <i_fmul>`, :ref:`fdiv <i_fdiv>`,
 :ref:`frem <i_frem>`, :ref:`fcmp <i_fcmp>`) have the following flags that can
 be set to enable otherwise unsafe floating point operations
@@ -1922,7 +1922,7 @@ function's scope.
 Type System
 ===========
 
-The LLVM type system is one of the most important features of the
+The LLVM37 type system is one of the most important features of the
 intermediate representation. Being typed enables a number of
 optimizations to be performed on the intermediate representation
 directly, without having to do extra analyses on the side before the
@@ -1981,7 +1981,7 @@ except :ref:`label <t_label>` and :ref:`metadata <t_metadata>`.
 +---------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 | ``float (i16, i32 *) *``        | :ref:`Pointer <t_pointer>` to a function that takes an ``i16`` and a :ref:`pointer <t_pointer>` to ``i32``, returning ``float``.                                    |
 +---------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| ``i32 (i8*, ...)``              | A vararg function that takes at least one :ref:`pointer <t_pointer>` to ``i8`` (char in C), which returns an integer. This is the signature for ``printf`` in LLVM. |
+| ``i32 (i8*, ...)``              | A vararg function that takes at least one :ref:`pointer <t_pointer>` to ``i8`` (char in C), which returns an integer. This is the signature for ``printf`` in LLVM37. |
 +---------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 | ``{i32, i32} (i32)``            | A function taking an ``i32``, returning a :ref:`structure <t_struct>` containing two ``i32`` values                                                                 |
 +---------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------+
@@ -2096,7 +2096,7 @@ numbered address space where the pointed-to object resides. The default
 address space is number zero. The semantics of non-zero address spaces
 are target-specific.
 
-Note that LLVM does not permit pointers to void (``void*``) nor does it
+Note that LLVM37 does not permit pointers to void (``void*``) nor does it
 permit pointers to labels (``label*``). Use ``i8*`` instead.
 
 :Syntax:
@@ -2235,8 +2235,8 @@ There is no restriction on indexing beyond the end of the array implied
 by a static type (though there are restrictions on indexing beyond the
 bounds of an allocated object in some cases). This means that
 single-dimension 'variable sized array' addressing can be implemented in
-LLVM with a zero length array type. An implementation of 'pascal style
-arrays' in LLVM could use the type "``{ i32, [0 x float]}``", for
+LLVM37 with a zero length array type. An implementation of 'pascal style
+arrays' in LLVM37 could use the type "``{ i32, [0 x float]}``", for
 example.
 
 .. _t_struct:
@@ -2314,7 +2314,7 @@ notion of a forward declared structure.
 Constants
 =========
 
-LLVM has several different basic types of constants. This section
+LLVM37 has several different basic types of constants. This section
 describes them all and their syntax.
 
 Simple Constants
@@ -2420,10 +2420,10 @@ The addresses of :ref:`global variables <globalvars>` and
 :ref:`functions <functionstructure>` are always implicitly valid
 (link-time) constants. These constants are explicitly referenced when
 the :ref:`identifier for the global <identifiers>` is used and always have
-:ref:`pointer <t_pointer>` type. For example, the following is a legal LLVM
+:ref:`pointer <t_pointer>` type. For example, the following is a legal LLVM37
 file:
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
     @X = global i32 17
     @Y = global i32 42
@@ -2444,7 +2444,7 @@ the program is well defined no matter what value is used. This gives the
 compiler more freedom to optimize. Here are some examples of
 (potentially surprising) transformations that are valid (in pseudo IR):
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
       %A = add %X, undef
       %B = sub %X, undef
@@ -2457,7 +2457,7 @@ compiler more freedom to optimize. Here are some examples of
 This is safe because all of the output bits are affected by the undef
 bits. Any output bit can have a zero or one depending on the input bits.
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
       %A = or %X, undef
       %B = and %X, undef
@@ -2478,7 +2478,7 @@ However, it is safe to assume that all bits of the '``undef``' could be
 all the bits of the '``undef``' operand to the '``or``' could be set,
 allowing the '``or``' to be folded to -1.
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
       %A = select undef, %X, %Y
       %B = select undef, 42, %Y
@@ -2500,7 +2500,7 @@ cleared low bit. However, in the ``%C`` example, the optimizer is
 allowed to assume that the '``undef``' operand could be the same as
 ``%Y``, allowing the whole '``select``' to be eliminated.
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
       %A = xor undef, undef
 
@@ -2528,10 +2528,10 @@ its value over its "live range". This is true because the variable
 doesn't actually *have a live range*. Instead, the value is logically
 read from arbitrary registers that happen to be around when needed, so
 the value is not necessarily consistent over time. In fact, ``%A`` and
-``%C`` need to have the same semantics or the core LLVM "replace all
+``%C`` need to have the same semantics or the core LLVM37 "replace all
 uses with" concept would not hold.
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
       %A = fdiv undef, %X
       %B = fdiv %X, undef
@@ -2552,7 +2552,7 @@ does not execute at all. This allows us to delete the divide and all
 code after it. Because the undefined operation "can't happen", the
 optimizer can assume that it occurs in dead code.
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
     a:  store undef -> %X
     b:  store %X -> undef
@@ -2595,7 +2595,7 @@ Poison value behavior is defined in terms of value *dependence*:
 -  Non-volatile loads and stores depend on the most recent stores to all
    of the referenced memory addresses, following the order in the IR
    (including loads and stores implied by intrinsics such as
-   :ref:`@llvm.memcpy <int_memcpy>`.)
+   :ref:`@llvm37.memcpy <int_memcpy>`.)
 -  An instruction with externally visible side effects depends on the
    most recent preceding instruction with externally visible side
    effects, following the order in the IR. (This includes :ref:`volatile
@@ -2617,7 +2617,7 @@ on a poison value has undefined behavior.
 
 Here are some examples:
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
     entry:
       %poison = sub nuw i32 0, 1           ; Results in a poison value.
@@ -2699,7 +2699,7 @@ Constant Expressions
 
 Constant expressions are used to allow expressions involving other
 constants to be used as constants. Constant expressions may be of any
-:ref:`first class <t_firstclass>` type and may involve any LLVM operation
+:ref:`first class <t_firstclass>` type and may involve any LLVM37 operation
 that does not have side effects (e.g. load and call are not supported).
 The following is the syntax for constant expressions:
 
@@ -2807,7 +2807,7 @@ Other Values
 Inline Assembler Expressions
 ----------------------------
 
-LLVM supports inline assembler expressions (as opposed to :ref:`Module-Level
+LLVM37 supports inline assembler expressions (as opposed to :ref:`Module-Level
 Inline Assembly <moduleasm>`) through the use of a special value. This value
 represents the inline assembler as a template string (containing the
 instructions to emit), a list of operand constraints (stored as a string), a
@@ -2824,22 +2824,22 @@ operand (See :ref:`inline-asm-modifiers`).
 A literal "``$``" may be included by using "``$$``" in the template. To include
 other special characters into the output, the usual "``\XX``" escapes may be
 used, just as in other strings. Note that after template substitution, the
-resulting assembly string is parsed by LLVM's integrated assembler unless it is
+resulting assembly string is parsed by LLVM37's integrated assembler unless it is
 disabled -- even when emitting a ``.s`` file -- and thus must contain assembly
-syntax known to LLVM.
+syntax known to LLVM37.
 
-LLVM's support for inline asm is modeled closely on the requirements of Clang's
+LLVM37's support for inline asm is modeled closely on the requirements of Clang's
 GCC-compatible inline-asm support. Thus, the feature-set and the constraint and
 modifier codes listed here are similar or identical to those in GCC's inline asm
 support. However, to be clear, the syntax of the template and constraint strings
 described here is *not* the same as the syntax accepted by GCC and Clang, and,
 while most constraint letters are passed through as-is by Clang, some get
-translated to other codes when converting from the C source to the LLVM
+translated to other codes when converting from the C source to the LLVM37
 assembly.
 
 An example inline assembler expression is:
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
     i32 (i32) asm "bswap $0", "=r,r"
 
@@ -2847,7 +2847,7 @@ Inline assembler expressions may **only** be used as the callee operand
 of a :ref:`call <i_call>` or an :ref:`invoke <i_invoke>` instruction.
 Thus, typically we have:
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
     %X = call i32 asm "bswap $0", "=r,r"(i32 %Y)
 
@@ -2855,7 +2855,7 @@ Inline asms with side effects not visible in the constraint list must be
 marked as having side effects. This is done through the use of the
 '``sideeffect``' keyword, like so:
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
     call void asm sideeffect "eieio", ""()
 
@@ -2866,7 +2866,7 @@ The compiler should make conservative assumptions about what the asm
 might contain and should generate its usual stack alignment code in the
 prologue if the '``alignstack``' keyword is present:
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
     call void asm alignstack "eieio", ""()
 
@@ -2875,7 +2875,7 @@ assumed dialect is ATT. When the '``inteldialect``' keyword is present,
 the inline asm is using the Intel dialect. Currently, ATT and Intel are
 the only supported dialects. An example is:
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
     call void asm inteldialect "eieio", ""()
 
@@ -2922,12 +2922,12 @@ constraints do not consume an argument from the call instruction. (Except, see
 below about indirect outputs).
 
 Normally, it is expected that no output locations are written to by the assembly
-expression until *all* of the inputs have been read. As such, LLVM may assign
+expression until *all* of the inputs have been read. As such, LLVM37 may assign
 the same register to an output and an input. If this is not safe (e.g. if the
 assembly contains two instructions, where the first writes to one output, and
 the second reads an input and writes to a second output), then the "``&``"
 modifier must be used (e.g. "``=&r``") to specify that the output is an
-"early-clobber" output. Marking an ouput as "early-clobber" ensures that LLVM
+"early-clobber" output. Marking an ouput as "early-clobber" ensures that LLVM37
 will not use the same register for any inputs (other than an input tied to this
 output).
 
@@ -2938,7 +2938,7 @@ Input constraints do not have a prefix -- just the constraint codes. Each input
 constraint will consume one argument from the call instruction. It is not
 permitted for the asm to write to any input register or memory location (unless
 that input is tied to an output). Note also that multiple inputs may all be
-assigned to the same register, if LLVM can determine that they necessarily all
+assigned to the same register, if LLVM37 can determine that they necessarily all
 contain the same value.
 
 Instead of providing a Constraint Code, input constraints may also "tie"
@@ -2996,7 +2996,7 @@ This is most typically used for memory constraint, e.g. "``=*m``", to pass the
 address of a variable as a value.
 
 It is also possible to use an indirect *register* constraint, but only on output
-(e.g. "``=*r``"). This will cause LLVM to allocate a register for an output
+(e.g. "``=*r``"). This will cause LLVM37 to allocate a register for an output
 value normally, and then, separately emit a store to the address provided as
 input, after the provided inline asm. (It's not clear what value this
 functionality provides, compared to writing the store explicitly after the asm
@@ -3028,7 +3028,7 @@ The one and two letter constraint codes are typically chosen to be the same as
 GCC's constraint codes.
 
 A single constraint may include one or more than constraint code in it, leaving
-it up to LLVM to choose which one to use. This is included mainly for
+it up to LLVM37 to choose which one to use. This is included mainly for
 compatibility with the translation of GCC inline asm coming from clang.
 
 There are two ways to specify alternatives, and either or both may be used in an
@@ -3050,7 +3050,7 @@ operand 1 may be one of ``r`` or ``i``. If operand 0 is ``r``, then operand 1
 may be one of ``r`` or ``m``. But, operand 0 and 1 cannot both be of type m.
 
 However, the use of either of the alternatives features is *NOT* recommended, as
-LLVM is not able to make an intelligent choice about which one to use. (At the
+LLVM37 is not able to make an intelligent choice about which one to use. (At the
 point it currently needs to choose, not enough information is available to do so
 in a smart way.) Thus, it simply tries to make a choice that's most likely to
 compile, not one that will be optimal performance. (e.g., given "``rm``", it'll
@@ -3065,9 +3065,9 @@ Supported Constraint Code List
 """"""""""""""""""""""""""""""
 
 The constraint codes are, in general, expected to behave the same way they do in
-GCC. LLVM's support is often implemented on an 'as-needed' basis, to support C
-inline asm code which was supported by GCC. A mismatch in behavior between LLVM
-and GCC likely indicates a bug in LLVM.
+GCC. LLVM37's support is often implemented on an 'as-needed' basis, to support C
+inline asm code which was supported by GCC. A mismatch in behavior between LLVM37
+and GCC likely indicates a bug in LLVM37.
 
 Some constraint codes are typically supported by all targets:
 
@@ -3083,7 +3083,7 @@ Some constraint codes are typically supported by all targets:
   useful to pass a label for an asm branch or call.
 
   .. FIXME: but that surely isn't actually okay to jump out of an asm
-     block without telling llvm about the control transfer???)
+     block without telling llvm37 about the control transfer???)
 
 - ``{register-name}``: Requires exactly the named physical register.
 
@@ -3107,7 +3107,7 @@ AArch64:
 - ``N``: An immediate integer for use with the ``MOV`` assembly alias on a
   64-bit register. This is a superset of ``L``.
 - ``Q``: Memory address operand must be in a single register (no
-  offsets). (However, LLVM currently does this for the ``m`` constraint as
+  offsets). (However, LLVM37 currently does this for the ``m`` constraint as
   well.)
 - ``r``: A 32 or 64-bit integer register (W* or X*).
 - ``w``: A 32, 64, or 128-bit floating-point/SIMD register.
@@ -3267,7 +3267,7 @@ SystemZ:
 - ``a``: A 32, 64, or 128-bit integer address register (excludes R0, which in an
   address context evaluates as zero).
 - ``h``: A 32-bit value in the high part of a 64bit data register
-  (LLVM-specific)
+  (LLVM37-specific)
 - ``f``: A 32, 64, or 128-bit floating point register.
 
 X86:
@@ -3319,9 +3319,9 @@ In the asm template string, modifiers can be used on the operand reference, like
 "``${0:n}``".
 
 The modifiers are, in general, expected to behave the same way they do in
-GCC. LLVM's support is often implemented on an 'as-needed' basis, to support C
-inline asm code which was supported by GCC. A mismatch in behavior between LLVM
-and GCC likely indicates a bug in LLVM.
+GCC. LLVM37's support is often implemented on an 'as-needed' basis, to support C
+inline asm code which was supported by GCC. A mismatch in behavior between LLVM37
+and GCC likely indicates a bug in LLVM37.
 
 Target-independent:
 
@@ -3431,9 +3431,9 @@ PowerPC:
 - ``y``: For a memory operand, prints formatter for a two-register X-form
   instruction. (Currently always prints ``r0,OPERAND``).
 - ``U``: Prints 'u' if the memory operand is an update form, and nothing
-  otherwise. (NOTE: LLVM does not support update form, so this will currently
+  otherwise. (NOTE: LLVM37 does not support update form, so this will currently
   always print nothing)
-- ``X``: Prints 'x' if the memory operand is an indexed form. (NOTE: LLVM does
+- ``X``: Prints 'x' if the memory operand is an indexed form. (NOTE: LLVM37 does
   not support indexed form, so this will currently always print nothing)
 
 Sparc:
@@ -3479,12 +3479,12 @@ Inline Asm Metadata
 The call instructions that wrap inline asm nodes may have a
 "``!srcloc``" MDNode attached to it that contains a list of constant
 integers. If present, the code generator will use the integer as the
-location cookie value when report errors through the ``LLVMContext``
+location cookie value when report errors through the ``LLVM37Context``
 error reporting mechanisms. This allows a front-end to correlate backend
 errors that occur with inline asm back to the source code that produced
 it. For example:
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
     call void asm sideeffect "something bad", ""(), !srcloc !42
     ...
@@ -3500,7 +3500,7 @@ occurs on.
 Metadata
 ========
 
-LLVM IR allows metadata to be attached to instructions in the program
+LLVM37 IR allows metadata to be attached to instructions in the program
 that can convey extra information about the code to the optimizers and
 code generator. One example application of metadata is source-level
 debug information. There are two metadata primitives: strings and nodes.
@@ -3525,13 +3525,13 @@ constants (a comma separated list of elements, surrounded by braces and
 preceded by an exclamation point). Metadata nodes can have any values as
 their operand. For example:
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
     !{ !"test\00", i32 10}
 
 Metadata nodes that aren't uniqued use the ``distinct`` keyword. For example:
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
     !0 = distinct !{!"test\00", i32 10}
 
@@ -3543,21 +3543,21 @@ A :ref:`named metadata <namedmetadatastructure>` is a collection of
 metadata nodes, which can be looked up in the module symbol table. For
 example:
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
     !foo = !{!4, !3}
 
-Metadata can be used as function arguments. Here ``llvm.dbg.value``
+Metadata can be used as function arguments. Here ``llvm37.dbg.value``
 function is using two metadata arguments:
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
-    call void @llvm.dbg.value(metadata !24, i64 0, metadata !25)
+    call void @llvm37.dbg.value(metadata !24, i64 0, metadata !25)
 
 Metadata can be attached with an instruction. Here metadata ``!21`` is
 attached to the ``add`` instruction using the ``!dbg`` identifier:
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
     %indvar.next = add i64 %indvar, 1, !dbg !21
 
@@ -3587,7 +3587,7 @@ tuples containing the debug info to be emitted along with the compile unit,
 regardless of code optimizations (some nodes are only emitted if there are
 references to them from instructions).
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
     !0 = !DICompileUnit(language: DW_LANG_C99, file: !1, producer: "clang",
                         isOptimized: true, flags: "-O2", runtimeVersion: 2,
@@ -3597,7 +3597,7 @@ references to them from instructions).
 
 Compile unit descriptors provide the root scope for objects declared in a
 specific compilation unit.  File descriptors are defined using this scope.
-These descriptors are collected by a named metadata ``!llvm.dbg.cu``.  They
+These descriptors are collected by a named metadata ``!llvm37.dbg.cu``.  They
 keep track of subprograms, global variables, type information, and imported
 entities (declarations and namespaces).
 
@@ -3608,7 +3608,7 @@ DIFile
 
 ``DIFile`` nodes represent files.  The ``filename:`` can include slashes.
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
     !0 = !DIFile(filename: "path/to/file", directory: "/path/to/dir")
 
@@ -3623,7 +3623,7 @@ DIBasicType
 ``DIBasicType`` nodes represent primitive types, such as ``int``, ``bool`` and
 ``float``.  ``tag:`` defaults to ``DW_TAG_base_type``.
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
     !0 = !DIBasicType(name: "unsigned char", size: 8, align: 8,
                       encoding: DW_ATE_unsigned_char)
@@ -3632,7 +3632,7 @@ DIBasicType
 The ``encoding:`` describes the details of the type.  Usually it's one of the
 following:
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
   DW_ATE_address       = 1
   DW_ATE_boolean       = 2
@@ -3652,7 +3652,7 @@ refers to a tuple; the first operand is the return type, while the rest are the
 types of the formal arguments in order.  If the first operand is ``null``, that
 represents a function with no return value (such as ``void foo() {}`` in C++).
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
     !0 = !BasicType(name: "int", size: 32, align: 32, DW_ATE_signed)
     !1 = !BasicType(name: "char", size: 8, align: 8, DW_ATE_signed_char)
@@ -3666,7 +3666,7 @@ DIDerivedType
 ``DIDerivedType`` nodes represent types derived from other types, such as
 qualified types.
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
     !0 = !DIBasicType(name: "unsigned char", size: 8, align: 8,
                       encoding: DW_ATE_unsigned_char)
@@ -3675,7 +3675,7 @@ qualified types.
 
 The following ``tag:`` values are valid:
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
   DW_TAG_formal_parameter   = 5
   DW_TAG_member             = 13
@@ -3714,7 +3714,7 @@ identifier used for type merging between modules.  When specified, other types
 can refer to composite types indirectly via a :ref:`metadata string
 <metadata-string>` that matches their identifier.
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
     !0 = !DIEnumerator(name: "SixKind", value: 7)
     !1 = !DIEnumerator(name: "SevenKind", value: 7)
@@ -3725,7 +3725,7 @@ can refer to composite types indirectly via a :ref:`metadata string
 
 The following ``tag:`` values are valid:
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
   DW_TAG_array_type       = 1
   DW_TAG_class_type       = 2
@@ -3758,7 +3758,7 @@ DISubrange
 ``DISubrange`` nodes are the elements for ``DW_TAG_array_type`` variants of
 :ref:`DICompositeType`.  ``count: -1`` indicates an empty array.
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
     !0 = !DISubrange(count: 5, lowerBound: 0) ; array counting from 0
     !1 = !DISubrange(count: 5, lowerBound: 1) ; array counting from 1
@@ -3772,7 +3772,7 @@ DIEnumerator
 ``DIEnumerator`` nodes are the elements for ``DW_TAG_enumeration_type``
 variants of :ref:`DICompositeType`.
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
     !0 = !DIEnumerator(name: "SixKind", value: 7)
     !1 = !DIEnumerator(name: "SevenKind", value: 7)
@@ -3785,7 +3785,7 @@ DITemplateTypeParameter
 language constructs.  They are used (optionally) in :ref:`DICompositeType` and
 :ref:`DISubprogram` ``templateParams:`` fields.
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
     !0 = !DITemplateTypeParameter(name: "Ty", type: !1)
 
@@ -3798,7 +3798,7 @@ but if specified can also be set to ``DW_TAG_GNU_template_template_param`` or
 ``DW_TAG_GNU_template_param_pack``.  They are used (optionally) in
 :ref:`DICompositeType` and :ref:`DISubprogram` ``templateParams:`` fields.
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
     !0 = !DITemplateValueParameter(name: "Ty", type: !1, value: i32 7)
 
@@ -3807,7 +3807,7 @@ DINamespace
 
 ``DINamespace`` nodes represent namespaces in the source language.
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
     !0 = !DINamespace(name: "myawesomeproject", scope: !1, file: !2, line: 7)
 
@@ -3816,7 +3816,7 @@ DIGlobalVariable
 
 ``DIGlobalVariable`` nodes represent global variables in the source language.
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
     !0 = !DIGlobalVariable(name: "foo", linkageName: "foo", scope: !1,
                            file: !2, line: 7, type: !3, isLocal: true,
@@ -3836,7 +3836,7 @@ DISubprogram
 retained, even if their IR counterparts are optimized out of the IR.  The
 ``type:`` field must point at an :ref:`DISubroutineType`.
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
     !0 = !DISubprogram(name: "foo", linkageName: "_Zfoov", scope: !1,
                        file: !2, line: 7, type: !3, isLocal: true,
@@ -3856,7 +3856,7 @@ DILexicalBlock
 two lexical blocks at same depth.  They are valid targets for ``scope:``
 fields.
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
     !0 = distinct !DILexicalBlock(scope: !1, file: !2, line: 7, column: 35)
 
@@ -3873,7 +3873,7 @@ DILexicalBlockFile
 indicate textual inclusion, or the ``discriminator:`` field can be used to
 discriminate between control flow within a single block in the source language.
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
     !0 = !DILexicalBlock(scope: !3, file: !4, line: 7, column: 35)
     !1 = !DILexicalBlockFile(scope: !0, file: !4, discriminator: 0)
@@ -3888,7 +3888,7 @@ DILocation
 mandatory, and points at an :ref:`DILexicalBlockFile`, an
 :ref:`DILexicalBlock`, or an :ref:`DISubprogram`.
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
     !0 = !DILocation(line: 2900, column: 42, scope: !1, inlinedAt: !2)
 
@@ -3898,13 +3898,13 @@ DILocalVariable
 """""""""""""""
 
 ``DILocalVariable`` nodes represent local variables in the source language.
-Instead of ``DW_TAG_variable``, they use LLVM-specific fake tags to
+Instead of ``DW_TAG_variable``, they use LLVM37-specific fake tags to
 discriminate between local variables (``DW_TAG_auto_variable``) and subprogram
 arguments (``DW_TAG_arg_variable``).  In the latter case, the ``arg:`` field
 specifies the argument position, and this variable will be included in the
 ``variables:`` field of its :ref:`DISubprogram`.
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
     !0 = !DILocalVariable(tag: DW_TAG_arg_variable, name: "this", arg: 0,
                           scope: !3, file: !2, line: 7, type: !3,
@@ -3918,8 +3918,8 @@ DIExpression
 """"""""""""
 
 ``DIExpression`` nodes represent DWARF expression sequences.  They are used in
-:ref:`debug intrinsics<dbg_intrinsics>` (such as ``llvm.dbg.declare``) to
-describe how the referenced LLVM variable relates to the source language
+:ref:`debug intrinsics<dbg_intrinsics>` (such as ``llvm37.dbg.declare``) to
+describe how the referenced LLVM37 variable relates to the source language
 variable.
 
 The current supported vocabulary is limited:
@@ -3929,7 +3929,7 @@ The current supported vocabulary is limited:
 - ``DW_OP_bit_piece, 16, 8`` specifies the offset and size (``16`` and ``8``
   here, respectively) of the variable piece from the working expression.
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
     !0 = !DIExpression(DW_OP_deref)
     !1 = !DIExpression(DW_OP_plus, 3)
@@ -3941,7 +3941,7 @@ DIObjCProperty
 
 ``DIObjCProperty`` nodes represent Objective-C property nodes.
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
     !3 = !DIObjCProperty(name: "foo", file: !1, line: 7, setter: "setFoo",
                          getter: "getFoo", attributes: 7, type: !2)
@@ -3952,7 +3952,7 @@ DIImportedEntity
 ``DIImportedEntity`` nodes represent entities (such as modules) imported into a
 compile unit.
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
    !2 = !DIImportedEntity(tag: DW_TAG_imported_module, name: "foo", scope: !0,
                           entity: !1, line: 7)
@@ -3960,7 +3960,7 @@ compile unit.
 '``tbaa``' Metadata
 ^^^^^^^^^^^^^^^^^^^
 
-In LLVM IR, memory does not have types, so LLVM's own type system is not
+In LLVM37 IR, memory does not have types, so LLVM37's own type system is not
 suitable for doing TBAA. Instead, metadata is added to the IR to
 describe a type system of a higher level language. This can be used to
 implement typical C/C++ TBAA, but it can also be used to implement
@@ -3969,7 +3969,7 @@ custom alias analysis behavior for other languages.
 The current metadata format is very simple. TBAA metadata nodes have up
 to three fields, e.g.:
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
     !0 = !{ !"an example type tree" }
     !1 = !{ !"int", !0 }
@@ -3996,7 +3996,7 @@ AliasAnalysis methods <AliasAnalysis.html#OtherItfs>`_).
 '``tbaa.struct``' Metadata
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The :ref:`llvm.memcpy <int_memcpy>` is often used to implement
+The :ref:`llvm37.memcpy <int_memcpy>` is often used to implement
 aggregate assignment operations in C and similar languages, however it
 is defined to copy a contiguous region of memory, which is more than
 strictly necessary for aggregate types which contain holes due to
@@ -4012,7 +4012,7 @@ For each group of three, the first operand gives the byte offset of a
 field in bytes, the second gives its size in bytes, and the third gives
 its tbaa tag. e.g.:
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
     !4 = !{ i64 0, i64 4, !1, i64 8, i64 4, !2 }
 
@@ -4054,7 +4054,7 @@ optionally be provided as a third list entry.
 
 For example,
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
     ; Two scope domains:
     !0 = !{!0}
@@ -4103,7 +4103,7 @@ it. ULP is defined as follows:
 The metadata node shall consist of a single positive floating point
 number representing the maximum relative error, for example:
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
     !0 = !{ float 2.5 } ; maximum acceptable inaccuracy is 2.5 ULPs
 
@@ -4131,7 +4131,7 @@ they must be non-contiguous.
 
 Examples:
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
       %a = load i8, i8* %x, align 1, !range !0 ; Can only be 0 or 1
       %b = load i8, i8* %y, align 1, !range !1 ; Can only be 255 (-1), 0 or 1
@@ -4144,14 +4144,14 @@ Examples:
     !2 = !{ i8 0, i8 2, i8 3, i8 6 }
     !3 = !{ i8 -2, i8 0, i8 3, i8 6 }
 
-'``llvm.loop``'
+'``llvm37.loop``'
 ^^^^^^^^^^^^^^^
 
 It is sometimes useful to attach information to loop constructs. Currently,
 loop metadata is implemented as metadata attached to the branch instruction
 in the loop latch block. This type of metadata refer to a metadata node that is
 guaranteed to be separate for each loop. The loop identifier metadata is
-specified with the name ``llvm.loop``.
+specified with the name ``llvm37.loop``.
 
 The loop identifier metadata is implemented using a metadata that refers to
 itself to avoid merging it with any other identifier metadata, e.g.,
@@ -4160,160 +4160,160 @@ to their own identification metadata even if they reside in separate functions.
 The following example contains loop identifier metadata for two separate loop
 constructs:
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
     !0 = !{!0}
     !1 = !{!1}
 
 The loop identifier metadata can be used to specify additional
 per-loop metadata. Any operands after the first operand can be treated
-as user-defined metadata. For example the ``llvm.loop.unroll.count``
+as user-defined metadata. For example the ``llvm37.loop.unroll.count``
 suggests an unroll factor to the loop unroller:
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
-      br i1 %exitcond, label %._crit_edge, label %.lr.ph, !llvm.loop !0
+      br i1 %exitcond, label %._crit_edge, label %.lr.ph, !llvm37.loop !0
     ...
     !0 = !{!0, !1}
     !1 = !{!"llvm.loop.unroll.count", i32 4}
 
-'``llvm.loop.vectorize``' and '``llvm.loop.interleave``'
+'``llvm37.loop.vectorize``' and '``llvm37.loop.interleave``'
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Metadata prefixed with ``llvm.loop.vectorize`` or ``llvm.loop.interleave`` are
+Metadata prefixed with ``llvm37.loop.vectorize`` or ``llvm37.loop.interleave`` are
 used to control per-loop vectorization and interleaving parameters such as
 vectorization width and interleave count.  These metadata should be used in
-conjunction with ``llvm.loop`` loop identification metadata.  The
-``llvm.loop.vectorize`` and ``llvm.loop.interleave`` metadata are only
+conjunction with ``llvm37.loop`` loop identification metadata.  The
+``llvm37.loop.vectorize`` and ``llvm37.loop.interleave`` metadata are only
 optimization hints and the optimizer will only interleave and vectorize loops if
-it believes it is safe to do so.  The ``llvm.mem.parallel_loop_access`` metadata
+it believes it is safe to do so.  The ``llvm37.mem.parallel_loop_access`` metadata
 which contains information about loop-carried memory dependencies can be helpful
 in determining the safety of these transformations.
 
-'``llvm.loop.interleave.count``' Metadata
+'``llvm37.loop.interleave.count``' Metadata
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This metadata suggests an interleave count to the loop interleaver.
-The first operand is the string ``llvm.loop.interleave.count`` and the
+The first operand is the string ``llvm37.loop.interleave.count`` and the
 second operand is an integer specifying the interleave count. For
 example:
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
    !0 = !{!"llvm.loop.interleave.count", i32 4}
 
-Note that setting ``llvm.loop.interleave.count`` to 1 disables interleaving
-multiple iterations of the loop.  If ``llvm.loop.interleave.count`` is set to 0
+Note that setting ``llvm37.loop.interleave.count`` to 1 disables interleaving
+multiple iterations of the loop.  If ``llvm37.loop.interleave.count`` is set to 0
 then the interleave count will be determined automatically.
 
-'``llvm.loop.vectorize.enable``' Metadata
+'``llvm37.loop.vectorize.enable``' Metadata
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This metadata selectively enables or disables vectorization for the loop. The
-first operand is the string ``llvm.loop.vectorize.enable`` and the second operand
+first operand is the string ``llvm37.loop.vectorize.enable`` and the second operand
 is a bit.  If the bit operand value is 1 vectorization is enabled. A value of
 0 disables vectorization:
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
    !0 = !{!"llvm.loop.vectorize.enable", i1 0}
    !1 = !{!"llvm.loop.vectorize.enable", i1 1}
 
-'``llvm.loop.vectorize.width``' Metadata
+'``llvm37.loop.vectorize.width``' Metadata
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This metadata sets the target width of the vectorizer. The first
-operand is the string ``llvm.loop.vectorize.width`` and the second
+operand is the string ``llvm37.loop.vectorize.width`` and the second
 operand is an integer specifying the width. For example:
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
    !0 = !{!"llvm.loop.vectorize.width", i32 4}
 
-Note that setting ``llvm.loop.vectorize.width`` to 1 disables
-vectorization of the loop.  If ``llvm.loop.vectorize.width`` is set to
+Note that setting ``llvm37.loop.vectorize.width`` to 1 disables
+vectorization of the loop.  If ``llvm37.loop.vectorize.width`` is set to
 0 or if the loop does not have this metadata the width will be
 determined automatically.
 
-'``llvm.loop.unroll``'
+'``llvm37.loop.unroll``'
 ^^^^^^^^^^^^^^^^^^^^^^
 
-Metadata prefixed with ``llvm.loop.unroll`` are loop unrolling
-optimization hints such as the unroll factor. ``llvm.loop.unroll``
-metadata should be used in conjunction with ``llvm.loop`` loop
-identification metadata. The ``llvm.loop.unroll`` metadata are only
+Metadata prefixed with ``llvm37.loop.unroll`` are loop unrolling
+optimization hints such as the unroll factor. ``llvm37.loop.unroll``
+metadata should be used in conjunction with ``llvm37.loop`` loop
+identification metadata. The ``llvm37.loop.unroll`` metadata are only
 optimization hints and the unrolling will only be performed if the
 optimizer believes it is safe to do so.
 
-'``llvm.loop.unroll.count``' Metadata
+'``llvm37.loop.unroll.count``' Metadata
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This metadata suggests an unroll factor to the loop unroller. The
-first operand is the string ``llvm.loop.unroll.count`` and the second
+first operand is the string ``llvm37.loop.unroll.count`` and the second
 operand is a positive integer specifying the unroll factor. For
 example:
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
    !0 = !{!"llvm.loop.unroll.count", i32 4}
 
 If the trip count of the loop is less than the unroll count the loop
 will be partially unrolled.
 
-'``llvm.loop.unroll.disable``' Metadata
+'``llvm37.loop.unroll.disable``' Metadata
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This metadata disables loop unrolling. The metadata has a single operand
-which is the string ``llvm.loop.unroll.disable``.  For example:
+which is the string ``llvm37.loop.unroll.disable``.  For example:
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
    !0 = !{!"llvm.loop.unroll.disable"}
 
-'``llvm.loop.unroll.runtime.disable``' Metadata
+'``llvm37.loop.unroll.runtime.disable``' Metadata
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This metadata disables runtime loop unrolling. The metadata has a single
-operand which is the string ``llvm.loop.unroll.runtime.disable``.  For example:
+operand which is the string ``llvm37.loop.unroll.runtime.disable``.  For example:
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
    !0 = !{!"llvm.loop.unroll.runtime.disable"}
 
-'``llvm.loop.unroll.full``' Metadata
+'``llvm37.loop.unroll.full``' Metadata
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This metadata suggests that the loop should be unrolled fully. The
-metadata has a single operand which is the string ``llvm.loop.unroll.full``.
+metadata has a single operand which is the string ``llvm37.loop.unroll.full``.
 For example:
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
    !0 = !{!"llvm.loop.unroll.full"}
 
-'``llvm.mem``'
+'``llvm37.mem``'
 ^^^^^^^^^^^^^^^
 
 Metadata types used to annotate memory accesses with information helpful
-for optimizations are prefixed with ``llvm.mem``.
+for optimizations are prefixed with ``llvm37.mem``.
 
-'``llvm.mem.parallel_loop_access``' Metadata
+'``llvm37.mem.parallel_loop_access``' Metadata
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The ``llvm.mem.parallel_loop_access`` metadata refers to a loop identifier,
+The ``llvm37.mem.parallel_loop_access`` metadata refers to a loop identifier,
 or metadata containing a list of loop identifiers for nested loops.
 The metadata is attached to memory accessing instructions and denotes that
 no loop carried memory dependence exist between it and other instructions denoted
 with the same loop identifier.
 
 Precisely, given two instructions ``m1`` and ``m2`` that both have the
-``llvm.mem.parallel_loop_access`` metadata, with ``L1`` and ``L2`` being the
+``llvm37.mem.parallel_loop_access`` metadata, with ``L1`` and ``L2`` being the
 set of loops associated with that metadata, respectively, then there is no loop
 carried dependence between ``m1`` and ``m2`` for loops in both ``L1`` and
 ``L2``.
 
 As a special case, if all memory accessing instructions in a loop have
-``llvm.mem.parallel_loop_access`` metadata that refers to that loop, then the
+``llvm37.mem.parallel_loop_access`` metadata that refers to that loop, then the
 loop has no loop carried memory dependences and is considered to be a parallel
 loop.
 
@@ -4325,18 +4325,18 @@ sequential (if optimization passes that are unaware of the parallel semantics
 insert new memory instructions into the loop body).
 
 Example of a loop that is considered parallel due to its correct use of
-both ``llvm.loop`` and ``llvm.mem.parallel_loop_access``
+both ``llvm37.loop`` and ``llvm37.mem.parallel_loop_access``
 metadata types that refer to the same loop identifier metadata.
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
    for.body:
      ...
-     %val0 = load i32, i32* %arrayidx, !llvm.mem.parallel_loop_access !0
+     %val0 = load i32, i32* %arrayidx, !llvm37.mem.parallel_loop_access !0
      ...
-     store i32 %val0, i32* %arrayidx1, !llvm.mem.parallel_loop_access !0
+     store i32 %val0, i32* %arrayidx1, !llvm37.mem.parallel_loop_access !0
      ...
-     br i1 %exitcond, label %for.end, label %for.body, !llvm.loop !0
+     br i1 %exitcond, label %for.end, label %for.body, !llvm37.loop !0
 
    for.end:
    ...
@@ -4346,27 +4346,27 @@ It is also possible to have nested parallel loops. In that case the
 memory accesses refer to a list of loop identifier metadata nodes instead of
 the loop identifier metadata node directly:
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
    outer.for.body:
      ...
-     %val1 = load i32, i32* %arrayidx3, !llvm.mem.parallel_loop_access !2
+     %val1 = load i32, i32* %arrayidx3, !llvm37.mem.parallel_loop_access !2
      ...
      br label %inner.for.body
 
    inner.for.body:
      ...
-     %val0 = load i32, i32* %arrayidx1, !llvm.mem.parallel_loop_access !0
+     %val0 = load i32, i32* %arrayidx1, !llvm37.mem.parallel_loop_access !0
      ...
-     store i32 %val0, i32* %arrayidx2, !llvm.mem.parallel_loop_access !0
+     store i32 %val0, i32* %arrayidx2, !llvm37.mem.parallel_loop_access !0
      ...
-     br i1 %exitcond, label %inner.for.end, label %inner.for.body, !llvm.loop !1
+     br i1 %exitcond, label %inner.for.end, label %inner.for.body, !llvm37.loop !1
 
    inner.for.end:
      ...
-     store i32 %val1, i32* %arrayidx4, !llvm.mem.parallel_loop_access !2
+     store i32 %val1, i32* %arrayidx4, !llvm37.mem.parallel_loop_access !2
      ...
-     br i1 %exitcond, label %outer.for.end, label %outer.for.body, !llvm.loop !2
+     br i1 %exitcond, label %outer.for.end, label %outer.for.body, !llvm37.loop !2
 
    outer.for.end:                                          ; preds = %for.body
    ...
@@ -4374,23 +4374,23 @@ the loop identifier metadata node directly:
    !1 = !{!1} ; an identifier for the inner loop
    !2 = !{!2} ; an identifier for the outer loop
 
-'``llvm.bitsets``'
+'``llvm37.bitsets``'
 ^^^^^^^^^^^^^^^^^^
 
-The ``llvm.bitsets`` global metadata is used to implement
+The ``llvm37.bitsets`` global metadata is used to implement
 :doc:`bitsets <BitSets>`.
 
 Module Flags Metadata
 =====================
 
-Information about the module as a whole is difficult to convey to LLVM's
-subsystems. The LLVM IR isn't sufficient to transmit this information.
-The ``llvm.module.flags`` named metadata exists in order to facilitate
+Information about the module as a whole is difficult to convey to LLVM37's
+subsystems. The LLVM37 IR isn't sufficient to transmit this information.
+The ``llvm37.module.flags`` named metadata exists in order to facilitate
 this. These flags are in the form of key / value pairs --- much like a
 dictionary --- making it easy for any subsystem who cares about a flag to
 look it up.
 
-The ``llvm.module.flags`` metadata contains a list of metadata triplets.
+The ``llvm37.module.flags`` metadata contains a list of metadata triplets.
 Each triplet has the following form:
 
 -  The first element is a *behavior* flag, which specifies the behavior
@@ -4403,9 +4403,9 @@ Each triplet has the following form:
 -  The third element is the value of the flag.
 
 When two (or more) modules are merged together, the resulting
-``llvm.module.flags`` metadata is the union of the modules' flags. That is, for
+``llvm37.module.flags`` metadata is the union of the modules' flags. That is, for
 each unique metadata ID string, there will be exactly one entry in the merged
-modules ``llvm.module.flags`` metadata table, and the value for that entry will
+modules ``llvm37.module.flags`` metadata table, and the value for that entry will
 be determined by the merge behavior flag, as described below. The only exception
 is that entries with the *Require* behavior are always preserved.
 
@@ -4460,7 +4460,7 @@ value) or **Override**.
 
 An example of module flags:
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
     !0 = !{ i32 1, !"foo", i32 1 }
     !1 = !{ i32 4, !"bar", i32 37 }
@@ -4470,7 +4470,7 @@ An example of module flags:
         !"foo", i32 1
       }
     }
-    !llvm.module.flags = !{ !0, !1, !2, !3 }
+    !llvm37.module.flags = !{ !0, !1, !2, !3 }
 
 -  Metadata ``!0`` has the ID ``!"foo"`` and the value '1'. The behavior
    if two or more ``!"foo"`` flags are seen is to emit an error if their
@@ -4490,7 +4490,7 @@ An example of module flags:
 
        !{ !"foo", i32 1 }
 
-   The behavior is to emit an error if the ``llvm.module.flags`` does not
+   The behavior is to emit an error if the ``llvm37.module.flags`` does not
    contain a flag with the ID ``!"foo"`` that has the value '1' after linking is
    performed.
 
@@ -4568,7 +4568,7 @@ framework::
        !{
           !{ !"-lz" },
           !{ !"-framework", !"Cocoa" } } }
-    !llvm.module.flags = !{ !0 }
+    !llvm37.module.flags = !{ !0 }
 
 The metadata encoding as lists of lists of options, as opposed to a collapsed
 list of options, is chosen so that the IR encoding can use multiple option
@@ -4612,7 +4612,7 @@ For example, the following metadata section specifies that the module was
 compiled with a ``wchar_t`` width of 4 bytes, and the underlying type of an
 enum is the smallest type which can represent all of its values::
 
-    !llvm.module.flags = !{!0, !1}
+    !llvm37.module.flags = !{!0, !1}
     !0 = !{i32 1, !"short_wchar", i32 1}
     !1 = !{i32 1, !"short_enum", i32 0}
 
@@ -4621,38 +4621,38 @@ enum is the smallest type which can represent all of its values::
 Intrinsic Global Variables
 ==========================
 
-LLVM has a number of "magic" global variables that contain data that
+LLVM37 has a number of "magic" global variables that contain data that
 affect code generation or other IR semantics. These are documented here.
 All globals of this sort should have a section specified as
-"``llvm.metadata``". This section and all globals that start with
-"``llvm.``" are reserved for use by LLVM.
+"``llvm37.metadata``". This section and all globals that start with
+"``llvm37.``" are reserved for use by LLVM37.
 
-.. _gv_llvmused:
+.. _gv_llvm37used:
 
-The '``llvm.used``' Global Variable
+The '``llvm37.used``' Global Variable
 -----------------------------------
 
-The ``@llvm.used`` global is an array which has
+The ``@llvm37.used`` global is an array which has
 :ref:`appending linkage <linkage_appending>`. This array contains a list of
 pointers to named global variables, functions and aliases which may optionally
 have a pointer cast formed of bitcast or getelementptr. For example, a legal
 use of it is:
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
     @X = global i8 4
     @Y = global i32 123
 
-    @llvm.used = appending global [2 x i8*] [
+    @llvm37.used = appending global [2 x i8*] [
        i8* @X,
        i8* bitcast (i32* @Y to i8*)
     ], section "llvm.metadata"
 
-If a symbol appears in the ``@llvm.used`` list, then the compiler, assembler,
+If a symbol appears in the ``@llvm37.used`` list, then the compiler, assembler,
 and linker are required to treat the symbol as if there is a reference to the
 symbol that it cannot see (which is why they have to be named). For example, if
 a variable has internal linkage and no references other than that from the
-``@llvm.used`` list, it cannot be deleted. This is commonly used to represent
+``@llvm37.used`` list, it cannot be deleted. This is commonly used to represent
 references from inline asms and other things the compiler cannot "see", and
 corresponds to "``attribute((used))``" in GNU C.
 
@@ -4660,31 +4660,31 @@ On some targets, the code generator must emit a directive to the
 assembler or object file to prevent the assembler and linker from
 molesting the symbol.
 
-.. _gv_llvmcompilerused:
+.. _gv_llvm37compilerused:
 
-The '``llvm.compiler.used``' Global Variable
+The '``llvm37.compiler.used``' Global Variable
 --------------------------------------------
 
-The ``@llvm.compiler.used`` directive is the same as the ``@llvm.used``
+The ``@llvm37.compiler.used`` directive is the same as the ``@llvm37.used``
 directive, except that it only prevents the compiler from touching the
 symbol. On targets that support it, this allows an intelligent linker to
 optimize references to the symbol without being impeded as it would be
-by ``@llvm.used``.
+by ``@llvm37.used``.
 
 This is a rare construct that should only be used in rare circumstances,
 and should not be exposed to source languages.
 
-.. _gv_llvmglobalctors:
+.. _gv_llvm37globalctors:
 
-The '``llvm.global_ctors``' Global Variable
+The '``llvm37.global_ctors``' Global Variable
 -------------------------------------------
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
     %0 = type { i32, void ()*, i8* }
-    @llvm.global_ctors = appending global [1 x %0] [%0 { i32 65535, void ()* @ctor, i8* @data }]
+    @llvm37.global_ctors = appending global [1 x %0] [%0 { i32 65535, void ()* @ctor, i8* @data }]
 
-The ``@llvm.global_ctors`` array contains a list of constructor
+The ``@llvm37.global_ctors`` array contains a list of constructor
 functions, priorities, and an optional associated global or function.
 The functions referenced by this array will be called in ascending order
 of priority (i.e. lowest first) when the module is loaded. The order of
@@ -4694,17 +4694,17 @@ If the third field is present, non-null, and points to a global variable
 or function, the initializer function will only run if the associated
 data from the current module is not discarded.
 
-.. _llvmglobaldtors:
+.. _llvm37globaldtors:
 
-The '``llvm.global_dtors``' Global Variable
+The '``llvm37.global_dtors``' Global Variable
 -------------------------------------------
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
     %0 = type { i32, void ()*, i8* }
-    @llvm.global_dtors = appending global [1 x %0] [%0 { i32 65535, void ()* @dtor, i8* @data }]
+    @llvm37.global_dtors = appending global [1 x %0] [%0 { i32 65535, void ()* @dtor, i8* @data }]
 
-The ``@llvm.global_dtors`` array contains a list of destructor
+The ``@llvm37.global_dtors`` array contains a list of destructor
 functions, priorities, and an optional associated global or function.
 The functions referenced by this array will be called in descending
 order of priority (i.e. highest first) when the module is unloaded. The
@@ -4717,7 +4717,7 @@ data from the current module is not discarded.
 Instruction Reference
 =====================
 
-The LLVM instruction set consists of several different classifications
+The LLVM37 instruction set consists of several different classifications
 of instructions: :ref:`terminator instructions <terminators>`, :ref:`binary
 instructions <binaryops>`, :ref:`bitwise binary
 instructions <bitwiseops>`, :ref:`memory instructions <memoryops>`, and
@@ -4791,7 +4791,7 @@ value.
 Example:
 """"""""
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
       ret i32 5                       ; Return an integer value of 5
       ret void                        ; Return from a void function
@@ -4836,7 +4836,7 @@ to the '``iffalse``' ``label`` argument.
 Example:
 """"""""
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
     Test:
       %cond = icmp eq i32 %a, %b
@@ -4894,7 +4894,7 @@ chained conditional branches or with a lookup table.
 Example:
 """"""""
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
      ; Emulate a conditional br instruction
      %Val = zext i1 %value to i32
@@ -4955,7 +4955,7 @@ This is typically implemented with a jump through a register.
 Example:
 """"""""
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
      indirectbr i8* %Addr, [ label %bb1, label %bb2, label %bb3 ]
 
@@ -5009,7 +5009,7 @@ This instruction requires several arguments:
    function value being invoked. In most cases, this is a direct
    function invocation, but indirect ``invoke``'s are just as possible,
    branching off an arbitrary pointer to function value.
-#. '``function ptr val``': An LLVM value containing a pointer to a
+#. '``function ptr val``': An LLVM37 value containing a pointer to a
    function to be invoked.
 #. '``function args``': argument list whose types match the function
    signature argument types and parameter attributes. All arguments must
@@ -5046,7 +5046,7 @@ return value is available.
 Example:
 """"""""
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
       %retval = invoke i32 @Test(i32 15) to label %Continue
                   unwind label %TestCleanup              ; i32:retval set
@@ -5088,7 +5088,7 @@ The '``resume``' instruction resumes propagation of an existing
 Example:
 """"""""
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
       resume { i8*, i32 } %exn
 
@@ -5166,7 +5166,7 @@ If the sum has unsigned overflow, the result returned is the
 mathematical result modulo 2\ :sup:`n`\ , where n is the bit width of
 the result.
 
-Because LLVM integers use a two's complement representation, this
+Because LLVM37 integers use a two's complement representation, this
 instruction is appropriate for both signed and unsigned integers.
 
 ``nuw`` and ``nsw`` stand for "No Unsigned Wrap" and "No Signed Wrap",
@@ -5177,7 +5177,7 @@ unsigned and/or signed overflow, respectively, occurs.
 Example:
 """"""""
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
       <result> = add i32 4, %var          ; yields i32:result = 4 + %var
 
@@ -5216,7 +5216,7 @@ optimizations:
 Example:
 """"""""
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
       <result> = fadd float 4.0, %var          ; yields float:result = 4.0 + %var
 
@@ -5257,7 +5257,7 @@ If the difference has unsigned overflow, the result returned is the
 mathematical result modulo 2\ :sup:`n`\ , where n is the bit width of
 the result.
 
-Because LLVM integers use a two's complement representation, this
+Because LLVM37 integers use a two's complement representation, this
 instruction is appropriate for both signed and unsigned integers.
 
 ``nuw`` and ``nsw`` stand for "No Unsigned Wrap" and "No Signed Wrap",
@@ -5268,7 +5268,7 @@ unsigned and/or signed overflow, respectively, occurs.
 Example:
 """"""""
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
       <result> = sub i32 4, %var          ; yields i32:result = 4 - %var
       <result> = sub i32 0, %val          ; yields i32:result = -%var
@@ -5311,7 +5311,7 @@ unsafe floating point optimizations:
 Example:
 """"""""
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
       <result> = fsub float 4.0, %var           ; yields float:result = 4.0 - %var
       <result> = fsub float -0.0, %val          ; yields float:result = -%var
@@ -5350,7 +5350,7 @@ If the result of the multiplication has unsigned overflow, the result
 returned is the mathematical result modulo 2\ :sup:`n`\ , where n is the
 bit width of the result.
 
-Because LLVM integers use a two's complement representation, and the
+Because LLVM37 integers use a two's complement representation, and the
 result is the same width as the operands, this instruction returns the
 correct result for both signed and unsigned integers. If a full product
 (e.g. ``i32`` * ``i32`` -> ``i64``) is needed, the operands should be
@@ -5365,7 +5365,7 @@ unsigned and/or signed overflow, respectively, occurs.
 Example:
 """"""""
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
       <result> = mul i32 4, %var          ; yields i32:result = 4 * %var
 
@@ -5404,7 +5404,7 @@ unsafe floating point optimizations:
 Example:
 """"""""
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
       <result> = fmul float 4.0, %var          ; yields float:result = 4.0 * %var
 
@@ -5448,7 +5448,7 @@ such, "((a udiv exact b) mul b) == a").
 Example:
 """"""""
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
       <result> = udiv i32 4, %var          ; yields i32:result = 4 / %var
 
@@ -5494,7 +5494,7 @@ a :ref:`poison value <poisonvalues>` if the result would be rounded.
 Example:
 """"""""
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
       <result> = sdiv i32 4, %var          ; yields i32:result = 4 / %var
 
@@ -5533,7 +5533,7 @@ unsafe floating point optimizations:
 Example:
 """"""""
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
       <result> = fdiv float 4.0, %var          ; yields float:result = 4.0 / %var
 
@@ -5575,7 +5575,7 @@ Taking the remainder of a division by zero leads to undefined behavior.
 Example:
 """"""""
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
       <result> = urem i32 4, %var          ; yields i32:result = 4 % %var
 
@@ -5630,7 +5630,7 @@ result of the division and the remainder.)
 Example:
 """"""""
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
       <result> = srem i32 4, %var          ; yields i32:result = 4 % %var
 
@@ -5670,7 +5670,7 @@ to enable otherwise unsafe floating point optimizations:
 Example:
 """"""""
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
       <result> = frem float 4.0, %var          ; yields float:result = 4.0 % %var
 
@@ -5732,7 +5732,7 @@ nsw/nuw bits in (mul %op1, (shl 1, %op2)).
 Example:
 """"""""
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
       <result> = shl i32 4, %var   ; yields i32: 4 << %var
       <result> = shl i32 4, 2      ; yields i32: 16
@@ -5781,7 +5781,7 @@ non-zero.
 Example:
 """"""""
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
       <result> = lshr i32 4, 1   ; yields i32:result = 2
       <result> = lshr i32 4, 2   ; yields i32:result = 1
@@ -5832,7 +5832,7 @@ non-zero.
 Example:
 """"""""
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
       <result> = ashr i32 4, 1   ; yields i32:result = 2
       <result> = ashr i32 4, 2   ; yields i32:result = 1
@@ -5884,7 +5884,7 @@ The truth table used for the '``and``' instruction is:
 Example:
 """"""""
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
       <result> = and i32 4, %var         ; yields i32:result = 4 & %var
       <result> = and i32 15, 40          ; yields i32:result = 8
@@ -5983,7 +5983,7 @@ The truth table used for the '``xor``' instruction is:
 Example:
 """"""""
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
       <result> = xor i32 4, %var         ; yields i32:result = 4 ^ %var
       <result> = xor i32 15, 40          ; yields i32:result = 39
@@ -5993,10 +5993,10 @@ Example:
 Vector Operations
 -----------------
 
-LLVM supports several instructions to represent vector operations in a
+LLVM37 supports several instructions to represent vector operations in a
 target-independent manner. These instructions cover the element-access
 and vector-specific operations needed to process vectors effectively.
-While LLVM does directly support these vector operations, many
+While LLVM37 does directly support these vector operations, many
 sophisticated algorithms will want to use target-specific intrinsics to
 take full advantage of a specific target.
 
@@ -6036,7 +6036,7 @@ exceeds the length of ``val``, the results are undefined.
 Example:
 """"""""
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
       <result> = extractelement <4 x i32> %vec, i32 0    ; yields i32
 
@@ -6078,7 +6078,7 @@ undefined.
 Example:
 """"""""
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
       <result> = insertelement <4 x i32> %vec, i32 1, i32 0    ; yields <4 x i32>
 
@@ -6126,7 +6126,7 @@ only one vector.
 Example:
 """"""""
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
       <result> = shufflevector <4 x i32> %v1, <4 x i32> %v2,
                               <4 x i32> <i32 0, i32 4, i32 1, i32 5>  ; yields <4 x i32>
@@ -6140,7 +6140,7 @@ Example:
 Aggregate Operations
 --------------------
 
-LLVM supports several instructions for working with
+LLVM37 supports several instructions for working with
 :ref:`aggregate <t_aggregate>` values.
 
 .. _i_extractvalue:
@@ -6185,7 +6185,7 @@ the index operands.
 Example:
 """"""""
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
       <result> = extractvalue {i32, float} %agg, 0    ; yields i32
 
@@ -6228,7 +6228,7 @@ indices is that of ``elt``.
 Example:
 """"""""
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
       %agg1 = insertvalue {i32, float} undef, i32 1, 0              ; yields {i32 1, float undef}
       %agg2 = insertvalue {i32, float} %agg1, float %val, 1         ; yields {i32 1, float %val}
@@ -6240,9 +6240,9 @@ Memory Access and Addressing Operations
 ---------------------------------------
 
 A key design point of an SSA-based representation is how it represents
-memory. In LLVM, no memory locations are in SSA form, which makes things
+memory. In LLVM37, no memory locations are in SSA form, which makes things
 very simple. This section describes how to read, write, and allocate
-memory in LLVM.
+memory in LLVM37.
 
 .. _i_alloca:
 
@@ -6295,7 +6295,7 @@ is not specified.
 Example:
 """"""""
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
       %ptr = alloca i32                             ; yields i32*:ptr
       %ptr = alloca i32, i32 4                      ; yields i32*:ptr
@@ -6410,7 +6410,7 @@ written using a store of the same type.
 Examples:
 """""""""
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
       %ptr = alloca i32                               ; yields i32*:ptr
       store i32 3, i32* %ptr                          ; yields void
@@ -6489,7 +6489,7 @@ belong to the type, but they will typically be overwritten.
 Example:
 """"""""
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
       %ptr = alloca i32                               ; yields i32*:ptr
       store i32 3, i32* %ptr                          ; yields void
@@ -6546,7 +6546,7 @@ that the fence only synchronizes with other fences in the same thread.
 Example:
 """"""""
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
       fence acquire                          ; yields void
       fence singlethread seq_cst             ; yields void
@@ -6620,7 +6620,7 @@ load with an ordering parameter determined the second ordering parameter.
 Example:
 """"""""
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
     entry:
       %orig = atomic load i32, i32* %ptr unordered                ; yields i32
@@ -6706,7 +6706,7 @@ operation argument:
 Example:
 """"""""
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
       %old = atomicrmw add i32* %ptr, i32 1 acquire                        ; yields i32
 
@@ -6757,7 +6757,7 @@ required to be constant. These integers are treated as signed values
 where relevant.
 
 For example, let's consider a C code fragment and how it gets compiled
-to LLVM:
+to LLVM37:
 
 .. code-block:: c
 
@@ -6776,9 +6776,9 @@ to LLVM:
       return &s[1].Z.B[5][13];
     }
 
-The LLVM code generated by Clang is:
+The LLVM37 code generated by Clang is:
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
     %struct.RT = type { i8, [10 x [20 x i32]], i8 }
     %struct.ST = type { i32, double, %struct.RT }
@@ -6804,10 +6804,10 @@ type. The '``getelementptr``' instruction returns a pointer to this
 element, thus computing a value of '``i32*``' type.
 
 Note that it is perfectly legal to index partially through a structure,
-returning a pointer to an inner element. Because of this, the LLVM code
+returning a pointer to an inner element. Because of this, the LLVM37 code
 for the given testcase is equivalent to:
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
     define i32* @foo(%struct.ST* %s) {
       %t1 = getelementptr %struct.ST, %struct.ST* %s, i32 1                        ; yields %struct.ST*:%t1
@@ -6845,7 +6845,7 @@ into how it works, see :doc:`the getelementptr FAQ <GetElementPtr>`.
 Example:
 """"""""
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
         ; yields [12 x i8]*:aptr
         %aptr = getelementptr {i32, [12 x i8]}, {i32, [12 x i8]}* %saptr, i64 0, i32 1
@@ -6864,7 +6864,7 @@ when one or more of its arguments is a vector. In such cases, all vector
 arguments should have the same number of elements, and every scalar argument
 will be effectively broadcast into a vector during address calculation.
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
      ; All arguments are vectors:
      ;   A[i] = ptrs[i] + offsets[i]*sizeof(i8)
@@ -6882,7 +6882,7 @@ will be effectively broadcast into a vector during address calculation.
 
 The two following instructions are equivalent:
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
      getelementptr  %struct.ST, <4 x %struct.ST*> %s, <4 x i64> %ind1,
        <4 x i32> <i32 2, i32 2, i32 2, i32 2>,
@@ -6904,12 +6904,12 @@ makes sense:
       A[i] = B[C[i]];
     }
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
     ; get pointers for 8 elements from array B
     %ptrs = getelementptr double, double* %B, <8 x i32> %C
     ; load 8 elements from array B into A
-    %A = call <8 x double> @llvm.masked.gather.v8f64(<8 x double*> %ptrs,
+    %A = call <8 x double> @llvm37.masked.gather.v8f64(<8 x double*> %ptrs,
          i32 8, <8 x i1> %mask, <8 x double> %passthru)
 
 Conversion Operations
@@ -6954,7 +6954,7 @@ It will always truncate bits.
 Example:
 """"""""
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
       %X = trunc i32 257 to i8                        ; yields i8:1
       %Y = trunc i32 123 to i1                        ; yields i1:true
@@ -6995,7 +6995,7 @@ When zero extending from i1, the result will always be either 0 or 1.
 Example:
 """"""""
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
       %X = zext i32 257 to i64              ; yields i64:257
       %Y = zext i1 true to i32              ; yields i32:1
@@ -7036,7 +7036,7 @@ When sign extending from i1, the extension always results in -1 or 0.
 Example:
 """"""""
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
       %X = sext i8  -1 to i16              ; yields i16   :65535
       %Y = sext i1 true to i32             ; yields i32:-1
@@ -7076,7 +7076,7 @@ destination type, ``ty2``, then the results are undefined.
 Example:
 """"""""
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
       %X = fptrunc double 123.0 to float         ; yields float:123.0
       %Y = fptrunc double 1.0E+300 to float      ; yields undefined
@@ -7116,7 +7116,7 @@ point <t_floating>` type. The ``fpext`` cannot be used to make a
 Example:
 """"""""
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
       %X = fpext float 3.125 to double         ; yields double:3.125000e+00
       %Y = fpext double %X to fp128            ; yields fp128:0xL00000000000000004000900000000000
@@ -7157,7 +7157,7 @@ are undefined.
 Example:
 """"""""
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
       %X = fptoui double 123.0 to i32      ; yields i32:123
       %Y = fptoui float 1.0E+300 to i1     ; yields undefined:1
@@ -7199,7 +7199,7 @@ are undefined.
 Example:
 """"""""
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
       %X = fptosi double -123.0 to i32      ; yields i32:-123
       %Y = fptosi float 1.0E-247 to i1      ; yields undefined:1
@@ -7241,7 +7241,7 @@ are undefined.
 Example:
 """"""""
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
       %X = uitofp i32 257 to float         ; yields float:257.0
       %Y = uitofp i8 -1 to double          ; yields double:255.0
@@ -7282,7 +7282,7 @@ undefined.
 Example:
 """"""""
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
       %X = sitofp i32 257 to float         ; yields float:257.0
       %Y = sitofp i8 -1 to double          ; yields double:-1.0
@@ -7327,7 +7327,7 @@ change.
 Example:
 """"""""
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
       %X = ptrtoint i32* %P to i8                         ; yields truncation on 32-bit architecture
       %Y = ptrtoint i32* %P to i64                        ; yields zero extension on 32-bit architecture
@@ -7371,7 +7371,7 @@ nothing is done (*no-op cast*).
 Example:
 """"""""
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
       %X = inttoptr i32 255 to i32*          ; yields zero extension on 64-bit architecture
       %Y = inttoptr i32 255 to i32*          ; yields no-op on 32-bit architecture
@@ -7423,7 +7423,7 @@ or :ref:`ptrtoint <i_ptrtoint>` instructions first.
 Example:
 """"""""
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
       %X = bitcast i8 255 to i8              ; yields i8 :-1
       %Y = bitcast i32* %x to sint*          ; yields sint*:%x
@@ -7469,7 +7469,7 @@ location.
 Example:
 """"""""
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
       %X = addrspacecast i32* %x to i32 addrspace(1)*    ; yields i32 addrspace(1)*:%x
       %Y = addrspacecast i32 addrspace(1)* %y to i64 addrspace(2)*    ; yields i64 addrspace(2)*:%y
@@ -7562,7 +7562,7 @@ as the values being compared. Otherwise, the result is an ``i1``.
 Example:
 """"""""
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
       <result> = icmp eq i32 4, 5          ; yields: result=false
       <result> = icmp ne float* %X, %X     ; yields: result=false
@@ -7679,7 +7679,7 @@ assumptions to be made about the values of input arguments; namely
 Example:
 """"""""
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
       <result> = fcmp oeq float 4.0, 5.0    ; yields: result=false
       <result> = fcmp one float 4.0, 5.0    ; yields: result=true
@@ -7736,7 +7736,7 @@ executed just prior to the current block.
 Example:
 """"""""
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
     Loop:       ; Infinite loop that counts from 0 on up...
       %indvar = phi i32 [ 0, %LoopHeader ], [ %nextindvar, %Loop ]
@@ -7786,7 +7786,7 @@ same size, then an entire vector is selected.
 Example:
 """"""""
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
       %X = select i1 true, i8 17, i8 42          ; yields i8:17
 
@@ -7848,7 +7848,7 @@ This instruction requires several arguments:
    -  The call is in tail position (ret immediately follows call and ret
       uses value of call or is void).
    -  Option ``-tailcallopt`` is enabled, or
-      ``llvm::GuaranteedTailCallOpt`` is ``true``.
+      ``llvm37::GuaranteedTailCallOpt`` is ``true``.
    -  `Platform-specific constraints are
       met. <CodeGenerator.html#tailcallopt>`_
 
@@ -7868,7 +7868,7 @@ This instruction requires several arguments:
    this signature. This type can be omitted if the function is not
    varargs and if the function type does not return a pointer to a
    function.
-#. '``fnptrval``': An LLVM value containing a pointer to a function to
+#. '``fnptrval``': An LLVM37 value containing a pointer to a function to
    be invoked. In most cases, this is a direct function invocation, but
    indirect ``call``'s are just as possible, calling an arbitrary pointer
    to function value.
@@ -7893,7 +7893,7 @@ return value of the function is bound to the result argument.
 Example:
 """"""""
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
       %retval = call i32 @test(i32 %argc)
       call i32 (i8*, ...)* @printf(i8* %msg, i32 12, i8 42)        ; yields i32
@@ -7908,7 +7908,7 @@ Example:
       %Z = call void @foo() noreturn                    ; indicates that %foo never returns normally
       %ZZ = call zeroext i32 @bar()                     ; Return value is %zero extended
 
-llvm treats calls to some functions with names and arguments that match
+llvm37 treats calls to some functions with names and arguments that match
 the standard C99 library as being the C99 library functions, and may
 perform optimizations or generate code for them under that assumption.
 This is something we'd like to change in the future to provide better
@@ -7953,7 +7953,7 @@ It is legal for this instruction to be called in a function which does
 not take a variable number of arguments, for example, the ``vfprintf``
 function.
 
-``va_arg`` is an LLVM instruction instead of an :ref:`intrinsic
+``va_arg`` is an LLVM37 instruction instead of an :ref:`intrinsic
 function <intrinsics>` because it takes a type as an argument.
 
 Example:
@@ -7984,7 +7984,7 @@ Syntax:
 Overview:
 """""""""
 
-The '``landingpad``' instruction is used by `LLVM's exception handling
+The '``landingpad``' instruction is used by `LLVM37's exception handling
 system <ExceptionHandling.html#overview>`_ to specify that a basic block
 is a landing pad --- one where the exception lands, and corresponds to the
 code found in the ``catch`` portion of a ``try``/``catch`` sequence. It
@@ -8012,7 +8012,7 @@ The '``landingpad``' instruction defines the values which are set by the
 :ref:`personality function <personalityfn>` upon re-entry to the function, and
 therefore the "result type" of the ``landingpad`` instruction. As with
 calling conventions, how the personality function results are
-represented in LLVM IR is target specific.
+represented in LLVM37 IR is target specific.
 
 The clauses are applied in order from top to bottom. If two
 ``landingpad`` instructions are merged together through inlining, the
@@ -8036,7 +8036,7 @@ The ``landingpad`` instruction has several restrictions:
 Example:
 """"""""
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
       ;; A landing pad which can catch an integer.
       %res = landingpad { i8*, i32 }
@@ -8054,25 +8054,25 @@ Example:
 Intrinsic Functions
 ===================
 
-LLVM supports the notion of an "intrinsic function". These functions
+LLVM37 supports the notion of an "intrinsic function". These functions
 have well known names and semantics and are required to follow certain
 restrictions. Overall, these intrinsics represent an extension mechanism
-for the LLVM language that does not require changing all of the
-transformations in LLVM when adding to the language (or the bitcode
+for the LLVM37 language that does not require changing all of the
+transformations in LLVM37 when adding to the language (or the bitcode
 reader/writer, the parser, etc...).
 
-Intrinsic function names must all start with an "``llvm.``" prefix. This
-prefix is reserved in LLVM for intrinsic names; thus, function names may
+Intrinsic function names must all start with an "``llvm37.``" prefix. This
+prefix is reserved in LLVM37 for intrinsic names; thus, function names may
 not begin with this prefix. Intrinsic functions must always be external
 functions: you cannot define the body of intrinsic functions. Intrinsic
 functions may only be used in call or invoke instructions: it is illegal
 to take the address of an intrinsic function. Additionally, because
-intrinsic functions are part of the LLVM language, it is required if any
+intrinsic functions are part of the LLVM37 language, it is required if any
 are added that they be documented here.
 
 Some intrinsic functions can be overloaded, i.e., the intrinsic
 represents a family of functions that perform the same operation but on
-different data types. Because LLVM can represent over 8 million
+different data types. Because LLVM37 can represent over 8 million
 different integer types, overloading is used commonly to allow an
 intrinsic function to operate on any integer type. One or more of the
 argument types or the result type can be overloaded to accept any
@@ -8086,36 +8086,36 @@ Overloaded intrinsics will have the names of its overloaded argument
 types encoded into its function name, each preceded by a period. Only
 those types which are overloaded result in a name suffix. Arguments
 whose type is matched against another type do not. For example, the
-``llvm.ctpop`` function can take an integer of any width and returns an
+``llvm37.ctpop`` function can take an integer of any width and returns an
 integer of exactly the same integer width. This leads to a family of
-functions such as ``i8 @llvm.ctpop.i8(i8 %val)`` and
-``i29 @llvm.ctpop.i29(i29 %val)``. Only one type, the return type, is
+functions such as ``i8 @llvm37.ctpop.i8(i8 %val)`` and
+``i29 @llvm37.ctpop.i29(i29 %val)``. Only one type, the return type, is
 overloaded, and only one type suffix is required. Because the argument's
 type is matched against the return type, it does not require its own
 name suffix.
 
 To learn how to add an intrinsic function, please see the `Extending
-LLVM Guide <ExtendingLLVM.html>`_.
+LLVM37 Guide <ExtendingLLVM.html>`_.
 
 .. _int_varargs:
 
 Variable Argument Handling Intrinsics
 -------------------------------------
 
-Variable argument support is defined in LLVM with the
+Variable argument support is defined in LLVM37 with the
 :ref:`va_arg <i_va_arg>` instruction and these three intrinsic
 functions. These functions are related to the similarly named macros
 defined in the ``<stdarg.h>`` header file.
 
 All of these functions operate on arguments that use a target-specific
-value type "``va_list``". The LLVM assembly language reference manual
+value type "``va_list``". The LLVM37 assembly language reference manual
 does not define what this type is, so all transformations should be
 prepared to handle these functions regardless of the type used.
 
 This example shows how the :ref:`va_arg <i_va_arg>` instruction and the
 variable argument handling intrinsic functions are used.
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
     ; This struct is different for every platform. For most platforms,
     ; it is merely an i8*.
@@ -8128,29 +8128,29 @@ variable argument handling intrinsic functions are used.
       ; Initialize variable argument processing
       %ap = alloca %struct.va_list
       %ap2 = bitcast %struct.va_list* %ap to i8*
-      call void @llvm.va_start(i8* %ap2)
+      call void @llvm37.va_start(i8* %ap2)
 
       ; Read a single integer argument
       %tmp = va_arg i8* %ap2, i32
 
-      ; Demonstrate usage of llvm.va_copy and llvm.va_end
+      ; Demonstrate usage of llvm37.va_copy and llvm37.va_end
       %aq = alloca i8*
       %aq2 = bitcast i8** %aq to i8*
-      call void @llvm.va_copy(i8* %aq2, i8* %ap2)
-      call void @llvm.va_end(i8* %aq2)
+      call void @llvm37.va_copy(i8* %aq2, i8* %ap2)
+      call void @llvm37.va_end(i8* %aq2)
 
       ; Stop processing of arguments.
-      call void @llvm.va_end(i8* %ap2)
+      call void @llvm37.va_end(i8* %ap2)
       ret i32 %tmp
     }
 
-    declare void @llvm.va_start(i8*)
-    declare void @llvm.va_copy(i8*, i8*)
-    declare void @llvm.va_end(i8*)
+    declare void @llvm37.va_start(i8*)
+    declare void @llvm37.va_copy(i8*, i8*)
+    declare void @llvm37.va_end(i8*)
 
 .. _int_va_start:
 
-'``llvm.va_start``' Intrinsic
+'``llvm37.va_start``' Intrinsic
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Syntax:
@@ -8158,12 +8158,12 @@ Syntax:
 
 ::
 
-      declare void @llvm.va_start(i8* <arglist>)
+      declare void @llvm37.va_start(i8* <arglist>)
 
 Overview:
 """""""""
 
-The '``llvm.va_start``' intrinsic initializes ``*<arglist>`` for
+The '``llvm37.va_start``' intrinsic initializes ``*<arglist>`` for
 subsequent use by ``va_arg``.
 
 Arguments:
@@ -8174,7 +8174,7 @@ The argument is a pointer to a ``va_list`` element to initialize.
 Semantics:
 """"""""""
 
-The '``llvm.va_start``' intrinsic works just like the ``va_start`` macro
+The '``llvm37.va_start``' intrinsic works just like the ``va_start`` macro
 available in C. In a target-dependent way, it initializes the
 ``va_list`` element to which the argument points, so that the next call
 to ``va_arg`` will produce the first variable argument passed to the
@@ -8182,7 +8182,7 @@ function. Unlike the C ``va_start`` macro, this intrinsic does not need
 to know the last argument of the function as the compiler can figure
 that out.
 
-'``llvm.va_end``' Intrinsic
+'``llvm37.va_end``' Intrinsic
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Syntax:
@@ -8190,13 +8190,13 @@ Syntax:
 
 ::
 
-      declare void @llvm.va_end(i8* <arglist>)
+      declare void @llvm37.va_end(i8* <arglist>)
 
 Overview:
 """""""""
 
-The '``llvm.va_end``' intrinsic destroys ``*<arglist>``, which has been
-initialized previously with ``llvm.va_start`` or ``llvm.va_copy``.
+The '``llvm37.va_end``' intrinsic destroys ``*<arglist>``, which has been
+initialized previously with ``llvm37.va_start`` or ``llvm37.va_copy``.
 
 Arguments:
 """"""""""
@@ -8206,16 +8206,16 @@ The argument is a pointer to a ``va_list`` to destroy.
 Semantics:
 """"""""""
 
-The '``llvm.va_end``' intrinsic works just like the ``va_end`` macro
+The '``llvm37.va_end``' intrinsic works just like the ``va_end`` macro
 available in C. In a target-dependent way, it destroys the ``va_list``
 element to which the argument points. Calls to
-:ref:`llvm.va_start <int_va_start>` and
-:ref:`llvm.va_copy <int_va_copy>` must be matched exactly with calls to
-``llvm.va_end``.
+:ref:`llvm37.va_start <int_va_start>` and
+:ref:`llvm37.va_copy <int_va_copy>` must be matched exactly with calls to
+``llvm37.va_end``.
 
 .. _int_va_copy:
 
-'``llvm.va_copy``' Intrinsic
+'``llvm37.va_copy``' Intrinsic
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Syntax:
@@ -8223,12 +8223,12 @@ Syntax:
 
 ::
 
-      declare void @llvm.va_copy(i8* <destarglist>, i8* <srcarglist>)
+      declare void @llvm37.va_copy(i8* <destarglist>, i8* <srcarglist>)
 
 Overview:
 """""""""
 
-The '``llvm.va_copy``' intrinsic copies the current argument position
+The '``llvm37.va_copy``' intrinsic copies the current argument position
 from the source argument list to the destination argument list.
 
 Arguments:
@@ -8240,16 +8240,16 @@ The second argument is a pointer to a ``va_list`` element to copy from.
 Semantics:
 """"""""""
 
-The '``llvm.va_copy``' intrinsic works just like the ``va_copy`` macro
+The '``llvm37.va_copy``' intrinsic works just like the ``va_copy`` macro
 available in C. In a target-dependent way, it copies the source
 ``va_list`` element into the destination ``va_list`` element. This
-intrinsic is necessary because the `` llvm.va_start`` intrinsic may be
+intrinsic is necessary because the `` llvm37.va_start`` intrinsic may be
 arbitrarily complex and require, for example, memory allocation.
 
 Accurate Garbage Collection Intrinsics
 --------------------------------------
 
-LLVM's support for `Accurate Garbage Collection <GarbageCollection.html>`_
+LLVM37's support for `Accurate Garbage Collection <GarbageCollection.html>`_
 (GC) requires the frontend to generate code containing appropriate intrinsic
 calls and select an appropriate GC strategy which knows how to lower these
 intrinsics in a manner which is appropriate for the target collector.
@@ -8258,23 +8258,23 @@ These intrinsics allow identification of :ref:`GC roots on the
 stack <int_gcroot>`, as well as garbage collector implementations that
 require :ref:`read <int_gcread>` and :ref:`write <int_gcwrite>` barriers.
 Frontends for type-safe garbage collected languages should generate
-these intrinsics to make use of the LLVM garbage collectors. For more
-details, see `Garbage Collection with LLVM <GarbageCollection.html>`_.
+these intrinsics to make use of the LLVM37 garbage collectors. For more
+details, see `Garbage Collection with LLVM37 <GarbageCollection.html>`_.
 
 Experimental Statepoint Intrinsics
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-LLVM provides an second experimental set of intrinsics for describing garbage
+LLVM37 provides an second experimental set of intrinsics for describing garbage
 collection safepoints in compiled code.  These intrinsics are an alternative
-to the ``llvm.gcroot`` intrinsics, but are compatible with the ones for
+to the ``llvm37.gcroot`` intrinsics, but are compatible with the ones for
 :ref:`read <int_gcread>` and :ref:`write <int_gcwrite>` barriers.  The
-differences in approach are covered in the `Garbage Collection with LLVM
+differences in approach are covered in the `Garbage Collection with LLVM37
 <GarbageCollection.html>`_ documentation.  The intrinsics themselves are
 described in :doc:`Statepoints`.
 
 .. _int_gcroot:
 
-'``llvm.gcroot``' Intrinsic
+'``llvm37.gcroot``' Intrinsic
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Syntax:
@@ -8282,12 +8282,12 @@ Syntax:
 
 ::
 
-      declare void @llvm.gcroot(i8** %ptrloc, i8* %metadata)
+      declare void @llvm37.gcroot(i8** %ptrloc, i8* %metadata)
 
 Overview:
 """""""""
 
-The '``llvm.gcroot``' intrinsic declares the existence of a GC root to
+The '``llvm37.gcroot``' intrinsic declares the existence of a GC root to
 the code generator, and allows some metadata to be associated with it.
 
 Arguments:
@@ -8304,12 +8304,12 @@ Semantics:
 At runtime, a call to this intrinsic stores a null pointer into the
 "ptrloc" location. At compile-time, the code generator generates
 information to allow the runtime to find the pointer at GC safe points.
-The '``llvm.gcroot``' intrinsic may only be used in a function which
+The '``llvm37.gcroot``' intrinsic may only be used in a function which
 :ref:`specifies a GC algorithm <gc>`.
 
 .. _int_gcread:
 
-'``llvm.gcread``' Intrinsic
+'``llvm37.gcread``' Intrinsic
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Syntax:
@@ -8317,12 +8317,12 @@ Syntax:
 
 ::
 
-      declare i8* @llvm.gcread(i8* %ObjPtr, i8** %Ptr)
+      declare i8* @llvm37.gcread(i8* %ObjPtr, i8** %Ptr)
 
 Overview:
 """""""""
 
-The '``llvm.gcread``' intrinsic identifies reads of references from heap
+The '``llvm37.gcread``' intrinsic identifies reads of references from heap
 locations, allowing garbage collector implementations that require read
 barriers.
 
@@ -8337,15 +8337,15 @@ runtime (otherwise null).
 Semantics:
 """"""""""
 
-The '``llvm.gcread``' intrinsic has the same semantics as a load
+The '``llvm37.gcread``' intrinsic has the same semantics as a load
 instruction, but may be replaced with substantially more complex code by
-the garbage collector runtime, as needed. The '``llvm.gcread``'
+the garbage collector runtime, as needed. The '``llvm37.gcread``'
 intrinsic may only be used in a function which :ref:`specifies a GC
 algorithm <gc>`.
 
 .. _int_gcwrite:
 
-'``llvm.gcwrite``' Intrinsic
+'``llvm37.gcwrite``' Intrinsic
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Syntax:
@@ -8353,12 +8353,12 @@ Syntax:
 
 ::
 
-      declare void @llvm.gcwrite(i8* %P1, i8* %Obj, i8** %P2)
+      declare void @llvm37.gcwrite(i8* %P1, i8* %Obj, i8** %P2)
 
 Overview:
 """""""""
 
-The '``llvm.gcwrite``' intrinsic identifies writes of references to heap
+The '``llvm37.gcwrite``' intrinsic identifies writes of references to heap
 locations, allowing garbage collector implementations that require write
 barriers (such as generational or reference counting collectors).
 
@@ -8373,19 +8373,19 @@ object, Obj may be null.
 Semantics:
 """"""""""
 
-The '``llvm.gcwrite``' intrinsic has the same semantics as a store
+The '``llvm37.gcwrite``' intrinsic has the same semantics as a store
 instruction, but may be replaced with substantially more complex code by
-the garbage collector runtime, as needed. The '``llvm.gcwrite``'
+the garbage collector runtime, as needed. The '``llvm37.gcwrite``'
 intrinsic may only be used in a function which :ref:`specifies a GC
 algorithm <gc>`.
 
 Code Generator Intrinsics
 -------------------------
 
-These intrinsics are provided by LLVM to expose special features that
+These intrinsics are provided by LLVM37 to expose special features that
 may only be implemented with code generator support.
 
-'``llvm.returnaddress``' Intrinsic
+'``llvm37.returnaddress``' Intrinsic
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Syntax:
@@ -8393,12 +8393,12 @@ Syntax:
 
 ::
 
-      declare i8  *@llvm.returnaddress(i32 <level>)
+      declare i8  *@llvm37.returnaddress(i32 <level>)
 
 Overview:
 """""""""
 
-The '``llvm.returnaddress``' intrinsic attempts to compute a
+The '``llvm37.returnaddress``' intrinsic attempts to compute a
 target-specific value indicating the return address of the current
 function or one of its callers.
 
@@ -8413,7 +8413,7 @@ value.
 Semantics:
 """"""""""
 
-The '``llvm.returnaddress``' intrinsic either returns a pointer
+The '``llvm37.returnaddress``' intrinsic either returns a pointer
 indicating the return address of the specified call frame, or zero if it
 cannot be identified. The value returned by this intrinsic is likely to
 be incorrect or 0 for arguments other than zero, so it should only be
@@ -8423,7 +8423,7 @@ Note that calling this intrinsic does not prevent function inlining or
 other aggressive transformations, so the value returned may not be that
 of the obvious source-language caller.
 
-'``llvm.frameaddress``' Intrinsic
+'``llvm37.frameaddress``' Intrinsic
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Syntax:
@@ -8431,12 +8431,12 @@ Syntax:
 
 ::
 
-      declare i8* @llvm.frameaddress(i32 <level>)
+      declare i8* @llvm37.frameaddress(i32 <level>)
 
 Overview:
 """""""""
 
-The '``llvm.frameaddress``' intrinsic attempts to return the
+The '``llvm37.frameaddress``' intrinsic attempts to return the
 target-specific frame pointer value for the specified stack frame.
 
 Arguments:
@@ -8450,7 +8450,7 @@ value.
 Semantics:
 """"""""""
 
-The '``llvm.frameaddress``' intrinsic either returns a pointer
+The '``llvm37.frameaddress``' intrinsic either returns a pointer
 indicating the frame address of the specified call frame, or zero if it
 cannot be identified. The value returned by this intrinsic is likely to
 be incorrect or 0 for arguments other than zero, so it should only be
@@ -8460,7 +8460,7 @@ Note that calling this intrinsic does not prevent function inlining or
 other aggressive transformations, so the value returned may not be that
 of the obvious source-language caller.
 
-'``llvm.localescape``' and '``llvm.localrecover``' Intrinsics
+'``llvm37.localescape``' and '``llvm37.localrecover``' Intrinsics
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Syntax:
@@ -8468,52 +8468,52 @@ Syntax:
 
 ::
 
-      declare void @llvm.localescape(...)
-      declare i8* @llvm.localrecover(i8* %func, i8* %fp, i32 %idx)
+      declare void @llvm37.localescape(...)
+      declare i8* @llvm37.localrecover(i8* %func, i8* %fp, i32 %idx)
 
 Overview:
 """""""""
 
-The '``llvm.localescape``' intrinsic escapes offsets of a collection of static
-allocas, and the '``llvm.localrecover``' intrinsic applies those offsets to a
+The '``llvm37.localescape``' intrinsic escapes offsets of a collection of static
+allocas, and the '``llvm37.localrecover``' intrinsic applies those offsets to a
 live frame pointer to recover the address of the allocation. The offset is
-computed during frame layout of the caller of ``llvm.localescape``.
+computed during frame layout of the caller of ``llvm37.localescape``.
 
 Arguments:
 """"""""""
 
-All arguments to '``llvm.localescape``' must be pointers to static allocas or
-casts of static allocas. Each function can only call '``llvm.localescape``'
+All arguments to '``llvm37.localescape``' must be pointers to static allocas or
+casts of static allocas. Each function can only call '``llvm37.localescape``'
 once, and it can only do so from the entry block.
 
-The ``func`` argument to '``llvm.localrecover``' must be a constant
+The ``func`` argument to '``llvm37.localrecover``' must be a constant
 bitcasted pointer to a function defined in the current module. The code
 generator cannot determine the frame allocation offset of functions defined in
 other modules.
 
-The ``fp`` argument to '``llvm.localrecover``' must be a frame pointer of a
-call frame that is currently live. The return value of '``llvm.localaddress``'
+The ``fp`` argument to '``llvm37.localrecover``' must be a frame pointer of a
+call frame that is currently live. The return value of '``llvm37.localaddress``'
 is one way to produce such a value, but various runtimes also expose a suitable
 pointer in platform-specific ways.
 
-The ``idx`` argument to '``llvm.localrecover``' indicates which alloca passed to
-'``llvm.localescape``' to recover. It is zero-indexed.
+The ``idx`` argument to '``llvm37.localrecover``' indicates which alloca passed to
+'``llvm37.localescape``' to recover. It is zero-indexed.
 
 Semantics:
 """"""""""
 
 These intrinsics allow a group of functions to share access to a set of local
 stack allocations of a one parent function. The parent function may call the
-'``llvm.localescape``' intrinsic once from the function entry block, and the
-child functions can use '``llvm.localrecover``' to access the escaped allocas.
-The '``llvm.localescape``' intrinsic blocks inlining, as inlining changes where
+'``llvm37.localescape``' intrinsic once from the function entry block, and the
+child functions can use '``llvm37.localrecover``' to access the escaped allocas.
+The '``llvm37.localescape``' intrinsic blocks inlining, as inlining changes where
 the escaped allocas are allocated, which would break attempts to use
-'``llvm.localrecover``'.
+'``llvm37.localrecover``'.
 
 .. _int_read_register:
 .. _int_write_register:
 
-'``llvm.read_register``' and '``llvm.write_register``' Intrinsics
+'``llvm37.read_register``' and '``llvm37.write_register``' Intrinsics
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Syntax:
@@ -8521,16 +8521,16 @@ Syntax:
 
 ::
 
-      declare i32 @llvm.read_register.i32(metadata)
-      declare i64 @llvm.read_register.i64(metadata)
-      declare void @llvm.write_register.i32(metadata, i32 @value)
-      declare void @llvm.write_register.i64(metadata, i64 @value)
+      declare i32 @llvm37.read_register.i32(metadata)
+      declare i64 @llvm37.read_register.i64(metadata)
+      declare void @llvm37.write_register.i32(metadata, i32 @value)
+      declare void @llvm37.write_register.i64(metadata, i64 @value)
       !0 = !{!"sp\00"}
 
 Overview:
 """""""""
 
-The '``llvm.read_register``' and '``llvm.write_register``' intrinsics
+The '``llvm37.read_register``' and '``llvm37.write_register``' intrinsics
 provides access to the named register. The register must be valid on
 the architecture being compiled to. The type needs to be compatible
 with the register being read.
@@ -8538,8 +8538,8 @@ with the register being read.
 Semantics:
 """"""""""
 
-The '``llvm.read_register``' intrinsic returns the current value of the
-register, where possible. The '``llvm.write_register``' intrinsic sets
+The '``llvm37.read_register``' intrinsic returns the current value of the
+register, where possible. The '``llvm37.write_register``' intrinsic sets
 the current value of the register, where possible.
 
 This is useful to implement named register global variables that need
@@ -8557,7 +8557,7 @@ registers.
 
 .. _int_stacksave:
 
-'``llvm.stacksave``' Intrinsic
+'``llvm37.stacksave``' Intrinsic
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Syntax:
@@ -8565,14 +8565,14 @@ Syntax:
 
 ::
 
-      declare i8* @llvm.stacksave()
+      declare i8* @llvm37.stacksave()
 
 Overview:
 """""""""
 
-The '``llvm.stacksave``' intrinsic is used to remember the current state
+The '``llvm37.stacksave``' intrinsic is used to remember the current state
 of the function stack, for use with
-:ref:`llvm.stackrestore <int_stackrestore>`. This is useful for
+:ref:`llvm37.stackrestore <int_stackrestore>`. This is useful for
 implementing language features like scoped automatic variable sized
 arrays in C99.
 
@@ -8580,16 +8580,16 @@ Semantics:
 """"""""""
 
 This intrinsic returns a opaque pointer value that can be passed to
-:ref:`llvm.stackrestore <int_stackrestore>`. When an
-``llvm.stackrestore`` intrinsic is executed with a value saved from
-``llvm.stacksave``, it effectively restores the state of the stack to
-the state it was in when the ``llvm.stacksave`` intrinsic executed. In
+:ref:`llvm37.stackrestore <int_stackrestore>`. When an
+``llvm37.stackrestore`` intrinsic is executed with a value saved from
+``llvm37.stacksave``, it effectively restores the state of the stack to
+the state it was in when the ``llvm37.stacksave`` intrinsic executed. In
 practice, this pops any :ref:`alloca <i_alloca>` blocks from the stack that
-were allocated after the ``llvm.stacksave`` was executed.
+were allocated after the ``llvm37.stacksave`` was executed.
 
 .. _int_stackrestore:
 
-'``llvm.stackrestore``' Intrinsic
+'``llvm37.stackrestore``' Intrinsic
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Syntax:
@@ -8597,23 +8597,23 @@ Syntax:
 
 ::
 
-      declare void @llvm.stackrestore(i8* %ptr)
+      declare void @llvm37.stackrestore(i8* %ptr)
 
 Overview:
 """""""""
 
-The '``llvm.stackrestore``' intrinsic is used to restore the state of
+The '``llvm37.stackrestore``' intrinsic is used to restore the state of
 the function stack to the state it was in when the corresponding
-:ref:`llvm.stacksave <int_stacksave>` intrinsic executed. This is
+:ref:`llvm37.stacksave <int_stacksave>` intrinsic executed. This is
 useful for implementing language features like scoped automatic variable
 sized arrays in C99.
 
 Semantics:
 """"""""""
 
-See the description for :ref:`llvm.stacksave <int_stacksave>`.
+See the description for :ref:`llvm37.stacksave <int_stacksave>`.
 
-'``llvm.prefetch``' Intrinsic
+'``llvm37.prefetch``' Intrinsic
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Syntax:
@@ -8621,12 +8621,12 @@ Syntax:
 
 ::
 
-      declare void @llvm.prefetch(i8* <address>, i32 <rw>, i32 <locality>, i32 <cache type>)
+      declare void @llvm37.prefetch(i8* <address>, i32 <rw>, i32 <locality>, i32 <cache type>)
 
 Overview:
 """""""""
 
-The '``llvm.prefetch``' intrinsic is a hint to the code generator to
+The '``llvm37.prefetch``' intrinsic is a hint to the code generator to
 insert a prefetch instruction if supported; otherwise, it is a noop.
 Prefetches have no effect on the behavior of the program but can change
 its performance characteristics.
@@ -8650,7 +8650,7 @@ particular, prefetches cannot trap and do not produce a value. On
 targets that support this intrinsic, the prefetch can provide hints to
 the processor cache for better performance.
 
-'``llvm.pcmarker``' Intrinsic
+'``llvm37.pcmarker``' Intrinsic
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Syntax:
@@ -8658,12 +8658,12 @@ Syntax:
 
 ::
 
-      declare void @llvm.pcmarker(i32 <id>)
+      declare void @llvm37.pcmarker(i32 <id>)
 
 Overview:
 """""""""
 
-The '``llvm.pcmarker``' intrinsic is a method to export a Program
+The '``llvm37.pcmarker``' intrinsic is a method to export a Program
 Counter (PC) in a region of code to simulators and other tools. The
 method is target specific, but it is expected that the marker will use
 exported symbols to transmit the PC of the marker. The marker makes no
@@ -8683,7 +8683,7 @@ Semantics:
 This intrinsic does not modify the behavior of the program. Backends
 that do not support this intrinsic may ignore it.
 
-'``llvm.readcyclecounter``' Intrinsic
+'``llvm37.readcyclecounter``' Intrinsic
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Syntax:
@@ -8691,12 +8691,12 @@ Syntax:
 
 ::
 
-      declare i64 @llvm.readcyclecounter()
+      declare i64 @llvm37.readcyclecounter()
 
 Overview:
 """""""""
 
-The '``llvm.readcyclecounter``' intrinsic provides access to the cycle
+The '``llvm37.readcyclecounter``' intrinsic provides access to the cycle
 counter register (or similar low latency, high accuracy clocks) on those
 targets that support it. On X86, it should map to RDTSC. On Alpha, it
 should map to RPCC. As the backing counters overflow quickly (on the
@@ -8714,7 +8714,7 @@ is lowered to a constant 0.
 Note that runtime support may be conditional on the privilege-level code is
 running at and the host platform.
 
-'``llvm.clear_cache``' Intrinsic
+'``llvm37.clear_cache``' Intrinsic
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Syntax:
@@ -8722,12 +8722,12 @@ Syntax:
 
 ::
 
-      declare void @llvm.clear_cache(i8*, i8*)
+      declare void @llvm37.clear_cache(i8*, i8*)
 
 Overview:
 """""""""
 
-The '``llvm.clear_cache``' intrinsic ensures visibility of modifications
+The '``llvm37.clear_cache``' intrinsic ensures visibility of modifications
 in the specified range to the execution unit of the processor. On
 targets with non-unified instruction and data cache, the implementation
 flushes the instruction cache.
@@ -8747,7 +8747,7 @@ time library.
 This instrinsic does *not* empty the instruction pipeline. Modifications
 of the current function are outside the scope of the intrinsic.
 
-'``llvm.instrprof_increment``' Intrinsic
+'``llvm37.instrprof_increment``' Intrinsic
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Syntax:
@@ -8755,13 +8755,13 @@ Syntax:
 
 ::
 
-      declare void @llvm.instrprof_increment(i8* <name>, i64 <hash>,
+      declare void @llvm37.instrprof_increment(i8* <name>, i64 <hash>,
                                              i32 <num-counters>, i32 <index>)
 
 Overview:
 """""""""
 
-The '``llvm.instrprof_increment``' intrinsic can be emitted by a
+The '``llvm37.instrprof_increment``' intrinsic can be emitted by a
 frontend for use with instrumentation based profiling. These will be
 lowered by the ``-instrprof`` pass to generate execution counts of a
 program at runtime.
@@ -8789,42 +8789,42 @@ This intrinsic represents an increment of a profiling counter. It will
 cause the ``-instrprof`` pass to generate the appropriate data
 structures and the code to increment the appropriate value, in a
 format that can be written out by a compiler runtime and consumed via
-the ``llvm-profdata`` tool.
+the ``llvm37-profdata`` tool.
 
 Standard C Library Intrinsics
 -----------------------------
 
-LLVM provides intrinsics for a few important standard C library
+LLVM37 provides intrinsics for a few important standard C library
 functions. These intrinsics allow source-language front-ends to pass
 information about the alignment of the pointer arguments to the code
 generator, providing opportunity for more efficient code generation.
 
 .. _int_memcpy:
 
-'``llvm.memcpy``' Intrinsic
+'``llvm37.memcpy``' Intrinsic
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Syntax:
 """""""
 
-This is an overloaded intrinsic. You can use ``llvm.memcpy`` on any
+This is an overloaded intrinsic. You can use ``llvm37.memcpy`` on any
 integer bit width and for different address spaces. Not all targets
 support all bit widths however.
 
 ::
 
-      declare void @llvm.memcpy.p0i8.p0i8.i32(i8* <dest>, i8* <src>,
+      declare void @llvm37.memcpy.p0i8.p0i8.i32(i8* <dest>, i8* <src>,
                                               i32 <len>, i32 <align>, i1 <isvolatile>)
-      declare void @llvm.memcpy.p0i8.p0i8.i64(i8* <dest>, i8* <src>,
+      declare void @llvm37.memcpy.p0i8.p0i8.i64(i8* <dest>, i8* <src>,
                                               i64 <len>, i32 <align>, i1 <isvolatile>)
 
 Overview:
 """""""""
 
-The '``llvm.memcpy.*``' intrinsics copy a block of memory from the
+The '``llvm37.memcpy.*``' intrinsics copy a block of memory from the
 source location to the destination location.
 
-Note that, unlike the standard libc function, the ``llvm.memcpy.*``
+Note that, unlike the standard libc function, the ``llvm37.memcpy.*``
 intrinsics do not return a value, takes extra alignment/isvolatile
 arguments and the pointers can be in specified address spaces.
 
@@ -8841,45 +8841,45 @@ If the call to this intrinsic has an alignment value that is not 0 or 1,
 then the caller guarantees that both the source and destination pointers
 are aligned to that boundary.
 
-If the ``isvolatile`` parameter is ``true``, the ``llvm.memcpy`` call is
+If the ``isvolatile`` parameter is ``true``, the ``llvm37.memcpy`` call is
 a :ref:`volatile operation <volatile>`. The detailed access behavior is not
 very cleanly specified and it is unwise to depend on it.
 
 Semantics:
 """"""""""
 
-The '``llvm.memcpy.*``' intrinsics copy a block of memory from the
+The '``llvm37.memcpy.*``' intrinsics copy a block of memory from the
 source location to the destination location, which are not allowed to
 overlap. It copies "len" bytes of memory over. If the argument is known
 to be aligned to some boundary, this can be specified as the fourth
 argument, otherwise it should be set to 0 or 1 (both meaning no alignment).
 
-'``llvm.memmove``' Intrinsic
+'``llvm37.memmove``' Intrinsic
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Syntax:
 """""""
 
-This is an overloaded intrinsic. You can use llvm.memmove on any integer
+This is an overloaded intrinsic. You can use llvm37.memmove on any integer
 bit width and for different address space. Not all targets support all
 bit widths however.
 
 ::
 
-      declare void @llvm.memmove.p0i8.p0i8.i32(i8* <dest>, i8* <src>,
+      declare void @llvm37.memmove.p0i8.p0i8.i32(i8* <dest>, i8* <src>,
                                                i32 <len>, i32 <align>, i1 <isvolatile>)
-      declare void @llvm.memmove.p0i8.p0i8.i64(i8* <dest>, i8* <src>,
+      declare void @llvm37.memmove.p0i8.p0i8.i64(i8* <dest>, i8* <src>,
                                                i64 <len>, i32 <align>, i1 <isvolatile>)
 
 Overview:
 """""""""
 
-The '``llvm.memmove.*``' intrinsics move a block of memory from the
+The '``llvm37.memmove.*``' intrinsics move a block of memory from the
 source location to the destination location. It is similar to the
-'``llvm.memcpy``' intrinsic but allows the two memory locations to
+'``llvm37.memcpy``' intrinsic but allows the two memory locations to
 overlap.
 
-Note that, unlike the standard libc function, the ``llvm.memmove.*``
+Note that, unlike the standard libc function, the ``llvm37.memmove.*``
 intrinsics do not return a value, takes extra alignment/isvolatile
 arguments and the pointers can be in specified address spaces.
 
@@ -8896,43 +8896,43 @@ If the call to this intrinsic has an alignment value that is not 0 or 1,
 then the caller guarantees that the source and destination pointers are
 aligned to that boundary.
 
-If the ``isvolatile`` parameter is ``true``, the ``llvm.memmove`` call
+If the ``isvolatile`` parameter is ``true``, the ``llvm37.memmove`` call
 is a :ref:`volatile operation <volatile>`. The detailed access behavior is
 not very cleanly specified and it is unwise to depend on it.
 
 Semantics:
 """"""""""
 
-The '``llvm.memmove.*``' intrinsics copy a block of memory from the
+The '``llvm37.memmove.*``' intrinsics copy a block of memory from the
 source location to the destination location, which may overlap. It
 copies "len" bytes of memory over. If the argument is known to be
 aligned to some boundary, this can be specified as the fourth argument,
 otherwise it should be set to 0 or 1 (both meaning no alignment).
 
-'``llvm.memset.*``' Intrinsics
+'``llvm37.memset.*``' Intrinsics
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Syntax:
 """""""
 
-This is an overloaded intrinsic. You can use llvm.memset on any integer
+This is an overloaded intrinsic. You can use llvm37.memset on any integer
 bit width and for different address spaces. However, not all targets
 support all bit widths.
 
 ::
 
-      declare void @llvm.memset.p0i8.i32(i8* <dest>, i8 <val>,
+      declare void @llvm37.memset.p0i8.i32(i8* <dest>, i8 <val>,
                                          i32 <len>, i32 <align>, i1 <isvolatile>)
-      declare void @llvm.memset.p0i8.i64(i8* <dest>, i8 <val>,
+      declare void @llvm37.memset.p0i8.i64(i8* <dest>, i8 <val>,
                                          i64 <len>, i32 <align>, i1 <isvolatile>)
 
 Overview:
 """""""""
 
-The '``llvm.memset.*``' intrinsics fill a block of memory with a
+The '``llvm37.memset.*``' intrinsics fill a block of memory with a
 particular byte value.
 
-Note that, unlike the standard libc function, the ``llvm.memset``
+Note that, unlike the standard libc function, the ``llvm37.memset``
 intrinsic does not return a value and takes extra alignment/volatile
 arguments. Also, the destination can be in an arbitrary address space.
 
@@ -8948,45 +8948,45 @@ If the call to this intrinsic has an alignment value that is not 0 or 1,
 then the caller guarantees that the destination pointer is aligned to
 that boundary.
 
-If the ``isvolatile`` parameter is ``true``, the ``llvm.memset`` call is
+If the ``isvolatile`` parameter is ``true``, the ``llvm37.memset`` call is
 a :ref:`volatile operation <volatile>`. The detailed access behavior is not
 very cleanly specified and it is unwise to depend on it.
 
 Semantics:
 """"""""""
 
-The '``llvm.memset.*``' intrinsics fill "len" bytes of memory starting
+The '``llvm37.memset.*``' intrinsics fill "len" bytes of memory starting
 at the destination location. If the argument is known to be aligned to
 some boundary, this can be specified as the fourth argument, otherwise
 it should be set to 0 or 1 (both meaning no alignment).
 
-'``llvm.sqrt.*``' Intrinsic
+'``llvm37.sqrt.*``' Intrinsic
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Syntax:
 """""""
 
-This is an overloaded intrinsic. You can use ``llvm.sqrt`` on any
+This is an overloaded intrinsic. You can use ``llvm37.sqrt`` on any
 floating point or vector of floating point type. Not all targets support
 all types however.
 
 ::
 
-      declare float     @llvm.sqrt.f32(float %Val)
-      declare double    @llvm.sqrt.f64(double %Val)
-      declare x86_fp80  @llvm.sqrt.f80(x86_fp80 %Val)
-      declare fp128     @llvm.sqrt.f128(fp128 %Val)
-      declare ppc_fp128 @llvm.sqrt.ppcf128(ppc_fp128 %Val)
+      declare float     @llvm37.sqrt.f32(float %Val)
+      declare double    @llvm37.sqrt.f64(double %Val)
+      declare x86_fp80  @llvm37.sqrt.f80(x86_fp80 %Val)
+      declare fp128     @llvm37.sqrt.f128(fp128 %Val)
+      declare ppc_fp128 @llvm37.sqrt.ppcf128(ppc_fp128 %Val)
 
 Overview:
 """""""""
 
-The '``llvm.sqrt``' intrinsics return the sqrt of the specified operand,
+The '``llvm37.sqrt``' intrinsics return the sqrt of the specified operand,
 returning the same value as the libm '``sqrt``' functions would. Unlike
-``sqrt`` in libm, however, ``llvm.sqrt`` has undefined behavior for
+``sqrt`` in libm, however, ``llvm37.sqrt`` has undefined behavior for
 negative numbers other than -0.0 (which allows for better optimization,
 because there is no need to worry about errno being set).
-``llvm.sqrt(-0.0)`` is defined to return -0.0 like IEEE sqrt.
+``llvm37.sqrt(-0.0)`` is defined to return -0.0 like IEEE sqrt.
 
 Arguments:
 """"""""""
@@ -9000,28 +9000,28 @@ Semantics:
 This function returns the sqrt of the specified operand if it is a
 nonnegative floating point number.
 
-'``llvm.powi.*``' Intrinsic
+'``llvm37.powi.*``' Intrinsic
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Syntax:
 """""""
 
-This is an overloaded intrinsic. You can use ``llvm.powi`` on any
+This is an overloaded intrinsic. You can use ``llvm37.powi`` on any
 floating point or vector of floating point type. Not all targets support
 all types however.
 
 ::
 
-      declare float     @llvm.powi.f32(float  %Val, i32 %power)
-      declare double    @llvm.powi.f64(double %Val, i32 %power)
-      declare x86_fp80  @llvm.powi.f80(x86_fp80  %Val, i32 %power)
-      declare fp128     @llvm.powi.f128(fp128 %Val, i32 %power)
-      declare ppc_fp128 @llvm.powi.ppcf128(ppc_fp128  %Val, i32 %power)
+      declare float     @llvm37.powi.f32(float  %Val, i32 %power)
+      declare double    @llvm37.powi.f64(double %Val, i32 %power)
+      declare x86_fp80  @llvm37.powi.f80(x86_fp80  %Val, i32 %power)
+      declare fp128     @llvm37.powi.f128(fp128 %Val, i32 %power)
+      declare ppc_fp128 @llvm37.powi.ppcf128(ppc_fp128  %Val, i32 %power)
 
 Overview:
 """""""""
 
-The '``llvm.powi.*``' intrinsics return the first operand raised to the
+The '``llvm37.powi.*``' intrinsics return the first operand raised to the
 specified (positive or negative) power. The order of evaluation of
 multiplications is not defined. When a vector of floating point type is
 used, the second argument remains a scalar integer value.
@@ -9038,28 +9038,28 @@ Semantics:
 This function returns the first value raised to the second power with an
 unspecified sequence of rounding operations.
 
-'``llvm.sin.*``' Intrinsic
+'``llvm37.sin.*``' Intrinsic
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Syntax:
 """""""
 
-This is an overloaded intrinsic. You can use ``llvm.sin`` on any
+This is an overloaded intrinsic. You can use ``llvm37.sin`` on any
 floating point or vector of floating point type. Not all targets support
 all types however.
 
 ::
 
-      declare float     @llvm.sin.f32(float  %Val)
-      declare double    @llvm.sin.f64(double %Val)
-      declare x86_fp80  @llvm.sin.f80(x86_fp80  %Val)
-      declare fp128     @llvm.sin.f128(fp128 %Val)
-      declare ppc_fp128 @llvm.sin.ppcf128(ppc_fp128  %Val)
+      declare float     @llvm37.sin.f32(float  %Val)
+      declare double    @llvm37.sin.f64(double %Val)
+      declare x86_fp80  @llvm37.sin.f80(x86_fp80  %Val)
+      declare fp128     @llvm37.sin.f128(fp128 %Val)
+      declare ppc_fp128 @llvm37.sin.ppcf128(ppc_fp128  %Val)
 
 Overview:
 """""""""
 
-The '``llvm.sin.*``' intrinsics return the sine of the operand.
+The '``llvm37.sin.*``' intrinsics return the sine of the operand.
 
 Arguments:
 """"""""""
@@ -9074,28 +9074,28 @@ This function returns the sine of the specified operand, returning the
 same values as the libm ``sin`` functions would, and handles error
 conditions in the same way.
 
-'``llvm.cos.*``' Intrinsic
+'``llvm37.cos.*``' Intrinsic
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Syntax:
 """""""
 
-This is an overloaded intrinsic. You can use ``llvm.cos`` on any
+This is an overloaded intrinsic. You can use ``llvm37.cos`` on any
 floating point or vector of floating point type. Not all targets support
 all types however.
 
 ::
 
-      declare float     @llvm.cos.f32(float  %Val)
-      declare double    @llvm.cos.f64(double %Val)
-      declare x86_fp80  @llvm.cos.f80(x86_fp80  %Val)
-      declare fp128     @llvm.cos.f128(fp128 %Val)
-      declare ppc_fp128 @llvm.cos.ppcf128(ppc_fp128  %Val)
+      declare float     @llvm37.cos.f32(float  %Val)
+      declare double    @llvm37.cos.f64(double %Val)
+      declare x86_fp80  @llvm37.cos.f80(x86_fp80  %Val)
+      declare fp128     @llvm37.cos.f128(fp128 %Val)
+      declare ppc_fp128 @llvm37.cos.ppcf128(ppc_fp128  %Val)
 
 Overview:
 """""""""
 
-The '``llvm.cos.*``' intrinsics return the cosine of the operand.
+The '``llvm37.cos.*``' intrinsics return the cosine of the operand.
 
 Arguments:
 """"""""""
@@ -9110,28 +9110,28 @@ This function returns the cosine of the specified operand, returning the
 same values as the libm ``cos`` functions would, and handles error
 conditions in the same way.
 
-'``llvm.pow.*``' Intrinsic
+'``llvm37.pow.*``' Intrinsic
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Syntax:
 """""""
 
-This is an overloaded intrinsic. You can use ``llvm.pow`` on any
+This is an overloaded intrinsic. You can use ``llvm37.pow`` on any
 floating point or vector of floating point type. Not all targets support
 all types however.
 
 ::
 
-      declare float     @llvm.pow.f32(float  %Val, float %Power)
-      declare double    @llvm.pow.f64(double %Val, double %Power)
-      declare x86_fp80  @llvm.pow.f80(x86_fp80  %Val, x86_fp80 %Power)
-      declare fp128     @llvm.pow.f128(fp128 %Val, fp128 %Power)
-      declare ppc_fp128 @llvm.pow.ppcf128(ppc_fp128  %Val, ppc_fp128 Power)
+      declare float     @llvm37.pow.f32(float  %Val, float %Power)
+      declare double    @llvm37.pow.f64(double %Val, double %Power)
+      declare x86_fp80  @llvm37.pow.f80(x86_fp80  %Val, x86_fp80 %Power)
+      declare fp128     @llvm37.pow.f128(fp128 %Val, fp128 %Power)
+      declare ppc_fp128 @llvm37.pow.ppcf128(ppc_fp128  %Val, ppc_fp128 Power)
 
 Overview:
 """""""""
 
-The '``llvm.pow.*``' intrinsics return the first operand raised to the
+The '``llvm37.pow.*``' intrinsics return the first operand raised to the
 specified (positive or negative) power.
 
 Arguments:
@@ -9147,28 +9147,28 @@ This function returns the first value raised to the second power,
 returning the same values as the libm ``pow`` functions would, and
 handles error conditions in the same way.
 
-'``llvm.exp.*``' Intrinsic
+'``llvm37.exp.*``' Intrinsic
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Syntax:
 """""""
 
-This is an overloaded intrinsic. You can use ``llvm.exp`` on any
+This is an overloaded intrinsic. You can use ``llvm37.exp`` on any
 floating point or vector of floating point type. Not all targets support
 all types however.
 
 ::
 
-      declare float     @llvm.exp.f32(float  %Val)
-      declare double    @llvm.exp.f64(double %Val)
-      declare x86_fp80  @llvm.exp.f80(x86_fp80  %Val)
-      declare fp128     @llvm.exp.f128(fp128 %Val)
-      declare ppc_fp128 @llvm.exp.ppcf128(ppc_fp128  %Val)
+      declare float     @llvm37.exp.f32(float  %Val)
+      declare double    @llvm37.exp.f64(double %Val)
+      declare x86_fp80  @llvm37.exp.f80(x86_fp80  %Val)
+      declare fp128     @llvm37.exp.f128(fp128 %Val)
+      declare ppc_fp128 @llvm37.exp.ppcf128(ppc_fp128  %Val)
 
 Overview:
 """""""""
 
-The '``llvm.exp.*``' intrinsics perform the exp function.
+The '``llvm37.exp.*``' intrinsics perform the exp function.
 
 Arguments:
 """"""""""
@@ -9182,28 +9182,28 @@ Semantics:
 This function returns the same values as the libm ``exp`` functions
 would, and handles error conditions in the same way.
 
-'``llvm.exp2.*``' Intrinsic
+'``llvm37.exp2.*``' Intrinsic
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Syntax:
 """""""
 
-This is an overloaded intrinsic. You can use ``llvm.exp2`` on any
+This is an overloaded intrinsic. You can use ``llvm37.exp2`` on any
 floating point or vector of floating point type. Not all targets support
 all types however.
 
 ::
 
-      declare float     @llvm.exp2.f32(float  %Val)
-      declare double    @llvm.exp2.f64(double %Val)
-      declare x86_fp80  @llvm.exp2.f80(x86_fp80  %Val)
-      declare fp128     @llvm.exp2.f128(fp128 %Val)
-      declare ppc_fp128 @llvm.exp2.ppcf128(ppc_fp128  %Val)
+      declare float     @llvm37.exp2.f32(float  %Val)
+      declare double    @llvm37.exp2.f64(double %Val)
+      declare x86_fp80  @llvm37.exp2.f80(x86_fp80  %Val)
+      declare fp128     @llvm37.exp2.f128(fp128 %Val)
+      declare ppc_fp128 @llvm37.exp2.ppcf128(ppc_fp128  %Val)
 
 Overview:
 """""""""
 
-The '``llvm.exp2.*``' intrinsics perform the exp2 function.
+The '``llvm37.exp2.*``' intrinsics perform the exp2 function.
 
 Arguments:
 """"""""""
@@ -9217,28 +9217,28 @@ Semantics:
 This function returns the same values as the libm ``exp2`` functions
 would, and handles error conditions in the same way.
 
-'``llvm.log.*``' Intrinsic
+'``llvm37.log.*``' Intrinsic
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Syntax:
 """""""
 
-This is an overloaded intrinsic. You can use ``llvm.log`` on any
+This is an overloaded intrinsic. You can use ``llvm37.log`` on any
 floating point or vector of floating point type. Not all targets support
 all types however.
 
 ::
 
-      declare float     @llvm.log.f32(float  %Val)
-      declare double    @llvm.log.f64(double %Val)
-      declare x86_fp80  @llvm.log.f80(x86_fp80  %Val)
-      declare fp128     @llvm.log.f128(fp128 %Val)
-      declare ppc_fp128 @llvm.log.ppcf128(ppc_fp128  %Val)
+      declare float     @llvm37.log.f32(float  %Val)
+      declare double    @llvm37.log.f64(double %Val)
+      declare x86_fp80  @llvm37.log.f80(x86_fp80  %Val)
+      declare fp128     @llvm37.log.f128(fp128 %Val)
+      declare ppc_fp128 @llvm37.log.ppcf128(ppc_fp128  %Val)
 
 Overview:
 """""""""
 
-The '``llvm.log.*``' intrinsics perform the log function.
+The '``llvm37.log.*``' intrinsics perform the log function.
 
 Arguments:
 """"""""""
@@ -9252,28 +9252,28 @@ Semantics:
 This function returns the same values as the libm ``log`` functions
 would, and handles error conditions in the same way.
 
-'``llvm.log10.*``' Intrinsic
+'``llvm37.log10.*``' Intrinsic
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Syntax:
 """""""
 
-This is an overloaded intrinsic. You can use ``llvm.log10`` on any
+This is an overloaded intrinsic. You can use ``llvm37.log10`` on any
 floating point or vector of floating point type. Not all targets support
 all types however.
 
 ::
 
-      declare float     @llvm.log10.f32(float  %Val)
-      declare double    @llvm.log10.f64(double %Val)
-      declare x86_fp80  @llvm.log10.f80(x86_fp80  %Val)
-      declare fp128     @llvm.log10.f128(fp128 %Val)
-      declare ppc_fp128 @llvm.log10.ppcf128(ppc_fp128  %Val)
+      declare float     @llvm37.log10.f32(float  %Val)
+      declare double    @llvm37.log10.f64(double %Val)
+      declare x86_fp80  @llvm37.log10.f80(x86_fp80  %Val)
+      declare fp128     @llvm37.log10.f128(fp128 %Val)
+      declare ppc_fp128 @llvm37.log10.ppcf128(ppc_fp128  %Val)
 
 Overview:
 """""""""
 
-The '``llvm.log10.*``' intrinsics perform the log10 function.
+The '``llvm37.log10.*``' intrinsics perform the log10 function.
 
 Arguments:
 """"""""""
@@ -9287,28 +9287,28 @@ Semantics:
 This function returns the same values as the libm ``log10`` functions
 would, and handles error conditions in the same way.
 
-'``llvm.log2.*``' Intrinsic
+'``llvm37.log2.*``' Intrinsic
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Syntax:
 """""""
 
-This is an overloaded intrinsic. You can use ``llvm.log2`` on any
+This is an overloaded intrinsic. You can use ``llvm37.log2`` on any
 floating point or vector of floating point type. Not all targets support
 all types however.
 
 ::
 
-      declare float     @llvm.log2.f32(float  %Val)
-      declare double    @llvm.log2.f64(double %Val)
-      declare x86_fp80  @llvm.log2.f80(x86_fp80  %Val)
-      declare fp128     @llvm.log2.f128(fp128 %Val)
-      declare ppc_fp128 @llvm.log2.ppcf128(ppc_fp128  %Val)
+      declare float     @llvm37.log2.f32(float  %Val)
+      declare double    @llvm37.log2.f64(double %Val)
+      declare x86_fp80  @llvm37.log2.f80(x86_fp80  %Val)
+      declare fp128     @llvm37.log2.f128(fp128 %Val)
+      declare ppc_fp128 @llvm37.log2.ppcf128(ppc_fp128  %Val)
 
 Overview:
 """""""""
 
-The '``llvm.log2.*``' intrinsics perform the log2 function.
+The '``llvm37.log2.*``' intrinsics perform the log2 function.
 
 Arguments:
 """"""""""
@@ -9322,28 +9322,28 @@ Semantics:
 This function returns the same values as the libm ``log2`` functions
 would, and handles error conditions in the same way.
 
-'``llvm.fma.*``' Intrinsic
+'``llvm37.fma.*``' Intrinsic
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Syntax:
 """""""
 
-This is an overloaded intrinsic. You can use ``llvm.fma`` on any
+This is an overloaded intrinsic. You can use ``llvm37.fma`` on any
 floating point or vector of floating point type. Not all targets support
 all types however.
 
 ::
 
-      declare float     @llvm.fma.f32(float  %a, float  %b, float  %c)
-      declare double    @llvm.fma.f64(double %a, double %b, double %c)
-      declare x86_fp80  @llvm.fma.f80(x86_fp80 %a, x86_fp80 %b, x86_fp80 %c)
-      declare fp128     @llvm.fma.f128(fp128 %a, fp128 %b, fp128 %c)
-      declare ppc_fp128 @llvm.fma.ppcf128(ppc_fp128 %a, ppc_fp128 %b, ppc_fp128 %c)
+      declare float     @llvm37.fma.f32(float  %a, float  %b, float  %c)
+      declare double    @llvm37.fma.f64(double %a, double %b, double %c)
+      declare x86_fp80  @llvm37.fma.f80(x86_fp80 %a, x86_fp80 %b, x86_fp80 %c)
+      declare fp128     @llvm37.fma.f128(fp128 %a, fp128 %b, fp128 %c)
+      declare ppc_fp128 @llvm37.fma.ppcf128(ppc_fp128 %a, ppc_fp128 %b, ppc_fp128 %c)
 
 Overview:
 """""""""
 
-The '``llvm.fma.*``' intrinsics perform the fused multiply-add
+The '``llvm37.fma.*``' intrinsics perform the fused multiply-add
 operation.
 
 Arguments:
@@ -9358,28 +9358,28 @@ Semantics:
 This function returns the same values as the libm ``fma`` functions
 would, and does not set errno.
 
-'``llvm.fabs.*``' Intrinsic
+'``llvm37.fabs.*``' Intrinsic
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Syntax:
 """""""
 
-This is an overloaded intrinsic. You can use ``llvm.fabs`` on any
+This is an overloaded intrinsic. You can use ``llvm37.fabs`` on any
 floating point or vector of floating point type. Not all targets support
 all types however.
 
 ::
 
-      declare float     @llvm.fabs.f32(float  %Val)
-      declare double    @llvm.fabs.f64(double %Val)
-      declare x86_fp80  @llvm.fabs.f80(x86_fp80 %Val)
-      declare fp128     @llvm.fabs.f128(fp128 %Val)
-      declare ppc_fp128 @llvm.fabs.ppcf128(ppc_fp128 %Val)
+      declare float     @llvm37.fabs.f32(float  %Val)
+      declare double    @llvm37.fabs.f64(double %Val)
+      declare x86_fp80  @llvm37.fabs.f80(x86_fp80 %Val)
+      declare fp128     @llvm37.fabs.f128(fp128 %Val)
+      declare ppc_fp128 @llvm37.fabs.ppcf128(ppc_fp128 %Val)
 
 Overview:
 """""""""
 
-The '``llvm.fabs.*``' intrinsics return the absolute value of the
+The '``llvm37.fabs.*``' intrinsics return the absolute value of the
 operand.
 
 Arguments:
@@ -9394,28 +9394,28 @@ Semantics:
 This function returns the same values as the libm ``fabs`` functions
 would, and handles error conditions in the same way.
 
-'``llvm.minnum.*``' Intrinsic
+'``llvm37.minnum.*``' Intrinsic
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Syntax:
 """""""
 
-This is an overloaded intrinsic. You can use ``llvm.minnum`` on any
+This is an overloaded intrinsic. You can use ``llvm37.minnum`` on any
 floating point or vector of floating point type. Not all targets support
 all types however.
 
 ::
 
-      declare float     @llvm.minnum.f32(float %Val0, float %Val1)
-      declare double    @llvm.minnum.f64(double %Val0, double %Val1)
-      declare x86_fp80  @llvm.minnum.f80(x86_fp80 %Val0, x86_fp80 %Val1)
-      declare fp128     @llvm.minnum.f128(fp128 %Val0, fp128 %Val1)
-      declare ppc_fp128 @llvm.minnum.ppcf128(ppc_fp128 %Val0, ppc_fp128 %Val1)
+      declare float     @llvm37.minnum.f32(float %Val0, float %Val1)
+      declare double    @llvm37.minnum.f64(double %Val0, double %Val1)
+      declare x86_fp80  @llvm37.minnum.f80(x86_fp80 %Val0, x86_fp80 %Val1)
+      declare fp128     @llvm37.minnum.f128(fp128 %Val0, fp128 %Val1)
+      declare ppc_fp128 @llvm37.minnum.ppcf128(ppc_fp128 %Val0, ppc_fp128 %Val1)
 
 Overview:
 """""""""
 
-The '``llvm.minnum.*``' intrinsics return the minimum of the two
+The '``llvm37.minnum.*``' intrinsics return the minimum of the two
 arguments.
 
 
@@ -9436,28 +9436,28 @@ NaN only if both operands are NaN. If the operands compare equal,
 returns a value that compares equal to both operands. This means that
 fmin(+/-0.0, +/-0.0) could return either -0.0 or 0.0.
 
-'``llvm.maxnum.*``' Intrinsic
+'``llvm37.maxnum.*``' Intrinsic
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Syntax:
 """""""
 
-This is an overloaded intrinsic. You can use ``llvm.maxnum`` on any
+This is an overloaded intrinsic. You can use ``llvm37.maxnum`` on any
 floating point or vector of floating point type. Not all targets support
 all types however.
 
 ::
 
-      declare float     @llvm.maxnum.f32(float  %Val0, float  %Val1l)
-      declare double    @llvm.maxnum.f64(double %Val0, double %Val1)
-      declare x86_fp80  @llvm.maxnum.f80(x86_fp80  %Val0, x86_fp80  %Val1)
-      declare fp128     @llvm.maxnum.f128(fp128 %Val0, fp128 %Val1)
-      declare ppc_fp128 @llvm.maxnum.ppcf128(ppc_fp128  %Val0, ppc_fp128  %Val1)
+      declare float     @llvm37.maxnum.f32(float  %Val0, float  %Val1l)
+      declare double    @llvm37.maxnum.f64(double %Val0, double %Val1)
+      declare x86_fp80  @llvm37.maxnum.f80(x86_fp80  %Val0, x86_fp80  %Val1)
+      declare fp128     @llvm37.maxnum.f128(fp128 %Val0, fp128 %Val1)
+      declare ppc_fp128 @llvm37.maxnum.ppcf128(ppc_fp128  %Val0, ppc_fp128  %Val1)
 
 Overview:
 """""""""
 
-The '``llvm.maxnum.*``' intrinsics return the maximum of the two
+The '``llvm37.maxnum.*``' intrinsics return the maximum of the two
 arguments.
 
 
@@ -9477,28 +9477,28 @@ NaN only if both operands are NaN. If the operands compare equal,
 returns a value that compares equal to both operands. This means that
 fmax(+/-0.0, +/-0.0) could return either -0.0 or 0.0.
 
-'``llvm.copysign.*``' Intrinsic
+'``llvm37.copysign.*``' Intrinsic
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Syntax:
 """""""
 
-This is an overloaded intrinsic. You can use ``llvm.copysign`` on any
+This is an overloaded intrinsic. You can use ``llvm37.copysign`` on any
 floating point or vector of floating point type. Not all targets support
 all types however.
 
 ::
 
-      declare float     @llvm.copysign.f32(float  %Mag, float  %Sgn)
-      declare double    @llvm.copysign.f64(double %Mag, double %Sgn)
-      declare x86_fp80  @llvm.copysign.f80(x86_fp80  %Mag, x86_fp80  %Sgn)
-      declare fp128     @llvm.copysign.f128(fp128 %Mag, fp128 %Sgn)
-      declare ppc_fp128 @llvm.copysign.ppcf128(ppc_fp128  %Mag, ppc_fp128  %Sgn)
+      declare float     @llvm37.copysign.f32(float  %Mag, float  %Sgn)
+      declare double    @llvm37.copysign.f64(double %Mag, double %Sgn)
+      declare x86_fp80  @llvm37.copysign.f80(x86_fp80  %Mag, x86_fp80  %Sgn)
+      declare fp128     @llvm37.copysign.f128(fp128 %Mag, fp128 %Sgn)
+      declare ppc_fp128 @llvm37.copysign.ppcf128(ppc_fp128  %Mag, ppc_fp128  %Sgn)
 
 Overview:
 """""""""
 
-The '``llvm.copysign.*``' intrinsics return a value with the magnitude of the
+The '``llvm37.copysign.*``' intrinsics return a value with the magnitude of the
 first operand and the sign of the second operand.
 
 Arguments:
@@ -9513,28 +9513,28 @@ Semantics:
 This function returns the same values as the libm ``copysign``
 functions would, and handles error conditions in the same way.
 
-'``llvm.floor.*``' Intrinsic
+'``llvm37.floor.*``' Intrinsic
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Syntax:
 """""""
 
-This is an overloaded intrinsic. You can use ``llvm.floor`` on any
+This is an overloaded intrinsic. You can use ``llvm37.floor`` on any
 floating point or vector of floating point type. Not all targets support
 all types however.
 
 ::
 
-      declare float     @llvm.floor.f32(float  %Val)
-      declare double    @llvm.floor.f64(double %Val)
-      declare x86_fp80  @llvm.floor.f80(x86_fp80  %Val)
-      declare fp128     @llvm.floor.f128(fp128 %Val)
-      declare ppc_fp128 @llvm.floor.ppcf128(ppc_fp128  %Val)
+      declare float     @llvm37.floor.f32(float  %Val)
+      declare double    @llvm37.floor.f64(double %Val)
+      declare x86_fp80  @llvm37.floor.f80(x86_fp80  %Val)
+      declare fp128     @llvm37.floor.f128(fp128 %Val)
+      declare ppc_fp128 @llvm37.floor.ppcf128(ppc_fp128  %Val)
 
 Overview:
 """""""""
 
-The '``llvm.floor.*``' intrinsics return the floor of the operand.
+The '``llvm37.floor.*``' intrinsics return the floor of the operand.
 
 Arguments:
 """"""""""
@@ -9548,28 +9548,28 @@ Semantics:
 This function returns the same values as the libm ``floor`` functions
 would, and handles error conditions in the same way.
 
-'``llvm.ceil.*``' Intrinsic
+'``llvm37.ceil.*``' Intrinsic
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Syntax:
 """""""
 
-This is an overloaded intrinsic. You can use ``llvm.ceil`` on any
+This is an overloaded intrinsic. You can use ``llvm37.ceil`` on any
 floating point or vector of floating point type. Not all targets support
 all types however.
 
 ::
 
-      declare float     @llvm.ceil.f32(float  %Val)
-      declare double    @llvm.ceil.f64(double %Val)
-      declare x86_fp80  @llvm.ceil.f80(x86_fp80  %Val)
-      declare fp128     @llvm.ceil.f128(fp128 %Val)
-      declare ppc_fp128 @llvm.ceil.ppcf128(ppc_fp128  %Val)
+      declare float     @llvm37.ceil.f32(float  %Val)
+      declare double    @llvm37.ceil.f64(double %Val)
+      declare x86_fp80  @llvm37.ceil.f80(x86_fp80  %Val)
+      declare fp128     @llvm37.ceil.f128(fp128 %Val)
+      declare ppc_fp128 @llvm37.ceil.ppcf128(ppc_fp128  %Val)
 
 Overview:
 """""""""
 
-The '``llvm.ceil.*``' intrinsics return the ceiling of the operand.
+The '``llvm37.ceil.*``' intrinsics return the ceiling of the operand.
 
 Arguments:
 """"""""""
@@ -9583,28 +9583,28 @@ Semantics:
 This function returns the same values as the libm ``ceil`` functions
 would, and handles error conditions in the same way.
 
-'``llvm.trunc.*``' Intrinsic
+'``llvm37.trunc.*``' Intrinsic
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Syntax:
 """""""
 
-This is an overloaded intrinsic. You can use ``llvm.trunc`` on any
+This is an overloaded intrinsic. You can use ``llvm37.trunc`` on any
 floating point or vector of floating point type. Not all targets support
 all types however.
 
 ::
 
-      declare float     @llvm.trunc.f32(float  %Val)
-      declare double    @llvm.trunc.f64(double %Val)
-      declare x86_fp80  @llvm.trunc.f80(x86_fp80  %Val)
-      declare fp128     @llvm.trunc.f128(fp128 %Val)
-      declare ppc_fp128 @llvm.trunc.ppcf128(ppc_fp128  %Val)
+      declare float     @llvm37.trunc.f32(float  %Val)
+      declare double    @llvm37.trunc.f64(double %Val)
+      declare x86_fp80  @llvm37.trunc.f80(x86_fp80  %Val)
+      declare fp128     @llvm37.trunc.f128(fp128 %Val)
+      declare ppc_fp128 @llvm37.trunc.ppcf128(ppc_fp128  %Val)
 
 Overview:
 """""""""
 
-The '``llvm.trunc.*``' intrinsics returns the operand rounded to the
+The '``llvm37.trunc.*``' intrinsics returns the operand rounded to the
 nearest integer not larger in magnitude than the operand.
 
 Arguments:
@@ -9619,28 +9619,28 @@ Semantics:
 This function returns the same values as the libm ``trunc`` functions
 would, and handles error conditions in the same way.
 
-'``llvm.rint.*``' Intrinsic
+'``llvm37.rint.*``' Intrinsic
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Syntax:
 """""""
 
-This is an overloaded intrinsic. You can use ``llvm.rint`` on any
+This is an overloaded intrinsic. You can use ``llvm37.rint`` on any
 floating point or vector of floating point type. Not all targets support
 all types however.
 
 ::
 
-      declare float     @llvm.rint.f32(float  %Val)
-      declare double    @llvm.rint.f64(double %Val)
-      declare x86_fp80  @llvm.rint.f80(x86_fp80  %Val)
-      declare fp128     @llvm.rint.f128(fp128 %Val)
-      declare ppc_fp128 @llvm.rint.ppcf128(ppc_fp128  %Val)
+      declare float     @llvm37.rint.f32(float  %Val)
+      declare double    @llvm37.rint.f64(double %Val)
+      declare x86_fp80  @llvm37.rint.f80(x86_fp80  %Val)
+      declare fp128     @llvm37.rint.f128(fp128 %Val)
+      declare ppc_fp128 @llvm37.rint.ppcf128(ppc_fp128  %Val)
 
 Overview:
 """""""""
 
-The '``llvm.rint.*``' intrinsics returns the operand rounded to the
+The '``llvm37.rint.*``' intrinsics returns the operand rounded to the
 nearest integer. It may raise an inexact floating-point exception if the
 operand isn't an integer.
 
@@ -9656,28 +9656,28 @@ Semantics:
 This function returns the same values as the libm ``rint`` functions
 would, and handles error conditions in the same way.
 
-'``llvm.nearbyint.*``' Intrinsic
+'``llvm37.nearbyint.*``' Intrinsic
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Syntax:
 """""""
 
-This is an overloaded intrinsic. You can use ``llvm.nearbyint`` on any
+This is an overloaded intrinsic. You can use ``llvm37.nearbyint`` on any
 floating point or vector of floating point type. Not all targets support
 all types however.
 
 ::
 
-      declare float     @llvm.nearbyint.f32(float  %Val)
-      declare double    @llvm.nearbyint.f64(double %Val)
-      declare x86_fp80  @llvm.nearbyint.f80(x86_fp80  %Val)
-      declare fp128     @llvm.nearbyint.f128(fp128 %Val)
-      declare ppc_fp128 @llvm.nearbyint.ppcf128(ppc_fp128  %Val)
+      declare float     @llvm37.nearbyint.f32(float  %Val)
+      declare double    @llvm37.nearbyint.f64(double %Val)
+      declare x86_fp80  @llvm37.nearbyint.f80(x86_fp80  %Val)
+      declare fp128     @llvm37.nearbyint.f128(fp128 %Val)
+      declare ppc_fp128 @llvm37.nearbyint.ppcf128(ppc_fp128  %Val)
 
 Overview:
 """""""""
 
-The '``llvm.nearbyint.*``' intrinsics returns the operand rounded to the
+The '``llvm37.nearbyint.*``' intrinsics returns the operand rounded to the
 nearest integer.
 
 Arguments:
@@ -9692,28 +9692,28 @@ Semantics:
 This function returns the same values as the libm ``nearbyint``
 functions would, and handles error conditions in the same way.
 
-'``llvm.round.*``' Intrinsic
+'``llvm37.round.*``' Intrinsic
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Syntax:
 """""""
 
-This is an overloaded intrinsic. You can use ``llvm.round`` on any
+This is an overloaded intrinsic. You can use ``llvm37.round`` on any
 floating point or vector of floating point type. Not all targets support
 all types however.
 
 ::
 
-      declare float     @llvm.round.f32(float  %Val)
-      declare double    @llvm.round.f64(double %Val)
-      declare x86_fp80  @llvm.round.f80(x86_fp80  %Val)
-      declare fp128     @llvm.round.f128(fp128 %Val)
-      declare ppc_fp128 @llvm.round.ppcf128(ppc_fp128  %Val)
+      declare float     @llvm37.round.f32(float  %Val)
+      declare double    @llvm37.round.f64(double %Val)
+      declare x86_fp80  @llvm37.round.f80(x86_fp80  %Val)
+      declare fp128     @llvm37.round.f128(fp128 %Val)
+      declare ppc_fp128 @llvm37.round.ppcf128(ppc_fp128  %Val)
 
 Overview:
 """""""""
 
-The '``llvm.round.*``' intrinsics returns the operand rounded to the
+The '``llvm37.round.*``' intrinsics returns the operand rounded to the
 nearest integer.
 
 Arguments:
@@ -9731,10 +9731,10 @@ functions would, and handles error conditions in the same way.
 Bit Manipulation Intrinsics
 ---------------------------
 
-LLVM provides intrinsics for a few important bit manipulation
+LLVM37 provides intrinsics for a few important bit manipulation
 operations. These allow efficient code generation for some algorithms.
 
-'``llvm.bswap.*``' Intrinsics
+'``llvm37.bswap.*``' Intrinsics
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Syntax:
@@ -9745,14 +9745,14 @@ integer type that is an even number of bytes (i.e. BitWidth % 16 == 0).
 
 ::
 
-      declare i16 @llvm.bswap.i16(i16 <id>)
-      declare i32 @llvm.bswap.i32(i32 <id>)
-      declare i64 @llvm.bswap.i64(i64 <id>)
+      declare i16 @llvm37.bswap.i16(i16 <id>)
+      declare i32 @llvm37.bswap.i32(i32 <id>)
+      declare i64 @llvm37.bswap.i64(i64 <id>)
 
 Overview:
 """""""""
 
-The '``llvm.bswap``' family of intrinsics is used to byte swap integer
+The '``llvm37.bswap``' family of intrinsics is used to byte swap integer
 values with an even number of bytes (positive multiple of 16 bits).
 These are useful for performing operations on data that is not in the
 target's native byte order.
@@ -9760,38 +9760,38 @@ target's native byte order.
 Semantics:
 """"""""""
 
-The ``llvm.bswap.i16`` intrinsic returns an i16 value that has the high
-and low byte of the input i16 swapped. Similarly, the ``llvm.bswap.i32``
+The ``llvm37.bswap.i16`` intrinsic returns an i16 value that has the high
+and low byte of the input i16 swapped. Similarly, the ``llvm37.bswap.i32``
 intrinsic returns an i32 value that has the four bytes of the input i32
 swapped, so that if the input bytes are numbered 0, 1, 2, 3 then the
 returned i32 will have its bytes in 3, 2, 1, 0 order. The
-``llvm.bswap.i48``, ``llvm.bswap.i64`` and other intrinsics extend this
+``llvm37.bswap.i48``, ``llvm37.bswap.i64`` and other intrinsics extend this
 concept to additional even-byte lengths (6 bytes, 8 bytes and more,
 respectively).
 
-'``llvm.ctpop.*``' Intrinsic
+'``llvm37.ctpop.*``' Intrinsic
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Syntax:
 """""""
 
-This is an overloaded intrinsic. You can use llvm.ctpop on any integer
+This is an overloaded intrinsic. You can use llvm37.ctpop on any integer
 bit width, or on any vector with integer elements. Not all targets
 support all bit widths or vector types, however.
 
 ::
 
-      declare i8 @llvm.ctpop.i8(i8  <src>)
-      declare i16 @llvm.ctpop.i16(i16 <src>)
-      declare i32 @llvm.ctpop.i32(i32 <src>)
-      declare i64 @llvm.ctpop.i64(i64 <src>)
-      declare i256 @llvm.ctpop.i256(i256 <src>)
-      declare <2 x i32> @llvm.ctpop.v2i32(<2 x i32> <src>)
+      declare i8 @llvm37.ctpop.i8(i8  <src>)
+      declare i16 @llvm37.ctpop.i16(i16 <src>)
+      declare i32 @llvm37.ctpop.i32(i32 <src>)
+      declare i64 @llvm37.ctpop.i64(i64 <src>)
+      declare i256 @llvm37.ctpop.i256(i256 <src>)
+      declare <2 x i32> @llvm37.ctpop.v2i32(<2 x i32> <src>)
 
 Overview:
 """""""""
 
-The '``llvm.ctpop``' family of intrinsics counts the number of bits set
+The '``llvm37.ctpop``' family of intrinsics counts the number of bits set
 in a value.
 
 Arguments:
@@ -9804,32 +9804,32 @@ match the argument type.
 Semantics:
 """"""""""
 
-The '``llvm.ctpop``' intrinsic counts the 1's in a variable, or within
+The '``llvm37.ctpop``' intrinsic counts the 1's in a variable, or within
 each element of a vector.
 
-'``llvm.ctlz.*``' Intrinsic
+'``llvm37.ctlz.*``' Intrinsic
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Syntax:
 """""""
 
-This is an overloaded intrinsic. You can use ``llvm.ctlz`` on any
+This is an overloaded intrinsic. You can use ``llvm37.ctlz`` on any
 integer bit width, or any vector whose elements are integers. Not all
 targets support all bit widths or vector types, however.
 
 ::
 
-      declare i8   @llvm.ctlz.i8  (i8   <src>, i1 <is_zero_undef>)
-      declare i16  @llvm.ctlz.i16 (i16  <src>, i1 <is_zero_undef>)
-      declare i32  @llvm.ctlz.i32 (i32  <src>, i1 <is_zero_undef>)
-      declare i64  @llvm.ctlz.i64 (i64  <src>, i1 <is_zero_undef>)
-      declare i256 @llvm.ctlz.i256(i256 <src>, i1 <is_zero_undef>)
-      declase <2 x i32> @llvm.ctlz.v2i32(<2 x i32> <src>, i1 <is_zero_undef>)
+      declare i8   @llvm37.ctlz.i8  (i8   <src>, i1 <is_zero_undef>)
+      declare i16  @llvm37.ctlz.i16 (i16  <src>, i1 <is_zero_undef>)
+      declare i32  @llvm37.ctlz.i32 (i32  <src>, i1 <is_zero_undef>)
+      declare i64  @llvm37.ctlz.i64 (i64  <src>, i1 <is_zero_undef>)
+      declare i256 @llvm37.ctlz.i256(i256 <src>, i1 <is_zero_undef>)
+      declase <2 x i32> @llvm37.ctlz.v2i32(<2 x i32> <src>, i1 <is_zero_undef>)
 
 Overview:
 """""""""
 
-The '``llvm.ctlz``' family of intrinsic functions counts the number of
+The '``llvm37.ctlz``' family of intrinsic functions counts the number of
 leading zeros in a variable.
 
 Arguments:
@@ -9848,35 +9848,35 @@ now predicated on avoiding zero-value inputs.
 Semantics:
 """"""""""
 
-The '``llvm.ctlz``' intrinsic counts the leading (most significant)
+The '``llvm37.ctlz``' intrinsic counts the leading (most significant)
 zeros in a variable, or within each element of the vector. If
 ``src == 0`` then the result is the size in bits of the type of ``src``
 if ``is_zero_undef == 0`` and ``undef`` otherwise. For example,
-``llvm.ctlz(i32 2) = 30``.
+``llvm37.ctlz(i32 2) = 30``.
 
-'``llvm.cttz.*``' Intrinsic
+'``llvm37.cttz.*``' Intrinsic
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Syntax:
 """""""
 
-This is an overloaded intrinsic. You can use ``llvm.cttz`` on any
+This is an overloaded intrinsic. You can use ``llvm37.cttz`` on any
 integer bit width, or any vector of integer elements. Not all targets
 support all bit widths or vector types, however.
 
 ::
 
-      declare i8   @llvm.cttz.i8  (i8   <src>, i1 <is_zero_undef>)
-      declare i16  @llvm.cttz.i16 (i16  <src>, i1 <is_zero_undef>)
-      declare i32  @llvm.cttz.i32 (i32  <src>, i1 <is_zero_undef>)
-      declare i64  @llvm.cttz.i64 (i64  <src>, i1 <is_zero_undef>)
-      declare i256 @llvm.cttz.i256(i256 <src>, i1 <is_zero_undef>)
-      declase <2 x i32> @llvm.cttz.v2i32(<2 x i32> <src>, i1 <is_zero_undef>)
+      declare i8   @llvm37.cttz.i8  (i8   <src>, i1 <is_zero_undef>)
+      declare i16  @llvm37.cttz.i16 (i16  <src>, i1 <is_zero_undef>)
+      declare i32  @llvm37.cttz.i32 (i32  <src>, i1 <is_zero_undef>)
+      declare i64  @llvm37.cttz.i64 (i64  <src>, i1 <is_zero_undef>)
+      declare i256 @llvm37.cttz.i256(i256 <src>, i1 <is_zero_undef>)
+      declase <2 x i32> @llvm37.cttz.v2i32(<2 x i32> <src>, i1 <is_zero_undef>)
 
 Overview:
 """""""""
 
-The '``llvm.cttz``' family of intrinsic functions counts the number of
+The '``llvm37.cttz``' family of intrinsic functions counts the number of
 trailing zeros.
 
 Arguments:
@@ -9895,38 +9895,38 @@ now predicated on avoiding zero-value inputs.
 Semantics:
 """"""""""
 
-The '``llvm.cttz``' intrinsic counts the trailing (least significant)
+The '``llvm37.cttz``' intrinsic counts the trailing (least significant)
 zeros in a variable, or within each element of a vector. If ``src == 0``
 then the result is the size in bits of the type of ``src`` if
 ``is_zero_undef == 0`` and ``undef`` otherwise. For example,
-``llvm.cttz(2) = 1``.
+``llvm37.cttz(2) = 1``.
 
 .. _int_overflow:
 
 Arithmetic with Overflow Intrinsics
 -----------------------------------
 
-LLVM provides intrinsics for some arithmetic with overflow operations.
+LLVM37 provides intrinsics for some arithmetic with overflow operations.
 
-'``llvm.sadd.with.overflow.*``' Intrinsics
+'``llvm37.sadd.with.overflow.*``' Intrinsics
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Syntax:
 """""""
 
-This is an overloaded intrinsic. You can use ``llvm.sadd.with.overflow``
+This is an overloaded intrinsic. You can use ``llvm37.sadd.with.overflow``
 on any integer bit width.
 
 ::
 
-      declare {i16, i1} @llvm.sadd.with.overflow.i16(i16 %a, i16 %b)
-      declare {i32, i1} @llvm.sadd.with.overflow.i32(i32 %a, i32 %b)
-      declare {i64, i1} @llvm.sadd.with.overflow.i64(i64 %a, i64 %b)
+      declare {i16, i1} @llvm37.sadd.with.overflow.i16(i16 %a, i16 %b)
+      declare {i32, i1} @llvm37.sadd.with.overflow.i32(i32 %a, i32 %b)
+      declare {i64, i1} @llvm37.sadd.with.overflow.i64(i64 %a, i64 %b)
 
 Overview:
 """""""""
 
-The '``llvm.sadd.with.overflow``' family of intrinsic functions perform
+The '``llvm37.sadd.with.overflow``' family of intrinsic functions perform
 a signed addition of the two arguments, and indicate whether an overflow
 occurred during the signed summation.
 
@@ -9942,7 +9942,7 @@ addition.
 Semantics:
 """"""""""
 
-The '``llvm.sadd.with.overflow``' family of intrinsic functions perform
+The '``llvm37.sadd.with.overflow``' family of intrinsic functions perform
 a signed addition of the two variables. They return a structure --- the
 first element of which is the signed summation, and the second element
 of which is a bit specifying if the signed summation resulted in an
@@ -9951,32 +9951,32 @@ overflow.
 Examples:
 """""""""
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
-      %res = call {i32, i1} @llvm.sadd.with.overflow.i32(i32 %a, i32 %b)
+      %res = call {i32, i1} @llvm37.sadd.with.overflow.i32(i32 %a, i32 %b)
       %sum = extractvalue {i32, i1} %res, 0
       %obit = extractvalue {i32, i1} %res, 1
       br i1 %obit, label %overflow, label %normal
 
-'``llvm.uadd.with.overflow.*``' Intrinsics
+'``llvm37.uadd.with.overflow.*``' Intrinsics
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Syntax:
 """""""
 
-This is an overloaded intrinsic. You can use ``llvm.uadd.with.overflow``
+This is an overloaded intrinsic. You can use ``llvm37.uadd.with.overflow``
 on any integer bit width.
 
 ::
 
-      declare {i16, i1} @llvm.uadd.with.overflow.i16(i16 %a, i16 %b)
-      declare {i32, i1} @llvm.uadd.with.overflow.i32(i32 %a, i32 %b)
-      declare {i64, i1} @llvm.uadd.with.overflow.i64(i64 %a, i64 %b)
+      declare {i16, i1} @llvm37.uadd.with.overflow.i16(i16 %a, i16 %b)
+      declare {i32, i1} @llvm37.uadd.with.overflow.i32(i32 %a, i32 %b)
+      declare {i64, i1} @llvm37.uadd.with.overflow.i64(i64 %a, i64 %b)
 
 Overview:
 """""""""
 
-The '``llvm.uadd.with.overflow``' family of intrinsic functions perform
+The '``llvm37.uadd.with.overflow``' family of intrinsic functions perform
 an unsigned addition of the two arguments, and indicate whether a carry
 occurred during the unsigned summation.
 
@@ -9992,7 +9992,7 @@ addition.
 Semantics:
 """"""""""
 
-The '``llvm.uadd.with.overflow``' family of intrinsic functions perform
+The '``llvm37.uadd.with.overflow``' family of intrinsic functions perform
 an unsigned addition of the two arguments. They return a structure --- the
 first element of which is the sum, and the second element of which is a
 bit specifying if the unsigned summation resulted in a carry.
@@ -10000,32 +10000,32 @@ bit specifying if the unsigned summation resulted in a carry.
 Examples:
 """""""""
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
-      %res = call {i32, i1} @llvm.uadd.with.overflow.i32(i32 %a, i32 %b)
+      %res = call {i32, i1} @llvm37.uadd.with.overflow.i32(i32 %a, i32 %b)
       %sum = extractvalue {i32, i1} %res, 0
       %obit = extractvalue {i32, i1} %res, 1
       br i1 %obit, label %carry, label %normal
 
-'``llvm.ssub.with.overflow.*``' Intrinsics
+'``llvm37.ssub.with.overflow.*``' Intrinsics
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Syntax:
 """""""
 
-This is an overloaded intrinsic. You can use ``llvm.ssub.with.overflow``
+This is an overloaded intrinsic. You can use ``llvm37.ssub.with.overflow``
 on any integer bit width.
 
 ::
 
-      declare {i16, i1} @llvm.ssub.with.overflow.i16(i16 %a, i16 %b)
-      declare {i32, i1} @llvm.ssub.with.overflow.i32(i32 %a, i32 %b)
-      declare {i64, i1} @llvm.ssub.with.overflow.i64(i64 %a, i64 %b)
+      declare {i16, i1} @llvm37.ssub.with.overflow.i16(i16 %a, i16 %b)
+      declare {i32, i1} @llvm37.ssub.with.overflow.i32(i32 %a, i32 %b)
+      declare {i64, i1} @llvm37.ssub.with.overflow.i64(i64 %a, i64 %b)
 
 Overview:
 """""""""
 
-The '``llvm.ssub.with.overflow``' family of intrinsic functions perform
+The '``llvm37.ssub.with.overflow``' family of intrinsic functions perform
 a signed subtraction of the two arguments, and indicate whether an
 overflow occurred during the signed subtraction.
 
@@ -10041,7 +10041,7 @@ subtraction.
 Semantics:
 """"""""""
 
-The '``llvm.ssub.with.overflow``' family of intrinsic functions perform
+The '``llvm37.ssub.with.overflow``' family of intrinsic functions perform
 a signed subtraction of the two arguments. They return a structure --- the
 first element of which is the subtraction, and the second element of
 which is a bit specifying if the signed subtraction resulted in an
@@ -10050,32 +10050,32 @@ overflow.
 Examples:
 """""""""
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
-      %res = call {i32, i1} @llvm.ssub.with.overflow.i32(i32 %a, i32 %b)
+      %res = call {i32, i1} @llvm37.ssub.with.overflow.i32(i32 %a, i32 %b)
       %sum = extractvalue {i32, i1} %res, 0
       %obit = extractvalue {i32, i1} %res, 1
       br i1 %obit, label %overflow, label %normal
 
-'``llvm.usub.with.overflow.*``' Intrinsics
+'``llvm37.usub.with.overflow.*``' Intrinsics
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Syntax:
 """""""
 
-This is an overloaded intrinsic. You can use ``llvm.usub.with.overflow``
+This is an overloaded intrinsic. You can use ``llvm37.usub.with.overflow``
 on any integer bit width.
 
 ::
 
-      declare {i16, i1} @llvm.usub.with.overflow.i16(i16 %a, i16 %b)
-      declare {i32, i1} @llvm.usub.with.overflow.i32(i32 %a, i32 %b)
-      declare {i64, i1} @llvm.usub.with.overflow.i64(i64 %a, i64 %b)
+      declare {i16, i1} @llvm37.usub.with.overflow.i16(i16 %a, i16 %b)
+      declare {i32, i1} @llvm37.usub.with.overflow.i32(i32 %a, i32 %b)
+      declare {i64, i1} @llvm37.usub.with.overflow.i64(i64 %a, i64 %b)
 
 Overview:
 """""""""
 
-The '``llvm.usub.with.overflow``' family of intrinsic functions perform
+The '``llvm37.usub.with.overflow``' family of intrinsic functions perform
 an unsigned subtraction of the two arguments, and indicate whether an
 overflow occurred during the unsigned subtraction.
 
@@ -10091,7 +10091,7 @@ subtraction.
 Semantics:
 """"""""""
 
-The '``llvm.usub.with.overflow``' family of intrinsic functions perform
+The '``llvm37.usub.with.overflow``' family of intrinsic functions perform
 an unsigned subtraction of the two arguments. They return a structure ---
 the first element of which is the subtraction, and the second element of
 which is a bit specifying if the unsigned subtraction resulted in an
@@ -10100,32 +10100,32 @@ overflow.
 Examples:
 """""""""
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
-      %res = call {i32, i1} @llvm.usub.with.overflow.i32(i32 %a, i32 %b)
+      %res = call {i32, i1} @llvm37.usub.with.overflow.i32(i32 %a, i32 %b)
       %sum = extractvalue {i32, i1} %res, 0
       %obit = extractvalue {i32, i1} %res, 1
       br i1 %obit, label %overflow, label %normal
 
-'``llvm.smul.with.overflow.*``' Intrinsics
+'``llvm37.smul.with.overflow.*``' Intrinsics
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Syntax:
 """""""
 
-This is an overloaded intrinsic. You can use ``llvm.smul.with.overflow``
+This is an overloaded intrinsic. You can use ``llvm37.smul.with.overflow``
 on any integer bit width.
 
 ::
 
-      declare {i16, i1} @llvm.smul.with.overflow.i16(i16 %a, i16 %b)
-      declare {i32, i1} @llvm.smul.with.overflow.i32(i32 %a, i32 %b)
-      declare {i64, i1} @llvm.smul.with.overflow.i64(i64 %a, i64 %b)
+      declare {i16, i1} @llvm37.smul.with.overflow.i16(i16 %a, i16 %b)
+      declare {i32, i1} @llvm37.smul.with.overflow.i32(i32 %a, i32 %b)
+      declare {i64, i1} @llvm37.smul.with.overflow.i64(i64 %a, i64 %b)
 
 Overview:
 """""""""
 
-The '``llvm.smul.with.overflow``' family of intrinsic functions perform
+The '``llvm37.smul.with.overflow``' family of intrinsic functions perform
 a signed multiplication of the two arguments, and indicate whether an
 overflow occurred during the signed multiplication.
 
@@ -10141,7 +10141,7 @@ multiplication.
 Semantics:
 """"""""""
 
-The '``llvm.smul.with.overflow``' family of intrinsic functions perform
+The '``llvm37.smul.with.overflow``' family of intrinsic functions perform
 a signed multiplication of the two arguments. They return a structure ---
 the first element of which is the multiplication, and the second element
 of which is a bit specifying if the signed multiplication resulted in an
@@ -10150,32 +10150,32 @@ overflow.
 Examples:
 """""""""
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
-      %res = call {i32, i1} @llvm.smul.with.overflow.i32(i32 %a, i32 %b)
+      %res = call {i32, i1} @llvm37.smul.with.overflow.i32(i32 %a, i32 %b)
       %sum = extractvalue {i32, i1} %res, 0
       %obit = extractvalue {i32, i1} %res, 1
       br i1 %obit, label %overflow, label %normal
 
-'``llvm.umul.with.overflow.*``' Intrinsics
+'``llvm37.umul.with.overflow.*``' Intrinsics
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Syntax:
 """""""
 
-This is an overloaded intrinsic. You can use ``llvm.umul.with.overflow``
+This is an overloaded intrinsic. You can use ``llvm37.umul.with.overflow``
 on any integer bit width.
 
 ::
 
-      declare {i16, i1} @llvm.umul.with.overflow.i16(i16 %a, i16 %b)
-      declare {i32, i1} @llvm.umul.with.overflow.i32(i32 %a, i32 %b)
-      declare {i64, i1} @llvm.umul.with.overflow.i64(i64 %a, i64 %b)
+      declare {i16, i1} @llvm37.umul.with.overflow.i16(i16 %a, i16 %b)
+      declare {i32, i1} @llvm37.umul.with.overflow.i32(i32 %a, i32 %b)
+      declare {i64, i1} @llvm37.umul.with.overflow.i64(i64 %a, i64 %b)
 
 Overview:
 """""""""
 
-The '``llvm.umul.with.overflow``' family of intrinsic functions perform
+The '``llvm37.umul.with.overflow``' family of intrinsic functions perform
 a unsigned multiplication of the two arguments, and indicate whether an
 overflow occurred during the unsigned multiplication.
 
@@ -10191,7 +10191,7 @@ multiplication.
 Semantics:
 """"""""""
 
-The '``llvm.umul.with.overflow``' family of intrinsic functions perform
+The '``llvm37.umul.with.overflow``' family of intrinsic functions perform
 an unsigned multiplication of the two arguments. They return a structure ---
 the first element of which is the multiplication, and the second
 element of which is a bit specifying if the unsigned multiplication
@@ -10200,9 +10200,9 @@ resulted in an overflow.
 Examples:
 """""""""
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
-      %res = call {i32, i1} @llvm.umul.with.overflow.i32(i32 %a, i32 %b)
+      %res = call {i32, i1} @llvm37.umul.with.overflow.i32(i32 %a, i32 %b)
       %sum = extractvalue {i32, i1} %res, 0
       %obit = extractvalue {i32, i1} %res, 1
       br i1 %obit, label %overflow, label %normal
@@ -10210,7 +10210,7 @@ Examples:
 Specialised Arithmetic Intrinsics
 ---------------------------------
 
-'``llvm.canonicalize.*``' Intrinsic
+'``llvm37.canonicalize.*``' Intrinsic
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Syntax:
@@ -10218,13 +10218,13 @@ Syntax:
 
 ::
 
-      declare float @llvm.canonicalize.f32(float %a)
-      declare double @llvm.canonicalize.f64(double %b)
+      declare float @llvm37.canonicalize.f32(float %a)
+      declare double @llvm37.canonicalize.f64(double %b)
 
 Overview:
 """""""""
 
-The '``llvm.canonicalize.*``' intrinsic returns the platform specific canonical
+The '``llvm37.canonicalize.*``' intrinsic returns the platform specific canonical
 encoding of a floating point number.  This canonicalization is useful for
 implementing certain numeric primitives such as frexp. The canonical encoding is
 defined by IEEE-754-2008 to be:
@@ -10255,17 +10255,17 @@ quiet NaN result.
 
 This function should always be implementable as multiplication by 1.0, provided
 that the compiler does not constant fold the operation.  Likewise, division by
-1.0 and ``llvm.minnum(x, x)`` are possible implementations.  Addition with
+1.0 and ``llvm37.minnum(x, x)`` are possible implementations.  Addition with
 -0.0 is also sufficient provided that the rounding mode is not -Infinity.
 
-``@llvm.canonicalize`` must preserve the equality relation.  That is:
+``@llvm37.canonicalize`` must preserve the equality relation.  That is:
 
-- ``(@llvm.canonicalize(x) == x)`` is equivalent to ``(x == x)``
-- ``(@llvm.canonicalize(x) == @llvm.canonicalize(y))`` is equivalent to
+- ``(@llvm37.canonicalize(x) == x)`` is equivalent to ``(x == x)``
+- ``(@llvm37.canonicalize(x) == @llvm37.canonicalize(y))`` is equivalent to
   to ``(x == y)``
 
 Additionally, the sign of zero must be conserved:
-``@llvm.canonicalize(-0.0) = -0.0`` and ``@llvm.canonicalize(+0.0) = +0.0``
+``@llvm37.canonicalize(-0.0) = -0.0`` and ``@llvm37.canonicalize(+0.0) = +0.0``
 
 The payload bits of a NaN must be conserved, with two exceptions.
 First, environments which use only a single canonical representation of NaN
@@ -10279,7 +10279,7 @@ The canonicalization operation may be optimized away if:
 - The result is consumed only by (or fused with) other floating-point
   operations.  That is, the bits of the floating point value are not examined.
 
-'``llvm.fmuladd.*``' Intrinsic
+'``llvm37.fmuladd.*``' Intrinsic
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Syntax:
@@ -10287,13 +10287,13 @@ Syntax:
 
 ::
 
-      declare float @llvm.fmuladd.f32(float %a, float %b, float %c)
-      declare double @llvm.fmuladd.f64(double %a, double %b, double %c)
+      declare float @llvm37.fmuladd.f32(float %a, float %b, float %c)
+      declare double @llvm37.fmuladd.f64(double %a, double %b, double %c)
 
 Overview:
 """""""""
 
-The '``llvm.fmuladd.*``' intrinsic functions represent multiply-add
+The '``llvm37.fmuladd.*``' intrinsic functions represent multiply-add
 expressions that can be fused if the code generator determines that (a) the
 target instruction set has support for a fused operation, and (b) that the
 fused operation is more efficient than the equivalent, separate pair of mul
@@ -10302,7 +10302,7 @@ and add instructions.
 Arguments:
 """"""""""
 
-The '``llvm.fmuladd.*``' intrinsics each take three arguments: two
+The '``llvm37.fmuladd.*``' intrinsics each take three arguments: two
 multiplicands, a and b, and an addend c.
 
 Semantics:
@@ -10312,21 +10312,21 @@ The expression:
 
 ::
 
-      %0 = call float @llvm.fmuladd.f32(%a, %b, %c)
+      %0 = call float @llvm37.fmuladd.f32(%a, %b, %c)
 
 is equivalent to the expression a \* b + c, except that rounding will
 not be performed between the multiplication and addition steps if the
 code generator fuses the operations. Fusion is not guaranteed, even if
 the target platform supports it. If a fused multiply-add is required the
-corresponding llvm.fma.\* intrinsic function should be used
-instead. This never sets errno, just as '``llvm.fma.*``'.
+corresponding llvm37.fma.\* intrinsic function should be used
+instead. This never sets errno, just as '``llvm37.fma.*``'.
 
 Examples:
 """""""""
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
-      %r2 = call float @llvm.fmuladd.f32(float %a, float %b, float %c) ; yields float:r2 = (a * b) + c
+      %r2 = call float @llvm37.fmuladd.f32(float %a, float %b, float %c) ; yields float:r2 = (a * b) + c
 
 Half Precision Floating Point Intrinsics
 ----------------------------------------
@@ -10337,16 +10337,16 @@ but does not support computation in the format.
 
 This means that code must first load the half-precision floating point
 value as an i16, then convert it to float with
-:ref:`llvm.convert.from.fp16 <int_convert_from_fp16>`. Computation can
+:ref:`llvm37.convert.from.fp16 <int_convert_from_fp16>`. Computation can
 then be performed on the float value (including extending to double
 etc). To store the value back to memory, it is first converted to float
 if needed, then converted to i16 with
-:ref:`llvm.convert.to.fp16 <int_convert_to_fp16>`, then storing as an
+:ref:`llvm37.convert.to.fp16 <int_convert_to_fp16>`, then storing as an
 i16 value.
 
 .. _int_convert_to_fp16:
 
-'``llvm.convert.to.fp16``' Intrinsic
+'``llvm37.convert.to.fp16``' Intrinsic
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Syntax:
@@ -10354,13 +10354,13 @@ Syntax:
 
 ::
 
-      declare i16 @llvm.convert.to.fp16.f32(float %a)
-      declare i16 @llvm.convert.to.fp16.f64(double %a)
+      declare i16 @llvm37.convert.to.fp16.f32(float %a)
+      declare i16 @llvm37.convert.to.fp16.f64(double %a)
 
 Overview:
 """""""""
 
-The '``llvm.convert.to.fp16``' intrinsic function performs a conversion from a
+The '``llvm37.convert.to.fp16``' intrinsic function performs a conversion from a
 conventional floating point type to half precision floating point format.
 
 Arguments:
@@ -10372,21 +10372,21 @@ converted.
 Semantics:
 """"""""""
 
-The '``llvm.convert.to.fp16``' intrinsic function performs a conversion from a
+The '``llvm37.convert.to.fp16``' intrinsic function performs a conversion from a
 conventional floating point format to half precision floating point format. The
 return value is an ``i16`` which contains the converted number.
 
 Examples:
 """""""""
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
-      %res = call i16 @llvm.convert.to.fp16.f32(float %a)
+      %res = call i16 @llvm37.convert.to.fp16.f32(float %a)
       store i16 %res, i16* @x, align 2
 
 .. _int_convert_from_fp16:
 
-'``llvm.convert.from.fp16``' Intrinsic
+'``llvm37.convert.from.fp16``' Intrinsic
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Syntax:
@@ -10394,13 +10394,13 @@ Syntax:
 
 ::
 
-      declare float @llvm.convert.from.fp16.f32(i16 %a)
-      declare double @llvm.convert.from.fp16.f64(i16 %a)
+      declare float @llvm37.convert.from.fp16.f32(i16 %a)
+      declare double @llvm37.convert.from.fp16.f64(i16 %a)
 
 Overview:
 """""""""
 
-The '``llvm.convert.from.fp16``' intrinsic function performs a
+The '``llvm37.convert.from.fp16``' intrinsic function performs a
 conversion from half precision floating point format to single precision
 floating point format.
 
@@ -10413,7 +10413,7 @@ converted.
 Semantics:
 """"""""""
 
-The '``llvm.convert.from.fp16``' intrinsic function performs a
+The '``llvm37.convert.from.fp16``' intrinsic function performs a
 conversion from half single precision floating point format to single
 precision floating point format. The input half-float value is
 represented by an ``i16`` value.
@@ -10421,26 +10421,26 @@ represented by an ``i16`` value.
 Examples:
 """""""""
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
       %a = load i16, i16* @x, align 2
-      %res = call float @llvm.convert.from.fp16(i16 %a)
+      %res = call float @llvm37.convert.from.fp16(i16 %a)
 
 .. _dbg_intrinsics:
 
 Debugger Intrinsics
 -------------------
 
-The LLVM debugger intrinsics (which all start with ``llvm.dbg.``
-prefix), are described in the `LLVM Source Level
+The LLVM37 debugger intrinsics (which all start with ``llvm37.dbg.``
+prefix), are described in the `LLVM37 Source Level
 Debugging <SourceLevelDebugging.html#format_common_intrinsics>`_
 document.
 
 Exception Handling Intrinsics
 -----------------------------
 
-The LLVM exception handling intrinsics (which all start with
-``llvm.eh.`` prefix), are described in the `LLVM Exception
+The LLVM37 exception handling intrinsics (which all start with
+``llvm37.eh.`` prefix), are described in the `LLVM37 Exception
 Handling <ExceptionHandling.html#format_common_intrinsics>`_ document.
 
 .. _int_trampoline:
@@ -10461,12 +10461,12 @@ For example, if the function is ``i32 f(i8* nest %c, i32 %x, i32 %y)``
 then the resulting function pointer has signature ``i32 (i32, i32)*``.
 It can be created as follows:
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
       %tramp = alloca [10 x i8], align 4 ; size and alignment only correct for X86
       %tramp1 = getelementptr [10 x i8], [10 x i8]* %tramp, i32 0, i32 0
-      call i8* @llvm.init.trampoline(i8* %tramp1, i8* bitcast (i32 (i8*, i32, i32)* @f to i8*), i8* %nval)
-      %p = call i8* @llvm.adjust.trampoline(i8* %tramp1)
+      call i8* @llvm37.init.trampoline(i8* %tramp1, i8* bitcast (i32 (i8*, i32, i32)* @f to i8*), i8* %nval)
+      %p = call i8* @llvm37.adjust.trampoline(i8* %tramp1)
       %fp = bitcast i8* %p to i32 (i32, i32)*
 
 The call ``%val = call i32 %fp(i32 %x, i32 %y)`` is then equivalent to
@@ -10474,7 +10474,7 @@ The call ``%val = call i32 %fp(i32 %x, i32 %y)`` is then equivalent to
 
 .. _int_it:
 
-'``llvm.init.trampoline``' Intrinsic
+'``llvm37.init.trampoline``' Intrinsic
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Syntax:
@@ -10482,7 +10482,7 @@ Syntax:
 
 ::
 
-      declare void @llvm.init.trampoline(i8* <tramp>, i8* <func>, i8* <nval>)
+      declare void @llvm37.init.trampoline(i8* <tramp>, i8* <func>, i8* <nval>)
 
 Overview:
 """""""""
@@ -10493,11 +10493,11 @@ turning it into a trampoline.
 Arguments:
 """"""""""
 
-The ``llvm.init.trampoline`` intrinsic takes three arguments, all
+The ``llvm37.init.trampoline`` intrinsic takes three arguments, all
 pointers. The ``tramp`` argument must point to a sufficiently large and
 sufficiently aligned block of memory; this memory is written to by the
 intrinsic. Note that the size and the alignment are target-specific -
-LLVM currently provides no portable way of determining them, so a
+LLVM37 currently provides no portable way of determining them, so a
 front-end that generates this intrinsic needs to have some
 target-specific knowledge. The ``func`` argument must hold a function
 bitcast to an ``i8*``.
@@ -10507,20 +10507,20 @@ Semantics:
 
 The block of memory pointed to by ``tramp`` is filled with target
 dependent code, turning it into a function. Then ``tramp`` needs to be
-passed to :ref:`llvm.adjust.trampoline <int_at>` to get a pointer which can
+passed to :ref:`llvm37.adjust.trampoline <int_at>` to get a pointer which can
 be :ref:`bitcast (to a new function) and called <int_trampoline>`. The new
 function's signature is the same as that of ``func`` with any arguments
 marked with the ``nest`` attribute removed. At most one such ``nest``
 argument is allowed, and it must be of pointer type. Calling the new
 function is equivalent to calling ``func`` with the same argument list,
 but with ``nval`` used for the missing ``nest`` argument. If, after
-calling ``llvm.init.trampoline``, the memory pointed to by ``tramp`` is
+calling ``llvm37.init.trampoline``, the memory pointed to by ``tramp`` is
 modified, then the effect of any later call to the returned function
 pointer is undefined.
 
 .. _int_at:
 
-'``llvm.adjust.trampoline``' Intrinsic
+'``llvm37.adjust.trampoline``' Intrinsic
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Syntax:
@@ -10528,7 +10528,7 @@ Syntax:
 
 ::
 
-      declare i8* @llvm.adjust.trampoline(i8* <tramp>)
+      declare i8* @llvm37.adjust.trampoline(i8* <tramp>)
 
 Overview:
 """""""""
@@ -10541,7 +10541,7 @@ Arguments:
 
 ``tramp`` must point to a block of memory which already has trampoline
 code filled in by a previous call to
-:ref:`llvm.init.trampoline <int_it>`.
+:ref:`llvm37.init.trampoline <int_it>`.
 
 Semantics:
 """"""""""
@@ -10557,11 +10557,11 @@ returned can then be :ref:`bitcast and executed <int_trampoline>`.
 Masked Vector Load and Store Intrinsics
 ---------------------------------------
 
-LLVM provides intrinsics for predicated vector load and store operations. The predicate is specified by a mask operand, which holds one bit per vector element, switching the associated vector lane on or off. The memory addresses corresponding to the "off" lanes are not accessed. When all bits of the mask are on, the intrinsic is identical to a regular vector load or store. When all bits are off, no memory is accessed.
+LLVM37 provides intrinsics for predicated vector load and store operations. The predicate is specified by a mask operand, which holds one bit per vector element, switching the associated vector lane on or off. The memory addresses corresponding to the "off" lanes are not accessed. When all bits of the mask are on, the intrinsic is identical to a regular vector load or store. When all bits are off, no memory is accessed.
 
 .. _int_mload:
 
-'``llvm.masked.load.*``' Intrinsics
+'``llvm37.masked.load.*``' Intrinsics
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Syntax:
@@ -10570,8 +10570,8 @@ This is an overloaded intrinsic. The loaded data is a vector of any integer or f
 
 ::
 
-      declare <16 x float> @llvm.masked.load.v16f32 (<16 x float>* <ptr>, i32 <alignment>, <16 x i1> <mask>, <16 x float> <passthru>)
-      declare <2 x double> @llvm.masked.load.v2f64  (<2 x double>* <ptr>, i32 <alignment>, <2 x i1>  <mask>, <2 x double> <passthru>)
+      declare <16 x float> @llvm37.masked.load.v16f32 (<16 x float>* <ptr>, i32 <alignment>, <16 x i1> <mask>, <16 x float> <passthru>)
+      declare <2 x double> @llvm37.masked.load.v2f64  (<2 x double>* <ptr>, i32 <alignment>, <2 x i1>  <mask>, <2 x double> <passthru>)
 
 Overview:
 """""""""
@@ -10588,13 +10588,13 @@ The first operand is the base pointer for the load. The second operand is the al
 Semantics:
 """"""""""
 
-The '``llvm.masked.load``' intrinsic is designed for conditional reading of selected vector elements in a single IR operation. It is useful for targets that support vector masked loads and allows vectorizing predicated basic blocks on these targets. Other targets may support this intrinsic differently, for example by lowering it into a sequence of branches that guard scalar load operations.
+The '``llvm37.masked.load``' intrinsic is designed for conditional reading of selected vector elements in a single IR operation. It is useful for targets that support vector masked loads and allows vectorizing predicated basic blocks on these targets. Other targets may support this intrinsic differently, for example by lowering it into a sequence of branches that guard scalar load operations.
 The result of this operation is equivalent to a regular vector load instruction followed by a 'select' between the loaded and the passthru values, predicated on the same mask. However, using this intrinsic prevents exceptions on memory access to masked-off lanes.
 
 
 ::
 
-       %res = call <16 x float> @llvm.masked.load.v16f32 (<16 x float>* %ptr, i32 4, <16 x i1>%mask, <16 x float> %passthru)
+       %res = call <16 x float> @llvm37.masked.load.v16f32 (<16 x float>* %ptr, i32 4, <16 x i1>%mask, <16 x float> %passthru)
 
        ;; The result of the two following instructions is identical aside from potential memory access exception
        %loadlal = load <16 x float>, <16 x float>* %ptr, align 4
@@ -10602,7 +10602,7 @@ The result of this operation is equivalent to a regular vector load instruction 
 
 .. _int_mstore:
 
-'``llvm.masked.store.*``' Intrinsics
+'``llvm37.masked.store.*``' Intrinsics
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Syntax:
@@ -10611,8 +10611,8 @@ This is an overloaded intrinsic. The data stored in memory is a vector of any in
 
 ::
 
-       declare void @llvm.masked.store.v8i32 (<8 x i32>  <value>, <8 x i32> * <ptr>, i32 <alignment>,  <8 x i1>  <mask>)
-       declare void @llvm.masked.store.v16f32(<16 x i32> <value>, <16 x i32>* <ptr>, i32 <alignment>,  <16 x i1> <mask>)
+       declare void @llvm37.masked.store.v8i32 (<8 x i32>  <value>, <8 x i32> * <ptr>, i32 <alignment>,  <8 x i1>  <mask>)
+       declare void @llvm37.masked.store.v16f32(<16 x i32> <value>, <16 x i32>* <ptr>, i32 <alignment>,  <16 x i1> <mask>)
 
 Overview:
 """""""""
@@ -10628,12 +10628,12 @@ The first operand is the vector value to be written to memory. The second operan
 Semantics:
 """"""""""
 
-The '``llvm.masked.store``' intrinsics is designed for conditional writing of selected vector elements in a single IR operation. It is useful for targets that support vector masked store and allows vectorizing predicated basic blocks on these targets. Other targets may support this intrinsic differently, for example by lowering it into a sequence of branches that guard scalar store operations.
+The '``llvm37.masked.store``' intrinsics is designed for conditional writing of selected vector elements in a single IR operation. It is useful for targets that support vector masked store and allows vectorizing predicated basic blocks on these targets. Other targets may support this intrinsic differently, for example by lowering it into a sequence of branches that guard scalar store operations.
 The result of this operation is equivalent to a load-modify-store sequence. However, using this intrinsic prevents exceptions and data races on memory access to masked-off lanes.
 
 ::
 
-       call void @llvm.masked.store.v16f32(<16 x float> %value, <16 x float>* %ptr, i32 4,  <16 x i1> %mask)
+       call void @llvm37.masked.store.v16f32(<16 x float> %value, <16 x float>* %ptr, i32 4,  <16 x i1> %mask)
 
        ;; The result of the following instructions is identical aside from potential data races and memory access exceptions
        %oldval = load <16 x float>, <16 x float>* %ptr, align 4
@@ -10644,11 +10644,11 @@ The result of this operation is equivalent to a load-modify-store sequence. Howe
 Masked Vector Gather and Scatter Intrinsics
 -------------------------------------------
 
-LLVM provides intrinsics for vector gather and scatter operations. They are similar to :ref:`Masked Vector Load and Store <int_mload_mstore>`, except they are designed for arbitrary memory accesses, rather than sequential memory accesses. Gather and scatter also employ a mask operand, which holds one bit per vector element, switching the associated vector lane on or off. The memory addresses corresponding to the "off" lanes are not accessed. When all bits are off, no memory is accessed.
+LLVM37 provides intrinsics for vector gather and scatter operations. They are similar to :ref:`Masked Vector Load and Store <int_mload_mstore>`, except they are designed for arbitrary memory accesses, rather than sequential memory accesses. Gather and scatter also employ a mask operand, which holds one bit per vector element, switching the associated vector lane on or off. The memory addresses corresponding to the "off" lanes are not accessed. When all bits are off, no memory is accessed.
 
 .. _int_mgather:
 
-'``llvm.masked.gather.*``' Intrinsics
+'``llvm37.masked.gather.*``' Intrinsics
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Syntax:
@@ -10657,8 +10657,8 @@ This is an overloaded intrinsic. The loaded data are multiple scalar values of a
 
 ::
 
-      declare <16 x float> @llvm.masked.gather.v16f32 (<16 x float*> <ptrs>, i32 <alignment>, <16 x i1> <mask>, <16 x float> <passthru>)
-      declare <2 x double> @llvm.masked.gather.v2f64  (<2 x double*> <ptrs>, i32 <alignment>, <2 x i1>  <mask>, <2 x double> <passthru>)
+      declare <16 x float> @llvm37.masked.gather.v16f32 (<16 x float*> <ptrs>, i32 <alignment>, <16 x i1> <mask>, <16 x float> <passthru>)
+      declare <2 x double> @llvm37.masked.gather.v2f64  (<2 x double*> <ptrs>, i32 <alignment>, <2 x i1>  <mask>, <2 x double> <passthru>)
 
 Overview:
 """""""""
@@ -10675,13 +10675,13 @@ The first operand is a vector of pointers which holds all memory addresses to re
 Semantics:
 """"""""""
 
-The '``llvm.masked.gather``' intrinsic is designed for conditional reading of multiple scalar values from arbitrary memory locations in a single IR operation. It is useful for targets that support vector masked gathers and allows vectorizing basic blocks with data and control divergence. Other targets may support this intrinsic differently, for example by lowering it into a sequence of scalar load operations.
+The '``llvm37.masked.gather``' intrinsic is designed for conditional reading of multiple scalar values from arbitrary memory locations in a single IR operation. It is useful for targets that support vector masked gathers and allows vectorizing basic blocks with data and control divergence. Other targets may support this intrinsic differently, for example by lowering it into a sequence of scalar load operations.
 The semantics of this operation are equivalent to a sequence of conditional scalar loads with subsequent gathering all loaded values into a single vector. The mask restricts memory access to certain lanes and facilitates vectorization of predicated basic blocks.
 
 
 ::
 
-       %res = call <4 x double> @llvm.masked.gather.v4f64 (<4 x double*> %ptrs, i32 8, <4 x i1>%mask, <4 x double> <true, true, true, true>)
+       %res = call <4 x double> @llvm37.masked.gather.v4f64 (<4 x double*> %ptrs, i32 8, <4 x i1>%mask, <4 x double> <true, true, true, true>)
 
        ;; The gather with all-true mask is equivalent to the following instruction sequence
        %ptr0 = extractelement <4 x double*> %ptrs, i32 0
@@ -10701,7 +10701,7 @@ The semantics of this operation are equivalent to a sequence of conditional scal
 
 .. _int_mscatter:
 
-'``llvm.masked.scatter.*``' Intrinsics
+'``llvm37.masked.scatter.*``' Intrinsics
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Syntax:
@@ -10710,8 +10710,8 @@ This is an overloaded intrinsic. The data stored in memory is a vector of any in
 
 ::
 
-       declare void @llvm.masked.scatter.v8i32 (<8 x i32>  <value>, <8 x i32*>  <ptrs>, i32 <alignment>,  <8 x i1>  <mask>)
-       declare void @llvm.masked.scatter.v16f32(<16 x i32> <value>, <16 x i32*> <ptrs>, i32 <alignment>,  <16 x i1> <mask>)
+       declare void @llvm37.masked.scatter.v8i32 (<8 x i32>  <value>, <8 x i32*>  <ptrs>, i32 <alignment>,  <8 x i1>  <mask>)
+       declare void @llvm37.masked.scatter.v16f32(<16 x i32> <value>, <16 x i32*> <ptrs>, i32 <alignment>,  <16 x i1> <mask>)
 
 Overview:
 """""""""
@@ -10727,12 +10727,12 @@ The first operand is a vector value to be written to memory. The second operand 
 Semantics:
 """"""""""
 
-The '``llvm.masked.scatter``' intrinsics is designed for writing selected vector elements to arbitrary memory addresses in a single IR operation. The operation may be conditional, when not all bits in the mask are switched on. It is useful for targets that support vector masked scatter and allows vectorizing basic blocks with data and control divergency. Other targets may support this intrinsic differently, for example by lowering it into a sequence of branches that guard scalar store operations.
+The '``llvm37.masked.scatter``' intrinsics is designed for writing selected vector elements to arbitrary memory addresses in a single IR operation. The operation may be conditional, when not all bits in the mask are switched on. It is useful for targets that support vector masked scatter and allows vectorizing basic blocks with data and control divergency. Other targets may support this intrinsic differently, for example by lowering it into a sequence of branches that guard scalar store operations.
 
 ::
 
        ;; This instruction unconditionaly stores data vector in multiple addresses
-       call @llvm.masked.scatter.v8i32 (<8 x i32> %value, <8 x i32*> %ptrs, i32 4,  <8 x i1>  <true, true, .. true>)
+       call @llvm37.masked.scatter.v8i32 (<8 x i32> %value, <8 x i32*> %ptrs, i32 4,  <8 x i1>  <true, true, .. true>)
 
        ;; It is equivalent to a list of scalar stores
        %val0 = extractelement <8 x i32> %value, i32 0
@@ -10758,7 +10758,7 @@ memory objects and ranges where variables are immutable.
 
 .. _int_lifestart:
 
-'``llvm.lifetime.start``' Intrinsic
+'``llvm37.lifetime.start``' Intrinsic
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Syntax:
@@ -10766,12 +10766,12 @@ Syntax:
 
 ::
 
-      declare void @llvm.lifetime.start(i64 <size>, i8* nocapture <ptr>)
+      declare void @llvm37.lifetime.start(i64 <size>, i8* nocapture <ptr>)
 
 Overview:
 """""""""
 
-The '``llvm.lifetime.start``' intrinsic specifies the start of a memory
+The '``llvm37.lifetime.start``' intrinsic specifies the start of a memory
 object's lifetime.
 
 Arguments:
@@ -10791,7 +10791,7 @@ that precedes this intrinsic can be replaced with ``'undef'``.
 
 .. _int_lifeend:
 
-'``llvm.lifetime.end``' Intrinsic
+'``llvm37.lifetime.end``' Intrinsic
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Syntax:
@@ -10799,12 +10799,12 @@ Syntax:
 
 ::
 
-      declare void @llvm.lifetime.end(i64 <size>, i8* nocapture <ptr>)
+      declare void @llvm37.lifetime.end(i64 <size>, i8* nocapture <ptr>)
 
 Overview:
 """""""""
 
-The '``llvm.lifetime.end``' intrinsic specifies the end of a memory
+The '``llvm37.lifetime.end``' intrinsic specifies the end of a memory
 object's lifetime.
 
 Arguments:
@@ -10822,7 +10822,7 @@ the memory pointed to by ``ptr`` is dead. This means that it is known to
 never be used and has an undefined value. Any stores into the memory
 object following this intrinsic may be removed as dead.
 
-'``llvm.invariant.start``' Intrinsic
+'``llvm37.invariant.start``' Intrinsic
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Syntax:
@@ -10830,12 +10830,12 @@ Syntax:
 
 ::
 
-      declare {}* @llvm.invariant.start(i64 <size>, i8* nocapture <ptr>)
+      declare {}* @llvm37.invariant.start(i64 <size>, i8* nocapture <ptr>)
 
 Overview:
 """""""""
 
-The '``llvm.invariant.start``' intrinsic specifies that the contents of
+The '``llvm37.invariant.start``' intrinsic specifies that the contents of
 a memory object will not change.
 
 Arguments:
@@ -10848,11 +10848,11 @@ to the object.
 Semantics:
 """"""""""
 
-This intrinsic indicates that until an ``llvm.invariant.end`` that uses
+This intrinsic indicates that until an ``llvm37.invariant.end`` that uses
 the return value, the referenced memory location is constant and
 unchanging.
 
-'``llvm.invariant.end``' Intrinsic
+'``llvm37.invariant.end``' Intrinsic
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Syntax:
@@ -10860,18 +10860,18 @@ Syntax:
 
 ::
 
-      declare void @llvm.invariant.end({}* <start>, i64 <size>, i8* nocapture <ptr>)
+      declare void @llvm37.invariant.end({}* <start>, i64 <size>, i8* nocapture <ptr>)
 
 Overview:
 """""""""
 
-The '``llvm.invariant.end``' intrinsic specifies that the contents of a
+The '``llvm37.invariant.end``' intrinsic specifies that the contents of a
 memory object are mutable.
 
 Arguments:
 """"""""""
 
-The first argument is the matching ``llvm.invariant.start`` intrinsic.
+The first argument is the matching ``llvm37.invariant.start`` intrinsic.
 The second argument is a constant integer representing the size of the
 object, or -1 if it is variable sized and the third argument is a
 pointer to the object.
@@ -10887,7 +10887,7 @@ General Intrinsics
 This class of intrinsics is designed to be generic and has no specific
 purpose.
 
-'``llvm.var.annotation``' Intrinsic
+'``llvm37.var.annotation``' Intrinsic
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Syntax:
@@ -10895,12 +10895,12 @@ Syntax:
 
 ::
 
-      declare void @llvm.var.annotation(i8* <val>, i8* <str>, i8* <str>, i32  <int>)
+      declare void @llvm37.var.annotation(i8* <val>, i8* <str>, i8* <str>, i32  <int>)
 
 Overview:
 """""""""
 
-The '``llvm.var.annotation``' intrinsic.
+The '``llvm37.var.annotation``' intrinsic.
 
 Arguments:
 """"""""""
@@ -10917,29 +10917,29 @@ strings. This can be useful for special purpose optimizations that want
 to look for these annotations. These have no other defined use; they are
 ignored by code generation and optimization.
 
-'``llvm.ptr.annotation.*``' Intrinsic
+'``llvm37.ptr.annotation.*``' Intrinsic
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Syntax:
 """""""
 
-This is an overloaded intrinsic. You can use '``llvm.ptr.annotation``' on a
+This is an overloaded intrinsic. You can use '``llvm37.ptr.annotation``' on a
 pointer to an integer of any width. *NOTE* you must specify an address space for
 the pointer. The identifier for the default address space is the integer
 '``0``'.
 
 ::
 
-      declare i8*   @llvm.ptr.annotation.p<address space>i8(i8* <val>, i8* <str>, i8* <str>, i32  <int>)
-      declare i16*  @llvm.ptr.annotation.p<address space>i16(i16* <val>, i8* <str>, i8* <str>, i32  <int>)
-      declare i32*  @llvm.ptr.annotation.p<address space>i32(i32* <val>, i8* <str>, i8* <str>, i32  <int>)
-      declare i64*  @llvm.ptr.annotation.p<address space>i64(i64* <val>, i8* <str>, i8* <str>, i32  <int>)
-      declare i256* @llvm.ptr.annotation.p<address space>i256(i256* <val>, i8* <str>, i8* <str>, i32  <int>)
+      declare i8*   @llvm37.ptr.annotation.p<address space>i8(i8* <val>, i8* <str>, i8* <str>, i32  <int>)
+      declare i16*  @llvm37.ptr.annotation.p<address space>i16(i16* <val>, i8* <str>, i8* <str>, i32  <int>)
+      declare i32*  @llvm37.ptr.annotation.p<address space>i32(i32* <val>, i8* <str>, i8* <str>, i32  <int>)
+      declare i64*  @llvm37.ptr.annotation.p<address space>i64(i64* <val>, i8* <str>, i8* <str>, i32  <int>)
+      declare i256* @llvm37.ptr.annotation.p<address space>i256(i256* <val>, i8* <str>, i8* <str>, i32  <int>)
 
 Overview:
 """""""""
 
-The '``llvm.ptr.annotation``' intrinsic.
+The '``llvm37.ptr.annotation``' intrinsic.
 
 Arguments:
 """"""""""
@@ -10957,27 +10957,27 @@ strings. This can be useful for special purpose optimizations that want to look
 for these annotations. These have no other defined use; they are ignored by code
 generation and optimization.
 
-'``llvm.annotation.*``' Intrinsic
+'``llvm37.annotation.*``' Intrinsic
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Syntax:
 """""""
 
-This is an overloaded intrinsic. You can use '``llvm.annotation``' on
+This is an overloaded intrinsic. You can use '``llvm37.annotation``' on
 any integer bit width.
 
 ::
 
-      declare i8 @llvm.annotation.i8(i8 <val>, i8* <str>, i8* <str>, i32  <int>)
-      declare i16 @llvm.annotation.i16(i16 <val>, i8* <str>, i8* <str>, i32  <int>)
-      declare i32 @llvm.annotation.i32(i32 <val>, i8* <str>, i8* <str>, i32  <int>)
-      declare i64 @llvm.annotation.i64(i64 <val>, i8* <str>, i8* <str>, i32  <int>)
-      declare i256 @llvm.annotation.i256(i256 <val>, i8* <str>, i8* <str>, i32  <int>)
+      declare i8 @llvm37.annotation.i8(i8 <val>, i8* <str>, i8* <str>, i32  <int>)
+      declare i16 @llvm37.annotation.i16(i16 <val>, i8* <str>, i8* <str>, i32  <int>)
+      declare i32 @llvm37.annotation.i32(i32 <val>, i8* <str>, i8* <str>, i32  <int>)
+      declare i64 @llvm37.annotation.i64(i64 <val>, i8* <str>, i8* <str>, i32  <int>)
+      declare i256 @llvm37.annotation.i256(i256 <val>, i8* <str>, i8* <str>, i32  <int>)
 
 Overview:
 """""""""
 
-The '``llvm.annotation``' intrinsic.
+The '``llvm37.annotation``' intrinsic.
 
 Arguments:
 """"""""""
@@ -10995,7 +10995,7 @@ with arbitrary strings. This can be useful for special purpose
 optimizations that want to look for these annotations. These have no
 other defined use; they are ignored by code generation and optimization.
 
-'``llvm.trap``' Intrinsic
+'``llvm37.trap``' Intrinsic
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Syntax:
@@ -11003,12 +11003,12 @@ Syntax:
 
 ::
 
-      declare void @llvm.trap() noreturn nounwind
+      declare void @llvm37.trap() noreturn nounwind
 
 Overview:
 """""""""
 
-The '``llvm.trap``' intrinsic.
+The '``llvm37.trap``' intrinsic.
 
 Arguments:
 """"""""""
@@ -11022,7 +11022,7 @@ This intrinsic is lowered to the target dependent trap instruction. If
 the target does not have a trap instruction, this intrinsic will be
 lowered to a call of the ``abort()`` function.
 
-'``llvm.debugtrap``' Intrinsic
+'``llvm37.debugtrap``' Intrinsic
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Syntax:
@@ -11030,12 +11030,12 @@ Syntax:
 
 ::
 
-      declare void @llvm.debugtrap() nounwind
+      declare void @llvm37.debugtrap() nounwind
 
 Overview:
 """""""""
 
-The '``llvm.debugtrap``' intrinsic.
+The '``llvm37.debugtrap``' intrinsic.
 
 Arguments:
 """"""""""
@@ -11049,7 +11049,7 @@ This intrinsic is lowered to code which is intended to cause an
 execution trap with the intention of requesting the attention of a
 debugger.
 
-'``llvm.stackprotector``' Intrinsic
+'``llvm37.stackprotector``' Intrinsic
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Syntax:
@@ -11057,19 +11057,19 @@ Syntax:
 
 ::
 
-      declare void @llvm.stackprotector(i8* <guard>, i8** <slot>)
+      declare void @llvm37.stackprotector(i8* <guard>, i8** <slot>)
 
 Overview:
 """""""""
 
-The ``llvm.stackprotector`` intrinsic takes the ``guard`` and stores it
+The ``llvm37.stackprotector`` intrinsic takes the ``guard`` and stores it
 onto the stack at ``slot``. The stack slot is adjusted to ensure that it
 is placed on the stack before local variables.
 
 Arguments:
 """"""""""
 
-The ``llvm.stackprotector`` intrinsic requires two pointer arguments.
+The ``llvm37.stackprotector`` intrinsic requires two pointer arguments.
 The first argument is the value loaded from the stack guard
 ``@__stack_chk_guard``. The second variable is an ``alloca`` that has
 enough space to hold the value of the guard.
@@ -11081,11 +11081,11 @@ This intrinsic causes the prologue/epilogue inserter to force the position of
 the ``AllocaInst`` stack slot to be before local variables on the stack. This is
 to ensure that if a local variable on the stack is overwritten, it will destroy
 the value of the guard. When the function exits, the guard on the stack is
-checked against the original guard by ``llvm.stackprotectorcheck``. If they are
-different, then ``llvm.stackprotectorcheck`` causes the program to abort by
+checked against the original guard by ``llvm37.stackprotectorcheck``. If they are
+different, then ``llvm37.stackprotectorcheck`` causes the program to abort by
 calling the ``__stack_chk_fail()`` function.
 
-'``llvm.stackprotectorcheck``' Intrinsic
+'``llvm37.stackprotectorcheck``' Intrinsic
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Syntax:
@@ -11093,26 +11093,26 @@ Syntax:
 
 ::
 
-      declare void @llvm.stackprotectorcheck(i8** <guard>)
+      declare void @llvm37.stackprotectorcheck(i8** <guard>)
 
 Overview:
 """""""""
 
-The ``llvm.stackprotectorcheck`` intrinsic compares ``guard`` against an already
+The ``llvm37.stackprotectorcheck`` intrinsic compares ``guard`` against an already
 created stack protector and if they are not equal calls the
 ``__stack_chk_fail()`` function.
 
 Arguments:
 """"""""""
 
-The ``llvm.stackprotectorcheck`` intrinsic requires one pointer argument, the
+The ``llvm37.stackprotectorcheck`` intrinsic requires one pointer argument, the
 the variable ``@__stack_chk_guard``.
 
 Semantics:
 """"""""""
 
 This intrinsic is provided to perform the stack protector check by comparing
-``guard`` with the stack slot created by ``llvm.stackprotector`` and if the
+``guard`` with the stack slot created by ``llvm37.stackprotector`` and if the
 values do not match call the ``__stack_chk_fail()`` function.
 
 The reason to provide this as an IR level intrinsic instead of implementing it
@@ -11123,7 +11123,7 @@ protector check from disrupting sibling tail calls in Codegen. With this
 intrinsic, we are able to generate the stack protector basic blocks late in
 codegen after the tail call decision has occurred.
 
-'``llvm.objectsize``' Intrinsic
+'``llvm37.objectsize``' Intrinsic
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Syntax:
@@ -11131,13 +11131,13 @@ Syntax:
 
 ::
 
-      declare i32 @llvm.objectsize.i32(i8* <object>, i1 <min>)
-      declare i64 @llvm.objectsize.i64(i8* <object>, i1 <min>)
+      declare i32 @llvm37.objectsize.i32(i8* <object>, i1 <min>)
+      declare i64 @llvm37.objectsize.i64(i8* <object>, i1 <min>)
 
 Overview:
 """""""""
 
-The ``llvm.objectsize`` intrinsic is designed to provide information to
+The ``llvm37.objectsize`` intrinsic is designed to provide information to
 the optimizers to determine at compile time whether a) an operation
 (like memcpy) will overflow a buffer that corresponds to an object, or
 b) that a runtime check for overflow isn't necessary. An object in this
@@ -11147,45 +11147,45 @@ other object.
 Arguments:
 """"""""""
 
-The ``llvm.objectsize`` intrinsic takes two arguments. The first
+The ``llvm37.objectsize`` intrinsic takes two arguments. The first
 argument is a pointer to or into the ``object``. The second argument is
-a boolean and determines whether ``llvm.objectsize`` returns 0 (if true)
+a boolean and determines whether ``llvm37.objectsize`` returns 0 (if true)
 or -1 (if false) when the object size is unknown. The second argument
 only accepts constants.
 
 Semantics:
 """"""""""
 
-The ``llvm.objectsize`` intrinsic is lowered to a constant representing
+The ``llvm37.objectsize`` intrinsic is lowered to a constant representing
 the size of the object concerned. If the size cannot be determined at
-compile time, ``llvm.objectsize`` returns ``i32/i64 -1 or 0`` (depending
+compile time, ``llvm37.objectsize`` returns ``i32/i64 -1 or 0`` (depending
 on the ``min`` argument).
 
-'``llvm.expect``' Intrinsic
+'``llvm37.expect``' Intrinsic
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Syntax:
 """""""
 
-This is an overloaded intrinsic. You can use ``llvm.expect`` on any
+This is an overloaded intrinsic. You can use ``llvm37.expect`` on any
 integer bit width.
 
 ::
 
-      declare i1 @llvm.expect.i1(i1 <val>, i1 <expected_val>)
-      declare i32 @llvm.expect.i32(i32 <val>, i32 <expected_val>)
-      declare i64 @llvm.expect.i64(i64 <val>, i64 <expected_val>)
+      declare i1 @llvm37.expect.i1(i1 <val>, i1 <expected_val>)
+      declare i32 @llvm37.expect.i32(i32 <val>, i32 <expected_val>)
+      declare i64 @llvm37.expect.i64(i64 <val>, i64 <expected_val>)
 
 Overview:
 """""""""
 
-The ``llvm.expect`` intrinsic provides information about expected (the
+The ``llvm37.expect`` intrinsic provides information about expected (the
 most probable) value of ``val``, which can be used by optimizers.
 
 Arguments:
 """"""""""
 
-The ``llvm.expect`` intrinsic takes two arguments. The first argument is
+The ``llvm37.expect`` intrinsic takes two arguments. The first argument is
 a value. The second argument is an expected value, this needs to be a
 constant value, variables are not allowed.
 
@@ -11196,7 +11196,7 @@ This intrinsic is lowered to the ``val``.
 
 .. _int_assume:
 
-'``llvm.assume``' Intrinsic
+'``llvm37.assume``' Intrinsic
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Syntax:
@@ -11204,12 +11204,12 @@ Syntax:
 
 ::
 
-      declare void @llvm.assume(i1 %cond)
+      declare void @llvm37.assume(i1 %cond)
 
 Overview:
 """""""""
 
-The ``llvm.assume`` allows the optimizer to assume that the provided
+The ``llvm37.assume`` allows the optimizer to assume that the provided
 condition is true. This information can then be used in simplifying other parts
 of the code.
 
@@ -11228,17 +11228,17 @@ provided condition are not used for code generation. If the condition is
 violated during execution, the behavior is undefined.
 
 Note that the optimizer might limit the transformations performed on values
-used by the ``llvm.assume`` intrinsic in order to preserve the instructions
+used by the ``llvm37.assume`` intrinsic in order to preserve the instructions
 only used to form the intrinsic's input argument. This might prove undesirable
-if the extra information provided by the ``llvm.assume`` intrinsic does not cause
+if the extra information provided by the ``llvm37.assume`` intrinsic does not cause
 sufficient overall improvement in code quality. For this reason,
-``llvm.assume`` should not be used to document basic mathematical invariants
+``llvm37.assume`` should not be used to document basic mathematical invariants
 that the optimizer can otherwise deduce or facts that are of little use to the
 optimizer.
 
 .. _bitset.test:
 
-'``llvm.bitset.test``' Intrinsic
+'``llvm37.bitset.test``' Intrinsic
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Syntax:
@@ -11246,7 +11246,7 @@ Syntax:
 
 ::
 
-      declare i1 @llvm.bitset.test(i8* %ptr, metadata %bitset) nounwind readnone
+      declare i1 @llvm37.bitset.test(i8* %ptr, metadata %bitset) nounwind readnone
 
 
 Arguments:
@@ -11258,10 +11258,10 @@ metadata string containing the name of a :doc:`bitset <BitSets>`.
 Overview:
 """""""""
 
-The ``llvm.bitset.test`` intrinsic tests whether the given pointer is a
+The ``llvm37.bitset.test`` intrinsic tests whether the given pointer is a
 member of the given bitset.
 
-'``llvm.donothing``' Intrinsic
+'``llvm37.donothing``' Intrinsic
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Syntax:
@@ -11269,13 +11269,13 @@ Syntax:
 
 ::
 
-      declare void @llvm.donothing() nounwind readnone
+      declare void @llvm37.donothing() nounwind readnone
 
 Overview:
 """""""""
 
-The ``llvm.donothing`` intrinsic doesn't perform any operation. It's one of only
-two intrinsics (besides ``llvm.experimental.patchpoint``) that can be called
+The ``llvm37.donothing`` intrinsic doesn't perform any operation. It's one of only
+two intrinsics (besides ``llvm37.experimental.patchpoint``) that can be called
 with an invoke instruction.
 
 Arguments:
@@ -11292,6 +11292,6 @@ by codegen.
 Stack Map Intrinsics
 --------------------
 
-LLVM provides experimental intrinsics to support runtime patching
+LLVM37 provides experimental intrinsics to support runtime patching
 mechanisms commonly desired in dynamic language JITs. These intrinsics
 are described in :doc:`StackMaps`.

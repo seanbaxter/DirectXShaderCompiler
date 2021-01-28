@@ -2,11 +2,11 @@
 <Vsix Version="1.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2010">
   <Identifier Id="20dbc914-1c7a-4992-b236-ef58b37850eb">
     <Name>ClangFormat</Name>
-    <Author>LLVM</Author>
+    <Author>LLVM37</Author>
     <Version>@CLANG_FORMAT_VS_VERSION@</Version>
     <Description xml:space="preserve">A tool to format C/C++/Obj-C code.</Description>
     <Locale>1033</Locale>
-    <MoreInfoUrl>http://clang.llvm.org/docs/ClangFormat.html</MoreInfoUrl>
+    <MoreInfoUrl>http://clang.llvm37.org/docs/ClangFormat.html</MoreInfoUrl>
     <License>license.txt</License>
     <InstalledByMsi>false</InstalledByMsi>
     <SupportedProducts>

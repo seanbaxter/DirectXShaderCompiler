@@ -9,9 +9,9 @@
 //                                                                           //
 ///////////////////////////////////////////////////////////////////////////////
 
-#include "llvm/Support/ManagedStatic.h"
-#include "llvm/Support/FileSystem.h"
-#include "llvm/Support/MD5.h"
+#include "llvm37/Support/ManagedStatic.h"
+#include "llvm37/Support/FileSystem.h"
+#include "llvm37/Support/MD5.h"
 #include "dxc/Support/WinIncludes.h"
 #include "dxc/Support/Global.h"
 #include "Tracing/DxcRuntimeEtw.h"
@@ -83,7 +83,7 @@ static HRESULT InitMaybeFail() throw() {
     IFC(DxcInitThreadMalloc());
     DxcSetThreadMallocToDefault();
     memSetup = true;
-    if (::llvm::sys::fs::SetupPerThreadFileSystem()) {
+    if (::llvm37::sys::fs::SetupPerThreadFileSystem()) {
         hr = E_FAIL;
         goto Cleanup;
     }
@@ -120,8 +120,8 @@ BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD Reason, LPVOID )
     DxcRuntimeEtw_DxcRuntimeShutdown_Start();
 
     DxcSetThreadMallocToDefault();
-    ::llvm::sys::fs::CleanupPerThreadFileSystem();
-    ::llvm::llvm_shutdown();
+    ::llvm37::sys::fs::CleanupPerThreadFileSystem();
+    ::llvm37::llvm37_shutdown();
     DxcClearThreadMalloc();
     DxcCleanupThreadMalloc();
 

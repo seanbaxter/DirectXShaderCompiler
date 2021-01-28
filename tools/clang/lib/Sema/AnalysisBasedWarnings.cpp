@@ -1,6 +1,6 @@
 //=- AnalysisBasedWarnings.cpp - Sema warnings based on libAnalysis -*- C++ -*-=//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -38,16 +38,16 @@
 #include "clang/Lex/Preprocessor.h"
 #include "clang/Sema/ScopeInfo.h"
 #include "clang/Sema/SemaInternal.h"
-#include "llvm/ADT/ArrayRef.h"
-#include "llvm/ADT/BitVector.h"
-#include "llvm/ADT/FoldingSet.h"
-#include "llvm/ADT/ImmutableMap.h"
-#include "llvm/ADT/MapVector.h"
-#include "llvm/ADT/PostOrderIterator.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/ADT/StringRef.h"
-#include "llvm/Support/Casting.h"
+#include "llvm37/ADT/ArrayRef.h"
+#include "llvm37/ADT/BitVector.h"
+#include "llvm37/ADT/FoldingSet.h"
+#include "llvm37/ADT/ImmutableMap.h"
+#include "llvm37/ADT/MapVector.h"
+#include "llvm37/ADT/PostOrderIterator.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/ADT/StringRef.h"
+#include "llvm37/Support/Casting.h"
 #include <algorithm>
 #include <deque>
 #include <iterator>
@@ -173,7 +173,7 @@ enum RecursiveState {
 
 static void checkForFunctionCall(Sema &S, const FunctionDecl *FD,
                                  CFGBlock &Block, unsigned ExitID,
-                                 llvm::SmallVectorImpl<RecursiveState> &States,
+                                 llvm37::SmallVectorImpl<RecursiveState> &States,
                                  RecursiveState State) {
   unsigned ID = Block.getBlockID();
 
@@ -249,7 +249,7 @@ static void checkRecursiveFunction(Sema &S, const FunctionDecl *FD,
     return;
 
   // Mark all nodes as FoundNoPath, then begin processing the entry block.
-  llvm::SmallVector<RecursiveState, 16> states(cfg->getNumBlockIDs(),
+  llvm37::SmallVector<RecursiveState, 16> states(cfg->getNumBlockIDs(),
                                                FoundNoPath);
   checkForFunctionCall(S, FD, cfg->getEntry(), cfg->getExit().getBlockID(),
                        states, FoundPathWithNoRecursiveCall);
@@ -287,7 +287,7 @@ static ControlFlowKind CheckFallThrough(AnalysisDeclContext &AC) {
 
   // The CFG leaves in dead things, and we don't want the dead code paths to
   // confuse us, so we mark all live things first.
-  llvm::BitVector live(cfg->getNumBlockIDs());
+  llvm37::BitVector live(cfg->getNumBlockIDs());
   unsigned count = reachable_code::ScanReachableFromBlock(&cfg->getEntry(),
                                                           live);
 
@@ -900,7 +900,7 @@ namespace {
       (void)Found;
     }
 
-    typedef llvm::SmallPtrSet<const AttributedStmt*, 8> AttrStmts;
+    typedef llvm37::SmallPtrSet<const AttributedStmt*, 8> AttrStmts;
 
     const AttrStmts &getFallthroughStmts() const {
       return FallthroughStmts;
@@ -1056,7 +1056,7 @@ namespace {
     bool FoundSwitchStatements;
     AttrStmts FallthroughStmts;
     Sema &S;
-    llvm::SmallPtrSet<const CFGBlock *, 16> ReachableBlocks;
+    llvm37::SmallPtrSet<const CFGBlock *, 16> ReachableBlocks;
   };
 }
 
@@ -1157,7 +1157,7 @@ static bool isInLoop(const ASTContext &Ctx, const ParentMap &PM,
       return true;
     case Stmt::DoStmtClass: {
       const Expr *Cond = cast<DoStmt>(S)->getCond();
-      llvm::APSInt Val;
+      llvm37::APSInt Val;
       if (!Cond->EvaluateAsInt(Val, Ctx))
         return true;
       return Val.getBoolValue();
@@ -1303,7 +1303,7 @@ static void diagnoseRepeatedUseOfWeak(Sema &S,
     else if (isa<ObjCIvarDecl>(D))
       ObjectKind = Ivar;
     else
-      llvm_unreachable("Unexpected weak object kind!");
+      llvm37_unreachable("Unexpected weak object kind!");
 
     // Show the first time the object was read.
     S.Diag(FirstRead->getLocStart(), DiagKind)
@@ -1325,11 +1325,11 @@ namespace {
 class UninitValsDiagReporter : public UninitVariablesHandler {
   Sema &S;
   typedef SmallVector<UninitUse, 2> UsesVec;
-  typedef llvm::PointerIntPair<UsesVec *, 1, bool> MappedType;
+  typedef llvm37::PointerIntPair<UsesVec *, 1, bool> MappedType;
   // Prefer using MapVector to DenseMap, so that iteration order will be
   // the same as insertion order. This is needed to obtain a deterministic
   // order of diagnostics when calling flushDiagnostics().
-  typedef llvm::MapVector<const VarDecl *, MappedType> UsesMap;
+  typedef llvm37::MapVector<const VarDecl *, MappedType> UsesMap;
   UsesMap *uses;
   
 public:
@@ -2074,12 +2074,12 @@ AnalysisBasedWarnings::IssueWarnings(sema::AnalysisBasedWarnings::Policy P,
 }
 
 void clang::sema::AnalysisBasedWarnings::PrintStats() const {
-  llvm::errs() << "\n*** Analysis Based Warnings Stats:\n";
+  llvm37::errs() << "\n*** Analysis Based Warnings Stats:\n";
 
   unsigned NumCFGsBuilt = NumFunctionsAnalyzed - NumFunctionsWithBadCFGs;
   unsigned AvgCFGBlocksPerFunction =
       !NumCFGsBuilt ? 0 : NumCFGBlocks/NumCFGsBuilt;
-  llvm::errs() << NumFunctionsAnalyzed << " functions analyzed ("
+  llvm37::errs() << NumFunctionsAnalyzed << " functions analyzed ("
                << NumFunctionsWithBadCFGs << " w/o CFGs).\n"
                << "  " << NumCFGBlocks << " CFG blocks built.\n"
                << "  " << AvgCFGBlocksPerFunction
@@ -2091,7 +2091,7 @@ void clang::sema::AnalysisBasedWarnings::PrintStats() const {
       : NumUninitAnalysisVariables/NumUninitAnalysisFunctions;
   unsigned AvgUninitBlockVisitsPerFunction = !NumUninitAnalysisFunctions ? 0
       : NumUninitAnalysisBlockVisits/NumUninitAnalysisFunctions;
-  llvm::errs() << NumUninitAnalysisFunctions
+  llvm37::errs() << NumUninitAnalysisFunctions
                << " functions analyzed for uninitialiazed variables\n"
                << "  " << NumUninitAnalysisVariables << " variables analyzed.\n"
                << "  " << AvgUninitVariablesPerFunction

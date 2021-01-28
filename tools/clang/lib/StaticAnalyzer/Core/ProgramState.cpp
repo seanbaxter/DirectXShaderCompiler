@@ -1,6 +1,6 @@
 //= ProgramState.cpp - Path-Sensitive "State" for tracking values --*- C++ -*--=
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -17,7 +17,7 @@
 #include "clang/StaticAnalyzer/Core/PathSensitive/ProgramStateTrait.h"
 #include "clang/StaticAnalyzer/Core/PathSensitive/SubEngine.h"
 #include "clang/StaticAnalyzer/Core/PathSensitive/TaintManager.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/Support/raw_ostream.h"
 
 using namespace clang;
 using namespace ento;
@@ -53,7 +53,7 @@ ProgramState::ProgramState(ProgramStateManager *mgr, const Environment& env,
 }
 
 ProgramState::ProgramState(const ProgramState &RHS)
-    : llvm::FoldingSetNode(),
+    : llvm37::FoldingSetNode(),
       stateMgr(RHS.stateMgr),
       Env(RHS.Env),
       store(RHS.store),
@@ -70,7 +70,7 @@ ProgramState::~ProgramState() {
 ProgramStateManager::ProgramStateManager(ASTContext &Ctx,
                                          StoreManagerCreator CreateSMgr,
                                          ConstraintManagerCreator CreateCMgr,
-                                         llvm::BumpPtrAllocator &alloc,
+                                         llvm37::BumpPtrAllocator &alloc,
                                          SubEngine *SubEng)
   : Eng(SubEng), EnvMgr(alloc), GDMFactory(alloc),
     svalBuilder(createSimpleSValBuilder(alloc, Ctx, *this)),
@@ -257,7 +257,7 @@ SVal ProgramState::getSVal(Loc location, QualType T) const {
   // about).
   if (!T.isNull()) {
     if (SymbolRef sym = V.getAsSymbol()) {
-      if (const llvm::APSInt *Int = getStateManager()
+      if (const llvm37::APSInt *Int = getStateManager()
                                     .getConstraintManager()
                                     .getSymVal(this, sym)) {
         // FIXME: Because we don't correctly model (yet) sign-extension
@@ -274,7 +274,7 @@ SVal ProgramState::getSVal(Loc location, QualType T) const {
         //  The symbolic value stored to 'x' is actually the conjured
         //  symbol for the call to foo(); the type of that symbol is 'char',
         //  not unsigned.
-        const llvm::APSInt &NewV = getBasicVals().Convert(T, *Int);
+        const llvm37::APSInt &NewV = getBasicVals().Convert(T, *Int);
         
         if (V.getAs<Loc>())
           return loc::ConcreteInt(NewV);
@@ -380,7 +380,7 @@ ProgramStateRef ProgramStateManager::getPersistentStateWithGDM(
 
 ProgramStateRef ProgramStateManager::getPersistentState(ProgramState &State) {
 
-  llvm::FoldingSetNodeID ID;
+  llvm37::FoldingSetNodeID ID;
   State.Profile(ID);
   void *InsertPos;
 
@@ -440,7 +440,7 @@ void ProgramState::printDOT(raw_ostream &Out) const {
 }
 
 void ProgramState::dump() const {
-  print(llvm::errs());
+  print(llvm37::errs());
 }
 
 void ProgramState::printTaint(raw_ostream &Out,
@@ -456,7 +456,7 @@ void ProgramState::printTaint(raw_ostream &Out,
 }
 
 void ProgramState::dumpTaint() const {
-  printTaint(llvm::errs());
+  printTaint(llvm37::errs());
 }
 
 //===----------------------------------------------------------------------===//
@@ -469,7 +469,7 @@ void *const* ProgramState::FindGDM(void *K) const {
 
 void*
 ProgramStateManager::FindGDMContext(void *K,
-                               void *(*CreateContext)(llvm::BumpPtrAllocator&),
+                               void *(*CreateContext)(llvm37::BumpPtrAllocator&),
                                void (*DeleteContext)(void*)) {
 
   std::pair<void*, void (*)(void*)>& p = GDMContexts[K];

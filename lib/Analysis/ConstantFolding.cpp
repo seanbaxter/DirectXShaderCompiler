@@ -1,6 +1,6 @@
 //===-- ConstantFolding.cpp - Fold instructions into constants ------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -16,34 +16,34 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Analysis/ConstantFolding.h"
-#include "llvm/ADT/SmallPtrSet.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/ADT/StringMap.h"
-#include "llvm/Analysis/TargetLibraryInfo.h"
-#include "llvm/Analysis/ValueTracking.h"
-#include "llvm/Config/config.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/DerivedTypes.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/GetElementPtrTypeIterator.h"
-#include "llvm/IR/GlobalVariable.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/Intrinsics.h"
-#include "llvm/IR/Operator.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/MathExtras.h"
+#include "llvm37/Analysis/ConstantFolding.h"
+#include "llvm37/ADT/SmallPtrSet.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/ADT/StringMap.h"
+#include "llvm37/Analysis/TargetLibraryInfo.h"
+#include "llvm37/Analysis/ValueTracking.h"
+#include "llvm37/Config/config.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/IR/DerivedTypes.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/GetElementPtrTypeIterator.h"
+#include "llvm37/IR/GlobalVariable.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/Intrinsics.h"
+#include "llvm37/IR/Operator.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/MathExtras.h"
 #include <cerrno>
 #include <cmath>
 
-#include "llvm/Analysis/DxilConstantFolding.h" // HLSL Change
+#include "llvm37/Analysis/DxilConstantFolding.h" // HLSL Change
 
 #ifdef HAVE_FENV_H
 #include <fenv.h>
 #endif
 
-using namespace llvm;
+using namespace llvm37;
 
 //===----------------------------------------------------------------------===//
 // Constant Folding internal helper functions
@@ -527,7 +527,7 @@ static Constant *ConstantFoldLoadThroughBitcast(ConstantExpr *CE,
 
 /// Return the value that a load from C would produce if it is constant and
 /// determinable. If this is not determinable, return null.
-Constant *llvm::ConstantFoldLoadFromConstPtr(Constant *C,
+Constant *llvm37::ConstantFoldLoadFromConstPtr(Constant *C,
                                              const DataLayout &DL) {
   // First, try the easy cases:
   if (GlobalVariable *GV = dyn_cast<GlobalVariable>(C))
@@ -891,7 +891,7 @@ static Constant *SymbolicallyEvaluateGEP(Type *SrcTy, ArrayRef<Constant *> Ops,
 /// Note that this fails if not all of the operands are constant.  Otherwise,
 /// this function can only fail when attempting to fold instructions like loads
 /// and stores, which have no constant expression form.
-Constant *llvm::ConstantFoldInstruction(Instruction *I, const DataLayout &DL,
+Constant *llvm37::ConstantFoldInstruction(Instruction *I, const DataLayout &DL,
                                         const TargetLibraryInfo *TLI) {
   // Handle PHI nodes quickly here...
   if (PHINode *PN = dyn_cast<PHINode>(I)) {
@@ -987,7 +987,7 @@ ConstantFoldConstantExpressionImpl(const ConstantExpr *CE, const DataLayout &DL,
 /// Attempt to fold the constant expression
 /// using the specified DataLayout.  If successful, the constant result is
 /// result is returned, if not, null is returned.
-Constant *llvm::ConstantFoldConstantExpression(const ConstantExpr *CE,
+Constant *llvm37::ConstantFoldConstantExpression(const ConstantExpr *CE,
                                                const DataLayout &DL,
                                                const TargetLibraryInfo *TLI) {
   SmallPtrSet<ConstantExpr *, 4> FoldedOps;
@@ -1004,7 +1004,7 @@ Constant *llvm::ConstantFoldConstantExpression(const ConstantExpr *CE,
 /// information, due to only being passed an opcode and operands. Constant
 /// folding using this function strips this information.
 ///
-Constant *llvm::ConstantFoldInstOperands(unsigned Opcode, Type *DestTy,
+Constant *llvm37::ConstantFoldInstOperands(unsigned Opcode, Type *DestTy,
                                          ArrayRef<Constant *> Ops,
                                          const DataLayout &DL,
                                          const TargetLibraryInfo *TLI) {
@@ -1021,7 +1021,7 @@ Constant *llvm::ConstantFoldInstOperands(unsigned Opcode, Type *DestTy,
   switch (Opcode) {
   default: return nullptr;
   case Instruction::ICmp:
-  case Instruction::FCmp: llvm_unreachable("Invalid for compares");
+  case Instruction::FCmp: llvm37_unreachable("Invalid for compares");
   case Instruction::Call:
     if (Function *F = dyn_cast<Function>(Ops.back()))
       if (canConstantFoldCallTo(F))
@@ -1102,7 +1102,7 @@ Constant *llvm::ConstantFoldInstOperands(unsigned Opcode, Type *DestTy,
 /// Attempt to constant fold a compare
 /// instruction (icmp/fcmp) with the specified operands.  If it fails, it
 /// returns a constant expression of the specified operands.
-Constant *llvm::ConstantFoldCompareInstOperands(unsigned Predicate,
+Constant *llvm37::ConstantFoldCompareInstOperands(unsigned Predicate,
                                                 Constant *Ops0, Constant *Ops1,
                                                 const DataLayout &DL,
                                                 const TargetLibraryInfo *TLI) {
@@ -1187,7 +1187,7 @@ Constant *llvm::ConstantFoldCompareInstOperands(unsigned Predicate,
 /// Given a constant and a getelementptr constantexpr, return the constant value
 /// being addressed by the constant expression, or null if something is funny
 /// and we can't decide.
-Constant *llvm::ConstantFoldLoadThroughGEPConstantExpr(Constant *C,
+Constant *llvm37::ConstantFoldLoadThroughGEPConstantExpr(Constant *C,
                                                        ConstantExpr *CE) {
   if (!CE->getOperand(1)->isNullValue())
     return nullptr;  // Do not allow stepping over the value!
@@ -1205,7 +1205,7 @@ Constant *llvm::ConstantFoldLoadThroughGEPConstantExpr(Constant *C,
 /// Given a constant and getelementptr indices (with an *implied* zero pointer
 /// index that is not in the list), return the constant value being addressed by
 /// a virtual load, or null if something is funny and we can't decide.
-Constant *llvm::ConstantFoldLoadThroughGEPIndices(Constant *C,
+Constant *llvm37::ConstantFoldLoadThroughGEPIndices(Constant *C,
                                                   ArrayRef<Constant*> Indices) {
   // Loop over all of the operands, tracking down which value we are
   // addressing.
@@ -1223,7 +1223,7 @@ Constant *llvm::ConstantFoldLoadThroughGEPIndices(Constant *C,
 //
 
 /// Return true if it's even possible to fold a call to the specified function.
-bool llvm::canConstantFoldCallTo(const Function *F) {
+bool llvm37::canConstantFoldCallTo(const Function *F) {
   if (hlsl::CanConstantFoldCallTo(F)) // HLSL Change
     return true;
 
@@ -1315,13 +1315,13 @@ static Constant *GetConstantFoldFPValue(double V, Type *Ty) {
     return ConstantFP::get(Ty->getContext(), APFloat((float)V));
   if (Ty->isDoubleTy())
     return ConstantFP::get(Ty->getContext(), APFloat(V));
-  llvm_unreachable("Can only constant fold half/float/double");
+  llvm37_unreachable("Can only constant fold half/float/double");
 
 }
 
 namespace {
 /// Clear the floating-point exception state.
-static inline void llvm_fenv_clearexcept() {
+static inline void llvm37_fenv_clearexcept() {
 #if defined(HAVE_FENV_H) && HAVE_DECL_FE_ALL_EXCEPT
   feclearexcept(FE_ALL_EXCEPT);
 #endif
@@ -1329,7 +1329,7 @@ static inline void llvm_fenv_clearexcept() {
 }
 
 /// Test if a floating-point exception was raised.
-static inline bool llvm_fenv_testexcept() {
+static inline bool llvm37_fenv_testexcept() {
   int errno_val = errno;
   if (errno_val == ERANGE || errno_val == EDOM)
     return true;
@@ -1342,12 +1342,12 @@ static inline bool llvm_fenv_testexcept() {
 } // End namespace
 
 // HLSL Change: changed calling convention of NativeFP to __cdecl and make non-static
-Constant *llvm::ConstantFoldFP(double (__cdecl *NativeFP)(double), double V,
+Constant *llvm37::ConstantFoldFP(double (__cdecl *NativeFP)(double), double V,
                                 Type *Ty) {
-  llvm_fenv_clearexcept();
+  llvm37_fenv_clearexcept();
   V = NativeFP(V);
-  if (llvm_fenv_testexcept()) {
-    llvm_fenv_clearexcept();
+  if (llvm37_fenv_testexcept()) {
+    llvm37_fenv_clearexcept();
     return nullptr;
   }
 
@@ -1357,10 +1357,10 @@ Constant *llvm::ConstantFoldFP(double (__cdecl *NativeFP)(double), double V,
 // HLSL Change: changed calling convention of NativeFP to __cdecl
 static Constant *ConstantFoldBinaryFP(double (__cdecl *NativeFP)(double, double),
                                       double V, double W, Type *Ty) {
-  llvm_fenv_clearexcept();
+  llvm37_fenv_clearexcept();
   V = NativeFP(V, W);
-  if (llvm_fenv_testexcept()) {
-    llvm_fenv_clearexcept();
+  if (llvm37_fenv_testexcept()) {
+    llvm37_fenv_clearexcept();
     return nullptr;
   }
 
@@ -1396,7 +1396,7 @@ static Constant *ConstantFoldConvertToInt(const APFloat &Val,
 #endif // HLSL Change Ends
 
 // HLSL Change - make non-static.
-double llvm::getValueAsDouble(ConstantFP *Op) {
+double llvm37::getValueAsDouble(ConstantFP *Op) {
   Type *Ty = Op->getType();
 
   if (Ty->isFloatTy())
@@ -1523,7 +1523,7 @@ static Constant *ConstantFoldScalarCall(StringRef Name, unsigned IntrinsicID,
           else {
             // Unlike the sqrt definitions in C/C++, POSIX, and IEEE-754 - which
             // all guarantee or favor returning NaN - the square root of a
-            // negative number is not defined for the LLVM sqrt intrinsic.
+            // negative number is not defined for the LLVM37 sqrt intrinsic.
             // This is because the intrinsic should only be emitted in place of
             // libm's sqrt function when using "no-nans-fp-math".
             return UndefValue::get(Ty);
@@ -1686,7 +1686,7 @@ static Constant *ConstantFoldScalarCall(StringRef Name, unsigned IntrinsicID,
           APInt Res;
           bool Overflow;
           switch (IntrinsicID) {
-          default: llvm_unreachable("Invalid case");
+          default: llvm37_unreachable("Invalid case");
           case Intrinsic::sadd_with_overflow:
             Res = Op1->getValue().sadd_ov(Op2->getValue(), Overflow);
             break;
@@ -1786,7 +1786,7 @@ static Constant *ConstantFoldVectorCall(StringRef Name, unsigned IntrinsicID,
 /// Attempt to constant fold a call to the specified function
 /// with the specified arguments, returning null if unsuccessful.
 Constant *
-llvm::ConstantFoldCall(Function *F, ArrayRef<Constant *> Operands,
+llvm37::ConstantFoldCall(Function *F, ArrayRef<Constant *> Operands,
                        const TargetLibraryInfo *TLI) {
   if (!F->hasName())
     return nullptr;

@@ -1,6 +1,6 @@
 //===--- SemaStmtAsm.cpp - Semantic Analysis for Asm Statements -----------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -21,9 +21,9 @@
 #include "clang/Sema/Lookup.h"
 #include "clang/Sema/Scope.h"
 #include "clang/Sema/ScopeInfo.h"
-#include "llvm/ADT/ArrayRef.h"
-#include "llvm/ADT/BitVector.h"
-#include "llvm/MC/MCParser/MCAsmParser.h"
+#include "llvm37/ADT/ArrayRef.h"
+#include "llvm37/ADT/BitVector.h"
+#include "llvm37/MC/MCParser/MCAsmParser.h"
 using namespace clang;
 using namespace sema;
 
@@ -255,7 +255,7 @@ StmtResult Sema::ActOnGCCAsmStmt(SourceLocation AsmLoc, bool IsSimple,
                          << InputExpr->getSourceRange());
     } else if (Info.requiresImmediateConstant() && !Info.allowsRegister()) {
       if (!InputExpr->isValueDependent()) {
-        llvm::APSInt Result;
+        llvm37::APSInt Result;
         if (!InputExpr->EvaluateAsInt(Result, Context))
            return StmtError(
                Diag(InputExpr->getLocStart(), diag::err_asm_immediate_expected)
@@ -507,7 +507,7 @@ StmtResult Sema::ActOnGCCAsmStmt(SourceLocation AsmLoc, bool IsSimple,
 ExprResult Sema::LookupInlineAsmIdentifier(CXXScopeSpec &SS,
                                            SourceLocation TemplateKWLoc,
                                            UnqualifiedId &Id,
-                                           llvm::InlineAsmIdentifierInfo &Info,
+                                           llvm37::InlineAsmIdentifierInfo &Info,
                                            bool IsUnevaluatedContext) {
   Info.clear();
 
@@ -642,7 +642,7 @@ LabelDecl *Sema::GetOrCreateMSAsmLabel(StringRef ExternalLabelName,
   } else {
     // Otherwise, insert it, but only resolve it if we have seen the label itself.
     std::string InternalName;
-    llvm::raw_string_ostream OS(InternalName);
+    llvm37::raw_string_ostream OS(InternalName);
     // Create an internal name for the label.  The name should not be a valid mangled
     // name, and should be unique.  We use a dot to make the name an invalid mangled
     // name.

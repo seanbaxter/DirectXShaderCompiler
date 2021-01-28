@@ -1,4 +1,4 @@
-; RUN: not llvm-as < %s >/dev/null 2> %t
+; RUN: not llvm37-as < %s >/dev/null 2> %t
 ; RUN: FileCheck %s < %t
 ; Test that a vector struct index with non-equal elements is rejected.
 

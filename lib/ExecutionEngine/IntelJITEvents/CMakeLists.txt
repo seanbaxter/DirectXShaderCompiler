@@ -1,6 +1,6 @@
 include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/.. )
 
-add_llvm_library(LLVMIntelJITEvents
+add_llvm_library(LLVM37IntelJITEvents
   IntelJITEventListener.cpp
   jitprofiling.c
 

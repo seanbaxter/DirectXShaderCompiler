@@ -18,17 +18,17 @@
 #include "dxc/Support/HLSLOptions.h"
 #include "dxc/DxilContainer/DxilContainer.h"
 
-#include "llvm/Support/CommandLine.h"
+#include "llvm37/Support/CommandLine.h"
 #include <dia2.h>
 #include <intsafe.h>
 
-using namespace llvm;
-using namespace llvm::opt;
+using namespace llvm37;
+using namespace llvm37::opt;
 using namespace dxc;
 using namespace hlsl::options;
 
 static cl::opt<std::string> InputFilename(cl::Positional,
-                                          cl::desc("<input .llvm file>"),
+                                          cl::desc("<input .llvm37 file>"),
                                           cl::init("-"));
 
 static cl::opt<std::string> OutputFilename("o",

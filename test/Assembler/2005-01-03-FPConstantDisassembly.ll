@@ -1,4 +1,4 @@
-; RUN: llvm-as < %s | llvm-dis | FileCheck %s
+; RUN: llvm37-as < %s | llvm37-dis | FileCheck %s
 ; RUN: verify-uselistorder %s
 
 define double @test() {

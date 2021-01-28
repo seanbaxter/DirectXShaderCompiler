@@ -1,6 +1,6 @@
 //===--- ExternalASTSource.h - Abstract External AST Interface --*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,12 +11,12 @@
 //  construction of AST nodes from some external source.
 //
 //===----------------------------------------------------------------------===//
-#ifndef LLVM_CLANG_AST_EXTERNALASTSOURCE_H
-#define LLVM_CLANG_AST_EXTERNALASTSOURCE_H
+#ifndef LLVM37_CLANG_AST_EXTERNALASTSOURCE_H
+#define LLVM37_CLANG_AST_EXTERNALASTSOURCE_H
 
 #include "clang/AST/CharUnits.h"
 #include "clang/AST/DeclBase.h"
-#include "llvm/ADT/DenseMap.h"
+#include "llvm37/ADT/DenseMap.h"
 
 namespace clang {
 
@@ -166,7 +166,7 @@ public:
   };
 
   /// \brief Return a descriptor for the corresponding module, if one exists.
-  virtual llvm::Optional<ASTSourceDescriptor> getSourceDescriptor(unsigned ID);
+  virtual llvm37::Optional<ASTSourceDescriptor> getSourceDescriptor(unsigned ID);
   /// \brief Return a descriptor for the module.
   virtual ASTSourceDescriptor getSourceDescriptor(const Module &M);
 
@@ -282,9 +282,9 @@ public:
   /// \returns true if the record layout was provided, false otherwise.
   virtual bool layoutRecordType(
       const RecordDecl *Record, uint64_t &Size, uint64_t &Alignment,
-      llvm::DenseMap<const FieldDecl *, uint64_t> &FieldOffsets,
-      llvm::DenseMap<const CXXRecordDecl *, CharUnits> &BaseOffsets,
-      llvm::DenseMap<const CXXRecordDecl *, CharUnits> &VirtualBaseOffsets);
+      llvm37::DenseMap<const FieldDecl *, uint64_t> &FieldOffsets,
+      llvm37::DenseMap<const CXXRecordDecl *, CharUnits> &BaseOffsets,
+      llvm37::DenseMap<const CXXRecordDecl *, CharUnits> &VirtualBaseOffsets);
 
   //===--------------------------------------------------------------------===//
   // Queries for performance analysis.
@@ -406,7 +406,7 @@ struct LazyGenerationalUpdatePtr {
   };
 
   // Our value is represented as simply T if there is no external AST source.
-  typedef llvm::PointerUnion<T, LazyData*> ValueType;
+  typedef llvm37::PointerUnion<T, LazyData*> ValueType;
   ValueType Value;
 
   LazyGenerationalUpdatePtr(ValueType V) : Value(V) {}
@@ -469,7 +469,7 @@ public:
 
 /// Specialize PointerLikeTypeTraits to allow LazyGenerationalUpdatePtr to be
 /// placed into a PointerUnion.
-namespace llvm {
+namespace llvm37 {
 template<typename Owner, typename T,
          void (clang::ExternalASTSource::*Update)(Owner)>
 struct PointerLikeTypeTraits<
@@ -514,7 +514,7 @@ public:
   /// We define this as a wrapping iterator around an int. The
   /// iterator_adaptor_base class forwards the iterator methods to basic integer
   /// arithmetic.
-  class iterator : public llvm::iterator_adaptor_base<
+  class iterator : public llvm37::iterator_adaptor_base<
                        iterator, int, std::random_access_iterator_tag, T, int> {
     LazyVector *Self;
 

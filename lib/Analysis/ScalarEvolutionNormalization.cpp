@@ -1,6 +1,6 @@
 //===- ScalarEvolutionNormalization.cpp - See below -------------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -12,11 +12,11 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/IR/Dominators.h"
-#include "llvm/Analysis/LoopInfo.h"
-#include "llvm/Analysis/ScalarEvolutionExpressions.h"
-#include "llvm/Analysis/ScalarEvolutionNormalization.h"
-using namespace llvm;
+#include "llvm37/IR/Dominators.h"
+#include "llvm37/Analysis/LoopInfo.h"
+#include "llvm37/Analysis/ScalarEvolutionExpressions.h"
+#include "llvm37/Analysis/ScalarEvolutionNormalization.h"
+using namespace llvm37;
 
 /// IVUseShouldUsePostIncValue - We have discovered a "User" of an IV expression
 /// and now we need to decide whether the user should use the preinc or post-inc
@@ -99,7 +99,7 @@ TransformImpl(const SCEV *S, Instruction *User, Value *OperandValToReplace) {
       case scZeroExtend: return SE.getZeroExtendExpr(N, S->getType());
       case scSignExtend: return SE.getSignExtendExpr(N, S->getType());
       case scTruncate: return SE.getTruncateExpr(N, S->getType());
-      default: llvm_unreachable("Unexpected SCEVCastExpr kind!");
+      default: llvm37_unreachable("Unexpected SCEVCastExpr kind!");
       }
     return S;
   }
@@ -205,7 +205,7 @@ TransformImpl(const SCEV *S, Instruction *User, Value *OperandValToReplace) {
       case scMulExpr: return SE.getMulExpr(Operands);
       case scSMaxExpr: return SE.getSMaxExpr(Operands);
       case scUMaxExpr: return SE.getUMaxExpr(Operands);
-      default: llvm_unreachable("Unexpected SCEVNAryExpr kind!");
+      default: llvm37_unreachable("Unexpected SCEVNAryExpr kind!");
       }
     return S;
   }
@@ -220,7 +220,7 @@ TransformImpl(const SCEV *S, Instruction *User, Value *OperandValToReplace) {
     return S;
   }
 
-  llvm_unreachable("Unexpected SCEV kind!");
+  llvm37_unreachable("Unexpected SCEV kind!");
 }
 
 /// Manage recursive transformation across an expression DAG. Revisiting
@@ -242,7 +242,7 @@ TransformSubExpr(const SCEV *S, Instruction *User, Value *OperandValToReplace) {
 
 /// Top level driver for transforming an expression DAG into its requested
 /// post-inc form (either "Normalized" or "Denormalized").
-const SCEV *llvm::TransformForPostIncUse(TransformKind Kind,
+const SCEV *llvm37::TransformForPostIncUse(TransformKind Kind,
                                          const SCEV *S,
                                          Instruction *User,
                                          Value *OperandValToReplace,

@@ -1,6 +1,6 @@
 //===- PseudoLoweringEmitter.cpp - PseudoLowering Generator -----*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -9,16 +9,16 @@
 
 #include "CodeGenInstruction.h"
 #include "CodeGenTarget.h"
-#include "llvm/ADT/IndexedMap.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/ADT/StringMap.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/TableGen/Error.h"
-#include "llvm/TableGen/Record.h"
-#include "llvm/TableGen/TableGenBackend.h"
+#include "llvm37/ADT/IndexedMap.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/ADT/StringMap.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/TableGen/Error.h"
+#include "llvm37/TableGen/Record.h"
+#include "llvm37/TableGen/TableGenBackend.h"
 #include <vector>
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "pseudo-lowering"
 
@@ -114,7 +114,7 @@ addDagOperandMapping(Record *Rec, DagInit *Dag, CodeGenInstruction &Insn,
       // Since we added more than one, we also need to adjust the base.
       BaseIdx += NewOps - 1;
     } else
-      llvm_unreachable("Unhandled pseudo-expansion argument type!");
+      llvm37_unreachable("Unhandled pseudo-expansion argument type!");
   }
   return OpsAdded;
 }
@@ -292,10 +292,10 @@ void PseudoLoweringEmitter::run(raw_ostream &o) {
   emitLoweringEmitter(o);
 }
 
-namespace llvm {
+namespace llvm37 {
 
 void EmitPseudoLowering(RecordKeeper &RK, raw_ostream &OS) {
   PseudoLoweringEmitter(RK).run(OS);
 }
 
-} // End llvm namespace
+} // End llvm37 namespace

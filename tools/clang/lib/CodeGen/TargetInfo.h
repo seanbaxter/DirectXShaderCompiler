@@ -1,6 +1,6 @@
 //===---- TargetInfo.h - Encapsulate target details -------------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -12,16 +12,16 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_LIB_CODEGEN_TARGETINFO_H
-#define LLVM_CLANG_LIB_CODEGEN_TARGETINFO_H
+#ifndef LLVM37_CLANG_LIB_CODEGEN_TARGETINFO_H
+#define LLVM37_CLANG_LIB_CODEGEN_TARGETINFO_H
 
 #include "CGValue.h"
 #include "clang/AST/Type.h"
 #include "clang/Basic/LLVM.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/ADT/StringRef.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/ADT/StringRef.h"
 
-namespace llvm {
+namespace llvm37 {
 class Constant;
 class GlobalValue;
 class Type;
@@ -55,12 +55,12 @@ public:
 
   /// setTargetAttributes - Provides a convenient hook to handle extra
   /// target-specific attributes for the given global.
-  virtual void setTargetAttributes(const Decl *D, llvm::GlobalValue *GV,
+  virtual void setTargetAttributes(const Decl *D, llvm37::GlobalValue *GV,
                                    CodeGen::CodeGenModule &M) const {}
 
   /// emitTargetMD - Provides a convenient hook to handle extra
   /// target-specific metadata for the given global.
-  virtual void emitTargetMD(const Decl *D, llvm::GlobalValue *GV,
+  virtual void emitTargetMD(const Decl *D, llvm37::GlobalValue *GV,
                             CodeGen::CodeGenModule &M) const {}
 
   /// Determines the size of struct _Unwind_Exception on this platform,
@@ -95,7 +95,7 @@ public:
   ///
   /// Returns true if the operation is unsupported by this target.
   virtual bool initDwarfEHRegSizeTable(CodeGen::CodeGenFunction &CGF,
-                                       llvm::Value *Address) const {
+                                       llvm37::Value *Address) const {
     return true;
   }
 
@@ -104,8 +104,8 @@ public:
   /// next instruction that will be executed.
   ///
   /// Used by __builtin_extract_return_addr().
-  virtual llvm::Value *decodeReturnAddress(CodeGen::CodeGenFunction &CGF,
-                                           llvm::Value *Address) const {
+  virtual llvm37::Value *decodeReturnAddress(CodeGen::CodeGenFunction &CGF,
+                                           llvm37::Value *Address) const {
     return Address;
   }
 
@@ -114,27 +114,27 @@ public:
   /// by the system in a return slot.
   ///
   /// Used by __builtin_frob_return_addr().
-  virtual llvm::Value *encodeReturnAddress(CodeGen::CodeGenFunction &CGF,
-                                           llvm::Value *Address) const {
+  virtual llvm37::Value *encodeReturnAddress(CodeGen::CodeGenFunction &CGF,
+                                           llvm37::Value *Address) const {
     return Address;
   }
 
-  /// Corrects the low-level LLVM type for a given constraint and "usual"
+  /// Corrects the low-level LLVM37 type for a given constraint and "usual"
   /// type.
   ///
-  /// \returns A pointer to a new LLVM type, possibly the same as the original
+  /// \returns A pointer to a new LLVM37 type, possibly the same as the original
   /// on success; 0 on failure.
-  virtual llvm::Type *adjustInlineAsmType(CodeGen::CodeGenFunction &CGF,
+  virtual llvm37::Type *adjustInlineAsmType(CodeGen::CodeGenFunction &CGF,
                                           StringRef Constraint,
-                                          llvm::Type *Ty) const {
+                                          llvm37::Type *Ty) const {
     return Ty;
   }
 
   /// Adds constraints and types for result registers.
   virtual void addReturnRegisterOutputs(
       CodeGen::CodeGenFunction &CGF, CodeGen::LValue ReturnValue,
-      std::string &Constraints, std::vector<llvm::Type *> &ResultRegTypes,
-      std::vector<llvm::Type *> &ResultTruncRegTypes,
+      std::string &Constraints, std::vector<llvm37::Type *> &ResultRegTypes,
+      std::vector<llvm37::Type *> &ResultTruncRegTypes,
       std::vector<CodeGen::LValue> &ResultRegDests, std::string &AsmString,
       unsigned NumOutputs) const {}
 
@@ -158,7 +158,7 @@ public:
 
   /// Return a constant used by UBSan as a signature to identify functions
   /// possessing type information, or 0 if the platform is unsupported.
-  virtual llvm::Constant *
+  virtual llvm37::Constant *
   getUBSanFunctionSignature(CodeGen::CodeGenModule &CGM) const {
     return nullptr;
   }
@@ -210,14 +210,14 @@ public:
 
   /// Gets the linker options necessary to link a dependent library on this
   /// platform.
-  virtual void getDependentLibraryOption(llvm::StringRef Lib,
-                                         llvm::SmallString<24> &Opt) const;
+  virtual void getDependentLibraryOption(llvm37::StringRef Lib,
+                                         llvm37::SmallString<24> &Opt) const;
 
   /// Gets the linker options necessary to detect object file mismatches on
   /// this platform.
-  virtual void getDetectMismatchOption(llvm::StringRef Name,
-                                       llvm::StringRef Value,
-                                       llvm::SmallString<32> &Opt) const {}
+  virtual void getDetectMismatchOption(llvm37::StringRef Name,
+                                       llvm37::StringRef Value,
+                                       llvm37::SmallString<32> &Opt) const {}
 };
 }
 

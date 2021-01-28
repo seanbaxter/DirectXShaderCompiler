@@ -1,6 +1,6 @@
 //===--- ASTTypeTraits.cpp --------------------------------------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -85,7 +85,7 @@ ASTNodeKind ASTNodeKind::getFromNode(const Decl &D) {
 #define ABSTRACT_DECL(D)
 #include "clang/AST/DeclNodes.inc"
   };
-  llvm_unreachable("invalid decl kind");
+  llvm37_unreachable("invalid decl kind");
 }
 
 ASTNodeKind ASTNodeKind::getFromNode(const Stmt &S) {
@@ -96,7 +96,7 @@ ASTNodeKind ASTNodeKind::getFromNode(const Stmt &S) {
 #define ABSTRACT_STMT(S)
 #include "clang/AST/StmtNodes.inc"
   }
-  llvm_unreachable("invalid stmt kind");
+  llvm37_unreachable("invalid stmt kind");
 }
 
 ASTNodeKind ASTNodeKind::getFromNode(const Type &T) {
@@ -106,10 +106,10 @@ ASTNodeKind ASTNodeKind::getFromNode(const Type &T) {
 #define ABSTRACT_TYPE(Class, Base)
 #include "clang/AST/TypeNodes.def"
   }
-  llvm_unreachable("invalid type kind");
+  llvm37_unreachable("invalid type kind");
 }
 
-void DynTypedNode::print(llvm::raw_ostream &OS,
+void DynTypedNode::print(llvm37::raw_ostream &OS,
                          const PrintingPolicy &PP) const {
   if (const TemplateArgument *TA = get<TemplateArgument>())
     TA->print(PP, OS);
@@ -131,7 +131,7 @@ void DynTypedNode::print(llvm::raw_ostream &OS,
     OS << "Unable to print values of type " << NodeKind.asStringRef() << "\n";
 }
 
-void DynTypedNode::dump(llvm::raw_ostream &OS, SourceManager &SM) const {
+void DynTypedNode::dump(llvm37::raw_ostream &OS, SourceManager &SM) const {
   if (const Decl *D = get<Decl>())
     D->dump(OS);
   else if (const Stmt *S = get<Stmt>())

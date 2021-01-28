@@ -1,6 +1,6 @@
 //= ScanfFormatString.cpp - Analysis of printf format strings --*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -504,7 +504,7 @@ bool ScanfSpecifier::fixType(QualType QT, QualType RawQT,
   else if (PT->isUnsignedIntegerType())
     CS.setKind(ConversionSpecifier::uArg);
   else
-    llvm_unreachable("Unexpected type");
+    llvm37_unreachable("Unexpected type");
 
   return true;
 }

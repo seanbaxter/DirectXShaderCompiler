@@ -1,27 +1,27 @@
 //===- IntegerDivision.cpp - Unit tests for the integer division code -----===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Transforms/Utils/IntegerDivision.h"
-#include "llvm/IR/BasicBlock.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/GlobalValue.h"
-#include "llvm/IR/IRBuilder.h"
-#include "llvm/IR/Module.h"
+#include "llvm37/Transforms/Utils/IntegerDivision.h"
+#include "llvm37/IR/BasicBlock.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/GlobalValue.h"
+#include "llvm37/IR/IRBuilder.h"
+#include "llvm37/IR/Module.h"
 #include "gtest/gtest.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 namespace {
 
 
 TEST(IntegerDivision, SDiv) {
-  LLVMContext &C(getGlobalContext());
+  LLVM37Context &C(getGlobalContext());
   Module M("test division", C);
   IRBuilder<> Builder(C);
 
@@ -51,7 +51,7 @@ TEST(IntegerDivision, SDiv) {
 }
 
 TEST(IntegerDivision, UDiv) {
-  LLVMContext &C(getGlobalContext());
+  LLVM37Context &C(getGlobalContext());
   Module M("test division", C);
   IRBuilder<> Builder(C);
 
@@ -81,7 +81,7 @@ TEST(IntegerDivision, UDiv) {
 }
 
 TEST(IntegerDivision, SRem) {
-  LLVMContext &C(getGlobalContext());
+  LLVM37Context &C(getGlobalContext());
   Module M("test remainder", C);
   IRBuilder<> Builder(C);
 
@@ -111,7 +111,7 @@ TEST(IntegerDivision, SRem) {
 }
 
 TEST(IntegerDivision, URem) {
-  LLVMContext &C(getGlobalContext());
+  LLVM37Context &C(getGlobalContext());
   Module M("test remainder", C);
   IRBuilder<> Builder(C);
 
@@ -142,7 +142,7 @@ TEST(IntegerDivision, URem) {
 
 
 TEST(IntegerDivision, SDiv64) {
-  LLVMContext &C(getGlobalContext());
+  LLVM37Context &C(getGlobalContext());
   Module M("test division", C);
   IRBuilder<> Builder(C);
 
@@ -172,7 +172,7 @@ TEST(IntegerDivision, SDiv64) {
 }
 
 TEST(IntegerDivision, UDiv64) {
-  LLVMContext &C(getGlobalContext());
+  LLVM37Context &C(getGlobalContext());
   Module M("test division", C);
   IRBuilder<> Builder(C);
 
@@ -202,7 +202,7 @@ TEST(IntegerDivision, UDiv64) {
 }
 
 TEST(IntegerDivision, SRem64) {
-  LLVMContext &C(getGlobalContext());
+  LLVM37Context &C(getGlobalContext());
   Module M("test remainder", C);
   IRBuilder<> Builder(C);
 
@@ -232,7 +232,7 @@ TEST(IntegerDivision, SRem64) {
 }
 
 TEST(IntegerDivision, URem64) {
-  LLVMContext &C(getGlobalContext());
+  LLVM37Context &C(getGlobalContext());
   Module M("test remainder", C);
   IRBuilder<> Builder(C);
 

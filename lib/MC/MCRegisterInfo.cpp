@@ -1,6 +1,6 @@
 //=== MC/MCRegisterInfo.cpp - Target Register Description -------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,9 +11,9 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/MC/MCRegisterInfo.h"
+#include "llvm37/MC/MCRegisterInfo.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 unsigned MCRegisterInfo::getMatchingSuperReg(unsigned Reg, unsigned SubIdx,
                                              const MCRegisterClass *RC) const {
@@ -59,22 +59,22 @@ unsigned MCRegisterInfo::getSubRegIdxOffset(unsigned Idx) const {
 }
 
 int MCRegisterInfo::getDwarfRegNum(unsigned RegNum, bool isEH) const {
-  const DwarfLLVMRegPair *M = isEH ? EHL2DwarfRegs : L2DwarfRegs;
+  const DwarfLLVM37RegPair *M = isEH ? EHL2DwarfRegs : L2DwarfRegs;
   unsigned Size = isEH ? EHL2DwarfRegsSize : L2DwarfRegsSize;
 
-  DwarfLLVMRegPair Key = { RegNum, 0 };
-  const DwarfLLVMRegPair *I = std::lower_bound(M, M+Size, Key);
+  DwarfLLVM37RegPair Key = { RegNum, 0 };
+  const DwarfLLVM37RegPair *I = std::lower_bound(M, M+Size, Key);
   if (I == M+Size || I->FromReg != RegNum)
     return -1;
   return I->ToReg;
 }
 
-int MCRegisterInfo::getLLVMRegNum(unsigned RegNum, bool isEH) const {
-  const DwarfLLVMRegPair *M = isEH ? EHDwarf2LRegs : Dwarf2LRegs;
+int MCRegisterInfo::getLLVM37RegNum(unsigned RegNum, bool isEH) const {
+  const DwarfLLVM37RegPair *M = isEH ? EHDwarf2LRegs : Dwarf2LRegs;
   unsigned Size = isEH ? EHDwarf2LRegsSize : Dwarf2LRegsSize;
 
-  DwarfLLVMRegPair Key = { RegNum, 0 };
-  const DwarfLLVMRegPair *I = std::lower_bound(M, M+Size, Key);
+  DwarfLLVM37RegPair Key = { RegNum, 0 };
+  const DwarfLLVM37RegPair *I = std::lower_bound(M, M+Size, Key);
   assert(I != M+Size && I->FromReg == RegNum && "Invalid RegNum");
   return I->ToReg;
 }

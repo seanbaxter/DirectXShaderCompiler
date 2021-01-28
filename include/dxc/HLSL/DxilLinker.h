@@ -13,19 +13,19 @@
 
 #include <unordered_map>
 #include <unordered_set>
-#include "llvm/ADT/StringRef.h"
-#include "llvm/ADT/StringMap.h"
+#include "llvm37/ADT/StringRef.h"
+#include "llvm37/ADT/StringMap.h"
 #include <memory>
-#include "llvm/Support/ErrorOr.h"
+#include "llvm37/Support/ErrorOr.h"
 #include "dxc/HLSL/DxilExportMap.h"
 
-namespace llvm {
+namespace llvm37 {
 class Function;
 class GlobalVariable;
 class Constant;
 class Module;
-class LLVMContext;
-} // namespace llvm
+class LLVM37Context;
+} // namespace llvm37
 
 namespace hlsl {
 class DxilModule;
@@ -35,23 +35,23 @@ class DxilResourceBase;
 class DxilLinker {
 public:
   virtual ~DxilLinker() {}
-  static DxilLinker *CreateLinker(llvm::LLVMContext &Ctx, unsigned valMajor, unsigned valMinor);
+  static DxilLinker *CreateLinker(llvm37::LLVM37Context &Ctx, unsigned valMajor, unsigned valMinor);
 
   void SetValidatorVersion(unsigned valMajor, unsigned valMinor) { m_valMajor = valMajor, m_valMinor = valMinor; }
-  virtual bool HasLibNameRegistered(llvm::StringRef name) = 0;
-  virtual bool RegisterLib(llvm::StringRef name,
-                           std::unique_ptr<llvm::Module> pModule,
-                           std::unique_ptr<llvm::Module> pDebugModule) = 0;
-  virtual bool AttachLib(llvm::StringRef name) = 0;
-  virtual bool DetachLib(llvm::StringRef name) = 0;
+  virtual bool HasLibNameRegistered(llvm37::StringRef name) = 0;
+  virtual bool RegisterLib(llvm37::StringRef name,
+                           std::unique_ptr<llvm37::Module> pModule,
+                           std::unique_ptr<llvm37::Module> pDebugModule) = 0;
+  virtual bool AttachLib(llvm37::StringRef name) = 0;
+  virtual bool DetachLib(llvm37::StringRef name) = 0;
   virtual void DetachAll() = 0;
 
-  virtual std::unique_ptr<llvm::Module>
-  Link(llvm::StringRef entry, llvm::StringRef profile, dxilutil::ExportMap &exportMap) = 0;
+  virtual std::unique_ptr<llvm37::Module>
+  Link(llvm37::StringRef entry, llvm37::StringRef profile, dxilutil::ExportMap &exportMap) = 0;
 
 protected:
-  DxilLinker(llvm::LLVMContext &Ctx, unsigned valMajor, unsigned valMinor) : m_ctx(Ctx), m_valMajor(valMajor), m_valMinor(valMinor) {}
-  llvm::LLVMContext &m_ctx;
+  DxilLinker(llvm37::LLVM37Context &Ctx, unsigned valMajor, unsigned valMinor) : m_ctx(Ctx), m_valMajor(valMajor), m_valMinor(valMinor) {}
+  llvm37::LLVM37Context &m_ctx;
   unsigned m_valMajor, m_valMinor;
 };
 

@@ -1,6 +1,6 @@
 //===--- Decl.cpp - Declaration AST Node Implementation -------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -30,7 +30,7 @@
 #include "clang/Basic/Specifiers.h"
 #include "clang/Basic/TargetInfo.h"
 #include "clang/Frontend/FrontendDiagnostic.h"
-#include "llvm/Support/ErrorHandling.h"
+#include "llvm37/Support/ErrorHandling.h"
 #include <algorithm>
 
 using namespace clang;
@@ -198,7 +198,7 @@ static Visibility getVisibilityFromAttr(const T *attr) {
   case T::Protected:
     return ProtectedVisibility;
   }
-  llvm_unreachable("bad visibility kind");
+  llvm37_unreachable("bad visibility kind");
 }
 
 /// Return the explicit visibility of the given declaration.
@@ -350,7 +350,7 @@ static LinkageInfo getLVForTemplateArgumentList(ArrayRef<TemplateArgument> Args,
       LV.merge(getLVForTemplateArgumentList(Arg.getPackAsArray(), computation));
       continue;
     }
-    llvm_unreachable("bad template argument kind");
+    llvm37_unreachable("bad template argument kind");
   }
 
   return LV;
@@ -418,7 +418,7 @@ static bool hasDirectVisibilityAttribute(const NamedDecl *D,
   case LVForLinkageOnly:
     return false;
   }
-  llvm_unreachable("bad visibility computation kind");
+  llvm37_unreachable("bad visibility computation kind");
 }
 
 /// Should we consider visibility associated with the template
@@ -1369,7 +1369,7 @@ static LinkageInfo getLVForDecl(const NamedDecl *D,
 
 std::string NamedDecl::getQualifiedNameAsString() const {
   std::string QualName;
-  llvm::raw_string_ostream OS(QualName);
+  llvm37::raw_string_ostream OS(QualName);
   printQualifiedName(OS, getASTContext().getPrintingPolicy());
   return OS.str();
 }
@@ -1499,7 +1499,7 @@ static bool isRedeclarable(Decl::Kind K) {
 #define ABSTRACT_DECL(DECL)
 #include "clang/AST/DeclNodes.inc"
   }
-  llvm_unreachable("unknown decl kind");
+  llvm37_unreachable("unknown decl kind");
 }
 
 bool NamedDecl::declarationReplaces(NamedDecl *OldD, bool IsKnownNewer) const {
@@ -1772,7 +1772,7 @@ const char *VarDecl::getStorageClassSpecifierString(StorageClass SC) {
   case SC_Static:               return "static";
   }
 
-  llvm_unreachable("Invalid storage class");
+  llvm37_unreachable("Invalid storage class");
 }
 
 VarDecl::VarDecl(Kind DK, ASTContext &C, DeclContext *DC,
@@ -1829,7 +1829,7 @@ VarDecl::TLSKind VarDecl::getTLSKind() const {
   case TSCS_thread_local:
     return TLS_Dynamic;
   }
-  llvm_unreachable("Unknown thread storage class specifier!");
+  llvm37_unreachable("Unknown thread storage class specifier!");
 }
 
 SourceRange VarDecl::getSourceRange() const {
@@ -2488,7 +2488,7 @@ bool FunctionDecl::isMSVCRTEntryPoint() const {
   if (!getIdentifier())
     return false;
 
-  return llvm::StringSwitch<bool>(getName())
+  return llvm37::StringSwitch<bool>(getName())
       .Cases("main",     // an ANSI console app
              "wmain",    // a Unicode console App
              "WinMain",  // an ANSI GUI app
@@ -2703,7 +2703,7 @@ void FunctionDecl::setDeclsInPrototypeScope(ArrayRef<NamedDecl *> NewDecls) {
   if (!NewDecls.empty()) {
     NamedDecl **A = new (getASTContext()) NamedDecl*[NewDecls.size()];
     std::copy(NewDecls.begin(), NewDecls.end(), A);
-    DeclsInPrototypeScope = llvm::makeArrayRef(A, NewDecls.size());
+    DeclsInPrototypeScope = llvm37::makeArrayRef(A, NewDecls.size());
     // Move declarations introduced in prototype to the function context.
     for (auto I : NewDecls) {
       DeclContext *DC = I->getDeclContext();
@@ -2974,7 +2974,7 @@ FunctionDecl::TemplatedKind FunctionDecl::getTemplatedKind() const {
                                <DependentFunctionTemplateSpecializationInfo*>())
     return TK_DependentFunctionTemplateSpecialization;
 
-  llvm_unreachable("Did we miss a TemplateOrSpecialization type?");
+  llvm37_unreachable("Did we miss a TemplateOrSpecialization type?");
 }
 
 FunctionDecl *FunctionDecl::getInstantiatedFromMemberFunction() const {
@@ -3044,7 +3044,7 @@ bool FunctionDecl::isTemplateInstantiation() const {
     case TSK_ExplicitInstantiationDefinition:
       return true;
   }
-  llvm_unreachable("All TSK values handled.");
+  llvm37_unreachable("All TSK values handled.");
 }
    
 FunctionDecl *FunctionDecl::getTemplateInstantiationPattern() const {
@@ -3161,7 +3161,7 @@ DependentFunctionTemplateSpecializationInfo::
 DependentFunctionTemplateSpecializationInfo(const UnresolvedSetImpl &Ts,
                                       const TemplateArgumentListInfo &TArgs)
   : AngleLocs(TArgs.getLAngleLoc(), TArgs.getRAngleLoc()) {
-  static_assert(sizeof(*this) % llvm::AlignOf<void *>::Alignment == 0,
+  static_assert(sizeof(*this) % llvm37::AlignOf<void *>::Alignment == 0,
                 "Trailing data is unaligned!");
 
   d.NumTemplates = Ts.size();
@@ -3213,7 +3213,7 @@ FunctionDecl::setTemplateSpecializationKind(TemplateSpecializationKind TSK,
         MSInfo->getPointOfInstantiation().isInvalid())
       MSInfo->setPointOfInstantiation(PointOfInstantiation);
   } else
-    llvm_unreachable("Function cannot have a template specialization kind");
+    llvm37_unreachable("Function cannot have a template specialization kind");
 }
 
 SourceLocation FunctionDecl::getPointOfInstantiation() const {
@@ -3411,7 +3411,7 @@ SourceRange FieldDecl::getSourceRange() const {
   case ISK_CapturedVLAType:
     return DeclaratorDecl::getSourceRange();
   }
-  llvm_unreachable("bad init storage kind");
+  llvm37_unreachable("bad init storage kind");
 }
 
 void FieldDecl::setCapturedVLAType(const VariableArrayType *VLAType) {
@@ -3936,14 +3936,14 @@ CapturedDecl *CapturedDecl::CreateDeserialized(ASTContext &C, unsigned ID,
 EnumConstantDecl *EnumConstantDecl::Create(ASTContext &C, EnumDecl *CD,
                                            SourceLocation L,
                                            IdentifierInfo *Id, QualType T,
-                                           Expr *E, const llvm::APSInt &V) {
+                                           Expr *E, const llvm37::APSInt &V) {
   return new (C, CD) EnumConstantDecl(CD, L, Id, T, E, V);
 }
 
 EnumConstantDecl *
 EnumConstantDecl::CreateDeserialized(ASTContext &C, unsigned ID) {
   return new (C, ID) EnumConstantDecl(nullptr, SourceLocation(), nullptr,
-                                      QualType(), nullptr, llvm::APSInt());
+                                      QualType(), nullptr, llvm37::APSInt());
 }
 
 void IndirectFieldDecl::anchor() { }
@@ -4117,7 +4117,7 @@ ArrayRef<SourceLocation> ImportDecl::getIdentifierLocs() const {
 
   const SourceLocation *StoredLocs
     = reinterpret_cast<const SourceLocation *>(this + 1);
-  return llvm::makeArrayRef(StoredLocs,
+  return llvm37::makeArrayRef(StoredLocs,
                             getNumModuleIdentifiers(getImportedModule()));
 }
 

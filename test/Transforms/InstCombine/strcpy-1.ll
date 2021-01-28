@@ -19,7 +19,7 @@ define void @test_simplify1() {
   %src = getelementptr [6 x i8], [6 x i8]* @hello, i32 0, i32 0
 
   call i8* @strcpy(i8* %dst, i8* %src)
-; CHECK: @llvm.memcpy.p0i8.p0i8.i32
+; CHECK: @llvm37.memcpy.p0i8.p0i8.i32
   ret void
 }
 

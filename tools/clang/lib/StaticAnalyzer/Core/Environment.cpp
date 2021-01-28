@@ -1,6 +1,6 @@
 //== Environment.cpp - Map from Stmt* to Locations/Values -------*- C++ -*--==//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -16,7 +16,7 @@
 #include "clang/Analysis/AnalysisContext.h"
 #include "clang/Analysis/CFG.h"
 #include "clang/StaticAnalyzer/Core/PathSensitive/ProgramState.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/Support/raw_ostream.h"
 
 using namespace clang;
 using namespace ento;
@@ -78,7 +78,7 @@ SVal Environment::getSVal(const EnvironmentEntry &Entry,
   case Stmt::OpaqueValueExprClass:
   case Stmt::ParenExprClass:
   case Stmt::SubstNonTypeTemplateParmExprClass:
-    llvm_unreachable("Should have been handled by ignoreTransparentExprs");
+    llvm37_unreachable("Should have been handled by ignoreTransparentExprs");
 
   case Stmt::AddrLabelExprClass:
   case Stmt::CharacterLiteralClass:
@@ -155,7 +155,7 @@ EnvironmentManager::removeDeadBindings(Environment Env,
   MarkLiveCallback CB(SymReaper);
   ScanReachableSymbols RSScaner(ST, CB);
 
-  llvm::ImmutableMapRef<EnvironmentEntry,SVal>
+  llvm37::ImmutableMapRef<EnvironmentEntry,SVal>
     EBMapRef(NewEnv.ExprBindings.getRootWithoutRetain(),
              F.getTreeFactory());
 

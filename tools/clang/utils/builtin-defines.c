@@ -51,7 +51,7 @@ RUN: done;
 #undef __APPLE_CC__
 #undef __VERSION__
 #undef __clang__
-#undef __llvm__
+#undef __llvm37__
 #undef __nocona
 #undef __nocona__
 #undef __k8

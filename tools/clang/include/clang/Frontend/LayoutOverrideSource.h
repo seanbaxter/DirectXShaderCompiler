@@ -1,19 +1,19 @@
 //===--- LayoutOverrideSource.h --Override Record Layouts -----------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_FRONTEND_LAYOUTOVERRIDESOURCE_H
-#define LLVM_CLANG_FRONTEND_LAYOUTOVERRIDESOURCE_H
+#ifndef LLVM37_CLANG_FRONTEND_LAYOUTOVERRIDESOURCE_H
+#define LLVM37_CLANG_FRONTEND_LAYOUTOVERRIDESOURCE_H
 
 #include "clang/AST/ExternalASTSource.h"
 #include "clang/Basic/LLVM.h"
-#include "llvm/ADT/StringMap.h"
-#include "llvm/ADT/StringRef.h"
+#include "llvm37/ADT/StringMap.h"
+#include "llvm37/ADT/StringRef.h"
 
 namespace clang {
   /// \brief An external AST source that overrides the layout of
@@ -36,7 +36,7 @@ namespace clang {
     };
     
     /// \brief The set of layouts that will be overridden.
-    llvm::StringMap<Layout> Layouts;
+    llvm37::StringMap<Layout> Layouts;
     
   public:
     /// \brief Create a new AST source that overrides the layout of some
@@ -50,9 +50,9 @@ namespace clang {
     bool
     layoutRecordType(const RecordDecl *Record,
        uint64_t &Size, uint64_t &Alignment,
-       llvm::DenseMap<const FieldDecl *, uint64_t> &FieldOffsets,
-       llvm::DenseMap<const CXXRecordDecl *, CharUnits> &BaseOffsets,
-       llvm::DenseMap<const CXXRecordDecl *,
+       llvm37::DenseMap<const FieldDecl *, uint64_t> &FieldOffsets,
+       llvm37::DenseMap<const CXXRecordDecl *, CharUnits> &BaseOffsets,
+       llvm37::DenseMap<const CXXRecordDecl *,
                       CharUnits> &VirtualBaseOffsets) override;
     
     /// \brief Dump the overridden layouts.

@@ -1,6 +1,6 @@
 //===- Unix/Process.cpp - Unix Process Implementation --------- -*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -12,12 +12,12 @@
 //===----------------------------------------------------------------------===//
 
 #include "Unix.h"
-#include "llvm/ADT/Hashing.h"
-#include "llvm/ADT/StringRef.h"
-#include "llvm/Support/ManagedStatic.h"
-#include "llvm/Support/Mutex.h"
-#include "llvm/Support/MutexGuard.h"
-#include "llvm/Support/TimeValue.h"
+#include "llvm37/ADT/Hashing.h"
+#include "llvm37/ADT/StringRef.h"
+#include "llvm37/Support/ManagedStatic.h"
+#include "llvm37/Support/Mutex.h"
+#include "llvm37/Support/MutexGuard.h"
+#include "llvm37/Support/TimeValue.h"
 #if HAVE_FCNTL_H
 #include <fcntl.h>
 #endif
@@ -57,7 +57,7 @@
 //===          is guaranteed to work on *all* UNIX variants.
 //===----------------------------------------------------------------------===//
 
-using namespace llvm;
+using namespace llvm37;
 using namespace sys;
 
 static std::pair<TimeValue, TimeValue> getRUsageTimes() {
@@ -131,7 +131,7 @@ void Process::GetTimeUsage(TimeValue &elapsed, TimeValue &user_time,
 #include <mach/mach.h>
 #endif
 
-// Some LLVM programs such as bugpoint produce core files as a normal part of
+// Some LLVM37 programs such as bugpoint produce core files as a normal part of
 // their operation. To prevent the disk from filling up, this function
 // does what's necessary to prevent their generation.
 void Process::PreventCoreFiles() {
@@ -251,7 +251,7 @@ std::error_code Process::SafelyCloseFileDescriptor(int FD) {
     return std::error_code(errno, std::generic_category());
   // Atomically swap our current signal mask with a full mask.
   sigset_t SavedSet;
-#if LLVM_ENABLE_THREADS
+#if LLVM37_ENABLE_THREADS
   if (int EC = pthread_sigmask(SIG_SETMASK, &FullSet, &SavedSet))
     return std::error_code(EC, std::generic_category());
 #else
@@ -266,7 +266,7 @@ std::error_code Process::SafelyCloseFileDescriptor(int FD) {
     ErrnoFromClose = errno;
   // Restore the signal mask back to what we saved earlier.
   int EC = 0;
-#if LLVM_ENABLE_THREADS
+#if LLVM37_ENABLE_THREADS
   EC = pthread_sigmask(SIG_SETMASK, &SavedSet, nullptr);
 #else
   if (sigprocmask(SIG_SETMASK, &SavedSet, nullptr) < 0)
@@ -447,7 +447,7 @@ static unsigned GetRandomNumberSeed() {
 }
 #endif
 
-unsigned llvm::sys::Process::GetRandomNumber() {
+unsigned llvm37::sys::Process::GetRandomNumber() {
 #if defined(HAVE_DECL_ARC4RANDOM) && HAVE_DECL_ARC4RANDOM
   return arc4random();
 #else

@@ -17,12 +17,12 @@ define void @foo(i32 %x) {
 ; for 'MetadataAsValue::get(ValueAsMetadata::get(Value*))'.  When @G drops to
 ; null, the ValueAsMetadata instance gets replaced by metadata !{}, or
 ; MDNode::get({}).
-  call void @llvm.foo(metadata i8*** @G, metadata i32 %x)
-; CHECK: call void @llvm.foo(metadata ![[EMPTY:[0-9]+]], metadata i32 %x)
+  call void @llvm37.foo(metadata i8*** @G, metadata i32 %x)
+; CHECK: call void @llvm37.foo(metadata ![[EMPTY:[0-9]+]], metadata i32 %x)
   ret void
 }
 
-declare void @llvm.foo(metadata, metadata) nounwind readnone
+declare void @llvm37.foo(metadata, metadata) nounwind readnone
 
 !named = !{!0}
 ; CHECK: !named = !{![[NULL:[0-9]+]]}

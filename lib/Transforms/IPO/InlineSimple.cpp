@@ -1,6 +1,6 @@
 //===- InlineSimple.cpp - Code to perform simple function inlining --------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,22 +11,22 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Transforms/IPO.h"
-#include "llvm/Analysis/AliasAnalysis.h"
-#include "llvm/Analysis/AssumptionCache.h"
-#include "llvm/Analysis/CallGraph.h"
-#include "llvm/Analysis/InlineCost.h"
-#include "llvm/IR/CallSite.h"
-#include "llvm/IR/CallingConv.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/Type.h"
-#include "llvm/Transforms/IPO/InlinerPass.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/Transforms/IPO.h"
+#include "llvm37/Analysis/AliasAnalysis.h"
+#include "llvm37/Analysis/AssumptionCache.h"
+#include "llvm37/Analysis/CallGraph.h"
+#include "llvm37/Analysis/InlineCost.h"
+#include "llvm37/IR/CallSite.h"
+#include "llvm37/IR/CallingConv.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/Type.h"
+#include "llvm37/Transforms/IPO/InlinerPass.h"
+#include "llvm37/Support/raw_ostream.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "inline"
 
@@ -83,13 +83,13 @@ INITIALIZE_PASS_DEPENDENCY(InlineCostAnalysis)
 INITIALIZE_PASS_END(SimpleInliner, "inline",
                 "Function Integration/Inlining", false, false)
 
-Pass *llvm::createFunctionInliningPass() { return new SimpleInliner(); }
+Pass *llvm37::createFunctionInliningPass() { return new SimpleInliner(); }
 
-Pass *llvm::createFunctionInliningPass(int Threshold) {
+Pass *llvm37::createFunctionInliningPass(int Threshold) {
   return new SimpleInliner(Threshold);
 }
 
-Pass *llvm::createFunctionInliningPass(unsigned OptLevel,
+Pass *llvm37::createFunctionInliningPass(unsigned OptLevel,
                                        unsigned SizeOptLevel) {
   return new SimpleInliner(
       computeThresholdFromOptLevels(OptLevel, SizeOptLevel));

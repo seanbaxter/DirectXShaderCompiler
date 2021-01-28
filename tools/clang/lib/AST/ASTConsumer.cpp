@@ -1,6 +1,6 @@
 //===--- ASTConsumer.cpp - Abstract interface for reading ASTs --*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -12,7 +12,7 @@
 //===----------------------------------------------------------------------===//
 
 #include "clang/AST/ASTConsumer.h"
-#include "llvm/Bitcode/BitstreamReader.h"
+#include "llvm37/Bitcode/BitstreamReader.h"
 #include "clang/AST/Decl.h"
 #include "clang/AST/DeclGroup.h"
 using namespace clang;

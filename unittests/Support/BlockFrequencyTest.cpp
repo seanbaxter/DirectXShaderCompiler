@@ -1,19 +1,19 @@
 //===- unittests/Support/BlockFrequencyTest.cpp - BlockFrequency tests ----===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Support/BlockFrequency.h"
-#include "llvm/Support/BranchProbability.h"
-#include "llvm/Support/DataTypes.h"
+#include "llvm37/Support/BlockFrequency.h"
+#include "llvm37/Support/BranchProbability.h"
+#include "llvm37/Support/DataTypes.h"
 #include "gtest/gtest.h"
 #include <climits>
 
-using namespace llvm;
+using namespace llvm37;
 
 namespace {
 

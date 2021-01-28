@@ -1,6 +1,6 @@
 //===-- Host.cpp - Implement OS Host Concept --------------------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,22 +11,22 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Support/Host.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/ADT/StringRef.h"
-#include "llvm/ADT/StringSwitch.h"
-#include "llvm/ADT/Triple.h"
-#include "llvm/Config/config.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/FileSystem.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/Support/Host.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/ADT/StringRef.h"
+#include "llvm37/ADT/StringSwitch.h"
+#include "llvm37/ADT/Triple.h"
+#include "llvm37/Config/config.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/FileSystem.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <string.h>
 
 // Include the platform-specific parts of this class.
-#ifdef LLVM_ON_UNIX
+#ifdef LLVM37_ON_UNIX
 #include "Unix/Host.inc"
 #endif
-#ifdef LLVM_ON_WIN32
+#ifdef LLVM37_ON_WIN32
 #include "Windows/Host.inc"
 #endif
 #ifdef _MSC_VER
@@ -47,10 +47,10 @@
 //
 //===----------------------------------------------------------------------===//
 
-using namespace llvm;
+using namespace llvm37;
 
 #if defined(__linux__)
-static ssize_t LLVM_ATTRIBUTE_UNUSED readCpuInfo(void *Buf, size_t Size) {
+static ssize_t LLVM37_ATTRIBUTE_UNUSED readCpuInfo(void *Buf, size_t Size) {
   // Note: We cannot mmap /proc/cpuinfo here and then process the resulting
   // memory buffer because the 'file' has 0 size (it can be read from only
   // as a stream).
@@ -848,7 +848,7 @@ bool sys::getHostCPUFeatures(StringMap<bool> &Features) {
 #endif
 
   for (unsigned I = 0, E = CPUFeatures.size(); I != E; ++I) {
-    StringRef LLVMFeatureStr = StringSwitch<StringRef>(CPUFeatures[I])
+    StringRef LLVM37FeatureStr = StringSwitch<StringRef>(CPUFeatures[I])
 #if defined(__aarch64__)
       .Case("asimd", "neon")
       .Case("fp", "fp-armv8")
@@ -877,8 +877,8 @@ bool sys::getHostCPUFeatures(StringMap<bool> &Features) {
       crypto |= CAP_SHA2;
 #endif
 
-    if (LLVMFeatureStr != "")
-      Features[LLVMFeatureStr] = true;
+    if (LLVM37FeatureStr != "")
+      Features[LLVM37FeatureStr] = true;
   }
 
 #if defined(__aarch64__)
@@ -896,7 +896,7 @@ bool sys::getHostCPUFeatures(StringMap<bool> &Features){
 #endif
 
 std::string sys::getProcessTriple() {
-  Triple PT(Triple::normalize(LLVM_HOST_TRIPLE));
+  Triple PT(Triple::normalize(LLVM37_HOST_TRIPLE));
 
   if (sizeof(void *) == 8 && PT.isArch32Bit())
     PT = PT.get64BitArchVariant();

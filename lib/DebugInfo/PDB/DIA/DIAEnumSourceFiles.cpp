@@ -1,17 +1,17 @@
 //==- DIAEnumSourceFiles.cpp - DIA Source File Enumerator impl ---*- C++ -*-==//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/DebugInfo/PDB/PDBSymbol.h"
-#include "llvm/DebugInfo/PDB/DIA/DIAEnumSourceFiles.h"
-#include "llvm/DebugInfo/PDB/DIA/DIASourceFile.h"
+#include "llvm37/DebugInfo/PDB/PDBSymbol.h"
+#include "llvm37/DebugInfo/PDB/DIA/DIAEnumSourceFiles.h"
+#include "llvm37/DebugInfo/PDB/DIA/DIASourceFile.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 DIAEnumSourceFiles::DIAEnumSourceFiles(
     const DIASession &PDBSession, CComPtr<IDiaEnumSourceFiles> DiaEnumerator)

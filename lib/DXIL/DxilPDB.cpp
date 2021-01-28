@@ -21,10 +21,10 @@
 // that are relevant for debugging.
 //
 
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/ADT/ArrayRef.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/Support/Endian.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/ADT/ArrayRef.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/Support/Endian.h"
 
 #include "dxc/DXIL/DxilPDB.h"
 #include "dxc/Support/WinIncludes.h"
@@ -34,7 +34,7 @@
 #include "dxc/dxcapi.h"
 #include "dxc/Support/dxcapi.impl.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 // MSF header
 static const char kMsfMagic[] = {'M',  'i',  'c',    'r', 'o', 's',  'o',  'f',
@@ -386,7 +386,7 @@ struct PDBReader {
       CalculateNumBlocks(m_SB.BlockSize, m_SB.NumDirectoryBytes);
 
     // Load in the directory blocks
-    llvm::SmallVector<uint32_t, 32> DirectoryBlocks;
+    llvm37::SmallVector<uint32_t, 32> DirectoryBlocks;
     IFR(GoToBeginningOfBlock(m_SB.BlockMapAddr))
     for (unsigned i = 0; i < uNumDirectoryBlocks; i++) {
       UINT32 uBlock = 0;
@@ -403,7 +403,7 @@ struct PDBReader {
     if (uNumStreams <= StreamIndex)
       return E_FAIL;
 
-    llvm::SmallVector<uint32_t, 6> StreamSizes;
+    llvm37::SmallVector<uint32_t, 6> StreamSizes;
     IFR(ReadU32ListFromBlocks(DirectoryBlocks, 1, uNumStreams, StreamSizes));
 
     UINT32 uOffsets = 0;
@@ -412,7 +412,7 @@ struct PDBReader {
       uOffsets += uNumBlocks;
     }
 
-    llvm::SmallVector<uint32_t, 12> DataBlocks;
+    llvm37::SmallVector<uint32_t, 12> DataBlocks;
     IFR(ReadU32ListFromBlocks(DirectoryBlocks, 1 + uNumStreams + uOffsets, 
       CalculateNumBlocks(m_SB.BlockSize, StreamSizes[StreamIndex]), DataBlocks));
 

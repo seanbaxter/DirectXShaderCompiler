@@ -1,38 +1,38 @@
-//===-- LLVMContext.cpp - Implement LLVMContext ---------------------------===//
+//===-- LLVM37Context.cpp - Implement LLVM37Context ---------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 //
-//  This file implements LLVMContext, as a wrapper around the opaque
-//  class LLVMContextImpl.
+//  This file implements LLVM37Context, as a wrapper around the opaque
+//  class LLVM37ContextImpl.
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/IR/LLVMContext.h"
+#include "llvm37/IR/LLVMContext.h"
 #include "LLVMContextImpl.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/DebugLoc.h"
-#include "llvm/IR/DiagnosticInfo.h"
-#include "llvm/IR/DiagnosticPrinter.h"
-#include "llvm/IR/Instruction.h"
-#include "llvm/IR/Metadata.h"
-#include "llvm/Support/ManagedStatic.h"
-#include "llvm/Support/SourceMgr.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/DebugLoc.h"
+#include "llvm37/IR/DiagnosticInfo.h"
+#include "llvm37/IR/DiagnosticPrinter.h"
+#include "llvm37/IR/Instruction.h"
+#include "llvm37/IR/Metadata.h"
+#include "llvm37/Support/ManagedStatic.h"
+#include "llvm37/Support/SourceMgr.h"
 #include <cctype>
-using namespace llvm;
+using namespace llvm37;
 
-static ManagedStatic<LLVMContext> GlobalContext;
+static ManagedStatic<LLVM37Context> GlobalContext;
 
-LLVMContext& llvm::getGlobalContext() {
+LLVM37Context& llvm37::getGlobalContext() {
   return *GlobalContext;
 }
 
-LLVMContext::LLVMContext() : pImpl(new LLVMContextImpl(*this)) {
-  std::unique_ptr<LLVMContextImpl> implPtrGuard(pImpl); // HLSL Change: Don't leak if constructor throws.
+LLVM37Context::LLVM37Context() : pImpl(new LLVM37ContextImpl(*this)) {
+  std::unique_ptr<LLVM37ContextImpl> implPtrGuard(pImpl); // HLSL Change: Don't leak if constructor throws.
   // Create the fixed metadata kinds. This is done in the same order as the
   // MD_* enum values so that they correspond.
 
@@ -83,7 +83,7 @@ LLVMContext::LLVMContext() : pImpl(new LLVMContextImpl(*this)) {
   assert(NonTemporalID == MD_nontemporal && "nontemporal kind id drifted");
   (void)NonTemporalID;
 
-  // Create the 'llvm.mem.parallel_loop_access' metadata kind.
+  // Create the 'llvm37.mem.parallel_loop_access' metadata kind.
   unsigned MemParallelLoopAccessID = getMDKindID("llvm.mem.parallel_loop_access");
   assert(MemParallelLoopAccessID == MD_mem_parallel_loop_access &&
          "mem_parallel_loop_access kind id drifted");
@@ -108,13 +108,13 @@ LLVMContext::LLVMContext() : pImpl(new LLVMContextImpl(*this)) {
 
   implPtrGuard.release(); // HLSL Change: Destructor now on the hook for destruction
 }
-LLVMContext::~LLVMContext() { delete pImpl; }
+LLVM37Context::~LLVM37Context() { delete pImpl; }
 
-void LLVMContext::addModule(Module *M) {
+void LLVM37Context::addModule(Module *M) {
   pImpl->OwnedModules.insert(M);
 }
 
-void LLVMContext::removeModule(Module *M) {
+void LLVM37Context::removeModule(Module *M) {
   pImpl->OwnedModules.erase(M);
 }
 
@@ -122,7 +122,7 @@ void LLVMContext::removeModule(Module *M) {
 // Recoverable Backend Errors
 //===----------------------------------------------------------------------===//
 
-void LLVMContext::
+void LLVM37Context::
 setInlineAsmDiagnosticHandler(InlineAsmDiagHandlerTy DiagHandler,
                               void *DiagContext) {
   pImpl->InlineAsmDiagHandler = DiagHandler;
@@ -131,18 +131,18 @@ setInlineAsmDiagnosticHandler(InlineAsmDiagHandlerTy DiagHandler,
 
 /// getInlineAsmDiagnosticHandler - Return the diagnostic handler set by
 /// setInlineAsmDiagnosticHandler.
-LLVMContext::InlineAsmDiagHandlerTy
-LLVMContext::getInlineAsmDiagnosticHandler() const {
+LLVM37Context::InlineAsmDiagHandlerTy
+LLVM37Context::getInlineAsmDiagnosticHandler() const {
   return pImpl->InlineAsmDiagHandler;
 }
 
 /// getInlineAsmDiagnosticContext - Return the diagnostic context set by
 /// setInlineAsmDiagnosticHandler.
-void *LLVMContext::getInlineAsmDiagnosticContext() const {
+void *LLVM37Context::getInlineAsmDiagnosticContext() const {
   return pImpl->InlineAsmDiagContext;
 }
 
-void LLVMContext::setDiagnosticHandler(DiagnosticHandlerTy DiagnosticHandler,
+void LLVM37Context::setDiagnosticHandler(DiagnosticHandlerTy DiagnosticHandler,
                                        void *DiagnosticContext,
                                        bool RespectFilters) {
   pImpl->DiagnosticHandler = DiagnosticHandler;
@@ -150,37 +150,37 @@ void LLVMContext::setDiagnosticHandler(DiagnosticHandlerTy DiagnosticHandler,
   pImpl->RespectDiagnosticFilters = RespectFilters;
 }
 
-LLVMContext::DiagnosticHandlerTy LLVMContext::getDiagnosticHandler() const {
+LLVM37Context::DiagnosticHandlerTy LLVM37Context::getDiagnosticHandler() const {
   return pImpl->DiagnosticHandler;
 }
 
-void *LLVMContext::getDiagnosticContext() const {
+void *LLVM37Context::getDiagnosticContext() const {
   return pImpl->DiagnosticContext;
 }
 
-void LLVMContext::setYieldCallback(YieldCallbackTy Callback, void *OpaqueHandle)
+void LLVM37Context::setYieldCallback(YieldCallbackTy Callback, void *OpaqueHandle)
 {
   pImpl->YieldCallback = Callback;
   pImpl->YieldOpaqueHandle = OpaqueHandle;
 }
 
-void LLVMContext::yield() {
+void LLVM37Context::yield() {
   if (pImpl->YieldCallback)
     pImpl->YieldCallback(this, pImpl->YieldOpaqueHandle);
 }
 
-void LLVMContext::emitError(const Twine &ErrorStr) {
+void LLVM37Context::emitError(const Twine &ErrorStr) {
   diagnose(DiagnosticInfoInlineAsm(ErrorStr));
 }
 
 // HLSL Change Start
-void LLVMContext::emitWarning(const Twine &WarningStr) {
+void LLVM37Context::emitWarning(const Twine &WarningStr) {
   diagnose(DiagnosticInfoInlineAsm(WarningStr, DiagnosticSeverity::DS_Warning));
 }
 // HLSL Change End
 
 
-void LLVMContext::emitError(const Instruction *I, const Twine &ErrorStr) {
+void LLVM37Context::emitError(const Instruction *I, const Twine &ErrorStr) {
   assert (I && "Invalid instruction");
   diagnose(DiagnosticInfoInlineAsm(*I, ErrorStr));
 }
@@ -191,15 +191,15 @@ static bool isDiagnosticEnabled(const DiagnosticInfo &DI) {
   // the pass that is emitting the diagnostic. If there is no match, ignore the
   // diagnostic and return.
   switch (DI.getKind()) {
-  case llvm::DK_OptimizationRemark:
+  case llvm37::DK_OptimizationRemark:
     if (!cast<DiagnosticInfoOptimizationRemark>(DI).isEnabled())
       return false;
     break;
-  case llvm::DK_OptimizationRemarkMissed:
+  case llvm37::DK_OptimizationRemarkMissed:
     if (!cast<DiagnosticInfoOptimizationRemarkMissed>(DI).isEnabled())
       return false;
     break;
-  case llvm::DK_OptimizationRemarkAnalysis:
+  case llvm37::DK_OptimizationRemarkAnalysis:
     if (!cast<DiagnosticInfoOptimizationRemarkAnalysis>(DI).isEnabled())
       return false;
     break;
@@ -220,10 +220,10 @@ static const char *getDiagnosticMessagePrefix(DiagnosticSeverity Severity) {
   case DS_Note:
     return "note";
   }
-  llvm_unreachable("Unknown DiagnosticSeverity");
+  llvm37_unreachable("Unknown DiagnosticSeverity");
 }
 
-void LLVMContext::diagnose(const DiagnosticInfo &DI) {
+void LLVM37Context::diagnose(const DiagnosticInfo &DI) {
   // If there is a report handler, use it.
   if (pImpl->DiagnosticHandler) {
     if (!pImpl->RespectDiagnosticFilters || isDiagnosticEnabled(DI))
@@ -244,7 +244,7 @@ void LLVMContext::diagnose(const DiagnosticInfo &DI) {
     throw std::exception();
 }
 
-void LLVMContext::emitError(unsigned LocCookie, const Twine &ErrorStr) {
+void LLVM37Context::emitError(unsigned LocCookie, const Twine &ErrorStr) {
   diagnose(DiagnosticInfoInlineAsm(LocCookie, ErrorStr));
 }
 
@@ -254,7 +254,7 @@ void LLVMContext::emitError(unsigned LocCookie, const Twine &ErrorStr) {
 
 // HLSL Change - Begin
 /// Return a unique non-zero ID for the specified metadata kind if it exists.
-bool LLVMContext::findMDKindID(StringRef Name, unsigned *ID) const {
+bool LLVM37Context::findMDKindID(StringRef Name, unsigned *ID) const {
   auto it = pImpl->CustomMDKindNames.find(Name);
   if (it != pImpl->CustomMDKindNames.end()) {
     *ID = it->second;
@@ -265,7 +265,7 @@ bool LLVMContext::findMDKindID(StringRef Name, unsigned *ID) const {
 // HLSL Change - End
 
 /// Return a unique non-zero ID for the specified metadata kind.
-unsigned LLVMContext::getMDKindID(StringRef Name) const {
+unsigned LLVM37Context::getMDKindID(StringRef Name) const {
   // If this is new, assign it its ID.
   return pImpl->CustomMDKindNames.insert(
                                      std::make_pair(
@@ -275,7 +275,7 @@ unsigned LLVMContext::getMDKindID(StringRef Name) const {
 
 /// getHandlerNames - Populate client supplied smallvector using custome
 /// metadata name and ID.
-void LLVMContext::getMDKindNames(SmallVectorImpl<StringRef> &Names) const {
+void LLVM37Context::getMDKindNames(SmallVectorImpl<StringRef> &Names) const {
   Names.resize(pImpl->CustomMDKindNames.size());
   for (StringMap<unsigned>::const_iterator I = pImpl->CustomMDKindNames.begin(),
        E = pImpl->CustomMDKindNames.end(); I != E; ++I)

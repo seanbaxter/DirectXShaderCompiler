@@ -1,6 +1,6 @@
 //===--- ScopeInfo.h - Information about a semantic context -----*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -12,17 +12,17 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_SEMA_SCOPEINFO_H
-#define LLVM_CLANG_SEMA_SCOPEINFO_H
+#ifndef LLVM37_CLANG_SEMA_SCOPEINFO_H
+#define LLVM37_CLANG_SEMA_SCOPEINFO_H
 
 #include "clang/AST/Expr.h"
 #include "clang/AST/Type.h"
 #include "clang/Basic/CapturedStmt.h"
 #include "clang/Basic/PartialDiagnostic.h"
 #include "clang/Sema/Ownership.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/SmallSet.h"
-#include "llvm/ADT/SmallVector.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/SmallSet.h"
+#include "llvm37/ADT/SmallVector.h"
 #include <algorithm>
 
 namespace clang {
@@ -153,7 +153,7 @@ public:
   
   /// \brief A list of parameters which have the nonnull attribute and are
   /// modified in the function.
-  llvm::SmallPtrSet<const ParmVarDecl*, 8>  ModifiedNonNullParams;
+  llvm37::SmallPtrSet<const ParmVarDecl*, 8>  ModifiedNonNullParams;
 
 public:
   /// Represents a simple identification of a weak object.
@@ -184,7 +184,7 @@ public:
     /// identify the object in memory.
     ///
     /// \sa isExactProfile()
-    typedef llvm::PointerIntPair<const NamedDecl *, 1, bool> BaseInfoTy;
+    typedef llvm37::PointerIntPair<const NamedDecl *, 1, bool> BaseInfoTy;
     BaseInfoTy Base;
 
     /// The "property" decl, as described in the class documentation.
@@ -228,7 +228,7 @@ public:
     }
 
     // For use in DenseMap.
-    // We can't specialize the usual llvm::DenseMapInfo at the end of the file
+    // We can't specialize the usual llvm37::DenseMapInfo at the end of the file
     // because by that point the DenseMap in FunctionScopeInfo has already been
     // instantiated.
     class DenseMapInfo {
@@ -242,7 +242,7 @@ public:
 
       static unsigned getHashValue(const WeakObjectProfileTy &Val) {
         typedef std::pair<BaseInfoTy, const NamedDecl *> Pair;
-        return llvm::DenseMapInfo<Pair>::getHashValue(Pair(Val.Base,
+        return llvm37::DenseMapInfo<Pair>::getHashValue(Pair(Val.Base,
                                                            Val.Property));
       }
 
@@ -260,7 +260,7 @@ public:
   ///
   /// Part of the implementation of -Wrepeated-use-of-weak.
   class WeakUseTy {
-    llvm::PointerIntPair<const Expr *, 1, bool> Rep;
+    llvm37::PointerIntPair<const Expr *, 1, bool> Rep;
   public:
     WeakUseTy(const Expr *Use, bool IsRead) : Rep(Use, IsRead) {}
 
@@ -281,7 +281,7 @@ public:
   /// Used to collect all uses of weak objects in a function body.
   ///
   /// Part of the implementation of -Wrepeated-use-of-weak.
-  typedef llvm::SmallDenseMap<WeakObjectProfileTy, WeakUseVector, 8,
+  typedef llvm37::SmallDenseMap<WeakObjectProfileTy, WeakUseVector, 8,
                               WeakObjectProfileTy::DenseMapInfo>
           WeakObjectUseMap;
 
@@ -392,13 +392,13 @@ public:
 
     /// The variable being captured (if we are not capturing 'this') and whether
     /// this is a nested capture.
-    llvm::PointerIntPair<VarDecl*, 1, bool> VarAndNested;
+    llvm37::PointerIntPair<VarDecl*, 1, bool> VarAndNested;
 
     /// Expression to initialize a field of the given type, and the kind of
     /// capture (if this is a capture and not an init-capture). The expression
     /// is only required if we are capturing ByVal and the variable's type has
     /// a non-trivial copy constructor.
-    llvm::PointerIntPair<void *, 2, CaptureKind> InitExprAndCaptureKind;
+    llvm37::PointerIntPair<void *, 2, CaptureKind> InitExprAndCaptureKind;
 
     /// \brief The source location at which the first capture occurred.
     SourceLocation Loc;
@@ -476,7 +476,7 @@ public:
      {}
 
   /// CaptureMap - A map of captured variables to (index+1) into Captures.
-  llvm::DenseMap<VarDecl*, unsigned> CaptureMap;
+  llvm37::DenseMap<VarDecl*, unsigned> CaptureMap;
 
   /// CXXThisCaptureIndex - The (index+1) of the capture of 'this';
   /// zero if 'this' is not captured.
@@ -536,7 +536,7 @@ public:
   }
 
   const Capture &getCapture(VarDecl *Var) const {
-    llvm::DenseMap<VarDecl*, unsigned>::const_iterator Known
+    llvm37::DenseMap<VarDecl*, unsigned>::const_iterator Known
       = CaptureMap.find(Var);
     assert(Known != CaptureMap.end() && "Variable has not been captured");
     return Captures[Known->second - 1];
@@ -609,7 +609,7 @@ public:
     case CR_OpenMP:
       return "OpenMP region";
     }
-    llvm_unreachable("Invalid captured region kind!");
+    llvm37_unreachable("Invalid captured region kind!");
   }
 
   static bool classof(const FunctionScopeInfo *FSI) {
@@ -678,13 +678,13 @@ public:
   ///  until its instantiation. But we still need to capture it in the 
   ///  enclosing lambda if all intervening lambdas can capture the variable.
 
-  llvm::SmallVector<Expr*, 4> PotentiallyCapturingExprs;
+  llvm37::SmallVector<Expr*, 4> PotentiallyCapturingExprs;
 
   /// \brief Contains all variable-referring-expressions that refer
   ///  to local variables that are usable as constant expressions and
   ///  do not involve an odr-use (they may still need to be captured
   ///  if the enclosing full-expression is instantiation dependent).
-  llvm::SmallSet<Expr*, 8> NonODRUsedCapturingExprs; 
+  llvm37::SmallSet<Expr*, 8> NonODRUsedCapturingExprs; 
 
   SourceLocation PotentialThisCaptureLocation;
 

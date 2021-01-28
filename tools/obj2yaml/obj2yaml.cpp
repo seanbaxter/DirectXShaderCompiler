@@ -1,6 +1,6 @@
 //===------ utils/obj2yaml.cpp - obj2yaml conversion tool -------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -9,15 +9,15 @@
 
 #include "Error.h"
 #include "obj2yaml.h"
-#include "llvm/Object/Archive.h"
-#include "llvm/Object/COFF.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/ManagedStatic.h"
-#include "llvm/Support/PrettyStackTrace.h"
-#include "llvm/Support/Signals.h"
+#include "llvm37/Object/Archive.h"
+#include "llvm37/Object/COFF.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/ManagedStatic.h"
+#include "llvm37/Support/PrettyStackTrace.h"
+#include "llvm37/Support/Signals.h"
 
-using namespace llvm;
-using namespace llvm::object;
+using namespace llvm37;
+using namespace llvm37::object;
 
 static std::error_code dumpObject(const ObjectFile &Obj) {
   if (Obj.isCOFF())
@@ -52,7 +52,7 @@ int __cdecl main(int argc, char *argv[]) {
   cl::ParseCommandLineOptions(argc, argv);
   sys::PrintStackTraceOnErrorSignal();
   PrettyStackTraceProgram X(argc, argv);
-  llvm_shutdown_obj Y; // Call llvm_shutdown() on exit.
+  llvm37_shutdown_obj Y; // Call llvm37_shutdown() on exit.
 
   if (std::error_code EC = dumpInput(InputFilename)) {
     errs() << "Error: '" << EC.message() << "'\n";

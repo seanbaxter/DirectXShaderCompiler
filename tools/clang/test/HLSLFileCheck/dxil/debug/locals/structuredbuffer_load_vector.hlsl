@@ -4,7 +4,7 @@
 // is preserved after scalarization and optims.
 
 // CHECK: call %dx.types.ResRet.i32 @dx.op.bufferLoad.i32
-// CHECK-DAG: call void @llvm.dbg.value
+// CHECK-DAG: call void @llvm37.dbg.value
 // CHECK-DAG: extractvalue %dx.types.ResRet.i32
 // CHECK-DAG: extractvalue %dx.types.ResRet.i32
 // CHECK: call void @dx.op.storeOutput.i32

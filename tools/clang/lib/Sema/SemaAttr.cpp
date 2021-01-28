@@ -1,6 +1,6 @@
 //===--- SemaAttr.cpp - Semantic Analysis for Attributes ------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -195,7 +195,7 @@ void Sema::ActOnPragmaPack(PragmaPackKind Kind, IdentifierInfo *Name,
   // If specified then alignment must be a "small" power of two.
   unsigned AlignmentVal = 0;
   if (Alignment) {
-    llvm::APSInt Val;
+    llvm37::APSInt Val;
 
     // pack(0) is like pack(), which just works out since that is what
     // we use 0 for in PackAttr.
@@ -280,7 +280,7 @@ void Sema::ActOnPragmaMSComment(PragmaMSCommentKind Kind, StringRef Arg) {
   // FIXME: Serialize this.
   switch (Kind) {
   case PCK_Unknown:
-    llvm_unreachable("unexpected pragma comment kind");
+    llvm37_unreachable("unexpected pragma comment kind");
   case PCK_Linker:
     Consumer.HandleLinkerOptionPragma(Arg);
     return;
@@ -292,7 +292,7 @@ void Sema::ActOnPragmaMSComment(PragmaMSCommentKind Kind, StringRef Arg) {
   case PCK_User:
     return;  // We ignore all of these.
   }
-  llvm_unreachable("invalid pragma comment kind");
+  llvm37_unreachable("invalid pragma comment kind");
 }
 
 void Sema::ActOnPragmaDetectMismatch(StringRef Name, StringRef Value) {
@@ -335,7 +335,7 @@ void Sema::ActOnPragmaMSVtorDisp(PragmaVtorDispKind Kind,
 template<typename ValueType>
 void Sema::PragmaStack<ValueType>::Act(SourceLocation PragmaLocation,
                                        PragmaMsStackAction Action,
-                                       llvm::StringRef StackSlotLabel,
+                                       llvm37::StringRef StackSlotLabel,
                                        ValueType Value) {
   if (Action == PSK_Reset) {
     CurrentValue = nullptr;
@@ -417,11 +417,11 @@ bool Sema::UnifySection(StringRef SectionName,
 /// \brief Called on well formed \#pragma bss_seg().
 void Sema::ActOnPragmaMSSeg(SourceLocation PragmaLocation,
                             PragmaMsStackAction Action,
-                            llvm::StringRef StackSlotLabel,
+                            llvm37::StringRef StackSlotLabel,
                             StringLiteral *SegmentName,
-                            llvm::StringRef PragmaName) {
+                            llvm37::StringRef PragmaName) {
   PragmaStack<StringLiteral *> *Stack =
-    llvm::StringSwitch<PragmaStack<StringLiteral *> *>(PragmaName)
+    llvm37::StringSwitch<PragmaStack<StringLiteral *> *>(PragmaName)
         .Case("data_seg", &DataSegStack)
         .Case("bss_seg", &BSSSegStack)
         .Case("const_seg", &ConstSegStack)

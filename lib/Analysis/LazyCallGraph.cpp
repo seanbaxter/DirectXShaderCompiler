@@ -1,22 +1,22 @@
 //===- LazyCallGraph.cpp - Analysis of a Module's call graph --------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Analysis/LazyCallGraph.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/IR/CallSite.h"
-#include "llvm/IR/InstVisitor.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/PassManager.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/Analysis/LazyCallGraph.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/IR/CallSite.h"
+#include "llvm37/IR/InstVisitor.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/PassManager.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/raw_ostream.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "lcg"
 

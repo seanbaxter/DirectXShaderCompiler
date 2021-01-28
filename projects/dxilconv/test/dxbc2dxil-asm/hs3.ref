@@ -131,7 +131,7 @@ attributes #2 = { nounwind readonly }
 !dx.valver = !{!0}
 !dx.shaderModel = !{!1}
 !dx.entryPoints = !{!2}
-!llvm.ident = !{!23}
+!llvm37.ident = !{!23}
 
 !0 = !{i32 1, i32 0}
 !1 = !{!"hs", i32 6, i32 0}

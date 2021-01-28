@@ -1,7 +1,7 @@
 # The test verifies that correct DWARF directives are emitted when
 # assembly files are instrumented.
 
-# RUN: llvm-mc %s -triple=i386-unknown-linux-gnu -asm-instrumentation=address -asan-instrument-assembly | FileCheck %s
+# RUN: llvm37-mc %s -triple=i386-unknown-linux-gnu -asm-instrumentation=address -asan-instrument-assembly | FileCheck %s
 
 # CHECK-LABEL: load4b_cfa_rbp
 # CHECK: pushl %ebx

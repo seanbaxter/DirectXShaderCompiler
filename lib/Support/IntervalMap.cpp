@@ -1,6 +1,6 @@
 //===- lib/Support/IntervalMap.cpp - A sorted interval map ----------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,9 +11,9 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/ADT/IntervalMap.h"
+#include "llvm37/ADT/IntervalMap.h"
 
-namespace llvm {
+namespace llvm37 {
 namespace IntervalMapImpl {
 
 void Path::replaceRoot(void *Root, unsigned Size, IdxPair Offsets) {
@@ -157,5 +157,5 @@ IdxPair distribute(unsigned Nodes, unsigned Elements, unsigned Capacity,
 }
 
 } // namespace IntervalMapImpl
-} // namespace llvm
+} // namespace llvm37
 

@@ -1,6 +1,6 @@
 //===- tools/dsymutil/DebugMap.h - Generic debug map representation -------===//
 //
-//                             The LLVM Linker
+//                             The LLVM37 Linker
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -18,21 +18,21 @@
 /// files and link their usefull debug info together.
 ///
 //===----------------------------------------------------------------------===//
-#ifndef LLVM_TOOLS_DSYMUTIL_DEBUGMAP_H
-#define LLVM_TOOLS_DSYMUTIL_DEBUGMAP_H
+#ifndef LLVM37_TOOLS_DSYMUTIL_DEBUGMAP_H
+#define LLVM37_TOOLS_DSYMUTIL_DEBUGMAP_H
 
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/StringMap.h"
-#include "llvm/ADT/Triple.h"
-#include "llvm/ADT/iterator_range.h"
-#include "llvm/Object/ObjectFile.h"
-#include "llvm/Support/ErrorOr.h"
-#include "llvm/Support/Format.h"
-#include "llvm/Support/Path.h"
-#include "llvm/Support/YAMLTraits.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/StringMap.h"
+#include "llvm37/ADT/Triple.h"
+#include "llvm37/ADT/iterator_range.h"
+#include "llvm37/Object/ObjectFile.h"
+#include "llvm37/Support/ErrorOr.h"
+#include "llvm37/Support/Format.h"
+#include "llvm37/Support/Path.h"
+#include "llvm37/Support/YAMLTraits.h"
 #include <vector>
 
-namespace llvm {
+namespace llvm37 {
 class raw_ostream;
 
 namespace dsymutil {
@@ -126,7 +126,7 @@ public:
   /// \brief Adds a symbol mapping to this DebugMapObject.
   /// \returns false if the symbol was already registered. The request
   /// is discarded in this case.
-  bool addSymbol(llvm::StringRef SymName, uint64_t ObjectAddress,
+  bool addSymbol(llvm37::StringRef SymName, uint64_t ObjectAddress,
                  uint64_t LinkedAddress, uint32_t Size);
 
   /// \brief Lookup a symbol mapping.
@@ -137,7 +137,7 @@ public:
   /// \returns null if the address isn't found.
   const DebugMapEntry *lookupObjectAddress(uint64_t Address) const;
 
-  llvm::StringRef getObjectFilename() const { return Filename; }
+  llvm37::StringRef getObjectFilename() const { return Filename; }
 
   iterator_range<StringMap<SymbolMapping>::const_iterator> symbols() const {
     return make_range(Symbols.begin(), Symbols.end());
@@ -181,12 +181,12 @@ public:
 }
 }
 
-LLVM_YAML_IS_SEQUENCE_VECTOR(llvm::dsymutil::DebugMapObject::YAMLSymbolMapping)
+LLVM37_YAML_IS_SEQUENCE_VECTOR(llvm37::dsymutil::DebugMapObject::YAMLSymbolMapping)
 
-namespace llvm {
+namespace llvm37 {
 namespace yaml {
 
-using namespace llvm::dsymutil;
+using namespace llvm37::dsymutil;
 
 template <>
 struct MappingTraits<std::pair<std::string, DebugMapObject::SymbolMapping>> {
@@ -201,7 +201,7 @@ template <> struct MappingTraits<dsymutil::DebugMapObject> {
 };
 
 template <> struct ScalarTraits<Triple> {
-  static void output(const Triple &val, void *, llvm::raw_ostream &out);
+  static void output(const Triple &val, void *, llvm37::raw_ostream &out);
   static StringRef input(StringRef scalar, void *, Triple &value);
   static bool mustQuote(StringRef) { return true; }
 };
@@ -225,4 +225,4 @@ template <> struct MappingTraits<std::unique_ptr<dsymutil::DebugMap>> {
 }
 }
 
-#endif // LLVM_TOOLS_DSYMUTIL_DEBUGMAP_H
+#endif // LLVM37_TOOLS_DSYMUTIL_DEBUGMAP_H

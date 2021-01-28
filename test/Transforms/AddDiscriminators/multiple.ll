@@ -47,11 +47,11 @@ if.end:                                           ; preds = %if.else, %if.then
 
 attributes #0 = { nounwind uwtable "less-precise-fpmad"="false" "no-frame-pointer-elim"="true" "no-frame-pointer-elim-non-leaf" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "stack-protector-buffer-size"="8" "unsafe-fp-math"="false" "use-soft-float"="false" }
 
-!llvm.dbg.cu = !{!0}
-!llvm.module.flags = !{!7, !8}
-!llvm.ident = !{!9}
+!llvm37.dbg.cu = !{!0}
+!llvm37.module.flags = !{!7, !8}
+!llvm37.ident = !{!9}
 
-!0 = !DICompileUnit(language: DW_LANG_C99, producer: "clang version 3.5 (trunk 199750) (llvm/trunk 199751)", isOptimized: false, emissionKind: 0, file: !1, enums: !2, retainedTypes: !2, subprograms: !3, globals: !2, imports: !2)
+!0 = !DICompileUnit(language: DW_LANG_C99, producer: "clang version 3.5 (trunk 199750) (llvm37/trunk 199751)", isOptimized: false, emissionKind: 0, file: !1, enums: !2, retainedTypes: !2, subprograms: !3, globals: !2, imports: !2)
 !1 = !DIFile(filename: "multiple.c", directory: ".")
 !2 = !{}
 !3 = !{!4}
@@ -61,7 +61,7 @@ attributes #0 = { nounwind uwtable "less-precise-fpmad"="false" "no-frame-pointe
 !13 = !DIBasicType(encoding: DW_ATE_signed, name: "int", size: 32, align: 32)
 !7 = !{i32 2, !"Dwarf Version", i32 4}
 !8 = !{i32 1, !"Debug Info Version", i32 3}
-!9 = !{!"clang version 3.5 (trunk 199750) (llvm/trunk 199751)"}
+!9 = !{!"clang version 3.5 (trunk 199750) (llvm37/trunk 199751)"}
 !10 = !DILocation(line: 3, scope: !11)
 !11 = distinct !DILexicalBlock(line: 3, column: 0, file: !1, scope: !4)
 !12 = !DILocation(line: 4, scope: !4)

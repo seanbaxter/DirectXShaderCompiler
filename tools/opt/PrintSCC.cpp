@@ -1,6 +1,6 @@
 //===- PrintSCC.cpp - Enumerate SCCs in some key graphs -------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -25,13 +25,13 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/ADT/SCCIterator.h"
-#include "llvm/Analysis/CallGraph.h"
-#include "llvm/IR/CFG.h"
-#include "llvm/IR/Module.h"
-#include "llvm/Pass.h"
-#include "llvm/Support/raw_ostream.h"
-using namespace llvm;
+#include "llvm37/ADT/SCCIterator.h"
+#include "llvm37/Analysis/CallGraph.h"
+#include "llvm37/IR/CFG.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/Pass.h"
+#include "llvm37/Support/raw_ostream.h"
+using namespace llvm37;
 
 namespace {
   struct CFGSCC : public FunctionPass {

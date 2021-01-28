@@ -17,7 +17,7 @@
 #include "dxc/Support/DxcLangExtensionsCommonHelper.h"
 #include <vector>
 
-namespace llvm {
+namespace llvm37 {
 class raw_string_ostream;
 class CallInst;
 class Value;
@@ -35,7 +35,7 @@ public:
   void SetupSema(clang::Sema &S) override {
     clang::ExternalASTSource *astSource = S.getASTContext().getExternalSource();
     if (clang::ExternalSemaSource *externalSema =
-            llvm::dyn_cast_or_null<clang::ExternalSemaSource>(astSource)) {
+            llvm37::dyn_cast_or_null<clang::ExternalSemaSource>(astSource)) {
       for (auto &&table : GetIntrinsicTables()) {
         hlsl::RegisterIntrinsicTable(externalSema, table);
       }
@@ -44,7 +44,7 @@ public:
 
   void SetupPreprocessorOptions(clang::PreprocessorOptions &PPOpts) override {
     for (const auto &define : GetDefines()) {
-      PPOpts.addMacroDef(llvm::StringRef(define.c_str()));
+      PPOpts.addMacroDef(llvm37::StringRef(define.c_str()));
     }
   }
 

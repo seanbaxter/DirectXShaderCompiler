@@ -92,7 +92,7 @@ attributes #1 = { alwaysinline nounwind readonly "disable-tail-calls"="false" "l
 attributes #2 = { nounwind }
 attributes #3 = { nounwind readonly }
 
-!llvm.ident = !{!0}
+!llvm37.ident = !{!0}
 !dx.version = !{!1}
 !dx.valver = !{!2}
 !dx.shaderModel = !{!3}

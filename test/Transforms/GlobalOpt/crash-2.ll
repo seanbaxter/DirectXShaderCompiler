@@ -1,5 +1,5 @@
-; RUN: llvm-as < %s | opt -globalopt -disable-output
-; NOTE: This needs to run through 'llvm-as' first to reproduce the error!
+; RUN: llvm37-as < %s | opt -globalopt -disable-output
+; NOTE: This needs to run through 'llvm37-as' first to reproduce the error!
 ; PR15440
 
 %union.U5.0.6.12 = type { i32 }

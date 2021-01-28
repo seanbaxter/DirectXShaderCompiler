@@ -1,6 +1,6 @@
 //===-- DeadArgumentElimination.cpp - Eliminate dead arguments ------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -17,28 +17,28 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Transforms/IPO.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/ADT/StringExtras.h"
-#include "llvm/IR/CallSite.h"
-#include "llvm/IR/CallingConv.h"
-#include "llvm/IR/Constant.h"
-#include "llvm/IR/DIBuilder.h"
-#include "llvm/IR/DebugInfo.h"
-#include "llvm/IR/DerivedTypes.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Module.h"
-#include "llvm/Pass.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/Transforms/IPO.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/ADT/StringExtras.h"
+#include "llvm37/IR/CallSite.h"
+#include "llvm37/IR/CallingConv.h"
+#include "llvm37/IR/Constant.h"
+#include "llvm37/IR/DIBuilder.h"
+#include "llvm37/IR/DebugInfo.h"
+#include "llvm37/IR/DerivedTypes.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/Pass.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <map>
 #include <set>
 #include <tuple>
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "deadargelim"
 
@@ -121,9 +121,9 @@ namespace {
 
     typedef SmallVector<RetOrArg, 5> UseVector;
 
-    // Map each LLVM function to corresponding metadata with debug info. If
+    // Map each LLVM37 function to corresponding metadata with debug info. If
     // the function is replaced with another one, we should patch the pointer
-    // to LLVM function in metadata.
+    // to LLVM37 function in metadata.
     // As the code generation for module is finished (and DIBuilder is
     // finalized) we assume that subprogram descriptors won't be changed, and
     // they are stored in map for short duration anyway.
@@ -185,11 +185,11 @@ INITIALIZE_PASS(DAH, "deadarghaX0r",
 /// createDeadArgEliminationPass - This pass removes arguments from functions
 /// which are not used by the body of the function.
 ///
-ModulePass *llvm::createDeadArgEliminationPass() { return new DAE(); }
-ModulePass *llvm::createDeadArgHackingPass() { return new DAH(); }
+ModulePass *llvm37::createDeadArgEliminationPass() { return new DAE(); }
+ModulePass *llvm37::createDeadArgHackingPass() { return new DAH(); }
 
 /// DeleteDeadVarargs - If this is an function that takes a ... list, and if
-/// llvm.vastart is never called, the varargs list is dead for the function.
+/// llvm37.vastart is never called, the varargs list is dead for the function.
 bool DAE::DeleteDeadVarargs(Function &Fn) {
   assert(Fn.getFunctionType()->isVarArg() && "Function isn't varargs!");
   if (Fn.isDeclaration() || !Fn.hasLocalLinkage()) return false;
@@ -199,7 +199,7 @@ bool DAE::DeleteDeadVarargs(Function &Fn) {
     return false;
 
   // Okay, we know we can transform this function if safe.  Scan its body
-  // looking for calls marked musttail or calls to llvm.vastart.
+  // looking for calls marked musttail or calls to llvm37.vastart.
   for (Function::iterator BB = Fn.begin(), E = Fn.end(); BB != E; ++BB) {
     for (BasicBlock::iterator I = BB->begin(), E = BB->end(); I != E; ++I) {
       CallInst *CI = dyn_cast<CallInst>(I);
@@ -214,7 +214,7 @@ bool DAE::DeleteDeadVarargs(Function &Fn) {
     }
   }
 
-  // If we get here, there are no calls to llvm.vastart in the function body,
+  // If we get here, there are no calls to llvm37.vastart in the function body,
   // remove the "..." and adjust all the calls.
 
   // Start by computing a new prototype for the function, which is the same as
@@ -300,7 +300,7 @@ bool DAE::DeleteDeadVarargs(Function &Fn) {
     I2->takeName(I);
   }
 
-  // Patch the pointer to LLVM function in debug info descriptor.
+  // Patch the pointer to LLVM37 function in debug info descriptor.
   auto DI = FunctionDIs.find(&Fn);
   if (DI != FunctionDIs.end()) {
     DISubprogram *SP = DI->second;
@@ -1078,7 +1078,7 @@ bool DAE::RemoveDeadStuffFromFunction(Function *F) {
         BB->getInstList().erase(RI);
       }
 
-  // Patch the pointer to LLVM function in debug info descriptor.
+  // Patch the pointer to LLVM37 function in debug info descriptor.
   auto DI = FunctionDIs.find(F);
   if (DI != FunctionDIs.end())
     DI->second->replaceFunction(NF);

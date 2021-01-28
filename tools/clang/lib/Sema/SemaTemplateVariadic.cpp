@@ -1,6 +1,6 @@
 //===------- SemaTemplateVariadic.cpp - C++ Variadic Templates ------------===/
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -234,7 +234,7 @@ Sema::DiagnoseUnexpandedParameterPacks(SourceLocation Loc,
   
   SmallVector<SourceLocation, 4> Locations;
   SmallVector<IdentifierInfo *, 4> Names;
-  llvm::SmallPtrSet<IdentifierInfo *, 4> NamesKnown;
+  llvm37::SmallPtrSet<IdentifierInfo *, 4> NamesKnown;
 
   for (unsigned I = 0, N = Unexpanded.size(); I != N; ++I) {
     IdentifierInfo *Name = nullptr;
@@ -447,7 +447,7 @@ Sema::ActOnPackExpansion(const ParsedTemplateArgument &Arg,
       
     return Arg.getTemplatePackExpansion(EllipsisLoc);
   }
-  llvm_unreachable("Unhandled template argument kind?");
+  llvm37_unreachable("Unhandled template argument kind?");
 }
 
 TypeResult Sema::ActOnPackExpansion(ParsedType Type, 
@@ -574,7 +574,7 @@ bool Sema::CheckParameterPacksForExpansion(
       // Figure out whether we're instantiating to an argument pack or not.
       typedef LocalInstantiationScope::DeclArgumentPack DeclArgumentPack;
       
-      llvm::PointerUnion<Decl *, DeclArgumentPack *> *Instantiation
+      llvm37::PointerUnion<Decl *, DeclArgumentPack *> *Instantiation
         = CurrentInstantiationScope->findInstantiationOf(
                                         i->first.get<NamedDecl *>());
       if (Instantiation->is<DeclArgumentPack *>()) {
@@ -665,7 +665,7 @@ Optional<unsigned> Sema::getNumArgumentsInExpansion(QualType T,
         // Function parameter pack.
         typedef LocalInstantiationScope::DeclArgumentPack DeclArgumentPack;
         
-        llvm::PointerUnion<Decl *, DeclArgumentPack *> *Instantiation
+        llvm37::PointerUnion<Decl *, DeclArgumentPack *> *Instantiation
           = CurrentInstantiationScope->findInstantiationOf(
                                         Unexpanded[I].first.get<NamedDecl *>());
         if (Instantiation->is<Decl*>())
@@ -852,7 +852,7 @@ ExprResult Sema::ActOnSizeofParameterPackExpr(Scope *S,
   case LookupResult::NotFoundInCurrentInstantiation:
     if (TypoCorrection Corrected =
             CorrectTypo(R.getLookupNameInfo(), R.getLookupKind(), S, nullptr,
-                        llvm::make_unique<ParameterPackValidatorCCC>(),
+                        llvm37::make_unique<ParameterPackValidatorCCC>(),
                         CTK_ErrorRecovery)) {
       diagnoseTypo(Corrected,
                    PDiag(diag::err_sizeof_pack_no_pack_name_suggest) << &Name,
@@ -938,7 +938,7 @@ Sema::getTemplateArgumentPackExpansionPattern(
     return TemplateArgumentLoc();
   }
 
-  llvm_unreachable("Invalid TemplateArgument Kind!");
+  llvm37_unreachable("Invalid TemplateArgument Kind!");
 }
 
 static void CheckFoldOperand(Sema &S, Expr *E) {

@@ -1,26 +1,26 @@
-//===- llvm/unittests/IR/DominatorTreeTest.cpp - Constants unit tests -----===//
+//===- llvm37/unittests/IR/DominatorTreeTest.cpp - Constants unit tests -----===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/IR/Dominators.h"
-#include "llvm/Analysis/PostDominators.h"
-#include "llvm/AsmParser/Parser.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/LegacyPassManager.h"
-#include "llvm/Support/SourceMgr.h"
+#include "llvm37/IR/Dominators.h"
+#include "llvm37/Analysis/PostDominators.h"
+#include "llvm37/AsmParser/Parser.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/LegacyPassManager.h"
+#include "llvm37/Support/SourceMgr.h"
 #include "gtest/gtest.h"
 
-using namespace llvm;
+using namespace llvm37;
 
-namespace llvm {
+namespace llvm37 {
   void initializeDPassPass(PassRegistry&);
 
   namespace {
@@ -214,7 +214,7 @@ namespace llvm {
     };
     char DPass::ID = 0;
 
-    std::unique_ptr<Module> makeLLVMModule(DPass *P) {
+    std::unique_ptr<Module> makeLLVM37Module(DPass *P) {
       const char *ModuleStrig =
         "declare i32 @g()\n" \
         "define void @f(i32 %x) personality i32 ()* @g {\n" \
@@ -238,14 +238,14 @@ namespace llvm {
         "  %y9 = phi i32 [0, %bb2], [%y4, %bb1]\n"
         "  ret void\n" \
         "}\n";
-      LLVMContext &C = getGlobalContext();
+      LLVM37Context &C = getGlobalContext();
       SMDiagnostic Err;
       return parseAssemblyString(ModuleStrig, Err, C);
     }
 
     TEST(DominatorTree, Unreachable) {
       DPass *P = new DPass();
-      std::unique_ptr<Module> M = makeLLVMModule(P);
+      std::unique_ptr<Module> M = makeLLVM37Module(P);
       legacy::PassManager Passes;
       Passes.add(P);
       Passes.run(*M);

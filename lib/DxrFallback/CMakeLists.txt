@@ -1,4 +1,4 @@
-add_llvm_library(LLVMDxrFallback
+add_llvm_library(LLVM37DxrFallback
   DxrFallbackCompiler.cpp
   FunctionBuilder.h
   LiveValues.cpp
@@ -11,4 +11,4 @@ add_llvm_library(LLVMDxrFallback
   StateFunctionTransform.h
 )
 
-add_dependencies(LLVMDxrFallback intrinsics_gen)
+add_dependencies(LLVM37DxrFallback intrinsics_gen)

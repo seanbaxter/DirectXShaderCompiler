@@ -1,6 +1,6 @@
 //===--- FileSystemStatCache.h - Caching for 'stat' calls -------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -12,12 +12,12 @@
 ///
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_BASIC_FILESYSTEMSTATCACHE_H
-#define LLVM_CLANG_BASIC_FILESYSTEMSTATCACHE_H
+#ifndef LLVM37_CLANG_BASIC_FILESYSTEMSTATCACHE_H
+#define LLVM37_CLANG_BASIC_FILESYSTEMSTATCACHE_H
 
 #include "clang/Basic/LLVM.h"
-#include "llvm/ADT/StringMap.h"
-#include "llvm/Support/FileSystem.h"
+#include "llvm37/ADT/StringMap.h"
+#include "llvm37/Support/FileSystem.h"
 #include <memory>
 
 namespace clang {
@@ -32,7 +32,7 @@ struct FileData {
   std::string Name;
   uint64_t Size;
   time_t ModTime;
-  llvm::sys::fs::UniqueID UniqueID;
+  llvm37::sys::fs::UniqueID UniqueID;
   bool IsDirectory;
   bool IsNamedPipe;
   bool InPCH;
@@ -113,9 +113,9 @@ protected:
 class MemorizeStatCalls : public FileSystemStatCache {
 public:
   /// \brief The set of stat() calls that have been seen.
-  llvm::StringMap<FileData, llvm::BumpPtrAllocator> StatCalls;
+  llvm37::StringMap<FileData, llvm37::BumpPtrAllocator> StatCalls;
 
-  typedef llvm::StringMap<FileData, llvm::BumpPtrAllocator>::const_iterator
+  typedef llvm37::StringMap<FileData, llvm37::BumpPtrAllocator>::const_iterator
   iterator;
 
   iterator begin() const { return StatCalls.begin(); }

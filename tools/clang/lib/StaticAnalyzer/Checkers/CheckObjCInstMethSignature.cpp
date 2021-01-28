@@ -1,6 +1,6 @@
 //=- CheckObjCInstMethodRetTy.cpp - Check ObjC method signatures -*- C++ -*-==//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -20,8 +20,8 @@
 #include "clang/StaticAnalyzer/Core/BugReporter/BugReporter.h"
 #include "clang/StaticAnalyzer/Core/BugReporter/PathDiagnostic.h"
 #include "clang/StaticAnalyzer/Core/Checker.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/Support/raw_ostream.h"
 
 using namespace clang;
 using namespace ento;
@@ -48,7 +48,7 @@ static void CompareReturnTypes(const ObjCMethodDecl *MethDerived,
 
   if (!AreTypesCompatible(ResDerived, ResAncestor, Ctx)) {
     std::string sbuf;
-    llvm::raw_string_ostream os(sbuf);
+    llvm37::raw_string_ostream os(sbuf);
 
     os << "The Objective-C class '"
        << *MethDerived->getClassInterface()
@@ -89,7 +89,7 @@ static void CheckObjCInstMethSignature(const ObjCImplementationDecl *ID,
   ASTContext &Ctx = BR.getContext();
 
   // Build a DenseMap of the methods for quick querying.
-  typedef llvm::DenseMap<Selector,ObjCMethodDecl*> MapTy;
+  typedef llvm37::DenseMap<Selector,ObjCMethodDecl*> MapTy;
   MapTy IMeths;
   unsigned NumMethods = 0;
 

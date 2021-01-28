@@ -1,6 +1,6 @@
 //===--- PPConditionalDirectiveRecord.h - Preprocessing Directives-*- C++ -*-=//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,12 +11,12 @@
 //  a record of conditional directive regions.
 //
 //===----------------------------------------------------------------------===//
-#ifndef LLVM_CLANG_LEX_PPCONDITIONALDIRECTIVERECORD_H
-#define LLVM_CLANG_LEX_PPCONDITIONALDIRECTIVERECORD_H
+#ifndef LLVM37_CLANG_LEX_PPCONDITIONALDIRECTIVERECORD_H
+#define LLVM37_CLANG_LEX_PPCONDITIONALDIRECTIVERECORD_H
 
 #include "clang/Basic/SourceLocation.h"
 #include "clang/Lex/PPCallbacks.h"
-#include "llvm/ADT/SmallVector.h"
+#include "llvm37/ADT/SmallVector.h"
 #include <vector>
 
 namespace clang {
@@ -100,4 +100,4 @@ private:
 
 } // end namespace clang
 
-#endif // LLVM_CLANG_LEX_PPCONDITIONALDIRECTIVERECORD_H
+#endif // LLVM37_CLANG_LEX_PPCONDITIONALDIRECTIVERECORD_H

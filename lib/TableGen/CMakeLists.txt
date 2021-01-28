@@ -1,4 +1,4 @@
-add_llvm_library(LLVMTableGen
+add_llvm_library(LLVM37TableGen
   Error.cpp
   Main.cpp
   Record.cpp
@@ -9,5 +9,5 @@ add_llvm_library(LLVMTableGen
   TGParser.cpp
 
   ADDITIONAL_HEADER_DIRS
-  ${LLVM_MAIN_INCLUDE_DIR}/llvm/TableGen
+  ${LLVM37_MAIN_INCLUDE_DIR}/llvm37/TableGen
   )

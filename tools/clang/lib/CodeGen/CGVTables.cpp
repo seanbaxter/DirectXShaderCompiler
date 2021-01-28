@@ -1,6 +1,6 @@
-//===--- CGVTables.cpp - Emit LLVM Code for C++ vtables -------------------===//
+//===--- CGVTables.cpp - Emit LLVM37 Code for C++ vtables -------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -18,11 +18,11 @@
 #include "clang/AST/RecordLayout.h"
 #include "clang/CodeGen/CGFunctionInfo.h"
 #include "clang/Frontend/CodeGenOptions.h"
-#include "llvm/ADT/DenseSet.h"
-#include "llvm/ADT/SetVector.h"
-#include "llvm/Support/Compiler.h"
-#include "llvm/Support/Format.h"
-#include "llvm/Transforms/Utils/Cloning.h"
+#include "llvm37/ADT/DenseSet.h"
+#include "llvm37/ADT/SetVector.h"
+#include "llvm37/Support/Compiler.h"
+#include "llvm37/Support/Format.h"
+#include "llvm37/Transforms/Utils/Cloning.h"
 #include <algorithm>
 #include <cstdio>
 
@@ -32,13 +32,13 @@ using namespace CodeGen;
 CodeGenVTables::CodeGenVTables(CodeGenModule &CGM)
     : CGM(CGM), VTContext(CGM.getContext().getVTableContext()) {}
 
-llvm::Constant *CodeGenModule::GetAddrOfThunk(GlobalDecl GD, 
+llvm37::Constant *CodeGenModule::GetAddrOfThunk(GlobalDecl GD, 
                                               const ThunkInfo &Thunk) {
   const CXXMethodDecl *MD = cast<CXXMethodDecl>(GD.getDecl());
 
   // Compute the mangled name.
   SmallString<256> Name;
-  llvm::raw_svector_ostream Out(Name);
+  llvm37::raw_svector_ostream Out(Name);
   if (const CXXDestructorDecl* DD = dyn_cast<CXXDestructorDecl>(MD))
     getCXXABI().getMangleContext().mangleCXXDtorThunk(DD, GD.getDtorType(),
                                                       Thunk.This, Out);
@@ -46,18 +46,18 @@ llvm::Constant *CodeGenModule::GetAddrOfThunk(GlobalDecl GD,
     getCXXABI().getMangleContext().mangleThunk(MD, Thunk, Out);
   Out.flush();
 
-  llvm::Type *Ty = getTypes().GetFunctionTypeForVTable(GD);
-  return GetOrCreateLLVMFunction(Name, Ty, GD, /*ForVTable=*/true,
+  llvm37::Type *Ty = getTypes().GetFunctionTypeForVTable(GD);
+  return GetOrCreateLLVM37Function(Name, Ty, GD, /*ForVTable=*/true,
                                  /*DontDefer=*/true, /*IsThunk=*/true);
 }
 
 static void setThunkVisibility(CodeGenModule &CGM, const CXXMethodDecl *MD,
-                               const ThunkInfo &Thunk, llvm::Function *Fn) {
+                               const ThunkInfo &Thunk, llvm37::Function *Fn) {
   CGM.setGlobalVisibility(Fn, MD);
 }
 
 static void setThunkProperties(CodeGenModule &CGM, const ThunkInfo &Thunk,
-                               llvm::Function *ThunkFn, bool ForVTable,
+                               llvm37::Function *ThunkFn, bool ForVTable,
                                GlobalDecl GD) {
   CGM.setFunctionLinkage(GD, ThunkFn);
   CGM.getCXXABI().setThunkLinkage(ThunkFn, ForVTable, GD,
@@ -87,18 +87,18 @@ static RValue PerformReturnAdjustment(CodeGenFunction &CGF,
   // Emit the return adjustment.
   bool NullCheckValue = !ResultType->isReferenceType();
 
-  llvm::BasicBlock *AdjustNull = nullptr;
-  llvm::BasicBlock *AdjustNotNull = nullptr;
-  llvm::BasicBlock *AdjustEnd = nullptr;
+  llvm37::BasicBlock *AdjustNull = nullptr;
+  llvm37::BasicBlock *AdjustNotNull = nullptr;
+  llvm37::BasicBlock *AdjustEnd = nullptr;
 
-  llvm::Value *ReturnValue = RV.getScalarVal();
+  llvm37::Value *ReturnValue = RV.getScalarVal();
 
   if (NullCheckValue) {
     AdjustNull = CGF.createBasicBlock("adjust.null");
     AdjustNotNull = CGF.createBasicBlock("adjust.notnull");
     AdjustEnd = CGF.createBasicBlock("adjust.end");
   
-    llvm::Value *IsNull = CGF.Builder.CreateIsNull(ReturnValue);
+    llvm37::Value *IsNull = CGF.Builder.CreateIsNull(ReturnValue);
     CGF.Builder.CreateCondBr(IsNull, AdjustNull, AdjustNotNull);
     CGF.EmitBlock(AdjustNotNull);
   }
@@ -112,9 +112,9 @@ static RValue PerformReturnAdjustment(CodeGenFunction &CGF,
     CGF.Builder.CreateBr(AdjustEnd);
     CGF.EmitBlock(AdjustEnd);
   
-    llvm::PHINode *PHI = CGF.Builder.CreatePHI(ReturnValue->getType(), 2);
+    llvm37::PHINode *PHI = CGF.Builder.CreatePHI(ReturnValue->getType(), 2);
     PHI->addIncoming(ReturnValue, AdjustNotNull);
-    PHI->addIncoming(llvm::Constant::getNullValue(ReturnValue->getType()), 
+    PHI->addIncoming(llvm37::Constant::getNullValue(ReturnValue->getType()), 
                      AdjustNull);
     ReturnValue = PHI;
   }
@@ -124,22 +124,22 @@ static RValue PerformReturnAdjustment(CodeGenFunction &CGF,
 
 // This function does roughly the same thing as GenerateThunk, but in a
 // very different way, so that va_start and va_end work correctly.
-// FIXME: This function assumes "this" is the first non-sret LLVM argument of
+// FIXME: This function assumes "this" is the first non-sret LLVM37 argument of
 //        a function, and that there is an alloca built in the entry block
 //        for all accesses to "this".
 // FIXME: This function assumes there is only one "ret" statement per function.
 // FIXME: Cloning isn't correct in the presence of indirect goto!
 // FIXME: This implementation of thunks bloats codesize by duplicating the
 //        function definition.  There are alternatives:
-//        1. Add some sort of stub support to LLVM for cases where we can
+//        1. Add some sort of stub support to LLVM37 for cases where we can
 //           do a this adjustment, then a sibcall.
 //        2. We could transform the definition to take a va_list instead of an
 //           actual variable argument list, then have the thunks (including a
 //           no-op thunk for the regular definition) call va_start/va_end.
 //           There's a bit of per-call overhead for this solution, but it's
 //           better for codesize if the definition is long.
-llvm::Function *
-CodeGenFunction::GenerateVarArgsThunk(llvm::Function *Fn,
+llvm37::Function *
+CodeGenFunction::GenerateVarArgsThunk(llvm37::Function *Fn,
                                       const CGFunctionInfo &FnInfo,
                                       GlobalDecl GD, const ThunkInfo &Thunk) {
   const CXXMethodDecl *MD = cast<CXXMethodDecl>(GD.getDecl());
@@ -148,13 +148,13 @@ CodeGenFunction::GenerateVarArgsThunk(llvm::Function *Fn,
 
   // Get the original function
   assert(FnInfo.isVariadic());
-  llvm::Type *Ty = CGM.getTypes().GetFunctionType(FnInfo);
-  llvm::Value *Callee = CGM.GetAddrOfFunction(GD, Ty, /*ForVTable=*/true);
-  llvm::Function *BaseFn = cast<llvm::Function>(Callee);
+  llvm37::Type *Ty = CGM.getTypes().GetFunctionType(FnInfo);
+  llvm37::Value *Callee = CGM.GetAddrOfFunction(GD, Ty, /*ForVTable=*/true);
+  llvm37::Function *BaseFn = cast<llvm37::Function>(Callee);
 
   // Clone to thunk.
-  llvm::ValueToValueMapTy VMap;
-  llvm::Function *NewFn = llvm::CloneFunction(BaseFn, VMap,
+  llvm37::ValueToValueMapTy VMap;
+  llvm37::Function *NewFn = llvm37::CloneFunction(BaseFn, VMap,
                                               /*ModuleLevelChanges=*/false);
   CGM.getModule().getFunctionList().push_back(NewFn);
   Fn->replaceAllUsesWith(NewFn);
@@ -166,30 +166,30 @@ CodeGenFunction::GenerateVarArgsThunk(llvm::Function *Fn,
   CurFn = Fn;
 
   // Get the "this" value
-  llvm::Function::arg_iterator AI = Fn->arg_begin();
+  llvm37::Function::arg_iterator AI = Fn->arg_begin();
   if (CGM.ReturnTypeUsesSRet(FnInfo))
     ++AI;
 
   // Find the first store of "this", which will be to the alloca associated
   // with "this".
-  llvm::Value *ThisPtr = &*AI;
-  llvm::BasicBlock *EntryBB = Fn->begin();
-  llvm::Instruction *ThisStore =
-      std::find_if(EntryBB->begin(), EntryBB->end(), [&](llvm::Instruction &I) {
-    return isa<llvm::StoreInst>(I) && I.getOperand(0) == ThisPtr;
+  llvm37::Value *ThisPtr = &*AI;
+  llvm37::BasicBlock *EntryBB = Fn->begin();
+  llvm37::Instruction *ThisStore =
+      std::find_if(EntryBB->begin(), EntryBB->end(), [&](llvm37::Instruction &I) {
+    return isa<llvm37::StoreInst>(I) && I.getOperand(0) == ThisPtr;
   });
   assert(ThisStore && "Store of this should be in entry block?");
   // Adjust "this", if necessary.
   Builder.SetInsertPoint(ThisStore);
-  llvm::Value *AdjustedThisPtr =
+  llvm37::Value *AdjustedThisPtr =
       CGM.getCXXABI().performThisAdjustment(*this, ThisPtr, Thunk.This);
   ThisStore->setOperand(0, AdjustedThisPtr);
 
   if (!Thunk.Return.isEmpty()) {
     // Fix up the returned value, if necessary.
-    for (llvm::Function::iterator I = Fn->begin(), E = Fn->end(); I != E; I++) {
-      llvm::Instruction *T = I->getTerminator();
-      if (isa<llvm::ReturnInst>(T)) {
+    for (llvm37::Function::iterator I = Fn->begin(), E = Fn->end(); I != E; I++) {
+      llvm37::Instruction *T = I->getTerminator();
+      if (isa<llvm37::ReturnInst>(T)) {
         RValue RV = RValue::get(T->getOperand(0));
         T->eraseFromParent();
         Builder.SetInsertPoint(&*I);
@@ -203,7 +203,7 @@ CodeGenFunction::GenerateVarArgsThunk(llvm::Function *Fn,
   return Fn;
 }
 
-void CodeGenFunction::StartThunk(llvm::Function *Fn, GlobalDecl GD,
+void CodeGenFunction::StartThunk(llvm37::Function *Fn, GlobalDecl GD,
                                  const CGFunctionInfo &FnInfo) {
   assert(!CurGD.getDecl() && "CurGD was already set!");
   CurGD = GD;
@@ -238,14 +238,14 @@ void CodeGenFunction::StartThunk(llvm::Function *Fn, GlobalDecl GD,
   CXXThisValue = CXXABIThisValue;
 }
 
-void CodeGenFunction::EmitCallAndReturnForThunk(llvm::Value *Callee,
+void CodeGenFunction::EmitCallAndReturnForThunk(llvm37::Value *Callee,
                                                 const ThunkInfo *Thunk) {
   assert(isa<CXXMethodDecl>(CurGD.getDecl()) &&
          "Please use a new CGF for this thunk");
   const CXXMethodDecl *MD = cast<CXXMethodDecl>(CurGD.getDecl());
 
   // Adjust the 'this' pointer if necessary
-  llvm::Value *AdjustedThisPtr = Thunk ? CGM.getCXXABI().performThisAdjustment(
+  llvm37::Value *AdjustedThisPtr = Thunk ? CGM.getCXXABI().performThisAdjustment(
                                              *this, LoadCXXThis(), Thunk->This)
                                        : LoadCXXThis();
 
@@ -306,7 +306,7 @@ void CodeGenFunction::EmitCallAndReturnForThunk(llvm::Value *Callee,
     Slot = ReturnValueSlot(ReturnValue, ResultType.isVolatileQualified());
   
   // Now emit our call.
-  llvm::Instruction *CallOrInvoke;
+  llvm37::Instruction *CallOrInvoke;
   RValue RV = EmitCall(*CurFnInfo, Callee, Slot, CallArgs, MD, &CallOrInvoke);
 
   // Consider return adjustment if we have ThunkInfo.
@@ -324,14 +324,14 @@ void CodeGenFunction::EmitCallAndReturnForThunk(llvm::Value *Callee,
 }
 
 void CodeGenFunction::EmitMustTailThunk(const CXXMethodDecl *MD,
-                                        llvm::Value *AdjustedThisPtr,
-                                        llvm::Value *Callee) {
+                                        llvm37::Value *AdjustedThisPtr,
+                                        llvm37::Value *Callee) {
   // Emitting a musttail call thunk doesn't use any of the CGCall.cpp machinery
-  // to translate AST arguments into LLVM IR arguments.  For thunks, we know
+  // to translate AST arguments into LLVM37 IR arguments.  For thunks, we know
   // that the caller prototype more or less matches the callee prototype with
   // the exception of 'this'.
-  SmallVector<llvm::Value *, 8> Args;
-  for (llvm::Argument &A : CurFn->args())
+  SmallVector<llvm37::Value *, 8> Args;
+  for (llvm37::Argument &A : CurFn->args())
     Args.push_back(&A);
 
   // Set the adjusted 'this' pointer.
@@ -339,15 +339,15 @@ void CodeGenFunction::EmitMustTailThunk(const CXXMethodDecl *MD,
   if (ThisAI.isDirect()) {
     const ABIArgInfo &RetAI = CurFnInfo->getReturnInfo();
     int ThisArgNo = RetAI.isIndirect() && !RetAI.isSRetAfterThis() ? 1 : 0;
-    llvm::Type *ThisType = Args[ThisArgNo]->getType();
+    llvm37::Type *ThisType = Args[ThisArgNo]->getType();
     if (ThisType != AdjustedThisPtr->getType())
       AdjustedThisPtr = Builder.CreateBitCast(AdjustedThisPtr, ThisType);
     Args[ThisArgNo] = AdjustedThisPtr;
   } else {
     assert(ThisAI.isInAlloca() && "this is passed directly or inalloca");
-    llvm::Value *ThisAddr = GetAddrOfLocalVar(CXXABIThisDecl);
-    llvm::Type *ThisType =
-        cast<llvm::PointerType>(ThisAddr->getType())->getElementType();
+    llvm37::Value *ThisAddr = GetAddrOfLocalVar(CXXABIThisDecl);
+    llvm37::Type *ThisType =
+        cast<llvm37::PointerType>(ThisAddr->getType())->getElementType();
     if (ThisType != AdjustedThisPtr->getType())
       AdjustedThisPtr = Builder.CreateBitCast(AdjustedThisPtr, ThisType);
     Builder.CreateStore(AdjustedThisPtr, ThisAddr);
@@ -355,18 +355,18 @@ void CodeGenFunction::EmitMustTailThunk(const CXXMethodDecl *MD,
 
   // Emit the musttail call manually.  Even if the prologue pushed cleanups, we
   // don't actually want to run them.
-  llvm::CallInst *Call = Builder.CreateCall(Callee, Args);
-  Call->setTailCallKind(llvm::CallInst::TCK_MustTail);
+  llvm37::CallInst *Call = Builder.CreateCall(Callee, Args);
+  Call->setTailCallKind(llvm37::CallInst::TCK_MustTail);
 
   // Apply the standard set of call attributes.
   unsigned CallingConv;
   CodeGen::AttributeListType AttributeList;
   CGM.ConstructAttributeList(*CurFnInfo, MD, AttributeList, CallingConv,
                              /*AttrOnCallSite=*/true);
-  llvm::AttributeSet Attrs =
-      llvm::AttributeSet::get(getLLVMContext(), AttributeList);
+  llvm37::AttributeSet Attrs =
+      llvm37::AttributeSet::get(getLLVM37Context(), AttributeList);
   Call->setAttributes(Attrs);
-  Call->setCallingConv(static_cast<llvm::CallingConv::ID>(CallingConv));
+  Call->setCallingConv(static_cast<llvm37::CallingConv::ID>(CallingConv));
 
   if (Call->getType()->isVoidTy())
     Builder.CreateRetVoid();
@@ -379,15 +379,15 @@ void CodeGenFunction::EmitMustTailThunk(const CXXMethodDecl *MD,
   FinishFunction();
 }
 
-void CodeGenFunction::generateThunk(llvm::Function *Fn,
+void CodeGenFunction::generateThunk(llvm37::Function *Fn,
                                     const CGFunctionInfo &FnInfo,
                                     GlobalDecl GD, const ThunkInfo &Thunk) {
   StartThunk(Fn, GD, FnInfo);
 
   // Get our callee.
-  llvm::Type *Ty =
+  llvm37::Type *Ty =
     CGM.getTypes().GetFunctionType(CGM.getTypes().arrangeGlobalDeclaration(GD));
-  llvm::Value *Callee = CGM.GetAddrOfFunction(GD, Ty, /*ForVTable=*/true);
+  llvm37::Value *Callee = CGM.GetAddrOfFunction(GD, Ty, /*ForVTable=*/true);
 
   // Make the call and return the result.
   EmitCallAndReturnForThunk(Callee, &Thunk);
@@ -398,22 +398,22 @@ void CodeGenVTables::emitThunk(GlobalDecl GD, const ThunkInfo &Thunk,
   const CGFunctionInfo &FnInfo = CGM.getTypes().arrangeGlobalDeclaration(GD);
 
   // FIXME: re-use FnInfo in this computation.
-  llvm::Constant *C = CGM.GetAddrOfThunk(GD, Thunk);
-  llvm::GlobalValue *Entry;
+  llvm37::Constant *C = CGM.GetAddrOfThunk(GD, Thunk);
+  llvm37::GlobalValue *Entry;
 
   // Strip off a bitcast if we got one back.
-  if (llvm::ConstantExpr *CE = dyn_cast<llvm::ConstantExpr>(C)) {
-    assert(CE->getOpcode() == llvm::Instruction::BitCast);
-    Entry = cast<llvm::GlobalValue>(CE->getOperand(0));
+  if (llvm37::ConstantExpr *CE = dyn_cast<llvm37::ConstantExpr>(C)) {
+    assert(CE->getOpcode() == llvm37::Instruction::BitCast);
+    Entry = cast<llvm37::GlobalValue>(CE->getOperand(0));
   } else {
-    Entry = cast<llvm::GlobalValue>(C);
+    Entry = cast<llvm37::GlobalValue>(C);
   }
 
   // There's already a declaration with the same name, check if it has the same
   // type or if we need to replace it.
   if (Entry->getType()->getElementType() !=
       CGM.getTypes().GetFunctionTypeForVTable(GD)) {
-    llvm::GlobalValue *OldThunkFn = Entry;
+    llvm37::GlobalValue *OldThunkFn = Entry;
 
     // If the types mismatch then we have to rewrite the definition.
     assert(OldThunkFn->isDeclaration() &&
@@ -421,12 +421,12 @@ void CodeGenVTables::emitThunk(GlobalDecl GD, const ThunkInfo &Thunk,
 
     // Remove the name from the old thunk function and get a new thunk.
     OldThunkFn->setName(StringRef());
-    Entry = cast<llvm::GlobalValue>(CGM.GetAddrOfThunk(GD, Thunk));
+    Entry = cast<llvm37::GlobalValue>(CGM.GetAddrOfThunk(GD, Thunk));
     
     // If needed, replace the old thunk with a bitcast.
     if (!OldThunkFn->use_empty()) {
-      llvm::Constant *NewPtrForOldDecl =
-        llvm::ConstantExpr::getBitCast(Entry, OldThunkFn->getType());
+      llvm37::Constant *NewPtrForOldDecl =
+        llvm37::ConstantExpr::getBitCast(Entry, OldThunkFn->getType());
       OldThunkFn->replaceAllUsesWith(NewPtrForOldDecl);
     }
     
@@ -434,7 +434,7 @@ void CodeGenVTables::emitThunk(GlobalDecl GD, const ThunkInfo &Thunk,
     OldThunkFn->eraseFromParent();
   }
 
-  llvm::Function *ThunkFn = cast<llvm::Function>(Entry);
+  llvm37::Function *ThunkFn = cast<llvm37::Function>(Entry);
   bool ABIHasKeyFunctions = CGM.getTarget().getCXXABI().hasKeyFunctions();
   bool UseAvailableExternallyLinkage = ForVTable && ABIHasKeyFunctions;
 
@@ -448,7 +448,7 @@ void CodeGenVTables::emitThunk(GlobalDecl GD, const ThunkInfo &Thunk,
     return;
   }
 
-  CGM.SetLLVMFunctionAttributesForDefinition(GD.getDecl(), ThunkFn);
+  CGM.SetLLVM37FunctionAttributesForDefinition(GD.getDecl(), ThunkFn);
 
   if (ThunkFn->isVarArg()) {
     // Varargs thunks are special; we can't just generate a call because
@@ -506,44 +506,44 @@ void CodeGenVTables::EmitThunks(GlobalDecl GD)
     emitThunk(GD, (*ThunkInfoVector)[I], /*ForVTable=*/false);
 }
 
-llvm::Constant *CodeGenVTables::CreateVTableInitializer(
+llvm37::Constant *CodeGenVTables::CreateVTableInitializer(
     const CXXRecordDecl *RD, const VTableComponent *Components,
     unsigned NumComponents, const VTableLayout::VTableThunkTy *VTableThunks,
-    unsigned NumVTableThunks, llvm::Constant *RTTI) {
-  SmallVector<llvm::Constant *, 64> Inits;
+    unsigned NumVTableThunks, llvm37::Constant *RTTI) {
+  SmallVector<llvm37::Constant *, 64> Inits;
 
-  llvm::Type *Int8PtrTy = CGM.Int8PtrTy;
+  llvm37::Type *Int8PtrTy = CGM.Int8PtrTy;
   
-  llvm::Type *PtrDiffTy = 
+  llvm37::Type *PtrDiffTy = 
     CGM.getTypes().ConvertType(CGM.getContext().getPointerDiffType());
 
   unsigned NextVTableThunkIndex = 0;
 
-  llvm::Constant *PureVirtualFn = nullptr, *DeletedVirtualFn = nullptr;
+  llvm37::Constant *PureVirtualFn = nullptr, *DeletedVirtualFn = nullptr;
 
   for (unsigned I = 0; I != NumComponents; ++I) {
     VTableComponent Component = Components[I];
 
-    llvm::Constant *Init = nullptr;
+    llvm37::Constant *Init = nullptr;
 
     switch (Component.getKind()) {
     case VTableComponent::CK_VCallOffset:
-      Init = llvm::ConstantInt::get(PtrDiffTy, 
+      Init = llvm37::ConstantInt::get(PtrDiffTy, 
                                     Component.getVCallOffset().getQuantity());
-      Init = llvm::ConstantExpr::getIntToPtr(Init, Int8PtrTy);
+      Init = llvm37::ConstantExpr::getIntToPtr(Init, Int8PtrTy);
       break;
     case VTableComponent::CK_VBaseOffset:
-      Init = llvm::ConstantInt::get(PtrDiffTy, 
+      Init = llvm37::ConstantInt::get(PtrDiffTy, 
                                     Component.getVBaseOffset().getQuantity());
-      Init = llvm::ConstantExpr::getIntToPtr(Init, Int8PtrTy);
+      Init = llvm37::ConstantExpr::getIntToPtr(Init, Int8PtrTy);
       break;
     case VTableComponent::CK_OffsetToTop:
-      Init = llvm::ConstantInt::get(PtrDiffTy, 
+      Init = llvm37::ConstantInt::get(PtrDiffTy, 
                                     Component.getOffsetToTop().getQuantity());
-      Init = llvm::ConstantExpr::getIntToPtr(Init, Int8PtrTy);
+      Init = llvm37::ConstantExpr::getIntToPtr(Init, Int8PtrTy);
       break;
     case VTableComponent::CK_RTTI:
-      Init = llvm::ConstantExpr::getBitCast(RTTI, Int8PtrTy);
+      Init = llvm37::ConstantExpr::getBitCast(RTTI, Int8PtrTy);
       break;
     case VTableComponent::CK_FunctionPointer:
     case VTableComponent::CK_CompleteDtorPointer:
@@ -553,7 +553,7 @@ llvm::Constant *CodeGenVTables::CreateVTableInitializer(
       // Get the right global decl.
       switch (Component.getKind()) {
       default:
-        llvm_unreachable("Unexpected vtable component kind");
+        llvm37_unreachable("Unexpected vtable component kind");
       case VTableComponent::CK_FunctionPointer:
         GD = Component.getFunctionDecl();
         break;
@@ -568,22 +568,22 @@ llvm::Constant *CodeGenVTables::CreateVTableInitializer(
       if (cast<CXXMethodDecl>(GD.getDecl())->isPure()) {
         // We have a pure virtual member function.
         if (!PureVirtualFn) {
-          llvm::FunctionType *Ty = 
-            llvm::FunctionType::get(CGM.VoidTy, /*isVarArg=*/false);
+          llvm37::FunctionType *Ty = 
+            llvm37::FunctionType::get(CGM.VoidTy, /*isVarArg=*/false);
           StringRef PureCallName = CGM.getCXXABI().GetPureVirtualCallName();
           PureVirtualFn = CGM.CreateRuntimeFunction(Ty, PureCallName);
-          PureVirtualFn = llvm::ConstantExpr::getBitCast(PureVirtualFn,
+          PureVirtualFn = llvm37::ConstantExpr::getBitCast(PureVirtualFn,
                                                          CGM.Int8PtrTy);
         }
         Init = PureVirtualFn;
       } else if (cast<CXXMethodDecl>(GD.getDecl())->isDeleted()) {
         if (!DeletedVirtualFn) {
-          llvm::FunctionType *Ty =
-            llvm::FunctionType::get(CGM.VoidTy, /*isVarArg=*/false);
+          llvm37::FunctionType *Ty =
+            llvm37::FunctionType::get(CGM.VoidTy, /*isVarArg=*/false);
           StringRef DeletedCallName =
             CGM.getCXXABI().GetDeletedVirtualCallName();
           DeletedVirtualFn = CGM.CreateRuntimeFunction(Ty, DeletedCallName);
-          DeletedVirtualFn = llvm::ConstantExpr::getBitCast(DeletedVirtualFn,
+          DeletedVirtualFn = llvm37::ConstantExpr::getBitCast(DeletedVirtualFn,
                                                          CGM.Int8PtrTy);
         }
         Init = DeletedVirtualFn;
@@ -598,33 +598,33 @@ llvm::Constant *CodeGenVTables::CreateVTableInitializer(
 
           NextVTableThunkIndex++;
         } else {
-          llvm::Type *Ty = CGM.getTypes().GetFunctionTypeForVTable(GD);
+          llvm37::Type *Ty = CGM.getTypes().GetFunctionTypeForVTable(GD);
         
           Init = CGM.GetAddrOfFunction(GD, Ty, /*ForVTable=*/true);
         }
 
-        Init = llvm::ConstantExpr::getBitCast(Init, Int8PtrTy);
+        Init = llvm37::ConstantExpr::getBitCast(Init, Int8PtrTy);
       }
       break;
     }
 
     case VTableComponent::CK_UnusedFunctionPointer:
-      Init = llvm::ConstantExpr::getNullValue(Int8PtrTy);
+      Init = llvm37::ConstantExpr::getNullValue(Int8PtrTy);
       break;
     };
     
     Inits.push_back(Init);
   }
   
-  llvm::ArrayType *ArrayType = llvm::ArrayType::get(Int8PtrTy, NumComponents);
-  return llvm::ConstantArray::get(ArrayType, Inits);
+  llvm37::ArrayType *ArrayType = llvm37::ArrayType::get(Int8PtrTy, NumComponents);
+  return llvm37::ConstantArray::get(ArrayType, Inits);
 }
 
-llvm::GlobalVariable *
+llvm37::GlobalVariable *
 CodeGenVTables::GenerateConstructionVTable(const CXXRecordDecl *RD, 
                                       const BaseSubobject &Base, 
                                       bool BaseIsVirtual, 
-                                   llvm::GlobalVariable::LinkageTypes Linkage,
+                                   llvm37::GlobalVariable::LinkageTypes Linkage,
                                       VTableAddressPointsMapTy& AddressPoints) {
   if (CGDebugInfo *DI = CGM.getModuleDebugInfo())
     DI->completeClassData(Base.getBase());
@@ -638,37 +638,37 @@ CodeGenVTables::GenerateConstructionVTable(const CXXRecordDecl *RD,
 
   // Get the mangled construction vtable name.
   SmallString<256> OutName;
-  llvm::raw_svector_ostream Out(OutName);
+  llvm37::raw_svector_ostream Out(OutName);
   cast<ItaniumMangleContext>(CGM.getCXXABI().getMangleContext())
       .mangleCXXCtorVTable(RD, Base.getBaseOffset().getQuantity(),
                            Base.getBase(), Out);
   Out.flush();
   StringRef Name = OutName.str();
 
-  llvm::ArrayType *ArrayType = 
-    llvm::ArrayType::get(CGM.Int8PtrTy, VTLayout->getNumVTableComponents());
+  llvm37::ArrayType *ArrayType = 
+    llvm37::ArrayType::get(CGM.Int8PtrTy, VTLayout->getNumVTableComponents());
 
   // Construction vtable symbols are not part of the Itanium ABI, so we cannot
   // guarantee that they actually will be available externally. Instead, when
   // emitting an available_externally VTT, we provide references to an internal
   // linkage construction vtable. The ABI only requires complete-object vtables
   // to be the same for all instances of a type, not construction vtables.
-  if (Linkage == llvm::GlobalVariable::AvailableExternallyLinkage)
-    Linkage = llvm::GlobalVariable::InternalLinkage;
+  if (Linkage == llvm37::GlobalVariable::AvailableExternallyLinkage)
+    Linkage = llvm37::GlobalVariable::InternalLinkage;
 
   // Create the variable that will hold the construction vtable.
-  llvm::GlobalVariable *VTable = 
+  llvm37::GlobalVariable *VTable = 
     CGM.CreateOrReplaceCXXRuntimeVariable(Name, ArrayType, Linkage);
   CGM.setGlobalVisibility(VTable, RD);
 
   // V-tables are always unnamed_addr.
   VTable->setUnnamedAddr(true);
 
-  llvm::Constant *RTTI = CGM.GetAddrOfRTTIDescriptor(
+  llvm37::Constant *RTTI = CGM.GetAddrOfRTTIDescriptor(
       CGM.getContext().getTagDeclType(Base.getBase()));
 
   // Create and set the initializer.
-  llvm::Constant *Init = CreateVTableInitializer(
+  llvm37::Constant *Init = CreateVTableInitializer(
       Base.getBase(), VTLayout->vtable_component_begin(),
       VTLayout->getNumVTableComponents(), VTLayout->vtable_thunk_begin(),
       VTLayout->getNumVTableThunks(), RTTI);
@@ -682,10 +682,10 @@ CodeGenVTables::GenerateConstructionVTable(const CXXRecordDecl *RD,
 /// Compute the required linkage of the v-table for the given class.
 ///
 /// Note that we only call this at the end of the translation unit.
-llvm::GlobalVariable::LinkageTypes 
+llvm37::GlobalVariable::LinkageTypes 
 CodeGenModule::getVTableLinkage(const CXXRecordDecl *RD) {
   if (!RD->isExternallyVisible())
-    return llvm::GlobalVariable::InternalLinkage;
+    return llvm37::GlobalVariable::InternalLinkage;
 
   // We're at the end of the translation unit, so the current key
   // function is fully correct.
@@ -703,42 +703,42 @@ CodeGenModule::getVTableLinkage(const CXXRecordDecl *RD) {
         assert(def && "Should not have been asked to emit this");
         if (keyFunction->isInlined())
           return !Context.getLangOpts().AppleKext ?
-                   llvm::GlobalVariable::LinkOnceODRLinkage :
-                   llvm::Function::InternalLinkage;
+                   llvm37::GlobalVariable::LinkOnceODRLinkage :
+                   llvm37::Function::InternalLinkage;
         
-        return llvm::GlobalVariable::ExternalLinkage;
+        return llvm37::GlobalVariable::ExternalLinkage;
 
       case TSK_ImplicitInstantiation:
         return !Context.getLangOpts().AppleKext ?
-                 llvm::GlobalVariable::LinkOnceODRLinkage :
-                 llvm::Function::InternalLinkage;
+                 llvm37::GlobalVariable::LinkOnceODRLinkage :
+                 llvm37::Function::InternalLinkage;
 
       case TSK_ExplicitInstantiationDefinition:
         return !Context.getLangOpts().AppleKext ?
-                 llvm::GlobalVariable::WeakODRLinkage :
-                 llvm::Function::InternalLinkage;
+                 llvm37::GlobalVariable::WeakODRLinkage :
+                 llvm37::Function::InternalLinkage;
   
       case TSK_ExplicitInstantiationDeclaration:
-        llvm_unreachable("Should not have been asked to emit this");
+        llvm37_unreachable("Should not have been asked to emit this");
     }
   }
 
   // -fapple-kext mode does not support weak linkage, so we must use
   // internal linkage.
   if (Context.getLangOpts().AppleKext)
-    return llvm::Function::InternalLinkage;
+    return llvm37::Function::InternalLinkage;
 
-  llvm::GlobalVariable::LinkageTypes DiscardableODRLinkage =
-      llvm::GlobalValue::LinkOnceODRLinkage;
-  llvm::GlobalVariable::LinkageTypes NonDiscardableODRLinkage =
-      llvm::GlobalValue::WeakODRLinkage;
+  llvm37::GlobalVariable::LinkageTypes DiscardableODRLinkage =
+      llvm37::GlobalValue::LinkOnceODRLinkage;
+  llvm37::GlobalVariable::LinkageTypes NonDiscardableODRLinkage =
+      llvm37::GlobalValue::WeakODRLinkage;
   if (RD->hasAttr<DLLExportAttr>()) {
     // Cannot discard exported vtables.
     DiscardableODRLinkage = NonDiscardableODRLinkage;
   } else if (RD->hasAttr<DLLImportAttr>()) {
     // Imported vtables are available externally.
-    DiscardableODRLinkage = llvm::GlobalVariable::AvailableExternallyLinkage;
-    NonDiscardableODRLinkage = llvm::GlobalVariable::AvailableExternallyLinkage;
+    DiscardableODRLinkage = llvm37::GlobalVariable::AvailableExternallyLinkage;
+    NonDiscardableODRLinkage = llvm37::GlobalVariable::AvailableExternallyLinkage;
   }
 
   switch (RD->getTemplateSpecializationKind()) {
@@ -748,13 +748,13 @@ CodeGenModule::getVTableLinkage(const CXXRecordDecl *RD) {
     return DiscardableODRLinkage;
 
   case TSK_ExplicitInstantiationDeclaration:
-    return llvm::GlobalVariable::ExternalLinkage;
+    return llvm37::GlobalVariable::ExternalLinkage;
 
   case TSK_ExplicitInstantiationDefinition:
     return NonDiscardableODRLinkage;
   }
 
-  llvm_unreachable("Invalid TemplateSpecializationKind!");
+  llvm37_unreachable("Invalid TemplateSpecializationKind!");
 }
 
 /// This is a callback from Sema to tell us that that a particular v-table is
@@ -850,7 +850,7 @@ bool CodeGenModule::IsCFIBlacklistedRecord(const CXXRecordDecl *RD) {
   return RD->isInStdNamespace();
 }
 
-void CodeGenModule::EmitVTableBitSetEntries(llvm::GlobalVariable *VTable,
+void CodeGenModule::EmitVTableBitSetEntries(llvm37::GlobalVariable *VTable,
                                             const VTableLayout &VTLayout) {
   if (!LangOpts.Sanitize.has(SanitizerKind::CFIVCall) &&
       !LangOpts.Sanitize.has(SanitizerKind::CFINVCall) &&
@@ -861,7 +861,7 @@ void CodeGenModule::EmitVTableBitSetEntries(llvm::GlobalVariable *VTable,
   CharUnits PointerWidth =
       Context.toCharUnitsFromBits(Context.getTargetInfo().getPointerWidth(0));
 
-  std::vector<llvm::MDTuple *> BitsetEntries;
+  std::vector<llvm37::MDTuple *> BitsetEntries;
   // Create a bit set entry for each address point.
   for (auto &&AP : VTLayout.getAddressPoints()) {
     if (IsCFIBlacklistedRecord(AP.first.getBase()))
@@ -872,29 +872,29 @@ void CodeGenModule::EmitVTableBitSetEntries(llvm::GlobalVariable *VTable,
   }
 
   // Sort the bit set entries for determinism.
-  std::sort(BitsetEntries.begin(), BitsetEntries.end(), [](llvm::MDTuple *T1,
-                                                           llvm::MDTuple *T2) {
+  std::sort(BitsetEntries.begin(), BitsetEntries.end(), [](llvm37::MDTuple *T1,
+                                                           llvm37::MDTuple *T2) {
     if (T1 == T2)
       return false;
 
-    StringRef S1 = cast<llvm::MDString>(T1->getOperand(0))->getString();
-    StringRef S2 = cast<llvm::MDString>(T2->getOperand(0))->getString();
+    StringRef S1 = cast<llvm37::MDString>(T1->getOperand(0))->getString();
+    StringRef S2 = cast<llvm37::MDString>(T2->getOperand(0))->getString();
     if (S1 < S2)
       return true;
     if (S1 != S2)
       return false;
 
-    uint64_t Offset1 = cast<llvm::ConstantInt>(
-                           cast<llvm::ConstantAsMetadata>(T1->getOperand(2))
+    uint64_t Offset1 = cast<llvm37::ConstantInt>(
+                           cast<llvm37::ConstantAsMetadata>(T1->getOperand(2))
                                ->getValue())->getZExtValue();
-    uint64_t Offset2 = cast<llvm::ConstantInt>(
-                           cast<llvm::ConstantAsMetadata>(T2->getOperand(2))
+    uint64_t Offset2 = cast<llvm37::ConstantInt>(
+                           cast<llvm37::ConstantAsMetadata>(T2->getOperand(2))
                                ->getValue())->getZExtValue();
     assert(Offset1 != Offset2);
     return Offset1 < Offset2;
   });
 
-  llvm::NamedMDNode *BitsetsMD =
+  llvm37::NamedMDNode *BitsetsMD =
       getModule().getOrInsertNamedMetadata("llvm.bitsets");
   for (auto BitsetEntry : BitsetEntries)
     BitsetsMD->addOperand(BitsetEntry);

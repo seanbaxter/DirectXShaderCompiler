@@ -1,6 +1,6 @@
 //===------ FeatureManager.h - SPIR-V Version/Extension Manager -*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -10,8 +10,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_LIB_SPIRV_FEATUREMANAGER_H
-#define LLVM_CLANG_LIB_SPIRV_FEATUREMANAGER_H
+#ifndef LLVM37_CLANG_LIB_SPIRV_FEATUREMANAGER_H
+#define LLVM37_CLANG_LIB_SPIRV_FEATUREMANAGER_H
 
 #include <string>
 
@@ -20,8 +20,8 @@
 #include "dxc/Support/SPIRVOptions.h"
 #include "clang/Basic/Diagnostic.h"
 #include "clang/Basic/SourceLocation.h"
-#include "llvm/ADT/SmallBitVector.h"
-#include "llvm/ADT/StringRef.h"
+#include "llvm37/ADT/SmallBitVector.h"
+#include "llvm37/ADT/StringRef.h"
 
 namespace clang {
 namespace spirv {
@@ -59,7 +59,7 @@ public:
   FeatureManager(DiagnosticsEngine &de, const SpirvCodeGenOptions &);
 
   /// Allows the given extension to be used in CodeGen.
-  bool allowExtension(llvm::StringRef);
+  bool allowExtension(llvm37::StringRef);
 
   /// Allows all extensions to be used in CodeGen.
   void allowAllKnownExtensions();
@@ -67,16 +67,16 @@ public:
   /// Rqeusts the given extension for translating the given target feature at
   /// the given source location. Emits an error if the given extension is not
   /// permitted to use.
-  bool requestExtension(Extension, llvm::StringRef target, SourceLocation);
+  bool requestExtension(Extension, llvm37::StringRef target, SourceLocation);
 
   /// Translates extension name to symbol.
-  Extension getExtensionSymbol(llvm::StringRef name);
+  Extension getExtensionSymbol(llvm37::StringRef name);
 
   /// Translates extension symbol to name.
   const char *getExtensionName(Extension symbol);
 
   /// Returns true if the given extension is a KHR extension.
-  bool isKHRExtension(llvm::StringRef name);
+  bool isKHRExtension(llvm37::StringRef name);
 
   /// Returns the names of all known extensions as a string.
   std::string getKnownExtensions(const char *delimiter, const char *prefix = "",
@@ -85,7 +85,7 @@ public:
   /// Rqeusts the given target environment for translating the given feature at
   /// the given source location. Emits an error if the requested target
   /// environment does not match user's target environemnt.
-  bool requestTargetEnv(spv_target_env, llvm::StringRef target, SourceLocation);
+  bool requestTargetEnv(spv_target_env, llvm37::StringRef target, SourceLocation);
 
   /// Returns the target environment corresponding to the target environment
   /// that was specified as command line option. If no option is specified, the
@@ -131,7 +131,7 @@ private:
 
   DiagnosticsEngine &diags;
 
-  llvm::SmallBitVector allowedExtensions;
+  llvm37::SmallBitVector allowedExtensions;
   spv_target_env targetEnv;
   std::string targetEnvStr;
 };
@@ -139,4 +139,4 @@ private:
 } // end namespace spirv
 } // end namespace clang
 
-#endif // LLVM_CLANG_LIB_SPIRV_FEATUREMANAGER_H
+#endif // LLVM37_CLANG_LIB_SPIRV_FEATUREMANAGER_H

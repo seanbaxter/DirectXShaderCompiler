@@ -1,6 +1,6 @@
 //===- unittests/SPIRV/SpirvContextTest.cpp ----- SpirvContext tests ------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -270,8 +270,8 @@ TEST_F(SpirvContextTest, ArrayTypeUnique1) {
   const auto *int32 = spvContext.getSIntType(32);
   EXPECT_EQ(spvContext.getArrayType(int32, 5, 4),
             spvContext.getArrayType(int32, 5, 4));
-  EXPECT_EQ(spvContext.getArrayType(int32, 5, llvm::None),
-            spvContext.getArrayType(int32, 5, llvm::None));
+  EXPECT_EQ(spvContext.getArrayType(int32, 5, llvm37::None),
+            spvContext.getArrayType(int32, 5, llvm37::None));
 }
 
 TEST_F(SpirvContextTest, ArrayTypeUnique2) {
@@ -296,7 +296,7 @@ TEST_F(SpirvContextTest, ArrayTypeUnique4) {
             spvContext.getArrayType(int32, 5, 8));
 
   EXPECT_NE(spvContext.getArrayType(int32, 5, 4),
-            spvContext.getArrayType(int32, 5, llvm::None));
+            spvContext.getArrayType(int32, 5, llvm37::None));
 }
 
 TEST_F(SpirvContextTest, RuntimeArrayTypeUnique1) {
@@ -304,8 +304,8 @@ TEST_F(SpirvContextTest, RuntimeArrayTypeUnique1) {
   const auto *int32 = spvContext.getSIntType(32);
   EXPECT_EQ(spvContext.getRuntimeArrayType(int32, 4),
             spvContext.getRuntimeArrayType(int32, 4));
-  EXPECT_EQ(spvContext.getRuntimeArrayType(int32, llvm::None),
-            spvContext.getRuntimeArrayType(int32, llvm::None));
+  EXPECT_EQ(spvContext.getRuntimeArrayType(int32, llvm37::None),
+            spvContext.getRuntimeArrayType(int32, llvm37::None));
 }
 
 TEST_F(SpirvContextTest, RuntimeArrayTypeUnique2) {
@@ -323,7 +323,7 @@ TEST_F(SpirvContextTest, RuntimeArrayTypeUnique3) {
             spvContext.getRuntimeArrayType(int32, 8));
 
   EXPECT_NE(spvContext.getRuntimeArrayType(int32, 4),
-            spvContext.getRuntimeArrayType(int32, llvm::None));
+            spvContext.getRuntimeArrayType(int32, llvm37::None));
 }
 
 TEST_F(SpirvContextTest, PointerTypeUnique1) {

@@ -1,6 +1,6 @@
 //===--- NestedNameSpecifier.h - C++ nested name specifiers -----*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,13 +11,13 @@
 //  a C++ nested-name-specifier.
 //
 //===----------------------------------------------------------------------===//
-#ifndef LLVM_CLANG_AST_NESTEDNAMESPECIFIER_H
-#define LLVM_CLANG_AST_NESTEDNAMESPECIFIER_H
+#ifndef LLVM37_CLANG_AST_NESTEDNAMESPECIFIER_H
+#define LLVM37_CLANG_AST_NESTEDNAMESPECIFIER_H
 
 #include "clang/Basic/Diagnostic.h"
-#include "llvm/ADT/FoldingSet.h"
-#include "llvm/ADT/PointerIntPair.h"
-#include "llvm/Support/Compiler.h"
+#include "llvm37/ADT/FoldingSet.h"
+#include "llvm37/ADT/PointerIntPair.h"
+#include "llvm37/Support/Compiler.h"
 
 namespace clang {
 
@@ -41,7 +41,7 @@ class LangOptions;
 /// (for dependent names), decltype specifier, or the global specifier ('::').
 /// The last two specifiers can only appear at the start of a 
 /// nested-namespace-specifier.
-class NestedNameSpecifier : public llvm::FoldingSetNode {
+class NestedNameSpecifier : public llvm37::FoldingSetNode {
 
   /// \brief Enumeration describing
   enum StoredSpecifierKind {
@@ -57,7 +57,7 @@ class NestedNameSpecifier : public llvm::FoldingSetNode {
   /// The pointer is the nested-name-specifier that precedes this
   /// one. The integer stores one of the first four values of type
   /// SpecifierKind.
-  llvm::PointerIntPair<NestedNameSpecifier *, 2, StoredSpecifierKind> Prefix;
+  llvm37::PointerIntPair<NestedNameSpecifier *, 2, StoredSpecifierKind> Prefix;
 
   /// \brief The last component in the nested name specifier, which
   /// can be an identifier, a declaration, or a type.
@@ -98,7 +98,7 @@ private:
   /// \brief Copy constructor used internally to clone nested name
   /// specifiers.
   NestedNameSpecifier(const NestedNameSpecifier &Other)
-    : llvm::FoldingSetNode(Other), Prefix(Other.Prefix),
+    : llvm37::FoldingSetNode(Other), Prefix(Other.Prefix),
       Specifier(Other.Specifier) {
   }
 
@@ -210,7 +210,7 @@ public:
   /// stream.
   void print(raw_ostream &OS, const PrintingPolicy &Policy) const;
 
-  void Profile(llvm::FoldingSetNodeID &ID) const {
+  void Profile(llvm37::FoldingSetNodeID &ID) const {
     ID.AddPointer(Prefix.getOpaqueValue());
     ID.AddPointer(Specifier);
   }
@@ -266,7 +266,7 @@ public:
   /// For example, if this instance refers to a nested-name-specifier
   /// \c \::std::vector<int>::, the returned source range would cover
   /// from the initial '::' to the last '::'.
-  SourceRange getSourceRange() const LLVM_READONLY;
+  SourceRange getSourceRange() const LLVM37_READONLY;
 
   /// \brief Retrieve the source range covering just the last part of
   /// this nested-name-specifier, not including the prefix.
@@ -464,7 +464,7 @@ public:
   void Adopt(NestedNameSpecifierLoc Other);
 
   /// \brief Retrieve the source range covered by this nested-name-specifier.
-  SourceRange getSourceRange() const LLVM_READONLY {
+  SourceRange getSourceRange() const LLVM37_READONLY {
     return NestedNameSpecifierLoc(Representation, Buffer).getSourceRange();
   }
 

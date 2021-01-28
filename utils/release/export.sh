@@ -1,21 +1,21 @@
 #!/bin/sh
-#===-- tag.sh - Tag the LLVM release candidates ----------------------------===#
+#===-- tag.sh - Tag the LLVM37 release candidates ----------------------------===#
 #
-#                     The LLVM Compiler Infrastructure
+#                     The LLVM37 Compiler Infrastructure
 #
 # This file is distributed under the University of Illinois Open Source
 # License.
 #
 #===------------------------------------------------------------------------===#
 #
-# Create branches and release candidates for the LLVM release.
+# Create branches and release candidates for the LLVM37 release.
 #
 #===------------------------------------------------------------------------===#
 
 set -e
 
-projects="llvm cfe test-suite compiler-rt libcxx libcxxabi clang-tools-extra polly lldb lld openmp libunwind"
-base_url="https://llvm.org/svn/llvm-project"
+projects="llvm37 cfe test-suite compiler-rt libcxx libcxxabi clang-tools-extra polly lldb lld openmp libunwind"
+base_url="https://llvm37.org/svn/llvm37-project"
 
 release=""
 rc=""

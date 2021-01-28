@@ -1,6 +1,6 @@
 //===- NewPMDriver.h - Function to drive opt with the new PM ----*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -18,13 +18,13 @@
 ///
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_TOOLS_OPT_NEWPMDRIVER_H
-#define LLVM_TOOLS_OPT_NEWPMDRIVER_H
+#ifndef LLVM37_TOOLS_OPT_NEWPMDRIVER_H
+#define LLVM37_TOOLS_OPT_NEWPMDRIVER_H
 
-#include "llvm/ADT/StringRef.h"
+#include "llvm37/ADT/StringRef.h"
 
-namespace llvm {
-class LLVMContext;
+namespace llvm37 {
+class LLVM37Context;
 class Module;
 class TargetMachine;
 class tool_output_file;
@@ -48,7 +48,7 @@ enum VerifierKind {
 /// inclusion of the new pass manager headers and the old headers into the same
 /// file. It's interface is consequentially somewhat ad-hoc, but will go away
 /// when the transition finishes.
-bool runPassPipeline(StringRef Arg0, LLVMContext &Context, Module &M,
+bool runPassPipeline(StringRef Arg0, LLVM37Context &Context, Module &M,
                      TargetMachine *TM, tool_output_file *Out,
                      StringRef PassPipeline, opt_tool::OutputKind OK,
                      opt_tool::VerifierKind VK,

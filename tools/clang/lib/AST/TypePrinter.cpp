@@ -1,6 +1,6 @@
 //===--- TypePrinter.cpp - Pretty-Print Clang Types -----------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -20,10 +20,10 @@
 #include "clang/AST/Type.h"
 #include "clang/Basic/LangOptions.h"
 #include "clang/Basic/SourceManager.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/ADT/StringExtras.h"
-#include "llvm/Support/SaveAndRestore.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/ADT/StringExtras.h"
+#include "llvm37/Support/SaveAndRestore.h"
+#include "llvm37/Support/raw_ostream.h"
 using namespace clang;
 
 namespace {
@@ -1196,7 +1196,7 @@ void TypePrinter::printAttributedBefore(const AttributedType *T,
     else if (T->getAttrKind() == AttributedType::attr_null_unspecified)
       OS << " _Null_unspecified";
     else
-      llvm_unreachable("unhandled nullability");
+      llvm37_unreachable("unhandled nullability");
     spaceBeforePlaceHolder(OS);
   }
 }
@@ -1240,14 +1240,14 @@ void TypePrinter::printAttributedAfter(const AttributedType *T,
     else if (T->getAttrKind() == AttributedType::attr_null_unspecified)
       OS << " _Null_unspecified";
     else
-      llvm_unreachable("unhandled nullability");
+      llvm37_unreachable("unhandled nullability");
 
     return;
   }
 
   OS << " __attribute__((";
   switch (T->getAttrKind()) {
-  default: llvm_unreachable("This attribute should have been handled already");
+  default: llvm37_unreachable("This attribute should have been handled already");
   case AttributedType::attr_address_space:
     OS << "address_space(";
     OS << T->getEquivalentType().getAddressSpace();
@@ -1311,7 +1311,7 @@ void TypePrinter::printAttributedAfter(const AttributedType *T,
   case AttributedType::attr_objc_ownership:
     OS << "objc_ownership(";
     switch (T->getEquivalentType().getObjCLifetime()) {
-    case Qualifiers::OCL_None: llvm_unreachable("no ownership!");
+    case Qualifiers::OCL_None: llvm37_unreachable("no ownership!");
     case Qualifiers::OCL_ExplicitNone: OS << "none"; break;
     case Qualifiers::OCL_Strong: OS << "strong"; break;
     case Qualifiers::OCL_Weak: OS << "weak"; break;
@@ -1442,7 +1442,7 @@ TemplateSpecializationType::PrintTemplateArgumentList(
   for (unsigned Arg = 0; Arg < NumArgs; ++Arg) {
     // Print the argument into a string.
     SmallString<128> Buf;
-    llvm::raw_svector_ostream ArgOS(Buf);
+    llvm37::raw_svector_ostream ArgOS(Buf);
     if (Args[Arg].getKind() == TemplateArgument::Pack) {
       if (Args[Arg].pack_size() && Arg > 0)
         OS << ", ";
@@ -1493,7 +1493,7 @@ PrintTemplateArgumentList(raw_ostream &OS,
     
     // Print the argument into a string.
     SmallString<128> Buf;
-    llvm::raw_svector_ostream ArgOS(Buf);
+    llvm37::raw_svector_ostream ArgOS(Buf);
     if (Args[Arg].getArgument().getKind() == TemplateArgument::Pack) {
       PrintTemplateArgumentList(ArgOS,
                                 Args[Arg].getArgument().pack_begin(), 
@@ -1535,7 +1535,7 @@ std::string Qualifiers::getAsString() const {
 // space.
 std::string Qualifiers::getAsString(const PrintingPolicy &Policy) const {
   SmallString<64> Buf;
-  llvm::raw_svector_ostream StrOS(Buf);
+  llvm37::raw_svector_ostream StrOS(Buf);
   print(StrOS, Policy);
   return StrOS.str();
 }
@@ -1609,7 +1609,7 @@ void Qualifiers::print(raw_ostream &OS, const PrintingPolicy& Policy,
     }
 
     switch (lifetime) {
-    case Qualifiers::OCL_None: llvm_unreachable("none but true");
+    case Qualifiers::OCL_None: llvm37_unreachable("none but true");
     case Qualifiers::OCL_ExplicitNone: OS << "__unsafe_unretained"; break;
     case Qualifiers::OCL_Strong: 
       if (!Policy.SuppressStrongLifetime)
@@ -1651,7 +1651,7 @@ void QualType::getAsStringInternal(const Type *ty, Qualifiers qs,
                                    std::string &buffer,
                                    const PrintingPolicy &policy) {
   SmallString<256> Buf;
-  llvm::raw_svector_ostream StrOS(Buf);
+  llvm37::raw_svector_ostream StrOS(Buf);
   TypePrinter(policy).print(ty, qs, StrOS, buffer);
   std::string str = StrOS.str();
   buffer.swap(str);

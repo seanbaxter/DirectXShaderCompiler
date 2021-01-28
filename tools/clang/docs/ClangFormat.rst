@@ -54,14 +54,14 @@ to format C/C++/Obj-C code.
                                Can only be used with one input file.
     -output-replacements-xml - Output replacements as XML.
     -style=<string>          - Coding style, currently supports:
-                                 LLVM, Google, Chromium, Mozilla, WebKit.
+                                 LLVM37, Google, Chromium, Mozilla, WebKit.
                                Use -style=file to load style configuration from
                                .clang-format file located in one of the parent
                                directories of the source file (or current
                                directory for stdin).
                                Use -style="{key: value, ...}" to set specific
                                parameters, e.g.:
-                                 -style="{BasedOnStyle: llvm, IndentWidth: 8}"
+                                 -style="{BasedOnStyle: llvm37, IndentWidth: 8}"
 
   General options:
 
@@ -79,7 +79,7 @@ An easy way to create the ``.clang-format`` file is:
 
 .. code-block:: console
 
-  clang-format -style=llvm -dump-config > .clang-format
+  clang-format -style=llvm37 -dump-config > .clang-format
 
 Available style options are described in :doc:`ClangFormatStyleOptions`.
 
@@ -147,7 +147,7 @@ Visual Studio Integration
 =========================
 
 Download the latest Visual Studio extension from the `alpha build site
-<http://llvm.org/builds/>`_. The default key-binding is Ctrl-R,Ctrl-F.
+<http://llvm37.org/builds/>`_. The default key-binding is Ctrl-R,Ctrl-F.
 
 
 Script for patch reformatting
@@ -168,7 +168,7 @@ a unified diff and reformats all contained lines with :program:`clang-format`.
     -i              apply edits to files instead of displaying a diff
     -p NUM          strip the smallest prefix containing P slashes
     -regex PATTERN  custom pattern selecting file paths to reformat
-    -style STYLE    formatting style to apply (LLVM, Google, Chromium, Mozilla,
+    -style STYLE    formatting style to apply (LLVM37, Google, Chromium, Mozilla,
                     WebKit)
 
 So to reformat all the lines in the latest :program:`git` commit, just do:

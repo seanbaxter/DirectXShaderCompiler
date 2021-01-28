@@ -1,4 +1,4 @@
-# RUN: llvm-mc -triple i386-unknown-unknown %s | FileCheck %s
+# RUN: llvm37-mc -triple i386-unknown-unknown %s | FileCheck %s
 
 # FIXME: This is currently unsupported. If it turns out no one uses it, we
 # should just rip it out.

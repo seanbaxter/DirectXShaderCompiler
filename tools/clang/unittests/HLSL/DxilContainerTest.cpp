@@ -40,8 +40,8 @@
 #endif
 #endif
 
-#include "llvm/Support/Format.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/Support/Format.h"
+#include "llvm37/Support/raw_ostream.h"
 
 #include "dxc/Test/HLSLTestData.h"
 #include "dxc/Test/HlslTestUtils.h"
@@ -283,8 +283,8 @@ public:
         VERIFY_ARE_EQUAL(testCB.Size, baseCB.Size);
         VERIFY_ARE_EQUAL(testCB.uFlags, baseCB.uFlags);
 
-        llvm::StringMap<D3D12_SHADER_VARIABLE_DESC> variableMap;
-        llvm::StringMap<ID3D12ShaderReflectionType*> variableTypeMap;
+        llvm37::StringMap<D3D12_SHADER_VARIABLE_DESC> variableMap;
+        llvm37::StringMap<ID3D12ShaderReflectionType*> variableTypeMap;
         for (UINT vi = 0; vi < testCB.Variables; ++vi) {
           ID3D12ShaderReflectionVariable *pBaseConst;
           D3D12_SHADER_VARIABLE_DESC baseConst;
@@ -470,9 +470,9 @@ public:
     VERIFY_ARE_EQUAL(pHashBlob->GetBufferSize(), sizeof(DxcShaderHash));
     const hlsl::DxilShaderHash *pShaderHash = (hlsl::DxilShaderHash *)pHashBlob->GetBufferPointer();
     std::string result;
-    llvm::raw_string_ostream os(result);
+    llvm37::raw_string_ostream os(result);
     for (int i = 0; i < 16; ++i)
-      os << llvm::format("%.2x", pShaderHash->Digest[i]);
+      os << llvm37::format("%.2x", pShaderHash->Digest[i]);
     return os.str();
   }
 
@@ -1087,13 +1087,13 @@ TEST_F(DxilContainerTest, CompileWhenOkThenCheckRDAT2) {
       VERIFY_IS_TRUE(funcTableReader->GetNumFunctions() == 1);
       VERIFY_IS_TRUE(resTableReader->GetNumResources() == 3);
       FunctionReader funcReader = funcTableReader->GetItem(0);
-      llvm::StringRef name(funcReader.GetUnmangledName());
+      llvm37::StringRef name(funcReader.GetUnmangledName());
       VERIFY_IS_TRUE(name.compare("RayGenMain") == 0);
       VERIFY_IS_TRUE(funcReader.GetShaderKind() ==
                      hlsl::DXIL::ShaderKind::RayGeneration);
       VERIFY_IS_TRUE(funcReader.GetNumResources() == 3);
       VERIFY_IS_TRUE(funcReader.GetNumDependencies() == 1);
-      llvm::StringRef dependencyName =
+      llvm37::StringRef dependencyName =
           hlsl::dxilutil::DemangleFunctionName(funcReader.GetDependency(0));
       VERIFY_IS_TRUE(dependencyName.compare("function1") == 0);
     }

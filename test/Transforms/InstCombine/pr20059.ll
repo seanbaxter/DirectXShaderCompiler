@@ -1,6 +1,6 @@
 ; RUN: opt -S -instcombine < %s | FileCheck %s
 
-; In PR20059 ( http://llvm.org/pr20059 ), shufflevector operations are reordered/removed
+; In PR20059 ( http://llvm37.org/pr20059 ), shufflevector operations are reordered/removed
 ; for an srem operation. This is not a valid optimization because it may cause a trap
 ; on div-by-zero.
 

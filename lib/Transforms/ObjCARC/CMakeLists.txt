@@ -1,4 +1,4 @@
-add_llvm_library(LLVMObjCARCOpts
+add_llvm_library(LLVM37ObjCARCOpts
   ObjCARC.cpp
   ObjCARCOpts.cpp
   ObjCARCExpand.cpp
@@ -12,7 +12,7 @@ add_llvm_library(LLVMObjCARCOpts
   PtrState.cpp
 
   ADDITIONAL_HEADER_DIRS
-  ${LLVM_MAIN_INCLUDE_DIR}/llvm/Transforms
+  ${LLVM37_MAIN_INCLUDE_DIR}/llvm37/Transforms
   )
 
-add_dependencies(LLVMObjCARCOpts intrinsics_gen)
+add_dependencies(LLVM37ObjCARCOpts intrinsics_gen)

@@ -12,17 +12,17 @@
 #include "dxc/DXIL/DxilOperations.h"
 #include "dxc/DXIL/DxilResource.h"
 #include "dxc/Support/Global.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/Support/Casting.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/Support/Casting.h"
 #include "dxc/DXIL/DxilEntryProps.h"
 #include "dxc/DXIL/DxilInstructions.h"
 #include "dxc/DXIL/DxilResourceProperties.h"
 #include "dxc/DXIL/DxilUtil.h"
 
 using namespace hlsl;
-using namespace llvm;
+using namespace llvm37;
 
 ShaderFlags::ShaderFlags():
   m_bDisableOptimizations(false)

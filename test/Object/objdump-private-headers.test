@@ -1,8 +1,8 @@
-RUN: llvm-objdump -p %p/Inputs/program-headers.elf-i386 \
+RUN: llvm37-objdump -p %p/Inputs/program-headers.elf-i386 \
 RUN:              | FileCheck %s -check-prefix ELF-i386
-RUN: llvm-objdump -p %p/Inputs/program-headers.elf-x86-64 \
+RUN: llvm37-objdump -p %p/Inputs/program-headers.elf-x86-64 \
 RUN:              | FileCheck %s -check-prefix ELF-x86-64
-RUN: llvm-objdump -p %p/Inputs/macho-rpath-x86_64 \
+RUN: llvm37-objdump -p %p/Inputs/macho-rpath-x86_64 \
 RUN:              | FileCheck %s -check-prefix MACHO-x86_64
 
 ELF-i386: Program Header:

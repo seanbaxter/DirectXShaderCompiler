@@ -1,4 +1,4 @@
-// RUN: llvm-tblgen %s | FileCheck %s
+// RUN: llvm37-tblgen %s | FileCheck %s
 
 class Register<string name, int idx> {
   string Name = name;

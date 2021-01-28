@@ -77,7 +77,7 @@ declare void @dx.op.storeOutput.i32(i32, i32, i32, i8, i32) #0
 attributes #0 = { nounwind }
 attributes #1 = { nounwind readnone }
 
-!llvm.ident = !{!0}
+!llvm37.ident = !{!0}
 !dx.version = !{!1}
 !dx.shaderModel = !{!2}
 !dx.typeAnnotations = !{!3}

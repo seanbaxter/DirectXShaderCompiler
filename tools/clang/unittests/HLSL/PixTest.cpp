@@ -38,7 +38,7 @@
 #include "dxc/Test/HlslTestUtils.h"
 #include "dxc/Test/DxcTestUtils.h"
 
-#include "llvm/Support/raw_os_ostream.h"
+#include "llvm37/Support/raw_os_ostream.h"
 #include "dxc/Support/Global.h"
 #include "dxc/Support/dxcapi.use.h"
 #include "dxc/Support/microcom.h"
@@ -46,19 +46,19 @@
 #include "dxc/Support/Unicode.h"
 
 #include <fstream>
-#include "llvm/Bitcode/ReaderWriter.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/Intrinsics.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/ModuleSlotTracker.h"
-#include "llvm/Support/FileSystem.h"
-#include "llvm/Support/MemoryBuffer.h"
-#include "llvm/Support/MSFileSystem.h"
-#include "llvm/Support/Path.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/ADT/StringSwitch.h"
+#include "llvm37/Bitcode/ReaderWriter.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/Intrinsics.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/ModuleSlotTracker.h"
+#include "llvm37/Support/FileSystem.h"
+#include "llvm37/Support/MemoryBuffer.h"
+#include "llvm37/Support/MSFileSystem.h"
+#include "llvm37/Support/Path.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/ADT/StringSwitch.h"
 
 
 #include <../lib/DxilDia/DxilDiaSession.h>
@@ -904,8 +904,8 @@ public:
 
   class ModuleAndHangersOn
   {
-    std::unique_ptr<llvm::LLVMContext> llvmContext;
-    std::unique_ptr<llvm::Module> llvmModule;
+    std::unique_ptr<llvm37::LLVM37Context> llvm37Context;
+    std::unique_ptr<llvm37::Module> llvm37Module;
     DxilModule* dxilModule;
 
   public:
@@ -927,29 +927,29 @@ public:
           reinterpret_cast<const DxilProgramHeader *>(GetDxilPartData(*it));
       VERIFY_IS_TRUE(IsValidDxilProgramHeader(pProgramHeader, (*it)->PartSize));
 
-      // Get a pointer to the llvm bitcode.
+      // Get a pointer to the llvm37 bitcode.
       const char *pIL;
       uint32_t pILLength;
       GetDxilProgramBitcode(pProgramHeader, &pIL, &pILLength);
 
-      // Parse llvm bitcode into a module.
-      std::unique_ptr<llvm::MemoryBuffer> pBitcodeBuf(
-          llvm::MemoryBuffer::getMemBuffer(llvm::StringRef(pIL, pILLength), "",
+      // Parse llvm37 bitcode into a module.
+      std::unique_ptr<llvm37::MemoryBuffer> pBitcodeBuf(
+          llvm37::MemoryBuffer::getMemBuffer(llvm37::StringRef(pIL, pILLength), "",
                                            false));
 
-      llvmContext.reset(new llvm::LLVMContext);
+      llvm37Context.reset(new llvm37::LLVM37Context);
 
-      llvm::ErrorOr<std::unique_ptr<llvm::Module>> pModule(
-          llvm::parseBitcodeFile(pBitcodeBuf->getMemBufferRef(),
-                                 *llvmContext));
+      llvm37::ErrorOr<std::unique_ptr<llvm37::Module>> pModule(
+          llvm37::parseBitcodeFile(pBitcodeBuf->getMemBufferRef(),
+                                 *llvm37Context));
       if (std::error_code ec = pModule.getError()) {
         VERIFY_FAIL();
       }
 
-      llvmModule = std::move(pModule.get());
+      llvm37Module = std::move(pModule.get());
 
       dxilModule =
-          DxilModule::TryGetDxilModule(llvmModule.get());
+          DxilModule::TryGetDxilModule(llvm37Module.get());
     }
 
     DxilModule& GetDxilModule()
@@ -1241,8 +1241,8 @@ TEST_F(PixTest, DiaLoadRelocatedBitcode) {
   VERIFY_IS_TRUE(uNewSizeInBytes % sizeof(UINT32) == 0);
   newProgramHeader.SizeInUint32 = uNewSizeInBytes / sizeof(UINT32);
 
-  llvm::SmallVector<char, 0> buffer;
-  llvm::raw_svector_ostream OS(buffer);
+  llvm37::SmallVector<char, 0> buffer;
+  llvm37::raw_svector_ostream OS(buffer);
 
   // Write the header
   OS.write((char *)&newProgramHeader, sizeof(newProgramHeader));
@@ -1475,8 +1475,8 @@ TEST_F(PixTest, DiaLoadBitcodePlusExtraData) {
   uint32_t uBitcodeSize = 0;
   hlsl::GetDxilProgramBitcode(programHeader, &pBitcode, &uBitcodeSize);
 
-  llvm::SmallVector<char, 0> buffer;
-  llvm::raw_svector_ostream OS(buffer);
+  llvm37::SmallVector<char, 0> buffer;
+  llvm37::raw_svector_ostream OS(buffer);
 
   // Write the bitcode
   OS.write(pBitcode, uBitcodeSize);
@@ -1642,7 +1642,7 @@ TEST_F(PixTest, PixDebugCompileInfo) {
 
 // This function lives in lib\DxilPIXPasses\DxilAnnotateWithVirtualRegister.cpp
 // Declared here so we can test it.
-uint32_t CountStructMembers(llvm::Type const* pType);
+uint32_t CountStructMembers(llvm37::Type const* pType);
 
 PixTest::TestableResults PixTest::TestStructAnnotationCase(
     const char* hlsl, 
@@ -1673,7 +1673,7 @@ PixTest::TestableResults PixTest::TestStructAnnotationCase(
 
   ModuleAndHangersOn moduleEtc(pAnnotatedContainer);
   
-  llvm::Function *entryFunction = moduleEtc.GetDxilModule().GetEntryFunction();
+  llvm37::Function *entryFunction = moduleEtc.GetDxilModule().GetEntryFunction();
 
   PixTest::TestableResults ret;
 
@@ -1682,10 +1682,10 @@ PixTest::TestableResults PixTest::TestStructAnnotationCase(
   {
     for (auto& instruction : block.getInstList())
     {
-      if (auto* dbgDeclare = llvm::dyn_cast<llvm::DbgDeclareInst>(&instruction))
+      if (auto* dbgDeclare = llvm37::dyn_cast<llvm37::DbgDeclareInst>(&instruction))
       {
-        llvm::Value* Address = dbgDeclare->getAddress();
-        auto* AddressAsAlloca = llvm::dyn_cast<llvm::AllocaInst>(Address);
+        llvm37::Value* Address = dbgDeclare->getAddress();
+        auto* AddressAsAlloca = llvm37::dyn_cast<llvm37::AllocaInst>(Address);
         if (AddressAsAlloca != nullptr)
         {
             auto* Expression = dbgDeclare->getExpression();
@@ -1718,8 +1718,8 @@ PixTest::TestableResults PixTest::TestStructAnnotationCase(
 
             // Use this independent count of number of struct members to test the 
             // function that operates on the alloca type:
-            llvm::Type* pAllocaTy = AddressAsAlloca->getType()->getElementType();
-            if (auto* AT = llvm::dyn_cast<llvm::ArrayType>(pAllocaTy))
+            llvm37::Type* pAllocaTy = AddressAsAlloca->getType()->getElementType();
+            if (auto* AT = llvm37::dyn_cast<llvm37::ArrayType>(pAllocaTy))
             {
                 // This is the case where a struct is passed to a function, and in 
                 // these tests there should be only one struct behind the pointer.
@@ -1727,7 +1727,7 @@ PixTest::TestableResults PixTest::TestStructAnnotationCase(
                 pAllocaTy = AT->getArrayElementType();
             }
 
-            if (auto* ST = llvm::dyn_cast<llvm::StructType>(pAllocaTy))
+            if (auto* ST = llvm37::dyn_cast<llvm37::StructType>(pAllocaTy))
             {
                 uint32_t countOfMembers = CountStructMembers(ST);
                 // memberIndex might be greater, because the fragment iterator also includes contained derived types as
@@ -1775,22 +1775,22 @@ PixTest::TestableResults PixTest::TestStructAnnotationCase(
   for (auto& block : entryFunction->getBasicBlockList()) {
     for (auto& instruction : block.getInstList()) {
       if (auto* store =
-        llvm::dyn_cast<llvm::StoreInst>(&instruction)) {
+        llvm37::dyn_cast<llvm37::StoreInst>(&instruction)) {
 
-        if (auto* pGEP = llvm::dyn_cast<llvm::GetElementPtrInst>(store->getPointerOperand()))
+        if (auto* pGEP = llvm37::dyn_cast<llvm37::GetElementPtrInst>(store->getPointerOperand()))
         {
           ret.AllocaWrites.push_back({});
           auto& NewAllocaWrite = ret.AllocaWrites.back();
-          llvm::Value* pPointerOperand = pGEP->getPointerOperand();
-          if (auto* pGEP2 = llvm::dyn_cast<llvm::GetElementPtrInst>(pPointerOperand))
+          llvm37::Value* pPointerOperand = pGEP->getPointerOperand();
+          if (auto* pGEP2 = llvm37::dyn_cast<llvm37::GetElementPtrInst>(pPointerOperand))
           {
-            auto *pMemberIndex = llvm::dyn_cast<llvm::ConstantInt>(
+            auto *pMemberIndex = llvm37::dyn_cast<llvm37::ConstantInt>(
                 pGEP->getOperand(2));
             uint64_t memberIndex = pMemberIndex->getLimitedValue();
             // Until we have debugging info for floatN, matrixNxM etc., we can't get the name:
             // auto *secondPointer = pGEP2->getPointerOperandType();
             // auto* pStruct =
-            // llvm::dyn_cast<llvm::StructType>(secondPointer->getVectorElementType());
+            // llvm37::dyn_cast<llvm37::StructType>(secondPointer->getVectorElementType());
             NewAllocaWrite.memberName =
                 "member" + std::to_string(memberIndex);
           }
@@ -1799,13 +1799,13 @@ PixTest::TestableResults PixTest::TestStructAnnotationCase(
             NewAllocaWrite.memberName = pGEP->getName();
           }
 
-          llvm::Value* index;
+          llvm37::Value* index;
           if (pix_dxil::PixAllocaRegWrite::FromInst(
             store, 
             &NewAllocaWrite.regBase, 
             &NewAllocaWrite.regSize,
             &index)) {
-            auto* asInt = llvm::dyn_cast<llvm::ConstantInt>(index);
+            auto* asInt = llvm37::dyn_cast<llvm37::ConstantInt>(index);
             NewAllocaWrite.index = asInt->getLimitedValue();
           }
         }

@@ -1,4 +1,4 @@
-; RUN: llvm-link %s %p/partial-type-refinement-link.ll -S | FileCheck %s
+; RUN: llvm37-link %s %p/partial-type-refinement-link.ll -S | FileCheck %s
 ; PR4954
 
 ; CHECK: load %PI*, %PI** getelementptr inbounds (%"RegisterP<LowerArrayLength>", %"RegisterP<LowerArrayLength>"* @_ZN3mvmL1XE, i64 0, i32 0, i32 6, i32 0, i32 0, i32 0), align 16

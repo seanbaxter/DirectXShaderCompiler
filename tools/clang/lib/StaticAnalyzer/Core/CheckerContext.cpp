@@ -1,6 +1,6 @@
 //== CheckerContext.cpp - Context info for path-sensitive checkers-----------=//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.

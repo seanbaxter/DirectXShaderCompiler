@@ -1,5 +1,5 @@
-; RUN: llvm-extract -func foo -S < %s | FileCheck %s
-; RUN: llvm-extract -delete -func foo -S < %s | FileCheck --check-prefix=DELETE %s
+; RUN: llvm37-extract -func foo -S < %s | FileCheck %s
+; RUN: llvm37-extract -delete -func foo -S < %s | FileCheck --check-prefix=DELETE %s
 
 ; Test that we don't convert weak_odr to external definitions.
 

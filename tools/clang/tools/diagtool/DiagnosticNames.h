@@ -1,18 +1,18 @@
 //===- DiagnosticNames.h - Defines a table of all builtin diagnostics ------==//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_TOOLS_DIAGTOOL_DIAGNOSTICNAMES_H
-#define LLVM_CLANG_TOOLS_DIAGTOOL_DIAGNOSTICNAMES_H
+#ifndef LLVM37_CLANG_TOOLS_DIAGTOOL_DIAGNOSTICNAMES_H
+#define LLVM37_CLANG_TOOLS_DIAGTOOL_DIAGNOSTICNAMES_H
 
-#include "llvm/ADT/ArrayRef.h"
-#include "llvm/ADT/StringRef.h"
-#include "llvm/Support/DataTypes.h"
+#include "llvm37/ADT/ArrayRef.h"
+#include "llvm37/ADT/StringRef.h"
+#include "llvm37/Support/DataTypes.h"
 
 namespace diagtool {
 
@@ -21,8 +21,8 @@ namespace diagtool {
     short DiagID;
     uint8_t NameLen;
     
-    llvm::StringRef getName() const {
-      return llvm::StringRef(NameStr, NameLen);
+    llvm37::StringRef getName() const {
+      return llvm37::StringRef(NameStr, NameLen);
     }
 
     bool operator<(const DiagnosticRecord &Other) const {
@@ -31,7 +31,7 @@ namespace diagtool {
   };
 
   /// \brief Get every diagnostic in the system, sorted by name.
-  llvm::ArrayRef<DiagnosticRecord> getBuiltinDiagnosticsByName();
+  llvm37::ArrayRef<DiagnosticRecord> getBuiltinDiagnosticsByName();
 
   /// \brief Get a diagnostic by its ID.
   const DiagnosticRecord &getDiagnosticForID(short DiagID);
@@ -42,7 +42,7 @@ namespace diagtool {
     uint16_t Members;
     uint16_t SubGroups;
 
-    llvm::StringRef getName() const;
+    llvm37::StringRef getName() const;
 
     template<typename RecordType>
     class group_iterator {
@@ -94,13 +94,13 @@ namespace diagtool {
     diagnostics_iterator diagnostics_begin() const;
     diagnostics_iterator diagnostics_end() const;
 
-    bool operator<(llvm::StringRef Other) const {
+    bool operator<(llvm37::StringRef Other) const {
       return getName() < Other;
     }
   };
 
   /// \brief Get every diagnostic group in the system, sorted by name.
-  llvm::ArrayRef<GroupRecord> getDiagnosticGroups();
+  llvm37::ArrayRef<GroupRecord> getDiagnosticGroups();
 
   template<>
   inline GroupRecord::subgroup_iterator::reference

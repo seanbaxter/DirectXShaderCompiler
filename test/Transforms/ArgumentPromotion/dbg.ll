@@ -16,8 +16,8 @@ define void @caller(i32** %Y) {
   ret void
 }
 
-!llvm.module.flags = !{!0}
-!llvm.dbg.cu = !{!3}
+!llvm37.module.flags = !{!0}
+!llvm37.dbg.cu = !{!3}
 
 !0 = !{i32 2, !"Debug Info Version", i32 3}
 !1 = !DILocation(line: 8, scope: !2)

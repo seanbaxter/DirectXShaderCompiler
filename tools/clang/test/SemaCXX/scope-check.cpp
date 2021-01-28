@@ -184,7 +184,7 @@ namespace test9 {
   }
 }
 
-// http://llvm.org/PR10462
+// http://llvm37.org/PR10462
 namespace PR10462 {
   enum MyEnum {
     something_valid,

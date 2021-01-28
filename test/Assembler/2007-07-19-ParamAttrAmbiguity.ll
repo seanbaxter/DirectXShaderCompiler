@@ -1,5 +1,5 @@
 ; PR1553
-; RUN: llvm-as < %s > /dev/null
+; RUN: llvm37-as < %s > /dev/null
 ; RUN: verify-uselistorder %s
 define void @bar() {
         %t = call i8 @foo( i8 10 )

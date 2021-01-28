@@ -1,6 +1,6 @@
 //===--- ASTMatchersInternal.cpp - Structural query framework -------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -13,8 +13,8 @@
 
 #include "clang/ASTMatchers/ASTMatchers.h"
 #include "clang/ASTMatchers/ASTMatchersInternal.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/Support/ManagedStatic.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/Support/ManagedStatic.h"
 
 namespace clang {
 namespace ast_matchers {
@@ -104,7 +104,7 @@ public:
     return true;
   }
 };
-static llvm::ManagedStatic<TrueMatcherImpl> TrueMatcherInstance;
+static llvm37::ManagedStatic<TrueMatcherImpl> TrueMatcherInstance;
 
 }  // namespace
 
@@ -156,7 +156,7 @@ DynTypedMatcher DynTypedMatcher::constructVariadic(
         SupportedKind, RestrictKind,
         new VariadicMatcher<NotUnaryOperator>(std::move(InnerMatchers)));
   }
-  llvm_unreachable("Invalid Op value.");
+  llvm37_unreachable("Invalid Op value.");
 }
 
 DynTypedMatcher DynTypedMatcher::trueMatcher(
@@ -206,8 +206,8 @@ bool DynTypedMatcher::matchesNoKindCheck(
   return false;
 }
 
-llvm::Optional<DynTypedMatcher> DynTypedMatcher::tryBind(StringRef ID) const {
-  if (!AllowBind) return llvm::None;
+llvm37::Optional<DynTypedMatcher> DynTypedMatcher::tryBind(StringRef ID) const {
+  if (!AllowBind) return llvm37::None;
   auto Result = *this;
   Result.Implementation = new IdDynMatcher(ID, Result.Implementation);
   return Result;
@@ -306,8 +306,8 @@ bool HasNameMatcher::matchesNodeUnqualified(const NamedDecl &Node) const {
   }
   if (Node.getDeclName()) {
     // Name needs to be constructed.
-    llvm::SmallString<128> NodeName;
-    llvm::raw_svector_ostream OS(NodeName);
+    llvm37::SmallString<128> NodeName;
+    llvm37::raw_svector_ostream OS(NodeName);
     Node.printName(OS);
     return Name == OS.str();
   }
@@ -315,8 +315,8 @@ bool HasNameMatcher::matchesNodeUnqualified(const NamedDecl &Node) const {
 }
 
 bool HasNameMatcher::matchesNodeFull(const NamedDecl &Node) const {
-  llvm::SmallString<128> NodeName = StringRef("::");
-  llvm::raw_svector_ostream OS(NodeName);
+  llvm37::SmallString<128> NodeName = StringRef("::");
+  llvm37::raw_svector_ostream OS(NodeName);
   Node.printQualifiedName(OS);
   const StringRef FullName = OS.str();
   const StringRef Pattern = Name;

@@ -1,17 +1,17 @@
 //===- unittests/Support/TargetRegistry.cpp - -----------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Support/TargetRegistry.h"
-#include "llvm/Support/TargetSelect.h"
+#include "llvm37/Support/TargetRegistry.h"
+#include "llvm37/Support/TargetSelect.h"
 #include "gtest/gtest.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 namespace {
 
@@ -20,7 +20,7 @@ TEST(TargetRegistry, TargetHasArchType) {
   // else this would pass by accident if InitializeAllTargetInfos were omitted.
   int Count = 0;
 
-  llvm::InitializeAllTargetInfos();
+  llvm37::InitializeAllTargetInfos();
 
   for (const Target &T : TargetRegistry::targets()) {
     StringRef Name = T.getName();
@@ -31,7 +31,7 @@ TEST(TargetRegistry, TargetHasArchType) {
     // false?"
     // So given that the cpp backend truly has no target arch, it is skipped.
     if (Name != "cpp") {
-      Triple::ArchType Arch = Triple::getArchTypeForLLVMName(Name);
+      Triple::ArchType Arch = Triple::getArchTypeForLLVM37Name(Name);
       EXPECT_NE(Arch, Triple::UnknownArch);
       ++Count;
     }

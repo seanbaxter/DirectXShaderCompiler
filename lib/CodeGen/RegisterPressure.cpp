@@ -1,6 +1,6 @@
 //===-- RegisterPressure.cpp - Dynamic Register Pressure ------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -12,15 +12,15 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/CodeGen/RegisterPressure.h"
-#include "llvm/CodeGen/LiveInterval.h"
-#include "llvm/CodeGen/LiveIntervalAnalysis.h"
-#include "llvm/CodeGen/MachineRegisterInfo.h"
-#include "llvm/CodeGen/RegisterClassInfo.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/CodeGen/RegisterPressure.h"
+#include "llvm37/CodeGen/LiveInterval.h"
+#include "llvm37/CodeGen/LiveIntervalAnalysis.h"
+#include "llvm37/CodeGen/MachineRegisterInfo.h"
+#include "llvm37/CodeGen/RegisterClassInfo.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/raw_ostream.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 /// Increase pressure for each pressure set provided by TargetRegisterInfo.
 static void increaseSetPressure(std::vector<unsigned> &CurrSetPressure,
@@ -40,8 +40,8 @@ static void decreaseSetPressure(std::vector<unsigned> &CurrSetPressure,
   }
 }
 
-LLVM_DUMP_METHOD
-void llvm::dumpRegSetPressure(ArrayRef<unsigned> SetPressure,
+LLVM37_DUMP_METHOD
+void llvm37::dumpRegSetPressure(ArrayRef<unsigned> SetPressure,
                               const TargetRegisterInfo *TRI) {
   bool Empty = true;
   for (unsigned i = 0, e = SetPressure.size(); i < e; ++i) {
@@ -54,7 +54,7 @@ void llvm::dumpRegSetPressure(ArrayRef<unsigned> SetPressure,
     dbgs() << "\n";
 }
 
-LLVM_DUMP_METHOD
+LLVM37_DUMP_METHOD
 void RegisterPressure::dump(const TargetRegisterInfo *TRI) const {
   dbgs() << "Max Pressure: ";
   dumpRegSetPressure(MaxSetPressure, TRI);
@@ -68,7 +68,7 @@ void RegisterPressure::dump(const TargetRegisterInfo *TRI) const {
   dbgs() << '\n';
 }
 
-LLVM_DUMP_METHOD
+LLVM37_DUMP_METHOD
 void RegPressureTracker::dump() const {
   if (!isTopClosed() || !isBottomClosed()) {
     dbgs() << "Curr Pressure: ";
@@ -821,7 +821,7 @@ getMaxUpwardPressureDelta(const MachineInstr *MI, PressureDiff *PDiff,
     if (Delta2.CurrentMax.isValid())
       dbgs() << "CurrMx2 " << TRI->getRegPressureSetName(Delta2.CurrentMax.getPSet())
              << " " << Delta2.CurrentMax.getUnitInc() << "\n";
-    llvm_unreachable("RegP Delta Mismatch");
+    llvm37_unreachable("RegP Delta Mismatch");
   }
 #endif
 }

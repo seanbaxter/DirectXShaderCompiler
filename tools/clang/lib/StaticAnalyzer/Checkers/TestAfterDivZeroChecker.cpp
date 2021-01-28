@@ -1,6 +1,6 @@
 //== TestAfterDivZeroChecker.cpp - Test after division by zero checker --*--==//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -17,7 +17,7 @@
 #include "clang/StaticAnalyzer/Core/Checker.h"
 #include "clang/StaticAnalyzer/Core/PathSensitive/CallEvent.h"
 #include "clang/StaticAnalyzer/Core/PathSensitive/CheckerContext.h"
-#include "llvm/ADT/FoldingSet.h"
+#include "llvm37/ADT/FoldingSet.h"
 
 using namespace clang;
 using namespace ento;
@@ -48,7 +48,7 @@ public:
     return ZeroSymbol < X.ZeroSymbol;
   }
 
-  void Profile(llvm::FoldingSetNodeID &ID) const {
+  void Profile(llvm37::FoldingSetNodeID &ID) const {
     ID.AddInteger(BlockID);
     ID.AddPointer(SFC);
     ID.AddPointer(ZeroSymbol);
@@ -65,7 +65,7 @@ public:
   DivisionBRVisitor(SymbolRef ZeroSymbol, const StackFrameContext *SFC)
       : ZeroSymbol(ZeroSymbol), SFC(SFC), Satisfied(false) {}
 
-  void Profile(llvm::FoldingSetNodeID &ID) const override {
+  void Profile(llvm37::FoldingSetNodeID &ID) const override {
     ID.Add(ZeroSymbol);
     ID.Add(SFC);
   }
@@ -171,12 +171,12 @@ void TestAfterDivZeroChecker::reportBug(SVal Val, CheckerContext &C) const {
     if (!DivZeroBug)
       DivZeroBug.reset(new BuiltinBug(this, "Division by zero"));
 
-    auto R = llvm::make_unique<BugReport>(
+    auto R = llvm37::make_unique<BugReport>(
         *DivZeroBug, "Value being compared against zero has already been used "
                      "for division",
         N);
 
-    R->addVisitor(llvm::make_unique<DivisionBRVisitor>(Val.getAsSymbol(),
+    R->addVisitor(llvm37::make_unique<DivisionBRVisitor>(Val.getAsSymbol(),
                                                        C.getStackFrame()));
     C.emitReport(std::move(R));
   }
@@ -190,7 +190,7 @@ void TestAfterDivZeroChecker::checkEndFunction(CheckerContext &C) const {
     return;
 
   DivZeroMapTy::Factory &F = State->get_context<DivZeroMap>();
-  for (llvm::ImmutableSet<ZeroState>::iterator I = DivZeroes.begin(),
+  for (llvm37::ImmutableSet<ZeroState>::iterator I = DivZeroes.begin(),
                                                E = DivZeroes.end();
        I != E; ++I) {
     ZeroState ZS = *I;

@@ -1,6 +1,6 @@
 //===--- SemaOpenMP.cpp - Semantic Analysis for OpenMP constructs ---------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -41,283 +41,283 @@ using namespace clang;
 //===----------------------------------------------------------------------===//
 
 void Sema::InitDataSharingAttributesStack() {
-  llvm_unreachable("HLSL does not support OpenMP constructs");
+  llvm37_unreachable("HLSL does not support OpenMP constructs");
 }
 
 bool Sema::IsOpenMPCapturedVar(VarDecl *VD) {
-  llvm_unreachable("HLSL does not support OpenMP constructs");
+  llvm37_unreachable("HLSL does not support OpenMP constructs");
 }
 
 bool Sema::isOpenMPPrivateVar(VarDecl *VD, unsigned Level) {
-  llvm_unreachable("HLSL does not support OpenMP constructs");
+  llvm37_unreachable("HLSL does not support OpenMP constructs");
 }
 
 void Sema::DestroyDataSharingAttributesStack() {
-  llvm_unreachable("HLSL does not support OpenMP constructs");
+  llvm37_unreachable("HLSL does not support OpenMP constructs");
 }
 
 void Sema::StartOpenMPDSABlock(OpenMPDirectiveKind DKind,
   const DeclarationNameInfo &DirName,
   Scope *CurScope, SourceLocation Loc) {
-  llvm_unreachable("HLSL does not support OpenMP constructs");
+  llvm37_unreachable("HLSL does not support OpenMP constructs");
 }
 
 void Sema::StartOpenMPClause(OpenMPClauseKind K) {
-  llvm_unreachable("HLSL does not support OpenMP constructs");
+  llvm37_unreachable("HLSL does not support OpenMP constructs");
 }
 
 void Sema::EndOpenMPClause() {
-  llvm_unreachable("HLSL does not support OpenMP constructs");
+  llvm37_unreachable("HLSL does not support OpenMP constructs");
 }
 
 void Sema::EndOpenMPDSABlock(Stmt *CurDirective) {
-  llvm_unreachable("HLSL does not support OpenMP constructs");
+  llvm37_unreachable("HLSL does not support OpenMP constructs");
 }
 
 ExprResult Sema::ActOnOpenMPIdExpression(Scope *CurScope,
   CXXScopeSpec &ScopeSpec,
   const DeclarationNameInfo &Id) {
-  llvm_unreachable("HLSL does not support OpenMP constructs");
+  llvm37_unreachable("HLSL does not support OpenMP constructs");
 }
 
 Sema::DeclGroupPtrTy
 Sema::ActOnOpenMPThreadprivateDirective(SourceLocation Loc,
   ArrayRef<Expr *> VarList) {
-  llvm_unreachable("HLSL does not support OpenMP constructs");
+  llvm37_unreachable("HLSL does not support OpenMP constructs");
 }
 
 OMPThreadPrivateDecl *
 Sema::CheckOMPThreadPrivateDecl(SourceLocation Loc, ArrayRef<Expr *> VarList) {
-  llvm_unreachable("HLSL does not support OpenMP constructs");
+  llvm37_unreachable("HLSL does not support OpenMP constructs");
 }
 
 void Sema::ActOnOpenMPRegionStart(OpenMPDirectiveKind DKind, Scope *CurScope) {
-  llvm_unreachable("HLSL does not support OpenMP constructs");
+  llvm37_unreachable("HLSL does not support OpenMP constructs");
 }
 
 StmtResult Sema::ActOnOpenMPRegionEnd(StmtResult S,
   ArrayRef<OMPClause *> Clauses) {
-  llvm_unreachable("HLSL does not support OpenMP constructs");
+  llvm37_unreachable("HLSL does not support OpenMP constructs");
 }
 
 StmtResult Sema::ActOnOpenMPExecutableDirective(
   OpenMPDirectiveKind Kind, const DeclarationNameInfo &DirName,
   OpenMPDirectiveKind CancelRegion, ArrayRef<OMPClause *> Clauses,
   Stmt *AStmt, SourceLocation StartLoc, SourceLocation EndLoc) {
-  llvm_unreachable("HLSL does not support OpenMP constructs");
+  llvm37_unreachable("HLSL does not support OpenMP constructs");
 }
 
 StmtResult Sema::ActOnOpenMPParallelDirective(ArrayRef<OMPClause *> Clauses,
   Stmt *AStmt,
   SourceLocation StartLoc,
   SourceLocation EndLoc) {
-  llvm_unreachable("HLSL does not support OpenMP constructs");
+  llvm37_unreachable("HLSL does not support OpenMP constructs");
 }
 
 void Sema::ActOnOpenMPLoopInitialization(SourceLocation ForLoc, Stmt *Init) {
-  llvm_unreachable("HLSL does not support OpenMP constructs");
+  llvm37_unreachable("HLSL does not support OpenMP constructs");
 }
 
 StmtResult Sema::ActOnOpenMPSimdDirective(
   ArrayRef<OMPClause *> Clauses, Stmt *AStmt, SourceLocation StartLoc,
   SourceLocation EndLoc,
-  llvm::DenseMap<VarDecl *, Expr *> &VarsWithImplicitDSA) {
-  llvm_unreachable("HLSL does not support OpenMP constructs");
+  llvm37::DenseMap<VarDecl *, Expr *> &VarsWithImplicitDSA) {
+  llvm37_unreachable("HLSL does not support OpenMP constructs");
 }
 
 StmtResult Sema::ActOnOpenMPForDirective(
   ArrayRef<OMPClause *> Clauses, Stmt *AStmt, SourceLocation StartLoc,
   SourceLocation EndLoc,
-  llvm::DenseMap<VarDecl *, Expr *> &VarsWithImplicitDSA) {
-  llvm_unreachable("HLSL does not support OpenMP constructs");
+  llvm37::DenseMap<VarDecl *, Expr *> &VarsWithImplicitDSA) {
+  llvm37_unreachable("HLSL does not support OpenMP constructs");
 }
 
 StmtResult Sema::ActOnOpenMPForSimdDirective(
   ArrayRef<OMPClause *> Clauses, Stmt *AStmt, SourceLocation StartLoc,
   SourceLocation EndLoc,
-  llvm::DenseMap<VarDecl *, Expr *> &VarsWithImplicitDSA) {
-  llvm_unreachable("HLSL does not support OpenMP constructs");
+  llvm37::DenseMap<VarDecl *, Expr *> &VarsWithImplicitDSA) {
+  llvm37_unreachable("HLSL does not support OpenMP constructs");
 }
 
 StmtResult Sema::ActOnOpenMPSectionsDirective(ArrayRef<OMPClause *> Clauses,
   Stmt *AStmt,
   SourceLocation StartLoc,
   SourceLocation EndLoc) {
-  llvm_unreachable("HLSL does not support OpenMP constructs");
+  llvm37_unreachable("HLSL does not support OpenMP constructs");
 }
 
 StmtResult Sema::ActOnOpenMPSectionDirective(Stmt *AStmt,
   SourceLocation StartLoc,
   SourceLocation EndLoc) {
-  llvm_unreachable("HLSL does not support OpenMP constructs");
+  llvm37_unreachable("HLSL does not support OpenMP constructs");
 }
 
 StmtResult Sema::ActOnOpenMPSingleDirective(ArrayRef<OMPClause *> Clauses,
   Stmt *AStmt,
   SourceLocation StartLoc,
   SourceLocation EndLoc) {
-  llvm_unreachable("HLSL does not support OpenMP constructs");
+  llvm37_unreachable("HLSL does not support OpenMP constructs");
 }
 
 StmtResult Sema::ActOnOpenMPMasterDirective(Stmt *AStmt,
   SourceLocation StartLoc,
   SourceLocation EndLoc) {
-  llvm_unreachable("HLSL does not support OpenMP constructs");
+  llvm37_unreachable("HLSL does not support OpenMP constructs");
 }
 
 StmtResult
 Sema::ActOnOpenMPCriticalDirective(const DeclarationNameInfo &DirName,
   Stmt *AStmt, SourceLocation StartLoc,
   SourceLocation EndLoc) {
-  llvm_unreachable("HLSL does not support OpenMP constructs");
+  llvm37_unreachable("HLSL does not support OpenMP constructs");
 }
 
 StmtResult Sema::ActOnOpenMPParallelForDirective(
   ArrayRef<OMPClause *> Clauses, Stmt *AStmt, SourceLocation StartLoc,
   SourceLocation EndLoc,
-  llvm::DenseMap<VarDecl *, Expr *> &VarsWithImplicitDSA) {
-  llvm_unreachable("HLSL does not support OpenMP constructs");
+  llvm37::DenseMap<VarDecl *, Expr *> &VarsWithImplicitDSA) {
+  llvm37_unreachable("HLSL does not support OpenMP constructs");
 }
 
 StmtResult Sema::ActOnOpenMPParallelForSimdDirective(
   ArrayRef<OMPClause *> Clauses, Stmt *AStmt, SourceLocation StartLoc,
   SourceLocation EndLoc,
-  llvm::DenseMap<VarDecl *, Expr *> &VarsWithImplicitDSA) {
-  llvm_unreachable("HLSL does not support OpenMP constructs");
+  llvm37::DenseMap<VarDecl *, Expr *> &VarsWithImplicitDSA) {
+  llvm37_unreachable("HLSL does not support OpenMP constructs");
 }
 
 StmtResult
 Sema::ActOnOpenMPParallelSectionsDirective(ArrayRef<OMPClause *> Clauses,
   Stmt *AStmt, SourceLocation StartLoc,
   SourceLocation EndLoc) {
-  llvm_unreachable("HLSL does not support OpenMP constructs");
+  llvm37_unreachable("HLSL does not support OpenMP constructs");
 }
 
 StmtResult Sema::ActOnOpenMPTaskDirective(ArrayRef<OMPClause *> Clauses,
   Stmt *AStmt, SourceLocation StartLoc,
   SourceLocation EndLoc) {
-  llvm_unreachable("HLSL does not support OpenMP constructs");
+  llvm37_unreachable("HLSL does not support OpenMP constructs");
 }
 
 StmtResult Sema::ActOnOpenMPTaskyieldDirective(SourceLocation StartLoc,
   SourceLocation EndLoc) {
-  llvm_unreachable("HLSL does not support OpenMP constructs");
+  llvm37_unreachable("HLSL does not support OpenMP constructs");
 }
 
 StmtResult Sema::ActOnOpenMPBarrierDirective(SourceLocation StartLoc,
   SourceLocation EndLoc) {
-  llvm_unreachable("HLSL does not support OpenMP constructs");
+  llvm37_unreachable("HLSL does not support OpenMP constructs");
 }
 
 StmtResult Sema::ActOnOpenMPTaskwaitDirective(SourceLocation StartLoc,
   SourceLocation EndLoc) {
-  llvm_unreachable("HLSL does not support OpenMP constructs");
+  llvm37_unreachable("HLSL does not support OpenMP constructs");
 }
 
 StmtResult Sema::ActOnOpenMPTaskgroupDirective(Stmt *AStmt,
   SourceLocation StartLoc,
   SourceLocation EndLoc) {
-  llvm_unreachable("HLSL does not support OpenMP constructs");
+  llvm37_unreachable("HLSL does not support OpenMP constructs");
 }
 
 StmtResult Sema::ActOnOpenMPFlushDirective(ArrayRef<OMPClause *> Clauses,
   SourceLocation StartLoc,
   SourceLocation EndLoc) {
-  llvm_unreachable("HLSL does not support OpenMP constructs");
+  llvm37_unreachable("HLSL does not support OpenMP constructs");
 }
 
 StmtResult Sema::ActOnOpenMPOrderedDirective(Stmt *AStmt,
   SourceLocation StartLoc,
   SourceLocation EndLoc) {
-  llvm_unreachable("HLSL does not support OpenMP constructs");
+  llvm37_unreachable("HLSL does not support OpenMP constructs");
 }
 
 StmtResult Sema::ActOnOpenMPAtomicDirective(ArrayRef<OMPClause *> Clauses,
   Stmt *AStmt,
   SourceLocation StartLoc,
   SourceLocation EndLoc) {
-  llvm_unreachable("HLSL does not support OpenMP constructs");
+  llvm37_unreachable("HLSL does not support OpenMP constructs");
 }
 
 StmtResult Sema::ActOnOpenMPTargetDirective(ArrayRef<OMPClause *> Clauses,
   Stmt *AStmt,
   SourceLocation StartLoc,
   SourceLocation EndLoc) {
-  llvm_unreachable("HLSL does not support OpenMP constructs");
+  llvm37_unreachable("HLSL does not support OpenMP constructs");
 }
 
 StmtResult Sema::ActOnOpenMPTeamsDirective(ArrayRef<OMPClause *> Clauses,
   Stmt *AStmt, SourceLocation StartLoc,
   SourceLocation EndLoc) {
-  llvm_unreachable("HLSL does not support OpenMP constructs");
+  llvm37_unreachable("HLSL does not support OpenMP constructs");
 }
 
 StmtResult
 Sema::ActOnOpenMPCancellationPointDirective(SourceLocation StartLoc,
   SourceLocation EndLoc,
   OpenMPDirectiveKind CancelRegion) {
-  llvm_unreachable("HLSL does not support OpenMP constructs");
+  llvm37_unreachable("HLSL does not support OpenMP constructs");
 }
 
 StmtResult Sema::ActOnOpenMPCancelDirective(SourceLocation StartLoc,
   SourceLocation EndLoc,
   OpenMPDirectiveKind CancelRegion) {
-  llvm_unreachable("HLSL does not support OpenMP constructs");
+  llvm37_unreachable("HLSL does not support OpenMP constructs");
 }
 
 OMPClause *Sema::ActOnOpenMPSingleExprClause(OpenMPClauseKind Kind, Expr *Expr,
   SourceLocation StartLoc,
   SourceLocation LParenLoc,
   SourceLocation EndLoc) {
-  llvm_unreachable("HLSL does not support OpenMP constructs");
+  llvm37_unreachable("HLSL does not support OpenMP constructs");
 }
 
 OMPClause *Sema::ActOnOpenMPIfClause(Expr *Condition, SourceLocation StartLoc,
   SourceLocation LParenLoc,
   SourceLocation EndLoc) {
-  llvm_unreachable("HLSL does not support OpenMP constructs");
+  llvm37_unreachable("HLSL does not support OpenMP constructs");
 }
 
 OMPClause *Sema::ActOnOpenMPFinalClause(Expr *Condition,
   SourceLocation StartLoc,
   SourceLocation LParenLoc,
   SourceLocation EndLoc) {
-  llvm_unreachable("HLSL does not support OpenMP constructs");
+  llvm37_unreachable("HLSL does not support OpenMP constructs");
 }
 ExprResult Sema::PerformOpenMPImplicitIntegerConversion(SourceLocation Loc,
   Expr *Op) {
-  llvm_unreachable("HLSL does not support OpenMP constructs");
+  llvm37_unreachable("HLSL does not support OpenMP constructs");
 }
 
 OMPClause *Sema::ActOnOpenMPNumThreadsClause(Expr *NumThreads,
   SourceLocation StartLoc,
   SourceLocation LParenLoc,
   SourceLocation EndLoc) {
-  llvm_unreachable("HLSL does not support OpenMP constructs");
+  llvm37_unreachable("HLSL does not support OpenMP constructs");
 }
 
 ExprResult Sema::VerifyPositiveIntegerConstantInClause(Expr *E,
   OpenMPClauseKind CKind) {
-  llvm_unreachable("HLSL does not support OpenMP constructs");
+  llvm37_unreachable("HLSL does not support OpenMP constructs");
 }
 
 OMPClause *Sema::ActOnOpenMPSafelenClause(Expr *Len, SourceLocation StartLoc,
   SourceLocation LParenLoc,
   SourceLocation EndLoc) {
-  llvm_unreachable("HLSL does not support OpenMP constructs");
+  llvm37_unreachable("HLSL does not support OpenMP constructs");
 }
 
 OMPClause *Sema::ActOnOpenMPCollapseClause(Expr *NumForLoops,
   SourceLocation StartLoc,
   SourceLocation LParenLoc,
   SourceLocation EndLoc) {
-  llvm_unreachable("HLSL does not support OpenMP constructs");
+  llvm37_unreachable("HLSL does not support OpenMP constructs");
 }
 
 OMPClause *Sema::ActOnOpenMPSimpleClause(
   OpenMPClauseKind Kind, unsigned Argument, SourceLocation ArgumentLoc,
   SourceLocation StartLoc, SourceLocation LParenLoc, SourceLocation EndLoc) {
-  llvm_unreachable("HLSL does not support OpenMP constructs");
+  llvm37_unreachable("HLSL does not support OpenMP constructs");
 }
 
 OMPClause *Sema::ActOnOpenMPDefaultClause(OpenMPDefaultClauseKind Kind,
@@ -325,7 +325,7 @@ OMPClause *Sema::ActOnOpenMPDefaultClause(OpenMPDefaultClauseKind Kind,
   SourceLocation StartLoc,
   SourceLocation LParenLoc,
   SourceLocation EndLoc) {
-  llvm_unreachable("HLSL does not support OpenMP constructs");
+  llvm37_unreachable("HLSL does not support OpenMP constructs");
 }
 
 OMPClause *Sema::ActOnOpenMPProcBindClause(OpenMPProcBindClauseKind Kind,
@@ -333,7 +333,7 @@ OMPClause *Sema::ActOnOpenMPProcBindClause(OpenMPProcBindClauseKind Kind,
   SourceLocation StartLoc,
   SourceLocation LParenLoc,
   SourceLocation EndLoc) {
-  llvm_unreachable("HLSL does not support OpenMP constructs");
+  llvm37_unreachable("HLSL does not support OpenMP constructs");
 }
 
 OMPClause *Sema::ActOnOpenMPSingleExprWithArgClause(
@@ -341,65 +341,65 @@ OMPClause *Sema::ActOnOpenMPSingleExprWithArgClause(
   SourceLocation StartLoc, SourceLocation LParenLoc,
   SourceLocation ArgumentLoc, SourceLocation CommaLoc,
   SourceLocation EndLoc) {
-  llvm_unreachable("HLSL does not support OpenMP constructs");
+  llvm37_unreachable("HLSL does not support OpenMP constructs");
 }
 
 OMPClause *Sema::ActOnOpenMPScheduleClause(
   OpenMPScheduleClauseKind Kind, Expr *ChunkSize, SourceLocation StartLoc,
   SourceLocation LParenLoc, SourceLocation KindLoc, SourceLocation CommaLoc,
   SourceLocation EndLoc) {
-  llvm_unreachable("HLSL does not support OpenMP constructs");
+  llvm37_unreachable("HLSL does not support OpenMP constructs");
 }
 
 OMPClause *Sema::ActOnOpenMPClause(OpenMPClauseKind Kind,
   SourceLocation StartLoc,
   SourceLocation EndLoc) {
-  llvm_unreachable("HLSL does not support OpenMP constructs");
+  llvm37_unreachable("HLSL does not support OpenMP constructs");
 }
 
 OMPClause *Sema::ActOnOpenMPOrderedClause(SourceLocation StartLoc,
   SourceLocation EndLoc) {
-  llvm_unreachable("HLSL does not support OpenMP constructs");
+  llvm37_unreachable("HLSL does not support OpenMP constructs");
 }
 
 OMPClause *Sema::ActOnOpenMPNowaitClause(SourceLocation StartLoc,
   SourceLocation EndLoc) {
-  llvm_unreachable("HLSL does not support OpenMP constructs");
+  llvm37_unreachable("HLSL does not support OpenMP constructs");
 }
 
 OMPClause *Sema::ActOnOpenMPUntiedClause(SourceLocation StartLoc,
   SourceLocation EndLoc) {
-  llvm_unreachable("HLSL does not support OpenMP constructs");
+  llvm37_unreachable("HLSL does not support OpenMP constructs");
 }
 
 OMPClause *Sema::ActOnOpenMPMergeableClause(SourceLocation StartLoc,
   SourceLocation EndLoc) {
-  llvm_unreachable("HLSL does not support OpenMP constructs");
+  llvm37_unreachable("HLSL does not support OpenMP constructs");
 }
 
 OMPClause *Sema::ActOnOpenMPReadClause(SourceLocation StartLoc,
   SourceLocation EndLoc) {
-  llvm_unreachable("HLSL does not support OpenMP constructs");
+  llvm37_unreachable("HLSL does not support OpenMP constructs");
 }
 
 OMPClause *Sema::ActOnOpenMPWriteClause(SourceLocation StartLoc,
   SourceLocation EndLoc) {
-  llvm_unreachable("HLSL does not support OpenMP constructs");
+  llvm37_unreachable("HLSL does not support OpenMP constructs");
 }
 
 OMPClause *Sema::ActOnOpenMPUpdateClause(SourceLocation StartLoc,
   SourceLocation EndLoc) {
-  llvm_unreachable("HLSL does not support OpenMP constructs");
+  llvm37_unreachable("HLSL does not support OpenMP constructs");
 }
 
 OMPClause *Sema::ActOnOpenMPCaptureClause(SourceLocation StartLoc,
   SourceLocation EndLoc) {
-  llvm_unreachable("HLSL does not support OpenMP constructs");
+  llvm37_unreachable("HLSL does not support OpenMP constructs");
 }
 
 OMPClause *Sema::ActOnOpenMPSeqCstClause(SourceLocation StartLoc,
   SourceLocation EndLoc) {
-  llvm_unreachable("HLSL does not support OpenMP constructs");
+  llvm37_unreachable("HLSL does not support OpenMP constructs");
 }
 
 OMPClause *Sema::ActOnOpenMPVarListClause(
@@ -408,35 +408,35 @@ OMPClause *Sema::ActOnOpenMPVarListClause(
   SourceLocation EndLoc, CXXScopeSpec &ReductionIdScopeSpec,
   const DeclarationNameInfo &ReductionId, OpenMPDependClauseKind DepKind,
   SourceLocation DepLoc) {
-  llvm_unreachable("HLSL does not support OpenMP constructs");
+  llvm37_unreachable("HLSL does not support OpenMP constructs");
 }
 
 OMPClause *Sema::ActOnOpenMPPrivateClause(ArrayRef<Expr *> VarList,
   SourceLocation StartLoc,
   SourceLocation LParenLoc,
   SourceLocation EndLoc) {
-  llvm_unreachable("HLSL does not support OpenMP constructs");
+  llvm37_unreachable("HLSL does not support OpenMP constructs");
 }
 
 OMPClause *Sema::ActOnOpenMPFirstprivateClause(ArrayRef<Expr *> VarList,
   SourceLocation StartLoc,
   SourceLocation LParenLoc,
   SourceLocation EndLoc) {
-  llvm_unreachable("HLSL does not support OpenMP constructs");
+  llvm37_unreachable("HLSL does not support OpenMP constructs");
 }
 
 OMPClause *Sema::ActOnOpenMPLastprivateClause(ArrayRef<Expr *> VarList,
   SourceLocation StartLoc,
   SourceLocation LParenLoc,
   SourceLocation EndLoc) {
-  llvm_unreachable("HLSL does not support OpenMP constructs");
+  llvm37_unreachable("HLSL does not support OpenMP constructs");
 }
 
 OMPClause *Sema::ActOnOpenMPSharedClause(ArrayRef<Expr *> VarList,
   SourceLocation StartLoc,
   SourceLocation LParenLoc,
   SourceLocation EndLoc) {
-  llvm_unreachable("HLSL does not support OpenMP constructs");
+  llvm37_unreachable("HLSL does not support OpenMP constructs");
 }
 
 OMPClause *Sema::ActOnOpenMPReductionClause(
@@ -444,7 +444,7 @@ OMPClause *Sema::ActOnOpenMPReductionClause(
   SourceLocation ColonLoc, SourceLocation EndLoc,
   CXXScopeSpec &ReductionIdScopeSpec,
   const DeclarationNameInfo &ReductionId) {
-  llvm_unreachable("HLSL does not support OpenMP constructs");
+  llvm37_unreachable("HLSL does not support OpenMP constructs");
 }
 
 OMPClause *Sema::ActOnOpenMPLinearClause(ArrayRef<Expr *> VarList, Expr *Step,
@@ -452,34 +452,34 @@ OMPClause *Sema::ActOnOpenMPLinearClause(ArrayRef<Expr *> VarList, Expr *Step,
   SourceLocation LParenLoc,
   SourceLocation ColonLoc,
   SourceLocation EndLoc) {
-  llvm_unreachable("HLSL does not support OpenMP constructs");
+  llvm37_unreachable("HLSL does not support OpenMP constructs");
 }
 
 OMPClause *Sema::ActOnOpenMPAlignedClause(
   ArrayRef<Expr *> VarList, Expr *Alignment, SourceLocation StartLoc,
   SourceLocation LParenLoc, SourceLocation ColonLoc, SourceLocation EndLoc) {
-  llvm_unreachable("HLSL does not support OpenMP constructs");
+  llvm37_unreachable("HLSL does not support OpenMP constructs");
 }
 
 OMPClause *Sema::ActOnOpenMPCopyinClause(ArrayRef<Expr *> VarList,
   SourceLocation StartLoc,
   SourceLocation LParenLoc,
   SourceLocation EndLoc) {
-  llvm_unreachable("HLSL does not support OpenMP constructs");
+  llvm37_unreachable("HLSL does not support OpenMP constructs");
 }
 
 OMPClause *Sema::ActOnOpenMPCopyprivateClause(ArrayRef<Expr *> VarList,
   SourceLocation StartLoc,
   SourceLocation LParenLoc,
   SourceLocation EndLoc) {
-  llvm_unreachable("HLSL does not support OpenMP constructs");
+  llvm37_unreachable("HLSL does not support OpenMP constructs");
 }
 
 OMPClause *Sema::ActOnOpenMPFlushClause(ArrayRef<Expr *> VarList,
   SourceLocation StartLoc,
   SourceLocation LParenLoc,
   SourceLocation EndLoc) {
-  llvm_unreachable("HLSL does not support OpenMP constructs");
+  llvm37_unreachable("HLSL does not support OpenMP constructs");
 }
 
 OMPClause *
@@ -487,7 +487,7 @@ Sema::ActOnOpenMPDependClause(OpenMPDependClauseKind DepKind,
   SourceLocation DepLoc, SourceLocation ColonLoc,
   ArrayRef<Expr *> VarList, SourceLocation StartLoc,
   SourceLocation LParenLoc, SourceLocation EndLoc) {
-  llvm_unreachable("HLSL does not support OpenMP constructs");
+  llvm37_unreachable("HLSL does not support OpenMP constructs");
 }
 
 #else
@@ -544,9 +544,9 @@ private:
     OpenMPClauseKind Attributes;
     DeclRefExpr *RefExpr;
   };
-  typedef llvm::SmallDenseMap<VarDecl *, DSAInfo, 64> DeclSAMapTy;
-  typedef llvm::SmallDenseMap<VarDecl *, DeclRefExpr *, 64> AlignedMapTy;
-  typedef llvm::DenseSet<VarDecl *> LoopControlVariablesSetTy;
+  typedef llvm37::SmallDenseMap<VarDecl *, DSAInfo, 64> DeclSAMapTy;
+  typedef llvm37::SmallDenseMap<VarDecl *, DeclRefExpr *, 64> AlignedMapTy;
+  typedef llvm37::DenseSet<VarDecl *> LoopControlVariablesSetTy;
 
   struct SharingMapTy {
     DeclSAMapTy SharingMap;
@@ -650,7 +650,7 @@ public:
   /// attributes which match specified \a CPred predicate at the specified
   /// OpenMP region.
   bool hasExplicitDSA(VarDecl *D,
-                      const llvm::function_ref<bool(OpenMPClauseKind)> &CPred,
+                      const llvm37::function_ref<bool(OpenMPClauseKind)> &CPred,
                       unsigned Level);
   /// \brief Finds a directive which matches specified \a DPred predicate.
   template <class NamedDirectivesPredicate>
@@ -1081,7 +1081,7 @@ DSAStackTy::hasInnermostDSA(VarDecl *D, ClausesPredicate CPred,
 }
 
 bool DSAStackTy::hasExplicitDSA(
-    VarDecl *D, const llvm::function_ref<bool(OpenMPClauseKind)> &CPred,
+    VarDecl *D, const llvm37::function_ref<bool(OpenMPClauseKind)> &CPred,
     unsigned Level) {
   if (CPred(ClauseKindMode))
     return true;
@@ -1249,7 +1249,7 @@ ExprResult Sema::ActOnOpenMPIdExpression(Scope *CurScope,
   if (!Lookup.isSingleResult()) {
     if (TypoCorrection Corrected = CorrectTypo(
             Id, LookupOrdinaryName, CurScope, nullptr,
-            llvm::make_unique<VarDeclFilterCCC>(*this), CTK_ErrorRecovery)) {
+            llvm37::make_unique<VarDeclFilterCCC>(*this), CTK_ErrorRecovery)) {
       diagnoseTypo(Corrected,
                    PDiag(Lookup.empty()
                              ? diag::err_undeclared_var_use_suggest
@@ -1536,8 +1536,8 @@ class DSAAttrChecker : public StmtVisitor<DSAAttrChecker, void> {
   Sema &SemaRef;
   bool ErrorFound;
   CapturedStmt *CS;
-  llvm::SmallVector<Expr *, 8> ImplicitFirstprivate;
-  llvm::DenseMap<VarDecl *, Expr *> VarsWithInheritedDSA;
+  llvm37::SmallVector<Expr *, 8> ImplicitFirstprivate;
+  llvm37::DenseMap<VarDecl *, Expr *> VarsWithInheritedDSA;
 
 public:
   void VisitDeclRefExpr(DeclRefExpr *E) {
@@ -1607,7 +1607,7 @@ public:
 
   bool isErrorFound() { return ErrorFound; }
   ArrayRef<Expr *> getImplicitFirstprivate() { return ImplicitFirstprivate; }
-  llvm::DenseMap<VarDecl *, Expr *> &getVarsWithInheritedDSA() {
+  llvm37::DenseMap<VarDecl *, Expr *> &getVarsWithInheritedDSA() {
     return VarsWithInheritedDSA;
   }
 
@@ -1806,9 +1806,9 @@ void Sema::ActOnOpenMPRegionStart(OpenMPDirectiveKind DKind, Scope *CurScope) {
   case OMPD_cancellation_point:
   case OMPD_cancel:
   case OMPD_flush:
-    llvm_unreachable("OpenMP Directive is not allowed");
+    llvm37_unreachable("OpenMP Directive is not allowed");
   case OMPD_unknown:
-    llvm_unreachable("Unknown OpenMP directive");
+    llvm37_unreachable("Unknown OpenMP directive");
   }
 }
 
@@ -2455,8 +2455,8 @@ StmtResult Sema::ActOnOpenMPExecutableDirective(
                             StartLoc))
     return StmtError();
 
-  llvm::SmallVector<OMPClause *, 8> ClausesWithImplicit;
-  llvm::DenseMap<VarDecl *, Expr *> VarsWithInheritedDSA;
+  llvm37::SmallVector<OMPClause *, 8> ClausesWithImplicit;
+  llvm37::DenseMap<VarDecl *, Expr *> VarsWithInheritedDSA;
   bool ErrorFound = false;
   ClausesWithImplicit.append(Clauses.begin(), Clauses.end());
   if (AStmt) {
@@ -2601,9 +2601,9 @@ StmtResult Sema::ActOnOpenMPExecutableDirective(
     Res = ActOnOpenMPCancelDirective(StartLoc, EndLoc, CancelRegion);
     break;
   case OMPD_threadprivate:
-    llvm_unreachable("OpenMP Directive is not allowed");
+    llvm37_unreachable("OpenMP Directive is not allowed");
   case OMPD_unknown:
-    llvm_unreachable("Unknown OpenMP directive");
+    llvm37_unreachable("Unknown OpenMP directive");
   }
 
   for (auto P : VarsWithInheritedDSA) {
@@ -2815,7 +2815,7 @@ bool OpenMPIterationSpaceChecker::SetStep(Expr *NewStep, bool Subtract) {
     //  loop. If test-expr is of form b relational-op var and relational-op is
     //  > or >= then incr-expr must cause var to increase on each iteration of
     //  the loop.
-    llvm::APSInt Result;
+    llvm37::APSInt Result;
     bool IsConstant = NewStep->isIntegerConstantExpr(Result, SemaRef.Context);
     bool IsUnsigned = !NewStep->getType()->hasSignedIntegerRepresentation();
     bool IsConstNeg =
@@ -3319,7 +3319,7 @@ static bool CheckOpenMPIterationSpace(
     OpenMPDirectiveKind DKind, Stmt *S, Sema &SemaRef, DSAStackTy &DSA,
     unsigned CurrentNestedLoopCount, unsigned NestedLoopCount,
     Expr *NestedLoopCountExpr,
-    llvm::DenseMap<VarDecl *, Expr *> &VarsWithImplicitDSA,
+    llvm37::DenseMap<VarDecl *, Expr *> &VarsWithImplicitDSA,
     LoopIterationSpace &ResultIterSpace) {
   // OpenMP [2.6, Canonical Loop Form]
   //   for (init-expr; test-expr; incr-expr) structured-block
@@ -3543,7 +3543,7 @@ static ExprResult WidenIterationCount(unsigned Bits, Expr *E,
 static bool FitsInto(unsigned Bits, bool Signed, Expr *E, Sema &SemaRef) {
   if (E == nullptr)
     return false;
-  llvm::APSInt Result;
+  llvm37::APSInt Result;
   if (E->isIntegerConstantExpr(Result, SemaRef.Context))
     return Signed ? Result.isSignedIntN(Bits) : Result.isIntN(Bits);
   return false;
@@ -3555,12 +3555,12 @@ static bool FitsInto(unsigned Bits, bool Signed, Expr *E, Sema &SemaRef) {
 static unsigned
 CheckOpenMPLoop(OpenMPDirectiveKind DKind, Expr *NestedLoopCountExpr,
                 Stmt *AStmt, Sema &SemaRef, DSAStackTy &DSA,
-                llvm::DenseMap<VarDecl *, Expr *> &VarsWithImplicitDSA,
+                llvm37::DenseMap<VarDecl *, Expr *> &VarsWithImplicitDSA,
                 OMPLoopDirective::HelperExprs &Built) {
   unsigned NestedLoopCount = 1;
   if (NestedLoopCountExpr) {
     // Found 'collapse' clause - calculate collapse number.
-    llvm::APSInt Result;
+    llvm37::APSInt Result;
     if (NestedLoopCountExpr->EvaluateAsInt(Result, SemaRef.getASTContext()))
       NestedLoopCount = Result.getLimitedValue();
   }
@@ -3688,7 +3688,7 @@ CheckOpenMPLoop(OpenMPDirectiveKind DKind, Expr *NestedLoopCountExpr,
 
   // Calculate the last iteration number beforehand instead of doing this on
   // each iteration. Do not do this if the number of iterations may be kfold-ed.
-  llvm::APSInt Result;
+  llvm37::APSInt Result;
   bool IsConstant =
       LastIteration.get()->isIntegerConstantExpr(Result, SemaRef.Context);
   ExprResult CalcLastIteration;
@@ -3943,7 +3943,7 @@ static Expr *GetCollapseNumberExpr(ArrayRef<OMPClause *> Clauses) {
 StmtResult Sema::ActOnOpenMPSimdDirective(
     ArrayRef<OMPClause *> Clauses, Stmt *AStmt, SourceLocation StartLoc,
     SourceLocation EndLoc,
-    llvm::DenseMap<VarDecl *, Expr *> &VarsWithImplicitDSA) {
+    llvm37::DenseMap<VarDecl *, Expr *> &VarsWithImplicitDSA) {
   OMPLoopDirective::HelperExprs B;
   // In presence of clause 'collapse', it will define the nested loops number.
   unsigned NestedLoopCount =
@@ -3973,7 +3973,7 @@ StmtResult Sema::ActOnOpenMPSimdDirective(
 StmtResult Sema::ActOnOpenMPForDirective(
     ArrayRef<OMPClause *> Clauses, Stmt *AStmt, SourceLocation StartLoc,
     SourceLocation EndLoc,
-    llvm::DenseMap<VarDecl *, Expr *> &VarsWithImplicitDSA) {
+    llvm37::DenseMap<VarDecl *, Expr *> &VarsWithImplicitDSA) {
   OMPLoopDirective::HelperExprs B;
   // In presence of clause 'collapse', it will define the nested loops number.
   unsigned NestedLoopCount =
@@ -3993,7 +3993,7 @@ StmtResult Sema::ActOnOpenMPForDirective(
 StmtResult Sema::ActOnOpenMPForSimdDirective(
     ArrayRef<OMPClause *> Clauses, Stmt *AStmt, SourceLocation StartLoc,
     SourceLocation EndLoc,
-    llvm::DenseMap<VarDecl *, Expr *> &VarsWithImplicitDSA) {
+    llvm37::DenseMap<VarDecl *, Expr *> &VarsWithImplicitDSA) {
   OMPLoopDirective::HelperExprs B;
   // In presence of clause 'collapse', it will define the nested loops number.
   unsigned NestedLoopCount =
@@ -4116,7 +4116,7 @@ Sema::ActOnOpenMPCriticalDirective(const DeclarationNameInfo &DirName,
 StmtResult Sema::ActOnOpenMPParallelForDirective(
     ArrayRef<OMPClause *> Clauses, Stmt *AStmt, SourceLocation StartLoc,
     SourceLocation EndLoc,
-    llvm::DenseMap<VarDecl *, Expr *> &VarsWithImplicitDSA) {
+    llvm37::DenseMap<VarDecl *, Expr *> &VarsWithImplicitDSA) {
   assert(AStmt && isa<CapturedStmt>(AStmt) && "Captured statement expected");
   CapturedStmt *CS = cast<CapturedStmt>(AStmt);
   // 1.2.2 OpenMP Language Terminology
@@ -4145,7 +4145,7 @@ StmtResult Sema::ActOnOpenMPParallelForDirective(
 StmtResult Sema::ActOnOpenMPParallelForSimdDirective(
     ArrayRef<OMPClause *> Clauses, Stmt *AStmt, SourceLocation StartLoc,
     SourceLocation EndLoc,
-    llvm::DenseMap<VarDecl *, Expr *> &VarsWithImplicitDSA) {
+    llvm37::DenseMap<VarDecl *, Expr *> &VarsWithImplicitDSA) {
   assert(AStmt && isa<CapturedStmt>(AStmt) && "Captured statement expected");
   CapturedStmt *CS = cast<CapturedStmt>(AStmt);
   // 1.2.2 OpenMP Language Terminology
@@ -4372,7 +4372,7 @@ bool OpenMPAtomicUpdateChecker::checkBinaryOperation(
         OpLoc = AtomicInnerBinOp->getOperatorLoc();
         auto *LHS = AtomicInnerBinOp->getLHS();
         auto *RHS = AtomicInnerBinOp->getRHS();
-        llvm::FoldingSetNodeID XId, LHSId, RHSId;
+        llvm37::FoldingSetNodeID XId, LHSId, RHSId;
         X->IgnoreParenImpCasts()->Profile(XId, SemaRef.getASTContext(),
                                           /*Canonical=*/true);
         LHS->IgnoreParenImpCasts()->Profile(LHSId, SemaRef.getASTContext(),
@@ -4812,7 +4812,7 @@ StmtResult Sema::ActOnOpenMPAtomicDirective(ArrayRef<OMPClause *> Clauses,
             //  { v = x; x = expr binop x; }
             // Check that the first expression has form v = x.
             auto *PossibleX = BinOp->getRHS()->IgnoreParenImpCasts();
-            llvm::FoldingSetNodeID XId, PossibleXId;
+            llvm37::FoldingSetNodeID XId, PossibleXId;
             Checker.getX()->Profile(XId, Context, /*Canonical=*/true);
             PossibleX->Profile(PossibleXId, Context, /*Canonical=*/true);
             IsUpdateExprFound = XId == PossibleXId;
@@ -4842,7 +4842,7 @@ StmtResult Sema::ActOnOpenMPAtomicDirective(ArrayRef<OMPClause *> Clauses,
               //  { x = expr binop x; v = x; }
               // Check that the second expression has form v = x.
               auto *PossibleX = BinOp->getRHS()->IgnoreParenImpCasts();
-              llvm::FoldingSetNodeID XId, PossibleXId;
+              llvm37::FoldingSetNodeID XId, PossibleXId;
               Checker.getX()->Profile(XId, Context, /*Canonical=*/true);
               PossibleX->Profile(PossibleXId, Context, /*Canonical=*/true);
               IsUpdateExprFound = XId == PossibleXId;
@@ -4880,7 +4880,7 @@ StmtResult Sema::ActOnOpenMPAtomicDirective(ArrayRef<OMPClause *> Clauses,
                     FirstBinOp->getRHS()->IgnoreParenImpCasts();
                 auto *PossibleXLHSInSecond =
                     SecondBinOp->getLHS()->IgnoreParenImpCasts();
-                llvm::FoldingSetNodeID X1Id, X2Id;
+                llvm37::FoldingSetNodeID X1Id, X2Id;
                 PossibleXRHSInFirst->Profile(X1Id, Context, /*Canonical=*/true);
                 PossibleXLHSInSecond->Profile(X2Id, Context,
                                               /*Canonical=*/true);
@@ -5078,7 +5078,7 @@ OMPClause *Sema::ActOnOpenMPSingleExprClause(OpenMPClauseKind Kind, Expr *Expr,
   case OMPC_seq_cst:
   case OMPC_depend:
   case OMPC_unknown:
-    llvm_unreachable("Clause is not allowed.");
+    llvm37_unreachable("Clause is not allowed.");
   }
   return Res;
 }
@@ -5157,7 +5157,7 @@ ExprResult Sema::PerformOpenMPImplicitIntegerConversion(SourceLocation Loc,
     }
     SemaDiagnosticBuilder diagnoseConversion(Sema &, SourceLocation, QualType,
                                              QualType) override {
-      llvm_unreachable("conversion functions are permitted");
+      llvm37_unreachable("conversion functions are permitted");
     }
   } ConvertDiagnoser;
   return PerformContextualImplicitConversion(Loc, Op, ConvertDiagnoser);
@@ -5180,7 +5180,7 @@ OMPClause *Sema::ActOnOpenMPNumThreadsClause(Expr *NumThreads,
 
     // OpenMP [2.5, Restrictions]
     //  The num_threads expression must evaluate to a positive integer value.
-    llvm::APSInt Result;
+    llvm37::APSInt Result;
     if (ValExpr->isIntegerConstantExpr(Result, Context) && Result.isSigned() &&
         !Result.isStrictlyPositive()) {
       Diag(NumThreadsLoc, diag::err_omp_negative_expression_in_clause)
@@ -5200,7 +5200,7 @@ ExprResult Sema::VerifyPositiveIntegerConstantInClause(Expr *E,
   if (E->isValueDependent() || E->isTypeDependent() ||
       E->isInstantiationDependent() || E->containsUnexpandedParameterPack())
     return E;
-  llvm::APSInt Result;
+  llvm37::APSInt Result;
   ExprResult ICE = VerifyIntegerConstantExpression(E, &Result);
   if (ICE.isInvalid())
     return ExprError();
@@ -5293,7 +5293,7 @@ OMPClause *Sema::ActOnOpenMPSimpleClause(
   case OMPC_seq_cst:
   case OMPC_depend:
   case OMPC_unknown:
-    llvm_unreachable("Clause is not allowed.");
+    llvm37_unreachable("Clause is not allowed.");
   }
   return Res;
 }
@@ -5335,7 +5335,7 @@ OMPClause *Sema::ActOnOpenMPDefaultClause(OpenMPDefaultClauseKind Kind,
     DSAStack->setDefaultDSAShared(KindKwLoc);
     break;
   case OMPC_DEFAULT_unknown:
-    llvm_unreachable("Clause kind is not allowed.");
+    llvm37_unreachable("Clause kind is not allowed.");
     break;
   }
   return new (Context)
@@ -5414,7 +5414,7 @@ OMPClause *Sema::ActOnOpenMPSingleExprWithArgClause(
   case OMPC_seq_cst:
   case OMPC_depend:
   case OMPC_unknown:
-    llvm_unreachable("Clause is not allowed.");
+    llvm37_unreachable("Clause is not allowed.");
   }
   return Res;
 }
@@ -5462,7 +5462,7 @@ OMPClause *Sema::ActOnOpenMPScheduleClause(
       // OpenMP [2.7.1, Restrictions]
       //  chunk_size must be a loop invariant integer expression with a positive
       //  value.
-      llvm::APSInt Result;
+      llvm37::APSInt Result;
       if (ValExpr->isIntegerConstantExpr(Result, Context)) {
         if (Result.isSigned() && !Result.isStrictlyPositive()) {
           Diag(ChunkSizeLoc, diag::err_omp_negative_expression_in_clause)
@@ -5537,7 +5537,7 @@ OMPClause *Sema::ActOnOpenMPClause(OpenMPClauseKind Kind,
   case OMPC_flush:
   case OMPC_depend:
   case OMPC_unknown:
-    llvm_unreachable("Clause is not allowed.");
+    llvm37_unreachable("Clause is not allowed.");
   }
   return Res;
 }
@@ -5653,7 +5653,7 @@ OMPClause *Sema::ActOnOpenMPVarListClause(
   case OMPC_capture:
   case OMPC_seq_cst:
   case OMPC_unknown:
-    llvm_unreachable("Clause is not allowed.");
+    llvm37_unreachable("Clause is not allowed.");
   }
   return Res;
 }
@@ -6342,7 +6342,7 @@ OMPClause *Sema::ActOnOpenMPReductionClause(
   case OO_Subscript:
   case OO_Conditional:
   case NUM_OVERLOADED_OPERATORS:
-    llvm_unreachable("Unexpected reduction identifier");
+    llvm37_unreachable("Unexpected reduction identifier");
   case OO_None:
     if (auto II = DN.getAsIdentifierInfo()) {
       if (II->isStr("max"))
@@ -6550,15 +6550,15 @@ OMPClause *Sema::ActOnOpenMPReductionClause(
         Type = ComplexTy->getElementType();
       }
       if (Type->isRealFloatingType()) {
-        llvm::APFloat InitValue =
-            llvm::APFloat::getAllOnesValue(Context.getTypeSize(Type),
+        llvm37::APFloat InitValue =
+            llvm37::APFloat::getAllOnesValue(Context.getTypeSize(Type),
                                            /*isIEEE=*/true);
         Init = FloatingLiteral::Create(Context, InitValue, /*isexact=*/true,
                                        Type, ELoc);
       } else if (Type->isScalarType()) {
         auto Size = Context.getTypeSize(Type);
         QualType IntTy = Context.getIntTypeForBitwidth(Size, /*Signed=*/0);
-        llvm::APInt InitValue = llvm::APInt::getAllOnesValue(Size);
+        llvm37::APInt InitValue = llvm37::APInt::getAllOnesValue(Size);
         Init = IntegerLiteral::Create(Context, InitValue, IntTy, ELoc);
       }
       if (Init && OrigType->isAnyComplexType()) {
@@ -6580,12 +6580,12 @@ OMPClause *Sema::ActOnOpenMPReductionClause(
         auto Size = Context.getTypeSize(Type);
         QualType IntTy =
             Context.getIntTypeForBitwidth(Size, /*Signed=*/IsSigned);
-        llvm::APInt InitValue =
+        llvm37::APInt InitValue =
             (BOK != BO_LT)
-                ? IsSigned ? llvm::APInt::getSignedMinValue(Size)
-                           : llvm::APInt::getMinValue(Size)
-                : IsSigned ? llvm::APInt::getSignedMaxValue(Size)
-                           : llvm::APInt::getMaxValue(Size);
+                ? IsSigned ? llvm37::APInt::getSignedMinValue(Size)
+                           : llvm37::APInt::getMinValue(Size)
+                : IsSigned ? llvm37::APInt::getSignedMaxValue(Size)
+                           : llvm37::APInt::getMaxValue(Size);
         Init = IntegerLiteral::Create(Context, InitValue, IntTy, ELoc);
         if (Type->isPointerType()) {
           // Cast to pointer type.
@@ -6597,7 +6597,7 @@ OMPClause *Sema::ActOnOpenMPReductionClause(
           Init = CastExpr.get();
         }
       } else if (Type->isRealFloatingType()) {
-        llvm::APFloat InitValue = llvm::APFloat::getLargest(
+        llvm37::APFloat InitValue = llvm37::APFloat::getLargest(
             Context.getFloatTypeSemantics(Type), BOK != BO_LT);
         Init = FloatingLiteral::Create(Context, InitValue, /*isexact=*/true,
                                        Type, ELoc);
@@ -6627,7 +6627,7 @@ OMPClause *Sema::ActOnOpenMPReductionClause(
     case BO_ShlAssign:
     case BO_ShrAssign:
     case BO_Comma:
-      llvm_unreachable("Unexpected reduction operation");
+      llvm37_unreachable("Unexpected reduction operation");
     }
     if (Init) {
       AddInitializerToDecl(RHSVD, Init, /*DirectInit=*/false,
@@ -6821,7 +6821,7 @@ OMPClause *Sema::ActOnOpenMPLinearClause(ArrayRef<Expr *> VarList, Expr *Step,
 
     // Warn about zero linear step (it would be probably better specified as
     // making corresponding variables 'const').
-    llvm::APSInt Result;
+    llvm37::APSInt Result;
     bool IsConstant = StepExpr->isIntegerConstantExpr(Result, Context);
     if (IsConstant && !Result.isNegative() && !Result.isStrictlyPositive())
       Diag(StepLoc, diag::warn_omp_linear_step_zero) << Vars[0]

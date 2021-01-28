@@ -1,4 +1,4 @@
-; RUN: llvm-link -S %s -o - | FileCheck %s
+; RUN: llvm37-link -S %s -o - | FileCheck %s
 
 ; CHECK-DAG: @foo = private externally_initialized global i8* null
 @foo = private externally_initialized global i8* null

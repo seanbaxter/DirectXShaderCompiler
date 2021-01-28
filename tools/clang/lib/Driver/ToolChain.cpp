@@ -1,6 +1,6 @@
 //===--- ToolChain.cpp - Collections of tools for one platform ------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -15,24 +15,24 @@
 #include "clang/Driver/Options.h"
 #include "clang/Driver/SanitizerArgs.h"
 #include "clang/Driver/ToolChain.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/ADT/StringSwitch.h"
-#include "llvm/Option/Arg.h"
-#include "llvm/Option/ArgList.h"
-#include "llvm/Option/Option.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/FileSystem.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/ADT/StringSwitch.h"
+#include "llvm37/Option/Arg.h"
+#include "llvm37/Option/ArgList.h"
+#include "llvm37/Option/Option.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/FileSystem.h"
 using namespace clang::driver;
 using namespace clang;
-using namespace llvm::opt;
+using namespace llvm37::opt;
 
-static llvm::opt::Arg *GetRTTIArgument(const ArgList &Args) {
+static llvm37::opt::Arg *GetRTTIArgument(const ArgList &Args) {
   return Args.getLastArg(options::OPT_mkernel, options::OPT_fapple_kext,
                          options::OPT_fno_rtti, options::OPT_frtti);
 }
 
 static ToolChain::RTTIMode CalculateRTTIMode(const ArgList &Args,
-                                             const llvm::Triple &Triple,
+                                             const llvm37::Triple &Triple,
                                              const Arg *CachedRTTIArg) {
   // Explicit rtti/no-rtti args
   if (CachedRTTIArg) {
@@ -59,7 +59,7 @@ static ToolChain::RTTIMode CalculateRTTIMode(const ArgList &Args,
   return ToolChain::RM_DisabledImplicitly;
 }
 
-ToolChain::ToolChain(const Driver &D, const llvm::Triple &T,
+ToolChain::ToolChain(const Driver &D, const llvm37::Triple &T,
                      const ArgList &Args)
     : D(D), Triple(T), Args(Args), CachedRTTIArg(GetRTTIArgument(Args)),
       CachedRTTIMode(CalculateRTTIMode(Args, Triple, CachedRTTIArg)) {
@@ -94,11 +94,11 @@ StringRef ToolChain::getDefaultUniversalArchName() const {
   // an inverse of the darwin::getArchTypeForDarwinArchName() function, but the
   // only interesting special case is powerpc.
   switch (Triple.getArch()) {
-  case llvm::Triple::ppc:
+  case llvm37::Triple::ppc:
     return "ppc";
-  case llvm::Triple::ppc64:
+  case llvm37::Triple::ppc64:
     return "ppc64";
-  case llvm::Triple::ppc64le:
+  case llvm37::Triple::ppc64le:
     return "ppc64le";
   default:
     return Triple.getArchName();
@@ -120,7 +120,7 @@ Tool *ToolChain::buildAssembler() const {
 }
 
 Tool *ToolChain::buildLinker() const {
-  llvm_unreachable("Linking is not supported by this toolchain");
+  llvm37_unreachable("Linking is not supported by this toolchain");
 }
 
 Tool *ToolChain::getAssemble() const {
@@ -156,7 +156,7 @@ Tool *ToolChain::getTool(Action::ActionClass AC) const {
   case Action::LipoJobClass:
   case Action::DsymutilJobClass:
   case Action::VerifyDebugInfoJobClass:
-    llvm_unreachable("Invalid tool kind.");
+    llvm37_unreachable("Invalid tool kind.");
 
   case Action::CompileJobClass:
   case Action::PrecompileJobClass:
@@ -168,7 +168,7 @@ Tool *ToolChain::getTool(Action::ActionClass AC) const {
     return getClang();
   }
 
-  llvm_unreachable("Invalid tool kind.");
+  llvm37_unreachable("Invalid tool kind.");
 }
 
 Tool *ToolChain::SelectTool(const JobAction &JA) const {
@@ -198,11 +198,11 @@ std::string ToolChain::GetLinkerPath() const {
     if (Suffix.empty() || Suffix == "ld")
       return GetProgramPath("ld");
 
-    llvm::SmallString<8> LinkerName("ld.");
+    llvm37::SmallString<8> LinkerName("ld.");
     LinkerName.append(Suffix);
 
     std::string LinkerPath(GetProgramPath(LinkerName.c_str()));
-    if (llvm::sys::fs::exists(LinkerPath))
+    if (llvm37::sys::fs::exists(LinkerPath))
       return LinkerPath;
 
     getDriver().Diag(diag::err_drv_invalid_linker_name) << A->getAsString(Args);
@@ -217,21 +217,21 @@ types::ID ToolChain::LookupTypeForExtension(const char *Ext) const {
   return types::lookupTypeForExtension(Ext);
 }
 
-bool ToolChain::HasNativeLLVMSupport() const {
+bool ToolChain::HasNativeLLVM37Support() const {
   return false;
 }
 
 bool ToolChain::isCrossCompiling() const {
-  llvm::Triple HostTriple(LLVM_HOST_TRIPLE);
+  llvm37::Triple HostTriple(LLVM37_HOST_TRIPLE);
   switch (HostTriple.getArch()) {
   // The A32/T32/T16 instruction sets are not separate architectures in this
   // context.
-  case llvm::Triple::arm:
-  case llvm::Triple::armeb:
-  case llvm::Triple::thumb:
-  case llvm::Triple::thumbeb:
-    return getArch() != llvm::Triple::arm && getArch() != llvm::Triple::thumb &&
-           getArch() != llvm::Triple::armeb && getArch() != llvm::Triple::thumbeb;
+  case llvm37::Triple::arm:
+  case llvm37::Triple::armeb:
+  case llvm37::Triple::thumb:
+  case llvm37::Triple::thumbeb:
+    return getArch() != llvm37::Triple::arm && getArch() != llvm37::Triple::thumb &&
+           getArch() != llvm37::Triple::armeb && getArch() != llvm37::Triple::thumbeb;
   default:
     return HostTriple.getArch() != getArch();
   }
@@ -245,24 +245,24 @@ ObjCRuntime ToolChain::getDefaultObjCRuntime(bool isNonFragile) const {
 bool ToolChain::isThreadModelSupported(const StringRef Model) const {
   if (Model == "single") {
     // FIXME: 'single' is only supported on ARM so far.
-    return Triple.getArch() == llvm::Triple::arm ||
-           Triple.getArch() == llvm::Triple::armeb ||
-           Triple.getArch() == llvm::Triple::thumb ||
-           Triple.getArch() == llvm::Triple::thumbeb;
+    return Triple.getArch() == llvm37::Triple::arm ||
+           Triple.getArch() == llvm37::Triple::armeb ||
+           Triple.getArch() == llvm37::Triple::thumb ||
+           Triple.getArch() == llvm37::Triple::thumbeb;
   } else if (Model == "posix")
     return true;
 
   return false;
 }
 
-std::string ToolChain::ComputeLLVMTriple(const ArgList &Args,
+std::string ToolChain::ComputeLLVM37Triple(const ArgList &Args,
                                          types::ID InputType) const {
   switch (getTriple().getArch()) {
   default:
     return getTripleString();
 
-  case llvm::Triple::x86_64: {
-    llvm::Triple Triple = getTriple();
+  case llvm37::Triple::x86_64: {
+    llvm37::Triple Triple = getTriple();
     if (!Triple.isOSBinFormatMachO())
       return getTripleString();
 
@@ -275,8 +275,8 @@ std::string ToolChain::ComputeLLVMTriple(const ArgList &Args,
     }
     return Triple.getTriple();
   }
-  case llvm::Triple::aarch64: {
-    llvm::Triple Triple = getTriple();
+  case llvm37::Triple::aarch64: {
+    llvm37::Triple Triple = getTriple();
     if (!Triple.isOSBinFormatMachO())
       return getTripleString();
 
@@ -286,14 +286,14 @@ std::string ToolChain::ComputeLLVMTriple(const ArgList &Args,
     Triple.setArchName("arm64");
     return Triple.getTriple();
   }
-  case llvm::Triple::arm:
-  case llvm::Triple::armeb:
-  case llvm::Triple::thumb:
-  case llvm::Triple::thumbeb: {
+  case llvm37::Triple::arm:
+  case llvm37::Triple::armeb:
+  case llvm37::Triple::thumb:
+  case llvm37::Triple::thumbeb: {
     // FIXME: Factor into subclasses.
-    llvm::Triple Triple = getTriple();
-    bool IsBigEndian = getTriple().getArch() == llvm::Triple::armeb ||
-                       getTriple().getArch() == llvm::Triple::thumbeb;
+    llvm37::Triple Triple = getTriple();
+    bool IsBigEndian = getTriple().getArch() == llvm37::Triple::armeb ||
+                       getTriple().getArch() == llvm37::Triple::thumbeb;
 
     // Handle pseudo-target flags '-mlittle-endian'/'-EL' and
     // '-mbig-endian'/'-EB'.
@@ -314,7 +314,7 @@ std::string ToolChain::ComputeLLVMTriple(const ArgList &Args,
       ? tools::arm::getARMCPUForMArch(MArch, Triple)
       : tools::arm::getARMTargetCPU(MCPU, MArch, Triple);
     StringRef Suffix = 
-      tools::arm::getLLVMArchSuffixForARM(CPU,
+      tools::arm::getLLVM37ArchSuffixForARM(CPU,
                                           tools::arm::getARMArch(MArch, Triple));
     bool ThumbDefault = Suffix.startswith("v6m") || Suffix.startswith("v7m") ||
       Suffix.startswith("v7em") ||
@@ -346,7 +346,7 @@ std::string ToolChain::ComputeLLVMTriple(const ArgList &Args,
 
 std::string ToolChain::ComputeEffectiveClangTriple(const ArgList &Args, 
                                                    types::ID InputType) const {
-  return ComputeLLVMTriple(Args, InputType);
+  return ComputeLLVM37Triple(Args, InputType);
 }
 
 void ToolChain::AddClangSystemIncludeArgs(const ArgList &DriverArgs,
@@ -416,7 +416,7 @@ ToolChain::CXXStdlibType ToolChain::GetCXXStdlibType(const ArgList &Args) const{
 void ToolChain::addExternCSystemIncludeIfExists(const ArgList &DriverArgs,
                                                 ArgStringList &CC1Args,
                                                 const Twine &Path) {
-  if (llvm::sys::fs::exists(Path))
+  if (llvm37::sys::fs::exists(Path))
     addExternCSystemInclude(DriverArgs, CC1Args, Path);
 }
 

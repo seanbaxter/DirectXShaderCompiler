@@ -2,7 +2,7 @@
 ; PR13903
 
 define void @main() personality i8 0 {
-  invoke void @llvm.donothing()
+  invoke void @llvm37.donothing()
           to label %ret unwind label %unw
 unw:
   %tmp = landingpad i8 cleanup
@@ -10,4 +10,4 @@ unw:
 ret:
   ret void
 }
-declare void @llvm.donothing() nounwind readnone
+declare void @llvm37.donothing() nounwind readnone

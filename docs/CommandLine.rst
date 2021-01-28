@@ -9,7 +9,7 @@ Introduction
 ============
 
 NOTE: This document describes the CommandLine library as used for the original
-LLVM project, not the DirectX Compiler. For the DirectX Compiler project, we
+LLVM37 project, not the DirectX Compiler. For the DirectX Compiler project, we
 prefer to avoid globals for a few reasons: thread-safety, control over
 initialization and cleanup timing (explicit vs. runtime/linker-determined) and
 ability to control memory allocations.
@@ -89,7 +89,7 @@ To start out, you need to include the CommandLine header file into your program:
 
 .. code-block:: c++
 
-  #include "llvm/Support/CommandLine.h"
+  #include "llvm37/Support/CommandLine.h"
 
 Additionally, you need to add this as the first line of your main program:
 
@@ -649,7 +649,7 @@ these categories using the `cl::cat`_ option attribute. For example:
 The output of ``-help`` will become categorized if an option category is
 declared. The output looks something like ::
 
-  OVERVIEW: This is a small program to demo the LLVM CommandLine API
+  OVERVIEW: This is a small program to demo the LLVM37 CommandLine API
   USAGE: Sample [options]
 
   OPTIONS:
@@ -1298,7 +1298,7 @@ Here is an example of how the function could be used:
 
 .. code-block:: c++
 
-  using namespace llvm;
+  using namespace llvm37;
   int main(int argc, char **argv) {
     cl::OptionCategory AnotherCategory("Some options");
 
@@ -1322,7 +1322,7 @@ Here is an example of how the function could be used:
     assert(Map.count("help") > 0);
     Map["help"]->setDescription("Shows help");
 
-    cl::ParseCommandLineOptions(argc, argv, "This is a small program to demo the LLVM CommandLine API");
+    cl::ParseCommandLineOptions(argc, argv, "This is a small program to demo the LLVM37 CommandLine API");
     ...
   }
 
@@ -1372,7 +1372,7 @@ The ``cl::SetVersionPrinter`` function is designed to be called directly from
 ``main`` and *before* ``cl::ParseCommandLineOptions``. Its use is optional. It
 simply arranges for a function to be called in response to the ``--version``
 option instead of having the ``CommandLine`` library print out the usual version
-string for LLVM. This is useful for programs that are not part of LLVM but wish
+string for LLVM37. This is useful for programs that are not part of LLVM37 but wish
 to use the ``CommandLine`` facilities. Such programs should just define a small
 function that takes no arguments and returns ``void`` and that prints out
 whatever version information is appropriate for the program. Pass the address of
@@ -1727,13 +1727,13 @@ tutorial.
 Exploiting external storage
 ---------------------------
 
-Several of the LLVM libraries define static ``cl::opt`` instances that will
+Several of the LLVM37 libraries define static ``cl::opt`` instances that will
 automatically be included in any program that links with that library.  This is
 a feature. However, sometimes it is necessary to know the value of the command
 line option outside of the library. In these cases the library does or should
 provide an external storage location that is accessible to users of the
-library. Examples of this include the ``llvm::DebugFlag`` exported by the
-``lib/Support/Debug.cpp`` file and the ``llvm::TimePassesIsEnabled`` flag
+library. Examples of this include the ``llvm37::DebugFlag`` exported by the
+``lib/Support/Debug.cpp`` file and the ``llvm37::TimePassesIsEnabled`` flag
 exported by the ``lib/VMCore/PassManager.cpp`` file.
 
 .. todo::

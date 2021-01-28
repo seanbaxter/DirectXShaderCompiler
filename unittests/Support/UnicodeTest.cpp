@@ -1,16 +1,16 @@
 //===- unittests/Support/UnicodeTest.cpp - Unicode.h tests ----------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Support/Unicode.h"
+#include "llvm37/Support/Unicode.h"
 #include "gtest/gtest.h"
 
-namespace llvm {
+namespace llvm37 {
 namespace sys {
 namespace unicode {
 namespace {
@@ -90,4 +90,4 @@ TEST(Unicode, isPrintable) {
 } // namespace
 } // namespace unicode
 } // namespace sys
-} // namespace llvm
+} // namespace llvm37

@@ -1,10 +1,10 @@
-RUN: yaml2obj %p/Inputs/COFF/i386.yaml | llvm-objdump -t - \
+RUN: yaml2obj %p/Inputs/COFF/i386.yaml | llvm37-objdump -t - \
 RUN:              | FileCheck %s -check-prefix COFF-i386
-RUN: llvm-objdump -t %p/Inputs/trivial-object-test.elf-i386 \
+RUN: llvm37-objdump -t %p/Inputs/trivial-object-test.elf-i386 \
 RUN:              | FileCheck %s -check-prefix ELF-i386
-RUN: llvm-objdump -t %p/Inputs/trivial-object-test.macho-i386 \
+RUN: llvm37-objdump -t %p/Inputs/trivial-object-test.macho-i386 \
 RUN:              | FileCheck %s -check-prefix macho-i386
-RUN: llvm-objdump -t %p/Inputs/shared-object-test.elf-i386 \
+RUN: llvm37-objdump -t %p/Inputs/shared-object-test.elf-i386 \
 RUN:              | FileCheck %s -check-prefix ELF-shared
 
 COFF-i386: file format

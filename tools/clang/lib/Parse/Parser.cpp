@@ -1,6 +1,6 @@
 //===--- Parser.cpp - C Language Family Parser ----------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -20,7 +20,7 @@
 #include "clang/Sema/DeclSpec.h"
 #include "clang/Sema/ParsedTemplate.h"
 #include "clang/Sema/Scope.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/Support/raw_ostream.h"
 using namespace clang;
 
 
@@ -1136,7 +1136,7 @@ Decl *Parser::ParseFunctionDefinition(ParsingDeclarator &D,
                       : diag::ext_defaulted_function);
       Actions.SetDeclDefaulted(Res, KWLoc);
     } else {
-      llvm_unreachable("function definition after = not 'delete' or 'default'");
+      llvm37_unreachable("function definition after = not 'delete' or 'default'");
     }
 
     if (Tok.is(tok::comma)) {
@@ -1522,7 +1522,7 @@ Parser::TryAnnotateName(bool IsAddressOfOperand,
   }
 
   case Sema::NC_NestedNameSpecifier:
-    llvm_unreachable("already parsed nested name specifier");
+    llvm37_unreachable("already parsed nested name specifier");
   }
 
   // Unable to classify the name, but maybe we can annotate a scope specifier.
@@ -1966,7 +1966,7 @@ void Parser::ParseMicrosoftIfExistsExternalDeclaration() {
     break;
       
   case IEB_Dependent:
-    llvm_unreachable("Cannot have a dependent external declaration");
+    llvm37_unreachable("Cannot have a dependent external declaration");
       
   case IEB_Skip:
     Braces.skipToEnd();

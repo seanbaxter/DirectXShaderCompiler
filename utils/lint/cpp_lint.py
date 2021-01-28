@@ -1,7 +1,7 @@
 #!/usr/bin/python
 #
-# Checks C++ files to make sure they conform to LLVM standards, as specified in
-# http://llvm.org/docs/CodingStandards.html .
+# Checks C++ files to make sure they conform to LLVM37 standards, as specified in
+# http://llvm37.org/docs/CodingStandards.html .
 #
 # TODO: add unittests for the verifier functions:
 # http://docs.python.org/library/unittest.html .
@@ -21,7 +21,7 @@ def VerifyIncludes(filename, lines):
   lint = []
 
   include_gtest_re = re.compile(r'^#include "gtest/(.*)"')
-  include_llvm_re = re.compile(r'^#include "llvm/(.*)"')
+  include_llvm37_re = re.compile(r'^#include "llvm37/(.*)"')
   include_support_re = re.compile(r'^#include "(Support/.*)"')
   include_config_re = re.compile(r'^#include "(Config/.*)"')
   include_system_re = re.compile(r'^#include <(.*)>')
@@ -34,8 +34,8 @@ def VerifyIncludes(filename, lines):
   for line in lines:
     # TODO: implement private headers
     # TODO: implement gtest headers
-    # TODO: implement top-level llvm/* headers
-    # TODO: implement llvm/Support/* headers
+    # TODO: implement top-level llvm37/* headers
+    # TODO: implement llvm37/Support/* headers
 
     # Process Config/* headers
     config_header = include_config_re.match(line)

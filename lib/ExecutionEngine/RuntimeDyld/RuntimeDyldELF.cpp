@@ -1,6 +1,6 @@
 //===-- RuntimeDyldELF.cpp - Run-time dynamic linker for MC-JIT -*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -13,20 +13,20 @@
 
 #include "RuntimeDyldELF.h"
 #include "RuntimeDyldCheckerImpl.h"
-#include "llvm/ADT/IntervalMap.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/StringRef.h"
-#include "llvm/ADT/Triple.h"
-#include "llvm/MC/MCStreamer.h"
-#include "llvm/Object/ELFObjectFile.h"
-#include "llvm/Object/ObjectFile.h"
-#include "llvm/Support/ELF.h"
-#include "llvm/Support/Endian.h"
-#include "llvm/Support/MemoryBuffer.h"
-#include "llvm/Support/TargetRegistry.h"
+#include "llvm37/ADT/IntervalMap.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/StringRef.h"
+#include "llvm37/ADT/Triple.h"
+#include "llvm37/MC/MCStreamer.h"
+#include "llvm37/Object/ELFObjectFile.h"
+#include "llvm37/Object/ObjectFile.h"
+#include "llvm37/Support/ELF.h"
+#include "llvm37/Support/Endian.h"
+#include "llvm37/Support/MemoryBuffer.h"
+#include "llvm37/Support/TargetRegistry.h"
 
-using namespace llvm;
-using namespace llvm::object;
+using namespace llvm37;
+using namespace llvm37::object;
 
 #define DEBUG_TYPE "dyld"
 
@@ -40,7 +40,7 @@ static inline std::error_code check(std::error_code Err) {
 namespace {
 
 template <class ELFT> class DyldELFObject : public ELFObjectFile<ELFT> {
-  LLVM_ELF_IMPORT_TYPES_ELFT(ELFT)
+  LLVM37_ELF_IMPORT_TYPES_ELFT(ELFT)
 
   typedef Elf_Shdr_Impl<ELFT> Elf_Shdr;
   typedef Elf_Sym_Impl<ELFT> Elf_Sym;
@@ -124,7 +124,7 @@ createRTDyldELFObject(MemoryBufferRef Buffer,
   typedef typename ELFDataTypeTypedefHelper<ELFT>::value_type addr_type;
 
   std::unique_ptr<DyldELFObject<ELFT>> Obj =
-    llvm::make_unique<DyldELFObject<ELFT>>(Buffer, ec);
+    llvm37::make_unique<DyldELFObject<ELFT>>(Buffer, ec);
 
   // Iterate over all sections in the object.
   for (const auto &Sec : Obj->sections()) {
@@ -169,7 +169,7 @@ OwningBinary<ObjectFile> createELFDebugObject(const ObjectFile &Obj,
     typedef ELFType<support::little, true> ELF64LE;
     DebugObj = createRTDyldELFObject<ELF64LE>(Buffer->getMemBufferRef(), L, ec);
   } else
-    llvm_unreachable("Unexpected ELF format");
+    llvm37_unreachable("Unexpected ELF format");
 
   assert(!ec && "Could not construct copy ELF object file");
 
@@ -183,7 +183,7 @@ LoadedELFObjectInfo::getObjectForDebug(const ObjectFile &Obj) const {
 
 } // namespace
 
-namespace llvm {
+namespace llvm37 {
 
 RuntimeDyldELF::RuntimeDyldELF(RuntimeDyld::MemoryManager &MemMgr,
                                RuntimeDyld::SymbolResolver &Resolver)
@@ -217,7 +217,7 @@ std::unique_ptr<RuntimeDyld::LoadedObjectInfo>
 RuntimeDyldELF::loadObject(const object::ObjectFile &O) {
   unsigned SectionStartIdx, SectionEndIdx;
   std::tie(SectionStartIdx, SectionEndIdx) = loadObjectImpl(O);
-  return llvm::make_unique<LoadedELFObjectInfo>(*this, SectionStartIdx,
+  return llvm37::make_unique<LoadedELFObjectInfo>(*this, SectionStartIdx,
                                                 SectionEndIdx);
 }
 
@@ -227,7 +227,7 @@ void RuntimeDyldELF::resolveX86_64Relocation(const SectionEntry &Section,
                                              uint64_t SymOffset) {
   switch (Type) {
   default:
-    llvm_unreachable("Relocation type not implemented yet!");
+    llvm37_unreachable("Relocation type not implemented yet!");
     break;
   case ELF::R_X86_64_64: {
     support::ulittle64_t::ref(Section.Address + Offset) = Value + Addend;
@@ -280,8 +280,8 @@ void RuntimeDyldELF::resolveX86Relocation(const SectionEntry &Section,
   }
   default:
     // There are other relocation types, but it appears these are the
-    // only ones currently used by the LLVM ELF object writer
-    llvm_unreachable("Relocation type not implemented yet!");
+    // only ones currently used by the LLVM37 ELF object writer
+    llvm37_unreachable("Relocation type not implemented yet!");
     break;
   }
 }
@@ -301,7 +301,7 @@ void RuntimeDyldELF::resolveAArch64Relocation(const SectionEntry &Section,
 
   switch (Type) {
   default:
-    llvm_unreachable("Relocation type not implemented yet!");
+    llvm37_unreachable("Relocation type not implemented yet!");
     break;
   case ELF::R_AARCH64_ABS64: {
     uint64_t *TargetPtr =
@@ -440,7 +440,7 @@ void RuntimeDyldELF::resolveARMRelocation(const SectionEntry &Section,
 
   switch (Type) {
   default:
-    llvm_unreachable("Not implemented relocation type!");
+    llvm37_unreachable("Not implemented relocation type!");
 
   case ELF::R_ARM_NONE:
     break;
@@ -490,7 +490,7 @@ void RuntimeDyldELF::resolveMIPSRelocation(const SectionEntry &Section,
 
   switch (Type) {
   default:
-    llvm_unreachable("Not implemented relocation type!");
+    llvm37_unreachable("Not implemented relocation type!");
     break;
   case ELF::R_MIPS_32:
     writeBytesUnaligned(Value, TargetPtr, 4);
@@ -573,7 +573,7 @@ void RuntimeDyldELF::setMipsABI(const ObjectFile &Obj) {
   IsMipsO32ABI = AbiVariant & ELF::EF_MIPS_ABI_O32;
   IsMipsN64ABI = Obj.getFileFormatName().equals("ELF64-mips");
   if (AbiVariant & ELF::EF_MIPS_ABI2)
-    llvm_unreachable("Mips N32 ABI is not supported yet");
+    llvm37_unreachable("Mips N32 ABI is not supported yet");
 }
 
 void RuntimeDyldELF::resolveMIPS64Relocation(const SectionEntry &Section,
@@ -623,7 +623,7 @@ RuntimeDyldELF::evaluateMIPS64Relocation(const SectionEntry &Section,
 
   switch (Type) {
   default:
-    llvm_unreachable("Not implemented relocation type!");
+    llvm37_unreachable("Not implemented relocation type!");
     break;
   case ELF::R_MIPS_JALR:
   case ELF::R_MIPS_NONE:
@@ -850,7 +850,7 @@ void RuntimeDyldELF::findOPDEntrySection(const ELFObjectFileBase &Obj,
       return;
     }
   }
-  llvm_unreachable("Attempting to get address of ODP entry!");
+  llvm37_unreachable("Attempting to get address of ODP entry!");
 }
 
 // Relocation masks following the #lo(value), #hi(value), #ha(value),
@@ -890,7 +890,7 @@ void RuntimeDyldELF::resolvePPC64Relocation(const SectionEntry &Section,
   uint8_t *LocalAddress = Section.Address + Offset;
   switch (Type) {
   default:
-    llvm_unreachable("Relocation type not implemented yet!");
+    llvm37_unreachable("Relocation type not implemented yet!");
     break;
   case ELF::R_PPC64_ADDR16:
     writeInt16BE(LocalAddress, applyPPClo(Value + Addend));
@@ -946,14 +946,14 @@ void RuntimeDyldELF::resolvePPC64Relocation(const SectionEntry &Section,
   case ELF::R_PPC64_ADDR32: {
     int32_t Result = static_cast<int32_t>(Value + Addend);
     if (SignExtend32<32>(Result) != Result)
-      llvm_unreachable("Relocation R_PPC64_ADDR32 overflow");
+      llvm37_unreachable("Relocation R_PPC64_ADDR32 overflow");
     writeInt32BE(LocalAddress, Result);
   } break;
   case ELF::R_PPC64_REL24: {
     uint64_t FinalAddress = (Section.LoadAddress + Offset);
     int32_t delta = static_cast<int32_t>(Value - FinalAddress + Addend);
     if (SignExtend32<24>(delta) != delta)
-      llvm_unreachable("Relocation R_PPC64_REL24 overflow");
+      llvm37_unreachable("Relocation R_PPC64_REL24 overflow");
     // Generates a 'bl <address>' instruction
     writeInt32BE(LocalAddress, 0x48000001 | (delta & 0x03FFFFFC));
   } break;
@@ -961,7 +961,7 @@ void RuntimeDyldELF::resolvePPC64Relocation(const SectionEntry &Section,
     uint64_t FinalAddress = (Section.LoadAddress + Offset);
     int32_t delta = static_cast<int32_t>(Value - FinalAddress + Addend);
     if (SignExtend32<32>(delta) != delta)
-      llvm_unreachable("Relocation R_PPC64_REL32 overflow");
+      llvm37_unreachable("Relocation R_PPC64_REL32 overflow");
     writeInt32BE(LocalAddress, delta);
   } break;
   case ELF::R_PPC64_REL64: {
@@ -981,7 +981,7 @@ void RuntimeDyldELF::resolveSystemZRelocation(const SectionEntry &Section,
   uint8_t *LocalAddress = Section.Address + Offset;
   switch (Type) {
   default:
-    llvm_unreachable("Relocation type not implemented yet!");
+    llvm37_unreachable("Relocation type not implemented yet!");
     break;
   case ELF::R_390_PC16DBL:
   case ELF::R_390_PLT16DBL: {
@@ -1070,7 +1070,7 @@ void RuntimeDyldELF::resolveRelocation(const SectionEntry &Section,
       resolveMIPS64Relocation(Section, Offset, Value, Type, Addend, SymOffset,
                               SectionID);
     else
-      llvm_unreachable("Mips ABI not handled");
+      llvm37_unreachable("Mips ABI not handled");
     break;
   case Triple::ppc64: // Fall through.
   case Triple::ppc64le:
@@ -1080,7 +1080,7 @@ void RuntimeDyldELF::resolveRelocation(const SectionEntry &Section,
     resolveSystemZRelocation(Section, Offset, Value, Type, Addend);
     break;
   default:
-    llvm_unreachable("Unsupported CPU type!");
+    llvm37_unreachable("Unsupported CPU type!");
   }
 }
 
@@ -1139,7 +1139,7 @@ relocation_iterator RuntimeDyldELF::processRelocationRef(
       section_iterator si(Obj.section_end());
       Symbol->getSection(si);
       if (si == Obj.section_end())
-        llvm_unreachable("Symbol section not found, bad object file format!");
+        llvm37_unreachable("Symbol section not found, bad object file format!");
       DEBUG(dbgs() << "\t\tThis is section symbol\n");
       bool isCode = si->isText();
       Value.SectionID = findOrEmitSection(Obj, (*si), isCode, ObjSectionToID);
@@ -1160,7 +1160,7 @@ relocation_iterator RuntimeDyldELF::processRelocationRef(
       break;
     }
     default:
-      llvm_unreachable("Unresolved symbol type!");
+      llvm37_unreachable("Unresolved symbol type!");
       break;
     }
   }
@@ -1464,13 +1464,13 @@ relocation_iterator RuntimeDyldELF::processRelocationRef(
       case ELF::R_PPC64_TOC16_LO_DS: RelType = ELF::R_PPC64_ADDR16_LO_DS; break;
       case ELF::R_PPC64_TOC16_HI: RelType = ELF::R_PPC64_ADDR16_HI; break;
       case ELF::R_PPC64_TOC16_HA: RelType = ELF::R_PPC64_ADDR16_HA; break;
-      default: llvm_unreachable("Wrong relocation type.");
+      default: llvm37_unreachable("Wrong relocation type.");
       }
 
       RelocationValueRef TOCValue;
       findPPC64TOCSection(Obj, ObjSectionToID, TOCValue);
       if (Value.SymbolName || Value.SectionID != TOCValue.SectionID)
-        llvm_unreachable("Unsupported TOC relocation.");
+        llvm37_unreachable("Unsupported TOC relocation.");
       Value.Addend -= TOCValue.Addend;
       resolveRelocation(Sections[SectionID], Offset, Value.Addend, RelType, 0);
     } else {
@@ -1655,10 +1655,10 @@ size_t RuntimeDyldELF::getGOTEntrySize() {
     else if (IsMipsN64ABI)
       Result = sizeof(uint64_t);
     else
-      llvm_unreachable("Mips ABI not handled");
+      llvm37_unreachable("Mips ABI not handled");
     break;
   default:
-    llvm_unreachable("Unsupported CPU type!");
+    llvm37_unreachable("Unsupported CPU type!");
   }
   return Result;
 }
@@ -1746,4 +1746,4 @@ bool RuntimeDyldELF::isCompatibleFile(const object::ObjectFile &Obj) const {
   return Obj.isELF();
 }
 
-} // namespace llvm
+} // namespace llvm37

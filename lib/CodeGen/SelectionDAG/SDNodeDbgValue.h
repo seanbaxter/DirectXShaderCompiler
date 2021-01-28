@@ -1,6 +1,6 @@
-//===-- llvm/CodeGen/SDNodeDbgValue.h - SelectionDAG dbg_value --*- C++ -*-===//
+//===-- llvm37/CodeGen/SDNodeDbgValue.h - SelectionDAG dbg_value --*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,14 +11,14 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_LIB_CODEGEN_SELECTIONDAG_SDNODEDBGVALUE_H
-#define LLVM_LIB_CODEGEN_SELECTIONDAG_SDNODEDBGVALUE_H
+#ifndef LLVM37_LIB_CODEGEN_SELECTIONDAG_SDNODEDBGVALUE_H
+#define LLVM37_LIB_CODEGEN_SELECTIONDAG_SDNODEDBGVALUE_H
 
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/IR/DebugLoc.h"
-#include "llvm/Support/DataTypes.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/IR/DebugLoc.h"
+#include "llvm37/Support/DataTypes.h"
 
-namespace llvm {
+namespace llvm37 {
 
 class MDNode;
 class SDNode;
@@ -119,6 +119,6 @@ public:
   bool isInvalidated() const { return Invalid; }
 };
 
-} // end llvm namespace
+} // end llvm37 namespace
 
 #endif

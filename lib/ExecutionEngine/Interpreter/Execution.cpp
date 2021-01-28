@@ -1,6 +1,6 @@
 //===-- Execution.cpp - Implement code to simulate the program ------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -12,21 +12,21 @@
 //===----------------------------------------------------------------------===//
 
 #include "Interpreter.h"
-#include "llvm/ADT/APInt.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/CodeGen/IntrinsicLowering.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/DerivedTypes.h"
-#include "llvm/IR/GetElementPtrTypeIterator.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/MathExtras.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/APInt.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/CodeGen/IntrinsicLowering.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/DerivedTypes.h"
+#include "llvm37/IR/GetElementPtrTypeIterator.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/MathExtras.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <algorithm>
 #include <cmath>
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "interpreter"
 
@@ -59,7 +59,7 @@ static void executeFAddInst(GenericValue &Dest, GenericValue Src1,
     IMPLEMENT_BINARY_OPERATOR(+, Double);
   default:
     dbgs() << "Unhandled type for FAdd instruction: " << *Ty << "\n";
-    llvm_unreachable(nullptr);
+    llvm37_unreachable(nullptr);
   }
 }
 
@@ -70,7 +70,7 @@ static void executeFSubInst(GenericValue &Dest, GenericValue Src1,
     IMPLEMENT_BINARY_OPERATOR(-, Double);
   default:
     dbgs() << "Unhandled type for FSub instruction: " << *Ty << "\n";
-    llvm_unreachable(nullptr);
+    llvm37_unreachable(nullptr);
   }
 }
 
@@ -81,7 +81,7 @@ static void executeFMulInst(GenericValue &Dest, GenericValue Src1,
     IMPLEMENT_BINARY_OPERATOR(*, Double);
   default:
     dbgs() << "Unhandled type for FMul instruction: " << *Ty << "\n";
-    llvm_unreachable(nullptr);
+    llvm37_unreachable(nullptr);
   }
 }
 
@@ -92,7 +92,7 @@ static void executeFDivInst(GenericValue &Dest, GenericValue Src1,
     IMPLEMENT_BINARY_OPERATOR(/, Double);
   default:
     dbgs() << "Unhandled type for FDiv instruction: " << *Ty << "\n";
-    llvm_unreachable(nullptr);
+    llvm37_unreachable(nullptr);
   }
 }
 
@@ -107,7 +107,7 @@ static void executeFRemInst(GenericValue &Dest, GenericValue Src1,
     break;
   default:
     dbgs() << "Unhandled type for Rem instruction: " << *Ty << "\n";
-    llvm_unreachable(nullptr);
+    llvm37_unreachable(nullptr);
   }
 }
 
@@ -144,7 +144,7 @@ static GenericValue executeICMP_EQ(GenericValue Src1, GenericValue Src2,
     IMPLEMENT_POINTER_ICMP(==);
   default:
     dbgs() << "Unhandled type for ICMP_EQ predicate: " << *Ty << "\n";
-    llvm_unreachable(nullptr);
+    llvm37_unreachable(nullptr);
   }
   return Dest;
 }
@@ -158,7 +158,7 @@ static GenericValue executeICMP_NE(GenericValue Src1, GenericValue Src2,
     IMPLEMENT_POINTER_ICMP(!=);
   default:
     dbgs() << "Unhandled type for ICMP_NE predicate: " << *Ty << "\n";
-    llvm_unreachable(nullptr);
+    llvm37_unreachable(nullptr);
   }
   return Dest;
 }
@@ -172,7 +172,7 @@ static GenericValue executeICMP_ULT(GenericValue Src1, GenericValue Src2,
     IMPLEMENT_POINTER_ICMP(<);
   default:
     dbgs() << "Unhandled type for ICMP_ULT predicate: " << *Ty << "\n";
-    llvm_unreachable(nullptr);
+    llvm37_unreachable(nullptr);
   }
   return Dest;
 }
@@ -186,7 +186,7 @@ static GenericValue executeICMP_SLT(GenericValue Src1, GenericValue Src2,
     IMPLEMENT_POINTER_ICMP(<);
   default:
     dbgs() << "Unhandled type for ICMP_SLT predicate: " << *Ty << "\n";
-    llvm_unreachable(nullptr);
+    llvm37_unreachable(nullptr);
   }
   return Dest;
 }
@@ -200,7 +200,7 @@ static GenericValue executeICMP_UGT(GenericValue Src1, GenericValue Src2,
     IMPLEMENT_POINTER_ICMP(>);
   default:
     dbgs() << "Unhandled type for ICMP_UGT predicate: " << *Ty << "\n";
-    llvm_unreachable(nullptr);
+    llvm37_unreachable(nullptr);
   }
   return Dest;
 }
@@ -214,7 +214,7 @@ static GenericValue executeICMP_SGT(GenericValue Src1, GenericValue Src2,
     IMPLEMENT_POINTER_ICMP(>);
   default:
     dbgs() << "Unhandled type for ICMP_SGT predicate: " << *Ty << "\n";
-    llvm_unreachable(nullptr);
+    llvm37_unreachable(nullptr);
   }
   return Dest;
 }
@@ -228,7 +228,7 @@ static GenericValue executeICMP_ULE(GenericValue Src1, GenericValue Src2,
     IMPLEMENT_POINTER_ICMP(<=);
   default:
     dbgs() << "Unhandled type for ICMP_ULE predicate: " << *Ty << "\n";
-    llvm_unreachable(nullptr);
+    llvm37_unreachable(nullptr);
   }
   return Dest;
 }
@@ -242,7 +242,7 @@ static GenericValue executeICMP_SLE(GenericValue Src1, GenericValue Src2,
     IMPLEMENT_POINTER_ICMP(<=);
   default:
     dbgs() << "Unhandled type for ICMP_SLE predicate: " << *Ty << "\n";
-    llvm_unreachable(nullptr);
+    llvm37_unreachable(nullptr);
   }
   return Dest;
 }
@@ -256,7 +256,7 @@ static GenericValue executeICMP_UGE(GenericValue Src1, GenericValue Src2,
     IMPLEMENT_POINTER_ICMP(>=);
   default:
     dbgs() << "Unhandled type for ICMP_UGE predicate: " << *Ty << "\n";
-    llvm_unreachable(nullptr);
+    llvm37_unreachable(nullptr);
   }
   return Dest;
 }
@@ -270,7 +270,7 @@ static GenericValue executeICMP_SGE(GenericValue Src1, GenericValue Src2,
     IMPLEMENT_POINTER_ICMP(>=);
   default:
     dbgs() << "Unhandled type for ICMP_SGE predicate: " << *Ty << "\n";
-    llvm_unreachable(nullptr);
+    llvm37_unreachable(nullptr);
   }
   return Dest;
 }
@@ -295,7 +295,7 @@ void Interpreter::visitICmpInst(ICmpInst &I) {
   case ICmpInst::ICMP_SGE: R = executeICMP_SGE(Src1, Src2, Ty); break;
   default:
     dbgs() << "Don't know how to handle this ICmp predicate!\n-->" << I;
-    llvm_unreachable(nullptr);
+    llvm37_unreachable(nullptr);
   }
  
   SetValue(&I, R, SF);
@@ -331,7 +331,7 @@ static GenericValue executeFCMP_OEQ(GenericValue Src1, GenericValue Src2,
     IMPLEMENT_VECTOR_FCMP(==);
   default:
     dbgs() << "Unhandled type for FCmp EQ instruction: " << *Ty << "\n";
-    llvm_unreachable(nullptr);
+    llvm37_unreachable(nullptr);
   }
   return Dest;
 }
@@ -387,7 +387,7 @@ static GenericValue executeFCMP_ONE(GenericValue Src1, GenericValue Src2,
     IMPLEMENT_VECTOR_FCMP(!=);
     default:
       dbgs() << "Unhandled type for FCmp NE instruction: " << *Ty << "\n";
-      llvm_unreachable(nullptr);
+      llvm37_unreachable(nullptr);
   }
   // in vector case mask out NaN elements
   if (Ty->isVectorTy())
@@ -407,7 +407,7 @@ static GenericValue executeFCMP_OLE(GenericValue Src1, GenericValue Src2,
     IMPLEMENT_VECTOR_FCMP(<=);
   default:
     dbgs() << "Unhandled type for FCmp LE instruction: " << *Ty << "\n";
-    llvm_unreachable(nullptr);
+    llvm37_unreachable(nullptr);
   }
   return Dest;
 }
@@ -421,7 +421,7 @@ static GenericValue executeFCMP_OGE(GenericValue Src1, GenericValue Src2,
     IMPLEMENT_VECTOR_FCMP(>=);
   default:
     dbgs() << "Unhandled type for FCmp GE instruction: " << *Ty << "\n";
-    llvm_unreachable(nullptr);
+    llvm37_unreachable(nullptr);
   }
   return Dest;
 }
@@ -435,7 +435,7 @@ static GenericValue executeFCMP_OLT(GenericValue Src1, GenericValue Src2,
     IMPLEMENT_VECTOR_FCMP(<);
   default:
     dbgs() << "Unhandled type for FCmp LT instruction: " << *Ty << "\n";
-    llvm_unreachable(nullptr);
+    llvm37_unreachable(nullptr);
   }
   return Dest;
 }
@@ -449,7 +449,7 @@ static GenericValue executeFCMP_OGT(GenericValue Src1, GenericValue Src2,
     IMPLEMENT_VECTOR_FCMP(>);
   default:
     dbgs() << "Unhandled type for FCmp GT instruction: " << *Ty << "\n";
-    llvm_unreachable(nullptr);
+    llvm37_unreachable(nullptr);
   }
   return Dest;
 }
@@ -617,7 +617,7 @@ void Interpreter::visitFCmpInst(FCmpInst &I) {
   switch (I.getPredicate()) {
   default:
     dbgs() << "Don't know how to handle this FCmp predicate!\n-->" << I;
-    llvm_unreachable(nullptr);
+    llvm37_unreachable(nullptr);
   break;
   case FCmpInst::FCMP_FALSE: R = executeFCMP_BOOL(Src1, Src2, Ty, false); 
   break;
@@ -674,7 +674,7 @@ static GenericValue executeCmpInst(unsigned predicate, GenericValue Src1,
   case FCmpInst::FCMP_TRUE:  return executeFCMP_BOOL(Src1, Src2, Ty, true);
   default:
     dbgs() << "Unhandled Cmp predicate\n";
-    llvm_unreachable(nullptr);
+    llvm37_unreachable(nullptr);
   }
 }
 
@@ -720,7 +720,7 @@ void Interpreter::visitBinaryOperator(BinaryOperator &I) {
       FLOAT_VECTOR_FUNCTION(OP, DoubleVal)                            \
     else {                                                            \
       dbgs() << "Unhandled type for OP instruction: " << *Ty << "\n"; \
-      llvm_unreachable(0);                                            \
+      llvm37_unreachable(0);                                            \
     }                                                                 \
   }                                                                   \
 }
@@ -728,7 +728,7 @@ void Interpreter::visitBinaryOperator(BinaryOperator &I) {
     switch(I.getOpcode()){
     default:
       dbgs() << "Don't know how to handle this binary operator!\n-->" << I;
-      llvm_unreachable(nullptr);
+      llvm37_unreachable(nullptr);
       break;
     case Instruction::Add:   INTEGER_VECTOR_OPERATION(+) break;
     case Instruction::Sub:   INTEGER_VECTOR_OPERATION(-) break;
@@ -756,7 +756,7 @@ void Interpreter::visitBinaryOperator(BinaryOperator &I) {
             fmod(Src1.AggregateVal[i].DoubleVal, Src2.AggregateVal[i].DoubleVal);
         else {
           dbgs() << "Unhandled type for Rem instruction: " << *Ty << "\n";
-          llvm_unreachable(nullptr);
+          llvm37_unreachable(nullptr);
         }
       }
       break;
@@ -765,7 +765,7 @@ void Interpreter::visitBinaryOperator(BinaryOperator &I) {
     switch (I.getOpcode()) {
     default:
       dbgs() << "Don't know how to handle this binary operator!\n-->" << I;
-      llvm_unreachable(nullptr);
+      llvm37_unreachable(nullptr);
       break;
     case Instruction::Add:   R.IntVal = Src1.IntVal + Src2.IntVal; break;
     case Instruction::Sub:   R.IntVal = Src1.IntVal - Src2.IntVal; break;
@@ -1084,7 +1084,7 @@ void Interpreter::visitCallSite(CallSite CS) {
       return;
     default:
       // If it is an unknown intrinsic function, use the intrinsic lowering
-      // class to transform it into hopefully tasty LLVM code.
+      // class to transform it into hopefully tasty LLVM37 code.
       //
       BasicBlock::iterator me(CS.getInstruction());
       BasicBlock *Parent = CS.getInstruction()->getParent();
@@ -1124,11 +1124,11 @@ void Interpreter::visitCallSite(CallSite CS) {
 
 // auxiliary function for shift operations
 static unsigned getShiftAmount(uint64_t orgShiftAmount,
-                               llvm::APInt valueToShift) {
+                               llvm37::APInt valueToShift) {
   unsigned valueWidth = valueToShift.getBitWidth();
   if (orgShiftAmount < (uint64_t)valueWidth)
     return orgShiftAmount;
-  // according to the llvm documentation, if orgShiftAmount > valueWidth,
+  // according to the llvm37 documentation, if orgShiftAmount > valueWidth,
   // the result is undfeined. but we do shift by this rule:
   return (NextPowerOf2(valueWidth-1) - 1) & orgShiftAmount;
 }
@@ -1147,14 +1147,14 @@ void Interpreter::visitShl(BinaryOperator &I) {
     for (unsigned i = 0; i < src1Size; i++) {
       GenericValue Result;
       uint64_t shiftAmount = Src2.AggregateVal[i].IntVal.getZExtValue();
-      llvm::APInt valueToShift = Src1.AggregateVal[i].IntVal;
+      llvm37::APInt valueToShift = Src1.AggregateVal[i].IntVal;
       Result.IntVal = valueToShift.shl(getShiftAmount(shiftAmount, valueToShift));
       Dest.AggregateVal.push_back(Result);
     }
   } else {
     // scalar
     uint64_t shiftAmount = Src2.IntVal.getZExtValue();
-    llvm::APInt valueToShift = Src1.IntVal;
+    llvm37::APInt valueToShift = Src1.IntVal;
     Dest.IntVal = valueToShift.shl(getShiftAmount(shiftAmount, valueToShift));
   }
 
@@ -1174,14 +1174,14 @@ void Interpreter::visitLShr(BinaryOperator &I) {
     for (unsigned i = 0; i < src1Size; i++) {
       GenericValue Result;
       uint64_t shiftAmount = Src2.AggregateVal[i].IntVal.getZExtValue();
-      llvm::APInt valueToShift = Src1.AggregateVal[i].IntVal;
+      llvm37::APInt valueToShift = Src1.AggregateVal[i].IntVal;
       Result.IntVal = valueToShift.lshr(getShiftAmount(shiftAmount, valueToShift));
       Dest.AggregateVal.push_back(Result);
     }
   } else {
     // scalar
     uint64_t shiftAmount = Src2.IntVal.getZExtValue();
-    llvm::APInt valueToShift = Src1.IntVal;
+    llvm37::APInt valueToShift = Src1.IntVal;
     Dest.IntVal = valueToShift.lshr(getShiftAmount(shiftAmount, valueToShift));
   }
 
@@ -1201,14 +1201,14 @@ void Interpreter::visitAShr(BinaryOperator &I) {
     for (unsigned i = 0; i < src1Size; i++) {
       GenericValue Result;
       uint64_t shiftAmount = Src2.AggregateVal[i].IntVal.getZExtValue();
-      llvm::APInt valueToShift = Src1.AggregateVal[i].IntVal;
+      llvm37::APInt valueToShift = Src1.AggregateVal[i].IntVal;
       Result.IntVal = valueToShift.ashr(getShiftAmount(shiftAmount, valueToShift));
       Dest.AggregateVal.push_back(Result);
     }
   } else {
     // scalar
     uint64_t shiftAmount = Src2.IntVal.getZExtValue();
-    llvm::APInt valueToShift = Src1.IntVal;
+    llvm37::APInt valueToShift = Src1.IntVal;
     Dest.IntVal = valueToShift.ashr(getShiftAmount(shiftAmount, valueToShift));
   }
 
@@ -1530,7 +1530,7 @@ GenericValue Interpreter::executeBitCastInst(Value *SrcVal, Type *DstTy,
     }
 
     if (SrcNum * SrcBitSize != DstNum * DstBitSize)
-      llvm_unreachable("Invalid BitCast");
+      llvm37_unreachable("Invalid BitCast");
 
     // If src is floating point, cast to integer first.
     TempSrc.AggregateVal.resize(SrcNum);
@@ -1548,7 +1548,7 @@ GenericValue Interpreter::executeBitCastInst(Value *SrcVal, Type *DstTy,
         TempSrc.AggregateVal[i].IntVal = SrcVec.AggregateVal[i].IntVal;
     } else {
       // Pointers are not allowed as the element type of vector.
-      llvm_unreachable("Invalid Bitcast");
+      llvm37_unreachable("Invalid Bitcast");
     }
 
     // now TempSrc is integer type vector
@@ -1630,7 +1630,7 @@ GenericValue Interpreter::executeBitCastInst(Value *SrcVal, Type *DstTy,
       } else if (SrcTy->isIntegerTy()) {
         Dest.IntVal = Src.IntVal;
       } else {
-        llvm_unreachable("Invalid BitCast");
+        llvm37_unreachable("Invalid BitCast");
       }
     } else if (DstTy->isFloatTy()) {
       if (SrcTy->isIntegerTy())
@@ -1645,7 +1645,7 @@ GenericValue Interpreter::executeBitCastInst(Value *SrcVal, Type *DstTy,
         Dest.DoubleVal = Src.DoubleVal;
       }
     } else {
-      llvm_unreachable("Invalid Bitcast");
+      llvm37_unreachable("Invalid Bitcast");
     }
   }
 
@@ -1734,7 +1734,7 @@ void Interpreter::visitVAArgInst(VAArgInst &I) {
   IMPLEMENT_VAARG(Double);
   default:
     dbgs() << "Unhandled dest type for vaarg instruction: " << *Ty << "\n";
-    llvm_unreachable(nullptr);
+    llvm37_unreachable(nullptr);
   }
 
   // Set the Value of this Instruction.
@@ -1758,7 +1758,7 @@ void Interpreter::visitExtractElementInst(ExtractElementInst &I) {
     default:
       dbgs() << "Unhandled destination type for extractelement instruction: "
       << *Ty << "\n";
-      llvm_unreachable(nullptr);
+      llvm37_unreachable(nullptr);
       break;
     case Type::IntegerTyID:
       Dest.IntVal = Src1.AggregateVal[indx].IntVal;
@@ -1782,7 +1782,7 @@ void Interpreter::visitInsertElementInst(InsertElementInst &I) {
   Type *Ty = I.getType();
 
   if(!(Ty->isVectorTy()) )
-    llvm_unreachable("Unhandled dest type for insertelement instruction");
+    llvm37_unreachable("Unhandled dest type for insertelement instruction");
 
   GenericValue Src1 = getOperandValue(I.getOperand(0), SF);
   GenericValue Src2 = getOperandValue(I.getOperand(1), SF);
@@ -1795,10 +1795,10 @@ void Interpreter::visitInsertElementInst(InsertElementInst &I) {
   Dest.AggregateVal = Src1.AggregateVal;
 
   if(Src1.AggregateVal.size() <= indx)
-      llvm_unreachable("Invalid index in insertelement instruction");
+      llvm37_unreachable("Invalid index in insertelement instruction");
   switch (TyContained->getTypeID()) {
     default:
-      llvm_unreachable("Unhandled dest type for insertelement instruction");
+      llvm37_unreachable("Unhandled dest type for insertelement instruction");
     case Type::IntegerTyID:
       Dest.AggregateVal[indx].IntVal = Src2.IntVal;
       break;
@@ -1817,7 +1817,7 @@ void Interpreter::visitShuffleVectorInst(ShuffleVectorInst &I){
 
   Type *Ty = I.getType();
   if(!(Ty->isVectorTy()))
-    llvm_unreachable("Unhandled dest type for shufflevector instruction");
+    llvm37_unreachable("Unhandled dest type for shufflevector instruction");
 
   GenericValue Src1 = getOperandValue(I.getOperand(0), SF);
   GenericValue Src2 = getOperandValue(I.getOperand(1), SF);
@@ -1837,7 +1837,7 @@ void Interpreter::visitShuffleVectorInst(ShuffleVectorInst &I){
 
   switch (TyContained->getTypeID()) {
     default:
-      llvm_unreachable("Unhandled dest type for insertelement instruction");
+      llvm37_unreachable("Unhandled dest type for insertelement instruction");
       break;
     case Type::IntegerTyID:
       for( unsigned i=0; i<src3Size; i++) {
@@ -1852,7 +1852,7 @@ void Interpreter::visitShuffleVectorInst(ShuffleVectorInst &I){
           // %tmp = shufflevector <2 x i32> <i32 3, i32 4>, <2 x i32> undef,
           //                      <2 x i32> < i32 0, i32 5 >,
           // where i32 5 is invalid, but let it be additional check here:
-          llvm_unreachable("Invalid mask in shufflevector instruction");
+          llvm37_unreachable("Invalid mask in shufflevector instruction");
       }
       break;
     case Type::FloatTyID:
@@ -1863,7 +1863,7 @@ void Interpreter::visitShuffleVectorInst(ShuffleVectorInst &I){
         else if(j < src1Size + src2Size)
           Dest.AggregateVal[i].FloatVal = Src2.AggregateVal[j-src1Size].FloatVal;
         else
-          llvm_unreachable("Invalid mask in shufflevector instruction");
+          llvm37_unreachable("Invalid mask in shufflevector instruction");
         }
       break;
     case Type::DoubleTyID:
@@ -1875,7 +1875,7 @@ void Interpreter::visitShuffleVectorInst(ShuffleVectorInst &I){
           Dest.AggregateVal[i].DoubleVal =
             Src2.AggregateVal[j-src1Size].DoubleVal;
         else
-          llvm_unreachable("Invalid mask in shufflevector instruction");
+          llvm37_unreachable("Invalid mask in shufflevector instruction");
       }
       break;
   }
@@ -1900,7 +1900,7 @@ void Interpreter::visitExtractValueInst(ExtractValueInst &I) {
   Type *IndexedType = ExtractValueInst::getIndexedType(Agg->getType(), I.getIndices());
   switch (IndexedType->getTypeID()) {
     default:
-      llvm_unreachable("Unhandled dest type for extractelement instruction");
+      llvm37_unreachable("Unhandled dest type for extractelement instruction");
     break;
     case Type::IntegerTyID:
       Dest.IntVal = pSrc->IntVal;
@@ -1947,7 +1947,7 @@ void Interpreter::visitInsertValueInst(InsertValueInst &I) {
 
   switch (IndexedType->getTypeID()) {
     default:
-      llvm_unreachable("Unhandled dest type for insertelement instruction");
+      llvm37_unreachable("Unhandled dest type for insertelement instruction");
     break;
     case Type::IntegerTyID:
       pDest->IntVal = Src2.IntVal;
@@ -2049,7 +2049,7 @@ GenericValue Interpreter::getConstantExprValue (ConstantExpr *CE,
     break;
   default:
     dbgs() << "Unhandled ConstantExpr: " << *CE << "\n";
-    llvm_unreachable("Unhandled ConstantExpr");
+    llvm37_unreachable("Unhandled ConstantExpr");
   }
   return Dest;
 }
@@ -2090,7 +2090,7 @@ void Interpreter::callFunction(Function *F, ArrayRef<GenericValue> ArgVals) {
     return;
   }
 
-  // Get pointers to first LLVM BB & Instruction in function.
+  // Get pointers to first LLVM37 BB & Instruction in function.
   StackFrame.CurBB     = F->begin();
   StackFrame.CurInst   = StackFrame.CurBB->begin();
 
@@ -2129,7 +2129,7 @@ DEBUG(
       dbgs() << "  --> ";
       const GenericValue &Val = SF.Values[&I];
       switch (I.getType()->getTypeID()) {
-      default: llvm_unreachable("Invalid GenericValue Type");
+      default: llvm37_unreachable("Invalid GenericValue Type");
       case Type::VoidTyID:    dbgs() << "void"; break;
       case Type::FloatTyID:   dbgs() << "float " << Val.FloatVal; break;
       case Type::DoubleTyID:  dbgs() << "double " << Val.DoubleVal; break;

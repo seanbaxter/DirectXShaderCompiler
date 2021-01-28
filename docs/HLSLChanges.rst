@@ -5,7 +5,7 @@ HLSL Changes
 Introduction
 ============
 
-This document is meant to describe the changes that have been made to the LLVM
+This document is meant to describe the changes that have been made to the LLVM37
 and Clang codebases to support HLSL, the High-Level Shading Language.  The
 focus is on design changes and general approach rather than specific changes
 made to support the language and runtime.
@@ -35,18 +35,18 @@ This section outlines the considerations that have prompted multiple changes.
   versions (API in case of the DLL, command-line format in the case of the
   program).
 
-Forking LLVM and Clang
+Forking LLVM37 and Clang
 ======================
 
-This section describes why and how the HLSL on LLVM project has forked LLVM
+This section describes why and how the HLSL on LLVM37 project has forked LLVM37
 and Clang.
 
-LLVM and Clang provide an excellent starting point for building a compiler,
+LLVM37 and Clang provide an excellent starting point for building a compiler,
 especially one that will exist in an ecosystem of organizations contributing
 to the pipeline, whether it be in the form of tooling and abstractions by
 middleware and tool authors, or backend compilers by hardware vendors.
 
-The decision was made to fork LLVM and Clang rather than work directly and
+The decision was made to fork LLVM37 and Clang rather than work directly and
 upstream all changes for the following reasons:
 
 * While HLSL started out as a C derivative, over time is has drifted away, not
@@ -61,8 +61,8 @@ upstream all changes for the following reasons:
   version will be much more closely aligned to C/C++ semantics and could be
   more easily adapted. This version of the codebase isn't it.
 
-* The changes to LLVM are meaningless without an execution model, which is
-  currently being worked on. Changes to LLVM are more likely to get
+* The changes to LLVM37 are meaningless without an execution model, which is
+  currently being worked on. Changes to LLVM37 are more likely to get
   upstreamed, however we have chosen to not consider this until we have
   multiple implementations of DXIL backends.
 
@@ -76,7 +76,7 @@ Dependency Injection
 ====================
 
 One of the goals of dxcompiler is to be a reusable component for a variety of
-applications. While Clang and LLVM have support for being hosted as a
+applications. While Clang and LLVM37 have support for being hosted as a
 dynamically loaded library, there is still a number of assumptions made that
 make usage problematic, specifically:
 
@@ -97,7 +97,7 @@ The solution we have implemented relies on having a thread-local component
 that can service I/O requests as well as other OS-implemented or process-wide
 constructs. The library is then meant to be used through specific API points
 that will set and tear down this component as appropriate. The MSFileSystem
-class in include/llvm/Support/MSFileSystem.h provides the access point
+class in include/llvm37/Support/MSFileSystem.h provides the access point
 (although the API should likely be renamed, as it's broader than a pur file
 system abstraction, and 'MS' monikers are being changed to 'HLSL').
 
@@ -124,16 +124,16 @@ cleaned up.
 Error Handling
 ==============
 
-Clang and LLVM already provide a number of error handling mechanisms:
+Clang and LLVM37 already provide a number of error handling mechanisms:
 returning a bool flag to indicate success or failure, returning a structured
 object that flags the result along with other information, using STL system
 errors for certain errors, or using errno for some C standard library calls.
 
 There are two other kinds of error handling mechanisms introduced by HLSL
-on LLVM.
+on LLVM37.
 
 * C++ Exceptions. The primary use case for these is to handle out-of-memory
-  exceptions. A second case is to handle cases where LLVM and Clang today
+  exceptions. A second case is to handle cases where LLVM37 and Clang today
   attempt to terminate the process even though they are in a recoverable state
   (for example, when a '--help' switch is found in command-line options).
 
@@ -152,7 +152,7 @@ Removing Unused Functionality
 
 Removing unused functionality can help reduce the binary size, improve
 performance, and speed up compilation time for the project. However, this has
-to be traded off against changing the behavior of LLVM and Clang (and the
+to be traded off against changing the behavior of LLVM37 and Clang (and the
 cost of understanding this change for developers who are familiar with those
 projects), as well as the future maintenance for integrations.
 
@@ -226,13 +226,13 @@ there to drive a number of code-generation tasks, which can be found in other
 HLSL Modules
 ============
 
-llvm::Module is the type that represents a shader program. It includes
+llvm37::Module is the type that represents a shader program. It includes
 metadata nodes to provide details around the ABI, flags, etc. However,
 manipulation of all this information in terms of metadata is not very
 efficient or convenient.
 
 As part of the work with HLSL, we introduce two modules that are attached
-in-memory to an llvm::Module: a high-level HLModule, and a low-level
+in-memory to an llvm37::Module: a high-level HLModule, and a low-level
 DxilModule. The high-level module is used in the early passes to deal with
 HLSL-as-a-language concepts, such as intrinsics, matrices and vectors; the
 low-level module is used to deal with concepts as they exist in the DXIL
@@ -240,7 +240,7 @@ specification. Only one of these additional modules ever exists at one point;
 the DxilGenerationPass that does the translation destroys the high-level
 representation and creates a low-level one as part of its work.
 
-To preserve many of the benefits of LLVM's modular pipeline, it is useful to
+To preserve many of the benefits of LLVM37's modular pipeline, it is useful to
 serialize and deserialize shaders at different stages of processing, and so
 both HLModule and DxilModule provide support for these. The expectation for a
 wholesale compilation from source, however, is that this information lives

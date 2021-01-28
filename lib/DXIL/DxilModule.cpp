@@ -20,22 +20,22 @@
 #include "dxc/DXIL/DxilInstructions.h"
 #include "dxc/DXIL/DxilCounters.h"
 
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Metadata.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/Operator.h"
-#include "llvm/IR/DebugInfo.h"
-#include "llvm/IR/DiagnosticInfo.h"
-#include "llvm/IR/DiagnosticPrinter.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/SetVector.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/Metadata.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/Operator.h"
+#include "llvm37/IR/DebugInfo.h"
+#include "llvm37/IR/DiagnosticInfo.h"
+#include "llvm37/IR/DiagnosticPrinter.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/SetVector.h"
 #include <unordered_set>
 
-using namespace llvm;
+using namespace llvm37;
 using std::string;
 using std::vector;
 using std::unique_ptr;
@@ -82,14 +82,14 @@ const char *kDxBreakCondName = "dx.break.cond";
 const char *kDxBreakMDName = "dx.break.br";
 }
 
-// Avoid dependency on DxilModule from llvm::Module using this:
-void DxilModule_RemoveGlobal(llvm::Module* M, llvm::GlobalObject* G) {
+// Avoid dependency on DxilModule from llvm37::Module using this:
+void DxilModule_RemoveGlobal(llvm37::Module* M, llvm37::GlobalObject* G) {
   if (M && G && M->HasDxilModule()) {
-    if (llvm::Function *F = dyn_cast<llvm::Function>(G))
+    if (llvm37::Function *F = dyn_cast<llvm37::Function>(G))
       M->GetDxilModule().RemoveFunction(F);
   }
 }
-void DxilModule_ResetModule(llvm::Module* M) {
+void DxilModule_ResetModule(llvm37::Module* M) {
   if (M && M->HasDxilModule())
     delete &M->GetDxilModule();
   M->SetDxilModule(nullptr);
@@ -106,7 +106,7 @@ DxilModule::DxilModule(Module *pModule)
 , m_pModule(pModule)
 , m_pEntryFunc(nullptr)
 , m_EntryName("")
-, m_pMDHelper(llvm::make_unique<DxilMDHelper>(pModule, llvm::make_unique<DxilExtraPropertyHelper>(pModule)))
+, m_pMDHelper(llvm37::make_unique<DxilMDHelper>(pModule, llvm37::make_unique<DxilExtraPropertyHelper>(pModule)))
 , m_pDebugInfoFinder(nullptr)
 , m_pSM(nullptr)
 , m_DxilMajor(DXIL::kDxilMajor)
@@ -114,8 +114,8 @@ DxilModule::DxilModule(Module *pModule)
 , m_ValMajor(1)
 , m_ValMinor(0)
 , m_ForceZeroStoreLifetimes(false)
-, m_pOP(llvm::make_unique<OP>(pModule->getContext(), pModule))
-, m_pTypeSystem(llvm::make_unique<DxilTypeSystem>(pModule))
+, m_pOP(llvm37::make_unique<OP>(pModule->getContext(), pModule))
+, m_pTypeSystem(llvm37::make_unique<DxilTypeSystem>(pModule))
 , m_bDisableOptimizations(false)
 , m_bUseMinPrecision(true) // use min precision by default
 , m_bAllResourcesBound(false)
@@ -130,7 +130,7 @@ DxilModule::DxilModule(Module *pModule)
   m_pModule->pfnResetDxilModule = &DxilModule_ResetModule;
 
 #if defined(_DEBUG) || defined(DBG)
-  // Pin LLVM dump methods.
+  // Pin LLVM37 dump methods.
   void (__thiscall Module::*pfnModuleDump)() const = &Module::dump;
   void (__thiscall Type::*pfnTypeDump)() const = &Type::dump;
   void (__thiscall Function::*pfnViewCFGOnly)() const = &Function::viewCFGOnly;
@@ -144,7 +144,7 @@ DxilModule::~DxilModule() {
     m_pModule->pfnRemoveGlobal = nullptr;
 }
 
-LLVMContext &DxilModule::GetCtx() const { return m_Ctx; }
+LLVM37Context &DxilModule::GetCtx() const { return m_Ctx; }
 Module *DxilModule::GetModule() const { return m_pModule; }
 OP *DxilModule::GetOP() const { return m_pOP.get(); }
 
@@ -164,7 +164,7 @@ void DxilModule::SetShaderModel(const ShaderModel *pSM, bool bUseMinPrecision) {
     DxilFunctionProps props;
     props.shaderKind = m_pSM->GetKind();
     m_DxilEntryPropsMap[nullptr] =
-      llvm::make_unique<DxilEntryProps>(props, m_bUseMinPrecision);
+      llvm37::make_unique<DxilEntryProps>(props, m_bUseMinPrecision);
   }
   m_SerializedRootSignature.clear();
 }
@@ -264,7 +264,7 @@ void DxilModule::SetEntryFunctionName(const string &name) {
   m_EntryName = name;
 }
 
-llvm::Function *DxilModule::GetPatchConstantFunction() {
+llvm37::Function *DxilModule::GetPatchConstantFunction() {
   if (!m_pSM->IsHS())
     return nullptr;
   DXASSERT(m_DxilEntryPropsMap.size() == 1, "should have one entry prop");
@@ -273,7 +273,7 @@ llvm::Function *DxilModule::GetPatchConstantFunction() {
   return props.ShaderProps.HS.patchConstantFunc;
 }
 
-const llvm::Function *DxilModule::GetPatchConstantFunction() const {
+const llvm37::Function *DxilModule::GetPatchConstantFunction() const {
   if (!m_pSM->IsHS())
     return nullptr;
   DXASSERT(m_DxilEntryPropsMap.size() == 1, "should have one entry prop");
@@ -282,7 +282,7 @@ const llvm::Function *DxilModule::GetPatchConstantFunction() const {
   return props.ShaderProps.HS.patchConstantFunc;
 }
 
-void DxilModule::SetPatchConstantFunction(llvm::Function *patchConstantFunc) {
+void DxilModule::SetPatchConstantFunction(llvm37::Function *patchConstantFunc) {
   if (!m_pSM->IsHS())
     return;
   DXASSERT(m_DxilEntryPropsMap.size() == 1, "should have one entry prop");
@@ -298,7 +298,7 @@ void DxilModule::SetPatchConstantFunction(llvm::Function *patchConstantFunc) {
   }
 }
 
-bool DxilModule::IsEntryOrPatchConstantFunction(const llvm::Function* pFunc) const {
+bool DxilModule::IsEntryOrPatchConstantFunction(const llvm37::Function* pFunc) const {
   return pFunc == GetEntryFunction() || pFunc == GetPatchConstantFunction();
 }
 
@@ -912,10 +912,10 @@ const vector<unique_ptr<DxilResource> > &DxilModule::GetUAVs() const {
 void DxilModule::LoadDxilResourceBaseFromMDNode(MDNode *MD, DxilResourceBase &R) {
   return m_pMDHelper->LoadDxilResourceBaseFromMDNode(MD, R);
 }
-void DxilModule::LoadDxilResourceFromMDNode(llvm::MDNode *MD, DxilResource &R) {
+void DxilModule::LoadDxilResourceFromMDNode(llvm37::MDNode *MD, DxilResource &R) {
   return m_pMDHelper->LoadDxilResourceFromMDNode(MD, R);
 }
-void DxilModule::LoadDxilSamplerFromMDNode(llvm::MDNode *MD, DxilSampler &S) {
+void DxilModule::LoadDxilSamplerFromMDNode(llvm37::MDNode *MD, DxilSampler &S) {
   return m_pMDHelper->LoadDxilSamplerFromMDNode(MD, S);
 }
 
@@ -966,7 +966,7 @@ static void ConvertUsedResource(std::unordered_set<unsigned> &immResID,
   }
 }
 
-void DxilModule::RemoveFunction(llvm::Function *F) {
+void DxilModule::RemoveFunction(llvm37::Function *F) {
   DXASSERT_NOMSG(F != nullptr);
   m_DxilEntryPropsMap.erase(F);
   if (m_pTypeSystem.get()->GetFunctionAnnotation(F))
@@ -1098,7 +1098,7 @@ bool DxilModule::RenameResourcesWithPrefix(const std::string &prefix) {
 
 namespace {
 template <typename TResource>
-static bool RenameGlobalsWithBinding(std::vector<std::unique_ptr<TResource>> &vec, llvm::StringRef prefix, bool bKeepName) {
+static bool RenameGlobalsWithBinding(std::vector<std::unique_ptr<TResource>> &vec, llvm37::StringRef prefix, bool bKeepName) {
   bool bChanged = false;
   for (auto &res : vec) {
     if (res->IsAllocated()) {
@@ -1173,54 +1173,54 @@ std::vector<uint8_t> &DxilModule::GetSerializedRootSignature() {
 }
 
 // Entry props.
-bool DxilModule::HasDxilEntrySignature(const llvm::Function *F) const {
+bool DxilModule::HasDxilEntrySignature(const llvm37::Function *F) const {
   return m_DxilEntryPropsMap.find(F) != m_DxilEntryPropsMap.end();
 }
-DxilEntrySignature &DxilModule::GetDxilEntrySignature(const llvm::Function *F) {
+DxilEntrySignature &DxilModule::GetDxilEntrySignature(const llvm37::Function *F) {
   DXASSERT(m_DxilEntryPropsMap.count(F) != 0, "cannot find F in map");
   return m_DxilEntryPropsMap[F].get()->sig;
 }
-void DxilModule::ReplaceDxilEntryProps(llvm::Function *F,
-                                       llvm::Function *NewF) {
+void DxilModule::ReplaceDxilEntryProps(llvm37::Function *F,
+                                       llvm37::Function *NewF) {
   DXASSERT(m_DxilEntryPropsMap.count(F) != 0, "cannot find F in map");
   std::unique_ptr<DxilEntryProps> Props = std::move(m_DxilEntryPropsMap[F]);
   m_DxilEntryPropsMap.erase(F);
   m_DxilEntryPropsMap[NewF] = std::move(Props);
 }
-void DxilModule::CloneDxilEntryProps(llvm::Function *F, llvm::Function *NewF) {
+void DxilModule::CloneDxilEntryProps(llvm37::Function *F, llvm37::Function *NewF) {
   DXASSERT(m_DxilEntryPropsMap.count(F) != 0, "cannot find F in map");
   std::unique_ptr<DxilEntryProps> Props =
-      llvm::make_unique<DxilEntryProps>(*m_DxilEntryPropsMap[F]);
+      llvm37::make_unique<DxilEntryProps>(*m_DxilEntryPropsMap[F]);
   m_DxilEntryPropsMap[NewF] = std::move(Props);
 }
 
-bool DxilModule::HasDxilEntryProps(const llvm::Function *F) const {
+bool DxilModule::HasDxilEntryProps(const llvm37::Function *F) const {
   return m_DxilEntryPropsMap.find(F) != m_DxilEntryPropsMap.end();
 }
-DxilEntryProps &DxilModule::GetDxilEntryProps(const llvm::Function *F) {
+DxilEntryProps &DxilModule::GetDxilEntryProps(const llvm37::Function *F) {
   DXASSERT(m_DxilEntryPropsMap.count(F) != 0, "cannot find F in map");
   return *m_DxilEntryPropsMap.find(F)->second.get();
 }
-const DxilEntryProps &DxilModule::GetDxilEntryProps(const llvm::Function *F) const {
+const DxilEntryProps &DxilModule::GetDxilEntryProps(const llvm37::Function *F) const {
   DXASSERT(m_DxilEntryPropsMap.count(F) != 0, "cannot find F in map");
   return *m_DxilEntryPropsMap.find(F)->second.get();
 }
 
-bool DxilModule::HasDxilFunctionProps(const llvm::Function *F) const {
+bool DxilModule::HasDxilFunctionProps(const llvm37::Function *F) const {
   return m_DxilEntryPropsMap.find(F) != m_DxilEntryPropsMap.end();
 }
-DxilFunctionProps &DxilModule::GetDxilFunctionProps(const llvm::Function *F) {
+DxilFunctionProps &DxilModule::GetDxilFunctionProps(const llvm37::Function *F) {
   return const_cast<DxilFunctionProps &>(
       static_cast<const DxilModule *>(this)->GetDxilFunctionProps(F));
 }
 
 const DxilFunctionProps &
-DxilModule::GetDxilFunctionProps(const llvm::Function *F) const {
+DxilModule::GetDxilFunctionProps(const llvm37::Function *F) const {
   DXASSERT(m_DxilEntryPropsMap.count(F) != 0, "cannot find F in map");
   return m_DxilEntryPropsMap.find(F)->second.get()->props;
 }
 
-void DxilModule::SetPatchConstantFunctionForHS(llvm::Function *hullShaderFunc, llvm::Function *patchConstantFunc) {
+void DxilModule::SetPatchConstantFunctionForHS(llvm37::Function *hullShaderFunc, llvm37::Function *patchConstantFunc) {
   auto propIter = m_DxilEntryPropsMap.find(hullShaderFunc);
   DXASSERT(propIter != m_DxilEntryPropsMap.end(),
            "Hull shader must already have function props!");
@@ -1235,16 +1235,16 @@ void DxilModule::SetPatchConstantFunctionForHS(llvm::Function *hullShaderFunc, l
       m_PatchConstantFunctions.insert(patchConstantFunc);
   }
 }
-bool DxilModule::IsGraphicsShader(const llvm::Function *F) const {
+bool DxilModule::IsGraphicsShader(const llvm37::Function *F) const {
   return HasDxilFunctionProps(F) && GetDxilFunctionProps(F).IsGraphics();
 }
-bool DxilModule::IsPatchConstantShader(const llvm::Function *F) const {
+bool DxilModule::IsPatchConstantShader(const llvm37::Function *F) const {
   return m_PatchConstantFunctions.count(F) != 0;
 }
-bool DxilModule::IsComputeShader(const llvm::Function *F) const {
+bool DxilModule::IsComputeShader(const llvm37::Function *F) const {
   return HasDxilFunctionProps(F) && GetDxilFunctionProps(F).IsCS();
 }
-bool DxilModule::IsEntryThatUsesSignatures(const llvm::Function *F) const {
+bool DxilModule::IsEntryThatUsesSignatures(const llvm37::Function *F) const {
   auto propIter = m_DxilEntryPropsMap.find(F);
   if (propIter != m_DxilEntryPropsMap.end()) {
     DxilFunctionProps &props = propIter->second->props;
@@ -1253,7 +1253,7 @@ bool DxilModule::IsEntryThatUsesSignatures(const llvm::Function *F) const {
   // Otherwise, return true if patch constant function
   return IsPatchConstantShader(F);
 }
-bool DxilModule::IsEntry(const llvm::Function *F) const {
+bool DxilModule::IsEntry(const llvm37::Function *F) const {
   auto propIter = m_DxilEntryPropsMap.find(F);
   if (propIter != m_DxilEntryPropsMap.end()) {
     DXASSERT(propIter->second->props.shaderKind != DXIL::ShaderKind::Invalid,
@@ -1328,24 +1328,24 @@ void DxilModule::ResetEntryPropsMap(DxilEntryPropsMap &&PropMap) {
             inserter(m_DxilEntryPropsMap, m_DxilEntryPropsMap.begin()));
 }
 
-static const StringRef llvmUsedName = "llvm.used";
+static const StringRef llvm37UsedName = "llvm.used";
 
-void DxilModule::EmitLLVMUsed() {
-  if (GlobalVariable *oldGV = m_pModule->getGlobalVariable(llvmUsedName)) {
+void DxilModule::EmitLLVM37Used() {
+  if (GlobalVariable *oldGV = m_pModule->getGlobalVariable(llvm37UsedName)) {
     oldGV->eraseFromParent();
   }
-  if (m_LLVMUsed.empty())
+  if (m_LLVM37Used.empty())
     return;
 
-  vector<llvm::Constant *> GVs;
+  vector<llvm37::Constant *> GVs;
   Type *pI8PtrType = Type::getInt8PtrTy(m_Ctx, DXIL::kDefaultAddrSpace);
 
-  GVs.resize(m_LLVMUsed.size());
-  for (size_t i = 0, e = m_LLVMUsed.size(); i != e; i++) {
-    Constant *pConst = cast<Constant>(&*m_LLVMUsed[i]);
+  GVs.resize(m_LLVM37Used.size());
+  for (size_t i = 0, e = m_LLVM37Used.size(); i != e; i++) {
+    Constant *pConst = cast<Constant>(&*m_LLVM37Used[i]);
     PointerType *pPtrType = dyn_cast<PointerType>(pConst->getType());
     if (pPtrType->getPointerAddressSpace() != DXIL::kDefaultAddrSpace) {
-      // Cast pointer to addrspace 0, as LLVMUsed elements must have the same
+      // Cast pointer to addrspace 0, as LLVM37Used elements must have the same
       // type.
       GVs[i] = ConstantExpr::getAddrSpaceCast(pConst, pI8PtrType);
     } else {
@@ -1357,37 +1357,37 @@ void DxilModule::EmitLLVMUsed() {
 
   GlobalVariable *pGV =
       new GlobalVariable(*m_pModule, pATy, false, GlobalValue::AppendingLinkage,
-                         ConstantArray::get(pATy, GVs), llvmUsedName);
+                         ConstantArray::get(pATy, GVs), llvm37UsedName);
 
   pGV->setSection("llvm.metadata");
 }
 
-void DxilModule::ClearLLVMUsed() {
-  if (GlobalVariable *oldGV = m_pModule->getGlobalVariable(llvmUsedName)) {
+void DxilModule::ClearLLVM37Used() {
+  if (GlobalVariable *oldGV = m_pModule->getGlobalVariable(llvm37UsedName)) {
     oldGV->eraseFromParent();
   }
-  if (m_LLVMUsed.empty())
+  if (m_LLVM37Used.empty())
     return;
 
-  for (size_t i = 0, e = m_LLVMUsed.size(); i != e; i++) {
-    Constant *pConst = cast<Constant>(&*m_LLVMUsed[i]);
+  for (size_t i = 0, e = m_LLVM37Used.size(); i != e; i++) {
+    Constant *pConst = cast<Constant>(&*m_LLVM37Used[i]);
     pConst->removeDeadConstantUsers();
   }
-  m_LLVMUsed.clear();
+  m_LLVM37Used.clear();
 }
 
-vector<GlobalVariable* > &DxilModule::GetLLVMUsed() {
-  return m_LLVMUsed;
+vector<GlobalVariable* > &DxilModule::GetLLVM37Used() {
+  return m_LLVM37Used;
 }
 
 // DXIL metadata serialization/deserialization.
 void DxilModule::ClearDxilMetadata(Module &M) {
   // Delete: DXIL version, validator version, DXIL shader model,
   // entry point tuples (shader properties, signatures, resources)
-  // type system, view ID state, LLVM used, entry point tuples,
+  // type system, view ID state, LLVM37 used, entry point tuples,
   // root signature, function properties.
   // Other cases for libs pending.
-  // LLVM used is a global variable - handle separately.
+  // LLVM37 used is a global variable - handle separately.
   SmallVector<NamedMDNode*, 8> nodes;
   for (NamedMDNode &b : M.named_metadata()) {
     StringRef name = b.getName();
@@ -1438,13 +1438,13 @@ void DxilModule::EmitDxilMetadata() {
   MDTuple *pMDResources = EmitDxilResources();
   if (pMDResources)
     m_pMDHelper->EmitDxilResources(pMDResources);
-  m_pMDHelper->EmitDxilTypeSystem(GetTypeSystem(), m_LLVMUsed);
+  m_pMDHelper->EmitDxilTypeSystem(GetTypeSystem(), m_LLVM37Used);
   if (!m_pSM->IsLib() && !m_pSM->IsCS() &&
       ((m_ValMajor == 0 &&  m_ValMinor == 0) ||
        (m_ValMajor > 1 || (m_ValMajor == 1 && m_ValMinor >= 1)))) {
     m_pMDHelper->EmitDxilViewIdState(m_SerializedState);
   }
-  EmitLLVMUsed();
+  EmitLLVM37Used();
   MDTuple *pEntry = m_pMDHelper->EmitDxilEntryPointTuple(GetEntryFunction(), m_EntryName, pMDSignatures, pMDResources, pMDProperties);
   vector<MDNode *> Entries;
   Entries.emplace_back(pEntry);
@@ -1457,7 +1457,7 @@ void DxilModule::EmitDxilMetadata() {
     std::transform( m_DxilEntryPropsMap.begin(),
                     m_DxilEntryPropsMap.end(),
                     std::back_inserter(funcOrder),
-                    [](const std::pair<const llvm::Function * const, std::unique_ptr<DxilEntryProps>> &p) -> const Function* { return p.first; } );
+                    [](const std::pair<const llvm37::Function * const, std::unique_ptr<DxilEntryProps>> &p) -> const Function* { return p.first; } );
     std::sort(funcOrder.begin(), funcOrder.end(), [](const Function *F1, const Function *F2) {
       return F1->getName() < F2->getName();
     });
@@ -1486,7 +1486,7 @@ void DxilModule::EmitDxilMetadata() {
   }
 }
 
-bool DxilModule::IsKnownNamedMetaData(llvm::NamedMDNode &Node) {
+bool DxilModule::IsKnownNamedMetaData(llvm37::NamedMDNode &Node) {
   return DxilMDHelper::IsKnownNamedMetaData(Node);
 }
 
@@ -1510,13 +1510,13 @@ void DxilModule::LoadDxilMetadata() {
   // which requires global entry properties,
   // so load entry properties first, then set the shader model
 
-  const llvm::NamedMDNode *pEntries = m_pMDHelper->GetDxilEntryPoints();
+  const llvm37::NamedMDNode *pEntries = m_pMDHelper->GetDxilEntryPoints();
   if (!loadedSM->IsLib()) {
     IFTBOOL(pEntries->getNumOperands() == 1, DXC_E_INCORRECT_DXIL_METADATA);
   }
   Function *pEntryFunc;
   string EntryName;
-  const llvm::MDOperand *pEntrySignatures, *pEntryResources, *pEntryProperties;
+  const llvm37::MDOperand *pEntrySignatures, *pEntryResources, *pEntryProperties;
   m_pMDHelper->GetDxilEntryPoint(pEntries->getOperand(0),
                                  pEntryFunc, EntryName,
                                  pEntrySignatures, pEntryResources,
@@ -1543,7 +1543,7 @@ void DxilModule::LoadDxilMetadata() {
     for (unsigned i = 1; i < pEntries->getNumOperands(); i++) {
       Function *pFunc;
       string Name;
-      const llvm::MDOperand *pSignatures, *pResources, *pProperties;
+      const llvm37::MDOperand *pSignatures, *pResources, *pProperties;
       m_pMDHelper->GetDxilEntryPoint(pEntries->getOperand(i), pFunc, Name,
                                      pSignatures, pResources, pProperties);
       DxilFunctionProps props;
@@ -1558,7 +1558,7 @@ void DxilModule::LoadDxilMetadata() {
       }
 
       std::unique_ptr<DxilEntryProps> pEntryProps =
-          llvm::make_unique<DxilEntryProps>(props, m_bUseMinPrecision);
+          llvm37::make_unique<DxilEntryProps>(props, m_bUseMinPrecision);
       m_pMDHelper->LoadDxilSignatures(*pSignatures, pEntryProps->sig);
 
       m_DxilEntryPropsMap[pFunc] = std::move(pEntryProps);
@@ -1572,7 +1572,7 @@ void DxilModule::LoadDxilMetadata() {
     }
   } else {
     std::unique_ptr<DxilEntryProps> pEntryProps =
-        llvm::make_unique<DxilEntryProps>(entryFuncProps, m_bUseMinPrecision);
+        llvm37::make_unique<DxilEntryProps>(entryFuncProps, m_bUseMinPrecision);
     DxilFunctionProps *pFuncProps = &pEntryProps->props;
     m_pMDHelper->LoadDxilSignatures(*pEntrySignatures, pEntryProps->sig);
 
@@ -1682,7 +1682,7 @@ StripResourcesReflection(std::vector<std::unique_ptr<TResource>> &vec) {
 
 // Return true if any members or components of struct <Ty> contain
 // scalars of less than 32 bits or are matrices, in which case translation is required
-typedef llvm::SmallSetVector<const StructType*, 4> SmallStructSetVector;
+typedef llvm37::SmallSetVector<const StructType*, 4> SmallStructSetVector;
 static bool ResourceTypeRequiresTranslation(const StructType * Ty, SmallStructSetVector & containedStructs) {
   if (Ty->getName().startswith("class.matrix."))
     return true;
@@ -1791,11 +1791,11 @@ bool DxilModule::StripReflection() {
   return bChanged;
 }
 
-void DxilModule::LoadDxilResources(const llvm::MDOperand &MDO) {
+void DxilModule::LoadDxilResources(const llvm37::MDOperand &MDO) {
   if (MDO.get() == nullptr)
     return;
 
-  const llvm::MDTuple *pSRVs, *pUAVs, *pCBuffers, *pSamplers;
+  const llvm37::MDTuple *pSRVs, *pUAVs, *pCBuffers, *pSamplers;
   m_pMDHelper->GetDxilResources(MDO, pSRVs, pUAVs, pCBuffers, pSamplers);
 
   // Load SRV records.
@@ -1842,19 +1842,19 @@ void DxilModule::StripShaderSourcesAndCompileOptions(bool bReplaceWithDummyData)
     contents->eraseFromParent();
     if (bReplaceWithDummyData) {
       // Insert an empty source and content
-      llvm::LLVMContext &context = m_pModule->getContext();
-      llvm::NamedMDNode *newNamedMD = m_pModule->getOrInsertNamedMetadata(DxilMDHelper::kDxilSourceContentsMDName);
-      llvm::Metadata *operands[2] = { llvm::MDString::get(context, ""), llvm::MDString::get(context, "") };
-      newNamedMD->addOperand(llvm::MDTuple::get(context, operands));
+      llvm37::LLVM37Context &context = m_pModule->getContext();
+      llvm37::NamedMDNode *newNamedMD = m_pModule->getOrInsertNamedMetadata(DxilMDHelper::kDxilSourceContentsMDName);
+      llvm37::Metadata *operands[2] = { llvm37::MDString::get(context, ""), llvm37::MDString::get(context, "") };
+      newNamedMD->addOperand(llvm37::MDTuple::get(context, operands));
     }
   }
   if (NamedMDNode *defines =
           m_pModule->getNamedMetadata(DxilMDHelper::kDxilSourceDefinesMDName)) {
     defines->eraseFromParent();
     if (bReplaceWithDummyData) {
-      llvm::LLVMContext &context = m_pModule->getContext();
-      llvm::NamedMDNode *newNamedMD = m_pModule->getOrInsertNamedMetadata(DxilMDHelper::kDxilSourceDefinesMDName);
-      newNamedMD->addOperand(llvm::MDTuple::get(context, llvm::ArrayRef<llvm::Metadata *>()));
+      llvm37::LLVM37Context &context = m_pModule->getContext();
+      llvm37::NamedMDNode *newNamedMD = m_pModule->getOrInsertNamedMetadata(DxilMDHelper::kDxilSourceDefinesMDName);
+      newNamedMD->addOperand(llvm37::MDTuple::get(context, llvm37::ArrayRef<llvm37::Metadata *>()));
     }
   }
   if (NamedMDNode *mainFileName = m_pModule->getNamedMetadata(
@@ -1862,19 +1862,19 @@ void DxilModule::StripShaderSourcesAndCompileOptions(bool bReplaceWithDummyData)
     mainFileName->eraseFromParent();
     if (bReplaceWithDummyData) {
       // Insert an empty file name
-      llvm::LLVMContext &context = m_pModule->getContext();
-      llvm::NamedMDNode *newNamedMD = m_pModule->getOrInsertNamedMetadata(DxilMDHelper::kDxilSourceMainFileNameMDName);
-      llvm::Metadata *operands[1] = { llvm::MDString::get(context, "") };
-      newNamedMD->addOperand(llvm::MDTuple::get(context, operands));
+      llvm37::LLVM37Context &context = m_pModule->getContext();
+      llvm37::NamedMDNode *newNamedMD = m_pModule->getOrInsertNamedMetadata(DxilMDHelper::kDxilSourceMainFileNameMDName);
+      llvm37::Metadata *operands[1] = { llvm37::MDString::get(context, "") };
+      newNamedMD->addOperand(llvm37::MDTuple::get(context, operands));
     }
   }
   if (NamedMDNode *arguments =
           m_pModule->getNamedMetadata(DxilMDHelper::kDxilSourceArgsMDName)) {
     arguments->eraseFromParent();
     if (bReplaceWithDummyData) {
-      llvm::LLVMContext &context = m_pModule->getContext();
-      llvm::NamedMDNode *newNamedMD = m_pModule->getOrInsertNamedMetadata(DxilMDHelper::kDxilSourceArgsMDName);
-      newNamedMD->addOperand(llvm::MDTuple::get(context, llvm::ArrayRef<llvm::Metadata *>()));
+      llvm37::LLVM37Context &context = m_pModule->getContext();
+      llvm37::NamedMDNode *newNamedMD = m_pModule->getOrInsertNamedMetadata(DxilMDHelper::kDxilSourceArgsMDName);
+      newNamedMD->addOperand(llvm37::MDTuple::get(context, llvm37::ArrayRef<llvm37::Metadata *>()));
     }
   }
 }
@@ -1882,12 +1882,12 @@ void DxilModule::StripShaderSourcesAndCompileOptions(bool bReplaceWithDummyData)
 void DxilModule::StripDebugRelatedCode() {
   StripShaderSourcesAndCompileOptions();
   if (NamedMDNode *flags = m_pModule->getModuleFlagsMetadata()) {
-    SmallVector<llvm::Module::ModuleFlagEntry, 4> flagEntries;
+    SmallVector<llvm37::Module::ModuleFlagEntry, 4> flagEntries;
     m_pModule->getModuleFlagsMetadata(flagEntries);
     flags->eraseFromParent();
 
     for (unsigned i = 0; i < flagEntries.size(); i++) {
-      llvm::Module::ModuleFlagEntry &entry = flagEntries[i];
+      llvm37::Module::ModuleFlagEntry &entry = flagEntries[i];
       if (entry.Key->getString() == "Dwarf Version" || entry.Key->getString() == "Debug Info Version") {
         continue;
       }
@@ -1899,14 +1899,14 @@ void DxilModule::StripDebugRelatedCode() {
 }
 DebugInfoFinder &DxilModule::GetOrCreateDebugInfoFinder() {
   if (m_pDebugInfoFinder == nullptr) {
-    m_pDebugInfoFinder = llvm::make_unique<llvm::DebugInfoFinder>();
+    m_pDebugInfoFinder = llvm37::make_unique<llvm37::DebugInfoFinder>();
     m_pDebugInfoFinder->processModule(*m_pModule);
   }
   return *m_pDebugInfoFinder;
 }
 
-hlsl::DxilModule *hlsl::DxilModule::TryGetDxilModule(llvm::Module *pModule) {
-  LLVMContext &Ctx = pModule->getContext();
+hlsl::DxilModule *hlsl::DxilModule::TryGetDxilModule(llvm37::Module *pModule) {
+  LLVM37Context &Ctx = pModule->getContext();
   std::string diagStr;
   raw_string_ostream diagStream(diagStr);
 
@@ -1940,7 +1940,7 @@ bool DxilModule::HasPreciseFastMathFlags(const Instruction *inst) {
 }
 
 // Set fast math flags configured to indicate the instruction is precise.
-void DxilModule::SetPreciseFastMathFlags(llvm::Instruction *inst) {
+void DxilModule::SetPreciseFastMathFlags(llvm37::Instruction *inst) {
   assert(isa<FPMathOperator>(inst));
   inst->copyFastMathFlags(FastMathFlags());
 }
@@ -1956,7 +1956,7 @@ void DxilModule::SetPreciseFastMathFlags(llvm::Instruction *inst) {
 // preserved in the bitcode. We can expand this by converting fast math
 // flags to dx.precise metadata during serialization and back to fast
 // math flags during deserialization.
-bool DxilModule::PreservesFastMathFlags(const llvm::Instruction *inst) {
+bool DxilModule::PreservesFastMathFlags(const llvm37::Instruction *inst) {
   return
     isa<FPMathOperator>(inst) && (isa<BinaryOperator>(inst) || isa<FCmpInst>(inst));
 }
@@ -1974,11 +1974,11 @@ bool DxilModule::IsPrecise(const Instruction *inst) const {
 
 } // namespace hlsl
 
-namespace llvm {
+namespace llvm37 {
 hlsl::DxilModule &Module::GetOrCreateDxilModule(bool skipInit) {
   std::unique_ptr<hlsl::DxilModule> M;
   if (!HasDxilModule()) {
-    M = llvm::make_unique<hlsl::DxilModule>(this);
+    M = llvm37::make_unique<hlsl::DxilModule>(this);
     if (!skipInit) {
       M->LoadDxilMetadata();
     }

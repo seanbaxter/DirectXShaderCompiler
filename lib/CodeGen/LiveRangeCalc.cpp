@@ -1,6 +1,6 @@
 //===---- LiveRangeCalc.cpp - Calculate live ranges -----------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -12,10 +12,10 @@
 //===----------------------------------------------------------------------===//
 
 #include "LiveRangeCalc.h"
-#include "llvm/CodeGen/MachineDominators.h"
-#include "llvm/CodeGen/MachineRegisterInfo.h"
+#include "llvm37/CodeGen/MachineDominators.h"
+#include "llvm37/CodeGen/MachineRegisterInfo.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "regalloc"
 
@@ -277,7 +277,7 @@ bool LiveRangeCalc::findReachingDefs(LiveRange &LR, MachineBasicBlock &UseMBB,
       const MachineInstr *MI = Indexes->getInstructionFromIndex(Use);
       if (MI != nullptr)
         errs() << Use << " " << *MI;
-      llvm_unreachable("Use not jointly dominated by defs.");
+      llvm37_unreachable("Use not jointly dominated by defs.");
     }
 
     if (TargetRegisterInfo::isPhysicalRegister(PhysReg) &&
@@ -286,7 +286,7 @@ bool LiveRangeCalc::findReachingDefs(LiveRange &LR, MachineBasicBlock &UseMBB,
       errs() << "The register " << PrintReg(PhysReg)
              << " needs to be live in to BB#" << MBB->getNumber()
              << ", but is missing from the live-in list.\n";
-      llvm_unreachable("Invalid global physical register");
+      llvm37_unreachable("Invalid global physical register");
     }
 #endif
 

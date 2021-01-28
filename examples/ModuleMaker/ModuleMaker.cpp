@@ -1,29 +1,29 @@
 //===- examples/ModuleMaker/ModuleMaker.cpp - Example project ---*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 //
-// This programs is a simple example that creates an LLVM module "from scratch",
+// This programs is a simple example that creates an LLVM37 module "from scratch",
 // emitting it as a bitcode file to standard out.  This is just to show how
-// LLVM projects work and to demonstrate some of the LLVM APIs.
+// LLVM37 projects work and to demonstrate some of the LLVM37 APIs.
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Bitcode/ReaderWriter.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/DerivedTypes.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Module.h"
-#include "llvm/Support/raw_ostream.h"
-using namespace llvm;
+#include "llvm37/Bitcode/ReaderWriter.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/DerivedTypes.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/Support/raw_ostream.h"
+using namespace llvm37;
 
 int main() {
-  LLVMContext Context;
+  LLVM37Context Context;
 
   // Create the "module" or "program" or "translation unit" to hold the
   // function

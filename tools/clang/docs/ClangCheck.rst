@@ -16,8 +16,8 @@ do basic error checking and AST dumping.
   > }
   > EOF
   $ ~/clang/build/bin/clang-check snippet.cc -ast-dump --
-  Processing: /Users/danieljasper/clang/llvm/tools/clang/docs/snippet.cc.
-  /Users/danieljasper/clang/llvm/tools/clang/docs/snippet.cc:2:12: error: expected ';' at end of
+  Processing: /Users/danieljasper/clang/llvm37/tools/clang/docs/snippet.cc.
+  /Users/danieljasper/clang/llvm37/tools/clang/docs/snippet.cc:2:12: error: expected ';' at end of
         declaration
     int a = 0
              ^
@@ -26,7 +26,7 @@ do basic error checking and AST dumping.
     (TypedefDecl 0x7ff3a302a410 <<invalid sloc>> __int128_t '__int128')
     (TypedefDecl 0x7ff3a302a470 <<invalid sloc>> __uint128_t 'unsigned __int128')
     (TypedefDecl 0x7ff3a302a830 <<invalid sloc>> __builtin_va_list '__va_list_tag [1]')
-    (FunctionDecl 0x7ff3a302a8d0 </Users/danieljasper/clang/llvm/tools/clang/docs/snippet.cc:1:1, line:3:1> f 'void (void)'
+    (FunctionDecl 0x7ff3a302a8d0 </Users/danieljasper/clang/llvm37/tools/clang/docs/snippet.cc:1:1, line:3:1> f 'void (void)'
       (CompoundStmt 0x7ff3a302aa10 <line:1:10, line:3:1>
         (DeclStmt 0x7ff3a302a9f8 <line:2:3, line:3:1>
           (VarDecl 0x7ff3a302a980 <line:2:3, col:11> a 'int'
@@ -36,4 +36,4 @@ do basic error checking and AST dumping.
 
 The '--' at the end is important as it prevents `clang-check` from search for a
 compilation database. For more information on how to setup and use `clang-check`
-in a project, see :doc:`HowToSetupToolingForLLVM`.
+in a project, see :doc:`HowToSetupToolingForLLVM37`.

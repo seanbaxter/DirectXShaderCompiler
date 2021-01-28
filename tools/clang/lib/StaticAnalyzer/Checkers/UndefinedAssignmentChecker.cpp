@@ -1,6 +1,6 @@
 //===--- UndefinedAssignmentChecker.h ---------------------------*- C++ -*--==//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -83,7 +83,7 @@ void UndefinedAssignmentChecker::checkBind(SVal location, SVal val,
     break;
   }
 
-  auto R = llvm::make_unique<BugReport>(*BT, str, N);
+  auto R = llvm37::make_unique<BugReport>(*BT, str, N);
   if (ex) {
     R->addRange(ex->getSourceRange());
     bugreporter::trackNullOrUndefValue(N, ex, *R);

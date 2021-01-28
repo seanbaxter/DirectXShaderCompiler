@@ -1,5 +1,5 @@
-// RUN: llvm-objdump -p %p/Inputs/hello.obj.macho-arm | FileCheck %s
-// RUN: llvm-objdump -p %p/Inputs/hello.exe.macho-arm \
+// RUN: llvm37-objdump -p %p/Inputs/hello.obj.macho-arm | FileCheck %s
+// RUN: llvm37-objdump -p %p/Inputs/hello.exe.macho-arm \
 // RUN:     | FileCheck %s -check-prefix=EXE
 
 CHECK: Mach header

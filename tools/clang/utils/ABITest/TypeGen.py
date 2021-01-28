@@ -109,7 +109,7 @@ class RecordType(Type):
             else:
                 return '%s field%d;'%(printer.getTypeName(t),i)
         fields = map(getField, enumerate(self.fields))
-        # Name the struct for more readable LLVM IR.
+        # Name the struct for more readable LLVM37 IR.
         return 'typedef %s %s { %s } %s;'%(('struct','union')[self.isUnion],
                                            name, ' '.join(fields), name)
                                            

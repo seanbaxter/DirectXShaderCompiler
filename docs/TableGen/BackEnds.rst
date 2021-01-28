@@ -21,7 +21,7 @@ backend to print this out in a way that is meaningful to the user (normally a
 C program including a file or a textual list of warnings, options and error
 messages).
 
-TableGen is used by both LLVM and Clang with very different goals. LLVM uses it
+TableGen is used by both LLVM37 and Clang with very different goals. LLVM37 uses it
 as a way to automate the generation of massive amounts of information regarding
 instructions, schedules, cores and architecture features. Some backends generate
 output that is consumed by more than one source file, so they need to be created
@@ -31,7 +31,7 @@ C code structures, so that they can be directly included as-is.
 Clang, on the other hand, uses it mainly for diagnostic messages (errors,
 warnings, tips) and attributes, so more on the textual end of the scale.
 
-LLVM BackEnds
+LLVM37 BackEnds
 =============
 
 .. warning::
@@ -70,7 +70,7 @@ output multiple blocks:
 
 The macros will be undef'd automatically as they're used, in the include file.
 
-On all LLVM back-ends, the ``llvm-tblgen`` binary will be executed on the root
+On all LLVM37 back-ends, the ``llvm37-tblgen`` binary will be executed on the root
 TableGen file ``<Target>.td``, which should include all others. This guarantees
 that all information needed is accessible, and that no duplication is needed
 in the TbleGen files.

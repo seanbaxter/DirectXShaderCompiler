@@ -1,6 +1,6 @@
 //===- X86DisassemblerTables.h - Disassembler tables ------------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -14,16 +14,16 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_UTILS_TABLEGEN_X86DISASSEMBLERTABLES_H
-#define LLVM_UTILS_TABLEGEN_X86DISASSEMBLERTABLES_H
+#ifndef LLVM37_UTILS_TABLEGEN_X86DISASSEMBLERTABLES_H
+#define LLVM37_UTILS_TABLEGEN_X86DISASSEMBLERTABLES_H
 
 #include "X86DisassemblerShared.h"
 #include "X86ModRMFilters.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <map>
 #include <vector>
 
-namespace llvm {
+namespace llvm37 {
 
 namespace X86Disassembler {
 
@@ -278,6 +278,6 @@ public:
 
 } // namespace X86Disassembler
 
-} // namespace llvm
+} // namespace llvm37
 
 #endif

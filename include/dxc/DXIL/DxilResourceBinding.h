@@ -13,7 +13,7 @@
 
 #include "DxilConstants.h"
 
-namespace llvm {
+namespace llvm37 {
 class Constant;
 class Type;
 }
@@ -41,11 +41,11 @@ class DxilResourceBase;
 struct DxilInst_CreateHandleFromBinding;
 
 namespace resource_helper {
-llvm::Constant *getAsConstant(const DxilResourceBinding &, llvm::Type *Ty,
+llvm37::Constant *getAsConstant(const DxilResourceBinding &, llvm37::Type *Ty,
                               const ShaderModel &);
-DxilResourceBinding loadBindingFromConstant(const llvm::Constant &C);
+DxilResourceBinding loadBindingFromConstant(const llvm37::Constant &C);
 DxilResourceBinding
-loadBindingFromCreateHandleFromBinding(const DxilInst_CreateHandleFromBinding &createHandle, llvm::Type *Ty,
+loadBindingFromCreateHandleFromBinding(const DxilInst_CreateHandleFromBinding &createHandle, llvm37::Type *Ty,
                        const ShaderModel &);
 DxilResourceBinding loadBindingFromResourceBase(DxilResourceBase *);
 

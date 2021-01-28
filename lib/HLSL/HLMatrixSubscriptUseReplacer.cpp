@@ -10,13 +10,13 @@
 #include "HLMatrixSubscriptUseReplacer.h"
 #include "dxc/DXIL/DxilUtil.h"
 #include "dxc/Support/Global.h"
-#include "llvm/IR/Constant.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/IRBuilder.h"
-#include "llvm/IR/Type.h"
-#include "llvm/IR/Value.h"
+#include "llvm37/IR/Constant.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/IRBuilder.h"
+#include "llvm37/IR/Type.h"
+#include "llvm37/IR/Value.h"
 
-using namespace llvm;
+using namespace llvm37;
 using namespace hlsl;
 
 HLMatrixSubscriptUseReplacer::HLMatrixSubscriptUseReplacer(CallInst* Call, Value *LoweredPtr, Value *TempLoweredMatrix,
@@ -45,7 +45,7 @@ void HLMatrixSubscriptUseReplacer::replaceUses(Instruction* PtrInst, Value* SubI
   // We handle any number of load/stores of the subscript,
   // whether through a GEP or not, but there should really only be one.
   while (!PtrInst->use_empty()) {
-    llvm::Use &Use = *PtrInst->use_begin();
+    llvm37::Use &Use = *PtrInst->use_begin();
     Instruction *UserInst = cast<Instruction>(Use.getUser());
 
     bool DeleteUserInst = true;
@@ -88,7 +88,7 @@ void HLMatrixSubscriptUseReplacer::replaceUses(Instruction* PtrInst, Value* SubI
             flushLoweredMatrix(UserBuilder);
           }
           else {
-            llvm_unreachable("Unexpected matrix subscript use.");
+            llvm37_unreachable("Unexpected matrix subscript use.");
           }
         }
       }
@@ -104,7 +104,7 @@ void HLMatrixSubscriptUseReplacer::replaceUses(Instruction* PtrInst, Value* SubI
           flushLoweredMatrix(UserBuilder);
         }
         else {
-          llvm_unreachable("Unexpected matrix subscript use.");
+          llvm37_unreachable("Unexpected matrix subscript use.");
         }
       }
     }

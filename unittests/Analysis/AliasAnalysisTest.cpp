@@ -1,23 +1,23 @@
 //===--- AliasAnalysisTest.cpp - Mixed TBAA unit tests --------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Analysis/AliasAnalysis.h"
-#include "llvm/Analysis/Passes.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/LegacyPassManager.h"
-#include "llvm/Support/CommandLine.h"
+#include "llvm37/Analysis/AliasAnalysis.h"
+#include "llvm37/Analysis/Passes.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/LegacyPassManager.h"
+#include "llvm37/Support/CommandLine.h"
 #include "gtest/gtest.h"
 
-namespace llvm {
+namespace llvm37 {
 namespace {
 
 class AliasAnalysisTest : public testing::Test {
@@ -63,7 +63,7 @@ protected:
     PM.run(M);
   }
 
-  LLVMContext C;
+  LLVM37Context C;
   Module M;
 };
 
@@ -101,4 +101,4 @@ TEST_F(AliasAnalysisTest, getModRefInfo) {
 }
 
 } // end anonymous namspace
-} // end llvm namespace
+} // end llvm37 namespace

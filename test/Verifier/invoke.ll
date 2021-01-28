@@ -1,4 +1,4 @@
-; RUN: not llvm-as < %s -o /dev/null 2>&1 | FileCheck %s
+; RUN: not llvm37-as < %s -o /dev/null 2>&1 | FileCheck %s
 
 ; PR1042
 define i32 @foo() {
@@ -24,15 +24,15 @@ L:		; preds = %L2, %L1, %L1
 
 
 declare i32 @__gxx_personality_v0(...)
-declare void @llvm.donothing()
-declare void @llvm.trap()
-declare i8 @llvm.expect.i8(i8,i8)
+declare void @llvm37.donothing()
+declare void @llvm37.trap()
+declare i8 @llvm37.expect.i8(i8,i8)
 declare i32 @fn(i8 (i8, i8)*)
 
 define void @f1() personality i8* bitcast (i32 (...)* @__gxx_personality_v0 to i8*) {
 entry:
 ; OK
-  invoke void @llvm.donothing()
+  invoke void @llvm37.donothing()
   to label %conta unwind label %contb
 
 conta:
@@ -47,7 +47,7 @@ contb:
 define i8 @f2() personality i8* bitcast (i32 (...)* @__gxx_personality_v0 to i8*) {
 entry:
 ; CHECK: Cannot invoke an intrinsinc other than donothing or patchpoint
-  invoke void @llvm.trap()
+  invoke void @llvm37.trap()
   to label %cont unwind label %lpad
 
 cont:
@@ -62,13 +62,13 @@ lpad:
 define i32 @f3() {
 entry:
 ; CHECK: Cannot take the address of an intrinsic
-  %call = call i32 @fn(i8 (i8, i8)* @llvm.expect.i8)
+  %call = call i32 @fn(i8 (i8, i8)* @llvm37.expect.i8)
   ret i32 %call
 }
 
 define void @f4() personality i8* bitcast (i32 (...)* @__gxx_personality_v0 to i8*) {
 entry:
-  invoke void @llvm.donothing()
+  invoke void @llvm37.donothing()
   to label %cont unwind label %cont
 
 cont:

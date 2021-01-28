@@ -1,6 +1,6 @@
 //===-- EHScopeStack.h - Stack for cleanup IR generation --------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -13,15 +13,15 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_LIB_CODEGEN_EHSCOPESTACK_H
-#define LLVM_CLANG_LIB_CODEGEN_EHSCOPESTACK_H
+#ifndef LLVM37_CLANG_LIB_CODEGEN_EHSCOPESTACK_H
+#define LLVM37_CLANG_LIB_CODEGEN_EHSCOPESTACK_H
 
 #include "clang/Basic/LLVM.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/IR/BasicBlock.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/Value.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/IR/BasicBlock.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/Value.h"
 
 namespace clang {
 namespace CodeGen {
@@ -38,19 +38,19 @@ struct BranchFixup {
   /// The block containing the terminator which needs to be modified
   /// into a switch if this fixup is resolved into the current scope.
   /// If null, LatestBranch points directly to the destination.
-  llvm::BasicBlock *OptimisticBranchBlock;
+  llvm37::BasicBlock *OptimisticBranchBlock;
 
   /// The ultimate destination of the branch.
   ///
   /// This can be set to null to indicate that this fixup was
   /// successfully resolved.
-  llvm::BasicBlock *Destination;
+  llvm37::BasicBlock *Destination;
 
   /// The destination index value.
   unsigned DestinationIndex;
 
   /// The initial branch of the fixup.
-  llvm::BranchInst *InitialBranch;
+  llvm37::BranchInst *InitialBranch;
 };
 
 template <class T> struct InvariantValue {
@@ -66,9 +66,9 @@ template <class T> struct InvariantValue {
 template <class T> struct DominatingValue : InvariantValue<T> {};
 
 template <class T, bool mightBeInstruction =
-            std::is_base_of<llvm::Value, T>::value &&
-            !std::is_base_of<llvm::Constant, T>::value &&
-            !std::is_base_of<llvm::BasicBlock, T>::value>
+            std::is_base_of<llvm37::Value, T>::value &&
+            !std::is_base_of<llvm37::Constant, T>::value &&
+            !std::is_base_of<llvm37::BasicBlock, T>::value>
 struct DominatingPointer;
 template <class T> struct DominatingPointer<T,false> : InvariantValue<T*> {};
 // template <class T> struct DominatingPointer<T,true> at end of file
@@ -189,14 +189,14 @@ public:
     SavedTuple Saved;
 
     template <std::size_t... Is>
-    T restore(CodeGenFunction &CGF, llvm::index_sequence<Is...>) {
+    T restore(CodeGenFunction &CGF, llvm37::index_sequence<Is...>) {
       // It's important that the restores are emitted in order. The braced init
       // list guarentees that.
       return T{DominatingValue<As>::restore(CGF, std::get<Is>(Saved))...};
     }
 
     void Emit(CodeGenFunction &CGF, Flags flags) override {
-      restore(CGF, llvm::index_sequence_for<As...>()).Emit(CGF, flags);
+      restore(CGF, llvm37::index_sequence_for<As...>()).Emit(CGF, flags);
     }
 
   public:

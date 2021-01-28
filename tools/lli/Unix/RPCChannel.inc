@@ -1,6 +1,6 @@
-//=- RPCChannel.inc - LLVM out-of-process JIT execution for Unix --=//
+//=- RPCChannel.inc - LLVM37 out-of-process JIT execution for Unix --=//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -12,8 +12,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Support/Errno.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/Support/Errno.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/wait.h>
@@ -30,7 +30,7 @@ struct ConnectionData_t {
 
 } // namespace
 
-namespace llvm {
+namespace llvm37 {
 
 bool RPCChannel::createServer() {
   int PipeFD[2][2];
@@ -88,7 +88,7 @@ void RPCChannel::Wait() { wait(nullptr); }
 
 static bool CheckError(int rc, size_t Size, const char *Desc) {
   if (rc < 0) {
-    llvm::errs() << "IO Error: " << Desc << ": " << sys::StrError() << '\n';
+    llvm37::errs() << "IO Error: " << Desc << ": " << sys::StrError() << '\n';
     return false;
   } else if ((size_t)rc != Size) {
     std::string ErrorMsg;
@@ -99,7 +99,7 @@ static bool CheckError(int rc, size_t Size, const char *Desc) {
     ErrorMsg += " bytes, Got ";
     sprintf(Number, "%d", rc);
     ErrorMsg += Number;
-    llvm::errs() << "RPC Error: " << Desc << ": " << ErrorMsg << '\n';
+    llvm37::errs() << "RPC Error: " << Desc << ": " << ErrorMsg << '\n';
     return false;
   }
   return true;
@@ -119,4 +119,4 @@ RPCChannel::~RPCChannel() {
   delete static_cast<ConnectionData_t *>(ConnectionData);
 }
 
-} // namespace llvm
+} // namespace llvm37

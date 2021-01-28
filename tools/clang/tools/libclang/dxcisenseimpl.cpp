@@ -23,15 +23,15 @@
 #include "clang/Rewrite/Core/Rewriter.h"
 #include "clang/Sema/SemaConsumer.h"
 #include "clang/Frontend/ASTUnit.h"
-#include "llvm/Support/Host.h"
+#include "llvm37/Support/Host.h"
 #include "clang/Sema/SemaHLSL.h"
 
 #include "dxc/Support/WinFunctions.h"
 #include "dxc/Support/WinIncludes.h"
 #include "dxc/Support/Global.h"
 #include "dxcisenseimpl.h"
-#include "llvm/Support/FileSystem.h"
-#include "llvm/Support/MSFileSystem.h"
+#include "llvm37/Support/FileSystem.h"
+#include "llvm37/Support/MSFileSystem.h"
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -1160,12 +1160,12 @@ HRESULT DxcIndex::ParseTranslationUnit(
   try
   {
     // TODO: until an interface to file access is defined and implemented, simply fall back to pure Win32/CRT calls.
-    ::llvm::sys::fs::MSFileSystem* msfPtr;
+    ::llvm37::sys::fs::MSFileSystem* msfPtr;
     IFT(CreateMSFileSystemForDisk(&msfPtr));
-    std::unique_ptr<::llvm::sys::fs::MSFileSystem> msf(msfPtr);
+    std::unique_ptr<::llvm37::sys::fs::MSFileSystem> msf(msfPtr);
 
-    ::llvm::sys::fs::AutoPerThreadSystem pts(msf.get());
-    IFTLLVM(pts.error_code());
+    ::llvm37::sys::fs::AutoPerThreadSystem pts(msf.get());
+    IFTLLVM37(pts.error_code());
     CXTranslationUnit tu = clang_parseTranslationUnit(m_index, source_filename,
       command_line_args, num_command_line_args,
       files, num_unsaved_files, options);
@@ -1476,12 +1476,12 @@ DxcTranslationUnit::~DxcTranslationUnit() {
   if (m_tu != nullptr) {
     // TODO: until an interface to file access is defined and implemented, simply fall back to pure Win32/CRT calls.
     // Also, note that this can throw / fail in a destructor, which is a big no-no.
-    ::llvm::sys::fs::MSFileSystem* msfPtr;
+    ::llvm37::sys::fs::MSFileSystem* msfPtr;
     CreateMSFileSystemForDisk(&msfPtr);
     assert(msfPtr != nullptr);
-    std::unique_ptr<::llvm::sys::fs::MSFileSystem> msf(msfPtr);
+    std::unique_ptr<::llvm37::sys::fs::MSFileSystem> msf(msfPtr);
 
-    ::llvm::sys::fs::AutoPerThreadSystem pts(msf.get());
+    ::llvm37::sys::fs::AutoPerThreadSystem pts(msf.get());
     assert(!pts.error_code());
 
     clang_disposeTranslationUnit(m_tu);
@@ -1597,10 +1597,10 @@ HRESULT DxcTranslationUnit::GetFile(LPCSTR name, IDxcFile** pResult)
 
   // TODO: until an interface to file access is defined and implemented, simply fall back to pure Win32/CRT calls.
   DxcThreadMalloc TM(m_pMalloc);
-  ::llvm::sys::fs::MSFileSystem* msfPtr;
+  ::llvm37::sys::fs::MSFileSystem* msfPtr;
   IFR(CreateMSFileSystemForDisk(&msfPtr));
-  std::unique_ptr<::llvm::sys::fs::MSFileSystem> msf(msfPtr);
-  ::llvm::sys::fs::AutoPerThreadSystem pts(msf.get());
+  std::unique_ptr<::llvm37::sys::fs::MSFileSystem> msf(msfPtr);
+  ::llvm37::sys::fs::AutoPerThreadSystem pts(msf.get());
 
   CXFile localFile = clang_getFile(m_tu, name);
   return localFile == nullptr ? DISP_E_BADINDEX : DxcFile::Create(localFile, pResult);

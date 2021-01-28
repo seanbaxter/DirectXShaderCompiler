@@ -1,6 +1,6 @@
 //===- MachineDominators.cpp - Machine Dominator Calculation --------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -12,13 +12,13 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/CodeGen/MachineDominators.h"
-#include "llvm/CodeGen/Passes.h"
-#include "llvm/ADT/SmallBitVector.h"
+#include "llvm37/CodeGen/MachineDominators.h"
+#include "llvm37/CodeGen/Passes.h"
+#include "llvm37/ADT/SmallBitVector.h"
 
-using namespace llvm;
+using namespace llvm37;
 
-namespace llvm {
+namespace llvm37 {
 template class DomTreeNodeBase<MachineBasicBlock>;
 template class DominatorTreeBase<MachineBasicBlock>;
 }
@@ -28,7 +28,7 @@ char MachineDominatorTree::ID = 0;
 INITIALIZE_PASS(MachineDominatorTree, "machinedomtree",
                 "MachineDominator Tree Construction", true, true)
 
-char &llvm::MachineDominatorsID = MachineDominatorTree::ID;
+char &llvm37::MachineDominatorsID = MachineDominatorTree::ID;
 
 void MachineDominatorTree::getAnalysisUsage(AnalysisUsage &AU) const {
   AU.setPreservesAll();

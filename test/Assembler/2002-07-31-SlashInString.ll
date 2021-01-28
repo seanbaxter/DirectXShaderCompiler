@@ -1,4 +1,4 @@
-; RUN: llvm-as < %s | llvm-dis | llvm-as 
+; RUN: llvm37-as < %s | llvm37-dis | llvm37-as 
 ; RUN: verify-uselistorder %s
 
 ; Make sure that \\ works in a string initializer

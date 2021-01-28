@@ -12,7 +12,7 @@
 // Pass to read the scope nest annotations in a cfg and provide a high-level
 // view of the scope nesting structure.
 //
-// The pass follows the same usage patter as the LLVM LoopInfo pass. We have
+// The pass follows the same usage patter as the LLVM37 LoopInfo pass. We have
 // a ScopeNestInfo class that contains the results of the scope info
 // analysis. The ScopeNestInfoWrapperPass class is the pass implementation
 // that runs the analysis and saves the results so it can be queried by
@@ -25,23 +25,23 @@
 // This pass is itself a thin wrapper around the ScopeNestIterator pass. The
 // iterator does the heavy lifting and we just cache the results of the
 // iteration here. We keep the iterator separate so that it can be easily
-// run outside the llvm pass infrastructure.
+// run outside the llvm37 pass infrastructure.
 //
 ///////////////////////////////////////////////////////////////////////////////
 
 #pragma once
-#include "llvm/Pass.h"
+#include "llvm37/Pass.h"
 #include "DxilConvPasses/ScopeNest.h"
 
 
-namespace llvm {
+namespace llvm37 {
 class Function;
 class PassRegistry;
 class FunctionPass;
 
 
-llvm::FunctionPass *createScopeNestInfoWrapperPass();
-void initializeScopeNestInfoWrapperPassPass(llvm::PassRegistry&);
+llvm37::FunctionPass *createScopeNestInfoWrapperPass();
+void initializeScopeNestInfoWrapperPassPass(llvm37::PassRegistry&);
 
 // Class to hold the results of the scope nest analysis.
 //
@@ -49,7 +49,7 @@ void initializeScopeNestInfoWrapperPassPass(llvm::PassRegistry&);
 // We could provide a higher-level view of the scope nesting if needed,
 // but that would probably build on the stream of elements anyway.
 //
-// This class is modeled after llvm LoopInfo.
+// This class is modeled after llvm37 LoopInfo.
 class ScopeNestInfo {
 public:
     typedef std::vector<ScopeNestEvent>::const_iterator elements_iterator;
@@ -71,7 +71,7 @@ private:
 
 // The legacy pass manager's analysis pass to read scope nest annotation information.
 //
-// This class is modeled after the llvm LoopInfoWrapperPass.
+// This class is modeled after the llvm37 LoopInfoWrapperPass.
 class ScopeNestInfoWrapperPass : public FunctionPass {
     ScopeNestInfo SI;
 

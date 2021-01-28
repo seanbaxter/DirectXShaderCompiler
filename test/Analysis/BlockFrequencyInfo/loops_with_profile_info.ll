@@ -194,9 +194,9 @@ for.end31:                                        ; preds = %for.cond26
   ret i32 %15
 }
 
-!llvm.ident = !{!0}
+!llvm37.ident = !{!0}
 
-!0 = !{!"clang version 3.7.0 (trunk 232635) (llvm/trunk 232636)"}
+!0 = !{!"clang version 3.7.0 (trunk 232635) (llvm37/trunk 232636)"}
 !1 = !{!"branch_weights", i32 101, i32 2}
 !2 = !{!"branch_weights", i32 10001, i32 101}
 !3 = !{!"branch_weights", i32 1000001, i32 10001}

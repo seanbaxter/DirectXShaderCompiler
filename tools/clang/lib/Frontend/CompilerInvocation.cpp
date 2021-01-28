@@ -1,6 +1,6 @@
 //===--- CompilerInvocation.cpp -------------------------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -19,22 +19,22 @@
 #include "clang/Frontend/Utils.h"
 #include "clang/Lex/HeaderSearchOptions.h"
 #include "clang/Serialization/ASTReader.h"
-#include "llvm/ADT/Hashing.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/ADT/StringExtras.h"
-#include "llvm/ADT/StringSwitch.h"
-#include "llvm/ADT/Triple.h"
-#include "llvm/Option/Arg.h"
-#include "llvm/Option/ArgList.h"
-#include "llvm/Option/OptTable.h"
-#include "llvm/Option/Option.h"
-#include "llvm/Support/CodeGen.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/FileSystem.h"
-#include "llvm/Support/Host.h"
-#include "llvm/Support/Path.h"
-#include "llvm/Support/Process.h"
+#include "llvm37/ADT/Hashing.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/ADT/StringExtras.h"
+#include "llvm37/ADT/StringSwitch.h"
+#include "llvm37/ADT/Triple.h"
+#include "llvm37/Option/Arg.h"
+#include "llvm37/Option/ArgList.h"
+#include "llvm37/Option/OptTable.h"
+#include "llvm37/Option/Option.h"
+#include "llvm37/Support/CodeGen.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/FileSystem.h"
+#include "llvm37/Support/Host.h"
+#include "llvm37/Support/Path.h"
+#include "llvm37/Support/Process.h"
 #include <atomic>
 #include <memory>
 #include <sys/stat.h>
@@ -67,7 +67,7 @@ CompilerInvocationBase::~CompilerInvocationBase() {}
 
 using namespace clang::driver;
 using namespace clang::driver::options;
-using namespace llvm::opt;
+using namespace llvm37::opt;
 
 //
 
@@ -137,7 +137,7 @@ static bool ParseAnalyzerArgs(AnalyzerOptions &Opts, ArgList &Args,
   bool Success = true;
   if (Arg *A = Args.getLastArg(OPT_analyzer_store)) {
     StringRef Name = A->getValue();
-    AnalysisStores Value = llvm::StringSwitch<AnalysisStores>(Name)
+    AnalysisStores Value = llvm37::StringSwitch<AnalysisStores>(Name)
 #define ANALYSIS_STORE(NAME, CMDFLAG, DESC, CREATFN) \
       .Case(CMDFLAG, NAME##Model)
 #include "clang/StaticAnalyzer/Core/Analyses.def"
@@ -153,7 +153,7 @@ static bool ParseAnalyzerArgs(AnalyzerOptions &Opts, ArgList &Args,
 
   if (Arg *A = Args.getLastArg(OPT_analyzer_constraints)) {
     StringRef Name = A->getValue();
-    AnalysisConstraints Value = llvm::StringSwitch<AnalysisConstraints>(Name)
+    AnalysisConstraints Value = llvm37::StringSwitch<AnalysisConstraints>(Name)
 #define ANALYSIS_CONSTRAINTS(NAME, CMDFLAG, DESC, CREATFN) \
       .Case(CMDFLAG, NAME##Model)
 #include "clang/StaticAnalyzer/Core/Analyses.def"
@@ -169,7 +169,7 @@ static bool ParseAnalyzerArgs(AnalyzerOptions &Opts, ArgList &Args,
 
   if (Arg *A = Args.getLastArg(OPT_analyzer_output)) {
     StringRef Name = A->getValue();
-    AnalysisDiagClients Value = llvm::StringSwitch<AnalysisDiagClients>(Name)
+    AnalysisDiagClients Value = llvm37::StringSwitch<AnalysisDiagClients>(Name)
 #define ANALYSIS_DIAGNOSTICS(NAME, CMDFLAG, DESC, CREATFN) \
       .Case(CMDFLAG, PD_##NAME)
 #include "clang/StaticAnalyzer/Core/Analyses.def"
@@ -185,7 +185,7 @@ static bool ParseAnalyzerArgs(AnalyzerOptions &Opts, ArgList &Args,
 
   if (Arg *A = Args.getLastArg(OPT_analyzer_purge)) {
     StringRef Name = A->getValue();
-    AnalysisPurgeMode Value = llvm::StringSwitch<AnalysisPurgeMode>(Name)
+    AnalysisPurgeMode Value = llvm37::StringSwitch<AnalysisPurgeMode>(Name)
 #define ANALYSIS_PURGE(NAME, CMDFLAG, DESC) \
       .Case(CMDFLAG, NAME)
 #include "clang/StaticAnalyzer/Core/Analyses.def"
@@ -201,7 +201,7 @@ static bool ParseAnalyzerArgs(AnalyzerOptions &Opts, ArgList &Args,
 
   if (Arg *A = Args.getLastArg(OPT_analyzer_inlining_mode)) {
     StringRef Name = A->getValue();
-    AnalysisInliningMode Value = llvm::StringSwitch<AnalysisInliningMode>(Name)
+    AnalysisInliningMode Value = llvm37::StringSwitch<AnalysisInliningMode>(Name)
 #define ANALYSIS_INLINING_MODE(NAME, CMDFLAG, DESC) \
       .Case(CMDFLAG, NAME)
 #include "clang/StaticAnalyzer/Core/Analyses.def"
@@ -307,12 +307,12 @@ static StringRef getCodeModel(ArgList &Args, DiagnosticsEngine &Diags) {
 
 /// \brief Create a new Regex instance out of the string value in \p RpassArg.
 /// It returns a pointer to the newly generated Regex instance.
-static std::shared_ptr<llvm::Regex>
+static std::shared_ptr<llvm37::Regex>
 GenerateOptimizationRemarkRegex(DiagnosticsEngine &Diags, ArgList &Args,
                                 Arg *RpassArg) {
   StringRef Val = RpassArg->getValue();
   std::string RegexError;
-  std::shared_ptr<llvm::Regex> Pattern = std::make_shared<llvm::Regex>(Val);
+  std::shared_ptr<llvm37::Regex> Pattern = std::make_shared<llvm37::Regex>(Val);
   if (!Pattern->isValid(RegexError)) {
     Diags.Report(diag::err_drv_optimization_remark_pattern)
         << RegexError << RpassArg->getAsString(Args);
@@ -328,7 +328,7 @@ static bool parseDiagnosticLevelMask(StringRef FlagName,
   bool Success = true;
   for (const auto &Level : Levels) {
     DiagnosticLevelMask const PM =
-      llvm::StringSwitch<DiagnosticLevelMask>(Level)
+      llvm37::StringSwitch<DiagnosticLevelMask>(Level)
         .Case("note",    DiagnosticLevelMask::Note)
         .Case("remark",  DiagnosticLevelMask::Remark)
         .Case("warning", DiagnosticLevelMask::Warning)
@@ -400,8 +400,8 @@ static bool ParseCodeGenArgs(CodeGenOptions &Opts, ArgList &Args, InputKind IK,
     bool Default = false;
     // Until dtrace (via CTF) and LLDB can deal with distributed debug info,
     // Darwin and FreeBSD default to standalone/full debug info.
-    if (llvm::Triple(TargetOpts.Triple).isOSDarwin() ||
-        llvm::Triple(TargetOpts.Triple).isOSFreeBSD())
+    if (llvm37::Triple(TargetOpts.Triple).isOSDarwin() ||
+        llvm37::Triple(TargetOpts.Triple).isOSFreeBSD())
       Default = true;
 
     if (Args.hasFlag(OPT_fstandalone_debug, OPT_fno_standalone_debug, Default))
@@ -422,10 +422,10 @@ static bool ParseCodeGenArgs(CodeGenOptions &Opts, ArgList &Args, InputKind IK,
     Opts.DwarfVersion = 4;
 
   if (const Arg *A =
-          Args.getLastArg(OPT_emit_llvm_uselists, OPT_no_emit_llvm_uselists))
-    Opts.EmitLLVMUseLists = A->getOption().getID() == OPT_emit_llvm_uselists;
+          Args.getLastArg(OPT_emit_llvm37_uselists, OPT_no_emit_llvm37_uselists))
+    Opts.EmitLLVM37UseLists = A->getOption().getID() == OPT_emit_llvm37_uselists;
 
-  Opts.DisableLLVMOpts = Args.hasArg(OPT_disable_llvm_optzns);
+  Opts.DisableLLVM37Opts = Args.hasArg(OPT_disable_llvm37_optzns);
   Opts.DisableRedZone = Args.hasArg(OPT_disable_red_zone);
   Opts.ForbidGuardVariables = Args.hasArg(OPT_fforbid_guard_variables);
   Opts.UseRegisterSizedBitfieldAccess = Args.hasArg(
@@ -517,7 +517,7 @@ static bool ParseCodeGenArgs(CodeGenOptions &Opts, ArgList &Args, InputKind IK,
   Opts.VectorizeSLP = Args.hasArg(OPT_vectorize_slp);
 
   Opts.MainFileName = Args.getLastArgValue(OPT_main_file_name);
-  Opts.VerifyModule = !Args.hasArg(OPT_disable_llvm_verifier);
+  Opts.VerifyModule = !Args.hasArg(OPT_disable_llvm37_verifier);
 
   Opts.DisableGCov = Args.hasArg(OPT_test_coverage);
   Opts.EmitGcovArcs = Args.hasArg(OPT_femit_coverage_data);
@@ -578,7 +578,7 @@ static bool ParseCodeGenArgs(CodeGenOptions &Opts, ArgList &Args, InputKind IK,
 
   if (Arg *A = Args.getLastArg(OPT_fobjc_dispatch_method_EQ)) {
     StringRef Name = A->getValue();
-    unsigned Method = llvm::StringSwitch<unsigned>(Name)
+    unsigned Method = llvm37::StringSwitch<unsigned>(Name)
       .Case("legacy", CodeGenOptions::Legacy)
       .Case("non-legacy", CodeGenOptions::NonLegacy)
       .Case("mixed", CodeGenOptions::Mixed)
@@ -594,7 +594,7 @@ static bool ParseCodeGenArgs(CodeGenOptions &Opts, ArgList &Args, InputKind IK,
 
   if (Arg *A = Args.getLastArg(OPT_ftlsmodel_EQ)) {
     StringRef Name = A->getValue();
-    unsigned Model = llvm::StringSwitch<unsigned>(Name)
+    unsigned Model = llvm37::StringSwitch<unsigned>(Name)
         .Case("global-dynamic", CodeGenOptions::GeneralDynamicTLSModel)
         .Case("local-dynamic", CodeGenOptions::LocalDynamicTLSModel)
         .Case("initial-exec", CodeGenOptions::InitialExecTLSModel)
@@ -722,7 +722,7 @@ bool clang::ParseDiagnosticArgs(DiagnosticOptions &Opts, ArgList &Args,
   Opts.ShowOptionNames = Args.hasArg(OPT_fdiagnostics_show_option);
 
 #ifdef MSFT_SUPPORTS_ANSI_ESCAPE_CODES
-  llvm::sys::Process::UseANSIEscapeCodes(Args.hasArg(OPT_fansi_escape_codes));
+  llvm37::sys::Process::UseANSIEscapeCodes(Args.hasArg(OPT_fansi_escape_codes));
 #endif
 
   // Default behavior is to not to show note include stacks.
@@ -833,7 +833,7 @@ static InputKind ParseFrontendArgs(FrontendOptions &Opts, ArgList &Args,
   if (const Arg *A = Args.getLastArg(OPT_Action_Group)) {
     switch (A->getOption().getID()) {
     default:
-      llvm_unreachable("Invalid option in group!");
+      llvm37_unreachable("Invalid option in group!");
     case OPT_ast_list:
       Opts.ProgramAction = frontend::ASTDeclList; break;
     case OPT_ast_dump:
@@ -849,14 +849,14 @@ static InputKind ParseFrontendArgs(FrontendOptions &Opts, ArgList &Args,
       Opts.ProgramAction = frontend::DumpTokens; break;
     case OPT_S:
       Opts.ProgramAction = frontend::EmitAssembly; break;
-    case OPT_emit_llvm_bc:
+    case OPT_emit_llvm37_bc:
       Opts.ProgramAction = frontend::EmitBC; break;
     case OPT_emit_html:
       Opts.ProgramAction = frontend::EmitHTML; break;
-    case OPT_emit_llvm:
-      Opts.ProgramAction = frontend::EmitLLVM; break;
-    case OPT_emit_llvm_only:
-      Opts.ProgramAction = frontend::EmitLLVMOnly; break;
+    case OPT_emit_llvm37:
+      Opts.ProgramAction = frontend::EmitLLVM37; break;
+    case OPT_emit_llvm37_only:
+      Opts.ProgramAction = frontend::EmitLLVM37Only; break;
     case OPT_emit_codegen_only:
       Opts.ProgramAction = frontend::EmitCodeGenOnly; break;
     case OPT_emit_obj:
@@ -935,7 +935,7 @@ static InputKind ParseFrontendArgs(FrontendOptions &Opts, ArgList &Args,
   Opts.ShowTimers = Args.hasArg(OPT_ftime_report);
   Opts.ShowVersion = Args.hasArg(OPT_version);
   Opts.ASTMergeFiles = Args.getAllArgValues(OPT_ast_merge);
-  Opts.LLVMArgs = Args.getAllArgValues(OPT_mllvm);
+  Opts.LLVM37Args = Args.getAllArgValues(OPT_mllvm37);
   Opts.FixWhatYouCan = Args.hasArg(OPT_fix_what_you_can);
   Opts.FixOnlyWarnings = Args.hasArg(OPT_fix_only_warnings);
   Opts.FixAndRecompile = Args.hasArg(OPT_fixit_recompile);
@@ -964,7 +964,7 @@ static InputKind ParseFrontendArgs(FrontendOptions &Opts, ArgList &Args,
                                      OPT_arcmt_migrate)) {
     switch (A->getOption().getID()) {
     default:
-      llvm_unreachable("missed a case");
+      llvm37_unreachable("missed a case");
     case OPT_arcmt_check:
       Opts.ARCMTAction = FrontendOptions::ARCMT_Check;
       break;
@@ -1023,7 +1023,7 @@ static InputKind ParseFrontendArgs(FrontendOptions &Opts, ArgList &Args,
 
   InputKind DashX = IK_None;
   if (const Arg *A = Args.getLastArg(OPT_x)) {
-    DashX = llvm::StringSwitch<InputKind>(A->getValue())
+    DashX = llvm37::StringSwitch<InputKind>(A->getValue())
       .Case("c", IK_C)
       .Case("cl", IK_OpenCL)
       .Case("cuda", IK_CUDA)
@@ -1044,7 +1044,7 @@ static InputKind ParseFrontendArgs(FrontendOptions &Opts, ArgList &Args,
       .Case("c++-header", IK_CXX)
       .Case("objective-c++-header", IK_ObjCXX)
       .Cases("ast", "pcm", IK_AST)
-      .Case("ir", IK_LLVM_IR)
+      .Case("ir", IK_LLVM37_IR)
       .Case("hlsl", IK_HLSL) // HLSL Change: Default File extension for hlsl files
       .Default(IK_None);
     if (DashX == IK_None)
@@ -1075,17 +1075,17 @@ static InputKind ParseFrontendArgs(FrontendOptions &Opts, ArgList &Args,
 std::string CompilerInvocation::GetResourcesPath(const char *Argv0,
                                                  void *MainAddr) {
   std::string ClangExecutable =
-      llvm::sys::fs::getMainExecutable(Argv0, MainAddr);
-  StringRef Dir = llvm::sys::path::parent_path(ClangExecutable);
+      llvm37::sys::fs::getMainExecutable(Argv0, MainAddr);
+  StringRef Dir = llvm37::sys::path::parent_path(ClangExecutable);
 
   // Compute the path to the resource directory.
   StringRef ClangResourceDir(CLANG_RESOURCE_DIR);
   SmallString<128> P(Dir);
   if (ClangResourceDir != "") {
-    llvm::sys::path::append(P, ClangResourceDir);
+    llvm37::sys::path::append(P, ClangResourceDir);
   } else {
     StringRef ClangLibdirSuffix(CLANG_LIBDIR_SUFFIX);
-    llvm::sys::path::append(P, "..", Twine("lib") + ClangLibdirSuffix, "clang",
+    llvm37::sys::path::append(P, "..", Twine("lib") + ClangLibdirSuffix, "clang",
                             CLANG_VERSION_STRING);
   }
 
@@ -1214,8 +1214,8 @@ void CompilerInvocation::setLangDefaults(LangOptions &Opts, InputKind IK,
     switch (IK) {
     case IK_None:
     case IK_AST:
-    case IK_LLVM_IR:
-      llvm_unreachable("Invalid input kind!");
+    case IK_LLVM37_IR:
+      llvm37_unreachable("Invalid input kind!");
     case IK_OpenCL:
       LangStd = LangStandard::lang_opencl;
       break;
@@ -1325,7 +1325,7 @@ static void ParseLangArgs(LangOptions &Opts, ArgList &Args, InputKind IK,
   // FIXME: Cleanup per-file based stuff.
   LangStandard::Kind LangStd = LangStandard::lang_unspecified;
   if (const Arg *A = Args.getLastArg(OPT_std_EQ)) {
-    LangStd = llvm::StringSwitch<LangStandard::Kind>(A->getValue())
+    LangStd = llvm37::StringSwitch<LangStandard::Kind>(A->getValue())
 #define LANGSTANDARD(id, name, desc, features) \
       .Case(name, LangStandard::lang_##id)
 #include "clang/Frontend/LangStandards.def"
@@ -1375,7 +1375,7 @@ static void ParseLangArgs(LangOptions &Opts, ArgList &Args, InputKind IK,
   // Override the -std option in this case.
   if (const Arg *A = Args.getLastArg(OPT_cl_std_EQ)) {
     LangStandard::Kind OpenCLLangStd
-    = llvm::StringSwitch<LangStandard::Kind>(A->getValue())
+    = llvm37::StringSwitch<LangStandard::Kind>(A->getValue())
     .Case("CL", LangStandard::lang_opencl)
     .Case("CL1.1", LangStandard::lang_opencl11)
     .Case("CL1.2", LangStandard::lang_opencl12)
@@ -1633,7 +1633,7 @@ static void ParseLangArgs(LangOptions &Opts, ArgList &Args, InputKind IK,
         << "-fmodules-local-submodule-visibility" << "C";
 
   if (Arg *A = Args.getLastArg(OPT_faddress_space_map_mangling_EQ)) {
-    switch (llvm::StringSwitch<unsigned>(A->getValue())
+    switch (llvm37::StringSwitch<unsigned>(A->getValue())
       .Case("target", LangOptions::ASMM_Target)
       .Case("no", LangOptions::ASMM_Off)
       .Case("yes", LangOptions::ASMM_On)
@@ -1656,7 +1656,7 @@ static void ParseLangArgs(LangOptions &Opts, ArgList &Args, InputKind IK,
 
   if (Arg *A = Args.getLastArg(OPT_fms_memptr_rep_EQ)) {
     LangOptions::PragmaMSPointersToMembersKind InheritanceModel =
-        llvm::StringSwitch<LangOptions::PragmaMSPointersToMembersKind>(
+        llvm37::StringSwitch<LangOptions::PragmaMSPointersToMembersKind>(
             A->getValue())
             .Case("single",
                   LangOptions::PPTMK_FullGeneralitySingleInheritance)
@@ -1722,7 +1722,7 @@ static void ParseLangArgs(LangOptions &Opts, ArgList &Args, InputKind IK,
       getLastArgIntValue(Args, OPT_fsanitize_address_field_padding, 0, Diags);
   Opts.SanitizerBlacklistFiles = Args.getAllArgValues(OPT_fsanitize_blacklist);
 #else
-  llvm::StringRef ver = Args.getLastArgValue(OPT_hlsl_version);
+  llvm37::StringRef ver = Args.getLastArgValue(OPT_hlsl_version);
   if (ver.empty()) { Opts.HLSLVersion = 2018; }   // Default to latest
   else {
     try {
@@ -1818,7 +1818,7 @@ static void ParsePreprocessorArgs(PreprocessorOptions &Opts, ArgList &Args,
 
   if (Arg *A = Args.getLastArg(OPT_fobjc_arc_cxxlib_EQ)) {
     StringRef Name = A->getValue();
-    unsigned Library = llvm::StringSwitch<unsigned>(Name)
+    unsigned Library = llvm37::StringSwitch<unsigned>(Name)
       .Case("libc++", ARCXX_libcxx)
       .Case("libstdc++", ARCXX_libstdcxx)
       .Case("none", ARCXX_nolib)
@@ -1843,8 +1843,8 @@ static void ParsePreprocessorOutputArgs(PreprocessorOutputOptions &Opts,
   case frontend::EmitAssembly:
   case frontend::EmitBC:
   case frontend::EmitHTML:
-  case frontend::EmitLLVM:
-  case frontend::EmitLLVMOnly:
+  case frontend::EmitLLVM37:
+  case frontend::EmitLLVM37Only:
   case frontend::EmitCodeGenOnly:
   case frontend::EmitObj:
   case frontend::FixIt:
@@ -1889,11 +1889,11 @@ static void ParseTargetArgs(TargetOptions &Opts, ArgList &Args) {
   Opts.FPMath = Args.getLastArgValue(OPT_mfpmath);
   Opts.FeaturesAsWritten = Args.getAllArgValues(OPT_target_feature);
   Opts.LinkerVersion = Args.getLastArgValue(OPT_target_linker_version);
-  Opts.Triple = llvm::Triple::normalize(Args.getLastArgValue(OPT_triple));
+  Opts.Triple = llvm37::Triple::normalize(Args.getLastArgValue(OPT_triple));
   Opts.Reciprocals = Args.getAllArgValues(OPT_mrecip_EQ);
   // Use the default target triple if unspecified.
   if (Opts.Triple.empty())
-    Opts.Triple = llvm::sys::getDefaultTargetTriple();
+    Opts.Triple = llvm37::sys::getDefaultTargetTriple();
 }
 
 bool CompilerInvocation::CreateFromArgs(CompilerInvocation &Res,
@@ -1919,7 +1919,7 @@ bool CompilerInvocation::CreateFromArgs(CompilerInvocation &Res,
   // End HLSL Change
   unsigned MissingArgIndex, MissingArgCount;
   InputArgList Args =
-      Opts->ParseArgs(llvm::makeArrayRef(ArgBegin, ArgEnd), MissingArgIndex,
+      Opts->ParseArgs(llvm37::makeArrayRef(ArgBegin, ArgEnd), MissingArgIndex,
                       MissingArgCount, IncludedFlagsBitmask, ExcludedFlagsBitmask);
 
   // Check for missing argument error.
@@ -1947,7 +1947,7 @@ bool CompilerInvocation::CreateFromArgs(CompilerInvocation &Res,
   Success &= ParseCodeGenArgs(Res.getCodeGenOpts(), Args, DashX, Diags,
                               Res.getTargetOpts());
   ParseHeaderSearchArgs(Res.getHeaderSearchOpts(), Args);
-  if (DashX != IK_AST && DashX != IK_LLVM_IR) {
+  if (DashX != IK_AST && DashX != IK_LLVM37_IR) {
     ParseLangArgs(*Res.getLangOpts(), Args, DashX, Diags);
 #ifdef MS_SUPPORT_VARIABLE_LANGOPTS
     if (Res.getFrontendOpts().ProgramAction == frontend::RewriteObjC)
@@ -1979,7 +1979,7 @@ namespace {
     void add(StringRef Value);
     void flush();
     
-    llvm::APInt getAsInteger() const;
+    llvm37::APInt getAsInteger() const;
   };
 }
 
@@ -2014,17 +2014,17 @@ void ModuleSignature::add(StringRef Value) {
     add(*I, 8);
 }
 
-llvm::APInt ModuleSignature::getAsInteger() const {
-  return llvm::APInt(Data.size() * 64, Data);
+llvm37::APInt ModuleSignature::getAsInteger() const {
+  return llvm37::APInt(Data.size() * 64, Data);
 }
 
 std::string CompilerInvocation::getModuleHash() const {
 #ifdef MSFT_SUPPORTS_MODULES
   // Note: For QoI reasons, the things we use as a hash here should all be
   // dumped via the -module-info flag.
-  using llvm::hash_code;
-  using llvm::hash_value;
-  using llvm::hash_combine;
+  using llvm37::hash_code;
+  using llvm37::hash_value;
+  using llvm37::hash_combine;
 
   // Start the signature with the compiler version.
   // FIXME: We'd rather use something more cryptographically sound than
@@ -2087,13 +2087,13 @@ std::string CompilerInvocation::getModuleHash() const {
   if (!hsOpts.Sysroot.empty()) {
     SmallString<128> systemVersionFile;
     systemVersionFile += hsOpts.Sysroot;
-    llvm::sys::path::append(systemVersionFile, "System");
-    llvm::sys::path::append(systemVersionFile, "Library");
-    llvm::sys::path::append(systemVersionFile, "CoreServices");
-    llvm::sys::path::append(systemVersionFile, "SystemVersion.plist");
+    llvm37::sys::path::append(systemVersionFile, "System");
+    llvm37::sys::path::append(systemVersionFile, "Library");
+    llvm37::sys::path::append(systemVersionFile, "CoreServices");
+    llvm37::sys::path::append(systemVersionFile, "SystemVersion.plist");
 
-    llvm::ErrorOr<std::unique_ptr<llvm::MemoryBuffer>> buffer =
-        llvm::MemoryBuffer::getFile(systemVersionFile);
+    llvm37::ErrorOr<std::unique_ptr<llvm37::MemoryBuffer>> buffer =
+        llvm37::MemoryBuffer::getFile(systemVersionFile);
     if (buffer) {
       code = hash_combine(code, buffer.get()->getBuffer());
 
@@ -2103,7 +2103,7 @@ std::string CompilerInvocation::getModuleHash() const {
     }
   }
 
-  return llvm::APInt(64, code).toString(36, /*Signed=*/false);
+  return llvm37::APInt(64, code).toString(36, /*Signed=*/false);
 #else
   return std::string();
 #endif // MSFT_SUPPORTS_MODULES
@@ -2146,7 +2146,7 @@ void BuryPointer(const void *Ptr) {
   // will not be properly buried and a leak detector will report a leak, which
   // is what we want in such case.
   static const size_t kGraveYardMaxSize = 16;
-  LLVM_ATTRIBUTE_UNUSED static const void *GraveYard[kGraveYardMaxSize];
+  LLVM37_ATTRIBUTE_UNUSED static const void *GraveYard[kGraveYardMaxSize];
   static std::atomic<unsigned> GraveYardSize;
   unsigned Idx = GraveYardSize++;
   if (Idx >= kGraveYardMaxSize)
@@ -2164,8 +2164,8 @@ createVFSFromCompilerInvocation(const CompilerInvocation &CI,
     Overlay(new vfs::OverlayFileSystem(vfs::getRealFileSystem()));
   // earlier vfs files are on the bottom
   for (const std::string &File : CI.getHeaderSearchOpts().VFSOverlayFiles) {
-    llvm::ErrorOr<std::unique_ptr<llvm::MemoryBuffer>> Buffer =
-        llvm::MemoryBuffer::getFile(File);
+    llvm37::ErrorOr<std::unique_ptr<llvm37::MemoryBuffer>> Buffer =
+        llvm37::MemoryBuffer::getFile(File);
     if (!Buffer) {
       Diags.Report(diag::err_missing_vfs_overlay_file) << File;
       return IntrusiveRefCntPtr<vfs::FileSystem>();

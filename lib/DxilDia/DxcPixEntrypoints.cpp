@@ -22,8 +22,8 @@
 #include "dxc/Support/Global.h"
 #include "dxc/Support/microcom.h"
 #include "dxc/Support/FileIOHelper.h"
-#include "llvm/Support/MSFileSystem.h"
-#include "llvm/Support/FileSystem.h"
+#include "llvm37/Support/MSFileSystem.h"
+#include "llvm37/Support/FileSystem.h"
 
 #include "DxcPixBase.h"
 #include "DxcPixDxilDebugInfo.h"
@@ -295,12 +295,12 @@ HRESULT SetupAndRun(
   HRESULT hr = E_FAIL;
   try
   {
-    ::llvm::sys::fs::MSFileSystem* msfPtr;
+    ::llvm37::sys::fs::MSFileSystem* msfPtr;
     IFT(CreateMSFileSystemForDisk(&msfPtr));
-    std::unique_ptr<::llvm::sys::fs::MSFileSystem> msf(msfPtr);
+    std::unique_ptr<::llvm37::sys::fs::MSFileSystem> msf(msfPtr);
 
-    ::llvm::sys::fs::AutoPerThreadSystem pts(msf.get());
-    IFTLLVM(pts.error_code());
+    ::llvm37::sys::fs::AutoPerThreadSystem pts(msf.get());
+    IFTLLVM37(pts.error_code());
 
     EnsureAllPointersAreChecked(Args...);
     hr = Handler(Args...);

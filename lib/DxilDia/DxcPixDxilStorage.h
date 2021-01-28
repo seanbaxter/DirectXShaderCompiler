@@ -26,10 +26,10 @@
 
 #include "DxcPixDxilDebugInfo.h"
 
-namespace llvm
+namespace llvm37
 {
 class DIType;
-}  // namespace llvm
+}  // namespace llvm37
 
 namespace dxil_debug_info
 {
@@ -37,7 +37,7 @@ struct VariableInfo;
 
 HRESULT CreateDxcPixStorage(
     DxcPixDxilDebugInfo *pDxilDebugInfo,
-    llvm::DIType *diType,
+    llvm37::DIType *diType,
     const VariableInfo *VarInfo,
     unsigned CurrentOffsetInBits,
     IDxcPixDxilStorage **ppStorage);

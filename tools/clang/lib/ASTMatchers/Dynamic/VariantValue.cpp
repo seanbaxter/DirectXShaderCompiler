@@ -1,6 +1,6 @@
 //===--- VariantValue.cpp - Polymorphic value type -*- C++ -*-===/
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -14,7 +14,7 @@
 
 #include "clang/ASTMatchers/Dynamic/VariantValue.h"
 #include "clang/Basic/LLVM.h"
-#include "llvm/ADT/STLExtras.h"
+#include "llvm37/ADT/STLExtras.h"
 
 namespace clang {
 namespace ast_matchers {
@@ -29,7 +29,7 @@ std::string ArgKind::asString() const {
   case AK_String:
     return "string";
   }
-  llvm_unreachable("unhandled ArgKind");
+  llvm37_unreachable("unhandled ArgKind");
 }
 
 bool ArgKind::isConvertibleTo(ArgKind To, unsigned *Specificity) const {
@@ -56,7 +56,7 @@ VariantMatcher::MatcherOps::canConstructFrom(const DynTypedMatcher &Matcher,
   return Matcher.canConvertTo(NodeKind);
 }
 
-llvm::Optional<DynTypedMatcher>
+llvm37::Optional<DynTypedMatcher>
 VariantMatcher::MatcherOps::constructVariadicOperator(
     DynTypedMatcher::VariadicOperator Op,
     ArrayRef<VariantMatcher> InnerMatchers) const {
@@ -65,11 +65,11 @@ VariantMatcher::MatcherOps::constructVariadicOperator(
     // Abort if any of the inner matchers can't be converted to
     // Matcher<T>.
     if (!InnerMatcher.Value)
-      return llvm::None;
-    llvm::Optional<DynTypedMatcher> Inner =
+      return llvm37::None;
+    llvm37::Optional<DynTypedMatcher> Inner =
         InnerMatcher.Value->getTypedMatcher(*this);
     if (!Inner)
-      return llvm::None;
+      return llvm37::None;
     DynMatchers.push_back(*Inner);
   }
   return DynTypedMatcher::constructVariadic(Op, DynMatchers);
@@ -81,7 +81,7 @@ class VariantMatcher::SinglePayload : public VariantMatcher::Payload {
 public:
   SinglePayload(const DynTypedMatcher &Matcher) : Matcher(Matcher) {}
 
-  llvm::Optional<DynTypedMatcher> getSingleMatcher() const override {
+  llvm37::Optional<DynTypedMatcher> getSingleMatcher() const override {
     return Matcher;
   }
 
@@ -90,12 +90,12 @@ public:
         .str();
   }
 
-  llvm::Optional<DynTypedMatcher>
+  llvm37::Optional<DynTypedMatcher>
   getTypedMatcher(const MatcherOps &Ops) const override {
     bool Ignore;
     if (Ops.canConstructFrom(Matcher, Ignore))
       return Matcher;
-    return llvm::None;
+    return llvm37::None;
   }
 
   bool isConvertibleTo(ast_type_traits::ASTNodeKind Kind,
@@ -115,9 +115,9 @@ public:
 
   ~PolymorphicPayload() override {}
 
-  llvm::Optional<DynTypedMatcher> getSingleMatcher() const override {
+  llvm37::Optional<DynTypedMatcher> getSingleMatcher() const override {
     if (Matchers.size() != 1)
-      return llvm::Optional<DynTypedMatcher>();
+      return llvm37::Optional<DynTypedMatcher>();
     return Matchers[0];
   }
 
@@ -131,7 +131,7 @@ public:
     return (Twine("Matcher<") + Inner + ">").str();
   }
 
-  llvm::Optional<DynTypedMatcher>
+  llvm37::Optional<DynTypedMatcher>
   getTypedMatcher(const MatcherOps &Ops) const override {
     bool FoundIsExact = false;
     const DynTypedMatcher *Found = nullptr;
@@ -153,7 +153,7 @@ public:
     // We only succeed if we found exactly one, or if we found an exact match.
     if (Found && (FoundIsExact || NumFound == 1))
       return *Found;
-    return llvm::None;
+    return llvm37::None;
   }
 
   bool isConvertibleTo(ast_type_traits::ASTNodeKind Kind,
@@ -180,8 +180,8 @@ public:
                     std::vector<VariantMatcher> Args)
       : Op(Op), Args(std::move(Args)) {}
 
-  llvm::Optional<DynTypedMatcher> getSingleMatcher() const override {
-    return llvm::Optional<DynTypedMatcher>();
+  llvm37::Optional<DynTypedMatcher> getSingleMatcher() const override {
+    return llvm37::Optional<DynTypedMatcher>();
   }
 
   std::string getTypeAsString() const override {
@@ -194,7 +194,7 @@ public:
     return Inner;
   }
 
-  llvm::Optional<DynTypedMatcher>
+  llvm37::Optional<DynTypedMatcher>
   getTypedMatcher(const MatcherOps &Ops) const override {
     return Ops.constructVariadicOperator(Op, Args);
   }
@@ -230,8 +230,8 @@ VariantMatcher VariantMatcher::VariadicOperatorMatcher(
   return VariantMatcher(new VariadicOpPayload(Op, std::move(Args)));
 }
 
-llvm::Optional<DynTypedMatcher> VariantMatcher::getSingleMatcher() const {
-  return Value ? Value->getSingleMatcher() : llvm::Optional<DynTypedMatcher>();
+llvm37::Optional<DynTypedMatcher> VariantMatcher::getSingleMatcher() const {
+  return Value ? Value->getSingleMatcher() : llvm37::Optional<DynTypedMatcher>();
 }
 
 void VariantMatcher::reset() { Value.reset(); }
@@ -359,7 +359,7 @@ bool VariantValue::isConvertibleTo(ArgKind Kind, unsigned *Specificity) const {
       return false;
     return getMatcher().isConvertibleTo(Kind.getMatcherKind(), Specificity);
   }
-  llvm_unreachable("Invalid Type");
+  llvm37_unreachable("Invalid Type");
 }
 
 bool VariantValue::isConvertibleTo(ArrayRef<ArgKind> Kinds,
@@ -384,7 +384,7 @@ std::string VariantValue::getTypeAsString() const {
   case VT_Unsigned: return "Unsigned";
   case VT_Nothing: return "Nothing";
   }
-  llvm_unreachable("Invalid Type");
+  llvm37_unreachable("Invalid Type");
 }
 
 } // end namespace dynamic

@@ -1,6 +1,6 @@
 //===--- VkConstantsTables.h --- Implict Vulkan Constants Tables ---C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -12,8 +12,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_LIB_SEMA_VKCONSTANTSTABLES_H
-#define LLVM_CLANG_LIB_SEMA_VKCONSTANTSTABLES_H
+#ifndef LLVM37_CLANG_LIB_SEMA_VKCONSTANTSTABLES_H
+#define LLVM37_CLANG_LIB_SEMA_VKCONSTANTSTABLES_H
 
 std::vector<std::pair<std::string, uint32_t>> GetVkIntegerConstants() {
   return {
@@ -26,4 +26,4 @@ std::vector<std::pair<std::string, uint32_t>> GetVkIntegerConstants() {
   };
 }
 
-#endif // LLVM_CLANG_LIB_SEMA_VKCONSTANTSTABLES_H
+#endif // LLVM37_CLANG_LIB_SEMA_VKCONSTANTSTABLES_H

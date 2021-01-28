@@ -1,4 +1,4 @@
-; RUN: not llvm-as -disable-output < %s 2>&1 | FileCheck %s
+; RUN: not llvm37-as -disable-output < %s 2>&1 | FileCheck %s
 ; Check common error from old format.
 
 define void @foo() {

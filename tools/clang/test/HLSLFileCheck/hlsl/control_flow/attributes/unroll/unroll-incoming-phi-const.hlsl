@@ -11,7 +11,7 @@
 // CHECK: call void @dx.op.bufferStore.i32(i32 69
 // CHECK-NOT: call void @dx.op.bufferStore.i32(i32 69
 
-// CHECK: !llvm.loop
+// CHECK: !llvm37.loop
 // CHECK-NOT: call void @dx.op.bufferStore.i32(i32 69
 // CHECK: ret void
 

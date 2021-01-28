@@ -1,31 +1,31 @@
-//===---- CGLoopInfo.h - LLVM CodeGen for loop metadata -*- C++ -*---------===//
+//===---- CGLoopInfo.h - LLVM37 CodeGen for loop metadata -*- C++ -*---------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 //
-// This is the internal state used for llvm translation for loop statement
+// This is the internal state used for llvm37 translation for loop statement
 // metadata.
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_LIB_CODEGEN_CGLOOPINFO_H
-#define LLVM_CLANG_LIB_CODEGEN_CGLOOPINFO_H
+#ifndef LLVM37_CLANG_LIB_CODEGEN_CGLOOPINFO_H
+#define LLVM37_CLANG_LIB_CODEGEN_CGLOOPINFO_H
 
-#include "llvm/ADT/ArrayRef.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/IR/Value.h"
-#include "llvm/Support/Compiler.h"
+#include "llvm37/ADT/ArrayRef.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/IR/Value.h"
+#include "llvm37/Support/Compiler.h"
 
-namespace llvm {
+namespace llvm37 {
 class BasicBlock;
 class Instruction;
 class MDNode;
-} // end namespace llvm
+} // end namespace llvm37
 
 namespace clang {
 class Attr;
@@ -36,19 +36,19 @@ struct LoopAttributes {
   explicit LoopAttributes(bool IsParallel = false);
   void clear();
 
-  /// \brief Generate llvm.loop.parallel metadata for loads and stores.
+  /// \brief Generate llvm37.loop.parallel metadata for loads and stores.
   bool IsParallel;
 
-  /// \brief Values of llvm.loop.vectorize.enable metadata.
+  /// \brief Values of llvm37.loop.vectorize.enable metadata.
   enum LVEnableState { VecUnspecified, VecEnable, VecDisable };
 
-  /// \brief llvm.loop.vectorize.enable
+  /// \brief llvm37.loop.vectorize.enable
   LVEnableState VectorizerEnable;
 
-  /// \brief llvm.loop.vectorize.width
+  /// \brief llvm37.loop.vectorize.width
   unsigned VectorizerWidth;
 
-  /// \brief llvm.loop.interleave.count
+  /// \brief llvm37.loop.interleave.count
   unsigned VectorizerUnroll;
 
   // HLSL Change Begins.
@@ -66,22 +66,22 @@ struct LoopAttributes {
 class LoopInfo {
 public:
   /// \brief Construct a new LoopInfo for the loop with entry Header.
-  LoopInfo(llvm::BasicBlock *Header, const LoopAttributes &Attrs);
+  LoopInfo(llvm37::BasicBlock *Header, const LoopAttributes &Attrs);
 
   /// \brief Get the loop id metadata for this loop.
-  llvm::MDNode *getLoopID() const { return LoopID; }
+  llvm37::MDNode *getLoopID() const { return LoopID; }
 
   /// \brief Get the header block of this loop.
-  llvm::BasicBlock *getHeader() const { return Header; }
+  llvm37::BasicBlock *getHeader() const { return Header; }
 
   /// \brief Get the set of attributes active for this loop.
   const LoopAttributes &getAttributes() const { return Attrs; }
 
 private:
   /// \brief Loop ID metadata.
-  llvm::MDNode *LoopID;
+  llvm37::MDNode *LoopID;
   /// \brief Header block of this loop.
-  llvm::BasicBlock *Header;
+  llvm37::BasicBlock *Header;
   /// \brief The attributes for this loop.
   LoopAttributes Attrs;
 };
@@ -98,14 +98,14 @@ public:
 
   /// \brief Begin a new structured loop. The set of staged attributes will be
   /// applied to the loop and then cleared.
-  void push(llvm::BasicBlock *Header,
-            llvm::ArrayRef<const Attr *> Attrs = llvm::None);
+  void push(llvm37::BasicBlock *Header,
+            llvm37::ArrayRef<const Attr *> Attrs = llvm37::None);
 
   /// \brief End the current loop.
   void pop();
 
   /// \brief Return the top loop id metadata.
-  llvm::MDNode *getCurLoopID() const { return getInfo().getLoopID(); }
+  llvm37::MDNode *getCurLoopID() const { return getInfo().getLoopID(); }
 
   /// \brief Return true if the top loop is parallel.
   bool getCurLoopParallel() const {
@@ -114,7 +114,7 @@ public:
 
   /// \brief Function called by the CodeGenFunction when an instruction is
   /// created.
-  void InsertHelper(llvm::Instruction *I) const;
+  void InsertHelper(llvm37::Instruction *I) const;
 
   /// \brief Set the next pushed loop as parallel.
   void setParallel(bool Enable = true) { StagedAttrs.IsParallel = Enable; }
@@ -152,7 +152,7 @@ private:
   /// \brief The set of attributes that will be applied to the next pushed loop.
   LoopAttributes StagedAttrs;
   /// \brief Stack of active loops.
-  llvm::SmallVector<LoopInfo, 4> Active;
+  llvm37::SmallVector<LoopInfo, 4> Active;
 };
 
 } // end namespace CodeGen

@@ -1,6 +1,6 @@
 //===-------------- TypeOrdering.h - Total ordering for types -------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -12,12 +12,12 @@
 ///
 /// Defines clang::QualTypeOrdering, a total ordering on clang::QualType,
 /// and hence enables QualType values to be sorted and to be used in
-/// std::maps, std::sets, llvm::DenseMaps, and llvm::DenseSets.
+/// std::maps, std::sets, llvm37::DenseMaps, and llvm37::DenseSets.
 ///
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_AST_TYPEORDERING_H
-#define LLVM_CLANG_AST_TYPEORDERING_H
+#ifndef LLVM37_CLANG_AST_TYPEORDERING_H
+#define LLVM37_CLANG_AST_TYPEORDERING_H
 
 #include "clang/AST/CanonicalType.h"
 #include "clang/AST/Type.h"
@@ -34,7 +34,7 @@ struct QualTypeOrdering {
 
 }
 
-namespace llvm {
+namespace llvm37 {
   template<class> struct DenseMapInfo;
 
   template<> struct DenseMapInfo<clang::QualType> {

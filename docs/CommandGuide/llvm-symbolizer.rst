@@ -1,17 +1,17 @@
-llvm-symbolizer - convert addresses into source code locations
+llvm37-symbolizer - convert addresses into source code locations
 ==============================================================
 
 SYNOPSIS
 --------
 
-:program:`llvm-symbolizer` [options]
+:program:`llvm37-symbolizer` [options]
 
 DESCRIPTION
 -----------
 
-:program:`llvm-symbolizer` reads object file names and addresses from standard
+:program:`llvm37-symbolizer` reads object file names and addresses from standard
 input and prints corresponding source code locations to standard output.
-If object file is specified in command line, :program:`llvm-symbolizer` reads
+If object file is specified in command line, :program:`llvm37-symbolizer` reads
 only addresses from standard input. This
 program uses debug info sections and symbol table in the object files.
 
@@ -26,7 +26,7 @@ EXAMPLE
   /tmp/c.so 0x710
   /tmp/mach_universal_binary:i386 0x1f84
   /tmp/mach_universal_binary:x86_64 0x100000f24
-  $ llvm-symbolizer < addr.txt
+  $ llvm37-symbolizer < addr.txt
   main
   /tmp/a.cc:4
   
@@ -50,7 +50,7 @@ EXAMPLE
   $ cat addr2.txt
   0x4004f4
   0x401000
-  $ llvm-symbolizer -obj=a.out < addr2.txt
+  $ llvm37-symbolizer -obj=a.out < addr2.txt
   main
   /tmp/a.cc:4
 
@@ -102,4 +102,4 @@ OPTIONS
 EXIT STATUS
 -----------
 
-:program:`llvm-symbolizer` returns 0. Other exit codes imply internal program error.
+:program:`llvm37-symbolizer` returns 0. Other exit codes imply internal program error.

@@ -1,5 +1,5 @@
 ================================
-Source Level Debugging with LLVM
+Source Level Debugging with LLVM37
 ================================
 
 .. contents::
@@ -9,7 +9,7 @@ Introduction
 ============
 
 This document is the central repository for all information pertaining to debug
-information in LLVM.  It describes the :ref:`actual format that the LLVM debug
+information in LLVM37.  It describes the :ref:`actual format that the LLVM37 debug
 information takes <format>`, which is useful for those interested in creating
 front-ends or dealing directly with the information.  Further, this document
 provides specific examples of what debug information for C/C++ looks like.
@@ -17,11 +17,11 @@ provides specific examples of what debug information for C/C++ looks like.
 HLSL and DXIL-specific information is available in the :doc:`Source Level
 Debugging with HLSL <SourceLevelDebuggingHLSL>` document.
 
-Philosophy behind LLVM debugging information
+Philosophy behind LLVM37 debugging information
 --------------------------------------------
 
-The idea of the LLVM debugging information is to capture how the important
-pieces of the source-language's Abstract Syntax Tree map onto LLVM code.
+The idea of the LLVM37 debugging information is to capture how the important
+pieces of the source-language's Abstract Syntax Tree map onto LLVM37 code.
 Several design aspects have shaped the solution that appears here.  The
 important ones are:
 
@@ -29,26 +29,26 @@ important ones are:
   compiler.  No transformations, analyses, or code generators should need to
   be modified because of debugging information.
 
-* LLVM optimizations should interact in :ref:`well-defined and easily described
+* LLVM37 optimizations should interact in :ref:`well-defined and easily described
   ways <intro_debugopt>` with the debugging information.
 
-* Because LLVM is designed to support arbitrary programming languages,
-  LLVM-to-LLVM tools should not need to know anything about the semantics of
+* Because LLVM37 is designed to support arbitrary programming languages,
+  LLVM37-to-LLVM37 tools should not need to know anything about the semantics of
   the source-level-language.
 
 * Source-level languages are often **widely** different from one another.
-  LLVM should not put any restrictions of the flavor of the source-language,
+  LLVM37 should not put any restrictions of the flavor of the source-language,
   and the debugging information should work with any language.
 
-* With code generator support, it should be possible to use an LLVM compiler
+* With code generator support, it should be possible to use an LLVM37 compiler
   to compile a program to native machine code and standard debugging
   formats.  This allows compatibility with traditional machine-code level
   debuggers, like GDB or DBX.
 
-The approach used by the LLVM implementation is to use a small set of
+The approach used by the LLVM37 implementation is to use a small set of
 :ref:`intrinsic functions <format_common_intrinsics>` to define a mapping
-between LLVM program objects and the source-level objects.  The description of
-the source-level program is maintained in LLVM metadata in an
+between LLVM37 program objects and the source-level objects.  The description of
+the source-level program is maintained in LLVM37 metadata in an
 :ref:`implementation-defined format <ccxx_frontend>` (the C/C++ front-end
 currently uses working draft 7 of the `DWARF 3 standard
 <http://www.eagercon.com/dwarf/dwarf3std.htm>`_).
@@ -62,7 +62,7 @@ Debug information consumers
 ---------------------------
 
 The role of debug information is to provide meta information normally stripped
-away during the compilation process.  This meta information provides an LLVM
+away during the compilation process.  This meta information provides an LLVM37
 user a relationship between generated code and the original program source
 code.
 
@@ -81,29 +81,29 @@ TODO - expound a bit more.
 Debugging optimized code
 ------------------------
 
-An extremely high priority of LLVM debugging information is to make it interact
-well with optimizations and analysis.  In particular, the LLVM debug
+An extremely high priority of LLVM37 debugging information is to make it interact
+well with optimizations and analysis.  In particular, the LLVM37 debug
 information provides the following guarantees:
 
-* LLVM debug information **always provides information to accurately read
-  the source-level state of the program**, regardless of which LLVM
+* LLVM37 debug information **always provides information to accurately read
+  the source-level state of the program**, regardless of which LLVM37
   optimizations have been run, and without any modification to the
   optimizations themselves.  However, some optimizations may impact the
   ability to modify the current state of the program with a debugger, such
   as setting program variables, or calling functions that have been
   deleted.
 
-* As desired, LLVM optimizations can be upgraded to be aware of the LLVM
+* As desired, LLVM37 optimizations can be upgraded to be aware of the LLVM37
   debugging information, allowing them to update the debugging information
   as they perform aggressive optimizations.  This means that, with effort,
-  the LLVM optimizers could optimize debug code just as well as non-debug
+  the LLVM37 optimizers could optimize debug code just as well as non-debug
   code.
 
-* LLVM debug information does not prevent optimizations from
+* LLVM37 debug information does not prevent optimizations from
   happening (for example inlining, basic block reordering/merging/cleanup,
   tail duplication, etc).
 
-* LLVM debug information is automatically optimized along with the rest of
+* LLVM37 debug information is automatically optimized along with the rest of
   the program, using existing facilities.  For example, duplicate
   information is automatically merged by the linker, and unused information
   is automatically removed.
@@ -123,7 +123,7 @@ completely.
 Debugging information format
 ============================
 
-LLVM debugging information has been carefully designed to make it possible for
+LLVM37 debugging information has been carefully designed to make it possible for
 the optimizer to optimize the program and debugging information without
 necessarily having to know anything about debugging information.  In
 particular, the use of metadata avoids duplicated debugging information from
@@ -132,7 +132,7 @@ debugging information for a function if it decides to delete the function.
 
 To do this, most of the debugging information (descriptors for types,
 variables, functions, source files, etc) is inserted by the language front-end
-in the form of LLVM metadata.
+in the form of LLVM37 metadata.
 
 Debug information is designed to be agnostic about the target debugger and
 debugging information representation (e.g. DWARF/Stabs/etc).  It uses a generic
@@ -141,9 +141,9 @@ namespaces, etc: this allows for arbitrary source-language semantics and
 type-systems to be used, as long as there is a module written for the target
 debugger to interpret the information.
 
-To provide basic functionality, the LLVM debugger does have to make some
+To provide basic functionality, the LLVM37 debugger does have to make some
 assumptions about the source-level language being debugged, though it keeps
-these to a minimum.  The only common features that the LLVM debugger assumes
+these to a minimum.  The only common features that the LLVM37 debugger assumes
 exist are `source files <LangRef.html#difile>`_, and `program objects
 <LangRef.html#diglobalvariable>`_.  These abstract objects are used by a
 debugger to form stack traces, show information about local variables, etc.
@@ -160,15 +160,15 @@ Debug information descriptors are `specialized metadata nodes
 Debugger intrinsic functions
 ----------------------------
 
-LLVM uses several intrinsic functions (name prefixed with "``llvm.dbg``") to
+LLVM37 uses several intrinsic functions (name prefixed with "``llvm37.dbg``") to
 provide debug information at various points in generated code.
 
-``llvm.dbg.declare``
+``llvm37.dbg.declare``
 ^^^^^^^^^^^^^^^^^^^^
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
-  void @llvm.dbg.declare(metadata, metadata, metadata)
+  void @llvm37.dbg.declare(metadata, metadata, metadata)
 
 This intrinsic provides information about a local element (e.g., variable).
 The first argument is metadata holding the alloca for the variable.  The second
@@ -176,12 +176,12 @@ argument is a `local variable <LangRef.html#dilocalvariable>`_ containing a
 description of the variable.  The third argument is a `complex expression
 <LangRef.html#diexpression>`_.
 
-``llvm.dbg.value``
+``llvm37.dbg.value``
 ^^^^^^^^^^^^^^^^^^
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
-  void @llvm.dbg.value(metadata, i64, metadata, metadata)
+  void @llvm37.dbg.value(metadata, i64, metadata, metadata)
 
 This intrinsic provides information when a user source variable is set to a new
 value.  The first argument is the new value (wrapped as metadata).  The second
@@ -198,11 +198,11 @@ scopes limited to a subset of a function.  In the C family of languages, for
 example, variables are only live (readable and writable) within the source
 block that they are defined in.  In functional languages, values are only
 readable after they have been defined.  Though this is a very obvious concept,
-it is non-trivial to model in LLVM, because it has no notion of scoping in this
+it is non-trivial to model in LLVM37, because it has no notion of scoping in this
 sense, and does not want to be tied to a language's scoping rules.
 
-In order to handle this, the LLVM debug format uses the metadata attached to
-llvm instructions to encode line number and scoping information.  Consider the
+In order to handle this, the LLVM37 debug format uses the metadata attached to
+llvm37 instructions to encode line number and scoping information.  Consider the
 following C fragment, for example:
 
 .. code-block:: c
@@ -217,9 +217,9 @@ following C fragment, for example:
   8.    X = Y;
   9.  }
 
-Compiled to LLVM, this function would be represented like this:
+Compiled to LLVM37, this function would be represented like this:
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
   ; Function Attrs: nounwind ssp uwtable
   define void @foo() #0 {
@@ -227,11 +227,11 @@ Compiled to LLVM, this function would be represented like this:
     %X = alloca i32, align 4
     %Y = alloca i32, align 4
     %Z = alloca i32, align 4
-    call void @llvm.dbg.declare(metadata i32* %X, metadata !11, metadata !13), !dbg !14
+    call void @llvm37.dbg.declare(metadata i32* %X, metadata !11, metadata !13), !dbg !14
     store i32 21, i32* %X, align 4, !dbg !14
-    call void @llvm.dbg.declare(metadata i32* %Y, metadata !15, metadata !13), !dbg !16
+    call void @llvm37.dbg.declare(metadata i32* %Y, metadata !15, metadata !13), !dbg !16
     store i32 22, i32* %Y, align 4, !dbg !16
-    call void @llvm.dbg.declare(metadata i32* %Z, metadata !17, metadata !13), !dbg !19
+    call void @llvm37.dbg.declare(metadata i32* %Z, metadata !17, metadata !13), !dbg !19
     store i32 23, i32* %Z, align 4, !dbg !19
     %0 = load i32, i32* %X, align 4, !dbg !20
     store i32 %0, i32* %Z, align 4, !dbg !21
@@ -241,17 +241,17 @@ Compiled to LLVM, this function would be represented like this:
   }
 
   ; Function Attrs: nounwind readnone
-  declare void @llvm.dbg.declare(metadata, metadata, metadata) #1
+  declare void @llvm37.dbg.declare(metadata, metadata, metadata) #1
 
   attributes #0 = { nounwind ssp uwtable "less-precise-fpmad"="false" "no-frame-pointer-elim"="true" "no-frame-pointer-elim-non-leaf" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "stack-protector-buffer-size"="8" "unsafe-fp-math"="false" "use-soft-float"="false" }
   attributes #1 = { nounwind readnone }
 
-  !llvm.dbg.cu = !{!0}
-  !llvm.module.flags = !{!7, !8, !9}
-  !llvm.ident = !{!10}
+  !llvm37.dbg.cu = !{!0}
+  !llvm37.module.flags = !{!7, !8, !9}
+  !llvm37.ident = !{!10}
 
-  !0 = !DICompileUnit(language: DW_LANG_C99, file: !1, producer: "clang version 3.7.0 (trunk 231150) (llvm/trunk 231154)", isOptimized: false, runtimeVersion: 0, emissionKind: 1, enums: !2, retainedTypes: !2, subprograms: !3, globals: !2, imports: !2)
-  !1 = !DIFile(filename: "/dev/stdin", directory: "/Users/dexonsmith/data/llvm/debug-info")
+  !0 = !DICompileUnit(language: DW_LANG_C99, file: !1, producer: "clang version 3.7.0 (trunk 231150) (llvm37/trunk 231154)", isOptimized: false, runtimeVersion: 0, emissionKind: 1, enums: !2, retainedTypes: !2, subprograms: !3, globals: !2, imports: !2)
+  !1 = !DIFile(filename: "/dev/stdin", directory: "/Users/dexonsmith/data/llvm37/debug-info")
   !2 = !{}
   !3 = !{!4}
   !4 = !DISubprogram(name: "foo", scope: !1, file: !1, line: 1, type: !5, isLocal: false, isDefinition: true, scopeLine: 1, isOptimized: false, function: void ()* @foo, variables: !2)
@@ -260,7 +260,7 @@ Compiled to LLVM, this function would be represented like this:
   !7 = !{i32 2, !"Dwarf Version", i32 2}
   !8 = !{i32 2, !"Debug Info Version", i32 3}
   !9 = !{i32 1, !"PIC Level", i32 2}
-  !10 = !{!"clang version 3.7.0 (trunk 231150) (llvm/trunk 231154)"}
+  !10 = !{!"clang version 3.7.0 (trunk 231150) (llvm37/trunk 231154)"}
   !11 = !DILocalVariable(tag: DW_TAG_auto_variable, name: "X", scope: !4, file: !1, line: 2, type: !12)
   !12 = !DIBasicType(name: "int", size: 32, align: 32, encoding: DW_ATE_signed)
   !13 = !DIExpression()
@@ -277,22 +277,22 @@ Compiled to LLVM, this function would be represented like this:
   !24 = !DILocation(line: 9, column: 3, scope: !4)
 
 
-This example illustrates a few important details about LLVM debugging
-information.  In particular, it shows how the ``llvm.dbg.declare`` intrinsic and
+This example illustrates a few important details about LLVM37 debugging
+information.  In particular, it shows how the ``llvm37.dbg.declare`` intrinsic and
 location information, which are attached to an instruction, are applied
 together to allow a debugger to analyze the relationship between statements,
 variable definitions, and the code used to implement the function.
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
-  call void @llvm.dbg.declare(metadata i32* %X, metadata !11, metadata !13), !dbg !14
+  call void @llvm37.dbg.declare(metadata i32* %X, metadata !11, metadata !13), !dbg !14
     ; [debug line = 2:7] [debug variable = X]
 
-The first intrinsic ``%llvm.dbg.declare`` encodes debugging information for the
+The first intrinsic ``%llvm37.dbg.declare`` encodes debugging information for the
 variable ``X``.  The metadata ``!dbg !14`` attached to the intrinsic provides
 scope information for the variable ``X``.
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
   !14 = !DILocation(line: 2, column: 9, scope: !4)
   !4 = !DISubprogram(name: "foo", scope: !1, file: !1, line: 1, type: !5,
@@ -308,16 +308,16 @@ declared at line number 2 at a function level scope in function ``foo``.
 
 Now lets take another example.
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
-  call void @llvm.dbg.declare(metadata i32* %Z, metadata !17, metadata !13), !dbg !19
+  call void @llvm37.dbg.declare(metadata i32* %Z, metadata !17, metadata !13), !dbg !19
     ; [debug line = 5:9] [debug variable = Z]
 
-The third intrinsic ``%llvm.dbg.declare`` encodes debugging information for
+The third intrinsic ``%llvm37.dbg.declare`` encodes debugging information for
 variable ``Z``.  The metadata ``!dbg !19`` attached to the intrinsic provides
 scope information for the variable ``Z``.
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
   !18 = distinct !DILexicalBlock(scope: !4, file: !1, line: 4, column: 5)
   !19 = !DILocation(line: 5, column: 11, scope: !18)
@@ -345,25 +345,25 @@ This section describes the forms used to represent C and C++ programs.  Other
 languages could pattern themselves after this (which itself is tuned to
 representing programs in the same way that DWARF 3 does), or they could choose
 to provide completely different forms if they don't fit into the DWARF model.
-As support for debugging information gets added to the various LLVM
+As support for debugging information gets added to the various LLVM37
 source-language front-ends, the information used should be documented here.
 
 The following sections provide examples of a few C/C++ constructs and the debug
 information that would best describe those constructs.  The canonical
 references are the ``DIDescriptor`` classes defined in
-``include/llvm/IR/DebugInfo.h`` and the implementations of the helper functions
+``include/llvm37/IR/DebugInfo.h`` and the implementations of the helper functions
 in ``lib/IR/DIBuilder.cpp``.
 
 C/C++ source file information
 -----------------------------
 
-``llvm::Instruction`` provides easy access to metadata attached with an
-instruction.  One can extract line number information encoded in LLVM IR using
+``llvm37::Instruction`` provides easy access to metadata attached with an
+instruction.  One can extract line number information encoded in LLVM37 IR using
 ``Instruction::getMetadata()`` and ``DILocation::getLineNumber()``.
 
 .. code-block:: c++
 
-  if (MDNode *N = I->getMetadata("dbg")) {  // Here I is an LLVM instruction
+  if (MDNode *N = I->getMetadata("dbg")) {  // Here I is an LLVM37 instruction
     DILocation Loc(N);                      // DILocation is in DebugInfo.h
     unsigned Line = Loc.getLineNumber();
     StringRef File = Loc.getFilename();
@@ -381,7 +381,7 @@ Given an integer global variable declared as follows:
 
 a C/C++ front-end would generate the following descriptors:
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
   ;;
   ;; Define the global itself.
@@ -391,15 +391,15 @@ a C/C++ front-end would generate the following descriptors:
   ;;
   ;; List of debug info of globals
   ;;
-  !llvm.dbg.cu = !{!0}
+  !llvm37.dbg.cu = !{!0}
 
   ;; Some unrelated metadata.
-  !llvm.module.flags = !{!6, !7}
+  !llvm37.module.flags = !{!6, !7}
 
   ;; Define the compile unit.
   !0 = !DICompileUnit(language: DW_LANG_C99, file: !1,
                       producer:
-                      "clang version 3.7.0 (trunk 231150) (llvm/trunk 231154)",
+                      "clang version 3.7.0 (trunk 231150) (llvm37/trunk 231154)",
                       isOptimized: false, runtimeVersion: 0, emissionKind: 1,
                       enums: !2, retainedTypes: !2, subprograms: !2, globals:
                       !3, imports: !2)
@@ -408,7 +408,7 @@ a C/C++ front-end would generate the following descriptors:
   ;; Define the file
   ;;
   !1 = !DIFile(filename: "/dev/stdin",
-               directory: "/Users/dexonsmith/data/llvm/debug-info")
+               directory: "/Users/dexonsmith/data/llvm37/debug-info")
 
   ;; An empty array.
   !2 = !{}
@@ -447,7 +447,7 @@ Given a function declared as follows:
 
 a C/C++ front-end would generate the following descriptors:
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
   ;;
   ;; Define the anchor for subprograms.

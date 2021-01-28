@@ -1,4 +1,4 @@
-; RUN: llvm-as %s -o /dev/null
+; RUN: llvm37-as %s -o /dev/null
 ; RUN: verify-uselistorder %s
 
 define i32* @t1({ float, i32 }* %X) {

@@ -1,4 +1,4 @@
-; RUN: llvm-link %p/opaque.ll %p/Inputs/opaque.ll -S -o - | FileCheck %s
+; RUN: llvm37-link %p/opaque.ll %p/Inputs/opaque.ll -S -o - | FileCheck %s
 
 ; CHECK-DAG: %A =   type {}
 ; CHECK-DAG: %B =   type { %C, %C, %B* }

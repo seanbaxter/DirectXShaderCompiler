@@ -1,4 +1,4 @@
-add_llvm_library(LLVMMC
+add_llvm_library(LLVM37MC
   ConstantPools.cpp
   ELFObjectWriter.cpp
   MCAsmBackend.cpp
@@ -50,7 +50,7 @@ add_llvm_library(LLVMMC
   YAML.cpp
 
   ADDITIONAL_HEADER_DIRS
-  ${LLVM_MAIN_INCLUDE_DIR}/llvm/MC
+  ${LLVM37_MAIN_INCLUDE_DIR}/llvm37/MC
   )
 
 add_subdirectory(MCParser)

@@ -1,6 +1,6 @@
 //===--- TemplateName.h - C++ Template Name Representation-------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,12 +11,12 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_AST_TEMPLATENAME_H
-#define LLVM_CLANG_AST_TEMPLATENAME_H
+#ifndef LLVM37_CLANG_AST_TEMPLATENAME_H
+#define LLVM37_CLANG_AST_TEMPLATENAME_H
 
 #include "clang/Basic/LLVM.h"
-#include "llvm/ADT/FoldingSet.h"
-#include "llvm/ADT/PointerUnion.h"
+#include "llvm37/ADT/FoldingSet.h"
+#include "llvm37/ADT/PointerUnion.h"
 
 namespace clang {
   
@@ -116,7 +116,7 @@ public:
 /// provided with a template template argument pack in a context where its
 /// enclosing pack expansion could not be fully expanded.
 class SubstTemplateTemplateParmPackStorage
-  : public UncommonTemplateNameStorage, public llvm::FoldingSetNode
+  : public UncommonTemplateNameStorage, public llvm37::FoldingSetNode
 {
   TemplateTemplateParmDecl *Parameter;
   const TemplateArgument *Arguments;
@@ -137,9 +137,9 @@ public:
   /// parameter was substituted.
   TemplateArgument getArgumentPack() const;
   
-  void Profile(llvm::FoldingSetNodeID &ID, ASTContext &Context);
+  void Profile(llvm37::FoldingSetNodeID &ID, ASTContext &Context);
   
-  static void Profile(llvm::FoldingSetNodeID &ID,
+  static void Profile(llvm37::FoldingSetNodeID &ID,
                       ASTContext &Context,
                       TemplateTemplateParmDecl *Parameter,
                       const TemplateArgument &ArgPack);
@@ -173,7 +173,7 @@ public:
 /// specifier in the typedef. "apply" is a nested template, and can
 /// only be understood in the context of
 class TemplateName {
-  typedef llvm::PointerUnion4<TemplateDecl *,
+  typedef llvm37::PointerUnion4<TemplateDecl *,
                               UncommonTemplateNameStorage *,
                               QualifiedTemplateName *,
                               DependentTemplateName *> StorageType;
@@ -316,7 +316,7 @@ public:
   /// error.
   void dump() const;
 
-  void Profile(llvm::FoldingSetNodeID &ID) {
+  void Profile(llvm37::FoldingSetNodeID &ID) {
     ID.AddPointer(Storage.getOpaqueValue());
   }
 
@@ -337,7 +337,7 @@ const DiagnosticBuilder &operator<<(const DiagnosticBuilder &DB,
 /// \brief A structure for storing the information associated with a
 /// substituted template template parameter.
 class SubstTemplateTemplateParmStorage
-  : public UncommonTemplateNameStorage, public llvm::FoldingSetNode {
+  : public UncommonTemplateNameStorage, public llvm37::FoldingSetNode {
   friend class ASTContext;
 
   TemplateTemplateParmDecl *Parameter;
@@ -352,9 +352,9 @@ public:
   TemplateTemplateParmDecl *getParameter() const { return Parameter; }
   TemplateName getReplacement() const { return Replacement; }
 
-  void Profile(llvm::FoldingSetNodeID &ID);
+  void Profile(llvm37::FoldingSetNodeID &ID);
   
-  static void Profile(llvm::FoldingSetNodeID &ID,
+  static void Profile(llvm37::FoldingSetNodeID &ID,
                       TemplateTemplateParmDecl *parameter,
                       TemplateName replacement);
 };
@@ -380,7 +380,7 @@ inline TemplateName TemplateName::getUnderlying() const {
 /// with a qualified name, and has no semantic meaning. In this
 /// manner, it is to TemplateName what ElaboratedType is to Type,
 /// providing extra syntactic sugar for downstream clients.
-class QualifiedTemplateName : public llvm::FoldingSetNode {
+class QualifiedTemplateName : public llvm37::FoldingSetNode {
   /// \brief The nested name specifier that qualifies the template name.
   ///
   /// The bit is used to indicate whether the "template" keyword was
@@ -388,7 +388,7 @@ class QualifiedTemplateName : public llvm::FoldingSetNode {
   /// "template" keyword is always redundant in this case (otherwise,
   /// the template name would be a dependent name and we would express
   /// this name with DependentTemplateName).
-  llvm::PointerIntPair<NestedNameSpecifier *, 1> Qualifier;
+  llvm37::PointerIntPair<NestedNameSpecifier *, 1> Qualifier;
 
   /// \brief The template declaration or set of overloaded function templates
   /// that this qualified name refers to.
@@ -417,11 +417,11 @@ public:
   /// refers.
   TemplateDecl *getTemplateDecl() const { return Template; }
 
-  void Profile(llvm::FoldingSetNodeID &ID) {
+  void Profile(llvm37::FoldingSetNodeID &ID) {
     Profile(ID, getQualifier(), hasTemplateKeyword(), getTemplateDecl());
   }
 
-  static void Profile(llvm::FoldingSetNodeID &ID, NestedNameSpecifier *NNS,
+  static void Profile(llvm37::FoldingSetNodeID &ID, NestedNameSpecifier *NNS,
                       bool TemplateKeyword, TemplateDecl *Template) {
     ID.AddPointer(NNS);
     ID.AddBoolean(TemplateKeyword);
@@ -437,14 +437,14 @@ public:
 /// DependentTemplateName can refer to "MetaFun::template apply",
 /// where "MetaFun::" is the nested name specifier and "apply" is the
 /// template name referenced. The "template" keyword is implied.
-class DependentTemplateName : public llvm::FoldingSetNode {
+class DependentTemplateName : public llvm37::FoldingSetNode {
   /// \brief The nested name specifier that qualifies the template
   /// name.
   ///
   /// The bit stored in this qualifier describes whether the \c Name field
   /// is interpreted as an IdentifierInfo pointer (when clear) or as an
   /// overloaded operator kind (when set).
-  llvm::PointerIntPair<NestedNameSpecifier *, 1, bool> Qualifier;
+  llvm37::PointerIntPair<NestedNameSpecifier *, 1, bool> Qualifier;
 
   /// \brief The dependent template name.
   union {
@@ -515,21 +515,21 @@ public:
     return Operator; 
   }
   
-  void Profile(llvm::FoldingSetNodeID &ID) {
+  void Profile(llvm37::FoldingSetNodeID &ID) {
     if (isIdentifier())
       Profile(ID, getQualifier(), getIdentifier());
     else
       Profile(ID, getQualifier(), getOperator());
   }
 
-  static void Profile(llvm::FoldingSetNodeID &ID, NestedNameSpecifier *NNS,
+  static void Profile(llvm37::FoldingSetNodeID &ID, NestedNameSpecifier *NNS,
                       const IdentifierInfo *Identifier) {
     ID.AddPointer(NNS);
     ID.AddBoolean(false);
     ID.AddPointer(Identifier);
   }
 
-  static void Profile(llvm::FoldingSetNodeID &ID, NestedNameSpecifier *NNS,
+  static void Profile(llvm37::FoldingSetNodeID &ID, NestedNameSpecifier *NNS,
                       OverloadedOperatorKind Operator) {
     ID.AddPointer(NNS);
     ID.AddBoolean(true);
@@ -539,7 +539,7 @@ public:
 
 } // end namespace clang.
 
-namespace llvm {
+namespace llvm37 {
 
 /// \brief The clang::TemplateName class is effectively a pointer.
 template<>
@@ -557,6 +557,6 @@ public:
   enum { NumLowBitsAvailable = 0 };
 };
 
-} // end namespace llvm.
+} // end namespace llvm37.
 
 #endif

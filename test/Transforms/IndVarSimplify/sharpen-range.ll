@@ -1,6 +1,6 @@
 ;; RUN: opt -S < %s -indvars | FileCheck %s
 
-;; Check if llvm can narrow !range metadata based on loop entry
+;; Check if llvm37 can narrow !range metadata based on loop entry
 ;; predicates.
 
 declare void @abort()

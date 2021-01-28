@@ -1,6 +1,6 @@
 //===- ELFYAML.cpp - ELF YAMLIO implementation ----------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,11 +11,11 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Object/ELFYAML.h"
-#include "llvm/Support/Casting.h"
-#include "llvm/Support/MipsABIFlags.h"
+#include "llvm37/Object/ELFYAML.h"
+#include "llvm37/Support/Casting.h"
+#include "llvm37/Support/MipsABIFlags.h"
 
-namespace llvm {
+namespace llvm37 {
 
 ELFYAML::Section::~Section() {}
 
@@ -317,7 +317,7 @@ void ScalarBitSetTraits<ELFYAML::ELF_EF>::bitset(IO &IO,
     BCase(EF_HEXAGON_ISA_V5)
     break;
   default:
-    llvm_unreachable("Unsupported architecture");
+    llvm37_unreachable("Unsupported architecture");
   }
 #undef BCase
 #undef BCaseMask
@@ -457,25 +457,25 @@ void ScalarEnumerationTraits<ELFYAML::ELF_REL>::enumeration(
 #define ELF_RELOC(X, Y) IO.enumCase(Value, #X, ELF::X);
   switch (Object->Header.Machine) {
   case ELF::EM_X86_64:
-#include "llvm/Support/ELFRelocs/x86_64.def"
+#include "llvm37/Support/ELFRelocs/x86_64.def"
     break;
   case ELF::EM_MIPS:
-#include "llvm/Support/ELFRelocs/Mips.def"
+#include "llvm37/Support/ELFRelocs/Mips.def"
     break;
   case ELF::EM_HEXAGON:
-#include "llvm/Support/ELFRelocs/Hexagon.def"
+#include "llvm37/Support/ELFRelocs/Hexagon.def"
     break;
   case ELF::EM_386:
-#include "llvm/Support/ELFRelocs/i386.def"
+#include "llvm37/Support/ELFRelocs/i386.def"
     break;
   case ELF::EM_AARCH64:
-#include "llvm/Support/ELFRelocs/AArch64.def"
+#include "llvm37/Support/ELFRelocs/AArch64.def"
     break;
   case ELF::EM_ARM:
-#include "llvm/Support/ELFRelocs/ARM.def"
+#include "llvm37/Support/ELFRelocs/ARM.def"
     break;
   default:
-    llvm_unreachable("Unsupported architecture");
+    llvm37_unreachable("Unsupported architecture");
   }
 #undef ELF_RELOC
 }
@@ -766,11 +766,11 @@ void MappingTraits<ELFYAML::Object>::mapping(IO &IO, ELFYAML::Object &Object) {
   IO.setContext(nullptr);
 }
 
-LLVM_YAML_STRONG_TYPEDEF(uint8_t, MIPS_AFL_REG)
-LLVM_YAML_STRONG_TYPEDEF(uint8_t, MIPS_ABI_FP)
-LLVM_YAML_STRONG_TYPEDEF(uint32_t, MIPS_AFL_EXT)
-LLVM_YAML_STRONG_TYPEDEF(uint32_t, MIPS_AFL_ASE)
-LLVM_YAML_STRONG_TYPEDEF(uint32_t, MIPS_AFL_FLAGS1)
+LLVM37_YAML_STRONG_TYPEDEF(uint8_t, MIPS_AFL_REG)
+LLVM37_YAML_STRONG_TYPEDEF(uint8_t, MIPS_ABI_FP)
+LLVM37_YAML_STRONG_TYPEDEF(uint32_t, MIPS_AFL_EXT)
+LLVM37_YAML_STRONG_TYPEDEF(uint32_t, MIPS_AFL_ASE)
+LLVM37_YAML_STRONG_TYPEDEF(uint32_t, MIPS_AFL_FLAGS1)
 
 } // end namespace yaml
-} // end namespace llvm
+} // end namespace llvm37

@@ -1,6 +1,6 @@
 //===- CallingConvEmitter.cpp - Generate calling conventions --------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -13,11 +13,11 @@
 //===----------------------------------------------------------------------===//
 
 #include "CodeGenTarget.h"
-#include "llvm/TableGen/Error.h"
-#include "llvm/TableGen/Record.h"
-#include "llvm/TableGen/TableGenBackend.h"
+#include "llvm37/TableGen/Error.h"
+#include "llvm37/TableGen/Record.h"
+#include "llvm37/TableGen/TableGenBackend.h"
 #include <cassert>
-using namespace llvm;
+using namespace llvm37;
 
 namespace {
 class CallingConvEmitter {
@@ -274,11 +274,11 @@ void CallingConvEmitter::EmitAction(Record *Action,
   }
 }
 
-namespace llvm {
+namespace llvm37 {
 
 void EmitCallingConv(RecordKeeper &RK, raw_ostream &OS) {
   emitSourceFileHeader("Calling Convention Implementation Fragment", OS);
   CallingConvEmitter(RK).run(OS);
 }
 
-} // End llvm namespace
+} // End llvm37 namespace

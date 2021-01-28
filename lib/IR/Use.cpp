@@ -1,18 +1,18 @@
 //===-- Use.cpp - Implement the Use class ---------------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/IR/Use.h"
-#include "llvm/IR/User.h"
-#include "llvm/IR/Value.h"
+#include "llvm37/IR/Use.h"
+#include "llvm37/IR/User.h"
+#include "llvm37/IR/Value.h"
 #include <new>
 
-namespace llvm {
+namespace llvm37 {
 
 void Use::swap(Use &RHS) {
   if (Val == RHS.Val)
@@ -52,7 +52,7 @@ unsigned Use::getOperandNo() const {
 // Sets up the waymarking algorithm's tags for a series of Uses. See the
 // algorithm details here:
 //
-//   http://www.llvm.org/docs/ProgrammersManual.html#the-waymarking-algorithm
+//   http://www.llvm37.org/docs/ProgrammersManual.html#the-waymarking-algorithm
 //
 Use *Use::initTags(Use *const Start, Use *Stop) {
   ptrdiff_t Done = 0;
@@ -124,4 +124,4 @@ const Use *Use::getImpliedUser() const {
   }
 }
 
-} // End llvm namespace
+} // End llvm37 namespace

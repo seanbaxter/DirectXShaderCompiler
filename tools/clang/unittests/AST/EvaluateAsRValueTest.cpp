@@ -1,6 +1,6 @@
 //===- unittests/AST/EvaluateAsRValueTest.cpp -----------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -59,8 +59,8 @@ class EvaluateConstantInitializersAction : public clang::ASTFrontendAction {
  public:
    std::unique_ptr<clang::ASTConsumer>
    CreateASTConsumer(clang::CompilerInstance &Compiler,
-                     llvm::StringRef FilePath) override {
-     return llvm::make_unique<Consumer>();
+                     llvm37::StringRef FilePath) override {
+     return llvm37::make_unique<Consumer>();
   }
 
  private:

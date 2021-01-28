@@ -1,21 +1,21 @@
-//===- llvm/unittest/IR/PassManager.cpp - PassManager tests ---------------===//
+//===- llvm37/unittest/IR/PassManager.cpp - PassManager tests ---------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/AsmParser/Parser.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/PassManager.h"
-#include "llvm/Support/SourceMgr.h"
+#include "llvm37/AsmParser/Parser.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/PassManager.h"
+#include "llvm37/Support/SourceMgr.h"
 #include "gtest/gtest.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 namespace {
 
@@ -171,7 +171,7 @@ struct TestInvalidationFunctionPass {
 };
 
 std::unique_ptr<Module> parseIR(const char *IR) {
-  LLVMContext &C = getGlobalContext();
+  LLVM37Context &C = getGlobalContext();
   SMDiagnostic Err;
   return parseAssemblyString(IR, Err, C);
 }

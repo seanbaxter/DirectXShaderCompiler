@@ -1,6 +1,6 @@
 //===- Signals.cpp - Signal Handling support --------------------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -12,10 +12,10 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Support/Signals.h"
-#include "llvm/Config/config.h"
+#include "llvm37/Support/Signals.h"
+#include "llvm37/Config/config.h"
 
-namespace llvm {
+namespace llvm37 {
 using namespace sys;
 
 //===----------------------------------------------------------------------===//
@@ -26,9 +26,9 @@ using namespace sys;
 }
 
 // Include the platform-specific parts of this class.
-#ifdef LLVM_ON_UNIX
+#ifdef LLVM37_ON_UNIX
 #include "Unix/Signals.inc"
 #endif
-#ifdef LLVM_ON_WIN32
+#ifdef LLVM37_ON_WIN32
 #include "Windows/Signals.inc"
 #endif

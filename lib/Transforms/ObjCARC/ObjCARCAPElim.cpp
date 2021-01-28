@@ -1,6 +1,6 @@
 //===- ObjCARCAPElim.cpp - ObjC ARC Optimization --------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -19,19 +19,19 @@
 /// by name, and hardwires knowledge of their semantics.
 ///
 /// WARNING: This file knows about how certain Objective-C library functions are
-/// used. Naive LLVM IR transformations which would otherwise be
+/// used. Naive LLVM37 IR transformations which would otherwise be
 /// behavior-preserving may break these assumptions.
 ///
 //===----------------------------------------------------------------------===//
 
 #include "ObjCARC.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/raw_ostream.h"
 
-using namespace llvm;
-using namespace llvm::objcarc;
+using namespace llvm37;
+using namespace llvm37::objcarc;
 
 #define DEBUG_TYPE "objc-arc-ap-elim"
 
@@ -58,7 +58,7 @@ INITIALIZE_PASS(ObjCARCAPElim,
                 "ObjC ARC autorelease pool elimination",
                 false, false)
 
-Pass *llvm::createObjCARCAPElimPass() {
+Pass *llvm37::createObjCARCAPElimPass() {
   return new ObjCARCAPElim();
 }
 
@@ -135,7 +135,7 @@ bool ObjCARCAPElim::runOnModule(Module &M) {
   if (!ModuleHasARC(M))
     return false;
 
-  // Find the llvm.global_ctors variable, as the first step in
+  // Find the llvm37.global_ctors variable, as the first step in
   // identifying the global constructors. In theory, unnecessary autorelease
   // pools could occur anywhere, but in practice it's pretty rare. Global
   // ctors are a place where autorelease pools get inserted automatically,
@@ -155,7 +155,7 @@ bool ObjCARCAPElim::runOnModule(Module &M) {
   for (User::op_iterator OI = Init->op_begin(), OE = Init->op_end();
        OI != OE; ++OI) {
     Value *Op = *OI;
-    // llvm.global_ctors is an array of three-field structs where the second
+    // llvm37.global_ctors is an array of three-field structs where the second
     // members are constructor functions.
     Function *F = dyn_cast<Function>(cast<ConstantStruct>(Op)->getOperand(1));
     // If the user used a constructor function with the wrong signature and

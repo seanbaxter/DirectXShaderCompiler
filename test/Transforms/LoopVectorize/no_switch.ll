@@ -14,7 +14,7 @@ target datalayout = "e-m:o-i64:64-f80:128-n8:16:32:64-S128"
 define void @_Z11test_switchPii(i32* nocapture %A, i32 %Length) #0 {
 entry:
   %cmp18 = icmp sgt i32 %Length, 0, !dbg !10
-  br i1 %cmp18, label %for.body.preheader, label %for.end, !dbg !10, !llvm.loop !12
+  br i1 %cmp18, label %for.body.preheader, label %for.end, !dbg !10, !llvm37.loop !12
 
 for.body.preheader:                               ; preds = %entry
   br label %for.body, !dbg !14
@@ -44,7 +44,7 @@ for.inc:                                          ; preds = %sw.bb3, %for.body, 
   %indvars.iv.next = add nuw nsw i64 %indvars.iv, 1, !dbg !10
   %lftr.wideiv = trunc i64 %indvars.iv.next to i32, !dbg !10
   %exitcond = icmp eq i32 %lftr.wideiv, %Length, !dbg !10
-  br i1 %exitcond, label %for.end.loopexit, label %for.body, !dbg !10, !llvm.loop !12
+  br i1 %exitcond, label %for.end.loopexit, label %for.body, !dbg !10, !llvm37.loop !12
 
 for.end.loopexit:                                 ; preds = %for.inc
   br label %for.end
@@ -55,9 +55,9 @@ for.end:                                          ; preds = %for.end.loopexit, %
 
 attributes #0 = { nounwind }
 
-!llvm.dbg.cu = !{!0}
-!llvm.module.flags = !{!7, !8}
-!llvm.ident = !{!9}
+!llvm37.dbg.cu = !{!0}
+!llvm37.module.flags = !{!7, !8}
+!llvm37.ident = !{!9}
 
 !0 = !DICompileUnit(language: DW_LANG_C_plus_plus, producer: "clang version 3.5.0", isOptimized: true, runtimeVersion: 6, emissionKind: 2, file: !1, enums: !2, retainedTypes: !2, subprograms: !3, globals: !2, imports: !2)
 !1 = !DIFile(filename: "source.cpp", directory: ".")

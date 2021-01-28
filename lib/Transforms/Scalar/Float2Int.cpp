@@ -1,6 +1,6 @@
 //===- Float2Int.cpp - Demote floating point ops to work on integers ------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -13,25 +13,25 @@
 //===----------------------------------------------------------------------===//
 
 #define DEBUG_TYPE "float2int"
-#include "llvm/ADT/APInt.h"
-#include "llvm/ADT/APSInt.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/EquivalenceClasses.h"
-#include "llvm/ADT/MapVector.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/IR/ConstantRange.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/IRBuilder.h"
-#include "llvm/IR/InstIterator.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/Module.h"
-#include "llvm/Pass.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Transforms/Scalar.h"
+#include "llvm37/ADT/APInt.h"
+#include "llvm37/ADT/APSInt.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/EquivalenceClasses.h"
+#include "llvm37/ADT/MapVector.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/IR/ConstantRange.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/IRBuilder.h"
+#include "llvm37/IR/InstIterator.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/Pass.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Transforms/Scalar.h"
 #include <deque>
 #include <functional> // For std::function
-using namespace llvm;
+using namespace llvm37;
 
 // The algorithm is simple. Start at instructions that convert from the
 // float to the int domain: fptoui, fptosi and fcmp. Walk up the def-use
@@ -82,7 +82,7 @@ namespace {
     SmallPtrSet<Instruction*,8> Roots;
     EquivalenceClasses<Instruction*> ECs;
     MapVector<Instruction*, Value*> ConvertedInsts;
-    LLVMContext *Ctx;
+    LLVM37Context *Ctx;
   };
 }
 
@@ -120,7 +120,7 @@ static CmpInst::Predicate mapFCmpPred(CmpInst::Predicate P) {
 // integer version.
 static Instruction::BinaryOps mapBinOpcode(unsigned Opcode) {
   switch (Opcode) {
-  default: llvm_unreachable("Unhandled opcode!");
+  default: llvm37_unreachable("Unhandled opcode!");
   case Instruction::FAdd: return Instruction::Add;
   case Instruction::FSub: return Instruction::Sub;
   case Instruction::FMul: return Instruction::Mul;
@@ -256,7 +256,7 @@ void Float2Int::walkForwards() {
     default:
     case Instruction::UIToFP:
     case Instruction::SIToFP:
-      llvm_unreachable("Should have been handled in walkForwards!");
+      llvm37_unreachable("Should have been handled in walkForwards!");
 
     case Instruction::FAdd:
       Op = [](ArrayRef<ConstantRange> Ops) {
@@ -344,7 +344,7 @@ void Float2Int::walkForwards() {
                                            &Exact);
         OpRanges.push_back(ConstantRange(Int));
       } else {
-        llvm_unreachable("Should have already marked this as badRange!");
+        llvm37_unreachable("Should have already marked this as badRange!");
       }
     }
 
@@ -458,7 +458,7 @@ Value *Float2Int::convert(Instruction *I, Type *ToTy) {
                                          &Exact);
       NewOperands.push_back(ConstantInt::get(ToTy, Val));
     } else {
-      llvm_unreachable("Unhandled operand type?");
+      llvm37_unreachable("Unhandled operand type?");
     }
   }
 
@@ -466,7 +466,7 @@ Value *Float2Int::convert(Instruction *I, Type *ToTy) {
   IRBuilder<> IRB(I);
   Value *NewV = nullptr;
   switch (I->getOpcode()) {
-  default: llvm_unreachable("Unhandled instruction!");
+  default: llvm37_unreachable("Unhandled instruction!");
 
   case Instruction::FPToUI:
     NewV = IRB.CreateZExtOrTrunc(NewOperands[0], I->getType());
@@ -539,7 +539,7 @@ bool Float2Int::runOnFunction(Function &F) {
   return Modified;
 }
 
-FunctionPass *llvm::createFloat2IntPass() {
+FunctionPass *llvm37::createFloat2IntPass() {
   return new Float2Int();
 }
 

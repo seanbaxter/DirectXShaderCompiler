@@ -11,14 +11,14 @@
 
 #pragma once
 
-namespace llvm {
+namespace llvm37 {
 class PassRegistry;
 class ModulePass;
 
 extern char &DxilCleanupID;
 
-llvm::ModulePass *createDxilCleanupPass();
+llvm37::ModulePass *createDxilCleanupPass();
 
-void initializeDxilCleanupPass(llvm::PassRegistry&);
+void initializeDxilCleanupPass(llvm37::PassRegistry&);
 
 }

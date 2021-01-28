@@ -2,7 +2,7 @@
 
 """A test case update script.
 
-This script is a utility to update LLVM X86 'llc' based test cases with new
+This script is a utility to update LLVM37 X86 'llc' based test cases with new
 FileCheck patterns. It can either update all of the tests in the file or
 a single test function.
 """

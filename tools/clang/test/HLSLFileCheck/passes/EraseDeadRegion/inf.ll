@@ -14,7 +14,7 @@ target triple = "dxil-ms-dx"
 
 @"\01?output@@3V?$RWBuffer@M@@A" = external global %"class.RWBuffer<float>", align 4
 @CBUF = external constant %CBUF
-@llvm.used = appending global [2 x i8*] [i8* bitcast (%"class.RWBuffer<float>"* @"\01?output@@3V?$RWBuffer@M@@A" to i8*), i8* bitcast (%CBUF* @CBUF to i8*)], section "llvm.metadata"
+@llvm37.used = appending global [2 x i8*] [i8* bitcast (%"class.RWBuffer<float>"* @"\01?output@@3V?$RWBuffer@M@@A" to i8*), i8* bitcast (%CBUF* @CBUF to i8*)], section "llvm.metadata"
 
 ; Function Attrs: nounwind
 define void @main(<4 x float>* noalias nocapture readnone, i32) #0 {
@@ -159,7 +159,7 @@ attributes #1 = { nounwind }
 attributes #2 = { nounwind readonly }
 
 !pauseresume = !{!0}
-!llvm.ident = !{!1}
+!llvm37.ident = !{!1}
 
 !0 = !{!"hlsl-dxilemit", !"hlsl-dxilload"}
 !1 = !{!"clang version 3.7 (tags/RELEASE_370/final)"}

@@ -1,5 +1,5 @@
-; RUN: llvm-link %s -override %S/Inputs/override-with-internal-linkage-2.ll -S | FileCheck %s
-; RUN: llvm-link -override %S/Inputs/override-with-internal-linkage-2.ll %s -S | FileCheck %s
+; RUN: llvm37-link %s -override %S/Inputs/override-with-internal-linkage-2.ll -S | FileCheck %s
+; RUN: llvm37-link -override %S/Inputs/override-with-internal-linkage-2.ll %s -S | FileCheck %s
 
 ; CHECK-LABEL: define i32 @foo
 ; CHECK-NEXT: entry:

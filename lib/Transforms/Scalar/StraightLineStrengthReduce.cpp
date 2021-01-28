@@ -1,6 +1,6 @@
 //===-- StraightLineStrengthReduce.cpp - ------------------------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -59,21 +59,21 @@
 #include <vector>
 //                                                                           //
 ///////////////////////////////////////////////////////////////////////////////
-#include "llvm/ADT/DenseSet.h"
-#include "llvm/ADT/FoldingSet.h"
-#include "llvm/Analysis/ScalarEvolution.h"
-#include "llvm/Analysis/TargetTransformInfo.h"
-#include "llvm/Analysis/ValueTracking.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/Dominators.h"
-#include "llvm/IR/IRBuilder.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/PatternMatch.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Transforms/Scalar.h"
-#include "llvm/Transforms/Utils/Local.h"
+#include "llvm37/ADT/DenseSet.h"
+#include "llvm37/ADT/FoldingSet.h"
+#include "llvm37/Analysis/ScalarEvolution.h"
+#include "llvm37/Analysis/TargetTransformInfo.h"
+#include "llvm37/Analysis/ValueTracking.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/IR/Dominators.h"
+#include "llvm37/IR/IRBuilder.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/PatternMatch.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Transforms/Scalar.h"
+#include "llvm37/Transforms/Utils/Local.h"
 
-using namespace llvm;
+using namespace llvm37;
 using namespace PatternMatch;
 
 namespace {
@@ -219,7 +219,7 @@ INITIALIZE_PASS_DEPENDENCY(TargetTransformInfoWrapperPass)
 INITIALIZE_PASS_END(StraightLineStrengthReduce, "slsr",
                     "Straight line strength reduction", false, false)
 
-FunctionPass *llvm::createStraightLineStrengthReducePass() {
+FunctionPass *llvm37::createStraightLineStrengthReducePass() {
   return new StraightLineStrengthReduce();
 }
 
@@ -675,7 +675,7 @@ void StraightLineStrengthReduce::rewriteCandidateWithBasis(
     }
     break;
   default:
-    llvm_unreachable("C.CandidateKind is invalid");
+    llvm37_unreachable("C.CandidateKind is invalid");
   };
   Reduced->takeName(C.Ins);
   C.Ins->replaceAllUsesWith(Reduced);

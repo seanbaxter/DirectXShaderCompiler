@@ -14,19 +14,19 @@
 #include "dxc/dxcapi.h"
 #include "dxc/Support/microcom.h"
 #include <memory>
-#include "llvm/ADT/StringRef.h"
+#include "llvm37/ADT/StringRef.h"
 
 namespace clang {
 class DiagnosticsEngine;
 }
 
-namespace llvm {
-class LLVMContext;
+namespace llvm37 {
+class LLVM37Context;
 class MemoryBuffer;
 class Module;
 class raw_string_ostream;
 class Twine;
-} // namespace llvm
+} // namespace llvm37
 
 namespace hlsl {
 enum class SerializeDxilFlags : uint32_t;
@@ -40,24 +40,24 @@ class DxcOpts;
 
 namespace dxcutil {
 struct AssembleInputs {
-  AssembleInputs(std::unique_ptr<llvm::Module> &&pM,
+  AssembleInputs(std::unique_ptr<llvm37::Module> &&pM,
                  CComPtr<IDxcBlob> &pOutputContainerBlob,
                  IMalloc *pMalloc,
                  hlsl::SerializeDxilFlags SerializeFlags,
                  CComPtr<hlsl::AbstractMemoryStream> &pModuleBitcode,
                  bool bDebugInfo = false,
-                 llvm::StringRef DebugName = llvm::StringRef(),
+                 llvm37::StringRef DebugName = llvm37::StringRef(),
                  clang::DiagnosticsEngine *pDiag = nullptr,
                  hlsl::DxilShaderHash *pShaderHashOut = nullptr,
                  hlsl::AbstractMemoryStream *pReflectionOut = nullptr,
                  hlsl::AbstractMemoryStream *pRootSigOut = nullptr);
-  std::unique_ptr<llvm::Module> pM;
+  std::unique_ptr<llvm37::Module> pM;
   CComPtr<IDxcBlob> &pOutputContainerBlob;
   IMalloc *pMalloc;
   hlsl::SerializeDxilFlags SerializeFlags;
   CComPtr<hlsl::AbstractMemoryStream> &pModuleBitcode;
   bool bDebugInfo;
-  llvm::StringRef DebugName = llvm::StringRef();
+  llvm37::StringRef DebugName = llvm37::StringRef();
   clang::DiagnosticsEngine *pDiag;
   hlsl::DxilShaderHash *pShaderHashOut = nullptr;
   hlsl::AbstractMemoryStream *pReflectionOut = nullptr;
@@ -68,7 +68,7 @@ HRESULT ValidateRootSignatureInContainer(
     IDxcBlob *pRootSigContainer, clang::DiagnosticsEngine *pDiag = nullptr);
 void GetValidatorVersion(unsigned *pMajor, unsigned *pMinor);
 void AssembleToContainer(AssembleInputs &inputs);
-HRESULT Disassemble(IDxcBlob *pProgram, llvm::raw_string_ostream &Stream);
+HRESULT Disassemble(IDxcBlob *pProgram, llvm37::raw_string_ostream &Stream);
 void ReadOptsAndValidate(hlsl::options::MainArgs &mainArgs,
                          hlsl::options::DxcOpts &opts,
                          hlsl::AbstractMemoryStream *pOutputStream,
@@ -84,6 +84,6 @@ void CreateOperationResultFromOutputs(
     const std::string &warnings, bool hasErrorOccurred,
     _COM_Outptr_ IDxcOperationResult **ppResult);
 
-bool IsAbsoluteOrCurDirRelative(const llvm::Twine &T);
+bool IsAbsoluteOrCurDirRelative(const llvm37::Twine &T);
 
 } // namespace dxcutil

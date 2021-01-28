@@ -8,7 +8,7 @@ How To Use Attributes
 Introduction
 ============
 
-Attributes in LLVM have changed in some fundamental ways.  It was necessary to
+Attributes in LLVM37 have changed in some fundamental ways.  It was necessary to
 do this to support expanding the attributes to encompass more than a handful of
 attributes --- e.g. command line options.  The old way of handling attributes
 consisted of representing them as a bit mask of values.  This bit mask was
@@ -58,7 +58,7 @@ An ``AttributeSet`` object is designed to be passed around by value.
 
 Note: It is advised that you do *not* use the ``AttributeSet`` "introspection"
 methods (e.g. ``Raw``, ``getRawPointer``, etc.).  These methods break
-encapsulation, and may be removed in a future release (i.e. LLVM 4.0).
+encapsulation, and may be removed in a future release (i.e. LLVM37 4.0).
 
 ``AttrBuilder``
 ===============
@@ -74,7 +74,7 @@ should be passed by reference.
 
 Note: It is advised that you do *not* use the ``AttrBuilder::addRawValue()``
 method or the ``AttrBuilder(uint64_t Val)`` constructor.  These are for
-backwards compatibility and may be removed in a future release (i.e. LLVM 4.0).
+backwards compatibility and may be removed in a future release (i.e. LLVM37 4.0).
 
 And that's basically it! A lot of functionality is hidden behind these classes,
 but the interfaces are pretty straight forward.

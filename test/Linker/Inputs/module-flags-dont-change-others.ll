@@ -1,4 +1,4 @@
-!llvm.module.flags = !{!3, !4, !5}
+!llvm37.module.flags = !{!3, !4, !5}
 
 !0 = !{}
 !1 = !{!0}

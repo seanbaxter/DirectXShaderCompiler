@@ -10,8 +10,8 @@
 //                                                                           //
 ///////////////////////////////////////////////////////////////////////////////
 
-#include "llvm/ADT/SmallPtrSet.h"
-#include "llvm/ADT/DenseMap.h"
+#include "llvm37/ADT/SmallPtrSet.h"
+#include "llvm37/ADT/DenseMap.h"
 #include "clang/AST/ASTContext.h"
 #include "clang/AST/Attr.h"
 #include "clang/AST/DeclCXX.h"
@@ -791,13 +791,13 @@ QualType GetOrCreateMatrixSpecialization(ASTContext& context, Sema* sema,
       TemplateArgument(elementType),
       TemplateArgument(
           context,
-          llvm::APSInt(
-              llvm::APInt(context.getIntWidth(context.IntTy), rowCount), false),
+          llvm37::APSInt(
+              llvm37::APInt(context.getIntWidth(context.IntTy), rowCount), false),
           context.IntTy),
       TemplateArgument(
           context,
-          llvm::APSInt(
-              llvm::APInt(context.getIntWidth(context.IntTy), colCount), false),
+          llvm37::APSInt(
+              llvm37::APInt(context.getIntWidth(context.IntTy), colCount), false),
           context.IntTy)};
 
   QualType matrixSpecializationType = GetOrCreateTemplateSpecialization(context, *sema, matrixTemplateDecl, ArrayRef<TemplateArgument>(templateArgs));
@@ -827,8 +827,8 @@ QualType GetOrCreateVectorSpecialization(ASTContext& context, Sema* sema,
       TemplateArgument(elementType),
       TemplateArgument(
           context,
-          llvm::APSInt(
-              llvm::APInt(context.getIntWidth(context.IntTy), colCount), false),
+          llvm37::APSInt(
+              llvm37::APInt(context.getIntWidth(context.IntTy), colCount), false),
           context.IntTy)};
 
   QualType vectorSpecializationType = GetOrCreateTemplateSpecialization(context, *sema, vectorTemplateDecl, ArrayRef<TemplateArgument>(templateArgs));
@@ -1971,7 +1971,7 @@ FunctionDecl *AddHLSLIntrinsicFunction(
   // Add intrinsic attribute
   AddHLSLIntrinsicAttr(functionDecl, context, tableName, lowering, pIntrinsic);
 
-  llvm::SmallVector<ParmVarDecl *, 4> paramDecls;
+  llvm37::SmallVector<ParmVarDecl *, 4> paramDecls;
   for (size_t i = 1; i < functionArgTypeCount; i++) {
     // For variadic functions all non-explicit arguments will have the same
     // name: "..."
@@ -2064,7 +2064,7 @@ public:
   }
 
 public:
-  UsedIntrinsic(const HLSL_INTRINSIC* intrinsicSource, llvm::ArrayRef<QualType> args)
+  UsedIntrinsic(const HLSL_INTRINSIC* intrinsicSource, llvm37::ArrayRef<QualType> args)
     : m_args(args.begin(), args.end()), m_intrinsicSource(intrinsicSource), m_functionDecl(nullptr)
   {
   }
@@ -2458,7 +2458,7 @@ class IntrinsicTableDefIter
 private:
   StringRef _typeName;
   StringRef _functionName;
-  llvm::SmallVector<CComPtr<IDxcIntrinsicTable>, 2>& _tables;
+  llvm37::SmallVector<CComPtr<IDxcIntrinsicTable>, 2>& _tables;
   const HLSL_INTRINSIC* _tableIntrinsic;
   UINT64 _tableLookupCookie;
   unsigned _tableIndex;
@@ -2466,7 +2466,7 @@ private:
   bool _firstChecked;
 
   IntrinsicTableDefIter(
-    llvm::SmallVector<CComPtr<IDxcIntrinsicTable>, 2>& tables,
+    llvm37::SmallVector<CComPtr<IDxcIntrinsicTable>, 2>& tables,
     StringRef typeName,
     StringRef functionName,
     unsigned argCount) :
@@ -2511,7 +2511,7 @@ private:
   }
 
 public:
-  static IntrinsicTableDefIter CreateStart(llvm::SmallVector<CComPtr<IDxcIntrinsicTable>, 2>& tables,
+  static IntrinsicTableDefIter CreateStart(llvm37::SmallVector<CComPtr<IDxcIntrinsicTable>, 2>& tables,
     StringRef typeName,
     StringRef functionName,
     unsigned argCount)
@@ -2520,7 +2520,7 @@ public:
     return result;
   }
 
-  static IntrinsicTableDefIter CreateEnd(llvm::SmallVector<CComPtr<IDxcIntrinsicTable>, 2>& tables)
+  static IntrinsicTableDefIter CreateEnd(llvm37::SmallVector<CComPtr<IDxcIntrinsicTable>, 2>& tables)
   {
     IntrinsicTableDefIter result(tables, StringRef(), StringRef(), 0);
     result._tableIndex = tables.size();
@@ -2841,12 +2841,12 @@ static CXXRecordDecl *CreateSubobjectProceduralPrimitiveHitGroup(ASTContext& con
 namespace hlsl {
   struct CallNode {
     FunctionDecl *CallerFn;
-    ::llvm::SmallPtrSet<FunctionDecl *, 4> CalleeFns;
+    ::llvm37::SmallPtrSet<FunctionDecl *, 4> CalleeFns;
   };
-  typedef ::llvm::DenseMap<FunctionDecl*, CallNode> CallNodes;
-  typedef ::llvm::SmallPtrSet<Decl *, 8> FnCallStack;
-  typedef ::llvm::SmallPtrSet<FunctionDecl*, 128> FunctionSet;
-  typedef ::llvm::SmallVector<FunctionDecl*, 32> PendingFunctions;
+  typedef ::llvm37::DenseMap<FunctionDecl*, CallNode> CallNodes;
+  typedef ::llvm37::SmallPtrSet<Decl *, 8> FnCallStack;
+  typedef ::llvm37::SmallPtrSet<FunctionDecl*, 128> FunctionSet;
+  typedef ::llvm37::SmallVector<FunctionDecl*, 32> PendingFunctions;
 
   // Returns the definition of a function.
   // This serves two purposes - ignore built-in functions, and pick
@@ -3019,7 +3019,7 @@ private:
   Sema* m_sema;
 
   // Intrinsic tables available externally.
-  llvm::SmallVector<CComPtr<IDxcIntrinsicTable>, 2> m_intrinsicTables;
+  llvm37::SmallVector<CComPtr<IDxcIntrinsicTable>, 2> m_intrinsicTables;
 
   // Scalar types indexed by HLSLScalarType.
   QualType m_scalarTypes[HLSLScalarTypeCount];
@@ -3476,7 +3476,7 @@ private:
     DXASSERT(m_vkNSDecl, "caller has not created the vk namespace yet");
 
     for (auto intConst : GetVkIntegerConstants()) {
-      const llvm::StringRef name = intConst.first;
+      const llvm37::StringRef name = intConst.first;
       const uint32_t value = intConst.second;
       auto &context = m_sema->getASTContext();
       QualType type = context.getConstType(context.UnsignedIntTy);
@@ -3486,7 +3486,7 @@ private:
                           context.getTrivialTypeSourceInfo(type),
                           clang::StorageClass::SC_Static);
       Expr *exprVal = IntegerLiteral::Create(
-          context, llvm::APInt(context.getIntWidth(type), value), type, NoLoc);
+          context, llvm37::APInt(context.getIntWidth(type), value), type, NoLoc);
       varDecl->setInit(exprVal);
       varDecl->setImplicit(true);
       m_vkNSDecl->addDecl(varDecl);
@@ -4763,7 +4763,7 @@ public:
       _In_ SourceLocation Loc
   );
 
-  bool CheckRangedTemplateArgument(SourceLocation diagLoc, llvm::APSInt& sintValue)
+  bool CheckRangedTemplateArgument(SourceLocation diagLoc, llvm37::APSInt& sintValue)
   {
     if (!sintValue.isStrictlyPositive() || sintValue.getLimitedValue() > 4)
     {
@@ -4837,7 +4837,7 @@ public:
       else if (arg.getKind() == TemplateArgument::ArgKind::Expression) {
         if (isMatrix || isVector) {
           Expr *expr = arg.getAsExpr();
-          llvm::APSInt constantResult;
+          llvm37::APSInt constantResult;
           if (expr != nullptr &&
               expr->isIntegerConstantExpr(constantResult, *m_context)) {
             if (CheckRangedTemplateArgument(argSrcLoc, constantResult)) {
@@ -4848,7 +4848,7 @@ public:
       }
       else if (arg.getKind() == TemplateArgument::ArgKind::Integral) {
         if (isMatrix || isVector) {
-          llvm::APSInt Val = arg.getAsIntegral();
+          llvm37::APSInt Val = arg.getAsIntegral();
           if (CheckRangedTemplateArgument(argSrcLoc, Val)) {
             return true;
           }
@@ -5509,7 +5509,7 @@ static bool CombineObjectTypes(ArBasicKind Target, _In_ ArBasicKind Source,
 static ArBasicKind LiteralToConcrete(Expr *litExpr,
                                      HLSLExternalSource *pHLSLExternalSource) {
   if (IntegerLiteral *intLit = dyn_cast<IntegerLiteral>(litExpr)) {
-    llvm::APInt val = intLit->getValue();
+    llvm37::APInt val = intLit->getValue();
     unsigned width = val.getActiveBits();
     bool isNeg = val.isNegative();
     if (isNeg) {
@@ -5526,7 +5526,7 @@ static ArBasicKind LiteralToConcrete(Expr *litExpr,
         return ArBasicKind::AR_BASIC_UINT64;
     }
   } else if (FloatingLiteral *floatLit = dyn_cast<FloatingLiteral>(litExpr)) {
-    llvm::APFloat val = floatLit->getValue();
+    llvm37::APFloat val = floatLit->getValue();
     unsigned width = val.getSizeInBits(val.getSemantics());
     if (width <= 16)
       return ArBasicKind::AR_BASIC_FLOAT16;
@@ -7702,7 +7702,7 @@ ExprResult HLSLExternalSource::LookupMatrixMemberExprForHLSL(
     msg = diag::err_hlsl_matrix_member_zero_in_one_based;
     break;
   default:
-    llvm_unreachable("Unknown MatrixMemberAccessError value");
+    llvm37_unreachable("Unknown MatrixMemberAccessError value");
   }
 
   if (msg != 0)
@@ -7906,7 +7906,7 @@ ExprResult HLSLExternalSource::LookupVectorMemberExprForHLSL(
     msg = diag::err_hlsl_vector_member_too_many_positions;
     break;
   default:
-    llvm_unreachable("Unknown VectorMemberAccessError value");
+    llvm37_unreachable("Unknown VectorMemberAccessError value");
   }
 
   if (msg != 0) {
@@ -9814,12 +9814,12 @@ bool IsValueInBasicRange(ArBasicKind basicKind, const APValue& value)
     if (value.isInt()) {
       val = value.getInt().getLimitedValue();
     } else if (value.isFloat()) {
-      llvm::APFloat floatValue = value.getFloat();
+      llvm37::APFloat floatValue = value.getFloat();
       if (!floatValue.isFinite()) {
         return false;
       }
-      llvm::APFloat valueFloat = value.getFloat();
-      if (&valueFloat.getSemantics() == &llvm::APFloat::IEEEsingle) {
+      llvm37::APFloat valueFloat = value.getFloat();
+      if (&valueFloat.getSemantics() == &llvm37::APFloat::IEEEsingle) {
         val = value.getFloat().convertToFloat();
       }
       else {
@@ -11071,9 +11071,9 @@ static int ValidateAttributeIntArg(Sema& S, const AttributeList &Attr, unsigned 
       }
       else if (ArgNum.isFloat())
       {
-        llvm::APSInt floatInt;
+        llvm37::APSInt floatInt;
         bool isPrecise;
-        if (ArgNum.getFloat().convertToInteger(floatInt, llvm::APFloat::rmTowardZero, &isPrecise) == llvm::APFloat::opStatus::opOK)
+        if (ArgNum.getFloat().convertToInteger(floatInt, llvm37::APFloat::rmTowardZero, &isPrecise) == llvm37::APFloat::opStatus::opOK)
         {
           value = floatInt.getSExtValue();
         }
@@ -11112,17 +11112,17 @@ static int ValidateAttributeFloatArg(Sema &S, const AttributeList &Attr,
     Expr *E = Attr.getArgAsExpr(index);
 
     if (FloatingLiteral *FL = dyn_cast<FloatingLiteral>(E)) {
-      llvm::APFloat flV = FL->getValue();
+      llvm37::APFloat flV = FL->getValue();
       if (flV.getSizeInBits(flV.getSemantics()) == 64) {
-        llvm::APInt intV = llvm::APInt::floatToBits(flV.convertToDouble());
+        llvm37::APInt intV = llvm37::APInt::floatToBits(flV.convertToDouble());
         value = intV.getLimitedValue();
       } else {
-        llvm::APInt intV = llvm::APInt::floatToBits(flV.convertToFloat());
+        llvm37::APInt intV = llvm37::APInt::floatToBits(flV.convertToFloat());
         value = intV.getLimitedValue();
       }
     } else if (IntegerLiteral *IL = dyn_cast<IntegerLiteral>(E)) {
-      llvm::APInt intV =
-          llvm::APInt::floatToBits((float)IL->getValue().getLimitedValue());
+      llvm37::APInt intV =
+          llvm37::APInt::floatToBits((float)IL->getValue().getLimitedValue());
       value = intV.getLimitedValue();
     } else {
       S.Diag(E->getLocStart(), diag::err_hlsl_attribute_expects_float_literal)
@@ -12703,7 +12703,7 @@ clang::QualType hlsl::GetOriginalElementType(
   return type;
 }
 
-void hlsl::CustomPrintHLSLAttr(const clang::Attr *A, llvm::raw_ostream &Out, const clang::PrintingPolicy &Policy, unsigned int Indentation) {
+void hlsl::CustomPrintHLSLAttr(const clang::Attr *A, llvm37::raw_ostream &Out, const clang::PrintingPolicy &Policy, unsigned int Indentation) {
   switch (A->getKind()) {
 
   // Parameter modifiers
@@ -13092,7 +13092,7 @@ bool hlsl::IsHLSLAttr(clang::attr::Kind AttrKind) {
   return false;
 }
 
-void hlsl::PrintClipPlaneIfPresent(clang::Expr *ClipPlane, llvm::raw_ostream &Out, const clang::PrintingPolicy &Policy) {
+void hlsl::PrintClipPlaneIfPresent(clang::Expr *ClipPlane, llvm37::raw_ostream &Out, const clang::PrintingPolicy &Policy) {
   if (ClipPlane) {
     Out << ", ";
     ClipPlane->printPretty(Out, 0, Policy);
@@ -13126,7 +13126,7 @@ bool hlsl::CanConvert(
   return HLSLExternalSource::FromSema(self)->CanConvert(loc, sourceExpr, target, explicitConversion, nullptr, standard);
 }
 
-void hlsl::Indent(unsigned int Indentation, llvm::raw_ostream &Out)
+void hlsl::Indent(unsigned int Indentation, llvm37::raw_ostream &Out)
 {
   for (unsigned i = 0; i != Indentation; ++i)
     Out << "  ";
@@ -13162,7 +13162,7 @@ void Sema::CheckHLSLArrayAccess(const Expr *expr) {
   DXASSERT_NOMSG(OperatorCallExpr->getOperator() == OverloadedOperatorKind::OO_Subscript);
 
   const Expr *RHS = OperatorCallExpr->getArg(1); // first subscript expression
-  llvm::APSInt index;
+  llvm37::APSInt index;
   if (RHS->EvaluateAsInt(index, Context)) {
       int64_t intIndex = index.getLimitedValue();
       const QualType LHSQualType = OperatorCallExpr->getArg(0)->getType();

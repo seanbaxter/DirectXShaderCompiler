@@ -1,6 +1,6 @@
 //===------- TreeTransform.h - Semantic Tree Transformation -----*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,8 +11,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_LIB_SEMA_TREETRANSFORM_H
-#define LLVM_CLANG_LIB_SEMA_TREETRANSFORM_H
+#ifndef LLVM37_CLANG_LIB_SEMA_TREETRANSFORM_H
+#define LLVM37_CLANG_LIB_SEMA_TREETRANSFORM_H
 
 #include "TypeLocBuilder.h"
 #include "clang/AST/Decl.h"
@@ -33,8 +33,8 @@
 #include "clang/Sema/SemaDiagnostic.h"
 #include "clang/Sema/SemaInternal.h"
 #include "clang/Sema/SemaHLSL.h" // HLSL Change
-#include "llvm/ADT/ArrayRef.h"
-#include "llvm/Support/ErrorHandling.h"
+#include "llvm37/ADT/ArrayRef.h"
+#include "llvm37/Support/ErrorHandling.h"
 #include <algorithm>
 
 namespace clang {
@@ -116,7 +116,7 @@ protected:
   /// \brief The set of local declarations that have been transformed, for
   /// cases where we are forced to build new declarations within the transformer
   /// rather than in the subclass (e.g., lambda closure types).
-  llvm::DenseMap<Decl *, Decl *> TransformedLocalDecls;
+  llvm37::DenseMap<Decl *, Decl *> TransformedLocalDecls;
 
 public:
   /// \brief Initializes a new tree transformer.
@@ -402,7 +402,7 @@ public:
   /// transformer has had to transform the declaration itself. Subclasses
   /// may override this function to provide alternate behavior.
   Decl *TransformDecl(SourceLocation Loc, Decl *D) {
-    llvm::DenseMap<Decl *, Decl *>::iterator Known
+    llvm37::DenseMap<Decl *, Decl *>::iterator Known
       = TransformedLocalDecls.find(D);
     if (Known != TransformedLocalDecls.end())
       return Known->second;
@@ -638,19 +638,19 @@ public:
 
   StmtResult TransformOMPExecutableDirective(OMPExecutableDirective *S);
 
-// FIXME: We use LLVM_ATTRIBUTE_NOINLINE because inlining causes a ridiculous
+// FIXME: We use LLVM37_ATTRIBUTE_NOINLINE because inlining causes a ridiculous
 // amount of stack usage with clang.
 #define STMT(Node, Parent)                        \
-  LLVM_ATTRIBUTE_NOINLINE \
+  LLVM37_ATTRIBUTE_NOINLINE \
   StmtResult Transform##Node(Node *S);
 #define EXPR(Node, Parent)                        \
-  LLVM_ATTRIBUTE_NOINLINE \
+  LLVM37_ATTRIBUTE_NOINLINE \
   ExprResult Transform##Node(Node *E);
 #define ABSTRACT_STMT(Stmt)
 #include "clang/AST/StmtNodes.inc"
 
 #define OPENMP_CLAUSE(Name, Class)                        \
-  LLVM_ATTRIBUTE_NOINLINE \
+  LLVM37_ATTRIBUTE_NOINLINE \
   OMPClause *Transform ## Class(Class *S);
 #include "clang/Basic/OpenMPKinds.def"
 
@@ -716,7 +716,7 @@ public:
   /// Also by default, all of the other Rebuild*Array
   QualType RebuildArrayType(QualType ElementType,
                             ArrayType::ArraySizeModifier SizeMod,
-                            const llvm::APInt *Size,
+                            const llvm37::APInt *Size,
                             Expr *SizeExpr,
                             unsigned IndexTypeQuals,
                             SourceRange BracketsRange);
@@ -728,7 +728,7 @@ public:
   /// Subclasses may override this routine to provide different behavior.
   QualType RebuildConstantArrayType(QualType ElementType,
                                     ArrayType::ArraySizeModifier SizeMod,
-                                    const llvm::APInt &Size,
+                                    const llvm37::APInt &Size,
                                     unsigned IndexTypeQuals,
                                     SourceRange BracketsRange);
 
@@ -977,7 +977,7 @@ public:
 
       case LookupResult::FoundOverloaded:
       case LookupResult::FoundUnresolvedValue:
-        llvm_unreachable("Tag lookup cannot find non-tags");
+        llvm37_unreachable("Tag lookup cannot find non-tags");
 
       case LookupResult::Ambiguous:
         // Let the LookupResult structure handle ambiguities.
@@ -2194,7 +2194,7 @@ public:
                                                    SubExpr, RParenLoc);
 
     default:
-      llvm_unreachable("Invalid C++ named cast");
+      llvm37_unreachable("Invalid C++ named cast");
     }
   }
 
@@ -2857,7 +2857,7 @@ public:
     case TemplateArgument::Pack:
     case TemplateArgument::TemplateExpansion:
     case TemplateArgument::NullPtr:
-      llvm_unreachable("Pack expansion pattern has no parameter packs");
+      llvm37_unreachable("Pack expansion pattern has no parameter packs");
 
     case TemplateArgument::Type:
       if (TypeSourceInfo *Expansion
@@ -3356,7 +3356,7 @@ TreeTransform<Derived>
   }
   }
 
-  llvm_unreachable("Unknown name kind.");
+  llvm37_unreachable("Unknown name kind.");
 }
 
 template<typename Derived>
@@ -3440,7 +3440,7 @@ TreeTransform<Derived>::TransformTemplateName(CXXScopeSpec &SS,
   }
 
   // These should be getting filtered out before they reach the AST.
-  llvm_unreachable("overloaded function decl survived to here");
+  llvm37_unreachable("overloaded function decl survived to here");
 }
 
 template<typename Derived>
@@ -3450,7 +3450,7 @@ void TreeTransform<Derived>::InventTemplateArgumentLoc(
   SourceLocation Loc = getDerived().getBaseLocation();
   switch (Arg.getKind()) {
   case TemplateArgument::Null:
-    llvm_unreachable("null template argument in TreeTransform");
+    llvm37_unreachable("null template argument in TreeTransform");
     break;
 
   case TemplateArgument::Type:
@@ -3504,7 +3504,7 @@ bool TreeTransform<Derived>::TransformTemplateArgument(
   case TemplateArgument::Pack:
   case TemplateArgument::Declaration:
   case TemplateArgument::NullPtr:
-    llvm_unreachable("Unexpected TemplateArgument");
+    llvm37_unreachable("Unexpected TemplateArgument");
 
   case TemplateArgument::Type: {
     TypeSourceInfo *DI = Input.getTypeSourceInfo();
@@ -3540,7 +3540,7 @@ bool TreeTransform<Derived>::TransformTemplateArgument(
   }
 
   case TemplateArgument::TemplateExpansion:
-    llvm_unreachable("Caller should expand pack expansions");
+    llvm37_unreachable("Caller should expand pack expansions");
 
   case TemplateArgument::Expression: {
     // Template argument expressions are constant expressions.
@@ -3795,7 +3795,7 @@ TreeTransform<Derived>::TransformType(TypeLocBuilder &TLB, TypeLoc T) {
 #include "clang/AST/TypeLocNodes.def"
   }
 
-  llvm_unreachable("unhandled type loc!");
+  llvm37_unreachable("unhandled type loc!");
 }
 
 /// FIXME: By default, this routine adds type qualifiers only to types
@@ -5770,7 +5770,7 @@ TreeTransform<Derived>::TransformObjCObjectType(TypeLocBuilder &TLB,
                NewTypeArgInfos,
                TL.getTypeArgsRAngleLoc(),
                TL.getProtocolLAngleLoc(),
-               llvm::makeArrayRef(TL.getTypePtr()->qual_begin(),
+               llvm37::makeArrayRef(TL.getTypePtr()->qual_begin(),
                                   TL.getNumProtocols()),
                TL.getProtocolLocs(),
                TL.getProtocolRAngleLoc());
@@ -6370,7 +6370,7 @@ template<typename Derived>
 StmtResult
 TreeTransform<Derived>::TransformMSAsmStmt(MSAsmStmt *S) {
   ArrayRef<Token> AsmToks =
-    llvm::makeArrayRef(S->getAsmToks(), S->getNumAsmToks());
+    llvm37::makeArrayRef(S->getAsmToks(), S->getNumAsmToks());
 
   bool HadError = false, HadChange = false;
 
@@ -6875,7 +6875,7 @@ StmtResult TreeTransform<Derived>::TransformOMPExecutableDirective(
     OMPExecutableDirective *D) {
 
   // Transform the clauses
-  llvm::SmallVector<OMPClause *, 16> TClauses;
+  llvm37::SmallVector<OMPClause *, 16> TClauses;
   ArrayRef<OMPClause *> Clauses = D->clauses();
   TClauses.reserve(Clauses.size());
   for (ArrayRef<OMPClause *>::iterator I = Clauses.begin(), E = Clauses.end();
@@ -7336,7 +7336,7 @@ TreeTransform<Derived>::TransformOMPSeqCstClause(OMPSeqCstClause *C) {
 template <typename Derived>
 OMPClause *
 TreeTransform<Derived>::TransformOMPPrivateClause(OMPPrivateClause *C) {
-  llvm::SmallVector<Expr *, 16> Vars;
+  llvm37::SmallVector<Expr *, 16> Vars;
   Vars.reserve(C->varlist_size());
   for (auto *VE : C->varlists()) {
     ExprResult EVar = getDerived().TransformExpr(cast<Expr>(VE));
@@ -7351,7 +7351,7 @@ TreeTransform<Derived>::TransformOMPPrivateClause(OMPPrivateClause *C) {
 template <typename Derived>
 OMPClause *TreeTransform<Derived>::TransformOMPFirstprivateClause(
     OMPFirstprivateClause *C) {
-  llvm::SmallVector<Expr *, 16> Vars;
+  llvm37::SmallVector<Expr *, 16> Vars;
   Vars.reserve(C->varlist_size());
   for (auto *VE : C->varlists()) {
     ExprResult EVar = getDerived().TransformExpr(cast<Expr>(VE));
@@ -7366,7 +7366,7 @@ OMPClause *TreeTransform<Derived>::TransformOMPFirstprivateClause(
 template <typename Derived>
 OMPClause *
 TreeTransform<Derived>::TransformOMPLastprivateClause(OMPLastprivateClause *C) {
-  llvm::SmallVector<Expr *, 16> Vars;
+  llvm37::SmallVector<Expr *, 16> Vars;
   Vars.reserve(C->varlist_size());
   for (auto *VE : C->varlists()) {
     ExprResult EVar = getDerived().TransformExpr(cast<Expr>(VE));
@@ -7381,7 +7381,7 @@ TreeTransform<Derived>::TransformOMPLastprivateClause(OMPLastprivateClause *C) {
 template <typename Derived>
 OMPClause *
 TreeTransform<Derived>::TransformOMPSharedClause(OMPSharedClause *C) {
-  llvm::SmallVector<Expr *, 16> Vars;
+  llvm37::SmallVector<Expr *, 16> Vars;
   Vars.reserve(C->varlist_size());
   for (auto *VE : C->varlists()) {
     ExprResult EVar = getDerived().TransformExpr(cast<Expr>(VE));
@@ -7396,7 +7396,7 @@ TreeTransform<Derived>::TransformOMPSharedClause(OMPSharedClause *C) {
 template <typename Derived>
 OMPClause *
 TreeTransform<Derived>::TransformOMPReductionClause(OMPReductionClause *C) {
-  llvm::SmallVector<Expr *, 16> Vars;
+  llvm37::SmallVector<Expr *, 16> Vars;
   Vars.reserve(C->varlist_size());
   for (auto *VE : C->varlists()) {
     ExprResult EVar = getDerived().TransformExpr(cast<Expr>(VE));
@@ -7421,7 +7421,7 @@ TreeTransform<Derived>::TransformOMPReductionClause(OMPReductionClause *C) {
 template <typename Derived>
 OMPClause *
 TreeTransform<Derived>::TransformOMPLinearClause(OMPLinearClause *C) {
-  llvm::SmallVector<Expr *, 16> Vars;
+  llvm37::SmallVector<Expr *, 16> Vars;
   Vars.reserve(C->varlist_size());
   for (auto *VE : C->varlists()) {
     ExprResult EVar = getDerived().TransformExpr(cast<Expr>(VE));
@@ -7440,7 +7440,7 @@ TreeTransform<Derived>::TransformOMPLinearClause(OMPLinearClause *C) {
 template <typename Derived>
 OMPClause *
 TreeTransform<Derived>::TransformOMPAlignedClause(OMPAlignedClause *C) {
-  llvm::SmallVector<Expr *, 16> Vars;
+  llvm37::SmallVector<Expr *, 16> Vars;
   Vars.reserve(C->varlist_size());
   for (auto *VE : C->varlists()) {
     ExprResult EVar = getDerived().TransformExpr(cast<Expr>(VE));
@@ -7459,7 +7459,7 @@ TreeTransform<Derived>::TransformOMPAlignedClause(OMPAlignedClause *C) {
 template <typename Derived>
 OMPClause *
 TreeTransform<Derived>::TransformOMPCopyinClause(OMPCopyinClause *C) {
-  llvm::SmallVector<Expr *, 16> Vars;
+  llvm37::SmallVector<Expr *, 16> Vars;
   Vars.reserve(C->varlist_size());
   for (auto *VE : C->varlists()) {
     ExprResult EVar = getDerived().TransformExpr(cast<Expr>(VE));
@@ -7474,7 +7474,7 @@ TreeTransform<Derived>::TransformOMPCopyinClause(OMPCopyinClause *C) {
 template <typename Derived>
 OMPClause *
 TreeTransform<Derived>::TransformOMPCopyprivateClause(OMPCopyprivateClause *C) {
-  llvm::SmallVector<Expr *, 16> Vars;
+  llvm37::SmallVector<Expr *, 16> Vars;
   Vars.reserve(C->varlist_size());
   for (auto *VE : C->varlists()) {
     ExprResult EVar = getDerived().TransformExpr(cast<Expr>(VE));
@@ -7488,7 +7488,7 @@ TreeTransform<Derived>::TransformOMPCopyprivateClause(OMPCopyprivateClause *C) {
 
 template <typename Derived>
 OMPClause *TreeTransform<Derived>::TransformOMPFlushClause(OMPFlushClause *C) {
-  llvm::SmallVector<Expr *, 16> Vars;
+  llvm37::SmallVector<Expr *, 16> Vars;
   Vars.reserve(C->varlist_size());
   for (auto *VE : C->varlists()) {
     ExprResult EVar = getDerived().TransformExpr(cast<Expr>(VE));
@@ -7503,7 +7503,7 @@ OMPClause *TreeTransform<Derived>::TransformOMPFlushClause(OMPFlushClause *C) {
 template <typename Derived>
 OMPClause *
 TreeTransform<Derived>::TransformOMPDependClause(OMPDependClause *C) {
-  llvm::SmallVector<Expr *, 16> Vars;
+  llvm37::SmallVector<Expr *, 16> Vars;
   Vars.reserve(C->varlist_size());
   for (auto *VE : C->varlists()) {
     ExprResult EVar = getDerived().TransformExpr(cast<Expr>(VE));
@@ -8280,7 +8280,7 @@ template<typename Derived>
 ExprResult
 TreeTransform<Derived>::TransformDesignatedInitUpdateExpr(
     DesignatedInitUpdateExpr *E) {
-  llvm_unreachable("Unexpected DesignatedInitUpdateExpr in syntactic form of "
+  llvm37_unreachable("Unexpected DesignatedInitUpdateExpr in syntactic form of "
                    "initializer");
   return ExprError();
 }
@@ -8289,7 +8289,7 @@ template<typename Derived>
 ExprResult
 TreeTransform<Derived>::TransformNoInitExpr(
     NoInitExpr *E) {
-  llvm_unreachable("Unexpected NoInitExpr in syntactic form of initializer");
+  llvm37_unreachable("Unexpected NoInitExpr in syntactic form of initializer");
   return ExprError();
 }
 
@@ -8426,7 +8426,7 @@ TreeTransform<Derived>::TransformCXXOperatorCallExpr(CXXOperatorCallExpr *E) {
   case OO_Delete:
   case OO_Array_New:
   case OO_Array_Delete:
-    llvm_unreachable("new and delete operators cannot use CXXOperatorCallExpr");
+    llvm37_unreachable("new and delete operators cannot use CXXOperatorCallExpr");
 
   case OO_Call: {
     // This is a call to an object's operator().
@@ -8461,11 +8461,11 @@ TreeTransform<Derived>::TransformCXXOperatorCallExpr(CXXOperatorCallExpr *E) {
     break;
 
   case OO_Conditional:
-    llvm_unreachable("conditional operator is not actually overloadable");
+    llvm37_unreachable("conditional operator is not actually overloadable");
 
   case OO_None:
   case NUM_OVERLOADED_OPERATORS:
-    llvm_unreachable("not an overloaded operator?");
+    llvm37_unreachable("not an overloaded operator?");
   }
 
   ExprResult Callee = getDerived().TransformExpr(E->getCallee());
@@ -10677,7 +10677,7 @@ TreeTransform<Derived>::TransformBlockExpr(BlockExpr *E) {
 template<typename Derived>
 ExprResult
 TreeTransform<Derived>::TransformAsTypeExpr(AsTypeExpr *E) {
-  llvm_unreachable("Cannot transform asType expressions yet");
+  llvm37_unreachable("Cannot transform asType expressions yet");
 }
 
 template<typename Derived>
@@ -10765,7 +10765,7 @@ template<typename Derived>
 QualType
 TreeTransform<Derived>::RebuildArrayType(QualType ElementType,
                                          ArrayType::ArraySizeModifier SizeMod,
-                                         const llvm::APInt *Size,
+                                         const llvm37::APInt *Size,
                                          Expr *SizeExpr,
                                          unsigned IndexTypeQuals,
                                          SourceRange BracketsRange) {
@@ -10779,7 +10779,7 @@ TreeTransform<Derived>::RebuildArrayType(QualType ElementType,
     SemaRef.Context.UnsignedIntTy, SemaRef.Context.UnsignedLongTy,
     SemaRef.Context.UnsignedLongLongTy, SemaRef.Context.UnsignedInt128Ty
   };
-  const unsigned NumTypes = llvm::array_lengthof(Types);
+  const unsigned NumTypes = llvm37::array_lengthof(Types);
   QualType SizeType;
   for (unsigned I = 0; I != NumTypes; ++I)
     if (Size->getBitWidth() == SemaRef.Context.getIntWidth(Types[I])) {
@@ -10801,7 +10801,7 @@ template<typename Derived>
 QualType
 TreeTransform<Derived>::RebuildConstantArrayType(QualType ElementType,
                                                  ArrayType::ArraySizeModifier SizeMod,
-                                                 const llvm::APInt &Size,
+                                                 const llvm37::APInt &Size,
                                                  unsigned IndexTypeQuals,
                                                  SourceRange BracketsRange) {
   return getDerived().RebuildArrayType(ElementType, SizeMod, &Size, nullptr,
@@ -10854,7 +10854,7 @@ template<typename Derived>
 QualType TreeTransform<Derived>::RebuildExtVectorType(QualType ElementType,
                                                       unsigned NumElements,
                                                  SourceLocation AttributeLoc) {
-  llvm::APInt numElements(SemaRef.Context.getIntWidth(SemaRef.Context.IntTy),
+  llvm37::APInt numElements(SemaRef.Context.getIntWidth(SemaRef.Context.IntTy),
                           NumElements, true);
   IntegerLiteral *VectorSize
     = IntegerLiteral::Create(SemaRef.Context, numElements, SemaRef.Context.IntTy,

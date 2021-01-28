@@ -1,5 +1,5 @@
 =======================
-Writing an LLVM Backend
+Writing an LLVM37 Backend
 =======================
 
 .. toctree::
@@ -13,22 +13,22 @@ Writing an LLVM Backend
 Introduction
 ============
 
-NOTE: this document describes the instructions for LLVM, not the DirectX
+NOTE: this document describes the instructions for LLVM37, not the DirectX
 Compiler. It's available only for informational purposes. The design of a
 back-end is typically built as a standalone component for consumers of DXIL.
 
 This document describes techniques for writing compiler backends that convert
-the LLVM Intermediate Representation (IR) to code for a specified machine or
+the LLVM37 Intermediate Representation (IR) to code for a specified machine or
 other languages.  Code intended for a specific machine can take the form of
 either assembly code or binary code (usable for a JIT compiler).
 
-The backend of LLVM features a target-independent code generator that may
+The backend of LLVM37 features a target-independent code generator that may
 create output for several types of target CPUs --- including X86, PowerPC,
 ARM, and SPARC.  The backend may also be used to generate code targeted at SPUs
 of the Cell processor or GPUs to support the execution of compute kernels.
 
 The document focuses on existing examples found in subdirectories of
-``llvm/lib/Target`` in a downloaded LLVM release.  In particular, this document
+``llvm37/lib/Target`` in a downloaded LLVM37 release.  In particular, this document
 focuses on the example of creating a static compiler (one that emits text
 assembly) for a SPARC target, because SPARC has fairly standard
 characteristics, such as a RISC instruction set and straightforward calling
@@ -37,7 +37,7 @@ conventions.
 Audience
 --------
 
-The audience for this document is anyone who needs to write an LLVM backend to
+The audience for this document is anyone who needs to write an LLVM37 backend to
 generate code for a specific hardware or software target.
 
 Prerequisite Reading
@@ -45,11 +45,11 @@ Prerequisite Reading
 
 These essential documents must be read before reading this document:
 
-* `LLVM Language Reference Manual <LangRef.html>`_ --- a reference manual for
-  the LLVM assembly language.
+* `LLVM37 Language Reference Manual <LangRef.html>`_ --- a reference manual for
+  the LLVM37 assembly language.
 
 * :doc:`CodeGenerator` --- a guide to the components (classes and code
-  generation algorithms) for translating the LLVM internal representation into
+  generation algorithms) for translating the LLVM37 internal representation into
   machine code for a specified target.  Pay particular attention to the
   descriptions of code generation stages: Instruction Selection, Scheduling and
   Formation, SSA-based Optimization, Register Allocation, Prolog/Epilog Code
@@ -57,11 +57,11 @@ These essential documents must be read before reading this document:
 
 * :doc:`TableGen/index` --- a document that describes the TableGen
   (``tblgen``) application that manages domain-specific information to support
-  LLVM code generation.  TableGen processes input from a target description
+  LLVM37 code generation.  TableGen processes input from a target description
   file (``.td`` suffix) and generates C++ code that can be used for code
   generation.
 
-* :doc:`WritingAnLLVMPass` --- The assembly printer is a ``FunctionPass``, as
+* :doc:`WritingAnLLVM37Pass` --- The assembly printer is a ``FunctionPass``, as
   are several ``SelectionDAG`` processing steps.
 
 To follow the SPARC examples in this document, have a copy of `The SPARC
@@ -76,7 +76,7 @@ features.
 Basic Steps
 -----------
 
-To write a compiler backend for LLVM that converts the LLVM IR to code for a
+To write a compiler backend for LLVM37 that converts the LLVM37 IR to code for a
 specified target (machine or other language), follow these steps:
 
 * Create a subclass of the ``TargetMachine`` class that describes
@@ -99,7 +99,7 @@ specified target (machine or other language), follow these steps:
   additional code for a subclass of the ``TargetInstrInfo`` class to represent
   machine instructions supported by the target machine.
 
-* Describe the selection and conversion of the LLVM IR from a Directed Acyclic
+* Describe the selection and conversion of the LLVM37 IR from a Directed Acyclic
   Graph (DAG) representation of instructions to native target-specific
   instructions.  Use TableGen to generate code that matches patterns and
   selects instructions based on additional information in a target-specific
@@ -109,11 +109,11 @@ specified target (machine or other language), follow these steps:
   to replace or remove operations and data types that are not supported
   natively in a SelectionDAG.
 
-* Write code for an assembly printer that converts LLVM IR to a GAS format for
+* Write code for an assembly printer that converts LLVM37 IR to a GAS format for
   your target machine.  You should add assembly strings to the instructions
   defined in your target-specific version of ``TargetInstrInfo.td``.  You
   should also write code for a subclass of ``AsmPrinter`` that performs the
-  LLVM-to-assembly conversion and a trivial subclass of ``TargetAsmInfo``.
+  LLVM37-to-assembly conversion and a trivial subclass of ``TargetAsmInfo``.
 
 * Optionally, add support for subtargets (i.e., variants with different
   capabilities).  You should also write code for a subclass of the
@@ -131,9 +131,9 @@ Preliminaries
 -------------
 
 To actually create your compiler backend, you need to create and modify a few
-files.  The absolute minimum is discussed here.  But to actually use the LLVM
+files.  The absolute minimum is discussed here.  But to actually use the LLVM37
 target-independent code generator, you must perform the steps described in the
-:doc:`LLVM Target-Independent Code Generator <CodeGenerator>` document.
+:doc:`LLVM37 Target-Independent Code Generator <CodeGenerator>` document.
 
 First, you should create a subdirectory under ``lib/Target`` to hold all the
 files related to your target.  If your target is called "Dummy", create the
@@ -142,9 +142,9 @@ directory ``lib/Target/Dummy``.
 In this new directory, create a ``Makefile``.  It is easiest to copy a
 ``Makefile`` of another target and modify it.  It should at least contain the
 ``LEVEL``, ``LIBRARYNAME`` and ``TARGET`` variables, and then include
-``$(LEVEL)/Makefile.common``.  The library can be named ``LLVMDummy`` (for
+``$(LEVEL)/Makefile.common``.  The library can be named ``LLVM37Dummy`` (for
 example, see the MIPS target).  Alternatively, you can split the library into
-``LLVMDummyCodeGen`` and ``LLVMDummyAsmPrinter``, the latter of which should be
+``LLVM37DummyCodeGen`` and ``LLVM37DummyAsmPrinter``, the latter of which should be
 implemented in a subdirectory below ``lib/Target/Dummy`` (for example, see the
 PowerPC target).
 
@@ -155,12 +155,12 @@ any other naming scheme will confuse ``llvm-config`` and produce a lot of
 To make your target actually do something, you need to implement a subclass of
 ``TargetMachine``.  This implementation should typically be in the file
 ``lib/Target/DummyTargetMachine.cpp``, but any file in the ``lib/Target``
-directory will be built and should work.  To use LLVM's target independent code
+directory will be built and should work.  To use LLVM37's target independent code
 generator, you should do what all current machine backends do: create a
-subclass of ``LLVMTargetMachine``.  (To create a target from scratch, create a
+subclass of ``LLVM37TargetMachine``.  (To create a target from scratch, create a
 subclass of ``TargetMachine``.)
 
-To get LLVM to actually build and link your target, you need to add it to the
+To get LLVM37 to actually build and link your target, you need to add it to the
 ``TARGETS_TO_BUILD`` variable.  To do this, you modify the configure script to
 know about your target when parsing the ``--enable-targets`` option.  Search
 the configure script for ``TARGETS_TO_BUILD``, add your target to the lists
@@ -171,15 +171,15 @@ change ``autoconf/configure.ac`` and regenerate configure by running
 Target Machine
 ==============
 
-``LLVMTargetMachine`` is designed as a base class for targets implemented with
-the LLVM target-independent code generator.  The ``LLVMTargetMachine`` class
+``LLVM37TargetMachine`` is designed as a base class for targets implemented with
+the LLVM37 target-independent code generator.  The ``LLVM37TargetMachine`` class
 should be specialized by a concrete target class that implements the various
-virtual methods.  ``LLVMTargetMachine`` is defined as a subclass of
-``TargetMachine`` in ``include/llvm/Target/TargetMachine.h``.  The
+virtual methods.  ``LLVM37TargetMachine`` is defined as a subclass of
+``TargetMachine`` in ``include/llvm37/Target/TargetMachine.h``.  The
 ``TargetMachine`` class implementation (``TargetMachine.cpp``) also processes
 numerous command-line options.
 
-To create a concrete target-specific subclass of ``LLVMTargetMachine``, start
+To create a concrete target-specific subclass of ``LLVM37TargetMachine``, start
 by copying an existing ``TargetMachine`` class and header.  You should name the
 files that you create to reflect your specific target.  For instance, for the
 SPARC target, name the files ``SparcTargetMachine.h`` and
@@ -199,11 +199,11 @@ simply return a class member.
 
 .. code-block:: c++
 
-  namespace llvm {
+  namespace llvm37 {
 
   class Module;
 
-  class SparcTargetMachine : public LLVMTargetMachine {
+  class SparcTargetMachine : public LLVM37TargetMachine {
     const DataLayout DataLayout;       // Calculates type size & alignment
     SparcSubtarget Subtarget;
     SparcInstrInfo InstrInfo;
@@ -229,7 +229,7 @@ simply return a class member.
     virtual bool addPreEmitPass(PassManagerBase &PM, bool Fast);
   };
 
-  } // end namespace llvm
+  } // end namespace llvm37
 
 * ``getInstrInfo()``
 * ``getRegisterInfo()``
@@ -282,7 +282,7 @@ Target Registration
 ===================
 
 You must also register your target with the ``TargetRegistry``, which is what
-other LLVM tools use to be able to lookup and use your target at runtime.  The
+other LLVM37 tools use to be able to lookup and use your target at runtime.  The
 ``TargetRegistry`` can be used directly, but for most targets there are helper
 templates which should take care of the work for you.
 
@@ -294,9 +294,9 @@ looks like this:
 
 .. code-block:: c++
 
-  Target llvm::TheSparcTarget;
+  Target llvm37::TheSparcTarget;
 
-  extern "C" void LLVMInitializeSparcTargetInfo() {
+  extern "C" void LLVM37InitializeSparcTargetInfo() {
     RegisterTarget<Triple::sparc, /*HasJIT=*/false>
       X(TheSparcTarget, "sparc", "Sparc");
   }
@@ -310,11 +310,11 @@ example.  Here is an example of registering the Sparc assembly printer:
 
 .. code-block:: c++
 
-  extern "C" void LLVMInitializeSparcAsmPrinter() {
+  extern "C" void LLVM37InitializeSparcAsmPrinter() {
     RegisterAsmPrinter<SparcAsmPrinter> X(TheSparcTarget);
   }
 
-For more information, see "`llvm/Target/TargetRegistry.h
+For more information, see "`llvm37/Target/TargetRegistry.h
 </doxygen/TargetRegistry_8h-source.html>`_".
 
 Register Set and Register Classes
@@ -351,7 +351,7 @@ to define an object for each register.  The specified string ``n`` becomes the
 ``Name`` of the register.  The basic ``Register`` object does not have any
 subregisters and does not specify any aliases.
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
   class Register<string n> {
     string Namespace = "";
@@ -367,7 +367,7 @@ subregisters and does not specify any aliases.
 For example, in the ``X86RegisterInfo.td`` file, there are register definitions
 that utilize the ``Register`` class, such as:
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
   def AL : Register<"AL">, DwarfRegNum<[0, 0, 0]>;
 
@@ -394,7 +394,7 @@ generates this code in the ``X86GenRegisterInfo.inc`` file:
 
 From the register info file, TableGen generates a ``TargetRegisterDesc`` object
 for each register.  ``TargetRegisterDesc`` is defined in
-``include/llvm/Target/TargetRegisterInfo.h`` with the following fields:
+``include/llvm37/Target/TargetRegisterInfo.h`` with the following fields:
 
 .. code-block:: c++
 
@@ -420,7 +420,7 @@ classes.  In ``Target.td``, the ``Register`` class is the base for the
 ``RegisterWithSubRegs`` class that is used to define registers that need to
 specify subregisters in the ``SubRegs`` list, as shown here:
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
   class RegisterWithSubRegs<string n, list<Register> subregs> : Register<n> {
     let SubRegs = subregs;
@@ -433,7 +433,7 @@ feature common to these subclasses.  Note the use of "``let``" expressions to
 override values that are initially defined in a superclass (such as ``SubRegs``
 field in the ``Rd`` class).
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
   class SparcReg<string n> : Register<n> {
     field bits<5> Num;
@@ -458,7 +458,7 @@ field in the ``Rd`` class).
 In the ``SparcRegisterInfo.td`` file, there are register definitions that
 utilize these subclasses of ``Register``, such as:
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
   def G0 : Ri< 0, "G0">, DwarfRegNum<[0]>;
   def G1 : Ri< 1, "G1">, DwarfRegNum<[1]>;
@@ -484,7 +484,7 @@ default allocation order of the registers.  A target description file
 ``XXXRegisterInfo.td`` that uses ``Target.td`` can construct register classes
 using the following class:
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
   class RegisterClass<string namespace,
   list<ValueType> regTypes, int alignment, dag regList> {
@@ -511,7 +511,7 @@ To define a ``RegisterClass``, use the following 4 arguments:
 * The first argument of the definition is the name of the namespace.
 
 * The second argument is a list of ``ValueType`` register type values that are
-  defined in ``include/llvm/CodeGen/ValueTypes.td``.  Defined values include
+  defined in ``include/llvm37/CodeGen/ValueTypes.td``.  Defined values include
   integer types (such as ``i16``, ``i32``, and ``i1`` for Boolean),
   floating-point types (``f32``, ``f64``), and vector types (for example,
   ``v8i16`` for an ``8 x i16`` vector).  All registers in a ``RegisterClass``
@@ -528,7 +528,7 @@ To define a ``RegisterClass``, use the following 4 arguments:
   If an alternative allocation order method is not specified, then ``regList``
   also defines the order of allocation used by the register allocator.  Besides
   simply listing registers with ``(add R0, R1, ...)``, more advanced set
-  operators are available.  See ``include/llvm/Target/Target.td`` for more
+  operators are available.  See ``include/llvm37/Target/Target.td`` for more
   information.
 
 In ``SparcRegisterInfo.td``, three ``RegisterClass`` objects are defined:
@@ -538,7 +538,7 @@ defines a group of 32 single-precision floating-point registers (``F0`` to
 ``F31``); ``DFPRegs`` defines a group of 16 double-precision registers
 (``D0-D15``).
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
   // F0, F1, F2, ..., F31
   def FPRegs : RegisterClass<"SP", [f32], 32, (sequence "F%u", 0, 31)>;
@@ -662,12 +662,12 @@ for the SPARC implementation in ``SparcRegisterInfo.cpp``:
 Instruction Set
 ===============
 
-During the early stages of code generation, the LLVM IR code is converted to a
+During the early stages of code generation, the LLVM37 IR code is converted to a
 ``SelectionDAG`` with nodes that are instances of the ``SDNode`` class
 containing target instructions.  An ``SDNode`` has an opcode, operands, type
 requirements, and operation properties.  For example, is an operation
 commutative, does an operation load from memory.  The various operation node
-types are described in the ``include/llvm/CodeGen/SelectionDAGNodes.h`` file
+types are described in the ``include/llvm37/CodeGen/SelectionDAGNodes.h`` file
 (values of the ``NodeType`` enum in the ``ISD`` namespace).
 
 TableGen uses the following target description (``.td``) input files to
@@ -709,7 +709,7 @@ which describes one instruction.  An instruction descriptor defines:
 The Instruction class (defined in ``Target.td``) is mostly used as a base for
 more complex instruction classes.
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
   class Instruction {
     string Namespace = "";
@@ -732,7 +732,7 @@ target).
 A single instruction from the architecture manual is often modeled as multiple
 target instructions, depending upon its operands.  For example, a manual might
 describe an add instruction that takes a register or an immediate operand.  An
-LLVM target could model this with two instructions named ``ADDri`` and
+LLVM37 target could model this with two instructions named ``ADDri`` and
 ``ADDrr``.
 
 You should define a class for each instruction category and define each opcode
@@ -766,7 +766,7 @@ specific operation value for ``LD``/Load Word.  The third parameter is the
 output destination, which is a register operand and defined in the ``Register``
 target description file (``IntRegs``).
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
   def LDrr : F3_1 <3, 0b000000, (outs IntRegs:$dst), (ins MEMrr:$addr),
                    "ld [$addr], $dst",
@@ -775,7 +775,7 @@ target description file (``IntRegs``).
 The fourth parameter is the input source, which uses the address operand
 ``MEMrr`` that is defined earlier in ``SparcInstrInfo.td``:
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
   def MEMrr : Operand<i32> {
     let PrintMethod = "printMemOperand";
@@ -794,7 +794,7 @@ immediate value operands.  For example, to perform a Load Integer instruction
 for a Word from an immediate operand to a register, the following instruction
 class is defined:
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
   def LDri : F3_2 <3, 0b000000, (outs IntRegs:$dst), (ins MEMri:$addr),
                    "ld [$addr], $dst",
@@ -807,7 +807,7 @@ creation of templates to define several instruction classes at once (using the
 pattern ``F3_12`` is defined to create 2 instruction classes each time
 ``F3_12`` is invoked:
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
   multiclass F3_12 <string OpcStr, bits<6> Op3Val, SDNode OpNode> {
     def rr  : F3_1 <2, Op3Val,
@@ -824,7 +824,7 @@ So when the ``defm`` directive is used for the ``XOR`` and ``ADD``
 instructions, as seen below, it creates four instruction objects: ``XORrr``,
 ``XORri``, ``ADDrr``, and ``ADDri``.
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
   defm XOR   : F3_12<"xor", 0b000011, xor>;
   defm ADD   : F3_12<"add", 0b000000, add>;
@@ -836,7 +836,7 @@ For example, the 10\ :sup:`th` bit represents the "greater than" condition for
 integers, and the 22\ :sup:`nd` bit represents the "greater than" condition for
 floats.
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
   def ICC_NE  : ICC_VAL< 9>;  // Not Equal
   def ICC_E   : ICC_VAL< 1>;  // Equal
@@ -861,7 +861,7 @@ order they are defined.  Fields are bound when they are assigned a value.  For
 example, the Sparc target defines the ``XNORrr`` instruction as a ``F3_1``
 format instruction having three operands.
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
   def XNORrr  : F3_1<2, 0b000111,
                      (outs IntRegs:$dst), (ins IntRegs:$b, IntRegs:$c),
@@ -871,7 +871,7 @@ format instruction having three operands.
 The instruction templates in ``SparcInstrFormats.td`` show the base class for
 ``F3_1`` is ``InstSP``.
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
   class InstSP<dag outs, dag ins, string asmstr, list<dag> pattern> : Instruction {
     field bits<32> Inst;
@@ -886,7 +886,7 @@ The instruction templates in ``SparcInstrFormats.td`` show the base class for
 
 ``InstSP`` leaves the ``op`` field unbound.
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
   class F3<dag outs, dag ins, string asmstr, list<dag> pattern>
       : InstSP<outs, ins, asmstr, pattern> {
@@ -903,7 +903,7 @@ The instruction templates in ``SparcInstrFormats.td`` show the base class for
 fields.  ``F3`` format instructions will bind the operands ``rd``, ``op3``, and
 ``rs1`` fields.
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
   class F3_1<bits<2> opVal, bits<6> op3val, dag outs, dag ins,
              string asmstr, list<dag> pattern> : F3<outs, ins, asmstr, pattern> {
@@ -928,10 +928,10 @@ TableGen will also generate a function called getNamedOperandIdx() which
 can be used to look up an operand's index in a MachineInstr based on its
 TableGen name.  Setting the UseNamedOperandTable bit in an instruction's
 TableGen definition will add all of its operands to an enumeration in the
-llvm::XXX:OpName namespace and also add an entry for it into the OperandMap
+llvm37::XXX:OpName namespace and also add an entry for it into the OperandMap
 table, which can be queried using getNamedOperandIdx()
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
   int DstIndex = SP::getNamedOperandIdx(SP::XNORrr, SP::OpName::dst); // => 0
   int BIndex = SP::getNamedOperandIdx(SP::XNORrr, SP::OpName::b);     // => 1
@@ -969,16 +969,16 @@ Instruction Operand Types
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 TableGen will also generate an enumeration consisting of all named Operand
-types defined in the backend, in the llvm::XXX::OpTypes namespace.
+types defined in the backend, in the llvm37::XXX::OpTypes namespace.
 Some common immediate Operand types (for instance i8, i32, i64, f32, f64)
-are defined for all targets in ``include/llvm/Target/Target.td``, and are
+are defined for all targets in ``include/llvm37/Target/Target.td``, and are
 available in each Target's OpTypes enum.  Also, only named Operand types appear
 in the enumeration: anonymous types are ignored.
 For example, the X86 backend defines ``brtarget`` and ``brtarget8``, both
 instances of the TableGen ``Operand`` class, which represent branch target
 operands:
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
   def brtarget : Operand<OtherVT>;
   def brtarget8 : Operand<OtherVT>;
@@ -1014,7 +1014,7 @@ Instruction Scheduling
 ----------------------
 
 Instruction itineraries can be queried using MCDesc::getSchedClass(). The
-value can be named by an enumemation in llvm::XXX::Sched namespace generated
+value can be named by an enumemation in llvm37::XXX::Sched namespace generated
 by TableGen in XXXGenInstrInfo.inc. The name of the schedule classes are
 the same as provided in XXXSchedule.td plus a default NoItinerary class.
 
@@ -1190,7 +1190,7 @@ handle, such as an indirect branch.
 Instruction Selector
 ====================
 
-LLVM uses a ``SelectionDAG`` to represent LLVM IR instructions, and nodes of
+LLVM37 uses a ``SelectionDAG`` to represent LLVM37 IR instructions, and nodes of
 the ``SelectionDAG`` ideally represent native target instructions.  During code
 generation, instruction selection passes are performed to convert non-native
 DAG instructions into native target-specific instructions.  The pass described
@@ -1217,25 +1217,25 @@ declares the ``FunctionPass`` class or a subclass of ``FunctionPass``.  In
 ``XXXTargetMachine.cpp``, a Pass Manager (PM) should add each instruction
 selection pass into the queue of passes to run.
 
-The LLVM static compiler (``llc``) is an excellent tool for visualizing the
+The LLVM37 static compiler (``llc``) is an excellent tool for visualizing the
 contents of DAGs.  To display the ``SelectionDAG`` before or after specific
 processing phases, use the command line options for ``llc``, described at
 :ref:`SelectionDAG-Process`.
 
 To describe instruction selector behavior, you should add patterns for lowering
-LLVM code into a ``SelectionDAG`` as the last parameter of the instruction
+LLVM37 code into a ``SelectionDAG`` as the last parameter of the instruction
 definitions in ``XXXInstrInfo.td``.  For example, in ``SparcInstrInfo.td``,
 this entry defines a register store operation, and the last parameter describes
 a pattern with the store DAG operator.
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
   def STrr  : F3_1< 3, 0b000100, (outs), (ins MEMrr:$addr, IntRegs:$src),
                    "st $src, [$addr]", [(store i32:$src, ADDRrr:$addr)]>;
 
 ``ADDRrr`` is a memory mode that is also defined in ``SparcInstrInfo.td``:
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
   def ADDRrr : ComplexPattern<i32, 2, "SelectADDRrr", [], []>;
 
@@ -1246,7 +1246,7 @@ defined in an implementation of the Instructor Selector (such as
 In ``lib/Target/TargetSelectionDAG.td``, the DAG operator for store is defined
 below:
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
   def store : PatFrag<(ops node:$val, node:$ptr),
                       (st node:$val, node:$ptr), [{
@@ -1326,11 +1326,11 @@ starts with the following code:
   addRegisterClass(MVT::f64, SP::DFPRegsRegisterClass);
 
 You should examine the node types in the ``ISD`` namespace
-(``include/llvm/CodeGen/SelectionDAGNodes.h``) and determine which operations
+(``include/llvm37/CodeGen/SelectionDAGNodes.h``) and determine which operations
 the target natively supports.  For operations that do **not** have native
 support, add a callback to the constructor for the ``XXXTargetLowering`` class,
 so the instruction selection process knows what to do.  The ``TargetLowering``
-class callback methods (declared in ``llvm/Target/TargetLowering.h``) are:
+class callback methods (declared in ``llvm37/Target/TargetLowering.h``) are:
 
 * ``setOperationAction`` --- General operation.
 * ``setLoadExtAction`` --- Load with extension.
@@ -1464,7 +1464,7 @@ if the current argument is of type ``f32`` or ``f64``), then the action is
 performed.  In this case, the ``CCAssignToReg`` action assigns the argument
 value to the first available register: either ``R0`` or ``R1``.
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
   CCIfType<[f32,f64], CCAssignToReg<[R0, R1]>>
 
@@ -1475,7 +1475,7 @@ which registers are used for specified scalar return types.  A single-precision
 float is returned to register ``F0``, and a double-precision float goes to
 register ``D0``.  A 32-bit integer is returned in register ``I0`` or ``I1``.
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
   def RetCC_Sparc32 : CallingConv<[
     CCIfType<[i32], CCAssignToReg<[I0, I1]>>,
@@ -1490,7 +1490,7 @@ the size of the slot, and the second parameter, also 4, indicates the stack
 alignment along 4-byte units.  (Special cases: if size is zero, then the ABI
 size is used; if alignment is zero, then the ABI alignment is used.)
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
   def CC_Sparc32 : CallingConv<[
     // All arguments get passed in integer registers if there is space.
@@ -1505,7 +1505,7 @@ the following example (in ``X86CallingConv.td``), the definition of
 assigned to the register ``ST0`` or ``ST1``, the ``RetCC_X86Common`` is
 invoked.
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
   def RetCC_X86_32_C : CallingConv<[
     CCIfType<[f32], CCAssignToReg<[ST0, ST1]>>,
@@ -1520,7 +1520,7 @@ then a specified action is invoked.  In the following example (in
 ``RetCC_X86_32_Fast`` is invoked.  If the ``SSECall`` calling convention is in
 use, then ``RetCC_X86_32_SSE`` is invoked.
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
   def RetCC_X86_32 : CallingConv<[
     CCIfCC<"CallingConv::Fast", CCDelegateTo<RetCC_X86_32_Fast>>,
@@ -1556,9 +1556,9 @@ Other calling convention interfaces include:
 Assembly Printer
 ================
 
-During the code emission stage, the code generator may utilize an LLVM pass to
+During the code emission stage, the code generator may utilize an LLVM37 pass to
 produce assembly output.  To do this, you want to implement the code for a
-printer that converts LLVM IR to a GAS-format assembly language for your target
+printer that converts LLVM37 IR to a GAS-format assembly language for your target
 machine, using the following steps:
 
 * Define all the assembly strings for your target, adding them to the
@@ -1574,7 +1574,7 @@ machine, using the following steps:
   ``TargetAsmInfo`` properties and sometimes new implementations for methods.
 
 * Write ``XXXAsmPrinter.cpp``, which implements the ``AsmPrinter`` class that
-  performs the LLVM-to-assembly conversion.
+  performs the LLVM37-to-assembly conversion.
 
 The code in ``XXXTargetAsmInfo.h`` is usually a trivial declaration of the
 ``XXXTargetAsmInfo`` class for use in ``XXXTargetAsmInfo.cpp``.  Similarly,
@@ -1599,15 +1599,15 @@ where the target specific ``TargetAsmInfo`` class uses an overridden methods:
 
 A target-specific implementation of ``AsmPrinter`` is written in
 ``XXXAsmPrinter.cpp``, which implements the ``AsmPrinter`` class that converts
-the LLVM to printable assembly.  The implementation must include the following
+the LLVM37 to printable assembly.  The implementation must include the following
 headers that have declarations for the ``AsmPrinter`` and
 ``MachineFunctionPass`` classes.  The ``MachineFunctionPass`` is a subclass of
 ``FunctionPass``.
 
 .. code-block:: c++
 
-  #include "llvm/CodeGen/AsmPrinter.h"
-  #include "llvm/CodeGen/MachineFunctionPass.h"
+  #include "llvm37/CodeGen/AsmPrinter.h"
+  #include "llvm37/CodeGen/MachineFunctionPass.h"
 
 As a ``FunctionPass``, ``AsmPrinter`` first calls ``doInitialization`` to set
 up the ``AsmPrinter``.  In ``SparcAsmPrinter``, a ``Mangler`` object is
@@ -1665,7 +1665,7 @@ Subtarget Support
 =================
 
 Subtarget support is used to inform the code generation process of instruction
-set variations for a given chip set.  For example, the LLVM SPARC
+set variations for a given chip set.  For example, the LLVM37 SPARC
 implementation provided covers three major versions of the SPARC microprocessor
 architecture: Version 8 (V8, which is a 32-bit architecture), Version 9 (V9, a
 64-bit architecture), and the UltraSPARC architecture.  V8 has 16
@@ -1688,7 +1688,7 @@ feature, the value of the attribute, and a description of the feature.  (The
 fifth parameter is a list of features whose presence is implied, and its
 default value is an empty array.)
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
   class SubtargetFeature<string n, string a, string v, string d,
                          list<SubtargetFeature> i = []> {
@@ -1702,7 +1702,7 @@ default value is an empty array.)
 In the ``Sparc.td`` file, the ``SubtargetFeature`` is used to define the
 following features.
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
   def FeatureV9 : SubtargetFeature<"v9", "IsV9", "true",
                        "Enable SPARC-V9 instructions">;
@@ -1716,7 +1716,7 @@ Elsewhere in ``Sparc.td``, the ``Proc`` class is defined and then is used to
 define particular SPARC processor subtypes that may have the previously
 described features.
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
   class Proc<string Name, list<SubtargetFeature> Features>
     : Processor<Name, NoItineraries, Features>;
@@ -1780,7 +1780,7 @@ contains the binary coding of machine instructions and the
 implementations do not.
 
 Both ``XXXJITInfo.cpp`` and ``XXXCodeEmitter.cpp`` must include the
-``llvm/CodeGen/MachineCodeEmitter.h`` header file that defines the
+``llvm37/CodeGen/MachineCodeEmitter.h`` header file that defines the
 ``MachineCodeEmitter`` class containing code for several callback functions
 that write data (in bytes, words, strings, etc.) to the output stream.
 

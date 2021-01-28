@@ -1,6 +1,6 @@
 //===--- CapabilityVisitor.cpp - Capability Visitor --------------*- C++ -*-==//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -13,7 +13,7 @@
 namespace clang {
 namespace spirv {
 
-void CapabilityVisitor::addExtension(Extension ext, llvm::StringRef target,
+void CapabilityVisitor::addExtension(Extension ext, llvm37::StringRef target,
                                      SourceLocation loc) {
   featureManager.requestExtension(ext, target, loc);
   // Do not emit OpExtension if the given extension is natively supported in
@@ -558,7 +558,7 @@ bool CapabilityVisitor::visit(SpirvEntryPoint *entryPoint) {
     addExtension(Extension::NV_mesh_shader, "SPV_NV_mesh_shader", {});
     break;
   default:
-    llvm_unreachable("found unknown shader model");
+    llvm37_unreachable("found unknown shader model");
     break;
   }
   return true;

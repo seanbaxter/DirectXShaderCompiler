@@ -1,14 +1,14 @@
 ; RUN: llc < %s -march=nvptx -mcpu=sm_20 | FileCheck %s
 
 
-declare float @llvm.nvvm.sqrt.f(float)
+declare float @llvm37.nvvm.sqrt.f(float)
 
 
 ; CHECK: sqrt_div
 ; CHECK: sqrt.rn.f32
 ; CHECK: div.rn.f32
 define float @sqrt_div(float %a, float %b) {
-  %t1 = tail call float @llvm.nvvm.sqrt.f(float %a)
+  %t1 = tail call float @llvm37.nvvm.sqrt.f(float %a)
   %t2 = fdiv float %t1, %b
   ret float %t2
 }
@@ -17,7 +17,7 @@ define float @sqrt_div(float %a, float %b) {
 ; CHECK: sqrt.approx.f32
 ; CHECK: div.approx.f32
 define float @sqrt_div_fast(float %a, float %b) #0 {
-  %t1 = tail call float @llvm.nvvm.sqrt.f(float %a)
+  %t1 = tail call float @llvm37.nvvm.sqrt.f(float %a)
   %t2 = fdiv float %t1, %b
   ret float %t2
 }

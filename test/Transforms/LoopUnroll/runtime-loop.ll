@@ -12,7 +12,7 @@ target datalayout = "e-p:64:64:64-i1:8:8-i8:8:8-i16:16:16-i32:32:32-i64:64:64-f3
 ; CHECK: %indvars.iv.prol = phi i64 [ %indvars.iv.next.prol, %for.body.prol ], [ 0, %for.body.preheader ]
 ; CHECK:  %prol.iter.sub = sub i32 %prol.iter, 1
 ; CHECK:  %prol.iter.cmp = icmp ne i32 %prol.iter.sub, 0
-; CHECK:  br i1 %prol.iter.cmp, label %for.body.prol, label %for.body.preheader.split, !llvm.loop !0
+; CHECK:  br i1 %prol.iter.cmp, label %for.body.prol, label %for.body.preheader.split, !llvm37.loop !0
 
 define i32 @test(i32* nocapture %a, i32 %n) nounwind uwtable readonly {
 entry:
@@ -134,7 +134,7 @@ for.body:                                         ; preds = %for.body, %entry
   %add = add i32 %conv, %res.03
   %sub = add nsw i32 %len.addr.04, -2
   %cmp = icmp eq i32 %sub, 0
-  br i1 %cmp, label %for.cond.for.end_crit_edge, label %for.body, !llvm.loop !0
+  br i1 %cmp, label %for.cond.for.end_crit_edge, label %for.body, !llvm37.loop !0
 
 for.cond.for.end_crit_edge:                       ; preds = %for.body
   %phitmp = trunc i32 %add to i16

@@ -16,8 +16,8 @@
 #include <unordered_map>
 #include <map>
 #include "DxilConstants.h"
-#include "llvm/ADT/MapVector.h"
-#include "llvm/ADT/StringRef.h"
+#include "llvm37/ADT/MapVector.h"
+#include "llvm37/ADT/StringRef.h"
 
 namespace hlsl {
 
@@ -39,7 +39,7 @@ public:
   DxilSubobject &operator=(const DxilSubobject &other) = delete;
 
   Kind GetKind() const { return m_Kind; }
-  llvm::StringRef GetName() const { return m_Name; }
+  llvm37::StringRef GetName() const { return m_Name; }
 
   // Note: strings and root signature data is owned by DxilModule
   // When creating subobjects, use canonical strings from module
@@ -48,7 +48,7 @@ public:
   bool GetStateObjectConfig(uint32_t &Flags) const;
   bool GetRootSignature(bool local, const void * &Data, uint32_t &Size, 
                         const char **pText = nullptr) const;
-  bool GetSubobjectToExportsAssociation(llvm::StringRef &Subobject,
+  bool GetSubobjectToExportsAssociation(llvm37::StringRef &Subobject,
                                         const char * const * &Exports,
                                         uint32_t &NumExports) const;
   bool GetRaytracingShaderConfig(uint32_t &MaxPayloadSizeInBytes,
@@ -56,19 +56,19 @@ public:
   bool GetRaytracingPipelineConfig(uint32_t &MaxTraceRecursionDepth) const;
   bool GetRaytracingPipelineConfig1(uint32_t &MaxTraceRecursionDepth, uint32_t &Flags) const;
   bool GetHitGroup(DXIL::HitGroupType &hitGroupType,
-                   llvm::StringRef &AnyHit,
-                   llvm::StringRef &ClosestHit,
-                   llvm::StringRef &Intersection) const;
+                   llvm37::StringRef &AnyHit,
+                   llvm37::StringRef &ClosestHit,
+                   llvm37::StringRef &Intersection) const;
 
 private:
-  DxilSubobject(DxilSubobjects &owner, Kind kind, llvm::StringRef name);
-  DxilSubobject(DxilSubobjects &owner, const DxilSubobject &other, llvm::StringRef name);
+  DxilSubobject(DxilSubobjects &owner, Kind kind, llvm37::StringRef name);
+  DxilSubobject(DxilSubobjects &owner, const DxilSubobject &other, llvm37::StringRef name);
   void CopyUnionedContents(const DxilSubobject &other);
   void InternStrings();
 
   DxilSubobjects &m_Owner;
   Kind m_Kind;
-  llvm::StringRef m_Name;
+  llvm37::StringRef m_Name;
 
   std::vector<const char*> m_Exports;
 
@@ -118,8 +118,8 @@ private:
 class DxilSubobjects {
 public:
   typedef std::pair<std::unique_ptr<char[]>, size_t> StoredBytes;
-  typedef llvm::MapVector< llvm::StringRef, StoredBytes > BytesStorage;
-  typedef llvm::MapVector< llvm::StringRef, std::unique_ptr<DxilSubobject> > SubobjectStorage;
+  typedef llvm37::MapVector< llvm37::StringRef, StoredBytes > BytesStorage;
+  typedef llvm37::MapVector< llvm37::StringRef, std::unique_ptr<DxilSubobject> > SubobjectStorage;
   using Kind = DXIL::SubobjectKind;
 
   DxilSubobjects();
@@ -130,46 +130,46 @@ public:
   DxilSubobjects &operator=(const DxilSubobjects &other) = delete;
 
   // Add/find string in owned subobject strings, returning canonical ptr
-  llvm::StringRef InternString(llvm::StringRef value);
+  llvm37::StringRef InternString(llvm37::StringRef value);
   // Add/find raw bytes, returning canonical ptr
   const void *InternRawBytes(const void *ptr, size_t size);
-  DxilSubobject *FindSubobject(llvm::StringRef name);
-  void RemoveSubobject(llvm::StringRef name);
-  DxilSubobject &CloneSubobject(const DxilSubobject &Subobject, llvm::StringRef Name);
+  DxilSubobject *FindSubobject(llvm37::StringRef name);
+  void RemoveSubobject(llvm37::StringRef name);
+  DxilSubobject &CloneSubobject(const DxilSubobject &Subobject, llvm37::StringRef Name);
   const SubobjectStorage &GetSubobjects() const { return m_Subobjects;  }
 
   // Create DxilSubobjects
 
-  DxilSubobject &CreateStateObjectConfig(llvm::StringRef Name,
+  DxilSubobject &CreateStateObjectConfig(llvm37::StringRef Name,
                                          uint32_t Flags);
   // Local/Global RootSignature
-  DxilSubobject &CreateRootSignature(llvm::StringRef Name,
+  DxilSubobject &CreateRootSignature(llvm37::StringRef Name,
                                      bool local,
                                      const void *Data,
                                      uint32_t Size,
-                                     llvm::StringRef *pText = nullptr);
+                                     llvm37::StringRef *pText = nullptr);
   DxilSubobject &CreateSubobjectToExportsAssociation(
-    llvm::StringRef Name,
-    llvm::StringRef Subobject, llvm::StringRef *Exports, uint32_t NumExports);
+    llvm37::StringRef Name,
+    llvm37::StringRef Subobject, llvm37::StringRef *Exports, uint32_t NumExports);
   DxilSubobject &CreateRaytracingShaderConfig(
-    llvm::StringRef Name,
+    llvm37::StringRef Name,
     uint32_t MaxPayloadSizeInBytes,
     uint32_t MaxAttributeSizeInBytes);
   DxilSubobject &CreateRaytracingPipelineConfig(
-    llvm::StringRef Name,
+    llvm37::StringRef Name,
     uint32_t MaxTraceRecursionDepth);
   DxilSubobject &CreateRaytracingPipelineConfig1(
-    llvm::StringRef Name,
+    llvm37::StringRef Name,
     uint32_t MaxTraceRecursionDepth,
     uint32_t Flags);
-  DxilSubobject &CreateHitGroup(llvm::StringRef Name, 
+  DxilSubobject &CreateHitGroup(llvm37::StringRef Name, 
                                 DXIL::HitGroupType hitGroupType,
-                                llvm::StringRef AnyHit,
-                                llvm::StringRef ClosestHit,
-                                llvm::StringRef Intersection);
+                                llvm37::StringRef AnyHit,
+                                llvm37::StringRef ClosestHit,
+                                llvm37::StringRef Intersection);
 
 private:
-  DxilSubobject &CreateSubobject(Kind kind, llvm::StringRef Name);
+  DxilSubobject &CreateSubobject(Kind kind, llvm37::StringRef Name);
 
   BytesStorage m_BytesStorage;
   SubobjectStorage m_Subobjects;

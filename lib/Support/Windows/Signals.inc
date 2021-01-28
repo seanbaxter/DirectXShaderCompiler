@@ -1,6 +1,6 @@
 //===- Win32/Signals.cpp - Win32 Signals Implementation ---------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -13,16 +13,16 @@
 
 #if 0 // HLSL Change - disable signal processing
 
-#include "llvm/Support/FileSystem.h"
+#include "llvm37/Support/FileSystem.h"
 #include <algorithm>
 #include <signal.h>
 #include <stdio.h>
 #include <vector>
 
-#include "llvm/Support/Format.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/Support/Format.h"
+#include "llvm37/Support/raw_ostream.h"
 
-// The Windows.h header must be after LLVM and standard headers.
+// The Windows.h header must be after LLVM37 and standard headers.
 #include "WindowsSupport.h"
 
 #ifdef __MINGW32__
@@ -168,8 +168,8 @@ static bool load64BitDebugHelp(void) {
 }
 
 // Forward declare.
-static LONG WINAPI LLVMUnhandledExceptionFilter(LPEXCEPTION_POINTERS ep);
-static BOOL WINAPI LLVMConsoleCtrlHandler(DWORD dwCtrlType);
+static LONG WINAPI LLVM37UnhandledExceptionFilter(LPEXCEPTION_POINTERS ep);
+static BOOL WINAPI LLVM37ConsoleCtrlHandler(DWORD dwCtrlType);
 
 // InterruptFunction - The function to call if ctrl-c is pressed.
 static void (*InterruptFunction)() = 0;
@@ -186,7 +186,7 @@ static PTOP_LEVEL_EXCEPTION_FILTER OldFilter = NULL;
 static CRITICAL_SECTION CriticalSection;
 static bool CriticalSectionInitialized = false;
 
-static void PrintStackTraceForThread(llvm::raw_ostream &OS, HANDLE hProcess,
+static void PrintStackTraceForThread(llvm37::raw_ostream &OS, HANDLE hProcess,
                                      HANDLE hThread, STACKFRAME64 &StackFrame,
                                      CONTEXT *Context) {
   DWORD machineType;
@@ -209,7 +209,7 @@ static void PrintStackTraceForThread(llvm::raw_ostream &OS, HANDLE hProcess,
     if (StackFrame.AddrFrame.Offset == 0)
       break;
 
-    using namespace llvm;
+    using namespace llvm37;
     // Print the PC in hexadecimal.
     DWORD64 PC = StackFrame.AddrPC.Offset;
 #if defined(_M_X64)
@@ -270,7 +270,7 @@ static void PrintStackTraceForThread(llvm::raw_ostream &OS, HANDLE hProcess,
   }
 }
 
-namespace llvm {
+namespace llvm37 {
 
 //===----------------------------------------------------------------------===//
 //=== WARNING: Implementation here must contain only Win32 specific code
@@ -281,7 +281,7 @@ namespace llvm {
 /// AvoidMessageBoxHook - Emulates hitting "retry" from an "abort, retry,
 /// ignore" CRT debug report dialog.  "retry" raises an exception which
 /// ultimately triggers our stack dumper.
-static LLVM_ATTRIBUTE_UNUSED int
+static LLVM37_ATTRIBUTE_UNUSED int
 __cdecl // HLSL Change
 AvoidMessageBoxHook(int ReportType, char *Message, int *Return) {
   // Set *Return to the retry code for the return value of _CrtDbgReport:
@@ -297,7 +297,7 @@ AvoidMessageBoxHook(int ReportType, char *Message, int *Return) {
 
 extern "C" void HandleAbort(int Sig) {
   if (Sig == SIGABRT) {
-    LLVM_BUILTIN_TRAP;
+    LLVM37_BUILTIN_TRAP;
   }
 }
 
@@ -332,8 +332,8 @@ static void RegisterHandler() {
   EnterCriticalSection(&CriticalSection);
 
   RegisteredUnhandledExceptionFilter = true;
-  OldFilter = SetUnhandledExceptionFilter(LLVMUnhandledExceptionFilter);
-  SetConsoleCtrlHandler(LLVMConsoleCtrlHandler, TRUE);
+  OldFilter = SetUnhandledExceptionFilter(LLVM37UnhandledExceptionFilter);
+  SetConsoleCtrlHandler(LLVM37ConsoleCtrlHandler, TRUE);
 
   // IMPORTANT NOTE: Caller must call LeaveCriticalSection(&CriticalSection) or
   // else multi-threading problems will ensue.
@@ -407,7 +407,7 @@ void sys::PrintStackTraceOnErrorSignal(bool DisableCrashReporting) {
 extern "C" VOID WINAPI RtlCaptureContext(PCONTEXT ContextRecord);
 #endif
 
-void llvm::sys::PrintStackTrace(raw_ostream &OS) {
+void llvm37::sys::PrintStackTrace(raw_ostream &OS) {
 
   STACKFRAME64 StackFrame = {};
   CONTEXT Context = {};
@@ -429,7 +429,7 @@ void llvm::sys::PrintStackTrace(raw_ostream &OS) {
 }
 
 
-void llvm::sys::SetInterruptFunction(void (*IF)()) {
+void llvm37::sys::SetInterruptFunction(void (*IF)()) {
   RegisterHandler();
   InterruptFunction = IF;
   LeaveCriticalSection(&CriticalSection);
@@ -439,7 +439,7 @@ void llvm::sys::SetInterruptFunction(void (*IF)()) {
 /// AddSignalHandler - Add a function to be called when a signal is delivered
 /// to the process.  The handler can have a cookie passed to it to identify
 /// what instance of the handler it is.
-void llvm::sys::AddSignalHandler(void (*FnPtr)(void *), void *Cookie) {
+void llvm37::sys::AddSignalHandler(void (*FnPtr)(void *), void *Cookie) {
   if (CallBacksToRun == 0)
     CallBacksToRun = new std::vector<std::pair<void(*)(void*), void*> >();
   CallBacksToRun->push_back(std::make_pair(FnPtr, Cookie));
@@ -461,7 +461,7 @@ static void Cleanup() {
 
   if (FilesToRemove != NULL)
     while (!FilesToRemove->empty()) {
-      llvm::sys::fs::remove(FilesToRemove->back());
+      llvm37::sys::fs::remove(FilesToRemove->back());
       FilesToRemove->pop_back();
     }
 
@@ -472,7 +472,7 @@ static void Cleanup() {
   LeaveCriticalSection(&CriticalSection);
 }
 
-void llvm::sys::RunInterruptHandlers() {
+void llvm37::sys::RunInterruptHandlers() {
   // The interrupt handler may be called from an interrupt, but it may also be
   // called manually (such as the case of report_fatal_error with no registered
   // error handler). We must ensure that the critical section is properly
@@ -481,7 +481,7 @@ void llvm::sys::RunInterruptHandlers() {
   Cleanup();
 }
 
-static LONG WINAPI LLVMUnhandledExceptionFilter(LPEXCEPTION_POINTERS ep) {
+static LONG WINAPI LLVM37UnhandledExceptionFilter(LPEXCEPTION_POINTERS ep) {
   Cleanup();
 
   // Initialize the STACKFRAME structure.
@@ -505,13 +505,13 @@ static LONG WINAPI LLVMUnhandledExceptionFilter(LPEXCEPTION_POINTERS ep) {
 
   HANDLE hProcess = GetCurrentProcess();
   HANDLE hThread = GetCurrentThread();
-  PrintStackTraceForThread(llvm::errs(), hProcess, hThread, StackFrame,
+  PrintStackTraceForThread(llvm37::errs(), hProcess, hThread, StackFrame,
                            ep->ContextRecord);
 
   _exit(ep->ExceptionRecord->ExceptionCode);
 }
 
-static BOOL WINAPI LLVMConsoleCtrlHandler(DWORD dwCtrlType) {
+static BOOL WINAPI LLVM37ConsoleCtrlHandler(DWORD dwCtrlType) {
   // We are running in our very own thread, courtesy of Windows.
   EnterCriticalSection(&CriticalSection);
   Cleanup();
@@ -545,7 +545,7 @@ static BOOL WINAPI LLVMConsoleCtrlHandler(DWORD dwCtrlType) {
 
 #else
 
-namespace llvm {
+namespace llvm37 {
 namespace sys {
 
 bool RemoveFileOnSignal(StringRef Filename, std::string* ErrMsg) { return false; }

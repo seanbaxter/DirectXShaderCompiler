@@ -1,6 +1,6 @@
-//===-- llvm/CodeGen/PseudoSourceValue.cpp ----------------------*- C++ -*-===//
+//===-- llvm37/CodeGen/PseudoSourceValue.cpp ----------------------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,16 +11,16 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/CodeGen/PseudoSourceValue.h"
-#include "llvm/CodeGen/MachineFrameInfo.h"
-#include "llvm/IR/DerivedTypes.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/ManagedStatic.h"
-#include "llvm/Support/Mutex.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/CodeGen/PseudoSourceValue.h"
+#include "llvm37/CodeGen/MachineFrameInfo.h"
+#include "llvm37/IR/DerivedTypes.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/ManagedStatic.h"
+#include "llvm37/Support/Mutex.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <map>
-using namespace llvm;
+using namespace llvm37;
 
 namespace {
 struct PSVGlobalsTy {
@@ -82,7 +82,7 @@ bool PseudoSourceValue::isConstant(const MachineFrameInfo *) const {
       this == getConstantPool() ||
       this == getJumpTable())
     return true;
-  llvm_unreachable("Unknown PseudoSourceValue!");
+  llvm37_unreachable("Unknown PseudoSourceValue!");
 }
 
 bool PseudoSourceValue::isAliased(const MachineFrameInfo *MFI) const {
@@ -91,7 +91,7 @@ bool PseudoSourceValue::isAliased(const MachineFrameInfo *MFI) const {
       this == getConstantPool() ||
       this == getJumpTable())
     return false;
-  llvm_unreachable("Unknown PseudoSourceValue!");
+  llvm37_unreachable("Unknown PseudoSourceValue!");
 }
 
 bool PseudoSourceValue::mayAlias(const MachineFrameInfo *MFI) const {
@@ -115,7 +115,7 @@ bool FixedStackPseudoSourceValue::isAliased(const MachineFrameInfo *MFI) const {
 bool FixedStackPseudoSourceValue::mayAlias(const MachineFrameInfo *MFI) const {
   if (!MFI)
     return true;
-  // Spill slots will not alias any LLVM IR value.
+  // Spill slots will not alias any LLVM37 IR value.
   return !MFI->isSpillSlotObjectIndex(FI);
 }
 

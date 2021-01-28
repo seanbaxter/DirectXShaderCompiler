@@ -1,6 +1,6 @@
 //===- unittest/ASTMatchers/Dynamic/ParserTest.cpp - Parser unit tests -===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -10,8 +10,8 @@
 #include "../ASTMatchersTest.h"
 #include "clang/ASTMatchers/Dynamic/Parser.h"
 #include "clang/ASTMatchers/Dynamic/Registry.h"
-#include "llvm/ADT/Optional.h"
-#include "llvm/ADT/StringMap.h"
+#include "llvm37/ADT/Optional.h"
+#include "llvm37/ADT/StringMap.h"
 #include "gtest/gtest.h"
 #include <string>
 #include <vector>
@@ -42,7 +42,7 @@ public:
     Errors.push_back(Error.toStringFull());
   }
 
-  llvm::Optional<MatcherCtor>
+  llvm37::Optional<MatcherCtor>
   lookupMatcherCtor(StringRef MatcherName) override {
     const ExpectedMatchersTy::value_type *Matcher =
         &*ExpectedMatchers.find(MatcherName);
@@ -112,8 +112,8 @@ bool matchesRange(const SourceRange &Range, unsigned StartLine,
          Range.Start.Column == StartColumn && Range.End.Column == EndColumn;
 }
 
-llvm::Optional<DynTypedMatcher> getSingleMatcher(const VariantValue &Value) {
-  llvm::Optional<DynTypedMatcher> Result =
+llvm37::Optional<DynTypedMatcher> getSingleMatcher(const VariantValue &Value) {
+  llvm37::Optional<DynTypedMatcher> Result =
       Value.getMatcher().getSingleMatcher();
   EXPECT_TRUE(Result.hasValue());
   return Result;
@@ -162,7 +162,7 @@ using ast_matchers::internal::Matcher;
 
 Parser::NamedValueMap getTestNamedValues() {
   Parser::NamedValueMap Values;
-  Values["nameX"] = llvm::StringRef("x");
+  Values["nameX"] = llvm37::StringRef("x");
   Values["hasParamA"] =
       VariantMatcher::SingleMatcher(hasParameter(0, hasName("a")));
   return Values;
@@ -170,7 +170,7 @@ Parser::NamedValueMap getTestNamedValues() {
 
 TEST(ParserTest, FullParserTest) {
   Diagnostics Error;
-  llvm::Optional<DynTypedMatcher> VarDecl(Parser::parseMatcherExpression(
+  llvm37::Optional<DynTypedMatcher> VarDecl(Parser::parseMatcherExpression(
       "varDecl(hasInitializer(binaryOperator(hasLHS(integerLiteral()),"
       "                                      hasOperatorName(\"+\"))))",
       &Error));
@@ -181,7 +181,7 @@ TEST(ParserTest, FullParserTest) {
   EXPECT_FALSE(matches("int x = 1 - false;", M));
   EXPECT_FALSE(matches("int x = true - 1;", M));
 
-  llvm::Optional<DynTypedMatcher> HasParameter(Parser::parseMatcherExpression(
+  llvm37::Optional<DynTypedMatcher> HasParameter(Parser::parseMatcherExpression(
       "functionDecl(hasParameter(1, hasName(\"x\")))", &Error));
   EXPECT_EQ("", Error.toStringFull());
   M = HasParameter->unconditionalConvertTo<Decl>();
@@ -191,7 +191,7 @@ TEST(ParserTest, FullParserTest) {
 
   // Test named values.
   auto NamedValues = getTestNamedValues();
-  llvm::Optional<DynTypedMatcher> HasParameterWithNamedValues(
+  llvm37::Optional<DynTypedMatcher> HasParameterWithNamedValues(
       Parser::parseMatcherExpression(
           "functionDecl(hasParamA, hasParameter(1, hasName(nameX)))",
           nullptr, &NamedValues, &Error));

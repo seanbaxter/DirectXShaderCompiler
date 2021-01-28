@@ -3,7 +3,7 @@
 # vim:set sts=2 sw=2 et:
 #===----------------------------------------------------------------------===#
 #
-#                     The LLVM Compiler Infrastructure
+#                     The LLVM37 Compiler Infrastructure
 #
 # This file is distributed under the University of Illinois Open Source
 # License. See LICENSE.TXT for details.
@@ -38,12 +38,12 @@ END
 usage_recipes() {
 cat <<END
      all      - Generate an index in each directory that contains .td files
-                in the LLVM source tree.
+                in the LLVM37 source tree.
      here     - Generate an index for all .td files in the current directory.
      recurse  - Generate an index in each directory that contains .td files
                 in and under the current directory.
      target [<target> ...]
-              - Generate a tags file for each specified LLVM code generator
+              - Generate a tags file for each specified LLVM37 code generator
                 target, or if none are specified, all targets.
 END
 }
@@ -89,7 +89,7 @@ OPTIONS
 
 RECIPES
   $SELF -x all
-              Produce a tags file in every directory in the LLVM source tree
+              Produce a tags file in every directory in the LLVM37 source tree
               that contains any .td files.
   $SELF -x here
               Produce a tags file from .td files in the current directory.
@@ -180,8 +180,8 @@ td_prep() {
     if [ -z "$d" ]
     then
       # See whether this include file can be found in a common location.
-      for d in $LLVM_SRC_ROOT/include \
-               $LLVM_SRC_ROOT/tools/clang/include
+      for d in $LLVM37_SRC_ROOT/include \
+               $LLVM37_SRC_ROOT/tools/clang/include
       do
         if [ -f "$d/$i" ]
         then
@@ -280,10 +280,10 @@ do_recurse()
   td_dirs
 }
 
-# Generate tags for all .td files in LLVM.
+# Generate tags for all .td files in LLVM37.
 do_all()
 {
-  td_find "$LLVM_SRC_ROOT"
+  td_find "$LLVM37_SRC_ROOT"
   td_dirs
 }
 
@@ -309,7 +309,7 @@ td_find()
 # Generate tags for the specified code generator targets, or
 # if there are no arguments, all targets.
 do_targets() {
-  cd $LLVM_SRC_ROOT/lib/Target
+  cd $LLVM37_SRC_ROOT/lib/Target
   if [ -z "$*" ]
   then
     td_find "$PWD"
@@ -335,13 +335,13 @@ do_targets() {
   td_dirs
 }
 
-# Change to the directory at the top of the enclosing LLVM source tree,
+# Change to the directory at the top of the enclosing LLVM37 source tree,
 # if possible.
-llvm_src_root() {
+llvm37_src_root() {
   while [ "$PWD" != / ]
   do
     # Use this directory if multiple notable subdirectories are present.
-    [ -d include/llvm -a -d lib/Target ] && return 0
+    [ -d include/llvm37 -a -d lib/Target ] && return 0
     cd ..
   done
   return 1
@@ -352,8 +352,8 @@ LC_ALL=C
 export LC_ALL
 
 # Globals.
-TBLGEN=llvm-tblgen
-LLVM_SRC_ROOT=
+TBLGEN=llvm37-tblgen
+LLVM37_SRC_ROOT=
 
 # Command options.
 OPT_TAGSFILE=tags
@@ -411,10 +411,10 @@ then
   exit $?
 fi
 
-# Find the directory at the top of the enclosing LLVM source tree.
-if ! LLVM_SRC_ROOT=$(llvm_src_root && pwd)
+# Find the directory at the top of the enclosing LLVM37 source tree.
+if ! LLVM37_SRC_ROOT=$(llvm37_src_root && pwd)
 then
-  printf >&2 '%s: Run from within the LLVM source tree.\n' "$SELF"
+  printf >&2 '%s: Run from within the LLVM37 source tree.\n' "$SELF"
   exit 3
 fi
 

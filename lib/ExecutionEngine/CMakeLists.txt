@@ -1,6 +1,6 @@
 
 
-add_llvm_library(LLVMExecutionEngine
+add_llvm_library(LLVM37ExecutionEngine
   ExecutionEngine.cpp
   ExecutionEngineBindings.cpp
   GDBRegistrationListener.cpp
@@ -8,7 +8,7 @@ add_llvm_library(LLVMExecutionEngine
   TargetSelect.cpp
 
   ADDITIONAL_HEADER_DIRS
-  ${LLVM_MAIN_INCLUDE_DIR}/llvm/ExecutionEngine
+  ${LLVM37_MAIN_INCLUDE_DIR}/llvm37/ExecutionEngine
 
   DEPENDS
   intrinsics_gen
@@ -19,10 +19,10 @@ add_subdirectory(Interpreter)
 # add_subdirectory(Orc) # HLSL Change
 # add_subdirectory(RuntimeDyld) # HLSL Change
 
-if( LLVM_USE_OPROFILE )
+if( LLVM37_USE_OPROFILE )
   add_subdirectory(OProfileJIT)
-endif( LLVM_USE_OPROFILE )
+endif( LLVM37_USE_OPROFILE )
 
-if( LLVM_USE_INTEL_JITEVENTS )
+if( LLVM37_USE_INTEL_JITEVENTS )
   add_subdirectory(IntelJITEvents)
-endif( LLVM_USE_INTEL_JITEVENTS )
+endif( LLVM37_USE_INTEL_JITEVENTS )

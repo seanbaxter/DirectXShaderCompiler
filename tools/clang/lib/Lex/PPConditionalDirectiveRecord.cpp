@@ -1,6 +1,6 @@
 //===--- PPConditionalDirectiveRecord.h - Preprocessing Directives-*- C++ -*-=//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -13,7 +13,7 @@
 //===----------------------------------------------------------------------===//
 
 #include "clang/Lex/PPConditionalDirectiveRecord.h"
-#include "llvm/Support/Capacity.h"
+#include "llvm37/Support/Capacity.h"
 //                                                                           //
 ///////////////////////////////////////////////////////////////////////////////
 using namespace clang;
@@ -120,5 +120,5 @@ void PPConditionalDirectiveRecord::Endif(SourceLocation Loc,
 }
 
 size_t PPConditionalDirectiveRecord::getTotalMemory() const {
-  return llvm::capacity_in_bytes(CondDirectiveLocs);
+  return llvm37::capacity_in_bytes(CondDirectiveLocs);
 }

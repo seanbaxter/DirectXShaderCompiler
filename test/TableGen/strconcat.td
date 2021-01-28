@@ -1,4 +1,4 @@
-// RUN: llvm-tblgen %s | FileCheck %s
+// RUN: llvm37-tblgen %s | FileCheck %s
 
 // CHECK: class Y<string Y:S = ?> {
 // CHECK:   string T = !strconcat(Y:S, "foo");

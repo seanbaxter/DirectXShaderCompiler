@@ -1,6 +1,6 @@
-//===-lto.cpp - LLVM Link Time Optimizer ----------------------------------===//
+//===-lto.cpp - LLVM37 Link Time Optimizer ----------------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -12,15 +12,15 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm-c/lto.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/CodeGen/CommandFlags.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/LTO/LTOCodeGenerator.h"
-#include "llvm/LTO/LTOModule.h"
-#include "llvm/Support/MemoryBuffer.h"
-#include "llvm/Support/Signals.h"
-#include "llvm/Support/TargetSelect.h"
+#include "llvm37-c/lto.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/CodeGen/CommandFlags.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/LTO/LTOCodeGenerator.h"
+#include "llvm37/LTO/LTOModule.h"
+#include "llvm37/Support/MemoryBuffer.h"
+#include "llvm37/Support/Signals.h"
+#include "llvm37/Support/TargetSelect.h"
 
 // extra command-line flags needed for LTOCodeGenerator
 static cl::opt<char>
@@ -57,10 +57,10 @@ static bool parsedOptions = false;
 // Initialize the configured targets if they have not been initialized.
 static void lto_initialize() {
   if (!initialized) {
-#ifdef LLVM_ON_WIN32
+#ifdef LLVM37_ON_WIN32
     // Dialog box on crash disabling doesn't work across DLL boundaries, so do
     // it here.
-    llvm::sys::DisableSystemDialogsOnCrash();
+    llvm37::sys::DisableSystemDialogsOnCrash();
 #endif
 
     InitializeAllTargetInfos();
@@ -80,7 +80,7 @@ namespace {
 // file.
 struct LibLTOCodeGenerator : LTOCodeGenerator {
   LibLTOCodeGenerator() {}
-  LibLTOCodeGenerator(std::unique_ptr<LLVMContext> Context)
+  LibLTOCodeGenerator(std::unique_ptr<LLVM37Context> Context)
       : LTOCodeGenerator(std::move(Context)) {}
 
   std::unique_ptr<MemoryBuffer> NativeObjectFile;
@@ -146,13 +146,13 @@ lto_module_is_object_file_in_memory_for_target(const void* mem,
 
 lto_module_t lto_module_create(const char* path) {
   lto_initialize();
-  llvm::TargetOptions Options = InitTargetOptionsFromCodeGenFlags();
+  llvm37::TargetOptions Options = InitTargetOptionsFromCodeGenFlags();
   return wrap(LTOModule::createFromFile(path, Options, sLastErrorString));
 }
 
 lto_module_t lto_module_create_from_fd(int fd, const char *path, size_t size) {
   lto_initialize();
-  llvm::TargetOptions Options = InitTargetOptionsFromCodeGenFlags();
+  llvm37::TargetOptions Options = InitTargetOptionsFromCodeGenFlags();
   return wrap(
       LTOModule::createFromOpenFile(fd, path, size, Options, sLastErrorString));
 }
@@ -162,14 +162,14 @@ lto_module_t lto_module_create_from_fd_at_offset(int fd, const char *path,
                                                  size_t map_size,
                                                  off_t offset) {
   lto_initialize();
-  llvm::TargetOptions Options = InitTargetOptionsFromCodeGenFlags();
+  llvm37::TargetOptions Options = InitTargetOptionsFromCodeGenFlags();
   return wrap(LTOModule::createFromOpenFileSlice(fd, path, map_size, offset,
                                                  Options, sLastErrorString));
 }
 
 lto_module_t lto_module_create_from_memory(const void* mem, size_t length) {
   lto_initialize();
-  llvm::TargetOptions Options = InitTargetOptionsFromCodeGenFlags();
+  llvm37::TargetOptions Options = InitTargetOptionsFromCodeGenFlags();
   return wrap(LTOModule::createFromBuffer(mem, length, Options, sLastErrorString));
 }
 
@@ -177,7 +177,7 @@ lto_module_t lto_module_create_from_memory_with_path(const void* mem,
                                                      size_t length,
                                                      const char *path) {
   lto_initialize();
-  llvm::TargetOptions Options = InitTargetOptionsFromCodeGenFlags();
+  llvm37::TargetOptions Options = InitTargetOptionsFromCodeGenFlags();
   return wrap(
       LTOModule::createFromBuffer(mem, length, Options, sLastErrorString, path));
 }
@@ -185,7 +185,7 @@ lto_module_t lto_module_create_from_memory_with_path(const void* mem,
 lto_module_t lto_module_create_in_local_context(const void *mem, size_t length,
                                                 const char *path) {
   lto_initialize();
-  llvm::TargetOptions Options = InitTargetOptionsFromCodeGenFlags();
+  llvm37::TargetOptions Options = InitTargetOptionsFromCodeGenFlags();
   return wrap(LTOModule::createInLocalContext(mem, length, Options,
                                               sLastErrorString, path));
 }
@@ -195,7 +195,7 @@ lto_module_t lto_module_create_in_codegen_context(const void *mem,
                                                   const char *path,
                                                   lto_code_gen_t cg) {
   lto_initialize();
-  llvm::TargetOptions Options = InitTargetOptionsFromCodeGenFlags();
+  llvm37::TargetOptions Options = InitTargetOptionsFromCodeGenFlags();
   return wrap(LTOModule::createInContext(mem, length, Options, sLastErrorString,
                                          path, &unwrap(cg)->getContext()));
 }
@@ -239,7 +239,7 @@ static lto_code_gen_t createCodeGen(bool InLocalContext) {
   TargetOptions Options = InitTargetOptionsFromCodeGenFlags();
 
   LibLTOCodeGenerator *CodeGen =
-      InLocalContext ? new LibLTOCodeGenerator(make_unique<LLVMContext>())
+      InLocalContext ? new LibLTOCodeGenerator(make_unique<LLVM37Context>())
                      : new LibLTOCodeGenerator();
   CodeGen->setTargetOptions(Options);
   return wrap(CodeGen);

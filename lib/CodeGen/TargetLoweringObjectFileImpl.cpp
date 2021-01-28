@@ -1,6 +1,6 @@
-//===-- llvm/CodeGen/TargetLoweringObjectFileImpl.cpp - Object File Info --===//
+//===-- llvm37/CodeGen/TargetLoweringObjectFileImpl.cpp - Object File Info --===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -12,34 +12,34 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/CodeGen/TargetLoweringObjectFileImpl.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/ADT/StringExtras.h"
-#include "llvm/ADT/Triple.h"
-#include "llvm/CodeGen/MachineModuleInfoImpls.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/DerivedTypes.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/GlobalVariable.h"
-#include "llvm/IR/Mangler.h"
-#include "llvm/IR/Module.h"
-#include "llvm/MC/MCContext.h"
-#include "llvm/MC/MCExpr.h"
-#include "llvm/MC/MCSectionCOFF.h"
-#include "llvm/MC/MCSectionELF.h"
-#include "llvm/MC/MCSectionMachO.h"
-#include "llvm/MC/MCStreamer.h"
-#include "llvm/MC/MCSymbolELF.h"
-#include "llvm/MC/MCValue.h"
-#include "llvm/Support/Dwarf.h"
-#include "llvm/Support/ELF.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Target/TargetLowering.h"
-#include "llvm/Target/TargetMachine.h"
-#include "llvm/Target/TargetSubtargetInfo.h"
-using namespace llvm;
+#include "llvm37/CodeGen/TargetLoweringObjectFileImpl.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/ADT/StringExtras.h"
+#include "llvm37/ADT/Triple.h"
+#include "llvm37/CodeGen/MachineModuleInfoImpls.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/IR/DerivedTypes.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/GlobalVariable.h"
+#include "llvm37/IR/Mangler.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/MC/MCContext.h"
+#include "llvm37/MC/MCExpr.h"
+#include "llvm37/MC/MCSectionCOFF.h"
+#include "llvm37/MC/MCSectionELF.h"
+#include "llvm37/MC/MCSectionMachO.h"
+#include "llvm37/MC/MCStreamer.h"
+#include "llvm37/MC/MCSymbolELF.h"
+#include "llvm37/MC/MCValue.h"
+#include "llvm37/Support/Dwarf.h"
+#include "llvm37/Support/ELF.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Target/TargetLowering.h"
+#include "llvm37/Target/TargetMachine.h"
+#include "llvm37/Target/TargetSubtargetInfo.h"
+using namespace llvm37;
 using namespace dwarf;
 
 //===----------------------------------------------------------------------===//
@@ -124,23 +124,23 @@ getELFKindForNamedSection(StringRef Name, SectionKind K) {
   if (Name == ".bss" ||
       Name.startswith(".bss.") ||
       Name.startswith(".gnu.linkonce.b.") ||
-      Name.startswith(".llvm.linkonce.b.") ||
+      Name.startswith(".llvm37.linkonce.b.") ||
       Name == ".sbss" ||
       Name.startswith(".sbss.") ||
       Name.startswith(".gnu.linkonce.sb.") ||
-      Name.startswith(".llvm.linkonce.sb."))
+      Name.startswith(".llvm37.linkonce.sb."))
     return SectionKind::getBSS();
 
   if (Name == ".tdata" ||
       Name.startswith(".tdata.") ||
       Name.startswith(".gnu.linkonce.td.") ||
-      Name.startswith(".llvm.linkonce.td."))
+      Name.startswith(".llvm37.linkonce.td."))
     return SectionKind::getThreadData();
 
   if (Name == ".tbss" ||
       Name.startswith(".tbss.") ||
       Name.startswith(".gnu.linkonce.tb.") ||
-      Name.startswith(".llvm.linkonce.tb."))
+      Name.startswith(".llvm37.linkonce.tb."))
     return SectionKind::getThreadBSS();
 
   return K;

@@ -10,10 +10,10 @@
 // CHECK-DAG: %[[i2:.*]] = extractvalue %dx.types.CBufRet.i32 %{{.*}}, 2
 // CHECK-DAG: %[[f2:.*]] = extractvalue %dx.types.CBufRet.f32 %{{.*}}, 3
 
-// CHECK-DAG: call void @llvm.dbg.value(metadata i32 %[[i1]], i64 0, metadata !{{.*}}, metadata ![[i1expr:.*]])
-// CHECK-DAG: call void @llvm.dbg.value(metadata float %[[f1]], i64 0, metadata !{{.*}}, metadata ![[f1expr:.*]])
-// CHECK-DAG: call void @llvm.dbg.value(metadata i32 %[[i2]], i64 0, metadata !{{.*}}, metadata ![[i2expr:.*]])
-// CHECK-DAG: call void @llvm.dbg.value(metadata float %[[f2]], i64 0, metadata !{{.*}}, metadata ![[f2expr:.*]])
+// CHECK-DAG: call void @llvm37.dbg.value(metadata i32 %[[i1]], i64 0, metadata !{{.*}}, metadata ![[i1expr:.*]])
+// CHECK-DAG: call void @llvm37.dbg.value(metadata float %[[f1]], i64 0, metadata !{{.*}}, metadata ![[f1expr:.*]])
+// CHECK-DAG: call void @llvm37.dbg.value(metadata i32 %[[i2]], i64 0, metadata !{{.*}}, metadata ![[i2expr:.*]])
+// CHECK-DAG: call void @llvm37.dbg.value(metadata float %[[f2]], i64 0, metadata !{{.*}}, metadata ![[f2expr:.*]])
 
 // Exclude quoted source file (see readme)
 // CHECK-LABEL: {{!"[^"]*\\0A[^"]*"}}

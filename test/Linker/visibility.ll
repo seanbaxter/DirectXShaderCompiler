@@ -1,5 +1,5 @@
-; RUN: llvm-link %s %p/Inputs/visibility.ll -S | FileCheck %s
-; RUN: llvm-link %p/Inputs/visibility.ll %s -S | FileCheck %s
+; RUN: llvm37-link %s %p/Inputs/visibility.ll -S | FileCheck %s
+; RUN: llvm37-link %p/Inputs/visibility.ll %s -S | FileCheck %s
 
 ; The values in this file are strong, the ones in Inputs/visibility.ll are weak,
 ; but we should still get the visibility from them.

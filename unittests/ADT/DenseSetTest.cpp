@@ -1,6 +1,6 @@
-//===- llvm/unittest/ADT/DenseSetTest.cpp - DenseSet unit tests --*- C++ -*-===//
+//===- llvm37/unittest/ADT/DenseSetTest.cpp - DenseSet unit tests --*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -8,9 +8,9 @@
 //===----------------------------------------------------------------------===//
 
 #include "gtest/gtest.h"
-#include "llvm/ADT/DenseSet.h"
+#include "llvm37/ADT/DenseSet.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 namespace {
 
@@ -20,7 +20,7 @@ class DenseSetTest : public testing::Test {
 
 // Test hashing with a set of only two entries.
 TEST_F(DenseSetTest, DoubleEntrySetTest) {
-  llvm::DenseSet<unsigned> set(2);
+  llvm37::DenseSet<unsigned> set(2);
   set.insert(0);
   set.insert(1);
   // Original failure was an infinite loop in this call:

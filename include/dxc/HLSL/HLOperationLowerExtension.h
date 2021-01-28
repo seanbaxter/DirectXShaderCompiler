@@ -12,11 +12,11 @@
 #pragma once
 
 #include "dxc/HLSL/HLSLExtensionsCodegenHelper.h"
-#include "llvm/ADT/StringRef.h"
+#include "llvm37/ADT/StringRef.h"
 #include <string>
 #include <unordered_map>
 
-namespace llvm {
+namespace llvm37 {
   class Value;
   class CallInst;
   class Function;
@@ -30,7 +30,7 @@ namespace hlsl {
   struct HLResourceLookup 
   {
       // Lookup resource kind based on handle. Return true on success.
-      virtual bool GetResourceKindName(llvm::Value *HLHandle, const char **ppName) = 0;
+      virtual bool GetResourceKindName(llvm37::Value *HLHandle, const char **ppName) = 0;
       virtual ~HLResourceLookup() {}
   };
 
@@ -48,13 +48,13 @@ namespace hlsl {
     };
 
     // Create the lowering using the given strategy and custom codegen helper.
-    ExtensionLowering(llvm::StringRef strategy, HLSLExtensionsCodegenHelper *helper, OP& hlslOp, HLResourceLookup &resourceHelper);
+    ExtensionLowering(llvm37::StringRef strategy, HLSLExtensionsCodegenHelper *helper, OP& hlslOp, HLResourceLookup &resourceHelper);
     ExtensionLowering(Strategy strategy, HLSLExtensionsCodegenHelper *helper, OP& hlslOp, HLResourceLookup &resourceHelper);
 
     // Translate the HL op call to a DXIL op call.
     // Returns a new value if translation was successful.
     // Returns nullptr if translation failed or made no changes.
-    llvm::Value *Translate(llvm::CallInst *CI);
+    llvm37::Value *Translate(llvm37::CallInst *CI);
     
     // Translate the strategy string to an enum. The strategy string is
     // added as a custom attribute on the high level extension function.
@@ -62,15 +62,15 @@ namespace hlsl {
     //  "r" -> Replicate
     //  "n" -> NoTranslation
     //  "c" -> Custom
-    static Strategy GetStrategy(llvm::StringRef strategy);
+    static Strategy GetStrategy(llvm37::StringRef strategy);
 
     // Translate the strategy enum into a name. This is the inverse of the
     // GetStrategy() function.
-    static llvm::StringRef GetStrategyName(Strategy strategy);
+    static llvm37::StringRef GetStrategyName(Strategy strategy);
 
     // Get the name that will be used for the extension function call after
     // lowering.
-    std::string GetExtensionName(llvm::CallInst *CI);
+    std::string GetExtensionName(llvm37::CallInst *CI);
 
   private:
     Strategy m_strategy;
@@ -79,12 +79,12 @@ namespace hlsl {
     HLResourceLookup &m_hlResourceLookup;
     std::string m_extraStrategyInfo;
 
-    llvm::Value *Unknown(llvm::CallInst *CI);
-    llvm::Value *NoTranslation(llvm::CallInst *CI);
-    llvm::Value *Replicate(llvm::CallInst *CI);
-    llvm::Value *Pack(llvm::CallInst *CI);
-    llvm::Value *Resource(llvm::CallInst *CI);
-    llvm::Value *Dxil(llvm::CallInst *CI);
-    llvm::Value *CustomResource(llvm::CallInst *CI);
+    llvm37::Value *Unknown(llvm37::CallInst *CI);
+    llvm37::Value *NoTranslation(llvm37::CallInst *CI);
+    llvm37::Value *Replicate(llvm37::CallInst *CI);
+    llvm37::Value *Pack(llvm37::CallInst *CI);
+    llvm37::Value *Resource(llvm37::CallInst *CI);
+    llvm37::Value *Dxil(llvm37::CallInst *CI);
+    llvm37::Value *CustomResource(llvm37::CallInst *CI);
   };
 }

@@ -1,6 +1,6 @@
 //===--- MemoryBuffer.cpp - Memory Buffer implementation ------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,16 +11,16 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Support/MemoryBuffer.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/Config/config.h"
-#include "llvm/Support/Errc.h"
-#include "llvm/Support/Errno.h"
-#include "llvm/Support/FileSystem.h"
-#include "llvm/Support/MathExtras.h"
-#include "llvm/Support/Path.h"
-#include "llvm/Support/Process.h"
-#include "llvm/Support/Program.h"
+#include "llvm37/Support/MemoryBuffer.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/Config/config.h"
+#include "llvm37/Support/Errc.h"
+#include "llvm37/Support/Errno.h"
+#include "llvm37/Support/FileSystem.h"
+#include "llvm37/Support/MathExtras.h"
+#include "llvm37/Support/Path.h"
+#include "llvm37/Support/Process.h"
+#include "llvm37/Support/Program.h"
 #include <cassert>
 #include <cerrno>
 #include <cstring>
@@ -32,7 +32,7 @@
 #else
 #include <io.h>
 #endif
-using namespace llvm;
+using namespace llvm37;
 
 //===----------------------------------------------------------------------===//
 // MemoryBuffer implementation itself.
@@ -232,7 +232,7 @@ getMemoryBufferForStream(int FD, const Twine &BufferName) {
   // Read into Buffer until we hit EOF.
   do {
     Buffer.reserve(Buffer.size() + ChunkSize);
-    ReadBytes = llvm::sys::fs::msf_read(FD, Buffer.end(), ChunkSize);
+    ReadBytes = llvm37::sys::fs::msf_read(FD, Buffer.end(), ChunkSize);
     if (ReadBytes == -1) {
       if (errno == EINTR) continue;
       return std::error_code(errno, std::generic_category());
@@ -267,7 +267,7 @@ getFileAux(const Twine &Filename, int64_t FileSize, uint64_t MapSize,
   ErrorOr<std::unique_ptr<MemoryBuffer>> Ret =
       getOpenFileImpl(FD, Filename, FileSize, MapSize, Offset,
                       RequiresNullTerminator, IsVolatileSize);
-  llvm::sys::fs::msf_close(FD);  // HLSL Change - use msf_close
+  llvm37::sys::fs::msf_close(FD);  // HLSL Change - use msf_close
   return Ret;
 }
 
@@ -379,7 +379,7 @@ getOpenFileImpl(int FD, const Twine &Filename, uint64_t FileSize,
   size_t BytesLeft = MapSize;
 #undef HAVE_PREAD // HLSL Change - pread bypasses needed layers
 #ifndef HAVE_PREAD
-  if (llvm::sys::fs::msf_lseek(FD, Offset, SEEK_SET) == -1)  // HLSL Change - use msf_lseek
+  if (llvm37::sys::fs::msf_lseek(FD, Offset, SEEK_SET) == -1)  // HLSL Change - use msf_lseek
     return std::error_code(errno, std::generic_category());
 #endif
 
@@ -387,7 +387,7 @@ getOpenFileImpl(int FD, const Twine &Filename, uint64_t FileSize,
 #ifdef HAVE_PREAD
     ssize_t NumRead = ::pread(FD, BufPtr, BytesLeft, MapSize-BytesLeft+Offset);
 #else
-    ssize_t NumRead = ::llvm::sys::fs::msf_read(FD, BufPtr, BytesLeft);
+    ssize_t NumRead = ::llvm37::sys::fs::msf_read(FD, BufPtr, BytesLeft);
 #endif
     if (NumRead == -1) {
       if (errno == EINTR)

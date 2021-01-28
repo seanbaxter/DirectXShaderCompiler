@@ -5,7 +5,7 @@
 // offset in a struct.
 
 // CHECK: call i32 @dx.op.loadInput.i32
-// CHECK: call void @llvm.dbg.value
+// CHECK: call void @llvm37.dbg.value
 // CHECK: call void @dx.op.storeOutput.i32
 // CHECK: ret void
 

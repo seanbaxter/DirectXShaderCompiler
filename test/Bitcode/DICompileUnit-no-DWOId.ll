@@ -1,7 +1,7 @@
 ; The input uses the older (r236428) form without a dwoId field.  This should
 ; default to 0, which is not displayed at all in the textual representation.
 ;
-; RUN: llvm-dis %s.bc -o - | FileCheck %s
+; RUN: llvm37-dis %s.bc -o - | FileCheck %s
 ; CHECK: !DICompileUnit
 ; CHECK-NOT: dwoId:
 !named = !{!0}

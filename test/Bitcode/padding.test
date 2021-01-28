@@ -1,4 +1,4 @@
-Test that both llvm-dis (uses a data streamer) and opt (no data streamer)
+Test that both llvm37-dis (uses a data streamer) and opt (no data streamer)
 handle a .bc file with any padding.
 
 A file padded with '\n' can be produced under a peculiar situation:
@@ -11,8 +11,8 @@ A file padded with '\n' can be produced under a peculiar situation:
 
 and there is no reason to not handle the general case.
 
-RUN: llvm-dis -disable-output %p/Inputs/padding.bc
+RUN: llvm37-dis -disable-output %p/Inputs/padding.bc
 RUN: opt -disable-output %p/Inputs/padding.bc
 
-RUN: llvm-dis -disable-output %p/Inputs/padding-garbage.bc
+RUN: llvm37-dis -disable-output %p/Inputs/padding-garbage.bc
 RUN: opt -disable-output %p/Inputs/padding-garbage.bc

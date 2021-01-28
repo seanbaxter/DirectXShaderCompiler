@@ -1,6 +1,6 @@
 //===- CodeExtractor.cpp - Pull code region into a new function -----------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -13,30 +13,30 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Transforms/Utils/CodeExtractor.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/SetVector.h"
-#include "llvm/ADT/StringExtras.h"
-#include "llvm/Analysis/LoopInfo.h"
-#include "llvm/Analysis/RegionInfo.h"
-#include "llvm/Analysis/RegionIterator.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/DerivedTypes.h"
-#include "llvm/IR/Dominators.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/Intrinsics.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/Verifier.h"
-#include "llvm/Pass.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Transforms/Utils/BasicBlockUtils.h"
+#include "llvm37/Transforms/Utils/CodeExtractor.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/SetVector.h"
+#include "llvm37/ADT/StringExtras.h"
+#include "llvm37/Analysis/LoopInfo.h"
+#include "llvm37/Analysis/RegionInfo.h"
+#include "llvm37/Analysis/RegionIterator.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/DerivedTypes.h"
+#include "llvm37/IR/Dominators.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/Intrinsics.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/Verifier.h"
+#include "llvm37/Pass.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Transforms/Utils/BasicBlockUtils.h"
 #include <algorithm>
 #include <set>
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "code-extractor"
 
@@ -79,7 +79,7 @@ static SetVector<BasicBlock *> buildExtractionBlockSet(IteratorT BBBegin,
   // empty set if we encounter invalid blocks.
   for (IteratorT I = BBBegin, E = BBEnd; I != E; ++I) {
     if (!Result.insert(*I))
-      llvm_unreachable("Repeated basic blocks in extraction input");
+      llvm37_unreachable("Repeated basic blocks in extraction input");
 
     if (!isBlockValidForExtraction(**I)) {
       Result.clear();
@@ -425,7 +425,7 @@ emitCallAndSwitchStatement(Function *newFunction, BasicBlock *codeReplacer,
   // aggregating parameters), or plan inputs and allocated memory for outputs
   std::vector<Value*> params, StructValues, ReloadOutputs, Reloads;
   
-  LLVMContext &Context = newFunction->getContext();
+  LLVM37Context &Context = newFunction->getContext();
 
   // Add inputs as params, or to be filled into the struct
   for (ValueSet::iterator i = inputs.begin(), e = inputs.end(); i != e; ++i)

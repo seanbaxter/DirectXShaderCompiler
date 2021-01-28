@@ -1,4 +1,4 @@
-// RUN: %clang_cc1 -emit-llvm-only %s
+// RUN: %clang_cc1 -emit-llvm37-only %s
 // PR10290
 
 template<int Flags> struct foo {

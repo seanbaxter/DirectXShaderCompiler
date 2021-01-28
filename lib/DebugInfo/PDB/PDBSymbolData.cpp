@@ -1,20 +1,20 @@
 //===- PDBSymbolData.cpp - PDB data (e.g. variable) accessors ---*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/DebugInfo/PDB/PDBSymbolData.h"
+#include "llvm37/DebugInfo/PDB/PDBSymbolData.h"
 
-#include "llvm/DebugInfo/PDB/IPDBSession.h"
-#include "llvm/DebugInfo/PDB/PDBSymDumper.h"
+#include "llvm37/DebugInfo/PDB/IPDBSession.h"
+#include "llvm37/DebugInfo/PDB/PDBSymDumper.h"
 
 #include <utility>
 
-using namespace llvm;
+using namespace llvm37;
 
 PDBSymbolData::PDBSymbolData(const IPDBSession &PDBSession,
                              std::unique_ptr<IPDBRawSymbol> DataSymbol)

@@ -72,7 +72,7 @@ for.inc:                                          ; preds = %if.then, %for.body3
   %incdec.ptr = getelementptr inbounds i8, i8* %a.116, i64 1
   %add.ptr = getelementptr inbounds i16, i16* %r.117, i64 3
   %tobool2 = icmp eq i32 %dec18, 0
-  br i1 %tobool2, label %for.cond1.for.cond.loopexit_crit_edge, label %for.body3, !llvm.loop !0
+  br i1 %tobool2, label %for.cond1.for.cond.loopexit_crit_edge, label %for.body3, !llvm37.loop !0
 
 for.cond.for.end6_crit_edge:                      ; preds = %for.cond.loopexit
   br label %for.end6

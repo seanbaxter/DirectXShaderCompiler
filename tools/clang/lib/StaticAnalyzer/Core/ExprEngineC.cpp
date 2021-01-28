@@ -1,6 +1,6 @@
 //=-- ExprEngineC.cpp - ExprEngine support for C expressions ----*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -17,7 +17,7 @@
 
 using namespace clang;
 using namespace ento;
-using llvm::APSInt;
+using llvm37::APSInt;
 
 void ExprEngine::VisitBinaryOperator(const BinaryOperator* B,
                                      ExplodedNode *Pred,
@@ -105,7 +105,7 @@ void ExprEngine::VisitBinaryOperator(const BinaryOperator* B,
     
     switch (Op) {
       default:
-        llvm_unreachable("Invalid opcode for compound assignment.");
+        llvm37_unreachable("Invalid opcode for compound assignment.");
       case BO_MulAssign: Op = BO_Mul; break;
       case BO_DivAssign: Op = BO_Div; break;
       case BO_RemAssign: Op = BO_Rem; break;
@@ -258,7 +258,7 @@ void ExprEngine::VisitCast(const CastExpr *CastE, const Expr *Ex,
 
     switch (CastE->getCastKind()) {
       case CK_LValueToRValue:
-        llvm_unreachable("LValueToRValue casts handled earlier.");
+        llvm37_unreachable("LValueToRValue casts handled earlier.");
       case CK_ToVoid:
         continue;
         // The analyzer doesn't do anything special with these casts,
@@ -595,7 +595,7 @@ void ExprEngine::VisitInitListExpr(const InitListExpr *IE,
   if (!IE->isGLValue() &&
       (T->isArrayType() || T->isRecordType() || T->isVectorType() ||
        T->isAnyComplexType())) {
-    llvm::ImmutableList<SVal> vals = getBasicVals().getEmptySValList();
+    llvm37::ImmutableList<SVal> vals = getBasicVals().getEmptySValList();
     
     // Handle base case where the initializer has no elements.
     // e.g: static int* myArray[] = {};
@@ -847,7 +847,7 @@ void ExprEngine::VisitUnaryOperator(const UnaryOperator* U,
         
       switch (U->getOpcode()) {
         default:
-          llvm_unreachable("Invalid Opcode.");
+          llvm37_unreachable("Invalid Opcode.");
         case UO_Not:
           // FIXME: Do we need to handle promotions?
           state = state->BindExpr(U, LCtx, evalComplement(V.castAs<NonLoc>()));

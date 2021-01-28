@@ -1,6 +1,6 @@
 //===- LoopSimplify.cpp - Loop Canonicalization Pass ----------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -37,35 +37,35 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Transforms/Scalar.h"
-#include "llvm/ADT/DepthFirstIterator.h"
-#include "llvm/ADT/SetOperations.h"
-#include "llvm/ADT/SetVector.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/Analysis/AliasAnalysis.h"
-#include "llvm/Analysis/AssumptionCache.h"
-#include "llvm/Analysis/DependenceAnalysis.h"
-#include "llvm/Analysis/InstructionSimplify.h"
-#include "llvm/Analysis/LoopInfo.h"
-#include "llvm/Analysis/ScalarEvolution.h"
-#include "llvm/IR/CFG.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/Dominators.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/Type.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Transforms/Utils/BasicBlockUtils.h"
-#include "llvm/Transforms/Utils/Local.h"
-#include "llvm/Transforms/Utils/LoopUtils.h"
-#include "llvm/Transforms/Utils/LoopSimplify.h"
-using namespace llvm;
+#include "llvm37/Transforms/Scalar.h"
+#include "llvm37/ADT/DepthFirstIterator.h"
+#include "llvm37/ADT/SetOperations.h"
+#include "llvm37/ADT/SetVector.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/Analysis/AliasAnalysis.h"
+#include "llvm37/Analysis/AssumptionCache.h"
+#include "llvm37/Analysis/DependenceAnalysis.h"
+#include "llvm37/Analysis/InstructionSimplify.h"
+#include "llvm37/Analysis/LoopInfo.h"
+#include "llvm37/Analysis/ScalarEvolution.h"
+#include "llvm37/IR/CFG.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/IR/Dominators.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/Type.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Transforms/Utils/BasicBlockUtils.h"
+#include "llvm37/Transforms/Utils/Local.h"
+#include "llvm37/Transforms/Utils/LoopUtils.h"
+#include "llvm37/Transforms/Utils/LoopSimplify.h"
+using namespace llvm37;
 
 #define DEBUG_TYPE "loop-simplify"
 
@@ -113,7 +113,7 @@ static void placeSplitBlockCarefully(BasicBlock *NewBB,
 /// preheader, this method is called to insert one.  This method has two phases:
 /// preheader insertion and analysis updating.
 ///
-BasicBlock *llvm::InsertPreheaderForLoop(Loop *L, Pass *PP) {
+BasicBlock *llvm37::InsertPreheaderForLoop(Loop *L, Pass *PP) {
   BasicBlock *Header = L->getHeader();
 
   // Get analyses that we try to update.
@@ -597,7 +597,7 @@ ReprocessLoop:
         // This is a big restructuring change, reprocess the whole loop.
         Changed = true;
         // GCC doesn't tail recursion eliminate this.
-        // FIXME: It isn't clear we can't rely on LLVM to TRE this.
+        // FIXME: It isn't clear we can't rely on LLVM37 to TRE this.
         goto ReprocessLoop;
       }
     }
@@ -719,7 +719,7 @@ ReprocessLoop:
   return Changed;
 }
 
-bool llvm::simplifyLoop(Loop *L, DominatorTree *DT, LoopInfo *LI, Pass *PP,
+bool llvm37::simplifyLoop(Loop *L, DominatorTree *DT, LoopInfo *LI, Pass *PP,
                         AliasAnalysis *AA, ScalarEvolution *SE,
                         AssumptionCache *AC) {
   bool Changed = false;
@@ -752,7 +752,7 @@ INITIALIZE_PASS_END(LoopSimplify, "loop-simplify",
                 "Canonicalize natural loops", false, false)
 
 // Publicly exposed interface to pass...
-Pass *llvm::createLoopSimplifyPass() { return new LoopSimplify(); }
+Pass *llvm37::createLoopSimplifyPass() { return new LoopSimplify(); }
 
 LoopSimplify::LoopSimplify() : FunctionPass(ID) {
   initializeLoopSimplifyPass(*PassRegistry::getPassRegistry());

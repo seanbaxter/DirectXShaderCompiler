@@ -1,6 +1,6 @@
 //===-- TargetSubtargetInfo.cpp - General Target Information ---------------==//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,10 +11,10 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Support/CommandLine.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/Target/TargetSubtargetInfo.h"
-using namespace llvm;
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/Target/TargetSubtargetInfo.h"
+using namespace llvm37;
 
 //---------------------------------------------------------------------------
 // TargetSubtargetInfo Class

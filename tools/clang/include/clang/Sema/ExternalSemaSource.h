@@ -1,6 +1,6 @@
 //===--- ExternalSemaSource.h - External Sema Interface ---------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -10,17 +10,17 @@
 //  This file defines the ExternalSemaSource interface.
 //
 //===----------------------------------------------------------------------===//
-#ifndef LLVM_CLANG_SEMA_EXTERNALSEMASOURCE_H
-#define LLVM_CLANG_SEMA_EXTERNALSEMASOURCE_H
+#ifndef LLVM37_CLANG_SEMA_EXTERNALSEMASOURCE_H
+#define LLVM37_CLANG_SEMA_EXTERNALSEMASOURCE_H
 
 #include "clang/AST/ExternalASTSource.h"
 #include "clang/AST/Type.h"
 #include "clang/Sema/TypoCorrection.h"
 #include "clang/Sema/Weak.h"
-#include "llvm/ADT/MapVector.h"
+#include "llvm37/ADT/MapVector.h"
 #include <utility>
 
-namespace llvm {
+namespace llvm37 {
 template <class T, unsigned n> class SmallSetVector;
 }
 
@@ -80,10 +80,10 @@ public:
   /// \brief Load the set of used but not defined functions or variables with
   /// internal linkage, or used but not defined internal functions.
   virtual void ReadUndefinedButUsed(
-                         llvm::DenseMap<NamedDecl*, SourceLocation> &Undefined);
+                         llvm37::DenseMap<NamedDecl*, SourceLocation> &Undefined);
 
-  virtual void ReadMismatchingDeleteExpressions(llvm::MapVector<
-      FieldDecl *, llvm::SmallVector<std::pair<SourceLocation, bool>, 4>> &);
+  virtual void ReadMismatchingDeleteExpressions(llvm37::MapVector<
+      FieldDecl *, llvm37::SmallVector<std::pair<SourceLocation, bool>, 4>> &);
 
   /// \brief Do last resort, unqualified lookup on a LookupResult that
   /// Sema cannot find.
@@ -141,7 +141,7 @@ public:
   /// be invoked multiple times; the external source should take care not to
   /// introduce the same declarations repeatedly.
   virtual void ReadUnusedLocalTypedefNameCandidates(
-      llvm::SmallSetVector<const TypedefNameDecl *, 4> &Decls) {};
+      llvm37::SmallSetVector<const TypedefNameDecl *, 4> &Decls) {};
 
   /// \brief Read the set of referenced selectors known to the
   /// external Sema source.
@@ -188,7 +188,7 @@ public:
   /// external source should take care not to introduce the same map entries
   /// repeatedly.
   virtual void ReadLateParsedTemplates(
-      llvm::MapVector<const FunctionDecl *, LateParsedTemplate *> &LPTMap) {}
+      llvm37::MapVector<const FunctionDecl *, LateParsedTemplate *> &LPTMap) {}
 
   /// \copydoc Sema::CorrectTypo
   /// \note LookupKind must correspond to a valid Sema::LookupNameKind

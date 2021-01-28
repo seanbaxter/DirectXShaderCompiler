@@ -1,22 +1,22 @@
 //===-- MCExternalSymbolizer.cpp - External symbolizer --------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/MC/MCExternalSymbolizer.h"
-#include "llvm/MC/MCContext.h"
-#include "llvm/MC/MCExpr.h"
-#include "llvm/MC/MCInst.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/MC/MCExternalSymbolizer.h"
+#include "llvm37/MC/MCContext.h"
+#include "llvm37/MC/MCExpr.h"
+#include "llvm37/MC/MCInst.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <cstring>
 
-using namespace llvm;
+using namespace llvm37;
 
-namespace llvm {
+namespace llvm37 {
 class Triple;
 }
 
@@ -39,14 +39,14 @@ bool MCExternalSymbolizer::tryAddingSymbolicOperand(MCInst &MI,
                                                     bool IsBranch,
                                                     uint64_t Offset,
                                                     uint64_t InstSize) {
-  struct LLVMOpInfo1 SymbolicOp;
-  std::memset(&SymbolicOp, '\0', sizeof(struct LLVMOpInfo1));
+  struct LLVM37OpInfo1 SymbolicOp;
+  std::memset(&SymbolicOp, '\0', sizeof(struct LLVM37OpInfo1));
   SymbolicOp.Value = Value;
 
   if (!GetOpInfo ||
       !GetOpInfo(DisInfo, Address, Offset, InstSize, 1, &SymbolicOp)) {
     // Clear SymbolicOp.Value from above and also all other fields.
-    std::memset(&SymbolicOp, '\0', sizeof(struct LLVMOpInfo1));
+    std::memset(&SymbolicOp, '\0', sizeof(struct LLVM37OpInfo1));
 
     // At this point, GetOpInfo() did not find any relocation information about
     // this operand and we are left to use the SymbolLookUp() call back to guess
@@ -62,9 +62,9 @@ bool MCExternalSymbolizer::tryAddingSymbolicOperand(MCInst &MI,
 
     uint64_t ReferenceType;
     if (IsBranch)
-       ReferenceType = LLVMDisassembler_ReferenceType_In_Branch;
+       ReferenceType = LLVM37Disassembler_ReferenceType_In_Branch;
     else
-       ReferenceType = LLVMDisassembler_ReferenceType_InOut_None;
+       ReferenceType = LLVM37Disassembler_ReferenceType_InOut_None;
     const char *ReferenceName;
     const char *Name = SymbolLookUp(DisInfo, Value, &ReferenceType, Address,
                                     &ReferenceName);
@@ -72,16 +72,16 @@ bool MCExternalSymbolizer::tryAddingSymbolicOperand(MCInst &MI,
       SymbolicOp.AddSymbol.Name = Name;
       SymbolicOp.AddSymbol.Present = true;
       // If Name is a C++ symbol name put the human readable name in a comment.
-      if(ReferenceType == LLVMDisassembler_ReferenceType_DeMangled_Name)
+      if(ReferenceType == LLVM37Disassembler_ReferenceType_DeMangled_Name)
         cStream << ReferenceName;
     }
     // For branches always create an MCExpr so it gets printed as hex address.
     else if (IsBranch) {
       SymbolicOp.Value = Value;
     }
-    if(ReferenceType == LLVMDisassembler_ReferenceType_Out_SymbolStub)
+    if(ReferenceType == LLVM37Disassembler_ReferenceType_Out_SymbolStub)
       cStream << "symbol stub for: " << ReferenceName;
-    else if(ReferenceType == LLVMDisassembler_ReferenceType_Out_Objc_Message)
+    else if(ReferenceType == LLVM37Disassembler_ReferenceType_Out_Objc_Message)
       cStream << "Objc message: " << ReferenceName;
     if (!Name && !IsBranch)
       return false;
@@ -158,38 +158,38 @@ void MCExternalSymbolizer::tryAddingPcLoadReferenceComment(raw_ostream &cStream,
                                                            int64_t Value,
                                                            uint64_t Address) {
   if (SymbolLookUp) {
-    uint64_t ReferenceType = LLVMDisassembler_ReferenceType_In_PCrel_Load;
+    uint64_t ReferenceType = LLVM37Disassembler_ReferenceType_In_PCrel_Load;
     const char *ReferenceName;
     (void)SymbolLookUp(DisInfo, Value, &ReferenceType, Address, &ReferenceName);
-    if(ReferenceType == LLVMDisassembler_ReferenceType_Out_LitPool_SymAddr)
+    if(ReferenceType == LLVM37Disassembler_ReferenceType_Out_LitPool_SymAddr)
       cStream << "literal pool symbol address: " << ReferenceName;
     else if(ReferenceType ==
-            LLVMDisassembler_ReferenceType_Out_LitPool_CstrAddr) {
+            LLVM37Disassembler_ReferenceType_Out_LitPool_CstrAddr) {
       cStream << "literal pool for: \"";
       cStream.write_escaped(ReferenceName);
       cStream << "\"";
     }
     else if(ReferenceType ==
-            LLVMDisassembler_ReferenceType_Out_Objc_CFString_Ref)
+            LLVM37Disassembler_ReferenceType_Out_Objc_CFString_Ref)
       cStream << "Objc cfstring ref: @\"" << ReferenceName << "\"";
     else if(ReferenceType ==
-            LLVMDisassembler_ReferenceType_Out_Objc_Message)
+            LLVM37Disassembler_ReferenceType_Out_Objc_Message)
       cStream << "Objc message: " << ReferenceName;
     else if(ReferenceType ==
-            LLVMDisassembler_ReferenceType_Out_Objc_Message_Ref)
+            LLVM37Disassembler_ReferenceType_Out_Objc_Message_Ref)
       cStream << "Objc message ref: " << ReferenceName;
     else if(ReferenceType ==
-            LLVMDisassembler_ReferenceType_Out_Objc_Selector_Ref)
+            LLVM37Disassembler_ReferenceType_Out_Objc_Selector_Ref)
       cStream << "Objc selector ref: " << ReferenceName;
     else if(ReferenceType ==
-            LLVMDisassembler_ReferenceType_Out_Objc_Class_Ref)
+            LLVM37Disassembler_ReferenceType_Out_Objc_Class_Ref)
       cStream << "Objc class ref: " << ReferenceName;
   }
 }
 
-namespace llvm {
-MCSymbolizer *createMCSymbolizer(const Triple &TT, LLVMOpInfoCallback GetOpInfo,
-                                 LLVMSymbolLookupCallback SymbolLookUp,
+namespace llvm37 {
+MCSymbolizer *createMCSymbolizer(const Triple &TT, LLVM37OpInfoCallback GetOpInfo,
+                                 LLVM37SymbolLookupCallback SymbolLookUp,
                                  void *DisInfo, MCContext *Ctx,
                                  std::unique_ptr<MCRelocationInfo> &&RelInfo) {
   assert(Ctx && "No MCContext given for symbolic disassembly");

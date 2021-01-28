@@ -1,6 +1,6 @@
 //===--- HTMLDiagnostics.cpp - HTML Diagnostics for Paths ----*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -22,11 +22,11 @@
 #include "clang/Rewrite/Core/Rewriter.h"
 #include "clang/StaticAnalyzer/Core/BugReporter/PathDiagnostic.h"
 #include "clang/StaticAnalyzer/Core/CheckerManager.h"
-#include "llvm/Support/Errc.h"
-#include "llvm/Support/FileSystem.h"
-#include "llvm/Support/MemoryBuffer.h"
-#include "llvm/Support/Path.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/Support/Errc.h"
+#include "llvm37/Support/FileSystem.h"
+#include "llvm37/Support/MemoryBuffer.h"
+#include "llvm37/Support/Path.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <sstream>
 
 using namespace clang;
@@ -104,8 +104,8 @@ void HTMLDiagnostics::ReportDiag(const PathDiagnostic& D,
   // Create the HTML directory if it is missing.
   if (!createdDir) {
     createdDir = true;
-    if (std::error_code ec = llvm::sys::fs::create_directories(Directory)) {
-      llvm::errs() << "warning: could not create directory '"
+    if (std::error_code ec = llvm37::sys::fs::create_directories(Directory)) {
+      llvm37::errs() << "warning: could not create directory '"
                    << Directory << "': " << ec.message() << '\n';
 
       noDir = true;
@@ -180,10 +180,10 @@ void HTMLDiagnostics::ReportDiag(const PathDiagnostic& D,
   // working directory if we have no directory information.  This is
   // a work in progress.
 
-  llvm::SmallString<0> DirName;
+  llvm37::SmallString<0> DirName;
 
-  if (llvm::sys::path::is_relative(Entry->getName())) {
-    llvm::sys::fs::current_path(DirName);
+  if (llvm37::sys::path::is_relative(Entry->getName())) {
+    llvm37::sys::fs::current_path(DirName);
     DirName += '/';
   }
 
@@ -194,7 +194,7 @@ void HTMLDiagnostics::ReportDiag(const PathDiagnostic& D,
 
   {
     std::string s;
-    llvm::raw_string_ostream os(s);
+    llvm37::raw_string_ostream os(s);
 
     os << "<!-- REPORTHEADER -->\n"
       << "<h3>Bug Summary</h3>\n<table class=\"simpletable\">\n"
@@ -226,7 +226,7 @@ void HTMLDiagnostics::ReportDiag(const PathDiagnostic& D,
   // Embed meta-data tags.
   {
     std::string s;
-    llvm::raw_string_ostream os(s);
+    llvm37::raw_string_ostream os(s);
 
     StringRef BugDesc = D.getVerboseDescription();
     if (!BugDesc.empty())
@@ -242,7 +242,7 @@ void HTMLDiagnostics::ReportDiag(const PathDiagnostic& D,
 
     os << "\n<!-- BUGFILE " << DirName << Entry->getName() << " -->\n";
 
-    os << "\n<!-- FILENAME " << llvm::sys::path::filename(Entry->getName()) << " -->\n";
+    os << "\n<!-- FILENAME " << llvm37::sys::path::filename(Entry->getName()) << " -->\n";
 
     os  << "\n<!-- FUNCTIONNAME " <<  declName << " -->\n";
 
@@ -271,7 +271,7 @@ void HTMLDiagnostics::ReportDiag(const PathDiagnostic& D,
   const RewriteBuffer *Buf = R.getRewriteBufferFor(FID);
 
   if (!Buf) {
-    llvm::errs() << "warning: no diagnostics generated for main file.\n";
+    llvm37::errs() << "warning: no diagnostics generated for main file.\n";
     return;
   }
 
@@ -280,11 +280,11 @@ void HTMLDiagnostics::ReportDiag(const PathDiagnostic& D,
   SmallString<128> Model, ResultPath;
 
   if (!AnalyzerOpts.shouldWriteStableReportFilename()) {
-      llvm::sys::path::append(Model, Directory, "report-%%%%%%.html");
+      llvm37::sys::path::append(Model, Directory, "report-%%%%%%.html");
 
       if (std::error_code EC =
-          llvm::sys::fs::createUniqueFile(Model, FD, ResultPath)) {
-          llvm::errs() << "warning: could not create file in '" << Directory
+          llvm37::sys::fs::createUniqueFile(Model, FD, ResultPath)) {
+          llvm37::errs() << "warning: could not create file in '" << Directory
                        << "': " << EC.message() << '\n';
           return;
       }
@@ -297,18 +297,18 @@ void HTMLDiagnostics::ReportDiag(const PathDiagnostic& D,
           std::stringstream filename;
           Model = "";
           filename << "report-"
-                   << llvm::sys::path::filename(Entry->getName()).str()
+                   << llvm37::sys::path::filename(Entry->getName()).str()
                    << "-" << declName.c_str()
                    << "-" << offsetDecl
                    << "-" << i << ".html";
-          llvm::sys::path::append(Model, Directory,
+          llvm37::sys::path::append(Model, Directory,
                                   filename.str());
-          EC = llvm::sys::fs::openFileForWrite(Model,
+          EC = llvm37::sys::fs::openFileForWrite(Model,
                                                FD,
-                                               llvm::sys::fs::F_RW |
-                                               llvm::sys::fs::F_Excl);
-          if (EC && EC != llvm::errc::file_exists) {
-              llvm::errs() << "warning: could not create file '" << Model
+                                               llvm37::sys::fs::F_RW |
+                                               llvm37::sys::fs::F_Excl);
+          if (EC && EC != llvm37::errc::file_exists) {
+              llvm37::errs() << "warning: could not create file '" << Model
                            << "': " << EC.message() << '\n';
               return;
           }
@@ -316,11 +316,11 @@ void HTMLDiagnostics::ReportDiag(const PathDiagnostic& D,
       } while (EC);
   }
 
-  llvm::raw_fd_ostream os(FD, true);
+  llvm37::raw_fd_ostream os(FD, true);
 
   if (filesMade)
     filesMade->addDiagnostic(D, getName(),
-                             llvm::sys::path::filename(ResultPath));
+                             llvm37::sys::path::filename(ResultPath));
 
   // Emit the HTML to disk.
   for (RewriteBuffer::iterator I = Buf->begin(), E = Buf->end(); I!=E; ++I)
@@ -345,7 +345,7 @@ void HTMLDiagnostics::HandlePiece(Rewriter& R, FileID BugFileID,
   if (LPosInfo.first != BugFileID)
     return;
 
-  const llvm::MemoryBuffer *Buf = SM.getBuffer(LPosInfo.first);
+  const llvm37::MemoryBuffer *Buf = SM.getBuffer(LPosInfo.first);
   const char* FileStart = Buf->getBufferStart();
 
   // Compute the column number.  Rewind from the current position to the start
@@ -370,7 +370,7 @@ void HTMLDiagnostics::HandlePiece(Rewriter& R, FileID BugFileID,
   const char *Kind = nullptr;
   switch (P.getKind()) {
   case PathDiagnosticPiece::Call:
-      llvm_unreachable("Calls should already be handled");
+      llvm37_unreachable("Calls should already be handled");
   case PathDiagnosticPiece::Event:  Kind = "Event"; break;
   case PathDiagnosticPiece::ControlFlow: Kind = "Control"; break;
     // Setting Kind to "Control" is intentional.
@@ -378,7 +378,7 @@ void HTMLDiagnostics::HandlePiece(Rewriter& R, FileID BugFileID,
   }
 
   std::string sbuf;
-  llvm::raw_string_ostream os(sbuf);
+  llvm37::raw_string_ostream os(sbuf);
 
   os << "\n<tr><td class=\"num\"></td><td class=\"line\"><div id=\"";
 

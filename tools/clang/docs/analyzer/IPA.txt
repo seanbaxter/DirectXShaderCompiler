@@ -8,7 +8,7 @@ There are several options that control which calls the analyzer will consider fo
 inlining. The major one is -analyzer-config ipa:
 
   -analyzer-config ipa=none - All inlining is disabled. This is the only mode 
-     available in LLVM 3.1 and earlier and in Xcode 4.3 and earlier.
+     available in LLVM37 3.1 and earlier and in Xcode 4.3 and earlier.
 
   -analyzer-config ipa=basic-inlining - Turns on inlining for C functions, C++ 
      static member functions, and blocks -- essentially, the calls that behave 

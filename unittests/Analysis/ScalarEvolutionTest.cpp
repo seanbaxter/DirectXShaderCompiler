@@ -1,23 +1,23 @@
 //===- ScalarEvolutionsTest.cpp - ScalarEvolution unit tests --------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Analysis/ScalarEvolutionExpressions.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/Analysis/LoopInfo.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/GlobalVariable.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/LegacyPassManager.h"
+#include "llvm37/Analysis/ScalarEvolutionExpressions.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/Analysis/LoopInfo.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/GlobalVariable.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/LegacyPassManager.h"
 #include "gtest/gtest.h"
 
-namespace llvm {
+namespace llvm37 {
 namespace {
 
 // We use this fixture to ensure that we clean up ScalarEvolution before
@@ -30,7 +30,7 @@ protected:
     // pass was finished.
     SE.releaseMemory();
   }
-  LLVMContext Context;
+  LLVM37Context Context;
   Module M;
   legacy::PassManager PM;
   ScalarEvolution &SE;
@@ -231,4 +231,4 @@ TEST_F(ScalarEvolutionsTest, SCEVMultiplyAddRecs) {
 }
 
 }  // end anonymous namespace
-}  // end namespace llvm
+}  // end namespace llvm37

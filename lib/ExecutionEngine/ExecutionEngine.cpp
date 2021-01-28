@@ -1,6 +1,6 @@
 //===-- ExecutionEngine.cpp - Common Implementation shared by EEs ---------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -12,33 +12,33 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/ExecutionEngine/ExecutionEngine.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/ExecutionEngine/GenericValue.h"
-#include "llvm/ExecutionEngine/JITEventListener.h"
-#include "llvm/ExecutionEngine/RTDyldMemoryManager.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/DerivedTypes.h"
-#include "llvm/IR/Mangler.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/Operator.h"
-#include "llvm/IR/ValueHandle.h"
-#include "llvm/Object/Archive.h"
-#include "llvm/Object/ObjectFile.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/DynamicLibrary.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/Host.h"
-#include "llvm/Support/MutexGuard.h"
-#include "llvm/Support/TargetRegistry.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Target/TargetMachine.h"
+#include "llvm37/ExecutionEngine/ExecutionEngine.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/ExecutionEngine/GenericValue.h"
+#include "llvm37/ExecutionEngine/JITEventListener.h"
+#include "llvm37/ExecutionEngine/RTDyldMemoryManager.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/IR/DerivedTypes.h"
+#include "llvm37/IR/Mangler.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/Operator.h"
+#include "llvm37/IR/ValueHandle.h"
+#include "llvm37/Object/Archive.h"
+#include "llvm37/Object/ObjectFile.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/DynamicLibrary.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/Host.h"
+#include "llvm37/Support/MutexGuard.h"
+#include "llvm37/Support/TargetRegistry.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Target/TargetMachine.h"
 #include <cmath>
 #include <cstring>
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "jit"
 
@@ -119,16 +119,16 @@ char *ExecutionEngine::getMemoryForGV(const GlobalVariable *GV) {
 }
 
 void ExecutionEngine::addObjectFile(std::unique_ptr<object::ObjectFile> O) {
-  llvm_unreachable("ExecutionEngine subclass doesn't implement addObjectFile.");
+  llvm37_unreachable("ExecutionEngine subclass doesn't implement addObjectFile.");
 }
 
 void
 ExecutionEngine::addObjectFile(object::OwningBinary<object::ObjectFile> O) {
-  llvm_unreachable("ExecutionEngine subclass doesn't implement addObjectFile.");
+  llvm37_unreachable("ExecutionEngine subclass doesn't implement addObjectFile.");
 }
 
 void ExecutionEngine::addArchive(object::OwningBinary<object::Archive> A) {
-  llvm_unreachable("ExecutionEngine subclass doesn't implement addArchive.");
+  llvm37_unreachable("ExecutionEngine subclass doesn't implement addArchive.");
 }
 
 bool ExecutionEngine::removeModule(Module *M) {
@@ -325,11 +325,11 @@ class ArgvArray {
 public:
   /// Turn a vector of strings into a nice argv style array of pointers to null
   /// terminated strings.
-  void *reset(LLVMContext &C, ExecutionEngine *EE,
+  void *reset(LLVM37Context &C, ExecutionEngine *EE,
               const std::vector<std::string> &InputArgv);
 };
 }  // anonymous namespace
-void *ArgvArray::reset(LLVMContext &C, ExecutionEngine *EE,
+void *ArgvArray::reset(LLVM37Context &C, ExecutionEngine *EE,
                        const std::vector<std::string> &InputArgv) {
   Values.clear();  // Free the old contents.
   Values.reserve(InputArgv.size());
@@ -366,7 +366,7 @@ void ExecutionEngine::runStaticConstructorsDestructors(Module &mod,
   GlobalVariable *GV = mod.getNamedGlobal(Name);
 
   // If this global has internal linkage, or if it has a use, then it must be
-  // an old-style (llvmgcc3) static ctor with __main linked in and in use.  If
+  // an old-style (llvm37gcc3) static ctor with __main linked in and in use.  If
   // this is the case, don't execute any of the global ctors, __main will do
   // it.
   if (!GV || GV->isDeclaration() || GV->hasLocalLinkage()) return;
@@ -579,7 +579,7 @@ void *ExecutionEngine::getPointerToGlobal(const GlobalValue *GV) {
           const_cast<GlobalVariable *>(dyn_cast<GlobalVariable>(GV)))
     EmitGlobalVariable(GVar);
   else
-    llvm_unreachable("Global hasn't had an address allocated yet!");
+    llvm37_unreachable("Global hasn't had an address allocated yet!");
 
   return getPointerToGlobalIfAvailable(GV);
 }
@@ -748,7 +748,7 @@ GenericValue ExecutionEngine::getConstantValue(const Constant *C) {
       GenericValue GV = getConstantValue(Op0);
       Type* DestTy = CE->getType();
       switch (Op0->getType()->getTypeID()) {
-        default: llvm_unreachable("Invalid bitcast operand");
+        default: llvm37_unreachable("Invalid bitcast operand");
         case Type::IntegerTyID:
           assert(DestTy->isFloatingPointTy() && "invalid bitcast");
           if (DestTy->isFloatTy())
@@ -787,10 +787,10 @@ GenericValue ExecutionEngine::getConstantValue(const Constant *C) {
       GenericValue RHS = getConstantValue(CE->getOperand(1));
       GenericValue GV;
       switch (CE->getOperand(0)->getType()->getTypeID()) {
-      default: llvm_unreachable("Bad add type!");
+      default: llvm37_unreachable("Bad add type!");
       case Type::IntegerTyID:
         switch (CE->getOpcode()) {
-          default: llvm_unreachable("Invalid integer opcode");
+          default: llvm37_unreachable("Invalid integer opcode");
           case Instruction::Add: GV.IntVal = LHS.IntVal + RHS.IntVal; break;
           case Instruction::Sub: GV.IntVal = LHS.IntVal - RHS.IntVal; break;
           case Instruction::Mul: GV.IntVal = LHS.IntVal * RHS.IntVal; break;
@@ -805,7 +805,7 @@ GenericValue ExecutionEngine::getConstantValue(const Constant *C) {
         break;
       case Type::FloatTyID:
         switch (CE->getOpcode()) {
-          default: llvm_unreachable("Invalid float opcode");
+          default: llvm37_unreachable("Invalid float opcode");
           case Instruction::FAdd:
             GV.FloatVal = LHS.FloatVal + RHS.FloatVal; break;
           case Instruction::FSub:
@@ -820,7 +820,7 @@ GenericValue ExecutionEngine::getConstantValue(const Constant *C) {
         break;
       case Type::DoubleTyID:
         switch (CE->getOpcode()) {
-          default: llvm_unreachable("Invalid double opcode");
+          default: llvm37_unreachable("Invalid double opcode");
           case Instruction::FAdd:
             GV.DoubleVal = LHS.DoubleVal + RHS.DoubleVal; break;
           case Instruction::FSub:
@@ -839,7 +839,7 @@ GenericValue ExecutionEngine::getConstantValue(const Constant *C) {
         const fltSemantics &Sem = CE->getOperand(0)->getType()->getFltSemantics();
         APFloat apfLHS = APFloat(Sem, LHS.IntVal);
         switch (CE->getOpcode()) {
-          default: llvm_unreachable("Invalid long double opcode");
+          default: llvm37_unreachable("Invalid long double opcode");
           case Instruction::FAdd:
             apfLHS.add(APFloat(Sem, RHS.IntVal), APFloat::rmNearestTiesToEven);
             GV.IntVal = apfLHS.bitcastToAPInt();
@@ -905,7 +905,7 @@ GenericValue ExecutionEngine::getConstantValue(const Constant *C) {
     else if (const GlobalVariable *GV = dyn_cast<GlobalVariable>(C))
       Result = PTOGV(getOrEmitGlobalVariable(const_cast<GlobalVariable*>(GV)));
     else
-      llvm_unreachable("Unknown constant pointer type!");
+      llvm37_unreachable("Unknown constant pointer type!");
     break;
   case Type::VectorTyID: {
     unsigned elemNum;
@@ -922,7 +922,7 @@ GenericValue ExecutionEngine::getConstantValue(const Constant *C) {
         elemNum = VTy->getNumElements();
         ElemTy = VTy->getElementType();
     } else {
-        llvm_unreachable("Unknown constant vector type!");
+        llvm37_unreachable("Unknown constant vector type!");
     }
 
     Result.AggregateVal.resize(elemNum);
@@ -998,7 +998,7 @@ GenericValue ExecutionEngine::getConstantValue(const Constant *C) {
 
       break;
     }
-    llvm_unreachable("Unknown constant pointer type!");
+    llvm37_unreachable("Unknown constant pointer type!");
   }
   break;
 
@@ -1225,7 +1225,7 @@ void ExecutionEngine::InitializeMemory(const Constant *Init, void *Addr) {
   }
 
   DEBUG(dbgs() << "Bad Type: " << *Init->getType() << "\n");
-  llvm_unreachable("Unknown constant type to initialize memory with!");
+  llvm37_unreachable("Unknown constant type to initialize memory with!");
 }
 
 /// EmitGlobals - Emit all of the global variables to memory, storing their

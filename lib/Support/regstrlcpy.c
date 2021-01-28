@@ -27,7 +27,7 @@
  */
 _Use_decl_annotations_
 size_t
-llvm_strlcpy(char *dst, const char *src, size_t siz)
+llvm37_strlcpy(char *dst, const char *src, size_t siz)
 {
 	char *d = dst;
 	const char *s = src;

@@ -30,7 +30,7 @@ while (scalar(@ARGV) and ($_ = $ARGV[0], /^[-+]/)) {
 # Give first option a name.
 my $Directory = $ARGV[0];
 if (!defined($Directory) || ! -d "$Directory") {
-  die "First argument must specify the directory containing LLVM libs\n";
+  die "First argument must specify the directory containing LLVM37 libs\n";
 }
 
 my $nmPath = $ARGV[1];
@@ -69,10 +69,10 @@ if ($PEROBJ) {
 opendir DIR,$Directory;
 my @files = readdir DIR;
 closedir DIR;
-my @libs = grep(/libLLVM.*\.(dylib|so|a)$/,sort(@files));
-# Omit the all-of-llvm shared library.
-@libs = grep(!/libLLVM-\d\.\d(svn)?\.(dylib|so)/, @libs);
-my @objs = grep(/LLVM.*\.o$/,sort(@files));
+my @libs = grep(/libLLVM37.*\.(dylib|so|a)$/,sort(@files));
+# Omit the all-of-llvm37 shared library.
+@libs = grep(!/libLLVM37-\d\.\d(svn)?\.(dylib|so)/, @libs);
+my @objs = grep(/LLVM37.*\.o$/,sort(@files));
 
 # Declare the hashes we will use to keep track of the library and object file
 # symbol definitions.
@@ -86,7 +86,7 @@ if ($PEROBJ) {
   foreach my $lib (@libs ) {
     `$ranlibPath $Directory/$lib`;
     my $libpath = $lib;
-    $libpath =~ s/^libLLVM(.*)\.a/$1/;
+    $libpath =~ s/^libLLVM37(.*)\.a/$1/;
     $libpath =~ s/(.+)CodeGen$/Target\/$1/;
     $libpath =~ s/(.+)AsmPrinter$/Target\/$1\/AsmPrinter/;
     $libpath =~ s/(.+)AsmParser$/Target\/$1\/AsmParser/;
@@ -115,7 +115,7 @@ if ($PEROBJ) {
         $objdefs{$1} = $objfile;
         $objdeps{$objfile} = {};
         $libobjs{$lib}{$objfile}=1;
-#        my $p = "../llvm/".$objfile;
+#        my $p = "../llvm37/".$objfile;
 #        $p =~ s/Support\/reg(.*).o/Support\/reg$1.c/;
 #        $p =~ s/.o$/.cpp/;
 #        unless (-e $p) {
@@ -127,7 +127,7 @@ if ($PEROBJ) {
   }
   foreach my $lib (@libs ) {
     my $libpath = $lib;
-    $libpath =~ s/^libLLVM(.*)\.a/$1/;
+    $libpath =~ s/^libLLVM37(.*)\.a/$1/;
     $libpath =~ s/(.+)CodeGen$/Target\/$1/;
     $libpath =~ s/(.+)AsmPrinter$/Target\/$1\/AsmPrinter/;
     $libpath =~ s/(.+)AsmParser$/Target\/$1\/AsmParser/;

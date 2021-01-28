@@ -1,28 +1,28 @@
 //===-- StructurizeCFG.cpp ------------------------------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Transforms/Scalar.h"
-#include "llvm/ADT/MapVector.h"
-#include "llvm/ADT/PostOrderIterator.h"
-#include "llvm/ADT/SCCIterator.h"
-#include "llvm/Analysis/LoopInfo.h"
-#include "llvm/Analysis/RegionInfo.h"
-#include "llvm/Analysis/RegionIterator.h"
-#include "llvm/Analysis/RegionPass.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/PatternMatch.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Transforms/Utils/SSAUpdater.h"
+#include "llvm37/Transforms/Scalar.h"
+#include "llvm37/ADT/MapVector.h"
+#include "llvm37/ADT/PostOrderIterator.h"
+#include "llvm37/ADT/SCCIterator.h"
+#include "llvm37/Analysis/LoopInfo.h"
+#include "llvm37/Analysis/RegionInfo.h"
+#include "llvm37/Analysis/RegionIterator.h"
+#include "llvm37/Analysis/RegionPass.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/PatternMatch.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Transforms/Utils/SSAUpdater.h"
 
-using namespace llvm;
-using namespace llvm::PatternMatch;
+using namespace llvm37;
+using namespace llvm37::PatternMatch;
 
 #define DEBUG_TYPE "structurizecfg"
 
@@ -272,7 +272,7 @@ INITIALIZE_PASS_END(StructurizeCFG, "structurizecfg", "Structurize the CFG",
 
 /// \brief Initialize the types and constants used in the pass
 bool StructurizeCFG::doInitialization(Region *R, RGPassManager &RGM) {
-  LLVMContext &Context = R->getEntry()->getContext();
+  LLVM37Context &Context = R->getEntry()->getContext();
 
   Boolean = Type::getInt1Ty(Context);
   BoolTrue = ConstantInt::getTrue(Context);
@@ -403,7 +403,7 @@ Value *StructurizeCFG::invert(Value *Condition) {
                                      EntryBlock.getTerminator());
   }
 
-  llvm_unreachable("Unhandled condition to invert");
+  llvm37_unreachable("Unhandled condition to invert");
 }
 
 /// \brief Build the condition for one edge
@@ -697,7 +697,7 @@ void StructurizeCFG::changeExit(RegionNode *Node, BasicBlock *NewExit,
 
 /// \brief Create a new flow node and update dominator tree and region info
 BasicBlock *StructurizeCFG::getNextFlow(BasicBlock *Dominator) {
-  LLVMContext &Context = Func->getContext();
+  LLVM37Context &Context = Func->getContext();
   BasicBlock *Insert = Order.empty() ? ParentRegion->getExit() :
                        Order.back()->getEntry();
   BasicBlock *Flow = BasicBlock::Create(Context, FlowBlockName,
@@ -952,6 +952,6 @@ bool StructurizeCFG::runOnRegion(Region *R, RGPassManager &RGM) {
 }
 
 /// \brief Create the pass
-Pass *llvm::createStructurizeCFGPass() {
+Pass *llvm37::createStructurizeCFGPass() {
   return new StructurizeCFG();
 }

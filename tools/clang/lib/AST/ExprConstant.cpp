@@ -1,6 +1,6 @@
 //===--- ExprConstant.cpp - Expression Constant Evaluator -----------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -43,17 +43,17 @@
 #include "clang/AST/TypeLoc.h"
 #include "clang/Basic/Builtins.h"
 #include "clang/Basic/TargetInfo.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <cstring>
 #include <functional>
 
-#include "llvm/Support/OacrIgnoreCond.h"  // HLSL Change - constant evaluator is language-dependant
+#include "llvm37/Support/OacrIgnoreCond.h"  // HLSL Change - constant evaluator is language-dependant
 #include "dxc/HlslIntrinsicOp.h"          // HLSL Change
 
 using namespace clang;
-using llvm::APSInt;
-using llvm::APFloat;
+using llvm37::APSInt;
+using llvm37::APFloat;
 
 static bool IsGlobalLValue(APValue::LValueBase B);
 
@@ -426,7 +426,7 @@ namespace {
         // representation which rounds to the correct value, but it's a bit
         // tricky to implement.
         unsigned precision =
-            llvm::APFloat::semanticsPrecision(F.getSemantics());
+            llvm37::APFloat::semanticsPrecision(F.getSemantics());
         precision = (precision * 59 + 195) / 196;
         SmallVector<char, 32> Buffer;
         F.toString(Buffer, precision);
@@ -438,7 +438,7 @@ namespace {
 
   /// A cleanup, and a flag indicating whether it is lifetime-extended.
   class Cleanup {
-    llvm::PointerIntPair<APValue*, 1, bool> Value;
+    llvm37::PointerIntPair<APValue*, 1, bool> Value;
 
   public:
     Cleanup(APValue *Val, bool IsLifetimeExtended)
@@ -490,7 +490,7 @@ namespace {
 
     /// A stack of values whose lifetimes end at the end of some surrounding
     /// evaluation frame.
-    llvm::SmallVector<Cleanup, 16> CleanupStack;
+    llvm37::SmallVector<Cleanup, 16> CleanupStack;
 
     /// EvaluatingDecl - This is the declaration whose initializer is being
     /// evaluated, if any.
@@ -726,7 +726,7 @@ namespace {
       case EM_ConstantFold:
         return false;
       }
-      llvm_unreachable("Missed EvalMode case");
+      llvm37_unreachable("Missed EvalMode case");
     }
 
     /// Note that we have had a side-effect, and determine whether we should
@@ -754,7 +754,7 @@ namespace {
       case EM_IgnoreSideEffects:
         return false;
       }
-      llvm_unreachable("Missed EvalMode case");
+      llvm37_unreachable("Missed EvalMode case");
     }
   };
 
@@ -917,7 +917,7 @@ void EvalInfo::addCallStack(unsigned Limit) {
     }
 
     SmallVector<char, 128> Buffer;
-    llvm::raw_svector_ostream Out(Buffer);
+    llvm37::raw_svector_ostream Out(Buffer);
     describeCall(Frame, Out);
     addDiag(Frame->CallLoc, diag::note_constexpr_call_here) << Out.str();
   }
@@ -1079,7 +1079,7 @@ namespace {
     /// DeclAndIsDerivedMember - The member declaration, and a flag indicating
     /// whether the member is a member of some class derived from the class type
     /// of the member pointer.
-    llvm::PointerIntPair<const ValueDecl*, 1, bool> DeclAndIsDerivedMember;
+    llvm37::PointerIntPair<const ValueDecl*, 1, bool> DeclAndIsDerivedMember;
     /// Path - The path of base/derived classes from the member declaration's
     /// class (exclusive) to the class type of the member pointer (inclusive).
     SmallVector<const CXXRecordDecl*, 4> Path;
@@ -1529,7 +1529,7 @@ static bool HandleConversionToBool(const APValue &Val, bool &Result) {
     return false;
   }
 
-  llvm_unreachable("unknown APValue kind");
+  llvm37_unreachable("unknown APValue kind");
 }
 
 static bool EvaluateAsBooleanCondition(const Expr *E, bool &Result,
@@ -1562,7 +1562,7 @@ static bool HandleFloatToIntCast(EvalInfo &Info, const Expr *E,
 
   Result = APSInt(DestWidth, !DestSigned);
   bool ignored;
-  if (Value.convertToInteger(Result, llvm::APFloat::rmTowardZero, &ignored)
+  if (Value.convertToInteger(Result, llvm37::APFloat::rmTowardZero, &ignored)
       & APFloat::opInvalidOp)
     HandleOverflow(Info, E, Value, DestType);
   return true;
@@ -1625,7 +1625,7 @@ static bool truncateBitfieldValue(EvalInfo &Info, const Expr *E,
 }
 
 static bool EvalAndBitcastToAPInt(EvalInfo &Info, const Expr *E,
-                                  llvm::APInt &Res) {
+                                  llvm37::APInt &Res) {
   APValue SVal;
   if (!Evaluate(SVal, Info, E))
     return false;
@@ -1643,10 +1643,10 @@ static bool EvalAndBitcastToAPInt(EvalInfo &Info, const Expr *E,
     QualType EltTy = VecTy->castAs<VectorType>()->getElementType();
     unsigned EltSize = Info.Ctx.getTypeSize(EltTy);
     bool BigEndian = Info.Ctx.getTargetInfo().isBigEndian();
-    Res = llvm::APInt::getNullValue(VecSize);
+    Res = llvm37::APInt::getNullValue(VecSize);
     for (unsigned i = 0; i < SVal.getVectorLength(); i++) {
       APValue &Elt = SVal.getVectorElt(i);
-      llvm::APInt EltAsInt;
+      llvm37::APInt EltAsInt;
       if (Elt.isInt()) {
         EltAsInt = Elt.getInt();
       } else if (Elt.isFloat()) {
@@ -1732,7 +1732,7 @@ static bool handleIntIntBinOp(EvalInfo &Info, const Expr *E, const APSInt &LHS,
   case BO_Shl: {
     if (Info.getLangOpts().OpenCL)
       // OpenCL 6.3j: shift values are effectively % word size of LHS.
-      RHS &= APSInt(llvm::APInt(RHS.getBitWidth(),
+      RHS &= APSInt(llvm37::APInt(RHS.getBitWidth(),
                     static_cast<uint64_t>(LHS.getBitWidth() - 1)),
                     RHS.isUnsigned());
     else if (RHS.isSigned() && RHS.isNegative()) {
@@ -1763,7 +1763,7 @@ static bool handleIntIntBinOp(EvalInfo &Info, const Expr *E, const APSInt &LHS,
   case BO_Shr: {
     if (Info.getLangOpts().OpenCL)
       // OpenCL 6.3j: shift values are effectively % word size of LHS.
-      RHS &= APSInt(llvm::APInt(RHS.getBitWidth(),
+      RHS &= APSInt(llvm37::APInt(RHS.getBitWidth(),
                     static_cast<uint64_t>(LHS.getBitWidth() - 1)),
                     RHS.isUnsigned());
     else if (RHS.isSigned() && RHS.isNegative()) {
@@ -2086,7 +2086,7 @@ static unsigned getBaseIndex(const CXXRecordDecl *Derived,
       return Index;
   }
 
-  llvm_unreachable("base class missing from derived class's bases list");
+  llvm37_unreachable("base class missing from derived class's bases list");
 }
 
 /// Extract the value of a character from a string literal.
@@ -2488,7 +2488,7 @@ struct ModifySubobjectHandler {
     return true;
   }
   bool foundString(APValue &Subobj, QualType SubobjType, uint64_t Character) {
-    llvm_unreachable("shouldn't encounter string elements with ExpandArrays");
+    llvm37_unreachable("shouldn't encounter string elements with ExpandArrays");
   }
 };
 } // end anonymous namespace
@@ -2915,7 +2915,7 @@ struct CompoundAssignSubobjectHandler {
     return true;
   }
   bool foundString(APValue &Subobj, QualType SubobjType, uint64_t Character) {
-    llvm_unreachable("shouldn't encounter string elements here");
+    llvm37_unreachable("shouldn't encounter string elements here");
   }
 };
 } // end anonymous namespace
@@ -3068,7 +3068,7 @@ struct IncDecSubobjectHandler {
     return true;
   }
   bool foundString(APValue &Subobj, QualType SubobjType, uint64_t Character) {
-    llvm_unreachable("shouldn't encounter string elements here");
+    llvm37_unreachable("shouldn't encounter string elements here");
   }
 };
 } // end anonymous namespace
@@ -3192,7 +3192,7 @@ static const ValueDecl *HandleMemberPointerAccess(EvalInfo &Info,
       if (!HandleLValueIndirectMember(Info, RHS, LV, IFD))
         return nullptr;
     } else {
-      llvm_unreachable("can't construct reference to bound member function");
+      llvm37_unreachable("can't construct reference to bound member function");
     }
   }
 
@@ -3333,7 +3333,7 @@ static EvalStmtResult EvaluateLoopBody(APValue &Result, EvalInfo &Info,
   case ESR_CaseNotFound:
     return ESR;
   }
-  llvm_unreachable("Invalid EvalStmtResult!");
+  llvm37_unreachable("Invalid EvalStmtResult!");
 }
 
 /// Evaluate a switch statement.
@@ -3390,7 +3390,7 @@ static EvalStmtResult EvaluateSwitch(APValue &Result, EvalInfo &Info,
     Info.Diag(Found->getLocStart(), diag::note_constexpr_stmt_expr_unsupported);
     return ESR_Failed;
   }
-  llvm_unreachable("Invalid EvalStmtResult!");
+  llvm37_unreachable("Invalid EvalStmtResult!");
 }
 
 // Evaluate a statement.
@@ -3986,7 +3986,7 @@ static bool HandleConstructorCall(SourceLocation CallLoc, const LValue &This,
           Value = &Value->getStructField(FD->getFieldIndex());
       }
     } else {
-      llvm_unreachable("unknown base initializer kind");
+      llvm37_unreachable("unknown base initializer kind");
     }
 
     FullExpressionRAII InitScope(Info);
@@ -4087,7 +4087,7 @@ public:
   }
 
   bool VisitStmt(const Stmt *) {
-    llvm_unreachable("Expression evaluator should not be called on stmts");
+    llvm37_unreachable("Expression evaluator should not be called on stmts");
   }
   bool VisitExpr(const Expr *E) {
     return Error(E);
@@ -4204,7 +4204,7 @@ public:
 
     const FunctionDecl *FD = nullptr;
     LValue *This = nullptr, ThisVal;
-    auto Args = llvm::makeArrayRef(E->getArgs(), E->getNumArgs());
+    auto Args = llvm37::makeArrayRef(E->getArgs(), E->getNumArgs());
     bool HasQualifier = false;
 
     // Extract function decl and 'this' pointer from the callee.
@@ -4440,7 +4440,7 @@ public:
       }
     }
 
-    llvm_unreachable("Return from function from the loop above.");
+    llvm37_unreachable("Return from function from the loop above.");
   }
 
   /// Visit a value which is evaluated, but whose value is ignored.
@@ -4956,7 +4956,7 @@ bool PointerExprEvaluator::VisitBinaryOperator(const BinaryOperator *E) {
   if (!EvalPtrOK && !Info.keepEvaluatingAfterFailure())
     return false;
 
-  llvm::APSInt Offset;
+  llvm37::APSInt Offset;
   if (!EvaluateInteger(IExp, Offset, Info) || !EvalPtrOK)
     return false;
 
@@ -5515,7 +5515,7 @@ bool RecordExprEvaluator::VisitCXXConstructExpr(const CXXConstructExpr *E) {
   if (ZeroInit && !ZeroInitialization(E))
     return false;
 
-  auto Args = llvm::makeArrayRef(E->getArgs(), E->getNumArgs());
+  auto Args = llvm37::makeArrayRef(E->getArgs(), E->getNumArgs());
   return HandleConstructorCall(E->getExprLoc(), This, Args,
                                cast<CXXConstructorDecl>(Definition), Info,
                                Result);
@@ -5783,7 +5783,7 @@ bool VectorExprEvaluator::VisitCastExpr(const CastExpr* E) {
   }
   case CK_BitCast: {
     // Evaluate the operand into an APInt we can extract from.
-    llvm::APInt SValInt;
+    llvm37::APInt SValInt;
     if (!EvalAndBitcastToAPInt(Info, SE, SValInt))
       return false;
     // Extract the elements
@@ -5792,12 +5792,12 @@ bool VectorExprEvaluator::VisitCastExpr(const CastExpr* E) {
     bool BigEndian = Info.Ctx.getTargetInfo().isBigEndian();
     SmallVector<APValue, 4> Elts;
     if (EltTy->isRealFloatingType()) {
-      const llvm::fltSemantics &Sem = Info.Ctx.getFloatTypeSemantics(EltTy);
+      const llvm37::fltSemantics &Sem = Info.Ctx.getFloatTypeSemantics(EltTy);
       unsigned FloatEltSize = EltSize;
       if (&Sem == &APFloat::x87DoubleExtended)
         FloatEltSize = 80;
       for (unsigned i = 0; i < NElts; i++) {
-        llvm::APInt Elt;
+        llvm37::APInt Elt;
         if (BigEndian)
           Elt = SValInt.rotl(i*EltSize+FloatEltSize).trunc(FloatEltSize);
         else
@@ -5806,7 +5806,7 @@ bool VectorExprEvaluator::VisitCastExpr(const CastExpr* E) {
       }
     } else if (EltTy->isIntegerType()) {
       for (unsigned i = 0; i < NElts; i++) {
-        llvm::APInt Elt;
+        llvm37::APInt Elt;
         if (BigEndian)
           Elt = SValInt.rotl(i*EltSize+EltSize).zextOrTrunc(EltSize);
         else
@@ -5871,7 +5871,7 @@ VectorExprEvaluator::VisitInitListExpr(const InitListExpr *E) {
         Elements.push_back(v.getVectorElt(j));
       CountElts += vlen;
     } else if (EltTy->isIntegerType()) {
-      llvm::APSInt sInt(32);
+      llvm37::APSInt sInt(32);
       if (CountInits < NumInits) {
         if (!EvaluateInteger(E->getInit(CountInits), sInt, Info))
           return false;
@@ -5880,7 +5880,7 @@ VectorExprEvaluator::VisitInitListExpr(const InitListExpr *E) {
       Elements.push_back(APValue(sInt));
       CountElts++;
     } else {
-      llvm::APFloat f(0.0);
+      llvm37::APFloat f(0.0);
       if (CountInits < NumInits) {
         if (!EvaluateFloat(E->getInit(CountInits), f, Info))
           return false;
@@ -6100,7 +6100,7 @@ bool ArrayExprEvaluator::VisitCXXConstructExpr(const CXXConstructExpr *E,
       return false;
   }
 
-  auto Args = llvm::makeArrayRef(E->getArgs(), E->getNumArgs());
+  auto Args = llvm37::makeArrayRef(E->getArgs(), E->getNumArgs());
   return HandleConstructorCall(E->getExprLoc(), Subobject, Args,
                                cast<CXXConstructorDecl>(Definition),
                                Info, *Value);
@@ -6122,7 +6122,7 @@ public:
   IntExprEvaluator(EvalInfo &info, APValue &result)
     : ExprEvaluatorBaseTy(info), Result(result) {}
 
-  bool Success(const llvm::APSInt &SI, const Expr *E, APValue &Result) {
+  bool Success(const llvm37::APSInt &SI, const Expr *E, APValue &Result) {
     assert(E->getType()->isIntegralOrEnumerationType() &&
            "Invalid evaluation result.");
     assert(SI.isSigned() == E->getType()->isSignedIntegerOrEnumerationType() &&
@@ -6132,11 +6132,11 @@ public:
     Result = APValue(SI);
     return true;
   }
-  bool Success(const llvm::APSInt &SI, const Expr *E) {
+  bool Success(const llvm37::APSInt &SI, const Expr *E) {
     return Success(SI, E, Result);
   }
 
-  bool Success(const llvm::APInt &I, const Expr *E, APValue &Result) {
+  bool Success(const llvm37::APInt &I, const Expr *E, APValue &Result) {
     assert(E->getType()->isIntegralOrEnumerationType() && 
            "Invalid evaluation result.");
     assert(I.getBitWidth() == Info.Ctx.getIntWidth(E->getType()) &&
@@ -6146,7 +6146,7 @@ public:
                             E->getType()->isUnsignedIntegerOrEnumerationType());
     return true;
   }
-  bool Success(const llvm::APInt &I, const Expr *E) {
+  bool Success(const llvm37::APInt &I, const Expr *E) {
     return Success(I, E, Result);
   }
 
@@ -6291,7 +6291,7 @@ bool IntExprEvaluator::CheckReferencedDecl(const Expr* E, const Decl* D) {
     else {
       // Get rid of mismatch (otherwise Success assertions will fail)
       // by computing a new value matching the type of E.
-      llvm::APSInt Val = ECD->getInitVal();
+      llvm37::APSInt Val = ECD->getInitVal();
       if (!SameSign)
         Val.setIsSigned(!ECD->getInitVal().isSigned());
       if (!SameWidth)
@@ -6354,7 +6354,7 @@ static int EvaluateBuiltinClassifyType(const CallExpr *E) {
   else if (ArgTy->isUnionType())
     return union_type_class;
   else  // FIXME: offset_type_class, method_type_class, & lang_type_class?
-    llvm_unreachable("CallExpr::isBuiltinClassifyType(): unimplemented type");
+    llvm37_unreachable("CallExpr::isBuiltinClassifyType(): unimplemented type");
 }
 
 /// EvaluateBuiltinConstantPForLValue - Determine the result of
@@ -6442,7 +6442,7 @@ bool IntExprEvaluator::TryEvaluateBuiltinObjectSize(const CallExpr *E) {
     // It is not possible to determine which objects ptr points to at compile time,
     // __builtin_object_size should return (size_t) -1 for type 0 or 1
     // and (size_t) 0 for type 2 or 3.
-    llvm::APSInt TypeIntVaue;
+    llvm37::APSInt TypeIntVaue;
     const Expr *ExprType = E->getArg(1);
     if (!ExprType->EvaluateAsInt(TypeIntVaue, Info.Ctx))
       return false;
@@ -7078,7 +7078,7 @@ void DataRecursiveIntBinOpEvaluator::process(EvalResult &Result) {
     }
   }
   
-  llvm_unreachable("Invalid Job::Kind!");
+  llvm37_unreachable("Invalid Job::Kind!");
 }
 
 bool IntExprEvaluator::VisitBinaryOperator(const BinaryOperator *E) {
@@ -7165,7 +7165,7 @@ bool IntExprEvaluator::VisitBinaryOperator(const BinaryOperator *E) {
 
     switch (E->getOpcode()) {
     default:
-      llvm_unreachable("Invalid binary operator!");
+      llvm37_unreachable("Invalid binary operator!");
     case BO_LT:
       return Success(CR == APFloat::cmpLessThan, E);
     case BO_GT:
@@ -7289,7 +7289,7 @@ bool IntExprEvaluator::VisitBinaryOperator(const BinaryOperator *E) {
           return false;
         }
 
-        // FIXME: LLVM and GCC both compute LHSOffset - RHSOffset at runtime,
+        // FIXME: LLVM37 and GCC both compute LHSOffset - RHSOffset at runtime,
         // and produce incorrect results when it overflows. Such behavior
         // appears to be non-conforming, but is common, so perhaps we should
         // assume the standard intended for such cases to be undefined behavior
@@ -7298,11 +7298,11 @@ bool IntExprEvaluator::VisitBinaryOperator(const BinaryOperator *E) {
         // Compute (LHSOffset - RHSOffset) / Size carefully, checking for
         // overflow in the final conversion to ptrdiff_t.
         APSInt LHS(
-          llvm::APInt(65, (int64_t)LHSOffset.getQuantity(), true), false);
+          llvm37::APInt(65, (int64_t)LHSOffset.getQuantity(), true), false);
         APSInt RHS(
-          llvm::APInt(65, (int64_t)RHSOffset.getQuantity(), true), false);
+          llvm37::APInt(65, (int64_t)RHSOffset.getQuantity(), true), false);
         APSInt ElemSize(
-          llvm::APInt(65, (int64_t)ElementSize.getQuantity(), true), false);
+          llvm37::APInt(65, (int64_t)ElementSize.getQuantity(), true), false);
         APSInt TrueResult = (LHS - RHS) / ElemSize;
         APSInt Result = TrueResult.trunc(Info.Ctx.getIntWidth(E->getType()));
 
@@ -7388,7 +7388,7 @@ bool IntExprEvaluator::VisitBinaryOperator(const BinaryOperator *E) {
       }
 
       switch (E->getOpcode()) {
-      default: llvm_unreachable("missing comparison operator");
+      default: llvm37_unreachable("missing comparison operator");
       case BO_LT: return Success(CompareLHS < CompareRHS, E);
       case BO_GT: return Success(CompareLHS > CompareRHS, E);
       case BO_LE: return Success(CompareLHS <= CompareRHS, E);
@@ -7512,7 +7512,7 @@ bool IntExprEvaluator::VisitUnaryExprOrTypeTraitExpr(
   // HLSL Change Ends
   }
 
-  llvm_unreachable("unknown expr/type trait");
+  llvm37_unreachable("unknown expr/type trait");
 }
 
 bool IntExprEvaluator::VisitOffsetOfExpr(const OffsetOfExpr *OOE) {
@@ -7554,7 +7554,7 @@ bool IntExprEvaluator::VisitOffsetOfExpr(const OffsetOfExpr *OOE) {
     }
 
     case OffsetOfExpr::OffsetOfNode::Identifier:
-      llvm_unreachable("dependent __builtin_offsetof");
+      llvm37_unreachable("dependent __builtin_offsetof");
 
     case OffsetOfExpr::OffsetOfNode::Base: {
       CXXBaseSpecifier *BaseSpec = ON.getBase();
@@ -7663,7 +7663,7 @@ bool IntExprEvaluator::VisitCastExpr(const CastExpr *E) {
   case CK_ZeroToOCLEvent:
   case CK_NonAtomicToAtomic:
   case CK_AddressSpaceConversion:
-    llvm_unreachable("invalid cast kind for integral value");
+    llvm37_unreachable("invalid cast kind for integral value");
 
   case CK_BitCast:
   case CK_Dependent:
@@ -7760,7 +7760,7 @@ bool IntExprEvaluator::VisitCastExpr(const CastExpr *E) {
   }
   }
 
-  llvm_unreachable("unknown cast resulting in integral value");
+  llvm37_unreachable("unknown cast resulting in integral value");
 }
 
 bool IntExprEvaluator::VisitUnaryReal(const UnaryOperator *E) {
@@ -7843,25 +7843,25 @@ static bool TryEvaluateBuiltinNaN(const ASTContext &Context,
                                   QualType ResultTy,
                                   const Expr *Arg,
                                   bool SNaN,
-                                  llvm::APFloat &Result) {
+                                  llvm37::APFloat &Result) {
   const StringLiteral *S = dyn_cast<StringLiteral>(Arg->IgnoreParenCasts());
   if (!S) return false;
 
-  const llvm::fltSemantics &Sem = Context.getFloatTypeSemantics(ResultTy);
+  const llvm37::fltSemantics &Sem = Context.getFloatTypeSemantics(ResultTy);
 
-  llvm::APInt fill;
+  llvm37::APInt fill;
 
   // Treat empty strings as if they were zero.
   if (S->getString().empty())
-    fill = llvm::APInt(32, 0);
+    fill = llvm37::APInt(32, 0);
   else if (S->getString().getAsInteger(0, fill))
     return false;
 
   if (Context.getTargetInfo().isNan2008()) {
     if (SNaN)
-      Result = llvm::APFloat::getSNaN(Sem, false, &fill);
+      Result = llvm37::APFloat::getSNaN(Sem, false, &fill);
     else
-      Result = llvm::APFloat::getQNaN(Sem, false, &fill);
+      Result = llvm37::APFloat::getQNaN(Sem, false, &fill);
   } else {
     // Prior to IEEE 754-2008, architectures were allowed to choose whether
     // the first bit of their significand was set for qNaN or sNaN. MIPS chose
@@ -7869,9 +7869,9 @@ static bool TryEvaluateBuiltinNaN(const ASTContext &Context,
     // 2008 revisions, MIPS interpreted sNaN-2008 as qNan and qNaN-2008 as
     // sNaN. This is now known as "legacy NaN" encoding.
     if (SNaN)
-      Result = llvm::APFloat::getQNaN(Sem, false, &fill);
+      Result = llvm37::APFloat::getQNaN(Sem, false, &fill);
     else
-      Result = llvm::APFloat::getSNaN(Sem, false, &fill);
+      Result = llvm37::APFloat::getSNaN(Sem, false, &fill);
   }
 
   return true;
@@ -7888,9 +7888,9 @@ bool FloatExprEvaluator::VisitCallExpr(const CallExpr *E) {
   case Builtin::BI__builtin_inf:
   case Builtin::BI__builtin_inff:
   case Builtin::BI__builtin_infl: {
-    const llvm::fltSemantics &Sem =
+    const llvm37::fltSemantics &Sem =
       Info.Ctx.getFloatTypeSemantics(E->getType());
-    Result = llvm::APFloat::getInf(Sem);
+    Result = llvm37::APFloat::getInf(Sem);
     return true;
   }
 
@@ -7961,8 +7961,8 @@ bool FloatExprEvaluator::VisitUnaryImag(const UnaryOperator *E) {
   }
 
   VisitIgnoredValue(E->getSubExpr());
-  const llvm::fltSemantics &Sem = Info.Ctx.getFloatTypeSemantics(E->getType());
-  Result = llvm::APFloat::getZero(Sem);
+  const llvm37::fltSemantics &Sem = Info.Ctx.getFloatTypeSemantics(E->getType());
+  Result = llvm37::APFloat::getZero(Sem);
   return true;
 }
 
@@ -8152,7 +8152,7 @@ bool ComplexExprEvaluator::VisitCastExpr(const CastExpr *E) {
   case CK_ZeroToOCLEvent:
   case CK_NonAtomicToAtomic:
   case CK_AddressSpaceConversion:
-    llvm_unreachable("invalid cast kind for complex value");
+    llvm37_unreachable("invalid cast kind for complex value");
 
   case CK_LValueToRValue:
   case CK_AtomicToNonAtomic:
@@ -8238,7 +8238,7 @@ bool ComplexExprEvaluator::VisitCastExpr(const CastExpr *E) {
   }
   }
 
-  llvm_unreachable("unknown cast resulting in complex value");
+  llvm37_unreachable("unknown cast resulting in complex value");
 }
 
 bool ComplexExprEvaluator::VisitBinaryOperator(const BinaryOperator *E) {
@@ -8637,7 +8637,7 @@ static bool Evaluate(APValue &Result, EvalInfo &Info, const Expr *E) {
       return false;
     LV.moveInto(Result);
   } else if (T->isRealFloatingType()) {
-    llvm::APFloat F(0.0);
+    llvm37::APFloat F(0.0);
     if (!EvaluateFloat(E, F, Info))
       return false;
     Result = APValue(F);
@@ -9183,11 +9183,11 @@ static ICEDiag CheckICE(const Expr* E, const ASTContext &Ctx) {
         // EvaluateAsRValue gives an error for undefined Div/Rem, so make sure
         // we don't evaluate one.
         if (LHSResult.Kind == IK_ICE && RHSResult.Kind == IK_ICE) {
-          llvm::APSInt REval = Exp->getRHS()->EvaluateKnownConstInt(Ctx);
+          llvm37::APSInt REval = Exp->getRHS()->EvaluateKnownConstInt(Ctx);
           if (REval == 0)
             return ICEDiag(IK_ICEIfUnevaluated, E->getLocStart());
           if (REval.isSigned() && REval.isAllOnesValue()) {
-            llvm::APSInt LEval = Exp->getLHS()->EvaluateKnownConstInt(Ctx);
+            llvm37::APSInt LEval = Exp->getLHS()->EvaluateKnownConstInt(Ctx);
             if (LEval.isMinSignedValue())
               return ICEDiag(IK_ICEIfUnevaluated, E->getLocStart());
           }
@@ -9243,7 +9243,7 @@ static ICEDiag CheckICE(const Expr* E, const ASTContext &Ctx) {
         // undefined, so we are not required to treat it as a constant
         // expression.
         if (FL->getValue().convertToInteger(IgnoredVal,
-                                            llvm::APFloat::rmTowardZero,
+                                            llvm37::APFloat::rmTowardZero,
                                             &Ignored) & APFloat::opInvalidOp)
           return ICEDiag(IK_NotICE, E->getLocStart());
         return NoDiag();
@@ -9313,13 +9313,13 @@ static ICEDiag CheckICE(const Expr* E, const ASTContext &Ctx) {
   }
   }
 
-  llvm_unreachable("Invalid StmtClass!");
+  llvm37_unreachable("Invalid StmtClass!");
 }
 
 /// Evaluate an expression as a C++11 integral constant expression.
 static bool EvaluateCPlusPlus11IntegralConstantExpr(const ASTContext &Ctx,
                                                     const Expr *E,
-                                                    llvm::APSInt *Value,
+                                                    llvm37::APSInt *Value,
                                                     SourceLocation *Loc) {
   if (!E->getType()->isIntegralOrEnumerationType()) {
     if (Loc) *Loc = E->getExprLoc();
@@ -9352,7 +9352,7 @@ bool Expr::isIntegerConstantExpr(const ASTContext &Ctx,
   return true;
 }
 
-bool Expr::isIntegerConstantExpr(llvm::APSInt &Value, const ASTContext &Ctx,
+bool Expr::isIntegerConstantExpr(llvm37::APSInt &Value, const ASTContext &Ctx,
                                  SourceLocation *Loc, bool isEvaluated) const {
   if (Ctx.getLangOpts().CPlusPlus11)
     return EvaluateCPlusPlus11IntegralConstantExpr(Ctx, this, &Value, Loc);
@@ -9360,7 +9360,7 @@ bool Expr::isIntegerConstantExpr(llvm::APSInt &Value, const ASTContext &Ctx,
   if (!isIntegerConstantExpr(Ctx, Loc))
     return false;
   if (!EvaluateAsInt(Value, Ctx))
-    llvm_unreachable("ICE cannot be evaluated!");
+    llvm37_unreachable("ICE cannot be evaluated!");
   return true;
 }
 

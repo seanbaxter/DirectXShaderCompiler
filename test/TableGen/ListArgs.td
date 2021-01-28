@@ -1,4 +1,4 @@
-// RUN: llvm-tblgen %s
+// RUN: llvm37-tblgen %s
 // XFAIL: vg_leak
 
 class B<list<int> v> {

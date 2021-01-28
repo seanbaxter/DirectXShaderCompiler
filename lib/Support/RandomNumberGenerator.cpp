@@ -1,6 +1,6 @@
 //===-- RandomNumberGenerator.cpp - Implement RNG class -------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -13,17 +13,17 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Support/RandomNumberGenerator.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/Support/RandomNumberGenerator.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/raw_ostream.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "rng"
 
 // Tracking BUG: 19665
-// http://llvm.org/bugs/show_bug.cgi?id=19665
+// http://llvm37.org/bugs/show_bug.cgi?id=19665
 //
 // Do not change to cl::opt<uint64_t> since this silently breaks argument parsing.
 #if 0 // HLSL Change Starts - option pending

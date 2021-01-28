@@ -1,4 +1,4 @@
-; RUN: llvm-as < %s | llvm-dis | llvm-as > /dev/null
+; RUN: llvm37-as < %s | llvm37-dis | llvm37-as > /dev/null
 ; RUN: verify-uselistorder %s
 
 %t = type opaque

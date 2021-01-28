@@ -1,20 +1,20 @@
-//===- TableGenBackends.h - Declarations for LLVM TableGen Backends -------===//
+//===- TableGenBackends.h - Declarations for LLVM37 TableGen Backends -------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 //
-// This file contains the declarations for all of the LLVM TableGen
+// This file contains the declarations for all of the LLVM37 TableGen
 // backends. A "TableGen backend" is just a function. See below for a
 // precise description.
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_UTILS_TABLEGEN_TABLEGENBACKENDS_H
-#define LLVM_UTILS_TABLEGEN_TABLEGENBACKENDS_H
+#ifndef LLVM37_UTILS_TABLEGEN_TABLEGENBACKENDS_H
+#define LLVM37_UTILS_TABLEGEN_TABLEGENBACKENDS_H
 
 // A TableGen backend is a function that looks like
 //
@@ -32,7 +32,7 @@
 // with a richer ontology of types), where the nodes are subclasses of
 // Record. The methods `getClass`, `getDef` are the basic interface to
 // access the node-graph.  RecordKeeper also provides a handy method
-// `getAllDerivedDefinitions`. Consult "include/llvm/TableGen/Record.h" for
+// `getAllDerivedDefinitions`. Consult "include/llvm37/TableGen/Record.h" for
 // the exact interfaces provided by Record's and RecordKeeper.
 //
 // A common pattern for TableGen backends is for the EmitFoo function to
@@ -54,10 +54,10 @@
 // of some sort; then the dependency could be expressed as being on the
 // module, and all the modules would have a common dependency on the
 // TableGen binary with as few dependencies as possible on the rest of
-// LLVM.
+// LLVM37.
 
 
-namespace llvm {
+namespace llvm37 {
 
 class raw_ostream;
 class RecordKeeper;
@@ -79,6 +79,6 @@ void EmitMapTable(RecordKeeper &RK, raw_ostream &OS);
 void EmitOptParser(RecordKeeper &RK, raw_ostream &OS);
 void EmitCTags(RecordKeeper &RK, raw_ostream &OS);
 
-} // End llvm namespace
+} // End llvm37 namespace
 
 #endif

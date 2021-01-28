@@ -20,9 +20,9 @@
 #include "clang/Rewrite/Frontend/ASTConsumers.h"
 #include "clang/Rewrite/Frontend/FixItRewriter.h"
 #include "clang/Rewrite/Frontend/Rewriters.h"
-#include "llvm/Support/FileSystem.h"
-#include "llvm/Support/Path.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/Support/FileSystem.h"
+#include "llvm37/Support/Path.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <memory>
 
 using namespace clang;
@@ -43,7 +43,7 @@ FixItAction::~FixItAction() {}
 
 std::unique_ptr<ASTConsumer>
 FixItAction::CreateASTConsumer(CompilerInstance &CI, StringRef InFile) {
-  return llvm::make_unique<ASTConsumer>();
+  return llvm37::make_unique<ASTConsumer>();
 }
 
 namespace {
@@ -52,7 +52,7 @@ public:
   FixItRewriteInPlace() { InPlace = true; }
 
   std::string RewriteFilename(const std::string &Filename, int &fd) override {
-    llvm_unreachable("don't call RewriteFilename for inplace rewrites");
+    llvm37_unreachable("don't call RewriteFilename for inplace rewrites");
   }
 };
 
@@ -68,8 +68,8 @@ public:
   std::string RewriteFilename(const std::string &Filename, int &fd) override {
     fd = -1;
     SmallString<128> Path(Filename);
-    llvm::sys::path::replace_extension(Path,
-      NewSuffix + llvm::sys::path::extension(Path));
+    llvm37::sys::path::replace_extension(Path,
+      NewSuffix + llvm37::sys::path::extension(Path));
     return Path.str();
   }
 };
@@ -78,8 +78,8 @@ class FixItRewriteToTemp : public FixItOptions {
 public:
   std::string RewriteFilename(const std::string &Filename, int &fd) override {
     SmallString<128> Path;
-    llvm::sys::fs::createTemporaryFile(llvm::sys::path::filename(Filename),
-                                       llvm::sys::path::extension(Filename), fd,
+    llvm37::sys::fs::createTemporaryFile(llvm37::sys::path::filename(Filename),
+                                       llvm37::sys::path::extension(Filename), fd,
                                        Path);
     return Path.str();
   }

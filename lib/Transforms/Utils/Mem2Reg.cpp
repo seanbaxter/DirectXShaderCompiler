@@ -1,6 +1,6 @@
 //===- Mem2Reg.cpp - The -mem2reg pass, a wrapper around the Utils lib ----===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -12,15 +12,15 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Transforms/Scalar.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/Analysis/AssumptionCache.h"
-#include "llvm/IR/Dominators.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/Transforms/Utils/PromoteMemToReg.h"
-#include "llvm/Transforms/Utils/UnifyFunctionExitNodes.h"
-using namespace llvm;
+#include "llvm37/Transforms/Scalar.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/Analysis/AssumptionCache.h"
+#include "llvm37/IR/Dominators.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/Transforms/Utils/PromoteMemToReg.h"
+#include "llvm37/Transforms/Utils/UnifyFunctionExitNodes.h"
+using namespace llvm37;
 
 #define DEBUG_TYPE "mem2reg"
 
@@ -91,6 +91,6 @@ bool PromotePass::runOnFunction(Function &F) {
 
 // createPromoteMemoryToRegister - Provide an entry point to create this pass.
 //
-FunctionPass *llvm::createPromoteMemoryToRegisterPass() {
+FunctionPass *llvm37::createPromoteMemoryToRegisterPass() {
   return new PromotePass();
 }

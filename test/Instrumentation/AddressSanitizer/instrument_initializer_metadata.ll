@@ -11,7 +11,7 @@ target triple = "x86_64-unknown-linux-gnu"
 !1 = !{i32* @XXX, null, null, i1 true, i1 false}
 !2 = !{i32* @yyy, null, null, i1 false, i1 false}
 !3 = !{i32* @YYY, null, null, i1 false, i1 false}
-!llvm.asan.globals = !{!0, !1, !2, !3}
+!llvm37.asan.globals = !{!0, !1, !2, !3}
 
 define i32 @initializer() uwtable {
 entry:
@@ -25,7 +25,7 @@ entry:
   ret void
 }
 
-@llvm.global_ctors = appending global [2 x { i32, void ()* }] [{ i32, void ()* } { i32 65535, void ()* @__late_ctor }, { i32, void ()* } { i32 0, void ()* @__early_ctor }]
+@llvm37.global_ctors = appending global [2 x { i32, void ()* }] [{ i32, void ()* } { i32 65535, void ()* @__late_ctor }, { i32, void ()* } { i32 0, void ()* @__early_ctor }]
 
 define internal void @__late_ctor() sanitize_address section ".text.startup" {
 entry:

@@ -1,6 +1,6 @@
 /*===-- jitprofiling.h - JIT Profiling API-------------------------*- C -*-===*
  *
- *                     The LLVM Compiler Infrastructure
+ *                     The LLVM37 Compiler Infrastructure
  *
  * This file is distributed under the University of Illinois Open Source
  * License. See LICENSE.TXT for details.
@@ -10,7 +10,7 @@
  * This file provides Intel(R) Performance Analyzer JIT (Just-In-Time) 
  * Profiling API declaration.
  *
- * NOTE: This file comes in a style different from the rest of LLVM
+ * NOTE: This file comes in a style different from the rest of LLVM37
  * source base since  this is a piece of code shared from Intel(R)
  * products.  Please do not reformat / re-style this code to make
  * subsequent merges and contributions from the original source base eaiser.

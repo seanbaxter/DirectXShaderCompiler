@@ -1,4 +1,4 @@
-; RUN: llvm-link %p/type-unique-dst-types.ll \
+; RUN: llvm37-link %p/type-unique-dst-types.ll \
 ; RUN:           %p/Inputs/type-unique-dst-types2.ll \
 ; RUN:           %p/Inputs/type-unique-dst-types3.ll -S -o - | FileCheck %s
 

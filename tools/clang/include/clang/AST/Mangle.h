@@ -1,6 +1,6 @@
 //===--- Mangle.h - Mangle C++ Names ----------------------------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,16 +11,16 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_AST_MANGLE_H
-#define LLVM_CLANG_AST_MANGLE_H
+#ifndef LLVM37_CLANG_AST_MANGLE_H
+#define LLVM37_CLANG_AST_MANGLE_H
 
 #include "clang/AST/Type.h"
 #include "clang/Basic/ABI.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/ADT/StringRef.h"
-#include "llvm/Support/Casting.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/ADT/StringRef.h"
+#include "llvm37/Support/Casting.h"
+#include "llvm37/Support/raw_ostream.h"
 
 namespace clang {
   class ASTContext;
@@ -52,9 +52,9 @@ private:
   DiagnosticsEngine &Diags;
   const ManglerKind Kind;
 
-  llvm::DenseMap<const BlockDecl*, unsigned> GlobalBlockIds;
-  llvm::DenseMap<const BlockDecl*, unsigned> LocalBlockIds;
-  llvm::DenseMap<const TagDecl*, uint64_t> AnonStructIds;
+  llvm37::DenseMap<const BlockDecl*, unsigned> GlobalBlockIds;
+  llvm37::DenseMap<const BlockDecl*, unsigned> LocalBlockIds;
+  llvm37::DenseMap<const TagDecl*, uint64_t> AnonStructIds;
 
 public:
   ManglerKind getKind() const { return Kind; }
@@ -73,15 +73,15 @@ public:
   virtual void startNewFunction() { LocalBlockIds.clear(); }
   
   unsigned getBlockId(const BlockDecl *BD, bool Local) {
-    llvm::DenseMap<const BlockDecl *, unsigned> &BlockIds
+    llvm37::DenseMap<const BlockDecl *, unsigned> &BlockIds
       = Local? LocalBlockIds : GlobalBlockIds;
-    std::pair<llvm::DenseMap<const BlockDecl *, unsigned>::iterator, bool>
+    std::pair<llvm37::DenseMap<const BlockDecl *, unsigned>::iterator, bool>
       Result = BlockIds.insert(std::make_pair(BD, BlockIds.size()));
     return Result.first->second;
   }
 
   uint64_t getAnonymousStructId(const TagDecl *TD) {
-    std::pair<llvm::DenseMap<const TagDecl *, uint64_t>::iterator, bool>
+    std::pair<llvm37::DenseMap<const TagDecl *, uint64_t>::iterator, bool>
         Result = AnonStructIds.insert(std::make_pair(TD, AnonStructIds.size()));
     return Result.first->second;
   }

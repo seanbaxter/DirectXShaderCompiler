@@ -1,26 +1,26 @@
 //===-- MCJIT.h - Class definition for the MCJIT ----------------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_LIB_EXECUTIONENGINE_MCJIT_MCJIT_H
-#define LLVM_LIB_EXECUTIONENGINE_MCJIT_MCJIT_H
+#ifndef LLVM37_LIB_EXECUTIONENGINE_MCJIT_MCJIT_H
+#define LLVM37_LIB_EXECUTIONENGINE_MCJIT_MCJIT_H
 
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/SmallPtrSet.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/ExecutionEngine/ExecutionEngine.h"
-#include "llvm/ExecutionEngine/ObjectCache.h"
-#include "llvm/ExecutionEngine/ObjectMemoryBuffer.h"
-#include "llvm/ExecutionEngine/RTDyldMemoryManager.h"
-#include "llvm/ExecutionEngine/RuntimeDyld.h"
-#include "llvm/IR/Module.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/SmallPtrSet.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/ExecutionEngine/ExecutionEngine.h"
+#include "llvm37/ExecutionEngine/ObjectCache.h"
+#include "llvm37/ExecutionEngine/ObjectMemoryBuffer.h"
+#include "llvm37/ExecutionEngine/RTDyldMemoryManager.h"
+#include "llvm37/ExecutionEngine/RuntimeDyld.h"
+#include "llvm37/IR/Module.h"
 
-namespace llvm {
+namespace llvm37 {
 class MCJIT;
 
 // This is a helper class that the MCJIT execution engine uses for linking
@@ -71,7 +71,7 @@ class MCJIT : public ExecutionEngine {
         std::shared_ptr<MCJITMemoryManager> MemMgr,
         std::shared_ptr<RuntimeDyld::SymbolResolver> Resolver);
 
-  typedef llvm::SmallPtrSet<Module *, 4> ModulePtrSet;
+  typedef llvm37::SmallPtrSet<Module *, 4> ModulePtrSet;
 
   class OwningModuleContainer {
   public:
@@ -335,6 +335,6 @@ protected:
                               bool CheckFunctionsOnly);
 };
 
-} // End llvm namespace
+} // End llvm37 namespace
 
 #endif

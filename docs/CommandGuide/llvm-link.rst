@@ -1,16 +1,16 @@
-llvm-link - LLVM bitcode linker
+llvm37-link - LLVM37 bitcode linker
 ===============================
 
 SYNOPSIS
 --------
 
-:program:`llvm-link` [*options*] *filename ...*
+:program:`llvm37-link` [*options*] *filename ...*
 
 DESCRIPTION
 -----------
 
-:program:`llvm-link` takes several LLVM bitcode files and links them together
-into a single LLVM bitcode file.  It writes the output file to standard output,
+:program:`llvm37-link` takes several LLVM37 bitcode files and links them together
+into a single LLVM37 bitcode file.  It writes the output file to standard output,
 unless the :option:`-o` option is used to specify a filename.
 
 OPTIONS
@@ -18,23 +18,23 @@ OPTIONS
 
 .. option:: -f
 
- Enable binary output on terminals.  Normally, :program:`llvm-link` will refuse
+ Enable binary output on terminals.  Normally, :program:`llvm37-link` will refuse
  to write raw bitcode output if the output stream is a terminal. With this
- option, :program:`llvm-link` will write raw bitcode regardless of the output
+ option, :program:`llvm37-link` will write raw bitcode regardless of the output
  device.
 
 .. option:: -o filename
 
  Specify the output file name.  If ``filename`` is "``-``", then
- :program:`llvm-link` will write its output to standard output.
+ :program:`llvm37-link` will write its output to standard output.
 
 .. option:: -S
 
- Write output in LLVM intermediate language (instead of bitcode).
+ Write output in LLVM37 intermediate language (instead of bitcode).
 
 .. option:: -d
 
- If specified, :program:`llvm-link` prints a human-readable version of the
+ If specified, :program:`llvm37-link` prints a human-readable version of the
  output bitcode file to standard error.
 
 .. option:: -help
@@ -43,14 +43,14 @@ OPTIONS
 
 .. option:: -v
 
- Verbose mode.  Print information about what :program:`llvm-link` is doing.
+ Verbose mode.  Print information about what :program:`llvm37-link` is doing.
  This typically includes a message for each bitcode file linked in and for each
  library found.
 
 EXIT STATUS
 -----------
 
-If :program:`llvm-link` succeeds, it will exit with 0.  Otherwise, if an error
+If :program:`llvm37-link` succeeds, it will exit with 0.  Otherwise, if an error
 occurs, it will exit with a non-zero value.
 
 

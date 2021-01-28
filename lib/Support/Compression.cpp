@@ -1,6 +1,6 @@
 //===--- Compression.cpp - Compression implementation ---------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,19 +11,19 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Support/Compression.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/ADT/StringRef.h"
-#include "llvm/Config/config.h"
-#include "llvm/Support/Compiler.h"
-#include "llvm/Support/ErrorHandling.h"
-#if LLVM_ENABLE_ZLIB == 1 && HAVE_ZLIB_H
+#include "llvm37/Support/Compression.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/ADT/StringRef.h"
+#include "llvm37/Config/config.h"
+#include "llvm37/Support/Compiler.h"
+#include "llvm37/Support/ErrorHandling.h"
+#if LLVM37_ENABLE_ZLIB == 1 && HAVE_ZLIB_H
 #include <zlib.h>
 #endif
 
-using namespace llvm;
+using namespace llvm37;
 
-#if LLVM_ENABLE_ZLIB == 1 && HAVE_LIBZ
+#if LLVM37_ENABLE_ZLIB == 1 && HAVE_LIBZ
 static int encodeZlibCompressionLevel(zlib::CompressionLevel Level) {
   switch (Level) {
     case zlib::NoCompression: return 0;
@@ -31,7 +31,7 @@ static int encodeZlibCompressionLevel(zlib::CompressionLevel Level) {
     case zlib::DefaultCompression: return Z_DEFAULT_COMPRESSION;
     case zlib::BestSizeCompression: return 9;
   }
-  llvm_unreachable("Invalid zlib::CompressionLevel!");
+  llvm37_unreachable("Invalid zlib::CompressionLevel!");
 }
 
 static zlib::Status encodeZlibReturnValue(int ReturnValue) {
@@ -41,7 +41,7 @@ static zlib::Status encodeZlibReturnValue(int ReturnValue) {
     case Z_BUF_ERROR: return zlib::StatusBufferTooShort;
     case Z_STREAM_ERROR: return zlib::StatusInvalidArg;
     case Z_DATA_ERROR: return zlib::StatusInvalidData;
-    default: llvm_unreachable("unknown zlib return status!");
+    default: llvm37_unreachable("unknown zlib return status!");
   }
 }
 
@@ -56,7 +56,7 @@ zlib::Status zlib::compress(StringRef InputBuffer,
       (Bytef *)CompressedBuffer.data(), &CompressedSize,
       (const Bytef *)InputBuffer.data(), InputBuffer.size(), CLevel));
   // Tell MemorySanitizer that zlib output buffer is fully initialized.
-  // This avoids a false report when running LLVM with uninstrumented ZLib.
+  // This avoids a false report when running LLVM37 with uninstrumented ZLib.
   __msan_unpoison(CompressedBuffer.data(), CompressedSize);
   CompressedBuffer.resize(CompressedSize);
   return Res;
@@ -70,7 +70,7 @@ zlib::Status zlib::uncompress(StringRef InputBuffer,
       (Bytef *)UncompressedBuffer.data(), (uLongf *)&UncompressedSize,
       (const Bytef *)InputBuffer.data(), InputBuffer.size()));
   // Tell MemorySanitizer that zlib output buffer is fully initialized.
-  // This avoids a false report when running LLVM with uninstrumented ZLib.
+  // This avoids a false report when running LLVM37 with uninstrumented ZLib.
   __msan_unpoison(UncompressedBuffer.data(), UncompressedSize);
   UncompressedBuffer.resize(UncompressedSize);
   return Res;
@@ -93,7 +93,7 @@ zlib::Status zlib::uncompress(StringRef InputBuffer,
   return zlib::StatusUnsupported;
 }
 uint32_t zlib::crc32(StringRef Buffer) {
-  llvm_unreachable("zlib::crc32 is unavailable");
+  llvm37_unreachable("zlib::crc32 is unavailable");
 }
 #endif
 

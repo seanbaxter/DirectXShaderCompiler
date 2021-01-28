@@ -1,6 +1,6 @@
 //===--- SemaObjCProperty.cpp - Semantic Analysis for ObjC @property ------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -21,8 +21,8 @@
 #include "clang/Lex/Lexer.h"
 #include "clang/Lex/Preprocessor.h"
 #include "clang/Sema/Initialization.h"
-#include "llvm/ADT/DenseSet.h"
-#include "llvm/ADT/SmallString.h"
+#include "llvm37/ADT/DenseSet.h"
+#include "llvm37/ADT/SmallString.h"
 
 using namespace clang;
 
@@ -40,7 +40,7 @@ Decl *Sema::ActOnProperty(Scope *S, SourceLocation AtLoc,
   bool *isOverridingProperty,
   tok::ObjCKeywordKind MethodImplKind,
   DeclContext *lexicalDC) {
-  llvm_unreachable("HLSL does not support ObjC constructs");
+  llvm37_unreachable("HLSL does not support ObjC constructs");
 }
 
 
@@ -58,7 +58,7 @@ Sema::HandlePropertyInClassExtension(Scope *S,
   QualType T,
   TypeSourceInfo *TSI,
   tok::ObjCKeywordKind MethodImplKind) {
-  llvm_unreachable("HLSL does not support ObjC constructs");
+  llvm37_unreachable("HLSL does not support ObjC constructs");
 }
 
 ObjCPropertyDecl *Sema::CreatePropertyDecl(Scope *S,
@@ -76,7 +76,7 @@ ObjCPropertyDecl *Sema::CreatePropertyDecl(Scope *S,
   TypeSourceInfo *TInfo,
   tok::ObjCKeywordKind MethodImplKind,
   DeclContext *lexicalDC) {
-  llvm_unreachable("HLSL does not support ObjC constructs");
+  llvm37_unreachable("HLSL does not support ObjC constructs");
 }
 
 Decl *Sema::ActOnPropertyImplDecl(Scope *S,
@@ -86,7 +86,7 @@ Decl *Sema::ActOnPropertyImplDecl(Scope *S,
   IdentifierInfo *PropertyId,
   IdentifierInfo *PropertyIvar,
   SourceLocation PropertyIvarLoc) {
-  llvm_unreachable("HLSL does not support ObjC constructs");
+  llvm37_unreachable("HLSL does not support ObjC constructs");
 }
 
 void
@@ -94,68 +94,68 @@ Sema::DiagnosePropertyMismatch(ObjCPropertyDecl *Property,
   ObjCPropertyDecl *SuperProperty,
   const IdentifierInfo *inheritedName,
   bool OverridingProtocolProperty) {
-  llvm_unreachable("HLSL does not support ObjC constructs");
+  llvm37_unreachable("HLSL does not support ObjC constructs");
 }
 
 bool Sema::DiagnosePropertyAccessorMismatch(ObjCPropertyDecl *property,
   ObjCMethodDecl *GetterMethod,
   SourceLocation Loc) {
-  llvm_unreachable("HLSL does not support ObjC constructs");
+  llvm37_unreachable("HLSL does not support ObjC constructs");
 }
 
 bool
 Sema::IvarBacksCurrentMethodAccessor(ObjCInterfaceDecl *IFace,
   ObjCMethodDecl *Method, ObjCIvarDecl *IV) {
-  llvm_unreachable("HLSL does not support ObjC constructs");
+  llvm37_unreachable("HLSL does not support ObjC constructs");
 }
 
 void Sema::DefaultSynthesizeProperties(Scope *S, ObjCImplDecl* IMPDecl,
   ObjCInterfaceDecl *IDecl) {
-  llvm_unreachable("HLSL does not support ObjC constructs");
+  llvm37_unreachable("HLSL does not support ObjC constructs");
 }
 
 void Sema::DefaultSynthesizeProperties(Scope *S, Decl *D) {
-  llvm_unreachable("HLSL does not support ObjC constructs");
+  llvm37_unreachable("HLSL does not support ObjC constructs");
 }
 
 void Sema::DiagnoseUnimplementedProperties(Scope *S, ObjCImplDecl* IMPDecl,
   ObjCContainerDecl *CDecl,
   bool SynthesizeProperties) {
-  llvm_unreachable("HLSL does not support ObjC constructs");
+  llvm37_unreachable("HLSL does not support ObjC constructs");
 }
 
 void Sema::diagnoseNullResettableSynthesizedSetters(const ObjCImplDecl *impDecl) {
-  llvm_unreachable("HLSL does not support ObjC constructs");
+  llvm37_unreachable("HLSL does not support ObjC constructs");
 }
 
 void
 Sema::AtomicPropertySetterGetterRules(ObjCImplDecl* IMPDecl,
   ObjCContainerDecl* IDecl) {
-  llvm_unreachable("HLSL does not support ObjC constructs");
+  llvm37_unreachable("HLSL does not support ObjC constructs");
 }
 
 void Sema::DiagnoseOwningPropertyGetterSynthesis(const ObjCImplementationDecl *D) {
-  llvm_unreachable("HLSL does not support ObjC constructs");
+  llvm37_unreachable("HLSL does not support ObjC constructs");
 }
 
 void Sema::DiagnoseMissingDesignatedInitOverrides(
   const ObjCImplementationDecl *ImplD,
   const ObjCInterfaceDecl *IFD) {
-  llvm_unreachable("HLSL does not support ObjC constructs");
+  llvm37_unreachable("HLSL does not support ObjC constructs");
 }
 
 void Sema::ProcessPropertyDecl(ObjCPropertyDecl *property,
   ObjCContainerDecl *CD,
   ObjCPropertyDecl *redeclaredProperty,
   ObjCContainerDecl *lexicalDC) {
-  llvm_unreachable("HLSL does not support ObjC constructs");
+  llvm37_unreachable("HLSL does not support ObjC constructs");
 }
 
 void Sema::CheckObjCPropertyAttributes(Decl *PDecl,
   SourceLocation Loc,
   unsigned &Attributes,
   bool propertyInPrimaryClass) {
-  llvm_unreachable("HLSL does not support ObjC constructs");
+  llvm37_unreachable("HLSL does not support ObjC constructs");
 }
 
 // HLSL Change Ends
@@ -244,7 +244,7 @@ static void checkARCPropertyDecl(Sema &S, ObjCPropertyDecl *property) {
 static void
 CheckPropertyAgainstProtocol(Sema &S, ObjCPropertyDecl *Prop,
                              ObjCProtocolDecl *Proto,
-                             llvm::SmallPtrSetImpl<ObjCProtocolDecl *> &Known) {
+                             llvm37::SmallPtrSetImpl<ObjCProtocolDecl *> &Known) {
   // Have we seen this protocol before?
   if (!Known.insert(Proto).second)
     return;
@@ -324,7 +324,7 @@ Decl *Sema::ActOnProperty(Scope *S, SourceLocation AtLoc,
   if (getLangOpts().ObjCAutoRefCount)
     checkARCPropertyDecl(*this, Res);
 
-  llvm::SmallPtrSet<ObjCProtocolDecl *, 16> KnownProtos;
+  llvm37::SmallPtrSet<ObjCProtocolDecl *, 16> KnownProtos;
   if (ObjCInterfaceDecl *IFace = dyn_cast<ObjCInterfaceDecl>(ClassDecl)) {
     // For a class, compare the property against a property in our superclass.
     bool FoundInSuper = false;
@@ -844,7 +844,7 @@ static void checkARCPropertyImpl(Sema &S, SourceLocation propertyImplLoc,
     break;
 
   case Qualifiers::OCL_Autoreleasing:
-    llvm_unreachable("properties cannot be autoreleasing");
+    llvm37_unreachable("properties cannot be autoreleasing");
 
   case Qualifiers::OCL_None:
     // Any other property should be ignored.
@@ -1856,7 +1856,7 @@ void Sema::DiagnoseUnimplementedProperties(Scope *S, ObjCImplDecl* IMPDecl,
   if (PropMap.empty())
     return;
 
-  llvm::DenseSet<ObjCPropertyDecl *> PropImplMap;
+  llvm37::DenseSet<ObjCPropertyDecl *> PropImplMap;
   for (const auto *I : IMPDecl->property_impls())
     PropImplMap.insert(I->getPropertyDecl());
 

@@ -1,4 +1,4 @@
-; RUN: llvm-as < %s | llvm-bcanalyzer -dump | FileCheck %s -check-prefix=BC
+; RUN: llvm37-as < %s | llvm37-bcanalyzer -dump | FileCheck %s -check-prefix=BC
 ; PR23436: Actually emit DEBUG_LOC_AGAIN records.
 
 ; BC: <DEBUG_LOC op
@@ -6,7 +6,7 @@
 ; BC: <DEBUG_LOC op
 ; BC: <DEBUG_LOC_AGAIN/>
 
-; RUN: llvm-as < %s | llvm-dis | FileCheck %s
+; RUN: llvm37-as < %s | llvm37-dis | FileCheck %s
 ; RUN: verify-uselistorder %s
 ; Check that this round-trips correctly.
 
@@ -26,7 +26,7 @@ entry:
 ; CHECK: ![[LINE1]] = !DILocation(line: 1,
 ; CHECK: ![[LINE2]] = !DILocation(line: 2,
 
-!llvm.module.flags = !{!0}
+!llvm37.module.flags = !{!0}
 
 !0 = !{i32 2, !"Debug Info Version", i32 3}
 !1 = !DICompileUnit(language: DW_LANG_C99, file: !DIFile(filename: "f", directory: "/d"),

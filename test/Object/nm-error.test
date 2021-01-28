@@ -1,8 +1,8 @@
-Test that llvm-nm returns an error because of the unknown file type, but
+Test that llvm37-nm returns an error because of the unknown file type, but
 keeps processing subsequent files.
 
 RUN: touch %t
-RUN: not llvm-nm %p/Inputs/trivial-object-test.elf-i386 %t \
+RUN: not llvm37-nm %p/Inputs/trivial-object-test.elf-i386 %t \
 RUN:             %p/Inputs/trivial-object-test.elf-i386 | \
 RUN: FileCheck %s
 

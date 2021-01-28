@@ -1,6 +1,6 @@
 //===--- CommonOptionsParser.cpp - common options for clang tools ---------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -19,18 +19,18 @@
 //  It creates a CompilationDatabase and reads common command-line options.
 //
 //  This class uses the Clang Tooling infrastructure, see
-//    http://clang.llvm.org/docs/HowToSetupToolingForLLVM.html
-//  for details on setting it up with LLVM source tree.
+//    http://clang.llvm37.org/docs/HowToSetupToolingForLLVM.html
+//  for details on setting it up with LLVM37 source tree.
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Support/CommandLine.h"
+#include "llvm37/Support/CommandLine.h"
 #include "clang/Tooling/ArgumentsAdjusters.h"
 #include "clang/Tooling/CommonOptionsParser.h"
 #include "clang/Tooling/Tooling.h"
 
 using namespace clang::tooling;
-using namespace llvm;
+using namespace llvm37;
 
 const char *const CommonOptionsParser::HelpMessage =
     "\n"
@@ -41,7 +41,7 @@ const char *const CommonOptionsParser::HelpMessage =
     "\tCMake option to get this output). When no build path is specified,\n"
     "\ta search for compile_commands.json will be attempted through all\n"
     "\tparent paths of the first input file . See:\n"
-    "\thttp://clang.llvm.org/docs/HowToSetupToolingForLLVM.html for an\n"
+    "\thttp://clang.llvm37.org/docs/HowToSetupToolingForLLVM.html for an\n"
     "\texample of setting up Clang Tooling on a source tree.\n"
     "\n"
     "<source0> ... specify the paths of source files. These paths are\n"
@@ -130,10 +130,10 @@ CommonOptionsParser::CommonOptionsParser(int &argc, const char **argv,
                                                                ErrorMessage);
     }
     if (!Compilations)
-      llvm::report_fatal_error(ErrorMessage);
+      llvm37::report_fatal_error(ErrorMessage);
   }
   auto AdjustingCompilations =
-      llvm::make_unique<ArgumentsAdjustingCompilations>(
+      llvm37::make_unique<ArgumentsAdjustingCompilations>(
           std::move(Compilations));
   AdjustingCompilations->appendArgumentsAdjuster(
       getInsertArgumentAdjuster(ArgsBefore, ArgumentInsertPosition::BEGIN));

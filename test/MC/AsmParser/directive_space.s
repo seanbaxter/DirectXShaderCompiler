@@ -1,4 +1,4 @@
-# RUN: llvm-mc -triple i386-apple-darwin %s | FileCheck %s
+# RUN: llvm37-mc -triple i386-apple-darwin %s | FileCheck %s
 
 # CHECK: TEST0:
 # CHECK: .space 1

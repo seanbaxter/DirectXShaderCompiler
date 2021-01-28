@@ -1,6 +1,6 @@
 //===- FuzzerTraceState.cpp - Trace-based fuzzer mutator ------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -25,13 +25,13 @@
 //
 // DataFlowSanitizer (DFSan) is a tool for
 // generalised dynamic data flow (taint) analysis:
-// http://clang.llvm.org/docs/DataFlowSanitizer.html .
+// http://clang.llvm37.org/docs/DataFlowSanitizer.html .
 //
 // The approach with DFSan-based fuzzing has some similarity to
 // "Taint-based Directed Whitebox Fuzzing"
 // by Vijay Ganesh & Tim Leek & Martin Rinard:
 // http://dspace.mit.edu/openaccess-disseminate/1721.1/59320,
-// but it uses a full blown LLVM IR taint analysis and separate instrumentation
+// but it uses a full blown LLVM37 IR taint analysis and separate instrumentation
 // to analyze all of the "attack points" at once.
 //
 // Workflow with DFSan:
@@ -63,7 +63,7 @@
 
 /* Example of manual usage (-fsanitize=dataflow is optional):
 (
-  cd $LLVM/lib/Fuzzer/
+  cd $LLVM37/lib/Fuzzer/
   clang  -fPIC -c -g -O2 -std=c++11 Fuzzer*.cpp
   clang++ -O0 -std=c++11 -fsanitize-coverage=edge,trace-cmp \
     -fsanitize=dataflow \
@@ -98,8 +98,8 @@ static bool ReallyHaveDFSan() {
   return &dfsan_create_label != nullptr;
 }
 
-// These values are copied from include/llvm/IR/InstrTypes.h.
-// We do not include the LLVM headers here to remain independent.
+// These values are copied from include/llvm37/IR/InstrTypes.h.
+// We do not include the LLVM37 headers here to remain independent.
 // If these values ever change, an assertion in ComputeCmp will fail.
 enum Predicate {
   ICMP_EQ = 32,  ///< equal

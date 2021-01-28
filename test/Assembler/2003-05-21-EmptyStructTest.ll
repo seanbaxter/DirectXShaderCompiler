@@ -1,4 +1,4 @@
-; RUN: llvm-as %s -o /dev/null
+; RUN: llvm37-as %s -o /dev/null
 ; RUN: verify-uselistorder %s
 
 ; The old C front-end never generated empty structures, now the new one

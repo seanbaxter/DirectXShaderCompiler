@@ -1,20 +1,20 @@
-//===----- llvm/unittest/ADT/SCCIteratorTest.cpp - SCCIterator tests ------===//
+//===----- llvm37/unittest/ADT/SCCIteratorTest.cpp - SCCIterator tests ------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/ADT/SCCIterator.h"
-#include "llvm/ADT/GraphTraits.h"
+#include "llvm37/ADT/SCCIterator.h"
+#include "llvm37/ADT/GraphTraits.h"
 #include "gtest/gtest.h"
 #include <limits.h>
 
-using namespace llvm;
+using namespace llvm37;
 
-namespace llvm {
+namespace llvm37 {
 
 /// Graph<N> - A graph with N nodes.  Note that N can be at most 8.
 template <unsigned N>
@@ -319,7 +319,7 @@ TEST(SCCIteratorTest, AllSmallGraphs) {
 
       NodesInSomeSCC = NodesInSomeSCC.Join(NodesInThisSCC);
 
-      // Check a property that is specific to the LLVM SCC iterator and
+      // Check a property that is specific to the LLVM37 SCC iterator and
       // guaranteed by it: if a node in SCC S1 has an edge to a node in
       // SCC S2, then S1 is visited *after* S2.  This means that the set
       // of nodes reachable from this SCC must be contained either in the

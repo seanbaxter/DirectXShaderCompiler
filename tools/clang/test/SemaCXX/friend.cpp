@@ -16,7 +16,7 @@ namespace test0 {
   };
 }
 
-// Test derived from LLVM's Registry.h
+// Test derived from LLVM37's Registry.h
 namespace test1 {
   template <class T> struct Outer {
     void foo(T);

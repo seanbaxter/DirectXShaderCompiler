@@ -1,19 +1,19 @@
 //===----- EditedSource.h - Collection of source edits ----------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_EDIT_EDITEDSOURCE_H
-#define LLVM_CLANG_EDIT_EDITEDSOURCE_H
+#ifndef LLVM37_CLANG_EDIT_EDITEDSOURCE_H
+#define LLVM37_CLANG_EDIT_EDITEDSOURCE_H
 
 #include "clang/Edit/FileOffset.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/StringRef.h"
-#include "llvm/Support/Allocator.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/StringRef.h"
+#include "llvm37/Support/Allocator.h"
 #include <map>
 
 namespace clang {
@@ -39,9 +39,9 @@ class EditedSource {
   typedef std::map<FileOffset, FileEdit> FileEditsTy;
   FileEditsTy FileEdits;
 
-  llvm::DenseMap<unsigned, SourceLocation> ExpansionToArgMap;
+  llvm37::DenseMap<unsigned, SourceLocation> ExpansionToArgMap;
 
-  llvm::BumpPtrAllocator StrAlloc;
+  llvm37::BumpPtrAllocator StrAlloc;
 
 public:
   EditedSource(const SourceManager &SM, const LangOptions &LangOpts,

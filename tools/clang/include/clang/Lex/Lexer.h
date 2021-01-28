@@ -1,6 +1,6 @@
 //===--- Lexer.h - C Language Family Lexer ----------------------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,12 +11,12 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_LEX_LEXER_H
-#define LLVM_CLANG_LEX_LEXER_H
+#ifndef LLVM37_CLANG_LEX_LEXER_H
+#define LLVM37_CLANG_LEX_LEXER_H
 
 #include "clang/Basic/LangOptions.h"
 #include "clang/Lex/PreprocessorLexer.h"
-#include "llvm/ADT/SmallVector.h"
+#include "llvm37/ADT/SmallVector.h"
 #include <cassert>
 #include <string>
 
@@ -100,7 +100,7 @@ public:
   /// with the specified preprocessor managing the lexing process.  This lexer
   /// assumes that the associated file buffer and Preprocessor objects will
   /// outlive it, so it doesn't take ownership of either of them.
-  Lexer(FileID FID, const llvm::MemoryBuffer *InputBuffer, Preprocessor &PP);
+  Lexer(FileID FID, const llvm37::MemoryBuffer *InputBuffer, Preprocessor &PP);
 
   /// Lexer constructor - Create a new raw lexer object.  This object is only
   /// suitable for calls to 'LexFromRawLexer'.  This lexer assumes that the
@@ -111,7 +111,7 @@ public:
   /// Lexer constructor - Create a new raw lexer object.  This object is only
   /// suitable for calls to 'LexFromRawLexer'.  This lexer assumes that the
   /// text range will outlive it, so it doesn't take ownership of it.
-  Lexer(FileID FID, const llvm::MemoryBuffer *InputBuffer,
+  Lexer(FileID FID, const llvm37::MemoryBuffer *InputBuffer,
         const SourceManager &SM, const LangOptions &LangOpts);
 
   /// Create_PragmaLexer: Lexer constructor - Create a new lexer object for

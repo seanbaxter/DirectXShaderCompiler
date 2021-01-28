@@ -1,6 +1,6 @@
-//===-- llvm/lib/CodeGen/AsmPrinter/WinCodeViewLineTables.cpp --*- C++ -*--===//
+//===-- llvm37/lib/CodeGen/AsmPrinter/WinCodeViewLineTables.cpp --*- C++ -*--===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -12,11 +12,11 @@
 //===----------------------------------------------------------------------===//
 
 #include "WinCodeViewLineTables.h"
-#include "llvm/MC/MCExpr.h"
-#include "llvm/MC/MCSymbol.h"
-#include "llvm/Support/COFF.h"
+#include "llvm37/MC/MCExpr.h"
+#include "llvm37/MC/MCSymbol.h"
+#include "llvm37/Support/COFF.h"
 
-namespace llvm {
+namespace llvm37 {
 
 StringRef WinCodeViewLineTables::getFullFilepath(const MDNode *S) {
   assert(S);

@@ -1,5 +1,5 @@
-RUN: yaml2obj %p/Inputs/COFF/i386.yaml | llvm-objdump -f - | FileCheck %s -check-prefix COFF-i386
-RUN: llvm-objdump -f %p/Inputs/trivial-object-test.elf-i386 \
+RUN: yaml2obj %p/Inputs/COFF/i386.yaml | llvm37-objdump -f - | FileCheck %s -check-prefix COFF-i386
+RUN: llvm37-objdump -f %p/Inputs/trivial-object-test.elf-i386 \
 RUN:              | FileCheck %s -check-prefix ELF-i386
 
 XFAIL: *

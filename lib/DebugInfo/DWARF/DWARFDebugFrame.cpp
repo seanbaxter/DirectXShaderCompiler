@@ -1,32 +1,32 @@
 //===-- DWARFDebugFrame.h - Parsing of .debug_frame -------------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/DebugInfo/DWARF/DWARFDebugFrame.h"
-#include "llvm/ADT/ArrayRef.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/Support/Casting.h"
-#include "llvm/Support/DataTypes.h"
-#include "llvm/Support/Dwarf.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/Format.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/DebugInfo/DWARF/DWARFDebugFrame.h"
+#include "llvm37/ADT/ArrayRef.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/Support/Casting.h"
+#include "llvm37/Support/DataTypes.h"
+#include "llvm37/Support/Dwarf.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/Format.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <string>
 #include <vector>
 
-using namespace llvm;
+using namespace llvm37;
 using namespace dwarf;
 
 
 /// \brief Abstract frame entry defining the common interface concrete
 /// entries implement.
-class llvm::FrameEntry {
+class llvm37::FrameEntry {
 public:
   enum FrameKind {FK_CIE, FK_FDE};
   FrameEntry(FrameKind K, uint64_t Offset, uint64_t Length)
@@ -109,7 +109,7 @@ void FrameEntry::parseInstructions(DataExtractor Data, uint32_t *Offset,
       // bits of the opcode itself.
       uint64_t Op1 = Opcode & DWARF_CFI_PRIMARY_OPERAND_MASK;
       switch (Primary) {
-        default: llvm_unreachable("Impossible primary CFI opcode");
+        default: llvm37_unreachable("Impossible primary CFI opcode");
         case DW_CFA_advance_loc:
         case DW_CFA_restore:
           addInstruction(Primary, Op1);
@@ -121,7 +121,7 @@ void FrameEntry::parseInstructions(DataExtractor Data, uint32_t *Offset,
     } else {
       // Extended opcode - its value is Opcode itself.
       switch (Opcode) {
-        default: llvm_unreachable("Invalid extended CFI opcode");
+        default: llvm37_unreachable("Invalid extended CFI opcode");
         case DW_CFA_nop:
         case DW_CFA_remember_state:
         case DW_CFA_restore_state:
@@ -429,7 +429,7 @@ DWARFDebugFrame::DWARFDebugFrame() {
 DWARFDebugFrame::~DWARFDebugFrame() {
 }
 
-static void LLVM_ATTRIBUTE_UNUSED dumpDataAux(DataExtractor Data,
+static void LLVM37_ATTRIBUTE_UNUSED dumpDataAux(DataExtractor Data,
                                               uint32_t Offset, int Length) {
   errs() << "DUMP: ";
   for (int i = 0; i < Length; ++i) {

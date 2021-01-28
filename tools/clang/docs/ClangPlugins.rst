@@ -52,7 +52,7 @@ Putting it all together
 Let's look at an example plugin that prints top-level function names.  This
 example is checked into the clang repository; please take a look at
 the `latest version of PrintFunctionNames.cpp
-<http://llvm.org/viewvc/llvm-project/cfe/trunk/examples/PrintFunctionNames/PrintFunctionNames.cpp?view=markup>`_.
+<http://llvm37.org/viewvc/llvm37-project/cfe/trunk/examples/PrintFunctionNames/PrintFunctionNames.cpp?view=markup>`_.
 
 Running the plugin
 ==================
@@ -89,5 +89,5 @@ source tree:
             -plugin -Xclang print-fns
 
 Also see the print-function-name plugin example's
-`README <http://llvm.org/viewvc/llvm-project/cfe/trunk/examples/PrintFunctionNames/README.txt?view=markup>`_
+`README <http://llvm37.org/viewvc/llvm37-project/cfe/trunk/examples/PrintFunctionNames/README.txt?view=markup>`_
 

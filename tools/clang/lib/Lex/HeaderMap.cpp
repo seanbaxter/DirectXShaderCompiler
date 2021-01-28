@@ -1,6 +1,6 @@
 //===--- HeaderMap.cpp - A file that acts like dir of symlinks ------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -14,10 +14,10 @@
 #include "clang/Lex/HeaderMap.h"
 #include "clang/Basic/CharInfo.h"
 #include "clang/Basic/FileManager.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/Support/DataTypes.h"
-#include "llvm/Support/MathExtras.h"
-#include "llvm/Support/MemoryBuffer.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/Support/DataTypes.h"
+#include "llvm37/Support/MathExtras.h"
+#include "llvm37/Support/MemoryBuffer.h"
 #include <cstdio>
 #include <memory>
 using namespace clang;
@@ -94,8 +94,8 @@ const HeaderMap *HeaderMap::Create(const FileEntry *FE, FileManager &FM) {
   if (Header->Magic == HMAP_HeaderMagicNumber &&
       Header->Version == HMAP_HeaderVersion)
     NeedsByteSwap = false;
-  else if (Header->Magic == llvm::ByteSwap_32(HMAP_HeaderMagicNumber) &&
-           Header->Version == llvm::ByteSwap_16(HMAP_HeaderVersion))
+  else if (Header->Magic == llvm37::ByteSwap_32(HMAP_HeaderMagicNumber) &&
+           Header->Version == llvm37::ByteSwap_16(HMAP_HeaderVersion))
     NeedsByteSwap = true;  // Mixed endianness headermap.
   else
     return nullptr;  // Not a header map.
@@ -118,7 +118,7 @@ const char *HeaderMap::getFileName() const {
 
 unsigned HeaderMap::getEndianAdjustedWord(unsigned X) const {
   if (!NeedsBSwap) return X;
-  return llvm::ByteSwap_32(X);
+  return llvm37::ByteSwap_32(X);
 }
 
 /// getHeader - Return a reference to the file header, in unbyte-swapped form.

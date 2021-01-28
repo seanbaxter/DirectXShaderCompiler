@@ -1,6 +1,6 @@
 //===-- SelectionDAGDumper.cpp - Implement SelectionDAG::dump() -----------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,24 +11,24 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/CodeGen/SelectionDAG.h"
+#include "llvm37/CodeGen/SelectionDAG.h"
 #include "ScheduleDAGSDNodes.h"
-#include "llvm/ADT/StringExtras.h"
-#include "llvm/CodeGen/MachineConstantPool.h"
-#include "llvm/CodeGen/MachineFunction.h"
-#include "llvm/CodeGen/MachineModuleInfo.h"
-#include "llvm/IR/DebugInfo.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/Intrinsics.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/GraphWriter.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Target/TargetInstrInfo.h"
-#include "llvm/Target/TargetIntrinsicInfo.h"
-#include "llvm/Target/TargetMachine.h"
-#include "llvm/Target/TargetRegisterInfo.h"
-#include "llvm/Target/TargetSubtargetInfo.h"
-using namespace llvm;
+#include "llvm37/ADT/StringExtras.h"
+#include "llvm37/CodeGen/MachineConstantPool.h"
+#include "llvm37/CodeGen/MachineFunction.h"
+#include "llvm37/CodeGen/MachineModuleInfo.h"
+#include "llvm37/IR/DebugInfo.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/Intrinsics.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/GraphWriter.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Target/TargetInstrInfo.h"
+#include "llvm37/Target/TargetIntrinsicInfo.h"
+#include "llvm37/Target/TargetMachine.h"
+#include "llvm37/Target/TargetRegisterInfo.h"
+#include "llvm37/Target/TargetSubtargetInfo.h"
+using namespace llvm37;
 
 std::string SDNode::getOperationName(const SelectionDAG *G) const {
   switch (getOpcode()) {
@@ -115,7 +115,7 @@ std::string SDNode::getOperationName(const SelectionDAG *G) const {
       return Intrinsic::getName((Intrinsic::ID)IID);
     else if (const TargetIntrinsicInfo *TII = G->getTarget().getIntrinsicInfo())
       return TII->getName(IID);
-    llvm_unreachable("Invalid intrinsic ID");
+    llvm37_unreachable("Invalid intrinsic ID");
   }
 
   case ISD::BUILD_VECTOR:               return "BUILD_VECTOR";
@@ -251,7 +251,7 @@ std::string SDNode::getOperationName(const SelectionDAG *G) const {
 
   case ISD::CONVERT_RNDSAT: {
     switch (cast<CvtRndSatSDNode>(this)->getCvtCode()) {
-    default: llvm_unreachable("Unknown cvt code!");
+    default: llvm37_unreachable("Unknown cvt code!");
     case ISD::CVT_FF:                   return "cvt_ff";
     case ISD::CVT_FS:                   return "cvt_fs";
     case ISD::CVT_FU:                   return "cvt_fu";
@@ -310,7 +310,7 @@ std::string SDNode::getOperationName(const SelectionDAG *G) const {
 
   case ISD::CONDCODE:
     switch (cast<CondCodeSDNode>(this)->get()) {
-    default: llvm_unreachable("Unknown setcc condition!");
+    default: llvm37_unreachable("Unknown setcc condition!");
     case ISD::SETOEQ:                   return "setoeq";
     case ISD::SETOGT:                   return "setogt";
     case ISD::SETOGE:                   return "setoge";

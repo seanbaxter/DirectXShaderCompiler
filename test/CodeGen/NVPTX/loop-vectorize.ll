@@ -25,13 +25,13 @@ for.body:                                         ; preds = %for.body.preheader,
   %add = add nsw i32 %i.06, %a
   %mul = mul nsw i32 %add, %b
   %cmp1 = icmp sgt i32 %mul, -1
-  tail call void @llvm.assume(i1 %cmp1)
+  tail call void @llvm37.assume(i1 %cmp1)
   %inc = add nuw nsw i32 %i.06, 1
   %exitcond = icmp eq i32 %inc, %n
   br i1 %exitcond, label %for.cond.cleanup.loopexit, label %for.body
 }
 
-declare void @llvm.assume(i1) #0
+declare void @llvm37.assume(i1) #0
 
 attributes #0 = { nounwind }
 

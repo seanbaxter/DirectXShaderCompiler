@@ -1,6 +1,6 @@
 //===- CIndexCodeCompletion.cpp - Code Completion API hooks ---------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -28,14 +28,14 @@
 #include "clang/Frontend/FrontendDiagnostic.h"
 #include "clang/Sema/CodeCompleteConsumer.h"
 #include "clang/Sema/Sema.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/ADT/StringExtras.h"
-#include "llvm/Support/CrashRecoveryContext.h"
-#include "llvm/Support/FileSystem.h"
-#include "llvm/Support/MemoryBuffer.h"
-#include "llvm/Support/Program.h"
-#include "llvm/Support/Timer.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/ADT/StringExtras.h"
+#include "llvm37/Support/CrashRecoveryContext.h"
+#include "llvm37/Support/FileSystem.h"
+#include "llvm37/Support/MemoryBuffer.h"
+#include "llvm37/Support/Program.h"
+#include "llvm37/Support/Timer.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <atomic>
 #include <cstdio>
 #include <cstdlib>
@@ -107,7 +107,7 @@ clang_getCompletionChunkKind(CXCompletionString completion_string,
     return CXCompletionChunk_VerticalSpace;
   }
 
-  llvm_unreachable("Invalid CompletionKind!");
+  llvm37_unreachable("Invalid CompletionKind!");
 }
 
 CXString clang_getCompletionChunkText(CXCompletionString completion_string,
@@ -144,7 +144,7 @@ CXString clang_getCompletionChunkText(CXCompletionString completion_string,
     return cxstring::createEmpty();
   }
 
-  llvm_unreachable("Invalid CodeCompletionString Kind!");
+  llvm37_unreachable("Invalid CodeCompletionString Kind!");
 }
 
 
@@ -183,7 +183,7 @@ clang_getCompletionChunkCompletionString(CXCompletionString completion_string,
     return (*CCStr)[chunk_number].Optional;
   }
 
-  llvm_unreachable("Invalid CompletionKind!");
+  llvm37_unreachable("Invalid CompletionKind!");
 }
 
 unsigned clang_getNumCompletionChunks(CXCompletionString completion_string) {
@@ -278,7 +278,7 @@ struct AllocatedCXCodeCompleteResults : public CXCodeCompleteResults {
 
   /// \brief Temporary buffers that will be deleted once we have finished with
   /// the code-completion results.
-  SmallVector<const llvm::MemoryBuffer *, 1> TemporaryBuffers;
+  SmallVector<const llvm37::MemoryBuffer *, 1> TemporaryBuffers;
   
   /// \brief Allocator used to store globally cached code-completion results.
   IntrusiveRefCntPtr<clang::GlobalCodeCompletionAllocator>
@@ -334,11 +334,11 @@ AllocatedCXCodeCompleteResults::AllocatedCXCodeCompleteResults(
 }
   
 AllocatedCXCodeCompleteResults::~AllocatedCXCodeCompleteResults() {
-  llvm::DeleteContainerPointers(DiagnosticsWrappers);
+  llvm37::DeleteContainerPointers(DiagnosticsWrappers);
   delete [] Results;
 
   for (unsigned I = 0, N = TemporaryFiles.size(); I != N; ++I)
-    llvm::sys::fs::remove(TemporaryFiles[I]);
+    llvm37::sys::fs::remove(TemporaryFiles[I]);
   for (unsigned I = 0, N = TemporaryBuffers.size(); I != N; ++I)
     delete TemporaryBuffers[I];
 
@@ -668,7 +668,7 @@ static void clang_codeCompleteAt_Impl(void *UserData) {
 
 #ifdef UDP_CODE_COMPLETION_LOGGER
 #ifdef UDP_CODE_COMPLETION_LOGGER_PORT
-  const llvm::TimeRecord &StartTime =  llvm::TimeRecord::getCurrentTime();
+  const llvm37::TimeRecord &StartTime =  llvm37::TimeRecord::getCurrentTime();
 #endif
 #endif
 
@@ -693,8 +693,8 @@ static void clang_codeCompleteAt_Impl(void *UserData) {
   SmallVector<ASTUnit::RemappedFile, 4> RemappedFiles;
 
   for (auto &UF : CCAI->unsaved_files) {
-    std::unique_ptr<llvm::MemoryBuffer> MB =
-        llvm::MemoryBuffer::getMemBufferCopy(getContents(UF), UF.Filename);
+    std::unique_ptr<llvm37::MemoryBuffer> MB =
+        llvm37::MemoryBuffer::getMemBufferCopy(getContents(UF), UF.Filename);
     RemappedFiles.push_back(std::make_pair(UF.Filename, MB.release()));
   }
 
@@ -734,9 +734,9 @@ static void clang_codeCompleteAt_Impl(void *UserData) {
 
 #ifdef UDP_CODE_COMPLETION_LOGGER
 #ifdef UDP_CODE_COMPLETION_LOGGER_PORT
-  const llvm::TimeRecord &EndTime =  llvm::TimeRecord::getCurrentTime();
+  const llvm37::TimeRecord &EndTime =  llvm37::TimeRecord::getCurrentTime();
   SmallString<256> LogResult;
-  llvm::raw_svector_ostream os(LogResult);
+  llvm37::raw_svector_ostream os(LogResult);
 
   // Figure out the language and whether or not it uses PCH.
   const char *lang = 0;
@@ -757,7 +757,7 @@ static void clang_codeCompleteAt_Impl(void *UserData) {
         const char *arg = *(++I);
         SmallString<512> pchName;
         {
-          llvm::raw_svector_ostream os(pchName);
+          llvm37::raw_svector_ostream os(pchName);
           os << arg << ".pth";
         }
         pchName.push_back('\0');
@@ -822,7 +822,7 @@ CXCodeCompleteResults *clang_codeCompleteAt(CXTranslationUnit TU,
     return nullptr;
 
   CodeCompleteAtInfo CCAI = {TU, complete_filename, complete_line,
-    complete_column, llvm::makeArrayRef(unsaved_files, num_unsaved_files),
+    complete_column, llvm37::makeArrayRef(unsaved_files, num_unsaved_files),
     options, nullptr};
 
   // HLSL Change - Force code completion to run on current thread.
@@ -831,7 +831,7 @@ CXCodeCompleteResults *clang_codeCompleteAt(CXTranslationUnit TU,
     return CCAI.result;
   }
 
-  llvm::CrashRecoveryContext CRC;
+  llvm37::CrashRecoveryContext CRC;
 
   if (!RunSafely(CRC, clang_codeCompleteAt_Impl, &CCAI)) {
     fprintf(stderr, "libclang: crash detected in code completion\n");

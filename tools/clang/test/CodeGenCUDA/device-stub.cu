@@ -1,4 +1,4 @@
-// RUN: %clang_cc1 -emit-llvm %s -fcuda-include-gpubinary %s -o - | FileCheck %s
+// RUN: %clang_cc1 -emit-llvm37 %s -fcuda-include-gpubinary %s -o - | FileCheck %s
 
 #include "Inputs/cuda.h"
 
@@ -13,8 +13,8 @@
 // * variable to save GPU binary handle after initialization
 // CHECK: @__cuda_gpubin_handle = internal global i8** null
 // * Make sure our constructor/destructor was added to global ctor/dtor list.
-// CHECK: @llvm.global_ctors = appending global {{.*}}@__cuda_module_ctor
-// CHECK: @llvm.global_dtors = appending global {{.*}}@__cuda_module_dtor
+// CHECK: @llvm37.global_ctors = appending global {{.*}}@__cuda_module_ctor
+// CHECK: @llvm37.global_dtors = appending global {{.*}}@__cuda_module_dtor
 
 // Test that we build the correct number of calls to cudaSetupArgument followed
 // by a call to cudaLaunch.

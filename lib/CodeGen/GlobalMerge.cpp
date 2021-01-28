@@ -1,6 +1,6 @@
 //===-- GlobalMerge.cpp - Internal globals merging  -----------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -59,30 +59,30 @@
 // We use heuristics to discover the best global grouping we can (cf cl::opts).
 // ===---------------------------------------------------------------------===//
 
-#include "llvm/Transforms/Scalar.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/SmallBitVector.h"
-#include "llvm/ADT/SmallPtrSet.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/CodeGen/Passes.h"
-#include "llvm/IR/Attributes.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/DerivedTypes.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/GlobalVariable.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/Intrinsics.h"
-#include "llvm/IR/Module.h"
-#include "llvm/Pass.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Target/TargetLowering.h"
-#include "llvm/Target/TargetLoweringObjectFile.h"
-#include "llvm/Target/TargetSubtargetInfo.h"
+#include "llvm37/Transforms/Scalar.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/SmallBitVector.h"
+#include "llvm37/ADT/SmallPtrSet.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/CodeGen/Passes.h"
+#include "llvm37/IR/Attributes.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/IR/DerivedTypes.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/GlobalVariable.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/Intrinsics.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/Pass.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Target/TargetLowering.h"
+#include "llvm37/Target/TargetLoweringObjectFile.h"
+#include "llvm37/Target/TargetSubtargetInfo.h"
 #include <algorithm>
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "global-merge"
 
@@ -488,7 +488,7 @@ bool GlobalMerge::doMerge(SmallVectorImpl<GlobalVariable *> &Globals,
 }
 
 void GlobalMerge::collectUsedGlobalVariables(Module &M) {
-  // Extract global variables from llvm.used array
+  // Extract global variables from llvm37.used array
   const GlobalVariable *GV = M.getGlobalVariable("llvm.used");
   if (!GV || !GV->hasInitializer()) return;
 
@@ -558,7 +558,7 @@ bool GlobalMerge::doInitialization(Module &M) {
 
     // Ignore all 'special' globals.
     if (I->getName().startswith("llvm.") ||
-        I->getName().startswith(".llvm."))
+        I->getName().startswith(".llvm37."))
       continue;
 
     // Ignore all "required" globals:
@@ -603,7 +603,7 @@ bool GlobalMerge::doFinalization(Module &M) {
   return false;
 }
 
-Pass *llvm::createGlobalMergePass(const TargetMachine *TM, unsigned Offset,
+Pass *llvm37::createGlobalMergePass(const TargetMachine *TM, unsigned Offset,
                                   bool OnlyOptimizeForSize) {
   return new GlobalMerge(TM, Offset, OnlyOptimizeForSize);
 }

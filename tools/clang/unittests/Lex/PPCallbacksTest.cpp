@@ -1,6 +1,6 @@
 //===- unittests/Lex/PPCallbacksTest.cpp - PPCallbacks tests ------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -23,8 +23,8 @@
 #include "clang/Lex/PreprocessorOptions.h"
 #include "clang/Parse/Parser.h"
 #include "clang/Sema/Sema.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/Support/Path.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/Support/Path.h"
 #include "gtest/gtest.h"
 
 using namespace clang;
@@ -136,7 +136,7 @@ protected:
       FileMgr.getVirtualFile(HeaderPath, 0, 0);
 
       // Add header's parent path to search path.
-      StringRef SearchPath = llvm::sys::path::parent_path(HeaderPath);
+      StringRef SearchPath = llvm37::sys::path::parent_path(HeaderPath);
       const DirectoryEntry *DE = FileMgr.getDirectory(SearchPath);
       DirectoryLookup DL(DE, SrcMgr::C_User, false);
       HeaderInfo.AddSearchPath(DL, IsSystemHeader);
@@ -154,8 +154,8 @@ protected:
   // the InclusionDirective callback.
   CharSourceRange InclusionDirectiveFilenameRange(const char* SourceText, 
       const char* HeaderPath, bool SystemHeader) {
-    std::unique_ptr<llvm::MemoryBuffer> Buf =
-        llvm::MemoryBuffer::getMemBuffer(SourceText);
+    std::unique_ptr<llvm37::MemoryBuffer> Buf =
+        llvm37::MemoryBuffer::getMemBuffer(SourceText);
     SourceMgr.setMainFileID(SourceMgr.createFileID(std::move(Buf)));
 
     VoidModuleLoader ModLoader;
@@ -192,8 +192,8 @@ protected:
     LangOptions OpenCLLangOpts;
     OpenCLLangOpts.OpenCL = 1;
 
-    std::unique_ptr<llvm::MemoryBuffer> SourceBuf =
-        llvm::MemoryBuffer::getMemBuffer(SourceText, "test.cl");
+    std::unique_ptr<llvm37::MemoryBuffer> SourceBuf =
+        llvm37::MemoryBuffer::getMemBuffer(SourceText, "test.cl");
     SourceMgr.setMainFileID(SourceMgr.createFileID(std::move(SourceBuf)));
 
     VoidModuleLoader ModLoader;

@@ -10,11 +10,11 @@
 #include "dxc/DXIL/DxilCompType.h"
 #include "dxc/Support/Global.h"
 
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Type.h"
-#include "llvm/IR/DerivedTypes.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/Type.h"
+#include "llvm37/IR/DerivedTypes.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 
 namespace hlsl {
@@ -255,7 +255,7 @@ bool CompType::HasMinPrec() const {
   return false;
 }
 
-Type *CompType::GetLLVMType(LLVMContext &Ctx) const {
+Type *CompType::GetLLVM37Type(LLVM37Context &Ctx) const {
   switch (m_Kind) {
   case Kind::I1:        return (Type*)Type::getInt1Ty(Ctx);
   case Kind::I16:
@@ -281,7 +281,7 @@ Type *CompType::GetLLVMType(LLVMContext &Ctx) const {
   return nullptr;
 }
 
-PointerType *CompType::GetLLVMPtrType(LLVMContext &Ctx, const unsigned AddrSpace) const {
+PointerType *CompType::GetLLVM37PtrType(LLVM37Context &Ctx, const unsigned AddrSpace) const {
   switch (m_Kind) {
   case Kind::I1:        return Type::getInt1PtrTy  (Ctx, AddrSpace);
   case Kind::I16:
@@ -307,12 +307,12 @@ PointerType *CompType::GetLLVMPtrType(LLVMContext &Ctx, const unsigned AddrSpace
   return nullptr;
 }
 
-Type *CompType::GetLLVMBaseType(llvm::LLVMContext &Ctx) const {
-  return GetBaseCompType().GetLLVMType(Ctx);
+Type *CompType::GetLLVM37BaseType(llvm37::LLVM37Context &Ctx) const {
+  return GetBaseCompType().GetLLVM37Type(Ctx);
 }
 
 CompType CompType::GetCompType(Type *type) {
-  LLVMContext &Ctx = type->getContext();
+  LLVM37Context &Ctx = type->getContext();
   if (type == Type::getInt1Ty(Ctx))   return CompType(Kind::I1);
   if (type == Type::getInt16Ty(Ctx))  return CompType(Kind::I16);
   if (type == Type::getInt32Ty(Ctx))  return CompType(Kind::I32);

@@ -1,4 +1,4 @@
-; RUN: llvm-as < %s | llvm-dis
+; RUN: llvm37-as < %s | llvm37-dis
 ; RUN: verify-uselistorder %s
 ; PR3876
 @gdtr = external global [0 x i8]

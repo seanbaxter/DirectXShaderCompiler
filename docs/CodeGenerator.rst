@@ -1,5 +1,5 @@
 ==========================================
-The LLVM Target-Independent Code Generator
+The LLVM37 Target-Independent Code Generator
 ==========================================
 
 .. role:: raw-html(raw)
@@ -28,24 +28,24 @@ The LLVM Target-Independent Code Generator
 Introduction
 ============
 
-NOTE: this document describes the instructions for LLVM, not the DirectX
+NOTE: this document describes the instructions for LLVM37, not the DirectX
 Compiler. It's available only for informational purposes.
 
-The LLVM target-independent code generator is a framework that provides a suite
-of reusable components for translating the LLVM internal representation to the
+The LLVM37 target-independent code generator is a framework that provides a suite
+of reusable components for translating the LLVM37 internal representation to the
 machine code for a specified target---either in assembly form (suitable for a
 static compiler) or in binary machine code format (usable for a JIT
-compiler). The LLVM target-independent code generator consists of six main
+compiler). The LLVM37 target-independent code generator consists of six main
 components:
 
 1. `Abstract target description`_ interfaces which capture important properties
    about various aspects of the machine, independently of how they will be used.
-   These interfaces are defined in ``include/llvm/Target/``.
+   These interfaces are defined in ``include/llvm37/Target/``.
 
 2. Classes used to represent the `code being generated`_ for a target.  These
    classes are intended to be abstract enough to represent the machine code for
    *any* target machine.  These classes are defined in
-   ``include/llvm/CodeGen/``. At this level, concepts like "constant pool
+   ``include/llvm37/CodeGen/``. At this level, concepts like "constant pool
    entries" and "jump tables" are explicitly exposed.
 
 3. Classes and algorithms used to represent code as the object file level, the
@@ -59,11 +59,11 @@ components:
 
 5. `Implementations of the abstract target description interfaces`_ for
    particular targets.  These machine descriptions make use of the components
-   provided by LLVM, and can optionally provide custom target-specific passes,
+   provided by LLVM37, and can optionally provide custom target-specific passes,
    to build complete code generators for a specific target.  Target descriptions
    live in ``lib/Target/``.
 
-6. The target-independent JIT components.  The LLVM JIT is completely target
+6. The target-independent JIT components.  The LLVM37 JIT is completely target
    independent (it uses the ``TargetJITInfo`` structure to interface for
    target-specific issues.  The code for the target-independent JIT lives in
    ``lib/ExecutionEngine/JIT``.
@@ -73,7 +73,7 @@ different pieces of this will be useful to you.  In any case, you should be
 familiar with the `target description`_ and `machine code representation`_
 classes.  If you want to add a backend for a new target, you will need to
 `implement the target description`_ classes for your new target and understand
-the :doc:`LLVM code representation <LangRef>`.  If you are interested in
+the :doc:`LLVM37 code representation <LangRef>`.  If you are interested in
 implementing a new `code generation algorithm`_, it should only depend on the
 target-description and machine code representation classes, ensuring that it is
 portable.
@@ -81,27 +81,27 @@ portable.
 Required components in the code generator
 -----------------------------------------
 
-The two pieces of the LLVM code generator are the high-level interface to the
+The two pieces of the LLVM37 code generator are the high-level interface to the
 code generator and the set of reusable components that can be used to build
 target-specific backends.  The two most important interfaces (:raw-html:`<tt>`
 `TargetMachine`_ :raw-html:`</tt>` and :raw-html:`<tt>` `DataLayout`_
 :raw-html:`</tt>`) are the only ones that are required to be defined for a
-backend to fit into the LLVM system, but the others must be defined if the
+backend to fit into the LLVM37 system, but the others must be defined if the
 reusable code generator components are going to be used.
 
-This design has two important implications.  The first is that LLVM can support
+This design has two important implications.  The first is that LLVM37 can support
 completely non-traditional code generation targets.  For example, the C backend
 does not require register allocation, instruction selection, or any of the other
 standard components provided by the system.  As such, it only implements these
 two interfaces, and does its own thing. Note that C backend was removed from the
-trunk since LLVM 3.1 release. Another example of a code generator like this is a
-(purely hypothetical) backend that converts LLVM to the GCC RTL form and uses
+trunk since LLVM37 3.1 release. Another example of a code generator like this is a
+(purely hypothetical) backend that converts LLVM37 to the GCC RTL form and uses
 GCC to emit machine code for a target.
 
 This design also implies that it is possible to design and implement radically
-different code generators in the LLVM system that do not make use of any of the
+different code generators in the LLVM37 system that do not make use of any of the
 built-in components.  Doing so is not recommended at all, but could be required
-for radically different targets that do not fit into the LLVM machine
+for radically different targets that do not fit into the LLVM37 machine
 description model: FPGAs for example.
 
 .. _high-level design of the code generator:
@@ -109,16 +109,16 @@ description model: FPGAs for example.
 The high-level design of the code generator
 -------------------------------------------
 
-The LLVM target-independent code generator is designed to support efficient and
+The LLVM37 target-independent code generator is designed to support efficient and
 quality code generation for standard register-based microprocessors.  Code
 generation in this model is divided into the following stages:
 
 1. `Instruction Selection`_ --- This phase determines an efficient way to
-   express the input LLVM code in the target instruction set.  This stage
+   express the input LLVM37 code in the target instruction set.  This stage
    produces the initial code for the program in the target instruction set, then
    makes use of virtual registers in SSA form and physical registers that
    represent any required register assignments due to target constraints or
-   calling conventions.  This step turns the LLVM code into a DAG of target
+   calling conventions.  This step turns the LLVM37 code into a DAG of target
    instructions.
 
 2. `Scheduling and Formation`_ --- This phase takes the DAG of target
@@ -140,7 +140,7 @@ generation in this model is divided into the following stages:
 
 5. `Prolog/Epilog Code Insertion`_ --- Once the machine code has been generated
    for the function and the amount of stack space required is known (used for
-   LLVM alloca's and spill slots), the prolog and epilog code for the function
+   LLVM37 alloca's and spill slots), the prolog and epilog code for the function
    can be inserted and "abstract stack location references" can be eliminated.
    This stage is responsible for implementing optimizations like frame-pointer
    elimination and stack packing.
@@ -174,14 +174,14 @@ The target description classes require a detailed description of the target
 architecture.  These target descriptions often have a large amount of common
 information (e.g., an ``add`` instruction is almost identical to a ``sub``
 instruction).  In order to allow the maximum amount of commonality to be
-factored out, the LLVM code generator uses the
+factored out, the LLVM37 code generator uses the
 :doc:`TableGen/index` tool to describe big chunks of the
 target machine, which allows the use of domain-specific and target-specific
 abstractions to reduce the amount of repetition.
 
-As LLVM continues to be developed and refined, we plan to move more and more of
+As LLVM37 continues to be developed and refined, we plan to move more and more of
 the target description to the ``.td`` form.  Doing so gives us a number of
-advantages.  The most important is that it makes it easier to port LLVM because
+advantages.  The most important is that it makes it easier to port LLVM37 because
 it reduces the amount of C++ code that has to be written, and the surface area
 of the code generator that needs to be understood before someone can get
 something working.  Second, it makes it easier to change things. In particular,
@@ -194,7 +194,7 @@ in one place (``tblgen``) to update all of the targets to a new interface.
 Target description classes
 ==========================
 
-The LLVM target description classes (located in the ``include/llvm/Target``
+The LLVM37 target description classes (located in the ``include/llvm37/Target``
 directory) provide an abstract description of the target machine independent of
 any particular client.  These classes are designed to capture the *abstract*
 properties of the target (such as the instructions and registers it has), and do
@@ -239,7 +239,7 @@ The ``TargetLowering`` class
 ----------------------------
 
 The ``TargetLowering`` class is used by SelectionDAG based instruction selectors
-primarily to describe how LLVM code should be lowered to SelectionDAG
+primarily to describe how LLVM37 code should be lowered to SelectionDAG
 operations.  Among other things, this class indicates:
 
 * an initial register class to use for various ``ValueType``\s,
@@ -326,11 +326,11 @@ provide one of these objects through the ``getJITInfo`` method.
 Machine code description classes
 ================================
 
-At the high-level, LLVM code is translated to a machine specific representation
+At the high-level, LLVM37 code is translated to a machine specific representation
 formed out of :raw-html:`<tt>` `MachineFunction`_ :raw-html:`</tt>`,
 :raw-html:`<tt>` `MachineBasicBlock`_ :raw-html:`</tt>`, and :raw-html:`<tt>`
 `MachineInstr`_ :raw-html:`</tt>` instances (defined in
-``include/llvm/CodeGen``).  This representation is completely target agnostic,
+``include/llvm37/CodeGen``).  This representation is completely target agnostic,
 representing instructions in their most abstract form: an opcode and a series of
 operands.  This representation is designed to support both an SSA representation
 for machine code, as well as a register allocated, non-SSA form.
@@ -358,18 +358,18 @@ register reference, a constant integer, a basic block reference, etc.  In
 addition, a machine operand should be marked as a def or a use of the value
 (though only registers are allowed to be defs).
 
-By convention, the LLVM code generator orders instruction operands so that all
+By convention, the LLVM37 code generator orders instruction operands so that all
 register definitions come before the register uses, even on architectures that
 are normally printed in other orders.  For example, the SPARC add instruction:
 "``add %i1, %i2, %i3``" adds the "%i1", and "%i2" registers and stores the
-result into the "%i3" register.  In the LLVM code generator, the operands should
+result into the "%i3" register.  In the LLVM37 code generator, the operands should
 be stored as "``%i3, %i1, %i2``": with the destination first.
 
 Keeping destination (definition) operands at the beginning of the operand list
 has several advantages.  In particular, the debugging printer will print the
 instruction like this:
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
   %r3 = add %i1, %i2
 
@@ -382,7 +382,7 @@ Using the ``MachineInstrBuilder.h`` functions
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Machine instructions are created by using the ``BuildMI`` functions, located in
-the ``include/llvm/CodeGen/MachineInstrBuilder.h`` file.  The ``BuildMI``
+the ``include/llvm37/CodeGen/MachineInstrBuilder.h`` file.  The ``BuildMI``
 functions make it easy to build arbitrary machine instructions.  Usage of the
 ``BuildMI`` functions look like this:
 
@@ -432,9 +432,9 @@ registers), or external factors like calling conventions.  In any case, the
 instruction selector should emit code that copies a virtual register into or out
 of a physical register when needed.
 
-For example, consider this simple LLVM example:
+For example, consider this simple LLVM37 example:
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
   define i32 @test(i32 %X, i32 %Y) {
     %Z = sdiv i32 %X, %Y
@@ -444,7 +444,7 @@ For example, consider this simple LLVM example:
 The X86 instruction selector might produce this machine code for the ``div`` and
 ``ret``:
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
   ;; Start of div
   %EAX = mov %reg1024           ;; Copy X (in reg1024) into EAX
@@ -461,7 +461,7 @@ By the end of code generation, the register allocator would coalesce the
 registers and delete the resultant identity moves producing the following
 code:
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
   ;; X is in EAX, Y is in ECX
   mov %EAX, %EDX
@@ -491,7 +491,7 @@ Machine code in SSA form
 
 ``MachineInstr``'s are initially selected in SSA-form, and are maintained in
 SSA-form until register allocation happens.  For the most part, this is
-trivially simple since LLVM is already in SSA form; LLVM PHI nodes become
+trivially simple since LLVM37 is already in SSA form; LLVM37 PHI nodes become
 machine code PHI nodes, and virtual registers are only allowed to have a single
 definition.
 
@@ -505,10 +505,10 @@ The ``MachineBasicBlock`` class
 
 The ``MachineBasicBlock`` class contains a list of machine instructions
 (:raw-html:`<tt>` `MachineInstr`_ :raw-html:`</tt>` instances).  It roughly
-corresponds to the LLVM code input to the instruction selector, but there can be
-a one-to-many mapping (i.e. one LLVM basic block can map to multiple machine
+corresponds to the LLVM37 code input to the instruction selector, but there can be
+a one-to-many mapping (i.e. one LLVM37 basic block can map to multiple machine
 basic blocks). The ``MachineBasicBlock`` class has a "``getBasicBlock``" method,
-which returns the LLVM basic block that it comes from.
+which returns the LLVM37 basic block that it comes from.
 
 .. _MachineFunction:
 
@@ -517,16 +517,16 @@ The ``MachineFunction`` class
 
 The ``MachineFunction`` class contains a list of machine basic blocks
 (:raw-html:`<tt>` `MachineBasicBlock`_ :raw-html:`</tt>` instances).  It
-corresponds one-to-one with the LLVM function input to the instruction selector.
+corresponds one-to-one with the LLVM37 function input to the instruction selector.
 In addition to a list of basic blocks, the ``MachineFunction`` contains a a
 ``MachineConstantPool``, a ``MachineFrameInfo``, a ``MachineFunctionInfo``, and
-a ``MachineRegisterInfo``.  See ``include/llvm/CodeGen/MachineFunction.h`` for
+a ``MachineRegisterInfo``.  See ``include/llvm37/CodeGen/MachineFunction.h`` for
 more information.
 
 ``MachineInstr Bundles``
 ------------------------
 
-LLVM code generator can model sequences of instructions as MachineInstr
+LLVM37 code generator can model sequences of instructions as MachineInstr
 bundles. A MI bundle can model a VLIW group / pack which contains an arbitrary
 number of parallel instructions. It can also be used to model a sequential list
 of instructions (potentially with data dependencies) that cannot be legally
@@ -604,11 +604,11 @@ The "MC" Layer
 
 The MC Layer is used to represent and process code at the raw machine code
 level, devoid of "high level" information like "constant pools", "jump tables",
-"global variables" or anything like that.  At this level, LLVM handles things
+"global variables" or anything like that.  At this level, LLVM37 handles things
 like label names, machine instructions, and sections in the object file.  The
 code in this layer is used for a number of important purposes: the tail end of
 the code generator uses it to write a .s or .o file, and it is also used by the
-llvm-mc tool to implement standalone machine code assemblers and disassemblers.
+llvm37-mc tool to implement standalone machine code assemblers and disassemblers.
 
 This section describes some of the important classes.  There are also a number
 of important subsystems that interact at this layer, they are described later in
@@ -627,10 +627,10 @@ SwitchSection, EmitValue (for .byte, .word), etc, which directly correspond to
 assembly level directives.  It also has an EmitInstruction method, which is used
 to output an MCInst to the streamer.
 
-This API is most important for two clients: the llvm-mc stand-alone assembler is
+This API is most important for two clients: the llvm37-mc stand-alone assembler is
 effectively a parser that parses a line, then invokes a method on MCStreamer. In
 the code generator, the `Code Emission`_ phase of the code generator lowers
-higher level LLVM IR and Machine* constructs down to the MC layer, emitting
+higher level LLVM37 IR and Machine* constructs down to the MC layer, emitting
 directives through MCStreamer.
 
 On the implementation side of MCStreamer, there are two major implementations:
@@ -646,7 +646,7 @@ inherit from it, a target object streamer and a target asm streamer. The target
 asm streamer just prints it (``emitFnStart -> .fnstrart``), and the object
 streamer implement the assembler logic for it.
 
-To make llvm use these classes, the target initialization must call
+To make llvm37 use these classes, the target initialization must call
 TargetRegistry::RegisterAsmStreamer and TargetRegistry::RegisterMCObjectStreamer
 passing callbacks that allocate the corresponding target streamer and pass it
 to createAsmStreamer or to the appropriate object streamer constructor.
@@ -723,9 +723,9 @@ their design.
 Instruction Selection
 ---------------------
 
-Instruction Selection is the process of translating LLVM code presented to the
+Instruction Selection is the process of translating LLVM37 code presented to the
 code generator into target-specific machine instructions.  There are several
-well-known ways to do this in the literature.  LLVM uses a SelectionDAG based
+well-known ways to do this in the literature.  LLVM37 uses a SelectionDAG based
 instruction selector.
 
 Portions of the DAG instruction selector are generated from the target
@@ -752,7 +752,7 @@ The SelectionDAG is a Directed-Acyclic-Graph whose nodes are instances of the
 ``SDNode`` class.  The primary payload of the ``SDNode`` is its operation code
 (Opcode) that indicates what operation the node performs and the operands to the
 operation.  The various operation node types are described at the top of the
-``include/llvm/CodeGen/ISDOpcodes.h`` file.
+``include/llvm37/CodeGen/ISDOpcodes.h`` file.
 
 Although most operations define a single value, each node in the graph may
 define multiple values.  For example, a combined div/rem operation will define
@@ -796,7 +796,7 @@ SelectionDAG Instruction Selection Process
 SelectionDAG-based instruction selection consists of the following steps:
 
 #. `Build initial DAG`_ --- This stage performs a simple translation from the
-   input LLVM code to an illegal SelectionDAG.
+   input LLVM37 code to an illegal SelectionDAG.
 
 #. `Optimize SelectionDAG`_ --- This stage performs simple optimizations on the
    SelectionDAG to simplify it, and recognize meta instructions (like rotates
@@ -861,9 +861,9 @@ Initial SelectionDAG Construction
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The initial SelectionDAG is na\ :raw-html:`&iuml;`\ vely peephole expanded from
-the LLVM input by the ``SelectionDAGBuilder`` class.  The intent of this pass
+the LLVM37 input by the ``SelectionDAGBuilder`` class.  The intent of this pass
 is to expose as much low-level, target-specific details to the SelectionDAG as
-possible.  This pass is mostly hard-coded (e.g. an LLVM ``add`` turns into an
+possible.  This pass is mostly hard-coded (e.g. an LLVM37 ``add`` turns into an
 ``SDNode add`` while a ``getelementptr`` is expanded into the obvious
 arithmetic). This pass requires target-specific hooks to lower calls, returns,
 varargs, etc.  For these features, the :raw-html:`<tt>` `TargetLowering`_
@@ -963,17 +963,17 @@ SelectionDAG Select Phase
 The Select phase is the bulk of the target-specific code for instruction
 selection.  This phase takes a legal SelectionDAG as input, pattern matches the
 instructions supported by the target to this DAG, and produces a new DAG of
-target code.  For example, consider the following LLVM fragment:
+target code.  For example, consider the following LLVM37 fragment:
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
   %t1 = fadd float %W, %X
   %t2 = fmul float %t1, %Y
   %t3 = fadd float %t2, %Z
 
-This LLVM code corresponds to a SelectionDAG that looks basically like this:
+This LLVM37 code corresponds to a SelectionDAG that looks basically like this:
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
   (fadd:f32 (fmul:f32 (fadd:f32 W, X), Y), Z)
 
@@ -1006,7 +1006,7 @@ instruction definitions:
 
 The highlighted portion of the instruction definitions indicates the pattern
 used to match the instructions. The DAG operators (like ``fmul``/``fadd``)
-are defined in the ``include/llvm/Target/TargetSelectionDAG.td`` file.
+are defined in the ``include/llvm37/Target/TargetSelectionDAG.td`` file.
 "``F4RC``" is the register class of the input and result values.
 
 The TableGen DAG instruction selector generator reads the instruction patterns
@@ -1158,7 +1158,7 @@ each *virtual* register and *register allocatable* physical register
 in the function.  This is done in a very efficient manner because it uses SSA to
 sparsely compute lifetime information for virtual registers (which are in SSA
 form) and only has to track physical registers within a block.  Before register
-allocation, LLVM can assume that physical registers are only live within a
+allocation, LLVM37 can assume that physical registers are only live within a
 single basic block.  This allows it to do a single, local analysis to resolve
 physical register lifetimes within each basic block. If a physical register is
 not register allocatable (e.g., a stack pointer or condition codes), it is not
@@ -1213,10 +1213,10 @@ registers. If the number of physical registers is not enough to accommodate all
 the virtual registers, some of them will have to be mapped into memory. These
 virtuals are called *spilled virtuals*.
 
-How registers are represented in LLVM
+How registers are represented in LLVM37
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-In LLVM, physical registers are denoted by integer numbers that normally range
+In LLVM37, physical registers are denoted by integer numbers that normally range
 from 1 to 1023. To see how this numbering is defined for a particular
 architecture, you can read the ``GenRegisterNames.inc`` file for that
 architecture. For instance, by inspecting
@@ -1226,12 +1226,12 @@ architecture. For instance, by inspecting
 Some architectures contain registers that share the same physical location. A
 notable example is the X86 platform. For instance, in the X86 architecture, the
 registers ``EAX``, ``AX`` and ``AL`` share the first eight bits. These physical
-registers are marked as *aliased* in LLVM. Given a particular architecture, you
+registers are marked as *aliased* in LLVM37. Given a particular architecture, you
 can check which registers are aliased by inspecting its ``RegisterInfo.td``
 file. Moreover, the class ``MCRegAliasIterator`` enumerates all the physical
 registers aliased to a register.
 
-Physical registers, in LLVM, are grouped in *Register Classes*.  Elements in the
+Physical registers, in LLVM37, are grouped in *Register Classes*.  Elements in the
 same register class are functionally equivalent, and can be interchangeably
 used. Each virtual register can only be mapped to physical registers of a
 particular class. For instance, in the X86 architecture, some virtuals can only
@@ -1288,7 +1288,7 @@ uses registers 1025 and 1026. Given a register operand, the method
 instruction. The method ``MachineOperand::isDef()`` informs if that registers is
 being defined.
 
-We will call physical registers present in the LLVM bitcode before register
+We will call physical registers present in the LLVM37 bitcode before register
 allocation *pre-colored registers*. Pre-colored registers are used in many
 different situations, for instance, to pass parameters of functions calls, and
 to store results of particular instructions. There are two types of pre-colored
@@ -1352,7 +1352,7 @@ how to invoke the spiller, see ``RegAllocLinearScan::runOnMachineFunction`` in
 Handling two address instructions
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-With very rare exceptions (e.g., function calls), the LLVM machine code
+With very rare exceptions (e.g., function calls), the LLVM37 machine code
 instructions are three address instructions. That is, each instruction is
 expected to define at most one register, and to use at most two registers.
 However, some architectures use two address instructions. In this case, the
@@ -1360,8 +1360,8 @@ defined register is also one of the used registers. For instance, an instruction
 such as ``ADD %EAX, %EBX``, in X86 is actually equivalent to ``%EAX = %EAX +
 %EBX``.
 
-In order to produce correct code, LLVM must convert three address instructions
-that represent two address instructions into true two address instructions. LLVM
+In order to produce correct code, LLVM37 must convert three address instructions
+that represent two address instructions into true two address instructions. LLVM37
 provides the pass ``TwoAddressInstructionPass`` for this specific purpose. It
 must be run before register allocation takes place. After its execution, the
 resulting code may no longer be in SSA form. This happens, for instance, in
@@ -1389,7 +1389,7 @@ that preserve their semantics.
 
 There are many ways in which PHI instructions can safely be removed from the
 target code. The most traditional PHI deconstruction algorithm replaces PHI
-instructions with copy instructions. That is the strategy adopted by LLVM. The
+instructions with copy instructions. That is the strategy adopted by LLVM37. The
 SSA deconstruction algorithm is implemented in
 ``lib/CodeGen/PHIElimination.cpp``. In order to invoke this pass, the identifier
 ``PHIEliminationID`` must be marked as required in the code of the register
@@ -1422,7 +1422,7 @@ original instruction. See ``LiveIntervals::addIntervalsForSpills`` in
 Built in register allocators
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The LLVM infrastructure provides the application developer with three different
+The LLVM37 infrastructure provides the application developer with three different
 register allocators:
 
 * *Fast* --- This register allocator is the default for debug builds. It
@@ -1592,7 +1592,7 @@ VLIW Packetizer
 In a Very Long Instruction Word (VLIW) architecture, the compiler is responsible
 for mapping instructions to functional-units available on the architecture. To
 that end, the compiler creates groups of instructions called *packets* or
-*bundles*. The VLIW packetizer in LLVM is a target-independent mechanism to
+*bundles*. The VLIW packetizer in LLVM37 is a target-independent mechanism to
 enable the packetization of machine instructions.
 
 Mapping from instructions to functional units
@@ -1629,13 +1629,13 @@ functions: ``DFAPacketizer::clearResources()``,
 ``DFAPacketizer::canReserveResources(MachineInstr *MI)``. These functions allow
 a target packetizer to add an instruction to an existing packet and to check
 whether an instruction can be added to a packet. See
-``llvm/CodeGen/DFAPacketizer.h`` for more information.
+``llvm37/CodeGen/DFAPacketizer.h`` for more information.
 
 Implementing a Native Assembler
 ===============================
 
 Though you're probably reading this because you want to write or maintain a
-compiler backend, LLVM also fully supports building a native assembler.
+compiler backend, LLVM37 also fully supports building a native assembler.
 We've tried hard to automate the generation of the assembler from the .td files
 (in particular the instruction syntax and encodings), which means that a large
 part of the manual and repetitive data entry can be factored and shared with the
@@ -1957,7 +1957,7 @@ Assembly Parser
 ^^^^^^^^^^^^^^^
 
 This box indicates whether the target supports parsing target specific .s files
-by implementing the MCAsmParser interface.  This is required for llvm-mc to be
+by implementing the MCAsmParser interface.  This is required for llvm37-mc to be
 able to act as a native assembler and is required for inline assembly support in
 the native .o file writer.
 
@@ -2067,7 +2067,7 @@ Example:
 
 Call as ``llc -tailcallopt test.ll``.
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
   declare fastcc i32 @tailcallee(i32 inreg %a1, i32 inreg %a2, i32 %a3, i32 %a4)
 
@@ -2110,7 +2110,7 @@ following constraints are met:
 
 Example:
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
   declare i32 @bar(i32, i32)
 
@@ -2176,7 +2176,7 @@ memory addresses of the following expression directly in integer instructions
 
   SegmentReg: Base + [1,2,4,8] * IndexReg + Disp32
 
-In order to represent this, LLVM tracks no less than 5 operands for each memory
+In order to represent this, LLVM37 tracks no less than 5 operands for each memory
 operand of this form.  This means that the "load" form of '``mov``' has the
 following ``MachineOperand``\s in this order:
 
@@ -2197,7 +2197,7 @@ X86 address spaces supported
 x86 has a feature which provides the ability to perform loads and stores to
 different address spaces via the x86 segment registers.  A segment override
 prefix byte on an instruction causes the instruction's memory access to go to
-the specified segment.  LLVM address space 0 is the default address space, which
+the specified segment.  LLVM37 address space 0 is the default address space, which
 includes the stack, and any unqualified memory accesses in a program.  Address
 spaces 1-255 are currently reserved for user-defined code.  The GS-segment is
 represented by address space 256, while the FS-segment is represented by address
@@ -2212,16 +2212,16 @@ The ``thread_local`` keyword applies to global variables and specifies that they
 are to be allocated in thread-local memory. There are no type qualifiers
 involved, and these variables can be pointed to with normal pointers and
 accessed with normal loads and stores.  The ``thread_local`` keyword is
-target-independent at the LLVM IR level (though LLVM doesn't yet have
+target-independent at the LLVM37 IR level (though LLVM37 doesn't yet have
 implementations of it for some configurations)
 
 Special address spaces, in contrast, apply to static types. Every load and store
 has a particular address space in its address operand type, and this is what
-determines which address space is accessed.  LLVM ignores these special address
+determines which address space is accessed.  LLVM37 ignores these special address
 space qualifiers on global variables, and does not provide a way to directly
-allocate storage in them.  At the LLVM IR level, the behavior of these special
+allocate storage in them.  At the LLVM37 IR level, the behavior of these special
 address spaces depends in part on the underlying OS or runtime environment, and
-they are specific to x86 (and LLVM doesn't yet handle them correctly in some
+they are specific to x86 (and LLVM37 doesn't yet handle them correctly in some
 cases).
 
 Some operating systems and runtime environments use (or may in the future use)
@@ -2248,13 +2248,13 @@ The PowerPC code generator lives in the lib/Target/PowerPC directory.  The code
 generation is retargetable to several variations or *subtargets* of the PowerPC
 ISA; including ppc32, ppc64 and altivec.
 
-LLVM PowerPC ABI
+LLVM37 PowerPC ABI
 ^^^^^^^^^^^^^^^^
 
-LLVM follows the AIX PowerPC ABI, with two deviations. LLVM uses a PC relative
+LLVM37 follows the AIX PowerPC ABI, with two deviations. LLVM37 uses a PC relative
 (PIC) or static addressing for accessing global values, so no TOC (r2) is
 used. Second, r31 is used as a frame pointer to allow dynamic growth of a stack
-frame.  LLVM takes advantage of having no TOC to provide space to save the frame
+frame.  LLVM37 takes advantage of having no TOC to provide space to save the frame
 pointer in the PowerPC linkage area of the caller frame.  Other details of
 PowerPC ABI can be found at `PowerPC ABI
 <http://developer.apple.com/documentation/DeveloperTools/Conceptual/LowLevelABI/Articles/32bitPowerPC.html>`_\
@@ -2269,7 +2269,7 @@ invocation.  Since the frame is fixed size, all references into the frame can be
 accessed via fixed offsets from the stack pointer.  The exception to this is
 when dynamic alloca or variable sized arrays are present, then a base pointer
 (r31) is used as a proxy for the stack pointer and stack pointer is free to grow
-or shrink.  A base pointer is also used if llvm-gcc is not passed the
+or shrink.  A base pointer is also used if llvm37-gcc is not passed the
 -fomit-frame-pointer flag. The stack pointer is always aligned to 16 bytes, so
 that space allocated for altivec vectors will be properly aligned.
 
@@ -2300,7 +2300,7 @@ An invocation frame is laid out as follows (low memory at top):
 :raw-html:`</table>`
 
 The *linkage* area is used by a callee to save special registers prior to
-allocating its own frame.  Only three entries are relevant to LLVM. The first
+allocating its own frame.  Only three entries are relevant to LLVM37. The first
 entry is the previous stack pointer (sp), aka link.  This allows probing tools
 like gdb or exception handlers to quickly scan the frames in the stack.  A
 function epilog can also use the link to pop the frame from the stack.  The
@@ -2393,17 +2393,17 @@ since only the link value needs to be copied.  The link value can be easily
 fetched by adding the original frame size to the base pointer.  Note that
 allocations in the dynamic space need to observe 16 byte alignment.
 
-The *locals area* is where the llvm compiler reserves space for local variables.
+The *locals area* is where the llvm37 compiler reserves space for local variables.
 
-The *saved registers area* is where the llvm compiler spills callee saved
+The *saved registers area* is where the llvm37 compiler spills callee saved
 registers on entry to the callee.
 
 Prolog/Epilog
 ^^^^^^^^^^^^^
 
-The llvm prolog and epilog are the same as described in the PowerPC ABI, with
+The llvm37 prolog and epilog are the same as described in the PowerPC ABI, with
 the following exceptions.  Callee saved registers are spilled after the frame is
-created.  This allows the llvm epilog/prolog support to be common with other
+created.  This allows the llvm37 epilog/prolog support to be common with other
 targets.  The base pointer callee saved register r31 is saved in the TOC slot of
 linkage area.  This simplifies allocation of space for the base pointer and
 makes it convenient to locate programatically and during debugging.
@@ -2419,7 +2419,7 @@ The NVPTX backend
 -----------------
 
 The NVPTX code generator under lib/Target/NVPTX is an open-source version of
-the NVIDIA NVPTX code generator for LLVM.  It is contributed by NVIDIA and is
+the NVIDIA NVPTX code generator for LLVM37.  It is contributed by NVIDIA and is
 a port of the code generator used in the CUDA compiler (nvcc).  It targets the
 PTX 3.0/3.1 ISA and can target any compute capability greater than or equal to
 2.0 (Fermi).

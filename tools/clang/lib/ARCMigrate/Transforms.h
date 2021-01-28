@@ -1,18 +1,18 @@
 //===-- Transforms.h - Transformations to ARC mode --------------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
-#ifndef LLVM_CLANG_LIB_ARCMIGRATE_TRANSFORMS_H
-#define LLVM_CLANG_LIB_ARCMIGRATE_TRANSFORMS_H
+#ifndef LLVM37_CLANG_LIB_ARCMIGRATE_TRANSFORMS_H
+#define LLVM37_CLANG_LIB_ARCMIGRATE_TRANSFORMS_H
 
 #include "clang/AST/ParentMap.h"
 #include "clang/AST/RecursiveASTVisitor.h"
-#include "llvm/ADT/DenseSet.h"
-#include "llvm/Support/SaveAndRestore.h"
+#include "llvm37/ADT/DenseSet.h"
+#include "llvm37/Support/SaveAndRestore.h"
 
 namespace clang {
   class Decl;
@@ -93,12 +93,12 @@ public:
     bool FullyMigratable;
   };
   std::vector<GCAttrOccurrence> GCAttrs;
-  llvm::DenseSet<unsigned> AttrSet;
-  llvm::DenseSet<unsigned> RemovedAttrSet;
+  llvm37::DenseSet<unsigned> AttrSet;
+  llvm37::DenseSet<unsigned> RemovedAttrSet;
 
   /// \brief Set of raw '@' locations for 'assign' properties group that contain
   /// GC __weak.
-  llvm::DenseSet<unsigned> AtPropsWeak;
+  llvm37::DenseSet<unsigned> AtPropsWeak;
 
   explicit MigrationContext(MigrationPass &pass) : Pass(pass) {}
   ~MigrationContext();
@@ -203,7 +203,7 @@ public:
   }
 };
 
-typedef llvm::DenseSet<Expr *> ExprSet;
+typedef llvm37::DenseSet<Expr *> ExprSet;
 
 void clearRefsIn(Stmt *S, ExprSet &refs);
 template <typename iterator>

@@ -10,15 +10,15 @@ if "%HLSL_BLD_DIR%"=="" (
   exit /b 1
 )
 
-if not exist "%HLSL_BLD_DIR%\LLVM.sln" (
-  echo Missing solution file at %HLSL_BLD_DIR%\LLVM.sln
+if not exist "%HLSL_BLD_DIR%\LLVM37.sln" (
+  echo Missing solution file at %HLSL_BLD_DIR%\LLVM37.sln
   exit /b 1
 )
 
 if not exist "%ProgramFiles(x86)%\Microsoft Visual Studio 14.0\Common7\IDE\devenv.exe" (
-  start %HLSL_BLD_DIR%\LLVM.sln
+  start %HLSL_BLD_DIR%\LLVM37.sln
 ) else (
-  start "%ProgramFiles(x86)%\Microsoft Visual Studio 14.0\Common7\IDE\devenv.exe" %HLSL_BLD_DIR%\LLVM.sln
+  start "%ProgramFiles(x86)%\Microsoft Visual Studio 14.0\Common7\IDE\devenv.exe" %HLSL_BLD_DIR%\LLVM37.sln
 )
 
 goto :eof
@@ -29,5 +29,5 @@ echo.
 echo  hctvs
 echo.
 echo VS is expected to be at "%ProgramFiles(x86)%\Microsoft Visual Studio 14.0\Common7\IDE\devenv.exe"
-echo The solution is expected to be at %HLSL_BLD_DIR%\LLVM.sln
+echo The solution is expected to be at %HLSL_BLD_DIR%\LLVM37.sln
 echo.

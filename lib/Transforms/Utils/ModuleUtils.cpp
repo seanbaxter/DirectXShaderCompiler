@@ -1,6 +1,6 @@
 //===-- ModuleUtils.cpp - Functions to manipulate Modules -----------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,15 +11,15 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Transforms/Utils/ModuleUtils.h"
-#include "llvm/ADT/SmallPtrSet.h"
-#include "llvm/IR/DerivedTypes.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/IRBuilder.h"
-#include "llvm/IR/Module.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/Transforms/Utils/ModuleUtils.h"
+#include "llvm37/ADT/SmallPtrSet.h"
+#include "llvm37/IR/DerivedTypes.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/IRBuilder.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/Support/raw_ostream.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 static void appendToGlobalArray(const char *Array, 
                                 Module &M, Function *F, int Priority) {
@@ -52,9 +52,9 @@ static void appendToGlobalArray(const char *Array,
   Constant *CSVals[3];
   CSVals[0] = IRB.getInt32(Priority);
   CSVals[1] = F;
-  // FIXME: Drop support for the two element form in LLVM 4.0.
+  // FIXME: Drop support for the two element form in LLVM37 4.0.
   if (EltTy->getNumElements() >= 3)
-    CSVals[2] = llvm::Constant::getNullValue(IRB.getInt8PtrTy());
+    CSVals[2] = llvm37::Constant::getNullValue(IRB.getInt8PtrTy());
   Constant *RuntimeCtorInit =
       ConstantStruct::get(EltTy, makeArrayRef(CSVals, EltTy->getNumElements()));
 
@@ -70,16 +70,16 @@ static void appendToGlobalArray(const char *Array,
                            GlobalValue::AppendingLinkage, NewInit, Array);
 }
 
-void llvm::appendToGlobalCtors(Module &M, Function *F, int Priority) {
+void llvm37::appendToGlobalCtors(Module &M, Function *F, int Priority) {
   appendToGlobalArray("llvm.global_ctors", M, F, Priority);
 }
 
-void llvm::appendToGlobalDtors(Module &M, Function *F, int Priority) {
+void llvm37::appendToGlobalDtors(Module &M, Function *F, int Priority) {
   appendToGlobalArray("llvm.global_dtors", M, F, Priority);
 }
 
 GlobalVariable *
-llvm::collectUsedGlobalVariables(Module &M, SmallPtrSetImpl<GlobalValue *> &Set,
+llvm37::collectUsedGlobalVariables(Module &M, SmallPtrSetImpl<GlobalValue *> &Set,
                                  bool CompilerUsed) {
   const char *Name = CompilerUsed ? "llvm.compiler.used" : "llvm.used";
   GlobalVariable *GV = M.getGlobalVariable(Name);
@@ -95,7 +95,7 @@ llvm::collectUsedGlobalVariables(Module &M, SmallPtrSetImpl<GlobalValue *> &Set,
   return GV;
 }
 
-Function *llvm::checkSanitizerInterfaceFunction(Constant *FuncOrBitcast) {
+Function *llvm37::checkSanitizerInterfaceFunction(Constant *FuncOrBitcast) {
   if (isa<Function>(FuncOrBitcast))
     return cast<Function>(FuncOrBitcast);
   FuncOrBitcast->dump();
@@ -105,7 +105,7 @@ Function *llvm::checkSanitizerInterfaceFunction(Constant *FuncOrBitcast) {
   report_fatal_error(Err);
 }
 
-std::pair<Function *, Function *> llvm::createSanitizerCtorAndInitFunctions(
+std::pair<Function *, Function *> llvm37::createSanitizerCtorAndInitFunctions(
     Module &M, StringRef CtorName, StringRef InitName,
     ArrayRef<Type *> InitArgTypes, ArrayRef<Value *> InitArgs) {
   assert(!InitName.empty() && "Expected init function name");

@@ -1,5 +1,5 @@
 
-include "llvm/Option/OptParser.td"
+include "llvm37/Option/OptParser.td"
 
 def OptFlag1 : OptionFlag;
 def OptFlag2 : OptionFlag;

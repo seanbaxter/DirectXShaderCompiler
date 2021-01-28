@@ -1,6 +1,6 @@
 //===- InstCombineCasts.cpp -----------------------------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -12,11 +12,11 @@
 //===----------------------------------------------------------------------===//
 
 #include "InstCombineInternal.h"
-#include "llvm/Analysis/ConstantFolding.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/PatternMatch.h"
-#include "llvm/Analysis/TargetLibraryInfo.h"
-using namespace llvm;
+#include "llvm37/Analysis/ConstantFolding.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/IR/PatternMatch.h"
+#include "llvm37/Analysis/TargetLibraryInfo.h"
+using namespace llvm37;
 using namespace PatternMatch;
 
 #define DEBUG_TYPE "instcombine"
@@ -221,7 +221,7 @@ Value *InstCombiner::EvaluateInDifferentType(Value *V, Type *Ty,
   }
   default:
     // TODO: Can handle more cases here.
-    llvm_unreachable("Unreachable!");
+    llvm37_unreachable("Unreachable!");
   }
 
   Res->takeName(I);

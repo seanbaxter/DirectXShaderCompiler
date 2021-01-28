@@ -1,5 +1,5 @@
 """
-Descriptor objects for entities that are part of the LLVM project.
+Descriptor objects for entities that are part of the LLVM37 project.
 """
 
 from __future__ import absolute_import
@@ -190,9 +190,9 @@ parent = %s
         if basename in ('gtest', 'gtest_main'):
             return basename
 
-        return 'LLVM%s' % basename
+        return 'LLVM37%s' % basename
 
-    def get_llvmconfig_component_name(self):
+    def get_llvm37config_component_name(self):
         return self.get_library_name().lower()
 
 class OptionalLibraryComponentInfo(LibraryComponentInfo):
@@ -254,7 +254,7 @@ parent = %s
                 self.add_to_library_groups)
         return result
 
-    def get_llvmconfig_component_name(self):
+    def get_llvm37config_component_name(self):
         return self.name.lower()
 
 class TargetGroupComponentInfo(ComponentInfo):
@@ -331,7 +331,7 @@ parent = %s
                 result += '%s = 1\n' % (bool_key,)
         return result
 
-    def get_llvmconfig_component_name(self):
+    def get_llvm37config_component_name(self):
         return self.name.lower()
 
 class ToolComponentInfo(ComponentInfo):

@@ -1,28 +1,28 @@
 //===- Parser.cpp - Main dispatch module for the Parser library -----------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 //
-// This library implements the functionality defined in llvm/AsmParser/Parser.h
+// This library implements the functionality defined in llvm37/AsmParser/Parser.h
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/AsmParser/Parser.h"
+#include "llvm37/AsmParser/Parser.h"
 #include "LLParser.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/IR/Module.h"
-#include "llvm/Support/MemoryBuffer.h"
-#include "llvm/Support/SourceMgr.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/Support/MemoryBuffer.h"
+#include "llvm37/Support/SourceMgr.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <cstring>
 #include <system_error>
-using namespace llvm;
+using namespace llvm37;
 
-bool llvm::parseAssemblyInto(MemoryBufferRef F, Module &M, SMDiagnostic &Err,
+bool llvm37::parseAssemblyInto(MemoryBufferRef F, Module &M, SMDiagnostic &Err,
                              SlotMapping *Slots) {
   SourceMgr SM;
   std::unique_ptr<MemoryBuffer> Buf = MemoryBuffer::getMemBuffer(F);
@@ -31,9 +31,9 @@ bool llvm::parseAssemblyInto(MemoryBufferRef F, Module &M, SMDiagnostic &Err,
   return LLParser(F.getBuffer(), SM, Err, &M, Slots).Run();
 }
 
-std::unique_ptr<Module> llvm::parseAssembly(MemoryBufferRef F,
+std::unique_ptr<Module> llvm37::parseAssembly(MemoryBufferRef F,
                                             SMDiagnostic &Err,
-                                            LLVMContext &Context,
+                                            LLVM37Context &Context,
                                             SlotMapping *Slots) {
   std::unique_ptr<Module> M =
       make_unique<Module>(F.getBufferIdentifier(), Context);
@@ -44,9 +44,9 @@ std::unique_ptr<Module> llvm::parseAssembly(MemoryBufferRef F,
   return M;
 }
 
-std::unique_ptr<Module> llvm::parseAssemblyFile(StringRef Filename,
+std::unique_ptr<Module> llvm37::parseAssemblyFile(StringRef Filename,
                                                 SMDiagnostic &Err,
-                                                LLVMContext &Context,
+                                                LLVM37Context &Context,
                                                 SlotMapping *Slots) {
   ErrorOr<std::unique_ptr<MemoryBuffer>> FileOrErr =
       MemoryBuffer::getFileOrSTDIN(Filename);
@@ -59,9 +59,9 @@ std::unique_ptr<Module> llvm::parseAssemblyFile(StringRef Filename,
   return parseAssembly(FileOrErr.get()->getMemBufferRef(), Err, Context, Slots);
 }
 
-std::unique_ptr<Module> llvm::parseAssemblyString(StringRef AsmString,
+std::unique_ptr<Module> llvm37::parseAssemblyString(StringRef AsmString,
                                                   SMDiagnostic &Err,
-                                                  LLVMContext &Context,
+                                                  LLVM37Context &Context,
                                                   SlotMapping *Slots) {
   MemoryBufferRef F(AsmString, "<string>");
   return parseAssembly(F, Err, Context, Slots);

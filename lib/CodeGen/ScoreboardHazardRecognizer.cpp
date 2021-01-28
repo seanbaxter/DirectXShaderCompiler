@@ -1,6 +1,6 @@
 //===----- ScoreboardHazardRecognizer.cpp - Scheduler Support -------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -13,17 +13,17 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/CodeGen/ScoreboardHazardRecognizer.h"
-#include "llvm/CodeGen/ScheduleDAG.h"
-#include "llvm/MC/MCInstrItineraries.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Target/TargetInstrInfo.h"
+#include "llvm37/CodeGen/ScoreboardHazardRecognizer.h"
+#include "llvm37/CodeGen/ScheduleDAG.h"
+#include "llvm37/MC/MCInstrItineraries.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Target/TargetInstrInfo.h"
 
-using namespace llvm;
+using namespace llvm37;
 
-#define DEBUG_TYPE ::llvm::ScoreboardHazardRecognizer::DebugType
+#define DEBUG_TYPE ::llvm37::ScoreboardHazardRecognizer::DebugType
 
 #ifndef NDEBUG
 const char *ScoreboardHazardRecognizer::DebugType = "";
@@ -90,7 +90,7 @@ void ScoreboardHazardRecognizer::Reset() {
   ReservedScoreboard.reset();
 }
 
-#if !defined(NDEBUG) || defined(LLVM_ENABLE_DUMP)
+#if !defined(NDEBUG) || defined(LLVM37_ENABLE_DUMP)
 void ScoreboardHazardRecognizer::Scoreboard::dump() const {
   dbgs() << "Scoreboard:\n";
 

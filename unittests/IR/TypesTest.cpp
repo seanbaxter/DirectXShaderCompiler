@@ -1,21 +1,21 @@
-//===- llvm/unittest/IR/TypesTest.cpp - Type unit tests -------------------===//
+//===- llvm37/unittest/IR/TypesTest.cpp - Type unit tests -------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/IR/DerivedTypes.h"
-#include "llvm/IR/LLVMContext.h"
+#include "llvm37/IR/DerivedTypes.h"
+#include "llvm37/IR/LLVMContext.h"
 #include "gtest/gtest.h"
-using namespace llvm;
+using namespace llvm37;
 
 namespace {
 
 TEST(TypesTest, StructType) {
-  LLVMContext C;
+  LLVM37Context C;
 
   // PR13522
   StructType *Struct = StructType::create(C, "FooBar");

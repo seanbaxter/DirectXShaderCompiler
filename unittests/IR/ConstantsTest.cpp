@@ -1,23 +1,23 @@
-//===- llvm/unittest/IR/ConstantsTest.cpp - Constants unit tests ----------===//
+//===- llvm37/unittest/IR/ConstantsTest.cpp - Constants unit tests ----------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/AsmParser/Parser.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/DerivedTypes.h"
-#include "llvm/IR/InstrTypes.h"
-#include "llvm/IR/Instruction.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Module.h"
-#include "llvm/Support/SourceMgr.h"
+#include "llvm37/AsmParser/Parser.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/DerivedTypes.h"
+#include "llvm37/IR/InstrTypes.h"
+#include "llvm37/IR/Instruction.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/Support/SourceMgr.h"
 #include "gtest/gtest.h"
 
-namespace llvm {
+namespace llvm37 {
 namespace {
 
 TEST(ConstantsTest, Integer_i1) {
@@ -124,7 +124,7 @@ TEST(ConstantsTest, FP128Test) {
 }
 
 TEST(ConstantsTest, PointerCast) {
-  LLVMContext &C(getGlobalContext());
+  LLVM37Context &C(getGlobalContext());
   Type *Int8PtrTy = Type::getInt8PtrTy(C);
   Type *Int32PtrTy = Type::getInt32PtrTy(C);
   Type *Int64Ty = Type::getInt64Ty(C);
@@ -296,7 +296,7 @@ TEST(ConstantsTest, ReplaceWithConstantTest) {
 #undef CHECK
 
 TEST(ConstantsTest, ConstantArrayReplaceWithConstant) {
-  LLVMContext Context;
+  LLVM37Context Context;
   std::unique_ptr<Module> M(new Module("MyModule", Context));
 
   Type *IntTy = Type::getInt8Ty(Context);
@@ -321,7 +321,7 @@ TEST(ConstantsTest, ConstantArrayReplaceWithConstant) {
 }
 
 TEST(ConstantsTest, ConstantExprReplaceWithConstant) {
-  LLVMContext Context;
+  LLVM37Context Context;
   std::unique_ptr<Module> M(new Module("MyModule", Context));
 
   Type *IntTy = Type::getInt8Ty(Context);
@@ -344,7 +344,7 @@ TEST(ConstantsTest, ConstantExprReplaceWithConstant) {
 }
 
 TEST(ConstantsTest, GEPReplaceWithConstant) {
-  LLVMContext Context;
+  LLVM37Context Context;
   std::unique_ptr<Module> M(new Module("MyModule", Context));
 
   Type *IntTy = Type::getInt32Ty(Context);
@@ -369,7 +369,7 @@ TEST(ConstantsTest, GEPReplaceWithConstant) {
 }
 
 TEST(ConstantsTest, AliasCAPI) {
-  LLVMContext Context;
+  LLVM37Context Context;
   SMDiagnostic Error;
   std::unique_ptr<Module> M =
       parseAssemblyString("@g = global i32 42", Error, Context);
@@ -377,10 +377,10 @@ TEST(ConstantsTest, AliasCAPI) {
   Type *I16Ty = Type::getInt16Ty(Context);
   Type *I16PTy = PointerType::get(I16Ty, 0);
   Constant *Aliasee = ConstantExpr::getBitCast(G, I16PTy);
-  LLVMValueRef AliasRef =
-      LLVMAddAlias(wrap(M.get()), wrap(I16PTy), wrap(Aliasee), "a");
+  LLVM37ValueRef AliasRef =
+      LLVM37AddAlias(wrap(M.get()), wrap(I16PTy), wrap(Aliasee), "a");
   ASSERT_EQ(unwrap<GlobalAlias>(AliasRef)->getAliasee(), Aliasee);
 }
 
 }  // end anonymous namespace
-}  // end namespace llvm
+}  // end namespace llvm37

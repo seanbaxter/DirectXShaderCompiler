@@ -1,7 +1,7 @@
-; RUN: llvm-dis < %s.bc | FileCheck %s
+; RUN: llvm37-dis < %s.bc | FileCheck %s
 ; RUN: verify-uselistorder < %s.bc
 
-; old-aliases.bc consist of this file assembled with an old llvm-as (3.5 trunk)
+; old-aliases.bc consist of this file assembled with an old llvm37-as (3.5 trunk)
 ; from when aliases contained a ConstantExpr.
 
 @v1 = global i32 0

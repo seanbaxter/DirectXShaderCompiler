@@ -23,7 +23,7 @@ BE2:    ; preds = %n br label %Loop
   br label %Loop, !dbg !11
 }
 
-!llvm.module.flags = !{!0, !1}
+!llvm37.module.flags = !{!0, !1}
 !0 = !{i32 2, !"Dwarf Version", i32 4}
 !1 = !{i32 2, !"Debug Info Version", i32 3}
 

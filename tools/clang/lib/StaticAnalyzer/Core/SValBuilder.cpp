@@ -1,6 +1,6 @@
 // SValBuilder.cpp - Basic class for all SValBuilder implementations -*- C++ -*-
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -42,7 +42,7 @@ DefinedOrUnknownSVal SValBuilder::makeZeroVal(QualType type) {
 }
 
 NonLoc SValBuilder::makeNonLoc(const SymExpr *lhs, BinaryOperator::Opcode op,
-                                const llvm::APSInt& rhs, QualType type) {
+                                const llvm37::APSInt& rhs, QualType type) {
   // The Environment ensures we always get a persistent APSInt in
   // BasicValueFactory, so we don't need to get the APSInt from
   // BasicValueFactory again.
@@ -51,7 +51,7 @@ NonLoc SValBuilder::makeNonLoc(const SymExpr *lhs, BinaryOperator::Opcode op,
   return nonloc::SymbolVal(SymMgr.getSymIntExpr(lhs, op, rhs, type));
 }
 
-NonLoc SValBuilder::makeNonLoc(const llvm::APSInt& lhs,
+NonLoc SValBuilder::makeNonLoc(const llvm37::APSInt& lhs,
                                BinaryOperator::Opcode op, const SymExpr *rhs,
                                QualType type) {
   assert(rhs);
@@ -79,7 +79,7 @@ SVal SValBuilder::convertToArrayIndex(SVal val) {
 
   // Common case: we have an appropriately sized integer.
   if (Optional<nonloc::ConcreteInt> CI = val.getAs<nonloc::ConcreteInt>()) {
-    const llvm::APSInt& I = CI->getValue();
+    const llvm37::APSInt& I = CI->getValue();
     if (I.getBitWidth() == ArrayIndexWidth && I.isSigned())
       return val;
   }
@@ -286,7 +286,7 @@ Optional<SVal> SValBuilder::getConstantVal(const Expr *E) {
       return None;
 
     ASTContext &Ctx = getContext();
-    llvm::APSInt Result;
+    llvm37::APSInt Result;
     if (E->EvaluateAsInt(Result, Ctx))
       return makeIntVal(Result);
 

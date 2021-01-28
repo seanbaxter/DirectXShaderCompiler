@@ -1,33 +1,33 @@
 //===- MIRPrinter.cpp - MIR serialization format printer ------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 //
-// This file implements the class that prints out the LLVM IR and machine
+// This file implements the class that prints out the LLVM37 IR and machine
 // functions using the MIR serialization format.
 //
 //===----------------------------------------------------------------------===//
 
 #include "MIRPrinter.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/CodeGen/MachineFunction.h"
-#include "llvm/CodeGen/MachineFrameInfo.h"
-#include "llvm/CodeGen/MachineRegisterInfo.h"
-#include "llvm/CodeGen/MIRYamlMapping.h"
-#include "llvm/IR/BasicBlock.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/ModuleSlotTracker.h"
-#include "llvm/Support/MemoryBuffer.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Support/YAMLTraits.h"
-#include "llvm/Target/TargetInstrInfo.h"
-#include "llvm/Target/TargetSubtargetInfo.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/CodeGen/MachineFunction.h"
+#include "llvm37/CodeGen/MachineFrameInfo.h"
+#include "llvm37/CodeGen/MachineRegisterInfo.h"
+#include "llvm37/CodeGen/MIRYamlMapping.h"
+#include "llvm37/IR/BasicBlock.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/ModuleSlotTracker.h"
+#include "llvm37/Support/MemoryBuffer.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Support/YAMLTraits.h"
+#include "llvm37/Target/TargetInstrInfo.h"
+#include "llvm37/Target/TargetSubtargetInfo.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 namespace {
 
@@ -73,22 +73,22 @@ public:
 
 } // end anonymous namespace
 
-namespace llvm {
+namespace llvm37 {
 namespace yaml {
 
-/// This struct serializes the LLVM IR module.
+/// This struct serializes the LLVM37 IR module.
 template <> struct BlockScalarTraits<Module> {
   static void output(const Module &Mod, void *Ctxt, raw_ostream &OS) {
     Mod.print(OS, nullptr);
   }
   static StringRef input(StringRef Str, void *Ctxt, Module &Mod) {
-    llvm_unreachable("LLVM Module is supposed to be parsed separately");
+    llvm37_unreachable("LLVM37 Module is supposed to be parsed separately");
     return "";
   }
 };
 
 } // end namespace yaml
-} // end namespace llvm
+} // end namespace llvm37
 
 static void printReg(unsigned Reg, raw_ostream &OS,
                      const TargetRegisterInfo *TRI) {
@@ -100,7 +100,7 @@ static void printReg(unsigned Reg, raw_ostream &OS,
   else if (Reg < TRI->getNumRegs())
     OS << '%' << StringRef(TRI->getName(Reg)).lower();
   else
-    llvm_unreachable("Can't print this kind of register yet");
+    llvm37_unreachable("Can't print this kind of register yet");
 }
 
 void MIRPrinter::print(const MachineFunction &MF) {
@@ -332,21 +332,21 @@ void MIPrinter::print(const MachineOperand &Op, const TargetRegisterInfo *TRI) {
     if (RegMaskInfo != RegisterMaskIds.end())
       OS << StringRef(TRI->getRegMaskNames()[RegMaskInfo->second]).lower();
     else
-      llvm_unreachable("Can't print this machine register mask yet.");
+      llvm37_unreachable("Can't print this machine register mask yet.");
     break;
   }
   default:
     // TODO: Print the other machine operands.
-    llvm_unreachable("Can't print this machine operand at the moment");
+    llvm37_unreachable("Can't print this machine operand at the moment");
   }
 }
 
-void llvm::printMIR(raw_ostream &OS, const Module &M) {
+void llvm37::printMIR(raw_ostream &OS, const Module &M) {
   yaml::Output Out(OS);
   Out << const_cast<Module &>(M);
 }
 
-void llvm::printMIR(raw_ostream &OS, const MachineFunction &MF) {
+void llvm37::printMIR(raw_ostream &OS, const MachineFunction &MF) {
   MIRPrinter Printer(OS);
   Printer.print(MF);
 }

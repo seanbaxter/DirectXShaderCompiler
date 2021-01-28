@@ -1,6 +1,6 @@
-//===- llvm/unittest/ADT/DenseMapMap.cpp - DenseMap unit tests --*- C++ -*-===//
+//===- llvm37/unittest/ADT/DenseMapMap.cpp - DenseMap unit tests --*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -8,11 +8,11 @@
 //===----------------------------------------------------------------------===//
 
 #include "gtest/gtest.h"
-#include "llvm/ADT/DenseMap.h"
+#include "llvm37/ADT/DenseMap.h"
 #include <map>
 #include <set>
 
-using namespace llvm;
+using namespace llvm37;
 
 namespace {
 

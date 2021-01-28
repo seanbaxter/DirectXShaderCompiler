@@ -1,12 +1,12 @@
 // RUN: %dxc -E main -T vs_6_0 -Zi -Od %s | FileCheck %s
 
-// CHECK: void @llvm.dbg.value(metadata i32 %
-// CHECK: void @llvm.dbg.value(metadata i32 %
+// CHECK: void @llvm37.dbg.value(metadata i32 %
+// CHECK: void @llvm37.dbg.value(metadata i32 %
 
-// CHECK: void @llvm.dbg.value(metadata i32 %
-// CHECK: void @llvm.dbg.value(metadata i32 %
-// CHECK: void @llvm.dbg.value(metadata i32 %
-// CHECK: void @llvm.dbg.value(metadata i32 %{{.*}}, i64 0, metadata ![[var_md:[0-9]+]], metadata ![[expr_md:[0-9]+]]
+// CHECK: void @llvm37.dbg.value(metadata i32 %
+// CHECK: void @llvm37.dbg.value(metadata i32 %
+// CHECK: void @llvm37.dbg.value(metadata i32 %
+// CHECK: void @llvm37.dbg.value(metadata i32 %{{.*}}, i64 0, metadata ![[var_md:[0-9]+]], metadata ![[expr_md:[0-9]+]]
 
 // Exclude quoted source file (see readme)
 // CHECK-LABEL: {{!"[^"]*\\0A[^"]*"}}

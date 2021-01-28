@@ -1,21 +1,21 @@
 //===-- MCAsmParser.cpp - Abstract Asm Parser Interface -------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/MC/MCParser/MCAsmParser.h"
-#include "llvm/ADT/Twine.h"
-#include "llvm/MC/MCParser/MCAsmLexer.h"
-#include "llvm/MC/MCParser/MCParsedAsmOperand.h"
-#include "llvm/MC/MCTargetAsmParser.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/SourceMgr.h"
-#include "llvm/Support/raw_ostream.h"
-using namespace llvm;
+#include "llvm37/MC/MCParser/MCAsmParser.h"
+#include "llvm37/ADT/Twine.h"
+#include "llvm37/MC/MCParser/MCAsmLexer.h"
+#include "llvm37/MC/MCParser/MCParsedAsmOperand.h"
+#include "llvm37/MC/MCTargetAsmParser.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/SourceMgr.h"
+#include "llvm37/Support/raw_ostream.h"
+using namespace llvm37;
 
 MCAsmParser::MCAsmParser() : TargetParser(nullptr), ShowParsedOperands(0) {
 }
@@ -44,7 +44,7 @@ bool MCAsmParser::parseExpression(const MCExpr *&Res) {
 }
 
 void MCParsedAsmOperand::dump() const {
-#if !defined(NDEBUG) || defined(LLVM_ENABLE_DUMP)
+#if !defined(NDEBUG) || defined(LLVM37_ENABLE_DUMP)
   dbgs() << "  " << *this;
 #endif
 }

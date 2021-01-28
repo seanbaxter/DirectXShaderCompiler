@@ -42,10 +42,10 @@ return:
 
 ; Don't eliminate an icmp that's contributing to the loop exit test though.
 
-; CHECK-LABEL: @_ZNK4llvm5APInt3ultERKS0_(
+; CHECK-LABEL: @_ZNK4llvm375APInt3ultERKS0_(
 ; CHECK: %tmp99 = icmp sgt i32 %i, -1
 
-define i32 @_ZNK4llvm5APInt3ultERKS0_(i32 %tmp2.i1, i64** %tmp65, i64** %tmp73, i64** %tmp82, i64** %tmp90) {
+define i32 @_ZNK4llvm375APInt3ultERKS0_(i32 %tmp2.i1, i64** %tmp65, i64** %tmp73, i64** %tmp82, i64** %tmp90) {
 entry:
   br label %bb18
 
@@ -135,7 +135,7 @@ noassert:                                         ; preds = %forbody
   br i1 %tmp32, label %forcond, label %assert33
 
 assert33:                                         ; preds = %noassert
-  tail call void @llvm.trap()
+  tail call void @llvm37.trap()
   unreachable
 
 forcond38:                                        ; preds = %noassert68, %forcond38.preheader
@@ -152,14 +152,14 @@ noassert68:                                       ; preds = %forbody39
   br i1 %tmp76, label %forcond38, label %assert77
 
 assert77:                                         ; preds = %noassert68
-  tail call void @llvm.trap()
+  tail call void @llvm37.trap()
   unreachable
 
 unrolledend:                                      ; preds = %forcond38
   ret i32 0
 }
 
-declare void @llvm.trap() noreturn nounwind
+declare void @llvm37.trap() noreturn nounwind
 
 ; In this case the second loop only has a single iteration, fold the header away
 ; CHECK-LABEL: @func_12(
@@ -186,7 +186,7 @@ noassert:                                         ; preds = %forbody
   br i1 %tmp32, label %forcond, label %assert33
 
 assert33:                                         ; preds = %noassert
-  tail call void @llvm.trap()
+  tail call void @llvm37.trap()
   unreachable
 
 forcond38:                                        ; preds = %noassert68, %forcond38.preheader
@@ -203,7 +203,7 @@ noassert68:                                       ; preds = %forbody39
   br i1 %tmp76, label %forcond38, label %assert77
 
 assert77:                                         ; preds = %noassert68
-  tail call void @llvm.trap()
+  tail call void @llvm37.trap()
   unreachable
 
 unrolledend:                                      ; preds = %forcond38

@@ -6,13 +6,13 @@ target triple = "x86_64-unknown-linux-gnu"
 define i32 @test1(i32 %a, i32 %b) #0 {
 entry:
   %cmp = icmp sgt i32 %a, 5
-  tail call void @llvm.assume(i1 %cmp)
+  tail call void @llvm37.assume(i1 %cmp)
   %cmp1 = icmp sgt i32 %b, 1234
   br i1 %cmp1, label %if.then, label %if.else
 
 ; CHECK-LABEL: @test1
 ; CHECK: icmp sgt i32 %a, 5
-; CHECK: call void @llvm.assume
+; CHECK: call void @llvm37.assume
 ; CHECK-NOT: icmp sgt i32 %a, 3
 ; CHECK: ret i32
 
@@ -36,13 +36,13 @@ return:                                           ; preds = %if.else, %if.then, 
 define i32 @test2(i32 %a) #0 {
 entry:
   %cmp = icmp sgt i32 %a, 5
-  tail call void @llvm.assume(i1 %cmp)
+  tail call void @llvm37.assume(i1 %cmp)
   %cmp1 = icmp sgt i32 %a, 3
   br i1 %cmp1, label %if.then, label %return
 
 ; CHECK-LABEL: @test2
 ; CHECK: icmp sgt i32 %a, 5
-; CHECK: tail call void @llvm.assume
+; CHECK: tail call void @llvm37.assume
 ; CHECK: tail call void (...) @bar()
 ; CHECK: ret i32 1
 
@@ -57,7 +57,7 @@ return:                                           ; preds = %entry, %if.then
 }
 
 ; Function Attrs: nounwind
-declare void @llvm.assume(i1) #1
+declare void @llvm37.assume(i1) #1
 
 declare void @bar(...)
 

@@ -1,6 +1,6 @@
 //===-- DataLayout.cpp - Data size & alignment routines --------------------==//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -16,22 +16,22 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/IR/DataLayout.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/Triple.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/DerivedTypes.h"
-#include "llvm/IR/GetElementPtrTypeIterator.h"
-#include "llvm/IR/Module.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/ManagedStatic.h"
-#include "llvm/Support/MathExtras.h"
-#include "llvm/Support/Mutex.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/Triple.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/DerivedTypes.h"
+#include "llvm37/IR/GetElementPtrTypeIterator.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/ManagedStatic.h"
+#include "llvm37/Support/MathExtras.h"
+#include "llvm37/Support/Mutex.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <algorithm>
 #include <cstdlib>
-using namespace llvm;
+using namespace llvm37;
 
 //===----------------------------------------------------------------------===//
 // Support for StructLayout
@@ -235,7 +235,7 @@ void DataLayout::parseSpecifier(StringRef Desc) {
     switch (Specifier) {
     case 's':
       // Ignored for backward compatibility.
-      // FIXME: remove this on LLVM 4.0.
+      // FIXME: remove this on LLVM37 4.0.
       break;
     case 'E':
       BigEndian = true;
@@ -484,7 +484,7 @@ unsigned DataLayout::getAlignmentInfo(AlignTypeEnum AlignType,
       BestMatchIdx = LargestInt;
     } else if (AlignType == VECTOR_ALIGN) {
       // By default, use natural alignment for vector types. This is consistent
-      // with what clang and llvm-gcc do.
+      // with what clang and llvm37-gcc do.
       unsigned Align = getTypeAllocSize(cast<VectorType>(Ty)->getElementType());
       Align *= cast<VectorType>(Ty)->getNumElements();
       // If the alignment is not a power of 2, round up to the next power of 2.
@@ -667,7 +667,7 @@ unsigned DataLayout::getAlignment(Type *Ty, bool abi_or_pref) const {
     // HLSL Change Ends.
     break;
   default:
-    llvm_unreachable("Bad type for getAlignment!!!");
+    llvm37_unreachable("Bad type for getAlignment!!!");
   }
 
   return getAlignmentInfo((AlignTypeEnum)AlignType, getTypeSizeInBits(Ty),
@@ -694,7 +694,7 @@ unsigned DataLayout::getPreferredTypeAlignmentShift(Type *Ty) const {
   return Log2_32(Align);
 }
 
-IntegerType *DataLayout::getIntPtrType(LLVMContext &C,
+IntegerType *DataLayout::getIntPtrType(LLVM37Context &C,
                                        unsigned AddressSpace) const {
   return IntegerType::get(C, getPointerSizeInBits(AddressSpace));
 }
@@ -709,7 +709,7 @@ Type *DataLayout::getIntPtrType(Type *Ty) const {
   return IntTy;
 }
 
-Type *DataLayout::getSmallestLegalIntType(LLVMContext &C, unsigned Width) const {
+Type *DataLayout::getSmallestLegalIntType(LLVM37Context &C, unsigned Width) const {
   for (unsigned LegalIntWidth : LegalIntWidths)
     if (Width <= LegalIntWidth)
       return Type::getIntNTy(C, LegalIntWidth);

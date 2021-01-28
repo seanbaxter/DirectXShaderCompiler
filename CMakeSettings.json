@@ -26,7 +26,7 @@
             "value": "OFF"
           },
           {
-            "name": "LLVM_INCLUDE_TESTS:BOOL",
+            "name": "LLVM37_INCLUDE_TESTS:BOOL",
             "value": "OFF"
           },
           {
@@ -34,15 +34,15 @@
             "value": "ON"
           },
           {
-            "name": "LLVM_TARGETS_TO_BUILD:STRING",
+            "name": "LLVM37_TARGETS_TO_BUILD:STRING",
             "value": "None"
           },
           {
-            "name": "LLVM_INCLUDE_DOCS:BOOL",
+            "name": "LLVM37_INCLUDE_DOCS:BOOL",
             "value": "OFF"
           },
           {
-            "name": "LLVM_INCLUDE_EXAMPLES:BOOL",
+            "name": "LLVM37_INCLUDE_EXAMPLES:BOOL",
             "value": "OFF"
           },
           {
@@ -50,27 +50,27 @@
             "value": "ON"
           },
           {
-            "name": "LLVM_OPTIMIZED_TABLEGEN:BOOL",
+            "name": "LLVM37_OPTIMIZED_TABLEGEN:BOOL",
             "value": "OFF"
           },
           {
-            "name": "LLVM_REQUIRES_EH:BOOL",
+            "name": "LLVM37_REQUIRES_EH:BOOL",
             "value": "ON"
           },
           {
-            "name": "LLVM_APPEND_VC_REV:BOOL",
+            "name": "LLVM37_APPEND_VC_REV:BOOL",
             "value": "ON"
           },
           {
-            "name": "LLVM_ENABLE_RTTI:BOOL",
+            "name": "LLVM37_ENABLE_RTTI:BOOL",
             "value": "ON"
           },
           {
-            "name": "LLVM_ENABLE_EH:BOOL",
+            "name": "LLVM37_ENABLE_EH:BOOL",
             "value": "ON"
           },
           {
-            "name": "LLVM_DEFAULT_TARGET_TRIPLE:STRING",
+            "name": "LLVM37_DEFAULT_TARGET_TRIPLE:STRING",
             "value": "dxil-ms-dx"
           },
           {
@@ -78,7 +78,7 @@
             "value": "OFF"
           },
           {
-            "name": "-DLLVM_REQUIRES_RTTI:BOOL",
+            "name": "-DLLVM37_REQUIRES_RTTI:BOOL",
             "value": "ON"
           },
           {
@@ -116,7 +116,7 @@
             "value": "OFF"
           },
           {
-            "name": "LLVM_INCLUDE_TESTS:BOOL",
+            "name": "LLVM37_INCLUDE_TESTS:BOOL",
             "value": "OFF"
           },
           {
@@ -124,15 +124,15 @@
             "value": "ON"
           },
           {
-            "name": "LLVM_TARGETS_TO_BUILD:STRING",
+            "name": "LLVM37_TARGETS_TO_BUILD:STRING",
             "value": "None"
           },
           {
-            "name": "LLVM_INCLUDE_DOCS:BOOL",
+            "name": "LLVM37_INCLUDE_DOCS:BOOL",
             "value": "OFF"
           },
           {
-            "name": "LLVM_INCLUDE_EXAMPLES:BOOL",
+            "name": "LLVM37_INCLUDE_EXAMPLES:BOOL",
             "value": "OFF"
           },
           {
@@ -140,27 +140,27 @@
             "value": "ON"
           },
           {
-            "name": "LLVM_OPTIMIZED_TABLEGEN:BOOL",
+            "name": "LLVM37_OPTIMIZED_TABLEGEN:BOOL",
             "value": "OFF"
           },
           {
-            "name": "LLVM_REQUIRES_EH:BOOL",
+            "name": "LLVM37_REQUIRES_EH:BOOL",
             "value": "ON"
           },
           {
-            "name": "LLVM_APPEND_VC_REV:BOOL",
+            "name": "LLVM37_APPEND_VC_REV:BOOL",
             "value": "ON"
           },
           {
-            "name": "LLVM_ENABLE_RTTI:BOOL",
+            "name": "LLVM37_ENABLE_RTTI:BOOL",
             "value": "ON"
           },
           {
-            "name": "LLVM_ENABLE_EH:BOOL",
+            "name": "LLVM37_ENABLE_EH:BOOL",
             "value": "ON"
           },
           {
-            "name": "LLVM_DEFAULT_TARGET_TRIPLE:STRING",
+            "name": "LLVM37_DEFAULT_TARGET_TRIPLE:STRING",
             "value": "dxil-ms-dx"
           },
           {
@@ -168,7 +168,7 @@
             "value": "OFF"
           },
           {
-            "name": "-DLLVM_REQUIRES_RTTI:BOOL",
+            "name": "-DLLVM37_REQUIRES_RTTI:BOOL",
             "value": "ON"
           },
           {
@@ -206,7 +206,7 @@
             "value": "OFF"
           },
           {
-            "name": "LLVM_INCLUDE_TESTS:BOOL",
+            "name": "LLVM37_INCLUDE_TESTS:BOOL",
             "value": "OFF"
           },
           {
@@ -214,15 +214,15 @@
             "value": "ON"
           },
           {
-            "name": "LLVM_TARGETS_TO_BUILD:STRING",
+            "name": "LLVM37_TARGETS_TO_BUILD:STRING",
             "value": "None"
           },
           {
-            "name": "LLVM_INCLUDE_DOCS:BOOL",
+            "name": "LLVM37_INCLUDE_DOCS:BOOL",
             "value": "OFF"
           },
           {
-            "name": "LLVM_INCLUDE_EXAMPLES:BOOL",
+            "name": "LLVM37_INCLUDE_EXAMPLES:BOOL",
             "value": "OFF"
           },
           {
@@ -230,27 +230,27 @@
             "value": "ON"
           },
           {
-            "name": "LLVM_OPTIMIZED_TABLEGEN:BOOL",
+            "name": "LLVM37_OPTIMIZED_TABLEGEN:BOOL",
             "value": "OFF"
           },
           {
-            "name": "LLVM_REQUIRES_EH:BOOL",
+            "name": "LLVM37_REQUIRES_EH:BOOL",
             "value": "ON"
           },
           {
-            "name": "LLVM_APPEND_VC_REV:BOOL",
+            "name": "LLVM37_APPEND_VC_REV:BOOL",
             "value": "ON"
           },
           {
-            "name": "LLVM_ENABLE_RTTI:BOOL",
+            "name": "LLVM37_ENABLE_RTTI:BOOL",
             "value": "ON"
           },
           {
-            "name": "LLVM_ENABLE_EH:BOOL",
+            "name": "LLVM37_ENABLE_EH:BOOL",
             "value": "ON"
           },
           {
-            "name": "LLVM_DEFAULT_TARGET_TRIPLE:STRING",
+            "name": "LLVM37_DEFAULT_TARGET_TRIPLE:STRING",
             "value": "dxil-ms-dx"
           },
           {
@@ -258,7 +258,7 @@
             "value": "OFF"
           },
           {
-            "name": "-DLLVM_REQUIRES_RTTI:BOOL",
+            "name": "-DLLVM37_REQUIRES_RTTI:BOOL",
             "value": "ON"
           },
           {
@@ -296,7 +296,7 @@
             "value": "OFF"
           },
           {
-            "name": "LLVM_INCLUDE_TESTS:BOOL",
+            "name": "LLVM37_INCLUDE_TESTS:BOOL",
             "value": "OFF"
           },
           {
@@ -304,15 +304,15 @@
             "value": "ON"
           },
           {
-            "name": "LLVM_TARGETS_TO_BUILD:STRING",
+            "name": "LLVM37_TARGETS_TO_BUILD:STRING",
             "value": "None"
           },
           {
-            "name": "LLVM_INCLUDE_DOCS:BOOL",
+            "name": "LLVM37_INCLUDE_DOCS:BOOL",
             "value": "OFF"
           },
           {
-            "name": "LLVM_INCLUDE_EXAMPLES:BOOL",
+            "name": "LLVM37_INCLUDE_EXAMPLES:BOOL",
             "value": "OFF"
           },
           {
@@ -320,27 +320,27 @@
             "value": "ON"
           },
           {
-            "name": "LLVM_OPTIMIZED_TABLEGEN:BOOL",
+            "name": "LLVM37_OPTIMIZED_TABLEGEN:BOOL",
             "value": "OFF"
           },
           {
-            "name": "LLVM_REQUIRES_EH:BOOL",
+            "name": "LLVM37_REQUIRES_EH:BOOL",
             "value": "ON"
           },
           {
-            "name": "LLVM_APPEND_VC_REV:BOOL",
+            "name": "LLVM37_APPEND_VC_REV:BOOL",
             "value": "ON"
           },
           {
-            "name": "LLVM_ENABLE_RTTI:BOOL",
+            "name": "LLVM37_ENABLE_RTTI:BOOL",
             "value": "ON"
           },
           {
-            "name": "LLVM_ENABLE_EH:BOOL",
+            "name": "LLVM37_ENABLE_EH:BOOL",
             "value": "ON"
           },
           {
-            "name": "LLVM_DEFAULT_TARGET_TRIPLE:STRING",
+            "name": "LLVM37_DEFAULT_TARGET_TRIPLE:STRING",
             "value": "dxil-ms-dx"
           },
           {
@@ -348,7 +348,7 @@
             "value": "OFF"
           },
           {
-            "name": "-DLLVM_REQUIRES_RTTI:BOOL",
+            "name": "-DLLVM37_REQUIRES_RTTI:BOOL",
             "value": "ON"
           },
           {

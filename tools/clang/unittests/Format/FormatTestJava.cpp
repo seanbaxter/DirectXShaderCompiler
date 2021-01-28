@@ -1,6 +1,6 @@
 //===- unittest/Format/FormatTestJava.cpp - Formatting tests for Java -----===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -9,7 +9,7 @@
 
 #include "FormatTestUtils.h"
 #include "clang/Format/Format.h"
-#include "llvm/Support/Debug.h"
+#include "llvm37/Support/Debug.h"
 #include "gtest/gtest.h"
 
 #define DEBUG_TYPE "format-test"
@@ -19,20 +19,20 @@ namespace format {
 
 class FormatTestJava : public ::testing::Test {
 protected:
-  static std::string format(llvm::StringRef Code, unsigned Offset,
+  static std::string format(llvm37::StringRef Code, unsigned Offset,
                             unsigned Length, const FormatStyle &Style) {
-    DEBUG(llvm::errs() << "---\n");
-    DEBUG(llvm::errs() << Code << "\n\n");
+    DEBUG(llvm37::errs() << "---\n");
+    DEBUG(llvm37::errs() << Code << "\n\n");
     std::vector<tooling::Range> Ranges(1, tooling::Range(Offset, Length));
     tooling::Replacements Replaces = reformat(Style, Code, Ranges);
     std::string Result = applyAllReplacements(Code, Replaces);
     EXPECT_NE("", Result);
-    DEBUG(llvm::errs() << "\n" << Result << "\n\n");
+    DEBUG(llvm37::errs() << "\n" << Result << "\n\n");
     return Result;
   }
 
   static std::string
-  format(llvm::StringRef Code,
+  format(llvm37::StringRef Code,
          const FormatStyle &Style = getGoogleStyle(FormatStyle::LK_Java)) {
     return format(Code, 0, Code.size(), Style);
   }
@@ -44,7 +44,7 @@ protected:
   }
 
   static void verifyFormat(
-      llvm::StringRef Code,
+      llvm37::StringRef Code,
       const FormatStyle &Style = getGoogleStyle(FormatStyle::LK_Java)) {
     EXPECT_EQ(Code.str(), format(test::messUp(Code), Style));
   }
@@ -273,7 +273,7 @@ TEST_F(FormatTestJava, Annotations) {
                "});");
 
   verifyFormat("void SomeFunction(@Nullable String something) {}");
-  verifyFormat("void SomeFunction(@org.llvm.Nullable String something) {}");
+  verifyFormat("void SomeFunction(@org.llvm37.Nullable String something) {}");
 
   verifyFormat("@Partial @Mock DataLoader loader;");
   verifyFormat("@SuppressWarnings(value = \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\")\n"
@@ -281,13 +281,13 @@ TEST_F(FormatTestJava, Annotations) {
 
   verifyFormat("@SomeAnnotation(\"With some really looooooooooooooong text\")\n"
                "private static final long something = 0L;");
-  verifyFormat("@org.llvm.Qualified(\"With some really looooooooooong text\")\n"
+  verifyFormat("@org.llvm37.Qualified(\"With some really looooooooooong text\")\n"
                "private static final long something = 0L;");
   verifyFormat("@Mock\n"
                "DataLoader loooooooooooooooooooooooader =\n"
                "    aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa;",
                getStyleWithColumns(60));
-  verifyFormat("@org.llvm.QualifiedMock\n"
+  verifyFormat("@org.llvm37.QualifiedMock\n"
                "DataLoader loooooooooooooooooooooooader =\n"
                "    aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa;",
                getStyleWithColumns(60));

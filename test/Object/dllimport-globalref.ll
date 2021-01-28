@@ -1,4 +1,4 @@
-; RUN: llvm-as %s -o - | llvm-nm - | FileCheck %s
+; RUN: llvm37-as %s -o - | llvm37-nm - | FileCheck %s
 
 ; We should technically emit an unmangled reference to f here,
 ; but no existing linker needs this.

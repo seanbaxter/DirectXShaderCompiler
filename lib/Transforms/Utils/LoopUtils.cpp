@@ -1,6 +1,6 @@
 //===-- LoopUtils.cpp - Loop Utility functions -------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,18 +11,18 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Analysis/LoopInfo.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/PatternMatch.h"
-#include "llvm/IR/ValueHandle.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Analysis/ScalarEvolution.h"
-#include "llvm/Analysis/ScalarEvolutionExpressions.h"
-#include "llvm/IR/Module.h"
-#include "llvm/Transforms/Utils/LoopUtils.h"
+#include "llvm37/Analysis/LoopInfo.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/PatternMatch.h"
+#include "llvm37/IR/ValueHandle.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Analysis/ScalarEvolution.h"
+#include "llvm37/Analysis/ScalarEvolutionExpressions.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/Transforms/Utils/LoopUtils.h"
 
-using namespace llvm;
-using namespace llvm::PatternMatch;
+using namespace llvm37;
+using namespace llvm37::PatternMatch;
 
 #define DEBUG_TYPE "loop-utils"
 
@@ -385,11 +385,11 @@ Constant *RecurrenceDescriptor::getRecurrenceIdentity(RecurrenceKind K,
     // Adding zero to a number does not change it.
     return ConstantFP::get(Tp, 0.0L);
   default:
-    llvm_unreachable("Unknown recurrence kind");
+    llvm37_unreachable("Unknown recurrence kind");
   }
 }
 
-/// This function translates the recurrence kind to an LLVM binary operator.
+/// This function translates the recurrence kind to an LLVM37 binary operator.
 unsigned RecurrenceDescriptor::getRecurrenceBinOp(RecurrenceKind Kind) {
   switch (Kind) {
   case RK_IntegerAdd:
@@ -411,7 +411,7 @@ unsigned RecurrenceDescriptor::getRecurrenceBinOp(RecurrenceKind Kind) {
   case RK_FloatMinMax:
     return Instruction::FCmp;
   default:
-    llvm_unreachable("Unknown recurrence operation");
+    llvm37_unreachable("Unknown recurrence operation");
   }
 }
 
@@ -421,7 +421,7 @@ Value *RecurrenceDescriptor::createMinMaxOp(IRBuilder<> &Builder,
   CmpInst::Predicate P = CmpInst::ICMP_NE;
   switch (RK) {
   default:
-    llvm_unreachable("Unknown min/max recurrence kind");
+    llvm37_unreachable("Unknown min/max recurrence kind");
   case MRK_UIntMin:
     P = CmpInst::ICMP_ULT;
     break;
@@ -452,7 +452,7 @@ Value *RecurrenceDescriptor::createMinMaxOp(IRBuilder<> &Builder,
   return Select;
 }
 
-bool llvm::isInductionPHI(PHINode *Phi, ScalarEvolution *SE,
+bool llvm37::isInductionPHI(PHINode *Phi, ScalarEvolution *SE,
                           ConstantInt *&StepValue) {
   Type *PhiTy = Phi->getType();
   // We only handle integer and pointer inductions variables.

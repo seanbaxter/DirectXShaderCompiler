@@ -1,6 +1,6 @@
 //===-- Value.cpp - Implement the Value class -----------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,30 +11,30 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/IR/Value.h"
+#include "llvm37/IR/Value.h"
 #include "LLVMContextImpl.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/IR/CallSite.h"
-#include "llvm/IR/Constant.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/DerivedTypes.h"
-#include "llvm/IR/GetElementPtrTypeIterator.h"
-#include "llvm/IR/InstrTypes.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/Operator.h"
-#include "llvm/IR/Statepoint.h"
-#include "llvm/IR/ValueHandle.h"
-#include "llvm/IR/ValueSymbolTable.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/ManagedStatic.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/IR/CallSite.h"
+#include "llvm37/IR/Constant.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/IR/DerivedTypes.h"
+#include "llvm37/IR/GetElementPtrTypeIterator.h"
+#include "llvm37/IR/InstrTypes.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/Operator.h"
+#include "llvm37/IR/Statepoint.h"
+#include "llvm37/IR/ValueHandle.h"
+#include "llvm37/IR/ValueSymbolTable.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/ManagedStatic.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <algorithm>
-using namespace llvm;
+using namespace llvm37;
 
 //===----------------------------------------------------------------------===//
 //                                Value Class
@@ -160,7 +160,7 @@ static bool getSymTab(Value *V, ValueSymbolTable *&ST) {
 ValueName *Value::getValueName() const {
   if (!HasName) return nullptr;
 
-  LLVMContext &Ctx = getContext();
+  LLVM37Context &Ctx = getContext();
   auto I = Ctx.pImpl->ValueNames.find(this);
   assert(I != Ctx.pImpl->ValueNames.end() &&
          "No name entry found!");
@@ -169,7 +169,7 @@ ValueName *Value::getValueName() const {
 }
 
 void Value::setValueName(ValueName *VN) {
-  LLVMContext &Ctx = getContext();
+  LLVM37Context &Ctx = getContext();
 
   assert(HasName == (bool)Ctx.pImpl->ValueNames.count(this) &&  // HLSL Change - bool == int
          "HasName bit out of sync!");
@@ -524,7 +524,7 @@ Value *Value::DoPHITranslation(const BasicBlock *CurBB,
   return this;
 }
 
-LLVMContext &Value::getContext() const { return VTy->getContext(); }
+LLVM37Context &Value::getContext() const { return VTy->getContext(); }
 
 void Value::reverseUseList() {
   if (!UseList || !UseList->Next)
@@ -575,7 +575,7 @@ void ValueHandleBase::AddToExistingUseListAfter(ValueHandleBase *List) {
 void ValueHandleBase::AddToUseList() {
   assert(V && "Null pointer doesn't have a use list!");
 
-  LLVMContextImpl *pImpl = V->getContext().pImpl;
+  LLVM37ContextImpl *pImpl = V->getContext().pImpl;
 
   if (V->HasValueHandle) {
     // If this value already has a ValueHandle, then it must be in the
@@ -633,7 +633,7 @@ void ValueHandleBase::RemoveFromUseList() {
   // If the Next pointer was null, then it is possible that this was the last
   // ValueHandle watching VP.  If so, delete its entry from the ValueHandles
   // map.
-  LLVMContextImpl *pImpl = V->getContext().pImpl;
+  LLVM37ContextImpl *pImpl = V->getContext().pImpl;
   DenseMap<Value*, ValueHandleBase*> &Handles = pImpl->ValueHandles;
   if (Handles.isPointerIntoBucketsArray(PrevPtr)) {
     Handles.erase(V);
@@ -647,7 +647,7 @@ void ValueHandleBase::ValueIsDeleted(Value *V) {
 
   // Get the linked list base, which is guaranteed to exist since the
   // HasValueHandle flag is set.
-  LLVMContextImpl *pImpl = V->getContext().pImpl;
+  LLVM37ContextImpl *pImpl = V->getContext().pImpl;
   ValueHandleBase *Entry = pImpl->ValueHandles[V];
   assert(Entry && "Value bit set but no entries exist");
 
@@ -690,11 +690,11 @@ void ValueHandleBase::ValueIsDeleted(Value *V) {
     dbgs() << "While deleting: " << *V->getType() << " %" << V->getName()
            << "\n";
     if (pImpl->ValueHandles[V]->getKind() == Assert)
-      llvm_unreachable("An asserting value handle still pointed to this"
+      llvm37_unreachable("An asserting value handle still pointed to this"
                        " value!");
 
 #endif
-    llvm_unreachable("All references to V were not removed?");
+    llvm37_unreachable("All references to V were not removed?");
   }
 }
 
@@ -707,7 +707,7 @@ void ValueHandleBase::ValueIsRAUWd(Value *Old, Value *New) {
 
   // Get the linked list base, which is guaranteed to exist since the
   // HasValueHandle flag is set.
-  LLVMContextImpl *pImpl = Old->getContext().pImpl;
+  LLVM37ContextImpl *pImpl = Old->getContext().pImpl;
   ValueHandleBase *Entry = pImpl->ValueHandles[Old];
 
   assert(Entry && "Value bit set but no entries exist");
@@ -754,7 +754,7 @@ void ValueHandleBase::ValueIsRAUWd(Value *Old, Value *New) {
         dbgs() << "After RAUW from " << *Old->getType() << " %"
                << Old->getName() << " to " << *New->getType() << " %"
                << New->getName() << "\n";
-        llvm_unreachable("A tracking or weak value handle still pointed to the"
+        llvm37_unreachable("A tracking or weak value handle still pointed to the"
                          " old value!\n");
       default:
         break;

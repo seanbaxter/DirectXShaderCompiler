@@ -1,4 +1,4 @@
-// RUN: %clang_cc1 -emit-llvm-only -triple %itanium_abi_triple -fdump-record-layouts %s 2>/dev/null \
+// RUN: %clang_cc1 -emit-llvm37-only -triple %itanium_abi_triple -fdump-record-layouts %s 2>/dev/null \
 // RUN:            | FileCheck %s
 
 union A {

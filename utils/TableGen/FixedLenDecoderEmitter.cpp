@@ -1,6 +1,6 @@
 //===------------ FixedLenDecoderEmitter.cpp - Decoder Generator ----------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -13,24 +13,24 @@
 //===----------------------------------------------------------------------===//
 
 #include "CodeGenTarget.h"
-#include "llvm/ADT/APInt.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/ADT/StringExtras.h"
-#include "llvm/ADT/StringRef.h"
-#include "llvm/ADT/Twine.h"
-#include "llvm/MC/MCFixedLenDisassembler.h"
-#include "llvm/Support/DataTypes.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/FormattedStream.h"
-#include "llvm/Support/LEB128.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/TableGen/Error.h"
-#include "llvm/TableGen/Record.h"
+#include "llvm37/ADT/APInt.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/ADT/StringExtras.h"
+#include "llvm37/ADT/StringRef.h"
+#include "llvm37/ADT/Twine.h"
+#include "llvm37/MC/MCFixedLenDisassembler.h"
+#include "llvm37/Support/DataTypes.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/FormattedStream.h"
+#include "llvm37/Support/LEB128.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/TableGen/Error.h"
+#include "llvm37/TableGen/Record.h"
 #include <map>
 #include <string>
 #include <vector>
 
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "decoder-emitter"
 
@@ -161,7 +161,7 @@ static void dumpBits(raw_ostream &o, const BitsInit &bits) {
       o << "_";
       break;
     default:
-      llvm_unreachable("unexpected return value from bitFromBits");
+      llvm37_unreachable("unexpected return value from bitFromBits");
     }
   }
 }
@@ -548,7 +548,7 @@ void Filter::recurse() {
     // Delegates to an inferior filter chooser for further processing on this
     // group of instructions whose segment values are variable.
     FilterChooserMap.insert(
-        std::make_pair(-1U, llvm::make_unique<FilterChooser>(
+        std::make_pair(-1U, llvm37::make_unique<FilterChooser>(
                                 Owner->AllInstructions, VariableInstructions,
                                 Owner->Operands, BitValueArray, *Owner)));
   }
@@ -575,7 +575,7 @@ void Filter::recurse() {
     // Delegates to an inferior filter chooser for further processing on this
     // category of instructions.
     FilterChooserMap.insert(std::make_pair(
-        Inst.first, llvm::make_unique<FilterChooser>(
+        Inst.first, llvm37::make_unique<FilterChooser>(
                                 Owner->AllInstructions, Inst.second,
                                 Owner->Operands, BitValueArray, *Owner)));
   }
@@ -852,7 +852,7 @@ emitPredicateFunction(formatted_raw_ostream &OS, PredicateSet &Predicates,
   Indentation += 2;
   if (!Predicates.empty()) {
     OS.indent(Indentation) << "switch (Idx) {\n";
-    OS.indent(Indentation) << "default: llvm_unreachable(\"Invalid index!\");\n";
+    OS.indent(Indentation) << "default: llvm37_unreachable(\"Invalid index!\");\n";
     unsigned Index = 0;
     for (const auto &Predicate : Predicates) {
       OS.indent(Indentation) << "case " << Index++ << ":\n";
@@ -861,7 +861,7 @@ emitPredicateFunction(formatted_raw_ostream &OS, PredicateSet &Predicates,
     OS.indent(Indentation) << "}\n";
   } else {
     // No case statement to emit
-    OS.indent(Indentation) << "llvm_unreachable(\"Invalid index!\");\n";
+    OS.indent(Indentation) << "llvm37_unreachable(\"Invalid index!\");\n";
   }
   Indentation -= 2;
   OS.indent(Indentation) << "}\n\n";
@@ -880,7 +880,7 @@ emitDecoderFunction(formatted_raw_ostream &OS, DecoderSet &Decoders,
   Indentation += 2;
   OS.indent(Indentation) << "InsnType tmp;\n";
   OS.indent(Indentation) << "switch (Idx) {\n";
-  OS.indent(Indentation) << "default: llvm_unreachable(\"Invalid index!\");\n";
+  OS.indent(Indentation) << "default: llvm37_unreachable(\"Invalid index!\");\n";
   unsigned Index = 0;
   for (const auto &Decoder : Decoders) {
     OS.indent(Indentation) << "case " << Index++ << ":\n";
@@ -996,7 +996,7 @@ unsigned FilterChooser::getIslands(std::vector<unsigned> &StartBits,
     Val = Value(Insn[i]);
     bool Filtered = PositionFiltered(i);
     switch (State) {
-    default: llvm_unreachable("Unreachable code!");
+    default: llvm37_unreachable("Unreachable code!");
     case 0:
     case 1:
       if (Filtered || Val == -1)
@@ -1505,7 +1505,7 @@ bool FilterChooser::filterProcessor(bool AllowMixed, bool Greedy) {
         RA = ATTR_MIXED;
         break;
       default:
-        llvm_unreachable("Unexpected bitAttr!");
+        llvm37_unreachable("Unexpected bitAttr!");
       }
       break;
     case ATTR_ALL_SET:
@@ -1526,7 +1526,7 @@ bool FilterChooser::filterProcessor(bool AllowMixed, bool Greedy) {
         RA = ATTR_MIXED;
         break;
       default:
-        llvm_unreachable("Unexpected bitAttr!");
+        llvm37_unreachable("Unexpected bitAttr!");
       }
       break;
     case ATTR_MIXED:
@@ -1548,13 +1548,13 @@ bool FilterChooser::filterProcessor(bool AllowMixed, bool Greedy) {
       case ATTR_MIXED:
         break;
       default:
-        llvm_unreachable("Unexpected bitAttr!");
+        llvm37_unreachable("Unexpected bitAttr!");
       }
       break;
     case ATTR_ALL_UNSET:
-      llvm_unreachable("regionAttr state machine has no ATTR_UNSET state");
+      llvm37_unreachable("regionAttr state machine has no ATTR_UNSET state");
     case ATTR_FILTERED:
-      llvm_unreachable("regionAttr state machine has no ATTR_FILTERED state");
+      llvm37_unreachable("regionAttr state machine has no ATTR_FILTERED state");
     }
   }
 
@@ -2124,21 +2124,21 @@ static void emitDecodeInstruction(formatted_raw_ostream &OS) {
      << "    }\n"
      << "    }\n"
      << "  }\n"
-     << "  llvm_unreachable(\"bogosity detected in disassembler state machine!\");\n"
+     << "  llvm37_unreachable(\"bogosity detected in disassembler state machine!\");\n"
      << "}\n\n";
 }
 
 // Emits disassembler code for instruction decoding.
 void FixedLenDecoderEmitter::run(raw_ostream &o) {
   formatted_raw_ostream OS(o);
-  OS << "#include \"llvm/MC/MCInst.h\"\n";
-  OS << "#include \"llvm/Support/Debug.h\"\n";
-  OS << "#include \"llvm/Support/DataTypes.h\"\n";
-  OS << "#include \"llvm/Support/LEB128.h\"\n";
-  OS << "#include \"llvm/Support/raw_ostream.h\"\n";
+  OS << "#include \"llvm37/MC/MCInst.h\"\n";
+  OS << "#include \"llvm37/Support/Debug.h\"\n";
+  OS << "#include \"llvm37/Support/DataTypes.h\"\n";
+  OS << "#include \"llvm37/Support/LEB128.h\"\n";
+  OS << "#include \"llvm37/Support/raw_ostream.h\"\n";
   OS << "#include <assert.h>\n";
   OS << '\n';
-  OS << "namespace llvm {\n\n";
+  OS << "namespace llvm37 {\n\n";
 
   emitFieldFromInstruction(OS);
 
@@ -2207,10 +2207,10 @@ void FixedLenDecoderEmitter::run(raw_ostream &o) {
   // Emit the main entry point for the decoder, decodeInstruction().
   emitDecodeInstruction(OS);
 
-  OS << "\n} // End llvm namespace\n";
+  OS << "\n} // End llvm37 namespace\n";
 }
 
-namespace llvm {
+namespace llvm37 {
 
 void EmitFixedLenDecoder(RecordKeeper &RK, raw_ostream &OS,
                          std::string PredicateNamespace,
@@ -2223,4 +2223,4 @@ void EmitFixedLenDecoder(RecordKeeper &RK, raw_ostream &OS,
                          ROK, RFail, L).run(OS);
 }
 
-} // End llvm namespace
+} // End llvm37 namespace

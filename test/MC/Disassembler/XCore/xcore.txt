@@ -1,4 +1,4 @@
-# RUN: llvm-mc --disassemble %s -triple=xcore-xmos-elf | FileCheck %s
+# RUN: llvm37-mc --disassemble %s -triple=xcore-xmos-elf | FileCheck %s
 
 # 0r instructions
 

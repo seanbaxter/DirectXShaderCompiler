@@ -1,6 +1,6 @@
 //===---- StmtProfile.cpp - Profile implementation for Stmt ASTs ----------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -20,18 +20,18 @@
 #include "clang/AST/ExprCXX.h"
 #include "clang/AST/ExprObjC.h"
 #include "clang/AST/StmtVisitor.h"
-#include "llvm/ADT/FoldingSet.h"
+#include "llvm37/ADT/FoldingSet.h"
 using namespace clang;
 //                                                                           //
 ///////////////////////////////////////////////////////////////////////////////
 namespace {
   class StmtProfiler : public ConstStmtVisitor<StmtProfiler> {
-    llvm::FoldingSetNodeID &ID;
+    llvm37::FoldingSetNodeID &ID;
     const ASTContext &Context;
     bool Canonical;
 
   public:
-    StmtProfiler(llvm::FoldingSetNodeID &ID, const ASTContext &Context,
+    StmtProfiler(llvm37::FoldingSetNodeID &ID, const ASTContext &Context,
                  bool Canonical)
       : ID(ID), Context(Context), Canonical(Canonical) { }
 
@@ -771,12 +771,12 @@ void StmtProfiler::VisitDesignatedInitExpr(const DesignatedInitExpr *S) {
 // InitListExpr, then a DesignatedInitUpdateExpr is not encountered.
 void StmtProfiler::VisitDesignatedInitUpdateExpr(
     const DesignatedInitUpdateExpr *S) {
-  llvm_unreachable("Unexpected DesignatedInitUpdateExpr in syntactic form of "
+  llvm37_unreachable("Unexpected DesignatedInitUpdateExpr in syntactic form of "
                    "initializer");
 }
 
 void StmtProfiler::VisitNoInitExpr(const NoInitExpr *S) {
-  llvm_unreachable("Unexpected NoInitExpr in syntactic form of initializer");
+  llvm37_unreachable("Unexpected NoInitExpr in syntactic form of initializer");
 }
 
 void StmtProfiler::VisitImplicitValueInitExpr(const ImplicitValueInitExpr *S) {
@@ -842,7 +842,7 @@ static Stmt::StmtClass DecodeOperatorCall(const CXXOperatorCallExpr *S,
   case OO_Call:
   case OO_Conditional:
   case NUM_OVERLOADED_OPERATORS:
-    llvm_unreachable("Invalid operator call kind");
+    llvm37_unreachable("Invalid operator call kind");
       
   case OO_Plus:
     if (S->getNumArgs() == 1) {
@@ -1011,7 +1011,7 @@ static Stmt::StmtClass DecodeOperatorCall(const CXXOperatorCallExpr *S,
     return Stmt::ArraySubscriptExprClass;
   }
   
-  llvm_unreachable("Invalid overloaded operator expression");
+  llvm37_unreachable("Invalid overloaded operator expression");
 }
 
 
@@ -1165,7 +1165,7 @@ StmtProfiler::VisitLambdaExpr(const LambdaExpr *S) {
       ID.AddBoolean(C->isPackExpansion());
       break;
     case LCK_VLAType:
-      llvm_unreachable("VLA type in explicit captures.");
+      llvm37_unreachable("VLA type in explicit captures.");
     }
   }
   // Note: If we actually needed to be able to match lambda
@@ -1551,7 +1551,7 @@ void StmtProfiler::VisitTemplateArgument(const TemplateArgument &Arg) {
   }
 }
 
-void Stmt::Profile(llvm::FoldingSetNodeID &ID, const ASTContext &Context,
+void Stmt::Profile(llvm37::FoldingSetNodeID &ID, const ASTContext &Context,
                    bool Canonical) const {
   StmtProfiler Profiler(ID, Context, Canonical);
   Profiler.Visit(this);

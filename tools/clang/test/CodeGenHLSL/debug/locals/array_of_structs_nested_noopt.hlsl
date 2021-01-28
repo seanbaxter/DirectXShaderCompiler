@@ -8,9 +8,9 @@
 // CHECK-DAG: alloca [6 x float]
 // CHECK-DAG: %[[a:.*]] = alloca [12 x i32]
 
-// CHECK-DAG: call void @llvm.dbg.declare(metadata [12 x i32]* %[[a]], metadata !{{.*}}, metadata ![[aexpr:.*]]), !dbg !{{.*}}, !dx.dbg.varlayout ![[alayout:.*]]
-// CHECK-DAG: call void @llvm.dbg.declare(metadata [6 x float]* %{{.*}}, metadata !{{.*}}, metadata !{{.*}}), !dbg !{{.*}}, !dx.dbg.varlayout !{{.*}}
-// CHECK-DAG: call void @llvm.dbg.declare(metadata [6 x float]* %{{.*}}, metadata !{{.*}}, metadata !{{.*}}), !dbg !{{.*}}, !dx.dbg.varlayout !{{.*}}
+// CHECK-DAG: call void @llvm37.dbg.declare(metadata [12 x i32]* %[[a]], metadata !{{.*}}, metadata ![[aexpr:.*]]), !dbg !{{.*}}, !dx.dbg.varlayout ![[alayout:.*]]
+// CHECK-DAG: call void @llvm37.dbg.declare(metadata [6 x float]* %{{.*}}, metadata !{{.*}}, metadata !{{.*}}), !dbg !{{.*}}, !dx.dbg.varlayout !{{.*}}
+// CHECK-DAG: call void @llvm37.dbg.declare(metadata [6 x float]* %{{.*}}, metadata !{{.*}}, metadata !{{.*}}), !dbg !{{.*}}, !dx.dbg.varlayout !{{.*}}
 
 // Exclude quoted source file (see readme)
 // CHECK-LABEL: {{!"[^"]*\\0A[^"]*"}}

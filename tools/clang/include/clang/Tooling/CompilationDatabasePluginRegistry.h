@@ -1,24 +1,24 @@
 //===--- CompilationDatabasePluginRegistry.h - ------------------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_TOOLING_COMPILATIONDATABASEPLUGINREGISTRY_H
-#define LLVM_CLANG_TOOLING_COMPILATIONDATABASEPLUGINREGISTRY_H
+#ifndef LLVM37_CLANG_TOOLING_COMPILATIONDATABASEPLUGINREGISTRY_H
+#define LLVM37_CLANG_TOOLING_COMPILATIONDATABASEPLUGINREGISTRY_H
 
 #include "clang/Tooling/CompilationDatabase.h"
-#include "llvm/Support/Registry.h"
+#include "llvm37/Support/Registry.h"
 
 namespace clang {
 namespace tooling {
 
 class CompilationDatabasePlugin;
 
-typedef llvm::Registry<CompilationDatabasePlugin>
+typedef llvm37::Registry<CompilationDatabasePlugin>
     CompilationDatabasePluginRegistry;
 
 } // end namespace tooling

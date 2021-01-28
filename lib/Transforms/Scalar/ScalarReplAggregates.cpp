@@ -1,6 +1,6 @@
 //===- ScalarReplAggregates.cpp - Scalar Replacement of Aggregates --------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -19,38 +19,38 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Transforms/Scalar.h"
-#include "llvm/ADT/SetVector.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/Analysis/AssumptionCache.h"
-#include "llvm/Analysis/Loads.h"
-#include "llvm/Analysis/ValueTracking.h"
-#include "llvm/IR/CallSite.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/DIBuilder.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/DebugInfo.h"
-#include "llvm/IR/DerivedTypes.h"
-#include "llvm/IR/Dominators.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/GetElementPtrTypeIterator.h"
-#include "llvm/IR/GlobalVariable.h"
-#include "llvm/IR/IRBuilder.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/Operator.h"
-#include "llvm/Pass.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/MathExtras.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Transforms/Utils/Local.h"
-#include "llvm/Transforms/Utils/PromoteMemToReg.h"
-#include "llvm/Transforms/Utils/SSAUpdater.h"
-using namespace llvm;
+#include "llvm37/Transforms/Scalar.h"
+#include "llvm37/ADT/SetVector.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/Analysis/AssumptionCache.h"
+#include "llvm37/Analysis/Loads.h"
+#include "llvm37/Analysis/ValueTracking.h"
+#include "llvm37/IR/CallSite.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/DIBuilder.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/IR/DebugInfo.h"
+#include "llvm37/IR/DerivedTypes.h"
+#include "llvm37/IR/Dominators.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/GetElementPtrTypeIterator.h"
+#include "llvm37/IR/GlobalVariable.h"
+#include "llvm37/IR/IRBuilder.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/Operator.h"
+#include "llvm37/Pass.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/MathExtras.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Transforms/Utils/Local.h"
+#include "llvm37/Transforms/Utils/PromoteMemToReg.h"
+#include "llvm37/Transforms/Utils/SSAUpdater.h"
+using namespace llvm37;
 
 #define DEBUG_TYPE "scalarrepl"
 
@@ -240,7 +240,7 @@ INITIALIZE_PASS_END(SROA_SSAUp, "scalarrepl-ssa",
                     "Scalar Replacement of Aggregates (SSAUp)", false, false)
 
 // Public interface to the ScalarReplAggregates pass
-FunctionPass *llvm::createScalarReplAggregatesPass(int Threshold,
+FunctionPass *llvm37::createScalarReplAggregatesPass(int Threshold,
                                                    bool UseDomTree,
                                                    int StructMemberThreshold,
                                                    int ArrayElementThreshold,
@@ -272,7 +272,7 @@ class ConvertToScalarInfo {
   bool IsNotTrivial;
 
   /// ScalarKind - Tracks the kind of alloca being considered for promotion,
-  /// computed based on the uses of the alloca rather than the LLVM type system.
+  /// computed based on the uses of the alloca rather than the LLVM37 type system.
   enum {
     Unknown,
 
@@ -751,7 +751,7 @@ void ConvertToScalarInfo::ConvertUsesToScalar(Value *Ptr, AllocaInst *NewAI,
       }
     }
 
-    llvm_unreachable("Unsupported operation!");
+    llvm37_unreachable("Unsupported operation!");
   }
 }
 
@@ -907,7 +907,7 @@ ConvertScalar_InsertValue(Value *SV, Value *Old,
   // Convert the stored type to the actual type, shift it left to insert
   // then 'or' into place.
   Type *AllocaType = Old->getType();
-  LLVMContext &Context = Old->getContext();
+  LLVM37Context &Context = Old->getContext();
 
   if (VectorType *VTy = dyn_cast<VectorType>(AllocaType)) {
     uint64_t VecSize = DL.getTypeAllocSizeInBits(VTy);
@@ -2604,7 +2604,7 @@ bool SROA::isSafeAllocaToScalarRepl(AllocaInst *AI) {
 
   // Okay, we know all the users are promotable.  If the aggregate is a memcpy
   // source and destination, we have to be careful.  In particular, the memcpy
-  // could be moving around elements that live in structure padding of the LLVM
+  // could be moving around elements that live in structure padding of the LLVM37
   // types, but may actually be used.  In these cases, we refuse to promote the
   // struct.
   if (Info.isMemCpySrc && Info.isMemCpyDst &&

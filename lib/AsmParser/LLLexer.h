@@ -1,6 +1,6 @@
-//===- LLLexer.h - Lexer for LLVM Assembly Files ----------------*- C++ -*-===//
+//===- LLLexer.h - Lexer for LLVM37 Assembly Files ----------------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,27 +11,27 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_LIB_ASMPARSER_LLLEXER_H
-#define LLVM_LIB_ASMPARSER_LLLEXER_H
+#ifndef LLVM37_LIB_ASMPARSER_LLLEXER_H
+#define LLVM37_LIB_ASMPARSER_LLLEXER_H
 
 #include "LLToken.h"
-#include "llvm/ADT/APFloat.h"
-#include "llvm/ADT/APSInt.h"
-#include "llvm/Support/SourceMgr.h"
+#include "llvm37/ADT/APFloat.h"
+#include "llvm37/ADT/APSInt.h"
+#include "llvm37/Support/SourceMgr.h"
 #include <string>
 
-namespace llvm {
+namespace llvm37 {
   class MemoryBuffer;
   class Type;
   class SMDiagnostic;
-  class LLVMContext;
+  class LLVM37Context;
 
   class LLLexer {
     const char *CurPtr;
     StringRef CurBuf;
     SMDiagnostic &ErrorInfo;
     SourceMgr &SM;
-    LLVMContext &Context;
+    LLVM37Context &Context;
 
     // Information about the current token.
     const char *TokStart;
@@ -44,7 +44,7 @@ namespace llvm {
 
   public:
     explicit LLLexer(StringRef StartBuf, SourceMgr &SM, SMDiagnostic &,
-                     LLVMContext &C);
+                     LLVM37Context &C);
 
     lltok::Kind Lex() {
       return CurKind = LexToken();
@@ -91,6 +91,6 @@ namespace llvm {
     void HexToIntPair(const char *Buffer, const char *End, uint64_t Pair[2]);
     void FP80HexToIntPair(const char *Buff, const char *End, uint64_t Pair[2]);
   };
-} // end namespace llvm
+} // end namespace llvm37
 
 #endif

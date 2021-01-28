@@ -9,7 +9,7 @@ declare void @_Z4barv()
 
 declare void @_Z7cleanupv()
 
-declare i32 @llvm.eh.typeid.for(i8*) nounwind readonly
+declare i32 @llvm37.eh.typeid.for(i8*) nounwind readonly
 
 declare i8* @__cxa_begin_catch(i8*) nounwind
 
@@ -30,14 +30,14 @@ lpad:                                             ; preds = %entry
           catch %struct.__fundamental_type_info_pseudo* @_ZTIb
   %exc_ptr2.i = extractvalue { i8*, i32 } %0, 0
   %filter3.i = extractvalue { i8*, i32 } %0, 1
-  %typeid.i = tail call i32 @llvm.eh.typeid.for(i8* bitcast (%struct.__fundamental_type_info_pseudo* @_ZTIi to i8*))
-; CHECK: call i32 @llvm.eh.typeid.for
+  %typeid.i = tail call i32 @llvm37.eh.typeid.for(i8* bitcast (%struct.__fundamental_type_info_pseudo* @_ZTIi to i8*))
+; CHECK: call i32 @llvm37.eh.typeid.for
   %1 = icmp eq i32 %filter3.i, %typeid.i
   br i1 %1, label %ppad, label %next
 
 next:                                             ; preds = %lpad
-  %typeid1.i = tail call i32 @llvm.eh.typeid.for(i8* bitcast (%struct.__fundamental_type_info_pseudo* @_ZTIb to i8*))
-; CHECK: call i32 @llvm.eh.typeid.for
+  %typeid1.i = tail call i32 @llvm37.eh.typeid.for(i8* bitcast (%struct.__fundamental_type_info_pseudo* @_ZTIb to i8*))
+; CHECK: call i32 @llvm37.eh.typeid.for
   %2 = icmp eq i32 %filter3.i, %typeid1.i
   br i1 %2, label %ppad2, label %next2
 
@@ -53,13 +53,13 @@ ppad2:                                            ; preds = %next
 
 next2:                                            ; preds = %next
   call void @_Z7cleanupv()
-  %typeid = tail call i32 @llvm.eh.typeid.for(i8* bitcast (%struct.__fundamental_type_info_pseudo* @_ZTIi to i8*))
-; CHECK-NOT: call i32 @llvm.eh.typeid.for
+  %typeid = tail call i32 @llvm37.eh.typeid.for(i8* bitcast (%struct.__fundamental_type_info_pseudo* @_ZTIi to i8*))
+; CHECK-NOT: call i32 @llvm37.eh.typeid.for
   %4 = icmp eq i32 %filter3.i, %typeid
   br i1 %4, label %ppad3, label %next3
 
 next3:                                            ; preds = %next2
-  %typeid1 = tail call i32 @llvm.eh.typeid.for(i8* bitcast (%struct.__fundamental_type_info_pseudo* @_ZTIb to i8*))
+  %typeid1 = tail call i32 @llvm37.eh.typeid.for(i8* bitcast (%struct.__fundamental_type_info_pseudo* @_ZTIb to i8*))
   %5 = icmp eq i32 %filter3.i, %typeid1
   br i1 %5, label %ppad4, label %unwind
 

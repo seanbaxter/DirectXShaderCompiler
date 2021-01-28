@@ -1,4 +1,4 @@
-; RUN: llvm-link %s %p/func-attrs-b.ll -S -o - | FileCheck %s
+; RUN: llvm37-link %s %p/func-attrs-b.ll -S -o - | FileCheck %s
 ; PR2382
 
 ; CHECK: call void @check0(%struct.S0* sret null, %struct.S0* byval align 4 null, %struct.S0* align 4 null, %struct.S0* byval align 4 null)

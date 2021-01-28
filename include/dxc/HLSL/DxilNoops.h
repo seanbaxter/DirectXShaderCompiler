@@ -8,17 +8,17 @@
 ///////////////////////////////////////////////////////////////////////////////
 #pragma once
 
-#include "llvm/ADT/StringRef.h"
+#include "llvm37/ADT/StringRef.h"
 
-namespace llvm {
+namespace llvm37 {
   class Instruction;
 }
 
 namespace hlsl {
-static const llvm::StringRef kNoopName = "dx.noop";
-static const llvm::StringRef kPreservePrefix = "dx.preserve.";
-static const llvm::StringRef kNothingName = "dx.nothing.a";
-static const llvm::StringRef kPreserveName = "dx.preserve.value.a";
+static const llvm37::StringRef kNoopName = "dx.noop";
+static const llvm37::StringRef kPreservePrefix = "dx.preserve.";
+static const llvm37::StringRef kNothingName = "dx.nothing.a";
+static const llvm37::StringRef kPreserveName = "dx.preserve.value.a";
 
-bool IsPreserve(llvm::Instruction *S);
+bool IsPreserve(llvm37::Instruction *S);
 }

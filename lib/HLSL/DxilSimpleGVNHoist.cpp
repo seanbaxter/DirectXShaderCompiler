@@ -6,22 +6,22 @@
 // License. See LICENSE.TXT for details.                                     //
 //                                                                           //
 // A simple version of GVN hoist for DXIL.                                   //
-// Based on GVNHoist in LLVM 6.0.                                            //                                                                           //
+// Based on GVNHoist in LLVM37 6.0.                                            //                                                                           //
 ///////////////////////////////////////////////////////////////////////////////
 
 #include "dxc/HLSL/DxilGenerationPass.h"
 #include "dxc/DXIL/DxilOperations.h"
 
-#include "llvm/IR/Dominators.h"
-#include "llvm/IR/Instructions.h"
+#include "llvm37/IR/Dominators.h"
+#include "llvm37/IR/Instructions.h"
 
-#include "llvm/ADT/PostOrderIterator.h"
-#include "llvm/ADT/DenseMapInfo.h"
-#include "llvm/ADT/DenseSet.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/IR/CFG.h"
+#include "llvm37/ADT/PostOrderIterator.h"
+#include "llvm37/ADT/DenseMapInfo.h"
+#include "llvm37/ADT/DenseSet.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/IR/CFG.h"
 
-using namespace llvm;
+using namespace llvm37;
 using namespace hlsl;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -55,13 +55,13 @@ struct Expression {
 
 }
 
-namespace llvm {
+namespace llvm37 {
 template <> struct DenseMapInfo<Expression> {
   static inline Expression getEmptyKey() { return ~0U; }
   static inline Expression getTombstoneKey() { return ~1U; }
 
   static unsigned getHashValue(const Expression &e) {
-    using llvm::hash_value;
+    using llvm37::hash_value;
 
     return static_cast<unsigned>(hash_value(e));
   }
@@ -70,7 +70,7 @@ template <> struct DenseMapInfo<Expression> {
     return LHS == RHS;
   }
 };
-} // namespace llvm
+} // namespace llvm37
 
 namespace {
 // Simple Value table which support DXIL operation.
@@ -578,7 +578,7 @@ bool DxilSimpleGVNHoist::runOnFunction(Function &F) {
 
 }
 
-FunctionPass *llvm::createDxilSimpleGVNHoistPass() {
+FunctionPass *llvm37::createDxilSimpleGVNHoistPass() {
   return new DxilSimpleGVNHoist();
 }
 

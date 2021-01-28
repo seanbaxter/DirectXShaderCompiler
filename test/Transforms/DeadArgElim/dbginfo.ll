@@ -17,7 +17,7 @@
 ; CHECK: !DISubprogram(name: "f1",{{.*}} function: void ()* @_ZL2f1iz
 
 ; Check that debug info metadata for subprograms stores pointers to
-; updated LLVM functions.
+; updated LLVM37 functions.
 
 ; Function Attrs: uwtable
 define void @_Z2f2v() #0 {
@@ -29,23 +29,23 @@ entry:
 ; Function Attrs: nounwind uwtable
 define internal void @_ZL2f1iz(i32, ...) #1 {
 entry:
-  call void @llvm.dbg.value(metadata i32 %0, i64 0, metadata !17, metadata !18), !dbg !19
+  call void @llvm37.dbg.value(metadata i32 %0, i64 0, metadata !17, metadata !18), !dbg !19
   ret void, !dbg !20
 }
 
 ; Function Attrs: nounwind readnone
-declare void @llvm.dbg.declare(metadata, metadata, metadata) #2
+declare void @llvm37.dbg.declare(metadata, metadata, metadata) #2
 
 ; Function Attrs: nounwind readnone
-declare void @llvm.dbg.value(metadata, i64, metadata, metadata) #2
+declare void @llvm37.dbg.value(metadata, i64, metadata, metadata) #2
 
 attributes #0 = { uwtable "less-precise-fpmad"="false" "no-frame-pointer-elim"="true" "no-frame-pointer-elim-non-leaf" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "stack-protector-buffer-size"="8" "unsafe-fp-math"="false" "use-soft-float"="false" }
 attributes #1 = { nounwind uwtable "less-precise-fpmad"="false" "no-frame-pointer-elim"="true" "no-frame-pointer-elim-non-leaf" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "stack-protector-buffer-size"="8" "unsafe-fp-math"="false" "use-soft-float"="false" }
 attributes #2 = { nounwind readnone }
 
-!llvm.dbg.cu = !{!0}
-!llvm.module.flags = !{!12, !13}
-!llvm.ident = !{!14}
+!llvm37.dbg.cu = !{!0}
+!llvm37.module.flags = !{!12, !13}
+!llvm37.ident = !{!14}
 
 !0 = !DICompileUnit(language: DW_LANG_C_plus_plus, producer: "clang version 3.6.0 ", isOptimized: false, emissionKind: 1, file: !1, enums: !2, retainedTypes: !2, subprograms: !3, globals: !2, imports: !2)
 !1 = !DIFile(filename: "dbg.cpp", directory: "/tmp/dbginfo")

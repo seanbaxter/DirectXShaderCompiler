@@ -1,6 +1,6 @@
 //===- COFFYAML.cpp - COFF YAMLIO implementation --------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,10 +11,10 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Object/COFFYAML.h"
+#include "llvm37/Object/COFFYAML.h"
 
 #define ECase(X) IO.enumCase(Value, #X, COFF::X);
-namespace llvm {
+namespace llvm37 {
 
 namespace COFFYAML {
 Section::Section() { memset(&Header, 0, sizeof(COFF::section)); }

@@ -8,7 +8,7 @@ define i1 @inner() {
   %c = icmp eq i32 %x1, 0
 
   ; Here are enough instructions to prevent inlining, but because they are used
-  ; only by the @llvm.assume intrinsic, they're free (and, thus, inlining will
+  ; only by the @llvm37.assume intrinsic, they're free (and, thus, inlining will
   ; still happen).
   %a2 = mul i32 %a1, %a1
   %a3 = sub i32 %a1, 5
@@ -16,7 +16,7 @@ define i1 @inner() {
   %a5 = mul i32 %a4, %a4
   %a6 = add i32 %a5, %x1
   %ca = icmp sgt i32 %a6, -7
-  tail call void @llvm.assume(i1 %ca)
+  tail call void @llvm37.assume(i1 %ca)
 
   ret i1 %c
 }
@@ -28,5 +28,5 @@ define i1 @outer() optsize {
    ret i1 %r
 }
 
-declare void @llvm.assume(i1) nounwind
+declare void @llvm37.assume(i1) nounwind
 

@@ -77,8 +77,8 @@ attributes #1 = { nounwind "less-precise-fpmad"="false" "no-frame-pointer-elim"=
 attributes #2 = { "less-precise-fpmad"="false" "no-frame-pointer-elim"="true" "no-frame-pointer-elim-non-leaf" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+sse,+sse2" "unsafe-fp-math"="false" "use-soft-float"="false" }
 attributes #3 = { nounwind }
 
-!llvm.ident = !{!0}
+!llvm37.ident = !{!0}
 
-!0 = !{!"clang version 3.7.0 (trunk 236218) (llvm/trunk 236235)"}
+!0 = !{!"clang version 3.7.0 (trunk 236218) (llvm37/trunk 236235)"}
 !1 = !{!"branch_weights", i32 -1044967295, i32 1}
 !2 = !{!"branch_weights", i32 433323762, i32 -394957723}

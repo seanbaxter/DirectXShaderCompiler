@@ -1,6 +1,6 @@
-# RUN: llvm-mc -triple i386-apple-darwin10 %s | FileCheck %s
-# RUN: llvm-mc -triple i386-pc-mingw32 %s | FileCheck %s
-# RUN: not llvm-mc -triple i386-linux-gnu %s 2>&1 | FileCheck %s -check-prefix=ERROR
+# RUN: llvm37-mc -triple i386-apple-darwin10 %s | FileCheck %s
+# RUN: llvm37-mc -triple i386-pc-mingw32 %s | FileCheck %s
+# RUN: not llvm37-mc -triple i386-linux-gnu %s 2>&1 | FileCheck %s -check-prefix=ERROR
 
 # CHECK: TEST0:
 # CHECK: .lcomm a,7,4

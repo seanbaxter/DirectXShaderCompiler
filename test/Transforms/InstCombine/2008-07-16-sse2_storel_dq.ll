@@ -6,8 +6,8 @@
 define void @x(<2 x i64> %y) nounwind  {
 entry:
 	bitcast <2 x i64> %y to <4 x i32>
-	call void @llvm.x86.sse2.storel.dq( i8* bitcast (double* @G to i8*), <4 x i32> %0 ) nounwind 
+	call void @llvm37.x86.sse2.storel.dq( i8* bitcast (double* @G to i8*), <4 x i32> %0 ) nounwind 
 	ret void
 }
 
-declare void @llvm.x86.sse2.storel.dq(i8*, <4 x i32>) nounwind 
+declare void @llvm37.x86.sse2.storel.dq(i8*, <4 x i32>) nounwind 

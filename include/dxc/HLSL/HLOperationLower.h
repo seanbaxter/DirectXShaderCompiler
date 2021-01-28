@@ -12,7 +12,7 @@
 #pragma once
 #include <unordered_set>
 
-namespace llvm {
+namespace llvm37 {
 class Instruction;
 class LoadInst;
 class Function;
@@ -25,5 +25,5 @@ class HLSLExtensionsCodegenHelper;
 
 void TranslateBuiltinOperations(
     HLModule &HLM, HLSLExtensionsCodegenHelper *extCodegenHelper,
-    std::unordered_set<llvm::LoadInst *> &UpdateCounterSet);
+    std::unordered_set<llvm37::LoadInst *> &UpdateCounterSet);
 }

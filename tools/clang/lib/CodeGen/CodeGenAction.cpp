@@ -1,6 +1,6 @@
-//===--- CodeGenAction.cpp - LLVM Code Generation Frontend Action ---------===//
+//===--- CodeGenAction.cpp - LLVM37 Code Generation Frontend Action ---------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -22,22 +22,22 @@
 #include "clang/Frontend/FrontendDiagnostic.h"
 #include "clang/Frontend/TextDiagnosticPrinter.h" // HLSL Change
 #include "clang/Lex/Preprocessor.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/Bitcode/ReaderWriter.h"
-#include "llvm/IR/DebugInfo.h"
-#include "llvm/IR/DiagnosticInfo.h"
-#include "llvm/IR/DiagnosticPrinter.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IRReader/IRReader.h"
-#include "llvm/Linker/Linker.h"
-#include "llvm/Pass.h"
-#include "llvm/Support/MemoryBuffer.h"
-#include "llvm/Support/SourceMgr.h"
-#include "llvm/Support/Timer.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/Bitcode/ReaderWriter.h"
+#include "llvm37/IR/DebugInfo.h"
+#include "llvm37/IR/DiagnosticInfo.h"
+#include "llvm37/IR/DiagnosticPrinter.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IRReader/IRReader.h"
+#include "llvm37/Linker/Linker.h"
+#include "llvm37/Pass.h"
+#include "llvm37/Support/MemoryBuffer.h"
+#include "llvm37/Support/SourceMgr.h"
+#include "llvm37/Support/Timer.h"
 #include <memory>
 using namespace clang;
-using namespace llvm;
+using namespace llvm37;
 
 namespace clang {
   class BackendConsumer : public ASTConsumer {
@@ -50,11 +50,11 @@ namespace clang {
     raw_pwrite_stream *AsmOutStream;
     ASTContext *Context;
 
-    Timer LLVMIRGeneration;
+    Timer LLVM37IRGeneration;
 
     std::unique_ptr<CodeGenerator> Gen;
 
-    std::unique_ptr<llvm::Module> TheModule, LinkModule;
+    std::unique_ptr<llvm37::Module> TheModule, LinkModule;
 
   public:
     BackendConsumer(BackendAction Action, DiagnosticsEngine &Diags,
@@ -63,16 +63,16 @@ namespace clang {
                     const CodeGenOptions &CodeGenOpts,
                     const TargetOptions &TargetOpts,
                     const LangOptions &LangOpts, bool TimePasses,
-                    const std::string &InFile, llvm::Module *LinkModule,
-                    raw_pwrite_stream *OS, LLVMContext &C,
+                    const std::string &InFile, llvm37::Module *LinkModule,
+                    raw_pwrite_stream *OS, LLVM37Context &C,
                     CoverageSourceInfo *CoverageInfo = nullptr)
         : Diags(Diags), Action(Action), CodeGenOpts(CodeGenOpts),
           TargetOpts(TargetOpts), LangOpts(LangOpts), AsmOutStream(OS),
-          Context(nullptr), LLVMIRGeneration("LLVM IR Generation Time"),
-          Gen(CreateLLVMCodeGen(Diags, InFile, HeaderSearchOpts, PPOpts,
+          Context(nullptr), LLVM37IRGeneration("LLVM37 IR Generation Time"),
+          Gen(CreateLLVM37CodeGen(Diags, InFile, HeaderSearchOpts, PPOpts,
                                 CodeGenOpts, C, CoverageInfo)),
           LinkModule(LinkModule) {
-      llvm::TimePassesIsEnabled = TimePasses;
+      llvm37::TimePassesIsEnabled = TimePasses;
     }
 
     // HLSL Change Starts - avoid double free
@@ -83,8 +83,8 @@ namespace clang {
     }
     // HLSL Change Ends - avoid double free
 
-    std::unique_ptr<llvm::Module> takeModule() { return std::move(TheModule); }
-    llvm::Module *takeLinkModule() { return LinkModule.release(); }
+    std::unique_ptr<llvm37::Module> takeModule() { return std::move(TheModule); }
+    llvm37::Module *takeLinkModule() { return LinkModule.release(); }
 
     void HandleCXXStaticMemberVarInstantiation(VarDecl *VD) override {
       Gen->HandleCXXStaticMemberVarInstantiation(VD);
@@ -98,29 +98,29 @@ namespace clang {
         
       Context = &Ctx;
 
-      if (llvm::TimePassesIsEnabled)
-        LLVMIRGeneration.startTimer();
+      if (llvm37::TimePassesIsEnabled)
+        LLVM37IRGeneration.startTimer();
 
       Gen->Initialize(Ctx);
 
       TheModule.reset(Gen->GetModule());
 
-      if (llvm::TimePassesIsEnabled)
-        LLVMIRGeneration.stopTimer();
+      if (llvm37::TimePassesIsEnabled)
+        LLVM37IRGeneration.stopTimer();
     }
 
     bool HandleTopLevelDecl(DeclGroupRef D) override {
       PrettyStackTraceDecl CrashInfo(*D.begin(), SourceLocation(),
                                      Context->getSourceManager(),
-                                     "LLVM IR generation of declaration");
+                                     "LLVM37 IR generation of declaration");
 
-      if (llvm::TimePassesIsEnabled)
-        LLVMIRGeneration.startTimer();
+      if (llvm37::TimePassesIsEnabled)
+        LLVM37IRGeneration.startTimer();
 
       Gen->HandleTopLevelDecl(D);
 
-      if (llvm::TimePassesIsEnabled)
-        LLVMIRGeneration.stopTimer();
+      if (llvm37::TimePassesIsEnabled)
+        LLVM37IRGeneration.stopTimer();
 
       return true;
     }
@@ -128,26 +128,26 @@ namespace clang {
     void HandleInlineMethodDefinition(CXXMethodDecl *D) override {
       PrettyStackTraceDecl CrashInfo(D, SourceLocation(),
                                      Context->getSourceManager(),
-                                     "LLVM IR generation of inline method");
-      if (llvm::TimePassesIsEnabled)
-        LLVMIRGeneration.startTimer();
+                                     "LLVM37 IR generation of inline method");
+      if (llvm37::TimePassesIsEnabled)
+        LLVM37IRGeneration.startTimer();
 
       Gen->HandleInlineMethodDefinition(D);
 
-      if (llvm::TimePassesIsEnabled)
-        LLVMIRGeneration.stopTimer();
+      if (llvm37::TimePassesIsEnabled)
+        LLVM37IRGeneration.stopTimer();
     }
 
     void HandleTranslationUnit(ASTContext &C) override {
       {
-        PrettyStackTraceString CrashInfo("Per-file LLVM IR generation");
-        if (llvm::TimePassesIsEnabled)
-          LLVMIRGeneration.startTimer();
+        PrettyStackTraceString CrashInfo("Per-file LLVM37 IR generation");
+        if (llvm37::TimePassesIsEnabled)
+          LLVM37IRGeneration.startTimer();
 
         Gen->HandleTranslationUnit(C);
 
-        if (llvm::TimePassesIsEnabled)
-          LLVMIRGeneration.stopTimer();
+        if (llvm37::TimePassesIsEnabled)
+          LLVM37IRGeneration.stopTimer();
       }
 
       // Silently ignore if we weren't initialized for some reason.
@@ -156,7 +156,7 @@ namespace clang {
 
       // Make sure IR generation is happy with the module. This is released by
       // the module provider.
-      llvm::Module *M = Gen->ReleaseModule();
+      llvm37::Module *M = Gen->ReleaseModule();
       if (!M) {
         // The module has been released by IR gen on failures, do not double
         // free.
@@ -177,13 +177,13 @@ namespace clang {
 
       // Install an inline asm handler so that diagnostics get printed through
       // our diagnostics hooks.
-      LLVMContext &Ctx = TheModule->getContext();
-      LLVMContext::InlineAsmDiagHandlerTy OldHandler =
+      LLVM37Context &Ctx = TheModule->getContext();
+      LLVM37Context::InlineAsmDiagHandlerTy OldHandler =
         Ctx.getInlineAsmDiagnosticHandler();
       void *OldContext = Ctx.getInlineAsmDiagnosticContext();
       Ctx.setInlineAsmDiagnosticHandler(InlineAsmDiagHandler, this);
 
-      LLVMContext::DiagnosticHandlerTy OldDiagnosticHandler =
+      LLVM37Context::DiagnosticHandlerTy OldDiagnosticHandler =
           Ctx.getDiagnosticHandler();
       void *OldDiagnosticContext = Ctx.getDiagnosticContext();
       Ctx.setDiagnosticHandler(DiagnosticHandler, this);
@@ -200,7 +200,7 @@ namespace clang {
     void HandleTagDeclDefinition(TagDecl *D) override {
       PrettyStackTraceDecl CrashInfo(D, SourceLocation(),
                                      Context->getSourceManager(),
-                                     "LLVM IR generation of declaration");
+                                     "LLVM37 IR generation of declaration");
       Gen->HandleTagDeclDefinition(D);
     }
 
@@ -216,82 +216,82 @@ namespace clang {
       Gen->HandleVTable(RD);
     }
 
-    void HandleLinkerOptionPragma(llvm::StringRef Opts) override {
+    void HandleLinkerOptionPragma(llvm37::StringRef Opts) override {
       Gen->HandleLinkerOptionPragma(Opts);
     }
 
-    void HandleDetectMismatch(llvm::StringRef Name,
-                                      llvm::StringRef Value) override {
+    void HandleDetectMismatch(llvm37::StringRef Name,
+                                      llvm37::StringRef Value) override {
       Gen->HandleDetectMismatch(Name, Value);
     }
 
-    void HandleDependentLibrary(llvm::StringRef Opts) override {
+    void HandleDependentLibrary(llvm37::StringRef Opts) override {
       Gen->HandleDependentLibrary(Opts);
     }
 
-    static void InlineAsmDiagHandler(const llvm::SMDiagnostic &SM,void *Context,
+    static void InlineAsmDiagHandler(const llvm37::SMDiagnostic &SM,void *Context,
                                      unsigned LocCookie) {
       SourceLocation Loc = SourceLocation::getFromRawEncoding(LocCookie);
       ((BackendConsumer*)Context)->InlineAsmDiagHandler2(SM, Loc);
     }
 
-    void linkerDiagnosticHandler(const llvm::DiagnosticInfo &DI);
+    void linkerDiagnosticHandler(const llvm37::DiagnosticInfo &DI);
 
-    static void DiagnosticHandler(const llvm::DiagnosticInfo &DI,
+    static void DiagnosticHandler(const llvm37::DiagnosticInfo &DI,
                                   void *Context) {
       ((BackendConsumer *)Context)->DiagnosticHandlerImpl(DI);
     }
 
-    void InlineAsmDiagHandler2(const llvm::SMDiagnostic &,
+    void InlineAsmDiagHandler2(const llvm37::SMDiagnostic &,
                                SourceLocation LocCookie);
 
-    void DiagnosticHandlerImpl(const llvm::DiagnosticInfo &DI);
+    void DiagnosticHandlerImpl(const llvm37::DiagnosticInfo &DI);
     /// \brief Specialized handler for InlineAsm diagnostic.
     /// \return True if the diagnostic has been successfully reported, false
     /// otherwise.
-    bool InlineAsmDiagHandler(const llvm::DiagnosticInfoInlineAsm &D);
+    bool InlineAsmDiagHandler(const llvm37::DiagnosticInfoInlineAsm &D);
     /// \brief Specialized handler for StackSize diagnostic.
     /// \return True if the diagnostic has been successfully reported, false
     /// otherwise.
-    bool StackSizeDiagHandler(const llvm::DiagnosticInfoStackSize &D);
+    bool StackSizeDiagHandler(const llvm37::DiagnosticInfoStackSize &D);
     /// \brief Specialized handlers for optimization remarks.
     /// Note that these handlers only accept remarks and they always handle
     /// them.
-    void EmitOptimizationMessage(const llvm::DiagnosticInfoOptimizationBase &D,
+    void EmitOptimizationMessage(const llvm37::DiagnosticInfoOptimizationBase &D,
                                  unsigned DiagID);
     void
-    OptimizationRemarkHandler(const llvm::DiagnosticInfoOptimizationRemark &D);
+    OptimizationRemarkHandler(const llvm37::DiagnosticInfoOptimizationRemark &D);
     void OptimizationRemarkHandler(
-        const llvm::DiagnosticInfoOptimizationRemarkMissed &D);
+        const llvm37::DiagnosticInfoOptimizationRemarkMissed &D);
     void OptimizationRemarkHandler(
-        const llvm::DiagnosticInfoOptimizationRemarkAnalysis &D);
+        const llvm37::DiagnosticInfoOptimizationRemarkAnalysis &D);
     void OptimizationFailureHandler(
-        const llvm::DiagnosticInfoOptimizationFailure &D);
-    bool DxilDiagHandler(const llvm::DiagnosticInfoDxil &D);
+        const llvm37::DiagnosticInfoOptimizationFailure &D);
+    bool DxilDiagHandler(const llvm37::DiagnosticInfoDxil &D);
 
   };
   
   void BackendConsumer::anchor() {}
 }
 
-/// ConvertBackendLocation - Convert a location in a temporary llvm::SourceMgr
+/// ConvertBackendLocation - Convert a location in a temporary llvm37::SourceMgr
 /// buffer to be a valid FullSourceLoc.
-static FullSourceLoc ConvertBackendLocation(const llvm::SMDiagnostic &D,
+static FullSourceLoc ConvertBackendLocation(const llvm37::SMDiagnostic &D,
                                             SourceManager &CSM) {
-  // Get both the clang and llvm source managers.  The location is relative to
-  // a memory buffer that the LLVM Source Manager is handling, we need to add
+  // Get both the clang and llvm37 source managers.  The location is relative to
+  // a memory buffer that the LLVM37 Source Manager is handling, we need to add
   // a copy to the Clang source manager.
-  const llvm::SourceMgr &LSM = *D.getSourceMgr();
+  const llvm37::SourceMgr &LSM = *D.getSourceMgr();
 
-  // We need to copy the underlying LLVM memory buffer because llvm::SourceMgr
+  // We need to copy the underlying LLVM37 memory buffer because llvm37::SourceMgr
   // already owns its one and clang::SourceManager wants to own its one.
   const MemoryBuffer *LBuf =
   LSM.getMemoryBuffer(LSM.FindBufferContainingLoc(D.getLoc()));
 
   // Create the copy and transfer ownership to clang::SourceManager.
   // TODO: Avoid copying files into memory.
-  std::unique_ptr<llvm::MemoryBuffer> CBuf =
-      llvm::MemoryBuffer::getMemBufferCopy(LBuf->getBuffer(),
+  std::unique_ptr<llvm37::MemoryBuffer> CBuf =
+      llvm37::MemoryBuffer::getMemBufferCopy(LBuf->getBuffer(),
                                            LBuf->getBufferIdentifier());
   // FIXME: Keep a file ID map instead of creating new IDs for each location.
   FileID FID = CSM.createFileID(std::move(CBuf));
@@ -307,7 +307,7 @@ static FullSourceLoc ConvertBackendLocation(const llvm::SMDiagnostic &D,
 /// InlineAsmDiagHandler2 - This function is invoked when the backend hits an
 /// error parsing inline asm.  The SMDiagnostic indicates the error relative to
 /// the temporary memory buffer that the inline asm parser has set up.
-void BackendConsumer::InlineAsmDiagHandler2(const llvm::SMDiagnostic &D,
+void BackendConsumer::InlineAsmDiagHandler2(const llvm37::SMDiagnostic &D,
                                             SourceLocation LocCookie) {
   // There are a couple of different kinds of errors we could get here.  First,
   // we re-format the SMDiagnostic in terms of a clang diagnostic.
@@ -324,13 +324,13 @@ void BackendConsumer::InlineAsmDiagHandler2(const llvm::SMDiagnostic &D,
 
   unsigned DiagID;
   switch (D.getKind()) {
-  case llvm::SourceMgr::DK_Error:
+  case llvm37::SourceMgr::DK_Error:
     DiagID = diag::err_fe_inline_asm;
     break;
-  case llvm::SourceMgr::DK_Warning:
+  case llvm37::SourceMgr::DK_Warning:
     DiagID = diag::warn_fe_inline_asm;
     break;
-  case llvm::SourceMgr::DK_Note:
+  case llvm37::SourceMgr::DK_Note:
     DiagID = diag::note_fe_inline_asm;
     break;
   }
@@ -363,16 +363,16 @@ void BackendConsumer::InlineAsmDiagHandler2(const llvm::SMDiagnostic &D,
 #define ComputeDiagID(Severity, GroupName, DiagID)                             \
   do {                                                                         \
     switch (Severity) {                                                        \
-    case llvm::DS_Error:                                                       \
+    case llvm37::DS_Error:                                                       \
       DiagID = diag::err_fe_##GroupName;                                       \
       break;                                                                   \
-    case llvm::DS_Warning:                                                     \
+    case llvm37::DS_Warning:                                                     \
       DiagID = diag::warn_fe_##GroupName;                                      \
       break;                                                                   \
-    case llvm::DS_Remark:                                                      \
-      llvm_unreachable("'remark' severity not expected");                      \
+    case llvm37::DS_Remark:                                                      \
+      llvm37_unreachable("'remark' severity not expected");                      \
       break;                                                                   \
-    case llvm::DS_Note:                                                        \
+    case llvm37::DS_Note:                                                        \
       DiagID = diag::note_fe_##GroupName;                                      \
       break;                                                                   \
     }                                                                          \
@@ -381,23 +381,23 @@ void BackendConsumer::InlineAsmDiagHandler2(const llvm::SMDiagnostic &D,
 #define ComputeDiagRemarkID(Severity, GroupName, DiagID)                       \
   do {                                                                         \
     switch (Severity) {                                                        \
-    case llvm::DS_Error:                                                       \
+    case llvm37::DS_Error:                                                       \
       DiagID = diag::err_fe_##GroupName;                                       \
       break;                                                                   \
-    case llvm::DS_Warning:                                                     \
+    case llvm37::DS_Warning:                                                     \
       DiagID = diag::warn_fe_##GroupName;                                      \
       break;                                                                   \
-    case llvm::DS_Remark:                                                      \
+    case llvm37::DS_Remark:                                                      \
       DiagID = diag::remark_fe_##GroupName;                                    \
       break;                                                                   \
-    case llvm::DS_Note:                                                        \
+    case llvm37::DS_Note:                                                        \
       DiagID = diag::note_fe_##GroupName;                                      \
       break;                                                                   \
     }                                                                          \
   } while (false)
 
 bool
-BackendConsumer::InlineAsmDiagHandler(const llvm::DiagnosticInfoInlineAsm &D) {
+BackendConsumer::InlineAsmDiagHandler(const llvm37::DiagnosticInfoInlineAsm &D) {
   unsigned DiagID;
   ComputeDiagID(D.getSeverity(), inline_asm, DiagID);
   std::string Message = D.getMsgStr().str();
@@ -422,8 +422,8 @@ BackendConsumer::InlineAsmDiagHandler(const llvm::DiagnosticInfoInlineAsm &D) {
 }
 
 bool
-BackendConsumer::StackSizeDiagHandler(const llvm::DiagnosticInfoStackSize &D) {
-  if (D.getSeverity() != llvm::DS_Warning)
+BackendConsumer::StackSizeDiagHandler(const llvm37::DiagnosticInfoStackSize &D) {
+  if (D.getSeverity() != llvm37::DS_Warning)
     // For now, the only support we have for StackSize diagnostic is warning.
     // We do not know how to format other severities.
     return false;
@@ -439,10 +439,10 @@ BackendConsumer::StackSizeDiagHandler(const llvm::DiagnosticInfoStackSize &D) {
 }
 
 void BackendConsumer::EmitOptimizationMessage(
-    const llvm::DiagnosticInfoOptimizationBase &D, unsigned DiagID) {
+    const llvm37::DiagnosticInfoOptimizationBase &D, unsigned DiagID) {
   // We only support warnings and remarks.
-  assert(D.getSeverity() == llvm::DS_Remark ||
-         D.getSeverity() == llvm::DS_Warning);
+  assert(D.getSeverity() == llvm37::DS_Remark ||
+         D.getSeverity() == llvm37::DS_Warning);
 
   SourceManager &SourceMgr = Context->getSourceManager();
   FileManager &FileMgr = SourceMgr.getFileManager();
@@ -482,7 +482,7 @@ void BackendConsumer::EmitOptimizationMessage(
 }
 
 void BackendConsumer::OptimizationRemarkHandler(
-    const llvm::DiagnosticInfoOptimizationRemark &D) {
+    const llvm37::DiagnosticInfoOptimizationRemark &D) {
   // Optimization remarks are active only if the -Rpass flag has a regular
   // expression that matches the name of the pass name in \p D.
   if (CodeGenOpts.OptimizationRemarkPattern &&
@@ -491,7 +491,7 @@ void BackendConsumer::OptimizationRemarkHandler(
 }
 
 void BackendConsumer::OptimizationRemarkHandler(
-    const llvm::DiagnosticInfoOptimizationRemarkMissed &D) {
+    const llvm37::DiagnosticInfoOptimizationRemarkMissed &D) {
   // Missed optimization remarks are active only if the -Rpass-missed
   // flag has a regular expression that matches the name of the pass
   // name in \p D.
@@ -502,7 +502,7 @@ void BackendConsumer::OptimizationRemarkHandler(
 }
 
 void BackendConsumer::OptimizationRemarkHandler(
-    const llvm::DiagnosticInfoOptimizationRemarkAnalysis &D) {
+    const llvm37::DiagnosticInfoOptimizationRemarkAnalysis &D) {
   // Optimization analysis remarks are active only if the -Rpass-analysis
   // flag has a regular expression that matches the name of the pass
   // name in \p D.
@@ -513,7 +513,7 @@ void BackendConsumer::OptimizationRemarkHandler(
 }
 
 void BackendConsumer::OptimizationFailureHandler(
-    const llvm::DiagnosticInfoOptimizationFailure &D) {
+    const llvm37::DiagnosticInfoOptimizationFailure &D) {
   EmitOptimizationMessage(D, diag::warn_fe_backend_optimization_failure);
 }
 
@@ -534,7 +534,7 @@ void BackendConsumer::linkerDiagnosticHandler(const DiagnosticInfo &DI) {
 
 // HLSL Change start - Dxil Diagnostic Info reporter
 bool
-BackendConsumer::DxilDiagHandler(const llvm::DiagnosticInfoDxil &D) {
+BackendConsumer::DxilDiagHandler(const llvm37::DiagnosticInfoDxil &D) {
   unsigned DiagID;
   ComputeDiagID(D.getSeverity(), inline_asm, DiagID);
 
@@ -575,42 +575,42 @@ BackendConsumer::DxilDiagHandler(const llvm::DiagnosticInfoDxil &D) {
 /// to report something to the user.
 void BackendConsumer::DiagnosticHandlerImpl(const DiagnosticInfo &DI) {
   unsigned DiagID = diag::err_fe_inline_asm;
-  llvm::DiagnosticSeverity Severity = DI.getSeverity();
+  llvm37::DiagnosticSeverity Severity = DI.getSeverity();
   // Get the diagnostic ID based.
   switch (DI.getKind()) {
-  case llvm::DK_InlineAsm:
+  case llvm37::DK_InlineAsm:
     if (InlineAsmDiagHandler(cast<DiagnosticInfoInlineAsm>(DI)))
       return;
     ComputeDiagID(Severity, inline_asm, DiagID);
     break;
-  case llvm::DK_StackSize:
+  case llvm37::DK_StackSize:
     if (StackSizeDiagHandler(cast<DiagnosticInfoStackSize>(DI)))
       return;
     ComputeDiagID(Severity, backend_frame_larger_than, DiagID);
     break;
-  case llvm::DK_OptimizationRemark:
+  case llvm37::DK_OptimizationRemark:
     // Optimization remarks are always handled completely by this
     // handler. There is no generic way of emitting them.
     OptimizationRemarkHandler(cast<DiagnosticInfoOptimizationRemark>(DI));
     return;
-  case llvm::DK_OptimizationRemarkMissed:
+  case llvm37::DK_OptimizationRemarkMissed:
     // Optimization remarks are always handled completely by this
     // handler. There is no generic way of emitting them.
     OptimizationRemarkHandler(cast<DiagnosticInfoOptimizationRemarkMissed>(DI));
     return;
-  case llvm::DK_OptimizationRemarkAnalysis:
+  case llvm37::DK_OptimizationRemarkAnalysis:
     // Optimization remarks are always handled completely by this
     // handler. There is no generic way of emitting them.
     OptimizationRemarkHandler(
         cast<DiagnosticInfoOptimizationRemarkAnalysis>(DI));
     return;
-  case llvm::DK_OptimizationFailure:
+  case llvm37::DK_OptimizationFailure:
     // Optimization failures are always handled completely by this
     // handler.
     OptimizationFailureHandler(cast<DiagnosticInfoOptimizationFailure>(DI));
     return;
 // HLSL Change start - Dxil Diagnostic Info reporter
-  case llvm::DK_DXIL:
+  case llvm37::DK_DXIL:
     if (DxilDiagHandler(cast<DiagnosticInfoDxil>(DI)))
       return;
     ComputeDiagID(Severity, inline_asm, DiagID);
@@ -634,9 +634,9 @@ void BackendConsumer::DiagnosticHandlerImpl(const DiagnosticInfo &DI) {
 }
 #undef ComputeDiagID
 
-CodeGenAction::CodeGenAction(unsigned _Act, LLVMContext *_VMContext)
+CodeGenAction::CodeGenAction(unsigned _Act, LLVM37Context *_VMContext)
   : Act(_Act), LinkModule(nullptr),
-    VMContext(_VMContext ? _VMContext : new LLVMContext),
+    VMContext(_VMContext ? _VMContext : new LLVM37Context),
     OwnsVMContext(!_VMContext) {}
 
 CodeGenAction::~CodeGenAction() {
@@ -660,11 +660,11 @@ void CodeGenAction::EndSourceFileAction() {
   TheModule = BEConsumer->takeModule();
 }
 
-std::unique_ptr<llvm::Module> CodeGenAction::takeModule() {
+std::unique_ptr<llvm37::Module> CodeGenAction::takeModule() {
   return std::move(TheModule);
 }
 
-llvm::LLVMContext *CodeGenAction::takeLLVMContext() {
+llvm37::LLVM37Context *CodeGenAction::takeLLVM37Context() {
   OwnsVMContext = false;
   return VMContext;
 }
@@ -688,7 +688,7 @@ GetOutputStream(CompilerInstance &CI, StringRef InFile, BackendAction Action) {
     return CI.createDefaultOutputFile(true, InFile, "o");
   }
 
-  llvm_unreachable("Invalid action!");
+  llvm37_unreachable("Invalid action!");
 }
 
 std::unique_ptr<ASTConsumer>
@@ -698,7 +698,7 @@ CodeGenAction::CreateASTConsumer(CompilerInstance &CI, StringRef InFile) {
   if (BA != Backend_EmitNothing && !OS)
     return nullptr;
 
-  llvm::Module *LinkModuleToUse = LinkModule;
+  llvm37::Module *LinkModuleToUse = LinkModule;
 
   // If we were not given a link module, and the user requested that one be
   // loaded from bitcode, do so now.
@@ -711,7 +711,7 @@ CodeGenAction::CreateASTConsumer(CompilerInstance &CI, StringRef InFile) {
       return nullptr;
     }
 
-    ErrorOr<std::unique_ptr<llvm::Module>> ModuleOrErr =
+    ErrorOr<std::unique_ptr<llvm37::Module>> ModuleOrErr =
         getLazyBitcodeModule(std::move(*BCBuf), *VMContext);
     if (std::error_code EC = ModuleOrErr.getError()) {
       CI.getDiagnostics().Report(diag::err_cannot_open_file)
@@ -737,15 +737,15 @@ CodeGenAction::CreateASTConsumer(CompilerInstance &CI, StringRef InFile) {
   return std::move(Result);
 }
 
-static void BitcodeInlineAsmDiagHandler(const llvm::SMDiagnostic &SM,
+static void BitcodeInlineAsmDiagHandler(const llvm37::SMDiagnostic &SM,
                                          void *Context,
                                          unsigned LocCookie) {
-  SM.print(nullptr, llvm::errs());
+  SM.print(nullptr, llvm37::errs());
 }
 
 void CodeGenAction::ExecuteAction() {
   // If this is an IR file, we have to treat it specially.
-  if (getCurrentFileKind() == IK_LLVM_IR) {
+  if (getCurrentFileKind() == IK_LLVM37_IR) {
     BackendAction BA = static_cast<BackendAction>(Act);
     CompilerInstance &CI = getCompilerInstance();
     raw_pwrite_stream *OS = GetOutputStream(CI, getCurrentFile(), BA);
@@ -755,11 +755,11 @@ void CodeGenAction::ExecuteAction() {
     bool Invalid;
     SourceManager &SM = CI.getSourceManager();
     FileID FID = SM.getMainFileID();
-    llvm::MemoryBuffer *MainFile = SM.getBuffer(FID, &Invalid);
+    llvm37::MemoryBuffer *MainFile = SM.getBuffer(FID, &Invalid);
     if (Invalid)
       return;
 
-    llvm::SMDiagnostic Err;
+    llvm37::SMDiagnostic Err;
     TheModule = parseIR(MainFile->getMemBufferRef(), Err, *VMContext);
     if (!TheModule) {
       // Translate from the diagnostic info to the SourceManager location if
@@ -791,7 +791,7 @@ void CodeGenAction::ExecuteAction() {
       TheModule->setTargetTriple(TargetOpts.Triple);
     }
 
-    LLVMContext &Ctx = TheModule->getContext();
+    LLVM37Context &Ctx = TheModule->getContext();
     Ctx.setInlineAsmDiagnosticHandler(BitcodeInlineAsmDiagHandler);
     EmitBackendOutput(CI.getDiagnostics(), CI.getCodeGenOpts(), TargetOpts,
                       CI.getLangOpts(), CI.getTarget().getTargetDescription(),
@@ -806,31 +806,31 @@ void CodeGenAction::ExecuteAction() {
 //
 
 void EmitAssemblyAction::anchor() { }
-EmitAssemblyAction::EmitAssemblyAction(llvm::LLVMContext *_VMContext)
+EmitAssemblyAction::EmitAssemblyAction(llvm37::LLVM37Context *_VMContext)
   : CodeGenAction(Backend_EmitAssembly, _VMContext) {}
 
 void EmitBCAction::anchor() { }
-EmitBCAction::EmitBCAction(llvm::LLVMContext *_VMContext)
+EmitBCAction::EmitBCAction(llvm37::LLVM37Context *_VMContext)
   : CodeGenAction(Backend_EmitBC, _VMContext) {}
 
-void EmitLLVMAction::anchor() { }
-EmitLLVMAction::EmitLLVMAction(llvm::LLVMContext *_VMContext)
+void EmitLLVM37Action::anchor() { }
+EmitLLVM37Action::EmitLLVM37Action(llvm37::LLVM37Context *_VMContext)
   : CodeGenAction(Backend_EmitLL, _VMContext) {}
 
-void EmitLLVMOnlyAction::anchor() { }
-EmitLLVMOnlyAction::EmitLLVMOnlyAction(llvm::LLVMContext *_VMContext)
+void EmitLLVM37OnlyAction::anchor() { }
+EmitLLVM37OnlyAction::EmitLLVM37OnlyAction(llvm37::LLVM37Context *_VMContext)
   : CodeGenAction(Backend_EmitNothing, _VMContext) {}
 
 void EmitCodeGenOnlyAction::anchor() { }
-EmitCodeGenOnlyAction::EmitCodeGenOnlyAction(llvm::LLVMContext *_VMContext)
+EmitCodeGenOnlyAction::EmitCodeGenOnlyAction(llvm37::LLVM37Context *_VMContext)
   : CodeGenAction(Backend_EmitMCNull, _VMContext) {}
 
 void EmitObjAction::anchor() { }
-EmitObjAction::EmitObjAction(llvm::LLVMContext *_VMContext)
+EmitObjAction::EmitObjAction(llvm37::LLVM37Context *_VMContext)
   : CodeGenAction(Backend_EmitObj, _VMContext) {}
 
 // HLSL Change Starts
 void EmitOptDumpAction::anchor() { }
-EmitOptDumpAction::EmitOptDumpAction(llvm::LLVMContext *_VMContext)
+EmitOptDumpAction::EmitOptDumpAction(llvm37::LLVM37Context *_VMContext)
   : CodeGenAction(Backend_EmitPasses, _VMContext) {}
 // HLSL Change Ends

@@ -1,6 +1,6 @@
 //===----- CXXABI.h - Interface to C++ ABIs ---------------------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -12,8 +12,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_LIB_AST_CXXABI_H
-#define LLVM_CLANG_LIB_AST_CXXABI_H
+#ifndef LLVM37_CLANG_LIB_AST_CXXABI_H
+#define LLVM37_CLANG_LIB_AST_CXXABI_H
 
 #include "clang/AST/Type.h"
 

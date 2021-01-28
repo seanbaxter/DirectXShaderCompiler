@@ -1,6 +1,6 @@
 //===- LowerTypePasses.cpp ------------------------------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -13,23 +13,23 @@
 #include "dxc/DXIL/DxilOperations.h"
 #include "dxc/DXIL/DxilUtil.h"
 #include "dxc/HlslIntrinsicOp.h"
-#include "llvm/Pass.h"
-#include "llvm/IR/Constant.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/DIBuilder.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/GetElementPtrTypeIterator.h"
-#include "llvm/IR/GlobalVariable.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/IR/IRBuilder.h"
-#include "llvm/IR/Module.h"
-#include "llvm/Transforms/Scalar.h"
-#include "llvm/Transforms/Utils/Local.h"
-#include "llvm/Analysis/ValueTracking.h"
+#include "llvm37/Pass.h"
+#include "llvm37/IR/Constant.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/DIBuilder.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/GetElementPtrTypeIterator.h"
+#include "llvm37/IR/GlobalVariable.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/IR/IRBuilder.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/Transforms/Scalar.h"
+#include "llvm37/Transforms/Utils/Local.h"
+#include "llvm37/Analysis/ValueTracking.h"
 #include <vector>
 
-using namespace llvm;
+using namespace llvm37;
 using namespace hlsl;
 
 static ArrayType* CreateNestArrayTy(Type* FinalEltTy,
@@ -91,7 +91,7 @@ GlobalVariable *LowerTypePass::lowerInternalGlobal(GlobalVariable *GV) {
   GlobalValue::LinkageTypes linkage = GV->getLinkage();
 
   Module *M = GV->getParent();
-  GlobalVariable *NewGV = new llvm::GlobalVariable(
+  GlobalVariable *NewGV = new llvm37::GlobalVariable(
       *M, NewTy, /*IsConstant*/ isConst, linkage,
       /*InitVal*/ InitVal, GV->getName() + getGlobalPrefix(),
       /*InsertBefore*/ nullptr, TLMode, AddressSpace);
@@ -110,12 +110,12 @@ bool LowerTypePass::runOnFunction(Function &F, bool HasDbgInfo) {
     if (needToLower(A))
       workList.emplace_back(A);
   }
-  LLVMContext &Context = F.getContext();
+  LLVM37Context &Context = F.getContext();
   for (AllocaInst *A : workList) {
     AllocaInst *NewA = lowerAlloca(A);
     if (HasDbgInfo) {
       // Migrate debug info.
-      DbgDeclareInst *DDI = llvm::FindAllocaDbgDeclare(A);
+      DbgDeclareInst *DDI = llvm37::FindAllocaDbgDeclare(A);
       if (DDI) DDI->setOperand(0, MetadataAsValue::get(Context, LocalAsMetadata::get(NewA)));
     }
     // Replace users.
@@ -131,7 +131,7 @@ bool LowerTypePass::runOnModule(Module &M) {
   // Load up debug information, to cross-reference values and the instructions
   // used to load them.
   bool HasDbgInfo = getDebugMetadataVersionFromModule(M) != 0;
-  llvm::DebugInfoFinder Finder;
+  llvm37::DebugInfoFinder Finder;
   if (HasDbgInfo) {
     Finder.processModule(M);
   }
@@ -515,7 +515,7 @@ INITIALIZE_PASS(DynamicIndexingVectorToArray, "dynamic-vector-to-array",
   false)
 
 // Public interface to the DynamicIndexingVectorToArray pass
-ModulePass *llvm::createDynamicIndexingVectorToArrayPass(bool ReplaceAllVector) {
+ModulePass *llvm37::createDynamicIndexingVectorToArrayPass(bool ReplaceAllVector) {
   return new DynamicIndexingVectorToArray(ReplaceAllVector);
 }
 
@@ -592,7 +592,7 @@ void ReplaceMultiDimGEP(User *GEP, Value *OneDim, IRBuilder<> &Builder) {
 }
 
 void MultiDimArrayToOneDimArray::lowerUseWithNewValue(Value *MultiDim, Value *OneDim) {
-  LLVMContext &Context = MultiDim->getContext();
+  LLVM37Context &Context = MultiDim->getContext();
   // All users should be element type.
   // Replace users of AI or GV.
   for (auto it = MultiDim->user_begin(); it != MultiDim->user_end();) {
@@ -682,7 +682,7 @@ INITIALIZE_PASS(MultiDimArrayToOneDimArray, "multi-dim-one-dim",
   false)
 
 // Public interface to the SROA_Parameter_HLSL pass
-ModulePass *llvm::createMultiDimArrayToOneDimArrayPass() {
+ModulePass *llvm37::createMultiDimArrayToOneDimArrayPass() {
   return new MultiDimArrayToOneDimArray();
 }
 
@@ -860,6 +860,6 @@ INITIALIZE_PASS(ResourceToHandle, "resource-handle",
   false)
 
 // Public interface to the ResourceToHandle pass
-ModulePass *llvm::createResourceToHandlePass() {
+ModulePass *llvm37::createResourceToHandlePass() {
   return new ResourceToHandle();
 }

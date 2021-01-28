@@ -1,4 +1,4 @@
-// RUN: %clang_cc1 -verify -emit-llvm-only %s
+// RUN: %clang_cc1 -verify -emit-llvm37-only %s
 
 // rdar://problem/7838962
 namespace test0 {

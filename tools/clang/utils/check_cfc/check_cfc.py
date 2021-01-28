@@ -216,7 +216,7 @@ def is_normal_compile(args):
     than a preprocess or link. args is a list of command line arguments."""
     compile_step = '-c' in args
     # Bitcode cannot be disassembled in the same way
-    bitcode = '-flto' in args or '-emit-llvm' in args
+    bitcode = '-flto' in args or '-emit-llvm37' in args
     # Version and help are queries of the compiler and override -c if specified
     query = '--version' in args or '--help' in args
     # Options to output dependency files for make

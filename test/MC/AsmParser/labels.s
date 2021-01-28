@@ -1,4 +1,4 @@
-// RUN: llvm-mc -triple i686-apple-darwin10 %s | FileCheck %s
+// RUN: llvm37-mc -triple i686-apple-darwin10 %s | FileCheck %s
 
         .data
 // CHECK: a:

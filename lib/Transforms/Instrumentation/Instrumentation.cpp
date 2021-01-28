@@ -1,6 +1,6 @@
 //===-- Instrumentation.cpp - TransformUtils Infrastructure ---------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -12,15 +12,15 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/InitializePasses.h"
-#include "llvm-c/Initialization.h"
-#include "llvm/PassRegistry.h"
+#include "llvm37/InitializePasses.h"
+#include "llvm37-c/Initialization.h"
+#include "llvm37/PassRegistry.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 /// initializeInstrumentation - Initialize all passes in the TransformUtils
 /// library.
-void llvm::initializeInstrumentation(PassRegistry &Registry) {
+void llvm37::initializeInstrumentation(PassRegistry &Registry) {
   initializeAddressSanitizerPass(Registry);
   initializeAddressSanitizerModulePass(Registry);
   initializeBoundsCheckingPass(Registry);
@@ -33,8 +33,8 @@ void llvm::initializeInstrumentation(PassRegistry &Registry) {
   initializeSafeStackPass(Registry);
 }
 
-/// LLVMInitializeInstrumentation - C binding for
+/// LLVM37InitializeInstrumentation - C binding for
 /// initializeInstrumentation.
-void LLVMInitializeInstrumentation(LLVMPassRegistryRef R) {
+void LLVM37InitializeInstrumentation(LLVM37PassRegistryRef R) {
   initializeInstrumentation(*unwrap(R));
 }

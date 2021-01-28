@@ -1,6 +1,6 @@
 //===-- IPO.cpp -----------------------------------------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -8,20 +8,20 @@
 //===----------------------------------------------------------------------===//
 //
 // This file implements the common infrastructure (including C bindings) for 
-// libLLVMIPO.a, which implements several transformations over the LLVM 
+// libLLVM37IPO.a, which implements several transformations over the LLVM37 
 // intermediate representation.
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm-c/Initialization.h"
-#include "llvm-c/Transforms/IPO.h"
-#include "llvm/InitializePasses.h"
-#include "llvm/IR/LegacyPassManager.h"
-#include "llvm/Transforms/IPO.h"
+#include "llvm37-c/Initialization.h"
+#include "llvm37-c/Transforms/IPO.h"
+#include "llvm37/InitializePasses.h"
+#include "llvm37/IR/LegacyPassManager.h"
+#include "llvm37/Transforms/IPO.h"
 
-using namespace llvm;
+using namespace llvm37;
 
-void llvm::initializeIPO(PassRegistry &Registry) {
+void llvm37::initializeIPO(PassRegistry &Registry) {
   initializeArgPromotionPass(Registry);
   initializeConstantMergePass(Registry);
   initializeDAEPass(Registry);
@@ -49,65 +49,65 @@ void llvm::initializeIPO(PassRegistry &Registry) {
   initializeEliminateAvailableExternallyPass(Registry);
 }
 
-void LLVMInitializeIPO(LLVMPassRegistryRef R) {
+void LLVM37InitializeIPO(LLVM37PassRegistryRef R) {
   initializeIPO(*unwrap(R));
 }
 
-void LLVMAddArgumentPromotionPass(LLVMPassManagerRef PM) {
+void LLVM37AddArgumentPromotionPass(LLVM37PassManagerRef PM) {
   unwrap(PM)->add(createArgumentPromotionPass());
 }
 
-void LLVMAddConstantMergePass(LLVMPassManagerRef PM) {
+void LLVM37AddConstantMergePass(LLVM37PassManagerRef PM) {
   unwrap(PM)->add(createConstantMergePass());
 }
 
-void LLVMAddDeadArgEliminationPass(LLVMPassManagerRef PM) {
+void LLVM37AddDeadArgEliminationPass(LLVM37PassManagerRef PM) {
   unwrap(PM)->add(createDeadArgEliminationPass());
 }
 
-void LLVMAddFunctionAttrsPass(LLVMPassManagerRef PM) {
+void LLVM37AddFunctionAttrsPass(LLVM37PassManagerRef PM) {
   unwrap(PM)->add(createFunctionAttrsPass());
 }
 
-void LLVMAddFunctionInliningPass(LLVMPassManagerRef PM) {
+void LLVM37AddFunctionInliningPass(LLVM37PassManagerRef PM) {
   unwrap(PM)->add(createFunctionInliningPass());
 }
 
-void LLVMAddAlwaysInlinerPass(LLVMPassManagerRef PM) {
-  unwrap(PM)->add(llvm::createAlwaysInlinerPass());
+void LLVM37AddAlwaysInlinerPass(LLVM37PassManagerRef PM) {
+  unwrap(PM)->add(llvm37::createAlwaysInlinerPass());
 }
 
-void LLVMAddGlobalDCEPass(LLVMPassManagerRef PM) {
+void LLVM37AddGlobalDCEPass(LLVM37PassManagerRef PM) {
   unwrap(PM)->add(createGlobalDCEPass());
 }
 
-void LLVMAddGlobalOptimizerPass(LLVMPassManagerRef PM) {
+void LLVM37AddGlobalOptimizerPass(LLVM37PassManagerRef PM) {
   unwrap(PM)->add(createGlobalOptimizerPass());
 }
 
-void LLVMAddIPConstantPropagationPass(LLVMPassManagerRef PM) {
+void LLVM37AddIPConstantPropagationPass(LLVM37PassManagerRef PM) {
   unwrap(PM)->add(createIPConstantPropagationPass());
 }
 
-void LLVMAddPruneEHPass(LLVMPassManagerRef PM) {
+void LLVM37AddPruneEHPass(LLVM37PassManagerRef PM) {
   unwrap(PM)->add(createPruneEHPass());
 }
 
-void LLVMAddIPSCCPPass(LLVMPassManagerRef PM) {
+void LLVM37AddIPSCCPPass(LLVM37PassManagerRef PM) {
   unwrap(PM)->add(createIPSCCPPass());
 }
 
-void LLVMAddInternalizePass(LLVMPassManagerRef PM, unsigned AllButMain) {
+void LLVM37AddInternalizePass(LLVM37PassManagerRef PM, unsigned AllButMain) {
   std::vector<const char *> Export;
   if (AllButMain)
     Export.push_back("main");
   unwrap(PM)->add(createInternalizePass(Export));
 }
 
-void LLVMAddStripDeadPrototypesPass(LLVMPassManagerRef PM) {
+void LLVM37AddStripDeadPrototypesPass(LLVM37PassManagerRef PM) {
   unwrap(PM)->add(createStripDeadPrototypesPass());
 }
 
-void LLVMAddStripSymbolsPass(LLVMPassManagerRef PM) {
+void LLVM37AddStripSymbolsPass(LLVM37PassManagerRef PM) {
   unwrap(PM)->add(createStripSymbolsPass());
 }

@@ -1,6 +1,6 @@
 //===-- Internalize.cpp - Mark functions internal -------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -19,20 +19,20 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Transforms/IPO.h"
-#include "llvm/ADT/SmallPtrSet.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/Analysis/CallGraph.h"
-#include "llvm/IR/Module.h"
-#include "llvm/Pass.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Transforms/Utils/GlobalStatus.h"
-#include "llvm/Transforms/Utils/ModuleUtils.h"
+#include "llvm37/Transforms/IPO.h"
+#include "llvm37/ADT/SmallPtrSet.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/Analysis/CallGraph.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/Pass.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Transforms/Utils/GlobalStatus.h"
+#include "llvm37/Transforms/Utils/ModuleUtils.h"
 #include <fstream>
 #include <set>
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "internalize"
 
@@ -139,15 +139,15 @@ bool InternalizePass::runOnModule(Module &M) {
   SmallPtrSet<GlobalValue *, 8> Used;
   collectUsedGlobalVariables(M, Used, false);
 
-  // We must assume that globals in llvm.used have a reference that not even
+  // We must assume that globals in llvm37.used have a reference that not even
   // the linker can see, so we don't internalize them.
-  // For llvm.compiler.used the situation is a bit fuzzy. The assembler and
+  // For llvm37.compiler.used the situation is a bit fuzzy. The assembler and
   // linker can drop those symbols. If this pass is running as part of LTO,
-  // one might think that it could just drop llvm.compiler.used. The problem
-  // is that even in LTO llvm doesn't see every reference. For example,
+  // one might think that it could just drop llvm37.compiler.used. The problem
+  // is that even in LTO llvm37 doesn't see every reference. For example,
   // we don't see references from function local inline assembly. To be
-  // conservative, we internalize symbols in llvm.compiler.used, but we
-  // keep llvm.compiler.used so that the symbol is not deleted by llvm.
+  // conservative, we internalize symbols in llvm37.compiler.used, but we
+  // keep llvm37.compiler.used so that the symbol is not deleted by llvm37.
   for (GlobalValue *V : Used) {
     ExternalNames.insert(V->getName());
   }
@@ -169,9 +169,9 @@ bool InternalizePass::runOnModule(Module &M) {
     DEBUG(dbgs() << "Internalizing func " << I->getName() << "\n");
   }
 
-  // Never internalize the llvm.used symbol.  It is used to implement
+  // Never internalize the llvm37.used symbol.  It is used to implement
   // attribute((used)).
-  // FIXME: Shouldn't this just filter on llvm.metadata section??
+  // FIXME: Shouldn't this just filter on llvm37.metadata section??
   ExternalNames.insert("llvm.used");
   ExternalNames.insert("llvm.compiler.used");
 
@@ -217,8 +217,8 @@ bool InternalizePass::runOnModule(Module &M) {
   return Changed;
 }
 
-ModulePass *llvm::createInternalizePass() { return new InternalizePass(); }
+ModulePass *llvm37::createInternalizePass() { return new InternalizePass(); }
 
-ModulePass *llvm::createInternalizePass(ArrayRef<const char *> ExportList) {
+ModulePass *llvm37::createInternalizePass(ArrayRef<const char *> ExportList) {
   return new InternalizePass(ExportList);
 }

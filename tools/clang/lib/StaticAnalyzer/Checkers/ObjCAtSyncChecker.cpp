@@ -1,6 +1,6 @@
 //== ObjCAtSyncChecker.cpp - nil mutex checker for @synchronized -*- C++ -*--=//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -48,7 +48,7 @@ void ObjCAtSyncChecker::checkPreStmt(const ObjCAtSynchronizedStmt *S,
         BT_undef.reset(new BuiltinBug(this, "Uninitialized value used as mutex "
                                             "for @synchronized"));
       auto report =
-          llvm::make_unique<BugReport>(*BT_undef, BT_undef->getDescription(), N);
+          llvm37::make_unique<BugReport>(*BT_undef, BT_undef->getDescription(), N);
       bugreporter::trackNullOrUndefValue(N, Ex, *report);
       C.emitReport(std::move(report));
     }
@@ -72,7 +72,7 @@ void ObjCAtSyncChecker::checkPreStmt(const ObjCAtSynchronizedStmt *S,
               this, "Nil value used as mutex for @synchronized() "
                     "(no synchronization will occur)"));
         auto report =
-            llvm::make_unique<BugReport>(*BT_null, BT_null->getDescription(), N);
+            llvm37::make_unique<BugReport>(*BT_null, BT_null->getDescription(), N);
         bugreporter::trackNullOrUndefValue(N, Ex, *report);
 
         C.emitReport(std::move(report));

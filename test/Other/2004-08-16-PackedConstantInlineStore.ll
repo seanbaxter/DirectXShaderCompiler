@@ -1,4 +1,4 @@
-; RUN: llvm-as < %s | llvm-dis
+; RUN: llvm37-as < %s | llvm37-dis
 @bar = external global <2 x i32>                ; <<2 x i32>*> [#uses=1]
 
 define void @main() {

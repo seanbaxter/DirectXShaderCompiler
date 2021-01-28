@@ -1,6 +1,6 @@
 //===----------- ValueTypes.cpp - Implementation of EVT methods -----------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,48 +11,48 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/CodeGen/ValueTypes.h"
-#include "llvm/ADT/StringExtras.h"
-#include "llvm/IR/DerivedTypes.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Type.h"
-#include "llvm/Support/ErrorHandling.h"
-using namespace llvm;
+#include "llvm37/CodeGen/ValueTypes.h"
+#include "llvm37/ADT/StringExtras.h"
+#include "llvm37/IR/DerivedTypes.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/Type.h"
+#include "llvm37/Support/ErrorHandling.h"
+using namespace llvm37;
 
 EVT EVT::changeExtendedVectorElementTypeToInteger() const {
-  LLVMContext &Context = LLVMTy->getContext();
+  LLVM37Context &Context = LLVM37Ty->getContext();
   EVT IntTy = getIntegerVT(Context, getVectorElementType().getSizeInBits());
   return getVectorVT(Context, IntTy, getVectorNumElements());
 }
 
-EVT EVT::getExtendedIntegerVT(LLVMContext &Context, unsigned BitWidth) {
+EVT EVT::getExtendedIntegerVT(LLVM37Context &Context, unsigned BitWidth) {
   EVT VT;
-  VT.LLVMTy = IntegerType::get(Context, BitWidth);
+  VT.LLVM37Ty = IntegerType::get(Context, BitWidth);
   assert(VT.isExtended() && "Type is not extended!");
   return VT;
 }
 
-EVT EVT::getExtendedVectorVT(LLVMContext &Context, EVT VT,
+EVT EVT::getExtendedVectorVT(LLVM37Context &Context, EVT VT,
                              unsigned NumElements) {
   EVT ResultVT;
-  ResultVT.LLVMTy = VectorType::get(VT.getTypeForEVT(Context), NumElements);
+  ResultVT.LLVM37Ty = VectorType::get(VT.getTypeForEVT(Context), NumElements);
   assert(ResultVT.isExtended() && "Type is not extended!");
   return ResultVT;
 }
 
 bool EVT::isExtendedFloatingPoint() const {
   assert(isExtended() && "Type is not extended!");
-  return LLVMTy->isFPOrFPVectorTy();
+  return LLVM37Ty->isFPOrFPVectorTy();
 }
 
 bool EVT::isExtendedInteger() const {
   assert(isExtended() && "Type is not extended!");
-  return LLVMTy->isIntOrIntVectorTy();
+  return LLVM37Ty->isIntOrIntVectorTy();
 }
 
 bool EVT::isExtendedVector() const {
   assert(isExtended() && "Type is not extended!");
-  return LLVMTy->isVectorTy();
+  return LLVM37Ty->isVectorTy();
 }
 
 bool EVT::isExtended16BitVector() const {
@@ -85,21 +85,21 @@ bool EVT::isExtended1024BitVector() const {
 
 EVT EVT::getExtendedVectorElementType() const {
   assert(isExtended() && "Type is not extended!");
-  return EVT::getEVT(cast<VectorType>(LLVMTy)->getElementType());
+  return EVT::getEVT(cast<VectorType>(LLVM37Ty)->getElementType());
 }
 
 unsigned EVT::getExtendedVectorNumElements() const {
   assert(isExtended() && "Type is not extended!");
-  return cast<VectorType>(LLVMTy)->getNumElements();
+  return cast<VectorType>(LLVM37Ty)->getNumElements();
 }
 
 unsigned EVT::getExtendedSizeInBits() const {
   assert(isExtended() && "Type is not extended!");
-  if (IntegerType *ITy = dyn_cast<IntegerType>(LLVMTy))
+  if (IntegerType *ITy = dyn_cast<IntegerType>(LLVM37Ty))
     return ITy->getBitWidth();
-  if (VectorType *VTy = dyn_cast<VectorType>(LLVMTy))
+  if (VectorType *VTy = dyn_cast<VectorType>(LLVM37Ty))
     return VTy->getBitWidth();
-  llvm_unreachable("Unrecognized extended type!");
+  llvm37_unreachable("Unrecognized extended type!");
 }
 
 /// getEVTString - This function returns value type as a string, e.g. "i32".
@@ -111,7 +111,7 @@ std::string EVT::getEVTString() const {
              getVectorElementType().getEVTString();
     if (isInteger())
       return "i" + utostr(getSizeInBits());
-    llvm_unreachable("Invalid EVT!");
+    llvm37_unreachable("Invalid EVT!");
   case MVT::i1:      return "i1";
   case MVT::i8:      return "i8";
   case MVT::i16:     return "i16";
@@ -175,14 +175,14 @@ std::string EVT::getEVTString() const {
   }
 }
 
-/// getTypeForEVT - This method returns an LLVM type corresponding to the
+/// getTypeForEVT - This method returns an LLVM37 type corresponding to the
 /// specified EVT.  For integer types, this returns an unsigned type.  Note
 /// that this will abort for types that cannot be represented.
-Type *EVT::getTypeForEVT(LLVMContext &Context) const {
+Type *EVT::getTypeForEVT(LLVM37Context &Context) const {
   switch (V.SimpleTy) {
   default:
     assert(isExtended() && "Type is not extended!");
-    return LLVMTy;
+    return LLVM37Ty;
   case MVT::isVoid:  return Type::getVoidTy(Context);
   case MVT::i1:      return Type::getInt1Ty(Context);
   case MVT::i8:      return Type::getInt8Ty(Context);
@@ -250,7 +250,7 @@ MVT MVT::getVT(Type *Ty, bool HandleUnknown){
   switch (Ty->getTypeID()) {
   default:
     if (HandleUnknown) return MVT(MVT::Other);
-    llvm_unreachable("Unknown type!");
+    llvm37_unreachable("Unknown type!");
   case Type::VoidTyID:
     return MVT::isVoid;
   case Type::IntegerTyID:

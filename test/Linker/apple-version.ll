@@ -1,10 +1,10 @@
-; RUN: llvm-link %s %S/Inputs/apple-version/1.ll -S -o - 2>%t.err | FileCheck %s -check-prefix=CHECK1
+; RUN: llvm37-link %s %S/Inputs/apple-version/1.ll -S -o - 2>%t.err | FileCheck %s -check-prefix=CHECK1
 ; RUN: cat %t.err | FileCheck --check-prefix=WARN1 --allow-empty %s
-; RUN: llvm-link %s %S/Inputs/apple-version/2.ll -S -o - 2>%t.err | FileCheck %s -check-prefix=CHECK2
+; RUN: llvm37-link %s %S/Inputs/apple-version/2.ll -S -o - 2>%t.err | FileCheck %s -check-prefix=CHECK2
 ; RUN: cat %t.err | FileCheck --check-prefix=WARN2 --allow-empty %s
-; RUN: llvm-link %s %S/Inputs/apple-version/3.ll -S -o /dev/null 2>%t.err
+; RUN: llvm37-link %s %S/Inputs/apple-version/3.ll -S -o /dev/null 2>%t.err
 ; RUN: cat %t.err | FileCheck --check-prefix=WARN3 %s
-; RUN: llvm-link %s %S/Inputs/apple-version/4.ll -S -o /dev/null 2>%t.err
+; RUN: llvm37-link %s %S/Inputs/apple-version/4.ll -S -o /dev/null 2>%t.err
 ; RUN: cat %t.err | FileCheck --check-prefix=WARN4 --allow-empty %s
 
 ; Check that the triple that has the larger version number is chosen and no

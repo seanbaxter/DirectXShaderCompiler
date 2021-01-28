@@ -1,6 +1,6 @@
 //===-------- OrcMCJITReplacement.cpp - Orc-based MCJIT replacement -------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -8,19 +8,19 @@
 //===----------------------------------------------------------------------===//
 
 #include "OrcMCJITReplacement.h"
-#include "llvm/ExecutionEngine/GenericValue.h"
+#include "llvm37/ExecutionEngine/GenericValue.h"
 
 namespace {
 
 static struct RegisterJIT {
-  RegisterJIT() { llvm::orc::OrcMCJITReplacement::Register(); }
+  RegisterJIT() { llvm37::orc::OrcMCJITReplacement::Register(); }
 } JITRegistrator;
 
 }
 
-extern "C" void LLVMLinkInOrcMCJITReplacement() {}
+extern "C" void LLVM37LinkInOrcMCJITReplacement() {}
 
-namespace llvm {
+namespace llvm37 {
 namespace orc {
 
 GenericValue
@@ -86,7 +86,7 @@ OrcMCJITReplacement::runFunction(Function *F,
     GenericValue rv;
     switch (RetTy->getTypeID()) {
     default:
-      llvm_unreachable("Unknown return type for function call!");
+      llvm37_unreachable("Unknown return type for function call!");
     case Type::IntegerTyID: {
       unsigned BitWidth = cast<IntegerType>(RetTy)->getBitWidth();
       if (BitWidth == 1)
@@ -100,7 +100,7 @@ OrcMCJITReplacement::runFunction(Function *F,
       else if (BitWidth <= 64)
         rv.IntVal = APInt(BitWidth, ((int64_t (*)())(intptr_t)FPtr)());
       else
-        llvm_unreachable("Integer types > 64 bits not supported");
+        llvm37_unreachable("Integer types > 64 bits not supported");
       return rv;
     }
     case Type::VoidTyID:
@@ -115,14 +115,14 @@ OrcMCJITReplacement::runFunction(Function *F,
     case Type::X86_FP80TyID:
     case Type::FP128TyID:
     case Type::PPC_FP128TyID:
-      llvm_unreachable("long double not supported yet");
+      llvm37_unreachable("long double not supported yet");
     case Type::PointerTyID:
       return PTOGV(((void *(*)())(intptr_t)FPtr)());
     }
   }
 
-  llvm_unreachable("Full-featured argument passing not supported yet!");
+  llvm37_unreachable("Full-featured argument passing not supported yet!");
 }
 
 } // End namespace orc.
-} // End namespace llvm.
+} // End namespace llvm37.

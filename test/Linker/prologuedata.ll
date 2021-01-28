@@ -1,4 +1,4 @@
-; RUN: llvm-link %s -S -o - | FileCheck %s
+; RUN: llvm37-link %s -S -o - | FileCheck %s
 
 @g1 = global void()* @f2
 ; CHECK: @g1 = global void ()* @f2

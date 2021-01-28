@@ -17,18 +17,18 @@
 #include <unordered_map>
 #include <vector>
 
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/iterator_range.h"
-#include "llvm/ADT/PointerUnion.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/iterator_range.h"
+#include "llvm37/ADT/PointerUnion.h"
 
-namespace llvm {
+namespace llvm37 {
 class DIDerivedType;
 class DILocalVariable;
 class DIScope;
 class DITemplateTypeParameter;
 class DIType;
 class Instruction;
-}  // namespace llvm
+}  // namespace llvm37
 
 namespace dxil_dia {
 class Session;
@@ -54,7 +54,7 @@ public:
       virtual HRESULT Create(Session *pSession, Symbol **) = 0;
   };
 
-  using ScopeToIDMap = llvm::DenseMap<llvm::DIScope *, DWORD>;
+  using ScopeToIDMap = llvm37::DenseMap<llvm37::DIScope *, DWORD>;
   using IDToLiveRangeMap = std::unordered_map<DWORD, LiveRange>;
   using ParentToChildrenMap = std::unordered_multimap<DWORD, DWORD>;
 
@@ -71,7 +71,7 @@ public:
   HRESULT GetLiveRangeOf(Symbol *pSym, LiveRange *LR) const;
   HRESULT GetGlobalScope(Symbol **ppSym) const;
   HRESULT ChildrenOf(Symbol *pSym, std::vector<CComPtr<Symbol>> *pChildren) const;
-  HRESULT DbgScopeOf(const llvm::Instruction *instr, SymbolChildrenEnumerator **ppRet) const;
+  HRESULT DbgScopeOf(const llvm37::Instruction *instr, SymbolChildrenEnumerator **ppRet) const;
 
 private:
   HRESULT ChildrenOf(DWORD ID, std::vector<CComPtr<Symbol>> *pChildren) const;

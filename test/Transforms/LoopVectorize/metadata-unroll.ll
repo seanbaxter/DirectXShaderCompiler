@@ -31,7 +31,7 @@ define void @inc(i32 %n) nounwind uwtable noinline ssp {
   %indvars.iv.next = add i64 %indvars.iv, 1
   %lftr.wideiv = trunc i64 %indvars.iv.next to i32
   %exitcond = icmp eq i32 %lftr.wideiv, %n
-  br i1 %exitcond, label %._crit_edge, label %.lr.ph, !llvm.loop !0
+  br i1 %exitcond, label %._crit_edge, label %.lr.ph, !llvm37.loop !0
 
 ._crit_edge:                                      ; preds = %.lr.ph, %0
   ret void

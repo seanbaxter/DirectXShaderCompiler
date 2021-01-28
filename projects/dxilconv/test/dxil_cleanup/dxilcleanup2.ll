@@ -35,7 +35,7 @@ attributes #2 = { nounwind readonly }
 !dx.version = !{!0}
 !dx.shaderModel = !{!1}
 !dx.entryPoints = !{!2}
-!llvm.ident = !{!10}
+!llvm37.ident = !{!10}
 
 !0 = !{i32 1, i32 0}
 !1 = !{!"ps", i32 6, i32 0}

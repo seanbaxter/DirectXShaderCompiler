@@ -1,6 +1,6 @@
 //===- Consumed.cpp --------------------------------------------*- C++ --*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -26,10 +26,10 @@
 #include "clang/Analysis/CFG.h"
 #include "clang/Basic/OperatorKinds.h"
 #include "clang/Basic/SourceLocation.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/Support/Compiler.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/Support/Compiler.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <memory>
 
 // TODO: Adjust states of args to constructors in the same way that arguments to
@@ -107,7 +107,7 @@ static ConsumedState invertConsumedUnconsumed(ConsumedState State) {
   case CS_Unknown:
     return CS_Unknown;
   }
-  llvm_unreachable("invalid enum");
+  llvm37_unreachable("invalid enum");
 }
 
 static bool isCallableInState(const CallableWhenAttr *CWAttr,
@@ -174,7 +174,7 @@ static bool isKnownState(ConsumedState State) {
   case CS_Unknown:
     return false;
   }
-  llvm_unreachable("invalid enum");
+  llvm37_unreachable("invalid enum");
 }
 
 static bool isRValueRef(QualType ParamType) {
@@ -203,7 +203,7 @@ static ConsumedState mapConsumableAttrState(const QualType QT) {
   case ConsumableAttr::Consumed:
     return CS_Consumed;
   }
-  llvm_unreachable("invalid enum");
+  llvm37_unreachable("invalid enum");
 }
 
 static ConsumedState
@@ -216,7 +216,7 @@ mapParamTypestateAttrState(const ParamTypestateAttr *PTAttr) {
   case ParamTypestateAttr::Consumed:
     return CS_Consumed;
   }
-  llvm_unreachable("invalid_enum");
+  llvm37_unreachable("invalid_enum");
 }
 
 static ConsumedState
@@ -229,7 +229,7 @@ mapReturnTypestateAttrState(const ReturnTypestateAttr *RTSAttr) {
   case ReturnTypestateAttr::Consumed:
     return CS_Consumed;
   }
-  llvm_unreachable("invalid enum");
+  llvm37_unreachable("invalid enum");
 }
 
 static ConsumedState mapSetTypestateAttrState(const SetTypestateAttr *STAttr) {
@@ -241,7 +241,7 @@ static ConsumedState mapSetTypestateAttrState(const SetTypestateAttr *STAttr) {
   case SetTypestateAttr::Consumed:
     return CS_Consumed;
   }
-  llvm_unreachable("invalid_enum");
+  llvm37_unreachable("invalid_enum");
 }
 
 static StringRef stateToString(ConsumedState State) {
@@ -258,7 +258,7 @@ static StringRef stateToString(ConsumedState State) {
   case consumed::CS_Consumed:
     return "consumed";
   }
-  llvm_unreachable("invalid enum");
+  llvm37_unreachable("invalid enum");
 }
 
 static ConsumedState testsFor(const FunctionDecl *FunDecl) {
@@ -269,7 +269,7 @@ static ConsumedState testsFor(const FunctionDecl *FunDecl) {
   case TestTypestateAttr::Consumed:
     return CS_Consumed;
   }
-  llvm_unreachable("invalid enum");
+  llvm37_unreachable("invalid enum");
 }
 
 namespace {
@@ -455,7 +455,7 @@ setStateForVarOrTmp(ConsumedStateMap *StateMap, const PropagationInfo &PInfo,
 
 class ConsumedStmtVisitor : public ConstStmtVisitor<ConsumedStmtVisitor> {
   
-  typedef llvm::DenseMap<const Stmt *, PropagationInfo> MapType;
+  typedef llvm37::DenseMap<const Stmt *, PropagationInfo> MapType;
   typedef std::pair<const Stmt *, PropagationInfo> PairType;
   typedef MapType::iterator InfoEntry;
   typedef MapType::const_iterator ConstInfoEntry;

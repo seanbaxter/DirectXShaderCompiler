@@ -1,6 +1,6 @@
 //===- LoopInfo.cpp - Natural Loop Calculator -----------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -14,28 +14,28 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Analysis/LoopInfo.h"
-#include "llvm/ADT/DepthFirstIterator.h"
-#include "llvm/ADT/SmallPtrSet.h"
-#include "llvm/Analysis/LoopInfoImpl.h"
-#include "llvm/Analysis/LoopIterator.h"
-#include "llvm/Analysis/ValueTracking.h"
-#include "llvm/IR/CFG.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/Dominators.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Metadata.h"
-#include "llvm/IR/PassManager.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/Analysis/LoopInfo.h"
+#include "llvm37/ADT/DepthFirstIterator.h"
+#include "llvm37/ADT/SmallPtrSet.h"
+#include "llvm37/Analysis/LoopInfoImpl.h"
+#include "llvm37/Analysis/LoopIterator.h"
+#include "llvm37/Analysis/ValueTracking.h"
+#include "llvm37/IR/CFG.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/Dominators.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/Metadata.h"
+#include "llvm37/IR/PassManager.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <algorithm>
-using namespace llvm;
+using namespace llvm37;
 
 // Explicitly instantiate methods in LoopInfoImpl.h for IR-level Loops.
-template class llvm::LoopBase<BasicBlock, Loop>;
-template class llvm::LoopInfoBase<BasicBlock, Loop>;
+template class llvm37::LoopBase<BasicBlock, Loop>;
+template class llvm37::LoopInfoBase<BasicBlock, Loop>;
 
 // Always verify loopinfo if expensive checking is enabled.
 #ifdef XDEBUG
@@ -305,7 +305,7 @@ bool Loop::isAnnotatedParallel() const {
       // nested parallel loops). The loop identifier metadata refers to
       // itself so we can check both cases with the same routine.
       MDNode *loopIdMD =
-          II->getMetadata(LLVMContext::MD_mem_parallel_loop_access);
+          II->getMetadata(LLVM37Context::MD_mem_parallel_loop_access);
 
       if (!loopIdMD)
         return false;
@@ -403,7 +403,7 @@ BasicBlock *Loop::getUniqueExitBlock() const {
   return nullptr;
 }
 
-#if !defined(NDEBUG) || defined(LLVM_ENABLE_DUMP)
+#if !defined(NDEBUG) || defined(LLVM37_ENABLE_DUMP)
 void Loop::dump() const {
   print(dbgs());
 }

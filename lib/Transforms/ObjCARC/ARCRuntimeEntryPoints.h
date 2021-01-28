@@ -1,6 +1,6 @@
 //===- ARCRuntimeEntryPoints.h - ObjC ARC Optimization --*- C++ -*---------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -14,17 +14,17 @@
 /// by name, and hardwires knowledge of their semantics.
 ///
 /// WARNING: This file knows about how certain Objective-C library functions are
-/// used. Naive LLVM IR transformations which would otherwise be
+/// used. Naive LLVM37 IR transformations which would otherwise be
 /// behavior-preserving may break these assumptions.
 ///
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_LIB_TRANSFORMS_OBJCARC_ARCRUNTIMEENTRYPOINTS_H
-#define LLVM_LIB_TRANSFORMS_OBJCARC_ARCRUNTIMEENTRYPOINTS_H
+#ifndef LLVM37_LIB_TRANSFORMS_OBJCARC_ARCRUNTIMEENTRYPOINTS_H
+#define LLVM37_LIB_TRANSFORMS_OBJCARC_ARCRUNTIMEENTRYPOINTS_H
 
 #include "ObjCARC.h"
 
-namespace llvm {
+namespace llvm37 {
 namespace objcarc {
 
 enum class ARCRuntimeEntryPointKind {
@@ -95,7 +95,7 @@ public:
                                     "objc_retainAutoreleaseReturnValue", true);
     }
 
-    llvm_unreachable("Switch should be a covered switch.");
+    llvm37_unreachable("Switch should be a covered switch.");
   }
 
 private:
@@ -126,7 +126,7 @@ private:
     if (Decl)
       return Decl;
 
-    LLVMContext &C = TheModule->getContext();
+    LLVM37Context &C = TheModule->getContext();
     Type *Params[] = { PointerType::getUnqual(Type::getInt8Ty(C)) };
     AttributeSet Attr =
       AttributeSet().addAttribute(C, AttributeSet::FunctionIndex,
@@ -142,7 +142,7 @@ private:
     if (Decl)
       return Decl;
 
-    LLVMContext &C = TheModule->getContext();
+    LLVM37Context &C = TheModule->getContext();
     Type *I8X = PointerType::getUnqual(Type::getInt8Ty(C));
     Type *Params[] = { I8X };
     FunctionType *Fty = FunctionType::get(I8X, Params, /*isVarArg=*/false);
@@ -160,7 +160,7 @@ private:
     if (Decl)
       return Decl;
 
-    LLVMContext &C = TheModule->getContext();
+    LLVM37Context &C = TheModule->getContext();
     Type *I8X = PointerType::getUnqual(Type::getInt8Ty(C));
     Type *I8XX = PointerType::getUnqual(I8X);
     Type *Params[] = { I8XX, I8X };
@@ -179,6 +179,6 @@ private:
 }; // class ARCRuntimeEntryPoints
 
 } // namespace objcarc
-} // namespace llvm
+} // namespace llvm37
 
 #endif

@@ -1,4 +1,4 @@
-# RUN: llvm-mc -triple i386-unknown-unknown %s -I %p | FileCheck %s
+# RUN: llvm37-mc -triple i386-unknown-unknown %s -I %p | FileCheck %s
 
 .data
 .incbin "incbin\137abcd"  # "\137" is underscore "_"

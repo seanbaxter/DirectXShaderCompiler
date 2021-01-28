@@ -1,4 +1,4 @@
-add_llvm_library(LLVMMCParser
+add_llvm_library(LLVM37MCParser
   AsmLexer.cpp
   AsmParser.cpp
   COFFAsmParser.cpp
@@ -10,5 +10,5 @@ add_llvm_library(LLVMMCParser
   MCTargetAsmParser.cpp
 
   ADDITIONAL_HEADER_DIRS
-  ${LLVM_MAIN_INCLUDE_DIR}/llvm/MC/MCParser
+  ${LLVM37_MAIN_INCLUDE_DIR}/llvm37/MC/MCParser
   )

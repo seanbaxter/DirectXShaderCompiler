@@ -28,7 +28,7 @@ entry:
 ; CHECK: @test1()
 ; CHECK: %S1 = alloca %struct.ss
 ; CHECK: %S = alloca %struct.ss
-; CHECK: call void @llvm.memcpy
+; CHECK: call void @llvm37.memcpy
 ; CHECK: ret i32 0
 }
 
@@ -54,7 +54,7 @@ entry:
 	ret i32 %X
 ; CHECK: @test2()
 ; CHECK: %S = alloca %struct.ss
-; CHECK-NOT: call void @llvm.memcpy
+; CHECK-NOT: call void @llvm37.memcpy
 ; CHECK: ret i32
 }
 
@@ -77,7 +77,7 @@ entry:
 ; CHECK: @test3()
 ; CHECK: %S1 = alloca %struct.ss, align 64
 ; CHECK: %S = alloca %struct.ss
-; CHECK: call void @llvm.memcpy
+; CHECK: call void @llvm37.memcpy
 ; CHECK: call void @g3(%struct.ss* %S1)
 ; CHECK: ret void
 }
@@ -99,7 +99,7 @@ entry:
 	ret i32 %X
 ; CHECK: @test4()
 ; CHECK: %S = alloca %struct.ss, align 64
-; CHECK-NOT: call void @llvm.memcpy
+; CHECK-NOT: call void @llvm37.memcpy
 ; CHECK: call void @g3
 ; CHECK: ret i32 4
 }

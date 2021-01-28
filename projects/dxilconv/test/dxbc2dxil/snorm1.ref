@@ -62,7 +62,7 @@ attributes #2 = { nounwind }
 !dx.resources = !{!2}
 !dx.typeAnnotations = !{!10}
 !dx.entryPoints = !{!15}
-!llvm.ident = !{!23}
+!llvm37.ident = !{!23}
 
 !0 = !{i32 1, i32 0}
 !1 = !{!"ps", i32 6, i32 0}

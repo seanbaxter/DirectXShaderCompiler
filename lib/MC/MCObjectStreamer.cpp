@@ -1,27 +1,27 @@
 //===- lib/MC/MCObjectStreamer.cpp - Object File MCStreamer Interface -----===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/MC/MCObjectStreamer.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/MC/MCAsmBackend.h"
-#include "llvm/MC/MCAsmInfo.h"
-#include "llvm/MC/MCAssembler.h"
-#include "llvm/MC/MCCodeEmitter.h"
-#include "llvm/MC/MCContext.h"
-#include "llvm/MC/MCDwarf.h"
-#include "llvm/MC/MCExpr.h"
-#include "llvm/MC/MCObjectWriter.h"
-#include "llvm/MC/MCSection.h"
-#include "llvm/MC/MCSymbol.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/TargetRegistry.h"
-using namespace llvm;
+#include "llvm37/MC/MCObjectStreamer.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/MC/MCAsmBackend.h"
+#include "llvm37/MC/MCAsmInfo.h"
+#include "llvm37/MC/MCAssembler.h"
+#include "llvm37/MC/MCCodeEmitter.h"
+#include "llvm37/MC/MCContext.h"
+#include "llvm37/MC/MCDwarf.h"
+#include "llvm37/MC/MCExpr.h"
+#include "llvm37/MC/MCObjectWriter.h"
+#include "llvm37/MC/MCSection.h"
+#include "llvm37/MC/MCSymbol.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/TargetRegistry.h"
+using namespace llvm37;
 
 MCObjectStreamer::MCObjectStreamer(MCContext &Context, MCAsmBackend &TAB,
                                    raw_pwrite_stream &OS,
@@ -265,7 +265,7 @@ void MCObjectStreamer::EmitInstruction(const MCInst &Inst,
 void MCObjectStreamer::EmitInstToFragment(const MCInst &Inst,
                                           const MCSubtargetInfo &STI) {
   if (getAssembler().getRelaxAll() && getAssembler().isBundlingEnabled())
-    llvm_unreachable("All instructions should have already been relaxed");
+    llvm37_unreachable("All instructions should have already been relaxed");
 
   // Always create a new, separate fragment here, because its size can change
   // during relaxation.
@@ -286,15 +286,15 @@ static const char *const BundlingNotImplementedMsg =
 #endif
 
 void MCObjectStreamer::EmitBundleAlignMode(unsigned AlignPow2) {
-  llvm_unreachable(BundlingNotImplementedMsg);
+  llvm37_unreachable(BundlingNotImplementedMsg);
 }
 
 void MCObjectStreamer::EmitBundleLock(bool AlignToEnd) {
-  llvm_unreachable(BundlingNotImplementedMsg);
+  llvm37_unreachable(BundlingNotImplementedMsg);
 }
 
 void MCObjectStreamer::EmitBundleUnlock() {
-  llvm_unreachable(BundlingNotImplementedMsg);
+  llvm37_unreachable(BundlingNotImplementedMsg);
 }
 
 void MCObjectStreamer::EmitDwarfLocDirective(unsigned FileNo, unsigned Line,

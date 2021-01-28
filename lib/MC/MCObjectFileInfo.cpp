@@ -1,22 +1,22 @@
 //===-- MObjectFileInfo.cpp - Object File Information ---------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/MC/MCObjectFileInfo.h"
-#include "llvm/ADT/StringExtras.h"
-#include "llvm/ADT/Triple.h"
-#include "llvm/MC/MCAsmInfo.h"
-#include "llvm/MC/MCContext.h"
-#include "llvm/MC/MCSection.h"
-#include "llvm/MC/MCSectionCOFF.h"
-#include "llvm/MC/MCSectionELF.h"
-#include "llvm/MC/MCSectionMachO.h"
-using namespace llvm;
+#include "llvm37/MC/MCObjectFileInfo.h"
+#include "llvm37/ADT/StringExtras.h"
+#include "llvm37/ADT/Triple.h"
+#include "llvm37/MC/MCAsmInfo.h"
+#include "llvm37/MC/MCContext.h"
+#include "llvm37/MC/MCSection.h"
+#include "llvm37/MC/MCSectionCOFF.h"
+#include "llvm37/MC/MCSectionELF.h"
+#include "llvm37/MC/MCSectionMachO.h"
+using namespace llvm37;
 
 static bool useCompactUnwind(const Triple &T) {
   // Only on darwin.
@@ -235,10 +235,10 @@ void MCObjectFileInfo::initMachOMCObjectFileInfo(Triple T) {
   DwarfDebugInlineSection =
       Ctx->getMachOSection("__DWARF", "__debug_inlined", MachO::S_ATTR_DEBUG,
                            SectionKind::getMetadata());
-  StackMapSection = Ctx->getMachOSection("__LLVM_STACKMAPS", "__llvm_stackmaps",
+  StackMapSection = Ctx->getMachOSection("__LLVM37_STACKMAPS", "__llvm37_stackmaps",
                                          0, SectionKind::getMetadata());
 
-  FaultMapSection = Ctx->getMachOSection("__LLVM_FAULTMAPS", "__llvm_faultmaps",
+  FaultMapSection = Ctx->getMachOSection("__LLVM37_FAULTMAPS", "__llvm37_faultmaps",
                                          0, SectionKind::getMetadata());
 
   TLSExtraDataSection = TLSTLVSection;
@@ -520,10 +520,10 @@ void MCObjectFileInfo::initELFMCObjectFileInfo(Triple T) {
       Ctx->getELFSection(".debug_addr", ELF::SHT_PROGBITS, 0, "addr_sec");
 
   StackMapSection =
-      Ctx->getELFSection(".llvm_stackmaps", ELF::SHT_PROGBITS, ELF::SHF_ALLOC);
+      Ctx->getELFSection(".llvm37_stackmaps", ELF::SHT_PROGBITS, ELF::SHF_ALLOC);
 
   FaultMapSection =
-      Ctx->getELFSection(".llvm_faultmaps", ELF::SHT_PROGBITS, ELF::SHF_ALLOC);
+      Ctx->getELFSection(".llvm37_faultmaps", ELF::SHT_PROGBITS, ELF::SHF_ALLOC);
 }
 
 void MCObjectFileInfo::initCOFFMCObjectFileInfo(Triple T) {
@@ -734,7 +734,7 @@ void MCObjectFileInfo::initCOFFMCObjectFileInfo(Triple T) {
                    COFF::IMAGE_SCN_MEM_WRITE,
       SectionKind::getDataRel());
 	  
-  StackMapSection = Ctx->getCOFFSection(".llvm_stackmaps",
+  StackMapSection = Ctx->getCOFFSection(".llvm37_stackmaps",
                                         COFF::IMAGE_SCN_CNT_INITIALIZED_DATA |
                                             COFF::IMAGE_SCN_MEM_READ,
                                         SectionKind::getReadOnly());	

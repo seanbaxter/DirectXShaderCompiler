@@ -1,6 +1,6 @@
 //===-- DwarfException.h - Dwarf Exception Framework -----------*- C++ -*--===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,17 +11,17 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_LIB_CODEGEN_ASMPRINTER_DWARFEXCEPTION_H
-#define LLVM_LIB_CODEGEN_ASMPRINTER_DWARFEXCEPTION_H
+#ifndef LLVM37_LIB_CODEGEN_ASMPRINTER_DWARFEXCEPTION_H
+#define LLVM37_LIB_CODEGEN_ASMPRINTER_DWARFEXCEPTION_H
 
 #include "EHStreamer.h"
-#include "llvm/CodeGen/AsmPrinter.h"
+#include "llvm37/CodeGen/AsmPrinter.h"
 
-namespace llvm {
+namespace llvm37 {
 class MachineFunction;
 class ARMTargetStreamer;
 
-class LLVM_LIBRARY_VISIBILITY DwarfCFIExceptionBase : public EHStreamer {
+class LLVM37_LIBRARY_VISIBILITY DwarfCFIExceptionBase : public EHStreamer {
 protected:
   DwarfCFIExceptionBase(AsmPrinter *A);
 
@@ -31,7 +31,7 @@ protected:
   void markFunctionEnd() override;
 };
 
-class LLVM_LIBRARY_VISIBILITY DwarfCFIException : public DwarfCFIExceptionBase {
+class LLVM37_LIBRARY_VISIBILITY DwarfCFIException : public DwarfCFIExceptionBase {
   /// Per-function flag to indicate if .cfi_personality should be emitted.
   bool shouldEmitPersonality;
 
@@ -61,7 +61,7 @@ public:
   void endFunction(const MachineFunction *) override;
 };
 
-class LLVM_LIBRARY_VISIBILITY ARMException : public DwarfCFIExceptionBase {
+class LLVM37_LIBRARY_VISIBILITY ARMException : public DwarfCFIExceptionBase {
   void emitTypeInfos(unsigned TTypeEncoding) override;
   ARMTargetStreamer &getTargetStreamer();
 
@@ -82,6 +82,6 @@ public:
   /// Gather and emit post-function exception information.
   void endFunction(const MachineFunction *) override;
 };
-} // End of namespace llvm
+} // End of namespace llvm37
 
 #endif

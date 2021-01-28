@@ -1,17 +1,17 @@
-//===- llvm/unittest/Support/ThreadLocalTest.cpp - ThreadLocal tests ------===//
+//===- llvm37/unittest/Support/ThreadLocalTest.cpp - ThreadLocal tests ------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Support/ThreadLocal.h"
+#include "llvm37/Support/ThreadLocal.h"
 #include "gtest/gtest.h"
 #include <type_traits>
 
-using namespace llvm;
+using namespace llvm37;
 using namespace sys;
 
 namespace {

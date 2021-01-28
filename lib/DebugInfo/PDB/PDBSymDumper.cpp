@@ -1,20 +1,20 @@
 //===- PDBSymDumper.cpp - ---------------------------------------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/DebugInfo/PDB/PDBSymDumper.h"
-#include "llvm/Support/ErrorHandling.h"
+#include "llvm37/DebugInfo/PDB/PDBSymDumper.h"
+#include "llvm37/Support/ErrorHandling.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 #define PDB_SYMDUMP_UNREACHABLE(Type)                                          \
   if (RequireImpl)                                                             \
-    llvm_unreachable("Attempt to dump " #Type " with no dump implementation");
+    llvm37_unreachable("Attempt to dump " #Type " with no dump implementation");
 
 PDBSymDumper::PDBSymDumper(bool ShouldRequireImpl)
     : RequireImpl(ShouldRequireImpl) {}

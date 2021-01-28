@@ -1,6 +1,6 @@
 //=== MangleNumberingContext.h - Context for mangling numbers ---*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -12,12 +12,12 @@
 //  literals.
 //
 //===----------------------------------------------------------------------===//
-#ifndef LLVM_CLANG_AST_MANGLENUMBERINGCONTEXT_H
-#define LLVM_CLANG_AST_MANGLENUMBERINGCONTEXT_H
+#ifndef LLVM37_CLANG_AST_MANGLENUMBERINGCONTEXT_H
+#define LLVM37_CLANG_AST_MANGLENUMBERINGCONTEXT_H
 
 #include "clang/Basic/LLVM.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/IntrusiveRefCntPtr.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/IntrusiveRefCntPtr.h"
 
 namespace clang {
 

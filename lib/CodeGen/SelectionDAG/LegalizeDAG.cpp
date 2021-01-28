@@ -1,6 +1,6 @@
 //===-- LegalizeDAG.cpp - Implement SelectionDAG::Legalize ----------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,31 +11,31 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/CodeGen/SelectionDAG.h"
-#include "llvm/ADT/SetVector.h"
-#include "llvm/ADT/SmallPtrSet.h"
-#include "llvm/ADT/SmallSet.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/ADT/Triple.h"
-#include "llvm/CodeGen/Analysis.h"
-#include "llvm/CodeGen/MachineFunction.h"
-#include "llvm/CodeGen/MachineJumpTableInfo.h"
-#include "llvm/IR/CallingConv.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/DebugInfo.h"
-#include "llvm/IR/DerivedTypes.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/MathExtras.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Target/TargetFrameLowering.h"
-#include "llvm/Target/TargetLowering.h"
-#include "llvm/Target/TargetMachine.h"
-#include "llvm/Target/TargetSubtargetInfo.h"
-using namespace llvm;
+#include "llvm37/CodeGen/SelectionDAG.h"
+#include "llvm37/ADT/SetVector.h"
+#include "llvm37/ADT/SmallPtrSet.h"
+#include "llvm37/ADT/SmallSet.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/ADT/Triple.h"
+#include "llvm37/CodeGen/Analysis.h"
+#include "llvm37/CodeGen/MachineFunction.h"
+#include "llvm37/CodeGen/MachineJumpTableInfo.h"
+#include "llvm37/IR/CallingConv.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/IR/DebugInfo.h"
+#include "llvm37/IR/DerivedTypes.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/MathExtras.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Target/TargetFrameLowering.h"
+#include "llvm37/Target/TargetLowering.h"
+#include "llvm37/Target/TargetMachine.h"
+#include "llvm37/Target/TargetSubtargetInfo.h"
+using namespace llvm37;
 
 #define DEBUG_TYPE "legalizedag"
 
@@ -246,10 +246,10 @@ SelectionDAGLegalize::ExpandConstantFP(ConstantFPSDNode *CFP, bool UseCP) {
   // an FP extending load is the same cost as a normal load (such as on the x87
   // fp stack or PPC FP unit).
   EVT VT = CFP->getValueType(0);
-  ConstantFP *LLVMC = const_cast<ConstantFP*>(CFP->getConstantFPValue());
+  ConstantFP *LLVM37C = const_cast<ConstantFP*>(CFP->getConstantFPValue());
   if (!UseCP) {
     assert((VT == MVT::f64 || VT == MVT::f32) && "Invalid type expansion");
-    return DAG.getConstant(LLVMC->getValueAPF().bitcastToAPInt(), dl,
+    return DAG.getConstant(LLVM37C->getValueAPF().bitcastToAPInt(), dl,
                            (VT == MVT::f64) ? MVT::i64 : MVT::i32);
   }
 
@@ -263,14 +263,14 @@ SelectionDAGLegalize::ExpandConstantFP(ConstantFPSDNode *CFP, bool UseCP) {
         TLI.isLoadExtLegal(ISD::EXTLOAD, OrigVT, SVT) &&
         TLI.ShouldShrinkFPConstant(OrigVT)) {
       Type *SType = SVT.getTypeForEVT(*DAG.getContext());
-      LLVMC = cast<ConstantFP>(ConstantExpr::getFPTrunc(LLVMC, SType));
+      LLVM37C = cast<ConstantFP>(ConstantExpr::getFPTrunc(LLVM37C, SType));
       VT = SVT;
       Extend = true;
     }
   }
 
   SDValue CPIdx =
-      DAG.getConstantPool(LLVMC, TLI.getPointerTy(DAG.getDataLayout()));
+      DAG.getConstantPool(LLVM37C, TLI.getPointerTy(DAG.getDataLayout()));
   unsigned Alignment = cast<ConstantPoolSDNode>(CPIdx)->getAlignment();
   if (Extend) {
     SDValue Result =
@@ -724,7 +724,7 @@ void SelectionDAGLegalize::LegalizeStoreOps(SDNode *Node) {
         SDValue Value = ST->getValue();
         MVT VT = Value.getSimpleValueType();
         switch (TLI.getOperationAction(ISD::STORE, VT)) {
-        default: llvm_unreachable("This action is not supported yet!");
+        default: llvm37_unreachable("This action is not supported yet!");
         case TargetLowering::Legal: {
           // If this is an unaligned store and the target doesn't support it,
           // expand it.
@@ -841,7 +841,7 @@ void SelectionDAGLegalize::LegalizeStoreOps(SDNode *Node) {
       } else {
         switch (TLI.getTruncStoreAction(ST->getValue().getSimpleValueType(),
                                         StVT.getSimpleVT())) {
-        default: llvm_unreachable("This action is not supported yet!");
+        default: llvm37_unreachable("This action is not supported yet!");
         case TargetLowering::Legal: {
           unsigned AS = ST->getAddressSpace();
           unsigned Align = ST->getAlignment();
@@ -893,7 +893,7 @@ void SelectionDAGLegalize::LegalizeLoadOps(SDNode *Node) {
     SDValue RChain = SDValue(Node, 1);
 
     switch (TLI.getOperationAction(Node->getOpcode(), VT)) {
-    default: llvm_unreachable("This action is not supported yet!");
+    default: llvm37_unreachable("This action is not supported yet!");
     case TargetLowering::Legal: {
       unsigned AS = LD->getAddressSpace();
       unsigned Align = LD->getAlignment();
@@ -1077,7 +1077,7 @@ void SelectionDAGLegalize::LegalizeLoadOps(SDNode *Node) {
     bool isCustom = false;
     switch (TLI.getLoadExtAction(ExtType, Node->getValueType(0),
                                  SrcVT.getSimpleVT())) {
-    default: llvm_unreachable("This action is not supported yet!");
+    default: llvm37_unreachable("This action is not supported yet!");
     case TargetLowering::Custom:
       isCustom = true;
       // FALLTHROUGH
@@ -1394,7 +1394,7 @@ void SelectionDAGLegalize::LegalizeOp(SDNode *Node) {
     Node->dump( &DAG);
     dbgs() << "\n";
 #endif
-    llvm_unreachable("Do not know how to legalize this operator!");
+    llvm37_unreachable("Do not know how to legalize this operator!");
 
   case ISD::CALLSEQ_START:
   case ISD::CALLSEQ_END:
@@ -1695,7 +1695,7 @@ bool SelectionDAGLegalize::LegalizeSetCCCondCode(EVT VT,
   ISD::CondCode CCCode = cast<CondCodeSDNode>(CC)->get();
   NeedInvert = false;
   switch (TLI.getCondCodeAction(CCCode, OpVT)) {
-  default: llvm_unreachable("Unknown condition code action!");
+  default: llvm37_unreachable("Unknown condition code action!");
   case TargetLowering::Legal:
     // Nothing to do.
     break;
@@ -1709,7 +1709,7 @@ bool SelectionDAGLegalize::LegalizeSetCCCondCode(EVT VT,
     ISD::CondCode CC1 = ISD::SETCC_INVALID, CC2 = ISD::SETCC_INVALID;
     unsigned Opc = 0;
     switch (CCCode) {
-    default: llvm_unreachable("Don't know how to expand this condition!");
+    default: llvm37_unreachable("Don't know how to expand this condition!");
     case ISD::SETO:
         assert(TLI.getCondCodeAction(ISD::SETOEQ, OpVT)
             == TargetLowering::Legal
@@ -1748,7 +1748,7 @@ bool SelectionDAGLegalize::LegalizeSetCCCondCode(EVT VT,
     case ISD::SETLT:
       // We only support using the inverted operation, which is computed above
       // and not a different manner of supporting expanding these cases.
-      llvm_unreachable("Don't know how to expand this condition!");
+      llvm37_unreachable("Don't know how to expand this condition!");
     case ISD::SETNE:
     case ISD::SETEQ:
       // Try inverting the result of the inverse condition.
@@ -1760,7 +1760,7 @@ bool SelectionDAGLegalize::LegalizeSetCCCondCode(EVT VT,
       }
       // If inverting the condition didn't work then we have no means to expand
       // the condition.
-      llvm_unreachable("Don't know how to expand this condition!");
+      llvm37_unreachable("Don't know how to expand this condition!");
     }
 
     SDValue SetCC1, SetCC2;
@@ -2177,7 +2177,7 @@ SDValue SelectionDAGLegalize::ExpandFPLibCall(SDNode* Node,
                                               RTLIB::Libcall Call_PPCF128) {
   RTLIB::Libcall LC;
   switch (Node->getSimpleValueType(0).SimpleTy) {
-  default: llvm_unreachable("Unexpected request for libcall!");
+  default: llvm37_unreachable("Unexpected request for libcall!");
   case MVT::f32: LC = Call_F32; break;
   case MVT::f64: LC = Call_F64; break;
   case MVT::f80: LC = Call_F80; break;
@@ -2195,7 +2195,7 @@ SDValue SelectionDAGLegalize::ExpandIntLibCall(SDNode* Node, bool isSigned,
                                                RTLIB::Libcall Call_I128) {
   RTLIB::Libcall LC;
   switch (Node->getSimpleValueType(0).SimpleTy) {
-  default: llvm_unreachable("Unexpected request for libcall!");
+  default: llvm37_unreachable("Unexpected request for libcall!");
   case MVT::i8:   LC = Call_I8; break;
   case MVT::i16:  LC = Call_I16; break;
   case MVT::i32:  LC = Call_I32; break;
@@ -2210,7 +2210,7 @@ static bool isDivRemLibcallAvailable(SDNode *Node, bool isSigned,
                                      const TargetLowering &TLI) {
   RTLIB::Libcall LC;
   switch (Node->getSimpleValueType(0).SimpleTy) {
-  default: llvm_unreachable("Unexpected request for libcall!");
+  default: llvm37_unreachable("Unexpected request for libcall!");
   case MVT::i8:   LC= isSigned ? RTLIB::SDIVREM_I8  : RTLIB::UDIVREM_I8;  break;
   case MVT::i16:  LC= isSigned ? RTLIB::SDIVREM_I16 : RTLIB::UDIVREM_I16; break;
   case MVT::i32:  LC= isSigned ? RTLIB::SDIVREM_I32 : RTLIB::UDIVREM_I32; break;
@@ -2255,7 +2255,7 @@ SelectionDAGLegalize::ExpandDivRemLibCall(SDNode *Node,
 
   RTLIB::Libcall LC;
   switch (Node->getSimpleValueType(0).SimpleTy) {
-  default: llvm_unreachable("Unexpected request for libcall!");
+  default: llvm37_unreachable("Unexpected request for libcall!");
   case MVT::i8:   LC= isSigned ? RTLIB::SDIVREM_I8  : RTLIB::UDIVREM_I8;  break;
   case MVT::i16:  LC= isSigned ? RTLIB::SDIVREM_I16 : RTLIB::UDIVREM_I16; break;
   case MVT::i32:  LC= isSigned ? RTLIB::SDIVREM_I32 : RTLIB::UDIVREM_I32; break;
@@ -2313,7 +2313,7 @@ SelectionDAGLegalize::ExpandDivRemLibCall(SDNode *Node,
 static bool isSinCosLibcallAvailable(SDNode *Node, const TargetLowering &TLI) {
   RTLIB::Libcall LC;
   switch (Node->getSimpleValueType(0).SimpleTy) {
-  default: llvm_unreachable("Unexpected request for libcall!");
+  default: llvm37_unreachable("Unexpected request for libcall!");
   case MVT::f32:     LC = RTLIB::SINCOS_F32; break;
   case MVT::f64:     LC = RTLIB::SINCOS_F64; break;
   case MVT::f80:     LC = RTLIB::SINCOS_F80; break;
@@ -2361,7 +2361,7 @@ SelectionDAGLegalize::ExpandSinCosLibCall(SDNode *Node,
                                           SmallVectorImpl<SDValue> &Results) {
   RTLIB::Libcall LC;
   switch (Node->getSimpleValueType(0).SimpleTy) {
-  default: llvm_unreachable("Unexpected request for libcall!");
+  default: llvm37_unreachable("Unexpected request for libcall!");
   case MVT::f32:     LC = RTLIB::SINCOS_F32; break;
   case MVT::f64:     LC = RTLIB::SINCOS_F64; break;
   case MVT::f80:     LC = RTLIB::SINCOS_F80; break;
@@ -2593,7 +2593,7 @@ SDValue SelectionDAGLegalize::ExpandLegalINT_TO_FP(bool isSigned,
   // offset depending on the data type.
   uint64_t FF;
   switch (Op0.getSimpleValueType().SimpleTy) {
-  default: llvm_unreachable("Unsupported integer type!");
+  default: llvm37_unreachable("Unsupported integer type!");
   case MVT::i8 : FF = 0x43800000ULL; break;  // 2^8  (as a float)
   case MVT::i16: FF = 0x47800000ULL; break;  // 2^16 (as a float)
   case MVT::i32: FF = 0x4F800000ULL; break;  // 2^32 (as a float)
@@ -2719,7 +2719,7 @@ SDValue SelectionDAGLegalize::ExpandBSWAP(SDValue Op, SDLoc dl) {
   EVT SHVT = TLI.getShiftAmountTy(VT, DAG.getDataLayout());
   SDValue Tmp1, Tmp2, Tmp3, Tmp4, Tmp5, Tmp6, Tmp7, Tmp8;
   switch (VT.getSimpleVT().SimpleTy) {
-  default: llvm_unreachable("Unhandled Expand type in BSWAP!");
+  default: llvm37_unreachable("Unhandled Expand type in BSWAP!");
   case MVT::i16:
     Tmp2 = DAG.getNode(ISD::SHL, dl, VT, Op, DAG.getConstant(8, dl, SHVT));
     Tmp1 = DAG.getNode(ISD::SRL, dl, VT, Op, DAG.getConstant(8, dl, SHVT));
@@ -2770,7 +2770,7 @@ SDValue SelectionDAGLegalize::ExpandBSWAP(SDValue Op, SDLoc dl) {
 SDValue SelectionDAGLegalize::ExpandBitCount(unsigned Opc, SDValue Op,
                                              SDLoc dl) {
   switch (Opc) {
-  default: llvm_unreachable("Cannot expand this yet!");
+  default: llvm37_unreachable("Cannot expand this yet!");
   case ISD::CTPOP: {
     EVT VT = Op.getValueType();
     EVT ShVT = TLI.getShiftAmountTy(VT, DAG.getDataLayout());
@@ -3331,7 +3331,7 @@ void SelectionDAGLegalize::ExpandNode(SDNode *Node) {
     // Expand Y = MAX(A, B) -> Y = (A > B) ? A : B
     ISD::CondCode Pred;
     switch (Node->getOpcode()) {
-    default: llvm_unreachable("How did we get here?");
+    default: llvm37_unreachable("How did we get here?");
     case ISD::SMAX: Pred = ISD::SETGT; break;
     case ISD::SMIN: Pred = ISD::SETLT; break;
     case ISD::UMAX: Pred = ISD::SETUGT; break;
@@ -3473,7 +3473,7 @@ void SelectionDAGLegalize::ExpandNode(SDNode *Node) {
                                       RTLIB::FMA_PPCF128));
     break;
   case ISD::FMAD:
-    llvm_unreachable("Illegal fmad should never be formed");
+    llvm37_unreachable("Illegal fmad should never be formed");
 
   case ISD::FADD:
     Results.push_back(ExpandFPLibCall(Node, RTLIB::ADD_F32, RTLIB::ADD_F64,

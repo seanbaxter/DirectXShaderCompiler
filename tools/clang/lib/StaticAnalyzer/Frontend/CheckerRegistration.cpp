@@ -1,6 +1,6 @@
 //===--- CheckerRegistration.cpp - Registration for the Analyzer Checkers -===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -20,15 +20,15 @@
 #include "clang/StaticAnalyzer/Core/CheckerOptInfo.h"
 #include "clang/StaticAnalyzer/Core/CheckerRegistry.h"
 #include "clang/StaticAnalyzer/Frontend/FrontendActions.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/Support/DynamicLibrary.h"
-#include "llvm/Support/Path.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/Support/DynamicLibrary.h"
+#include "llvm37/Support/Path.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <memory>
 
 using namespace clang;
 using namespace ento;
-using llvm::sys::DynamicLibrary;
+using llvm37::sys::DynamicLibrary;
 
 namespace {
 class ClangCheckerRegistry : public CheckerRegistry {
@@ -93,7 +93,7 @@ void ClangCheckerRegistry::warnIncompatible(DiagnosticsEngine *diags,
     return;
 
   diags->Report(diag::warn_incompatible_analyzer_plugin_api)
-      << llvm::sys::path::filename(pluginPath);
+      << llvm37::sys::path::filename(pluginPath);
   diags->Report(diag::note_incompatible_analyzer_plugin_api)
       << CLANG_ANALYZER_API_VERSION_STRING
       << pluginAPIVersion;

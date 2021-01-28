@@ -1,6 +1,6 @@
 //===- PtrUseVisitor.cpp - InstVisitors over a pointers uses --------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,9 +11,9 @@
 ///
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Analysis/PtrUseVisitor.h"
+#include "llvm37/Analysis/PtrUseVisitor.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 void detail::PtrUseVisitorBase::enqueueUsers(Instruction &I) {
   for (Use &U : I.uses()) {

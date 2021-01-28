@@ -2,10 +2,10 @@
 
 // Test that local matrices preserve debug info with optimizations
 
-// CHECK: call void @llvm.dbg.value
-// CHECK: call void @llvm.dbg.value
-// CHECK: call void @llvm.dbg.value
-// CHECK: call void @llvm.dbg.value
+// CHECK: call void @llvm37.dbg.value
+// CHECK: call void @llvm37.dbg.value
+// CHECK: call void @llvm37.dbg.value
+// CHECK: call void @llvm37.dbg.value
 
 // Exclude quoted source file (see readme)
 // CHECK-LABEL: {{!"[^"]*\\0A[^"]*"}}

@@ -18,7 +18,7 @@ entry:
 
 define i32 @main(i32 %argc, i8** %argv) {
 ; CHECK-LABEL: @main
-; CHECK: llvm.lifetime.start
+; CHECK: llvm37.lifetime.start
 ; CHECK: memcpy
 entry:
   %call = call i32 @foo(%struct.foo* byval align 8 @gFoo, i32 %argc)

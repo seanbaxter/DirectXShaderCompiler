@@ -1,6 +1,6 @@
 //===-- Type.cpp - Implement the Type class -------------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,19 +11,19 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/IR/Type.h"
+#include "llvm37/IR/Type.h"
 #include "LLVMContextImpl.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/IR/Module.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/IR/Module.h"
 #include <algorithm>
 #include <cstdarg>
-using namespace llvm;
+using namespace llvm37;
 
 //===----------------------------------------------------------------------===//
 //                         Type Class Implementation
 //===----------------------------------------------------------------------===//
 
-Type *Type::getPrimitiveType(LLVMContext &C, TypeID IDNumber) {
+Type *Type::getPrimitiveType(LLVM37Context &C, TypeID IDNumber) {
   switch (IDNumber) {
   case VoidTyID      : return getVoidTy(C);
   case HalfTyID      : return getHalfTy(C);
@@ -222,77 +222,77 @@ unsigned Type::getPointerAddressSpace() const {
 //                          Primitive 'Type' data
 //===----------------------------------------------------------------------===//
 
-Type *Type::getVoidTy(LLVMContext &C) { return &C.pImpl->VoidTy; }
-Type *Type::getLabelTy(LLVMContext &C) { return &C.pImpl->LabelTy; }
-Type *Type::getHalfTy(LLVMContext &C) { return &C.pImpl->HalfTy; }
-Type *Type::getFloatTy(LLVMContext &C) { return &C.pImpl->FloatTy; }
-Type *Type::getDoubleTy(LLVMContext &C) { return &C.pImpl->DoubleTy; }
-Type *Type::getMetadataTy(LLVMContext &C) { return &C.pImpl->MetadataTy; }
-Type *Type::getX86_FP80Ty(LLVMContext &C) { return &C.pImpl->X86_FP80Ty; }
-Type *Type::getFP128Ty(LLVMContext &C) { return &C.pImpl->FP128Ty; }
-Type *Type::getPPC_FP128Ty(LLVMContext &C) { return &C.pImpl->PPC_FP128Ty; }
-Type *Type::getX86_MMXTy(LLVMContext &C) { return &C.pImpl->X86_MMXTy; }
+Type *Type::getVoidTy(LLVM37Context &C) { return &C.pImpl->VoidTy; }
+Type *Type::getLabelTy(LLVM37Context &C) { return &C.pImpl->LabelTy; }
+Type *Type::getHalfTy(LLVM37Context &C) { return &C.pImpl->HalfTy; }
+Type *Type::getFloatTy(LLVM37Context &C) { return &C.pImpl->FloatTy; }
+Type *Type::getDoubleTy(LLVM37Context &C) { return &C.pImpl->DoubleTy; }
+Type *Type::getMetadataTy(LLVM37Context &C) { return &C.pImpl->MetadataTy; }
+Type *Type::getX86_FP80Ty(LLVM37Context &C) { return &C.pImpl->X86_FP80Ty; }
+Type *Type::getFP128Ty(LLVM37Context &C) { return &C.pImpl->FP128Ty; }
+Type *Type::getPPC_FP128Ty(LLVM37Context &C) { return &C.pImpl->PPC_FP128Ty; }
+Type *Type::getX86_MMXTy(LLVM37Context &C) { return &C.pImpl->X86_MMXTy; }
 
-IntegerType *Type::getInt1Ty(LLVMContext &C) { return &C.pImpl->Int1Ty; }
-IntegerType *Type::getInt8Ty(LLVMContext &C) { return &C.pImpl->Int8Ty; }
-IntegerType *Type::getInt16Ty(LLVMContext &C) { return &C.pImpl->Int16Ty; }
-IntegerType *Type::getInt32Ty(LLVMContext &C) { return &C.pImpl->Int32Ty; }
-IntegerType *Type::getInt64Ty(LLVMContext &C) { return &C.pImpl->Int64Ty; }
-IntegerType *Type::getInt128Ty(LLVMContext &C) { return &C.pImpl->Int128Ty; }
+IntegerType *Type::getInt1Ty(LLVM37Context &C) { return &C.pImpl->Int1Ty; }
+IntegerType *Type::getInt8Ty(LLVM37Context &C) { return &C.pImpl->Int8Ty; }
+IntegerType *Type::getInt16Ty(LLVM37Context &C) { return &C.pImpl->Int16Ty; }
+IntegerType *Type::getInt32Ty(LLVM37Context &C) { return &C.pImpl->Int32Ty; }
+IntegerType *Type::getInt64Ty(LLVM37Context &C) { return &C.pImpl->Int64Ty; }
+IntegerType *Type::getInt128Ty(LLVM37Context &C) { return &C.pImpl->Int128Ty; }
 
-IntegerType *Type::getIntNTy(LLVMContext &C, unsigned N) {
+IntegerType *Type::getIntNTy(LLVM37Context &C, unsigned N) {
   return IntegerType::get(C, N);
 }
 
-PointerType *Type::getHalfPtrTy(LLVMContext &C, unsigned AS) {
+PointerType *Type::getHalfPtrTy(LLVM37Context &C, unsigned AS) {
   return getHalfTy(C)->getPointerTo(AS);
 }
 
-PointerType *Type::getFloatPtrTy(LLVMContext &C, unsigned AS) {
+PointerType *Type::getFloatPtrTy(LLVM37Context &C, unsigned AS) {
   return getFloatTy(C)->getPointerTo(AS);
 }
 
-PointerType *Type::getDoublePtrTy(LLVMContext &C, unsigned AS) {
+PointerType *Type::getDoublePtrTy(LLVM37Context &C, unsigned AS) {
   return getDoubleTy(C)->getPointerTo(AS);
 }
 
-PointerType *Type::getX86_FP80PtrTy(LLVMContext &C, unsigned AS) {
+PointerType *Type::getX86_FP80PtrTy(LLVM37Context &C, unsigned AS) {
   return getX86_FP80Ty(C)->getPointerTo(AS);
 }
 
-PointerType *Type::getFP128PtrTy(LLVMContext &C, unsigned AS) {
+PointerType *Type::getFP128PtrTy(LLVM37Context &C, unsigned AS) {
   return getFP128Ty(C)->getPointerTo(AS);
 }
 
-PointerType *Type::getPPC_FP128PtrTy(LLVMContext &C, unsigned AS) {
+PointerType *Type::getPPC_FP128PtrTy(LLVM37Context &C, unsigned AS) {
   return getPPC_FP128Ty(C)->getPointerTo(AS);
 }
 
-PointerType *Type::getX86_MMXPtrTy(LLVMContext &C, unsigned AS) {
+PointerType *Type::getX86_MMXPtrTy(LLVM37Context &C, unsigned AS) {
   return getX86_MMXTy(C)->getPointerTo(AS);
 }
 
-PointerType *Type::getIntNPtrTy(LLVMContext &C, unsigned N, unsigned AS) {
+PointerType *Type::getIntNPtrTy(LLVM37Context &C, unsigned N, unsigned AS) {
   return getIntNTy(C, N)->getPointerTo(AS);
 }
 
-PointerType *Type::getInt1PtrTy(LLVMContext &C, unsigned AS) {
+PointerType *Type::getInt1PtrTy(LLVM37Context &C, unsigned AS) {
   return getInt1Ty(C)->getPointerTo(AS);
 }
 
-PointerType *Type::getInt8PtrTy(LLVMContext &C, unsigned AS) {
+PointerType *Type::getInt8PtrTy(LLVM37Context &C, unsigned AS) {
   return getInt8Ty(C)->getPointerTo(AS);
 }
 
-PointerType *Type::getInt16PtrTy(LLVMContext &C, unsigned AS) {
+PointerType *Type::getInt16PtrTy(LLVM37Context &C, unsigned AS) {
   return getInt16Ty(C)->getPointerTo(AS);
 }
 
-PointerType *Type::getInt32PtrTy(LLVMContext &C, unsigned AS) {
+PointerType *Type::getInt32PtrTy(LLVM37Context &C, unsigned AS) {
   return getInt32Ty(C)->getPointerTo(AS);
 }
 
-PointerType *Type::getInt64PtrTy(LLVMContext &C, unsigned AS) {
+PointerType *Type::getInt64PtrTy(LLVM37Context &C, unsigned AS) {
   return getInt64Ty(C)->getPointerTo(AS);
 }
 
@@ -301,7 +301,7 @@ PointerType *Type::getInt64PtrTy(LLVMContext &C, unsigned AS) {
 //                       IntegerType Implementation
 //===----------------------------------------------------------------------===//
 
-IntegerType *IntegerType::get(LLVMContext &C, unsigned NumBits) {
+IntegerType *IntegerType::get(LLVM37Context &C, unsigned NumBits) {
   assert(NumBits >= MIN_INT_BITS && "bitwidth too small");
   assert(NumBits <= MAX_INT_BITS && "bitwidth too large");
   
@@ -360,7 +360,7 @@ FunctionType::FunctionType(Type *Result, ArrayRef<Type*> Params,
 // FunctionType::get - The factory function for the FunctionType class.
 FunctionType *FunctionType::get(Type *ReturnType,
                                 ArrayRef<Type*> Params, bool isVarArg) {
-  LLVMContextImpl *pImpl = ReturnType->getContext().pImpl;
+  LLVM37ContextImpl *pImpl = ReturnType->getContext().pImpl;
   FunctionTypeKeyInfo::KeyTy Key(ReturnType, Params, isVarArg);
   auto I = pImpl->FunctionTypes.find_as(Key);
   FunctionType *FT;
@@ -401,9 +401,9 @@ bool FunctionType::isValidArgumentType(Type *ArgTy) {
 
 // Primitive Constructors.
 
-StructType *StructType::get(LLVMContext &Context, ArrayRef<Type*> ETypes, 
+StructType *StructType::get(LLVM37Context &Context, ArrayRef<Type*> ETypes, 
                             bool isPacked) {
-  LLVMContextImpl *pImpl = Context.pImpl;
+  LLVM37ContextImpl *pImpl = Context.pImpl;
   AnonStructTypeKeyInfo::KeyTy Key(ETypes, isPacked);
   auto I = pImpl->AnonStructTypes.find_as(Key);
   StructType *ST;
@@ -487,44 +487,44 @@ void StructType::setName(StringRef Name) {
 //===----------------------------------------------------------------------===//
 // StructType Helper functions.
 
-StructType *StructType::create(LLVMContext &Context, StringRef Name) {
+StructType *StructType::create(LLVM37Context &Context, StringRef Name) {
   StructType *ST = new (Context.pImpl->TypeAllocator) StructType(Context);
   if (!Name.empty())
     ST->setName(Name);
   return ST;
 }
 
-StructType *StructType::get(LLVMContext &Context, bool isPacked) {
+StructType *StructType::get(LLVM37Context &Context, bool isPacked) {
   return get(Context, None, isPacked);
 }
 
 StructType *StructType::get(Type *type, ...) {
   assert(type && "Cannot create a struct type with no elements with this");
-  LLVMContext &Ctx = type->getContext();
+  LLVM37Context &Ctx = type->getContext();
   va_list ap;
-  SmallVector<llvm::Type*, 8> StructFields;
+  SmallVector<llvm37::Type*, 8> StructFields;
   va_start(ap, type);
   while (type) {
     StructFields.push_back(type);
-    type = va_arg(ap, llvm::Type*);
+    type = va_arg(ap, llvm37::Type*);
   }
-  auto *Ret = llvm::StructType::get(Ctx, StructFields);
+  auto *Ret = llvm37::StructType::get(Ctx, StructFields);
   va_end(ap);
   return Ret;
 }
 
-StructType *StructType::create(LLVMContext &Context, ArrayRef<Type*> Elements,
+StructType *StructType::create(LLVM37Context &Context, ArrayRef<Type*> Elements,
                                StringRef Name, bool isPacked) {
   StructType *ST = create(Context, Name);
   ST->setBody(Elements, isPacked);
   return ST;
 }
 
-StructType *StructType::create(LLVMContext &Context, ArrayRef<Type*> Elements) {
+StructType *StructType::create(LLVM37Context &Context, ArrayRef<Type*> Elements) {
   return create(Context, Elements, StringRef());
 }
 
-StructType *StructType::create(LLVMContext &Context) {
+StructType *StructType::create(LLVM37Context &Context) {
   return create(Context, StringRef());
 }
 
@@ -543,15 +543,15 @@ StructType *StructType::create(ArrayRef<Type*> Elements) {
 
 StructType *StructType::create(StringRef Name, Type *type, ...) {
   assert(type && "Cannot create a struct type with no elements with this");
-  LLVMContext &Ctx = type->getContext();
+  LLVM37Context &Ctx = type->getContext();
   va_list ap;
-  SmallVector<llvm::Type*, 8> StructFields;
+  SmallVector<llvm37::Type*, 8> StructFields;
   va_start(ap, type);
   while (type) {
     StructFields.push_back(type);
-    type = va_arg(ap, llvm::Type*);
+    type = va_arg(ap, llvm37::Type*);
   }
-  auto *Ret = llvm::StructType::create(Ctx, StructFields, Name);
+  auto *Ret = llvm37::StructType::create(Ctx, StructFields, Name);
   va_end(ap);
   return Ret;
 }
@@ -590,11 +590,11 @@ StringRef StructType::getName() const {
 void StructType::setBody(Type *type, ...) {
   assert(type && "Cannot create a struct type with no elements with this");
   va_list ap;
-  SmallVector<llvm::Type*, 8> StructFields;
+  SmallVector<llvm37::Type*, 8> StructFields;
   va_start(ap, type);
   while (type) {
     StructFields.push_back(type);
-    type = va_arg(ap, llvm::Type*);
+    type = va_arg(ap, llvm37::Type*);
   }
   setBody(StructFields);
   va_end(ap);
@@ -687,7 +687,7 @@ ArrayType *ArrayType::get(Type *elementType, uint64_t NumElements) {
   Type *ElementType = const_cast<Type*>(elementType);
   assert(isValidElementType(ElementType) && "Invalid type for array element!");
     
-  LLVMContextImpl *pImpl = ElementType->getContext().pImpl;
+  LLVM37ContextImpl *pImpl = ElementType->getContext().pImpl;
   ArrayType *&Entry = 
     pImpl->ArrayTypes[std::make_pair(ElementType, NumElements)];
 
@@ -717,7 +717,7 @@ VectorType *VectorType::get(Type *elementType, unsigned NumElements) {
                                             "be an integer, floating point, or "
                                             "pointer type.");
 
-  LLVMContextImpl *pImpl = ElementType->getContext().pImpl;
+  LLVM37ContextImpl *pImpl = ElementType->getContext().pImpl;
   VectorType *&Entry = ElementType->getContext().pImpl
     ->VectorTypes[std::make_pair(ElementType, NumElements)];
 
@@ -739,7 +739,7 @@ PointerType *PointerType::get(Type *EltTy, unsigned AddressSpace) {
   assert(EltTy && "Can't get a pointer to <null> type!");
   assert(isValidElementType(EltTy) && "Invalid type for pointer element!");
   
-  LLVMContextImpl *CImpl = EltTy->getContext().pImpl;
+  LLVM37ContextImpl *CImpl = EltTy->getContext().pImpl;
   
   // Since AddressSpace #0 is the common case, we special case it.
   PointerType *&Entry = AddressSpace == 0 ? CImpl->PointerTypes[EltTy]

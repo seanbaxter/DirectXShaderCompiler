@@ -10,7 +10,7 @@
 #include "dxc/Support/Global.h"
 #include "dxc/DXIL/DxilSignature.h"
 #include "dxc/DXIL/DxilSigPoint.h"
-#include "llvm/ADT/STLExtras.h"
+#include "llvm37/ADT/STLExtras.h"
 
 using std::vector;
 using std::unique_ptr;
@@ -61,7 +61,7 @@ bool DxilSignature::IsOutput() const {
 }
 
 unique_ptr<DxilSignatureElement> DxilSignature::CreateElement() {
-  return llvm::make_unique<DxilSignatureElement>(m_sigPointKind);
+  return llvm37::make_unique<DxilSignatureElement>(m_sigPointKind);
 }
 
 unsigned DxilSignature::AppendElement(std::unique_ptr<DxilSignatureElement> pSE, bool bSetID) {

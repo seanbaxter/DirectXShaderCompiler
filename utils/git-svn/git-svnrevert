@@ -20,7 +20,7 @@ if [ $? -ne 0 ] || [ "$OTHER" = "" ]; then
     echo "Possible problems are:"
     echo "  * Your revision number ($COMMIT) is wrong"
     echo "  * This tree is not up to date (before that commit)"
-    echo "  * This commit in in another three (llvm, clang, compiler-rt, etc)"
+    echo "  * This commit in in another three (llvm37, clang, compiler-rt, etc)"
     exit 1
 fi
 

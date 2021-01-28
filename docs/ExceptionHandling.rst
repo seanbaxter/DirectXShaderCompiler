@@ -1,5 +1,5 @@
 ==========================
-Exception Handling in LLVM
+Exception Handling in LLVM37
 ==========================
 
 .. contents::
@@ -9,7 +9,7 @@ Introduction
 ============
 
 This document is the central repository for all information pertaining to
-exception handling in LLVM.  It describes the format that LLVM exception
+exception handling in LLVM37.  It describes the format that LLVM37 exception
 handling information takes, which is useful for those interested in creating
 front-ends or dealing directly with the information.  Further, this document
 provides specific examples of what exception handling information is used for in
@@ -43,8 +43,8 @@ table formats can be found at `Exception Handling Tables
 Setjmp/Longjmp Exception Handling
 ---------------------------------
 
-Setjmp/Longjmp (SJLJ) based exception handling uses LLVM intrinsics
-`llvm.eh.sjlj.setjmp`_ and `llvm.eh.sjlj.longjmp`_ to handle control flow for
+Setjmp/Longjmp (SJLJ) based exception handling uses LLVM37 intrinsics
+`llvm37.eh.sjlj.setjmp`_ and `llvm37.eh.sjlj.longjmp`_ to handle control flow for
 exception handling.
 
 For each function which does exception processing --- be it ``try``/``catch``
@@ -53,7 +53,7 @@ list. When exceptions are unwinding, the runtime uses this list to identify
 which functions need processing.
 
 Landing pad selection is encoded in the call site entry of the function
-context. The runtime returns to the function via `llvm.eh.sjlj.longjmp`_, where
+context. The runtime returns to the function via `llvm37.eh.sjlj.longjmp`_, where
 a switch table transfers control to the appropriate landing pad based on the
 index stored in the function context.
 
@@ -82,7 +82,7 @@ found at `MSDN Exception Handling (x64)
 Overview
 --------
 
-When an exception is thrown in LLVM code, the runtime does its best to find a
+When an exception is thrown in LLVM37 code, the runtime does its best to find a
 handler suited to processing the circumstance.
 
 The runtime first attempts to find an *exception frame* corresponding to the
@@ -118,12 +118,12 @@ receives an *exception structure* and a *selector value* corresponding to the
 *type* of exception thrown. The selector is then used to determine which *catch*
 should actually process the exception.
 
-LLVM Code Generation
+LLVM37 Code Generation
 ====================
 
 From a C++ developer's perspective, exceptions are defined in terms of the
 ``throw`` and ``try``/``catch`` statements. In this section we will describe the
-implementation of LLVM exception handling in terms of C++ examples.
+implementation of LLVM37 exception handling in terms of C++ examples.
 
 Throw
 -----
@@ -148,7 +148,7 @@ Try/Catch
 ---------
 
 A call within the scope of a *try* statement can potentially raise an
-exception. In those circumstances, the LLVM C++ front-end replaces the call with
+exception. In those circumstances, the LLVM37 C++ front-end replaces the call with
 an ``invoke`` instruction. Unlike a call, the ``invoke`` has two potential
 continuation points:
 
@@ -158,13 +158,13 @@ continuation points:
    unwinding of a throw
 
 The term used to define the place where an ``invoke`` continues after an
-exception is called a *landing pad*. LLVM landing pads are conceptually
+exception is called a *landing pad*. LLVM37 landing pads are conceptually
 alternative function entry points where an exception structure reference and a
 type info index are passed in as arguments. The landing pad saves the exception
 structure reference and then proceeds to select the catch block that corresponds
 to the type info of the exception object.
 
-The LLVM :ref:`i_landingpad` is used to convey information about the landing
+The LLVM37 :ref:`i_landingpad` is used to convey information about the landing
 pad to the back end. For C++, the ``landingpad`` instruction returns a pointer
 and integer pair corresponding to the pointer to the *exception structure* and
 the *selector value* respectively.
@@ -187,7 +187,7 @@ following meanings:
      (...)``").
 
    - When this clause is matched, the selector value will be equal to the value
-     returned by "``@llvm.eh.typeid.for(i8* @ExcType)``". This will always be a
+     returned by "``@llvm37.eh.typeid.for(i8* @ExcType)``". This will always be a
      positive value.
 
 -  ``filter <type> [<type> @ExcType1, ..., <type> @ExcTypeN]``
@@ -232,7 +232,7 @@ Once the landing pad has the type info selector, the code branches to the code
 for the first catch. The catch then checks the value of the type info selector
 against the index of type info for that catch.  Since the type info index is not
 known until all the type infos have been gathered in the backend, the catch code
-must call the `llvm.eh.typeid.for`_ intrinsic to determine the index for a given
+must call the `llvm37.eh.typeid.for`_ intrinsic to determine the index for a given
 type info. If the catch fails to match the selector then control is passed on to
 the next catch.
 
@@ -287,7 +287,7 @@ Throw Filters
 
 C++ allows the specification of which exception types may be thrown from a
 function. To represent this, a top level landing pad may exist to filter out
-invalid types. To express this in LLVM code the :ref:`i_landingpad` will have a
+invalid types. To express this in LLVM37 code the :ref:`i_landingpad` will have a
 filter clause. The clause consists of an array of type infos.
 ``landingpad`` will return a negative value
 if the exception does not match any of the type infos. If no match is found then
@@ -295,7 +295,7 @@ a call to ``__cxa_call_unexpected`` should be made, otherwise
 ``_Unwind_Resume``.  Each of these functions requires a reference to the
 exception structure.  Note that the most general form of a ``landingpad``
 instruction can have any number of catch, cleanup, and filter clauses (though
-having more than one cleanup is pointless). The LLVM C++ front-end can generate
+having more than one cleanup is pointless). The LLVM37 C++ front-end can generate
 such ``landingpad`` instructions due to inlining creating nested exception
 handling scopes.
 
@@ -339,11 +339,11 @@ original context before code generation.
 
 Catch handlers are called with a pointer to the handler itself as the first
 argument and a pointer to the parent function's stack frame as the second
-argument.  The catch handler uses the `llvm.localrecover
-<LangRef.html#llvm-localescape-and-llvm-localrecover-intrinsics>`_ to get a
+argument.  The catch handler uses the `llvm37.localrecover
+<LangRef.html#llvm37-localescape-and-llvm37-localrecover-intrinsics>`_ to get a
 pointer to a frame allocation block that is created in the parent frame using
-the `llvm.localescape
-<LangRef.html#llvm-localescape-and-llvm-localrecover-intrinsics>`_ intrinsic.
+the `llvm37.localescape
+<LangRef.html#llvm37-localescape-and-llvm37-localrecover-intrinsics>`_ intrinsic.
 The ``WinEHPrepare`` pass will have created a structure definition for the
 contents of this block.  The first two members of the structure will always be
 (1) a 32-bit integer that the runtime uses to track the exception state of the
@@ -366,29 +366,29 @@ The IR generated for Windows runtime based C++ exception handling is initially
 very similar to the ``landingpad`` mechanism described above.  Calls to
 libc++abi functions (such as ``__cxa_begin_catch``/``__cxa_end_catch`` and
 ``__cxa_throw_exception`` are replaced with calls to intrinsics or Windows
-runtime functions (such as ``llvm.eh.begincatch``/``llvm.eh.endcatch`` and
+runtime functions (such as ``llvm37.eh.begincatch``/``llvm37.eh.endcatch`` and
 ``__CxxThrowException``).
 
 During the WinEHPrepare pass, the handler functions are outlined into handler
 functions and the original landing pad code is replaced with a call to the
-``llvm.eh.actions`` intrinsic that describes the order in which handlers will
+``llvm37.eh.actions`` intrinsic that describes the order in which handlers will
 be processed from the logical location of the landing pad and an indirect
-branch to the return value of the ``llvm.eh.actions`` intrinsic. The
-``llvm.eh.actions`` intrinsic is defined as returning the address at which
+branch to the return value of the ``llvm37.eh.actions`` intrinsic. The
+``llvm37.eh.actions`` intrinsic is defined as returning the address at which
 execution will continue.  This is a temporary construct which will be removed
 before code generation, but it allows for the accurate tracking of control
 flow until then.
 
 A typical landing pad will look like this after outlining:
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
     lpad:
       %vals = landingpad { i8*, i32 } personality i8* bitcast (i32 (...)* @__CxxFrameHandler3 to i8*)
 	      cleanup
           catch i8* bitcast (i8** @_ZTIi to i8*)
           catch i8* bitcast (i8** @_ZTIf to i8*)
-      %recover = call i8* (...)* @llvm.eh.actions(
+      %recover = call i8* (...)* @llvm37.eh.actions(
           i32 3, i8* bitcast (i8** @_ZTIi to i8*), i8* (i8*, i8*)* @_Z4testb.catch.1)
           i32 2, i8* null, void (i8*, i8*)* @_Z4testb.cleanup.1)
           i32 1, i8* bitcast (i8** @_ZTIf to i8*), i8* (i8*, i8*)* @_Z4testb.catch.0)
@@ -415,18 +415,18 @@ an exception is caught.
 Exception Handling Intrinsics
 =============================
 
-In addition to the ``landingpad`` and ``resume`` instructions, LLVM uses several
-intrinsic functions (name prefixed with ``llvm.eh``) to provide exception
+In addition to the ``landingpad`` and ``resume`` instructions, LLVM37 uses several
+intrinsic functions (name prefixed with ``llvm37.eh``) to provide exception
 handling information at various points in generated code.
 
-.. _llvm.eh.typeid.for:
+.. _llvm37.eh.typeid.for:
 
-``llvm.eh.typeid.for``
+``llvm37.eh.typeid.for``
 ----------------------
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
-  i32 @llvm.eh.typeid.for(i8* %type_info)
+  i32 @llvm37.eh.typeid.for(i8* %type_info)
 
 
 This intrinsic returns the type info index in the exception table of the current
@@ -435,14 +435,14 @@ function.  This value can be used to compare against the result of
 
 Uses of this intrinsic are generated by the C++ front-end.
 
-.. _llvm.eh.begincatch:
+.. _llvm37.eh.begincatch:
 
-``llvm.eh.begincatch``
+``llvm37.eh.begincatch``
 ----------------------
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
-  void @llvm.eh.begincatch(i8* %ehptr, i8* %ehobj)
+  void @llvm37.eh.begincatch(i8* %ehptr, i8* %ehobj)
 
 
 This intrinsic marks the beginning of catch handling code within the blocks
@@ -468,26 +468,26 @@ by instructions that retrieve the exception object pointer from the frame
 allocation block.
 
 
-.. _llvm.eh.endcatch:
+.. _llvm37.eh.endcatch:
 
-``llvm.eh.endcatch``
+``llvm37.eh.endcatch``
 ----------------------
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
-  void @llvm.eh.endcatch()
+  void @llvm37.eh.endcatch()
 
 
 This intrinsic marks the end of catch handling code within the current block,
-which will be a successor of a block which called ``llvm.eh.begincatch''.
+which will be a successor of a block which called ``llvm37.eh.begincatch''.
 The exact behavior of this function depends on the compilation target and the
 personality function associated with the corresponding ``landingpad``
 instruction.
 
-There may be more than one call to ``llvm.eh.endcatch`` for any given call to
-``llvm.eh.begincatch`` with each ``llvm.eh.endcatch`` call corresponding to the
+There may be more than one call to ``llvm37.eh.endcatch`` for any given call to
+``llvm37.eh.begincatch`` with each ``llvm37.eh.endcatch`` call corresponding to the
 end of a different control path.  All control paths following a call to
-``llvm.eh.begincatch`` must reach a call to ``llvm.eh.endcatch``.
+``llvm37.eh.begincatch`` must reach a call to ``llvm37.eh.endcatch``.
 
 Uses of this intrinsic are generated by the C++ front-end.  Many targets will
 use implementation-specific functions (such as ``__cxa_begin_catch``) instead
@@ -498,14 +498,14 @@ When used in the native Windows C++ exception handling implementation, this
 intrinsic serves as a placeholder to delimit code before a catch handler is
 outlined.  After the handler is outlined, this intrinsic is simply removed.
 
-.. _llvm.eh.actions:
+.. _llvm37.eh.actions:
 
-``llvm.eh.actions``
+``llvm37.eh.actions``
 ----------------------
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
-  void @llvm.eh.actions()
+  void @llvm37.eh.actions()
 
 This intrinsic represents the list of actions to take when an exception is
 thrown. It is typically used by Windows exception handling schemes where cleanup
@@ -525,7 +525,7 @@ to catch the exception.
 
 For Windows C++ exception handling, the first argument for a catch handler is a
 pointer to the RTTI type descriptor for the object to catch. The second
-argument is an index into the argument list of the ``llvm.localescape`` call in
+argument is an index into the argument list of the ``llvm37.localescape`` call in
 the main function. The exception object will be copied into the provided stack
 object. If the exception object is not required, this argument should be -1.
 The third argument is a pointer to a function implementing the catch.  This
@@ -539,7 +539,7 @@ where the exception will be handled. In other words, catch handlers are not
 outlined in SEH. After running cleanups, execution immediately resumes at this
 PC.
 
-In order to preserve the structure of the CFG, a call to '``llvm.eh.actions``'
+In order to preserve the structure of the CFG, a call to '``llvm37.eh.actions``'
 must be followed by an ':ref:`indirectbr <i_indirectbr>`' instruction that
 jumps to the result of the intrinsic call.
 
@@ -547,22 +547,22 @@ jumps to the result of the intrinsic call.
 SJLJ Intrinsics
 ---------------
 
-The ``llvm.eh.sjlj`` intrinsics are used internally within LLVM's
+The ``llvm37.eh.sjlj`` intrinsics are used internally within LLVM37's
 backend.  Uses of them are generated by the backend's
 ``SjLjEHPrepare`` pass.
 
-.. _llvm.eh.sjlj.setjmp:
+.. _llvm37.eh.sjlj.setjmp:
 
-``llvm.eh.sjlj.setjmp``
+``llvm37.eh.sjlj.setjmp``
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
-  i32 @llvm.eh.sjlj.setjmp(i8* %setjmp_buf)
+  i32 @llvm37.eh.sjlj.setjmp(i8* %setjmp_buf)
 
 For SJLJ based exception handling, this intrinsic forces register saving for the
 current function and stores the address of the following instruction for use as
-a destination address by `llvm.eh.sjlj.longjmp`_. The buffer format and the
+a destination address by `llvm37.eh.sjlj.longjmp`_. The buffer format and the
 overall functioning of this intrinsic is compatible with the GCC
 ``__builtin_setjmp`` implementation allowing code built with the clang and GCC
 to interoperate.
@@ -570,44 +570,44 @@ to interoperate.
 The single parameter is a pointer to a five word buffer in which the calling
 context is saved. The front end places the frame pointer in the first word, and
 the target implementation of this intrinsic should place the destination address
-for a `llvm.eh.sjlj.longjmp`_ in the second word. The following three words are
+for a `llvm37.eh.sjlj.longjmp`_ in the second word. The following three words are
 available for use in a target-specific manner.
 
-.. _llvm.eh.sjlj.longjmp:
+.. _llvm37.eh.sjlj.longjmp:
 
-``llvm.eh.sjlj.longjmp``
+``llvm37.eh.sjlj.longjmp``
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
-  void @llvm.eh.sjlj.longjmp(i8* %setjmp_buf)
+  void @llvm37.eh.sjlj.longjmp(i8* %setjmp_buf)
 
-For SJLJ based exception handling, the ``llvm.eh.sjlj.longjmp`` intrinsic is
+For SJLJ based exception handling, the ``llvm37.eh.sjlj.longjmp`` intrinsic is
 used to implement ``__builtin_longjmp()``. The single parameter is a pointer to
-a buffer populated by `llvm.eh.sjlj.setjmp`_. The frame pointer and stack
+a buffer populated by `llvm37.eh.sjlj.setjmp`_. The frame pointer and stack
 pointer are restored from the buffer, then control is transferred to the
 destination address.
 
-``llvm.eh.sjlj.lsda``
+``llvm37.eh.sjlj.lsda``
 ~~~~~~~~~~~~~~~~~~~~~
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
-  i8* @llvm.eh.sjlj.lsda()
+  i8* @llvm37.eh.sjlj.lsda()
 
-For SJLJ based exception handling, the ``llvm.eh.sjlj.lsda`` intrinsic returns
+For SJLJ based exception handling, the ``llvm37.eh.sjlj.lsda`` intrinsic returns
 the address of the Language Specific Data Area (LSDA) for the current
 function. The SJLJ front-end code stores this address in the exception handling
 function context for use by the runtime.
 
-``llvm.eh.sjlj.callsite``
+``llvm37.eh.sjlj.callsite``
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
-  void @llvm.eh.sjlj.callsite(i32 %call_site_num)
+  void @llvm37.eh.sjlj.callsite(i32 %call_site_num)
 
-For SJLJ based exception handling, the ``llvm.eh.sjlj.callsite`` intrinsic
+For SJLJ based exception handling, the ``llvm37.eh.sjlj.callsite`` intrinsic
 identifies the callsite value associated with the following ``invoke``
 instruction. This is used to ensure that landing pad entries in the LSDA are
 generated in matching order.

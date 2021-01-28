@@ -16,13 +16,13 @@ target datalayout = "e-p:32:32:32-i1:8:8-i8:8:8-i16:16:16-i32:32:32-i64:32:64-f3
 
 declare i32 @sprintf(i8*, i8*, ...)
 
-; Check sprintf(dst, fmt) -> llvm.memcpy(str, fmt, strlen(fmt) + 1, 1).
+; Check sprintf(dst, fmt) -> llvm37.memcpy(str, fmt, strlen(fmt) + 1, 1).
 
 define void @test_simplify1(i8* %dst) {
 ; CHECK-LABEL: @test_simplify1(
   %fmt = getelementptr [13 x i8], [13 x i8]* @hello_world, i32 0, i32 0
   call i32 (i8*, i8*, ...) @sprintf(i8* %dst, i8* %fmt)
-; CHECK-NEXT: call void @llvm.memcpy.p0i8.p0i8.i32(i8* %dst, i8* getelementptr inbounds ([13 x i8], [13 x i8]* @hello_world, i32 0, i32 0), i32 13, i32 1, i1 false)
+; CHECK-NEXT: call void @llvm37.memcpy.p0i8.p0i8.i32(i8* %dst, i8* getelementptr inbounds ([13 x i8], [13 x i8]* @hello_world, i32 0, i32 0), i32 13, i32 1, i1 false)
   ret void
 ; CHECK-NEXT: ret void
 }
@@ -58,7 +58,7 @@ define void @test_simplify4(i8* %dst) {
 ; CHECK-NEXT: ret void
 }
 
-; Check sprintf(dst, "%s", str) -> llvm.memcpy(dest, str, strlen(str) + 1, 1).
+; Check sprintf(dst, "%s", str) -> llvm37.memcpy(dest, str, strlen(str) + 1, 1).
 
 define void @test_simplify5(i8* %dst, i8* %str) {
 ; CHECK-LABEL: @test_simplify5(
@@ -66,7 +66,7 @@ define void @test_simplify5(i8* %dst, i8* %str) {
   call i32 (i8*, i8*, ...) @sprintf(i8* %dst, i8* %fmt, i8* %str)
 ; CHECK-NEXT: [[STRLEN:%[a-z0-9]+]] = call i32 @strlen(i8* %str)
 ; CHECK-NEXT: [[LENINC:%[a-z0-9]+]] = add i32 [[STRLEN]], 1
-; CHECK-NEXT: call void @llvm.memcpy.p0i8.p0i8.i32(i8* %dst, i8* %str, i32 [[LENINC]], i32 1, i1 false)
+; CHECK-NEXT: call void @llvm37.memcpy.p0i8.p0i8.i32(i8* %dst, i8* %str, i32 [[LENINC]], i32 1, i1 false)
   ret void
 ; CHECK-NEXT: ret void
 }

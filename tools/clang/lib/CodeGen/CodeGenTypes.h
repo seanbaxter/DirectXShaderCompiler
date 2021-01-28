@@ -1,32 +1,32 @@
-//===--- CodeGenTypes.h - Type translation for LLVM CodeGen -----*- C++ -*-===//
+//===--- CodeGenTypes.h - Type translation for LLVM37 CodeGen -----*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 //
-// This is the code that handles AST -> LLVM type lowering.
+// This is the code that handles AST -> LLVM37 type lowering.
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_LIB_CODEGEN_CODEGENTYPES_H
-#define LLVM_CLANG_LIB_CODEGEN_CODEGENTYPES_H
+#ifndef LLVM37_CLANG_LIB_CODEGEN_CODEGENTYPES_H
+#define LLVM37_CLANG_LIB_CODEGEN_CODEGENTYPES_H
 
 #include "CGCall.h"
 #include "clang/AST/GlobalDecl.h"
 #include "clang/CodeGen/CGFunctionInfo.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/IR/Module.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/IR/Module.h"
 #include <vector>
 
-namespace llvm {
+namespace llvm37 {
 class FunctionType;
 class Module;
 class DataLayout;
 class Type;
-class LLVMContext;
+class LLVM37Context;
 class StructType;
 }
 
@@ -69,9 +69,9 @@ inline CXXCtorType toCXXCtorType(StructorType T) {
   case StructorType::Base:
     return Ctor_Base;
   case StructorType::Deleting:
-    llvm_unreachable("cannot have a deleting ctor");
+    llvm37_unreachable("cannot have a deleting ctor");
   }
-  llvm_unreachable("not a StructorType");
+  llvm37_unreachable("not a StructorType");
 }
 
 inline StructorType getFromCtorType(CXXCtorType T) {
@@ -81,12 +81,12 @@ inline StructorType getFromCtorType(CXXCtorType T) {
   case Ctor_Base:
     return StructorType::Base;
   case Ctor_Comdat:
-    llvm_unreachable("not expecting a COMDAT");
+    llvm37_unreachable("not expecting a COMDAT");
   case Ctor_CopyingClosure:
   case Ctor_DefaultClosure:
-    llvm_unreachable("not expecting a closure");
+    llvm37_unreachable("not expecting a closure");
   }
-  llvm_unreachable("not a CXXCtorType");
+  llvm37_unreachable("not a CXXCtorType");
 }
 
 inline CXXDtorType toCXXDtorType(StructorType T) {
@@ -98,7 +98,7 @@ inline CXXDtorType toCXXDtorType(StructorType T) {
   case StructorType::Deleting:
     return Dtor_Deleting;
   }
-  llvm_unreachable("not a StructorType");
+  llvm37_unreachable("not a StructorType");
 }
 
 inline StructorType getFromDtorType(CXXDtorType T) {
@@ -110,19 +110,19 @@ inline StructorType getFromDtorType(CXXDtorType T) {
   case Dtor_Base:
     return StructorType::Base;
   case Dtor_Comdat:
-    llvm_unreachable("not expecting a COMDAT");
+    llvm37_unreachable("not expecting a COMDAT");
   }
-  llvm_unreachable("not a CXXDtorType");
+  llvm37_unreachable("not a CXXDtorType");
 }
 
 /// This class organizes the cross-module state that is used while lowering
-/// AST types to LLVM types.
+/// AST types to LLVM37 types.
 class CodeGenTypes {
   CodeGenModule &CGM;
   // Some of this stuff should probably be left on the CGM.
   ASTContext &Context;
-  llvm::Module &TheModule;
-  const llvm::DataLayout &TheDataLayout;
+  llvm37::Module &TheModule;
+  const llvm37::DataLayout &TheDataLayout;
   const TargetInfo &Target;
   CGCXXABI &TheCXXABI;
 
@@ -134,24 +134,24 @@ class CodeGenTypes {
   /// manipulation is done by the runtime interfaces, which are
   /// responsible for coercing to the appropriate type; these opaque
   /// types are never refined.
-  llvm::DenseMap<const ObjCInterfaceType*, llvm::Type *> InterfaceTypes;
+  llvm37::DenseMap<const ObjCInterfaceType*, llvm37::Type *> InterfaceTypes;
 
   /// Maps clang struct type with corresponding record layout info.
-  llvm::DenseMap<const Type*, CGRecordLayout *> CGRecordLayouts;
+  llvm37::DenseMap<const Type*, CGRecordLayout *> CGRecordLayouts;
 
-  /// Contains the LLVM IR type for any converted RecordDecl.
-  llvm::DenseMap<const Type*, llvm::StructType *> RecordDeclTypes;
+  /// Contains the LLVM37 IR type for any converted RecordDecl.
+  llvm37::DenseMap<const Type*, llvm37::StructType *> RecordDeclTypes;
   
   /// Hold memoized CGFunctionInfo results.
-  llvm::FoldingSet<CGFunctionInfo> FunctionInfos;
+  llvm37::FoldingSet<CGFunctionInfo> FunctionInfos;
 
   /// This set keeps track of records that we're currently converting
   /// to an IR type.  For example, when converting:
   /// struct A { struct B { int x; } } when processing 'x', the 'A' and 'B'
   /// types will be in this set.
-  llvm::SmallPtrSet<const Type*, 4> RecordsBeingLaidOut;
+  llvm37::SmallPtrSet<const Type*, 4> RecordsBeingLaidOut;
   
-  llvm::SmallPtrSet<const CGFunctionInfo*, 4> FunctionsBeingProcessed;
+  llvm37::SmallPtrSet<const CGFunctionInfo*, 4> FunctionsBeingProcessed;
   
   /// True if we didn't layout a function due to a being inside
   /// a recursive struct conversion, set this to true.
@@ -160,45 +160,45 @@ class CodeGenTypes {
   SmallVector<const RecordDecl *, 8> DeferredRecords;
   
 private:
-  /// This map keeps cache of llvm::Types and maps clang::Type to
-  /// corresponding llvm::Type.
-  llvm::DenseMap<const Type *, llvm::Type *> TypeCache;
+  /// This map keeps cache of llvm37::Types and maps clang::Type to
+  /// corresponding llvm37::Type.
+  llvm37::DenseMap<const Type *, llvm37::Type *> TypeCache;
 
 public:
   CodeGenTypes(CodeGenModule &cgm);
   ~CodeGenTypes();
 
-  const llvm::DataLayout &getDataLayout() const { return TheDataLayout; }
+  const llvm37::DataLayout &getDataLayout() const { return TheDataLayout; }
   ASTContext &getContext() const { return Context; }
   const ABIInfo &getABIInfo() const { return TheABIInfo; }
   const TargetInfo &getTarget() const { return Target; }
   CGCXXABI &getCXXABI() const { return TheCXXABI; }
-  llvm::LLVMContext &getLLVMContext() { return TheModule.getContext(); }
+  llvm37::LLVM37Context &getLLVM37Context() { return TheModule.getContext(); }
 
-  /// ConvertType - Convert type T into a llvm::Type.
-  llvm::Type *ConvertType(QualType T);
+  /// ConvertType - Convert type T into a llvm37::Type.
+  llvm37::Type *ConvertType(QualType T);
 
-  /// ConvertTypeForMem - Convert type T into a llvm::Type.  This differs from
+  /// ConvertTypeForMem - Convert type T into a llvm37::Type.  This differs from
   /// ConvertType in that it is used to convert to the memory representation for
   /// a type.  For example, the scalar representation for _Bool is i1, but the
   /// memory representation is usually i8 or i32, depending on the target.
-  llvm::Type *ConvertTypeForMem(QualType T);
+  llvm37::Type *ConvertTypeForMem(QualType T);
 
-  /// GetFunctionType - Get the LLVM function type for \arg Info.
-  llvm::FunctionType *GetFunctionType(const CGFunctionInfo &Info);
+  /// GetFunctionType - Get the LLVM37 function type for \arg Info.
+  llvm37::FunctionType *GetFunctionType(const CGFunctionInfo &Info);
 
-  llvm::FunctionType *GetFunctionType(GlobalDecl GD);
+  llvm37::FunctionType *GetFunctionType(GlobalDecl GD);
 
   /// isFuncTypeConvertible - Utility to check whether a function type can
-  /// be converted to an LLVM type (i.e. doesn't depend on an incomplete tag
+  /// be converted to an LLVM37 type (i.e. doesn't depend on an incomplete tag
   /// type).
   bool isFuncTypeConvertible(const FunctionType *FT);
   bool isFuncParamTypeConvertible(QualType Ty);
 
-  /// GetFunctionTypeForVTable - Get the LLVM function type for use in a vtable,
+  /// GetFunctionTypeForVTable - Get the LLVM37 function type for use in a vtable,
   /// given a CXXMethodDecl. If the method to has an incomplete return type,
   /// and/or incomplete argument types, this will return the opaque type.
-  llvm::Type *GetFunctionTypeForVTable(GlobalDecl GD);
+  llvm37::Type *GetFunctionTypeForVTable(GlobalDecl GD);
 
   const CGRecordLayout &getCGRecordLayout(const RecordDecl*);
 
@@ -213,7 +213,7 @@ public:
   // The arrangement methods are split into three families:
   //   - those meant to drive the signature and prologue/epilogue
   //     of a function declaration or definition,
-  //   - those meant for the computation of the LLVM type for an abstract
+  //   - those meant for the computation of the LLVM37 type for an abstract
   //     appearance of a function, and
   //   - those meant for performing the IR-generation of a call.
   // They differ mainly in how they deal with optional (i.e. variadic)
@@ -270,44 +270,44 @@ public:
   const CGFunctionInfo &arrangeCXXMethodType(const CXXRecordDecl *RD,
                                              const FunctionProtoType *FTP);
 
-  /// "Arrange" the LLVM information for a call or type with the given
+  /// "Arrange" the LLVM37 information for a call or type with the given
   /// signature.  This is largely an internal method; other clients
   /// should use one of the above routines, which ultimately defer to
   /// this.
   ///
   /// \param argTypes - must all actually be canonical as params
-  const CGFunctionInfo &arrangeLLVMFunctionInfo(CanQualType returnType,
+  const CGFunctionInfo &arrangeLLVM37FunctionInfo(CanQualType returnType,
                                                 bool instanceMethod,
                                                 bool chainCall,
                                                 ArrayRef<CanQualType> argTypes,
                                                 FunctionType::ExtInfo info,
                                                 RequiredArgs args);
 
-  /// \brief Compute a new LLVM record layout object for the given record.
+  /// \brief Compute a new LLVM37 record layout object for the given record.
   CGRecordLayout *ComputeRecordLayout(const RecordDecl *D,
-                                      llvm::StructType *Ty);
+                                      llvm37::StructType *Ty);
 
   /// addRecordTypeName - Compute a name from the given record decl with an
-  /// optional suffix and name the given LLVM type using it.
-  void addRecordTypeName(const RecordDecl *RD, llvm::StructType *Ty,
+  /// optional suffix and name the given LLVM37 type using it.
+  void addRecordTypeName(const RecordDecl *RD, llvm37::StructType *Ty,
                          StringRef suffix);
   
 
 public:  // These are internal details of CGT that shouldn't be used externally.
   /// ConvertRecordDeclType - Lay out a tagged decl type like struct or union.
-  llvm::StructType *ConvertRecordDeclType(const RecordDecl *TD);
+  llvm37::StructType *ConvertRecordDeclType(const RecordDecl *TD);
 
-  /// getExpandedTypes - Expand the type \arg Ty into the LLVM
+  /// getExpandedTypes - Expand the type \arg Ty into the LLVM37
   /// argument types it would be passed as. See ABIArgInfo::Expand.
   void getExpandedTypes(QualType Ty,
-                        SmallVectorImpl<llvm::Type *>::iterator &TI);
+                        SmallVectorImpl<llvm37::Type *>::iterator &TI);
 
   /// IsZeroInitializable - Return whether a type can be
-  /// zero-initialized (in the C++ sense) with an LLVM zeroinitializer.
+  /// zero-initialized (in the C++ sense) with an LLVM37 zeroinitializer.
   bool isZeroInitializable(QualType T);
 
   /// IsZeroInitializable - Return whether a record type can be
-  /// zero-initialized (in the C++ sense) with an LLVM zeroinitializer.
+  /// zero-initialized (in the C++ sense) with an LLVM37 zeroinitializer.
   bool isZeroInitializable(const RecordDecl *RD);
   
   bool isRecordLayoutComplete(const Type *Ty) const;

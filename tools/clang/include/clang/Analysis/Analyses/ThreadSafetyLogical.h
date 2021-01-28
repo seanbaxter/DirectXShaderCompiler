@@ -1,6 +1,6 @@
 //===- ThreadSafetyLogical.h -----------------------------------*- C++ --*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -10,8 +10,8 @@
 // that are used as part of fact-checking capability expressions.
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_ANALYSIS_ANALYSES_THREADSAFETYLOGICAL_H
-#define LLVM_CLANG_ANALYSIS_ANALYSES_THREADSAFETYLOGICAL_H
+#ifndef LLVM37_CLANG_ANALYSIS_ANALYSES_THREADSAFETYLOGICAL_H
+#define LLVM37_CLANG_ANALYSIS_ANALYSES_THREADSAFETYLOGICAL_H
 
 #include "clang/Analysis/Analyses/ThreadSafetyTIL.h"
 

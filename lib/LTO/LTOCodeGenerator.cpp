@@ -1,6 +1,6 @@
-//===-LTOCodeGenerator.cpp - LLVM Link Time Optimizer ---------------------===//
+//===-LTOCodeGenerator.cpp - LLVM37 Link Time Optimizer ---------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -12,52 +12,52 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/LTO/LTOCodeGenerator.h"
-#include "llvm/ADT/StringExtras.h"
-#include "llvm/Analysis/Passes.h"
-#include "llvm/Analysis/TargetLibraryInfo.h"
-#include "llvm/Analysis/TargetTransformInfo.h"
-#include "llvm/Bitcode/ReaderWriter.h"
-#include "llvm/CodeGen/RuntimeLibcalls.h"
-#include "llvm/Config/config.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/DerivedTypes.h"
-#include "llvm/IR/DiagnosticInfo.h"
-#include "llvm/IR/DiagnosticPrinter.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/LegacyPassManager.h"
-#include "llvm/IR/Mangler.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/Verifier.h"
-#include "llvm/InitializePasses.h"
-#include "llvm/LTO/LTOModule.h"
-#include "llvm/Linker/Linker.h"
-#include "llvm/MC/MCAsmInfo.h"
-#include "llvm/MC/MCContext.h"
-#include "llvm/MC/SubtargetFeature.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/FileSystem.h"
-#include "llvm/Support/Host.h"
-#include "llvm/Support/MemoryBuffer.h"
-#include "llvm/Support/Signals.h"
-#include "llvm/Support/TargetRegistry.h"
-#include "llvm/Support/TargetSelect.h"
-#include "llvm/Support/ToolOutputFile.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Target/TargetLowering.h"
-#include "llvm/Target/TargetOptions.h"
-#include "llvm/Target/TargetRegisterInfo.h"
-#include "llvm/Target/TargetSubtargetInfo.h"
-#include "llvm/Transforms/IPO.h"
-#include "llvm/Transforms/IPO/PassManagerBuilder.h"
-#include "llvm/Transforms/ObjCARC.h"
+#include "llvm37/LTO/LTOCodeGenerator.h"
+#include "llvm37/ADT/StringExtras.h"
+#include "llvm37/Analysis/Passes.h"
+#include "llvm37/Analysis/TargetLibraryInfo.h"
+#include "llvm37/Analysis/TargetTransformInfo.h"
+#include "llvm37/Bitcode/ReaderWriter.h"
+#include "llvm37/CodeGen/RuntimeLibcalls.h"
+#include "llvm37/Config/config.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/IR/DerivedTypes.h"
+#include "llvm37/IR/DiagnosticInfo.h"
+#include "llvm37/IR/DiagnosticPrinter.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/LegacyPassManager.h"
+#include "llvm37/IR/Mangler.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/Verifier.h"
+#include "llvm37/InitializePasses.h"
+#include "llvm37/LTO/LTOModule.h"
+#include "llvm37/Linker/Linker.h"
+#include "llvm37/MC/MCAsmInfo.h"
+#include "llvm37/MC/MCContext.h"
+#include "llvm37/MC/SubtargetFeature.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/FileSystem.h"
+#include "llvm37/Support/Host.h"
+#include "llvm37/Support/MemoryBuffer.h"
+#include "llvm37/Support/Signals.h"
+#include "llvm37/Support/TargetRegistry.h"
+#include "llvm37/Support/TargetSelect.h"
+#include "llvm37/Support/ToolOutputFile.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Target/TargetLowering.h"
+#include "llvm37/Target/TargetOptions.h"
+#include "llvm37/Target/TargetRegisterInfo.h"
+#include "llvm37/Target/TargetSubtargetInfo.h"
+#include "llvm37/Transforms/IPO.h"
+#include "llvm37/Transforms/IPO/PassManagerBuilder.h"
+#include "llvm37/Transforms/ObjCARC.h"
 #include <system_error>
-using namespace llvm;
+using namespace llvm37;
 
 const char* LTOCodeGenerator::getVersionString() {
-#ifdef LLVM_VERSION_INFO
-  return PACKAGE_NAME " version " PACKAGE_VERSION ", " LLVM_VERSION_INFO;
+#ifdef LLVM37_VERSION_INFO
+  return PACKAGE_NAME " version " PACKAGE_VERSION ", " LLVM37_VERSION_INFO;
 #else
   return PACKAGE_NAME " version " PACKAGE_VERSION;
 #endif
@@ -68,7 +68,7 @@ LTOCodeGenerator::LTOCodeGenerator()
   initializeLTOPasses();
 }
 
-LTOCodeGenerator::LTOCodeGenerator(std::unique_ptr<LLVMContext> Context)
+LTOCodeGenerator::LTOCodeGenerator(std::unique_ptr<LLVM37Context> Context)
     : OwnedContext(std::move(Context)), Context(*OwnedContext),
       IRLinker(new Module("ld-temp.o", *OwnedContext)) {
   initializeLTOPasses();
@@ -169,7 +169,7 @@ void LTOCodeGenerator::setDebugInfo(lto_debug_model debug) {
     EmitDwarfDebugInfo = true;
     return;
   }
-  llvm_unreachable("Unknown debug format!");
+  llvm37_unreachable("Unknown debug format!");
 }
 
 void LTOCodeGenerator::setCodePICModel(lto_codegen_model model) {
@@ -181,7 +181,7 @@ void LTOCodeGenerator::setCodePICModel(lto_codegen_model model) {
     CodeModel = model;
     return;
   }
-  llvm_unreachable("Unknown PIC model!");
+  llvm37_unreachable("Unknown PIC model!");
 }
 
 bool LTOCodeGenerator::writeMergedModules(const char *path,
@@ -222,7 +222,7 @@ bool LTOCodeGenerator::compileOptimizedToFile(const char **name,
   SmallString<128> Filename;
   int FD;
   std::error_code EC =
-      sys::fs::createTemporaryFile("lto-llvm", "o", FD, Filename);
+      sys::fs::createTemporaryFile("lto-llvm37", "o", FD, Filename);
   if (EC) {
     errMsg = EC.message();
     return false;
@@ -301,7 +301,7 @@ bool LTOCodeGenerator::determineTarget(std::string &errMsg) {
   std::string TripleStr = IRLinker.getModule()->getTargetTriple();
   if (TripleStr.empty())
     TripleStr = sys::getDefaultTargetTriple();
-  llvm::Triple Triple(TripleStr);
+  llvm37::Triple Triple(TripleStr);
 
   // create target machine from info for merged modules
   const Target *march = TargetRegistry::lookupTarget(TripleStr, errMsg);
@@ -333,11 +333,11 @@ bool LTOCodeGenerator::determineTarget(std::string &errMsg) {
   std::string FeatureStr = Features.getString();
   // Set a default CPU for Darwin triples.
   if (MCpu.empty() && Triple.isOSDarwin()) {
-    if (Triple.getArch() == llvm::Triple::x86_64)
+    if (Triple.getArch() == llvm37::Triple::x86_64)
       MCpu = "core2";
-    else if (Triple.getArch() == llvm::Triple::x86)
+    else if (Triple.getArch() == llvm37::Triple::x86)
       MCpu = "yonah";
-    else if (Triple.getArch() == llvm::Triple::aarch64)
+    else if (Triple.getArch() == llvm37::Triple::aarch64)
       MCpu = "cyclone";
   }
 
@@ -386,20 +386,20 @@ applyRestriction(GlobalValue &GV,
     AsmUsed.insert(&GV);
 
   // Conservatively append user-supplied runtime library functions to
-  // llvm.compiler.used.  These could be internalized and deleted by
+  // llvm37.compiler.used.  These could be internalized and deleted by
   // optimizations like -globalopt, causing problems when later optimizations
-  // add new library calls (e.g., llvm.memset => memset and printf => puts).
+  // add new library calls (e.g., llvm37.memset => memset and printf => puts).
   // Leave it to the linker to remove any dead code (e.g. with -dead_strip).
   if (isa<Function>(GV) &&
       std::binary_search(Libcalls.begin(), Libcalls.end(), GV.getName()))
     AsmUsed.insert(&GV);
 }
 
-static void findUsedValues(GlobalVariable *LLVMUsed,
+static void findUsedValues(GlobalVariable *LLVM37Used,
                            SmallPtrSetImpl<GlobalValue*> &UsedValues) {
-  if (!LLVMUsed) return;
+  if (!LLVM37Used) return;
 
-  ConstantArray *Inits = cast<ConstantArray>(LLVMUsed->getInitializer());
+  ConstantArray *Inits = cast<ConstantArray>(LLVM37Used->getInitializer());
   for (unsigned i = 0, e = Inits->getNumOperands(); i != e; ++i)
     if (GlobalValue *GV =
         dyn_cast<GlobalValue>(Inits->getOperand(i)->stripPointerCasts()))
@@ -407,7 +407,7 @@ static void findUsedValues(GlobalVariable *LLVMUsed,
 }
 
 // Collect names of runtime library functions. User-defined functions with the
-// same names are added to llvm.compiler.used to prevent them from being
+// same names are added to llvm37.compiler.used to prevent them from being
 // deleted by optimizations.
 static void accumulateAndSortLibcalls(std::vector<StringRef> &Libcalls,
                                       const TargetLibraryInfo& TLI,
@@ -472,28 +472,28 @@ void LTOCodeGenerator::applyScopeRestrictions() {
          e = mergedModule->alias_end(); a != e; ++a)
     applyRestriction(*a, Libcalls, MustPreserveList, AsmUsed, Mangler);
 
-  GlobalVariable *LLVMCompilerUsed =
+  GlobalVariable *LLVM37CompilerUsed =
     mergedModule->getGlobalVariable("llvm.compiler.used");
-  findUsedValues(LLVMCompilerUsed, AsmUsed);
-  if (LLVMCompilerUsed)
-    LLVMCompilerUsed->eraseFromParent();
+  findUsedValues(LLVM37CompilerUsed, AsmUsed);
+  if (LLVM37CompilerUsed)
+    LLVM37CompilerUsed->eraseFromParent();
 
   if (!AsmUsed.empty()) {
-    llvm::Type *i8PTy = llvm::Type::getInt8PtrTy(Context);
+    llvm37::Type *i8PTy = llvm37::Type::getInt8PtrTy(Context);
     std::vector<Constant*> asmUsed2;
     for (auto *GV : AsmUsed) {
       Constant *c = ConstantExpr::getBitCast(GV, i8PTy);
       asmUsed2.push_back(c);
     }
 
-    llvm::ArrayType *ATy = llvm::ArrayType::get(i8PTy, asmUsed2.size());
-    LLVMCompilerUsed =
-      new llvm::GlobalVariable(*mergedModule, ATy, false,
-                               llvm::GlobalValue::AppendingLinkage,
-                               llvm::ConstantArray::get(ATy, asmUsed2),
+    llvm37::ArrayType *ATy = llvm37::ArrayType::get(i8PTy, asmUsed2.size());
+    LLVM37CompilerUsed =
+      new llvm37::GlobalVariable(*mergedModule, ATy, false,
+                               llvm37::GlobalValue::AppendingLinkage,
+                               llvm37::ConstantArray::get(ATy, asmUsed2),
                                "llvm.compiler.used");
 
-    LLVMCompilerUsed->setSection("llvm.metadata");
+    LLVM37CompilerUsed->setSection("llvm.metadata");
   }
 
   passes.add(createInternalizePass(MustPreserveList));
@@ -579,7 +579,7 @@ void LTOCodeGenerator::setCodeGenDebugOptions(const char *options) {
     // ParseCommandLineOptions() expects argv[0] to be program name. Lazily add
     // that.
     if (CodegenOptions.empty())
-      CodegenOptions.push_back(strdup("libLLVMLTO"));
+      CodegenOptions.push_back(strdup("libLLVM37LTO"));
     CodegenOptions.push_back(strdup(o.first.str().c_str()));
   }
 }
@@ -597,7 +597,7 @@ void LTOCodeGenerator::DiagnosticHandler(const DiagnosticInfo &DI,
 }
 
 void LTOCodeGenerator::DiagnosticHandler2(const DiagnosticInfo &DI) {
-  // Map the LLVM internal diagnostic severity to the LTO diagnostic severity.
+  // Map the LLVM37 internal diagnostic severity to the LTO diagnostic severity.
   lto_codegen_diagnostic_severity_t Severity;
   switch (DI.getSeverity()) {
   case DS_Error:
@@ -633,7 +633,7 @@ LTOCodeGenerator::setDiagnosticHandler(lto_diagnostic_handler_t DiagHandler,
   this->DiagContext = Ctxt;
   if (!DiagHandler)
     return Context.setDiagnosticHandler(nullptr, nullptr);
-  // Register the LTOCodeGenerator stub in the LLVMContext to forward the
+  // Register the LTOCodeGenerator stub in the LLVM37Context to forward the
   // diagnostic to the external DiagHandler.
   Context.setDiagnosticHandler(LTOCodeGenerator::DiagnosticHandler, this,
                                /* RespectFilters */ true);

@@ -1,5 +1,5 @@
-; RUN: llvm-link %s %p/2011-08-04-DebugLoc2.ll -o %t.bc
-; RUN: llvm-dis < %t.bc | FileCheck %s
+; RUN: llvm37-link %s %p/2011-08-04-DebugLoc2.ll -o %t.bc
+; RUN: llvm37-dis < %t.bc | FileCheck %s
 ; Test if DebugLoc is mapped properly or not.
 
 
@@ -13,11 +13,11 @@ define i32 @foo() nounwind ssp {
   ret i32 42, !dbg !6
 }
 
-!llvm.dbg.cu = !{!0}
-!llvm.module.flags = !{!11}
-!llvm.dbg.sp = !{!1}
+!llvm37.dbg.cu = !{!0}
+!llvm37.module.flags = !{!11}
+!llvm37.dbg.sp = !{!1}
 
-!0 = !DICompileUnit(language: DW_LANG_C99, producer: "Apple clang version 3.0 (tags/Apple/clang-209.11) (based on LLVM 3.0svn)", isOptimized: true, emissionKind: 0, file: !8, enums: !9, retainedTypes: !9, subprograms: !10)
+!0 = !DICompileUnit(language: DW_LANG_C99, producer: "Apple clang version 3.0 (tags/Apple/clang-209.11) (based on LLVM37 3.0svn)", isOptimized: true, emissionKind: 0, file: !8, enums: !9, retainedTypes: !9, subprograms: !10)
 !1 = !DISubprogram(name: "foo", line: 2, isLocal: false, isDefinition: true, virtualIndex: 6, isOptimized: false, file: !8, scope: !2, type: !3, function: i32 ()* @foo)
 !2 = !DIFile(filename: "a.c", directory: "/private/tmp")
 !3 = !DISubroutineType(types: !4)

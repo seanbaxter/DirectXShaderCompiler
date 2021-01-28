@@ -22,25 +22,25 @@
 #include "dxc/DXIL/DxilUtil.h"
 #include "dxc/HLSL/HLMatrixType.h"
 #include "dxc/HLSL/HLModule.h"
-#include "llvm/Analysis/DxilValueCache.h"
+#include "llvm37/Analysis/DxilValueCache.h"
 #include "dxc/DXIL/DxilMetadataHelper.h"
 
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/IR/InstIterator.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/PassManager.h"
-#include "llvm/IR/DebugInfo.h"
-#include "llvm/Analysis/ValueTracking.h"
-#include "llvm/ADT/BitVector.h"
-#include "llvm/ADT/SetVector.h"
-#include "llvm/ADT/DenseSet.h"
-#include "llvm/Pass.h"
-#include "llvm/Transforms/Utils/Local.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/IR/InstIterator.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/PassManager.h"
+#include "llvm37/IR/DebugInfo.h"
+#include "llvm37/Analysis/ValueTracking.h"
+#include "llvm37/ADT/BitVector.h"
+#include "llvm37/ADT/SetVector.h"
+#include "llvm37/ADT/DenseSet.h"
+#include "llvm37/Pass.h"
+#include "llvm37/Transforms/Utils/Local.h"
 #include <memory>
 #include <unordered_set>
 
-using namespace llvm;
+using namespace llvm37;
 using namespace hlsl;
 
 // Resource rangeID remap.
@@ -259,7 +259,7 @@ public:
   }
 };
 
-bool llvm::AreDxilResourcesDense(llvm::Module *M, hlsl::DxilResourceBase **ppNonDense) {
+bool llvm37::AreDxilResourcesDense(llvm37::Module *M, hlsl::DxilResourceBase **ppNonDense) {
   DxilModule &DM = M->GetOrCreateDxilModule();
   RemapEntryCollection rewrites;
   if (BuildRewriteMap(rewrites, DM)) {
@@ -453,7 +453,7 @@ static bool LegalizeResources(Module &M, DxilValueCache *DVC) {
   while (DCEWorklist.size()) {
     Instruction *I = DCEWorklist.back();
     DCEWorklist.pop_back();
-    if (llvm::isInstructionTriviallyDead(I)) {
+    if (llvm37::isInstructionTriviallyDead(I)) {
       for (Use &Op : I->operands())
         if (Instruction *OpI = dyn_cast<Instruction>(Op.get()))
           DCEWorklist.push_back(OpI);
@@ -491,8 +491,8 @@ public:
   bool runOnModule(Module &M) override {
     DxilModule &DM = M.GetOrCreateDxilModule();
     m_DM = &DM;
-    // Clear llvm used to remove unused resource.
-    m_DM->ClearLLVMUsed();
+    // Clear llvm37 used to remove unused resource.
+    m_DM->ClearLLVM37Used();
     m_bIsLib = DM.GetShaderModel()->IsLib();
     m_bLegalizationFailed = false;
 
@@ -603,8 +603,8 @@ private:
 namespace {
 
 typedef std::unordered_map<Value*, Value*> ValueToValueMap;
-typedef llvm::SetVector<Value*> ValueSetVector;
-typedef llvm::SmallVector<Value*, 4> IndexVector;
+typedef llvm37::SetVector<Value*> ValueSetVector;
+typedef llvm37::SmallVector<Value*, 4> IndexVector;
 typedef std::unordered_map<Value*, IndexVector> ValueToIdxMap;
 
 //#define SUPPORT_SELECT_ON_ALLOCA
@@ -706,7 +706,7 @@ public:
       StringRef Name = V->getName();
       std::string escName;
       if (isa<Function>(V)) {
-        llvm::raw_string_ostream os(escName);
+        llvm37::raw_string_ostream os(escName);
         dxilutil::PrintEscapedString(Name, os);
         os.flush();
         Name = escName;
@@ -1028,7 +1028,7 @@ public:
       // set bAlloca for users
       bAlloca = true;
     } else if (Constant *C = dyn_cast<Constant>(V)) {
-      // skip @llvm.used entry
+      // skip @llvm37.used entry
       return;
     } else if (BitCastInst *BCI = dyn_cast<BitCastInst>(V)) {
       DXASSERT(onlyUsedByLifetimeMarkers(BCI),
@@ -1104,7 +1104,7 @@ public:
 #endif
         )
       return;
-    LLVMContext &Ctx =
+    LLVM37Context &Ctx =
 #ifdef SUPPORT_SELECT_ON_ALLOCA
       Selects.empty() ? AllocaSelects[0]->getContext() :
 #endif
@@ -1558,7 +1558,7 @@ public:
     return m_Errors.ErrorsReported();
   }
 
-  bool runOnModule(llvm::Module &M) {
+  bool runOnModule(llvm37::Module &M) {
     DxilModule &DM = M.GetOrCreateDxilModule();
 
     bool bChanged = CollectResources(DM);
@@ -1596,7 +1596,7 @@ private:
 
 char DxilLegalizeResources::ID = 0;
 
-ModulePass *llvm::createDxilLegalizeResources() {
+ModulePass *llvm37::createDxilLegalizeResources() {
   return new DxilLegalizeResources();
 }
 
@@ -1736,7 +1736,7 @@ void UpdateStructTypeForLegacyLayout(DxilResourceBase &Res,
   Constant *Symbol = Res.GetGlobalSymbol();
   Type *ElemTy = Res.GetHLSLType()->getPointerElementType();
   // Support Array of ConstantBuffer/StructuredBuffer.
-  llvm::SmallVector<unsigned, 4> arrayDims;
+  llvm37::SmallVector<unsigned, 4> arrayDims;
   ElemTy = dxilutil::StripArrayTypes(ElemTy, &arrayDims);
   StructType *ST = cast<StructType>(ElemTy);
   if (ST->isOpaque()) {
@@ -1918,9 +1918,9 @@ Value *flattenGepIdx(GEPOperator *GEP) {
     // Must be instruction for multi dim array.
     std::unique_ptr<IRBuilder<>> Builder;
     if (GetElementPtrInst *GEPInst = dyn_cast<GetElementPtrInst>(GEP)) {
-      Builder = llvm::make_unique<IRBuilder<>>(GEPInst);
+      Builder = llvm37::make_unique<IRBuilder<>>(GEPInst);
     } else {
-      Builder = llvm::make_unique<IRBuilder<>>(GEP->getContext());
+      Builder = llvm37::make_unique<IRBuilder<>>(GEP->getContext());
     }
     for (; GEPIt != E; ++GEPIt) {
       if (GEPIt->isArrayTy()) {
@@ -1947,7 +1947,7 @@ void DxilLowerCreateHandleForLib::TranslateDxilResourceUses(
   OP::OpCode createOp = bCreateFromBinding ? OP::OpCode::CreateHandleFromBinding
                                            : OP::OpCode::CreateHandle;
   Function *createHandle = hlslOP->GetOpFunc(
-      createOp, llvm::Type::getVoidTy(m_DM->GetCtx()));
+      createOp, llvm37::Type::getVoidTy(m_DM->GetCtx()));
   Value *opArg = hlslOP->GetU32Const((unsigned)createOp);
 
   bool isViewResource = res.GetClass() == DXIL::ResourceClass::SRV ||
@@ -2157,7 +2157,7 @@ void PatchTBufferLoad(CallInst *handle, DxilModule &DM,
     return;
   patchedSet.insert(handle);
   hlsl::OP *hlslOP = DM.GetOP();
-  llvm::LLVMContext &Ctx = DM.GetCtx();
+  llvm37::LLVM37Context &Ctx = DM.GetCtx();
   Type *doubleTy = Type::getDoubleTy(Ctx);
   Type *i64Ty = Type::getInt64Ty(Ctx);
 
@@ -2400,11 +2400,11 @@ static unsigned DetectLowAndHighWordUsage(ExtractValueInst *EV) {
   if (EV->getType()->getScalarSizeInBits() == 32) {
     for (auto U : EV->users()) {
       Instruction *I = cast<Instruction>(U);
-      if (I->getOpcode() == LLVMLShr) {
+      if (I->getOpcode() == LLVM37LShr) {
         ConstantInt *CShift = dyn_cast<ConstantInt>(I->getOperand(1));
         if (CShift && CShift->getLimitedValue() == 16)
           result |= kHighWordUsed;
-      } else if (I->getOpcode() == LLVMTrunc &&
+      } else if (I->getOpcode() == LLVM37Trunc &&
                I->getType()->getPrimitiveSizeInBits() == 16) {
         result |= kLowWordUsed;
       } else {
@@ -2585,7 +2585,7 @@ void DxilLowerCreateHandleForLib::SetNonUniformIndexForDynamicResource(
 
 char DxilLowerCreateHandleForLib::ID = 0;
 
-ModulePass *llvm::createDxilLowerCreateHandleForLibPass() {
+ModulePass *llvm37::createDxilLowerCreateHandleForLibPass() {
   return new DxilLowerCreateHandleForLib();
 }
 
@@ -2632,7 +2632,7 @@ private:
 
 char DxilAllocateResourcesForLib::ID = 0;
 
-ModulePass *llvm::createDxilAllocateResourcesForLibPass() {
+ModulePass *llvm37::createDxilAllocateResourcesForLibPass() {
   return new DxilAllocateResourcesForLib();
 }
 

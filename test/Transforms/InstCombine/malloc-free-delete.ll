@@ -24,24 +24,24 @@ define i1 @foo() {
   ret i1 %z
 }
 
-declare void @llvm.lifetime.start(i64, i8*)
-declare void @llvm.lifetime.end(i64, i8*)
-declare i64 @llvm.objectsize.i64(i8*, i1)
-declare void @llvm.memcpy.p0i8.p0i8.i32(i8* nocapture, i8* nocapture, i32, i32, i1) nounwind
-declare void @llvm.memmove.p0i8.p0i8.i32(i8* nocapture, i8* nocapture, i32, i32, i1) nounwind
-declare void @llvm.memset.p0i8.i32(i8*, i8, i32, i32, i1) nounwind
+declare void @llvm37.lifetime.start(i64, i8*)
+declare void @llvm37.lifetime.end(i64, i8*)
+declare i64 @llvm37.objectsize.i64(i8*, i1)
+declare void @llvm37.memcpy.p0i8.p0i8.i32(i8* nocapture, i8* nocapture, i32, i32, i1) nounwind
+declare void @llvm37.memmove.p0i8.p0i8.i32(i8* nocapture, i8* nocapture, i32, i32, i1) nounwind
+declare void @llvm37.memset.p0i8.i32(i8*, i8, i32, i32, i1) nounwind
 
 define void @test3(i8* %src) {
 ; CHECK-LABEL: @test3(
 ; CHECK-NEXT: ret void
   %a = call noalias i8* @malloc(i32 10)
-  call void @llvm.lifetime.start(i64 10, i8* %a)
-  call void @llvm.lifetime.end(i64 10, i8* %a)
-  %size = call i64 @llvm.objectsize.i64(i8* %a, i1 true)
+  call void @llvm37.lifetime.start(i64 10, i8* %a)
+  call void @llvm37.lifetime.end(i64 10, i8* %a)
+  %size = call i64 @llvm37.objectsize.i64(i8* %a, i1 true)
   store i8 42, i8* %a
-  call void @llvm.memcpy.p0i8.p0i8.i32(i8* %a, i8* %src, i32 32, i32 1, i1 false)
-  call void @llvm.memmove.p0i8.p0i8.i32(i8* %a, i8* %src, i32 32, i32 1, i1 false)
-  call void @llvm.memset.p0i8.i32(i8* %a, i8 5, i32 32, i32 1, i1 false)
+  call void @llvm37.memcpy.p0i8.p0i8.i32(i8* %a, i8* %src, i32 32, i32 1, i1 false)
+  call void @llvm37.memmove.p0i8.p0i8.i32(i8* %a, i8* %src, i32 32, i32 1, i1 false)
+  call void @llvm37.memset.p0i8.i32(i8* %a, i8 5, i32 32, i32 1, i1 false)
   %alloc2 = call noalias i8* @calloc(i32 5, i32 7) nounwind
   %z = icmp ne i8* %alloc2, null
   ret void
@@ -67,12 +67,12 @@ define void @test5(i8* %ptr, i8** %esc) {
 ; CHECK-NEXT: call i8* @malloc
 ; CHECK-NEXT: call i8* @malloc
 ; CHECK-NEXT: call i8* @malloc
-; CHECK-NEXT: call void @llvm.memcpy
-; CHECK-NEXT: call void @llvm.memmove
+; CHECK-NEXT: call void @llvm37.memcpy
+; CHECK-NEXT: call void @llvm37.memmove
 ; CHECK-NEXT: store
-; CHECK-NEXT: call void @llvm.memcpy
-; CHECK-NEXT: call void @llvm.memmove
-; CHECK-NEXT: call void @llvm.memset
+; CHECK-NEXT: call void @llvm37.memcpy
+; CHECK-NEXT: call void @llvm37.memmove
+; CHECK-NEXT: call void @llvm37.memset
 ; CHECK-NEXT: store volatile
 ; CHECK-NEXT: ret
   %a = call i8* @malloc(i32 700)
@@ -82,12 +82,12 @@ define void @test5(i8* %ptr, i8** %esc) {
   %e = call i8* @malloc(i32 700)
   %f = call i8* @malloc(i32 700)
   %g = call i8* @malloc(i32 700)
-  call void @llvm.memcpy.p0i8.p0i8.i32(i8* %ptr, i8* %a, i32 32, i32 1, i1 false)
-  call void @llvm.memmove.p0i8.p0i8.i32(i8* %ptr, i8* %b, i32 32, i32 1, i1 false)
+  call void @llvm37.memcpy.p0i8.p0i8.i32(i8* %ptr, i8* %a, i32 32, i32 1, i1 false)
+  call void @llvm37.memmove.p0i8.p0i8.i32(i8* %ptr, i8* %b, i32 32, i32 1, i1 false)
   store i8* %c, i8** %esc
-  call void @llvm.memcpy.p0i8.p0i8.i32(i8* %d, i8* %ptr, i32 32, i32 1, i1 true)
-  call void @llvm.memmove.p0i8.p0i8.i32(i8* %e, i8* %ptr, i32 32, i32 1, i1 true)
-  call void @llvm.memset.p0i8.i32(i8* %f, i8 5, i32 32, i32 1, i1 true)
+  call void @llvm37.memcpy.p0i8.p0i8.i32(i8* %d, i8* %ptr, i32 32, i32 1, i1 true)
+  call void @llvm37.memmove.p0i8.p0i8.i32(i8* %e, i8* %ptr, i32 32, i32 1, i1 true)
+  call void @llvm37.memset.p0i8.i32(i8* %f, i8 5, i32 32, i32 1, i1 true)
   store volatile i8 4, i8* %g
   ret void
 }

@@ -1,4 +1,4 @@
-; RUN: not llvm-as < %s 2>&1 | FileCheck %s
+; RUN: not llvm37-as < %s 2>&1 | FileCheck %s
 
 !0 = !DILocalVariable(tag: DW_TAG_arg_variable, scope: !{}, arg: 65535)
 

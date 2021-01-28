@@ -1,4 +1,4 @@
-; RUN: llvm-as < %s | llvm-dis | grep "align 1024"
+; RUN: llvm37-as < %s | llvm37-dis | grep "align 1024"
 ; RUN: verify-uselistorder %s
 
 define void @test(i32* %arg) {

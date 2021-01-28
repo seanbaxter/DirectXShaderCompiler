@@ -1,9 +1,9 @@
 #!/bin/sh
-# LLVM LOCAL file B&I
+# LLVM37 LOCAL file B&I
 
 set -x
 
-# Build LLVM the "Apple way".
+# Build LLVM37 the "Apple way".
 # Parameters:
 
 # The first parameter is a space-separated list of the architectures the
@@ -21,7 +21,7 @@ TARGETS="$2"
 # shell script named 'configure' in this directory. This script makes a copy...
 ORIG_SRC_DIR="$3"
 
-# The fourth parameter is the location where the LLVM will be installed. You can
+# The fourth parameter is the location where the LLVM37 will be installed. You can
 # move it once it's built, so this mostly controls the layout of $DEST_DIR.
 DEST_ROOT="$4"
 
@@ -35,12 +35,12 @@ DEST_DIR="$5"
 SYM_DIR="$6"
 
 # The seventh parameter is a yes/no that indicates whether assertions should be
-# enabled in the LLVM libs/tools.
-LLVM_ASSERTIONS="$7"
+# enabled in the LLVM37 libs/tools.
+LLVM37_ASSERTIONS="$7"
 
 # The eighth parameter is a yes/no that indicates whether this is an optimized
 # build.
-LLVM_OPTIMIZED="$8"
+LLVM37_OPTIMIZED="$8"
 
 # A yes/no parameter that controls whether to cross-build for an ARM host.
 ARM_HOSTED_BUILD="$9"
@@ -49,10 +49,10 @@ ARM_HOSTED_BUILD="$9"
 IOS_SIM_BUILD="${10}"
 
 # The version number of the submission, e.g. 1007.
-LLVM_SUBMIT_VERSION="${11}"
+LLVM37_SUBMIT_VERSION="${11}"
 
 # The subversion number of the submission, e.g. 03.
-LLVM_SUBMIT_SUBVERSION="${12}"
+LLVM37_SUBMIT_SUBVERSION="${12}"
 
 # The current working directory is where the build will happen. It may already
 # contain a partial result of an interrupted build, in which case this script
@@ -79,14 +79,14 @@ sed -e '/[Aa]pple-style/d' -e '/include.*GNUmakefile/d' $ORIG_SRC_DIR/Makefile >
 
 SUBVERSION=`echo $RC_ProjectSourceVersion | sed -e 's/.*\.\([0-9]*\).*/\1/'`
 if [ "x$SUBVERSION" != "x$RC_ProjectSourceVersion" ]; then
-    LLVM_SUBMIT_SUBVERSION=`printf "%02d" $SUBVERSION`
+    LLVM37_SUBMIT_SUBVERSION=`printf "%02d" $SUBVERSION`
     RC_ProjectSourceVersion=`echo $RC_ProjectSourceVersion | sed -e 's/\..*//'`
-    LLVM_SUBMIT_VERSION=$RC_ProjectSourceVersion
+    LLVM37_SUBMIT_VERSION=$RC_ProjectSourceVersion
 fi
-if [ "x$LLVM_SUBMIT_SUBVERSION" = "x00" -o "x$LLVM_SUBMIT_SUBVERSION" = "x0" ]; then
-    LLVM_VERSION="$LLVM_SUBMIT_VERSION"
+if [ "x$LLVM37_SUBMIT_SUBVERSION" = "x00" -o "x$LLVM37_SUBMIT_SUBVERSION" = "x0" ]; then
+    LLVM37_VERSION="$LLVM37_SUBMIT_VERSION"
 else
-    LLVM_VERSION="$LLVM_SUBMIT_VERSION-$LLVM_SUBMIT_SUBVERSION"
+    LLVM37_VERSION="$LLVM37_SUBMIT_VERSION-$LLVM37_SUBMIT_SUBVERSION"
 fi
 
 SDKROOT_PATH=`xcodebuild -version -sdk $SDKROOT Path`
@@ -103,8 +103,8 @@ JOBS_FLAG="-j $SYSCTL"
 
 COMMON_CONFIGURE_OPTS="\
   --prefix=$DEST_DIR$DEST_ROOT \
-  --enable-assertions=$LLVM_ASSERTIONS \
-  --enable-optimized=$LLVM_OPTIMIZED \
+  --enable-assertions=$LLVM37_ASSERTIONS \
+  --enable-optimized=$LLVM37_OPTIMIZED \
   --disable-bindings \
   --disable-zlib \
   --enable-terminfo=no"
@@ -116,13 +116,13 @@ COMMON_MAKEFLAGS="\
   DISABLE_EDIS=1 \
   REQUIRES_RTTI=1 \
   DEBUG_SYMBOLS=1 \
-  LLVM_SUBMIT_VERSION=$LLVM_SUBMIT_VERSION \
-  LLVM_SUBMIT_SUBVERSION=$LLVM_SUBMIT_SUBVERSION \
+  LLVM37_SUBMIT_VERSION=$LLVM37_SUBMIT_VERSION \
+  LLVM37_SUBMIT_SUBVERSION=$LLVM37_SUBMIT_SUBVERSION \
   VERBOSE=1"
 
-# Build the LLVM tree universal.
-mkdir -p $DIR/obj-llvm || exit 1
-cd $DIR/obj-llvm || exit 1
+# Build the LLVM37 tree universal.
+mkdir -p $DIR/obj-llvm37 || exit 1
+cd $DIR/obj-llvm37 || exit 1
 
 if [ "$ARM_HOSTED_BUILD" = yes ]; then
   # The cross-tools' build process expects to find an existing cross toolchain
@@ -164,9 +164,9 @@ if [ "$ARM_HOSTED_BUILD" = yes ]; then
   fi
 
   make $JOBS_FLAG $COMMON_MAKEFLAGS SDKROOT= UNIVERSAL_ARCH="$HOSTS" \
-    CXXFLAGS="-DLLVM_VERSION_INFO='\" Apple Build #$LLVM_VERSION\"'"
+    CXXFLAGS="-DLLVM37_VERSION_INFO='\" Apple Build #$LLVM37_VERSION\"'"
   if [ $? != 0 ] ; then
-    echo "error: LLVM 'make' failed!"
+    echo "error: LLVM37 'make' failed!"
     exit 1
   fi 
 
@@ -207,9 +207,9 @@ else
     || exit 1
 
   make $JOBS_FLAG $COMMON_MAKEFLAGS UNIVERSAL_ARCH="$HOSTS" \
-    CXXFLAGS="-DLLVM_VERSION_INFO='\" Apple Build #$LLVM_VERSION\"'"
+    CXXFLAGS="-DLLVM37_VERSION_INFO='\" Apple Build #$LLVM37_VERSION\"'"
   if [ $? != 0 ] ; then
-    echo "error: LLVM 'make' failed!"
+    echo "error: LLVM37 'make' failed!"
     exit 1
   fi 
 fi 
@@ -223,31 +223,31 @@ cd $DEST_DIR || exit 1
 # Clean out DEST_DIR in case -noclean was passed to buildit.
 rm -rf * || exit 1
 
-cd $DIR/obj-llvm || exit 1
+cd $DIR/obj-llvm37 || exit 1
 
 # Install the tree into the destination directory.
 make $JOBS_FLAG $COMMON_MAKEFLAGS UNIVERSAL_ARCH="$HOSTS" install
 if ! test $? == 0 ; then
-    echo "error: LLVM 'make install' failed!"
+    echo "error: LLVM37 'make install' failed!"
     exit 1
 fi 
 
 # Install Version.h
-LLVM_MINOR_VERSION=`echo $LLVM_SUBMIT_SUBVERSION | sed -e 's,0*\([1-9][0-9]*\),\1,'`
-if [ "x$LLVM_MINOR_VERSION" = "x" ]; then
-    LLVM_MINOR_VERSION=0
+LLVM37_MINOR_VERSION=`echo $LLVM37_SUBMIT_SUBVERSION | sed -e 's,0*\([1-9][0-9]*\),\1,'`
+if [ "x$LLVM37_MINOR_VERSION" = "x" ]; then
+    LLVM37_MINOR_VERSION=0
 fi
-RC_ProjectSourceSubversion=`printf "%d" $LLVM_MINOR_VERSION`
-echo "#define LLVM_VERSION ${RC_ProjectSourceVersion}" > $DEST_DIR$DEST_ROOT/include/llvm/Version.h
-echo "#define LLVM_MINOR_VERSION ${RC_ProjectSourceSubversion}" >> $DEST_DIR$DEST_ROOT/include/llvm/Version.h
+RC_ProjectSourceSubversion=`printf "%d" $LLVM37_MINOR_VERSION`
+echo "#define LLVM37_VERSION ${RC_ProjectSourceVersion}" > $DEST_DIR$DEST_ROOT/include/llvm37/Version.h
+echo "#define LLVM37_MINOR_VERSION ${RC_ProjectSourceSubversion}" >> $DEST_DIR$DEST_ROOT/include/llvm37/Version.h
 
 # Run unifdef to preprocess the installed headers to reflect whether this
 # was a debug or release build.
 for file in `find $DEST_DIR$DEST_ROOT/include -type f -print`; do
-  if [ "$LLVM_ASSERTIONS" = yes ]; then
+  if [ "$LLVM37_ASSERTIONS" = yes ]; then
     unifdef -UNDEBUG -D_DEBUG -o $file $file
   else
-    unifdef -DNDEBUG -U_DEBUG -ULLVM_ENABLE_DUMP -o $file $file
+    unifdef -DNDEBUG -U_DEBUG -ULLVM37_ENABLE_DUMP -o $file $file
   fi
 done
 
@@ -257,8 +257,8 @@ if [ -n "$SDKROOT" ]; then
   STRIP=`xcrun -sdk $SDKROOT -find strip`
 fi
 
-if [ "x$LLVM_DEBUG" != "x1" ]; then
-    # Strip local symbols from llvm libraries.
+if [ "x$LLVM37_DEBUG" != "x1" ]; then
+    # Strip local symbols from llvm37 libraries.
     #
     # Use '-l' to strip i386 modules. N.B. that flag doesn't work with kext or
     # PPC objects!
@@ -270,13 +270,13 @@ fi
 
 # Remove .dir files 
 cd $DEST_DIR$DEST_ROOT
-rm -f bin/.dir etc/llvm/.dir lib/.dir
+rm -f bin/.dir etc/llvm37/.dir lib/.dir
 
 # The Hello dylib is an example of how to build a pass.
 # The BugpointPasses module is only used to test bugpoint.
 # These unversioned dylibs cause verification failures, so do not install them.
 # (The wildcards are used to match a "lib" prefix if it is present.)
-rm $DEST_DIR$DEST_ROOT/lib/*LLVMHello.dylib
+rm $DEST_DIR$DEST_ROOT/lib/*LLVM37Hello.dylib
 rm $DEST_DIR$DEST_ROOT/lib/*BugpointPasses.dylib
 
 # Compress manpages

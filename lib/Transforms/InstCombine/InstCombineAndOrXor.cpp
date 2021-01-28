@@ -1,6 +1,6 @@
 //===- InstCombineAndOrXor.cpp --------------------------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -12,12 +12,12 @@
 //===----------------------------------------------------------------------===//
 
 #include "InstCombineInternal.h"
-#include "llvm/Analysis/InstructionSimplify.h"
-#include "llvm/IR/ConstantRange.h"
-#include "llvm/IR/Intrinsics.h"
-#include "llvm/IR/PatternMatch.h"
-#include "llvm/Transforms/Utils/CmpInstAnalysis.h"
-using namespace llvm;
+#include "llvm37/Analysis/InstructionSimplify.h"
+#include "llvm37/IR/ConstantRange.h"
+#include "llvm37/IR/Intrinsics.h"
+#include "llvm37/IR/PatternMatch.h"
+#include "llvm37/Transforms/Utils/CmpInstAnalysis.h"
+using namespace llvm37;
 using namespace PatternMatch;
 
 #define DEBUG_TYPE "instcombine"
@@ -60,7 +60,7 @@ static unsigned getFCmpCode(FCmpInst::Predicate CC, bool &isOrdered) {
     // True -> 7
   default:
     // Not expecting FCMP_FALSE and FCMP_TRUE;
-    llvm_unreachable("Unexpected FCmp predicate!");
+    llvm37_unreachable("Unexpected FCmp predicate!");
   }
 }
 
@@ -84,7 +84,7 @@ static Value *getFCmpValue(bool isordered, unsigned code,
                            InstCombiner::BuilderTy *Builder) {
   CmpInst::Predicate Pred;
   switch (code) {
-  default: llvm_unreachable("Illegal FCmp code!");
+  default: llvm37_unreachable("Illegal FCmp code!");
   case 0: Pred = isordered ? FCmpInst::FCMP_ORD : FCmpInst::FCMP_UNO; break;
   case 1: Pred = isordered ? FCmpInst::FCMP_OGT : FCmpInst::FCMP_UGT; break;
   case 2: Pred = isordered ? FCmpInst::FCMP_OEQ : FCmpInst::FCMP_UEQ; break;
@@ -704,7 +704,7 @@ static unsigned foldLogOpOfMaskedICmpsHelper(Value*& A,
 /// try to fold (icmp(A & B) ==/!= C) &/| (icmp(A & D) ==/!= E)
 /// into a single (icmp(A & X) ==/!= Y)
 static Value *foldLogOpOfMaskedICmps(ICmpInst *LHS, ICmpInst *RHS, bool IsAnd,
-                                     llvm::InstCombiner::BuilderTy *Builder) {
+                                     llvm37::InstCombiner::BuilderTy *Builder) {
   Value *A = nullptr, *B = nullptr, *C = nullptr, *D = nullptr, *E = nullptr;
   ICmpInst::Predicate LHSCC = LHS->getPredicate(), RHSCC = RHS->getPredicate();
   unsigned mask = foldLogOpOfMaskedICmpsHelper(A, B, C, D, E, LHS, RHS,
@@ -1015,10 +1015,10 @@ Value *InstCombiner::FoldAndOfICmps(ICmpInst *LHS, ICmpInst *RHS) {
   assert(LHSCst != RHSCst && "Compares not folded above?");
 
   switch (LHSCC) {
-  default: llvm_unreachable("Unknown integer condition code!");
+  default: llvm37_unreachable("Unknown integer condition code!");
   case ICmpInst::ICMP_EQ:
     switch (RHSCC) {
-    default: llvm_unreachable("Unknown integer condition code!");
+    default: llvm37_unreachable("Unknown integer condition code!");
     case ICmpInst::ICMP_NE:         // (X == 13 & X != 15) -> X == 13
     case ICmpInst::ICMP_ULT:        // (X == 13 & X <  15) -> X == 13
     case ICmpInst::ICMP_SLT:        // (X == 13 & X <  15) -> X == 13
@@ -1026,7 +1026,7 @@ Value *InstCombiner::FoldAndOfICmps(ICmpInst *LHS, ICmpInst *RHS) {
     }
   case ICmpInst::ICMP_NE:
     switch (RHSCC) {
-    default: llvm_unreachable("Unknown integer condition code!");
+    default: llvm37_unreachable("Unknown integer condition code!");
     case ICmpInst::ICMP_ULT:
       if (LHSCst == SubOne(RHSCst)) // (X != 13 & X u< 14) -> X < 13
         return Builder->CreateICmpULT(Val, LHSCst);
@@ -1057,7 +1057,7 @@ Value *InstCombiner::FoldAndOfICmps(ICmpInst *LHS, ICmpInst *RHS) {
     break;
   case ICmpInst::ICMP_ULT:
     switch (RHSCC) {
-    default: llvm_unreachable("Unknown integer condition code!");
+    default: llvm37_unreachable("Unknown integer condition code!");
     case ICmpInst::ICMP_EQ:         // (X u< 13 & X == 15) -> false
     case ICmpInst::ICMP_UGT:        // (X u< 13 & X u> 15) -> false
       return ConstantInt::get(CmpInst::makeCmpResultType(LHS->getType()), 0);
@@ -1072,7 +1072,7 @@ Value *InstCombiner::FoldAndOfICmps(ICmpInst *LHS, ICmpInst *RHS) {
     break;
   case ICmpInst::ICMP_SLT:
     switch (RHSCC) {
-    default: llvm_unreachable("Unknown integer condition code!");
+    default: llvm37_unreachable("Unknown integer condition code!");
     case ICmpInst::ICMP_UGT:        // (X s< 13 & X u> 15) -> no change
       break;
     case ICmpInst::ICMP_NE:         // (X s< 13 & X != 15) -> X < 13
@@ -1084,7 +1084,7 @@ Value *InstCombiner::FoldAndOfICmps(ICmpInst *LHS, ICmpInst *RHS) {
     break;
   case ICmpInst::ICMP_UGT:
     switch (RHSCC) {
-    default: llvm_unreachable("Unknown integer condition code!");
+    default: llvm37_unreachable("Unknown integer condition code!");
     case ICmpInst::ICMP_EQ:         // (X u> 13 & X == 15) -> X == 15
     case ICmpInst::ICMP_UGT:        // (X u> 13 & X u> 15) -> X u> 15
       return RHS;
@@ -1102,7 +1102,7 @@ Value *InstCombiner::FoldAndOfICmps(ICmpInst *LHS, ICmpInst *RHS) {
     break;
   case ICmpInst::ICMP_SGT:
     switch (RHSCC) {
-    default: llvm_unreachable("Unknown integer condition code!");
+    default: llvm37_unreachable("Unknown integer condition code!");
     case ICmpInst::ICMP_EQ:         // (X s> 13 & X == 15) -> X == 15
     case ICmpInst::ICMP_SGT:        // (X s> 13 & X s> 15) -> X s> 15
       return RHS;
@@ -1898,10 +1898,10 @@ Value *InstCombiner::FoldOrOfICmps(ICmpInst *LHS, ICmpInst *RHS,
   assert(LHSCst != RHSCst && "Compares not folded above?");
 
   switch (LHSCC) {
-  default: llvm_unreachable("Unknown integer condition code!");
+  default: llvm37_unreachable("Unknown integer condition code!");
   case ICmpInst::ICMP_EQ:
     switch (RHSCC) {
-    default: llvm_unreachable("Unknown integer condition code!");
+    default: llvm37_unreachable("Unknown integer condition code!");
     case ICmpInst::ICMP_EQ:
       if (LHS->getOperand(0) == RHS->getOperand(0)) {
         // if LHSCst and RHSCst differ only by one bit:
@@ -1936,7 +1936,7 @@ Value *InstCombiner::FoldOrOfICmps(ICmpInst *LHS, ICmpInst *RHS,
     break;
   case ICmpInst::ICMP_NE:
     switch (RHSCC) {
-    default: llvm_unreachable("Unknown integer condition code!");
+    default: llvm37_unreachable("Unknown integer condition code!");
     case ICmpInst::ICMP_EQ:          // (X != 13 | X == 15) -> X != 13
     case ICmpInst::ICMP_UGT:         // (X != 13 | X u> 15) -> X != 13
     case ICmpInst::ICMP_SGT:         // (X != 13 | X s> 15) -> X != 13
@@ -1948,7 +1948,7 @@ Value *InstCombiner::FoldOrOfICmps(ICmpInst *LHS, ICmpInst *RHS,
     }
   case ICmpInst::ICMP_ULT:
     switch (RHSCC) {
-    default: llvm_unreachable("Unknown integer condition code!");
+    default: llvm37_unreachable("Unknown integer condition code!");
     case ICmpInst::ICMP_EQ:         // (X u< 13 | X == 14) -> no change
       break;
     case ICmpInst::ICMP_UGT:        // (X u< 13 | X u> 15) -> (X-13) u> 2
@@ -1968,7 +1968,7 @@ Value *InstCombiner::FoldOrOfICmps(ICmpInst *LHS, ICmpInst *RHS,
     break;
   case ICmpInst::ICMP_SLT:
     switch (RHSCC) {
-    default: llvm_unreachable("Unknown integer condition code!");
+    default: llvm37_unreachable("Unknown integer condition code!");
     case ICmpInst::ICMP_EQ:         // (X s< 13 | X == 14) -> no change
       break;
     case ICmpInst::ICMP_SGT:        // (X s< 13 | X s> 15) -> (X-13) s> 2
@@ -1988,7 +1988,7 @@ Value *InstCombiner::FoldOrOfICmps(ICmpInst *LHS, ICmpInst *RHS,
     break;
   case ICmpInst::ICMP_UGT:
     switch (RHSCC) {
-    default: llvm_unreachable("Unknown integer condition code!");
+    default: llvm37_unreachable("Unknown integer condition code!");
     case ICmpInst::ICMP_EQ:         // (X u> 13 | X == 15) -> X u> 13
     case ICmpInst::ICMP_UGT:        // (X u> 13 | X u> 15) -> X u> 13
       return LHS;
@@ -2003,7 +2003,7 @@ Value *InstCombiner::FoldOrOfICmps(ICmpInst *LHS, ICmpInst *RHS,
     break;
   case ICmpInst::ICMP_SGT:
     switch (RHSCC) {
-    default: llvm_unreachable("Unknown integer condition code!");
+    default: llvm37_unreachable("Unknown integer condition code!");
     case ICmpInst::ICMP_EQ:         // (X s> 13 | X == 15) -> X > 13
     case ICmpInst::ICMP_SGT:        // (X s> 13 | X s> 15) -> X > 13
       return LHS;

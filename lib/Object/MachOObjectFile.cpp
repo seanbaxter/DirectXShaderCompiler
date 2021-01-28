@@ -1,6 +1,6 @@
 //===- MachOObjectFile.cpp - Mach-O object file binding ---------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -12,23 +12,23 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Object/MachO.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/StringSwitch.h"
-#include "llvm/ADT/Triple.h"
-#include "llvm/Support/DataExtractor.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/Format.h"
-#include "llvm/Support/Host.h"
-#include "llvm/Support/LEB128.h"
-#include "llvm/Support/MachO.h"
-#include "llvm/Support/MemoryBuffer.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/Object/MachO.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/StringSwitch.h"
+#include "llvm37/ADT/Triple.h"
+#include "llvm37/Support/DataExtractor.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/Format.h"
+#include "llvm37/Support/Host.h"
+#include "llvm37/Support/LEB128.h"
+#include "llvm37/Support/MachO.h"
+#include "llvm37/Support/MemoryBuffer.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <cctype>
 #include <cstring>
 #include <limits>
 
-using namespace llvm;
+using namespace llvm37;
 using namespace object;
 
 namespace {
@@ -972,11 +972,11 @@ StringRef MachOObjectFile::getFileFormatName() const {
   unsigned CPUType = getCPUType(this);
   if (!is64Bit()) {
     switch (CPUType) {
-    case llvm::MachO::CPU_TYPE_I386:
+    case llvm37::MachO::CPU_TYPE_I386:
       return "Mach-O 32-bit i386";
-    case llvm::MachO::CPU_TYPE_ARM:
+    case llvm37::MachO::CPU_TYPE_ARM:
       return "Mach-O arm";
-    case llvm::MachO::CPU_TYPE_POWERPC:
+    case llvm37::MachO::CPU_TYPE_POWERPC:
       return "Mach-O 32-bit ppc";
     default:
       return "Mach-O 32-bit unknown";
@@ -984,11 +984,11 @@ StringRef MachOObjectFile::getFileFormatName() const {
   }
 
   switch (CPUType) {
-  case llvm::MachO::CPU_TYPE_X86_64:
+  case llvm37::MachO::CPU_TYPE_X86_64:
     return "Mach-O 64-bit x86-64";
-  case llvm::MachO::CPU_TYPE_ARM64:
+  case llvm37::MachO::CPU_TYPE_ARM64:
     return "Mach-O arm64";
-  case llvm::MachO::CPU_TYPE_POWERPC64:
+  case llvm37::MachO::CPU_TYPE_POWERPC64:
     return "Mach-O 64-bit ppc64";
   default:
     return "Mach-O 64-bit unknown";
@@ -997,17 +997,17 @@ StringRef MachOObjectFile::getFileFormatName() const {
 
 Triple::ArchType MachOObjectFile::getArch(uint32_t CPUType) {
   switch (CPUType) {
-  case llvm::MachO::CPU_TYPE_I386:
+  case llvm37::MachO::CPU_TYPE_I386:
     return Triple::x86;
-  case llvm::MachO::CPU_TYPE_X86_64:
+  case llvm37::MachO::CPU_TYPE_X86_64:
     return Triple::x86_64;
-  case llvm::MachO::CPU_TYPE_ARM:
+  case llvm37::MachO::CPU_TYPE_ARM:
     return Triple::arm;
-  case llvm::MachO::CPU_TYPE_ARM64:
+  case llvm37::MachO::CPU_TYPE_ARM64:
     return Triple::aarch64;
-  case llvm::MachO::CPU_TYPE_POWERPC:
+  case llvm37::MachO::CPU_TYPE_POWERPC:
     return Triple::ppc;
-  case llvm::MachO::CPU_TYPE_POWERPC64:
+  case llvm37::MachO::CPU_TYPE_POWERPC64:
     return Triple::ppc64;
   default:
     return Triple::UnknownArch;
@@ -1430,13 +1430,13 @@ void MachORebaseEntry::moveNext() {
       More = false;
       Done = true;
       moveToEnd();
-      DEBUG_WITH_TYPE("mach-o-rebase", llvm::dbgs() << "REBASE_OPCODE_DONE\n");
+      DEBUG_WITH_TYPE("mach-o-rebase", llvm37::dbgs() << "REBASE_OPCODE_DONE\n");
       break;
     case MachO::REBASE_OPCODE_SET_TYPE_IMM:
       RebaseType = ImmValue;
       DEBUG_WITH_TYPE(
           "mach-o-rebase",
-          llvm::dbgs() << "REBASE_OPCODE_SET_TYPE_IMM: "
+          llvm37::dbgs() << "REBASE_OPCODE_SET_TYPE_IMM: "
                        << "RebaseType=" << (int) RebaseType << "\n");
       break;
     case MachO::REBASE_OPCODE_SET_SEGMENT_AND_OFFSET_ULEB:
@@ -1444,7 +1444,7 @@ void MachORebaseEntry::moveNext() {
       SegmentOffset = readULEB128();
       DEBUG_WITH_TYPE(
           "mach-o-rebase",
-          llvm::dbgs() << "REBASE_OPCODE_SET_SEGMENT_AND_OFFSET_ULEB: "
+          llvm37::dbgs() << "REBASE_OPCODE_SET_SEGMENT_AND_OFFSET_ULEB: "
                        << "SegmentIndex=" << SegmentIndex << ", "
                        << format("SegmentOffset=0x%06X", SegmentOffset)
                        << "\n");
@@ -1452,14 +1452,14 @@ void MachORebaseEntry::moveNext() {
     case MachO::REBASE_OPCODE_ADD_ADDR_ULEB:
       SegmentOffset += readULEB128();
       DEBUG_WITH_TYPE("mach-o-rebase",
-                      llvm::dbgs() << "REBASE_OPCODE_ADD_ADDR_ULEB: "
+                      llvm37::dbgs() << "REBASE_OPCODE_ADD_ADDR_ULEB: "
                                    << format("SegmentOffset=0x%06X",
                                              SegmentOffset) << "\n");
       break;
     case MachO::REBASE_OPCODE_ADD_ADDR_IMM_SCALED:
       SegmentOffset += ImmValue * PointerSize;
       DEBUG_WITH_TYPE("mach-o-rebase",
-                      llvm::dbgs() << "REBASE_OPCODE_ADD_ADDR_IMM_SCALED: "
+                      llvm37::dbgs() << "REBASE_OPCODE_ADD_ADDR_IMM_SCALED: "
                                    << format("SegmentOffset=0x%06X",
                                              SegmentOffset) << "\n");
       break;
@@ -1468,7 +1468,7 @@ void MachORebaseEntry::moveNext() {
       RemainingLoopCount = ImmValue - 1;
       DEBUG_WITH_TYPE(
           "mach-o-rebase",
-          llvm::dbgs() << "REBASE_OPCODE_DO_REBASE_IMM_TIMES: "
+          llvm37::dbgs() << "REBASE_OPCODE_DO_REBASE_IMM_TIMES: "
                        << format("SegmentOffset=0x%06X", SegmentOffset)
                        << ", AdvanceAmount=" << AdvanceAmount
                        << ", RemainingLoopCount=" << RemainingLoopCount
@@ -1479,7 +1479,7 @@ void MachORebaseEntry::moveNext() {
       RemainingLoopCount = readULEB128() - 1;
       DEBUG_WITH_TYPE(
           "mach-o-rebase",
-          llvm::dbgs() << "REBASE_OPCODE_DO_REBASE_ULEB_TIMES: "
+          llvm37::dbgs() << "REBASE_OPCODE_DO_REBASE_ULEB_TIMES: "
                        << format("SegmentOffset=0x%06X", SegmentOffset)
                        << ", AdvanceAmount=" << AdvanceAmount
                        << ", RemainingLoopCount=" << RemainingLoopCount
@@ -1490,7 +1490,7 @@ void MachORebaseEntry::moveNext() {
       RemainingLoopCount = 0;
       DEBUG_WITH_TYPE(
           "mach-o-rebase",
-          llvm::dbgs() << "REBASE_OPCODE_DO_REBASE_ADD_ADDR_ULEB: "
+          llvm37::dbgs() << "REBASE_OPCODE_DO_REBASE_ADD_ADDR_ULEB: "
                        << format("SegmentOffset=0x%06X", SegmentOffset)
                        << ", AdvanceAmount=" << AdvanceAmount
                        << ", RemainingLoopCount=" << RemainingLoopCount
@@ -1501,7 +1501,7 @@ void MachORebaseEntry::moveNext() {
       AdvanceAmount = readULEB128() + PointerSize;
       DEBUG_WITH_TYPE(
           "mach-o-rebase",
-          llvm::dbgs() << "REBASE_OPCODE_DO_REBASE_ULEB_TIMES_SKIPPING_ULEB: "
+          llvm37::dbgs() << "REBASE_OPCODE_DO_REBASE_ULEB_TIMES_SKIPPING_ULEB: "
                        << format("SegmentOffset=0x%06X", SegmentOffset)
                        << ", AdvanceAmount=" << AdvanceAmount
                        << ", RemainingLoopCount=" << RemainingLoopCount
@@ -1618,20 +1618,20 @@ void MachOBindEntry::moveNext() {
       More = false;
       Done = true;
       moveToEnd();
-      DEBUG_WITH_TYPE("mach-o-bind", llvm::dbgs() << "BIND_OPCODE_DONE\n");
+      DEBUG_WITH_TYPE("mach-o-bind", llvm37::dbgs() << "BIND_OPCODE_DONE\n");
       break;
     case MachO::BIND_OPCODE_SET_DYLIB_ORDINAL_IMM:
       Ordinal = ImmValue;
       DEBUG_WITH_TYPE(
           "mach-o-bind",
-          llvm::dbgs() << "BIND_OPCODE_SET_DYLIB_ORDINAL_IMM: "
+          llvm37::dbgs() << "BIND_OPCODE_SET_DYLIB_ORDINAL_IMM: "
                        << "Ordinal=" << Ordinal << "\n");
       break;
     case MachO::BIND_OPCODE_SET_DYLIB_ORDINAL_ULEB:
       Ordinal = readULEB128();
       DEBUG_WITH_TYPE(
           "mach-o-bind",
-          llvm::dbgs() << "BIND_OPCODE_SET_DYLIB_ORDINAL_ULEB: "
+          llvm37::dbgs() << "BIND_OPCODE_SET_DYLIB_ORDINAL_ULEB: "
                        << "Ordinal=" << Ordinal << "\n");
       break;
     case MachO::BIND_OPCODE_SET_DYLIB_SPECIAL_IMM:
@@ -1642,7 +1642,7 @@ void MachOBindEntry::moveNext() {
         Ordinal = 0;
       DEBUG_WITH_TYPE(
           "mach-o-bind",
-          llvm::dbgs() << "BIND_OPCODE_SET_DYLIB_SPECIAL_IMM: "
+          llvm37::dbgs() << "BIND_OPCODE_SET_DYLIB_SPECIAL_IMM: "
                        << "Ordinal=" << Ordinal << "\n");
       break;
     case MachO::BIND_OPCODE_SET_SYMBOL_TRAILING_FLAGS_IMM:
@@ -1656,7 +1656,7 @@ void MachOBindEntry::moveNext() {
       ++Ptr;
       DEBUG_WITH_TYPE(
           "mach-o-bind",
-          llvm::dbgs() << "BIND_OPCODE_SET_SYMBOL_TRAILING_FLAGS_IMM: "
+          llvm37::dbgs() << "BIND_OPCODE_SET_SYMBOL_TRAILING_FLAGS_IMM: "
                        << "SymbolName=" << SymbolName << "\n");
       if (TableKind == Kind::Weak) {
         if (ImmValue & MachO::BIND_SYMBOL_FLAGS_NON_WEAK_DEFINITION)
@@ -1667,7 +1667,7 @@ void MachOBindEntry::moveNext() {
       BindType = ImmValue;
       DEBUG_WITH_TYPE(
           "mach-o-bind",
-          llvm::dbgs() << "BIND_OPCODE_SET_TYPE_IMM: "
+          llvm37::dbgs() << "BIND_OPCODE_SET_TYPE_IMM: "
                        << "BindType=" << (int)BindType << "\n");
       break;
     case MachO::BIND_OPCODE_SET_ADDEND_SLEB:
@@ -1676,7 +1676,7 @@ void MachOBindEntry::moveNext() {
         Malformed = true;
       DEBUG_WITH_TYPE(
           "mach-o-bind",
-          llvm::dbgs() << "BIND_OPCODE_SET_ADDEND_SLEB: "
+          llvm37::dbgs() << "BIND_OPCODE_SET_ADDEND_SLEB: "
                        << "Addend=" << Addend << "\n");
       break;
     case MachO::BIND_OPCODE_SET_SEGMENT_AND_OFFSET_ULEB:
@@ -1684,7 +1684,7 @@ void MachOBindEntry::moveNext() {
       SegmentOffset = readULEB128();
       DEBUG_WITH_TYPE(
           "mach-o-bind",
-          llvm::dbgs() << "BIND_OPCODE_SET_SEGMENT_AND_OFFSET_ULEB: "
+          llvm37::dbgs() << "BIND_OPCODE_SET_SEGMENT_AND_OFFSET_ULEB: "
                        << "SegmentIndex=" << SegmentIndex << ", "
                        << format("SegmentOffset=0x%06X", SegmentOffset)
                        << "\n");
@@ -1692,7 +1692,7 @@ void MachOBindEntry::moveNext() {
     case MachO::BIND_OPCODE_ADD_ADDR_ULEB:
       SegmentOffset += readULEB128();
       DEBUG_WITH_TYPE("mach-o-bind",
-                      llvm::dbgs() << "BIND_OPCODE_ADD_ADDR_ULEB: "
+                      llvm37::dbgs() << "BIND_OPCODE_ADD_ADDR_ULEB: "
                                    << format("SegmentOffset=0x%06X",
                                              SegmentOffset) << "\n");
       break;
@@ -1700,7 +1700,7 @@ void MachOBindEntry::moveNext() {
       AdvanceAmount = PointerSize;
       RemainingLoopCount = 0;
       DEBUG_WITH_TYPE("mach-o-bind",
-                      llvm::dbgs() << "BIND_OPCODE_DO_BIND: "
+                      llvm37::dbgs() << "BIND_OPCODE_DO_BIND: "
                                    << format("SegmentOffset=0x%06X",
                                              SegmentOffset) << "\n");
       return;
@@ -1711,7 +1711,7 @@ void MachOBindEntry::moveNext() {
         Malformed = true;
       DEBUG_WITH_TYPE(
           "mach-o-bind",
-          llvm::dbgs() << "BIND_OPCODE_DO_BIND_ADD_ADDR_ULEB: "
+          llvm37::dbgs() << "BIND_OPCODE_DO_BIND_ADD_ADDR_ULEB: "
                        << format("SegmentOffset=0x%06X", SegmentOffset)
                        << ", AdvanceAmount=" << AdvanceAmount
                        << ", RemainingLoopCount=" << RemainingLoopCount
@@ -1723,7 +1723,7 @@ void MachOBindEntry::moveNext() {
       if (TableKind == Kind::Lazy)
         Malformed = true;
       DEBUG_WITH_TYPE("mach-o-bind",
-                      llvm::dbgs()
+                      llvm37::dbgs()
                       << "BIND_OPCODE_DO_BIND_ADD_ADDR_IMM_SCALED: "
                       << format("SegmentOffset=0x%06X",
                                              SegmentOffset) << "\n");
@@ -1735,7 +1735,7 @@ void MachOBindEntry::moveNext() {
         Malformed = true;
       DEBUG_WITH_TYPE(
           "mach-o-bind",
-          llvm::dbgs() << "BIND_OPCODE_DO_BIND_ULEB_TIMES_SKIPPING_ULEB: "
+          llvm37::dbgs() << "BIND_OPCODE_DO_BIND_ULEB_TIMES_SKIPPING_ULEB: "
                        << format("SegmentOffset=0x%06X", SegmentOffset)
                        << ", AdvanceAmount=" << AdvanceAmount
                        << ", RemainingLoopCount=" << RemainingLoopCount

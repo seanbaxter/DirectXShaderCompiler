@@ -1,4 +1,4 @@
-; RUN: llvm-as < %s 2>&1 | FileCheck %s 
+; RUN: llvm37-as < %s 2>&1 | FileCheck %s 
 
 ; CHECK-NOT: Instruction operands must be first-class
 

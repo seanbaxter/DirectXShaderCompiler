@@ -1,16 +1,16 @@
-llvm-stress - generate random .ll files
+llvm37-stress - generate random .ll files
 =======================================
 
 SYNOPSIS
 --------
 
-:program:`llvm-stress` [-size=filesize] [-seed=initialseed] [-o=outfile]
+:program:`llvm37-stress` [-size=filesize] [-seed=initialseed] [-o=outfile]
 
 DESCRIPTION
 -----------
 
-The :program:`llvm-stress` tool is used to generate random ``.ll`` files that
-can be used to test different components of LLVM.
+The :program:`llvm37-stress` tool is used to generate random ``.ll`` files that
+can be used to test different components of LLVM37.
 
 OPTIONS
 -------
@@ -30,5 +30,5 @@ OPTIONS
 EXIT STATUS
 -----------
 
-:program:`llvm-stress` returns 0.
+:program:`llvm37-stress` returns 0.
 

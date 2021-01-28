@@ -1,6 +1,6 @@
 //===----- CGOpenMPRuntime.h - Interface to OpenMP Runtimes -----*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,18 +11,18 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_LIB_CODEGEN_CGOPENMPRUNTIME_H
-#define LLVM_CLANG_LIB_CODEGEN_CGOPENMPRUNTIME_H
+#ifndef LLVM37_CLANG_LIB_CODEGEN_CGOPENMPRUNTIME_H
+#define LLVM37_CLANG_LIB_CODEGEN_CGOPENMPRUNTIME_H
 
 #include "clang/AST/Type.h"
 #include "clang/Basic/OpenMPKinds.h"
 #include "clang/Basic/SourceLocation.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/DenseSet.h"
-#include "llvm/ADT/StringMap.h"
-#include "llvm/IR/ValueHandle.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/DenseSet.h"
+#include "llvm37/ADT/StringMap.h"
+#include "llvm37/IR/ValueHandle.h"
 
-namespace llvm {
+namespace llvm37 {
 class ArrayType;
 class Constant;
 class Function;
@@ -31,7 +31,7 @@ class GlobalVariable;
 class StructType;
 class Type;
 class Value;
-} // namespace llvm
+} // namespace llvm37
 
 namespace clang {
 class Expr;
@@ -43,7 +43,7 @@ namespace CodeGen {
 class CodeGenFunction;
 class CodeGenModule;
 
-typedef llvm::function_ref<void(CodeGenFunction &)> RegionCodeGenTy;
+typedef llvm37::function_ref<void(CodeGenFunction &)> RegionCodeGenTy;
 
 class CGOpenMPRuntime {
 private:
@@ -158,7 +158,7 @@ private:
 
   /// \brief Values for bit flags used in the ident_t to describe the fields.
   /// All enumeric elements are named and described in accordance with the code
-  /// from http://llvm.org/svn/llvm-project/openmp/trunk/runtime/src/kmp.h
+  /// from http://llvm37.org/svn/llvm37-project/openmp/trunk/runtime/src/kmp.h
   enum OpenMPLocationFlags {
     /// \brief Use trampoline for internal microtask.
     OMP_IDENT_IMD = 0x01,
@@ -180,14 +180,14 @@ private:
   CodeGenModule &CGM;
   /// \brief Default const ident_t object used for initialization of all other
   /// ident_t objects.
-  llvm::Constant *DefaultOpenMPPSource;
+  llvm37::Constant *DefaultOpenMPPSource;
   /// \brief Map of flags and corresponding default locations.
-  typedef llvm::DenseMap<unsigned, llvm::Value *> OpenMPDefaultLocMapTy;
+  typedef llvm37::DenseMap<unsigned, llvm37::Value *> OpenMPDefaultLocMapTy;
   OpenMPDefaultLocMapTy OpenMPDefaultLocMap;
-  llvm::Value *getOrCreateDefaultLocation(OpenMPLocationFlags Flags);
+  llvm37::Value *getOrCreateDefaultLocation(OpenMPLocationFlags Flags);
   /// \brief Describes ident structure that describes a source location.
   /// All descriptions are taken from
-  /// http://llvm.org/svn/llvm-project/openmp/trunk/runtime/src/kmp.h
+  /// http://llvm37.org/svn/llvm37-project/openmp/trunk/runtime/src/kmp.h
   /// Original structure:
   /// typedef struct ident {
   ///    kmp_int32 reserved_1;   /**<  might be used in Fortran;
@@ -225,35 +225,35 @@ private:
     /// and a pair of line numbers that delimit the construct.
     IdentField_PSource
   };
-  llvm::StructType *IdentTy;
+  llvm37::StructType *IdentTy;
   /// \brief Map for SourceLocation and OpenMP runtime library debug locations.
-  typedef llvm::DenseMap<unsigned, llvm::Value *> OpenMPDebugLocMapTy;
+  typedef llvm37::DenseMap<unsigned, llvm37::Value *> OpenMPDebugLocMapTy;
   OpenMPDebugLocMapTy OpenMPDebugLocMap;
   /// \brief The type for a microtask which gets passed to __kmpc_fork_call().
   /// Original representation is:
   /// typedef void (kmpc_micro)(kmp_int32 global_tid, kmp_int32 bound_tid,...);
-  llvm::FunctionType *Kmpc_MicroTy;
+  llvm37::FunctionType *Kmpc_MicroTy;
   /// \brief Stores debug location and ThreadID for the function.
   struct DebugLocThreadIdTy {
-    llvm::Value *DebugLoc;
-    llvm::Value *ThreadID;
+    llvm37::Value *DebugLoc;
+    llvm37::Value *ThreadID;
   };
   /// \brief Map of local debug location, ThreadId and functions.
-  typedef llvm::DenseMap<llvm::Function *, DebugLocThreadIdTy>
+  typedef llvm37::DenseMap<llvm37::Function *, DebugLocThreadIdTy>
       OpenMPLocThreadIDMapTy;
   OpenMPLocThreadIDMapTy OpenMPLocThreadIDMap;
   /// \brief Type kmp_critical_name, originally defined as typedef kmp_int32
   /// kmp_critical_name[8];
-  llvm::ArrayType *KmpCriticalNameTy;
+  llvm37::ArrayType *KmpCriticalNameTy;
   /// \brief An ordered map of auto-generated variables to their unique names.
   /// It stores variables with the following names: 1) ".gomp_critical_user_" +
   /// <critical_section_name> + ".var" for "omp critical" directives; 2)
   /// <mangled_name_for_global_var> + ".cache." for cache for threadprivate
   /// variables.
-  llvm::StringMap<llvm::AssertingVH<llvm::Constant>, llvm::BumpPtrAllocator>
+  llvm37::StringMap<llvm37::AssertingVH<llvm37::Constant>, llvm37::BumpPtrAllocator>
       InternalVars;
   /// \brief Type typedef kmp_int32 (* kmp_routine_entry_t)(kmp_int32, void *);
-  llvm::Type *KmpRoutineEntryPtrTy;
+  llvm37::Type *KmpRoutineEntryPtrTy;
   QualType KmpRoutineEntryPtrQTy;
   /// \brief Type typedef struct kmp_task {
   ///    void *              shareds; /**< pointer to block of pointers to
@@ -282,51 +282,51 @@ private:
   /// \brief Emits object of ident_t type with info for source location.
   /// \param Flags Flags for OpenMP location.
   ///
-  llvm::Value *emitUpdateLocation(CodeGenFunction &CGF, SourceLocation Loc,
+  llvm37::Value *emitUpdateLocation(CodeGenFunction &CGF, SourceLocation Loc,
                                   OpenMPLocationFlags Flags = OMP_IDENT_KMPC);
 
   /// \brief Returns pointer to ident_t type.
-  llvm::Type *getIdentTyPointerTy();
+  llvm37::Type *getIdentTyPointerTy();
 
   /// \brief Returns pointer to kmpc_micro type.
-  llvm::Type *getKmpc_MicroPointerTy();
+  llvm37::Type *getKmpc_MicroPointerTy();
 
   /// \brief Returns specified OpenMP runtime function.
   /// \param Function OpenMP runtime function.
   /// \return Specified function.
-  llvm::Constant *createRuntimeFunction(OpenMPRTLFunction Function);
+  llvm37::Constant *createRuntimeFunction(OpenMPRTLFunction Function);
 
   /// \brief Returns __kmpc_for_static_init_* runtime function for the specified
   /// size \a IVSize and sign \a IVSigned.
-  llvm::Constant *createForStaticInitFunction(unsigned IVSize, bool IVSigned);
+  llvm37::Constant *createForStaticInitFunction(unsigned IVSize, bool IVSigned);
 
   /// \brief Returns __kmpc_dispatch_init_* runtime function for the specified
   /// size \a IVSize and sign \a IVSigned.
-  llvm::Constant *createDispatchInitFunction(unsigned IVSize, bool IVSigned);
+  llvm37::Constant *createDispatchInitFunction(unsigned IVSize, bool IVSigned);
 
   /// \brief Returns __kmpc_dispatch_next_* runtime function for the specified
   /// size \a IVSize and sign \a IVSigned.
-  llvm::Constant *createDispatchNextFunction(unsigned IVSize, bool IVSigned);
+  llvm37::Constant *createDispatchNextFunction(unsigned IVSize, bool IVSigned);
 
   /// \brief Returns __kmpc_dispatch_fini_* runtime function for the specified
   /// size \a IVSize and sign \a IVSigned.
-  llvm::Constant *createDispatchFiniFunction(unsigned IVSize, bool IVSigned);
+  llvm37::Constant *createDispatchFiniFunction(unsigned IVSize, bool IVSigned);
 
   /// \brief If the specified mangled name is not in the module, create and
   /// return threadprivate cache object. This object is a pointer's worth of
   /// storage that's reserved for use by the OpenMP runtime.
   /// \param VD Threadprivate variable.
   /// \return Cache variable for the specified threadprivate.
-  llvm::Constant *getOrCreateThreadPrivateCache(const VarDecl *VD);
+  llvm37::Constant *getOrCreateThreadPrivateCache(const VarDecl *VD);
 
   /// \brief Emits address of the word in a memory where current thread id is
   /// stored.
-  virtual llvm::Value *emitThreadIDAddress(CodeGenFunction &CGF,
+  virtual llvm37::Value *emitThreadIDAddress(CodeGenFunction &CGF,
                                            SourceLocation Loc);
 
   /// \brief Gets thread id value for the current thread.
   ///
-  llvm::Value *getThreadID(CodeGenFunction &CGF, SourceLocation Loc);
+  llvm37::Value *getThreadID(CodeGenFunction &CGF, SourceLocation Loc);
 
   /// \brief Gets (if variable with the given name already exist) or creates
   /// internal global variable with the specified Name. The created variable has
@@ -334,11 +334,11 @@ private:
   /// \param Ty Type of the global variable. If it is exist already the type
   /// must be the same.
   /// \param Name Name of the variable.
-  llvm::Constant *getOrCreateInternalVariable(llvm::Type *Ty,
-                                              const llvm::Twine &Name);
+  llvm37::Constant *getOrCreateInternalVariable(llvm37::Type *Ty,
+                                              const llvm37::Twine &Name);
 
   /// \brief Set of threadprivate variables with the generated initializer.
-  llvm::DenseSet<const VarDecl *> ThreadPrivateWithDefinition;
+  llvm37::DenseSet<const VarDecl *> ThreadPrivateWithDefinition;
 
   /// \brief Emits initialization code for the threadprivate variables.
   /// \param VDAddr Address of the global variable \a VD.
@@ -346,16 +346,16 @@ private:
   /// \param CopyCtor Pointer to a global copy function for \a VD.
   /// \param Dtor Pointer to a global destructor function for \a VD.
   /// \param Loc Location of threadprivate declaration.
-  void emitThreadPrivateVarInit(CodeGenFunction &CGF, llvm::Value *VDAddr,
-                                llvm::Value *Ctor, llvm::Value *CopyCtor,
-                                llvm::Value *Dtor, SourceLocation Loc);
+  void emitThreadPrivateVarInit(CodeGenFunction &CGF, llvm37::Value *VDAddr,
+                                llvm37::Value *Ctor, llvm37::Value *CopyCtor,
+                                llvm37::Value *Dtor, SourceLocation Loc);
 
   /// \brief Returns corresponding lock object for the specified critical region
   /// name. If the lock object does not exist it is created, otherwise the
   /// reference to the existing copy is returned.
   /// \param CriticalName Name of the critical region.
   ///
-  llvm::Value *getCriticalRegionLock(StringRef CriticalName);
+  llvm37::Value *getCriticalRegionLock(StringRef CriticalName);
 
 public:
   explicit CGOpenMPRuntime(CodeGenModule &CGM);
@@ -370,7 +370,7 @@ public:
   /// \param InnermostKind Kind of innermost directive (for simple directives it
   /// is a directive itself, for combined - its innermost directive).
   /// \param CodeGen Code generation sequence for the \a D directive.
-  virtual llvm::Value *emitParallelOutlinedFunction(
+  virtual llvm37::Value *emitParallelOutlinedFunction(
       const OMPExecutableDirective &D, const VarDecl *ThreadIDVar,
       OpenMPDirectiveKind InnermostKind, const RegionCodeGenTy &CodeGen);
 
@@ -383,7 +383,7 @@ public:
   /// is a directive itself, for combined - its innermost directive).
   /// \param CodeGen Code generation sequence for the \a D directive.
   ///
-  virtual llvm::Value *emitTaskOutlinedFunction(
+  virtual llvm37::Value *emitTaskOutlinedFunction(
       const OMPExecutableDirective &D, const VarDecl *ThreadIDVar,
       OpenMPDirectiveKind InnermostKind, const RegionCodeGenTy &CodeGen);
 
@@ -402,8 +402,8 @@ public:
   /// specified, nullptr otherwise.
   ///
   virtual void emitParallelCall(CodeGenFunction &CGF, SourceLocation Loc,
-                                llvm::Value *OutlinedFn,
-                                llvm::Value *CapturedStruct,
+                                llvm37::Value *OutlinedFn,
+                                llvm37::Value *CapturedStruct,
                                 const Expr *IfCond);
 
   /// \brief Emits a critical region.
@@ -499,9 +499,9 @@ public:
   ///
   virtual void emitForInit(CodeGenFunction &CGF, SourceLocation Loc,
                            OpenMPScheduleClauseKind SchedKind, unsigned IVSize,
-                           bool IVSigned, bool Ordered, llvm::Value *IL,
-                           llvm::Value *LB, llvm::Value *UB, llvm::Value *ST,
-                           llvm::Value *Chunk = nullptr);
+                           bool IVSigned, bool Ordered, llvm37::Value *IL,
+                           llvm37::Value *LB, llvm37::Value *UB, llvm37::Value *ST,
+                           llvm37::Value *Chunk = nullptr);
 
   /// \brief Call the appropriate runtime routine to notify that we finished
   /// iteration of the ordered loop with the dynamic scheduling.
@@ -537,17 +537,17 @@ public:
   /// number is returned.
   /// \param ST Address of the output variable in which the stride value is
   /// returned.
-  virtual llvm::Value *emitForNext(CodeGenFunction &CGF, SourceLocation Loc,
+  virtual llvm37::Value *emitForNext(CodeGenFunction &CGF, SourceLocation Loc,
                                    unsigned IVSize, bool IVSigned,
-                                   llvm::Value *IL, llvm::Value *LB,
-                                   llvm::Value *UB, llvm::Value *ST);
+                                   llvm37::Value *IL, llvm37::Value *LB,
+                                   llvm37::Value *UB, llvm37::Value *ST);
 
   /// \brief Emits call to void __kmpc_push_num_threads(ident_t *loc, kmp_int32
   /// global_tid, kmp_int32 num_threads) to generate code for 'num_threads'
   /// clause.
   /// \param NumThreads An integer value of threads.
   virtual void emitNumThreadsClause(CodeGenFunction &CGF,
-                                    llvm::Value *NumThreads,
+                                    llvm37::Value *NumThreads,
                                     SourceLocation Loc);
 
   /// \brief Emit call to void __kmpc_push_proc_bind(ident_t *loc, kmp_int32
@@ -562,9 +562,9 @@ public:
   /// \param VDAddr Address of the global variable \a VD.
   /// \param Loc Location of the reference to threadprivate var.
   /// \return Address of the threadprivate variable for the current thread.
-  virtual llvm::Value *getAddrOfThreadPrivate(CodeGenFunction &CGF,
+  virtual llvm37::Value *getAddrOfThreadPrivate(CodeGenFunction &CGF,
                                               const VarDecl *VD,
-                                              llvm::Value *VDAddr,
+                                              llvm37::Value *VDAddr,
                                               SourceLocation Loc);
 
   /// \brief Emit a code for initialization of threadprivate variable. It emits
@@ -575,8 +575,8 @@ public:
   /// \param VDAddr Address of the global variable \a VD.
   /// \param Loc Location of threadprivate declaration.
   /// \param PerformInit true if initialization expression is not constant.
-  virtual llvm::Function *
-  emitThreadPrivateVarDefinition(const VarDecl *VD, llvm::Value *VDAddr,
+  virtual llvm37::Function *
+  emitThreadPrivateVarDefinition(const VarDecl *VD, llvm37::Value *VDAddr,
                                  SourceLocation Loc, bool PerformInit,
                                  CodeGenFunction *CGF = nullptr);
 
@@ -606,10 +606,10 @@ public:
   /// \param Tied true if the task is tied (the task is tied to the thread that
   /// can suspend its task region), false - untied (the task is not tied to any
   /// thread).
-  /// \param Final Contains either constant bool value, or llvm::Value * of i1
+  /// \param Final Contains either constant bool value, or llvm37::Value * of i1
   /// type for final clause. If the value is true, the task forces all of its
   /// child tasks to become final and included tasks.
-  /// \param TaskFunction An LLVM function with type void (*)(i32 /*gtid*/, i32
+  /// \param TaskFunction An LLVM37 function with type void (*)(i32 /*gtid*/, i32
   /// /*part_id*/, captured_struct */*__context*/);
   /// \param SharedsTy A type which contains references the shared variables.
   /// \param Shareds Context with the list of shared variables from the \p
@@ -631,8 +631,8 @@ public:
   /// original expression and dependency type.
   virtual void emitTaskCall(
       CodeGenFunction &CGF, SourceLocation Loc, const OMPExecutableDirective &D,
-      bool Tied, llvm::PointerIntPair<llvm::Value *, 1, bool> Final,
-      llvm::Value *TaskFunction, QualType SharedsTy, llvm::Value *Shareds,
+      bool Tied, llvm37::PointerIntPair<llvm37::Value *, 1, bool> Final,
+      llvm37::Value *TaskFunction, QualType SharedsTy, llvm37::Value *Shareds,
       const Expr *IfCond, ArrayRef<const Expr *> PrivateVars,
       ArrayRef<const Expr *> PrivateCopies,
       ArrayRef<const Expr *> FirstprivateVars,

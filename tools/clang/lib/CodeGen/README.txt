@@ -31,7 +31,7 @@ block.
 NOTE: The main case we care about this for is for -O0 -g compile time
 performance, and in that scenario we will need to emit the alloca
 anyway currently to emit proper debug info. So this is blocked by
-being able to emit debug information which refers to an LLVM
+being able to emit debug information which refers to an LLVM37
 temporary, not an alloca.
 
 //===---------------------------------------------------------------------===//

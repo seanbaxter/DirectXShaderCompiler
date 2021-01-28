@@ -1,6 +1,6 @@
 //===--- PlistDiagnostics.cpp - Plist Diagnostics for Paths -----*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -19,9 +19,9 @@
 #include "clang/Lex/Preprocessor.h"
 #include "clang/StaticAnalyzer/Core/BugReporter/PathDiagnostic.h"
 #include "clang/StaticAnalyzer/Core/PathDiagnosticConsumers.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/Support/Casting.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/Support/Casting.h"
 using namespace clang;
 using namespace ento;
 using namespace markup;
@@ -339,9 +339,9 @@ void PlistDiagnostics::FlushDiagnosticsImpl(
 
   // Open the file.
   std::error_code EC;
-  llvm::raw_fd_ostream o(OutputFile, EC, llvm::sys::fs::F_Text);
+  llvm37::raw_fd_ostream o(OutputFile, EC, llvm37::sys::fs::F_Text);
   if (EC) {
-    llvm::errs() << "warning: could not create file: " << EC.message() << '\n';
+    llvm37::errs() << "warning: could not create file: " << EC.message() << '\n';
     return;
   }
 

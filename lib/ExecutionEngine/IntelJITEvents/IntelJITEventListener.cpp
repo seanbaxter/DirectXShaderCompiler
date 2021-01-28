@@ -1,6 +1,6 @@
 //===-- IntelJITEventListener.cpp - Tell Intel profiler about JITed code --===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -12,25 +12,25 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Config/config.h"
+#include "llvm37/Config/config.h"
 #include "IntelJITEventsWrapper.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/CodeGen/MachineFunction.h"
-#include "llvm/DebugInfo/DIContext.h"
-#include "llvm/DebugInfo/DWARF/DWARFContext.h"
-#include "llvm/ExecutionEngine/JITEventListener.h"
-#include "llvm/IR/DebugInfo.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/Metadata.h"
-#include "llvm/IR/ValueHandle.h"
-#include "llvm/Object/ObjectFile.h"
-#include "llvm/Object/SymbolSize.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/Errno.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/CodeGen/MachineFunction.h"
+#include "llvm37/DebugInfo/DIContext.h"
+#include "llvm37/DebugInfo/DWARF/DWARFContext.h"
+#include "llvm37/ExecutionEngine/JITEventListener.h"
+#include "llvm37/IR/DebugInfo.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/Metadata.h"
+#include "llvm37/IR/ValueHandle.h"
+#include "llvm37/Object/ObjectFile.h"
+#include "llvm37/Object/SymbolSize.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/Errno.h"
+#include "llvm37/Support/raw_ostream.h"
 
-using namespace llvm;
-using namespace llvm::object;
+using namespace llvm37;
+using namespace llvm37::object;
 
 #define DEBUG_TYPE "amplifier-jit-event-listener"
 
@@ -212,7 +212,7 @@ void IntelJITEventListener::NotifyFreeingObject(const ObjectFile &Obj) {
 
 }  // anonymous namespace.
 
-namespace llvm {
+namespace llvm37 {
 JITEventListener *JITEventListener::createIntelJITEventListener() {
   return new IntelJITEventListener(new IntelJITEventsWrapper);
 }
@@ -223,5 +223,5 @@ JITEventListener *JITEventListener::createIntelJITEventListener(
   return new IntelJITEventListener(TestImpl);
 }
 
-} // namespace llvm
+} // namespace llvm37
 

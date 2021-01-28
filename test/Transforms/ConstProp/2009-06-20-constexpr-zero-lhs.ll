@@ -1,4 +1,4 @@
-; RUN: llvm-as < %s | llvm-dis | not grep ptrtoint
+; RUN: llvm37-as < %s | llvm37-dis | not grep ptrtoint
 ; PR4424
 @G = external global i32
 @test1 = constant i32 sdiv (i32 0, i32 ptrtoint (i32* @G to i32))

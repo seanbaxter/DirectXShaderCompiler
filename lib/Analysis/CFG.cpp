@@ -1,6 +1,6 @@
 //===-- CFG.cpp - BasicBlock analysis --------------------------------------==//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -12,19 +12,19 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Analysis/CFG.h"
-#include "llvm/ADT/SmallSet.h"
-#include "llvm/Analysis/LoopInfo.h"
-#include "llvm/IR/Dominators.h"
+#include "llvm37/Analysis/CFG.h"
+#include "llvm37/ADT/SmallSet.h"
+#include "llvm37/Analysis/LoopInfo.h"
+#include "llvm37/IR/Dominators.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 /// FindFunctionBackedges - Analyze the specified function to find all of the
 /// loop backedges in the function and return them.  This is a relatively cheap
 /// (compared to computing dominators and loop info) analysis.
 ///
 /// The output is added to Result, as pairs of <from,to> edge info.
-void llvm::FindFunctionBackedges(const Function &F,
+void llvm37::FindFunctionBackedges(const Function &F,
      SmallVectorImpl<std::pair<const BasicBlock*,const BasicBlock*> > &Result) {
   const BasicBlock *BB = &F.getEntryBlock();
   if (succ_empty(BB))
@@ -69,7 +69,7 @@ void llvm::FindFunctionBackedges(const Function &F,
 /// and return its position in the terminator instruction's list of
 /// successors.  It is an error to call this with a block that is not a
 /// successor.
-unsigned llvm::GetSuccessorNumber(BasicBlock *BB, BasicBlock *Succ) {
+unsigned llvm37::GetSuccessorNumber(BasicBlock *BB, BasicBlock *Succ) {
   TerminatorInst *Term = BB->getTerminator();
 #ifndef NDEBUG
   unsigned e = Term->getNumSuccessors();
@@ -84,7 +84,7 @@ unsigned llvm::GetSuccessorNumber(BasicBlock *BB, BasicBlock *Succ) {
 /// isCriticalEdge - Return true if the specified edge is a critical edge.
 /// Critical edges are edges from a block with multiple successors to a block
 /// with multiple predecessors.
-bool llvm::isCriticalEdge(const TerminatorInst *TI, unsigned SuccNum,
+bool llvm37::isCriticalEdge(const TerminatorInst *TI, unsigned SuccNum,
                           bool AllowIdenticalEdges) {
   assert(SuccNum < TI->getNumSuccessors() && "Illegal edge specification!");
   if (TI->getNumSuccessors() == 1) return false;
@@ -126,7 +126,7 @@ static bool loopContainsBoth(const LoopInfo *LI,
   return L1 != nullptr && L1 == L2;
 }
 
-bool llvm::isPotentiallyReachableFromMany(
+bool llvm37::isPotentiallyReachableFromMany(
     SmallVectorImpl<BasicBlock *> &Worklist, BasicBlock *StopBB,
     const DominatorTree *DT, const LoopInfo *LI) {
   // When the stop block is unreachable, it's dominated from everywhere,
@@ -170,7 +170,7 @@ bool llvm::isPotentiallyReachableFromMany(
   return false;
 }
 
-bool llvm::isPotentiallyReachable(const BasicBlock *A, const BasicBlock *B,
+bool llvm37::isPotentiallyReachable(const BasicBlock *A, const BasicBlock *B,
                                   const DominatorTree *DT, const LoopInfo *LI) {
   assert(A->getParent() == B->getParent() &&
          "This analysis is function-local!");
@@ -182,7 +182,7 @@ bool llvm::isPotentiallyReachable(const BasicBlock *A, const BasicBlock *B,
                                         DT, LI);
 }
 
-bool llvm::isPotentiallyReachable(const Instruction *A, const Instruction *B,
+bool llvm37::isPotentiallyReachable(const Instruction *A, const Instruction *B,
                                   const DominatorTree *DT, const LoopInfo *LI) {
   assert(A->getParent()->getParent() == B->getParent()->getParent() &&
          "This analysis is function-local!");

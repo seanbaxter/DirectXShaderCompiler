@@ -1,6 +1,6 @@
 //===- unittests/Tooling/ReplacementsYamlTest.cpp - Serialization tests ---===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -14,7 +14,7 @@
 #include "clang/Tooling/ReplacementsYaml.h"
 #include "gtest/gtest.h"
 
-using namespace llvm;
+using namespace llvm37;
 using namespace clang::tooling;
 
 TEST(ReplacementsYamlTest, serializesReplacements) {
@@ -29,7 +29,7 @@ TEST(ReplacementsYamlTest, serializesReplacements) {
       .push_back(Replacement("/path/to/file2.h", 301, 2, "replacement #2"));
 
   std::string YamlContent;
-  llvm::raw_string_ostream YamlContentStream(YamlContent);
+  llvm37::raw_string_ostream YamlContentStream(YamlContent);
 
   yaml::Output YAML(YamlContentStream);
   YAML << Doc;

@@ -1,6 +1,6 @@
 //===- ExternalPreprocessorSource.h - Abstract Macro Interface --*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,8 +11,8 @@
 //  construction of macro definitions from some external source.
 //
 //===----------------------------------------------------------------------===//
-#ifndef LLVM_CLANG_LEX_EXTERNALPREPROCESSORSOURCE_H
-#define LLVM_CLANG_LEX_EXTERNALPREPROCESSORSOURCE_H
+#ifndef LLVM37_CLANG_LEX_EXTERNALPREPROCESSORSOURCE_H
+#define LLVM37_CLANG_LEX_EXTERNALPREPROCESSORSOURCE_H
 
 namespace clang {
 

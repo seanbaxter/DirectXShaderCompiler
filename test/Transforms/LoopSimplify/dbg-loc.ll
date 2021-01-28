@@ -72,7 +72,7 @@ eh.resume:                                        ; preds = %catch
 ; CHECK-DAG: [[LOOPEXIT_LOC]] = !DILocation(line: 75, column: 9, scope: !{{[0-9]+}})
 ; CHECK-DAG: [[LPAD_PREHEADER_LOC]] = !DILocation(line: 85, column: 1, scope: !{{[0-9]+}})
 
-!llvm.module.flags = !{!0, !1, !2}
+!llvm37.module.flags = !{!0, !1, !2}
 !0 = !{i32 2, !"Dwarf Version", i32 4}
 !1 = !{i32 2, !"Debug Info Version", i32 3}
 !2 = !{i32 1, !"PIC Level", i32 2}

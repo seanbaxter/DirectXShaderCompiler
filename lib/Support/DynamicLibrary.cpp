@@ -1,6 +1,6 @@
 //===-- DynamicLibrary.cpp - Runtime link/load libraries --------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -13,29 +13,29 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Support/DynamicLibrary.h"
-#include "llvm-c/Support.h"
-#include "llvm/ADT/DenseSet.h"
-#include "llvm/ADT/StringMap.h"
-#include "llvm/Config/config.h"
-#include "llvm/Support/ManagedStatic.h"
-#include "llvm/Support/Mutex.h"
+#include "llvm37/Support/DynamicLibrary.h"
+#include "llvm37-c/Support.h"
+#include "llvm37/ADT/DenseSet.h"
+#include "llvm37/ADT/StringMap.h"
+#include "llvm37/Config/config.h"
+#include "llvm37/Support/ManagedStatic.h"
+#include "llvm37/Support/Mutex.h"
 #include <cstdio>
 #include <cstring>
 
 // Collection of symbol name/value pairs to be searched prior to any libraries.
-static llvm::ManagedStatic<llvm::StringMap<void *> > ExplicitSymbols;
-static llvm::ManagedStatic<llvm::sys::SmartMutex<true> > SymbolsMutex;
+static llvm37::ManagedStatic<llvm37::StringMap<void *> > ExplicitSymbols;
+static llvm37::ManagedStatic<llvm37::sys::SmartMutex<true> > SymbolsMutex;
 
-void llvm::sys::DynamicLibrary::AddSymbol(StringRef symbolName,
+void llvm37::sys::DynamicLibrary::AddSymbol(StringRef symbolName,
                                           void *symbolValue) {
   SmartScopedLock<true> lock(*SymbolsMutex);
   (*ExplicitSymbols)[symbolName] = symbolValue;
 }
 
-char llvm::sys::DynamicLibrary::Invalid = 0;
+char llvm37::sys::DynamicLibrary::Invalid = 0;
 
-#ifdef LLVM_ON_WIN32
+#ifdef LLVM37_ON_WIN32
 
 #include "Windows/DynamicLibrary.inc"
 
@@ -43,8 +43,8 @@ char llvm::sys::DynamicLibrary::Invalid = 0;
 
 #if HAVE_DLFCN_H
 #include <dlfcn.h>
-using namespace llvm;
-using namespace llvm::sys;
+using namespace llvm37;
+using namespace llvm37::sys;
 
 //===----------------------------------------------------------------------===//
 //=== WARNING: Implementation here must contain only TRULY operating system
@@ -89,8 +89,8 @@ void *DynamicLibrary::getAddressOfSymbol(const char *symbolName) {
 
 #else
 
-using namespace llvm;
-using namespace llvm::sys;
+using namespace llvm37;
+using namespace llvm37::sys;
 
 DynamicLibrary DynamicLibrary::getPermanentLibrary(const char *filename,
                                                    std::string *errMsg) {
@@ -104,7 +104,7 @@ void *DynamicLibrary::getAddressOfSymbol(const char *symbolName) {
 
 #endif
 
-namespace llvm {
+namespace llvm37 {
 void *SearchForAddressOfSpecialSymbol(const char* symbolName);
 }
 
@@ -133,7 +133,7 @@ void* DynamicLibrary::SearchForAddressOfSymbol(const char *symbolName) {
   }
 #endif
 
-  if (void *Result = llvm::SearchForAddressOfSpecialSymbol(symbolName))
+  if (void *Result = llvm37::SearchForAddressOfSpecialSymbol(symbolName))
     return Result;
 
 // This macro returns the address of a well-known, explicit symbol
@@ -170,21 +170,21 @@ void* DynamicLibrary::SearchForAddressOfSymbol(const char *symbolName) {
   return nullptr;
 }
 
-#endif // LLVM_ON_WIN32
+#endif // LLVM37_ON_WIN32
 
 //===----------------------------------------------------------------------===//
 // C API.
 //===----------------------------------------------------------------------===//
 
-LLVMBool LLVMLoadLibraryPermanently(const char* Filename) {
-  return llvm::sys::DynamicLibrary::LoadLibraryPermanently(Filename);
+LLVM37Bool LLVM37LoadLibraryPermanently(const char* Filename) {
+  return llvm37::sys::DynamicLibrary::LoadLibraryPermanently(Filename);
 }
 
-void *LLVMSearchForAddressOfSymbol(const char *symbolName) {
-  return llvm::sys::DynamicLibrary::SearchForAddressOfSymbol(symbolName);
+void *LLVM37SearchForAddressOfSymbol(const char *symbolName) {
+  return llvm37::sys::DynamicLibrary::SearchForAddressOfSymbol(symbolName);
 }
 
-void LLVMAddSymbol(const char *symbolName, void *symbolValue) {
-  return llvm::sys::DynamicLibrary::AddSymbol(symbolName, symbolValue);
+void LLVM37AddSymbol(const char *symbolName, void *symbolValue) {
+  return llvm37::sys::DynamicLibrary::AddSymbol(symbolName, symbolValue);
 }
 

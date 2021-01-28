@@ -93,7 +93,7 @@
 
 ; Round trip through bitcode.
 ; RUN: opt -f -o - -passes='no-op-module,no-op-module' %s \
-; RUN:     | llvm-dis \
+; RUN:     | llvm37-dis \
 ; RUN:     | FileCheck %s --check-prefix=CHECK-NOOP
 
 ; RUN: opt -disable-output -debug-pass-manager -verify-each -passes='no-op-module,function(no-op-function)' %s 2>&1 \

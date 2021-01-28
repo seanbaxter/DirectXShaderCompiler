@@ -2,7 +2,7 @@
 #
 #===- clang-format-diff.py - ClangFormat Diff Reformatter ----*- python -*--===#
 #
-#                     The LLVM Compiler Infrastructure
+#                     The LLVM37 Compiler Infrastructure
 #
 # This file is distributed under the University of Illinois Open Source
 # License. See LICENSE.TXT for details.
@@ -57,7 +57,7 @@ def main():
   parser.add_argument(
       '-style',
       help=
-      'formatting style to apply (LLVM, Google, Chromium, Mozilla, WebKit)')
+      'formatting style to apply (LLVM37, Google, Chromium, Mozilla, WebKit)')
   args = parser.parse_args()
 
   # Extract changed lines for each file.

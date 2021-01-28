@@ -1,5 +1,5 @@
-// RUN: llvm-mc %s -o %t -filetype=obj -triple=x86_64-pc-win32
-// RUN: llvm-cxxdump %t | FileCheck %s
+// RUN: llvm37-mc %s -o %t -filetype=obj -triple=x86_64-pc-win32
+// RUN: llvm37-cxxdump %t | FileCheck %s
 
 // CHECK:      ??_8B@@7B@[0]: 8
 // CHECK-NEXT: ??_8B@@7B@[4]: 9

@@ -1,6 +1,6 @@
 //===--- Linkage.h - Linkage enumeration and utilities ----------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,8 +11,8 @@
 /// \brief Defines the Linkage enumeration and various utility functions.
 ///
 //===----------------------------------------------------------------------===//
-#ifndef LLVM_CLANG_BASIC_LINKAGE_H
-#define LLVM_CLANG_BASIC_LINKAGE_H
+#ifndef LLVM37_CLANG_BASIC_LINKAGE_H
+#define LLVM37_CLANG_BASIC_LINKAGE_H
 
 #include <assert.h>
 #include <stdint.h>
@@ -107,4 +107,4 @@ inline Linkage minLinkage(Linkage L1, Linkage L2) {
 
 } // end namespace clang
 
-#endif // LLVM_CLANG_BASIC_LINKAGE_H
+#endif // LLVM37_CLANG_BASIC_LINKAGE_H

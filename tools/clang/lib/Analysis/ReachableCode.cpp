@@ -1,6 +1,6 @@
 //=- ReachableCodePathInsensitive.cpp ---------------------------*- C++ --*-==//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -22,8 +22,8 @@
 #include "clang/Analysis/CFG.h"
 #include "clang/Basic/SourceManager.h"
 #include "clang/Lex/Preprocessor.h"
-#include "llvm/ADT/BitVector.h"
-#include "llvm/ADT/SmallVector.h"
+#include "llvm37/ADT/BitVector.h"
+#include "llvm37/ADT/SmallVector.h"
 
 using namespace clang;
 
@@ -109,7 +109,7 @@ static bool isDeadReturn(const CFGBlock *B, const Stmt *S) {
       return false;
     }
   }
-  llvm_unreachable("Broke out of infinite loop.");
+  llvm37_unreachable("Broke out of infinite loop.");
 }
 
 static SourceLocation getTopMostMacro(SourceLocation Loc, SourceManager &SM) {
@@ -265,7 +265,7 @@ static bool shouldTreatSuccessorsAsReachable(const CFGBlock *B,
 }
 
 static unsigned scanFromBlock(const CFGBlock *Start,
-                              llvm::BitVector &Reachable,
+                              llvm37::BitVector &Reachable,
                               Preprocessor *PP,
                               bool IncludeSometimesUnreachableEdges) {
   unsigned count = 0;
@@ -332,7 +332,7 @@ static unsigned scanFromBlock(const CFGBlock *Start,
 
 static unsigned scanMaybeReachableFromBlock(const CFGBlock *Start,
                                             Preprocessor &PP,
-                                            llvm::BitVector &Reachable) {
+                                            llvm37::BitVector &Reachable) {
   return scanFromBlock(Start, Reachable, &PP, true);
 }
 
@@ -342,8 +342,8 @@ static unsigned scanMaybeReachableFromBlock(const CFGBlock *Start,
 
 namespace {
   class DeadCodeScan {
-    llvm::BitVector Visited;
-    llvm::BitVector &Reachable;
+    llvm37::BitVector Visited;
+    llvm37::BitVector &Reachable;
     SmallVector<const CFGBlock *, 10> WorkList;
     Preprocessor &PP;
 
@@ -353,7 +353,7 @@ namespace {
     DeferredLocsTy DeferredLocs;
 
   public:
-    DeadCodeScan(llvm::BitVector &reachable, Preprocessor &PP)
+    DeadCodeScan(llvm37::BitVector &reachable, Preprocessor &PP)
     : Visited(reachable.size()),
       Reachable(reachable),
       PP(PP) {}
@@ -488,7 +488,7 @@ unsigned DeadCodeScan::scanBackwards(const clang::CFGBlock *Start,
   // If we didn't find a dead root, then report the dead code with the
   // earliest location.
   if (!DeferredLocs.empty()) {
-    llvm::array_pod_sort(DeferredLocs.begin(), DeferredLocs.end(), SrcCmp);
+    llvm37::array_pod_sort(DeferredLocs.begin(), DeferredLocs.end(), SrcCmp);
     for (DeferredLocsTy::iterator I = DeferredLocs.begin(),
          E = DeferredLocs.end(); I != E; ++I) {
       const CFGBlock *Block = I->first;
@@ -631,7 +631,7 @@ namespace clang { namespace reachable_code {
 void Callback::anchor() { }
 
 unsigned ScanReachableFromBlock(const CFGBlock *Start,
-                                llvm::BitVector &Reachable) {
+                                llvm37::BitVector &Reachable) {
   return scanFromBlock(Start, Reachable, /* SourceManager* */ nullptr, false);
 }
 
@@ -644,7 +644,7 @@ void FindUnreachableCode(AnalysisDeclContext &AC, Preprocessor &PP,
 
   // Scan for reachable blocks from the entrance of the CFG.
   // If there are no unreachable blocks, we're done.
-  llvm::BitVector reachable(cfg->getNumBlockIDs());
+  llvm37::BitVector reachable(cfg->getNumBlockIDs());
   unsigned numReachable =
     scanMaybeReachableFromBlock(&cfg->getEntry(), PP, reachable);
   if (numReachable == cfg->getNumBlockIDs())

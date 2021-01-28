@@ -1,4 +1,4 @@
-add_llvm_library(LLVMMCDisassembler
+add_llvm_library(LLVM37MCDisassembler
   Disassembler.cpp
   MCRelocationInfo.cpp
   MCExternalSymbolizer.cpp

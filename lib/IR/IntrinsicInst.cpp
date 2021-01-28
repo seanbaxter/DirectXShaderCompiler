@@ -1,6 +1,6 @@
 //===-- InstrinsicInst.cpp - Intrinsic Instruction Wrappers ---------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -21,11 +21,11 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/GlobalVariable.h"
-#include "llvm/IR/Metadata.h"
-using namespace llvm;
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/GlobalVariable.h"
+#include "llvm37/IR/Metadata.h"
+using namespace llvm37;
 
 //===----------------------------------------------------------------------===//
 /// DbgInfoIntrinsic - This is the common base class for debug info intrinsics
@@ -60,7 +60,7 @@ static Value *getValueImpl(Value *Op) {
 }
 
 //===----------------------------------------------------------------------===//
-/// DbgDeclareInst - This represents the llvm.dbg.declare instruction.
+/// DbgDeclareInst - This represents the llvm37.dbg.declare instruction.
 ///
 
 Value *DbgDeclareInst::getAddress() const {
@@ -71,7 +71,7 @@ Value *DbgDeclareInst::getAddress() const {
 }
 
 //===----------------------------------------------------------------------===//
-/// DbgValueInst - This represents the llvm.dbg.value instruction.
+/// DbgValueInst - This represents the llvm37.dbg.value instruction.
 ///
 
 const Value *DbgValueInst::getValue() const {

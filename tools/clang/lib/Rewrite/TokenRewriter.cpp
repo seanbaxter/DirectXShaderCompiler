@@ -1,6 +1,6 @@
 //===--- TokenRewriter.cpp - Token-based code rewriting interface ---------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -23,7 +23,7 @@ TokenRewriter::TokenRewriter(FileID FID, SourceManager &SM,
   ScratchBuf.reset(new ScratchBuffer(SM));
 
   // Create a lexer to lex all the tokens of the main file in raw mode.
-  const llvm::MemoryBuffer *FromFile = SM.getBuffer(FID);
+  const llvm37::MemoryBuffer *FromFile = SM.getBuffer(FID);
   Lexer RawLex(FID, FromFile, SM, LangOpts);
 
   // Return all comments and whitespace as tokens.

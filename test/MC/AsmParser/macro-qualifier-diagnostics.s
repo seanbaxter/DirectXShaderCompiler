@@ -1,4 +1,4 @@
-# RUN: not llvm-mc -triple i386 -o /dev/null %s 2>&1 | FileCheck %s
+# RUN: not llvm37-mc -triple i386 -o /dev/null %s 2>&1 | FileCheck %s
 
 	.macro missing_qualifier parameter:
 

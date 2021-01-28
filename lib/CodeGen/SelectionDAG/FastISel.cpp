@@ -1,6 +1,6 @@
 //===-- FastISel.cpp - Implementation of the FastISel class ---------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -25,7 +25,7 @@
 // The intended use for "fast" instruction selection is "-O0" mode
 // compilation, where the quality of the generated code is irrelevant when
 // weighed against the speed at which the code can be generated.  Also,
-// at -O0, the LLVM optimizers are not running, and this makes the
+// at -O0, the LLVM37 optimizers are not running, and this makes the
 // compile time of codegen a much higher portion of the overall compile
 // time.  Despite its limitations, "fast" instruction selection is able to
 // handle enough code on its own to provide noticeable overall speedups
@@ -39,36 +39,36 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/CodeGen/Analysis.h"
-#include "llvm/ADT/Optional.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/Analysis/BranchProbabilityInfo.h"
-#include "llvm/Analysis/Loads.h"
-#include "llvm/Analysis/TargetLibraryInfo.h"
-#include "llvm/CodeGen/Analysis.h"
-#include "llvm/CodeGen/FastISel.h"
-#include "llvm/CodeGen/FunctionLoweringInfo.h"
-#include "llvm/CodeGen/MachineFrameInfo.h"
-#include "llvm/CodeGen/MachineInstrBuilder.h"
-#include "llvm/CodeGen/MachineModuleInfo.h"
-#include "llvm/CodeGen/MachineRegisterInfo.h"
-#include "llvm/CodeGen/StackMaps.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/DebugInfo.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/GlobalVariable.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/IR/Mangler.h"
-#include "llvm/IR/Operator.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Target/TargetInstrInfo.h"
-#include "llvm/Target/TargetLowering.h"
-#include "llvm/Target/TargetMachine.h"
-#include "llvm/Target/TargetSubtargetInfo.h"
-using namespace llvm;
+#include "llvm37/CodeGen/Analysis.h"
+#include "llvm37/ADT/Optional.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/Analysis/BranchProbabilityInfo.h"
+#include "llvm37/Analysis/Loads.h"
+#include "llvm37/Analysis/TargetLibraryInfo.h"
+#include "llvm37/CodeGen/Analysis.h"
+#include "llvm37/CodeGen/FastISel.h"
+#include "llvm37/CodeGen/FunctionLoweringInfo.h"
+#include "llvm37/CodeGen/MachineFrameInfo.h"
+#include "llvm37/CodeGen/MachineInstrBuilder.h"
+#include "llvm37/CodeGen/MachineModuleInfo.h"
+#include "llvm37/CodeGen/MachineRegisterInfo.h"
+#include "llvm37/CodeGen/StackMaps.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/IR/DebugInfo.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/GlobalVariable.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/IR/Mangler.h"
+#include "llvm37/IR/Operator.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Target/TargetInstrInfo.h"
+#include "llvm37/Target/TargetLowering.h"
+#include "llvm37/Target/TargetMachine.h"
+#include "llvm37/Target/TargetSubtargetInfo.h"
+using namespace llvm37;
 
 #define DEBUG_TYPE "isel"
 
@@ -144,7 +144,7 @@ bool FastISel::hasTrivialKill(const Value *V) {
         !hasTrivialKill(Cast->getOperand(0)))
       return false;
 
-  // Even the value might have only one use in the LLVM IR, it is possible that
+  // Even the value might have only one use in the LLVM37 IR, it is possible that
   // FastISel might fold the use into another instruction and now there is more
   // than one use at the Machine Instruction level.
   unsigned Reg = lookUpRegForValue(V);
@@ -414,7 +414,7 @@ bool FastISel::selectBinaryOp(const User *I, unsigned ISDOpcode) {
       if (!ResultReg)
         return false;
 
-      // We successfully emitted code for the given LLVM Instruction.
+      // We successfully emitted code for the given LLVM37 Instruction.
       updateValueMap(I, ResultReg);
       return true;
     }
@@ -447,7 +447,7 @@ bool FastISel::selectBinaryOp(const User *I, unsigned ISDOpcode) {
     if (!ResultReg)
       return false;
 
-    // We successfully emitted code for the given LLVM Instruction.
+    // We successfully emitted code for the given LLVM37 Instruction.
     updateValueMap(I, ResultReg);
     return true;
   }
@@ -457,7 +457,7 @@ bool FastISel::selectBinaryOp(const User *I, unsigned ISDOpcode) {
     unsigned ResultReg = fastEmit_rf(VT.getSimpleVT(), VT.getSimpleVT(),
                                      ISDOpcode, Op0, Op0IsKill, CF);
     if (ResultReg) {
-      // We successfully emitted code for the given LLVM Instruction.
+      // We successfully emitted code for the given LLVM37 Instruction.
       updateValueMap(I, ResultReg);
       return true;
     }
@@ -476,7 +476,7 @@ bool FastISel::selectBinaryOp(const User *I, unsigned ISDOpcode) {
     // the given ISD opcode and type. Halt "fast" selection and bail.
     return false;
 
-  // We successfully emitted code for the given LLVM Instruction.
+  // We successfully emitted code for the given LLVM37 Instruction.
   updateValueMap(I, ResultReg);
   return true;
 }
@@ -564,7 +564,7 @@ bool FastISel::selectGetElementPtr(const User *I) {
       return false;
   }
 
-  // We successfully emitted code for the given LLVM Instruction.
+  // We successfully emitted code for the given LLVM37 Instruction.
   updateValueMap(I, N);
   return true;
 }
@@ -600,7 +600,7 @@ bool FastISel::addStackMapLiveVars(SmallVectorImpl<MachineOperand> &Ops,
 }
 
 bool FastISel::selectStackmap(const CallInst *I) {
-  // void @llvm.experimental.stackmap(i64 <id>, i32 <numShadowBytes>,
+  // void @llvm37.experimental.stackmap(i64 <id>, i32 <numShadowBytes>,
   //                                  [live variables...])
   assert(I->getCalledFunction()->getReturnType()->isVoidTy() &&
          "Stackmap cannot return a value.");
@@ -712,7 +712,7 @@ FastISel::CallLoweringInfo &FastISel::CallLoweringInfo::setCallee(
 }
 
 bool FastISel::selectPatchpoint(const CallInst *I) {
-  // void|i64 @llvm.experimental.patchpoint.void|i64(i64 <id>,
+  // void|i64 @llvm37.experimental.patchpoint.void|i64(i64 <id>,
   //                                                 i32 <numBytes>,
   //                                                 i8* <target>,
   //                                                 i32 <numArgs>,
@@ -778,13 +778,13 @@ bool FastISel::selectPatchpoint(const CallInst *I) {
         cast<ConstantInt>(C->getOperand(0))->getZExtValue();
       Ops.push_back(MachineOperand::CreateImm(CalleeConstAddr));
     } else
-      llvm_unreachable("Unsupported ConstantExpr.");
+      llvm37_unreachable("Unsupported ConstantExpr.");
   } else if (const auto *GV = dyn_cast<GlobalValue>(Callee)) {
     Ops.push_back(MachineOperand::CreateGA(GV, 0));
   } else if (isa<ConstantPointerNull>(Callee))
     Ops.push_back(MachineOperand::CreateImm(0));
   else
-    llvm_unreachable("Unsupported callee address.");
+    llvm37_unreachable("Unsupported callee address.");
 
   // Adjust <numArgs> to account for any arguments that have been passed on
   // the stack instead.
@@ -1498,7 +1498,7 @@ bool FastISel::selectOperator(const User *I, unsigned Opcode) {
   case Instruction::Sub:
     return selectBinaryOp(I, ISD::SUB);
   case Instruction::FSub:
-    // FNeg is currently represented in LLVM IR as a special case of FSub.
+    // FNeg is currently represented in LLVM37 IR as a special case of FSub.
     if (BinaryOperator::isFNeg(I))
       return selectFNeg(I);
     return selectBinaryOp(I, ISD::FSUB);
@@ -1538,8 +1538,8 @@ bool FastISel::selectOperator(const User *I, unsigned Opcode) {
     const BranchInst *BI = cast<BranchInst>(I);
 
     if (BI->isUnconditional()) {
-      const BasicBlock *LLVMSucc = BI->getSuccessor(0);
-      MachineBasicBlock *MSucc = FuncInfo.MBBMap[LLVMSucc];
+      const BasicBlock *LLVM37Succ = BI->getSuccessor(0);
+      MachineBasicBlock *MSucc = FuncInfo.MBBMap[LLVM37Succ];
       fastEmitBranch(MSucc, BI->getDebugLoc());
       return true;
     }
@@ -1599,7 +1599,7 @@ bool FastISel::selectOperator(const User *I, unsigned Opcode) {
     return selectExtractValue(I);
 
   case Instruction::PHI:
-    llvm_unreachable("FastISel shouldn't visit PHI nodes!");
+    llvm37_unreachable("FastISel shouldn't visit PHI nodes!");
 
   default:
     // Unhandled instruction. Halt "fast" selection and bail.
@@ -2000,8 +2000,8 @@ unsigned FastISel::fastEmitZExtFromI1(MVT VT, unsigned Op0, bool Op0IsKill) {
 /// nodes as input.  We cannot just directly add them, because expansion
 /// might result in multiple MBB's for one BB.  As such, the start of the
 /// BB might correspond to a different MBB than the end.
-bool FastISel::handlePHINodesInSuccessorBlocks(const BasicBlock *LLVMBB) {
-  const TerminatorInst *TI = LLVMBB->getTerminator();
+bool FastISel::handlePHINodesInSuccessorBlocks(const BasicBlock *LLVM37BB) {
+  const TerminatorInst *TI = LLVM37BB->getTerminator();
 
   SmallPtrSet<MachineBasicBlock *, 4> SuccsHandled;
   FuncInfo.OrigNumPHINodesToUpdate = FuncInfo.PHINodesToUpdate.size();
@@ -2021,7 +2021,7 @@ bool FastISel::handlePHINodesInSuccessorBlocks(const BasicBlock *LLVMBB) {
 
     MachineBasicBlock::iterator MBBI = SuccMBB->begin();
 
-    // At this point we know that there is a 1-1 correspondence between LLVM PHI
+    // At this point we know that there is a 1-1 correspondence between LLVM37 PHI
     // nodes and Machine PHI nodes, but the incoming operands have not been
     // emitted yet.
     for (BasicBlock::const_iterator I = SuccBB->begin();
@@ -2046,7 +2046,7 @@ bool FastISel::handlePHINodesInSuccessorBlocks(const BasicBlock *LLVMBB) {
         }
       }
 
-      const Value *PHIOp = PN->getIncomingValueForBlock(LLVMBB);
+      const Value *PHIOp = PN->getIncomingValueForBlock(LLVM37BB);
 
       // Set the DebugLoc for the copy. Prefer the location of the operand
       // if there is one; use the location of the PHI otherwise.
@@ -2162,9 +2162,9 @@ FastISel::createMachineMemOperandFor(const Instruction *I) const {
   } else
     return nullptr;
 
-  bool IsNonTemporal = I->getMetadata(LLVMContext::MD_nontemporal) != nullptr;
-  bool IsInvariant = I->getMetadata(LLVMContext::MD_invariant_load) != nullptr;
-  const MDNode *Ranges = I->getMetadata(LLVMContext::MD_range);
+  bool IsNonTemporal = I->getMetadata(LLVM37Context::MD_nontemporal) != nullptr;
+  bool IsInvariant = I->getMetadata(LLVM37Context::MD_invariant_load) != nullptr;
+  const MDNode *Ranges = I->getMetadata(LLVM37Context::MD_range);
 
   AAMDNodes AAInfo;
   I->getAAMetadata(AAInfo);
@@ -2192,7 +2192,7 @@ CmpInst::Predicate FastISel::optimizeCmpPredicate(const CmpInst *CI) const {
     return Predicate;
 
   switch (Predicate) {
-  default: llvm_unreachable("Invalid predicate!");
+  default: llvm37_unreachable("Invalid predicate!");
   case CmpInst::FCMP_FALSE: Predicate = CmpInst::FCMP_FALSE; break;
   case CmpInst::FCMP_OEQ:   Predicate = CmpInst::FCMP_ORD;   break;
   case CmpInst::FCMP_OGT:   Predicate = CmpInst::FCMP_FALSE; break;

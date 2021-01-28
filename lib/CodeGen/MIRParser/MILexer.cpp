@@ -1,6 +1,6 @@
 //===- MILexer.cpp - Machine instructions lexer implementation ----------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -12,11 +12,11 @@
 //===----------------------------------------------------------------------===//
 
 #include "MILexer.h"
-#include "llvm/ADT/StringSwitch.h"
-#include "llvm/ADT/Twine.h"
+#include "llvm37/ADT/StringSwitch.h"
+#include "llvm37/ADT/Twine.h"
 #include <cctype>
 
-using namespace llvm;
+using namespace llvm37;
 
 namespace {
 
@@ -196,7 +196,7 @@ static Cursor maybeLexSymbol(Cursor C, MIToken &Token) {
   return C;
 }
 
-StringRef llvm::lexMIToken(
+StringRef llvm37::lexMIToken(
     StringRef Source, MIToken &Token,
     function_ref<void(StringRef::iterator Loc, const Twine &)> ErrorCallback) {
   auto C = skipWhitespace(Cursor(Source));

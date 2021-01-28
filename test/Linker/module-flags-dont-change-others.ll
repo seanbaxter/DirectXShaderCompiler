@@ -1,13 +1,13 @@
-; RUN: llvm-link %s %S/Inputs/module-flags-dont-change-others.ll -S -o - | FileCheck %s
+; RUN: llvm37-link %s %S/Inputs/module-flags-dont-change-others.ll -S -o - | FileCheck %s
 
 ; Test that module-flag linking doesn't change other metadata.  In particular,
 ; !named should still point at the unmodified tuples (!3, !4, and !5) that
 ; happen to also serve as module flags.
 
 ; CHECK: !named = !{!0, !1, !2, !3, !4, !5}
-; CHECK: !llvm.module.flags = !{!6, !7, !8}
+; CHECK: !llvm37.module.flags = !{!6, !7, !8}
 !named = !{!0, !1, !2, !3, !4, !5}
-!llvm.module.flags = !{!3, !4, !5}
+!llvm37.module.flags = !{!3, !4, !5}
 
 ; CHECK: !0 = !{}
 ; CHECK: !1 = !{!0}

@@ -1,52 +1,52 @@
 //===-- TargetMachine.cpp -------------------------------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 //
-// This file implements the LLVM-C part of TargetMachine.h
+// This file implements the LLVM37-C part of TargetMachine.h
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm-c/TargetMachine.h"
-#include "llvm-c/Core.h"
-#include "llvm-c/Target.h"
-#include "llvm/Analysis/TargetTransformInfo.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/LegacyPassManager.h"
-#include "llvm/Support/CodeGen.h"
-#include "llvm/Support/FileSystem.h"
-#include "llvm/Support/FormattedStream.h"
-#include "llvm/Support/Host.h"
-#include "llvm/Support/TargetRegistry.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Target/TargetMachine.h"
-#include "llvm/Target/TargetSubtargetInfo.h"
+#include "llvm37-c/TargetMachine.h"
+#include "llvm37-c/Core.h"
+#include "llvm37-c/Target.h"
+#include "llvm37/Analysis/TargetTransformInfo.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/LegacyPassManager.h"
+#include "llvm37/Support/CodeGen.h"
+#include "llvm37/Support/FileSystem.h"
+#include "llvm37/Support/FormattedStream.h"
+#include "llvm37/Support/Host.h"
+#include "llvm37/Support/TargetRegistry.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Target/TargetMachine.h"
+#include "llvm37/Target/TargetSubtargetInfo.h"
 #include <cassert>
 #include <cstdlib>
 #include <cstring>
 
-using namespace llvm;
+using namespace llvm37;
 
-inline TargetMachine *unwrap(LLVMTargetMachineRef P) {
+inline TargetMachine *unwrap(LLVM37TargetMachineRef P) {
   return reinterpret_cast<TargetMachine*>(P);
 }
-inline Target *unwrap(LLVMTargetRef P) {
+inline Target *unwrap(LLVM37TargetRef P) {
   return reinterpret_cast<Target*>(P);
 }
-inline LLVMTargetMachineRef wrap(const TargetMachine *P) {
+inline LLVM37TargetMachineRef wrap(const TargetMachine *P) {
   return
-    reinterpret_cast<LLVMTargetMachineRef>(const_cast<TargetMachine*>(P));
+    reinterpret_cast<LLVM37TargetMachineRef>(const_cast<TargetMachine*>(P));
 }
-inline LLVMTargetRef wrap(const Target * P) {
-  return reinterpret_cast<LLVMTargetRef>(const_cast<Target*>(P));
+inline LLVM37TargetRef wrap(const Target * P) {
+  return reinterpret_cast<LLVM37TargetRef>(const_cast<Target*>(P));
 }
 
-LLVMTargetRef LLVMGetFirstTarget() {
+LLVM37TargetRef LLVM37GetFirstTarget() {
   if (TargetRegistry::targets().begin() == TargetRegistry::targets().end()) {
     return nullptr;
   }
@@ -54,11 +54,11 @@ LLVMTargetRef LLVMGetFirstTarget() {
   const Target *target = &*TargetRegistry::targets().begin();
   return wrap(target);
 }
-LLVMTargetRef LLVMGetNextTarget(LLVMTargetRef T) {
+LLVM37TargetRef LLVM37GetNextTarget(LLVM37TargetRef T) {
   return wrap(unwrap(T)->getNext());
 }
 
-LLVMTargetRef LLVMGetTargetFromName(const char *Name) {
+LLVM37TargetRef LLVM37GetTargetFromName(const char *Name) {
   StringRef NameRef = Name;
   auto I = std::find_if(
       TargetRegistry::targets().begin(), TargetRegistry::targets().end(),
@@ -66,7 +66,7 @@ LLVMTargetRef LLVMGetTargetFromName(const char *Name) {
   return I != TargetRegistry::targets().end() ? wrap(&*I) : nullptr;
 }
 
-LLVMBool LLVMGetTargetFromTriple(const char* TripleStr, LLVMTargetRef *T,
+LLVM37Bool LLVM37GetTargetFromTriple(const char* TripleStr, LLVM37TargetRef *T,
                                  char **ErrorMessage) {
   std::string Error;
   
@@ -82,39 +82,39 @@ LLVMBool LLVMGetTargetFromTriple(const char* TripleStr, LLVMTargetRef *T,
   return 0;
 }
 
-const char * LLVMGetTargetName(LLVMTargetRef T) {
+const char * LLVM37GetTargetName(LLVM37TargetRef T) {
   return unwrap(T)->getName();
 }
 
-const char * LLVMGetTargetDescription(LLVMTargetRef T) {
+const char * LLVM37GetTargetDescription(LLVM37TargetRef T) {
   return unwrap(T)->getShortDescription();
 }
 
-LLVMBool LLVMTargetHasJIT(LLVMTargetRef T) {
+LLVM37Bool LLVM37TargetHasJIT(LLVM37TargetRef T) {
   return unwrap(T)->hasJIT();
 }
 
-LLVMBool LLVMTargetHasTargetMachine(LLVMTargetRef T) {
+LLVM37Bool LLVM37TargetHasTargetMachine(LLVM37TargetRef T) {
   return unwrap(T)->hasTargetMachine();
 }
 
-LLVMBool LLVMTargetHasAsmBackend(LLVMTargetRef T) {
+LLVM37Bool LLVM37TargetHasAsmBackend(LLVM37TargetRef T) {
   return unwrap(T)->hasMCAsmBackend();
 }
 
-LLVMTargetMachineRef LLVMCreateTargetMachine(LLVMTargetRef T,
+LLVM37TargetMachineRef LLVM37CreateTargetMachine(LLVM37TargetRef T,
         const char* Triple, const char* CPU, const char* Features,
-        LLVMCodeGenOptLevel Level, LLVMRelocMode Reloc,
-        LLVMCodeModel CodeModel) {
+        LLVM37CodeGenOptLevel Level, LLVM37RelocMode Reloc,
+        LLVM37CodeModel CodeModel) {
   Reloc::Model RM;
   switch (Reloc){
-    case LLVMRelocStatic:
+    case LLVM37RelocStatic:
       RM = Reloc::Static;
       break;
-    case LLVMRelocPIC:
+    case LLVM37RelocPIC:
       RM = Reloc::PIC_;
       break;
-    case LLVMRelocDynamicNoPic:
+    case LLVM37RelocDynamicNoPic:
       RM = Reloc::DynamicNoPIC;
       break;
     default:
@@ -126,13 +126,13 @@ LLVMTargetMachineRef LLVMCreateTargetMachine(LLVMTargetRef T,
 
   CodeGenOpt::Level OL;
   switch (Level) {
-    case LLVMCodeGenLevelNone:
+    case LLVM37CodeGenLevelNone:
       OL = CodeGenOpt::None;
       break;
-    case LLVMCodeGenLevelLess:
+    case LLVM37CodeGenLevelLess:
       OL = CodeGenOpt::Less;
       break;
-    case LLVMCodeGenLevelAggressive:
+    case LLVM37CodeGenLevelAggressive:
       OL = CodeGenOpt::Aggressive;
       break;
     default:
@@ -146,42 +146,42 @@ LLVMTargetMachineRef LLVMCreateTargetMachine(LLVMTargetRef T,
 }
 
 
-void LLVMDisposeTargetMachine(LLVMTargetMachineRef T) {
+void LLVM37DisposeTargetMachine(LLVM37TargetMachineRef T) {
   delete unwrap(T);
 }
 
-LLVMTargetRef LLVMGetTargetMachineTarget(LLVMTargetMachineRef T) {
+LLVM37TargetRef LLVM37GetTargetMachineTarget(LLVM37TargetMachineRef T) {
   const Target* target = &(unwrap(T)->getTarget());
   return wrap(target);
 }
 
-char* LLVMGetTargetMachineTriple(LLVMTargetMachineRef T) {
+char* LLVM37GetTargetMachineTriple(LLVM37TargetMachineRef T) {
   std::string StringRep = unwrap(T)->getTargetTriple().str();
   return strdup(StringRep.c_str());
 }
 
-char* LLVMGetTargetMachineCPU(LLVMTargetMachineRef T) {
+char* LLVM37GetTargetMachineCPU(LLVM37TargetMachineRef T) {
   std::string StringRep = unwrap(T)->getTargetCPU();
   return strdup(StringRep.c_str());
 }
 
-char* LLVMGetTargetMachineFeatureString(LLVMTargetMachineRef T) {
+char* LLVM37GetTargetMachineFeatureString(LLVM37TargetMachineRef T) {
   std::string StringRep = unwrap(T)->getTargetFeatureString();
   return strdup(StringRep.c_str());
 }
 
-LLVMTargetDataRef LLVMGetTargetMachineData(LLVMTargetMachineRef T) {
+LLVM37TargetDataRef LLVM37GetTargetMachineData(LLVM37TargetMachineRef T) {
   return wrap(unwrap(T)->getDataLayout());
 }
 
-void LLVMSetTargetMachineAsmVerbosity(LLVMTargetMachineRef T,
-                                      LLVMBool VerboseAsm) {
+void LLVM37SetTargetMachineAsmVerbosity(LLVM37TargetMachineRef T,
+                                      LLVM37Bool VerboseAsm) {
   unwrap(T)->Options.MCOptions.AsmVerbose = VerboseAsm;
 }
 
-static LLVMBool LLVMTargetMachineEmit(LLVMTargetMachineRef T, LLVMModuleRef M,
+static LLVM37Bool LLVM37TargetMachineEmit(LLVM37TargetMachineRef T, LLVM37ModuleRef M,
                                       raw_pwrite_stream &OS,
-                                      LLVMCodeGenFileType codegen,
+                                      LLVM37CodeGenFileType codegen,
                                       char **ErrorMessage) {
   TargetMachine* TM = unwrap(T);
   Module* Mod = unwrap(M);
@@ -201,7 +201,7 @@ static LLVMBool LLVMTargetMachineEmit(LLVMTargetMachineRef T, LLVMModuleRef M,
 
   TargetMachine::CodeGenFileType ft;
   switch (codegen) {
-    case LLVMAssemblyFile:
+    case LLVM37AssemblyFile:
       ft = TargetMachine::CGFT_AssemblyFile;
       break;
     default:
@@ -220,40 +220,40 @@ static LLVMBool LLVMTargetMachineEmit(LLVMTargetMachineRef T, LLVMModuleRef M,
   return false;
 }
 
-LLVMBool LLVMTargetMachineEmitToFile(LLVMTargetMachineRef T, LLVMModuleRef M,
-  char* Filename, LLVMCodeGenFileType codegen, char** ErrorMessage) {
+LLVM37Bool LLVM37TargetMachineEmitToFile(LLVM37TargetMachineRef T, LLVM37ModuleRef M,
+  char* Filename, LLVM37CodeGenFileType codegen, char** ErrorMessage) {
   std::error_code EC;
   raw_fd_ostream dest(Filename, EC, sys::fs::F_None);
   if (EC) {
     *ErrorMessage = strdup(EC.message().c_str());
     return true;
   }
-  bool Result = LLVMTargetMachineEmit(T, M, dest, codegen, ErrorMessage);
+  bool Result = LLVM37TargetMachineEmit(T, M, dest, codegen, ErrorMessage);
   dest.flush();
   return Result;
 }
 
-LLVMBool LLVMTargetMachineEmitToMemoryBuffer(LLVMTargetMachineRef T,
-  LLVMModuleRef M, LLVMCodeGenFileType codegen, char** ErrorMessage,
-  LLVMMemoryBufferRef *OutMemBuf) {
+LLVM37Bool LLVM37TargetMachineEmitToMemoryBuffer(LLVM37TargetMachineRef T,
+  LLVM37ModuleRef M, LLVM37CodeGenFileType codegen, char** ErrorMessage,
+  LLVM37MemoryBufferRef *OutMemBuf) {
   SmallString<0> CodeString;
   raw_svector_ostream OStream(CodeString);
-  bool Result = LLVMTargetMachineEmit(T, M, OStream, codegen, ErrorMessage);
+  bool Result = LLVM37TargetMachineEmit(T, M, OStream, codegen, ErrorMessage);
   OStream.flush();
 
   StringRef Data = OStream.str();
   *OutMemBuf =
-      LLVMCreateMemoryBufferWithMemoryRangeCopy(Data.data(), Data.size(), "");
+      LLVM37CreateMemoryBufferWithMemoryRangeCopy(Data.data(), Data.size(), "");
   return Result;
 }
 
 #if 0 // HLSL Change Starts - DXIL has a fixed triple
-char *LLVMGetDefaultTargetTriple(void) {
+char *LLVM37GetDefaultTargetTriple(void) {
   return strdup(sys::getDefaultTargetTriple().c_str());
 }
 #endif // HLSL Change Ends
 
-void LLVMAddAnalysisPasses(LLVMTargetMachineRef T, LLVMPassManagerRef PM) {
+void LLVM37AddAnalysisPasses(LLVM37TargetMachineRef T, LLVM37PassManagerRef PM) {
   unwrap(PM)->add(
       createTargetTransformInfoWrapperPass(unwrap(T)->getTargetIRAnalysis()));
 }

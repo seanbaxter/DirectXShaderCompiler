@@ -1,6 +1,6 @@
 //===--- FrontendOptions.cpp ----------------------------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -8,11 +8,11 @@
 //===----------------------------------------------------------------------===//
 
 #include "clang/Frontend/FrontendOptions.h"
-#include "llvm/ADT/StringSwitch.h"
+#include "llvm37/ADT/StringSwitch.h"
 using namespace clang;
 
 InputKind FrontendOptions::getInputKindForExtension(StringRef Extension) {
-  return llvm::StringSwitch<InputKind>(Extension)
+  return llvm37::StringSwitch<InputKind>(Extension)
     .Cases("ast", "pcm", IK_AST)
     .Case("c", IK_C)
     .Cases("S", "s", IK_Asm)
@@ -28,6 +28,6 @@ InputKind FrontendOptions::getInputKindForExtension(StringRef Extension) {
     .Case("cl", IK_OpenCL)
     .Case("cu", IK_CUDA)
     .Cases("hlsl", "fx", IK_HLSL) // HLSL Change: Inputkind files for hlsl
-    .Cases("ll", "bc", IK_LLVM_IR)
+    .Cases("ll", "bc", IK_LLVM37_IR)
     .Default(IK_C);
 }

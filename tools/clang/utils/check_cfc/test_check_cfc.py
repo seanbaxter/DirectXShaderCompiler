@@ -87,7 +87,7 @@ class TestCheckCFC(unittest.TestCase):
         self.assertFalse(
             check_cfc.is_normal_compile(['clang', '-c', 'test.cpp', '-flto']))
         self.assertFalse(
-            check_cfc.is_normal_compile(['clang', '-c', 'test.cpp', '-emit-llvm']))
+            check_cfc.is_normal_compile(['clang', '-c', 'test.cpp', '-emit-llvm37']))
         # Outputting preprocessed output or assembly is not a normal compile
         self.assertFalse(
             check_cfc.is_normal_compile(['clang', '-E', 'test.cpp', '-o', 'test.ii']))

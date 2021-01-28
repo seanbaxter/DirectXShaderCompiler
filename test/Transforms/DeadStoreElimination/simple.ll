@@ -1,9 +1,9 @@
 ; RUN: opt < %s -basicaa -dse -S | FileCheck %s
 target datalayout = "E-p:64:64:64-a0:0:8-f32:32:32-f64:64:64-i1:8:8-i8:8:8-i16:16:16-i32:32:32-i64:32:64-v64:64:64-v128:128:128"
 
-declare void @llvm.memset.p0i8.i64(i8* nocapture, i8, i64, i32, i1) nounwind
-declare void @llvm.memcpy.p0i8.p0i8.i64(i8* nocapture, i8* nocapture, i64, i32, i1) nounwind
-declare void @llvm.init.trampoline(i8*, i8*, i8*)
+declare void @llvm37.memset.p0i8.i64(i8* nocapture, i8, i64, i32, i1) nounwind
+declare void @llvm37.memcpy.p0i8.p0i8.i64(i8* nocapture, i8* nocapture, i64, i32, i1) nounwind
+declare void @llvm37.init.trampoline(i8*, i8*, i8*)
 
 define void @test1(i32* %Q, i32* %P) {
         %DEAD = load i32, i32* %Q
@@ -63,22 +63,22 @@ define void @test5(i32* %Q) {
 ; alias).
 define void @test6(i32 *%p, i8 *%q) {
   store i32 10, i32* %p, align 4       ;; dead.
-  call void @llvm.memset.p0i8.i64(i8* %q, i8 42, i64 900, i32 1, i1 false)
+  call void @llvm37.memset.p0i8.i64(i8* %q, i8 42, i64 900, i32 1, i1 false)
   store i32 30, i32* %p, align 4
   ret void
 ; CHECK-LABEL: @test6(
-; CHECK-NEXT: call void @llvm.memset
+; CHECK-NEXT: call void @llvm37.memset
 }
 
 ; Should delete store of 10 even though memcpy is a may-store to P (P and Q may
 ; alias).
 define void @test7(i32 *%p, i8 *%q, i8* noalias %r) {
   store i32 10, i32* %p, align 4       ;; dead.
-  call void @llvm.memcpy.p0i8.p0i8.i64(i8* %q, i8* %r, i64 900, i32 1, i1 false)
+  call void @llvm37.memcpy.p0i8.p0i8.i64(i8* %q, i8* %r, i64 900, i32 1, i1 false)
   store i32 30, i32* %p, align 4
   ret void
 ; CHECK-LABEL: @test7(
-; CHECK-NEXT: call void @llvm.memcpy
+; CHECK-NEXT: call void @llvm37.memcpy
 }
 
 ; Do not delete stores that are only partially killed.
@@ -132,7 +132,7 @@ define void @test11() {
 	%storage = alloca [10 x i8], align 16		; <[10 x i8]*> [#uses=1]
 ; CHECK-NOT: alloca
 	%cast = getelementptr [10 x i8], [10 x i8]* %storage, i32 0, i32 0		; <i8*> [#uses=1]
-	call void @llvm.init.trampoline( i8* %cast, i8* bitcast (void ()* @test11f to i8*), i8* null )		; <i8*> [#uses=1]
+	call void @llvm37.init.trampoline( i8* %cast, i8* bitcast (void ()* @test11f to i8*), i8* null )		; <i8*> [#uses=1]
 ; CHECK-NOT: trampoline
 	ret void
 ; CHECK: ret void
@@ -208,42 +208,42 @@ define void @test14(i32* %Q) {
 
 ;; Fully dead overwrite of memcpy.
 define void @test15(i8* %P, i8* %Q) nounwind ssp {
-  tail call void @llvm.memcpy.p0i8.p0i8.i64(i8* %P, i8* %Q, i64 12, i32 1, i1 false)
-  tail call void @llvm.memcpy.p0i8.p0i8.i64(i8* %P, i8* %Q, i64 12, i32 1, i1 false)
+  tail call void @llvm37.memcpy.p0i8.p0i8.i64(i8* %P, i8* %Q, i64 12, i32 1, i1 false)
+  tail call void @llvm37.memcpy.p0i8.p0i8.i64(i8* %P, i8* %Q, i64 12, i32 1, i1 false)
   ret void
 ; CHECK-LABEL: @test15(
-; CHECK-NEXT: call void @llvm.memcpy
+; CHECK-NEXT: call void @llvm37.memcpy
 ; CHECK-NEXT: ret
 }
 
 ;; Full overwrite of smaller memcpy.
 define void @test16(i8* %P, i8* %Q) nounwind ssp {
-  tail call void @llvm.memcpy.p0i8.p0i8.i64(i8* %P, i8* %Q, i64 8, i32 1, i1 false)
-  tail call void @llvm.memcpy.p0i8.p0i8.i64(i8* %P, i8* %Q, i64 12, i32 1, i1 false)
+  tail call void @llvm37.memcpy.p0i8.p0i8.i64(i8* %P, i8* %Q, i64 8, i32 1, i1 false)
+  tail call void @llvm37.memcpy.p0i8.p0i8.i64(i8* %P, i8* %Q, i64 12, i32 1, i1 false)
   ret void
 ; CHECK-LABEL: @test16(
-; CHECK-NEXT: call void @llvm.memcpy
+; CHECK-NEXT: call void @llvm37.memcpy
 ; CHECK-NEXT: ret
 }
 
 ;; Overwrite of memset by memcpy.
 define void @test17(i8* %P, i8* noalias %Q) nounwind ssp {
-  tail call void @llvm.memset.p0i8.i64(i8* %P, i8 42, i64 8, i32 1, i1 false)
-  tail call void @llvm.memcpy.p0i8.p0i8.i64(i8* %P, i8* %Q, i64 12, i32 1, i1 false)
+  tail call void @llvm37.memset.p0i8.i64(i8* %P, i8 42, i64 8, i32 1, i1 false)
+  tail call void @llvm37.memcpy.p0i8.p0i8.i64(i8* %P, i8* %Q, i64 12, i32 1, i1 false)
   ret void
 ; CHECK-LABEL: @test17(
-; CHECK-NEXT: call void @llvm.memcpy
+; CHECK-NEXT: call void @llvm37.memcpy
 ; CHECK-NEXT: ret
 }
 
 ; Should not delete the volatile memset.
 define void @test17v(i8* %P, i8* %Q) nounwind ssp {
-  tail call void @llvm.memset.p0i8.i64(i8* %P, i8 42, i64 8, i32 1, i1 true)
-  tail call void @llvm.memcpy.p0i8.p0i8.i64(i8* %P, i8* %Q, i64 12, i32 1, i1 false)
+  tail call void @llvm37.memset.p0i8.i64(i8* %P, i8 42, i64 8, i32 1, i1 true)
+  tail call void @llvm37.memcpy.p0i8.p0i8.i64(i8* %P, i8* %Q, i64 12, i32 1, i1 false)
   ret void
 ; CHECK-LABEL: @test17v(
-; CHECK-NEXT: call void @llvm.memset
-; CHECK-NEXT: call void @llvm.memcpy
+; CHECK-NEXT: call void @llvm37.memset
+; CHECK-NEXT: call void @llvm37.memcpy
 ; CHECK-NEXT: ret
 }
 
@@ -252,12 +252,12 @@ define void @test17v(i8* %P, i8* %Q) nounwind ssp {
 ; A = B
 ; A = A
 define void @test18(i8* %P, i8* %Q, i8* %R) nounwind ssp {
-  tail call void @llvm.memcpy.p0i8.p0i8.i64(i8* %P, i8* %Q, i64 12, i32 1, i1 false)
-  tail call void @llvm.memcpy.p0i8.p0i8.i64(i8* %P, i8* %R, i64 12, i32 1, i1 false)
+  tail call void @llvm37.memcpy.p0i8.p0i8.i64(i8* %P, i8* %Q, i64 12, i32 1, i1 false)
+  tail call void @llvm37.memcpy.p0i8.p0i8.i64(i8* %P, i8* %R, i64 12, i32 1, i1 false)
   ret void
 ; CHECK-LABEL: @test18(
-; CHECK-NEXT: call void @llvm.memcpy
-; CHECK-NEXT: call void @llvm.memcpy
+; CHECK-NEXT: call void @llvm37.memcpy
+; CHECK-NEXT: call void @llvm37.memcpy
 ; CHECK-NEXT: ret
 }
 

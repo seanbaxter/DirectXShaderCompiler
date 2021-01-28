@@ -14,10 +14,10 @@ entry:
   ret void, !dbg !7
 }
 
-!llvm.dbg.cu = !{!0}
-!llvm.module.flags = !{!11}
-!llvm.dbg.sp = !{!1}
-!llvm.dbg.gv = !{!5}
+!llvm37.dbg.cu = !{!0}
+!llvm37.module.flags = !{!11}
+!llvm37.dbg.sp = !{!1}
+!llvm37.dbg.gv = !{!5}
 
 !0 = !DICompileUnit(language: DW_LANG_C99, producer: "clang version 3.0 ()", isOptimized: true, emissionKind: 0, file: !9, enums: !{}, retainedTypes: !{}, subprograms: !10)
 !1 = !DISubprogram(name: "bar", line: 2, isLocal: false, isDefinition: true, virtualIndex: 6, isOptimized: false, file: !9, scope: !2, type: !3, function: void ()* @bar)

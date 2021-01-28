@@ -11,17 +11,17 @@
 
 #pragma once
 
-#ifndef LLVM_HLSL_OPTIONS_H
-#define LLVM_HLSL_OPTIONS_H
+#ifndef LLVM37_HLSL_OPTIONS_H
+#define LLVM37_HLSL_OPTIONS_H
 
-#include "llvm/ADT/ArrayRef.h"
-#include "llvm/ADT/StringRef.h"
-#include "llvm/Option/ArgList.h"
+#include "llvm37/ADT/ArrayRef.h"
+#include "llvm37/ADT/StringRef.h"
+#include "llvm37/Option/ArgList.h"
 #include "dxc/dxcapi.h"
 #include "dxc/Support/SPIRVOptions.h"
 #include <map>
 
-namespace llvm {
+namespace llvm37 {
 namespace opt {
 class OptTable;
 class raw_ostream;
@@ -36,7 +36,7 @@ namespace hlsl {
 
 namespace options {
 /// Flags specifically for clang options.  Must not overlap with
-/// llvm::opt::DriverFlag or (for clarity) with clang::driver::options.
+/// llvm37::opt::DriverFlag or (for clarity) with clang::driver::options.
 enum HlslFlags {
   DriverOption = (1 << 13),
   NoArgumentUnused = (1 << 14),
@@ -54,7 +54,7 @@ enum ID {
 #undef OPTION
   };
 
-const llvm::opt::OptTable *getHlslOptTable();
+const llvm37::opt::OptTable *getHlslOptTable();
 std::error_code initHlslOptTable();
 void cleanupHlslOptTable();
 
@@ -73,10 +73,10 @@ static const unsigned ISenseFlags = HlslFlags::CoreOption | HlslFlags::ISenseOpt
 /// Use this class to capture preprocessor definitions and manage their lifetime.
 class DxcDefines {
 public:
-  void push_back(llvm::StringRef value);
+  void push_back(llvm37::StringRef value);
   LPWSTR DefineValues = nullptr;
-  llvm::SmallVector<llvm::StringRef, 8> DefineStrings;
-  llvm::SmallVector<DxcDefine, 8> DefineVector;
+  llvm37::SmallVector<llvm37::StringRef, 8> DefineStrings;
+  llvm37::SmallVector<DxcDefine, 8> DefineVector;
 
   ~DxcDefines() { delete[] DefineValues; }
   DxcDefines(const DxcDefines &) = delete;
@@ -103,33 +103,33 @@ struct RewriterOpts {
 class DxcOpts {
 public:
   DxcDefines Defines;
-  llvm::opt::InputArgList Args = llvm::opt::InputArgList(nullptr, nullptr); // Original arguments.
+  llvm37::opt::InputArgList Args = llvm37::opt::InputArgList(nullptr, nullptr); // Original arguments.
 
-  llvm::StringRef AssemblyCode; // OPT_Fc
-  llvm::StringRef DebugFile;    // OPT_Fd
-  llvm::StringRef EntryPoint;   // OPT_entrypoint
-  llvm::StringRef ExternalFn;   // OPT_external_fn
-  llvm::StringRef ExternalLib;  // OPT_external_lib
-  llvm::StringRef ExtractPrivateFile; // OPT_getprivate
-  llvm::StringRef ForceRootSigVer; // OPT_force_rootsig_ver
-  llvm::StringRef InputFile; // OPT_INPUT
-  llvm::StringRef OutputHeader; // OPT_Fh
-  llvm::StringRef OutputObject; // OPT_Fo
-  llvm::StringRef OutputWarningsFile; // OPT_Fe
-  llvm::StringRef OutputReflectionFile; // OPT_Fre
-  llvm::StringRef OutputRootSigFile; // OPT_Frs
-  llvm::StringRef OutputShaderHashFile; // OPT_Fsh
-  llvm::StringRef Preprocess; // OPT_P
-  llvm::StringRef TargetProfile; // OPT_target_profile
-  llvm::StringRef VariableName; // OPT_Vn
-  llvm::StringRef PrivateSource; // OPT_setprivate
-  llvm::StringRef RootSignatureSource; // OPT_setrootsignature
-  llvm::StringRef VerifyRootSignatureSource; //OPT_verifyrootsignature
-  llvm::StringRef RootSignatureDefine; // OPT_rootsig_define
-  llvm::StringRef FloatDenormalMode; // OPT_denorm
+  llvm37::StringRef AssemblyCode; // OPT_Fc
+  llvm37::StringRef DebugFile;    // OPT_Fd
+  llvm37::StringRef EntryPoint;   // OPT_entrypoint
+  llvm37::StringRef ExternalFn;   // OPT_external_fn
+  llvm37::StringRef ExternalLib;  // OPT_external_lib
+  llvm37::StringRef ExtractPrivateFile; // OPT_getprivate
+  llvm37::StringRef ForceRootSigVer; // OPT_force_rootsig_ver
+  llvm37::StringRef InputFile; // OPT_INPUT
+  llvm37::StringRef OutputHeader; // OPT_Fh
+  llvm37::StringRef OutputObject; // OPT_Fo
+  llvm37::StringRef OutputWarningsFile; // OPT_Fe
+  llvm37::StringRef OutputReflectionFile; // OPT_Fre
+  llvm37::StringRef OutputRootSigFile; // OPT_Frs
+  llvm37::StringRef OutputShaderHashFile; // OPT_Fsh
+  llvm37::StringRef Preprocess; // OPT_P
+  llvm37::StringRef TargetProfile; // OPT_target_profile
+  llvm37::StringRef VariableName; // OPT_Vn
+  llvm37::StringRef PrivateSource; // OPT_setprivate
+  llvm37::StringRef RootSignatureSource; // OPT_setrootsignature
+  llvm37::StringRef VerifyRootSignatureSource; //OPT_verifyrootsignature
+  llvm37::StringRef RootSignatureDefine; // OPT_rootsig_define
+  llvm37::StringRef FloatDenormalMode; // OPT_denorm
   std::vector<std::string> Exports; // OPT_exports
   std::vector<std::string> PreciseOutputs; // OPT_precise_output
-  llvm::StringRef DefaultLinkage; // OPT_default_linkage
+  llvm37::StringRef DefaultLinkage; // OPT_default_linkage
   unsigned DefaultTextCodePage = DXC_CP_UTF8; // OPT_encoding
 
   bool AllResourcesBound = false; // OPT_all_resources_bound
@@ -214,7 +214,7 @@ public:
   bool EmbedDebugInfo();        // Qembed_debug
   bool EmbedPDBName();          // Zi or Fd
   bool DebugFileIsDirectory();  // Fd ends in '\\'
-  llvm::StringRef GetPDBName(); // Fd name
+  llvm37::StringRef GetPDBName(); // Fd name
 
   // SPIRV Change Starts
 #ifdef ENABLE_SPIRV_CODEGEN
@@ -228,16 +228,16 @@ public:
 /// command-line arguments to a program.
 class MainArgs {
 public:
-  llvm::SmallVector<std::string, 8> Utf8StringVector;
-  llvm::SmallVector<const char *, 8> Utf8CharPtrVector;
+  llvm37::SmallVector<std::string, 8> Utf8StringVector;
+  llvm37::SmallVector<const char *, 8> Utf8CharPtrVector;
 
   MainArgs() = default;
   MainArgs(int argc, const wchar_t **argv, int skipArgCount = 1);
   MainArgs(int argc, const char **argv, int skipArgCount = 1);
-  MainArgs(llvm::ArrayRef<llvm::StringRef> args);
+  MainArgs(llvm37::ArrayRef<llvm37::StringRef> args);
   MainArgs& operator=(const MainArgs &other);
-  llvm::ArrayRef<const char *> getArrayRef() const {
-    return llvm::ArrayRef<const char *>(Utf8CharPtrVector.data(),
+  llvm37::ArrayRef<const char *> getArrayRef() const {
+    return llvm37::ArrayRef<const char *>(Utf8CharPtrVector.data(),
       Utf8CharPtrVector.size());
   }
 };
@@ -248,21 +248,21 @@ private:
   std::wstring m_value;
 
 public:
-  StringRefUtf16(llvm::StringRef value);
+  StringRefUtf16(llvm37::StringRef value);
   operator LPCWSTR() const { return m_value.size() ? m_value.data() : nullptr; }
 };
 
 /// Reads all options from the given argument strings, populates opts, and
 /// validates reporting errors and warnings.
-int ReadDxcOpts(const llvm::opt::OptTable *optionTable, unsigned flagsToInclude,
+int ReadDxcOpts(const llvm37::opt::OptTable *optionTable, unsigned flagsToInclude,
                 const MainArgs &argStrings, DxcOpts &opts,
-                llvm::raw_ostream &errors);
+                llvm37::raw_ostream &errors);
 
 /// Sets up the specified DxcDllSupport instance as per the given options.
 int SetupDxcDllSupport(const DxcOpts &opts, dxc::DxcDllSupport &dxcSupport,
-                       llvm::raw_ostream &errors);
+                       llvm37::raw_ostream &errors);
 
-void CopyArgsToWStrings(const llvm::opt::InputArgList &inArgs,
+void CopyArgsToWStrings(const llvm37::opt::InputArgList &inArgs,
                         unsigned flagsToInclude,
                         std::vector<std::wstring> &outArgs);
 }

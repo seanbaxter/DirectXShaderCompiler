@@ -1,6 +1,6 @@
 //===--- DeclVisitor.h - Visitor for Decl subclasses ------------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -10,8 +10,8 @@
 //  This file defines the DeclVisitor interface.
 //
 //===----------------------------------------------------------------------===//
-#ifndef LLVM_CLANG_AST_DECLVISITOR_H
-#define LLVM_CLANG_AST_DECLVISITOR_H
+#ifndef LLVM37_CLANG_AST_DECLVISITOR_H
+#define LLVM37_CLANG_AST_DECLVISITOR_H
 
 #include "clang/AST/Decl.h"
 #include "clang/AST/DeclCXX.h"
@@ -42,7 +42,7 @@ public:
 #define ABSTRACT_DECL(DECL)
 #include "clang/AST/DeclNodes.inc"
     }
-    llvm_unreachable("Decl that isn't part of DeclNodes.inc!");
+    llvm37_unreachable("Decl that isn't part of DeclNodes.inc!");
   }
 
   // If the implementation chooses not to implement a certain visit
@@ -76,4 +76,4 @@ class ConstDeclVisitor
 
 }  // end namespace clang
 
-#endif // LLVM_CLANG_AST_DECLVISITOR_H
+#endif // LLVM37_CLANG_AST_DECLVISITOR_H

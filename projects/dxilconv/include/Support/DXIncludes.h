@@ -7,7 +7,7 @@
 //                                                                           //
 // This is a common include for DXBC/Windows related things.                 //
 //                                                                           //
-// IMPORTANT: do not add LLVM/Clang or DXIL files to this file.              //
+// IMPORTANT: do not add LLVM37/Clang or DXIL files to this file.              //
 //                                                                           //
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -15,7 +15,7 @@
 #pragma once
 
 // This is a platform-specific file.
-// Do not add LLVM/Clang or DXIL files to this file.
+// Do not add LLVM37/Clang or DXIL files to this file.
 
 #define NOMINMAX 1
 #define WIN32_LEAN_AND_MEAN 1

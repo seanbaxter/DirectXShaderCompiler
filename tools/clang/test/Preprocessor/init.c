@@ -88,7 +88,7 @@
 // COMMON:#define __clang_minor__ {{[0-9]+}}
 // COMMON:#define __clang_patchlevel__ {{[0-9]+}}
 // COMMON:#define __clang_version__
-// COMMON:#define __llvm__ 1
+// COMMON:#define __llvm37__ 1
 //
 // 
 // RUN: %clang_cc1 -ffreestanding -E -dM < /dev/null | FileCheck -check-prefix FREESTANDING %s
@@ -3000,7 +3000,7 @@
 // MIPS32BE:#define __WINT_TYPE__ int
 // MIPS32BE:#define __WINT_WIDTH__ 32
 // MIPS32BE:#define __clang__ 1
-// MIPS32BE:#define __llvm__ 1
+// MIPS32BE:#define __llvm37__ 1
 // MIPS32BE:#define __mips 32
 // MIPS32BE:#define __mips__ 1
 // MIPS32BE:#define __mips_fpr 32
@@ -3206,7 +3206,7 @@
 // MIPS32EL:#define __WINT_TYPE__ int
 // MIPS32EL:#define __WINT_WIDTH__ 32
 // MIPS32EL:#define __clang__ 1
-// MIPS32EL:#define __llvm__ 1
+// MIPS32EL:#define __llvm37__ 1
 // MIPS32EL:#define __mips 32
 // MIPS32EL:#define __mips__ 1
 // MIPS32EL:#define __mips_fpr 32
@@ -3510,7 +3510,7 @@
 // MIPSN32BE: #define __WINT_TYPE__ int
 // MIPSN32BE: #define __WINT_WIDTH__ 32
 // MIPSN32BE: #define __clang__ 1
-// MIPSN32BE: #define __llvm__ 1
+// MIPSN32BE: #define __llvm37__ 1
 // MIPSN32BE: #define __mips 64
 // MIPSN32BE: #define __mips64 1
 // MIPSN32BE: #define __mips64__ 1
@@ -3817,7 +3817,7 @@
 // MIPSN32EL: #define __WINT_TYPE__ int
 // MIPSN32EL: #define __WINT_WIDTH__ 32
 // MIPSN32EL: #define __clang__ 1
-// MIPSN32EL: #define __llvm__ 1
+// MIPSN32EL: #define __llvm37__ 1
 // MIPSN32EL: #define __mips 64
 // MIPSN32EL: #define __mips64 1
 // MIPSN32EL: #define __mips64__ 1
@@ -4027,7 +4027,7 @@
 // MIPS64BE:#define __WINT_TYPE__ int
 // MIPS64BE:#define __WINT_WIDTH__ 32
 // MIPS64BE:#define __clang__ 1
-// MIPS64BE:#define __llvm__ 1
+// MIPS64BE:#define __llvm37__ 1
 // MIPS64BE:#define __mips 64
 // MIPS64BE:#define __mips64 1
 // MIPS64BE:#define __mips64__ 1
@@ -4236,7 +4236,7 @@
 // MIPS64EL:#define __WINT_TYPE__ int
 // MIPS64EL:#define __WINT_WIDTH__ 32
 // MIPS64EL:#define __clang__ 1
-// MIPS64EL:#define __llvm__ 1
+// MIPS64EL:#define __llvm37__ 1
 // MIPS64EL:#define __mips 64
 // MIPS64EL:#define __mips64 1
 // MIPS64EL:#define __mips64__ 1
@@ -7849,7 +7849,7 @@
 // X86_64-CLOUDABI:#define __clang_minor__ 
 // X86_64-CLOUDABI:#define __clang_patchlevel__ 
 // X86_64-CLOUDABI:#define __clang_version__ 
-// X86_64-CLOUDABI:#define __llvm__ 1
+// X86_64-CLOUDABI:#define __llvm37__ 1
 // X86_64-CLOUDABI:#define __x86_64 1
 // X86_64-CLOUDABI:#define __x86_64__ 1
 //

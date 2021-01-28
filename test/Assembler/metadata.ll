@@ -1,4 +1,4 @@
-; RUN: llvm-as < %s | llvm-dis | llvm-as | llvm-dis | FileCheck %s
+; RUN: llvm37-as < %s | llvm37-dis | llvm37-as | llvm37-dis | FileCheck %s
 ; RUN: verify-uselistorder %s
 
 ; CHECK-LABEL: @test
@@ -6,7 +6,7 @@
 define void @test() {
   add i32 2, 1, !bar !0
   add i32 1, 2, !foo !1
-  call void @llvm.dbg.func.start(metadata !"foo")
+  call void @llvm37.dbg.func.start(metadata !"foo")
   extractvalue {{i32, i32}, i32} undef, 0, 1, !foo !0
   ret void, !foo !0, !bar !1
 }
@@ -35,7 +35,7 @@ define void @test_attachment_name() {
 !3 = distinct !{}
 !4 = distinct !{}
 
-declare void @llvm.dbg.func.start(metadata) nounwind readnone
+declare void @llvm37.dbg.func.start(metadata) nounwind readnone
 
 !foo = !{ !0 }
 !bar = !{ !1 }

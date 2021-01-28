@@ -1,4 +1,4 @@
-add_llvm_library(LLVMTransformUtils
+add_llvm_library(LLVM37TransformUtils
   ASanStackFrameLayout.cpp
   AddDiscriminators.cpp
   BasicBlockUtils.cpp
@@ -41,8 +41,8 @@ add_llvm_library(LLVMTransformUtils
   ValueMapper.cpp
 
   ADDITIONAL_HEADER_DIRS
-  ${LLVM_MAIN_INCLUDE_DIR}/llvm/Transforms
-  ${LLVM_MAIN_INCLUDE_DIR}/llvm/Transforms/Utils
+  ${LLVM37_MAIN_INCLUDE_DIR}/llvm37/Transforms
+  ${LLVM37_MAIN_INCLUDE_DIR}/llvm37/Transforms/Utils
   )
 
-add_dependencies(LLVMTransformUtils intrinsics_gen)
+add_dependencies(LLVM37TransformUtils intrinsics_gen)

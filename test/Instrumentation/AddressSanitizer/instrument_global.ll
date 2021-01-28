@@ -6,9 +6,9 @@ target triple = "x86_64-unknown-linux-gnu"
 ; If a global is present, __asan_[un]register_globals should be called from
 ; module ctor/dtor
 
-; CHECK: llvm.global_ctors
+; CHECK: llvm37.global_ctors
 ; CHECK: @__asan_gen_ = private constant [8 x i8] c"<stdin>\00", align 1
-; CHECK: llvm.global_dtors
+; CHECK: llvm37.global_dtors
 
 ; Test that we don't instrument global arrays with static initializer
 ; indexed with constants in-bounds. But instrument all other cases.
@@ -68,7 +68,7 @@ entry:
 }
 
 
-!llvm.asan.globals = !{!0}
+!llvm37.asan.globals = !{!0}
 !0 = !{[10 x i32]* @GlobDy, null, null, i1 true, i1 false}
 
 ; CHECK-LABEL: define internal void @asan.module_ctor

@@ -9,18 +9,18 @@ if( NOT MSVC )
     if( HAVE_LIBDL )
       set(system_libs ${system_libs} ${CMAKE_DL_LIBS})
     endif()
-    if(LLVM_ENABLE_TERMINFO)
+    if(LLVM37_ENABLE_TERMINFO)
       if(HAVE_TERMINFO)
         set(system_libs ${system_libs} ${TERMINFO_LIBS})
       endif()
     endif()
-    if( LLVM_ENABLE_THREADS AND HAVE_LIBATOMIC )
+    if( LLVM37_ENABLE_THREADS AND HAVE_LIBATOMIC )
       set(system_libs ${system_libs} atomic)
     endif()
-    if( LLVM_ENABLE_THREADS AND HAVE_LIBPTHREAD )
+    if( LLVM37_ENABLE_THREADS AND HAVE_LIBPTHREAD )
       set(system_libs ${system_libs} pthread)
     endif()
-    if ( LLVM_ENABLE_ZLIB AND HAVE_LIBZ )
+    if ( LLVM37_ENABLE_ZLIB AND HAVE_LIBZ )
       set(system_libs ${system_libs} z)
     endif()
     set(system_libs ${system_libs} m)
@@ -30,7 +30,7 @@ endif( NOT MSVC )
 # HLSL Change - add ignored sources
 set(HLSL_IGNORE_SOURCES DynamicLibrary.cpp PluginLoader.cpp)
 
-add_llvm_library(LLVMSupport
+add_llvm_library(LLVM37Support
   APFloat.cpp
   APInt.cpp
   APSInt.cpp
@@ -131,12 +131,12 @@ add_llvm_library(LLVMSupport
   ADDITIONAL_HEADER_DIRS
   Unix
   Windows
-  ${LLVM_MAIN_INCLUDE_DIR}/llvm/Support
+  ${LLVM37_MAIN_INCLUDE_DIR}/llvm37/Support
 
   LINK_LIBS ${system_libs}
   )
 
-set_property(TARGET LLVMSupport PROPERTY LLVM_SYSTEM_LIBS "${system_libs}")
+set_property(TARGET LLVM37Support PROPERTY LLVM37_SYSTEM_LIBS "${system_libs}")
 if(WIN32)
-set_property(TARGET LLVMSupport PROPERTY COMPILE_FLAGS /EHsc )
+set_property(TARGET LLVM37Support PROPERTY COMPILE_FLAGS /EHsc )
 endif(WIN32)

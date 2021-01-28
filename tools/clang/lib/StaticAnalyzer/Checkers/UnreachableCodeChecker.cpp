@@ -1,6 +1,6 @@
 //==- UnreachableCodeChecker.cpp - Generalized dead code checker -*- C++ -*-==//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -24,7 +24,7 @@
 #include "clang/StaticAnalyzer/Core/PathSensitive/CheckerHelpers.h"
 #include "clang/StaticAnalyzer/Core/PathSensitive/ExplodedGraph.h"
 #include "clang/StaticAnalyzer/Core/PathSensitive/SVals.h"
-#include "llvm/ADT/SmallSet.h"
+#include "llvm37/ADT/SmallSet.h"
 
 // The number of CFGBlock pointers we want to reserve memory for. This is used
 // once for each function we analyze.
@@ -39,7 +39,7 @@ public:
   void checkEndAnalysis(ExplodedGraph &G, BugReporter &B,
                         ExprEngine &Eng) const;
 private:
-  typedef llvm::SmallSet<unsigned, DEFAULT_CFGBLOCKS> CFGBlocksSet;
+  typedef llvm37::SmallSet<unsigned, DEFAULT_CFGBLOCKS> CFGBlocksSet;
 
   static inline const Stmt *getUnreachableStmt(const CFGBlock *CB);
   static void FindUnreachableEntryPoints(const CFGBlock *CB,
@@ -129,7 +129,7 @@ void UnreachableCodeChecker::checkEndAnalysis(ExplodedGraph &G,
 
     // Special case for __builtin_unreachable.
     // FIXME: This should be extended to include other unreachable markers,
-    // such as llvm_unreachable.
+    // such as llvm37_unreachable.
     if (!CB->empty()) {
       bool foundUnreachable = false;
       for (CFGBlock::const_iterator ci = CB->begin(), ce = CB->end();

@@ -15,7 +15,7 @@ You can download the latest successful build's artifacts (built by Appveyor) for
 
 ## Features and Goals
 
-The starting point of the project is a fork of the [LLVM](http://llvm.org/) and [Clang](http://clang.llvm.org/) projects, modified to accept HLSL and emit a validated container that can be consumed by GPU drivers.
+The starting point of the project is a fork of the [LLVM37](http://llvm37.org/) and [Clang](http://clang.llvm37.org/) projects, modified to accept HLSL and emit a validated container that can be consumed by GPU drivers.
 
 At the moment, the DirectX HLSL Compiler provides the following components:
 
@@ -112,9 +112,9 @@ To make contributions, see the [CONTRIBUTING.md](CONTRIBUTING.md) file in this p
 
 ## Documentation
 
-You can find documentation for this project in the `docs` directory. These contain the original LLVM documentation files, as well as two new files worth nothing:
+You can find documentation for this project in the `docs` directory. These contain the original LLVM37 documentation files, as well as two new files worth nothing:
 
-* [HLSLChanges.rst](docs/HLSLChanges.rst): this is the starting point for how this fork diverges from the original llvm/clang sources
+* [HLSLChanges.rst](docs/HLSLChanges.rst): this is the starting point for how this fork diverges from the original llvm37/clang sources
 * [DXIL.rst](docs/DXIL.rst): this file contains the specification for the DXIL format
 * [tools/clang/docs/UsingDxc.rst](tools/clang/docs/UsingDxc.rst): this file contains a user guide for dxc.exe
 

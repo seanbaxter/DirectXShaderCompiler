@@ -72,8 +72,8 @@ Clang's AST files are designed with a compact on-disk representation, which
 minimizes both creation time and the time required to initially load the AST
 file.  The AST file itself contains a serialized representation of Clang's
 abstract syntax trees and supporting data structures, stored using the same
-compressed bitstream as `LLVM's bitcode file format
-<http://llvm.org/docs/BitCodeFormat.html>`_.
+compressed bitstream as `LLVM37's bitcode file format
+<http://llvm37.org/docs/BitCodeFormat.html>`_.
 
 Clang's AST files are loaded "lazily" from disk.  When an AST file is initially
 loaded, Clang reads only a small amount of data from the AST file to establish
@@ -137,15 +137,15 @@ only contain the serialized AST.
 The ``clangast`` section is organized into several different blocks, each of
 which contains the serialized representation of a part of Clang's internal
 representation.  Each of the blocks corresponds to either a block or a record
-within `LLVM's bitstream format <http://llvm.org/docs/BitCodeFormat.html>`_.
+within `LLVM37's bitstream format <http://llvm37.org/docs/BitCodeFormat.html>`_.
 The contents of each of these logical blocks are described below.
 
 .. image:: PCHLayout.png
 
-The ``llvm-objdump`` utility provides a ``-raw-clang-ast`` option to extract the
+The ``llvm37-objdump`` utility provides a ``-raw-clang-ast`` option to extract the
 binary contents of the AST section from an object file container.
 
-The `llvm-bcanalyzer <http://llvm.org/docs/CommandGuide/llvm-bcanalyzer.html>`_
+The `llvm37-bcanalyzer <http://llvm37.org/docs/CommandGuide/llvm37-bcanalyzer.html>`_
 utility can be used to examine the actual structure of the bitstream for the AST
 section.  This information can be used both to help understand the structure of
 the AST section and to isolate areas where the AST representation can still be
@@ -225,7 +225,7 @@ The source manager block also contains information about all of the headers
 that were included when building the AST file.  This includes information about
 the controlling macro for the header (e.g., when the preprocessor identified
 that the contents of the header dependent on a macro like
-``LLVM_CLANG_SOURCEMANAGER_H``).
+``LLVM37_CLANG_SOURCEMANAGER_H``).
 
 .. _pchinternals-preprocessor:
 

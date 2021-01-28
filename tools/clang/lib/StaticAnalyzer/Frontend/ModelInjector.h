@@ -1,6 +1,6 @@
 //===-- ModelInjector.h -----------------------------------------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -21,12 +21,12 @@
 ///
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_SA_FRONTEND_MODELINJECTOR_H
-#define LLVM_CLANG_SA_FRONTEND_MODELINJECTOR_H
+#ifndef LLVM37_CLANG_SA_FRONTEND_MODELINJECTOR_H
+#define LLVM37_CLANG_SA_FRONTEND_MODELINJECTOR_H
 
 #include "clang/Analysis/CodeInjector.h"
-#include "llvm/ADT/IntrusiveRefCntPtr.h"
-#include "llvm/ADT/StringMap.h"
+#include "llvm37/ADT/IntrusiveRefCntPtr.h"
+#include "llvm37/ADT/StringMap.h"
 #include <map>
 #include <memory>
 #include <vector>
@@ -66,7 +66,7 @@ private:
 
   // FIXME: double memoization is redundant, with memoization both here and in
   // BodyFarm.
-  llvm::StringMap<Stmt *> Bodies;
+  llvm37::StringMap<Stmt *> Bodies;
 };
 }
 }

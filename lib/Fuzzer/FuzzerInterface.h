@@ -1,6 +1,6 @@
 //===- FuzzerInterface.h - Interface header for the Fuzzer ------*- C++ -* ===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -13,8 +13,8 @@
 // to avoid bad interactions between the code used in the fuzzer and
 // the code used in the target function.
 
-#ifndef LLVM_FUZZER_INTERFACE_H
-#define LLVM_FUZZER_INTERFACE_H
+#ifndef LLVM37_FUZZER_INTERFACE_H
+#define LLVM37_FUZZER_INTERFACE_H
 
 #include <cstddef>
 #include <cstdint>
@@ -29,14 +29,14 @@ Usage:
 #\code
 #include "FuzzerInterface.h"
 
-void LLVMFuzzerTestOneInput(const uint8_t *Data, size_t Size) {
+void LLVM37FuzzerTestOneInput(const uint8_t *Data, size_t Size) {
   DoStuffWithData(Data, Size);
 }
 
 // Implement your own main() or use the one from FuzzerMain.cpp.
 int main(int argc, char **argv) {
   InitializeMeIfNeeded();
-  return fuzzer::FuzzerDriver(argc, argv, LLVMFuzzerTestOneInput);
+  return fuzzer::FuzzerDriver(argc, argv, LLVM37FuzzerTestOneInput);
 }
 #\endcode
 */
@@ -95,4 +95,4 @@ int FuzzerDriver(int argc, char **argv, UserSuppliedFuzzer &USF);
 
 }  // namespace fuzzer
 
-#endif  // LLVM_FUZZER_INTERFACE_H
+#endif  // LLVM37_FUZZER_INTERFACE_H

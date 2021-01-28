@@ -1,4 +1,4 @@
-llvm-build - LLVM Project Build Utility
+llvm-build - LLVM37 Project Build Utility
 =======================================
 
 
@@ -13,7 +13,7 @@ DESCRIPTION
 -----------
 
 
-**llvm-build** is a tool for working with LLVM projects that use the LLVMBuild
+**llvm-build** is a tool for working with LLVM37 projects that use the LLVMBuild
 system for describing their components.
 
 At heart, **llvm-build** is responsible for loading, verifying, and manipulating
@@ -70,7 +70,7 @@ OPTIONS
 
  Write out the LLVMBuild in the form of a CMake fragment, so it can easily be
  consumed by the CMake based build system. The exact contents and format of this
- file are closely tied to how LLVMBuild is integrated with CMake, see LLVM's
+ file are closely tied to how LLVMBuild is integrated with CMake, see LLVM37's
  top-level CMakeLists.txt.
 
 
@@ -80,7 +80,7 @@ OPTIONS
  Write out the LLVMBuild in the form of a Makefile fragment, so it can easily be
  consumed by a Make based build system. The exact contents and format of this
  file are closely tied to how LLVMBuild is integrated with the Makefiles, see
- LLVM's Makefile.rules.
+ LLVM37's Makefile.rules.
 
 
 

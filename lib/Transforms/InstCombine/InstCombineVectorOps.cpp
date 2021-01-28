@@ -1,6 +1,6 @@
 //===- InstCombineVectorOps.cpp -------------------------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -13,11 +13,11 @@
 //===----------------------------------------------------------------------===//
 
 #include "InstCombineInternal.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/Analysis/InstructionSimplify.h"
-#include "llvm/Analysis/VectorUtils.h"
-#include "llvm/IR/PatternMatch.h"
-using namespace llvm;
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/Analysis/InstructionSimplify.h"
+#include "llvm37/Analysis/VectorUtils.h"
+#include "llvm37/IR/PatternMatch.h"
+using namespace llvm37;
 using namespace PatternMatch;
 
 #define DEBUG_TYPE "instcombine"
@@ -690,7 +690,7 @@ static Value *BuildNew(Instruction *I, ArrayRef<Value*> NewOps) {
       return GEP;
     }
   }
-  llvm_unreachable("failed to rebuild vector instructions");
+  llvm37_unreachable("failed to rebuild vector instructions");
 }
 
 Value *
@@ -789,7 +789,7 @@ InstCombiner::EvaluateInDifferentElementOrder(Value *V, ArrayRef<int> Mask) {
                                        Builder->getInt32(Index), "", I);
     }
   }
-  llvm_unreachable("failed to reorder elements of vector instruction!");
+  llvm37_unreachable("failed to reorder elements of vector instruction!");
 }
 
 static void RecognizeIdentityMask(const SmallVectorImpl<int> &Mask,

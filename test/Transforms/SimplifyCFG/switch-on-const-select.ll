@@ -26,7 +26,7 @@ b:
     ret i32 %retval
 ; CHECK-NOT: bees:
 bees:
-    tail call void @llvm.trap() nounwind
+    tail call void @llvm37.trap() nounwind
     unreachable
 }
 
@@ -52,7 +52,7 @@ b:
     tail call void @bees.b() nounwind
     br label %a
 bees:
-    tail call void @llvm.trap() nounwind
+    tail call void @llvm37.trap() nounwind
     unreachable
 }
 
@@ -77,7 +77,7 @@ b:
     tail call void @bees.b() nounwind
     ret void
 bees:
-    tail call void @llvm.trap()
+    tail call void @llvm37.trap()
     unreachable
 }
 
@@ -102,7 +102,7 @@ b:
     tail call void @bees.b() nounwind
     ret void
 bees:
-    tail call void @llvm.trap()
+    tail call void @llvm37.trap()
     unreachable
 }
 
@@ -129,11 +129,11 @@ a:
     ret i32 -1
 ; CHECK-NOT: bees:
 bees:
-    tail call void @llvm.trap()
+    tail call void @llvm37.trap()
     unreachable
 }
 
-declare void @llvm.trap() nounwind noreturn
+declare void @llvm37.trap() nounwind noreturn
 declare void @bees.a() nounwind
 declare void @bees.b() nounwind
 

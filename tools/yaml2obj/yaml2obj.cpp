@@ -1,6 +1,6 @@
 //===- yaml2obj - Convert YAML to a binary object file --------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -15,19 +15,19 @@
 //===----------------------------------------------------------------------===//
 
 #include "yaml2obj.h"
-#include "llvm/ADT/StringExtras.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/FileSystem.h"
-#include "llvm/Support/ManagedStatic.h"
-#include "llvm/Support/MemoryBuffer.h"
-#include "llvm/Support/PrettyStackTrace.h"
-#include "llvm/Support/Signals.h"
-#include "llvm/Support/ToolOutputFile.h"
-#include "llvm/Support/YAMLTraits.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/StringExtras.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/FileSystem.h"
+#include "llvm37/Support/ManagedStatic.h"
+#include "llvm37/Support/MemoryBuffer.h"
+#include "llvm37/Support/PrettyStackTrace.h"
+#include "llvm37/Support/Signals.h"
+#include "llvm37/Support/ToolOutputFile.h"
+#include "llvm37/Support/YAMLTraits.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <system_error>
 
-using namespace llvm;
+using namespace llvm37;
 
 static cl::opt<std::string>
   Input(cl::Positional, cl::desc("<input>"), cl::init("-"));
@@ -71,7 +71,7 @@ static int convertYAML(yaml::Input &YIn, raw_ostream &Out,
   } while (YIn.nextDocument());
 
   errs() << "yaml2obj: Cannot find the " << DocNum
-         << llvm::getOrdinalSuffix(DocNum) << " document\n";
+         << llvm37::getOrdinalSuffix(DocNum) << " document\n";
   return 1;
 }
 
@@ -80,7 +80,7 @@ int __cdecl main(int argc, char **argv) {
   cl::ParseCommandLineOptions(argc, argv);
   sys::PrintStackTraceOnErrorSignal();
   PrettyStackTraceProgram X(argc, argv);
-  llvm_shutdown_obj Y;  // Call llvm_shutdown() on exit.
+  llvm37_shutdown_obj Y;  // Call llvm37_shutdown() on exit.
 
   if (OutputFilename.empty())
     OutputFilename = "-";

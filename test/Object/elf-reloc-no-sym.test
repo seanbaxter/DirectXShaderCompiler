@@ -1,4 +1,4 @@
-RUN: llvm-readobj -r %p/Inputs/elf-reloc-no-sym.x86_64 | FileCheck %s
+RUN: llvm37-readobj -r %p/Inputs/elf-reloc-no-sym.x86_64 | FileCheck %s
 
 CHECK:      Relocations [
 CHECK-NEXT:   Section (1) .rela.plt {

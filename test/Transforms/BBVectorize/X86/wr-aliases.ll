@@ -5,16 +5,16 @@ target triple = "x86_64-unknown-linux-gnu"
 %class.QBezier.15 = type { double, double, double, double, double, double, double, double }
 
 ; Function Attrs: nounwind
-declare void @llvm.memcpy.p0i8.p0i8.i64(i8* nocapture, i8* nocapture readonly, i64, i32, i1) #0
+declare void @llvm37.memcpy.p0i8.p0i8.i64(i8* nocapture, i8* nocapture readonly, i64, i32, i1) #0
 
 ; Function Attrs: uwtable
 declare fastcc void @_ZL12printQBezier7QBezier(%class.QBezier.15* byval nocapture readonly align 8) #1
 
 ; Function Attrs: nounwind
-declare void @llvm.lifetime.start(i64, i8* nocapture) #0
+declare void @llvm37.lifetime.start(i64, i8* nocapture) #0
 
 ; Function Attrs: nounwind
-declare void @llvm.lifetime.end(i64, i8* nocapture) #0
+declare void @llvm37.lifetime.end(i64, i8* nocapture) #0
 
 define void @main_arrayctor.cont([10 x %class.QBezier.15]* %beziers, %class.QBezier.15* %agg.tmp.i, %class.QBezier.15* %agg.tmp55.i, %class.QBezier.15* %agg.tmp56.i) {
 newFuncRoot:
@@ -49,13 +49,13 @@ arrayctor.cont:                                   ; preds = %newFuncRoot
   store double 8.000000e+01, double* %ref.tmp.sroa.8.0.idx7, align 8
   %add.ptr = getelementptr inbounds [10 x %class.QBezier.15], [10 x %class.QBezier.15]* %beziers, i64 0, i64 1
   %v0 = bitcast %class.QBezier.15* %agg.tmp.i to i8*
-  call void @llvm.lifetime.start(i64 64, i8* %v0)
+  call void @llvm37.lifetime.start(i64 64, i8* %v0)
   %v1 = bitcast %class.QBezier.15* %agg.tmp55.i to i8*
-  call void @llvm.lifetime.start(i64 64, i8* %v1)
+  call void @llvm37.lifetime.start(i64 64, i8* %v1)
   %v2 = bitcast %class.QBezier.15* %agg.tmp56.i to i8*
-  call void @llvm.lifetime.start(i64 64, i8* %v2)
+  call void @llvm37.lifetime.start(i64 64, i8* %v2)
   %v3 = bitcast [10 x %class.QBezier.15]* %beziers to i8*
-  call void @llvm.memcpy.p0i8.p0i8.i64(i8* %v0, i8* %v3, i64 64, i32 8, i1 false)
+  call void @llvm37.memcpy.p0i8.p0i8.i64(i8* %v0, i8* %v3, i64 64, i32 8, i1 false)
   call fastcc void @_ZL12printQBezier7QBezier(%class.QBezier.15* byval align 8 %agg.tmp.i)
   %x2.i = getelementptr inbounds [10 x %class.QBezier.15], [10 x %class.QBezier.15]* %beziers, i64 0, i64 0, i32 2
   %v4 = load double, double* %x2.i, align 16
@@ -130,13 +130,13 @@ arrayctor.cont:                                   ; preds = %newFuncRoot
   %y454.i = getelementptr inbounds [10 x %class.QBezier.15], [10 x %class.QBezier.15]* %beziers, i64 0, i64 1, i32 7
   store double %mul52.i, double* %y454.i, align 8
   %v22 = bitcast %class.QBezier.15* %add.ptr to i8*
-  call void @llvm.memcpy.p0i8.p0i8.i64(i8* %v1, i8* %v22, i64 64, i32 8, i1 false)
+  call void @llvm37.memcpy.p0i8.p0i8.i64(i8* %v1, i8* %v22, i64 64, i32 8, i1 false)
   call fastcc void @_ZL12printQBezier7QBezier(%class.QBezier.15* byval align 8 %agg.tmp55.i)
-  call void @llvm.memcpy.p0i8.p0i8.i64(i8* %v2, i8* %v3, i64 64, i32 8, i1 false)
+  call void @llvm37.memcpy.p0i8.p0i8.i64(i8* %v2, i8* %v3, i64 64, i32 8, i1 false)
   call fastcc void @_ZL12printQBezier7QBezier(%class.QBezier.15* byval align 8 %agg.tmp56.i)
-  call void @llvm.lifetime.end(i64 64, i8* %v0)
-  call void @llvm.lifetime.end(i64 64, i8* %v1)
-  call void @llvm.lifetime.end(i64 64, i8* %v2)
+  call void @llvm37.lifetime.end(i64 64, i8* %v0)
+  call void @llvm37.lifetime.end(i64 64, i8* %v1)
+  call void @llvm37.lifetime.end(i64 64, i8* %v2)
   br label %arrayctor.cont.ret.exitStub
 }
 

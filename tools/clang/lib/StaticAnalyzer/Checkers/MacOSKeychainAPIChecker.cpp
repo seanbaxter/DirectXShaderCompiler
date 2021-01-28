@@ -1,6 +1,6 @@
 //==--- MacOSKeychainAPIChecker.cpp ------------------------------*- C++ -*-==//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -19,8 +19,8 @@
 #include "clang/StaticAnalyzer/Core/PathSensitive/CheckerContext.h"
 #include "clang/StaticAnalyzer/Core/PathSensitive/ProgramState.h"
 #include "clang/StaticAnalyzer/Core/PathSensitive/ProgramStateTrait.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/Support/raw_ostream.h"
 
 using namespace clang;
 using namespace ento;
@@ -48,7 +48,7 @@ public:
               Region == X.Region);
     }
 
-    void Profile(llvm::FoldingSetNodeID &ID) const {
+    void Profile(llvm37::FoldingSetNodeID &ID) const {
       ID.AddInteger(AllocatorIdx);
       ID.AddPointer(Region);
     }
@@ -138,7 +138,7 @@ private:
     SecKeychainBugVisitor(SymbolRef S) : Sym(S) {}
     ~SecKeychainBugVisitor() override {}
 
-    void Profile(llvm::FoldingSetNodeID &ID) const override {
+    void Profile(llvm37::FoldingSetNodeID &ID) const override {
       static int X = 0;
       ID.AddPointer(&X);
       ID.AddPointer(Sym);
@@ -262,14 +262,14 @@ void MacOSKeychainAPIChecker::
     return;
   initBugType();
   SmallString<80> sbuf;
-  llvm::raw_svector_ostream os(sbuf);
+  llvm37::raw_svector_ostream os(sbuf);
   unsigned int PDeallocIdx =
                FunctionsToTrack[AP.second->AllocatorIdx].DeallocatorIdx;
 
   os << "Deallocator doesn't match the allocator: '"
      << FunctionsToTrack[PDeallocIdx].Name << "' should be used.";
-  auto Report = llvm::make_unique<BugReport>(*BT, os.str(), N);
-  Report->addVisitor(llvm::make_unique<SecKeychainBugVisitor>(AP.first));
+  auto Report = llvm37::make_unique<BugReport>(*BT, os.str(), N);
+  Report->addVisitor(llvm37::make_unique<SecKeychainBugVisitor>(AP.first));
   Report->addRange(ArgExpr->getSourceRange());
   markInteresting(Report.get(), AP);
   C.emitReport(std::move(Report));
@@ -307,14 +307,14 @@ void MacOSKeychainAPIChecker::checkPreStmt(const CallExpr *CE,
             return;
           initBugType();
           SmallString<128> sbuf;
-          llvm::raw_svector_ostream os(sbuf);
+          llvm37::raw_svector_ostream os(sbuf);
           unsigned int DIdx = FunctionsToTrack[AS->AllocatorIdx].DeallocatorIdx;
           os << "Allocated data should be released before another call to "
               << "the allocator: missing a call to '"
               << FunctionsToTrack[DIdx].Name
               << "'.";
-          auto Report = llvm::make_unique<BugReport>(*BT, os.str(), N);
-          Report->addVisitor(llvm::make_unique<SecKeychainBugVisitor>(V));
+          auto Report = llvm37::make_unique<BugReport>(*BT, os.str(), N);
+          Report->addVisitor(llvm37::make_unique<SecKeychainBugVisitor>(V));
           Report->addRange(ArgExpr->getSourceRange());
           Report->markInteresting(AS->Region);
           C.emitReport(std::move(Report));
@@ -369,7 +369,7 @@ void MacOSKeychainAPIChecker::checkPreStmt(const CallExpr *CE,
     if (!N)
       return;
     initBugType();
-    auto Report = llvm::make_unique<BugReport>(
+    auto Report = llvm37::make_unique<BugReport>(
         *BT, "Trying to free data which has not been allocated.", N);
     Report->addRange(ArgExpr->getSourceRange());
     if (AS)
@@ -412,7 +412,7 @@ void MacOSKeychainAPIChecker::checkPreStmt(const CallExpr *CE,
       return;
     }
 
-    llvm_unreachable("We know of no other possible APIs.");
+    llvm37_unreachable("We know of no other possible APIs.");
   }
 
   // The call is deallocating a value we previously allocated, so remove it
@@ -435,9 +435,9 @@ void MacOSKeychainAPIChecker::checkPreStmt(const CallExpr *CE,
     if (!N)
       return;
     initBugType();
-    auto Report = llvm::make_unique<BugReport>(
+    auto Report = llvm37::make_unique<BugReport>(
         *BT, "Only call free if a valid (non-NULL) buffer was returned.", N);
-    Report->addVisitor(llvm::make_unique<SecKeychainBugVisitor>(ArgSM));
+    Report->addVisitor(llvm37::make_unique<SecKeychainBugVisitor>(ArgSM));
     Report->addRange(ArgExpr->getSourceRange());
     Report->markInteresting(AS->Region);
     C.emitReport(std::move(Report));
@@ -524,7 +524,7 @@ MacOSKeychainAPIChecker::generateAllocatedDataNotReleasedReport(
   const ADFunctionInfo &FI = FunctionsToTrack[AP.second->AllocatorIdx];
   initBugType();
   SmallString<70> sbuf;
-  llvm::raw_svector_ostream os(sbuf);
+  llvm37::raw_svector_ostream os(sbuf);
   os << "Allocated data is not released: missing a call to '"
       << FunctionsToTrack[FI.DeallocatorIdx].Name << "'.";
 
@@ -546,10 +546,10 @@ MacOSKeychainAPIChecker::generateAllocatedDataNotReleasedReport(
                                               AllocNode->getLocationContext());
 
   auto Report =
-      llvm::make_unique<BugReport>(*BT, os.str(), N, LocUsedForUniqueing,
+      llvm37::make_unique<BugReport>(*BT, os.str(), N, LocUsedForUniqueing,
                                   AllocNode->getLocationContext()->getDecl());
 
-  Report->addVisitor(llvm::make_unique<SecKeychainBugVisitor>(AP.first));
+  Report->addVisitor(llvm37::make_unique<SecKeychainBugVisitor>(AP.first));
   markInteresting(Report.get(), AP);
   return Report;
 }

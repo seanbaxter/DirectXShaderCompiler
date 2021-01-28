@@ -1,18 +1,18 @@
 //===-- RecordStreamer.h - Record asm defined and used symbols ---*- C++ -*===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_LIB_OBJECT_RECORDSTREAMER_H
-#define LLVM_LIB_OBJECT_RECORDSTREAMER_H
+#ifndef LLVM37_LIB_OBJECT_RECORDSTREAMER_H
+#define LLVM37_LIB_OBJECT_RECORDSTREAMER_H
 
-#include "llvm/MC/MCStreamer.h"
+#include "llvm37/MC/MCStreamer.h"
 
-namespace llvm {
+namespace llvm37 {
 class RecordStreamer : public MCStreamer {
 public:
   enum State { NeverSeen, Global, Defined, DefinedGlobal, Used };

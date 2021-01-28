@@ -28,7 +28,7 @@ loop:
   %2 = mul nsw i32 %i, %a
   %3 = add nsw i32 %2, %b
   %4 = icmp sgt i32 %3, -1
-  call void @llvm.assume(i1 %4)
+  call void @llvm37.assume(i1 %4)
 
   br i1 %exitcond, label %exit, label %loop
 
@@ -38,4 +38,4 @@ exit:
 
 declare void @use(i32)
 
-declare void @llvm.assume(i1)
+declare void @llvm37.assume(i1)

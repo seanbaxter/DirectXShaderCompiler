@@ -1,8 +1,8 @@
 (*
 
-polygen grammar for LLVM assembly language.
+polygen grammar for LLVM37 assembly language.
 
-This file defines an LLVM assembly language grammar for polygen,
+This file defines an LLVM37 assembly language grammar for polygen,
 which is a tool for generating random text based on a grammar.
 It is strictly syntax-based, and makes no attempt to generate
 IR that is semantically valid. Most of the IR produced doesn't
@@ -12,9 +12,9 @@ TODO: Metadata, in all its forms
 
 *)
 
-I ::=   "title:    LLVM assembly language\n"
+I ::=   "title:    LLVM37 assembly language\n"
       ^ "status:   experimental\n"
-      ^ "audience: LLVM developers\n"
+      ^ "audience: LLVM37 developers\n"
 ;
 
 S ::= Module ;
@@ -22,7 +22,7 @@ S ::= Module ;
 (*
 Define rules for non-keyword tokens. This is currently just a bunch
 of hacks. They don't cover many valid forms of tokens, and they also
-generate some invalid forms of tokens. The LLVM parser has custom
+generate some invalid forms of tokens. The LLVM37 parser has custom
 C++ code to lex these; custom C++ code for emitting them would be
 convenient, but polygen doesn't support that.
 *)
@@ -52,7 +52,7 @@ LABELSTR            ::= StringConstant ;
 FPVAL               ::= ESAPINTVAL ^ "." ^ EUAPINTVAL | "0x" ^ HexDigitSeq ;
 
 (*
-The rest of this file is derived directly from llvmAsmParser.y.
+The rest of this file is derived directly from llvm37AsmParser.y.
 *)
 
 ArithmeticOps ::= + OptNW add | fadd | OptNW sub | fsub | OptNW mul | fmul |

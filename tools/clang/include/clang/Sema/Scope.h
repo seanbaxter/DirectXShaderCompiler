@@ -1,6 +1,6 @@
 //===--- Scope.h - Scope interface ------------------------------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,15 +11,15 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_SEMA_SCOPE_H
-#define LLVM_CLANG_SEMA_SCOPE_H
+#ifndef LLVM37_CLANG_SEMA_SCOPE_H
+#define LLVM37_CLANG_SEMA_SCOPE_H
 
 #include "clang/Basic/Diagnostic.h"
-#include "llvm/ADT/PointerIntPair.h"
-#include "llvm/ADT/SmallPtrSet.h"
-#include "llvm/ADT/SmallVector.h"
+#include "llvm37/ADT/PointerIntPair.h"
+#include "llvm37/ADT/SmallPtrSet.h"
+#include "llvm37/ADT/SmallVector.h"
 
-namespace llvm {
+namespace llvm37 {
 
 class raw_ostream;
 
@@ -183,7 +183,7 @@ private:
   /// popped, these declarations are removed from the IdentifierTable's notion
   /// of current declaration.  It is up to the current Action implementation to
   /// implement these semantics.
-  typedef llvm::SmallPtrSet<Decl *, 32> DeclSetTy;
+  typedef llvm37::SmallPtrSet<Decl *, 32> DeclSetTy;
   DeclSetTy DeclsInScope;
 
   /// The DeclContext with which this scope is associated. For
@@ -199,7 +199,7 @@ private:
 
   /// A lattice consisting of undefined, a single NRVO candidate variable in
   /// this scope, or over-defined. The bit is true when over-defined.
-  llvm::PointerIntPair<VarDecl *, 1, bool> NRVO;
+  llvm37::PointerIntPair<VarDecl *, 1, bool> NRVO;
 
 public:
   Scope(Scope *Parent, unsigned ScopeFlags, DiagnosticsEngine &Diag)
@@ -270,7 +270,7 @@ public:
     return PrototypeIndex++;
   }
 
-  typedef llvm::iterator_range<DeclSetTy::iterator> decl_range;
+  typedef llvm37::iterator_range<DeclSetTy::iterator> decl_range;
   decl_range decls() const {
     return decl_range(DeclsInScope.begin(), DeclsInScope.end());
   }
@@ -447,7 +447,7 @@ public:
     UsingDirectives.push_back(UDir);
   }
 
-  typedef llvm::iterator_range<UsingDirectivesTy::iterator>
+  typedef llvm37::iterator_range<UsingDirectivesTy::iterator>
     using_directives_range;
 
   using_directives_range using_directives() {

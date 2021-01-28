@@ -1,4 +1,4 @@
-; RUN: llvm-as < %s > /dev/null
+; RUN: llvm37-as < %s > /dev/null
 ; RUN: verify-uselistorder %s
 
 define <4 x i32> @foo() {

@@ -1,6 +1,6 @@
 //===--- SanitizerBlacklist.h - Blacklist for sanitizers --------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,20 +11,20 @@
 // sanitizers.
 //
 //===----------------------------------------------------------------------===//
-#ifndef LLVM_CLANG_BASIC_SANITIZERBLACKLIST_H
-#define LLVM_CLANG_BASIC_SANITIZERBLACKLIST_H
+#ifndef LLVM37_CLANG_BASIC_SANITIZERBLACKLIST_H
+#define LLVM37_CLANG_BASIC_SANITIZERBLACKLIST_H
 
 #include "clang/Basic/LLVM.h"
 #include "clang/Basic/SourceLocation.h"
 #include "clang/Basic/SourceManager.h"
-#include "llvm/ADT/StringRef.h"
-#include "llvm/Support/SpecialCaseList.h"
+#include "llvm37/ADT/StringRef.h"
+#include "llvm37/Support/SpecialCaseList.h"
 #include <memory>
 
 namespace clang {
 
 class SanitizerBlacklist {
-  std::unique_ptr<llvm::SpecialCaseList> SCL;
+  std::unique_ptr<llvm37::SpecialCaseList> SCL;
   SourceManager &SM;
 
 public:

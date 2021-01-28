@@ -11,11 +11,11 @@ entry:
   %ptrint = ptrtoint i32* %a to i64
   %maskedptr = and i64 %ptrint, 63
   %maskcond = icmp eq i64 %maskedptr, 0
-  tail call void @llvm.assume(i1 %maskcond)
+  tail call void @llvm37.assume(i1 %maskcond)
   %ptrint1 = ptrtoint i32* %b to i64
   %maskedptr2 = and i64 %ptrint1, 63
   %maskcond3 = icmp eq i64 %maskedptr2, 0
-  tail call void @llvm.assume(i1 %maskcond3)
+  tail call void @llvm37.assume(i1 %maskcond3)
   br label %for.body
 
 ; CHECK-LABEL: @foo
@@ -40,7 +40,7 @@ for.end:                                          ; preds = %for.body
 }
 
 ; Function Attrs: nounwind
-declare void @llvm.assume(i1) #1
+declare void @llvm37.assume(i1) #1
 
 attributes #0 = { nounwind uwtable }
 attributes #1 = { nounwind }

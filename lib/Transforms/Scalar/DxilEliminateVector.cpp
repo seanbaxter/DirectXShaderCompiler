@@ -10,22 +10,22 @@
 //                                                                           //
 ///////////////////////////////////////////////////////////////////////////////
 
-#include "llvm/Pass.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/Dominators.h"
-#include "llvm/Transforms/Scalar.h"
-#include "llvm/Transforms/Utils/PromoteMemToReg.h"
+#include "llvm37/Pass.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/Dominators.h"
+#include "llvm37/Transforms/Scalar.h"
+#include "llvm37/Transforms/Utils/PromoteMemToReg.h"
 
-#include "llvm/IR/DebugInfo.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/IR/DIBuilder.h"
+#include "llvm37/IR/DebugInfo.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/IR/DIBuilder.h"
 
-#include "llvm/Analysis/DxilValueCache.h"
+#include "llvm37/Analysis/DxilValueCache.h"
 
 #include <vector>
 
-using namespace llvm;
+using namespace llvm37;
 
 namespace {
 
@@ -162,7 +162,7 @@ bool DxilEliminateVector::runOnFunction(Function &F) {
       if (isa<InsertElementInst>(&I) || isa<ExtractElementInst>(&I))
         VectorInsts.push_back(&I);
       else if (AllocaInst *AI = dyn_cast<AllocaInst>(&I)) {
-        if (AI->getAllocatedType()->isVectorTy() && llvm::isAllocaPromotable(AI))
+        if (AI->getAllocatedType()->isVectorTy() && llvm37::isAllocaPromotable(AI))
           VectorAllocas.push_back(AI);
       }
   }
@@ -220,7 +220,7 @@ bool DxilEliminateVector::runOnFunction(Function &F) {
   return Changed;
 }
 
-Pass *llvm::createDxilEliminateVectorPass() {
+Pass *llvm37::createDxilEliminateVectorPass() {
   return new DxilEliminateVector();
 }
 

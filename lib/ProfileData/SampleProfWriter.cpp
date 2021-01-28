@@ -1,13 +1,13 @@
-//===- SampleProfWriter.cpp - Write LLVM sample profile data --------------===//
+//===- SampleProfWriter.cpp - Write LLVM37 sample profile data --------------===//
 //
-//                      The LLVM Compiler Infrastructure
+//                      The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 //
-// This file implements the class that writes LLVM sample profiles. It
+// This file implements the class that writes LLVM37 sample profiles. It
 // supports two file formats: text and binary. The textual representation
 // is useful for debugging and testing purposes. The binary representation
 // is more compact, resulting in smaller file sizes. However, they can
@@ -18,16 +18,16 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/ProfileData/SampleProfWriter.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/ErrorOr.h"
-#include "llvm/Support/LEB128.h"
-#include "llvm/Support/LineIterator.h"
-#include "llvm/Support/MemoryBuffer.h"
-#include "llvm/Support/Regex.h"
+#include "llvm37/ProfileData/SampleProfWriter.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/ErrorOr.h"
+#include "llvm37/Support/LEB128.h"
+#include "llvm37/Support/LineIterator.h"
+#include "llvm37/Support/MemoryBuffer.h"
+#include "llvm37/Support/Regex.h"
 
-using namespace llvm::sampleprof;
-using namespace llvm;
+using namespace llvm37::sampleprof;
+using namespace llvm37;
 
 /// \brief Write samples to a text file.
 bool SampleProfileWriterText::write(StringRef FName, const FunctionSamples &S) {

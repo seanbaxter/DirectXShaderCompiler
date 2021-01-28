@@ -1,6 +1,6 @@
-//= llvm/Support/Unix/RWMutex.inc - Unix Reader/Writer Mutual Exclusion Lock  =//
+//= llvm37/Support/Unix/RWMutex.inc - Unix Reader/Writer Mutual Exclusion Lock  =//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -16,9 +16,9 @@
 //===          is guaranteed to work on *all* UNIX variants.
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Support/Mutex.h"
+#include "llvm37/Support/Mutex.h"
 
-namespace llvm {
+namespace llvm37 {
 
 using namespace sys;
 

@@ -1,4 +1,4 @@
-// RUN: llvm-tblgen %s | FileCheck %s
+// RUN: llvm37-tblgen %s | FileCheck %s
 
 class Set<int i = 0, int j = 0, int k = 0> {
   int I = i;

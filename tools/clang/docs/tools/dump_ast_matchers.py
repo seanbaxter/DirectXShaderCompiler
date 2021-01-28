@@ -38,7 +38,7 @@ def esc(text):
   text = re.sub(r'>', '&gt;', text)
   def link_if_exists(m):
     name = m.group(1)
-    url = 'http://clang.llvm.org/doxygen/classclang_1_1%s.html' % name
+    url = 'http://clang.llvm37.org/doxygen/classclang_1_1%s.html' % name
     if url not in doxygen_probes:
       try:
         print 'Probing %s...' % url
@@ -251,7 +251,7 @@ def act_on_decl(declaration, comment, allowed_types):
 
     # Parse ArgumentAdapting matchers.
     m = re.match(
-        r"""^.*ArgumentAdaptingMatcherFunc<.*>\s*(?:LLVM_ATTRIBUTE_UNUSED\s*)
+        r"""^.*ArgumentAdaptingMatcherFunc<.*>\s*(?:LLVM37_ATTRIBUTE_UNUSED\s*)
               ([a-zA-Z]*)\s*=\s*{};$""",
         declaration, flags=re.X)
     if m:

@@ -1,6 +1,6 @@
 //== SymbolManager.h - Management of Symbolic Values ------------*- C++ -*--==//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -16,7 +16,7 @@
 #include "clang/Analysis/Analyses/LiveVariables.h"
 #include "clang/StaticAnalyzer/Core/PathSensitive/MemRegion.h"
 #include "clang/StaticAnalyzer/Core/PathSensitive/Store.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/Support/raw_ostream.h"
 
 using namespace clang;
 using namespace ento;
@@ -24,7 +24,7 @@ using namespace ento;
 void SymExpr::anchor() { }
 
 void SymExpr::dump() const {
-  dumpToStream(llvm::errs());
+  dumpToStream(llvm37::errs());
 }
 
 void SymIntExpr::dumpToStream(raw_ostream &os) const {
@@ -137,7 +137,7 @@ void SymExpr::symbol_iterator::expand() {
       return;
     }
   }
-  llvm_unreachable("unhandled expansion case");
+  llvm37_unreachable("unhandled expansion case");
 }
 
 unsigned SymExpr::computeComplexity() const {
@@ -149,7 +149,7 @@ unsigned SymExpr::computeComplexity() const {
 
 const SymbolRegionValue*
 SymbolManager::getRegionValueSymbol(const TypedValueRegion* R) {
-  llvm::FoldingSetNodeID profile;
+  llvm37::FoldingSetNodeID profile;
   SymbolRegionValue::Profile(profile, R);
   void *InsertPos;
   SymExpr *SD = DataSet.FindNodeOrInsertPos(profile, InsertPos);
@@ -168,7 +168,7 @@ const SymbolConjured* SymbolManager::conjureSymbol(const Stmt *E,
                                                    QualType T,
                                                    unsigned Count,
                                                    const void *SymbolTag) {
-  llvm::FoldingSetNodeID profile;
+  llvm37::FoldingSetNodeID profile;
   SymbolConjured::Profile(profile, E, T, Count, LCtx, SymbolTag);
   void *InsertPos;
   SymExpr *SD = DataSet.FindNodeOrInsertPos(profile, InsertPos);
@@ -186,7 +186,7 @@ const SymbolDerived*
 SymbolManager::getDerivedSymbol(SymbolRef parentSymbol,
                                 const TypedValueRegion *R) {
 
-  llvm::FoldingSetNodeID profile;
+  llvm37::FoldingSetNodeID profile;
   SymbolDerived::Profile(profile, parentSymbol, R);
   void *InsertPos;
   SymExpr *SD = DataSet.FindNodeOrInsertPos(profile, InsertPos);
@@ -202,7 +202,7 @@ SymbolManager::getDerivedSymbol(SymbolRef parentSymbol,
 
 const SymbolExtent*
 SymbolManager::getExtentSymbol(const SubRegion *R) {
-  llvm::FoldingSetNodeID profile;
+  llvm37::FoldingSetNodeID profile;
   SymbolExtent::Profile(profile, R);
   void *InsertPos;
   SymExpr *SD = DataSet.FindNodeOrInsertPos(profile, InsertPos);
@@ -220,7 +220,7 @@ const SymbolMetadata*
 SymbolManager::getMetadataSymbol(const MemRegion* R, const Stmt *S, QualType T,
                                  unsigned Count, const void *SymbolTag) {
 
-  llvm::FoldingSetNodeID profile;
+  llvm37::FoldingSetNodeID profile;
   SymbolMetadata::Profile(profile, R, S, T, Count, SymbolTag);
   void *InsertPos;
   SymExpr *SD = DataSet.FindNodeOrInsertPos(profile, InsertPos);
@@ -237,7 +237,7 @@ SymbolManager::getMetadataSymbol(const MemRegion* R, const Stmt *S, QualType T,
 const SymbolCast*
 SymbolManager::getCastSymbol(const SymExpr *Op,
                              QualType From, QualType To) {
-  llvm::FoldingSetNodeID ID;
+  llvm37::FoldingSetNodeID ID;
   SymbolCast::Profile(ID, Op, From, To);
   void *InsertPos;
   SymExpr *data = DataSet.FindNodeOrInsertPos(ID, InsertPos);
@@ -252,9 +252,9 @@ SymbolManager::getCastSymbol(const SymExpr *Op,
 
 const SymIntExpr *SymbolManager::getSymIntExpr(const SymExpr *lhs,
                                                BinaryOperator::Opcode op,
-                                               const llvm::APSInt& v,
+                                               const llvm37::APSInt& v,
                                                QualType t) {
-  llvm::FoldingSetNodeID ID;
+  llvm37::FoldingSetNodeID ID;
   SymIntExpr::Profile(ID, lhs, op, v, t);
   void *InsertPos;
   SymExpr *data = DataSet.FindNodeOrInsertPos(ID, InsertPos);
@@ -268,11 +268,11 @@ const SymIntExpr *SymbolManager::getSymIntExpr(const SymExpr *lhs,
   return cast<SymIntExpr>(data);
 }
 
-const IntSymExpr *SymbolManager::getIntSymExpr(const llvm::APSInt& lhs,
+const IntSymExpr *SymbolManager::getIntSymExpr(const llvm37::APSInt& lhs,
                                                BinaryOperator::Opcode op,
                                                const SymExpr *rhs,
                                                QualType t) {
-  llvm::FoldingSetNodeID ID;
+  llvm37::FoldingSetNodeID ID;
   IntSymExpr::Profile(ID, lhs, op, rhs, t);
   void *InsertPos;
   SymExpr *data = DataSet.FindNodeOrInsertPos(ID, InsertPos);
@@ -290,7 +290,7 @@ const SymSymExpr *SymbolManager::getSymSymExpr(const SymExpr *lhs,
                                                BinaryOperator::Opcode op,
                                                const SymExpr *rhs,
                                                QualType t) {
-  llvm::FoldingSetNodeID ID;
+  llvm37::FoldingSetNodeID ID;
   SymSymExpr::Profile(ID, lhs, op, rhs, t);
   void *InsertPos;
   SymExpr *data = DataSet.FindNodeOrInsertPos(ID, InsertPos);
@@ -326,7 +326,7 @@ QualType SymbolRegionValue::getType() const {
 }
 
 SymbolManager::~SymbolManager() {
-  llvm::DeleteContainerSeconds(SymbolDependencies);
+  llvm37::DeleteContainerSeconds(SymbolDependencies);
 }
 
 bool SymbolManager::canSymbolicate(QualType T) {

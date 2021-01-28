@@ -1,6 +1,6 @@
 //== ReturnUndefChecker.cpp -------------------------------------*- C++ -*--==//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -84,7 +84,7 @@ static void emitBug(CheckerContext &C, BuiltinBug &BT, const Expr *RetE,
   if (!N)
     return;
 
-  auto Report = llvm::make_unique<BugReport>(BT, BT.getDescription(), N);
+  auto Report = llvm37::make_unique<BugReport>(BT, BT.getDescription(), N);
 
   Report->addRange(RetE->getSourceRange());
   bugreporter::trackNullOrUndefValue(N, TrackingE ? TrackingE : RetE, *Report);

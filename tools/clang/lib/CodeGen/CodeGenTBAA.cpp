@@ -1,6 +1,6 @@
-//===--- CodeGenTypes.cpp - TBAA information for LLVM CodeGen -------------===//
+//===--- CodeGenTypes.cpp - TBAA information for LLVM37 CodeGen -------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -21,15 +21,15 @@
 #include "clang/AST/Mangle.h"
 #include "clang/AST/RecordLayout.h"
 #include "clang/Frontend/CodeGenOptions.h"
-#include "llvm/ADT/SmallSet.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Metadata.h"
-#include "llvm/IR/Type.h"
+#include "llvm37/ADT/SmallSet.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/Metadata.h"
+#include "llvm37/IR/Type.h"
 using namespace clang;
 using namespace CodeGen;
 
-CodeGenTBAA::CodeGenTBAA(ASTContext &Ctx, llvm::LLVMContext& VMContext,
+CodeGenTBAA::CodeGenTBAA(ASTContext &Ctx, llvm37::LLVM37Context& VMContext,
                          const CodeGenOptions &CGO,
                          const LangOptions &Features, MangleContext &MContext)
   : Context(Ctx), CodeGenOpts(CGO), Features(Features), MContext(MContext),
@@ -39,9 +39,9 @@ CodeGenTBAA::CodeGenTBAA(ASTContext &Ctx, llvm::LLVMContext& VMContext,
 CodeGenTBAA::~CodeGenTBAA() {
 }
 
-llvm::MDNode *CodeGenTBAA::getRoot() {
+llvm37::MDNode *CodeGenTBAA::getRoot() {
   // Define the root of the tree. This identifies the tree, so that
-  // if our LLVM IR is linked with LLVM IR from a different front-end
+  // if our LLVM37 IR is linked with LLVM37 IR from a different front-end
   // (or a different version of this front-end), their TBAA trees will
   // remain distinct, and the optimizer will treat them conservatively.
   if (!Root)
@@ -52,12 +52,12 @@ llvm::MDNode *CodeGenTBAA::getRoot() {
 
 // For both scalar TBAA and struct-path aware TBAA, the scalar type has the
 // same format: name, parent node, and offset.
-llvm::MDNode *CodeGenTBAA::createTBAAScalarType(StringRef Name,
-                                                llvm::MDNode *Parent) {
+llvm37::MDNode *CodeGenTBAA::createTBAAScalarType(StringRef Name,
+                                                llvm37::MDNode *Parent) {
   return MDHelper.createTBAAScalarTypeNode(Name, Parent);
 }
 
-llvm::MDNode *CodeGenTBAA::getChar() {
+llvm37::MDNode *CodeGenTBAA::getChar() {
   // Define the root of the tree for user-accessible memory. C and C++
   // give special powers to char and certain similar types. However,
   // these special powers only cover user-accessible memory, and doesn't
@@ -84,7 +84,7 @@ static bool TypeHasMayAlias(QualType QTy) {
   return false;
 }
 
-llvm::MDNode *
+llvm37::MDNode *
 CodeGenTBAA::getTBAAInfo(QualType QTy) {
   // At -O0 or relaxed aliasing, TBAA is not emitted for regular types.
   if (CodeGenOpts.OptimizationLevel == 0 || CodeGenOpts.RelaxedAliasing)
@@ -97,7 +97,7 @@ CodeGenTBAA::getTBAAInfo(QualType QTy) {
 
   const Type *Ty = Context.getCanonicalType(QTy).getTypePtr();
 
-  if (llvm::MDNode *N = MetadataCache[Ty])
+  if (llvm37::MDNode *N = MetadataCache[Ty])
     return N;
 
   // Handle builtin types.
@@ -153,7 +153,7 @@ CodeGenTBAA::getTBAAInfo(QualType QTy) {
       return MetadataCache[Ty] = getChar();
 
     SmallString<256> OutName;
-    llvm::raw_svector_ostream Out(OutName);
+    llvm37::raw_svector_ostream Out(OutName);
     MContext.mangleTypeName(QualType(ETy, 0), Out);
     Out.flush();
     return MetadataCache[Ty] = createTBAAScalarType(OutName, getChar());
@@ -163,14 +163,14 @@ CodeGenTBAA::getTBAAInfo(QualType QTy) {
   return MetadataCache[Ty] = getChar();
 }
 
-llvm::MDNode *CodeGenTBAA::getTBAAInfoForVTablePtr() {
+llvm37::MDNode *CodeGenTBAA::getTBAAInfoForVTablePtr() {
   return createTBAAScalarType("vtable pointer", getRoot());
 }
 
 bool
 CodeGenTBAA::CollectFields(uint64_t BaseOffset,
                            QualType QTy,
-                           SmallVectorImpl<llvm::MDBuilder::TBAAStructField> &
+                           SmallVectorImpl<llvm37::MDBuilder::TBAAStructField> &
                              Fields,
                            bool MayAlias) {
   /* Things not handled yet include: C++ base classes, bitfields, */
@@ -203,20 +203,20 @@ CodeGenTBAA::CollectFields(uint64_t BaseOffset,
   /* Otherwise, treat whatever it is as a field. */
   uint64_t Offset = BaseOffset;
   uint64_t Size = Context.getTypeSizeInChars(QTy).getQuantity();
-  llvm::MDNode *TBAAInfo = MayAlias ? getChar() : getTBAAInfo(QTy);
-  llvm::MDNode *TBAATag = getTBAAScalarTagInfo(TBAAInfo);
-  Fields.push_back(llvm::MDBuilder::TBAAStructField(Offset, Size, TBAATag));
+  llvm37::MDNode *TBAAInfo = MayAlias ? getChar() : getTBAAInfo(QTy);
+  llvm37::MDNode *TBAATag = getTBAAScalarTagInfo(TBAAInfo);
+  Fields.push_back(llvm37::MDBuilder::TBAAStructField(Offset, Size, TBAATag));
   return true;
 }
 
-llvm::MDNode *
+llvm37::MDNode *
 CodeGenTBAA::getTBAAStructInfo(QualType QTy) {
   const Type *Ty = Context.getCanonicalType(QTy).getTypePtr();
 
-  if (llvm::MDNode *N = StructMetadataCache[Ty])
+  if (llvm37::MDNode *N = StructMetadataCache[Ty])
     return N;
 
-  SmallVector<llvm::MDBuilder::TBAAStructField, 4> Fields;
+  SmallVector<llvm37::MDBuilder::TBAAStructField, 4> Fields;
   if (CollectFields(0, QTy, Fields, TypeHasMayAlias(QTy)))
     return MDHelper.createTBAAStructNode(Fields);
 
@@ -238,24 +238,24 @@ static bool isTBAAPathStruct(QualType QTy) {
   return false;
 }
 
-llvm::MDNode *
+llvm37::MDNode *
 CodeGenTBAA::getTBAAStructTypeInfo(QualType QTy) {
   const Type *Ty = Context.getCanonicalType(QTy).getTypePtr();
   assert(isTBAAPathStruct(QTy));
 
-  if (llvm::MDNode *N = StructTypeMetadataCache[Ty])
+  if (llvm37::MDNode *N = StructTypeMetadataCache[Ty])
     return N;
 
   if (const RecordType *TTy = QTy->getAs<RecordType>()) {
     const RecordDecl *RD = TTy->getDecl()->getDefinition();
 
     const ASTRecordLayout &Layout = Context.getASTRecordLayout(RD);
-    SmallVector <std::pair<llvm::MDNode*, uint64_t>, 4> Fields;
+    SmallVector <std::pair<llvm37::MDNode*, uint64_t>, 4> Fields;
     unsigned idx = 0;
     for (RecordDecl::field_iterator i = RD->field_begin(),
          e = RD->field_end(); i != e; ++i, ++idx) {
       QualType FieldQTy = i->getType();
-      llvm::MDNode *FieldNode;
+      llvm37::MDNode *FieldNode;
       if (isTBAAPathStruct(FieldQTy))
         FieldNode = getTBAAStructTypeInfo(FieldQTy);
       else
@@ -269,7 +269,7 @@ CodeGenTBAA::getTBAAStructTypeInfo(QualType QTy) {
     SmallString<256> OutName;
     if (Features.CPlusPlus) {
       // Don't use the mangler for C code.
-      llvm::raw_svector_ostream Out(OutName);
+      llvm37::raw_svector_ostream Out(OutName);
       MContext.mangleTypeName(QualType(Ty, 0), Out);
       Out.flush();
     } else {
@@ -284,8 +284,8 @@ CodeGenTBAA::getTBAAStructTypeInfo(QualType QTy) {
 }
 
 /// Return a TBAA tag node for both scalar TBAA and struct-path aware TBAA.
-llvm::MDNode *
-CodeGenTBAA::getTBAAStructTagInfo(QualType BaseQTy, llvm::MDNode *AccessNode,
+llvm37::MDNode *
+CodeGenTBAA::getTBAAStructTagInfo(QualType BaseQTy, llvm37::MDNode *AccessNode,
                                   uint64_t Offset) {
   if (!AccessNode)
     return nullptr;
@@ -295,10 +295,10 @@ CodeGenTBAA::getTBAAStructTagInfo(QualType BaseQTy, llvm::MDNode *AccessNode,
 
   const Type *BTy = Context.getCanonicalType(BaseQTy).getTypePtr();
   TBAAPathTag PathTag = TBAAPathTag(BTy, AccessNode, Offset);
-  if (llvm::MDNode *N = StructTagMetadataCache[PathTag])
+  if (llvm37::MDNode *N = StructTagMetadataCache[PathTag])
     return N;
 
-  llvm::MDNode *BNode = nullptr;
+  llvm37::MDNode *BNode = nullptr;
   if (isTBAAPathStruct(BaseQTy))
     BNode  = getTBAAStructTypeInfo(BaseQTy);
   if (!BNode)
@@ -309,11 +309,11 @@ CodeGenTBAA::getTBAAStructTagInfo(QualType BaseQTy, llvm::MDNode *AccessNode,
     MDHelper.createTBAAStructTagNode(BNode, AccessNode, Offset);
 }
 
-llvm::MDNode *
-CodeGenTBAA::getTBAAScalarTagInfo(llvm::MDNode *AccessNode) {
+llvm37::MDNode *
+CodeGenTBAA::getTBAAScalarTagInfo(llvm37::MDNode *AccessNode) {
   if (!AccessNode)
     return nullptr;
-  if (llvm::MDNode *N = ScalarTagMetadataCache[AccessNode])
+  if (llvm37::MDNode *N = ScalarTagMetadataCache[AccessNode])
     return N;
 
   return ScalarTagMetadataCache[AccessNode] =

@@ -1,6 +1,6 @@
 //===- IntervalPartition.cpp - Interval Partition module code -------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -12,8 +12,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Analysis/IntervalIterator.h"
-using namespace llvm;
+#include "llvm37/Analysis/IntervalIterator.h"
+using namespace llvm37;
 
 char IntervalPartition::ID = 0;
 INITIALIZE_PASS(IntervalPartition, "intervals",

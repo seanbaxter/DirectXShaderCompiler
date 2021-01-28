@@ -1,6 +1,6 @@
 //===--- SemaExpr.cpp - Semantic Analysis for Expressions -----------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -42,7 +42,7 @@
 #include "clang/Sema/ScopeInfo.h"
 #include "clang/Sema/SemaFixItUtils.h"
 #include "clang/Sema/Template.h"
-#include "llvm/Support/ConvertUTF.h"
+#include "llvm37/Support/ConvertUTF.h"
 #include "clang/Sema/SemaHLSL.h" // HLSL Change
 using namespace clang;
 using namespace sema;
@@ -1368,7 +1368,7 @@ Sema::ActOnGenericSelectionExpr(SourceLocation KeyLoc,
 
   ExprResult ER = CreateGenericSelectionExpr(KeyLoc, DefaultLoc, RParenLoc,
                                              ControllingExpr,
-                                             llvm::makeArrayRef(Types, NumAssocs),
+                                             llvm37::makeArrayRef(Types, NumAssocs),
                                              ArgExprs);
   delete [] Types;
   return ER;
@@ -1544,7 +1544,7 @@ static ExprResult BuildCookedLiteralOperatorCall(Sema &S, Scope *Scope,
   OpNameInfo.setCXXLiteralOperatorNameLoc(UDSuffixLoc);
 
   LookupResult R(S, OpName, UDSuffixLoc, Sema::LookupOrdinaryName);
-  if (S.LookupLiteralOperator(Scope, R, llvm::makeArrayRef(ArgTy, Args.size()),
+  if (S.LookupLiteralOperator(Scope, R, llvm37::makeArrayRef(ArgTy, Args.size()),
                               /*AllowRaw*/false, /*AllowTemplate*/false,
                               /*AllowStringTemplate*/false) == Sema::LOLR_Error)
     return ExprError();
@@ -1577,7 +1577,7 @@ Sema::ActOnStringLiteral(ArrayRef<Token> StringToks, Scope *UDLScope) {
     QualType CharTyConst = Context.CharTy;
     CharTyConst.addConst();
     QualType StrTy = Context.getConstantArrayType(CharTyConst,
-                                 llvm::APInt(32, Literal.GetNumStringChars()+1),
+                                 llvm37::APInt(32, Literal.GetNumStringChars()+1),
                                  ArrayType::Normal, 0);
 
     StringLiteral *Result = StringLiteral::Create(Context, Literal.GetString(), StringLiteral::StringKind::Ascii,
@@ -1612,7 +1612,7 @@ Sema::ActOnStringLiteral(ArrayRef<Token> StringToks, Scope *UDLScope) {
   // the nul terminator character as well as the string length for pascal
   // strings.
   QualType StrTy = Context.getConstantArrayType(CharTyConst,
-                                 llvm::APInt(32, Literal.GetNumStringChars()+1),
+                                 llvm37::APInt(32, Literal.GetNumStringChars()+1),
                                  ArrayType::Normal, 0);
 
   // OpenCL v1.1 s6.5.3: a string literal is in the constant address space.
@@ -1657,7 +1657,7 @@ Sema::ActOnStringLiteral(ArrayRef<Token> StringToks, Scope *UDLScope) {
                                 /*AllowStringTemplate*/true)) {
 
   case LOLR_Cooked: {
-    llvm::APInt Len(Context.getIntWidth(SizeType), Literal.GetNumStringChars());
+    llvm37::APInt Len(Context.getIntWidth(SizeType), Literal.GetNumStringChars());
     IntegerLiteral *LenArg = IntegerLiteral::Create(Context, Len, SizeType,
                                                     StringTokLocs[0]);
     Expr *Args[] = { Lit, LenArg };
@@ -1670,7 +1670,7 @@ Sema::ActOnStringLiteral(ArrayRef<Token> StringToks, Scope *UDLScope) {
 
     unsigned CharBits = Context.getIntWidth(CharTy);
     bool CharIsUnsigned = CharTy->isUnsignedIntegerType();
-    llvm::APSInt Value(CharBits, CharIsUnsigned);
+    llvm37::APSInt Value(CharBits, CharIsUnsigned);
 
     TemplateArgument TypeArg(CharTy);
     TemplateArgumentLocInfo TypeArgInfo(Context.getTrivialTypeSourceInfo(CharTy));
@@ -1687,11 +1687,11 @@ Sema::ActOnStringLiteral(ArrayRef<Token> StringToks, Scope *UDLScope) {
   }
   case LOLR_Raw:
   case LOLR_Template:
-    llvm_unreachable("unexpected literal operator lookup result");
+    llvm37_unreachable("unexpected literal operator lookup result");
   case LOLR_Error:
     return ExprError();
   }
-  llvm_unreachable("unexpected literal operator lookup result");
+  llvm37_unreachable("unexpected literal operator lookup result");
 }
 
 ExprResult
@@ -2230,7 +2230,7 @@ Sema::ActOnIdExpression(Scope *S, CXXScopeSpec &SS,
     // If this name wasn't predeclared and if this is not a function
     // call, diagnose the problem.
     TypoExpr *TE = nullptr;
-    auto DefaultValidator = llvm::make_unique<CorrectionCandidateCallback>(
+    auto DefaultValidator = llvm37::make_unique<CorrectionCandidateCallback>(
         II, SS.isValid() ? SS.getScopeRep() : nullptr);
     DefaultValidator->IsAddressOfOperand = IsAddressOfOperand;
     assert((!CCC || CCC->IsAddressOfOperand == IsAddressOfOperand) &&
@@ -2914,12 +2914,12 @@ ExprResult Sema::BuildDeclarationNameExpr(
 #define DECL(type, base) \
     case Decl::type:
 #include "clang/AST/DeclNodes.inc"
-      llvm_unreachable("invalid value decl kind");
+      llvm37_unreachable("invalid value decl kind");
 
     // These shouldn't make it here.
     case Decl::ObjCAtDefsField:
     case Decl::ObjCIvar:
-      llvm_unreachable("forming non-member reference to ivar?");
+      llvm37_unreachable("forming non-member reference to ivar?");
 
     // Enum constants are always r-values and never references.
     // Unresolved using declarations are dependent.
@@ -3103,7 +3103,7 @@ ExprResult Sema::BuildPredefinedExpr(SourceLocation Loc,
     auto Str = PredefinedExpr::ComputeName(IT, currentDecl);
     unsigned Length = Str.length();
 
-    llvm::APInt LengthI(32, Length + 1);
+    llvm37::APInt LengthI(32, Length + 1);
     if (IT == PredefinedExpr::LFunction) {
       ResTy = Context.WideCharTy.withConst();
       SmallString<32> RawChars;
@@ -3129,7 +3129,7 @@ ExprResult Sema::ActOnPredefinedExpr(SourceLocation Loc, tok::TokenKind Kind) {
   PredefinedExpr::IdentType IT;
 
   switch (Kind) {
-  default: llvm_unreachable("Unknown simple primary expr!");
+  default: llvm37_unreachable("Unknown simple primary expr!");
   case tok::kw___func__: IT = PredefinedExpr::Func; break; // [C99 6.4.2.2]
   case tok::kw___FUNCTION__: IT = PredefinedExpr::Function; break;
   case tok::kw___FUNCDNAME__: IT = PredefinedExpr::FuncDName; break; // [MS]
@@ -3218,15 +3218,15 @@ ExprResult Sema::ActOnIntegerConstant(SourceLocation Loc, uint64_t Val) {
   } else
     Ty = Context.IntTy;
   // HLSL Change Ends
-  return IntegerLiteral::Create(Context, llvm::APInt(IntSize, Val),
+  return IntegerLiteral::Create(Context, llvm37::APInt(IntSize, Val),
                                 Ty, Loc);    // HLSL Change
 }
 
 static Expr *BuildFloatingLiteral(Sema &S, NumericLiteralParser &Literal,
                                   QualType Ty, SourceLocation Loc) {
-  const llvm::fltSemantics &Format = S.Context.getFloatTypeSemantics(Ty);
+  const llvm37::fltSemantics &Format = S.Context.getFloatTypeSemantics(Ty);
 
-  using llvm::APFloat;
+  using llvm37::APFloat;
   APFloat Val(Format);
 
   APFloat::opStatus result = Literal.GetFloatValue(Val);
@@ -3266,7 +3266,7 @@ bool Sema::CheckLoopHintExpr(Expr *E, SourceLocation Loc) {
     return true;
   }
 
-  llvm::APSInt ValueAPS;
+  llvm37::APSInt ValueAPS;
   ExprResult R = VerifyIntegerConstantExpression(E, &ValueAPS);
 
   if (R.isInvalid())
@@ -3351,7 +3351,7 @@ ExprResult Sema::ActOnNumericConstant(const Token &Tok, Scope *UDLScope) {
       if (Literal.isFloatingLiteral()) {
         Lit = BuildFloatingLiteral(*this, Literal, CookedTy, Tok.getLocation());
       } else {
-        llvm::APInt ResultVal(Context.getTargetInfo().getLongLongWidth(), 0);
+        llvm37::APInt ResultVal(Context.getTargetInfo().getLongLongWidth(), 0);
         if (Literal.GetIntegerValue(ResultVal))
           Diag(Tok.getLocation(), diag::err_integer_literal_too_large)
               << /* Unsigned */ 1;
@@ -3367,7 +3367,7 @@ ExprResult Sema::ActOnNumericConstant(const Token &Tok, Scope *UDLScope) {
       //   operator "" X ("n")
       unsigned Length = Literal.getUDSuffixOffset();
       QualType StrTy = Context.getConstantArrayType(
-          Context.CharTy.withConst(), llvm::APInt(32, Length + 1),
+          Context.CharTy.withConst(), llvm37::APInt(32, Length + 1),
           ArrayType::Normal, 0);
       Expr *Lit = StringLiteral::Create(
           Context, StringRef(TokSpelling.data(), Length), StringLiteral::Ascii,
@@ -3383,7 +3383,7 @@ ExprResult Sema::ActOnNumericConstant(const Token &Tok, Scope *UDLScope) {
       TemplateArgumentListInfo ExplicitArgs;
       unsigned CharBits = Context.getIntWidth(Context.CharTy);
       bool CharIsUnsigned = Context.CharTy->isUnsignedIntegerType();
-      llvm::APSInt Value(CharBits, CharIsUnsigned);
+      llvm37::APSInt Value(CharBits, CharIsUnsigned);
       for (unsigned I = 0, N = Literal.getUDSuffixOffset(); I != N; ++I) {
         Value = TokSpelling[I];
         TemplateArgument Arg(Context, Value, Context.CharTy);
@@ -3394,7 +3394,7 @@ ExprResult Sema::ActOnNumericConstant(const Token &Tok, Scope *UDLScope) {
                                       &ExplicitArgs);
     }
     case LOLR_StringTemplate:
-      llvm_unreachable("unexpected literal operator lookup result");
+      llvm37_unreachable("unexpected literal operator lookup result");
     }
   }
 
@@ -3438,7 +3438,7 @@ ExprResult Sema::ActOnNumericConstant(const Token &Tok, Scope *UDLScope) {
   } else if (getLangOpts().HLSL) {
     QualType Ty;
     unsigned Width = 64;
-    llvm::APInt ResultVal(Width, 0);
+    llvm37::APInt ResultVal(Width, 0);
     if (!Literal.isLong && !Literal.isLongLong && !Literal.isUnsigned) {
       // in HLSL, unspecific literal ints are LitIntTy, using 64-bit
       Ty = Context.LitIntTy;
@@ -3493,7 +3493,7 @@ ExprResult Sema::ActOnNumericConstant(const Token &Tok, Scope *UDLScope) {
     if (Literal.MicrosoftInteger == 128 && MaxWidth < 128 &&
         Context.getTargetInfo().hasInt128Type())
       MaxWidth = 128;
-    llvm::APInt ResultVal(MaxWidth, 0);
+    llvm37::APInt ResultVal(MaxWidth, 0);
 
     if (Literal.GetIntegerValue(ResultVal)) {
       // If this value didn't fit into uintmax_t, error and force to ull.
@@ -4070,7 +4070,7 @@ Sema::ActOnPostfixUnaryOp(Scope *S, SourceLocation OpLoc,
                           tok::TokenKind Kind, Expr *Input) {
   UnaryOperatorKind Opc;
   switch (Kind) {
-  default: llvm_unreachable("Unknown unary op!");
+  default: llvm37_unreachable("Unknown unary op!");
   case tok::plusplus:   Opc = UO_PostInc; break;
   case tok::minusminus: Opc = UO_PostDec; break;
   }
@@ -4464,7 +4464,7 @@ static TypoCorrection TryTypoCorrectionForCall(Sema &S, Expr *Fn,
   if (TypoCorrection Corrected = S.CorrectTypo(
           DeclarationNameInfo(FuncName, NameLoc), Sema::LookupOrdinaryName,
           S.getScopeForContext(S.CurContext), nullptr,
-          llvm::make_unique<FunctionCallCCC>(S, FuncName.getAsIdentifierInfo(),
+          llvm37::make_unique<FunctionCallCCC>(S, FuncName.getAsIdentifierInfo(),
                                              Args.size(), ME),
           Sema::CTK_ErrorRecovery)) {
     if (NamedDecl *ND = Corrected.getCorrectionDecl()) {
@@ -4818,7 +4818,7 @@ static bool isPlaceholderToRemoveAsArg(QualType type) {
   case BuiltinType::BuiltinFn:
     return true;
   }
-  llvm_unreachable("bad builtin type kind");
+  llvm37_unreachable("bad builtin type kind");
 }
 
 /// Check an argument list for placeholders that we won't try to
@@ -5421,7 +5421,7 @@ CastKind Sema::PrepareScalarCast(ExprResult &Src, QualType DestTy) {
 
   switch (Type::ScalarTypeKind SrcKind = SrcTy->getScalarTypeKind()) {
   case Type::STK_MemberPointer:
-    llvm_unreachable("member pointer type in C");
+    llvm37_unreachable("member pointer type in C");
 
   case Type::STK_CPointer:
   case Type::STK_BlockPointer:
@@ -5452,9 +5452,9 @@ CastKind Sema::PrepareScalarCast(ExprResult &Src, QualType DestTy) {
     case Type::STK_FloatingComplex:
     case Type::STK_IntegralComplex:
     case Type::STK_MemberPointer:
-      llvm_unreachable("illegal cast from pointer");
+      llvm37_unreachable("illegal cast from pointer");
     }
-    llvm_unreachable("Should have returned before this");
+    llvm37_unreachable("Should have returned before this");
 
   case Type::STK_Bool: // casting from bool is like casting from an integer
   case Type::STK_Integral:
@@ -5483,9 +5483,9 @@ CastKind Sema::PrepareScalarCast(ExprResult &Src, QualType DestTy) {
                               CK_IntegralToFloating);
       return CK_FloatingRealToComplex;
     case Type::STK_MemberPointer:
-      llvm_unreachable("member pointer type in C");
+      llvm37_unreachable("member pointer type in C");
     }
-    llvm_unreachable("Should have returned before this");
+    llvm37_unreachable("Should have returned before this");
 
   case Type::STK_Floating:
     switch (DestTy->getScalarTypeKind()) {
@@ -5508,11 +5508,11 @@ CastKind Sema::PrepareScalarCast(ExprResult &Src, QualType DestTy) {
     case Type::STK_CPointer:
     case Type::STK_ObjCObjectPointer:
     case Type::STK_BlockPointer:
-      llvm_unreachable("valid float->pointer cast?");
+      llvm37_unreachable("valid float->pointer cast?");
     case Type::STK_MemberPointer:
-      llvm_unreachable("member pointer type in C");
+      llvm37_unreachable("member pointer type in C");
     }
-    llvm_unreachable("Should have returned before this");
+    llvm37_unreachable("Should have returned before this");
 
   case Type::STK_FloatingComplex:
     switch (DestTy->getScalarTypeKind()) {
@@ -5537,11 +5537,11 @@ CastKind Sema::PrepareScalarCast(ExprResult &Src, QualType DestTy) {
     case Type::STK_CPointer:
     case Type::STK_ObjCObjectPointer:
     case Type::STK_BlockPointer:
-      llvm_unreachable("valid complex float->pointer cast?");
+      llvm37_unreachable("valid complex float->pointer cast?");
     case Type::STK_MemberPointer:
-      llvm_unreachable("member pointer type in C");
+      llvm37_unreachable("member pointer type in C");
     }
-    llvm_unreachable("Should have returned before this");
+    llvm37_unreachable("Should have returned before this");
 
   case Type::STK_IntegralComplex:
     switch (DestTy->getScalarTypeKind()) {
@@ -5566,14 +5566,14 @@ CastKind Sema::PrepareScalarCast(ExprResult &Src, QualType DestTy) {
     case Type::STK_CPointer:
     case Type::STK_ObjCObjectPointer:
     case Type::STK_BlockPointer:
-      llvm_unreachable("valid complex int->pointer cast?");
+      llvm37_unreachable("valid complex int->pointer cast?");
     case Type::STK_MemberPointer:
-      llvm_unreachable("member pointer type in C");
+      llvm37_unreachable("member pointer type in C");
     }
-    llvm_unreachable("Should have returned before this");
+    llvm37_unreachable("Should have returned before this");
   }
 
-  llvm_unreachable("Unhandled scalar cast");
+  llvm37_unreachable("Unhandled scalar cast");
 }
 
 static bool breakDownVectorType(QualType type, uint64_t &len,
@@ -6192,7 +6192,7 @@ OpenCLConvertScalarsToVectors(Sema &S, ExprResult &LHS, ExprResult &RHS,
     // with an OpenCL name. Instead, we just print a description.
     std::string EleTyName = ResTy.getUnqualifiedType().getAsString();
     SmallString<64> Str;
-    llvm::raw_svector_ostream OS(Str);
+    llvm37::raw_svector_ostream OS(Str);
     OS << "(vector of " << NumElements << " '" << EleTyName << "' values)";
     S.Diag(QuestionLoc, diag::err_conditional_vector_element_size)
       << CondTy << OS.str();
@@ -7648,7 +7648,7 @@ QualType Sema::CheckMultiplyDivideOperands(ExprResult &LHS, ExprResult &RHS,
     return InvalidOperands(Loc, LHS, RHS);
 
   // Check for division by zero.
-  llvm::APSInt RHSValue;
+  llvm37::APSInt RHSValue;
   if (IsDiv && !RHS.get()->isValueDependent() &&
       RHS.get()->EvaluateAsInt(RHSValue, Context) && RHSValue == 0)
     DiagRuntimeBehavior(Loc, RHS.get(),
@@ -7680,7 +7680,7 @@ QualType Sema::CheckRemainderOperands(
     return InvalidOperands(Loc, LHS, RHS);
 
   // Check for remainder by zero.
-  llvm::APSInt RHSValue;
+  llvm37::APSInt RHSValue;
   if (!RHS.get()->isValueDependent() &&
       RHS.get()->EvaluateAsInt(RHSValue, Context) && RHSValue == 0)
     DiagRuntimeBehavior(Loc, RHS.get(),
@@ -7862,11 +7862,11 @@ static void diagnoseStringPlusInt(Sema &Self, SourceLocation OpLoc,
   if (!IsStringPlusInt || IndexExpr->isValueDependent())
     return;
 
-  llvm::APSInt index;
+  llvm37::APSInt index;
   if (IndexExpr->EvaluateAsInt(index, Self.getASTContext())) {
     unsigned StrLenWithNull = StrExpr->getLength() + 1;
     if (index.isNonNegative() &&
-        index <= llvm::APSInt(llvm::APInt(index.getBitWidth(), StrLenWithNull),
+        index <= llvm37::APSInt(llvm37::APInt(index.getBitWidth(), StrLenWithNull),
                               index.isUnsigned()))
       return;
   }
@@ -7917,7 +7917,7 @@ static void diagnoseStringPlusChar(Sema &Self, SourceLocation OpLoc,
   const QualType CharType = CharExpr->getType();
   if (!CharType->isAnyCharacterType() &&
       CharType->isIntegerType() &&
-      llvm::isUIntN(Ctx.getCharWidth(), CharExpr->getValue())) {
+      llvm37::isUIntN(Ctx.getCharWidth(), CharExpr->getValue())) {
     Self.Diag(OpLoc, diag::warn_string_plus_char)
         << DiagRange << Ctx.CharTy;
   } else {
@@ -8132,7 +8132,7 @@ static void DiagnoseBadShiftValues(Sema& S, ExprResult &LHS, ExprResult &RHS,
   if (S.getLangOpts().OpenCL)
     return;
 
-  llvm::APSInt Right;
+  llvm37::APSInt Right;
   // Check right/shifter operand
   if (RHS.get()->isValueDependent() ||
       !RHS.get()->EvaluateAsInt(Right, S.Context))
@@ -8144,7 +8144,7 @@ static void DiagnoseBadShiftValues(Sema& S, ExprResult &LHS, ExprResult &RHS,
                             << RHS.get()->getSourceRange());
     return;
   }
-  llvm::APInt LeftBits(Right.getBitWidth(),
+  llvm37::APInt LeftBits(Right.getBitWidth(),
                        S.Context.getTypeSize(LHS.get()->getType()));
   if (Right.uge(LeftBits)) {
     S.DiagRuntimeBehavior(Loc, RHS.get(),
@@ -8159,7 +8159,7 @@ static void DiagnoseBadShiftValues(Sema& S, ExprResult &LHS, ExprResult &RHS,
   // according to C++ has undefined behavior ([expr.shift] 5.8/2). Unsigned
   // integers have defined behavior modulo one more than the maximum value
   // representable in the result type, so never warn for those.
-  llvm::APSInt Left;
+  llvm37::APSInt Left;
   if (LHS.get()->isValueDependent() ||
       LHSType->hasUnsignedIntegerRepresentation() ||
       !LHS.get()->EvaluateAsInt(Left, S.Context))
@@ -8174,11 +8174,11 @@ static void DiagnoseBadShiftValues(Sema& S, ExprResult &LHS, ExprResult &RHS,
     return;
   }
 
-  llvm::APInt ResultBits =
-      static_cast<llvm::APInt&>(Right) + Left.getMinSignedBits();
+  llvm37::APInt ResultBits =
+      static_cast<llvm37::APInt&>(Right) + Left.getMinSignedBits();
   if (LeftBits.uge(ResultBits))
     return;
-  llvm::APSInt Result = Left.extend(ResultBits.getLimitedValue());
+  llvm37::APSInt Result = Left.extend(ResultBits.getLimitedValue());
   Result = Result.shl(Right);
 
   // Print the bit representation of the signed integer as an unsigned
@@ -8565,7 +8565,7 @@ static void diagnoseObjCLiteralComparison(Sema &S, SourceLocation Loc,
   Sema::ObjCLiteralKind LiteralKind = S.CheckLiteralKind(Literal);
   assert(LiteralKind != Sema::LK_Block);
   if (LiteralKind == Sema::LK_None) {
-    llvm_unreachable("Unknown Objective-C object literal kind");
+    llvm37_unreachable("Unknown Objective-C object literal kind");
   }
 
   if (LiteralKind == Sema::LK_String)
@@ -9181,7 +9181,7 @@ inline QualType Sema::CheckLogicalOperands( // C99 6.5.[13,14]
     // that isn't 0 or 1 (which indicate a potential logical operation that
     // happened to fold to true/false) then warn.
     // Parens on the RHS are ignored.
-    llvm::APSInt Result;
+    llvm37::APSInt Result;
     if (RHS.get()->EvaluateAsInt(Result, Context))
       if ((getLangOpts().Bool && !RHS.get()->getType()->isBooleanType() &&
            !RHS.get()->getExprLoc().isMacroID()) ||
@@ -9546,7 +9546,7 @@ bool CheckForModifiableLvalue(Expr *E, SourceLocation Loc, Sema &S) { // HLSL Ch
     DiagID = diag::err_typecheck_lvalue_casts_not_supported;
     break;
   case Expr::MLV_Valid:
-    llvm_unreachable("did not take early return for MLV_Valid");
+    llvm37_unreachable("did not take early return for MLV_Valid");
   case Expr::MLV_InvalidExpression:
   case Expr::MLV_MemberFunction:
   case Expr::MLV_ClassTemporary:
@@ -9565,7 +9565,7 @@ bool CheckForModifiableLvalue(Expr *E, SourceLocation Loc, Sema &S) { // HLSL Ch
     break;
     // HLSL Change Ends
   case Expr::MLV_NoSetterProperty:
-    llvm_unreachable("readonly properties should be processed differently");
+    llvm37_unreachable("readonly properties should be processed differently");
   case Expr::MLV_InvalidMessageExpression:
     DiagID = diag::error_readonly_message_assignment;
     break;
@@ -10085,7 +10085,7 @@ QualType Sema::CheckAddressOfOperand(ExprResult &OrigOp, SourceLocation OpLoc) {
         }
       }
     } else if (!isa<FunctionDecl>(dcl) && !isa<NonTypeTemplateParmDecl>(dcl))
-      llvm_unreachable("Unknown/unexpected decl type");
+      llvm37_unreachable("Unknown/unexpected decl type");
   }
 
   if (AddressOfError != AO_No_Error) {
@@ -10187,7 +10187,7 @@ static QualType CheckIndirectionOperand(Sema &S, Expr *Op, ExprValueKind &VK,
 BinaryOperatorKind Sema::ConvertTokenKindToBinaryOpcode(tok::TokenKind Kind) {
   BinaryOperatorKind Opc;
   switch (Kind) {
-  default: llvm_unreachable("Unknown binop!");
+  default: llvm37_unreachable("Unknown binop!");
   case tok::periodstar:           Opc = BO_PtrMemD; break;
   case tok::arrowstar:            Opc = BO_PtrMemI; break;
   case tok::star:                 Opc = BO_Mul; break;
@@ -10228,7 +10228,7 @@ static inline UnaryOperatorKind ConvertTokenKindToUnaryOpcode(
   tok::TokenKind Kind) {
   UnaryOperatorKind Opc;
   switch (Kind) {
-  default: llvm_unreachable("Unknown unary op!");
+  default: llvm37_unreachable("Unknown unary op!");
   case tok::plusplus:     Opc = UO_PreInc; break;
   case tok::minusminus:   Opc = UO_PreDec; break;
   case tok::amp:          Opc = UO_AddrOf; break;
@@ -11471,7 +11471,7 @@ ExprResult Sema::ActOnChooseExpr(SourceLocation BuiltinLoc,
     ValueDependent = true;
   } else {
     // The conditional expression is required to be a constant expression.
-    llvm::APSInt condEval(32);
+    llvm37::APSInt condEval(32);
     ExprResult CondICE
       = VerifyIntegerConstantExpression(CondExpr, &condEval,
           diag::err_typecheck_choose_expr_requires_constant, false);
@@ -11659,7 +11659,7 @@ void Sema::ActOnBlockError(SourceLocation CaretLoc, Scope *CurScope) {
 ExprResult Sema::ActOnBlockStmtExpr(SourceLocation CaretLoc,
                                     Stmt *Body, Scope *CurScope) {
   // HLSL Changes Start
-  llvm_unreachable("block statements unsupported and unreachable in HLSL");
+  llvm37_unreachable("block statements unsupported and unreachable in HLSL");
 #if 0
   // HLSL Changes End
   // If blocks are disabled, emit an error.
@@ -11888,7 +11888,7 @@ ExprResult Sema::ActOnGNUNullExpr(SourceLocation TokenLoc) {
   else if (pw == Context.getTargetInfo().getLongLongWidth())
     Ty = Context.LongLongTy;
   else {
-    llvm_unreachable("I don't know size of pointer!");
+    llvm37_unreachable("I don't know size of pointer!");
   }
 
   return new (Context) GNUNullExpr(Ty, TokenLoc);
@@ -11999,7 +11999,7 @@ bool Sema::DiagnoseAssignmentResult(AssignConvertType ConvTy,
       break;
     }
 
-    llvm_unreachable("unknown error case for discarding qualifiers!");
+    llvm37_unreachable("unknown error case for discarding qualifiers!");
     // fallthrough
   }
   case CompatiblePointerDiscardsQualifiers:
@@ -12130,7 +12130,7 @@ bool Sema::DiagnoseAssignmentResult(AssignConvertType ConvTy,
 }
 
 ExprResult Sema::VerifyIntegerConstantExpression(Expr *E,
-                                                 llvm::APSInt *Result) {
+                                                 llvm37::APSInt *Result) {
   class SimpleICEDiagnoser : public VerifyICEDiagnoser {
   public:
     void diagnoseNotICE(Sema &S, SourceLocation Loc, SourceRange SR) override {
@@ -12142,7 +12142,7 @@ ExprResult Sema::VerifyIntegerConstantExpression(Expr *E,
 }
 
 ExprResult Sema::VerifyIntegerConstantExpression(Expr *E,
-                                                 llvm::APSInt *Result,
+                                                 llvm37::APSInt *Result,
                                                  unsigned DiagID,
                                                  bool AllowFold) {
   class IDDiagnoser : public VerifyICEDiagnoser {
@@ -12166,7 +12166,7 @@ void Sema::VerifyICEDiagnoser::diagnoseFold(Sema &S, SourceLocation Loc,
 }
 
 ExprResult
-Sema::VerifyIntegerConstantExpression(Expr *E, llvm::APSInt *Result,
+Sema::VerifyIntegerConstantExpression(Expr *E, llvm37::APSInt *Result,
                                       VerifyICEDiagnoser &Diagnoser,
                                       bool AllowFold) {
   SourceLocation DiagLoc = E->getLocStart();
@@ -12218,7 +12218,7 @@ Sema::VerifyIntegerConstantExpression(Expr *E, llvm::APSInt *Result,
 
       SemaDiagnosticBuilder diagnoseConversion(
           Sema &S, SourceLocation Loc, QualType T, QualType ConvTy) override {
-        llvm_unreachable("conversion functions are permitted");
+        llvm37_unreachable("conversion functions are permitted");
       }
     } ConvertDiagnoser(Diagnoser.Suppress);
 
@@ -12471,7 +12471,7 @@ static bool IsPotentiallyEvaluatedContext(Sema &SemaRef) {
       // containing expression is used.
       return false;
   }
-  llvm_unreachable("Invalid context");
+  llvm37_unreachable("Invalid context");
 }
 
 /// \brief Mark a function referenced, and check whether it is odr-used
@@ -13204,7 +13204,7 @@ bool Sema::tryCaptureVariable(
         case Type::ObjCObject:
         case Type::ObjCInterface:
         case Type::ObjCObjectPointer:
-          llvm_unreachable("type class is never variably-modified!");
+          llvm37_unreachable("type class is never variably-modified!");
         case Type::Adjusted:
           QTy = cast<AdjustedType>(Ty)->getOriginalType();
           break;
@@ -13452,7 +13452,7 @@ ExprResult Sema::ActOnConstantExpression(ExprResult Res) {
 }
 
 void Sema::CleanupVarDeclMarking() {
-  for (llvm::SmallPtrSetIterator<Expr*> i = MaybeODRUseExprs.begin(),
+  for (llvm37::SmallPtrSetIterator<Expr*> i = MaybeODRUseExprs.begin(),
                                         e = MaybeODRUseExprs.end();
        i != e; ++i) {
     VarDecl *Var;
@@ -13464,7 +13464,7 @@ void Sema::CleanupVarDeclMarking() {
       Var = cast<VarDecl>(ME->getMemberDecl());
       Loc = ME->getMemberLoc();
     } else {
-      llvm_unreachable("Unexpected expression");
+      llvm37_unreachable("Unexpected expression");
     }
 
     MarkVarDeclODRUsed(Var, Loc, *this,
@@ -14032,7 +14032,7 @@ namespace {
     RebuildUnknownAnyFunction(Sema &S) : S(S) {}
 
     ExprResult VisitStmt(Stmt *S) {
-      llvm_unreachable("unexpected statement!");
+      llvm37_unreachable("unexpected statement!");
     }
 
     ExprResult VisitExpr(Expr *E) {
@@ -14124,7 +14124,7 @@ namespace {
       : S(S), DestType(CastType) {}
 
     ExprResult VisitStmt(Stmt *S) {
-      llvm_unreachable("unexpected statement!");
+      llvm37_unreachable("unexpected statement!");
     }
 
     ExprResult VisitExpr(Expr *E) {
@@ -14355,7 +14355,7 @@ ExprResult RebuildUnknownAnyExpr::VisitImplicitCastExpr(ImplicitCastExpr *E) {
     E->setSubExpr(Result.get());
     return E;
   } else {
-    llvm_unreachable("Unhandled cast type!");
+    llvm37_unreachable("Unhandled cast type!");
   }
 }
 
@@ -14626,7 +14626,7 @@ ExprResult Sema::CheckPlaceholderExpr(Expr *E) {
     break;
   }
 
-  llvm_unreachable("invalid placeholder type!");
+  llvm37_unreachable("invalid placeholder type!");
 }
 
 bool Sema::CheckCaseExpression(Expr *E) {

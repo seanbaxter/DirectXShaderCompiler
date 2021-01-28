@@ -1,6 +1,6 @@
 //===- BuildSystem.cpp - Utilities for use by build systems ---------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -14,17 +14,17 @@
 #include "clang-c/BuildSystem.h"
 #include "CXString.h"
 #include "clang/Basic/VirtualFileSystem.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/Support/CBindingWrapping.h"
-#include "llvm/Support/Path.h"
-#include "llvm/Support/TimeValue.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/Support/CBindingWrapping.h"
+#include "llvm37/Support/Path.h"
+#include "llvm37/Support/TimeValue.h"
+#include "llvm37/Support/raw_ostream.h"
 
 using namespace clang;
-using namespace llvm::sys;
+using namespace llvm37::sys;
 
 unsigned long long clang_getBuildSessionTimestamp(void) {
-  return llvm::sys::TimeValue::now().toEpochTime();
+  return llvm37::sys::TimeValue::now().toEpochTime();
 }
 
 DEFINE_SIMPLE_CONVERSION_FUNCTIONS(clang::vfs::YAMLVFSWriter,
@@ -73,8 +73,8 @@ clang_VirtualFileOverlay_writeToBuffer(CXVirtualFileOverlay VFO, unsigned,
   if (!VFO || !out_buffer_ptr || !out_buffer_size)
     return CXError_InvalidArguments;
 
-  llvm::SmallString<256> Buf;
-  llvm::raw_svector_ostream OS(Buf);
+  llvm37::SmallString<256> Buf;
+  llvm37::raw_svector_ostream OS(Buf);
   unwrap(VFO)->write(OS);
 
   StringRef Data = OS.str();
@@ -129,8 +129,8 @@ clang_ModuleMapDescriptor_writeToBuffer(CXModuleMapDescriptor MMD, unsigned,
   if (!MMD || !out_buffer_ptr || !out_buffer_size)
     return CXError_InvalidArguments;
 
-  llvm::SmallString<256> Buf;
-  llvm::raw_svector_ostream OS(Buf);
+  llvm37::SmallString<256> Buf;
+  llvm37::raw_svector_ostream OS(Buf);
   OS << "framework module " << MMD->ModuleName << " {\n";
   OS << "  umbrella header \"";
   OS.write_escaped(MMD->UmbrellaHeader) << "\"\n";

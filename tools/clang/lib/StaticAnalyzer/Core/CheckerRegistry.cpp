@@ -1,6 +1,6 @@
 //===--- CheckerRegistry.cpp - Maintains all available checkers -*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -12,14 +12,14 @@
 #include "clang/Frontend/FrontendDiagnostic.h"
 #include "clang/StaticAnalyzer/Core/CheckerOptInfo.h"
 #include "clang/StaticAnalyzer/Core/AnalyzerOptions.h"
-#include "llvm/ADT/SetVector.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/SetVector.h"
+#include "llvm37/Support/raw_ostream.h"
 
 using namespace clang;
 using namespace ento;
 
 static const char PackageSeparator = '.';
-typedef llvm::SetVector<const CheckerRegistry::CheckerInfo *> CheckerInfoSet;
+typedef llvm37::SetVector<const CheckerRegistry::CheckerInfo *> CheckerInfoSet;
 
 
 static bool checkerNameLT(const CheckerRegistry::CheckerInfo &a,
@@ -45,7 +45,7 @@ static bool isInPackage(const CheckerRegistry::CheckerInfo &checker,
 }
 
 static void collectCheckers(const CheckerRegistry::CheckerInfoList &checkers,
-                            const llvm::StringMap<size_t> &packageSizes,
+                            const llvm37::StringMap<size_t> &packageSizes,
                             CheckerOptInfo &opt, CheckerInfoSet &collected) {
   // Use a binary search to find the possible start of the package.
   CheckerRegistry::CheckerInfo packageInfo(nullptr, opt.getName(), "");
@@ -67,7 +67,7 @@ static void collectCheckers(const CheckerRegistry::CheckerInfoList &checkers,
   // See how large the package is.
   // If the package doesn't exist, assume the option refers to a single checker.
   size_t size = 1;
-  llvm::StringMap<size_t>::const_iterator packageSize =
+  llvm37::StringMap<size_t>::const_iterator packageSize =
     packageSizes.find(opt.getName());
   if (packageSize != packageSizes.end())
     size = packageSize->getValue();

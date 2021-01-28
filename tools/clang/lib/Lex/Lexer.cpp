@@ -1,6 +1,6 @@
 //===--- Lexer.cpp - C Language Family Lexer ------------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -19,12 +19,12 @@
 #include "clang/Lex/LexDiagnostic.h"
 #include "clang/Lex/LiteralSupport.h"
 #include "clang/Lex/Preprocessor.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/StringExtras.h"
-#include "llvm/ADT/StringSwitch.h"
-#include "llvm/Support/Compiler.h"
-#include "llvm/Support/ConvertUTF.h"
-#include "llvm/Support/MemoryBuffer.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/StringExtras.h"
+#include "llvm37/ADT/StringSwitch.h"
+#include "llvm37/Support/Compiler.h"
+#include "llvm37/Support/ConvertUTF.h"
+#include "llvm37/Support/MemoryBuffer.h"
 #include <cstring>
 using namespace clang;
 
@@ -68,7 +68,7 @@ void Lexer::InitLexer(const char *BufStart, const char *BufPtr,
   if (BufferStart == BufferPtr) {
     // Determine the size of the BOM.
     StringRef Buf(BufferStart, BufferEnd - BufferStart);
-    size_t BOMLength = llvm::StringSwitch<size_t>(Buf)
+    size_t BOMLength = llvm37::StringSwitch<size_t>(Buf)
       .StartsWith("\xEF\xBB\xBF", 3) // UTF-8 BOM
       .Default(0);
 
@@ -106,7 +106,7 @@ void Lexer::InitLexer(const char *BufStart, const char *BufPtr,
 /// with the specified preprocessor managing the lexing process.  This lexer
 /// assumes that the associated file buffer and Preprocessor objects will
 /// outlive it, so it doesn't take ownership of either of them.
-Lexer::Lexer(FileID FID, const llvm::MemoryBuffer *InputFile, Preprocessor &PP)
+Lexer::Lexer(FileID FID, const llvm37::MemoryBuffer *InputFile, Preprocessor &PP)
   : PreprocessorLexer(&PP, FID),
     FileLoc(PP.getSourceManager().getLocForStartOfFile(FID)),
     LangOpts(PP.getLangOpts()) {
@@ -141,7 +141,7 @@ Lexer::Lexer(SourceLocation fileloc, const LangOptions &langOpts,
 /// Lexer constructor - Create a new raw lexer object.  This object is only
 /// suitable for calls to 'LexFromRawLexer'.  This lexer assumes that the text
 /// range will outlive it, so it doesn't take ownership of it.
-Lexer::Lexer(FileID FID, const llvm::MemoryBuffer *FromFile,
+Lexer::Lexer(FileID FID, const llvm37::MemoryBuffer *FromFile,
              const SourceManager &SM, const LangOptions &langOpts)
     : Lexer(SM.getLocForStartOfFile(FID), langOpts, FromFile->getBufferStart(),
             FromFile->getBufferStart(), FromFile->getBufferEnd()) {}
@@ -169,7 +169,7 @@ Lexer *Lexer::Create_PragmaLexer(SourceLocation SpellingLoc,
 
   // Create the lexer as if we were going to lex the file normally.
   FileID SpellingFID = SM.getFileID(SpellingLoc);
-  const llvm::MemoryBuffer *InputFile = SM.getBuffer(SpellingFID);
+  const llvm37::MemoryBuffer *InputFile = SM.getBuffer(SpellingFID);
   Lexer *L = new Lexer(SpellingFID, InputFile, PP);
 
   // Now that the lexer is created, change the start/end locations so that we
@@ -620,7 +620,7 @@ std::pair<unsigned, bool> Lexer::ComputePreamble(StringRef Buffer,
       if (TheTok.getKind() == tok::raw_identifier && !TheTok.needsCleaning()) {
         StringRef Keyword = TheTok.getRawIdentifier();
         PreambleDirectiveKind PDK
-          = llvm::StringSwitch<PreambleDirectiveKind>(Keyword)
+          = llvm37::StringSwitch<PreambleDirectiveKind>(Keyword)
               .Case("include", PDK_Skipped)
               .Case("__include_macros", PDK_Skipped)
               .Case("define", PDK_Skipped)
@@ -1013,7 +1013,7 @@ bool Lexer::isIdentifierBodyChar(char c, const LangOptions &LangOpts) {
 /// lexer buffer was all expanded at a single point, perform the mapping.
 /// This is currently only used for _Pragma implementation, so it is the slow
 /// path of the hot getSourceLocation method.  Do not allow it to be inlined.
-static LLVM_ATTRIBUTE_NOINLINE SourceLocation GetMappedTokenLoc(
+static LLVM37_ATTRIBUTE_NOINLINE SourceLocation GetMappedTokenLoc(
     Preprocessor &PP, SourceLocation FileLoc, unsigned CharNo, unsigned TokLen);
 static SourceLocation GetMappedTokenLoc(Preprocessor &PP,
                                         SourceLocation FileLoc,
@@ -1355,15 +1355,15 @@ void Lexer::SkipBytes(unsigned Bytes, bool StartOfLine) {
 
 static bool isAllowedIDChar(uint32_t C, const LangOptions &LangOpts) {
   if (LangOpts.CPlusPlus11 || LangOpts.C11) {
-    static const llvm::sys::UnicodeCharSet C11AllowedIDChars(
+    static const llvm37::sys::UnicodeCharSet C11AllowedIDChars(
         C11AllowedIDCharRanges);
     return C11AllowedIDChars.contains(C);
   } else if (LangOpts.CPlusPlus) {
-    static const llvm::sys::UnicodeCharSet CXX03AllowedIDChars(
+    static const llvm37::sys::UnicodeCharSet CXX03AllowedIDChars(
         CXX03AllowedIDCharRanges);
     return CXX03AllowedIDChars.contains(C);
   } else {
-    static const llvm::sys::UnicodeCharSet C99AllowedIDChars(
+    static const llvm37::sys::UnicodeCharSet C99AllowedIDChars(
         C99AllowedIDCharRanges);
     return C99AllowedIDChars.contains(C);
   }
@@ -1372,13 +1372,13 @@ static bool isAllowedIDChar(uint32_t C, const LangOptions &LangOpts) {
 static bool isAllowedInitiallyIDChar(uint32_t C, const LangOptions &LangOpts) {
   assert(isAllowedIDChar(C, LangOpts));
   if (LangOpts.CPlusPlus11 || LangOpts.C11) {
-    static const llvm::sys::UnicodeCharSet C11DisallowedInitialIDChars(
+    static const llvm37::sys::UnicodeCharSet C11DisallowedInitialIDChars(
         C11DisallowedInitialIDCharRanges);
     return !C11DisallowedInitialIDChars.contains(C);
   } else if (LangOpts.CPlusPlus) {
     return true;
   } else {
-    static const llvm::sys::UnicodeCharSet C99DisallowedInitialIDChars(
+    static const llvm37::sys::UnicodeCharSet C99DisallowedInitialIDChars(
         C99DisallowedInitialIDCharRanges);
     return !C99DisallowedInitialIDChars.contains(C);
   }
@@ -1399,9 +1399,9 @@ static void maybeDiagnoseIDCharCompat(DiagnosticsEngine &Diags, uint32_t C,
       CannotStartIdentifier
     };
 
-    static const llvm::sys::UnicodeCharSet C99AllowedIDChars(
+    static const llvm37::sys::UnicodeCharSet C99AllowedIDChars(
         C99AllowedIDCharRanges);
-    static const llvm::sys::UnicodeCharSet C99DisallowedInitialIDChars(
+    static const llvm37::sys::UnicodeCharSet C99DisallowedInitialIDChars(
         C99DisallowedInitialIDCharRanges);
     if (!C99AllowedIDChars.contains(C)) {
       Diags.Report(Range.getBegin(), diag::warn_c99_compat_unicode_id)
@@ -1416,7 +1416,7 @@ static void maybeDiagnoseIDCharCompat(DiagnosticsEngine &Diags, uint32_t C,
 
   // Check C++98 compatibility.
   if (!Diags.isIgnored(diag::warn_cxx98_compat_unicode_id, Range.getBegin())) {
-    static const llvm::sys::UnicodeCharSet CXX03AllowedIDChars(
+    static const llvm37::sys::UnicodeCharSet CXX03AllowedIDChars(
         CXX03AllowedIDCharRanges);
     if (!CXX03AllowedIDChars.contains(C)) {
       Diags.Report(Range.getBegin(), diag::warn_cxx98_compat_unicode_id)
@@ -1451,7 +1451,7 @@ bool Lexer::tryConsumeIdentifierUTF8Char(const char *&CurPtr) {
   const char *UnicodePtr = CurPtr;
   UTF32 CodePoint;
   ConversionResult Result =
-      llvm::convertUTF8Sequence((const UTF8 **)&UnicodePtr,
+      llvm37::convertUTF8Sequence((const UTF8 **)&UnicodePtr,
                                 (const UTF8 *)BufferEnd,
                                 &CodePoint,
                                 strictConversion);
@@ -2327,7 +2327,7 @@ bool Lexer::SkipBlockComment(Token &Result, const char *CurPtr,
           // Adjust the pointer to point directly after the first slash. It's
           // not necessary to set C here, it will be overwritten at the end of
           // the outer loop.
-          CurPtr += llvm::countTrailingZeros<unsigned>(cmp) + 1;
+          CurPtr += llvm37::countTrailingZeros<unsigned>(cmp) + 1;
           goto FoundSlash;
         }
         CurPtr += 16;
@@ -2736,7 +2736,7 @@ uint32_t Lexer::tryReadUCN(const char *&StartPtr, const char *SlashLoc,
   for (unsigned i = 0; i < NumHexDigits; ++i) {
     char C = getCharAndSize(CurPtr, CharSize);
 
-    unsigned Value = llvm::hexDigitValue(C);
+    unsigned Value = llvm37::hexDigitValue(C);
     if (Value == -1U) {
       if (Result && !isLexingRawMode()) {
         if (i == 0) {
@@ -2824,7 +2824,7 @@ uint32_t Lexer::tryReadUCN(const char *&StartPtr, const char *SlashLoc,
 
 bool Lexer::CheckUnicodeWhitespace(Token &Result, uint32_t C,
                                    const char *CurPtr) {
-  static const llvm::sys::UnicodeCharSet UnicodeWhitespaceChars(
+  static const llvm37::sys::UnicodeCharSet UnicodeWhitespaceChars(
       UnicodeWhitespaceCharRanges);
   if (!isLexingRawMode() && !PP->isPreprocessedOutput() &&
       UnicodeWhitespaceChars.contains(C)) {
@@ -3605,7 +3605,7 @@ LexNextToken:
     // an escaped newline.
     --CurPtr;
     ConversionResult Status =
-        llvm::convertUTF8Sequence((const UTF8 **)&CurPtr,
+        llvm37::convertUTF8Sequence((const UTF8 **)&CurPtr,
                                   (const UTF8 *)BufferEnd,
                                   &CodePoint,
                                   strictConversion);

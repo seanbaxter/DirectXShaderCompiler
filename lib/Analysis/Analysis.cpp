@@ -1,25 +1,25 @@
 //===-- Analysis.cpp ------------------------------------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm-c/Analysis.h"
-#include "llvm-c/Initialization.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/Verifier.h"
-#include "llvm/InitializePasses.h"
-#include "llvm/PassRegistry.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37-c/Analysis.h"
+#include "llvm37-c/Initialization.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/Verifier.h"
+#include "llvm37/InitializePasses.h"
+#include "llvm37/PassRegistry.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <cstring>
 
-using namespace llvm;
+using namespace llvm37;
 
 /// initializeAnalysis - Initialize all passes linked into the Analysis library.
-void llvm::initializeAnalysis(PassRegistry &Registry) {
+void llvm37::initializeAnalysis(PassRegistry &Registry) {
   initializeAliasAnalysisAnalysisGroup(Registry);
   initializeAliasAnalysisCounterPass(Registry);
   initializeAAEvalPass(Registry);
@@ -71,24 +71,24 @@ void llvm::initializeAnalysis(PassRegistry &Registry) {
   initializeScopedNoAliasAAPass(Registry);
 }
 
-void LLVMInitializeAnalysis(LLVMPassRegistryRef R) {
+void LLVM37InitializeAnalysis(LLVM37PassRegistryRef R) {
   initializeAnalysis(*unwrap(R));
 }
 
 _Use_decl_annotations_
-LLVMBool LLVMVerifyModule(LLVMModuleRef M, LLVMVerifierFailureAction Action,
+LLVM37Bool LLVM37VerifyModule(LLVM37ModuleRef M, LLVM37VerifierFailureAction Action,
                           char **OutMessages) {
-  raw_ostream *DebugOS = Action != LLVMReturnStatusAction ? &errs() : nullptr;
+  raw_ostream *DebugOS = Action != LLVM37ReturnStatusAction ? &errs() : nullptr;
   std::string Messages;
   raw_string_ostream MsgsOS(Messages);
 
-  LLVMBool Result = verifyModule(*unwrap(M), OutMessages ? &MsgsOS : DebugOS);
+  LLVM37Bool Result = verifyModule(*unwrap(M), OutMessages ? &MsgsOS : DebugOS);
 
   // Duplicate the output to stderr.
   if (DebugOS && OutMessages)
     *DebugOS << MsgsOS.str();
 
-  if (Action == LLVMAbortProcessAction && Result)
+  if (Action == LLVM37AbortProcessAction && Result)
     report_fatal_error("Broken module found, compilation aborted!");
 
   if (OutMessages)
@@ -97,23 +97,23 @@ LLVMBool LLVMVerifyModule(LLVMModuleRef M, LLVMVerifierFailureAction Action,
   return Result;
 }
 
-LLVMBool LLVMVerifyFunction(LLVMValueRef Fn, LLVMVerifierFailureAction Action) {
-  LLVMBool Result = verifyFunction(
-      *unwrap<Function>(Fn), Action != LLVMReturnStatusAction ? &errs()
+LLVM37Bool LLVM37VerifyFunction(LLVM37ValueRef Fn, LLVM37VerifierFailureAction Action) {
+  LLVM37Bool Result = verifyFunction(
+      *unwrap<Function>(Fn), Action != LLVM37ReturnStatusAction ? &errs()
                                                               : nullptr);
 
-  if (Action == LLVMAbortProcessAction && Result)
+  if (Action == LLVM37AbortProcessAction && Result)
     report_fatal_error("Broken function found, compilation aborted!");
 
   return Result;
 }
 
-void LLVMViewFunctionCFG(LLVMValueRef Fn) {
+void LLVM37ViewFunctionCFG(LLVM37ValueRef Fn) {
   Function *F = unwrap<Function>(Fn);
   F->viewCFG();
 }
 
-void LLVMViewFunctionCFGOnly(LLVMValueRef Fn) {
+void LLVM37ViewFunctionCFGOnly(LLVM37ValueRef Fn) {
   Function *F = unwrap<Function>(Fn);
   F->viewCFGOnly();
 }

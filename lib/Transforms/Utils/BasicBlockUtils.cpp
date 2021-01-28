@@ -1,6 +1,6 @@
 //===-- BasicBlockUtils.cpp - BasicBlock Utilities -------------------------==//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -12,28 +12,28 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Transforms/Utils/BasicBlockUtils.h"
-#include "llvm/Analysis/AliasAnalysis.h"
-#include "llvm/Analysis/CFG.h"
-#include "llvm/Analysis/LoopInfo.h"
-#include "llvm/Analysis/MemoryDependenceAnalysis.h"
-#include "llvm/IR/Constant.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/Dominators.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/IR/Type.h"
-#include "llvm/IR/ValueHandle.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Transforms/Scalar.h"
-#include "llvm/Transforms/Utils/Local.h"
+#include "llvm37/Transforms/Utils/BasicBlockUtils.h"
+#include "llvm37/Analysis/AliasAnalysis.h"
+#include "llvm37/Analysis/CFG.h"
+#include "llvm37/Analysis/LoopInfo.h"
+#include "llvm37/Analysis/MemoryDependenceAnalysis.h"
+#include "llvm37/IR/Constant.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/IR/Dominators.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/IR/Type.h"
+#include "llvm37/IR/ValueHandle.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Transforms/Scalar.h"
+#include "llvm37/Transforms/Utils/Local.h"
 #include <algorithm>
-using namespace llvm;
+using namespace llvm37;
 
 /// DeleteDeadBlock - Delete the specified block, which must have no
 /// predecessors.
-void llvm::DeleteDeadBlock(BasicBlock *BB) {
+void llvm37::DeleteDeadBlock(BasicBlock *BB) {
   assert((pred_begin(BB) == pred_end(BB) ||
          // Can delete self loop.
          BB->getSinglePredecessor() == BB) && "Block is not dead!");
@@ -65,7 +65,7 @@ void llvm::DeleteDeadBlock(BasicBlock *BB) {
 /// any single-entry PHI nodes in it, fold them away.  This handles the case
 /// when all entries to the PHI nodes in a block are guaranteed equal, such as
 /// when the block has exactly one predecessor.
-void llvm::FoldSingleEntryPHINodes(BasicBlock *BB, AliasAnalysis *AA,
+void llvm37::FoldSingleEntryPHINodes(BasicBlock *BB, AliasAnalysis *AA,
                                    MemoryDependenceAnalysis *MemDep) {
   if (!isa<PHINode>(BB->begin())) return;
 
@@ -89,7 +89,7 @@ void llvm::FoldSingleEntryPHINodes(BasicBlock *BB, AliasAnalysis *AA,
 /// is dead. Also recursively delete any operands that become dead as
 /// a result. This includes tracing the def-use list from the PHI to see if
 /// it is ultimately unused or if it reaches an unused cycle.
-bool llvm::DeleteDeadPHIs(BasicBlock *BB, const TargetLibraryInfo *TLI) {
+bool llvm37::DeleteDeadPHIs(BasicBlock *BB, const TargetLibraryInfo *TLI) {
   // Recursively deleting a PHI may cause multiple PHIs to be deleted
   // or RAUW'd undef, so use an array of WeakVH for the PHIs to delete.
   SmallVector<WeakVH, 8> PHIs;
@@ -107,7 +107,7 @@ bool llvm::DeleteDeadPHIs(BasicBlock *BB, const TargetLibraryInfo *TLI) {
 
 /// MergeBlockIntoPredecessor - Attempts to merge a block into its predecessor,
 /// if possible.  The return value indicates success or failure.
-bool llvm::MergeBlockIntoPredecessor(BasicBlock *BB, DominatorTree *DT,
+bool llvm37::MergeBlockIntoPredecessor(BasicBlock *BB, DominatorTree *DT,
                                      LoopInfo *LI, AliasAnalysis *AA,
                                      MemoryDependenceAnalysis *MemDep) {
   // Don't merge away blocks who have their address taken.
@@ -187,7 +187,7 @@ bool llvm::MergeBlockIntoPredecessor(BasicBlock *BB, DominatorTree *DT,
 /// ReplaceInstWithValue - Replace all uses of an instruction (specified by BI)
 /// with a value, then remove and delete the original instruction.
 ///
-void llvm::ReplaceInstWithValue(BasicBlock::InstListType &BIL,
+void llvm37::ReplaceInstWithValue(BasicBlock::InstListType &BIL,
                                 BasicBlock::iterator &BI, Value *V) {
   Instruction &I = *BI;
   // Replaces all of the uses of the instruction with uses of the value
@@ -206,7 +206,7 @@ void llvm::ReplaceInstWithValue(BasicBlock::InstListType &BIL,
 /// instruction specified by I.  The original instruction is deleted and BI is
 /// updated to point to the new instruction.
 ///
-void llvm::ReplaceInstWithInst(BasicBlock::InstListType &BIL,
+void llvm37::ReplaceInstWithInst(BasicBlock::InstListType &BIL,
                                BasicBlock::iterator &BI, Instruction *I) {
   assert(I->getParent() == nullptr &&
          "ReplaceInstWithInst: Instruction already inserted into basic block!");
@@ -229,14 +229,14 @@ void llvm::ReplaceInstWithInst(BasicBlock::InstListType &BIL,
 /// ReplaceInstWithInst - Replace the instruction specified by From with the
 /// instruction specified by To.
 ///
-void llvm::ReplaceInstWithInst(Instruction *From, Instruction *To) {
+void llvm37::ReplaceInstWithInst(Instruction *From, Instruction *To) {
   BasicBlock::iterator BI(From);
   ReplaceInstWithInst(From->getParent()->getInstList(), BI, To);
 }
 
 /// SplitEdge -  Split the edge connecting specified block. Pass P must
 /// not be NULL.
-BasicBlock *llvm::SplitEdge(BasicBlock *BB, BasicBlock *Succ, DominatorTree *DT,
+BasicBlock *llvm37::SplitEdge(BasicBlock *BB, BasicBlock *Succ, DominatorTree *DT,
                             LoopInfo *LI) {
   unsigned SuccNum = GetSuccessorNumber(BB, Succ);
 
@@ -264,7 +264,7 @@ BasicBlock *llvm::SplitEdge(BasicBlock *BB, BasicBlock *Succ, DominatorTree *DT,
 }
 
 unsigned
-llvm::SplitAllCriticalEdges(Function &F,
+llvm37::SplitAllCriticalEdges(Function &F,
                             const CriticalEdgeSplittingOptions &Options) {
   unsigned NumBroken = 0;
   for (Function::iterator I = F.begin(), E = F.end(); I != E; ++I) {
@@ -282,7 +282,7 @@ llvm::SplitAllCriticalEdges(Function &F,
 /// to a new block.  The two blocks are joined by an unconditional branch and
 /// the loop info is updated.
 ///
-BasicBlock *llvm::SplitBlock(BasicBlock *Old, Instruction *SplitPt,
+BasicBlock *llvm37::SplitBlock(BasicBlock *Old, Instruction *SplitPt,
                              DominatorTree *DT, LoopInfo *LI) {
   BasicBlock::iterator SplitIt = SplitPt;
   while (isa<PHINode>(SplitIt) || isa<LandingPadInst>(SplitIt))
@@ -467,12 +467,12 @@ static void UpdatePHINodes(BasicBlock *OrigBB, BasicBlock *NewBB,
 /// It will have suffix of 'Suffix'+".split_lp".
 /// See SplitLandingPadPredecessors for more details on this case.
 ///
-/// This currently updates the LLVM IR, AliasAnalysis, DominatorTree,
+/// This currently updates the LLVM37 IR, AliasAnalysis, DominatorTree,
 /// LoopInfo, and LCCSA but no other analyses. In particular, it does not
 /// preserve LoopSimplify (because it's complicated to handle the case where one
 /// of the edges being split is an exit of a loop with other exits).
 ///
-BasicBlock *llvm::SplitBlockPredecessors(BasicBlock *BB,
+BasicBlock *llvm37::SplitBlockPredecessors(BasicBlock *BB,
                                          ArrayRef<BasicBlock *> Preds,
                                          const char *Suffix, AliasAnalysis *AA,
                                          DominatorTree *DT, LoopInfo *LI,
@@ -534,13 +534,13 @@ BasicBlock *llvm::SplitBlockPredecessors(BasicBlock *BB,
 /// OrigBB is clone into both of the new basic blocks. The new blocks are given
 /// the suffixes 'Suffix1' and 'Suffix2', and are returned in the NewBBs vector.
 ///
-/// This currently updates the LLVM IR, AliasAnalysis, DominatorTree,
+/// This currently updates the LLVM37 IR, AliasAnalysis, DominatorTree,
 /// DominanceFrontier, LoopInfo, and LCCSA but no other analyses. In particular,
 /// it does not preserve LoopSimplify (because it's complicated to handle the
 /// case where one of the edges being split is an exit of a loop with other
 /// exits).
 ///
-void llvm::SplitLandingPadPredecessors(BasicBlock *OrigBB,
+void llvm37::SplitLandingPadPredecessors(BasicBlock *OrigBB,
                                        ArrayRef<BasicBlock *> Preds,
                                        const char *Suffix1, const char *Suffix2,
                                        SmallVectorImpl<BasicBlock *> &NewBBs,
@@ -643,7 +643,7 @@ void llvm::SplitLandingPadPredecessors(BasicBlock *OrigBB,
 /// the return instruction returns a value defined by a PHI, propagate the
 /// right value into the return. It returns the new return instruction in the
 /// predecessor.
-ReturnInst *llvm::FoldReturnIntoUncondBranch(ReturnInst *RI, BasicBlock *BB,
+ReturnInst *llvm37::FoldReturnIntoUncondBranch(ReturnInst *RI, BasicBlock *BB,
                                              BasicBlock *Pred) {
   Instruction *UncondBranch = Pred->getTerminator();
   // Clone the return and add it to the end of the predecessor.
@@ -701,7 +701,7 @@ ReturnInst *llvm::FoldReturnIntoUncondBranch(ReturnInst *RI, BasicBlock *BB,
 /// UnreachableInst, otherwise it branches to Tail.
 /// Returns the NewBasicBlock's terminator.
 
-TerminatorInst *llvm::SplitBlockAndInsertIfThen(Value *Cond,
+TerminatorInst *llvm37::SplitBlockAndInsertIfThen(Value *Cond,
                                                 Instruction *SplitBefore,
                                                 bool Unreachable,
                                                 MDNode *BranchWeights,
@@ -709,7 +709,7 @@ TerminatorInst *llvm::SplitBlockAndInsertIfThen(Value *Cond,
   BasicBlock *Head = SplitBefore->getParent();
   BasicBlock *Tail = Head->splitBasicBlock(SplitBefore);
   TerminatorInst *HeadOldTerm = Head->getTerminator();
-  LLVMContext &C = Head->getContext();
+  LLVM37Context &C = Head->getContext();
   BasicBlock *ThenBlock = BasicBlock::Create(C, "", Head->getParent(), Tail);
   TerminatorInst *CheckTerm;
   if (Unreachable)
@@ -719,7 +719,7 @@ TerminatorInst *llvm::SplitBlockAndInsertIfThen(Value *Cond,
   CheckTerm->setDebugLoc(SplitBefore->getDebugLoc());
   BranchInst *HeadNewTerm =
     BranchInst::Create(/*ifTrue*/ThenBlock, /*ifFalse*/Tail, Cond);
-  HeadNewTerm->setMetadata(LLVMContext::MD_prof, BranchWeights);
+  HeadNewTerm->setMetadata(LLVM37Context::MD_prof, BranchWeights);
   ReplaceInstWithInst(HeadOldTerm, HeadNewTerm);
 
   if (DT) {
@@ -752,14 +752,14 @@ TerminatorInst *llvm::SplitBlockAndInsertIfThen(Value *Cond,
 ///     ElseBlock
 ///   SplitBefore
 ///   Tail
-void llvm::SplitBlockAndInsertIfThenElse(Value *Cond, Instruction *SplitBefore,
+void llvm37::SplitBlockAndInsertIfThenElse(Value *Cond, Instruction *SplitBefore,
                                          TerminatorInst **ThenTerm,
                                          TerminatorInst **ElseTerm,
                                          MDNode *BranchWeights) {
   BasicBlock *Head = SplitBefore->getParent();
   BasicBlock *Tail = Head->splitBasicBlock(SplitBefore);
   TerminatorInst *HeadOldTerm = Head->getTerminator();
-  LLVMContext &C = Head->getContext();
+  LLVM37Context &C = Head->getContext();
   BasicBlock *ThenBlock = BasicBlock::Create(C, "", Head->getParent(), Tail);
   BasicBlock *ElseBlock = BasicBlock::Create(C, "", Head->getParent(), Tail);
   *ThenTerm = BranchInst::Create(Tail, ThenBlock);
@@ -768,7 +768,7 @@ void llvm::SplitBlockAndInsertIfThenElse(Value *Cond, Instruction *SplitBefore,
   (*ElseTerm)->setDebugLoc(SplitBefore->getDebugLoc());
   BranchInst *HeadNewTerm =
     BranchInst::Create(/*ifTrue*/ThenBlock, /*ifFalse*/ElseBlock, Cond);
-  HeadNewTerm->setMetadata(LLVMContext::MD_prof, BranchWeights);
+  HeadNewTerm->setMetadata(LLVM37Context::MD_prof, BranchWeights);
   ReplaceInstWithInst(HeadOldTerm, HeadNewTerm);
 }
 
@@ -782,7 +782,7 @@ void llvm::SplitBlockAndInsertIfThenElse(Value *Cond, Instruction *SplitBefore,
 ///
 /// This does no checking to see if the true/false blocks have large or unsavory
 /// instructions in them.
-Value *llvm::GetIfCondition(BasicBlock *BB, BasicBlock *&IfTrue,
+Value *llvm37::GetIfCondition(BasicBlock *BB, BasicBlock *&IfTrue,
                              BasicBlock *&IfFalse) {
   PHINode *SomePHI = dyn_cast<PHINode>(BB->begin());
   BasicBlock *Pred1 = nullptr;

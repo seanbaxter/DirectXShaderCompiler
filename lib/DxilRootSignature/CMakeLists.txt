@@ -1,6 +1,6 @@
 # Copyright (C) Microsoft Corporation. All rights reserved.
 # This file is distributed under the University of Illinois Open Source License. See LICENSE.TXT for details.
-add_llvm_library(LLVMDxilRootSignature
+add_llvm_library(LLVM37DxilRootSignature
   DxilRootSignature.cpp
   DxilRootSignatureConvert.cpp
   DxilRootSignatureSerializer.cpp
@@ -8,7 +8,7 @@ add_llvm_library(LLVMDxilRootSignature
 
 
   ADDITIONAL_HEADER_DIRS
-  ${LLVM_MAIN_INCLUDE_DIR}/llvm/IR
+  ${LLVM37_MAIN_INCLUDE_DIR}/llvm37/IR
 )
 
-add_dependencies(LLVMDxilRootSignature intrinsics_gen)
+add_dependencies(LLVM37DxilRootSignature intrinsics_gen)

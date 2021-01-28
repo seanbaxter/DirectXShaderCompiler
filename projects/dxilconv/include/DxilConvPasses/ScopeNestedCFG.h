@@ -17,18 +17,18 @@
 #pragma once
 
 
-namespace llvm {
+namespace llvm37 {
 class Module;
 class Function;
 class PassRegistry;
 class FunctionPass;
 
 
-llvm::FunctionPass *createScopeNestedCFGPass();
-void initializeScopeNestedCFGPass(llvm::PassRegistry&);
+llvm37::FunctionPass *createScopeNestedCFGPass();
+void initializeScopeNestedCFGPass(llvm37::PassRegistry&);
 
-llvm::FunctionPass *createLoopSimplifyFunctionPass();
-void initializeLoopSimplifyFunctionPass(llvm::PassRegistry&);
+llvm37::FunctionPass *createLoopSimplifyFunctionPass();
+void initializeLoopSimplifyFunctionPass(llvm37::PassRegistry&);
 
 enum class BranchKind {
   Invalid = 0,

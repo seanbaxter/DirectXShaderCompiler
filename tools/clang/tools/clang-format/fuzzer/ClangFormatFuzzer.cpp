@@ -1,6 +1,6 @@
 //===-- ClangFormatFuzzer.cpp - Fuzz the Clang format tool ----------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -15,7 +15,7 @@
 
 #include "clang/Format/Format.h"
 
-extern "C" void LLVMFuzzerTestOneInput(uint8_t *data, size_t size) {
+extern "C" void LLVM37FuzzerTestOneInput(uint8_t *data, size_t size) {
   // FIXME: fuzz more things: different styles, different style features.
   std::string s((const char *)data, size);
   auto Style = getGoogleStyle(clang::format::FormatStyle::LK_Cpp);

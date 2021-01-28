@@ -1,6 +1,6 @@
 //===--- ARCMT.cpp - Migration to ARC mode --------------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -12,7 +12,7 @@
 #include "clang/AST/Expr.h"
 #include "clang/Basic/SourceManager.h"
 #include "clang/Lex/Preprocessor.h"
-#include "llvm/ADT/DenseSet.h"
+#include "llvm37/ADT/DenseSet.h"
 #include <map>
 using namespace clang;
 using namespace arcmt;
@@ -111,12 +111,12 @@ class TransformActionsImpl {
   /// intersect with each other.
   std::list<CharRange> Removals;
 
-  llvm::DenseSet<Stmt *> StmtRemovals;
+  llvm37::DenseSet<Stmt *> StmtRemovals;
 
   std::vector<std::pair<CharRange, SourceLocation> > IndentationRanges;
 
   /// \brief Keeps text passed to transformation methods.
-  llvm::StringMap<bool> UniqueText;
+  llvm37::StringMap<bool> UniqueText;
 
 public:
   TransformActionsImpl(CapturedDiagList &capturedDiags,

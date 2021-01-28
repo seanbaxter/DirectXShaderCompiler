@@ -3,13 +3,13 @@
 ; file for us.  Tokenization with quotes is tested in unittests.
 ; RUN: echo %s > %t.list1
 ; RUN: echo "-time-passes @%t.list1" > %t.list2
-; RUN: llvm-as @%t.list2 -o %t.bc
-; RUN: llvm-nm %t.bc 2>&1 | FileCheck %s
+; RUN: llvm37-as @%t.list2 -o %t.bc
+; RUN: llvm37-nm %t.bc 2>&1 | FileCheck %s
 
 ; When the response file begins with UTF8 BOM sequence, we shall remove them.
 ; Neither command below should return a "Could not open input file" error.
-; RUN: llvm-as @%S/Inputs/utf8-response > /dev/null
-; RUN: llvm-as @%S/Inputs/utf8-bom-response > /dev/null
+; RUN: llvm37-as @%S/Inputs/utf8-response > /dev/null
+; RUN: llvm37-as @%S/Inputs/utf8-bom-response > /dev/null
 
 ; CHECK: T foobar
 

@@ -1,6 +1,6 @@
 //===--- DeclObjC.h - Classes for representing declarations -----*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,13 +11,13 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_AST_DECLOBJC_H
-#define LLVM_CLANG_AST_DECLOBJC_H
+#ifndef LLVM37_CLANG_AST_DECLOBJC_H
+#define LLVM37_CLANG_AST_DECLOBJC_H
 
 #include "clang/AST/Decl.h"
 #include "clang/AST/SelectorLocationsKind.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/Support/Compiler.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/Support/Compiler.h"
 
 namespace clang {
 class Expr;
@@ -288,9 +288,9 @@ public:
   SourceLocation getDeclaratorEndLoc() const { return DeclEndLoc; }
 
   // Location information, modeled after the Stmt API.
-  SourceLocation getLocStart() const LLVM_READONLY { return getLocation(); }
-  SourceLocation getLocEnd() const LLVM_READONLY;
-  SourceRange getSourceRange() const override LLVM_READONLY {
+  SourceLocation getLocStart() const LLVM37_READONLY { return getLocation(); }
+  SourceLocation getLocEnd() const LLVM37_READONLY;
+  SourceRange getSourceRange() const override LLVM37_READONLY {
     return SourceRange(getLocation(), getLocEnd());
   }
 
@@ -348,8 +348,8 @@ public:
   unsigned param_size() const { return NumParams; }
   typedef const ParmVarDecl *const *param_const_iterator;
   typedef ParmVarDecl *const *param_iterator;
-  typedef llvm::iterator_range<param_iterator> param_range;
-  typedef llvm::iterator_range<param_const_iterator> param_const_range;
+  typedef llvm37::iterator_range<param_iterator> param_range;
+  typedef llvm37::iterator_range<param_const_iterator> param_const_range;
 
   param_range params() { return param_range(param_begin(), param_end()); }
   param_const_range params() const {
@@ -374,7 +374,7 @@ public:
   // ArrayRef access to formal parameters.  This should eventually
   // replace the iterator interface above.
   ArrayRef<ParmVarDecl*> parameters() const {
-    return llvm::makeArrayRef(const_cast<ParmVarDecl**>(getParams()),
+    return llvm37::makeArrayRef(const_cast<ParmVarDecl**>(getParams()),
                               NumParams);
   }
 
@@ -383,20 +383,20 @@ public:
   /// ignored.
   void setMethodParams(ASTContext &C,
                        ArrayRef<ParmVarDecl*> Params,
-                       ArrayRef<SourceLocation> SelLocs = llvm::None);
+                       ArrayRef<SourceLocation> SelLocs = llvm37::None);
 
   // Iterator access to parameter types.
   struct GetTypeFn {
     QualType operator()(const ParmVarDecl *PD) const { return PD->getType(); }
   };
-  typedef llvm::mapped_iterator<param_const_iterator, GetTypeFn>
+  typedef llvm37::mapped_iterator<param_const_iterator, GetTypeFn>
       param_type_iterator;
 
   param_type_iterator param_type_begin() const {
-    return llvm::map_iterator(param_begin(), GetTypeFn());
+    return llvm37::map_iterator(param_begin(), GetTypeFn());
   }
   param_type_iterator param_type_end() const {
-    return llvm::map_iterator(param_end(), GetTypeFn());
+    return llvm37::map_iterator(param_end(), GetTypeFn());
   }
 
   /// createImplicitParams - Used to lazily create the self and cmd
@@ -573,7 +573,7 @@ public:
                                    TypeSourceInfo *boundInfo);
   static ObjCTypeParamDecl *CreateDeserialized(ASTContext &ctx, unsigned ID);
 
-  SourceRange getSourceRange() const override LLVM_READONLY;
+  SourceRange getSourceRange() const override LLVM37_READONLY;
 
   /// Determine the variance of this type parameter.
   ObjCTypeParamVariance getVariance() const {
@@ -710,7 +710,7 @@ public:
 
   // Iterator access to properties.
   typedef specific_decl_iterator<ObjCPropertyDecl> prop_iterator;
-  typedef llvm::iterator_range<specific_decl_iterator<ObjCPropertyDecl>>
+  typedef llvm37::iterator_range<specific_decl_iterator<ObjCPropertyDecl>>
     prop_range;
 
   prop_range properties() const { return prop_range(prop_begin(), prop_end()); }
@@ -723,7 +723,7 @@ public:
 
   // Iterator access to instance/class methods.
   typedef specific_decl_iterator<ObjCMethodDecl> method_iterator;
-  typedef llvm::iterator_range<specific_decl_iterator<ObjCMethodDecl>>
+  typedef llvm37::iterator_range<specific_decl_iterator<ObjCMethodDecl>>
     method_range;
 
   method_range methods() const {
@@ -739,7 +739,7 @@ public:
   typedef filtered_decl_iterator<ObjCMethodDecl,
                                  &ObjCMethodDecl::isInstanceMethod>
     instmeth_iterator;
-  typedef llvm::iterator_range<instmeth_iterator> instmeth_range;
+  typedef llvm37::iterator_range<instmeth_iterator> instmeth_range;
 
   instmeth_range instance_methods() const {
     return instmeth_range(instmeth_begin(), instmeth_end());
@@ -754,7 +754,7 @@ public:
   typedef filtered_decl_iterator<ObjCMethodDecl,
                                  &ObjCMethodDecl::isClassMethod>
     classmeth_iterator;
-  typedef llvm::iterator_range<classmeth_iterator> classmeth_range;
+  typedef llvm37::iterator_range<classmeth_iterator> classmeth_range;
 
   classmeth_range class_methods() const {
     return classmeth_range(classmeth_begin(), classmeth_end());
@@ -782,12 +782,12 @@ public:
   ObjCPropertyDecl *
   FindPropertyDeclaration(const IdentifierInfo *PropertyId) const;
 
-  typedef llvm::DenseMap<IdentifierInfo*, ObjCPropertyDecl*> PropertyMap;
+  typedef llvm37::DenseMap<IdentifierInfo*, ObjCPropertyDecl*> PropertyMap;
   
-  typedef llvm::DenseMap<const ObjCProtocolDecl *, ObjCPropertyDecl*>
+  typedef llvm37::DenseMap<const ObjCProtocolDecl *, ObjCPropertyDecl*>
             ProtocolPropertyMap;
   
-  typedef llvm::SmallVector<ObjCPropertyDecl*, 8> PropertyDeclOrder;
+  typedef llvm37::SmallVector<ObjCPropertyDecl*, 8> PropertyDeclOrder;
   
   /// This routine collects list of properties to be implemented in the class.
   /// This includes, class's and its conforming protocols' properties.
@@ -806,7 +806,7 @@ public:
     AtEnd = atEnd;
   }
 
-  SourceRange getSourceRange() const override LLVM_READONLY {
+  SourceRange getSourceRange() const override LLVM37_READONLY {
     return SourceRange(AtStart, getAtEndRange().getEnd());
   }
 
@@ -935,7 +935,7 @@ class ObjCInterfaceDecl : public ObjCContainerDecl
   ///
   /// The bit indicates when we don't need to check for out-of-date
   /// declarations. It will be set unless modules are enabled.
-  llvm::PointerIntPair<DefinitionData *, 1, bool> Data;
+  llvm37::PointerIntPair<DefinitionData *, 1, bool> Data;
 
   DefinitionData &data() const {
     assert(Data.getPointer() && "Declaration has no definition!");
@@ -987,7 +987,7 @@ public:
     return TypeParamList;
   }
 
-  SourceRange getSourceRange() const override LLVM_READONLY {
+  SourceRange getSourceRange() const override LLVM37_READONLY {
     if (isThisDeclarationADefinition())
       return ObjCContainerDecl::getSourceRange();
     
@@ -1035,7 +1035,7 @@ public:
   }
 
   typedef ObjCProtocolList::iterator protocol_iterator;
-  typedef llvm::iterator_range<protocol_iterator> protocol_range;
+  typedef llvm37::iterator_range<protocol_iterator> protocol_range;
 
   protocol_range protocols() const {
     return protocol_range(protocol_begin(), protocol_end());
@@ -1062,7 +1062,7 @@ public:
   }
 
   typedef ObjCProtocolList::loc_iterator protocol_loc_iterator;
-  typedef llvm::iterator_range<protocol_loc_iterator> protocol_loc_range;
+  typedef llvm37::iterator_range<protocol_loc_iterator> protocol_loc_range;
 
   protocol_loc_range protocol_locs() const {
     return protocol_loc_range(protocol_loc_begin(), protocol_loc_end());
@@ -1090,7 +1090,7 @@ public:
   }
 
   typedef ObjCList<ObjCProtocolDecl>::iterator all_protocol_iterator;
-  typedef llvm::iterator_range<all_protocol_iterator> all_protocol_range;
+  typedef llvm37::iterator_range<all_protocol_iterator> all_protocol_range;
 
   all_protocol_range all_referenced_protocols() const {
     return all_protocol_range(all_referenced_protocol_begin(),
@@ -1122,7 +1122,7 @@ public:
   }
 
   typedef specific_decl_iterator<ObjCIvarDecl> ivar_iterator;
-  typedef llvm::iterator_range<specific_decl_iterator<ObjCIvarDecl>> ivar_range;
+  typedef llvm37::iterator_range<specific_decl_iterator<ObjCIvarDecl>> ivar_range;
 
   ivar_range ivars() const { return ivar_range(ivar_begin(), ivar_end()); }
   ivar_iterator ivar_begin() const { 
@@ -1177,7 +1177,7 @@ public:
   /// initializers then the interface inherits the designated initializers of
   /// its super class.
   void getDesignatedInitializers(
-                  llvm::SmallVectorImpl<const ObjCMethodDecl *> &Methods) const;
+                  llvm37::SmallVectorImpl<const ObjCMethodDecl *> &Methods) const;
 
   /// Returns true if the given selector is a designated initializer for the
   /// interface.
@@ -1320,7 +1320,7 @@ public:
   typedef filtered_category_iterator<isVisibleCategory>
     visible_categories_iterator;
 
-  typedef llvm::iterator_range<visible_categories_iterator>
+  typedef llvm37::iterator_range<visible_categories_iterator>
     visible_categories_range;
 
   visible_categories_range visible_categories() const {
@@ -1354,7 +1354,7 @@ public:
   /// \brief Iterator that walks over all of the known categories and
   /// extensions, including those that are hidden.
   typedef filtered_category_iterator<isKnownCategory> known_categories_iterator;
-  typedef llvm::iterator_range<known_categories_iterator>
+  typedef llvm37::iterator_range<known_categories_iterator>
     known_categories_range;
 
   known_categories_range known_categories() const {
@@ -1390,7 +1390,7 @@ public:
   typedef filtered_category_iterator<isVisibleExtension>
     visible_extensions_iterator;
 
-  typedef llvm::iterator_range<visible_extensions_iterator>
+  typedef llvm37::iterator_range<visible_extensions_iterator>
     visible_extensions_range;
 
   visible_extensions_range visible_extensions() const {
@@ -1424,7 +1424,7 @@ public:
   /// \brief Iterator that walks over all of the known extensions.
   typedef filtered_category_iterator<isKnownExtension>
     known_extensions_iterator;
-  typedef llvm::iterator_range<known_extensions_iterator>
+  typedef llvm37::iterator_range<known_extensions_iterator>
     known_extensions_range;
 
   known_extensions_range known_extensions() const {
@@ -1747,7 +1747,7 @@ class ObjCProtocolDecl : public ObjCContainerDecl,
   ///
   /// The bit indicates when we don't need to check for out-of-date
   /// declarations. It will be set unless modules are enabled.
-  llvm::PointerIntPair<DefinitionData *, 1, bool> Data;
+  llvm37::PointerIntPair<DefinitionData *, 1, bool> Data;
 
   DefinitionData &data() const {
     assert(Data.getPointer() && "Objective-C protocol has no definition!");
@@ -1785,7 +1785,7 @@ public:
     return data().ReferencedProtocols;
   }
   typedef ObjCProtocolList::iterator protocol_iterator;
-  typedef llvm::iterator_range<protocol_iterator> protocol_range;
+  typedef llvm37::iterator_range<protocol_iterator> protocol_range;
 
   protocol_range protocols() const {
     return protocol_range(protocol_begin(), protocol_end());
@@ -1803,7 +1803,7 @@ public:
     return data().ReferencedProtocols.end(); 
   }
   typedef ObjCProtocolList::loc_iterator protocol_loc_iterator;
-  typedef llvm::iterator_range<protocol_loc_iterator> protocol_loc_range;
+  typedef llvm37::iterator_range<protocol_loc_iterator> protocol_loc_range;
 
   protocol_loc_range protocol_locs() const {
     return protocol_loc_range(protocol_loc_begin(), protocol_loc_end());
@@ -1887,7 +1887,7 @@ public:
   /// objc_runtime_name attribute or protocol name.
   StringRef getObjCRuntimeNameAsString() const;
 
-  SourceRange getSourceRange() const override LLVM_READONLY {
+  SourceRange getSourceRange() const override LLVM37_READONLY {
     if (isThisDeclarationADefinition())
       return ObjCContainerDecl::getSourceRange();
    
@@ -2010,7 +2010,7 @@ public:
   }
 
   typedef ObjCProtocolList::iterator protocol_iterator;
-  typedef llvm::iterator_range<protocol_iterator> protocol_range;
+  typedef llvm37::iterator_range<protocol_iterator> protocol_range;
 
   protocol_range protocols() const {
     return protocol_range(protocol_begin(), protocol_end());
@@ -2021,7 +2021,7 @@ public:
   protocol_iterator protocol_end() const { return ReferencedProtocols.end(); }
   unsigned protocol_size() const { return ReferencedProtocols.size(); }
   typedef ObjCProtocolList::loc_iterator protocol_loc_iterator;
-  typedef llvm::iterator_range<protocol_loc_iterator> protocol_loc_range;
+  typedef llvm37::iterator_range<protocol_loc_iterator> protocol_loc_range;
 
   protocol_loc_range protocol_locs() const {
     return protocol_loc_range(protocol_loc_begin(), protocol_loc_end());
@@ -2044,7 +2044,7 @@ public:
   bool IsClassExtension() const { return getIdentifier() == nullptr; }
 
   typedef specific_decl_iterator<ObjCIvarDecl> ivar_iterator;
-  typedef llvm::iterator_range<specific_decl_iterator<ObjCIvarDecl>> ivar_range;
+  typedef llvm37::iterator_range<specific_decl_iterator<ObjCIvarDecl>> ivar_range;
 
   ivar_range ivars() const { return ivar_range(ivar_begin(), ivar_end()); }
   ivar_iterator ivar_begin() const {
@@ -2114,7 +2114,7 @@ public:
 
   // Iterator access to properties.
   typedef specific_decl_iterator<ObjCPropertyImplDecl> propimpl_iterator;
-  typedef llvm::iterator_range<specific_decl_iterator<ObjCPropertyImplDecl>>
+  typedef llvm37::iterator_range<specific_decl_iterator<ObjCPropertyImplDecl>>
     propimpl_range;
 
   propimpl_range property_impls() const {
@@ -2279,8 +2279,8 @@ public:
   /// init_const_iterator - Iterates through the ivar initializer list.
   typedef CXXCtorInitializer * const * init_const_iterator;
 
-  typedef llvm::iterator_range<init_iterator> init_range;
-  typedef llvm::iterator_range<init_const_iterator> init_const_range;
+  typedef llvm37::iterator_range<init_iterator> init_range;
+  typedef llvm37::iterator_range<init_const_iterator> init_const_range;
 
   init_range inits() { return init_range(init_begin(), init_end()); }
   init_const_range inits() const {
@@ -2365,7 +2365,7 @@ public:
   SourceLocation getIvarRBraceLoc() const { return IvarRBraceLoc; }
   
   typedef specific_decl_iterator<ObjCIvarDecl> ivar_iterator;
-  typedef llvm::iterator_range<specific_decl_iterator<ObjCIvarDecl>> ivar_range;
+  typedef llvm37::iterator_range<specific_decl_iterator<ObjCIvarDecl>> ivar_range;
 
   ivar_range ivars() const { return ivar_range(ivar_begin(), ivar_end()); }
   ivar_iterator ivar_begin() const {
@@ -2601,7 +2601,7 @@ public:
     return PropertyIvarDecl;
   }
 
-  SourceRange getSourceRange() const override LLVM_READONLY {
+  SourceRange getSourceRange() const override LLVM37_READONLY {
     return SourceRange(AtLoc, getLocation());
   }
   
@@ -2672,9 +2672,9 @@ public:
 
   static ObjCPropertyImplDecl *CreateDeserialized(ASTContext &C, unsigned ID);
 
-  SourceRange getSourceRange() const override LLVM_READONLY;
+  SourceRange getSourceRange() const override LLVM37_READONLY;
 
-  SourceLocation getLocStart() const LLVM_READONLY { return AtLoc; }
+  SourceLocation getLocStart() const LLVM37_READONLY { return AtLoc; }
   void setAtLoc(SourceLocation Loc) { AtLoc = Loc; }
 
   ObjCPropertyDecl *getPropertyDecl() const {

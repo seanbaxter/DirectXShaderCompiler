@@ -28,10 +28,10 @@ target triple = "aarch64-apple-darwin"
 declare void @_Z3fn31A(%struct.A* nocapture readonly %p1) #0
 
 ; Function Attrs: nounwind readnone
-declare void @llvm.dbg.declare(metadata, metadata, metadata) #1
+declare void @llvm37.dbg.declare(metadata, metadata, metadata) #1
 
 ; Function Attrs: nounwind
-declare void @llvm.memcpy.p0i8.p0i8.i64(i8* nocapture, i8* nocapture readonly, i64, i32, i1) #2
+declare void @llvm37.memcpy.p0i8.p0i8.i64(i8* nocapture, i8* nocapture readonly, i64, i32, i1) #2
 
 ; Function Attrs: nounwind
 define void @_Z3fn4v() #0 {
@@ -40,20 +40,20 @@ entry:
 ; CHECK: define void @_Z3fn5v()
 ; CHECK-NEXT: entry:
 ; CHECK-NEXT:   %agg.tmp.sroa.3.i = alloca [20 x i8], align 4
-; CHECK-NEXT:   call void @llvm.dbg.declare(metadata [20 x i8]* %agg.tmp.sroa.3.i,
+; CHECK-NEXT:   call void @llvm37.dbg.declare(metadata [20 x i8]* %agg.tmp.sroa.3.i,
   %agg.tmp.sroa.3 = alloca [20 x i8], align 4
-  tail call void @llvm.dbg.declare(metadata [20 x i8]* %agg.tmp.sroa.3, metadata !46, metadata !48), !dbg !49
+  tail call void @llvm37.dbg.declare(metadata [20 x i8]* %agg.tmp.sroa.3, metadata !46, metadata !48), !dbg !49
   %agg.tmp.sroa.0.0.copyload = load i32, i32* getelementptr inbounds (%struct.A, %struct.A* @b, i64 0, i32 0), align 8, !dbg !50
-  tail call void @llvm.dbg.value(metadata i32 %agg.tmp.sroa.0.0.copyload, i64 0, metadata !46, metadata !51), !dbg !49
+  tail call void @llvm37.dbg.value(metadata i32 %agg.tmp.sroa.0.0.copyload, i64 0, metadata !46, metadata !51), !dbg !49
   %agg.tmp.sroa.3.0..sroa_idx = getelementptr inbounds [20 x i8], [20 x i8]* %agg.tmp.sroa.3, i64 0, i64 0, !dbg !50
-  call void @llvm.memcpy.p0i8.p0i8.i64(i8* %agg.tmp.sroa.3.0..sroa_idx, i8* getelementptr (i8, i8* bitcast (%struct.A* @b to i8*), i64 4), i64 20, i32 4, i1 false), !dbg !50
-  tail call void @llvm.dbg.declare(metadata %struct.A* undef, metadata !46, metadata !31) #2, !dbg !49
+  call void @llvm37.memcpy.p0i8.p0i8.i64(i8* %agg.tmp.sroa.3.0..sroa_idx, i8* getelementptr (i8, i8* bitcast (%struct.A* @b to i8*), i64 4), i64 20, i32 4, i1 false), !dbg !50
+  tail call void @llvm37.dbg.declare(metadata %struct.A* undef, metadata !46, metadata !31) #2, !dbg !49
   %tobool.i = icmp eq i32 %agg.tmp.sroa.0.0.copyload, 0, !dbg !52
   br i1 %tobool.i, label %_Z3fn31A.exit, label %if.then.i, !dbg !53
 
 if.then.i:                                        ; preds = %entry
   store i32 %agg.tmp.sroa.0.0.copyload, i32* getelementptr inbounds (%struct.A, %struct.A* @a, i64 0, i32 0), align 8, !dbg !54
-  call void @llvm.memcpy.p0i8.p0i8.i64(i8* getelementptr (i8, i8* bitcast (%struct.A* @a to i8*), i64 4), i8* %agg.tmp.sroa.3.0..sroa_idx, i64 20, i32 4, i1 false), !dbg !54
+  call void @llvm37.memcpy.p0i8.p0i8.i64(i8* getelementptr (i8, i8* bitcast (%struct.A* @a to i8*), i64 4), i8* %agg.tmp.sroa.3.0..sroa_idx, i64 20, i32 4, i1 false), !dbg !54
   br label %_Z3fn31A.exit, !dbg !54
 
 _Z3fn31A.exit:                                    ; preds = %entry, %if.then.i
@@ -71,18 +71,18 @@ while.body:                                       ; preds = %entry, %while.body
 }
 
 ; Function Attrs: nounwind readnone
-declare void @llvm.dbg.value(metadata, i64, metadata, metadata) #1
+declare void @llvm37.dbg.value(metadata, i64, metadata, metadata) #1
 
 attributes #0 = { nounwind }
 attributes #1 = { nounwind readnone }
 attributes #2 = { nounwind }
 attributes #3 = { noreturn nounwind }
 
-!llvm.dbg.cu = !{!0}
-!llvm.module.flags = !{!28, !29}
-!llvm.ident = !{!30}
+!llvm37.dbg.cu = !{!0}
+!llvm37.module.flags = !{!28, !29}
+!llvm37.ident = !{!30}
 
-!0 = !DICompileUnit(language: DW_LANG_C_plus_plus, producer: "clang version 3.7.0 (trunk 227480) (llvm/trunk 227517)", isOptimized: true, emissionKind: 1, file: !1, enums: !2, retainedTypes: !3, subprograms: !14, globals: !25, imports: !2)
+!0 = !DICompileUnit(language: DW_LANG_C_plus_plus, producer: "clang version 3.7.0 (trunk 227480) (llvm37/trunk 227517)", isOptimized: true, emissionKind: 1, file: !1, enums: !2, retainedTypes: !3, subprograms: !14, globals: !25, imports: !2)
 !1 = !DIFile(filename: "<stdin>", directory: "")
 !2 = !{}
 !3 = !{!4}
@@ -112,7 +112,7 @@ attributes #3 = { noreturn nounwind }
 !27 = !DIGlobalVariable(name: "b", line: 4, isLocal: false, isDefinition: true, scope: null, file: !16, type: !"_ZTS1A", variable: %struct.A* @b)
 !28 = !{i32 2, !"Dwarf Version", i32 4}
 !29 = !{i32 2, !"Debug Info Version", i32 3}
-!30 = !{!"clang version 3.7.0 (trunk 227480) (llvm/trunk 227517)"}
+!30 = !{!"clang version 3.7.0 (trunk 227480) (llvm37/trunk 227517)"}
 !31 = !DIExpression(DW_OP_deref)
 !32 = !DILocation(line: 6, scope: !15)
 !33 = !DILocation(line: 7, scope: !34)

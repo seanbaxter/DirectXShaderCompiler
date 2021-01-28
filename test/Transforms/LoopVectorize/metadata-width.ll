@@ -19,7 +19,7 @@ for.body:                                         ; preds = %entry, %for.body
   %indvars.iv.next = add i64 %indvars.iv, 1
   %lftr.wideiv = trunc i64 %indvars.iv.next to i32
   %exitcond = icmp eq i32 %lftr.wideiv, %n
-  br i1 %exitcond, label %for.end, label %for.body, !llvm.loop !0
+  br i1 %exitcond, label %for.end, label %for.body, !llvm37.loop !0
 
 for.end:                                          ; preds = %for.body, %entry
   ret void

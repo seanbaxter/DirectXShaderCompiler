@@ -1,4 +1,4 @@
-// RUN: llvm-mc -triple i386-apple-darwin10 %s 2>&1 | FileCheck %s
+// RUN: llvm37-mc -triple i386-apple-darwin10 %s 2>&1 | FileCheck %s
 
 .macro abc a b:vararg
 .globl "\a, \b"

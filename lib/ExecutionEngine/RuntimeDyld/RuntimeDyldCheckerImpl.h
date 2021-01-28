@@ -1,19 +1,19 @@
 //===-- RuntimeDyldCheckerImpl.h -- RuntimeDyld test framework --*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_LIB_EXECUTIONENGINE_RUNTIMEDYLD_RUNTIMEDYLDCHECKERIMPL_H
-#define LLVM_LIB_EXECUTIONENGINE_RUNTIMEDYLD_RUNTIMEDYLDCHECKERIMPL_H
+#ifndef LLVM37_LIB_EXECUTIONENGINE_RUNTIMEDYLD_RUNTIMEDYLDCHECKERIMPL_H
+#define LLVM37_LIB_EXECUTIONENGINE_RUNTIMEDYLD_RUNTIMEDYLDCHECKERIMPL_H
 
 #include "RuntimeDyldImpl.h"
 #include <set>
 
-namespace llvm {
+namespace llvm37 {
 
 class RuntimeDyldCheckerImpl {
   friend class RuntimeDyldChecker;
@@ -24,7 +24,7 @@ class RuntimeDyldCheckerImpl {
 public:
   RuntimeDyldCheckerImpl(RuntimeDyld &RTDyld, MCDisassembler *Disassembler,
                          MCInstPrinter *InstPrinter,
-                         llvm::raw_ostream &ErrStream);
+                         llvm37::raw_ostream &ErrStream);
 
   bool check(StringRef CheckExpr) const;
   bool checkAllRulesInBuffer(StringRef RulePrefix, MemoryBuffer *MemBuf) const;
@@ -68,7 +68,7 @@ private:
   RuntimeDyld &RTDyld;
   MCDisassembler *Disassembler;
   MCInstPrinter *InstPrinter;
-  llvm::raw_ostream &ErrStream;
+  llvm37::raw_ostream &ErrStream;
 
   StubMap Stubs;
 };

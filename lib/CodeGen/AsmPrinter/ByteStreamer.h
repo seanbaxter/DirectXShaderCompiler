@@ -1,6 +1,6 @@
-//===-- llvm/CodeGen/ByteStreamer.h - ByteStreamer class --------*- C++ -*-===//
+//===-- llvm37/CodeGen/ByteStreamer.h - ByteStreamer class --------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -12,17 +12,17 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_LIB_CODEGEN_ASMPRINTER_BYTESTREAMER_H
-#define LLVM_LIB_CODEGEN_ASMPRINTER_BYTESTREAMER_H
+#ifndef LLVM37_LIB_CODEGEN_ASMPRINTER_BYTESTREAMER_H
+#define LLVM37_LIB_CODEGEN_ASMPRINTER_BYTESTREAMER_H
 
 #include "DIEHash.h"
-#include "llvm/ADT/ArrayRef.h"
-#include "llvm/CodeGen/AsmPrinter.h"
-#include "llvm/MC/MCStreamer.h"
-#include "llvm/Support/LEB128.h"
+#include "llvm37/ADT/ArrayRef.h"
+#include "llvm37/CodeGen/AsmPrinter.h"
+#include "llvm37/MC/MCStreamer.h"
+#include "llvm37/Support/LEB128.h"
 #include <string>
 
-namespace llvm {
+namespace llvm37 {
 class ByteStreamer {
  public:
   virtual ~ByteStreamer() {}

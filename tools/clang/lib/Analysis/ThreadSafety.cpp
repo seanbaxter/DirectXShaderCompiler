@@ -1,6 +1,6 @@
 //===- ThreadSafety.cpp ----------------------------------------*- C++ --*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -10,7 +10,7 @@
 // A intra-procedural analysis for thread safety (e.g. deadlocks and race
 // conditions), based off of an annotation system.
 //
-// See http://clang.llvm.org/docs/ThreadSafetyAnalysis.html
+// See http://clang.llvm37.org/docs/ThreadSafetyAnalysis.html
 // for more information.
 //
 //===----------------------------------------------------------------------===//
@@ -32,13 +32,13 @@
 #include "clang/Basic/OperatorKinds.h"
 #include "clang/Basic/SourceLocation.h"
 #include "clang/Basic/SourceManager.h"
-#include "llvm/ADT/BitVector.h"
-#include "llvm/ADT/FoldingSet.h"
-#include "llvm/ADT/ImmutableMap.h"
-#include "llvm/ADT/PostOrderIterator.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/ADT/StringRef.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/BitVector.h"
+#include "llvm37/ADT/FoldingSet.h"
+#include "llvm37/ADT/ImmutableMap.h"
+#include "llvm37/ADT/PostOrderIterator.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/ADT/StringRef.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <algorithm>
 #include <ostream>
 #include <sstream>
@@ -52,7 +52,7 @@ ThreadSafetyHandler::~ThreadSafetyHandler() {}
 
 namespace {
 class TILPrinter :
-  public til::PrettyPrinter<TILPrinter, llvm::raw_ostream> {};
+  public til::PrettyPrinter<TILPrinter, llvm37::raw_ostream> {};
 
 
 /// Issue a warning about an invalid lock expression
@@ -267,8 +267,8 @@ private:
     int                         Visited;
   };
 
-  typedef llvm::DenseMap<const ValueDecl*, BeforeInfo>  BeforeMap;
-  typedef llvm::DenseMap<const ValueDecl*, bool>        CycleMap;
+  typedef llvm37::DenseMap<const ValueDecl*, BeforeInfo>  BeforeMap;
+  typedef llvm37::DenseMap<const ValueDecl*, bool>        CycleMap;
 
 public:
   BeforeSet() { }
@@ -289,7 +289,7 @@ private:
 } // end namespace clang
 
 namespace {
-typedef llvm::ImmutableMap<const NamedDecl*, unsigned> LocalVarContext;
+typedef llvm37::ImmutableMap<const NamedDecl*, unsigned> LocalVarContext;
 class LocalVariableMap;
 
 /// A side (entry or exit) of a CFG node.
@@ -426,43 +426,43 @@ public:
 
   void dumpVarDefinitionName(unsigned i) {
     if (i == 0) {
-      llvm::errs() << "Undefined";
+      llvm37::errs() << "Undefined";
       return;
     }
     const NamedDecl *Dec = VarDefinitions[i].Dec;
     if (!Dec) {
-      llvm::errs() << "<<NULL>>";
+      llvm37::errs() << "<<NULL>>";
       return;
     }
-    Dec->printName(llvm::errs());
-    llvm::errs() << "." << i << " " << ((const void*) Dec);
+    Dec->printName(llvm37::errs());
+    llvm37::errs() << "." << i << " " << ((const void*) Dec);
   }
 
-  /// Dumps an ASCII representation of the variable map to llvm::errs()
+  /// Dumps an ASCII representation of the variable map to llvm37::errs()
   void dump() {
     for (unsigned i = 1, e = VarDefinitions.size(); i < e; ++i) {
       const Expr *Exp = VarDefinitions[i].Exp;
       unsigned Ref = VarDefinitions[i].Ref;
 
       dumpVarDefinitionName(i);
-      llvm::errs() << " = ";
+      llvm37::errs() << " = ";
       if (Exp) Exp->dump();
       else {
         dumpVarDefinitionName(Ref);
-        llvm::errs() << "\n";
+        llvm37::errs() << "\n";
       }
     }
   }
 
-  /// Dumps an ASCII representation of a Context to llvm::errs()
+  /// Dumps an ASCII representation of a Context to llvm37::errs()
   void dumpContext(Context C) {
     for (Context::iterator I = C.begin(), E = C.end(); I != E; ++I) {
       const NamedDecl *D = I.getKey();
-      D->printName(llvm::errs());
+      D->printName(llvm37::errs());
       const unsigned *i = C.lookup(D);
-      llvm::errs() << " -> ";
+      llvm37::errs() << " -> ";
       dumpVarDefinitionName(*i);
-      llvm::errs() << "\n";
+      llvm37::errs() << "\n";
     }
   }
 
@@ -833,7 +833,7 @@ public:
                     StringRef DiagKind) const override {
     FSet.removeLock(FactMan, Cp);
     if (!Cp.negative()) {
-      FSet.addLock(FactMan, llvm::make_unique<LockableFactEntry>(
+      FSet.addLock(FactMan, llvm37::make_unique<LockableFactEntry>(
                                 !Cp, LK_Exclusive, UnlockLoc));
     }
   }
@@ -874,7 +874,7 @@ public:
     assert(!Cp.negative() && "Managing object cannot be negative.");
     for (const til::SExpr *UnderlyingMutex : UnderlyingMutexes) {
       CapabilityExpr UnderCp(UnderlyingMutex, false);
-      auto UnderEntry = llvm::make_unique<LockableFactEntry>(
+      auto UnderEntry = llvm37::make_unique<LockableFactEntry>(
           !UnderCp, LK_Exclusive, UnlockLoc);
 
       if (FullyRemove) {
@@ -905,7 +905,7 @@ class ThreadSafetyAnalyzer {
   friend class BuildLockset;
   friend class threadSafety::BeforeSet;
 
-  llvm::BumpPtrAllocator Bpa;
+  llvm37::BumpPtrAllocator Bpa;
   threadSafety::til::MemRegionRef Arena;
   threadSafety::SExprBuilder SxBuilder;
 
@@ -1444,11 +1444,11 @@ void ThreadSafetyAnalyzer::getEdgeLockset(FactSet& Result,
   // Add and remove locks.
   SourceLocation Loc = Exp->getExprLoc();
   for (const auto &ExclusiveLockToAdd : ExclusiveLocksToAdd)
-    addLock(Result, llvm::make_unique<LockableFactEntry>(ExclusiveLockToAdd,
+    addLock(Result, llvm37::make_unique<LockableFactEntry>(ExclusiveLockToAdd,
                                                          LK_Exclusive, Loc),
             CapDiagKind);
   for (const auto &SharedLockToAdd : SharedLocksToAdd)
-    addLock(Result, llvm::make_unique<LockableFactEntry>(SharedLockToAdd,
+    addLock(Result, llvm37::make_unique<LockableFactEntry>(SharedLockToAdd,
                                                          LK_Shared, Loc),
             CapDiagKind);
 }
@@ -1729,7 +1729,7 @@ void BuildLockset::handleCall(Expr *Exp, const NamedDecl *D, VarDecl *VD) {
         Analyzer->getMutexIDs(AssertLocks, A, Exp, D, VD);
         for (const auto &AssertLock : AssertLocks)
           Analyzer->addLock(FSet,
-                            llvm::make_unique<LockableFactEntry>(
+                            llvm37::make_unique<LockableFactEntry>(
                                 AssertLock, LK_Exclusive, Loc, false, true),
                             ClassifyDiagnostic(A));
         break;
@@ -1740,7 +1740,7 @@ void BuildLockset::handleCall(Expr *Exp, const NamedDecl *D, VarDecl *VD) {
         CapExprSet AssertLocks;
         Analyzer->getMutexIDs(AssertLocks, A, Exp, D, VD);
         for (const auto &AssertLock : AssertLocks)
-          Analyzer->addLock(FSet, llvm::make_unique<LockableFactEntry>(
+          Analyzer->addLock(FSet, llvm37::make_unique<LockableFactEntry>(
                                       AssertLock, LK_Shared, Loc, false, true),
                             ClassifyDiagnostic(A));
         break;
@@ -1792,11 +1792,11 @@ void BuildLockset::handleCall(Expr *Exp, const NamedDecl *D, VarDecl *VD) {
 
   // Add locks.
   for (const auto &M : ExclusiveLocksToAdd)
-    Analyzer->addLock(FSet, llvm::make_unique<LockableFactEntry>(
+    Analyzer->addLock(FSet, llvm37::make_unique<LockableFactEntry>(
                                 M, LK_Exclusive, Loc, isScopedVar),
                       CapDiagKind);
   for (const auto &M : SharedLocksToAdd)
-    Analyzer->addLock(FSet, llvm::make_unique<LockableFactEntry>(
+    Analyzer->addLock(FSet, llvm37::make_unique<LockableFactEntry>(
                                 M, LK_Shared, Loc, isScopedVar),
                       CapDiagKind);
 
@@ -1812,7 +1812,7 @@ void BuildLockset::handleCall(Expr *Exp, const NamedDecl *D, VarDecl *VD) {
     std::copy(ScopedSharedReqs.begin(), ScopedSharedReqs.end(),
               std::back_inserter(SharedLocksToAdd));
     Analyzer->addLock(FSet,
-                      llvm::make_unique<ScopedLockableFactEntry>(
+                      llvm37::make_unique<ScopedLockableFactEntry>(
                           Scp, MLoc, ExclusiveLocksToAdd, SharedLocksToAdd),
                       CapDiagKind);
   }
@@ -2176,12 +2176,12 @@ void ThreadSafetyAnalyzer::runAnalysis(AnalysisDeclContext &AC) {
 
     // FIXME -- Loc can be wrong here.
     for (const auto &Mu : ExclusiveLocksToAdd) {
-      auto Entry = llvm::make_unique<LockableFactEntry>(Mu, LK_Exclusive, Loc);
+      auto Entry = llvm37::make_unique<LockableFactEntry>(Mu, LK_Exclusive, Loc);
       Entry->setDeclared(true);
       addLock(InitialLockset, std::move(Entry), CapDiagKind, true);
     }
     for (const auto &Mu : SharedLocksToAdd) {
-      auto Entry = llvm::make_unique<LockableFactEntry>(Mu, LK_Shared, Loc);
+      auto Entry = llvm37::make_unique<LockableFactEntry>(Mu, LK_Shared, Loc);
       Entry->setDeclared(true);
       addLock(InitialLockset, std::move(Entry), CapDiagKind, true);
     }
@@ -2353,10 +2353,10 @@ void ThreadSafetyAnalyzer::runAnalysis(AnalysisDeclContext &AC) {
   // issue the appropriate warning.
   // FIXME: the location here is not quite right.
   for (const auto &Lock : ExclusiveLocksAcquired)
-    ExpectedExitSet.addLock(FactMan, llvm::make_unique<LockableFactEntry>(
+    ExpectedExitSet.addLock(FactMan, llvm37::make_unique<LockableFactEntry>(
                                          Lock, LK_Exclusive, D->getLocation()));
   for (const auto &Lock : SharedLocksAcquired)
-    ExpectedExitSet.addLock(FactMan, llvm::make_unique<LockableFactEntry>(
+    ExpectedExitSet.addLock(FactMan, llvm37::make_unique<LockableFactEntry>(
                                          Lock, LK_Shared, D->getLocation()));
   for (const auto &Lock : LocksReleased)
     ExpectedExitSet.removeLock(FactMan, Lock);
@@ -2397,5 +2397,5 @@ LockKind threadSafety::getLockKindFromAccessKind(AccessKind AK) {
     case AK_Written :
       return LK_Exclusive;
   }
-  llvm_unreachable("Unknown AccessKind");
+  llvm37_unreachable("Unknown AccessKind");
 }

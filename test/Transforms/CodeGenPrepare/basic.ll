@@ -9,7 +9,7 @@ target triple = "x86_64-apple-darwin10.0.0"
 ; rdar://8785296
 define i32 @test1(i8* %ptr) nounwind ssp noredzone align 2 {
 entry:
-  %0 = tail call i64 @llvm.objectsize.i64(i8* %ptr, i1 false)
+  %0 = tail call i64 @llvm37.objectsize.i64(i8* %ptr, i1 false)
   %1 = icmp ugt i64 %0, 3
   br i1 %1, label %T, label %trap
 
@@ -17,7 +17,7 @@ entry:
 ; CHECK-NOT: br label %
 
 trap:                                             ; preds = %0, %entry
-  tail call void @llvm.trap() noreturn nounwind
+  tail call void @llvm37.trap() noreturn nounwind
   unreachable
 
 T:
@@ -25,6 +25,6 @@ T:
   ret i32 4
 }
 
-declare i64 @llvm.objectsize.i64(i8*, i1) nounwind readonly
+declare i64 @llvm37.objectsize.i64(i8*, i1) nounwind readonly
 
-declare void @llvm.trap() nounwind
+declare void @llvm37.trap() nounwind

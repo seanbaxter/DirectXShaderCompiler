@@ -1,6 +1,6 @@
 ; RUN: opt < %s -simplifycfg -S | FileCheck %s
 
-; In PR17073 ( http://llvm.org/pr17073 ), we illegally hoisted an operation that can trap.
+; In PR17073 ( http://llvm37.org/pr17073 ), we illegally hoisted an operation that can trap.
 ; The first test confirms that we don't do that when the trapping op is reached by the current BB (block1).
 ; The second test confirms that we don't do that when the trapping op is reached by the previous BB (entry).
 ; The third test confirms that we can still do this optimization for an operation (add) that doesn't trap.

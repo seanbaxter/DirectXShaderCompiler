@@ -1,6 +1,6 @@
 //===- MergeFunctions.cpp - Merge identical functions ---------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -81,29 +81,29 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Transforms/IPO.h"
-#include "llvm/ADT/DenseSet.h"
-#include "llvm/ADT/FoldingSet.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/SmallSet.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/IR/CallSite.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/IRBuilder.h"
-#include "llvm/IR/InlineAsm.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/Operator.h"
-#include "llvm/IR/ValueHandle.h"
-#include "llvm/Pass.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/Transforms/IPO.h"
+#include "llvm37/ADT/DenseSet.h"
+#include "llvm37/ADT/FoldingSet.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/SmallSet.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/IR/CallSite.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/IR/IRBuilder.h"
+#include "llvm37/IR/InlineAsm.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/Operator.h"
+#include "llvm37/IR/ValueHandle.h"
+#include "llvm37/Pass.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <vector>
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "mergefunc"
 
@@ -341,7 +341,7 @@ private:
   /// Then both Left and Right are to be expanded and their element types will
   /// be checked with the same way. If we get Res != 0 on some stage, return it.
   /// Otherwise return 0.
-  /// 6. For all other cases put llvm_unreachable.
+  /// 6. For all other cases put llvm37_unreachable.
   int cmpTypes(Type *TyL, Type *TyR) const;
 
   int cmpNumbers(uint64_t L, uint64_t R) const;
@@ -641,7 +641,7 @@ int FunctionComparator::cmpTypes(Type *TyL, Type *TyR) const {
 
   switch (TyL->getTypeID()) {
   default:
-    llvm_unreachable("Unknown type!");
+    llvm37_unreachable("Unknown type!");
     // Fall through in Release mode.
   case Type::IntegerTyID:
   case Type::VectorTyID:
@@ -761,8 +761,8 @@ int FunctionComparator::cmpOperations(const Instruction *L,
     if (int Res =
             cmpNumbers(LI->getSynchScope(), cast<LoadInst>(R)->getSynchScope()))
       return Res;
-    return cmpNumbers((uint64_t)LI->getMetadata(LLVMContext::MD_range),
-                      (uint64_t)cast<LoadInst>(R)->getMetadata(LLVMContext::MD_range));
+    return cmpNumbers((uint64_t)LI->getMetadata(LLVM37Context::MD_range),
+                      (uint64_t)cast<LoadInst>(R)->getMetadata(LLVM37Context::MD_range));
   }
   if (const StoreInst *SI = dyn_cast<StoreInst>(L)) {
     if (int Res =
@@ -786,8 +786,8 @@ int FunctionComparator::cmpOperations(const Instruction *L,
             cmpAttrs(CI->getAttributes(), cast<CallInst>(R)->getAttributes()))
       return Res;
     return cmpNumbers(
-        (uint64_t)CI->getMetadata(LLVMContext::MD_range),
-        (uint64_t)cast<CallInst>(R)->getMetadata(LLVMContext::MD_range));
+        (uint64_t)CI->getMetadata(LLVM37Context::MD_range),
+        (uint64_t)cast<CallInst>(R)->getMetadata(LLVM37Context::MD_range));
   }
   if (const InvokeInst *CI = dyn_cast<InvokeInst>(L)) {
     if (int Res = cmpNumbers(CI->getCallingConv(),
@@ -797,8 +797,8 @@ int FunctionComparator::cmpOperations(const Instruction *L,
             cmpAttrs(CI->getAttributes(), cast<InvokeInst>(R)->getAttributes()))
       return Res;
     return cmpNumbers(
-        (uint64_t)CI->getMetadata(LLVMContext::MD_range),
-        (uint64_t)cast<InvokeInst>(R)->getMetadata(LLVMContext::MD_range));
+        (uint64_t)CI->getMetadata(LLVM37Context::MD_range),
+        (uint64_t)cast<InvokeInst>(R)->getMetadata(LLVM37Context::MD_range));
   }
   if (const InsertValueInst *IVI = dyn_cast<InsertValueInst>(L)) {
     ArrayRef<unsigned> LIndices = IVI->getIndices();
@@ -1036,7 +1036,7 @@ int FunctionComparator::compare() {
                                     ArgLE = FnL->arg_end();
        ArgLI != ArgLE; ++ArgLI, ++ArgRI) {
     if (cmpValues(ArgLI, ArgRI) != 0)
-      llvm_unreachable("Arguments repeat!");
+      llvm37_unreachable("Arguments repeat!");
   }
 
   // We do a CFG-ordered walk since the actual ordering of the blocks in the
@@ -1150,7 +1150,7 @@ private:
 char MergeFunctions::ID = 0;
 INITIALIZE_PASS(MergeFunctions, "mergefunc", "Merge Functions", false, false)
 
-ModulePass *llvm::createMergeFunctionsPass() {
+ModulePass *llvm37::createMergeFunctionsPass() {
   return new MergeFunctions();
 }
 

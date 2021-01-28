@@ -1,6 +1,6 @@
 //=- IvarInvalidationChecker.cpp - -*- C++ -------------------------------*-==//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -35,9 +35,9 @@
 #include "clang/StaticAnalyzer/Core/BugReporter/BugReporter.h"
 #include "clang/StaticAnalyzer/Core/Checker.h"
 #include "clang/StaticAnalyzer/Core/PathSensitive/AnalysisManager.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/SetVector.h"
-#include "llvm/ADT/SmallString.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/SetVector.h"
+#include "llvm37/ADT/SmallString.h"
 
 using namespace clang;
 using namespace ento;
@@ -56,12 +56,12 @@ struct ChecksFilter {
 
 class IvarInvalidationCheckerImpl {
 
-  typedef llvm::SmallSetVector<const ObjCMethodDecl*, 2> MethodSet;
-  typedef llvm::DenseMap<const ObjCMethodDecl*,
+  typedef llvm37::SmallSetVector<const ObjCMethodDecl*, 2> MethodSet;
+  typedef llvm37::DenseMap<const ObjCMethodDecl*,
                          const ObjCIvarDecl*> MethToIvarMapTy;
-  typedef llvm::DenseMap<const ObjCPropertyDecl*,
+  typedef llvm37::DenseMap<const ObjCPropertyDecl*,
                          const ObjCIvarDecl*> PropToIvarMapTy;
-  typedef llvm::DenseMap<const ObjCIvarDecl*,
+  typedef llvm37::DenseMap<const ObjCIvarDecl*,
                          const ObjCPropertyDecl*> IvarToPropMapTy;
 
 
@@ -95,7 +95,7 @@ class IvarInvalidationCheckerImpl {
     }
   };
 
-  typedef llvm::DenseMap<const ObjCIvarDecl*, InvalidationInfo> IvarSet;
+  typedef llvm37::DenseMap<const ObjCIvarDecl*, InvalidationInfo> IvarSet;
 
   /// Statement visitor, which walks the method body and flags the ivars
   /// referenced in it (either directly or via property).
@@ -199,7 +199,7 @@ class IvarInvalidationCheckerImpl {
       const ObjCIvarDecl **FirstIvarDecl);
 
   /// Print ivar name or the property if the given ivar backs a property.
-  static void printIvar(llvm::raw_svector_ostream &os,
+  static void printIvar(llvm37::raw_svector_ostream &os,
                         const ObjCIvarDecl *IvarDecl,
                         const IvarToPropMapTy &IvarToPopertyMap);
 
@@ -333,7 +333,7 @@ const ObjCIvarDecl *IvarInvalidationCheckerImpl::findPropertyBackingIvar(
 
     SmallString<128> PropNameWithUnderscore;
     {
-      llvm::raw_svector_ostream os(PropNameWithUnderscore);
+      llvm37::raw_svector_ostream os(PropNameWithUnderscore);
       os << '_' << PropName;
     }
     if (IvarName == PropNameWithUnderscore)
@@ -346,7 +346,7 @@ const ObjCIvarDecl *IvarInvalidationCheckerImpl::findPropertyBackingIvar(
   return nullptr;
 }
 
-void IvarInvalidationCheckerImpl::printIvar(llvm::raw_svector_ostream &os,
+void IvarInvalidationCheckerImpl::printIvar(llvm37::raw_svector_ostream &os,
                                       const ObjCIvarDecl *IvarDecl,
                                       const IvarToPropMapTy &IvarToPopertyMap) {
   if (IvarDecl->getSynthesize()) {
@@ -533,7 +533,7 @@ void IvarInvalidationCheckerImpl::reportNoInvalidationMethod(
     const IvarToPropMapTy &IvarToPopertyMap,
     const ObjCInterfaceDecl *InterfaceD, bool MissingDeclaration) const {
   SmallString<128> sbuf;
-  llvm::raw_svector_ostream os(sbuf);
+  llvm37::raw_svector_ostream os(sbuf);
   assert(FirstIvarDecl);
   printIvar(os, FirstIvarDecl, IvarToPopertyMap);
   os << "needs to be invalidated; ";
@@ -556,7 +556,7 @@ reportIvarNeedsInvalidation(const ObjCIvarDecl *IvarD,
                             const IvarToPropMapTy &IvarToPopertyMap,
                             const ObjCMethodDecl *MethodD) const {
   SmallString<128> sbuf;
-  llvm::raw_svector_ostream os(sbuf);
+  llvm37::raw_svector_ostream os(sbuf);
   printIvar(os, IvarD, IvarToPopertyMap);
   os << "needs to be invalidated or set to nil";
   if (MethodD) {

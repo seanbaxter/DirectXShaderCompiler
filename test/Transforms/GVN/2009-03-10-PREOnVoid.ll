@@ -4,12 +4,12 @@
 ; ModuleID = 'bugpoint-reduced-simplified.bc'
 target datalayout = "e-p:32:32:32-i1:8:8-i8:8:8-i16:16:16-i32:32:32-i64:32:64-f32:32:32-f64:32:64-v64:64:64-v128:128:128-a0:0:64-f80:32:32"
 target triple = "i386-pc-linux-gnu"
-	%llvm.dbg.anchor.type = type { i32, i32 }
+	%llvm37.dbg.anchor.type = type { i32, i32 }
 	%"struct.__gnu_cxx::hash<void*>" = type <{ i8 }>
 	%struct.__sched_param = type { i32 }
 	%struct._pthread_descr_struct = type opaque
 	%struct.pthread_attr_t = type { i32, i32, %struct.__sched_param, i32, i32, i32, i32, i8*, i32 }
-	%struct.pthread_mutex_t = type { i32, i32, %struct._pthread_descr_struct*, i32, %llvm.dbg.anchor.type }
+	%struct.pthread_mutex_t = type { i32, i32, %struct._pthread_descr_struct*, i32, %llvm37.dbg.anchor.type }
 	%"struct.std::_Rb_tree<void*,std::pair<void* const, std::vector<ShadowInfo, std::allocator<ShadowInfo> > >,std::_Select1st<std::pair<void* const, std::vector<ShadowInfo, std::allocator<ShadowInfo> > > >,std::less<void*>,std::allocator<std::pair<void* const, std::vector<ShadowInfo, std::allocator<ShadowInfo> > > > >" = type { %"struct.std::_Rb_tree<void*,std::pair<void* const, std::vector<ShadowInfo, std::allocator<ShadowInfo> > >,std::_Select1st<std::pair<void* const, std::vector<ShadowInfo, std::allocator<ShadowInfo> > > >,std::less<void*>,std::allocator<std::pair<void* const, std::vector<ShadowInfo, std::allocator<ShadowInfo> > > > >::_Rb_tree_impl<std::less<void*>,false>" }
 	%"struct.std::_Rb_tree<void*,std::pair<void* const, std::vector<ShadowInfo, std::allocator<ShadowInfo> > >,std::_Select1st<std::pair<void* const, std::vector<ShadowInfo, std::allocator<ShadowInfo> > > >,std::less<void*>,std::allocator<std::pair<void* const, std::vector<ShadowInfo, std::allocator<ShadowInfo> > > > >::_Rb_tree_impl<std::less<void*>,false>" = type { %"struct.__gnu_cxx::hash<void*>", %"struct.std::_Rb_tree_node_base", i32 }
 	%"struct.std::_Rb_tree_iterator<std::pair<void* const, std::vector<ShadowInfo, std::allocator<ShadowInfo> > > >" = type { %"struct.std::_Rb_tree_node_base"* }

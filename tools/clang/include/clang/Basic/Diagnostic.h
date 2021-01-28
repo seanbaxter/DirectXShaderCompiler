@@ -1,6 +1,6 @@
 //===--- Diagnostic.h - C Language Family Diagnostic Handling ---*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -12,17 +12,17 @@
 ///
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_BASIC_DIAGNOSTIC_H
-#define LLVM_CLANG_BASIC_DIAGNOSTIC_H
+#ifndef LLVM37_CLANG_BASIC_DIAGNOSTIC_H
+#define LLVM37_CLANG_BASIC_DIAGNOSTIC_H
 
 #include "clang/Basic/DiagnosticIDs.h"
 #include "clang/Basic/DiagnosticOptions.h"
 #include "clang/Basic/SourceLocation.h"
 #include "clang/Basic/Specifiers.h"
-#include "llvm/ADT/ArrayRef.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/IntrusiveRefCntPtr.h"
-#include "llvm/ADT/iterator_range.h"
+#include "llvm37/ADT/ArrayRef.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/IntrusiveRefCntPtr.h"
+#include "llvm37/ADT/iterator_range.h"
 #include <list>
 #include <vector>
 
@@ -203,11 +203,11 @@ private:
   /// the state so that we know what is the diagnostic state at any given
   /// source location.
   class DiagState {
-    llvm::DenseMap<unsigned, DiagnosticMapping> DiagMap;
+    llvm37::DenseMap<unsigned, DiagnosticMapping> DiagMap;
 
   public:
-    typedef llvm::DenseMap<unsigned, DiagnosticMapping>::iterator iterator;
-    typedef llvm::DenseMap<unsigned, DiagnosticMapping>::const_iterator
+    typedef llvm37::DenseMap<unsigned, DiagnosticMapping>::iterator iterator;
+    typedef llvm37::DenseMap<unsigned, DiagnosticMapping>::const_iterator
     const_iterator;
 
     void setMapping(diag::kind Diag, DiagnosticMapping Info) {
@@ -357,7 +357,7 @@ public:
   /// \brief Retrieve the diagnostic options.
   DiagnosticOptions &getDiagnosticOptions() const { return *DiagOpts; }
 
-  typedef llvm::iterator_range<DiagState::const_iterator> diag_mapping_range;
+  typedef llvm37::iterator_range<DiagState::const_iterator> diag_mapping_range;
 
   /// \brief Get the current set of diagnostic mappings.
   diag_mapping_range getDiagnosticMappings() const {
@@ -870,7 +870,7 @@ class DiagnosticBuilder {
   /// \brief Status variable indicating if this diagnostic is still active.
   ///
   // NOTE: This field is redundant with DiagObj (IsActive iff (DiagObj == 0)),
-  // but LLVM is not currently smart enough to eliminate the null check that
+  // but LLVM37 is not currently smart enough to eliminate the null check that
   // Emit() would end up with if we used that as our status variable.
   mutable bool IsActive;
 
@@ -1293,7 +1293,7 @@ public:
   unsigned range_size() const { return Ranges.size(); }
   
   ArrayRef<CharSourceRange> getRanges() const {
-    return llvm::makeArrayRef(Ranges);
+    return llvm37::makeArrayRef(Ranges);
   }
 
 
@@ -1303,7 +1303,7 @@ public:
   unsigned fixit_size() const { return FixIts.size(); }
   
   ArrayRef<FixItHint> getFixIts() const {
-    return llvm::makeArrayRef(FixIts);
+    return llvm37::makeArrayRef(FixIts);
   }
 };
 

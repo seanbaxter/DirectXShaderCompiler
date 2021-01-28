@@ -1,6 +1,6 @@
 //===--- AST.h - "Umbrella" header for AST library --------------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,8 +11,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_AST_AST_H
-#define LLVM_CLANG_AST_AST_H
+#ifndef LLVM37_CLANG_AST_AST_H
+#define LLVM37_CLANG_AST_AST_H
 
 // This header exports all AST interfaces.
 #include "clang/AST/ASTContext.h"

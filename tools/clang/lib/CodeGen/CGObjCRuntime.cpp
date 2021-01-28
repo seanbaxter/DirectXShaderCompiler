@@ -1,6 +1,6 @@
 //==- CGObjCRuntime.cpp - Interface to Shared Objective-C Runtime Features ==//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -21,7 +21,7 @@
 #include "clang/AST/RecordLayout.h"
 #include "clang/AST/StmtObjC.h"
 #include "clang/CodeGen/CGFunctionInfo.h"
-#include "llvm/IR/CallSite.h"
+#include "llvm37/IR/CallSite.h"
 
 using namespace clang;
 using namespace CodeGen;
@@ -91,18 +91,18 @@ unsigned CGObjCRuntime::ComputeBitfieldBitOffset(
 
 LValue CGObjCRuntime::EmitValueForIvarAtOffset(CodeGen::CodeGenFunction &CGF,
                                                const ObjCInterfaceDecl *OID,
-                                               llvm::Value *BaseValue,
+                                               llvm37::Value *BaseValue,
                                                const ObjCIvarDecl *Ivar,
                                                unsigned CVRQualifiers,
-                                               llvm::Value *Offset) {
+                                               llvm37::Value *Offset) {
   // Compute (type*) ( (char *) BaseValue + Offset)
   QualType IvarTy = Ivar->getType();
-  llvm::Type *LTy = CGF.CGM.getTypes().ConvertTypeForMem(IvarTy);
-  llvm::Value *V = CGF.Builder.CreateBitCast(BaseValue, CGF.Int8PtrTy);
+  llvm37::Type *LTy = CGF.CGM.getTypes().ConvertTypeForMem(IvarTy);
+  llvm37::Value *V = CGF.Builder.CreateBitCast(BaseValue, CGF.Int8PtrTy);
   V = CGF.Builder.CreateInBoundsGEP(V, Offset, "add.ptr");
 
   if (!Ivar->isBitField()) {
-    V = CGF.Builder.CreateBitCast(V, llvm::PointerType::getUnqual(LTy));
+    V = CGF.Builder.CreateBitCast(V, llvm37::PointerType::getUnqual(LTy));
     LValue LV = CGF.MakeNaturalAlignAddrLValue(V, IvarTy);
     LV.getQuals().addCVRQualifiers(CVRQualifiers);
     return LV;
@@ -128,7 +128,7 @@ LValue CGObjCRuntime::EmitValueForIvarAtOffset(CodeGen::CodeGenFunction &CGF,
   uint64_t BitFieldSize = Ivar->getBitWidthValue(CGF.getContext());
   CharUnits StorageSize =
     CGF.CGM.getContext().toCharUnitsFromBits(
-      llvm::RoundUpToAlignment(BitOffset + BitFieldSize, AlignmentBits));
+      llvm37::RoundUpToAlignment(BitOffset + BitFieldSize, AlignmentBits));
   CharUnits Alignment = CGF.CGM.getContext().toCharUnitsFromBits(AlignmentBits);
 
   // Allocate a new CGBitFieldInfo object to describe this access.
@@ -143,7 +143,7 @@ LValue CGObjCRuntime::EmitValueForIvarAtOffset(CodeGen::CodeGenFunction &CGF,
                              CharUnits::fromQuantity(0)));
 
   V = CGF.Builder.CreateBitCast(V,
-                                llvm::Type::getIntNPtrTy(CGF.getLLVMContext(),
+                                llvm37::Type::getIntNPtrTy(CGF.getLLVM37Context(),
                                                          Info->StorageSize));
   return LValue::MakeBitfield(V, *Info,
                               IvarTy.withCVRQualifiers(CVRQualifiers),
@@ -154,15 +154,15 @@ namespace {
   struct CatchHandler {
     const VarDecl *Variable;
     const Stmt *Body;
-    llvm::BasicBlock *Block;
-    llvm::Constant *TypeInfo;
+    llvm37::BasicBlock *Block;
+    llvm37::Constant *TypeInfo;
   };
 
   struct CallObjCEndCatch : EHScopeStack::Cleanup {
-    CallObjCEndCatch(bool MightThrow, llvm::Value *Fn) :
+    CallObjCEndCatch(bool MightThrow, llvm37::Value *Fn) :
       MightThrow(MightThrow), Fn(Fn) {}
     bool MightThrow;
-    llvm::Value *Fn;
+    llvm37::Value *Fn;
 
     void Emit(CodeGenFunction &CGF, Flags flags) override {
       if (!MightThrow) {
@@ -178,9 +178,9 @@ namespace {
 
 void CGObjCRuntime::EmitTryCatchStmt(CodeGenFunction &CGF,
                                      const ObjCAtTryStmt &S,
-                                     llvm::Constant *beginCatchFn,
-                                     llvm::Constant *endCatchFn,
-                                     llvm::Constant *exceptionRethrowFn) {
+                                     llvm37::Constant *beginCatchFn,
+                                     llvm37::Constant *endCatchFn,
+                                     llvm37::Constant *exceptionRethrowFn) {
   // Jump destination for falling out of catch bodies.
   CodeGenFunction::JumpDest Cont;
   if (S.getNumCatchStmts())
@@ -235,13 +235,13 @@ void CGObjCRuntime::EmitTryCatchStmt(CodeGenFunction &CGF,
     CatchHandler &Handler = Handlers[I];
 
     CGF.EmitBlock(Handler.Block);
-    llvm::Value *RawExn = CGF.getExceptionFromSlot();
+    llvm37::Value *RawExn = CGF.getExceptionFromSlot();
 
     // Enter the catch.
-    llvm::Value *Exn = RawExn;
+    llvm37::Value *Exn = RawExn;
     if (beginCatchFn) {
       Exn = CGF.Builder.CreateCall(beginCatchFn, RawExn, "exn.adjusted");
-      cast<llvm::CallInst>(Exn)->setDoesNotThrow();
+      cast<llvm37::CallInst>(Exn)->setDoesNotThrow();
     }
 
     CodeGenFunction::LexicalScope cleanups(CGF, Handler.Body->getSourceRange());
@@ -257,12 +257,12 @@ void CGObjCRuntime::EmitTryCatchStmt(CodeGenFunction &CGF,
 
     // Bind the catch parameter if it exists.
     if (const VarDecl *CatchParam = Handler.Variable) {
-      llvm::Type *CatchType = CGF.ConvertType(CatchParam->getType());
-      llvm::Value *CastExn = CGF.Builder.CreateBitCast(Exn, CatchType);
+      llvm37::Type *CatchType = CGF.ConvertType(CatchParam->getType());
+      llvm37::Value *CastExn = CGF.Builder.CreateBitCast(Exn, CatchType);
 
       CGF.EmitAutoVarDecl(*CatchParam);
 
-      llvm::Value *CatchParamAddr = CGF.GetAddrOfLocalVar(CatchParam);
+      llvm37::Value *CatchParamAddr = CGF.GetAddrOfLocalVar(CatchParam);
 
       switch (CatchParam->getType().getQualifiers().getObjCLifetime()) {
       case Qualifiers::OCL_Strong:
@@ -304,9 +304,9 @@ void CGObjCRuntime::EmitTryCatchStmt(CodeGenFunction &CGF,
 
 namespace {
   struct CallSyncExit : EHScopeStack::Cleanup {
-    llvm::Value *SyncExitFn;
-    llvm::Value *SyncArg;
-    CallSyncExit(llvm::Value *SyncExitFn, llvm::Value *SyncArg)
+    llvm37::Value *SyncExitFn;
+    llvm37::Value *SyncArg;
+    CallSyncExit(llvm37::Value *SyncExitFn, llvm37::Value *SyncArg)
       : SyncExitFn(SyncExitFn), SyncArg(SyncArg) {}
 
     void Emit(CodeGenFunction &CGF, Flags flags) override {
@@ -317,14 +317,14 @@ namespace {
 
 void CGObjCRuntime::EmitAtSynchronizedStmt(CodeGenFunction &CGF,
                                            const ObjCAtSynchronizedStmt &S,
-                                           llvm::Function *syncEnterFn,
-                                           llvm::Function *syncExitFn) {
+                                           llvm37::Function *syncEnterFn,
+                                           llvm37::Function *syncExitFn) {
   CodeGenFunction::RunCleanupsScope cleanups(CGF);
 
   // Evaluate the lock operand.  This is guaranteed to dominate the
   // ARC release and lock-release cleanups.
   const Expr *lockExpr = S.getSynchExpr();
-  llvm::Value *lock;
+  llvm37::Value *lock;
   if (CGF.getLangOpts().ObjCAutoRefCount) {
     lock = CGF.EmitARCRetainScalarExpr(lockExpr);
     lock = CGF.EmitObjCConsumeObject(lockExpr->getType(), lock);
@@ -359,7 +359,7 @@ CGObjCRuntime::getMessageSendInfo(const ObjCMethodDecl *method,
     const CGFunctionInfo &signature =
       CGM.getTypes().arrangeObjCMessageSendSignature(method, callArgs[0].Ty);
 
-    llvm::PointerType *signatureType =
+    llvm37::PointerType *signatureType =
       CGM.getTypes().GetFunctionType(signature)->getPointerTo();
 
     // If that's not variadic, there's no need to recompute the ABI
@@ -383,7 +383,7 @@ CGObjCRuntime::getMessageSendInfo(const ObjCMethodDecl *method,
                                            RequiredArgs::All);
 
   // Derive the signature to call from that.
-  llvm::PointerType *signatureType =
+  llvm37::PointerType *signatureType =
     CGM.getTypes().GetFunctionType(argsInfo)->getPointerTo();
   return MessageSendInfo(argsInfo, signatureType);
 }

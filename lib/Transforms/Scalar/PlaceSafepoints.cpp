@@ -1,6 +1,6 @@
 //===- PlaceSafepoints.cpp - Place GC Safepoints --------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -48,38 +48,38 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Pass.h"
-#include "llvm/IR/LegacyPassManager.h"
-#include "llvm/ADT/SetOperations.h"
-#include "llvm/ADT/SetVector.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/ADT/StringRef.h"
-#include "llvm/Analysis/LoopPass.h"
-#include "llvm/Analysis/LoopInfo.h"
-#include "llvm/Analysis/ScalarEvolution.h"
-#include "llvm/Analysis/ScalarEvolutionExpressions.h"
-#include "llvm/Analysis/CFG.h"
-#include "llvm/Analysis/InstructionSimplify.h"
-#include "llvm/IR/BasicBlock.h"
-#include "llvm/IR/CallSite.h"
-#include "llvm/IR/Dominators.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/IRBuilder.h"
-#include "llvm/IR/InstIterator.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/Intrinsics.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/Statepoint.h"
-#include "llvm/IR/Value.h"
-#include "llvm/IR/Verifier.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Transforms/Scalar.h"
-#include "llvm/Transforms/Utils/BasicBlockUtils.h"
-#include "llvm/Transforms/Utils/Cloning.h"
-#include "llvm/Transforms/Utils/Local.h"
+#include "llvm37/Pass.h"
+#include "llvm37/IR/LegacyPassManager.h"
+#include "llvm37/ADT/SetOperations.h"
+#include "llvm37/ADT/SetVector.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/ADT/StringRef.h"
+#include "llvm37/Analysis/LoopPass.h"
+#include "llvm37/Analysis/LoopInfo.h"
+#include "llvm37/Analysis/ScalarEvolution.h"
+#include "llvm37/Analysis/ScalarEvolutionExpressions.h"
+#include "llvm37/Analysis/CFG.h"
+#include "llvm37/Analysis/InstructionSimplify.h"
+#include "llvm37/IR/BasicBlock.h"
+#include "llvm37/IR/CallSite.h"
+#include "llvm37/IR/Dominators.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/IRBuilder.h"
+#include "llvm37/IR/InstIterator.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/Intrinsics.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/Statepoint.h"
+#include "llvm37/IR/Value.h"
+#include "llvm37/IR/Verifier.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Transforms/Scalar.h"
+#include "llvm37/Transforms/Utils/BasicBlockUtils.h"
+#include "llvm37/Transforms/Utils/Cloning.h"
+#include "llvm37/Transforms/Utils/Local.h"
 
 #define DEBUG_TYPE "safepoint-placement"
 STATISTIC(NumEntrySafepoints, "Number of entry safepoints inserted");
@@ -89,7 +89,7 @@ STATISTIC(NumBackedgeSafepoints, "Number of backedge safepoints inserted");
 STATISTIC(CallInLoop, "Number of loops w/o safepoints due to calls in loop");
 STATISTIC(FiniteExecution, "Number of loops w/o safepoints finite execution");
 
-using namespace llvm;
+using namespace llvm37;
 
 // Ignore oppurtunities to avoid placing safepoints on backedges, useful for
 // validation
@@ -395,11 +395,11 @@ static bool doesNotRequireEntrySafepointBefore(const CallSite &CS) {
       // amount or run forever.
       return false;
     default:
-      // Most LLVM intrinsics are things which do not expand to actual calls, or
+      // Most LLVM37 intrinsics are things which do not expand to actual calls, or
       // at least if they do, are leaf functions that cause only finite stack
       // growth.  In particular, the optimizer likes to form things like memsets
       // out of stores in the original IR.  Another important example is
-      // llvm.localescape which must occur in the entry block.  Inserting a
+      // llvm37.localescape which must occur in the entry block.  Inserting a
       // safepoint before it is not legal since it could push the localescape
       // out of the entry block.
       return true;
@@ -741,7 +741,7 @@ bool PlaceSafepoints::runOnFunction(Function &F) {
 char PlaceBackedgeSafepointsImpl::ID = 0;
 char PlaceSafepoints::ID = 0;
 
-FunctionPass *llvm::createPlaceSafepointsPass() {
+FunctionPass *llvm37::createPlaceSafepointsPass() {
   return new PlaceSafepoints();
 }
 
@@ -763,7 +763,7 @@ INITIALIZE_PASS_END(PlaceSafepoints, "place-safepoints", "Place Safepoints",
 static bool isGCLeafFunction(const CallSite &CS) {
   Instruction *inst = CS.getInstruction();
   if (isa<IntrinsicInst>(inst)) {
-    // Most LLVM intrinsics are things which can never take a safepoint.
+    // Most LLVM37 intrinsics are things which can never take a safepoint.
     // As a result, we don't need to have the stack parsable at the
     // callsite.  This is a highly useful optimization since intrinsic
     // calls are fairly prevelent, particularly in debug builds.
@@ -973,7 +973,7 @@ static Value *ReplaceWithStatepoint(const CallSite &CS, /* to replace */
     Instruction *IP = &*(NormalDest->getFirstInsertionPt());
     Builder.SetInsertPoint(IP);
   } else {
-    llvm_unreachable("unexpect type of CallSite");
+    llvm37_unreachable("unexpect type of CallSite");
   }
   assert(Token);
 

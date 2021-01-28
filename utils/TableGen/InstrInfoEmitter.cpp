@@ -1,6 +1,6 @@
 //===- InstrInfoEmitter.cpp - Generate a Instruction Set Desc. ------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -17,15 +17,15 @@
 #include "CodeGenTarget.h"
 #include "SequenceToOffsetTable.h"
 #include "TableGenBackends.h"
-#include "llvm/ADT/StringExtras.h"
-#include "llvm/TableGen/Error.h"
-#include "llvm/TableGen/Record.h"
-#include "llvm/TableGen/TableGenBackend.h"
+#include "llvm37/ADT/StringExtras.h"
+#include "llvm37/TableGen/Error.h"
+#include "llvm37/TableGen/Record.h"
+#include "llvm37/TableGen/TableGenBackend.h"
 #include <algorithm>
 #include <cstdio>
 #include <map>
 #include <vector>
-using namespace llvm;
+using namespace llvm37;
 
 namespace {
 class InstrInfoEmitter {
@@ -225,7 +225,7 @@ void InstrInfoEmitter::initOperandMapData(
 /// name.
 ///
 /// This code generates:
-/// - An enum in the llvm::TargetNamespace::OpName namespace, with one entry
+/// - An enum in the llvm37::TargetNamespace::OpName namespace, with one entry
 ///   for each operand name.
 /// - A 2-dimensional table called OperandMap for mapping OpName enum values to
 ///   operand indices.
@@ -247,7 +247,7 @@ void InstrInfoEmitter::emitOperandNameMappings(raw_ostream &OS,
 
   OS << "#ifdef GET_INSTRINFO_OPERAND_ENUM\n";
   OS << "#undef GET_INSTRINFO_OPERAND_ENUM\n";
-  OS << "namespace llvm {\n";
+  OS << "namespace llvm37 {\n";
   OS << "namespace " << Namespace << " {\n";
   OS << "namespace " << OpNameNS << " { \n";
   OS << "enum {\n";
@@ -258,14 +258,14 @@ void InstrInfoEmitter::emitOperandNameMappings(raw_ostream &OS,
   OS << "\n};\n";
   OS << "} // End namespace OpName\n";
   OS << "} // End namespace " << Namespace << "\n";
-  OS << "} // End namespace llvm\n";
+  OS << "} // End namespace llvm37\n";
   OS << "#endif //GET_INSTRINFO_OPERAND_ENUM\n";
 
   OS << "#ifdef GET_INSTRINFO_NAMED_OPS\n";
   OS << "#undef GET_INSTRINFO_NAMED_OPS\n";
-  OS << "namespace llvm {\n";
+  OS << "namespace llvm37 {\n";
   OS << "namespace " << Namespace << " {\n";
-  OS << "LLVM_READONLY\n";
+  OS << "LLVM37_READONLY\n";
   OS << "int16_t getNamedOperandIdx(uint16_t Opcode, uint16_t NamedIdx) {\n";
   if (!Operands.empty()) {
     OS << "  static const int16_t OperandMap [][" << Operands.size()
@@ -298,13 +298,13 @@ void InstrInfoEmitter::emitOperandNameMappings(raw_ostream &OS,
   }
   OS << "}\n";
   OS << "} // End namespace " << Namespace << "\n";
-  OS << "} // End namespace llvm\n";
+  OS << "} // End namespace llvm37\n";
   OS << "#endif //GET_INSTRINFO_NAMED_OPS\n";
 
 }
 
 /// Generate an enum for all the operand types for this target, under the
-/// llvm::TargetNamespace::OpTypes namespace.
+/// llvm37::TargetNamespace::OpTypes namespace.
 /// Operand types are all definitions derived of the Operand Target.td class.
 void InstrInfoEmitter::emitOperandTypesEnum(raw_ostream &OS,
                                             const CodeGenTarget &Target) {
@@ -314,7 +314,7 @@ void InstrInfoEmitter::emitOperandTypesEnum(raw_ostream &OS,
 
   OS << "\n#ifdef GET_INSTRINFO_OPERAND_TYPES_ENUM\n";
   OS << "#undef GET_INSTRINFO_OPERAND_TYPES_ENUM\n";
-  OS << "namespace llvm {\n";
+  OS << "namespace llvm37 {\n";
   OS << "namespace " << Namespace << " {\n";
   OS << "namespace OpTypes { \n";
   OS << "enum OperandType {\n";
@@ -329,7 +329,7 @@ void InstrInfoEmitter::emitOperandTypesEnum(raw_ostream &OS,
   OS << "  OPERAND_TYPE_LIST_END" << "\n};\n";
   OS << "} // End namespace OpTypes\n";
   OS << "} // End namespace " << Namespace << "\n";
-  OS << "} // End namespace llvm\n";
+  OS << "} // End namespace llvm37\n";
   OS << "#endif // GET_INSTRINFO_OPERAND_TYPES_ENUM\n";
 }
 
@@ -347,7 +347,7 @@ void InstrInfoEmitter::run(raw_ostream &OS) {
   OS << "\n#ifdef GET_INSTRINFO_MC_DESC\n";
   OS << "#undef GET_INSTRINFO_MC_DESC\n";
 
-  OS << "namespace llvm {\n\n";
+  OS << "namespace llvm37 {\n\n";
 
   CodeGenTarget &Target = CDP.getTargetInfo();
   const std::string &TargetName = Target.getName();
@@ -418,7 +418,7 @@ void InstrInfoEmitter::run(raw_ostream &OS) {
      << TargetName << "InstrNameIndices, " << TargetName << "InstrNameData, "
      << NumberedInstructions.size() << ");\n}\n\n";
 
-  OS << "} // End llvm namespace \n";
+  OS << "} // End llvm37 namespace \n";
 
   OS << "#endif // GET_INSTRINFO_MC_DESC\n\n";
 
@@ -427,20 +427,20 @@ void InstrInfoEmitter::run(raw_ostream &OS) {
   OS << "#undef GET_INSTRINFO_HEADER\n";
 
   std::string ClassName = TargetName + "GenInstrInfo";
-  OS << "namespace llvm {\n";
+  OS << "namespace llvm37 {\n";
   OS << "struct " << ClassName << " : public TargetInstrInfo {\n"
      << "  explicit " << ClassName
      << "(int CFSetupOpcode = -1, int CFDestroyOpcode = -1);\n"
      << "  virtual ~" << ClassName << "();\n"
      << "};\n";
-  OS << "} // End llvm namespace \n";
+  OS << "} // End llvm37 namespace \n";
 
   OS << "#endif // GET_INSTRINFO_HEADER\n\n";
 
   OS << "\n#ifdef GET_INSTRINFO_CTOR_DTOR\n";
   OS << "#undef GET_INSTRINFO_CTOR_DTOR\n";
 
-  OS << "namespace llvm {\n";
+  OS << "namespace llvm37 {\n";
   OS << "extern const MCInstrDesc " << TargetName << "Insts[];\n";
   OS << "extern const unsigned " << TargetName << "InstrNameIndices[];\n";
   OS << "extern const char " << TargetName << "InstrNameData[];\n";
@@ -451,7 +451,7 @@ void InstrInfoEmitter::run(raw_ostream &OS) {
      << "InstrNameIndices, " << TargetName << "InstrNameData, "
      << NumberedInstructions.size() << ");\n}\n"
      << ClassName << "::~" << ClassName << "() {}\n";
-  OS << "} // End llvm namespace \n";
+  OS << "} // End llvm37 namespace \n";
 
   OS << "#endif // GET_INSTRINFO_CTOR_DTOR\n\n";
 
@@ -568,7 +568,7 @@ void InstrInfoEmitter::emitEnums(raw_ostream &OS) {
   OS << "\n#ifdef GET_INSTRINFO_ENUM\n";
   OS << "#undef GET_INSTRINFO_ENUM\n";
 
-  OS << "namespace llvm {\n\n";
+  OS << "namespace llvm37 {\n\n";
 
   CodeGenTarget Target(Records);
 
@@ -597,16 +597,16 @@ void InstrInfoEmitter::emitEnums(raw_ostream &OS) {
   OS << "  };\n";
   OS << "} // End Sched namespace\n";
   OS << "} // End " << Namespace << " namespace\n";
-  OS << "} // End llvm namespace \n";
+  OS << "} // End llvm37 namespace \n";
 
   OS << "#endif // GET_INSTRINFO_ENUM\n\n";
 }
 
-namespace llvm {
+namespace llvm37 {
 
 void EmitInstrInfo(RecordKeeper &RK, raw_ostream &OS) {
   InstrInfoEmitter(RK).run(OS);
   EmitMapTable(RK, OS);
 }
 
-} // End llvm namespace
+} // End llvm37 namespace

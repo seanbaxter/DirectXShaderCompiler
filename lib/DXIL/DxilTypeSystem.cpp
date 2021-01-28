@@ -12,11 +12,11 @@
 #include "dxc/Support/Global.h"
 #include "dxc/Support/WinFunctions.h"
 
-#include "llvm/IR/Module.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/Support/raw_ostream.h"
 
-using namespace llvm;
+using namespace llvm37;
 using std::unique_ptr;
 using std::string;
 using std::vector;
@@ -55,10 +55,10 @@ void DxilFieldAnnotation::SetMatrixAnnotation(const DxilMatrixAnnotation &MA) { 
 bool DxilFieldAnnotation::HasResourceAttribute() const {
   return m_ResourceAttribute;
 }
-llvm::MDNode *DxilFieldAnnotation::GetResourceAttribute() const {
+llvm37::MDNode *DxilFieldAnnotation::GetResourceAttribute() const {
   return m_ResourceAttribute;
 }
-void DxilFieldAnnotation::SetResourceAttribute(llvm::MDNode *MD) {
+void DxilFieldAnnotation::SetResourceAttribute(llvm37::MDNode *MD) {
   m_ResourceAttribute = MD;
 }
 bool DxilFieldAnnotation::HasCBufferOffset() const { return m_CBufferOffset != UINT_MAX; }
@@ -69,7 +69,7 @@ const CompType &DxilFieldAnnotation::GetCompType() const { return m_CompType; }
 void DxilFieldAnnotation::SetCompType(CompType::Kind kind) { m_CompType = CompType(kind); }
 bool DxilFieldAnnotation::HasSemanticString() const { return !m_Semantic.empty(); }
 const std::string &DxilFieldAnnotation::GetSemanticString() const { return m_Semantic; }
-llvm::StringRef DxilFieldAnnotation::GetSemanticStringRef() const { return llvm::StringRef(m_Semantic); }
+llvm37::StringRef DxilFieldAnnotation::GetSemanticStringRef() const { return llvm37::StringRef(m_Semantic); }
 void DxilFieldAnnotation::SetSemanticString(const std::string &SemString) { m_Semantic = SemString; }
 bool DxilFieldAnnotation::HasInterpolationMode() const { return !m_InterpMode.IsUndefined(); }
 const InterpolationMode &DxilFieldAnnotation::GetInterpolationMode() const { return m_InterpMode; }
@@ -91,8 +91,8 @@ DxilTemplateArgAnnotation::DxilTemplateArgAnnotation()
 {}
 
 bool DxilTemplateArgAnnotation::IsType() const { return m_Type != nullptr; }
-const llvm::Type *DxilTemplateArgAnnotation::GetType() const { return m_Type; }
-void DxilTemplateArgAnnotation::SetType(const llvm::Type *pType) { m_Type = pType; }
+const llvm37::Type *DxilTemplateArgAnnotation::GetType() const { return m_Type; }
+void DxilTemplateArgAnnotation::SetType(const llvm37::Type *pType) { m_Type = pType; }
 
 bool DxilTemplateArgAnnotation::IsIntegral() const { return m_Type == nullptr; }
 int64_t DxilTemplateArgAnnotation::GetIntegral() const { return m_Integral; }
@@ -117,7 +117,7 @@ const DxilFieldAnnotation &DxilStructAnnotation::GetFieldAnnotation(unsigned Fie
 const StructType *DxilStructAnnotation::GetStructType() const {
   return m_pStructType;
 }
-void DxilStructAnnotation::SetStructType(const llvm::StructType *Ty) {
+void DxilStructAnnotation::SetStructType(const llvm37::StructType *Ty) {
   m_pStructType = Ty;
 }
 
@@ -294,7 +294,7 @@ StructType *DxilTypeSystem::GetUNormF32Type(unsigned NumComps) {
 }
 
 StructType *DxilTypeSystem::GetNormFloatType(CompType CT, unsigned NumComps) {
-  Type *pCompType = CT.GetLLVMType(m_pModule->getContext());
+  Type *pCompType = CT.GetLLVM37Type(m_pModule->getContext());
   DXASSERT_NOMSG(pCompType->isFloatTy());
   Type *pFieldType = pCompType;
   string TypeName;
@@ -316,7 +316,7 @@ StructType *DxilTypeSystem::GetNormFloatType(CompType CT, unsigned NumComps) {
   return pStructType;
 }
 
-void DxilTypeSystem::CopyTypeAnnotation(const llvm::Type *Ty,
+void DxilTypeSystem::CopyTypeAnnotation(const llvm37::Type *Ty,
                                         const DxilTypeSystem &src) {
   if (isa<PointerType>(Ty))
     Ty = Ty->getPointerElementType();
@@ -344,8 +344,8 @@ void DxilTypeSystem::CopyTypeAnnotation(const llvm::Type *Ty,
   }
 }
 
-void DxilTypeSystem::CopyFunctionAnnotation(const llvm::Function *pDstFunction,
-                                            const llvm::Function *pSrcFunction,
+void DxilTypeSystem::CopyFunctionAnnotation(const llvm37::Function *pDstFunction,
+                                            const llvm37::Function *pSrcFunction,
                                             const DxilTypeSystem &src) {
   const DxilFunctionAnnotation *annot = src.GetFunctionAnnotation(pSrcFunction);
   // Don't have annotation.
@@ -475,8 +475,8 @@ DXIL::SigPointKind SigPointFromInputQual(DxilParamInputQual Q, DXIL::ShaderKind 
   return DXIL::SigPointKind::Invalid;
 }
 
-void RemapSemantic(llvm::StringRef &oldSemName, llvm::StringRef &oldSemFullName, const char *newSemName,
-  DxilParameterAnnotation &paramInfo, llvm::LLVMContext &Context) {
+void RemapSemantic(llvm37::StringRef &oldSemName, llvm37::StringRef &oldSemFullName, const char *newSemName,
+  DxilParameterAnnotation &paramInfo, llvm37::LLVM37Context &Context) {
   // format deprecation warning
   Context.emitWarning(Twine("DX9-style semantic \"") + oldSemName + Twine("\" mapped to DX10 system semantic \"") + newSemName +
     Twine("\" due to -Gec flag. This functionality is deprecated in newer language versions."));
@@ -491,12 +491,12 @@ void RemapSemantic(llvm::StringRef &oldSemName, llvm::StringRef &oldSemFullName,
   paramInfo.SetSemanticString(newSemNameStr);
 }
 
-void RemapObsoleteSemantic(DxilParameterAnnotation &paramInfo, DXIL::SigPointKind sigPoint, llvm::LLVMContext &Context) {
+void RemapObsoleteSemantic(DxilParameterAnnotation &paramInfo, DXIL::SigPointKind sigPoint, llvm37::LLVM37Context &Context) {
   DXASSERT(paramInfo.HasSemanticString(), "expected paramInfo with semantic");
   //*ppWarningMsg = nullptr;
 
-  llvm::StringRef semFullName = paramInfo.GetSemanticStringRef();
-  llvm::StringRef semName;
+  llvm37::StringRef semFullName = paramInfo.GetSemanticStringRef();
+  llvm37::StringRef semName;
   unsigned semIndex;
   Semantic::DecomposeNameAndIndex(semFullName, &semName, &semIndex);
 
@@ -531,7 +531,7 @@ void DxilTypeSystem::SetMinPrecision(bool bMinPrecision) {
   m_LowPrecisionMode = mode;
 }
 
-DxilStructTypeIterator::DxilStructTypeIterator(llvm::StructType *sTy, DxilStructAnnotation *sAnnotation,
+DxilStructTypeIterator::DxilStructTypeIterator(llvm37::StructType *sTy, DxilStructAnnotation *sAnnotation,
   unsigned idx)
   : STy(sTy), SAnnotation(sAnnotation), index(idx) {
   DXASSERT(
@@ -558,16 +558,16 @@ bool DxilStructTypeIterator::operator==(DxilStructTypeIterator iter) {
 
 bool DxilStructTypeIterator::operator!=(DxilStructTypeIterator iter) { return !(operator==(iter)); }
 
-std::pair<llvm::Type *, DxilFieldAnnotation *> DxilStructTypeIterator::operator*() {
-  return std::pair<llvm::Type *, DxilFieldAnnotation *>(
+std::pair<llvm37::Type *, DxilFieldAnnotation *> DxilStructTypeIterator::operator*() {
+  return std::pair<llvm37::Type *, DxilFieldAnnotation *>(
     STy->getElementType(index), &SAnnotation->GetFieldAnnotation(index));
 }
 
-DxilStructTypeIterator begin(llvm::StructType *STy, DxilStructAnnotation *SAnno) {
+DxilStructTypeIterator begin(llvm37::StructType *STy, DxilStructAnnotation *SAnno) {
   return { STy, SAnno, 0 };
 }
 
-DxilStructTypeIterator end(llvm::StructType *STy, DxilStructAnnotation *SAnno) {
+DxilStructTypeIterator end(llvm37::StructType *STy, DxilStructAnnotation *SAnno) {
   return { STy, SAnno, STy->getNumElements() };
 }
 

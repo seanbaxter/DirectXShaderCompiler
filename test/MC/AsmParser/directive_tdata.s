@@ -1,4 +1,4 @@
-# RUN: llvm-mc -triple x86_64-unknown-darwin %s | FileCheck %s
+# RUN: llvm37-mc -triple x86_64-unknown-darwin %s | FileCheck %s
 
 # CHECK:	__DATA,__thread_data,thread_local_regular
 # CHECK:	_a$tlv$init:

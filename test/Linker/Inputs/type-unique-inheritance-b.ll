@@ -10,13 +10,13 @@ entry:
   %a.addr = alloca i32, align 4
   %t = alloca %class.B, align 8
   store i32 %a, i32* %a.addr, align 4
-  call void @llvm.dbg.declare(metadata i32* %a.addr, metadata !28, metadata !DIExpression()), !dbg !29
-  call void @llvm.dbg.declare(metadata %class.B* %t, metadata !30, metadata !DIExpression()), !dbg !31
+  call void @llvm37.dbg.declare(metadata i32* %a.addr, metadata !28, metadata !DIExpression()), !dbg !29
+  call void @llvm37.dbg.declare(metadata %class.B* %t, metadata !30, metadata !DIExpression()), !dbg !31
   ret void, !dbg !32
 }
 
 ; Function Attrs: nounwind readnone
-declare void @llvm.dbg.declare(metadata, metadata, metadata) #1
+declare void @llvm37.dbg.declare(metadata, metadata, metadata) #1
 
 ; Function Attrs: ssp uwtable
 define i32 @main() #2 {
@@ -24,7 +24,7 @@ entry:
   %retval = alloca i32, align 4
   %a = alloca %class.A, align 4
   store i32 0, i32* %retval
-  call void @llvm.dbg.declare(metadata %class.A* %a, metadata !33, metadata !DIExpression()), !dbg !34
+  call void @llvm37.dbg.declare(metadata %class.A* %a, metadata !33, metadata !DIExpression()), !dbg !34
   call void @_Z1fi(i32 0), !dbg !35
   call void @_Z1gi(i32 1), !dbg !36
   ret i32 0, !dbg !37
@@ -37,10 +37,10 @@ attributes #1 = { nounwind readnone }
 attributes #2 = { ssp uwtable "less-precise-fpmad"="false" "no-frame-pointer-elim"="true" "no-frame-pointer-elim-non-leaf" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "stack-protector-buffer-size"="8" "unsafe-fp-math"="false" "use-soft-float"="false" }
 attributes #3 = { "less-precise-fpmad"="false" "no-frame-pointer-elim"="true" "no-frame-pointer-elim-non-leaf" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "stack-protector-buffer-size"="8" "unsafe-fp-math"="false" "use-soft-float"="false" }
 
-!llvm.dbg.cu = !{!0}
-!llvm.module.flags = !{!27, !38}
+!llvm37.dbg.cu = !{!0}
+!llvm37.module.flags = !{!27, !38}
 
-!0 = !DICompileUnit(language: DW_LANG_C_plus_plus, producer: "clang version 3.4 (http://llvm.org/git/clang.git f54e02f969d02d640103db73efc30c45439fceab) (http://llvm.org/git/llvm.git 284353b55896cb1babfaa7add7c0a363245342d2)", isOptimized: false, emissionKind: 0, file: !1, enums: !2, retainedTypes: !3, subprograms: !19, globals: !2, imports: !2)
+!0 = !DICompileUnit(language: DW_LANG_C_plus_plus, producer: "clang version 3.4 (http://llvm37.org/git/clang.git f54e02f969d02d640103db73efc30c45439fceab) (http://llvm37.org/git/llvm37.git 284353b55896cb1babfaa7add7c0a363245342d2)", isOptimized: false, emissionKind: 0, file: !1, enums: !2, retainedTypes: !3, subprograms: !19, globals: !2, imports: !2)
 !1 = !DIFile(filename: "bar.cpp", directory: "/Users/mren/c_testing/type_unique_air/inher")
 !2 = !{}
 !3 = !{!4, !11, !15}

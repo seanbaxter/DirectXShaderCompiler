@@ -1,23 +1,23 @@
 //===-- lib/CodeGen/MachineInstrBundle.cpp --------------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/CodeGen/MachineInstrBundle.h"
-#include "llvm/ADT/SmallSet.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/CodeGen/MachineFunctionPass.h"
-#include "llvm/CodeGen/MachineInstrBuilder.h"
-#include "llvm/CodeGen/Passes.h"
-#include "llvm/Target/TargetInstrInfo.h"
-#include "llvm/Target/TargetMachine.h"
-#include "llvm/Target/TargetRegisterInfo.h"
-#include "llvm/Target/TargetSubtargetInfo.h"
-using namespace llvm;
+#include "llvm37/CodeGen/MachineInstrBundle.h"
+#include "llvm37/ADT/SmallSet.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/CodeGen/MachineFunctionPass.h"
+#include "llvm37/CodeGen/MachineInstrBuilder.h"
+#include "llvm37/CodeGen/Passes.h"
+#include "llvm37/Target/TargetInstrInfo.h"
+#include "llvm37/Target/TargetMachine.h"
+#include "llvm37/Target/TargetRegisterInfo.h"
+#include "llvm37/Target/TargetSubtargetInfo.h"
+using namespace llvm37;
 
 namespace {
   class UnpackMachineBundles : public MachineFunctionPass {
@@ -36,7 +36,7 @@ namespace {
 } // end anonymous namespace
 
 char UnpackMachineBundles::ID = 0;
-char &llvm::UnpackMachineBundlesID = UnpackMachineBundles::ID;
+char &llvm37::UnpackMachineBundlesID = UnpackMachineBundles::ID;
 INITIALIZE_PASS(UnpackMachineBundles, "unpack-mi-bundles",
                 "Unpack machine instruction bundles", false, false)
 
@@ -77,7 +77,7 @@ bool UnpackMachineBundles::runOnMachineFunction(MachineFunction &MF) {
 }
 
 FunctionPass *
-llvm::createUnpackMachineBundles(std::function<bool(const Function &)> Ftor) {
+llvm37::createUnpackMachineBundles(std::function<bool(const Function &)> Ftor) {
   return new UnpackMachineBundles(Ftor);
 }
 
@@ -94,12 +94,12 @@ namespace {
 } // end anonymous namespace
 
 char FinalizeMachineBundles::ID = 0;
-char &llvm::FinalizeMachineBundlesID = FinalizeMachineBundles::ID;
+char &llvm37::FinalizeMachineBundlesID = FinalizeMachineBundles::ID;
 INITIALIZE_PASS(FinalizeMachineBundles, "finalize-mi-bundles",
                 "Finalize machine instruction bundles", false, false)
 
 bool FinalizeMachineBundles::runOnMachineFunction(MachineFunction &MF) {
-  return llvm::finalizeBundles(MF);
+  return llvm37::finalizeBundles(MF);
 }
 
 
@@ -109,7 +109,7 @@ bool FinalizeMachineBundles::runOnMachineFunction(MachineFunction &MF) {
 /// IsInternalRead markers to MachineOperands which are defined inside the
 /// bundle, and it copies externally visible defs and uses to the BUNDLE
 /// instruction.
-void llvm::finalizeBundle(MachineBasicBlock &MBB,
+void llvm37::finalizeBundle(MachineBasicBlock &MBB,
                           MachineBasicBlock::instr_iterator FirstMI,
                           MachineBasicBlock::instr_iterator LastMI) {
   assert(FirstMI != LastMI && "Empty bundle?");
@@ -220,7 +220,7 @@ void llvm::finalizeBundle(MachineBasicBlock &MBB,
 /// with 'InsideBundle' marker. It returns the MBB instruction iterator that
 /// points to the end of the bundle.
 MachineBasicBlock::instr_iterator
-llvm::finalizeBundle(MachineBasicBlock &MBB,
+llvm37::finalizeBundle(MachineBasicBlock &MBB,
                      MachineBasicBlock::instr_iterator FirstMI) {
   MachineBasicBlock::instr_iterator E = MBB.instr_end();
   MachineBasicBlock::instr_iterator LastMI = std::next(FirstMI);
@@ -232,7 +232,7 @@ llvm::finalizeBundle(MachineBasicBlock &MBB,
 
 /// finalizeBundles - Finalize instruction bundles in the specified
 /// MachineFunction. Return true if any bundles are finalized.
-bool llvm::finalizeBundles(MachineFunction &MF) {
+bool llvm37::finalizeBundles(MachineFunction &MF) {
   bool Changed = false;
   for (MachineFunction::iterator I = MF.begin(), E = MF.end(); I != E; ++I) {
     MachineBasicBlock &MBB = *I;

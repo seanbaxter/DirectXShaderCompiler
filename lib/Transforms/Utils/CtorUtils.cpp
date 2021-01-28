@@ -1,32 +1,32 @@
 //===- CtorUtils.cpp - Helpers for working with global_ctors ----*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 //
-// This file defines functions that are used to process llvm.global_ctors.
+// This file defines functions that are used to process llvm37.global_ctors.
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Transforms/Utils/CtorUtils.h"
-#include "llvm/ADT/BitVector.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/GlobalVariable.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/Module.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/Transforms/Utils/CtorUtils.h"
+#include "llvm37/ADT/BitVector.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/GlobalVariable.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/raw_ostream.h"
 
 #define DEBUG_TYPE "ctor_utils"
 
-namespace llvm {
+namespace llvm37 {
 
 namespace {
-/// Given a specified llvm.global_ctors list, remove the listed elements.
+/// Given a specified llvm37.global_ctors list, remove the listed elements.
 void removeGlobalCtors(GlobalVariable *GCL, const BitVector &CtorsToRemove) {
   // Filter out the initializer elements to remove.
   ConstantArray *OldCA = cast<ConstantArray>(GCL->getInitializer());
@@ -63,7 +63,7 @@ void removeGlobalCtors(GlobalVariable *GCL, const BitVector &CtorsToRemove) {
   GCL->eraseFromParent();
 }
 
-/// Given a llvm.global_ctors list that we can understand,
+/// Given a llvm37.global_ctors list that we can understand,
 /// return a list of the functions and null terminator as a vector.
 std::vector<Function *> parseGlobalCtors(GlobalVariable *GV) {
   if (GV->getInitializer()->isNullValue())
@@ -78,7 +78,7 @@ std::vector<Function *> parseGlobalCtors(GlobalVariable *GV) {
   return Result;
 }
 
-/// Find the llvm.global_ctors list, verifying that all initializers have an
+/// Find the llvm37.global_ctors list, verifying that all initializers have an
 /// init priority of 65535.
 GlobalVariable *findGlobalCtors(Module &M) {
   GlobalVariable *GV = M.getGlobalVariable("llvm.global_ctors");
@@ -162,4 +162,4 @@ bool optimizeGlobalCtorsList(Module &M,
   return true;
 }
 
-} // End llvm namespace
+} // End llvm37 namespace

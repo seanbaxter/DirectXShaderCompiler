@@ -1,6 +1,6 @@
 //===--- SemaCast.cpp - Semantic Analysis for Casts -----------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -23,7 +23,7 @@
 #include "clang/Basic/PartialDiagnostic.h"
 #include "clang/Basic/TargetInfo.h"
 #include "clang/Sema/Initialization.h"
-#include "llvm/ADT/SmallVector.h"
+#include "llvm37/ADT/SmallVector.h"
 #include "clang/Sema/SemaHLSL.h" // HLSL Change
 #include <set>
 using namespace clang;
@@ -249,7 +249,7 @@ Sema::BuildCXXNamedCast(SourceLocation OpLoc, tok::TokenKind Kind,
   Op.DestRange = AngleBrackets;
 
   switch (Kind) {
-  default: llvm_unreachable("Unknown C++ cast!");
+  default: llvm37_unreachable("Unknown C++ cast!");
 
   case tok::kw_const_cast:
     if (!TypeDependent) {
@@ -350,7 +350,7 @@ static bool tryDiagnoseOverloadedCast(Sema &S, CastType CT,
   OverloadCandidateDisplayKind howManyCandidates = OCD_AllCandidates;
 
   switch (sequence.getFailedOverloadResult()) {
-  case OR_Success: llvm_unreachable("successful failed overload");
+  case OR_Success: llvm37_unreachable("successful failed overload");
   case OR_No_Viable_Function:
     if (candidates.empty())
       msg = diag::err_ovl_no_conversion_in_cast;

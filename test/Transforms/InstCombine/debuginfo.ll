@@ -1,8 +1,8 @@
 ; RUN: opt < %s -instcombine -S | FileCheck %s
 
-declare void @llvm.dbg.declare(metadata, metadata, metadata) nounwind readnone
+declare void @llvm37.dbg.declare(metadata, metadata, metadata) nounwind readnone
 
-declare i64 @llvm.objectsize.i64.p0i8(i8*, i1) nounwind readnone
+declare i64 @llvm37.objectsize.i64.p0i8(i8*, i1) nounwind readnone
 
 declare i8* @foo(i8*, i32, i64, i64) nounwind
 
@@ -12,24 +12,24 @@ entry:
   %__val.addr = alloca i32, align 4
   %__len.addr = alloca i64, align 8
   store i8* %__dest, i8** %__dest.addr, align 8
-; CHECK-NOT: call void @llvm.dbg.declare
-; CHECK: call void @llvm.dbg.value
-  call void @llvm.dbg.declare(metadata i8** %__dest.addr, metadata !0, metadata !DIExpression()), !dbg !16
+; CHECK-NOT: call void @llvm37.dbg.declare
+; CHECK: call void @llvm37.dbg.value
+  call void @llvm37.dbg.declare(metadata i8** %__dest.addr, metadata !0, metadata !DIExpression()), !dbg !16
   store i32 %__val, i32* %__val.addr, align 4
-  call void @llvm.dbg.declare(metadata i32* %__val.addr, metadata !7, metadata !DIExpression()), !dbg !18
+  call void @llvm37.dbg.declare(metadata i32* %__val.addr, metadata !7, metadata !DIExpression()), !dbg !18
   store i64 %__len, i64* %__len.addr, align 8
-  call void @llvm.dbg.declare(metadata i64* %__len.addr, metadata !9, metadata !DIExpression()), !dbg !20
+  call void @llvm37.dbg.declare(metadata i64* %__len.addr, metadata !9, metadata !DIExpression()), !dbg !20
   %tmp = load i8*, i8** %__dest.addr, align 8, !dbg !21
   %tmp1 = load i32, i32* %__val.addr, align 4, !dbg !21
   %tmp2 = load i64, i64* %__len.addr, align 8, !dbg !21
   %tmp3 = load i8*, i8** %__dest.addr, align 8, !dbg !21
-  %0 = call i64 @llvm.objectsize.i64.p0i8(i8* %tmp3, i1 false), !dbg !21
+  %0 = call i64 @llvm37.objectsize.i64.p0i8(i8* %tmp3, i1 false), !dbg !21
   %call = call i8* @foo(i8* %tmp, i32 %tmp1, i64 %tmp2, i64 %0), !dbg !21
   ret i8* %call, !dbg !21
 }
 
-!llvm.dbg.cu = !{!3}
-!llvm.module.flags = !{!30}
+!llvm37.dbg.cu = !{!3}
+!llvm37.module.flags = !{!30}
 
 !0 = !DILocalVariable(tag: DW_TAG_arg_variable, name: "__dest", line: 78, arg: 1, scope: !1, file: !2, type: !6)
 !1 = !DISubprogram(name: "foobar", line: 79, isLocal: true, isDefinition: true, virtualIndex: 6, flags: DIFlagPrototyped, isOptimized: true, scopeLine: 79, file: !27, scope: !2, type: !4, function: i8* (i8*, i32, i64)* @foobar, variables: !25)

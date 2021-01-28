@@ -1,7 +1,7 @@
-; RUN: llvm-as < %s > %t.bc
-; RUN: llvm-as < %p/2008-03-07-DroppedSection_a.ll > %t2.bc
-; RUN: llvm-link %t.bc %t2.bc -o %t3.bc
-; RUN: llvm-dis < %t3.bc | FileCheck %s
+; RUN: llvm37-as < %s > %t.bc
+; RUN: llvm37-as < %p/2008-03-07-DroppedSection_a.ll > %t2.bc
+; RUN: llvm37-link %t.bc %t2.bc -o %t3.bc
+; RUN: llvm37-dis < %t3.bc | FileCheck %s
 ; CHECK: .data.init_task
 
 ; ModuleID = 'u.bc'

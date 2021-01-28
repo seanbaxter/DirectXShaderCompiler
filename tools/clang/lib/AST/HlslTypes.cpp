@@ -41,7 +41,7 @@ ConvertHLSLVecMatTypeToExtVectorType(const clang::ASTContext &context,
         const TemplateArgument &arg0 = argList[0];
         const TemplateArgument &arg1 = argList[1];
         QualType elemTy = arg0.getAsType();
-        llvm::APSInt elmSize = arg1.getAsIntegral();
+        llvm37::APSInt elmSize = arg1.getAsIntegral();
         return context.getExtVectorType(elemTy, elmSize.getLimitedValue())
             ->getAs<ExtVectorType>();
       }
@@ -299,7 +299,7 @@ uint32_t GetHLSLVecSize(clang::QualType type) {
 
   const TemplateArgumentList &argList = templateDecl->getTemplateArgs();
   const TemplateArgument &arg1 = argList[1];
-  llvm::APSInt vecSize = arg1.getAsIntegral();
+  llvm37::APSInt vecSize = arg1.getAsIntegral();
   return vecSize.getLimitedValue();
 }
 
@@ -320,8 +320,8 @@ void GetRowsAndCols(clang::QualType type, uint32_t &rowCount,
   const TemplateArgumentList &argList = templateDecl->getTemplateArgs();
   const TemplateArgument &arg1 = argList[1];
   const TemplateArgument &arg2 = argList[2];
-  llvm::APSInt rowSize = arg1.getAsIntegral();
-  llvm::APSInt colSize = arg2.getAsIntegral();
+  llvm37::APSInt rowSize = arg1.getAsIntegral();
+  llvm37::APSInt colSize = arg2.getAsIntegral();
   rowCount = rowSize.getLimitedValue();
   colCount = colSize.getLimitedValue();
 }
@@ -370,14 +370,14 @@ void GetRowsAndColsForAny(QualType type, uint32_t &rowCount,
         const TemplateArgumentList &argList = templateDecl->getTemplateArgs();
         const TemplateArgument &arg1 = argList[1];
         const TemplateArgument &arg2 = argList[2];
-        llvm::APSInt rowSize = arg1.getAsIntegral();
-        llvm::APSInt colSize = arg2.getAsIntegral();
+        llvm37::APSInt rowSize = arg1.getAsIntegral();
+        llvm37::APSInt colSize = arg2.getAsIntegral();
         rowCount = rowSize.getLimitedValue();
         colCount = colSize.getLimitedValue();
       } else if (templateDecl->getName() == "vector") {
         const TemplateArgumentList &argList = templateDecl->getTemplateArgs();
         const TemplateArgument &arg1 = argList[1];
-        llvm::APSInt rowSize = arg1.getAsIntegral();
+        llvm37::APSInt rowSize = arg1.getAsIntegral();
         colCount = rowSize.getLimitedValue();
       }
     }
@@ -745,7 +745,7 @@ hlsl::ParameterModifier ParamModFromAttributeList(clang::AttributeList *pAttribu
   return ParameterModifier::FromInOut(isIn, isOut);
 }
 
-hlsl::ParameterModifier ParamModFromAttrs(llvm::ArrayRef<InheritableAttr *> attributes) {
+hlsl::ParameterModifier ParamModFromAttrs(llvm37::ArrayRef<InheritableAttr *> attributes) {
   bool isIn = false, isOut = false;
   for (InheritableAttr * attr : attributes) {
     if (isa<HLSLInAttr>(attr))

@@ -66,7 +66,7 @@ attributes #0 = { nounwind readnone }
 attributes #1 = { nounwind }
 attributes #2 = { nounwind readonly }
 
-!llvm.ident = !{!0}
+!llvm37.ident = !{!0}
 !dx.valver = !{!1}
 !dx.version = !{!1}
 !dx.shaderModel = !{!2}

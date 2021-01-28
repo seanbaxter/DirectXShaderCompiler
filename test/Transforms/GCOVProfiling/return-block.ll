@@ -4,11 +4,11 @@
 
 ; By default, the return block is last.
 ; RUN: opt -insert-gcov-profiling -disable-output %t2
-; RUN: llvm-cov gcov -n -dump %T/return-block.gcno 2>&1 | FileCheck -check-prefix=CHECK -check-prefix=RETURN-LAST %s
+; RUN: llvm37-cov gcov -n -dump %T/return-block.gcno 2>&1 | FileCheck -check-prefix=CHECK -check-prefix=RETURN-LAST %s
 
 ; But we can optionally emit it second, to match newer gcc versions.
 ; RUN: opt -insert-gcov-profiling -gcov-exit-block-before-body -disable-output %t2
-; RUN: llvm-cov gcov -n -dump %T/return-block.gcno 2>&1 | FileCheck -check-prefix=CHECK -check-prefix=RETURN-SECOND %s
+; RUN: llvm37-cov gcov -n -dump %T/return-block.gcno 2>&1 | FileCheck -check-prefix=CHECK -check-prefix=RETURN-SECOND %s
 
 target datalayout = "e-m:e-i64:64-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
@@ -39,17 +39,17 @@ attributes #0 = { nounwind uwtable "less-precise-fpmad"="false" "no-frame-pointe
 attributes #1 = { "less-precise-fpmad"="false" "no-frame-pointer-elim"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "stack-protector-buffer-size"="8" "unsafe-fp-math"="false" "use-soft-float"="false" }
 attributes #2 = { nounwind }
 
-!llvm.gcov = !{!19}
-!llvm.dbg.cu = !{!0}
-!llvm.module.flags = !{!11, !12}
-!llvm.ident = !{!13}
+!llvm37.gcov = !{!19}
+!llvm37.dbg.cu = !{!0}
+!llvm37.module.flags = !{!11, !12}
+!llvm37.ident = !{!13}
 
 !0 = !DICompileUnit(language: DW_LANG_C99, producer: "clang version 3.6.0 (trunk 223182)", isOptimized: true, emissionKind: 1, file: !1, enums: !2, retainedTypes: !2, subprograms: !3, globals: !8, imports: !2)
-!1 = !DIFile(filename: ".../llvm/test/Transforms/GCOVProfiling/return-block.ll", directory: "")
+!1 = !DIFile(filename: ".../llvm37/test/Transforms/GCOVProfiling/return-block.ll", directory: "")
 !2 = !{}
 !3 = !{!4}
 !4 = !DISubprogram(name: "test", line: 5, isLocal: false, isDefinition: true, isOptimized: true, scopeLine: 5, file: !1, scope: !5, type: !6, function: void ()* @test, variables: !2)
-!5 = !DIFile(filename: ".../llvm/test/Transforms/GCOVProfiling/return-block.ll", directory: "")
+!5 = !DIFile(filename: ".../llvm37/test/Transforms/GCOVProfiling/return-block.ll", directory: "")
 !6 = !DISubroutineType(types: !7)
 !7 = !{null}
 !8 = !{!9}

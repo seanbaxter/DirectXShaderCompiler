@@ -1,6 +1,6 @@
 //===--- HeaderIncludes.cpp - Generate Header Includes --------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,8 +11,8 @@
 #include "clang/Basic/SourceManager.h"
 #include "clang/Frontend/FrontendDiagnostic.h"
 #include "clang/Lex/Preprocessor.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/Support/raw_ostream.h"
 using namespace clang;
 
 namespace {
@@ -49,14 +49,14 @@ public:
 void clang::AttachHeaderIncludeGen(Preprocessor &PP, bool ShowAllHeaders,
                                    StringRef OutputPath, bool ShowDepth,
                                    bool MSStyle) {
-  raw_ostream *OutputFile = MSStyle ? &llvm::outs() : &llvm::errs();
+  raw_ostream *OutputFile = MSStyle ? &llvm37::outs() : &llvm37::errs();
   bool OwnsOutputFile = false;
 
   // Open the output file, if used.
   if (!OutputPath.empty()) {
     std::error_code EC;
-    llvm::raw_fd_ostream *OS = new llvm::raw_fd_ostream(
-        OutputPath.str(), EC, llvm::sys::fs::F_Append | llvm::sys::fs::F_Text);
+    llvm37::raw_fd_ostream *OS = new llvm37::raw_fd_ostream(
+        OutputPath.str(), EC, llvm37::sys::fs::F_Append | llvm37::sys::fs::F_Text);
     if (EC) {
       PP.getDiagnostics().Report(clang::diag::warn_fe_cc_print_header_failure)
           << EC.message();
@@ -69,7 +69,7 @@ void clang::AttachHeaderIncludeGen(Preprocessor &PP, bool ShowAllHeaders,
     }
   }
 
-  PP.addPPCallbacks(llvm::make_unique<HeaderIncludesCallback>(&PP,
+  PP.addPPCallbacks(llvm37::make_unique<HeaderIncludesCallback>(&PP,
                                                               ShowAllHeaders,
                                                               OutputFile,
                                                               OwnsOutputFile,

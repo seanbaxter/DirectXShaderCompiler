@@ -1,6 +1,6 @@
 //===--- InclusionRewriter.cpp - Rewrite includes into their expansions ---===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -18,11 +18,11 @@
 #include "clang/Lex/HeaderSearch.h"
 #include "clang/Lex/Pragma.h"
 #include "clang/Lex/Preprocessor.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/Support/raw_ostream.h"
 
 using namespace clang;
-using namespace llvm;
+using namespace llvm37;
 
 namespace {
 
@@ -39,7 +39,7 @@ class InclusionRewriter : public PPCallbacks {
   SourceManager &SM; ///< Used to read and manage source files.
   raw_ostream &OS; ///< The destination stream for rewritten contents.
   StringRef MainEOL; ///< The line ending marker to use.
-  const llvm::MemoryBuffer *PredefinesBuffer; ///< The preprocessor predefines.
+  const llvm37::MemoryBuffer *PredefinesBuffer; ///< The preprocessor predefines.
   bool ShowLineMarkers; ///< Show #line markers.
   bool UseLineDirectives; ///< Use of line directives or line markers.
   /// Tracks where inclusions that change the file are found.
@@ -53,7 +53,7 @@ public:
   InclusionRewriter(Preprocessor &PP, raw_ostream &OS, bool ShowLineMarkers,
                     bool UseLineDirectives);
   bool Process(FileID FileId, SrcMgr::CharacteristicKind FileType);
-  void setPredefinesBuffer(const llvm::MemoryBuffer *Buf) {
+  void setPredefinesBuffer(const llvm37::MemoryBuffer *Buf) {
     PredefinesBuffer = Buf;
   }
   void detectMainFileEOL();

@@ -8,7 +8,7 @@
 ; reader should NEVER produce a program "successfully" with placeholders still
 ; around!
 ;
-; RUN: llvm-as < %s | llvm-dis | llvm-as
+; RUN: llvm37-as < %s | llvm37-dis | llvm37-as
 ; RUN: verify-uselistorder %s
 
 @.LC0 = internal global [4 x i8] c"foo\00"		; <[4 x i8]*> [#uses=1]

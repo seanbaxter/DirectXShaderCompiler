@@ -1,6 +1,6 @@
 //===--- FileMatchTrie.h - --------------------------------------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -12,11 +12,11 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_TOOLING_FILEMATCHTRIE_H
-#define LLVM_CLANG_TOOLING_FILEMATCHTRIE_H
+#ifndef LLVM37_CLANG_TOOLING_FILEMATCHTRIE_H
+#define LLVM37_CLANG_TOOLING_FILEMATCHTRIE_H
 
 #include "clang/Basic/LLVM.h"
-#include "llvm/ADT/StringRef.h"
+#include "llvm37/ADT/StringRef.h"
 #include <memory>
 #include <string>
 #include <vector>
@@ -48,7 +48,7 @@ class FileMatchTrieNode;
 /// For a given input file, the \c FileMatchTrie finds its entries in order
 /// of matching suffix length. For each suffix length, there might be one or
 /// more entries in the database. For each of those entries, it calls
-/// \c llvm::sys::fs::equivalent() (injected as \c PathComparator). There might
+/// \c llvm37::sys::fs::equivalent() (injected as \c PathComparator). There might
 /// be zero or more entries with the same matching suffix length that are
 /// equivalent to the input file. Three cases are distinguished:
 /// 0  equivalent files: Continue with the next suffix length.

@@ -46,7 +46,7 @@ cbuffer cbEveryFrame : register(b0)
  * vector in dbg.value                             *
  ***************************************************/
 // VEC-LABLE: sw.bb:
-// VEC-BUG:       @llvm.dbg.value(metadata <4 x float>
+// VEC-BUG:       @llvm37.dbg.value(metadata <4 x float>
 // VEC-CHK:       store float 1.000000e+00, float* %9
 // VEC-CHK:       store float 0.000000e+00, float* %10
 // VEC-CHK:       store float 1.000000e+00, float* %11
@@ -102,7 +102,7 @@ float4 FlowControlPS(VS_OUTPUT_ENV input) : SV_Target
  * dx.types.ResRet.f32 in dbg.value                *
  ***************************************************/
 // RES:           %[[S:[0-9]+]] = call %dx.types.ResRet.f32 @dx.op.sample.f32
-// RES-BUG:       @llvm.dbg.value(metadata %dx.types.ResRet.f32
+// RES-BUG:       @llvm37.dbg.value(metadata %dx.types.ResRet.f32
 // RES-CHK-DAG:   %[[X:[0-9]+]] = extractvalue %dx.types.ResRet.f32 %[[S]], 0
 // RES-CHK-DAG:   %[[Y:[0-9]+]] = extractvalue %dx.types.ResRet.f32 %[[S]], 1
 // RES-CHK-DAG:   %[[Z:[0-9]+]] = extractvalue %dx.types.ResRet.f32 %[[S]], 2

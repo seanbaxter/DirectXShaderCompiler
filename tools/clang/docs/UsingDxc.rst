@@ -8,7 +8,7 @@ Using DirectX Compiler Tools
 Introduction
 ============
 
-The HLSL on LLVM project provides a number of tools to create and manipulate
+The HLSL on LLVM37 project provides a number of tools to create and manipulate
 DirectX shader programs.
 
 After building the project, the tools described are available under the

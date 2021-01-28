@@ -14,8 +14,8 @@ if.then:                                          ; preds = %for.body
   br i1 undef, label %if.then27, label %if.end.if.end.split_crit_edge.critedge, !dbg !16
 
 if.then27:                                        ; preds = %if.then
-; CHECK: tail call void @llvm.dbg.value
-  tail call void @llvm.dbg.value(metadata double undef, i64 0, metadata !19, metadata !DIExpression()), !dbg !21
+; CHECK: tail call void @llvm37.dbg.value
+  tail call void @llvm37.dbg.value(metadata double undef, i64 0, metadata !19, metadata !DIExpression()), !dbg !21
   br label %for.body61.us
 
 if.end.if.end.split_crit_edge.critedge:           ; preds = %if.then
@@ -31,13 +31,13 @@ for.end104:                                       ; preds = %for.cond.backedge
   ret void, !dbg !24
 }
 
-declare void @llvm.dbg.value(metadata, i64, metadata, metadata) nounwind readnone
+declare void @llvm37.dbg.value(metadata, i64, metadata, metadata) nounwind readnone
 
-!llvm.module.flags = !{!26}
-!llvm.dbg.sp = !{!0, !6, !9, !10}
+!llvm37.module.flags = !{!26}
+!llvm37.dbg.sp = !{!0, !6, !9, !10}
 
 !0 = !DISubprogram(name: "idamax", line: 112, isLocal: false, isDefinition: true, virtualIndex: 6, flags: DIFlagPrototyped, isOptimized: false, file: !25, scope: !1, type: !3)
-!1 = !DIFile(filename: "/Volumes/Lalgate/work/llvm/projects/llvm-test/SingleSource/Benchmarks/CoyoteBench/lpbench.c", directory: "/private/tmp")
+!1 = !DIFile(filename: "/Volumes/Lalgate/work/llvm37/projects/llvm37-test/SingleSource/Benchmarks/CoyoteBench/lpbench.c", directory: "/private/tmp")
 !2 = !DICompileUnit(language: DW_LANG_C99, producer: "clang version 2.9 (trunk 127169)", isOptimized: true, emissionKind: 0, file: !25, enums: !8, retainedTypes: !8, subprograms: !8)
 !3 = !DISubroutineType(types: !4)
 !4 = !{!5}
@@ -61,5 +61,5 @@ declare void @llvm.dbg.value(metadata, i64, metadata, metadata) nounwind readnon
 !22 = distinct !DILexicalBlock(line: 285, column: 13, file: !25, scope: !17)
 !23 = !DILocation(line: 296, column: 13, scope: !17)
 !24 = !DILocation(line: 313, column: 1, scope: !14)
-!25 = !DIFile(filename: "/Volumes/Lalgate/work/llvm/projects/llvm-test/SingleSource/Benchmarks/CoyoteBench/lpbench.c", directory: "/private/tmp")
+!25 = !DIFile(filename: "/Volumes/Lalgate/work/llvm37/projects/llvm37-test/SingleSource/Benchmarks/CoyoteBench/lpbench.c", directory: "/private/tmp")
 !26 = !{i32 1, !"Debug Info Version", i32 3}

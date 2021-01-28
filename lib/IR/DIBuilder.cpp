@@ -1,6 +1,6 @@
 //===--- DIBuilder.cpp - Debug Information Builder ------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,17 +11,17 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/IR/DIBuilder.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/DebugInfo.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/IR/Module.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/Dwarf.h"
+#include "llvm37/IR/DIBuilder.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/DebugInfo.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/Dwarf.h"
 
-using namespace llvm;
-using namespace llvm::dwarf;
+using namespace llvm37;
+using namespace llvm37::dwarf;
 
 namespace {
 class HeaderBuilder {
@@ -47,7 +47,7 @@ public:
     return *this;
   }
 
-  MDString *get(LLVMContext &Context) const {
+  MDString *get(LLVM37Context &Context) const {
     return MDString::get(Context, StringRef(Chars.begin(), Chars.size()));
   }
 
@@ -154,7 +154,7 @@ DICompileUnit *DIBuilder::createCompileUnit(
   // Note that we only generate this when the caller wants to actually
   // emit debug information. When we are only interested in tracking
   // source line locations throughout the backend, we prevent codegen from
-  // emitting debug info in the final output by not generating llvm.dbg.cu.
+  // emitting debug info in the final output by not generating llvm37.dbg.cu.
   if (EmitDebugInfo) {
     NamedMDNode *NMD = M.getOrInsertNamedMetadata("llvm.dbg.cu");
     NMD->addOperand(CUNode);
@@ -165,7 +165,7 @@ DICompileUnit *DIBuilder::createCompileUnit(
 }
 
 static DIImportedEntity *
-createImportedModule(LLVMContext &C, dwarf::Tag Tag, DIScope *Context,
+createImportedModule(LLVM37Context &C, dwarf::Tag Tag, DIScope *Context,
                      Metadata *NS, unsigned Line, StringRef Name,
                      SmallVectorImpl<TrackingMDNodeRef> &AllImportedModules) {
   auto *M = DIImportedEntity::get(C, Tag, Context, DINodeRef(NS), Line, Name);
@@ -309,7 +309,7 @@ DIDerivedType *DIBuilder::createStaticMemberType(DIScope *Scope, StringRef Name,
                                                  DIFile *File,
                                                  unsigned LineNumber,
                                                  DIType *Ty, unsigned Flags,
-                                                 llvm::Constant *Val) {
+                                                 llvm37::Constant *Val) {
   Flags |= DINode::FlagStaticMember;
   return DIDerivedType::get(
       VMContext, dwarf::DW_TAG_member, Name, File, LineNumber,
@@ -346,7 +346,7 @@ DIBuilder::createTemplateTypeParameter(DIScope *Context, StringRef Name,
 }
 
 static DITemplateValueParameter *
-createTemplateValueParameterHelper(LLVMContext &VMContext, unsigned Tag,
+createTemplateValueParameterHelper(LLVM37Context &VMContext, unsigned Tag,
                                    DIScope *Context, StringRef Name, DIType *Ty,
                                    Metadata *MD) {
   assert((!Context || isa<DICompileUnit>(Context)) && "Expected compile unit");
@@ -472,7 +472,7 @@ DICompositeType *DIBuilder::createVectorType(uint64_t Size,
   return R;
 }
 
-static DIType *createTypeWithFlags(LLVMContext &Context, DIType *Ty,
+static DIType *createTypeWithFlags(LLVM37Context &Context, DIType *Ty,
                                    unsigned FlagsToSet) {
   auto NewTy = Ty->clone();
   NewTy->setFlags(NewTy->getFlags() | FlagsToSet);
@@ -540,7 +540,7 @@ DINodeArray DIBuilder::getOrCreateArray(ArrayRef<Metadata *> Elements) {
 }
 
 DITypeRefArray DIBuilder::getOrCreateTypeArray(ArrayRef<Metadata *> Elements) {
-  SmallVector<llvm::Metadata *, 16> Elts;
+  SmallVector<llvm37::Metadata *, 16> Elts;
   for (unsigned i = 0, e = Elements.size(); i != e; ++i) {
     if (Elements[i] && isa<MDNode>(Elements[i]))
       Elts.push_back(DITypeRef::get(cast<DIType>(Elements[i])));
@@ -734,7 +734,7 @@ DILexicalBlock *DIBuilder::createLexicalBlock(DIScope *Scope, DIFile *File,
                                      File, Line, Col);
 }
 
-static Value *getDbgIntrinsicValueImpl(LLVMContext &VMContext, Value *V) {
+static Value *getDbgIntrinsicValueImpl(LLVM37Context &VMContext, Value *V) {
   assert(V && "no value passed to dbg intrinsic");
   return MetadataAsValue::get(VMContext, ValueAsMetadata::get(V));
 }

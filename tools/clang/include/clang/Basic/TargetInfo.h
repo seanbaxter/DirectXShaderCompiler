@@ -1,6 +1,6 @@
 //===--- TargetInfo.h - Expose information about the target -----*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -12,8 +12,8 @@
 ///
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_BASIC_TARGETINFO_H
-#define LLVM_CLANG_BASIC_TARGETINFO_H
+#ifndef LLVM37_CLANG_BASIC_TARGETINFO_H
+#define LLVM37_CLANG_BASIC_TARGETINFO_H
 
 #include "clang/Basic/AddressSpaces.h"
 #include "clang/Basic/LLVM.h"
@@ -21,17 +21,17 @@
 #include "clang/Basic/TargetCXXABI.h"
 #include "clang/Basic/TargetOptions.h"
 #include "clang/Basic/VersionTuple.h"
-#include "llvm/ADT/IntrusiveRefCntPtr.h"
-#include "llvm/ADT/StringMap.h"
-#include "llvm/ADT/StringRef.h"
-#include "llvm/ADT/StringSwitch.h"
-#include "llvm/ADT/Triple.h"
-#include "llvm/Support/DataTypes.h"
+#include "llvm37/ADT/IntrusiveRefCntPtr.h"
+#include "llvm37/ADT/StringMap.h"
+#include "llvm37/ADT/StringRef.h"
+#include "llvm37/ADT/StringSwitch.h"
+#include "llvm37/ADT/Triple.h"
+#include "llvm37/Support/DataTypes.h"
 #include <cassert>
 #include <string>
 #include <vector>
 
-namespace llvm {
+namespace llvm37 {
 struct fltSemantics;
 }
 
@@ -48,7 +48,7 @@ namespace Builtin { struct Info; }
 ///
 class TargetInfo : public RefCountedBase<TargetInfo> {
   std::shared_ptr<TargetOptions> TargetOpts;
-  llvm::Triple Triple;
+  llvm37::Triple Triple;
 protected:
   // Target values set by the ctor of the actual target implementation.  Default
   // values are specified by the TargetInfo constructor.
@@ -75,7 +75,7 @@ protected:
   const char *DescriptionString;
   const char *UserLabelPrefix;
   const char *MCountName;
-  const llvm::fltSemantics *HalfFormat, *FloatFormat, *DoubleFormat,
+  const llvm37::fltSemantics *HalfFormat, *FloatFormat, *DoubleFormat,
     *LongDoubleFormat;
   unsigned char RegParmMax, SSERegParmMax;
   TargetCXXABI TheCXXABI;
@@ -89,7 +89,7 @@ protected:
   unsigned ComplexLongDoubleUsesFP2Ret : 1;
 
   // TargetInfo Constructor.  Default initializes all fields.
-  TargetInfo(const llvm::Triple &T);
+  TargetInfo(const llvm37::Triple &T);
 
 public:
   /// \brief Construct a target for the given options.
@@ -243,7 +243,7 @@ public:
     case SignedLongLong:
       return UnsignedLongLong;
     default:
-      llvm_unreachable("Unexpected signed integer type");
+      llvm37_unreachable("Unexpected signed integer type");
     }
   }
 
@@ -345,23 +345,23 @@ public:
   /// getHalfWidth/Align/Format - Return the size/align/format of 'half'.
   unsigned getHalfWidth() const { return HalfWidth; }
   unsigned getHalfAlign() const { return HalfAlign; }
-  const llvm::fltSemantics &getHalfFormat() const { return *HalfFormat; }
+  const llvm37::fltSemantics &getHalfFormat() const { return *HalfFormat; }
 
   /// getFloatWidth/Align/Format - Return the size/align/format of 'float'.
   unsigned getFloatWidth() const { return FloatWidth; }
   unsigned getFloatAlign() const { return FloatAlign; }
-  const llvm::fltSemantics &getFloatFormat() const { return *FloatFormat; }
+  const llvm37::fltSemantics &getFloatFormat() const { return *FloatFormat; }
 
   /// getDoubleWidth/Align/Format - Return the size/align/format of 'double'.
   unsigned getDoubleWidth() const { return DoubleWidth; }
   unsigned getDoubleAlign() const { return DoubleAlign; }
-  const llvm::fltSemantics &getDoubleFormat() const { return *DoubleFormat; }
+  const llvm37::fltSemantics &getDoubleFormat() const { return *DoubleFormat; }
 
   /// getLongDoubleWidth/Align/Format - Return the size/align/format of 'long
   /// double'.
   unsigned getLongDoubleWidth() const { return LongDoubleWidth; }
   unsigned getLongDoubleAlign() const { return LongDoubleAlign; }
-  const llvm::fltSemantics &getLongDoubleFormat() const {
+  const llvm37::fltSemantics &getLongDoubleFormat() const {
     return *LongDoubleFormat;
   }
 
@@ -390,7 +390,7 @@ public:
     return AtomicSizeInBits <= AlignmentInBits &&
            AtomicSizeInBits <= getMaxAtomicInlineWidth() &&
            (AtomicSizeInBits <= getCharWidth() ||
-            llvm::isPowerOf2_64(AtomicSizeInBits / getCharWidth()));
+            llvm37::isPowerOf2_64(AtomicSizeInBits / getCharWidth()));
   }
 
   /// \brief Return the maximum vector alignment supported for the given target.
@@ -664,12 +664,12 @@ public:
     return true;
   }
 
-  /// \brief Returns a string of target-specific clobbers, in LLVM format.
+  /// \brief Returns a string of target-specific clobbers, in LLVM37 format.
   virtual const char *getClobbers() const = 0;
 
 
   /// \brief Returns the target triple of the primary target.
-  const llvm::Triple &getTriple() const {
+  const llvm37::Triple &getTriple() const {
     return Triple;
   }
 
@@ -723,7 +723,7 @@ public:
 
   /// \brief Get the default set of target features for the CPU;
   /// this should include all legal feature strings on the target.
-  virtual void getDefaultFeatures(llvm::StringMap<bool> &Features) const {
+  virtual void getDefaultFeatures(llvm37::StringMap<bool> &Features) const {
   }
 
   /// \brief Get the ABI currently in use.
@@ -758,7 +758,7 @@ public:
   /// \brief Use this specified C++ ABI.
   ///
   /// \return False on error (invalid C++ ABI name).
-  bool setCXXABI(llvm::StringRef name) {
+  bool setCXXABI(llvm37::StringRef name) {
     TargetCXXABI ABI;
     if (!ABI.tryParse(name)) return false;
     return setCXXABI(ABI);
@@ -774,7 +774,7 @@ public:
 
   /// \brief Enable or disable a specific target feature;
   /// the feature name must be valid.
-  virtual void setFeatureEnabled(llvm::StringMap<bool> &Features,
+  virtual void setFeatureEnabled(llvm37::StringMap<bool> &Features,
                                  StringRef Name,
                                  bool Enabled) const {
     Features[Name] = Enabled;
@@ -821,8 +821,8 @@ public:
   /// \brief Whether the target supports SEH __try.
   bool isSEHTrySupported() const {
     return getTriple().isOSWindows() &&
-           (getTriple().getArch() == llvm::Triple::x86 ||
-            getTriple().getArch() == llvm::Triple::x86_64);
+           (getTriple().getArch() == llvm37::Triple::x86 ||
+            getTriple().getArch() == llvm37::Triple::x86_64);
   }
 
   /// \brief Return true if {|} are normal characters in the asm string.
@@ -895,7 +895,7 @@ public:
   }
 
   /// Controls if __builtin_longjmp / __builtin_setjmp can be lowered to
-  /// llvm.eh.sjlj.longjmp / llvm.eh.sjlj.setjmp.
+  /// llvm37.eh.sjlj.longjmp / llvm37.eh.sjlj.setjmp.
   virtual bool hasSjLjLowering() const {
     return false;
   }

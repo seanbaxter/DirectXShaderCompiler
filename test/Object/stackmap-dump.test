@@ -1,6 +1,6 @@
-RUN: llvm-readobj -stackmap %p/Inputs/stackmap-test.macho-x86-64 | FileCheck %s
+RUN: llvm37-readobj -stackmap %p/Inputs/stackmap-test.macho-x86-64 | FileCheck %s
 
-CHECK:      LLVM StackMap Version: 1
+CHECK:      LLVM37 StackMap Version: 1
 CHECK-NEXT: Num Functions: 1
 CHECK-NEXT:   Function address: 0, stack size: 16
 CHECK-NEXT: Num Constants: 1

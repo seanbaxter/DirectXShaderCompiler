@@ -45,9 +45,9 @@ two style guides are hard-coded:
 
 .. code-block:: c++
 
-  /// \brief Returns a format style complying with the LLVM coding standards:
-  /// http://llvm.org/docs/CodingStandards.html.
-  FormatStyle getLLVMStyle();
+  /// \brief Returns a format style complying with the LLVM37 coding standards:
+  /// http://llvm37.org/docs/CodingStandards.html.
+  FormatStyle getLLVM37Style();
 
   /// \brief Returns a format style complying with Google's C++ style guide:
   /// http://google-styleguide.googlecode.com/svn/trunk/cppguide.xml.

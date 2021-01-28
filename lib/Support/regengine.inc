@@ -71,7 +71,7 @@
 struct match {
 	struct re_guts *g;
 	int eflags;
-	llvm_regmatch_t *pmatch;	/* [nsub+1] (0 element unused) */
+	llvm37_regmatch_t *pmatch;	/* [nsub+1] (0 element unused) */
 	const char *offp;		/* offsets work from here */
 	const char *beginp;		/* start of string -- virtual NUL precedes */
 	const char *endp;		/* end of string -- virtual NUL here */
@@ -85,7 +85,7 @@ struct match {
 };
 
 static int matcher(struct re_guts *, const char *, size_t,
-                   llvm_regmatch_t[], int);
+                   llvm37_regmatch_t[], int);
 static const char *dissect(struct match *, const char *, const char *, sopno,
                            sopno);
 static const char *backref(struct match *, const char *, const char *, sopno,
@@ -129,7 +129,7 @@ static int nope = 0;
  */
 static int			/* 0 success, REG_NOMATCH failure */
 matcher(struct re_guts *g, const char *string, size_t nmatch,
-        llvm_regmatch_t pmatch[],
+        llvm37_regmatch_t pmatch[],
     int eflags)
 {
 	const char *endp;
@@ -207,8 +207,8 @@ matcher(struct re_guts *g, const char *string, size_t nmatch,
 
 		/* oh my, they want the subexpressions... */
 		if (m->pmatch == NULL)
-			m->pmatch = (llvm_regmatch_t *)regex_malloc((m->g->nsub + 1) * // HLSL Change: Use custom allocator
-							sizeof(llvm_regmatch_t));
+			m->pmatch = (llvm37_regmatch_t *)regex_malloc((m->g->nsub + 1) * // HLSL Change: Use custom allocator
+							sizeof(llvm37_regmatch_t));
 		if (m->pmatch == NULL) {
 			STATETEARDOWN(m);
 			return(REG_ESPACE);
@@ -493,7 +493,7 @@ backref(struct match *m, const char *start, const char *stop, sopno startst,
 	size_t len;
 	int hard;
 	sop s;
-	llvm_regoff_t offsave;
+	llvm37_regoff_t offsave;
 	cset *cs;
 
 	AT("back", start, stop, startst, stopst);

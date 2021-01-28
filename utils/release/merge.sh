@@ -1,7 +1,7 @@
 #!/bin/sh
-#===-- merge.sh - Test the LLVM release candidates -------------------------===#
+#===-- merge.sh - Test the LLVM37 release candidates -------------------------===#
 #
-#                     The LLVM Compiler Infrastructure
+#                     The LLVM37 Compiler Infrastructure
 #
 # This file is distributed under the University of Illinois Open Source
 # License.
@@ -53,7 +53,7 @@ if [ "x$rev" = "x" -o "x$proj" = "x" ]; then
     exit 1
 fi
 
-if ! svn ls http://llvm.org/svn/llvm-project/$proj/trunk > /dev/null 2>&1 ; then
+if ! svn ls http://llvm37.org/svn/llvm37-project/$proj/trunk > /dev/null 2>&1 ; then
     echo "error: invalid project: $proj"
     exit 1
 fi
@@ -61,13 +61,13 @@ fi
 tempfile=`mktemp /tmp/merge.XXXXXX` || exit 1
 
 echo "Merging r$rev:" > $tempfile
-svn log -c $rev http://llvm.org/svn/llvm-project/$proj/trunk >> $tempfile 2>&1
+svn log -c $rev http://llvm37.org/svn/llvm37-project/$proj/trunk >> $tempfile 2>&1
 
 cd $proj.src
 echo "# Updating tree"
 svn up
 echo "# Merging r$rev into $proj locally"
-svn merge -c $rev https://llvm.org/svn/llvm-project/$proj/trunk . || exit 1
+svn merge -c $rev https://llvm37.org/svn/llvm37-project/$proj/trunk . || exit 1
 
 echo
 echo "# To commit the merge, run the following in $proj.src/:"

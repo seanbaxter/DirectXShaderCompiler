@@ -8,10 +8,10 @@ add_dxilconv_project_executable(dxbc2dxil
 
 target_link_libraries(dxbc2dxil PRIVATE
   DxbcConverter
-  LLVMDxcSupport
-  LLVMDxilContainer
-  LLVMMSSupport
-  LLVMSupport
+  LLVM37DxcSupport
+  LLVM37DxilContainer
+  LLVM37MSSupport
+  LLVM37Support
 )
 
 add_dependencies(dxbc2dxil DxbcConverter)

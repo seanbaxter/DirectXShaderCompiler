@@ -1,6 +1,6 @@
 //===-- Instruction.cpp - Implement the Instruction class -----------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,14 +11,14 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/IR/Instruction.h"
-#include "llvm/IR/CallSite.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/Operator.h"
-#include "llvm/IR/Type.h"
-using namespace llvm;
+#include "llvm37/IR/Instruction.h"
+#include "llvm37/IR/CallSite.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/Operator.h"
+#include "llvm37/IR/Type.h"
+using namespace llvm37;
 
 Instruction::Instruction(Type *ty, unsigned it, Use *Ops, unsigned NumOps,
                          Instruction *InsertBefore)
@@ -468,7 +468,7 @@ bool Instruction::mayReturn() const {
 ///
 ///   Associative operators satisfy:  x op (y op z) === (x op y) op z
 ///
-/// In LLVM, the Add, Mul, And, Or, and Xor operators are associative.
+/// In LLVM37, the Add, Mul, And, Or, and Xor operators are associative.
 ///
 bool Instruction::isAssociative(unsigned Opcode) {
   return Opcode == And || Opcode == Or || Opcode == Xor ||
@@ -493,7 +493,7 @@ bool Instruction::isAssociative() const {
 ///
 ///   Commutative operators satisfy: (x op y) === (y op x)
 ///
-/// In LLVM, these are the associative operators, plus SetEQ and SetNE, when
+/// In LLVM37, these are the associative operators, plus SetEQ and SetNE, when
 /// applied to any type.
 ///
 bool Instruction::isCommutative(unsigned op) {
@@ -515,7 +515,7 @@ bool Instruction::isCommutative(unsigned op) {
 ///
 ///   Idempotent operators satisfy:  x op x === x
 ///
-/// In LLVM, the And and Or operators are idempotent.
+/// In LLVM37, the And and Or operators are idempotent.
 ///
 bool Instruction::isIdempotent(unsigned Opcode) {
   return Opcode == And || Opcode == Or;
@@ -528,26 +528,26 @@ bool Instruction::isIdempotent(unsigned Opcode) {
 ///   where Id is the identity for the operator, i.e. a constant such that
 ///     x op Id === x and Id op x === x for all x.
 ///
-/// In LLVM, the Xor operator is nilpotent.
+/// In LLVM37, the Xor operator is nilpotent.
 ///
 bool Instruction::isNilpotent(unsigned Opcode) {
   return Opcode == Xor;
 }
 
 Instruction *Instruction::cloneImpl() const {
-  llvm_unreachable("Subclass of Instruction failed to implement cloneImpl");
+  llvm37_unreachable("Subclass of Instruction failed to implement cloneImpl");
 }
 
 Instruction *Instruction::clone() const {
   Instruction *New = nullptr;
   switch (getOpcode()) {
   default:
-    llvm_unreachable("Unhandled Opcode.");
+    llvm37_unreachable("Unhandled Opcode.");
 #define HANDLE_INST(num, opc, clas)                                            \
   case Instruction::opc:                                                       \
     New = cast<clas>(this)->cloneImpl();                                       \
     break;
-#include "llvm/IR/Instruction.def"
+#include "llvm37/IR/Instruction.def"
 #undef HANDLE_INST
   }
 

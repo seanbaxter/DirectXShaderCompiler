@@ -30,7 +30,7 @@ lpad:
   ret void
 }
 
-!llvm.module.flags = !{!1}
+!llvm37.module.flags = !{!1}
 !1 = !{i32 2, !"Debug Info Version", i32 3}
 !2 = !DISubprogram()
 !3 = !DILocation(line: 1, scope: !2)

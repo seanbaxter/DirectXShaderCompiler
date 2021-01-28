@@ -23,13 +23,13 @@
 #include "dxc/DXIL/DxilUtil.h"
 #include "dxc/HLSL/DxilPackSignatureElement.h"
 
-#include "llvm/IR/IRBuilder.h"
-#include "llvm/IR/DebugInfo.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/IR/Module.h"
-#include "llvm/Transforms/Utils/Local.h"
+#include "llvm37/IR/IRBuilder.h"
+#include "llvm37/IR/DebugInfo.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/Transforms/Utils/Local.h"
 
-using namespace llvm;
+using namespace llvm37;
 using namespace hlsl;
 
 namespace {
@@ -38,8 +38,8 @@ namespace {
 unsigned UpdateSemanticAndInterpMode(StringRef &semName,
                                     DXIL::InterpolationMode &mode,
                                     DXIL::SigPointKind kind,
-                                    LLVMContext &Context) {
-  llvm::StringRef baseSemName; // The 'FOO' in 'FOO1'.
+                                    LLVM37Context &Context) {
+  llvm37::StringRef baseSemName; // The 'FOO' in 'FOO1'.
   uint32_t semIndex;           // The '1' in 'FOO1'
 
   // Split semName and index.
@@ -74,7 +74,7 @@ unsigned UpdateSemanticAndInterpMode(StringRef &semName,
 }
 
 DxilSignatureElement *FindArgInSignature(Argument &arg,
-                                         llvm::StringRef semantic,
+                                         llvm37::StringRef semantic,
                                          DXIL::InterpolationMode interpMode,
                                          DXIL::SigPointKind kind,
                                          DxilSignature &sig) {
@@ -268,7 +268,7 @@ void HLSignatureLower::ProcessArgument(Function *func,
     hlsl::RemapObsoleteSemantic(paramAnnotation, sigPoint->GetKind(), HLM.GetCtx());
   }
 
-  llvm::StringRef semanticStr = paramAnnotation.GetSemanticString();
+  llvm37::StringRef semanticStr = paramAnnotation.GetSemanticString();
   if (semanticStr.empty()) {
     dxilutil::EmitErrorOnFunction(func,
         "Semantic must be defined for all parameters of an entry function or "
@@ -341,7 +341,7 @@ void HLSignatureLower::ProcessArgument(Function *func,
     case DXIL::SemanticInterpretationKind::NotInSig:
     case DXIL::SemanticInterpretationKind::Shadow: {
       IRBuilder<> funcBuilder(func->getEntryBlock().getFirstInsertionPt());
-      if (DbgDeclareInst *DDI = llvm::FindAllocaDbgDeclare(&arg)) {
+      if (DbgDeclareInst *DDI = llvm37::FindAllocaDbgDeclare(&arg)) {
         funcBuilder.SetCurrentDebugLocation(DDI->getDebugLoc());
       }
       replaceInputOutputWithIntrinsic(pSemantic->GetKind(), &arg, HLM.GetOP(),
@@ -600,7 +600,7 @@ Value *replaceLdWithLdInput(Function *loadInput, LoadInst *ldInst,
   Value *zero = Builder.getInt32(0);
 
   if (VectorType *VT = dyn_cast<VectorType>(Ty)) {
-    Value *newVec = llvm::UndefValue::get(VT);
+    Value *newVec = llvm37::UndefValue::get(VT);
     DXASSERT(cols == VT->getNumElements(), "vec size must match");
     for (unsigned col = 0; col < cols; col++) {
       Value *colIdx = Builder.getInt8(col);
@@ -753,7 +753,7 @@ void replaceDirectInputParameter(Value *param, Function *loadInput,
   Type *EltTy = Ty->getScalarType();
 
   if (VectorType *VT = dyn_cast<VectorType>(Ty)) {
-    Value *newVec = llvm::UndefValue::get(VT);
+    Value *newVec = llvm37::UndefValue::get(VT);
     DXASSERT(cols == VT->getNumElements(), "vec size must match");
 
     for (unsigned col = 0; col < cols; col++) {
@@ -1019,7 +1019,7 @@ void GenerateInputOutputUserCall(InputOutputAccessInfo &info, Value *undefVertex
 
           TerminatorInst *TI = BB->getTerminator();
           IRBuilder<> SwitchBuilder(TI);
-          LLVMContext &Ctx = stInst->getContext();
+          LLVM37Context &Ctx = stInst->getContext();
           SwitchInst *Switch =
               SwitchBuilder.CreateSwitch(info.vectorIdx, EndBB, cols);
           TI->eraseFromParent();
@@ -1129,10 +1129,10 @@ void HLSignatureLower::GenerateDxilInputsOutputs(DXIL::SignatureKind SK) {
   Type *i1Ty = Type::getInt1Ty(constZero->getContext());
   Type *i32Ty = constZero->getType();
 
-  llvm::SmallVector<unsigned, 8> removeIndices;
+  llvm37::SmallVector<unsigned, 8> removeIndices;
   for (unsigned i = 0; i < Sig.GetElements().size(); i++) {
     DxilSignatureElement *SE = &Sig.GetElement(i);
-    llvm::Type *Ty = SE->GetCompType().GetLLVMType(HLM.GetCtx());
+    llvm37::Type *Ty = SE->GetCompType().GetLLVM37Type(HLM.GetCtx());
     // Cast i1 to i32 for load input.
     bool bI1Cast = false;
     if (Ty == i1Ty) {
@@ -1158,7 +1158,7 @@ void HLSignatureLower::GenerateDxilInputsOutputs(DXIL::SignatureKind SK) {
 
     IRBuilder<> EntryBuilder(Entry->getEntryBlock().getFirstInsertionPt());
 
-    if (DbgDeclareInst *DDI = llvm::FindAllocaDbgDeclare(GV)) {
+    if (DbgDeclareInst *DDI = llvm37::FindAllocaDbgDeclare(GV)) {
       EntryBuilder.SetCurrentDebugLocation(DDI->getDebugLoc());
     }
 
@@ -1215,7 +1215,7 @@ void HLSignatureLower::GenerateDxilCSInputs() {
     DxilParameterAnnotation &paramAnnotation =
         funcAnnotation->GetParameterAnnotation(arg.getArgNo());
 
-    llvm::StringRef semanticStr = paramAnnotation.GetSemanticString();
+    llvm37::StringRef semanticStr = paramAnnotation.GetSemanticString();
     if (semanticStr.empty()) {
       dxilutil::EmitErrorOnFunction(Entry, "Semantic must be defined for all "
                                     "parameters of an entry function or patch "
@@ -1341,7 +1341,7 @@ void HLSignatureLower::GenerateDxilPatchConstantLdSt() {
 
     Constant *ID = hlslOP->GetU32Const(i);
     // Generate LoadPatchConstant.
-    Type *Ty = SE->GetCompType().GetLLVMType(HLM.GetCtx());
+    Type *Ty = SE->GetCompType().GetLLVM37Type(HLM.GetCtx());
     // Cast i1 to i32 for load input.
     bool bI1Cast = false;
     if (Ty == i1Ty) {
@@ -1424,7 +1424,7 @@ void HLSignatureLower::GenerateDxilPatchConstantFunctionInputs() {
 
       Constant *inputID = hlslOP->GetU32Const(SE->GetID());
       unsigned cols = SE->GetCols();
-      Type *Ty = SE->GetCompType().GetLLVMType(HLM.GetCtx());
+      Type *Ty = SE->GetCompType().GetLLVM37Type(HLM.GetCtx());
       // Cast i1 to i32 for load input.
       bool bI1Cast = false;
       if (Ty == i1Ty) {
@@ -1502,7 +1502,7 @@ void HLSignatureLower::GenerateClipPlanesForVS(Value *outPosition) {
   if (!numClipPlanes)
     return;
 
-  LLVMContext &Ctx = HLM.GetCtx();
+  LLVM37Context &Ctx = HLM.GetCtx();
 
   Function *dp4 =
       HLM.GetOP()->GetOpFunc(DXIL::OpCode::Dot4, Type::getFloatTy(Ctx));

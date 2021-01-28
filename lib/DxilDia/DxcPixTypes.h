@@ -6,7 +6,7 @@
 // License. See LICENSE.TXT for details.                                     //
 //                                                                           //
 // Declares the classes implementing DxcPixType and its subinterfaces. These //
-// classes are used to interpret llvm::DITypes from the debug metadata.      //
+// classes are used to interpret llvm37::DITypes from the debug metadata.      //
 //                                                                           //
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -20,14 +20,14 @@
 #include "dxc/Support/Global.h"
 #include "dxc/Support/microcom.h"
 
-#include "llvm/IR/DebugInfo.h"
-#include "llvm/IR/DebugInfoMetadata.h"
+#include "llvm37/IR/DebugInfo.h"
+#include "llvm37/IR/DebugInfoMetadata.h"
 
 namespace dxil_debug_info
 {
 HRESULT CreateDxcPixType(
     DxcPixDxilDebugInfo *ppDxilDebugInfo,
-    llvm::DIType *diType,
+    llvm37::DIType *diType,
     IDxcPixType **ppResult);
 
 class DxcPixConstType : public IDxcPixConstType
@@ -35,18 +35,18 @@ class DxcPixConstType : public IDxcPixConstType
 private:
   DXC_MICROCOM_TM_REF_FIELDS()
   CComPtr<DxcPixDxilDebugInfo> m_pDxilDebugInfo;
-  llvm::DIDerivedType *m_pType;
-  llvm::DIType *m_pBaseType;
+  llvm37::DIDerivedType *m_pType;
+  llvm37::DIType *m_pBaseType;
 
   DxcPixConstType(
       IMalloc *pMalloc,
       DxcPixDxilDebugInfo *pDxilDebugInfo,
-      llvm::DIDerivedType *pType)
+      llvm37::DIDerivedType *pType)
     : m_pMalloc(pMalloc)
     , m_pDxilDebugInfo(pDxilDebugInfo)
     , m_pType(pType)
   {
-    const llvm::DITypeIdentifierMap EmptyMap;
+    const llvm37::DITypeIdentifierMap EmptyMap;
     m_pBaseType = m_pType->getBaseType().resolve(EmptyMap);
   }
 
@@ -73,18 +73,18 @@ class DxcPixTypedefType : public IDxcPixTypedefType
 private:
   DXC_MICROCOM_TM_REF_FIELDS()
   CComPtr<DxcPixDxilDebugInfo> m_pDxilDebugInfo;
-  llvm::DIDerivedType *m_pType;
-  llvm::DIType *m_pBaseType;
+  llvm37::DIDerivedType *m_pType;
+  llvm37::DIType *m_pBaseType;
 
   DxcPixTypedefType(
       IMalloc *pMalloc,
       DxcPixDxilDebugInfo *pDxilDebugInfo,
-      llvm::DIDerivedType *pType)
+      llvm37::DIDerivedType *pType)
     : m_pMalloc(pMalloc)
     , m_pDxilDebugInfo(pDxilDebugInfo)
     , m_pType(pType)
   {
-    const llvm::DITypeIdentifierMap EmptyMap;
+    const llvm37::DITypeIdentifierMap EmptyMap;
     m_pBaseType = m_pType->getBaseType().resolve(EmptyMap);
   }
 
@@ -111,12 +111,12 @@ class DxcPixScalarType : public IDxcPixScalarType
 private:
   DXC_MICROCOM_TM_REF_FIELDS()
   CComPtr<DxcPixDxilDebugInfo> m_pDxilDebugInfo;
-  llvm::DIBasicType *m_pType;
+  llvm37::DIBasicType *m_pType;
 
   DxcPixScalarType(
       IMalloc *pMalloc,
       DxcPixDxilDebugInfo *pDxilDebugInfo,
-      llvm::DIBasicType *pType)
+      llvm37::DIBasicType *pType)
     : m_pMalloc(pMalloc)
     , m_pDxilDebugInfo(pDxilDebugInfo)
     , m_pType(pType)
@@ -146,21 +146,21 @@ class DxcPixArrayType : public IDxcPixArrayType
 private:
   DXC_MICROCOM_TM_REF_FIELDS()
   CComPtr<DxcPixDxilDebugInfo> m_pDxilDebugInfo;
-  llvm::DICompositeType *m_pArray;
-  llvm::DIType *m_pBaseType;
+  llvm37::DICompositeType *m_pArray;
+  llvm37::DIType *m_pBaseType;
   unsigned m_DimNum;
 
   DxcPixArrayType(
       IMalloc *pMalloc,
       DxcPixDxilDebugInfo *pDxilDebugInfo,
-      llvm::DICompositeType *pArray,
+      llvm37::DICompositeType *pArray,
       unsigned DimNum)
     : m_pMalloc(pMalloc)
     , m_pDxilDebugInfo(pDxilDebugInfo)
     , m_pArray(pArray)
     , m_DimNum(DimNum)
   {
-    const llvm::DITypeIdentifierMap EmptyMap;
+    const llvm37::DITypeIdentifierMap EmptyMap;
     m_pBaseType = m_pArray->getBaseType().resolve(EmptyMap);
 
 #ifndef NDEBUG
@@ -168,7 +168,7 @@ private:
 
     for (auto *Dims : m_pArray->getElements())
     {
-      assert(llvm::isa<llvm::DISubrange>(Dims));
+      assert(llvm37::isa<llvm37::DISubrange>(Dims));
     }
 #endif  // !NDEBUG
   }
@@ -205,12 +205,12 @@ class DxcPixStructType : public IDxcPixStructType
 private:
   DXC_MICROCOM_TM_REF_FIELDS()
   CComPtr<DxcPixDxilDebugInfo> m_pDxilDebugInfo;
-  llvm::DICompositeType *m_pStruct;
+  llvm37::DICompositeType *m_pStruct;
 
   DxcPixStructType(
       IMalloc *pMalloc,
       DxcPixDxilDebugInfo *pDxilDebugInfo,
-      llvm::DICompositeType *pStruct
+      llvm37::DICompositeType *pStruct
   ) : m_pMalloc(pMalloc)
       , m_pDxilDebugInfo(pDxilDebugInfo)
       , m_pStruct(pStruct)
@@ -218,7 +218,7 @@ private:
 #ifndef NDEBUG
     for (auto *Node : m_pStruct->getElements())
     {
-      assert(llvm::isa<llvm::DIDerivedType>(Node) || llvm::isa<llvm::DISubprogram>(Node));
+      assert(llvm37::isa<llvm37::DIDerivedType>(Node) || llvm37::isa<llvm37::DISubprogram>(Node));
     }
 #endif  // !NDEBUG
   }
@@ -257,18 +257,18 @@ class DxcPixStructField : public IDxcPixStructField
 private:
   DXC_MICROCOM_TM_REF_FIELDS()
   CComPtr<DxcPixDxilDebugInfo> m_pDxilDebugInfo;
-  llvm::DIDerivedType *m_pField;
-  llvm::DIType *m_pType;
+  llvm37::DIDerivedType *m_pField;
+  llvm37::DIType *m_pType;
 
   DxcPixStructField(
       IMalloc *pMalloc,
       DxcPixDxilDebugInfo *pDxilDebugInfo,
-      llvm::DIDerivedType *pField)
+      llvm37::DIDerivedType *pField)
     : m_pMalloc(pMalloc)
     , m_pDxilDebugInfo(pDxilDebugInfo)
     , m_pField(pField)
   {
-    const llvm::DITypeIdentifierMap EmptyMap;
+    const llvm37::DITypeIdentifierMap EmptyMap;
     m_pType = m_pField->getBaseType().resolve(EmptyMap);
   }
 

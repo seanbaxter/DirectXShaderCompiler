@@ -35,20 +35,20 @@ need to update this document.
 What should I know to be able to follow along with this document?
 -----------------------------------------------------------------
 
-Reader should be familiar with common compile-engineering principles and LLVM
+Reader should be familiar with common compile-engineering principles and LLVM37
 code fundamentals. In this article we suppose reader is familiar with
 `Single Static Assingment <http://en.wikipedia.org/wiki/Static_single_assignment_form>`_
 concepts. Understanding of
-`IR structure <http://llvm.org/docs/LangRef.html#high-level-structure>`_ is
+`IR structure <http://llvm37.org/docs/LangRef.html#high-level-structure>`_ is
 also important.
 
 We will use such terms as
-"`module <http://llvm.org/docs/LangRef.html#high-level-structure>`_",
-"`function <http://llvm.org/docs/ProgrammersManual.html#the-function-class>`_",
+"`module <http://llvm37.org/docs/LangRef.html#high-level-structure>`_",
+"`function <http://llvm37.org/docs/ProgrammersManual.html#the-function-class>`_",
 "`basic block <http://en.wikipedia.org/wiki/Basic_block>`_",
-"`user <http://llvm.org/docs/ProgrammersManual.html#the-user-class>`_",
-"`value <http://llvm.org/docs/ProgrammersManual.html#the-value-class>`_",
-"`instruction <http://llvm.org/docs/ProgrammersManual.html#the-instruction-class>`_".
+"`user <http://llvm37.org/docs/ProgrammersManual.html#the-user-class>`_",
+"`value <http://llvm37.org/docs/ProgrammersManual.html#the-value-class>`_",
+"`instruction <http://llvm37.org/docs/ProgrammersManual.html#the-instruction-class>`_".
 
 As a good start point, Kaleidoscope tutorial could be used:
 
@@ -58,12 +58,12 @@ Especially it's important to understand chapter 3 of tutorial:
 
 :doc:`tutorial/LangImpl3`
 
-Reader also should know how passes work in LLVM, they could use next article as
+Reader also should know how passes work in LLVM37, they could use next article as
 a reference and start point here:
 
-:doc:`WritingAnLLVMPass`
+:doc:`WritingAnLLVM37Pass`
 
-What else? Well perhaps reader also should have some experience in LLVM pass
+What else? Well perhaps reader also should have some experience in LLVM37 pass
 debugging and bug-fixing.
 
 What I gain by reading this document?
@@ -77,7 +77,7 @@ Author wishes to everybody to avoid case, when you read code from top to bottom
 again and again, and yet you don't understand why we implemented it that way.
 
 We hope that after this article reader could easily debug and improve
-MergeFunctions pass and thus help LLVM project.
+MergeFunctions pass and thus help LLVM37 project.
 
 Narrative structure
 -------------------
@@ -187,7 +187,7 @@ merged with each other. It is defined as:
 
 ``std::set<FunctionNode> FnTree;``
 
-Here ``FunctionNode`` is a wrapper for ``llvm::Function`` class, with
+Here ``FunctionNode`` is a wrapper for ``llvm37::Function`` class, with
 implemented “<” operator among the functions set (below we explain how it works
 exactly; this is a key point in fast functions comparison).
 
@@ -258,7 +258,7 @@ Below, we will use the next operations:
    ``false`` is 0.
 
 The rest of article is based on *MergeFunctions.cpp* source code
-(*<llvm_dir>/lib/Transforms/IPO/MergeFunctions.cpp*). We would like to ask
+(*<llvm37_dir>/lib/Transforms/IPO/MergeFunctions.cpp*). We would like to ask
 reader to keep this file open nearby, so we could use it as a reference for
 further explanations.
 
@@ -378,7 +378,7 @@ technique (see the very first paragraph of this chapter). Both *left* and
 way. If we get -1 or 1 on some stage, return it. Otherwise return 0.
 
 8. Steps 1-6 describe all the possible cases, if we passed steps 1-6 and didn't
-get any conclusions, then invoke ``llvm_unreachable``, since it's quite
+get any conclusions, then invoke ``llvm37_unreachable``, since it's quite
 unexpectable case.
 
 cmpValues(const Value*, const Value*)
@@ -394,7 +394,7 @@ and in right function "*FR*". And every part of *left* place is equal to the
 corresponding part of *right* place, and (!) both parts use *Value* instances,
 for example:
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
    instr0 i32 %LV   ; left side, function FL
    instr0 i32 %RV   ; right side, function FR
@@ -409,13 +409,13 @@ in "*FL*" and "*FR*".
 
 Consider small example here:
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
   define void %f(i32 %pf0, i32 %pf1) {
     instr0 i32 %pf0 instr1 i32 %pf1 instr2 i32 123
   }
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
   define void %g(i32 %pg0, i32 %pg1) {
     instr0 i32 %pg0 instr1 i32 %pg0 instr2 i32 123
@@ -758,7 +758,7 @@ so *G* could be replaced with this wrapper.
 
 *writeAlias*
 
-As follows from *llvm* reference:
+As follows from *llvm37* reference:
 
 “Aliases act as *second name* for the aliasee value”. So we just want to create
 second name for *F* and use it instead of *G*:

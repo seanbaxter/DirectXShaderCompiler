@@ -1,6 +1,6 @@
 //===--- Marshallers.h - Generic matcher function marshallers -*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -17,14 +17,14 @@
 ///
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_LIB_ASTMATCHERS_DYNAMIC_MARSHALLERS_H
-#define LLVM_CLANG_LIB_ASTMATCHERS_DYNAMIC_MARSHALLERS_H
+#ifndef LLVM37_CLANG_LIB_ASTMATCHERS_DYNAMIC_MARSHALLERS_H
+#define LLVM37_CLANG_LIB_ASTMATCHERS_DYNAMIC_MARSHALLERS_H
 
 #include "clang/ASTMatchers/ASTMatchers.h"
 #include "clang/ASTMatchers/Dynamic/Diagnostics.h"
 #include "clang/ASTMatchers/Dynamic/VariantValue.h"
 #include "clang/Basic/LLVM.h"
-#include "llvm/ADT/STLExtras.h"
+#include "llvm37/ADT/STLExtras.h"
 #include <string>
 
 namespace clang {
@@ -78,8 +78,8 @@ template <> struct ArgTypeTraits<unsigned> {
 
 template <> struct ArgTypeTraits<attr::Kind> {
 private:
-  static attr::Kind getAttrKind(llvm::StringRef AttrKind) {
-    return llvm::StringSwitch<attr::Kind>(AttrKind)
+  static attr::Kind getAttrKind(llvm37::StringRef AttrKind) {
+    return llvm37::StringSwitch<attr::Kind>(AttrKind)
 #define ATTR(X) .Case("attr::" #X, attr:: X)
 #include "clang/Basic/AttrList.inc"
         .Default(attr::Kind(-1));
@@ -299,7 +299,7 @@ variadicMatcherDescriptor(StringRef MatcherName, const SourceRange &NameRange,
 
   VariantMatcher Out;
   if (!HasError) {
-    Out = outvalueToVariantMatcher(Func(llvm::makeArrayRef(InnerArgs,
+    Out = outvalueToVariantMatcher(Func(llvm37::makeArrayRef(InnerArgs,
                                                            Args.size())));
   }
 
@@ -326,7 +326,7 @@ public:
 
   template <typename ResultT, typename ArgT,
             ResultT (*F)(ArrayRef<const ArgT *>)>
-  VariadicFuncMatcherDescriptor(llvm::VariadicFunction<ResultT, ArgT, F> Func,
+  VariadicFuncMatcherDescriptor(llvm37::VariadicFunction<ResultT, ArgT, F> Func,
                           StringRef MatcherName)
       : Func(&variadicMatcherDescriptor<ResultT, ArgT, F>),
         MatcherName(MatcherName.str()),
@@ -658,7 +658,7 @@ MatcherDescriptor *makeMatcherAutoMarshall(ReturnType (*Func)(ArgType1, ArgType2
 template <typename ResultT, typename ArgT,
           ResultT (*Func)(ArrayRef<const ArgT *>)>
 MatcherDescriptor *
-makeMatcherAutoMarshall(llvm::VariadicFunction<ResultT, ArgT, Func> VarFunc,
+makeMatcherAutoMarshall(llvm37::VariadicFunction<ResultT, ArgT, Func> VarFunc,
                         StringRef MatcherName) {
   return new VariadicFuncMatcherDescriptor(VarFunc, MatcherName);
 }
@@ -713,4 +713,4 @@ makeMatcherAutoMarshall(ast_matchers::internal::VariadicOperatorMatcherFunc<
 }  // namespace ast_matchers
 }  // namespace clang
 
-#endif  // LLVM_CLANG_AST_MATCHERS_DYNAMIC_MARSHALLERS_H
+#endif  // LLVM37_CLANG_AST_MATCHERS_DYNAMIC_MARSHALLERS_H

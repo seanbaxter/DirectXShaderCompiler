@@ -1,6 +1,6 @@
 //===--- HTMLPrint.cpp - Source code -> HTML pretty-printing --------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -21,8 +21,8 @@
 #include "clang/Lex/Preprocessor.h"
 #include "clang/Rewrite/Core/HTMLRewrite.h"
 #include "clang/Rewrite/Core/Rewriter.h"
-#include "llvm/Support/MemoryBuffer.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/Support/MemoryBuffer.h"
+#include "llvm37/Support/raw_ostream.h"
 using namespace clang;
 
 //===----------------------------------------------------------------------===//
@@ -51,7 +51,7 @@ std::unique_ptr<ASTConsumer> clang::CreateHTMLPrinter(raw_ostream *OS,
                                                       Preprocessor &PP,
                                                       bool SyntaxHighlight,
                                                       bool HighlightMacros) {
-  return llvm::make_unique<HTMLPrinter>(OS, PP, SyntaxHighlight,
+  return llvm37::make_unique<HTMLPrinter>(OS, PP, SyntaxHighlight,
                                         HighlightMacros);
 }
 

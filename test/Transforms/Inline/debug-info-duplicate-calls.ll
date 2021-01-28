@@ -1,6 +1,6 @@
 ; RUN: opt < %s -always-inline -S | FileCheck %s
 
-; Original input generated from clang -emit-llvm -S -c -mllvm -disable-llvm-optzns
+; Original input generated from clang -emit-llvm37 -S -c -mllvm37 -disable-llvm37-optzns
 ;
 ; #define CALLS1 f2(); f2();
 ; #define CALLS2 f4(); f4();
@@ -94,11 +94,11 @@ attributes #0 = { uwtable "less-precise-fpmad"="false" "no-frame-pointer-elim"="
 attributes #1 = { alwaysinline inlinehint uwtable "less-precise-fpmad"="false" "no-frame-pointer-elim"="true" "no-frame-pointer-elim-non-leaf" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "stack-protector-buffer-size"="8" "unsafe-fp-math"="false" "use-soft-float"="false" }
 attributes #2 = { "less-precise-fpmad"="false" "no-frame-pointer-elim"="true" "no-frame-pointer-elim-non-leaf" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "stack-protector-buffer-size"="8" "unsafe-fp-math"="false" "use-soft-float"="false" }
 
-!llvm.dbg.cu = !{!0}
-!llvm.module.flags = !{!10, !11}
-!llvm.ident = !{!12}
+!llvm37.dbg.cu = !{!0}
+!llvm37.module.flags = !{!10, !11}
+!llvm37.ident = !{!12}
 
-!0 = !DICompileUnit(language: DW_LANG_C_plus_plus, producer: "clang version 3.7.0 (trunk 226474) (llvm/trunk 226478)", isOptimized: false, emissionKind: 2, file: !1, enums: !2, retainedTypes: !2, subprograms: !3, globals: !2, imports: !2)
+!0 = !DICompileUnit(language: DW_LANG_C_plus_plus, producer: "clang version 3.7.0 (trunk 226474) (llvm37/trunk 226478)", isOptimized: false, emissionKind: 2, file: !1, enums: !2, retainedTypes: !2, subprograms: !3, globals: !2, imports: !2)
 !1 = !DIFile(filename: "debug-info-duplicate-calls.cpp", directory: "/tmp/dbginfo")
 !2 = !{}
 !3 = !{!4, !7, !8, !9}
@@ -110,7 +110,7 @@ attributes #2 = { "less-precise-fpmad"="false" "no-frame-pointer-elim"="true" "n
 !9 = !DISubprogram(name: "f2", line: 4, isLocal: false, isDefinition: true, flags: DIFlagPrototyped, isOptimized: false, scopeLine: 4, file: !1, scope: !5, type: !6, function: void ()* @_Z2f2v, variables: !2)
 !10 = !{i32 2, !"Dwarf Version", i32 4}
 !11 = !{i32 2, !"Debug Info Version", i32 3}
-!12 = !{!"clang version 3.7.0 (trunk 226474) (llvm/trunk 226478)"}
+!12 = !{!"clang version 3.7.0 (trunk 226474) (llvm37/trunk 226478)"}
 !13 = !DILocation(line: 14, column: 3, scope: !4)
 !14 = !DILocation(line: 15, column: 1, scope: !4)
 !15 = !DILocation(line: 11, column: 3, scope: !7)

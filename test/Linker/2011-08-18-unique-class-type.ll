@@ -1,4 +1,4 @@
-; RUN: llvm-link %s %p/2011-08-18-unique-class-type2.ll -S -o - | FileCheck %s
+; RUN: llvm37-link %s %p/2011-08-18-unique-class-type2.ll -S -o - | FileCheck %s
 ; CHECK: DW_TAG_class_type
 ; CHECK-NOT: DW_TAG_class_type
 ; Test to check there is only one MDNode for class A after linking.
@@ -11,14 +11,14 @@ target triple = "x86_64-apple-macosx10.7.0"
 define void @_Z3fooN2N11AE() nounwind uwtable ssp {
 entry:
   %mya = alloca %"class.N1::A", align 1
-  call void @llvm.dbg.declare(metadata %"class.N1::A"* %mya, metadata !9, metadata !DIExpression()), !dbg !13
+  call void @llvm37.dbg.declare(metadata %"class.N1::A"* %mya, metadata !9, metadata !DIExpression()), !dbg !13
   ret void, !dbg !14
 }
 
-declare void @llvm.dbg.declare(metadata, metadata, metadata) nounwind readnone
+declare void @llvm37.dbg.declare(metadata, metadata, metadata) nounwind readnone
 
-!llvm.dbg.cu = !{!0}
-!llvm.module.flags = !{!18}
+!llvm37.dbg.cu = !{!0}
+!llvm37.module.flags = !{!18}
 
 !0 = !DICompileUnit(language: DW_LANG_C_plus_plus, producer: "clang version 3.0 (trunk 137954)", isOptimized: true, emissionKind: 0, file: !16, enums: !2, retainedTypes: !2, subprograms: !3, globals: !2)
 !1 = !{!2}

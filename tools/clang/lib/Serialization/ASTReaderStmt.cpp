@@ -1,6 +1,6 @@
 //===--- ASTReaderStmt.cpp - Stmt/Expr Deserialization ----------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -18,7 +18,7 @@
 #include "clang/AST/DeclTemplate.h"
 #include "clang/AST/StmtVisitor.h"
 #include "clang/Lex/Token.h"
-#include "llvm/ADT/SmallString.h"
+#include "llvm37/ADT/SmallString.h"
 using namespace clang;
 using namespace clang::serialization;
 
@@ -30,7 +30,7 @@ namespace clang {
     
     ASTReader &Reader;
     ModuleFile &F;
-    llvm::BitstreamCursor &DeclsCursor;
+    llvm37::BitstreamCursor &DeclsCursor;
     const ASTReader::RecordData &Record;
     unsigned &Idx;
 
@@ -79,7 +79,7 @@ namespace clang {
 
   public:
     ASTStmtReader(ASTReader &Reader, ModuleFile &F,
-                  llvm::BitstreamCursor &Cursor,
+                  llvm37::BitstreamCursor &Cursor,
                   const ASTReader::RecordData &Record, unsigned &Idx)
       : Reader(Reader), F(F), DeclsCursor(Cursor), Record(Record), Idx(Idx) { }
 
@@ -1629,7 +1629,7 @@ void ASTStmtReader::VisitOpaqueValueExpr(OpaqueValueExpr *E) {
 }
 
 void ASTStmtReader::VisitTypoExpr(TypoExpr *E) {
-  llvm_unreachable("Cannot read TypoExpr nodes");
+  llvm37_unreachable("Cannot read TypoExpr nodes");
 }
 
 //===----------------------------------------------------------------------===//
@@ -2295,7 +2295,7 @@ void ASTStmtReader::VisitOMPCancelDirective(OMPCancelDirective *D) {
 Stmt *ASTReader::ReadStmt(ModuleFile &F) {
   switch (ReadingKind) {
   case Read_None:
-    llvm_unreachable("should not call this when not reading anything");
+    llvm37_unreachable("should not call this when not reading anything");
   case Read_Decl:
   case Read_Type:
     return ReadStmtFromStream(F);
@@ -2303,7 +2303,7 @@ Stmt *ASTReader::ReadStmt(ModuleFile &F) {
     return ReadSubStmt();
   }
 
-  llvm_unreachable("ReadingKind not set ?");
+  llvm37_unreachable("ReadingKind not set ?");
 }
 
 Expr *ASTReader::ReadExpr(ModuleFile &F) {
@@ -2324,11 +2324,11 @@ Expr *ASTReader::ReadSubExpr() {
 Stmt *ASTReader::ReadStmtFromStream(ModuleFile &F) {
 
   ReadingKindTracker ReadingKind(Read_Stmt, *this);
-  llvm::BitstreamCursor &Cursor = F.DeclsCursor;
+  llvm37::BitstreamCursor &Cursor = F.DeclsCursor;
   
   // Map of offset to previously deserialized stmt. The offset points
   /// just after the stmt record.
-  llvm::DenseMap<uint64_t, Stmt *> StmtEntries;
+  llvm37::DenseMap<uint64_t, Stmt *> StmtEntries;
 
 #ifndef NDEBUG
   unsigned PrevNumStmts = StmtStack.size();
@@ -2340,16 +2340,16 @@ Stmt *ASTReader::ReadStmtFromStream(ModuleFile &F) {
   Stmt::EmptyShell Empty;
 
   while (true) {
-    llvm::BitstreamEntry Entry = Cursor.advanceSkippingSubblocks();
+    llvm37::BitstreamEntry Entry = Cursor.advanceSkippingSubblocks();
     
     switch (Entry.Kind) {
-    case llvm::BitstreamEntry::SubBlock: // Handled for us already.
-    case llvm::BitstreamEntry::Error:
+    case llvm37::BitstreamEntry::SubBlock: // Handled for us already.
+    case llvm37::BitstreamEntry::Error:
       Error("malformed block record in AST file");
       return nullptr;
-    case llvm::BitstreamEntry::EndBlock:
+    case llvm37::BitstreamEntry::EndBlock:
       goto Done;
-    case llvm::BitstreamEntry::Record:
+    case llvm37::BitstreamEntry::Record:
       // The interesting case.
       break;
     }
@@ -2707,7 +2707,7 @@ Stmt *ASTReader::ReadStmtFromStream(ModuleFile &F) {
       S = new (Context) ObjCSubscriptRefExpr(Empty);
       break;
     case EXPR_OBJC_KVC_REF_EXPR:
-      llvm_unreachable("mismatching AST file");
+      llvm37_unreachable("mismatching AST file");
     case EXPR_OBJC_MESSAGE_EXPR:
       S = ObjCMessageExpr::CreateEmpty(Context,
                                      Record[ASTStmtReader::NumExprFields],

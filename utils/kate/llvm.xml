@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE language SYSTEM "language.dtd">
-<language name="LLVM" section="Sources"
+<language name="LLVM37" section="Sources"
           version="1.00" kateversion="3.4.4"
           extensions="*.ll"
           mimetype=""
-          author="LLVM Team"
-          license="LLVM Release License">
+          author="LLVM37 Team"
+          license="LLVM37 Release License">
   <highlighting>
     <list name="keywords">
       <item> begin </item>
@@ -103,10 +103,10 @@
       <item> opaque </item>
     </list>
     <list name="intrinsic-global-variables">
-      <item> llvm.used </item>
-      <item> llvm.compiler.used </item>
-      <item> llvm.global_ctors </item>
-      <item> llvm.global_dtors </item>
+      <item> llvm37.used </item>
+      <item> llvm37.compiler.used </item>
+      <item> llvm37.global_ctors </item>
+      <item> llvm37.global_dtors </item>
     </list>
     <list name="instructions">
       <item> ret </item>
@@ -186,7 +186,7 @@
       <item> uno </item>
     </list>
     <contexts>
-      <context name="llvm" attribute="Normal Text" lineEndContext="#stay">
+      <context name="llvm37" attribute="Normal Text" lineEndContext="#stay">
         <DetectSpaces />
         <AnyChar String="@%" attribute="Symbol" context="symbol" />
 

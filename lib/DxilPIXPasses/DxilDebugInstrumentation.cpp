@@ -16,13 +16,13 @@
 #include "dxc/DxilPIXPasses/DxilPIXVirtualRegisters.h"
 #include "dxc/HLSL/DxilGenerationPass.h"
 
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/IRBuilder.h"
-#include "llvm/IR/InstIterator.h"
-#include "llvm/IR/Module.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/IRBuilder.h"
+#include "llvm37/IR/InstIterator.h"
+#include "llvm37/IR/Module.h"
 
-using namespace llvm;
+using namespace llvm37;
 using namespace hlsl;
 
 // Overview of instrumentation:
@@ -231,7 +231,7 @@ private:
   struct BuilderContext {
     Module &M;
     DxilModule &DM;
-    LLVMContext &Ctx;
+    LLVM37Context &Ctx;
     OP *HlslOP;
     IRBuilder<> &Builder;
   };
@@ -312,7 +312,7 @@ DxilDebugInstrumentation::addRequiredSystemValues(BuilderContext &BC) {
 
       if (Existing_SV_VertexId == InputElements.end()) {
         auto Added_SV_VertexId =
-            llvm::make_unique<DxilSignatureElement>(DXIL::SigPointKind::VSIn);
+            llvm37::make_unique<DxilSignatureElement>(DXIL::SigPointKind::VSIn);
         Added_SV_VertexId->Initialize("VertexId", hlsl::CompType::getF32(),
                                       hlsl::DXIL::InterpolationMode::Undefined,
                                       1, 1);
@@ -336,7 +336,7 @@ DxilDebugInstrumentation::addRequiredSystemValues(BuilderContext &BC) {
 
       if (Existing_SV_InstanceId == InputElements.end()) {
         auto Added_SV_InstanceId =
-            llvm::make_unique<DxilSignatureElement>(DXIL::SigPointKind::VSIn);
+            llvm37::make_unique<DxilSignatureElement>(DXIL::SigPointKind::VSIn);
         Added_SV_InstanceId->Initialize(
             "InstanceId", hlsl::CompType::getF32(),
             hlsl::DXIL::InterpolationMode::Undefined, 1, 1);
@@ -369,7 +369,7 @@ DxilDebugInstrumentation::addRequiredSystemValues(BuilderContext &BC) {
     // If not present, we add it.
     if (Existing_SV_Position == InputElements.end()) {
       auto Added_SV_Position =
-          llvm::make_unique<DxilSignatureElement>(DXIL::SigPointKind::PSIn);
+          llvm37::make_unique<DxilSignatureElement>(DXIL::SigPointKind::PSIn);
       Added_SV_Position->Initialize("Position", hlsl::CompType::getF32(),
                                     hlsl::DXIL::InterpolationMode::Linear, 1,
                                     4);
@@ -550,10 +550,10 @@ void DxilDebugInstrumentation::addUAV(BuilderContext &BC) {
   // Set up a UAV with structure of a single int
   unsigned int UAVResourceHandle =
       static_cast<unsigned int>(BC.DM.GetUAVs().size());
-  SmallVector<llvm::Type *, 1> Elements{Type::getInt32Ty(BC.Ctx)};
-  llvm::StructType *UAVStructTy =
-      llvm::StructType::create(Elements, "PIX_DebugUAV_Type");
-  std::unique_ptr<DxilResource> pUAV = llvm::make_unique<DxilResource>();
+  SmallVector<llvm37::Type *, 1> Elements{Type::getInt32Ty(BC.Ctx)};
+  llvm37::StructType *UAVStructTy =
+      llvm37::StructType::create(Elements, "PIX_DebugUAV_Type");
+  std::unique_ptr<DxilResource> pUAV = llvm37::make_unique<DxilResource>();
   pUAV->SetGlobalName("PIX_DebugUAVName");
   pUAV->SetGlobalSymbol(UndefValue::get(UAVStructTy->getPointerTo()));
   pUAV->SetID(UAVResourceHandle);
@@ -811,7 +811,7 @@ void DxilDebugInstrumentation::addStoreStepDebugEntry(BuilderContext &BC,
                                                       StoreInst *Inst) {
   std::uint32_t ValueOrdinalBase;
   std::uint32_t UnusedValueOrdinalSize;
-  llvm::Value *ValueOrdinalIndex;
+  llvm37::Value *ValueOrdinalIndex;
   if (!pix_dxil::PixAllocaRegWrite::FromInst(Inst, &ValueOrdinalBase,
                                              &UnusedValueOrdinalSize,
                                              &ValueOrdinalIndex)) {
@@ -836,7 +836,7 @@ void DxilDebugInstrumentation::addStepDebugEntry(BuilderContext &BC,
   if (Inst->getOpcode() == Instruction::OtherOps::Call) {
     if (Inst->getNumOperands() > 0) {
       if (auto *asInt =
-              llvm::cast_or_null<llvm::ConstantInt>(Inst->getOperand(0))) {
+              llvm37::cast_or_null<llvm37::ConstantInt>(Inst->getOperand(0))) {
         if (asInt->getZExtValue() == (uint64_t)DXIL::OpCode::AllocateRayQuery) {
           // Ray query handles should not be stored in the debug trace UAV
           return;
@@ -845,7 +845,7 @@ void DxilDebugInstrumentation::addStepDebugEntry(BuilderContext &BC,
     }
   }
 
-  if (auto *St = llvm::dyn_cast<llvm::StoreInst>(Inst)) {
+  if (auto *St = llvm37::dyn_cast<llvm37::StoreInst>(Inst)) {
     addStoreStepDebugEntry(BC, St);
     return;
   }
@@ -919,7 +919,7 @@ void DxilDebugInstrumentation::addStepDebugEntryValue(
 
 bool DxilDebugInstrumentation::runOnModule(Module &M) {
   DxilModule &DM = M.GetOrCreateDxilModule();
-  LLVMContext &Ctx = M.getContext();
+  LLVM37Context &Ctx = M.getContext();
   OP *HlslOP = DM.GetOP();
 
   auto ShaderModel = DM.GetShaderModel();
@@ -986,7 +986,7 @@ bool DxilDebugInstrumentation::runOnModule(Module &M) {
       if (Inst.getOpcode() != Instruction::OtherOps::PHI) {
         break;
       }
-      PHINode &PN = llvm::cast<PHINode>(Inst);
+      PHINode &PN = llvm37::cast<PHINode>(Inst);
       for (unsigned i = 0, e = PN.getNumIncomingValues(); i != e; ++i) {
         BasicBlock *PhiBB = PN.getIncomingBlock(i);
         Value *PhiVal = PN.getIncomingValue(i);
@@ -1062,7 +1062,7 @@ bool DxilDebugInstrumentation::runOnModule(Module &M) {
 
 char DxilDebugInstrumentation::ID = 0;
 
-ModulePass *llvm::createDxilDebugInstrumentationPass() {
+ModulePass *llvm37::createDxilDebugInstrumentationPass() {
   return new DxilDebugInstrumentation();
 }
 

@@ -17,7 +17,7 @@ entry:
 }
 
 ; CHECK-LABEL: @f
-; CHECK: call void @llvm.trap()
+; CHECK: call void @llvm37.trap()
 define i16 @f2() {
 entry:
   %packed1 = alloca %struct.s2_packed, align 8

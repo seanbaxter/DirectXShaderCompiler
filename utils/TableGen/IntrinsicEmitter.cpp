@@ -1,6 +1,6 @@
 //===- IntrinsicEmitter.cpp - Generate intrinsic information --------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -15,13 +15,13 @@
 #include "CodeGenTarget.h"
 #include "SequenceToOffsetTable.h"
 #include "TableGenBackends.h"
-#include "llvm/ADT/StringExtras.h"
-#include "llvm/TableGen/Error.h"
-#include "llvm/TableGen/Record.h"
-#include "llvm/TableGen/StringMatcher.h"
-#include "llvm/TableGen/TableGenBackend.h"
+#include "llvm37/ADT/StringExtras.h"
+#include "llvm37/TableGen/Error.h"
+#include "llvm37/TableGen/Record.h"
+#include "llvm37/TableGen/StringMatcher.h"
+#include "llvm37/TableGen/TableGenBackend.h"
 #include <algorithm>
-using namespace llvm;
+using namespace llvm37;
 
 namespace {
 class IntrinsicEmitter {
@@ -95,10 +95,10 @@ void IntrinsicEmitter::run(raw_ostream &OS) {
   // Emit intrinsic alias analysis mod/ref behavior.
   EmitModRefBehavior(Ints, OS);
 
-  // Emit code to translate GCC builtins into LLVM intrinsics.
+  // Emit code to translate GCC builtins into LLVM37 intrinsics.
   EmitIntrinsicToGCCBuiltinMap(Ints, OS);
 
-  // Emit code to translate MS builtins into LLVM intrinsics.
+  // Emit code to translate MS builtins into LLVM37 intrinsics.
   EmitIntrinsicToMSBuiltinMap(Ints, OS);
 
   EmitSuffix(OS);
@@ -146,7 +146,7 @@ EmitFnNameRecognizer(const std::vector<CodeGenIntrinsic> &Ints,
 
   OS << "// Function name -> enum value recognizer code.\n";
   OS << "#ifdef GET_FUNCTION_RECOGNIZER\n";
-  OS << "  StringRef NameR(Name+6, Len-6);   // Skip over 'llvm.'\n";
+  OS << "  StringRef NameR(Name+6, Len-6);   // Skip over 'llvm37.'\n";
   OS << "  switch (Name[5]) {                  // Dispatch on first letter.\n";
   OS << "  default: break;\n";
   // Emit the intrinsic matching stuff by first letter.
@@ -302,25 +302,25 @@ static void EncodeFixedValueType(MVT::SimpleValueType VT,
 static void EncodeFixedType(Record *R, std::vector<unsigned char> &ArgCodes,
                             std::vector<unsigned char> &Sig) {
 
-  if (R->isSubClassOf("LLVMMatchType")) {
+  if (R->isSubClassOf("LLVM37MatchType")) {
     unsigned Number = R->getValueAsInt("Number");
     assert(Number < ArgCodes.size() && "Invalid matching number!");
-    if (R->isSubClassOf("LLVMExtendedType"))
+    if (R->isSubClassOf("LLVM37ExtendedType"))
       Sig.push_back(IIT_EXTEND_ARG);
-    else if (R->isSubClassOf("LLVMTruncatedType"))
+    else if (R->isSubClassOf("LLVM37TruncatedType"))
       Sig.push_back(IIT_TRUNC_ARG);
-    else if (R->isSubClassOf("LLVMHalfElementsVectorType"))
+    else if (R->isSubClassOf("LLVM37HalfElementsVectorType"))
       Sig.push_back(IIT_HALF_VEC_ARG);
-    else if (R->isSubClassOf("LLVMVectorSameWidth")) {
+    else if (R->isSubClassOf("LLVM37VectorSameWidth")) {
       Sig.push_back(IIT_SAME_VEC_WIDTH_ARG);
       Sig.push_back((Number << 3) | ArgCodes[Number]);
       MVT::SimpleValueType VT = getValueType(R->getValueAsDef("ElTy"));
       EncodeFixedValueType(VT, Sig);
       return;
     }
-    else if (R->isSubClassOf("LLVMPointerTo"))
+    else if (R->isSubClassOf("LLVM37PointerTo"))
       Sig.push_back(IIT_PTR_TO_ARG);
-    else if (R->isSubClassOf("LLVMVectorOfPointersToElt"))
+    else if (R->isSubClassOf("LLVM37VectorOfPointersToElt"))
       Sig.push_back(IIT_VEC_OF_PTRS_TO_ELT);
     else
       Sig.push_back(IIT_ARG);
@@ -351,7 +351,7 @@ static void EncodeFixedType(Record *R, std::vector<unsigned char> &ArgCodes,
 
   case MVT::iPTR: {
     unsigned AddrSpace = 0;
-    if (R->isSubClassOf("LLVMQualPointerType")) {
+    if (R->isSubClassOf("LLVM37QualPointerType")) {
       AddrSpace = R->getValueAsInt("AddrSpace");
       assert(AddrSpace < 256 && "Address space exceeds 255");
     }
@@ -406,7 +406,7 @@ static void ComputeFixedEncoding(const CodeGenIntrinsic &Int,
       case 3: TypeSig.push_back(IIT_STRUCT3); break;
       case 4: TypeSig.push_back(IIT_STRUCT4); break;
       case 5: TypeSig.push_back(IIT_STRUCT5); break;
-      default: llvm_unreachable("Unhandled case in struct");
+      default: llvm37_unreachable("Unhandled case in struct");
     }
 
     for (unsigned i = 0, e = Int.IS.RetVTs.size(); i != e; ++i)
@@ -522,7 +522,7 @@ static ModRefKind getModRefKind(const CodeGenIntrinsic &intrinsic) {
   case CodeGenIntrinsic::ReadWriteMem:
     return MRK_none;
   }
-  llvm_unreachable("bad mod-ref kind");
+  llvm37_unreachable("bad mod-ref kind");
 }
 
 namespace {
@@ -559,10 +559,10 @@ EmitAttributes(const std::vector<CodeGenIntrinsic> &Ints, raw_ostream &OS) {
   OS << "// Add parameter attributes that are not common to all intrinsics.\n";
   OS << "#ifdef GET_INTRINSIC_ATTRIBUTES\n";
   if (TargetOnly)
-    OS << "static AttributeSet getAttributes(LLVMContext &C, " << TargetPrefix
+    OS << "static AttributeSet getAttributes(LLVM37Context &C, " << TargetPrefix
        << "Intrinsic::ID id) {\n";
   else
-    OS << "AttributeSet Intrinsic::getAttributes(LLVMContext &C, ID id) {\n";
+    OS << "AttributeSet Intrinsic::getAttributes(LLVM37Context &C, ID id) {\n";
 
   // Compute the maximum number of attribute arguments and the map
   typedef std::map<const CodeGenIntrinsic*, unsigned,
@@ -601,7 +601,7 @@ EmitAttributes(const std::vector<CodeGenIntrinsic> &Ints, raw_ostream &OS) {
   else
     OS << "1";
   OS << "]) {\n";
-  OS << "    default: llvm_unreachable(\"Invalid attribute number\");\n";
+  OS << "    default: llvm37_unreachable(\"Invalid attribute number\");\n";
   for (UniqAttrMapTy::const_iterator I = UniqAttributes.begin(),
        E = UniqAttributes.end(); I != E; ++I) {
     OS << "    case " << I->second << ": {\n";
@@ -785,11 +785,11 @@ EmitIntrinsicToGCCBuiltinMap(const std::vector<CodeGenIntrinsic> &Ints,
     }
   }
 
-  OS << "// Get the LLVM intrinsic that corresponds to a GCC builtin.\n";
+  OS << "// Get the LLVM37 intrinsic that corresponds to a GCC builtin.\n";
   OS << "// This is used by the C front-end.  The GCC builtin name is passed\n";
   OS << "// in as BuiltinName, and a target prefix (e.g. 'ppc') is passed\n";
   OS << "// in as TargetPrefix.  The result is assigned to 'IntrinsicID'.\n";
-  OS << "#ifdef GET_LLVM_INTRINSIC_FOR_GCC_BUILTIN\n";
+  OS << "#ifdef GET_LLVM37_INTRINSIC_FOR_GCC_BUILTIN\n";
 
   if (TargetOnly) {
     OS << "static " << TargetPrefix << "Intrinsic::ID "
@@ -840,11 +840,11 @@ EmitIntrinsicToMSBuiltinMap(const std::vector<CodeGenIntrinsic> &Ints,
                       "duplicate MS builtin name!");
   }
 
-  OS << "// Get the LLVM intrinsic that corresponds to a MS builtin.\n"
+  OS << "// Get the LLVM37 intrinsic that corresponds to a MS builtin.\n"
         "// This is used by the C front-end.  The MS builtin name is passed\n"
         "// in as a BuiltinName, and a target prefix (e.g. 'arm') is passed\n"
         "// in as a TargetPrefix.  The result is assigned to 'IntrinsicID'.\n"
-        "#ifdef GET_LLVM_INTRINSIC_FOR_MS_BUILTIN\n";
+        "#ifdef GET_LLVM37_INTRINSIC_FOR_MS_BUILTIN\n";
 
   OS << (TargetOnly ? "static " + TargetPrefix : "") << "Intrinsic::ID "
      << (TargetOnly ? "" : "Intrinsic::")
@@ -873,6 +873,6 @@ EmitIntrinsicToMSBuiltinMap(const std::vector<CodeGenIntrinsic> &Ints,
   OS << "#endif\n\n";
 }
 
-void llvm::EmitIntrinsics(RecordKeeper &RK, raw_ostream &OS, bool TargetOnly) {
+void llvm37::EmitIntrinsics(RecordKeeper &RK, raw_ostream &OS, bool TargetOnly) {
   IntrinsicEmitter(RK, TargetOnly).run(OS);
 }

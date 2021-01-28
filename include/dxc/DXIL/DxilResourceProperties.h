@@ -13,7 +13,7 @@
 
 #include "DxilConstants.h"
 
-namespace llvm {
+namespace llvm37 {
 class Constant;
 class Type;
 }
@@ -85,11 +85,11 @@ class DxilResourceBase;
 struct DxilInst_AnnotateHandle;
 
 namespace resource_helper {
-llvm::Constant *getAsConstant(const DxilResourceProperties &, llvm::Type *Ty,
+llvm37::Constant *getAsConstant(const DxilResourceProperties &, llvm37::Type *Ty,
                               const ShaderModel &);
-DxilResourceProperties loadPropsFromConstant(const llvm::Constant &C);
+DxilResourceProperties loadPropsFromConstant(const llvm37::Constant &C);
 DxilResourceProperties
-loadPropsFromAnnotateHandle(DxilInst_AnnotateHandle &annotateHandle, llvm::Type *Ty,
+loadPropsFromAnnotateHandle(DxilInst_AnnotateHandle &annotateHandle, llvm37::Type *Ty,
                        const ShaderModel &);
 DxilResourceProperties loadPropsFromResourceBase(const DxilResourceBase *);
 

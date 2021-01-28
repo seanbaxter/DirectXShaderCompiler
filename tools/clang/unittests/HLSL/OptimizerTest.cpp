@@ -28,18 +28,18 @@
 #include "dxc/Test/HlslTestUtils.h"
 #include "dxc/Test/DxcTestUtils.h"
 
-#include "llvm/Support/raw_os_ostream.h"
+#include "llvm37/Support/raw_os_ostream.h"
 #include "dxc/Support/Global.h"
 #include "dxc/Support/dxcapi.use.h"
 #include "dxc/Support/microcom.h"
 #include "dxc/Support/HLSLOptions.h"
 #include "dxc/Support/Unicode.h"
 
-#include "llvm/Support/FileSystem.h"
-#include "llvm/Support/MSFileSystem.h"
-#include "llvm/Support/Path.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/ADT/StringSwitch.h"
+#include "llvm37/Support/FileSystem.h"
+#include "llvm37/Support/MSFileSystem.h"
+#include "llvm37/Support/Path.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/ADT/StringSwitch.h"
 
 using namespace std;
 using namespace hlsl_test;
@@ -68,7 +68,7 @@ public:
   TEST_METHOD(OptimizerWhenSliceWithIntermediateOptionsThenOK)
 
   void OptimizerWhenSliceNThenOK(int optLevel);
-  void OptimizerWhenSliceNThenOK(int optLevel, LPCSTR pText, LPCWSTR pTarget, llvm::ArrayRef<LPCWSTR> args = {});
+  void OptimizerWhenSliceNThenOK(int optLevel, LPCSTR pText, LPCWSTR pTarget, llvm37::ArrayRef<LPCWSTR> args = {});
 
   dxc::DxcDllSupport m_dllSupport;
   VersionSupportInfo m_ver;
@@ -154,7 +154,7 @@ static void ExtractFunctionPasses(std::vector<LPCWSTR> &passes, std::vector<LPCW
   passes.erase(firstPass, lastPass);
 }
 
-void OptimizerTest::OptimizerWhenSliceNThenOK(int optLevel, LPCSTR pText, LPCWSTR pTarget, llvm::ArrayRef<LPCWSTR> args) {
+void OptimizerTest::OptimizerWhenSliceNThenOK(int optLevel, LPCSTR pText, LPCWSTR pTarget, llvm37::ArrayRef<LPCWSTR> args) {
   CComPtr<IDxcCompiler> pCompiler;
   CComPtr<IDxcOptimizer> pOptimizer;
   CComPtr<IDxcOperationResult> pResult;

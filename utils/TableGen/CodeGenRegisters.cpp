@@ -1,6 +1,6 @@
 //===- CodeGenRegisters.cpp - Register and RegisterClass Info -------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -14,15 +14,15 @@
 
 #include "CodeGenRegisters.h"
 #include "CodeGenTarget.h"
-#include "llvm/ADT/IntEqClasses.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/ADT/StringExtras.h"
-#include "llvm/ADT/Twine.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/TableGen/Error.h"
+#include "llvm37/ADT/IntEqClasses.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/ADT/StringExtras.h"
+#include "llvm37/ADT/Twine.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/TableGen/Error.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "regalloc-emitter"
 
@@ -647,8 +647,8 @@ struct TupleExpander : SetTheory::Expander {
 //===----------------------------------------------------------------------===//
 
 static void sortAndUniqueRegisters(CodeGenRegister::Vec &M) {
-  std::sort(M.begin(), M.end(), deref<llvm::less>());
-  M.erase(std::unique(M.begin(), M.end(), deref<llvm::equal>()), M.end());
+  std::sort(M.begin(), M.end(), deref<llvm37::less>());
+  M.erase(std::unique(M.begin(), M.end(), deref<llvm37::equal>()), M.end());
 }
 
 CodeGenRegisterClass::CodeGenRegisterClass(CodeGenRegBank &RegBank, Record *R)
@@ -764,10 +764,10 @@ void CodeGenRegisterClass::inheritProperties(CodeGenRegBank &RegBank) {
 
 bool CodeGenRegisterClass::contains(const CodeGenRegister *Reg) const {
   return std::binary_search(Members.begin(), Members.end(), Reg,
-                            deref<llvm::less>());
+                            deref<llvm37::less>());
 }
 
-namespace llvm {
+namespace llvm37 {
   raw_ostream &operator<<(raw_ostream &OS, const CodeGenRegisterClass::Key &K) {
     OS << "{ S=" << K.SpillSize << ", A=" << K.SpillAlignment;
     for (const auto R : *K.Members)
@@ -800,7 +800,7 @@ static bool testSubClass(const CodeGenRegisterClass *A,
          A->SpillSize <= B->SpillSize &&
          std::includes(A->getMembers().begin(), A->getMembers().end(),
                        B->getMembers().begin(), B->getMembers().end(),
-                       deref<llvm::less>());
+                       deref<llvm37::less>());
 }
 
 /// Sorting predicate for register classes.  This provides a topological
@@ -924,7 +924,7 @@ CodeGenRegBank::CodeGenRegBank(RecordKeeper &Records) {
   // Configure register Sets to understand register classes and tuples.
   Sets.addFieldExpander("RegisterClass", "MemberList");
   Sets.addFieldExpander("CalleeSavedRegs", "SaveList");
-  Sets.addExpander("RegisterTuples", llvm::make_unique<TupleExpander>());
+  Sets.addExpander("RegisterTuples", llvm37::make_unique<TupleExpander>());
 
   // Read in the user-defined (named) sub-register indices.
   // More indices will be synthesized later.
@@ -1862,7 +1862,7 @@ void CodeGenRegBank::inferCommonSubClass(CodeGenRegisterClass *RC) {
     CodeGenRegister::Vec Intersection;
     std::set_intersection(
         Memb1.begin(), Memb1.end(), Memb2.begin(), Memb2.end(),
-        std::inserter(Intersection, Intersection.begin()), deref<llvm::less>());
+        std::inserter(Intersection, Intersection.begin()), deref<llvm37::less>());
 
     // Skip disjoint class pairs.
     if (Intersection.empty())
@@ -1889,7 +1889,7 @@ void CodeGenRegBank::inferCommonSubClass(CodeGenRegisterClass *RC) {
 void CodeGenRegBank::inferSubClassWithSubReg(CodeGenRegisterClass *RC) {
   // Map SubRegIndex to set of registers in RC supporting that SubRegIndex.
   typedef std::map<const CodeGenSubRegIndex *, CodeGenRegister::Vec,
-                   deref<llvm::less>> SubReg2SetMap;
+                   deref<llvm37::less>> SubReg2SetMap;
 
   // Compute the set of registers supporting each SubRegIndex.
   SubReg2SetMap SRSets;

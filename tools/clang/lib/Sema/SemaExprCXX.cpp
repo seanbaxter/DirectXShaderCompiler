@@ -1,6 +1,6 @@
 //===--- SemaExprCXX.cpp - Semantic Analysis for Expressions --------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -35,9 +35,9 @@
 #include "clang/Sema/ScopeInfo.h"
 #include "clang/Sema/SemaLambda.h"
 #include "clang/Sema/TemplateDeduction.h"
-#include "llvm/ADT/APInt.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/Support/ErrorHandling.h"
+#include "llvm37/ADT/APInt.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/Support/ErrorHandling.h"
 #include "clang/Sema/SemaHLSL.h"      // HLSL Change
 using namespace clang;
 using namespace sema;
@@ -71,7 +71,7 @@ ParsedType Sema::getInheritingConstructorName(CXXScopeSpec &SS,
   case NestedNameSpecifier::Super:
   case NestedNameSpecifier::Namespace:
   case NestedNameSpecifier::NamespaceAlias:
-    llvm_unreachable("Nested name specifier is not a type for inheriting ctor");
+    llvm37_unreachable("Nested name specifier is not a type for inheriting ctor");
   }
 
   // This reference to the type is located entirely at the location of the
@@ -366,7 +366,7 @@ bool Sema::checkLiteralOperatorId(const CXXScopeSpec &SS,
     return false;
   }
 
-  llvm_unreachable("unknown nested name specifier kind");
+  llvm37_unreachable("unknown nested name specifier kind");
 }
 
 /// \brief Build a C++ typeid expression with a type operand.
@@ -686,9 +686,9 @@ ExprResult Sema::BuildCXXThrow(SourceLocation OpLoc, Expr *Ex,
 
 static void
 collectPublicBases(CXXRecordDecl *RD,
-                   llvm::DenseMap<CXXRecordDecl *, unsigned> &SubobjectsSeen,
-                   llvm::SmallPtrSetImpl<CXXRecordDecl *> &VBases,
-                   llvm::SetVector<CXXRecordDecl *> &PublicSubobjectsSeen,
+                   llvm37::DenseMap<CXXRecordDecl *, unsigned> &SubobjectsSeen,
+                   llvm37::SmallPtrSetImpl<CXXRecordDecl *> &VBases,
+                   llvm37::SetVector<CXXRecordDecl *> &PublicSubobjectsSeen,
                    bool ParentIsPublic) {
   for (const CXXBaseSpecifier &BS : RD->bases()) {
     CXXRecordDecl *BaseDecl = BS.getType()->getAsCXXRecordDecl();
@@ -715,10 +715,10 @@ collectPublicBases(CXXRecordDecl *RD,
 }
 
 static void getUnambiguousPublicSubobjects(
-    CXXRecordDecl *RD, llvm::SmallVectorImpl<CXXRecordDecl *> &Objects) {
-  llvm::DenseMap<CXXRecordDecl *, unsigned> SubobjectsSeen;
-  llvm::SmallSet<CXXRecordDecl *, 2> VBases;
-  llvm::SetVector<CXXRecordDecl *> PublicSubobjectsSeen;
+    CXXRecordDecl *RD, llvm37::SmallVectorImpl<CXXRecordDecl *> &Objects) {
+  llvm37::DenseMap<CXXRecordDecl *, unsigned> SubobjectsSeen;
+  llvm37::SmallSet<CXXRecordDecl *, 2> VBases;
+  llvm37::SetVector<CXXRecordDecl *> PublicSubobjectsSeen;
   SubobjectsSeen[RD] = 1;
   PublicSubobjectsSeen.insert(RD);
   collectPublicBases(RD, SubobjectsSeen, VBases, PublicSubobjectsSeen,
@@ -787,7 +787,7 @@ bool Sema::CheckCXXThrowOperand(SourceLocation ThrowLoc,
     // We are only interested in the public, unambiguous bases contained within
     // the exception object.  Bases which are ambiguous or otherwise
     // inaccessible are not catchable types.
-    llvm::SmallVector<CXXRecordDecl *, 2> UnambiguousPublicSubobjects;
+    llvm37::SmallVector<CXXRecordDecl *, 2> UnambiguousPublicSubobjects;
     getUnambiguousPublicSubobjects(RD, UnambiguousPublicSubobjects);
 
     for (CXXRecordDecl *Subobject : UnambiguousPublicSubobjects) {
@@ -1212,7 +1212,7 @@ Sema::ActOnCXXNew(SourceLocation StartLoc, bool UseGlobal,
 	    //   and shall evaluate to a strictly positive value.
             unsigned IntWidth = Context.getTargetInfo().getIntWidth();
             assert(IntWidth && "Builtin type of size 0?");
-            llvm::APSInt Value(IntWidth);
+            llvm37::APSInt Value(IntWidth);
             Array.NumElts
              = CheckConvertedConstantExpression(NumElts, Context.getSizeType(), Value,
                                                 CCEK_NewExpr)
@@ -1469,12 +1469,12 @@ Sema::BuildCXXNew(SourceRange Range, bool UseGlobal,
     // Note: such a construct has well-defined semantics in C++11: it throws
     // std::bad_array_new_length.
     if (!ArraySize->isValueDependent()) {
-      llvm::APSInt Value;
+      llvm37::APSInt Value;
       // We've already performed any required implicit conversion to integer or
       // unscoped enumeration type.
       if (ArraySize->isIntegerConstantExpr(Value, Context)) {
-        if (Value < llvm::APSInt(
-                        llvm::APInt::getNullValue(Value.getBitWidth()),
+        if (Value < llvm37::APSInt(
+                        llvm37::APInt::getNullValue(Value.getBitWidth()),
                                  Value.isUnsigned())) {
           if (getLangOpts().CPlusPlus11)
             Diag(ArraySize->getLocStart(),
@@ -1588,7 +1588,7 @@ Sema::BuildCXXNew(SourceRange Range, bool UseGlobal,
       // default-initialization).
       unsigned NumElements = ILE->getNumInits() + 1;
       InitType = Context.getConstantArrayType(AllocType,
-          llvm::APInt(Context.getTypeSize(Context.getSizeType()), NumElements),
+          llvm37::APInt(Context.getTypeSize(Context.getSizeType()), NumElements),
                                               ArrayType::Normal, 0);
     }
   }
@@ -1597,7 +1597,7 @@ Sema::BuildCXXNew(SourceRange Range, bool UseGlobal,
   // do it now.
   if (!AllocType->isDependentType() &&
       !Expr::hasAnyTypeDependentArguments(
-          llvm::makeArrayRef(Inits, NumInits))) {
+          llvm37::makeArrayRef(Inits, NumInits))) {
     // C++11 [expr.new]p15:
     //   A new-expression that creates an object of type T initializes that
     //   object as follows:
@@ -1752,7 +1752,7 @@ bool Sema::FindAllocationFunctions(SourceLocation StartLoc, SourceRange Range,
   // We don't care about the actual value of this argument.
   // FIXME: Should the Sema create the expression and embed it in the syntax
   // tree? Or should the consumer just recalculate the value?
-  IntegerLiteral Size(Context, llvm::APInt::getNullValue(
+  IntegerLiteral Size(Context, llvm37::APInt::getNullValue(
                       Context.getTargetInfo().getPointerWidth(0)),
                       Context.getSizeType(),
                       SourceLocation());
@@ -2052,7 +2052,7 @@ bool Sema::FindAllocationOverload(SourceLocation StartLoc, SourceRange Range,
     return true;
   }
   }
-  llvm_unreachable("Unreachable, bad result from BestViableFunction");
+  llvm37_unreachable("Unreachable, bad result from BestViableFunction");
 }
 
 
@@ -2160,7 +2160,7 @@ void Sema::DeclareGlobalAllocationFunction(DeclarationName Name,
                                            bool AddRestrictAttr) {
   // HLSL Change Starts Here
   // No support for new and delete operators.
-  llvm_unreachable("no support for new and delete in HLSL");
+  llvm37_unreachable("no support for new and delete in HLSL");
 #if 0
   // HLSL Change Ends Here  DeclContext *GlobalCtx = Context.getTranslationUnitDecl();
   unsigned NumParams = Param2.isNull() ? 1 : 2;
@@ -2208,7 +2208,7 @@ void Sema::DeclareGlobalAllocationFunction(DeclarationName Name,
       BadAllocType = Context.getTypeDeclType(getStdBadAlloc());
       assert(StdBadAlloc && "Must have std::bad_alloc declared");
       EPI.ExceptionSpec.Type = EST_Dynamic;
-      EPI.ExceptionSpec.Exceptions = llvm::makeArrayRef(BadAllocType);
+      EPI.ExceptionSpec.Exceptions = llvm37::makeArrayRef(BadAllocType);
     }
   } else {
     EPI.ExceptionSpec =
@@ -2218,7 +2218,7 @@ void Sema::DeclareGlobalAllocationFunction(DeclarationName Name,
   QualType Params[] = { Param1, Param2 };
 
   QualType FnType = Context.getFunctionType(
-      Return, llvm::makeArrayRef(Params, NumParams), EPI);
+      Return, llvm37::makeArrayRef(Params, NumParams), EPI);
   FunctionDecl *Alloc =
     FunctionDecl::Create(Context, GlobalCtx, SourceLocation(),
                          SourceLocation(), Name,
@@ -2241,7 +2241,7 @@ void Sema::DeclareGlobalAllocationFunction(DeclarationName Name,
                                         SC_None, nullptr);
     ParamDecls[I]->setImplicit();
   }
-  Alloc->setParams(llvm::makeArrayRef(ParamDecls, NumParams));
+  Alloc->setParams(llvm37::makeArrayRef(ParamDecls, NumParams));
 
   Context.getTranslationUnitDecl()->addDecl(Alloc);
   IdResolver.tryAddTopLevelDecl(Alloc, Name);
@@ -2259,7 +2259,7 @@ FunctionDecl *Sema::FindUsualDeallocationFunction(SourceLocation StartLoc,
   // C++ [expr.new]p20:
   //   [...] Any non-placement deallocation function matches a
   //   non-placement allocation function. [...]
-  llvm::SmallVector<FunctionDecl*, 2> Matches;
+  llvm37::SmallVector<FunctionDecl*, 2> Matches;
   for (LookupResult::iterator D = FoundDelete.begin(),
                            DEnd = FoundDelete.end();
        D != DEnd; ++D) {
@@ -2408,7 +2408,7 @@ public:
   /// for deleting the \p Field.
   MismatchResult analyzeField(FieldDecl *Field, bool DeleteWasArrayForm);
   /// List of mismatching new-expressions used for initialization of the pointee
-  llvm::SmallVector<const CXXNewExpr *, 4> NewExprs;
+  llvm37::SmallVector<const CXXNewExpr *, 4> NewExprs;
   /// Indicates whether delete-expression was in array form.
   bool IsArrayForm;
   FieldDecl *Field;
@@ -2609,9 +2609,9 @@ void Sema::AnalyzeDeleteExprMismatch(FieldDecl *Field, SourceLocation DeleteLoc,
   MismatchingNewDeleteDetector Detector(/*EndOfTU=*/true);
   switch (Detector.analyzeField(Field, DeleteWasArrayForm)) {
   case MismatchingNewDeleteDetector::VarInitMismatches:
-    llvm_unreachable("This analysis should have been done for class members.");
+    llvm37_unreachable("This analysis should have been done for class members.");
   case MismatchingNewDeleteDetector::AnalyzeLater:
-    llvm_unreachable("Analysis cannot be postponed any point beyond end of "
+    llvm37_unreachable("Analysis cannot be postponed any point beyond end of "
                      "translation unit.");
   case MismatchingNewDeleteDetector::MemberInitMismatches:
     DiagnoseMismatchedNewDelete(*this, DeleteLoc, Detector);
@@ -2697,7 +2697,7 @@ Sema::ActOnCXXDelete(SourceLocation StartLoc, bool UseGlobal,
       SemaDiagnosticBuilder diagnoseConversion(Sema &S, SourceLocation Loc,
                                                QualType T,
                                                QualType ConvTy) override {
-        llvm_unreachable("conversion functions are permitted");
+        llvm37_unreachable("conversion functions are permitted");
       }
     } Converter;
 
@@ -2925,7 +2925,7 @@ static ExprResult BuildCXXCastArgument(Sema &S,
                                        bool HadMultipleCandidates,
                                        Expr *From) {
   switch (Kind) {
-  default: llvm_unreachable("Unhandled cast kind!");
+  default: llvm37_unreachable("Unhandled cast kind!");
   case CK_ConstructorConversion: {
     CXXConstructorDecl *Constructor = cast<CXXConstructorDecl>(Method);
     SmallVector<Expr*, 8> ConstructorArgs;
@@ -3057,7 +3057,7 @@ Sema::PerformImplicitConversion(Expr *From, QualType ToType,
      return ExprError();
 
   case ImplicitConversionSequence::EllipsisConversion:
-    llvm_unreachable("Cannot perform an ellipsis conversion");
+    llvm37_unreachable("Cannot perform an ellipsis conversion");
 
   case ImplicitConversionSequence::BadConversion:
     return ExprError();
@@ -3164,7 +3164,7 @@ Sema::PerformImplicitConversion(Expr *From, QualType ToType,
     break;
 
   default:
-    llvm_unreachable("Improper first standard conversion");
+    llvm37_unreachable("Improper first standard conversion");
   }
 
   // Perform the second implicit conversion
@@ -3472,7 +3472,7 @@ Sema::PerformImplicitConversion(Expr *From, QualType ToType,
   case ICK_Function_To_Pointer:
   case ICK_Qualification:
   case ICK_Num_Conversion_Kinds:
-    llvm_unreachable("Improper second standard conversion");
+    llvm37_unreachable("Improper second standard conversion");
   }
 
   switch (SCS.Third) {
@@ -3500,7 +3500,7 @@ Sema::PerformImplicitConversion(Expr *From, QualType ToType,
   }
 
   default:
-    llvm_unreachable("Improper third standard conversion");
+    llvm37_unreachable("Improper third standard conversion");
   }
 
   // If this conversion sequence involved a scalar -> atomic conversion, perform
@@ -3534,7 +3534,7 @@ static bool CheckUnaryTypeTraitTypeCompleteness(Sema &S, TypeTrait UTT,
   // these class templates. We also try to follow any GCC documented behavior
   // in these expressions to ensure portability of standard libraries.
   switch (UTT) {
-  default: llvm_unreachable("not a UTT");
+  default: llvm37_unreachable("not a UTT");
     // is_complete_type somewhat obviously cannot require a complete type.
   case UTT_IsCompleteType:
     // Fall-through
@@ -3667,7 +3667,7 @@ static bool EvaluateUnaryTypeTrait(Sema &Self, TypeTrait UTT,
 
   ASTContext &C = Self.Context;
   switch(UTT) {
-  default: llvm_unreachable("not a UTT");
+  default: llvm37_unreachable("not a UTT");
     // Type trait expressions corresponding to the primary type category
     // predicates in C++0x [meta.unary.cat].
   case UTT_IsVoid:
@@ -4025,7 +4025,7 @@ static bool hasNontrivialObjCLifetime(QualType T) {
     return T->isObjCLifetimeType();
   }
 
-  llvm_unreachable("Unknown ObjC lifetime qualifier");
+  llvm37_unreachable("Unknown ObjC lifetime qualifier");
 }
 
 static bool EvaluateBinaryTypeTrait(Sema &Self, TypeTrait BTT, QualType LhsT,
@@ -4131,10 +4131,10 @@ static bool evaluateTypeTrait(Sema &S, TypeTrait Kind, SourceLocation KWLoc,
       return !Result.get()->hasNonTrivialCall(S.Context);
     }
 
-    llvm_unreachable("unhandled type trait");
+    llvm37_unreachable("unhandled type trait");
     return false;
   }
-    default: llvm_unreachable("not a TT");
+    default: llvm37_unreachable("not a TT");
   }
   
   return false;
@@ -4348,12 +4348,12 @@ static bool EvaluateBinaryTypeTrait(Sema &Self, TypeTrait BTT, QualType LhsT,
       return !Result.get()->hasNonTrivialCall(Self.Context);
     }
 
-    llvm_unreachable("unhandled type trait");
+    llvm37_unreachable("unhandled type trait");
     return false;
   }
-    default: llvm_unreachable("not a BTT");
+    default: llvm37_unreachable("not a BTT");
   }
-  llvm_unreachable("Unknown type trait or not implemented");
+  llvm37_unreachable("Unknown type trait or not implemented");
 }
 
 ExprResult Sema::ActOnArrayTypeTrait(ArrayTypeTrait ATT,
@@ -4387,7 +4387,7 @@ static uint64_t EvaluateArrayTypeTrait(Sema &Self, ArrayTypeTrait ATT,
     return 0;
 
   case ATT_ArrayExtent: {
-    llvm::APSInt Value;
+    llvm37::APSInt Value;
     uint64_t Dim;
     if (Self.VerifyIntegerConstantExpression(DimExpr, &Value,
           diag::err_dimension_expr_not_constant_integer,
@@ -4420,7 +4420,7 @@ static uint64_t EvaluateArrayTypeTrait(Sema &Self, ArrayTypeTrait ATT,
     return 0;
   }
   }
-  llvm_unreachable("Unknown type trait or not implemented");
+  llvm37_unreachable("Unknown type trait or not implemented");
 }
 
 ExprResult Sema::BuildArrayTypeTrait(ArrayTypeTrait ATT,
@@ -4463,7 +4463,7 @@ static bool EvaluateExpressionTrait(ExpressionTrait ET, Expr *E) {
   case ET_IsLValueExpr: return E->isLValue();
   case ET_IsRValueExpr: return E->isRValue();
   }
-  llvm_unreachable("Expression trait not covered by switch");
+  llvm37_unreachable("Expression trait not covered by switch");
 }
 
 ExprResult Sema::BuildExpressionTrait(ExpressionTrait ET,
@@ -4774,7 +4774,7 @@ static bool FindConditionalOverload(Sema &Self, ExprResult &LHS, ExprResult &RHS
       break;
 
     case OR_Deleted:
-      llvm_unreachable("Conditional operator has only built-in overloads");
+      llvm37_unreachable("Conditional operator has only built-in overloads");
   }
   return true;
 }
@@ -5448,7 +5448,7 @@ Expr *Sema::MaybeCreateExprWithCleanups(Expr *SubExpr) {
   if (!ExprNeedsCleanups)
     return SubExpr;
 
-  auto Cleanups = llvm::makeArrayRef(ExprCleanupObjects.begin() + FirstCleanup,
+  auto Cleanups = llvm37::makeArrayRef(ExprCleanupObjects.begin() + FirstCleanup,
                                      ExprCleanupObjects.size() - FirstCleanup);
 
   Expr *E = ExprWithCleanups::Create(Context, SubExpr, Cleanups);
@@ -5648,7 +5648,7 @@ ExprResult Sema::ActOnStartCXXMemberReference(Scope *S, Expr *Base,
     bool FirstIteration = true;
     FunctionDecl *CurFD = dyn_cast<FunctionDecl>(CurContext);
     // The set of types we've considered so far.
-    llvm::SmallPtrSet<CanQualType,8> CTypes;
+    llvm37::SmallPtrSet<CanQualType,8> CTypes;
     SmallVector<FunctionDecl*, 8> OperatorArrows;
     CTypes.insert(Context.getCanonicalType(BaseType));
 
@@ -6426,10 +6426,10 @@ static ExprResult attemptRecovery(Sema &SemaRef,
 
 namespace {
 class FindTypoExprs : public RecursiveASTVisitor<FindTypoExprs> {
-  llvm::SmallSetVector<TypoExpr *, 2> &TypoExprs;
+  llvm37::SmallSetVector<TypoExpr *, 2> &TypoExprs;
 
 public:
-  explicit FindTypoExprs(llvm::SmallSetVector<TypoExpr *, 2> &TypoExprs)
+  explicit FindTypoExprs(llvm37::SmallSetVector<TypoExpr *, 2> &TypoExprs)
       : TypoExprs(TypoExprs) {}
   bool VisitTypoExpr(TypoExpr *TE) {
     TypoExprs.insert(TE);
@@ -6442,10 +6442,10 @@ class TransformTypos : public TreeTransform<TransformTypos> {
 
   VarDecl *InitDecl; // A decl to avoid as a correction because it is in the
                      // process of being initialized.
-  llvm::function_ref<ExprResult(Expr *)> ExprFilter;
-  llvm::SmallSetVector<TypoExpr *, 2> TypoExprs, AmbiguousTypoExprs;
-  llvm::SmallDenseMap<TypoExpr *, ExprResult, 2> TransformCache;
-  llvm::SmallDenseMap<OverloadExpr *, Expr *, 4> OverloadResolution;
+  llvm37::function_ref<ExprResult(Expr *)> ExprFilter;
+  llvm37::SmallSetVector<TypoExpr *, 2> TypoExprs, AmbiguousTypoExprs;
+  llvm37::SmallDenseMap<TypoExpr *, ExprResult, 2> TransformCache;
+  llvm37::SmallDenseMap<OverloadExpr *, Expr *, 4> OverloadResolution;
 
   /// \brief Emit diagnostics for all of the TypoExprs encountered.
   /// If the TypoExprs were successfully corrected, then the diagnostics should
@@ -6520,7 +6520,7 @@ class TransformTypos : public TreeTransform<TransformTypos> {
   }
 
 public:
-  TransformTypos(Sema &SemaRef, VarDecl *InitDecl, llvm::function_ref<ExprResult(Expr *)> Filter)
+  TransformTypos(Sema &SemaRef, VarDecl *InitDecl, llvm37::function_ref<ExprResult(Expr *)> Filter)
       : BaseTransform(SemaRef), InitDecl(InitDecl), ExprFilter(Filter) {}
 
   ExprResult RebuildCallExpr(Expr *Callee, SourceLocation LParenLoc,
@@ -6634,7 +6634,7 @@ public:
 
 ExprResult
 Sema::CorrectDelayedTyposInExpr(Expr *E, VarDecl *InitDecl,
-                                llvm::function_ref<ExprResult(Expr *)> Filter) {
+                                llvm37::function_ref<ExprResult(Expr *)> Filter) {
   // If the current evaluation context indicates there are uncorrected typos
   // and the current expression isn't guaranteed to not have typos, try to
   // resolve any TypoExpr nodes that might be in the expression.
@@ -6800,7 +6800,7 @@ Sema::CheckMicrosoftIfExistsSymbol(Scope *S,
     return IER_Dependent;
   }
 
-  llvm_unreachable("Invalid LookupResult Kind!");
+  llvm37_unreachable("Invalid LookupResult Kind!");
 }
 
 Sema::IfExistsResult 

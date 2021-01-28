@@ -1,13 +1,13 @@
 //===-- DependenceAnalysis.cpp - DA Implementation --------------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 //
-// DependenceAnalysis is an LLVM pass that analyses dependences between memory
+// DependenceAnalysis is an LLVM37 pass that analyses dependences between memory
 // accesses. Currently, it is an (incomplete) implementation of the approach
 // described in
 //
@@ -51,23 +51,23 @@
 //                                                                            //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Analysis/DependenceAnalysis.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/Analysis/AliasAnalysis.h"
-#include "llvm/Analysis/LoopInfo.h"
-#include "llvm/Analysis/ScalarEvolution.h"
-#include "llvm/Analysis/ScalarEvolutionExpressions.h"
-#include "llvm/Analysis/ValueTracking.h"
-#include "llvm/IR/InstIterator.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/Operator.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/Analysis/DependenceAnalysis.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/Analysis/AliasAnalysis.h"
+#include "llvm37/Analysis/LoopInfo.h"
+#include "llvm37/Analysis/ScalarEvolution.h"
+#include "llvm37/Analysis/ScalarEvolutionExpressions.h"
+#include "llvm37/Analysis/ValueTracking.h"
+#include "llvm37/IR/InstIterator.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/Operator.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/raw_ostream.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "da"
 
@@ -129,7 +129,7 @@ INITIALIZE_PASS_END(DependenceAnalysis, "da",
 char DependenceAnalysis::ID = 0;
 
 
-FunctionPass *llvm::createDependenceAnalysisPass() {
+FunctionPass *llvm37::createDependenceAnalysisPass() {
   return new DependenceAnalysis();
 }
 
@@ -414,7 +414,7 @@ void DependenceAnalysis::Constraint::dump(raw_ostream &OS) const {
     OS << " Line is " << *getA() << "*X + " <<
       *getB() << "*Y = " << *getC() << "\n";
   else
-    llvm_unreachable("unknown constraint type in Constraint::dump");
+    llvm37_unreachable("unknown constraint type in Constraint::dump");
 }
 
 
@@ -572,7 +572,7 @@ bool DependenceAnalysis::intersectConstraints(Constraint *X,
     return false;
   }
 
-  llvm_unreachable("shouldn't reach the end of Constraint intersection");
+  llvm37_unreachable("shouldn't reach the end of Constraint intersection");
   return false;
 }
 
@@ -663,7 +663,7 @@ Value *getPointerOperand(Instruction *I) {
     return LI->getPointerOperand();
   if (StoreInst *SI = dyn_cast<StoreInst>(I))
     return SI->getPointerOperand();
-  llvm_unreachable("Value is not load or store instruction");
+  llvm37_unreachable("Value is not load or store instruction");
   return nullptr;
 }
 
@@ -992,7 +992,7 @@ bool DependenceAnalysis::isKnownPredicate(ICmpInst::Predicate Pred,
   case CmpInst::ICMP_SLT:
     return SE->isKnownNegative(Delta);
   default:
-    llvm_unreachable("unexpected predicate in isKnownPredicate");
+    llvm37_unreachable("unexpected predicate in isKnownPredicate");
   }
 }
 
@@ -2177,7 +2177,7 @@ bool DependenceAnalysis::testSIV(const SCEV *Src,
                               CurLoop, Level, Result, NewConstraint) ||
       gcdMIVtest(Src, Dst, Result);
   }
-  llvm_unreachable("SIV test expected at least one AddRec");
+  llvm37_unreachable("SIV test expected at least one AddRec");
   return false;
 }
 
@@ -2231,7 +2231,7 @@ bool DependenceAnalysis::testRDIV(const SCEV *Src,
       DstLoop = SrcAddRec->getLoop();
     }
     else
-      llvm_unreachable("RDIV reached by surprising SCEVs");
+      llvm37_unreachable("RDIV reached by surprising SCEVs");
   }
   else if (DstAddRec) {
     if (const SCEVAddRecExpr *tmpAddRec =
@@ -2244,10 +2244,10 @@ bool DependenceAnalysis::testRDIV(const SCEV *Src,
       SrcLoop = DstAddRec->getLoop();
     }
     else
-      llvm_unreachable("RDIV reached by surprising SCEVs");
+      llvm37_unreachable("RDIV reached by surprising SCEVs");
   }
   else
-    llvm_unreachable("RDIV expected at least one AddRec");
+    llvm37_unreachable("RDIV expected at least one AddRec");
   return exactRDIVtest(SrcCoeff, DstCoeff,
                        SrcConst, DstConst,
                        SrcLoop, DstLoop,
@@ -2631,7 +2631,7 @@ unsigned DependenceAnalysis::exploreDirections(unsigned Level,
           DEBUG(dbgs() << " *");
           break;
         default:
-          llvm_unreachable("unexpected Bound[K].Direction");
+          llvm37_unreachable("unexpected Bound[K].Direction");
         }
 #endif
       }
@@ -3261,7 +3261,7 @@ void DependenceAnalysis::updateDirection(Dependence::DVEntry &Level,
     Level.Direction &= NewDirection;
   }
   else
-    llvm_unreachable("constraint has unexpected kind");
+    llvm37_unreachable("constraint has unexpected kind");
 }
 
 /// Check if we can delinearize the subscripts. If the SCEVs representing the
@@ -3614,7 +3614,7 @@ DependenceAnalysis::depends(Instruction *Src, Instruction *Dst,
         return nullptr;
       break;
     default:
-      llvm_unreachable("subscript has unexpected classification");
+      llvm37_unreachable("subscript has unexpected classification");
     }
   }
 
@@ -3694,7 +3694,7 @@ DependenceAnalysis::depends(Instruction *Src, Instruction *Dst,
               case Subscript::MIV:
                 break;
               default:
-                llvm_unreachable("bad subscript classification");
+                llvm37_unreachable("bad subscript classification");
               }
             }
           }
@@ -3722,7 +3722,7 @@ DependenceAnalysis::depends(Instruction *Src, Instruction *Dst,
             return nullptr;
         }
         else
-          llvm_unreachable("expected only MIV subscripts at this point");
+          llvm37_unreachable("expected only MIV subscripts at this point");
       }
 
       // update Result.DV from constraint vector
@@ -3958,7 +3958,7 @@ const  SCEV *DependenceAnalysis::getSplitIteration(const Dependence &Dep,
     case Subscript::MIV:
       break;
     default:
-      llvm_unreachable("subscript has unexpected classification");
+      llvm37_unreachable("subscript has unexpected classification");
     }
   }
 
@@ -4015,7 +4015,7 @@ const  SCEV *DependenceAnalysis::getSplitIteration(const Dependence &Dep,
               case Subscript::MIV:
                 break;
               default:
-                llvm_unreachable("bad subscript classification");
+                llvm37_unreachable("bad subscript classification");
               }
             }
           }
@@ -4023,6 +4023,6 @@ const  SCEV *DependenceAnalysis::getSplitIteration(const Dependence &Dep,
       }
     }
   }
-  llvm_unreachable("somehow reached end of routine");
+  llvm37_unreachable("somehow reached end of routine");
   return nullptr;
 }

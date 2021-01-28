@@ -87,8 +87,8 @@ a b c in skipped block
  * CHECK-NOT: {{^}}/* Comments are whitespace too
  */
 
-Preserve URLs: http://clang.llvm.org
-/* CHECK: {{^}}Preserve URLs: http://clang.llvm.org{{$}}
+Preserve URLs: http://clang.llvm37.org
+/* CHECK: {{^}}Preserve URLs: http://clang.llvm37.org{{$}}
  */
 
 /* The following tests ensure we ignore # and ## in macro bodies */

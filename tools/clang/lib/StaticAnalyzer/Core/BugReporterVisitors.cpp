@@ -1,6 +1,6 @@
 // BugReporterVisitors.cpp - Helpers for reporting bugs -----------*- C++ -*--//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -21,15 +21,15 @@
 #include "clang/StaticAnalyzer/Core/PathSensitive/ExplodedGraph.h"
 #include "clang/StaticAnalyzer/Core/PathSensitive/ExprEngine.h"
 #include "clang/StaticAnalyzer/Core/PathSensitive/ProgramState.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/ADT/StringExtras.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/ADT/StringExtras.h"
+#include "llvm37/Support/raw_ostream.h"
 //                                                                           //
 ///////////////////////////////////////////////////////////////////////////////
 using namespace clang;
 using namespace ento;
 
-using llvm::FoldingSetNodeID;
+using llvm37::FoldingSetNodeID;
 
 //===----------------------------------------------------------------------===//
 // Utility functions.
@@ -117,7 +117,7 @@ std::unique_ptr<PathDiagnosticPiece> BugReporterVisitor::getDefaultEndPath(
 
   // Only add the statement itself as a range if we didn't specify any
   // special ranges for this report.
-  auto P = llvm::make_unique<PathDiagnosticEventPiece>(
+  auto P = llvm37::make_unique<PathDiagnosticEventPiece>(
       L, BR.getDescription(), Ranges.begin() == Ranges.end());
   for (const SourceRange &Range : Ranges)
     P->addRange(Range);
@@ -153,7 +153,7 @@ public:
     return static_cast<void *>(&Tag);
   }
 
-  void Profile(llvm::FoldingSetNodeID &ID) const override {
+  void Profile(llvm37::FoldingSetNodeID &ID) const override {
     ID.AddPointer(ReturnVisitor::getTag());
     ID.AddPointer(StackFrame);
     ID.AddBoolean(EnableNullFPSuppression);
@@ -219,7 +219,7 @@ public:
         EnableNullFPSuppression = State->isNull(*RetLoc).isConstrainedTrue();
 
     BR.markInteresting(CalleeContext);
-    BR.addVisitor(llvm::make_unique<ReturnVisitor>(CalleeContext,
+    BR.addVisitor(llvm37::make_unique<ReturnVisitor>(CalleeContext,
                                                    EnableNullFPSuppression));
   }
 
@@ -290,7 +290,7 @@ public:
 
     // Build an appropriate message based on the return value.
     SmallString<64> Msg;
-    llvm::raw_svector_ostream Out(Msg);
+    llvm37::raw_svector_ostream Out(Msg);
 
     if (V.getAs<Loc>()) {
       // If we have counter-suppression enabled, make sure we keep visiting
@@ -394,7 +394,7 @@ public:
       return nullptr;
     }
 
-    llvm_unreachable("Invalid visit mode!");
+    llvm37_unreachable("Invalid visit mode!");
   }
 
   std::unique_ptr<PathDiagnosticPiece> getEndPath(BugReporterContext &BRC,
@@ -408,7 +408,7 @@ public:
 } // end anonymous namespace
 
 
-void FindLastStoreBRVisitor ::Profile(llvm::FoldingSetNodeID &ID) const {
+void FindLastStoreBRVisitor ::Profile(llvm37::FoldingSetNodeID &ID) const {
   static int tag = 0;
   ID.AddPointer(&tag);
   ID.AddPointer(R);
@@ -544,7 +544,7 @@ PathDiagnosticPiece *FindLastStoreBRVisitor::VisitNode(const ExplodedNode *Succ,
 
   // Okay, we've found the binding. Emit an appropriate message.
   SmallString<256> sbuf;
-  llvm::raw_svector_ostream os(sbuf);
+  llvm37::raw_svector_ostream os(sbuf);
 
   if (Optional<PostStmt> PS = StoreSite->getLocationAs<PostStmt>()) {
     const Stmt *S = PS->getStmt();
@@ -567,7 +567,7 @@ PathDiagnosticPiece *FindLastStoreBRVisitor::VisitNode(const ExplodedNode *Succ,
           if (const VarRegion *OriginalR = BDR->getOriginalRegion(VR)) {
             if (Optional<KnownSVal> KV =
                 State->getSVal(OriginalR).getAs<KnownSVal>())
-              BR.addVisitor(llvm::make_unique<FindLastStoreBRVisitor>(
+              BR.addVisitor(llvm37::make_unique<FindLastStoreBRVisitor>(
                   *KV, OriginalR, EnableNullFPSuppression));
           }
         }
@@ -638,7 +638,7 @@ PathDiagnosticPiece *FindLastStoreBRVisitor::VisitNode(const ExplodedNode *Succ,
 
       // Printed parameter indexes are 1-based, not 0-based.
       unsigned Idx = Param->getFunctionScopeIndex() + 1;
-      os << " via " << Idx << llvm::getOrdinalSuffix(Idx) << " parameter";
+      os << " via " << Idx << llvm37::getOrdinalSuffix(Idx) << " parameter";
       if (R->canPrintPretty()) {
         os << " ";
         R->printPretty(os);
@@ -706,7 +706,7 @@ PathDiagnosticPiece *FindLastStoreBRVisitor::VisitNode(const ExplodedNode *Succ,
   return new PathDiagnosticEventPiece(L, os.str());
 }
 
-void TrackConstraintBRVisitor::Profile(llvm::FoldingSetNodeID &ID) const {
+void TrackConstraintBRVisitor::Profile(llvm37::FoldingSetNodeID &ID) const {
   static int tag = 0;
   ID.AddPointer(&tag);
   ID.AddBoolean(Assumption);
@@ -755,7 +755,7 @@ TrackConstraintBRVisitor::VisitNode(const ExplodedNode *N,
     // We found the transition point for the constraint.  We now need to
     // pretty-print the constraint. (work-in-progress)
     SmallString<64> sbuf;
-    llvm::raw_svector_ostream os(sbuf);
+    llvm37::raw_svector_ostream os(sbuf);
 
     if (Constraint.getAs<Loc>()) {
       os << "Assuming pointer value is ";
@@ -977,7 +977,7 @@ bool bugreporter::trackNullOrUndefValue(const ExplodedNode *N,
       // got initialized.
       if (const MemRegion *RR = getLocationRegionIfReference(Inner, N)) {
         if (Optional<KnownSVal> KV = LVal.getAs<KnownSVal>())
-          report.addVisitor(llvm::make_unique<FindLastStoreBRVisitor>(
+          report.addVisitor(llvm37::make_unique<FindLastStoreBRVisitor>(
               *KV, RR, EnableNullFPSuppression));
       }
     }
@@ -988,11 +988,11 @@ bool bugreporter::trackNullOrUndefValue(const ExplodedNode *N,
 
       report.markInteresting(R);
       report.markInteresting(V);
-      report.addVisitor(llvm::make_unique<UndefOrNullArgVisitor>(R));
+      report.addVisitor(llvm37::make_unique<UndefOrNullArgVisitor>(R));
 
       // If the contents are symbolic, find out when they became null.
       if (V.getAsLocSymbol(/*IncludeBaseRegions*/ true))
-        report.addVisitor(llvm::make_unique<TrackConstraintBRVisitor>(
+        report.addVisitor(llvm37::make_unique<TrackConstraintBRVisitor>(
             V.castAs<DefinedSVal>(), false));
 
       // Add visitor, which will suppress inline defensive checks.
@@ -1000,13 +1000,13 @@ bool bugreporter::trackNullOrUndefValue(const ExplodedNode *N,
         if (!DV->isZeroConstant() && LVState->isNull(*DV).isConstrainedTrue() &&
             EnableNullFPSuppression) {
           report.addVisitor(
-              llvm::make_unique<SuppressInlineDefensiveChecksVisitor>(*DV,
+              llvm37::make_unique<SuppressInlineDefensiveChecksVisitor>(*DV,
                                                                       LVNode));
         }
       }
 
       if (Optional<KnownSVal> KV = V.getAs<KnownSVal>())
-        report.addVisitor(llvm::make_unique<FindLastStoreBRVisitor>(
+        report.addVisitor(llvm37::make_unique<FindLastStoreBRVisitor>(
             *KV, R, EnableNullFPSuppression));
       return true;
     }
@@ -1038,11 +1038,11 @@ bool bugreporter::trackNullOrUndefValue(const ExplodedNode *N,
       RVal = state->getSVal(L->getRegion());
 
     const MemRegion *RegionRVal = RVal.getAsRegion();
-    report.addVisitor(llvm::make_unique<UndefOrNullArgVisitor>(L->getRegion()));
+    report.addVisitor(llvm37::make_unique<UndefOrNullArgVisitor>(L->getRegion()));
 
     if (RegionRVal && isa<SymbolicRegion>(RegionRVal)) {
       report.markInteresting(RegionRVal);
-      report.addVisitor(llvm::make_unique<TrackConstraintBRVisitor>(
+      report.addVisitor(llvm37::make_unique<TrackConstraintBRVisitor>(
           loc::MemRegionVal(RegionRVal), false));
     }
   }
@@ -1077,8 +1077,8 @@ PathDiagnosticPiece *NilReceiverBRVisitor::VisitNode(const ExplodedNode *N,
   if (!Receiver)
     return nullptr;
 
-  llvm::SmallString<256> Buf;
-  llvm::raw_svector_ostream OS(Buf);
+  llvm37::SmallString<256> Buf;
+  llvm37::raw_svector_ostream OS(Buf);
 
   if (const ObjCMessageExpr *ME = dyn_cast<ObjCMessageExpr>(S)) {
     OS << "'";
@@ -1126,7 +1126,7 @@ void FindLastStoreBRVisitor::registerStatementVarDecls(BugReport &BR,
 
         if (V.getAs<loc::ConcreteInt>() || V.getAs<nonloc::ConcreteInt>()) {
           // Register a new visitor with the BugReport.
-          BR.addVisitor(llvm::make_unique<FindLastStoreBRVisitor>(
+          BR.addVisitor(llvm37::make_unique<FindLastStoreBRVisitor>(
               V.castAs<KnownSVal>(), R, EnableNullFPSuppression));
         }
       }
@@ -1332,7 +1332,7 @@ ConditionBRVisitor::VisitTrueTest(const Expr *Cond,
   
   SmallString<128> LhsString, RhsString;
   {
-    llvm::raw_svector_ostream OutLHS(LhsString), OutRHS(RhsString);
+    llvm37::raw_svector_ostream OutLHS(LhsString), OutRHS(RhsString);
     const bool isVarLHS = patternMatch(BExpr->getLHS(), OutLHS, BRC, R, N,
                                        shouldPrune);
     const bool isVarRHS = patternMatch(BExpr->getRHS(), OutRHS, BRC, R, N,
@@ -1358,7 +1358,7 @@ ConditionBRVisitor::VisitTrueTest(const Expr *Cond,
 
   // Should we invert the strings if the LHS is not a variable name?
   SmallString<256> buf;
-  llvm::raw_svector_ostream Out(buf);
+  llvm37::raw_svector_ostream Out(buf);
   Out << "Assuming " << (shouldInvert ? RhsString : LhsString) << " is ";
 
   // Do we need to invert the opcode?
@@ -1416,7 +1416,7 @@ ConditionBRVisitor::VisitConditionVariable(StringRef LhsString,
   // we shouldn't emit anything here (c.f. the double note in
   // test/Analysis/inlining/path-notes.c)
   SmallString<256> buf;
-  llvm::raw_svector_ostream Out(buf);
+  llvm37::raw_svector_ostream Out(buf);
   Out << "Assuming " << LhsString << " is ";
   
   QualType Ty = CondVarExpr->getType();
@@ -1463,7 +1463,7 @@ ConditionBRVisitor::VisitTrueTest(const Expr *Cond,
     return nullptr;
 
   SmallString<256> Buf;
-  llvm::raw_svector_ostream Out(Buf);
+  llvm37::raw_svector_ostream Out(Buf);
     
   Out << "Assuming '" << VD->getDeclName() << "' is ";
     
@@ -1524,7 +1524,7 @@ LikelyFalsePositiveSuppressionBRVisitor::getEndPath(BugReporterContext &BRC,
     // Skip reports within the 'std' namespace. Although these can sometimes be
     // the user's fault, we currently don't report them very well, and
     // Note that this will not help for any other data structure libraries, like
-    // TR1, Boost, or llvm/ADT.
+    // TR1, Boost, or llvm37/ADT.
     if (Options.shouldSuppressFromCXXStandardLibrary()) {
       BR.markInvalid(getTag(), nullptr);
       return nullptr;

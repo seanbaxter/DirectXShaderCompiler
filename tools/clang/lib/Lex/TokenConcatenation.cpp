@@ -1,6 +1,6 @@
 //===--- TokenConcatenation.cpp - Token Concatenation Avoidance -----------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -14,7 +14,7 @@
 #include "clang/Lex/TokenConcatenation.h"
 #include "clang/Basic/CharInfo.h"
 #include "clang/Lex/Preprocessor.h"
-#include "llvm/Support/ErrorHandling.h"
+#include "llvm37/Support/ErrorHandling.h"
 using namespace clang;
 
 
@@ -205,10 +205,10 @@ bool TokenConcatenation::AvoidConcat(const Token &PrevPrevTok,
 
   switch (PrevKind) {
   default:
-    llvm_unreachable("InitAvoidConcatTokenInfo built wrong");
+    llvm37_unreachable("InitAvoidConcatTokenInfo built wrong");
 
   case tok::raw_identifier:
-    llvm_unreachable("tok::raw_identifier in non-raw lexing mode!");
+    llvm37_unreachable("tok::raw_identifier in non-raw lexing mode!");
 
   case tok::string_literal:
   case tok::wide_string_literal:

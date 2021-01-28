@@ -1,6 +1,6 @@
 //===--- Format.h - Format C++ code -----------------------------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -12,12 +12,12 @@
 ///
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_FORMAT_FORMAT_H
-#define LLVM_CLANG_FORMAT_FORMAT_H
+#ifndef LLVM37_CLANG_FORMAT_FORMAT_H
+#define LLVM37_CLANG_FORMAT_FORMAT_H
 
 #include "clang/Basic/LangOptions.h"
 #include "clang/Tooling/Core/Replacement.h"
-#include "llvm/ADT/ArrayRef.h"
+#include "llvm37/ADT/ArrayRef.h"
 #include <system_error>
 
 namespace clang {
@@ -31,7 +31,7 @@ namespace format {
 enum class ParseError { Success = 0, Error, Unsuitable };
 class ParseErrorCategory final : public std::error_category {
 public:
-  const char *name() const LLVM_NOEXCEPT override;
+  const char *name() const LLVM37_NOEXCEPT override;
   std::string message(int EV) const override;
 };
 const std::error_category &getParseCategory();
@@ -519,9 +519,9 @@ struct FormatStyle {
   }
 };
 
-/// \brief Returns a format style complying with the LLVM coding standards:
-/// http://llvm.org/docs/CodingStandards.html.
-FormatStyle getLLVMStyle();
+/// \brief Returns a format style complying with the LLVM37 coding standards:
+/// http://llvm37.org/docs/CodingStandards.html.
+FormatStyle getLLVM37Style();
 
 /// \brief Returns a format style complying with one of Google's style guides:
 /// http://google-styleguide.googlecode.com/svn/trunk/cppguide.xml.
@@ -550,7 +550,7 @@ FormatStyle getNoStyle();
 
 /// \brief Gets a predefined style for the specified language by name.
 ///
-/// Currently supported names: LLVM, Google, Chromium, Mozilla. Names are
+/// Currently supported names: LLVM37, Google, Chromium, Mozilla. Names are
 /// compared case-insensitively.
 ///
 /// Returns \c true if the Style has been set.
@@ -597,9 +597,9 @@ tooling::Replacements reformat(const FormatStyle &Style, StringRef Code,
 /// \brief Returns the \c LangOpts that the formatter expects you to set.
 ///
 /// \param Style determines specific settings for lexing mode.
-LangOptions getFormattingLangOpts(const FormatStyle &Style = getLLVMStyle());
+LangOptions getFormattingLangOpts(const FormatStyle &Style = getLLVM37Style());
 
-/// \brief Description to be used for help text for a llvm::cl option for
+/// \brief Description to be used for help text for a llvm37::cl option for
 /// specifying format style. The description is closely related to the operation
 /// of getStyle().
 extern const char *StyleOptionHelpDescription;
@@ -622,7 +622,7 @@ extern const char *StyleOptionHelpDescription;
 /// in case the style can't be determined from \p StyleName.
 ///
 /// \returns FormatStyle as specified by \c StyleName. If no style could be
-/// determined, the default is LLVM Style (see getLLVMStyle()).
+/// determined, the default is LLVM37 Style (see getLLVM37Style()).
 FormatStyle getStyle(StringRef StyleName, StringRef FileName,
                      StringRef FallbackStyle);
 
@@ -634,4 +634,4 @@ template <>
 struct is_error_code_enum<clang::format::ParseError> : std::true_type {};
 }
 
-#endif // LLVM_CLANG_FORMAT_FORMAT_H
+#endif // LLVM37_CLANG_FORMAT_FORMAT_H

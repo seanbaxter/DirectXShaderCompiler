@@ -1,4 +1,4 @@
-; RUN: llvm-as < %s
+; RUN: llvm37-as < %s
 ; RUN: verify-uselistorder %s
 
         %struct.S_102 = type { float, float }

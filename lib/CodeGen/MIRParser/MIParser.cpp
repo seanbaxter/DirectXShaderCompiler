@@ -1,6 +1,6 @@
 //===- MIParser.cpp - Machine instructions parser implementation ----------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -13,19 +13,19 @@
 
 #include "MIParser.h"
 #include "MILexer.h"
-#include "llvm/ADT/StringMap.h"
-#include "llvm/AsmParser/SlotMapping.h"
-#include "llvm/CodeGen/MachineBasicBlock.h"
-#include "llvm/CodeGen/MachineFunction.h"
-#include "llvm/CodeGen/MachineInstr.h"
-#include "llvm/CodeGen/MachineInstrBuilder.h"
-#include "llvm/IR/Module.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Support/SourceMgr.h"
-#include "llvm/Target/TargetSubtargetInfo.h"
-#include "llvm/Target/TargetInstrInfo.h"
+#include "llvm37/ADT/StringMap.h"
+#include "llvm37/AsmParser/SlotMapping.h"
+#include "llvm37/CodeGen/MachineBasicBlock.h"
+#include "llvm37/CodeGen/MachineFunction.h"
+#include "llvm37/CodeGen/MachineInstr.h"
+#include "llvm37/CodeGen/MachineInstrBuilder.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Support/SourceMgr.h"
+#include "llvm37/Target/TargetSubtargetInfo.h"
+#include "llvm37/Target/TargetInstrInfo.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 namespace {
 
@@ -324,7 +324,7 @@ bool MIParser::parseRegister(unsigned &Reg) {
   }
   // TODO: Parse other register kinds.
   default:
-    llvm_unreachable("The current token should be a register");
+    llvm37_unreachable("The current token should be a register");
   }
   return false;
 }
@@ -349,7 +349,7 @@ bool MIParser::parseRegisterFlag(unsigned &Flags) {
   // TODO: report an error when we specify the same flag more than once.
   // TODO: parse the other register flags.
   default:
-    llvm_unreachable("The current token should be a register flag");
+    llvm37_unreachable("The current token should be a register flag");
   }
   lex();
   return false;
@@ -397,7 +397,7 @@ bool MIParser::parseImmediateOperand(MachineOperand &Dest) {
   const APSInt &Int = Token.integerValue();
   if (Int.getMinSignedBits() > 64)
     // TODO: Replace this with an error when we can parse CIMM Machine Operands.
-    llvm_unreachable("Can't parse large integer literals yet!");
+    llvm37_unreachable("Can't parse large integer literals yet!");
   Dest = MachineOperand::CreateImm(Int.getExtValue());
   lex();
   return false;
@@ -461,7 +461,7 @@ bool MIParser::parseGlobalAddressOperand(MachineOperand &Dest) {
     break;
   }
   default:
-    llvm_unreachable("The current token should be a global value");
+    llvm37_unreachable("The current token should be a global value");
   }
   // TODO: Parse offset and target flags.
   lex();
@@ -583,21 +583,21 @@ unsigned MIParser::getSubRegIndex(StringRef Name) {
   return SubRegInfo->getValue();
 }
 
-bool llvm::parseMachineInstr(MachineInstr *&MI, SourceMgr &SM,
+bool llvm37::parseMachineInstr(MachineInstr *&MI, SourceMgr &SM,
                              MachineFunction &MF, StringRef Src,
                              const PerFunctionMIParsingState &PFS,
                              const SlotMapping &IRSlots, SMDiagnostic &Error) {
   return MIParser(SM, MF, Error, Src, PFS, IRSlots).parse(MI);
 }
 
-bool llvm::parseMBBReference(MachineBasicBlock *&MBB, SourceMgr &SM,
+bool llvm37::parseMBBReference(MachineBasicBlock *&MBB, SourceMgr &SM,
                              MachineFunction &MF, StringRef Src,
                              const PerFunctionMIParsingState &PFS,
                              const SlotMapping &IRSlots, SMDiagnostic &Error) {
   return MIParser(SM, MF, Error, Src, PFS, IRSlots).parseMBB(MBB);
 }
 
-bool llvm::parseNamedRegisterReference(unsigned &Reg, SourceMgr &SM,
+bool llvm37::parseNamedRegisterReference(unsigned &Reg, SourceMgr &SM,
                                        MachineFunction &MF, StringRef Src,
                                        const PerFunctionMIParsingState &PFS,
                                        const SlotMapping &IRSlots,

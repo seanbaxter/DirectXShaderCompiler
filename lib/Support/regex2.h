@@ -35,8 +35,8 @@
  *	@(#)regex2.h	8.4 (Berkeley) 3/20/94
  */
 
-#ifndef LLVM_SUPPORT_REGEX2_H
-#define LLVM_SUPPORT_REGEX2_H
+#ifndef LLVM37_SUPPORT_REGEX2_H
+#define LLVM37_SUPPORT_REGEX2_H
 
 /*
  * internals of regex_t
@@ -116,7 +116,7 @@ typedef struct {
 #define	CHadd(cs, c)	((cs)->ptr[(uch)(c)] |= (cs)->mask, (cs)->hash += (c))
 #define	CHsub(cs, c)	((cs)->ptr[(uch)(c)] &= ~(cs)->mask, (cs)->hash -= (c))
 #define	CHIN(cs, c)	((cs)->ptr[(uch)(c)] & (cs)->mask)
-#define	MCadd(p, cs, cp)	mcadd(p, cs, cp)	/* llvm_regcomp() internal fns */
+#define	MCadd(p, cs, cp)	mcadd(p, cs, cp)	/* llvm37_regcomp() internal fns */
 #define	MCsub(p, cs, cp)	mcsub(p, cs, cp)
 #define	MCin(p, cs, cp)	mcin(p, cs, cp)
 
@@ -134,7 +134,7 @@ struct re_guts {
 	int ncsets;		/* number of csets in use */
 	cset *sets;		/* -> cset [ncsets] */
 	uch *setbits;		/* -> uch[csetsize][ncsets/CHAR_BIT] */
-	int cflags;		/* copy of llvm_regcomp() cflags argument */
+	int cflags;		/* copy of llvm37_regcomp() cflags argument */
 	sopno nstates;		/* = number of sops */
 	sopno firststate;	/* the initial OEND (normally 0) */
 	sopno laststate;	/* the final OEND */

@@ -1,4 +1,4 @@
-set(LLVM_LINK_COMPONENTS
+set(LLVM37_LINK_COMPONENTS
   AsmPrinter
   Support
   )
@@ -7,6 +7,6 @@ set(CodeGenSources
   DIEHashTest.cpp
   )
 
-add_llvm_unittest(CodeGenTests
+add_llvm37_unittest(CodeGenTests
   ${CodeGenSources}
   )

@@ -1,106 +1,106 @@
 ; RUN: llc < %s -march=nvptx -mcpu=sm_20 | FileCheck %s
 
 
-declare i32 @llvm.nvvm.read.ptx.sreg.envreg0()
-declare i32 @llvm.nvvm.read.ptx.sreg.envreg1()
-declare i32 @llvm.nvvm.read.ptx.sreg.envreg2()
-declare i32 @llvm.nvvm.read.ptx.sreg.envreg3()
-declare i32 @llvm.nvvm.read.ptx.sreg.envreg4()
-declare i32 @llvm.nvvm.read.ptx.sreg.envreg5()
-declare i32 @llvm.nvvm.read.ptx.sreg.envreg6()
-declare i32 @llvm.nvvm.read.ptx.sreg.envreg7()
-declare i32 @llvm.nvvm.read.ptx.sreg.envreg8()
-declare i32 @llvm.nvvm.read.ptx.sreg.envreg9()
-declare i32 @llvm.nvvm.read.ptx.sreg.envreg10()
-declare i32 @llvm.nvvm.read.ptx.sreg.envreg11()
-declare i32 @llvm.nvvm.read.ptx.sreg.envreg12()
-declare i32 @llvm.nvvm.read.ptx.sreg.envreg13()
-declare i32 @llvm.nvvm.read.ptx.sreg.envreg14()
-declare i32 @llvm.nvvm.read.ptx.sreg.envreg15()
-declare i32 @llvm.nvvm.read.ptx.sreg.envreg16()
-declare i32 @llvm.nvvm.read.ptx.sreg.envreg17()
-declare i32 @llvm.nvvm.read.ptx.sreg.envreg18()
-declare i32 @llvm.nvvm.read.ptx.sreg.envreg19()
-declare i32 @llvm.nvvm.read.ptx.sreg.envreg20()
-declare i32 @llvm.nvvm.read.ptx.sreg.envreg21()
-declare i32 @llvm.nvvm.read.ptx.sreg.envreg22()
-declare i32 @llvm.nvvm.read.ptx.sreg.envreg23()
-declare i32 @llvm.nvvm.read.ptx.sreg.envreg24()
-declare i32 @llvm.nvvm.read.ptx.sreg.envreg25()
-declare i32 @llvm.nvvm.read.ptx.sreg.envreg26()
-declare i32 @llvm.nvvm.read.ptx.sreg.envreg27()
-declare i32 @llvm.nvvm.read.ptx.sreg.envreg28()
-declare i32 @llvm.nvvm.read.ptx.sreg.envreg29()
-declare i32 @llvm.nvvm.read.ptx.sreg.envreg30()
-declare i32 @llvm.nvvm.read.ptx.sreg.envreg31()
+declare i32 @llvm37.nvvm.read.ptx.sreg.envreg0()
+declare i32 @llvm37.nvvm.read.ptx.sreg.envreg1()
+declare i32 @llvm37.nvvm.read.ptx.sreg.envreg2()
+declare i32 @llvm37.nvvm.read.ptx.sreg.envreg3()
+declare i32 @llvm37.nvvm.read.ptx.sreg.envreg4()
+declare i32 @llvm37.nvvm.read.ptx.sreg.envreg5()
+declare i32 @llvm37.nvvm.read.ptx.sreg.envreg6()
+declare i32 @llvm37.nvvm.read.ptx.sreg.envreg7()
+declare i32 @llvm37.nvvm.read.ptx.sreg.envreg8()
+declare i32 @llvm37.nvvm.read.ptx.sreg.envreg9()
+declare i32 @llvm37.nvvm.read.ptx.sreg.envreg10()
+declare i32 @llvm37.nvvm.read.ptx.sreg.envreg11()
+declare i32 @llvm37.nvvm.read.ptx.sreg.envreg12()
+declare i32 @llvm37.nvvm.read.ptx.sreg.envreg13()
+declare i32 @llvm37.nvvm.read.ptx.sreg.envreg14()
+declare i32 @llvm37.nvvm.read.ptx.sreg.envreg15()
+declare i32 @llvm37.nvvm.read.ptx.sreg.envreg16()
+declare i32 @llvm37.nvvm.read.ptx.sreg.envreg17()
+declare i32 @llvm37.nvvm.read.ptx.sreg.envreg18()
+declare i32 @llvm37.nvvm.read.ptx.sreg.envreg19()
+declare i32 @llvm37.nvvm.read.ptx.sreg.envreg20()
+declare i32 @llvm37.nvvm.read.ptx.sreg.envreg21()
+declare i32 @llvm37.nvvm.read.ptx.sreg.envreg22()
+declare i32 @llvm37.nvvm.read.ptx.sreg.envreg23()
+declare i32 @llvm37.nvvm.read.ptx.sreg.envreg24()
+declare i32 @llvm37.nvvm.read.ptx.sreg.envreg25()
+declare i32 @llvm37.nvvm.read.ptx.sreg.envreg26()
+declare i32 @llvm37.nvvm.read.ptx.sreg.envreg27()
+declare i32 @llvm37.nvvm.read.ptx.sreg.envreg28()
+declare i32 @llvm37.nvvm.read.ptx.sreg.envreg29()
+declare i32 @llvm37.nvvm.read.ptx.sreg.envreg30()
+declare i32 @llvm37.nvvm.read.ptx.sreg.envreg31()
 
 
 ; CHECK: foo
 define i32 @foo() {
 ; CHECK: mov.b32 %r{{[0-9]+}}, %envreg0
-  %val0 = tail call i32 @llvm.nvvm.read.ptx.sreg.envreg0()
+  %val0 = tail call i32 @llvm37.nvvm.read.ptx.sreg.envreg0()
 ; CHECK: mov.b32 %r{{[0-9]+}}, %envreg1
-  %val1 = tail call i32 @llvm.nvvm.read.ptx.sreg.envreg1()
+  %val1 = tail call i32 @llvm37.nvvm.read.ptx.sreg.envreg1()
 ; CHECK: mov.b32 %r{{[0-9]+}}, %envreg2
-  %val2 = tail call i32 @llvm.nvvm.read.ptx.sreg.envreg2()
+  %val2 = tail call i32 @llvm37.nvvm.read.ptx.sreg.envreg2()
 ; CHECK: mov.b32 %r{{[0-9]+}}, %envreg3
-  %val3 = tail call i32 @llvm.nvvm.read.ptx.sreg.envreg3()
+  %val3 = tail call i32 @llvm37.nvvm.read.ptx.sreg.envreg3()
 ; CHECK: mov.b32 %r{{[0-9]+}}, %envreg4
-  %val4 = tail call i32 @llvm.nvvm.read.ptx.sreg.envreg4()
+  %val4 = tail call i32 @llvm37.nvvm.read.ptx.sreg.envreg4()
 ; CHECK: mov.b32 %r{{[0-9]+}}, %envreg5
-  %val5 = tail call i32 @llvm.nvvm.read.ptx.sreg.envreg5()
+  %val5 = tail call i32 @llvm37.nvvm.read.ptx.sreg.envreg5()
 ; CHECK: mov.b32 %r{{[0-9]+}}, %envreg6
-  %val6 = tail call i32 @llvm.nvvm.read.ptx.sreg.envreg6()
+  %val6 = tail call i32 @llvm37.nvvm.read.ptx.sreg.envreg6()
 ; CHECK: mov.b32 %r{{[0-9]+}}, %envreg7
-  %val7 = tail call i32 @llvm.nvvm.read.ptx.sreg.envreg7()
+  %val7 = tail call i32 @llvm37.nvvm.read.ptx.sreg.envreg7()
 ; CHECK: mov.b32 %r{{[0-9]+}}, %envreg8
-  %val8 = tail call i32 @llvm.nvvm.read.ptx.sreg.envreg8()
+  %val8 = tail call i32 @llvm37.nvvm.read.ptx.sreg.envreg8()
 ; CHECK: mov.b32 %r{{[0-9]+}}, %envreg9
-  %val9 = tail call i32 @llvm.nvvm.read.ptx.sreg.envreg9()
+  %val9 = tail call i32 @llvm37.nvvm.read.ptx.sreg.envreg9()
 ; CHECK: mov.b32 %r{{[0-9]+}}, %envreg10
-  %val10 = tail call i32 @llvm.nvvm.read.ptx.sreg.envreg10()
+  %val10 = tail call i32 @llvm37.nvvm.read.ptx.sreg.envreg10()
 ; CHECK: mov.b32 %r{{[0-9]+}}, %envreg11
-  %val11 = tail call i32 @llvm.nvvm.read.ptx.sreg.envreg11()
+  %val11 = tail call i32 @llvm37.nvvm.read.ptx.sreg.envreg11()
 ; CHECK: mov.b32 %r{{[0-9]+}}, %envreg12
-  %val12 = tail call i32 @llvm.nvvm.read.ptx.sreg.envreg12()
+  %val12 = tail call i32 @llvm37.nvvm.read.ptx.sreg.envreg12()
 ; CHECK: mov.b32 %r{{[0-9]+}}, %envreg13
-  %val13 = tail call i32 @llvm.nvvm.read.ptx.sreg.envreg13()
+  %val13 = tail call i32 @llvm37.nvvm.read.ptx.sreg.envreg13()
 ; CHECK: mov.b32 %r{{[0-9]+}}, %envreg14
-  %val14 = tail call i32 @llvm.nvvm.read.ptx.sreg.envreg14()
+  %val14 = tail call i32 @llvm37.nvvm.read.ptx.sreg.envreg14()
 ; CHECK: mov.b32 %r{{[0-9]+}}, %envreg15
-  %val15 = tail call i32 @llvm.nvvm.read.ptx.sreg.envreg15()
+  %val15 = tail call i32 @llvm37.nvvm.read.ptx.sreg.envreg15()
 ; CHECK: mov.b32 %r{{[0-9]+}}, %envreg16
-  %val16 = tail call i32 @llvm.nvvm.read.ptx.sreg.envreg16()
+  %val16 = tail call i32 @llvm37.nvvm.read.ptx.sreg.envreg16()
 ; CHECK: mov.b32 %r{{[0-9]+}}, %envreg17
-  %val17 = tail call i32 @llvm.nvvm.read.ptx.sreg.envreg17()
+  %val17 = tail call i32 @llvm37.nvvm.read.ptx.sreg.envreg17()
 ; CHECK: mov.b32 %r{{[0-9]+}}, %envreg18
-  %val18 = tail call i32 @llvm.nvvm.read.ptx.sreg.envreg18()
+  %val18 = tail call i32 @llvm37.nvvm.read.ptx.sreg.envreg18()
 ; CHECK: mov.b32 %r{{[0-9]+}}, %envreg19
-  %val19 = tail call i32 @llvm.nvvm.read.ptx.sreg.envreg19()
+  %val19 = tail call i32 @llvm37.nvvm.read.ptx.sreg.envreg19()
 ; CHECK: mov.b32 %r{{[0-9]+}}, %envreg20
-  %val20 = tail call i32 @llvm.nvvm.read.ptx.sreg.envreg20()
+  %val20 = tail call i32 @llvm37.nvvm.read.ptx.sreg.envreg20()
 ; CHECK: mov.b32 %r{{[0-9]+}}, %envreg21
-  %val21 = tail call i32 @llvm.nvvm.read.ptx.sreg.envreg21()
+  %val21 = tail call i32 @llvm37.nvvm.read.ptx.sreg.envreg21()
 ; CHECK: mov.b32 %r{{[0-9]+}}, %envreg22
-  %val22 = tail call i32 @llvm.nvvm.read.ptx.sreg.envreg22()
+  %val22 = tail call i32 @llvm37.nvvm.read.ptx.sreg.envreg22()
 ; CHECK: mov.b32 %r{{[0-9]+}}, %envreg23
-  %val23 = tail call i32 @llvm.nvvm.read.ptx.sreg.envreg23()
+  %val23 = tail call i32 @llvm37.nvvm.read.ptx.sreg.envreg23()
 ; CHECK: mov.b32 %r{{[0-9]+}}, %envreg24
-  %val24 = tail call i32 @llvm.nvvm.read.ptx.sreg.envreg24()
+  %val24 = tail call i32 @llvm37.nvvm.read.ptx.sreg.envreg24()
 ; CHECK: mov.b32 %r{{[0-9]+}}, %envreg25
-  %val25 = tail call i32 @llvm.nvvm.read.ptx.sreg.envreg25()
+  %val25 = tail call i32 @llvm37.nvvm.read.ptx.sreg.envreg25()
 ; CHECK: mov.b32 %r{{[0-9]+}}, %envreg26
-  %val26 = tail call i32 @llvm.nvvm.read.ptx.sreg.envreg26()
+  %val26 = tail call i32 @llvm37.nvvm.read.ptx.sreg.envreg26()
 ; CHECK: mov.b32 %r{{[0-9]+}}, %envreg27
-  %val27 = tail call i32 @llvm.nvvm.read.ptx.sreg.envreg27()
+  %val27 = tail call i32 @llvm37.nvvm.read.ptx.sreg.envreg27()
 ; CHECK: mov.b32 %r{{[0-9]+}}, %envreg28
-  %val28 = tail call i32 @llvm.nvvm.read.ptx.sreg.envreg28()
+  %val28 = tail call i32 @llvm37.nvvm.read.ptx.sreg.envreg28()
 ; CHECK: mov.b32 %r{{[0-9]+}}, %envreg29
-  %val29 = tail call i32 @llvm.nvvm.read.ptx.sreg.envreg29()
+  %val29 = tail call i32 @llvm37.nvvm.read.ptx.sreg.envreg29()
 ; CHECK: mov.b32 %r{{[0-9]+}}, %envreg30
-  %val30 = tail call i32 @llvm.nvvm.read.ptx.sreg.envreg30()
+  %val30 = tail call i32 @llvm37.nvvm.read.ptx.sreg.envreg30()
 ; CHECK: mov.b32 %r{{[0-9]+}}, %envreg31
-  %val31 = tail call i32 @llvm.nvvm.read.ptx.sreg.envreg31()
+  %val31 = tail call i32 @llvm37.nvvm.read.ptx.sreg.envreg31()
 
 
   %ret0 = add i32 %val0, %val1

@@ -1,6 +1,6 @@
 //===--- CommentSema.h - Doxygen comment semantic analysis ------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,16 +11,16 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_AST_COMMENTSEMA_H
-#define LLVM_CLANG_AST_COMMENTSEMA_H
+#ifndef LLVM37_CLANG_AST_COMMENTSEMA_H
+#define LLVM37_CLANG_AST_COMMENTSEMA_H
 
 #include "clang/AST/Comment.h"
 #include "clang/Basic/Diagnostic.h"
 #include "clang/Basic/SourceLocation.h"
-#include "llvm/ADT/ArrayRef.h"
-#include "llvm/ADT/StringMap.h"
-#include "llvm/ADT/StringRef.h"
-#include "llvm/Support/Allocator.h"
+#include "llvm37/ADT/ArrayRef.h"
+#include "llvm37/ADT/StringMap.h"
+#include "llvm37/ADT/StringRef.h"
+#include "llvm37/Support/Allocator.h"
 
 namespace clang {
 class Decl;
@@ -35,7 +35,7 @@ class Sema {
   void operator=(const Sema &) = delete;
 
   /// Allocator for AST nodes.
-  llvm::BumpPtrAllocator &Allocator;
+  llvm37::BumpPtrAllocator &Allocator;
 
   /// Source manager for the comment being parsed.
   const SourceManager &SourceMgr;
@@ -53,7 +53,7 @@ class Sema {
   /// \c TemplateParameters.
   ///
   /// Contains a valid value if \c DeclInfo->IsFilled is true.
-  llvm::StringMap<TParamCommandComment *> TemplateParameterDocs;
+  llvm37::StringMap<TParamCommandComment *> TemplateParameterDocs;
 
   /// AST node for the \\brief command and its aliases.
   const BlockCommandComment *BriefCommand;
@@ -70,7 +70,7 @@ class Sema {
   SmallVector<HTMLStartTagComment *, 8> HTMLOpenTags;
 
 public:
-  Sema(llvm::BumpPtrAllocator &Allocator, const SourceManager &SourceMgr,
+  Sema(llvm37::BumpPtrAllocator &Allocator, const SourceManager &SourceMgr,
        DiagnosticsEngine &Diags, CommandTraits &Traits,
        const Preprocessor *PP);
 
@@ -83,7 +83,7 @@ public:
     if (Size != 0) {
       T *Mem = Allocator.Allocate<T>(Size);
       std::uninitialized_copy(Source.begin(), Source.end(), Mem);
-      return llvm::makeArrayRef(Mem, Size);
+      return llvm37::makeArrayRef(Mem, Size);
     }
     return None;
   }

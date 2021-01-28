@@ -1,6 +1,6 @@
 //===- unittests/Frontend/FrontendActionTest.cpp - FrontendAction tests ---===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -15,11 +15,11 @@
 #include "clang/Frontend/CompilerInvocation.h"
 #include "clang/Lex/Preprocessor.h"
 #include "clang/Sema/Sema.h"
-#include "llvm/ADT/Triple.h"
-#include "llvm/Support/MemoryBuffer.h"
+#include "llvm37/ADT/Triple.h"
+#include "llvm37/Support/MemoryBuffer.h"
 #include "gtest/gtest.h"
 
-using namespace llvm;
+using namespace llvm37;
 using namespace clang;
 
 namespace {
@@ -45,7 +45,7 @@ public:
 
   std::unique_ptr<ASTConsumer> CreateASTConsumer(CompilerInstance &CI,
                                                  StringRef InFile) override {
-    return llvm::make_unique<Visitor>(CI, ActOnEndOfTranslationUnit,
+    return llvm37::make_unique<Visitor>(CI, ActOnEndOfTranslationUnit,
                                       decl_names);
   }
 

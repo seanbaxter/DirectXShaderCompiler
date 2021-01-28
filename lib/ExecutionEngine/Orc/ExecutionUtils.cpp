@@ -1,20 +1,20 @@
 //===---- ExecutionUtils.cpp - Utilities for executing functions in Orc ---===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/ExecutionEngine/Orc/ExecutionUtils.h"
+#include "llvm37/ExecutionEngine/Orc/ExecutionUtils.h"
 
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/GlobalVariable.h"
-#include "llvm/IR/Module.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/GlobalVariable.h"
+#include "llvm37/IR/Module.h"
 
-namespace llvm {
+namespace llvm37 {
 namespace orc {
 
 CtorDtorIterator::CtorDtorIterator(const GlobalVariable *GV, bool End)
@@ -45,7 +45,7 @@ CtorDtorIterator CtorDtorIterator::operator++(int) {
 
 CtorDtorIterator::Element CtorDtorIterator::operator*() const {
   ConstantStruct *CS = dyn_cast<ConstantStruct>(InitList->getOperand(I));
-  assert(CS && "Unrecognized type in llvm.global_ctors/llvm.global_dtors");
+  assert(CS && "Unrecognized type in llvm37.global_ctors/llvm37.global_dtors");
 
   Constant *FuncC = CS->getOperand(1);
   Function *Func = nullptr;
@@ -99,4 +99,4 @@ int LocalCXXRuntimeOverrides::CXAAtExitOverride(DestructorPtr Destructor,
 }
 
 } // End namespace orc.
-} // End namespace llvm.
+} // End namespace llvm37.

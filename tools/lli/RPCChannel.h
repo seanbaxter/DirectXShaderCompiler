@@ -1,6 +1,6 @@
-//===---------- RPCChannel.h - LLVM out-of-process JIT execution ----------===//
+//===---------- RPCChannel.h - LLVM37 out-of-process JIT execution ----------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -12,13 +12,13 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_TOOLS_LLI_RPCCHANNEL_H
-#define LLVM_TOOLS_LLI_RPCCHANNEL_H
+#ifndef LLVM37_TOOLS_LLI_RPCCHANNEL_H
+#define LLVM37_TOOLS_LLI_RPCCHANNEL_H
 
 #include <stdlib.h>
 #include <string>
 
-namespace llvm {
+namespace llvm37 {
 
 class RPCChannel {
 public:
@@ -44,6 +44,6 @@ public:
   void Wait();
 };
 
-} // end namespace llvm
+} // end namespace llvm37
 
 #endif

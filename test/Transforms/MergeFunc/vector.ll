@@ -17,7 +17,7 @@ target triple = "x86_64-unknown-linux-gnu"
 @vi = global %"class.std::vector" zeroinitializer, align 8
 @__dso_handle = external unnamed_addr global i8*
 @vp = global %"class.std::vector" zeroinitializer, align 8
-@llvm.global_ctors = appending global [1 x %0] [%0 { i32 65535, void ()* @_GLOBAL__I_a }]
+@llvm37.global_ctors = appending global [1 x %0] [%0 { i32 65535, void ()* @_GLOBAL__I_a }]
 
 define linkonce_odr void @_ZNSt6vectorIlSaIlEED1Ev(%"class.std::vector"* nocapture %this) unnamed_addr align 2 {
 entry:
@@ -59,7 +59,7 @@ declare void @_ZNSt6vectorIPvSaIS0_EE13_M_insert_auxEN9__gnu_cxx17__normal_itera
 
 declare void @_ZdlPv(i8*) nounwind
 
-declare void @llvm.memmove.p0i8.p0i8.i64(i8* nocapture, i8* nocapture, i64, i32, i1) nounwind
+declare void @llvm37.memmove.p0i8.p0i8.i64(i8* nocapture, i8* nocapture, i64, i32, i1) nounwind
 
 declare void @_ZSt17__throw_bad_allocv() noreturn
 
@@ -69,4 +69,4 @@ declare void @_ZNSt6vectorIlSaIlEE13_M_insert_auxEN9__gnu_cxx17__normal_iterator
 
 declare void @_GLOBAL__I_a()
 
-declare %1 @llvm.uadd.with.overflow.i64(i64, i64) nounwind readnone
+declare %1 @llvm37.uadd.with.overflow.i64(i64, i64) nounwind readnone

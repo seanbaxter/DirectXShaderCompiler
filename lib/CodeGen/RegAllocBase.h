@@ -1,6 +1,6 @@
 //===-- RegAllocBase.h - basic regalloc interface and driver --*- C++ -*---===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -34,13 +34,13 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_LIB_CODEGEN_REGALLOCBASE_H
-#define LLVM_LIB_CODEGEN_REGALLOCBASE_H
+#ifndef LLVM37_LIB_CODEGEN_REGALLOCBASE_H
+#define LLVM37_LIB_CODEGEN_REGALLOCBASE_H
 
-#include "llvm/CodeGen/LiveInterval.h"
-#include "llvm/CodeGen/RegisterClassInfo.h"
+#include "llvm37/CodeGen/LiveInterval.h"
+#include "llvm37/CodeGen/RegisterClassInfo.h"
 
-namespace llvm {
+namespace llvm37 {
 
 template<typename T> class SmallVectorImpl;
 class TargetRegisterInfo;
@@ -107,6 +107,6 @@ private:
   void seedLiveRegs();
 };
 
-} // end namespace llvm
+} // end namespace llvm37
 
 #endif

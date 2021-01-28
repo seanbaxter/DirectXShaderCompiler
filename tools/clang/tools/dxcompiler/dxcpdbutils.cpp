@@ -16,14 +16,14 @@
 #include "dxc/Support/WinIncludes.h"
 #include "dxc/Support/dxcapi.use.h"
 #include "dxc/Support/FileIOHelper.h"
-#include "llvm/Support/MSFileSystem.h"
-#include "llvm/Support/FileSystem.h"
-#include "llvm/Support/MemoryBuffer.h"
-#include "llvm/ADT/StringRef.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Module.h"
-#include "llvm/Support/Path.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/Support/MSFileSystem.h"
+#include "llvm37/Support/FileSystem.h"
+#include "llvm37/Support/MemoryBuffer.h"
+#include "llvm37/ADT/StringRef.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/Support/Path.h"
+#include "llvm37/Support/raw_ostream.h"
 
 #include "dxc/dxcapi.h"
 #include "dxc/dxcpix.h"
@@ -45,7 +45,7 @@
 #include <dia2.h>
 
 using namespace dxc;
-using namespace llvm;
+using namespace llvm37;
 
 static const std::string ToUtf8String(const std::wstring &str) {
   std::wstring_convert<std::codecvt_utf8<wchar_t> > converter;
@@ -79,8 +79,8 @@ static HRESULT CopyWstringToBSTR(const std::wstring &str, BSTR *pResult) {
 
 static std::wstring NormalizePath(const WCHAR *path) {
   std::string FilenameStr8 = Unicode::UTF16ToUTF8StringOrThrow(path);
-  llvm::SmallString<128> NormalizedPath;
-  llvm::sys::path::native(FilenameStr8, NormalizedPath);
+  llvm37::SmallString<128> NormalizedPath;
+  llvm37::sys::path::native(FilenameStr8, NormalizedPath);
   std::wstring FilenameStr16 = Unicode::UTF8ToUTF16StringOrThrow(NormalizedPath.c_str());
   return FilenameStr16;
 }
@@ -93,7 +93,7 @@ static bool IsBitcode(const void *ptr, size_t size) {
 }
 
 static void ComputeFlagsBasedOnArgs(ArrayRef<std::wstring> args, std::vector<std::wstring> *outFlags, std::vector<std::wstring> *outDefines, std::wstring *outTargetProfile, std::wstring *outEntryPoint) {
-  const llvm::opt::OptTable *optionTable = hlsl::options::getHlslOptTable();
+  const llvm37::opt::OptTable *optionTable = hlsl::options::getHlslOptTable();
   assert(optionTable);
   if (optionTable) {
     std::vector<std::string> argUtf8List;
@@ -108,8 +108,8 @@ static void ComputeFlagsBasedOnArgs(ArrayRef<std::wstring> args, std::vector<std
 
     unsigned missingIndex = 0;
     unsigned missingCount = 0;
-    llvm::opt::InputArgList argList = optionTable->ParseArgs(argPointerList, missingIndex, missingCount);
-    for (llvm::opt::Arg *arg : argList) {
+    llvm37::opt::InputArgList argList = optionTable->ParseArgs(argPointerList, missingIndex, missingCount);
+    for (llvm37::opt::Arg *arg : argList) {
       if (arg->getOption().matches(hlsl::options::OPT_D)) {
         std::wstring def = ToWstring(arg->getValue());
         if (outDefines)
@@ -128,7 +128,7 @@ static void ComputeFlagsBasedOnArgs(ArrayRef<std::wstring> args, std::vector<std
       }
 
       if (outFlags) {
-        llvm::StringRef Name = arg->getOption().getName();
+        llvm37::StringRef Name = arg->getOption().getName();
         if (Name.size()) {
           outFlags->push_back(std::wstring(L"-") + ToWstring(Name));
         }
@@ -305,11 +305,11 @@ private:
       return E_INVALIDARG;
     }
 
-    llvm::LLVMContext context;
-    std::unique_ptr<llvm::Module> pModule;
+    llvm37::LLVM37Context context;
+    std::unique_ptr<llvm37::Module> pModule;
 
     // NOTE: this doesn't copy the memory, just references it.
-    std::unique_ptr<llvm::MemoryBuffer> mb = llvm::MemoryBuffer::getMemBuffer(StringRef(bitcode, bitcode_size), "-", /*RequiresNullTerminator*/ false);
+    std::unique_ptr<llvm37::MemoryBuffer> mb = llvm37::MemoryBuffer::getMemBuffer(StringRef(bitcode, bitcode_size), "-", /*RequiresNullTerminator*/ false);
 
     // Lazily parse the module
     std::string DiagStr;
@@ -319,7 +319,7 @@ private:
 
     // Materialize only the stuff we need, so it's fast
     {
-      llvm::StringRef DebugMetadataList[] = {
+      llvm37::StringRef DebugMetadataList[] = {
         hlsl::DxilMDHelper::kDxilSourceContentsMDName,
         hlsl::DxilMDHelper::kDxilSourceDefinesMDName,
         hlsl::DxilMDHelper::kDxilSourceArgsMDName,
@@ -336,15 +336,15 @@ private:
     m_TargetProfile = ToWstring(DM.GetShaderModel()->GetName());
 
     // For each all the named metadata node in the module
-    for (llvm::NamedMDNode &node : pModule->named_metadata()) {
-      llvm::StringRef node_name = node.getName();
+    for (llvm37::NamedMDNode &node : pModule->named_metadata()) {
+      llvm37::StringRef node_name = node.getName();
 
       // dx.source.content
       if (node_name == hlsl::DxilMDHelper::kDxilSourceContentsMDName ||
           node_name == hlsl::DxilMDHelper::kDxilSourceContentsOldMDName)
       {
         for (unsigned i = 0; i < node.getNumOperands(); i++) {
-          llvm::MDTuple *tup = cast<llvm::MDTuple>(node.getOperand(i));
+          llvm37::MDTuple *tup = cast<llvm37::MDTuple>(node.getOperand(i));
           MDString *md_name = cast<MDString>(tup->getOperand(0));
           MDString *md_content = cast<MDString>(tup->getOperand(1));
 
@@ -572,12 +572,12 @@ public:
   HRESULT STDMETHODCALLTYPE Load(_In_ IDxcBlob *pPdbOrDxil) override {
     DxcThreadMalloc TM(m_pMalloc);
 
-    ::llvm::sys::fs::MSFileSystem *msfPtr = nullptr;
+    ::llvm37::sys::fs::MSFileSystem *msfPtr = nullptr;
     IFT(CreateMSFileSystemForDisk(&msfPtr));
-    std::unique_ptr<::llvm::sys::fs::MSFileSystem> msf(msfPtr);
+    std::unique_ptr<::llvm37::sys::fs::MSFileSystem> msf(msfPtr);
   
-    ::llvm::sys::fs::AutoPerThreadSystem pts(msf.get());
-    IFTLLVM(pts.error_code());
+    ::llvm37::sys::fs::AutoPerThreadSystem pts(msf.get());
+    IFTLLVM37(pts.error_code());
 
     if (!pPdbOrDxil)
       return E_POINTER;

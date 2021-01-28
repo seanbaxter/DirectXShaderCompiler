@@ -1,4 +1,4 @@
-; RUN: not llvm-link %s %p/Inputs/comdat3.ll -S -o - 2>&1 | FileCheck %s
+; RUN: not llvm37-link %s %p/Inputs/comdat3.ll -S -o - 2>&1 | FileCheck %s
 
 $foo = comdat noduplicates
 @foo = global i64 43, comdat($foo)

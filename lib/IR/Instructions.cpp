@@ -1,30 +1,30 @@
-//===-- Instructions.cpp - Implement the LLVM instructions ----------------===//
+//===-- Instructions.cpp - Implement the LLVM37 instructions ----------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 //
-// This file implements all of the non-inline methods for the LLVM instruction
+// This file implements all of the non-inline methods for the LLVM37 instruction
 // classes.
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/IR/Instructions.h"
+#include "llvm37/IR/Instructions.h"
 #include "LLVMContextImpl.h"
-#include "llvm/IR/CallSite.h"
-#include "llvm/IR/ConstantRange.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/DerivedTypes.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/Operator.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/MathExtras.h"
-using namespace llvm;
+#include "llvm37/IR/CallSite.h"
+#include "llvm37/IR/ConstantRange.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/IR/DerivedTypes.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/Operator.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/MathExtras.h"
+using namespace llvm37;
 
 //===----------------------------------------------------------------------===//
 //                            CallSite Class
@@ -301,7 +301,7 @@ void CallInst::addAttribute(unsigned i, StringRef Kind, StringRef Value) {
 void CallInst::removeAttribute(unsigned i, Attribute attr) {
   AttributeSet PAL = getAttributes();
   AttrBuilder B(attr);
-  LLVMContext &Context = getContext();
+  LLVM37Context &Context = getContext();
   PAL = PAL.removeAttributes(Context, i,
                              AttributeSet::get(Context, i, B));
   setAttributes(PAL);
@@ -600,21 +600,21 @@ ReturnInst::ReturnInst(const ReturnInst &RI)
   SubclassOptionalData = RI.SubclassOptionalData;
 }
 
-ReturnInst::ReturnInst(LLVMContext &C, Value *retVal, Instruction *InsertBefore)
+ReturnInst::ReturnInst(LLVM37Context &C, Value *retVal, Instruction *InsertBefore)
   : TerminatorInst(Type::getVoidTy(C), Instruction::Ret,
                    OperandTraits<ReturnInst>::op_end(this) - !!retVal, !!retVal,
                    InsertBefore) {
   if (retVal)
     Op<0>() = retVal;
 }
-ReturnInst::ReturnInst(LLVMContext &C, Value *retVal, BasicBlock *InsertAtEnd)
+ReturnInst::ReturnInst(LLVM37Context &C, Value *retVal, BasicBlock *InsertAtEnd)
   : TerminatorInst(Type::getVoidTy(C), Instruction::Ret,
                    OperandTraits<ReturnInst>::op_end(this) - !!retVal, !!retVal,
                    InsertAtEnd) {
   if (retVal)
     Op<0>() = retVal;
 }
-ReturnInst::ReturnInst(LLVMContext &Context, BasicBlock *InsertAtEnd)
+ReturnInst::ReturnInst(LLVM37Context &Context, BasicBlock *InsertAtEnd)
   : TerminatorInst(Type::getVoidTy(Context), Instruction::Ret,
                    OperandTraits<ReturnInst>::op_end(this), 0, InsertAtEnd) {
 }
@@ -626,11 +626,11 @@ unsigned ReturnInst::getNumSuccessorsV() const {
 /// Out-of-line ReturnInst method, put here so the C++ compiler can choose to
 /// emit the vtable for the class in this translation unit.
 void ReturnInst::setSuccessorV(unsigned idx, BasicBlock *NewSucc) {
-  llvm_unreachable("ReturnInst has no successors!");
+  llvm37_unreachable("ReturnInst has no successors!");
 }
 
 BasicBlock *ReturnInst::getSuccessorV(unsigned idx) const {
-  llvm_unreachable("ReturnInst has no successors!");
+  llvm37_unreachable("ReturnInst has no successors!");
 }
 
 ReturnInst::~ReturnInst() {
@@ -663,23 +663,23 @@ unsigned ResumeInst::getNumSuccessorsV() const {
 }
 
 void ResumeInst::setSuccessorV(unsigned idx, BasicBlock *NewSucc) {
-  llvm_unreachable("ResumeInst has no successors!");
+  llvm37_unreachable("ResumeInst has no successors!");
 }
 
 BasicBlock *ResumeInst::getSuccessorV(unsigned idx) const {
-  llvm_unreachable("ResumeInst has no successors!");
+  llvm37_unreachable("ResumeInst has no successors!");
 }
 
 //===----------------------------------------------------------------------===//
 //                      UnreachableInst Implementation
 //===----------------------------------------------------------------------===//
 
-UnreachableInst::UnreachableInst(LLVMContext &Context, 
+UnreachableInst::UnreachableInst(LLVM37Context &Context, 
                                  Instruction *InsertBefore)
   : TerminatorInst(Type::getVoidTy(Context), Instruction::Unreachable,
                    nullptr, 0, InsertBefore) {
 }
-UnreachableInst::UnreachableInst(LLVMContext &Context, BasicBlock *InsertAtEnd)
+UnreachableInst::UnreachableInst(LLVM37Context &Context, BasicBlock *InsertAtEnd)
   : TerminatorInst(Type::getVoidTy(Context), Instruction::Unreachable,
                    nullptr, 0, InsertAtEnd) {
 }
@@ -689,11 +689,11 @@ unsigned UnreachableInst::getNumSuccessorsV() const {
 }
 
 void UnreachableInst::setSuccessorV(unsigned idx, BasicBlock *NewSucc) {
-  llvm_unreachable("UnreachableInst has no successors!");
+  llvm37_unreachable("UnreachableInst has no successors!");
 }
 
 BasicBlock *UnreachableInst::getSuccessorV(unsigned idx) const {
-  llvm_unreachable("UnreachableInst has no successors!");
+  llvm37_unreachable("UnreachableInst has no successors!");
 }
 
 //===----------------------------------------------------------------------===//
@@ -768,14 +768,14 @@ void BranchInst::swapSuccessors() {
 
   // Update profile metadata if present and it matches our structural
   // expectations.
-  MDNode *ProfileData = getMetadata(LLVMContext::MD_prof);
+  MDNode *ProfileData = getMetadata(LLVM37Context::MD_prof);
   if (!ProfileData || ProfileData->getNumOperands() != 3)
     return;
 
   // The first operand is the name. Fetch them backwards and build a new one.
   Metadata *Ops[] = {ProfileData->getOperand(0), ProfileData->getOperand(2),
                      ProfileData->getOperand(1)};
-  setMetadata(LLVMContext::MD_prof,
+  setMetadata(LLVM37Context::MD_prof,
               MDNode::get(ProfileData->getContext(), Ops));
 }
 
@@ -794,7 +794,7 @@ void BranchInst::setSuccessorV(unsigned idx, BasicBlock *B) {
 //                        AllocaInst Implementation
 //===----------------------------------------------------------------------===//
 
-static Value *getAISize(LLVMContext &Context, Value *Amt) {
+static Value *getAISize(LLVM37Context &Context, Value *Amt) {
   if (!Amt)
     Amt = ConstantInt::get(Type::getInt32Ty(Context), 1);
   else {
@@ -1173,7 +1173,7 @@ AtomicRMWInst::AtomicRMWInst(BinOp Operation, Value *Ptr, Value *Val,
 //                       FenceInst Implementation
 //===----------------------------------------------------------------------===//
 
-FenceInst::FenceInst(LLVMContext &C, AtomicOrdering Ordering, 
+FenceInst::FenceInst(LLVM37Context &C, AtomicOrdering Ordering, 
                      SynchronizationScope SynchScope,
                      Instruction *InsertBefore)
   : Instruction(Type::getVoidTy(C), Fence, nullptr, 0, InsertBefore) {
@@ -1181,7 +1181,7 @@ FenceInst::FenceInst(LLVMContext &C, AtomicOrdering Ordering,
   setSynchScope(SynchScope);
 }
 
-FenceInst::FenceInst(LLVMContext &C, AtomicOrdering Ordering, 
+FenceInst::FenceInst(LLVM37Context &C, AtomicOrdering Ordering, 
                      SynchronizationScope SynchScope,
                      BasicBlock *InsertAtEnd)
   : Instruction(Type::getVoidTy(C), Fence, nullptr, 0, InsertAtEnd) {
@@ -1922,7 +1922,7 @@ void BinaryOperator::andIRFlags(const Value *V) {
 /// default precision.
 float FPMathOperator::getFPAccuracy() const {
   const MDNode *MD =
-      cast<Instruction>(this)->getMetadata(LLVMContext::MD_fpmath);
+      cast<Instruction>(this)->getMetadata(LLVM37Context::MD_fpmath);
   if (!MD)
     return 0.0;
   ConstantFP *Accuracy = mdconst::extract<ConstantFP>(MD->getOperand(0));
@@ -1980,7 +1980,7 @@ bool CastInst::isNoopCast(Instruction::CastOps Opcode,
                           Type *DestTy,
                           Type *IntPtrTy) {
   switch (Opcode) {
-    default: llvm_unreachable("Invalid CastOp");
+    default: llvm37_unreachable("Invalid CastOp");
     case Instruction::Trunc:
     case Instruction::ZExt:
     case Instruction::SExt: 
@@ -2246,9 +2246,9 @@ unsigned CastInst::isEliminableCastPair(
     case 99: 
       // Cast combination can't happen (error in input). This is for all cases
       // where the MidTy is not the same for the two cast instructions.
-      llvm_unreachable("Invalid Cast Combination");
+      llvm37_unreachable("Invalid Cast Combination");
     default:
-      llvm_unreachable("Error in CastResults table!!!");
+      llvm37_unreachable("Error in CastResults table!!!");
   }
 }
 
@@ -2270,7 +2270,7 @@ CastInst *CastInst::Create(Instruction::CastOps op, Value *S, Type *Ty,
   case IntToPtr:      return new IntToPtrInst      (S, Ty, Name, InsertBefore);
   case BitCast:       return new BitCastInst       (S, Ty, Name, InsertBefore);
   case AddrSpaceCast: return new AddrSpaceCastInst (S, Ty, Name, InsertBefore);
-  default: llvm_unreachable("Invalid opcode provided");
+  default: llvm37_unreachable("Invalid opcode provided");
   }
 }
 
@@ -2292,7 +2292,7 @@ CastInst *CastInst::Create(Instruction::CastOps op, Value *S, Type *Ty,
   case IntToPtr:      return new IntToPtrInst      (S, Ty, Name, InsertAtEnd);
   case BitCast:       return new BitCastInst       (S, Ty, Name, InsertAtEnd);
   case AddrSpaceCast: return new AddrSpaceCastInst (S, Ty, Name, InsertAtEnd);
-  default: llvm_unreachable("Invalid opcode provided");
+  default: llvm37_unreachable("Invalid opcode provided");
   }
 }
 
@@ -2657,7 +2657,7 @@ CastInst::getCastOpcode(
              "Casting vector to floating point of different width");
       return BitCast;                             // same size, no-op cast
     }
-    llvm_unreachable("Casting pointer or non-first class to float");
+    llvm37_unreachable("Casting pointer or non-first class to float");
   } else if (DestTy->isVectorTy()) {
     assert(DestBits == SrcBits &&
            "Illegal cast to vector (wrong type or size)");
@@ -2670,15 +2670,15 @@ CastInst::getCastOpcode(
     } else if (SrcTy->isIntegerTy()) {
       return IntToPtr;                              // int -> ptr
     }
-    llvm_unreachable("Casting pointer to other than pointer or int");
+    llvm37_unreachable("Casting pointer to other than pointer or int");
   } else if (DestTy->isX86_MMXTy()) {
     if (SrcTy->isVectorTy()) {
       assert(DestBits == SrcBits && "Casting vector of wrong width to X86_MMX");
       return BitCast;                               // 64-bit vector to MMX
     }
-    llvm_unreachable("Illegal cast to X86_MMX");
+    llvm37_unreachable("Illegal cast to X86_MMX");
   }
-  llvm_unreachable("Casting to type that is not first-class");
+  llvm37_unreachable("Casting to type that is not first-class");
 }
 
 //===----------------------------------------------------------------------===//
@@ -3046,7 +3046,7 @@ bool CmpInst::isEquality() const {
 
 CmpInst::Predicate CmpInst::getInversePredicate(Predicate pred) {
   switch (pred) {
-    default: llvm_unreachable("Unknown cmp predicate!");
+    default: llvm37_unreachable("Unknown cmp predicate!");
     case ICMP_EQ: return ICMP_NE;
     case ICMP_NE: return ICMP_EQ;
     case ICMP_UGT: return ICMP_ULE;
@@ -3079,7 +3079,7 @@ CmpInst::Predicate CmpInst::getInversePredicate(Predicate pred) {
 
 ICmpInst::Predicate ICmpInst::getSignedPredicate(Predicate pred) {
   switch (pred) {
-    default: llvm_unreachable("Unknown icmp predicate!");
+    default: llvm37_unreachable("Unknown icmp predicate!");
     case ICMP_EQ: case ICMP_NE: 
     case ICMP_SGT: case ICMP_SLT: case ICMP_SGE: case ICMP_SLE: 
        return pred;
@@ -3092,7 +3092,7 @@ ICmpInst::Predicate ICmpInst::getSignedPredicate(Predicate pred) {
 
 ICmpInst::Predicate ICmpInst::getUnsignedPredicate(Predicate pred) {
   switch (pred) {
-    default: llvm_unreachable("Unknown icmp predicate!");
+    default: llvm37_unreachable("Unknown icmp predicate!");
     case ICMP_EQ: case ICMP_NE: 
     case ICMP_UGT: case ICMP_ULT: case ICMP_UGE: case ICMP_ULE: 
        return pred;
@@ -3111,7 +3111,7 @@ ICmpInst::makeConstantRange(Predicate pred, const APInt &C) {
   APInt Upper(C);
   uint32_t BitWidth = C.getBitWidth();
   switch (pred) {
-  default: llvm_unreachable("Invalid ICmp opcode to ConstantRange ctor!");
+  default: llvm37_unreachable("Invalid ICmp opcode to ConstantRange ctor!");
   case ICmpInst::ICMP_EQ: ++Upper; break;
   case ICmpInst::ICMP_NE: ++Lower; break;
   case ICmpInst::ICMP_ULT:
@@ -3168,7 +3168,7 @@ ICmpInst::makeConstantRange(Predicate pred, const APInt &C) {
 
 CmpInst::Predicate CmpInst::getSwappedPredicate(Predicate pred) {
   switch (pred) {
-    default: llvm_unreachable("Unknown cmp predicate!");
+    default: llvm37_unreachable("Unknown cmp predicate!");
     case ICMP_EQ: case ICMP_NE:
       return pred;
     case ICMP_SGT: return ICMP_SLT;
@@ -3619,6 +3619,6 @@ InvokeInst *InvokeInst::cloneImpl() const {
 ResumeInst *ResumeInst::cloneImpl() const { return new (1) ResumeInst(*this); }
 
 UnreachableInst *UnreachableInst::cloneImpl() const {
-  LLVMContext &Context = getContext();
+  LLVM37Context &Context = getContext();
   return new UnreachableInst(Context);
 }

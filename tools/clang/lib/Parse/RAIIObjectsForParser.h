@@ -1,6 +1,6 @@
 //===--- RAIIObjectsForParser.h - RAII helpers for the parser ---*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -12,8 +12,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_LIB_PARSE_RAIIOBJECTSFORPARSER_H
-#define LLVM_CLANG_LIB_PARSE_RAIIOBJECTSFORPARSER_H
+#ifndef LLVM37_CLANG_LIB_PARSE_RAIIOBJECTSFORPARSER_H
+#define LLVM37_CLANG_LIB_PARSE_RAIIOBJECTSFORPARSER_H
 
 #include "clang/Parse/ParseDiagnostic.h"
 #include "clang/Parse/Parser.h"
@@ -373,7 +373,7 @@ namespace clang {
         case tok::l_brace: return P.BraceCount;
         case tok::l_square: return P.BracketCount;
         case tok::l_paren: return P.ParenCount;
-        default: llvm_unreachable("Wrong token kind");
+        default: llvm37_unreachable("Wrong token kind");
       }
     }
     
@@ -389,7 +389,7 @@ namespace clang {
         P(p), Kind(k), FinalToken(FinalToken)
     {
       switch (Kind) {
-        default: llvm_unreachable("Unexpected balanced token");
+        default: llvm37_unreachable("Unexpected balanced token");
         case tok::l_brace:
           Close = tok::r_brace; 
           Consumer = &Parser::ConsumeBrace;

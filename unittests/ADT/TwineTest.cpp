@@ -1,23 +1,23 @@
 //===- TwineTest.cpp - Twine unit tests -----------------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/ADT/Twine.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/Twine.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/Support/raw_ostream.h"
 #include "gtest/gtest.h"
-using namespace llvm;
+using namespace llvm37;
 
 namespace {
 
 std::string repr(const Twine &Value) {
   std::string res;
-  llvm::raw_string_ostream OS(res);
+  llvm37::raw_string_ostream OS(res);
   Value.printRepr(OS);
   return OS.str();
 }

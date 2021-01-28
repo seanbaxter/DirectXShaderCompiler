@@ -3,18 +3,18 @@
 #include "clang/AST/CommentCommandTraits.h"
 #include "clang/AST/CommentDiagnostic.h"
 #include "clang/Basic/CharInfo.h"
-#include "llvm/ADT/StringExtras.h"
-#include "llvm/ADT/StringSwitch.h"
-#include "llvm/Support/ConvertUTF.h"
-#include "llvm/Support/ErrorHandling.h"
+#include "llvm37/ADT/StringExtras.h"
+#include "llvm37/ADT/StringSwitch.h"
+#include "llvm37/Support/ConvertUTF.h"
+#include "llvm37/Support/ErrorHandling.h"
 
 namespace clang {
 namespace comments {
 
 void Token::dump(const Lexer &L, const SourceManager &SM) const {
-  llvm::errs() << "comments::Token Kind=" << Kind << " ";
+  llvm37::errs() << "comments::Token Kind=" << Kind << " ";
   Loc.dump(SM);
-  llvm::errs() << " " << Length << " \"" << L.getSpelling(*this, SM) << "\"\n";
+  llvm37::errs() << " " << Length << " \"" << L.getSpelling(*this, SM) << "\"\n";
 }
 
 static inline bool isHTMLNamedCharacterReferenceCharacter(char C) {
@@ -30,11 +30,11 @@ static inline bool isHTMLHexCharacterReferenceCharacter(char C) {
 }
 
 static inline StringRef convertCodePointToUTF8(
-                                      llvm::BumpPtrAllocator &Allocator,
+                                      llvm37::BumpPtrAllocator &Allocator,
                                       unsigned CodePoint) {
   char *Resolved = Allocator.Allocate<char>(UNI_MAX_UTF8_BYTES_PER_CODE_POINT);
   char *ResolvedPtr = Resolved;
-  if (llvm::ConvertCodePointToUTF8(CodePoint, ResolvedPtr))
+  if (llvm37::ConvertCodePointToUTF8(CodePoint, ResolvedPtr))
     return StringRef(Resolved, ResolvedPtr - Resolved);
   else
     return StringRef();
@@ -49,7 +49,7 @@ namespace {
 
 StringRef Lexer::resolveHTMLNamedCharacterReference(StringRef Name) const {
   // Fast path, first check a few most widely used named character references.
-  return llvm::StringSwitch<StringRef>(Name)
+  return llvm37::StringSwitch<StringRef>(Name)
       .Case("amp", "&")
       .Case("lt", "<")
       .Case("gt", ">")
@@ -75,7 +75,7 @@ StringRef Lexer::resolveHTMLHexCharacterReference(StringRef Name) const {
     CodePoint *= 16;
     const char C = Name[i];
     assert(isHTMLHexCharacterReferenceCharacter(C));
-    CodePoint += llvm::hexDigitValue(C);
+    CodePoint += llvm37::hexDigitValue(C);
   }
   return convertCodePointToUTF8(Allocator, CodePoint);
 }
@@ -264,7 +264,7 @@ const char *findCCommentEnd(const char *BufferPtr, const char *BufferEnd) {
         return BufferPtr;
     }
   }
-  llvm_unreachable("buffer end hit before '*/' was seen");
+  llvm37_unreachable("buffer end hit before '*/' was seen");
 }
     
 } // unnamed namespace
@@ -718,7 +718,7 @@ void Lexer::lexHTMLEndTag(Token &T) {
   State = LS_Normal;
 }
 
-Lexer::Lexer(llvm::BumpPtrAllocator &Allocator, DiagnosticsEngine &Diags,
+Lexer::Lexer(llvm37::BumpPtrAllocator &Allocator, DiagnosticsEngine &Diags,
              const CommandTraits &Traits,
              SourceLocation FileLoc,
              const char *BufferStart, const char *BufferEnd):
@@ -783,7 +783,7 @@ again:
       goto again;
     }
     default:
-      llvm_unreachable("second character of comment should be '/' or '*'");
+      llvm37_unreachable("second character of comment should be '/' or '*'");
     }
 
   case LCS_BetweenComments: {

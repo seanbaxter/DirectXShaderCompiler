@@ -1,4 +1,4 @@
-; RUN: not llvm-as < %s -disable-output 2>&1 | FileCheck %s
+; RUN: not llvm37-as < %s -disable-output 2>&1 | FileCheck %s
 ; CHECK: error: expected uselistorder directive
 
 define i32 @f32(i32 %a, i32 %b, i32 %c, i32 %d) {

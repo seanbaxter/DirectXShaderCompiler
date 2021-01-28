@@ -3,7 +3,7 @@
 // Regression tests where enabling lifetimes caused some inefficiencies due to
 // missing cleanup optimizations.
 // The first two tests are modeled to make it easy to compare against stock
-// LLVM: The code is converted easily to standard C++.
+// LLVM37: The code is converted easily to standard C++.
 
 //------------------------------------------------------------------------------
 // CHECK: define void @"\01?test@@YAXHAIAM@Z"

@@ -4,14 +4,14 @@
 @str = private unnamed_addr addrspace(4) constant [8 x i8] c"USE_MUL\00"
 
 declare i32 @__nvvm_reflect(i8*)
-declare i8* @llvm.nvvm.ptr.constant.to.gen.p0i8.p4i8(i8 addrspace(4)*)
+declare i8* @llvm37.nvvm.ptr.constant.to.gen.p0i8.p4i8(i8 addrspace(4)*)
 
 define float @foo(float %a, float %b) {
 ; USE_MUL_0: define float @foo
 ; USE_MUL_0-NOT: call i32 @__nvvm_reflect
 ; USE_MUL_1: define float @foo
 ; USE_MUL_1-NOT: call i32 @__nvvm_reflect
-  %ptr = tail call i8* @llvm.nvvm.ptr.constant.to.gen.p0i8.p4i8(i8 addrspace(4)* getelementptr inbounds ([8 x i8], [8 x i8] addrspace(4)* @str, i32 0, i32 0))
+  %ptr = tail call i8* @llvm37.nvvm.ptr.constant.to.gen.p0i8.p4i8(i8 addrspace(4)* getelementptr inbounds ([8 x i8], [8 x i8] addrspace(4)* @str, i32 0, i32 0))
   %reflect = tail call i32 @__nvvm_reflect(i8* %ptr)
   %cmp = icmp ugt i32 %reflect, 0
   br i1 %cmp, label %use_mul, label %use_add
@@ -33,17 +33,17 @@ exit:
   ret float %ret
 }
 
-declare i32 @llvm.nvvm.reflect.p0i8(i8*)
+declare i32 @llvm37.nvvm.reflect.p0i8(i8*)
 
 ; USE_MUL_0: define i32 @intrinsic
 ; USE_MUL_1: define i32 @intrinsic
 define i32 @intrinsic() {
-; USE_MUL_0-NOT: call i32 @llvm.nvvm.reflect
+; USE_MUL_0-NOT: call i32 @llvm37.nvvm.reflect
 ; USE_MUL_0: ret i32 0
-; USE_MUL_1-NOT: call i32 @llvm.nvvm.reflect
+; USE_MUL_1-NOT: call i32 @llvm37.nvvm.reflect
 ; USE_MUL_1: ret i32 1
-  %ptr = tail call i8* @llvm.nvvm.ptr.constant.to.gen.p0i8.p4i8(i8 addrspace(4)* getelementptr inbounds ([8 x i8], [8 x i8] addrspace(4)* @str, i32 0, i32 0))
-  %reflect = tail call i32 @llvm.nvvm.reflect.p0i8(i8* %ptr)
+  %ptr = tail call i8* @llvm37.nvvm.ptr.constant.to.gen.p0i8.p4i8(i8 addrspace(4)* getelementptr inbounds ([8 x i8], [8 x i8] addrspace(4)* @str, i32 0, i32 0))
+  %reflect = tail call i32 @llvm37.nvvm.reflect.p0i8(i8* %ptr)
   ret i32 %reflect
 }
 

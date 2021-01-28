@@ -1,6 +1,6 @@
 //===----- EditedSource.cpp - Collection of source edits ------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -13,8 +13,8 @@
 #include "clang/Edit/Commit.h"
 #include "clang/Edit/EditsReceiver.h"
 #include "clang/Lex/Lexer.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/ADT/Twine.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/ADT/Twine.h"
 
 using namespace clang;
 using namespace edit;
@@ -40,7 +40,7 @@ bool EditedSource::canInsertInOffset(SourceLocation OrigLoc, FileOffset Offs) {
       DefArgLoc = SourceMgr.getImmediateExpansionRange(OrigLoc).first;
     SourceLocation
       ExpLoc = SourceMgr.getImmediateExpansionRange(DefArgLoc).first;
-    llvm::DenseMap<unsigned, SourceLocation>::iterator
+    llvm37::DenseMap<unsigned, SourceLocation>::iterator
       I = ExpansionToArgMap.find(ExpLoc.getRawEncoding());
     if (I != ExpansionToArgMap.end() && I->second != DefArgLoc)
       return false; // Trying to write in a macro argument input that has

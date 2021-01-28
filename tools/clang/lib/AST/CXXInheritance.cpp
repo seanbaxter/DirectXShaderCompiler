@@ -1,6 +1,6 @@
 //===------ CXXInheritance.cpp - C++ Inheritance ----------------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -15,7 +15,7 @@
 #include "clang/AST/ASTContext.h"
 #include "clang/AST/DeclCXX.h"
 #include "clang/AST/RecordLayout.h"
-#include "llvm/ADT/SetVector.h"
+#include "llvm37/ADT/SetVector.h"
 #include <algorithm>
 #include <set>
 //                                                                           //
@@ -28,7 +28,7 @@ void CXXBasePaths::ComputeDeclsFound() {
   assert(NumDeclsFound == 0 && !DeclsFound &&
          "Already computed the set of declarations");
 
-  llvm::SetVector<NamedDecl *, SmallVector<NamedDecl *, 8> > Decls;
+  llvm37::SetVector<NamedDecl *, SmallVector<NamedDecl *, 8> > Decls;
   for (paths_iterator Path = begin(), PathEnd = end(); Path != PathEnd; ++Path)
     Decls.insert(Path->Decls.front());
 
@@ -458,10 +458,10 @@ namespace {
   class FinalOverriderCollector {
     /// \brief The number of subobjects of a given class type that
     /// occur within the class hierarchy.
-    llvm::DenseMap<const CXXRecordDecl *, unsigned> SubobjectCount;
+    llvm37::DenseMap<const CXXRecordDecl *, unsigned> SubobjectCount;
 
     /// \brief Overriders for each virtual base subobject.
-    llvm::DenseMap<const CXXRecordDecl *, CXXFinalOverriderMap *> VirtualOverriders;
+    llvm37::DenseMap<const CXXRecordDecl *, CXXFinalOverriderMap *> VirtualOverriders;
 
     CXXFinalOverriderMap FinalOverriders;
 
@@ -559,10 +559,10 @@ void FinalOverriderCollector::Collect(const CXXRecordDecl *RD,
     // overrider. To do so, we dig down to the original virtual
     // functions using data recursion and update all of the methods it
     // overrides.
-    typedef llvm::iterator_range<CXXMethodDecl::method_iterator>
+    typedef llvm37::iterator_range<CXXMethodDecl::method_iterator>
         OverriddenMethods;
     SmallVector<OverriddenMethods, 4> Stack;
-    Stack.push_back(llvm::make_range(CanonM->begin_overridden_methods(),
+    Stack.push_back(llvm37::make_range(CanonM->begin_overridden_methods(),
                                      CanonM->end_overridden_methods()));
     while (!Stack.empty()) {
       for (const CXXMethodDecl *OM : Stack.pop_back_val()) {
@@ -587,7 +587,7 @@ void FinalOverriderCollector::Collect(const CXXRecordDecl *RD,
 
         // Continue recursion to the methods that this virtual method
         // overrides.
-        Stack.push_back(llvm::make_range(CanonOM->begin_overridden_methods(),
+        Stack.push_back(llvm37::make_range(CanonOM->begin_overridden_methods(),
                                          CanonOM->end_overridden_methods()));
       }
     }
@@ -601,7 +601,7 @@ void FinalOverriderCollector::Collect(const CXXRecordDecl *RD,
 }
 
 FinalOverriderCollector::~FinalOverriderCollector() {
-  for (llvm::DenseMap<const CXXRecordDecl *, CXXFinalOverriderMap *>::iterator
+  for (llvm37::DenseMap<const CXXRecordDecl *, CXXFinalOverriderMap *>::iterator
          VO = VirtualOverriders.begin(), VOEnd = VirtualOverriders.end();
        VO != VOEnd; 
        ++VO)

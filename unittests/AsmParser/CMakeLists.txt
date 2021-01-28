@@ -1,9 +1,9 @@
-set(LLVM_LINK_COMPONENTS
+set(LLVM37_LINK_COMPONENTS
   AsmParser
   Core
   Support
   )
 
-add_llvm_unittest(AsmParserTests
+add_llvm37_unittest(AsmParserTests
   AsmParserTest.cpp
   )

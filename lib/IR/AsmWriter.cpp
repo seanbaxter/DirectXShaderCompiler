@@ -1,50 +1,50 @@
-//===-- AsmWriter.cpp - Printing LLVM as an assembly file -----------------===//
+//===-- AsmWriter.cpp - Printing LLVM37 as an assembly file -----------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 //
-// This library implements the functionality defined in llvm/IR/Writer.h
+// This library implements the functionality defined in llvm37/IR/Writer.h
 //
 // Note that these routines must be extremely tolerant of various errors in the
-// LLVM code, because it can be used for debugging transformations.
+// LLVM37 code, because it can be used for debugging transformations.
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/SetVector.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/ADT/StringExtras.h"
-#include "llvm/IR/AssemblyAnnotationWriter.h"
-#include "llvm/IR/CFG.h"
-#include "llvm/IR/CallingConv.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/DebugInfo.h"
-#include "llvm/IR/DerivedTypes.h"
-#include "llvm/IR/IRPrintingPasses.h"
-#include "llvm/IR/InlineAsm.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/ModuleSlotTracker.h"
-#include "llvm/IR/Operator.h"
-#include "llvm/IR/Statepoint.h"
-#include "llvm/IR/TypeFinder.h"
-#include "llvm/IR/UseListOrder.h"
-#include "llvm/IR/ValueSymbolTable.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/Dwarf.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/FormattedStream.h"
-#include "llvm/Support/MathExtras.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/SetVector.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/ADT/StringExtras.h"
+#include "llvm37/IR/AssemblyAnnotationWriter.h"
+#include "llvm37/IR/CFG.h"
+#include "llvm37/IR/CallingConv.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/DebugInfo.h"
+#include "llvm37/IR/DerivedTypes.h"
+#include "llvm37/IR/IRPrintingPasses.h"
+#include "llvm37/IR/InlineAsm.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/ModuleSlotTracker.h"
+#include "llvm37/IR/Operator.h"
+#include "llvm37/IR/Statepoint.h"
+#include "llvm37/IR/TypeFinder.h"
+#include "llvm37/IR/UseListOrder.h"
+#include "llvm37/IR/ValueSymbolTable.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/Dwarf.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/FormattedStream.h"
+#include "llvm37/Support/MathExtras.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <algorithm>
 #include <cctype>
-using namespace llvm;
+using namespace llvm37;
 
 // Make virtual table appear in this compilation unit.
 AssemblyAnnotationWriter::~AssemblyAnnotationWriter() {}
@@ -343,10 +343,10 @@ enum PrefixType {
   NoPrefix
 };
 
-/// PrintLLVMName - Turn the specified name into an 'LLVM name', which is either
+/// PrintLLVM37Name - Turn the specified name into an 'LLVM37 name', which is either
 /// prefixed with % (if the string only contains simple characters) or is
 /// surrounded with ""'s (if it has special chars in it).  Print it out.
-static void PrintLLVMName(raw_ostream &OS, StringRef Name, PrefixType Prefix) {
+static void PrintLLVM37Name(raw_ostream &OS, StringRef Name, PrefixType Prefix) {
   assert(!Name.empty() && "Cannot get empty name!");
   switch (Prefix) {
   case NoPrefix: break;
@@ -386,11 +386,11 @@ static void PrintLLVMName(raw_ostream &OS, StringRef Name, PrefixType Prefix) {
   OS << '"';
 }
 
-/// PrintLLVMName - Turn the specified name into an 'LLVM name', which is either
+/// PrintLLVM37Name - Turn the specified name into an 'LLVM37 name', which is either
 /// prefixed with % (if the string only contains simple characters) or is
 /// surrounded with ""'s (if it has special chars in it).  Print it out.
-static void PrintLLVMName(raw_ostream &OS, const Value *V) {
-  PrintLLVMName(OS, V->getName(),
+static void PrintLLVM37Name(raw_ostream &OS, const Value *V) {
+  PrintLLVM37Name(OS, V->getName(),
                 isa<GlobalValue>(V) ? GlobalPrefix : LocalPrefix);
 }
 
@@ -484,7 +484,7 @@ void TypePrinting::print(Type *Ty, raw_ostream &OS) {
       return printStructBody(STy, OS);
 
     if (!STy->getName().empty())
-      return PrintLLVMName(OS, STy->getName(), LocalPrefix);
+      return PrintLLVM37Name(OS, STy->getName(), LocalPrefix);
 
     DenseMap<StructType*, unsigned>::iterator I = NumberedTypes.find(STy);
     if (I != NumberedTypes.end())
@@ -516,7 +516,7 @@ void TypePrinting::print(Type *Ty, raw_ostream &OS) {
     return;
   }
   }
-  llvm_unreachable("Invalid TypeID");
+  llvm37_unreachable("Invalid TypeID");
 }
 
 void TypePrinting::printStructBody(StructType *STy, raw_ostream &OS) {
@@ -545,11 +545,11 @@ void TypePrinting::printStructBody(StructType *STy, raw_ostream &OS) {
     OS << '>';
 }
 
-namespace llvm {
+namespace llvm37 {
 //===----------------------------------------------------------------------===//
 // SlotTracker Class: Enumerate slot numbers for unnamed values
 //===----------------------------------------------------------------------===//
-/// This class provides computation of slot numbers for LLVM Assembly writing.
+/// This class provides computation of slot numbers for LLVM37 Assembly writing.
 ///
 class SlotTracker {
 public:
@@ -664,7 +664,7 @@ private:
   SlotTracker(const SlotTracker &) = delete;
   void operator=(const SlotTracker &) = delete;
 };
-} // namespace llvm
+} // namespace llvm37
 
 ModuleSlotTracker::ModuleSlotTracker(SlotTracker &Machine, const Module *M,
                                      const Function *F)
@@ -815,7 +815,7 @@ void SlotTracker::processFunction() {
       if (!I.getType()->isVoidTy() && !I.hasName())
         CreateFunctionSlot(&I);
 
-      // We allow direct calls to any llvm.foo function here, because the
+      // We allow direct calls to any llvm37.foo function here, because the
       // target may not be linked into the optimizer.
       if (const CallInst *CI = dyn_cast<CallInst>(&I)) {
         // Add all the call attributes to the table.
@@ -1174,7 +1174,7 @@ static void WriteConstantInternal(raw_ostream &Out, const Constant *CV,
       shiftcount = 12;
       Out << 'H';
     } else
-      llvm_unreachable("Unsupported floating point type");
+      llvm37_unreachable("Unsupported floating point type");
     // api needed to prevent premature destruction
     APInt api = CFP->getValueAPF().bitcastToAPInt();
     const uint64_t* p = api.getRawData();
@@ -1863,12 +1863,12 @@ static void WriteMDNodeBodyInternal(raw_ostream &Out, const MDNode *Node,
 
   switch (Node->getMetadataID()) {
   default:
-    llvm_unreachable("Expected uniquable MDNode");
+    llvm37_unreachable("Expected uniquable MDNode");
 #define HANDLE_MDNODE_LEAF(CLASS)                                              \
   case Metadata::CLASS##Kind:                                                  \
     write##CLASS(Out, cast<CLASS>(Node), TypePrinter, Machine, Context);       \
     break;
-#include "llvm/IR/Metadata.def"
+#include "llvm37/IR/Metadata.def"
   }
 }
 
@@ -1879,7 +1879,7 @@ static void WriteAsOperandInternal(raw_ostream &Out, const Value *V,
                                    SlotTracker *Machine,
                                    const Module *Context) {
   if (V->hasName()) {
-    PrintLLVMName(Out, V);
+    PrintLLVM37Name(Out, V);
     return;
   }
 
@@ -2364,7 +2364,7 @@ static void maybePrintComdat(formatted_raw_ostream &Out,
     return;
 
   Out << '(';
-  PrintLLVMName(Out, C->getName(), ComdatPrefix);
+  PrintLLVM37Name(Out, C->getName(), ComdatPrefix);
   Out << ')';
 }
 
@@ -2469,7 +2469,7 @@ void AssemblyWriter::printTypeIdentities() {
   }
 
   for (unsigned i = 0, e = TypePrinter.NamedTypes.size(); i != e; ++i) {
-    PrintLLVMName(Out, TypePrinter.NamedTypes[i]->getName(), LocalPrefix);
+    PrintLLVM37Name(Out, TypePrinter.NamedTypes[i]->getName(), LocalPrefix);
     Out << " = type ";
 
     // Make sure we print out at least one level of the type structure, so
@@ -2632,7 +2632,7 @@ void AssemblyWriter::printArgument(const Argument *Arg,
   // Output name, if available...
   if (Arg->hasName()) {
     Out << ' ';
-    PrintLLVMName(Out, Arg);
+    PrintLLVM37Name(Out, Arg);
   }
 }
 
@@ -2641,7 +2641,7 @@ void AssemblyWriter::printArgument(const Argument *Arg,
 void AssemblyWriter::printBasicBlock(const BasicBlock *BB) {
   if (BB->hasName()) {              // Print out the label if it exists...
     Out << "\n";
-    PrintLLVMName(Out, BB->getName(), LabelPrefix);
+    PrintLLVM37Name(Out, BB->getName(), LabelPrefix);
     Out << ':';
   } else if (!BB->use_empty()) {      // Don't print block # of no uses...
     Out << "\n; <label>:";
@@ -2724,7 +2724,7 @@ void AssemblyWriter::printInstruction(const Instruction &I) {
 
   // Print out name if it exists...
   if (I.hasName()) {
-    PrintLLVMName(Out, &I);
+    PrintLLVM37Name(Out, &I);
     Out << " = ";
   } else if (!I.getType()->isVoidTy()) {
     // Print out the def slot taken.
@@ -3163,7 +3163,7 @@ void NamedMDNode::print(raw_ostream &ROS) const {
 }
 
 void Comdat::print(raw_ostream &ROS) const {
-  PrintLLVMName(ROS, getName(), ComdatPrefix);
+  PrintLLVM37Name(ROS, getName(), ComdatPrefix);
   ROS << " = comdat ";
 
   switch (getSelectionKind()) {
@@ -3257,7 +3257,7 @@ void Value::print(raw_ostream &ROS, ModuleSlotTracker &MST) const {
   } else if (isa<InlineAsm>(this) || isa<Argument>(this)) {
     this->printAsOperand(OS, /* PrintType */ true, MST);
   } else {
-    llvm_unreachable("Unknown value to print out!");
+    llvm37_unreachable("Unknown value to print out!");
   }
 }
 
@@ -3366,29 +3366,29 @@ void MDNode::printAsBody(raw_ostream &OS, ModuleSlotTracker &MST, const Module *
 // HLSL Change end
 
 // Value::dump - allow easy printing of Values from the debugger.
-LLVM_DUMP_METHOD
+LLVM37_DUMP_METHOD
 void Value::dump() const { print(dbgs()); dbgs() << '\n'; }
 
 // Type::dump - allow easy printing of Types from the debugger.
-LLVM_DUMP_METHOD
+LLVM37_DUMP_METHOD
 void Type::dump() const { print(dbgs()); dbgs() << '\n'; }
 
 // Module::dump() - Allow printing of Modules from the debugger.
-LLVM_DUMP_METHOD
+LLVM37_DUMP_METHOD
 void Module::dump() const { print(dbgs(), nullptr); }
 
 // \brief Allow printing of Comdats from the debugger.
-LLVM_DUMP_METHOD
+LLVM37_DUMP_METHOD
 void Comdat::dump() const { print(dbgs()); }
 
 // NamedMDNode::dump() - Allow printing of NamedMDNodes from the debugger.
-LLVM_DUMP_METHOD
+LLVM37_DUMP_METHOD
 void NamedMDNode::dump() const { print(dbgs()); }
 
-LLVM_DUMP_METHOD
+LLVM37_DUMP_METHOD
 void Metadata::dump() const { dump(nullptr); }
 
-LLVM_DUMP_METHOD
+LLVM37_DUMP_METHOD
 void Metadata::dump(const Module *M) const {
   print(dbgs(), M);
   dbgs() << '\n';

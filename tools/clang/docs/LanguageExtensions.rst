@@ -519,7 +519,7 @@ which does not provide them.  The features which can be tested are listed here.
 Since Clang 3.4, the C++ SD-6 feature test macros are also supported.
 These are macros with names of the form ``__cpp_<feature_name>``, and are
 intended to be a portable way to query the supported features of the compiler.
-See `the C++ status page <http://clang.llvm.org/cxx_status.html#ts>`_ for
+See `the C++ status page <http://clang.llvm37.org/cxx_status.html#ts>`_ for
 information on the version of SD-6 supported by each Clang release, and the
 macros provided by that revision of the recommendations.
 
@@ -942,7 +942,7 @@ Modules
 Use ``__has_feature(modules)`` to determine if Modules have been enabled.
 For example, compiling code with ``-fmodules`` enables the use of Modules.
 
-More information could be found `here <http://clang.llvm.org/docs/Modules.html>`_.
+More information could be found `here <http://clang.llvm37.org/docs/Modules.html>`_.
 
 Checks for Type Trait Primitives
 ================================
@@ -955,7 +955,7 @@ They are not intended to be used directly by user code because they are
 implementation-defined and subject to change -- as such they're tied closely to
 the supported set of system headers, currently:
 
-* LLVM's own libc++
+* LLVM37's own libc++
 * GNU libstdc++
 * The Microsoft standard C++ library
 
@@ -1722,9 +1722,9 @@ Extensions for Static Analysis
 
 Clang supports additional attributes that are useful for documenting program
 invariants and rules for static analysis tools, such as the `Clang Static
-Analyzer <http://clang-analyzer.llvm.org/>`_. These attributes are documented
+Analyzer <http://clang-analyzer.llvm37.org/>`_. These attributes are documented
 in the analyzer's `list of source-level annotations
-<http://clang-analyzer.llvm.org/annotations.html>`_.
+<http://clang-analyzer.llvm37.org/annotations.html>`_.
 
 
 Extensions for Dynamic Analysis

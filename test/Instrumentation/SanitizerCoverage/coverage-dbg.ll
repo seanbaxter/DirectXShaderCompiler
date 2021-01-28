@@ -11,7 +11,7 @@
 ; 6: int A::f() {
 ; 7:    return x;
 ; 8: }
-; clang++ ../1.cc -O3 -g -S -emit-llvm  -fno-strict-aliasing
+; clang++ ../1.cc -O3 -g -S -emit-llvm37  -fno-strict-aliasing
 ; and add sanitize_address to @_ZN1A1fEv
 
 ; Test that __sanitizer_cov call has !dbg pointing to the opening { of A::f().
@@ -27,24 +27,24 @@ target triple = "x86_64-unknown-linux-gnu"
 ; Function Attrs: nounwind readonly uwtable
 define i32 @_ZN1A1fEv(%struct.A* nocapture readonly %this) #0 align 2 {
 entry:
-  tail call void @llvm.dbg.value(metadata %struct.A* %this, i64 0, metadata !15, metadata !DIExpression()), !dbg !20
+  tail call void @llvm37.dbg.value(metadata %struct.A* %this, i64 0, metadata !15, metadata !DIExpression()), !dbg !20
   %x = getelementptr inbounds %struct.A, %struct.A* %this, i64 0, i32 0, !dbg !21
   %0 = load i32, i32* %x, align 4, !dbg !21
   ret i32 %0, !dbg !21
 }
 
 ; Function Attrs: nounwind readnone
-declare void @llvm.dbg.value(metadata, i64, metadata, metadata) #1
+declare void @llvm37.dbg.value(metadata, i64, metadata, metadata) #1
 
 attributes #0 = { sanitize_address nounwind readonly uwtable "less-precise-fpmad"="false" "no-frame-pointer-elim"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "stack-protector-buffer-size"="8" "unsafe-fp-math"="false" "use-soft-float"="false" }
 attributes #1 = { nounwind readnone }
 
-!llvm.dbg.cu = !{!0}
-!llvm.module.flags = !{!17, !18}
-!llvm.ident = !{!19}
+!llvm37.dbg.cu = !{!0}
+!llvm37.module.flags = !{!17, !18}
+!llvm37.ident = !{!19}
 
 !0 = !DICompileUnit(language: DW_LANG_C_plus_plus, producer: "clang version 3.5.0 (210251)", isOptimized: true, emissionKind: 1, file: !1, enums: !2, retainedTypes: !3, subprograms: !12, globals: !2, imports: !2)
-!1 = !DIFile(filename: "../1.cc", directory: "/code/llvm/build0")
+!1 = !DIFile(filename: "../1.cc", directory: "/code/llvm37/build0")
 !2 = !{}
 !3 = !{!4}
 !4 = !DICompositeType(tag: DW_TAG_structure_type, name: "A", line: 1, size: 32, align: 32, file: !1, elements: !5, identifier: "_ZTS1A")

@@ -1,6 +1,6 @@
 /*===--- ConvertUTF.c - Universal Character Names conversions ---------------===
  *
- *                     The LLVM Compiler Infrastructure
+ *                     The LLVM37 Compiler Infrastructure
  *
  * This file is distributed under the University of Illinois Open Source
  * License. See LICENSE.TXT for details.
@@ -47,7 +47,7 @@
 ------------------------------------------------------------------------ */
 
 
-#include "llvm/Support/ConvertUTF.h"
+#include "llvm37/Support/ConvertUTF.h"
 #ifdef CVTUTF_DEBUG
 #include <stdio.h>
 #endif

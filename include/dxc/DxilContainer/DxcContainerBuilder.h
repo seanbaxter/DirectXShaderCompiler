@@ -16,7 +16,7 @@
 #include "dxc/Support/WinIncludes.h"
 #include "dxc/DxilContainer/DxilContainer.h"
 #include "dxc/Support/microcom.h"
-#include "llvm/ADT/SmallVector.h"
+#include "llvm37/ADT/SmallVector.h"
 
 using namespace hlsl;
 namespace hlsl {
@@ -51,7 +51,7 @@ private:
     CComPtr<IDxcBlob> m_Blob;
     DxilPart(UINT32 fourCC, IDxcBlob *pSource) : m_fourCC(fourCC), m_Blob(pSource) {}
   };
-  typedef llvm::SmallVector<DxilPart, 8> PartList;
+  typedef llvm37::SmallVector<DxilPart, 8> PartList;
 
   PartList m_parts;
   CComPtr<IDxcBlob> m_pContainer; 

@@ -96,8 +96,8 @@ ScalarEnumerationTraits on that type and define the enumeration() method:
 
 .. code-block:: c++
 
-    using llvm::yaml::ScalarEnumerationTraits;
-    using llvm::yaml::IO;
+    using llvm37::yaml::ScalarEnumerationTraits;
+    using llvm37::yaml::IO;
 
     template <>
     struct ScalarEnumerationTraits<FooBar> {
@@ -113,14 +113,14 @@ values and the YAML string representation is only in one place.
 This assures that the code for writing and parsing of YAML stays in sync.
 
 To specify a YAML mappings, you define a specialization on 
-llvm::yaml::MappingTraits.
+llvm37::yaml::MappingTraits.
 If your native data structure happens to be a struct that is already normalized,
 then the specialization is simple.  For example:
 
 .. code-block:: c++
    
-    using llvm::yaml::MappingTraits;
-    using llvm::yaml::IO;
+    using llvm37::yaml::MappingTraits;
+    using llvm37::yaml::IO;
     
     template <>
     struct MappingTraits<Person> {
@@ -140,7 +140,7 @@ programmatically use YAML I/O to write a YAML document:
 
 .. code-block:: c++
    
-    using llvm::yaml::Output;
+    using llvm37::yaml::Output;
 
     Person tom;
     tom.name = "Tom";
@@ -152,7 +152,7 @@ programmatically use YAML I/O to write a YAML document:
     persons.push_back(tom);
     persons.push_back(dan);
     
-    Output yout(llvm::outs());
+    Output yout(llvm37::outs());
     yout << persons;
    
 This would write the following:
@@ -168,7 +168,7 @@ And you can also read such YAML documents with the following code:
 
 .. code-block:: c++
 
-    using llvm::yaml::Input;
+    using llvm37::yaml::Input;
 
     typedef std::vector<Person> PersonList;
     std::vector<PersonList> docs;
@@ -261,8 +261,8 @@ operators to and from the base type.  For example:
 
 .. code-block:: c++
 
-    LLVM_YAML_STRONG_TYPEDEF(uint32_t, MyFooFlags)
-    LLVM_YAML_STRONG_TYPEDEF(uint32_t, MyBarFlags)
+    LLVM37_YAML_STRONG_TYPEDEF(uint32_t, MyFooFlags)
+    LLVM37_YAML_STRONG_TYPEDEF(uint32_t, MyBarFlags)
 
 This generates two classes MyFooFlags and MyBarFlags which you can use in your
 native data structures instead of uint32_t. They are implicitly 
@@ -280,7 +280,7 @@ format used by the built-in integer types:
 * Hex16
 * Hex8
 
-You can use llvm::yaml::Hex32 instead of uint32_t and the only different will
+You can use llvm37::yaml::Hex32 instead of uint32_t and the only different will
 be that when YAML I/O writes out that type it will be formatted in hexadecimal.
 
 
@@ -311,9 +311,9 @@ as a field type:
 
 .. code-block:: c++
 
-    using llvm::yaml::ScalarEnumerationTraits;
-    using llvm::yaml::MappingTraits;
-    using llvm::yaml::IO;
+    using llvm37::yaml::ScalarEnumerationTraits;
+    using llvm37::yaml::MappingTraits;
+    using llvm37::yaml::IO;
 
     template <>
     struct ScalarEnumerationTraits<CPUs> {
@@ -354,16 +354,16 @@ had the following bit flags defined:
       flagsRound  = 8
     };
 
-    LLVM_YAML_STRONG_TYPEDEF(uint32_t, MyFlags)
+    LLVM37_YAML_STRONG_TYPEDEF(uint32_t, MyFlags)
     
 To support reading and writing of MyFlags, you specialize ScalarBitSetTraits<>
 on MyFlags and provide the bit values and their names.   
 
 .. code-block:: c++
 
-    using llvm::yaml::ScalarBitSetTraits;
-    using llvm::yaml::MappingTraits;
-    using llvm::yaml::IO;
+    using llvm37::yaml::ScalarBitSetTraits;
+    using llvm37::yaml::MappingTraits;
+    using llvm37::yaml::IO;
 
     template <>
     struct ScalarBitSetTraits<MyFlags> {
@@ -444,19 +444,19 @@ some epoch), but in YAML it would be much nicer to express that integer in
 some time format (e.g. 4-May-2012 10:30pm).  YAML I/O has a way to support  
 custom formatting and parsing of scalar types by specializing ScalarTraits<> on
 your data type.  When writing, YAML I/O will provide the native type and
-your specialization must create a temporary llvm::StringRef.  When reading,
-YAML I/O will provide an llvm::StringRef of scalar and your specialization
+your specialization must create a temporary llvm37::StringRef.  When reading,
+YAML I/O will provide an llvm37::StringRef of scalar and your specialization
 must convert that to your native data type.  An outline of a custom scalar type
 looks like:
 
 .. code-block:: c++
 
-    using llvm::yaml::ScalarTraits;
-    using llvm::yaml::IO;
+    using llvm37::yaml::ScalarTraits;
+    using llvm37::yaml::IO;
 
     template <>
     struct ScalarTraits<MyCustomType> {
-      static void output(const T &value, void*, llvm::raw_ostream &out) {
+      static void output(const T &value, void*, llvm37::raw_ostream &out) {
         out << value;  // do custom formatting here
       }
       static StringRef input(StringRef scalar, void*, T &value) {
@@ -483,21 +483,21 @@ literal block notation, just like the example shown below:
 The YAML I/O library provides support for translating between YAML block scalars
 and specific C++ types by allowing you to specialize BlockScalarTraits<> on
 your data type. The library doesn't provide any built-in support for block
-scalar I/O for types like std::string and llvm::StringRef as they are already
+scalar I/O for types like std::string and llvm37::StringRef as they are already
 supported by YAML I/O and use the ordinary scalar notation by default.
 
 BlockScalarTraits specializations are very similar to the
 ScalarTraits specialization - YAML I/O will provide the native type and your
-specialization must create a temporary llvm::StringRef when writing, and
-it will also provide an llvm::StringRef that has the value of that block scalar
+specialization must create a temporary llvm37::StringRef when writing, and
+it will also provide an llvm37::StringRef that has the value of that block scalar
 and your specialization must convert that to your native data type when reading.
 An example of a custom type with an appropriate specialization of
 BlockScalarTraits is shown below:
 
 .. code-block:: c++
 
-    using llvm::yaml::BlockScalarTraits;
-    using llvm::yaml::IO;
+    using llvm37::yaml::BlockScalarTraits;
+    using llvm37::yaml::IO;
 
     struct MyStringType {
       std::string Str;
@@ -506,7 +506,7 @@ BlockScalarTraits is shown below:
     template <>
     struct BlockScalarTraits<MyStringType> {
       static void output(const MyStringType &Value, void *Ctxt,
-                         llvm::raw_ostream &OS) {
+                         llvm37::raw_ostream &OS) {
         OS << Value.Str;
       }
 
@@ -523,14 +523,14 @@ Mappings
 ========
 
 To be translated to or from a YAML mapping for your type T you must specialize  
-llvm::yaml::MappingTraits on T and implement the "void mapping(IO &io, T&)" 
+llvm37::yaml::MappingTraits on T and implement the "void mapping(IO &io, T&)" 
 method. If your native data structures use pointers to a class everywhere,
 you can specialize on the class pointer.  Examples:
 
 .. code-block:: c++
    
-    using llvm::yaml::MappingTraits;
-    using llvm::yaml::IO;
+    using llvm37::yaml::MappingTraits;
+    using llvm37::yaml::IO;
     
     // Example of struct Foo which is used by value
     template <>
@@ -561,8 +561,8 @@ bind the struct's fields to YAML key names.  For example:
 
 .. code-block:: c++
    
-    using llvm::yaml::MappingTraits;
-    using llvm::yaml::IO;
+    using llvm37::yaml::MappingTraits;
+    using llvm37::yaml::IO;
     
     template <>
     struct MappingTraits<Person> {
@@ -606,8 +606,8 @@ coordinates into polar when reading YAML.
 
 .. code-block:: c++
    
-    using llvm::yaml::MappingTraits;
-    using llvm::yaml::IO;
+    using llvm37::yaml::MappingTraits;
+    using llvm37::yaml::IO;
         
     template <>
     struct MappingTraits<Polar> {
@@ -701,8 +701,8 @@ This works for both reading and writing. For example:
 
 .. code-block:: c++
 
-    using llvm::yaml::MappingTraits;
-    using llvm::yaml::IO;
+    using llvm37::yaml::MappingTraits;
+    using llvm37::yaml::IO;
     
     struct Info {
       CPUs        cpu;
@@ -753,8 +753,8 @@ because it is a programming error to have invalid struct values.
 
 .. code-block:: c++
 
-    using llvm::yaml::MappingTraits;
-    using llvm::yaml::IO;
+    using llvm37::yaml::MappingTraits;
+    using llvm37::yaml::IO;
     
     struct Stuff {
       ...
@@ -782,8 +782,8 @@ add "static const bool flow = true;". For instance:
 
 .. code-block:: c++
 
-    using llvm::yaml::MappingTraits;
-    using llvm::yaml::IO;
+    using llvm37::yaml::MappingTraits;
+    using llvm37::yaml::IO;
 
     struct Stuff {
       ...
@@ -805,7 +805,7 @@ Sequence
 ========
 
 To be translated to or from a YAML sequence for your type T you must specialize
-llvm::yaml::SequenceTraits on T and implement two methods:
+llvm37::yaml::SequenceTraits on T and implement two methods:
 ``size_t size(IO &io, T&)`` and
 ``T::value_type& element(IO &io, T&, size_t indx)``.  For example:
 
@@ -853,7 +853,7 @@ configuration.
 Utility Macros
 --------------
 Since a common source of sequences is std::vector<>, YAML I/O provides macros:
-LLVM_YAML_IS_SEQUENCE_VECTOR() and LLVM_YAML_IS_FLOW_SEQUENCE_VECTOR() which
+LLVM37_YAML_IS_SEQUENCE_VECTOR() and LLVM37_YAML_IS_FLOW_SEQUENCE_VECTOR() which
 can be used to easily specify SequenceTraits<> on a std::vector type.  YAML 
 I/O does not partial specialize SequenceTraits on std::vector<> because that
 would force all vectors to be sequences.  An example use of the macros:
@@ -862,8 +862,8 @@ would force all vectors to be sequences.  An example use of the macros:
 
   std::vector<MyType1>;
   std::vector<MyType2>;
-  LLVM_YAML_IS_SEQUENCE_VECTOR(MyType1)
-  LLVM_YAML_IS_FLOW_SEQUENCE_VECTOR(MyType2)
+  LLVM37_YAML_IS_SEQUENCE_VECTOR(MyType1)
+  LLVM37_YAML_IS_FLOW_SEQUENCE_VECTOR(MyType2)
 
 
 
@@ -890,7 +890,7 @@ SequenceTraits but is named DocumentListTraits.  For example:
 
 User Context Data
 =================
-When an llvm::yaml::Input or llvm::yaml::Output object is created their 
+When an llvm37::yaml::Input or llvm37::yaml::Output object is created their 
 constructors take an optional "context" parameter.  This is a pointer to 
 whatever state information you might need.  
 
@@ -910,16 +910,16 @@ traits use to shared context sensitive information.
 Output
 ======
 
-The llvm::yaml::Output class is used to generate a YAML document from your 
+The llvm37::yaml::Output class is used to generate a YAML document from your 
 in-memory data structures, using traits defined on your data types.  
-To instantiate an Output object you need an llvm::raw_ostream, an optional 
+To instantiate an Output object you need an llvm37::raw_ostream, an optional 
 context pointer and an optional wrapping column:
 
 .. code-block:: c++
 
       class Output : public IO {
       public:
-        Output(llvm::raw_ostream &, void *context = NULL, int WrapColumn = 70);
+        Output(llvm37::raw_ostream &, void *context = NULL, int WrapColumn = 70);
     
 Once you have an Output object, you can use the C++ stream operator on it
 to write your native data as YAML. One thing to recall is that a YAML file
@@ -934,10 +934,10 @@ suppress the wrapping.
 
 .. code-block:: c++
    
-    using llvm::yaml::Output;
+    using llvm37::yaml::Output;
 
     void dumpMyMapDoc(const MyMapType &info) {
-      Output yout(llvm::outs());
+      Output yout(llvm37::outs());
       yout << info;
     }
 
@@ -957,10 +957,10 @@ and ends with a "...".
 
 .. code-block:: c++
    
-    using llvm::yaml::Output;
+    using llvm37::yaml::Output;
 
     void dumpMyMapDoc(const MyDocListType &docList) {
-      Output yout(llvm::outs());
+      Output yout(llvm37::outs());
       yout << docList;
     }
 
@@ -979,7 +979,7 @@ The above could produce output like:
 Input
 =====
 
-The llvm::yaml::Input class is used to parse YAML document(s) into your native
+The llvm37::yaml::Input class is used to parse YAML document(s) into your native
 data structures. To instantiate an Input
 object you need a StringRef to the entire YAML file, and optionally a context 
 pointer:
@@ -1001,7 +1001,7 @@ object.  For example:
 .. code-block:: c++
    
      // Reading a single document
-     using llvm::yaml::Input;
+     using llvm37::yaml::Input;
 
      Input yin(mb.getBuffer());
      
@@ -1017,9 +1017,9 @@ object.  For example:
 .. code-block:: c++
    
      // Reading multiple documents in one file
-     using llvm::yaml::Input;
+     using llvm37::yaml::Input;
 
-     LLVM_YAML_IS_DOCUMENT_LIST_VECTOR(std::vector<MyDocType>)
+     LLVM37_YAML_IS_DOCUMENT_LIST_VECTOR(std::vector<MyDocType>)
      
      Input yin(mb.getBuffer());
      

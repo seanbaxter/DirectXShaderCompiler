@@ -5,4 +5,4 @@
 !1 = !{ i32 1, !"qux", i32 42 }
 !2 = !{ i32 1, !"mux", !{ !"hello world", i32 927 } }
 
-!llvm.module.flags = !{ !0, !1, !2 }
+!llvm37.module.flags = !{ !0, !1, !2 }

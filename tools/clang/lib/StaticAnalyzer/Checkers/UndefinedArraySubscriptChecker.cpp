@@ -1,6 +1,6 @@
 //===--- UndefinedArraySubscriptChecker.h ----------------------*- C++ -*--===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -53,7 +53,7 @@ UndefinedArraySubscriptChecker::checkPreStmt(const ArraySubscriptExpr *A,
     BT.reset(new BuiltinBug(this, "Array subscript is undefined"));
 
   // Generate a report for this bug.
-  auto R = llvm::make_unique<BugReport>(*BT, BT->getName(), N);
+  auto R = llvm37::make_unique<BugReport>(*BT, BT->getName(), N);
   R->addRange(A->getIdx()->getSourceRange());
   bugreporter::trackNullOrUndefValue(N, A->getIdx(), *R);
   C.emitReport(std::move(R));

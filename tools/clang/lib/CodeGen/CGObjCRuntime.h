@@ -1,6 +1,6 @@
 //===----- CGObjCRuntime.h - Interface to ObjC Runtimes ---------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -13,15 +13,15 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_LIB_CODEGEN_CGOBJCRUNTIME_H
-#define LLVM_CLANG_LIB_CODEGEN_CGOBJCRUNTIME_H
+#ifndef LLVM37_CLANG_LIB_CODEGEN_CGOBJCRUNTIME_H
+#define LLVM37_CLANG_LIB_CODEGEN_CGOBJCRUNTIME_H
 #include "CGBuilder.h"
 #include "CGCall.h"
 #include "CGValue.h"
 #include "clang/AST/DeclObjC.h"
 #include "clang/Basic/IdentifierTable.h" // Selector
 
-namespace llvm {
+namespace llvm37 {
   class Constant;
   class Function;
   class Module;
@@ -84,10 +84,10 @@ protected:
 
   LValue EmitValueForIvarAtOffset(CodeGen::CodeGenFunction &CGF,
                                   const ObjCInterfaceDecl *OID,
-                                  llvm::Value *BaseValue,
+                                  llvm37::Value *BaseValue,
                                   const ObjCIvarDecl *Ivar,
                                   unsigned CVRQualifiers,
-                                  llvm::Value *Offset);
+                                  llvm37::Value *Offset);
   /// Emits a try / catch statement.  This function is intended to be called by
   /// subclasses, and provides a generic mechanism for generating these, which
   /// should be usable by all runtimes.  The caller must provide the functions
@@ -97,43 +97,43 @@ protected:
   /// the thrown object directly.
   void EmitTryCatchStmt(CodeGenFunction &CGF,
                         const ObjCAtTryStmt &S,
-                        llvm::Constant *beginCatchFn,
-                        llvm::Constant *endCatchFn,
-                        llvm::Constant *exceptionRethrowFn);
+                        llvm37::Constant *beginCatchFn,
+                        llvm37::Constant *endCatchFn,
+                        llvm37::Constant *exceptionRethrowFn);
   /// Emits an \@synchronize() statement, using the \p syncEnterFn and
   /// \p syncExitFn arguments as the functions called to lock and unlock
   /// the object.  This function can be called by subclasses that use
   /// zero-cost exception handling.
   void EmitAtSynchronizedStmt(CodeGenFunction &CGF,
                             const ObjCAtSynchronizedStmt &S,
-                            llvm::Function *syncEnterFn,
-                            llvm::Function *syncExitFn);
+                            llvm37::Function *syncEnterFn,
+                            llvm37::Function *syncExitFn);
 
 public:
   virtual ~CGObjCRuntime();
 
   /// Generate the function required to register all Objective-C components in
   /// this compilation unit with the runtime library.
-  virtual llvm::Function *ModuleInitFunction() = 0;
+  virtual llvm37::Function *ModuleInitFunction() = 0;
 
   /// Get a selector for the specified name and type values. The
-  /// return value should have the LLVM type for pointer-to
+  /// return value should have the LLVM37 type for pointer-to
   /// ASTContext::getObjCSelType().
-  virtual llvm::Value *GetSelector(CodeGenFunction &CGF,
+  virtual llvm37::Value *GetSelector(CodeGenFunction &CGF,
                                    Selector Sel, bool lval=false) = 0;
 
   /// Get a typed selector.
-  virtual llvm::Value *GetSelector(CodeGenFunction &CGF,
+  virtual llvm37::Value *GetSelector(CodeGenFunction &CGF,
                                    const ObjCMethodDecl *Method) = 0;
 
   /// Get the type constant to catch for the given ObjC pointer type.
   /// This is used externally to implement catching ObjC types in C++.
   /// Runtimes which don't support this should add the appropriate
   /// error to Sema.
-  virtual llvm::Constant *GetEHType(QualType T) = 0;
+  virtual llvm37::Constant *GetEHType(QualType T) = 0;
 
   /// Generate a constant string object.
-  virtual llvm::Constant *GenerateConstantString(const StringLiteral *) = 0;
+  virtual llvm37::Constant *GenerateConstantString(const StringLiteral *) = 0;
   
   /// Generate a category.  A category contains a list of methods (and
   /// accompanying metadata) and a list of protocols.
@@ -154,7 +154,7 @@ public:
                       ReturnValueSlot ReturnSlot,
                       QualType ResultType,
                       Selector Sel,
-                      llvm::Value *Receiver,
+                      llvm37::Value *Receiver,
                       const CallArgList &CallArgs,
                       const ObjCInterfaceDecl *Class = nullptr,
                       const ObjCMethodDecl *Method = nullptr) = 0;
@@ -172,14 +172,14 @@ public:
                            Selector Sel,
                            const ObjCInterfaceDecl *Class,
                            bool isCategoryImpl,
-                           llvm::Value *Self,
+                           llvm37::Value *Self,
                            bool IsClassMessage,
                            const CallArgList &CallArgs,
                            const ObjCMethodDecl *Method = nullptr) = 0;
 
   /// Emit the code to return the named protocol as an object, as in a
   /// \@protocol expression.
-  virtual llvm::Value *GenerateProtocolRef(CodeGenFunction &CGF,
+  virtual llvm37::Value *GenerateProtocolRef(CodeGenFunction &CGF,
                                            const ObjCProtocolDecl *OPD) = 0;
 
   /// Generate the named protocol.  Protocols contain method metadata but no
@@ -192,43 +192,43 @@ public:
   // FIXME: Current this just generates the Function definition, but really this
   // should also be generating the loads of the parameters, as the runtime
   // should have full control over how parameters are passed.
-  virtual llvm::Function *GenerateMethod(const ObjCMethodDecl *OMD,
+  virtual llvm37::Function *GenerateMethod(const ObjCMethodDecl *OMD,
                                          const ObjCContainerDecl *CD) = 0;
 
   /// Return the runtime function for getting properties.
-  virtual llvm::Constant *GetPropertyGetFunction() = 0;
+  virtual llvm37::Constant *GetPropertyGetFunction() = 0;
 
   /// Return the runtime function for setting properties.
-  virtual llvm::Constant *GetPropertySetFunction() = 0;
+  virtual llvm37::Constant *GetPropertySetFunction() = 0;
 
   /// Return the runtime function for optimized setting properties.
-  virtual llvm::Constant *GetOptimizedPropertySetFunction(bool atomic, 
+  virtual llvm37::Constant *GetOptimizedPropertySetFunction(bool atomic, 
                                                           bool copy) = 0;
 
   // API for atomic copying of qualified aggregates in getter.
-  virtual llvm::Constant *GetGetStructFunction() = 0;
+  virtual llvm37::Constant *GetGetStructFunction() = 0;
   // API for atomic copying of qualified aggregates in setter.
-  virtual llvm::Constant *GetSetStructFunction() = 0;
+  virtual llvm37::Constant *GetSetStructFunction() = 0;
   /// API for atomic copying of qualified aggregates with non-trivial copy
   /// assignment (c++) in setter.
-  virtual llvm::Constant *GetCppAtomicObjectSetFunction() = 0;
+  virtual llvm37::Constant *GetCppAtomicObjectSetFunction() = 0;
   /// API for atomic copying of qualified aggregates with non-trivial copy
   /// assignment (c++) in getter.
-  virtual llvm::Constant *GetCppAtomicObjectGetFunction() = 0;
+  virtual llvm37::Constant *GetCppAtomicObjectGetFunction() = 0;
   
   /// GetClass - Return a reference to the class for the given
   /// interface decl.
-  virtual llvm::Value *GetClass(CodeGenFunction &CGF,
+  virtual llvm37::Value *GetClass(CodeGenFunction &CGF,
                                 const ObjCInterfaceDecl *OID) = 0;
   
   
-  virtual llvm::Value *EmitNSAutoreleasePoolClassRef(CodeGenFunction &CGF) {
-    llvm_unreachable("autoreleasepool unsupported in this ABI");
+  virtual llvm37::Value *EmitNSAutoreleasePoolClassRef(CodeGenFunction &CGF) {
+    llvm37_unreachable("autoreleasepool unsupported in this ABI");
   }
   
   /// EnumerationMutationFunction - Return the function that's called by the
   /// compiler when a mutation is detected during foreach iteration.
-  virtual llvm::Constant *EnumerationMutationFunction() = 0;
+  virtual llvm37::Constant *EnumerationMutationFunction() = 0;
 
   virtual void EmitSynchronizedStmt(CodeGen::CodeGenFunction &CGF,
                                     const ObjCAtSynchronizedStmt &S) = 0;
@@ -237,46 +237,46 @@ public:
   virtual void EmitThrowStmt(CodeGen::CodeGenFunction &CGF,
                              const ObjCAtThrowStmt &S,
                              bool ClearInsertionPoint=true) = 0;
-  virtual llvm::Value *EmitObjCWeakRead(CodeGen::CodeGenFunction &CGF,
-                                        llvm::Value *AddrWeakObj) = 0;
+  virtual llvm37::Value *EmitObjCWeakRead(CodeGen::CodeGenFunction &CGF,
+                                        llvm37::Value *AddrWeakObj) = 0;
   virtual void EmitObjCWeakAssign(CodeGen::CodeGenFunction &CGF,
-                                  llvm::Value *src, llvm::Value *dest) = 0;
+                                  llvm37::Value *src, llvm37::Value *dest) = 0;
   virtual void EmitObjCGlobalAssign(CodeGen::CodeGenFunction &CGF,
-                                    llvm::Value *src, llvm::Value *dest,
+                                    llvm37::Value *src, llvm37::Value *dest,
                                     bool threadlocal=false) = 0;
   virtual void EmitObjCIvarAssign(CodeGen::CodeGenFunction &CGF,
-                                  llvm::Value *src, llvm::Value *dest,
-                                  llvm::Value *ivarOffset) = 0;
+                                  llvm37::Value *src, llvm37::Value *dest,
+                                  llvm37::Value *ivarOffset) = 0;
   virtual void EmitObjCStrongCastAssign(CodeGen::CodeGenFunction &CGF,
-                                        llvm::Value *src, llvm::Value *dest) = 0;
+                                        llvm37::Value *src, llvm37::Value *dest) = 0;
 
   virtual LValue EmitObjCValueForIvar(CodeGen::CodeGenFunction &CGF,
                                       QualType ObjectTy,
-                                      llvm::Value *BaseValue,
+                                      llvm37::Value *BaseValue,
                                       const ObjCIvarDecl *Ivar,
                                       unsigned CVRQualifiers) = 0;
-  virtual llvm::Value *EmitIvarOffset(CodeGen::CodeGenFunction &CGF,
+  virtual llvm37::Value *EmitIvarOffset(CodeGen::CodeGenFunction &CGF,
                                       const ObjCInterfaceDecl *Interface,
                                       const ObjCIvarDecl *Ivar) = 0;
   virtual void EmitGCMemmoveCollectable(CodeGen::CodeGenFunction &CGF,
-                                        llvm::Value *DestPtr,
-                                        llvm::Value *SrcPtr,
-                                        llvm::Value *Size) = 0;
-  virtual llvm::Constant *BuildGCBlockLayout(CodeGen::CodeGenModule &CGM,
+                                        llvm37::Value *DestPtr,
+                                        llvm37::Value *SrcPtr,
+                                        llvm37::Value *Size) = 0;
+  virtual llvm37::Constant *BuildGCBlockLayout(CodeGen::CodeGenModule &CGM,
                                   const CodeGen::CGBlockInfo &blockInfo) = 0;
-  virtual llvm::Constant *BuildRCBlockLayout(CodeGen::CodeGenModule &CGM,
+  virtual llvm37::Constant *BuildRCBlockLayout(CodeGen::CodeGenModule &CGM,
                                   const CodeGen::CGBlockInfo &blockInfo) = 0;
-  virtual llvm::Constant *BuildByrefLayout(CodeGen::CodeGenModule &CGM,
+  virtual llvm37::Constant *BuildByrefLayout(CodeGen::CodeGenModule &CGM,
                                            QualType T) = 0;
-  virtual llvm::GlobalVariable *GetClassGlobal(const std::string &Name,
+  virtual llvm37::GlobalVariable *GetClassGlobal(const std::string &Name,
                                                bool Weak = false) = 0;
 
   struct MessageSendInfo {
     const CGFunctionInfo &CallInfo;
-    llvm::PointerType *MessengerType;
+    llvm37::PointerType *MessengerType;
 
     MessageSendInfo(const CGFunctionInfo &callInfo,
-                    llvm::PointerType *messengerType)
+                    llvm37::PointerType *messengerType)
       : CallInfo(callInfo), MessengerType(messengerType) {}
   };
 

@@ -1,6 +1,6 @@
-//===-- LTOModule.cpp - LLVM Link Time Optimizer --------------------------===//
+//===-- LTOModule.cpp - LLVM37 Link Time Optimizer --------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -12,56 +12,56 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/LTO/LTOModule.h"
-#include "llvm/ADT/Triple.h"
-#include "llvm/Bitcode/ReaderWriter.h"
-#include "llvm/CodeGen/Analysis.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/DiagnosticPrinter.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Mangler.h"
-#include "llvm/IR/Metadata.h"
-#include "llvm/IR/Module.h"
-#include "llvm/MC/MCExpr.h"
-#include "llvm/MC/MCInst.h"
-#include "llvm/MC/MCInstrInfo.h"
-#include "llvm/MC/MCParser/MCAsmParser.h"
-#include "llvm/MC/MCSection.h"
-#include "llvm/MC/MCSubtargetInfo.h"
-#include "llvm/MC/MCSymbol.h"
-#include "llvm/MC/MCTargetAsmParser.h"
-#include "llvm/MC/SubtargetFeature.h"
-#include "llvm/Object/IRObjectFile.h"
-#include "llvm/Object/ObjectFile.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/FileSystem.h"
-#include "llvm/Support/Host.h"
-#include "llvm/Support/MemoryBuffer.h"
-#include "llvm/Support/Path.h"
-#include "llvm/Support/SourceMgr.h"
-#include "llvm/Support/TargetRegistry.h"
-#include "llvm/Support/TargetSelect.h"
-#include "llvm/Target/TargetLowering.h"
-#include "llvm/Target/TargetLoweringObjectFile.h"
-#include "llvm/Target/TargetRegisterInfo.h"
-#include "llvm/Target/TargetSubtargetInfo.h"
-#include "llvm/Transforms/Utils/GlobalStatus.h"
+#include "llvm37/LTO/LTOModule.h"
+#include "llvm37/ADT/Triple.h"
+#include "llvm37/Bitcode/ReaderWriter.h"
+#include "llvm37/CodeGen/Analysis.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/DiagnosticPrinter.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/Mangler.h"
+#include "llvm37/IR/Metadata.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/MC/MCExpr.h"
+#include "llvm37/MC/MCInst.h"
+#include "llvm37/MC/MCInstrInfo.h"
+#include "llvm37/MC/MCParser/MCAsmParser.h"
+#include "llvm37/MC/MCSection.h"
+#include "llvm37/MC/MCSubtargetInfo.h"
+#include "llvm37/MC/MCSymbol.h"
+#include "llvm37/MC/MCTargetAsmParser.h"
+#include "llvm37/MC/SubtargetFeature.h"
+#include "llvm37/Object/IRObjectFile.h"
+#include "llvm37/Object/ObjectFile.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/FileSystem.h"
+#include "llvm37/Support/Host.h"
+#include "llvm37/Support/MemoryBuffer.h"
+#include "llvm37/Support/Path.h"
+#include "llvm37/Support/SourceMgr.h"
+#include "llvm37/Support/TargetRegistry.h"
+#include "llvm37/Support/TargetSelect.h"
+#include "llvm37/Target/TargetLowering.h"
+#include "llvm37/Target/TargetLoweringObjectFile.h"
+#include "llvm37/Target/TargetRegisterInfo.h"
+#include "llvm37/Target/TargetSubtargetInfo.h"
+#include "llvm37/Transforms/Utils/GlobalStatus.h"
 #include <system_error>
-using namespace llvm;
-using namespace llvm::object;
+using namespace llvm37;
+using namespace llvm37::object;
 
 LTOModule::LTOModule(std::unique_ptr<object::IRObjectFile> Obj,
-                     llvm::TargetMachine *TM)
+                     llvm37::TargetMachine *TM)
     : IRFile(std::move(Obj)), _target(TM) {}
 
 LTOModule::LTOModule(std::unique_ptr<object::IRObjectFile> Obj,
-                     llvm::TargetMachine *TM,
-                     std::unique_ptr<LLVMContext> Context)
+                     llvm37::TargetMachine *TM,
+                     std::unique_ptr<LLVM37Context> Context)
     : OwnedContext(std::move(Context)), IRFile(std::move(Obj)), _target(TM) {}
 
 LTOModule::~LTOModule() {}
 
-/// isBitcodeFile - Returns 'true' if the file (or memory contents) is LLVM
+/// isBitcodeFile - Returns 'true' if the file (or memory contents) is LLVM37
 /// bitcode.
 bool LTOModule::isBitcodeFile(const void *Mem, size_t Length) {
   ErrorOr<MemoryBufferRef> BCData = IRObjectFile::findBitcodeInMemBuffer(
@@ -86,7 +86,7 @@ bool LTOModule::isBitcodeForTarget(MemoryBuffer *Buffer,
       IRObjectFile::findBitcodeInMemBuffer(Buffer->getMemBufferRef());
   if (!BCOrErr)
     return false;
-  LLVMContext Context;
+  LLVM37Context Context;
   std::string Triple = getBitcodeTargetTriple(*BCOrErr, Context);
   return StringRef(Triple).startswith(TriplePrefix);
 }
@@ -142,14 +142,14 @@ LTOModule *LTOModule::createInLocalContext(const void *mem, size_t length,
 LTOModule *LTOModule::createInContext(const void *mem, size_t length,
                                       TargetOptions options,
                                       std::string &errMsg, StringRef path,
-                                      LLVMContext *Context) {
+                                      LLVM37Context *Context) {
   StringRef Data((const char *)mem, length);
   MemoryBufferRef Buffer(Data, path);
   return makeLTOModule(Buffer, options, errMsg, Context);
 }
 
 static std::unique_ptr<Module> parseBitcodeFileImpl(MemoryBufferRef Buffer,
-                                                    LLVMContext &Context,
+                                                    LLVM37Context &Context,
                                                     bool ShouldBeLazy,
                                                     std::string &ErrMsg) {
 
@@ -190,10 +190,10 @@ static std::unique_ptr<Module> parseBitcodeFileImpl(MemoryBufferRef Buffer,
 
 LTOModule *LTOModule::makeLTOModule(MemoryBufferRef Buffer,
                                     TargetOptions options, std::string &errMsg,
-                                    LLVMContext *Context) {
-  std::unique_ptr<LLVMContext> OwnedContext;
+                                    LLVM37Context *Context) {
+  std::unique_ptr<LLVM37Context> OwnedContext;
   if (!Context) {
-    OwnedContext = llvm::make_unique<LLVMContext>();
+    OwnedContext = llvm37::make_unique<LLVM37Context>();
     Context = OwnedContext.get();
   }
 
@@ -208,7 +208,7 @@ LTOModule *LTOModule::makeLTOModule(MemoryBufferRef Buffer,
   std::string TripleStr = M->getTargetTriple();
   if (TripleStr.empty())
     TripleStr = sys::getDefaultTargetTriple();
-  llvm::Triple Triple(TripleStr);
+  llvm37::Triple Triple(TripleStr);
 
   // find machine architecture for this module
   const Target *march = TargetRegistry::lookupTarget(TripleStr, errMsg);
@@ -222,11 +222,11 @@ LTOModule *LTOModule::makeLTOModule(MemoryBufferRef Buffer,
   // Set a default CPU for Darwin triples.
   std::string CPU;
   if (Triple.isOSDarwin()) {
-    if (Triple.getArch() == llvm::Triple::x86_64)
+    if (Triple.getArch() == llvm37::Triple::x86_64)
       CPU = "core2";
-    else if (Triple.getArch() == llvm::Triple::x86)
+    else if (Triple.getArch() == llvm37::Triple::x86)
       CPU = "yonah";
-    else if (Triple.getArch() == llvm::Triple::aarch64)
+    else if (Triple.getArch() == llvm37::Triple::aarch64)
       CPU = "cyclone";
   }
 

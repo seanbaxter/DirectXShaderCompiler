@@ -1,6 +1,6 @@
 //== PrintfFormatString.cpp - Analysis of printf format strings --*- C++ -*-==//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -709,7 +709,7 @@ bool PrintfSpecifier::fixType(QualType QT, const LangOptions &LangOpt,
     HasAlternativeForm = 0;
     HasPlusPrefix = 0;
   } else {
-    llvm_unreachable("Unexpected type");
+    llvm37_unreachable("Unexpected type");
   }
 
   return true;

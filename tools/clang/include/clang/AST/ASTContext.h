@@ -1,6 +1,6 @@
 //===--- ASTContext.h - Context to hold long-lived AST nodes ----*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -12,8 +12,8 @@
 ///
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_AST_ASTCONTEXT_H
-#define LLVM_CLANG_AST_ASTCONTEXT_H
+#ifndef LLVM37_CLANG_AST_ASTCONTEXT_H
+#define LLVM37_CLANG_AST_ASTCONTEXT_H
 
 #include "clang/AST/ASTTypeTraits.h"
 #include "clang/AST/CanonicalType.h"
@@ -32,16 +32,16 @@
 #include "clang/Basic/PartialDiagnostic.h"
 #include "clang/Basic/SanitizerBlacklist.h"
 #include "clang/Basic/VersionTuple.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/FoldingSet.h"
-#include "llvm/ADT/IntrusiveRefCntPtr.h"
-#include "llvm/ADT/SmallPtrSet.h"
-#include "llvm/ADT/TinyPtrVector.h"
-#include "llvm/Support/Allocator.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/FoldingSet.h"
+#include "llvm37/ADT/IntrusiveRefCntPtr.h"
+#include "llvm37/ADT/SmallPtrSet.h"
+#include "llvm37/ADT/TinyPtrVector.h"
+#include "llvm37/Support/Allocator.h"
 #include <memory>
 #include <vector>
 
-namespace llvm {
+namespace llvm37 {
   struct fltSemantics;
 }
 
@@ -90,99 +90,99 @@ class ASTContext : public RefCountedBase<ASTContext> {
   ASTContext &this_() { return *this; }
 
   mutable SmallVector<Type *, 0> Types;
-  mutable llvm::FoldingSet<ExtQuals> ExtQualNodes;
-  mutable llvm::FoldingSet<ComplexType> ComplexTypes;
-  mutable llvm::FoldingSet<PointerType> PointerTypes;
-  mutable llvm::FoldingSet<AdjustedType> AdjustedTypes;
-  mutable llvm::FoldingSet<BlockPointerType> BlockPointerTypes;
-  mutable llvm::FoldingSet<LValueReferenceType> LValueReferenceTypes;
-  mutable llvm::FoldingSet<RValueReferenceType> RValueReferenceTypes;
-  mutable llvm::FoldingSet<MemberPointerType> MemberPointerTypes;
-  mutable llvm::FoldingSet<ConstantArrayType> ConstantArrayTypes;
-  mutable llvm::FoldingSet<IncompleteArrayType> IncompleteArrayTypes;
+  mutable llvm37::FoldingSet<ExtQuals> ExtQualNodes;
+  mutable llvm37::FoldingSet<ComplexType> ComplexTypes;
+  mutable llvm37::FoldingSet<PointerType> PointerTypes;
+  mutable llvm37::FoldingSet<AdjustedType> AdjustedTypes;
+  mutable llvm37::FoldingSet<BlockPointerType> BlockPointerTypes;
+  mutable llvm37::FoldingSet<LValueReferenceType> LValueReferenceTypes;
+  mutable llvm37::FoldingSet<RValueReferenceType> RValueReferenceTypes;
+  mutable llvm37::FoldingSet<MemberPointerType> MemberPointerTypes;
+  mutable llvm37::FoldingSet<ConstantArrayType> ConstantArrayTypes;
+  mutable llvm37::FoldingSet<IncompleteArrayType> IncompleteArrayTypes;
   mutable std::vector<VariableArrayType*> VariableArrayTypes;
-  mutable llvm::FoldingSet<DependentSizedArrayType> DependentSizedArrayTypes;
-  mutable llvm::FoldingSet<DependentSizedExtVectorType>
+  mutable llvm37::FoldingSet<DependentSizedArrayType> DependentSizedArrayTypes;
+  mutable llvm37::FoldingSet<DependentSizedExtVectorType>
     DependentSizedExtVectorTypes;
-  mutable llvm::FoldingSet<VectorType> VectorTypes;
-  mutable llvm::FoldingSet<FunctionNoProtoType> FunctionNoProtoTypes;
-  mutable llvm::ContextualFoldingSet<FunctionProtoType, ASTContext&>
+  mutable llvm37::FoldingSet<VectorType> VectorTypes;
+  mutable llvm37::FoldingSet<FunctionNoProtoType> FunctionNoProtoTypes;
+  mutable llvm37::ContextualFoldingSet<FunctionProtoType, ASTContext&>
     FunctionProtoTypes;
-  mutable llvm::FoldingSet<DependentTypeOfExprType> DependentTypeOfExprTypes;
-  mutable llvm::FoldingSet<DependentDecltypeType> DependentDecltypeTypes;
-  mutable llvm::FoldingSet<TemplateTypeParmType> TemplateTypeParmTypes;
-  mutable llvm::FoldingSet<SubstTemplateTypeParmType>
+  mutable llvm37::FoldingSet<DependentTypeOfExprType> DependentTypeOfExprTypes;
+  mutable llvm37::FoldingSet<DependentDecltypeType> DependentDecltypeTypes;
+  mutable llvm37::FoldingSet<TemplateTypeParmType> TemplateTypeParmTypes;
+  mutable llvm37::FoldingSet<SubstTemplateTypeParmType>
     SubstTemplateTypeParmTypes;
-  mutable llvm::FoldingSet<SubstTemplateTypeParmPackType>
+  mutable llvm37::FoldingSet<SubstTemplateTypeParmPackType>
     SubstTemplateTypeParmPackTypes;
-  mutable llvm::ContextualFoldingSet<TemplateSpecializationType, ASTContext&>
+  mutable llvm37::ContextualFoldingSet<TemplateSpecializationType, ASTContext&>
     TemplateSpecializationTypes;
-  mutable llvm::FoldingSet<ParenType> ParenTypes;
-  mutable llvm::FoldingSet<ElaboratedType> ElaboratedTypes;
-  mutable llvm::FoldingSet<DependentNameType> DependentNameTypes;
-  mutable llvm::ContextualFoldingSet<DependentTemplateSpecializationType,
+  mutable llvm37::FoldingSet<ParenType> ParenTypes;
+  mutable llvm37::FoldingSet<ElaboratedType> ElaboratedTypes;
+  mutable llvm37::FoldingSet<DependentNameType> DependentNameTypes;
+  mutable llvm37::ContextualFoldingSet<DependentTemplateSpecializationType,
                                      ASTContext&>
     DependentTemplateSpecializationTypes;
-  llvm::FoldingSet<PackExpansionType> PackExpansionTypes;
-  mutable llvm::FoldingSet<ObjCObjectTypeImpl> ObjCObjectTypes;
-  mutable llvm::FoldingSet<ObjCObjectPointerType> ObjCObjectPointerTypes;
-  mutable llvm::FoldingSet<AutoType> AutoTypes;
-  mutable llvm::FoldingSet<AtomicType> AtomicTypes;
-  llvm::FoldingSet<AttributedType> AttributedTypes;
+  llvm37::FoldingSet<PackExpansionType> PackExpansionTypes;
+  mutable llvm37::FoldingSet<ObjCObjectTypeImpl> ObjCObjectTypes;
+  mutable llvm37::FoldingSet<ObjCObjectPointerType> ObjCObjectPointerTypes;
+  mutable llvm37::FoldingSet<AutoType> AutoTypes;
+  mutable llvm37::FoldingSet<AtomicType> AtomicTypes;
+  llvm37::FoldingSet<AttributedType> AttributedTypes;
 
-  mutable llvm::FoldingSet<QualifiedTemplateName> QualifiedTemplateNames;
-  mutable llvm::FoldingSet<DependentTemplateName> DependentTemplateNames;
-  mutable llvm::FoldingSet<SubstTemplateTemplateParmStorage> 
+  mutable llvm37::FoldingSet<QualifiedTemplateName> QualifiedTemplateNames;
+  mutable llvm37::FoldingSet<DependentTemplateName> DependentTemplateNames;
+  mutable llvm37::FoldingSet<SubstTemplateTemplateParmStorage> 
     SubstTemplateTemplateParms;
-  mutable llvm::ContextualFoldingSet<SubstTemplateTemplateParmPackStorage,
+  mutable llvm37::ContextualFoldingSet<SubstTemplateTemplateParmPackStorage,
                                      ASTContext&> 
     SubstTemplateTemplateParmPacks;
   
   /// \brief The set of nested name specifiers.
   ///
   /// This set is managed by the NestedNameSpecifier class.
-  mutable llvm::FoldingSet<NestedNameSpecifier> NestedNameSpecifiers;
+  mutable llvm37::FoldingSet<NestedNameSpecifier> NestedNameSpecifiers;
   mutable NestedNameSpecifier *GlobalNestedNameSpecifier;
   friend class NestedNameSpecifier;
 
   /// \brief A cache mapping from RecordDecls to ASTRecordLayouts.
   ///
   /// This is lazily created.  This is intentionally not serialized.
-  mutable llvm::DenseMap<const RecordDecl*, const ASTRecordLayout*>
+  mutable llvm37::DenseMap<const RecordDecl*, const ASTRecordLayout*>
     ASTRecordLayouts;
-  mutable llvm::DenseMap<const ObjCContainerDecl*, const ASTRecordLayout*>
+  mutable llvm37::DenseMap<const ObjCContainerDecl*, const ASTRecordLayout*>
     ObjCLayouts;
 
   /// \brief A cache from types to size and alignment information.
-  typedef llvm::DenseMap<const Type *, struct TypeInfo> TypeInfoMap;
+  typedef llvm37::DenseMap<const Type *, struct TypeInfo> TypeInfoMap;
   mutable TypeInfoMap MemoizedTypeInfo;
 
   /// \brief A cache mapping from CXXRecordDecls to key functions.
-  llvm::DenseMap<const CXXRecordDecl*, LazyDeclPtr> KeyFunctions;
+  llvm37::DenseMap<const CXXRecordDecl*, LazyDeclPtr> KeyFunctions;
   
   /// \brief Mapping from ObjCContainers to their ObjCImplementations.
-  llvm::DenseMap<ObjCContainerDecl*, ObjCImplDecl*> ObjCImpls;
+  llvm37::DenseMap<ObjCContainerDecl*, ObjCImplDecl*> ObjCImpls;
   
   /// \brief Mapping from ObjCMethod to its duplicate declaration in the same
   /// interface.
-  llvm::DenseMap<const ObjCMethodDecl*,const ObjCMethodDecl*> ObjCMethodRedecls;
+  llvm37::DenseMap<const ObjCMethodDecl*,const ObjCMethodDecl*> ObjCMethodRedecls;
 
   /// \brief Mapping from __block VarDecls to their copy initialization expr.
-  llvm::DenseMap<const VarDecl*, Expr*> BlockVarCopyInits;
+  llvm37::DenseMap<const VarDecl*, Expr*> BlockVarCopyInits;
     
   /// \brief Mapping from class scope functions specialization to their
   /// template patterns.
-  llvm::DenseMap<const FunctionDecl*, FunctionDecl*>
+  llvm37::DenseMap<const FunctionDecl*, FunctionDecl*>
     ClassScopeSpecializationPattern;
 
   /// \brief Mapping from materialized temporaries with static storage duration
   /// that appear in constant initializers to their evaluated values.
-  llvm::DenseMap<const MaterializeTemporaryExpr*, APValue>
+  llvm37::DenseMap<const MaterializeTemporaryExpr*, APValue>
     MaterializedTemporaryValues;
 
   /// \brief Representation of a "canonical" template template parameter that
   /// is used in canonical template names.
-  class CanonicalTemplateTemplateParm : public llvm::FoldingSetNode {
+  class CanonicalTemplateTemplateParm : public llvm37::FoldingSetNode {
     TemplateTemplateParmDecl *Parm;
     
   public:
@@ -191,12 +191,12 @@ class ASTContext : public RefCountedBase<ASTContext> {
     
     TemplateTemplateParmDecl *getParam() const { return Parm; }
     
-    void Profile(llvm::FoldingSetNodeID &ID) { Profile(ID, Parm); }
+    void Profile(llvm37::FoldingSetNodeID &ID) { Profile(ID, Parm); }
     
-    static void Profile(llvm::FoldingSetNodeID &ID, 
+    static void Profile(llvm37::FoldingSetNodeID &ID, 
                         TemplateTemplateParmDecl *Parm);
   };
-  mutable llvm::FoldingSet<CanonicalTemplateTemplateParm>
+  mutable llvm37::FoldingSet<CanonicalTemplateTemplateParm>
     CanonTemplateTemplateParms;
   
   TemplateTemplateParmDecl *
@@ -283,21 +283,21 @@ class ASTContext : public RefCountedBase<ASTContext> {
   ///
   /// Since so few decls have attrs, we keep them in a hash map instead of
   /// wasting space in the Decl class.
-  llvm::DenseMap<const Decl*, AttrVec*> DeclAttrs;
+  llvm37::DenseMap<const Decl*, AttrVec*> DeclAttrs;
 
   /// \brief A mapping from non-redeclarable declarations in modules that were
   /// merged with other declarations to the canonical declaration that they were
   /// merged into.
-  llvm::DenseMap<Decl*, Decl*> MergedDecls;
+  llvm37::DenseMap<Decl*, Decl*> MergedDecls;
 
   /// \brief A mapping from a defining declaration to a list of modules (other
   /// than the owning module of the declaration) that contain merged
   /// definitions of that entity.
-  llvm::DenseMap<NamedDecl*, llvm::TinyPtrVector<Module*>> MergedDefModules;
+  llvm37::DenseMap<NamedDecl*, llvm37::TinyPtrVector<Module*>> MergedDefModules;
 
 public:
   /// \brief A type synonym for the TemplateOrInstantiation mapping.
-  typedef llvm::PointerUnion<VarTemplateDecl *, MemberSpecializationInfo *>
+  typedef llvm37::PointerUnion<VarTemplateDecl *, MemberSpecializationInfo *>
   TemplateOrSpecializationInfo;
 
 private:
@@ -332,7 +332,7 @@ private:
   /// This mapping will contain an entry that maps from the VarDecl for
   /// X<int>::value to the corresponding VarDecl for X<T>::value (within the
   /// class template X) and will be marked TSK_ImplicitInstantiation.
-  llvm::DenseMap<const VarDecl *, TemplateOrSpecializationInfo>
+  llvm37::DenseMap<const VarDecl *, TemplateOrSpecializationInfo>
   TemplateOrInstantiation;
 
   /// \brief Keeps track of the declaration from which a UsingDecl was
@@ -358,12 +358,12 @@ private:
   ///
   /// This mapping will contain an entry that maps from the UsingDecl in
   /// B<int> to the UnresolvedUsingDecl in B<T>.
-  llvm::DenseMap<UsingDecl *, NamedDecl *> InstantiatedFromUsingDecl;
+  llvm37::DenseMap<UsingDecl *, NamedDecl *> InstantiatedFromUsingDecl;
 
-  llvm::DenseMap<UsingShadowDecl*, UsingShadowDecl*>
+  llvm37::DenseMap<UsingShadowDecl*, UsingShadowDecl*>
     InstantiatedFromUsingShadowDecl;
 
-  llvm::DenseMap<FieldDecl *, FieldDecl *> InstantiatedFromUnnamedFieldDecl;
+  llvm37::DenseMap<FieldDecl *, FieldDecl *> InstantiatedFromUnnamedFieldDecl;
 
   /// \brief Mapping that stores the methods overridden by a given C++
   /// member function.
@@ -371,23 +371,23 @@ private:
   /// Since most C++ member functions aren't virtual and therefore
   /// don't override anything, we store the overridden functions in
   /// this map on the side rather than within the CXXMethodDecl structure.
-  typedef llvm::TinyPtrVector<const CXXMethodDecl*> CXXMethodVector;
-  llvm::DenseMap<const CXXMethodDecl *, CXXMethodVector> OverriddenMethods;
+  typedef llvm37::TinyPtrVector<const CXXMethodDecl*> CXXMethodVector;
+  llvm37::DenseMap<const CXXMethodDecl *, CXXMethodVector> OverriddenMethods;
 
   /// \brief Mapping from each declaration context to its corresponding
   /// mangling numbering context (used for constructs like lambdas which
   /// need to be consistently numbered for the mangler).
-  llvm::DenseMap<const DeclContext *, MangleNumberingContext *>
+  llvm37::DenseMap<const DeclContext *, MangleNumberingContext *>
       MangleNumberingContexts;
 
   /// \brief Side-table of mangling numbers for declarations which rarely
   /// need them (like static local vars).
-  llvm::DenseMap<const NamedDecl *, unsigned> MangleNumbers;
-  llvm::DenseMap<const VarDecl *, unsigned> StaticLocalNumbers;
+  llvm37::DenseMap<const NamedDecl *, unsigned> MangleNumbers;
+  llvm37::DenseMap<const VarDecl *, unsigned> StaticLocalNumbers;
 
   /// \brief Mapping that stores parameterIndex values for ParmVarDecls when
   /// that value exceeds the bitfield size of ParmVarDeclBits.ParameterIndex.
-  typedef llvm::DenseMap<const VarDecl *, unsigned> ParameterIndexTable;
+  typedef llvm37::DenseMap<const VarDecl *, unsigned> ParameterIndexTable;
   ParameterIndexTable ParamIndices;  
   
   ImportDecl *FirstLocalImport;
@@ -411,7 +411,7 @@ private:
   ///
   /// AST objects are never destructed; rather, all memory associated with the
   /// AST objects will be released when the ASTContext itself is destroyed.
-  mutable llvm::BumpPtrAllocator BumpAlloc;
+  mutable llvm37::BumpPtrAllocator BumpAlloc;
 
   /// \brief Allocator for partial diagnostics.
   PartialDiagnostic::StorageAllocator DiagAllocator;
@@ -444,11 +444,11 @@ public:
   ASTMutationListener *Listener;
 
   /// \brief Contains parents of a node.
-  typedef llvm::SmallVector<ast_type_traits::DynTypedNode, 2> ParentVector;
+  typedef llvm37::SmallVector<ast_type_traits::DynTypedNode, 2> ParentVector;
 
   /// \brief Maps from a node to its parents.
-  typedef llvm::DenseMap<const void *,
-                         llvm::PointerUnion<ast_type_traits::DynTypedNode *,
+  typedef llvm37::DenseMap<const void *,
+                         llvm37::PointerUnion<ast_type_traits::DynTypedNode *,
                                             ParentVector *>> ParentMap;
 
   /// \brief Returns the parents of the given node.
@@ -494,7 +494,7 @@ public:
   SourceManager& getSourceManager() { return SourceMgr; }
   const SourceManager& getSourceManager() const { return SourceMgr; }
 
-  llvm::BumpPtrAllocator &getAllocator() const {
+  llvm37::BumpPtrAllocator &getAllocator() const {
     return BumpAlloc;
   }
 
@@ -573,7 +573,7 @@ public:
       FromRedecl
     };
 
-    Kind getKind() const LLVM_READONLY {
+    Kind getKind() const LLVM37_READONLY {
       return Data.getInt();
     }
 
@@ -581,7 +581,7 @@ public:
       Data.setInt(K);
     }
 
-    const RawComment *getRaw() const LLVM_READONLY {
+    const RawComment *getRaw() const LLVM37_READONLY {
       return Data.getPointer();
     }
 
@@ -589,7 +589,7 @@ public:
       Data.setPointer(RC);
     }
 
-    const Decl *getOriginalDecl() const LLVM_READONLY {
+    const Decl *getOriginalDecl() const LLVM37_READONLY {
       return OriginalDecl;
     }
 
@@ -598,7 +598,7 @@ public:
     }
 
   private:
-    llvm::PointerIntPair<const RawComment *, 2, Kind> Data;
+    llvm37::PointerIntPair<const RawComment *, 2, Kind> Data;
     const Decl *OriginalDecl;
   };
 
@@ -607,11 +607,11 @@ public:
   ///
   /// Raw comments are owned by Comments list.  This mapping is populated
   /// lazily.
-  mutable llvm::DenseMap<const Decl *, RawCommentAndCacheFlags> RedeclComments;
+  mutable llvm37::DenseMap<const Decl *, RawCommentAndCacheFlags> RedeclComments;
 
   /// \brief Mapping from declarations to parsed comments attached to any
   /// redeclaration.
-  mutable llvm::DenseMap<const Decl *, comments::FullComment *> ParsedComments;
+  mutable llvm37::DenseMap<const Decl *, comments::FullComment *> ParsedComments;
 
   /// \brief Return the documentation comment attached to a given declaration,
   /// without looking into cache.
@@ -779,7 +779,7 @@ public:
     return Import->NextLocalImport;
   }
   
-  typedef llvm::iterator_range<import_iterator> import_range;
+  typedef llvm37::iterator_range<import_iterator> import_range;
   import_range local_imports() const {
     return import_range(import_iterator(FirstLocalImport), import_iterator());
   }
@@ -1081,7 +1081,7 @@ public:
 
   /// \brief Return the unique reference to the type for a constant array of
   /// the specified element type.
-  QualType getConstantArrayType(QualType EltTy, const llvm::APInt &ArySize,
+  QualType getConstantArrayType(QualType EltTy, const llvm37::APInt &ArySize,
                                 ArrayType::ArraySizeModifier ASM,
                                 unsigned IndexTypeQuals) const;
   
@@ -1707,7 +1707,7 @@ public:
 
   /// \brief Return the APFloat 'semantics' for the specified scalar floating
   /// point type.
-  const llvm::fltSemantics &getFloatTypeSemantics(QualType T) const;
+  const llvm37::fltSemantics &getFloatTypeSemantics(QualType T) const;
 
   /// \brief Get the size and alignment of the specified complete type in bits.
   TypeInfo getTypeInfo(const Type *T) const;
@@ -1857,7 +1857,7 @@ public:
   
   unsigned CountNonClassIvars(const ObjCInterfaceDecl *OI) const;
   void CollectInheritedProtocols(const Decl *CDecl,
-                          llvm::SmallPtrSet<ObjCProtocolDecl*, 8> &Protocols);
+                          llvm37::SmallPtrSet<ObjCProtocolDecl*, 8> &Protocols);
 
   //===--------------------------------------------------------------------===//
   //                            Type Operators
@@ -2209,7 +2209,7 @@ public:
   //===--------------------------------------------------------------------===//
   //                    Type Iterators.
   //===--------------------------------------------------------------------===//
-  typedef llvm::iterator_range<SmallVectorImpl<Type *>::const_iterator>
+  typedef llvm37::iterator_range<SmallVectorImpl<Type *>::const_iterator>
     type_const_range;
 
   type_const_range types() const {
@@ -2222,8 +2222,8 @@ public:
 
   /// \brief Make an APSInt of the appropriate width and signedness for the
   /// given \p Value and integer \p Type.
-  llvm::APSInt MakeIntValue(uint64_t Value, QualType Type) const {
-    llvm::APSInt Res(getIntWidth(Type), 
+  llvm37::APSInt MakeIntValue(uint64_t Value, QualType Type) const {
+    llvm37::APSInt Res(getIntWidth(Type), 
                      !Type->isSignedIntegerOrEnumerationType());
     Res = Value;
     return Res;
@@ -2448,14 +2448,14 @@ private:
 
   /// \brief A set of deallocations that should be performed when the
   /// ASTContext is destroyed.
-  typedef llvm::SmallDenseMap<void(*)(void*), llvm::SmallVector<void*, 16> >
+  typedef llvm37::SmallDenseMap<void(*)(void*), llvm37::SmallVector<void*, 16> >
     DeallocationMap;
   DeallocationMap Deallocations;
 
   // FIXME: This currently contains the set of StoredDeclMaps used
   // by DeclContext objects.  This probably should not be in ASTContext,
   // but we include it here so that ASTContext can quickly deallocate them.
-  llvm::PointerIntPair<StoredDeclsMap*,1> LastSDM;
+  llvm37::PointerIntPair<StoredDeclsMap*,1> LastSDM;
 
   friend class DeclContext;
   friend class DeclarationNameTable;
@@ -2489,7 +2489,7 @@ public:
         SectionFlags(SectionFlags) {}
   };
 
-  llvm::StringMap<SectionInfo> SectionInfos;
+  llvm37::StringMap<SectionInfo> SectionInfos;
 };
 
 /// \brief Utility function for constructing a nullary selector.

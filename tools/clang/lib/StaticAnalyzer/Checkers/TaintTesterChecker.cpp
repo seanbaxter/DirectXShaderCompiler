@@ -1,6 +1,6 @@
 //== TaintTesterChecker.cpp ----------------------------------- -*- C++ -*--=//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -52,7 +52,7 @@ void TaintTesterChecker::checkPostStmt(const Expr *E,
   if (State->isTainted(E, C.getLocationContext())) {
     if (ExplodedNode *N = C.addTransition()) {
       initBugType();
-      auto report = llvm::make_unique<BugReport>(*BT, "tainted",N);
+      auto report = llvm37::make_unique<BugReport>(*BT, "tainted",N);
       report->addRange(E->getSourceRange());
       C.emitReport(std::move(report));
     }

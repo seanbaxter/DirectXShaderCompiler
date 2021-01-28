@@ -7,7 +7,7 @@
 
 ;; This package allows to filter code through clang-format to fix its formatting.
 ;; clang-format is a tool that formats C/C++/Obj-C code according to a set of
-;; style options, see <http://clang.llvm.org/docs/ClangFormatStyleOptions.html>.
+;; style options, see <http://clang.llvm37.org/docs/ClangFormatStyleOptions.html>.
 ;; Note that clang-format 3.4 or newer is required.
 
 ;; clang-format.el is available via MELPA and can be installed via

@@ -1,6 +1,6 @@
-; RUN: llvm-as -o %T/1.bc %s
-; RUN: llvm-as -o %T/2.bc %S/Inputs/list-symbols.ll
-; RUN: llvm-lto -list-symbols-only %T/1.bc %T/2.bc | FileCheck %s
+; RUN: llvm37-as -o %T/1.bc %s
+; RUN: llvm37-as -o %T/2.bc %S/Inputs/list-symbols.ll
+; RUN: llvm37-lto -list-symbols-only %T/1.bc %T/2.bc | FileCheck %s
 
 ; CHECK-LABEL: 1.bc:
 ; CHECK-DAG: foo

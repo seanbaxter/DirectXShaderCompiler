@@ -1,27 +1,27 @@
-//===- Pass.cpp - LLVM Pass Infrastructure Implementation -----------------===//
+//===- Pass.cpp - LLVM37 Pass Infrastructure Implementation -----------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 //
-// This file implements the LLVM Pass infrastructure.  It is primarily
+// This file implements the LLVM37 Pass infrastructure.  It is primarily
 // responsible with ensuring that passes are executed and batched together
 // optimally.
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Pass.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/IRPrintingPasses.h"
-#include "llvm/IR/LegacyPassNameParser.h"
-#include "llvm/PassRegistry.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/Pass.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/IRPrintingPasses.h"
+#include "llvm37/IR/LegacyPassNameParser.h"
+#include "llvm37/PassRegistry.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <algorithm> // HLSL Change
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "ir"
 
@@ -36,7 +36,7 @@ Pass::~Pass() {
 
 // HLSL Change Starts
 
-void Pass::dumpConfig(llvm::raw_ostream &OS) {
+void Pass::dumpConfig(llvm37::raw_ostream &OS) {
   OS << '-' << this->getPassArgument();
 }
 
@@ -247,7 +247,7 @@ PassNameParser::PassNameParser(cl::Option &O)
 
 PassNameParser::~PassNameParser() {
   // This only gets called during static destruction, in which case the
-  // PassRegistry will have already been destroyed by llvm_shutdown().  So
+  // PassRegistry will have already been destroyed by llvm37_shutdown().  So
   // attempting to remove the registration listener is an error.
 }
 
@@ -308,7 +308,7 @@ AnalysisUsage &AnalysisUsage::addRequiredTransitiveID(char &ID) {
 
 // HLSL Changes Start
 
-bool llvm::GetPassOption(PassOptions &O, StringRef name, StringRef *pValue) {
+bool llvm37::GetPassOption(PassOptions &O, StringRef name, StringRef *pValue) {
   PassOption OpVal(name, StringRef());
   const PassOption *Op = std::lower_bound(O.begin(), O.end(), OpVal, PassOptionsCompare());
   if (Op != O.end() && Op->first == name) {
@@ -317,7 +317,7 @@ bool llvm::GetPassOption(PassOptions &O, StringRef name, StringRef *pValue) {
   }
   return false;
 }
-bool llvm::GetPassOptionBool(PassOptions &O, llvm::StringRef name, bool *pValue, bool defaultValue) {
+bool llvm37::GetPassOptionBool(PassOptions &O, llvm37::StringRef name, bool *pValue, bool defaultValue) {
   StringRef val;
   if (GetPassOption(O, name, &val)) {
     *pValue = (val.startswith_lower("t") || val.equals("1"));
@@ -326,7 +326,7 @@ bool llvm::GetPassOptionBool(PassOptions &O, llvm::StringRef name, bool *pValue,
   *pValue = defaultValue;
   return false;
 }
-bool llvm::GetPassOptionUnsigned(PassOptions &O, llvm::StringRef name, unsigned *pValue, unsigned defaultValue) {
+bool llvm37::GetPassOptionUnsigned(PassOptions &O, llvm37::StringRef name, unsigned *pValue, unsigned defaultValue) {
   StringRef val;
   if (GetPassOption(O, name, &val)) {
     val.getAsInteger<unsigned>(0, *pValue);
@@ -335,7 +335,7 @@ bool llvm::GetPassOptionUnsigned(PassOptions &O, llvm::StringRef name, unsigned 
   *pValue = defaultValue;
   return false;
 }
-bool llvm::GetPassOptionInt(PassOptions &O, llvm::StringRef name, int *pValue, int defaultValue) {
+bool llvm37::GetPassOptionInt(PassOptions &O, llvm37::StringRef name, int *pValue, int defaultValue) {
   StringRef val;
   if (GetPassOption(O, name, &val)) {
     val.getAsInteger<int>(0, *pValue);
@@ -344,7 +344,7 @@ bool llvm::GetPassOptionInt(PassOptions &O, llvm::StringRef name, int *pValue, i
   *pValue = defaultValue;
   return false;
 }
-bool llvm::GetPassOptionUInt32(PassOptions &O, llvm::StringRef name, uint32_t *pValue, uint32_t defaultValue) {
+bool llvm37::GetPassOptionUInt32(PassOptions &O, llvm37::StringRef name, uint32_t *pValue, uint32_t defaultValue) {
   StringRef val;
   if (GetPassOption(O, name, &val)) {
     val.getAsInteger<uint32_t>(0, *pValue);
@@ -353,7 +353,7 @@ bool llvm::GetPassOptionUInt32(PassOptions &O, llvm::StringRef name, uint32_t *p
   *pValue = defaultValue;
   return false;
 }
-bool llvm::GetPassOptionUInt64(PassOptions &O, llvm::StringRef name, uint64_t *pValue, uint64_t defaultValue) {
+bool llvm37::GetPassOptionUInt64(PassOptions &O, llvm37::StringRef name, uint64_t *pValue, uint64_t defaultValue) {
   StringRef val;
   if (GetPassOption(O, name, &val)) {
     val.getAsInteger<uint64_t>(0, *pValue);
@@ -362,7 +362,7 @@ bool llvm::GetPassOptionUInt64(PassOptions &O, llvm::StringRef name, uint64_t *p
   *pValue = defaultValue;
   return false;
 }
-bool llvm::GetPassOptionFloat(PassOptions &O, llvm::StringRef name, float *pValue, float defaultValue) {
+bool llvm37::GetPassOptionFloat(PassOptions &O, llvm37::StringRef name, float *pValue, float defaultValue) {
   StringRef val;
   if (GetPassOption(O, name, &val)) {
     std::string str;

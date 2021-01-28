@@ -1,6 +1,6 @@
 ; REQUIRES: object-emission
 ;
-; RUN: llvm-link %s %p/type-unique-odr-b.ll -S -o - | %llc_dwarf -filetype=obj -O0 | llvm-dwarfdump -debug-dump=info - | FileCheck %s
+; RUN: llvm37-link %s %p/type-unique-odr-b.ll -S -o - | %llc_dwarf -filetype=obj -O0 | llvm37-dwarfdump -debug-dump=info - | FileCheck %s
 ;
 ; Test ODR-based type uniquing for C++ class members.
 ; rdar://problem/15851313.
@@ -59,19 +59,19 @@ entry:
 define internal void @_ZL3barv() #0 {
 entry:
   %a = alloca %class.A, align 4
-  call void @llvm.dbg.declare(metadata %class.A* %a, metadata !24, metadata !DIExpression()), !dbg !25
+  call void @llvm37.dbg.declare(metadata %class.A* %a, metadata !24, metadata !DIExpression()), !dbg !25
   ret void, !dbg !26
 }
 
 ; Function Attrs: nounwind readnone
-declare void @llvm.dbg.declare(metadata, metadata, metadata) #1
+declare void @llvm37.dbg.declare(metadata, metadata, metadata) #1
 
 attributes #0 = { nounwind }
 attributes #1 = { nounwind readnone }
 
-!llvm.dbg.cu = !{!0}
-!llvm.module.flags = !{!20, !21}
-!llvm.ident = !{!22}
+!llvm37.dbg.cu = !{!0}
+!llvm37.module.flags = !{!20, !21}
+!llvm37.ident = !{!22}
 
 !0 = !DICompileUnit(language: DW_LANG_C_plus_plus, producer: "clang version 3.5.0 ", isOptimized: false, emissionKind: 1, file: !1, enums: !2, retainedTypes: !3, subprograms: !14, globals: !2, imports: !2)
 !1 = !DIFile(filename: "<unknown>", directory: "")

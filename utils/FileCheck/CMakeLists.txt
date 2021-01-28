@@ -1,5 +1,5 @@
-add_llvm_utility(FileCheck
+add_llvm37_utility(FileCheck
   FileCheck.cpp
   )
 
-target_link_libraries(FileCheck LLVMSupport LLVMMSSupport)
+target_link_libraries(FileCheck LLVM37Support LLVM37MSSupport)

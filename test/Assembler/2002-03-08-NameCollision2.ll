@@ -1,4 +1,4 @@
-; RUN: llvm-as %s -o /dev/null
+; RUN: llvm37-as %s -o /dev/null
 ; RUN: verify-uselistorder %s
 
 ; Another name collision problem.  Here the problem was that if a forward

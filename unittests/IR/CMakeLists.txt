@@ -1,4 +1,4 @@
-set(LLVM_LINK_COMPONENTS
+set(LLVM37_LINK_COMPONENTS
   Analysis
   AsmParser
   Core
@@ -31,11 +31,11 @@ set(IRSources
   )
 
 # HACK: Declare a couple of source files as optionally compiled to satisfy the
-# missing-file-checker in LLVM's weird CMake build.
-set(LLVM_OPTIONAL_SOURCES
+# missing-file-checker in LLVM37's weird CMake build.
+set(LLVM37_OPTIONAL_SOURCES
   ValueMapTest.cpp
   )
 
-add_llvm_unittest(IRTests
+add_llvm37_unittest(IRTests
   ${IRSources}
   )

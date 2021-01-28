@@ -1,6 +1,6 @@
 //===--- CC1Options.td - Options for clang -cc1 ---------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -149,10 +149,10 @@ def msave_temp_labels : Flag<["-"], "msave-temp-labels">,
 
 }
 
-def disable_llvm_optzns : Flag<["-"], "disable-llvm-optzns">,
-  HelpText<"Don't run LLVM optimization passes">;
-def disable_llvm_verifier : Flag<["-"], "disable-llvm-verifier">,
-  HelpText<"Don't run the LLVM IR verifier pass">;
+def disable_llvm37_optzns : Flag<["-"], "disable-llvm37-optzns">,
+  HelpText<"Don't run LLVM37 optimization passes">;
+def disable_llvm37_verifier : Flag<["-"], "disable-llvm37-verifier">,
+  HelpText<"Don't run the LLVM37 IR verifier pass">;
 def disable_red_zone : Flag<["-"], "disable-red-zone">,
   HelpText<"Do not emit code that uses the red zone.">;
 def dwarf_column_info : Flag<["-"], "dwarf-column-info">,
@@ -222,7 +222,7 @@ def split_stacks : Flag<["-"], "split-stacks">,
 def mno_zero_initialized_in_bss : Flag<["-"], "mno-zero-initialized-in-bss">,
   HelpText<"Do not put zero initialized data in the BSS">;
 def backend_option : Separate<["-"], "backend-option">,
-  HelpText<"Additional arguments to forward to LLVM backend (during code gen)">;
+  HelpText<"Additional arguments to forward to LLVM37 backend (during code gen)">;
 def mregparm : Separate<["-"], "mregparm">,
   HelpText<"Limit the number of registers available for integer arguments">;
 def mrelocation_model : Separate<["-"], "mrelocation-model">,
@@ -420,10 +420,10 @@ def emit_pth : Flag<["-"], "emit-pth">,
   HelpText<"Generate pre-tokenized header file">;
 def emit_pch : Flag<["-"], "emit-pch">,
   HelpText<"Generate pre-compiled header file">;
-def emit_llvm_bc : Flag<["-"], "emit-llvm-bc">,
-  HelpText<"Build ASTs then convert to LLVM, emit .bc file">;
-def emit_llvm_only : Flag<["-"], "emit-llvm-only">,
-  HelpText<"Build ASTs and convert to LLVM, discarding output">;
+def emit_llvm37_bc : Flag<["-"], "emit-llvm37-bc">,
+  HelpText<"Build ASTs then convert to LLVM37, emit .bc file">;
+def emit_llvm37_only : Flag<["-"], "emit-llvm37-only">,
+  HelpText<"Build ASTs and convert to LLVM37, discarding output">;
 def emit_codegen_only : Flag<["-"], "emit-codegen-only">,
   HelpText<"Generate machine code, but discard output">;
 def emit_obj : Flag<["-"], "emit-obj">,
@@ -436,10 +436,10 @@ def migrate : Flag<["-"], "migrate">,
   HelpText<"Migrate source code">;
 }
 
-def emit_llvm_uselists : Flag<["-"], "emit-llvm-uselists">,
-  HelpText<"Preserve order of LLVM use-lists when serializing">;
-def no_emit_llvm_uselists : Flag<["-"], "no-emit-llvm-uselists">,
-  HelpText<"Don't preserve order of LLVM use-lists when serializing">;
+def emit_llvm37_uselists : Flag<["-"], "emit-llvm37-uselists">,
+  HelpText<"Preserve order of LLVM37 use-lists when serializing">;
+def no_emit_llvm37_uselists : Flag<["-"], "no-emit-llvm37-uselists">,
+  HelpText<"Don't preserve order of LLVM37 use-lists when serializing">;
 
 def mt_migrate_directory : Separate<["-"], "mt-migrate-directory">,
   HelpText<"Directory for temporary files produced during ARC or ObjC migration">;

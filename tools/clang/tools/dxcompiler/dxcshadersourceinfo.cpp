@@ -14,7 +14,7 @@
 #include "dxc/DxilContainer/DxilContainer.h"
 #include "clang/Basic/SourceManager.h"
 #include "clang/Frontend/CodeGenOptions.h"
-#include "llvm/Support/Path.h"
+#include "llvm37/Support/Path.h"
 #include "miniz/miniz.h"
 
 #include "dxc/Support/Global.h"
@@ -131,7 +131,7 @@ bool SourceInfoReader::Init(const hlsl::DxilSourceInfo *SourceInfo, unsigned sou
           // Fail if not null terminated
           if (((const char *)ptr)[entry->NameSizeInBytes-1] != '\0')
             return false;
-          llvm::StringRef name = { (const char *)ptr, entry->NameSizeInBytes-1, };
+          llvm37::StringRef name = { (const char *)ptr, entry->NameSizeInBytes-1, };
           m_Sources[i].Name = name;
         }
 
@@ -183,7 +183,7 @@ bool SourceInfoReader::Init(const hlsl::DxilSourceInfo *SourceInfo, unsigned sou
           // Fail if not null terminated
           if (((const char *)ptr)[entry->ContentSizeInBytes-1] != '\0')
             return false;
-          llvm::StringRef content = { (const char *)ptr, entry->ContentSizeInBytes-1, };
+          llvm37::StringRef content = { (const char *)ptr, entry->ContentSizeInBytes-1, };
           m_Sources[i].Content = content;
         }
 
@@ -227,7 +227,7 @@ static uint32_t PadBufferToFourBytes(Buffer *buf, uint32_t unpaddedSize) {
   return paddedSize;
 }
 
-static void AppendFileContentEntry(Buffer *buf, llvm::StringRef content) {
+static void AppendFileContentEntry(Buffer *buf, llvm37::StringRef content) {
   hlsl::DxilSourceInfo_SourceContentsEntry header = {};
   header.AlignedSizeInBytes = PadToFourBytes(sizeof(header) + content.size()+1);
   header.ContentSizeInBytes = content.size()+1;
@@ -267,20 +267,20 @@ static void FinishSection(Buffer *buf, const size_t sectionOffset, hlsl::DxilSou
 
 struct SourceFile {
   std::string Name;
-  llvm::StringRef Content;
+  llvm37::StringRef Content;
 };
 
 static std::vector<SourceFile> ComputeFileList(clang::CodeGenOptions &cgOpts, clang::SourceManager &srcMgr) {
   std::vector<SourceFile> ret;
-  std::map<std::string, llvm::StringRef> filesMap;
+  std::map<std::string, llvm37::StringRef> filesMap;
   {
     bool bFoundMainFile = false;
     for (auto it = srcMgr.fileinfo_begin(), end = srcMgr.fileinfo_end(); it != end; ++it) {
       if (it->first->isValid() && !it->second->IsSystemFile) {
         // If main file, write that to metadata first.
         // Add the rest to filesMap to sort by name.
-        llvm::SmallString<128> NormalizedPath;
-        llvm::sys::path::native(it->first->getName(), NormalizedPath);
+        llvm37::SmallString<128> NormalizedPath;
+        llvm37::sys::path::native(it->first->getName(), NormalizedPath);
         if (cgOpts.MainFileName.compare(it->first->getName()) == 0) {
           SourceFile file;
           file.Name = NormalizedPath.str();
@@ -306,7 +306,7 @@ static std::vector<SourceFile> ComputeFileList(clang::CodeGenOptions &cgOpts, cl
   return ret;
 }
 
-void SourceInfoWriter::Write(llvm::StringRef targetProfile, llvm::StringRef entryPoint, clang::CodeGenOptions &cgOpts, clang::SourceManager &srcMgr) {
+void SourceInfoWriter::Write(llvm37::StringRef targetProfile, llvm37::StringRef entryPoint, clang::CodeGenOptions &cgOpts, clang::SourceManager &srcMgr) {
   m_Buffer.clear();
 
   // Write an empty header first.
@@ -417,18 +417,18 @@ void SourceInfoWriter::Write(llvm::StringRef targetProfile, llvm::StringRef entr
     const size_t headerOffset = m_Buffer.size();
     Append(&m_Buffer, &header, sizeof(header)); // Write an empty header first
 
-    llvm::SmallVector<const char *, 32> optPointers;
+    llvm37::SmallVector<const char *, 32> optPointers;
     for (const std::string &arg : cgOpts.HLSLArguments) {
       optPointers.push_back(arg.c_str());
     }
     unsigned missingIndex = 0;
     unsigned missingCount = 0;
-    const llvm::opt::OptTable *optTable = hlsl::options::getHlslOptTable();
-    llvm::opt::InputArgList argList = optTable->ParseArgs(optPointers, missingIndex, missingCount);
+    const llvm37::opt::OptTable *optTable = hlsl::options::getHlslOptTable();
+    llvm37::opt::InputArgList argList = optTable->ParseArgs(optPointers, missingIndex, missingCount);
 
     const size_t argumentsOffset = m_Buffer.size();
-    for (llvm::opt::Arg *arg : argList) {
-      llvm::StringRef name = arg->getOption().getName();
+    for (llvm37::opt::Arg *arg : argList) {
+      llvm37::StringRef name = arg->getOption().getName();
       const char *value = nullptr;
       if (arg->getNumValues() > 0) {
         assert(arg->getNumValues() == 1);

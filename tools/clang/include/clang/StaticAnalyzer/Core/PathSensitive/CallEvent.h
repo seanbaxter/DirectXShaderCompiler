@@ -1,6 +1,6 @@
 //===- CallEvent.h - Wrapper for all function and method calls ----*- C++ -*--//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -13,8 +13,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_STATICANALYZER_CORE_PATHSENSITIVE_CALLEVENT_H
-#define LLVM_CLANG_STATICANALYZER_CORE_PATHSENSITIVE_CALLEVENT_H
+#ifndef LLVM37_CLANG_STATICANALYZER_CORE_PATHSENSITIVE_CALLEVENT_H
+#define LLVM37_CLANG_STATICANALYZER_CORE_PATHSENSITIVE_CALLEVENT_H
 
 #include "clang/AST/DeclCXX.h"
 #include "clang/AST/ExprCXX.h"
@@ -23,7 +23,7 @@
 #include "clang/Basic/SourceManager.h"
 #include "clang/StaticAnalyzer/Core/PathSensitive/ProgramState.h"
 #include "clang/StaticAnalyzer/Core/PathSensitive/SVals.h"
-#include "llvm/ADT/PointerIntPair.h"
+#include "llvm37/ADT/PointerIntPair.h"
 
 namespace clang {
 class ProgramPoint;
@@ -117,7 +117,7 @@ public:
 private:
   ProgramStateRef State;
   const LocationContext *LCtx;
-  llvm::PointerUnion<const Expr *, const Decl *> Origin;
+  llvm37::PointerUnion<const Expr *, const Decl *> Origin;
 
   void operator=(const CallEvent &) = delete;
 
@@ -133,7 +133,7 @@ protected:
 private:
   mutable unsigned RefCount;
 
-  template <typename T> friend struct llvm::IntrusiveRefCntPtrInfo;
+  template <typename T> friend struct llvm37::IntrusiveRefCntPtrInfo;
   void Retain() const { ++RefCount; }
   void Release() const;
 
@@ -351,7 +351,7 @@ public:
   /// correspond with the argument value returned by \c getArgSVal(0).
   virtual ArrayRef<ParmVarDecl*> parameters() const = 0;
 
-  typedef llvm::mapped_iterator<ArrayRef<ParmVarDecl*>::iterator, get_type_fun>
+  typedef llvm37::mapped_iterator<ArrayRef<ParmVarDecl*>::iterator, get_type_fun>
     param_type_iterator;
 
   /// Returns an iterator over the types of the call's formal parameters.
@@ -360,12 +360,12 @@ public:
   /// definition because it represents a public interface, and probably has
   /// more annotations.
   param_type_iterator param_type_begin() const {
-    return llvm::map_iterator(parameters().begin(),
+    return llvm37::map_iterator(parameters().begin(),
                               get_type_fun(&ParmVarDecl::getType));
   }
   /// \sa param_type_begin()
   param_type_iterator param_type_end() const {
-    return llvm::map_iterator(parameters().end(),
+    return llvm37::map_iterator(parameters().end(),
                               get_type_fun(&ParmVarDecl::getType));
   }
 
@@ -640,7 +640,7 @@ class CXXDestructorCall : public CXXInstanceCall {
   friend class CallEventManager;
 
 protected:
-  typedef llvm::PointerIntPair<const MemRegion *, 1, bool> DtorDataTy;
+  typedef llvm37::PointerIntPair<const MemRegion *, 1, bool> DtorDataTy;
 
   /// Creates an implicit destructor.
   ///
@@ -861,13 +861,13 @@ public:
   bool isSetter() const {
     switch (getMessageKind()) {
     case OCM_Message:
-      llvm_unreachable("This is not a pseudo-object access!");
+      llvm37_unreachable("This is not a pseudo-object access!");
     case OCM_PropertyAccess:
       return getNumArgs() > 0;
     case OCM_Subscript:
       return getNumArgs() > 1;
     }
-    llvm_unreachable("Unknown message kind");
+    llvm37_unreachable("Unknown message kind");
   }
 
   RuntimeDefinition getRuntimeDefinition() const override;
@@ -897,7 +897,7 @@ public:
 class CallEventManager {
   friend class CallEvent;
 
-  llvm::BumpPtrAllocator &Alloc;
+  llvm37::BumpPtrAllocator &Alloc;
   SmallVector<void *, 8> Cache;
   typedef SimpleFunctionCall CallEventTemplateTy;
 
@@ -945,7 +945,7 @@ class CallEventManager {
   }
 
 public:
-  CallEventManager(llvm::BumpPtrAllocator &alloc) : Alloc(alloc) {}
+  CallEventManager(llvm37::BumpPtrAllocator &alloc) : Alloc(alloc) {}
 
 
   CallEventRef<>
@@ -1017,7 +1017,7 @@ inline void CallEvent::Release() const {
 } // end namespace ento
 } // end namespace clang
 
-namespace llvm {
+namespace llvm37 {
   // Support isa<>, cast<>, and dyn_cast<> for CallEventRef.
   template<class T> struct simplify_type< clang::ento::CallEventRef<T> > {
     typedef const T *SimpleType;

@@ -1,6 +1,6 @@
 //===--- StmtIterator.h - Iterators for Statements --------------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,11 +11,11 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_AST_STMTITERATOR_H
-#define LLVM_CLANG_AST_STMTITERATOR_H
+#ifndef LLVM37_CLANG_AST_STMTITERATOR_H
+#define LLVM37_CLANG_AST_STMTITERATOR_H
 
-#include "llvm/Support/Compiler.h"
-#include "llvm/Support/DataTypes.h"
+#include "llvm37/Support/Compiler.h"
+#include "llvm37/Support/DataTypes.h"
 #include <cassert>
 #include <cstddef>
 #include <iterator>

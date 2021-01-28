@@ -1,7 +1,7 @@
 ##----------------------------------------------------------*- Makefile -*-===##
 ##
-## Common rules for generating, linking, and compiling via LLVM.  This is
-## used to implement a robust testing framework for LLVM
+## Common rules for generating, linking, and compiling via LLVM37.  This is
+## used to implement a robust testing framework for LLVM37
 ##
 ##-------------------------------------------------------------------------===##
 
@@ -31,15 +31,15 @@ endif
 .PRECIOUS: Output/%.bc  Output/%.ll
 .PRECIOUS: Output/%.tbc Output/%.tll
 .PRECIOUS: Output/.dir
-.PRECIOUS: Output/%.llvm.bc
-.PRECIOUS: Output/%.llvm
+.PRECIOUS: Output/%.llvm37.bc
+.PRECIOUS: Output/%.llvm37
 
 LCCFLAGS  += -O2 -Wall
 LCXXFLAGS += -O2 -Wall
 LLCFLAGS =
 TESTRUNR = @echo Running test: $<; \
-             PATH="$(LLVMTOOLCURRENT):$(PATH)" \
-                  $(LLVM_SRC_ROOT)/test/TestRunner.sh
+             PATH="$(LLVM37TOOLCURRENT):$(PATH)" \
+                  $(LLVM37_SRC_ROOT)/test/TestRunner.sh
 
 LLCLIBS := $(LLCLIBS) -lm
 
@@ -47,17 +47,17 @@ clean::
 	$(RM) -f a.out core
 	$(RM) -rf Output/
 
-# LLVM Assemble from Output/X.ll to Output/X.bc.  Output/X.ll must have come
+# LLVM37 Assemble from Output/X.ll to Output/X.bc.  Output/X.ll must have come
 # from GCC output, so use GCCAS.
 #
 Output/%.bc: Output/%.ll $(LGCCAS)
 	-$(LGCCAS) $(STATS) $< -o $@
 
-# LLVM Assemble from X.ll to Output/X.bc.  Because we are coming directly from
-# LLVM source, use the non-transforming assembler.
+# LLVM37 Assemble from X.ll to Output/X.bc.  Because we are coming directly from
+# LLVM37 source, use the non-transforming assembler.
 #
-Output/%.bc: %.ll $(LLVMAS) Output/.dir
-	-$(LLVMAS) $< -o $@
+Output/%.bc: %.ll $(LLVM37AS) Output/.dir
+	-$(LLVM37AS) $< -o $@
 
 ## Cancel built-in implicit rules that override above rules
 %: %.s

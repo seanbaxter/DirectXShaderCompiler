@@ -1,6 +1,6 @@
 //===-- Module.cpp - Implement the Module class ---------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,25 +11,25 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/IR/Module.h"
+#include "llvm37/IR/Module.h"
 #include "SymbolTableListTraitsImpl.h"
-#include "llvm/ADT/DenseSet.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/ADT/StringExtras.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/DerivedTypes.h"
-#include "llvm/IR/GVMaterializer.h"
-#include "llvm/IR/InstrTypes.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/TypeFinder.h"
-#include "llvm/Support/Dwarf.h"
-#include "llvm/Support/Path.h"
-#include "llvm/Support/RandomNumberGenerator.h"
+#include "llvm37/ADT/DenseSet.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/ADT/StringExtras.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/DerivedTypes.h"
+#include "llvm37/IR/GVMaterializer.h"
+#include "llvm37/IR/InstrTypes.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/TypeFinder.h"
+#include "llvm37/Support/Dwarf.h"
+#include "llvm37/Support/Path.h"
+#include "llvm37/Support/RandomNumberGenerator.h"
 #include <algorithm>
 #include <cstdarg>
 #include <cstdlib>
-using namespace llvm;
+using namespace llvm37;
 
 //===----------------------------------------------------------------------===//
 // Methods to implement the globals and functions lists.
@@ -37,15 +37,15 @@ using namespace llvm;
 
 // Explicit instantiations of SymbolTableListTraits since some of the methods
 // are not in the public header file.
-template class llvm::SymbolTableListTraits<Function, Module>;
-template class llvm::SymbolTableListTraits<GlobalVariable, Module>;
-template class llvm::SymbolTableListTraits<GlobalAlias, Module>;
+template class llvm37::SymbolTableListTraits<Function, Module>;
+template class llvm37::SymbolTableListTraits<GlobalVariable, Module>;
+template class llvm37::SymbolTableListTraits<GlobalAlias, Module>;
 
 //===----------------------------------------------------------------------===//
 // Primitive Module methods.
 //
 
-Module::Module(StringRef MID, LLVMContext &C)
+Module::Module(StringRef MID, LLVM37Context &C)
     : Context(C), Materializer(), ModuleID(MID), DL("") {
   // HLSL Change - use unique_ptr to avoid leaks
   std::unique_ptr<ValueSymbolTable> ValSymTabPtr(new ValueSymbolTable());
@@ -97,13 +97,13 @@ GlobalValue *Module::getNamedValue(StringRef Name) const {
 }
 
 /// getMDKindID - Return a unique non-zero ID for the specified metadata kind.
-/// This ID is uniqued across modules in the current LLVMContext.
+/// This ID is uniqued across modules in the current LLVM37Context.
 unsigned Module::getMDKindID(StringRef Name) const {
   return Context.getMDKindID(Name);
 }
 
 /// getMDKindNames - Populate client supplied SmallVector with the name for
-/// custom metadata IDs registered in this LLVMContext.   ID #0 is not used,
+/// custom metadata IDs registered in this LLVM37Context.   ID #0 is not used,
 /// so it is filled in as an empty string.
 void Module::getMDKindNames(SmallVectorImpl<StringRef> &Result) const {
   return Context.getMDKindNames(Result);

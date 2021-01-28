@@ -1,6 +1,6 @@
 //===- NaryReassociate.cpp - Reassociate n-ary expressions ----------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -76,19 +76,19 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Analysis/AssumptionCache.h"
-#include "llvm/Analysis/ScalarEvolution.h"
-#include "llvm/Analysis/TargetLibraryInfo.h"
-#include "llvm/Analysis/TargetTransformInfo.h"
-#include "llvm/Analysis/ValueTracking.h"
-#include "llvm/IR/Dominators.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/PatternMatch.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Transforms/Scalar.h"
-#include "llvm/Transforms/Utils/Local.h"
-using namespace llvm;
+#include "llvm37/Analysis/AssumptionCache.h"
+#include "llvm37/Analysis/ScalarEvolution.h"
+#include "llvm37/Analysis/TargetLibraryInfo.h"
+#include "llvm37/Analysis/TargetTransformInfo.h"
+#include "llvm37/Analysis/ValueTracking.h"
+#include "llvm37/IR/Dominators.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/PatternMatch.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Transforms/Scalar.h"
+#include "llvm37/Transforms/Utils/Local.h"
+using namespace llvm37;
 using namespace PatternMatch;
 
 #define DEBUG_TYPE "nary-reassociate"
@@ -197,7 +197,7 @@ INITIALIZE_PASS_DEPENDENCY(TargetTransformInfoWrapperPass)
 INITIALIZE_PASS_END(NaryReassociate, "nary-reassociate", "Nary reassociation",
                     false, false)
 
-FunctionPass *llvm::createNaryReassociatePass() {
+FunctionPass *llvm37::createNaryReassociatePass() {
   return new NaryReassociate();
 }
 
@@ -285,7 +285,7 @@ Instruction *NaryReassociate::tryReassociate(Instruction *I) {
   case Instruction::GetElementPtr:
     return tryReassociateGEP(cast<GetElementPtrInst>(I));
   default:
-    llvm_unreachable("should be filtered out by isPotentiallyNaryReassociable");
+    llvm37_unreachable("should be filtered out by isPotentiallyNaryReassociable");
   }
 }
 

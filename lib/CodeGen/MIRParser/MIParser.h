@@ -1,6 +1,6 @@
 //===- MIParser.h - Machine Instructions Parser ---------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,13 +11,13 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_LIB_CODEGEN_MIRPARSER_MIPARSER_H
-#define LLVM_LIB_CODEGEN_MIRPARSER_MIPARSER_H
+#ifndef LLVM37_LIB_CODEGEN_MIRPARSER_MIPARSER_H
+#define LLVM37_LIB_CODEGEN_MIRPARSER_MIPARSER_H
 
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/StringRef.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/StringRef.h"
 
-namespace llvm {
+namespace llvm37 {
 
 class MachineBasicBlock;
 class MachineInstr;
@@ -46,6 +46,6 @@ bool parseNamedRegisterReference(unsigned &Reg, SourceMgr &SM,
                                  const SlotMapping &IRSlots,
                                  SMDiagnostic &Error);
 
-} // end namespace llvm
+} // end namespace llvm37
 
 #endif

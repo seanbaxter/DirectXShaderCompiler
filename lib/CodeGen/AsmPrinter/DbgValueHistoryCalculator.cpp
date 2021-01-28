@@ -1,6 +1,6 @@
-//===-- llvm/CodeGen/AsmPrinter/DbgValueHistoryCalculator.cpp -------------===//
+//===-- llvm37/CodeGen/AsmPrinter/DbgValueHistoryCalculator.cpp -------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -8,17 +8,17 @@
 //===----------------------------------------------------------------------===//
 
 #include "DbgValueHistoryCalculator.h"
-#include "llvm/ADT/BitVector.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/CodeGen/MachineBasicBlock.h"
-#include "llvm/CodeGen/MachineFunction.h"
-#include "llvm/IR/DebugInfo.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Target/TargetRegisterInfo.h"
+#include "llvm37/ADT/BitVector.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/CodeGen/MachineBasicBlock.h"
+#include "llvm37/CodeGen/MachineFunction.h"
+#include "llvm37/IR/DebugInfo.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Target/TargetRegisterInfo.h"
 #include <algorithm>
 #include <map>
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "dwarfdebug"
 
@@ -181,7 +181,7 @@ static void collectChangingRegs(const MachineFunction *MF,
   }
 }
 
-void llvm::calculateDbgValueHistory(const MachineFunction *MF,
+void llvm37::calculateDbgValueHistory(const MachineFunction *MF,
                                     const TargetRegisterInfo *TRI,
                                     DbgValueHistoryMap &Result) {
   BitVector ChangingRegs(TRI->getNumRegs());

@@ -1,12 +1,12 @@
 ; RUN: opt -S -loop-rotate < %s | FileCheck %s
 
-declare void @llvm.dbg.declare(metadata, metadata, metadata) nounwind readnone
-declare void @llvm.dbg.value(metadata, i64, metadata, metadata) nounwind readnone
+declare void @llvm37.dbg.declare(metadata, metadata, metadata) nounwind readnone
+declare void @llvm37.dbg.value(metadata, i64, metadata, metadata) nounwind readnone
 
 define i32 @tak(i32 %x, i32 %y, i32 %z) nounwind ssp {
 ; CHECK-LABEL: define i32 @tak(
 ; CHECK: entry
-; CHECK-NEXT: call void @llvm.dbg.value(metadata i32 %x
+; CHECK-NEXT: call void @llvm37.dbg.value(metadata i32 %x
 
 entry:
   br label %tailrecurse
@@ -15,9 +15,9 @@ tailrecurse:                                      ; preds = %if.then, %entry
   %x.tr = phi i32 [ %x, %entry ], [ %call, %if.then ]
   %y.tr = phi i32 [ %y, %entry ], [ %call9, %if.then ]
   %z.tr = phi i32 [ %z, %entry ], [ %call14, %if.then ]
-  tail call void @llvm.dbg.value(metadata i32 %x.tr, i64 0, metadata !6, metadata !DIExpression()), !dbg !7
-  tail call void @llvm.dbg.value(metadata i32 %y.tr, i64 0, metadata !8, metadata !DIExpression()), !dbg !9
-  tail call void @llvm.dbg.value(metadata i32 %z.tr, i64 0, metadata !10, metadata !DIExpression()), !dbg !11
+  tail call void @llvm37.dbg.value(metadata i32 %x.tr, i64 0, metadata !6, metadata !DIExpression()), !dbg !7
+  tail call void @llvm37.dbg.value(metadata i32 %y.tr, i64 0, metadata !8, metadata !DIExpression()), !dbg !9
+  tail call void @llvm37.dbg.value(metadata i32 %z.tr, i64 0, metadata !10, metadata !DIExpression()), !dbg !11
   %cmp = icmp slt i32 %y.tr, %x.tr, !dbg !12
   br i1 %cmp, label %if.then, label %if.end, !dbg !12
 
@@ -45,7 +45,7 @@ define void @FindFreeHorzSeg(i64 %startCol, i64 %row, i64* %rowStart) {
 ; body, even though it contains a debug intrinsic call.
 ; CHECK-LABEL: define void @FindFreeHorzSeg(
 ; CHECK: %dec = add
-; CHECK-NEXT: tail call void @llvm.dbg.value
+; CHECK-NEXT: tail call void @llvm37.dbg.value
 ; CHECK: %cmp = icmp
 ; CHECK: br i1 %cmp
 ; CHECK: phi i64 [ %{{[^,]*}}, %{{[^,]*}} ]
@@ -72,7 +72,7 @@ for.body:
 
 for.inc:
   %dec = add i64 %i.0, -1
-  tail call void @llvm.dbg.value(metadata i64 %dec, i64 0, metadata !DILocalVariable(tag: DW_TAG_auto_variable, scope: !0), metadata !DIExpression()), !dbg !DILocation(scope: !0)
+  tail call void @llvm37.dbg.value(metadata i64 %dec, i64 0, metadata !DILocalVariable(tag: DW_TAG_auto_variable, scope: !0), metadata !DIExpression()), !dbg !DILocation(scope: !0)
   br label %for.cond
 
 for.end:
@@ -81,11 +81,11 @@ for.end:
   ret void
 }
 
-!llvm.module.flags = !{!20}
-!llvm.dbg.sp = !{!0}
+!llvm37.module.flags = !{!20}
+!llvm37.dbg.sp = !{!0}
 
 !0 = !DISubprogram(name: "tak", line: 32, isLocal: false, isDefinition: true, virtualIndex: 6, flags: DIFlagPrototyped, isOptimized: false, file: !18, scope: !1, type: !3, function: i32 (i32, i32, i32)* @tak)
-!1 = !DIFile(filename: "/Volumes/Lalgate/cj/llvm/projects/llvm-test/SingleSource/Benchmarks/BenchmarkGame/recursive.c", directory: "/Volumes/Lalgate/cj/D/projects/llvm-test/SingleSource/Benchmarks/BenchmarkGame")
+!1 = !DIFile(filename: "/Volumes/Lalgate/cj/llvm37/projects/llvm37-test/SingleSource/Benchmarks/BenchmarkGame/recursive.c", directory: "/Volumes/Lalgate/cj/D/projects/llvm37-test/SingleSource/Benchmarks/BenchmarkGame")
 !2 = !DICompileUnit(language: DW_LANG_C99, producer: "clang version 2.9 (trunk 125492)", isOptimized: true, emissionKind: 0, file: !18, enums: !19, retainedTypes: !19)
 !3 = !DISubroutineType(types: !4)
 !4 = !{!5}
@@ -102,6 +102,6 @@ for.end:
 !15 = distinct !DILexicalBlock(line: 33, column: 14, file: !18, scope: !13)
 !16 = !DILocation(line: 36, column: 3, scope: !13)
 !17 = !DILocation(line: 37, column: 1, scope: !13)
-!18 = !DIFile(filename: "/Volumes/Lalgate/cj/llvm/projects/llvm-test/SingleSource/Benchmarks/BenchmarkGame/recursive.c", directory: "/Volumes/Lalgate/cj/D/projects/llvm-test/SingleSource/Benchmarks/BenchmarkGame")
+!18 = !DIFile(filename: "/Volumes/Lalgate/cj/llvm37/projects/llvm37-test/SingleSource/Benchmarks/BenchmarkGame/recursive.c", directory: "/Volumes/Lalgate/cj/D/projects/llvm37-test/SingleSource/Benchmarks/BenchmarkGame")
 !19 = !{i32 0}
 !20 = !{i32 1, !"Debug Info Version", i32 3}

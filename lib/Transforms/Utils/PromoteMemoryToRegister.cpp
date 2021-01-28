@@ -1,6 +1,6 @@
 //===- PromoteMemoryToRegister.cpp - Convert allocas to registers ---------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -15,31 +15,31 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Transforms/Utils/PromoteMemToReg.h"
-#include "llvm/ADT/ArrayRef.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/SmallPtrSet.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/Analysis/AliasSetTracker.h"
-#include "llvm/Analysis/InstructionSimplify.h"
-#include "llvm/Analysis/IteratedDominanceFrontier.h"
-#include "llvm/Analysis/ValueTracking.h"
-#include "llvm/IR/CFG.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/DIBuilder.h"
-#include "llvm/IR/DebugInfo.h"
-#include "llvm/IR/DerivedTypes.h"
-#include "llvm/IR/Dominators.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/IR/Metadata.h"
-#include "llvm/IR/Module.h"
-#include "llvm/Transforms/Utils/Local.h"
+#include "llvm37/Transforms/Utils/PromoteMemToReg.h"
+#include "llvm37/ADT/ArrayRef.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/SmallPtrSet.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/Analysis/AliasSetTracker.h"
+#include "llvm37/Analysis/InstructionSimplify.h"
+#include "llvm37/Analysis/IteratedDominanceFrontier.h"
+#include "llvm37/Analysis/ValueTracking.h"
+#include "llvm37/IR/CFG.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/DIBuilder.h"
+#include "llvm37/IR/DebugInfo.h"
+#include "llvm37/IR/DerivedTypes.h"
+#include "llvm37/IR/Dominators.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/IR/Metadata.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/Transforms/Utils/Local.h"
 #include <algorithm>
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "mem2reg"
 
@@ -48,7 +48,7 @@ STATISTIC(NumSingleStore,   "Number of alloca's promoted with a single store");
 STATISTIC(NumDeadAlloca,    "Number of dead alloca's removed");
 STATISTIC(NumPHIInsert,     "Number of PHI nodes inserted");
 
-bool llvm::isAllocaPromotable(const AllocaInst *AI) {
+bool llvm37::isAllocaPromotable(const AllocaInst *AI) {
   // FIXME: If the memory unit is of pointer or integer type, we can permit
   // assignments to subsections of the memory unit.
   unsigned AS = AI->getType()->getAddressSpace();
@@ -232,7 +232,7 @@ struct PromoteMem2Reg {
   /// An AliasSetTracker object to update.  If null, don't update it.
   AliasSetTracker *AST;
 
-  /// A cache of @llvm.assume intrinsics used by SimplifyInstruction.
+  /// A cache of @llvm37.assume intrinsics used by SimplifyInstruction.
   AssumptionCache *AC;
 
   /// Reverse mapping of Allocas.
@@ -449,7 +449,7 @@ static bool rewriteSingleStoreAlloca(AllocaInst *AI, AllocaInfo &Info,
 /// If we cannot promote this alloca (because it is read before it is written),
 /// return false.  This is necessary in cases where, due to control flow, the
 /// alloca is undefined only on some control flow paths.  e.g. code like
-/// this is correct in LLVM IR:
+/// this is correct in LLVM37 IR:
 ///  // A is an alloca with no stores so far
 ///  for (...) {
 ///    int t = *A;
@@ -1077,7 +1077,7 @@ NextIteration:
   goto NextIteration;
 }
 
-void llvm::PromoteMemToReg(ArrayRef<AllocaInst *> Allocas, DominatorTree &DT,
+void llvm37::PromoteMemToReg(ArrayRef<AllocaInst *> Allocas, DominatorTree &DT,
                            AliasSetTracker *AST, AssumptionCache *AC) {
   // If there is nothing to do, bail out...
   if (Allocas.empty())

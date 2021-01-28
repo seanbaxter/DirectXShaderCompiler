@@ -1,22 +1,22 @@
 //===-- MCInstPrinter.cpp - Convert an MCInst to target assembly syntax ---===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/MC/MCInstPrinter.h"
-#include "llvm/ADT/StringRef.h"
-#include "llvm/MC/MCAsmInfo.h"
-#include "llvm/MC/MCInstrInfo.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/Format.h"
-#include "llvm/Support/raw_ostream.h"
-using namespace llvm;
+#include "llvm37/MC/MCInstPrinter.h"
+#include "llvm37/ADT/StringRef.h"
+#include "llvm37/MC/MCAsmInfo.h"
+#include "llvm37/MC/MCInstrInfo.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/Format.h"
+#include "llvm37/Support/raw_ostream.h"
+using namespace llvm37;
 
-void llvm::dumpBytes(ArrayRef<uint8_t> bytes, raw_ostream &OS) {
+void llvm37::dumpBytes(ArrayRef<uint8_t> bytes, raw_ostream &OS) {
   static const char hex_rep[] = "0123456789abcdef";
   for (char i: bytes) {
     OS << hex_rep[(i & 0xF0) >> 4];
@@ -35,7 +35,7 @@ StringRef MCInstPrinter::getOpcodeName(unsigned Opcode) const {
 }
 
 void MCInstPrinter::printRegName(raw_ostream &OS, unsigned RegNo) const {
-  llvm_unreachable("Target should implement this");
+  llvm37_unreachable("Target should implement this");
 }
 
 void MCInstPrinter::printAnnotation(raw_ostream &OS, StringRef Annot) {
@@ -102,7 +102,7 @@ format_object<int64_t> MCInstPrinter::formatHex(int64_t Value) const {
         return format("%" PRIx64 "h", Value);
     }
   }
-  llvm_unreachable("unsupported print style");
+  llvm37_unreachable("unsupported print style");
 }
 
 format_object<uint64_t> MCInstPrinter::formatHex(uint64_t Value) const {
@@ -115,5 +115,5 @@ format_object<uint64_t> MCInstPrinter::formatHex(uint64_t Value) const {
     else
       return format("%" PRIx64 "h", Value);
   }
-  llvm_unreachable("unsupported print style");
+  llvm37_unreachable("unsupported print style");
 }

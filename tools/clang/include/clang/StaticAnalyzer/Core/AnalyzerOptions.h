@@ -1,6 +1,6 @@
 //===--- AnalyzerOptions.h - Analysis Engine Options ------------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -12,13 +12,13 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_STATICANALYZER_CORE_ANALYZEROPTIONS_H
-#define LLVM_CLANG_STATICANALYZER_CORE_ANALYZEROPTIONS_H
+#ifndef LLVM37_CLANG_STATICANALYZER_CORE_ANALYZEROPTIONS_H
+#define LLVM37_CLANG_STATICANALYZER_CORE_ANALYZEROPTIONS_H
 
 #include "clang/Basic/LLVM.h"
-#include "llvm/ADT/IntrusiveRefCntPtr.h"
-#include "llvm/ADT/Optional.h"
-#include "llvm/ADT/StringMap.h"
+#include "llvm37/ADT/IntrusiveRefCntPtr.h"
+#include "llvm37/ADT/Optional.h"
+#include "llvm37/ADT/StringMap.h"
 #include <string>
 #include <vector>
 
@@ -123,7 +123,7 @@ enum IPAKind {
 
 class AnalyzerOptions : public RefCountedBase<AnalyzerOptions> {
 public:
-  typedef llvm::StringMap<std::string> ConfigTable;
+  typedef llvm37::StringMap<std::string> ConfigTable;
 
   /// \brief Pair of checker name and enable/disable.
   std::vector<std::pair<std::string, bool> > CheckersControlList;

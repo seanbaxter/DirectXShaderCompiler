@@ -1,6 +1,6 @@
 //===------- SpirvEmitter.h - SPIR-V Binary Code Emitter --------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,8 +11,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_LIB_SPIRV_SPIRVEMITTER_H
-#define LLVM_CLANG_LIB_SPIRV_SPIRVEMITTER_H
+#ifndef LLVM37_CLANG_LIB_SPIRV_SPIRVEMITTER_H
+#define LLVM37_CLANG_LIB_SPIRV_SPIRVEMITTER_H
 
 #include <stack>
 #include <string>
@@ -31,7 +31,7 @@
 #include "clang/SPIRV/FeatureManager.h"
 #include "clang/SPIRV/SpirvBuilder.h"
 #include "clang/SPIRV/SpirvContext.h"
-#include "llvm/ADT/STLExtras.h"
+#include "llvm37/ADT/STLExtras.h"
 
 #include "DeclResultIdMapper.h"
 
@@ -60,7 +60,7 @@ public:
   RichDebugInfo *getOrCreateRichDebugInfo(const SourceLocation &loc);
 
   void doDecl(const Decl *decl);
-  void doStmt(const Stmt *stmt, llvm::ArrayRef<const Attr *> attrs = {});
+  void doStmt(const Stmt *stmt, llvm37::ArrayRef<const Attr *> attrs = {});
   SpirvInstruction *doExpr(const Expr *expr);
 
   /// Processes the given expression and emits SPIR-V instructions. If the
@@ -89,13 +89,13 @@ private:
   void doBreakStmt(const BreakStmt *stmt);
   void doDiscardStmt(const DiscardStmt *stmt);
   inline void doDeclStmt(const DeclStmt *stmt);
-  void doForStmt(const ForStmt *, llvm::ArrayRef<const Attr *> attrs = {});
-  void doIfStmt(const IfStmt *ifStmt, llvm::ArrayRef<const Attr *> attrs = {});
+  void doForStmt(const ForStmt *, llvm37::ArrayRef<const Attr *> attrs = {});
+  void doIfStmt(const IfStmt *ifStmt, llvm37::ArrayRef<const Attr *> attrs = {});
   void doReturnStmt(const ReturnStmt *stmt);
   void doSwitchStmt(const SwitchStmt *stmt,
-                    llvm::ArrayRef<const Attr *> attrs = {});
-  void doWhileStmt(const WhileStmt *, llvm::ArrayRef<const Attr *> attrs = {});
-  void doDoStmt(const DoStmt *, llvm::ArrayRef<const Attr *> attrs = {});
+                    llvm37::ArrayRef<const Attr *> attrs = {});
+  void doWhileStmt(const WhileStmt *, llvm37::ArrayRef<const Attr *> attrs = {});
+  void doDoStmt(const DoStmt *, llvm37::ArrayRef<const Attr *> attrs = {});
   void doContinueStmt(const ContinueStmt *);
 
   SpirvInstruction *doArraySubscriptExpr(const ArraySubscriptExpr *expr);
@@ -280,12 +280,12 @@ private:
   /// Emit instructions for assigning to the given mesh out attribute.
   void assignToMSOutAttribute(
       const DeclaratorDecl *decl, SpirvInstruction *value,
-      const llvm::SmallVector<SpirvInstruction *, 4> &indices);
+      const llvm37::SmallVector<SpirvInstruction *, 4> &indices);
 
   /// Emit instructions for assigning to the given mesh out indices object.
   void
   assignToMSOutIndices(const DeclaratorDecl *decl, SpirvInstruction *value,
-                       const llvm::SmallVector<SpirvInstruction *, 4> &indices);
+                       const llvm37::SmallVector<SpirvInstruction *, 4> &indices);
 
   /// Processes each vector within the given matrix by calling actOnEachVector.
   /// matrixVal should be the loaded value of the matrix. actOnEachVector takes
@@ -293,7 +293,7 @@ private:
   /// the value. It returns the <result-id> of the processed vector.
   SpirvInstruction *processEachVectorInMatrix(
       const Expr *matrix, SpirvInstruction *matrixVal,
-      llvm::function_ref<SpirvInstruction *(uint32_t, QualType,
+      llvm37::function_ref<SpirvInstruction *(uint32_t, QualType,
                                             SpirvInstruction *)>
           actOnEachVector,
       SourceLocation loc = {});
@@ -312,7 +312,7 @@ private:
   /// Creates a temporary local variable in the current function of the given
   /// varType and varName. Initializes the variable with the given initValue.
   /// Returns the instruction pointer for the variable.
-  SpirvVariable *createTemporaryVar(QualType varType, llvm::StringRef varName,
+  SpirvVariable *createTemporaryVar(QualType varType, llvm37::StringRef varName,
                                     SpirvInstruction *initValue,
                                     SourceLocation loc);
 
@@ -322,8 +322,8 @@ private:
   /// expression.
   const Expr *
   collectArrayStructIndices(const Expr *expr, bool rawIndex,
-                            llvm::SmallVectorImpl<uint32_t> *rawIndices,
-                            llvm::SmallVectorImpl<SpirvInstruction *> *indices,
+                            llvm37::SmallVectorImpl<uint32_t> *rawIndices,
+                            llvm37::SmallVectorImpl<SpirvInstruction *> *indices,
                             bool *isMSOutAttribute = nullptr);
 
   /// Creates an access chain to index into the given SPIR-V evaluation result
@@ -331,7 +331,7 @@ private:
   SpirvInstruction *
   turnIntoElementPtr(QualType baseType, SpirvInstruction *base,
                      QualType elemType,
-                     const llvm::SmallVector<SpirvInstruction *, 4> &indices,
+                     const llvm37::SmallVector<SpirvInstruction *, 4> &indices,
                      SourceLocation loc);
 
 private:
@@ -625,12 +625,12 @@ private:
 
   /// Translates the given frontend APInt into its SPIR-V equivalent for the
   /// given targetType.
-  SpirvConstant *translateAPInt(const llvm::APInt &intValue,
+  SpirvConstant *translateAPInt(const llvm37::APInt &intValue,
                                 QualType targetType);
 
   /// Translates the given frontend APFloat into its SPIR-V equivalent for the
   /// given targetType.
-  SpirvConstant *translateAPFloat(llvm::APFloat floatValue,
+  SpirvConstant *translateAPFloat(llvm37::APFloat floatValue,
                                   QualType targetType);
 
   /// Tries to evaluate the given Expr as a constant and returns the <result-id>
@@ -640,12 +640,12 @@ private:
   /// Tries to evaluate the given APFloat as a 32-bit float. If the evaluation
   /// can be performed without loss, it returns the <result-id> of the SPIR-V
   /// constant for that value. Returns zero otherwise.
-  SpirvConstant *tryToEvaluateAsFloat32(const llvm::APFloat &);
+  SpirvConstant *tryToEvaluateAsFloat32(const llvm37::APFloat &);
 
   /// Tries to evaluate the given APInt as a 32-bit integer. If the evaluation
   /// can be performed without loss, it returns the <result-id> of the SPIR-V
   /// constant for that value.
-  SpirvConstant *tryToEvaluateAsInt32(const llvm::APInt &, bool isSigned);
+  SpirvConstant *tryToEvaluateAsInt32(const llvm37::APInt &, bool isSigned);
 
   /// Returns true iff the given expression is a literal integer that cannot be
   /// represented in a 32-bit integer type or a literal float that cannot be
@@ -921,7 +921,7 @@ private:
   /// This method handles AssocCounter#3 and AssocCounter#4.
   const CounterVarFields *
   getIntermediateACSBufferCounter(const Expr *expr,
-                                  llvm::SmallVector<uint32_t, 4> *indices);
+                                  llvm37::SmallVector<uint32_t, 4> *indices);
 
   /// Gets or creates an ImplicitParamDecl to represent the implicit object
   /// parameter of the given method.
@@ -1076,7 +1076,7 @@ private:
 
   /// \brief Entry function name, derived from the command line
   /// and should be const.
-  const llvm::StringRef entryFunctionName;
+  const llvm37::StringRef entryFunctionName;
 
   /// \brief Structure to maintain record of all entry functions and any
   /// reachable functions.
@@ -1101,7 +1101,7 @@ private:
 
   /// \brief A map of funcDecl to its FunctionInfo. Consists of all entry
   /// functions followed by all reachable functions from the entry functions.
-  llvm::DenseMap<const DeclaratorDecl *, FunctionInfo *> functionInfoMap;
+  llvm37::DenseMap<const DeclaratorDecl *, FunctionInfo *> functionInfoMap;
 
   /// A queue of FunctionInfo reachable from all the entry functions.
   std::vector<const FunctionInfo *> workQueue;
@@ -1151,11 +1151,11 @@ private:
   /// DeclResultIdMapper.
   ///
   /// Note: legalization specific code
-  llvm::DenseMap<const CXXMethodDecl *, const ImplicitParamDecl *> thisDecls;
+  llvm37::DenseMap<const CXXMethodDecl *, const ImplicitParamDecl *> thisDecls;
 
   /// Global variables that should be initialized once at the begining of the
   /// entry function.
-  llvm::SmallVector<const VarDecl *, 4> toInitGloalVars;
+  llvm37::SmallVector<const VarDecl *, 4> toInitGloalVars;
 
   /// For loops, while loops, and switch statements may encounter "break"
   /// statements that alter their control flow. At any point the break statement
@@ -1180,17 +1180,17 @@ private:
   std::stack<SpirvBasicBlock *> continueStack;
 
   /// Maps a given statement to the basic block that is associated with it.
-  llvm::DenseMap<const Stmt *, SpirvBasicBlock *> stmtBasicBlock;
+  llvm37::DenseMap<const Stmt *, SpirvBasicBlock *> stmtBasicBlock;
 
   /// Maintains mapping from a type to SPIR-V variable along with SPIR-V
   /// instruction for id of location decoration Used for raytracing stage
   /// variables of storage class RayPayloadNV, CallableDataNV and
   /// HitAttributeNV.
-  llvm::SmallDenseMap<QualType,
+  llvm37::SmallDenseMap<QualType,
                       std::pair<SpirvInstruction *, SpirvInstruction *>, 4>
       rayPayloadMap;
-  llvm::SmallDenseMap<QualType, SpirvInstruction *, 4> hitAttributeMap;
-  llvm::SmallDenseMap<QualType,
+  llvm37::SmallDenseMap<QualType, SpirvInstruction *, 4> hitAttributeMap;
+  llvm37::SmallDenseMap<QualType,
                       std::pair<SpirvInstruction *, SpirvInstruction *>, 4>
       callDataMap;
 

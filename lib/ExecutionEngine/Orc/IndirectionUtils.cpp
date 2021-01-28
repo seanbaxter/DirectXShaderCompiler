@@ -1,22 +1,22 @@
 //===---- IndirectionUtils.cpp - Utilities for call indirection in Orc ----===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/Triple.h"
-#include "llvm/ExecutionEngine/Orc/IndirectionUtils.h"
-#include "llvm/IR/CallSite.h"
-#include "llvm/IR/IRBuilder.h"
-#include "llvm/Transforms/Utils/Cloning.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/Triple.h"
+#include "llvm37/ExecutionEngine/Orc/IndirectionUtils.h"
+#include "llvm37/IR/CallSite.h"
+#include "llvm37/IR/IRBuilder.h"
+#include "llvm37/Transforms/Utils/Cloning.h"
 #include <set>
 #include <sstream>
 
-namespace llvm {
+namespace llvm37 {
 namespace orc {
 
 Constant* createIRTypedAddress(FunctionType &FT, TargetAddress Addr) {
@@ -178,4 +178,4 @@ void moveGlobalVariableInitializer(GlobalVariable &OrigGV,
 }
 
 } // End namespace orc.
-} // End namespace llvm.
+} // End namespace llvm37.

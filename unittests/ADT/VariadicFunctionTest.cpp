@@ -1,6 +1,6 @@
 //===----------- VariadicFunctionTest.cpp - VariadicFunction unit tests ---===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -8,10 +8,10 @@
 //===----------------------------------------------------------------------===//
 
 #include "gtest/gtest.h"
-#include "llvm/ADT/ArrayRef.h"
-#include "llvm/ADT/VariadicFunction.h"
+#include "llvm37/ADT/ArrayRef.h"
+#include "llvm37/ADT/VariadicFunction.h"
 
-using namespace llvm;
+using namespace llvm37;
 namespace {
 
 // Defines a variadic function StringCat() to join strings.

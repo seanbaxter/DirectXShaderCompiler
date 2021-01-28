@@ -1,7 +1,7 @@
 // Test that function entry counts are set correctly.
 
-// RUN: llvm-profdata merge %S/Inputs/func-entry.proftext -o %t.profdata
-// RUN: %clang %s -o - -mllvm -disable-llvm-optzns -emit-llvm -S -fprofile-instr-use=%t.profdata | FileCheck %s
+// RUN: llvm37-profdata merge %S/Inputs/func-entry.proftext -o %t.profdata
+// RUN: %clang %s -o - -mllvm37 -disable-llvm37-optzns -emit-llvm37 -S -fprofile-instr-use=%t.profdata | FileCheck %s
 
 void foo(void);
 

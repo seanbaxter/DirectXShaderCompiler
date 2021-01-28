@@ -107,7 +107,7 @@ entry:
   %conv = zext i8 %value1 to i32
   %sub = add nsw i32 %conv, -1
   %conv1 = sitofp i32 %sub to float
-  %0 = tail call float @llvm.pow.f32(float 0x3FF028F5C0000000, float %conv1)
+  %0 = tail call float @llvm37.pow.f32(float 0x3FF028F5C0000000, float %conv1)
   %mul = fmul float %0, 2.620000e+03
   %conv2 = sitofp i32 %response to float
   %sub3 = fsub float %conv2, %mul
@@ -120,7 +120,7 @@ entry:
   %conv = zext i8 %value1 to i32
   %sub = add nsw i32 %conv, -1
   %conv1 = sitofp i32 %sub to float
-  %0 = tail call float @llvm.pow.f32(float 0x3FF028F5C0000000, float %conv1)
+  %0 = tail call float @llvm37.pow.f32(float 0x3FF028F5C0000000, float %conv1)
   %mul = fmul float %0, 2.620000e+03
   %conv2 = sitofp i32 %response to float
   %sub3 = fsub float %conv2, %mul
@@ -130,7 +130,7 @@ entry:
 
 declare float @fabsf(float) optsize minsize
 
-declare float @llvm.pow.f32(float, float) optsize minsize
+declare float @llvm37.pow.f32(float, float) optsize minsize
 
 attributes #0 = { minsize optsize }
 attributes #1 = { minsize optsize "use-soft-float"="true" }

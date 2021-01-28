@@ -1,6 +1,6 @@
 //===- FlattenCFGPass.cpp - CFG Flatten Pass ----------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,12 +11,12 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Transforms/Scalar.h"
-#include "llvm/Analysis/AliasAnalysis.h"
-#include "llvm/IR/CFG.h"
-#include "llvm/Pass.h"
-#include "llvm/Transforms/Utils/Local.h"
-using namespace llvm;
+#include "llvm37/Transforms/Scalar.h"
+#include "llvm37/Analysis/AliasAnalysis.h"
+#include "llvm37/IR/CFG.h"
+#include "llvm37/Pass.h"
+#include "llvm37/Transforms/Utils/Local.h"
+using namespace llvm37;
 
 #define DEBUG_TYPE "flattencfg"
 
@@ -46,7 +46,7 @@ INITIALIZE_PASS_END(FlattenCFGPass, "flattencfg", "Flatten the CFG", false,
                     false)
 
 // Public interface to the FlattenCFG pass
-FunctionPass *llvm::createFlattenCFGPass() { return new FlattenCFGPass(); }
+FunctionPass *llvm37::createFlattenCFGPass() { return new FlattenCFGPass(); }
 
 /// iterativelyFlattenCFG - Call FlattenCFG on all the blocks in the function,
 /// iterating until no more changes are made.

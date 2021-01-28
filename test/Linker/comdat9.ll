@@ -1,4 +1,4 @@
-; RUN: llvm-link %s -S -o - | FileCheck %s
+; RUN: llvm37-link %s -S -o - | FileCheck %s
 
 $c = comdat any
 @a = alias void ()* @f

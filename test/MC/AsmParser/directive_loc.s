@@ -1,5 +1,5 @@
-# RUN: llvm-mc -triple i386-unknown-unknown %s | FileCheck %s
-# RUN: llvm-mc -triple i386-unknown-unknown %s -filetype=null
+# RUN: llvm37-mc -triple i386-unknown-unknown %s | FileCheck %s
+# RUN: llvm37-mc -triple i386-unknown-unknown %s -filetype=null
 
         .file 1 "hello"
 # CHECK: .file 1 "hello"

@@ -1,5 +1,5 @@
 ; Test function attributes
-; RUN: llvm-as < %s | llvm-dis | FileCheck %s
+; RUN: llvm37-as < %s | llvm37-dis | FileCheck %s
 ; RUN: verify-uselistorder %s
 
 ; CHECK: define void @fn1() #0

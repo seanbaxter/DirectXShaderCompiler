@@ -1,4 +1,4 @@
-# RUN: llvm-mc -triple x86_64-pc-win32 %s | FileCheck %s
+# RUN: llvm37-mc -triple x86_64-pc-win32 %s | FileCheck %s
 
     .text
     .globl func

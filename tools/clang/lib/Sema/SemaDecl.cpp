@@ -1,6 +1,6 @@
 //===--- SemaDecl.cpp - Semantic Analysis for Declarations ----------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -43,8 +43,8 @@
 #include "clang/Sema/Scope.h"
 #include "clang/Sema/ScopeInfo.h"
 #include "clang/Sema/Template.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/ADT/Triple.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/ADT/Triple.h"
 #include <algorithm>
 #include <cstring>
 #include <functional>
@@ -329,7 +329,7 @@ ParsedType Sema::getTypeName(const IdentifierInfo &II, SourceLocation NameLoc,
     if (CorrectedII) {
       TypoCorrection Correction = CorrectTypo(
           Result.getLookupNameInfo(), Kind, S, SS,
-          llvm::make_unique<TypeNameValidatorCCC>(true, isClassName),
+          llvm37::make_unique<TypeNameValidatorCCC>(true, isClassName),
           CTK_ErrorRecovery);
       IdentifierInfo *NewII = Correction.getCorrectionAsIdentifierInfo();
       TemplateTy Template;
@@ -469,7 +469,7 @@ synthesizeCurrentNestedNameSpecifier(ASTContext &Context, DeclContext *DC) {
     else if (isa<TranslationUnitDecl>(DC))
       return NestedNameSpecifier::GlobalSpecifier(Context);
   }
-  llvm_unreachable("something isn't in TU scope?");
+  llvm37_unreachable("something isn't in TU scope?");
 }
 
 ParsedType Sema::ActOnDelayedDefaultTemplateArg(const IdentifierInfo &II,
@@ -566,7 +566,7 @@ void Sema::DiagnoseUnknownTypeName(IdentifierInfo *&II,
   // results, in case we have something that we can suggest.
   if (TypoCorrection Corrected =
           CorrectTypo(DeclarationNameInfo(II, IILoc), LookupOrdinaryName, S, SS,
-                      llvm::make_unique<TypeNameValidatorCCC>(
+                      llvm37::make_unique<TypeNameValidatorCCC>(
                           false, false, AllowClassTemplates),
                       CTK_ErrorRecovery)) {
     if (Corrected.isKeyword()) {
@@ -586,7 +586,7 @@ void Sema::DiagnoseUnknownTypeName(IdentifierInfo *&II,
                      PDiag(diag::err_unknown_nested_typename_suggest)
                        << II << DC << DroppedSpecifier << SS->getRange());
       } else {
-        llvm_unreachable("could not have corrected a typo here");
+        llvm37_unreachable("could not have corrected a typo here");
       }
 
       CXXScopeSpec tmpSS;
@@ -1645,7 +1645,7 @@ ObjCInterfaceDecl *Sema::getObjCInterfaceDecl(IdentifierInfo *&Id,
     // find an Objective-C class name.
     if (TypoCorrection C = CorrectTypo(
             DeclarationNameInfo(Id, IdLoc), LookupOrdinaryName, TUScope, nullptr,
-            llvm::make_unique<DeclFilterCCC<ObjCInterfaceDecl>>(),
+            llvm37::make_unique<DeclFilterCCC<ObjCInterfaceDecl>>(),
             CTK_ErrorRecovery)) {
       diagnoseTypo(C, PDiag(diag::err_undef_interface_suggest) << Id);
       IDecl = C.getCorrectionDeclAs<ObjCInterfaceDecl>();
@@ -1719,7 +1719,7 @@ static StringRef getHeaderName(ASTContext::GetBuiltinTypeError Error) {
   case ASTContext::GE_Missing_ucontext:
     return "ucontext.h";
   }
-  llvm_unreachable("unhandled error kind");
+  llvm37_unreachable("unhandled error kind");
 }
 
 /// LazilyCreateBuiltin - The specified Builtin-ID was first used at
@@ -3655,7 +3655,7 @@ void Sema::setTagNameForLinkagePurposes(TagDecl *TagFromDeclSpec,
     SourceLocation tagLoc = TagFromDeclSpec->getInnerLocStart();
     tagLoc = getLocForEndOfToken(tagLoc);
 
-    llvm::SmallString<40> textToInsert;
+    llvm37::SmallString<40> textToInsert;
     textToInsert += ' ';
     textToInsert += NewTD->getIdentifier()->getName();
     Diag(tagLoc, diag::note_typedef_changes_linkage)
@@ -3680,7 +3680,7 @@ static unsigned GetDiagnosticTypeSpecifierID(DeclSpec::TST T) {
   case DeclSpec::TST_enum:
     return 4;
   default:
-    llvm_unreachable("unexpected type specifier");
+    llvm37_unreachable("unexpected type specifier");
   }
 }
 
@@ -4050,7 +4050,7 @@ StorageClassSpecToVarDeclStorageClass(const DeclSpec &DS) {
   case DeclSpec::SCS_mutable:        // Fall through.
   case DeclSpec::SCS_typedef:        return SC_None;
   }
-  llvm_unreachable("unknown storage class specifier");
+  llvm37_unreachable("unknown storage class specifier");
 }
 
 static SourceLocation findDefaultInitializer(const CXXRecordDecl *Record) {
@@ -4064,7 +4064,7 @@ static SourceLocation findDefaultInitializer(const CXXRecordDecl *Record) {
       return FD->getLocation();
   }
 
-  llvm_unreachable("couldn't find in-class initializer");
+  llvm37_unreachable("couldn't find in-class initializer");
 }
 
 static void checkDuplicateDefaultInit(Sema &S, CXXRecordDecl *Parent,
@@ -4501,7 +4501,7 @@ Sema::GetNameFromUnqualifiedId(const UnqualifiedId &Name) {
 
   } // switch (Name.getKind())
 
-  llvm_unreachable("Unknown name kind");
+  llvm37_unreachable("Unknown name kind");
 }
 
 static QualType getCoreType(QualType Ty) {
@@ -4989,7 +4989,7 @@ NamedDecl *Sema::HandleDeclarator(Scope *S, Declarator &D,
 static QualType TryToFixInvalidVariablyModifiedType(QualType T,
                                                     ASTContext &Context,
                                                     bool &SizeIsNegative,
-                                                    llvm::APSInt &Oversized) {
+                                                    llvm37::APSInt &Oversized) {
   // This method tries to turn a variable array into a constant
   // array even when the size isn't an ICE.  This is necessary
   // for compatibility with code that depends on gcc's buggy
@@ -5029,7 +5029,7 @@ static QualType TryToFixInvalidVariablyModifiedType(QualType T,
   if (VLATy->getElementType()->isVariablyModifiedType())
     return QualType();
 
-  llvm::APSInt Res;
+  llvm37::APSInt Res;
   if (!VLATy->getSizeExpr() ||
       !VLATy->getSizeExpr()->EvaluateAsInt(Res, Context))
     return QualType();
@@ -5089,7 +5089,7 @@ static TypeSourceInfo*
 TryToFixInvalidVariablyModifiedTypeSourceInfo(TypeSourceInfo *TInfo,
                                               ASTContext &Context,
                                               bool &SizeIsNegative,
-                                              llvm::APSInt &Oversized) {
+                                              llvm37::APSInt &Oversized) {
   QualType FixedTy
     = TryToFixInvalidVariablyModifiedType(TInfo->getType(), Context,
                                           SizeIsNegative, Oversized);
@@ -5196,7 +5196,7 @@ Sema::CheckTypedefForVariablyModifiedType(Scope *S, TypedefNameDecl *NewTD) {
 
     if (S->getFnParent() == nullptr) {
       bool SizeIsNegative;
-      llvm::APSInt Oversized;
+      llvm37::APSInt Oversized;
       TypeSourceInfo *FixedTInfo =
         TryToFixInvalidVariablyModifiedTypeSourceInfo(TInfo, Context,
                                                       SizeIsNegative,
@@ -5573,7 +5573,7 @@ static bool shouldConsiderLinkage(const VarDecl *VD) {
     return true;
   if (DC->isRecord())
     return false;
-  llvm_unreachable("Unexpected context");
+  llvm37_unreachable("Unexpected context");
 }
 
 static bool shouldConsiderLinkage(const FunctionDecl *FD) {
@@ -5582,7 +5582,7 @@ static bool shouldConsiderLinkage(const FunctionDecl *FD) {
     return true;
   if (DC->isRecord())
     return false;
-  llvm_unreachable("Unexpected context");
+  llvm37_unreachable("Unexpected context");
 }
 
 static bool hasParsedAttr(Scope *S, const AttributeList *AttrList,
@@ -5644,7 +5644,7 @@ static bool isDeclTUScopedExternallyVisible(const Decl *D) {
     return (VD->getDeclContext()->isTranslationUnit() || VD->isExternC()) &&
            VD->hasExternalFormalLinkage();
 
-  llvm_unreachable("Unknown type of decl!");
+  llvm37_unreachable("Unknown type of decl!");
 }
 
 NamedDecl *
@@ -5805,9 +5805,9 @@ Sema::ActOnVariableDeclarator(Scope *S, Declarator &D, DeclContext *DC,
           << FixItHint::CreateRemoval(D.getDeclSpec().getStorageClassSpecLoc());
         break;
       case SC_PrivateExtern:
-        llvm_unreachable("C storage class in c++!");
+        llvm37_unreachable("C storage class in c++!");
       case SC_OpenCLWorkGroupLocal:
-        llvm_unreachable("OpenCL storage class in c++!");
+        llvm37_unreachable("OpenCL storage class in c++!");
       }
     }    
 
@@ -6077,7 +6077,7 @@ Sema::ActOnVariableDeclarator(Scope *S, Declarator &D, DeclContext *DC,
                                                 Context, Label, 0));
   } else if (!ExtnameUndeclaredIdentifiers.empty() &&
              isDeclTUScopedExternallyVisible(NewVD)) {
-    llvm::DenseMap<IdentifierInfo*,AsmLabelAttr*>::iterator I =
+    llvm37::DenseMap<IdentifierInfo*,AsmLabelAttr*>::iterator I =
       ExtnameUndeclaredIdentifiers.find(NewVD->getIdentifier());
     if (I != ExtnameUndeclaredIdentifiers.end()) {
       NewVD->addAttr(I->second);
@@ -6477,7 +6477,7 @@ void Sema::CheckVariableDeclarationType(VarDecl *NewVD) {
   if ((isVM && NewVD->hasLinkage()) ||
       (T->isVariableArrayType() && NewVD->hasGlobalStorage())) {
     bool SizeIsNegative;
-    llvm::APSInt Oversized;
+    llvm37::APSInt Oversized;
     TypeSourceInfo *FixedTInfo =
       TryToFixInvalidVariablyModifiedTypeSourceInfo(TInfo, Context,
                                                     SizeIsNegative, Oversized);
@@ -6788,7 +6788,7 @@ static NamedDecl *DiagnoseInvalidRedeclaration(
   } else if ((Correction = SemaRef.CorrectTypo(
                   Prev.getLookupNameInfo(), Prev.getLookupKind(), S,
                   &ExtraArgs.D.getCXXScopeSpec(),
-                  llvm::make_unique<DifferentNameValidatorCCC>(
+                  llvm37::make_unique<DifferentNameValidatorCCC>(
                       SemaRef.Context, NewFD, MD ? MD->getParent() : nullptr),
                   Sema::CTK_ErrorRecovery, IsLocalFriend ? nullptr : NewDC))) {
     // Set up everything for the call to ActOnFunctionDeclarator
@@ -6889,7 +6889,7 @@ static NamedDecl *DiagnoseInvalidRedeclaration(
 
 static StorageClass getFunctionStorageClass(Sema &SemaRef, Declarator &D) {
   switch (D.getDeclSpec().getStorageClassSpec()) {
-  default: llvm_unreachable("Unknown storage class!");
+  default: llvm37_unreachable("Unknown storage class!");
   case DeclSpec::SCS_auto:
   case DeclSpec::SCS_register:
   case DeclSpec::SCS_mutable:
@@ -7107,7 +7107,7 @@ static void checkIsValidOpenCLKernelParameter(
   Sema &S,
   Declarator &D,
   ParmVarDecl *Param,
-  llvm::SmallPtrSetImpl<const Type *> &ValidTypes) {
+  llvm37::SmallPtrSetImpl<const Type *> &ValidTypes) {
   QualType PT = Param->getType();
 
   // Cache the valid types we encounter to avoid rechecking structs that are
@@ -7613,7 +7613,7 @@ Sema::ActOnFunctionDeclarator(Scope *S, Declarator &D, DeclContext *DC,
                                                 SE->getString(), 0));
   } else if (!ExtnameUndeclaredIdentifiers.empty() &&
              isDeclTUScopedExternallyVisible(NewFD)) {
-    llvm::DenseMap<IdentifierInfo*,AsmLabelAttr*>::iterator I =
+    llvm37::DenseMap<IdentifierInfo*,AsmLabelAttr*>::iterator I =
       ExtnameUndeclaredIdentifiers.find(NewFD->getIdentifier());
     if (I != ExtnameUndeclaredIdentifiers.end()) {
       NewFD->addAttr(I->second);
@@ -8069,7 +8069,7 @@ Sema::ActOnFunctionDeclarator(Scope *S, Declarator &D, DeclContext *DC,
       D.setInvalidType();
     }
 
-    llvm::SmallPtrSet<const Type *, 16> ValidTypes;
+    llvm37::SmallPtrSet<const Type *, 16> ValidTypes;
     for (auto Param : NewFD->params())
       checkIsValidOpenCLKernelParameter(*this, D, Param, ValidTypes);
   }
@@ -8587,7 +8587,7 @@ namespace {
     bool isReferenceType;
 
     bool isInitList;
-    llvm::SmallVector<unsigned, 4> InitFieldIndex;
+    llvm37::SmallVector<unsigned, 4> InitFieldIndex;
   public:
     typedef EvaluatedExprVisitor<SelfReferenceChecker> Inherited;
 
@@ -8627,7 +8627,7 @@ namespace {
     // Returns true if MemberExpr is checked and no futher checking is needed.
     // Returns false if additional checking is required.
     bool CheckInitListMemberExpr(MemberExpr *E, bool CheckReference) {
-      llvm::SmallVector<FieldDecl*, 4> Fields;
+      llvm37::SmallVector<FieldDecl*, 4> Fields;
       Expr *Base = E;
       bool ReferenceField = false;
 
@@ -8652,7 +8652,7 @@ namespace {
         return true;
 
       // Convert FieldDecls to their index number.
-      llvm::SmallVector<unsigned, 4> UsedFieldIndex;
+      llvm37::SmallVector<unsigned, 4> UsedFieldIndex;
       for (auto I = Fields.rbegin(), E = Fields.rend(); I != E; ++I) {
         UsedFieldIndex.push_back((*I)->getFieldIndex());
       }
@@ -9709,7 +9709,7 @@ void Sema::ActOnCXXForRangeDecl(Decl *D) {
     Error = 4;
     break;
   case SC_OpenCLWorkGroupLocal:
-    llvm_unreachable("Unexpected storage class");
+    llvm37_unreachable("Unexpected storage class");
   }
   if (Error != -1) {
     Diag(VD->getOuterLocStart(), diag::err_for_range_storage_class)
@@ -10038,7 +10038,7 @@ Sema::FinalizeDeclaration(Decl *ThisDecl) {
     if (!MagicValueExpr) {
       continue;
     }
-    llvm::APSInt MagicValueInt;
+    llvm37::APSInt MagicValueInt;
     if (!MagicValueExpr->isIntegerConstantExpr(MagicValueInt, Context)) {
       Diag(I->getRange().getBegin(),
            diag::err_type_tag_for_datatype_not_ice)
@@ -10453,7 +10453,7 @@ void Sema::ActOnFinishKNRParamDeclarations(Scope *S, Declarator &D,
       --i;
       if (FTI.Params[i].Param == nullptr) {
         SmallString<256> Code;
-        llvm::raw_svector_ostream(Code)
+        llvm37::raw_svector_ostream(Code)
             << "  int " << FTI.Params[i].Ident->getName() << ";\n";
         Diag(FTI.Params[i].IdentLoc, diag::ext_param_not_declared)
             << FTI.Params[i].Ident
@@ -11155,7 +11155,7 @@ NamedDecl *Sema::ImplicitlyDefineFunction(SourceLocation Loc,
     if (S &&
         (Corrected = CorrectTypo(
              DeclarationNameInfo(&II, Loc), LookupOrdinaryName, S, nullptr,
-             llvm::make_unique<DeclFilterCCC<FunctionDecl>>(), CTK_NonError)))
+             llvm37::make_unique<DeclFilterCCC<FunctionDecl>>(), CTK_NonError)))
       diagnoseTypo(Corrected, PDiag(diag::note_function_suggestion),
                    /*ErrorRecovery*/false);
   }
@@ -11257,7 +11257,7 @@ void Sema::AddKnownFunctionAttributes(FunctionDecl *FD) {
 
     // Mark const if we don't care about errno and that is the only
     // thing preventing the function from being const. This allows
-    // IRgen to use LLVM intrinsics for such functions.
+    // IRgen to use LLVM37 intrinsics for such functions.
     if (!getLangOpts().MathErrno &&
         Context.BuiltinInfo.isConstWithoutErrno(BuiltinID)) {
       if (!FD->hasAttr<ConstAttr>())
@@ -11426,7 +11426,7 @@ static unsigned getRedeclDiagFromTagKind(TagTypeKind Tag) {
   case TTK_Struct: return 0;
   case TTK_Interface: return 1;
   case TTK_Class:  return 2;
-  default: llvm_unreachable("Invalid tag kind for redecl diagnostic!");
+  default: llvm37_unreachable("Invalid tag kind for redecl diagnostic!");
   }
 }
 
@@ -11566,7 +11566,7 @@ static FixItHint createFriendTagNNSFixIt(Sema &SemaRef, NamedDecl *ND, Scope *S,
   // Once we have all the namespaces, reverse them to go outermost first, and
   // build an NNS.
   SmallString<64> Insertion;
-  llvm::raw_svector_ostream OS(Insertion);
+  llvm37::raw_svector_ostream OS(Insertion);
   if (DC->isTranslationUnit())
     OS << "::";
   std::reverse(Namespaces.begin(), Namespaces.end());
@@ -11675,7 +11675,7 @@ Decl *Sema::ActOnTag(Scope *S, unsigned TagSpec, TagUseKind TUK,
   // Figure out the underlying type if this a enum declaration. We need to do
   // this early, because it's needed to detect if this is an incompatible
   // redeclaration.
-  llvm::PointerUnion<const Type*, TypeSourceInfo*> EnumUnderlying;
+  llvm37::PointerUnion<const Type*, TypeSourceInfo*> EnumUnderlying;
 
   if (Kind == TTK_Enum) {
     if (UnderlyingType.isInvalid() || (!UnderlyingType.get() && ScopedEnum))
@@ -12602,7 +12602,7 @@ ExprResult Sema::VerifyBitField(SourceLocation FieldLoc,
   if (BitWidth->isValueDependent() || BitWidth->isTypeDependent())
     return BitWidth;
 
-  llvm::APSInt Value;
+  llvm37::APSInt Value;
   ExprResult ICE = VerifyIntegerConstantExpression(BitWidth, &Value);
   if (ICE.isInvalid())
     return ICE;
@@ -12827,7 +12827,7 @@ FieldDecl *Sema::CheckFieldDecl(DeclarationName Name, QualType T,
   // than a variably modified type.
   if (!InvalidDecl && T->isVariablyModifiedType()) {
     bool SizeIsNegative;
-    llvm::APSInt Oversized;
+    llvm37::APSInt Oversized;
 
     TypeSourceInfo *FixedTInfo =
       TryToFixInvalidVariablyModifiedTypeSourceInfo(TInfo, Context,
@@ -13024,7 +13024,7 @@ bool Sema::CheckNontrivialField(FieldDecl *FD) {
 static ObjCIvarDecl::AccessControl
 TranslateIvarVisibility(tok::ObjCKeywordKind ivarVisibility) {
   switch (ivarVisibility) {
-  default: llvm_unreachable("Unknown visitibility kind");
+  default: llvm37_unreachable("Unknown visitibility kind");
   case tok::objc_private: return ObjCIvarDecl::Private;
   case tok::objc_public: return ObjCIvarDecl::Public;
   case tok::objc_protected: return ObjCIvarDecl::Protected;
@@ -13169,7 +13169,7 @@ void Sema::ActOnLastBitfield(SourceLocation DeclLoc,
       return;
   }
   // All conditions are met. Add a new bitfield to the tail end of ivars.
-  llvm::APInt Zero(Context.getTypeSize(Context.IntTy), 0);
+  llvm37::APInt Zero(Context.getTypeSize(Context.IntTy), 0);
   Expr * BW = IntegerLiteral::Create(Context, Zero, Context.IntTy, DeclLoc);
 
   Ivar = ObjCIvarDecl::Create(Context, cast<ObjCContainerDecl>(CurContext),
@@ -13599,7 +13599,7 @@ void Sema::ActOnFields(Scope *S, SourceLocation RecLoc, Decl *EnclosingDecl,
 /// \brief Determine whether the given integral value is representable within
 /// the given type T.
 static bool isRepresentableIntegerValue(ASTContext &Context,
-                                        llvm::APSInt &Value,
+                                        llvm37::APSInt &Value,
                                         QualType T) {
   assert(T->isIntegralType(Context) && "Integral type required!");
   unsigned BitWidth = Context.getIntWidth(T);
@@ -13643,7 +13643,7 @@ EnumConstantDecl *Sema::CheckEnumConstant(EnumDecl *Enum,
                                           IdentifierInfo *Id,
                                           Expr *Val) {
   unsigned IntWidth = Context.getTargetInfo().getIntWidth();
-  llvm::APSInt EnumVal(IntWidth);
+  llvm37::APSInt EnumVal(IntWidth);
   QualType EltTy;
 
   if (Val && DiagnoseUnexpandedParameterPack(Val, UPPC_EnumeratorValue))
@@ -13944,7 +13944,7 @@ struct DupKey {
     : val(val), isTombstoneOrEmptyKey(isTombstoneOrEmptyKey) {}
 };
 
-static DupKey GetDupKey(const llvm::APSInt& Val) {
+static DupKey GetDupKey(const llvm37::APSInt& Val) {
   return DupKey(Val.isSigned() ? Val.getSExtValue() : Val.getZExtValue(),
                 false);
 }
@@ -13979,8 +13979,8 @@ static void CheckForDuplicateEnumValues(Sema &S, ArrayRef<Decl *> Elements,
   typedef SmallVector<EnumConstantDecl *, 3> ECDVector;
   typedef SmallVector<ECDVector *, 3> DuplicatesVector;
 
-  typedef llvm::PointerUnion<EnumConstantDecl*, ECDVector*> DeclOrVector;
-  typedef llvm::DenseMap<DupKey, DeclOrVector, DenseMapInfoDupKey>
+  typedef llvm37::PointerUnion<EnumConstantDecl*, ECDVector*> DeclOrVector;
+  typedef llvm37::DenseMap<DupKey, DeclOrVector, DenseMapInfoDupKey>
           ValueToVectorMap;
 
   DuplicatesVector DupVector;
@@ -14072,16 +14072,16 @@ static void CheckForDuplicateEnumValues(Sema &S, ArrayRef<Decl *> Elements,
 }
 
 bool
-Sema::IsValueInFlagEnum(const EnumDecl *ED, const llvm::APInt &Val,
+Sema::IsValueInFlagEnum(const EnumDecl *ED, const llvm37::APInt &Val,
                         bool AllowMask) const {
   FlagEnumAttr *FEAttr = ED->getAttr<FlagEnumAttr>();
   assert(FEAttr && "looking for value in non-flag enum");
 
-  llvm::APInt FlagMask = ~FEAttr->getFlagBits();
+  llvm37::APInt FlagMask = ~FEAttr->getFlagBits();
   unsigned Width = FlagMask.getBitWidth();
 
   // We will try a zero-extended value for the regular check first.
-  llvm::APInt ExtVal = Val.zextOrSelf(Width);
+  llvm37::APInt ExtVal = Val.zextOrSelf(Width);
 
   // A value is in a flag enum if either its bits are a subset of the enum's
   // flag bits (the first condition) or we are allowing masks and the same is
@@ -14106,7 +14106,7 @@ Sema::IsValueInFlagEnum(const EnumDecl *ED, const llvm::APInt &Val,
     // detect that case and will get a false positive for it. In most cases,
     // though, it can be fixed by making it a signed type (e.g. ~0x1), so it may
     // be fine just to accept this as a warning.
-    ExtVal |= llvm::APInt::getHighBitsSet(Width, Width - Val.getBitWidth());
+    ExtVal |= llvm37::APInt::getHighBitsSet(Width, Width - Val.getBitWidth());
     if (!(FlagMask & ~ExtVal))
       return true;
   }
@@ -14157,7 +14157,7 @@ void Sema::ActOnEnumBody(SourceLocation EnumLoc, SourceLocation LBraceLoc,
       cast_or_null<EnumConstantDecl>(Elements[i]);
     if (!ECD) continue;  // Already issued a diagnostic.
 
-    const llvm::APSInt &InitVal = ECD->getInitVal();
+    const llvm37::APSInt &InitVal = ECD->getInitVal();
 
     // Keep track of the size of positive and negative values.
     if (InitVal.isUnsigned() || InitVal.isNonNegative())
@@ -14267,7 +14267,7 @@ void Sema::ActOnEnumBody(SourceLocation EnumLoc, SourceLocation LBraceLoc,
 
   FlagEnumAttr *FEAttr = Enum->getAttr<FlagEnumAttr>();
   if (FEAttr)
-    FEAttr->getFlagBits() = llvm::APInt(BestWidth, 0);
+    FEAttr->getFlagBits() = llvm37::APInt(BestWidth, 0);
 
   // Loop over all of the enumerator constants, changing their types to match
   // the type of the enum if needed. If we have a flag type, we also prepare the
@@ -14283,7 +14283,7 @@ void Sema::ActOnEnumBody(SourceLocation EnumLoc, SourceLocation LBraceLoc,
     // that X has type 'int', not 'unsigned'.
 
     // Determine whether the value fits into an int.
-    llvm::APSInt InitVal = ECD->getInitVal();
+    llvm37::APSInt InitVal = ECD->getInitVal();
 
     // If it fits into an integer type, force it.  Otherwise force it to match
     // the enum decl type.
@@ -14335,7 +14335,7 @@ flagbits:
     // Check to see if we have a constant with exactly one bit set. Note that x
     // & (x - 1) will be nonzero if and only if x has more than one bit set.
     if (FEAttr) {
-      llvm::APInt ExtVal = InitVal.zextOrSelf(BestWidth);
+      llvm37::APInt ExtVal = InitVal.zextOrSelf(BestWidth);
       if (ExtVal != 0 && !(ExtVal & (ExtVal - 1))) {
         FEAttr->getFlagBits() |= ExtVal;
       }
@@ -14347,7 +14347,7 @@ flagbits:
       EnumConstantDecl *ECD = cast_or_null<EnumConstantDecl>(D);
       if (!ECD) continue;  // Already issued a diagnostic.
 
-      llvm::APSInt InitVal = ECD->getInitVal();
+      llvm37::APSInt InitVal = ECD->getInitVal();
       if (InitVal != 0 && !IsValueInFlagEnum(Enum, InitVal, true))
         Diag(ECD->getLocation(), diag::warn_flag_enum_constant_out_of_range)
           << ECD << Enum;
@@ -14370,7 +14370,7 @@ Decl *Sema::ActOnFileScopeAsmDecl(Expr *expr,
                                   SourceLocation StartLoc,
                                   SourceLocation EndLoc) {
 #if 1 // HLSL Change
-  llvm_unreachable("HLSL parser does not produce file scope asm decl");
+  llvm37_unreachable("HLSL parser does not produce file scope asm decl");
 #else
   StringLiteral *AsmString = cast<StringLiteral>(expr);
 

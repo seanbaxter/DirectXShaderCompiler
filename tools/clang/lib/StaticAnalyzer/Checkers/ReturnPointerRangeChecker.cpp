@@ -1,6 +1,6 @@
 //== ReturnPointerRangeChecker.cpp ------------------------------*- C++ -*--==//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -80,7 +80,7 @@ void ReturnPointerRangeChecker::checkPreStmt(const ReturnStmt *RS,
     // reference is outside the range.
 
     // Generate a report for this bug.
-    auto report = llvm::make_unique<BugReport>(*BT, BT->getDescription(), N);
+    auto report = llvm37::make_unique<BugReport>(*BT, BT->getDescription(), N);
 
     report->addRange(RetE->getSourceRange());
     C.emitReport(std::move(report));

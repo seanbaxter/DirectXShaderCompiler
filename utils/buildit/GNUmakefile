@@ -1,5 +1,5 @@
-# LLVM LOCAL file build machinery
-# LLVM Compiler Makefile for use by buildit.  
+# LLVM37 LOCAL file build machinery
+# LLVM37 Compiler Makefile for use by buildit.  
 #
 # This makefile is intended only for use with B&I buildit. For "normal" builds
 # use the conventional top-level makefile.
@@ -40,10 +40,10 @@ ENABLE_ASSERTIONS := no
 endif
 
 # Default is optimized build.
-ifeq ($(LLVM_DEBUG),1)
-LLVM_OPTIMIZED := no
+ifeq ($(LLVM37_DEBUG),1)
+LLVM37_OPTIMIZED := no
 else
-LLVM_OPTIMIZED := yes
+LLVM37_OPTIMIZED := yes
 endif
 
 # Default to do a native build, not a cross-build for an ARM host or simulator.
@@ -61,9 +61,9 @@ endif
 # NOTE : Always put version numbers at the end because they are optional.
 install: $(OBJROOT) $(SYMROOT) $(DSTROOT)
 	cd $(OBJROOT) && \
-	  $(SRC)/utils/buildit/build_llvm "$(RC_ARCHS)" "$(TARGETS)" \
+	  $(SRC)/utils/buildit/build_llvm37 "$(RC_ARCHS)" "$(TARGETS)" \
 	    $(SRC) $(PREFIX) $(DSTROOT) $(SYMROOT) \
-	    $(ENABLE_ASSERTIONS) $(LLVM_OPTIMIZED) \
+	    $(ENABLE_ASSERTIONS) $(LLVM37_OPTIMIZED) \
 	    $(ARM_HOSTED_BUILD) $(IOS_SIM_BUILD) \
 	    $(RC_ProjectSourceVersion) $(RC_ProjectSourceSubversion) 
 

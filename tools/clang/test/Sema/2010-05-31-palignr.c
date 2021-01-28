@@ -1,4 +1,4 @@
-// RUN: not %clang_cc1 -triple x86_64-apple-darwin -emit-llvm -o /dev/null %s
+// RUN: not %clang_cc1 -triple x86_64-apple-darwin -emit-llvm37 -o /dev/null %s
 
 #include <tmmintrin.h>
 

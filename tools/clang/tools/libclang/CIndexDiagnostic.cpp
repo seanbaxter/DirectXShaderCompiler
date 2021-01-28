@@ -1,6 +1,6 @@
 /*===-- CIndexDiagnostics.cpp - Diagnostics C Interface ---------*- C++ -*-===*\
 |*                                                                            *|
-|*                     The LLVM Compiler Infrastructure                       *|
+|*                     The LLVM37 Compiler Infrastructure                       *|
 |*                                                                            *|
 |* This file is distributed under the University of Illinois Open Source      *|
 |* License. See LICENSE.TXT for details.                                      *|
@@ -21,15 +21,15 @@
 #include "clang/Frontend/FrontendDiagnostic.h"
 #include "clang/Frontend/DiagnosticRenderer.h"
 #include "clang/Basic/DiagnosticOptions.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/ADT/Twine.h"
-#include "llvm/Support/MemoryBuffer.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/ADT/Twine.h"
+#include "llvm37/Support/MemoryBuffer.h"
+#include "llvm37/Support/raw_ostream.h"
 
 using namespace clang;
 using namespace clang::cxloc;
 using namespace clang::cxdiag;
-using namespace llvm;
+using namespace llvm37;
 
 CXDiagnosticSetImpl::~CXDiagnosticSetImpl() {}
 
@@ -105,7 +105,7 @@ public:
     if (Level != DiagnosticsEngine::Note)
       CurrentSet = MainSet;
 
-    auto Owner = llvm::make_unique<CXStoredDiagnostic>(*SD, LangOpts);
+    auto Owner = llvm37::make_unique<CXStoredDiagnostic>(*SD, LangOpts);
     CXStoredDiagnostic &CD = *Owner;
     CurrentSet->appendDiagnostic(std::move(Owner));
 
@@ -128,7 +128,7 @@ public:
     else
       L = clang_getNullLocation();
     CurrentSet->appendDiagnostic(
-        llvm::make_unique<CXDiagnosticCustomNoteImpl>(Message, L));
+        llvm37::make_unique<CXDiagnosticCustomNoteImpl>(Message, L));
   }
 
   void emitDiagnosticLoc(SourceLocation Loc, PresumedLoc PLoc,
@@ -150,7 +150,7 @@ public:
     else
       L = clang_getNullLocation();
     CurrentSet->appendDiagnostic(
-        llvm::make_unique<CXDiagnosticCustomNoteImpl>(Message, L));
+        llvm37::make_unique<CXDiagnosticCustomNoteImpl>(Message, L));
   }
 
   CXDiagnosticSetImpl *CurrentSet;
@@ -259,7 +259,7 @@ CXString clang_formatDiagnostic(CXDiagnostic Diagnostic, unsigned Options) {
   CXDiagnosticSeverity Severity = clang_getDiagnosticSeverity(Diagnostic);
 
   SmallString<256> Str;
-  llvm::raw_svector_ostream Out(Str);
+  llvm37::raw_svector_ostream Out(Str);
   
   if (Options & CXDiagnostic_DisplaySourceLocation) {
     // Print source location (file:line), along with optional column
@@ -307,7 +307,7 @@ CXString clang_formatDiagnostic(CXDiagnostic Diagnostic, unsigned Options) {
   /* Print warning/error/etc. */
   if (Options & CXDiagnostic_DisplaySeverity) { // HLSL Change
   switch (Severity) {
-  case CXDiagnostic_Ignored: llvm_unreachable("impossible");
+  case CXDiagnostic_Ignored: llvm37_unreachable("impossible");
   case CXDiagnostic_Note: Out << "note: "; break;
   case CXDiagnostic_Warning: Out << "warning: "; break;
   case CXDiagnostic_Error: Out << "error: "; break;

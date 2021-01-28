@@ -1,27 +1,27 @@
-//===-- CGValue.h - LLVM CodeGen wrappers for llvm::Value* ------*- C++ -*-===//
+//===-- CGValue.h - LLVM37 CodeGen wrappers for llvm37::Value* ------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 //
-// These classes implement wrappers around llvm::Value in order to
+// These classes implement wrappers around llvm37::Value in order to
 // fully represent the range of values for C L- and R- values.
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_LIB_CODEGEN_CGVALUE_H
-#define LLVM_CLANG_LIB_CODEGEN_CGVALUE_H
+#ifndef LLVM37_CLANG_LIB_CODEGEN_CGVALUE_H
+#define LLVM37_CLANG_LIB_CODEGEN_CGVALUE_H
 
 #include "clang/AST/ASTContext.h"
 #include "clang/AST/CharUnits.h"
 #include "clang/AST/Type.h"
-#include "llvm/IR/Value.h"
-#include "llvm/IR/Type.h"
+#include "llvm37/IR/Value.h"
+#include "llvm37/IR/Type.h"
 
-namespace llvm {
+namespace llvm37 {
   class Constant;
   class MDNode;
 }
@@ -33,15 +33,15 @@ namespace CodeGen {
 
 /// RValue - This trivial value class is used to represent the result of an
 /// expression that is evaluated.  It can be one of three things: either a
-/// simple LLVM SSA value, a pair of SSA values for complex numbers, or the
+/// simple LLVM37 SSA value, a pair of SSA values for complex numbers, or the
 /// address of an aggregate value in memory.
 class RValue {
   enum Flavor { Scalar, Complex, Aggregate };
 
   // Stores first value and flavor.
-  llvm::PointerIntPair<llvm::Value *, 2, Flavor> V1;
+  llvm37::PointerIntPair<llvm37::Value *, 2, Flavor> V1;
   // Stores second value and volatility.
-  llvm::PointerIntPair<llvm::Value *, 1, bool> V2;
+  llvm37::PointerIntPair<llvm37::Value *, 1, bool> V2;
 
 public:
   bool isScalar() const { return V1.getInt() == Scalar; }
@@ -51,31 +51,31 @@ public:
   bool isVolatileQualified() const { return V2.getInt(); }
 
   /// getScalarVal() - Return the Value* of this scalar value.
-  llvm::Value *getScalarVal() const {
+  llvm37::Value *getScalarVal() const {
     assert(isScalar() && "Not a scalar!");
     return V1.getPointer();
   }
 
   /// getComplexVal - Return the real/imag components of this complex value.
   ///
-  std::pair<llvm::Value *, llvm::Value *> getComplexVal() const {
+  std::pair<llvm37::Value *, llvm37::Value *> getComplexVal() const {
     return std::make_pair(V1.getPointer(), V2.getPointer());
   }
 
   /// getAggregateAddr() - Return the Value* of the address of the aggregate.
-  llvm::Value *getAggregateAddr() const {
+  llvm37::Value *getAggregateAddr() const {
     assert(isAggregate() && "Not an aggregate!");
     return V1.getPointer();
   }
 
-  static RValue get(llvm::Value *V) {
+  static RValue get(llvm37::Value *V) {
     RValue ER;
     ER.V1.setPointer(V);
     ER.V1.setInt(Scalar);
     ER.V2.setInt(false);
     return ER;
   }
-  static RValue getComplex(llvm::Value *V1, llvm::Value *V2) {
+  static RValue getComplex(llvm37::Value *V1, llvm37::Value *V2) {
     RValue ER;
     ER.V1.setPointer(V1);
     ER.V2.setPointer(V2);
@@ -83,13 +83,13 @@ public:
     ER.V2.setInt(false);
     return ER;
   }
-  static RValue getComplex(const std::pair<llvm::Value *, llvm::Value *> &C) {
+  static RValue getComplex(const std::pair<llvm37::Value *, llvm37::Value *> &C) {
     return getComplex(C.first, C.second);
   }
   // FIXME: Aggregate rvalues need to retain information about whether they are
   // volatile or not.  Remove default to find all places that probably get this
   // wrong.
-  static RValue getAggregate(llvm::Value *V, bool Volatile = false) {
+  static RValue getAggregate(llvm37::Value *V, bool Volatile = false) {
     RValue ER;
     ER.V1.setPointer(V);
     ER.V1.setInt(Aggregate);
@@ -104,7 +104,7 @@ enum ARCPreciseLifetime_t {
 };
 
 /// LValue - This represents an lvalue references.  Because C/C++ allow
-/// bitfields, this is not a simple LLVM pointer, it may be a pointer plus a
+/// bitfields, this is not a simple LLVM37 pointer, it may be a pointer plus a
 /// bitrange.
 class LValue {
   enum {
@@ -116,14 +116,14 @@ class LValue {
     GlobalReg     // This is a register l-value, use getGlobalReg()
   } LVType;
 
-  llvm::Value *V;
+  llvm37::Value *V;
 
   union {
     // Index into a vector subscript: V[i]
-    llvm::Value *VectorIdx;
+    llvm37::Value *VectorIdx;
 
     // ExtVector element subset: V.xyx
-    llvm::Constant *VectorElts;
+    llvm37::Constant *VectorElts;
 
     // BitField start bit and size
     const CGBitFieldInfo *BitFieldInfo;
@@ -166,12 +166,12 @@ class LValue {
   uint64_t TBAAOffset;
 
   /// TBAAInfo - TBAA information to attach to dereferences of this LValue.
-  llvm::MDNode *TBAAInfo;
+  llvm37::MDNode *TBAAInfo;
 
 private:
   void Initialize(QualType Type, Qualifiers Quals,
                   CharUnits Alignment,
-                  llvm::MDNode *TBAAInfo = nullptr) {
+                  llvm37::MDNode *TBAAInfo = nullptr) {
     this->Type = Type;
     this->Quals = Quals;
     this->Alignment = Alignment.getQuantity();
@@ -252,8 +252,8 @@ public:
   uint64_t getTBAAOffset() const { return TBAAOffset; }
   void setTBAAOffset(uint64_t O) { TBAAOffset = O; }
 
-  llvm::MDNode *getTBAAInfo() const { return TBAAInfo; }
-  void setTBAAInfo(llvm::MDNode *N) { TBAAInfo = N; }
+  llvm37::MDNode *getTBAAInfo() const { return TBAAInfo; }
+  void setTBAAInfo(llvm37::MDNode *N) { TBAAInfo = N; }
 
   const Qualifiers &getQuals() const { return Quals; }
   Qualifiers &getQuals() { return Quals; }
@@ -264,25 +264,25 @@ public:
   void setAlignment(CharUnits A) { Alignment = A.getQuantity(); }
 
   // simple lvalue
-  llvm::Value *getAddress() const { assert(isSimple()); return V; }
-  void setAddress(llvm::Value *address) {
+  llvm37::Value *getAddress() const { assert(isSimple()); return V; }
+  void setAddress(llvm37::Value *address) {
     assert(isSimple());
     V = address;
   }
 
   // vector elt lvalue
-  llvm::Value *getVectorAddr() const { assert(isVectorElt()); return V; }
-  llvm::Value *getVectorIdx() const { assert(isVectorElt()); return VectorIdx; }
+  llvm37::Value *getVectorAddr() const { assert(isVectorElt()); return V; }
+  llvm37::Value *getVectorIdx() const { assert(isVectorElt()); return VectorIdx; }
 
   // extended vector elements.
-  llvm::Value *getExtVectorAddr() const { assert(isExtVectorElt()); return V; }
-  llvm::Constant *getExtVectorElts() const {
+  llvm37::Value *getExtVectorAddr() const { assert(isExtVectorElt()); return V; }
+  llvm37::Constant *getExtVectorElts() const {
     assert(isExtVectorElt());
     return VectorElts;
   }
 
   // bitfield lvalue
-  llvm::Value *getBitFieldAddr() const {
+  llvm37::Value *getBitFieldAddr() const {
     assert(isBitField());
     return V;
   }
@@ -292,11 +292,11 @@ public:
   }
 
   // global register lvalue
-  llvm::Value *getGlobalReg() const { assert(isGlobalReg()); return V; }
+  llvm37::Value *getGlobalReg() const { assert(isGlobalReg()); return V; }
 
-  static LValue MakeAddr(llvm::Value *address, QualType type,
+  static LValue MakeAddr(llvm37::Value *address, QualType type,
                          CharUnits alignment, ASTContext &Context,
-                         llvm::MDNode *TBAAInfo = nullptr) {
+                         llvm37::MDNode *TBAAInfo = nullptr) {
     Qualifiers qs = type.getQualifiers();
     qs.setObjCGCAttr(Context.getObjCGCAttrKind(type));
 
@@ -308,7 +308,7 @@ public:
     return R;
   }
 
-  static LValue MakeVectorElt(llvm::Value *Vec, llvm::Value *Idx,
+  static LValue MakeVectorElt(llvm37::Value *Vec, llvm37::Value *Idx,
                               QualType type, CharUnits Alignment) {
     LValue R;
     R.LVType = VectorElt;
@@ -318,7 +318,7 @@ public:
     return R;
   }
 
-  static LValue MakeExtVectorElt(llvm::Value *Vec, llvm::Constant *Elts,
+  static LValue MakeExtVectorElt(llvm37::Value *Vec, llvm37::Constant *Elts,
                                  QualType type, CharUnits Alignment) {
     LValue R;
     R.LVType = ExtVectorElt;
@@ -334,7 +334,7 @@ public:
   /// bit-field refers to.
   /// \param Info - The information describing how to perform the bit-field
   /// access.
-  static LValue MakeBitfield(llvm::Value *Addr,
+  static LValue MakeBitfield(llvm37::Value *Addr,
                              const CGBitFieldInfo &Info,
                              QualType type, CharUnits Alignment) {
     LValue R;
@@ -345,7 +345,7 @@ public:
     return R;
   }
 
-  static LValue MakeGlobalReg(llvm::Value *Reg,
+  static LValue MakeGlobalReg(llvm37::Value *Reg,
                               QualType type,
                               CharUnits Alignment) {
     LValue R;
@@ -364,7 +364,7 @@ public:
 /// An aggregate value slot.
 class AggValueSlot {
   /// The address.
-  llvm::Value *Addr;
+  llvm37::Value *Addr;
 
   // Qualifiers
   Qualifiers Quals;
@@ -423,7 +423,7 @@ public:
   ///   for calling destructors on this object
   /// \param needsGC - true if the slot is potentially located
   ///   somewhere that ObjC GC calls should be emitted for
-  static AggValueSlot forAddr(llvm::Value *addr, CharUnits align,
+  static AggValueSlot forAddr(llvm37::Value *addr, CharUnits align,
                               Qualifiers quals,
                               IsDestructed_t isDestructed,
                               NeedsGCBarriers_t needsGC,
@@ -474,7 +474,7 @@ public:
     return NeedsGCBarriers_t(ObjCGCFlag);
   }
   
-  llvm::Value *getAddr() const {
+  llvm37::Value *getAddr() const {
     return Addr;
   }
 

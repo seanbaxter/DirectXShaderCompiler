@@ -2,9 +2,9 @@
 
 """Script to sort the top-most block of #include lines.
 
-Assumes the LLVM coding conventions.
+Assumes the LLVM37 coding conventions.
 
-Currently, this script only bothers sorting the llvm/... headers. Patches
+Currently, this script only bothers sorting the llvm37/... headers. Patches
 welcome for more functionality, and sorting other header groups.
 """
 
@@ -30,7 +30,7 @@ def sort_includes(f):
   api_headers = []
   local_headers = []
   subproject_headers = []
-  llvm_headers = []
+  llvm37_headers = []
   system_headers = []
   for (i, l) in enumerate(lines):
     if l.strip() == '':
@@ -53,8 +53,8 @@ def sort_includes(f):
           header.startswith('"polly/')):
         subproject_headers.append(header)
         continue
-      if (header.startswith('"llvm/') or header.startswith('"llvm-c/')):
-        llvm_headers.append(header)
+      if (header.startswith('"llvm37/') or header.startswith('"llvm37-c/')):
+        llvm37_headers.append(header)
         continue
       local_headers.append(header)
       continue
@@ -71,9 +71,9 @@ def sort_includes(f):
 
   local_headers = sorted(set(local_headers))
   subproject_headers = sorted(set(subproject_headers))
-  llvm_headers = sorted(set(llvm_headers))
+  llvm37_headers = sorted(set(llvm37_headers))
   system_headers = sorted(set(system_headers))
-  headers = api_headers + local_headers + subproject_headers + llvm_headers + system_headers
+  headers = api_headers + local_headers + subproject_headers + llvm37_headers + system_headers
   header_lines = ['#include ' + h for h in headers]
   lines = lines[:headers_begin] + header_lines + lines[headers_end + 1:]
 

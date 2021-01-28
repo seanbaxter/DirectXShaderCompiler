@@ -1,6 +1,6 @@
 //===-- StatepointLowering.cpp - SDAGBuilder's statepoint code -----------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -14,21 +14,21 @@
 
 #include "StatepointLowering.h"
 #include "SelectionDAGBuilder.h"
-#include "llvm/ADT/SmallSet.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/CodeGen/FunctionLoweringInfo.h"
-#include "llvm/CodeGen/GCMetadata.h"
-#include "llvm/CodeGen/GCStrategy.h"
-#include "llvm/CodeGen/SelectionDAG.h"
-#include "llvm/CodeGen/StackMaps.h"
-#include "llvm/IR/CallingConv.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/IR/Intrinsics.h"
-#include "llvm/IR/Statepoint.h"
-#include "llvm/Target/TargetLowering.h"
+#include "llvm37/ADT/SmallSet.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/CodeGen/FunctionLoweringInfo.h"
+#include "llvm37/CodeGen/GCMetadata.h"
+#include "llvm37/CodeGen/GCStrategy.h"
+#include "llvm37/CodeGen/SelectionDAG.h"
+#include "llvm37/CodeGen/StackMaps.h"
+#include "llvm37/IR/CallingConv.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/IR/Intrinsics.h"
+#include "llvm37/IR/Statepoint.h"
+#include "llvm37/Target/TargetLowering.h"
 #include <algorithm>
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "statepoint-lowering"
 
@@ -110,7 +110,7 @@ StatepointLoweringState::allocateStackSlot(EVT ValueType,
     // keep this code as simple as possible.
     NextSlotToAllocate++;
   }
-  llvm_unreachable("infinite loop?");
+  llvm37_unreachable("infinite loop?");
 }
 
 /// Utility function for reservePreviousStackSlotForValue. Tries to find
@@ -167,7 +167,7 @@ static Optional<int> findPreviousSpillSlot(const Value *Val,
   //   statepoint(ptr)
   // We will return that stack slot for ptr is unknown. And later we might
   // assign different stack slots for ptr and relocated_pointer. This limits
-  // llvm's ability to remove redundant stores.
+  // llvm37's ability to remove redundant stores.
   // Unfortunately it's hard to accomplish in current infrastructure.
   // We use this function to eliminate spill store completely, while
   // in example we still need to emit store, but instead of any location
@@ -378,9 +378,9 @@ static void getIncomingStatepointGCValues(
     Ptrs.push_back(relocateOpers.getDerivedPtr());
   }
 
-  // Remove any redundant llvm::Values which map to the same SDValue as another
+  // Remove any redundant llvm37::Values which map to the same SDValue as another
   // input.  Also has the effect of removing duplicates in the original
-  // llvm::Value input list as well.  This is a useful optimization for
+  // llvm37::Value input list as well.  This is a useful optimization for
   // reducing the size of the StackMap section.  It has no other impact.
   removeDuplicatesGCPtrs(Bases, Ptrs, Relocs, Builder);
 
@@ -587,9 +587,9 @@ static void lowerStatepointMetaArgs(SmallVectorImpl<SDValue> &Ops,
       // We do this only to check that we are not relocating any unvisited value.
       SpillMap[V] = None;
 
-      // Default llvm mechanisms for exporting values which are used in
+      // Default llvm37 mechanisms for exporting values which are used in
       // different basic blocks does not work for gc relocates.
-      // Note that it would be incorrect to teach llvm that all relocates are
+      // Note that it would be incorrect to teach llvm37 that all relocates are
       // uses of the corresponging values so that it would automatically
       // export them. Relocates of the spilled values does not use original
       // value.

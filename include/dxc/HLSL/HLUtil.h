@@ -11,13 +11,13 @@
 
 #pragma once
 
-#include "llvm/ADT/SetVector.h"
+#include "llvm37/ADT/SetVector.h"
 
-namespace llvm {
+namespace llvm37 {
 class Function;
 class Value;
 class MemCpyInst;
-} // namespace llvm
+} // namespace llvm37
 
 namespace hlsl {
 class DxilTypeSystem;
@@ -62,27 +62,27 @@ struct PointerStatus {
   } loadedType;
   /// If only one value (besides the initializer constant) is ever stored to
   /// this global, keep track of what value it is.
-  llvm::Value *StoredOnceValue;
+  llvm37::Value *StoredOnceValue;
   /// Memcpy which this ptr is used.
-  llvm::SetVector<llvm::MemCpyInst *> memcpySet;
+  llvm37::SetVector<llvm37::MemCpyInst *> memcpySet;
   /// Memcpy which use this ptr as dest.
-  llvm::MemCpyInst *StoringMemcpy;
+  llvm37::MemCpyInst *StoringMemcpy;
   /// Memcpy which use this ptr as src.
-  llvm::MemCpyInst *LoadingMemcpy;
+  llvm37::MemCpyInst *LoadingMemcpy;
   /// These start out null/false.  When the first accessing function is noticed,
   /// it is recorded. When a second different accessing function is noticed,
   /// HasMultipleAccessingFunctions is set to true.
-  const llvm::Function *AccessingFunction;
+  const llvm37::Function *AccessingFunction;
   bool HasMultipleAccessingFunctions;
   /// Size of the ptr.
   unsigned Size;
-  llvm::Value *Ptr;
+  llvm37::Value *Ptr;
   // Just check load store.
   bool bLoadStoreOnly;
 
   void analyze(DxilTypeSystem &typeSys, bool bStructElt);
 
-  PointerStatus(llvm::Value *ptr, unsigned size, bool bLdStOnly);
+  PointerStatus(llvm37::Value *ptr, unsigned size, bool bLdStOnly);
   void MarkAsStored();
   void MarkAsLoaded();
   bool HasStored();

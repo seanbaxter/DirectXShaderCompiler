@@ -1,6 +1,6 @@
 //===- unittest/Tooling/CompilationDatabaseTest.cpp -----------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -14,7 +14,7 @@
 #include "clang/Tooling/FileMatchTrie.h"
 #include "clang/Tooling/JSONCompilationDatabase.h"
 #include "clang/Tooling/Tooling.h"
-#include "llvm/Support/Path.h"
+#include "llvm37/Support/Path.h"
 #include "gtest/gtest.h"
 
 namespace clang {
@@ -69,9 +69,9 @@ TEST(JSONCompilationDatabase, GetAllFiles) {
 
   std::vector<std::string> expected_files;
   SmallString<16> PathStorage;
-  llvm::sys::path::native("//net/dir/file1", PathStorage);
+  llvm37::sys::path::native("//net/dir/file1", PathStorage);
   expected_files.push_back(PathStorage.str());
-  llvm::sys::path::native("//net/dir/file2", PathStorage);
+  llvm37::sys::path::native("//net/dir/file2", PathStorage);
   expected_files.push_back(PathStorage.str());
   EXPECT_EQ(expected_files, getAllFiles(
     "[{\"directory\":\"//net/dir\","
@@ -138,7 +138,7 @@ protected:
   FileMatchTrieTest() : Trie(new FakeComparator()) {}
 
   StringRef find(StringRef Path) {
-    llvm::raw_string_ostream ES(Error);
+    llvm37::raw_string_ostream ES(Error);
     return Trie.findEquivalent(Path, ES);
   }
 

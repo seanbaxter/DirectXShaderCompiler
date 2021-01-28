@@ -4,8 +4,8 @@
 ; RUN: echo save >> %t.mri
 ; RUN: echo end >> %t.mri
 
-; RUN: llvm-ar -M  < %t.mri
-; RUN: llvm-ar t %t.a | FileCheck %s
+; RUN: llvm37-ar -M  < %t.mri
+; RUN: llvm37-ar t %t.a | FileCheck %s
 
 ; CHECK: evenlen
 ; CHECK-NEXT: oddlen

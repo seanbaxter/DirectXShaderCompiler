@@ -1,6 +1,6 @@
 //===-- DeclarationName.h - Representation of declaration names -*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -10,14 +10,14 @@
 // This file declares the DeclarationName and DeclarationNameTable classes.
 //
 //===----------------------------------------------------------------------===//
-#ifndef LLVM_CLANG_AST_DECLARATIONNAME_H
-#define LLVM_CLANG_AST_DECLARATIONNAME_H
+#ifndef LLVM37_CLANG_AST_DECLARATIONNAME_H
+#define LLVM37_CLANG_AST_DECLARATIONNAME_H
 
 #include "clang/Basic/IdentifierTable.h"
 #include "clang/Basic/PartialDiagnostic.h"
-#include "llvm/Support/Compiler.h"
+#include "llvm37/Support/Compiler.h"
 
-namespace llvm {
+namespace llvm37 {
   template <typename T> struct DenseMapInfo;
 }
 
@@ -529,13 +529,13 @@ public:
   /// getEndLoc - Retrieve the location of the last token.
   SourceLocation getEndLoc() const;
   /// getSourceRange - The range of the declaration name.
-  SourceRange getSourceRange() const LLVM_READONLY {
+  SourceRange getSourceRange() const LLVM37_READONLY {
     return SourceRange(getLocStart(), getLocEnd());
   }
-  SourceLocation getLocStart() const LLVM_READONLY {
+  SourceLocation getLocStart() const LLVM37_READONLY {
     return getBeginLoc();
   }
-  SourceLocation getLocEnd() const LLVM_READONLY {
+  SourceLocation getLocEnd() const LLVM37_READONLY {
     SourceLocation EndLoc = getEndLoc();
     return EndLoc.isValid() ? EndLoc : getLocStart();
   }
@@ -567,7 +567,7 @@ inline raw_ostream &operator<<(raw_ostream &OS,
 
 }  // end namespace clang
 
-namespace llvm {
+namespace llvm37 {
 /// Define DenseMapInfo so that DeclarationNames can be used as keys
 /// in DenseMap and DenseSets.
 template<>
@@ -593,6 +593,6 @@ struct DenseMapInfo<clang::DeclarationName> {
 template <>
 struct isPodLike<clang::DeclarationName> { static const bool value = true; };
 
-}  // end namespace llvm
+}  // end namespace llvm37
 
 #endif

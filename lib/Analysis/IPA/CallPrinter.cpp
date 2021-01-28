@@ -1,6 +1,6 @@
 //===- CallPrinter.cpp - DOT printer for call graph -----------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -14,13 +14,13 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Analysis/CallGraph.h"
-#include "llvm/Analysis/CallPrinter.h"
-#include "llvm/Analysis/DOTGraphTraitsPass.h"
+#include "llvm37/Analysis/CallGraph.h"
+#include "llvm37/Analysis/CallPrinter.h"
+#include "llvm37/Analysis/DOTGraphTraitsPass.h"
 
-using namespace llvm;
+using namespace llvm37;
 
-namespace llvm {
+namespace llvm37 {
 
 template <> struct DOTGraphTraits<CallGraph *> : public DefaultDOTGraphTraits {
   DOTGraphTraits(bool isSimple = false) : DefaultDOTGraphTraits(isSimple) {}
@@ -41,7 +41,7 @@ struct AnalysisCallGraphWrapperPassTraits {
   }
 };
 
-} // end llvm namespace
+} // end llvm37 namespace
 
 namespace {
 
@@ -82,11 +82,11 @@ INITIALIZE_PASS(CallGraphPrinter, "dot-callgraph",
                 "Print call graph to 'dot' file", false, false)
 
 // Create methods available outside of this file, to use them
-// "include/llvm/LinkAllPasses.h". Otherwise the pass would be deleted by
+// "include/llvm37/LinkAllPasses.h". Otherwise the pass would be deleted by
 // the link time optimization.
 
-ModulePass *llvm::createCallGraphViewerPass() { return new CallGraphViewer(); }
+ModulePass *llvm37::createCallGraphViewerPass() { return new CallGraphViewer(); }
 
-ModulePass *llvm::createCallGraphPrinterPass() {
+ModulePass *llvm37::createCallGraphPrinterPass() {
   return new CallGraphPrinter();
 }

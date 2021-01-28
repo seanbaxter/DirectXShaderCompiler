@@ -1,7 +1,7 @@
 #!/bin/sh
 ##===- utils/countloc.sh - Counts Lines Of Code --------------*- Script -*-===##
 # 
-#                     The LLVM Compiler Infrastructure
+#                     The LLVM37 Compiler Infrastructure
 #
 # This file is distributed under the University of Illinois Open Source
 # License. See LICENSE.TXT for details.
@@ -12,11 +12,11 @@
 # (excluding certain things), runs "wc -l" on them to get the number of lines in
 # each file and then sums up and prints the total with awk. 
 #
-# The script takes one optional option, -topdir, which specifies the top llvm
+# The script takes one optional option, -topdir, which specifies the top llvm37
 # source directory. If it is not specified then the llvm-config tool is 
 # consulted to find top source dir.  
 #
-# Note that the implementation is based on llvmdo. See that script for more
+# Note that the implementation is based on llvm37do. See that script for more
 # details.
 ##===----------------------------------------------------------------------===##
 
@@ -31,10 +31,10 @@ fi
 
 if test -d "$TOPDIR" ; then
   cd $TOPDIR
-  ./utils/llvmdo -topdir "$TOPDIR" -dirs "include lib tools test utils examples" -code-only wc -l | awk '\
+  ./utils/llvm37do -topdir "$TOPDIR" -dirs "include lib tools test utils examples" -code-only wc -l | awk '\
       BEGIN { loc=0; } \
       { loc += $1; } \
       END { print loc; }'
 else
-  echo "Can't find LLVM top directory"
+  echo "Can't find LLVM37 top directory"
 fi

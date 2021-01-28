@@ -16,11 +16,11 @@
 dxil_dia::SourceFile::SourceFile(IMalloc *pMalloc, Session *pSession, DWORD index)
   : m_pMalloc(pMalloc), m_pSession(pSession), m_index(index) {}
 
-llvm::MDTuple *dxil_dia::SourceFile::NameContent() const {
-  return llvm::cast<llvm::MDTuple>(m_pSession->Contents()->getOperand(m_index));
+llvm37::MDTuple *dxil_dia::SourceFile::NameContent() const {
+  return llvm37::cast<llvm37::MDTuple>(m_pSession->Contents()->getOperand(m_index));
 }
-llvm::StringRef dxil_dia::SourceFile::Name() const {
-  return llvm::dyn_cast<llvm::MDString>(NameContent()->getOperand(0))->getString();
+llvm37::StringRef dxil_dia::SourceFile::Name() const {
+  return llvm37::dyn_cast<llvm37::MDString>(NameContent()->getOperand(0))->getString();
 }
 
 STDMETHODIMP dxil_dia::SourceFile::get_uniqueId(

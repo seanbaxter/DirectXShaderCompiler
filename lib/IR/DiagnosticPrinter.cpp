@@ -1,6 +1,6 @@
-//===- llvm/Support/DiagnosticInfo.cpp - Diagnostic Definitions -*- C++ -*-===//
+//===- llvm37/Support/DiagnosticInfo.cpp - Diagnostic Definitions -*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,14 +11,14 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/ADT/Twine.h"
-#include "llvm/IR/DiagnosticPrinter.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/Value.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Support/SourceMgr.h"
+#include "llvm37/ADT/Twine.h"
+#include "llvm37/IR/DiagnosticPrinter.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/Value.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Support/SourceMgr.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 DiagnosticPrinter &DiagnosticPrinterRawOStream::operator<<(char C) {
   Stream << C;

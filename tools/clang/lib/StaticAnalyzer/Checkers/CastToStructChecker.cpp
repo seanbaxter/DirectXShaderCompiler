@@ -1,6 +1,6 @@
 //=== CastToStructChecker.cpp - Fixed address usage checker ----*- C++ -*--===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -63,7 +63,7 @@ void CastToStructChecker::checkPreStmt(const CastExpr *CE,
                            "Casting a non-structure type to a structure type "
                            "and accessing a field can lead to memory access "
                            "errors or data corruption."));
-      auto R = llvm::make_unique<BugReport>(*BT, BT->getDescription(), N);
+      auto R = llvm37::make_unique<BugReport>(*BT, BT->getDescription(), N);
       R->addRange(CE->getSourceRange());
       C.emitReport(std::move(R));
     }

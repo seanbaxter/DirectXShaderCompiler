@@ -1,6 +1,6 @@
 //===-- Attributes.cpp - Implement AttributesList -------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -13,27 +13,27 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/IR/Attributes.h"
+#include "llvm37/IR/Attributes.h"
 #include "AttributeImpl.h"
 #include "LLVMContextImpl.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/StringExtras.h"
-#include "llvm/IR/Type.h"
-#include "llvm/Support/Atomic.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/ManagedStatic.h"
-#include "llvm/Support/Mutex.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/StringExtras.h"
+#include "llvm37/IR/Type.h"
+#include "llvm37/Support/Atomic.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/ManagedStatic.h"
+#include "llvm37/Support/Mutex.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <algorithm>
-using namespace llvm;
+using namespace llvm37;
 
 //===----------------------------------------------------------------------===//
 // Attribute Construction Methods
 //===----------------------------------------------------------------------===//
 
-Attribute Attribute::get(LLVMContext &Context, Attribute::AttrKind Kind,
+Attribute Attribute::get(LLVM37Context &Context, Attribute::AttrKind Kind,
                          uint64_t Val) {
-  LLVMContextImpl *pImpl = Context.pImpl;
+  LLVM37ContextImpl *pImpl = Context.pImpl;
   FoldingSetNodeID ID;
   ID.AddInteger(Kind);
   if (Val) ID.AddInteger(Val);
@@ -55,8 +55,8 @@ Attribute Attribute::get(LLVMContext &Context, Attribute::AttrKind Kind,
   return Attribute(PA);
 }
 
-Attribute Attribute::get(LLVMContext &Context, StringRef Kind, StringRef Val) {
-  LLVMContextImpl *pImpl = Context.pImpl;
+Attribute Attribute::get(LLVM37Context &Context, StringRef Kind, StringRef Val) {
+  LLVM37ContextImpl *pImpl = Context.pImpl;
   FoldingSetNodeID ID;
   ID.AddString(Kind);
   if (!Val.empty()) ID.AddString(Val);
@@ -75,26 +75,26 @@ Attribute Attribute::get(LLVMContext &Context, StringRef Kind, StringRef Val) {
   return Attribute(PA);
 }
 
-Attribute Attribute::getWithAlignment(LLVMContext &Context, uint64_t Align) {
+Attribute Attribute::getWithAlignment(LLVM37Context &Context, uint64_t Align) {
   assert(isPowerOf2_32(Align) && "Alignment must be a power of two.");
   assert(Align <= 0x40000000 && "Alignment too large.");
   return get(Context, Alignment, Align);
 }
 
-Attribute Attribute::getWithStackAlignment(LLVMContext &Context,
+Attribute Attribute::getWithStackAlignment(LLVM37Context &Context,
                                            uint64_t Align) {
   assert(isPowerOf2_32(Align) && "Alignment must be a power of two.");
   assert(Align <= 0x100 && "Alignment too large.");
   return get(Context, StackAlignment, Align);
 }
 
-Attribute Attribute::getWithDereferenceableBytes(LLVMContext &Context,
+Attribute Attribute::getWithDereferenceableBytes(LLVM37Context &Context,
                                                 uint64_t Bytes) {
   assert(Bytes && "Bytes must be non-zero.");
   return get(Context, Dereferenceable, Bytes);
 }
 
-Attribute Attribute::getWithDereferenceableOrNullBytes(LLVMContext &Context,
+Attribute Attribute::getWithDereferenceableOrNullBytes(LLVM37Context &Context,
                                                        uint64_t Bytes) {
   assert(Bytes && "Bytes must be non-zero.");
   return get(Context, DereferenceableOrNull, Bytes);
@@ -321,7 +321,7 @@ std::string Attribute::getAsString(bool InAttrGrp) const {
     return Result;
   }
 
-  llvm_unreachable("Unknown attribute");
+  llvm37_unreachable("Unknown attribute");
 }
 
 bool Attribute::operator<(Attribute A) const {
@@ -397,7 +397,7 @@ uint64_t AttributeImpl::getAttrMask(Attribute::AttrKind Val) {
   // FIXME: Remove this.
   switch (Val) {
   case Attribute::EndAttrKinds:
-    llvm_unreachable("Synthetic enumerators which should never get here");
+    llvm37_unreachable("Synthetic enumerators which should never get here");
 
   case Attribute::None:            return 0;
   case Attribute::ZExt:            return 1 << 0;
@@ -443,30 +443,30 @@ uint64_t AttributeImpl::getAttrMask(Attribute::AttrKind Val) {
   case Attribute::Convergent:      return 1ULL << 46;
   case Attribute::SafeStack:       return 1ULL << 47;
   case Attribute::Dereferenceable:
-    llvm_unreachable("dereferenceable attribute not supported in raw format");
+    llvm37_unreachable("dereferenceable attribute not supported in raw format");
     break;
   case Attribute::DereferenceableOrNull:
-    llvm_unreachable("dereferenceable_or_null attribute not supported in raw "
+    llvm37_unreachable("dereferenceable_or_null attribute not supported in raw "
                      "format");
     break;
   case Attribute::ArgMemOnly:
-    llvm_unreachable("argmemonly attribute not supported in raw format");
+    llvm37_unreachable("argmemonly attribute not supported in raw format");
     break;
   }
-  llvm_unreachable("Unsupported attribute type");
+  llvm37_unreachable("Unsupported attribute type");
 }
 
 //===----------------------------------------------------------------------===//
 // AttributeSetNode Definition
 //===----------------------------------------------------------------------===//
 
-AttributeSetNode *AttributeSetNode::get(LLVMContext &C,
+AttributeSetNode *AttributeSetNode::get(LLVM37Context &C,
                                         ArrayRef<Attribute> Attrs) {
   if (Attrs.empty())
     return nullptr;
 
   // Otherwise, build a key to look up the existing attributes.
-  LLVMContextImpl *pImpl = C.pImpl;
+  LLVM37ContextImpl *pImpl = C.pImpl;
   FoldingSetNodeID ID;
 
   SmallVector<Attribute, 8> SortedAttrs(Attrs.begin(), Attrs.end());
@@ -584,7 +584,7 @@ uint64_t AttributeSetImpl::Raw(unsigned Index) const {
       else if (Kind == Attribute::StackAlignment)
         Mask |= ((uint64_t)(Log2_32(ASN->getStackAlignment())) + 1) << 26; // HLSL Change: widen to 64-bits before shift not after
       else if (Kind == Attribute::Dereferenceable)
-        llvm_unreachable("dereferenceable not supported in bit mask");
+        llvm37_unreachable("dereferenceable not supported in bit mask");
       else
         Mask |= AttributeImpl::getAttrMask(Kind);
     }
@@ -604,9 +604,9 @@ void AttributeSetImpl::dump() const {
 //===----------------------------------------------------------------------===//
 
 AttributeSet
-AttributeSet::getImpl(LLVMContext &C,
+AttributeSet::getImpl(LLVM37Context &C,
                       ArrayRef<std::pair<unsigned, AttributeSetNode*> > Attrs) {
-  LLVMContextImpl *pImpl = C.pImpl;
+  LLVM37ContextImpl *pImpl = C.pImpl;
   FoldingSetNodeID ID;
   AttributeSetImpl::Profile(ID, Attrs);
 
@@ -628,7 +628,7 @@ AttributeSet::getImpl(LLVMContext &C,
   return AttributeSet(PA);
 }
 
-AttributeSet AttributeSet::get(LLVMContext &C,
+AttributeSet AttributeSet::get(LLVM37Context &C,
                                ArrayRef<std::pair<unsigned, Attribute> > Attrs){
   // If there are no attributes then return a null AttributesList pointer.
   if (Attrs.empty())
@@ -662,7 +662,7 @@ AttributeSet AttributeSet::get(LLVMContext &C,
   return getImpl(C, AttrPairVec);
 }
 
-AttributeSet AttributeSet::get(LLVMContext &C,
+AttributeSet AttributeSet::get(LLVM37Context &C,
                                ArrayRef<std::pair<unsigned,
                                                   AttributeSetNode*> > Attrs) {
   // If there are no attributes then return a null AttributesList pointer.
@@ -672,7 +672,7 @@ AttributeSet AttributeSet::get(LLVMContext &C,
   return getImpl(C, Attrs);
 }
 
-AttributeSet AttributeSet::get(LLVMContext &C, unsigned Index,
+AttributeSet AttributeSet::get(LLVM37Context &C, unsigned Index,
                                const AttrBuilder &B) {
   if (!B.hasAttributes())
     return AttributeSet();
@@ -710,7 +710,7 @@ AttributeSet AttributeSet::get(LLVMContext &C, unsigned Index,
   return get(C, Attrs);
 }
 
-AttributeSet AttributeSet::get(LLVMContext &C, unsigned Index,
+AttributeSet AttributeSet::get(LLVM37Context &C, unsigned Index,
                                ArrayRef<Attribute::AttrKind> Kind) {
   SmallVector<std::pair<unsigned, Attribute>, 8> Attrs;
   for (ArrayRef<Attribute::AttrKind>::iterator I = Kind.begin(),
@@ -719,7 +719,7 @@ AttributeSet AttributeSet::get(LLVMContext &C, unsigned Index,
   return get(C, Attrs);
 }
 
-AttributeSet AttributeSet::get(LLVMContext &C, ArrayRef<AttributeSet> Attrs) {
+AttributeSet AttributeSet::get(LLVM37Context &C, ArrayRef<AttributeSet> Attrs) {
   if (Attrs.empty()) return AttributeSet();
   if (Attrs.size() == 1) return Attrs[0];
 
@@ -750,27 +750,27 @@ AttributeSet AttributeSet::get(LLVMContext &C, ArrayRef<AttributeSet> Attrs) {
   return getImpl(C, AttrNodeVec);
 }
 
-AttributeSet AttributeSet::addAttribute(LLVMContext &C, unsigned Index,
+AttributeSet AttributeSet::addAttribute(LLVM37Context &C, unsigned Index,
                                         Attribute::AttrKind Attr) const {
   if (hasAttribute(Index, Attr)) return *this;
   return addAttributes(C, Index, AttributeSet::get(C, Index, Attr));
 }
 
-AttributeSet AttributeSet::addAttribute(LLVMContext &C, unsigned Index,
+AttributeSet AttributeSet::addAttribute(LLVM37Context &C, unsigned Index,
                                         StringRef Kind) const {
-  llvm::AttrBuilder B;
+  llvm37::AttrBuilder B;
   B.addAttribute(Kind);
   return addAttributes(C, Index, AttributeSet::get(C, Index, B));
 }
 
-AttributeSet AttributeSet::addAttribute(LLVMContext &C, unsigned Index,
+AttributeSet AttributeSet::addAttribute(LLVM37Context &C, unsigned Index,
                                         StringRef Kind, StringRef Value) const {
-  llvm::AttrBuilder B;
+  llvm37::AttrBuilder B;
   B.addAttribute(Kind, Value);
   return addAttributes(C, Index, AttributeSet::get(C, Index, B));
 }
 
-AttributeSet AttributeSet::addAttributes(LLVMContext &C, unsigned Index,
+AttributeSet AttributeSet::addAttributes(LLVM37Context &C, unsigned Index,
                                          AttributeSet Attrs) const {
   if (!pImpl) return Attrs;
   if (!Attrs.pImpl) return *this;
@@ -819,13 +819,13 @@ AttributeSet AttributeSet::addAttributes(LLVMContext &C, unsigned Index,
   return get(C, AttrSet);
 }
 
-AttributeSet AttributeSet::removeAttribute(LLVMContext &C, unsigned Index,
+AttributeSet AttributeSet::removeAttribute(LLVM37Context &C, unsigned Index,
                                            Attribute::AttrKind Attr) const {
   if (!hasAttribute(Index, Attr)) return *this;
   return removeAttributes(C, Index, AttributeSet::get(C, Index, Attr));
 }
 
-AttributeSet AttributeSet::removeAttributes(LLVMContext &C, unsigned Index,
+AttributeSet AttributeSet::removeAttributes(LLVM37Context &C, unsigned Index,
                                             AttributeSet Attrs) const {
   if (!pImpl) return AttributeSet();
   if (!Attrs.pImpl) return *this;
@@ -868,7 +868,7 @@ AttributeSet AttributeSet::removeAttributes(LLVMContext &C, unsigned Index,
   return get(C, AttrSet);
 }
 
-AttributeSet AttributeSet::removeAttributes(LLVMContext &C, unsigned Index,
+AttributeSet AttributeSet::removeAttributes(LLVM37Context &C, unsigned Index,
                                             const AttrBuilder &Attrs) const {
   if (!pImpl) return AttributeSet();
 
@@ -904,17 +904,17 @@ AttributeSet AttributeSet::removeAttributes(LLVMContext &C, unsigned Index,
   return get(C, AttrSet);
 }
 
-AttributeSet AttributeSet::addDereferenceableAttr(LLVMContext &C, unsigned Index,
+AttributeSet AttributeSet::addDereferenceableAttr(LLVM37Context &C, unsigned Index,
                                                   uint64_t Bytes) const {
-  llvm::AttrBuilder B;
+  llvm37::AttrBuilder B;
   B.addDereferenceableAttr(Bytes);
   return addAttributes(C, Index, AttributeSet::get(C, Index, B));
 }
 
-AttributeSet AttributeSet::addDereferenceableOrNullAttr(LLVMContext &C,
+AttributeSet AttributeSet::addDereferenceableOrNullAttr(LLVM37Context &C,
                                                         unsigned Index,
                                                         uint64_t Bytes) const {
-  llvm::AttrBuilder B;
+  llvm37::AttrBuilder B;
   B.addDereferenceableOrNullAttr(Bytes);
   return addAttributes(C, Index, AttributeSet::get(C, Index, B));
 }
@@ -923,7 +923,7 @@ AttributeSet AttributeSet::addDereferenceableOrNullAttr(LLVMContext &C,
 // AttributeSet Accessor Methods
 //===----------------------------------------------------------------------===//
 
-LLVMContext &AttributeSet::getContext() const {
+LLVM37Context &AttributeSet::getContext() const {
   return pImpl->getContext();
 }
 

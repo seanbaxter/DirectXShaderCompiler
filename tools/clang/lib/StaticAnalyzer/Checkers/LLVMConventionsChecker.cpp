@@ -1,14 +1,14 @@
-//=== LLVMConventionsChecker.cpp - Check LLVM codebase conventions ---*- C++ -*-
+//=== LLVM37ConventionsChecker.cpp - Check LLVM37 codebase conventions ---*- C++ -*-
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 //
-// This defines LLVMConventionsChecker, a bunch of small little checks
-// for checking specific coding conventions in the LLVM/Clang codebase.
+// This defines LLVM37ConventionsChecker, a bunch of small little checks
+// for checking specific coding conventions in the LLVM37/Clang codebase.
 //
 //===----------------------------------------------------------------------===//
 
@@ -17,8 +17,8 @@
 #include "clang/AST/StmtVisitor.h"
 #include "clang/StaticAnalyzer/Core/BugReporter/BugReporter.h"
 #include "clang/StaticAnalyzer/Core/Checker.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/Support/raw_ostream.h"
 
 using namespace clang;
 using namespace ento;
@@ -27,7 +27,7 @@ using namespace ento;
 // Generic type checking routines.
 //===----------------------------------------------------------------------===//
 
-static bool IsLLVMStringRef(QualType T) {
+static bool IsLLVM37StringRef(QualType T) {
   const RecordType *RT = T->getAs<RecordType>();
   if (!RT)
     return false;
@@ -102,7 +102,7 @@ static bool IsSmallVector(QualType T) {
   TemplateName TM = TS->getTemplateName();
   TemplateDecl *TD = TM.getAsTemplateDecl();
 
-  if (!TD || !InNamespace(TD, "llvm"))
+  if (!TD || !InNamespace(TD, "llvm37"))
     return false;
 
   return TD->getName() == "SmallVector";
@@ -156,7 +156,7 @@ void StringRefCheckerVisitor::VisitVarDecl(VarDecl *VD) {
 
   // Pattern match for:
   // StringRef x = call() (where call returns std::string)
-  if (!IsLLVMStringRef(VD->getType()))
+  if (!IsLLVM37StringRef(VD->getType()))
     return;
   ExprWithCleanups *Ex1 = dyn_cast<ExprWithCleanups>(Init);
   if (!Ex1)
@@ -182,7 +182,7 @@ void StringRefCheckerVisitor::VisitVarDecl(VarDecl *VD) {
                      "std::string that it outlives";
   PathDiagnosticLocation VDLoc =
     PathDiagnosticLocation::createBegin(VD, BR.getSourceManager());
-  BR.EmitBasicReport(DeclWithIssue, Checker, desc, "LLVM Conventions", desc,
+  BR.EmitBasicReport(DeclWithIssue, Checker, desc, "LLVM37 Conventions", desc,
                      VDLoc, Init->getSourceRange());
 }
 
@@ -259,7 +259,7 @@ void ASTFieldVisitor::Visit(FieldDecl *D) {
 
 void ASTFieldVisitor::ReportError(QualType T) {
   SmallString<1024> buf;
-  llvm::raw_svector_ostream os(buf);
+  llvm37::raw_svector_ostream os(buf);
 
   os << "AST class '" << Root->getName() << "' has a field '"
      << FieldChain.front()->getName() << "' that allocates heap memory";
@@ -288,15 +288,15 @@ void ASTFieldVisitor::ReportError(QualType T) {
   PathDiagnosticLocation L = PathDiagnosticLocation::createBegin(
                                FieldChain.front(), BR.getSourceManager());
   BR.EmitBasicReport(Root, Checker, "AST node allocates heap memory",
-                     "LLVM Conventions", os.str(), L);
+                     "LLVM37 Conventions", os.str(), L);
 }
 
 //===----------------------------------------------------------------------===//
-// LLVMConventionsChecker
+// LLVM37ConventionsChecker
 //===----------------------------------------------------------------------===//
 
 namespace {
-class LLVMConventionsChecker : public Checker<
+class LLVM37ConventionsChecker : public Checker<
                                                 check::ASTDecl<CXXRecordDecl>,
                                                 check::ASTCodeBody > {
 public:
@@ -313,6 +313,6 @@ public:
 };
 }
 
-void ento::registerLLVMConventionsChecker(CheckerManager &mgr) {
-  mgr.registerChecker<LLVMConventionsChecker>();
+void ento::registerLLVM37ConventionsChecker(CheckerManager &mgr) {
+  mgr.registerChecker<LLVM37ConventionsChecker>();
 }

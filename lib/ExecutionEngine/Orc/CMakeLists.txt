@@ -1,4 +1,4 @@
-add_llvm_library(LLVMOrcJIT
+add_llvm_library(LLVM37OrcJIT
   ExecutionUtils.cpp
   IndirectionUtils.cpp
   NullResolver.cpp
@@ -6,7 +6,7 @@ add_llvm_library(LLVMOrcJIT
   OrcTargetSupport.cpp
 
   ADDITIONAL_HEADER_DIRS
-  ${LLVM_MAIN_INCLUDE_DIR}/llvm/ExecutionEngine/Orc
+  ${LLVM37_MAIN_INCLUDE_DIR}/llvm37/ExecutionEngine/Orc
 
   DEPENDS
   intrinsics_gen

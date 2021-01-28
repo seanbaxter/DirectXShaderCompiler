@@ -1,33 +1,33 @@
-//===- llvm/unittest/ADT/APFloat.cpp - APFloat unit tests ---------------------===//
+//===- llvm37/unittest/ADT/APFloat.cpp - APFloat unit tests ---------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/ADT/APFloat.h"
-#include "llvm/ADT/APSInt.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/APFloat.h"
+#include "llvm37/ADT/APSInt.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/Support/raw_ostream.h"
 #include "gtest/gtest.h"
 #include <cmath>
 #include <ostream>
 #include <string>
 
-using namespace llvm;
+using namespace llvm37;
 
 static double convertToDoubleFromString(const char *Str) {
-  llvm::APFloat F(0.0);
-  F.convertFromString(Str, llvm::APFloat::rmNearestTiesToEven);
+  llvm37::APFloat F(0.0);
+  F.convertFromString(Str, llvm37::APFloat::rmNearestTiesToEven);
   return F.convertToDouble();
 }
 
 static std::string convertToString(double d, unsigned Prec, unsigned Pad) {
-  llvm::SmallVector<char, 100> Buffer;
-  llvm::APFloat F(d);
+  llvm37::SmallVector<char, 100> Buffer;
+  llvm37::APFloat F(d);
   F.toString(Buffer, Prec, Pad);
   return std::string(Buffer.data(), Buffer.size());
 }
@@ -516,7 +516,7 @@ TEST(APFloatTest, FMA) {
     EXPECT_TRUE(f1.isNegative() && f1.isZero());
   }
 
-  // Test x87 extended precision case from http://llvm.org/PR20728.
+  // Test x87 extended precision case from http://llvm37.org/PR20728.
   {
     APFloat M1(APFloat::x87DoubleExtended, 1.0);
     APFloat M2(APFloat::x87DoubleExtended, 1.0);
@@ -619,22 +619,22 @@ TEST(APFloatTest, DecimalStringsWithoutNullTerminators) {
   // rdar://14323230.
   APFloat Val(APFloat::IEEEdouble);
   Val.convertFromString(StringRef("0.00", 3),
-                        llvm::APFloat::rmNearestTiesToEven);
+                        llvm37::APFloat::rmNearestTiesToEven);
   EXPECT_EQ(Val.convertToDouble(), 0.0);
   Val.convertFromString(StringRef("0.01", 3),
-                        llvm::APFloat::rmNearestTiesToEven);
+                        llvm37::APFloat::rmNearestTiesToEven);
   EXPECT_EQ(Val.convertToDouble(), 0.0);
   Val.convertFromString(StringRef("0.09", 3),
-                        llvm::APFloat::rmNearestTiesToEven);
+                        llvm37::APFloat::rmNearestTiesToEven);
   EXPECT_EQ(Val.convertToDouble(), 0.0);
   Val.convertFromString(StringRef("0.095", 4),
-                        llvm::APFloat::rmNearestTiesToEven);
+                        llvm37::APFloat::rmNearestTiesToEven);
   EXPECT_EQ(Val.convertToDouble(), 0.09);
   Val.convertFromString(StringRef("0.00e+3", 7),
-                        llvm::APFloat::rmNearestTiesToEven);
+                        llvm37::APFloat::rmNearestTiesToEven);
   EXPECT_EQ(Val.convertToDouble(), 0.00);
   Val.convertFromString(StringRef("0e+3", 4),
-                        llvm::APFloat::rmNearestTiesToEven);
+                        llvm37::APFloat::rmNearestTiesToEven);
   EXPECT_EQ(Val.convertToDouble(), 0.00);
 
 }

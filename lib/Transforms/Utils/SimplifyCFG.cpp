@@ -1,6 +1,6 @@
 //===- SimplifyCFG.cpp - Code to perform CFG simplification ---------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,47 +11,47 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Transforms/Utils/Local.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/SetVector.h"
-#include "llvm/ADT/SmallPtrSet.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/Analysis/ConstantFolding.h"
-#include "llvm/Analysis/InstructionSimplify.h"
-#include "llvm/Analysis/TargetTransformInfo.h"
-#include "llvm/Analysis/ValueTracking.h"
-#include "llvm/IR/CFG.h"
-#include "llvm/IR/ConstantRange.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/DerivedTypes.h"
-#include "llvm/IR/GlobalVariable.h"
-#include "llvm/IR/IRBuilder.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/MDBuilder.h"
-#include "llvm/IR/Metadata.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/NoFolder.h"
-#include "llvm/IR/Operator.h"
-#include "llvm/IR/PatternMatch.h"
-#include "llvm/IR/Type.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Transforms/Utils/BasicBlockUtils.h"
-#include "llvm/Transforms/Utils/Local.h"
-#include "llvm/Transforms/Utils/ValueMapper.h"
+#include "llvm37/Transforms/Utils/Local.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/SetVector.h"
+#include "llvm37/ADT/SmallPtrSet.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/Analysis/ConstantFolding.h"
+#include "llvm37/Analysis/InstructionSimplify.h"
+#include "llvm37/Analysis/TargetTransformInfo.h"
+#include "llvm37/Analysis/ValueTracking.h"
+#include "llvm37/IR/CFG.h"
+#include "llvm37/IR/ConstantRange.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/IR/DerivedTypes.h"
+#include "llvm37/IR/GlobalVariable.h"
+#include "llvm37/IR/IRBuilder.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/MDBuilder.h"
+#include "llvm37/IR/Metadata.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/NoFolder.h"
+#include "llvm37/IR/Operator.h"
+#include "llvm37/IR/PatternMatch.h"
+#include "llvm37/IR/Type.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Transforms/Utils/BasicBlockUtils.h"
+#include "llvm37/Transforms/Utils/Local.h"
+#include "llvm37/Transforms/Utils/ValueMapper.h"
 #include <algorithm>
 #include <map>
 #include <set>
 
 #include "dxc/DXIL/DxilMetadataHelper.h" // HLSL Change - control flow hint.
 
-using namespace llvm;
+using namespace llvm37;
 using namespace PatternMatch;
 
 #define DEBUG_TYPE "simplifycfg"
@@ -687,7 +687,7 @@ SimplifyEqualityComparisonWithOnlyPredecessor(TerminatorInst *TI,
 
     // Collect branch weights into a vector.
     SmallVector<uint32_t, 8> Weights;
-    MDNode *MD = SI->getMetadata(LLVMContext::MD_prof);
+    MDNode *MD = SI->getMetadata(LLVM37Context::MD_prof);
     bool HasWeight = MD && (MD->getNumOperands() == 2 + SI->getNumCases());
     if (HasWeight)
       for (unsigned MD_i = 1, MD_e = MD->getNumOperands(); MD_i < MD_e;
@@ -707,7 +707,7 @@ SimplifyEqualityComparisonWithOnlyPredecessor(TerminatorInst *TI,
       }
     }
     if (HasWeight && Weights.size() >= 2)
-      SI->setMetadata(LLVMContext::MD_prof,
+      SI->setMetadata(LLVM37Context::MD_prof,
                       MDBuilder(SI->getParent()->getContext()).
                       createBranchWeights(Weights));
 
@@ -782,7 +782,7 @@ static int __cdecl ConstantIntSortPredicate(ConstantInt *const *P1,
 }
 
 static inline bool HasBranchWeights(const Instruction* I) {
-  MDNode *ProfMD = I->getMetadata(LLVMContext::MD_prof);
+  MDNode *ProfMD = I->getMetadata(LLVM37Context::MD_prof);
   if (ProfMD && ProfMD->getOperand(0))
     if (MDString* MDS = dyn_cast<MDString>(ProfMD->getOperand(0)))
       return MDS->getString().equals("branch_weights");
@@ -795,7 +795,7 @@ static inline bool HasBranchWeights(const Instruction* I) {
 /// metadata.
 static void GetBranchWeights(TerminatorInst *TI,
                              SmallVectorImpl<uint64_t> &Weights) {
-  MDNode *MD = TI->getMetadata(LLVMContext::MD_prof);
+  MDNode *MD = TI->getMetadata(LLVM37Context::MD_prof);
   assert(MD);
   for (unsigned i = 1, e = MD->getNumOperands(); i < e; ++i) {
     ConstantInt *CI = mdconst::extract<ConstantInt>(MD->getOperand(i));
@@ -1005,7 +1005,7 @@ bool SimplifyCFGOpt::FoldValueComparisonIntoPredecessors(TerminatorInst *TI,
 
         SmallVector<uint32_t, 8> MDWeights(Weights.begin(), Weights.end());
 
-        NewSI->setMetadata(LLVMContext::MD_prof,
+        NewSI->setMetadata(LLVM37Context::MD_prof,
                            MDBuilder(BB->getContext()).
                            createBranchWeights(MDWeights));
       }
@@ -1114,11 +1114,11 @@ static bool HoistThenElseCodeToIf(BranchInst *BI,
       I2->replaceAllUsesWith(I1);
     I1->intersectOptionalDataWith(I2);
     unsigned KnownIDs[] = {
-      LLVMContext::MD_tbaa,
-      LLVMContext::MD_range,
-      LLVMContext::MD_fpmath,
-      LLVMContext::MD_invariant_load,
-      LLVMContext::MD_nonnull
+      LLVM37Context::MD_tbaa,
+      LLVM37Context::MD_range,
+      LLVM37Context::MD_fpmath,
+      LLVM37Context::MD_invariant_load,
+      LLVM37Context::MD_nonnull
     };
     combineMetadata(I1, I2, KnownIDs);
     I2->eraseFromParent();
@@ -2052,7 +2052,7 @@ static bool ExtractBranchMetadata(BranchInst *BI,
                                   uint64_t &ProbTrue, uint64_t &ProbFalse) {
   assert(BI->isConditional() &&
          "Looking for probabilities on unconditional branch?");
-  MDNode *ProfileData = BI->getMetadata(LLVMContext::MD_prof);
+  MDNode *ProfileData = BI->getMetadata(LLVM37Context::MD_prof);
   if (!ProfileData || ProfileData->getNumOperands() != 3) return false;
   ConstantInt *CITrue =
       mdconst::dyn_extract<ConstantInt>(ProfileData->getOperand(1));
@@ -2084,7 +2084,7 @@ static bool checkCSEInPredecessor(Instruction *Inst, BasicBlock *PB) {
 /// If this basic block is simple enough, and if a predecessor branches to us
 /// and one of our successors, fold the block into the predecessor and use
 /// logical operations to pick the right destination.
-bool llvm::FoldBranchToCommonDest(BranchInst *BI, unsigned BonusInstThreshold) {
+bool llvm37::FoldBranchToCommonDest(BranchInst *BI, unsigned BonusInstThreshold) {
   BasicBlock *BB = BI->getParent();
 
   Instruction *Cond = nullptr;
@@ -2245,7 +2245,7 @@ bool llvm::FoldBranchToCommonDest(BranchInst *BI, unsigned BonusInstThreshold) {
       // only given the branch precondition.
       // For an analogous reason, we must also drop all the metadata whose
       // semantics we don't understand.
-      NewBonusInst->dropUnknownMetadata(LLVMContext::MD_dbg);
+      NewBonusInst->dropUnknownMetadata(LLVM37Context::MD_dbg);
 
       PredBlock->getInstList().insert(PBI, NewBonusInst);
       NewBonusInst->takeName(BonusInst);
@@ -2309,11 +2309,11 @@ bool llvm::FoldBranchToCommonDest(BranchInst *BI, unsigned BonusInstThreshold) {
         FitWeights(NewWeights);
 
         SmallVector<uint32_t, 8> MDWeights(NewWeights.begin(),NewWeights.end());
-        PBI->setMetadata(LLVMContext::MD_prof,
+        PBI->setMetadata(LLVM37Context::MD_prof,
                          MDBuilder(BI->getContext()).
                          createBranchWeights(MDWeights));
       } else
-        PBI->setMetadata(LLVMContext::MD_prof, nullptr);
+        PBI->setMetadata(LLVM37Context::MD_prof, nullptr);
     } else {
       // Update PHI nodes in the common successors.
       for (unsigned i = 0, e = PHIs.size(); i != e; ++i) {
@@ -2559,7 +2559,7 @@ static bool SimplifyCondBranchToCondBranch(BranchInst *PBI, BranchInst *BI) {
     // Halve the weights if any of them cannot fit in an uint32_t
     FitWeights(NewWeights);
 
-    PBI->setMetadata(LLVMContext::MD_prof,
+    PBI->setMetadata(LLVM37Context::MD_prof,
                      MDBuilder(BI->getContext())
                          .createBranchWeights(NewWeights[0], NewWeights[1]));
   }
@@ -2636,7 +2636,7 @@ static bool SimplifyTerminatorOnSelect(TerminatorInst *OldTerm, Value *Cond,
       // Create a conditional branch sharing the condition of the select.
       BranchInst *NewBI = Builder.CreateCondBr(Cond, TrueBB, FalseBB);
       if (TrueWeight != FalseWeight)
-        NewBI->setMetadata(LLVMContext::MD_prof,
+        NewBI->setMetadata(LLVM37Context::MD_prof,
                            MDBuilder(OldTerm->getContext()).
                            createBranchWeights(TrueWeight, FalseWeight));
     }
@@ -2823,7 +2823,7 @@ static bool TryToSimplifyUncondBranchWithICmpInIt(
       Weights.push_back(Weights[0]);
 
       SmallVector<uint32_t, 8> MDWeights(Weights.begin(), Weights.end());
-      SI->setMetadata(LLVMContext::MD_prof,
+      SI->setMetadata(LLVM37Context::MD_prof,
                       MDBuilder(SI->getContext()).
                       createBranchWeights(MDWeights));
     }
@@ -3252,7 +3252,7 @@ static bool TurnSwitchRangeIntoICmp(SwitchInst *SI, IRBuilder<> &Builder) {
         TrueWeight /= 2;
         FalseWeight /= 2;
       }
-      NewBI->setMetadata(LLVMContext::MD_prof,
+      NewBI->setMetadata(LLVM37Context::MD_prof,
                          MDBuilder(SI->getContext()).createBranchWeights(
                              (uint32_t)TrueWeight, (uint32_t)FalseWeight));
     }
@@ -3321,7 +3321,7 @@ static bool EliminateDeadSwitchCases(SwitchInst *SI, AssumptionCache *AC,
   }
   if (HasWeight && Weights.size() >= 2) {
     SmallVector<uint32_t, 8> MDWeights(Weights.begin(), Weights.end());
-    SI->setMetadata(LLVMContext::MD_prof,
+    SI->setMetadata(LLVM37Context::MD_prof,
                     MDBuilder(SI->getParent()->getContext()).
                     createBranchWeights(MDWeights));
   }
@@ -3924,7 +3924,7 @@ Value *SwitchLookupTable::BuildLookup(Value *Index, IRBuilder<> &Builder) {
       return Builder.CreateLoad(GEP, "switch.load");
     }
   }
-  llvm_unreachable("Unknown lookup table kind!");
+  llvm37_unreachable("Unknown lookup table kind!");
 }
 
 bool SwitchLookupTable::WouldFitInRegister(const DataLayout &DL,
@@ -4734,7 +4734,7 @@ bool SimplifyCFGOpt::run(BasicBlock *BB) {
 /// eliminates unreachable basic blocks, and does other "peephole" optimization
 /// of the CFG.  It returns true if a modification was made.
 ///
-bool llvm::SimplifyCFG(BasicBlock *BB, const TargetTransformInfo &TTI,
+bool llvm37::SimplifyCFG(BasicBlock *BB, const TargetTransformInfo &TTI,
                        unsigned BonusInstThreshold, AssumptionCache *AC) {
   return SimplifyCFGOpt(TTI, BB->getModule()->getDataLayout(),
                         BonusInstThreshold, AC).run(BB);

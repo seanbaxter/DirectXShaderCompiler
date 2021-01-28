@@ -1,4 +1,4 @@
-// RUN: not llvm-mc -g -triple i386-unknown-unknown %s 2> %t.err | FileCheck %s
+// RUN: not llvm37-mc -g -triple i386-unknown-unknown %s 2> %t.err | FileCheck %s
 // RUN: FileCheck --check-prefix=CHECK-ERRORS %s < %t.err
 // Test for Bug 11740
 

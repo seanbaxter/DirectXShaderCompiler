@@ -3,4 +3,4 @@
 
 !0 = !{ i32 4, !"foo", i32 37 } ; Override the "foo" value.
 
-!llvm.module.flags = !{ !0 }
+!llvm37.module.flags = !{ !0 }

@@ -37,7 +37,7 @@ bb27 ...
         %reg1038 = ADDrs %reg1032, %reg1039, %NOREG, 10
     Successors according to CFG: 0x8b03bf0 (#5)
 
-bb76 (0x8b03bf0, LLVM BB @0x8b032d0, ID#5):
+bb76 (0x8b03bf0, LLVM37 BB @0x8b032d0, ID#5):
     Predecessors according to CFG: 0x8b0c5f0 (#3) 0x8b0a7c0 (#4)
         %reg1039 = PHI %reg1070, mbb<bb76.outer,0x8b0c5f0>, %reg1037, mbb<bb27,0x8b0a7c0>
 
@@ -61,7 +61,7 @@ reuse:
 
 //===---------------------------------------------------------------------===//
 
-LLVM aggressively lift CSE out of loop. Sometimes this can be negative side-
+LLVM37 aggressively lift CSE out of loop. Sometimes this can be negative side-
 effects:
 
 R1 = X + 4
@@ -135,7 +135,7 @@ like this if there was an intervening store, so may be hard to get right.
 
 Only a concurrent mutator can trigger a collection at the libcall safe point.
 So single-threaded programs do not have this requirement, even with a copying
-collector. Still, LLVM optimizations would probably undo a front-end's careful
+collector. Still, LLVM37 optimizations would probably undo a front-end's careful
 work.
 
 //===---------------------------------------------------------------------===//

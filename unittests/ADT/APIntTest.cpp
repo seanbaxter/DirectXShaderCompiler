@@ -1,19 +1,19 @@
-//===- llvm/unittest/ADT/APInt.cpp - APInt unit tests ---------------------===//
+//===- llvm37/unittest/ADT/APInt.cpp - APInt unit tests ---------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/ADT/APInt.h"
-#include "llvm/ADT/SmallString.h"
+#include "llvm37/ADT/APInt.h"
+#include "llvm37/ADT/SmallString.h"
 #include "gtest/gtest.h"
 #include <array>
 #include <ostream>
 
-using namespace llvm;
+using namespace llvm37;
 
 namespace {
 
@@ -41,7 +41,7 @@ TEST(APIntTest, i128_NegativeCount) {
 }
 
 // XFAIL this test on FreeBSD where the system gcc-4.2.1 seems to miscompile it.
-#if defined(__llvm__) || !defined(__FreeBSD__)
+#if defined(__llvm37__) || !defined(__FreeBSD__)
 
 TEST(APIntTest, i33_Count) {
   APInt i33minus2(33, static_cast<uint64_t>(-2), true);

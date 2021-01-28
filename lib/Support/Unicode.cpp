@@ -1,6 +1,6 @@
-//===- llvm/Support/Unicode.cpp - Unicode character properties  -*- C++ -*-===//
+//===- llvm37/Support/Unicode.cpp - Unicode character properties  -*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -12,11 +12,11 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Support/Unicode.h"
-#include "llvm/Support/ConvertUTF.h"
-#include "llvm/Support/UnicodeCharRanges.h"
+#include "llvm37/Support/Unicode.h"
+#include "llvm37/Support/ConvertUTF.h"
+#include "llvm37/Support/UnicodeCharRanges.h"
 
-namespace llvm {
+namespace llvm37 {
 namespace sys {
 namespace unicode {
 
@@ -363,5 +363,5 @@ int columnWidthUTF8(StringRef Text) {
 
 } // namespace unicode
 } // namespace sys
-} // namespace llvm
+} // namespace llvm37
 

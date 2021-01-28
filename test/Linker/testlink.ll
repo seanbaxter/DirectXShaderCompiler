@@ -1,4 +1,4 @@
-; RUN: llvm-link %s %S/Inputs/testlink.ll -S | FileCheck %s
+; RUN: llvm37-link %s %S/Inputs/testlink.ll -S | FileCheck %s
 
 ; CHECK: %Ty2 = type { %Ty1* }
 ; CHECK: %Ty1 = type { %Ty2* }

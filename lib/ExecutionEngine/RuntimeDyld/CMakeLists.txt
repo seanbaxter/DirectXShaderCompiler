@@ -1,4 +1,4 @@
-add_llvm_library(LLVMRuntimeDyld
+add_llvm_library(LLVM37RuntimeDyld
   RTDyldMemoryManager.cpp
   RuntimeDyld.cpp
   RuntimeDyldChecker.cpp

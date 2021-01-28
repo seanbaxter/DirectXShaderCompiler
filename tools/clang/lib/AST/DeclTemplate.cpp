@@ -1,6 +1,6 @@
 //===--- DeclTemplate.cpp - Template Declaration AST Node Implementation --===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -19,7 +19,7 @@
 #include "clang/AST/ExprCXX.h"
 #include "clang/AST/TypeLoc.h"
 #include "clang/Basic/IdentifierTable.h"
-#include "llvm/ADT/STLExtras.h"
+#include "llvm37/ADT/STLExtras.h"
 #include <memory>
 using namespace clang;
 
@@ -59,8 +59,8 @@ TemplateParameterList::Create(const ASTContext &C, SourceLocation TemplateLoc,
                               unsigned NumParams, SourceLocation RAngleLoc) {
   unsigned Size = sizeof(TemplateParameterList) 
                 + sizeof(NamedDecl *) * NumParams;
-  unsigned Align = std::max(llvm::alignOf<TemplateParameterList>(),
-                            llvm::alignOf<NamedDecl*>());
+  unsigned Align = std::max(llvm37::alignOf<TemplateParameterList>(),
+                            llvm37::alignOf<NamedDecl*>());
   void *Mem = C.Allocate(Size, Align);
   return new (Mem) TemplateParameterList(TemplateLoc, LAngleLoc, Params,
                                          NumParams, RAngleLoc);
@@ -169,10 +169,10 @@ RedeclarableTemplateDecl::CommonBase *RedeclarableTemplateDecl::getCommonPtr() c
 template<class EntryType>
 typename RedeclarableTemplateDecl::SpecEntryTraits<EntryType>::DeclType *
 RedeclarableTemplateDecl::findSpecializationImpl(
-    llvm::FoldingSetVector<EntryType> &Specs, ArrayRef<TemplateArgument> Args,
+    llvm37::FoldingSetVector<EntryType> &Specs, ArrayRef<TemplateArgument> Args,
     void *&InsertPos) {
   typedef SpecEntryTraits<EntryType> SETraits;
-  llvm::FoldingSetNodeID ID;
+  llvm37::FoldingSetNodeID ID;
   EntryType::Profile(ID,Args, getASTContext());
   EntryType *Entry = Specs.FindNodeOrInsertPos(ID, InsertPos);
   return Entry ? SETraits::getDecl(Entry)->getMostRecentDecl() : nullptr;
@@ -180,7 +180,7 @@ RedeclarableTemplateDecl::findSpecializationImpl(
 
 template<class Derived, class EntryType>
 void RedeclarableTemplateDecl::addSpecializationImpl(
-    llvm::FoldingSetVector<EntryType> &Specializations, EntryType *Entry,
+    llvm37::FoldingSetVector<EntryType> &Specializations, EntryType *Entry,
     void *InsertPos) {
   typedef SpecEntryTraits<EntryType> SETraits;
   if (InsertPos) {
@@ -292,7 +292,7 @@ void FunctionTemplateDecl::LoadLazySpecializations() const {
   }
 }
 
-llvm::FoldingSetVector<FunctionTemplateSpecializationInfo> &
+llvm37::FoldingSetVector<FunctionTemplateSpecializationInfo> &
 FunctionTemplateDecl::getSpecializations() const {
   LoadLazySpecializations();
   return getCommonPtr()->Specializations;
@@ -320,7 +320,7 @@ ArrayRef<TemplateArgument> FunctionTemplateDecl::getInjectedTemplateArgs() {
                                  CommonPtr->InjectedArgs);
   }
 
-  return llvm::makeArrayRef(CommonPtr->InjectedArgs, Params->size());
+  return llvm37::makeArrayRef(CommonPtr->InjectedArgs, Params->size());
 }
 
 //===----------------------------------------------------------------------===//
@@ -366,13 +366,13 @@ void ClassTemplateDecl::LoadLazySpecializations() const {
   }
 }
 
-llvm::FoldingSetVector<ClassTemplateSpecializationDecl> &
+llvm37::FoldingSetVector<ClassTemplateSpecializationDecl> &
 ClassTemplateDecl::getSpecializations() const {
   LoadLazySpecializations();
   return getCommonPtr()->Specializations;
 }  
 
-llvm::FoldingSetVector<ClassTemplatePartialSpecializationDecl> &
+llvm37::FoldingSetVector<ClassTemplatePartialSpecializationDecl> &
 ClassTemplateDecl::getPartialSpecializations() {
   LoadLazySpecializations();
   return getCommonPtr()->PartialSpecializations;
@@ -420,11 +420,11 @@ void ClassTemplateDecl::AddPartialSpecialization(
 
 void ClassTemplateDecl::getPartialSpecializations(
           SmallVectorImpl<ClassTemplatePartialSpecializationDecl *> &PS) {
-  llvm::FoldingSetVector<ClassTemplatePartialSpecializationDecl> &PartialSpecs
+  llvm37::FoldingSetVector<ClassTemplatePartialSpecializationDecl> &PartialSpecs
     = getPartialSpecializations();
   PS.clear();
   PS.reserve(PartialSpecs.size());
-  for (llvm::FoldingSetVector<ClassTemplatePartialSpecializationDecl>::iterator
+  for (llvm37::FoldingSetVector<ClassTemplatePartialSpecializationDecl>::iterator
        P = PartialSpecs.begin(), PEnd = PartialSpecs.end();
        P != PEnd; ++P)
     PS.push_back(P->getMostRecentDecl());
@@ -433,7 +433,7 @@ void ClassTemplateDecl::getPartialSpecializations(
 ClassTemplatePartialSpecializationDecl *
 ClassTemplateDecl::findPartialSpecialization(QualType T) {
   ASTContext &Context = getASTContext();
-  using llvm::FoldingSetVector;
+  using llvm37::FoldingSetVector;
   typedef FoldingSetVector<ClassTemplatePartialSpecializationDecl>::iterator
     partial_spec_iterator;
   for (partial_spec_iterator P = getPartialSpecializations().begin(),
@@ -450,7 +450,7 @@ ClassTemplatePartialSpecializationDecl *
 ClassTemplateDecl::findPartialSpecInstantiatedFromMember(
                                     ClassTemplatePartialSpecializationDecl *D) {
   Decl *DCanon = D->getCanonicalDecl();
-  for (llvm::FoldingSetVector<ClassTemplatePartialSpecializationDecl>::iterator
+  for (llvm37::FoldingSetVector<ClassTemplatePartialSpecializationDecl>::iterator
             P = getPartialSpecializations().begin(),
          PEnd = getPartialSpecializations().end();
        P != PEnd; ++P) {
@@ -818,7 +818,7 @@ ClassTemplateSpecializationDecl::getSourceRange() const {
   }
   else {
     // No explicit info available.
-    llvm::PointerUnion<ClassTemplateDecl *,
+    llvm37::PointerUnion<ClassTemplateDecl *,
                        ClassTemplatePartialSpecializationDecl *>
       inst_from = getInstantiatedFrom();
     if (inst_from.isNull())
@@ -1004,13 +1004,13 @@ void VarTemplateDecl::LoadLazySpecializations() const {
   }
 }
 
-llvm::FoldingSetVector<VarTemplateSpecializationDecl> &
+llvm37::FoldingSetVector<VarTemplateSpecializationDecl> &
 VarTemplateDecl::getSpecializations() const {
   LoadLazySpecializations();
   return getCommonPtr()->Specializations;
 }
 
-llvm::FoldingSetVector<VarTemplatePartialSpecializationDecl> &
+llvm37::FoldingSetVector<VarTemplatePartialSpecializationDecl> &
 VarTemplateDecl::getPartialSpecializations() {
   LoadLazySpecializations();
   return getCommonPtr()->PartialSpecializations;
@@ -1057,11 +1057,11 @@ void VarTemplateDecl::AddPartialSpecialization(
 
 void VarTemplateDecl::getPartialSpecializations(
     SmallVectorImpl<VarTemplatePartialSpecializationDecl *> &PS) {
-  llvm::FoldingSetVector<VarTemplatePartialSpecializationDecl> &PartialSpecs =
+  llvm37::FoldingSetVector<VarTemplatePartialSpecializationDecl> &PartialSpecs =
       getPartialSpecializations();
   PS.clear();
   PS.reserve(PartialSpecs.size());
-  for (llvm::FoldingSetVector<VarTemplatePartialSpecializationDecl>::iterator
+  for (llvm37::FoldingSetVector<VarTemplatePartialSpecializationDecl>::iterator
            P = PartialSpecs.begin(),
            PEnd = PartialSpecs.end();
        P != PEnd; ++P)
@@ -1072,7 +1072,7 @@ VarTemplatePartialSpecializationDecl *
 VarTemplateDecl::findPartialSpecInstantiatedFromMember(
     VarTemplatePartialSpecializationDecl *D) {
   Decl *DCanon = D->getCanonicalDecl();
-  for (llvm::FoldingSetVector<VarTemplatePartialSpecializationDecl>::iterator
+  for (llvm37::FoldingSetVector<VarTemplatePartialSpecializationDecl>::iterator
            P = getPartialSpecializations().begin(),
            PEnd = getPartialSpecializations().end();
        P != PEnd; ++P) {

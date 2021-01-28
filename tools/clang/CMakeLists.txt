@@ -14,17 +14,17 @@ else()
   endif()
 endif()
 
-# If we are not building as a part of LLVM, build Clang as an
-# standalone project, using LLVM as an external library:
+# If we are not building as a part of LLVM37, build Clang as an
+# standalone project, using LLVM37 as an external library:
 if( CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR )
   project(Clang)
 
   # Rely on llvm-config.
   set(CONFIG_OUTPUT)
-  find_program(LLVM_CONFIG "llvm-config")
-  if(LLVM_CONFIG)
-    message(STATUS "Found LLVM_CONFIG as ${LLVM_CONFIG}")
-    set(CONFIG_COMMAND ${LLVM_CONFIG}
+  find_program(LLVM37_CONFIG "llvm-config")
+  if(LLVM37_CONFIG)
+    message(STATUS "Found LLVM37_CONFIG as ${LLVM37_CONFIG}")
+    set(CONFIG_COMMAND ${LLVM37_CONFIG}
       "--assertion-mode"
       "--bindir"
       "--libdir"
@@ -46,123 +46,123 @@ if( CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR )
       message(FATAL_ERROR "llvm-config failed with status ${HAD_ERROR}")
     endif()
   else()
-    message(FATAL_ERROR "llvm-config not found -- ${LLVM_CONFIG}")
+    message(FATAL_ERROR "llvm-config not found -- ${LLVM37_CONFIG}")
   endif()
 
   list(GET CONFIG_OUTPUT 0 ENABLE_ASSERTIONS)
   list(GET CONFIG_OUTPUT 1 TOOLS_BINARY_DIR)
   list(GET CONFIG_OUTPUT 2 LIBRARY_DIR)
   list(GET CONFIG_OUTPUT 3 INCLUDE_DIR)
-  list(GET CONFIG_OUTPUT 4 LLVM_OBJ_ROOT)
+  list(GET CONFIG_OUTPUT 4 LLVM37_OBJ_ROOT)
   list(GET CONFIG_OUTPUT 5 MAIN_SRC_DIR)
 
   if(NOT MSVC_IDE)
-    set(LLVM_ENABLE_ASSERTIONS ${ENABLE_ASSERTIONS}
+    set(LLVM37_ENABLE_ASSERTIONS ${ENABLE_ASSERTIONS}
       CACHE BOOL "Enable assertions")
     # Assertions should follow llvm-config's.
-    mark_as_advanced(LLVM_ENABLE_ASSERTIONS)
+    mark_as_advanced(LLVM37_ENABLE_ASSERTIONS)
   endif()
 
-  set(LLVM_TOOLS_BINARY_DIR ${TOOLS_BINARY_DIR} CACHE PATH "Path to llvm/bin")
-  set(LLVM_LIBRARY_DIR ${LIBRARY_DIR} CACHE PATH "Path to llvm/lib")
-  set(LLVM_MAIN_INCLUDE_DIR ${INCLUDE_DIR} CACHE PATH "Path to llvm/include")
-  set(LLVM_BINARY_DIR ${LLVM_OBJ_ROOT} CACHE PATH "Path to LLVM build tree")
-  set(LLVM_MAIN_SRC_DIR ${MAIN_SRC_DIR} CACHE PATH "Path to LLVM source tree")
+  set(LLVM37_TOOLS_BINARY_DIR ${TOOLS_BINARY_DIR} CACHE PATH "Path to llvm37/bin")
+  set(LLVM37_LIBRARY_DIR ${LIBRARY_DIR} CACHE PATH "Path to llvm37/lib")
+  set(LLVM37_MAIN_INCLUDE_DIR ${INCLUDE_DIR} CACHE PATH "Path to llvm37/include")
+  set(LLVM37_BINARY_DIR ${LLVM37_OBJ_ROOT} CACHE PATH "Path to LLVM37 build tree")
+  set(LLVM37_MAIN_SRC_DIR ${MAIN_SRC_DIR} CACHE PATH "Path to LLVM37 source tree")
 
-  find_program(LLVM_TABLEGEN_EXE "llvm-tblgen" ${LLVM_TOOLS_BINARY_DIR}
+  find_program(LLVM37_TABLEGEN_EXE "llvm37-tblgen" ${LLVM37_TOOLS_BINARY_DIR}
     NO_DEFAULT_PATH)
 
-  set(LLVM_CMAKE_PATH "${LLVM_BINARY_DIR}/share/llvm/cmake")
-  set(LLVMCONFIG_FILE "${LLVM_CMAKE_PATH}/LLVMConfig.cmake")
-  if(EXISTS ${LLVMCONFIG_FILE})
-    list(APPEND CMAKE_MODULE_PATH "${LLVM_CMAKE_PATH}")
-    include(${LLVMCONFIG_FILE})
+  set(LLVM37_CMAKE_PATH "${LLVM37_BINARY_DIR}/share/llvm37/cmake")
+  set(LLVM37CONFIG_FILE "${LLVM37_CMAKE_PATH}/LLVMConfig.cmake")
+  if(EXISTS ${LLVM37CONFIG_FILE})
+    list(APPEND CMAKE_MODULE_PATH "${LLVM37_CMAKE_PATH}")
+    include(${LLVM37CONFIG_FILE})
   else()
-    message(FATAL_ERROR "Not found: ${LLVMCONFIG_FILE}")
+    message(FATAL_ERROR "Not found: ${LLVM37CONFIG_FILE}")
   endif()
 
   # They are used as destination of target generators.
-  set(LLVM_RUNTIME_OUTPUT_INTDIR ${CMAKE_BINARY_DIR}/${CMAKE_CFG_INTDIR}/bin)
-  set(LLVM_LIBRARY_OUTPUT_INTDIR ${CMAKE_BINARY_DIR}/${CMAKE_CFG_INTDIR}/lib${LLVM_LIBDIR_SUFFIX})
+  set(LLVM37_RUNTIME_OUTPUT_INTDIR ${CMAKE_BINARY_DIR}/${CMAKE_CFG_INTDIR}/bin)
+  set(LLVM37_LIBRARY_OUTPUT_INTDIR ${CMAKE_BINARY_DIR}/${CMAKE_CFG_INTDIR}/lib${LLVM37_LIBDIR_SUFFIX})
   if(WIN32 OR CYGWIN)
     # DLL platform -- put DLLs into bin.
-    set(LLVM_SHLIB_OUTPUT_INTDIR ${LLVM_RUNTIME_OUTPUT_INTDIR})
+    set(LLVM37_SHLIB_OUTPUT_INTDIR ${LLVM37_RUNTIME_OUTPUT_INTDIR})
   else()
-    set(LLVM_SHLIB_OUTPUT_INTDIR ${LLVM_LIBRARY_OUTPUT_INTDIR})
+    set(LLVM37_SHLIB_OUTPUT_INTDIR ${LLVM37_LIBRARY_OUTPUT_INTDIR})
   endif()
 
-  option(LLVM_INSTALL_TOOLCHAIN_ONLY
+  option(LLVM37_INSTALL_TOOLCHAIN_ONLY
     "Only include toolchain files in the 'install' target." OFF)
 
-  option(LLVM_FORCE_USE_OLD_HOST_TOOLCHAIN
+  option(LLVM37_FORCE_USE_OLD_HOST_TOOLCHAIN
     "Set to ON to force using an old, unsupported host toolchain." OFF)
 
   include(AddLLVM)
   include(TableGen)
   include(HandleLLVMOptions)
 
-  set(PACKAGE_VERSION "${LLVM_PACKAGE_VERSION}")
+  set(PACKAGE_VERSION "${LLVM37_PACKAGE_VERSION}")
 
-  if (NOT DEFINED LLVM_INCLUDE_TESTS)
-    set(LLVM_INCLUDE_TESTS ON)
+  if (NOT DEFINED LLVM37_INCLUDE_TESTS)
+    set(LLVM37_INCLUDE_TESTS ON)
   endif()
 
-  include_directories("${LLVM_BINARY_DIR}/include" "${LLVM_MAIN_INCLUDE_DIR}")
-  link_directories("${LLVM_LIBRARY_DIR}")
+  include_directories("${LLVM37_BINARY_DIR}/include" "${LLVM37_MAIN_INCLUDE_DIR}")
+  link_directories("${LLVM37_LIBRARY_DIR}")
 
   set( CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin )
-  set( CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib${LLVM_LIBDIR_SUFFIX} )
-  set( CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib${LLVM_LIBDIR_SUFFIX} )
+  set( CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib${LLVM37_LIBDIR_SUFFIX} )
+  set( CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib${LLVM37_LIBDIR_SUFFIX} )
 
-  if(LLVM_INCLUDE_TESTS)
-    # Check prebuilt llvm/utils.
-    if(EXISTS ${LLVM_TOOLS_BINARY_DIR}/FileCheck${CMAKE_EXECUTABLE_SUFFIX}
-        AND EXISTS ${LLVM_TOOLS_BINARY_DIR}/count${CMAKE_EXECUTABLE_SUFFIX}
-        AND EXISTS ${LLVM_TOOLS_BINARY_DIR}/not${CMAKE_EXECUTABLE_SUFFIX})
-      set(LLVM_UTILS_PROVIDED ON)
+  if(LLVM37_INCLUDE_TESTS)
+    # Check prebuilt llvm37/utils.
+    if(EXISTS ${LLVM37_TOOLS_BINARY_DIR}/FileCheck${CMAKE_EXECUTABLE_SUFFIX}
+        AND EXISTS ${LLVM37_TOOLS_BINARY_DIR}/count${CMAKE_EXECUTABLE_SUFFIX}
+        AND EXISTS ${LLVM37_TOOLS_BINARY_DIR}/not${CMAKE_EXECUTABLE_SUFFIX})
+      set(LLVM37_UTILS_PROVIDED ON)
     endif()
 
-    if(EXISTS ${LLVM_MAIN_SRC_DIR}/utils/lit/lit.py)
-      set(LLVM_LIT ${LLVM_MAIN_SRC_DIR}/utils/lit/lit.py)
-      if(NOT LLVM_UTILS_PROVIDED)
-        add_subdirectory(${LLVM_MAIN_SRC_DIR}/utils/FileCheck utils/FileCheck)
-        add_subdirectory(${LLVM_MAIN_SRC_DIR}/utils/count utils/count)
-        add_subdirectory(${LLVM_MAIN_SRC_DIR}/utils/not utils/not)
-        set(LLVM_UTILS_PROVIDED ON)
+    if(EXISTS ${LLVM37_MAIN_SRC_DIR}/utils/lit/lit.py)
+      set(LLVM37_LIT ${LLVM37_MAIN_SRC_DIR}/utils/lit/lit.py)
+      if(NOT LLVM37_UTILS_PROVIDED)
+        add_subdirectory(${LLVM37_MAIN_SRC_DIR}/utils/FileCheck utils/FileCheck)
+        add_subdirectory(${LLVM37_MAIN_SRC_DIR}/utils/count utils/count)
+        add_subdirectory(${LLVM37_MAIN_SRC_DIR}/utils/not utils/not)
+        set(LLVM37_UTILS_PROVIDED ON)
         set(CLANG_TEST_DEPS FileCheck count not)
       endif()
-      set(UNITTEST_DIR ${LLVM_MAIN_SRC_DIR}/utils/unittest)
+      set(UNITTEST_DIR ${LLVM37_MAIN_SRC_DIR}/utils/unittest)
       if(EXISTS ${UNITTEST_DIR}/googletest/include/gtest/gtest.h
-          AND NOT EXISTS ${LLVM_LIBRARY_DIR}/${CMAKE_STATIC_LIBRARY_PREFIX}gtest${CMAKE_STATIC_LIBRARY_SUFFIX}
+          AND NOT EXISTS ${LLVM37_LIBRARY_DIR}/${CMAKE_STATIC_LIBRARY_PREFIX}gtest${CMAKE_STATIC_LIBRARY_SUFFIX}
           AND EXISTS ${UNITTEST_DIR}/CMakeLists.txt)
         add_subdirectory(${UNITTEST_DIR} utils/unittest)
       endif()
     else()
       # Seek installed Lit.
-      find_program(LLVM_LIT "lit.py" ${LLVM_MAIN_SRC_DIR}/utils/lit
+      find_program(LLVM37_LIT "lit.py" ${LLVM37_MAIN_SRC_DIR}/utils/lit
         DOC "Path to lit.py")
     endif()
 
-    if(LLVM_LIT)
+    if(LLVM37_LIT)
       # Define the default arguments to use with 'lit', and an option for the user
       # to override.
       set(LIT_ARGS_DEFAULT "-sv")
       if (MSVC OR XCODE)
         set(LIT_ARGS_DEFAULT "${LIT_ARGS_DEFAULT} --no-progress-bar")
       endif()
-      set(LLVM_LIT_ARGS "${LIT_ARGS_DEFAULT}" CACHE STRING "Default options for lit")
+      set(LLVM37_LIT_ARGS "${LIT_ARGS_DEFAULT}" CACHE STRING "Default options for lit")
 
       # On Win32 hosts, provide an option to specify the path to the GnuWin32 tools.
       if( WIN32 AND NOT CYGWIN )
-        set(LLVM_LIT_TOOLS_DIR "" CACHE PATH "Path to GnuWin32 tools")
+        set(LLVM37_LIT_TOOLS_DIR "" CACHE PATH "Path to GnuWin32 tools")
       endif()
     else()
-      set(LLVM_INCLUDE_TESTS OFF)
+      set(LLVM37_INCLUDE_TESTS OFF)
     endif()
   endif()
 
   set( CLANG_BUILT_STANDALONE 1 )
-  set(BACKEND_PACKAGE_STRING "LLVM ${LLVM_PACKAGE_VERSION}")
+  set(BACKEND_PACKAGE_STRING "LLVM37 ${LLVM37_PACKAGE_VERSION}")
 else()
   set(BACKEND_PACKAGE_STRING "${PACKAGE_STRING}")
 endif()
@@ -199,18 +199,18 @@ if(CLANG_REPOSITORY_STRING)
   add_definitions(-DCLANG_REPOSITORY_STRING="${CLANG_REPOSITORY_STRING}")
 endif()
 
-set(CLANG_VENDOR_UTI "org.llvm.clang" CACHE STRING
+set(CLANG_VENDOR_UTI "org.llvm37.clang" CACHE STRING
   "Vendor-specific uti.")
 
-# The libdir suffix must exactly match whatever LLVM's configuration used.
-set(CLANG_LIBDIR_SUFFIX "${LLVM_LIBDIR_SUFFIX}")
+# The libdir suffix must exactly match whatever LLVM37's configuration used.
+set(CLANG_LIBDIR_SUFFIX "${LLVM37_LIBDIR_SUFFIX}")
 
 set(CLANG_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 set(CLANG_BINARY_DIR ${CMAKE_CURRENT_BINARY_DIR})
 
 if( CMAKE_SOURCE_DIR STREQUAL CMAKE_BINARY_DIR AND NOT MSVC_IDE )
   message(FATAL_ERROR "In-source builds are not allowed. CMake would overwrite "
-"the makefiles distributed with LLVM. Please create a directory and run cmake "
+"the makefiles distributed with LLVM37. Please create a directory and run cmake "
 "from there, passing the path to this source directory as the last argument. "
 "This process created the file `CMakeCache.txt' and the directory "
 "`CMakeFiles'. Please delete them.")
@@ -228,7 +228,7 @@ if( NOT CMAKE_SOURCE_DIR STREQUAL CMAKE_BINARY_DIR )
   endif()
 endif()
 
-# Compute the Clang version from the LLVM version.
+# Compute the Clang version from the LLVM37 version.
 string(REGEX MATCH "[0-9]+\\.[0-9]+(\\.[0-9]+)?" CLANG_VERSION
   ${PACKAGE_VERSION})
 message(STATUS "Clang version: ${CLANG_VERSION}")
@@ -251,11 +251,11 @@ configure_file(
   ${CMAKE_CURRENT_BINARY_DIR}/include/clang/Basic/Version.inc)
 
 # Add appropriate flags for GCC
-if (LLVM_COMPILER_IS_GCC_COMPATIBLE)
+if (LLVM37_COMPILER_IS_GCC_COMPATIBLE)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-common -Woverloaded-virtual -fno-strict-aliasing")
 
-  # Enable -pedantic for Clang even if it's not enabled for LLVM.
-  if (NOT LLVM_ENABLE_PEDANTIC)
+  # Enable -pedantic for Clang even if it's not enabled for LLVM37.
+  if (NOT LLVM37_ENABLE_PEDANTIC)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pedantic -Wno-long-long")
   endif ()
 
@@ -310,7 +310,7 @@ function(clang_tablegen)
     message(FATAL_ERROR "SOURCE source-file required by clang_tablegen")
   endif()
 
-  set( LLVM_TARGET_DEFINITIONS ${CTG_SOURCE} )
+  set( LLVM37_TARGET_DEFINITIONS ${CTG_SOURCE} )
   tablegen(CLANG ${CTG_UNPARSED_ARGUMENTS})
 
   if(CTG_TARGET)
@@ -372,13 +372,13 @@ macro(add_clang_library name)
   llvm_add_library(${name} ${ARG_UNPARSED_ARGUMENTS} ${srcs})
 
   if(TARGET ${name})
-    target_link_libraries(${name} ${cmake_2_8_12_INTERFACE} ${LLVM_COMMON_LIBS})
+    target_link_libraries(${name} ${cmake_2_8_12_INTERFACE} ${LLVM37_COMMON_LIBS})
 
-    if (NOT LLVM_INSTALL_TOOLCHAIN_ONLY OR ${name} STREQUAL "libclang")
+    if (NOT LLVM37_INSTALL_TOOLCHAIN_ONLY OR ${name} STREQUAL "libclang")
       install(TARGETS ${name}
         EXPORT ClangTargets
-        LIBRARY DESTINATION lib${LLVM_LIBDIR_SUFFIX}
-        ARCHIVE DESTINATION lib${LLVM_LIBDIR_SUFFIX}
+        LIBRARY DESTINATION lib${LLVM37_LIBDIR_SUFFIX}
+        ARCHIVE DESTINATION lib${LLVM37_LIBDIR_SUFFIX}
         RUNTIME DESTINATION bin)
     endif()
     set_property(GLOBAL APPEND PROPERTY CLANG_EXPORTS ${name})
@@ -392,7 +392,7 @@ macro(add_clang_library name)
 endmacro(add_clang_library)
 
 macro(add_clang_executable name)
-  add_llvm_executable( ${name} ${ARGN} )
+  add_llvm37_executable( ${name} ${ARGN} )
   set_target_properties(${name} PROPERTIES FOLDER "Clang executables")
   set_clang_windows_version_resource_properties(${name})
 endmacro(add_clang_executable)
@@ -404,7 +404,7 @@ include_directories(BEFORE
   ${CMAKE_CURRENT_SOURCE_DIR}/include
   )
 
-if (NOT LLVM_INSTALL_TOOLCHAIN_ONLY)
+if (NOT LLVM37_INSTALL_TOOLCHAIN_ONLY)
   install(DIRECTORY include/clang include/clang-c
     DESTINATION include
     FILES_MATCHING
@@ -473,7 +473,7 @@ add_subdirectory(include)
 
 # All targets below may depend on all tablegen'd files.
 get_property(CLANG_TABLEGEN_TARGETS GLOBAL PROPERTY CLANG_TABLEGEN_TARGETS)
-list(APPEND LLVM_COMMON_DEPENDS ${CLANG_TABLEGEN_TARGETS})
+list(APPEND LLVM37_COMMON_DEPENDS ${CLANG_TABLEGEN_TARGETS})
 
 add_subdirectory(lib)
 add_subdirectory(tools)
@@ -489,10 +489,10 @@ endif()
 
 option(CLANG_INCLUDE_TESTS
        "Generate build targets for the Clang unit tests."
-       ${LLVM_INCLUDE_TESTS})
+       ${LLVM37_INCLUDE_TESTS})
 
 if( CLANG_INCLUDE_TESTS OR HLSL_INCLUDE_TESTS ) # HLSL Change
-  if(HLSL_INCLUDE_TESTS OR EXISTS ${LLVM_MAIN_SRC_DIR}/utils/unittest/googletest/include/gtest/gtest.h) # HLSL Change - no need for gtest
+  if(HLSL_INCLUDE_TESTS OR EXISTS ${LLVM37_MAIN_SRC_DIR}/utils/unittest/googletest/include/gtest/gtest.h) # HLSL Change - no need for gtest
     add_subdirectory(unittests)
     list(APPEND CLANG_TEST_DEPS ClangUnitTests)
     list(APPEND CLANG_TEST_PARAMS
@@ -504,22 +504,22 @@ if( CLANG_INCLUDE_TESTS OR HLSL_INCLUDE_TESTS ) # HLSL Change
   if(CLANG_BUILT_STANDALONE)
     # Add a global check rule now that all subdirectories have been traversed
     # and we know the total set of lit testsuites.
-    get_property(LLVM_LIT_TESTSUITES GLOBAL PROPERTY LLVM_LIT_TESTSUITES)
-    get_property(LLVM_LIT_PARAMS GLOBAL PROPERTY LLVM_LIT_PARAMS)
-    get_property(LLVM_LIT_DEPENDS GLOBAL PROPERTY LLVM_LIT_DEPENDS)
-    get_property(LLVM_LIT_EXTRA_ARGS GLOBAL PROPERTY LLVM_LIT_EXTRA_ARGS)
+    get_property(LLVM37_LIT_TESTSUITES GLOBAL PROPERTY LLVM37_LIT_TESTSUITES)
+    get_property(LLVM37_LIT_PARAMS GLOBAL PROPERTY LLVM37_LIT_PARAMS)
+    get_property(LLVM37_LIT_DEPENDS GLOBAL PROPERTY LLVM37_LIT_DEPENDS)
+    get_property(LLVM37_LIT_EXTRA_ARGS GLOBAL PROPERTY LLVM37_LIT_EXTRA_ARGS)
     add_lit_target(check-all
       "Running all regression tests"
-      ${LLVM_LIT_TESTSUITES}
-      PARAMS ${LLVM_LIT_PARAMS}
-      DEPENDS ${LLVM_LIT_DEPENDS}
-      ARGS ${LLVM_LIT_EXTRA_ARGS}
+      ${LLVM37_LIT_TESTSUITES}
+      PARAMS ${LLVM37_LIT_PARAMS}
+      DEPENDS ${LLVM37_LIT_DEPENDS}
+      ARGS ${LLVM37_LIT_EXTRA_ARGS}
       )
   endif()
 endif()
 
 option(CLANG_INCLUDE_DOCS "Generate build targets for the Clang docs."
-  ${LLVM_INCLUDE_DOCS})
+  ${LLVM37_INCLUDE_DOCS})
 if( CLANG_INCLUDE_DOCS )
   add_subdirectory(docs)
 endif()
@@ -529,7 +529,7 @@ set(CLANG_ORDER_FILE "" CACHE FILEPATH
 
 if (CLANG_BUILT_STANDALONE)
   # Generate a list of CMake library targets so that other CMake projects can
-  # link against them. LLVM calls its version of this file LLVMExports.cmake, but
+  # link against them. LLVM37 calls its version of this file LLVM37Exports.cmake, but
   # the usual CMake convention seems to be ${Project}Targets.cmake.
   set(CLANG_INSTALL_PACKAGE_DIR share/clang/cmake)
   set(clang_cmake_builddir "${CMAKE_BINARY_DIR}/${CLANG_INSTALL_PACKAGE_DIR}")

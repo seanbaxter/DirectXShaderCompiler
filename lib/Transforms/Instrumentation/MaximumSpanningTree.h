@@ -1,6 +1,6 @@
-//===- llvm/Analysis/MaximumSpanningTree.h - Interface ----------*- C++ -*-===//
+//===- llvm37/Analysis/MaximumSpanningTree.h - Interface ----------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -12,15 +12,15 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_ANALYSIS_MAXIMUMSPANNINGTREE_H
-#define LLVM_ANALYSIS_MAXIMUMSPANNINGTREE_H
+#ifndef LLVM37_ANALYSIS_MAXIMUMSPANNINGTREE_H
+#define LLVM37_ANALYSIS_MAXIMUMSPANNINGTREE_H
 
-#include "llvm/ADT/EquivalenceClasses.h"
-#include "llvm/IR/BasicBlock.h"
+#include "llvm37/ADT/EquivalenceClasses.h"
+#include "llvm37/IR/BasicBlock.h"
 #include <algorithm>
 #include <vector>
 
-namespace llvm {
+namespace llvm37 {
 
   /// MaximumSpanningTree - A MST implementation.
   /// The type parameter T determines the type of the nodes of the graph.
@@ -106,6 +106,6 @@ namespace llvm {
     }
   };
 
-} // End llvm namespace
+} // End llvm37 namespace
 
 #endif

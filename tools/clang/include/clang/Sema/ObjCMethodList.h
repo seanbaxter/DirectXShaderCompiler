@@ -1,6 +1,6 @@
 //===--- ObjCMethodList.h - A singly linked list of methods -----*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,10 +11,10 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_SEMA_OBJCMETHODLIST_H
-#define LLVM_CLANG_SEMA_OBJCMETHODLIST_H
+#ifndef LLVM37_CLANG_SEMA_OBJCMETHODLIST_H
+#define LLVM37_CLANG_SEMA_OBJCMETHODLIST_H
 
-#include "llvm/ADT/PointerIntPair.h"
+#include "llvm37/ADT/PointerIntPair.h"
 
 namespace clang {
 
@@ -25,9 +25,9 @@ class ObjCMethodDecl;
 struct ObjCMethodList {
   // NOTE: If you add any members to this struct, make sure to serialize them.
   /// \brief If there is more than one decl with this signature.
-  llvm::PointerIntPair<ObjCMethodDecl *, 1> MethodAndHasMoreThanOneDecl;
+  llvm37::PointerIntPair<ObjCMethodDecl *, 1> MethodAndHasMoreThanOneDecl;
   /// \brief The next list object and 2 bits for extra info.
-  llvm::PointerIntPair<ObjCMethodList *, 2> NextAndExtraBits;
+  llvm37::PointerIntPair<ObjCMethodList *, 2> NextAndExtraBits;
 
   ObjCMethodList() { }
   ObjCMethodList(ObjCMethodDecl *M)

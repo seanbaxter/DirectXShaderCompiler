@@ -1,6 +1,6 @@
 //===------- LegalizeVectorTypes.cpp - Legalization of vector types -------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -21,10 +21,10 @@
 //===----------------------------------------------------------------------===//
 
 #include "LegalizeTypes.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/raw_ostream.h"
-using namespace llvm;
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/raw_ostream.h"
+using namespace llvm37;
 
 #define DEBUG_TYPE "legalize-types"
 
@@ -422,7 +422,7 @@ bool DAGTypeLegalizer::ScalarizeVectorOperand(SDNode *N, unsigned OpNo) {
       N->dump(&DAG);
       dbgs() << "\n";
 #endif
-      llvm_unreachable("Do not know how to scalarize this operator's operand!");
+      llvm37_unreachable("Do not know how to scalarize this operator's operand!");
     case ISD::BITCAST:
       Res = ScalarizeVecOp_BITCAST(N);
       break;
@@ -1181,7 +1181,7 @@ void DAGTypeLegalizer::SplitVecRes_ExtendOp(SDNode *N, SDValue &Lo,
   unsigned NumElements = SrcVT.getVectorNumElements();
   if ((NumElements & 1) == 0 &&
       SrcVT.getSizeInBits() * 2 < DestVT.getSizeInBits()) {
-    LLVMContext &Ctx = *DAG.getContext();
+    LLVM37Context &Ctx = *DAG.getContext();
     EVT NewSrcVT = EVT::getVectorVT(
         Ctx, EVT::getIntegerVT(
                  Ctx, SrcVT.getVectorElementType().getSizeInBits() * 2),
@@ -1898,7 +1898,7 @@ void DAGTypeLegalizer::WidenVectorResult(SDNode *N, unsigned ResNo) {
     N->dump(&DAG);
     dbgs() << "\n";
 #endif
-    llvm_unreachable("Do not know how to widen the result of this operator!");
+    llvm37_unreachable("Do not know how to widen the result of this operator!");
 
   case ISD::MERGE_VALUES:      Res = WidenVecRes_MERGE_VALUES(N, ResNo); break;
   case ISD::BITCAST:           Res = WidenVecRes_BITCAST(N); break;
@@ -2807,7 +2807,7 @@ bool DAGTypeLegalizer::WidenVectorOperand(SDNode *N, unsigned OpNo) {
     N->dump(&DAG);
     dbgs() << "\n";
 #endif
-    llvm_unreachable("Do not know how to widen this operator's operand!");
+    llvm37_unreachable("Do not know how to widen this operator's operand!");
 
   case ISD::BITCAST:            Res = WidenVecOp_BITCAST(N); break;
   case ISD::CONCAT_VECTORS:     Res = WidenVecOp_CONCAT_VECTORS(N); break;
@@ -2902,7 +2902,7 @@ SDValue DAGTypeLegalizer::WidenVecOp_EXTEND(SDNode *N) {
   // low lanes.
   switch (N->getOpcode()) {
   default:
-    llvm_unreachable("Extend legalization on on extend operation!");
+    llvm37_unreachable("Extend legalization on on extend operation!");
   case ISD::ANY_EXTEND:
     return DAG.getAnyExtendVectorInReg(InOp, DL, VT);
   case ISD::SIGN_EXTEND:

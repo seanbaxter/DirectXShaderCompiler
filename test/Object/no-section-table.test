@@ -1,4 +1,4 @@
-RUN: llvm-readobj %p/Inputs/no-section-table.so -hash-table -dynamic-table \
+RUN: llvm37-readobj %p/Inputs/no-section-table.so -hash-table -dynamic-table \
 RUN:   | FileCheck %s
 
 CHECK: DynamicSection [ (24 entries)

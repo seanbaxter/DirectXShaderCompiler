@@ -1,6 +1,6 @@
 //===--- SemaDeclSpec.cpp - Declaration Specifier Semantic Analysis -------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -25,9 +25,9 @@
 #include "clang/Sema/ParsedTemplate.h"
 #include "clang/Sema/Sema.h"
 #include "clang/Sema/SemaDiagnostic.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/Support/ErrorHandling.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/Support/ErrorHandling.h"
 #include <cstring>
 using namespace clang;
 
@@ -230,7 +230,7 @@ DeclaratorChunk DeclaratorChunk::getFunction(bool hasProto,
     // is already used (consider a function returning a function pointer) or too
     // small (function with too many parameters), go to the heap.
     if (!TheDeclarator.InlineParamsUsed &&
-        NumParams <= llvm::array_lengthof(TheDeclarator.InlineParams)) {
+        NumParams <= llvm37::array_lengthof(TheDeclarator.InlineParams)) {
       I.Fun.Params = TheDeclarator.InlineParams;
       I.Fun.DeleteParams = false;
       TheDeclarator.InlineParamsUsed = true;
@@ -281,7 +281,7 @@ bool Declarator::isDeclarationOfFunction() const {
     case DeclaratorChunk::MemberPointer:
       return false;
     }
-    llvm_unreachable("Invalid type chunk");
+    llvm37_unreachable("Invalid type chunk");
   }
   
   switch (DS.getTypeSpecType()) {
@@ -349,7 +349,7 @@ bool Declarator::isDeclarationOfFunction() const {
     }
   }
 
-  llvm_unreachable("Invalid TypeSpecType!");
+  llvm37_unreachable("Invalid TypeSpecType!");
 }
 
 bool Declarator::isStaticMember() {
@@ -411,7 +411,7 @@ const char *DeclSpec::getSpecifierName(DeclSpec::SCS S) {
   case DeclSpec::SCS_private_extern: return "__private_extern__";
   case DeclSpec::SCS_mutable:     return "mutable";
   }
-  llvm_unreachable("Unknown typespec!");
+  llvm37_unreachable("Unknown typespec!");
 }
 
 const char *DeclSpec::getSpecifierName(DeclSpec::TSCS S) {
@@ -421,7 +421,7 @@ const char *DeclSpec::getSpecifierName(DeclSpec::TSCS S) {
   case DeclSpec::TSCS_thread_local:  return "thread_local";
   case DeclSpec::TSCS__Thread_local: return "_Thread_local";
   }
-  llvm_unreachable("Unknown typespec!");
+  llvm37_unreachable("Unknown typespec!");
 }
 
 const char *DeclSpec::getSpecifierName(TSW W) {
@@ -431,7 +431,7 @@ const char *DeclSpec::getSpecifierName(TSW W) {
   case TSW_long:        return "long";
   case TSW_longlong:    return "long long";
   }
-  llvm_unreachable("Unknown typespec!");
+  llvm37_unreachable("Unknown typespec!");
 }
 
 const char *DeclSpec::getSpecifierName(TSC C) {
@@ -440,7 +440,7 @@ const char *DeclSpec::getSpecifierName(TSC C) {
   case TSC_imaginary:   return "imaginary";
   case TSC_complex:     return "complex";
   }
-  llvm_unreachable("Unknown typespec!");
+  llvm37_unreachable("Unknown typespec!");
 }
 
 
@@ -450,7 +450,7 @@ const char *DeclSpec::getSpecifierName(TSS S) {
   case TSS_signed:      return "signed";
   case TSS_unsigned:    return "unsigned";
   }
-  llvm_unreachable("Unknown typespec!");
+  llvm37_unreachable("Unknown typespec!");
 }
 
 const char *DeclSpec::getSpecifierName(DeclSpec::TST T,
@@ -497,7 +497,7 @@ const char *DeclSpec::getSpecifierName(DeclSpec::TST T,
   case DeclSpec::TST_atomic: return "_Atomic";
   case DeclSpec::TST_error:       return "(error)";
   }
-  llvm_unreachable("Unknown typespec!");
+  llvm37_unreachable("Unknown typespec!");
 }
 
 const char *DeclSpec::getSpecifierName(TQ T) {
@@ -508,7 +508,7 @@ const char *DeclSpec::getSpecifierName(TQ T) {
   case DeclSpec::TQ_volatile:    return "volatile";
   case DeclSpec::TQ_atomic:      return "_Atomic";
   }
-  llvm_unreachable("Unknown typespec!");
+  llvm37_unreachable("Unknown typespec!");
 }
 
 bool DeclSpec::SetStorageClassSpec(Sema &S, SCS SC, SourceLocation Loc,
@@ -796,7 +796,7 @@ bool DeclSpec::SetTypeQual(TQ T, SourceLocation Loc, const char *&PrevSpec,
   case TQ_atomic:   TQ_atomicLoc = Loc; return false;
   }
 
-  llvm_unreachable("Unknown type qualifier!");
+  llvm37_unreachable("Unknown type qualifier!");
 }
 
 bool DeclSpec::setFunctionSpecInline(SourceLocation Loc, const char *&PrevSpec,
@@ -1270,7 +1270,7 @@ bool VirtSpecifiers::SetSpecifier(Specifier VS, SourceLocation Loc,
   Specifiers |= VS;
 
   switch (VS) {
-  default: llvm_unreachable("Unknown specifier!");
+  default: llvm37_unreachable("Unknown specifier!");
   case VS_Override: VS_overrideLoc = Loc; break;
   case VS_Sealed:
   case VS_Final:    VS_finalLoc = Loc; break;
@@ -1281,7 +1281,7 @@ bool VirtSpecifiers::SetSpecifier(Specifier VS, SourceLocation Loc,
 
 const char *VirtSpecifiers::getSpecifierName(Specifier VS) {
   switch (VS) {
-  default: llvm_unreachable("Unknown specifier");
+  default: llvm37_unreachable("Unknown specifier");
   case VS_Override: return "override";
   case VS_Final: return "final";
   case VS_Sealed: return "sealed";

@@ -1,6 +1,6 @@
 //===- Metadata.cpp - Implement Metadata classes --------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,23 +11,23 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/IR/Metadata.h"
+#include "llvm37/IR/Metadata.h"
 #include "LLVMContextImpl.h"
 #include "MetadataImpl.h"
 #include "SymbolTableListTraitsImpl.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/SmallSet.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/ADT/StringMap.h"
-#include "llvm/IR/ConstantRange.h"
-#include "llvm/IR/DebugInfoMetadata.h"
-#include "llvm/IR/Instruction.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/ValueHandle.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/SmallSet.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/ADT/StringMap.h"
+#include "llvm37/IR/ConstantRange.h"
+#include "llvm37/IR/DebugInfoMetadata.h"
+#include "llvm37/IR/Instruction.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/ValueHandle.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 MetadataAsValue::MetadataAsValue(Type *Ty, Metadata *MD)
     : Value(Ty, MetadataAsValueVal), MD(MD) {
@@ -50,7 +50,7 @@ MetadataAsValue::~MetadataAsValue() {
 ///
 /// This maintains readability of bitcode from when metadata was a type of
 /// value, and these bridges were unnecessary.
-static Metadata *canonicalizeMetadataForValue(LLVMContext &Context,
+static Metadata *canonicalizeMetadataForValue(LLVM37Context &Context,
                                               Metadata *MD) {
   if (!MD)
     // !{}
@@ -72,7 +72,7 @@ static Metadata *canonicalizeMetadataForValue(LLVMContext &Context,
   return MD;
 }
 
-MetadataAsValue *MetadataAsValue::get(LLVMContext &Context, Metadata *MD) {
+MetadataAsValue *MetadataAsValue::get(LLVM37Context &Context, Metadata *MD) {
   MD = canonicalizeMetadataForValue(Context, MD);
   auto *&Entry = Context.pImpl->MetadataAsValues[MD];
   if (!Entry)
@@ -80,7 +80,7 @@ MetadataAsValue *MetadataAsValue::get(LLVMContext &Context, Metadata *MD) {
   return Entry;
 }
 
-MetadataAsValue *MetadataAsValue::getIfExists(LLVMContext &Context,
+MetadataAsValue *MetadataAsValue::getIfExists(LLVM37Context &Context,
                                               Metadata *MD) {
   MD = canonicalizeMetadataForValue(Context, MD);
   auto &Store = Context.pImpl->MetadataAsValues;
@@ -88,7 +88,7 @@ MetadataAsValue *MetadataAsValue::getIfExists(LLVMContext &Context,
 }
 
 void MetadataAsValue::handleChangedMetadata(Metadata *MD) {
-  LLVMContext &Context = getContext();
+  LLVM37Context &Context = getContext();
   MD = canonicalizeMetadataForValue(Context, MD);
   auto &Store = Context.pImpl->MetadataAsValues;
 
@@ -198,9 +198,9 @@ void ReplaceableMetadataImpl::replaceAllUsesWith(Metadata *MD) {
   case Metadata::CLASS##Kind:                                                  \
     cast<CLASS>(OwnerMD)->handleChangedOperand(Pair.first, MD);                \
     continue;
-#include "llvm/IR/Metadata.def"
+#include "llvm37/IR/Metadata.def"
     default:
-      llvm_unreachable("Invalid metadata subclass");
+      llvm37_unreachable("Invalid metadata subclass");
     }
   }
   assert(UseMap.empty() && "Expected all uses to be replaced");
@@ -298,7 +298,7 @@ void ValueAsMetadata::handleRAUW(Value *From, Value *To) {
   assert(From != To && "Expected changed value");
   assert(From->getType() == To->getType() && "Unexpected type change");
 
-  LLVMContext &Context = From->getType()->getContext();
+  LLVM37Context &Context = From->getType()->getContext();
   auto &Store = Context.pImpl->ValuesAsMetadata;
   auto I = Store.find(From);
   if (I == Store.end()) {
@@ -357,7 +357,7 @@ void ValueAsMetadata::handleRAUW(Value *From, Value *To) {
 // MDString implementation.
 //
 
-MDString *MDString::get(LLVMContext &Context, StringRef Str) {
+MDString *MDString::get(LLVM37Context &Context, StringRef Str) {
   auto &Store = Context.pImpl->MDStringCache;
   auto I = Store.find(Str);
   if (I != Store.end())
@@ -393,15 +393,15 @@ StringRef MDString::getString() const {
 // prepended to them.
 #define HANDLE_MDNODE_LEAF(CLASS)                                              \
   static_assert(                                                               \
-      llvm::AlignOf<uint64_t>::Alignment >= llvm::AlignOf<CLASS>::Alignment,   \
+      llvm37::AlignOf<uint64_t>::Alignment >= llvm37::AlignOf<CLASS>::Alignment,   \
       "Alignment is insufficient after objects prepended to " #CLASS);
-#include "llvm/IR/Metadata.def"
+#include "llvm37/IR/Metadata.def"
 
 void *MDNode::operator new(size_t Size, unsigned NumOps) {
   size_t OpSize = NumOps * sizeof(MDOperand);
   // uint64_t is the most aligned type we need support (ensured by static_assert
   // above)
-  OpSize = RoundUpToAlignment(OpSize, llvm::alignOf<uint64_t>());
+  OpSize = RoundUpToAlignment(OpSize, llvm37::alignOf<uint64_t>());
   void *Ptr = reinterpret_cast<char *>(::operator new(OpSize + Size)) + OpSize;
   MDOperand *O = static_cast<MDOperand *>(Ptr);
   for (MDOperand *E = O - NumOps; O != E; --O)
@@ -412,7 +412,7 @@ void *MDNode::operator new(size_t Size, unsigned NumOps) {
 void MDNode::operator delete(void *Mem) {
   MDNode *N = static_cast<MDNode *>(Mem);
   size_t OpSize = N->NumOperands * sizeof(MDOperand);
-  OpSize = RoundUpToAlignment(OpSize, llvm::alignOf<uint64_t>());
+  OpSize = RoundUpToAlignment(OpSize, llvm37::alignOf<uint64_t>());
 
   MDOperand *O = static_cast<MDOperand *>(Mem);
   for (MDOperand *E = O - N->NumOperands; O != E; --O)
@@ -420,7 +420,7 @@ void MDNode::operator delete(void *Mem) {
   ::operator delete(reinterpret_cast<char *>(Mem) - OpSize);
 }
 
-MDNode::MDNode(LLVMContext &Context, unsigned ID, StorageType Storage,
+MDNode::MDNode(LLVM37Context &Context, unsigned ID, StorageType Storage,
                ArrayRef<Metadata *> Ops1, ArrayRef<Metadata *> Ops2)
     : Metadata(ID, Storage), NumOperands(Ops1.size() + Ops2.size()),
       NumUnresolved(0), Context(Context) {
@@ -445,11 +445,11 @@ MDNode::MDNode(LLVMContext &Context, unsigned ID, StorageType Storage,
 TempMDNode MDNode::clone() const {
   switch (getMetadataID()) {
   default:
-    llvm_unreachable("Invalid MDNode subclass");
+    llvm37_unreachable("Invalid MDNode subclass");
 #define HANDLE_MDNODE_LEAF(CLASS)                                              \
   case CLASS##Kind:                                                            \
     return cast<CLASS>(this)->cloneImpl();
-#include "llvm/IR/Metadata.def"
+#include "llvm37/IR/Metadata.def"
   }
 }
 
@@ -643,12 +643,12 @@ void MDNode::handleChangedOperand(void *Ref, Metadata *New) {
 void MDNode::deleteAsSubclass() {
   switch (getMetadataID()) {
   default:
-    llvm_unreachable("Invalid subclass of MDNode");
+    llvm37_unreachable("Invalid subclass of MDNode");
 #define HANDLE_MDNODE_LEAF(CLASS)                                              \
   case CLASS##Kind:                                                            \
     delete cast<CLASS>(this);                                                  \
     break;
-#include "llvm/IR/Metadata.def"
+#include "llvm37/IR/Metadata.def"
   }
 }
 
@@ -679,7 +679,7 @@ MDNode *MDNode::uniquify() {
   // Try to insert into uniquing store.
   switch (getMetadataID()) {
   default:
-    llvm_unreachable("Invalid subclass of MDNode");
+    llvm37_unreachable("Invalid subclass of MDNode");
 #define HANDLE_MDNODE_LEAF(CLASS)                                              \
   case CLASS##Kind: {                                                          \
     CLASS *SubclassThis = cast<CLASS>(this);                                   \
@@ -688,23 +688,23 @@ MDNode *MDNode::uniquify() {
     dispatchRecalculateHash(SubclassThis, ShouldRecalculateHash);              \
     return uniquifyImpl(SubclassThis, getContext().pImpl->CLASS##s);           \
   }
-#include "llvm/IR/Metadata.def"
+#include "llvm37/IR/Metadata.def"
   }
 }
 
 void MDNode::eraseFromStore() {
   switch (getMetadataID()) {
   default:
-    llvm_unreachable("Invalid subclass of MDNode");
+    llvm37_unreachable("Invalid subclass of MDNode");
 #define HANDLE_MDNODE_LEAF(CLASS)                                              \
   case CLASS##Kind:                                                            \
     getContext().pImpl->CLASS##s.erase(cast<CLASS>(this));                     \
     break;
-#include "llvm/IR/Metadata.def"
+#include "llvm37/IR/Metadata.def"
   }
 }
 
-MDTuple *MDTuple::getImpl(LLVMContext &Context, ArrayRef<Metadata *> MDs,
+MDTuple *MDTuple::getImpl(LLVM37Context &Context, ArrayRef<Metadata *> MDs,
                           StorageType Storage, bool ShouldCreate) {
   unsigned Hash = 0;
   if (Storage == Uniqued) {
@@ -743,14 +743,14 @@ void MDNode::storeDistinctInContext() {
   // Reset the hash.
   switch (getMetadataID()) {
   default:
-    llvm_unreachable("Invalid subclass of MDNode");
+    llvm37_unreachable("Invalid subclass of MDNode");
 #define HANDLE_MDNODE_LEAF(CLASS)                                              \
   case CLASS##Kind: {                                                          \
     std::integral_constant<bool, HasCachedHash<CLASS>::value> ShouldResetHash; \
     dispatchResetHash(cast<CLASS>(this), ShouldResetHash);                     \
     break;                                                                     \
   }
-#include "llvm/IR/Metadata.def"
+#include "llvm37/IR/Metadata.def"
   }
 
   getContext().pImpl->DistinctMDNodes.insert(this);
@@ -779,7 +779,7 @@ void MDNode::setOperand(unsigned I, Metadata *New) {
 /// MDNode::concatenate() and \a MDNode::intersect() to maintain behaviour from
 /// when self-referencing nodes were still uniqued.  If the first operand has
 /// the same operands as \c Ops, return the first operand instead.
-static MDNode *getOrSelfReference(LLVMContext &Context,
+static MDNode *getOrSelfReference(LLVM37Context &Context,
                                   ArrayRef<Metadata *> Ops) {
   if (!Ops.empty())
     if (MDNode *N = dyn_cast_or_null<MDNode>(Ops[0]))
@@ -1075,7 +1075,7 @@ void Instruction::dropUnknownMetadata(ArrayRef<unsigned> KnownIDs) {
   KnownSet.insert(KnownIDs.begin(), KnownIDs.end());
 
   // Drop debug if needed
-  if (KnownSet.erase(LLVMContext::MD_dbg))
+  if (KnownSet.erase(LLVM37Context::MD_dbg))
     DbgLoc = DebugLoc();
 
   if (!hasMetadataHashEntry())
@@ -1110,7 +1110,7 @@ void Instruction::setMetadata(unsigned KindID, MDNode *Node) {
     return;
 
   // Handle 'dbg' as a special case since it is not stored in the hash table.
-  if (KindID == LLVMContext::MD_dbg) {
+  if (KindID == LLVM37Context::MD_dbg) {
     DbgLoc = DebugLoc(Node);
     return;
   }
@@ -1145,14 +1145,14 @@ void Instruction::setMetadata(unsigned KindID, MDNode *Node) {
 }
 
 void Instruction::setAAMetadata(const AAMDNodes &N) {
-  setMetadata(LLVMContext::MD_tbaa, N.TBAA);
-  setMetadata(LLVMContext::MD_alias_scope, N.Scope);
-  setMetadata(LLVMContext::MD_noalias, N.NoAlias);
+  setMetadata(LLVM37Context::MD_tbaa, N.TBAA);
+  setMetadata(LLVM37Context::MD_alias_scope, N.Scope);
+  setMetadata(LLVM37Context::MD_noalias, N.NoAlias);
 }
 
 MDNode *Instruction::getMetadataImpl(unsigned KindID) const {
   // Handle 'dbg' as a special case since it is not stored in the hash table.
-  if (KindID == LLVMContext::MD_dbg)
+  if (KindID == LLVM37Context::MD_dbg)
     return DbgLoc.getAsMDNode();
 
   if (!hasMetadataHashEntry())
@@ -1170,7 +1170,7 @@ void Instruction::getAllMetadataImpl(
   // Handle 'dbg' as a special case since it is not stored in the hash table.
   if (DbgLoc) {
     Result.push_back(
-        std::make_pair((unsigned)LLVMContext::MD_dbg, DbgLoc.getAsMDNode()));
+        std::make_pair((unsigned)LLVM37Context::MD_dbg, DbgLoc.getAsMDNode()));
     if (!hasMetadataHashEntry()) return;
   }
 

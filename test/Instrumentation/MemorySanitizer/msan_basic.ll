@@ -4,7 +4,7 @@
 target datalayout = "e-p:64:64:64-i1:8:8-i8:8:8-i16:16:16-i32:32:32-i64:64:64-f32:32:32-f64:64:64-v64:64:64-v128:128:128-a0:0:64-s0:64:64-f80:128:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-; CHECK: @llvm.global_ctors {{.*}} @msan.module_ctor
+; CHECK: @llvm37.global_ctors {{.*}} @msan.module_ctor
 
 ; Check the presence and the linkage type of __msan_track_origins and
 ; other interface symbols.
@@ -200,11 +200,11 @@ entry:
 ; memset
 define void @MemSet(i8* nocapture %x) nounwind uwtable sanitize_memory {
 entry:
-  call void @llvm.memset.p0i8.i64(i8* %x, i8 42, i64 10, i32 1, i1 false)
+  call void @llvm37.memset.p0i8.i64(i8* %x, i8 42, i64 10, i32 1, i1 false)
   ret void
 }
 
-declare void @llvm.memset.p0i8.i64(i8* nocapture, i8, i64, i32, i1) nounwind
+declare void @llvm37.memset.p0i8.i64(i8* nocapture, i8, i64, i32, i1) nounwind
 
 ; CHECK: @MemSet
 ; CHECK: call i8* @__msan_memset
@@ -214,11 +214,11 @@ declare void @llvm.memset.p0i8.i64(i8* nocapture, i8, i64, i32, i1) nounwind
 ; memcpy
 define void @MemCpy(i8* nocapture %x, i8* nocapture %y) nounwind uwtable sanitize_memory {
 entry:
-  call void @llvm.memcpy.p0i8.p0i8.i64(i8* %x, i8* %y, i64 10, i32 1, i1 false)
+  call void @llvm37.memcpy.p0i8.p0i8.i64(i8* %x, i8* %y, i64 10, i32 1, i1 false)
   ret void
 }
 
-declare void @llvm.memcpy.p0i8.p0i8.i64(i8* nocapture, i8* nocapture, i64, i32, i1) nounwind
+declare void @llvm37.memcpy.p0i8.p0i8.i64(i8* nocapture, i8* nocapture, i64, i32, i1) nounwind
 
 ; CHECK: @MemCpy
 ; CHECK: call i8* @__msan_memcpy
@@ -228,11 +228,11 @@ declare void @llvm.memcpy.p0i8.p0i8.i64(i8* nocapture, i8* nocapture, i64, i32, 
 ; memmove is lowered to a call
 define void @MemMove(i8* nocapture %x, i8* nocapture %y) nounwind uwtable sanitize_memory {
 entry:
-  call void @llvm.memmove.p0i8.p0i8.i64(i8* %x, i8* %y, i64 10, i32 1, i1 false)
+  call void @llvm37.memmove.p0i8.p0i8.i64(i8* %x, i8* %y, i64 10, i32 1, i1 false)
   ret void
 }
 
-declare void @llvm.memmove.p0i8.p0i8.i64(i8* nocapture, i8* nocapture, i64, i32, i1) nounwind
+declare void @llvm37.memmove.p0i8.p0i8.i64(i8* nocapture, i8* nocapture, i64, i32, i1) nounwind
 
 ; CHECK: @MemMove
 ; CHECK: call i8* @__msan_memmove
@@ -537,17 +537,17 @@ define <4 x i32> @ShuffleVector(<4 x i32> %vec, <4 x i32> %vec1) sanitize_memory
 
 ; Test bswap intrinsic instrumentation
 define i32 @BSwap(i32 %x) nounwind uwtable readnone sanitize_memory {
-  %y = tail call i32 @llvm.bswap.i32(i32 %x)
+  %y = tail call i32 @llvm37.bswap.i32(i32 %x)
   ret i32 %y
 }
 
-declare i32 @llvm.bswap.i32(i32) nounwind readnone
+declare i32 @llvm37.bswap.i32(i32) nounwind readnone
 
 ; CHECK: @BSwap
 ; CHECK-NOT: call void @__msan_warning
-; CHECK: @llvm.bswap.i32
+; CHECK: @llvm37.bswap.i32
 ; CHECK-NOT: call void @__msan_warning
-; CHECK: @llvm.bswap.i32
+; CHECK: @llvm37.bswap.i32
 ; CHECK-NOT: call void @__msan_warning
 ; CHECK: ret i32
 
@@ -555,35 +555,35 @@ declare i32 @llvm.bswap.i32(i32) nounwind readnone
 ; Store intrinsic.
 
 define void @StoreIntrinsic(i8* %p, <4 x float> %x) nounwind uwtable sanitize_memory {
-  call void @llvm.x86.sse.storeu.ps(i8* %p, <4 x float> %x)
+  call void @llvm37.x86.sse.storeu.ps(i8* %p, <4 x float> %x)
   ret void
 }
 
-declare void @llvm.x86.sse.storeu.ps(i8*, <4 x float>) nounwind
+declare void @llvm37.x86.sse.storeu.ps(i8*, <4 x float>) nounwind
 
 ; CHECK: @StoreIntrinsic
 ; CHECK-NOT: br
 ; CHECK-NOT: = or
 ; CHECK: store <4 x i32> {{.*}} align 1
-; CHECK: call void @llvm.x86.sse.storeu.ps
+; CHECK: call void @llvm37.x86.sse.storeu.ps
 ; CHECK: ret void
 
 
 ; Load intrinsic.
 
 define <16 x i8> @LoadIntrinsic(i8* %p) nounwind uwtable sanitize_memory {
-  %call = call <16 x i8> @llvm.x86.sse3.ldu.dq(i8* %p)
+  %call = call <16 x i8> @llvm37.x86.sse3.ldu.dq(i8* %p)
   ret <16 x i8> %call
 }
 
-declare <16 x i8> @llvm.x86.sse3.ldu.dq(i8* %p) nounwind
+declare <16 x i8> @llvm37.x86.sse3.ldu.dq(i8* %p) nounwind
 
 ; CHECK: @LoadIntrinsic
 ; CHECK: load <16 x i8>, <16 x i8>* {{.*}} align 1
 ; CHECK-ORIGINS: [[ORIGIN:%[01-9a-z]+]] = load i32, i32* {{.*}}
 ; CHECK-NOT: br
 ; CHECK-NOT: = or
-; CHECK: call <16 x i8> @llvm.x86.sse3.ldu.dq
+; CHECK: call <16 x i8> @llvm37.x86.sse3.ldu.dq
 ; CHECK: store <16 x i8> {{.*}} @__msan_retval_tls
 ; CHECK-ORIGINS: store i32 {{.*}}[[ORIGIN]], i32* @__msan_retval_origin_tls
 ; CHECK: ret <16 x i8>
@@ -594,11 +594,11 @@ declare <16 x i8> @llvm.x86.sse3.ldu.dq(i8* %p) nounwind
 ; And no shadow checks!
 
 define <8 x i16> @Paddsw128(<8 x i16> %a, <8 x i16> %b) nounwind uwtable sanitize_memory {
-  %call = call <8 x i16> @llvm.x86.sse2.padds.w(<8 x i16> %a, <8 x i16> %b)
+  %call = call <8 x i16> @llvm37.x86.sse2.padds.w(<8 x i16> %a, <8 x i16> %b)
   ret <8 x i16> %call
 }
 
-declare <8 x i16> @llvm.x86.sse2.padds.w(<8 x i16> %a, <8 x i16> %b) nounwind
+declare <8 x i16> @llvm37.x86.sse2.padds.w(<8 x i16> %a, <8 x i16> %b) nounwind
 
 ; CHECK: @Paddsw128
 ; CHECK-NEXT: load <8 x i16>, <8 x i16>* {{.*}} @__msan_param_tls
@@ -609,7 +609,7 @@ declare <8 x i16> @llvm.x86.sse2.padds.w(<8 x i16> %a, <8 x i16> %b) nounwind
 ; CHECK-ORIGINS: = bitcast <8 x i16> {{.*}} to i128
 ; CHECK-ORIGINS-NEXT: = icmp ne i128 {{.*}}, 0
 ; CHECK-ORIGINS-NEXT: = select i1 {{.*}}, i32 {{.*}}, i32
-; CHECK-NEXT: call <8 x i16> @llvm.x86.sse2.padds.w
+; CHECK-NEXT: call <8 x i16> @llvm37.x86.sse2.padds.w
 ; CHECK-NEXT: store <8 x i16> {{.*}} @__msan_retval_tls
 ; CHECK-ORIGINS: store i32 {{.*}} @__msan_retval_origin_tls
 ; CHECK-NEXT: ret <8 x i16>
@@ -631,15 +631,15 @@ define <8 x i8*> @VectorOfPointers(<8 x i8*>* %p) nounwind uwtable sanitize_memo
 
 ; Test handling of va_copy.
 
-declare void @llvm.va_copy(i8*, i8*) nounwind
+declare void @llvm37.va_copy(i8*, i8*) nounwind
 
 define void @VACopy(i8* %p1, i8* %p2) nounwind uwtable sanitize_memory {
-  call void @llvm.va_copy(i8* %p1, i8* %p2) nounwind
+  call void @llvm37.va_copy(i8* %p1, i8* %p2) nounwind
   ret void
 }
 
 ; CHECK: @VACopy
-; CHECK: call void @llvm.memset.p0i8.i64({{.*}}, i8 0, i64 24, i32 8, i1 false)
+; CHECK: call void @llvm37.memset.p0i8.i64({{.*}}, i8 0, i64 24, i32 8, i1 false)
 ; CHECK: ret void
 
 
@@ -647,7 +647,7 @@ define void @VACopy(i8* %p1, i8* %p2) nounwind uwtable sanitize_memory {
 ; It should work with a local stack copy instead.
 
 %struct.__va_list_tag = type { i32, i32, i8*, i8* }
-declare void @llvm.va_start(i8*) nounwind
+declare void @llvm37.va_start(i8*) nounwind
 
 ; Function Attrs: nounwind uwtable
 define void @VAStart(i32 %x, ...) sanitize_memory {
@@ -657,12 +657,12 @@ entry:
   store i32 %x, i32* %x.addr, align 4
   %arraydecay = getelementptr inbounds [1 x %struct.__va_list_tag], [1 x %struct.__va_list_tag]* %va, i32 0, i32 0
   %arraydecay1 = bitcast %struct.__va_list_tag* %arraydecay to i8*
-  call void @llvm.va_start(i8* %arraydecay1)
+  call void @llvm37.va_start(i8* %arraydecay1)
   ret void
 }
 
 ; CHECK: @VAStart
-; CHECK: call void @llvm.va_start
+; CHECK: call void @llvm37.va_start
 ; CHECK-NOT: @__msan_va_arg_tls
 ; CHECK-NOT: @__msan_va_arg_overflow_size_tls
 ; CHECK: ret void
@@ -720,7 +720,7 @@ entry:
 declare i32 @NoSanitizeMemoryAllocaHelper(i32* %p)
 
 ; CHECK: @NoSanitizeMemoryAlloca
-; CHECK: call void @llvm.memset.p0i8.i64(i8* {{.*}}, i8 0, i64 4, i32 4, i1 false)
+; CHECK: call void @llvm37.memset.p0i8.i64(i8* {{.*}}, i8 0, i64 4, i32 4, i1 false)
 ; CHECK: call i32 @NoSanitizeMemoryAllocaHelper(i32*
 ; CHECK: ret i32
 
@@ -839,7 +839,7 @@ entry:
   %agg.tmp.sroa.2.0..sroa_cast = bitcast i32* %agg.tmp.sroa.2.0..sroa_idx to i64*
   %agg.tmp.sroa.2.0.copyload = load i64, i64* %agg.tmp.sroa.2.0..sroa_cast, align 4
   %1 = bitcast %struct.StructByVal* %agg.tmp2 to i8*
-  call void @llvm.memcpy.p0i8.p0i8.i64(i8* %1, i8* %0, i64 16, i32 4, i1 false)
+  call void @llvm37.memcpy.p0i8.p0i8.i64(i8* %1, i8* %0, i64 16, i32 4, i1 false)
   call void (i32, ...) @VAArgStructFn(i32 undef, i64 %agg.tmp.sroa.0.0.copyload, i64 %agg.tmp.sroa.2.0.copyload, i64 %agg.tmp.sroa.0.0.copyload, i64 %agg.tmp.sroa.2.0.copyload, %struct.StructByVal* byval align 8 %agg.tmp2)
   ret void
 }
@@ -859,7 +859,7 @@ entry:
 ; third struct through the overflow area byval
 ; CHECK: ptrtoint %struct.StructByVal* {{.*}} to i64
 ; CHECK: bitcast { i32, i32, i32, i32 }* {{.*}}@__msan_va_arg_tls {{.*}}, i64 176
-; CHECK: call void @llvm.memcpy.p0i8.p0i8.i64
+; CHECK: call void @llvm37.memcpy.p0i8.p0i8.i64
 ; CHECK: store i64 16, i64* @__msan_va_arg_overflow_size_tls
 ; CHECK: call void (i32, ...) @VAArgStructFn
 ; CHECK: ret void

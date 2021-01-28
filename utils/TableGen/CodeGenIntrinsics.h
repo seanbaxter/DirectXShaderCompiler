@@ -1,6 +1,6 @@
 //===- CodeGenIntrinsic.h - Intrinsic Class Wrapper ------------*- C++ -*--===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,21 +11,21 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_UTILS_TABLEGEN_CODEGENINTRINSICS_H
-#define LLVM_UTILS_TABLEGEN_CODEGENINTRINSICS_H
+#ifndef LLVM37_UTILS_TABLEGEN_CODEGENINTRINSICS_H
+#define LLVM37_UTILS_TABLEGEN_CODEGENINTRINSICS_H
 
-#include "llvm/CodeGen/MachineValueType.h"
+#include "llvm37/CodeGen/MachineValueType.h"
 #include <string>
 #include <vector>
 
-namespace llvm {
+namespace llvm37 {
   class Record;
   class RecordKeeper;
   class CodeGenTarget;
 
   struct CodeGenIntrinsic {
     Record *TheDef;            // The actual record defining this intrinsic.
-    std::string Name;          // The name of the LLVM function "llvm.bswap.i32"
+    std::string Name;          // The name of the LLVM37 function "llvm.bswap.i32"
     std::string EnumName;      // The name of the enum "bswap_i32"
     std::string GCCBuiltinName;// Name of the corresponding GCC builtin, or "".
     std::string MSBuiltinName; // Name of the corresponding MS builtin, or "".

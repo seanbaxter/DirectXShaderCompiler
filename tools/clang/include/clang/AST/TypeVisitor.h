@@ -1,6 +1,6 @@
 //===--- TypeVisitor.h - Visitor for Type subclasses ------------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,8 +11,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_AST_TYPEVISITOR_H
-#define LLVM_CLANG_AST_TYPEVISITOR_H
+#ifndef LLVM37_CLANG_AST_TYPEVISITOR_H
+#define LLVM37_CLANG_AST_TYPEVISITOR_H
 
 #include "clang/AST/Type.h"
 
@@ -73,7 +73,7 @@ public:
 #define TYPE(CLASS, PARENT) case Type::CLASS: DISPATCH(CLASS##Type);
 #include "clang/AST/TypeNodes.def"
     }
-    llvm_unreachable("Unknown type class!");
+    llvm37_unreachable("Unknown type class!");
   }
 
   // If the implementation chooses not to implement a certain visit method, fall

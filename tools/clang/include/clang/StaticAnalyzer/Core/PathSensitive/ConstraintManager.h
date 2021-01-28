@@ -1,6 +1,6 @@
 //== ConstraintManager.h - Constraints on symbolic values.-------*- C++ -*--==//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,14 +11,14 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_STATICANALYZER_CORE_PATHSENSITIVE_CONSTRAINTMANAGER_H
-#define LLVM_CLANG_STATICANALYZER_CORE_PATHSENSITIVE_CONSTRAINTMANAGER_H
+#ifndef LLVM37_CLANG_STATICANALYZER_CORE_PATHSENSITIVE_CONSTRAINTMANAGER_H
+#define LLVM37_CLANG_STATICANALYZER_CORE_PATHSENSITIVE_CONSTRAINTMANAGER_H
 
 #include "clang/StaticAnalyzer/Core/PathSensitive/SVals.h"
 #include "clang/StaticAnalyzer/Core/PathSensitive/SymbolManager.h"
-#include "llvm/Support/SaveAndRestore.h"
+#include "llvm37/Support/SaveAndRestore.h"
 
-namespace llvm {
+namespace llvm37 {
 class APSInt;
 }
 
@@ -104,7 +104,7 @@ public:
   ///
   /// Note that a ConstraintManager is not obligated to return a concretized
   /// value for a symbol, even if it is perfectly constrained.
-  virtual const llvm::APSInt* getSymVal(ProgramStateRef state,
+  virtual const llvm37::APSInt* getSymVal(ProgramStateRef state,
                                         SymbolRef sym) const {
     return nullptr;
   }

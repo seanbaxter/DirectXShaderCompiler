@@ -10,9 +10,9 @@ DESCRIPTION
 -----------
 
 :program:`tblgen` translates from target description (``.td``) files into C++
-code that can be included in the definition of an LLVM target library.  Most
-users of LLVM will not need to use this program.  It is only for assisting with
-writing an LLVM target backend.
+code that can be included in the definition of an LLVM37 target library.  Most
+users of LLVM37 will not need to use this program.  It is only for assisting with
+writing an LLVM37 target backend.
 
 The input and output of :program:`tblgen` is beyond the scope of this short
 introduction; please see the :doc:`introduction to TableGen

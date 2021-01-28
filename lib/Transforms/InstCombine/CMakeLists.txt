@@ -1,4 +1,4 @@
-add_llvm_library(LLVMInstCombine
+add_llvm_library(LLVM37InstCombine
   InstructionCombining.cpp
   InstCombineAddSub.cpp
   InstCombineAndOrXor.cpp
@@ -14,8 +14,8 @@ add_llvm_library(LLVMInstCombine
   InstCombineVectorOps.cpp
 
   ADDITIONAL_HEADER_DIRS
-  ${LLVM_MAIN_INCLUDE_DIR}/llvm/Transforms
-  ${LLVM_MAIN_INCLUDE_DIR}/llvm/Transforms/InstCombine
+  ${LLVM37_MAIN_INCLUDE_DIR}/llvm37/Transforms
+  ${LLVM37_MAIN_INCLUDE_DIR}/llvm37/Transforms/InstCombine
   )
 
-add_dependencies(LLVMInstCombine intrinsics_gen)
+add_dependencies(LLVM37InstCombine intrinsics_gen)

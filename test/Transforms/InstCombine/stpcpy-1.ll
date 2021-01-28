@@ -18,7 +18,7 @@ define i8* @test_simplify1() {
   %src = getelementptr [6 x i8], [6 x i8]* @hello, i32 0, i32 0
 
   %ret = call i8* @stpcpy(i8* %dst, i8* %src)
-; CHECK: @llvm.memcpy.p0i8.p0i8.i32
+; CHECK: @llvm37.memcpy.p0i8.p0i8.i32
 ; CHECK-NEXT: getelementptr inbounds ([32 x i8], [32 x i8]* @a, i32 0, i32 5)
   ret i8* %ret
 }

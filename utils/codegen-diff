@@ -130,6 +130,6 @@ L<gdb(1)>, L<objdump(1)>, L<script(1)>.
 
 You will need my B<gdb> patch:
 
-  http://llvm.cs.uiuc.edu/~gaeke/gdb-disassembly-print-bytes.patch
+  http://llvm37.cs.uiuc.edu/~gaeke/gdb-disassembly-print-bytes.patch
 
 =cut

@@ -1,4 +1,4 @@
-// RUN: %clang_cc1 -emit-llvm -triple i386-linux-gnu -o %t %s
+// RUN: %clang_cc1 -emit-llvm37 -triple i386-linux-gnu -o %t %s
 // RUN: FileCheck --input-file=%t %s
 // PR10392
 

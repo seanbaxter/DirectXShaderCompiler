@@ -1,6 +1,6 @@
 //===--- MicrosoftMangle.cpp - Microsoft Visual C++ Name Mangling ---------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -26,8 +26,8 @@
 #include "clang/Basic/ABI.h"
 #include "clang/Basic/DiagnosticOptions.h"
 #include "clang/Basic/TargetInfo.h"
-#include "llvm/ADT/StringExtras.h"
-#include "llvm/Support/MathExtras.h"
+#include "llvm37/ADT/StringExtras.h"
+#include "llvm37/Support/MathExtras.h"
 
 using namespace clang;
 
@@ -90,11 +90,11 @@ static bool isLambda(const NamedDecl *ND) {
 /// Microsoft Visual C++ ABI.
 class MicrosoftMangleContextImpl : public MicrosoftMangleContext {
   typedef std::pair<const DeclContext *, IdentifierInfo *> DiscriminatorKeyTy;
-  llvm::DenseMap<DiscriminatorKeyTy, unsigned> Discriminator;
-  llvm::DenseMap<const NamedDecl *, unsigned> Uniquifier;
-  llvm::DenseMap<const CXXRecordDecl *, unsigned> LambdaIds;
-  llvm::DenseMap<const NamedDecl *, unsigned> SEHFilterIds;
-  llvm::DenseMap<const NamedDecl *, unsigned> SEHFinallyIds;
+  llvm37::DenseMap<DiscriminatorKeyTy, unsigned> Discriminator;
+  llvm37::DenseMap<const NamedDecl *, unsigned> Uniquifier;
+  llvm37::DenseMap<const CXXRecordDecl *, unsigned> LambdaIds;
+  llvm37::DenseMap<const NamedDecl *, unsigned> SEHFilterIds;
+  llvm37::DenseMap<const NamedDecl *, unsigned> SEHFinallyIds;
 
 public:
   MicrosoftMangleContextImpl(ASTContext &Context, DiagnosticsEngine &Diags)
@@ -196,7 +196,7 @@ public:
     assert(!RD->isExternallyVisible() && "RD must not be visible!");
     assert(RD->getLambdaManglingNumber() == 0 &&
            "RD must not have a mangling number!");
-    std::pair<llvm::DenseMap<const CXXRecordDecl *, unsigned>::iterator, bool>
+    std::pair<llvm37::DenseMap<const CXXRecordDecl *, unsigned>::iterator, bool>
         Result = LambdaIds.insert(std::make_pair(RD, LambdaIds.size()));
     return Result.first->second;
   }
@@ -217,10 +217,10 @@ class MicrosoftCXXNameMangler {
   const NamedDecl *Structor;
   unsigned StructorType;
 
-  typedef llvm::SmallVector<std::string, 10> BackRefVec;
+  typedef llvm37::SmallVector<std::string, 10> BackRefVec;
   BackRefVec NameBackReferences;
 
-  typedef llvm::DenseMap<void *, unsigned> ArgBackRefMap;
+  typedef llvm37::DenseMap<void *, unsigned> ArgBackRefMap;
   ArgBackRefMap TypeBackReferences;
 
   ASTContext &getASTContext() const { return Context.getASTContext(); }
@@ -307,7 +307,7 @@ private:
   void mangleFunctionClass(const FunctionDecl *FD);
   void mangleCallingConvention(CallingConv CC);
   void mangleCallingConvention(const FunctionType *T);
-  void mangleIntegerLiteral(const llvm::APSInt &Number, bool IsBoolean);
+  void mangleIntegerLiteral(const llvm37::APSInt &Number, bool IsBoolean);
   void mangleExpression(const Expr *E);
   void mangleThrowSpecification(const FunctionProtoType *T);
 
@@ -717,8 +717,8 @@ void MicrosoftCXXNameMangler::mangleUnqualifiedName(const NamedDecl *ND,
     // the mangled type name as a key to check the mangling of different types
     // for aliasing.
 
-    llvm::SmallString<64> TemplateMangling;
-    llvm::raw_svector_ostream Stream(TemplateMangling);
+    llvm37::SmallString<64> TemplateMangling;
+    llvm37::raw_svector_ostream Stream(TemplateMangling);
     MicrosoftCXXNameMangler Extra(Context, Stream);
     Extra.mangleTemplateInstantiationName(TD, *TemplateArgs);
     Stream.flush();
@@ -751,9 +751,9 @@ void MicrosoftCXXNameMangler::mangleUnqualifiedName(const NamedDecl *ND,
         // Anonymous types with no tag or typedef get the name of their
         // declarator mangled in.  If they have no declarator, number them with
         // a $S prefix.
-        llvm::SmallString<64> Name("$S");
+        llvm37::SmallString<64> Name("$S");
         // Get a unique id for the anonymous struct.
-        Name += llvm::utostr(Context.getAnonymousStructId(RD) + 1);
+        Name += llvm37::utostr(Context.getAnonymousStructId(RD) + 1);
         mangleSourceName(Name.str());
         break;
       }
@@ -771,14 +771,14 @@ void MicrosoftCXXNameMangler::mangleUnqualifiedName(const NamedDecl *ND,
 
       if (const CXXRecordDecl *Record = dyn_cast<CXXRecordDecl>(TD)) {
         if (Record->isLambda()) {
-          llvm::SmallString<10> Name("<lambda_");
+          llvm37::SmallString<10> Name("<lambda_");
           unsigned LambdaId;
           if (Record->getLambdaManglingNumber())
             LambdaId = Record->getLambdaManglingNumber();
           else
             LambdaId = Context.getLambdaId(Record);
 
-          Name += llvm::utostr(LambdaId);
+          Name += llvm37::utostr(LambdaId);
           Name += ">";
 
           mangleSourceName(Name);
@@ -786,7 +786,7 @@ void MicrosoftCXXNameMangler::mangleUnqualifiedName(const NamedDecl *ND,
         }
       }
 
-      llvm::SmallString<64> Name("<unnamed-type-");
+      llvm37::SmallString<64> Name("<unnamed-type-");
       if (TD->hasDeclaratorForAnonDecl()) {
         // Anonymous types with no tag or typedef get the name of their
         // declarator mangled in if they have one.
@@ -794,7 +794,7 @@ void MicrosoftCXXNameMangler::mangleUnqualifiedName(const NamedDecl *ND,
       } else {
         // Otherwise, number the types using a $S prefix.
         Name += "$S";
-        Name += llvm::utostr(Context.getAnonymousStructId(TD));
+        Name += llvm37::utostr(Context.getAnonymousStructId(TD));
       }
       Name += ">";
       mangleSourceName(Name.str());
@@ -804,7 +804,7 @@ void MicrosoftCXXNameMangler::mangleUnqualifiedName(const NamedDecl *ND,
     case DeclarationName::ObjCZeroArgSelector:
     case DeclarationName::ObjCOneArgSelector:
     case DeclarationName::ObjCMultiArgSelector:
-      llvm_unreachable("Can't mangle Objective-C selector names here!");
+      llvm37_unreachable("Can't mangle Objective-C selector names here!");
 
     case DeclarationName::CXXConstructorName:
       if (Structor == getStructor(ND)) {
@@ -848,7 +848,7 @@ void MicrosoftCXXNameMangler::mangleUnqualifiedName(const NamedDecl *ND,
     }
 
     case DeclarationName::CXXUsingDirective:
-      llvm_unreachable("Can't mangle a using directive name!");
+      llvm37_unreachable("Can't mangle a using directive name!");
   }
 }
 
@@ -908,9 +908,9 @@ void MicrosoftCXXNameMangler::mangleCXXDtorType(CXXDtorType T) {
   // FIXME: Add a vector deleting dtor type.  It goes in the vtable, so we need
   // it.
   case Dtor_Comdat:
-    llvm_unreachable("not expecting a COMDAT");
+    llvm37_unreachable("not expecting a COMDAT");
   }
-  llvm_unreachable("Unsupported dtor type?");
+  llvm37_unreachable("Unsupported dtor type?");
 }
 
 void MicrosoftCXXNameMangler::mangleOperatorName(OverloadedOperatorKind OO,
@@ -1041,7 +1041,7 @@ void MicrosoftCXXNameMangler::mangleOperatorName(OverloadedOperatorKind OO,
 
   case OO_None:
   case NUM_OVERLOADED_OPERATORS:
-    llvm_unreachable("Not an overloaded operator");
+    llvm37_unreachable("Not an overloaded operator");
   }
 }
 
@@ -1089,7 +1089,7 @@ MicrosoftCXXNameMangler::mangleUnscopedTemplateName(const TemplateDecl *TD) {
   mangleUnqualifiedName(TD);
 }
 
-void MicrosoftCXXNameMangler::mangleIntegerLiteral(const llvm::APSInt &Value,
+void MicrosoftCXXNameMangler::mangleIntegerLiteral(const llvm37::APSInt &Value,
                                                    bool IsBoolean) {
   // <integer-literal> ::= $0 <number>
   Out << "$0";
@@ -1104,7 +1104,7 @@ void MicrosoftCXXNameMangler::mangleIntegerLiteral(const llvm::APSInt &Value,
 
 void MicrosoftCXXNameMangler::mangleExpression(const Expr *E) {
   // See if this is a constant expression.
-  llvm::APSInt Value;
+  llvm37::APSInt Value;
   if (E->isIntegerConstantExpr(Value, Context.getASTContext())) {
     mangleIntegerLiteral(Value, E->getType()->isBooleanType());
     return;
@@ -1174,9 +1174,9 @@ void MicrosoftCXXNameMangler::mangleTemplateArg(const TemplateDecl *TD,
 
   switch (TA.getKind()) {
   case TemplateArgument::Null:
-    llvm_unreachable("Can't mangle null template arguments!");
+    llvm37_unreachable("Can't mangle null template arguments!");
   case TemplateArgument::TemplateExpansion:
-    llvm_unreachable("Can't mangle template expansion arguments!");
+    llvm37_unreachable("Can't mangle template expansion arguments!");
   case TemplateArgument::Type: {
     QualType T = TA.getAsType();
     mangleType(T, SourceRange(), QMM_Escape);
@@ -1226,12 +1226,12 @@ void MicrosoftCXXNameMangler::mangleTemplateArg(const TemplateDecl *TD,
         // However, we are free to use 0 *if* we would use multiple fields for
         // non-nullptr member pointers.
         if (!RD->nullFieldOffsetIsZero()) {
-          mangleIntegerLiteral(llvm::APSInt::get(-1), /*IsBoolean=*/false);
+          mangleIntegerLiteral(llvm37::APSInt::get(-1), /*IsBoolean=*/false);
           return;
         }
       }
     }
-    mangleIntegerLiteral(llvm::APSInt::getUnsigned(0), /*IsBoolean=*/false);
+    mangleIntegerLiteral(llvm37::APSInt::getUnsigned(0), /*IsBoolean=*/false);
     break;
   }
   case TemplateArgument::Expression:
@@ -1251,7 +1251,7 @@ void MicrosoftCXXNameMangler::mangleTemplateArg(const TemplateDecl *TD,
       else if (isa<NonTypeTemplateParmDecl>(Parm))
         Out << "$S";
       else
-        llvm_unreachable("unexpected template parameter decl!");
+        llvm37_unreachable("unexpected template parameter decl!");
     } else {
       for (const TemplateArgument &PA : TemplateArgs)
         mangleTemplateArg(TD, PA, Parm);
@@ -1267,7 +1267,7 @@ void MicrosoftCXXNameMangler::mangleTemplateArg(const TemplateDecl *TD,
       Out << "$$Y";
       mangleName(ND);
     } else {
-      llvm_unreachable("unexpected template template NamedDecl!");
+      llvm37_unreachable("unexpected template template NamedDecl!");
     }
     break;
   }
@@ -1506,7 +1506,7 @@ void MicrosoftCXXNameMangler::mangleType(QualType T, SourceRange Range,
 #define ABSTRACT_TYPE(CLASS, PARENT)
 #define NON_CANONICAL_TYPE(CLASS, PARENT) \
   case Type::CLASS: \
-    llvm_unreachable("can't mangle non-canonical type " #CLASS "Type"); \
+    llvm37_unreachable("can't mangle non-canonical type " #CLASS "Type"); \
     return;
 #define TYPE(CLASS, PARENT) \
   case Type::CLASS: \
@@ -1577,7 +1577,7 @@ void MicrosoftCXXNameMangler::mangleType(const BuiltinType *T, Qualifiers,
   case BuiltinType::Id:
 #include "clang/AST/BuiltinTypes.def"
   case BuiltinType::Dependent:
-    llvm_unreachable("placeholder types shouldn't get to name mangling");
+    llvm37_unreachable("placeholder types shouldn't get to name mangling");
 
   case BuiltinType::ObjCId: Out << "PAUobjc_object@@"; break;
   case BuiltinType::ObjCClass: Out << "PAUobjc_class@@"; break;
@@ -1641,7 +1641,7 @@ void MicrosoftCXXNameMangler::mangleType(const FunctionProtoType *T, Qualifiers,
 }
 void MicrosoftCXXNameMangler::mangleType(const FunctionNoProtoType *T,
                                          Qualifiers, SourceRange) {
-  llvm_unreachable("Can't mangle K&R function prototypes");
+  llvm37_unreachable("Can't mangle K&R function prototypes");
 }
 
 void MicrosoftCXXNameMangler::mangleFunctionType(const FunctionType *T,
@@ -1713,7 +1713,7 @@ void MicrosoftCXXNameMangler::mangleFunctionType(const FunctionType *T,
                            Range);
         Out << '@';
       } else {
-        llvm_unreachable("unexpected constructor closure!");
+        llvm37_unreachable("unexpected constructor closure!");
       }
       Out << 'Z';
       return;
@@ -1782,7 +1782,7 @@ void MicrosoftCXXNameMangler::mangleFunctionClass(const FunctionDecl *FD) {
   if (const CXXMethodDecl *MD = dyn_cast<CXXMethodDecl>(FD)) {
     switch (MD->getAccess()) {
       case AS_none:
-        llvm_unreachable("Unsupported access specifier");
+        llvm37_unreachable("Unsupported access specifier");
       case AS_private:
         if (MD->isStatic())
           Out << 'C';
@@ -1831,7 +1831,7 @@ void MicrosoftCXXNameMangler::mangleCallingConvention(CallingConv CC) {
 
   switch (CC) {
     default:
-      llvm_unreachable("Unsupported CC for mangling");
+      llvm37_unreachable("Unsupported CC for mangling");
     case CC_X86_64Win64:
     case CC_X86_64SysV:
     case CC_C: Out << 'A'; break;
@@ -1914,23 +1914,23 @@ void MicrosoftCXXNameMangler::mangleDecayedArrayType(const ArrayType *T) {
 }
 void MicrosoftCXXNameMangler::mangleType(const ConstantArrayType *T, Qualifiers,
                                          SourceRange) {
-  llvm_unreachable("Should have been special cased");
+  llvm37_unreachable("Should have been special cased");
 }
 void MicrosoftCXXNameMangler::mangleType(const VariableArrayType *T, Qualifiers,
                                          SourceRange) {
-  llvm_unreachable("Should have been special cased");
+  llvm37_unreachable("Should have been special cased");
 }
 void MicrosoftCXXNameMangler::mangleType(const DependentSizedArrayType *T,
                                          Qualifiers, SourceRange) {
-  llvm_unreachable("Should have been special cased");
+  llvm37_unreachable("Should have been special cased");
 }
 void MicrosoftCXXNameMangler::mangleType(const IncompleteArrayType *T,
                                          Qualifiers, SourceRange) {
-  llvm_unreachable("Should have been special cased");
+  llvm37_unreachable("Should have been special cased");
 }
 void MicrosoftCXXNameMangler::mangleArrayType(const ArrayType *T) {
   QualType ElementTy(T, 0);
-  SmallVector<llvm::APInt, 3> Dimensions;
+  SmallVector<llvm37::APInt, 3> Dimensions;
   for (;;) {
     if (ElementTy->isConstantArrayType()) {
       const ConstantArrayType *CAT =
@@ -1940,12 +1940,12 @@ void MicrosoftCXXNameMangler::mangleArrayType(const ArrayType *T) {
     } else if (ElementTy->isIncompleteArrayType()) {
       const IncompleteArrayType *IAT =
           getASTContext().getAsIncompleteArrayType(ElementTy);
-      Dimensions.push_back(llvm::APInt(32, 0));
+      Dimensions.push_back(llvm37::APInt(32, 0));
       ElementTy = IAT->getElementType();
     } else if (ElementTy->isVariableArrayType()) {
       const VariableArrayType *VAT =
         getASTContext().getAsVariableArrayType(ElementTy);
-      Dimensions.push_back(llvm::APInt(32, 0));
+      Dimensions.push_back(llvm37::APInt(32, 0));
       ElementTy = VAT->getElementType();
     } else if (ElementTy->isDependentSizedArrayType()) {
       // The dependent expression has to be folded into a constant (TODO).
@@ -1964,7 +1964,7 @@ void MicrosoftCXXNameMangler::mangleArrayType(const ArrayType *T) {
   Out << 'Y';
   // <dimension-count> ::= <number> # number of extra dimensions
   mangleNumber(Dimensions.size());
-  for (const llvm::APInt &Dimension : Dimensions)
+  for (const llvm37::APInt &Dimension : Dimensions)
     mangleNumber(Dimension.getLimitedValue());
   mangleType(ElementTy, SourceRange(), QMM_Escape);
 }
@@ -2065,9 +2065,9 @@ void MicrosoftCXXNameMangler::mangleType(const VectorType *T, Qualifiers Quals,
   // Pattern match exactly the typedefs in our intrinsic headers.  Anything that
   // doesn't match the Intel types uses a custom mangling below.
   bool IsBuiltin = true;
-  llvm::Triple::ArchType AT =
+  llvm37::Triple::ArchType AT =
       getASTContext().getTargetInfo().getTriple().getArch();
-  if (AT == llvm::Triple::x86 || AT == llvm::Triple::x86_64) {
+  if (AT == llvm37::Triple::x86 || AT == llvm37::Triple::x86_64) {
     if (Width == 64 && ET->getKind() == BuiltinType::LongLong) {
       Out << "T__m64";
     } else if (Width >= 128) {
@@ -2141,7 +2141,7 @@ void MicrosoftCXXNameMangler::mangleType(const BlockPointerType *T,
 
 void MicrosoftCXXNameMangler::mangleType(const InjectedClassNameType *,
                                          Qualifiers, SourceRange) {
-  llvm_unreachable("Cannot mangle injected class name type.");
+  llvm37_unreachable("Cannot mangle injected class name type.");
 }
 
 void MicrosoftCXXNameMangler::mangleType(const TemplateSpecializationType *T,
@@ -2285,7 +2285,7 @@ static void mangleThunkThisAdjustment(const CXXMethodDecl *MD,
     char AccessSpec;
     switch (MD->getAccess()) {
     case AS_none:
-      llvm_unreachable("Unsupported access specifier");
+      llvm37_unreachable("Unsupported access specifier");
     case AS_private:
       AccessSpec = '0';
       break;
@@ -2313,7 +2313,7 @@ static void mangleThunkThisAdjustment(const CXXMethodDecl *MD,
   } else if (Adjustment.NonVirtual != 0) {
     switch (MD->getAccess()) {
     case AS_none:
-      llvm_unreachable("Unsupported access specifier");
+      llvm37_unreachable("Unsupported access specifier");
     case AS_private:
       Out << 'G';
       break;
@@ -2327,7 +2327,7 @@ static void mangleThunkThisAdjustment(const CXXMethodDecl *MD,
   } else {
     switch (MD->getAccess()) {
     case AS_none:
-      llvm_unreachable("Unsupported access specifier");
+      llvm37_unreachable("Unsupported access specifier");
     case AS_private:
       Out << 'A';
       break;
@@ -2477,9 +2477,9 @@ void MicrosoftMangleContextImpl::mangleCXXCatchableType(
   MicrosoftCXXNameMangler Mangler(*this, Out);
   Mangler.getStream() << "_CT";
 
-  llvm::SmallString<64> RTTIMangling;
+  llvm37::SmallString<64> RTTIMangling;
   {
-    llvm::raw_svector_ostream Stream(RTTIMangling);
+    llvm37::raw_svector_ostream Stream(RTTIMangling);
     mangleCXXRTTI(T, Stream);
   }
   Mangler.getStream() << RTTIMangling.substr(1);
@@ -2487,9 +2487,9 @@ void MicrosoftMangleContextImpl::mangleCXXCatchableType(
   // VS2015 CTP6 omits the copy-constructor in the mangled name.  This name is,
   // in fact, superfluous but I'm not sure the change was made consciously.
   // TODO: Revisit this when VS2015 gets released.
-  llvm::SmallString<64> CopyCtorMangling;
+  llvm37::SmallString<64> CopyCtorMangling;
   if (CD) {
-    llvm::raw_svector_ostream Stream(CopyCtorMangling);
+    llvm37::raw_svector_ostream Stream(CopyCtorMangling);
     mangleCXXCtor(CD, CT, Stream);
   }
   Mangler.getStream() << CopyCtorMangling.substr(1);
@@ -2621,7 +2621,7 @@ void MicrosoftMangleContextImpl::mangleStaticGuardVariable(const VarDecl *VD,
   // functions.  It uses a different mangling in external functions to support
   // guarding more than 32 variables.  MSVC rejects inline functions with more
   // than 32 static locals.  We don't fully implement the second mangling
-  // because those guards are not externally visible, and instead use LLVM's
+  // because those guards are not externally visible, and instead use LLVM37's
   // default renaming when creating a new guard variable.
   MicrosoftCXXNameMangler Mangler(*this, Out);
 
@@ -2757,7 +2757,7 @@ void MicrosoftMangleContextImpl::mangleStringLiteral(const StringLiteral *SL,
 
   // The literature refers to the process of reversing the bits in the final CRC
   // output as "reflection".
-  CRC = llvm::reverseBits(CRC);
+  CRC = llvm37::reverseBits(CRC);
 
   // <encoded-crc>: The CRC is encoded utilizing the standard number mangling
   // scheme.

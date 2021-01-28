@@ -1,4 +1,4 @@
-// RUN: llvm-tblgen -gen-intrinsic %s | FileCheck %s
+// RUN: llvm37-tblgen -gen-intrinsic %s | FileCheck %s
 // XFAIL: vg_leak
 
 class IntrinsicProperty;
@@ -9,21 +9,21 @@ class ValueType<int size, int value> {
   int Value = value;
 }
 
-class LLVMType<ValueType vt> {
+class LLVM37Type<ValueType vt> {
   ValueType VT = vt;
 }
 
-class Intrinsic<string name, list<LLVMType> param_types = []> {
-  string LLVMName = name;
+class Intrinsic<string name, list<LLVM37Type> param_types = []> {
+  string LLVM37Name = name;
   bit isTarget = 0;
   string TargetPrefix = "";
-  list<LLVMType> RetTypes = [];
-  list<LLVMType> ParamTypes = param_types;
+  list<LLVM37Type> RetTypes = [];
+  list<LLVM37Type> ParamTypes = param_types;
   list<IntrinsicProperty> Properties = [];
 }
 
 def iAny : ValueType<0, 254>;
-def llvm_anyint_ty : LLVMType<iAny>;
+def llvm37_anyint_ty : LLVM37Type<iAny>;
 
 
 // Make sure an intrinsic name that is a prefix of another is checked after the
@@ -32,5 +32,5 @@ def llvm_anyint_ty : LLVMType<iAny>;
 // CHECK: if (NameR.startswith("oo.bar.")) return Intrinsic::foo_bar;
 // CHECK: if (NameR.startswith("oo.")) return Intrinsic::foo;
 
-def int_foo : Intrinsic<"llvm.foo", [llvm_anyint_ty]>;
-def int_foo_bar : Intrinsic<"llvm.foo.bar", [llvm_anyint_ty]>;
+def int_foo : Intrinsic<"llvm.foo", [llvm37_anyint_ty]>;
+def int_foo_bar : Intrinsic<"llvm.foo.bar", [llvm37_anyint_ty]>;

@@ -1,6 +1,6 @@
 //===---- VerifyDiagnosticConsumer.cpp - Verifying Diagnostic Client ------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -18,9 +18,9 @@
 #include "clang/Frontend/TextDiagnosticBuffer.h"
 #include "clang/Lex/HeaderSearch.h"
 #include "clang/Lex/Preprocessor.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/Support/Regex.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/Support/Regex.h"
+#include "llvm37/Support/raw_ostream.h"
 
 using namespace clang;
 typedef VerifyDiagnosticConsumer::Directive Directive;
@@ -82,7 +82,7 @@ void VerifyDiagnosticConsumer::BeginSourceFile(const LangOptions &LangOpts,
 #ifndef NDEBUG
       // Debug build tracks parsed files.
       const_cast<Preprocessor*>(PP)->addPPCallbacks(
-                      llvm::make_unique<VerifyFileTracker>(*this, *SrcManager));
+                      llvm37::make_unique<VerifyFileTracker>(*this, *SrcManager));
 #endif
     }
   }
@@ -196,7 +196,7 @@ public:
   }
 
 private:
-  llvm::Regex Regex;
+  llvm37::Regex Regex;
 };
 
 class ParseHelper
@@ -591,7 +591,7 @@ static bool findDirectives(SourceManager &SM, FileID FID,
     return false;
 
   // Create a lexer to lex all the tokens of the main file in raw mode.
-  const llvm::MemoryBuffer *FromFile = SM.getBuffer(FID);
+  const llvm37::MemoryBuffer *FromFile = SM.getBuffer(FID);
   Lexer RawLex(FID, FromFile, SM, LangOpts);
 
   // Return comments as tokens, this is how we find expected diagnostics.
@@ -626,7 +626,7 @@ static unsigned PrintUnexpected(DiagnosticsEngine &Diags, SourceManager *SourceM
   if (diag_begin == diag_end) return 0;
 
   SmallString<256> Fmt;
-  llvm::raw_svector_ostream OS(Fmt);
+  llvm37::raw_svector_ostream OS(Fmt);
   for (const_diag_iterator I = diag_begin, E = diag_end; I != E; ++I) {
     if (I->first.isInvalid() || !SourceMgr)
       OS << "\n  (frontend)";
@@ -654,7 +654,7 @@ static unsigned PrintExpected(DiagnosticsEngine &Diags,
     return 0;
 
   SmallString<256> Fmt;
-  llvm::raw_svector_ostream OS(Fmt);
+  llvm37::raw_svector_ostream OS(Fmt);
   for (auto *DirPtr : DL) {
     Directive &D = *DirPtr;
     OS << "\n  File " << SourceMgr.getFilename(D.DiagnosticLoc);
@@ -827,7 +827,7 @@ void VerifyDiagnosticConsumer::CheckDiagnostics() {
   // is applicable.
   if (UnparsedFiles.size() > 0) {
     // Generate a cache of parsed FileEntry pointers for alias lookups.
-    llvm::SmallPtrSet<const FileEntry *, 8> ParsedFileCache;
+    llvm37::SmallPtrSet<const FileEntry *, 8> ParsedFileCache;
     for (ParsedFilesMap::iterator I = ParsedFiles.begin(),
                                 End = ParsedFiles.end(); I != End; ++I) {
       if (const FileEntry *FE = I->second)
@@ -846,7 +846,7 @@ void VerifyDiagnosticConsumer::CheckDiagnostics() {
 
       // Report a fatal error if this file contained directives.
       if (Status.foundDirectives()) {
-        llvm::report_fatal_error(Twine("-verify directives found after rather"
+        llvm37::report_fatal_error(Twine("-verify directives found after rather"
                                        " than during normal parsing of ",
                                  StringRef(FE ? FE->getName() : "(unknown)")));
       }
@@ -898,7 +898,7 @@ std::unique_ptr<Directive> Directive::create(bool RegexKind,
                                              bool MatchAnyLine, StringRef Text,
                                              unsigned Min, unsigned Max) {
   if (!RegexKind)
-    return llvm::make_unique<StandardDirective>(DirectiveLoc, DiagnosticLoc,
+    return llvm37::make_unique<StandardDirective>(DirectiveLoc, DiagnosticLoc,
                                                 MatchAnyLine, Text, Min, Max);
 
   // Parse the directive into a regular expression.
@@ -919,11 +919,11 @@ std::unique_ptr<Directive> Directive::create(bool RegexKind,
       if (VerbatimMatchLength == StringRef::npos)
         VerbatimMatchLength = S.size();
       // Escape and append the fixed string.
-      RegexStr += llvm::Regex::escape(S.substr(0, VerbatimMatchLength));
+      RegexStr += llvm37::Regex::escape(S.substr(0, VerbatimMatchLength));
       S = S.drop_front(VerbatimMatchLength);
     }
   }
 
-  return llvm::make_unique<RegexDirective>(
+  return llvm37::make_unique<RegexDirective>(
       DirectiveLoc, DiagnosticLoc, MatchAnyLine, Text, Min, Max, RegexStr);
 }

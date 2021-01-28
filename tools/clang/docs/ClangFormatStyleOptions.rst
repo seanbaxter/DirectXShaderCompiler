@@ -7,7 +7,7 @@ supported by :doc:`LibFormat` and :doc:`ClangFormat`.
 
 When using :program:`clang-format` command line utility or
 ``clang::format::reformat(...)`` functions from code, one can either use one of
-the predefined styles (LLVM, Google, Chromium, Mozilla, WebKit) or create a
+the predefined styles (LLVM37, Google, Chromium, Mozilla, WebKit) or create a
 custom style by configuring specific style options.
 
 
@@ -52,8 +52,8 @@ An example of a configuration file for multiple languages:
 .. code-block:: yaml
 
   ---
-  # We'll use defaults from the LLVM style, but with 4 columns indentation.
-  BasedOnStyle: LLVM
+  # We'll use defaults from the LLVM37 style, but with 4 columns indentation.
+  BasedOnStyle: LLVM37
   IndentWidth: 4
   ---
   Language: Cpp
@@ -75,7 +75,7 @@ options of a certain predefined style is:
 
 .. code-block:: console
 
-  clang-format -style=llvm -dump-config > .clang-format
+  clang-format -style=llvm37 -dump-config > .clang-format
 
 When specifying configuration in the ``-style=`` option, the same configuration
 is applied for all input files. The format of the configuration is:
@@ -108,7 +108,7 @@ Configuring Style in Code
 
 When using ``clang::format::reformat(...)`` functions, the format is specified
 by supplying the `clang::format::FormatStyle
-<http://clang.llvm.org/doxygen/structclang_1_1format_1_1FormatStyle.html>`_
+<http://clang.llvm37.org/doxygen/structclang_1_1format_1_1FormatStyle.html>`_
 structure.
 
 
@@ -129,9 +129,9 @@ the configuration (without a prefix: ``Auto``).
 
   Possible values:
 
-  * ``LLVM``
-    A style complying with the `LLVM coding standards
-    <http://llvm.org/docs/CodingStandards.html>`_
+  * ``LLVM37``
+    A style complying with the `LLVM37 coding standards
+    <http://llvm37.org/docs/CodingStandards.html>`_
   * ``Google``
     A style complying with `Google's C++ style guide
     <http://google-styleguide.googlecode.com/svn/trunk/cppguide.xml>`_
@@ -554,7 +554,7 @@ A style similar to the `Linux Kernel style
 
 .. code-block:: yaml
 
-  BasedOnStyle: LLVM
+  BasedOnStyle: LLVM37
   IndentWidth: 8
   UseTab: Always
   BreakBeforeBraces: Linux

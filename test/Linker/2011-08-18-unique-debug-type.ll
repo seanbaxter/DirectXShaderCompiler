@@ -1,4 +1,4 @@
-; RUN: llvm-link %s %p/2011-08-18-unique-debug-type2.ll -S -o - | FileCheck %s
+; RUN: llvm37-link %s %p/2011-08-18-unique-debug-type2.ll -S -o - | FileCheck %s
 ; Test to check only one MDNode for "int" after linking.
 ; CHECK: !DIBasicType(name: "int"
 target datalayout = "e-p:64:64:64-i1:8:8-i8:8:8-i16:16:16-i32:32:32-i64:64:64-f32:32:32-f64:64:64-v64:64:64-v128:128:128-a0:0:64-s0:64:64-f80:128:128-n8:16:32:64"
@@ -9,8 +9,8 @@ entry:
   ret i32 1, !dbg !10
 }
 
-!llvm.dbg.cu = !{!0}
-!llvm.module.flags = !{!13}
+!llvm37.dbg.cu = !{!0}
+!llvm37.module.flags = !{!13}
 
 !0 = !DICompileUnit(language: DW_LANG_C99, producer: "clang version 3.0 (trunk 137954)", isOptimized: true, emissionKind: 0, file: !12, enums: !2, retainedTypes: !2, subprograms: !3, globals: !2)
 !1 = !{!2}

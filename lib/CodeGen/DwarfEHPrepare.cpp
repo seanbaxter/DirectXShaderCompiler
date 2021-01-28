@@ -1,6 +1,6 @@
 //===-- DwarfEHPrepare - Prepare exception handling for code generation ---===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -12,21 +12,21 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/CodeGen/Passes.h"
-#include "llvm/ADT/BitVector.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/Analysis/CFG.h"
-#include "llvm/Analysis/LibCallSemantics.h"
-#include "llvm/Analysis/TargetTransformInfo.h"
-#include "llvm/IR/Dominators.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/Module.h"
-#include "llvm/Pass.h"
-#include "llvm/Target/TargetLowering.h"
-#include "llvm/Target/TargetSubtargetInfo.h"
-#include "llvm/Transforms/Utils/Local.h"
-using namespace llvm;
+#include "llvm37/CodeGen/Passes.h"
+#include "llvm37/ADT/BitVector.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/Analysis/CFG.h"
+#include "llvm37/Analysis/LibCallSemantics.h"
+#include "llvm37/Analysis/TargetTransformInfo.h"
+#include "llvm37/IR/Dominators.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/Pass.h"
+#include "llvm37/Target/TargetLowering.h"
+#include "llvm37/Target/TargetSubtargetInfo.h"
+#include "llvm37/Transforms/Utils/Local.h"
+using namespace llvm37;
 
 #define DEBUG_TYPE "dwarfehprepare"
 
@@ -85,7 +85,7 @@ INITIALIZE_PASS_DEPENDENCY(TargetTransformInfoWrapperPass)
 INITIALIZE_TM_PASS_END(DwarfEHPrepare, "dwarfehprepare",
                        "Prepare DWARF exceptions", false, false)
 
-FunctionPass *llvm::createDwarfEHPass(const TargetMachine *TM) {
+FunctionPass *llvm37::createDwarfEHPass(const TargetMachine *TM) {
   return new DwarfEHPrepare(TM);
 }
 
@@ -157,7 +157,7 @@ size_t DwarfEHPrepare::pruneUnreachableResumes(
 
   const TargetTransformInfo &TTI =
       getAnalysis<TargetTransformInfoWrapperPass>().getTTI(Fn);
-  LLVMContext &Ctx = Fn.getContext();
+  LLVM37Context &Ctx = Fn.getContext();
 
   // Otherwise, insert unreachable instructions and call simplifycfg.
   size_t ResumesLeft = 0;
@@ -197,7 +197,7 @@ bool DwarfEHPrepare::InsertUnwindResumeCalls(Function &Fn) {
   if (isMSVCEHPersonality(Pers))
     return false;
 
-  LLVMContext &Ctx = Fn.getContext();
+  LLVM37Context &Ctx = Fn.getContext();
 
   size_t ResumesLeft = pruneUnreachableResumes(Fn, Resumes, CleanupLPads);
   if (ResumesLeft == 0)

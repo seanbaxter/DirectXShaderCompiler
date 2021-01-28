@@ -1,6 +1,6 @@
 //===- HoistConstantArray.cpp - Code to perform constant array hoisting ---===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -71,19 +71,19 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Transforms/Scalar.h"
-#include "llvm/Pass.h"
-#include "llvm/IR/Type.h"
-#include "llvm/IR/Constant.h"
-#include "llvm/IR/Instruction.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/GlobalVariable.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/Operator.h"
-#include "llvm/Support/Casting.h"
-#include "llvm/Analysis/ValueTracking.h"
-using namespace llvm;
+#include "llvm37/Transforms/Scalar.h"
+#include "llvm37/Pass.h"
+#include "llvm37/IR/Type.h"
+#include "llvm37/IR/Constant.h"
+#include "llvm37/IR/Instruction.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/GlobalVariable.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/Operator.h"
+#include "llvm37/Support/Casting.h"
+#include "llvm37/Analysis/ValueTracking.h"
+using namespace llvm37;
 
 namespace {
   class CandidateArray;
@@ -286,7 +286,7 @@ bool CandidateArray::AnalyzeStore(StoreInst *SI) {
       return false;
 
     // Deal with the 'extra 0' index from what might have been a global pointer
-    // https://www.llvm.org/docs/GetElementPtr.html#why-is-the-extra-0-index-required
+    // https://www.llvm37.org/docs/GetElementPtr.html#why-is-the-extra-0-index-required
     if ((gep->getNumIndices() == 2) && (gep->getPointerOperand() == m_Alloca)) {
       // Non-zero offset is unexpected, but could occur in the wild. Bail out if
       // we see it.
@@ -405,7 +405,7 @@ bool HoistConstantArray::runOnModule(Module &M) {
   return changed;
 }
 
-ModulePass *llvm::createHoistConstantArrayPass() {
+ModulePass *llvm37::createHoistConstantArrayPass() {
   return new HoistConstantArray();
 }
 

@@ -1,6 +1,6 @@
 //===--- NonNullParamChecker.cpp - Undefined arguments checker -*- C++ -*--===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -52,7 +52,7 @@ void NonNullParamChecker::checkPreCall(const CallEvent &Call,
 
   // Merge all non-null attributes
   unsigned NumArgs = Call.getNumArgs();
-  llvm::SmallBitVector AttrNonNull(NumArgs);
+  llvm37::SmallBitVector AttrNonNull(NumArgs);
   for (const auto *NonNull : FD->specific_attrs<NonNullAttr>()) {
     if (!NonNull->args_size()) {
       AttrNonNull.set(0, NumArgs);
@@ -182,7 +182,7 @@ NonNullParamChecker::genReportNullAttrNonNull(const ExplodedNode *ErrorNode,
     BTAttrNonNull.reset(new BugType(
         this, "Argument with 'nonnull' attribute passed null", "API"));
 
-  auto R = llvm::make_unique<BugReport>(
+  auto R = llvm37::make_unique<BugReport>(
       *BTAttrNonNull,
       "Null pointer passed as an argument to a 'nonnull' parameter", ErrorNode);
   if (ArgE)
@@ -196,7 +196,7 @@ std::unique_ptr<BugReport> NonNullParamChecker::genReportReferenceToNullPointer(
   if (!BTNullRefArg)
     BTNullRefArg.reset(new BuiltinBug(this, "Dereference of null pointer"));
 
-  auto R = llvm::make_unique<BugReport>(
+  auto R = llvm37::make_unique<BugReport>(
       *BTNullRefArg, "Forming reference to null pointer", ErrorNode);
   if (ArgE) {
     const Expr *ArgEDeref = bugreporter::getDerefExpr(ArgE);

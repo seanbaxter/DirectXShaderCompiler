@@ -1,6 +1,6 @@
 //===-- TargetSelect.cpp - Target Chooser Code ----------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -14,16 +14,16 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/ExecutionEngine/ExecutionEngine.h"
-#include "llvm/ADT/Triple.h"
-#include "llvm/IR/Module.h"
-#include "llvm/MC/SubtargetFeature.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/Host.h"
-#include "llvm/Support/TargetRegistry.h"
-#include "llvm/Target/TargetMachine.h"
+#include "llvm37/ExecutionEngine/ExecutionEngine.h"
+#include "llvm37/ADT/Triple.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/MC/SubtargetFeature.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/Host.h"
+#include "llvm37/Support/TargetRegistry.h"
+#include "llvm37/Target/TargetMachine.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 TargetMachine *EngineBuilder::selectTarget() {
   Triple TT;
@@ -64,7 +64,7 @@ TargetMachine *EngineBuilder::selectTarget(const Triple &TargetTriple,
 
     // Adjust the triple to match (if known), otherwise stick with the
     // requested/host triple.
-    Triple::ArchType Type = Triple::getArchTypeForLLVMName(MArch);
+    Triple::ArchType Type = Triple::getArchTypeForLLVM37Name(MArch);
     if (Type != Triple::UnknownArch)
       TheTriple.setArch(Type);
   } else {

@@ -49,7 +49,7 @@ for.body:                                         ; preds = %for.body, %entry
   store i32 %inc, i32* %arrayidx, align 4
   %indvars.iv.next = add nuw nsw i64 %indvars.iv, 1
   %exitcond = icmp eq i64 %indvars.iv.next, 4
-  br i1 %exitcond, label %for.end, label %for.body, !llvm.loop !1
+  br i1 %exitcond, label %for.end, label %for.body, !llvm37.loop !1
 
 for.end:                                          ; preds = %for.body
   ret void
@@ -100,7 +100,7 @@ for.body:                                         ; preds = %for.body, %entry
   store i32 %inc, i32* %arrayidx, align 4
   %indvars.iv.next = add nuw nsw i64 %indvars.iv, 1
   %exitcond = icmp eq i64 %indvars.iv.next, 64
-  br i1 %exitcond, label %for.end, label %for.body, !llvm.loop !3
+  br i1 %exitcond, label %for.end, label %for.body, !llvm37.loop !3
 
 for.end:                                          ; preds = %for.body
   ret void
@@ -130,7 +130,7 @@ for.body:                                         ; preds = %for.body, %entry
   store i32 %inc, i32* %arrayidx, align 4
   %indvars.iv.next = add nuw nsw i64 %indvars.iv, 1
   %exitcond = icmp eq i64 %indvars.iv.next, 64
-  br i1 %exitcond, label %for.end, label %for.body, !llvm.loop !5
+  br i1 %exitcond, label %for.end, label %for.body, !llvm37.loop !5
 
 for.end:                                          ; preds = %for.body
   ret void
@@ -148,7 +148,7 @@ for.end:                                          ; preds = %for.body
 define void @runtime_loop_with_full(i32* nocapture %a, i32 %b) {
 entry:
   %cmp3 = icmp sgt i32 %b, 0
-  br i1 %cmp3, label %for.body, label %for.end, !llvm.loop !8
+  br i1 %cmp3, label %for.body, label %for.end, !llvm37.loop !8
 
 for.body:                                         ; preds = %entry, %for.body
   %indvars.iv = phi i64 [ %indvars.iv.next, %for.body ], [ 0, %entry ]
@@ -159,7 +159,7 @@ for.body:                                         ; preds = %entry, %for.body
   %indvars.iv.next = add nuw nsw i64 %indvars.iv, 1
   %lftr.wideiv = trunc i64 %indvars.iv.next to i32
   %exitcond = icmp eq i32 %lftr.wideiv, %b
-  br i1 %exitcond, label %for.end, label %for.body, !llvm.loop !8
+  br i1 %exitcond, label %for.end, label %for.body, !llvm37.loop !8
 
 for.end:                                          ; preds = %for.body, %entry
   ret void
@@ -185,7 +185,7 @@ for.end:                                          ; preds = %for.body, %entry
 define void @runtime_loop_with_count4(i32* nocapture %a, i32 %b) {
 entry:
   %cmp3 = icmp sgt i32 %b, 0
-  br i1 %cmp3, label %for.body, label %for.end, !llvm.loop !9
+  br i1 %cmp3, label %for.body, label %for.end, !llvm37.loop !9
 
 for.body:                                         ; preds = %entry, %for.body
   %indvars.iv = phi i64 [ %indvars.iv.next, %for.body ], [ 0, %entry ]
@@ -196,7 +196,7 @@ for.body:                                         ; preds = %entry, %for.body
   %indvars.iv.next = add nuw nsw i64 %indvars.iv, 1
   %lftr.wideiv = trunc i64 %indvars.iv.next to i32
   %exitcond = icmp eq i32 %lftr.wideiv, %b
-  br i1 %exitcond, label %for.end, label %for.body, !llvm.loop !9
+  br i1 %exitcond, label %for.end, label %for.body, !llvm37.loop !9
 
 for.end:                                          ; preds = %for.body, %entry
   ret void
@@ -222,7 +222,7 @@ for.body:                                         ; preds = %for.body, %entry
   store i32 %inc, i32* %arrayidx, align 4
   %indvars.iv.next = add nuw nsw i64 %indvars.iv, 1
   %exitcond = icmp eq i64 %indvars.iv.next, 4
-  br i1 %exitcond, label %for.end, label %for.body, !llvm.loop !10
+  br i1 %exitcond, label %for.end, label %for.body, !llvm37.loop !10
 
 for.end:                                          ; preds = %for.body
   ret void
@@ -250,7 +250,7 @@ for.body:                                         ; preds = %for.body, %entry
   store i32 %inc, i32* %arrayidx, align 4
   %indvars.iv.next = add nuw nsw i64 %indvars.iv, 1
   %exitcond = icmp eq i64 %indvars.iv.next, 1000000
-  br i1 %exitcond, label %for.end, label %for.body, !llvm.loop !12
+  br i1 %exitcond, label %for.end, label %for.body, !llvm37.loop !12
 
 for.end:                                          ; preds = %for.body
   ret void

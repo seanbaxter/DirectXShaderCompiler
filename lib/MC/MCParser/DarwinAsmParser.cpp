@@ -1,26 +1,26 @@
 //===- DarwinAsmParser.cpp - Darwin (Mach-O) Assembly Parser --------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/MC/MCParser/MCAsmParserExtension.h"
-#include "llvm/ADT/StringRef.h"
-#include "llvm/ADT/StringSwitch.h"
-#include "llvm/ADT/Twine.h"
-#include "llvm/MC/MCContext.h"
-#include "llvm/MC/MCParser/MCAsmLexer.h"
-#include "llvm/MC/MCParser/MCAsmParser.h"
-#include "llvm/MC/MCSectionMachO.h"
-#include "llvm/MC/MCStreamer.h"
-#include "llvm/MC/MCSymbol.h"
-#include "llvm/Support/FileSystem.h"
-#include "llvm/Support/MemoryBuffer.h"
-#include "llvm/Support/SourceMgr.h"
-using namespace llvm;
+#include "llvm37/MC/MCParser/MCAsmParserExtension.h"
+#include "llvm37/ADT/StringRef.h"
+#include "llvm37/ADT/StringSwitch.h"
+#include "llvm37/ADT/Twine.h"
+#include "llvm37/MC/MCContext.h"
+#include "llvm37/MC/MCParser/MCAsmLexer.h"
+#include "llvm37/MC/MCParser/MCAsmParser.h"
+#include "llvm37/MC/MCSectionMachO.h"
+#include "llvm37/MC/MCStreamer.h"
+#include "llvm37/MC/MCSymbol.h"
+#include "llvm37/Support/FileSystem.h"
+#include "llvm37/Support/MemoryBuffer.h"
+#include "llvm37/Support/SourceMgr.h"
+using namespace llvm37;
 
 namespace {
 
@@ -908,10 +908,10 @@ bool DarwinAsmParser::parseVersionMin(StringRef Directive, SMLoc) {
   return false;
 }
 
-namespace llvm {
+namespace llvm37 {
 
 MCAsmParserExtension *createDarwinAsmParser() {
   return new DarwinAsmParser;
 }
 
-} // end llvm namespace
+} // end llvm37 namespace

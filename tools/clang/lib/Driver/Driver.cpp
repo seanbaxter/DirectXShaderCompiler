@@ -1,6 +1,6 @@
 //===--- Driver.cpp - Clang GCC Compatible Driver -------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -20,30 +20,30 @@
 #include "clang/Driver/SanitizerArgs.h"
 #include "clang/Driver/Tool.h"
 #include "clang/Driver/ToolChain.h"
-#include "llvm/ADT/ArrayRef.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/StringExtras.h"
-#include "llvm/ADT/StringSet.h"
-#include "llvm/ADT/StringSwitch.h"
-#include "llvm/Option/Arg.h"
-#include "llvm/Option/ArgList.h"
-#include "llvm/Option/OptSpecifier.h"
-#include "llvm/Option/OptTable.h"
-#include "llvm/Option/Option.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/FileSystem.h"
-#include "llvm/Support/Path.h"
-#include "llvm/Support/PrettyStackTrace.h"
-#include "llvm/Support/Process.h"
-#include "llvm/Support/Program.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/ArrayRef.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/StringExtras.h"
+#include "llvm37/ADT/StringSet.h"
+#include "llvm37/ADT/StringSwitch.h"
+#include "llvm37/Option/Arg.h"
+#include "llvm37/Option/ArgList.h"
+#include "llvm37/Option/OptSpecifier.h"
+#include "llvm37/Option/OptTable.h"
+#include "llvm37/Option/Option.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/FileSystem.h"
+#include "llvm37/Support/Path.h"
+#include "llvm37/Support/PrettyStackTrace.h"
+#include "llvm37/Support/Process.h"
+#include "llvm37/Support/Program.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <map>
 #include <memory>
 
 using namespace clang::driver;
 using namespace clang;
-using namespace llvm::opt;
+using namespace llvm37::opt;
 
 Driver::Driver(StringRef ClangExecutable, StringRef DefaultTargetTriple,
                DiagnosticsEngine &Diags)
@@ -51,23 +51,23 @@ Driver::Driver(StringRef ClangExecutable, StringRef DefaultTargetTriple,
       SaveTemps(SaveTempsNone), ClangExecutable(ClangExecutable),
       SysRoot(DEFAULT_SYSROOT), UseStdLib(true),
       DefaultTargetTriple(DefaultTargetTriple),
-      DriverTitle("clang LLVM compiler"), CCPrintOptionsFilename(nullptr),
+      DriverTitle("clang LLVM37 compiler"), CCPrintOptionsFilename(nullptr),
       CCPrintHeadersFilename(nullptr), CCLogDiagnosticsFilename(nullptr),
       CCCPrintBindings(false), CCPrintHeaders(false), CCLogDiagnostics(false),
       CCGenDiagnostics(false), CCCGenericGCCName(""), CheckInputsExist(true),
       CCCUsePCH(true), SuppressMissingInputWarning(false) {
 
-  Name = llvm::sys::path::filename(ClangExecutable);
-  Dir = llvm::sys::path::parent_path(ClangExecutable);
+  Name = llvm37::sys::path::filename(ClangExecutable);
+  Dir = llvm37::sys::path::parent_path(ClangExecutable);
 
   // Compute the path to the resource directory.
   StringRef ClangResourceDir(CLANG_RESOURCE_DIR);
   SmallString<128> P(Dir);
   if (ClangResourceDir != "") {
-    llvm::sys::path::append(P, ClangResourceDir);
+    llvm37::sys::path::append(P, ClangResourceDir);
   } else {
     StringRef ClangLibdirSuffix(CLANG_LIBDIR_SUFFIX);
-    llvm::sys::path::append(P, "..", Twine("lib") + ClangLibdirSuffix, "clang",
+    llvm37::sys::path::append(P, "..", Twine("lib") + ClangLibdirSuffix, "clang",
                             CLANG_VERSION_STRING);
   }
   ResourceDir = P.str();
@@ -76,7 +76,7 @@ Driver::Driver(StringRef ClangExecutable, StringRef DefaultTargetTriple,
 Driver::~Driver() {
   delete Opts;
 
-  llvm::DeleteContainerSeconds(ToolChains);
+  llvm37::DeleteContainerSeconds(ToolChains);
 }
 
 void Driver::ParseDriverMode(ArrayRef<const char *> Args) {
@@ -92,7 +92,7 @@ void Driver::ParseDriverMode(ArrayRef<const char *> Args) {
       continue;
 
     const StringRef Value = Arg.drop_front(OptName.size());
-    const unsigned M = llvm::StringSwitch<unsigned>(Value)
+    const unsigned M = llvm37::StringSwitch<unsigned>(Value)
                            .Case("gcc", GCCMode)
                            .Case("g++", GXXMode)
                            .Case("cpp", CPPMode)
@@ -107,7 +107,7 @@ void Driver::ParseDriverMode(ArrayRef<const char *> Args) {
 }
 
 InputArgList Driver::ParseArgStrings(ArrayRef<const char *> ArgStrings) {
-  llvm::PrettyStackTraceString CrashInfo("Command line argument parsing");
+  llvm37::PrettyStackTraceString CrashInfo("Command line argument parsing");
 
   unsigned IncludedFlagsBitmask;
   unsigned ExcludedFlagsBitmask;
@@ -287,14 +287,14 @@ DerivedArgList *Driver::TranslateInputArgs(const InputArgList &Args) const {
 ///
 /// This routine provides the logic to compute a target triple from various
 /// args passed to the driver and the default triple string.
-static llvm::Triple computeTargetTriple(StringRef DefaultTargetTriple,
+static llvm37::Triple computeTargetTriple(StringRef DefaultTargetTriple,
                                         const ArgList &Args,
                                         StringRef DarwinArchName = "") {
   // FIXME: Already done in Compilation *Driver::BuildCompilation
   if (const Arg *A = Args.getLastArg(options::OPT_target))
     DefaultTargetTriple = A->getValue();
 
-  llvm::Triple Target(llvm::Triple::normalize(DefaultTargetTriple));
+  llvm37::Triple Target(llvm37::Triple::normalize(DefaultTargetTriple));
 
   // Handle Apple-specific options available here.
   if (Target.isOSBinFormatMachO()) {
@@ -316,44 +316,44 @@ static llvm::Triple computeTargetTriple(StringRef DefaultTargetTriple,
   if (Arg *A = Args.getLastArg(options::OPT_mlittle_endian,
                                options::OPT_mbig_endian)) {
     if (A->getOption().matches(options::OPT_mlittle_endian)) {
-      llvm::Triple LE = Target.getLittleEndianArchVariant();
-      if (LE.getArch() != llvm::Triple::UnknownArch)
+      llvm37::Triple LE = Target.getLittleEndianArchVariant();
+      if (LE.getArch() != llvm37::Triple::UnknownArch)
         Target = std::move(LE);
     } else {
-      llvm::Triple BE = Target.getBigEndianArchVariant();
-      if (BE.getArch() != llvm::Triple::UnknownArch)
+      llvm37::Triple BE = Target.getBigEndianArchVariant();
+      if (BE.getArch() != llvm37::Triple::UnknownArch)
         Target = std::move(BE);
     }
   }
 
   // Skip further flag support on OSes which don't support '-m32' or '-m64'.
-  if (Target.getArchName() == "tce" || Target.getOS() == llvm::Triple::Minix)
+  if (Target.getArchName() == "tce" || Target.getOS() == llvm37::Triple::Minix)
     return Target;
 
   // Handle pseudo-target flags '-m64', '-mx32', '-m32' and '-m16'.
   if (Arg *A = Args.getLastArg(options::OPT_m64, options::OPT_mx32,
                                options::OPT_m32, options::OPT_m16)) {
-    llvm::Triple::ArchType AT = llvm::Triple::UnknownArch;
+    llvm37::Triple::ArchType AT = llvm37::Triple::UnknownArch;
 
     if (A->getOption().matches(options::OPT_m64)) {
       AT = Target.get64BitArchVariant().getArch();
-      if (Target.getEnvironment() == llvm::Triple::GNUX32)
-        Target.setEnvironment(llvm::Triple::GNU);
+      if (Target.getEnvironment() == llvm37::Triple::GNUX32)
+        Target.setEnvironment(llvm37::Triple::GNU);
     } else if (A->getOption().matches(options::OPT_mx32) &&
-               Target.get64BitArchVariant().getArch() == llvm::Triple::x86_64) {
-      AT = llvm::Triple::x86_64;
-      Target.setEnvironment(llvm::Triple::GNUX32);
+               Target.get64BitArchVariant().getArch() == llvm37::Triple::x86_64) {
+      AT = llvm37::Triple::x86_64;
+      Target.setEnvironment(llvm37::Triple::GNUX32);
     } else if (A->getOption().matches(options::OPT_m32)) {
       AT = Target.get32BitArchVariant().getArch();
-      if (Target.getEnvironment() == llvm::Triple::GNUX32)
-        Target.setEnvironment(llvm::Triple::GNU);
+      if (Target.getEnvironment() == llvm37::Triple::GNUX32)
+        Target.setEnvironment(llvm37::Triple::GNU);
     } else if (A->getOption().matches(options::OPT_m16) &&
-               Target.get32BitArchVariant().getArch() == llvm::Triple::x86) {
-      AT = llvm::Triple::x86;
-      Target.setEnvironment(llvm::Triple::CODE16);
+               Target.get32BitArchVariant().getArch() == llvm37::Triple::x86) {
+      AT = llvm37::Triple::x86;
+      Target.setEnvironment(llvm37::Triple::CODE16);
     }
 
-    if (AT != llvm::Triple::UnknownArch && AT != Target.getArch())
+    if (AT != llvm37::Triple::UnknownArch && AT != Target.getArch())
       Target.setArch(AT);
   }
 
@@ -361,7 +361,7 @@ static llvm::Triple computeTargetTriple(StringRef DefaultTargetTriple,
 }
 
 Compilation *Driver::BuildCompilation(ArrayRef<const char *> ArgList) {
-  llvm::PrettyStackTraceString CrashInfo("Compilation construction");
+  llvm37::PrettyStackTraceString CrashInfo("Compilation construction");
 
   // FIXME: Handle environment options which affect driver behavior, somewhere
   // (client?). GCC_EXEC_PREFIX, LPATH, CC_PRINT_OPTIONS.
@@ -371,7 +371,7 @@ Compilation *Driver::BuildCompilation(ArrayRef<const char *> ArgList) {
     StringRef CompilerPath = env;
     while (!CompilerPath.empty()) {
       std::pair<StringRef, StringRef> Split =
-          CompilerPath.split(llvm::sys::EnvPathSeparator);
+          CompilerPath.split(llvm37::sys::EnvPathSeparator);
       PrefixDirs.push_back(Split.first);
       CompilerPath = Split.second;
     }
@@ -411,9 +411,9 @@ Compilation *Driver::BuildCompilation(ArrayRef<const char *> ArgList) {
   // and getToolChain is const.
   if (IsCLMode()) {
     // clang-cl targets MSVC-style Win32.
-    llvm::Triple T(DefaultTargetTriple);
-    T.setOS(llvm::Triple::Win32);
-    T.setEnvironment(llvm::Triple::MSVC);
+    llvm37::Triple T(DefaultTargetTriple);
+    T.setOS(llvm37::Triple::Win32);
+    T.setEnvironment(llvm37::Triple::MSVC);
     DefaultTargetTriple = T.str();
   }
   if (const Arg *A = Args.getLastArg(options::OPT_target))
@@ -435,14 +435,14 @@ Compilation *Driver::BuildCompilation(ArrayRef<const char *> ArgList) {
     ResourceDir = A->getValue();
 
   if (const Arg *A = Args.getLastArg(options::OPT_save_temps_EQ)) {
-    SaveTemps = llvm::StringSwitch<SaveTempsMode>(A->getValue())
+    SaveTemps = llvm37::StringSwitch<SaveTempsMode>(A->getValue())
                     .Case("cwd", SaveTempsCwd)
                     .Case("obj", SaveTempsObj)
                     .Default(SaveTempsCwd);
   }
 
-  std::unique_ptr<llvm::opt::InputArgList> UArgs =
-      llvm::make_unique<InputArgList>(std::move(Args));
+  std::unique_ptr<llvm37::opt::InputArgList> UArgs =
+      llvm37::make_unique<InputArgList>(std::move(Args));
 
   // Perform the default argument translations.
   DerivedArgList *TranslatedArgs = TranslateInputArgs(*UArgs);
@@ -480,8 +480,8 @@ Compilation *Driver::BuildCompilation(ArrayRef<const char *> ArgList) {
   return C;
 }
 
-static void printArgList(raw_ostream &OS, const llvm::opt::ArgList &Args) {
-  llvm::opt::ArgStringList ASL;
+static void printArgList(raw_ostream &OS, const llvm37::opt::ArgList &Args) {
+  llvm37::opt::ArgStringList ASL;
   for (const auto *A : Args)
     A->render(Args, ASL);
 
@@ -507,7 +507,7 @@ void Driver::generateCompilationDiagnostics(Compilation &C,
     return;
 
   // Print the version of the compiler.
-  PrintVersion(C, llvm::errs());
+  PrintVersion(C, llvm37::errs());
 
   Diag(clang::diag::note_drv_command_failed_diag_msg)
       << "PLEASE submit a bug report to " BUG_REPORT_URL " and include the "
@@ -562,7 +562,7 @@ void Driver::generateCompilationDiagnostics(Compilation &C,
 
   // Don't attempt to generate preprocessed files if multiple -arch options are
   // used, unless they're all duplicates.
-  llvm::StringSet<> ArchNames;
+  llvm37::StringSet<> ArchNames;
   for (const Arg *A : C.getArgs()) {
     if (A->getOption().matches(options::OPT_arch)) {
       StringRef ArchName = A->getValue();
@@ -625,8 +625,8 @@ void Driver::generateCompilationDiagnostics(Compilation &C,
     if (StringRef(TempFile).endswith(".cache")) {
       // In some cases (modules) we'll dump extra data to help with reproducing
       // the crash into a directory next to the output.
-      VFS = llvm::sys::path::filename(TempFile);
-      llvm::sys::path::append(VFS, "vfs", "vfs.yaml");
+      VFS = llvm37::sys::path::filename(TempFile);
+      llvm37::sys::path::append(VFS, "vfs", "vfs.yaml");
     }
   }
 
@@ -635,7 +635,7 @@ void Driver::generateCompilationDiagnostics(Compilation &C,
 
   std::string Script = CrashInfo.Filename.rsplit('.').first.str() + ".sh";
   std::error_code EC;
-  llvm::raw_fd_ostream ScriptOS(Script, EC, llvm::sys::fs::F_Excl);
+  llvm37::raw_fd_ostream ScriptOS(Script, EC, llvm37::sys::fs::F_Excl);
   if (EC) {
     Diag(clang::diag::note_drv_command_failed_diag_msg)
         << "Error generating run script: " + Script + " " + EC.message();
@@ -663,7 +663,7 @@ void Driver::setUpResponseFiles(Compilation &C, Command &Cmd) {
   // if the tool does not support response files, there is a chance/ that things
   // will just work without a response file, so we silently just skip it.
   if (Cmd.getCreator().getResponseFilesSupport() == Tool::RF_None ||
-      llvm::sys::argumentsFitWithinSystemLimits(Cmd.getArguments()))
+      llvm37::sys::argumentsFitWithinSystemLimits(Cmd.getArguments()))
     return;
 
   std::string TmpName = GetTemporaryPath("response", "txt");
@@ -677,7 +677,7 @@ int Driver::ExecuteCompilation(
     SmallVectorImpl<std::pair<int, const Command *>> &FailingCommands) {
   // Just print if -### was present.
   if (C.getArgs().hasArg(options::OPT__HASH_HASH_HASH)) {
-    C.getJobs().Print(llvm::errs(), "\n", true);
+    C.getJobs().Print(llvm37::errs(), "\n", true);
     return 0;
   }
 
@@ -746,7 +746,7 @@ void Driver::PrintHelp(bool ShowHidden) const {
   if (!ShowHidden)
     ExcludedFlagsBitmask |= HelpHidden;
 
-  getOpts().PrintHelp(llvm::outs(), Name.c_str(), DriverTitle.c_str(), "",
+  getOpts().PrintHelp(llvm37::outs(), Name.c_str(), DriverTitle.c_str(), "",
                       IncludedFlagsBitmask, ExcludedFlagsBitmask);
 }
 
@@ -781,7 +781,7 @@ bool Driver::HandleImmediateArgs(const Compilation &C) {
   // don't expect inconsistencies w.r.t. that to matter in practice.
 
   if (C.getArgs().hasArg(options::OPT_dumpmachine)) {
-    llvm::outs() << C.getDefaultToolChain().getTripleString() << '\n';
+    llvm37::outs() << C.getDefaultToolChain().getTripleString() << '\n';
     return false;
   }
 
@@ -792,12 +792,12 @@ bool Driver::HandleImmediateArgs(const Compilation &C) {
     // If we want to return a more correct answer some day, then we should
     // introduce a non-pedantically GCC compatible mode to Clang in which we
     // provide sensible definitions for -dumpversion, __VERSION__, etc.
-    llvm::outs() << "4.2.1\n";
+    llvm37::outs() << "4.2.1\n";
     return false;
   }
 
   if (C.getArgs().hasArg(options::OPT__print_diagnostic_categories)) {
-    PrintDiagnosticCategories(llvm::outs());
+    PrintDiagnosticCategories(llvm37::outs());
     return false;
   }
 
@@ -809,79 +809,79 @@ bool Driver::HandleImmediateArgs(const Compilation &C) {
 
   if (C.getArgs().hasArg(options::OPT__version)) {
     // Follow gcc behavior and use stdout for --version and stderr for -v.
-    PrintVersion(C, llvm::outs());
+    PrintVersion(C, llvm37::outs());
     return false;
   }
 
   if (C.getArgs().hasArg(options::OPT_v) ||
       C.getArgs().hasArg(options::OPT__HASH_HASH_HASH)) {
-    PrintVersion(C, llvm::errs());
+    PrintVersion(C, llvm37::errs());
     SuppressMissingInputWarning = true;
   }
 
   const ToolChain &TC = C.getDefaultToolChain();
 
   if (C.getArgs().hasArg(options::OPT_v))
-    TC.printVerboseInfo(llvm::errs());
+    TC.printVerboseInfo(llvm37::errs());
 
   if (C.getArgs().hasArg(options::OPT_print_search_dirs)) {
-    llvm::outs() << "programs: =";
+    llvm37::outs() << "programs: =";
     bool separator = false;
     for (const std::string &Path : TC.getProgramPaths()) {
       if (separator)
-        llvm::outs() << ':';
-      llvm::outs() << Path;
+        llvm37::outs() << ':';
+      llvm37::outs() << Path;
       separator = true;
     }
-    llvm::outs() << "\n";
-    llvm::outs() << "libraries: =" << ResourceDir;
+    llvm37::outs() << "\n";
+    llvm37::outs() << "libraries: =" << ResourceDir;
 
     StringRef sysroot = C.getSysRoot();
 
     for (const std::string &Path : TC.getFilePaths()) {
       // Always print a separator. ResourceDir was the first item shown.
-      llvm::outs() << ':';
+      llvm37::outs() << ':';
       // Interpretation of leading '=' is needed only for NetBSD.
       if (Path[0] == '=')
-        llvm::outs() << sysroot << Path.substr(1);
+        llvm37::outs() << sysroot << Path.substr(1);
       else
-        llvm::outs() << Path;
+        llvm37::outs() << Path;
     }
-    llvm::outs() << "\n";
+    llvm37::outs() << "\n";
     return false;
   }
 
   // FIXME: The following handlers should use a callback mechanism, we don't
   // know what the client would like to do.
   if (Arg *A = C.getArgs().getLastArg(options::OPT_print_file_name_EQ)) {
-    llvm::outs() << GetFilePath(A->getValue(), TC) << "\n";
+    llvm37::outs() << GetFilePath(A->getValue(), TC) << "\n";
     return false;
   }
 
   if (Arg *A = C.getArgs().getLastArg(options::OPT_print_prog_name_EQ)) {
-    llvm::outs() << GetProgramPath(A->getValue(), TC) << "\n";
+    llvm37::outs() << GetProgramPath(A->getValue(), TC) << "\n";
     return false;
   }
 
   if (C.getArgs().hasArg(options::OPT_print_libgcc_file_name)) {
-    llvm::outs() << GetFilePath("libgcc.a", TC) << "\n";
+    llvm37::outs() << GetFilePath("libgcc.a", TC) << "\n";
     return false;
   }
 
   if (C.getArgs().hasArg(options::OPT_print_multi_lib)) {
     for (const Multilib &Multilib : TC.getMultilibs())
-      llvm::outs() << Multilib << "\n";
+      llvm37::outs() << Multilib << "\n";
     return false;
   }
 
   if (C.getArgs().hasArg(options::OPT_print_multi_directory)) {
     for (const Multilib &Multilib : TC.getMultilibs()) {
       if (Multilib.gccSuffix().empty())
-        llvm::outs() << ".\n";
+        llvm37::outs() << ".\n";
       else {
         StringRef Suffix(Multilib.gccSuffix());
         assert(Suffix.front() == '/');
-        llvm::outs() << Suffix.substr(1) << "\n";
+        llvm37::outs() << Suffix.substr(1) << "\n";
       }
     }
     return false;
@@ -898,7 +898,7 @@ static unsigned PrintActions1(const Compilation &C, Action *A,
     return Ids[A];
 
   std::string str;
-  llvm::raw_string_ostream os(str);
+  llvm37::raw_string_ostream os(str);
 
   os << Action::getClassName(A->getKind()) << ", ";
   if (InputAction *IA = dyn_cast<InputAction>(A)) {
@@ -928,7 +928,7 @@ static unsigned PrintActions1(const Compilation &C, Action *A,
 
   unsigned Id = Ids.size();
   Ids[A] = Id;
-  llvm::errs() << Id << ": " << os.str() << ", "
+  llvm37::errs() << Id << ": " << os.str() << ", "
                << types::getTypeName(A->getType()) << "\n";
 
   return Id;
@@ -959,18 +959,18 @@ static bool ContainsCompileOrAssembleAction(const Action *A) {
 void Driver::BuildUniversalActions(const ToolChain &TC, DerivedArgList &Args,
                                    const InputList &BAInputs,
                                    ActionList &Actions) const {
-  llvm::PrettyStackTraceString CrashInfo("Building universal build actions");
+  llvm37::PrettyStackTraceString CrashInfo("Building universal build actions");
   // Collect the list of architectures. Duplicates are allowed, but should only
   // be handled once (in the order seen).
-  llvm::StringSet<> ArchNames;
+  llvm37::StringSet<> ArchNames;
   SmallVector<const char *, 4> Archs;
   for (Arg *A : Args) {
     if (A->getOption().matches(options::OPT_arch)) {
       // Validate the option here; we don't save the type here because its
       // particular spelling may participate in other driver choices.
-      llvm::Triple::ArchType Arch =
+      llvm37::Triple::ArchType Arch =
           tools::darwin::getArchTypeForMachOArchName(A->getValue());
-      if (Arch == llvm::Triple::UnknownArch) {
+      if (Arch == llvm37::Triple::UnknownArch) {
         Diag(clang::diag::err_drv_invalid_arch_name) << A->getAsString(Args);
         continue;
       }
@@ -1060,18 +1060,18 @@ static bool DiagnoseInputExistence(const Driver &D, const DerivedArgList &Args,
 
   SmallString<64> Path(Value);
   if (Arg *WorkDir = Args.getLastArg(options::OPT_working_directory)) {
-    if (!llvm::sys::path::is_absolute(Path)) {
+    if (!llvm37::sys::path::is_absolute(Path)) {
       SmallString<64> Directory(WorkDir->getValue());
-      llvm::sys::path::append(Directory, Value);
+      llvm37::sys::path::append(Directory, Value);
       Path.assign(Directory);
     }
   }
 
-  if (llvm::sys::fs::exists(Twine(Path)))
+  if (llvm37::sys::fs::exists(Twine(Path)))
     return true;
 
-  if (D.IsCLMode() && !llvm::sys::path::is_absolute(Twine(Path)) &&
-      llvm::sys::Process::FindInEnvPath("LIB", Value))
+  if (D.IsCLMode() && !llvm37::sys::path::is_absolute(Twine(Path)) &&
+      llvm37::sys::Process::FindInEnvPath("LIB", Value))
     return true;
 
   D.Diag(clang::diag::err_drv_no_such_file) << Path;
@@ -1247,7 +1247,7 @@ buildCudaActions(const Driver &D, const ToolChain &TC, DerivedArgList &Args,
 
   // Collect all cuda_gpu_arch parameters, removing duplicates.
   SmallVector<const char *, 4> GpuArchList;
-  llvm::StringSet<> GpuArchNames;
+  llvm37::StringSet<> GpuArchNames;
   for (Arg *A : Args) {
     if (A->getOption().matches(options::OPT_cuda_gpu_arch_EQ)) {
       A->claim();
@@ -1321,7 +1321,7 @@ buildCudaActions(const Driver &D, const ToolChain &TC, DerivedArgList &Args,
 
 void Driver::BuildActions(const ToolChain &TC, DerivedArgList &Args,
                           const InputList &Inputs, ActionList &Actions) const {
-  llvm::PrettyStackTraceString CrashInfo("Building compilation actions");
+  llvm37::PrettyStackTraceString CrashInfo("Building compilation actions");
 
   if (!SuppressMissingInputWarning && Inputs.empty()) {
     Diag(clang::diag::err_drv_no_input_files);
@@ -1331,8 +1331,8 @@ void Driver::BuildActions(const ToolChain &TC, DerivedArgList &Args,
   Arg *FinalPhaseArg;
   phases::ID FinalPhase = getFinalPhase(Args, &FinalPhaseArg);
 
-  if (FinalPhase == phases::Link && Args.hasArg(options::OPT_emit_llvm)) {
-    Diag(clang::diag::err_drv_emit_llvm_link);
+  if (FinalPhase == phases::Link && Args.hasArg(options::OPT_emit_llvm37)) {
+    Diag(clang::diag::err_drv_emit_llvm37_link);
   }
 
   // Reject -Z* at the top level, these options should never have been exposed
@@ -1344,7 +1344,7 @@ void Driver::BuildActions(const ToolChain &TC, DerivedArgList &Args,
   if (Arg *A = Args.getLastArg(options::OPT__SLASH_Fo)) {
     StringRef V = A->getValue();
     if (Inputs.size() > 1 && !V.empty() &&
-        !llvm::sys::path::is_separator(V.back())) {
+        !llvm37::sys::path::is_separator(V.back())) {
       // Check whether /Fo tries to name an output file for multiple inputs.
       Diag(clang::diag::err_drv_out_file_argument_with_multiple_sources)
           << A->getSpelling() << V;
@@ -1356,7 +1356,7 @@ void Driver::BuildActions(const ToolChain &TC, DerivedArgList &Args,
   if (Arg *A = Args.getLastArg(options::OPT__SLASH_Fa)) {
     StringRef V = A->getValue();
     if (Inputs.size() > 1 && !V.empty() &&
-        !llvm::sys::path::is_separator(V.back())) {
+        !llvm37::sys::path::is_separator(V.back())) {
       // Check whether /Fa tries to name an asm file for multiple inputs.
       Diag(clang::diag::err_drv_out_file_argument_with_multiple_sources)
           << A->getSpelling() << V;
@@ -1376,7 +1376,7 @@ void Driver::BuildActions(const ToolChain &TC, DerivedArgList &Args,
   // Construct the actions to perform.
   ActionList LinkerInputs;
 
-  llvm::SmallVector<phases::ID, phases::MaxNumberOfPhases> PL;
+  llvm37::SmallVector<phases::ID, phases::MaxNumberOfPhases> PL;
   for (unsigned i = 0, e = Inputs.size(); i != e; ++i) {
     types::ID InputType = Inputs[i].first;
     const Arg *InputArg = Inputs[i].second;
@@ -1452,7 +1452,7 @@ void Driver::BuildActions(const ToolChain &TC, DerivedArgList &Args,
         break;
       }
 
-      // Some types skip the assembler phase (e.g., llvm-bc), but we can't
+      // Some types skip the assembler phase (e.g., llvm37-bc), but we can't
       // encode this in the steps because the intermediate type depends on
       // arguments. Just special case here.
       if (Phase == phases::Assemble && Current->getType() != types::TY_PP_Asm)
@@ -1497,11 +1497,11 @@ std::unique_ptr<Action>
 Driver::ConstructPhaseAction(const ToolChain &TC, const ArgList &Args,
                              phases::ID Phase,
                              std::unique_ptr<Action> Input) const {
-  llvm::PrettyStackTraceString CrashInfo("Constructing phase actions");
+  llvm37::PrettyStackTraceString CrashInfo("Constructing phase actions");
   // Build the appropriate action.
   switch (Phase) {
   case phases::Link:
-    llvm_unreachable("link action invalid here.");
+    llvm37_unreachable("link action invalid here.");
   case phases::Preprocess: {
     types::ID OutputTy;
     // -{M, MM} alter the output type.
@@ -1516,7 +1516,7 @@ Driver::ConstructPhaseAction(const ToolChain &TC, const ArgList &Args,
       assert(OutputTy != types::TY_INVALID &&
              "Cannot preprocess this input type!");
     }
-    return llvm::make_unique<PreprocessJobAction>(std::move(Input), OutputTy);
+    return llvm37::make_unique<PreprocessJobAction>(std::move(Input), OutputTy);
   }
   case phases::Precompile: {
     types::ID OutputTy = types::TY_PCH;
@@ -1524,56 +1524,56 @@ Driver::ConstructPhaseAction(const ToolChain &TC, const ArgList &Args,
       // Syntax checks should not emit a PCH file
       OutputTy = types::TY_Nothing;
     }
-    return llvm::make_unique<PrecompileJobAction>(std::move(Input), OutputTy);
+    return llvm37::make_unique<PrecompileJobAction>(std::move(Input), OutputTy);
   }
   case phases::Compile: {
     if (Args.hasArg(options::OPT_fsyntax_only))
-      return llvm::make_unique<CompileJobAction>(std::move(Input),
+      return llvm37::make_unique<CompileJobAction>(std::move(Input),
                                                  types::TY_Nothing);
     if (Args.hasArg(options::OPT_rewrite_objc))
-      return llvm::make_unique<CompileJobAction>(std::move(Input),
+      return llvm37::make_unique<CompileJobAction>(std::move(Input),
                                                  types::TY_RewrittenObjC);
     if (Args.hasArg(options::OPT_rewrite_legacy_objc))
-      return llvm::make_unique<CompileJobAction>(std::move(Input),
+      return llvm37::make_unique<CompileJobAction>(std::move(Input),
                                                  types::TY_RewrittenLegacyObjC);
     if (Args.hasArg(options::OPT__analyze, options::OPT__analyze_auto))
-      return llvm::make_unique<AnalyzeJobAction>(std::move(Input),
+      return llvm37::make_unique<AnalyzeJobAction>(std::move(Input),
                                                  types::TY_Plist);
     if (Args.hasArg(options::OPT__migrate))
-      return llvm::make_unique<MigrateJobAction>(std::move(Input),
+      return llvm37::make_unique<MigrateJobAction>(std::move(Input),
                                                  types::TY_Remap);
     if (Args.hasArg(options::OPT_emit_ast))
-      return llvm::make_unique<CompileJobAction>(std::move(Input),
+      return llvm37::make_unique<CompileJobAction>(std::move(Input),
                                                  types::TY_AST);
     if (Args.hasArg(options::OPT_module_file_info))
-      return llvm::make_unique<CompileJobAction>(std::move(Input),
+      return llvm37::make_unique<CompileJobAction>(std::move(Input),
                                                  types::TY_ModuleFile);
     if (Args.hasArg(options::OPT_verify_pch))
-      return llvm::make_unique<VerifyPCHJobAction>(std::move(Input),
+      return llvm37::make_unique<VerifyPCHJobAction>(std::move(Input),
                                                    types::TY_Nothing);
-    return llvm::make_unique<CompileJobAction>(std::move(Input),
-                                               types::TY_LLVM_BC);
+    return llvm37::make_unique<CompileJobAction>(std::move(Input),
+                                               types::TY_LLVM37_BC);
   }
   case phases::Backend: {
     if (IsUsingLTO(Args)) {
       types::ID Output =
           Args.hasArg(options::OPT_S) ? types::TY_LTO_IR : types::TY_LTO_BC;
-      return llvm::make_unique<BackendJobAction>(std::move(Input), Output);
+      return llvm37::make_unique<BackendJobAction>(std::move(Input), Output);
     }
-    if (Args.hasArg(options::OPT_emit_llvm)) {
+    if (Args.hasArg(options::OPT_emit_llvm37)) {
       types::ID Output =
-          Args.hasArg(options::OPT_S) ? types::TY_LLVM_IR : types::TY_LLVM_BC;
-      return llvm::make_unique<BackendJobAction>(std::move(Input), Output);
+          Args.hasArg(options::OPT_S) ? types::TY_LLVM37_IR : types::TY_LLVM37_BC;
+      return llvm37::make_unique<BackendJobAction>(std::move(Input), Output);
     }
-    return llvm::make_unique<BackendJobAction>(std::move(Input),
+    return llvm37::make_unique<BackendJobAction>(std::move(Input),
                                                types::TY_PP_Asm);
   }
   case phases::Assemble:
-    return llvm::make_unique<AssembleJobAction>(std::move(Input),
+    return llvm37::make_unique<AssembleJobAction>(std::move(Input),
                                                 types::TY_Object);
   }
 
-  llvm_unreachable("invalid phase in ConstructPhaseAction");
+  llvm37_unreachable("invalid phase in ConstructPhaseAction");
 }
 
 bool Driver::IsUsingLTO(const ArgList &Args) const {
@@ -1581,7 +1581,7 @@ bool Driver::IsUsingLTO(const ArgList &Args) const {
 }
 
 void Driver::BuildJobs(Compilation &C) const {
-  llvm::PrettyStackTraceString CrashInfo("Building compilation jobs");
+  llvm37::PrettyStackTraceString CrashInfo("Building compilation jobs");
 
   Arg *FinalOutput = C.getArgs().getLastArg(options::OPT_o);
 
@@ -1600,7 +1600,7 @@ void Driver::BuildJobs(Compilation &C) const {
   }
 
   // Collect the list of architectures.
-  llvm::StringSet<> ArchNames;
+  llvm37::StringSet<> ArchNames;
   if (C.getDefaultToolChain().getTriple().isOSBinFormatMachO())
     for (const Arg *A : C.getArgs())
       if (A->getOption().matches(options::OPT_arch))
@@ -1706,9 +1706,9 @@ static const Tool *SelectToolForJob(Compilation &C, bool SaveTemps,
 
   // A backend job should always be combined with the preceding compile job
   // unless OPT_save_temps is enabled and the compiler is capable of emitting
-  // LLVM IR as an intermediate output.
+  // LLVM37 IR as an intermediate output.
   if (isa<BackendJobAction>(JA)) {
-    // Check if the compiler supports emitting LLVM IR.
+    // Check if the compiler supports emitting LLVM37 IR.
     assert(Inputs->size() == 1);
     JobAction *CompileJA;
     // Extract real host action, if it's a CudaHostAction.
@@ -1748,7 +1748,7 @@ void Driver::BuildJobsForAction(Compilation &C, const Action *A,
                                 bool AtTopLevel, bool MultipleArchs,
                                 const char *LinkingOutput,
                                 InputInfo &Result) const {
-  llvm::PrettyStackTraceString CrashInfo("Building compilation jobs");
+  llvm37::PrettyStackTraceString CrashInfo("Building compilation jobs");
 
   InputInfoList CudaDeviceInputInfos;
   if (const CudaHostAction *CHA = dyn_cast<CudaHostAction>(A)) {
@@ -1797,7 +1797,7 @@ void Driver::BuildJobsForAction(Compilation &C, const Action *A,
   if (const CudaDeviceAction *CDA = dyn_cast<CudaDeviceAction>(A)) {
     // Figure out which NVPTX triple to use for device-side compilation based on
     // whether host is 64-bit.
-    llvm::Triple DeviceTriple(C.getDefaultToolChain().getTriple().isArch64Bit()
+    llvm37::Triple DeviceTriple(C.getDefaultToolChain().getTriple().isArch64Bit()
                                   ? "nvptx64-nvidia-cuda"
                                   : "nvptx-nvidia-cuda");
     BuildJobsForAction(C, *CDA->begin(),
@@ -1851,14 +1851,14 @@ void Driver::BuildJobsForAction(Compilation &C, const Action *A,
                        A->getType(), BaseInput);
 
   if (CCCPrintBindings && !CCGenDiagnostics) {
-    llvm::errs() << "# \"" << T->getToolChain().getTripleString() << '"'
+    llvm37::errs() << "# \"" << T->getToolChain().getTripleString() << '"'
                  << " - \"" << T->getName() << "\", inputs: [";
     for (unsigned i = 0, e = InputInfos.size(); i != e; ++i) {
-      llvm::errs() << InputInfos[i].getAsString();
+      llvm37::errs() << InputInfos[i].getAsString();
       if (i + 1 != e)
-        llvm::errs() << ", ";
+        llvm37::errs() << ", ";
     }
-    llvm::errs() << "], output: " << Result.getAsString() << "\n";
+    llvm37::errs() << "], output: " << Result.getAsString() << "\n";
   } else {
     T->ConstructJob(C, *JA, Result, InputInfos,
                     C.getArgsForToolChain(TC, BoundArch), LinkingOutput);
@@ -1866,7 +1866,7 @@ void Driver::BuildJobsForAction(Compilation &C, const Action *A,
 }
 
 const char *Driver::getDefaultImageName() const {
-  llvm::Triple Target(llvm::Triple::normalize(DefaultTargetTriple));
+  llvm37::Triple Target(llvm37::Triple::normalize(DefaultTargetTriple));
   return Target.isOSWindows() ? "a.exe" : "a.out";
 }
 
@@ -1882,12 +1882,12 @@ static const char *MakeCLOutputFilename(const ArgList &Args, StringRef ArgValue,
   if (ArgValue.empty()) {
     // If the argument is empty, output to BaseName in the current dir.
     Filename = BaseName;
-  } else if (llvm::sys::path::is_separator(Filename.back())) {
+  } else if (llvm37::sys::path::is_separator(Filename.back())) {
     // If the argument is a directory, output to BaseName in that dir.
-    llvm::sys::path::append(Filename, BaseName);
+    llvm37::sys::path::append(Filename, BaseName);
   }
 
-  if (!llvm::sys::path::has_extension(ArgValue)) {
+  if (!llvm37::sys::path::has_extension(ArgValue)) {
     // If the argument didn't provide an extension, then set it.
     const char *Extension = types::getTypeTempSuffix(FileType, true);
 
@@ -1897,7 +1897,7 @@ static const char *MakeCLOutputFilename(const ArgList &Args, StringRef ArgValue,
       Extension = "dll";
     }
 
-    llvm::sys::path::replace_extension(Filename, Extension);
+    llvm37::sys::path::replace_extension(Filename, Extension);
   }
 
   return Args.MakeArgString(Filename.c_str());
@@ -1907,7 +1907,7 @@ const char *Driver::GetNamedOutputPath(Compilation &C, const JobAction &JA,
                                        const char *BaseInput,
                                        const char *BoundArch, bool AtTopLevel,
                                        bool MultipleArchs) const {
-  llvm::PrettyStackTraceString CrashInfo("Computing output path");
+  llvm37::PrettyStackTraceString CrashInfo("Computing output path");
   // Output to a user requested destination?
   if (AtTopLevel && !isa<DsymutilJobAction>(JA) && !isa<VerifyJobAction>(JA)) {
     if (Arg *FinalOutput = C.getArgs().getLastArg(options::OPT_o))
@@ -1917,7 +1917,7 @@ const char *Driver::GetNamedOutputPath(Compilation &C, const JobAction &JA,
   // For /P, preprocess to file named after BaseInput.
   if (C.getArgs().hasArg(options::OPT__SLASH_P)) {
     assert(AtTopLevel && isa<PreprocessJobAction>(JA));
-    StringRef BaseName = llvm::sys::path::filename(BaseInput);
+    StringRef BaseName = llvm37::sys::path::filename(BaseInput);
     StringRef NameArg;
     if (Arg *A = C.getArgs().getLastArg(options::OPT__SLASH_Fi))
       NameArg = A->getValue();
@@ -1936,7 +1936,7 @@ const char *Driver::GetNamedOutputPath(Compilation &C, const JobAction &JA,
       (C.getArgs().hasArg(options::OPT__SLASH_FA) ||
        C.getArgs().hasArg(options::OPT__SLASH_Fa))) {
     // Use /Fa and the input filename to determine the asm file name.
-    StringRef BaseName = llvm::sys::path::filename(BaseInput);
+    StringRef BaseName = llvm37::sys::path::filename(BaseInput);
     StringRef FaValue = C.getArgs().getLastArgValue(options::OPT__SLASH_Fa);
     return C.addResultFile(
         MakeCLOutputFilename(C.getArgs(), FaValue, BaseName, JA.getType()),
@@ -1947,7 +1947,7 @@ const char *Driver::GetNamedOutputPath(Compilation &C, const JobAction &JA,
   if ((!AtTopLevel && !isSaveTempsEnabled() &&
        !C.getArgs().hasArg(options::OPT__SLASH_Fo)) ||
       CCGenDiagnostics) {
-    StringRef Name = llvm::sys::path::filename(BaseInput);
+    StringRef Name = llvm37::sys::path::filename(BaseInput);
     std::pair<StringRef, StringRef> Split = Name.split('.');
     std::string TmpName = GetTemporaryPath(
         Split.first, types::getTypeTempSuffix(JA.getType(), IsCLMode()));
@@ -1961,7 +1961,7 @@ const char *Driver::GetNamedOutputPath(Compilation &C, const JobAction &JA,
   if (isa<DsymutilJobAction>(JA) || isa<VerifyJobAction>(JA))
     BaseName = BasePath;
   else
-    BaseName = llvm::sys::path::filename(BasePath);
+    BaseName = llvm37::sys::path::filename(BasePath);
 
   // Determine what the derived output name should be.
   const char *NamedOutput;
@@ -2009,11 +2009,11 @@ const char *Driver::GetNamedOutputPath(Compilation &C, const JobAction &JA,
       Suffixed += "-";
       Suffixed.append(BoundArch);
     }
-    // When using both -save-temps and -emit-llvm, use a ".tmp.bc" suffix for
+    // When using both -save-temps and -emit-llvm37, use a ".tmp.bc" suffix for
     // the unoptimized bitcode so that it does not get overwritten by the ".bc"
     // optimized bitcode output.
-    if (!AtTopLevel && C.getArgs().hasArg(options::OPT_emit_llvm) &&
-        JA.getType() == types::TY_LLVM_BC)
+    if (!AtTopLevel && C.getArgs().hasArg(options::OPT_emit_llvm37) &&
+        JA.getType() == types::TY_LLVM37_BC)
       Suffixed += ".tmp";
     Suffixed += '.';
     Suffixed += Suffix;
@@ -2025,9 +2025,9 @@ const char *Driver::GetNamedOutputPath(Compilation &C, const JobAction &JA,
       JA.getType() != types::TY_PCH) {
     Arg *FinalOutput = C.getArgs().getLastArg(options::OPT_o);
     SmallString<128> TempPath(FinalOutput->getValue());
-    llvm::sys::path::remove_filename(TempPath);
-    StringRef OutputFileName = llvm::sys::path::filename(NamedOutput);
-    llvm::sys::path::append(TempPath, OutputFileName);
+    llvm37::sys::path::remove_filename(TempPath);
+    StringRef OutputFileName = llvm37::sys::path::filename(NamedOutput);
+    llvm37::sys::path::append(TempPath, OutputFileName);
     NamedOutput = C.getArgs().MakeArgString(TempPath.c_str());
   }
 
@@ -2036,12 +2036,12 @@ const char *Driver::GetNamedOutputPath(Compilation &C, const JobAction &JA,
   if (!AtTopLevel && isSaveTempsEnabled() && NamedOutput == BaseName) {
     bool SameFile = false;
     SmallString<256> Result;
-    llvm::sys::fs::current_path(Result);
-    llvm::sys::path::append(Result, BaseName);
-    llvm::sys::fs::equivalent(BaseInput, Result.c_str(), SameFile);
+    llvm37::sys::fs::current_path(Result);
+    llvm37::sys::path::append(Result, BaseName);
+    llvm37::sys::fs::equivalent(BaseInput, Result.c_str(), SameFile);
     // Must share the same path to conflict.
     if (SameFile) {
-      StringRef Name = llvm::sys::path::filename(BaseInput);
+      StringRef Name = llvm37::sys::path::filename(BaseInput);
       std::pair<StringRef, StringRef> Split = Name.split('.');
       std::string TmpName = GetTemporaryPath(
           Split.first, types::getTypeTempSuffix(JA.getType(), IsCLMode()));
@@ -2051,11 +2051,11 @@ const char *Driver::GetNamedOutputPath(Compilation &C, const JobAction &JA,
 
   // As an annoying special case, PCH generation doesn't strip the pathname.
   if (JA.getType() == types::TY_PCH) {
-    llvm::sys::path::remove_filename(BasePath);
+    llvm37::sys::path::remove_filename(BasePath);
     if (BasePath.empty())
       BasePath = NamedOutput;
     else
-      llvm::sys::path::append(BasePath, NamedOutput);
+      llvm37::sys::path::append(BasePath, NamedOutput);
     return C.addResultFile(C.getArgs().MakeArgString(BasePath.c_str()), &JA);
   } else {
     return C.addResultFile(NamedOutput, &JA);
@@ -2069,22 +2069,22 @@ std::string Driver::GetFilePath(const char *Name, const ToolChain &TC) const {
     if (Dir.empty())
       continue;
     SmallString<128> P(Dir[0] == '=' ? SysRoot + Dir.substr(1) : Dir);
-    llvm::sys::path::append(P, Name);
-    if (llvm::sys::fs::exists(Twine(P)))
+    llvm37::sys::path::append(P, Name);
+    if (llvm37::sys::fs::exists(Twine(P)))
       return P.str();
   }
 
   SmallString<128> P(ResourceDir);
-  llvm::sys::path::append(P, Name);
-  if (llvm::sys::fs::exists(Twine(P)))
+  llvm37::sys::path::append(P, Name);
+  if (llvm37::sys::fs::exists(Twine(P)))
     return P.str();
 
   for (const std::string &Dir : TC.getFilePaths()) {
     if (Dir.empty())
       continue;
     SmallString<128> P(Dir[0] == '=' ? SysRoot + Dir.substr(1) : Dir);
-    llvm::sys::path::append(P, Name);
-    if (llvm::sys::fs::exists(Twine(P)))
+    llvm37::sys::path::append(P, Name);
+    if (llvm37::sys::fs::exists(Twine(P)))
       return P.str();
   }
 
@@ -2102,10 +2102,10 @@ void Driver::generatePrefixedToolNames(
 static bool ScanDirForExecutable(SmallString<128> &Dir,
                                  ArrayRef<std::string> Names) {
   for (const auto &Name : Names) {
-    llvm::sys::path::append(Dir, Name);
-    if (llvm::sys::fs::can_execute(Twine(Dir)))
+    llvm37::sys::path::append(Dir, Name);
+    if (llvm37::sys::fs::can_execute(Twine(Dir)))
       return true;
-    llvm::sys::path::remove_filename(Dir);
+    llvm37::sys::path::remove_filename(Dir);
   }
   return false;
 }
@@ -2118,13 +2118,13 @@ std::string Driver::GetProgramPath(const char *Name,
   // Respect a limited subset of the '-Bprefix' functionality in GCC by
   // attempting to use this prefix when looking for program paths.
   for (const auto &PrefixDir : PrefixDirs) {
-    if (llvm::sys::fs::is_directory(PrefixDir)) {
+    if (llvm37::sys::fs::is_directory(PrefixDir)) {
       SmallString<128> P(PrefixDir);
       if (ScanDirForExecutable(P, TargetSpecificExecutables))
         return P.str();
     } else {
       SmallString<128> P(PrefixDir + Name);
-      if (llvm::sys::fs::can_execute(Twine(P)))
+      if (llvm37::sys::fs::can_execute(Twine(P)))
         return P.str();
     }
   }
@@ -2138,8 +2138,8 @@ std::string Driver::GetProgramPath(const char *Name,
 
   // If all else failed, search the path.
   for (const auto &TargetSpecificExecutable : TargetSpecificExecutables)
-    if (llvm::ErrorOr<std::string> P =
-            llvm::sys::findProgramByName(TargetSpecificExecutable))
+    if (llvm37::ErrorOr<std::string> P =
+            llvm37::sys::findProgramByName(TargetSpecificExecutable))
       return *P;
 
   return Name;
@@ -2148,7 +2148,7 @@ std::string Driver::GetProgramPath(const char *Name,
 std::string Driver::GetTemporaryPath(StringRef Prefix,
                                      const char *Suffix) const {
   SmallString<128> Path;
-  std::error_code EC = llvm::sys::fs::createTemporaryFile(Prefix, Suffix, Path);
+  std::error_code EC = llvm37::sys::fs::createTemporaryFile(Prefix, Suffix, Path);
   if (EC) {
     Diag(clang::diag::err_unable_to_make_temp) << EC.message();
     return "";
@@ -2158,50 +2158,50 @@ std::string Driver::GetTemporaryPath(StringRef Prefix,
 }
 
 const ToolChain &Driver::getToolChain(const ArgList &Args,
-                                      const llvm::Triple &Target) const {
+                                      const llvm37::Triple &Target) const {
   ToolChain *&TC = ToolChains[Target.str()];
 #if 0 // HLSL Change - remove toolchains
   if (!TC) {
     switch (Target.getOS()) {
-    case llvm::Triple::CloudABI:
+    case llvm37::Triple::CloudABI:
       TC = new toolchains::CloudABI(*this, Target, Args);
       break;
-    case llvm::Triple::Darwin:
-    case llvm::Triple::MacOSX:
-    case llvm::Triple::IOS:
+    case llvm37::Triple::Darwin:
+    case llvm37::Triple::MacOSX:
+    case llvm37::Triple::IOS:
       TC = new toolchains::DarwinClang(*this, Target, Args);
       break;
-    case llvm::Triple::DragonFly:
+    case llvm37::Triple::DragonFly:
       TC = new toolchains::DragonFly(*this, Target, Args);
       break;
-    case llvm::Triple::OpenBSD:
+    case llvm37::Triple::OpenBSD:
       TC = new toolchains::OpenBSD(*this, Target, Args);
       break;
-    case llvm::Triple::Bitrig:
+    case llvm37::Triple::Bitrig:
       TC = new toolchains::Bitrig(*this, Target, Args);
       break;
-    case llvm::Triple::NetBSD:
+    case llvm37::Triple::NetBSD:
       TC = new toolchains::NetBSD(*this, Target, Args);
       break;
-    case llvm::Triple::FreeBSD:
+    case llvm37::Triple::FreeBSD:
       TC = new toolchains::FreeBSD(*this, Target, Args);
       break;
-    case llvm::Triple::Minix:
+    case llvm37::Triple::Minix:
       TC = new toolchains::Minix(*this, Target, Args);
       break;
-    case llvm::Triple::Linux:
-      if (Target.getArch() == llvm::Triple::hexagon)
+    case llvm37::Triple::Linux:
+      if (Target.getArch() == llvm37::Triple::hexagon)
         TC = new toolchains::Hexagon_TC(*this, Target, Args);
       else
         TC = new toolchains::Linux(*this, Target, Args);
       break;
-    case llvm::Triple::NaCl:
+    case llvm37::Triple::NaCl:
       TC = new toolchains::NaCl_TC(*this, Target, Args);
       break;
-    case llvm::Triple::Solaris:
+    case llvm37::Triple::Solaris:
       TC = new toolchains::Solaris(*this, Target, Args);
       break;
-    case llvm::Triple::Win32:
+    case llvm37::Triple::Win32:
       switch (Target.getEnvironment()) {
       default:
         if (Target.isOSBinFormatELF())
@@ -2211,19 +2211,19 @@ const ToolChain &Driver::getToolChain(const ArgList &Args,
         else
           TC = new toolchains::Generic_GCC(*this, Target, Args);
         break;
-      case llvm::Triple::GNU:
+      case llvm37::Triple::GNU:
         TC = new toolchains::MinGW(*this, Target, Args);
         break;
-      case llvm::Triple::Itanium:
+      case llvm37::Triple::Itanium:
         TC = new toolchains::CrossWindowsToolChain(*this, Target, Args);
         break;
-      case llvm::Triple::MSVC:
-      case llvm::Triple::UnknownEnvironment:
+      case llvm37::Triple::MSVC:
+      case llvm37::Triple::UnknownEnvironment:
         TC = new toolchains::MSVCToolChain(*this, Target, Args);
         break;
       }
       break;
-    case llvm::Triple::CUDA:
+    case llvm37::Triple::CUDA:
       TC = new toolchains::CudaToolChain(*this, Target, Args);
       break;
     default:
@@ -2231,11 +2231,11 @@ const ToolChain &Driver::getToolChain(const ArgList &Args,
       // an OS of Linux, in which case it got handled above already.
       if (Target.getArchName() == "tce")
         TC = new toolchains::TCEToolChain(*this, Target, Args);
-      else if (Target.getArch() == llvm::Triple::hexagon)
+      else if (Target.getArch() == llvm37::Triple::hexagon)
         TC = new toolchains::Hexagon_TC(*this, Target, Args);
-      else if (Target.getArch() == llvm::Triple::xcore)
+      else if (Target.getArch() == llvm37::Triple::xcore)
         TC = new toolchains::XCore(*this, Target, Args);
-      else if (Target.getArch() == llvm::Triple::shave)
+      else if (Target.getArch() == llvm37::Triple::shave)
         TC = new toolchains::SHAVEToolChain(*this, Target, Args);
       else if (Target.isOSBinFormatELF())
         TC = new toolchains::Generic_ELF(*this, Target, Args);

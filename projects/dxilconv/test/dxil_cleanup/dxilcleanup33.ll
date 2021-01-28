@@ -101,7 +101,7 @@ attributes #2 = { nounwind }
 !dx.shaderModel = !{!1}
 !dx.resources = !{!2}
 !dx.entryPoints = !{!5}
-!llvm.ident = !{!14}
+!llvm37.ident = !{!14}
 
 !0 = !{i32 1, i32 0}
 !1 = !{!"ps", i32 6, i32 0}

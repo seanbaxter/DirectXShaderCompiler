@@ -1,6 +1,6 @@
 //===-- FrontendAction.h - Generic Frontend Action Interface ----*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -15,15 +15,15 @@
 ///
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_FRONTEND_FRONTENDACTION_H
-#define LLVM_CLANG_FRONTEND_FRONTENDACTION_H
+#ifndef LLVM37_CLANG_FRONTEND_FRONTENDACTION_H
+#define LLVM37_CLANG_FRONTEND_FRONTENDACTION_H
 
 #include "clang/AST/ASTConsumer.h"
 #include "clang/Basic/LLVM.h"
 #include "clang/Basic/LangOptions.h"
 #include "clang/Frontend/ASTUnit.h"
 #include "clang/Frontend/FrontendOptions.h"
-#include "llvm/ADT/StringRef.h"
+#include "llvm37/ADT/StringRef.h"
 #include <memory>
 #include <string>
 #include <vector>

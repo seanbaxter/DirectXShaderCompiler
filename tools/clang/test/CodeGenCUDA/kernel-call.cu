@@ -1,4 +1,4 @@
-// RUN: %clang_cc1 -emit-llvm %s -o - | FileCheck %s
+// RUN: %clang_cc1 -emit-llvm37 %s -o - | FileCheck %s
 
 #include "Inputs/cuda.h"
 

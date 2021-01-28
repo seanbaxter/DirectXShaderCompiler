@@ -1,6 +1,6 @@
 //===--- RecordLayout.h - Layout information for a struct/union -*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,12 +11,12 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_AST_RECORDLAYOUT_H
-#define LLVM_CLANG_AST_RECORDLAYOUT_H
+#ifndef LLVM37_CLANG_AST_RECORDLAYOUT_H
+#define LLVM37_CLANG_AST_RECORDLAYOUT_H
 
 #include "clang/AST/CharUnits.h"
 #include "clang/AST/DeclCXX.h"
-#include "llvm/ADT/DenseMap.h"
+#include "llvm37/ADT/DenseMap.h"
 
 namespace clang {
   class ASTContext;
@@ -53,7 +53,7 @@ public:
      VBaseOffset(VBaseOffset), HasVtorDisp(hasVtorDisp) {}
   };
 
-  typedef llvm::DenseMap<const CXXRecordDecl *, VBaseInfo>
+  typedef llvm37::DenseMap<const CXXRecordDecl *, VBaseInfo>
     VBaseOffsetsMapTy;
 
 private:
@@ -114,13 +114,13 @@ private:
     bool LeadsWithZeroSizedBase : 1;
 
     /// PrimaryBase - The primary base info for this record.
-    llvm::PointerIntPair<const CXXRecordDecl *, 1, bool> PrimaryBase;
+    llvm37::PointerIntPair<const CXXRecordDecl *, 1, bool> PrimaryBase;
 
     /// BaseSharingVBPtr - The base we share vbptr with.
     const CXXRecordDecl *BaseSharingVBPtr;
     
-    /// FIXME: This should really use a SmallPtrMap, once we have one in LLVM :)
-    typedef llvm::DenseMap<const CXXRecordDecl *, CharUnits> BaseOffsetsMapTy;
+    /// FIXME: This should really use a SmallPtrMap, once we have one in LLVM37 :)
+    typedef llvm37::DenseMap<const CXXRecordDecl *, CharUnits> BaseOffsetsMapTy;
     
     /// BaseOffsets - Contains a map from base classes to their offset.
     BaseOffsetsMapTy BaseOffsets;

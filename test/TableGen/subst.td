@@ -1,4 +1,4 @@
-// RUN: llvm-tblgen %s | FileCheck %s
+// RUN: llvm37-tblgen %s | FileCheck %s
 // XFAIL: vg_leak
 
 class Honorific<string t> {

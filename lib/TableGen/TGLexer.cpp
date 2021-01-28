@@ -1,6 +1,6 @@
 //===- TGLexer.cpp - Lexer for TableGen -----------------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -12,19 +12,19 @@
 //===----------------------------------------------------------------------===//
 
 #include "TGLexer.h"
-#include "llvm/ADT/StringSwitch.h"
-#include "llvm/ADT/Twine.h"
-#include "llvm/Config/config.h" // for strtoull()/strtoll() define
-#include "llvm/Support/MemoryBuffer.h"
-#include "llvm/Support/SourceMgr.h"
-#include "llvm/TableGen/Error.h"
+#include "llvm37/ADT/StringSwitch.h"
+#include "llvm37/ADT/Twine.h"
+#include "llvm37/Config/config.h" // for strtoull()/strtoll() define
+#include "llvm37/Support/MemoryBuffer.h"
+#include "llvm37/Support/SourceMgr.h"
+#include "llvm37/TableGen/Error.h"
 #include <cctype>
 #include <cerrno>
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
 
-using namespace llvm;
+using namespace llvm37;
 
 TGLexer::TGLexer(SourceMgr &SM) : SrcMgr(SM) {
   CurBuffer = SrcMgr.getMainFileID();

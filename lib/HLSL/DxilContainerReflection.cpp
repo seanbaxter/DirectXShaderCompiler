@@ -9,11 +9,11 @@
 //                                                                           //
 ///////////////////////////////////////////////////////////////////////////////
 
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/Bitcode/ReaderWriter.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/InstIterator.h"
-#include "llvm/IR/Operator.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/Bitcode/ReaderWriter.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/InstIterator.h"
+#include "llvm37/IR/Operator.h"
 #include "dxc/DxilContainer/DxilContainer.h"
 #include "dxc/DXIL/DxilModule.h"
 #include "dxc/DXIL/DxilShaderModel.h"
@@ -32,11 +32,11 @@
 #include "dxc/DXIL/DxilCounters.h"
 
 #include <unordered_set>
-#include "llvm/ADT/SetVector.h"
+#include "llvm37/ADT/SetVector.h"
 
 #include "dxc/dxcapi.h"
 
-#ifdef LLVM_ON_WIN32
+#ifdef LLVM37_ON_WIN32
 #include "d3d12shader.h" // for compatibility
 #include "d3d11shader.h" // for compatibility
 
@@ -58,7 +58,7 @@ const GUID IID_ID3D11ShaderReflection_47 = {
     0x4956,
     {0xa8, 0x37, 0x78, 0x69, 0x63, 0x75, 0x55, 0x84}};
 
-using namespace llvm;
+using namespace llvm37;
 using namespace hlsl;
 using namespace hlsl::DXIL;
 
@@ -100,8 +100,8 @@ enum class PublicAPI { D3D12 = 0, D3D11_47 = 1, D3D11_43 = 2 };
 class DxilModuleReflection {
 public:
   hlsl::RDAT::DxilRuntimeData m_RDAT;
-  LLVMContext Context;
-  std::unique_ptr<Module> m_pModule; // Must come after LLVMContext, otherwise unique_ptr will over-delete.
+  LLVM37Context Context;
+  std::unique_ptr<Module> m_pModule; // Must come after LLVM37Context, otherwise unique_ptr will over-delete.
   DxilModule *m_pDxilModule = nullptr;
   bool m_bUsageInMetadata = false;
   std::vector<std::unique_ptr<CShaderReflectionConstantBuffer>>    m_CBs;
@@ -444,7 +444,7 @@ public:
   HRESULT InitializeEmpty();
   HRESULT Initialize(
     DxilModule              &M,
-    llvm::Type              *type,
+    llvm37::Type              *type,
     DxilFieldAnnotation     &typeAnnotation,
     unsigned int            baseOffset,
     std::vector<std::unique_ptr<CShaderReflectionType>>& allTypes,
@@ -713,7 +713,7 @@ STDMETHODIMP CShaderReflectionType::ImplementsInterface(THIS_ ID3D12ShaderReflec
 // Helper routine for types that don't have an obvious mapping
 // to the existing shader reflection interface.
 static bool ProcessUnhandledObjectType(
-  llvm::StructType            *structType,
+  llvm37::StructType            *structType,
   D3D_SHADER_VARIABLE_TYPE    *outObjectType)
 {
   // Don't actually make this a hard error, but instead report the problem using a suitable debug message.
@@ -728,7 +728,7 @@ static bool ProcessUnhandledObjectType(
 // (a texture, sampler, buffer, etc.), and to extract the coresponding shader
 // reflection type.
 static bool TryToDetectObjectType(
-  llvm::StructType            *structType,
+  llvm37::StructType            *structType,
   D3D_SHADER_VARIABLE_TYPE    *outObjectType)
 {
   // Note: This logic is largely duplicated from `dxilutil::IsHLSLObjectType`
@@ -806,19 +806,19 @@ static bool TryToDetectObjectType(
   return false;
 }
 
-// Helper to determine if an LLVM type represents an HLSL
+// Helper to determine if an LLVM37 type represents an HLSL
 // object type (uses the `TryToDetectObjectType()` function
 // defined previously).
 static bool IsObjectType(
-  llvm::Type* inType)
+  llvm37::Type* inType)
 {
-  llvm::Type* type = inType;
+  llvm37::Type* type = inType;
   while(type->isArrayTy())
   {
     type = type->getArrayElementType();
   }
 
-  llvm::StructType* structType = dyn_cast<StructType>(type);
+  llvm37::StructType* structType = dyn_cast<StructType>(type);
   if(!structType)
     return false;
 
@@ -832,11 +832,11 @@ HRESULT CShaderReflectionType::InitializeEmpty()
   return S_OK;
 }
 
-// Main logic for translating an LLVM type and associated
+// Main logic for translating an LLVM37 type and associated
 // annotations into a D3D shader reflection type.
 HRESULT CShaderReflectionType::Initialize(
   DxilModule              &M,
-  llvm::Type              *inType,
+  llvm37::Type              *inType,
   DxilFieldAnnotation     &typeAnnotation,
   unsigned int            baseOffset,
   std::vector<std::unique_ptr<CShaderReflectionType>>& allTypes,
@@ -873,11 +873,11 @@ HRESULT CShaderReflectionType::Initialize(
   // data, but only as the `Elements` field being non-zero.
   // We "unwrap" any array type here, and then proceed to look
   // at the element type.
-  llvm::Type* type = inType;
+  llvm37::Type* type = inType;
 
   while(type->isArrayTy())
   {
-    llvm::Type* elementType = type->getArrayElementType();
+    llvm37::Type* elementType = type->getArrayElementType();
 
     // Note: At this point an HLSL matrix type may appear as an ordinary
     // array (not wrapped in a `struct`), so `dxilutil::IsHLSLMatrixType()`
@@ -1049,7 +1049,7 @@ HRESULT CShaderReflectionType::Initialize(
   }
   else if( type->isVectorTy() )
   {
-    // We assume that LLVM vectors either represent matrices (handled above)
+    // We assume that LLVM37 vectors either represent matrices (handled above)
     // or HLSL vectors.
     //
     // Note: the reflection interface encodes an N-vector as if it had 1 row
@@ -1084,7 +1084,7 @@ HRESULT CShaderReflectionType::Initialize(
       m_Desc.Rows = 1;
 
       // Try to "clean" the type name for use in reflection data
-      llvm::StringRef name = structType->getName();
+      llvm37::StringRef name = structType->getName();
       name = name.ltrim("dx.alignment.legacy.");
       name = name.ltrim("struct.");
       m_Name = name;
@@ -1108,7 +1108,7 @@ HRESULT CShaderReflectionType::Initialize(
       for(unsigned int ff = 0; ff < fieldCount; ++ff)
       {
         DxilFieldAnnotation& fieldAnnotation = structAnnotation->GetFieldAnnotation(ff);
-        llvm::Type* fieldType = structType->getStructElementType(ff);
+        llvm37::Type* fieldType = structType->getStructElementType(ff);
 
         // Skip fields with object types, since these are not part of constant buffers,
         // and are not allowed in other buffer types.
@@ -1151,7 +1151,7 @@ HRESULT CShaderReflectionType::Initialize(
 
       // Because we might have skipped fields during enumeration,
       // the `Members` count in the description might not be the same
-      // as the field count of the original LLVM type.
+      // as the field count of the original LLVM37 type.
       m_Desc.Members = m_MemberTypes.size();
     }
   }
@@ -1582,7 +1582,7 @@ static UINT ResourceToFlags(DxilResourceBase *RB) {
   DxilResource *R = DxilResourceFromBase(RB);
   if (R != nullptr &&
       (R->IsAnyTexture() || R->GetKind() == DXIL::ResourceKind::TypedBuffer)) {
-    llvm::Type *RetTy = R->GetRetType();
+    llvm37::Type *RetTy = R->GetRetType();
     if (VectorType *VT = dyn_cast<VectorType>(RetTy)) {
       unsigned vecSize = VT->getNumElements();
       switch (vecSize) {
@@ -1776,7 +1776,7 @@ static void SetCBufVarUsage(CShaderReflectionConstantBuffer &cb,
 
 void DxilShaderReflection::SetCBufferUsage() {
   hlsl::OP *hlslOP = m_pDxilModule->GetOP();
-  LLVMContext &Ctx = m_pDxilModule->GetCtx();
+  LLVM37Context &Ctx = m_pDxilModule->GetCtx();
 
   // Indexes >= cbuffer size from DxilModule are SRV or UAV structured buffers.
   // We only collect usage for actual cbuffers, so don't go clearing usage on other buffers.
@@ -2025,7 +2025,7 @@ LPCSTR DxilShaderReflection::CreateUpperCase(LPCSTR pValue) {
   if (*pCursor == '\0')
     return pValue;
 
-  std::unique_ptr<char[]> pUpperStr = llvm::make_unique<char[]>(strlen(pValue) + 1);
+  std::unique_ptr<char[]> pUpperStr = llvm37::make_unique<char[]>(strlen(pValue) + 1);
   char *pWrite = pUpperStr.get();
   pCursor = pValue;
   for (;;) {
@@ -2254,7 +2254,7 @@ void DxilShaderReflection::InitDesc() {
   DxilCounters counters = {};
   m_pDxilModule->LoadDxilCounters(counters);
 
-  // UINT InstructionCount;               // Num llvm instructions in all functions
+  // UINT InstructionCount;               // Num llvm37 instructions in all functions
   // UINT TempArrayCount;                 // Number of bytes used in arrays (alloca + static global)
   // UINT DynamicFlowControlCount;        // Number of branches with more than one successor for now
   // UINT ArrayInstructionCount;          // number of load/store on arrays for now
@@ -2754,10 +2754,10 @@ ID3D12FunctionReflection *DxilLibraryReflection::GetFunctionByIndex(INT Function
   return m_FunctionVector[FunctionIndex];
 }
 
-#else // LLVM_ON_WIN32
+#else // LLVM37_ON_WIN32
 
 void hlsl::CreateDxcContainerReflection(IDxcContainerReflection **ppResult) {
   *ppResult = nullptr;
 }
 
-#endif // LLVM_ON_WIN32
+#endif // LLVM37_ON_WIN32

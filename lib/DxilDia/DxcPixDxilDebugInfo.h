@@ -26,11 +26,11 @@ namespace dxil_dia
 class Session;
 }  // namespace dxil_dia
 
-namespace llvm
+namespace llvm37
 {
 class Instruction;
 class Module;
-}  // namespace llvm
+}  // namespace llvm37
 
 namespace dxil_debug_info
 {
@@ -47,7 +47,7 @@ private:
       IMalloc *pMalloc,
       dxil_dia::Session *pSession);
 
-  llvm::Instruction* FindInstruction(
+  llvm37::Instruction* FindInstruction(
       DWORD InstructionOffset
   ) const;
 
@@ -88,7 +88,7 @@ public:
       _In_ DWORD InstructionOffset,
       _COM_Outptr_ IDxcPixDxilSourceLocations** ppSourceLocations) override;
 
-  llvm::Module *GetModuleRef();
+  llvm37::Module *GetModuleRef();
 
   IMalloc *GetMallocNoRef()
   {
@@ -131,7 +131,7 @@ private:
   DxcPixDxilSourceLocations(
     IMalloc* pMalloc,
     dxil_dia::Session *pSession,
-    llvm::Instruction* IP);
+    llvm37::Instruction* IP);
 
   struct Location
   {

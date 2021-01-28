@@ -13,7 +13,7 @@
 // - templated with declared specializations with annotations
 // - template that can be instantiated
 
-// http://llvm.org/PR12070
+// http://llvm37.org/PR12070
 struct Foo {
   typedef int Foo::*FooInt;
   int f;

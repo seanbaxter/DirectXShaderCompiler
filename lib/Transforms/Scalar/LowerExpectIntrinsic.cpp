@@ -1,33 +1,33 @@
 //===- LowerExpectIntrinsic.cpp - Lower expect intrinsic ------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 //
-// This pass lowers the 'expect' intrinsic to LLVM metadata.
+// This pass lowers the 'expect' intrinsic to LLVM37 metadata.
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Transforms/Scalar/LowerExpectIntrinsic.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/IR/BasicBlock.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/Intrinsics.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/MDBuilder.h"
-#include "llvm/IR/Metadata.h"
-#include "llvm/Pass.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Transforms/Scalar.h"
+#include "llvm37/Transforms/Scalar/LowerExpectIntrinsic.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/IR/BasicBlock.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/Intrinsics.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/MDBuilder.h"
+#include "llvm37/IR/Metadata.h"
+#include "llvm37/Pass.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Transforms/Scalar.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "lower-expect-intrinsic"
 
@@ -74,7 +74,7 @@ static bool handleSwitchExpect(SwitchInst &SI) {
   else
     Weights[Case.getCaseIndex() + 1] = LikelyBranchWeight;
 
-  SI.setMetadata(LLVMContext::MD_prof,
+  SI.setMetadata(LLVM37Context::MD_prof,
                  MDBuilder(CI->getContext()).createBranchWeights(Weights));
 
   SI.setCondition(ArgValue);
@@ -86,12 +86,12 @@ static bool handleBranchExpect(BranchInst &BI) {
     return false;
 
   // Handle non-optimized IR code like:
-  //   %expval = call i64 @llvm.expect.i64(i64 %conv1, i64 1)
+  //   %expval = call i64 @llvm37.expect.i64(i64 %conv1, i64 1)
   //   %tobool = icmp ne i64 %expval, 0
   //   br i1 %tobool, label %if.then, label %if.end
   //
   // Or the following simpler case:
-  //   %expval = call i1 @llvm.expect.i1(i1 %cmp, i1 1)
+  //   %expval = call i1 @llvm37.expect.i1(i1 %cmp, i1 1)
   //   br i1 %expval, label %if.then, label %if.end
 
   CallInst *CI;
@@ -127,7 +127,7 @@ static bool handleBranchExpect(BranchInst &BI) {
   else
     Node = MDB.createBranchWeights(UnlikelyBranchWeight, LikelyBranchWeight);
 
-  BI.setMetadata(LLVMContext::MD_prof, Node);
+  BI.setMetadata(LLVM37Context::MD_prof, Node);
 
   if (CmpI)
     CmpI->setOperand(0, ArgValue);
@@ -149,7 +149,7 @@ static bool lowerExpectIntrinsic(Function &F) {
         ExpectIntrinsicsHandled++;
     }
 
-    // remove llvm.expect intrinsics.
+    // remove llvm37.expect intrinsics.
     for (BasicBlock::iterator BI = BB.begin(), BE = BB.end(); BI != BE;) {
       CallInst *CI = dyn_cast<CallInst>(BI++);
       if (!CI)
@@ -197,6 +197,6 @@ char LowerExpectIntrinsic::ID = 0;
 INITIALIZE_PASS(LowerExpectIntrinsic, "lower-expect",
                 "Lower 'expect' Intrinsics", false, false)
 
-FunctionPass *llvm::createLowerExpectIntrinsicPass() {
+FunctionPass *llvm37::createLowerExpectIntrinsicPass() {
   return new LowerExpectIntrinsic();
 }

@@ -1,6 +1,6 @@
-//===- llvm/unittest/IR/LegacyPassManager.cpp - Legacy PassManager tests --===//
+//===- llvm37/unittest/IR/LegacyPassManager.cpp - Legacy PassManager tests --===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -13,32 +13,32 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/IR/LegacyPassManager.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/Analysis/CallGraphSCCPass.h"
-#include "llvm/Analysis/LoopInfo.h"
-#include "llvm/Analysis/LoopPass.h"
-#include "llvm/IR/BasicBlock.h"
-#include "llvm/IR/CallingConv.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/DerivedTypes.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/GlobalVariable.h"
-#include "llvm/IR/IRPrintingPasses.h"
-#include "llvm/IR/InlineAsm.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/Verifier.h"
-#include "llvm/Pass.h"
-#include "llvm/Support/MathExtras.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/IR/LegacyPassManager.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/Analysis/CallGraphSCCPass.h"
+#include "llvm37/Analysis/LoopInfo.h"
+#include "llvm37/Analysis/LoopPass.h"
+#include "llvm37/IR/BasicBlock.h"
+#include "llvm37/IR/CallingConv.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/IR/DerivedTypes.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/GlobalVariable.h"
+#include "llvm37/IR/IRPrintingPasses.h"
+#include "llvm37/IR/InlineAsm.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/Verifier.h"
+#include "llvm37/Pass.h"
+#include "llvm37/Support/MathExtras.h"
+#include "llvm37/Support/raw_ostream.h"
 #include "gtest/gtest.h"
 
-using namespace llvm;
+using namespace llvm37;
 
-namespace llvm {
+namespace llvm37 {
   void initializeModuleNDMPass(PassRegistry&);
   void initializeFPassPass(PassRegistry&);
   void initializeCGPassPass(PassRegistry&);
@@ -152,8 +152,8 @@ namespace llvm {
     struct PassTest : public PassTestBase<P> {
     public:
 #ifndef _MSC_VER // MSVC complains that Pass is not base class.
-      using llvm::Pass::doInitialization;
-      using llvm::Pass::doFinalization;
+      using llvm37::Pass::doInitialization;
+      using llvm37::Pass::doFinalization;
 #endif
       bool doInitialization(T &t) override {
         EXPECT_FALSE(PassTestBase<P>::initialized);
@@ -204,8 +204,8 @@ namespace llvm {
         EXPECT_EQ(run, initcount);
         EXPECT_EQ(finalized, fincount);
       }
-      using llvm::Pass::doInitialization;
-      using llvm::Pass::doFinalization;
+      using llvm37::Pass::doInitialization;
+      using llvm37::Pass::doFinalization;
       bool doInitialization(Loop* L, LPPassManager &LPM) override {
         initialized = true;
         initcount++;
@@ -334,11 +334,11 @@ namespace llvm {
       EXPECT_EQ(1, mDNM->run);
     }
 
-    Module* makeLLVMModule();
+    Module* makeLLVM37Module();
 
     template<typename T>
     void MemoryTestHelper(int run) {
-      std::unique_ptr<Module> M(makeLLVMModule());
+      std::unique_ptr<Module> M(makeLLVM37Module());
       T *P = new T();
       legacy::PassManager Passes;
       Passes.add(P);
@@ -348,7 +348,7 @@ namespace llvm {
 
     template<typename T>
     void MemoryTestHelper(int run, int N) {
-      Module *M = makeLLVMModule();
+      Module *M = makeLLVM37Module();
       T *P = new T();
       legacy::PassManager Passes;
       Passes.add(P);
@@ -383,7 +383,7 @@ namespace llvm {
     }
 
     TEST(PassManager, MemoryOnTheFly) {
-      Module *M = makeLLVMModule();
+      Module *M = makeLLVM37Module();
       {
         SCOPED_TRACE("Running OnTheFlyTest");
         struct OnTheFlyTest *O = new OnTheFlyTest();
@@ -396,7 +396,7 @@ namespace llvm {
       delete M;
     }
 
-    Module* makeLLVMModule() {
+    Module* makeLLVM37Module() {
       // Module Construction
       Module* mod = new Module("test-mem", getGlobalContext());
       mod->setDataLayout("e-p:64:64:64-i1:8:8-i8:8:8-i16:16:16-i32:32:32-"

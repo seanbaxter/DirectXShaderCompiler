@@ -1,6 +1,6 @@
 //=== ClangASTNodesEmitter.cpp - Generate Clang AST node tables -*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,13 +11,13 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/TableGen/Record.h"
-#include "llvm/TableGen/TableGenBackend.h"
+#include "llvm37/TableGen/Record.h"
+#include "llvm37/TableGen/TableGenBackend.h"
 #include <cctype>
 #include <map>
 #include <set>
 #include <string>
-using namespace llvm;
+using namespace llvm37;
 
 /// ClangASTNodesEmitter - The top-level class emits .inc files containing
 ///  declarations of Clang statements.

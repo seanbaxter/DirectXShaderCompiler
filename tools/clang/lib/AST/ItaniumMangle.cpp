@@ -1,6 +1,6 @@
 //===--- ItaniumMangle.cpp - Itanium C++ Name Mangling ----------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -29,9 +29,9 @@
 #include "clang/Basic/ABI.h"
 #include "clang/Basic/SourceManager.h"
 #include "clang/Basic/TargetInfo.h"
-#include "llvm/ADT/StringExtras.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/StringExtras.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/raw_ostream.h"
 //                                                                           //
 ///////////////////////////////////////////////////////////////////////////////
 #define MANGLE_CHECKER 0
@@ -125,8 +125,8 @@ static const unsigned UnknownArity = ~0U;
 
 class ItaniumMangleContextImpl : public ItaniumMangleContext {
   typedef std::pair<const DeclContext*, IdentifierInfo*> DiscriminatorKeyTy;
-  llvm::DenseMap<DiscriminatorKeyTy, unsigned> Discriminator;
-  llvm::DenseMap<const NamedDecl*, unsigned> Uniquifier;
+  llvm37::DenseMap<DiscriminatorKeyTy, unsigned> Discriminator;
+  llvm37::DenseMap<const NamedDecl*, unsigned> Uniquifier;
 
 public:
   explicit ItaniumMangleContextImpl(ASTContext &Context,
@@ -265,7 +265,7 @@ class CXXNameMangler {
 
   } FunctionTypeDepth;
 
-  llvm::DenseMap<uintptr_t, unsigned> Substitutions;
+  llvm37::DenseMap<uintptr_t, unsigned> Substitutions;
 
   ASTContext &getASTContext() const { return Context.getASTContext(); }
 
@@ -302,9 +302,9 @@ public:
 
   void mangle(const NamedDecl *D);
   void mangleCallOffset(int64_t NonVirtual, int64_t Virtual);
-  void mangleNumber(const llvm::APSInt &I);
+  void mangleNumber(const llvm37::APSInt &I);
   void mangleNumber(int64_t Number);
-  void mangleFloat(const llvm::APFloat &F);
+  void mangleFloat(const llvm37::APFloat &F);
   void mangleFunctionEncoding(const FunctionDecl *FD);
   void mangleSeqID(unsigned SeqID);
   void mangleName(const NamedDecl *ND);
@@ -386,7 +386,7 @@ private:
   void mangleNeonVectorType(const VectorType *T);
   void mangleAArch64NeonVectorType(const VectorType *T);
 
-  void mangleIntegerLiteral(QualType T, const llvm::APSInt &Value);
+  void mangleIntegerLiteral(QualType T, const llvm37::APSInt &Value);
   void mangleMemberExprBase(const Expr *base, bool isArrow);
   void mangleMemberExpr(const Expr *base, bool isArrow,
                         NestedNameSpecifier *qualifier,
@@ -683,7 +683,7 @@ void CXXNameMangler::mangleUnscopedTemplateName(TemplateName Template) {
   addSubstitution(Template);
 }
 
-void CXXNameMangler::mangleFloat(const llvm::APFloat &f) {
+void CXXNameMangler::mangleFloat(const llvm37::APFloat &f) {
   // ABI:
   //   Floating-point literals are encoded using a fixed-length
   //   lowercase hexadecimal string corresponding to the internal
@@ -697,7 +697,7 @@ void CXXNameMangler::mangleFloat(const llvm::APFloat &f) {
   // Our requirements here are just barely weird enough to justify
   // using a custom algorithm instead of post-processing APInt::toString().
 
-  llvm::APInt valueBits = f.bitcastToAPInt();
+  llvm37::APInt valueBits = f.bitcastToAPInt();
   unsigned numCharacters = (valueBits.getBitWidth() + 3) / 4;
   assert(numCharacters != 0);
 
@@ -711,9 +711,9 @@ void CXXNameMangler::mangleFloat(const llvm::APFloat &f) {
     unsigned digitBitIndex = 4 * (numCharacters - stringIndex - 1);
 
     // Project out 4 bits starting at 'digitIndex'.
-    llvm::integerPart hexDigit
-      = valueBits.getRawData()[digitBitIndex / llvm::integerPartWidth];
-    hexDigit >>= (digitBitIndex % llvm::integerPartWidth);
+    llvm37::integerPart hexDigit
+      = valueBits.getRawData()[digitBitIndex / llvm37::integerPartWidth];
+    hexDigit >>= (digitBitIndex % llvm37::integerPartWidth);
     hexDigit &= 0xF;
 
     // Map that over to a lowercase hex digit.
@@ -727,7 +727,7 @@ void CXXNameMangler::mangleFloat(const llvm::APFloat &f) {
   Out.write(buffer.data(), numCharacters);
 }
 
-void CXXNameMangler::mangleNumber(const llvm::APSInt &Value) {
+void CXXNameMangler::mangleNumber(const llvm37::APSInt &Value) {
   if (Value.isSigned() && Value.isNegative()) {
     Out << 'n';
     Value.abs().print(Out, /*signed*/ false);
@@ -830,7 +830,7 @@ void CXXNameMangler::mangleUnresolvedPrefix(NestedNameSpecifier *qualifier,
     return;
 
   case NestedNameSpecifier::Super:
-    llvm_unreachable("Can't mangle __super specifier");
+    llvm37_unreachable("Can't mangle __super specifier");
 
   case NestedNameSpecifier::Namespace:
     if (qualifier->getPrefix())
@@ -914,13 +914,13 @@ void CXXNameMangler::mangleUnresolvedName(NestedNameSpecifier *qualifier,
       mangleOperatorName(name, knownArity);
       break;
     case DeclarationName::CXXConstructorName:
-      llvm_unreachable("Can't mangle a constructor name!");
+      llvm37_unreachable("Can't mangle a constructor name!");
     case DeclarationName::CXXUsingDirective:
-      llvm_unreachable("Can't mangle a using directive name!");
+      llvm37_unreachable("Can't mangle a using directive name!");
     case DeclarationName::ObjCMultiArgSelector:
     case DeclarationName::ObjCOneArgSelector:
     case DeclarationName::ObjCZeroArgSelector:
-      llvm_unreachable("Can't mangle Objective-C selector names here!");
+      llvm37_unreachable("Can't mangle Objective-C selector names here!");
   }
 }
 
@@ -1025,7 +1025,7 @@ void CXXNameMangler::mangleUnqualifiedName(const NamedDecl *ND,
       unsigned UnnamedMangle = getASTContext().getManglingNumber(TD);
       Out << "Ut";
       if (UnnamedMangle > 1)
-        Out << llvm::utostr(UnnamedMangle - 2);
+        Out << llvm37::utostr(UnnamedMangle - 2);
       Out << '_';
       break;
     }
@@ -1038,7 +1038,7 @@ void CXXNameMangler::mangleUnqualifiedName(const NamedDecl *ND,
     // where n is the length of the string.
     SmallString<8> Str;
     Str += "$_";
-    Str += llvm::utostr(AnonStructId);
+    Str += llvm37::utostr(AnonStructId);
 
     Out << Str.size();
     Out << Str;
@@ -1048,7 +1048,7 @@ void CXXNameMangler::mangleUnqualifiedName(const NamedDecl *ND,
   case DeclarationName::ObjCZeroArgSelector:
   case DeclarationName::ObjCOneArgSelector:
   case DeclarationName::ObjCMultiArgSelector:
-    llvm_unreachable("Can't mangle Objective-C selector names here!");
+    llvm37_unreachable("Can't mangle Objective-C selector names here!");
 
   case DeclarationName::CXXConstructorName:
     if (ND == Structor)
@@ -1088,7 +1088,7 @@ void CXXNameMangler::mangleUnqualifiedName(const NamedDecl *ND,
     break;
 
   case DeclarationName::CXXUsingDirective:
-    llvm_unreachable("Can't mangle a using directive name!");
+    llvm37_unreachable("Can't mangle a using directive name!");
   }
 }
 
@@ -1312,7 +1312,7 @@ void CXXNameMangler::manglePrefix(NestedNameSpecifier *qualifier) {
     return;
 
   case NestedNameSpecifier::Super:
-    llvm_unreachable("Can't mangle __super specifier");
+    llvm37_unreachable("Can't mangle __super specifier");
 
   case NestedNameSpecifier::Namespace:
     mangleName(qualifier->getAsNamespace());
@@ -1337,7 +1337,7 @@ void CXXNameMangler::manglePrefix(NestedNameSpecifier *qualifier) {
     return;
   }
 
-  llvm_unreachable("unexpected nested name specifier");
+  llvm37_unreachable("unexpected nested name specifier");
 }
 
 void CXXNameMangler::manglePrefix(const DeclContext *DC, bool NoFunction) {
@@ -1448,7 +1448,7 @@ void CXXNameMangler::mangleType(TemplateName TN) {
     break;
 
   case TemplateName::OverloadedTemplate:
-    llvm_unreachable("can't mangle an overloaded template name as a <type>");
+    llvm37_unreachable("can't mangle an overloaded template name as a <type>");
 
   case TemplateName::DependentTemplate: {
     const DependentTemplateName *Dependent = TN.getAsDependentTemplateName();
@@ -1515,7 +1515,7 @@ bool CXXNameMangler::mangleUnresolvedTypeOrSimpleId(QualType Ty,
   case Type::ObjCInterface:
   case Type::ObjCObjectPointer:
   case Type::Atomic:
-    llvm_unreachable("type is illegal as a nested name specifier");
+    llvm37_unreachable("type is illegal as a nested name specifier");
 
   case Type::SubstTemplateTypeParmPack:
     // FIXME: not clear how to mangle this!
@@ -1582,7 +1582,7 @@ bool CXXNameMangler::mangleUnresolvedTypeOrSimpleId(QualType Ty,
 
     case TemplateName::OverloadedTemplate:
     case TemplateName::DependentTemplate:
-      llvm_unreachable("invalid base for a template specialization type");
+      llvm37_unreachable("invalid base for a template specialization type");
 
     case TemplateName::SubstTemplateTemplateParm: {
       SubstTemplateTemplateParmStorage *subst =
@@ -1639,7 +1639,7 @@ void CXXNameMangler::mangleOperatorName(DeclarationName Name, unsigned Arity) {
   case DeclarationName::ObjCMultiArgSelector:
   case DeclarationName::ObjCOneArgSelector:
   case DeclarationName::ObjCZeroArgSelector:
-    llvm_unreachable("Not an operator name");
+    llvm37_unreachable("Not an operator name");
 
   case DeclarationName::CXXConversionFunctionName:
     // <operator-name> ::= cv <type>    # (cast)
@@ -1764,7 +1764,7 @@ CXXNameMangler::mangleOperatorName(OverloadedOperatorKind OO, unsigned Arity) {
 
   case OO_None:
   case NUM_OVERLOADED_OPERATORS:
-    llvm_unreachable("Not an overloaded operator");
+    llvm37_unreachable("Not an overloaded operator");
   }
 }
 
@@ -1790,10 +1790,10 @@ void CXXNameMangler::mangleQualifiers(Qualifiers Quals) {
     if (Context.getASTContext().addressSpaceMapManglingFor(AS)) {
       //  <target-addrspace> ::= "AS" <address-space-number>
       unsigned TargetAS = Context.getASTContext().getTargetAddressSpace(AS);
-      ASString = "AS" + llvm::utostr_32(TargetAS);
+      ASString = "AS" + llvm37::utostr_32(TargetAS);
     } else {
       switch (AS) {
-      default: llvm_unreachable("Not a language specific address space");
+      default: llvm37_unreachable("Not a language specific address space");
       //  <OpenCL-addrspace> ::= "CL" [ "global" | "local" | "constant" ]
       case LangAS::opencl_global:   ASString = "CLglobal";   break;
       case LangAS::opencl_local:    ASString = "CLlocal";    break;
@@ -1942,7 +1942,7 @@ void CXXNameMangler::mangleType(QualType T) {
 #define ABSTRACT_TYPE(CLASS, PARENT)
 #define NON_CANONICAL_TYPE(CLASS, PARENT) \
     case Type::CLASS: \
-      llvm_unreachable("can't mangle non-canonical type " #CLASS "Type"); \
+      llvm37_unreachable("can't mangle non-canonical type " #CLASS "Type"); \
       return;
 #define TYPE(CLASS, PARENT) \
     case Type::CLASS: \
@@ -2027,7 +2027,7 @@ void CXXNameMangler::mangleType(const BuiltinType *T) {
   case BuiltinType::Id:
 #include "clang/AST/BuiltinTypes.def"
   case BuiltinType::Dependent:
-    llvm_unreachable("mangling a placeholder type");
+    llvm37_unreachable("mangling a placeholder type");
   case BuiltinType::ObjCId: Out << "11objc_object"; break;
   case BuiltinType::ObjCClass: Out << "10objc_class"; break;
   case BuiltinType::ObjCSel: Out << "13objc_selector"; break;
@@ -2074,7 +2074,7 @@ void CXXNameMangler::mangleType(const FunctionProtoType *T) {
   Out << 'E';
 }
 void CXXNameMangler::mangleType(const FunctionNoProtoType *T) {
-  llvm_unreachable("Can't mangle K&R function prototypes");
+  llvm37_unreachable("Can't mangle K&R function prototypes");
 }
 void CXXNameMangler::mangleBareFunctionType(const FunctionType *T,
                                             bool MangleReturnType) {
@@ -2246,7 +2246,7 @@ void CXXNameMangler::mangleNeonVectorType(const VectorType *T) {
     case BuiltinType::ULongLong:
       EltName = "poly64_t";
       break;
-    default: llvm_unreachable("unexpected Neon polynomial vector element type");
+    default: llvm37_unreachable("unexpected Neon polynomial vector element type");
     }
   } else {
     switch (cast<BuiltinType>(EltType)->getKind()) {
@@ -2262,7 +2262,7 @@ void CXXNameMangler::mangleNeonVectorType(const VectorType *T) {
     case BuiltinType::Float:     EltName = "float32_t"; break;
     case BuiltinType::Half:      EltName = "float16_t";break;
     default:
-      llvm_unreachable("unexpected Neon vector element type");
+      llvm37_unreachable("unexpected Neon vector element type");
     }
   }
   const char *BaseName = nullptr;
@@ -2305,7 +2305,7 @@ static StringRef mangleAArch64VectorBase(const BuiltinType *EltType) {
   case BuiltinType::Double:
     return "Float64";
   default:
-    llvm_unreachable("Unexpected vector element base type");
+    llvm37_unreachable("Unexpected vector element base type");
   }
 }
 
@@ -2336,13 +2336,13 @@ void CXXNameMangler::mangleAArch64NeonVectorType(const VectorType *T) {
       EltName = "Poly64";
       break;
     default:
-      llvm_unreachable("unexpected Neon polynomial vector element type");
+      llvm37_unreachable("unexpected Neon polynomial vector element type");
     }
   } else
     EltName = mangleAArch64VectorBase(cast<BuiltinType>(EltType));
 
   std::string TypeName =
-      ("__" + EltName + "x" + llvm::utostr(T->getNumElements()) + "_t").str();
+      ("__" + EltName + "x" + llvm37::utostr(T->getNumElements()) + "_t").str();
   Out << TypeName.length() << TypeName;
 }
 
@@ -2357,11 +2357,11 @@ void CXXNameMangler::mangleAArch64NeonVectorType(const VectorType *T) {
 void CXXNameMangler::mangleType(const VectorType *T) {
   if ((T->getVectorKind() == VectorType::NeonVector ||
        T->getVectorKind() == VectorType::NeonPolyVector)) {
-    llvm::Triple Target = getASTContext().getTargetInfo().getTriple();
-    llvm::Triple::ArchType Arch =
+    llvm37::Triple Target = getASTContext().getTargetInfo().getTriple();
+    llvm37::Triple::ArchType Arch =
         getASTContext().getTargetInfo().getTriple().getArch();
-    if ((Arch == llvm::Triple::aarch64 ||
-         Arch == llvm::Triple::aarch64_be) && !Target.isOSDarwin())
+    if ((Arch == llvm37::Triple::aarch64 ||
+         Arch == llvm37::Triple::aarch64_be) && !Target.isOSDarwin())
       mangleAArch64NeonVectorType(T);
     else
       mangleNeonVectorType(T);
@@ -2403,7 +2403,7 @@ void CXXNameMangler::mangleType(const ObjCObjectType *T) {
   if (!T->qual_empty()) {
     // Mangle protocol qualifiers.
     SmallString<64> QualStr;
-    llvm::raw_svector_ostream QualOS(QualStr);
+    llvm37::raw_svector_ostream QualOS(QualStr);
     QualOS << "objcproto";
     for (const auto *I : T->quals()) {
       StringRef name = I->getName();
@@ -2479,7 +2479,7 @@ void CXXNameMangler::mangleType(const DependentNameType *T) {
       Out << "Te";
       break;
     default:
-      llvm_unreachable("unexpected keyword for dependent type name");
+      llvm37_unreachable("unexpected keyword for dependent type name");
   }
   // Typename types are always nested
   Out << 'N';
@@ -2574,7 +2574,7 @@ void CXXNameMangler::mangleType(const AtomicType *T) {
 }
 
 void CXXNameMangler::mangleIntegerLiteral(QualType T,
-                                          const llvm::APSInt &Value) {
+                                          const llvm37::APSInt &Value) {
   //  <expr-primary> ::= L <type> <value number> E # integer literal
   Out << 'L';
 
@@ -2717,7 +2717,7 @@ recurse:
   case Expr::LambdaExprClass:
   case Expr::MSPropertyRefExprClass:
   case Expr::TypoExprClass:  // This should no longer exist in the AST by now.
-    llvm_unreachable("unexpected statement kind");
+    llvm37_unreachable("unexpected statement kind");
 
   // FIXME: invent manglings for all these.
   case Expr::BlockExprClass:
@@ -2791,7 +2791,7 @@ recurse:
 
   // These are used for internal purposes and cannot be meaningfully mangled.
   case Expr::OpaqueValueExprClass:
-    llvm_unreachable("cannot mangle opaque value; mangling wrong thing?");
+    llvm37_unreachable("cannot mangle opaque value; mangling wrong thing?");
 
   case Expr::InitListExprClass: {
     Out << "il";
@@ -3038,7 +3038,7 @@ recurse:
       QualType T = (ImplicitlyConvertedToType.isNull() || 
                     !ImplicitlyConvertedToType->isIntegerType())? SAE->getType()
                                                     : ImplicitlyConvertedToType;
-      llvm::APSInt V = SAE->EvaluateKnownConstInt(Context.getASTContext());
+      llvm37::APSInt V = SAE->EvaluateKnownConstInt(Context.getASTContext());
       mangleIntegerLiteral(T, V);
       break;
     }
@@ -3326,7 +3326,7 @@ recurse:
     break;
 
   case Expr::IntegerLiteralClass: {
-    llvm::APSInt Value(cast<IntegerLiteral>(E)->getValue());
+    llvm37::APSInt Value(cast<IntegerLiteral>(E)->getValue());
     if (E->getType()->isSignedIntegerType())
       Value.setIsSigned(true);
     mangleIntegerLiteral(E->getType(), Value);
@@ -3342,12 +3342,12 @@ recurse:
     if (const FloatingLiteral *Imag =
           dyn_cast<FloatingLiteral>(IE->getSubExpr())) {
       // Mangle a floating-point zero of the appropriate type.
-      mangleFloat(llvm::APFloat(Imag->getValue().getSemantics()));
+      mangleFloat(llvm37::APFloat(Imag->getValue().getSemantics()));
       Out << '_';
       mangleFloat(Imag->getValue());
     } else {
       Out << "0_";
-      llvm::APSInt Value(cast<IntegerLiteral>(IE->getSubExpr())->getValue());
+      llvm37::APSInt Value(cast<IntegerLiteral>(IE->getSubExpr())->getValue());
       if (IE->getSubExpr()->getType()->isSignedIntegerType())
         Value.setIsSigned(true);
       mangleNumber(Value);
@@ -3505,7 +3505,7 @@ void CXXNameMangler::mangleCXXCtorType(CXXCtorType T) {
     break;
   case Ctor_DefaultClosure:
   case Ctor_CopyingClosure:
-    llvm_unreachable("closure constructors don't exist for the Itanium ABI!");
+    llvm37_unreachable("closure constructors don't exist for the Itanium ABI!");
   }
 }
 
@@ -3567,7 +3567,7 @@ void CXXNameMangler::mangleTemplateArg(TemplateArgument A) {
   
   switch (A.getKind()) {
   case TemplateArgument::Null:
-    llvm_unreachable("Cannot mangle NULL template argument");
+    llvm37_unreachable("Cannot mangle NULL template argument");
       
   case TemplateArgument::Type:
     mangleType(A.getAsType());
@@ -3725,7 +3725,7 @@ bool CXXNameMangler::mangleSubstitution(TemplateName Template) {
 }
 
 bool CXXNameMangler::mangleSubstitution(uintptr_t Ptr) {
-  llvm::DenseMap<uintptr_t, unsigned>::iterator I = Substitutions.find(Ptr);
+  llvm37::DenseMap<uintptr_t, unsigned>::iterator I = Substitutions.find(Ptr);
   if (I == Substitutions.end())
     return false;
 
@@ -4001,7 +4001,7 @@ void ItaniumMangleContextImpl::mangleStaticGuardVariable(const VarDecl *D,
 void ItaniumMangleContextImpl::mangleDynamicInitializer(const VarDecl *MD,
                                                         raw_ostream &Out) {
   // These symbols are internal in the Itanium ABI, so the names don't matter.
-  // Clang has traditionally used this symbol and allowed LLVM to adjust it to
+  // Clang has traditionally used this symbol and allowed LLVM37 to adjust it to
   // avoid duplicate symbols.
   Out << "__cxx_global_var_init";
 }
@@ -4131,7 +4131,7 @@ void ItaniumMangleContextImpl::mangleCXXVTableBitSet(const CXXRecordDecl *RD,
 }
 
 void ItaniumMangleContextImpl::mangleStringLiteral(const StringLiteral *, raw_ostream &) {
-  llvm_unreachable("Can't mangle string literals");
+  llvm37_unreachable("Can't mangle string literals");
 }
 
 ItaniumMangleContext *

@@ -1,6 +1,6 @@
 //===--- CodeGenOptions.h ---------------------------------------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,11 +11,11 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_FRONTEND_CODEGENOPTIONS_H
-#define LLVM_CLANG_FRONTEND_CODEGENOPTIONS_H
+#ifndef LLVM37_CLANG_FRONTEND_CODEGENOPTIONS_H
+#define LLVM37_CLANG_FRONTEND_CODEGENOPTIONS_H
 
 #include "clang/Basic/Sanitizers.h"
-#include "llvm/Support/Regex.h"
+#include "llvm37/Support/Regex.h"
 #include <memory>
 #include <string>
 #include <vector>
@@ -151,7 +151,7 @@ public:
   /// function instead of to trap instructions.
   std::string TrapFuncName;
 
-  /// A list of command-line options to forward to the LLVM backend.
+  /// A list of command-line options to forward to the LLVM37 backend.
   std::vector<std::string> BackendOptions;
 
   /// A list of dependent libraries.
@@ -204,7 +204,7 @@ public:
   std::vector<std::string> HLSLPreciseOutputs;
   /// Arguments passed in from command line
   std::vector<std::string> HLSLArguments;
-  /// Helper for generating llvm bitcode for hlsl extensions.
+  /// Helper for generating llvm37 bitcode for hlsl extensions.
   std::shared_ptr<hlsl::HLSLExtensionsCodegenHelper> HLSLExtensionsCodegen;
   /// Signature packing mode (0 == default for target)
   unsigned HLSLSignaturePackingStrategy = 0;
@@ -247,14 +247,14 @@ public:
   /// expression (and support this feature), will emit a diagnostic
   /// whenever they perform a transformation. This is enabled by the
   /// -Rpass=regexp flag.
-  std::shared_ptr<llvm::Regex> OptimizationRemarkPattern;
+  std::shared_ptr<llvm37::Regex> OptimizationRemarkPattern;
 
   /// Regular expression to select optimizations for which we should enable
   /// missed optimization remarks. Transformation passes whose name matches this
   /// expression (and support this feature), will emit a diagnostic
   /// whenever they tried but failed to perform a transformation. This is
   /// enabled by the -Rpass-missed=regexp flag.
-  std::shared_ptr<llvm::Regex> OptimizationRemarkMissedPattern;
+  std::shared_ptr<llvm37::Regex> OptimizationRemarkMissedPattern;
 
   /// Regular expression to select optimizations for which we should enable
   /// optimization analyses. Transformation passes whose name matches this
@@ -262,7 +262,7 @@ public:
   /// whenever they want to explain why they decided to apply or not apply
   /// a given transformation. This is enabled by the -Rpass-analysis=regexp
   /// flag.
-  std::shared_ptr<llvm::Regex> OptimizationRemarkAnalysisPattern;
+  std::shared_ptr<llvm37::Regex> OptimizationRemarkAnalysisPattern;
 
   /// Set of files definining the rules for the symbol rewriting.
   std::vector<std::string> RewriteMapFiles;

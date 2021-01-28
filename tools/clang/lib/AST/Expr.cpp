@@ -1,6 +1,6 @@
 //===--- Expr.cpp - Expression AST Node Implementation --------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -30,8 +30,8 @@
 #include "clang/Lex/Lexer.h"
 #include "clang/Lex/LiteralSupport.h"
 #include "clang/Sema/SemaDiagnostic.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <algorithm>
 #include <cstring>
 using namespace clang;
@@ -192,7 +192,7 @@ namespace {
 
 SourceLocation Expr::getExprLoc() const {
   switch (getStmtClass()) {
-  case Stmt::NoStmtClass: llvm_unreachable("statement without class");
+  case Stmt::NoStmtClass: llvm37_unreachable("statement without class");
 #define ABSTRACT_STMT(type)
 #define STMT(type, base) \
   case Stmt::type##Class: break;
@@ -200,7 +200,7 @@ SourceLocation Expr::getExprLoc() const {
   case Stmt::type##Class: return getExprLocImpl<type>(this, &type::getExprLoc);
 #include "clang/AST/StmtNodes.inc"
   }
-  llvm_unreachable("unknown expression kind");
+  llvm37_unreachable("unknown expression kind");
 }
 
 //===----------------------------------------------------------------------===//
@@ -404,7 +404,7 @@ DeclRefExpr *DeclRefExpr::Create(const ASTContext &Context,
   else if (TemplateKWLoc.isValid())
     Size += ASTTemplateKWAndArgsInfo::sizeFor(0);
 
-  void *Mem = Context.Allocate(Size, llvm::alignOf<DeclRefExpr>());
+  void *Mem = Context.Allocate(Size, llvm37::alignOf<DeclRefExpr>());
   return new (Mem) DeclRefExpr(Context, QualifierLoc, TemplateKWLoc, D,
                                RefersToEnclosingVariableOrCapture,
                                NameInfo, FoundD, TemplateArgs, T, VK);
@@ -423,7 +423,7 @@ DeclRefExpr *DeclRefExpr::CreateEmpty(const ASTContext &Context,
   if (HasTemplateKWAndArgsInfo)
     Size += ASTTemplateKWAndArgsInfo::sizeFor(NumTemplateArgs);
 
-  void *Mem = Context.Allocate(Size, llvm::alignOf<DeclRefExpr>());
+  void *Mem = Context.Allocate(Size, llvm37::alignOf<DeclRefExpr>());
   return new (Mem) DeclRefExpr(EmptyShell());
 }
 
@@ -467,7 +467,7 @@ StringRef PredefinedExpr::getIdentTypeName(PredefinedExpr::IdentType IT) {
   case PrettyFunctionNoVirtual:
     break;
   }
-  llvm_unreachable("Unknown ident type for PredefinedExpr");
+  llvm37_unreachable("Unknown ident type for PredefinedExpr");
 }
 
 // FIXME: Maybe this should use DeclPrinter with a special "print predefined
@@ -482,7 +482,7 @@ std::string PredefinedExpr::ComputeName(IdentType IT, const Decl *CurrentDecl) {
 
       if (MC->shouldMangleDeclName(ND)) {
         SmallString<256> Buffer;
-        llvm::raw_svector_ostream Out(Buffer);
+        llvm37::raw_svector_ostream Out(Buffer);
         if (const CXXConstructorDecl *CD = dyn_cast<CXXConstructorDecl>(ND))
           MC->mangleCXXCtor(CD, Ctor_Base, Out);
         else if (const CXXDestructorDecl *DD = dyn_cast<CXXDestructorDecl>(ND))
@@ -503,7 +503,7 @@ std::string PredefinedExpr::ComputeName(IdentType IT, const Decl *CurrentDecl) {
     std::unique_ptr<MangleContext> MC;
     MC.reset(Context.createMangleContext());
     SmallString<256> Buffer;
-    llvm::raw_svector_ostream Out(Buffer);
+    llvm37::raw_svector_ostream Out(Buffer);
     auto DC = CurrentDecl->getDeclContext();
     if (DC->isFileContext())
       MC->mangleGlobalBlock(BD, /*ID*/ nullptr, Out);
@@ -520,7 +520,7 @@ std::string PredefinedExpr::ComputeName(IdentType IT, const Decl *CurrentDecl) {
       return FD->getNameAsString();
 
     SmallString<256> Name;
-    llvm::raw_svector_ostream Out(Name);
+    llvm37::raw_svector_ostream Out(Name);
 
     if (const CXXMethodDecl *MD = dyn_cast<CXXMethodDecl>(FD)) {
       if (MD->isVirtual() && IT != PrettyFunctionNoVirtual)
@@ -531,7 +531,7 @@ std::string PredefinedExpr::ComputeName(IdentType IT, const Decl *CurrentDecl) {
 
     PrintingPolicy Policy(Context.getLangOpts());
     std::string Proto;
-    llvm::raw_string_ostream POut(Proto);
+    llvm37::raw_string_ostream POut(Proto);
 
     const FunctionDecl *Decl = FD;
     if (const FunctionDecl* Pattern = FD->getTemplateInstantiationPattern())
@@ -594,7 +594,7 @@ std::string PredefinedExpr::ComputeName(IdentType IT, const Decl *CurrentDecl) {
     }
 
     std::string TemplateParams;
-    llvm::raw_string_ostream TOut(TemplateParams);
+    llvm37::raw_string_ostream TOut(TemplateParams);
     for (SpecsTy::reverse_iterator I = Specs.rbegin(), E = Specs.rend();
          I != E; ++I) {
       const TemplateParameterList *Params 
@@ -663,11 +663,11 @@ std::string PredefinedExpr::ComputeName(IdentType IT, const Decl *CurrentDecl) {
         const Decl *D = Decl::castFromDeclContext(DC);
         return ComputeName(IT, D);
       }
-    llvm_unreachable("CapturedDecl not inside a function or method");
+    llvm37_unreachable("CapturedDecl not inside a function or method");
   }
   if (const ObjCMethodDecl *MD = dyn_cast<ObjCMethodDecl>(CurrentDecl)) {
     SmallString<256> Name;
-    llvm::raw_svector_ostream Out(Name);
+    llvm37::raw_svector_ostream Out(Name);
     Out << (MD->isInstanceMethod() ? '-' : '+');
     Out << '[';
 
@@ -695,7 +695,7 @@ std::string PredefinedExpr::ComputeName(IdentType IT, const Decl *CurrentDecl) {
 }
 
 void APNumericStorage::setIntValue(const ASTContext &C,
-                                   const llvm::APInt &Val) {
+                                   const llvm37::APInt &Val) {
   if (hasAllocation())
     C.Deallocate(pVal);
 
@@ -711,7 +711,7 @@ void APNumericStorage::setIntValue(const ASTContext &C,
     VAL = 0;
 }
 
-IntegerLiteral::IntegerLiteral(const ASTContext &C, const llvm::APInt &V,
+IntegerLiteral::IntegerLiteral(const ASTContext &C, const llvm37::APInt &V,
                                QualType type, SourceLocation l)
   : Expr(IntegerLiteralClass, type, VK_RValue, OK_Ordinary, false, false,
          false, false),
@@ -723,7 +723,7 @@ IntegerLiteral::IntegerLiteral(const ASTContext &C, const llvm::APInt &V,
 }
 
 IntegerLiteral *
-IntegerLiteral::Create(const ASTContext &C, const llvm::APInt &V,
+IntegerLiteral::Create(const ASTContext &C, const llvm37::APInt &V,
                        QualType type, SourceLocation l) {
   return new (C) IntegerLiteral(C, V, type, l);
 }
@@ -733,7 +733,7 @@ IntegerLiteral::Create(const ASTContext &C, EmptyShell Empty) {
   return new (C) IntegerLiteral(Empty);
 }
 
-FloatingLiteral::FloatingLiteral(const ASTContext &C, const llvm::APFloat &V,
+FloatingLiteral::FloatingLiteral(const ASTContext &C, const llvm37::APFloat &V,
                                  bool isexact, QualType Type, SourceLocation L)
   : Expr(FloatingLiteralClass, Type, VK_RValue, OK_Ordinary, false, false,
          false, false), Loc(L) {
@@ -749,7 +749,7 @@ FloatingLiteral::FloatingLiteral(const ASTContext &C, EmptyShell Empty)
 }
 
 FloatingLiteral *
-FloatingLiteral::Create(const ASTContext &C, const llvm::APFloat &V,
+FloatingLiteral::Create(const ASTContext &C, const llvm37::APFloat &V,
                         bool isexact, QualType Type, SourceLocation L) {
   return new (C) FloatingLiteral(C, V, isexact, Type, L);
 }
@@ -759,48 +759,48 @@ FloatingLiteral::Create(const ASTContext &C, EmptyShell Empty) {
   return new (C) FloatingLiteral(C, Empty);
 }
 
-const llvm::fltSemantics &FloatingLiteral::getSemantics() const {
+const llvm37::fltSemantics &FloatingLiteral::getSemantics() const {
   switch(FloatingLiteralBits.Semantics) {
   case IEEEhalf:
-    return llvm::APFloat::IEEEhalf;
+    return llvm37::APFloat::IEEEhalf;
   case IEEEsingle:
-    return llvm::APFloat::IEEEsingle;
+    return llvm37::APFloat::IEEEsingle;
   case IEEEdouble:
-    return llvm::APFloat::IEEEdouble;
+    return llvm37::APFloat::IEEEdouble;
   case x87DoubleExtended:
-    return llvm::APFloat::x87DoubleExtended;
+    return llvm37::APFloat::x87DoubleExtended;
   case IEEEquad:
-    return llvm::APFloat::IEEEquad;
+    return llvm37::APFloat::IEEEquad;
   case PPCDoubleDouble:
-    return llvm::APFloat::PPCDoubleDouble;
+    return llvm37::APFloat::PPCDoubleDouble;
   }
-  llvm_unreachable("Unrecognised floating semantics");
+  llvm37_unreachable("Unrecognised floating semantics");
 }
 
-void FloatingLiteral::setSemantics(const llvm::fltSemantics &Sem) {
-  if (&Sem == &llvm::APFloat::IEEEhalf)
+void FloatingLiteral::setSemantics(const llvm37::fltSemantics &Sem) {
+  if (&Sem == &llvm37::APFloat::IEEEhalf)
     FloatingLiteralBits.Semantics = IEEEhalf;
-  else if (&Sem == &llvm::APFloat::IEEEsingle)
+  else if (&Sem == &llvm37::APFloat::IEEEsingle)
     FloatingLiteralBits.Semantics = IEEEsingle;
-  else if (&Sem == &llvm::APFloat::IEEEdouble)
+  else if (&Sem == &llvm37::APFloat::IEEEdouble)
     FloatingLiteralBits.Semantics = IEEEdouble;
-  else if (&Sem == &llvm::APFloat::x87DoubleExtended)
+  else if (&Sem == &llvm37::APFloat::x87DoubleExtended)
     FloatingLiteralBits.Semantics = x87DoubleExtended;
-  else if (&Sem == &llvm::APFloat::IEEEquad)
+  else if (&Sem == &llvm37::APFloat::IEEEquad)
     FloatingLiteralBits.Semantics = IEEEquad;
-  else if (&Sem == &llvm::APFloat::PPCDoubleDouble)
+  else if (&Sem == &llvm37::APFloat::PPCDoubleDouble)
     FloatingLiteralBits.Semantics = PPCDoubleDouble;
   else
-    llvm_unreachable("Unknown floating semantics");
+    llvm37_unreachable("Unknown floating semantics");
 }
 
 /// getValueAsApproximateDouble - This returns the value as an inaccurate
 /// double.  Note that this may cause loss of precision, but is useful for
 /// debugging dumps, etc.
 double FloatingLiteral::getValueAsApproximateDouble() const {
-  llvm::APFloat V = getValue();
+  llvm37::APFloat V = getValue();
   bool ignored;
-  V.convert(llvm::APFloat::IEEEdouble, llvm::APFloat::rmNearestTiesToEven,
+  V.convert(llvm37::APFloat::IEEEdouble, llvm37::APFloat::rmNearestTiesToEven,
             &ignored);
   return V.convertToDouble();
 }
@@ -840,7 +840,7 @@ StringLiteral *StringLiteral::Create(const ASTContext &C, StringRef Str,
   // any concatenated string tokens.
   void *Mem = C.Allocate(sizeof(StringLiteral)+
                          sizeof(SourceLocation)*(NumStrs-1),
-                         llvm::alignOf<StringLiteral>());
+                         llvm37::alignOf<StringLiteral>());
   StringLiteral *SL = new (Mem) StringLiteral(Ty);
 
   // OPTIMIZE: could allocate this appended to the StringLiteral.
@@ -858,7 +858,7 @@ StringLiteral *StringLiteral::CreateEmpty(const ASTContext &C,
                                           unsigned NumStrs) {
   void *Mem = C.Allocate(sizeof(StringLiteral)+
                          sizeof(SourceLocation)*(NumStrs-1),
-                         llvm::alignOf<StringLiteral>());
+                         llvm37::alignOf<StringLiteral>());
   StringLiteral *SL = new (Mem) StringLiteral(QualType());
   SL->CharByteWidth = 0;
   SL->Length = 0;
@@ -1075,13 +1075,13 @@ StringRef UnaryOperator::getOpcodeStr(Opcode Op) {
   case UO_Imag:    return "__imag";
   case UO_Extension: return "__extension__";
   }
-  llvm_unreachable("Unknown unary operator");
+  llvm37_unreachable("Unknown unary operator");
 }
 
 UnaryOperatorKind
 UnaryOperator::getOverloadedOpcode(OverloadedOperatorKind OO, bool Postfix) {
   switch (OO) {
-  default: llvm_unreachable("No unary operator for overloaded function");
+  default: llvm37_unreachable("No unary operator for overloaded function");
   case OO_PlusPlus:   return Postfix ? UO_PostInc : UO_PreInc;
   case OO_MinusMinus: return Postfix ? UO_PostDec : UO_PreDec;
   case OO_Amp:        return UO_AddrOf;
@@ -1395,7 +1395,7 @@ MemberExpr *MemberExpr::Create(
   else if (TemplateKWLoc.isValid())
     Size += ASTTemplateKWAndArgsInfo::sizeFor(0);
 
-  void *Mem = C.Allocate(Size, llvm::alignOf<MemberExpr>());
+  void *Mem = C.Allocate(Size, llvm37::alignOf<MemberExpr>());
   MemberExpr *E = new (Mem)
       MemberExpr(base, isarrow, OperatorLoc, memberdecl, nameinfo, ty, vk, ok);
 
@@ -1718,7 +1718,7 @@ const char *CastExpr::getCastKindName() const {
   // HLSL Change Ends
   }
 
-  llvm_unreachable("Unhandled cast kind!");
+  llvm37_unreachable("Unhandled cast kind!");
 }
 
 Expr *CastExpr::getSubExprAsWritten() {
@@ -1759,7 +1759,7 @@ CXXBaseSpecifier **CastExpr::path_buffer() {
 #define STMT(Type, Base)
 #include "clang/AST/StmtNodes.inc"
   default:
-    llvm_unreachable("non-cast expressions not possible here");
+    llvm37_unreachable("non-cast expressions not possible here");
   }
 }
 
@@ -1848,13 +1848,13 @@ StringRef BinaryOperator::getOpcodeStr(Opcode Op) {
   case BO_Comma:     return ",";
   }
 
-  llvm_unreachable("Invalid OpCode!");
+  llvm37_unreachable("Invalid OpCode!");
 }
 
 BinaryOperatorKind
 BinaryOperator::getOverloadedOpcode(OverloadedOperatorKind OO) {
   switch (OO) {
-  default: llvm_unreachable("Not an overloadable binary operator");
+  default: llvm37_unreachable("Not an overloadable binary operator");
   case OO_Plus: return BO_Add;
   case OO_Minus: return BO_Sub;
   case OO_Star: return BO_Mul;
@@ -2838,7 +2838,7 @@ bool Expr::isConstantInitializer(ASTContext &Ctx, bool IsForRef,
           const Expr *Elt = ILE->getInit(ElementNo++);
           if (Field->isBitField()) {
             // Bitfields have to evaluate to an integer.
-            llvm::APSInt ResultTmp;
+            llvm37::APSInt ResultTmp;
             if (!Elt->EvaluateAsInt(ResultTmp, Ctx)) {
               if (Culprit)
                 *Culprit = Elt;
@@ -2960,7 +2960,7 @@ bool Expr::HasSideEffects(const ASTContext &Ctx,
   #define STMT(Type, Base) case Type##Class:
   #define EXPR(Type, Base)
   #include "clang/AST/StmtNodes.inc"
-    llvm_unreachable("unexpected Expr kind");
+    llvm37_unreachable("unexpected Expr kind");
 
   case DependentScopeDeclRefExprClass:
   case CXXUnresolvedConstructExprClass:
@@ -2972,7 +2972,7 @@ bool Expr::HasSideEffects(const ASTContext &Ctx,
   case FunctionParmPackExprClass:
   case TypoExprClass:
   case CXXFoldExprClass:
-    llvm_unreachable("shouldn't see dependent / unresolved nodes here");
+    llvm37_unreachable("shouldn't see dependent / unresolved nodes here");
 
   case DeclRefExprClass:
   case ObjCIvarRefExprClass:
@@ -3264,7 +3264,7 @@ Expr::isNullPointerConstant(ASTContext &Ctx,
       (!Ctx.getLangOpts().CPlusPlus11 || Ctx.getLangOpts().MSVCCompat)) {
     switch (NPC) {
     case NPC_NeverValueDependent:
-      llvm_unreachable("Unexpected value dependent expression!");
+      llvm37_unreachable("Unexpected value dependent expression!");
     case NPC_ValueDependentIsNull:
       if (isTypeDependent() || getType()->isIntegralType(Ctx))
         return NPCK_ZeroExpression;
@@ -3509,7 +3509,7 @@ bool ExtVectorElementExpr::containsDuplicateElements() const {
   return false;
 }
 
-/// getEncodedElementAccess - We encode the fields as a llvm ConstantArray.
+/// getEncodedElementAccess - We encode the fields as a llvm37 ConstantArray.
 void ExtVectorElementExpr::getEncodedElementAccess(
                                   SmallVectorImpl<unsigned> &Elts) const {
   StringRef Comp = Accessor->getName();
@@ -3737,7 +3737,7 @@ ObjCMessageExpr *ObjCMessageExpr::alloc(const ASTContext &C,
   unsigned Size = sizeof(ObjCMessageExpr) + sizeof(void *) + 
     NumArgs * sizeof(Expr *) + NumStoredSelLocs * sizeof(SourceLocation);
   return (ObjCMessageExpr *)C.Allocate(Size,
-                                     llvm::AlignOf<ObjCMessageExpr>::Alignment);
+                                     llvm37::AlignOf<ObjCMessageExpr>::Alignment);
 }
 
 void ObjCMessageExpr::getSelectorLocs(
@@ -3759,7 +3759,7 @@ SourceRange ObjCMessageExpr::getReceiverRange() const {
     return getSuperLoc();
   }
 
-  llvm_unreachable("Invalid ReceiverKind!");
+  llvm37_unreachable("Invalid ReceiverKind!");
 }
 
 Selector ObjCMessageExpr::getSelector() const {
@@ -3780,7 +3780,7 @@ QualType ObjCMessageExpr::getReceiverType() const {
     return getSuperType();
   }
 
-  llvm_unreachable("unexpected receiver kind");
+  llvm37_unreachable("unexpected receiver kind");
 }
 
 ObjCInterfaceDecl *ObjCMessageExpr::getReceiverInterface() const {
@@ -3815,7 +3815,7 @@ StringRef ObjCBridgedCastExpr::getBridgeKindName() const {
     return "__bridge_retained";
   }
 
-  llvm_unreachable("Invalid BridgeKind!");
+  llvm37_unreachable("Invalid BridgeKind!");
 }
 
 ShuffleVectorExpr::ShuffleVectorExpr(const ASTContext &C, ArrayRef<Expr*> args,
@@ -4138,7 +4138,7 @@ PseudoObjectExpr *PseudoObjectExpr::Create(const ASTContext &Context,
                                            unsigned numSemanticExprs) {
   void *buffer = Context.Allocate(sizeof(PseudoObjectExpr) +
                                     (1 + numSemanticExprs) * sizeof(Expr*),
-                                  llvm::alignOf<PseudoObjectExpr>());
+                                  llvm37::alignOf<PseudoObjectExpr>());
   return new(buffer) PseudoObjectExpr(sh, numSemanticExprs);
 }
 
@@ -4167,7 +4167,7 @@ PseudoObjectExpr *PseudoObjectExpr::Create(const ASTContext &C, Expr *syntax,
 
   void *buffer = C.Allocate(sizeof(PseudoObjectExpr) +
                               (1 + semantics.size()) * sizeof(Expr*),
-                            llvm::alignOf<PseudoObjectExpr>());
+                            llvm37::alignOf<PseudoObjectExpr>());
   return new(buffer) PseudoObjectExpr(type, VK, syntax, semantics,
                                       resultIndex);
 }
@@ -4418,5 +4418,5 @@ unsigned AtomicExpr::getNumSubExprs(AtomicOp Op) {
   case AO__atomic_compare_exchange_n:
     return 6;
   }
-  llvm_unreachable("unknown atomic op");
+  llvm37_unreachable("unknown atomic op");
 }

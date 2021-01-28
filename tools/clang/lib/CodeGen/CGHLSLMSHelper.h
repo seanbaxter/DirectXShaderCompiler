@@ -4,8 +4,8 @@
 
 #include "clang/Basic/SourceLocation.h"
 
-#include "llvm/ADT/StringMap.h"
-#include "llvm/ADT/MapVector.h"
+#include "llvm37/ADT/StringMap.h"
+#include "llvm37/ADT/MapVector.h"
 
 #include "dxc/DXIL/DxilCBuffer.h"
 
@@ -19,7 +19,7 @@ class CodeGenModule;
 }
 }
 
-namespace llvm {
+namespace llvm37 {
 class Function;
 class Module;
 class Value;
@@ -46,13 +46,13 @@ namespace CGHLSLMSHelper {
 
 struct EntryFunctionInfo {
   clang::SourceLocation SL = clang::SourceLocation();
-  llvm::Function *Func = nullptr;
+  llvm37::Function *Func = nullptr;
 };
 
   // Map to save patch constant functions
 struct PatchConstantInfo {
   clang::SourceLocation SL = clang::SourceLocation();
-  llvm::Function *Func = nullptr;
+  llvm37::Function *Func = nullptr;
   std::uint32_t NumOverloads = 0;
 };
 
@@ -76,8 +76,8 @@ public:
   bool IsTBuf() { return bIsTBuf; }
   bool IsArray() { return bIsArray; }
   void SetIsArray() { bIsArray = true; }
-  llvm::Type *GetResultType() { return ResultTy; }
-  void SetResultType(llvm::Type *Ty) { ResultTy = Ty; }
+  llvm37::Type *GetResultType() { return ResultTy; }
+  void SetResultType(llvm37::Type *Ty) { ResultTy = Ty; }
 
 private:
   std::vector<std::unique_ptr<DxilResourceBase>>
@@ -85,7 +85,7 @@ private:
   bool bIsView;
   bool bIsTBuf;
   bool bIsArray;
-  llvm::Type *ResultTy;
+  llvm37::Type *ResultTy;
 };
 // Scope to help transform multiple returns.
 struct Scope {
@@ -97,9 +97,9 @@ struct Scope {
    FunctionScope,
  };
  ScopeKind kind;
- llvm::BasicBlock *EndScopeBB;
+ llvm37::BasicBlock *EndScopeBB;
  // Save loopContinueBB to create dxBreak.
- llvm::BasicBlock *loopContinueBB;
+ llvm37::BasicBlock *loopContinueBB;
  // For case like
  // if () {
  //   ...
@@ -119,38 +119,38 @@ struct Scope {
 class ScopeInfo {
 public:
   ScopeInfo(){}
-  ScopeInfo(llvm::Function *F);
-  void AddIf(llvm::BasicBlock *endIfBB);
-  void AddSwitch(llvm::BasicBlock *endSwitchBB);
-  void AddLoop(llvm::BasicBlock *loopContinue, llvm::BasicBlock *endLoopBB);
-  void AddRet(llvm::BasicBlock *bbWithRet);
+  ScopeInfo(llvm37::Function *F);
+  void AddIf(llvm37::BasicBlock *endIfBB);
+  void AddSwitch(llvm37::BasicBlock *endSwitchBB);
+  void AddLoop(llvm37::BasicBlock *loopContinue, llvm37::BasicBlock *endLoopBB);
+  void AddRet(llvm37::BasicBlock *bbWithRet);
   void EndScope(bool bScopeFinishedWithRet);
   Scope &GetScope(unsigned i);
-  const llvm::SmallVector<unsigned, 2> &GetRetScopes() { return rets; }
+  const llvm37::SmallVector<unsigned, 2> &GetRetScopes() { return rets; }
   void LegalizeWholeReturnedScope();
-  llvm::SmallVector<Scope, 16> &GetScopes() { return scopes; }
+  llvm37::SmallVector<Scope, 16> &GetScopes() { return scopes; }
   bool CanSkipStructurize();
 
 private:
-  void AddScope(Scope::ScopeKind k, llvm::BasicBlock *endScopeBB);
-  llvm::SmallVector<unsigned, 2> rets;
+  void AddScope(Scope::ScopeKind k, llvm37::BasicBlock *endScopeBB);
+  llvm37::SmallVector<unsigned, 2> rets;
   unsigned maxRetLevel;
   bool bAllReturnsInIf;
-  llvm::SmallVector<unsigned, 8> scopeStack;
+  llvm37::SmallVector<unsigned, 8> scopeStack;
   // save all scopes.
-  llvm::SmallVector<Scope, 16> scopes;
+  llvm37::SmallVector<Scope, 16> scopes;
 };
 
 // Map from value to resource properties.
 // This only collect object variables(global/local/parameter), not object fields inside struct.
 // Object fields inside struct is saved by TypeAnnotation.
 struct DxilObjectProperties {
-  bool AddResource(llvm::Value *V, const hlsl::DxilResourceProperties &RP);
-  bool IsResource(llvm::Value *V);
-  hlsl::DxilResourceProperties GetResource(llvm::Value *V);
+  bool AddResource(llvm37::Value *V, const hlsl::DxilResourceProperties &RP);
+  bool IsResource(llvm37::Value *V);
+  hlsl::DxilResourceProperties GetResource(llvm37::Value *V);
 
   // MapVector for deterministic iteration order.
-  llvm::MapVector<llvm::Value *, hlsl::DxilResourceProperties> resMap;
+  llvm37::MapVector<llvm37::Value *, hlsl::DxilResourceProperties> resMap;
 };
 
 // Align cbuffer offset in legacy mode (16 bytes per row).
@@ -160,49 +160,49 @@ unsigned AlignBufferOffsetInLegacy(unsigned offset, unsigned size,
 
 void FinishEntries(hlsl::HLModule &HLM, const EntryFunctionInfo &Entry,
                    clang::CodeGen::CodeGenModule &CGM,
-                   llvm::StringMap<EntryFunctionInfo> &entryFunctionMap,
-                   std::unordered_map<llvm::Function *,
+                   llvm37::StringMap<EntryFunctionInfo> &entryFunctionMap,
+                   std::unordered_map<llvm37::Function *,
                                       const clang::HLSLPatchConstantFuncAttr *>
                        &HSEntryPatchConstantFuncAttr,
-                   llvm::StringMap<PatchConstantInfo> &patchConstantFunctionMap,
-                   std::unordered_map<llvm::Function *,
+                   llvm37::StringMap<PatchConstantInfo> &patchConstantFunctionMap,
+                   std::unordered_map<llvm37::Function *,
                                       std::unique_ptr<hlsl::DxilFunctionProps>>
                        &patchConstantFunctionPropsMap);
 
 void FinishIntrinsics(
     hlsl::HLModule &HLM,
-    std::vector<std::pair<llvm::Function *, unsigned>> &intrinsicMap,
+    std::vector<std::pair<llvm37::Function *, unsigned>> &intrinsicMap,
     DxilObjectProperties &valToResPropertiesMap);
 
-void AddDxBreak(llvm::Module &M, const llvm::SmallVector<llvm::BranchInst*, 16> &DxBreaks);
+void AddDxBreak(llvm37::Module &M, const llvm37::SmallVector<llvm37::BranchInst*, 16> &DxBreaks);
 
 void ReplaceConstStaticGlobals(
-    std::unordered_map<llvm::GlobalVariable *, std::vector<llvm::Constant *>>
+    std::unordered_map<llvm37::GlobalVariable *, std::vector<llvm37::Constant *>>
         &staticConstGlobalInitListMap,
-    std::unordered_map<llvm::GlobalVariable *, llvm::Function *> &staticConstGlobalCtorMap);
+    std::unordered_map<llvm37::GlobalVariable *, llvm37::Function *> &staticConstGlobalCtorMap);
 
-void FinishClipPlane(hlsl::HLModule &HLM, std::vector<llvm::Function *> &clipPlaneFuncList,
-                    std::unordered_map<llvm::Value *, llvm::DebugLoc> &debugInfoMap,
+void FinishClipPlane(hlsl::HLModule &HLM, std::vector<llvm37::Function *> &clipPlaneFuncList,
+                    std::unordered_map<llvm37::Value *, llvm37::DebugLoc> &debugInfoMap,
                     clang::CodeGen::CodeGenModule &CGM);
 
 void AddRegBindingsForResourceInConstantBuffer(
     hlsl::HLModule &HLM,
-    llvm::DenseMap<llvm::Constant *,
-                   llvm::SmallVector<std::pair<hlsl::DXIL::ResourceClass, unsigned>,
+    llvm37::DenseMap<llvm37::Constant *,
+                   llvm37::SmallVector<std::pair<hlsl::DXIL::ResourceClass, unsigned>,
                                      1>> &constantRegBindingMap);
 
 void FinishCBuffer(
-    hlsl::HLModule &HLM, llvm::Type *CBufferType,
-    std::unordered_map<llvm::Constant *, hlsl::DxilFieldAnnotation>
+    hlsl::HLModule &HLM, llvm37::Type *CBufferType,
+    std::unordered_map<llvm37::Constant *, hlsl::DxilFieldAnnotation>
         &AnnotationMap);
 
-void ProcessCtorFunctions(llvm::Module &M,
-                          llvm::SmallVector<llvm::Function *, 2> &Ctors,
-                          llvm::Function *Entry,
-                          llvm::Function *PatchConstantFn);
+void ProcessCtorFunctions(llvm37::Module &M,
+                          llvm37::SmallVector<llvm37::Function *, 2> &Ctors,
+                          llvm37::Function *Entry,
+                          llvm37::Function *PatchConstantFn);
 
-void CollectCtorFunctions(llvm::Module &M, llvm::StringRef globalName,
-                          llvm::SmallVector<llvm::Function *, 2> &Ctors,
+void CollectCtorFunctions(llvm37::Module &M, llvm37::StringRef globalName,
+                          llvm37::SmallVector<llvm37::Function *, 2> &Ctors,
                           clang::CodeGen::CodeGenModule &CGM);
 
 void TranslateRayQueryConstructor(hlsl::HLModule &HLM);
@@ -210,16 +210,16 @@ void TranslateRayQueryConstructor(hlsl::HLModule &HLM);
 void UpdateLinkage(
     hlsl::HLModule &HLM, clang::CodeGen::CodeGenModule &CGM,
     hlsl::dxilutil::ExportMap &exportMap,
-    llvm::StringMap<EntryFunctionInfo> &entryFunctionMap,
-    llvm::StringMap<PatchConstantInfo> &patchConstantFunctionMap);
+    llvm37::StringMap<EntryFunctionInfo> &entryFunctionMap,
+    llvm37::StringMap<PatchConstantInfo> &patchConstantFunctionMap);
 
-void StructurizeMultiRet(llvm::Module &M,
+void StructurizeMultiRet(llvm37::Module &M,
                          clang::CodeGen::CodeGenModule &CGM,
-                         llvm::DenseMap<llvm::Function *, ScopeInfo> &ScopeMap,
+                         llvm37::DenseMap<llvm37::Function *, ScopeInfo> &ScopeMap,
                          bool bWaveEnabledStage,
-                         llvm::SmallVector<llvm::BranchInst *, 16> &DxBreaks);
+                         llvm37::SmallVector<llvm37::BranchInst *, 16> &DxBreaks);
 
-llvm::Value *TryEvalIntrinsic(llvm::CallInst *CI, hlsl::IntrinsicOp intriOp, unsigned hlslVersion);
-void SimpleTransformForHLDXIR(llvm::Module *pM);
+llvm37::Value *TryEvalIntrinsic(llvm37::CallInst *CI, hlsl::IntrinsicOp intriOp, unsigned hlslVersion);
+void SimpleTransformForHLDXIR(llvm37::Module *pM);
 void ExtensionCodeGen(hlsl::HLModule &HLM, clang::CodeGen::CodeGenModule &CGM);
 } // namespace CGHLSLMSHelper

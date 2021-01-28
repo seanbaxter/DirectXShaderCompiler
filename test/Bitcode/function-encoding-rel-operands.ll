@@ -1,6 +1,6 @@
 ; Basic sanity test to check that instruction operands are encoded with
 ; relative IDs.
-; RUN: llvm-as < %s | llvm-bcanalyzer -dump | FileCheck %s
+; RUN: llvm37-as < %s | llvm37-bcanalyzer -dump | FileCheck %s
 ; RUN: verify-uselistorder < %s
 
 ; CHECK: FUNCTION_BLOCK
@@ -49,4 +49,4 @@ entry:
   ret i1 %2
 }
 
-; CHECK: Stream type: LLVM IR
+; CHECK: Stream type: LLVM37 IR

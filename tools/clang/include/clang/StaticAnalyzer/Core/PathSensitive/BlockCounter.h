@@ -1,6 +1,6 @@
 //==- BlockCounter.h - ADT for counting block visits ---------------*- C++ -*-//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -13,10 +13,10 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_STATICANALYZER_CORE_PATHSENSITIVE_BLOCKCOUNTER_H
-#define LLVM_CLANG_STATICANALYZER_CORE_PATHSENSITIVE_BLOCKCOUNTER_H
+#ifndef LLVM37_CLANG_STATICANALYZER_CORE_PATHSENSITIVE_BLOCKCOUNTER_H
+#define LLVM37_CLANG_STATICANALYZER_CORE_PATHSENSITIVE_BLOCKCOUNTER_H
 
-#include "llvm/Support/Allocator.h"
+#include "llvm37/Support/Allocator.h"
 
 namespace clang {
 
@@ -41,7 +41,7 @@ public:
   class Factory {
     void *F;
   public:
-    Factory(llvm::BumpPtrAllocator& Alloc);
+    Factory(llvm37::BumpPtrAllocator& Alloc);
     ~Factory();
 
     BlockCounter GetEmptyCounter();

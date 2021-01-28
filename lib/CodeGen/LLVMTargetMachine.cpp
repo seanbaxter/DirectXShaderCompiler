@@ -1,39 +1,39 @@
-//===-- LLVMTargetMachine.cpp - Implement the LLVMTargetMachine class -----===//
+//===-- LLVM37TargetMachine.cpp - Implement the LLVM37TargetMachine class -----===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 //
-// This file implements the LLVMTargetMachine class.
+// This file implements the LLVM37TargetMachine class.
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Target/TargetMachine.h"
-#include "llvm/Analysis/Passes.h"
-#include "llvm/CodeGen/AsmPrinter.h"
-#include "llvm/CodeGen/BasicTTIImpl.h"
-#include "llvm/CodeGen/MachineFunctionAnalysis.h"
-#include "llvm/CodeGen/MachineModuleInfo.h"
-#include "llvm/CodeGen/Passes.h"
-#include "llvm/IR/IRPrintingPasses.h"
-#include "llvm/IR/LegacyPassManager.h"
-#include "llvm/IR/Verifier.h"
-#include "llvm/MC/MCAsmInfo.h"
-#include "llvm/MC/MCContext.h"
-#include "llvm/MC/MCInstrInfo.h"
-#include "llvm/MC/MCStreamer.h"
-#include "llvm/MC/MCSubtargetInfo.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/FormattedStream.h"
-#include "llvm/Support/TargetRegistry.h"
-#include "llvm/Target/TargetLoweringObjectFile.h"
-#include "llvm/Target/TargetOptions.h"
-#include "llvm/Transforms/Scalar.h"
-using namespace llvm;
+#include "llvm37/Target/TargetMachine.h"
+#include "llvm37/Analysis/Passes.h"
+#include "llvm37/CodeGen/AsmPrinter.h"
+#include "llvm37/CodeGen/BasicTTIImpl.h"
+#include "llvm37/CodeGen/MachineFunctionAnalysis.h"
+#include "llvm37/CodeGen/MachineModuleInfo.h"
+#include "llvm37/CodeGen/Passes.h"
+#include "llvm37/IR/IRPrintingPasses.h"
+#include "llvm37/IR/LegacyPassManager.h"
+#include "llvm37/IR/Verifier.h"
+#include "llvm37/MC/MCAsmInfo.h"
+#include "llvm37/MC/MCContext.h"
+#include "llvm37/MC/MCInstrInfo.h"
+#include "llvm37/MC/MCStreamer.h"
+#include "llvm37/MC/MCSubtargetInfo.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/FormattedStream.h"
+#include "llvm37/Support/TargetRegistry.h"
+#include "llvm37/Target/TargetLoweringObjectFile.h"
+#include "llvm37/Target/TargetOptions.h"
+#include "llvm37/Transforms/Scalar.h"
+using namespace llvm37;
 
 // Enable or disable FastISel. Both options are needed, because
 // FastISel is enabled by default with -fast, and we wish to be
@@ -42,7 +42,7 @@ static cl::opt<cl::boolOrDefault>
 EnableFastISelOption("fast-isel", cl::Hidden,
   cl::desc("Enable the \"fast\" instruction selector"));
 
-void LLVMTargetMachine::initAsmInfo() {
+void LLVM37TargetMachine::initAsmInfo() {
   MRI = TheTarget.createMCRegInfo(getTargetTriple().str());
   MII = TheTarget.createMCInstrInfo();
   // FIXME: Having an MCSubtargetInfo on the target machine is a hack due
@@ -54,7 +54,7 @@ void LLVMTargetMachine::initAsmInfo() {
 
   MCAsmInfo *TmpAsmInfo =
       TheTarget.createMCAsmInfo(*MRI, getTargetTriple().str());
-  // TargetSelect.h moved to a different directory between LLVM 2.9 and 3.0,
+  // TargetSelect.h moved to a different directory between LLVM37 2.9 and 3.0,
   // and if the old one gets included then MCAsmInfo will be NULL and
   // we'll crash later.
   // Provide the user with a useful error message about what's wrong.
@@ -71,7 +71,7 @@ void LLVMTargetMachine::initAsmInfo() {
   AsmInfo = TmpAsmInfo;
 }
 
-LLVMTargetMachine::LLVMTargetMachine(const Target &T,
+LLVM37TargetMachine::LLVM37TargetMachine(const Target &T,
                                      StringRef DataLayoutString,
                                      const Triple &TT, StringRef CPU,
                                      StringRef FS, TargetOptions Options,
@@ -81,7 +81,7 @@ LLVMTargetMachine::LLVMTargetMachine(const Target &T,
   CodeGenInfo = T.createMCCodeGenInfo(TT.str(), RM, CM, OL);
 }
 
-TargetIRAnalysis LLVMTargetMachine::getTargetIRAnalysis() {
+TargetIRAnalysis LLVM37TargetMachine::getTargetIRAnalysis() {
   return TargetIRAnalysis([this](Function &F) {
     return TargetTransformInfo(BasicTTIImpl(this, F));
   });
@@ -89,7 +89,7 @@ TargetIRAnalysis LLVMTargetMachine::getTargetIRAnalysis() {
 
 /// addPassesToX helper drives creation and initialization of TargetPassConfig.
 static MCContext *
-addPassesToGenerateCode(LLVMTargetMachine *TM, PassManagerBase &PM,
+addPassesToGenerateCode(LLVM37TargetMachine *TM, PassManagerBase &PM,
                         bool DisableVerify, AnalysisID StartBefore,
                         AnalysisID StartAfter, AnalysisID StopAfter,
                         MachineFunctionInitializer *MFInitializer = nullptr) {
@@ -141,7 +141,7 @@ addPassesToGenerateCode(LLVMTargetMachine *TM, PassManagerBase &PM,
   return &MMI->getContext();
 }
 
-bool LLVMTargetMachine::addPassesToEmitFile(
+bool LLVM37TargetMachine::addPassesToEmitFile(
     PassManagerBase &PM, raw_pwrite_stream &Out, CodeGenFileType FileType,
     bool DisableVerify, AnalysisID StartBefore, AnalysisID StartAfter,
     AnalysisID StopAfter, MachineFunctionInitializer *MFInitializer) {
@@ -179,7 +179,7 @@ bool LLVMTargetMachine::addPassesToEmitFile(
 
     MCAsmBackend *MAB =
         getTarget().createMCAsmBackend(MRI, getTargetTriple().str(), TargetCPU);
-    auto FOut = llvm::make_unique<formatted_raw_ostream>(Out);
+    auto FOut = llvm37::make_unique<formatted_raw_ostream>(Out);
     MCStreamer *S = getTarget().createAsmStreamer(
         *Context, std::move(FOut), Options.MCOptions.AsmVerbose,
         Options.MCOptions.MCUseDwarfDirectory, InstPrinter, MCE, MAB,
@@ -228,7 +228,7 @@ bool LLVMTargetMachine::addPassesToEmitFile(
 /// code is not supported. It fills the MCContext Ctx pointer which can be
 /// used to build custom MCStreamer.
 ///
-bool LLVMTargetMachine::addPassesToEmitMC(PassManagerBase &PM, MCContext *&Ctx,
+bool LLVM37TargetMachine::addPassesToEmitMC(PassManagerBase &PM, MCContext *&Ctx,
                                           raw_pwrite_stream &Out,
                                           bool DisableVerify) {
   // Add common CodeGen passes.

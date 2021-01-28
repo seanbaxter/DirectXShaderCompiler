@@ -1,6 +1,6 @@
 //===- unittests/AST/NamedDeclPrinterTest.cpp --- NamedDecl printer tests -===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -19,7 +19,7 @@
 #include "clang/AST/ASTContext.h"
 #include "clang/ASTMatchers/ASTMatchFinder.h"
 #include "clang/Tooling/Tooling.h"
-#include "llvm/ADT/SmallString.h"
+#include "llvm37/ADT/SmallString.h"
 #include "gtest/gtest.h"
 
 using namespace clang;
@@ -45,7 +45,7 @@ public:
     if (NumFoundDecls > 1)
       return;
 
-    llvm::raw_svector_ostream Out(Printed);
+    llvm37::raw_svector_ostream Out(Printed);
     PrintingPolicy Policy = Result.Context->getPrintingPolicy();
     Policy.SuppressUnwrittenScope = SuppressUnwrittenScope;
     ND->printQualifiedName(Out, Policy);

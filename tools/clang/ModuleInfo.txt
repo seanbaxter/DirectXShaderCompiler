@@ -1,5 +1,5 @@
-# This file provides information for llvm-top
-DepModule: llvm 
+# This file provides information for llvm37-top
+DepModule: llvm37 
 ConfigCmd:
 ConfigTest:
 BuildCmd:

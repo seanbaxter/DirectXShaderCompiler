@@ -36,7 +36,7 @@ for.end:                                          ; preds = %for.body, %entry
   ret i32 %sum.0.lcssa, !dbg !10
 }
 
-!llvm.module.flags = !{!0, !1, !2}
+!llvm37.module.flags = !{!0, !1, !2}
 !0 = !{i32 2, !"Dwarf Version", i32 4}
 !1 = !{i32 2, !"Debug Info Version", i32 3}
 !2 = !{i32 1, !"PIC Level", i32 2}

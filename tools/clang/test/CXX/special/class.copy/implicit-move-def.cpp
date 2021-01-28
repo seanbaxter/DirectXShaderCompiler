@@ -1,6 +1,6 @@
-// FIXME: %clang_cc1 -emit-llvm -triple %itanium_abi_triple -o - -std=c++11 %s | FileCheck -check-prefix=CHECK %s
-// RUN: %clang_cc1 -emit-llvm -triple %itanium_abi_triple -o - -std=c++11 %s | FileCheck -check-prefix=CHECK-ASSIGN %s
-// RUN: %clang_cc1 -emit-llvm -triple %itanium_abi_triple -o - -std=c++11 %s | FileCheck -check-prefix=CHECK-CTOR %s
+// FIXME: %clang_cc1 -emit-llvm37 -triple %itanium_abi_triple -o - -std=c++11 %s | FileCheck -check-prefix=CHECK %s
+// RUN: %clang_cc1 -emit-llvm37 -triple %itanium_abi_triple -o - -std=c++11 %s | FileCheck -check-prefix=CHECK-ASSIGN %s
+// RUN: %clang_cc1 -emit-llvm37 -triple %itanium_abi_triple -o - -std=c++11 %s | FileCheck -check-prefix=CHECK-CTOR %s
 
 // construct
 
@@ -65,7 +65,7 @@ struct I {
 // CHECK: define void @_Z1hv() nounwind {
 void h() {
   I i;
-  // CHECK: call void @llvm.memcpy.
+  // CHECK: call void @llvm37.memcpy.
   i = I();
   // CHECK-NEXT: ret void
 }

@@ -9,7 +9,7 @@ set GMAKE_OPTS = ""
 set DEBUG = 0
 
 ## Search path for automatically finding the obj-root to use.
-## Note: The src root directory ${LLVMDIR} will be prepended to this path later.
+## Note: The src root directory ${LLVM37DIR} will be prepended to this path later.
 ## 
 set OBJROOTDIRLIST = ( )
 
@@ -48,7 +48,7 @@ while ( !( $?options_done ) && ($#argv > 0))
 end
 
 if ($#argv > 1) then
-    echo 'ERROR: More than one tool is not supported by "makellvm"'
+    echo 'ERROR: More than one tool is not supported by "makellvm37"'
     usage
 endif
 if ($#argv > 0) then
@@ -58,7 +58,7 @@ if ($DEBUG) then
     echo "DEBUG: EXEC = $EXEC"
 endif
 
-## Compute LLVMDIR: the root of the current LLVM tree.
+## Compute LLVM37DIR: the root of the current LLVM37 tree.
 ## It is recorded in the variable LEVEL in Makefile, to compute it
 ## 
 if (! $?MFILE) then
@@ -78,20 +78,20 @@ if (! -f $MFILE) then
     exit 1
 endif
 
-set LLVMDIR = `awk '/LEVEL[ 	]*=/ {print $NF}' $MFILE`
+set LLVM37DIR = `awk '/LEVEL[ 	]*=/ {print $NF}' $MFILE`
 if ($DEBUG) then
-    echo "DEBUG: LLVMDIR = $LLVMDIR"
+    echo "DEBUG: LLVM37DIR = $LLVM37DIR"
 endif
 
-if ($#LLVMDIR == 0 || ! -d "$LLVMDIR") then
-    echo "Unable to find LLVM src-root directory or directory is invalid."
-    echo "Are you within a valid LLVM directory for running gmake?"
+if ($#LLVM37DIR == 0 || ! -d "$LLVM37DIR") then
+    echo "Unable to find LLVM37 src-root directory or directory is invalid."
+    echo "Are you within a valid LLVM37 directory for running gmake?"
     exit 1
 endif
 
 ## Try to determine the obj-root directory automatically if not specified
 ## 
-set OBJROOTDIRLIST = ( ${LLVMDIR} $OBJROOTDIRLIST )	## add src dir
+set OBJROOTDIRLIST = ( ${LLVM37DIR} $OBJROOTDIRLIST )	## add src dir
 if ($?OBJROOT == 0) then
     ## Try to determine object root directory by looking for Makefile.config
     foreach objdir ( $OBJROOTDIRLIST )
@@ -108,12 +108,12 @@ if ($?OBJROOT == 0) then
     endif
     echo "Using OBJ-ROOT = ${OBJROOT} (specify '-obj obj-root' to override)."
 endif
-if (${OBJROOT} == ${LLVMDIR}) then
+if (${OBJROOT} == ${LLVM37DIR}) then
     # run make in the source directory itself
     set BUILDROOT = .
 else
     # run make in the in the obj-root tree, in the directory for $cwd
-    set SRCROOT = `sh -c "cd $LLVMDIR; pwd | sed 's/\//\\\//g'"` 
+    set SRCROOT = `sh -c "cd $LLVM37DIR; pwd | sed 's/\//\\\//g'"` 
     set CURSRCDIR = `echo $cwd | sed -e "s/${SRCROOT}//"`
     set BUILDROOT = ${OBJROOT}/${CURSRCDIR}
     unset SRCROOT CURSRCDIR
@@ -127,7 +127,7 @@ if (! -d $BUILDROOT) then
 endif
 cd $BUILDROOT 
 
-set CMD = "make $GMAKE_OPTS && (cd $LLVMDIR/tools/$EXEC && make $GMAKE_OPTS)"
+set CMD = "make $GMAKE_OPTS && (cd $LLVM37DIR/tools/$EXEC && make $GMAKE_OPTS)"
 
 if ($doit == 1) then
     csh -f -c "$CMD"

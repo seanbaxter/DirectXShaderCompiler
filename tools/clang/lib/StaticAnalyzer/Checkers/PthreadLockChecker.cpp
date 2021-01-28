@@ -1,6 +1,6 @@
 //===--- PthreadLockChecker.cpp - Check for locking problems ---*- C++ -*--===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -18,7 +18,7 @@
 #include "clang/StaticAnalyzer/Core/CheckerManager.h"
 #include "clang/StaticAnalyzer/Core/PathSensitive/CheckerContext.h"
 #include "clang/StaticAnalyzer/Core/PathSensitive/ProgramStateTrait.h"
-#include "llvm/ADT/ImmutableList.h"
+#include "llvm37/ADT/ImmutableList.h"
 
 using namespace clang;
 using namespace ento;
@@ -44,7 +44,7 @@ public:
   bool isUnlocked() const { return K == Unlocked; }
   bool isDestroyed() const { return K == Destroyed; }
 
-  void Profile(llvm::FoldingSetNodeID &ID) const {
+  void Profile(llvm37::FoldingSetNodeID &ID) const {
     ID.AddInteger(K);
   }
 };
@@ -145,7 +145,7 @@ void PthreadLockChecker::AcquireLock(CheckerContext &C, const CallExpr *CE,
       ExplodedNode *N = C.generateSink();
       if (!N)
         return;
-      auto report = llvm::make_unique<BugReport>(
+      auto report = llvm37::make_unique<BugReport>(
           *BT_doublelock, "This lock has already been acquired", N);
       report->addRange(CE->getArg(0)->getSourceRange());
       C.emitReport(std::move(report));
@@ -168,7 +168,7 @@ void PthreadLockChecker::AcquireLock(CheckerContext &C, const CallExpr *CE,
       std::tie(lockSucc, lockFail) = state->assume(retVal);
       break;
     default:
-      llvm_unreachable("Unknown tryLock locking semantics");
+      llvm37_unreachable("Unknown tryLock locking semantics");
     }
     assert(lockFail && lockSucc);
     C.addTransition(lockFail);
@@ -207,7 +207,7 @@ void PthreadLockChecker::ReleaseLock(CheckerContext &C, const CallExpr *CE,
       ExplodedNode *N = C.generateSink();
       if (!N)
         return;
-      auto Report = llvm::make_unique<BugReport>(
+      auto Report = llvm37::make_unique<BugReport>(
           *BT_doubleunlock, "This lock has already been unlocked", N);
       Report->addRange(CE->getArg(0)->getSourceRange());
       C.emitReport(std::move(Report));
@@ -230,7 +230,7 @@ void PthreadLockChecker::ReleaseLock(CheckerContext &C, const CallExpr *CE,
       ExplodedNode *N = C.generateSink();
       if (!N)
         return;
-      auto report = llvm::make_unique<BugReport>(
+      auto report = llvm37::make_unique<BugReport>(
           *BT_lor, "This was not the most recently acquired lock. Possible "
                    "lock order reversal", N);
       report->addRange(CE->getArg(0)->getSourceRange());
@@ -275,7 +275,7 @@ void PthreadLockChecker::DestroyLock(CheckerContext &C, const CallExpr *CE,
   ExplodedNode *N = C.generateSink();
   if (!N)
     return;
-  auto Report = llvm::make_unique<BugReport>(*BT_destroylock, Message, N);
+  auto Report = llvm37::make_unique<BugReport>(*BT_destroylock, Message, N);
   Report->addRange(CE->getArg(0)->getSourceRange());
   C.emitReport(std::move(Report));
 }
@@ -310,7 +310,7 @@ void PthreadLockChecker::InitLock(CheckerContext &C, const CallExpr *CE,
   ExplodedNode *N = C.generateSink();
   if (!N)
     return;
-  auto Report = llvm::make_unique<BugReport>(*BT_initlock, Message, N);
+  auto Report = llvm37::make_unique<BugReport>(*BT_initlock, Message, N);
   Report->addRange(CE->getArg(0)->getSourceRange());
   C.emitReport(std::move(Report));
 }
@@ -323,7 +323,7 @@ void PthreadLockChecker::reportUseDestroyedBug(CheckerContext &C,
   ExplodedNode *N = C.generateSink();
   if (!N)
     return;
-  auto Report = llvm::make_unique<BugReport>(
+  auto Report = llvm37::make_unique<BugReport>(
       *BT_destroylock, "This lock has already been destroyed", N);
   Report->addRange(CE->getArg(0)->getSourceRange());
   C.emitReport(std::move(Report));

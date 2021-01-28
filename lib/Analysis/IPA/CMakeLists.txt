@@ -1,4 +1,4 @@
-add_llvm_library(LLVMipa
+add_llvm_library(LLVM37ipa
   CallGraph.cpp
   CallGraphSCCPass.cpp
   CallPrinter.cpp
@@ -7,4 +7,4 @@ add_llvm_library(LLVMipa
   InlineCost.cpp
   )
 
-add_dependencies(LLVMipa intrinsics_gen)
+add_dependencies(LLVM37ipa intrinsics_gen)

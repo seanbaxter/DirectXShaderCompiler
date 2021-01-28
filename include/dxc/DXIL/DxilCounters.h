@@ -13,7 +13,7 @@
 
 #include <stdint.h>
 
-namespace llvm {
+namespace llvm37 {
   class Module;
   class StringRef;
 }
@@ -61,7 +61,7 @@ struct DxilCounters {
   }
 };
 
-void CountInstructions(llvm::Module &M, DxilCounters& counters);
-uint32_t *LookupByName(llvm::StringRef name, DxilCounters& counters);
+void CountInstructions(llvm37::Module &M, DxilCounters& counters);
+uint32_t *LookupByName(llvm37::StringRef name, DxilCounters& counters);
 
 } // namespace hlsl

@@ -1,5 +1,5 @@
-; RUN: llvm-as < %s | llvm-dis > %t
-; RUN: llvm-as < %t | llvm-dis > %t2
+; RUN: llvm37-as < %s | llvm37-dis > %t
+; RUN: llvm37-as < %t | llvm37-dis > %t2
 ; RUN: diff %t %t2
 ; ModuleID = '<stdin>'
 target datalayout = "e-p:32:32:32-i1:8:8-i8:8:8-i16:16:16-i32:32:32-i64:32:64-f32:32:32-f64:32:64-v64:64:64-v128:128:128-a0:0:64"

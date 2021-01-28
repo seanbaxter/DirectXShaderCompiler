@@ -1,6 +1,6 @@
-//===- llvm/unittest/ADT/SmallStringTest.cpp ------------------------------===//
+//===- llvm37/unittest/ADT/SmallStringTest.cpp ------------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,13 +11,13 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/ADT/SmallString.h"
+#include "llvm37/ADT/SmallString.h"
 #include "gtest/gtest.h"
 #include <climits>
 #include <cstring>
 #include <stdarg.h>
 
-using namespace llvm;
+using namespace llvm37;
 
 namespace {
 
@@ -183,7 +183,7 @@ TEST(StringRefTest, Comparisons) {
   EXPECT_EQ( 0, SmallString<10>("10").compare_numeric("10"));
   EXPECT_EQ( 0, SmallString<10>("10a").compare_numeric("10a"));
   EXPECT_EQ( 1, SmallString<10>("2").compare_numeric("1"));
-  EXPECT_EQ( 0, SmallString<10>("llvm_v1i64_ty").compare_numeric("llvm_v1i64_ty"));
+  EXPECT_EQ( 0, SmallString<10>("llvm37_v1i64_ty").compare_numeric("llvm37_v1i64_ty"));
   EXPECT_EQ( 1, SmallString<10>("\xFF").compare_numeric("\1"));
   EXPECT_EQ( 1, SmallString<10>("V16").compare_numeric("V1_q0"));
   EXPECT_EQ(-1, SmallString<10>("V1_q0").compare_numeric("V16"));

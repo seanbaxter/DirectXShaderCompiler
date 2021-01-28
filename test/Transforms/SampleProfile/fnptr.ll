@@ -124,8 +124,8 @@ declare i32 @rand() #1
 ; Function Attrs: nounwind
 declare i32 @printf(i8* nocapture readonly, ...) #1
 
-!llvm.module.flags = !{!0}
-!llvm.ident = !{!1}
+!llvm37.module.flags = !{!0}
+!llvm37.ident = !{!1}
 
 !0 = !{i32 2, !"Debug Info Version", i32 3}
 !1 = !{!"clang version 3.6.0 "}

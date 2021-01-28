@@ -1,6 +1,6 @@
 //=- NSAutoreleasePoolChecker.cpp --------------------------------*- C++ -*-==//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -68,7 +68,7 @@ void NSAutoreleasePoolChecker::checkPreObjCMessage(const ObjCMethodCall &msg,
     return;
   }
 
-  auto Report = llvm::make_unique<BugReport>(
+  auto Report = llvm37::make_unique<BugReport>(
       *BT, "Use -drain instead of -release when using NSAutoreleasePool and "
            "garbage collection", N);
   Report->addRange(msg.getSourceRange());

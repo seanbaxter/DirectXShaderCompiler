@@ -1,6 +1,6 @@
 //===--- StmtVisitor.h - Visitor for Stmt subclasses ------------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,8 +11,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_AST_STMTVISITOR_H
-#define LLVM_CLANG_AST_STMTVISITOR_H
+#ifndef LLVM37_CLANG_AST_STMTVISITOR_H
+#define LLVM37_CLANG_AST_STMTVISITOR_H
 
 #include "clang/AST/ExprCXX.h"
 #include "clang/AST/ExprObjC.h"
@@ -39,7 +39,7 @@ public:
   RetTy Visit(PTR(Stmt) S) {
 
     // If we have a binary expr, dispatch to the subcode of the binop.  A smart
-    // optimizer (e.g. LLVM) will fold this comparison into the switch stmt
+    // optimizer (e.g. LLVM37) will fold this comparison into the switch stmt
     // below.
     if (PTR(BinaryOperator) BinOp = dyn_cast<BinaryOperator>(S)) {
       switch (BinOp->getOpcode()) {
@@ -98,7 +98,7 @@ public:
 
     // Top switch stmt: dispatch to VisitFooStmt for each FooStmt.
     switch (S->getStmtClass()) {
-    default: llvm_unreachable("Unknown stmt kind!");
+    default: llvm37_unreachable("Unknown stmt kind!");
 #define ABSTRACT_STMT(STMT)
 #define STMT(CLASS, PARENT)                              \
     case Stmt::CLASS ## Class: DISPATCH(CLASS, CLASS);
@@ -201,7 +201,7 @@ public:
   RetTy Visit(PTR(OMPClause) S) {
     // Top switch clause: visit each OMPClause.
     switch (S->getClauseKind()) {
-    default: llvm_unreachable("Unknown clause kind!");
+    default: llvm37_unreachable("Unknown clause kind!");
 #define OPENMP_CLAUSE(Name, Class)                              \
     case OMPC_ ## Name : return Visit ## Class(static_cast<PTR(Class)>(S));
 #include "clang/Basic/OpenMPKinds.def"

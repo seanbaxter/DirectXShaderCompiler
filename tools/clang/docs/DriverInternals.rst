@@ -42,9 +42,9 @@ Flexible
 --------
 
 The driver was designed to be flexible and easily accommodate new uses
-as we grow the clang and LLVM infrastructure. As one example, the driver
+as we grow the clang and LLVM37 infrastructure. As one example, the driver
 can easily support the introduction of tools which have an integrated
-assembler; something we hope to add to LLVM in the future.
+assembler; something we hope to add to LLVM37 in the future.
 
 Similarly, most of the driver functionality is kept in a library which
 can be used to build other tools which want to implement or accept a gcc

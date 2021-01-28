@@ -9,7 +9,7 @@ DirectXShaderCompiler on Linux & macOS
 Introduction
 ============
 
-DirectXShaderCompiler (DXC) is based on LLVM/Clang, which is originally
+DirectXShaderCompiler (DXC) is based on LLVM37/Clang, which is originally
 cross-platform. However, to support HLSL, certain Windows specific techniques
 (like COM, SAL, etc.) are introduced to solve technical issues on the Windows
 platform, which also makes DXC not compilable/runnable on non-Windows platforms.
@@ -77,7 +77,7 @@ Please make sure you have the following resources before building:
 - Either of gcc/g++ or clang/clang++ compilers. Minimum supported version:
 
   - `GCC <https://gcc.gnu.org/releases.html>`_ version 5.5 or higher.
-  - `Clang <http://releases.llvm.org/>`_ version 3.8 or higher.
+  - `Clang <http://releases.llvm37.org/>`_ version 3.8 or higher.
 
 
 Building DXC

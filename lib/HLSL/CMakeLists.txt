@@ -1,11 +1,11 @@
 # Copyright (C) Microsoft Corporation. All rights reserved.
 # This file is distributed under the University of Illinois Open Source License. See LICENSE.TXT for details.
-set(LLVM_LINK_COMPONENTS
-  ${LLVM_TARGETS_TO_BUILD}
+set(LLVM37_LINK_COMPONENTS
+  ${LLVM37_TARGETS_TO_BUILD}
   passprinters
 )
 
-add_llvm_library(LLVMHLSL
+add_llvm_library(LLVM37HLSL
   ComputeViewIdState.cpp
   ComputeViewIdStateBuilder.cpp
   ControlDependence.cpp
@@ -57,7 +57,7 @@ add_llvm_library(LLVMHLSL
   DxilNoOptLegalize.cpp
 
   ADDITIONAL_HEADER_DIRS
-  ${LLVM_MAIN_INCLUDE_DIR}/llvm/IR
+  ${LLVM37_MAIN_INCLUDE_DIR}/llvm37/IR
 )
 
-add_dependencies(LLVMHLSL intrinsics_gen)
+add_dependencies(LLVM37HLSL intrinsics_gen)

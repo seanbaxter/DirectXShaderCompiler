@@ -1,6 +1,6 @@
-//= llvm/Support/Win32/ThreadLocal.inc - Win32 Thread Local Data -*- C++ -*-===//
+//= llvm37/Support/Win32/ThreadLocal.inc - Win32 Thread Local Data -*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -17,9 +17,9 @@
 //===----------------------------------------------------------------------===//
 
 #include "WindowsSupport.h"
-#include "llvm/Support/ThreadLocal.h"
+#include "llvm37/Support/ThreadLocal.h"
 
-namespace llvm {
+namespace llvm37 {
 using namespace sys;
 
 ThreadLocalImpl::ThreadLocalImpl() : data() {

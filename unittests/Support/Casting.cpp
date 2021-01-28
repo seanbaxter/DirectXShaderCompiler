@@ -1,20 +1,20 @@
-//===---------- llvm/unittest/Support/Casting.cpp - Casting tests ---------===//
+//===---------- llvm37/unittest/Support/Casting.cpp - Casting tests ---------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Support/Casting.h"
-#include "llvm/IR/User.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/Support/Casting.h"
+#include "llvm37/IR/User.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/raw_ostream.h"
 #include "gtest/gtest.h"
 #include <cstdlib>
 
-namespace llvm {
+namespace llvm37 {
 // Used to test illegal cast. If a cast doesn't match any of the "real" ones,
 // it will match this one.
 struct IllegalCast;
@@ -71,9 +71,9 @@ template <> struct simplify_type<foo> {
   static SimpleType getSimplifiedValue(foo &Val) { return 0; }
 };
 
-} // End llvm namespace
+} // End llvm37 namespace
 
-using namespace llvm;
+using namespace llvm37;
 
 
 // Test the peculiar behavior of Use in simplify_type.
@@ -175,7 +175,7 @@ TEST(CastingTest, dyn_cast_or_null) {
 const bar *B2 = &B;
 }  // anonymous namespace
 
-bar *llvm::fub() { return nullptr; }
+bar *llvm37::fub() { return nullptr; }
 
 namespace {
 namespace inferred_upcasting {
@@ -257,7 +257,7 @@ public:
 } // end namespace pointer_wrappers
 } // end namespace
 
-namespace llvm {
+namespace llvm37 {
 
 template <> struct simplify_type<pointer_wrappers::PTy> {
   typedef pointer_wrappers::Base *SimpleType;
@@ -272,7 +272,7 @@ template <> struct simplify_type<const pointer_wrappers::PTy> {
   }
 };
 
-} // end namespace llvm
+} // end namespace llvm37
 
 namespace {
 namespace pointer_wrappers {

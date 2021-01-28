@@ -1,6 +1,6 @@
 //===- ObjCARCExpand.cpp - ObjC ARC Optimization --------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -18,34 +18,34 @@
 /// by name, and hardwires knowledge of their semantics.
 ///
 /// WARNING: This file knows about how certain Objective-C library functions are
-/// used. Naive LLVM IR transformations which would otherwise be
+/// used. Naive LLVM37 IR transformations which would otherwise be
 /// behavior-preserving may break these assumptions.
 ///
 //===----------------------------------------------------------------------===//
 
 #include "ObjCARC.h"
-#include "llvm/ADT/StringRef.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/InstIterator.h"
-#include "llvm/IR/Instruction.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/Value.h"
-#include "llvm/Pass.h"
-#include "llvm/PassAnalysisSupport.h"
-#include "llvm/PassRegistry.h"
-#include "llvm/PassSupport.h"
-#include "llvm/Support/Casting.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/StringRef.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/InstIterator.h"
+#include "llvm37/IR/Instruction.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/Value.h"
+#include "llvm37/Pass.h"
+#include "llvm37/PassAnalysisSupport.h"
+#include "llvm37/PassRegistry.h"
+#include "llvm37/PassSupport.h"
+#include "llvm37/Support/Casting.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/raw_ostream.h"
 
 #define DEBUG_TYPE "objc-arc-expand"
 
-namespace llvm {
+namespace llvm37 {
   class Module;
 }
 
-using namespace llvm;
-using namespace llvm::objcarc;
+using namespace llvm37;
+using namespace llvm37::objcarc;
 
 namespace {
   /// \brief Early ARC transformations.
@@ -69,7 +69,7 @@ char ObjCARCExpand::ID = 0;
 INITIALIZE_PASS(ObjCARCExpand,
                 "objc-arc-expand", "ObjC ARC expansion", false, false)
 
-Pass *llvm::createObjCARCExpandPass() {
+Pass *llvm37::createObjCARCExpandPass() {
   return new ObjCARCExpand();
 }
 

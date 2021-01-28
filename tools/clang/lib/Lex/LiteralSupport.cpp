@@ -1,6 +1,6 @@
 //===--- LiteralSupport.cpp - Code to parse and process literals ----------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -17,15 +17,15 @@
 #include "clang/Basic/TargetInfo.h"
 #include "clang/Lex/LexDiagnostic.h"
 #include "clang/Lex/Preprocessor.h"
-#include "llvm/ADT/StringExtras.h"
-#include "llvm/Support/ConvertUTF.h"
-#include "llvm/Support/ErrorHandling.h"
+#include "llvm37/ADT/StringExtras.h"
+#include "llvm37/Support/ConvertUTF.h"
+#include "llvm37/Support/ErrorHandling.h"
 
 using namespace clang;
 
 static unsigned getCharWidth(tok::TokenKind kind, const TargetInfo &Target) {
   switch (kind) {
-  default: llvm_unreachable("Unknown token type!");
+  default: llvm37_unreachable("Unknown token type!");
   case tok::char_constant:
   case tok::string_literal:
   case tok::utf8_char_constant:
@@ -141,7 +141,7 @@ static unsigned ProcessCharEscape(const char *ThisTokBegin,
     // Hex escapes are a maximal series of hex digits.
     bool Overflow = false;
     for (; ThisTokBuf != ThisTokEnd; ++ThisTokBuf) {
-      int CharVal = llvm::hexDigitValue(ThisTokBuf[0]);
+      int CharVal = llvm37::hexDigitValue(ThisTokBuf[0]);
       if (CharVal == -1) break;
       // About to shift out a digit?
       if (ResultChar & 0xF0000000)
@@ -207,7 +207,7 @@ static unsigned ProcessCharEscape(const char *ThisTokBegin,
     else
       Diag(Diags, Features, Loc, ThisTokBegin, EscapeBegin, ThisTokBuf,
            diag::ext_unknown_escape)
-        << "x" + llvm::utohexstr(ResultChar);
+        << "x" + llvm37::utohexstr(ResultChar);
     break;
   }
 
@@ -215,10 +215,10 @@ static unsigned ProcessCharEscape(const char *ThisTokBegin,
 }
 
 static void appendCodePoint(unsigned Codepoint,
-                            llvm::SmallVectorImpl<char> &Str) {
+                            llvm37::SmallVectorImpl<char> &Str) {
   char ResultBuf[4];
   char *ResultPtr = ResultBuf;
-  bool Res = llvm::ConvertCodePointToUTF8(Codepoint, ResultPtr);
+  bool Res = llvm37::ConvertCodePointToUTF8(Codepoint, ResultPtr);
   (void)Res;
   assert(Res && "Unexpected conversion failure");
   Str.append(ResultBuf, ResultPtr);
@@ -244,7 +244,7 @@ void clang::expandUCNs(SmallVectorImpl<char> &Buf, StringRef Input) {
 
     uint32_t CodePoint = 0;
     for (++I; NumHexDigits != 0; ++I, --NumHexDigits) {
-      unsigned Value = llvm::hexDigitValue(*I);
+      unsigned Value = llvm37::hexDigitValue(*I);
       assert(Value != -1U);
 
       CodePoint <<= 4;
@@ -278,7 +278,7 @@ static bool ProcessUCNEscape(const char *ThisTokBegin, const char *&ThisTokBuf,
   UcnLen = (ThisTokBuf[-1] == 'u' ? 4 : 8);
   unsigned short UcnLenSave = UcnLen;
   for (; ThisTokBuf != ThisTokEnd && UcnLenSave; ++ThisTokBuf, UcnLenSave--) {
-    int CharVal = llvm::hexDigitValue(ThisTokBuf[0]);
+    int CharVal = llvm37::hexDigitValue(ThisTokBuf[0]);
     if (CharVal == -1) break;
     UcnVal <<= 4;
     UcnVal |= CharVal;
@@ -751,7 +751,7 @@ bool NumericLiteralParser::isValidUDSuffix(const LangOptions &LangOpts,
 
   // In C++1y, "s", "h", "min", "ms", "us", and "ns" are used in the library.
   // Per tweaked N3660, "il", "i", and "if" are also used in the library.
-  return llvm::StringSwitch<bool>(Suffix)
+  return llvm37::StringSwitch<bool>(Suffix)
       .Cases("h", "min", "s", true)
       .Cases("ms", "us", "ns", true)
       .Cases("il", "i", "if", true)
@@ -930,14 +930,14 @@ static bool alwaysFitsInto64Bits(unsigned Radix, unsigned NumDigits) {
   case 16:
     return NumDigits <= 64 / 4; // Digits are groups of 4 bits.
   default:
-    llvm_unreachable("impossible Radix");
+    llvm37_unreachable("impossible Radix");
   }
 }
 
 /// GetIntegerValue - Convert this numeric literal value to an APInt that
 /// matches Val's input width.  If there is an overflow, set Val to the low bits
 /// of the result and return true.  Otherwise, return false.
-bool NumericLiteralParser::GetIntegerValue(llvm::APInt &Val) {
+bool NumericLiteralParser::GetIntegerValue(llvm37::APInt &Val) {
   // Fast path: Compute a conservative bound on the maximum number of
   // bits per digit in this radix. If we can't possibly overflow a
   // uint64 based on that bound then do the simple conversion to
@@ -949,7 +949,7 @@ bool NumericLiteralParser::GetIntegerValue(llvm::APInt &Val) {
     uint64_t N = 0;
     for (const char *Ptr = DigitsBegin; Ptr != SuffixBegin; ++Ptr)
       if (!isDigitSeparator(*Ptr))
-        N = N * radix + llvm::hexDigitValue(*Ptr);
+        N = N * radix + llvm37::hexDigitValue(*Ptr);
 
     // This will truncate the value to Val's input width. Simply check
     // for overflow by comparing.
@@ -960,9 +960,9 @@ bool NumericLiteralParser::GetIntegerValue(llvm::APInt &Val) {
   Val = 0;
   const char *Ptr = DigitsBegin;
 
-  llvm::APInt RadixVal(Val.getBitWidth(), radix);
-  llvm::APInt CharVal(Val.getBitWidth(), 0);
-  llvm::APInt OldVal = Val;
+  llvm37::APInt RadixVal(Val.getBitWidth(), radix);
+  llvm37::APInt CharVal(Val.getBitWidth(), 0);
+  llvm37::APInt OldVal = Val;
 
   bool OverflowOccurred = false;
   while (Ptr < SuffixBegin) {
@@ -971,7 +971,7 @@ bool NumericLiteralParser::GetIntegerValue(llvm::APInt &Val) {
       continue;
     }
 
-    unsigned C = llvm::hexDigitValue(*Ptr++);
+    unsigned C = llvm37::hexDigitValue(*Ptr++);
 
     // If this letter is out of bound for this radix, reject it.
     assert(C < radix && "NumericLiteralParser ctor should have rejected this");
@@ -994,13 +994,13 @@ bool NumericLiteralParser::GetIntegerValue(llvm::APInt &Val) {
   return OverflowOccurred;
 }
 
-llvm::APFloat::opStatus
-NumericLiteralParser::GetFloatValue(llvm::APFloat &Result) {
-  using llvm::APFloat;
+llvm37::APFloat::opStatus
+NumericLiteralParser::GetFloatValue(llvm37::APFloat &Result) {
+  using llvm37::APFloat;
 
   unsigned n = std::min(SuffixBegin - ThisTokBegin, ThisTokEnd - ThisTokBegin);
 
-  llvm::SmallString<16> Buffer;
+  llvm37::SmallString<16> Buffer;
   StringRef Str(ThisTokBegin, n);
   if (Str.find('\'') != StringRef::npos) {
     Buffer.reserve(n);
@@ -1200,7 +1200,7 @@ CharLiteralParser::CharLiteralParser(const char *begin, const char *end,
     IsMultiChar = false;
   }
 
-  llvm::APInt LitVal(PP.getTargetInfo().getIntWidth(), 0);
+  llvm37::APInt LitVal(PP.getTargetInfo().getIntWidth(), 0);
 
   // Narrow character literals act as though their value is concatenated
   // in this implementation, but warn on overflow.

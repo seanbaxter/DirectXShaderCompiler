@@ -1,7 +1,7 @@
 # The test verifies that memory references through %rsp are correctly
 # adjusted after instrumentation.
 
-# RUN: llvm-mc %s -triple=x86_64-unknown-linux-gnu -asm-instrumentation=address -asan-instrument-assembly | FileCheck %s
+# RUN: llvm37-mc %s -triple=x86_64-unknown-linux-gnu -asm-instrumentation=address -asan-instrument-assembly | FileCheck %s
 
 # CHECK-LABEL: rsp_access
 # CHECK: leaq -128(%rsp), %rsp

@@ -1,6 +1,6 @@
 //===- unittests/SPIRV/SpirvTestBase.h ---- Base class for SPIR-V Tests ---===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -35,9 +35,9 @@ private:
   // to make the tests run faster.
   void initialize() {
     std::string warnings;
-    llvm::raw_string_ostream w(warnings);
+    llvm37::raw_string_ostream w(warnings);
     std::unique_ptr<clang::TextDiagnosticPrinter> diagPrinter =
-        llvm::make_unique<clang::TextDiagnosticPrinter>(
+        llvm37::make_unique<clang::TextDiagnosticPrinter>(
             w, &compilerInstance.getDiagnosticOpts());
 
     std::shared_ptr<clang::TargetOptions> targetOptions(

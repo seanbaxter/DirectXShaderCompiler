@@ -59,7 +59,7 @@ void test(int i) {
   char c = (char __attribute__((aligned(8)))) i; // expected-warning {{'aligned' attribute ignored when parsing type}}
 }
 
-// http://llvm.org/PR11082
+// http://llvm37.org/PR11082
 //
 // FIXME: This may or may not be the correct approach (no warning or error),
 // but large amounts of Linux and FreeBSD code need this attribute to not be

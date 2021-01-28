@@ -1,4 +1,4 @@
-; RUN: llvm-as %s -o - | llvm-dis | FileCheck %s
+; RUN: llvm37-as %s -o - | llvm37-dis | FileCheck %s
 ; RUN: verify-uselistorder < %s
 
 define void @test_cmpxchg(i32* %addr, i32 %desired, i32 %new) {

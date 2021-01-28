@@ -1,6 +1,6 @@
 //===-- Constants.cpp - Implement Constant nodes --------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,30 +11,30 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/IR/Constants.h"
+#include "llvm37/IR/Constants.h"
 #include "ConstantFold.h"
 #include "LLVMContextImpl.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/FoldingSet.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/ADT/StringExtras.h"
-#include "llvm/ADT/StringMap.h"
-#include "llvm/IR/DerivedTypes.h"
-#include "llvm/IR/GetElementPtrTypeIterator.h"
-#include "llvm/IR/GlobalValue.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/Operator.h"
-#include "llvm/Support/Compiler.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/ManagedStatic.h"
-#include "llvm/Support/MathExtras.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/FoldingSet.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/ADT/StringExtras.h"
+#include "llvm37/ADT/StringMap.h"
+#include "llvm37/IR/DerivedTypes.h"
+#include "llvm37/IR/GetElementPtrTypeIterator.h"
+#include "llvm37/IR/GlobalValue.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/Operator.h"
+#include "llvm37/Support/Compiler.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/ManagedStatic.h"
+#include "llvm37/Support/MathExtras.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <algorithm>
 #include <cstdarg>
-using namespace llvm;
+using namespace llvm37;
 
 //===----------------------------------------------------------------------===//
 //                              Constant Class
@@ -206,7 +206,7 @@ Constant *Constant::getNullValue(Type *Ty) {
     return ConstantAggregateZero::get(Ty);
   default:
     // Function, Label, or Opaque type?
-    llvm_unreachable("Cannot create a null constant of that type!");
+    llvm37_unreachable("Cannot create a null constant of that type!");
   }
 }
 
@@ -281,12 +281,12 @@ void Constant::destroyConstant() {
   /// a chance to remove the constant from any maps/pools it's contained in.
   switch (getValueID()) {
   default:
-    llvm_unreachable("Not a constant!");
+    llvm37_unreachable("Not a constant!");
 #define HANDLE_CONSTANT(Name)                                                  \
   case Value::Name##Val:                                                       \
     cast<Name>(this)->destroyConstantImpl();                                   \
     break;
-#include "llvm/IR/Value.def"
+#include "llvm37/IR/Value.def"
   }
 
   // When a Constant is destroyed, there may be lingering
@@ -527,15 +527,15 @@ ConstantInt::ConstantInt(IntegerType *Ty, const APInt& V)
   assert(V.getBitWidth() == Ty->getBitWidth() && "Invalid constant for type");
 }
 
-ConstantInt *ConstantInt::getTrue(LLVMContext &Context) {
-  LLVMContextImpl *pImpl = Context.pImpl;
+ConstantInt *ConstantInt::getTrue(LLVM37Context &Context) {
+  LLVM37ContextImpl *pImpl = Context.pImpl;
   if (!pImpl->TheTrueVal)
     pImpl->TheTrueVal = ConstantInt::get(Type::getInt1Ty(Context), 1);
   return pImpl->TheTrueVal;
 }
 
-ConstantInt *ConstantInt::getFalse(LLVMContext &Context) {
-  LLVMContextImpl *pImpl = Context.pImpl;
+ConstantInt *ConstantInt::getFalse(LLVM37Context &Context) {
+  LLVM37ContextImpl *pImpl = Context.pImpl;
   if (!pImpl->TheFalseVal)
     pImpl->TheFalseVal = ConstantInt::get(Type::getInt1Ty(Context), 0);
   return pImpl->TheFalseVal;
@@ -566,9 +566,9 @@ Constant *ConstantInt::getFalse(Type *Ty) {
 }
 
 // Get a ConstantInt from an APInt.
-ConstantInt *ConstantInt::get(LLVMContext &Context, const APInt &V) {
+ConstantInt *ConstantInt::get(LLVM37Context &Context, const APInt &V) {
   // get an existing value or the insertion position
-  LLVMContextImpl *pImpl = Context.pImpl;
+  LLVM37ContextImpl *pImpl = Context.pImpl;
   ConstantInt *&Slot = pImpl->IntConstants[V];
   if (!Slot) {
     // Get the corresponding integer type for the bit width of the value.
@@ -621,7 +621,7 @@ ConstantInt *ConstantInt::get(IntegerType* Ty, StringRef Str,
 
 /// Remove the constant from the constant table.
 void ConstantInt::destroyConstantImpl() {
-  llvm_unreachable("You can't ConstantInt->destroyConstantImpl()!");
+  llvm37_unreachable("You can't ConstantInt->destroyConstantImpl()!");
 }
 
 //===----------------------------------------------------------------------===//
@@ -650,7 +650,7 @@ void ConstantFP::anchor() { }
 /// specified type.  This should only be used for simple constant values like
 /// 2.0/1.0 etc, that are known-valid both as double and as the target format.
 Constant *ConstantFP::get(Type *Ty, double V) {
-  LLVMContext &Context = Ty->getContext();
+  LLVM37Context &Context = Ty->getContext();
 
   APFloat FV(V);
   bool ignored;
@@ -667,7 +667,7 @@ Constant *ConstantFP::get(Type *Ty, double V) {
 
 
 Constant *ConstantFP::get(Type *Ty, StringRef Str) {
-  LLVMContext &Context = Ty->getContext();
+  LLVM37Context &Context = Ty->getContext();
 
   APFloat FV(*TypeToFloatSemantics(Ty->getScalarType()), Str);
   Constant *C = get(Context, FV);
@@ -711,8 +711,8 @@ Constant *ConstantFP::getZeroValueForNegation(Type *Ty) {
 
 
 // ConstantFP accessors.
-ConstantFP* ConstantFP::get(LLVMContext &Context, const APFloat& V) {
-  LLVMContextImpl* pImpl = Context.pImpl;
+ConstantFP* ConstantFP::get(LLVM37Context &Context, const APFloat& V) {
+  LLVM37ContextImpl* pImpl = Context.pImpl;
 
   ConstantFP *&Slot = pImpl->FPConstants[V];
 
@@ -761,7 +761,7 @@ bool ConstantFP::isExactlyValue(const APFloat &V) const {
 
 /// Remove the constant from the constant table.
 void ConstantFP::destroyConstantImpl() {
-  llvm_unreachable("You can't ConstantInt->destroyConstantImpl()!");
+  llvm37_unreachable("You can't ConstantInt->destroyConstantImpl()!");
 }
 
 //===----------------------------------------------------------------------===//
@@ -972,7 +972,7 @@ Constant *ConstantArray::getImpl(ArrayType *Ty, ArrayRef<Constant*> V) {
 
 /// getTypeForElements - Return an anonymous struct type to use for a constant
 /// with the specified set of elements.  The list must not be empty.
-StructType *ConstantStruct::getTypeForElements(LLVMContext &Context,
+StructType *ConstantStruct::getTypeForElements(LLVM37Context &Context,
                                                ArrayRef<Constant*> V,
                                                bool Packed) {
   unsigned VecSize = V.size();
@@ -1037,7 +1037,7 @@ Constant *ConstantStruct::get(StructType *T, ...) {
   va_list ap;
   SmallVector<Constant*, 8> Values;
   va_start(ap, T);
-  while (Constant *Val = va_arg(ap, llvm::Constant*))
+  while (Constant *Val = va_arg(ap, llvm37::Constant*))
     Values.push_back(Val);
   va_end(ap);
   return get(T, Values);
@@ -1580,7 +1580,7 @@ static Constant *getFoldedCast(Instruction::CastOps opc, Constant *C, Type *Ty,
   if (OnlyIfReduced)
     return nullptr;
 
-  LLVMContextImpl *pImpl = Ty->getContext().pImpl;
+  LLVM37ContextImpl *pImpl = Ty->getContext().pImpl;
 
   // Look up the constant in the table first to ensure uniqueness.
   ConstantExprKeyType Key(opc, C);
@@ -1597,7 +1597,7 @@ Constant *ConstantExpr::getCast(unsigned oc, Constant *C, Type *Ty,
 
   switch (opc) {
   default:
-    llvm_unreachable("Invalid cast opcode");
+    llvm37_unreachable("Invalid cast opcode");
   case Instruction::Trunc:
     return getTrunc(C, Ty, OnlyIfReduced);
   case Instruction::ZExt:
@@ -1941,7 +1941,7 @@ Constant *ConstantExpr::get(unsigned Opcode, Constant *C1, Constant *C2,
   Constant *ArgVec[] = { C1, C2 };
   ConstantExprKeyType Key(Opcode, ArgVec, 0, Flags);
 
-  LLVMContextImpl *pImpl = C1->getContext().pImpl;
+  LLVM37ContextImpl *pImpl = C1->getContext().pImpl;
   return pImpl->ExprConstants.getOrCreate(C1->getType(), Key);
 }
 
@@ -1992,7 +1992,7 @@ Constant *ConstantExpr::getCompare(unsigned short Predicate, Constant *C1,
   assert(C1->getType() == C2->getType() && "Op types should be identical!");
 
   switch (Predicate) {
-  default: llvm_unreachable("Invalid CmpInst predicate");
+  default: llvm37_unreachable("Invalid CmpInst predicate");
   case CmpInst::FCMP_FALSE: case CmpInst::FCMP_OEQ: case CmpInst::FCMP_OGT:
   case CmpInst::FCMP_OGE:   case CmpInst::FCMP_OLT: case CmpInst::FCMP_OLE:
   case CmpInst::FCMP_ONE:   case CmpInst::FCMP_ORD: case CmpInst::FCMP_UNO:
@@ -2022,7 +2022,7 @@ Constant *ConstantExpr::getSelect(Constant *C, Constant *V1, Constant *V2,
   Constant *ArgVec[] = { C, V1, V2 };
   ConstantExprKeyType Key(Instruction::Select, ArgVec);
 
-  LLVMContextImpl *pImpl = C->getContext().pImpl;
+  LLVM37ContextImpl *pImpl = C->getContext().pImpl;
   return pImpl->ExprConstants.getOrCreate(V1->getType(), Key);
 }
 
@@ -2067,7 +2067,7 @@ Constant *ConstantExpr::getGetElementPtr(Type *Ty, Constant *C,
                                 InBounds ? GEPOperator::IsInBounds : 0, None,
                                 Ty);
 
-  LLVMContextImpl *pImpl = C->getContext().pImpl;
+  LLVM37ContextImpl *pImpl = C->getContext().pImpl;
   return pImpl->ExprConstants.getOrCreate(ReqTy, Key);
 }
 
@@ -2092,7 +2092,7 @@ Constant *ConstantExpr::getICmp(unsigned short pred, Constant *LHS,
   if (VectorType *VT = dyn_cast<VectorType>(LHS->getType()))
     ResultTy = VectorType::get(ResultTy, VT->getNumElements());
 
-  LLVMContextImpl *pImpl = LHS->getType()->getContext().pImpl;
+  LLVM37ContextImpl *pImpl = LHS->getType()->getContext().pImpl;
   return pImpl->ExprConstants.getOrCreate(ResultTy, Key);
 }
 
@@ -2116,7 +2116,7 @@ Constant *ConstantExpr::getFCmp(unsigned short pred, Constant *LHS,
   if (VectorType *VT = dyn_cast<VectorType>(LHS->getType()))
     ResultTy = VectorType::get(ResultTy, VT->getNumElements());
 
-  LLVMContextImpl *pImpl = LHS->getType()->getContext().pImpl;
+  LLVM37ContextImpl *pImpl = LHS->getType()->getContext().pImpl;
   return pImpl->ExprConstants.getOrCreate(ResultTy, Key);
 }
 
@@ -2138,7 +2138,7 @@ Constant *ConstantExpr::getExtractElement(Constant *Val, Constant *Idx,
   Constant *ArgVec[] = { Val, Idx };
   const ConstantExprKeyType Key(Instruction::ExtractElement, ArgVec);
 
-  LLVMContextImpl *pImpl = Val->getContext().pImpl;
+  LLVM37ContextImpl *pImpl = Val->getContext().pImpl;
   return pImpl->ExprConstants.getOrCreate(ReqTy, Key);
 }
 
@@ -2161,7 +2161,7 @@ Constant *ConstantExpr::getInsertElement(Constant *Val, Constant *Elt,
   Constant *ArgVec[] = { Val, Elt, Idx };
   const ConstantExprKeyType Key(Instruction::InsertElement, ArgVec);
 
-  LLVMContextImpl *pImpl = Val->getContext().pImpl;
+  LLVM37ContextImpl *pImpl = Val->getContext().pImpl;
   return pImpl->ExprConstants.getOrCreate(Val->getType(), Key);
 }
 
@@ -2184,7 +2184,7 @@ Constant *ConstantExpr::getShuffleVector(Constant *V1, Constant *V2,
   Constant *ArgVec[] = { V1, V2, Mask };
   const ConstantExprKeyType Key(Instruction::ShuffleVector, ArgVec);
 
-  LLVMContextImpl *pImpl = ShufTy->getContext().pImpl;
+  LLVM37ContextImpl *pImpl = ShufTy->getContext().pImpl;
   return pImpl->ExprConstants.getOrCreate(ShufTy, Key);
 }
 
@@ -2208,7 +2208,7 @@ Constant *ConstantExpr::getInsertValue(Constant *Agg, Constant *Val,
   Constant *ArgVec[] = { Agg, Val };
   const ConstantExprKeyType Key(Instruction::InsertValue, ArgVec, 0, 0, Idxs);
 
-  LLVMContextImpl *pImpl = Agg->getContext().pImpl;
+  LLVM37ContextImpl *pImpl = Agg->getContext().pImpl;
   return pImpl->ExprConstants.getOrCreate(ReqTy, Key);
 }
 
@@ -2232,7 +2232,7 @@ Constant *ConstantExpr::getExtractValue(Constant *Agg, ArrayRef<unsigned> Idxs,
   Constant *ArgVec[] = { Agg };
   const ConstantExprKeyType Key(Instruction::ExtractValue, ArgVec, 0, 0, Idxs);
 
-  LLVMContextImpl *pImpl = Agg->getContext().pImpl;
+  LLVM37ContextImpl *pImpl = Agg->getContext().pImpl;
   return pImpl->ExprConstants.getOrCreate(ReqTy, Key);
 }
 
@@ -2549,32 +2549,32 @@ void ConstantDataSequential::destroyConstantImpl() {
 /// get() constructors - Return a constant with array type with an element
 /// count and element type matching the ArrayRef passed in.  Note that this
 /// can return a ConstantAggregateZero object.
-Constant *ConstantDataArray::get(LLVMContext &Context, ArrayRef<uint8_t> Elts) {
+Constant *ConstantDataArray::get(LLVM37Context &Context, ArrayRef<uint8_t> Elts) {
   Type *Ty = ArrayType::get(Type::getInt8Ty(Context), Elts.size());
   const char *Data = reinterpret_cast<const char *>(Elts.data());
   return getImpl(StringRef(const_cast<char *>(Data), Elts.size()*1), Ty);
 }
-Constant *ConstantDataArray::get(LLVMContext &Context, ArrayRef<uint16_t> Elts){
+Constant *ConstantDataArray::get(LLVM37Context &Context, ArrayRef<uint16_t> Elts){
   Type *Ty = ArrayType::get(Type::getInt16Ty(Context), Elts.size());
   const char *Data = reinterpret_cast<const char *>(Elts.data());
   return getImpl(StringRef(const_cast<char *>(Data), Elts.size()*2), Ty);
 }
-Constant *ConstantDataArray::get(LLVMContext &Context, ArrayRef<uint32_t> Elts){
+Constant *ConstantDataArray::get(LLVM37Context &Context, ArrayRef<uint32_t> Elts){
   Type *Ty = ArrayType::get(Type::getInt32Ty(Context), Elts.size());
   const char *Data = reinterpret_cast<const char *>(Elts.data());
   return getImpl(StringRef(const_cast<char *>(Data), Elts.size()*4), Ty);
 }
-Constant *ConstantDataArray::get(LLVMContext &Context, ArrayRef<uint64_t> Elts){
+Constant *ConstantDataArray::get(LLVM37Context &Context, ArrayRef<uint64_t> Elts){
   Type *Ty = ArrayType::get(Type::getInt64Ty(Context), Elts.size());
   const char *Data = reinterpret_cast<const char *>(Elts.data());
   return getImpl(StringRef(const_cast<char *>(Data), Elts.size()*8), Ty);
 }
-Constant *ConstantDataArray::get(LLVMContext &Context, ArrayRef<float> Elts) {
+Constant *ConstantDataArray::get(LLVM37Context &Context, ArrayRef<float> Elts) {
   Type *Ty = ArrayType::get(Type::getFloatTy(Context), Elts.size());
   const char *Data = reinterpret_cast<const char *>(Elts.data());
   return getImpl(StringRef(const_cast<char *>(Data), Elts.size()*4), Ty);
 }
-Constant *ConstantDataArray::get(LLVMContext &Context, ArrayRef<double> Elts) {
+Constant *ConstantDataArray::get(LLVM37Context &Context, ArrayRef<double> Elts) {
   Type *Ty = ArrayType::get(Type::getDoubleTy(Context), Elts.size());
   const char *Data = reinterpret_cast<const char *>(Elts.data());
   return getImpl(StringRef(const_cast<char *>(Data), Elts.size() * 8), Ty);
@@ -2585,19 +2585,19 @@ Constant *ConstantDataArray::get(LLVMContext &Context, ArrayRef<double> Elts) {
 /// bits in the ArrayRef passed in. (i.e. half for 16bits, float for 32bits,
 /// double for 64bits) Note that this can return a ConstantAggregateZero
 /// object.
-Constant *ConstantDataArray::getFP(LLVMContext &Context,
+Constant *ConstantDataArray::getFP(LLVM37Context &Context,
                                    ArrayRef<uint16_t> Elts) {
   Type *Ty = VectorType::get(Type::getHalfTy(Context), Elts.size());
   const char *Data = reinterpret_cast<const char *>(Elts.data());
   return getImpl(StringRef(const_cast<char *>(Data), Elts.size() * 2), Ty);
 }
-Constant *ConstantDataArray::getFP(LLVMContext &Context,
+Constant *ConstantDataArray::getFP(LLVM37Context &Context,
                                    ArrayRef<uint32_t> Elts) {
   Type *Ty = ArrayType::get(Type::getFloatTy(Context), Elts.size());
   const char *Data = reinterpret_cast<const char *>(Elts.data());
   return getImpl(StringRef(const_cast<char *>(Data), Elts.size() * 4), Ty);
 }
-Constant *ConstantDataArray::getFP(LLVMContext &Context,
+Constant *ConstantDataArray::getFP(LLVM37Context &Context,
                                    ArrayRef<uint64_t> Elts) {
   Type *Ty = ArrayType::get(Type::getDoubleTy(Context), Elts.size());
   const char *Data = reinterpret_cast<const char *>(Elts.data());
@@ -2609,7 +2609,7 @@ Constant *ConstantDataArray::getFP(LLVMContext &Context,
 /// be placed at the end of the array (increasing the length of the string by
 /// one more than the StringRef would normally indicate.  Pass AddNull=false
 /// to disable this behavior.
-Constant *ConstantDataArray::getString(LLVMContext &Context,
+Constant *ConstantDataArray::getString(LLVM37Context &Context,
                                        StringRef Str, bool AddNull) {
   if (!AddNull) {
     const uint8_t *Data = reinterpret_cast<const uint8_t *>(Str.data());
@@ -2626,32 +2626,32 @@ Constant *ConstantDataArray::getString(LLVMContext &Context,
 /// get() constructors - Return a constant with vector type with an element
 /// count and element type matching the ArrayRef passed in.  Note that this
 /// can return a ConstantAggregateZero object.
-Constant *ConstantDataVector::get(LLVMContext &Context, ArrayRef<uint8_t> Elts){
+Constant *ConstantDataVector::get(LLVM37Context &Context, ArrayRef<uint8_t> Elts){
   Type *Ty = VectorType::get(Type::getInt8Ty(Context), Elts.size());
   const char *Data = reinterpret_cast<const char *>(Elts.data());
   return getImpl(StringRef(const_cast<char *>(Data), Elts.size()*1), Ty);
 }
-Constant *ConstantDataVector::get(LLVMContext &Context, ArrayRef<uint16_t> Elts){
+Constant *ConstantDataVector::get(LLVM37Context &Context, ArrayRef<uint16_t> Elts){
   Type *Ty = VectorType::get(Type::getInt16Ty(Context), Elts.size());
   const char *Data = reinterpret_cast<const char *>(Elts.data());
   return getImpl(StringRef(const_cast<char *>(Data), Elts.size()*2), Ty);
 }
-Constant *ConstantDataVector::get(LLVMContext &Context, ArrayRef<uint32_t> Elts){
+Constant *ConstantDataVector::get(LLVM37Context &Context, ArrayRef<uint32_t> Elts){
   Type *Ty = VectorType::get(Type::getInt32Ty(Context), Elts.size());
   const char *Data = reinterpret_cast<const char *>(Elts.data());
   return getImpl(StringRef(const_cast<char *>(Data), Elts.size()*4), Ty);
 }
-Constant *ConstantDataVector::get(LLVMContext &Context, ArrayRef<uint64_t> Elts){
+Constant *ConstantDataVector::get(LLVM37Context &Context, ArrayRef<uint64_t> Elts){
   Type *Ty = VectorType::get(Type::getInt64Ty(Context), Elts.size());
   const char *Data = reinterpret_cast<const char *>(Elts.data());
   return getImpl(StringRef(const_cast<char *>(Data), Elts.size()*8), Ty);
 }
-Constant *ConstantDataVector::get(LLVMContext &Context, ArrayRef<float> Elts) {
+Constant *ConstantDataVector::get(LLVM37Context &Context, ArrayRef<float> Elts) {
   Type *Ty = VectorType::get(Type::getFloatTy(Context), Elts.size());
   const char *Data = reinterpret_cast<const char *>(Elts.data());
   return getImpl(StringRef(const_cast<char *>(Data), Elts.size()*4), Ty);
 }
-Constant *ConstantDataVector::get(LLVMContext &Context, ArrayRef<double> Elts) {
+Constant *ConstantDataVector::get(LLVM37Context &Context, ArrayRef<double> Elts) {
   Type *Ty = VectorType::get(Type::getDoubleTy(Context), Elts.size());
   const char *Data = reinterpret_cast<const char *>(Elts.data());
   return getImpl(StringRef(const_cast<char *>(Data), Elts.size() * 8), Ty);
@@ -2662,19 +2662,19 @@ Constant *ConstantDataVector::get(LLVMContext &Context, ArrayRef<double> Elts) {
 /// bits in the ArrayRef passed in.  (i.e. half for 16bits, float for 32bits,
 /// double for 64bits) Note that this can return a ConstantAggregateZero
 /// object.
-Constant *ConstantDataVector::getFP(LLVMContext &Context,
+Constant *ConstantDataVector::getFP(LLVM37Context &Context,
                                     ArrayRef<uint16_t> Elts) {
   Type *Ty = VectorType::get(Type::getHalfTy(Context), Elts.size());
   const char *Data = reinterpret_cast<const char *>(Elts.data());
   return getImpl(StringRef(const_cast<char *>(Data), Elts.size() * 2), Ty);
 }
-Constant *ConstantDataVector::getFP(LLVMContext &Context,
+Constant *ConstantDataVector::getFP(LLVM37Context &Context,
                                     ArrayRef<uint32_t> Elts) {
   Type *Ty = VectorType::get(Type::getFloatTy(Context), Elts.size());
   const char *Data = reinterpret_cast<const char *>(Elts.data());
   return getImpl(StringRef(const_cast<char *>(Data), Elts.size() * 4), Ty);
 }
-Constant *ConstantDataVector::getFP(LLVMContext &Context,
+Constant *ConstantDataVector::getFP(LLVM37Context &Context,
                                     ArrayRef<uint64_t> Elts) {
   Type *Ty = VectorType::get(Type::getDoubleTy(Context), Elts.size());
   const char *Data = reinterpret_cast<const char *>(Elts.data());
@@ -2728,7 +2728,7 @@ uint64_t ConstantDataSequential::getElementAsInteger(unsigned Elt) const {
   // The data is stored in host byte order, make sure to cast back to the right
   // type to load with the right endianness.
   switch (getElementType()->getIntegerBitWidth()) {
-  default: llvm_unreachable("Invalid bitwidth for CDS");
+  default: llvm37_unreachable("Invalid bitwidth for CDS");
   case 8:
     return *const_cast<uint8_t *>(reinterpret_cast<const uint8_t *>(EltPtr));
   case 16:
@@ -2747,7 +2747,7 @@ APFloat ConstantDataSequential::getElementAsAPFloat(unsigned Elt) const {
 
   switch (getElementType()->getTypeID()) {
   default:
-    llvm_unreachable("Accessor can only be used when element is float/double!");
+    llvm37_unreachable("Accessor can only be used when element is float/double!");
   case Type::FloatTyID: {
     auto EltVal = *reinterpret_cast<const uint32_t *>(EltPtr);
     return APFloat(APFloat::IEEEsingle, APInt(32, EltVal));
@@ -2841,12 +2841,12 @@ void Constant::handleOperandChange(Value *From, Value *To, Use *U) {
   Value *Replacement = nullptr;
   switch (getValueID()) {
   default:
-    llvm_unreachable("Not a constant!");
+    llvm37_unreachable("Not a constant!");
 #define HANDLE_CONSTANT(Name)                                                  \
   case Value::Name##Val:                                                       \
     Replacement = cast<Name>(this)->handleOperandChangeImpl(From, To, U);      \
     break;
-#include "llvm/IR/Value.def"
+#include "llvm37/IR/Value.def"
   }
 
   // If handleOperandChangeImpl returned nullptr, then it handled
@@ -2865,30 +2865,30 @@ void Constant::handleOperandChange(Value *From, Value *To, Use *U) {
 }
 
 Value *ConstantInt::handleOperandChangeImpl(Value *From, Value *To, Use *U) {
-  llvm_unreachable("Unsupported class for handleOperandChange()!");
+  llvm37_unreachable("Unsupported class for handleOperandChange()!");
 }
 
 Value *ConstantFP::handleOperandChangeImpl(Value *From, Value *To, Use *U) {
-  llvm_unreachable("Unsupported class for handleOperandChange()!");
+  llvm37_unreachable("Unsupported class for handleOperandChange()!");
 }
 
 Value *UndefValue::handleOperandChangeImpl(Value *From, Value *To, Use *U) {
-  llvm_unreachable("Unsupported class for handleOperandChange()!");
+  llvm37_unreachable("Unsupported class for handleOperandChange()!");
 }
 
 Value *ConstantPointerNull::handleOperandChangeImpl(Value *From, Value *To,
                                                     Use *U) {
-  llvm_unreachable("Unsupported class for handleOperandChange()!");
+  llvm37_unreachable("Unsupported class for handleOperandChange()!");
 }
 
 Value *ConstantAggregateZero::handleOperandChangeImpl(Value *From, Value *To,
                                                       Use *U) {
-  llvm_unreachable("Unsupported class for handleOperandChange()!");
+  llvm37_unreachable("Unsupported class for handleOperandChange()!");
 }
 
 Value *ConstantDataSequential::handleOperandChangeImpl(Value *From, Value *To,
                                                        Use *U) {
-  llvm_unreachable("Unsupported class for handleOperandChange()!");
+  llvm37_unreachable("Unsupported class for handleOperandChange()!");
 }
 
 Value *ConstantArray::handleOperandChangeImpl(Value *From, Value *To, Use *U) {

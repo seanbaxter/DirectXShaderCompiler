@@ -1,14 +1,14 @@
 //=== SelectorExtras.h - Helpers for checkers using selectors -----*- C++ -*-=//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_LIB_STATICANALYZER_CHECKERS_SELECTOREXTRAS_H
-#define LLVM_CLANG_LIB_STATICANALYZER_CHECKERS_SELECTOREXTRAS_H
+#ifndef LLVM37_CLANG_LIB_STATICANALYZER_CHECKERS_SELECTOREXTRAS_H
+#define LLVM37_CLANG_LIB_STATICANALYZER_CHECKERS_SELECTOREXTRAS_H
 
 #include "clang/AST/ASTContext.h"
 #include <cstdarg>
@@ -34,7 +34,7 @@ static inline Selector getKeywordSelector(ASTContext &Ctx, va_list argp) {
   return getKeywordSelectorImpl(Ctx, First, argp);
 }
 
-LLVM_END_WITH_NULL
+LLVM37_END_WITH_NULL
 static inline Selector getKeywordSelector(ASTContext &Ctx,
                                           const char *First, ...) {
   va_list argp;
@@ -44,7 +44,7 @@ static inline Selector getKeywordSelector(ASTContext &Ctx,
   return result;
 }
 
-LLVM_END_WITH_NULL
+LLVM37_END_WITH_NULL
 static inline void lazyInitKeywordSelector(Selector &Sel, ASTContext &Ctx,
                                            const char *First, ...) {
   if (!Sel.isNull())

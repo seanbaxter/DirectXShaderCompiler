@@ -4,7 +4,7 @@
 // RUN: FileCheck --input-file=%t-11 %s
 // RUN: FileCheck --input-file=%t-11 %s --check-prefix=CHECK-CXX11
 
-// http://llvm.org/PR7905
+// http://llvm37.org/PR7905
 namespace PR7905 {
 struct S; // expected-note {{forward declaration}}
 void foo1() {

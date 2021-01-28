@@ -38,13 +38,13 @@ define fp128 @square_fabs_call_f128(fp128 %x) {
 
 ; Make sure all intrinsic calls are eliminated when the input is known positive.
 
-declare float @llvm.fabs.f32(float)
-declare double @llvm.fabs.f64(double)
-declare fp128 @llvm.fabs.f128(fp128)
+declare float @llvm37.fabs.f32(float)
+declare double @llvm37.fabs.f64(double)
+declare fp128 @llvm37.fabs.f128(fp128)
 
 define float @square_fabs_intrinsic_f32(float %x) {
   %mul = fmul float %x, %x
-  %fabsf = tail call float @llvm.fabs.f32(float %mul)
+  %fabsf = tail call float @llvm37.fabs.f32(float %mul)
   ret float %fabsf
 
 ; CHECK-LABEL: square_fabs_intrinsic_f32(
@@ -54,7 +54,7 @@ define float @square_fabs_intrinsic_f32(float %x) {
 
 define double @square_fabs_intrinsic_f64(double %x) {
   %mul = fmul double %x, %x
-  %fabs = tail call double @llvm.fabs.f64(double %mul)
+  %fabs = tail call double @llvm37.fabs.f64(double %mul)
   ret double %fabs
 
 ; CHECK-LABEL: square_fabs_intrinsic_f64(
@@ -64,7 +64,7 @@ define double @square_fabs_intrinsic_f64(double %x) {
 
 define fp128 @square_fabs_intrinsic_f128(fp128 %x) {
   %mul = fmul fp128 %x, %x
-  %fabsl = tail call fp128 @llvm.fabs.f128(fp128 %mul)
+  %fabsl = tail call fp128 @llvm37.fabs.f128(fp128 %mul)
   ret fp128 %fabsl
 
 ; CHECK-LABEL: square_fabs_intrinsic_f128(

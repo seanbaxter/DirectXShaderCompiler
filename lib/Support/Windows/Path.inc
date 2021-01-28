@@ -1,6 +1,6 @@
-//===- llvm/Support/Windows/Path.inc - Windows Path Impl --------*- C++ -*-===//
+//===- llvm37/Support/Windows/Path.inc - Windows Path Impl --------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -16,8 +16,8 @@
 //===          is guaranteed to work on *all* Windows variants.
 //===----------------------------------------------------------------------===//
 
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/Support/WindowsError.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/Support/WindowsError.h"
 #include <fcntl.h>
 #include <io.h>
 #include <sys/stat.h>
@@ -42,11 +42,11 @@ typedef int errno_t;
 #endif
 #endif // HLSL Change Ends
 
-using namespace llvm;
+using namespace llvm37;
 
-using llvm::sys::windows::UTF8ToUTF16;
-using llvm::sys::windows::UTF16ToUTF8;
-using llvm::sys::path::widenPath;
+using llvm37::sys::windows::UTF8ToUTF16;
+using llvm37::sys::windows::UTF16ToUTF8;
+using llvm37::sys::path::widenPath;
 
 static bool is_separator(const wchar_t value) {
   switch (value) {
@@ -58,7 +58,7 @@ static bool is_separator(const wchar_t value) {
   }
 }
 
-namespace llvm {
+namespace llvm37 {
 namespace sys  {
 namespace path {
 
@@ -76,7 +76,7 @@ std::error_code widenPath(const Twine &Path8,
 
   // If we made this path absolute, how much longer would it get?
   size_t CurPathLen;
-  if (llvm::sys::path::is_absolute(Twine(Path8Str)))
+  if (llvm37::sys::path::is_absolute(Twine(Path8Str)))
     CurPathLen = 0; // No contribution from current_path needed.
   else {
     CurPathLen = ::GetCurrentDirectoryW(0, NULL);
@@ -90,7 +90,7 @@ std::error_code widenPath(const Twine &Path8,
     SmallString<2*MAX_PATH> FullPath("\\\\?\\");
     if (CurPathLen) {
       SmallString<80> CurPath;
-      if (std::error_code EC = llvm::sys::fs::current_path(CurPath))
+      if (std::error_code EC = llvm37::sys::fs::current_path(CurPath))
         return EC;
       FullPath.append(CurPath);
     }
@@ -98,15 +98,15 @@ std::error_code widenPath(const Twine &Path8,
     // the \\?\ prefix is documented to treat them as real components).
     // The iterators don't report separators and append() always attaches
     // preferred_separator so we don't need to call native() on the result.
-    for (llvm::sys::path::const_iterator I = llvm::sys::path::begin(Path8Str),
-                                         E = llvm::sys::path::end(Path8Str);
+    for (llvm37::sys::path::const_iterator I = llvm37::sys::path::begin(Path8Str),
+                                         E = llvm37::sys::path::end(Path8Str);
                                          I != E; ++I) {
       if (I->size() == 1 && *I == ".")
         continue;
       if (I->size() == 2 && *I == "..")
-        llvm::sys::path::remove_filename(FullPath);
+        llvm37::sys::path::remove_filename(FullPath);
       else
-        llvm::sys::path::append(FullPath, *I);
+        llvm37::sys::path::append(FullPath, *I);
     }
     return UTF8ToUTF16(FullPath, Path16);
   }
@@ -353,7 +353,7 @@ static std::error_code getStatus(HANDLE FileHandle, file_status &Result) {
 
   switch (::GetFileType(FileHandle)) {
   default:
-    llvm_unreachable("Don't know anything about this file type");
+    llvm37_unreachable("Don't know anything about this file type");
   case FILE_TYPE_UNKNOWN: {
     DWORD Err = ::GetLastError();
     if (Err != NO_ERROR)
@@ -795,8 +795,8 @@ void system_temp_directory(bool ErasedOnReboot, SmallVectorImpl<char> &Result) {
 } // end namespace path
 
 namespace windows {
-std::error_code UTF8ToUTF16(llvm::StringRef utf8,
-                            llvm::SmallVectorImpl<wchar_t> &utf16) {
+std::error_code UTF8ToUTF16(llvm37::StringRef utf8,
+                            llvm37::SmallVectorImpl<wchar_t> &utf16) {
   if (!utf8.empty()) {
     int len = ::MultiByteToWideChar(CP_UTF8, MB_ERR_INVALID_CHARS, utf8.begin(),
                                     utf8.size(), utf16.begin(), 0);
@@ -824,7 +824,7 @@ std::error_code UTF8ToUTF16(llvm::StringRef utf8,
 static
 std::error_code UTF16ToCodePage(unsigned codepage, const wchar_t *utf16,
                                 size_t utf16_len,
-                                llvm::SmallVectorImpl<char> &utf8) {
+                                llvm37::SmallVectorImpl<char> &utf8) {
   if (utf16_len) {
     // Get length.
     int len = ::WideCharToMultiByte(codepage, 0, utf16, utf16_len, utf8.begin(),
@@ -852,14 +852,14 @@ std::error_code UTF16ToCodePage(unsigned codepage, const wchar_t *utf16,
 }
 
 std::error_code UTF16ToUTF8(const wchar_t *utf16, size_t utf16_len,
-                            llvm::SmallVectorImpl<char> &utf8) {
+                            llvm37::SmallVectorImpl<char> &utf8) {
   return UTF16ToCodePage(CP_UTF8, utf16, utf16_len, utf8);
 }
 
 std::error_code UTF16ToCurCP(const wchar_t *utf16, size_t utf16_len,
-                             llvm::SmallVectorImpl<char> &utf8) {
+                             llvm37::SmallVectorImpl<char> &utf8) {
   return UTF16ToCodePage(CP_ACP, utf16, utf16_len, utf8);
 }
 } // end namespace windows
 } // end namespace sys
-} // end namespace llvm
+} // end namespace llvm37

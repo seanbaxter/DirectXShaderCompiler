@@ -1,6 +1,6 @@
 /*===-- CIndexDiagnostic.h - Diagnostics C Interface ------------*- C++ -*-===*\
 |*                                                                            *|
-|*                     The LLVM Compiler Infrastructure                       *|
+|*                     The LLVM37 Compiler Infrastructure                       *|
 |*                                                                            *|
 |* This file is distributed under the University of Illinois Open Source      *|
 |* License. See LICENSE.TXT for details.                                      *|
@@ -11,8 +11,8 @@
 |*                                                                            *|
 \*===----------------------------------------------------------------------===*/
 
-#ifndef LLVM_CLANG_TOOLS_LIBCLANG_CINDEXDIAGNOSTIC_H
-#define LLVM_CLANG_TOOLS_LIBCLANG_CINDEXDIAGNOSTIC_H
+#ifndef LLVM37_CLANG_TOOLS_LIBCLANG_CINDEXDIAGNOSTIC_H
+#define LLVM37_CLANG_TOOLS_LIBCLANG_CINDEXDIAGNOSTIC_H
 
 #include "clang-c/Index.h"
 #include <memory>

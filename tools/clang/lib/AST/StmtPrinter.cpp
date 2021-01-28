@@ -1,6 +1,6 @@
 //===--- StmtPrinter.cpp - Printing implementation for Stmt ASTs ----------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -22,8 +22,8 @@
 #include "clang/AST/PrettyPrinter.h"
 #include "clang/AST/StmtVisitor.h"
 #include "clang/Basic/CharInfo.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/Support/Format.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/Support/Format.h"
 #include "clang/Sema/SemaHLSL.h" // HLSL Change
 using namespace clang;
 
@@ -92,10 +92,10 @@ namespace  {
       else StmtVisitor<StmtPrinter>::Visit(S);
     }
 
-    void VisitStmt(Stmt *Node) LLVM_ATTRIBUTE_UNUSED {
+    void VisitStmt(Stmt *Node) LLVM37_ATTRIBUTE_UNUSED {
       Indent() << "<<unknown stmt type>>\n";
     }
-    void VisitExpr(Expr *Node) LLVM_ATTRIBUTE_UNUSED {
+    void VisitExpr(Expr *Node) LLVM37_ATTRIBUTE_UNUSED {
       OS << "<<unknown expr type>>";
     }
     void VisitCXXNamedCastExpr(CXXNamedCastExpr *Node);
@@ -1105,18 +1105,18 @@ void StmtPrinter::VisitCharacterLiteral(CharacterLiteral *Node) {
     // HLSL Change Begin
     if (Policy.LangOpts.HLSL && value > 255) {
       unsigned int truncVal = value & (~0xffffff00);
-      OS << "'\\x" << llvm::format("%02x", truncVal) << "'";
+      OS << "'\\x" << llvm37::format("%02x", truncVal) << "'";
     }
     else {
     // HLSL Change End
     if (value < 256 && isPrintable((unsigned char)value))
       OS << "'" << (char)value << "'";
     else if (value < 256)
-      OS << "'\\x" << llvm::format("%02x", value) << "'";
+      OS << "'\\x" << llvm37::format("%02x", value) << "'";
     else if (value <= 0xFFFF)
-      OS << "'\\u" << llvm::format("%04x", value) << "'";
+      OS << "'\\u" << llvm37::format("%04x", value) << "'";
     else
-      OS << "'\\U" << llvm::format("%08x", value) << "'";
+      OS << "'\\U" << llvm37::format("%08x", value) << "'";
     }
   }
 }
@@ -1127,7 +1127,7 @@ void StmtPrinter::VisitIntegerLiteral(IntegerLiteral *Node) {
 
   // Emit suffixes.  Integer literals are always a builtin integer type.
   switch (Node->getType()->getAs<BuiltinType>()->getKind()) {
-  default: llvm_unreachable("Unexpected type for integer literal!");
+  default: llvm37_unreachable("Unexpected type for integer literal!");
   case BuiltinType::Char_S:
   case BuiltinType::Char_U:    OS << "i8"; break;
   case BuiltinType::UChar:     OS << "Ui8"; break;
@@ -1165,7 +1165,7 @@ static void PrintFloatingLiteral(raw_ostream &OS, FloatingLiteral *Node,
   // HLSL Change Starts - override suffixes
   if (HLSLSuffix) {
     switch (Node->getType()->getAs<BuiltinType>()->getKind()) {
-    default: llvm_unreachable("Unexpected type for float literal!");
+    default: llvm37_unreachable("Unexpected type for float literal!");
     case BuiltinType::LitFloat:   break; // HLSL Change -- no suffix
     case BuiltinType::Min10Float: break; // no suffix, as this is a literal and 'F' would pollute expression
     case BuiltinType::HalfFloat:
@@ -1181,7 +1181,7 @@ static void PrintFloatingLiteral(raw_ostream &OS, FloatingLiteral *Node,
 
   // Emit suffixes.  Float literals are always a builtin float type.
   switch (Node->getType()->getAs<BuiltinType>()->getKind()) {
-  default: llvm_unreachable("Unexpected type for float literal!");
+  default: llvm37_unreachable("Unexpected type for float literal!");
   case BuiltinType::Half:       break; // FIXME: suffix?
   case BuiltinType::Double:     break; // no suffix.
   case BuiltinType::Float:      OS << 'F'; break;
@@ -1664,7 +1664,7 @@ void StmtPrinter::VisitCXXOperatorCallExpr(CXXOperatorCallExpr *Node) {
     OS << ' ' << OpStrings[Kind] << ' ';
     PrintExpr(Node->getArg(1));
   } else {
-    llvm_unreachable("unknown overloaded operator");
+    llvm37_unreachable("unknown overloaded operator");
   }
 }
 
@@ -1898,7 +1898,7 @@ void StmtPrinter::VisitLambdaExpr(LambdaExpr *Node) {
       OS << C->getCapturedVar()->getName();
       break;
     case LCK_VLAType:
-      llvm_unreachable("VLA type in explicit captures.");
+      llvm37_unreachable("VLA type in explicit captures.");
     }
 
     if (Node->isInitCapture(C))
@@ -1976,7 +1976,7 @@ void StmtPrinter::VisitCXXNewExpr(CXXNewExpr *E) {
     OS << "(";
   std::string TypeS;
   if (Expr *Size = E->getArraySize()) {
-    llvm::raw_string_ostream s(TypeS);
+    llvm37::raw_string_ostream s(TypeS);
     s << '[';
     Size->printPretty(s, Helper, Policy);
     s << ']';
@@ -2103,7 +2103,7 @@ case clang::BTT_##Name: return #Spelling;
   case clang::TT_##Name: return #Spelling;
 #include "clang/Basic/TokenKinds.def"
   }
-  llvm_unreachable("Type trait not covered by switch");
+  llvm37_unreachable("Type trait not covered by switch");
 }
 
 static const char *getTypeTraitName(ArrayTypeTrait ATT) {
@@ -2111,7 +2111,7 @@ static const char *getTypeTraitName(ArrayTypeTrait ATT) {
   case ATT_ArrayRank:        return "__array_rank";
   case ATT_ArrayExtent:      return "__array_extent";
   }
-  llvm_unreachable("Array type trait not covered by switch");
+  llvm37_unreachable("Array type trait not covered by switch");
 }
 
 static const char *getExpressionTraitName(ExpressionTrait ET) {
@@ -2119,7 +2119,7 @@ static const char *getExpressionTraitName(ExpressionTrait ET) {
   case ET_IsLValueExpr:      return "__is_lvalue_expr";
   case ET_IsRValueExpr:      return "__is_rvalue_expr";
   }
-  llvm_unreachable("Expression type trait not covered by switch");
+  llvm37_unreachable("Expression type trait not covered by switch");
 }
 
 void StmtPrinter::VisitTypeTraitExpr(TypeTraitExpr *E) {
@@ -2353,7 +2353,7 @@ void StmtPrinter::VisitAsTypeExpr(AsTypeExpr *Node) {
 //===----------------------------------------------------------------------===//
 
 void Stmt::dumpPretty(const ASTContext &Context) const {
-  printPretty(llvm::errs(), nullptr, PrintingPolicy(Context.getLangOpts()));
+  printPretty(llvm37::errs(), nullptr, PrintingPolicy(Context.getLangOpts()));
 }
 
 void Stmt::printPretty(raw_ostream &OS,

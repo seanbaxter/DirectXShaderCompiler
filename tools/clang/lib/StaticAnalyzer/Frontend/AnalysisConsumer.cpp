@@ -1,6 +1,6 @@
 //===--- AnalysisConsumer.cpp - ASTConsumer for running Analyses ----------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -36,21 +36,21 @@
 #include "clang/StaticAnalyzer/Core/PathSensitive/AnalysisManager.h"
 #include "clang/StaticAnalyzer/Core/PathSensitive/ExprEngine.h"
 #include "clang/StaticAnalyzer/Frontend/CheckerRegistration.h"
-#include "llvm/ADT/DepthFirstIterator.h"
-#include "llvm/ADT/PostOrderIterator.h"
-#include "llvm/ADT/SmallPtrSet.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/Support/FileSystem.h"
-#include "llvm/Support/Path.h"
-#include "llvm/Support/Program.h"
-#include "llvm/Support/Timer.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/DepthFirstIterator.h"
+#include "llvm37/ADT/PostOrderIterator.h"
+#include "llvm37/ADT/SmallPtrSet.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/Support/FileSystem.h"
+#include "llvm37/Support/Path.h"
+#include "llvm37/Support/Program.h"
+#include "llvm37/Support/Timer.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <memory>
 #include <queue>
 
 using namespace clang;
 using namespace ento;
-using llvm::SmallPtrSet;
+using llvm37::SmallPtrSet;
 
 #define DEBUG_TYPE "AnalysisConsumer"
 
@@ -74,7 +74,7 @@ void ento::createPlistHTMLDiagnosticConsumer(AnalyzerOptions &AnalyzerOpts,
                                              const std::string &prefix,
                                              const Preprocessor &PP) {
   createHTMLDiagnosticConsumer(AnalyzerOpts, C,
-                               llvm::sys::path::parent_path(prefix), PP);
+                               llvm37::sys::path::parent_path(prefix), PP);
   createPlistDiagnosticConsumer(AnalyzerOpts, C, prefix, PP);
 }
 
@@ -82,7 +82,7 @@ void ento::createTextPathDiagnosticConsumer(AnalyzerOptions &AnalyzerOpts,
                                             PathDiagnosticConsumers &C,
                                             const std::string &Prefix,
                                             const clang::Preprocessor &PP) {
-  llvm_unreachable("'text' consumer should be enabled on ClangDiags");
+  llvm37_unreachable("'text' consumer should be enabled on ClangDiags");
 }
 
 namespace {
@@ -179,7 +179,7 @@ public:
   std::unique_ptr<AnalysisManager> Mgr;
 
   /// Time the analyzes time of each translation unit.
-  static llvm::Timer* TUTotalTimer;
+  static llvm37::Timer* TUTotalTimer;
 
   /// The information about analyzed functions shared throughout the
   /// translation unit.
@@ -194,8 +194,8 @@ public:
       OutDir(outdir), Opts(opts), Plugins(plugins), Injector(injector) {
     DigestAnalyzerOptions();
     if (Opts->PrintStats) {
-      llvm::EnableStatistics();
-      TUTotalTimer = new llvm::Timer("Analyzer Total Time");
+      llvm37::EnableStatistics();
+      TUTotalTimer = new llvm37::Timer("Analyzer Total Time");
     }
   }
 
@@ -229,7 +229,7 @@ public:
     // Create the analyzer component creators.
     switch (Opts->AnalysisStoreOpt) {
     default:
-      llvm_unreachable("Unknown store manager.");
+      llvm37_unreachable("Unknown store manager.");
 #define ANALYSIS_STORE(NAME, CMDFLAG, DESC, CREATEFN)           \
       case NAME##Model: CreateStoreMgr = CREATEFN; break;
 #include "clang/StaticAnalyzer/Core/Analyses.def"
@@ -237,7 +237,7 @@ public:
 
     switch (Opts->AnalysisConstraintsOpt) {
     default:
-      llvm_unreachable("Unknown constraint manager.");
+      llvm37_unreachable("Unknown constraint manager.");
 #define ANALYSIS_CONSTRAINTS(NAME, CMDFLAG, DESC, CREATEFN)     \
       case NAME##Model: CreateConstraintMgr = CREATEFN; break;
 #include "clang/StaticAnalyzer/Core/Analyses.def"
@@ -252,37 +252,37 @@ public:
     SourceManager &SM = Mgr->getASTContext().getSourceManager();
     PresumedLoc Loc = SM.getPresumedLoc(D->getLocation());
     if (Loc.isValid()) {
-      llvm::errs() << "ANALYZE";
+      llvm37::errs() << "ANALYZE";
 
       if (Mode == AM_Syntax)
-        llvm::errs() << " (Syntax)";
+        llvm37::errs() << " (Syntax)";
       else if (Mode == AM_Path) {
-        llvm::errs() << " (Path, ";
+        llvm37::errs() << " (Path, ";
         switch (IMode) {
           case ExprEngine::Inline_Minimal:
-            llvm::errs() << " Inline_Minimal";
+            llvm37::errs() << " Inline_Minimal";
             break;
           case ExprEngine::Inline_Regular:
-            llvm::errs() << " Inline_Regular";
+            llvm37::errs() << " Inline_Regular";
             break;
         }
-        llvm::errs() << ")";
+        llvm37::errs() << ")";
       }
       else
         assert(Mode == (AM_Syntax | AM_Path) && "Unexpected mode!");
 
-      llvm::errs() << ": " << Loc.getFilename();
+      llvm37::errs() << ": " << Loc.getFilename();
       if (isa<FunctionDecl>(D) || isa<ObjCMethodDecl>(D)) {
         const NamedDecl *ND = cast<NamedDecl>(D);
-        llvm::errs() << ' ' << *ND << '\n';
+        llvm37::errs() << ' ' << *ND << '\n';
       }
       else if (isa<BlockDecl>(D)) {
-        llvm::errs() << ' ' << "block(line:" << Loc.getLine() << ",col:"
+        llvm37::errs() << ' ' << "block(line:" << Loc.getLine() << ",col:"
                      << Loc.getColumn() << '\n';
       }
       else if (const ObjCMethodDecl *MD = dyn_cast<ObjCMethodDecl>(D)) {
         Selector S = MD->getSelector();
-        llvm::errs() << ' ' << S.getAsString();
+        llvm37::errs() << ' ' << S.getAsString();
       }
     }
   }
@@ -292,7 +292,7 @@ public:
     checkerMgr = createCheckerManager(*Opts, PP.getLangOpts(), Plugins,
                                       PP.getDiagnostics());
 
-    Mgr = llvm::make_unique<AnalysisManager>(
+    Mgr = llvm37::make_unique<AnalysisManager>(
         *Ctx, PP.getDiagnostics(), PP.getLangOpts(), PathConsumers,
         CreateStoreMgr, CreateConstraintMgr, checkerMgr.get(), *Opts, Injector);
   }
@@ -390,7 +390,7 @@ private:
 //===----------------------------------------------------------------------===//
 // AnalysisConsumer implementation.
 //===----------------------------------------------------------------------===//
-llvm::Timer* AnalysisConsumer::TUTotalTimer = nullptr;
+llvm37::Timer* AnalysisConsumer::TUTotalTimer = nullptr;
 
 bool AnalysisConsumer::HandleTopLevelDecl(DeclGroupRef DG) {
   storeTopLevelDecls(DG);
@@ -468,8 +468,8 @@ void AnalysisConsumer::HandleDeclsCallGraph(const unsigned LocalTUDeclsSize) {
   // often.
   SetOfConstDecls Visited;
   SetOfConstDecls VisitedAsTopLevel;
-  llvm::ReversePostOrderTraversal<clang::CallGraph*> RPOT(&CG);
-  for (llvm::ReversePostOrderTraversal<clang::CallGraph*>::rpo_iterator
+  llvm37::ReversePostOrderTraversal<clang::CallGraph*> RPOT(&CG);
+  for (llvm37::ReversePostOrderTraversal<clang::CallGraph*>::rpo_iterator
          I = RPOT.begin(), E = RPOT.end(); I != E; ++I) {
     NumFunctionTopLevel++;
 
@@ -703,7 +703,7 @@ ento::CreateAnalysisConsumer(CompilerInstance &CI) {
   AnalyzerOptionsRef analyzerOpts = CI.getAnalyzerOpts();
   bool hasModelPath = analyzerOpts->Config.count("model-path") > 0;
 
-  return llvm::make_unique<AnalysisConsumer>(
+  return llvm37::make_unique<AnalysisConsumer>(
       CI.getPreprocessor(), CI.getFrontendOpts().OutputFile, analyzerOpts,
       CI.getFrontendOpts().Plugins,
       hasModelPath ? new ModelInjector(CI) : nullptr);
@@ -720,7 +720,7 @@ class UbigraphViz : public ExplodedNode::Auditor {
   std::string Filename;
   unsigned Cntr;
 
-  typedef llvm::DenseMap<void*,unsigned> VMap;
+  typedef llvm37::DenseMap<void*,unsigned> VMap;
   VMap M;
 
 public:
@@ -736,12 +736,12 @@ public:
 static std::unique_ptr<ExplodedNode::Auditor> CreateUbiViz() {
   SmallString<128> P;
   int FD;
-  llvm::sys::fs::createTemporaryFile("llvm_ubi", "", FD, P);
-  llvm::errs() << "Writing '" << P << "'.\n";
+  llvm37::sys::fs::createTemporaryFile("llvm37_ubi", "", FD, P);
+  llvm37::errs() << "Writing '" << P << "'.\n";
 
-  auto Stream = llvm::make_unique<llvm::raw_fd_ostream>(FD, true);
+  auto Stream = llvm37::make_unique<llvm37::raw_fd_ostream>(FD, true);
 
-  return llvm::make_unique<UbigraphViz>(std::move(Stream), P);
+  return llvm37::make_unique<UbigraphViz>(std::move(Stream), P);
 }
 
 void UbigraphViz::AddEdge(ExplodedNode *Src, ExplodedNode *Dst) {
@@ -788,23 +788,23 @@ UbigraphViz::UbigraphViz(std::unique_ptr<raw_ostream> Out, StringRef Filename)
 
 UbigraphViz::~UbigraphViz() {
   Out.reset();
-  llvm::errs() << "Running 'ubiviz' program... ";
+  llvm37::errs() << "Running 'ubiviz' program... ";
 #ifdef MSFT_SUPPORTS_CHILD_PROCESSES
   std::string ErrMsg;
   std::string Ubiviz;
-  if (auto Path = llvm::sys::findProgramByName("ubiviz"))
+  if (auto Path = llvm37::sys::findProgramByName("ubiviz"))
     Ubiviz = *Path;
   std::vector<const char*> args;
   args.push_back(Ubiviz.c_str());
   args.push_back(Filename.c_str());
   args.push_back(nullptr);
 
-  if (llvm::sys::ExecuteAndWait(Ubiviz, &args[0], nullptr, nullptr, 0, 0,
+  if (llvm37::sys::ExecuteAndWait(Ubiviz, &args[0], nullptr, nullptr, 0, 0,
                                 &ErrMsg)) {
-    llvm::errs() << "Error viewing graph: " << ErrMsg << "\n";
+    llvm37::errs() << "Error viewing graph: " << ErrMsg << "\n";
   }
 
   // Delete the file.
-  llvm::sys::fs::remove(Filename);
+  llvm37::sys::fs::remove(Filename);
 #endif // MSFT_SUPPORTS_CHILD_PROCESSES
 }

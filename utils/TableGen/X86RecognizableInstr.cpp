@@ -1,6 +1,6 @@
 //===- X86RecognizableInstr.cpp - Disassembler instruction spec --*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -17,10 +17,10 @@
 #include "X86RecognizableInstr.h"
 #include "X86DisassemblerShared.h"
 #include "X86ModRMFilters.h"
-#include "llvm/Support/ErrorHandling.h"
+#include "llvm37/Support/ErrorHandling.h"
 #include <string>
 
-using namespace llvm;
+using namespace llvm37;
 
 #define MRM_MAPPING     \
   MAP(C0, 32)           \
@@ -289,7 +289,7 @@ InstructionContext RecognizableInstr::insnContext() const {
   if (Encoding == X86Local::EVEX) {
     if (HasVEX_LPrefix && HasEVEX_L2Prefix) {
       errs() << "Don't support VEX.L if EVEX_L2 is enabled: " << Name << "\n";
-      llvm_unreachable("Don't support VEX.L if EVEX_L2 is enabled");
+      llvm37_unreachable("Don't support VEX.L if EVEX_L2 is enabled");
     }
     // VEX_L & VEX_W
     if (HasVEX_LPrefix && HasVEX_WPrefix) {
@@ -303,7 +303,7 @@ InstructionContext RecognizableInstr::insnContext() const {
         insnContext = EVEX_KB(IC_EVEX_L_W);
       else {
         errs() << "Instruction does not use a prefix: " << Name << "\n";
-        llvm_unreachable("Invalid prefix");
+        llvm37_unreachable("Invalid prefix");
       }
     } else if (HasVEX_LPrefix) {
       // VEX_L
@@ -317,7 +317,7 @@ InstructionContext RecognizableInstr::insnContext() const {
         insnContext = EVEX_KB(IC_EVEX_L);
       else {
         errs() << "Instruction does not use a prefix: " << Name << "\n";
-        llvm_unreachable("Invalid prefix");
+        llvm37_unreachable("Invalid prefix");
       }
     }
     else if (HasEVEX_L2Prefix && HasVEX_WPrefix) {
@@ -332,7 +332,7 @@ InstructionContext RecognizableInstr::insnContext() const {
         insnContext = EVEX_KB(IC_EVEX_L2_W);
       else {
         errs() << "Instruction does not use a prefix: " << Name << "\n";
-        llvm_unreachable("Invalid prefix");
+        llvm37_unreachable("Invalid prefix");
       }
     } else if (HasEVEX_L2Prefix) {
       // EVEX_L2
@@ -346,7 +346,7 @@ InstructionContext RecognizableInstr::insnContext() const {
         insnContext = EVEX_KB(IC_EVEX_L2);
       else {
         errs() << "Instruction does not use a prefix: " << Name << "\n";
-        llvm_unreachable("Invalid prefix");
+        llvm37_unreachable("Invalid prefix");
       }
     }
     else if (HasVEX_WPrefix) {
@@ -361,7 +361,7 @@ InstructionContext RecognizableInstr::insnContext() const {
         insnContext = EVEX_KB(IC_EVEX_W);
       else {
         errs() << "Instruction does not use a prefix: " << Name << "\n";
-        llvm_unreachable("Invalid prefix");
+        llvm37_unreachable("Invalid prefix");
       }
     }
     // No L, no W
@@ -386,7 +386,7 @@ InstructionContext RecognizableInstr::insnContext() const {
         insnContext = IC_VEX_L_W;
       else {
         errs() << "Instruction does not use a prefix: " << Name << "\n";
-        llvm_unreachable("Invalid prefix");
+        llvm37_unreachable("Invalid prefix");
       }
     } else if (OpPrefix == X86Local::PD && HasVEX_LPrefix)
       insnContext = IC_VEX_L_OPSIZE;
@@ -414,7 +414,7 @@ InstructionContext RecognizableInstr::insnContext() const {
       insnContext = IC_VEX;
     else {
       errs() << "Instruction does not use a prefix: " << Name << "\n";
-      llvm_unreachable("Invalid prefix");
+      llvm37_unreachable("Invalid prefix");
     }
   } else if (Is64Bit || HasREX_WPrefix || AdSize == X86Local::AdSize64) {
     if (HasREX_WPrefix && (OpSize == X86Local::OpSize16 || OpPrefix == X86Local::PD))
@@ -571,7 +571,7 @@ void RecognizableInstr::emitInstructionSpecifier() {
     ++additionalOperands;
 
   switch (Form) {
-  default: llvm_unreachable("Unhandled form");
+  default: llvm37_unreachable("Unhandled form");
   case X86Local::RawFrmSrc:
     HANDLE_OPERAND(relocation);
     return;
@@ -811,7 +811,7 @@ void RecognizableInstr::emitInstructionSpecifier() {
 }
 
 void RecognizableInstr::emitDecodePath(DisassemblerTables &tables) const {
-  // Special cases where the LLVM tables are not complete
+  // Special cases where the LLVM37 tables are not complete
 
 #define MAP(from, to)                     \
   case X86Local::MRM_##from:
@@ -822,7 +822,7 @@ void RecognizableInstr::emitDecodePath(DisassemblerTables &tables) const {
   uint8_t       opcodeToSet = 0;
 
   switch (OpMap) {
-  default: llvm_unreachable("Invalid map!");
+  default: llvm37_unreachable("Invalid map!");
   case X86Local::OB:
   case X86Local::TB:
   case X86Local::T8:
@@ -831,7 +831,7 @@ void RecognizableInstr::emitDecodePath(DisassemblerTables &tables) const {
   case X86Local::XOP9:
   case X86Local::XOPA:
     switch (OpMap) {
-    default: llvm_unreachable("Unexpected map!");
+    default: llvm37_unreachable("Unexpected map!");
     case X86Local::OB:   opcodeType = ONEBYTE;      break;
     case X86Local::TB:   opcodeType = TWOBYTE;      break;
     case X86Local::T8:   opcodeType = THREEBYTE_38; break;
@@ -1038,7 +1038,7 @@ OperandType RecognizableInstr::typeFromString(const std::string &s,
   TYPE("vz64mem",             TYPE_M64)
   TYPE("BNDR",                TYPE_BNDR)
   errs() << "Unhandled type string " << s << "\n";
-  llvm_unreachable("Unhandled type string");
+  llvm37_unreachable("Unhandled type string");
 }
 #undef TYPE
 
@@ -1077,7 +1077,7 @@ RecognizableInstr::immediateEncodingFromString(const std::string &s,
   ENCODING("VR256X",          ENCODING_IB)
   ENCODING("VR512",           ENCODING_IB)
   errs() << "Unhandled immediate encoding " << s << "\n";
-  llvm_unreachable("Unhandled immediate encoding");
+  llvm37_unreachable("Unhandled immediate encoding");
 }
 
 OperandEncoding
@@ -1108,7 +1108,7 @@ RecognizableInstr::rmRegisterEncodingFromString(const std::string &s,
   ENCODING("VK64",            ENCODING_RM)
   ENCODING("BNDR",            ENCODING_RM)
   errs() << "Unhandled R/M register encoding " << s << "\n";
-  llvm_unreachable("Unhandled R/M register encoding");
+  llvm37_unreachable("Unhandled R/M register encoding");
 }
 
 OperandEncoding
@@ -1148,7 +1148,7 @@ RecognizableInstr::roRegisterEncodingFromString(const std::string &s,
   ENCODING("VK64WM",          ENCODING_REG)
   ENCODING("BNDR",            ENCODING_REG)
   errs() << "Unhandled reg/opcode register encoding " << s << "\n";
-  llvm_unreachable("Unhandled reg/opcode register encoding");
+  llvm37_unreachable("Unhandled reg/opcode register encoding");
 }
 
 OperandEncoding
@@ -1173,7 +1173,7 @@ RecognizableInstr::vvvvRegisterEncodingFromString(const std::string &s,
   ENCODING("VK32",            ENCODING_VVVV)
   ENCODING("VK64",            ENCODING_VVVV)
   errs() << "Unhandled VEX.vvvv register encoding " << s << "\n";
-  llvm_unreachable("Unhandled VEX.vvvv register encoding");
+  llvm37_unreachable("Unhandled VEX.vvvv register encoding");
 }
 
 OperandEncoding
@@ -1187,7 +1187,7 @@ RecognizableInstr::writemaskRegisterEncodingFromString(const std::string &s,
   ENCODING("VK32WM",          ENCODING_WRITEMASK)
   ENCODING("VK64WM",          ENCODING_WRITEMASK)
   errs() << "Unhandled mask register encoding " << s << "\n";
-  llvm_unreachable("Unhandled mask register encoding");
+  llvm37_unreachable("Unhandled mask register encoding");
 }
 
 OperandEncoding
@@ -1226,7 +1226,7 @@ RecognizableInstr::memoryEncodingFromString(const std::string &s,
   ENCODING("vy64xmem",        ENCODING_RM)
   ENCODING("vz64mem",         ENCODING_RM)
   errs() << "Unhandled memory encoding " << s << "\n";
-  llvm_unreachable("Unhandled memory encoding");
+  llvm37_unreachable("Unhandled memory encoding");
 }
 
 OperandEncoding
@@ -1273,7 +1273,7 @@ RecognizableInstr::relocationEncodingFromString(const std::string &s,
   ENCODING("dstidx32",        ENCODING_DI)
   ENCODING("dstidx64",        ENCODING_DI)
   errs() << "Unhandled relocation encoding " << s << "\n";
-  llvm_unreachable("Unhandled relocation encoding");
+  llvm37_unreachable("Unhandled relocation encoding");
 }
 
 OperandEncoding
@@ -1287,6 +1287,6 @@ RecognizableInstr::opcodeModifierEncodingFromString(const std::string &s,
   ENCODING("GR32_NOAX",       ENCODING_Rv)
   ENCODING("GR64_NOAX",       ENCODING_RO)
   errs() << "Unhandled opcode modifier encoding " << s << "\n";
-  llvm_unreachable("Unhandled opcode modifier encoding");
+  llvm37_unreachable("Unhandled opcode modifier encoding");
 }
 #undef ENCODING

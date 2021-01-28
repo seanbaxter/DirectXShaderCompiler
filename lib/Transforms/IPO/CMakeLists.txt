@@ -1,4 +1,4 @@
-add_llvm_library(LLVMipo
+add_llvm_library(LLVM37ipo
   ArgumentPromotion.cpp
   BarrierNoopPass.cpp
   ConstantMerge.cpp
@@ -24,8 +24,8 @@ add_llvm_library(LLVMipo
   StripSymbols.cpp
 
   ADDITIONAL_HEADER_DIRS
-  ${LLVM_MAIN_INCLUDE_DIR}/llvm/Transforms
-  ${LLVM_MAIN_INCLUDE_DIR}/llvm/Transforms/IPO
+  ${LLVM37_MAIN_INCLUDE_DIR}/llvm37/Transforms
+  ${LLVM37_MAIN_INCLUDE_DIR}/llvm37/Transforms/IPO
   )
 
-add_dependencies(LLVMipo intrinsics_gen)
+add_dependencies(LLVM37ipo intrinsics_gen)

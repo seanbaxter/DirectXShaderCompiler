@@ -1,4 +1,4 @@
-set(LLVM_LINK_COMPONENTS
+set(LLVM37_LINK_COMPONENTS
   AsmParser
   BitReader
   BitWriter
@@ -6,7 +6,7 @@ set(LLVM_LINK_COMPONENTS
   Support
   )
 
-add_llvm_unittest(BitcodeTests
+add_llvm37_unittest(BitcodeTests
   BitReaderTest.cpp
   BitstreamReaderTest.cpp
   )

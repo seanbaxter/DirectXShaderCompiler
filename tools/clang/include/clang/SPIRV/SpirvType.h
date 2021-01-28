@@ -1,13 +1,13 @@
 //===-- SpirvType.h - SPIR-V Type -----------------------------*- C++ -*---===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
-#ifndef LLVM_CLANG_SPIRV_SPIRVTYPE_H
-#define LLVM_CLANG_SPIRV_SPIRVTYPE_H
+#ifndef LLVM37_CLANG_SPIRV_SPIRVTYPE_H
+#define LLVM37_CLANG_SPIRV_SPIRVTYPE_H
 
 #include <string>
 #include <utility>
@@ -15,9 +15,9 @@
 
 #include "spirv/unified1/spirv.hpp11"
 #include "clang/AST/Attr.h"
-#include "llvm/ADT/ArrayRef.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/ADT/StringRef.h"
+#include "llvm37/ADT/ArrayRef.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/ADT/StringRef.h"
 
 namespace clang {
 namespace spirv {
@@ -59,7 +59,7 @@ public:
   virtual ~SpirvType() = default;
 
   Kind getKind() const { return kind; }
-  llvm::StringRef getName() const { return debugName; }
+  llvm37::StringRef getName() const { return debugName; }
 
   static bool isTexture(const SpirvType *);
   static bool isRWTexture(const SpirvType *);
@@ -73,7 +73,7 @@ public:
   static bool isOrContainsType(const SpirvType *);
 
 protected:
-  SpirvType(Kind k, llvm::StringRef name = "") : kind(k), debugName(name) {}
+  SpirvType(Kind k, llvm37::StringRef name = "") : kind(k), debugName(name) {}
 
 private:
   const Kind kind;
@@ -239,13 +239,13 @@ private:
 class ArrayType : public SpirvType {
 public:
   ArrayType(const SpirvType *elemType, uint32_t elemCount,
-            llvm::Optional<uint32_t> arrayStride)
+            llvm37::Optional<uint32_t> arrayStride)
       : SpirvType(TK_Array), elementType(elemType), elementCount(elemCount),
         stride(arrayStride) {}
 
   const SpirvType *getElementType() const { return elementType; }
   uint32_t getElementCount() const { return elementCount; }
-  llvm::Optional<uint32_t> getStride() const { return stride; }
+  llvm37::Optional<uint32_t> getStride() const { return stride; }
 
   static bool classof(const SpirvType *t) { return t->getKind() == TK_Array; }
 
@@ -255,14 +255,14 @@ private:
   const SpirvType *elementType;
   uint32_t elementCount;
   // Two arrays types with different ArrayStride decorations, are in fact two
-  // different array types. If no layout information is needed, use llvm::None.
-  llvm::Optional<uint32_t> stride;
+  // different array types. If no layout information is needed, use llvm37::None.
+  llvm37::Optional<uint32_t> stride;
 };
 
 class RuntimeArrayType : public SpirvType {
 public:
   RuntimeArrayType(const SpirvType *elemType,
-                   llvm::Optional<uint32_t> arrayStride)
+                   llvm37::Optional<uint32_t> arrayStride)
       : SpirvType(TK_RuntimeArray), elementType(elemType), stride(arrayStride) {
   }
 
@@ -273,13 +273,13 @@ public:
   bool operator==(const RuntimeArrayType &that) const;
 
   const SpirvType *getElementType() const { return elementType; }
-  llvm::Optional<uint32_t> getStride() const { return stride; }
+  llvm37::Optional<uint32_t> getStride() const { return stride; }
 
 private:
   const SpirvType *elementType;
   // Two runtime arrays with different ArrayStride decorations, are in fact two
-  // different types. If no layout information is needed, use llvm::None.
-  llvm::Optional<uint32_t> stride;
+  // different types. If no layout information is needed, use llvm37::None.
+  llvm37::Optional<uint32_t> stride;
 };
 
 // The StructType is the lowered type that best represents what a structure type
@@ -289,12 +289,12 @@ class StructType : public SpirvType {
 public:
   struct FieldInfo {
   public:
-    FieldInfo(const SpirvType *type_, llvm::StringRef name_ = "",
-              llvm::Optional<uint32_t> offset_ = llvm::None,
-              llvm::Optional<uint32_t> matrixStride_ = llvm::None,
-              llvm::Optional<bool> isRowMajor_ = llvm::None,
+    FieldInfo(const SpirvType *type_, llvm37::StringRef name_ = "",
+              llvm37::Optional<uint32_t> offset_ = llvm37::None,
+              llvm37::Optional<uint32_t> matrixStride_ = llvm37::None,
+              llvm37::Optional<bool> isRowMajor_ = llvm37::None,
               bool relaxedPrecision = false, bool precise = false)
-        : type(type_), name(name_), offset(offset_), sizeInBytes(llvm::None),
+        : type(type_), name(name_), offset(offset_), sizeInBytes(llvm37::None),
           matrixStride(matrixStride_), isRowMajor(isRowMajor_),
           isRelaxedPrecision(relaxedPrecision), isPrecise(precise) {
       // A StructType may not contain any hybrid types.
@@ -308,13 +308,13 @@ public:
     // The field's name.
     std::string name;
     // The integer offset in bytes for this field.
-    llvm::Optional<uint32_t> offset;
+    llvm37::Optional<uint32_t> offset;
     // The integer size in bytes for this field.
-    llvm::Optional<uint32_t> sizeInBytes;
+    llvm37::Optional<uint32_t> sizeInBytes;
     // The matrix stride for this field (if applicable).
-    llvm::Optional<uint32_t> matrixStride;
+    llvm37::Optional<uint32_t> matrixStride;
     // The majorness of this field (if applicable).
-    llvm::Optional<bool> isRowMajor;
+    llvm37::Optional<bool> isRowMajor;
     // Whether this field is a RelaxedPrecision field.
     bool isRelaxedPrecision;
     // Whether this field is marked as 'precise'.
@@ -322,14 +322,14 @@ public:
   };
 
   StructType(
-      llvm::ArrayRef<FieldInfo> fields, llvm::StringRef name, bool isReadOnly,
+      llvm37::ArrayRef<FieldInfo> fields, llvm37::StringRef name, bool isReadOnly,
       StructInterfaceType interfaceType = StructInterfaceType::InternalStorage);
 
   static bool classof(const SpirvType *t) { return t->getKind() == TK_Struct; }
 
-  llvm::ArrayRef<FieldInfo> getFields() const { return fields; }
+  llvm37::ArrayRef<FieldInfo> getFields() const { return fields; }
   bool isReadOnly() const { return readOnly; }
-  llvm::StringRef getStructName() const { return getName(); }
+  llvm37::StringRef getStructName() const { return getName(); }
   StructInterfaceType getInterfaceType() const { return interfaceType; }
 
   bool operator==(const StructType &that) const;
@@ -339,7 +339,7 @@ private:
   // struct names and field names. That basically means we cannot ignore these
   // names when considering unification. Otherwise, reflection will be confused.
 
-  llvm::SmallVector<FieldInfo, 8> fields;
+  llvm37::SmallVector<FieldInfo, 8> fields;
   bool readOnly;
   // Indicates the interface type of this structure. If this structure is a
   // storage buffer shader-interface, it will be decorated with 'BufferBlock'.
@@ -372,7 +372,7 @@ private:
 /// type is allowed to be a hybrid type.
 class FunctionType : public SpirvType {
 public:
-  FunctionType(const SpirvType *ret, llvm::ArrayRef<const SpirvType *> param);
+  FunctionType(const SpirvType *ret, llvm37::ArrayRef<const SpirvType *> param);
 
   static bool classof(const SpirvType *t) {
     return t->getKind() == TK_Function;
@@ -384,11 +384,11 @@ public:
 
   // void setReturnType(const SpirvType *t) { returnType = t; }
   const SpirvType *getReturnType() const { return returnType; }
-  llvm::ArrayRef<const SpirvType *> getParamTypes() const { return paramTypes; }
+  llvm37::ArrayRef<const SpirvType *> getParamTypes() const { return paramTypes; }
 
 private:
   const SpirvType *returnType;
-  llvm::SmallVector<const SpirvType *, 8> paramTypes;
+  llvm37::SmallVector<const SpirvType *, 8> paramTypes;
 };
 
 /// Represents accleration structure type as defined in SPV_NV_ray_tracing.
@@ -419,7 +419,7 @@ public:
   }
 
 protected:
-  HybridType(Kind k, llvm::StringRef name = "") : SpirvType(k, name) {}
+  HybridType(Kind k, llvm37::StringRef name = "") : SpirvType(k, name) {}
 };
 
 /// **NOTE**: This type is created in order to facilitate transition of old
@@ -431,7 +431,7 @@ class HybridStructType : public HybridType {
 public:
   struct FieldInfo {
   public:
-    FieldInfo(QualType astType_, llvm::StringRef name_ = "",
+    FieldInfo(QualType astType_, llvm37::StringRef name_ = "",
               clang::VKOffsetAttr *offset = nullptr,
               hlsl::ConstantPacking *packOffset = nullptr,
               const hlsl::RegisterAssignment *regC = nullptr,
@@ -454,16 +454,16 @@ public:
   };
 
   HybridStructType(
-      llvm::ArrayRef<FieldInfo> fields, llvm::StringRef name, bool isReadOnly,
+      llvm37::ArrayRef<FieldInfo> fields, llvm37::StringRef name, bool isReadOnly,
       StructInterfaceType interfaceType = StructInterfaceType::InternalStorage);
 
   static bool classof(const SpirvType *t) {
     return t->getKind() == TK_HybridStruct;
   }
 
-  llvm::ArrayRef<FieldInfo> getFields() const { return fields; }
+  llvm37::ArrayRef<FieldInfo> getFields() const { return fields; }
   bool isReadOnly() const { return readOnly; }
-  llvm::StringRef getStructName() const { return getName(); }
+  llvm37::StringRef getStructName() const { return getName(); }
   StructInterfaceType getInterfaceType() const { return interfaceType; }
 
 private:
@@ -471,7 +471,7 @@ private:
   // struct names and field names. That basically means we cannot ignore these
   // names when considering unification. Otherwise, reflection will be confused.
 
-  llvm::SmallVector<FieldInfo, 8> fields;
+  llvm37::SmallVector<FieldInfo, 8> fields;
   bool readOnly;
   // Indicates the interface type of this structure. If this structure is a
   // storage buffer shader-interface, it will be decorated with 'BufferBlock'.
@@ -529,7 +529,7 @@ bool SpirvType::isOrContainsType(const SpirvType *type) {
     else
       // We want to make sure it is a numberical type of a specific bitwidth.
       return isa<NumericalType>(type) &&
-             llvm::cast<NumericalType>(type)->getBitwidth() == Bitwidth;
+             llvm37::cast<NumericalType>(type)->getBitwidth() == Bitwidth;
   }
 
   if (const auto *vecType = dyn_cast<VectorType>(type))
@@ -557,4 +557,4 @@ bool SpirvType::isOrContainsType(const SpirvType *type) {
 } // end namespace spirv
 } // end namespace clang
 
-#endif // LLVM_CLANG_SPIRV_SPIRVTYPE_H
+#endif // LLVM37_CLANG_SPIRV_SPIRVTYPE_H

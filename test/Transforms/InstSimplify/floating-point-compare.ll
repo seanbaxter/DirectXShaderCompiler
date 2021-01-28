@@ -4,21 +4,21 @@
 ; and between uge and olt, to give reasonble coverage 
 ; without combinatorial explosion.
 
-declare float @llvm.fabs.f32(float)
-declare float @llvm.sqrt.f32(float)
-declare double @llvm.powi.f64(double,i32)
-declare float @llvm.exp.f32(float)
-declare double @llvm.exp2.f64(double)
-declare float @llvm.fma.f32(float,float,float)
+declare float @llvm37.fabs.f32(float)
+declare float @llvm37.sqrt.f32(float)
+declare double @llvm37.powi.f64(double,i32)
+declare float @llvm37.exp.f32(float)
+declare double @llvm37.exp2.f64(double)
+declare float @llvm37.fma.f32(float,float,float)
 
 declare void @expect_equal(i1,i1)
 
 ; CHECK-LABEL: @orderedLessZeroTree(
 define i1 @orderedLessZeroTree(float,float,float,float) {
   %square = fmul float %0, %0
-  %abs = call float @llvm.fabs.f32(float %1)
-  %sqrt = call float @llvm.sqrt.f32(float %2)
-  %fma = call float @llvm.fma.f32(float %3, float %3, float %sqrt)
+  %abs = call float @llvm37.fabs.f32(float %1)
+  %sqrt = call float @llvm37.sqrt.f32(float %2)
+  %fma = call float @llvm37.fma.f32(float %3, float %3, float %sqrt)
   %div = fdiv float %square, %abs
   %rem = frem float %sqrt, %fma
   %add = fadd float %div, %rem
@@ -29,7 +29,7 @@ define i1 @orderedLessZeroTree(float,float,float,float) {
 
 ; CHECK-LABEL: @orderedLessZeroExpExt(
 define i1 @orderedLessZeroExpExt(float) {
-  %a = call float @llvm.exp.f32(float %0)
+  %a = call float @llvm37.exp.f32(float %0)
   %b = fpext float %a to double
   %uge = fcmp uge double %b, 0.000000e+00
 ; CHECK: ret i1 true
@@ -38,7 +38,7 @@ define i1 @orderedLessZeroExpExt(float) {
 
 ; CHECK-LABEL: @orderedLessZeroExp2Trunc(
 define i1 @orderedLessZeroExp2Trunc(double) {
-  %a = call double @llvm.exp2.f64(double %0)
+  %a = call double @llvm37.exp2.f64(double %0)
   %b = fptrunc double %a to float
   %olt = fcmp olt float %b, 0.000000e+00
 ; CHECK: ret i1 false
@@ -48,10 +48,10 @@ define i1 @orderedLessZeroExp2Trunc(double) {
 ; CHECK-LABEL: @orderedLessZeroPowi(
 define i1 @orderedLessZeroPowi(double,double) {
   ; Even constant exponent
-  %a = call double @llvm.powi.f64(double %0, i32 2)
+  %a = call double @llvm37.powi.f64(double %0, i32 2)
   %square = fmul double %1, %1
   ; Odd constant exponent with provably non-negative base
-  %b = call double @llvm.powi.f64(double %square, i32 3)
+  %b = call double @llvm37.powi.f64(double %square, i32 3)
   %c = fadd double %a, %b
   %olt = fcmp olt double %b, 0.000000e+00
 ; CHECK: ret i1 false

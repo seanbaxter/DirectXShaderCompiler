@@ -1,4 +1,4 @@
-; RUN: not llvm-as < %s 2>&1 | FileCheck %s
+; RUN: not llvm37-as < %s 2>&1 | FileCheck %s
 
 ; Verify the operand type of the ret instructions in a function match the
 ; declared return type of the function they live in.

@@ -1,6 +1,6 @@
 //===- ValueTracking.cpp - Walk computations to compute properties --------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -12,32 +12,32 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Analysis/ValueTracking.h"
-#include "llvm/ADT/SmallPtrSet.h"
-#include "llvm/Analysis/AssumptionCache.h"
-#include "llvm/Analysis/InstructionSimplify.h"
-#include "llvm/Analysis/MemoryBuiltins.h"
-#include "llvm/Analysis/LoopInfo.h"
-#include "llvm/IR/CallSite.h"
-#include "llvm/IR/ConstantRange.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/Dominators.h"
-#include "llvm/IR/GetElementPtrTypeIterator.h"
-#include "llvm/IR/GlobalAlias.h"
-#include "llvm/IR/GlobalVariable.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Metadata.h"
-#include "llvm/IR/Operator.h"
-#include "llvm/IR/PatternMatch.h"
-#include "llvm/IR/Statepoint.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/MathExtras.h"
+#include "llvm37/Analysis/ValueTracking.h"
+#include "llvm37/ADT/SmallPtrSet.h"
+#include "llvm37/Analysis/AssumptionCache.h"
+#include "llvm37/Analysis/InstructionSimplify.h"
+#include "llvm37/Analysis/MemoryBuiltins.h"
+#include "llvm37/Analysis/LoopInfo.h"
+#include "llvm37/IR/CallSite.h"
+#include "llvm37/IR/ConstantRange.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/IR/Dominators.h"
+#include "llvm37/IR/GetElementPtrTypeIterator.h"
+#include "llvm37/IR/GlobalAlias.h"
+#include "llvm37/IR/GlobalVariable.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/Metadata.h"
+#include "llvm37/IR/Operator.h"
+#include "llvm37/IR/PatternMatch.h"
+#include "llvm37/IR/Statepoint.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/MathExtras.h"
 #include <cstring>
-using namespace llvm;
-using namespace llvm::PatternMatch;
+using namespace llvm37;
+using namespace llvm37::PatternMatch;
 
 const unsigned MaxDepth = 6;
 
@@ -138,7 +138,7 @@ static void computeKnownBits(Value *V, APInt &KnownZero, APInt &KnownOne,
                              const DataLayout &DL, unsigned Depth,
                              const Query &Q);
 
-void llvm::computeKnownBits(Value *V, APInt &KnownZero, APInt &KnownOne,
+void llvm37::computeKnownBits(Value *V, APInt &KnownZero, APInt &KnownOne,
                             const DataLayout &DL, unsigned Depth,
                             AssumptionCache *AC, const Instruction *CxtI,
                             const DominatorTree *DT) {
@@ -146,7 +146,7 @@ void llvm::computeKnownBits(Value *V, APInt &KnownZero, APInt &KnownOne,
                      Query(AC, safeCxtI(V, CxtI), DT));
 }
 
-bool llvm::haveNoCommonBitsSet(Value *LHS, Value *RHS, const DataLayout &DL,
+bool llvm37::haveNoCommonBitsSet(Value *LHS, Value *RHS, const DataLayout &DL,
                                AssumptionCache *AC, const Instruction *CxtI,
                                const DominatorTree *DT) {
   assert(LHS->getType() == RHS->getType() &&
@@ -165,7 +165,7 @@ static void ComputeSignBit(Value *V, bool &KnownZero, bool &KnownOne,
                            const DataLayout &DL, unsigned Depth,
                            const Query &Q);
 
-void llvm::ComputeSignBit(Value *V, bool &KnownZero, bool &KnownOne,
+void llvm37::ComputeSignBit(Value *V, bool &KnownZero, bool &KnownOne,
                           const DataLayout &DL, unsigned Depth,
                           AssumptionCache *AC, const Instruction *CxtI,
                           const DominatorTree *DT) {
@@ -176,7 +176,7 @@ void llvm::ComputeSignBit(Value *V, bool &KnownZero, bool &KnownOne,
 static bool isKnownToBeAPowerOfTwo(Value *V, bool OrZero, unsigned Depth,
                                    const Query &Q, const DataLayout &DL);
 
-bool llvm::isKnownToBeAPowerOfTwo(Value *V, const DataLayout &DL, bool OrZero,
+bool llvm37::isKnownToBeAPowerOfTwo(Value *V, const DataLayout &DL, bool OrZero,
                                   unsigned Depth, AssumptionCache *AC,
                                   const Instruction *CxtI,
                                   const DominatorTree *DT) {
@@ -187,7 +187,7 @@ bool llvm::isKnownToBeAPowerOfTwo(Value *V, const DataLayout &DL, bool OrZero,
 static bool isKnownNonZero(Value *V, const DataLayout &DL, unsigned Depth,
                            const Query &Q);
 
-bool llvm::isKnownNonZero(Value *V, const DataLayout &DL, unsigned Depth,
+bool llvm37::isKnownNonZero(Value *V, const DataLayout &DL, unsigned Depth,
                           AssumptionCache *AC, const Instruction *CxtI,
                           const DominatorTree *DT) {
   return ::isKnownNonZero(V, DL, Depth, Query(AC, safeCxtI(V, CxtI), DT));
@@ -196,7 +196,7 @@ bool llvm::isKnownNonZero(Value *V, const DataLayout &DL, unsigned Depth,
 static bool MaskedValueIsZero(Value *V, const APInt &Mask, const DataLayout &DL,
                               unsigned Depth, const Query &Q);
 
-bool llvm::MaskedValueIsZero(Value *V, const APInt &Mask, const DataLayout &DL,
+bool llvm37::MaskedValueIsZero(Value *V, const APInt &Mask, const DataLayout &DL,
                              unsigned Depth, AssumptionCache *AC,
                              const Instruction *CxtI, const DominatorTree *DT) {
   return ::MaskedValueIsZero(V, Mask, DL, Depth,
@@ -206,7 +206,7 @@ bool llvm::MaskedValueIsZero(Value *V, const APInt &Mask, const DataLayout &DL,
 static unsigned ComputeNumSignBits(Value *V, const DataLayout &DL,
                                    unsigned Depth, const Query &Q);
 
-unsigned llvm::ComputeNumSignBits(Value *V, const DataLayout &DL,
+unsigned llvm37::ComputeNumSignBits(Value *V, const DataLayout &DL,
                                   unsigned Depth, AssumptionCache *AC,
                                   const Instruction *CxtI,
                                   const DominatorTree *DT) {
@@ -354,7 +354,7 @@ static void computeKnownBitsMul(Value *Op0, Value *Op1, bool NSW,
     KnownOne.setBit(BitWidth - 1);
 }
 
-void llvm::computeKnownBitsFromRangeMetadata(const MDNode &Ranges,
+void llvm37::computeKnownBitsFromRangeMetadata(const MDNode &Ranges,
                                              APInt &KnownZero) {
   unsigned BitWidth = KnownZero.getBitWidth();
   unsigned NumRanges = Ranges.getNumOperands() / 2;
@@ -488,7 +488,7 @@ static bool isValidAssumeForContext(Value *V, const Query &Q) {
   return false;
 }
 
-bool llvm::isValidAssumeForContext(const Instruction *I,
+bool llvm37::isValidAssumeForContext(const Instruction *I,
                                    const Instruction *CxtI,
                                    const DominatorTree *DT) {
   return ::isValidAssumeForContext(const_cast<Instruction *>(I),
@@ -566,7 +566,7 @@ static void computeKnownBitsFromTrueCondition(Value *V, ICmpInst *Cmp,
       else if (RHS == V)
         computeKnownBits(LHS, KnownZeroTemp, KnownOneTemp, DL, Depth + 1, Q);
       else
-        llvm_unreachable("missing use?");
+        llvm37_unreachable("missing use?");
       KnownZero |= KnownZeroTemp;
       KnownOne |= KnownOneTemp;
     }
@@ -958,7 +958,7 @@ static void computeKnownBitsFromOperator(Operator *I, APInt &KnownZero,
   switch (I->getOpcode()) {
   default: break;
   case Instruction::Load:
-    if (MDNode *MD = cast<LoadInst>(I)->getMetadata(LLVMContext::MD_range))
+    if (MDNode *MD = cast<LoadInst>(I)->getMetadata(LLVM37Context::MD_range))
       computeKnownBitsFromRangeMetadata(*MD, KnownZero);
     break;
   case Instruction::And: {
@@ -1343,7 +1343,7 @@ static void computeKnownBitsFromOperator(Operator *I, APInt &KnownZero,
   }
   case Instruction::Call:
   case Instruction::Invoke:
-    if (MDNode *MD = cast<Instruction>(I)->getMetadata(LLVMContext::MD_range))
+    if (MDNode *MD = cast<Instruction>(I)->getMetadata(LLVM37Context::MD_range))
       computeKnownBitsFromRangeMetadata(*MD, KnownZero);
     // If a range metadata is attached to this IntrinsicInst, intersect the
     // explicit range specified by the metadata and the implicit range of
@@ -1761,7 +1761,7 @@ bool isKnownNonZero(Value *V, const DataLayout &DL, unsigned Depth,
   }
 
   if (Instruction* I = dyn_cast<Instruction>(V)) {
-    if (MDNode *Ranges = I->getMetadata(LLVMContext::MD_range)) {
+    if (MDNode *Ranges = I->getMetadata(LLVM37Context::MD_range)) {
       // If the possible ranges don't contain zero, then the value is
       // definitely non-zero.
       if (IntegerType* Ty = dyn_cast<IntegerType>(V->getType())) {
@@ -2139,7 +2139,7 @@ unsigned ComputeNumSignBits(Value *V, const DataLayout &DL, unsigned Depth,
 /// If successful, it returns true and returns the multiple in
 /// Multiple. If unsuccessful, it returns false. It looks
 /// through SExt instructions only if LookThroughSExt is true.
-bool llvm::ComputeMultiple(Value *V, unsigned Base, Value *&Multiple,
+bool llvm37::ComputeMultiple(Value *V, unsigned Base, Value *&Multiple,
                            bool LookThroughSExt, unsigned Depth) {
   const unsigned MaxDepth = 6;
 
@@ -2261,7 +2261,7 @@ bool llvm::ComputeMultiple(Value *V, unsigned Base, Value *&Multiple,
 /// NOTE: this function will need to be revisited when we support non-default
 /// rounding modes!
 ///
-bool llvm::CannotBeNegativeZero(const Value *V, unsigned Depth) {
+bool llvm37::CannotBeNegativeZero(const Value *V, unsigned Depth) {
   if (const ConstantFP *CFP = dyn_cast<ConstantFP>(V))
     return !CFP->getValueAPF().isNegZero();
 
@@ -2312,7 +2312,7 @@ bool llvm::CannotBeNegativeZero(const Value *V, unsigned Depth) {
   return false;
 }
 
-bool llvm::CannotBeOrderedLessThanZero(const Value *V, unsigned Depth) {
+bool llvm37::CannotBeOrderedLessThanZero(const Value *V, unsigned Depth) {
   if (const ConstantFP *CFP = dyn_cast<ConstantFP>(V))
     return !CFP->getValueAPF().isNegative() || CFP->getValueAPF().isZero();
 
@@ -2373,7 +2373,7 @@ bool llvm::CannotBeOrderedLessThanZero(const Value *V, unsigned Depth) {
 /// true for all i8 values obviously, but is also true for i32 0, i32 -1,
 /// i16 0xF0F0, double 0.0 etc.  If the value can't be handled with a repeated
 /// byte store (e.g. i16 0x1234), return null.
-Value *llvm::isBytewiseValue(Value *V) {
+Value *llvm37::isBytewiseValue(Value *V) {
   // All byte-wide stores are splatable, even of arbitrary variables.
   if (V->getType()->isIntegerTy(8)) return V;
 
@@ -2438,7 +2438,7 @@ static Value *BuildSubAggregate(Value *From, Value* To, Type *IndexedType,
                                 SmallVectorImpl<unsigned> &Idxs,
                                 unsigned IdxSkip,
                                 Instruction *InsertBefore) {
-  llvm::StructType *STy = dyn_cast<llvm::StructType>(IndexedType);
+  llvm37::StructType *STy = dyn_cast<llvm37::StructType>(IndexedType);
   if (STy) {
     // Save the original To argument so we can modify it
     Value *OrigTo = To;
@@ -2477,7 +2477,7 @@ static Value *BuildSubAggregate(Value *From, Value* To, Type *IndexedType,
     return nullptr;
 
   // Insert the value in the new (sub) aggregrate
-  return llvm::InsertValueInst::Create(To, V, makeArrayRef(Idxs).slice(IdxSkip),
+  return llvm37::InsertValueInst::Create(To, V, makeArrayRef(Idxs).slice(IdxSkip),
                                        "tmp", InsertBefore);
 }
 
@@ -2511,7 +2511,7 @@ static Value *BuildSubAggregate(Value *From, ArrayRef<unsigned> idx_range,
 ///
 /// If InsertBefore is not null, this function will duplicate (modified)
 /// insertvalues when a part of a nested struct is extracted.
-Value *llvm::FindInsertedValue(Value *V, ArrayRef<unsigned> idx_range,
+Value *llvm37::FindInsertedValue(Value *V, ArrayRef<unsigned> idx_range,
                                Instruction *InsertBefore) {
   // Nothing to index? Just return V then (this is useful at the end of our
   // recursion).
@@ -2597,7 +2597,7 @@ Value *llvm::FindInsertedValue(Value *V, ArrayRef<unsigned> idx_range,
 
 /// Analyze the specified pointer to see if it can be expressed as a base
 /// pointer plus a constant offset. Return the base and offset to the caller.
-Value *llvm::GetPointerBaseWithConstantOffset(Value *Ptr, int64_t &Offset,
+Value *llvm37::GetPointerBaseWithConstantOffset(Value *Ptr, int64_t &Offset,
                                               const DataLayout &DL) {
   unsigned BitWidth = DL.getPointerTypeSizeInBits(Ptr->getType());
   APInt ByteOffset(BitWidth, 0);
@@ -2632,7 +2632,7 @@ Value *llvm::GetPointerBaseWithConstantOffset(Value *Ptr, int64_t &Offset,
 /// This function computes the length of a null-terminated C string pointed to
 /// by V. If successful, it returns true and returns the string in Str.
 /// If unsuccessful, it returns false.
-bool llvm::getConstantStringInfo(const Value *V, StringRef &Str,
+bool llvm37::getConstantStringInfo(const Value *V, StringRef &Str,
                                  uint64_t Offset, bool TrimAtNul) {
   assert(V);
 
@@ -2767,7 +2767,7 @@ static uint64_t GetStringLengthH(Value *V, SmallPtrSetImpl<PHINode*> &PHIs) {
 
 /// If we can compute the length of the string pointed to by
 /// the specified pointer, return 'len+1'.  If we can't, return 0.
-uint64_t llvm::GetStringLength(Value *V) {
+uint64_t llvm37::GetStringLength(Value *V) {
   if (!V->getType()->isPointerTy()) return 0;
 
   SmallPtrSet<PHINode*, 32> PHIs;
@@ -2803,7 +2803,7 @@ static bool isSameUnderlyingObjectInLoop(PHINode *PN, LoopInfo *LI) {
   return true;
 }
 
-Value *llvm::GetUnderlyingObject(Value *V, const DataLayout &DL,
+Value *llvm37::GetUnderlyingObject(Value *V, const DataLayout &DL,
                                  unsigned MaxLookup) {
   if (!V->getType()->isPointerTy())
     return V;
@@ -2833,7 +2833,7 @@ Value *llvm::GetUnderlyingObject(Value *V, const DataLayout &DL,
   return V;
 }
 
-void llvm::GetUnderlyingObjects(Value *V, SmallVectorImpl<Value *> &Objects,
+void llvm37::GetUnderlyingObjects(Value *V, SmallVectorImpl<Value *> &Objects,
                                 const DataLayout &DL, LoopInfo *LI,
                                 unsigned MaxLookup) {
   SmallPtrSet<Value *, 4> Visited;
@@ -2875,7 +2875,7 @@ void llvm::GetUnderlyingObjects(Value *V, SmallVectorImpl<Value *> &Objects,
 }
 
 /// Return true if the only users of this pointer are lifetime markers.
-bool llvm::onlyUsedByLifetimeMarkers(const Value *V) {
+bool llvm37::onlyUsedByLifetimeMarkers(const Value *V) {
   for (const User *U : V->users()) {
     const IntrinsicInst *II = dyn_cast<IntrinsicInst>(U);
     if (!II) return false;
@@ -2910,13 +2910,13 @@ static bool isDereferenceableFromAttribute(const Value *BV, APInt Offset,
       CheckForNonNull = true;
     }
   } else if (const LoadInst *LI = dyn_cast<LoadInst>(BV)) {
-    if (MDNode *MD = LI->getMetadata(LLVMContext::MD_dereferenceable)) {
+    if (MDNode *MD = LI->getMetadata(LLVM37Context::MD_dereferenceable)) {
       ConstantInt *CI = mdconst::extract<ConstantInt>(MD->getOperand(0));
       DerefBytes = CI->getLimitedValue();
     }
     if (!DerefBytes.getBoolValue()) {
       if (MDNode *MD = 
-              LI->getMetadata(LLVMContext::MD_dereferenceable_or_null)) {
+              LI->getMetadata(LLVM37Context::MD_dereferenceable_or_null)) {
         ConstantInt *CI = mdconst::extract<ConstantInt>(MD->getOperand(0));
         DerefBytes = CI->getLimitedValue();
       }
@@ -3028,7 +3028,7 @@ static bool isDereferenceablePointer(const Value *V, const DataLayout &DL,
   return false;
 }
 
-bool llvm::isDereferenceablePointer(const Value *V, const DataLayout &DL,
+bool llvm37::isDereferenceablePointer(const Value *V, const DataLayout &DL,
                                     const Instruction *CtxI,
                                     const DominatorTree *DT,
                                     const TargetLibraryInfo *TLI) {
@@ -3052,7 +3052,7 @@ bool llvm::isDereferenceablePointer(const Value *V, const DataLayout &DL,
   return ::isDereferenceablePointer(V, DL, CtxI, DT, TLI, Visited);
 }
 
-bool llvm::isSafeToSpeculativelyExecute(const Value *V,
+bool llvm37::isSafeToSpeculativelyExecute(const Value *V,
                                         const Instruction *CtxI,
                                         const DominatorTree *DT,
                                         const TargetLibraryInfo *TLI) {
@@ -3127,7 +3127,7 @@ bool llvm::isSafeToSpeculativelyExecute(const Value *V,
       case Intrinsic::umul_with_overflow:
       case Intrinsic::usub_with_overflow:
         return true;
-      // Sqrt should be OK, since the llvm sqrt intrinsic isn't defined to set
+      // Sqrt should be OK, since the llvm37 sqrt intrinsic isn't defined to set
       // errno like libm sqrt would.
       case Intrinsic::sqrt:
       case Intrinsic::fma:
@@ -3166,7 +3166,7 @@ bool llvm::isSafeToSpeculativelyExecute(const Value *V,
 }
 
 /// Return true if we know that the specified value is never null.
-bool llvm::isKnownNonNull(const Value *V, const TargetLibraryInfo *TLI) {
+bool llvm37::isKnownNonNull(const Value *V, const TargetLibraryInfo *TLI) {
   // Alloca never returns null, malloc might.
   if (isa<AllocaInst>(V)) return true;
 
@@ -3180,7 +3180,7 @@ bool llvm::isKnownNonNull(const Value *V, const TargetLibraryInfo *TLI) {
 
   // A Load tagged w/nonnull metadata is never null. 
   if (const LoadInst *LI = dyn_cast<LoadInst>(V))
-    return LI->getMetadata(LLVMContext::MD_nonnull);
+    return LI->getMetadata(LLVM37Context::MD_nonnull);
 
   if (auto CS = ImmutableCallSite(V))
     if (CS.isReturnNonNull())
@@ -3239,7 +3239,7 @@ static bool isKnownNonNullFromDominatingCondition(const Value *V,
   return false;
 }
 
-bool llvm::isKnownNonNullAt(const Value *V, const Instruction *CtxI,
+bool llvm37::isKnownNonNullAt(const Value *V, const Instruction *CtxI,
                    const DominatorTree *DT, const TargetLibraryInfo *TLI) {
   if (isKnownNonNull(V, TLI))
     return true;
@@ -3247,7 +3247,7 @@ bool llvm::isKnownNonNullAt(const Value *V, const Instruction *CtxI,
   return CtxI ? ::isKnownNonNullFromDominatingCondition(V, CtxI, DT) : false;
 }
 
-OverflowResult llvm::computeOverflowForUnsignedMul(Value *LHS, Value *RHS,
+OverflowResult llvm37::computeOverflowForUnsignedMul(Value *LHS, Value *RHS,
                                                    const DataLayout &DL,
                                                    AssumptionCache *AC,
                                                    const Instruction *CxtI,
@@ -3297,7 +3297,7 @@ OverflowResult llvm::computeOverflowForUnsignedMul(Value *LHS, Value *RHS,
   return OverflowResult::MayOverflow;
 }
 
-OverflowResult llvm::computeOverflowForUnsignedAdd(Value *LHS, Value *RHS,
+OverflowResult llvm37::computeOverflowForUnsignedAdd(Value *LHS, Value *RHS,
                                                    const DataLayout &DL,
                                                    AssumptionCache *AC,
                                                    const Instruction *CxtI,
@@ -3422,7 +3422,7 @@ static Constant *lookThroughCast(ICmpInst *CmpI, Value *V1, Value *V2,
   return nullptr;
 }
 
-SelectPatternFlavor llvm::matchSelectPattern(Value *V,
+SelectPatternFlavor llvm37::matchSelectPattern(Value *V,
                                              Value *&LHS, Value *&RHS,
                                              Instruction::CastOps *CastOp) {
   SelectInst *SI = dyn_cast<SelectInst>(V);

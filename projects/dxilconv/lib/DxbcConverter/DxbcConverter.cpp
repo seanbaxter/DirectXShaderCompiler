@@ -9,7 +9,7 @@
 //                                                                           //
 ///////////////////////////////////////////////////////////////////////////////
 
-#include "llvm/Support/Debug.h"
+#include "llvm37/Support/Debug.h"
 #include "DxbcConverterImpl.h"
 #include "DxilConvPasses/DxilCleanup.h"
 #include "dxc/DxilContainer/DxilContainer.h"
@@ -37,7 +37,7 @@ __override HRESULT STDMETHODCALLTYPE DxbcConverter::Convert(_In_reads_bytes_(Dxb
       IFT(CreateMSFileSystemForDisk(&pFSPtr));
       unique_ptr<sys::fs::MSFileSystem> pFS(pFSPtr);
       sys::fs::AutoPerThreadSystem pTS(pFS.get());
-      IFTLLVM(pTS.error_code());
+      IFTLLVM37(pTS.error_code());
 
       struct StdErrFlusher {
         ~StdErrFlusher() { dbgs().flush(); }
@@ -78,7 +78,7 @@ __override HRESULT STDMETHODCALLTYPE DxbcConverter::ConvertInDriver(_In_reads_by
       IFT(CreateMSFileSystemForDisk(&pFSPtr));
       unique_ptr<sys::fs::MSFileSystem> pFS(pFSPtr);
       sys::fs::AutoPerThreadSystem pTS(pFS.get());
-      IFTLLVM(pTS.error_code());
+      IFTLLVM37(pTS.error_code());
 
       struct StdErrFlusher {
         ~StdErrFlusher() { dbgs().flush(); }
@@ -142,13 +142,13 @@ DxbcConverter::~DxbcConverter() {
 
 static void AddDxilPipelineStateValidationToDXBC( DxilModule *pModule,
                                                   DxilPipelineStateValidation &PSV);
-static void EmitIdentMetadata(llvm::Module *pModule, LPCSTR pValue) {
-  llvm::NamedMDNode *IdentMetadata =
+static void EmitIdentMetadata(llvm37::Module *pModule, LPCSTR pValue) {
+  llvm37::NamedMDNode *IdentMetadata =
     pModule->getOrInsertNamedMetadata("llvm.ident");
-  llvm::LLVMContext &Ctx = pModule->getContext();
+  llvm37::LLVM37Context &Ctx = pModule->getContext();
 
-  llvm::Metadata *IdentNode[] = {llvm::MDString::get(Ctx, pValue)};
-  IdentMetadata->addOperand(llvm::MDNode::get(Ctx, IdentNode));
+  llvm37::Metadata *IdentNode[] = {llvm37::MDString::get(Ctx, pValue)};
+  IdentMetadata->addOperand(llvm37::MDNode::get(Ctx, IdentNode));
 }
 
 void WritePart(AbstractMemoryStream *pStream, const void *pData, size_t size) {
@@ -178,7 +178,7 @@ void DxbcConverter::ConvertImpl(_In_reads_bytes_(DxbcSize) LPCVOID pDxbc,
   ParseExtraOptions(pExtraOptions);
 
   // Create the module.
-  m_pModule = std::make_unique<llvm::Module>("main", m_Ctx);
+  m_pModule = std::make_unique<llvm37::Module>("main", m_Ctx);
 
   // Setup DxilModule.
   m_pPR = &(m_pModule->GetOrCreateDxilModule(/*skipInit*/true));
@@ -245,7 +245,7 @@ void DxbcConverter::ConvertImpl(_In_reads_bytes_(DxbcSize) LPCVOID pDxbc,
   SmallVector<char, 4*1024> DxilBuffer;
   SerializeDxil(DxilBuffer);
 
-  // Wrap LLVM module in a DXBC container.
+  // Wrap LLVM37 module in a DXBC container.
   size_t DXILSize = DxilBuffer.size_in_bytes();
   DxilContainerWriter *pContainerWriter = hlsl::NewDxilContainerWriter();
   pContainerWriter->AddPart(DXBC_DXIL, DXILSize, [=](AbstractMemoryStream *pStream) {
@@ -362,7 +362,7 @@ void DxbcConverter::ConvertInDriverImpl(_In_reads_bytes_(8) const UINT32 *pByteC
   ParseExtraOptions(pExtraOptions);
 
   // Create the module.
-  m_pModule = std::make_unique<llvm::Module>("main", m_Ctx);
+  m_pModule = std::make_unique<llvm37::Module>("main", m_Ctx);
 
   // Setup DxilModule.
   m_pPR = &(m_pModule->GetOrCreateDxilModule(/*skipInit*/true));
@@ -1830,8 +1830,8 @@ void DxbcConverter::AnalyzeShader(D3D10ShaderBinary::CShaderCodeParser &Parser) 
                                   GlobalVariable::NotThreadLocal, DXIL::kTGSMAddrSpace);
       E.pVar->setAlignment(kRegCompAlignment);
 
-      // Mark GV as being used for LLVM.
-      m_pPR->GetLLVMUsed().push_back(E.pVar);
+      // Mark GV as being used for LLVM37.
+      m_pPR->GetLLVM37Used().push_back(E.pVar);
 
       m_TGSMMap[Inst.m_Operands[0].m_Index[0].m_RegIndex] = E;
       break;
@@ -2122,7 +2122,7 @@ void DxbcConverter::ConvertInstructions(D3D10ShaderBinary::CShaderCodeParser &Pa
         unsigned Size = Inst.m_CustomData.DataSizeInBytes >> 2;
         DXASSERT_DXBC(m_pIcbGV == nullptr && Inst.m_CustomData.DataSizeInBytes == Size*4);
 
-        llvm::Constant *pIcbData = ConstantDataArray::get(m_Ctx, ArrayRef<float>((float*)Inst.m_CustomData.pData, Size));
+        llvm37::Constant *pIcbData = ConstantDataArray::get(m_Ctx, ArrayRef<float>((float*)Inst.m_CustomData.pData, Size));
         m_pIcbGV = new GlobalVariable(*m_pModule, pIcbData->getType(), true, GlobalValue::InternalLinkage,
                                       pIcbData, "dx.icb", nullptr, 
                                       GlobalVariable::NotThreadLocal, DXIL::kImmediateCBufferAddrSpace);
@@ -2289,7 +2289,7 @@ void DxbcConverter::ConvertInstructions(D3D10ShaderBinary::CShaderCodeParser &Pa
         OperationType = OperationTypeCos;
       }
       CMask WriteMaskAll = WriteMaskSin | WriteMaskCos;
-      Type *pOperationType = OperationType.GetLLVMType(m_Ctx);
+      Type *pOperationType = OperationType.GetLLVM37Type(m_Ctx);
 
       OperandValue In;
       LoadOperand(In, Inst, 2, WriteMaskAll, OperationType);
@@ -2613,7 +2613,7 @@ void DxbcConverter::ConvertInstructions(D3D10ShaderBinary::CShaderCodeParser &Pa
 
       // Function call.
       CompType DstType = DXBC::GetCompTypeWithMinPrec(CompType::getF32(), Inst.m_Operands[uOpOutput].m_MinPrecision);
-      Type *pDstType = DstType.GetLLVMType(m_Ctx);
+      Type *pDstType = DstType.GetLLVM37Type(m_Ctx);
       Function *F = m_pOP->GetOpFunc(OpCode, pDstType);
       Value *pOpRet = m_pBuilder->CreateCall(F, Args);
 
@@ -2650,7 +2650,7 @@ void DxbcConverter::ConvertInstructions(D3D10ShaderBinary::CShaderCodeParser &Pa
 
       // Function call.
       CompType DstType = DXBC::GetCompTypeWithMinPrec(CompType::getF32(), Inst.m_Operands[uOpOutput].m_MinPrecision);
-      Type *pDstType = DstType.GetLLVMType(m_Ctx);
+      Type *pDstType = DstType.GetLLVM37Type(m_Ctx);
       Function *F = m_pOP->GetOpFunc(OpCode, pDstType);
       Value *pOpRet = m_pBuilder->CreateCall(F, Args);
 
@@ -2676,7 +2676,7 @@ void DxbcConverter::ConvertInstructions(D3D10ShaderBinary::CShaderCodeParser &Pa
 
       // Function call.
       CompType DstType = DXBC::GetCompTypeWithMinPrec(CompType::getF32(), Inst.m_Operands[uOpOutput].m_MinPrecision);
-      Type *pDstType = DstType.GetLLVMType(m_Ctx);
+      Type *pDstType = DstType.GetLLVM37Type(m_Ctx);
       Function *F = m_pOP->GetOpFunc(OpCode, pDstType);
       Value *pOpRet = m_pBuilder->CreateCall(F, Args);
 
@@ -2723,7 +2723,7 @@ void DxbcConverter::ConvertInstructions(D3D10ShaderBinary::CShaderCodeParser &Pa
 
       // Function call.
       CompType DstType = DXBC::GetCompTypeWithMinPrec(CompType::getF32(), Inst.m_Operands[uOpOutput].m_MinPrecision);
-      Type *pDstType = DstType.GetLLVMType(m_Ctx);
+      Type *pDstType = DstType.GetLLVM37Type(m_Ctx);
       Function *F = m_pOP->GetOpFunc(OpCode, pDstType);
       Value *pOpRet = m_pBuilder->CreateCall(F, Args);
 
@@ -2760,7 +2760,7 @@ void DxbcConverter::ConvertInstructions(D3D10ShaderBinary::CShaderCodeParser &Pa
 
       // Function call.
       CompType DstType = DXBC::GetCompTypeWithMinPrec(CompType::getF32(), Inst.m_Operands[uOpOutput].m_MinPrecision);
-      Type *pDstType = DstType.GetLLVMType(m_Ctx);
+      Type *pDstType = DstType.GetLLVM37Type(m_Ctx);
       Function *F = m_pOP->GetOpFunc(OpCode, pDstType);
       Value *pOpRet = m_pBuilder->CreateCall(F, Args);
 
@@ -2786,7 +2786,7 @@ void DxbcConverter::ConvertInstructions(D3D10ShaderBinary::CShaderCodeParser &Pa
 
       // Function call.
       CompType DstType = DXBC::GetCompTypeWithMinPrec(CompType::getF32(), Inst.m_Operands[uOpOutput].m_MinPrecision);
-      Type *pDstType = DstType.GetLLVMType(m_Ctx);
+      Type *pDstType = DstType.GetLLVM37Type(m_Ctx);
       Function *F = m_pOP->GetOpFunc(OpCode, pDstType);
       Value *pOpRet = m_pBuilder->CreateCall(F, Args);
 
@@ -2814,7 +2814,7 @@ void DxbcConverter::ConvertInstructions(D3D10ShaderBinary::CShaderCodeParser &Pa
 
       // Return type.
       CompType DstType = DXBC::GetCompTypeWithMinPrec(R.GetCompType().GetBaseCompType(), Inst.m_Operands[uOpOutput].m_MinPrecision);
-      Type *pDstType = DstType.GetLLVMType(m_Ctx);
+      Type *pDstType = DstType.GetLLVM37Type(m_Ctx);
 
       // Create Load call.
       Value *pOpRet;
@@ -2887,7 +2887,7 @@ void DxbcConverter::ConvertInstructions(D3D10ShaderBinary::CShaderCodeParser &Pa
 
       // Return type.
       CompType DstType = DXBC::GetCompTypeWithMinPrec(R.GetCompType().GetBaseCompType(), Inst.m_Operands[uOpOutput].m_MinPrecision);
-      Type *pDstType = DstType.GetLLVMType(m_Ctx);
+      Type *pDstType = DstType.GetLLVM37Type(m_Ctx);
 
       // Create Load call.
       Value *pOpRet;
@@ -2949,7 +2949,7 @@ void DxbcConverter::ConvertInstructions(D3D10ShaderBinary::CShaderCodeParser &Pa
 
       // Value type.
       CompType ValueType = DXBC::GetCompTypeWithMinPrec(R.GetCompType().GetBaseCompType(), Inst.m_Operands[uOpUAV].m_MinPrecision);
-      Type *pValueType = ValueType.GetLLVMType(m_Ctx);
+      Type *pValueType = ValueType.GetLLVM37Type(m_Ctx);
 
       // Value.
       CMask ValueMask = CMask::FromDXBC(Inst.m_Operands[uOpUAV].m_WriteMask);
@@ -3021,7 +3021,7 @@ void DxbcConverter::ConvertInstructions(D3D10ShaderBinary::CShaderCodeParser &Pa
         Args[3] = m_pUnusedI32;                               // Coord 1: unused
 
         CompType DstType = CompType::getI32();
-        Type *pDstType = DstType.GetLLVMType(m_Ctx);
+        Type *pDstType = DstType.GetLLVM37Type(m_Ctx);
         Function *F = m_pOP->GetOpFunc(OpCode, pDstType);
         Value *pOpRet = m_pBuilder->CreateCall(F, Args);
 
@@ -3053,7 +3053,7 @@ void DxbcConverter::ConvertInstructions(D3D10ShaderBinary::CShaderCodeParser &Pa
 
         // Value type.
         CompType ValueType = CompType::getI32();
-        Type *pValueType = ValueType.GetLLVMType(m_Ctx);
+        Type *pValueType = ValueType.GetLLVM37Type(m_Ctx);
 
         // Value.
         CMask ValueMask = CMask::FromDXBC(Inst.m_Operands[uOpUAV].m_WriteMask);
@@ -3106,7 +3106,7 @@ void DxbcConverter::ConvertInstructions(D3D10ShaderBinary::CShaderCodeParser &Pa
         Args[3] = GetCoordValue(Inst, uOpStructByteOffset); // Coord 2: byte offset within the element
 
         CompType DstType = CompType::getI32();
-        Type *pDstType = DstType.GetLLVMType(m_Ctx);
+        Type *pDstType = DstType.GetLLVM37Type(m_Ctx);
         Function *F = m_pOP->GetOpFunc(OpCode, pDstType);
         Value *pOpRet = m_pBuilder->CreateCall(F, Args);
 
@@ -3143,7 +3143,7 @@ void DxbcConverter::ConvertInstructions(D3D10ShaderBinary::CShaderCodeParser &Pa
 
         // Value type.
         CompType ValueType = CompType::getI32();
-        Type *pValueType = ValueType.GetLLVMType(m_Ctx);
+        Type *pValueType = ValueType.GetLLVM37Type(m_Ctx);
 
         // Value.
         CMask ValueMask = CMask::FromDXBC(Inst.m_Operands[uOpUAV].m_WriteMask);
@@ -3224,7 +3224,7 @@ void DxbcConverter::ConvertInstructions(D3D10ShaderBinary::CShaderCodeParser &Pa
 
         // Value type.
         CompType ValueType = CompType::getI32();
-        Type *pValueType = ValueType.GetLLVMType(m_Ctx);
+        Type *pValueType = ValueType.GetLLVM37Type(m_Ctx);
 
         // Compare value.
         if (bHasCompare) {
@@ -3344,7 +3344,7 @@ void DxbcConverter::ConvertInstructions(D3D10ShaderBinary::CShaderCodeParser &Pa
 
       // Function call.
       CompType DstType = DXBC::GetCompTypeWithMinPrec(R.GetCompType().GetBaseCompType(), Inst.m_Operands[uOpOutput].m_MinPrecision);
-      Type *pDstType = DstType.GetLLVMType(m_Ctx);
+      Type *pDstType = DstType.GetLLVM37Type(m_Ctx);
       Function *F = m_pOP->GetOpFunc(OpCode, pDstType);
       Value *pOpRet = m_pBuilder->CreateCall(F, Args);
 
@@ -3385,7 +3385,7 @@ void DxbcConverter::ConvertInstructions(D3D10ShaderBinary::CShaderCodeParser &Pa
 
       // Function call.
       CompType DstType = DXBC::GetCompTypeWithMinPrec(R.GetCompType().GetBaseCompType(), Inst.m_Operands[uOpOutput].m_MinPrecision);
-      Type *pDstType = DstType.GetLLVMType(m_Ctx);
+      Type *pDstType = DstType.GetLLVM37Type(m_Ctx);
       Function *F = m_pOP->GetOpFunc(OpCode, pDstType);
       Value *pOpRet = m_pBuilder->CreateCall(F, Args);
 
@@ -3420,7 +3420,7 @@ void DxbcConverter::ConvertInstructions(D3D10ShaderBinary::CShaderCodeParser &Pa
 
       // Function call.
       CompType DstType = DXBC::GetCompTypeWithMinPrec(R.GetCompType().GetBaseCompType(), Inst.m_Operands[uOpOutput].m_MinPrecision);
-      Type *pDstType = DstType.GetLLVMType(m_Ctx);
+      Type *pDstType = DstType.GetLLVM37Type(m_Ctx);
       Function *F = m_pOP->GetOpFunc(OpCode, pDstType);
       Value *pOpRet = m_pBuilder->CreateCall(F, Args);
 
@@ -3460,7 +3460,7 @@ void DxbcConverter::ConvertInstructions(D3D10ShaderBinary::CShaderCodeParser &Pa
 
       // Function call.
       CompType DstType = DXBC::GetCompTypeWithMinPrec(R.GetCompType().GetBaseCompType(), Inst.m_Operands[uOpOutput].m_MinPrecision);
-      Type *pDstType = DstType.GetLLVMType(m_Ctx);
+      Type *pDstType = DstType.GetLLVM37Type(m_Ctx);
       Function *F = m_pOP->GetOpFunc(OpCode, pDstType);
       Value *pOpRet = m_pBuilder->CreateCall(F, Args);
 
@@ -4238,7 +4238,7 @@ void DxbcConverter::ConvertInstructions(D3D10ShaderBinary::CShaderCodeParser &Pa
       Args[5] = CoordMask.IsSet(2) ? InCoord[2] : m_pUnusedF32;
 
       CompType DstType = DXBC::GetCompTypeWithMinPrec(CompType::getF32(), Inst.m_Operands[uOpOutput].m_MinPrecision);
-      Type *pDstType = DstType.GetLLVMType(m_Ctx);
+      Type *pDstType = DstType.GetLLVM37Type(m_Ctx);
       Function *F = m_pOP->GetOpFunc(OpCode, pDstType);
 
       // Create unclamped CalculateLOD.
@@ -4303,7 +4303,7 @@ void DxbcConverter::ConvertInstructions(D3D10ShaderBinary::CShaderCodeParser &Pa
       Value *pRowIndexValue = LoadOperandIndex(OpInput.m_Index[0], OpInput.m_IndexType[0]);
 
       CompType DstType = DXBC::GetCompTypeWithMinPrec(CompType::getF32(), Inst.m_Operands[uOpOutput].m_MinPrecision);
-      Type *pDstType = DstType.GetLLVMType(m_Ctx);
+      Type *pDstType = DstType.GetLLVM37Type(m_Ctx);
       Function *F = m_pOP->GetOpFunc(OpCode, pDstType);
 
       Value *Args[6];
@@ -4348,7 +4348,7 @@ void DxbcConverter::ConvertInstructions(D3D10ShaderBinary::CShaderCodeParser &Pa
       Value *pRowIndexValue = LoadOperandIndex(OpInput.m_Index[0], OpInput.m_IndexType[0]);
 
       CompType DstType = DXBC::GetCompTypeWithMinPrec(CompType::getF32(), Inst.m_Operands[uOpOutput].m_MinPrecision);
-      Type *pDstType = DstType.GetLLVMType(m_Ctx);
+      Type *pDstType = DstType.GetLLVM37Type(m_Ctx);
       Function *F = m_pOP->GetOpFunc(OpCode, pDstType);
 
       Value *Args[5];
@@ -4389,7 +4389,7 @@ void DxbcConverter::ConvertInstructions(D3D10ShaderBinary::CShaderCodeParser &Pa
       Value *pRowIndexValue = LoadOperandIndex(OpInput.m_Index[0], OpInput.m_IndexType[0]);
 
       CompType DstType = DXBC::GetCompTypeWithMinPrec(CompType::getF32(), Inst.m_Operands[uOpOutput].m_MinPrecision);
-      Type *pDstType = DstType.GetLLVMType(m_Ctx);
+      Type *pDstType = DstType.GetLLVM37Type(m_Ctx);
       Function *F = m_pOP->GetOpFunc(OpCode, pDstType);
 
       Value *Args[4];
@@ -4837,7 +4837,7 @@ public:
           GEPIndices.push_back(V);
 
           if (ConstantInt *C = dyn_cast<ConstantInt>(V)) {
-            LLVMContext &Ctx = C->getContext();
+            LLVM37Context &Ctx = C->getContext();
 
             if (C->getType() != Type::getInt32Ty(Ctx)) {
               uint64_t n = C->getZExtValue();
@@ -4877,7 +4877,7 @@ void DxbcConverter::ConvertUnary(OP::OpCode OpCode,
                  OP::GetOpCodeClass(OpCode) == OP::OpCodeClass::UnaryBits);
   CMask WriteMask = CMask::FromDXBC(Inst.m_Operands[DstIdx].m_WriteMask);
   CompType OperationType = DXBC::GetCompTypeWithMinPrec(ElementType, Inst.m_Operands[DstIdx].m_MinPrecision);
-  Type *pOperationType = OperationType.GetLLVMType(m_Ctx);
+  Type *pOperationType = OperationType.GetLLVM37Type(m_Ctx);
   Function *pFunc = m_pOP->GetOpFunc(OpCode, pOperationType);
 
   OperandValue In, Out;
@@ -4901,7 +4901,7 @@ void DxbcConverter::ConvertBinary(OP::OpCode OpCode,
   DXASSERT_NOMSG(OP::GetOpCodeClass(OpCode) == OP::OpCodeClass::Binary);
   CMask WriteMask = CMask::FromDXBC(Inst.m_Operands[DstIdx].m_WriteMask);
   CompType OperationType = DXBC::GetCompTypeWithMinPrec(ElementType, Inst.m_Operands[DstIdx].m_MinPrecision);
-  Type *pOperationType = OperationType.GetLLVMType(m_Ctx);
+  Type *pOperationType = OperationType.GetLLVM37Type(m_Ctx);
   Function *pFunc = m_pOP->GetOpFunc(OpCode, pOperationType);
 
   OperandValue In1, In2, Out;
@@ -4973,7 +4973,7 @@ void DxbcConverter::ConvertBinaryWithTwoOuts(OP::OpCode OpCode,
   CMask Dst1Mask = CMask::FromDXBC(Inst.m_Operands[DstIdx1].m_WriteMask);
   CMask Dst2Mask = CMask::FromDXBC(Inst.m_Operands[DstIdx2].m_WriteMask);
   CompType OperationType = CompType::getI32();
-  Type *pOperationType = OperationType.GetLLVMType(m_Ctx);
+  Type *pOperationType = OperationType.GetLLVM37Type(m_Ctx);
   Function *pFunc = m_pOP->GetOpFunc(OpCode, pOperationType);
 
   OperandValue In1, In2, Out1, Out2;
@@ -5000,7 +5000,7 @@ void DxbcConverter::ConvertBinaryWithCarry(OP::OpCode OpCode,
   DXASSERT_NOMSG(OP::GetOpCodeClass(OpCode) == OP::OpCodeClass::BinaryWithCarryOrBorrow);
   CMask WriteMask = CMask::FromDXBC(Inst.m_Operands[DstIdx1].m_WriteMask | Inst.m_Operands[DstIdx2].m_WriteMask);
   CompType OperationType = CompType::getI32();
-  Type *pOperationType = OperationType.GetLLVMType(m_Ctx);
+  Type *pOperationType = OperationType.GetLLVM37Type(m_Ctx);
   Function *pFunc = m_pOP->GetOpFunc(OpCode, pOperationType);
 
   OperandValue In1, In2, Out1, Out2;
@@ -5031,7 +5031,7 @@ void DxbcConverter::ConvertTertiary(OP::OpCode OpCode,
   DXASSERT_NOMSG(OP::GetOpCodeClass(OpCode) == OP::OpCodeClass::Tertiary);
   CMask WriteMask = CMask::FromDXBC(Inst.m_Operands[DstIdx].m_WriteMask);
   CompType OperationType = DXBC::GetCompTypeWithMinPrec(ElementType, Inst.m_Operands[DstIdx].m_MinPrecision);
-  Type *pOperationType = OperationType.GetLLVMType(m_Ctx);
+  Type *pOperationType = OperationType.GetLLVM37Type(m_Ctx);
   if (!m_pOP->IsOverloadLegal(OpCode, pOperationType)) {
     if (pOperationType == Type::getInt16Ty(m_Ctx)) {
       pOperationType = Type::getInt32Ty(m_Ctx);
@@ -5067,7 +5067,7 @@ void DxbcConverter::ConvertQuaternary(OP::OpCode OpCode,
   DXASSERT_NOMSG(OP::GetOpCodeClass(OpCode) == OP::OpCodeClass::Quaternary);
   CMask WriteMask = CMask::FromDXBC(Inst.m_Operands[DstIdx].m_WriteMask);
   CompType OperationType = DXBC::GetCompTypeWithMinPrec(ElementType, Inst.m_Operands[DstIdx].m_MinPrecision);
-  Type *pOperationType = OperationType.GetLLVMType(m_Ctx);
+  Type *pOperationType = OperationType.GetLLVM37Type(m_Ctx);
   Function *pFunc = m_pOP->GetOpFunc(OpCode, pOperationType);
 
   OperandValue In1, In2, In3, In4, Out;
@@ -5164,7 +5164,7 @@ void DxbcConverter::ConvertDotProduct(OP::OpCode OpCode,
                                       D3D10ShaderBinary::CInstruction &Inst) {
   CMask WriteMask = CMask::FromDXBC(Inst.m_Operands[0].m_WriteMask);
   CompType OperationType = DXBC::GetCompTypeWithMinPrec(CompType::getF32(), Inst.m_Operands[0].m_MinPrecision);
-  Type *pOperationType = OperationType.GetLLVMType(m_Ctx);
+  Type *pOperationType = OperationType.GetLLVM37Type(m_Ctx);
   Function *pFunc = m_pOP->GetOpFunc(OpCode, pOperationType);
 
   OperandValue In1, In2, Out;
@@ -5272,7 +5272,7 @@ void DxbcConverter::ConvertCast(const CompType &SrcElementType,
                                 const unsigned DstIdx,
                                 const unsigned SrcIdx) {
   CMask WriteMask = CMask::FromDXBC(Inst.m_Operands[DstIdx].m_WriteMask);
-  Type *pDstType = DstElementType.GetLLVMType(m_Ctx);
+  Type *pDstType = DstElementType.GetLLVM37Type(m_Ctx);
 
   OperandValue In, Out;
   LoadOperand(In, Inst, SrcIdx, WriteMask, SrcElementType);
@@ -5290,7 +5290,7 @@ void DxbcConverter::ConvertToDouble(const CompType &SrcElementType, D3D10ShaderB
   const unsigned SrcIdx = 1;
   CMask WriteMask = CMask::FromDXBC(Inst.m_Operands[DstIdx].m_WriteMask);
   CompType DstElementType = CompType::getF64();
-  Type *pDstType = DstElementType.GetLLVMType(m_Ctx);
+  Type *pDstType = DstElementType.GetLLVM37Type(m_Ctx);
   CMask Mask;
   BYTE OutputComp;
   switch (WriteMask.ToByte()) {
@@ -5572,7 +5572,7 @@ void DxbcConverter::ConvertLoadTGSM(D3D10ShaderBinary::CInstruction &Inst, const
 
   OperandValue Out;
   CompType DstType = DXBC::GetCompTypeFromMinPrec(Inst.m_Operands[uOpOutput].m_MinPrecision, CompType::getF32());
-  Type *pSrcType = SrcType.GetLLVMPtrType(m_Ctx, DXIL::kTGSMAddrSpace);
+  Type *pSrcType = SrcType.GetLLVM37PtrType(m_Ctx, DXIL::kTGSMAddrSpace);
 
   for (BYTE c = 0; c < DXBC::kWidth; c++) {
     if (!OutputMask.IsSet(c)) continue;
@@ -5619,7 +5619,7 @@ void DxbcConverter::ConvertStoreTGSM(D3D10ShaderBinary::CInstruction &Inst, cons
   LoadOperand(InValue, Inst, uOpValue, OutputMask, ValueType);
     
   CompType DstType = BaseValueType;
-  Type *pDstType = DstType.GetLLVMPtrType(m_Ctx, DXIL::kTGSMAddrSpace);
+  Type *pDstType = DstType.GetLLVM37PtrType(m_Ctx, DXIL::kTGSMAddrSpace);
   for (BYTE c = 0; c < DXBC::kWidth; c++) {
     if (!OutputMask.IsSet(c)) continue;
 
@@ -5658,7 +5658,7 @@ void DxbcConverter::EmitGSOutputRegisterStore(unsigned StreamId) {
     unsigned TempReg = GetGSTempRegForOutputReg(SE.GetStartRow());
 
     CompType DxbcValueType = SE.GetCompType();
-    Type *pDxbcValueType = DxbcValueType.GetLLVMType(m_Ctx);
+    Type *pDxbcValueType = DxbcValueType.GetLLVM37Type(m_Ctx);
 
     for (BYTE c = 0; c < SE.GetCols(); c++) {
       BYTE Comp = SE.GetStartCol() + c;
@@ -5805,7 +5805,7 @@ void DxbcConverter::LoadOperand(OperandValue &SrcVal,
     if (DxbcValueType.IsBoolTy()) {
       DxbcValueType = CompType::getI32();
     }
-    Type *pDxbcValueType = DxbcValueType.GetLLVMType(m_Ctx);
+    Type *pDxbcValueType = DxbcValueType.GetLLVM37Type(m_Ctx);
 
     if (DxbcValueType.GetKind() != CompType::Kind::F64)
     {
@@ -5833,7 +5833,7 @@ void DxbcConverter::LoadOperand(OperandValue &SrcVal,
           Value *Args[2];
           Args[0] = m_pOP->GetU32Const((unsigned)OP::OpCode::TempRegLoad);  // OpCode
           Args[1] = m_pOP->GetU32Const(DXBC::GetRegIndex(Reg, Comp));       // Linearized register index1
-          Function *F = m_pOP->GetOpFunc(OP::OpCode::TempRegLoad, CompType::getU32().GetLLVMType(m_Ctx));
+          Function *F = m_pOP->GetOpFunc(OP::OpCode::TempRegLoad, CompType::getU32().GetLLVM37Type(m_Ctx));
           pValue1 = m_pBuilder->CreateCall(F, Args);
           Args[1] = m_pOP->GetU32Const(DXBC::GetRegIndex(Reg, Comp+1));     // Linearized register index2
           pValue2 = m_pBuilder->CreateCall(F, Args);
@@ -5954,7 +5954,7 @@ void DxbcConverter::LoadOperand(OperandValue &SrcVal,
       if (DxbcValueType.IsBoolTy()) {
         DxbcValueType = CompType::getI32();
       }
-      Type *pDxbcValueType = DxbcValueType.GetLLVMType(m_Ctx);
+      Type *pDxbcValueType = DxbcValueType.GetLLVM37Type(m_Ctx);
 
       MutableArrayRef<Value *> Args;
       Value *Args1[1];
@@ -6021,7 +6021,7 @@ void DxbcConverter::LoadOperand(OperandValue &SrcVal,
     if (DxbcValueType.IsBoolTy()) {
       DxbcValueType = CompType::getI32();
     }
-    Type *pDxbcValueType = DxbcValueType.GetLLVMType(m_Ctx);
+    Type *pDxbcValueType = DxbcValueType.GetLLVM37Type(m_Ctx);
 
     DXASSERT_NOMSG(m_bLegacyCBufferLoad);
     Value *Args[3];
@@ -6205,7 +6205,7 @@ void DxbcConverter::LoadOperand(OperandValue &SrcVal,
     case D3D11_SB_OPERAND_TYPE_INPUT_THREAD_ID_IN_GROUP:  OpCode = OP::OpCode::ThreadIdInGroup; break;
     }
     CompType DxbcValueType = CompType::Kind::I32;
-    Type *pDxbcValueType = DxbcValueType.GetLLVMType(m_Ctx);
+    Type *pDxbcValueType = DxbcValueType.GetLLVM37Type(m_Ctx);
     Function *F = m_pOP->GetOpFunc(OpCode, pDxbcValueType);
 
     for (OperandValueHelper OVH(SrcVal, Mask, O); !OVH.IsDone(); OVH.Advance()) {
@@ -6227,7 +6227,7 @@ void DxbcConverter::LoadOperand(OperandValue &SrcVal,
   case D3D11_SB_OPERAND_TYPE_INPUT_THREAD_ID_IN_GROUP_FLATTENED: {
     OP::OpCode OpCode = OP::OpCode::FlattenedThreadIdInGroup;
     CompType DxbcValueType = CompType::Kind::I32;
-    Type *pDxbcValueType = DxbcValueType.GetLLVMType(m_Ctx);
+    Type *pDxbcValueType = DxbcValueType.GetLLVM37Type(m_Ctx);
     Function *F = m_pOP->GetOpFunc(OpCode, pDxbcValueType);
 
     for (OperandValueHelper OVH(SrcVal, Mask, O); !OVH.IsDone(); OVH.Advance()) {
@@ -6256,7 +6256,7 @@ void DxbcConverter::LoadOperand(OperandValue &SrcVal,
       if (DxbcValueType.IsBoolTy()) {
         DxbcValueType = CompType::getI32();
       }
-      Type *pDxbcValueType = DxbcValueType.GetLLVMType(m_Ctx);
+      Type *pDxbcValueType = DxbcValueType.GetLLVM37Type(m_Ctx);
 
       // Make row/col index relative within element.
       Value *pRowIndexValueRel = m_pBuilder->CreateSub(pRowIndexValue, m_pOP->GetU32Const(E->GetStartRow()));
@@ -6293,7 +6293,7 @@ void DxbcConverter::LoadOperand(OperandValue &SrcVal,
       if (DxbcValueType.IsBoolTy()) {
         DxbcValueType = CompType::getI32();
       }
-      Type *pDxbcValueType = DxbcValueType.GetLLVMType(m_Ctx);
+      Type *pDxbcValueType = DxbcValueType.GetLLVM37Type(m_Ctx);
 
       // Make row/col index relative within element.
       Value *pRowIndexValueRel = m_pBuilder->CreateSub(pRowIndexValue, m_pOP->GetU32Const(E->GetStartRow()));
@@ -6319,7 +6319,7 @@ void DxbcConverter::LoadOperand(OperandValue &SrcVal,
   case D3D11_SB_OPERAND_TYPE_INPUT_DOMAIN_POINT: {
     OP::OpCode OpCode = OP::OpCode::DomainLocation;
     CompType DxbcValueType = CompType::Kind::F32;
-    Type *pDxbcValueType = DxbcValueType.GetLLVMType(m_Ctx);
+    Type *pDxbcValueType = DxbcValueType.GetLLVM37Type(m_Ctx);
     Function *F = m_pOP->GetOpFunc(OpCode, pDxbcValueType);
 
     for (OperandValueHelper OVH(SrcVal, Mask, O); !OVH.IsDone(); OVH.Advance()) {
@@ -6352,7 +6352,7 @@ void DxbcConverter::LoadOperand(OperandValue &SrcVal,
     case D3D11_SB_OPERAND_TYPE_INNER_COVERAGE:          OpCode = OP::OpCode::InnerCoverage; break;
     }
     CompType DxbcValueType = CompType::Kind::I32;
-    Type *pDxbcValueType = DxbcValueType.GetLLVMType(m_Ctx);
+    Type *pDxbcValueType = DxbcValueType.GetLLVM37Type(m_Ctx);
     Function *F = m_pOP->GetOpFunc(OpCode, pDxbcValueType);
 
     Value *Args[1];
@@ -6517,7 +6517,7 @@ void DxbcConverter::StoreOperand(OperandValue &DstVal,
     if (DxbcValueType.IsBoolTy()) {
       DxbcValueType = CompType::getI32();
     }
-    Type *pDxbcValueType = DxbcValueType.GetLLVMType(m_Ctx);
+    Type *pDxbcValueType = DxbcValueType.GetLLVM37Type(m_Ctx);
 
     if (DxbcValueType.GetKind() != CompType::Kind::F64) {
       for (BYTE c = 0; c < DXBC::kWidth; c++) {
@@ -6631,7 +6631,7 @@ void DxbcConverter::StoreOperand(OperandValue &DstVal,
         if (DxbcValueType.IsBoolTy()) {
           DxbcValueType = CompType::getI32();
         }
-        Type *pLlvmDxbcValueType = DxbcValueType.GetLLVMType(m_Ctx);
+        Type *pLlvmDxbcValueType = DxbcValueType.GetLLVM37Type(m_Ctx);
 
         // Make row index relative within element.
         Value *pRowIndexValueRel = m_pBuilder->CreateSub(pRowIndexValue, m_pOP->GetU32Const(E->GetStartRow()));
@@ -6652,7 +6652,7 @@ void DxbcConverter::StoreOperand(OperandValue &DstVal,
       if (DxbcValueType.IsBoolTy()) {
         DxbcValueType = CompType::getI32();
       }
-      Type *pDxbcValueType = DxbcValueType.GetLLVMType(m_Ctx);
+      Type *pDxbcValueType = DxbcValueType.GetLLVM37Type(m_Ctx);
 
       for (BYTE c = 0; c < DXBC::kWidth; c++) {
         if (!Mask.IsSet(c)) continue;
@@ -6683,7 +6683,7 @@ void DxbcConverter::StoreOperand(OperandValue &DstVal,
       DXASSERT(m_pSM->IsPS(), "PS has only one output stream.");
       const DxilSignatureElement *E = m_pOutputSignature->GetElement(O.m_Type);
       CompType DxbcValueType = E->GetCompType();
-      Type *pLlvmDxbcValueType = DxbcValueType.GetLLVMType(m_Ctx);
+      Type *pLlvmDxbcValueType = DxbcValueType.GetLLVM37Type(m_Ctx);
 
       Value *Args[5];
       Args[0] = m_pOP->GetU32Const((unsigned)OP::OpCode::StoreOutput);              // OpCode
@@ -6789,7 +6789,7 @@ Value *DxbcConverter::CastDxbcValue(Value *pValue, const CompType &SrcType, cons
   if (SrcType == DstType)
     return pValue;
 
-  DXASSERT(SrcType.GetLLVMType(m_Ctx) == pValue->getType(), "otherwise caller passed incorrect args");
+  DXASSERT(SrcType.GetLLVM37Type(m_Ctx) == pValue->getType(), "otherwise caller passed incorrect args");
 
   switch (SrcType.GetKind()) {
   case CompType::Kind::I1:
@@ -6928,7 +6928,7 @@ Value *DxbcConverter::CastDxbcValue(Value *pValue, const CompType &SrcType, cons
 }
 
 Value *DxbcConverter::CreateBitCast(Value *pValue, const CompType &SrcType, const CompType &DstType) {
-  DXASSERT(SrcType.GetLLVMType(m_Ctx) == pValue->getType(), "otherwise caller passed incorrect args");
+  DXASSERT(SrcType.GetLLVM37Type(m_Ctx) == pValue->getType(), "otherwise caller passed incorrect args");
 
   OP::OpCode OpCode = (OP::OpCode)(-1);
 
@@ -7294,7 +7294,7 @@ StructType *DxbcConverter::GetTypedResElemType(CompType CT) {
     } else if (CT.GetKind() == CompType::Kind::UNormF32) {
       pElemType = m_pPR->GetTypeSystem().GetUNormF32Type(1);
     } else {
-      pElemType = CT.GetLLVMType(m_Ctx);
+      pElemType = CT.GetLLVM37Type(m_Ctx);
     }
     if (!pElemType->isStructTy()) {
       pGVType = StructType::create(m_Ctx, pElemType, GVTypeName);

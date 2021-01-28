@@ -3,7 +3,7 @@
 define i32 @f(i32 %theNumber) {
 entry:
   %cmp = icmp sgt i32 %theNumber, -1
-  call void @llvm.assume(i1 %cmp)
+  call void @llvm37.assume(i1 %cmp)
   br i1 true, label %if.then, label %if.end
 
 if.then:                                          ; preds = %entry
@@ -15,4 +15,4 @@ if.end:                                           ; preds = %if.then, %entry
   ret i32 %phi
 }
 
-declare void @llvm.assume(i1)
+declare void @llvm37.assume(i1)

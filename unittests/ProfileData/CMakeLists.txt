@@ -1,10 +1,10 @@
-set(LLVM_LINK_COMPONENTS
+set(LLVM37_LINK_COMPONENTS
   Core
   ProfileData
   Support
   )
 
-add_llvm_unittest(ProfileDataTests
+add_llvm37_unittest(ProfileDataTests
   CoverageMappingTest.cpp
   InstrProfTest.cpp
   )

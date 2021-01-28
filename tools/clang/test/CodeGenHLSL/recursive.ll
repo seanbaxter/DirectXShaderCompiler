@@ -177,7 +177,7 @@ attributes #0 = { alwaysinline nounwind "disable-tail-calls"="false" "less-preci
 attributes #1 = { nounwind readnone }
 attributes #2 = { nounwind }
 
-!llvm.ident = !{!0}
+!llvm37.ident = !{!0}
 !dx.version = !{!1}
 !dx.shaderModel = !{!2}
 !dx.typeAnnotations = !{!3}

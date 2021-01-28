@@ -1,6 +1,6 @@
-//===- llvm/Support/Unix/Unix.h - Common Unix Include File -------*- C++ -*-===//
+//===- llvm37/Support/Unix/Unix.h - Common Unix Include File -------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,8 +11,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_LIB_SUPPORT_UNIX_UNIX_H
-#define LLVM_LIB_SUPPORT_UNIX_UNIX_H
+#ifndef LLVM37_LIB_SUPPORT_UNIX_UNIX_H
+#define LLVM37_LIB_SUPPORT_UNIX_UNIX_H
 
 //===----------------------------------------------------------------------===//
 //=== WARNING: Implementation here must contain only generic UNIX code that
@@ -20,8 +20,8 @@
 //                                                                           //
 ///////////////////////////////////////////////////////////////////////////////
 
-#include "llvm/Config/config.h"     // Get autoconf configuration settings
-#include "llvm/Support/Errno.h"
+#include "llvm37/Config/config.h"     // Get autoconf configuration settings
+#include "llvm37/Support/Errno.h"
 #include <algorithm>
 #include <assert.h>
 #include <cerrno>
@@ -73,7 +73,7 @@ static inline bool MakeErrMsg(
     return true;
   if (errnum == -1)
     errnum = errno;
-  *ErrMsg = prefix + ": " + llvm::sys::StrError(errnum);
+  *ErrMsg = prefix + ": " + llvm37::sys::StrError(errnum);
   return true;
 }
 

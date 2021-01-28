@@ -1,6 +1,6 @@
 //===-- DxilTargetTransformInfo.h - DXIL specific TTI -------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -14,14 +14,14 @@
 
 #pragma once
 
-#include "llvm/CodeGen/BasicTTIImpl.h"
+#include "llvm37/CodeGen/BasicTTIImpl.h"
 
 namespace hlsl {
 class DxilModule;
 class OP;
 }
 
-namespace llvm {
+namespace llvm37 {
 
 class DxilTTIImpl final : public BasicTTIImplBase<DxilTTIImpl> {
   typedef BasicTTIImplBase<DxilTTIImpl> BaseT;
@@ -40,4 +40,4 @@ public:
   bool isSourceOfDivergence(const Value *V) const;
 };
 
-} // end namespace llvm
+} // end namespace llvm37

@@ -1,6 +1,6 @@
 //===------- SPIRVOptions.h -------------------------------------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,14 +11,14 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_SPIRV_OPTIONS_H
-#define LLVM_SPIRV_OPTIONS_H
+#ifndef LLVM37_SPIRV_OPTIONS_H
+#define LLVM37_SPIRV_OPTIONS_H
 
 #ifdef ENABLE_SPIRV_CODEGEN
 
-#include "llvm/ADT/ArrayRef.h"
-#include "llvm/ADT/StringRef.h"
-#include "llvm/Option/ArgList.h"
+#include "llvm37/ADT/ArrayRef.h"
+#include "llvm37/ADT/StringRef.h"
+#include "llvm37/Option/ArgList.h"
 
 namespace clang {
 namespace spirv {
@@ -60,14 +60,14 @@ struct SpirvCodeGenOptions {
   SpirvLayoutRule sBufferLayoutRule;
   SpirvLayoutRule tBufferLayoutRule;
   SpirvLayoutRule ampPayloadLayoutRule;
-  llvm::StringRef stageIoOrder;
-  llvm::StringRef targetEnv;
-  llvm::SmallVector<int32_t, 4> bShift;
-  llvm::SmallVector<int32_t, 4> sShift;
-  llvm::SmallVector<int32_t, 4> tShift;
-  llvm::SmallVector<int32_t, 4> uShift;
-  llvm::SmallVector<llvm::StringRef, 4> allowedExtensions;
-  llvm::SmallVector<llvm::StringRef, 4> optConfig;
+  llvm37::StringRef stageIoOrder;
+  llvm37::StringRef targetEnv;
+  llvm37::SmallVector<int32_t, 4> bShift;
+  llvm37::SmallVector<int32_t, 4> sShift;
+  llvm37::SmallVector<int32_t, 4> tShift;
+  llvm37::SmallVector<int32_t, 4> uShift;
+  llvm37::SmallVector<llvm37::StringRef, 4> allowedExtensions;
+  llvm37::SmallVector<llvm37::StringRef, 4> optConfig;
   std::vector<std::string> bindRegister;
   std::vector<std::string> bindGlobals;
 
@@ -79,4 +79,4 @@ struct SpirvCodeGenOptions {
 } // namespace clang
 
 #endif // ENABLE_SPIRV_CODEGEN
-#endif // LLVM_SPIRV_OPTIONS_H
+#endif // LLVM37_SPIRV_OPTIONS_H

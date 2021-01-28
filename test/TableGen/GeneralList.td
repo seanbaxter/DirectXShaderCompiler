@@ -1,4 +1,4 @@
-// RUN: llvm-tblgen %s
+// RUN: llvm37-tblgen %s
 //
 // Test to make sure that lists work with any data-type
 

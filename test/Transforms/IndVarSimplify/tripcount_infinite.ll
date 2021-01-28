@@ -2,7 +2,7 @@
 ; loops!  :)
 ;
 ; RUN: opt < %s -indvars -adce -simplifycfg -S | grep icmp | wc -l > %t2
-; RUN: llvm-as < %s | llvm-dis | grep icmp | wc -l > %t1
+; RUN: llvm37-as < %s | llvm37-dis | grep icmp | wc -l > %t1
 ; RUN: diff %t1 %t2
 
 ;; test for (i = 1; i != 100; i += 2)

@@ -1,4 +1,4 @@
-// RUN: llvm-mc -triple i386 %s 2>&1 | FileCheck %s
+// RUN: llvm37-mc -triple i386 %s 2>&1 | FileCheck %s
 
 	.warning
 // CHECK: warning: .warning directive invoked in source file

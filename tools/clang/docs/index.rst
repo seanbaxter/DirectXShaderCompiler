@@ -40,7 +40,7 @@ Using Clang as a Library
    RAVFrontendAction
    LibASTMatchersTutorial
    LibASTMatchers
-   HowToSetupToolingForLLVM
+   HowToSetupToolingForLLVM37
    JSONCompilationDatabase
 
 Using Clang Tools

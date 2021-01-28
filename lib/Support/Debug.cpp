@@ -1,6 +1,6 @@
 //===-- Debug.cpp - An easy way to add debug output to your code ----------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -23,22 +23,22 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/ManagedStatic.h"
-#include "llvm/Support/Signals.h"
-#include "llvm/Support/circular_raw_ostream.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/ManagedStatic.h"
+#include "llvm37/Support/Signals.h"
+#include "llvm37/Support/circular_raw_ostream.h"
+#include "llvm37/Support/raw_ostream.h"
 #include "dxc/Support/WinIncludes.h" // HLSL Change
 
 #undef isCurrentDebugType
 #undef setCurrentDebugType
 
-using namespace llvm;
+using namespace llvm37;
 
-// Even though LLVM might be built with NDEBUG, define symbols that the code
-// built without NDEBUG can depend on via the llvm/Support/Debug.h header.
-namespace llvm {
+// Even though LLVM37 might be built with NDEBUG, define symbols that the code
+// built without NDEBUG can depend on via the llvm37/Support/Debug.h header.
+namespace llvm37 {
 /// Exported boolean set by the -debug option.
 bool DebugFlag = false;
 
@@ -68,15 +68,15 @@ void setCurrentDebugType(const char *Type) {
   CurrentDebugType->push_back(Type);
 }
 
-} // namespace llvm
+} // namespace llvm37
 
 // All Debug.h functionality is a no-op in NDEBUG mode.
 #ifndef NDEBUG
 
 #if 1 // HLSL Change Starts - redirect to OutputDebugString
-namespace llvm {
+namespace llvm37 {
   raw_ostream &dbgs() {
-    struct ods_ostream : public llvm::raw_ostream {
+    struct ods_ostream : public llvm37::raw_ostream {
       ods_ostream() {
         SetUnbuffered();
       }
@@ -143,13 +143,13 @@ static void debug_user_sig_handler(void *Cookie) {
   // know that debug mode is enabled and dbgs() really is a
   // circular_raw_ostream.  If NDEBUG is defined, then dbgs() ==
   // errs() but this will never be invoked.
-  llvm::circular_raw_ostream &dbgout =
-      static_cast<circular_raw_ostream &>(llvm::dbgs());
+  llvm37::circular_raw_ostream &dbgout =
+      static_cast<circular_raw_ostream &>(llvm37::dbgs());
   dbgout.flushBufferWithBanner();
 }
 
 /// dbgs - Return a circular-buffered debug stream.
-raw_ostream &llvm::dbgs() {
+raw_ostream &llvm37::dbgs() {
   // Do one-time initialization in a thread-safe way.
   static struct dbgstream {
     circular_raw_ostream strm;
@@ -173,7 +173,7 @@ raw_ostream &llvm::dbgs() {
 
 #else
 // Avoid "has no symbols" warning.
-namespace llvm {
+namespace llvm37 {
   /// dbgs - Return errs().
   raw_ostream &dbgs() {
     return errs();
@@ -184,4 +184,4 @@ namespace llvm {
 
 /// EnableDebugBuffering - Turn on signal handler installation.
 ///
-bool llvm::EnableDebugBuffering = false;
+bool llvm37::EnableDebugBuffering = false;

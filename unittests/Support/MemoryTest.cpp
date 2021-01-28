@@ -1,18 +1,18 @@
-//===- llvm/unittest/Support/AllocatorTest.cpp - BumpPtrAllocator tests ---===//
+//===- llvm37/unittest/Support/AllocatorTest.cpp - BumpPtrAllocator tests ---===//
 //
-//		       The LLVM Compiler Infrastructure
+//		       The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Support/Memory.h"
-#include "llvm/Support/Process.h"
+#include "llvm37/Support/Memory.h"
+#include "llvm37/Support/Process.h"
 #include "gtest/gtest.h"
 #include <cstdlib>
 
-using namespace llvm;
+using namespace llvm37;
 using namespace sys;
 
 namespace {

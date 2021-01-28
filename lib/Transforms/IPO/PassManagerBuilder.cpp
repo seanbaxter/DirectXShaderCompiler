@@ -1,6 +1,6 @@
 //===- PassManagerBuilder.cpp - Build Standard Pass -----------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -12,26 +12,26 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Transforms/IPO/PassManagerBuilder.h"
-#include "llvm-c/Transforms/PassManagerBuilder.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/Analysis/Passes.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/Verifier.h"
-#include "llvm/IR/LegacyPassManager.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/ManagedStatic.h"
-#include "llvm/Analysis/TargetLibraryInfo.h"
-#include "llvm/Target/TargetMachine.h"
-#include "llvm/Transforms/IPO.h"
-#include "llvm/Transforms/Scalar.h"
-#include "llvm/Transforms/Vectorize.h"
+#include "llvm37/Transforms/IPO/PassManagerBuilder.h"
+#include "llvm37-c/Transforms/PassManagerBuilder.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/Analysis/Passes.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/IR/Verifier.h"
+#include "llvm37/IR/LegacyPassManager.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/ManagedStatic.h"
+#include "llvm37/Analysis/TargetLibraryInfo.h"
+#include "llvm37/Target/TargetMachine.h"
+#include "llvm37/Transforms/IPO.h"
+#include "llvm37/Transforms/Scalar.h"
+#include "llvm37/Transforms/Vectorize.h"
 #include "dxc/HLSL/DxilGenerationPass.h" // HLSL Change
 #include "dxc/HLSL/HLMatrixLowerPass.h" // HLSL Change
 #include "dxc/HLSL/ComputeViewIdState.h" // HLSL Change
-#include "llvm/Analysis/DxilValueCache.h" // HLSL Change
+#include "llvm37/Analysis/DxilValueCache.h" // HLSL Change
 
-using namespace llvm;
+using namespace llvm37;
 
 #if HLSL_VECTORIZATION_ENABLED // HLSL Change - don't build vectorization passes
 
@@ -829,85 +829,85 @@ void PassManagerBuilder::populateLTOPassManager(legacy::PassManagerBase &PM) {
     PM.add(createVerifierPass());
 }
 
-inline PassManagerBuilder *unwrap(LLVMPassManagerBuilderRef P) {
+inline PassManagerBuilder *unwrap(LLVM37PassManagerBuilderRef P) {
     return reinterpret_cast<PassManagerBuilder*>(P);
 }
 
-inline LLVMPassManagerBuilderRef wrap(PassManagerBuilder *P) {
-  return reinterpret_cast<LLVMPassManagerBuilderRef>(P);
+inline LLVM37PassManagerBuilderRef wrap(PassManagerBuilder *P) {
+  return reinterpret_cast<LLVM37PassManagerBuilderRef>(P);
 }
 
-LLVMPassManagerBuilderRef LLVMPassManagerBuilderCreate() {
+LLVM37PassManagerBuilderRef LLVM37PassManagerBuilderCreate() {
   PassManagerBuilder *PMB = new PassManagerBuilder();
   return wrap(PMB);
 }
 
-void LLVMPassManagerBuilderDispose(LLVMPassManagerBuilderRef PMB) {
+void LLVM37PassManagerBuilderDispose(LLVM37PassManagerBuilderRef PMB) {
   PassManagerBuilder *Builder = unwrap(PMB);
   delete Builder;
 }
 
 void
-LLVMPassManagerBuilderSetOptLevel(LLVMPassManagerBuilderRef PMB,
+LLVM37PassManagerBuilderSetOptLevel(LLVM37PassManagerBuilderRef PMB,
                                   unsigned OptLevel) {
   PassManagerBuilder *Builder = unwrap(PMB);
   Builder->OptLevel = OptLevel;
 }
 
 void
-LLVMPassManagerBuilderSetSizeLevel(LLVMPassManagerBuilderRef PMB,
+LLVM37PassManagerBuilderSetSizeLevel(LLVM37PassManagerBuilderRef PMB,
                                    unsigned SizeLevel) {
   PassManagerBuilder *Builder = unwrap(PMB);
   Builder->SizeLevel = SizeLevel;
 }
 
 void
-LLVMPassManagerBuilderSetDisableUnitAtATime(LLVMPassManagerBuilderRef PMB,
-                                            LLVMBool Value) {
+LLVM37PassManagerBuilderSetDisableUnitAtATime(LLVM37PassManagerBuilderRef PMB,
+                                            LLVM37Bool Value) {
   PassManagerBuilder *Builder = unwrap(PMB);
   Builder->DisableUnitAtATime = Value;
 }
 
 void
-LLVMPassManagerBuilderSetDisableUnrollLoops(LLVMPassManagerBuilderRef PMB,
-                                            LLVMBool Value) {
+LLVM37PassManagerBuilderSetDisableUnrollLoops(LLVM37PassManagerBuilderRef PMB,
+                                            LLVM37Bool Value) {
   PassManagerBuilder *Builder = unwrap(PMB);
   Builder->DisableUnrollLoops = Value;
 }
 
 void
-LLVMPassManagerBuilderSetDisableSimplifyLibCalls(LLVMPassManagerBuilderRef PMB,
-                                                 LLVMBool Value) {
+LLVM37PassManagerBuilderSetDisableSimplifyLibCalls(LLVM37PassManagerBuilderRef PMB,
+                                                 LLVM37Bool Value) {
   // NOTE: The simplify-libcalls pass has been removed.
 }
 
 void
-LLVMPassManagerBuilderUseInlinerWithThreshold(LLVMPassManagerBuilderRef PMB,
+LLVM37PassManagerBuilderUseInlinerWithThreshold(LLVM37PassManagerBuilderRef PMB,
                                               unsigned Threshold) {
   PassManagerBuilder *Builder = unwrap(PMB);
   Builder->Inliner = createFunctionInliningPass(Threshold);
 }
 
 void
-LLVMPassManagerBuilderPopulateFunctionPassManager(LLVMPassManagerBuilderRef PMB,
-                                                  LLVMPassManagerRef PM) {
+LLVM37PassManagerBuilderPopulateFunctionPassManager(LLVM37PassManagerBuilderRef PMB,
+                                                  LLVM37PassManagerRef PM) {
   PassManagerBuilder *Builder = unwrap(PMB);
   legacy::FunctionPassManager *FPM = unwrap<legacy::FunctionPassManager>(PM);
   Builder->populateFunctionPassManager(*FPM);
 }
 
 void
-LLVMPassManagerBuilderPopulateModulePassManager(LLVMPassManagerBuilderRef PMB,
-                                                LLVMPassManagerRef PM) {
+LLVM37PassManagerBuilderPopulateModulePassManager(LLVM37PassManagerBuilderRef PMB,
+                                                LLVM37PassManagerRef PM) {
   PassManagerBuilder *Builder = unwrap(PMB);
   legacy::PassManagerBase *MPM = unwrap(PM);
   Builder->populateModulePassManager(*MPM);
 }
 
-void LLVMPassManagerBuilderPopulateLTOPassManager(LLVMPassManagerBuilderRef PMB,
-                                                  LLVMPassManagerRef PM,
-                                                  LLVMBool Internalize,
-                                                  LLVMBool RunInliner) {
+void LLVM37PassManagerBuilderPopulateLTOPassManager(LLVM37PassManagerBuilderRef PMB,
+                                                  LLVM37PassManagerRef PM,
+                                                  LLVM37Bool Internalize,
+                                                  LLVM37Bool RunInliner) {
   PassManagerBuilder *Builder = unwrap(PMB);
   legacy::PassManagerBase *LPM = unwrap(PM);
 

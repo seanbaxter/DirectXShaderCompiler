@@ -1,6 +1,6 @@
 add_subdirectory(ChildTarget)
 
-set(LLVM_LINK_COMPONENTS
+set(LLVM37_LINK_COMPONENTS
   CodeGen
   Core
   ExecutionEngine
@@ -19,23 +19,23 @@ set(LLVM_LINK_COMPONENTS
   native
   )
 
-if( LLVM_USE_OPROFILE )
-  set(LLVM_LINK_COMPONENTS
-    ${LLVM_LINK_COMPONENTS}
+if( LLVM37_USE_OPROFILE )
+  set(LLVM37_LINK_COMPONENTS
+    ${LLVM37_LINK_COMPONENTS}
     OProfileJIT
     )
-endif( LLVM_USE_OPROFILE )
+endif( LLVM37_USE_OPROFILE )
 
-if( LLVM_USE_INTEL_JITEVENTS )
-  set(LLVM_LINK_COMPONENTS
-    ${LLVM_LINK_COMPONENTS}
+if( LLVM37_USE_INTEL_JITEVENTS )
+  set(LLVM37_LINK_COMPONENTS
+    ${LLVM37_LINK_COMPONENTS}
     DebugInfoDWARF
     IntelJITEvents
     Object
     )
-endif( LLVM_USE_INTEL_JITEVENTS )
+endif( LLVM37_USE_INTEL_JITEVENTS )
 
-add_llvm_tool(lli
+add_llvm37_tool(lli
   lli.cpp
   OrcLazyJIT.cpp
   RemoteMemoryManager.cpp

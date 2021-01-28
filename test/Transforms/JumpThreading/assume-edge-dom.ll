@@ -1,7 +1,7 @@
 ; RUN: opt -S -jump-threading < %s | FileCheck %s
 
 declare i8* @escape()
-declare void @llvm.assume(i1)
+declare void @llvm37.assume(i1)
 
 define i1 @test1(i1 %cond) {
 entry:
@@ -14,12 +14,12 @@ entry:
 taken:
     %res1 = call i8* @escape()
     %a = icmp eq i8* %res1, null
-    tail call void @llvm.assume(i1 %a)
+    tail call void @llvm37.assume(i1 %a)
     br label %done
 not_taken:
     %res2 = call i8* @escape()
     %b = icmp ne i8* %res2, null
-    tail call void @llvm.assume(i1 %b)
+    tail call void @llvm37.assume(i1 %b)
     br label %done
 
 ; An assume that can be used to simplify this comparison dominates each

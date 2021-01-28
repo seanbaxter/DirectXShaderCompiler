@@ -1,13 +1,13 @@
 ; RUN: opt -inline -S < %s | FileCheck %s
 
-; PR23216: We can't inline functions using llvm.localescape.
+; PR23216: We can't inline functions using llvm37.localescape.
 
-declare void @llvm.localescape(...)
-declare i8* @llvm.frameaddress(i32)
-declare i8* @llvm.localrecover(i8*, i8*, i32)
+declare void @llvm37.localescape(...)
+declare i8* @llvm37.frameaddress(i32)
+declare i8* @llvm37.localrecover(i8*, i8*, i32)
 
 define internal void @foo(i8* %fp) {
-  %a.i8 = call i8* @llvm.localrecover(i8* bitcast (i32 ()* @bar to i8*), i8* %fp, i32 0)
+  %a.i8 = call i8* @llvm37.localrecover(i8* bitcast (i32 ()* @bar to i8*), i8* %fp, i32 0)
   %a = bitcast i8* %a.i8 to i32*
   store i32 42, i32* %a
   ret void
@@ -16,8 +16,8 @@ define internal void @foo(i8* %fp) {
 define internal i32 @bar() {
 entry:
   %a = alloca i32
-  call void (...) @llvm.localescape(i32* %a)
-  %fp = call i8* @llvm.frameaddress(i32 0)
+  call void (...) @llvm37.localescape(i32* %a)
+  %fp = call i8* @llvm37.frameaddress(i32 0)
   tail call void @foo(i8* %fp)
   %r = load i32, i32* %a
   ret i32 %r
@@ -27,7 +27,7 @@ entry:
 define internal i32 @bar_alwaysinline() alwaysinline {
 entry:
   %a = alloca i32
-  call void (...) @llvm.localescape(i32* %a)
+  call void (...) @llvm37.localescape(i32* %a)
   tail call void @foo(i8* null)
   ret i32 0
 }

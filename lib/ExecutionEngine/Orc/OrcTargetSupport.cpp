@@ -1,9 +1,9 @@
 
-#include "llvm/ADT/Triple.h"
-#include "llvm/ExecutionEngine/Orc/OrcTargetSupport.h"
+#include "llvm37/ADT/Triple.h"
+#include "llvm37/ExecutionEngine/Orc/OrcTargetSupport.h"
 #include <array>
 
-using namespace llvm::orc;
+using namespace llvm37::orc;
 
 namespace {
 
@@ -14,7 +14,7 @@ uint64_t executeCompileCallback(JITCompileCallbackManagerBase *JCBM,
 
 }
 
-namespace llvm {
+namespace llvm37 {
 namespace orc {
 
 const char* OrcX86_64::ResolverBlockName = "orc_resolver_block";
@@ -136,4 +136,4 @@ OrcX86_64::insertCompileCallbackTrampolines(Module &M,
 }
 
 } // End namespace orc.
-} // End namespace llvm.
+} // End namespace llvm37.

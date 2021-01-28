@@ -19,7 +19,7 @@
 #include "dxc/dxcapi.h"
 #include "dxillib.h"
 
-#include "llvm/ADT/SmallVector.h"
+#include "llvm37/ADT/SmallVector.h"
 #include <algorithm>
 
 #include "dxc/HLSL/DxilLinker.h"
@@ -29,16 +29,16 @@
 #include "dxc/dxcapi.internal.h"
 #include "dxcutil.h"
 #include "clang/Basic/Diagnostic.h"
-#include "llvm/Bitcode/ReaderWriter.h"
-#include "llvm/IR/DiagnosticPrinter.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Module.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/Bitcode/ReaderWriter.h"
+#include "llvm37/IR/DiagnosticPrinter.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/Support/raw_ostream.h"
 #include "clang/Frontend/TextDiagnosticPrinter.h"
 #include "dxc/Support/HLSLOptions.h"
 
 using namespace hlsl;
-using namespace llvm;
+using namespace llvm37;
 
 // This declaration is used for the locally-linked validator.
 HRESULT CreateDxcValidator(_In_ REFIID riid, _Out_ LPVOID *ppv);
@@ -98,13 +98,13 @@ public:
   }
 
   ~DxcLinker() {
-    // Make sure DxilLinker is released before LLVMContext.
+    // Make sure DxilLinker is released before LLVM37Context.
     m_pLinker.reset();
   }
 
 private:
   DXC_MICROCOM_TM_REF_FIELDS()
-  LLVMContext m_Ctx;
+  LLVM37Context m_Ctx;
   std::unique_ptr<DxilLinker> m_pLinker;
   CComPtr<IDxcContainerEventsHandler> m_pDxcContainerEventsHandler;
   std::vector<CComPtr<IDxcBlob>> m_blobs; // Keep blobs live for lazy load.
@@ -125,7 +125,7 @@ DxcLinker::RegisterLibrary(_In_opt_ LPCWSTR pLibName, // Name of the library.
     return E_INVALIDARG;
 
   try {
-    std::unique_ptr<llvm::Module> pModule, pDebugModule;
+    std::unique_ptr<llvm37::Module> pModule, pDebugModule;
 
     CComPtr<IMalloc> pMalloc;
     CComPtr<AbstractMemoryStream> pDiagStream;
@@ -205,10 +205,10 @@ HRESULT STDMETHODCALLTYPE DxcLinker::Link(
     }
 
     std::string warnings;
-    //llvm::raw_string_ostream w(warnings);
+    //llvm37::raw_string_ostream w(warnings);
     IFT(CreateMemoryStream(pMalloc, &pDiagStream));
     raw_stream_ostream DiagStream(pDiagStream);
-    llvm::DiagnosticPrinterRawOStream DiagPrinter(DiagStream);
+    llvm37::DiagnosticPrinterRawOStream DiagPrinter(DiagStream);
     PrintDiagnosticContext DiagContext(DiagPrinter);
     m_Ctx.setDiagnosticHandler(PrintDiagnosticContext::PrintDiagnosticHandler,
                                &DiagContext, true);

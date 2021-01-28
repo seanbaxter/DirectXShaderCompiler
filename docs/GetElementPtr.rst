@@ -8,10 +8,10 @@ The Often Misunderstood GEP Instruction
 Introduction
 ============
 
-This document seeks to dispel the mystery and confusion surrounding LLVM's
+This document seeks to dispel the mystery and confusion surrounding LLVM37's
 `GetElementPtr <LangRef.html#i_getelementptr>`_ (GEP) instruction.  Questions
 about the wily GEP instruction are probably the most frequently occurring
-questions once a developer gets down to coding with LLVM. Here we lay out the
+questions once a developer gets down to coding with LLVM37. Here we lay out the
 sources of confusion and show that the GEP instruction is really quite simple.
 
 Address Computation
@@ -40,7 +40,7 @@ same. For example, when we write, in "C":
 
 it is natural to think that there is only one index, the selection of the field
 ``F``.  However, in this example, ``Foo`` is a pointer. That pointer
-must be indexed explicitly in LLVM. C, on the other hand, indices through it
+must be indexed explicitly in LLVM37. C, on the other hand, indices through it
 transparently.  To arrive at the same address location as the C code, you would
 provide the GEP instruction with two index operands. The first operand indexes
 through the pointer; the second operand indexes the field ``F`` of the
@@ -82,10 +82,10 @@ instructions for the three indices through "P" in the assignment statement.  The
 function argument ``P`` will be the first operand of each of these GEP
 instructions.  The second operand indexes through that pointer.  The third
 operand will be the field offset into the ``struct munger_struct`` type, for
-either the ``f1`` or ``f2`` field. So, in LLVM assembly the ``munge`` function
+either the ``f1`` or ``f2`` field. So, in LLVM37 assembly the ``munge`` function
 looks like:
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
   void %munge(%struct.munger_struct* %P) {
   entry:
@@ -105,7 +105,7 @@ memory, or a global variable.
 
 To make this clear, let's consider a more obtuse example:
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
   %MyVar = uninitialized global i32
   ...
@@ -130,7 +130,7 @@ directly to the GEP instructions.
 The obtuse part of this example is in the cases of ``%idx2`` and ``%idx3``. They
 result in the computation of addresses that point to memory past the end of the
 ``%MyVar`` global, which is only one ``i32`` long, not three ``i32``\s long.
-While this is legal in LLVM, it is inadvisable because any load or store with
+While this is legal in LLVM37, it is inadvisable because any load or store with
 the pointer that results from these GEP instructions would produce undefined
 results.
 
@@ -142,7 +142,7 @@ Quick answer: there are no superfluous indices.
 This question arises most often when the GEP instruction is applied to a global
 variable which is always a pointer type. For example, consider this:
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
   %MyStruct = uninitialized global { float*, i32 }
   ...
@@ -178,7 +178,7 @@ The GetElementPtr instruction dereferences nothing. That is, it doesn't access
 memory in any way. That's what the Load and Store instructions are for.  GEP is
 only involved in the computation of addresses. For example, consider this:
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
   %MyVar = uninitialized global { [40 x i32 ]* }
   ...
@@ -195,7 +195,7 @@ illegal.
 In order to access the 18th integer in the array, you would need to do the
 following:
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
   %idx = getelementptr { [40 x i32]* }, { [40 x i32]* }* %, i64 0, i32 0
   %arr = load [40 x i32]** %idx
@@ -204,7 +204,7 @@ following:
 In this case, we have to load the pointer in the structure with a load
 instruction before we can index into the array. If the example was changed to:
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
   %MyVar = uninitialized global { [40 x i32 ] }
   ...
@@ -223,7 +223,7 @@ If you look at the first indices in these GEP instructions you find that they
 are different (0 and 1), therefore the address computation diverges with that
 index. Consider this example:
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
   %MyVar = global { [10 x i32] }
   %idx1 = getelementptr { [10 x i32] }, { [10 x i32] }* %MyVar, i64 0, i32 0, i64 1
@@ -246,7 +246,7 @@ These two GEP instructions will compute the same address because indexing
 through the 0th element does not change the address. However, it does change the
 type. Consider this example:
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
   %MyVar = global { [10 x i32] }
   %idx1 = getelementptr { [10 x i32] }, { [10 x i32] }* %MyVar, i64 1, i32 0, i64 0
@@ -275,7 +275,7 @@ How is GEP different from ``ptrtoint``, arithmetic, and ``inttoptr``?
 It's very similar; there are only subtle differences.
 
 With ptrtoint, you have to pick an integer type. One approach is to pick i64;
-this is safe on everything LLVM supports (LLVM internally assumes pointers are
+this is safe on everything LLVM37 supports (LLVM37 internally assumes pointers are
 never wider than 64 bits in many places), and the optimizer will actually narrow
 the i64 arithmetic down to the actual pointer size on targets which don't
 support 64-bit arithmetic in most cases. However, there are some cases where it
@@ -311,8 +311,8 @@ the overall picture.
 How does VLA addressing work with GEPs?
 ---------------------------------------
 
-GEPs don't natively support VLAs. LLVM's type system is entirely static, and GEP
-address computations are guided by an LLVM type.
+GEPs don't natively support VLAs. LLVM37's type system is entirely static, and GEP
+address computations are guided by an LLVM37 type.
 
 VLA indices can be implemented as linearized indices. For example, an expression
 like ``X[a][b][c]``, must be effectively lowered into a form like
@@ -397,12 +397,12 @@ Can I cast an object's address to integer and add it to null?
 
 You can compute an address that way, but if you use GEP to do the add, you can't
 use that pointer to actually access the object, unless the object is managed
-outside of LLVM.
+outside of LLVM37.
 
 The underlying integer computation is sufficiently defined; null has a defined
 value --- zero --- and you can add whatever value you want to it.
 
-However, it's invalid to access (load from or store to) an LLVM-aware object
+However, it's invalid to access (load from or store to) an LLVM37-aware object
 with such a pointer. This includes ``GlobalVariables``, ``Allocas``, and objects
 pointed to by noalias pointers.
 
@@ -416,18 +416,18 @@ Can I compute the distance between two objects, and add that value to one addres
 
 As with arithmetic on null, you can use GEP to compute an address that way, but
 you can't use that pointer to actually access the object if you do, unless the
-object is managed outside of LLVM.
+object is managed outside of LLVM37.
 
 Also as above, ptrtoint and inttoptr provide an alternative way to do this which
 do not have this restriction.
 
-Can I do type-based alias analysis on LLVM IR?
+Can I do type-based alias analysis on LLVM37 IR?
 ----------------------------------------------
 
-You can't do type-based alias analysis using LLVM's built-in type system,
-because LLVM has no restrictions on mixing types in addressing, loads or stores.
+You can't do type-based alias analysis using LLVM37's built-in type system,
+because LLVM37 has no restrictions on mixing types in addressing, loads or stores.
 
-LLVM's type-based alias analysis pass uses metadata to describe a different type
+LLVM37's type-based alias analysis pass uses metadata to describe a different type
 system (such as the C type system), and performs type-based aliasing on top of
 that.  Further details are in the `language reference <LangRef.html#tbaa>`_.
 
@@ -478,7 +478,7 @@ priority:
   into C (this covers a lot).
 
 * Support optimizations such as those that are common in C compilers. In
-  particular, GEP is a cornerstone of LLVM's `pointer aliasing
+  particular, GEP is a cornerstone of LLVM37's `pointer aliasing
   model <LangRef.html#pointeraliasing>`_.
 
 * Provide a consistent method for computing addresses so that address
@@ -502,10 +502,10 @@ same but have distinct operand types.
 What's an uglygep?
 ------------------
 
-Some LLVM optimizers operate on GEPs by internally lowering them into more
+Some LLVM37 optimizers operate on GEPs by internally lowering them into more
 primitive integer expressions, which allows them to be combined with other
 integer expressions and/or split into multiple separate integer expressions. If
-they've made non-trivial changes, translating back into LLVM IR can involve
+they've made non-trivial changes, translating back into LLVM37 IR can involve
 reverse-engineering the structure of the addressing in order to fit it into the
 static type of the original first operand. It isn't always possibly to fully
 reconstruct this structure; sometimes the underlying addressing doesn't

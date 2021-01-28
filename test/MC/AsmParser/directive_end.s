@@ -1,5 +1,5 @@
-# RUN: llvm-mc -triple i386-unknown-unknown %s -filetype obj -o - \
-# RUN:   | llvm-readobj -t | FileCheck %s
+# RUN: llvm37-mc -triple i386-unknown-unknown %s -filetype obj -o - \
+# RUN:   | llvm37-readobj -t | FileCheck %s
 
 	.end
 

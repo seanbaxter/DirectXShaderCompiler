@@ -1,5 +1,5 @@
 // Make sure that compiler-added local variables (whose line number is zero)
-// don't crash llvm-cov.
+// don't crash llvm37-cov.
 
 // We need shell for cd
 // REQUIRES: shell
@@ -9,7 +9,7 @@
 // RUN: cd %t
 // RUN: cp %s %p/Inputs/range_based_for.gc* .
 
-// RUN: llvm-cov gcov range_based_for.cpp | FileCheck %s --check-prefix=STDOUT
+// RUN: llvm37-cov gcov range_based_for.cpp | FileCheck %s --check-prefix=STDOUT
 // STDOUT: File 'range_based_for.cpp'
 // STDOUT: Lines executed:100.00% of 5
 // STDOUT: range_based_for.cpp:creating 'range_based_for.cpp.gcov'
@@ -25,5 +25,5 @@ int main(int argc, const char *argv[]) { // GCOV: 1:    [[@LINE]]:int main(
   return 0;                              // GCOV: 1:    [[@LINE]]:  return
 }                                        // GCOV: -:    [[@LINE]]:}
 
-// llvm-cov doesn't work on big endian yet
+// llvm37-cov doesn't work on big endian yet
 // XFAIL: powerpc64-, s390x, mips-, mips64-, sparc

@@ -1,4 +1,4 @@
-# RUN: llvm-mc -triple i386 -filetype asm -o - %s | FileCheck %s
+# RUN: llvm37-mc -triple i386 -filetype asm -o - %s | FileCheck %s
 
 	.macro	it, cond
 	.endm

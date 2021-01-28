@@ -1,6 +1,6 @@
-//===- RemoteTarget.h - LLVM Remote process JIT execution ----------------===//
+//===- RemoteTarget.h - LLVM37 Remote process JIT execution ----------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -12,17 +12,17 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_TOOLS_LLI_REMOTETARGET_H
-#define LLVM_TOOLS_LLI_REMOTETARGET_H
+#ifndef LLVM37_TOOLS_LLI_REMOTETARGET_H
+#define LLVM37_TOOLS_LLI_REMOTETARGET_H
 
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/ADT/StringRef.h"
-#include "llvm/Support/DataTypes.h"
-#include "llvm/Support/Memory.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/ADT/StringRef.h"
+#include "llvm37/Support/DataTypes.h"
+#include "llvm37/Support/Memory.h"
 #include <stdlib.h>
 #include <string>
 
-namespace llvm {
+namespace llvm37 {
 
 class RemoteTarget {
   bool IsRunning;
@@ -117,6 +117,6 @@ private:
   static void doRemoteTargeting(int CmdFD, int OutFD);
 };
 
-} // end namespace llvm
+} // end namespace llvm37
 
 #endif

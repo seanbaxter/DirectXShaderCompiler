@@ -1,6 +1,6 @@
 //===- RegionInfo.cpp - SESE region detection analysis --------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -9,24 +9,24 @@
 // Detects single entry single exit regions in the control flow graph.
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Analysis/RegionInfo.h"
-#include "llvm/ADT/PostOrderIterator.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/Analysis/LoopInfo.h"
-#include "llvm/Analysis/RegionInfoImpl.h"
-#include "llvm/Analysis/RegionIterator.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/ErrorHandling.h"
+#include "llvm37/Analysis/RegionInfo.h"
+#include "llvm37/ADT/PostOrderIterator.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/Analysis/LoopInfo.h"
+#include "llvm37/Analysis/RegionInfoImpl.h"
+#include "llvm37/Analysis/RegionIterator.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/ErrorHandling.h"
 #include <algorithm>
 #include <iterator>
 #include <set>
 
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "region"
 
-namespace llvm {
+namespace llvm37 {
 template class RegionBase<RegionTraits<Function>>;
 template class RegionNodeBase<RegionTraits<Function>>;
 template class RegionInfoBase<RegionTraits<Function>>;
@@ -147,7 +147,7 @@ void RegionInfoPass::print(raw_ostream &OS, const Module *) const {
   RI.print(OS);
 }
 
-#if !defined(NDEBUG) || defined(LLVM_ENABLE_DUMP)
+#if !defined(NDEBUG) || defined(LLVM37_ENABLE_DUMP)
 void RegionInfoPass::dump() const {
   RI.dump();
 }
@@ -164,10 +164,10 @@ INITIALIZE_PASS_END(RegionInfoPass, "regions",
                 "Detect single entry single exit regions", true, true)
 
 // Create methods available outside of this file, to use them
-// "include/llvm/LinkAllPasses.h". Otherwise the pass would be deleted by
+// "include/llvm37/LinkAllPasses.h". Otherwise the pass would be deleted by
 // the link time optimization.
 
-namespace llvm {
+namespace llvm37 {
   FunctionPass *createRegionInfoPass() {
     return new RegionInfoPass();
   }

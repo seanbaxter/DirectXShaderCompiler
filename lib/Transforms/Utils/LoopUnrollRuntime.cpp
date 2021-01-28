@@ -1,6 +1,6 @@
 //===-- UnrollLoopRuntime.cpp - Runtime Loop unrolling utilities ----------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -21,25 +21,25 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Transforms/Utils/UnrollLoop.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/Analysis/AliasAnalysis.h"
-#include "llvm/Analysis/LoopIterator.h"
-#include "llvm/Analysis/LoopPass.h"
-#include "llvm/Analysis/ScalarEvolution.h"
-#include "llvm/Analysis/ScalarEvolutionExpander.h"
-#include "llvm/IR/BasicBlock.h"
-#include "llvm/IR/Dominators.h"
-#include "llvm/IR/Metadata.h"
-#include "llvm/IR/Module.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Transforms/Scalar.h"
-#include "llvm/Transforms/Utils/BasicBlockUtils.h"
-#include "llvm/Transforms/Utils/Cloning.h"
+#include "llvm37/Transforms/Utils/UnrollLoop.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/Analysis/AliasAnalysis.h"
+#include "llvm37/Analysis/LoopIterator.h"
+#include "llvm37/Analysis/LoopPass.h"
+#include "llvm37/Analysis/ScalarEvolution.h"
+#include "llvm37/Analysis/ScalarEvolutionExpander.h"
+#include "llvm37/IR/BasicBlock.h"
+#include "llvm37/IR/Dominators.h"
+#include "llvm37/IR/Metadata.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Transforms/Scalar.h"
+#include "llvm37/Transforms/Utils/BasicBlockUtils.h"
+#include "llvm37/Transforms/Utils/Cloning.h"
 #include <algorithm>
 
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "loop-unroll"
 
@@ -241,7 +241,7 @@ static void CloneLoopBlocks(Loop *L, Value *NewIter, const bool UnrollProlog,
       }
     }
 
-    LLVMContext &Context = NewLoop->getHeader()->getContext();
+    LLVM37Context &Context = NewLoop->getHeader()->getContext();
     SmallVector<Metadata *, 1> DisableOperands;
     DisableOperands.push_back(MDString::get(Context, "llvm.loop.unroll.disable"));
     MDNode *DisableNode = MDNode::get(Context, DisableOperands);
@@ -262,7 +262,7 @@ static void CloneLoopBlocks(Loop *L, Value *NewIter, const bool UnrollProlog,
 /// to the unroll factor as the number of *extra* copies added).
 /// We assume also that the loop unroll factor is a power-of-two. So, after
 /// unrolling the loop, the number of loop bodies executed is 2,
-/// 4, 8, etc.  Note - LLVM converts the if-then-sequence to a switch
+/// 4, 8, etc.  Note - LLVM37 converts the if-then-sequence to a switch
 /// instruction in SimplifyCFG.cpp.  Then, the backend decides how code for
 /// the switch instruction is generated.
 ///
@@ -277,7 +277,7 @@ static void CloneLoopBlocks(Loop *L, Value *NewIter, const bool UnrollProlog,
 /// ...
 /// End:
 ///
-bool llvm::UnrollRuntimeLoopProlog(Loop *L, unsigned Count,
+bool llvm37::UnrollRuntimeLoopProlog(Loop *L, unsigned Count,
                                    bool AllowExpensiveTripCount, LoopInfo *LI,
                                    LPPassManager *LPM) {
   // for now, only unroll loops that contain a single exit

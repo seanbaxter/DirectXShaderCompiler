@@ -9,11 +9,11 @@ target datalayout = "p:32:32:32-p1:16:16:16"
 ; CHECK: @ia = internal addrspace(1) global i8 42
 @ia = internal alias i8 addrspace(1)* @i
 
-@llvm.used = appending global [1 x i8*] [i8* addrspacecast (i8 addrspace(1)* @ca to i8*)], section "llvm.metadata"
-; CHECK-DAG: @llvm.used = appending global [1 x i8*] [i8* addrspacecast (i8 addrspace(1)* @ca to i8*)], section "llvm.metadata"
+@llvm37.used = appending global [1 x i8*] [i8* addrspacecast (i8 addrspace(1)* @ca to i8*)], section "llvm.metadata"
+; CHECK-DAG: @llvm37.used = appending global [1 x i8*] [i8* addrspacecast (i8 addrspace(1)* @ca to i8*)], section "llvm.metadata"
 
-@llvm.compiler.used = appending global [2 x i8*] [i8* addrspacecast(i8 addrspace(1)* @ia to i8*), i8* addrspacecast (i8 addrspace(1)* @i to i8*)], section "llvm.metadata"
-; CHECK-DAG: @llvm.compiler.used = appending global [1 x i8*] [i8* addrspacecast (i8 addrspace(1)* @ia to i8*)], section "llvm.metadata"
+@llvm37.compiler.used = appending global [2 x i8*] [i8* addrspacecast(i8 addrspace(1)* @ia to i8*), i8* addrspacecast (i8 addrspace(1)* @i to i8*)], section "llvm.metadata"
+; CHECK-DAG: @llvm37.compiler.used = appending global [1 x i8*] [i8* addrspacecast (i8 addrspace(1)* @ia to i8*)], section "llvm.metadata"
 
 @sameAsUsed = global [1 x i8*] [i8* addrspacecast(i8 addrspace(1)* @ca to i8*)]
 ; CHECK-DAG: @sameAsUsed = global [1 x i8*] [i8* addrspacecast (i8 addrspace(1)* @c to i8*)]

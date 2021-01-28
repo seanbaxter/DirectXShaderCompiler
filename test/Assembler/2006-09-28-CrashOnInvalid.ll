@@ -1,6 +1,6 @@
-; Test for PR902.  This program is erroneous, but should not crash llvm-as.
+; Test for PR902.  This program is erroneous, but should not crash llvm37-as.
 ; This tests that a simple error is caught and processed correctly.
-; RUN: not llvm-as < %s >/dev/null 2> %t
+; RUN: not llvm37-as < %s >/dev/null 2> %t
 ; RUN: grep "floating point constant invalid for type" %t
 
 define void @test() {

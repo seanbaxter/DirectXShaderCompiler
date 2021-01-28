@@ -1,6 +1,6 @@
 //===-- lib/MC/Disassembler.cpp - Disassembler Public C Interface ---------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -8,35 +8,35 @@
 //===----------------------------------------------------------------------===//
 
 #include "Disassembler.h"
-#include "llvm-c/Disassembler.h"
-#include "llvm/MC/MCAsmInfo.h"
-#include "llvm/MC/MCContext.h"
-#include "llvm/MC/MCDisassembler.h"
-#include "llvm/MC/MCInst.h"
-#include "llvm/MC/MCInstPrinter.h"
-#include "llvm/MC/MCInstrInfo.h"
-#include "llvm/MC/MCRegisterInfo.h"
-#include "llvm/MC/MCRelocationInfo.h"
-#include "llvm/MC/MCSubtargetInfo.h"
-#include "llvm/MC/MCSymbolizer.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/FormattedStream.h"
-#include "llvm/Support/TargetRegistry.h"
+#include "llvm37-c/Disassembler.h"
+#include "llvm37/MC/MCAsmInfo.h"
+#include "llvm37/MC/MCContext.h"
+#include "llvm37/MC/MCDisassembler.h"
+#include "llvm37/MC/MCInst.h"
+#include "llvm37/MC/MCInstPrinter.h"
+#include "llvm37/MC/MCInstrInfo.h"
+#include "llvm37/MC/MCRegisterInfo.h"
+#include "llvm37/MC/MCRelocationInfo.h"
+#include "llvm37/MC/MCSubtargetInfo.h"
+#include "llvm37/MC/MCSymbolizer.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/FormattedStream.h"
+#include "llvm37/Support/TargetRegistry.h"
 
-using namespace llvm;
+using namespace llvm37;
 
-// LLVMCreateDisasm() creates a disassembler for the TripleName.  Symbolic
+// LLVM37CreateDisasm() creates a disassembler for the TripleName.  Symbolic
 // disassembly is supported by passing a block of information in the DisInfo
 // parameter and specifying the TagType and callback functions as described in
-// the header llvm-c/Disassembler.h .  The pointer to the block and the 
+// the header llvm37-c/Disassembler.h .  The pointer to the block and the 
 // functions can all be passed as NULL.  If successful, this returns a
 // disassembler context.  If not, it returns NULL.
 //
-LLVMDisasmContextRef
-LLVMCreateDisasmCPUFeatures(const char *TT, const char *CPU,
+LLVM37DisasmContextRef
+LLVM37CreateDisasmCPUFeatures(const char *TT, const char *CPU,
                             const char *Features, void *DisInfo, int TagType,
-                            LLVMOpInfoCallback GetOpInfo,
-                            LLVMSymbolLookupCallback SymbolLookUp) {
+                            LLVM37OpInfoCallback GetOpInfo,
+                            LLVM37SymbolLookupCallback SymbolLookUp) {
   // Get the target.
   std::string Error;
   const Target *TheTarget = TargetRegistry::lookupTarget(TT, Error);
@@ -87,8 +87,8 @@ LLVMCreateDisasmCPUFeatures(const char *TT, const char *CPU,
   if (!IP)
     return nullptr;
 
-  LLVMDisasmContext *DC =
-      new LLVMDisasmContext(TT, DisInfo, TagType, GetOpInfo, SymbolLookUp,
+  LLVM37DisasmContext *DC =
+      new LLVM37DisasmContext(TT, DisInfo, TagType, GetOpInfo, SymbolLookUp,
                             TheTarget, MAI, MRI, STI, MII, Ctx, DisAsm, IP);
   if (!DC)
     return nullptr;
@@ -97,32 +97,32 @@ LLVMCreateDisasmCPUFeatures(const char *TT, const char *CPU,
   return DC;
 }
 
-LLVMDisasmContextRef
-LLVMCreateDisasmCPU(const char *TT, const char *CPU, void *DisInfo, int TagType,
-                    LLVMOpInfoCallback GetOpInfo,
-                    LLVMSymbolLookupCallback SymbolLookUp) {
-  return LLVMCreateDisasmCPUFeatures(TT, CPU, "", DisInfo, TagType, GetOpInfo,
+LLVM37DisasmContextRef
+LLVM37CreateDisasmCPU(const char *TT, const char *CPU, void *DisInfo, int TagType,
+                    LLVM37OpInfoCallback GetOpInfo,
+                    LLVM37SymbolLookupCallback SymbolLookUp) {
+  return LLVM37CreateDisasmCPUFeatures(TT, CPU, "", DisInfo, TagType, GetOpInfo,
                                      SymbolLookUp);
 }
 
-LLVMDisasmContextRef LLVMCreateDisasm(const char *TT, void *DisInfo,
-                                      int TagType, LLVMOpInfoCallback GetOpInfo,
-                                      LLVMSymbolLookupCallback SymbolLookUp) {
-  return LLVMCreateDisasmCPUFeatures(TT, "", "", DisInfo, TagType, GetOpInfo,
+LLVM37DisasmContextRef LLVM37CreateDisasm(const char *TT, void *DisInfo,
+                                      int TagType, LLVM37OpInfoCallback GetOpInfo,
+                                      LLVM37SymbolLookupCallback SymbolLookUp) {
+  return LLVM37CreateDisasmCPUFeatures(TT, "", "", DisInfo, TagType, GetOpInfo,
                                      SymbolLookUp);
 }
 
 //
-// LLVMDisasmDispose() disposes of the disassembler specified by the context.
+// LLVM37DisasmDispose() disposes of the disassembler specified by the context.
 //
-void LLVMDisasmDispose(LLVMDisasmContextRef DCR){
-  LLVMDisasmContext *DC = (LLVMDisasmContext *)DCR;
+void LLVM37DisasmDispose(LLVM37DisasmContextRef DCR){
+  LLVM37DisasmContext *DC = (LLVM37DisasmContext *)DCR;
   delete DC;
 }
 
 /// \brief Emits the comments that are stored in \p DC comment stream.
 /// Each comment in the comment stream must end with a newline.
-static void emitComments(LLVMDisasmContext *DC,
+static void emitComments(LLVM37DisasmContext *DC,
                          formatted_raw_ostream &FormattedOS) {
   // Flush the stream before taking its content.
   DC->CommentStream.flush();
@@ -154,7 +154,7 @@ static void emitComments(LLVMDisasmContext *DC,
 /// scheduling model, based on \p DC information.
 /// \return The maximum expected latency over all the operands or -1
 /// if no information is available.
-static int getItineraryLatency(LLVMDisasmContext *DC, const MCInst &Inst) {
+static int getItineraryLatency(LLVM37DisasmContext *DC, const MCInst &Inst) {
   const int NoInformationAvailable = -1;
 
   // Check if we have a CPU to get the itinerary information.
@@ -179,7 +179,7 @@ static int getItineraryLatency(LLVMDisasmContext *DC, const MCInst &Inst) {
 /// \brief Gets latency information for \p Inst, based on \p DC information.
 /// \return The maximum expected latency over all the definitions or -1
 /// if no information is available.
-static int getLatency(LLVMDisasmContext *DC, const MCInst &Inst) {
+static int getLatency(LLVM37DisasmContext *DC, const MCInst &Inst) {
   // Try to compute scheduling information.
   const MCSubtargetInfo *STI = DC->getSubtargetInfo();
   const MCSchedModel SCModel = STI->getSchedModel();
@@ -216,7 +216,7 @@ static int getLatency(LLVMDisasmContext *DC, const MCInst &Inst) {
 
 /// \brief Emits latency information in DC->CommentStream for \p Inst, based
 /// on the information available in \p DC.
-static void emitLatency(LLVMDisasmContext *DC, const MCInst &Inst) {
+static void emitLatency(LLVM37DisasmContext *DC, const MCInst &Inst) {
   int Latency = getLatency(DC, Inst);
 
   // Report only interesting latencies.
@@ -227,7 +227,7 @@ static void emitLatency(LLVMDisasmContext *DC, const MCInst &Inst) {
 }
 
 //
-// LLVMDisasmInstruction() disassembles a single instruction using the
+// LLVM37DisasmInstruction() disassembles a single instruction using the
 // disassembler context specified in the parameter DC.  The bytes of the
 // instruction are specified in the parameter Bytes, and contains at least
 // BytesSize number of bytes.  The instruction is at the address specified by
@@ -239,10 +239,10 @@ static void emitLatency(LLVMDisasmContext *DC, const MCInst &Inst) {
 // over by printing a .byte, .long etc. to continue.
 //
 _Use_decl_annotations_ // HLSL Change
-size_t LLVMDisasmInstruction(LLVMDisasmContextRef DCR, uint8_t *Bytes,
+size_t LLVM37DisasmInstruction(LLVM37DisasmContextRef DCR, uint8_t *Bytes,
                              uint64_t BytesSize, uint64_t PC, char *OutString,
                              size_t OutStringSize){
-  LLVMDisasmContext *DC = (LLVMDisasmContext *)DCR;
+  LLVM37DisasmContext *DC = (LLVM37DisasmContext *)DCR;
   // Wrap the pointer to the Bytes, BytesSize and PC in a MemoryObject.
   ArrayRef<uint8_t> Data(Bytes, BytesSize);
 
@@ -270,7 +270,7 @@ size_t LLVMDisasmInstruction(LLVMDisasmContextRef DCR, uint8_t *Bytes,
     formatted_raw_ostream FormattedOS(OS);
     IP->printInst(&Inst, FormattedOS, AnnotationsStr, *DC->getSubtargetInfo());
 
-    if (DC->getOptions() & LLVMDisassembler_Option_PrintLatency)
+    if (DC->getOptions() & LLVM37Disassembler_Option_PrintLatency)
       emitLatency(DC, Inst);
 
     emitComments(DC, FormattedOS);
@@ -284,30 +284,30 @@ size_t LLVMDisasmInstruction(LLVMDisasmContextRef DCR, uint8_t *Bytes,
     return Size;
   }
   }
-  llvm_unreachable("Invalid DecodeStatus!");
+  llvm37_unreachable("Invalid DecodeStatus!");
 }
 
 //
-// LLVMSetDisasmOptions() sets the disassembler's options.  It returns 1 if it
+// LLVM37SetDisasmOptions() sets the disassembler's options.  It returns 1 if it
 // can set all the Options and 0 otherwise.
 //
-int LLVMSetDisasmOptions(LLVMDisasmContextRef DCR, uint64_t Options){
-  if (Options & LLVMDisassembler_Option_UseMarkup){
-      LLVMDisasmContext *DC = (LLVMDisasmContext *)DCR;
+int LLVM37SetDisasmOptions(LLVM37DisasmContextRef DCR, uint64_t Options){
+  if (Options & LLVM37Disassembler_Option_UseMarkup){
+      LLVM37DisasmContext *DC = (LLVM37DisasmContext *)DCR;
       MCInstPrinter *IP = DC->getIP();
       IP->setUseMarkup(1);
-      DC->addOptions(LLVMDisassembler_Option_UseMarkup);
-      Options &= ~LLVMDisassembler_Option_UseMarkup;
+      DC->addOptions(LLVM37Disassembler_Option_UseMarkup);
+      Options &= ~LLVM37Disassembler_Option_UseMarkup;
   }
-  if (Options & LLVMDisassembler_Option_PrintImmHex){
-      LLVMDisasmContext *DC = (LLVMDisasmContext *)DCR;
+  if (Options & LLVM37Disassembler_Option_PrintImmHex){
+      LLVM37DisasmContext *DC = (LLVM37DisasmContext *)DCR;
       MCInstPrinter *IP = DC->getIP();
       IP->setPrintImmHex(1);
-      DC->addOptions(LLVMDisassembler_Option_PrintImmHex);
-      Options &= ~LLVMDisassembler_Option_PrintImmHex;
+      DC->addOptions(LLVM37Disassembler_Option_PrintImmHex);
+      Options &= ~LLVM37Disassembler_Option_PrintImmHex;
   }
-  if (Options & LLVMDisassembler_Option_AsmPrinterVariant){
-      LLVMDisasmContext *DC = (LLVMDisasmContext *)DCR;
+  if (Options & LLVM37Disassembler_Option_AsmPrinterVariant){
+      LLVM37DisasmContext *DC = (LLVM37DisasmContext *)DCR;
       // Try to set up the new instruction printer.
       const MCAsmInfo *MAI = DC->getAsmInfo();
       const MCInstrInfo *MII = DC->getInstrInfo();
@@ -318,21 +318,21 @@ int LLVMSetDisasmOptions(LLVMDisasmContextRef DCR, uint64_t Options){
           Triple(DC->getTripleName()), AsmPrinterVariant, *MAI, *MII, *MRI);
       if (IP) {
         DC->setIP(IP);
-        DC->addOptions(LLVMDisassembler_Option_AsmPrinterVariant);
-        Options &= ~LLVMDisassembler_Option_AsmPrinterVariant;
+        DC->addOptions(LLVM37Disassembler_Option_AsmPrinterVariant);
+        Options &= ~LLVM37Disassembler_Option_AsmPrinterVariant;
       }
   }
-  if (Options & LLVMDisassembler_Option_SetInstrComments) {
-    LLVMDisasmContext *DC = (LLVMDisasmContext *)DCR;
+  if (Options & LLVM37Disassembler_Option_SetInstrComments) {
+    LLVM37DisasmContext *DC = (LLVM37DisasmContext *)DCR;
     MCInstPrinter *IP = DC->getIP();
     IP->setCommentStream(DC->CommentStream);
-    DC->addOptions(LLVMDisassembler_Option_SetInstrComments);
-    Options &= ~LLVMDisassembler_Option_SetInstrComments;
+    DC->addOptions(LLVM37Disassembler_Option_SetInstrComments);
+    Options &= ~LLVM37Disassembler_Option_SetInstrComments;
   }
-  if (Options & LLVMDisassembler_Option_PrintLatency) {
-    LLVMDisasmContext *DC = (LLVMDisasmContext *)DCR;
-    DC->addOptions(LLVMDisassembler_Option_PrintLatency);
-    Options &= ~LLVMDisassembler_Option_PrintLatency;
+  if (Options & LLVM37Disassembler_Option_PrintLatency) {
+    LLVM37DisasmContext *DC = (LLVM37DisasmContext *)DCR;
+    DC->addOptions(LLVM37Disassembler_Option_PrintLatency);
+    Options &= ~LLVM37Disassembler_Option_PrintLatency;
   }
   return (Options == 0);
 }

@@ -1,6 +1,6 @@
 //===-- DeclContextInternals.h - DeclContext Representation -----*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,16 +11,16 @@
 //  of DeclContext.
 //
 //===----------------------------------------------------------------------===//
-#ifndef LLVM_CLANG_AST_DECLCONTEXTINTERNALS_H
-#define LLVM_CLANG_AST_DECLCONTEXTINTERNALS_H
+#ifndef LLVM37_CLANG_AST_DECLCONTEXTINTERNALS_H
+#define LLVM37_CLANG_AST_DECLCONTEXTINTERNALS_H
 
 #include "clang/AST/Decl.h"
 #include "clang/AST/DeclCXX.h"
 #include "clang/AST/DeclarationName.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/PointerIntPair.h"
-#include "llvm/ADT/PointerUnion.h"
-#include "llvm/ADT/SmallVector.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/PointerIntPair.h"
+#include "llvm37/ADT/PointerUnion.h"
+#include "llvm37/ADT/SmallVector.h"
 #include <algorithm>
 
 namespace clang {
@@ -36,12 +36,12 @@ struct StoredDeclsList {
 
   /// \brief A collection of declarations, with a flag to indicate if we have
   /// further external declarations.
-  typedef llvm::PointerIntPair<DeclsTy *, 1, bool> DeclsAndHasExternalTy;
+  typedef llvm37::PointerIntPair<DeclsTy *, 1, bool> DeclsAndHasExternalTy;
 
   /// \brief The stored data, which will be either a pointer to a NamedDecl,
   /// or a pointer to a vector with a flag to indicate if there are further
   /// external declarations.
-  llvm::PointerUnion<NamedDecl*, DeclsAndHasExternalTy> Data;
+  llvm37::PointerUnion<NamedDecl*, DeclsAndHasExternalTy> Data;
 
 public:
   StoredDeclsList() {}
@@ -237,7 +237,7 @@ public:
 };
 
 class StoredDeclsMap
-  : public llvm::SmallDenseMap<DeclarationName, StoredDeclsList, 4> {
+  : public llvm37::SmallDenseMap<DeclarationName, StoredDeclsList, 4> {
 
 public:
   static void DestroyAll(StoredDeclsMap *Map, bool Dependent);
@@ -245,7 +245,7 @@ public:
 private:
   friend class ASTContext; // walks the chain deleting these
   friend class DeclContext;
-  llvm::PointerIntPair<StoredDeclsMap*, 1> Previous;
+  llvm37::PointerIntPair<StoredDeclsMap*, 1> Previous;
 };
 
 class DependentStoredDeclsMap : public StoredDeclsMap {

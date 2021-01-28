@@ -1,6 +1,6 @@
 //=----------------------- InterleavedAccessPass.cpp -----------------------==//
 //
-// The LLVM Compiler Infrastructure
+// The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -37,15 +37,15 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/CodeGen/Passes.h"
-#include "llvm/IR/InstIterator.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/MathExtras.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Target/TargetLowering.h"
-#include "llvm/Target/TargetSubtargetInfo.h"
+#include "llvm37/CodeGen/Passes.h"
+#include "llvm37/IR/InstIterator.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/MathExtras.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Target/TargetLowering.h"
+#include "llvm37/Target/TargetSubtargetInfo.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "interleaved-access"
 
@@ -56,7 +56,7 @@ static cl::opt<bool> LowerInterleavedAccesses(
 
 static unsigned MaxFactor; // The maximum supported interleave factor.
 
-namespace llvm {
+namespace llvm37 {
 static void initializeInterleavedAccessPass(PassRegistry &);
 }
 
@@ -94,7 +94,7 @@ INITIALIZE_TM_PASS(InterleavedAccess, "interleaved-access",
     "Lower interleaved memory accesses to target specific intrinsics",
     false, false)
 
-FunctionPass *llvm::createInterleavedAccessPass(const TargetMachine *TM) {
+FunctionPass *llvm37::createInterleavedAccessPass(const TargetMachine *TM) {
   return new InterleavedAccess(TM);
 }
 

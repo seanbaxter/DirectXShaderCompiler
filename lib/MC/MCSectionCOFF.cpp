@@ -1,18 +1,18 @@
 //===- lib/MC/MCSectionCOFF.cpp - COFF Code Section Representation --------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/MC/MCSectionCOFF.h"
-#include "llvm/MC/MCAsmInfo.h"
-#include "llvm/MC/MCContext.h"
-#include "llvm/MC/MCSymbol.h"
-#include "llvm/Support/raw_ostream.h"
-using namespace llvm;
+#include "llvm37/MC/MCSectionCOFF.h"
+#include "llvm37/MC/MCAsmInfo.h"
+#include "llvm37/MC/MCContext.h"
+#include "llvm37/MC/MCSymbol.h"
+#include "llvm37/Support/raw_ostream.h"
+using namespace llvm37;
 
 MCSectionCOFF::~MCSectionCOFF() {} // anchor.
 

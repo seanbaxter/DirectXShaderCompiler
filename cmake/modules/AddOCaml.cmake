@@ -4,7 +4,7 @@
 #
 # Example usage:
 #
-# add_ocaml_library(pkg_a OCAML mod_a OCAMLDEP pkg_b C mod_a_stubs PKG ctypes LLVM core)
+# add_ocaml_library(pkg_a OCAML mod_a OCAMLDEP pkg_b C mod_a_stubs PKG ctypes LLVM37 core)
 #
 # Unnamed parameters:
 #
@@ -17,13 +17,13 @@
 # C         C stub sources. Imply presence of a corresponding .c file.
 # CFLAGS    Additional arguments passed when compiling C stubs.
 # PKG       Names of ocamlfind packages this library depends on.
-# LLVM      Names of LLVM libraries this library depends on.
+# LLVM37      Names of LLVM37 libraries this library depends on.
 # NOCOPY    Do not automatically copy sources (.c, .ml, .mli) from the source directory,
 #           e.g. if they are generated.
 #
 
 function(add_ocaml_library name)
-  CMAKE_PARSE_ARGUMENTS(ARG "NOCOPY" "" "OCAML;OCAMLDEP;C;CFLAGS;PKG;LLVM" ${ARGN})
+  CMAKE_PARSE_ARGUMENTS(ARG "NOCOPY" "" "OCAML;OCAMLDEP;C;CFLAGS;PKG;LLVM37" ${ARGN})
 
   set(src ${CMAKE_CURRENT_SOURCE_DIR})
   set(bin ${CMAKE_CURRENT_BINARY_DIR})
@@ -52,7 +52,7 @@ function(add_ocaml_library name)
          "${bin}/${name}${CMAKE_STATIC_LIBRARY_SUFFIX}")
   endif()
 
-  set(ocaml_flags "-lstdc++" "-ldopt" "-L${LLVM_LIBRARY_DIR}"
+  set(ocaml_flags "-lstdc++" "-ldopt" "-L${LLVM37_LIBRARY_DIR}"
                   "-ccopt" "-L\\$CAMLORIGIN/.."
                   "-ccopt" "-Wl,-rpath,\\$CAMLORIGIN/.."
                   ${ocaml_pkgs})
@@ -66,19 +66,19 @@ function(add_ocaml_library name)
     list(APPEND ocaml_flags "-custom")
   endif()
 
-  explicit_map_components_to_libraries(llvm_libs ${ARG_LLVM})
-  foreach( llvm_lib ${llvm_libs} )
-    list(APPEND ocaml_flags "-l${llvm_lib}" )
+  explicit_map_components_to_libraries(llvm37_libs ${ARG_LLVM37})
+  foreach( llvm37_lib ${llvm37_libs} )
+    list(APPEND ocaml_flags "-l${llvm37_lib}" )
   endforeach()
 
-  get_property(system_libs TARGET LLVMSupport PROPERTY LLVM_SYSTEM_LIBS)
+  get_property(system_libs TARGET LLVM37Support PROPERTY LLVM37_SYSTEM_LIBS)
   foreach(system_lib ${system_libs})
     list(APPEND ocaml_flags "-l${system_lib}" )
   endforeach()
 
   string(REPLACE ";" " " ARG_CFLAGS "${ARG_CFLAGS}")
-  set(c_flags "${ARG_CFLAGS} ${LLVM_DEFINITIONS}")
-  foreach( include_dir ${LLVM_INCLUDE_DIR} ${LLVM_MAIN_INCLUDE_DIR} )
+  set(c_flags "${ARG_CFLAGS} ${LLVM37_DEFINITIONS}")
+  foreach( include_dir ${LLVM37_INCLUDE_DIR} ${LLVM37_MAIN_INCLUDE_DIR} )
     set(c_flags "${c_flags} -I${include_dir}")
   endforeach()
 
@@ -146,7 +146,7 @@ function(add_ocaml_library name)
     OUTPUT "${bin}/${name}.odoc"
     COMMAND "${OCAMLFIND}" "ocamldoc"
             "-I" "${bin}"
-            "-I" "${LLVM_LIBRARY_DIR}/ocaml/"
+            "-I" "${LLVM37_LIBRARY_DIR}/ocaml/"
             "-dump" "${bin}/${name}.odoc"
             ${ocaml_pkgs} ${ocaml_inputs}
     DEPENDS ${ocaml_inputs} ${ocaml_outputs}
@@ -164,8 +164,8 @@ function(add_ocaml_library name)
     add_dependencies("ocaml_${name}" "ocaml_${ocaml_dep}")
   endforeach()
 
-  foreach( llvm_lib ${llvm_libs} )
-    add_dependencies("ocaml_${name}" "${llvm_lib}")
+  foreach( llvm37_lib ${llvm37_libs} )
+    add_dependencies("ocaml_${name}" "${llvm37_lib}")
   endforeach()
 
   set(install_files)
@@ -194,7 +194,7 @@ function(add_ocaml_library name)
     get_filename_component(filename "${install_file}" NAME)
     add_custom_command(TARGET "ocaml_${name}" POST_BUILD
       COMMAND "${CMAKE_COMMAND}" "-E" "copy" "${install_file}"
-                                             "${LLVM_LIBRARY_DIR}/ocaml/"
+                                             "${LLVM37_LIBRARY_DIR}/ocaml/"
       COMMENT "Copying OCaml library component ${filename} to intermediate area"
       VERBATIM)
   endforeach()

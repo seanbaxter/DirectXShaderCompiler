@@ -1,6 +1,6 @@
 //===--- Comment.cpp - Comment AST node implementation --------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -13,8 +13,8 @@
 #include "clang/AST/DeclObjC.h"
 #include "clang/AST/DeclTemplate.h"
 #include "clang/Basic/CharInfo.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/raw_ostream.h"
 
 namespace clang {
 namespace comments {
@@ -30,7 +30,7 @@ const char *Comment::getCommentKindName() const {
 #undef COMMENT
 #undef ABSTRACT_COMMENT
   }
-  llvm_unreachable("Unknown comment kind!");
+  llvm37_unreachable("Unknown comment kind!");
 }
 
 namespace {
@@ -42,7 +42,7 @@ good implements_child_begin_end(Comment::child_iterator (T::*)() const) {
   return good();
 }
 
-LLVM_ATTRIBUTE_UNUSED
+LLVM37_ATTRIBUTE_UNUSED
 static inline bad implements_child_begin_end(
                       Comment::child_iterator (Comment::*)() const) {
   return bad();
@@ -51,7 +51,7 @@ static inline bad implements_child_begin_end(
 #define ASSERT_IMPLEMENTS_child_begin(function) \
   (void) good(implements_child_begin_end(function))
 
-LLVM_ATTRIBUTE_UNUSED
+LLVM37_ATTRIBUTE_UNUSED
 static inline void CheckCommentASTNodes() {
 #define ABSTRACT_COMMENT(COMMENT)
 #define COMMENT(CLASS, PARENT) \
@@ -68,7 +68,7 @@ static inline void CheckCommentASTNodes() {
 
 Comment::child_iterator Comment::child_begin() const {
   switch (getCommentKind()) {
-  case NoCommentKind: llvm_unreachable("comment without a kind");
+  case NoCommentKind: llvm37_unreachable("comment without a kind");
 #define ABSTRACT_COMMENT(COMMENT)
 #define COMMENT(CLASS, PARENT) \
   case CLASS##Kind: \
@@ -77,12 +77,12 @@ Comment::child_iterator Comment::child_begin() const {
 #undef COMMENT
 #undef ABSTRACT_COMMENT
   }
-  llvm_unreachable("Unknown comment kind!");
+  llvm37_unreachable("Unknown comment kind!");
 }
 
 Comment::child_iterator Comment::child_end() const {
   switch (getCommentKind()) {
-  case NoCommentKind: llvm_unreachable("comment without a kind");
+  case NoCommentKind: llvm37_unreachable("comment without a kind");
 #define ABSTRACT_COMMENT(COMMENT)
 #define COMMENT(CLASS, PARENT) \
   case CLASS##Kind: \
@@ -91,7 +91,7 @@ Comment::child_iterator Comment::child_end() const {
 #undef COMMENT
 #undef ABSTRACT_COMMENT
   }
-  llvm_unreachable("Unknown comment kind!");
+  llvm37_unreachable("Unknown comment kind!");
 }
 
 bool TextComment::isWhitespaceNoCache() const {
@@ -123,7 +123,7 @@ const char *ParamCommandComment::getDirectionAsString(PassDirection D) {
   case ParamCommandComment::InOut:
     return "[in,out]";
   }
-  llvm_unreachable("unknown PassDirection");
+  llvm37_unreachable("unknown PassDirection");
 }
 
 void DeclInfo::fill() {
@@ -157,7 +157,7 @@ void DeclInfo::fill() {
   case Decl::CXXConversion: {
     const FunctionDecl *FD = cast<FunctionDecl>(CommentDecl);
     Kind = FunctionKind;
-    ParamVars = llvm::makeArrayRef(FD->param_begin(), FD->getNumParams());
+    ParamVars = llvm37::makeArrayRef(FD->param_begin(), FD->getNumParams());
     ReturnType = FD->getReturnType();
     unsigned NumLists = FD->getNumTemplateParameterLists();
     if (NumLists != 0) {
@@ -177,7 +177,7 @@ void DeclInfo::fill() {
   case Decl::ObjCMethod: {
     const ObjCMethodDecl *MD = cast<ObjCMethodDecl>(CommentDecl);
     Kind = FunctionKind;
-    ParamVars = llvm::makeArrayRef(MD->param_begin(), MD->param_size());
+    ParamVars = llvm37::makeArrayRef(MD->param_begin(), MD->param_size());
     ReturnType = MD->getReturnType();
     IsObjCMethod = true;
     IsInstanceMethod = MD->isInstanceMethod();
@@ -189,7 +189,7 @@ void DeclInfo::fill() {
     Kind = FunctionKind;
     TemplateKind = Template;
     const FunctionDecl *FD = FTD->getTemplatedDecl();
-    ParamVars = llvm::makeArrayRef(FD->param_begin(), FD->getNumParams());
+    ParamVars = llvm37::makeArrayRef(FD->param_begin(), FD->getNumParams());
     ReturnType = FD->getReturnType();
     TemplateParameters = FTD->getTemplateParameters();
     break;

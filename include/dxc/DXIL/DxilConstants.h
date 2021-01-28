@@ -823,7 +823,7 @@ namespace DXIL {
     RayQuery_StateVector,
     RayQuery_TraceRayInline,
   
-    // LLVM Instructions
+    // LLVM37 Instructions
     LlvmInst,
   
     // Legacy floating-point
@@ -1321,7 +1321,7 @@ namespace DXIL {
     AllowUavCondition = 4,
     ForceCase = 5,
     Call = 6,
-    // Loop and Unroll is using llvm.loop.unroll Metadata.
+    // Loop and Unroll is using llvm37.loop.unroll Metadata.
 
     LastEntry,
   };

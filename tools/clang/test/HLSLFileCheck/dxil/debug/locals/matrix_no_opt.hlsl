@@ -2,10 +2,10 @@
 
 // Test that local matrices preserve debug info without optimizations
 
-// CHECK: @llvm.dbg.value(metadata i32 %{{.*}}, metadata ![[divar:.*]], metadata ![[diexpr0:[0-9]+]]
-// CHECK: @llvm.dbg.value(metadata i32 %{{.*}}, metadata ![[divar]], metadata ![[diexpr1:[0-9]+]]
-// CHECK: @llvm.dbg.value(metadata i32 %{{.*}}, metadata ![[divar]], metadata ![[diexpr2:[0-9]+]]
-// CHECK: @llvm.dbg.value(metadata i32 %{{.*}}, metadata ![[divar]], metadata ![[diexpr3:[0-9]+]]
+// CHECK: @llvm37.dbg.value(metadata i32 %{{.*}}, metadata ![[divar:.*]], metadata ![[diexpr0:[0-9]+]]
+// CHECK: @llvm37.dbg.value(metadata i32 %{{.*}}, metadata ![[divar]], metadata ![[diexpr1:[0-9]+]]
+// CHECK: @llvm37.dbg.value(metadata i32 %{{.*}}, metadata ![[divar]], metadata ![[diexpr2:[0-9]+]]
+// CHECK: @llvm37.dbg.value(metadata i32 %{{.*}}, metadata ![[divar]], metadata ![[diexpr3:[0-9]+]]
 
 // Exclude quoted source file (see readme)
 // CHECK-LABEL: {{!"[^"]*\\0A[^"]*"}}

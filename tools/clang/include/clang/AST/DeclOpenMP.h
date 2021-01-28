@@ -1,6 +1,6 @@
 //===- DeclOpenMP.h - Classes for representing OpenMP directives -*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -12,11 +12,11 @@
 ///
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_AST_DECLOPENMP_H
-#define LLVM_CLANG_AST_DECLOPENMP_H
+#ifndef LLVM37_CLANG_AST_DECLOPENMP_H
+#define LLVM37_CLANG_AST_DECLOPENMP_H
 
 #include "clang/AST/DeclBase.h"
-#include "llvm/ADT/ArrayRef.h"
+#include "llvm37/ADT/ArrayRef.h"
 
 namespace clang {
 class Expr;
@@ -43,7 +43,7 @@ class OMPThreadPrivateDecl : public Decl {
     Decl(DK, DC, L), NumVars(0) { }
 
   ArrayRef<const Expr *> getVars() const {
-    return llvm::makeArrayRef(reinterpret_cast<const Expr * const *>(this + 1),
+    return llvm37::makeArrayRef(reinterpret_cast<const Expr * const *>(this + 1),
                               NumVars);
   }
 
@@ -64,8 +64,8 @@ public:
 
   typedef MutableArrayRef<Expr *>::iterator varlist_iterator;
   typedef ArrayRef<const Expr *>::iterator varlist_const_iterator;
-  typedef llvm::iterator_range<varlist_iterator> varlist_range;
-  typedef llvm::iterator_range<varlist_const_iterator> varlist_const_range;
+  typedef llvm37::iterator_range<varlist_iterator> varlist_range;
+  typedef llvm37::iterator_range<varlist_const_iterator> varlist_const_range;
 
   unsigned varlist_size() const { return NumVars; }
   bool varlist_empty() const { return NumVars == 0; }

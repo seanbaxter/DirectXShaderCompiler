@@ -1,6 +1,6 @@
 //===- ClangAttrEmitter.cpp - Generate Clang attribute handling =-*- C++ -*--=//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,22 +11,22 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/ADT/SmallString.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/SmallSet.h"
-#include "llvm/ADT/StringExtras.h"
-#include "llvm/ADT/StringSwitch.h"
-#include "llvm/TableGen/Error.h"
-#include "llvm/TableGen/Record.h"
-#include "llvm/TableGen/StringMatcher.h"
-#include "llvm/TableGen/TableGenBackend.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/SmallSet.h"
+#include "llvm37/ADT/StringExtras.h"
+#include "llvm37/ADT/StringSwitch.h"
+#include "llvm37/TableGen/Error.h"
+#include "llvm37/TableGen/Record.h"
+#include "llvm37/TableGen/StringMatcher.h"
+#include "llvm37/TableGen/TableGenBackend.h"
 #include <algorithm>
 #include <cctype>
 #include <memory>
 #include <set>
 #include <sstream>
 
-using namespace llvm;
+using namespace llvm37;
 
 namespace {
 class FlattenedSpelling {
@@ -286,7 +286,7 @@ namespace {
       } else if (type == "int" || type == "unsigned") {
         OS << "    OS << \" \" << SA->get" << getUpperName() << "();\n";
       } else {
-        llvm_unreachable("Unknown SimpleArgument type!");
+        llvm37_unreachable("Unknown SimpleArgument type!");
       }
     }
   };
@@ -314,15 +314,15 @@ namespace {
     {}
 
     void writeAccessors(raw_ostream &OS) const override {
-      OS << "  llvm::StringRef get" << getUpperName() << "() const {\n";
-      OS << "    return llvm::StringRef(" << getLowerName() << ", "
+      OS << "  llvm37::StringRef get" << getUpperName() << "() const {\n";
+      OS << "    return llvm37::StringRef(" << getLowerName() << ", "
          << getLowerName() << "Length);\n";
       OS << "  }\n";
       OS << "  unsigned get" << getUpperName() << "Length() const {\n";
       OS << "    return " << getLowerName() << "Length;\n";
       OS << "  }\n";
       OS << "  void set" << getUpperName()
-         << "(ASTContext &C, llvm::StringRef S) {\n";
+         << "(ASTContext &C, llvm37::StringRef S) {\n";
       OS << "    " << getLowerName() << "Length = S.size();\n";
       OS << "    this->" << getLowerName() << " = new (C, 1) char ["
          << getLowerName() << "Length];\n";
@@ -351,7 +351,7 @@ namespace {
       OS << getLowerName() << "Length(0)," << getLowerName() << "(0)";
     }
     void writeCtorParameters(raw_ostream &OS) const override {
-      OS << "llvm::StringRef " << getUpperName();
+      OS << "llvm37::StringRef " << getUpperName();
     }
     void writeDeclarations(raw_ostream &OS) const override {
       OS << "unsigned " << getLowerName() << "Length;\n";
@@ -537,8 +537,8 @@ namespace {
          << " return " << ArgName << " + " << ArgSizeName << "; }\n";
       OS << "  unsigned " << getLowerName() << "_size() const {"
          << " return " << ArgSizeName << "; }\n";
-      OS << "  llvm::iterator_range<" << IteratorType << "> " << RangeName
-         << "() const { return llvm::make_range(" << BeginFn << ", " << EndFn
+      OS << "  llvm37::iterator_range<" << IteratorType << "> " << RangeName
+         << "() const { return llvm37::make_range(" << BeginFn << ", " << EndFn
          << "); }\n";
     }
     void writeCloneArgs(raw_ostream &OS) const override {
@@ -704,7 +704,7 @@ namespace {
     void writeConversion(raw_ostream &OS) const {
       OS << "  static bool ConvertStrTo" << type << "(StringRef Val, ";
       OS << type << " &Out) {\n";
-      OS << "    Optional<" << type << "> R = llvm::StringSwitch<Optional<";
+      OS << "    Optional<" << type << "> R = llvm37::StringSwitch<Optional<";
       OS << type << ">>(Val)\n";
       for (size_t I = 0; I < enums.size(); ++I) {
         OS << "      .Case(\"" << values[I] << "\", ";
@@ -730,7 +730,7 @@ namespace {
              << ": return \"" << values[I] << "\";\n";       
       }
       OS << "    }\n"
-         << "    llvm_unreachable(\"No enumerator with that value\");\n"
+         << "    llvm37_unreachable(\"No enumerator with that value\");\n"
          << "  }\n";
     }
   };
@@ -813,7 +813,7 @@ namespace {
     void writeConversion(raw_ostream &OS) const {
       OS << "  static bool ConvertStrTo" << type << "(StringRef Val, ";
       OS << type << " &Out) {\n";
-      OS << "    Optional<" << type << "> R = llvm::StringSwitch<Optional<";
+      OS << "    Optional<" << type << "> R = llvm37::StringSwitch<Optional<";
       OS << type << ">>(Val)\n";
       for (size_t I = 0; I < enums.size(); ++I) {
         OS << "      .Case(\"" << values[I] << "\", ";
@@ -835,7 +835,7 @@ namespace {
           << ": return \"" << values[I] << "\";\n";
       }
       OS << "    }\n"
-        << "    llvm_unreachable(\"No enumerator with that value\");\n"
+        << "    llvm37_unreachable(\"No enumerator with that value\");\n"
         << "  }\n";
     }
   };
@@ -1027,49 +1027,49 @@ createArgument(const Record &Arg, StringRef Attr,
     Search = &Arg;
 
   std::unique_ptr<Argument> Ptr;
-  llvm::StringRef ArgName = Search->getName();
+  llvm37::StringRef ArgName = Search->getName();
 
   if (ArgName == "AlignedArgument")
-    Ptr = llvm::make_unique<AlignedArgument>(Arg, Attr);
+    Ptr = llvm37::make_unique<AlignedArgument>(Arg, Attr);
   else if (ArgName == "EnumArgument")
-    Ptr = llvm::make_unique<EnumArgument>(Arg, Attr);
+    Ptr = llvm37::make_unique<EnumArgument>(Arg, Attr);
   else if (ArgName == "ExprArgument")
-    Ptr = llvm::make_unique<ExprArgument>(Arg, Attr);
+    Ptr = llvm37::make_unique<ExprArgument>(Arg, Attr);
   else if (ArgName == "FunctionArgument")
-    Ptr = llvm::make_unique<SimpleArgument>(Arg, Attr, "FunctionDecl *");
+    Ptr = llvm37::make_unique<SimpleArgument>(Arg, Attr, "FunctionDecl *");
   else if (ArgName == "IdentifierArgument")
-    Ptr = llvm::make_unique<SimpleArgument>(Arg, Attr, "IdentifierInfo *");
+    Ptr = llvm37::make_unique<SimpleArgument>(Arg, Attr, "IdentifierInfo *");
   else if (ArgName == "DefaultBoolArgument")
-    Ptr = llvm::make_unique<DefaultSimpleArgument>(
+    Ptr = llvm37::make_unique<DefaultSimpleArgument>(
         Arg, Attr, "bool", Arg.getValueAsBit("Default"));
   else if (ArgName == "BoolArgument")
-    Ptr = llvm::make_unique<SimpleArgument>(Arg, Attr, "bool");
+    Ptr = llvm37::make_unique<SimpleArgument>(Arg, Attr, "bool");
   else if (ArgName == "DefaultIntArgument")
-    Ptr = llvm::make_unique<DefaultSimpleArgument>(
+    Ptr = llvm37::make_unique<DefaultSimpleArgument>(
         Arg, Attr, "int", Arg.getValueAsInt("Default"));
   else if (ArgName == "IntArgument")
-    Ptr = llvm::make_unique<SimpleArgument>(Arg, Attr, "int");
+    Ptr = llvm37::make_unique<SimpleArgument>(Arg, Attr, "int");
   else if (ArgName == "StringArgument")
-    Ptr = llvm::make_unique<StringArgument>(Arg, Attr);
+    Ptr = llvm37::make_unique<StringArgument>(Arg, Attr);
   else if (ArgName == "TypeArgument")
-    Ptr = llvm::make_unique<TypeArgument>(Arg, Attr);
+    Ptr = llvm37::make_unique<TypeArgument>(Arg, Attr);
   else if (ArgName == "UnsignedArgument")
-    Ptr = llvm::make_unique<SimpleArgument>(Arg, Attr, "unsigned");
+    Ptr = llvm37::make_unique<SimpleArgument>(Arg, Attr, "unsigned");
   else if (ArgName == "VariadicUnsignedArgument")
-    Ptr = llvm::make_unique<VariadicArgument>(Arg, Attr, "unsigned");
+    Ptr = llvm37::make_unique<VariadicArgument>(Arg, Attr, "unsigned");
   else if (ArgName == "VariadicStringArgument")
-    Ptr = llvm::make_unique<VariadicStringArgument>(Arg, Attr);
+    Ptr = llvm37::make_unique<VariadicStringArgument>(Arg, Attr);
   else if (ArgName == "VariadicEnumArgument")
-    Ptr = llvm::make_unique<VariadicEnumArgument>(Arg, Attr);
+    Ptr = llvm37::make_unique<VariadicEnumArgument>(Arg, Attr);
   else if (ArgName == "VariadicExprArgument")
-    Ptr = llvm::make_unique<VariadicExprArgument>(Arg, Attr);
+    Ptr = llvm37::make_unique<VariadicExprArgument>(Arg, Attr);
   else if (ArgName == "VersionArgument")
-    Ptr = llvm::make_unique<VersionArgument>(Arg, Attr);
+    Ptr = llvm37::make_unique<VersionArgument>(Arg, Attr);
 
   if (!Ptr) {
     // Search in reverse order so that the most-derived type is handled first.
     ArrayRef<Record*> Bases = Search->getSuperClasses();
-    for (const auto *Base : llvm::make_range(Bases.rbegin(), Bases.rend())) {
+    for (const auto *Base : llvm37::make_range(Bases.rbegin(), Bases.rend())) {
       if ((Ptr = createArgument(Arg, Attr, Base)))
         break;
     }
@@ -1101,7 +1101,7 @@ static void writeGetSpellingFunction(Record &R, raw_ostream &OS) {
 
   OS << "  switch (SpellingListIndex) {\n"
         "  default:\n"
-        "    llvm_unreachable(\"Unknown attribute spelling!\");\n"
+        "    llvm37_unreachable(\"Unknown attribute spelling!\");\n"
         "    return \"(No spelling)\";\n";
 
   for (unsigned I = 0; I < Spellings.size(); ++I)
@@ -1130,15 +1130,15 @@ writePrettyPrintFunction(Record &R,
   OS <<
     "  switch (SpellingListIndex) {\n"
     "  default:\n"
-    "    llvm_unreachable(\"Unknown attribute spelling!\");\n"
+    "    llvm37_unreachable(\"Unknown attribute spelling!\");\n"
     "    break;\n";
 
   for (unsigned I = 0; I < Spellings.size(); ++ I) {
-    llvm::SmallString<16> Prefix;
-    llvm::SmallString<8> Suffix;
+    llvm37::SmallString<16> Prefix;
+    llvm37::SmallString<8> Suffix;
     // The actual spelling of the name and namespace (if applicable)
     // of an attribute without considering prefix and suffix.
-    llvm::SmallString<64> Spelling;
+    llvm37::SmallString<64> Spelling;
     std::string Name = Spellings[I].name();
     std::string Variety = Spellings[I].variety();
 
@@ -1168,7 +1168,7 @@ writePrettyPrintFunction(Record &R,
         Spelling += " ";
       }
     } else {
-      llvm_unreachable("Unknown attribute syntax variety!");
+      llvm37_unreachable("Unknown attribute syntax variety!");
     }
 
     Spelling += Name;
@@ -1234,7 +1234,7 @@ getSpellingListIndex(const std::vector<FlattenedSpelling> &SpellingList,
     return Index;
   }
 
-  llvm_unreachable("Unknown spelling!");
+  llvm37_unreachable("Unknown spelling!");
 }
 
 static void writeAttrAccessorDefinition(const Record &R, raw_ostream &OS) {
@@ -1264,7 +1264,7 @@ SpellingNamesAreCommon(const std::vector<FlattenedSpelling>& Spellings) {
   std::string FirstName = NormalizeNameForSpellingComparison(
     Spellings.front().name());
   for (const auto &Spelling :
-       llvm::make_range(std::next(Spellings.begin()), Spellings.end())) {
+       llvm37::make_range(std::next(Spellings.begin()), Spellings.end())) {
     std::string Name = NormalizeNameForSpellingComparison(Spelling.name());
     if (Name != FirstName)
       return false;
@@ -1314,7 +1314,7 @@ CreateSemanticSpellings(const std::vector<FlattenedSpelling> &Spellings,
     // enumeration, but the spelling index and semantic spelling values are
     // meant to be equivalent, so we must specify a concrete value for each
     // enumerator.
-    Ret += "    " + EnumName + " = " + llvm::utostr(Idx);
+    Ret += "    " + EnumName + " = " + llvm37::utostr(Idx);
   }
   Ret += "\n  };\n\n";
   return Ret;
@@ -1324,7 +1324,7 @@ void WriteSemanticSpellingSwitch(const std::string &VarName,
                                  const SemanticSpellingMap &Map,
                                  raw_ostream &OS) {
   OS << "  switch (" << VarName << ") {\n    default: "
-    << "llvm_unreachable(\"Unknown spelling list index\");\n";
+    << "llvm37_unreachable(\"Unknown spelling list index\");\n";
   for (const auto &I : Map)
     OS << "    case " << I.first << ": return " << I.second << ";\n";
   OS << "  }\n";
@@ -1401,7 +1401,7 @@ static void emitClangAttrArgContextList(RecordKeeper &Records, raw_ostream &OS) 
 
 static bool isIdentifierArgument(Record *Arg) {
   return !Arg->getSuperClasses().empty() &&
-    llvm::StringSwitch<bool>(Arg->getSuperClasses().back()->getName())
+    llvm37::StringSwitch<bool>(Arg->getSuperClasses().back()->getName())
     .Case("IdentifierArgument", true)
     .Case("EnumArgument", true)
     .Case("VariadicEnumArgument", true)
@@ -1436,8 +1436,8 @@ namespace clang {
 void EmitClangAttrClass(RecordKeeper &Records, raw_ostream &OS) {
   emitSourceFileHeader("Attribute classes' definitions", OS);
 
-  OS << "#ifndef LLVM_CLANG_ATTR_CLASSES_INC\n";
-  OS << "#define LLVM_CLANG_ATTR_CLASSES_INC\n\n";
+  OS << "#ifndef LLVM37_CLANG_ATTR_CLASSES_INC\n";
+  OS << "#define LLVM37_CLANG_ATTR_CLASSES_INC\n\n";
 
   std::vector<Record*> Attrs = Records.getAllDerivedDefinitions("Attr");
 
@@ -1461,7 +1461,7 @@ void EmitClangAttrClass(RecordKeeper &Records, raw_ostream &OS) {
     ArrayRef<Record *> Supers = R.getSuperClasses();
     assert(!Supers.empty() && "Forgot to specify a superclass for the attr");
     std::string SuperName;
-    for (const auto *Super : llvm::make_range(Supers.rbegin(), Supers.rend())) {
+    for (const auto *Super : llvm37::make_range(Supers.rbegin(), Supers.rend())) {
       const Record &R = *Super;
       if (R.getName() != "TargetSpecificAttr" && SuperName.empty())
         SuperName = R.getName();
@@ -1676,7 +1676,7 @@ void EmitClangAttrImpl(RecordKeeper &Records, raw_ostream &OS) {
     OS << "  case attr::NUM_ATTRS:\n";
     OS << "    break;\n";
     OS << "  }\n";
-    OS << "  llvm_unreachable(\"Unexpected attribute kind!\");\n";
+    OS << "  llvm37_unreachable(\"Unexpected attribute kind!\");\n";
     OS << "}\n\n";
   };
 
@@ -1797,7 +1797,7 @@ void EmitClangAttrPCHRead(RecordKeeper &Records, raw_ostream &OS) {
 
   OS << "  switch (Kind) {\n";
   OS << "  default:\n";
-  OS << "    llvm_unreachable(\"Unknown attribute!\");\n";
+  OS << "    llvm37_unreachable(\"Unknown attribute!\");\n";
   for (const auto *Attr : Attrs) {
     const Record &R = *Attr;
     if (!R.getValueAsBit("ASTNode"))
@@ -1838,7 +1838,7 @@ void EmitClangAttrPCHWrite(RecordKeeper &Records, raw_ostream &OS) {
 
   OS << "  switch (A->getKind()) {\n";
   OS << "  default:\n";
-  OS << "    llvm_unreachable(\"Unknown attribute kind!\");\n";
+  OS << "    llvm37_unreachable(\"Unknown attribute kind!\");\n";
   OS << "    break;\n";
   for (const auto *Attr : Attrs) {
     const Record &R = *Attr;
@@ -1887,7 +1887,7 @@ static void GenerateHasAttrSpellingStringSwitch(
       }
     }
 
-    // It is assumed that there will be an llvm::Triple object named T within
+    // It is assumed that there will be an llvm37::Triple object named T within
     // scope that can be used to determine whether the attribute exists in
     // a given target.
     std::string Test;
@@ -1898,7 +1898,7 @@ static void GenerateHasAttrSpellingStringSwitch(
       Test += "(";
       for (auto AI = Arches.begin(), AE = Arches.end(); AI != AE; ++AI) {
         std::string Part = *AI;
-        Test += "T.getArch() == llvm::Triple::" + Part;
+        Test += "T.getArch() == llvm37::Triple::" + Part;
         if (AI + 1 != AE)
           Test += " || ";
       }
@@ -1911,7 +1911,7 @@ static void GenerateHasAttrSpellingStringSwitch(
         for (auto AI = OSes.begin(), AE = OSes.end(); AI != AE; ++AI) {
           std::string Part = *AI;
 
-          Test += "T.getOS() == llvm::Triple::" + Part;
+          Test += "T.getOS() == llvm37::Triple::" + Part;
           if (AI + 1 != AE)
             Test += " || ";
         }
@@ -1940,7 +1940,7 @@ static void GenerateHasAttrSpellingStringSwitch(
     // SPIRV Change Ends
 
     std::string TestStr =
-        !Test.empty() ? Test + " ? " + llvm::itostr(Version) + " : 0" : "1";
+        !Test.empty() ? Test + " ? " + llvm37::itostr(Version) + " : 0" : "1";
     std::vector<FlattenedSpelling> Spellings = GetFlattenedSpellings(*Attr);
     for (const auto &S : Spellings)
       if (Variety.empty() || (Variety == S.variety() &&
@@ -1979,13 +1979,13 @@ void EmitClangAttrHasAttrImpl(RecordKeeper &Records, raw_ostream &OS) {
 
   OS << "switch (Syntax) {\n";
   OS << "case AttrSyntax::GNU:\n";
-  OS << "  return llvm::StringSwitch<int>(Name)\n";
+  OS << "  return llvm37::StringSwitch<int>(Name)\n";
   GenerateHasAttrSpellingStringSwitch(GNU, OS, "GNU");
   OS << "case AttrSyntax::Declspec:\n";
-  OS << "  return llvm::StringSwitch<int>(Name)\n";
+  OS << "  return llvm37::StringSwitch<int>(Name)\n";
   GenerateHasAttrSpellingStringSwitch(Declspec, OS, "Declspec");
   OS << "case AttrSyntax::Pragma:\n";
-  OS << "  return llvm::StringSwitch<int>(Name)\n";
+  OS << "  return llvm37::StringSwitch<int>(Name)\n";
   GenerateHasAttrSpellingStringSwitch(Pragma, OS, "Pragma");
   OS << "case AttrSyntax::CXX: {\n";
   // C++11-style attributes are further split out based on the Scope.
@@ -1998,7 +1998,7 @@ void EmitClangAttrHasAttrImpl(RecordKeeper &Records, raw_ostream &OS) {
       OS << "if (!Scope || Scope->getName() == \"\") {\n";
     else
       OS << "if (Scope->getName() == \"" << I->first << "\") {\n";
-    OS << "  return llvm::StringSwitch<int>(Name)\n";
+    OS << "  return llvm37::StringSwitch<int>(Name)\n";
     GenerateHasAttrSpellingStringSwitch(I->second, OS, "CXX11", I->first);
     OS << "}";
   }
@@ -2013,7 +2013,7 @@ void EmitClangAttrSpellingListIndex(RecordKeeper &Records, raw_ostream &OS) {
   OS <<
     "  switch (AttrKind) {\n"
     "  default:\n"
-    "    llvm_unreachable(\"Unknown attribute kind!\");\n"
+    "    llvm37_unreachable(\"Unknown attribute kind!\");\n"
     "    break;\n";
 
   ParsedAttrMap Attrs = getParsedAttrList(Records);
@@ -2169,7 +2169,7 @@ void EmitClangAttrTemplateInstantiate(RecordKeeper &Records, raw_ostream &OS) {
     OS << ", A->getSpellingListIndex());\n    }\n";
   }
   OS << "  } // end switch\n"
-     << "  llvm_unreachable(\"Unknown attribute!\");\n"
+     << "  llvm37_unreachable(\"Unknown attribute!\");\n"
      << "  return 0;\n"
      << "}\n\n"
      << "} // end namespace sema\n"
@@ -2487,7 +2487,7 @@ static std::string GenerateLangOptRequirements(const Record &R,
 }
 
 static void GenerateDefaultTargetRequirements(raw_ostream &OS) {
-  OS << "static bool defaultTargetRequirements(const llvm::Triple &) {\n";
+  OS << "static bool defaultTargetRequirements(const llvm37::Triple &) {\n";
   OS << "  return true;\n";
   OS << "}\n\n";
 }
@@ -2529,7 +2529,7 @@ static std::string GenerateTargetRequirements(const Record &Attr,
   std::string FnName = "isTarget", Test = "(";
   for (auto I = Arches.begin(), E = Arches.end(); I != E; ++I) {
     std::string Part = *I;
-    Test += "Arch == llvm::Triple::" + Part;
+    Test += "Arch == llvm37::Triple::" + Part;
     if (I + 1 != E)
       Test += " || ";
     FnName += Part;
@@ -2548,7 +2548,7 @@ static std::string GenerateTargetRequirements(const Record &Attr,
     for (auto I = OSes.begin(), E = OSes.end(); I != E; ++I) {
       std::string Part = *I;
 
-      Test += "OS == llvm::Triple::" + Part;
+      Test += "OS == llvm37::Triple::" + Part;
       if (I + 1 != E)
         Test += " || ";
       FnName += Part;
@@ -2563,10 +2563,10 @@ static std::string GenerateTargetRequirements(const Record &Attr,
   if (I != CustomTargetSet.end())
     return *I;
 
-  OS << "static bool " << FnName << "(const llvm::Triple &T) {\n";
-  OS << "  llvm::Triple::ArchType Arch = T.getArch();\n";
+  OS << "static bool " << FnName << "(const llvm37::Triple &T) {\n";
+  OS << "  llvm37::Triple::ArchType Arch = T.getArch();\n";
   if (UsesOS)
-    OS << "  llvm::Triple::OSType OS = T.getOS();\n";
+    OS << "  llvm37::Triple::OSType OS = T.getOS();\n";
   OS << "  return " << Test << ";\n";
   OS << "}\n\n";
 
@@ -2761,7 +2761,7 @@ void EmitClangAttrDump(RecordKeeper &Records, raw_ostream &OS) {
   OS <<
     "  switch (A->getKind()) {\n"
     "  default:\n"
-    "    llvm_unreachable(\"Unknown attribute kind!\");\n"
+    "    llvm37_unreachable(\"Unknown attribute kind!\");\n"
     "    break;\n";
   std::vector<Record*> Attrs = Records.getAllDerivedDefinitions("Attr"), Args;
   for (const auto *Attr : Attrs) {
@@ -2796,7 +2796,7 @@ void EmitClangAttrDump(RecordKeeper &Records, raw_ostream &OS) {
 
 void EmitClangAttrParserStringSwitches(RecordKeeper &Records,
                                        raw_ostream &OS) {
-  emitSourceFileHeader("Parser-related llvm::StringSwitch cases", OS);
+  emitSourceFileHeader("Parser-related llvm37::StringSwitch cases", OS);
   emitClangAttrArgContextList(Records, OS);
   emitClangAttrIdentifierArgList(Records, OS);
   emitClangAttrTypeArgList(Records, OS);

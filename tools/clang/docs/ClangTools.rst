@@ -17,17 +17,17 @@ side-project so that developers who don't want or need to build them
 don't. If you want to get access to the extra Clang Tools repository,
 simply check it out into the tools tree of your Clang checkout and
 follow the usual process for building and working with a combined
-LLVM/Clang checkout:
+LLVM37/Clang checkout:
 
 -  With Subversion:
 
-   -  ``cd llvm/tools/clang/tools``
-   -  ``svn co http://llvm.org/svn/llvm-project/clang-tools-extra/trunk extra``
+   -  ``cd llvm37/tools/clang/tools``
+   -  ``svn co http://llvm37.org/svn/llvm37-project/clang-tools-extra/trunk extra``
 
 -  Or with Git:
 
-   -  ``cd llvm/tools/clang/tools``
-   -  ``git clone http://llvm.org/git/clang-tools-extra.git extra``
+   -  ``cd llvm37/tools/clang/tools``
+   -  ``git clone http://llvm37.org/git/clang-tools-extra.git extra``
 
 This document describes a high-level overview of the organization of
 Clang Tools within the project as well as giving an introduction to some
@@ -81,7 +81,7 @@ Clang tool with the basic Clang diagnostics by syntax checking specific files
 in a fast, command line interface. It can also accept flags to re-display the
 diagnostics in different formats with different flags, suitable for use driving
 an IDE or editor. Furthermore, it can be used in fixit-mode to directly apply
-fixit-hints offered by clang. See :doc:`HowToSetupToolingForLLVM` for
+fixit-hints offered by clang. See :doc:`HowToSetupToolingForLLVM37` for
 instructions on how to setup and used `clang-check`.
 
 ``clang-format``

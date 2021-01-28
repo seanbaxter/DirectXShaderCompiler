@@ -1,6 +1,6 @@
 //===-- TargetLoweringBase.cpp - Implement the TargetLoweringBase class ---===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,32 +11,32 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Target/TargetLowering.h"
-#include "llvm/ADT/BitVector.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/Triple.h"
-#include "llvm/CodeGen/Analysis.h"
-#include "llvm/CodeGen/MachineFrameInfo.h"
-#include "llvm/CodeGen/MachineFunction.h"
-#include "llvm/CodeGen/MachineInstrBuilder.h"
-#include "llvm/CodeGen/MachineJumpTableInfo.h"
-#include "llvm/CodeGen/StackMaps.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/DerivedTypes.h"
-#include "llvm/IR/GlobalVariable.h"
-#include "llvm/IR/Mangler.h"
-#include "llvm/MC/MCAsmInfo.h"
-#include "llvm/MC/MCContext.h"
-#include "llvm/MC/MCExpr.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/MathExtras.h"
-#include "llvm/Target/TargetLoweringObjectFile.h"
-#include "llvm/Target/TargetMachine.h"
-#include "llvm/Target/TargetRegisterInfo.h"
-#include "llvm/Target/TargetSubtargetInfo.h"
+#include "llvm37/Target/TargetLowering.h"
+#include "llvm37/ADT/BitVector.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/Triple.h"
+#include "llvm37/CodeGen/Analysis.h"
+#include "llvm37/CodeGen/MachineFrameInfo.h"
+#include "llvm37/CodeGen/MachineFunction.h"
+#include "llvm37/CodeGen/MachineInstrBuilder.h"
+#include "llvm37/CodeGen/MachineJumpTableInfo.h"
+#include "llvm37/CodeGen/StackMaps.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/IR/DerivedTypes.h"
+#include "llvm37/IR/GlobalVariable.h"
+#include "llvm37/IR/Mangler.h"
+#include "llvm37/MC/MCAsmInfo.h"
+#include "llvm37/MC/MCContext.h"
+#include "llvm37/MC/MCExpr.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/MathExtras.h"
+#include "llvm37/Target/TargetLoweringObjectFile.h"
+#include "llvm37/Target/TargetMachine.h"
+#include "llvm37/Target/TargetRegisterInfo.h"
+#include "llvm37/Target/TargetSubtargetInfo.h"
 #include <cctype>
-using namespace llvm;
+using namespace llvm37;
 
 static cl::opt<bool> JumpIsExpensiveOverride(
     "jump-is-expensive", cl::init(false),
@@ -840,7 +840,7 @@ void TargetLoweringBase::initActions() {
     }
   }
 
-  // Most targets ignore the @llvm.prefetch intrinsic.
+  // Most targets ignore the @llvm37.prefetch intrinsic.
   setOperationAction(ISD::PREFETCH, MVT::Other, Expand);
 
   // ConstantFP nodes default to expand.  Targets can either change this to
@@ -915,7 +915,7 @@ void TargetLoweringBase::setJumpIsExpensive(bool isExpensive) {
 }
 
 TargetLoweringBase::LegalizeKind
-TargetLoweringBase::getTypeConversion(LLVMContext &Context, EVT VT) const {
+TargetLoweringBase::getTypeConversion(LLVM37Context &Context, EVT VT) const {
   // If this is a simple type, use the ComputeRegisterProp mechanism.
   if (VT.isSimple()) {
     MVT SVT = VT.getSimpleVT();
@@ -1368,7 +1368,7 @@ void TargetLoweringBase::computeRegisterProperties(
       break;
     }
     default:
-      llvm_unreachable("Unknown vector legalization action!");
+      llvm37_unreachable("Unknown vector legalization action!");
     }
   }
 
@@ -1386,7 +1386,7 @@ void TargetLoweringBase::computeRegisterProperties(
   }
 }
 
-EVT TargetLoweringBase::getSetCCResultType(const DataLayout &DL, LLVMContext &,
+EVT TargetLoweringBase::getSetCCResultType(const DataLayout &DL, LLVM37Context &,
                                            EVT VT) const {
   assert(!VT.isVector() && "No default SetCC type for vectors!");
   return getPointerTy(DL).SimpleTy;
@@ -1405,7 +1405,7 @@ MVT::SimpleValueType TargetLoweringBase::getCmpLibcallReturnType() const {
 /// register.  It also returns the VT and quantity of the intermediate values
 /// before they are promoted/expanded.
 ///
-unsigned TargetLoweringBase::getVectorTypeBreakdown(LLVMContext &Context, EVT VT,
+unsigned TargetLoweringBase::getVectorTypeBreakdown(LLVM37Context &Context, EVT VT,
                                                 EVT &IntermediateVT,
                                                 unsigned &NumIntermediates,
                                                 MVT &RegisterVT) const {
@@ -1474,7 +1474,7 @@ unsigned TargetLoweringBase::getVectorTypeBreakdown(LLVMContext &Context, EVT VT
 /// type of the given function.  This does not require a DAG or a return value,
 /// and is suitable for use before any DAGs for the function are constructed.
 /// TODO: Move this out of TargetLowering.cpp.
-void llvm::GetReturnInfo(Type *ReturnType, AttributeSet attr,
+void llvm37::GetReturnInfo(Type *ReturnType, AttributeSet attr,
                          SmallVectorImpl<ISD::OutputArg> &Outs,
                          const TargetLowering &TLI, const DataLayout &DL) {
   SmallVector<EVT, 4> ValueVTs;
@@ -1536,7 +1536,7 @@ int TargetLoweringBase::InstructionOpcodeToISD(unsigned Opcode) const {
   enum InstructionOpcodes {
 #define HANDLE_INST(NUM, OPCODE, CLASS) OPCODE = NUM,
 #define LAST_OTHER_INST(NUM) InstructionOpcodesCount = NUM
-#include "llvm/IR/Instruction.def"
+#include "llvm37/IR/Instruction.def"
   };
   switch (static_cast<InstructionOpcodes>(Opcode)) {
   case Ret:            return 0;
@@ -1600,13 +1600,13 @@ int TargetLoweringBase::InstructionOpcodeToISD(unsigned Opcode) const {
   case LandingPad:     return 0;
   }
 
-  llvm_unreachable("Unknown instruction type encountered!");
+  llvm37_unreachable("Unknown instruction type encountered!");
 }
 
 std::pair<unsigned, MVT>
 TargetLoweringBase::getTypeLegalizationCost(const DataLayout &DL,
                                             Type *Ty) const {
-  LLVMContext &C = Ty->getContext();
+  LLVM37Context &C = Ty->getContext();
   EVT MTy = getValueType(DL, Ty);
 
   unsigned Cost = 1;

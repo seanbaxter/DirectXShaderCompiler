@@ -1,6 +1,6 @@
 //===--- Multilib.cpp - Multilib Implementation ---------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -10,26 +10,26 @@
 #include "clang/Driver/Multilib.h"
 #include "Tools.h"
 #include "clang/Driver/Options.h"
-#include "llvm/ADT/StringMap.h"
-#include "llvm/ADT/StringRef.h"
-#include "llvm/ADT/StringSet.h"
-#include "llvm/ADT/Triple.h"
-#include "llvm/Option/Arg.h"
-#include "llvm/Option/ArgList.h"
-#include "llvm/Option/OptTable.h"
-#include "llvm/Option/Option.h"
-#include "llvm/Support/MemoryBuffer.h"
-#include "llvm/Support/Path.h"
-#include "llvm/Support/Regex.h"
-#include "llvm/Support/YAMLParser.h"
-#include "llvm/Support/YAMLTraits.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/StringMap.h"
+#include "llvm37/ADT/StringRef.h"
+#include "llvm37/ADT/StringSet.h"
+#include "llvm37/ADT/Triple.h"
+#include "llvm37/Option/Arg.h"
+#include "llvm37/Option/ArgList.h"
+#include "llvm37/Option/OptTable.h"
+#include "llvm37/Option/Option.h"
+#include "llvm37/Support/MemoryBuffer.h"
+#include "llvm37/Support/Path.h"
+#include "llvm37/Support/Regex.h"
+#include "llvm37/Support/YAMLParser.h"
+#include "llvm37/Support/YAMLTraits.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <algorithm>
 
 using namespace clang::driver;
 using namespace clang;
-using namespace llvm::opt;
-using namespace llvm::sys;
+using namespace llvm37::opt;
+using namespace llvm37::sys;
 
 /// normalize Segment to "/foo/bar" or "".
 static void normalizePathSegment(std::string &Segment) {
@@ -97,10 +97,10 @@ void Multilib::print(raw_ostream &OS) const {
 }
 
 bool Multilib::isValid() const {
-  llvm::StringMap<int> FlagSet;
+  llvm37::StringMap<int> FlagSet;
   for (unsigned I = 0, N = Flags.size(); I != N; ++I) {
     StringRef Flag(Flags[I]);
-    llvm::StringMap<int>::iterator SI = FlagSet.find(Flag.substr(1));
+    llvm37::StringMap<int>::iterator SI = FlagSet.find(Flag.substr(1));
 
     assert(StringRef(Flag).front() == '+' || StringRef(Flag).front() == '-');
 
@@ -115,7 +115,7 @@ bool Multilib::isValid() const {
 bool Multilib::operator==(const Multilib &Other) const {
   // Check whether the flags sets match
   // allowing for the match to be order invariant
-  llvm::StringSet<> MyFlags;
+  llvm37::StringSet<> MyFlags;
   for (const auto &Flag : Flags)
     MyFlags.insert(Flag);
 
@@ -172,11 +172,11 @@ MultilibSet &MultilibSet::Either(const Multilib &M1, const Multilib &M2,
 
 static Multilib compose(const Multilib &Base, const Multilib &New) {
   SmallString<128> GCCSuffix;
-  llvm::sys::path::append(GCCSuffix, "/", Base.gccSuffix(), New.gccSuffix());
+  llvm37::sys::path::append(GCCSuffix, "/", Base.gccSuffix(), New.gccSuffix());
   SmallString<128> OSSuffix;
-  llvm::sys::path::append(OSSuffix, "/", Base.osSuffix(), New.osSuffix());
+  llvm37::sys::path::append(OSSuffix, "/", Base.osSuffix(), New.osSuffix());
   SmallString<128> IncludeSuffix;
-  llvm::sys::path::append(IncludeSuffix, "/", Base.includeSuffix(),
+  llvm37::sys::path::append(IncludeSuffix, "/", Base.includeSuffix(),
                           New.includeSuffix());
 
   Multilib Composed(GCCSuffix, OSSuffix, IncludeSuffix);
@@ -216,12 +216,12 @@ MultilibSet &MultilibSet::FilterOut(FilterCallback F) {
 }
 
 MultilibSet &MultilibSet::FilterOut(const char *Regex) {
-  llvm::Regex R(Regex);
+  llvm37::Regex R(Regex);
 #ifndef NDEBUG
   std::string Error;
   if (!R.isValid(Error)) {
-    llvm::errs() << Error;
-    llvm_unreachable("Invalid regex!");
+    llvm37::errs() << Error;
+    llvm37_unreachable("Invalid regex!");
   }
 #endif
 
@@ -243,7 +243,7 @@ static bool isFlagEnabled(StringRef Flag) {
 }
 
 bool MultilibSet::select(const Multilib::flags_list &Flags, Multilib &M) const {
-  llvm::StringMap<bool> FlagSet;
+  llvm37::StringMap<bool> FlagSet;
 
   // Stuff all of the flags into the FlagSet such that a true mappend indicates
   // the flag was enabled, and a false mappend indicates the flag was disabled.
@@ -252,7 +252,7 @@ bool MultilibSet::select(const Multilib::flags_list &Flags, Multilib &M) const {
 
   multilib_list Filtered = filterCopy([&FlagSet](const Multilib &M) {
     for (StringRef Flag : M.flags()) {
-      llvm::StringMap<bool>::const_iterator SI = FlagSet.find(Flag.substr(1));
+      llvm37::StringMap<bool>::const_iterator SI = FlagSet.find(Flag.substr(1));
       if (SI != FlagSet.end())
         if (SI->getValue() != isFlagEnabled(Flag))
           return true;

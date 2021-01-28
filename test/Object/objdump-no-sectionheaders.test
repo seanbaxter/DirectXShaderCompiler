@@ -1,4 +1,4 @@
-; RUN: llvm-objdump -h %p/Inputs/no-sections.elf-x86-64 \
+; RUN: llvm37-objdump -h %p/Inputs/no-sections.elf-x86-64 \
 ; RUN:              | FileCheck %s
 
 ; CHECK: Sections:

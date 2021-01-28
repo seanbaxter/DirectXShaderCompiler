@@ -1,5 +1,5 @@
 // RUN: %fxc /T vs_5_0 /Od %s /Fo %t.dxbc
-// RUN: %dxbc2dxil %t.dxbc /emit-llvm /o %t.ll.converted
+// RUN: %dxbc2dxil %t.dxbc /emit-llvm37 /o %t.ll.converted
 // RUN: fc %b.ref %t.ll.converted
 
 int4 main() : OUTPUT
@@ -22,7 +22,7 @@ int4 main() : OUTPUT
 // -> call void @dx.op.storeOutput.i32(i32 5, i32 0, i32 0, i8 1, i32 undef)
 // "i32 undef" is invalid here.  It's caused by:
 //   return of opInvalidOp from APFloat::convertToSignExtendedInteger
-//   which llvm::ConstantFoldCastInstruction turns into i32 undef
+//   which llvm37::ConstantFoldCastInstruction turns into i32 undef
 
 // fixed dxbc2dxil produces:
 // -> call void @dx.op.storeOutput.i32(i32 5, i32 0, i32 0, i8 2, i32 -1)

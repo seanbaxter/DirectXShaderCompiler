@@ -1,5 +1,5 @@
 ====================
-Writing an LLVM Pass
+Writing an LLVM37 Pass
 ====================
 
 .. contents::
@@ -8,28 +8,28 @@ Writing an LLVM Pass
 Introduction --- What is a pass?
 ================================
 
-NOTE: this document describes the instructions for LLVM, not the DirectX
+NOTE: this document describes the instructions for LLVM37, not the DirectX
 Compiler. There are a few additional requirements to have a pass behave
 properly with other compiler components.
 
-The LLVM Pass Framework is an important part of the LLVM system, because LLVM
+The LLVM37 Pass Framework is an important part of the LLVM37 system, because LLVM37
 passes are where most of the interesting parts of the compiler exist.  Passes
 perform the transformations and optimizations that make up the compiler, they
 build the analysis results that are used by these transformations, and they
 are, above all, a structuring technique for compiler code.
 
-All LLVM passes are subclasses of the `Pass
-<http://llvm.org/doxygen/classllvm_1_1Pass.html>`_ class, which implement
+All LLVM37 passes are subclasses of the `Pass
+<http://llvm37.org/doxygen/classllvm37_1_1Pass.html>`_ class, which implement
 functionality by overriding virtual methods inherited from ``Pass``.  Depending
 on how your pass works, you should inherit from the :ref:`ModulePass
-<writing-an-llvm-pass-ModulePass>` , :ref:`CallGraphSCCPass
-<writing-an-llvm-pass-CallGraphSCCPass>`, :ref:`FunctionPass
-<writing-an-llvm-pass-FunctionPass>` , or :ref:`LoopPass
-<writing-an-llvm-pass-LoopPass>`, or :ref:`RegionPass
-<writing-an-llvm-pass-RegionPass>`, or :ref:`BasicBlockPass
-<writing-an-llvm-pass-BasicBlockPass>` classes, which gives the system more
+<writing-an-llvm37-pass-ModulePass>` , :ref:`CallGraphSCCPass
+<writing-an-llvm37-pass-CallGraphSCCPass>`, :ref:`FunctionPass
+<writing-an-llvm37-pass-FunctionPass>` , or :ref:`LoopPass
+<writing-an-llvm37-pass-LoopPass>`, or :ref:`RegionPass
+<writing-an-llvm37-pass-RegionPass>`, or :ref:`BasicBlockPass
+<writing-an-llvm37-pass-BasicBlockPass>` classes, which gives the system more
 information about what your pass does, and how it can be combined with other
-passes.  One of the main features of the LLVM Pass Framework is that it
+passes.  One of the main features of the LLVM37 Pass Framework is that it
 schedules passes to run in an efficient way based on the constraints that your
 pass meets (which are indicated by which class they derive from).
 
@@ -43,19 +43,19 @@ Quick Start --- Writing hello world
 Here we describe how to write the "hello world" of passes.  The "Hello" pass is
 designed to simply print out the name of non-external functions that exist in
 the program being compiled.  It does not modify the program at all, it just
-inspects it.  The source code and files for this pass are available in the LLVM
+inspects it.  The source code and files for this pass are available in the LLVM37
 source tree in the ``lib/Transforms/Hello`` directory.
 
-.. _writing-an-llvm-pass-makefile:
+.. _writing-an-llvm37-pass-makefile:
 
 Setting up the build environment
 --------------------------------
 
 .. FIXME: Why does this recommend to build in-tree?
 
-First, configure and build LLVM.  This needs to be done directly inside the
-LLVM source tree rather than in a separate objects directory.  Next, you need
-to create a new directory somewhere in the LLVM source base.  For this example,
+First, configure and build LLVM37.  This needs to be done directly inside the
+LLVM37 source tree rather than in a separate objects directory.  Next, you need
+to create a new directory somewhere in the LLVM37 source base.  For this example,
 we'll assume that you made ``lib/Transforms/Hello``.  Finally, you must set up
 a build script (``Makefile``) that will compile the source code for the new
 pass.  To do this, copy the following into ``Makefile``:
@@ -64,7 +64,7 @@ pass.  To do this, copy the following into ``Makefile``:
 
     # Makefile for hello pass
 
-    # Path to top level of LLVM hierarchy
+    # Path to top level of LLVM37 hierarchy
     LEVEL = ../../..
 
     # Name of the library to build
@@ -84,12 +84,12 @@ are to be compiled and linked together into a shared object
 If your operating system uses a suffix other than ``.so`` (such as Windows or Mac
 OS X), the appropriate extension will be used.
 
-If you are used CMake to build LLVM, see :ref:`cmake-out-of-source-pass`.
+If you are used CMake to build LLVM37, see :ref:`cmake-out-of-source-pass`.
 
 Now that we have the build scripts set up, we just need to write the code for
 the pass itself.
 
-.. _writing-an-llvm-pass-basiccode:
+.. _writing-an-llvm37-pass-basiccode:
 
 Basic code required
 -------------------
@@ -99,23 +99,23 @@ Start out with:
 
 .. code-block:: c++
 
-  #include "llvm/Pass.h"
-  #include "llvm/IR/Function.h"
-  #include "llvm/Support/raw_ostream.h"
+  #include "llvm37/Pass.h"
+  #include "llvm37/IR/Function.h"
+  #include "llvm37/Support/raw_ostream.h"
 
 Which are needed because we are writing a `Pass
-<http://llvm.org/doxygen/classllvm_1_1Pass.html>`_, we are operating on
-`Function <http://llvm.org/doxygen/classllvm_1_1Function.html>`_\ s, and we will
+<http://llvm37.org/doxygen/classllvm37_1_1Pass.html>`_, we are operating on
+`Function <http://llvm37.org/doxygen/classllvm37_1_1Function.html>`_\ s, and we will
 be doing some printing.
 
 Next we have:
 
 .. code-block:: c++
 
-  using namespace llvm;
+  using namespace llvm37;
 
 ... which is required because the functions from the include files live in the
-llvm namespace.
+llvm37 namespace.
 
 Next we have:
 
@@ -136,8 +136,8 @@ Next, we declare our pass itself:
   struct Hello : public FunctionPass {
 
 This declares a "``Hello``" class that is a subclass of :ref:`FunctionPass
-<writing-an-llvm-pass-FunctionPass>`.  The different builtin pass subclasses
-are described in detail :ref:`later <writing-an-llvm-pass-pass-classes>`, but
+<writing-an-llvm37-pass-FunctionPass>`.  The different builtin pass subclasses
+are described in detail :ref:`later <writing-an-llvm37-pass-pass-classes>`, but
 for now, know that ``FunctionPass`` operates on a function at a time.
 
 .. code-block:: c++
@@ -145,7 +145,7 @@ for now, know that ``FunctionPass`` operates on a function at a time.
     static char ID;
     Hello() : FunctionPass(ID) {}
 
-This declares pass identifier used by LLVM to identify pass.  This allows LLVM
+This declares pass identifier used by LLVM37 to identify pass.  This allows LLVM37
 to avoid using expensive C++ runtime information.
 
 .. code-block:: c++
@@ -158,16 +158,16 @@ to avoid using expensive C++ runtime information.
     }; // end of struct Hello
   }  // end of anonymous namespace
 
-We declare a :ref:`runOnFunction <writing-an-llvm-pass-runOnFunction>` method,
+We declare a :ref:`runOnFunction <writing-an-llvm37-pass-runOnFunction>` method,
 which overrides an abstract virtual method inherited from :ref:`FunctionPass
-<writing-an-llvm-pass-FunctionPass>`.  This is where we are supposed to do our
+<writing-an-llvm37-pass-FunctionPass>`.  This is where we are supposed to do our
 thing, so we just print out our message with the name of each function.
 
 .. code-block:: c++
 
   char Hello::ID = 0;
 
-We initialize pass ID here.  LLVM uses ID's address to identify a pass, so
+We initialize pass ID here.  LLVM37 uses ID's address to identify a pass, so
 initialization value is not important.
 
 .. code-block:: c++
@@ -176,7 +176,7 @@ initialization value is not important.
                                false /* Only looks at CFG */,
                                false /* Analysis Pass */);
 
-Lastly, we :ref:`register our class <writing-an-llvm-pass-registration>`
+Lastly, we :ref:`register our class <writing-an-llvm37-pass-registration>`
 ``Hello``, giving it a command line argument "``hello``", and a name "Hello
 World Pass".  The last two arguments describe its behavior: if a pass walks CFG
 without modifying it then the third argument is set to ``true``; if a pass is
@@ -187,11 +187,11 @@ As a whole, the ``.cpp`` file looks like:
 
 .. code-block:: c++
 
-    #include "llvm/Pass.h"
-    #include "llvm/IR/Function.h"
-    #include "llvm/Support/raw_ostream.h"
+    #include "llvm37/Pass.h"
+    #include "llvm37/IR/Function.h"
+    #include "llvm37/Support/raw_ostream.h"
 
-    using namespace llvm;
+    using namespace llvm37;
 
     namespace {
       struct Hello : public FunctionPass {
@@ -211,7 +211,7 @@ As a whole, the ``.cpp`` file looks like:
 
 Now that it's all together, compile the file with a simple "``gmake``" command
 in the local directory and you should get a new file
-"``Debug+Asserts/lib/Hello.so``" under the top level directory of the LLVM
+"``Debug+Asserts/lib/Hello.so``" under the top level directory of the LLVM37
 source tree (not in the local directory).  Note that everything in this file is
 contained in an anonymous namespace --- this reflects the fact that passes
 are self contained units that do not need external interfaces (although they
@@ -226,21 +226,21 @@ dxcopt.
 Now that you have seen the basics of the mechanics behind passes, we can talk
 about some more details of how they work and how to use them.
 
-.. _writing-an-llvm-pass-pass-classes:
+.. _writing-an-llvm37-pass-pass-classes:
 
 Pass classes and requirements
 =============================
 
 One of the first things that you should do when designing a new pass is to
 decide what class you should subclass for your pass.  The :ref:`Hello World
-<writing-an-llvm-pass-basiccode>` example uses the :ref:`FunctionPass
-<writing-an-llvm-pass-FunctionPass>` class for its implementation, but we did
+<writing-an-llvm37-pass-basiccode>` example uses the :ref:`FunctionPass
+<writing-an-llvm37-pass-FunctionPass>` class for its implementation, but we did
 not discuss why or when this should occur.  Here we talk about the classes
 available, from the most general to the most specific.
 
 When choosing a superclass for your ``Pass``, you should choose the **most
 specific** class possible, while still being able to meet the requirements
-listed.  This gives the LLVM Pass Infrastructure information necessary to
+listed.  This gives the LLVM37 Pass Infrastructure information necessary to
 optimize how passes are run, so that the resultant compiler isn't unnecessarily
 slow.
 
@@ -248,7 +248,7 @@ The ``ImmutablePass`` class
 ---------------------------
 
 The most plain and boring type of pass is the "`ImmutablePass
-<http://llvm.org/doxygen/classllvm_1_1ImmutablePass.html>`_" class.  This pass
+<http://llvm37.org/doxygen/classllvm37_1_1ImmutablePass.html>`_" class.  This pass
 type is used for passes that do not have to be run, do not change state, and
 never need to be updated.  This is not a normal type of transformation or
 analysis, but can provide information about the current compiler configuration.
@@ -260,12 +260,12 @@ other static information that can affect the various transformations.
 ``ImmutablePass``\ es never invalidate other transformations, are never
 invalidated, and are never "run".
 
-.. _writing-an-llvm-pass-ModulePass:
+.. _writing-an-llvm37-pass-ModulePass:
 
 The ``ModulePass`` class
 ------------------------
 
-The `ModulePass <http://llvm.org/doxygen/classllvm_1_1ModulePass.html>`_ class
+The `ModulePass <http://llvm37.org/doxygen/classllvm37_1_1ModulePass.html>`_ class
 is the most general of all superclasses that you can use.  Deriving from
 ``ModulePass`` indicates that your pass uses the entire program as a unit,
 referring to function bodies in no predictable order, or adding and removing
@@ -273,7 +273,7 @@ functions.  Because nothing is known about the behavior of ``ModulePass``
 subclasses, no optimization can be done for their execution.
 
 A module pass can use function level passes (e.g. dominators) using the
-``getAnalysis`` interface ``getAnalysis<DominatorTree>(llvm::Function *)`` to
+``getAnalysis`` interface ``getAnalysis<DominatorTree>(llvm37::Function *)`` to
 provide the function to retrieve analysis result for, if the function pass does
 not require any module or immutable passes.  Note that this can only be done
 for functions for which the analysis ran, e.g. in the case of dominators you
@@ -294,20 +294,20 @@ The ``runOnModule`` method performs the interesting work of the pass.  It
 should return ``true`` if the module was modified by the transformation and
 ``false`` otherwise.
 
-.. _writing-an-llvm-pass-CallGraphSCCPass:
+.. _writing-an-llvm37-pass-CallGraphSCCPass:
 
 The ``CallGraphSCCPass`` class
 ------------------------------
 
 The `CallGraphSCCPass
-<http://llvm.org/doxygen/classllvm_1_1CallGraphSCCPass.html>`_ is used by
+<http://llvm37.org/doxygen/classllvm37_1_1CallGraphSCCPass.html>`_ is used by
 passes that need to traverse the program bottom-up on the call graph (callees
 before callers).  Deriving from ``CallGraphSCCPass`` provides some mechanics
 for building and traversing the ``CallGraph``, but also allows the system to
 optimize execution of ``CallGraphSCCPass``\ es.  If your pass meets the
 requirements outlined below, and doesn't meet the requirements of a
-:ref:`FunctionPass <writing-an-llvm-pass-FunctionPass>` or :ref:`BasicBlockPass
-<writing-an-llvm-pass-BasicBlockPass>`, you should derive from
+:ref:`FunctionPass <writing-an-llvm37-pass-FunctionPass>` or :ref:`BasicBlockPass
+<writing-an-llvm37-pass-BasicBlockPass>`, you should derive from
 ``CallGraphSCCPass``.
 
 ``TODO``: explain briefly what SCC, Tarjan's algo, and B-U mean.
@@ -322,7 +322,7 @@ To be explicit, CallGraphSCCPass subclasses are:
    they may change the contents of an SCC.
 #. ... *allowed* to add or remove global variables from the current Module.
 #. ... *allowed* to maintain state across invocations of :ref:`runOnSCC
-   <writing-an-llvm-pass-runOnSCC>` (including global data).
+   <writing-an-llvm37-pass-runOnSCC>` (including global data).
 
 Implementing a ``CallGraphSCCPass`` is slightly tricky in some cases because it
 has to handle SCCs with more than one node in it.  All of the virtual methods
@@ -343,7 +343,7 @@ designed to do simple initialization type of stuff that does not depend on the
 SCCs being processed.  The ``doInitialization`` method call is not scheduled to
 overlap with any other pass executions (thus it should be very fast).
 
-.. _writing-an-llvm-pass-runOnSCC:
+.. _writing-an-llvm37-pass-runOnSCC:
 
 The ``runOnSCC`` method
 ^^^^^^^^^^^^^^^^^^^^^^^
@@ -365,15 +365,15 @@ The ``doFinalization(CallGraph &)`` method
 
 The ``doFinalization`` method is an infrequently used method that is called
 when the pass framework has finished calling :ref:`runOnSCC
-<writing-an-llvm-pass-runOnSCC>` for every SCC in the program being compiled.
+<writing-an-llvm37-pass-runOnSCC>` for every SCC in the program being compiled.
 
-.. _writing-an-llvm-pass-FunctionPass:
+.. _writing-an-llvm37-pass-FunctionPass:
 
 The ``FunctionPass`` class
 --------------------------
 
 In contrast to ``ModulePass`` subclasses, `FunctionPass
-<http://llvm.org/doxygen/classllvm_1_1Pass.html>`_ subclasses do have a
+<http://llvm37.org/doxygen/classllvm37_1_1Pass.html>`_ subclasses do have a
 predictable, local behavior that can be expected by the system.  All
 ``FunctionPass`` execute on each function in the program independent of all of
 the other functions in the program.  ``FunctionPass``\ es do not require that
@@ -386,15 +386,15 @@ To be explicit, ``FunctionPass`` subclasses are not allowed to:
 #. Add or remove ``Function``\ s from the current ``Module``.
 #. Add or remove global variables from the current ``Module``.
 #. Maintain state across invocations of :ref:`runOnFunction
-   <writing-an-llvm-pass-runOnFunction>` (including global data).
+   <writing-an-llvm37-pass-runOnFunction>` (including global data).
 
 Implementing a ``FunctionPass`` is usually straightforward (See the :ref:`Hello
-World <writing-an-llvm-pass-basiccode>` pass for example).
+World <writing-an-llvm37-pass-basiccode>` pass for example).
 ``FunctionPass``\ es may overload three virtual methods to do their work.  All
 of these methods should return ``true`` if they modified the program, or
 ``false`` if they didn't.
 
-.. _writing-an-llvm-pass-doInitialization-mod:
+.. _writing-an-llvm37-pass-doInitialization-mod:
 
 The ``doInitialization(Module &)`` method
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -411,13 +411,13 @@ being processed.  The ``doInitialization`` method call is not scheduled to
 overlap with any other pass executions (thus it should be very fast).
 
 A good example of how this method should be used is the `LowerAllocations
-<http://llvm.org/doxygen/LowerAllocations_8cpp-source.html>`_ pass.  This pass
+<http://llvm37.org/doxygen/LowerAllocations_8cpp-source.html>`_ pass.  This pass
 converts ``malloc`` and ``free`` instructions into platform dependent
 ``malloc()`` and ``free()`` function calls.  It uses the ``doInitialization``
 method to get a reference to the ``malloc`` and ``free`` functions that it
 needs, adding prototypes to the module if necessary.
 
-.. _writing-an-llvm-pass-runOnFunction:
+.. _writing-an-llvm37-pass-runOnFunction:
 
 The ``runOnFunction`` method
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -430,7 +430,7 @@ The ``runOnFunction`` method must be implemented by your subclass to do the
 transformation or analysis work of your pass.  As usual, a ``true`` value
 should be returned if the function is modified.
 
-.. _writing-an-llvm-pass-doFinalization-mod:
+.. _writing-an-llvm37-pass-doFinalization-mod:
 
 The ``doFinalization(Module &)`` method
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -441,10 +441,10 @@ The ``doFinalization(Module &)`` method
 
 The ``doFinalization`` method is an infrequently used method that is called
 when the pass framework has finished calling :ref:`runOnFunction
-<writing-an-llvm-pass-runOnFunction>` for every function in the program being
+<writing-an-llvm37-pass-runOnFunction>` for every function in the program being
 compiled.
 
-.. _writing-an-llvm-pass-LoopPass:
+.. _writing-an-llvm37-pass-LoopPass:
 
 The ``LoopPass`` class
 ----------------------
@@ -472,7 +472,7 @@ stuff that does not depend on the functions being processed.  The
 pass executions (thus it should be very fast).  ``LPPassManager`` interface
 should be used to access ``Function`` or ``Module`` level analysis information.
 
-.. _writing-an-llvm-pass-runOnLoop:
+.. _writing-an-llvm37-pass-runOnLoop:
 
 The ``runOnLoop`` method
 ^^^^^^^^^^^^^^^^^^^^^^^^
@@ -495,14 +495,14 @@ The ``doFinalization()`` method
 
 The ``doFinalization`` method is an infrequently used method that is called
 when the pass framework has finished calling :ref:`runOnLoop
-<writing-an-llvm-pass-runOnLoop>` for every loop in the program being compiled.
+<writing-an-llvm37-pass-runOnLoop>` for every loop in the program being compiled.
 
-.. _writing-an-llvm-pass-RegionPass:
+.. _writing-an-llvm37-pass-RegionPass:
 
 The ``RegionPass`` class
 ------------------------
 
-``RegionPass`` is similar to :ref:`LoopPass <writing-an-llvm-pass-LoopPass>`,
+``RegionPass`` is similar to :ref:`LoopPass <writing-an-llvm37-pass-LoopPass>`,
 but executes on each single entry single exit region in the function.
 ``RegionPass`` processes regions in nested order such that the outer most
 region is processed last.
@@ -525,7 +525,7 @@ stuff that does not depend on the functions being processed.  The
 pass executions (thus it should be very fast).  ``RPPassManager`` interface
 should be used to access ``Function`` or ``Module`` level analysis information.
 
-.. _writing-an-llvm-pass-runOnRegion:
+.. _writing-an-llvm37-pass-runOnRegion:
 
 The ``runOnRegion`` method
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -548,31 +548,31 @@ The ``doFinalization()`` method
 
 The ``doFinalization`` method is an infrequently used method that is called
 when the pass framework has finished calling :ref:`runOnRegion
-<writing-an-llvm-pass-runOnRegion>` for every region in the program being
+<writing-an-llvm37-pass-runOnRegion>` for every region in the program being
 compiled.
 
-.. _writing-an-llvm-pass-BasicBlockPass:
+.. _writing-an-llvm37-pass-BasicBlockPass:
 
 The ``BasicBlockPass`` class
 ----------------------------
 
 ``BasicBlockPass``\ es are just like :ref:`FunctionPass's
-<writing-an-llvm-pass-FunctionPass>` , except that they must limit their scope
+<writing-an-llvm37-pass-FunctionPass>` , except that they must limit their scope
 of inspection and modification to a single basic block at a time.  As such,
 they are **not** allowed to do any of the following:
 
 #. Modify or inspect any basic blocks outside of the current one.
 #. Maintain state across invocations of :ref:`runOnBasicBlock
-   <writing-an-llvm-pass-runOnBasicBlock>`.
+   <writing-an-llvm37-pass-runOnBasicBlock>`.
 #. Modify the control flow graph (by altering terminator instructions)
 #. Any of the things forbidden for :ref:`FunctionPasses
-   <writing-an-llvm-pass-FunctionPass>`.
+   <writing-an-llvm37-pass-FunctionPass>`.
 
 ``BasicBlockPass``\ es are useful for traditional local and "peephole"
 optimizations.  They may override the same :ref:`doInitialization(Module &)
-<writing-an-llvm-pass-doInitialization-mod>` and :ref:`doFinalization(Module &)
-<writing-an-llvm-pass-doFinalization-mod>` methods that :ref:`FunctionPass's
-<writing-an-llvm-pass-FunctionPass>` have, but also have the following virtual
+<writing-an-llvm37-pass-doInitialization-mod>` and :ref:`doFinalization(Module &)
+<writing-an-llvm37-pass-doFinalization-mod>` methods that :ref:`FunctionPass's
+<writing-an-llvm37-pass-FunctionPass>` have, but also have the following virtual
 methods that may also be implemented:
 
 The ``doInitialization(Function &)`` method
@@ -589,7 +589,7 @@ that does not depend on the ``BasicBlock``\ s being processed.  The
 ``doInitialization`` method call is not scheduled to overlap with any other
 pass executions (thus it should be very fast).
 
-.. _writing-an-llvm-pass-runOnBasicBlock:
+.. _writing-an-llvm37-pass-runOnBasicBlock:
 
 The ``runOnBasicBlock`` method
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -612,14 +612,14 @@ The ``doFinalization(Function &)`` method
 
 The ``doFinalization`` method is an infrequently used method that is called
 when the pass framework has finished calling :ref:`runOnBasicBlock
-<writing-an-llvm-pass-runOnBasicBlock>` for every ``BasicBlock`` in the program
+<writing-an-llvm37-pass-runOnBasicBlock>` for every ``BasicBlock`` in the program
 being compiled.  This can be used to perform per-function finalization.
 
 The ``MachineFunctionPass`` class
 ---------------------------------
 
-A ``MachineFunctionPass`` is a part of the LLVM code generator that executes on
-the machine-dependent representation of each LLVM function in the program.
+A ``MachineFunctionPass`` is a part of the LLVM37 code generator that executes on
+the machine-dependent representation of each LLVM37 function in the program.
 
 Code generator passes are registered and initialized specially by
 ``TargetMachine::addPassesToEmitFile`` and similar routines, so they cannot
@@ -630,14 +630,14 @@ that apply to a ``FunctionPass`` also apply to it.  ``MachineFunctionPass``\ es
 also have additional restrictions.  In particular, ``MachineFunctionPass``\ es
 are not allowed to do any of the following:
 
-#. Modify or create any LLVM IR ``Instruction``\ s, ``BasicBlock``\ s,
+#. Modify or create any LLVM37 IR ``Instruction``\ s, ``BasicBlock``\ s,
    ``Argument``\ s, ``Function``\ s, ``GlobalVariable``\ s,
    ``GlobalAlias``\ es, or ``Module``\ s.
 #. Modify a ``MachineFunction`` other than the one currently being processed.
 #. Maintain state across invocations of :ref:`runOnMachineFunction
-   <writing-an-llvm-pass-runOnMachineFunction>` (including global data).
+   <writing-an-llvm37-pass-runOnMachineFunction>` (including global data).
 
-.. _writing-an-llvm-pass-runOnMachineFunction:
+.. _writing-an-llvm37-pass-runOnMachineFunction:
 
 The ``runOnMachineFunction(MachineFunction &MF)`` method
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -653,17 +653,17 @@ work of your ``MachineFunctionPass``.
 The ``runOnMachineFunction`` method is called on every ``MachineFunction`` in a
 ``Module``, so that the ``MachineFunctionPass`` may perform optimizations on
 the machine-dependent representation of the function.  If you want to get at
-the LLVM ``Function`` for the ``MachineFunction`` you're working on, use
+the LLVM37 ``Function`` for the ``MachineFunction`` you're working on, use
 ``MachineFunction``'s ``getFunction()`` accessor method --- but remember, you
-may not modify the LLVM ``Function`` or its contents from a
+may not modify the LLVM37 ``Function`` or its contents from a
 ``MachineFunctionPass``.
 
-.. _writing-an-llvm-pass-registration:
+.. _writing-an-llvm37-pass-registration:
 
 Pass registration
 -----------------
 
-In the :ref:`Hello World <writing-an-llvm-pass-basiccode>` example pass we
+In the :ref:`Hello World <writing-an-llvm37-pass-basiccode>` example pass we
 illustrated how pass registration works, and discussed some of the reasons that
 it is used and what it does.  Here we discuss how and why passes are
 registered.
@@ -683,28 +683,28 @@ The ``print`` method
 
 .. code-block:: c++
 
-  virtual void print(llvm::raw_ostream &O, const Module *M) const;
+  virtual void print(llvm37::raw_ostream &O, const Module *M) const;
 
 The ``print`` method must be implemented by "analyses" in order to print a
 human readable version of the analysis results.  This is useful for debugging
 an analysis itself, as well as for other people to figure out how an analysis
 works.  Use the opt ``-analyze`` argument to invoke this method.
 
-The ``llvm::raw_ostream`` parameter specifies the stream to write the results
+The ``llvm37::raw_ostream`` parameter specifies the stream to write the results
 on, and the ``Module`` parameter gives a pointer to the top level module of the
 program that has been analyzed.  Note however that this pointer may be ``NULL``
 in certain circumstances (such as calling the ``Pass::dump()`` from a
 debugger), so it should only be used to enhance debug output, it should not be
 depended on.
 
-.. _writing-an-llvm-pass-interaction:
+.. _writing-an-llvm37-pass-interaction:
 
 Specifying interactions between passes
 --------------------------------------
 
 One of the main responsibilities of the ``PassManager`` is to make sure that
 passes interact with each other correctly.  Because ``PassManager`` tries to
-:ref:`optimize the execution of passes <writing-an-llvm-pass-passmanager>` it
+:ref:`optimize the execution of passes <writing-an-llvm37-pass-passmanager>` it
 must know how the passes interact with each other and what dependencies exist
 between the various passes.  To track this, each pass can declare the set of
 passes that are required to be executed before the current pass, and the passes
@@ -714,10 +714,10 @@ Typically this functionality is used to require that analysis results are
 computed before your pass is run.  Running arbitrary transformation passes can
 invalidate the computed analysis results, which is what the invalidation set
 specifies.  If a pass does not implement the :ref:`getAnalysisUsage
-<writing-an-llvm-pass-getAnalysisUsage>` method, it defaults to not having any
+<writing-an-llvm37-pass-getAnalysisUsage>` method, it defaults to not having any
 prerequisite passes, and invalidating **all** other passes.
 
-.. _writing-an-llvm-pass-getAnalysisUsage:
+.. _writing-an-llvm37-pass-getAnalysisUsage:
 
 The ``getAnalysisUsage`` method
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -729,7 +729,7 @@ The ``getAnalysisUsage`` method
 By implementing the ``getAnalysisUsage`` method, the required and invalidated
 sets may be specified for your transformation.  The implementation should fill
 in the `AnalysisUsage
-<http://llvm.org/doxygen/classllvm_1_1AnalysisUsage.html>`_ object with
+<http://llvm37.org/doxygen/classllvm37_1_1AnalysisUsage.html>`_ object with
 information about which passes are required and not invalidated.  To do this, a
 pass may call any of the following methods on the ``AnalysisUsage`` object:
 
@@ -738,7 +738,7 @@ The ``AnalysisUsage::addRequired<>`` and ``AnalysisUsage::addRequiredTransitive<
 
 If your pass requires a previous pass to be executed (an analysis for example),
 it can use one of these methods to arrange for it to be run before your pass.
-LLVM has many different types of analyses and passes that can be required,
+LLVM37 has many different types of analyses and passes that can be required,
 spanning the range from ``DominatorSet`` to ``BreakCriticalEdges``.  Requiring
 ``BreakCriticalEdges``, for example, guarantees that there will be no critical
 edges in the CFG when your pass has been run.
@@ -764,11 +764,11 @@ to invalidate all others.
 The ``AnalysisUsage`` class provides several methods which are useful in
 certain circumstances that are related to ``addPreserved``.  In particular, the
 ``setPreservesAll`` method can be called to indicate that the pass does not
-modify the LLVM program at all (which is true for analyses), and the
+modify the LLVM37 program at all (which is true for analyses), and the
 ``setPreservesCFG`` method can be used by transformations that change
 instructions in the program but do not modify the CFG or terminator
 instructions (note that this property is implicitly set for
-:ref:`BasicBlockPass <writing-an-llvm-pass-BasicBlockPass>`\ es).
+:ref:`BasicBlockPass <writing-an-llvm37-pass-BasicBlockPass>`\ es).
 
 ``addPreserved`` is particularly useful for transformations like
 ``BreakCriticalEdges``.  This pass knows how to update a small set of loop and
@@ -786,14 +786,14 @@ Example implementations of ``getAnalysisUsage``
     AU.addRequired<LoopInfoWrapperPass>();
   }
 
-.. _writing-an-llvm-pass-getAnalysis:
+.. _writing-an-llvm37-pass-getAnalysis:
 
 The ``getAnalysis<>`` and ``getAnalysisIfAvailable<>`` methods
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The ``Pass::getAnalysis<>`` method is automatically inherited by your class,
 providing you with access to the passes that you declared that you required
-with the :ref:`getAnalysisUsage <writing-an-llvm-pass-getAnalysisUsage>`
+with the :ref:`getAnalysisUsage <writing-an-llvm37-pass-getAnalysisUsage>`
 method.  It takes a single template argument that specifies which pass class
 you want, and returns a reference to that pass.  For example:
 
@@ -807,7 +807,7 @@ you want, and returns a reference to that pass.  For example:
 This method call returns a reference to the pass desired.  You may get a
 runtime assertion failure if you attempt to get an analysis that you did not
 declare as required in your :ref:`getAnalysisUsage
-<writing-an-llvm-pass-getAnalysisUsage>` implementation.  This method can be
+<writing-an-llvm37-pass-getAnalysisUsage>` implementation.  This method can be
 called by your ``run*`` method implementation, or by any other local method
 invoked by your ``run*`` method.
 
@@ -853,7 +853,7 @@ Consider alias analysis for example.  The most trivial alias analysis returns
 flow-sensitive, context-sensitive interprocedural analysis that can take a
 significant amount of time to execute (and obviously, there is a lot of room
 between these two extremes for other implementations).  To cleanly support
-situations like this, the LLVM Pass Infrastructure supports the notion of
+situations like this, the LLVM37 Pass Infrastructure supports the notion of
 Analysis Groups.
 
 Analysis Group Concepts
@@ -868,29 +868,29 @@ the "default" implementation.
 Analysis groups are used by client passes just like other passes are: the
 ``AnalysisUsage::addRequired()`` and ``Pass::getAnalysis()`` methods.  In order
 to resolve this requirement, the :ref:`PassManager
-<writing-an-llvm-pass-passmanager>` scans the available passes to see if any
+<writing-an-llvm37-pass-passmanager>` scans the available passes to see if any
 implementations of the analysis group are available.  If none is available, the
 default implementation is created for the pass to use.  All standard rules for
-:ref:`interaction between passes <writing-an-llvm-pass-interaction>` still
+:ref:`interaction between passes <writing-an-llvm37-pass-interaction>` still
 apply.
 
-Although :ref:`Pass Registration <writing-an-llvm-pass-registration>` is
+Although :ref:`Pass Registration <writing-an-llvm37-pass-registration>` is
 optional for normal passes, all analysis group implementations must be
 registered, and must use the :ref:`INITIALIZE_AG_PASS
-<writing-an-llvm-pass-RegisterAnalysisGroup>` template to join the
+<writing-an-llvm37-pass-RegisterAnalysisGroup>` template to join the
 implementation pool.  Also, a default implementation of the interface **must**
 be registered with :ref:`RegisterAnalysisGroup
-<writing-an-llvm-pass-RegisterAnalysisGroup>`.
+<writing-an-llvm37-pass-RegisterAnalysisGroup>`.
 
 As a concrete example of an Analysis Group in action, consider the
-`AliasAnalysis <http://llvm.org/doxygen/classllvm_1_1AliasAnalysis.html>`_
+`AliasAnalysis <http://llvm37.org/doxygen/classllvm37_1_1AliasAnalysis.html>`_
 analysis group.  The default implementation of the alias analysis interface
-(the `basicaa <http://llvm.org/doxygen/structBasicAliasAnalysis.html>`_ pass)
+(the `basicaa <http://llvm37.org/doxygen/structBasicAliasAnalysis.html>`_ pass)
 just does a few simple checks that don't require significant analysis to
 compute (such as: two different globals can never alias each other, etc).
 Passes that use the `AliasAnalysis
-<http://llvm.org/doxygen/classllvm_1_1AliasAnalysis.html>`_ interface (for
-example the `gcse <http://llvm.org/doxygen/structGCSE.html>`_ pass), do not
+<http://llvm37.org/doxygen/classllvm37_1_1AliasAnalysis.html>`_ interface (for
+example the `gcse <http://llvm37.org/doxygen/structGCSE.html>`_ pass), do not
 care which implementation of alias analysis is actually provided, they just use
 the designated interface.
 
@@ -900,7 +900,7 @@ and added to the pass sequence.  Issuing the command ``opt -somefancyaa -gcse
 ...`` will cause the ``gcse`` pass to use the ``somefancyaa`` alias analysis
 (which doesn't actually exist, it's just a hypothetical example) instead.
 
-.. _writing-an-llvm-pass-RegisterAnalysisGroup:
+.. _writing-an-llvm37-pass-RegisterAnalysisGroup:
 
 Using ``RegisterAnalysisGroup``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -932,7 +932,7 @@ implementations of the interface by using the following code:
 
 This just shows a class ``FancyAA`` that uses the ``INITIALIZE_AG_PASS`` macro
 both to register and to "join" the `AliasAnalysis
-<http://llvm.org/doxygen/classllvm_1_1AliasAnalysis.html>`_ analysis group.
+<http://llvm37.org/doxygen/classllvm37_1_1AliasAnalysis.html>`_ analysis group.
 Every implementation of an analysis group should join using this macro.
 
 .. code-block:: c++
@@ -951,28 +951,28 @@ argument to the ``INITIALIZE_AG_PASS`` template).  There must be exactly one
 default implementation available at all times for an Analysis Group to be used.
 Only default implementation can derive from ``ImmutablePass``.  Here we declare
 that the `BasicAliasAnalysis
-<http://llvm.org/doxygen/structBasicAliasAnalysis.html>`_ pass is the default
+<http://llvm37.org/doxygen/structBasicAliasAnalysis.html>`_ pass is the default
 implementation for the interface.
 
 Pass Statistics
 ===============
 
-The `Statistic <http://llvm.org/doxygen/Statistic_8h-source.html>`_ class is
+The `Statistic <http://llvm37.org/doxygen/Statistic_8h-source.html>`_ class is
 designed to be an easy way to expose various success metrics from passes.
 These statistics are printed at the end of a run, when the :option:`-stats`
 command line option is enabled on the command line.  See the :ref:`Statistics
 section <Statistic>` in the Programmer's Manual for details.
 
-.. _writing-an-llvm-pass-passmanager:
+.. _writing-an-llvm37-pass-passmanager:
 
 What PassManager does
 ---------------------
 
-The `PassManager <http://llvm.org/doxygen/PassManager_8h-source.html>`_ `class
-<http://llvm.org/doxygen/classllvm_1_1PassManager.html>`_ takes a list of
-passes, ensures their :ref:`prerequisites <writing-an-llvm-pass-interaction>`
+The `PassManager <http://llvm37.org/doxygen/PassManager_8h-source.html>`_ `class
+<http://llvm37.org/doxygen/classllvm37_1_1PassManager.html>`_ takes a list of
+passes, ensures their :ref:`prerequisites <writing-an-llvm37-pass-interaction>`
 are set up correctly, and then schedules passes to run efficiently.  All of the
-LLVM tools that run passes use the PassManager for execution of these passes.
+LLVM37 tools that run passes use the PassManager for execution of these passes.
 
 The PassManager does two main things to try to reduce the execution time of a
 series of passes:
@@ -983,30 +983,30 @@ series of passes:
    which analyses are needed to be run for a pass.  An important part of work
    is that the ``PassManager`` tracks the exact lifetime of all analysis
    results, allowing it to :ref:`free memory
-   <writing-an-llvm-pass-releaseMemory>` allocated to holding analysis results
+   <writing-an-llvm37-pass-releaseMemory>` allocated to holding analysis results
    as soon as they are no longer needed.
 
 #. **Pipeline the execution of passes on the program.**  The ``PassManager``
    attempts to get better cache and memory usage behavior out of a series of
    passes by pipelining the passes together.  This means that, given a series
-   of consecutive :ref:`FunctionPass <writing-an-llvm-pass-FunctionPass>`, it
+   of consecutive :ref:`FunctionPass <writing-an-llvm37-pass-FunctionPass>`, it
    will execute all of the :ref:`FunctionPass
-   <writing-an-llvm-pass-FunctionPass>` on the first function, then all of the
-   :ref:`FunctionPasses <writing-an-llvm-pass-FunctionPass>` on the second
+   <writing-an-llvm37-pass-FunctionPass>` on the first function, then all of the
+   :ref:`FunctionPasses <writing-an-llvm37-pass-FunctionPass>` on the second
    function, etc... until the entire program has been run through the passes.
 
    This improves the cache behavior of the compiler, because it is only
-   touching the LLVM program representation for a single function at a time,
+   touching the LLVM37 program representation for a single function at a time,
    instead of traversing the entire program.  It reduces the memory consumption
    of compiler, because, for example, only one `DominatorSet
-   <http://llvm.org/doxygen/classllvm_1_1DominatorSet.html>`_ needs to be
+   <http://llvm37.org/doxygen/classllvm37_1_1DominatorSet.html>`_ needs to be
    calculated at a time.  This also makes it possible to implement some
-   :ref:`interesting enhancements <writing-an-llvm-pass-SMP>` in the future.
+   :ref:`interesting enhancements <writing-an-llvm37-pass-SMP>` in the future.
 
 The effectiveness of the ``PassManager`` is influenced directly by how much
 information it has about the behaviors of the passes it is scheduling.  For
 example, the "preserved" set is intentionally conservative in the face of an
-unimplemented :ref:`getAnalysisUsage <writing-an-llvm-pass-getAnalysisUsage>`
+unimplemented :ref:`getAnalysisUsage <writing-an-llvm37-pass-getAnalysisUsage>`
 method.  Not implementing when it should be implemented will have the effect of
 not allowing any analysis results to live across the execution of your pass.
 
@@ -1017,7 +1017,7 @@ information about all of the variants of the ``--debug-pass`` option, just type
 "``opt -help-hidden``").
 
 By using the --debug-pass=Structure option, for example, we can see how our
-:ref:`Hello World <writing-an-llvm-pass-basiccode>` pass interacts with other
+:ref:`Hello World <writing-an-llvm37-pass-basiccode>` pass interacts with other
 passes.  Lets try it out with the gcse and licm passes:
 
 .. code-block:: console
@@ -1050,12 +1050,12 @@ compute natural loop information, which is then used by the LICM pass.
 
 After the LICM pass, the module verifier runs (which is automatically added by
 the :program:`opt` tool), which uses the dominator set to check that the
-resultant LLVM code is well formed.  After it finishes, the dominator set
+resultant LLVM37 code is well formed.  After it finishes, the dominator set
 information is destroyed, after being computed once, and shared by three
 passes.
 
 Lets see how this changes when we run the :ref:`Hello World
-<writing-an-llvm-pass-basiccode>` pass in between the two passes:
+<writing-an-llvm37-pass-basiccode>` pass in between the two passes:
 
 .. code-block:: console
 
@@ -1084,10 +1084,10 @@ Lets see how this changes when we run the :ref:`Hello World
   Hello: puts
   Hello: main
 
-Here we see that the :ref:`Hello World <writing-an-llvm-pass-basiccode>` pass
+Here we see that the :ref:`Hello World <writing-an-llvm37-pass-basiccode>` pass
 has killed the Dominator Set pass, even though it doesn't modify the code at
 all!  To fix this, we need to add the following :ref:`getAnalysisUsage
-<writing-an-llvm-pass-getAnalysisUsage>` method to our pass:
+<writing-an-llvm37-pass-getAnalysisUsage>` method to our pass:
 
 .. code-block:: c++
 
@@ -1127,7 +1127,7 @@ Now when we run our pass, we get this output:
 Which shows that we don't accidentally invalidate dominator information
 anymore, and therefore do not have to compute it twice.
 
-.. _writing-an-llvm-pass-releaseMemory:
+.. _writing-an-llvm37-pass-releaseMemory:
 
 The ``releaseMemory`` method
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -1144,7 +1144,7 @@ some way to free analysis results when they are no longer useful.  The
 
 If you are writing an analysis or any other pass that retains a significant
 amount of state (for use by another pass which "requires" your pass and uses
-the :ref:`getAnalysis <writing-an-llvm-pass-getAnalysis>` method) you should
+the :ref:`getAnalysis <writing-an-llvm37-pass-getAnalysis>` method) you should
 implement ``releaseMemory`` to, well, release the memory allocated to maintain
 this internal state.  This method is called after the ``run*`` method for the
 class, before the next call of ``run*`` in your pass.
@@ -1152,7 +1152,7 @@ class, before the next call of ``run*`` in your pass.
 Registering dynamically loaded passes
 =====================================
 
-*Size matters* when constructing production quality tools using LLVM, both for
+*Size matters* when constructing production quality tools using LLVM37, both for
 the purposes of distribution, and for regulating the resident code size when
 running on the target system.  Therefore, it becomes desirable to selectively
 use some passes, while omitting others and maintain the flexibility to change
@@ -1188,7 +1188,7 @@ Implement your register allocator machine pass.  In your register allocator
 
 .. code-block:: c++
 
-  #include "llvm/CodeGen/RegAllocRegistry.h"
+  #include "llvm37/CodeGen/RegAllocRegistry.h"
 
 Also in your register allocator ``.cpp`` file, define a creator function in the
 form:
@@ -1232,13 +1232,13 @@ option.  Registering instruction schedulers is similar except use the
 To force the load/linking of your register allocator into the
 :program:`llc`/:program:`lli` tools, add your creator function's global
 declaration to ``Passes.h`` and add a "pseudo" call line to
-``llvm/Codegen/LinkAllCodegenComponents.h``.
+``llvm37/Codegen/LinkAllCodegenComponents.h``.
 
 Creating new registries
 -----------------------
 
 The easiest way to get started is to clone one of the existing registries; we
-recommend ``llvm/CodeGen/RegAllocRegistry.h``.  The key things to modify are
+recommend ``llvm37/CodeGen/RegAllocRegistry.h``.  The key things to modify are
 the class name and the ``FunctionPassCtor`` type.
 
 Then you need to declare the registry.  Example: if your pass registry is
@@ -1300,10 +1300,10 @@ object.  The most foolproof way of doing this is to set a breakpoint in
 
 .. code-block:: console
 
-  $ (gdb) break llvm::PassManager::run
+  $ (gdb) break llvm37::PassManager::run
   Breakpoint 1 at 0x2413bc: file Pass.cpp, line 70.
-  (gdb) run test.bc -load $(LLVMTOP)/llvm/Debug+Asserts/lib/[libname].so -[passoption]
-  Starting program: opt test.bc -load $(LLVMTOP)/llvm/Debug+Asserts/lib/[libname].so -[passoption]
+  (gdb) run test.bc -load $(LLVM37TOP)/llvm37/Debug+Asserts/lib/[libname].so -[passoption]
+  Starting program: opt test.bc -load $(LLVM37TOP)/llvm37/Debug+Asserts/lib/[libname].so -[passoption]
   Breakpoint 1, PassManager::run (this=0xffbef174, M=@0x70b298) at Pass.cpp:70
   70      bool PassManager::run(Module &M) { return PM->run(M); }
   (gdb)
@@ -1339,13 +1339,13 @@ like to contribute some tips of your own, just contact `Chris
 Future extensions planned
 -------------------------
 
-Although the LLVM Pass Infrastructure is very capable as it stands, and does
+Although the LLVM37 Pass Infrastructure is very capable as it stands, and does
 some nifty stuff, there are things we'd like to add in the future.  Here is
 where we are going:
 
-.. _writing-an-llvm-pass-SMP:
+.. _writing-an-llvm37-pass-SMP:
 
-Multithreaded LLVM
+Multithreaded LLVM37
 ^^^^^^^^^^^^^^^^^^
 
 Multiple CPU machines are becoming more common and compilation can never be
@@ -1357,8 +1357,8 @@ create multiple instances of each pass object, and allow the separate instances
 to be hacking on different parts of the program at the same time.
 
 This implementation would prevent each of the passes from having to implement
-multithreaded constructs, requiring only the LLVM core to have locking in a few
+multithreaded constructs, requiring only the LLVM37 core to have locking in a few
 places (for global resources).  Although this is a simple extension, we simply
 haven't had time (or multiprocessor machines, thus a reason) to implement this.
-Despite that, we have kept the LLVM passes SMP ready, and you should too.
+Despite that, we have kept the LLVM37 passes SMP ready, and you should too.
 

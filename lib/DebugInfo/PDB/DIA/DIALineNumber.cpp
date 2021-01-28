@@ -1,15 +1,15 @@
 //===- DIALineNumber.cpp - DIA implementation of IPDBLineNumber -*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/DebugInfo/PDB/DIA/DIALineNumber.h"
+#include "llvm37/DebugInfo/PDB/DIA/DIALineNumber.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 DIALineNumber::DIALineNumber(CComPtr<IDiaLineNumber> DiaLineNumber)
     : LineNumber(DiaLineNumber) {}

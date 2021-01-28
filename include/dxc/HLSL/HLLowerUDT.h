@@ -14,24 +14,24 @@
 #include "dxc/DXIL/DxilConstants.h"
 #include "dxc/DXIL/DxilTypeSystem.h"
 
-namespace llvm {
+namespace llvm37 {
 class Constant;
 class Function;
 class StructType;
 class Type;
 class Value;
-} // namespace llvm
+} // namespace llvm37
 
 namespace hlsl {
 class DxilTypeSystem;
 
-llvm::StructType *GetLoweredUDT(
-  llvm::StructType *structTy, hlsl::DxilTypeSystem *pTypeSys = nullptr);
-llvm::Constant *TranslateInitForLoweredUDT(
-    llvm::Constant *Init, llvm::Type *NewTy,
+llvm37::StructType *GetLoweredUDT(
+  llvm37::StructType *structTy, hlsl::DxilTypeSystem *pTypeSys = nullptr);
+llvm37::Constant *TranslateInitForLoweredUDT(
+    llvm37::Constant *Init, llvm37::Type *NewTy,
     // We need orientation for matrix fields
     hlsl::DxilTypeSystem *pTypeSys,
     hlsl::MatrixOrientation matOrientation = hlsl::MatrixOrientation::Undefined);
-void ReplaceUsesForLoweredUDT(llvm::Value *V, llvm::Value *NewV);
+void ReplaceUsesForLoweredUDT(llvm37::Value *V, llvm37::Value *NewV);
 
 } // namespace hlsl

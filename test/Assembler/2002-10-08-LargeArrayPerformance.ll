@@ -1,4 +1,4 @@
-; RUN: llvm-as %s -o /dev/null
+; RUN: llvm37-as %s -o /dev/null
 ; RUN: verify-uselistorder %s
 ; This testcase comes from the following really simple c file:
 ;; int foo[30000]

@@ -1,6 +1,6 @@
 //===--- PreciseVisitor.cpp ------- Precise Visitor --------------*- C++ -*-==//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -31,7 +31,7 @@ bool isAccessingPrecise(clang::spirv::SpirvAccessChain *inst) {
   // %z = OpAccessChain <type> %obj %int_1 %int_2 %int_3 %int_4 %int_5 %int_6
   std::stack<SpirvInstruction *> indexes;
   SpirvInstruction *base = inst;
-  while (auto *accessChain = llvm::dyn_cast<SpirvAccessChain>(base)) {
+  while (auto *accessChain = llvm37::dyn_cast<SpirvAccessChain>(base)) {
     for (auto iter = accessChain->getIndexes().rbegin();
          iter != accessChain->getIndexes().rend(); ++iter) {
       indexes.push(*iter);
@@ -48,21 +48,21 @@ bool isAccessingPrecise(clang::spirv::SpirvAccessChain *inst) {
   // at any point, return true.
   const SpirvType *baseType = base->getResultType();
   while (baseType && !indexes.empty()) {
-    if (auto *vecType = llvm::dyn_cast<VectorType>(baseType)) {
+    if (auto *vecType = llvm37::dyn_cast<VectorType>(baseType)) {
       indexes.pop();
       baseType = vecType->getElementType();
-    } else if (auto *matType = llvm::dyn_cast<MatrixType>(baseType)) {
+    } else if (auto *matType = llvm37::dyn_cast<MatrixType>(baseType)) {
       indexes.pop();
       baseType = matType->getVecType();
-    } else if (auto *arrType = llvm::dyn_cast<ArrayType>(baseType)) {
+    } else if (auto *arrType = llvm37::dyn_cast<ArrayType>(baseType)) {
       indexes.pop();
       baseType = arrType->getElementType();
-    } else if (auto *raType = llvm::dyn_cast<RuntimeArrayType>(baseType)) {
+    } else if (auto *raType = llvm37::dyn_cast<RuntimeArrayType>(baseType)) {
       indexes.pop();
       baseType = raType->getElementType();
-    } else if (auto *structType = llvm::dyn_cast<StructType>(baseType)) {
+    } else if (auto *structType = llvm37::dyn_cast<StructType>(baseType)) {
       SpirvInstruction *index = indexes.top();
-      if (auto *constInt = llvm::dyn_cast<SpirvConstantInteger>(index)) {
+      if (auto *constInt = llvm37::dyn_cast<SpirvConstantInteger>(index)) {
         uint32_t indexValue =
             static_cast<uint32_t>(constInt->getValue().getZExtValue());
         auto fields = structType->getFields();
@@ -80,7 +80,7 @@ bool isAccessingPrecise(clang::spirv::SpirvAccessChain *inst) {
         assert(false && "indexing into a struct with variable value");
         return false;
       }
-    } else if (auto *ptrType = llvm::dyn_cast<SpirvPointerType>(baseType)) {
+    } else if (auto *ptrType = llvm37::dyn_cast<SpirvPointerType>(baseType)) {
       // Note: no need to pop the stack here.
       baseType = ptrType->getPointeeType();
     } else {
@@ -211,7 +211,7 @@ bool PreciseVisitor::visit(SpirvStore *inst) {
     return true;
   }
 
-  if (auto *accessChain = llvm::dyn_cast<SpirvAccessChain>(ptr)) {
+  if (auto *accessChain = llvm37::dyn_cast<SpirvAccessChain>(ptr)) {
     if (isAccessingPrecise(accessChain)) {
       obj->setPrecise();
       return true;

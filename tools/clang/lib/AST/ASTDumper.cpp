@@ -1,6 +1,6 @@
 //===--- ASTDumper.cpp - Dumping implementation for ASTs ------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -23,7 +23,7 @@
 #include "clang/AST/TypeVisitor.h"
 #include "clang/Basic/Module.h"
 #include "clang/Basic/SourceManager.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/Support/raw_ostream.h"
 using namespace clang;
 using namespace clang::comments;
 
@@ -97,7 +97,7 @@ namespace  {
     const SourceManager *SM;
 
     /// Pending[i] is an action to dump an entity at level i.
-    llvm::SmallVector<std::function<void(bool isLastChild)>, 32> Pending;
+    llvm37::SmallVector<std::function<void(bool isLastChild)>, 32> Pending;
 
     /// Indicates whether we're at the top level.
     bool TopLevel;
@@ -229,7 +229,7 @@ namespace  {
     void dumpDeclContext(const DeclContext *DC);
     void dumpLookups(const DeclContext *DC, bool DumpDecls);
     void dumpAttr(const Attr *A);
-    void dumpHLSLUnusualAnnotations(const llvm::ArrayRef<hlsl::UnusualAnnotation*> UA);
+    void dumpHLSLUnusualAnnotations(const llvm37::ArrayRef<hlsl::UnusualAnnotation*> UA);
 
     // C++ Utilities
     void dumpAccessSpecifier(AccessSpecifier AS);
@@ -812,7 +812,7 @@ void ASTDumper::dumpAttr(const Attr *A) {
 #define ATTR(X) case attr::X: OS << #X; break;
 #include "clang/Basic/AttrList.inc"
       default:
-        llvm_unreachable("unexpected attribute kind");
+        llvm37_unreachable("unexpected attribute kind");
       }
       OS << "Attr";
     }
@@ -852,7 +852,7 @@ static void dumpPreviousDecl(raw_ostream &OS, const Decl *D) {
 #define ABSTRACT_DECL(DECL)
 #include "clang/AST/DeclNodes.inc"
   }
-  llvm_unreachable("Decl that isn't part of DeclNodes.inc!");
+  llvm37_unreachable("Decl that isn't part of DeclNodes.inc!");
 }
 
 //===----------------------------------------------------------------------===//
@@ -886,7 +886,7 @@ void ASTDumper::dumpCXXCtorInitializer(const CXXCtorInitializer *Init) {
     } else if (Init->isDelegatingInitializer()) {
       dumpType(Init->getTypeSourceInfo()->getType());
     } else {
-      llvm_unreachable("Unknown initializer type");
+      llvm37_unreachable("Unknown initializer type");
     }
     dumpStmt(Init->getInit());
   });
@@ -2407,40 +2407,40 @@ void ASTDumper::visitVerbatimLineComment(const VerbatimLineComment *C) {
 
 void QualType::dump(const char *msg) const {
   if (msg)
-    llvm::errs() << msg << ": ";
+    llvm37::errs() << msg << ": ";
   dump();
 }
 
-LLVM_DUMP_METHOD void QualType::dump() const {
-  ASTDumper Dumper(llvm::errs(), nullptr, nullptr);
+LLVM37_DUMP_METHOD void QualType::dump() const {
+  ASTDumper Dumper(llvm37::errs(), nullptr, nullptr);
   Dumper.dumpTypeAsChild(*this);
 }
 
-LLVM_DUMP_METHOD void Type::dump() const { QualType(this, 0).dump(); }
+LLVM37_DUMP_METHOD void Type::dump() const { QualType(this, 0).dump(); }
 
 //===----------------------------------------------------------------------===//
 // Decl method implementations
 //===----------------------------------------------------------------------===//
 
-LLVM_DUMP_METHOD void Decl::dump() const { dump(llvm::errs()); }
+LLVM37_DUMP_METHOD void Decl::dump() const { dump(llvm37::errs()); }
 
-LLVM_DUMP_METHOD void Decl::dump(raw_ostream &OS) const {
+LLVM37_DUMP_METHOD void Decl::dump(raw_ostream &OS) const {
   ASTDumper P(OS, &getASTContext().getCommentCommandTraits(),
               &getASTContext().getSourceManager());
   P.dumpDecl(this);
 }
 
-LLVM_DUMP_METHOD void Decl::dumpColor() const {
-  ASTDumper P(llvm::errs(), &getASTContext().getCommentCommandTraits(),
+LLVM37_DUMP_METHOD void Decl::dumpColor() const {
+  ASTDumper P(llvm37::errs(), &getASTContext().getCommentCommandTraits(),
               &getASTContext().getSourceManager(), /*ShowColors*/true);
   P.dumpDecl(this);
 }
 
-LLVM_DUMP_METHOD void DeclContext::dumpLookups() const {
-  dumpLookups(llvm::errs());
+LLVM37_DUMP_METHOD void DeclContext::dumpLookups() const {
+  dumpLookups(llvm37::errs());
 }
 
-LLVM_DUMP_METHOD void DeclContext::dumpLookups(raw_ostream &OS,
+LLVM37_DUMP_METHOD void DeclContext::dumpLookups(raw_ostream &OS,
                                                bool DumpDecls) const {
   const DeclContext *DC = this;
   while (!DC->isTranslationUnit())
@@ -2454,27 +2454,27 @@ LLVM_DUMP_METHOD void DeclContext::dumpLookups(raw_ostream &OS,
 // Stmt method implementations
 //===----------------------------------------------------------------------===//
 
-LLVM_DUMP_METHOD void Stmt::dump(SourceManager &SM) const {
-  dump(llvm::errs(), SM);
+LLVM37_DUMP_METHOD void Stmt::dump(SourceManager &SM) const {
+  dump(llvm37::errs(), SM);
 }
 
-LLVM_DUMP_METHOD void Stmt::dump(raw_ostream &OS, SourceManager &SM) const {
+LLVM37_DUMP_METHOD void Stmt::dump(raw_ostream &OS, SourceManager &SM) const {
   ASTDumper P(OS, nullptr, &SM);
   P.dumpStmt(this);
 }
 
-LLVM_DUMP_METHOD void Stmt::dump(raw_ostream &OS) const {
+LLVM37_DUMP_METHOD void Stmt::dump(raw_ostream &OS) const {
   ASTDumper P(OS, nullptr, nullptr);
   P.dumpStmt(this);
 }
 
-LLVM_DUMP_METHOD void Stmt::dump() const {
-  ASTDumper P(llvm::errs(), nullptr, nullptr);
+LLVM37_DUMP_METHOD void Stmt::dump() const {
+  ASTDumper P(llvm37::errs(), nullptr, nullptr);
   P.dumpStmt(this);
 }
 
-LLVM_DUMP_METHOD void Stmt::dumpColor() const {
-  ASTDumper P(llvm::errs(), nullptr, nullptr, /*ShowColors*/true);
+LLVM37_DUMP_METHOD void Stmt::dumpColor() const {
+  ASTDumper P(llvm37::errs(), nullptr, nullptr, /*ShowColors*/true);
   P.dumpStmt(this);
 }
 
@@ -2482,12 +2482,12 @@ LLVM_DUMP_METHOD void Stmt::dumpColor() const {
 // Comment method implementations
 //===----------------------------------------------------------------------===//
 
-LLVM_DUMP_METHOD void Comment::dump() const {
-  dump(llvm::errs(), nullptr, nullptr);
+LLVM37_DUMP_METHOD void Comment::dump() const {
+  dump(llvm37::errs(), nullptr, nullptr);
 }
 
-LLVM_DUMP_METHOD void Comment::dump(const ASTContext &Context) const {
-  dump(llvm::errs(), &Context.getCommentCommandTraits(),
+LLVM37_DUMP_METHOD void Comment::dump(const ASTContext &Context) const {
+  dump(llvm37::errs(), &Context.getCommentCommandTraits(),
        &Context.getSourceManager());
 }
 
@@ -2498,8 +2498,8 @@ void Comment::dump(raw_ostream &OS, const CommandTraits *Traits,
   D.dumpFullComment(FC);
 }
 
-LLVM_DUMP_METHOD void Comment::dumpColor() const {
+LLVM37_DUMP_METHOD void Comment::dumpColor() const {
   const FullComment *FC = dyn_cast<FullComment>(this);
-  ASTDumper D(llvm::errs(), nullptr, nullptr, /*ShowColors*/true);
+  ASTDumper D(llvm37::errs(), nullptr, nullptr, /*ShowColors*/true);
   D.dumpFullComment(FC);
 }

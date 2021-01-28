@@ -1,6 +1,6 @@
 //===-- Redeclarable.h - Base for Decls that can be redeclared -*- C++ -*-====//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,12 +11,12 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_AST_REDECLARABLE_H
-#define LLVM_CLANG_AST_REDECLARABLE_H
+#ifndef LLVM37_CLANG_AST_REDECLARABLE_H
+#define LLVM37_CLANG_AST_REDECLARABLE_H
 
 #include "clang/AST/ExternalASTSource.h"
-#include "llvm/ADT/PointerIntPair.h"
-#include "llvm/Support/Casting.h"
+#include "llvm37/ADT/PointerIntPair.h"
+#include "llvm37/Support/Casting.h"
 #include <iterator>
 
 namespace clang {
@@ -38,9 +38,9 @@ protected:
     /// A pointer to either an uninitialized latest declaration (where either
     /// we've not yet set the previous decl or there isn't one), or to a known
     /// previous declaration.
-    typedef llvm::PointerUnion<Previous, UninitializedLatest> NotKnownLatest;
+    typedef llvm37::PointerUnion<Previous, UninitializedLatest> NotKnownLatest;
 
-    mutable llvm::PointerUnion<NotKnownLatest, KnownLatest> Next;
+    mutable llvm37::PointerUnion<NotKnownLatest, KnownLatest> Next;
 
   public:
     enum PreviousTag { PreviousLink };
@@ -221,7 +221,7 @@ public:
     }
   };
 
-  typedef llvm::iterator_range<redecl_iterator> redecl_range;
+  typedef llvm37::iterator_range<redecl_iterator> redecl_range;
 
   /// \brief Returns an iterator range for all the redeclarations of the same
   /// decl. It will iterate at least once (when this decl is the only one).

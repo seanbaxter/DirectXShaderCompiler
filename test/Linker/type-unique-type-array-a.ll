@@ -1,6 +1,6 @@
 ; REQUIRES: object-emission
 ;
-; RUN: llvm-link %s %p/type-unique-type-array-b.ll -S -o - | %llc_dwarf -filetype=obj -O0 | llvm-dwarfdump -debug-dump=info - | FileCheck %s
+; RUN: llvm37-link %s %p/type-unique-type-array-b.ll -S -o - | %llc_dwarf -filetype=obj -O0 | llvm37-dwarfdump -debug-dump=info - | FileCheck %s
 ;
 ; rdar://problem/17628609
 ;
@@ -51,12 +51,12 @@ entry:
   %coerce.dive = getelementptr %struct.SA, %struct.SA* %sa, i32 0, i32 0
   store i32 %sa.coerce, i32* %coerce.dive
   store %class.A* %a, %class.A** %a.addr, align 8
-  call void @llvm.dbg.declare(metadata %class.A** %a.addr, metadata !24, metadata !DIExpression()), !dbg !25
-  call void @llvm.dbg.declare(metadata %struct.SA* %sa, metadata !26, metadata !DIExpression()), !dbg !27
+  call void @llvm37.dbg.declare(metadata %class.A** %a.addr, metadata !24, metadata !DIExpression()), !dbg !25
+  call void @llvm37.dbg.declare(metadata %struct.SA* %sa, metadata !26, metadata !DIExpression()), !dbg !27
   %0 = load %class.A*, %class.A** %a.addr, align 8, !dbg !28
   %1 = bitcast %struct.SA* %agg.tmp to i8*, !dbg !28
   %2 = bitcast %struct.SA* %sa to i8*, !dbg !28
-  call void @llvm.memcpy.p0i8.p0i8.i64(i8* %1, i8* %2, i64 4, i32 4, i1 false), !dbg !28
+  call void @llvm37.memcpy.p0i8.p0i8.i64(i8* %1, i8* %2, i64 4, i32 4, i1 false), !dbg !28
   %coerce.dive1 = getelementptr %struct.SA, %struct.SA* %agg.tmp, i32 0, i32 0, !dbg !28
   %3 = load i32, i32* %coerce.dive1, !dbg !28
   call void @_ZN1A5testAE2SA(%class.A* %0, i32 %3), !dbg !28
@@ -64,7 +64,7 @@ entry:
 }
 
 ; Function Attrs: nounwind readnone
-declare void @llvm.dbg.declare(metadata, metadata, metadata) #1
+declare void @llvm37.dbg.declare(metadata, metadata, metadata) #1
 
 ; Function Attrs: nounwind ssp uwtable
 define linkonce_odr void @_ZN1A5testAE2SA(%class.A* %this, i32 %a.coerce) #2 align 2 {
@@ -74,25 +74,25 @@ entry:
   %coerce.dive = getelementptr %struct.SA, %struct.SA* %a, i32 0, i32 0
   store i32 %a.coerce, i32* %coerce.dive
   store %class.A* %this, %class.A** %this.addr, align 8
-  call void @llvm.dbg.declare(metadata %class.A** %this.addr, metadata !30, metadata !DIExpression()), !dbg !31
-  call void @llvm.dbg.declare(metadata %struct.SA* %a, metadata !32, metadata !DIExpression()), !dbg !33
+  call void @llvm37.dbg.declare(metadata %class.A** %this.addr, metadata !30, metadata !DIExpression()), !dbg !31
+  call void @llvm37.dbg.declare(metadata %struct.SA* %a, metadata !32, metadata !DIExpression()), !dbg !33
   %this1 = load %class.A*, %class.A** %this.addr
   ret void, !dbg !34
 }
 
 ; Function Attrs: nounwind
-declare void @llvm.memcpy.p0i8.p0i8.i64(i8* nocapture, i8* nocapture readonly, i64, i32, i1) #3
+declare void @llvm37.memcpy.p0i8.p0i8.i64(i8* nocapture, i8* nocapture readonly, i64, i32, i1) #3
 
 attributes #0 = { ssp uwtable "less-precise-fpmad"="false" "no-frame-pointer-elim"="true" "no-frame-pointer-elim-non-leaf" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "stack-protector-buffer-size"="8" "unsafe-fp-math"="false" "use-soft-float"="false" }
 attributes #1 = { nounwind readnone }
 attributes #2 = { nounwind ssp uwtable "less-precise-fpmad"="false" "no-frame-pointer-elim"="true" "no-frame-pointer-elim-non-leaf" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "stack-protector-buffer-size"="8" "unsafe-fp-math"="false" "use-soft-float"="false" }
 attributes #3 = { nounwind }
 
-!llvm.dbg.cu = !{!0}
-!llvm.module.flags = !{!21, !22}
-!llvm.ident = !{!23}
+!llvm37.dbg.cu = !{!0}
+!llvm37.module.flags = !{!21, !22}
+!llvm37.ident = !{!23}
 
-!0 = !DICompileUnit(language: DW_LANG_C_plus_plus, producer: "clang version 3.5.0 (trunk 214102:214113M) (llvm/trunk 214102:214115M)", isOptimized: false, emissionKind: 1, file: !1, enums: !2, retainedTypes: !3, subprograms: !14, globals: !2, imports: !2)
+!0 = !DICompileUnit(language: DW_LANG_C_plus_plus, producer: "clang version 3.5.0 (trunk 214102:214113M) (llvm37/trunk 214102:214115M)", isOptimized: false, emissionKind: 1, file: !1, enums: !2, retainedTypes: !3, subprograms: !14, globals: !2, imports: !2)
 !1 = !DIFile(filename: "a.cpp", directory: "/Users/manmanren/test-Nov/type_unique/rdar_di_array")
 !2 = !{}
 !3 = !{!4, !10}
@@ -115,7 +115,7 @@ attributes #3 = { nounwind }
 !20 = !DISubprogram(name: "testA", linkageName: "_ZN1A5testAE2SA", line: 7, isLocal: false, isDefinition: true, virtualIndex: 6, flags: DIFlagPrototyped, isOptimized: false, scopeLine: 7, file: !1, scope: !"_ZTS1A", type: !7, function: void (%class.A*, i32)* @_ZN1A5testAE2SA, declaration: !6, variables: !2)
 !21 = !{i32 2, !"Dwarf Version", i32 2}
 !22 = !{i32 2, !"Debug Info Version", i32 3}
-!23 = !{!"clang version 3.5.0 (trunk 214102:214113M) (llvm/trunk 214102:214115M)"}
+!23 = !{!"clang version 3.5.0 (trunk 214102:214113M) (llvm37/trunk 214102:214115M)"}
 !24 = !DILocalVariable(tag: DW_TAG_arg_variable, name: "a", line: 11, arg: 1, scope: !15, file: !16, type: !19)
 !25 = !DILocation(line: 11, column: 14, scope: !15)
 !26 = !DILocalVariable(tag: DW_TAG_arg_variable, name: "sa", line: 11, arg: 2, scope: !15, file: !16, type: !"_ZTS2SA")

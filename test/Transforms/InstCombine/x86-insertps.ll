@@ -1,29 +1,29 @@
 ; RUN: opt < %s -instcombine -S | FileCheck %s
 
-declare <4 x float> @llvm.x86.sse41.insertps(<4 x float>, <4 x float>, i8) nounwind readnone
+declare <4 x float> @llvm37.x86.sse41.insertps(<4 x float>, <4 x float>, i8) nounwind readnone
 
 ; This should never happen, but make sure we don't crash handling a non-constant immediate byte.
 
 define <4 x float> @insertps_non_const_imm(<4 x float> %v1, <4 x float> %v2, i8 %c) {
-  %res = call <4 x float> @llvm.x86.sse41.insertps(<4 x float> %v1, <4 x float> %v2, i8 %c)
+  %res = call <4 x float> @llvm37.x86.sse41.insertps(<4 x float> %v1, <4 x float> %v2, i8 %c)
   ret <4 x float> %res
 
 ; CHECK-LABEL: @insertps_non_const_imm
-; CHECK-NEXT:  call <4 x float> @llvm.x86.sse41.insertps(<4 x float> %v1, <4 x float> %v2, i8 %c)
+; CHECK-NEXT:  call <4 x float> @llvm37.x86.sse41.insertps(<4 x float> %v1, <4 x float> %v2, i8 %c)
 ; CHECK-NEXT:  ret <4 x float>
 }
 
 ; If all zero mask bits are set, return a zero regardless of the other control bits.
 
 define <4 x float> @insertps_0x0f(<4 x float> %v1, <4 x float> %v2) {
-  %res = call <4 x float> @llvm.x86.sse41.insertps(<4 x float> %v1, <4 x float> %v2, i8 15)
+  %res = call <4 x float> @llvm37.x86.sse41.insertps(<4 x float> %v1, <4 x float> %v2, i8 15)
   ret <4 x float> %res
 
 ; CHECK-LABEL: @insertps_0x0f
 ; CHECK-NEXT:  ret <4 x float> zeroinitializer
 }
 define <4 x float> @insertps_0xff(<4 x float> %v1, <4 x float> %v2) {
-  %res = call <4 x float> @llvm.x86.sse41.insertps(<4 x float> %v1, <4 x float> %v2, i8 255)
+  %res = call <4 x float> @llvm37.x86.sse41.insertps(<4 x float> %v1, <4 x float> %v2, i8 255)
   ret <4 x float> %res
 
 ; CHECK-LABEL: @insertps_0xff
@@ -33,18 +33,18 @@ define <4 x float> @insertps_0xff(<4 x float> %v1, <4 x float> %v2) {
 ; If some zero mask bits are set that do not override the insertion, we do not change anything.
 
 define <4 x float> @insertps_0x0c(<4 x float> %v1, <4 x float> %v2) {
-  %res = call <4 x float> @llvm.x86.sse41.insertps(<4 x float> %v1, <4 x float> %v2, i8 12)
+  %res = call <4 x float> @llvm37.x86.sse41.insertps(<4 x float> %v1, <4 x float> %v2, i8 12)
   ret <4 x float> %res
 
 ; CHECK-LABEL: @insertps_0x0c
-; CHECK-NEXT:  call <4 x float> @llvm.x86.sse41.insertps(<4 x float> %v1, <4 x float> %v2, i8 12)
+; CHECK-NEXT:  call <4 x float> @llvm37.x86.sse41.insertps(<4 x float> %v1, <4 x float> %v2, i8 12)
 ; CHECK-NEXT:  ret <4 x float>
 }
 
 ; ...unless both input vectors are the same operand.
 
 define <4 x float> @insertps_0x15_single_input(<4 x float> %v1) {
-  %res = call <4 x float> @llvm.x86.sse41.insertps(<4 x float> %v1, <4 x float> %v1, i8 21)
+  %res = call <4 x float> @llvm37.x86.sse41.insertps(<4 x float> %v1, <4 x float> %v1, i8 21)
   ret <4 x float> %res
 
 ; CHECK-LABEL: @insertps_0x15_single_input
@@ -55,7 +55,7 @@ define <4 x float> @insertps_0x15_single_input(<4 x float> %v1) {
 ; The zero mask overrides the insertion lane.
 
 define <4 x float> @insertps_0x1a_single_input(<4 x float> %v1) {
-  %res = call <4 x float> @llvm.x86.sse41.insertps(<4 x float> %v1, <4 x float> %v1, i8 26)
+  %res = call <4 x float> @llvm37.x86.sse41.insertps(<4 x float> %v1, <4 x float> %v1, i8 26)
   ret <4 x float> %res
 
 ; CHECK-LABEL: @insertps_0x1a_single_input
@@ -66,7 +66,7 @@ define <4 x float> @insertps_0x1a_single_input(<4 x float> %v1) {
 ; The zero mask overrides the insertion lane, so the second input vector is not used.
 
 define <4 x float> @insertps_0xc1(<4 x float> %v1, <4 x float> %v2) {
-  %res = call <4 x float> @llvm.x86.sse41.insertps(<4 x float> %v1, <4 x float> %v2, i8 193)
+  %res = call <4 x float> @llvm37.x86.sse41.insertps(<4 x float> %v1, <4 x float> %v2, i8 193)
   ret <4 x float> %res
 
 ; CHECK-LABEL: @insertps_0xc1
@@ -77,7 +77,7 @@ define <4 x float> @insertps_0xc1(<4 x float> %v1, <4 x float> %v2) {
 ; If no zero mask bits are set, convert to a shuffle.
 
 define <4 x float> @insertps_0x00(<4 x float> %v1, <4 x float> %v2) {
-  %res = call <4 x float> @llvm.x86.sse41.insertps(<4 x float> %v1, <4 x float> %v2, i8 0)
+  %res = call <4 x float> @llvm37.x86.sse41.insertps(<4 x float> %v1, <4 x float> %v2, i8 0)
   ret <4 x float> %res
 
 ; CHECK-LABEL: @insertps_0x00
@@ -86,7 +86,7 @@ define <4 x float> @insertps_0x00(<4 x float> %v1, <4 x float> %v2) {
 }
 
 define <4 x float> @insertps_0x10(<4 x float> %v1, <4 x float> %v2) {
-  %res = call <4 x float> @llvm.x86.sse41.insertps(<4 x float> %v1, <4 x float> %v2, i8 16)
+  %res = call <4 x float> @llvm37.x86.sse41.insertps(<4 x float> %v1, <4 x float> %v2, i8 16)
   ret <4 x float> %res
 
 ; CHECK-LABEL: @insertps_0x10
@@ -95,7 +95,7 @@ define <4 x float> @insertps_0x10(<4 x float> %v1, <4 x float> %v2) {
 }
 
 define <4 x float> @insertps_0x20(<4 x float> %v1, <4 x float> %v2) {
-  %res = call <4 x float> @llvm.x86.sse41.insertps(<4 x float> %v1, <4 x float> %v2, i8 32)
+  %res = call <4 x float> @llvm37.x86.sse41.insertps(<4 x float> %v1, <4 x float> %v2, i8 32)
   ret <4 x float> %res
 
 ; CHECK-LABEL: @insertps_0x20
@@ -104,7 +104,7 @@ define <4 x float> @insertps_0x20(<4 x float> %v1, <4 x float> %v2) {
 }
 
 define <4 x float> @insertps_0x30(<4 x float> %v1, <4 x float> %v2) {
-  %res = call <4 x float> @llvm.x86.sse41.insertps(<4 x float> %v1, <4 x float> %v2, i8 48)
+  %res = call <4 x float> @llvm37.x86.sse41.insertps(<4 x float> %v1, <4 x float> %v2, i8 48)
   ret <4 x float> %res
 
 ; CHECK-LABEL: @insertps_0x30
@@ -113,7 +113,7 @@ define <4 x float> @insertps_0x30(<4 x float> %v1, <4 x float> %v2) {
 }
 
 define <4 x float> @insertps_0xc0(<4 x float> %v1, <4 x float> %v2) {
-  %res = call <4 x float> @llvm.x86.sse41.insertps(<4 x float> %v1, <4 x float> %v2, i8 192)
+  %res = call <4 x float> @llvm37.x86.sse41.insertps(<4 x float> %v1, <4 x float> %v2, i8 192)
   ret <4 x float> %res
 
 ; CHECK-LABEL: @insertps_0xc0
@@ -122,7 +122,7 @@ define <4 x float> @insertps_0xc0(<4 x float> %v1, <4 x float> %v2) {
 }
 
 define <4 x float> @insertps_0xd0(<4 x float> %v1, <4 x float> %v2) {
-  %res = call <4 x float> @llvm.x86.sse41.insertps(<4 x float> %v1, <4 x float> %v2, i8 208)
+  %res = call <4 x float> @llvm37.x86.sse41.insertps(<4 x float> %v1, <4 x float> %v2, i8 208)
   ret <4 x float> %res
 
 ; CHECK-LABEL: @insertps_0xd0
@@ -131,7 +131,7 @@ define <4 x float> @insertps_0xd0(<4 x float> %v1, <4 x float> %v2) {
 }
 
 define <4 x float> @insertps_0xe0(<4 x float> %v1, <4 x float> %v2) {
-  %res = call <4 x float> @llvm.x86.sse41.insertps(<4 x float> %v1, <4 x float> %v2, i8 224)
+  %res = call <4 x float> @llvm37.x86.sse41.insertps(<4 x float> %v1, <4 x float> %v2, i8 224)
   ret <4 x float> %res
 
 ; CHECK-LABEL: @insertps_0xe0
@@ -140,7 +140,7 @@ define <4 x float> @insertps_0xe0(<4 x float> %v1, <4 x float> %v2) {
 }
 
 define <4 x float> @insertps_0xf0(<4 x float> %v1, <4 x float> %v2) {
-  %res = call <4 x float> @llvm.x86.sse41.insertps(<4 x float> %v1, <4 x float> %v2, i8 240)
+  %res = call <4 x float> @llvm37.x86.sse41.insertps(<4 x float> %v1, <4 x float> %v2, i8 240)
   ret <4 x float> %res
 
 ; CHECK-LABEL: @insertps_0xf0

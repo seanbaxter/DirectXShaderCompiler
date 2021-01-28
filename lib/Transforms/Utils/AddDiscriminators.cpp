@@ -1,6 +1,6 @@
 //===- AddDiscriminators.cpp - Insert DWARF path discriminators -----------===//
 //
-//                      The LLVM Compiler Infrastructure
+//                      The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -52,20 +52,20 @@
 // http://wiki.dwarfstd.org/index.php?title=Path_Discriminators
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Transforms/Scalar.h"
-#include "llvm/IR/BasicBlock.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/DIBuilder.h"
-#include "llvm/IR/DebugInfo.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Module.h"
-#include "llvm/Pass.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/Transforms/Scalar.h"
+#include "llvm37/IR/BasicBlock.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/DIBuilder.h"
+#include "llvm37/IR/DebugInfo.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/Pass.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/raw_ostream.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "add-discriminators"
 
@@ -104,7 +104,7 @@ NoDiscriminators("no-discriminators", cl::init(false),
                  cl::desc("Disable generation of discriminator information."));
 #endif // HLSL_GLOBAL_OPT HLSL Change Ends
 
-FunctionPass *llvm::createAddDiscriminatorsPass() {
+FunctionPass *llvm37::createAddDiscriminatorsPass() {
   return new AddDiscriminators();
 }
 
@@ -177,7 +177,7 @@ bool AddDiscriminators::runOnFunction(Function &F) {
 
   bool Changed = false;
   Module *M = F.getParent();
-  LLVMContext &Ctx = M->getContext();
+  LLVM37Context &Ctx = M->getContext();
   DIBuilder Builder(*M, /*AllowUnresolved*/ false);
 
   // Traverse all the blocks looking for instructions in different

@@ -1,18 +1,18 @@
-//===-- llvm/MC/MCLinkerOptimizationHint.cpp ----- LOH handling -*- C++ -*-===//
+//===-- llvm37/MC/MCLinkerOptimizationHint.cpp ----- LOH handling -*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/MC/MCLinkerOptimizationHint.h"
-#include "llvm/MC/MCAsmLayout.h"
-#include "llvm/MC/MCAssembler.h"
-#include "llvm/Support/LEB128.h"
+#include "llvm37/MC/MCLinkerOptimizationHint.h"
+#include "llvm37/MC/MCAsmLayout.h"
+#include "llvm37/MC/MCAssembler.h"
+#include "llvm37/Support/LEB128.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 // Each LOH is composed by, in this order (each field is encoded using ULEB128):
 // - Its kind.

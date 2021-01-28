@@ -1,4 +1,4 @@
-; RUN: llvm-as %s -o /dev/null 2>&1
+; RUN: llvm37-as %s -o /dev/null 2>&1
 
 %rt2 = type { i32, { i8, %rt2*, i8 }, i32 }
 

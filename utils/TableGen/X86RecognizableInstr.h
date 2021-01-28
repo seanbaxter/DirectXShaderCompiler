@@ -1,6 +1,6 @@
 //===- X86RecognizableInstr.h - Disassembler instruction spec ----*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -14,22 +14,22 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_UTILS_TABLEGEN_X86RECOGNIZABLEINSTR_H
-#define LLVM_UTILS_TABLEGEN_X86RECOGNIZABLEINSTR_H
+#ifndef LLVM37_UTILS_TABLEGEN_X86RECOGNIZABLEINSTR_H
+#define LLVM37_UTILS_TABLEGEN_X86RECOGNIZABLEINSTR_H
 
 #include "CodeGenTarget.h"
 #include "X86DisassemblerTables.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/Support/DataTypes.h"
-#include "llvm/TableGen/Record.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/Support/DataTypes.h"
+#include "llvm37/TableGen/Record.h"
 
-namespace llvm {
+namespace llvm37 {
 
 namespace X86Disassembler {
 
 /// RecognizableInstr - Encapsulates all information required to decode a single
-///   instruction, as extracted from the LLVM instruction tables.  Has methods
-///   to interpret the information available in the LLVM tables, and to emit the
+///   instruction, as extracted from the LLVM37 instruction tables.  Has methods
+///   to interpret the information available in the LLVM37 tables, and to emit the
 ///   instruction into DisassemblerTables.
 class RecognizableInstr {
 private:
@@ -110,7 +110,7 @@ private:
   InstructionContext insnContext() const;
 
   /// typeFromString - Translates an operand type from the string provided in
-  ///   the LLVM tables to an OperandType for use in the operand specifier.
+  ///   the LLVM37 tables to an OperandType for use in the operand specifier.
   ///
   /// @param s              - The string, as extracted by calling Rec->getName()
   ///                         on a CodeGenInstruction::OperandInfo.
@@ -125,7 +125,7 @@ private:
                                     bool hasREX_WPrefix, uint8_t OpSize);
 
   /// immediateEncodingFromString - Translates an immediate encoding from the
-  ///   string provided in the LLVM tables to an OperandEncoding for use in
+  ///   string provided in the LLVM37 tables to an OperandEncoding for use in
   ///   the operand specifier.
   ///
   /// @param s       - See typeFromString().
@@ -158,7 +158,7 @@ private:
   /// \brief Adjust the encoding type for an operand based on the instruction.
   void adjustOperandEncoding(OperandEncoding &encoding);
 
-  /// handleOperand - Converts a single operand from the LLVM table format to
+  /// handleOperand - Converts a single operand from the LLVM37 table format to
   ///   the emitted table format, handling any duplicate operands it encounters
   ///   and then one non-duplicate.
   ///
@@ -235,6 +235,6 @@ public:
   
 } // namespace X86Disassembler
 
-} // namespace llvm
+} // namespace llvm37
 
 #endif

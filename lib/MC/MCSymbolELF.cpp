@@ -1,18 +1,18 @@
 //===- lib/MC/MCSymbolELF.cpp ---------------------------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/MC/MCAssembler.h"
-#include "llvm/MC/MCSymbolELF.h"
-#include "llvm/MC/MCFixupKindInfo.h"
-#include "llvm/Support/ELF.h"
+#include "llvm37/MC/MCAssembler.h"
+#include "llvm37/MC/MCSymbolELF.h"
+#include "llvm37/MC/MCFixupKindInfo.h"
+#include "llvm37/Support/ELF.h"
 
-namespace llvm {
+namespace llvm37 {
 
 namespace {
 enum {
@@ -45,7 +45,7 @@ void MCSymbolELF::setBinding(unsigned Binding) const {
   unsigned Val;
   switch (Binding) {
   default:
-    llvm_unreachable("Unsupported Binding");
+    llvm37_unreachable("Unsupported Binding");
   case ELF::STB_LOCAL:
     Val = 0;
     break;
@@ -68,7 +68,7 @@ unsigned MCSymbolELF::getBinding() const {
     uint32_t Val = (getFlags() & (0x3 << ELF_STB_Shift)) >> ELF_STB_Shift;
     switch (Val) {
     default:
-      llvm_unreachable("Invalid value");
+      llvm37_unreachable("Invalid value");
     case 0:
       return ELF::STB_LOCAL;
     case 1:
@@ -95,7 +95,7 @@ void MCSymbolELF::setType(unsigned Type) const {
   unsigned Val;
   switch (Type) {
   default:
-    llvm_unreachable("Unsupported Binding");
+    llvm37_unreachable("Unsupported Binding");
   case ELF::STT_NOTYPE:
     Val = 0;
     break;
@@ -126,7 +126,7 @@ unsigned MCSymbolELF::getType() const {
   uint32_t Val = (getFlags() & (0x7 << ELF_STT_Shift)) >> ELF_STT_Shift;
   switch (Val) {
   default:
-    llvm_unreachable("Invalid value");
+    llvm37_unreachable("Invalid value");
   case 0:
     return ELF::STT_NOTYPE;
   case 1:

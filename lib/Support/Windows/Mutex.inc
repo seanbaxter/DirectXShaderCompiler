@@ -1,6 +1,6 @@
-//===- llvm/Support/Win32/Mutex.inc - Win32 Mutex Implementation -*- C++ -*-===//
+//===- llvm37/Support/Win32/Mutex.inc - Win32 Mutex Implementation -*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -17,9 +17,9 @@
 //===----------------------------------------------------------------------===//
 
 #include "WindowsSupport.h"
-#include "llvm/Support/Mutex.h"
+#include "llvm37/Support/Mutex.h"
 
-namespace llvm {
+namespace llvm37 {
 using namespace sys;
 
 MutexImpl::MutexImpl(bool /*recursive*/)

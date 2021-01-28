@@ -1,5 +1,5 @@
 =======================================
-LLVM's Optional Rich Disassembly Output
+LLVM37's Optional Rich Disassembly Output
 =======================================
 
 .. contents::
@@ -8,7 +8,7 @@ LLVM's Optional Rich Disassembly Output
 Introduction
 ============
 
-LLVM's default disassembly output is raw text. To allow consumers more ability
+LLVM37's default disassembly output is raw text. To allow consumers more ability
 to introspect the instructions' textual representation or to reformat for a more
 user friendly display there is an optional rich disassembly output.
 
@@ -23,14 +23,14 @@ mismatches between consumers and producers. That is, the syntax generally does
 not carry semantics beyond "this text has an annotation," so consumers can
 simply ignore annotations they do not understand or do not care about.
 
-After calling ``LLVMCreateDisasm()`` to create a disassembler context the
+After calling ``LLVM37CreateDisasm()`` to create a disassembler context the
 optional output is enable with this call:
 
 .. code-block:: c
 
-    LLVMSetDisasmOptions(DC, LLVMDisassembler_Option_UseMarkup);
+    LLVM37SetDisasmOptions(DC, LLVM37Disassembler_Option_UseMarkup);
 
-Then subsequent calls to ``LLVMDisasmInstruction()`` will return output strings
+Then subsequent calls to ``LLVM37DisasmInstruction()`` will return output strings
 with the marked up annotations.
 
 Instruction Annotations
@@ -82,5 +82,5 @@ C API Details
 
 The intended consumers of this information use the C API, therefore the new C
 API function for the disassembler will be added to provide an option to produce
-disassembled instructions with annotations, ``LLVMSetDisasmOptions()`` and the
-``LLVMDisassembler_Option_UseMarkup`` option (see above).
+disassembled instructions with annotations, ``LLVM37SetDisasmOptions()`` and the
+``LLVM37Disassembler_Option_UseMarkup`` option (see above).

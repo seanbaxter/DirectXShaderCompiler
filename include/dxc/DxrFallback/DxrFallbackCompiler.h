@@ -5,7 +5,7 @@
 #include <string>
 #include <vector>
 
-namespace llvm
+namespace llvm37
 {
   class CallInst;
   class Function;
@@ -50,7 +50,7 @@ public:
   // called by functions in shaderNames. Shader entry state IDs are still
   // returned only for those originally in shaderNames. findCalledShaders used 
   // for testing.
-  DxrFallbackCompiler(llvm::Module* mod, const std::vector<std::string>& shaderNames, unsigned maxAttributeSize, unsigned stackSizeInBytes, bool findCalledShaders = false);
+  DxrFallbackCompiler(llvm37::Module* mod, const std::vector<std::string>& shaderNames, unsigned maxAttributeSize, unsigned stackSizeInBytes, bool findCalledShaders = false);
 
   // 0 - no debug output
   // 1 - dump initial combined module, compiled module, and final linked module
@@ -64,12 +64,12 @@ public:
   void link(std::vector<int>& shaderEntryStateIds, std::vector<unsigned int> &shaderStackSizes, IntToFuncNameMap *pCachedMap);
   // TODO: Ideally we would run this after inlining everything at the end of compile.
   // Until we figure out to do this, we will call the function after the final link.
-  static void resizeStack(llvm::Function* F, unsigned stackSizeInBytes);
+  static void resizeStack(llvm37::Function* F, unsigned stackSizeInBytes);
 private:
-  typedef std::map<int, llvm::Function*> IntToFuncMap;
-  typedef std::map<std::string, llvm::Function*> StringToFuncMap;
+  typedef std::map<int, llvm37::Function*> IntToFuncMap;
+  typedef std::map<std::string, llvm37::Function*> StringToFuncMap;
 
-  llvm::Module* m_module = nullptr;
+  llvm37::Module* m_module = nullptr;
   const std::vector<std::string>& m_entryShaderNames;
   unsigned m_stackSizeInBytes = 0;
   unsigned m_maxAttributeSize = 0;
@@ -82,18 +82,18 @@ private:
   void linkRuntime();
   void lowerAnyHitControlFlowFuncs();
   void lowerReportHit();
-  void lowerTraceRay(llvm::Type* runtimeDataArgTy);
-  void createStateFunctions(IntToFuncMap& stateFunctionMap, std::vector<int>& shaderEntryStateIds, std::vector<unsigned int>& shaderStackSizes, int baseStateId, const std::vector<std::string>& shaderNames, llvm::Type* runtimeDataArgTy);
-  void createLaunchParams(llvm::Function* func);
-  void createStack(llvm::Function* func);
-  void createStateDispatch(llvm::Function* func, const IntToFuncMap& stateFunctionMap, llvm::Type* runtimeDataArgTy);
+  void lowerTraceRay(llvm37::Type* runtimeDataArgTy);
+  void createStateFunctions(IntToFuncMap& stateFunctionMap, std::vector<int>& shaderEntryStateIds, std::vector<unsigned int>& shaderStackSizes, int baseStateId, const std::vector<std::string>& shaderNames, llvm37::Type* runtimeDataArgTy);
+  void createLaunchParams(llvm37::Function* func);
+  void createStack(llvm37::Function* func);
+  void createStateDispatch(llvm37::Function* func, const IntToFuncMap& stateFunctionMap, llvm37::Type* runtimeDataArgTy);
   void lowerIntrinsics();
 
-  llvm::Type* getRuntimeDataArgType();
-  llvm::Function* createDispatchFunction(const IntToFuncMap &stateFunctionMap, llvm::Type* runtimeDataArgTy);
+  llvm37::Type* getRuntimeDataArgType();
+  llvm37::Function* createDispatchFunction(const IntToFuncMap &stateFunctionMap, llvm37::Type* runtimeDataArgTy);
 
   // These functions return calls only in shaders in m_shaderMap.
-  std::vector<llvm::CallInst*> getCallsInShadersToFunction(const std::string& funcName);
-  std::vector<llvm::CallInst*> getCallsInShadersToFunctionWithPrefix(const std::string& funcNamePrefix);
+  std::vector<llvm37::CallInst*> getCallsInShadersToFunction(const std::string& funcName);
+  std::vector<llvm37::CallInst*> getCallsInShadersToFunctionWithPrefix(const std::string& funcNamePrefix);
 
 };

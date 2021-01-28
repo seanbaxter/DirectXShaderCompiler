@@ -1,25 +1,25 @@
-//===- llvm/unittests/MDBuilderTest.cpp - MDBuilder unit tests ------------===//
+//===- llvm37/unittests/MDBuilderTest.cpp - MDBuilder unit tests ------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/IR/MDBuilder.h"
-#include "llvm/IR/IRBuilder.h"
-#include "llvm/IR/Metadata.h"
-#include "llvm/IR/Operator.h"
+#include "llvm37/IR/MDBuilder.h"
+#include "llvm37/IR/IRBuilder.h"
+#include "llvm37/IR/Metadata.h"
+#include "llvm37/IR/Operator.h"
 #include "gtest/gtest.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 namespace {
 
 class MDBuilderTest : public testing::Test {
 protected:
-  LLVMContext Context;
+  LLVM37Context Context;
 };
 
 TEST_F(MDBuilderTest, createString) {

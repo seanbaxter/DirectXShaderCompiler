@@ -1,4 +1,4 @@
-set(LLVM_LINK_COMPONENTS
+set(LLVM37_LINK_COMPONENTS
   Support
   )
 
@@ -43,7 +43,7 @@ set(ADTSources
   VariadicFunctionTest.cpp
  )
 
-add_llvm_unittest(ADTTests
+add_llvm37_unittest(ADTTests
   ${ADTSources}
   )
 

@@ -1,6 +1,6 @@
 //===- MetaRenamer.cpp - Rename everything with metasyntatic names --------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -13,16 +13,16 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Transforms/IPO.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/IR/DerivedTypes.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/Type.h"
-#include "llvm/IR/TypeFinder.h"
-#include "llvm/Pass.h"
-using namespace llvm;
+#include "llvm37/Transforms/IPO.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/IR/DerivedTypes.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/Type.h"
+#include "llvm37/IR/TypeFinder.h"
+#include "llvm37/Pass.h"
+using namespace llvm37;
 
 namespace {
 
@@ -140,6 +140,6 @@ INITIALIZE_PASS(MetaRenamer, "metarenamer",
 //
 // MetaRenamer - Rename everything with metasyntactic names.
 //
-ModulePass *llvm::createMetaRenamerPass() {
+ModulePass *llvm37::createMetaRenamerPass() {
   return new MetaRenamer();
 }

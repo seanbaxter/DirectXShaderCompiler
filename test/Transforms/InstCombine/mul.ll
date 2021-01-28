@@ -164,7 +164,7 @@ define i32 @test18(i32 %A, i32 %B) {
 ; CHECK-NEXT: ret i32 0
 }
 
-declare {i32, i1} @llvm.smul.with.overflow.i32(i32, i32)
+declare {i32, i1} @llvm37.smul.with.overflow.i32(i32, i32)
 declare void @use(i1)
 
 define i32 @test19(i32 %A, i32 %B) {
@@ -173,7 +173,7 @@ define i32 @test19(i32 %A, i32 %B) {
   %D = and i32 %B, 1
 
 ; It would be nice if we also started proving that this doesn't overflow.
-  %E = call {i32, i1} @llvm.smul.with.overflow.i32(i32 %C, i32 %D)
+  %E = call {i32, i1} @llvm37.smul.with.overflow.i32(i32 %C, i32 %D)
   %F = extractvalue {i32, i1} %E, 0
   %G = extractvalue {i32, i1} %E, 1
   call void @use(i1 %G)

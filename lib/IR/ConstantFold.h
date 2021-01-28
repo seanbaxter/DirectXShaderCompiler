@@ -1,13 +1,13 @@
 //===-- ConstantFolding.h - Internal Constant Folding Interface -*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 //
-// This file defines the (internal) constant folding interfaces for LLVM.  These
+// This file defines the (internal) constant folding interfaces for LLVM37.  These
 // interfaces are used by the ConstantExpr::get* methods to automatically fold
 // constants when possible.
 //
@@ -16,12 +16,12 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_LIB_IR_CONSTANTFOLD_H
-#define LLVM_LIB_IR_CONSTANTFOLD_H
+#ifndef LLVM37_LIB_IR_CONSTANTFOLD_H
+#define LLVM37_LIB_IR_CONSTANTFOLD_H
 
-#include "llvm/ADT/ArrayRef.h"
+#include "llvm37/ADT/ArrayRef.h"
 
-namespace llvm {
+namespace llvm37 {
   class Value;
   class Constant;
   class Type;
@@ -55,6 +55,6 @@ namespace llvm {
                                       ArrayRef<Constant *> Idxs);
   Constant *ConstantFoldGetElementPtr(Type *Ty, Constant *C, bool inBounds,
                                       ArrayRef<Value *> Idxs);
-} // End llvm namespace
+} // End llvm37 namespace
 
 #endif

@@ -13,15 +13,15 @@
 
 #include "dxc/DxilPIXPasses/DxilPIXPasses.h"
 #include "dxc/DxilPIXPasses/DxilPIXVirtualRegisters.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/InstIterator.h"
-#include "llvm/IR/Instruction.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/Metadata.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/LegacyPassManager.h"
-#include "llvm/PassRegistry.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/InstIterator.h"
+#include "llvm37/IR/Instruction.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/Metadata.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/LegacyPassManager.h"
+#include "llvm37/PassRegistry.h"
 
 #include "DxilDia.h"
 #include "DxilDiaEnumTables.h"
@@ -32,20 +32,20 @@
 #include "DxilDiaTableSymbols.h"
 
 void dxil_dia::Session::Init(
-    std::shared_ptr<llvm::LLVMContext> context,
-    std::shared_ptr<llvm::Module> mod,
-    std::shared_ptr<llvm::DebugInfoFinder> finder) {
+    std::shared_ptr<llvm37::LLVM37Context> context,
+    std::shared_ptr<llvm37::Module> mod,
+    std::shared_ptr<llvm37::DebugInfoFinder> finder) {
   m_pEnumTables = nullptr;
   m_module = mod;
   m_context = context;
   m_finder = finder;
-  m_dxilModule = llvm::make_unique<hlsl::DxilModule>(mod.get());
+  m_dxilModule = llvm37::make_unique<hlsl::DxilModule>(mod.get());
 
-  llvm::legacy::PassManager PM;
-  llvm::initializeDxilDbgValueToDbgDeclarePass(*llvm::PassRegistry::getPassRegistry());
-  llvm::initializeDxilAnnotateWithVirtualRegisterPass(*llvm::PassRegistry::getPassRegistry());
-  PM.add(llvm::createDxilDbgValueToDbgDeclarePass());
-  PM.add(llvm::createDxilAnnotateWithVirtualRegisterPass());
+  llvm37::legacy::PassManager PM;
+  llvm37::initializeDxilDbgValueToDbgDeclarePass(*llvm37::PassRegistry::getPassRegistry());
+  llvm37::initializeDxilAnnotateWithVirtualRegisterPass(*llvm37::PassRegistry::getPassRegistry());
+  PM.add(llvm37::createDxilDbgValueToDbgDeclarePass());
+  PM.add(llvm37::createDxilAnnotateWithVirtualRegisterPass());
   PM.run(*m_module);
 
   // Extract HLSL metadata.
@@ -74,16 +74,16 @@ void dxil_dia::Session::Init(
 
   // Build up a linear list of instructions. The index will be used as the
   // RVA.
-  for (llvm::Function &fn : m_module->functions()) {
-    for (llvm::inst_iterator it = inst_begin(fn), end = inst_end(fn); it != end; ++it) {
-      llvm::Instruction &i = *it;
+  for (llvm37::Function &fn : m_module->functions()) {
+    for (llvm37::inst_iterator it = inst_begin(fn), end = inst_end(fn); it != end; ++it) {
+      llvm37::Instruction &i = *it;
       RVA rva;
       if (!pix_dxil::PixDxilInstNum::FromInst(&i, &rva)) {
         continue;
       }
       m_rvaMap.insert({ &i, rva });
       m_instructions.insert({ rva, &i});
-      if (llvm::DebugLoc DL = i.getDebugLoc()) {
+      if (llvm37::DebugLoc DL = i.getDebugLoc()) {
         auto result = m_lineToInfoMap.emplace(DL.getLine(), LineInfo(DL.getCol(), rva, rva + 1));
         if (!result.second) {
           result.first->second.StartCol = std::min(result.first->second.StartCol, DL.getCol());
@@ -109,12 +109,12 @@ void dxil_dia::Session::Init(
 }
 
 HRESULT dxil_dia::Session::getSourceFileIdByName(
-    llvm::StringRef fileName,
+    llvm37::StringRef fileName,
     DWORD *pRetVal) {
   if (Contents() != nullptr) {
     for (unsigned i = 0; i < Contents()->getNumOperands(); ++i) {
-      llvm::StringRef fn =
-        llvm::dyn_cast<llvm::MDString>(Contents()->getOperand(i)->getOperand(0))
+      llvm37::StringRef fn =
+        llvm37::dyn_cast<llvm37::MDString>(Contents()->getOperand(i)->getOperand(0))
         ->getString();
       if (fn.equals(fileName)) {
         *pRetVal = i;
@@ -235,7 +235,7 @@ static HRESULT DxcDiaFindLineNumbersByRVA(
   if (!ppResult)
     return E_POINTER;
 
-  std::vector<const llvm::Instruction*> instructions;
+  std::vector<const llvm37::Instruction*> instructions;
   auto &allInstructions = pSession->InstructionsRef();
 
   // Gather the list of insructions that map to the given rva range.
@@ -245,7 +245,7 @@ static HRESULT DxcDiaFindLineNumbersByRVA(
       return E_INVALIDARG;
 
     // Only include the instruction if it has debug info for line mappings.
-    const llvm::Instruction *inst = It->second;
+    const llvm37::Instruction *inst = It->second;
     if (inst->getDebugLoc())
       instructions.push_back(inst);
   }
@@ -310,7 +310,7 @@ STDMETHODIMP dxil_dia::Session::findLinesByLinenum(
     HRESULT hr;
     CComPtr<IDiaLineNumber> line;
     ULONG cnt;
-    std::vector<const llvm::Instruction *> lines;
+    std::vector<const llvm37::Instruction *> lines;
 
     std::function<bool(DWORD, DWORD)>column_matches = [column](DWORD colStart, DWORD colEnd) -> bool {
         return true;

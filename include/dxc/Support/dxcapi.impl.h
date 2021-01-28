@@ -14,11 +14,11 @@
 
 #include "dxc/dxcapi.h"
 #include "dxc/Support/microcom.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/ADT/ArrayRef.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/ADT/ArrayRef.h"
 
 // Simple adaptor for IStream. Can probably do better.
-class raw_stream_ostream : public llvm::raw_ostream {
+class raw_stream_ostream : public llvm37::raw_ostream {
 private:
   CComPtr<hlsl::AbstractMemoryStream> m_pStream;
   void write_impl(const char *Ptr, size_t Size) override {
@@ -187,7 +187,7 @@ struct DxcOutputObject {
     IFR(TranslateUtf8StringForOutput(pName, strlen(pName) + 1, DXC_CP_UTF16, &pBlobEncoding));
     return pBlobEncoding->QueryInterface(&name);
   }
-  HRESULT SetName(_In_opt_z_ llvm::StringRef Name) {
+  HRESULT SetName(_In_opt_z_ llvm37::StringRef Name) {
     DXASSERT_NOMSG(!name);
     if (Name.empty())
       return S_OK;
@@ -359,7 +359,7 @@ public:
     }
   }
 
-  void SetOutputs(const llvm::ArrayRef<DxcExtraOutputObject> outputs) {
+  void SetOutputs(const llvm37::ArrayRef<DxcExtraOutputObject> outputs) {
     Clear();
 
     m_uCount = outputs.size();
@@ -560,7 +560,7 @@ public:
     return S_OK;
   }
 
-  HRESULT SetOutputs(const llvm::ArrayRef<DxcOutputObject> outputs) {
+  HRESULT SetOutputs(const llvm37::ArrayRef<DxcOutputObject> outputs) {
     for (unsigned i = 0; i < outputs.size(); i++) {
       const DxcOutputObject &output = outputs.data()[i];
       // Skip if DXC_OUT_NONE or no object to store
@@ -587,7 +587,7 @@ public:
 
   // All-in-one initialization
   HRESULT Init(_In_ HRESULT status, _In_ DXC_OUT_KIND resultType,
-               const llvm::ArrayRef<DxcOutputObject> outputs) {
+               const llvm37::ArrayRef<DxcOutputObject> outputs) {
     m_status = status;
     m_resultType = resultType;
     return SetOutputs(outputs);
@@ -603,18 +603,18 @@ public:
     CComPtr<DxcResult> result =
       DxcResult::Alloc(DxcGetThreadMallocNoRef());
     IFROOM(result.p);
-    IFR(result->Init(status, resultType, llvm::ArrayRef<DxcOutputObject>(pOutputs, numOutputs)));
+    IFR(result->Init(status, resultType, llvm37::ArrayRef<DxcOutputObject>(pOutputs, numOutputs)));
     *ppResult = result.Detach();
     return S_OK;
   }
   static HRESULT Create(_In_ HRESULT status, _In_ DXC_OUT_KIND resultType,
-                        const llvm::ArrayRef<DxcOutputObject> outputs,
+                        const llvm37::ArrayRef<DxcOutputObject> outputs,
                         _COM_Outptr_ IDxcResult **ppResult) {
     return Create(status, resultType, outputs.data(), outputs.size(), ppResult);
   }
   // For convenient use in legacy interface implementations
   static HRESULT Create(_In_ HRESULT status, _In_ DXC_OUT_KIND resultType,
-                        const llvm::ArrayRef<DxcOutputObject> outputs,
+                        const llvm37::ArrayRef<DxcOutputObject> outputs,
                         _COM_Outptr_ IDxcOperationResult **ppResult) {
     IDxcResult *pResult;
     IFR(Create(status, resultType, outputs.data(), outputs.size(), &pResult));

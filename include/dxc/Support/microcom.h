@@ -13,7 +13,7 @@
 #define __DXC_MICROCOM__
 
 #include <atomic>
-#include "llvm/Support/Atomic.h"
+#include "llvm37/Support/Atomic.h"
 
 template <typename TIface>
 class CComInterfaceArray {
@@ -77,7 +77,7 @@ public:
 };
 
 #define DXC_MICROCOM_REF_FIELD(m_dwRef)                                        \
-  volatile std::atomic<llvm::sys::cas_flag> m_dwRef = {0};
+  volatile std::atomic<llvm37::sys::cas_flag> m_dwRef = {0};
 #define DXC_MICROCOM_ADDREF_IMPL(m_dwRef)                                      \
   ULONG STDMETHODCALLTYPE AddRef() override {                                  \
     return (ULONG)++m_dwRef;                                                   \
@@ -107,7 +107,7 @@ void DxcCallDestructor(T *obj) {
 // The "TM" version keep an IMalloc field that, if not null, indicate
 // ownership of 'this' and of any allocations used during release.
 #define DXC_MICROCOM_TM_REF_FIELDS()                                           \
-  volatile std::atomic<llvm::sys::cas_flag> m_dwRef = {0};                     \
+  volatile std::atomic<llvm37::sys::cas_flag> m_dwRef = {0};                     \
   CComPtr<IMalloc> m_pMalloc;
 
 #define DXC_MICROCOM_TM_ADDREF_RELEASE_IMPL()                                  \

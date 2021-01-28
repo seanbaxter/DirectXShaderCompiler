@@ -1,12 +1,12 @@
 //===-- TypeProbe.h - Static functions for probing QualType -----*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //===----------------------------------------------------------------------===//
-#ifndef LLVM_CLANG_SPIRV_TYPEPROBE_H
-#define LLVM_CLANG_SPIRV_TYPEPROBE_H
+#ifndef LLVM37_CLANG_SPIRV_TYPEPROBE_H
+#define LLVM37_CLANG_SPIRV_TYPEPROBE_H
 
 #include <string>
 
@@ -170,7 +170,7 @@ bool isLitTypeOrVecOfLitType(QualType type);
 /// desugared one. If isRowMajor is not nullptr, and a 'row_major' or
 /// 'column-major' attribute is found during desugaring, this information is
 /// written to *isRowMajor.
-QualType desugarType(QualType type, llvm::Optional<bool> *isRowMajor);
+QualType desugarType(QualType type, llvm37::Optional<bool> *isRowMajor);
 
 /// Returns true if type is a SPIR-V row-major matrix or array of matrices.
 /// Returns false if type is a SPIR-V col-major matrix or array of matrices.
@@ -350,4 +350,4 @@ bool isScalarOrNonStructAggregateOfNumericalTypes(QualType type);
 } // namespace spirv
 } // namespace clang
 
-#endif // LLVM_CLANG_SPIRV_TYPEPROBE_H
+#endif // LLVM37_CLANG_SPIRV_TYPEPROBE_H

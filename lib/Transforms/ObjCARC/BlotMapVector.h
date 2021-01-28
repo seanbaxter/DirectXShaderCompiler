@@ -1,17 +1,17 @@
 //===- BlotMapVector.h - A MapVector with the blot operation -*- C++ -*----===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/ADT/DenseMap.h"
+#include "llvm37/ADT/DenseMap.h"
 #include <vector>
 #include <algorithm>
 
-namespace llvm {
+namespace llvm37 {
 /// \brief An associative container with fast insertion-order (deterministic)
 /// iteration over its elements. Plus the special blot operation.
 template <class KeyT, class ValueT> class BlotMapVector {

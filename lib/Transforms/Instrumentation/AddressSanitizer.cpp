@@ -1,6 +1,6 @@
 //===-- AddressSanitizer.cpp - memory error detector ------------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -13,52 +13,52 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Transforms/Instrumentation.h"
-#include "llvm/ADT/ArrayRef.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/DenseSet.h"
-#include "llvm/ADT/DepthFirstIterator.h"
-#include "llvm/ADT/SmallSet.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/ADT/StringExtras.h"
-#include "llvm/ADT/Triple.h"
-#include "llvm/Analysis/MemoryBuiltins.h"
-#include "llvm/Analysis/TargetLibraryInfo.h"
-#include "llvm/Analysis/ValueTracking.h"
-#include "llvm/IR/CallSite.h"
-#include "llvm/IR/DIBuilder.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/Dominators.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/IRBuilder.h"
-#include "llvm/IR/InlineAsm.h"
-#include "llvm/IR/InstVisitor.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/MDBuilder.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/Type.h"
-#include "llvm/MC/MCSectionMachO.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/DataTypes.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/Endian.h"
-#include "llvm/Support/SwapByteOrder.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Transforms/Scalar.h"
-#include "llvm/Transforms/Utils/ASanStackFrameLayout.h"
-#include "llvm/Transforms/Utils/BasicBlockUtils.h"
-#include "llvm/Transforms/Utils/Cloning.h"
-#include "llvm/Transforms/Utils/Local.h"
-#include "llvm/Transforms/Utils/ModuleUtils.h"
-#include "llvm/Transforms/Utils/PromoteMemToReg.h"
+#include "llvm37/Transforms/Instrumentation.h"
+#include "llvm37/ADT/ArrayRef.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/DenseSet.h"
+#include "llvm37/ADT/DepthFirstIterator.h"
+#include "llvm37/ADT/SmallSet.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/ADT/StringExtras.h"
+#include "llvm37/ADT/Triple.h"
+#include "llvm37/Analysis/MemoryBuiltins.h"
+#include "llvm37/Analysis/TargetLibraryInfo.h"
+#include "llvm37/Analysis/ValueTracking.h"
+#include "llvm37/IR/CallSite.h"
+#include "llvm37/IR/DIBuilder.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/IR/Dominators.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/IRBuilder.h"
+#include "llvm37/IR/InlineAsm.h"
+#include "llvm37/IR/InstVisitor.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/MDBuilder.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/Type.h"
+#include "llvm37/MC/MCSectionMachO.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/DataTypes.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/Endian.h"
+#include "llvm37/Support/SwapByteOrder.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Transforms/Scalar.h"
+#include "llvm37/Transforms/Utils/ASanStackFrameLayout.h"
+#include "llvm37/Transforms/Utils/BasicBlockUtils.h"
+#include "llvm37/Transforms/Utils/Cloning.h"
+#include "llvm37/Transforms/Utils/Local.h"
+#include "llvm37/Transforms/Utils/ModuleUtils.h"
+#include "llvm37/Transforms/Utils/PromoteMemToReg.h"
 #include <algorithm>
 #include <string>
 #include <system_error>
 
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "asan"
 
@@ -137,7 +137,7 @@ static cl::opt<bool> ClAlwaysSlowPath(
     cl::init(false));
 // This flag limits the number of instructions to be instrumented
 // in any given BB. Normally, this should be set to unlimited (INT_MAX),
-// but due to http://llvm.org/bugs/show_bug.cgi?id=12652 we temporary
+// but due to http://llvm37.org/bugs/show_bug.cgi?id=12652 we temporary
 // set it to 10000.
 static cl::opt<int> ClMaxInsnsToInstrumentPerBB(
     "asan-max-ins-per-bb", cl::init(10000),
@@ -206,7 +206,7 @@ static cl::opt<bool> ClOptStack(
 
 static cl::opt<bool> ClCheckLifetime(
     "asan-check-lifetime",
-    cl::desc("Use llvm.lifetime intrinsics to insert extra checks"), cl::Hidden,
+    cl::desc("Use llvm37.lifetime intrinsics to insert extra checks"), cl::Hidden,
     cl::init(false));
 
 static cl::opt<bool> ClDynamicAllocaStack(
@@ -321,18 +321,18 @@ struct ShadowMapping {
 
 static ShadowMapping getShadowMapping(Triple &TargetTriple, int LongSize,
                                       bool IsKasan) {
-  bool IsAndroid = TargetTriple.getEnvironment() == llvm::Triple::Android;
+  bool IsAndroid = TargetTriple.getEnvironment() == llvm37::Triple::Android;
   bool IsIOS = TargetTriple.isiOS();
   bool IsFreeBSD = TargetTriple.isOSFreeBSD();
   bool IsLinux = TargetTriple.isOSLinux();
-  bool IsPPC64 = TargetTriple.getArch() == llvm::Triple::ppc64 ||
-                 TargetTriple.getArch() == llvm::Triple::ppc64le;
-  bool IsX86_64 = TargetTriple.getArch() == llvm::Triple::x86_64;
-  bool IsMIPS32 = TargetTriple.getArch() == llvm::Triple::mips ||
-                  TargetTriple.getArch() == llvm::Triple::mipsel;
-  bool IsMIPS64 = TargetTriple.getArch() == llvm::Triple::mips64 ||
-                  TargetTriple.getArch() == llvm::Triple::mips64el;
-  bool IsAArch64 = TargetTriple.getArch() == llvm::Triple::aarch64;
+  bool IsPPC64 = TargetTriple.getArch() == llvm37::Triple::ppc64 ||
+                 TargetTriple.getArch() == llvm37::Triple::ppc64le;
+  bool IsX86_64 = TargetTriple.getArch() == llvm37::Triple::x86_64;
+  bool IsMIPS32 = TargetTriple.getArch() == llvm37::Triple::mips ||
+                  TargetTriple.getArch() == llvm37::Triple::mipsel;
+  bool IsMIPS64 = TargetTriple.getArch() == llvm37::Triple::mips64 ||
+                  TargetTriple.getArch() == llvm37::Triple::mips64el;
+  bool IsAArch64 = TargetTriple.getArch() == llvm37::Triple::aarch64;
   bool IsWindows = TargetTriple.isOSWindows();
 
   ShadowMapping Mapping;
@@ -450,7 +450,7 @@ struct AddressSanitizer : public FunctionPass {
   bool isSafeAccess(ObjectSizeOffsetVisitor &ObjSizeVis, Value *Addr,
                     uint64_t TypeSize) const;
 
-  LLVMContext *C;
+  LLVM37Context *C;
   Triple TargetTriple;
   int LongSize;
   bool CompileKernel;
@@ -497,7 +497,7 @@ class AddressSanitizerModule : public ModulePass {
   GlobalsMetadata GlobalsMD;
   bool CompileKernel;
   Type *IntptrTy;
-  LLVMContext *C;
+  LLVM37Context *C;
   Triple TargetTriple;
   ShadowMapping Mapping;
   Function *AsanPoisonGlobals;
@@ -514,12 +514,12 @@ class AddressSanitizerModule : public ModulePass {
 // actual function which catches the exception. Most likely because the
 // compiler hoists the load of the shadow value somewhere too high.
 // This causes asan to report a non-existing bug on 453.povray.
-// It sounds like an LLVM bug.
+// It sounds like an LLVM37 bug.
 struct FunctionStackPoisoner : public InstVisitor<FunctionStackPoisoner> {
   Function &F;
   AddressSanitizer &ASan;
   DIBuilder DIB;
-  LLVMContext *C;
+  LLVM37Context *C;
   Type *IntptrTy;
   Type *IntptrPtrTy;
   ShadowMapping Mapping;
@@ -652,7 +652,7 @@ struct FunctionStackPoisoner : public InstVisitor<FunctionStackPoisoner> {
     if (SizeValue == ~0ULL ||
         !ConstantInt::isValueValidForType(IntptrTy, SizeValue))
       return;
-    // Find alloca instruction that corresponds to llvm.lifetime argument.
+    // Find alloca instruction that corresponds to llvm37.lifetime argument.
     AllocaInst *AI = findAllocaForValue(II.getArgOperand(1));
     if (!AI) return;
     bool DoPoison = (ID == Intrinsic::lifetime_end);
@@ -701,7 +701,7 @@ INITIALIZE_PASS_END(
     AddressSanitizer, "asan",
     "AddressSanitizer: detects use-after-free and out-of-bounds bugs.", false,
     false)
-FunctionPass *llvm::createAddressSanitizerFunctionPass(bool CompileKernel) {
+FunctionPass *llvm37::createAddressSanitizerFunctionPass(bool CompileKernel) {
   return new AddressSanitizer(CompileKernel);
 }
 
@@ -711,7 +711,7 @@ INITIALIZE_PASS(
     "AddressSanitizer: detects use-after-free and out-of-bounds bugs."
     "ModulePass",
     false, false)
-ModulePass *llvm::createAddressSanitizerModulePass(bool CompileKernel) {
+ModulePass *llvm37::createAddressSanitizerModulePass(bool CompileKernel) {
   return new AddressSanitizerModule(CompileKernel);
 }
 
@@ -1142,10 +1142,10 @@ bool AddressSanitizerModule::ShouldInstrumentGlobal(GlobalVariable *G) {
   if (G->hasSection()) {
     StringRef Section(G->getSection());
 
-    // Globals from llvm.metadata aren't emitted, do not instrument them.
+    // Globals from llvm37.metadata aren't emitted, do not instrument them.
     if (Section == "llvm.metadata") return false;
-    // Do not instrument globals from special LLVM sections.
-    if (Section.find("__llvm") != StringRef::npos) return false;
+    // Do not instrument globals from special LLVM37 sections.
+    if (Section.find("__llvm37") != StringRef::npos) return false;
 
     // Callbacks put into the CRT initializer/terminator sections
     // should not be instrumented.
@@ -1220,7 +1220,7 @@ void AddressSanitizerModule::initializeCallbacks(Module &M) {
 
 // This function replaces all global variables with new variables that have
 // trailing redzones. It also creates a function that poisons
-// redzones and inserts this function into llvm.global_ctors.
+// redzones and inserts this function into llvm37.global_ctors.
 bool AddressSanitizerModule::InstrumentGlobals(IRBuilder<> &IRB, Module &M) {
   GlobalsMD.init(M);
 
@@ -1652,7 +1652,7 @@ static int StackMallocSizeClass(_In_range_(0, kMaxAsanStackMallocSizeClass) uint
   uint64_t MaxSize = kMinStackMallocSize;
   for (int i = 0;; i++, MaxSize *= 2)
     if (LocalStackSize <= MaxSize) return i;
-  llvm_unreachable("impossible LocalStackSize");
+  llvm37_unreachable("impossible LocalStackSize");
 }
 
 // Set Size bytes starting from ShadowBase to kAsanStackAfterReturnMagic.
@@ -1897,7 +1897,7 @@ void FunctionStackPoisoner::poisonStack() {
       IRBuilder<> IRBElse(ElseTerm);
       poisonRedZones(L.ShadowBytes, IRBElse, ShadowBase, false);
     } else if (HavePoisonedAllocas) {
-      // If we poisoned some allocas in llvm.lifetime analysis,
+      // If we poisoned some allocas in llvm37.lifetime analysis,
       // unpoison whole stack frame now.
       poisonAlloca(LocalStackBase, LocalStackSize, IRBRet, false);
     } else {
@@ -1919,11 +1919,11 @@ void FunctionStackPoisoner::poisonAlloca(Value *V, uint64_t Size,
       {AddrArg, SizeArg});
 }
 
-// Handling llvm.lifetime intrinsics for a given %alloca:
-// (1) collect all llvm.lifetime.xxx(%size, %value) describing the alloca.
-// (2) if %size is constant, poison memory for llvm.lifetime.end (to detect
-//     invalid accesses) and unpoison it for llvm.lifetime.start (the memory
-//     could be poisoned by previous llvm.lifetime.end instruction, as the
+// Handling llvm37.lifetime intrinsics for a given %alloca:
+// (1) collect all llvm37.lifetime.xxx(%size, %value) describing the alloca.
+// (2) if %size is constant, poison memory for llvm37.lifetime.end (to detect
+//     invalid accesses) and unpoison it for llvm37.lifetime.start (the memory
+//     could be poisoned by previous llvm37.lifetime.end instruction, as the
 //     variable may go in and out of scope several times, e.g. in loops).
 // (3) if we poisoned at least one %alloca in a function,
 //     unpoison the whole stack frame at function exit.

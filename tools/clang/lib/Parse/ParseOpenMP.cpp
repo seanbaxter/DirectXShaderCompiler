@@ -1,6 +1,6 @@
 //===--- ParseOpenMP.cpp - OpenMP directives parsing ----------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -18,7 +18,7 @@
 #include "clang/Parse/ParseDiagnostic.h"
 #include "clang/Parse/Parser.h"
 #include "clang/Sema/Scope.h"
-#include "llvm/ADT/PointerIntPair.h"
+#include "llvm37/ADT/PointerIntPair.h"
 using namespace clang;
 
 //===----------------------------------------------------------------------===//
@@ -42,7 +42,7 @@ static OpenMPDirectiveKind ParseOpenMPDirectiveKind(Parser &P) {
           ? OMPD_unknown
           : getOpenMPDirectiveKind(P.getPreprocessor().getSpelling(Tok));
   bool TokenMatched = false;
-  for (unsigned i = 0; i < llvm::array_lengthof(F); ++i) {
+  for (unsigned i = 0; i < llvm37::array_lengthof(F); ++i) {
     if (!Tok.isAnnotation() && DKind == OMPD_unknown) {
       TokenMatched =
           (i == 0) &&
@@ -156,7 +156,7 @@ Parser::ParseOpenMPDeclarativeOrExecutableDirective(bool StandAloneAllowed) {
   ParenBraceBracketBalancer BalancerRAIIObj(*this);
   SmallVector<Expr *, 5> Identifiers;
   SmallVector<OMPClause *, 5> Clauses;
-  SmallVector<llvm::PointerIntPair<OMPClause *, 1, bool>, OMPC_unknown + 1>
+  SmallVector<llvm37::PointerIntPair<OMPClause *, 1, bool>, OMPC_unknown + 1>
   FirstClauses(OMPC_unknown + 1);
   unsigned ScopeFlags =
       Scope::FnScope | Scope::DeclScope | Scope::OpenMPDirectiveScope;

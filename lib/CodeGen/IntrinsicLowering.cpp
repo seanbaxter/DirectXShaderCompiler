@@ -1,6 +1,6 @@
 //===-- IntrinsicLowering.cpp - Intrinsic Lowering default implementation -===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,18 +11,18 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/CodeGen/IntrinsicLowering.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/IR/CallSite.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/DerivedTypes.h"
-#include "llvm/IR/IRBuilder.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/Type.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/raw_ostream.h"
-using namespace llvm;
+#include "llvm37/CodeGen/IntrinsicLowering.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/IR/CallSite.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/IR/DerivedTypes.h"
+#include "llvm37/IR/IRBuilder.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/Type.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/raw_ostream.h"
+using namespace llvm37;
 
 template <class ArgIt>
 static void EnsureFunctionExists(Module &M, const char *Name,
@@ -93,7 +93,7 @@ static CallInst *ReplaceCallWith(const char *NewFn, CallInst *CI,
 #endif
 
 void IntrinsicLowering::AddPrototypes(Module &M) {
-  LLVMContext &Context = M.getContext();
+  LLVM37Context &Context = M.getContext();
   for (Module::iterator I = M.begin(), E = M.end(); I != E; ++I)
     if (I->isDeclaration() && !I->use_empty())
       switch (I->getIntrinsicID()) {
@@ -163,7 +163,7 @@ void IntrinsicLowering::AddPrototypes(Module &M) {
 
 /// LowerBSWAP - Emit the code to lower bswap of V before the specified
 /// instruction IP.
-static Value *LowerBSWAP(LLVMContext &Context, Value *V, Instruction *IP) {
+static Value *LowerBSWAP(LLVM37Context &Context, Value *V, Instruction *IP) {
   assert(V->getType()->isIntegerTy() && "Can't bswap a non-integer type!");
 
   unsigned BitSize = V->getType()->getPrimitiveSizeInBits();
@@ -171,7 +171,7 @@ static Value *LowerBSWAP(LLVMContext &Context, Value *V, Instruction *IP) {
   IRBuilder<> Builder(IP->getParent(), IP);
 
   switch(BitSize) {
-  default: llvm_unreachable("Unhandled type size of value to byteswap!");
+  default: llvm37_unreachable("Unhandled type size of value to byteswap!");
   case 16: {
     Value *Tmp1 = Builder.CreateShl(V, ConstantInt::get(V->getType(), 8),
                                     "bswap.2");
@@ -259,7 +259,7 @@ static Value *LowerBSWAP(LLVMContext &Context, Value *V, Instruction *IP) {
 
 /// LowerCTPOP - Emit the code to lower ctpop of V before the specified
 /// instruction IP.
-static Value *LowerCTPOP(LLVMContext &Context, Value *V, Instruction *IP) {
+static Value *LowerCTPOP(LLVM37Context &Context, Value *V, Instruction *IP) {
   assert(V->getType()->isIntegerTy() && "Can't ctpop a non-integer type!");
 
   static const uint64_t MaskValues[6] = {
@@ -299,7 +299,7 @@ static Value *LowerCTPOP(LLVMContext &Context, Value *V, Instruction *IP) {
 
 /// LowerCTLZ - Emit the code to lower ctlz of V before the specified
 /// instruction IP.
-static Value *LowerCTLZ(LLVMContext &Context, Value *V, Instruction *IP) {
+static Value *LowerCTLZ(LLVM37Context &Context, Value *V, Instruction *IP) {
 
   IRBuilder<> Builder(IP->getParent(), IP);
 
@@ -319,7 +319,7 @@ static void ReplaceFPIntrinsicWithCall(CallInst *CI, const char *Fname,
                                        const char *LDname) {
   CallSite CS(CI);
   switch (CI->getArgOperand(0)->getType()->getTypeID()) {
-  default: llvm_unreachable("Invalid type in intrinsic");
+  default: llvm37_unreachable("Invalid type in intrinsic");
   case Type::FloatTyID:
     ReplaceCallWith(Fname, CI, CS.arg_begin(), CS.arg_end(),
                   Type::getFloatTy(CI->getContext()));
@@ -339,7 +339,7 @@ static void ReplaceFPIntrinsicWithCall(CallInst *CI, const char *Fname,
 
 void IntrinsicLowering::LowerIntrinsicCall(CallInst *CI) {
   IRBuilder<> Builder(CI->getParent(), CI);
-  LLVMContext &Context = CI->getContext();
+  LLVM37Context &Context = CI->getContext();
 
   const Function *Callee = CI->getCalledFunction();
   assert(Callee && "Cannot lower an indirect call!");
@@ -415,7 +415,7 @@ void IntrinsicLowering::LowerIntrinsicCall(CallInst *CI) {
   case Intrinsic::stacksave:
   case Intrinsic::stackrestore: {
     if (!Warned)
-      errs() << "WARNING: this target does not support the llvm.stack"
+      errs() << "WARNING: this target does not support the llvm37.stack"
              << (Callee->getIntrinsicID() == Intrinsic::stacksave ?
                "save" : "restore") << " intrinsic.\n";
     Warned = true;
@@ -426,7 +426,7 @@ void IntrinsicLowering::LowerIntrinsicCall(CallInst *CI) {
     
   case Intrinsic::returnaddress:
   case Intrinsic::frameaddress:
-    errs() << "WARNING: this target does not support the llvm."
+    errs() << "WARNING: this target does not support the llvm37."
            << (Callee->getIntrinsicID() == Intrinsic::returnaddress ?
              "return" : "frame") << "address intrinsic.\n";
     CI->replaceAllUsesWith(ConstantPointerNull::get(
@@ -439,7 +439,7 @@ void IntrinsicLowering::LowerIntrinsicCall(CallInst *CI) {
   case Intrinsic::pcmarker:
     break;    // Simply strip out pcmarker on unsupported architectures
   case Intrinsic::readcyclecounter: {
-    errs() << "WARNING: this target does not support the llvm.readcyclecoun"
+    errs() << "WARNING: this target does not support the llvm37.readcyclecoun"
            << "ter intrinsic.  It is being lowered to a constant 0\n";
     CI->replaceAllUsesWith(ConstantInt::get(Type::getInt64Ty(Context), 0));
     break;

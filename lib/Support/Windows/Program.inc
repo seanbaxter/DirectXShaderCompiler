@@ -1,6 +1,6 @@
 //===- Win32/Program.cpp - Win32 Program Implementation ------- -*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -12,12 +12,12 @@
 //===----------------------------------------------------------------------===//
 
 #include "WindowsSupport.h"
-#include "llvm/ADT/StringExtras.h"
-#include "llvm/Support/ConvertUTF.h"
-#include "llvm/Support/Errc.h"
-#include "llvm/Support/FileSystem.h"
-#include "llvm/Support/WindowsError.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/StringExtras.h"
+#include "llvm37/Support/ConvertUTF.h"
+#include "llvm37/Support/Errc.h"
+#include "llvm37/Support/FileSystem.h"
+#include "llvm37/Support/WindowsError.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <cstdio>
 #include <fcntl.h>
 #include <io.h>
@@ -28,7 +28,7 @@
 //===          and must not be UNIX code
 //===----------------------------------------------------------------------===//
 
-namespace llvm {
+namespace llvm37 {
 using namespace sys;
 
 ProcessInfo::ProcessInfo() : ProcessHandle(0), Pid(0), ReturnCode(0) {}
@@ -403,7 +403,7 @@ static bool Execute(ProcessInfo &PI, StringRef Program, const char **args,
   return true;
 }
 
-namespace llvm {
+namespace llvm37 {
 ProcessInfo sys::Wait(const ProcessInfo &PI, unsigned SecondsToWait,
                       bool WaitUntilChildTerminates, std::string *ErrMsg) {
   assert(PI.Pid && "invalid pid to wait on, process not started?");
@@ -488,10 +488,10 @@ std::error_code sys::ChangeStdoutToBinary() {
 }
 
 std::error_code
-llvm::sys::writeFileWithEncoding(StringRef FileName, StringRef Contents,
+llvm37::sys::writeFileWithEncoding(StringRef FileName, StringRef Contents,
                                  WindowsEncodingMethod Encoding) {
   std::error_code EC;
-  llvm::raw_fd_ostream OS(FileName, EC, llvm::sys::fs::OpenFlags::F_Text);
+  llvm37::raw_fd_ostream OS(FileName, EC, llvm37::sys::fs::OpenFlags::F_Text);
   if (EC)
     return EC;
 
@@ -522,7 +522,7 @@ llvm::sys::writeFileWithEncoding(StringRef FileName, StringRef Contents,
     OS.write(BOM, 2);
     OS.write((char *)ArgsUTF16.data(), ArgsUTF16.size() << 1);
   } else {
-    llvm_unreachable("Unknown encoding");
+    llvm37_unreachable("Unknown encoding");
   }
 
   if (OS.has_error())
@@ -533,7 +533,7 @@ llvm::sys::writeFileWithEncoding(StringRef FileName, StringRef Contents,
 
 #ifdef MSFT_SUPPORTS_CHILD_PROCESSES  // HLSL Change
 
-bool llvm::sys::argumentsFitWithinSystemLimits(ArrayRef<const char*> Args) {
+bool llvm37::sys::argumentsFitWithinSystemLimits(ArrayRef<const char*> Args) {
   // The documented max length of the command line passed to CreateProcess.
   static const size_t MaxCommandStringLength = 32768;
   size_t ArgLength = 0;

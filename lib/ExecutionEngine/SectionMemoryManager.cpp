@@ -1,6 +1,6 @@
 //===- SectionMemoryManager.cpp - Memory manager for MCJIT/RtDyld *- C++ -*-==//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -12,11 +12,11 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Config/config.h"
-#include "llvm/ExecutionEngine/SectionMemoryManager.h"
-#include "llvm/Support/MathExtras.h"
+#include "llvm37/Config/config.h"
+#include "llvm37/ExecutionEngine/SectionMemoryManager.h"
+#include "llvm37/Support/MathExtras.h"
 
-namespace llvm {
+namespace llvm37 {
 
 uint8_t *SectionMemoryManager::allocateDataSection(uintptr_t Size,
                                                    unsigned Alignment,
@@ -174,5 +174,5 @@ SectionMemoryManager::~SectionMemoryManager() {
     sys::Memory::releaseMappedMemory(RODataMem.AllocatedMem[i]);
 }
 
-} // namespace llvm
+} // namespace llvm37
 

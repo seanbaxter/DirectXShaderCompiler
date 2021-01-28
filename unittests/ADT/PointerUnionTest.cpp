@@ -1,6 +1,6 @@
-//===- llvm/unittest/ADT/PointerUnionTest.cpp - Optional unit tests -------===//
+//===- llvm37/unittest/ADT/PointerUnionTest.cpp - Optional unit tests -------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -8,8 +8,8 @@
 //===----------------------------------------------------------------------===//
 
 #include "gtest/gtest.h"
-#include "llvm/ADT/PointerUnion.h"
-using namespace llvm;
+#include "llvm37/ADT/PointerUnion.h"
+using namespace llvm37;
 
 namespace {
 

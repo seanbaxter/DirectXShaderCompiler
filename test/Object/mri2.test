@@ -3,5 +3,5 @@
 ; RUN: echo save >> %t.mri
 ; RUN: echo end >> %t.mri
 
-; RUN: not llvm-ar -M  < %t.mri 2>&1 | FileCheck %s
+; RUN: not llvm37-ar -M  < %t.mri 2>&1 | FileCheck %s
 ; CHECK: Editing multiple archives not supported

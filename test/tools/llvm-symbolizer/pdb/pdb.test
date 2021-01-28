@@ -1,6 +1,6 @@
-RUN: llvm-symbolizer -obj="%p/Inputs/test.exe" < "%p/Inputs/test.exe.input" | \
+RUN: llvm37-symbolizer -obj="%p/Inputs/test.exe" < "%p/Inputs/test.exe.input" | \
 RUN:    FileCheck %s --check-prefix=CHECK
-RUN: llvm-symbolizer -obj="%p/Inputs/test.exe" -demangle=false < \
+RUN: llvm37-symbolizer -obj="%p/Inputs/test.exe" -demangle=false < \
 RUN:    "%p/Inputs/test.exe.input" | FileCheck %s --check-prefix=CHECK-NO-DEMANGLE
 
 CHECK: foo(void)

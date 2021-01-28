@@ -1,6 +1,6 @@
 //===--- SemaLambda.cpp - Semantic Analysis for C++11 Lambdas -------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -47,14 +47,14 @@ static bool isInInlineFunction(const DeclContext *DC) {
 Optional<unsigned> clang::getStackIndexOfNearestEnclosingCaptureCapableLambda(
   ArrayRef<const sema::FunctionScopeInfo *> FunctionScopes,
   VarDecl *VarToCapture, Sema &S) {
-  llvm_unreachable("HLSL does not support lambdas");
+  llvm37_unreachable("HLSL does not support lambdas");
 }
 
 CXXRecordDecl *Sema::createLambdaClosureType(SourceRange IntroducerRange,
   TypeSourceInfo *Info,
   bool KnownDependent,
   LambdaCaptureDefault CaptureDefault) {
-  llvm_unreachable("HLSL does not support lambdas");
+  llvm37_unreachable("HLSL does not support lambdas");
 }
 
 MangleNumberingContext *
@@ -124,7 +124,7 @@ Sema::getCurrentMangleNumberContext(const DeclContext *DC,
     return &ExprEvalContexts.back().getMangleNumberingContext(Context);
   }
 
-  llvm_unreachable("unexpected context");
+  llvm37_unreachable("unexpected context");
 }
 
 MangleNumberingContext &
@@ -141,7 +141,7 @@ CXXMethodDecl *Sema::startLambdaDefinition(CXXRecordDecl *Class,
   TypeSourceInfo *MethodTypeInfo,
   SourceLocation EndLoc,
   ArrayRef<ParmVarDecl *> Params) {
-  llvm_unreachable("HLSL does not support lambdas");
+  llvm37_unreachable("HLSL does not support lambdas");
 }
 
 void Sema::buildLambdaScope(LambdaScopeInfo *LSI,
@@ -152,64 +152,64 @@ void Sema::buildLambdaScope(LambdaScopeInfo *LSI,
   bool ExplicitParams,
   bool ExplicitResultType,
   bool Mutable) {
-  llvm_unreachable("HLSL does not support lambdas");
+  llvm37_unreachable("HLSL does not support lambdas");
 }
 
 void Sema::finishLambdaExplicitCaptures(LambdaScopeInfo *LSI) {
-  llvm_unreachable("HLSL does not support lambdas");
+  llvm37_unreachable("HLSL does not support lambdas");
 }
 
 void Sema::addLambdaParameters(CXXMethodDecl *CallOperator, Scope *CurScope) {
-  llvm_unreachable("HLSL does not support lambdas");
+  llvm37_unreachable("HLSL does not support lambdas");
 }
 
 void Sema::deduceClosureReturnType(CapturingScopeInfo &CSI) {
-  llvm_unreachable("HLSL does not support lambdas");
+  llvm37_unreachable("HLSL does not support lambdas");
 }
 
 QualType Sema::performLambdaInitCaptureInitialization(SourceLocation Loc,
   bool ByRef,
   IdentifierInfo *Id,
   Expr *&Init) {
-  llvm_unreachable("HLSL does not support lambdas");
+  llvm37_unreachable("HLSL does not support lambdas");
 }
 
 VarDecl *Sema::createLambdaInitCaptureVarDecl(SourceLocation Loc,
   QualType InitCaptureType, IdentifierInfo *Id, Expr *Init) {
-  llvm_unreachable("HLSL does not support lambdas");
+  llvm37_unreachable("HLSL does not support lambdas");
 }
 
 FieldDecl *Sema::buildInitCaptureField(LambdaScopeInfo *LSI, VarDecl *Var) {
-  llvm_unreachable("HLSL does not support lambdas");
+  llvm37_unreachable("HLSL does not support lambdas");
 }
 
 void Sema::ActOnStartOfLambdaDefinition(LambdaIntroducer &Intro,
   Declarator &ParamInfo,
   Scope *CurScope) {
-  llvm_unreachable("HLSL does not support lambdas");
+  llvm37_unreachable("HLSL does not support lambdas");
 }
 
 void Sema::ActOnLambdaError(SourceLocation StartLoc, Scope *CurScope,
   bool IsInstantiation) {
-  llvm_unreachable("HLSL does not support lambdas");
+  llvm37_unreachable("HLSL does not support lambdas");
 }
 
 ExprResult Sema::ActOnLambdaExpr(SourceLocation StartLoc, Stmt *Body,
   Scope *CurScope) {
-  llvm_unreachable("HLSL does not support lambdas");
+  llvm37_unreachable("HLSL does not support lambdas");
   return ExprError();
 }
 
 ExprResult Sema::BuildLambdaExpr(SourceLocation StartLoc, SourceLocation EndLoc,
   LambdaScopeInfo *LSI) {
-  llvm_unreachable("HLSL does not support lambdas");
+  llvm37_unreachable("HLSL does not support lambdas");
 }
 
 ExprResult Sema::BuildBlockForLambdaConversion(SourceLocation CurrentLocation,
   SourceLocation ConvLocation,
   CXXConversionDecl *Conv,
   Expr *Src) {
-  llvm_unreachable("HLSL does not support lambdas");
+  llvm37_unreachable("HLSL does not support lambdas");
 }
 
 #else
@@ -529,7 +529,7 @@ Sema::getCurrentMangleNumberContext(const DeclContext *DC,
     return &ExprEvalContexts.back().getMangleNumberingContext(Context);
   }
 
-  llvm_unreachable("unexpected context");
+  llvm37_unreachable("unexpected context");
 }
 
 MangleNumberingContext &
@@ -1142,7 +1142,7 @@ void Sema::ActOnStartOfLambdaDefinition(LambdaIntroducer &Intro,
     Diag(Intro.DefaultLoc, diag::err_capture_default_non_local);
 
   // Distinct capture names, for diagnostics.
-  llvm::SmallSet<IdentifierInfo*, 8> CaptureNames;
+  llvm37::SmallSet<IdentifierInfo*, 8> CaptureNames;
 
   // Handle explicit captures.
   SourceLocation PrevCaptureLoc
@@ -1242,7 +1242,7 @@ void Sema::ActOnStartOfLambdaDefinition(LambdaIntroducer &Intro,
         // FIXME: Disable corrections that would add qualification?
         CXXScopeSpec ScopeSpec;
         if (DiagnoseEmptyLookup(CurScope, ScopeSpec, R,
-                                llvm::make_unique<DeclFilterCCC<VarDecl>>()))
+                                llvm37::make_unique<DeclFilterCCC<VarDecl>>()))
           continue;
       }
 
@@ -1614,7 +1614,7 @@ static ExprResult performLambdaVarCaptureInitialization(
     IdentifierInfo *IterationVarName = nullptr;
     {
       SmallString<8> Str;
-      llvm::raw_svector_ostream OS(Str);
+      llvm37::raw_svector_ostream OS(Str);
       OS << "__i" << IndexVariables.size();
       IterationVarName = &S.Context.Idents.get(OS.str());
     }
@@ -1678,9 +1678,9 @@ mapImplicitCaptureStyle(CapturingScopeInfo::ImplicitCaptureStyle ICS) {
   case CapturingScopeInfo::ImpCap_LambdaByref:
     return LCD_ByRef;
   case CapturingScopeInfo::ImpCap_Block:
-    llvm_unreachable("block capture in lambda");
+    llvm37_unreachable("block capture in lambda");
   }
-  llvm_unreachable("Unknown implicit capture style");
+  llvm37_unreachable("Unknown implicit capture style");
 }
 
 ExprResult Sema::BuildLambdaExpr(SourceLocation StartLoc, SourceLocation EndLoc,

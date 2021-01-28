@@ -28,11 +28,11 @@ hands the result off to a domain-specific `backend`_ for processing.
 
 The current major users of TableGen are :doc:`../CodeGenerator`
 and the
-`Clang diagnostics and attributes <http://clang.llvm.org/docs/UsersManual.html#controlling-errors-and-warnings>`_.
+`Clang diagnostics and attributes <http://clang.llvm37.org/docs/UsersManual.html#controlling-errors-and-warnings>`_.
 
 Note that if you work on TableGen much, and use emacs or vim, that you can find
-an emacs "TableGen mode" and a vim language file in the ``llvm/utils/emacs`` and
-``llvm/utils/vim`` directories of your LLVM distribution, respectively.
+an emacs "TableGen mode" and a vim language file in the ``llvm37/utils/emacs`` and
+``llvm37/utils/vim`` directories of your LLVM37 distribution, respectively.
 
 .. _intro:
 
@@ -40,26 +40,26 @@ an emacs "TableGen mode" and a vim language file in the ``llvm/utils/emacs`` and
 The TableGen program
 ====================
 
-TableGen files are interpreted by the TableGen program: `llvm-tblgen` available
+TableGen files are interpreted by the TableGen program: `llvm37-tblgen` available
 on your build directory under `bin`. It is not installed in the system (or where
-your sysroot is set to), since it has no use beyond LLVM's build process.
+your sysroot is set to), since it has no use beyond LLVM37's build process.
 
 Running TableGen
 ----------------
 
-TableGen runs just like any other LLVM tool.  The first (optional) argument
-specifies the file to read.  If a filename is not specified, ``llvm-tblgen``
+TableGen runs just like any other LLVM37 tool.  The first (optional) argument
+specifies the file to read.  If a filename is not specified, ``llvm37-tblgen``
 reads from standard input.
 
 To be useful, one of the `backends`_ must be used.  These backends are
-selectable on the command line (type '``llvm-tblgen -help``' for a list).  For
+selectable on the command line (type '``llvm37-tblgen -help``' for a list).  For
 example, to get a list of all of the definitions that subclass a particular type
 (which can be useful for building up an enum list of these records), use the
 ``-print-enums`` option:
 
 .. code-block:: bash
 
-  $ llvm-tblgen X86.td -print-enums -class=Register
+  $ llvm37-tblgen X86.td -print-enums -class=Register
   AH, AL, AX, BH, BL, BP, BPL, BX, CH, CL, CX, DH, DI, DIL, DL, DX, EAX, EBP, EBX,
   ECX, EDI, EDX, EFLAGS, EIP, ESI, ESP, FP0, FP1, FP2, FP3, FP4, FP5, FP6, IP,
   MM0, MM1, MM2, MM3, MM4, MM5, MM6, MM7, R10, R10B, R10D, R10W, R11, R11B, R11D,
@@ -69,7 +69,7 @@ example, to get a list of all of the definitions that subclass a particular type
   XMM0, XMM1, XMM10, XMM11, XMM12, XMM13, XMM14, XMM15, XMM2, XMM3, XMM4, XMM5,
   XMM6, XMM7, XMM8, XMM9,
 
-  $ llvm-tblgen X86.td -print-enums -class=Instruction 
+  $ llvm37-tblgen X86.td -print-enums -class=Instruction 
   ABS_F, ABS_Fp32, ABS_Fp64, ABS_Fp80, ADC32mi, ADC32mi8, ADC32mr, ADC32ri,
   ADC32ri8, ADC32rm, ADC32rr, ADC64mi32, ADC64mi8, ADC64mr, ADC64ri32, ADC64ri8,
   ADC64rm, ADC64rr, ADD16mi, ADD16mi8, ADD16mr, ADD16ri, ADD16ri8, ADD16rm,
@@ -85,12 +85,12 @@ appropriate way.
 Example
 -------
 
-With no other arguments, `llvm-tblgen` parses the specified file and prints out all
+With no other arguments, `llvm37-tblgen` parses the specified file and prints out all
 of the classes, then all of the definitions.  This is a good way to see what the
 various definitions expand to fully.  Running this on the ``X86.td`` file prints
 this (at the time of this writing):
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
   ...
   def ADD32rr {   // Instruction X86Inst I
@@ -155,7 +155,7 @@ by the code generator, and specifying it all manually would be unmaintainable,
 prone to bugs, and tiring to do in the first place.  Because we are using
 TableGen, all of the information was derived from the following definition:
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
   let Defs = [EFLAGS],
       isCommutable = 1,                  // X = ADD Y,Z --> X = ADD Z,Y
@@ -201,7 +201,7 @@ TableGen.
 **TableGen definitions** are the concrete form of 'records'.  These generally do
 not have any undefined values, and are marked with the '``def``' keyword.
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
   def FeatureFPARMv8 : SubtargetFeature<"fp-armv8", "HasFPARMv8", "true",
                                         "Enable ARMv8 FP">;
@@ -209,18 +209,18 @@ not have any undefined values, and are marked with the '``def``' keyword.
 In this example, FeatureFPARMv8 is ``SubtargetFeature`` record initialised
 with some values. The names of the classes are defined via the
 keyword `class` either on the same file or some other included. Most target
-TableGen files include the generic ones in ``include/llvm/Target``.
+TableGen files include the generic ones in ``include/llvm37/Target``.
 
 **TableGen classes** are abstract records that are used to build and describe
 other records.  These classes allow the end-user to build abstractions for
 either the domain they are targeting (such as "Register", "RegisterClass", and
-"Instruction" in the LLVM code generator) or for the implementor to help factor
+"Instruction" in the LLVM37 code generator) or for the implementor to help factor
 out common properties of records (such as "FPInst", which is used to represent
 floating point instructions in the X86 backend).  TableGen keeps track of all of
 the classes that are used to build up a definition, so the backend can find all
 definitions of a particular class, such as "Instruction".
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
  class ProcNoItin<string Name, list<SubtargetFeature> Features>
        : Processor<Name, NoItineraries, Features>;
@@ -235,7 +235,7 @@ If a multiclass inherits from another multiclass, the definitions in the
 sub-multiclass become part of the current multiclass, as if they were declared
 in the current multiclass.
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
   multiclass ro_signed_pats<string T, string Rm, dag Base, dag Offset, dag Extend,
                           dag address, ValueType sty> {
@@ -267,7 +267,7 @@ TableGen backends
 =================
 
 TableGen files have no real meaning without a back-end. The default operation
-of running ``llvm-tblgen`` is to print the information in a textual format, but
+of running ``llvm37-tblgen`` is to print the information in a textual format, but
 that's only useful for debugging of the TableGen files themselves. The power
 in TableGen is, however, to interpret the source files into an internal 
 representation that can be generated into anything you want.

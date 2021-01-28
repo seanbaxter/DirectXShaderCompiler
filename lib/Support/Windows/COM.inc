@@ -1,6 +1,6 @@
-//===- llvm/Support/Windows/COM.inc - Windows COM Implementation *- C++ -*-===//
+//===- llvm37/Support/Windows/COM.inc - Windows COM Implementation *- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -17,7 +17,7 @@
 
 #include <objbase.h>
 
-namespace llvm {
+namespace llvm37 {
 namespace sys {
 
 InitializeCOMRAII::InitializeCOMRAII(COMThreadingMode Threading,

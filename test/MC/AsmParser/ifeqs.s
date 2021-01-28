@@ -1,4 +1,4 @@
-// RUN: llvm-mc -triple i386 %s | FileCheck %s
+// RUN: llvm37-mc -triple i386 %s | FileCheck %s
 
 .ifeqs "alpha", "alpha"
 	.byte 1

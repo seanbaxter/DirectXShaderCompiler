@@ -521,7 +521,7 @@ struct IDxcContainerBuilder : public IUnknown {
 
 CROSS_PLATFORM_UUIDOF(IDxcAssembler, "091f7a26-1c1f-4948-904b-e6e3a8a771d5")
 struct IDxcAssembler : public IUnknown {
-  // Assemble dxil in ll or llvm bitcode to DXIL container.
+  // Assemble dxil in ll or llvm37 bitcode to DXIL container.
   virtual HRESULT STDMETHODCALLTYPE AssembleToContainer(
     _In_ IDxcBlob *pShader,                       // Shader to assemble.
     _COM_Outptr_ IDxcOperationResult **ppResult   // Assembly output status, buffer, and errors

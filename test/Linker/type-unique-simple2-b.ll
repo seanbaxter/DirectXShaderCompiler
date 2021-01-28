@@ -22,20 +22,20 @@ define void @_ZN1A6setFooEv(%class.A* %this) unnamed_addr #0 align 2 {
 entry:
   %this.addr = alloca %class.A*, align 8
   store %class.A* %this, %class.A** %this.addr, align 8
-  call void @llvm.dbg.declare(metadata %class.A** %this.addr, metadata !32, metadata !DIExpression()), !dbg !34
+  call void @llvm37.dbg.declare(metadata %class.A** %this.addr, metadata !32, metadata !DIExpression()), !dbg !34
   %this1 = load %class.A*, %class.A** %this.addr
   ret void, !dbg !35
 }
 
 ; Function Attrs: nounwind readnone
-declare void @llvm.dbg.declare(metadata, metadata, metadata) #1
+declare void @llvm37.dbg.declare(metadata, metadata, metadata) #1
 
 ; Function Attrs: nounwind
 define i32 @_ZN1A6getFooEv(%class.A* %this) unnamed_addr #0 align 2 {
 entry:
   %this.addr = alloca %class.A*, align 8
   store %class.A* %this, %class.A** %this.addr, align 8
-  call void @llvm.dbg.declare(metadata %class.A** %this.addr, metadata !36, metadata !DIExpression()), !dbg !37
+  call void @llvm37.dbg.declare(metadata %class.A** %this.addr, metadata !36, metadata !DIExpression()), !dbg !37
   %this1 = load %class.A*, %class.A** %this.addr
   ret i32 1, !dbg !38
 }
@@ -43,9 +43,9 @@ entry:
 attributes #0 = { nounwind }
 attributes #1 = { nounwind readnone }
 
-!llvm.dbg.cu = !{!0}
-!llvm.module.flags = !{!29, !30}
-!llvm.ident = !{!31}
+!llvm37.dbg.cu = !{!0}
+!llvm37.module.flags = !{!29, !30}
+!llvm37.ident = !{!31}
 
 !0 = !DICompileUnit(language: DW_LANG_C_plus_plus, producer: "clang version 3.5 ", isOptimized: false, emissionKind: 0, file: !1, enums: !2, retainedTypes: !3, subprograms: !25, globals: !2, imports: !2)
 !1 = !DIFile(filename: "<unknown>", directory: "")

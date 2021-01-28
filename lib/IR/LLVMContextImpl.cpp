@@ -1,25 +1,25 @@
-//===-- LLVMContextImpl.cpp - Implement LLVMContextImpl -------------------===//
+//===-- LLVM37ContextImpl.cpp - Implement LLVM37ContextImpl -------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 //
-//  This file implements the opaque LLVMContextImpl.
+//  This file implements the opaque LLVM37ContextImpl.
 //
 //===----------------------------------------------------------------------===//
 
 #include "LLVMContextImpl.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/IR/Attributes.h"
-#include "llvm/IR/DiagnosticInfo.h"
-#include "llvm/IR/Module.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/IR/Attributes.h"
+#include "llvm37/IR/DiagnosticInfo.h"
+#include "llvm37/IR/Module.h"
 #include <algorithm>
-using namespace llvm;
+using namespace llvm37;
 
-LLVMContextImpl::LLVMContextImpl(LLVMContext &C)
+LLVM37ContextImpl::LLVM37ContextImpl(LLVM37Context &C)
   : TheTrueVal(nullptr), TheFalseVal(nullptr),
     VoidTy(C, Type::VoidTyID),
     LabelTy(C, Type::LabelTyID),
@@ -67,9 +67,9 @@ struct DropFirst {
 };
 }
 
-LLVMContextImpl::~LLVMContextImpl() {
+LLVM37ContextImpl::~LLVM37ContextImpl() {
   // NOTE: We need to delete the contents of OwnedModules, but Module's dtor
-  // will call LLVMContextImpl::removeModule, thus invalidating iterators into
+  // will call LLVM37ContextImpl::removeModule, thus invalidating iterators into
   // the container. Avoid iterators during this operation:
   while (!OwnedModules.empty())
     delete *OwnedModules.begin();
@@ -81,7 +81,7 @@ LLVMContextImpl::~LLVMContextImpl() {
 #define HANDLE_MDNODE_LEAF(CLASS)                                              \
   for (auto *I : CLASS##s)                                                     \
     I->dropAllReferences();
-#include "llvm/IR/Metadata.def"
+#include "llvm37/IR/Metadata.def"
 
   // Also drop references that come from the Value bridges.
   for (auto &Pair : ValuesAsMetadata)
@@ -95,7 +95,7 @@ LLVMContextImpl::~LLVMContextImpl() {
 #define HANDLE_MDNODE_LEAF(CLASS)                                              \
   for (CLASS *I : CLASS##s)                                                    \
     delete I;
-#include "llvm/IR/Metadata.def"
+#include "llvm37/IR/Metadata.def"
 
   // Free the constants.
   std::for_each(ExprConstants.map_begin(), ExprConstants.map_end(),
@@ -162,7 +162,7 @@ LLVMContextImpl::~LLVMContextImpl() {
   MDStringCache.clear();
 }
 
-void LLVMContextImpl::dropTriviallyDeadConstantArrays() {
+void LLVM37ContextImpl::dropTriviallyDeadConstantArrays() {
   bool Changed;
   do {
     Changed = false;
@@ -184,7 +184,7 @@ void Module::dropTriviallyDeadConstantArrays() {
   Context.pImpl->dropTriviallyDeadConstantArrays();
 }
 
-namespace llvm {
+namespace llvm37 {
 /// \brief Make MDOperand transparent for hashing.
 ///
 /// This overload of an implementation detail of the hashing library makes

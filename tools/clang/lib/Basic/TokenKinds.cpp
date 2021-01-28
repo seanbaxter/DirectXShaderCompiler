@@ -1,6 +1,6 @@
 //===--- TokenKinds.cpp - Token Kinds Support -----------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -12,7 +12,7 @@
 //===----------------------------------------------------------------------===//
 
 #include "clang/Basic/TokenKinds.h"
-#include "llvm/Support/ErrorHandling.h"
+#include "llvm37/Support/ErrorHandling.h"
 using namespace clang;
 
 static const char * const TokNames[] = {
@@ -25,7 +25,7 @@ static const char * const TokNames[] = {
 const char *tok::getTokenName(TokenKind Kind) {
   if (Kind < tok::NUM_TOKENS)
     return TokNames[Kind];
-  llvm_unreachable("unknown TokenKind");
+  llvm37_unreachable("unknown TokenKind");
   return nullptr;
 }
 

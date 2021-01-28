@@ -1,13 +1,13 @@
 
-; Make sure that llvm-as/llvm-dis properly assembly/disassembly the 'builtin'
+; Make sure that llvm37-as/llvm37-dis properly assembly/disassembly the 'builtin'
 ; attribute.
 ;
 ; rdar://13727199
 
-; RUN: llvm-as -disable-verify < %s | \
-; RUN: llvm-dis | \
-; RUN: llvm-as -disable-verify | \
-; RUN: llvm-dis | \
+; RUN: llvm37-as -disable-verify < %s | \
+; RUN: llvm37-dis | \
+; RUN: llvm37-as -disable-verify | \
+; RUN: llvm37-dis | \
 ; RUN: FileCheck -check-prefix=CHECK-ASSEMBLES %s
 
 ; CHECK-ASSEMBLES: declare i8* @foo(i8*) [[NOBUILTIN:#[0-9]+]]
@@ -26,7 +26,7 @@ define i8* @bar(i8* %x) {
 ; which do not have nobuiltin on them.
 ; rdar://13727199
 
-; RUN: not llvm-as <%s 2>&1  | FileCheck -check-prefix=CHECK-BAD %s
+; RUN: not llvm37-as <%s 2>&1  | FileCheck -check-prefix=CHECK-BAD %s
 
 ; CHECK-BAD: Attribute 'builtin' can only be applied to a callsite.
 ; CHECK-BAD-NEXT: i8* (i8*)* @car

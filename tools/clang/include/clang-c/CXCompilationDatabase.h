@@ -1,6 +1,6 @@
 /*===-- clang-c/CXCompilationDatabase.h - Compilation database  ---*- C -*-===*\
 |*                                                                            *|
-|*                     The LLVM Compiler Infrastructure                       *|
+|*                     The LLVM37 Compiler Infrastructure                       *|
 |*                                                                            *|
 |* This file is distributed under the University of Illinois Open Source      *|
 |* License. See LICENSE.TXT for details.                                      *|
@@ -11,8 +11,8 @@
 |* the full Clang C++ API.                                                    *|
 |*                                                                            *|
 \*===----------------------------------------------------------------------===*/
-#ifndef LLVM_CLANG_C_CXCOMPILATIONDATABASE_H
-#define LLVM_CLANG_C_CXCOMPILATIONDATABASE_H
+#ifndef LLVM37_CLANG_C_CXCOMPILATIONDATABASE_H
+#define LLVM37_CLANG_C_CXCOMPILATIONDATABASE_H
 
 #include "clang-c/Platform.h"
 #include "clang-c/CXString.h"

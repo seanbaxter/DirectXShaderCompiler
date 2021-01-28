@@ -8,10 +8,10 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include "dxc/DXIL/DxilResourceBinding.h"
-#include "llvm/IR/Constant.h"
+#include "llvm37/IR/Constant.h"
 #include "dxc/DXIL/DxilShaderModel.h"
-#include "llvm/IR/DerivedTypes.h"
-#include "llvm/IR/Constants.h"
+#include "llvm37/IR/DerivedTypes.h"
+#include "llvm37/IR/Constants.h"
 #include "dxc/DXIL/DxilResourceBase.h"
 #include "dxc/DXIL/DxilResource.h"
 #include "dxc/DXIL/DxilCBuffer.h"
@@ -20,7 +20,7 @@
 #include "dxc/DXIL/DxilInstructions.h"
 #include "dxc/DXIL/DxilUtil.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 namespace hlsl {
 
@@ -38,7 +38,7 @@ namespace resource_helper {
 
 // The constant is as struct with int fields.
 // ShaderModel 6.6 has 4 fileds.
-llvm::Constant *getAsConstant(const DxilResourceBinding &B, llvm::Type *Ty,
+llvm37::Constant *getAsConstant(const DxilResourceBinding &B, llvm37::Type *Ty,
                               const ShaderModel &) {
   StructType *ST = cast<StructType>(Ty);
   switch (ST->getNumElements()) {
@@ -56,7 +56,7 @@ llvm::Constant *getAsConstant(const DxilResourceBinding &B, llvm::Type *Ty,
   }
   return nullptr;
 }
-DxilResourceBinding loadBindingFromConstant(const llvm::Constant &C) {
+DxilResourceBinding loadBindingFromConstant(const llvm37::Constant &C) {
   DxilResourceBinding B;
 
   // Ty Should match C.getType().
@@ -88,7 +88,7 @@ DxilResourceBinding loadBindingFromConstant(const llvm::Constant &C) {
   return B;
 }
 DxilResourceBinding loadBindingFromCreateHandleFromBinding(
-    const DxilInst_CreateHandleFromBinding &createHandle, llvm::Type *Ty,
+    const DxilInst_CreateHandleFromBinding &createHandle, llvm37::Type *Ty,
     const ShaderModel &) {
   Constant *B = cast<Constant>(createHandle.get_bind());
   return loadBindingFromConstant(*B);

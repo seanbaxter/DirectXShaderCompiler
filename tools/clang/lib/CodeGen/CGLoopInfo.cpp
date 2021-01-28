@@ -1,6 +1,6 @@
-//===---- CGLoopInfo.cpp - LLVM CodeGen for loop metadata -*- C++ -*-------===//
+//===---- CGLoopInfo.cpp - LLVM37 CodeGen for loop metadata -*- C++ -*-------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -10,15 +10,15 @@
 #include "CGLoopInfo.h"
 #include "clang/AST/Attr.h"
 #include "clang/Sema/LoopHint.h"
-#include "llvm/IR/BasicBlock.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/InstrTypes.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/Metadata.h"
+#include "llvm37/IR/BasicBlock.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/InstrTypes.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/Metadata.h"
 using namespace clang::CodeGen;
-using namespace llvm;
+using namespace llvm37;
 
-static MDNode *createMetadata(LLVMContext &Ctx, const LoopAttributes &Attrs) {
+static MDNode *createMetadata(LLVM37Context &Ctx, const LoopAttributes &Attrs) {
 
   if (!Attrs.IsParallel && Attrs.VectorizerWidth == 0 &&
       Attrs.VectorizerUnroll == 0 &&

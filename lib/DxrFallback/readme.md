@@ -21,6 +21,6 @@ The DXR Fallback Compiler addresses several challenges that native DX12 compute 
 These challenges are handled by abstractly viewing GPU execution of a DXR pipeline as State Machine traversal, where each shader is transformed into one or more state functions. further technical details are described in the header of [StateFunctionTransform.h](../DxrFallback/StateFunctionTransform.h).
 
 ## Building runtime.h
-Download LLVM 3.7: http://releases.llvm.org/3.7.0/LLVM-3.7.0-win64.exe
-You may need to adjust BINPATH in script.cmd to point to your llvm binaries
+Download LLVM37 3.7: http://releases.llvm37.org/3.7.0/LLVM37-3.7.0-win64.exe
+You may need to adjust BINPATH in script.cmd to point to your llvm37 binaries
 Run script.cmd and it should output a patched runtime.h

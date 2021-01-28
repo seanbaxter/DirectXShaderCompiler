@@ -1,6 +1,6 @@
 //===- InstCombineSelect.cpp ----------------------------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -12,11 +12,11 @@
 //===----------------------------------------------------------------------===//
 
 #include "InstCombineInternal.h"
-#include "llvm/Analysis/ConstantFolding.h"
-#include "llvm/Analysis/InstructionSimplify.h"
-#include "llvm/Analysis/ValueTracking.h"
-#include "llvm/IR/PatternMatch.h"
-using namespace llvm;
+#include "llvm37/Analysis/ConstantFolding.h"
+#include "llvm37/Analysis/InstructionSimplify.h"
+#include "llvm37/Analysis/ValueTracking.h"
+#include "llvm37/IR/PatternMatch.h"
+using namespace llvm37;
 using namespace PatternMatch;
 
 #define DEBUG_TYPE "instcombine"
@@ -25,7 +25,7 @@ static SelectPatternFlavor
 getInverseMinMaxSelectPattern(SelectPatternFlavor SPF) {
   switch (SPF) {
   default:
-    llvm_unreachable("unhandled!");
+    llvm37_unreachable("unhandled!");
 
   case SPF_SMIN:
     return SPF_SMAX;
@@ -41,7 +41,7 @@ getInverseMinMaxSelectPattern(SelectPatternFlavor SPF) {
 static CmpInst::Predicate getICmpPredicateForMinMax(SelectPatternFlavor SPF) {
   switch (SPF) {
   default:
-    llvm_unreachable("unhandled!");
+    llvm37_unreachable("unhandled!");
 
   case SPF_SMIN:
     return ICmpInst::ICMP_SLT;
@@ -94,7 +94,7 @@ static unsigned GetSelectFoldableOperands(Instruction *I) {
 /// function, return the identity constant that goes into the select.
 static Constant *GetSelectFoldableConstant(Instruction *I) {
   switch (I->getOpcode()) {
-  default: llvm_unreachable("This cannot happen!");
+  default: llvm37_unreachable("This cannot happen!");
   case Instruction::Add:
   case Instruction::Sub:
   case Instruction::Or:
@@ -181,7 +181,7 @@ Instruction *InstCombiner::FoldSelectOpOp(SelectInst &SI, Instruction *TI,
     else
       return BinaryOperator::Create(BO->getOpcode(), NewSI, MatchOp);
   }
-  llvm_unreachable("Shouldn't get here");
+  llvm37_unreachable("Shouldn't get here");
 }
 
 static bool isSelect01(Constant *C1, Constant *C2) {
@@ -343,13 +343,13 @@ static Value *foldSelectICmpAndOr(const SelectInst &SI, Value *TrueVal,
 ///
 /// For example, we can fold the following code sequence:
 /// \code
-///   %0 = tail call i32 @llvm.cttz.i32(i32 %x, i1 true)
+///   %0 = tail call i32 @llvm37.cttz.i32(i32 %x, i1 true)
 ///   %1 = icmp ne i32 %x, 0
 ///   %2 = select i1 %1, i32 %0, i32 32
 /// \code
 /// 
 /// into:
-///   %0 = tail call i32 @llvm.cttz.i32(i32 %x, i1 false)
+///   %0 = tail call i32 @llvm37.cttz.i32(i32 %x, i1 false)
 static Value *foldSelectCttzCtlz(ICmpInst *ICI, Value *TrueVal, Value *FalseVal,
                                   InstCombiner::BuilderTy *Builder) {
   ICmpInst::Predicate Pred = ICI->getPredicate();

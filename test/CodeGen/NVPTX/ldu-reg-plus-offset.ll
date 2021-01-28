@@ -7,13 +7,13 @@ define void @reg_plus_offset(i32* %a) {
 ; CHECK:        ldu.global.u32  %r{{[0-9]+}}, [%r{{[0-9]+}}+32];
 ; CHECK:        ldu.global.u32  %r{{[0-9]+}}, [%r{{[0-9]+}}+36];
   %p2 = getelementptr i32, i32* %a, i32 8
-  %t1 = call i32 @llvm.nvvm.ldu.global.i.i32.p0i32(i32* %p2, i32 4)
+  %t1 = call i32 @llvm37.nvvm.ldu.global.i.i32.p0i32(i32* %p2, i32 4)
   %p3 = getelementptr i32, i32* %a, i32 9
-  %t2 = call i32 @llvm.nvvm.ldu.global.i.i32.p0i32(i32* %p3, i32 4)
+  %t2 = call i32 @llvm37.nvvm.ldu.global.i.i32.p0i32(i32* %p3, i32 4)
   %t3 = mul i32 %t1, %t2
   store i32 %t3, i32* %a
   ret void
 }
 
-declare i32 @llvm.nvvm.ldu.global.i.i32.p0i32(i32*, i32)
-declare i32 @llvm.nvvm.read.ptx.sreg.tid.x()
+declare i32 @llvm37.nvvm.ldu.global.i.i32.p0i32(i32*, i32)
+declare i32 @llvm37.nvvm.read.ptx.sreg.tid.x()

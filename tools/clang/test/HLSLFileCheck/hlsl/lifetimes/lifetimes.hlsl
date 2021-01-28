@@ -7,10 +7,10 @@
 // CHECK: alloca
 // CHECK: icmp
 // CHECK: br i1
-// CHECK: call void @llvm.lifetime.start
+// CHECK: call void @llvm37.lifetime.start
 // CHECK: br label
 // CHECK: load i32
-// CHECK: call void @llvm.lifetime.end
+// CHECK: call void @llvm37.lifetime.end
 // CHECK: br label
 // CHECK: phi i32
 // CHECK: load i32
@@ -45,9 +45,9 @@ int if_scoped_array(int n, int c)
 // CHECK: ret
 // CHECK: phi i32
 // CHECK-NEXT: bitcast
-// CHECK-NEXT: call void @llvm.lifetime.start
+// CHECK-NEXT: call void @llvm37.lifetime.start
 // CHECK-NEXT: call float @"\01?func@@YAMUMyStruct@@@Z"(%struct.MyStruct* nonnull %[[alloca]])
-// CHECK-NEXT: call void @llvm.lifetime.end
+// CHECK-NEXT: call void @llvm37.lifetime.end
 // CHECK: br i1
 struct MyStruct {
   float x;
@@ -78,12 +78,12 @@ void loop_scoped_escaping_struct(int n)
 // CHECK-NEXT: phi i32
 // CHECK-NOT: phi float
 // CHECK-NEXT: bitcast
-// CHECK-NEXT: call void @llvm.lifetime.start
+// CHECK-NEXT: call void @llvm37.lifetime.start
 // CHECK-NOT: store
 // CHECK-NEXT: call void @"\01?func2@@YAXUMyStruct@@@Z"(%struct.MyStruct* nonnull %[[alloca]])
 // CHECK-NEXT: getelementptr
 // CHECK-NEXT: load
-// CHECK: call void @llvm.lifetime.end
+// CHECK: call void @llvm37.lifetime.end
 // CHECK: br i1
 void func2(inout MyStruct data);
 
@@ -191,9 +191,9 @@ int loop_scoped_struct_conditional_assign_from_func_output(int n, int c1)
 // The constant array should be hoisted to a constant global.
 //
 // CHECK: define i32 @"\01?global_constant@@YAHH@Z"(i32 %n)
-// CHECK: call void @llvm.lifetime.start
+// CHECK: call void @llvm37.lifetime.start
 // CHECK: load i32
-// CHECK: call void @llvm.lifetime.end
+// CHECK: call void @llvm37.lifetime.end
 // CHECK: ret i32
 int compute(int i)
 {
@@ -215,9 +215,9 @@ int global_constant(int n)
 // CHECK: define i32 @"\01?global_constant2@@YAHH@Z"(i32 %n)
 // CHECK: phi i32
 // CHECK: phi i32
-// CHECK: call void @llvm.lifetime.start
+// CHECK: call void @llvm37.lifetime.start
 // CHECK: load i32
-// CHECK: call void @llvm.lifetime.end
+// CHECK: call void @llvm37.lifetime.end
 export
 int global_constant2(int n)
 {

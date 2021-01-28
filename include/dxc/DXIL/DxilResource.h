@@ -37,7 +37,7 @@ public:
   CompType GetCompType() const;
   void SetCompType(const CompType CT);
 
-  llvm::Type *GetRetType() const;
+  llvm37::Type *GetRetType() const;
 
   unsigned GetSampleCount() const;
   void SetSampleCount(unsigned SampleCount);

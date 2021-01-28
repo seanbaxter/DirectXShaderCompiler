@@ -1,5 +1,5 @@
 ==================================
-LLVM Alias Analysis Infrastructure
+LLVM37 Alias Analysis Infrastructure
 ==================================
 
 .. contents::
@@ -18,10 +18,10 @@ alias analyses respond to a query with a `Must, May, or No`_ alias response,
 indicating that two pointers always point to the same object, might point to the
 same object, or are known to never point to the same object.
 
-The LLVM `AliasAnalysis
-<http://llvm.org/doxygen/classllvm_1_1AliasAnalysis.html>`__ class is the
+The LLVM37 `AliasAnalysis
+<http://llvm37.org/doxygen/classllvm37_1_1AliasAnalysis.html>`__ class is the
 primary interface used by clients and implementations of alias analyses in the
-LLVM system.  This class is the common interface between clients of alias
+LLVM37 system.  This class is the common interface between clients of alias
 analysis information and the implementations providing it, and is designed to
 support a wide range of implementations and clients (but currently all clients
 are assumed to be flow-insensitive).  In addition to simple alias analysis
@@ -37,7 +37,7 @@ or should be added, please `let me know <mailto:sabre@nondot.org>`_.
 ``AliasAnalysis`` Class Overview
 ================================
 
-The `AliasAnalysis <http://llvm.org/doxygen/classllvm_1_1AliasAnalysis.html>`__
+The `AliasAnalysis <http://llvm37.org/doxygen/classllvm37_1_1AliasAnalysis.html>`__
 class defines the interface that the various alias analysis implementations
 should support.  This class exports two important enums: ``AliasResult`` and
 ``ModRefResult`` which represent the result of an alias query or a mod/ref
@@ -60,7 +60,7 @@ Representation of Pointers
 Most importantly, the ``AliasAnalysis`` class provides several methods which are
 used to query whether or not two memory objects alias, whether function calls
 can modify or read a memory object, etc.  For all of these queries, memory
-objects are represented as a pair of their starting address (a symbolic LLVM
+objects are represented as a pair of their starting address (a symbolic LLVM37
 ``Value*``) and a static size.
 
 Representing memory objects as a starting address and a size is critically
@@ -195,15 +195,15 @@ satisfy the ``doesNotAccessMemory`` method also satisfies ``onlyReadsMemory``.
 Writing a new ``AliasAnalysis`` Implementation
 ==============================================
 
-Writing a new alias analysis implementation for LLVM is quite straight-forward.
+Writing a new alias analysis implementation for LLVM37 is quite straight-forward.
 There are already several implementations that you can use for examples, and the
 following information should help fill in any details.  For a examples, take a
-look at the `various alias analysis implementations`_ included with LLVM.
+look at the `various alias analysis implementations`_ included with LLVM37.
 
 Different Pass styles
 ---------------------
 
-The first step to determining what type of :doc:`LLVM pass <WritingAnLLVMPass>`
+The first step to determining what type of :doc:`LLVM37 pass <WritingAnLLVM37Pass>`
 you need to use for your Alias Analysis.  As is the case with most other
 analyses and transformations, the answer should be fairly obvious from what type
 of problem you are trying to solve:
@@ -264,7 +264,7 @@ Interfaces which may be specified
 ---------------------------------
 
 All of the `AliasAnalysis
-<http://llvm.org/doxygen/classllvm_1_1AliasAnalysis.html>`__ virtual methods
+<http://llvm37.org/doxygen/classllvm37_1_1AliasAnalysis.html>`__ virtual methods
 default to providing :ref:`chaining <aliasanalysis-chaining>` to another alias
 analysis implementation, which ends up returning conservatively correct
 information (returning "May" Alias and "Mod/Ref" for alias and mod/ref queries
@@ -296,7 +296,7 @@ Mod/Ref result, simply return whatever the superclass computes.  For example:
     return AliasAnalysis::alias(V1, V1Size, V2, V2Size);
   }
 
-In addition to analysis queries, you must make sure to unconditionally pass LLVM
+In addition to analysis queries, you must make sure to unconditionally pass LLVM37
 `update notification`_ methods to the superclass as well if you override them,
 which allows all alias analyses in a change to be updated.
 
@@ -362,7 +362,7 @@ must be reported through this callback, *except* for the uses below:
 Efficiency Issues
 -----------------
 
-From the LLVM perspective, the only thing you need to do to provide an efficient
+From the LLVM37 perspective, the only thing you need to do to provide an efficient
 alias analysis is to make sure that alias analysis **queries** are serviced
 quickly.  The actual calculation of the alias analysis results (the "run"
 method) is only performed once, but many (perhaps duplicate) queries may be
@@ -400,7 +400,7 @@ pass, which prevents the use of ``FunctionPass`` alias analysis passes.
 
 The ``AliasAnalysis`` API does have functions for notifying implementations when
 values are deleted or copied, however these aren't sufficient. There are many
-other ways that LLVM IR can be modified which could be relevant to
+other ways that LLVM37 IR can be modified which could be relevant to
 ``AliasAnalysis`` implementations which can not be expressed.
 
 The ``AliasAnalysisDebugger`` utility seems to suggest that ``AliasAnalysis``
@@ -448,7 +448,7 @@ Using the ``AliasSetTracker`` class
 
 Many transformations need information about alias **sets** that are active in
 some scope, rather than information about pairwise aliasing.  The
-`AliasSetTracker <http://llvm.org/doxygen/classllvm_1_1AliasSetTracker.html>`__
+`AliasSetTracker <http://llvm37.org/doxygen/classllvm37_1_1AliasSetTracker.html>`__
 class is used to efficiently build these Alias Sets from the pairwise alias
 analysis information provided by the ``AliasAnalysis`` interface.
 
@@ -481,9 +481,9 @@ uses the union-find algorithm to efficiently merge AliasSets when a pointer is
 inserted into the AliasSetTracker that aliases multiple sets.  The primary data
 structure is a hash table mapping pointers to the AliasSet they are in.
 
-The AliasSetTracker class must maintain a list of all of the LLVM ``Value*``\s
+The AliasSetTracker class must maintain a list of all of the LLVM37 ``Value*``\s
 that are in each AliasSet.  Since the hash table already has entries for each
-LLVM ``Value*`` of interest, the AliasesSets thread the linked list through
+LLVM37 ``Value*`` of interest, the AliasesSets thread the linked list through
 these hash-table nodes to avoid having to allocate memory unnecessarily, and to
 make merging alias sets extremely efficient (the linked list merge is constant
 time).
@@ -503,7 +503,7 @@ higher-level methods when possible (e.g., use mod/ref information instead of the
 Existing alias analysis implementations and clients
 ===================================================
 
-If you're going to be working with the LLVM alias analysis infrastructure, you
+If you're going to be working with the LLVM37 alias analysis infrastructure, you
 should know what clients and implementations of alias analysis are available.
 In particular, if you are implementing an alias analysis, you should be aware of
 the `the clients`_ that are useful for monitoring and evaluating different
@@ -573,7 +573,7 @@ algorithm" for interprocedural alias analysis.  Steensgaard's algorithm is a
 unification-based, flow-insensitive, context-insensitive, and field-insensitive
 alias analysis that is also very scalable (effectively linear time).
 
-The LLVM ``-steens-aa`` pass implements a "speculatively field-**sensitive**"
+The LLVM37 ``-steens-aa`` pass implements a "speculatively field-**sensitive**"
 version of Steensgaard's algorithm using the Data Structure Analysis framework.
 This gives it substantially more precision than the standard algorithm while
 maintaining excellent analysis scalability.
@@ -581,7 +581,7 @@ maintaining excellent analysis scalability.
 .. note::
 
   ``-steens-aa`` is available in the optional "poolalloc" module. It is not part
-  of the LLVM core.
+  of the LLVM37 core.
 
 The ``-ds-aa`` pass
 ^^^^^^^^^^^^^^^^^^^
@@ -599,7 +599,7 @@ information.
 .. note::
 
   ``-ds-aa`` is available in the optional "poolalloc" module. It is not part of
-  the LLVM core.
+  the LLVM37 core.
 
 The ``-scev-aa`` pass
 ^^^^^^^^^^^^^^^^^^^^^
@@ -612,7 +612,7 @@ analyses have.
 Alias analysis driven transformations
 -------------------------------------
 
-LLVM includes several alias-analysis driven transformations which can be used
+LLVM37 includes several alias-analysis driven transformations which can be used
 with any of the implementations above.
 
 The ``-adce`` pass

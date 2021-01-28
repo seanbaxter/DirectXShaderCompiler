@@ -3,16 +3,16 @@
 // FIXME: Don't seek bb labels, like "if.else"
 // REQUIRES: asserts
 
-// RUN: %clangxx %s -o - -emit-llvm -S -fprofile-instr-generate -fexceptions -target %itanium_abi_triple | FileCheck -check-prefix=PGOGEN %s
-// RUN: %clangxx %s -o - -emit-llvm -S -fprofile-instr-generate -fexceptions -target %itanium_abi_triple | FileCheck -check-prefix=PGOGEN-EXC %s
+// RUN: %clangxx %s -o - -emit-llvm37 -S -fprofile-instr-generate -fexceptions -target %itanium_abi_triple | FileCheck -check-prefix=PGOGEN %s
+// RUN: %clangxx %s -o - -emit-llvm37 -S -fprofile-instr-generate -fexceptions -target %itanium_abi_triple | FileCheck -check-prefix=PGOGEN-EXC %s
 
-// RUN: llvm-profdata merge %S/Inputs/cxx-throws.proftext -o %t.profdata
-// RUN: %clang %s -o - -emit-llvm -S -fprofile-instr-use=%t.profdata -fcxx-exceptions -target %itanium_abi_triple | FileCheck -check-prefix=PGOUSE %s
-// RUN: %clang %s -o - -emit-llvm -S -fprofile-instr-use=%t.profdata -fcxx-exceptions -target %itanium_abi_triple | FileCheck -check-prefix=PGOUSE-EXC %s
+// RUN: llvm37-profdata merge %S/Inputs/cxx-throws.proftext -o %t.profdata
+// RUN: %clang %s -o - -emit-llvm37 -S -fprofile-instr-use=%t.profdata -fcxx-exceptions -target %itanium_abi_triple | FileCheck -check-prefix=PGOUSE %s
+// RUN: %clang %s -o - -emit-llvm37 -S -fprofile-instr-use=%t.profdata -fcxx-exceptions -target %itanium_abi_triple | FileCheck -check-prefix=PGOUSE-EXC %s
 
-// PGOGEN: @[[THC:__llvm_profile_counters__Z6throwsv]] = private global [9 x i64] zeroinitializer
-// PGOGEN-EXC: @[[THC:__llvm_profile_counters__Z6throwsv]] = private global [9 x i64] zeroinitializer
-// PGOGEN: @[[UNC:__llvm_profile_counters__Z11unreachablei]] = private global [3 x i64] zeroinitializer
+// PGOGEN: @[[THC:__llvm37_profile_counters__Z6throwsv]] = private global [9 x i64] zeroinitializer
+// PGOGEN-EXC: @[[THC:__llvm37_profile_counters__Z6throwsv]] = private global [9 x i64] zeroinitializer
+// PGOGEN: @[[UNC:__llvm37_profile_counters__Z11unreachablei]] = private global [3 x i64] zeroinitializer
 
 // PGOGEN-LABEL: @_Z6throwsv()
 // PGOUSE-LABEL: @_Z6throwsv()

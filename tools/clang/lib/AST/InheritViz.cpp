@@ -1,6 +1,6 @@
 //===- InheritViz.cpp - Graphviz visualization for inheritance --*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -17,9 +17,9 @@
 #include "clang/AST/Decl.h"
 #include "clang/AST/DeclCXX.h"
 #include "clang/AST/TypeOrdering.h"
-#include "llvm/Support/FileSystem.h"
-#include "llvm/Support/GraphWriter.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/Support/FileSystem.h"
+#include "llvm37/Support/GraphWriter.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <map>
 #include <set>
 using namespace clang;
@@ -27,7 +27,7 @@ using namespace clang;
 namespace {
 /// InheritanceHierarchyWriter - Helper class that writes out a
 /// GraphViz file that diagrams the inheritance hierarchy starting at
-/// a given C++ class type. Note that we do not use LLVM's
+/// a given C++ class type. Note that we do not use LLVM37's
 /// GraphWriter, because the interface does not permit us to properly
 /// differentiate between uses of types as virtual bases
 /// vs. non-virtual bases.
@@ -42,7 +42,7 @@ public:
     : Context(Context), Out(Out) { }
 
   void WriteGraph(QualType Type) {
-    Out << "digraph \"" << llvm::DOT::EscapeString(Type.getAsString())
+    Out << "digraph \"" << llvm37::DOT::EscapeString(Type.getAsString())
         << "\" {\n";
     WriteNode(Type, false);
     Out << "}\n";
@@ -78,7 +78,7 @@ void InheritanceHierarchyWriter::WriteNode(QualType Type, bool FromVirtual) {
 
   // Give the node a label based on the name of the class.
   std::string TypeName = Type.getAsString();
-  Out << " [ shape=\"box\", label=\"" << llvm::DOT::EscapeString(TypeName);
+  Out << " [ shape=\"box\", label=\"" << llvm37::DOT::EscapeString(TypeName);
 
   // If the name of the class was a typedef or something different
   // from the "real" class name, show the real class name in
@@ -139,19 +139,19 @@ void CXXRecordDecl::viewInheritance(ASTContext& Context) const {
 
   int FD;
   SmallString<128> Filename;
-  if (std::error_code EC = llvm::sys::fs::createTemporaryFile(
+  if (std::error_code EC = llvm37::sys::fs::createTemporaryFile(
           Self.getAsString(), "dot", FD, Filename)) {
-    llvm::errs() << "Error: " << EC.message() << "\n";
+    llvm37::errs() << "Error: " << EC.message() << "\n";
     return;
   }
 
-  llvm::errs() << "Writing '" << Filename << "'... ";
+  llvm37::errs() << "Writing '" << Filename << "'... ";
 
-  llvm::raw_fd_ostream O(FD, true);
+  llvm37::raw_fd_ostream O(FD, true);
 
   InheritanceHierarchyWriter Writer(Context, O);
   Writer.WriteGraph(Self);
-  llvm::errs() << " done. \n";
+  llvm37::errs() << " done. \n";
 
   O.close();
 

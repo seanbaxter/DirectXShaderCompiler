@@ -1,21 +1,21 @@
 //===-- MCSubtargetInfo.cpp - Subtarget Information -----------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/MC/MCSubtargetInfo.h"
-#include "llvm/ADT/StringRef.h"
-#include "llvm/ADT/Triple.h"
-#include "llvm/MC/MCInstrItineraries.h"
-#include "llvm/MC/SubtargetFeature.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/MC/MCSubtargetInfo.h"
+#include "llvm37/ADT/StringRef.h"
+#include "llvm37/ADT/Triple.h"
+#include "llvm37/MC/MCInstrItineraries.h"
+#include "llvm37/MC/SubtargetFeature.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <algorithm>
 
-using namespace llvm;
+using namespace llvm37;
 
 static FeatureBitset getFeatures(StringRef CPU, StringRef FS,
                                  ArrayRef<SubtargetFeatureKV> ProcDesc,

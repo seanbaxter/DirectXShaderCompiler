@@ -1,21 +1,21 @@
 //===--- Arg.cpp - Argument Implementations -------------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Option/Arg.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/ADT/Twine.h"
-#include "llvm/Option/ArgList.h"
-#include "llvm/Option/Option.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/Option/Arg.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/ADT/Twine.h"
+#include "llvm37/Option/ArgList.h"
+#include "llvm37/Option/Option.h"
+#include "llvm37/Support/raw_ostream.h"
 
-using namespace llvm;
-using namespace llvm::opt;
+using namespace llvm37;
+using namespace llvm37::opt;
 
 Arg::Arg(const Option Opt, StringRef S, unsigned Index, const Arg *BaseArg)
     : Opt(Opt), BaseArg(BaseArg), Spelling(S), Index(Index), Claimed(false),
@@ -44,25 +44,25 @@ Arg::~Arg() {
 }
 
 void Arg::dump() const {
-  llvm::errs() << "<";
+  llvm37::errs() << "<";
 
-  llvm::errs() << " Opt:";
+  llvm37::errs() << " Opt:";
   Opt.dump();
 
-  llvm::errs() << " Index:" << Index;
+  llvm37::errs() << " Index:" << Index;
 
-  llvm::errs() << " Values: [";
+  llvm37::errs() << " Values: [";
   for (unsigned i = 0, e = Values.size(); i != e; ++i) {
-    if (i) llvm::errs() << ", ";
-    llvm::errs() << "'" << Values[i] << "'";
+    if (i) llvm37::errs() << ", ";
+    llvm37::errs() << "'" << Values[i] << "'";
   }
 
-  llvm::errs() << "]>\n";
+  llvm37::errs() << "]>\n";
 }
 
 std::string Arg::getAsString(const ArgList &Args) const {
   SmallString<256> Res;
-  llvm::raw_svector_ostream OS(Res);
+  llvm37::raw_svector_ostream OS(Res);
 
   ArgStringList ASL;
   render(Args, ASL);
@@ -93,7 +93,7 @@ void Arg::render(const ArgList &Args, ArgStringList &Output) const {
 
   case Option::RenderCommaJoinedStyle: {
     SmallString<256> Res;
-    llvm::raw_svector_ostream OS(Res);
+    llvm37::raw_svector_ostream OS(Res);
     OS << getSpelling();
     for (unsigned i = 0, e = getNumValues(); i != e; ++i) {
       if (i) OS << ',';

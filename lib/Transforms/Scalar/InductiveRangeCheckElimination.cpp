@@ -1,6 +1,6 @@
 //===-- InductiveRangeCheckElimination.cpp - ------------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -41,35 +41,35 @@
 //   }
 //===----------------------------------------------------------------------===//
 
-#include "llvm/ADT/Optional.h"
-#include "llvm/Analysis/BranchProbabilityInfo.h"
-#include "llvm/Analysis/InstructionSimplify.h"
-#include "llvm/Analysis/LoopInfo.h"
-#include "llvm/Analysis/LoopPass.h"
-#include "llvm/Analysis/ScalarEvolution.h"
-#include "llvm/Analysis/ScalarEvolutionExpander.h"
-#include "llvm/Analysis/ScalarEvolutionExpressions.h"
-#include "llvm/Analysis/ValueTracking.h"
-#include "llvm/IR/Dominators.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/IRBuilder.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/PatternMatch.h"
-#include "llvm/IR/ValueHandle.h"
-#include "llvm/IR/Verifier.h"
-#include "llvm/Pass.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Transforms/Scalar.h"
-#include "llvm/Transforms/Utils/BasicBlockUtils.h"
-#include "llvm/Transforms/Utils/Cloning.h"
-#include "llvm/Transforms/Utils/LoopUtils.h"
-#include "llvm/Transforms/Utils/SimplifyIndVar.h"
-#include "llvm/Transforms/Utils/UnrollLoop.h"
+#include "llvm37/ADT/Optional.h"
+#include "llvm37/Analysis/BranchProbabilityInfo.h"
+#include "llvm37/Analysis/InstructionSimplify.h"
+#include "llvm37/Analysis/LoopInfo.h"
+#include "llvm37/Analysis/LoopPass.h"
+#include "llvm37/Analysis/ScalarEvolution.h"
+#include "llvm37/Analysis/ScalarEvolutionExpander.h"
+#include "llvm37/Analysis/ScalarEvolutionExpressions.h"
+#include "llvm37/Analysis/ValueTracking.h"
+#include "llvm37/IR/Dominators.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/IRBuilder.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/PatternMatch.h"
+#include "llvm37/IR/ValueHandle.h"
+#include "llvm37/IR/Verifier.h"
+#include "llvm37/Pass.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Transforms/Scalar.h"
+#include "llvm37/Transforms/Utils/BasicBlockUtils.h"
+#include "llvm37/Transforms/Utils/Cloning.h"
+#include "llvm37/Transforms/Utils/LoopUtils.h"
+#include "llvm37/Transforms/Utils/SimplifyIndVar.h"
+#include "llvm37/Transforms/Utils/UnrollLoop.h"
 #include <array>
 
-using namespace llvm;
+using namespace llvm37;
 
 static cl::opt<unsigned> LoopSizeCutoff("irce-loop-size-cutoff", cl::Hidden,
                                         cl::init(64));
@@ -155,7 +155,7 @@ public:
     OS << "\n";
   }
 
-#if !defined(NDEBUG) || defined(LLVM_ENABLE_DUMP)
+#if !defined(NDEBUG) || defined(LLVM37_ENABLE_DUMP)
   void dump() {
     print(dbgs());
   }
@@ -243,7 +243,7 @@ const char *InductiveRangeCheck::rangeCheckKindToStr(
     return "RANGE_CHECK_BOTH";
   }
 
-  llvm_unreachable("unknown range check type!");
+  llvm37_unreachable("unknown range check type!");
 }
 
 /// Parse a single ICmp instruction, `ICI`, into a range check.  If `ICI`
@@ -269,7 +269,7 @@ InductiveRangeCheck::parseRangeCheckICmp(Loop *L, ICmpInst *ICI,
            SE.isKnownNonNegative(S);
   };
 
-  using namespace llvm::PatternMatch;
+  using namespace llvm37::PatternMatch;
 
   ICmpInst::Predicate Pred = ICI->getPredicate();
   Value *LHS = ICI->getOperand(0);
@@ -317,7 +317,7 @@ InductiveRangeCheck::parseRangeCheckICmp(Loop *L, ICmpInst *ICI,
     return RANGE_CHECK_UNKNOWN;
   }
 
-  llvm_unreachable("default clause returns!");
+  llvm37_unreachable("default clause returns!");
 }
 
 /// Parses an arbitrary condition into a range check.  `Length` is set only if
@@ -326,7 +326,7 @@ InductiveRangeCheck::RangeCheckKind
 InductiveRangeCheck::parseRangeCheck(Loop *L, ScalarEvolution &SE,
                                      Value *Condition, const SCEV *&Index,
                                      Value *&Length) {
-  using namespace llvm::PatternMatch;
+  using namespace llvm37::PatternMatch;
 
   Value *A = nullptr;
   Value *B = nullptr;
@@ -424,7 +424,7 @@ InductiveRangeCheck::create(InductiveRangeCheck::AllocatorTy &A, BranchInst *BI,
 
 namespace {
 
-// Keeps track of the structure of a loop.  This is similar to llvm::Loop,
+// Keeps track of the structure of a loop.  This is similar to llvm37::Loop,
 // except that it is more lightweight and can track the state of a loop through
 // changing and potentially invalid IR.  This structure also formalizes the
 // kinds of loops we can deal with -- ones that have a single latch that is also
@@ -586,7 +586,7 @@ class LoopConstrainer {
 
   // Some global state.
   Function &F;
-  LLVMContext &Ctx;
+  LLVM37Context &Ctx;
   ScalarEvolution &SE;
 
   // Information about the original loop we started out with.
@@ -1302,7 +1302,7 @@ InductiveRangeCheck::computeSafeIterationSpace(ScalarEvolution &SE,
                                                const SCEVAddRecExpr *IndVar,
                                                IRBuilder<> &) const {
   // IndVar is of the form "A + B * I" (where "I" is the canonical induction
-  // variable, that may or may not exist as a real llvm::Value in the loop) and
+  // variable, that may or may not exist as a real llvm37::Value in the loop) and
   // this inductive range check is a range check on the "C + D * I" ("C" is
   // getOffset() and "D" is getScale()).  We rewrite the value being range
   // checked to "M + N * IndVar" where "N" = "D * B^(-1)" and "M" = "C - NA".
@@ -1396,7 +1396,7 @@ bool InductiveRangeCheckElimination::runOnLoop(Loop *L, LPPassManager &LPM) {
     return false;
   }
 
-  LLVMContext &Context = Preheader->getContext();
+  LLVM37Context &Context = Preheader->getContext();
   InductiveRangeCheck::AllocatorTy IRCAlloc;
   SmallVector<InductiveRangeCheck *, 16> RangeChecks;
   ScalarEvolution &SE = getAnalysis<ScalarEvolution>();
@@ -1490,6 +1490,6 @@ bool InductiveRangeCheckElimination::runOnLoop(Loop *L, LPPassManager &LPM) {
   return Changed;
 }
 
-Pass *llvm::createInductiveRangeCheckEliminationPass() {
+Pass *llvm37::createInductiveRangeCheckEliminationPass() {
   return new InductiveRangeCheckElimination;
 }

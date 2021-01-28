@@ -21,7 +21,7 @@ define void @__entrypoint__pypy_array_constant() {
         ret void
 }
 
-define void @__entrypoint__raised_LLVMException() {
+define void @__entrypoint__raised_LLVM37Exception() {
         ret void
 }
 

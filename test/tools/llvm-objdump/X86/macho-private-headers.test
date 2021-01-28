@@ -1,25 +1,25 @@
-// RUN: llvm-objdump -p %p/Inputs/hello.obj.macho-x86_64 | FileCheck %s
-// RUN: llvm-objdump -p %p/Inputs/hello.exe.macho-x86_64 \
+// RUN: llvm37-objdump -p %p/Inputs/hello.obj.macho-x86_64 | FileCheck %s
+// RUN: llvm37-objdump -p %p/Inputs/hello.exe.macho-x86_64 \
 // RUN:     | FileCheck %s -check-prefix=EXE
-// RUN: llvm-objdump -p %p/Inputs/dylibLoadKinds.macho-x86_64 \
+// RUN: llvm37-objdump -p %p/Inputs/dylibLoadKinds.macho-x86_64 \
 // RUN:     | FileCheck %s -check-prefix=LOAD
-// RUN: llvm-objdump -p %p/Inputs/linkerOption.macho-x86_64 \
+// RUN: llvm37-objdump -p %p/Inputs/linkerOption.macho-x86_64 \
 // RUN:     | FileCheck %s -check-prefix=LD_OPT
-// RUN: llvm-objdump -p %p/Inputs/dylibSubFramework.macho-x86_64 \
+// RUN: llvm37-objdump -p %p/Inputs/dylibSubFramework.macho-x86_64 \
 // RUN:     | FileCheck %s -check-prefix=SUB_FRAME
-// RUN: llvm-objdump -p %p/Inputs/dylibSubUmbrella.macho-x86_64 \
+// RUN: llvm37-objdump -p %p/Inputs/dylibSubUmbrella.macho-x86_64 \
 // RUN:     | FileCheck %s -check-prefix=SUB_UMB
-// RUN: llvm-objdump -p %p/Inputs/dylibSubLibrary.macho-x86_64 \
+// RUN: llvm37-objdump -p %p/Inputs/dylibSubLibrary.macho-x86_64 \
 // RUN:     | FileCheck %s -check-prefix=SUB_LIB
-// RUN: llvm-objdump -p %p/Inputs/dylibSubClient.macho-x86_64 \
+// RUN: llvm37-objdump -p %p/Inputs/dylibSubClient.macho-x86_64 \
 // RUN:     | FileCheck %s -check-prefix=SUB_CLI
-// RUN: llvm-objdump -p %p/Inputs/dylibRoutines.macho-x86_64 \
+// RUN: llvm37-objdump -p %p/Inputs/dylibRoutines.macho-x86_64 \
 // RUN:     | FileCheck %s -check-prefix=ROUTINE
-// RUN: llvm-objdump -p %p/Inputs/exeThread.macho-x86_64 \
+// RUN: llvm37-objdump -p %p/Inputs/exeThread.macho-x86_64 \
 // RUN:     | FileCheck %s -check-prefix=THREAD
-// RUN: llvm-objdump -macho -p -arch i386 %p/Inputs/macho-universal.x86_64.i386 \
+// RUN: llvm37-objdump -macho -p -arch i386 %p/Inputs/macho-universal.x86_64.i386 \
 // RUN:     | FileCheck %s -check-prefix=FATi386
-// RUN: llvm-objdump -p -non-verbose %p/Inputs/hello.obj.macho-x86_64 \
+// RUN: llvm37-objdump -p -non-verbose %p/Inputs/hello.obj.macho-x86_64 \
 // RUN:     | FileCheck %s -check-prefix=NON_VERBOSE
 
 CHECK: Mach header

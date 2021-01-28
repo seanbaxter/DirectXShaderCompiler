@@ -1,6 +1,6 @@
 //===- InstructionCombining.cpp - Combine multiple instructions -----------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -33,37 +33,37 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Transforms/InstCombine/InstCombine.h"
+#include "llvm37/Transforms/InstCombine/InstCombine.h"
 #include "InstCombineInternal.h"
-#include "llvm-c/Initialization.h"
-#include "llvm/ADT/SmallPtrSet.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/ADT/StringSwitch.h"
-#include "llvm/Analysis/AssumptionCache.h"
-#include "llvm/Analysis/CFG.h"
-#include "llvm/Analysis/ConstantFolding.h"
-#include "llvm/Analysis/InstructionSimplify.h"
-#include "llvm/Analysis/LibCallSemantics.h"
-#include "llvm/Analysis/LoopInfo.h"
-#include "llvm/Analysis/MemoryBuiltins.h"
-#include "llvm/Analysis/TargetLibraryInfo.h"
-#include "llvm/Analysis/ValueTracking.h"
-#include "llvm/IR/CFG.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/Dominators.h"
-#include "llvm/IR/GetElementPtrTypeIterator.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/IR/PatternMatch.h"
-#include "llvm/IR/ValueHandle.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Transforms/Scalar.h"
-#include "llvm/Transforms/Utils/Local.h"
+#include "llvm37-c/Initialization.h"
+#include "llvm37/ADT/SmallPtrSet.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/ADT/StringSwitch.h"
+#include "llvm37/Analysis/AssumptionCache.h"
+#include "llvm37/Analysis/CFG.h"
+#include "llvm37/Analysis/ConstantFolding.h"
+#include "llvm37/Analysis/InstructionSimplify.h"
+#include "llvm37/Analysis/LibCallSemantics.h"
+#include "llvm37/Analysis/LoopInfo.h"
+#include "llvm37/Analysis/MemoryBuiltins.h"
+#include "llvm37/Analysis/TargetLibraryInfo.h"
+#include "llvm37/Analysis/ValueTracking.h"
+#include "llvm37/IR/CFG.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/IR/Dominators.h"
+#include "llvm37/IR/GetElementPtrTypeIterator.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/IR/PatternMatch.h"
+#include "llvm37/IR/ValueHandle.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Transforms/Scalar.h"
+#include "llvm37/Transforms/Utils/Local.h"
 #include <algorithm>
 #include <climits>
-using namespace llvm;
-using namespace llvm::PatternMatch;
+using namespace llvm37;
+using namespace llvm37::PatternMatch;
 
 #define DEBUG_TYPE "instcombine"
 
@@ -76,7 +76,7 @@ STATISTIC(NumFactor   , "Number of factorizations");
 STATISTIC(NumReassoc  , "Number of reassociations");
 
 Value *InstCombiner::EmitGEPOffset(User *GEP) {
-  return llvm::EmitGEPOffset(Builder, DL, GEP);
+  return llvm37::EmitGEPOffset(Builder, DL, GEP);
 }
 
 /// ShouldChangeType - Return true if it is desirable to convert a computation
@@ -697,7 +697,7 @@ static Value *FoldOperationIntoSelectOperand(Instruction &I, Value *SO,
   if (FCmpInst *CI = dyn_cast<FCmpInst>(&I))
     return IC->Builder->CreateICmp(CI->getPredicate(), Op0, Op1,
                                    SO->getName()+".cmp");
-  llvm_unreachable("Unknown binary instruction type!");
+  llvm37_unreachable("Unknown binary instruction type!");
 }
 
 // FoldOpIntoSelect - Given an instruction with a select as one operand and a
@@ -1912,7 +1912,7 @@ isAllocSiteRemovable(Instruction *AI, SmallVectorImpl<WeakVH> &Users,
         continue;
       }
       }
-      llvm_unreachable("missing a return?");
+      llvm37_unreachable("missing a return?");
     }
   } while (!Worklist.empty());
   return true;
@@ -2347,7 +2347,7 @@ static bool isCatchAll(EHPersonality Personality, Constant *TypeInfo) {
   case EHPersonality::MSVC_CXX:
     return TypeInfo->isNullValue();
   }
-  llvm_unreachable("invalid enum");
+  llvm37_unreachable("invalid enum");
 }
 
 static bool shorter_filter(const Value *LHS, const Value *RHS) {
@@ -3096,14 +3096,14 @@ INITIALIZE_PASS_END(InstructionCombiningPass, "instcombine",
                     "Combine redundant instructions", false, false)
 
 // Initialization Routines
-void llvm::initializeInstCombine(PassRegistry &Registry) {
+void llvm37::initializeInstCombine(PassRegistry &Registry) {
   initializeInstructionCombiningPassPass(Registry);
 }
 
-void LLVMInitializeInstCombine(LLVMPassRegistryRef R) {
+void LLVM37InitializeInstCombine(LLVM37PassRegistryRef R) {
   initializeInstructionCombiningPassPass(*unwrap(R));
 }
 
-FunctionPass *llvm::createInstructionCombiningPass() {
+FunctionPass *llvm37::createInstructionCombiningPass() {
   return new InstructionCombiningPass();
 }

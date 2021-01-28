@@ -1,7 +1,7 @@
 ; RUN: opt < %s -simplifycfg -instcombine -mem2reg -S | not grep alloca
 ;
 ; This tests to see if mem2reg can promote alloca instructions whose addresses
-; are used by PHI nodes that are immediately loaded.  The LLVM C++ front-end
+; are used by PHI nodes that are immediately loaded.  The LLVM37 C++ front-end
 ; often generates code that looks like this (when it codegen's ?: exprs as
 ; lvalues), so handling this simple extension is quite useful.
 ;

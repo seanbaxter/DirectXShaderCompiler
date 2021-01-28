@@ -5,13 +5,13 @@ declare noalias i8* @malloc(i32) nounwind
 declare noalias i8* @_Znwm(i64)  ; new(unsigned long)
 declare i32 @__gxx_personality_v0(...)
 declare void @__cxa_call_unexpected(i8*)
-declare i64 @llvm.objectsize.i64(i8*, i1) nounwind readonly
+declare i64 @llvm37.objectsize.i64(i8*, i1) nounwind readonly
 
 ; CHECK-LABEL: @f1(
 define i64 @f1(i8 **%esc) {
   %call = call i8* @malloc(i32 4)
   store i8* %call, i8** %esc
-  %size = call i64 @llvm.objectsize.i64(i8* %call, i1 false)
+  %size = call i64 @llvm37.objectsize.i64(i8* %call, i1 false)
 ; CHECK: ret i64 4
   ret i64 %size
 }
@@ -27,7 +27,7 @@ entry:
 invoke.cont:
 ; CHECK: ret i64 13
   store i8* %call, i8** %esc
-  %0 = tail call i64 @llvm.objectsize.i64(i8* %call, i1 false)
+  %0 = tail call i64 @llvm37.objectsize.i64(i8* %call, i1 false)
   ret i64 %0
 
 lpad:

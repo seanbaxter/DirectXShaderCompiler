@@ -1,6 +1,6 @@
 //===- ScalarEvolutionExpander.cpp - Scalar Evolution Analysis --*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -13,22 +13,22 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Analysis/ScalarEvolutionExpander.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/SmallSet.h"
-#include "llvm/Analysis/InstructionSimplify.h"
-#include "llvm/Analysis/LoopInfo.h"
-#include "llvm/Analysis/TargetTransformInfo.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/Dominators.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/PatternMatch.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/Analysis/ScalarEvolutionExpander.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/SmallSet.h"
+#include "llvm37/Analysis/InstructionSimplify.h"
+#include "llvm37/Analysis/LoopInfo.h"
+#include "llvm37/Analysis/TargetTransformInfo.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/IR/Dominators.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/PatternMatch.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/raw_ostream.h"
 
-using namespace llvm;
+using namespace llvm37;
 using namespace PatternMatch;
 
 /// ReuseOrCreateCast - Arrange for there to be a cast of V to Ty at IP,
@@ -349,7 +349,7 @@ static void SplitAddRecs(SmallVectorImpl<const SCEV *> &Ops,
 /// a GEP instead of using ptrtoint+arithmetic+inttoptr. This helps
 /// BasicAliasAnalysis and other passes analyze the result. See the rules
 /// for getelementptr vs. inttoptr in
-/// http://llvm.org/docs/LangRef.html#pointeraliasing
+/// http://llvm37.org/docs/LangRef.html#pointeraliasing
 /// for details.
 ///
 /// Design note: The correctness of using getelementptr here depends on
@@ -627,7 +627,7 @@ const Loop *SCEVExpander::getRelevantLoop(const SCEV *S) {
                            *SE.DT);
     return RelevantLoops[D] = Result;
   }
-  llvm_unreachable("Unexpected SCEV type!");
+  llvm37_unreachable("Unexpected SCEV type!");
 }
 
 namespace {
@@ -1942,7 +1942,7 @@ struct SCEVFindUnsafe {
 };
 }
 
-namespace llvm {
+namespace llvm37 {
 bool isSafeToExpand(const SCEV *S, ScalarEvolution &SE) {
   SCEVFindUnsafe Search(SE);
   visitAll(S, Search);

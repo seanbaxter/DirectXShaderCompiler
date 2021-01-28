@@ -42,8 +42,8 @@ RUN: printf '\0\0\0\0\0' >> %t-bar-padded.profraw
 RUN: cat %t-foo-padded.profraw %t-bar.profraw > %t-pad-between.profraw
 RUN: cat %t-foo-padded.profraw %t-bar-padded.profraw > %t-pad.profraw
 
-RUN: llvm-profdata show %t-pad-between.profraw -all-functions -counts | FileCheck %s
-RUN: llvm-profdata show %t-pad.profraw -all-functions -counts | FileCheck %s
+RUN: llvm37-profdata show %t-pad-between.profraw -all-functions -counts | FileCheck %s
+RUN: llvm37-profdata show %t-pad.profraw -all-functions -counts | FileCheck %s
 
 CHECK: Counters:
 CHECK:   foo:

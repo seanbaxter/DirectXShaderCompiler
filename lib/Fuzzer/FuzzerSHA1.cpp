@@ -1,6 +1,6 @@
 //===- FuzzerSHA1.h - Private copy of the SHA1 implementation ---*- C++ -* ===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -13,7 +13,7 @@
 //
 // lib/Fuzzer can not use SHA1 implementation from openssl because
 // openssl may not be available and because we may be fuzzing openssl itself.
-// For the same reason we do not want to depend on SHA1 from LLVM tree.
+// For the same reason we do not want to depend on SHA1 from LLVM37 tree.
 //===----------------------------------------------------------------------===//
 
 #include "FuzzerInternal.h"

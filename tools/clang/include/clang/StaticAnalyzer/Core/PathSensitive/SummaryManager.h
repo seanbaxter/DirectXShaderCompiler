@@ -1,6 +1,6 @@
 //== SummaryManager.h - Generic handling of function summaries --*- C++ -*--==//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -12,11 +12,11 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_GR_SUMMARY
-#define LLVM_CLANG_GR_SUMMARY
+#ifndef LLVM37_CLANG_GR_SUMMARY
+#define LLVM37_CLANG_GR_SUMMARY
 
-#include "llvm/ADT/FoldingSet.h"
-#include "llvm/Support/Allocator.h"
+#include "llvm37/ADT/FoldingSet.h"
+#include "llvm37/Support/Allocator.h"
 
 namespace clang {
 

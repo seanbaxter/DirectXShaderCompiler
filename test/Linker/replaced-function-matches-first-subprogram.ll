@@ -1,4 +1,4 @@
-; RUN: llvm-link %s %S/Inputs/replaced-function-matches-first-subprogram.ll -S | FileCheck %s
+; RUN: llvm37-link %s %S/Inputs/replaced-function-matches-first-subprogram.ll -S | FileCheck %s
 
 ; Generated from C++ source:
 ;
@@ -33,16 +33,16 @@ entry:
   ret i32 0, !dbg !15
 }
 
-; CHECK: !llvm.dbg.cu = !{![[CU1:[0-9]+]], ![[CU2:[0-9]+]]}
-!llvm.dbg.cu = !{!0}
-!llvm.module.flags = !{!10, !11, !12}
-!llvm.ident = !{!13}
+; CHECK: !llvm37.dbg.cu = !{![[CU1:[0-9]+]], ![[CU2:[0-9]+]]}
+!llvm37.dbg.cu = !{!0}
+!llvm37.module.flags = !{!10, !11, !12}
+!llvm37.ident = !{!13}
 
 ; Extract out the list of subprograms from each compile unit.
 ; CHECK-DAG: ![[CU1]] = !DICompileUnit({{.*}} subprograms: ![[SPs1:[0-9]+]]
 ; CHECK-DAG: ![[CU2]] = !DICompileUnit({{.*}} subprograms: ![[SPs2:[0-9]+]]
-!0 = !DICompileUnit(language: DW_LANG_C_plus_plus, producer: "clang version 3.6.0 (trunk 224193) (llvm/trunk 224197)", isOptimized: false, emissionKind: 2, file: !1, enums: !2, retainedTypes: !2, subprograms: !3, globals: !2, imports: !2)
-!1 = !DIFile(filename: "t1.cpp", directory: "/Users/dexonsmith/data/llvm/staging/test/Linker/repro/d1")
+!0 = !DICompileUnit(language: DW_LANG_C_plus_plus, producer: "clang version 3.6.0 (trunk 224193) (llvm37/trunk 224197)", isOptimized: false, emissionKind: 2, file: !1, enums: !2, retainedTypes: !2, subprograms: !3, globals: !2, imports: !2)
+!1 = !DIFile(filename: "t1.cpp", directory: "/Users/dexonsmith/data/llvm37/staging/test/Linker/repro/d1")
 !2 = !{}
 
 ; Extract out each compile unit's single subprogram.  The replaced subprogram's
@@ -51,7 +51,7 @@ entry:
 ; CHECK-DAG: ![[SPs2]] = !{![[SP2:[0-9]+]]}
 !3 = !{!4, !7}
 !4 = !DISubprogram(name: "foo", line: 2, isLocal: false, isDefinition: true, flags: DIFlagPrototyped, isOptimized: false, scopeLine: 2, file: !1, scope: !5, type: !6, function: i32 ()* @_Z3foov, variables: !2)
-!5 = !DIFile(filename: "t1.cpp", directory: "/Users/dexonsmith/data/llvm/staging/test/Linker/repro/d1")
+!5 = !DIFile(filename: "t1.cpp", directory: "/Users/dexonsmith/data/llvm37/staging/test/Linker/repro/d1")
 !6 = !DISubroutineType(types: !2)
 
 ; Extract out the file from the replaced subprogram.  Confirm that each
@@ -65,13 +65,13 @@ entry:
 !7 = !DISubprogram(name: "foo", line: 2, isLocal: false, isDefinition: true, flags: DIFlagPrototyped, isOptimized: false, scopeLine: 2, file: !8, scope: !9, type: !6, function: i32 (%struct.Class*)* @_ZN5ClassIiE3fooEv, variables: !2)
 
 ; The new subprogram should be pointing at the new directory.
-; CHECK-DAG: ![[FILE]] = !DIFile(filename: "../t.h", directory: "/Users/dexonsmith/data/llvm/staging/test/Linker/repro/d2")
-!8 = !DIFile(filename: "../t.h", directory: "/Users/dexonsmith/data/llvm/staging/test/Linker/repro/d1")
-!9 = !DIFile(filename: "../t.h", directory: "/Users/dexonsmith/data/llvm/staging/test/Linker/repro/d1")
+; CHECK-DAG: ![[FILE]] = !DIFile(filename: "../t.h", directory: "/Users/dexonsmith/data/llvm37/staging/test/Linker/repro/d2")
+!8 = !DIFile(filename: "../t.h", directory: "/Users/dexonsmith/data/llvm37/staging/test/Linker/repro/d1")
+!9 = !DIFile(filename: "../t.h", directory: "/Users/dexonsmith/data/llvm37/staging/test/Linker/repro/d1")
 !10 = !{i32 2, !"Dwarf Version", i32 2}
 !11 = !{i32 2, !"Debug Info Version", i32 3}
 !12 = !{i32 1, !"PIC Level", i32 2}
-!13 = !{!"clang version 3.6.0 (trunk 224193) (llvm/trunk 224197)"}
+!13 = !{!"clang version 3.6.0 (trunk 224193) (llvm37/trunk 224197)"}
 !14 = !DILocation(line: 2, column: 20, scope: !4)
 
 ; The same subprogram should be pointed to by inside the !dbg reference.

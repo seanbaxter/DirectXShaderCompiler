@@ -1,6 +1,6 @@
 //===--- PPExpressions.cpp - Preprocessor Expression Evaluation -----------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -22,9 +22,9 @@
 #include "clang/Lex/LexDiagnostic.h"
 #include "clang/Lex/LiteralSupport.h"
 #include "clang/Lex/MacroInfo.h"
-#include "llvm/ADT/APSInt.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/SaveAndRestore.h"
+#include "llvm37/ADT/APSInt.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/SaveAndRestore.h"
 using namespace clang;
 
 namespace {
@@ -34,7 +34,7 @@ namespace {
 class PPValue {
   SourceRange Range;
 public:
-  llvm::APSInt Val;
+  llvm37::APSInt Val;
 
   // Default ctor - Construct an 'invalid' PPValue.
   PPValue(unsigned BitWidth) : Val(BitWidth) {}
@@ -300,7 +300,7 @@ static bool EvaluateValue(PPValue &Result, Token &PeekTok, DefinedTracker &DT,
       NumBits = TI.getCharWidth();
 
     // Set the width.
-    llvm::APSInt Val(NumBits);
+    llvm37::APSInt Val(NumBits);
     // Set the value.
     Val = Literal.getValue();
     // Set the signedness. UTF-16 and UTF-32 are always unsigned
@@ -534,7 +534,7 @@ static bool EvaluateDirectiveSubExpr(PPValue &LHS, unsigned MinPrec,
 
     // Usual arithmetic conversions (C99 6.3.1.8p1): result is unsigned if
     // either operand is unsigned.
-    llvm::APSInt Res(LHS.getBitWidth());
+    llvm37::APSInt Res(LHS.getBitWidth());
     switch (Operator) {
     case tok::question:       // No UAC for x and y in "x ? y : z".
     case tok::lessless:       // Shift amount doesn't UAC with shift value.
@@ -565,7 +565,7 @@ static bool EvaluateDirectiveSubExpr(PPValue &LHS, unsigned MinPrec,
 
     bool Overflow = false;
     switch (Operator) {
-    default: llvm_unreachable("Unknown operator token!");
+    default: llvm37_unreachable("Unknown operator token!");
     case tok::percent:
       if (RHS.Val != 0)
         Res = LHS.Val % RHS.Val;
@@ -578,7 +578,7 @@ static bool EvaluateDirectiveSubExpr(PPValue &LHS, unsigned MinPrec,
     case tok::slash:
       if (RHS.Val != 0) {
         if (LHS.Val.isSigned())
-          Res = llvm::APSInt(LHS.Val.sdiv_ov(RHS.Val, Overflow), false);
+          Res = llvm37::APSInt(LHS.Val.sdiv_ov(RHS.Val, Overflow), false);
         else
           Res = LHS.Val / RHS.Val;
       } else if (ValueLive) {
@@ -590,7 +590,7 @@ static bool EvaluateDirectiveSubExpr(PPValue &LHS, unsigned MinPrec,
 
     case tok::star:
       if (Res.isSigned())
-        Res = llvm::APSInt(LHS.Val.smul_ov(RHS.Val, Overflow), false);
+        Res = llvm37::APSInt(LHS.Val.smul_ov(RHS.Val, Overflow), false);
       else
         Res = LHS.Val * RHS.Val;
       break;
@@ -599,7 +599,7 @@ static bool EvaluateDirectiveSubExpr(PPValue &LHS, unsigned MinPrec,
       if (LHS.isUnsigned())
         Res = LHS.Val.ushl_ov(RHS.Val, Overflow);
       else
-        Res = llvm::APSInt(LHS.Val.sshl_ov(RHS.Val, Overflow), false);
+        Res = llvm37::APSInt(LHS.Val.sshl_ov(RHS.Val, Overflow), false);
       break;
     }
     case tok::greatergreater: {
@@ -614,13 +614,13 @@ static bool EvaluateDirectiveSubExpr(PPValue &LHS, unsigned MinPrec,
       if (LHS.isUnsigned())
         Res = LHS.Val + RHS.Val;
       else
-        Res = llvm::APSInt(LHS.Val.sadd_ov(RHS.Val, Overflow), false);
+        Res = llvm37::APSInt(LHS.Val.sadd_ov(RHS.Val, Overflow), false);
       break;
     case tok::minus:
       if (LHS.isUnsigned())
         Res = LHS.Val - RHS.Val;
       else
-        Res = llvm::APSInt(LHS.Val.ssub_ov(RHS.Val, Overflow), false);
+        Res = llvm37::APSInt(LHS.Val.ssub_ov(RHS.Val, Overflow), false);
       break;
     case tok::lessequal:
       Res = LHS.Val <= RHS.Val;

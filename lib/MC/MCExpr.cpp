@@ -1,26 +1,26 @@
 //===- MCExpr.cpp - Assembly Level Expression Implementation --------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/MC/MCExpr.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/ADT/StringSwitch.h"
-#include "llvm/MC/MCAsmInfo.h"
-#include "llvm/MC/MCAsmLayout.h"
-#include "llvm/MC/MCAssembler.h"
-#include "llvm/MC/MCContext.h"
-#include "llvm/MC/MCObjectWriter.h"
-#include "llvm/MC/MCSymbol.h"
-#include "llvm/MC/MCValue.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/raw_ostream.h"
-using namespace llvm;
+#include "llvm37/MC/MCExpr.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/ADT/StringSwitch.h"
+#include "llvm37/MC/MCAsmInfo.h"
+#include "llvm37/MC/MCAsmLayout.h"
+#include "llvm37/MC/MCAssembler.h"
+#include "llvm37/MC/MCContext.h"
+#include "llvm37/MC/MCObjectWriter.h"
+#include "llvm37/MC/MCSymbol.h"
+#include "llvm37/MC/MCValue.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/raw_ostream.h"
+using namespace llvm37;
 
 #define DEBUG_TYPE "mcexpr"
 
@@ -125,10 +125,10 @@ void MCExpr::print(raw_ostream &OS, const MCAsmInfo *MAI) const {
   }
   }
 
-  llvm_unreachable("Invalid expression kind!");
+  llvm37_unreachable("Invalid expression kind!");
 }
 
-#if !defined(NDEBUG) || defined(LLVM_ENABLE_DUMP)
+#if !defined(NDEBUG) || defined(LLVM37_ENABLE_DUMP)
 void MCExpr::dump() const {
   dbgs() << *this;
   dbgs() << '\n';
@@ -302,7 +302,7 @@ StringRef MCSymbolRefExpr::getVariantKindName(VariantKind Kind) {
   case VK_TPREL: return "tprel";
   case VK_DTPREL: return "dtprel";
   }
-  llvm_unreachable("Invalid variant kind");
+  llvm37_unreachable("Invalid variant kind");
 }
 
 MCSymbolRefExpr::VariantKind
@@ -762,7 +762,7 @@ bool MCExpr::evaluateAsRelocatableImpl(MCValue &Res, const MCAssembler *Asm,
   }
   }
 
-  llvm_unreachable("Invalid assembly expression kind!");
+  llvm37_unreachable("Invalid assembly expression kind!");
 }
 
 MCSection *MCExpr::findAssociatedSection() const {
@@ -807,5 +807,5 @@ MCSection *MCExpr::findAssociatedSection() const {
   }
   }
 
-  llvm_unreachable("Invalid assembly expression kind!");
+  llvm37_unreachable("Invalid assembly expression kind!");
 }

@@ -1,6 +1,6 @@
 //===-- AsmPrinter.cpp - Common AsmPrinter code ---------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,48 +11,48 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/CodeGen/AsmPrinter.h"
+#include "llvm37/CodeGen/AsmPrinter.h"
 #include "DwarfDebug.h"
 #include "DwarfException.h"
 #include "WinException.h"
 #include "WinCodeViewLineTables.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/Analysis/ConstantFolding.h"
-#include "llvm/CodeGen/Analysis.h"
-#include "llvm/CodeGen/GCMetadataPrinter.h"
-#include "llvm/CodeGen/MachineConstantPool.h"
-#include "llvm/CodeGen/MachineFrameInfo.h"
-#include "llvm/CodeGen/MachineFunction.h"
-#include "llvm/CodeGen/MachineInstrBundle.h"
-#include "llvm/CodeGen/MachineJumpTableInfo.h"
-#include "llvm/CodeGen/MachineLoopInfo.h"
-#include "llvm/CodeGen/MachineModuleInfoImpls.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/DebugInfo.h"
-#include "llvm/IR/Mangler.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/Operator.h"
-#include "llvm/MC/MCAsmInfo.h"
-#include "llvm/MC/MCContext.h"
-#include "llvm/MC/MCExpr.h"
-#include "llvm/MC/MCInst.h"
-#include "llvm/MC/MCSection.h"
-#include "llvm/MC/MCStreamer.h"
-#include "llvm/MC/MCSymbolELF.h"
-#include "llvm/MC/MCValue.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/Format.h"
-#include "llvm/Support/MathExtras.h"
-#include "llvm/Support/TargetRegistry.h"
-#include "llvm/Support/Timer.h"
-#include "llvm/Target/TargetFrameLowering.h"
-#include "llvm/Target/TargetInstrInfo.h"
-#include "llvm/Target/TargetLowering.h"
-#include "llvm/Target/TargetLoweringObjectFile.h"
-#include "llvm/Target/TargetRegisterInfo.h"
-#include "llvm/Target/TargetSubtargetInfo.h"
-using namespace llvm;
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/Analysis/ConstantFolding.h"
+#include "llvm37/CodeGen/Analysis.h"
+#include "llvm37/CodeGen/GCMetadataPrinter.h"
+#include "llvm37/CodeGen/MachineConstantPool.h"
+#include "llvm37/CodeGen/MachineFrameInfo.h"
+#include "llvm37/CodeGen/MachineFunction.h"
+#include "llvm37/CodeGen/MachineInstrBundle.h"
+#include "llvm37/CodeGen/MachineJumpTableInfo.h"
+#include "llvm37/CodeGen/MachineLoopInfo.h"
+#include "llvm37/CodeGen/MachineModuleInfoImpls.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/IR/DebugInfo.h"
+#include "llvm37/IR/Mangler.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/Operator.h"
+#include "llvm37/MC/MCAsmInfo.h"
+#include "llvm37/MC/MCContext.h"
+#include "llvm37/MC/MCExpr.h"
+#include "llvm37/MC/MCInst.h"
+#include "llvm37/MC/MCSection.h"
+#include "llvm37/MC/MCStreamer.h"
+#include "llvm37/MC/MCSymbolELF.h"
+#include "llvm37/MC/MCValue.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/Format.h"
+#include "llvm37/Support/MathExtras.h"
+#include "llvm37/Support/TargetRegistry.h"
+#include "llvm37/Support/Timer.h"
+#include "llvm37/Target/TargetFrameLowering.h"
+#include "llvm37/Target/TargetInstrInfo.h"
+#include "llvm37/Target/TargetLowering.h"
+#include "llvm37/Target/TargetLoweringObjectFile.h"
+#include "llvm37/Target/TargetRegisterInfo.h"
+#include "llvm37/Target/TargetSubtargetInfo.h"
+using namespace llvm37;
 
 #define DEBUG_TYPE "asm-printer"
 
@@ -264,7 +264,7 @@ bool AsmPrinter::doInitialization(Module &M) {
     break;
   case ExceptionHandling::WinEH:
     switch (MAI->getWinEHEncodingType()) {
-    default: llvm_unreachable("unsupported unwinding information encoding");
+    default: llvm37_unreachable("unsupported unwinding information encoding");
     case WinEH::EncodingType::Invalid:
       break;
     case WinEH::EncodingType::X86:
@@ -324,11 +324,11 @@ void AsmPrinter::EmitLinkage(const GlobalValue *GV, MCSymbol *GVSym) const {
   case GlobalValue::InternalLinkage:
     return;
   case GlobalValue::AvailableExternallyLinkage:
-    llvm_unreachable("Should never emit this");
+    llvm37_unreachable("Should never emit this");
   case GlobalValue::ExternalWeakLinkage:
-    llvm_unreachable("Don't know how to emit these");
+    llvm37_unreachable("Don't know how to emit these");
   }
-  llvm_unreachable("Unknown linkage type!");
+  llvm37_unreachable("Unknown linkage type!");
 }
 
 void AsmPrinter::getNameWithPrefix(SmallVectorImpl<char> &Name,
@@ -343,8 +343,8 @@ MCSymbol *AsmPrinter::getSymbol(const GlobalValue *GV) const {
 /// EmitGlobalVariable - Emit the specified global variable to the .s file.
 void AsmPrinter::EmitGlobalVariable(const GlobalVariable *GV) {
   if (GV->hasInitializer()) {
-    // Check to see if this is a special global used by LLVM, if so, emit it.
-    if (EmitSpecialLLVMGlobal(GV))
+    // Check to see if this is a special global used by LLVM37, if so, emit it.
+    if (EmitSpecialLLVM37Global(GV))
       return;
 
     // Skip the emission of global equivalents. The symbol can be emitted later
@@ -1115,7 +1115,7 @@ bool AsmPrinter::doFinalization(Module &M) {
     if (GCMetadataPrinter *MP = GetOrCreateGCPrinter(**--I))
       MP->finishAssembly(M, *MI, *this);
 
-  // Emit llvm.ident metadata in an '.ident' directive.
+  // Emit llvm37.ident metadata in an '.ident' directive.
   EmitModuleIdents(M);
 
   // Emit __morestack address if needed for indirect calls.
@@ -1358,7 +1358,7 @@ void AsmPrinter::EmitJumpTableEntry(const MachineJumpTableInfo *MJTI,
   const MCExpr *Value = nullptr;
   switch (MJTI->getEntryKind()) {
   case MachineJumpTableInfo::EK_Inline:
-    llvm_unreachable("Cannot emit EK_Inline jump table entry");
+    llvm37_unreachable("Cannot emit EK_Inline jump table entry");
   case MachineJumpTableInfo::EK_Custom32:
     Value = MF->getSubtarget().getTargetLowering()->LowerCustomJumpTableEntry(
         MJTI, MBB, UID, OutContext);
@@ -1415,24 +1415,24 @@ void AsmPrinter::EmitJumpTableEntry(const MachineJumpTableInfo *MJTI,
 }
 
 
-/// EmitSpecialLLVMGlobal - Check to see if the specified global is a
-/// special global used by LLVM.  If so, emit it and return true, otherwise
+/// EmitSpecialLLVM37Global - Check to see if the specified global is a
+/// special global used by LLVM37.  If so, emit it and return true, otherwise
 /// do nothing and return false.
-bool AsmPrinter::EmitSpecialLLVMGlobal(const GlobalVariable *GV) {
+bool AsmPrinter::EmitSpecialLLVM37Global(const GlobalVariable *GV) {
   if (GV->getName() == "llvm.used") {
     if (MAI->hasNoDeadStrip())    // No need to emit this at all.
-      EmitLLVMUsedList(cast<ConstantArray>(GV->getInitializer()));
+      EmitLLVM37UsedList(cast<ConstantArray>(GV->getInitializer()));
     return true;
   }
 
-  // Ignore debug and non-emitted data.  This handles llvm.compiler.used.
+  // Ignore debug and non-emitted data.  This handles llvm37.compiler.used.
   if (StringRef(GV->getSection()) == "llvm.metadata" ||
       GV->hasAvailableExternallyLinkage())
     return true;
 
   if (!GV->hasAppendingLinkage()) return false;
 
-  assert(GV->hasInitializer() && "Not a special LLVM global!");
+  assert(GV->hasInitializer() && "Not a special LLVM37 global!");
 
   if (GV->getName() == "llvm.global_ctors") {
     EmitXXStructorList(GV->getInitializer(), /* isCtor */ true);
@@ -1461,10 +1461,10 @@ bool AsmPrinter::EmitSpecialLLVMGlobal(const GlobalVariable *GV) {
   return false;
 }
 
-/// EmitLLVMUsedList - For targets that define a MAI::UsedDirective, mark each
-/// global in the specified llvm.used list for which emitUsedDirectiveFor
+/// EmitLLVM37UsedList - For targets that define a MAI::UsedDirective, mark each
+/// global in the specified llvm37.used list for which emitUsedDirectiveFor
 /// is true, as being used with this directive.
-void AsmPrinter::EmitLLVMUsedList(const ConstantArray *InitList) {
+void AsmPrinter::EmitLLVM37UsedList(const ConstantArray *InitList) {
   // Should be an array of 'i8*'.
   for (unsigned i = 0, e = InitList->getNumOperands(); i != e; ++i) {
     const GlobalValue *GV =
@@ -1478,8 +1478,8 @@ namespace {
 struct Structor {
   Structor() : Priority(0), Func(nullptr), ComdatKey(nullptr) {}
   int Priority;
-  llvm::Constant *Func;
-  llvm::GlobalValue *ComdatKey;
+  llvm37::Constant *Func;
+  llvm37::GlobalValue *ComdatKey;
 };
 } // end namespace
 
@@ -1494,7 +1494,7 @@ void AsmPrinter::EmitXXStructorList(const Constant *List, bool isCtor) {
   const ConstantArray *InitList = dyn_cast<ConstantArray>(List);
   if (!InitList) return; // Not an array!
   StructType *ETy = dyn_cast<StructType>(InitList->getType()->getElementType());
-  // FIXME: Only allow the 3-field form in LLVM 4.0.
+  // FIXME: Only allow the 3-field form in LLVM37 4.0.
   if (!ETy || ETy->getNumElements() < 2 || ETy->getNumElements() > 3)
     return; // Not an array of two or three elements!
   if (!isa<IntegerType>(ETy->getTypeAtIndex(0U)) ||
@@ -1656,7 +1656,7 @@ const MCExpr *AsmPrinter::lowerConstant(const Constant *CV) {
 
   const ConstantExpr *CE = dyn_cast<ConstantExpr>(CV);
   if (!CE) {
-    llvm_unreachable("Unknown constant value to lower!");
+    llvm37_unreachable("Unknown constant value to lower!");
   }
 
   if (const MCExpr *RelocExpr
@@ -1754,7 +1754,7 @@ const MCExpr *AsmPrinter::lowerConstant(const Constant *CV) {
     const MCExpr *LHS = lowerConstant(CE->getOperand(0));
     const MCExpr *RHS = lowerConstant(CE->getOperand(1));
     switch (CE->getOpcode()) {
-    default: llvm_unreachable("Unknown binary operator constant cast expr");
+    default: llvm37_unreachable("Unknown binary operator constant cast expr");
     case Instruction::Add: return MCBinaryExpr::createAdd(LHS, RHS, Ctx);
     case Instruction::Sub: return MCBinaryExpr::createSub(LHS, RHS, Ctx);
     case Instruction::Mul: return MCBinaryExpr::createMul(LHS, RHS, Ctx);
@@ -1972,7 +1972,7 @@ static void emitGlobalConstantFP(const ConstantFP *CFP, AsmPrinter &AP) {
   unsigned TrailingBytes = NumBytes % sizeof(uint64_t);
   const uint64_t *p = API.getRawData();
 
-  // PPC's long double has odd notions of endianness compared to how LLVM
+  // PPC's long double has odd notions of endianness compared to how LLVM37
   // handles it: p[0] goes first for *big* endian on PPC.
   if (AP.TM.getDataLayout()->isBigEndian() &&
       !CFP->getType()->isPPC_FP128Ty()) {
@@ -2229,7 +2229,7 @@ static void emitGlobalConstantImpl(const Constant *CV, AsmPrinter &AP,
   AP.OutStreamer->EmitValue(ME, Size);
 }
 
-/// EmitGlobalConstant - Print a general LLVM constant to the .s file.
+/// EmitGlobalConstant - Print a general LLVM37 constant to the .s file.
 void AsmPrinter::EmitGlobalConstant(const Constant *CV) {
   uint64_t Size =
       TM.getDataLayout()->getTypeAllocSize(CV->getType());
@@ -2244,7 +2244,7 @@ void AsmPrinter::EmitGlobalConstant(const Constant *CV) {
 
 void AsmPrinter::EmitMachineConstantPoolValue(MachineConstantPoolValue *MCPV) {
   // Target doesn't support this yet!
-  llvm_unreachable("Target does not support EmitMachineConstantPoolValue");
+  llvm37_unreachable("Target does not support EmitMachineConstantPoolValue");
 }
 
 void AsmPrinter::printOffset(int64_t Offset, raw_ostream &OS) const {
@@ -2382,7 +2382,7 @@ void AsmPrinter::EmitBasicBlockStart(const MachineBasicBlock &MBB) const {
 
   // If the block has its address taken, emit any labels that were used to
   // reference the block.  It is possible that there is more than one label
-  // here, because multiple LLVM BB's may have been RAUW'd to this block after
+  // here, because multiple LLVM37 BB's may have been RAUW'd to this block after
   // the references were generated.
   if (MBB.hasAddressTaken()) {
     const BasicBlock *BB = MBB.getBasicBlock();

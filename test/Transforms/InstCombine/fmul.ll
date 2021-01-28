@@ -124,12 +124,12 @@ define float @test11(float %x, float %y) {
 ; CHECK: fadd fast float
 }
 
-; PR21126: http://llvm.org/bugs/show_bug.cgi?id=21126
+; PR21126: http://llvm37.org/bugs/show_bug.cgi?id=21126
 ; With unsafe/fast math, sqrt(X) * sqrt(X) is just X.
-declare double @llvm.sqrt.f64(double)
+declare double @llvm37.sqrt.f64(double)
 
 define double @sqrt_squared1(double %f) {
-  %sqrt = call double @llvm.sqrt.f64(double %f)
+  %sqrt = call double @llvm37.sqrt.f64(double %f)
   %mul = fmul fast double %sqrt, %sqrt
   ret double %mul
 ; CHECK-LABEL: @sqrt_squared1(
@@ -143,12 +143,12 @@ define double @sqrt_squared1(double %f) {
 ; Thus, we have an overall fast result, but no more indication of
 ; 'fast'ness in the code.
 define double @sqrt_squared2(double %f) {
-  %sqrt = call double @llvm.sqrt.f64(double %f)
+  %sqrt = call double @llvm37.sqrt.f64(double %f)
   %mul1 = fmul fast double %sqrt, %sqrt
   %mul2 = fmul double %mul1, %sqrt
   ret double %mul2
 ; CHECK-LABEL: @sqrt_squared2(
-; CHECK-NEXT: %sqrt = call double @llvm.sqrt.f64(double %f)
+; CHECK-NEXT: %sqrt = call double @llvm37.sqrt.f64(double %f)
 ; CHECK-NEXT: %mul2 = fmul double %sqrt, %f
 ; CHECK-NEXT: ret double %mul2
 }

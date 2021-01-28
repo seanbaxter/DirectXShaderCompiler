@@ -1,7 +1,7 @@
 ; RUN: opt < %s -S -early-cse | FileCheck %s
 ; RUN: opt < %s -S -passes=early-cse | FileCheck %s
 
-declare void @llvm.assume(i1) nounwind
+declare void @llvm37.assume(i1) nounwind
 
 ; CHECK-LABEL: @test1(
 define void @test1(i8 %V, i32 *%P) {
@@ -47,7 +47,7 @@ define i32 @test2(i32 *%P) {
 ; CHECK-LABEL: @test2a(
 define i32 @test2a(i32 *%P, i1 %b) {
   %V1 = load i32, i32* %P
-  tail call void @llvm.assume(i1 %b)
+  tail call void @llvm37.assume(i1 %b)
   %V2 = load i32, i32* %P
   %Diff = sub i32 %V1, %V2
   ret i32 %Diff
@@ -78,7 +78,7 @@ T:
   store i32 4, i32* %P
   ret i32 42
 F:
-  tail call void @llvm.assume(i1 %b)
+  tail call void @llvm37.assume(i1 %b)
   %V2 = load i32, i32* %P
   %Diff = sub i32 %V1, %V2
   ret i32 %Diff
@@ -128,7 +128,7 @@ define i32 @test6(i32 *%P) {
 ; CHECK-LABEL: @test6a(
 define i32 @test6a(i32 *%P, i1 %b) {
   store i32 42, i32* %P
-  tail call void @llvm.assume(i1 %b)
+  tail call void @llvm37.assume(i1 %b)
   %V1 = load i32, i32* %P
   ret i32 %V1
   ; CHECK: ret i32 42

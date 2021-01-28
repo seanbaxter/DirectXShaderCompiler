@@ -15,7 +15,7 @@
 #include "dxc/HLSL/DxilSignatureAllocator.h"
 
 using namespace hlsl;
-using namespace llvm;
+using namespace llvm37;
 
 #include <assert.h> // Needed for DxilPipelineStateValidation.h
 #include "dxc/DxilContainer/DxilPipelineStateValidation.h"

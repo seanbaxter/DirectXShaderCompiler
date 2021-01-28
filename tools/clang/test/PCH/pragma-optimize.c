@@ -3,7 +3,7 @@
 
 // Test with pch.
 // RUN: %clang_cc1 %s -emit-pch -o %t
-// RUN: %clang_cc1 %s -emit-llvm -include-pch %t -o - | FileCheck %s
+// RUN: %clang_cc1 %s -emit-llvm37 -include-pch %t -o - | FileCheck %s
 
 // The first run line creates a pch, and since at that point HEADER is not
 // defined, the only thing contained in the pch is the pragma. The second line

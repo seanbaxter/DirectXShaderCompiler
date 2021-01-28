@@ -1,6 +1,6 @@
 //===--- Action.cpp - Abstract compilation steps --------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -8,10 +8,10 @@
 //===----------------------------------------------------------------------===//
 
 #include "clang/Driver/Action.h"
-#include "llvm/Support/ErrorHandling.h"
+#include "llvm37/Support/ErrorHandling.h"
 #include <cassert>
 using namespace clang::driver;
-using namespace llvm::opt;
+using namespace llvm37::opt;
 
 Action::~Action() {
   if (OwnsInputs) {
@@ -40,7 +40,7 @@ const char *Action::getClassName(ActionClass AC) {
   case VerifyPCHJobClass: return "verify-pch";
   }
 
-  llvm_unreachable("invalid class");
+  llvm37_unreachable("invalid class");
 }
 
 void InputAction::anchor() {}

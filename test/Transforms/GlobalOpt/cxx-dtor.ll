@@ -6,7 +6,7 @@
 
 @a = global %struct.A zeroinitializer, align 1
 @__dso_handle = external global i8*
-@llvm.global_ctors = appending global [1 x %0] [%0 { i32 65535, void ()* @_GLOBAL__I_a }]
+@llvm37.global_ctors = appending global [1 x %0] [%0 { i32 65535, void ()* @_GLOBAL__I_a }]
 
 ; CHECK-NOT: call i32 @__cxa_atexit
 

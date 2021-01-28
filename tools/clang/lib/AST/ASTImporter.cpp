@@ -1,6 +1,6 @@
 //===--- ASTImporter.cpp - Importing ASTs from other Contexts ---*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -22,7 +22,7 @@
 #include "clang/AST/TypeVisitor.h"
 #include "clang/Basic/FileManager.h"
 #include "clang/Basic/SourceManager.h"
-#include "llvm/Support/MemoryBuffer.h"
+#include "llvm37/Support/MemoryBuffer.h"
 #include <deque>
 //                                                                           //
 ///////////////////////////////////////////////////////////////////////////////
@@ -243,7 +243,7 @@ namespace {
     /// \brief The set of "tentative" equivalences between two canonical 
     /// declarations, mapping from a declaration in the first context to the
     /// declaration in the second context that we believe to be equivalent.
-    llvm::DenseMap<Decl *, Decl *> TentativeEquivalences;
+    llvm37::DenseMap<Decl *, Decl *> TentativeEquivalences;
     
     /// \brief Queue of declarations in the first context whose equivalence
     /// with a declaration in the second context still needs to be verified.
@@ -251,7 +251,7 @@ namespace {
     
     /// \brief Declaration (from, to) pairs that are known not to be equivalent
     /// (which we have already complained about).
-    llvm::DenseSet<std::pair<Decl *, Decl *> > &NonEquivalentDecls;
+    llvm37::DenseSet<std::pair<Decl *, Decl *> > &NonEquivalentDecls;
     
     /// \brief Whether we're being strict about the spelling of types when 
     /// unifying two types.
@@ -264,7 +264,7 @@ namespace {
     bool LastDiagFromC2;
 
     StructuralEquivalenceContext(ASTContext &C1, ASTContext &C2,
-               llvm::DenseSet<std::pair<Decl *, Decl *> > &NonEquivalentDecls,
+               llvm37::DenseSet<std::pair<Decl *, Decl *> > &NonEquivalentDecls,
                                  bool StrictTypeSpelling = false,
                                  bool Complain = true)
       : C1(C1), C2(C2), NonEquivalentDecls(NonEquivalentDecls),
@@ -354,7 +354,7 @@ static bool IsStructurallyEquivalent(StructuralEquivalenceContext &Context,
                                           Arg2.getIntegralType()))
       return false;
     
-    return llvm::APSInt::isSameValue(Arg1.getAsIntegral(), Arg2.getAsIntegral());
+    return llvm37::APSInt::isSameValue(Arg1.getAsIntegral(), Arg2.getAsIntegral());
       
   case TemplateArgument::Declaration:
     return Context.IsStructurallyEquivalent(Arg1.getAsDecl(), Arg2.getAsDecl());
@@ -389,7 +389,7 @@ static bool IsStructurallyEquivalent(StructuralEquivalenceContext &Context,
     return true;
   }
   
-  llvm_unreachable("Invalid template argument kind");
+  llvm37_unreachable("Invalid template argument kind");
 }
 
 /// \brief Determine structural equivalence for the common part of array 
@@ -508,7 +508,7 @@ static bool IsStructurallyEquivalent(StructuralEquivalenceContext &Context,
   case Type::ConstantArray: {
     const ConstantArrayType *Array1 = cast<ConstantArrayType>(T1);
     const ConstantArrayType *Array2 = cast<ConstantArrayType>(T2);
-    if (!llvm::APInt::isSameValue(Array1->getSize(), Array2->getSize()))
+    if (!llvm37::APInt::isSameValue(Array1->getSize(), Array2->getSize()))
       return false;
     
     if (!IsArrayStructurallyEquivalent(Context, Array1, Array2))
@@ -1169,9 +1169,9 @@ static bool IsStructurallyEquivalent(StructuralEquivalenceContext &Context,
       return false;
     }
     
-    llvm::APSInt Val1 = EC1->getInitVal();
-    llvm::APSInt Val2 = EC2->getInitVal();
-    if (!llvm::APSInt::isSameValue(Val1, Val2) || 
+    llvm37::APSInt Val1 = EC1->getInitVal();
+    llvm37::APSInt Val2 = EC2->getInitVal();
+    if (!llvm37::APSInt::isSameValue(Val1, Val2) || 
         !IsStructurallyEquivalent(EC1->getIdentifier(), EC2->getIdentifier())) {
       if (Context.Complain) {
         Context.Diag2(D2->getLocation(), diag::warn_odr_tag_type_inconsistent)
@@ -1510,7 +1510,7 @@ QualType ASTNodeImporter::VisitBuiltinType(const BuiltinType *T) {
     return Importer.getToContext().WCharTy;
   }
 
-  llvm_unreachable("Invalid BuiltinType Kind!");
+  llvm37_unreachable("Invalid BuiltinType Kind!");
 }
 
 QualType ASTNodeImporter::VisitComplexType(const ComplexType *T) {
@@ -1969,7 +1969,7 @@ ASTNodeImporter::ImportDeclarationNameLoc(const DeclarationNameInfo &From,
     return;
   }
   }
-  llvm_unreachable("Unknown name kind.");
+  llvm37_unreachable("Unknown name kind.");
 }
 
 void ASTNodeImporter::ImportDeclContext(DeclContext *FromDC, bool ForceImport) {  
@@ -2220,7 +2220,7 @@ ASTNodeImporter::ImportTemplateArgument(const TemplateArgument &From) {
   }
   }
   
-  llvm_unreachable("Invalid template argument kind");
+  llvm37_unreachable("Invalid template argument kind");
 }
 
 bool ASTNodeImporter::ImportTemplateArguments(const TemplateArgument *FromArgs,
@@ -2273,8 +2273,8 @@ bool ASTNodeImporter::IsStructuralMatch(EnumDecl *FromEnum, EnumDecl *ToEnum) {
 bool ASTNodeImporter::IsStructuralMatch(EnumConstantDecl *FromEC,
                                         EnumConstantDecl *ToEC)
 {
-  const llvm::APSInt &FromVal = FromEC->getInitVal();
-  const llvm::APSInt &ToVal = ToEC->getInitVal();
+  const llvm37::APSInt &FromVal = FromEC->getInitVal();
+  const llvm37::APSInt &ToVal = ToEC->getInitVal();
 
   return FromVal.isSigned() == ToVal.isSigned() &&
          FromVal.getBitWidth() == ToVal.getBitWidth() &&
@@ -5315,7 +5315,7 @@ Expr *ASTNodeImporter::VisitCallExpr(CallExpr *E) {
 
   unsigned NumArgs = E->getNumArgs();
 
-  llvm::SmallVector<Expr *, 2> ToArgs(NumArgs);
+  llvm37::SmallVector<Expr *, 2> ToArgs(NumArgs);
 
   for (unsigned ai = 0, ae = NumArgs; ai != ae; ++ai) {
     Expr *FromArg = E->getArg(ai);
@@ -5357,7 +5357,7 @@ QualType ASTImporter::Import(QualType FromT) {
   const Type *fromTy = FromT.getTypePtr();
   
   // Check whether we've already imported this type.  
-  llvm::DenseMap<const Type *, const Type *>::iterator Pos
+  llvm37::DenseMap<const Type *, const Type *>::iterator Pos
     = ImportedTypes.find(fromTy);
   if (Pos != ImportedTypes.end())
     return ToContext.getQualifiedType(Pos->second, FromT.getLocalQualifiers());
@@ -5389,7 +5389,7 @@ TypeSourceInfo *ASTImporter::Import(TypeSourceInfo *FromTSI) {
 }
 
 Decl *ASTImporter::GetAlreadyImportedOrNull(Decl *FromD) {
-  llvm::DenseMap<Decl *, Decl *>::iterator Pos = ImportedDecls.find(FromD);
+  llvm37::DenseMap<Decl *, Decl *>::iterator Pos = ImportedDecls.find(FromD);
   if (Pos != ImportedDecls.end()) {
     Decl *ToD = Pos->second;
     ASTNodeImporter(*this).ImportDefinitionIfNeeded(FromD, ToD);
@@ -5406,7 +5406,7 @@ Decl *ASTImporter::Import(Decl *FromD) {
   ASTNodeImporter Importer(*this);
 
   // Check whether we've already imported this declaration.  
-  llvm::DenseMap<Decl *, Decl *>::iterator Pos = ImportedDecls.find(FromD);
+  llvm37::DenseMap<Decl *, Decl *>::iterator Pos = ImportedDecls.find(FromD);
   if (Pos != ImportedDecls.end()) {
     Decl *ToD = Pos->second;
     Importer.ImportDefinitionIfNeeded(FromD, ToD);
@@ -5513,7 +5513,7 @@ Stmt *ASTImporter::Import(Stmt *FromS) {
     return nullptr;
 
   // Check whether we've already imported this declaration.  
-  llvm::DenseMap<Stmt *, Stmt *>::iterator Pos = ImportedStmts.find(FromS);
+  llvm37::DenseMap<Stmt *, Stmt *>::iterator Pos = ImportedStmts.find(FromS);
   if (Pos != ImportedStmts.end())
     return Pos->second;
   
@@ -5578,7 +5578,7 @@ NestedNameSpecifier *ASTImporter::Import(NestedNameSpecifier *FromNNS) {
       return nullptr;
   }
 
-  llvm_unreachable("Invalid nested name specifier kind");
+  llvm37_unreachable("Invalid nested name specifier kind");
 }
 
 NestedNameSpecifierLoc ASTImporter::Import(NestedNameSpecifierLoc FromNNS) {
@@ -5672,7 +5672,7 @@ TemplateName ASTImporter::Import(TemplateName From) {
   }
   }
   
-  llvm_unreachable("Invalid template name kind");
+  llvm37_unreachable("Invalid template name kind");
 }
 
 SourceLocation ASTImporter::Import(SourceLocation FromLoc) {
@@ -5700,7 +5700,7 @@ SourceRange ASTImporter::Import(SourceRange FromRange) {
 }
 
 FileID ASTImporter::Import(FileID FromID) {
-  llvm::DenseMap<FileID, FileID>::iterator Pos
+  llvm37::DenseMap<FileID, FileID>::iterator Pos
     = ImportedFileIDs.find(FromID);
   if (Pos != ImportedFileIDs.end())
     return Pos->second;
@@ -5728,10 +5728,10 @@ FileID ASTImporter::Import(FileID FromID) {
                              FromSLoc.getFile().getFileCharacteristic());
   } else {
     // FIXME: We want to re-use the existing MemoryBuffer!
-    const llvm::MemoryBuffer *
+    const llvm37::MemoryBuffer *
         FromBuf = Cache->getBuffer(FromContext.getDiagnostics(), FromSM);
-    std::unique_ptr<llvm::MemoryBuffer> ToBuf
-      = llvm::MemoryBuffer::getMemBufferCopy(FromBuf->getBuffer(),
+    std::unique_ptr<llvm37::MemoryBuffer> ToBuf
+      = llvm37::MemoryBuffer::getMemBufferCopy(FromBuf->getBuffer(),
                                              FromBuf->getBufferIdentifier());
     ToID = ToSM.createFileID(std::move(ToBuf),
                              FromSLoc.getFile().getFileCharacteristic());
@@ -5839,7 +5839,7 @@ DeclarationName ASTImporter::Import(DeclarationName FromName) {
     return DeclarationName::getUsingDirectiveName();
   }
 
-  llvm_unreachable("Invalid DeclarationName Kind!");
+  llvm37_unreachable("Invalid DeclarationName Kind!");
 }
 
 IdentifierInfo *ASTImporter::Import(const IdentifierInfo *FromId) {
@@ -5911,7 +5911,7 @@ Decl *ASTImporter::Imported(Decl *From, Decl *To) {
 
 bool ASTImporter::IsStructurallyEquivalent(QualType From, QualType To,
                                            bool Complain) {
-  llvm::DenseMap<const Type *, const Type *>::iterator Pos
+  llvm37::DenseMap<const Type *, const Type *>::iterator Pos
    = ImportedTypes.find(From.getTypePtr());
   if (Pos != ImportedTypes.end() && ToContext.hasSameType(Import(From), To))
     return true;

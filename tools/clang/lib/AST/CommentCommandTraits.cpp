@@ -1,6 +1,6 @@
 //===--- CommentCommandTraits.cpp - Comment command properties --*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -8,16 +8,16 @@
 //===----------------------------------------------------------------------===//
 
 #include "clang/AST/CommentCommandTraits.h"
-#include "llvm/ADT/STLExtras.h"
+#include "llvm37/ADT/STLExtras.h"
 
 namespace clang {
 namespace comments {
 
 #include "clang/AST/CommentCommandInfo.inc"
 
-CommandTraits::CommandTraits(llvm::BumpPtrAllocator &Allocator,
+CommandTraits::CommandTraits(llvm37::BumpPtrAllocator &Allocator,
                              const CommentOptions &CommentOptions) :
-    NextID(llvm::array_lengthof(Commands)), Allocator(Allocator) {
+    NextID(llvm37::array_lengthof(Commands)), Allocator(Allocator) {
   registerCommentOptions(CommentOptions);
 }
 
@@ -115,7 +115,7 @@ const CommandInfo *CommandTraits::registerBlockCommand(StringRef CommandName) {
 
 const CommandInfo *CommandTraits::getBuiltinCommandInfo(
                                                   unsigned CommandID) {
-  if (CommandID < llvm::array_lengthof(Commands))
+  if (CommandID < llvm37::array_lengthof(Commands))
     return &Commands[CommandID];
   return nullptr;
 }
@@ -131,7 +131,7 @@ const CommandInfo *CommandTraits::getRegisteredCommandInfo(
 
 const CommandInfo *CommandTraits::getRegisteredCommandInfo(
                                                   unsigned CommandID) const {
-  return RegisteredCommands[CommandID - llvm::array_lengthof(Commands)];
+  return RegisteredCommands[CommandID - llvm37::array_lengthof(Commands)];
 }
 
 } // end namespace comments

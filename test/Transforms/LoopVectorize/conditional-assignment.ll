@@ -32,9 +32,9 @@ for.end:                                          ; preds = %for.inc
 
 attributes #0 = { nounwind }
 
-!llvm.dbg.cu = !{!0}
-!llvm.module.flags = !{!7, !8}
-!llvm.ident = !{!9}
+!llvm37.dbg.cu = !{!0}
+!llvm37.module.flags = !{!7, !8}
+!llvm37.ident = !{!9}
 
 !0 = !DICompileUnit(language: DW_LANG_C99, producer: "clang version 3.6.0", isOptimized: true, emissionKind: 2, file: !1, enums: !2, retainedTypes: !2, subprograms: !3, globals: !2, imports: !2)
 !1 = !DIFile(filename: "source.c", directory: ".")

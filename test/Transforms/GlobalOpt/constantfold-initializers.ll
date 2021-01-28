@@ -93,7 +93,7 @@ define internal void @test6() {
   ret void
 }
 
-@llvm.global_ctors = appending constant
+@llvm37.global_ctors = appending constant
   [6 x { i32, void ()* }]
   [{ i32, void ()* } { i32 65535, void ()* @test1 },
    { i32, void ()* } { i32 65535, void ()* @test2 },

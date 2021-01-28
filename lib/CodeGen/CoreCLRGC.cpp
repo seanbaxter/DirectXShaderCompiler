@@ -1,6 +1,6 @@
 //===-- CoreCLRGC.cpp - CoreCLR Runtime GC Strategy -----------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -20,11 +20,11 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/CodeGen/GCStrategy.h"
-#include "llvm/IR/DerivedTypes.h"
-#include "llvm/IR/Value.h"
+#include "llvm37/CodeGen/GCStrategy.h"
+#include "llvm37/IR/DerivedTypes.h"
+#include "llvm37/IR/Value.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 namespace {
 class CoreCLRGC : public GCStrategy {
@@ -49,6 +49,6 @@ public:
 
 static GCRegistry::Add<CoreCLRGC> X("coreclr", "CoreCLR-compatible GC");
 
-namespace llvm {
+namespace llvm37 {
 void linkCoreCLRGC() {}
 }

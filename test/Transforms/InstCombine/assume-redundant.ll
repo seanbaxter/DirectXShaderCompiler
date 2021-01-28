@@ -11,8 +11,8 @@ target triple = "x86_64-unknown-linux-gnu"
 define void @_Z3fooR1s(%struct.s* nocapture readonly dereferenceable(8) %x) #0 {
 
 ; CHECK-LABEL: @_Z3fooR1s
-; CHECK: call void @llvm.assume
-; CHECK-NOT: call void @llvm.assume
+; CHECK: call void @llvm37.assume
+; CHECK-NOT: call void @llvm37.assume
 
 entry:
   %a = getelementptr inbounds %struct.s, %struct.s* %x, i64 0, i32 0
@@ -24,19 +24,19 @@ entry:
 
 for.body:                                         ; preds = %for.body, %entry
   %indvars.iv = phi i64 [ 0, %entry ], [ %indvars.iv.next.1, %for.body ]
-  tail call void @llvm.assume(i1 %maskcond)
+  tail call void @llvm37.assume(i1 %maskcond)
   %arrayidx = getelementptr inbounds double, double* %0, i64 %indvars.iv
   %1 = load double, double* %arrayidx, align 16
   %add = fadd double %1, 1.000000e+00
-  tail call void @llvm.assume(i1 %maskcond)
+  tail call void @llvm37.assume(i1 %maskcond)
   %mul = fmul double %add, 2.000000e+00
   store double %mul, double* %arrayidx, align 16
   %indvars.iv.next = add nuw nsw i64 %indvars.iv, 1
-  tail call void @llvm.assume(i1 %maskcond)
+  tail call void @llvm37.assume(i1 %maskcond)
   %arrayidx.1 = getelementptr inbounds double, double* %0, i64 %indvars.iv.next
   %2 = load double, double* %arrayidx.1, align 8
   %add.1 = fadd double %2, 1.000000e+00
-  tail call void @llvm.assume(i1 %maskcond)
+  tail call void @llvm37.assume(i1 %maskcond)
   %mul.1 = fmul double %add.1, 2.000000e+00
   store double %mul.1, double* %arrayidx.1, align 8
   %indvars.iv.next.1 = add nuw nsw i64 %indvars.iv.next, 1
@@ -48,7 +48,7 @@ for.end:                                          ; preds = %for.body
 }
 
 ; Function Attrs: nounwind
-declare void @llvm.assume(i1) #1
+declare void @llvm37.assume(i1) #1
 
 attributes #0 = { nounwind uwtable }
 attributes #1 = { nounwind }

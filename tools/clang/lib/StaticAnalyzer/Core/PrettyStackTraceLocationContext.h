@@ -1,14 +1,14 @@
 //==- PrettyStackTraceLocationContext.h - show analysis backtrace --*- C++ -*-//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_LIB_STATICANALYZER_CORE_PRETTYSTACKTRACELOCATIONCONTEXT_H
-#define LLVM_CLANG_LIB_STATICANALYZER_CORE_PRETTYSTACKTRACELOCATIONCONTEXT_H
+#ifndef LLVM37_CLANG_LIB_STATICANALYZER_CORE_PRETTYSTACKTRACELOCATIONCONTEXT_H
+#define LLVM37_CLANG_LIB_STATICANALYZER_CORE_PRETTYSTACKTRACELOCATIONCONTEXT_H
 
 #include "clang/Analysis/AnalysisContext.h"
 
@@ -26,7 +26,7 @@ namespace ento {
 ///        #1 void test()
 /// 3.     crash-trace.c:6:3: Error evaluating statement
 /// \endcode
-class PrettyStackTraceLocationContext : public llvm::PrettyStackTraceEntry {
+class PrettyStackTraceLocationContext : public llvm37::PrettyStackTraceEntry {
   const LocationContext *LCtx;
 public:
   PrettyStackTraceLocationContext(const LocationContext *LC) : LCtx(LC) {

@@ -1,6 +1,6 @@
 //== ObjCContainersChecker.cpp - Path sensitive checker for CFArray *- C++ -*=//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -143,7 +143,7 @@ void ObjCContainersChecker::checkPreStmt(const CallExpr *CE,
       if (!N)
         return;
       initBugType();
-      auto R = llvm::make_unique<BugReport>(*BT, "Index is out of bounds", N);
+      auto R = llvm37::make_unique<BugReport>(*BT, "Index is out of bounds", N);
       R->addRange(IdxExpr->getSourceRange());
       C.emitReport(std::move(R));
       return;

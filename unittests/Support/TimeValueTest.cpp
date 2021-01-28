@@ -1,6 +1,6 @@
-//===- llvm/unittest/Support/TimeValueTest.cpp - Time Value tests ---------===//
+//===- llvm37/unittest/Support/TimeValueTest.cpp - Time Value tests ---------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -8,10 +8,10 @@
 //===----------------------------------------------------------------------===//
 
 #include "gtest/gtest.h"
-#include "llvm/Support/TimeValue.h"
+#include "llvm37/Support/TimeValue.h"
 #include <time.h>
 
-using namespace llvm;
+using namespace llvm37;
 namespace {
 
 TEST(TimeValue, time_t) {

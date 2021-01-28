@@ -1,6 +1,6 @@
 //==--- InterCheckerAPI.h ---------------------------------------*- C++ -*-==//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -10,8 +10,8 @@
 // inter-checker communications.
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_LIB_STATICANALYZER_CHECKERS_INTERCHECKERAPI_H
-#define LLVM_CLANG_LIB_STATICANALYZER_CHECKERS_INTERCHECKERAPI_H
+#ifndef LLVM37_CLANG_LIB_STATICANALYZER_CHECKERS_INTERCHECKERAPI_H
+#define LLVM37_CLANG_LIB_STATICANALYZER_CHECKERS_INTERCHECKERAPI_H
 namespace clang {
 class CheckerManager;
 

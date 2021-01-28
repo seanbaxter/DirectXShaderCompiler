@@ -1,6 +1,6 @@
 //===- BuildLibCalls.cpp - Utility builder for libcalls -------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,29 +11,29 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Transforms/Utils/BuildLibCalls.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/IRBuilder.h"
-#include "llvm/IR/Intrinsics.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/Type.h"
-#include "llvm/Analysis/TargetLibraryInfo.h"
+#include "llvm37/Transforms/Utils/BuildLibCalls.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/IRBuilder.h"
+#include "llvm37/IR/Intrinsics.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/Type.h"
+#include "llvm37/Analysis/TargetLibraryInfo.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 /// CastToCStr - Return V if it is an i8*, otherwise cast it to i8*.
-Value *llvm::CastToCStr(Value *V, IRBuilder<> &B) {
+Value *llvm37::CastToCStr(Value *V, IRBuilder<> &B) {
   unsigned AS = V->getType()->getPointerAddressSpace();
   return B.CreateBitCast(V, B.getInt8PtrTy(AS), "cstr");
 }
 
 /// EmitStrLen - Emit a call to the strlen function to the builder, for the
 /// specified pointer.  This always returns an integer value of size intptr_t.
-Value *llvm::EmitStrLen(Value *Ptr, IRBuilder<> &B, const DataLayout &DL,
+Value *llvm37::EmitStrLen(Value *Ptr, IRBuilder<> &B, const DataLayout &DL,
                         const TargetLibraryInfo *TLI) {
   if (!TLI->has(LibFunc::strlen))
     return nullptr;
@@ -44,7 +44,7 @@ Value *llvm::EmitStrLen(Value *Ptr, IRBuilder<> &B, const DataLayout &DL,
   Attribute::AttrKind AVs[2] = { Attribute::ReadOnly, Attribute::NoUnwind };
   AS[1] = AttributeSet::get(M->getContext(), AttributeSet::FunctionIndex, AVs);
 
-  LLVMContext &Context = B.GetInsertBlock()->getContext();
+  LLVM37Context &Context = B.GetInsertBlock()->getContext();
   Constant *StrLen = M->getOrInsertFunction(
       "strlen", AttributeSet::get(M->getContext(), AS),
       DL.getIntPtrType(Context), B.getInt8PtrTy(), nullptr);
@@ -58,7 +58,7 @@ Value *llvm::EmitStrLen(Value *Ptr, IRBuilder<> &B, const DataLayout &DL,
 /// EmitStrNLen - Emit a call to the strnlen function to the builder, for the
 /// specified pointer.  Ptr is required to be some pointer type, MaxLen must
 /// be of size_t type, and the return value has 'intptr_t' type.
-Value *llvm::EmitStrNLen(Value *Ptr, Value *MaxLen, IRBuilder<> &B,
+Value *llvm37::EmitStrNLen(Value *Ptr, Value *MaxLen, IRBuilder<> &B,
                          const DataLayout &DL, const TargetLibraryInfo *TLI) {
   if (!TLI->has(LibFunc::strnlen))
     return nullptr;
@@ -69,7 +69,7 @@ Value *llvm::EmitStrNLen(Value *Ptr, Value *MaxLen, IRBuilder<> &B,
   Attribute::AttrKind AVs[2] = { Attribute::ReadOnly, Attribute::NoUnwind };
   AS[1] = AttributeSet::get(M->getContext(), AttributeSet::FunctionIndex, AVs);
 
-  LLVMContext &Context = B.GetInsertBlock()->getContext();
+  LLVM37Context &Context = B.GetInsertBlock()->getContext();
   Constant *StrNLen =
       M->getOrInsertFunction("strnlen", AttributeSet::get(M->getContext(), AS),
                              DL.getIntPtrType(Context), B.getInt8PtrTy(),
@@ -84,7 +84,7 @@ Value *llvm::EmitStrNLen(Value *Ptr, Value *MaxLen, IRBuilder<> &B,
 /// EmitStrChr - Emit a call to the strchr function to the builder, for the
 /// specified pointer and character.  Ptr is required to be some pointer type,
 /// and the return value has 'i8*' type.
-Value *llvm::EmitStrChr(Value *Ptr, char C, IRBuilder<> &B,
+Value *llvm37::EmitStrChr(Value *Ptr, char C, IRBuilder<> &B,
                         const TargetLibraryInfo *TLI) {
   if (!TLI->has(LibFunc::strchr))
     return nullptr;
@@ -108,7 +108,7 @@ Value *llvm::EmitStrChr(Value *Ptr, char C, IRBuilder<> &B,
 }
 
 /// EmitStrNCmp - Emit a call to the strncmp function to the builder.
-Value *llvm::EmitStrNCmp(Value *Ptr1, Value *Ptr2, Value *Len, IRBuilder<> &B,
+Value *llvm37::EmitStrNCmp(Value *Ptr1, Value *Ptr2, Value *Len, IRBuilder<> &B,
                          const DataLayout &DL, const TargetLibraryInfo *TLI) {
   if (!TLI->has(LibFunc::strncmp))
     return nullptr;
@@ -120,7 +120,7 @@ Value *llvm::EmitStrNCmp(Value *Ptr1, Value *Ptr2, Value *Len, IRBuilder<> &B,
   Attribute::AttrKind AVs[2] = { Attribute::ReadOnly, Attribute::NoUnwind };
   AS[2] = AttributeSet::get(M->getContext(), AttributeSet::FunctionIndex, AVs);
 
-  LLVMContext &Context = B.GetInsertBlock()->getContext();
+  LLVM37Context &Context = B.GetInsertBlock()->getContext();
   Value *StrNCmp = M->getOrInsertFunction(
       "strncmp", AttributeSet::get(M->getContext(), AS), B.getInt32Ty(),
       B.getInt8PtrTy(), B.getInt8PtrTy(), DL.getIntPtrType(Context), nullptr);
@@ -135,7 +135,7 @@ Value *llvm::EmitStrNCmp(Value *Ptr1, Value *Ptr2, Value *Len, IRBuilder<> &B,
 
 /// EmitStrCpy - Emit a call to the strcpy function to the builder, for the
 /// specified pointer arguments.
-Value *llvm::EmitStrCpy(Value *Dst, Value *Src, IRBuilder<> &B,
+Value *llvm37::EmitStrCpy(Value *Dst, Value *Src, IRBuilder<> &B,
                         const TargetLibraryInfo *TLI, StringRef Name) {
   if (!TLI->has(LibFunc::strcpy))
     return nullptr;
@@ -158,7 +158,7 @@ Value *llvm::EmitStrCpy(Value *Dst, Value *Src, IRBuilder<> &B,
 
 /// EmitStrNCpy - Emit a call to the strncpy function to the builder, for the
 /// specified pointer arguments.
-Value *llvm::EmitStrNCpy(Value *Dst, Value *Src, Value *Len, IRBuilder<> &B,
+Value *llvm37::EmitStrNCpy(Value *Dst, Value *Src, Value *Len, IRBuilder<> &B,
                          const TargetLibraryInfo *TLI, StringRef Name) {
   if (!TLI->has(LibFunc::strncpy))
     return nullptr;
@@ -184,7 +184,7 @@ Value *llvm::EmitStrNCpy(Value *Dst, Value *Src, Value *Len, IRBuilder<> &B,
 /// EmitMemCpyChk - Emit a call to the __memcpy_chk function to the builder.
 /// This expects that the Len and ObjSize have type 'intptr_t' and Dst/Src
 /// are pointers.
-Value *llvm::EmitMemCpyChk(Value *Dst, Value *Src, Value *Len, Value *ObjSize,
+Value *llvm37::EmitMemCpyChk(Value *Dst, Value *Src, Value *Len, Value *ObjSize,
                            IRBuilder<> &B, const DataLayout &DL,
                            const TargetLibraryInfo *TLI) {
   if (!TLI->has(LibFunc::memcpy_chk))
@@ -194,7 +194,7 @@ Value *llvm::EmitMemCpyChk(Value *Dst, Value *Src, Value *Len, Value *ObjSize,
   AttributeSet AS;
   AS = AttributeSet::get(M->getContext(), AttributeSet::FunctionIndex,
                          Attribute::NoUnwind);
-  LLVMContext &Context = B.GetInsertBlock()->getContext();
+  LLVM37Context &Context = B.GetInsertBlock()->getContext();
   Value *MemCpy = M->getOrInsertFunction(
       "__memcpy_chk", AttributeSet::get(M->getContext(), AS), B.getInt8PtrTy(),
       B.getInt8PtrTy(), B.getInt8PtrTy(), DL.getIntPtrType(Context),
@@ -209,7 +209,7 @@ Value *llvm::EmitMemCpyChk(Value *Dst, Value *Src, Value *Len, Value *ObjSize,
 
 /// EmitMemChr - Emit a call to the memchr function.  This assumes that Ptr is
 /// a pointer, Val is an i32 value, and Len is an 'intptr_t' value.
-Value *llvm::EmitMemChr(Value *Ptr, Value *Val, Value *Len, IRBuilder<> &B,
+Value *llvm37::EmitMemChr(Value *Ptr, Value *Val, Value *Len, IRBuilder<> &B,
                         const DataLayout &DL, const TargetLibraryInfo *TLI) {
   if (!TLI->has(LibFunc::memchr))
     return nullptr;
@@ -218,7 +218,7 @@ Value *llvm::EmitMemChr(Value *Ptr, Value *Val, Value *Len, IRBuilder<> &B,
   AttributeSet AS;
   Attribute::AttrKind AVs[2] = { Attribute::ReadOnly, Attribute::NoUnwind };
   AS = AttributeSet::get(M->getContext(), AttributeSet::FunctionIndex, AVs);
-  LLVMContext &Context = B.GetInsertBlock()->getContext();
+  LLVM37Context &Context = B.GetInsertBlock()->getContext();
   Value *MemChr = M->getOrInsertFunction(
       "memchr", AttributeSet::get(M->getContext(), AS), B.getInt8PtrTy(),
       B.getInt8PtrTy(), B.getInt32Ty(), DL.getIntPtrType(Context), nullptr);
@@ -231,7 +231,7 @@ Value *llvm::EmitMemChr(Value *Ptr, Value *Val, Value *Len, IRBuilder<> &B,
 }
 
 /// EmitMemCmp - Emit a call to the memcmp function.
-Value *llvm::EmitMemCmp(Value *Ptr1, Value *Ptr2, Value *Len, IRBuilder<> &B,
+Value *llvm37::EmitMemCmp(Value *Ptr1, Value *Ptr2, Value *Len, IRBuilder<> &B,
                         const DataLayout &DL, const TargetLibraryInfo *TLI) {
   if (!TLI->has(LibFunc::memcmp))
     return nullptr;
@@ -243,7 +243,7 @@ Value *llvm::EmitMemCmp(Value *Ptr1, Value *Ptr2, Value *Len, IRBuilder<> &B,
   Attribute::AttrKind AVs[2] = { Attribute::ReadOnly, Attribute::NoUnwind };
   AS[2] = AttributeSet::get(M->getContext(), AttributeSet::FunctionIndex, AVs);
 
-  LLVMContext &Context = B.GetInsertBlock()->getContext();
+  LLVM37Context &Context = B.GetInsertBlock()->getContext();
   Value *MemCmp = M->getOrInsertFunction(
       "memcmp", AttributeSet::get(M->getContext(), AS), B.getInt32Ty(),
       B.getInt8PtrTy(), B.getInt8PtrTy(), DL.getIntPtrType(Context), nullptr);
@@ -275,7 +275,7 @@ static void AppendTypeSuffix(Value *Op, StringRef &Name, SmallString<20> &NameBu
 /// 'floor').  This function is known to take a single of type matching 'Op' and
 /// returns one value with the same type.  If 'Op' is a long double, 'l' is
 /// added as the suffix of name, if 'Op' is a float, we add a 'f' suffix.
-Value *llvm::EmitUnaryFloatFnCall(Value *Op, StringRef Name, IRBuilder<> &B,
+Value *llvm37::EmitUnaryFloatFnCall(Value *Op, StringRef Name, IRBuilder<> &B,
                                   const AttributeSet &Attrs) {
   SmallString<20> NameBuffer;
   AppendTypeSuffix(Op, Name, NameBuffer);   
@@ -296,7 +296,7 @@ Value *llvm::EmitUnaryFloatFnCall(Value *Op, StringRef Name, IRBuilder<> &B,
 /// and return one value with the same type.  If 'Op1/Op2' are long double, 'l'
 /// is added as the suffix of name, if 'Op1/Op2' is a float, we add a 'f'
 /// suffix.
-Value *llvm::EmitBinaryFloatFnCall(Value *Op1, Value *Op2, StringRef Name,
+Value *llvm37::EmitBinaryFloatFnCall(Value *Op1, Value *Op2, StringRef Name,
                                   IRBuilder<> &B, const AttributeSet &Attrs) {
   SmallString<20> NameBuffer;
   AppendTypeSuffix(Op1, Name, NameBuffer);   
@@ -314,7 +314,7 @@ Value *llvm::EmitBinaryFloatFnCall(Value *Op1, Value *Op2, StringRef Name,
 
 /// EmitPutChar - Emit a call to the putchar function.  This assumes that Char
 /// is an integer.
-Value *llvm::EmitPutChar(Value *Char, IRBuilder<> &B,
+Value *llvm37::EmitPutChar(Value *Char, IRBuilder<> &B,
                          const TargetLibraryInfo *TLI) {
   if (!TLI->has(LibFunc::putchar))
     return nullptr;
@@ -336,7 +336,7 @@ Value *llvm::EmitPutChar(Value *Char, IRBuilder<> &B,
 
 /// EmitPutS - Emit a call to the puts function.  This assumes that Str is
 /// some pointer.
-Value *llvm::EmitPutS(Value *Str, IRBuilder<> &B,
+Value *llvm37::EmitPutS(Value *Str, IRBuilder<> &B,
                       const TargetLibraryInfo *TLI) {
   if (!TLI->has(LibFunc::puts))
     return nullptr;
@@ -360,7 +360,7 @@ Value *llvm::EmitPutS(Value *Str, IRBuilder<> &B,
 
 /// EmitFPutC - Emit a call to the fputc function.  This assumes that Char is
 /// an integer and File is a pointer to FILE.
-Value *llvm::EmitFPutC(Value *Char, Value *File, IRBuilder<> &B,
+Value *llvm37::EmitFPutC(Value *Char, Value *File, IRBuilder<> &B,
                        const TargetLibraryInfo *TLI) {
   if (!TLI->has(LibFunc::fputc))
     return nullptr;
@@ -393,7 +393,7 @@ Value *llvm::EmitFPutC(Value *Char, Value *File, IRBuilder<> &B,
 
 /// EmitFPutS - Emit a call to the puts function.  Str is required to be a
 /// pointer and File is a pointer to FILE.
-Value *llvm::EmitFPutS(Value *Str, Value *File, IRBuilder<> &B,
+Value *llvm37::EmitFPutS(Value *Str, Value *File, IRBuilder<> &B,
                        const TargetLibraryInfo *TLI) {
   if (!TLI->has(LibFunc::fputs))
     return nullptr;
@@ -425,7 +425,7 @@ Value *llvm::EmitFPutS(Value *Str, Value *File, IRBuilder<> &B,
 
 /// EmitFWrite - Emit a call to the fwrite function.  This assumes that Ptr is
 /// a pointer, Size is an 'intptr_t', and File is a pointer to FILE.
-Value *llvm::EmitFWrite(Value *Ptr, Value *Size, Value *File, IRBuilder<> &B,
+Value *llvm37::EmitFWrite(Value *Ptr, Value *Size, Value *File, IRBuilder<> &B,
                         const DataLayout &DL, const TargetLibraryInfo *TLI) {
   if (!TLI->has(LibFunc::fwrite))
     return nullptr;
@@ -436,7 +436,7 @@ Value *llvm::EmitFWrite(Value *Ptr, Value *Size, Value *File, IRBuilder<> &B,
   AS[1] = AttributeSet::get(M->getContext(), 4, Attribute::NoCapture);
   AS[2] = AttributeSet::get(M->getContext(), AttributeSet::FunctionIndex,
                             Attribute::NoUnwind);
-  LLVMContext &Context = B.GetInsertBlock()->getContext();
+  LLVM37Context &Context = B.GetInsertBlock()->getContext();
   StringRef FWriteName = TLI->getName(LibFunc::fwrite);
   Constant *F;
   if (File->getType()->isPointerTy())

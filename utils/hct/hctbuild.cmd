@@ -269,25 +269,25 @@ set CMAKE_OPTS=%CMAKE_OPTS% -DENABLE_SPIRV_CODEGEN:BOOL=%SPIRV%
 set CMAKE_OPTS=%CMAKE_OPTS% -DSPIRV_BUILD_TESTS:BOOL=%SPV_TEST%
 set CMAKE_OPTS=%CMAKE_OPTS% -DCLANG_ENABLE_ARCMT:BOOL=OFF
 set CMAKE_OPTS=%CMAKE_OPTS% -DCLANG_ENABLE_STATIC_ANALYZER:BOOL=OFF
-set CMAKE_OPTS=%CMAKE_OPTS% -DCLANG_INCLUDE_TESTS:BOOL=OFF -DLLVM_INCLUDE_TESTS:BOOL=OFF
+set CMAKE_OPTS=%CMAKE_OPTS% -DCLANG_INCLUDE_TESTS:BOOL=OFF -DLLVM37_INCLUDE_TESTS:BOOL=OFF
 set CMAKE_OPTS=%CMAKE_OPTS% -DHLSL_INCLUDE_TESTS:BOOL=ON
-set CMAKE_OPTS=%CMAKE_OPTS% -DLLVM_TARGETS_TO_BUILD:STRING=None
-set CMAKE_OPTS=%CMAKE_OPTS% -DLLVM_INCLUDE_DOCS:BOOL=OFF -DLLVM_INCLUDE_EXAMPLES:BOOL=OFF
+set CMAKE_OPTS=%CMAKE_OPTS% -DLLVM37_TARGETS_TO_BUILD:STRING=None
+set CMAKE_OPTS=%CMAKE_OPTS% -DLLVM37_INCLUDE_DOCS:BOOL=OFF -DLLVM37_INCLUDE_EXAMPLES:BOOL=OFF
 set CMAKE_OPTS=%CMAKE_OPTS% -DLIBCLANG_BUILD_STATIC:BOOL=ON
-rem set CMAKE_OPTS=%CMAKE_OPTS% -DLLVM_OPTIMIZED_TABLEGEN:BOOL=ON
-set CMAKE_OPTS=%CMAKE_OPTS% -DLLVM_OPTIMIZED_TABLEGEN:BOOL=OFF
-set CMAKE_OPTS=%CMAKE_OPTS% -DLLVM_REQUIRES_EH:BOOL=ON
-set CMAKE_OPTS=%CMAKE_OPTS% -DLLVM_APPEND_VC_REV:BOOL=ON
+rem set CMAKE_OPTS=%CMAKE_OPTS% -DLLVM37_OPTIMIZED_TABLEGEN:BOOL=ON
+set CMAKE_OPTS=%CMAKE_OPTS% -DLLVM37_OPTIMIZED_TABLEGEN:BOOL=OFF
+set CMAKE_OPTS=%CMAKE_OPTS% -DLLVM37_REQUIRES_EH:BOOL=ON
+set CMAKE_OPTS=%CMAKE_OPTS% -DLLVM37_APPEND_VC_REV:BOOL=ON
 
 rem Enable exception handling (which requires RTTI).
-set CMAKE_OPTS=%CMAKE_OPTS% -DLLVM_ENABLE_RTTI:BOOL=ON
-set CMAKE_OPTS=%CMAKE_OPTS% -DLLVM_ENABLE_EH:BOOL=ON
+set CMAKE_OPTS=%CMAKE_OPTS% -DLLVM37_ENABLE_RTTI:BOOL=ON
+set CMAKE_OPTS=%CMAKE_OPTS% -DLLVM37_ENABLE_EH:BOOL=ON
 
 rem Setup a specific, stable triple for HLSL.
-set CMAKE_OPTS=%CMAKE_OPTS% -DLLVM_DEFAULT_TARGET_TRIPLE:STRING=dxil-ms-dx
+set CMAKE_OPTS=%CMAKE_OPTS% -DLLVM37_DEFAULT_TARGET_TRIPLE:STRING=dxil-ms-dx
 
 set CMAKE_OPTS=%CMAKE_OPTS% -DCLANG_BUILD_EXAMPLES:BOOL=OFF
-set CMAKE_OPTS=%CMAKE_OPTS% -DLLVM_REQUIRES_RTTI:BOOL=ON
+set CMAKE_OPTS=%CMAKE_OPTS% -DLLVM37_REQUIRES_RTTI:BOOL=ON
 set CMAKE_OPTS=%CMAKE_OPTS% -DCLANG_CL:BOOL=OFF
 set CMAKE_OPTS=%CMAKE_OPTS% -DCMAKE_SYSTEM_VERSION=10.0.14393.0
 set CMAKE_OPTS=%CMAKE_OPTS% -DDXC_BUILD_ARCH=%BUILD_ARCH%
@@ -295,10 +295,10 @@ set CMAKE_OPTS=%CMAKE_OPTS% -DDXC_BUILD_ARCH=%BUILD_ARCH%
 rem ARM cross-compile setup
 if %BUILD_ARM_CROSSCOMPILING% == 0 goto :after-cross-compile
 
-rem The ARM build needs to have access to x86 or x64 build of clang-tblgen and llvm-tblgen tools.
+rem The ARM build needs to have access to x86 or x64 build of clang-tblgen and llvm37-tblgen tools.
 call :verify-tblgen %BUILD_TBLGEN_PATH%
 if errorlevel 1 (
-  echo Cannot find x86/x64 version clang-tblgen and llvm-tblgen tools.
+  echo Cannot find x86/x64 version clang-tblgen and llvm37-tblgen tools.
   echo Please set BUILD_TBLGEN_PATH or use hctbuild -tblgen option to specify location of x86/x64 build of DXC.
   call :handlefail
   exit /b 1
@@ -307,7 +307,7 @@ if errorlevel 1 (
 echo TableGen path: %BUILD_TBLGEN_PATH%
 set CMAKE_OPTS=%CMAKE_OPTS% -DCMAKE_CROSSCOMPILING=True
 set CMAKE_OPTS=%CMAKE_OPTS% -DCMAKE_GENERATOR_PLATFORM=%BUILD_GENERATOR_PLATFORM%
-set CMAKE_OPTS=%CMAKE_OPTS% -DLLVM_TABLEGEN=%BUILD_TBLGEN_PATH%\llvm-tblgen.exe
+set CMAKE_OPTS=%CMAKE_OPTS% -DLLVM37_TABLEGEN=%BUILD_TBLGEN_PATH%\llvm37-tblgen.exe
 set CMAKE_OPTS=%CMAKE_OPTS% -DCLANG_TABLEGEN=%BUILD_TBLGEN_PATH%\clang-tblgen.exe
 
 echo Cross-compiling enabled.
@@ -372,10 +372,10 @@ echo   -Release builds release
 echo   -Debug builds debug
 echo.
 echo ARM build support
-echo   -tblgen sets path to x86 or x64 versions of clang-tblgen and llvm-tblgen tools
+echo   -tblgen sets path to x86 or x64 versions of clang-tblgen and llvm37-tblgen tools
 echo.
 if not "%HLSL_BLD_DIR%"=="" (
-  echo The solution file is at %HLSL_BLD_DIR%\LLVM.sln
+  echo The solution file is at %HLSL_BLD_DIR%\LLVM37.sln
   echo.
 )
 goto :eof
@@ -451,7 +451,7 @@ exit /b 0
 
 :verify-tblgen
 if exist %1\clang-tblgen.exe (
-  if exist %1\llvm-tblgen.exe exit /b 0
+  if exist %1\llvm37-tblgen.exe exit /b 0
 )
 exit /b 1
 

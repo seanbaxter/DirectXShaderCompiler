@@ -1,6 +1,6 @@
 //===--- SemaType.cpp - Semantic Analysis for Types -----------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -35,9 +35,9 @@
 #include "clang/Sema/SemaHLSL.h"    // HLSL Change
 #include "clang/Sema/ScopeInfo.h"
 #include "clang/Sema/Template.h"
-#include "llvm/ADT/SmallPtrSet.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/Support/ErrorHandling.h"
+#include "llvm37/ADT/SmallPtrSet.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/Support/ErrorHandling.h"
 
 using namespace clang;
 
@@ -377,13 +377,13 @@ static DeclaratorChunk *maybeMovePastReturnType(Declarator &declarator,
           result = &ptrChunk;
           goto continue_outer;
         }
-        llvm_unreachable("bad declarator chunk kind");
+        llvm37_unreachable("bad declarator chunk kind");
       }
 
       // If we run out of declarators doing that, we're done.
       return result;
     }
-    llvm_unreachable("bad declarator chunk kind");
+    llvm37_unreachable("bad declarator chunk kind");
 
     // Okay, reconsider from our new point.
   continue_outer: ;
@@ -1041,7 +1041,7 @@ TypeResult Sema::actOnObjCProtocolQualifierType(
   // Form id<protocol-list>.
   QualType Result = Context.getObjCObjectType(
                       Context.ObjCBuiltinIdTy, { },
-                      llvm::makeArrayRef(
+                      llvm37::makeArrayRef(
                         (ObjCProtocolDecl * const *)protocols.data(),
                         protocols.size()),
                       false);
@@ -1111,7 +1111,7 @@ TypeResult Sema::actOnObjCTypeArgsAndProtocolQualifiers(
       T, BaseTypeInfo->getTypeLoc().getSourceRange().getBegin(),
       TypeArgsLAngleLoc, ActualTypeArgInfos, TypeArgsRAngleLoc,
       ProtocolLAngleLoc,
-      llvm::makeArrayRef((ObjCProtocolDecl * const *)Protocols.data(),
+      llvm37::makeArrayRef((ObjCProtocolDecl * const *)Protocols.data(),
                          Protocols.size()),
       ProtocolLocs, ProtocolRAngleLoc,
       /*FailOnError=*/false);
@@ -1926,7 +1926,7 @@ QualType Sema::BuildReferenceType(QualType T, bool SpelledAsLValue,
 
 /// Check whether the specified array size makes the array type a VLA.  If so,
 /// return true, if not, return the size of the array in SizeVal.
-static bool isArraySizeVLA(Sema &S, Expr *ArraySize, llvm::APSInt &SizeVal) {
+static bool isArraySizeVLA(Sema &S, Expr *ArraySize, llvm37::APSInt &SizeVal) {
   // If the size is an ICE, it certainly isn't a VLA. If we're in a GNU mode
   // (like gnu99, but not c99) accept any evaluatable value as an extension.
   class VLADiagnoser : public Sema::VerifyICEDiagnoser {
@@ -2059,7 +2059,7 @@ QualType Sema::BuildArrayType(QualType T, ArrayType::ArraySizeModifier ASM,
     return QualType();
   }
 
-  llvm::APSInt ConstVal(Context.getTypeSize(Context.getSizeType()));
+  llvm37::APSInt ConstVal(Context.getTypeSize(Context.getSizeType()));
   if (!ArraySize) {
     if (ASM == ArrayType::Star)
       T = Context.getVariableArrayType(T, nullptr, ASM, Quals, Brackets);
@@ -2186,7 +2186,7 @@ QualType Sema::BuildExtVectorType(QualType T, Expr *ArraySize,
   }
 
   if (!ArraySize->isTypeDependent() && !ArraySize->isValueDependent()) {
-    llvm::APSInt vecSize(32);
+    llvm37::APSInt vecSize(32);
     if (!ArraySize->isIntegerConstantExpr(vecSize, Context)) {
       Diag(AttrLoc, diag::err_attribute_argument_type)
         << "ext_vector_type" << AANT_ArgumentIntegerConstant
@@ -2558,7 +2558,7 @@ static void diagnoseRedundantReturnTypeQualifiers(Sema &S, QualType RetTy,
       return;
     }
 
-    llvm_unreachable("unknown declarator chunk kind");
+    llvm37_unreachable("unknown declarator chunk kind");
   }
 
   // If the qualifiers come from a conversion function type, don't diagnose
@@ -2639,9 +2639,9 @@ static QualType GetDeclSpecTypeForDeclarator(TypeProcessingState &state,
 
     switch (D.getContext()) {
     case Declarator::KNRTypeListContext:
-      llvm_unreachable("K&R type lists aren't allowed in C++");
+      llvm37_unreachable("K&R type lists aren't allowed in C++");
     case Declarator::LambdaExprContext:
-      llvm_unreachable("Can't specify a type specifier in lambda grammar");
+      llvm37_unreachable("Can't specify a type specifier in lambda grammar");
     case Declarator::ObjCParameterContext:
     case Declarator::ObjCResultContext:
     case Declarator::PrototypeContext:
@@ -2656,7 +2656,7 @@ static QualType GetDeclSpecTypeForDeclarator(TypeProcessingState &state,
       if (D.getDeclSpec().getStorageClassSpec() == DeclSpec::SCS_static)
         break;
       switch (cast<TagDecl>(SemaRef.CurContext)->getTagKind()) {
-      case TTK_Enum: llvm_unreachable("unhandled tag kind");
+      case TTK_Enum: llvm37_unreachable("unhandled tag kind");
       case TTK_Struct: Error = 1; /* Struct member */ break;
       case TTK_Union:  Error = 2; /* Union member */ break;
       case TTK_Class:  Error = 3; /* Class member */ break;
@@ -2750,7 +2750,7 @@ static QualType GetDeclSpecTypeForDeclarator(TypeProcessingState &state,
     case Declarator::TrailingReturnContext:
       // Class and enumeration definitions are syntactically not allowed in
       // trailing return types.
-      llvm_unreachable("parser should not have allowed this");
+      llvm37_unreachable("parser should not have allowed this");
       break;
     case Declarator::FileContext:
     case Declarator::MemberContext:
@@ -2999,7 +2999,7 @@ IdentifierInfo *Sema::getNullabilityKeyword(NullabilityKind nullability) {
       Ident__Null_unspecified = PP.getIdentifierInfo("_Null_unspecified");
     return Ident__Null_unspecified;
   }
-  llvm_unreachable("Unknown nullability kind.");
+  llvm37_unreachable("Unknown nullability kind.");
 }
 
 /// Retrieve the identifier "NSError".
@@ -4070,7 +4070,7 @@ static TypeSourceInfo *GetFullTypeForDeclarator(TypeProcessingState &state,
         case NestedNameSpecifier::NamespaceAlias:
         case NestedNameSpecifier::Global:
         case NestedNameSpecifier::Super:
-          llvm_unreachable("Nested-name-specifier must name a type");
+          llvm37_unreachable("Nested-name-specifier must name a type");
 
         case NestedNameSpecifier::TypeSpec:
         case NestedNameSpecifier::TypeSpecWithTemplate:
@@ -4361,7 +4361,7 @@ static void transferARCOwnershipToDeclaratorChunk(TypeProcessingState &state,
 
   const char *attrStr = nullptr;
   switch (ownership) {
-  case Qualifiers::OCL_None: llvm_unreachable("no ownership!");
+  case Qualifiers::OCL_None: llvm37_unreachable("no ownership!");
   case Qualifiers::OCL_ExplicitNone: attrStr = "none"; break;
   case Qualifiers::OCL_Strong: attrStr = "strong"; break;
   case Qualifiers::OCL_Weak: attrStr = "weak"; break;
@@ -4520,7 +4520,7 @@ static AttributeList::Kind getAttrListKind(AttributedType::Kind kind) {
     return AttributeList::AT_HLSLGloballyCoherent;
   // HLSL Change Ends
   }
-  llvm_unreachable("unexpected attribute kind!");
+  llvm37_unreachable("unexpected attribute kind!");
 }
 
 static void fillAttributedTypeLoc(AttributedTypeLoc TL,
@@ -4740,10 +4740,10 @@ namespace {
       : Context(Context), Chunk(Chunk) {}
 
     void VisitQualifiedTypeLoc(QualifiedTypeLoc TL) {
-      llvm_unreachable("qualified type locs not expected here!");
+      llvm37_unreachable("qualified type locs not expected here!");
     }
     void VisitDecayedTypeLoc(DecayedTypeLoc TL) {
-      llvm_unreachable("decayed type locs not expected here!");
+      llvm37_unreachable("decayed type locs not expected here!");
     }
 
     void VisitAttributedTypeLoc(AttributedTypeLoc TL) {
@@ -4802,7 +4802,7 @@ namespace {
       case NestedNameSpecifier::NamespaceAlias:
       case NestedNameSpecifier::Global:
       case NestedNameSpecifier::Super:
-        llvm_unreachable("Nested-name-specifier must name a type");
+        llvm37_unreachable("Nested-name-specifier must name a type");
       }
 
       // Finally fill in MemberPointerLocInfo fields.
@@ -4847,7 +4847,7 @@ namespace {
     }
 
     void VisitTypeLoc(TypeLoc TL) {
-      llvm_unreachable("unsupported TypeLoc kind in declarator!");
+      llvm37_unreachable("unsupported TypeLoc kind in declarator!");
     }
   };
 }
@@ -4858,7 +4858,7 @@ static void fillAtomicQualLoc(AtomicTypeLoc ATL, const DeclaratorChunk &Chunk) {
   case DeclaratorChunk::Function:
   case DeclaratorChunk::Array:
   case DeclaratorChunk::Paren:
-    llvm_unreachable("cannot be _Atomic qualified");
+    llvm37_unreachable("cannot be _Atomic qualified");
 
   case DeclaratorChunk::Pointer:
     Loc = SourceLocation::getFromRawEncoding(Chunk.Ptr.AtomicQualLoc);
@@ -4945,7 +4945,7 @@ ParsedType Sema::CreateParsedType(QualType T, TypeSourceInfo *TInfo) {
 
 void LocInfoType::getAsStringInternal(std::string &Str,
                                       const PrintingPolicy &Policy) const {
-  llvm_unreachable("LocInfoType leaked into the type system; an opaque TypeTy*"
+  llvm37_unreachable("LocInfoType leaked into the type system; an opaque TypeTy*"
          " was used directly instead of getting the QualType through"
          " GetTypeFromParser");
 }
@@ -5023,7 +5023,7 @@ static void HandleAddressSpaceTypeAttribute(QualType &Type,
       return;
     }
     Expr *ASArgExpr = static_cast<Expr *>(Attr.getArgAsExpr(0));
-    llvm::APSInt addrSpace(32);
+    llvm37::APSInt addrSpace(32);
     if (ASArgExpr->isTypeDependent() || ASArgExpr->isValueDependent() ||
         !ASArgExpr->isIntegerConstantExpr(addrSpace, S.Context)) {
       S.Diag(Attr.getLoc(), diag::err_attribute_argument_type)
@@ -5043,7 +5043,7 @@ static void HandleAddressSpaceTypeAttribute(QualType &Type,
       }
       addrSpace.setIsSigned(false);
     }
-    llvm::APSInt max(addrSpace.getBitWidth());
+    llvm37::APSInt max(addrSpace.getBitWidth());
     max = Qualifiers::MaxAddressSpace;
     if (addrSpace > max) {
       S.Diag(Attr.getLoc(), diag::err_attribute_address_space_too_high)
@@ -5438,7 +5438,7 @@ namespace {
       }
       }
 
-      llvm_unreachable("unknown wrapping kind");
+      llvm37_unreachable("unknown wrapping kind");
     }
   };
 }
@@ -5495,7 +5495,7 @@ static bool handleMSPointerTypeQualifierAttr(TypeProcessingState &State,
 
   AttributedType::Kind TAK;
   switch (Kind) {
-  default: llvm_unreachable("Unknown attribute kind");
+  default: llvm37_unreachable("Unknown attribute kind");
   case AttributeList::AT_Ptr32: TAK = AttributedType::attr_ptr32; break;
   case AttributeList::AT_Ptr64: TAK = AttributedType::attr_ptr64; break;
   case AttributeList::AT_SPtr: TAK = AttributedType::attr_sptr; break;
@@ -5662,7 +5662,7 @@ static NullabilityKind mapNullabilityAttrKind(AttributeList::Kind kind) {
     return NullabilityKind::Unspecified;
 
   default:
-    llvm_unreachable("not a nullability attribute kind");
+    llvm37_unreachable("not a nullability attribute kind");
   }
 }
 
@@ -5841,7 +5841,7 @@ static bool handleHLSLTypeAttr(TypeProcessingState &State,
 
   AttributedType::Kind TAK;
   switch (Kind) {
-  default: llvm_unreachable("Unknown attribute kind");
+  default: llvm37_unreachable("Unknown attribute kind");
   case AttributeList::AT_HLSLRowMajor:    TAK = AttributedType::attr_hlsl_row_major; break;
   case AttributeList::AT_HLSLColumnMajor: TAK = AttributedType::attr_hlsl_column_major; break;
   case AttributeList::AT_HLSLUnorm:       TAK = AttributedType::attr_hlsl_unorm; break;
@@ -5859,7 +5859,7 @@ static AttributedType::Kind getCCTypeAttrKind(AttributeList &Attr) {
   assert(!Attr.isInvalid());
   switch (Attr.getKind()) {
   default:
-    llvm_unreachable("not a calling convention attribute");
+    llvm37_unreachable("not a calling convention attribute");
   case AttributeList::AT_CDecl:
     return AttributedType::attr_cdecl;
   case AttributeList::AT_FastCall:
@@ -5881,7 +5881,7 @@ static AttributedType::Kind getCCTypeAttrKind(AttributeList &Attr) {
       Str = cast<StringLiteral>(Attr.getArgAsExpr(0))->getString();
     else
       Str = Attr.getArgAsIdent(0)->Ident->getName();
-    return llvm::StringSwitch<AttributedType::Kind>(Str)
+    return llvm37::StringSwitch<AttributedType::Kind>(Str)
         .Case("aapcs", AttributedType::attr_pcs)
         .Case("aapcs-vfp", AttributedType::attr_pcs_vfp);
   }
@@ -5892,7 +5892,7 @@ static AttributedType::Kind getCCTypeAttrKind(AttributeList &Attr) {
   case AttributeList::AT_SysVABI:
     return AttributedType::attr_sysv_abi;
   }
-  llvm_unreachable("unexpected attribute kind!");
+  llvm37_unreachable("unexpected attribute kind!");
 }
 
 /// Process an individual function attribute.  Returns true to
@@ -6071,7 +6071,7 @@ static void HandleVectorSizeAttr(QualType& CurType, const AttributeList &Attr,
     return;
   }
   Expr *sizeExpr = static_cast<Expr *>(Attr.getArgAsExpr(0));
-  llvm::APSInt vecSize(32);
+  llvm37::APSInt vecSize(32);
   if (sizeExpr->isTypeDependent() || sizeExpr->isValueDependent() ||
       !sizeExpr->isIntegerConstantExpr(vecSize, S.Context)) {
     S.Diag(Attr.getLoc(), diag::err_attribute_argument_type)
@@ -6161,12 +6161,12 @@ static bool isPermittedNeonBaseType(QualType &Ty,
   if (!BTy)
     return false;
 
-  llvm::Triple Triple = S.Context.getTargetInfo().getTriple();
+  llvm37::Triple Triple = S.Context.getTargetInfo().getTriple();
 
   // Signed poly is mathematically wrong, but has been baked into some ABIs by
   // now.
-  bool IsPolyUnsigned = Triple.getArch() == llvm::Triple::aarch64 ||
-                        Triple.getArch() == llvm::Triple::aarch64_be;
+  bool IsPolyUnsigned = Triple.getArch() == llvm37::Triple::aarch64 ||
+                        Triple.getArch() == llvm37::Triple::aarch64_be;
   if (VecKind == VectorType::NeonPolyVector) {
     if (IsPolyUnsigned) {
       // AArch64 polynomial vectors are unsigned and support poly64.
@@ -6183,8 +6183,8 @@ static bool isPermittedNeonBaseType(QualType &Ty,
 
   // Non-polynomial vector types: the usual suspects are allowed, as well as
   // float64_t on AArch64.
-  bool Is64Bit = Triple.getArch() == llvm::Triple::aarch64 ||
-                 Triple.getArch() == llvm::Triple::aarch64_be;
+  bool Is64Bit = Triple.getArch() == llvm37::Triple::aarch64 ||
+                 Triple.getArch() == llvm37::Triple::aarch64_be;
 
   if (Is64Bit && BTy->getKind() == BuiltinType::Double)
     return true;
@@ -6228,7 +6228,7 @@ static void HandleNeonVectorTypeAttr(QualType& CurType,
   }
   // The number of elements must be an ICE.
   Expr *numEltsExpr = static_cast<Expr *>(Attr.getArgAsExpr(0));
-  llvm::APSInt numEltsInt(32);
+  llvm37::APSInt numEltsInt(32);
   if (numEltsExpr->isTypeDependent() || numEltsExpr->isValueDependent() ||
       !numEltsExpr->isIntegerConstantExpr(numEltsInt, S.Context)) {
     S.Diag(Attr.getLoc(), diag::err_attribute_argument_type)
@@ -6795,7 +6795,7 @@ static unsigned getLiteralDiagFromTagKind(TagTypeKind Tag) {
   case TTK_Struct: return 0;
   case TTK_Interface: return 1;
   case TTK_Class:  return 2;
-  default: llvm_unreachable("Invalid tag kind for literal type diagnostic!");
+  default: llvm37_unreachable("Invalid tag kind for literal type diagnostic!");
   }
 }
 
@@ -7050,7 +7050,7 @@ QualType Sema::BuildUnaryTransformType(QualType BaseType,
                                         UnaryTransformType::EnumUnderlyingType);
     }
   }
-  llvm_unreachable("unknown unary transform type");
+  llvm37_unreachable("unknown unary transform type");
 }
 
 QualType Sema::BuildAtomicType(QualType T, SourceLocation Loc) {

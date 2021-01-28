@@ -3,7 +3,7 @@
 """
 wciia - Whose Code Is It Anyway
 
-Determines code owner of the file/folder relative to the llvm source root.
+Determines code owner of the file/folder relative to the llvm37 source root.
 Code owner is determined from the content of the CODE_OWNERS.TXT 
 by parsing the D: field
 
@@ -12,7 +12,7 @@ usage:
 utils/wciia.py  path
 
 limitations:
-- must be run from llvm source root
+- must be run from llvm37 source root
 - very simplistic algorithm
 - only handles * as a wildcard
 - not very user friendly 

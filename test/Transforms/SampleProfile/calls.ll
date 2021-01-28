@@ -16,7 +16,7 @@
 ;   return 0;
 ; }
 ;
-; Note that this test is missing the llvm.dbg.cu annotation. This emulates
+; Note that this test is missing the llvm37.dbg.cu annotation. This emulates
 ; the effect of the user having only used -fprofile-sample-use without
 ; -gmlt when invoking the driver. In those cases, we need to track source
 ; location information but we do not have to generate debug info in the
@@ -89,8 +89,8 @@ while.end:                                        ; preds = %while.cond
 
 declare i32 @printf(i8*, ...) #2
 
-!llvm.module.flags = !{!8, !9}
-!llvm.ident = !{!10}
+!llvm37.module.flags = !{!8, !9}
+!llvm37.ident = !{!10}
 
 !0 = !DICompileUnit(language: DW_LANG_C_plus_plus, producer: "clang version 3.5 ", isOptimized: false, emissionKind: 0, file: !1, enums: !2, retainedTypes: !2, subprograms: !3, globals: !2, imports: !2)
 !1 = !DIFile(filename: "calls.cc", directory: ".")

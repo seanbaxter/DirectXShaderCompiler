@@ -1,16 +1,16 @@
 //===-- DWARFDebugAbbrev.cpp ----------------------------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/DebugInfo/DWARF/DWARFDebugAbbrev.h"
-#include "llvm/Support/Format.h"
-#include "llvm/Support/raw_ostream.h"
-using namespace llvm;
+#include "llvm37/DebugInfo/DWARF/DWARFDebugAbbrev.h"
+#include "llvm37/Support/Format.h"
+#include "llvm37/Support/raw_ostream.h"
+using namespace llvm37;
 
 DWARFAbbreviationDeclarationSet::DWARFAbbreviationDeclarationSet() {
   clear();

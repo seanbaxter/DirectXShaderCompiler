@@ -1,4 +1,4 @@
-//===- llvm/Support/Windows/MSFileSystemImpl.cpp DXComplier Impl *- C++ -*-===//
+//===- llvm37/Support/Windows/MSFileSystemImpl.cpp DXComplier Impl *- C++ -*-===//
 ///////////////////////////////////////////////////////////////////////////////
 //                                                                           //
 // MSFileSystemImpl.cpp                                                      //
@@ -27,17 +27,17 @@
 
 #include "dxc/Support/WinIncludes.h"
 #include "dxc/Support/WinAdapter.h"
-#include "llvm/Support/MSFileSystem.h"
+#include "llvm37/Support/MSFileSystem.h"
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // Externally visible functions.
 
-HRESULT CreateMSFileSystemForDisk(_COM_Outptr_ ::llvm::sys::fs::MSFileSystem** pResult) throw();
+HRESULT CreateMSFileSystemForDisk(_COM_Outptr_ ::llvm37::sys::fs::MSFileSystem** pResult) throw();
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // Win32-and-CRT-based MSFileSystem implementation with direct filesystem access.
 
-namespace llvm {
+namespace llvm37 {
 namespace sys  {
 namespace fs {
 
@@ -537,13 +537,13 @@ int MSFileSystemForDisk::Fstat(int FD, struct stat *Status) throw() {
 
 } // end namespace fs
 } // end namespace sys
-} // end namespace llvm
+} // end namespace llvm37
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // Externally visible functions.
 
-HRESULT CreateMSFileSystemForDisk(_COM_Outptr_ ::llvm::sys::fs::MSFileSystem** pResult) throw()
+HRESULT CreateMSFileSystemForDisk(_COM_Outptr_ ::llvm37::sys::fs::MSFileSystem** pResult) throw()
 {
-  *pResult = new (std::nothrow) ::llvm::sys::fs::MSFileSystemForDisk();
+  *pResult = new (std::nothrow) ::llvm37::sys::fs::MSFileSystemForDisk();
   return (*pResult != nullptr) ? S_OK : E_OUTOFMEMORY;
 }

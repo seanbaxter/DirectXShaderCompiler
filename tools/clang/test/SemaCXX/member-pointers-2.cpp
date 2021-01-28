@@ -1,4 +1,4 @@
-// RUN: %clang_cc1 -emit-llvm-only %s
+// RUN: %clang_cc1 -emit-llvm37-only %s
 
 // Tests that Sema properly creates member-access expressions for
 // these instead of bare FieldDecls.

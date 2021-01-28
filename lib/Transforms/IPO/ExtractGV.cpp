@@ -1,6 +1,6 @@
 //===-- ExtractGV.cpp - Global Value extraction pass ----------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,15 +11,15 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Transforms/IPO.h"
-#include "llvm/ADT/SetVector.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Module.h"
-#include "llvm/Pass.h"
+#include "llvm37/Transforms/IPO.h"
+#include "llvm37/ADT/SetVector.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/Pass.h"
 #include <algorithm>
-using namespace llvm;
+using namespace llvm37;
 
 /// Make sure GV is visible from both modules. Delete is true if it is
 /// being deleted from this module.
@@ -39,10 +39,10 @@ static void makeVisible(GlobalValue &GV, bool Delete) {
     return;
   }
 
-  // Map linkonce* to weak* so that llvm doesn't drop this GV.
+  // Map linkonce* to weak* so that llvm37 doesn't drop this GV.
   switch(GV.getLinkage()) {
   default:
-    llvm_unreachable("Unexpected linkage");
+    llvm37_unreachable("Unexpected linkage");
   case GlobalValue::LinkOnceAnyLinkage:
     GV.setLinkage(GlobalValue::WeakAnyLinkage);
     return;
@@ -131,7 +131,7 @@ namespace {
           Type *Ty =  CurI->getType()->getElementType();
 
           CurI->removeFromParent();
-          llvm::Value *Declaration;
+          llvm37::Value *Declaration;
           if (FunctionType *FTy = dyn_cast<FunctionType>(Ty)) {
             Declaration = Function::Create(FTy, GlobalValue::ExternalLinkage,
                                            CurI->getName(), &M);
@@ -154,7 +154,7 @@ namespace {
   char GVExtractorPass::ID = 0;
 }
 
-ModulePass *llvm::createGVExtractionPass(std::vector<GlobalValue *> &GVs,
+ModulePass *llvm37::createGVExtractionPass(std::vector<GlobalValue *> &GVs,
                                          bool deleteFn) {
   return new GVExtractorPass(GVs, deleteFn);
 }

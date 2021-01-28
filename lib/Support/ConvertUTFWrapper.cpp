@@ -1,6 +1,6 @@
 //===-- ConvertUTFWrapper.cpp - Wrap ConvertUTF.h with clang data types -----===
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -8,15 +8,15 @@
 //===----------------------------------------------------------------------===//
 
 #include "dxc/Support/WinAdapter.h" // HLSL Change
-#include "llvm/Support/ConvertUTF.h"
-#include "llvm/Support/SwapByteOrder.h"
+#include "llvm37/Support/ConvertUTF.h"
+#include "llvm37/Support/SwapByteOrder.h"
 #include <string>
 #include <vector>
 
-namespace llvm {
+namespace llvm37 {
 
 _Use_decl_annotations_ // HLSL Change
-bool ConvertUTF8toWide(unsigned WideCharWidth, llvm::StringRef Source,
+bool ConvertUTF8toWide(unsigned WideCharWidth, llvm37::StringRef Source,
                        char *&ResultPtr, const UTF8 *&ErrorPtr) {
   assert(WideCharWidth == 1 || WideCharWidth == 2 || WideCharWidth == 4);
   ConversionResult result = conversionOK;
@@ -103,7 +103,7 @@ bool convertUTF16ToUTF8String(ArrayRef<char> SrcBytes, std::string &Out) {
   if (Src[0] == UNI_UTF16_BYTE_ORDER_MARK_SWAPPED) {
     ByteSwapped.insert(ByteSwapped.end(), Src, SrcEnd);
     for (unsigned I = 0, E = ByteSwapped.size(); I != E; ++I)
-      ByteSwapped[I] = llvm::sys::SwapByteOrder_16(ByteSwapped[I]);
+      ByteSwapped[I] = llvm37::sys::SwapByteOrder_16(ByteSwapped[I]);
     Src = &ByteSwapped[0];
     SrcEnd = &ByteSwapped[ByteSwapped.size() - 1] + 1;
   }
@@ -171,5 +171,5 @@ bool convertUTF8ToUTF16String(StringRef SrcUTF8,
   return true;
 }
 
-} // end namespace llvm
+} // end namespace llvm37
 

@@ -89,12 +89,12 @@ For example on x86 a typical virtual call may look like this:
   ca8511:       0f 0b                   ud2
 
 The compiler relies on co-operation from the linker in order to assemble
-the bit vectors for the whole program. It currently does this using LLVM's
+the bit vectors for the whole program. It currently does this using LLVM37's
 `bit sets`_ mechanism together with link-time optimization.
 
 .. _address point: https://mentorembedded.github.io/cxx-abi/abi.html#vtable-general
-.. _bit sets: http://llvm.org/docs/BitSets.html
-.. _ByteArrayBuilder: http://llvm.org/docs/doxygen/html/structllvm_1_1ByteArrayBuilder.html
+.. _bit sets: http://llvm37.org/docs/BitSets.html
+.. _ByteArrayBuilder: http://llvm37.org/docs/doxygen/html/structllvm37_1_1ByteArrayBuilder.html
 
 Optimizations
 -------------
@@ -196,7 +196,7 @@ those sub-hierarchies need to be (see "Stripping Leading/Trailing Zeros in Bit
 Vectors" above). The `GlobalLayoutBuilder`_ class is responsible for laying
 out the globals efficiently to minimize the sizes of the underlying bitsets.
 
-.. _GlobalLayoutBuilder: http://llvm.org/viewvc/llvm-project/llvm/trunk/include/llvm/Transforms/IPO/LowerBitSets.h?view=markup
+.. _GlobalLayoutBuilder: http://llvm37.org/viewvc/llvm37-project/llvm37/trunk/include/llvm37/Transforms/IPO/LowerBitSets.h?view=markup
 
 Alignment
 ~~~~~~~~~

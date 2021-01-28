@@ -1,6 +1,6 @@
 //===--- LambdaCapture.h - Types for C++ Lambda Captures --------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -12,12 +12,12 @@
 ///
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_AST_LAMBDACAPTURE_H
-#define LLVM_CLANG_AST_LAMBDACAPTURE_H
+#ifndef LLVM37_CLANG_AST_LAMBDACAPTURE_H
+#define LLVM37_CLANG_AST_LAMBDACAPTURE_H
 
 #include "clang/AST/Decl.h"
 #include "clang/Basic/Lambda.h"
-#include "llvm/ADT/PointerIntPair.h"
+#include "llvm37/ADT/PointerIntPair.h"
 
 namespace clang {
 
@@ -36,7 +36,7 @@ class LambdaCapture {
     Capture_ByCopy = 0x02
   };
 
-  llvm::PointerIntPair<Decl *, 2> DeclAndBits;
+  llvm37::PointerIntPair<Decl *, 2> DeclAndBits;
   SourceLocation Loc;
   SourceLocation EllipsisLoc;
 
@@ -125,4 +125,4 @@ public:
 
 } // end namespace clang
 
-#endif // LLVM_CLANG_AST_LAMBDACAPTURE_H
+#endif // LLVM37_CLANG_AST_LAMBDACAPTURE_H

@@ -1,6 +1,6 @@
 ; REQUIRES: object-emission
 ;
-; RUN: llvm-link %s %p/type-unique-simple2-b.ll -S -o - | %llc_dwarf -filetype=obj -O0 | llvm-dwarfdump -debug-dump=info - | FileCheck %s
+; RUN: llvm37-link %s %p/type-unique-simple2-b.ll -S -o - | %llc_dwarf -filetype=obj -O0 | llvm37-dwarfdump -debug-dump=info - | FileCheck %s
 ;
 ; Tests for a merge error where attributes are inserted twice into the same DIE.
 ;
@@ -34,21 +34,21 @@ define i32 @_Z3barv() #0 {
 entry:
   %tmp = alloca %class.A, align 8
   %0 = bitcast %class.A* %tmp to i8*, !dbg !38
-  call void @llvm.memset.p0i8.i64(i8* %0, i8 0, i64 8, i32 8, i1 false), !dbg !38
+  call void @llvm37.memset.p0i8.i64(i8* %0, i8 0, i64 8, i32 8, i1 false), !dbg !38
   call void @_ZN1AC1Ev(%class.A* %tmp) #1, !dbg !38
   %call = call i32 @_ZN1A6getFooEv(%class.A* %tmp), !dbg !38
   ret i32 %call, !dbg !38
 }
 
 ; Function Attrs: nounwind
-declare void @llvm.memset.p0i8.i64(i8* nocapture, i8, i64, i32, i1) #1
+declare void @llvm37.memset.p0i8.i64(i8* nocapture, i8, i64, i32, i1) #1
 
 ; Function Attrs: inlinehint nounwind
 define linkonce_odr void @_ZN1AC1Ev(%class.A* %this) unnamed_addr #2 align 2 {
 entry:
   %this.addr = alloca %class.A*, align 8
   store %class.A* %this, %class.A** %this.addr, align 8
-  call void @llvm.dbg.declare(metadata %class.A** %this.addr, metadata !39, metadata !DIExpression()), !dbg !41
+  call void @llvm37.dbg.declare(metadata %class.A** %this.addr, metadata !39, metadata !DIExpression()), !dbg !41
   %this1 = load %class.A*, %class.A** %this.addr
   call void @_ZN1AC2Ev(%class.A* %this1) #1, !dbg !42
   ret void, !dbg !42
@@ -57,14 +57,14 @@ entry:
 declare i32 @_ZN1A6getFooEv(%class.A*)
 
 ; Function Attrs: nounwind readnone
-declare void @llvm.dbg.declare(metadata, metadata, metadata) #4
+declare void @llvm37.dbg.declare(metadata, metadata, metadata) #4
 
 ; Function Attrs: inlinehint nounwind
 define linkonce_odr void @_ZN1AC2Ev(%class.A* %this) unnamed_addr #2 align 2 {
 entry:
   %this.addr = alloca %class.A*, align 8
   store %class.A* %this, %class.A** %this.addr, align 8
-  call void @llvm.dbg.declare(metadata %class.A** %this.addr, metadata !44, metadata !DIExpression()), !dbg !45
+  call void @llvm37.dbg.declare(metadata %class.A** %this.addr, metadata !44, metadata !DIExpression()), !dbg !45
   %this1 = load %class.A*, %class.A** %this.addr
   %0 = bitcast %class.A* %this1 to i8***, !dbg !46
   store i8** getelementptr inbounds ([4 x i8*], [4 x i8*]* @_ZTV1A, i64 0, i64 2), i8*** %0, !dbg !46
@@ -76,9 +76,9 @@ attributes #1 = { nounwind }
 attributes #2 = { inlinehint nounwind }
 attributes #4 = { nounwind readnone }
 
-!llvm.dbg.cu = !{!0}
-!llvm.module.flags = !{!35, !36}
-!llvm.ident = !{!37}
+!llvm37.dbg.cu = !{!0}
+!llvm37.module.flags = !{!35, !36}
+!llvm37.ident = !{!37}
 
 !0 = !DICompileUnit(language: DW_LANG_C_plus_plus, producer: "clang version 3.5 ", isOptimized: false, emissionKind: 0, file: !1, enums: !2, retainedTypes: !3, subprograms: !26, globals: !2, imports: !2)
 !1 = !DIFile(filename: "<unknown>", directory: "")

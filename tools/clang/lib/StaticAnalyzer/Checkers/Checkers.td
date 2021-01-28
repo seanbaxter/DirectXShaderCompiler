@@ -1,6 +1,6 @@
 //===--- Checkers.td - Static Analyzer Checkers -===-----------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -43,7 +43,7 @@ def CocoaAlpha : Package<"cocoa">, InPackage<OSXAlpha>, Hidden;
 def CoreFoundation : Package<"coreFoundation">, InPackage<OSX>;
 def Containers : Package<"containers">, InPackage<CoreFoundation>;
 
-def LLVM : Package<"llvm">;
+def LLVM37 : Package<"llvm37">;
 def Debug : Package<"debug">;
 
 //===----------------------------------------------------------------------===//
@@ -480,13 +480,13 @@ def ObjCContainersChecker : Checker<"OutOfBounds">,
     
 }
 //===----------------------------------------------------------------------===//
-// Checkers for LLVM development.
+// Checkers for LLVM37 development.
 //===----------------------------------------------------------------------===//
 
-def LLVMConventionsChecker : Checker<"Conventions">,
-  InPackage<LLVM>,
-  HelpText<"Check code for LLVM codebase conventions">,
-  DescFile<"LLVMConventionsChecker.cpp">;
+def LLVM37ConventionsChecker : Checker<"Conventions">,
+  InPackage<LLVM37>,
+  HelpText<"Check code for LLVM37 codebase conventions">,
+  DescFile<"LLVM37ConventionsChecker.cpp">;
 
 //===----------------------------------------------------------------------===//
 // Debugging checkers (for analyzer development).

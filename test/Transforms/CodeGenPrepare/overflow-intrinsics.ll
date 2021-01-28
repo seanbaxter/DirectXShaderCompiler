@@ -4,7 +4,7 @@ target datalayout = "e-p:64:64:64-i1:8:8-i8:8:8-i16:16:16-i32:32:32-i64:64:64-f3
 target triple = "x86_64-apple-darwin10.0.0"
 
 ; CHECK-LABEL: @test1(
-; CHECK: llvm.uadd.with.overflow
+; CHECK: llvm37.uadd.with.overflow
 ; CHECK: ret i64
 define i64 @test1(i64 %a, i64 %b) nounwind ssp {
 entry:
@@ -15,7 +15,7 @@ entry:
 }
 
 ; CHECK-LABEL: @test2(
-; CHECK: llvm.uadd.with.overflow
+; CHECK: llvm37.uadd.with.overflow
 ; CHECK: ret i64
 define i64 @test2(i64 %a, i64 %b) nounwind ssp {
 entry:
@@ -26,7 +26,7 @@ entry:
 }
 
 ; CHECK-LABEL: @test3(
-; CHECK: llvm.uadd.with.overflow
+; CHECK: llvm37.uadd.with.overflow
 ; CHECK: ret i64
 define i64 @test3(i64 %a, i64 %b) nounwind ssp {
 entry:
@@ -37,7 +37,7 @@ entry:
 }
 
 ; CHECK-LABEL: @test4(
-; CHECK: llvm.uadd.with.overflow
+; CHECK: llvm37.uadd.with.overflow
 ; CHECK: extractvalue
 ; CHECK: extractvalue
 ; CHECK: select
@@ -56,7 +56,7 @@ entry:
 }
 
 ; CHECK-LABEL: @test5(
-; CHECK-NOT: llvm.uadd.with.overflow
+; CHECK-NOT: llvm37.uadd.with.overflow
 ; CHECK: next
 define i64 @test5(i64 %a, i64 %b, i64* %ptr, i1 %c) nounwind ssp {
 entry:

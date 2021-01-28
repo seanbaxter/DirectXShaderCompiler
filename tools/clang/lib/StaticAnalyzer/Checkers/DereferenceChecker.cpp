@@ -1,6 +1,6 @@
 //== NullDerefChecker.cpp - Null dereference checker ------------*- C++ -*--==//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -18,8 +18,8 @@
 #include "clang/StaticAnalyzer/Core/Checker.h"
 #include "clang/StaticAnalyzer/Core/CheckerManager.h"
 #include "clang/StaticAnalyzer/Core/PathSensitive/CheckerContext.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/Support/raw_ostream.h"
 
 using namespace clang;
 using namespace ento;
@@ -100,7 +100,7 @@ void DereferenceChecker::reportBug(ProgramStateRef State, const Stmt *S,
     BT_null.reset(new BuiltinBug(this, "Dereference of null pointer"));
 
   SmallString<100> buf;
-  llvm::raw_svector_ostream os(buf);
+  llvm37::raw_svector_ostream os(buf);
 
   SmallVector<SourceRange, 2> Ranges;
 
@@ -160,7 +160,7 @@ void DereferenceChecker::reportBug(ProgramStateRef State, const Stmt *S,
   }
 
   os.flush();
-  auto report = llvm::make_unique<BugReport>(
+  auto report = llvm37::make_unique<BugReport>(
       *BT_null, buf.empty() ? BT_null->getDescription() : StringRef(buf), N);
 
   bugreporter::trackNullOrUndefValue(N, bugreporter::getDerefExpr(S), *report);
@@ -182,7 +182,7 @@ void DereferenceChecker::checkLocation(SVal l, bool isLoad, const Stmt* S,
             new BuiltinBug(this, "Dereference of undefined pointer value"));
 
       auto report =
-          llvm::make_unique<BugReport>(*BT_undef, BT_undef->getDescription(), N);
+          llvm37::make_unique<BugReport>(*BT_undef, BT_undef->getDescription(), N);
       bugreporter::trackNullOrUndefValue(N, bugreporter::getDerefExpr(S),
                                          *report);
       C.emitReport(std::move(report));

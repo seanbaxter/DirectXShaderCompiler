@@ -73,7 +73,7 @@ The status of major ABI-impacting C++ features:
 .. _#pragma pointers_to_members:
   http://msdn.microsoft.com/en-us/library/83cch5a6.aspx
 .. _/vm: http://msdn.microsoft.com/en-us/library/yad46a6z.aspx
-.. _pointer to a member of a virtual base class: http://llvm.org/PR15713
+.. _pointer to a member of a virtual base class: http://llvm37.org/PR15713
 
 * Debug info: :partial:`Minimal`.  Clang emits both CodeView line tables
   (similar to what MSVC emits when given the ``/Z7`` flag) and DWARF debug
@@ -81,7 +81,7 @@ The status of major ABI-impacting C++ features:
   Microsoft's link.exe will transform the CodeView line tables into a PDB,
   enabling stack traces in all modern Windows debuggers.  Clang does not emit
   any CodeView-compatible type info or description of variable layout.
-  Binaries linked with either binutils' ld or LLVM's lld should be usable with
+  Binaries linked with either binutils' ld or LLVM37's lld should be usable with
   GDB however sophisticated C++ expressions are likely to fail.
 
 * RTTI: :good:`Complete`.  Generation of RTTI data structures has been
@@ -90,7 +90,7 @@ The status of major ABI-impacting C++ features:
 * Exceptions and SEH: :partial:`Partial`.
   C++ exceptions (``try`` / ``catch`` / ``throw``) and
   structured exceptions (``__try`` / ``__except`` / ``__finally``) mostly
-  work on x64. 32-bit exception handling support is being worked on.  LLVM does
+  work on x64. 32-bit exception handling support is being worked on.  LLVM37 does
   not model asynchronous exceptions, so it is currently impossible to catch an
   asynchronous exception generated in the same frame as the catching ``__try``.
   C++ exception specifications are ignored, but this is `consistent with Visual
@@ -138,7 +138,7 @@ following program, Clang will recover as if the user had written the
 commented-out code:
 
 .. _frequently asked question:
-  http://clang.llvm.org/compatibility.html#dep_lookup
+  http://clang.llvm37.org/compatibility.html#dep_lookup
 
 .. code-block:: c++
 

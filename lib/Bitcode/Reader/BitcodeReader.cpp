@@ -1,42 +1,42 @@
 //===- BitcodeReader.cpp - Internal BitcodeReader implementation ----------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Bitcode/ReaderWriter.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/ADT/Triple.h"
-#include "llvm/Bitcode/BitstreamReader.h"
-#include "llvm/Bitcode/LLVMBitCodes.h"
-#include "llvm/IR/AutoUpgrade.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/DebugInfo.h"
-#include "llvm/IR/DebugInfoMetadata.h"
-#include "llvm/IR/DerivedTypes.h"
-#include "llvm/IR/DiagnosticPrinter.h"
-#include "llvm/IR/GVMaterializer.h"
-#include "llvm/IR/InlineAsm.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/OperandTraits.h"
-#include "llvm/IR/Operator.h"
-#include "llvm/IR/ValueHandle.h"
-#include "llvm/Support/DataStream.h"
-#include "llvm/Support/ManagedStatic.h"
-#include "llvm/Support/MathExtras.h"
-#include "llvm/Support/MemoryBuffer.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/Bitcode/ReaderWriter.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/ADT/Triple.h"
+#include "llvm37/Bitcode/BitstreamReader.h"
+#include "llvm37/Bitcode/LLVMBitCodes.h"
+#include "llvm37/IR/AutoUpgrade.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/DebugInfo.h"
+#include "llvm37/IR/DebugInfoMetadata.h"
+#include "llvm37/IR/DerivedTypes.h"
+#include "llvm37/IR/DiagnosticPrinter.h"
+#include "llvm37/IR/GVMaterializer.h"
+#include "llvm37/IR/InlineAsm.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/OperandTraits.h"
+#include "llvm37/IR/Operator.h"
+#include "llvm37/IR/ValueHandle.h"
+#include "llvm37/Support/DataStream.h"
+#include "llvm37/Support/ManagedStatic.h"
+#include "llvm37/Support/MathExtras.h"
+#include "llvm37/Support/MemoryBuffer.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <deque>
 #include <unordered_set> // HLSL Change
 #include "dxc/DXIL/DxilOperations.h"   // HLSL Change
-using namespace llvm;
+using namespace llvm37;
 
 namespace {
 enum {
@@ -55,9 +55,9 @@ class BitcodeReaderValueList {
   /// number that holds the resolved value.
   typedef std::vector<std::pair<Constant*, unsigned> > ResolveConstantsTy;
   ResolveConstantsTy ResolveConstants;
-  LLVMContext &Context;
+  LLVM37Context &Context;
 public:
-  BitcodeReaderValueList(LLVMContext &C) : Context(C) {}
+  BitcodeReaderValueList(LLVM37Context &C) : Context(C) {}
   ~BitcodeReaderValueList() {
     assert(ResolveConstants.empty() && "Constants not resolved?");
   }
@@ -102,9 +102,9 @@ class BitcodeReaderMDValueList {
   unsigned MaxFwdRef;
   std::vector<TrackingMDRef> MDValuePtrs;
 
-  LLVMContext &Context;
+  LLVM37Context &Context;
 public:
-  BitcodeReaderMDValueList(LLVMContext &C)
+  BitcodeReaderMDValueList(LLVM37Context &C)
       : NumFwdRefs(0), AnyFwdRefs(false), Context(C) {}
 
   // vector compatibility methods
@@ -132,7 +132,7 @@ public:
 };
 
 class BitcodeReader : public GVMaterializer {
-  LLVMContext &Context;
+  LLVM37Context &Context;
   DiagnosticHandlerFunction DiagnosticHandler;
   Module *TheModule = nullptr;
   std::unique_ptr<MemoryBuffer> Buffer;
@@ -223,9 +223,9 @@ public:
   std::error_code error(BitcodeError E);
   std::error_code error(const Twine &Message);
 
-  BitcodeReader(std::unique_ptr<MemoryBuffer> &&Buffer, LLVMContext &Context, // HLSL Change: unique_ptr
+  BitcodeReader(std::unique_ptr<MemoryBuffer> &&Buffer, LLVM37Context &Context, // HLSL Change: unique_ptr
                 DiagnosticHandlerFunction DiagnosticHandler);
-  BitcodeReader(LLVMContext &Context,
+  BitcodeReader(LLVM37Context &Context,
                 DiagnosticHandlerFunction DiagnosticHandler);
   ~BitcodeReader() override { freeState(); }
 
@@ -263,8 +263,8 @@ public:
 
 private:
   std::vector<StructType *> IdentifiedStructTypes;
-  StructType *createIdentifiedStructType(LLVMContext &Context, StringRef Name);
-  StructType *createIdentifiedStructType(LLVMContext &Context);
+  StructType *createIdentifiedStructType(LLVM37Context &Context, StringRef Name);
+  StructType *createIdentifiedStructType(LLVM37Context &Context);
 
   Type *getTypeByID(unsigned ID);
   Value *getFnValueByID(unsigned ID, Type *Ty) {
@@ -424,7 +424,7 @@ std::error_code BitcodeReader::error(BitcodeError E) {
 }
 
 static DiagnosticHandlerFunction getDiagHandler(DiagnosticHandlerFunction F,
-                                                LLVMContext &C) {
+                                                LLVM37Context &C) {
   if (F)
     return F;
   return [&C](const DiagnosticInfo &DI) { C.diagnose(DI); };
@@ -439,13 +439,13 @@ static void ReportWarning(DiagnosticHandlerFunction F, const char *Msg) {
 }
 // HLSL Change Ends
 
-BitcodeReader::BitcodeReader(std::unique_ptr<MemoryBuffer> &&Buffer, LLVMContext &Context, // HLSL Change: unique_ptr
+BitcodeReader::BitcodeReader(std::unique_ptr<MemoryBuffer> &&Buffer, LLVM37Context &Context, // HLSL Change: unique_ptr
                              DiagnosticHandlerFunction DiagnosticHandler)
     : Context(Context),
       DiagnosticHandler(getDiagHandler(DiagnosticHandler, Context)),
       Buffer(std::move(Buffer)), ValueList(Context), MDValueList(Context) {} // HLSL Change: std::move
 
-BitcodeReader::BitcodeReader(LLVMContext &Context,
+BitcodeReader::BitcodeReader(LLVM37Context &Context,
                              DiagnosticHandlerFunction DiagnosticHandler)
     : Context(Context),
       DiagnosticHandler(getDiagHandler(DiagnosticHandler, Context)),
@@ -728,14 +728,14 @@ static FastMathFlags getDecodedFastMathFlags(unsigned Val) {
   return FMF;
 }
 
-static void upgradeDLLImportExportLinkage(llvm::GlobalValue *GV, unsigned Val) {
+static void upgradeDLLImportExportLinkage(llvm37::GlobalValue *GV, unsigned Val) {
   switch (Val) {
   case 5: GV->setDLLStorageClass(GlobalValue::DLLImportStorageClass); break;
   case 6: GV->setDLLStorageClass(GlobalValue::DLLExportStorageClass); break;
   }
 }
 
-namespace llvm {
+namespace llvm37 {
 namespace {
 /// \brief A class for maintaining the slot number definition
 /// as a placeholder for the actual definition for forward constants defs.
@@ -745,7 +745,7 @@ class ConstantPlaceHolder : public ConstantExpr {
 public:
   // allocate space for exactly one operand
   void *operator new(size_t s) { return User::operator new(s, 1); }
-  explicit ConstantPlaceHolder(Type *Ty, LLVMContext &Context)
+  explicit ConstantPlaceHolder(Type *Ty, LLVM37Context &Context)
       : ConstantExpr(Ty, Instruction::UserOp1, &Op<0>(), 1) {
     Op<0>() = UndefValue::get(Type::getInt32Ty(Context));
   }
@@ -1001,14 +1001,14 @@ Type *BitcodeReader::getTypeByID(unsigned ID) {
   return TypeList[ID] = createIdentifiedStructType(Context);
 }
 
-StructType *BitcodeReader::createIdentifiedStructType(LLVMContext &Context,
+StructType *BitcodeReader::createIdentifiedStructType(LLVM37Context &Context,
                                                       StringRef Name) {
   auto *Ret = StructType::create(Context, Name);
   IdentifiedStructTypes.push_back(Ret);
   return Ret;
 }
 
-StructType *BitcodeReader::createIdentifiedStructType(LLVMContext &Context) {
+StructType *BitcodeReader::createIdentifiedStructType(LLVM37Context &Context) {
   auto *Ret = StructType::create(Context);
   IdentifiedStructTypes.push_back(Ret);
   return Ret;
@@ -1020,10 +1020,10 @@ StructType *BitcodeReader::createIdentifiedStructType(LLVMContext &Context) {
 //===----------------------------------------------------------------------===//
 
 
-/// \brief This fills an AttrBuilder object with the LLVM attributes that have
+/// \brief This fills an AttrBuilder object with the LLVM37 attributes that have
 /// been decoded from the given integer. This function must stay in sync with
-/// 'encodeLLVMAttributesForBitcode'.
-static void decodeLLVMAttributesForBitcode(AttrBuilder &B,
+/// 'encodeLLVM37AttributesForBitcode'.
+static void decodeLLVM37AttributesForBitcode(AttrBuilder &B,
                                            uint64_t EncodedAttrs) {
   // FIXME: Remove in 4.0.
 
@@ -1081,7 +1081,7 @@ std::error_code BitcodeReader::parseAttributeBlock() {
 
       for (unsigned i = 0, e = Record.size(); i != e; i += 2) {
         AttrBuilder B;
-        decodeLLVMAttributesForBitcode(B, Record[i+1]);
+        decodeLLVM37AttributesForBitcode(B, Record[i+1]);
         Attrs.push_back(AttributeSet::get(Context, Record[i], B));
       }
 
@@ -1414,7 +1414,7 @@ std::error_code BitcodeReader::parseTypeTableBody() {
       break;
     }
     case bitc::TYPE_CODE_FUNCTION_OLD: {
-      // FIXME: attrid is dead, remove it in LLVM 4.0
+      // FIXME: attrid is dead, remove it in LLVM37 4.0
       // FUNCTION: [vararg, attrid, retty, paramty x N]
       if (Record.size() < 3)
         return error("Invalid record");
@@ -1846,7 +1846,7 @@ std::error_code BitcodeReader::parseSelectNamedMetadata(ArrayRef<StringRef> Name
     bool IsDistinct = false;
     switch (Code) {
     default:
-      llvm_unreachable("Can't actually be anything else.");
+      llvm37_unreachable("Can't actually be anything else.");
       break;
     case bitc::METADATA_VALUE: {
       if (Record.size() != 2)
@@ -1882,7 +1882,7 @@ std::error_code BitcodeReader::parseSelectNamedMetadata(ArrayRef<StringRef> Name
       String.clear();
       String.resize(Uint8Record.size());
       memcpy(&String[0], Uint8Record.data(), Uint8Record.size());
-      llvm::UpgradeMDStringConstant(String);
+      llvm37::UpgradeMDStringConstant(String);
       Metadata *MD = MDString::get(Context, String);
       MDValueList.assignValue(MD, MDNumber);
       break;
@@ -2365,7 +2365,7 @@ std::error_code BitcodeReader::parseMetadata() {
       String.resize(Uint8Record.size());
       memcpy(&String[0], Uint8Record.data(), Uint8Record.size());
 #endif
-      llvm::UpgradeMDStringConstant(String);
+      llvm37::UpgradeMDStringConstant(String);
       Metadata *MD = MDString::get(Context, String);
       MDValueList.assignValue(MD, NextMDValueNo++);
       break;
@@ -2785,7 +2785,7 @@ std::error_code BitcodeReader::parseConstants() {
         if (!IdxTy)
           return error("Invalid record");
         Op1 = ValueList.getConstantFwdRef(Record[3], IdxTy);
-      } else // TODO: Remove with llvm 4.0
+      } else // TODO: Remove with llvm37 4.0
         Op1 = ValueList.getConstantFwdRef(Record[2], Type::getInt32Ty(Context));
       if (!Op1)
         return error("Invalid record");
@@ -2806,7 +2806,7 @@ std::error_code BitcodeReader::parseConstants() {
         if (!IdxTy)
           return error("Invalid record");
         Op2 = ValueList.getConstantFwdRef(Record[3], IdxTy);
-      } else // TODO: Remove with llvm 4.0
+      } else // TODO: Remove with llvm37 4.0
         Op2 = ValueList.getConstantFwdRef(Record[2], Type::getInt32Ty(Context));
       if (!Op2)
         return error("Invalid record");
@@ -3563,7 +3563,7 @@ ErrorOr<std::string> BitcodeReader::parseModuleTriple() {
     }
     Record.clear();
   }
-  llvm_unreachable("Exit infinite loop");
+  llvm37_unreachable("Exit infinite loop");
 }
 
 ErrorOr<std::string> BitcodeReader::parseTriple() {
@@ -3666,7 +3666,7 @@ std::error_code BitcodeReader::parseMetadataAttachment(Function &F) {
           // upgrade path.
           break;
         Inst->setMetadata(I->second, cast<MDNode>(Node));
-        if (I->second == LLVMContext::MD_tbaa)
+        if (I->second == LLVM37Context::MD_tbaa)
           InstsWithTBAATag.push_back(Inst);
       }
       break;
@@ -4981,9 +4981,9 @@ BitcodeReader::initLazyStream(std::unique_ptr<DataStreamer> Streamer) {
   // Check and strip off the bitcode wrapper; BitstreamReader expects never to
   // see it.
   auto OwnedBytes =
-      llvm::make_unique<StreamingMemoryObject>(std::move(Streamer));
+      llvm37::make_unique<StreamingMemoryObject>(std::move(Streamer));
   StreamingMemoryObject &Bytes = *OwnedBytes;
-  StreamFile = llvm::make_unique<BitstreamReader>(std::move(OwnedBytes));
+  StreamFile = llvm37::make_unique<BitstreamReader>(std::move(OwnedBytes));
   Stream.init(&*StreamFile);
 
   unsigned char buf[16];
@@ -5005,7 +5005,7 @@ BitcodeReader::initLazyStream(std::unique_ptr<DataStreamer> Streamer) {
 
 namespace {
 class BitcodeErrorCategoryType : public std::error_category {
-  const char *name() const LLVM_NOEXCEPT override {
+  const char *name() const LLVM37_NOEXCEPT override {
     return "llvm.bitcode";
   }
   std::string message(int IE) const override {
@@ -5016,14 +5016,14 @@ class BitcodeErrorCategoryType : public std::error_category {
     case BitcodeError::CorruptedBitcode:
       return "Corrupted bitcode";
     }
-    llvm_unreachable("Unknown error type!");
+    llvm37_unreachable("Unknown error type!");
   }
 };
 }
 
 static BitcodeErrorCategoryType g_ErrorCategory; // HLSL Change - not a ManagedStatic
 
-const std::error_category &llvm::BitcodeErrorCategory() {
+const std::error_category &llvm37::BitcodeErrorCategory() {
   return g_ErrorCategory; // HLSL Change - simple global
 }
 
@@ -5033,7 +5033,7 @@ const std::error_category &llvm::BitcodeErrorCategory() {
 
 static ErrorOr<std::unique_ptr<Module>>
 getBitcodeModuleImpl(std::unique_ptr<DataStreamer> Streamer, StringRef Name,
-                     std::unique_ptr<BitcodeReader> RPtr, LLVMContext &Context, // HLSL Change: unique_ptr
+                     std::unique_ptr<BitcodeReader> RPtr, LLVM37Context &Context, // HLSL Change: unique_ptr
                      bool MaterializeAll, bool ShouldLazyLoadMetadata) {
   std::unique_ptr<Module> M = make_unique<Module>(Name, Context);
   // HLSL Change Begin: Transfer ownership of R to M, but keep a raw pointer
@@ -5068,7 +5068,7 @@ getBitcodeModuleImpl(std::unique_ptr<DataStreamer> Streamer, StringRef Name,
 /// everything.
 static ErrorOr<std::unique_ptr<Module>>
 getLazyBitcodeModuleImpl(std::unique_ptr<MemoryBuffer> &&Buffer,
-                         LLVMContext &Context, bool MaterializeAll,
+                         LLVM37Context &Context, bool MaterializeAll,
                          DiagnosticHandlerFunction DiagnosticHandler,
                          bool ShouldLazyLoadMetadata = false,
                          bool ShouldTrackBitstreamUsage = false) // HLSL Change
@@ -5077,7 +5077,7 @@ getLazyBitcodeModuleImpl(std::unique_ptr<MemoryBuffer> &&Buffer,
   // Get the buffer identifier before we transfer the ownership to the bitcode reader,
   // this is ugly but safe as long as it keeps the buffer, and hence identifier string, alive.
   const char* BufferIdentifier = Buffer->getBufferIdentifier();
-  std::unique_ptr<BitcodeReader> R = llvm::make_unique<BitcodeReader>(
+  std::unique_ptr<BitcodeReader> R = llvm37::make_unique<BitcodeReader>(
     std::move(Buffer), Context, DiagnosticHandler);
 
   if (R) R->ShouldTrackBitstreamUsage = ShouldTrackBitstreamUsage; // HLSL Change
@@ -5091,8 +5091,8 @@ getLazyBitcodeModuleImpl(std::unique_ptr<MemoryBuffer> &&Buffer,
   return Ret;
 }
 
-ErrorOr<std::unique_ptr<Module>> llvm::getLazyBitcodeModule(
-    std::unique_ptr<MemoryBuffer> &&Buffer, LLVMContext &Context,
+ErrorOr<std::unique_ptr<Module>> llvm37::getLazyBitcodeModule(
+    std::unique_ptr<MemoryBuffer> &&Buffer, LLVM37Context &Context,
     DiagnosticHandlerFunction DiagnosticHandler, bool ShouldLazyLoadMetadata,
     bool ShouldTrackBitstreamUsage) {
   return getLazyBitcodeModuleImpl(std::move(Buffer), Context, false,
@@ -5100,11 +5100,11 @@ ErrorOr<std::unique_ptr<Module>> llvm::getLazyBitcodeModule(
                                   ShouldTrackBitstreamUsage); // HLSL Change
 }
 
-ErrorOr<std::unique_ptr<Module>> llvm::getStreamedBitcodeModule(
+ErrorOr<std::unique_ptr<Module>> llvm37::getStreamedBitcodeModule(
     StringRef Name, std::unique_ptr<DataStreamer> Streamer,
-    LLVMContext &Context, DiagnosticHandlerFunction DiagnosticHandler) {
+    LLVM37Context &Context, DiagnosticHandlerFunction DiagnosticHandler) {
   std::unique_ptr<Module> M = make_unique<Module>(Name, Context);
-  std::unique_ptr<BitcodeReader> R = llvm::make_unique<BitcodeReader>(Context, DiagnosticHandler); // HLSL Change: unique_ptr
+  std::unique_ptr<BitcodeReader> R = llvm37::make_unique<BitcodeReader>(Context, DiagnosticHandler); // HLSL Change: unique_ptr
 
   return getBitcodeModuleImpl(std::move(Streamer), Name, std::move(R), Context, false, // HLSL Change: std::move
                               false);
@@ -5127,7 +5127,7 @@ void report_fatal_error_handler(void *user_datam, const std::string &reason,
 // HLSL Change Ends
 
 ErrorOr<std::unique_ptr<Module>>
-llvm::parseBitcodeFile(MemoryBufferRef Buffer, LLVMContext &Context,
+llvm37::parseBitcodeFile(MemoryBufferRef Buffer, LLVM37Context &Context,
                        DiagnosticHandlerFunction DiagnosticHandler,
                        bool ShouldTrackBitstreamUsage) // HLSL Change
 {
@@ -5145,10 +5145,10 @@ llvm::parseBitcodeFile(MemoryBufferRef Buffer, LLVMContext &Context,
 }
 
 std::string
-llvm::getBitcodeTargetTriple(MemoryBufferRef Buffer, LLVMContext &Context,
+llvm37::getBitcodeTargetTriple(MemoryBufferRef Buffer, LLVM37Context &Context,
                              DiagnosticHandlerFunction DiagnosticHandler) {
   std::unique_ptr<MemoryBuffer> Buf = MemoryBuffer::getMemBuffer(Buffer, false);
-  auto R = llvm::make_unique<BitcodeReader>(std::move(Buf), Context, // HLSL Change: std::move
+  auto R = llvm37::make_unique<BitcodeReader>(std::move(Buf), Context, // HLSL Change: std::move
                                             DiagnosticHandler);
   ErrorOr<std::string> Triple = R->parseTriple();
   if (Triple.getError())

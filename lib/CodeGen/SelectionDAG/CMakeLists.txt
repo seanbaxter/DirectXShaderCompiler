@@ -1,6 +1,6 @@
-set(LLVM_OPTIONAL_SOURCES legalizevectorops.cpp) # HLSL Change - ignore file
+set(LLVM37_OPTIONAL_SOURCES legalizevectorops.cpp) # HLSL Change - ignore file
 
-add_llvm_library(LLVMSelectionDAG
+add_llvm_library(LLVM37SelectionDAG
   DAGCombiner.cpp
   FastISel.cpp
   FunctionLoweringInfo.cpp
@@ -27,4 +27,4 @@ add_llvm_library(LLVMSelectionDAG
   TargetSelectionDAGInfo.cpp
   )
 
-add_dependencies(LLVMSelectionDAG intrinsics_gen)
+add_dependencies(LLVM37SelectionDAG intrinsics_gen)

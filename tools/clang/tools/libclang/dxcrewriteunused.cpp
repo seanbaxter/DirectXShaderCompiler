@@ -26,14 +26,14 @@
 #include "clang/Frontend/ASTUnit.h"
 #include "clang/Frontend/FrontendActions.h"
 #include "clang/Frontend/TextDiagnosticPrinter.h"
-#include "llvm/Support/Host.h"
+#include "llvm37/Support/Host.h"
 #include "clang/Sema/SemaHLSL.h"
 
 #include "dxc/Support/WinIncludes.h"
 #include "dxc/Support/Global.h"
 #include "dxc/Support/Unicode.h"
-#include "llvm/Support/FileSystem.h"
-#include "llvm/Support/MSFileSystem.h"
+#include "llvm37/Support/FileSystem.h"
+#include "llvm37/Support/MSFileSystem.h"
 #include "dxc/Support/microcom.h"
 #include "dxc/Support/FileIOHelper.h"
 
@@ -46,12 +46,12 @@
 
 // From dxcutil.h
 namespace dxcutil {
-bool IsAbsoluteOrCurDirRelative(const llvm::Twine &T);
+bool IsAbsoluteOrCurDirRelative(const llvm37::Twine &T);
 } // namespace dxcutil
 
 #define CP_UTF16 1200
 
-using namespace llvm;
+using namespace llvm37;
 using namespace clang;
 using namespace hlsl;
 
@@ -331,13 +331,13 @@ void WriteMacroDefines(ParsedSemanticDefineList &macros,
 ParsedSemanticDefineList hlsl::CollectSemanticDefinesParsedByCompiler(
     CompilerInstance &compiler, _In_ DxcLangExtensionsHelper *helper) {
   ParsedSemanticDefineList parsedDefines;
-  const llvm::SmallVector<std::string, 2> &defines =
+  const llvm37::SmallVector<std::string, 2> &defines =
       helper->GetSemanticDefines();
   if (defines.size() == 0) {
     return parsedDefines;
   }
 
-  const llvm::SmallVector<std::string, 2> &defineExclusions =
+  const llvm37::SmallVector<std::string, 2> &defineExclusions =
       helper->GetSemanticDefineExclusions();
 
   // This is very inefficient in general, but in practice we either have
@@ -405,7 +405,7 @@ void SetupCompilerCommon(CompilerInstance &compiler,
                          _In_opt_ dxcutil::DxcArgsFileSystem *msfPtr) {
   // Setup a compiler instance.
   std::shared_ptr<TargetOptions> targetOptions(new TargetOptions);
-  targetOptions->Triple = llvm::sys::getDefaultTargetTriple();
+  targetOptions->Triple = llvm37::sys::getDefaultTargetTriple();
   compiler.HlslLangExtensions = helper;
   compiler.createDiagnostics(diagPrinter, false);
   compiler.createFileManager();
@@ -428,7 +428,7 @@ void SetupCompilerCommon(CompilerInstance &compiler,
 
   PreprocessorOptions &PPOpts = compiler.getPreprocessorOpts();
   if (rewrite != nullptr) {
-    if (llvm::MemoryBuffer *pMemBuf = rewrite->second) {
+    if (llvm37::MemoryBuffer *pMemBuf = rewrite->second) {
       compiler.getPreprocessorOpts().addRemappedFile(StringRef(pMainFile),
                                                      pMemBuf);
     }
@@ -442,7 +442,7 @@ void SetupCompilerCommon(CompilerInstance &compiler,
   clang::HeaderSearchOptions &HSOpts = compiler.getHeaderSearchOpts();
   HSOpts.UseBuiltinIncludes = 0;
   // Consider: should we force-include '.' if the source file is relative?
-  for (const llvm::opt::Arg *A : opts.Args.filtered(options::OPT_I)) {
+  for (const llvm37::opt::Arg *A : opts.Args.filtered(options::OPT_I)) {
     const bool IsFrameworkFalse = false;
     const bool IgnoreSysRoot = true;
     if (dxcutil::IsAbsoluteOrCurDirRelative(A->getValue())) {
@@ -541,7 +541,7 @@ HRESULT GenerateAST(DxcLangExtensionsHelper *pExtHelper, LPCSTR pFileName,
   // Setup a compiler instance.
   CompilerInstance &compiler = astHelper.compiler;
   std::unique_ptr<TextDiagnosticPrinter> diagPrinter =
-      llvm::make_unique<TextDiagnosticPrinter>(w,
+      llvm37::make_unique<TextDiagnosticPrinter>(w,
                                                &compiler.getDiagnosticOpts());
   std::string definesStr = DefinesToString(pDefines, defineCount);
 
@@ -709,7 +709,7 @@ static
 HRESULT ReadOptsAndValidate(hlsl::options::MainArgs &mainArgs,
                             hlsl::options::DxcOpts &opts,
                             _COM_Outptr_ IDxcOperationResult **ppResult) {
-  const llvm::opt::OptTable *table = ::options::getHlslOptTable();
+  const llvm37::opt::OptTable *table = ::options::getHlslOptTable();
 
   CComPtr<AbstractMemoryStream> pOutputStream;
   IFT(CreateMemoryStream(GetGlobalHeapMalloc(), &pOutputStream));
@@ -1165,9 +1165,9 @@ HRESULT DoReWriteWithLineDirective(
 
     IFT(msfPtr->RegisterOutputStream(L"output.bc", pOutputStream));
 
-    llvm::MemoryBuffer *pMemBuf = pRemap->second;
-    std::unique_ptr<llvm::MemoryBuffer> pBuffer(
-        llvm::MemoryBuffer::getMemBufferCopy(pMemBuf->getBuffer(), pFileName));
+    llvm37::MemoryBuffer *pMemBuf = pRemap->second;
+    std::unique_ptr<llvm37::MemoryBuffer> pBuffer(
+        llvm37::MemoryBuffer::getMemBufferCopy(pMemBuf->getBuffer(), pFileName));
 
     std::unique_ptr<ASTUnit::RemappedFile> pPreprocessRemap(
         new ASTUnit::RemappedFile(pFileName, pBuffer.release()));
@@ -1175,7 +1175,7 @@ HRESULT DoReWriteWithLineDirective(
     // PrintPreprocessedAction will createPreprocessor.
     CompilerInstance compiler;
     std::unique_ptr<TextDiagnosticPrinter> diagPrinter =
-        llvm::make_unique<TextDiagnosticPrinter>(w,
+        llvm37::make_unique<TextDiagnosticPrinter>(w,
                                                  &compiler.getDiagnosticOpts());
     SetupCompilerForPreprocess(compiler, pExtHelper, pFileName,
                                diagPrinter.get(), pPreprocessRemap.get(), opts,
@@ -1192,7 +1192,7 @@ HRESULT DoReWriteWithLineDirective(
       buf.write(o);
       o.flush();
       StringRef fileName = Entry->getName();
-      std::unique_ptr<llvm::MemoryBuffer> rewriteBuf =
+      std::unique_ptr<llvm37::MemoryBuffer> rewriteBuf =
           MemoryBuffer::getMemBufferCopy(lineStr, fileName);
       preprocessorOpts.addRemappedFile(fileName, rewriteBuf.release());
     }
@@ -1262,14 +1262,14 @@ public:
     LPCSTR fakeName = "input.hlsl";
 
     try {
-      ::llvm::sys::fs::MSFileSystem* msfPtr;
+      ::llvm37::sys::fs::MSFileSystem* msfPtr;
       IFT(CreateMSFileSystemForDisk(&msfPtr));
-      std::unique_ptr<::llvm::sys::fs::MSFileSystem> msf(msfPtr);
-      ::llvm::sys::fs::AutoPerThreadSystem pts(msf.get());
-      IFTLLVM(pts.error_code());
+      std::unique_ptr<::llvm37::sys::fs::MSFileSystem> msf(msfPtr);
+      ::llvm37::sys::fs::AutoPerThreadSystem pts(msf.get());
+      IFTLLVM37(pts.error_code());
 
       StringRef Data(utf8Source->GetStringPointer(), utf8Source->GetStringLength());
-      std::unique_ptr<llvm::MemoryBuffer> pBuffer(llvm::MemoryBuffer::getMemBufferCopy(Data, fakeName));
+      std::unique_ptr<llvm37::MemoryBuffer> pBuffer(llvm37::MemoryBuffer::getMemBufferCopy(Data, fakeName));
       std::unique_ptr<ASTUnit::RemappedFile> pRemap(new ASTUnit::RemappedFile(fakeName, pBuffer.release()));
 
       CW2A utf8EntryPoint(pEntryPoint, CP_UTF8);
@@ -1309,14 +1309,14 @@ public:
     LPCSTR fakeName = "input.hlsl";
 
     try {
-      ::llvm::sys::fs::MSFileSystem* msfPtr;
+      ::llvm37::sys::fs::MSFileSystem* msfPtr;
       IFT(CreateMSFileSystemForDisk(&msfPtr));
-      std::unique_ptr<::llvm::sys::fs::MSFileSystem> msf(msfPtr);
-      ::llvm::sys::fs::AutoPerThreadSystem pts(msf.get());
-      IFTLLVM(pts.error_code());
+      std::unique_ptr<::llvm37::sys::fs::MSFileSystem> msf(msfPtr);
+      ::llvm37::sys::fs::AutoPerThreadSystem pts(msf.get());
+      IFTLLVM37(pts.error_code());
 
       StringRef Data(utf8Source->GetStringPointer(), utf8Source->GetStringLength());
-      std::unique_ptr<llvm::MemoryBuffer> pBuffer(llvm::MemoryBuffer::getMemBufferCopy(Data, fakeName));
+      std::unique_ptr<llvm37::MemoryBuffer> pBuffer(llvm37::MemoryBuffer::getMemBufferCopy(Data, fakeName));
       std::unique_ptr<ASTUnit::RemappedFile> pRemap(new ASTUnit::RemappedFile(fakeName, pBuffer.release()));
 
       hlsl::options::DxcOpts opts;
@@ -1361,12 +1361,12 @@ public:
 
     try {
       dxcutil::DxcArgsFileSystem *msfPtr = dxcutil::CreateDxcArgsFileSystem(utf8Source, pSourceName, pIncludeHandler);
-      std::unique_ptr<::llvm::sys::fs::MSFileSystem> msf(msfPtr);
-      ::llvm::sys::fs::AutoPerThreadSystem pts(msf.get());
-      IFTLLVM(pts.error_code());
+      std::unique_ptr<::llvm37::sys::fs::MSFileSystem> msf(msfPtr);
+      ::llvm37::sys::fs::AutoPerThreadSystem pts(msf.get());
+      IFTLLVM37(pts.error_code());
 
       StringRef Data(utf8Source->GetStringPointer(), utf8Source->GetStringLength());
-      std::unique_ptr<llvm::MemoryBuffer> pBuffer(llvm::MemoryBuffer::getMemBufferCopy(Data, fName));
+      std::unique_ptr<llvm37::MemoryBuffer> pBuffer(llvm37::MemoryBuffer::getMemBufferCopy(Data, fName));
       std::unique_ptr<ASTUnit::RemappedFile> pRemap(new ASTUnit::RemappedFile(fName, pBuffer.release()));
 
       hlsl::options::DxcOpts opts;
@@ -1425,14 +1425,14 @@ public:
     try {
       dxcutil::DxcArgsFileSystem *msfPtr = dxcutil::CreateDxcArgsFileSystem(
           utf8Source, pSourceName, pIncludeHandler);
-      std::unique_ptr<::llvm::sys::fs::MSFileSystem> msf(msfPtr);
-      ::llvm::sys::fs::AutoPerThreadSystem pts(msf.get());
-      IFTLLVM(pts.error_code());
+      std::unique_ptr<::llvm37::sys::fs::MSFileSystem> msf(msfPtr);
+      ::llvm37::sys::fs::AutoPerThreadSystem pts(msf.get());
+      IFTLLVM37(pts.error_code());
 
       StringRef Data(utf8Source->GetStringPointer(),
                      utf8Source->GetStringLength());
-      std::unique_ptr<llvm::MemoryBuffer> pBuffer(
-          llvm::MemoryBuffer::getMemBufferCopy(Data, fName));
+      std::unique_ptr<llvm37::MemoryBuffer> pBuffer(
+          llvm37::MemoryBuffer::getMemBufferCopy(Data, fName));
       std::unique_ptr<ASTUnit::RemappedFile> pRemap(
           new ASTUnit::RemappedFile(fName, pBuffer.release()));
 

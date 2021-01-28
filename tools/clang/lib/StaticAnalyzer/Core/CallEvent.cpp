@@ -1,6 +1,6 @@
 //===- Calls.cpp - Wrapper for all function and method calls ------*- C++ -*--//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -17,9 +17,9 @@
 #include "clang/AST/ParentMap.h"
 #include "clang/Analysis/ProgramPoint.h"
 #include "clang/StaticAnalyzer/Core/PathSensitive/CheckerContext.h"
-#include "llvm/ADT/SmallSet.h"
-#include "llvm/ADT/StringExtras.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/SmallSet.h"
+#include "llvm37/ADT/StringExtras.h"
+#include "llvm37/Support/raw_ostream.h"
 
 using namespace clang;
 using namespace ento;
@@ -124,7 +124,7 @@ static bool isPointerToConst(QualType Ty) {
 // Try to retrieve the function declaration and find the function parameter
 // types which are pointers/references to a non-pointer const.
 // We will not invalidate the corresponding argument regions.
-static void findPtrToConstParams(llvm::SmallSet<unsigned, 4> &PreserveArgs,
+static void findPtrToConstParams(llvm37::SmallSet<unsigned, 4> &PreserveArgs,
                                  const CallEvent &Call) {
   unsigned Idx = 0;
   for (CallEvent::param_type_iterator I = Call.param_type_begin(),
@@ -150,7 +150,7 @@ ProgramStateRef CallEvent::invalidateRegions(unsigned BlockCount,
   getExtraInvalidatedValues(ValuesToInvalidate);
 
   // Indexes of arguments whose values will be preserved by the call.
-  llvm::SmallSet<unsigned, 4> PreserveArgs;
+  llvm37::SmallSet<unsigned, 4> PreserveArgs;
   if (!argumentsMayEscape())
     findPtrToConstParams(PreserveArgs, *this);
 
@@ -213,7 +213,7 @@ SVal CallEvent::getReturnValue() const {
   return getSVal(E);
 }
 
-LLVM_DUMP_METHOD void CallEvent::dump() const { dump(llvm::errs()); }
+LLVM37_DUMP_METHOD void CallEvent::dump() const { dump(llvm37::errs()); }
 
 void CallEvent::dump(raw_ostream &Out) const {
   ASTContext &Ctx = getState()->getStateManager().getContext();
@@ -266,7 +266,7 @@ QualType CallEvent::getDeclaredResultType(const Decl *D) {
     return QualType();
   }
   
-  llvm_unreachable("unknown callable kind");
+  llvm37_unreachable("unknown callable kind");
 }
 
 bool CallEvent::isVariadic(const Decl *D) {
@@ -279,7 +279,7 @@ bool CallEvent::isVariadic(const Decl *D) {
   if (const BlockDecl *BD = dyn_cast<BlockDecl>(D))
     return BD->isVariadic();
 
-  llvm_unreachable("unknown callable kind");
+  llvm37_unreachable("unknown callable kind");
 }
 
 static void addParameterValuesToBindings(const StackFrameContext *CalleeCtx,
@@ -661,10 +661,10 @@ SourceRange ObjCMethodCall::getSourceRange() const {
   case OCM_Subscript:
     return getContainingPseudoObjectExpr()->getSourceRange();
   }
-  llvm_unreachable("unknown message kind");
+  llvm37_unreachable("unknown message kind");
 }
 
-typedef llvm::PointerIntPair<const PseudoObjectExpr *, 2> ObjCMessageDataTy;
+typedef llvm37::PointerIntPair<const PseudoObjectExpr *, 2> ObjCMessageDataTy;
 
 const PseudoObjectExpr *ObjCMethodCall::getContainingPseudoObjectExpr() const {
   assert(Data && "Lazy lookup not yet performed.");
@@ -775,7 +775,7 @@ bool ObjCMethodCall::canBeOverridenInSubclass(ObjCInterfaceDecl *IDecl,
     return false;
   };
 
-  llvm_unreachable("The while loop should always terminate.");
+  llvm37_unreachable("The while loop should always terminate.");
 }
 
 RuntimeDefinition ObjCMethodCall::getRuntimeDefinition() const {
@@ -830,7 +830,7 @@ RuntimeDefinition ObjCMethodCall::getRuntimeDefinition() const {
         // need to release memory.
         typedef std::pair<const ObjCInterfaceDecl*, Selector>
                 PrivateMethodKey;
-        typedef llvm::DenseMap<PrivateMethodKey,
+        typedef llvm37::DenseMap<PrivateMethodKey,
                                Optional<const ObjCMethodDecl *> >
                 PrivateMethodCache;
 
@@ -949,7 +949,7 @@ CallEventManager::getCaller(const StackFrameContext *CalleeCtx,
       return getObjCMethodCall(cast<ObjCMessageExpr>(CallSite),
                                State, CallerCtx);
     default:
-      llvm_unreachable("This is not an inlineable statement.");
+      llvm37_unreachable("This is not an inlineable statement.");
     }
   }
 

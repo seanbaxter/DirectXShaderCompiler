@@ -1,6 +1,6 @@
 //===--- SemaTemplateInstantiateDecl.cpp - C++ Template Decl Instantiation ===/
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -318,19 +318,19 @@ static DeclT *getPreviousDeclForInstantiation(DeclT *D) {
 
 Decl *
 TemplateDeclInstantiator::VisitTranslationUnitDecl(TranslationUnitDecl *D) {
-  llvm_unreachable("Translation units cannot be instantiated");
+  llvm37_unreachable("Translation units cannot be instantiated");
 }
 
 // HLSL Change Starts
 Decl *
 TemplateDeclInstantiator::VisitHLSLBufferDecl(HLSLBufferDecl *Decl) {
-  llvm_unreachable("HLSL buffer declarations cannot be instantiated");
+  llvm37_unreachable("HLSL buffer declarations cannot be instantiated");
 }
 // HLSL Change Ends
 
 Decl *
 TemplateDeclInstantiator::VisitExternCContextDecl(ExternCContextDecl *D) {
-  llvm_unreachable("extern \"C\" context cannot be instantiated");
+  llvm37_unreachable("extern \"C\" context cannot be instantiated");
 }
 
 Decl *
@@ -343,7 +343,7 @@ TemplateDeclInstantiator::VisitLabelDecl(LabelDecl *D) {
 
 Decl *
 TemplateDeclInstantiator::VisitNamespaceDecl(NamespaceDecl *D) {
-  llvm_unreachable("Namespaces cannot be instantiated");
+  llvm37_unreachable("Namespaces cannot be instantiated");
 }
 
 Decl *
@@ -918,7 +918,7 @@ void TemplateDeclInstantiator::InstantiateEnumDefinition(
 }
 
 Decl *TemplateDeclInstantiator::VisitEnumConstantDecl(EnumConstantDecl *D) {
-  llvm_unreachable("EnumConstantDecls can only occur within EnumDecls.");
+  llvm37_unreachable("EnumConstantDecls can only occur within EnumDecls.");
 }
 
 Decl *TemplateDeclInstantiator::VisitClassTemplateDecl(ClassTemplateDecl *D) {
@@ -2469,7 +2469,7 @@ Decl *TemplateDeclInstantiator::VisitCXXMethodDecl(CXXMethodDecl *D) {
 }
 
 Decl *TemplateDeclInstantiator::VisitRecordDecl(RecordDecl *D) {
-  llvm_unreachable("There are only CXXRecordDecls in C++");
+  llvm37_unreachable("There are only CXXRecordDecls in C++");
 }
 
 Decl *
@@ -2696,7 +2696,7 @@ Decl *TemplateDeclInstantiator::VisitVarTemplateSpecializationDecl(
 }
 
 Decl *TemplateDeclInstantiator::VisitObjCAtDefsFieldDecl(ObjCAtDefsFieldDecl *D) {
-  llvm_unreachable("@defs is not supported in Objective-C++");
+  llvm37_unreachable("@defs is not supported in Objective-C++");
 }
 
 Decl *TemplateDeclInstantiator::VisitFriendTemplateDecl(FriendTemplateDecl *D) {
@@ -2711,7 +2711,7 @@ Decl *TemplateDeclInstantiator::VisitFriendTemplateDecl(FriendTemplateDecl *D) {
 }
 
 Decl *TemplateDeclInstantiator::VisitDecl(Decl *D) {
-  llvm_unreachable("Unexpected decl");
+  llvm37_unreachable("Unexpected decl");
 }
 
 Decl *Sema::SubstDecl(Decl *D, DeclContext *Owner,
@@ -3794,7 +3794,7 @@ void Sema::InstantiateVariableDefinition(SourceLocation PointOfInstantiation,
     // find the real pattern.
     assert(VarSpec->getSpecializedTemplate() &&
            "Specialization without specialized template?");
-    llvm::PointerUnion<VarTemplateDecl *,
+    llvm37::PointerUnion<VarTemplateDecl *,
                        VarTemplatePartialSpecializationDecl *> PatternPtr =
         VarSpec->getSpecializedTemplateOrPartial();
     if (PatternPtr.is<VarTemplatePartialSpecializationDecl *>()) {
@@ -3973,7 +3973,7 @@ void Sema::InstantiateVariableDefinition(SourceLocation PointOfInstantiation,
         VarSpec->getSpecializedTemplate(), Def, nullptr,
         VarSpec->getTemplateArgsInfo(), VarSpec->getTemplateArgs().asArray()));
     if (Var) {
-      llvm::PointerUnion<VarTemplateDecl *,
+      llvm37::PointerUnion<VarTemplateDecl *,
                          VarTemplatePartialSpecializationDecl *> PatternPtr =
           VarSpec->getSpecializedTemplateOrPartial();
       if (VarTemplatePartialSpecializationDecl *Partial =
@@ -4639,7 +4639,7 @@ NamedDecl *Sema::FindInstantiatedDecl(SourceLocation Loc, NamedDecl *D,
           << Context.getTypeDeclType(Spec);
       } else {
         // We should have found something, but didn't.
-        llvm_unreachable("Unable to find instantiation of declaration!");
+        llvm37_unreachable("Unable to find instantiation of declaration!");
       }
     }
 
@@ -4692,7 +4692,7 @@ void Sema::PerformPendingInstantiations(bool LocalOnly) {
     // and removed the need for implicit instantiation.
     switch (Var->getMostRecentDecl()->getTemplateSpecializationKind()) {
     case TSK_Undeclared:
-      llvm_unreachable("Cannot instantitiate an undeclared specialization.");
+      llvm37_unreachable("Cannot instantitiate an undeclared specialization.");
     case TSK_ExplicitInstantiationDeclaration:
     case TSK_ExplicitSpecialization:
       continue;  // No longer need to instantiate this type.

@@ -1,6 +1,6 @@
 //===- ObjectFile.cpp - File format independent object file -----*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,16 +11,16 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Object/COFF.h"
-#include "llvm/Object/MachO.h"
-#include "llvm/Object/ObjectFile.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/FileSystem.h"
-#include "llvm/Support/MemoryBuffer.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/Object/COFF.h"
+#include "llvm37/Object/MachO.h"
+#include "llvm37/Object/ObjectFile.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/FileSystem.h"
+#include "llvm37/Support/MemoryBuffer.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <system_error>
 
-using namespace llvm;
+using namespace llvm37;
 using namespace object;
 
 void ObjectFile::anchor() { }
@@ -96,7 +96,7 @@ ObjectFile::createObjectFile(MemoryBufferRef Object, sys::fs::file_magic Type) {
   case sys::fs::file_magic::pecoff_executable:
     return createCOFFObjectFile(Object);
   }
-  llvm_unreachable("Unexpected Object File Type");
+  llvm37_unreachable("Unexpected Object File Type");
 }
 
 ErrorOr<OwningBinary<ObjectFile>>

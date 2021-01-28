@@ -1,6 +1,6 @@
 //===-- RegAllocFast.cpp - A fast register allocator for debug code -------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -12,30 +12,30 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/CodeGen/Passes.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/IndexedMap.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/SmallSet.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/ADT/SparseSet.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/CodeGen/MachineFrameInfo.h"
-#include "llvm/CodeGen/MachineFunctionPass.h"
-#include "llvm/CodeGen/MachineInstr.h"
-#include "llvm/CodeGen/MachineInstrBuilder.h"
-#include "llvm/CodeGen/MachineRegisterInfo.h"
-#include "llvm/CodeGen/RegAllocRegistry.h"
-#include "llvm/CodeGen/RegisterClassInfo.h"
-#include "llvm/IR/BasicBlock.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Target/TargetInstrInfo.h"
-#include "llvm/Target/TargetSubtargetInfo.h"
+#include "llvm37/CodeGen/Passes.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/IndexedMap.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/SmallSet.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/ADT/SparseSet.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/CodeGen/MachineFrameInfo.h"
+#include "llvm37/CodeGen/MachineFunctionPass.h"
+#include "llvm37/CodeGen/MachineInstr.h"
+#include "llvm37/CodeGen/MachineInstrBuilder.h"
+#include "llvm37/CodeGen/MachineRegisterInfo.h"
+#include "llvm37/CodeGen/RegAllocRegistry.h"
+#include "llvm37/CodeGen/RegisterClassInfo.h"
+#include "llvm37/IR/BasicBlock.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Target/TargetInstrInfo.h"
+#include "llvm37/Target/TargetSubtargetInfo.h"
 #include <algorithm>
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "regalloc"
 
@@ -358,7 +358,7 @@ void RAFast::usePhysReg(MachineOperand &MO) {
   default:
     // The physreg was allocated to a virtual register. That means the value we
     // wanted has been clobbered.
-    llvm_unreachable("Instruction uses an allocated register");
+    llvm37_unreachable("Instruction uses an allocated register");
   }
 
   // Maybe a superregister is reserved?
@@ -392,7 +392,7 @@ void RAFast::usePhysReg(MachineOperand &MO) {
       PhysRegState[Alias] = regDisabled;
       break;
     default:
-      llvm_unreachable("Instruction uses an alias of an allocated register");
+      llvm37_unreachable("Instruction uses an alias of an allocated register");
     }
   }
 
@@ -1119,6 +1119,6 @@ bool RAFast::runOnMachineFunction(MachineFunction &Fn) {
   return true;
 }
 
-FunctionPass *llvm::createFastRegisterAllocator() {
+FunctionPass *llvm37::createFastRegisterAllocator() {
   return new RAFast();
 }

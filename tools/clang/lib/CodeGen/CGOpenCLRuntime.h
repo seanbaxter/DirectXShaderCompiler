@@ -1,6 +1,6 @@
 //===----- CGOpenCLRuntime.h - Interface to OpenCL Runtimes -----*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -13,12 +13,12 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_LIB_CODEGEN_CGOPENCLRUNTIME_H
-#define LLVM_CLANG_LIB_CODEGEN_CGOPENCLRUNTIME_H
+#ifndef LLVM37_CLANG_LIB_CODEGEN_CGOPENCLRUNTIME_H
+#define LLVM37_CLANG_LIB_CODEGEN_CGOPENCLRUNTIME_H
 
 #include "clang/AST/Type.h"
-#include "llvm/IR/Type.h"
-#include "llvm/IR/Value.h"
+#include "llvm37/IR/Type.h"
+#include "llvm37/IR/Value.h"
 
 namespace clang {
 
@@ -43,7 +43,7 @@ public:
   virtual void EmitWorkGroupLocalVarDecl(CodeGenFunction &CGF,
                                          const VarDecl &D);
 
-  virtual llvm::Type *convertOpenCLSpecificType(const Type *T);
+  virtual llvm37::Type *convertOpenCLSpecificType(const Type *T);
 };
 
 }

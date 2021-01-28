@@ -133,7 +133,7 @@ The following is the current memory layout for Linux/x86\_64:
 +---------------+---------------+--------------------+
 
 Each byte of application memory corresponds to two bytes of shadow
-memory, which are used to store its taint label. As for LLVM SSA
+memory, which are used to store its taint label. As for LLVM37 SSA
 registers, we have not found it necessary to associate a label with
 each byte or bit of data, as some other tools do. Instead, labels are
 associated directly with registers.  Loads will result in a union of
@@ -172,7 +172,7 @@ Such functions are automatically-generated wrappers for the native functions.
 For example, given the ABI list example provided in the user manual, the
 following wrappers will be generated under the args ABI:
 
-.. code-block:: llvm
+.. code-block:: llvm37
 
     define linkonce_odr { i8*, i16 } @"dfsw$malloc"(i64 %0, i16 %1) {
     entry:

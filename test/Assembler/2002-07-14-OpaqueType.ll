@@ -1,5 +1,5 @@
 ; Test that opaque types are preserved correctly
-; RUN: llvm-as < %s | llvm-dis | llvm-as | llvm-dis
+; RUN: llvm37-as < %s | llvm37-dis | llvm37-as | llvm37-dis
 ;
 ; RUN: verify-uselistorder %s
 

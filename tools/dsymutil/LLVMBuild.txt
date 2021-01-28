@@ -1,6 +1,6 @@
 ;===- ./tools/dsymutil/LLVMBuild.txt ---------------------*- Conf -*--===;
 ;
-;                     The LLVM Compiler Infrastructure
+;                     The LLVM37 Compiler Infrastructure
 ;
 ; This file is distributed under the University of Illinois Open Source
 ; License. See LICENSE.TXT for details.
@@ -11,12 +11,12 @@
 ;
 ; For more information on the LLVMBuild system, please see:
 ;
-;   http://llvm.org/docs/LLVMBuild.html
+;   http://llvm37.org/docs/LLVMBuild.html
 ;
 ;===------------------------------------------------------------------------===;
 
 [component_0]
 type = Tool
-name = llvm-dsymutil
+name = llvm37-dsymutil
 parent = Tools
 required_libraries = AsmPrinter DebugInfoDWARF MC Object Support all-targets

@@ -1,4 +1,4 @@
-# RUN: not llvm-mc -filetype=obj -triple i386-unknown-unknown %s 2> %t
+# RUN: not llvm37-mc -filetype=obj -triple i386-unknown-unknown %s 2> %t
 # RUN: FileCheck -input-file %t %s
 
 

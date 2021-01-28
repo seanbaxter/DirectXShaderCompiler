@@ -1,6 +1,6 @@
 //===-- RegisterCoalescer.h - Register Coalescing Interface -----*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -12,10 +12,10 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_LIB_CODEGEN_REGISTERCOALESCER_H
-#define LLVM_LIB_CODEGEN_REGISTERCOALESCER_H
+#ifndef LLVM37_LIB_CODEGEN_REGISTERCOALESCER_H
+#define LLVM37_LIB_CODEGEN_REGISTERCOALESCER_H
 
-namespace llvm {
+namespace llvm37 {
 
   class MachineInstr;
   class TargetRegisterInfo;
@@ -111,6 +111,6 @@ namespace llvm {
     /// Return the register class of the coalesced register.
     const TargetRegisterClass *getNewRC() const { return NewRC; }
   };
-} // End llvm namespace
+} // End llvm37 namespace
 
 #endif

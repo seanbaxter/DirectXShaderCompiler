@@ -1,19 +1,19 @@
 //===--- Tool.h - Compilation Tools -----------------------------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_DRIVER_TOOL_H
-#define LLVM_CLANG_DRIVER_TOOL_H
+#ifndef LLVM37_CLANG_DRIVER_TOOL_H
+#define LLVM37_CLANG_DRIVER_TOOL_H
 
 #include "clang/Basic/LLVM.h"
-#include "llvm/Support/Program.h"
+#include "llvm37/Support/Program.h"
 
-namespace llvm {
+namespace llvm37 {
 namespace opt {
   class ArgList;
 }
@@ -63,7 +63,7 @@ private:
   const ResponseFileSupport ResponseSupport;
 
   /// The encoding to use when writing response files for this tool on Windows
-  const llvm::sys::WindowsEncodingMethod ResponseEncoding;
+  const llvm37::sys::WindowsEncodingMethod ResponseEncoding;
 
   /// The flag used to pass a response file via command line to this tool
   const char *const ResponseFlag;
@@ -71,7 +71,7 @@ private:
 public:
   Tool(const char *Name, const char *ShortName, const ToolChain &TC,
        ResponseFileSupport ResponseSupport = RF_None,
-       llvm::sys::WindowsEncodingMethod ResponseEncoding = llvm::sys::WEM_UTF8,
+       llvm37::sys::WindowsEncodingMethod ResponseEncoding = llvm37::sys::WEM_UTF8,
        const char *ResponseFlag = "@");
 
 public:
@@ -105,7 +105,7 @@ public:
   /// FIXME: When GNU tools learn how to parse UTF16 on Windows, we should
   /// always use UTF16 for Windows, which is the Windows official encoding for
   /// international characters.
-  llvm::sys::WindowsEncodingMethod getResponseFileEncoding() const {
+  llvm37::sys::WindowsEncodingMethod getResponseFileEncoding() const {
     return ResponseEncoding;
   }
   /// \brief Returns which prefix to use when passing the name of a response
@@ -127,7 +127,7 @@ public:
   virtual void ConstructJob(Compilation &C, const JobAction &JA,
                             const InputInfo &Output,
                             const InputInfoList &Inputs,
-                            const llvm::opt::ArgList &TCArgs,
+                            const llvm37::opt::ArgList &TCArgs,
                             const char *LinkingOutput) const = 0;
 };
 

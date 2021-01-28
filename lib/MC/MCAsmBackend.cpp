@@ -1,16 +1,16 @@
 //===-- MCAsmBackend.cpp - Target MC Assembly Backend ----------------------==//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/MC/MCAsmBackend.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/MC/MCFixupKindInfo.h"
-using namespace llvm;
+#include "llvm37/MC/MCAsmBackend.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/MC/MCFixupKindInfo.h"
+using namespace llvm37;
 
 MCAsmBackend::MCAsmBackend() : HasDataInCodeSupport(false) {}
 

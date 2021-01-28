@@ -1,6 +1,6 @@
 //===--- Refactoring.cpp - Framework for clang refactoring tools ----------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -18,9 +18,9 @@
 #include "clang/Lex/Lexer.h"
 #include "clang/Rewrite/Core/Rewriter.h"
 #include "clang/Tooling/Refactoring.h"
-#include "llvm/Support/FileSystem.h"
-#include "llvm/Support/Path.h"
-#include "llvm/Support/raw_os_ostream.h"
+#include "llvm37/Support/FileSystem.h"
+#include "llvm37/Support/Path.h"
+#include "llvm37/Support/raw_os_ostream.h"
 
 namespace clang {
 namespace tooling {
@@ -39,7 +39,7 @@ int RefactoringTool::runAndSave(FrontendActionFactory *ActionFactory) {
 
   LangOptions DefaultLangOptions;
   IntrusiveRefCntPtr<DiagnosticOptions> DiagOpts = new DiagnosticOptions();
-  TextDiagnosticPrinter DiagnosticPrinter(llvm::errs(), &*DiagOpts);
+  TextDiagnosticPrinter DiagnosticPrinter(llvm37::errs(), &*DiagOpts);
   DiagnosticsEngine Diagnostics(
       IntrusiveRefCntPtr<DiagnosticIDs>(new DiagnosticIDs()),
       &*DiagOpts, &DiagnosticPrinter, false);
@@ -47,7 +47,7 @@ int RefactoringTool::runAndSave(FrontendActionFactory *ActionFactory) {
   Rewriter Rewrite(Sources, DefaultLangOptions);
 
   if (!applyAllReplacements(Rewrite)) {
-    llvm::errs() << "Skipped some replacements.\n";
+    llvm37::errs() << "Skipped some replacements.\n";
   }
 
   return saveRewrittenFiles(Rewrite);

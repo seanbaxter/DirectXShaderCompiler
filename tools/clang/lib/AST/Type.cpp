@@ -1,6 +1,6 @@
 //===--- Type.cpp - Type representation and manipulation ------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -22,9 +22,9 @@
 #include "clang/AST/Type.h"
 #include "clang/AST/TypeVisitor.h"
 #include "clang/Basic/Specifiers.h"
-#include "llvm/ADT/APSInt.h"
-#include "llvm/ADT/StringExtras.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/APSInt.h"
+#include "llvm37/ADT/StringExtras.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <algorithm>
 using namespace clang;
 
@@ -75,7 +75,7 @@ bool QualType::isConstant(QualType T, ASTContext &Ctx) {
 
 unsigned ConstantArrayType::getNumAddressingBits(ASTContext &Context,
                                                  QualType ElementType,
-                                               const llvm::APInt &NumElements) {
+                                               const llvm37::APInt &NumElements) {
   uint64_t ElementSize = Context.getTypeSizeInChars(ElementType).getQuantity();
 
   // Fast path the common cases so we can avoid the conservative computation
@@ -84,8 +84,8 @@ unsigned ConstantArrayType::getNumAddressingBits(ASTContext &Context,
 
   // If the element size is a power of 2, we can directly compute the additional
   // number of addressing bits beyond those required for the element count.
-  if (llvm::isPowerOf2_64(ElementSize)) {
-    return NumElements.getActiveBits() + llvm::Log2_64(ElementSize);
+  if (llvm37::isPowerOf2_64(ElementSize)) {
+    return NumElements.getActiveBits() + llvm37::Log2_64(ElementSize);
   }
 
   // If both the element count and element size fit in 32-bits, we can do the
@@ -93,16 +93,16 @@ unsigned ConstantArrayType::getNumAddressingBits(ASTContext &Context,
   if ((ElementSize >> 32) == 0 && NumElements.getBitWidth() <= 64 &&
       (NumElements.getZExtValue() >> 32) == 0) {
     uint64_t TotalSize = NumElements.getZExtValue() * ElementSize;
-    return 64 - llvm::countLeadingZeros(TotalSize);
+    return 64 - llvm37::countLeadingZeros(TotalSize);
   }
 
   // Otherwise, use APSInt to handle arbitrary sized values.
-  llvm::APSInt SizeExtended(NumElements, true);
+  llvm37::APSInt SizeExtended(NumElements, true);
   unsigned SizeTypeBits = Context.getTypeSize(Context.getSizeType());
   SizeExtended = SizeExtended.extend(std::max(SizeTypeBits,
                                               SizeExtended.getBitWidth()) * 2);
 
-  llvm::APSInt TotalSize(llvm::APInt(SizeExtended.getBitWidth(), ElementSize));
+  llvm37::APSInt TotalSize(llvm37::APInt(SizeExtended.getBitWidth(), ElementSize));
   TotalSize *= SizeExtended;  
 
   return TotalSize.getActiveBits();
@@ -132,7 +132,7 @@ DependentSizedArrayType::DependentSizedArrayType(const ASTContext &Context,
 {
 }
 
-void DependentSizedArrayType::Profile(llvm::FoldingSetNodeID &ID,
+void DependentSizedArrayType::Profile(llvm37::FoldingSetNodeID &ID,
                                       const ASTContext &Context,
                                       QualType ET,
                                       ArraySizeModifier SizeMod,
@@ -161,7 +161,7 @@ DependentSizedExtVectorType::DependentSizedExtVectorType(const
 }
 
 void
-DependentSizedExtVectorType::Profile(llvm::FoldingSetNodeID &ID,
+DependentSizedExtVectorType::Profile(llvm37::FoldingSetNodeID &ID,
                                      const ASTContext &Context,
                                      QualType ElementType, Expr *SizeExpr) {
   ID.AddPointer(ElementType.getAsOpaquePtr());
@@ -231,7 +231,7 @@ QualType Type::getLocallyUnqualifiedSingleStepDesugaredType() const {
   }
 #include "clang/AST/TypeNodes.def"
   }
-  llvm_unreachable("bad type kind!");
+  llvm37_unreachable("bad type kind!");
 }
 
 SplitQualType QualType::getSplitDesugaredType(QualType T) {
@@ -837,10 +837,10 @@ public:
 
       if (exceptionChanged) {
         unsigned size = sizeof(QualType) * exceptionTypes.size();
-        void *mem = Ctx.Allocate(size, llvm::alignOf<QualType>());
+        void *mem = Ctx.Allocate(size, llvm37::alignOf<QualType>());
         memcpy(mem, exceptionTypes.data(), size);
         info.ExceptionSpec.Exceptions
-          = llvm::makeArrayRef((QualType *)mem, exceptionTypes.size());
+          = llvm37::makeArrayRef((QualType *)mem, exceptionTypes.size());
       }
     }
 
@@ -982,7 +982,7 @@ public:
       return QualType(T, 0);
 
     return Ctx.getObjCObjectType(baseType, typeArgs, 
-                                 llvm::makeArrayRef(T->qual_begin(),
+                                 llvm37::makeArrayRef(T->qual_begin(),
                                                     T->getNumProtocols()),
                                  T->isKindOfTypeAsWritten());
   }
@@ -1160,10 +1160,10 @@ QualType QualType::substObjCTypeArgs(
 
         if (exceptionChanged) {
           unsigned size = sizeof(QualType) * exceptionTypes.size();
-          void *mem = ctx.Allocate(size, llvm::alignOf<QualType>());
+          void *mem = ctx.Allocate(size, llvm37::alignOf<QualType>());
           memcpy(mem, exceptionTypes.data(), size);
           info.ExceptionSpec.Exceptions
-            = llvm::makeArrayRef((QualType *)mem, exceptionTypes.size());
+            = llvm37::makeArrayRef((QualType *)mem, exceptionTypes.size());
         }
       }
 
@@ -1313,7 +1313,7 @@ Optional<ArrayRef<QualType>> Type::getObjCSubstitutions(
   if (!curClassDecl) {
     // If we don't have a context type (e.g., this is "id" or some
     // variant thereof), substitute the bounds.
-    return llvm::ArrayRef<QualType>();
+    return llvm37::ArrayRef<QualType>();
   }
 
   // Follow the superclass chain until we've mapped the receiver type
@@ -1333,7 +1333,7 @@ Optional<ArrayRef<QualType>> Type::getObjCSubstitutions(
   // If we don't have a receiver type, or the receiver type does not
   // have type arguments, substitute in the defaults.
   if (!objectType || objectType->isUnspecialized()) {
-    return llvm::ArrayRef<QualType>();
+    return llvm37::ArrayRef<QualType>();
   }
 
   // The receiver type has the type arguments we want.
@@ -1829,7 +1829,7 @@ Type::ScalarTypeKind Type::getScalarTypeKind() const {
     if (BT->getKind() == BuiltinType::NullPtr) return STK_CPointer;
     if (BT->isInteger()) return STK_Integral;
     if (BT->isFloatingPoint()) return STK_Floating;
-    llvm_unreachable("unknown scalar builtin type");
+    llvm37_unreachable("unknown scalar builtin type");
   } else if (isa<PointerType>(T)) {
     return STK_CPointer;
   } else if (isa<BlockPointerType>(T)) {
@@ -1847,7 +1847,7 @@ Type::ScalarTypeKind Type::getScalarTypeKind() const {
     return STK_IntegralComplex;
   }
 
-  llvm_unreachable("unknown scalar type");
+  llvm37_unreachable("unknown scalar type");
 }
 
 /// \brief Determines whether the type is a C++ aggregate type or C
@@ -2371,7 +2371,7 @@ TypeWithKeyword::getTagTypeKindForTypeSpec(unsigned TypeSpec) {
   case TST_enum: return TTK_Enum;
   }
   
-  llvm_unreachable("Type specifier is not a tag type kind.");
+  llvm37_unreachable("Type specifier is not a tag type kind.");
 }
 
 ElaboratedTypeKeyword
@@ -2383,7 +2383,7 @@ TypeWithKeyword::getKeywordForTagTypeKind(TagTypeKind Kind) {
   case TTK_Union: return ETK_Union;
   case TTK_Enum: return ETK_Enum;
   }
-  llvm_unreachable("Unknown tag type kind.");
+  llvm37_unreachable("Unknown tag type kind.");
 }
 
 TagTypeKind
@@ -2396,9 +2396,9 @@ TypeWithKeyword::getTagTypeKindForKeyword(ElaboratedTypeKeyword Keyword) {
   case ETK_Enum: return TTK_Enum;
   case ETK_None: // Fall through.
   case ETK_Typename:
-    llvm_unreachable("Elaborated type keyword is not a tag type kind.");
+    llvm37_unreachable("Elaborated type keyword is not a tag type kind.");
   }
-  llvm_unreachable("Unknown elaborated type keyword.");
+  llvm37_unreachable("Unknown elaborated type keyword.");
 }
 
 bool
@@ -2414,7 +2414,7 @@ TypeWithKeyword::KeywordIsTagTypeKind(ElaboratedTypeKeyword Keyword) {
   case ETK_Enum:
     return true;
   }
-  llvm_unreachable("Unknown elaborated type keyword.");
+  llvm37_unreachable("Unknown elaborated type keyword.");
 }
 
 StringRef TypeWithKeyword::getKeywordName(ElaboratedTypeKeyword Keyword) {
@@ -2428,7 +2428,7 @@ StringRef TypeWithKeyword::getKeywordName(ElaboratedTypeKeyword Keyword) {
   case ETK_Enum:   return "enum";
   }
 
-  llvm_unreachable("Unknown elaborated type keyword.");
+  llvm37_unreachable("Unknown elaborated type keyword.");
 }
 
 DependentTemplateSpecializationType::DependentTemplateSpecializationType(
@@ -2451,7 +2451,7 @@ DependentTemplateSpecializationType::DependentTemplateSpecializationType(
 }
 
 void
-DependentTemplateSpecializationType::Profile(llvm::FoldingSetNodeID &ID,
+DependentTemplateSpecializationType::Profile(llvm37::FoldingSetNodeID &ID,
                                              const ASTContext &Context,
                                              ElaboratedTypeKeyword Keyword,
                                              NestedNameSpecifier *Qualifier,
@@ -2487,7 +2487,7 @@ const char *Type::getTypeClassName() const {
 #include "clang/AST/TypeNodes.def"
   }
   
-  llvm_unreachable("Invalid type class.");
+  llvm37_unreachable("Invalid type class.");
 }
 
 StringRef BuiltinType::getName(const PrintingPolicy &Policy) const {
@@ -2551,7 +2551,7 @@ StringRef BuiltinType::getName(const PrintingPolicy &Policy) const {
   // HLSL Change Ends
   }
   
-  llvm_unreachable("Invalid builtin type.");
+  llvm37_unreachable("Invalid builtin type.");
 }
 
 QualType QualType::getNonLValueExprType(const ASTContext &Context) const {
@@ -2587,7 +2587,7 @@ StringRef FunctionType::getNameForCallConv(CallingConv CC) {
   case CC_SpirKernel: return "spir_kernel";
   }
 
-  llvm_unreachable("Invalid calling convention.");
+  llvm37_unreachable("Invalid calling convention.");
 }
 
 FunctionProtoType::FunctionProtoType(QualType result, ArrayRef<QualType> params,
@@ -2721,7 +2721,7 @@ FunctionProtoType::getNoexceptSpec(const ASTContext &ctx) const {
   if (noexceptExpr->isValueDependent())
     return NR_Dependent;
 
-  llvm::APSInt value;
+  llvm37::APSInt value;
   bool isICE = noexceptExpr->isIntegerConstantExpr(value, ctx, nullptr,
                                                    /*evaluated*/false);
   (void)isICE;
@@ -2763,7 +2763,7 @@ bool FunctionProtoType::isTemplateVariadic() const {
   return false;
 }
 
-void FunctionProtoType::Profile(llvm::FoldingSetNodeID &ID, QualType Result,
+void FunctionProtoType::Profile(llvm37::FoldingSetNodeID &ID, QualType Result,
                                 const QualType *ArgTys, unsigned NumParams,
                                 const ExtProtoInfo &epi,
                                 ArrayRef<hlsl::ParameterModifier> ParamMods, // HLSL Change
@@ -2826,7 +2826,7 @@ void FunctionProtoType::Profile(llvm::FoldingSetNodeID &ID, QualType Result,
   ID.AddBoolean(epi.HasTrailingReturn);
 }
 
-void FunctionProtoType::Profile(llvm::FoldingSetNodeID &ID,
+void FunctionProtoType::Profile(llvm37::FoldingSetNodeID &ID,
                                 const ASTContext &Ctx) {
   Profile(ID, getReturnType(), param_type_begin(), NumParams, getExtProtoInfo(), getParamMods(), // HLSL Change
           Ctx);
@@ -2855,7 +2855,7 @@ QualType TypeOfExprType::desugar() const {
   return QualType(this, 0);
 }
 
-void DependentTypeOfExprType::Profile(llvm::FoldingSetNodeID &ID,
+void DependentTypeOfExprType::Profile(llvm37::FoldingSetNodeID &ID,
                                       const ASTContext &Context, Expr *E) {
   E->Profile(ID, Context, true);
 }
@@ -2884,7 +2884,7 @@ QualType DecltypeType::desugar() const {
 DependentDecltypeType::DependentDecltypeType(const ASTContext &Context, Expr *E)
   : DecltypeType(E, Context.DependentTy), Context(Context) { }
 
-void DependentDecltypeType::Profile(llvm::FoldingSetNodeID &ID,
+void DependentDecltypeType::Profile(llvm37::FoldingSetNodeID &ID,
                                     const ASTContext &Context, Expr *E) {
   E->Profile(ID, Context, true);
 }
@@ -2933,7 +2933,7 @@ bool AttributedType::isMSTypeSpec() const {
   case attr_uptr:
     return true;
   }
-  llvm_unreachable("invalid attr kind");
+  llvm37_unreachable("invalid attr kind");
 }
 
 // HLSL Change Starts
@@ -2947,7 +2947,7 @@ bool AttributedType::isHLSLTypeSpec() const {
   case attr_hlsl_globallycoherent:
     return true;
   }
-  llvm_unreachable("invalid attr kind");
+  llvm37_unreachable("invalid attr kind");
 }
 // HLSL Change Ends
 
@@ -2991,7 +2991,7 @@ bool AttributedType::isCallingConv() const {
   case attr_inteloclbicc:
     return true;
   }
-  llvm_unreachable("invalid attr kind");
+  llvm37_unreachable("invalid attr kind");
 }
 
 CXXRecordDecl *InjectedClassNameType::getDecl() const {
@@ -3016,11 +3016,11 @@ TemplateArgument SubstTemplateTypeParmPackType::getArgumentPack() const {
   return TemplateArgument(Arguments, NumArguments);
 }
 
-void SubstTemplateTypeParmPackType::Profile(llvm::FoldingSetNodeID &ID) {
+void SubstTemplateTypeParmPackType::Profile(llvm37::FoldingSetNodeID &ID) {
   Profile(ID, getReplacedParameter(), getArgumentPack());
 }
 
-void SubstTemplateTypeParmPackType::Profile(llvm::FoldingSetNodeID &ID,
+void SubstTemplateTypeParmPackType::Profile(llvm37::FoldingSetNodeID &ID,
                                            const TemplateTypeParmType *Replaced,
                                             const TemplateArgument &ArgPack) {
   ID.AddPointer(Replaced);
@@ -3098,7 +3098,7 @@ TemplateSpecializationType(TemplateName T,
 }
 
 void
-TemplateSpecializationType::Profile(llvm::FoldingSetNodeID &ID,
+TemplateSpecializationType::Profile(llvm37::FoldingSetNodeID &ID,
                                     TemplateName T,
                                     const TemplateArgument *Args,
                                     unsigned NumArgs,
@@ -3124,7 +3124,7 @@ QualifierCollector::apply(const ASTContext &Context, const Type *T) const {
   return Context.getQualifiedType(T, *this);
 }
 
-void ObjCObjectTypeImpl::Profile(llvm::FoldingSetNodeID &ID,
+void ObjCObjectTypeImpl::Profile(llvm37::FoldingSetNodeID &ID,
                                  QualType BaseType,
                                  ArrayRef<QualType> typeArgs,
                                  ArrayRef<ObjCProtocolDecl *> protocols,
@@ -3139,9 +3139,9 @@ void ObjCObjectTypeImpl::Profile(llvm::FoldingSetNodeID &ID,
   ID.AddBoolean(isKindOf);
 }
 
-void ObjCObjectTypeImpl::Profile(llvm::FoldingSetNodeID &ID) {
+void ObjCObjectTypeImpl::Profile(llvm37::FoldingSetNodeID &ID) {
   Profile(ID, getBaseType(), getTypeArgsAsWritten(),
-          llvm::makeArrayRef(qual_begin(), getNumProtocols()),
+          llvm37::makeArrayRef(qual_begin(), getNumProtocols()),
           isKindOfTypeAsWritten());
 }
 
@@ -3219,7 +3219,7 @@ static CachedProperties computeCachedProperties(const Type *T) {
 #define TYPE(Class,Base)
 #define NON_CANONICAL_TYPE(Class,Base) case Type::Class:
 #include "clang/AST/TypeNodes.def"
-    llvm_unreachable("didn't expect a non-canonical type here");
+    llvm37_unreachable("didn't expect a non-canonical type here");
 
 #define TYPE(Class,Base)
 #define DEPENDENT_TYPE(Class,Base) case Type::Class:
@@ -3300,7 +3300,7 @@ static CachedProperties computeCachedProperties(const Type *T) {
     return Cache::get(cast<AtomicType>(T)->getValueType());
   }
 
-  llvm_unreachable("unhandled type class");
+  llvm37_unreachable("unhandled type class");
 }
 
 /// \brief Determine the linkage of this type.
@@ -3321,7 +3321,7 @@ static LinkageInfo computeLinkageInfo(const Type *T) {
 #define TYPE(Class,Base)
 #define NON_CANONICAL_TYPE(Class,Base) case Type::Class:
 #include "clang/AST/TypeNodes.def"
-    llvm_unreachable("didn't expect a non-canonical type here");
+    llvm37_unreachable("didn't expect a non-canonical type here");
 
 #define TYPE(Class,Base)
 #define DEPENDENT_TYPE(Class,Base) case Type::Class:
@@ -3382,7 +3382,7 @@ static LinkageInfo computeLinkageInfo(const Type *T) {
     return computeLinkageInfo(cast<AtomicType>(T)->getValueType());
   }
 
-  llvm_unreachable("unhandled type class");
+  llvm37_unreachable("unhandled type class");
 }
 
 static LinkageInfo computeLinkageInfo(QualType T) {
@@ -3432,7 +3432,7 @@ bool Type::canHaveNullability() const {
   // We'll only see canonical types here.
 #define NON_CANONICAL_TYPE(Class, Parent)       \
   case Type::Class:                             \
-    llvm_unreachable("non-canonical type");
+    llvm37_unreachable("non-canonical type");
 #define TYPE(Class, Parent)
 #include "clang/AST/TypeNodes.def"
 
@@ -3529,10 +3529,10 @@ bool Type::canHaveNullability() const {
   case Type::Atomic:
     return false;
   }
-  llvm_unreachable("bad type kind!");
+  llvm37_unreachable("bad type kind!");
 }
 
-llvm::Optional<NullabilityKind> AttributedType::getImmediateNullability() const {
+llvm37::Optional<NullabilityKind> AttributedType::getImmediateNullability() const {
   if (getAttrKind() == AttributedType::attr_nonnull)
     return NullabilityKind::NonNull;
   if (getAttrKind() == AttributedType::attr_nullable)

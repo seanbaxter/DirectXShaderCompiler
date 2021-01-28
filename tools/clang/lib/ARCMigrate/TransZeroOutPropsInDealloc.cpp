@@ -1,6 +1,6 @@
 //===--- TransZeroOutPropsInDealloc.cpp - Transformations to ARC mode -----===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -29,7 +29,7 @@ class ZeroOutInDeallocRemover :
 
   MigrationPass &Pass;
 
-  llvm::DenseMap<ObjCPropertyDecl*, ObjCPropertyImplDecl*> SynthesizedProperties;
+  llvm37::DenseMap<ObjCPropertyDecl*, ObjCPropertyImplDecl*> SynthesizedProperties;
   ImplicitParamDecl *SelfD;
   ExprSet Removables;
   Selector FinalizeSel;
@@ -55,7 +55,7 @@ public:
       return true;
 
     bool BackedBySynthesizeSetter = false;
-    for (llvm::DenseMap<ObjCPropertyDecl*, ObjCPropertyImplDecl*>::iterator
+    for (llvm37::DenseMap<ObjCPropertyDecl*, ObjCPropertyImplDecl*>::iterator
          P = SynthesizedProperties.begin(), 
          E = SynthesizedProperties.end(); P != E; ++P) {
       ObjCPropertyDecl *PropDecl = P->first;
@@ -172,7 +172,7 @@ private:
       if (!IVDecl->getType()->isObjCObjectPointerType())
         return false;
       bool IvarBacksPropertySynthesis = false;
-      for (llvm::DenseMap<ObjCPropertyDecl*, ObjCPropertyImplDecl*>::iterator
+      for (llvm37::DenseMap<ObjCPropertyDecl*, ObjCPropertyImplDecl*>::iterator
            P = SynthesizedProperties.begin(), 
            E = SynthesizedProperties.end(); P != E; ++P) {
         ObjCPropertyImplDecl *PropImpDecl = P->second;

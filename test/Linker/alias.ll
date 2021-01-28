@@ -1,5 +1,5 @@
-; RUN: llvm-link %s %S/Inputs/alias.ll -S -o - | FileCheck %s
-; RUN: llvm-link %S/Inputs/alias.ll %s -S -o - | FileCheck %s
+; RUN: llvm37-link %s %S/Inputs/alias.ll -S -o - | FileCheck %s
+; RUN: llvm37-link %S/Inputs/alias.ll %s -S -o - | FileCheck %s
 
 @foo = weak global i32 0
 ; CHECK-DAG: @foo = alias i32* @zed

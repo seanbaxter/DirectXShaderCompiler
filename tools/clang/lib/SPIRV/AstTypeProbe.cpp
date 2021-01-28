@@ -1,6 +1,6 @@
 //===--- TypeProbe.cpp - Static functions for probing QualType ---*- C++ -*-==//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -380,7 +380,7 @@ bool isOrContains16BitType(QualType type, bool enable16BitTypesOption) {
                                  enable16BitTypesOption);
   }
 
-  llvm_unreachable("checking 16-bit type unimplemented");
+  llvm37_unreachable("checking 16-bit type unimplemented");
   return 0;
 }
 
@@ -485,7 +485,7 @@ uint32_t getElementSpirvBitwidth(const ASTContext &astContext, QualType type,
       break;
     }
   }
-  llvm_unreachable("invalid type passed to getElementSpirvBitwidth");
+  llvm37_unreachable("invalid type passed to getElementSpirvBitwidth");
 }
 
 bool canTreatAsSameScalarType(QualType type1, QualType type2) {
@@ -642,7 +642,7 @@ QualType getTypeWithCustomBitwidth(const ASTContext &ctx, QualType type,
       return ctx.UnsignedLongLongTy;
     }
   }
-  llvm_unreachable(
+  llvm37_unreachable(
       "invalid type or bitwidth passed to getTypeWithCustomBitwidth");
 }
 
@@ -721,8 +721,8 @@ bool isSameType(const ASTContext &astContext, QualType type1, QualType type2) {
   { // Two structures with identical fields
     if (const auto *structType1 = type1->getAs<RecordType>()) {
       if (const auto *structType2 = type2->getAs<RecordType>()) {
-        llvm::SmallVector<QualType, 4> fieldTypes1;
-        llvm::SmallVector<QualType, 4> fieldTypes2;
+        llvm37::SmallVector<QualType, 4> fieldTypes1;
+        llvm37::SmallVector<QualType, 4> fieldTypes2;
         for (const auto *field : structType1->getDecl()->fields())
           fieldTypes1.push_back(field->getType());
         for (const auto *field : structType2->getDecl()->fields())
@@ -747,7 +747,7 @@ bool isSameType(const ASTContext &astContext, QualType type1, QualType type2) {
   return false;
 }
 
-QualType desugarType(QualType type, llvm::Optional<bool> *isRowMajor) {
+QualType desugarType(QualType type, llvm37::Optional<bool> *isRowMajor) {
   if (const auto *attrType = type->getAs<AttributedType>()) {
     switch (auto kind = attrType->getAttrKind()) {
     // HLSL row-major is SPIR-V col-major
@@ -1061,7 +1061,7 @@ bool isRelaxedPrecisionType(QualType type, const SpirvCodeGenOptions &opts) {
 
   // Images with RelaxedPrecision sampled type.
   if (const auto *recordType = type->getAs<RecordType>()) {
-    const llvm::StringRef name = recordType->getDecl()->getName();
+    const llvm37::StringRef name = recordType->getDecl()->getName();
     if (name == "Texture1D" || name == "Texture2D" || name == "Texture3D" ||
         name == "TextureCube" || name == "Texture1DArray" ||
         name == "Texture2DArray" || name == "Texture2DMS" ||
@@ -1206,14 +1206,14 @@ QualType getHLSLMatrixType(ASTContext &astContext, Sema &S,
       TemplateArgument(elemType),
       TemplateArgument(
           astContext,
-          llvm::APSInt(
-              llvm::APInt(astContext.getIntWidth(astContext.IntTy), rows),
+          llvm37::APSInt(
+              llvm37::APInt(astContext.getIntWidth(astContext.IntTy), rows),
               false),
           astContext.IntTy),
       TemplateArgument(
           astContext,
-          llvm::APSInt(
-              llvm::APInt(astContext.getIntWidth(astContext.IntTy), columns),
+          llvm37::APSInt(
+              llvm37::APInt(astContext.getIntWidth(astContext.IntTy), columns),
               false),
           astContext.IntTy)};
 

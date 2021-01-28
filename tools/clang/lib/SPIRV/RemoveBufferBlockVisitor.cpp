@@ -1,6 +1,6 @@
 //===-- RemoveBufferBlockVisitor.cpp - RemoveBufferBlock Visitor -*- C++ -*-==//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -121,7 +121,7 @@ bool RemoveBufferBlockVisitor::updateStorageClass(
 
 bool RemoveBufferBlockVisitor::visit(SpirvFunction *fn, Phase phase) {
   if (phase == Visitor::Phase::Init) {
-    llvm::SmallVector<const SpirvType *, 4> paramTypes;
+    llvm37::SmallVector<const SpirvType *, 4> paramTypes;
     bool updatedParamTypes = false;
     for (auto *param : fn->getParameters()) {
       const auto *paramType = param->getResultType();

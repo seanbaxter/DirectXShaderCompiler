@@ -6,12 +6,12 @@ target datalayout = "e-p:32:32:32-i1:8:8-i8:8:8-i16:16:16-i32:32:32-i64:32:64-f3
 
 declare i8* @memset(i8*, i32, i32)
 
-; Check memset(mem1, val, size) -> llvm.memset(mem1, val, size, 1).
+; Check memset(mem1, val, size) -> llvm37.memset(mem1, val, size, 1).
 
 define i8* @test_simplify1(i8* %mem, i32 %val, i32 %size) {
 ; CHECK-LABEL: @test_simplify1(
   %ret = call i8* @memset(i8* %mem, i32 %val, i32 %size)
-; CHECK: call void @llvm.memset
+; CHECK: call void @llvm37.memset
   ret i8* %ret
 ; CHECK: ret i8* %mem
 }

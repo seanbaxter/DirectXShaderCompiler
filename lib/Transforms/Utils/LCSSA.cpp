@@ -1,6 +1,6 @@
 //===-- LCSSA.cpp - Convert loops into loop-closed SSA form ---------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -20,28 +20,28 @@
 // ... = X3 + 4             X4 = phi(X3)
 //                          ... = X4 + 4
 //
-// This is still valid LLVM; the extra phi nodes are purely redundant, and will
+// This is still valid LLVM37; the extra phi nodes are purely redundant, and will
 // be trivially eliminated by InstCombine.  The major benefit of this 
 // transformation is that it makes many other loop optimizations, such as 
 // LoopUnswitching, simpler.
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Transforms/Scalar.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/Analysis/AliasAnalysis.h"
-#include "llvm/Analysis/LoopPass.h"
-#include "llvm/Analysis/ScalarEvolution.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/Dominators.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/PredIteratorCache.h"
-#include "llvm/Pass.h"
-#include "llvm/Transforms/Utils/LoopUtils.h"
-#include "llvm/Transforms/Utils/SSAUpdater.h"
-using namespace llvm;
+#include "llvm37/Transforms/Scalar.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/Analysis/AliasAnalysis.h"
+#include "llvm37/Analysis/LoopPass.h"
+#include "llvm37/Analysis/ScalarEvolution.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/Dominators.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/PredIteratorCache.h"
+#include "llvm37/Pass.h"
+#include "llvm37/Transforms/Utils/LoopUtils.h"
+#include "llvm37/Transforms/Utils/SSAUpdater.h"
+using namespace llvm37;
 
 #define DEBUG_TYPE "lcssa"
 
@@ -212,7 +212,7 @@ blockDominatesAnExit(BasicBlock *BB,
   return false;
 }
 
-bool llvm::formLCSSA(Loop &L, DominatorTree &DT, LoopInfo *LI,
+bool llvm37::formLCSSA(Loop &L, DominatorTree &DT, LoopInfo *LI,
                      ScalarEvolution *SE) {
   bool Changed = false;
 
@@ -261,7 +261,7 @@ bool llvm::formLCSSA(Loop &L, DominatorTree &DT, LoopInfo *LI,
 }
 
 /// Process a loop nest depth first.
-bool llvm::formLCSSARecursively(Loop &L, DominatorTree &DT, LoopInfo *LI,
+bool llvm37::formLCSSARecursively(Loop &L, DominatorTree &DT, LoopInfo *LI,
                                 ScalarEvolution *SE) {
   bool Changed = false;
 
@@ -308,8 +308,8 @@ INITIALIZE_PASS_DEPENDENCY(DominatorTreeWrapperPass)
 INITIALIZE_PASS_DEPENDENCY(LoopInfoWrapperPass)
 INITIALIZE_PASS_END(LCSSA, "lcssa", "Loop-Closed SSA Form Pass", false, false)
 
-Pass *llvm::createLCSSAPass() { return new LCSSA(); }
-char &llvm::LCSSAID = LCSSA::ID;
+Pass *llvm37::createLCSSAPass() { return new LCSSA(); }
+char &llvm37::LCSSAID = LCSSA::ID;
 
 
 /// Process all loops in the function, inner-most out.

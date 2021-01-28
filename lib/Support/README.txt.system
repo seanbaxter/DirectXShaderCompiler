@@ -1,21 +1,21 @@
 Design Of lib/System
 ====================
 
-The software in this directory is designed to completely shield LLVM from any
+The software in this directory is designed to completely shield LLVM37 from any
 and all operating system specific functionality. It is not intended to be a
 complete operating system wrapper (such as ACE), but only to provide the
-functionality necessary to support LLVM.
+functionality necessary to support LLVM37.
 
 The software located here, of necessity, has very specific and stringent design
 rules. Violation of these rules means that cracks in the shield could form and
 the primary goal of the library is defeated. By consistently using this library,
-LLVM becomes more easily ported to new platforms since the only thing requiring
+LLVM37 becomes more easily ported to new platforms since the only thing requiring
 porting is this library.
 
 Complete documentation for the library can be found in the file:
-  llvm/docs/SystemLibrary.html
+  llvm37/docs/SystemLibrary.html
 or at this URL:
-  http://llvm.org/docs/SystemLibrary.html
+  http://llvm37.org/docs/SystemLibrary.html
 
 While we recommend that you read the more detailed documentation, for the
 impatient, here's a high level summary of the library's requirements.
@@ -34,7 +34,7 @@ impatient, here's a high level summary of the library's requirements.
 To accomplish these requirements, the library has numerous design criteria that
 must be satisfied. Here's a high level summary of the library's design criteria:
 
- 1. No unused functionality (only what LLVM needs)
+ 1. No unused functionality (only what LLVM37 needs)
  2. High-Level Interfaces
  3. Use Opaque Classes
  4. Common Implementations

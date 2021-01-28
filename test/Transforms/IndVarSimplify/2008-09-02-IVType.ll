@@ -18,7 +18,7 @@ target datalayout = "n8:16:32:64"
 	%struct.SharedEGlobals = type { i8**, i8**, i8**, i8** }
 	%struct.SharedGlobals = type { %struct.SharedEGlobals*, %struct.SharedDGlobals* }
 	%struct.YUVGeneralParams = type { i16*, i8*, i8*, i8*, i8*, i8*, void (i8*, i16**, i32, %struct.YUVGeneralParams*)*, i16, i16, i16, [6 x i8], void (i8*, i16**, i32, %struct.YUVGeneralParams*)*, i16, i16 }
-@llvm.used = appending global [1 x i8*] [ i8* bitcast (i16 (%struct.JPEGGlobals*)* @ExtractBufferedBlocksIgnored to i8*) ], section "llvm.metadata"		; <[1 x i8*]*> [#uses=0]
+@llvm37.used = appending global [1 x i8*] [ i8* bitcast (i16 (%struct.JPEGGlobals*)* @ExtractBufferedBlocksIgnored to i8*) ], section "llvm.metadata"		; <[1 x i8*]*> [#uses=0]
 
 define signext i16 @ExtractBufferedBlocksIgnored(%struct.JPEGGlobals* %globp)  nounwind {
 entry:

@@ -1,18 +1,18 @@
-//===- llvm/unittest/TypeBuilderTest.cpp - TypeBuilder tests --------------===//
+//===- llvm37/unittest/TypeBuilderTest.cpp - TypeBuilder tests --------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/IR/TypeBuilder.h"
-#include "llvm/ADT/ArrayRef.h"
-#include "llvm/IR/LLVMContext.h"
+#include "llvm37/IR/TypeBuilder.h"
+#include "llvm37/ADT/ArrayRef.h"
+#include "llvm37/IR/LLVMContext.h"
 #include "gtest/gtest.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 namespace {
 
@@ -158,10 +158,10 @@ TEST(TypeBuilderTest, Context) {
   // We used to cache TypeBuilder results in static local variables.  This
   // produced the same type for different contexts, which of course broke
   // things.
-  LLVMContext context1;
+  LLVM37Context context1;
   EXPECT_EQ(&context1,
             &(TypeBuilder<types::i<1>, true>::get(context1))->getContext());
-  LLVMContext context2;
+  LLVM37Context context2;
   EXPECT_EQ(&context2,
             &(TypeBuilder<types::i<1>, true>::get(context2))->getContext());
 }
@@ -180,10 +180,10 @@ struct MyPortableType {
 
 }  // anonymous namespace
 
-namespace llvm {
+namespace llvm37 {
 template<bool cross> class TypeBuilder<MyType, cross> {
 public:
-  static StructType *get(LLVMContext &Context) {
+  static StructType *get(LLVM37Context &Context) {
     // Using the static result variable ensures that the type is
     // only looked up once.
     std::vector<Type*> st;
@@ -206,7 +206,7 @@ public:
 
 template<bool cross> class TypeBuilder<MyPortableType, cross> {
 public:
-  static StructType *get(LLVMContext &Context) {
+  static StructType *get(LLVM37Context &Context) {
     // Using the static result variable ensures that the type is
     // only looked up once.
     std::vector<Type*> st;
@@ -226,7 +226,7 @@ public:
     FIELD_ARRAY
   };
 };
-}  // namespace llvm
+}  // namespace llvm37
 namespace {
 
 TEST(TypeBuilderTest, Extensions) {

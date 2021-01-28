@@ -36,7 +36,7 @@ target datalayout = "e-p:32:32"
 ; should be ignored.
 !7 = !{!"bitset2", null, i32 0}
 
-!llvm.bitsets = !{ !0, !1, !2, !3, !4, !5, !6, !7 }
+!llvm37.bitsets = !{ !0, !1, !2, !3, !4, !5, !6, !7 }
 
 ; CHECK: @bits_use{{[0-9]*}} = private alias i8* @bits{{[0-9]*}}
 ; CHECK: @bits_use.{{[0-9]*}} = private alias i8* @bits{{[0-9]*}}
@@ -64,11 +64,11 @@ target datalayout = "e-p:32:32"
 ; CHECK: @bits{{[0-9]*}} = private alias getelementptr inbounds ([68 x i8], [68 x i8]* [[BA]], i32 0, i32 0)
 ; CHECK: @bits.{{[0-9]*}} = private alias getelementptr inbounds ([68 x i8], [68 x i8]* [[BA]], i32 0, i32 0)
 
-declare i1 @llvm.bitset.test(i8* %ptr, metadata %bitset) nounwind readnone
+declare i1 @llvm37.bitset.test(i8* %ptr, metadata %bitset) nounwind readnone
 
 ; CHECK: @foo(i32* [[A0:%[^ ]*]])
 define i1 @foo(i32* %p) {
-  ; CHECK-NOT: llvm.bitset.test
+  ; CHECK-NOT: llvm37.bitset.test
 
   ; CHECK: [[R0:%[^ ]*]] = bitcast i32* [[A0]] to i8*
   %pi8 = bitcast i32* %p to i8*
@@ -86,10 +86,10 @@ define i1 @foo(i32* %p) {
   ; CHECK: [[R11:%[^ ]*]] = icmp ne i8 [[R10]], 0
 
   ; CHECK: [[R16:%[^ ]*]] = phi i1 [ false, {{%[^ ]*}} ], [ [[R11]], {{%[^ ]*}} ]
-  %x = call i1 @llvm.bitset.test(i8* %pi8, metadata !"bitset1")
+  %x = call i1 @llvm37.bitset.test(i8* %pi8, metadata !"bitset1")
 
-  ; CHECK-NOT: llvm.bitset.test
-  %y = call i1 @llvm.bitset.test(i8* %pi8, metadata !"bitset1")
+  ; CHECK-NOT: llvm37.bitset.test
+  %y = call i1 @llvm37.bitset.test(i8* %pi8, metadata !"bitset1")
 
   ; CHECK: ret i1 [[R16]]
   ret i1 %x
@@ -105,7 +105,7 @@ define i1 @bar(i32* %p) {
   ; CHECK: [[S4:%[^ ]*]] = shl i32 [[S2]], 24
   ; CHECK: [[S5:%[^ ]*]] = or i32 [[S3]], [[S4]]
   ; CHECK: [[S6:%[^ ]*]] = icmp ult i32 [[S5]], 2
-  %x = call i1 @llvm.bitset.test(i8* %pi8, metadata !"bitset2")
+  %x = call i1 @llvm37.bitset.test(i8* %pi8, metadata !"bitset2")
 
   ; CHECK: ret i1 [[S6]]
   ret i1 %x
@@ -129,9 +129,9 @@ define i1 @baz(i32* %p) {
   ; CHECK: [[T11:%[^ ]*]] = icmp ne i8 [[T10]], 0
 
   ; CHECK: [[T16:%[^ ]*]] = phi i1 [ false, {{%[^ ]*}} ], [ [[T11]], {{%[^ ]*}} ]
-  %x = call i1 @llvm.bitset.test(i8* %pi8, metadata !"bitset3")
+  %x = call i1 @llvm37.bitset.test(i8* %pi8, metadata !"bitset3")
   ; CHECK: ret i1 [[T16]]
   ret i1 %x
 }
 
-; CHECK-NOT: !llvm.bitsets
+; CHECK-NOT: !llvm37.bitsets

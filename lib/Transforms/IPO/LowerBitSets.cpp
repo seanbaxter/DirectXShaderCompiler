@@ -1,34 +1,34 @@
 //===-- LowerBitSets.cpp - Bitset lowering pass ---------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 //
-// This pass lowers bitset metadata and calls to the llvm.bitset.test intrinsic.
-// See http://llvm.org/docs/LangRef.html#bitsets for more information.
+// This pass lowers bitset metadata and calls to the llvm37.bitset.test intrinsic.
+// See http://llvm37.org/docs/LangRef.html#bitsets for more information.
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Transforms/IPO/LowerBitSets.h"
-#include "llvm/Transforms/IPO.h"
-#include "llvm/ADT/EquivalenceClasses.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/ADT/Triple.h"
-#include "llvm/IR/Constant.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/GlobalVariable.h"
-#include "llvm/IR/IRBuilder.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/Intrinsics.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/Operator.h"
-#include "llvm/Pass.h"
-#include "llvm/Transforms/Utils/BasicBlockUtils.h"
+#include "llvm37/Transforms/IPO/LowerBitSets.h"
+#include "llvm37/Transforms/IPO.h"
+#include "llvm37/ADT/EquivalenceClasses.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/ADT/Triple.h"
+#include "llvm37/IR/Constant.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/GlobalVariable.h"
+#include "llvm37/IR/IRBuilder.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/Intrinsics.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/Operator.h"
+#include "llvm37/Pass.h"
+#include "llvm37/Transforms/Utils/BasicBlockUtils.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "lowerbitsets"
 
@@ -204,7 +204,7 @@ struct LowerBitSets : public ModulePass {
   IntegerType *Int64Ty;
   Type *IntPtrTy;
 
-  // The llvm.bitsets named metadata.
+  // The llvm37.bitsets named metadata.
   NamedMDNode *BitSetNM;
 
   // Mapping from bitset mdstrings to the call sites that test them.
@@ -240,7 +240,7 @@ INITIALIZE_PASS_END(LowerBitSets, "lowerbitsets",
                 "Lower bitset metadata", false, false)
 char LowerBitSets::ID = 0;
 
-ModulePass *llvm::createLowerBitSetsPass() { return new LowerBitSets; }
+ModulePass *llvm37::createLowerBitSetsPass() { return new LowerBitSets; }
 
 bool LowerBitSets::doInitialization(Module &Mod) {
   M = &Mod;
@@ -421,7 +421,7 @@ Value *LowerBitSets::createBitSetTest(IRBuilder<> &B, BitSetInfo &BSI,
   }
 }
 
-/// Lower a llvm.bitset.test call to its implementation. Returns the value to
+/// Lower a llvm37.bitset.test call to its implementation. Returns the value to
 /// replace the call with.
 Value *LowerBitSets::lowerBitSetCall(
     CallInst *CI, BitSetInfo &BSI, ByteArrayInfo *&BAI,
@@ -493,7 +493,7 @@ Value *LowerBitSets::lowerBitSetCall(
 }
 
 /// Given a disjoint set of bitsets and globals, layout the globals, build the
-/// bit sets and lower the llvm.bitset.test calls.
+/// bit sets and lower the llvm37.bitset.test calls.
 void LowerBitSets::buildBitSetsFromGlobals(
     const std::vector<MDString *> &BitSets,
     const std::vector<GlobalVariable *> &Globals) {
@@ -539,7 +539,7 @@ void LowerBitSets::buildBitSetsFromGlobals(
 
     ByteArrayInfo *BAI = 0;
 
-    // Lower each call to llvm.bitset.test for this bitset.
+    // Lower each call to llvm37.bitset.test for this bitset.
     for (CallInst *CI : BitSetTestCallSites[BS]) {
       ++NumBitSetCallsLowered;
       Value *Lowered = lowerBitSetCall(CI, BSI, BAI, CombinedGlobal, GlobalLayout);
@@ -590,7 +590,7 @@ bool LowerBitSets::buildBitSets() {
     auto BitSetMDVal = dyn_cast<MetadataAsValue>(CI->getArgOperand(1));
     if (!BitSetMDVal || !isa<MDString>(BitSetMDVal->getMetadata()))
       report_fatal_error(
-          "Second argument of llvm.bitset.test must be metadata string");
+          "Second argument of llvm37.bitset.test must be metadata string");
     auto BitSet = cast<MDString>(BitSetMDVal->getMetadata());
 
     // Add the call site to the list of call sites for this bit set. We also use
@@ -617,7 +617,7 @@ bool LowerBitSets::buildBitSets() {
     for (MDNode *Op : BitSetNM->operands()) {
       if (Op->getNumOperands() != 3)
         report_fatal_error(
-            "All operands of llvm.bitsets metadata must have 3 elements");
+            "All operands of llvm37.bitsets metadata must have 3 elements");
 
       if (Op->getOperand(0) != BitSet || !Op->getOperand(1))
         continue;
@@ -656,8 +656,8 @@ bool LowerBitSets::buildBitSets() {
     // Build the list of bitsets and referenced globals in this disjoint set.
     std::vector<MDString *> BitSets;
     std::vector<GlobalVariable *> Globals;
-    llvm::DenseMap<MDString *, uint64_t> BitSetIndices;
-    llvm::DenseMap<GlobalVariable *, uint64_t> GlobalIndices;
+    llvm37::DenseMap<MDString *, uint64_t> BitSetIndices;
+    llvm37::DenseMap<GlobalVariable *, uint64_t> GlobalIndices;
     for (GlobalClassesTy::member_iterator MI = GlobalClasses.member_begin(I);
          MI != GlobalClasses.member_end(); ++MI) {
       if ((*MI).is<MDString *>()) {

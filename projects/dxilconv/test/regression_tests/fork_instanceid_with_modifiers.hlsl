@@ -1,8 +1,8 @@
 // RUN: %fxc /Ths_5_0 %s /Fo %t.dxbc
-// RUN: %dxbc2dxil %t.dxbc /emit-llvm | %FileCheck %s
+// RUN: %dxbc2dxil %t.dxbc /emit-llvm37 | %FileCheck %s
 
 // RUN: %fxc /Ths_5_1 /DDX12 %s /Fo %t.dxbc
-// RUN: %dxbc2dxil %t.dxbc /emit-llvm | %FileCheck %s
+// RUN: %dxbc2dxil %t.dxbc /emit-llvm37 | %FileCheck %s
 
 // CHECK: hullloop0:
 // CHECK: %[[InstanceID:.*]] = phi i32

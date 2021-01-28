@@ -1,6 +1,6 @@
 //===-- InterferenceCache.cpp - Caching per-block interference ---------*--===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -12,11 +12,11 @@
 //===----------------------------------------------------------------------===//
 
 #include "InterferenceCache.h"
-#include "llvm/CodeGen/LiveIntervalAnalysis.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Target/TargetRegisterInfo.h"
+#include "llvm37/CodeGen/LiveIntervalAnalysis.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Target/TargetRegisterInfo.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "regalloc"
 
@@ -77,7 +77,7 @@ InterferenceCache::Entry *InterferenceCache::get(unsigned PhysReg) {
     PhysRegEntries[PhysReg] = E;
     return &Entries[E];
   }
-  llvm_unreachable("Ran out of interference cache entries.");
+  llvm37_unreachable("Ran out of interference cache entries.");
 }
 
 /// revalidate - LIU contents have changed, update tags.

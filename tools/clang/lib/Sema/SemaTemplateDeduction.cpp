@@ -1,6 +1,6 @@
 //===------- SemaTemplateDeduction.cpp - Template Argument Deduction ------===/
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -23,7 +23,7 @@
 #include "clang/Sema/Sema.h"
 #include "clang/Sema/Template.h"
 #include "clang/Sema/SemaHLSL.h" // HLSL Change
-#include "llvm/ADT/SmallBitVector.h"
+#include "llvm37/ADT/SmallBitVector.h"
 #include <algorithm>
 
 namespace clang {
@@ -65,7 +65,7 @@ using namespace clang;
 
 /// \brief Compare two APSInts, extending and switching the sign as
 /// necessary to compare their values regardless of underlying type.
-static bool hasSameExtendedValue(llvm::APSInt X, llvm::APSInt Y) {
+static bool hasSameExtendedValue(llvm37::APSInt X, llvm37::APSInt Y) {
   if (Y.getBitWidth() > X.getBitWidth())
     X = X.extend(Y.getBitWidth());
   else if (Y.getBitWidth() < X.getBitWidth())
@@ -160,7 +160,7 @@ checkDeducedTemplateArguments(ASTContext &Context,
 
   switch (X.getKind()) {
   case TemplateArgument::Null:
-    llvm_unreachable("Non-deduced template arguments handled above");
+    llvm37_unreachable("Non-deduced template arguments handled above");
 
   case TemplateArgument::Type:
     // If two template type arguments have the same type, they're compatible.
@@ -213,7 +213,7 @@ checkDeducedTemplateArguments(ASTContext &Context,
 
     if (Y.getKind() == TemplateArgument::Expression) {
       // Compare the expressions for equality
-      llvm::FoldingSetNodeID ID1, ID2;
+      llvm37::FoldingSetNodeID ID1, ID2;
       X.getAsExpr()->Profile(ID1, Context, true);
       Y.getAsExpr()->Profile(ID2, Context, true);
       if (ID1 == ID2)
@@ -282,7 +282,7 @@ checkDeducedTemplateArguments(ASTContext &Context,
     return X;
   }
 
-  llvm_unreachable("Invalid TemplateArgument Kind!");
+  llvm37_unreachable("Invalid TemplateArgument Kind!");
 }
 
 /// \brief Deduce the value of the given non-type template parameter
@@ -290,7 +290,7 @@ checkDeducedTemplateArguments(ASTContext &Context,
 static Sema::TemplateDeductionResult
 DeduceNonTypeTemplateArgument(Sema &S,
                               NonTypeTemplateParmDecl *NTTP,
-                              llvm::APSInt Value, QualType ValueType,
+                              llvm37::APSInt Value, QualType ValueType,
                               bool DeducedFromArrayBound,
                               TemplateDeductionInfo &Info,
                     SmallVectorImpl<DeducedTemplateArgument> &Deduced) {
@@ -588,7 +588,7 @@ public:
     // Compute the set of template parameter indices that correspond to
     // parameter packs expanded by the pack expansion.
     {
-      llvm::SmallBitVector SawIndices(TemplateParams->size());
+      llvm37::SmallBitVector SawIndices(TemplateParams->size());
       SmallVector<UnexpandedParameterPack, 2> Unexpanded;
       S.collectUnexpandedParameterPacks(Pattern, Unexpanded);
       for (unsigned I = 0, N = Unexpanded.size(); I != N; ++I) {
@@ -1195,13 +1195,13 @@ DeduceTemplateArgumentsByTypeMatch(Sema &S,
   switch (Param->getTypeClass()) {
     // Non-canonical types cannot appear here.
 #define NON_CANONICAL_TYPE(Class, Base) \
-  case Type::Class: llvm_unreachable("deducing non-canonical type: " #Class);
+  case Type::Class: llvm37_unreachable("deducing non-canonical type: " #Class);
 #define TYPE(Class, Base)
 #include "clang/AST/TypeNodes.def"
       
     case Type::TemplateTypeParm:
     case Type::SubstTemplateTypeParmPack:
-      llvm_unreachable("Type nodes handled above");
+      llvm37_unreachable("Type nodes handled above");
 
     // These types cannot be dependent, so simply check whether the types are
     // the same.
@@ -1352,7 +1352,7 @@ DeduceTemplateArgumentsByTypeMatch(Sema &S,
              "Cannot deduce non-type template argument at depth > 0");
       if (const ConstantArrayType *ConstantArrayArg
             = dyn_cast<ConstantArrayType>(ArrayArg)) {
-        llvm::APSInt Size(ConstantArrayArg->getSize());
+        llvm37::APSInt Size(ConstantArrayArg->getSize());
         return DeduceNonTypeTemplateArgument(S, NTTP, Size,
                                              S.Context.getSizeType(),
                                              /*ArrayBound=*/true,
@@ -1447,7 +1447,7 @@ DeduceTemplateArgumentsByTypeMatch(Sema &S,
           // Use data recursion to crawl through the list of base classes.
           // Visited contains the set of nodes we have already visited, while
           // ToVisit is our stack of records that we still need to visit.
-          llvm::SmallPtrSet<const RecordType *, 8> Visited;
+          llvm37::SmallPtrSet<const RecordType *, 8> Visited;
           SmallVector<const RecordType *, 8> ToVisit;
           ToVisit.push_back(RecordT);
           bool Successful = false;
@@ -1606,7 +1606,7 @@ DeduceTemplateArgumentsByTypeMatch(Sema &S,
         if (!NTTP)
           return Sema::TDK_Success;
 
-        llvm::APSInt ArgSize(S.Context.getTypeSize(S.Context.IntTy), false);
+        llvm37::APSInt ArgSize(S.Context.getTypeSize(S.Context.IntTy), false);
         ArgSize = VectorArg->getNumElements();
         return DeduceNonTypeTemplateArgument(S, NTTP, ArgSize, S.Context.IntTy,
                                              false, Info, Deduced);
@@ -1648,7 +1648,7 @@ DeduceTemplateArgumentsByTypeMatch(Sema &S,
       return Sema::TDK_Success;
   }
 
-  llvm_unreachable("Invalid Type Class!");
+  llvm37_unreachable("Invalid Type Class!");
 }
 
 static Sema::TemplateDeductionResult
@@ -1666,7 +1666,7 @@ DeduceTemplateArguments(Sema &S,
 
   switch (Param.getKind()) {
   case TemplateArgument::Null:
-    llvm_unreachable("Null template argument in parameter list");
+    llvm37_unreachable("Null template argument in parameter list");
 
   case TemplateArgument::Type:
     if (Arg.getKind() == TemplateArgument::Type)
@@ -1688,7 +1688,7 @@ DeduceTemplateArguments(Sema &S,
     return Sema::TDK_NonDeducedMismatch;
 
   case TemplateArgument::TemplateExpansion:
-    llvm_unreachable("caller should handle pack expansions");
+    llvm37_unreachable("caller should handle pack expansions");
 
   case TemplateArgument::Declaration:
     if (Arg.getKind() == TemplateArgument::Declaration &&
@@ -1753,10 +1753,10 @@ DeduceTemplateArguments(Sema &S,
     return Sema::TDK_Success;
   }
   case TemplateArgument::Pack:
-    llvm_unreachable("Argument packs should be expanded by the caller!");
+    llvm37_unreachable("Argument packs should be expanded by the caller!");
   }
 
-  llvm_unreachable("Invalid TemplateArgument Kind!");
+  llvm37_unreachable("Invalid TemplateArgument Kind!");
 }
 
 /// \brief Determine whether there is a template argument to be used for
@@ -1920,7 +1920,7 @@ static bool isSameTemplateArg(ASTContext &Context,
 
   switch (X.getKind()) {
     case TemplateArgument::Null:
-      llvm_unreachable("Comparing NULL template argument");
+      llvm37_unreachable("Comparing NULL template argument");
 
     case TemplateArgument::Type:
       return Context.getCanonicalType(X.getAsType()) ==
@@ -1943,7 +1943,7 @@ static bool isSameTemplateArg(ASTContext &Context,
       return X.getAsIntegral() == Y.getAsIntegral();
 
     case TemplateArgument::Expression: {
-      llvm::FoldingSetNodeID XID, YID;
+      llvm37::FoldingSetNodeID XID, YID;
       X.getAsExpr()->Profile(XID, Context, true);
       Y.getAsExpr()->Profile(YID, Context, true);
       return XID == YID;
@@ -1963,7 +1963,7 @@ static bool isSameTemplateArg(ASTContext &Context,
       return true;
   }
 
-  llvm_unreachable("Invalid TemplateArgument Kind!");
+  llvm37_unreachable("Invalid TemplateArgument Kind!");
 }
 
 /// \brief Allocate a TemplateArgumentLoc where all locations have
@@ -1987,7 +1987,7 @@ getTrivialTemplateArgumentLoc(Sema &S,
                               SourceLocation Loc) {
   switch (Arg.getKind()) {
   case TemplateArgument::Null:
-    llvm_unreachable("Can't get a NULL template argument here");
+    llvm37_unreachable("Can't get a NULL template argument here");
 
   case TemplateArgument::Type:
     return TemplateArgumentLoc(Arg,
@@ -2041,7 +2041,7 @@ getTrivialTemplateArgumentLoc(Sema &S,
     return TemplateArgumentLoc(Arg, TemplateArgumentLocInfo());
   }
 
-  llvm_unreachable("Invalid TemplateArgument Kind!");
+  llvm37_unreachable("Invalid TemplateArgument Kind!");
 }
 
 
@@ -3690,7 +3690,7 @@ SpecializeCorrespondingLambdaCallOperatorAndInvoker(
                   getLambdaStaticInvoker()->getDescribedFunctionTemplate();
 
 #ifndef NDEBUG
-  Sema::TemplateDeductionResult LLVM_ATTRIBUTE_UNUSED Result =
+  Sema::TemplateDeductionResult LLVM37_ATTRIBUTE_UNUSED Result =
 #endif
     S.FinishTemplateArgumentDeduction(InvokerTemplate, DeducedArguments, 0, 
           InvokerSpecialized, TDInfo);
@@ -4117,7 +4117,7 @@ static void
 MarkUsedTemplateParameters(ASTContext &Ctx, QualType T,
                            bool OnlyDeduced,
                            unsigned Level,
-                           llvm::SmallBitVector &Deduced);
+                           llvm37::SmallBitVector &Deduced);
 
 /// \brief If this is a non-static member function,
 static void
@@ -4258,7 +4258,7 @@ static bool isAtLeastAsSpecializedAs(Sema &S,
   }
 
   // Figure out which template parameters were used.
-  llvm::SmallBitVector UsedParameters(TemplateParams->size());
+  llvm37::SmallBitVector UsedParameters(TemplateParams->size());
   switch (TPOC) {
   case TPOC_Call:
     for (unsigned I = 0, N = Args2.size(); I != N; ++I)
@@ -4609,7 +4609,7 @@ MarkUsedTemplateParameters(ASTContext &Ctx,
                            const TemplateArgument &TemplateArg,
                            bool OnlyDeduced,
                            unsigned Depth,
-                           llvm::SmallBitVector &Used);
+                           llvm37::SmallBitVector &Used);
 
 /// \brief Mark the template parameters that are used by the given
 /// expression.
@@ -4618,7 +4618,7 @@ MarkUsedTemplateParameters(ASTContext &Ctx,
                            const Expr *E,
                            bool OnlyDeduced,
                            unsigned Depth,
-                           llvm::SmallBitVector &Used) {
+                           llvm37::SmallBitVector &Used) {
   // We can deduce from a pack expansion.
   if (const PackExpansionExpr *Expansion = dyn_cast<PackExpansionExpr>(E))
     E = Expansion->getPattern();
@@ -4657,7 +4657,7 @@ MarkUsedTemplateParameters(ASTContext &Ctx,
                            NestedNameSpecifier *NNS,
                            bool OnlyDeduced,
                            unsigned Depth,
-                           llvm::SmallBitVector &Used) {
+                           llvm37::SmallBitVector &Used) {
   if (!NNS)
     return;
 
@@ -4674,7 +4674,7 @@ MarkUsedTemplateParameters(ASTContext &Ctx,
                            TemplateName Name,
                            bool OnlyDeduced,
                            unsigned Depth,
-                           llvm::SmallBitVector &Used) {
+                           llvm37::SmallBitVector &Used) {
   if (TemplateDecl *Template = Name.getAsTemplateDecl()) {
     if (TemplateTemplateParmDecl *TTP
           = dyn_cast<TemplateTemplateParmDecl>(Template)) {
@@ -4698,7 +4698,7 @@ static void
 MarkUsedTemplateParameters(ASTContext &Ctx, QualType T,
                            bool OnlyDeduced,
                            unsigned Depth,
-                           llvm::SmallBitVector &Used) {
+                           llvm37::SmallBitVector &Used) {
   if (T.isNull())
     return;
 
@@ -4931,7 +4931,7 @@ MarkUsedTemplateParameters(ASTContext &Ctx,
                            const TemplateArgument &TemplateArg,
                            bool OnlyDeduced,
                            unsigned Depth,
-                           llvm::SmallBitVector &Used) {
+                           llvm37::SmallBitVector &Used) {
   switch (TemplateArg.getKind()) {
   case TemplateArgument::Null:
   case TemplateArgument::Integral:
@@ -4979,7 +4979,7 @@ MarkUsedTemplateParameters(ASTContext &Ctx,
 void
 Sema::MarkUsedTemplateParameters(const TemplateArgumentList &TemplateArgs,
                                  bool OnlyDeduced, unsigned Depth,
-                                 llvm::SmallBitVector &Used) {
+                                 llvm37::SmallBitVector &Used) {
   // C++0x [temp.deduct.type]p9:
   //   If the template argument list of P contains a pack expansion that is not
   //   the last template argument, the entire template argument list is a
@@ -4997,7 +4997,7 @@ Sema::MarkUsedTemplateParameters(const TemplateArgumentList &TemplateArgs,
 /// call to the given function template.
 void Sema::MarkDeducedTemplateParameters(
     ASTContext &Ctx, const FunctionTemplateDecl *FunctionTemplate,
-    llvm::SmallBitVector &Deduced) {
+    llvm37::SmallBitVector &Deduced) {
   TemplateParameterList *TemplateParams
     = FunctionTemplate->getTemplateParameters();
   Deduced.clear();
@@ -5017,7 +5017,7 @@ bool hasDeducibleTemplateParameters(Sema &S,
 
   TemplateParameterList *TemplateParams
     = FunctionTemplate->getTemplateParameters();
-  llvm::SmallBitVector Deduced(TemplateParams->size());
+  llvm37::SmallBitVector Deduced(TemplateParams->size());
   ::MarkUsedTemplateParameters(S.Context, T, true, TemplateParams->getDepth(), 
                                Deduced);
 

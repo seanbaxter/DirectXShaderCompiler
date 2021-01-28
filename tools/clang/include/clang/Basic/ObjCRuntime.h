@@ -1,6 +1,6 @@
 //===--- ObjCRuntime.h - Objective-C Runtime Configuration ------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -12,12 +12,12 @@
 ///
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_BASIC_OBJCRUNTIME_H
-#define LLVM_CLANG_BASIC_OBJCRUNTIME_H
+#ifndef LLVM37_CLANG_BASIC_OBJCRUNTIME_H
+#define LLVM37_CLANG_BASIC_OBJCRUNTIME_H
 
 #include "clang/Basic/VersionTuple.h"
-#include "llvm/ADT/Triple.h"
-#include "llvm/Support/ErrorHandling.h"
+#include "llvm37/ADT/Triple.h"
+#include "llvm37/Support/ErrorHandling.h"
 
 namespace clang {
 
@@ -82,7 +82,7 @@ public:
     case ObjFW: return true;
     case iOS: return true;
     }
-    llvm_unreachable("bad kind");
+    llvm37_unreachable("bad kind");
   }
 
   /// The inverse of isNonFragile():  does this runtime follow the set of
@@ -90,19 +90,19 @@ public:
   bool isFragile() const { return !isNonFragile(); }
 
   /// The default dispatch mechanism to use for the specified architecture
-  bool isLegacyDispatchDefaultForArch(llvm::Triple::ArchType Arch) {
+  bool isLegacyDispatchDefaultForArch(llvm37::Triple::ArchType Arch) {
     // The GNUstep runtime uses a newer dispatch method by default from
     // version 1.6 onwards
     if (getKind() == GNUstep && getVersion() >= VersionTuple(1, 6)) {
-      if (Arch == llvm::Triple::arm ||
-          Arch == llvm::Triple::x86 ||
-          Arch == llvm::Triple::x86_64)
+      if (Arch == llvm37::Triple::arm ||
+          Arch == llvm37::Triple::x86 ||
+          Arch == llvm37::Triple::x86_64)
         return false;
     }
     else if ((getKind() ==  MacOSX) && isNonFragile() &&
              (getVersion() >= VersionTuple(10, 0)) &&
              (getVersion() < VersionTuple(10, 6)))
-        return Arch != llvm::Triple::x86_64;
+        return Arch != llvm37::Triple::x86_64;
     // Except for deployment target of 10.5 or less,
     // Mac runtimes use legacy dispatch everywhere now.
     return true;
@@ -120,7 +120,7 @@ public:
     case ObjFW:
       return true;
     }
-    llvm_unreachable("bad kind");
+    llvm37_unreachable("bad kind");
   }
 
   /// \brief Is this runtime basically of the NeXT family of runtimes?
@@ -140,7 +140,7 @@ public:
     case GNUstep: return true;
     case ObjFW: return true;
     }
-    llvm_unreachable("bad kind");
+    llvm37_unreachable("bad kind");
   }
 
   /// \brief Does this runtime natively provide the ARC entrypoints? 
@@ -158,7 +158,7 @@ public:
     case GNUstep: return getVersion() >= VersionTuple(1, 6);
     case ObjFW: return true;
     }
-    llvm_unreachable("bad kind");
+    llvm37_unreachable("bad kind");
   }
 
   /// \brief Does this runtime supports optimized setter entrypoints?
@@ -205,7 +205,7 @@ public:
     case GNUstep: return true;
     case ObjFW: return true;
     }
-    llvm_unreachable("bad kind");
+    llvm37_unreachable("bad kind");
   }
 
   /// \brief Does this runtime allow sizeof or alignof on object types?
@@ -228,7 +228,7 @@ public:
     case ObjFW:
       return false;
     }
-    llvm_unreachable("bad kind");
+    llvm37_unreachable("bad kind");
   }
 
   /// \brief Is subscripting pointer arithmetic?
@@ -249,7 +249,7 @@ public:
     case GNUstep: return false;
     case ObjFW: return false;
     }
-    llvm_unreachable("bad kind");
+    llvm37_unreachable("bad kind");
   }
 
   /// \brief Does this runtime support weakly importing classes?
@@ -262,7 +262,7 @@ public:
     case GNUstep: return true;
     case ObjFW: return true;
     }
-    llvm_unreachable("bad kind");
+    llvm37_unreachable("bad kind");
   }
 
   /// \brief Does this runtime use zero-cost exceptions?
@@ -275,7 +275,7 @@ public:
     case GNUstep: return true;
     case ObjFW: return true;
     }
-    llvm_unreachable("bad kind");
+    llvm37_unreachable("bad kind");
   }
 
   bool hasAtomicCopyHelper() const {

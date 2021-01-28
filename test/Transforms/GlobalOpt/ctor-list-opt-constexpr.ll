@@ -10,7 +10,7 @@ target triple = "x86_64-apple-darwin10.0.0"
 @H = global i32 0, align 4
 @X = global %struct.foo zeroinitializer, align 8
 @X2 = global %struct.bar zeroinitializer, align 8
-@llvm.global_ctors = appending global [2 x %0] [%0 { i32 65535, void ()* @init1 }, %0 { i32 65535, void ()* @init2 }]
+@llvm37.global_ctors = appending global [2 x %0] [%0 { i32 65535, void ()* @init1 }, %0 { i32 65535, void ()* @init2 }]
 
 ; PR8710 - GlobalOpt shouldn't change the global's initializer to have this
 ; arbitrary constant expression, the code generator can't handle it.

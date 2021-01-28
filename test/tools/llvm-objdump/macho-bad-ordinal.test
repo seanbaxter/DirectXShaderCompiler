@@ -1,4 +1,4 @@
-# RUN: llvm-objdump -macho -bind -lazy-bind %p/Inputs/bad-ordinal.macho-x86_64 \
+# RUN: llvm37-objdump -macho -bind -lazy-bind %p/Inputs/bad-ordinal.macho-x86_64 \
 # RUN:   | FileCheck %s 
 
 

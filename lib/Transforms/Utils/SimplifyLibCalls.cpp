@@ -1,6 +1,6 @@
 //===------ SimplifyLibCalls.cpp - Library calls simplifier ---------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -14,26 +14,26 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Transforms/Utils/SimplifyLibCalls.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/ADT/StringMap.h"
-#include "llvm/ADT/Triple.h"
-#include "llvm/Analysis/ValueTracking.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/DiagnosticInfo.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/IRBuilder.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/IR/Intrinsics.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/PatternMatch.h"
-#include "llvm/Support/Allocator.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Analysis/TargetLibraryInfo.h"
-#include "llvm/Transforms/Utils/BuildLibCalls.h"
+#include "llvm37/Transforms/Utils/SimplifyLibCalls.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/ADT/StringMap.h"
+#include "llvm37/ADT/Triple.h"
+#include "llvm37/Analysis/ValueTracking.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/IR/DiagnosticInfo.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/IRBuilder.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/IR/Intrinsics.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/PatternMatch.h"
+#include "llvm37/Support/Allocator.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Analysis/TargetLibraryInfo.h"
+#include "llvm37/Transforms/Utils/BuildLibCalls.h"
 
-using namespace llvm;
+using namespace llvm37;
 using namespace PatternMatch;
 
 #if 0 // HLSL Change Starts - option pending
@@ -65,7 +65,7 @@ static bool ignoreCallingConv(LibFunc::Func Func) {
   default:
     return false;
   }
-  llvm_unreachable("All cases should be covered in the switch.");
+  llvm37_unreachable("All cases should be covered in the switch.");
 }
 
 /// isOnlyUsedInZeroEqualityComparison - Return true if it only matters that the
@@ -127,7 +127,7 @@ static bool hasUnaryFloatFn(const TargetLibraryInfo *TLI, Type *Ty,
 static bool checkStringCopyLibFuncSignature(Function *F, LibFunc::Func Func) {
   const DataLayout &DL = F->getParent()->getDataLayout();
   FunctionType *FT = F->getFunctionType();
-  LLVMContext &Context = F->getContext();
+  LLVM37Context &Context = F->getContext();
   Type *PCharTy = Type::getInt8PtrTy(Context);
   Type *SizeTTy = DL.getIntPtrType(Context);
   unsigned NumParams = FT->getNumParams();
@@ -138,7 +138,7 @@ static bool checkStringCopyLibFuncSignature(Function *F, LibFunc::Func Func) {
 
   switch (Func) {
   default:
-    llvm_unreachable("Can't check signature for non-string-copy libfunc.");
+    llvm37_unreachable("Can't check signature for non-string-copy libfunc.");
   case LibFunc::stpncpy_chk:
   case LibFunc::strncpy_chk:
     --NumParams; // fallthrough
@@ -893,7 +893,7 @@ Value *LibCallSimplifier::optimizeMemCpy(CallInst *CI, IRBuilder<> &B) {
   if (!checkStringCopyLibFuncSignature(Callee, LibFunc::memcpy))
     return nullptr;
 
-  // memcpy(x, y, n) -> llvm.memcpy(x, y, n, 1)
+  // memcpy(x, y, n) -> llvm37.memcpy(x, y, n, 1)
   B.CreateMemCpy(CI->getArgOperand(0), CI->getArgOperand(1),
                  CI->getArgOperand(2), 1);
   return CI->getArgOperand(0);
@@ -905,7 +905,7 @@ Value *LibCallSimplifier::optimizeMemMove(CallInst *CI, IRBuilder<> &B) {
   if (!checkStringCopyLibFuncSignature(Callee, LibFunc::memmove))
     return nullptr;
 
-  // memmove(x, y, n) -> llvm.memmove(x, y, n, 1)
+  // memmove(x, y, n) -> llvm37.memmove(x, y, n, 1)
   B.CreateMemMove(CI->getArgOperand(0), CI->getArgOperand(1),
                   CI->getArgOperand(2), 1);
   return CI->getArgOperand(0);
@@ -917,7 +917,7 @@ Value *LibCallSimplifier::optimizeMemSet(CallInst *CI, IRBuilder<> &B) {
   if (!checkStringCopyLibFuncSignature(Callee, LibFunc::memset))
     return nullptr;
 
-  // memset(p, v, n) -> llvm.memset(p, v, n, 1)
+  // memset(p, v, n) -> llvm37.memset(p, v, n, 1)
   Value *Val = B.CreateIntCast(CI->getArgOperand(1), B.getInt8Ty(), false);
   B.CreateMemSet(CI->getArgOperand(0), Val, CI->getArgOperand(2), 1);
   return CI->getArgOperand(0);
@@ -1436,7 +1436,7 @@ Value *LibCallSimplifier::optimizeFFS(CallInst *CI, IRBuilder<> &B) {
     return B.getInt32(CI->getValue().countTrailingZeros() + 1);
   }
 
-  // ffs(x) -> x != 0 ? (i32)llvm.cttz(x)+1 : 0
+  // ffs(x) -> x != 0 ? (i32)llvm37.cttz(x)+1 : 0
   Type *ArgType = Op->getType();
   Value *F =
       Intrinsic::getDeclaration(Callee->getParent(), Intrinsic::cttz, ArgType);
@@ -1653,7 +1653,7 @@ Value *LibCallSimplifier::optimizeSPrintFString(CallInst *CI, IRBuilder<> &B) {
       if (FormatStr[i] == '%')
         return nullptr; // we found a format specifier, bail out.
 
-    // sprintf(str, fmt) -> llvm.memcpy(str, fmt, strlen(fmt)+1, 1)
+    // sprintf(str, fmt) -> llvm37.memcpy(str, fmt, strlen(fmt)+1, 1)
     B.CreateMemCpy(CI->getArgOperand(0), CI->getArgOperand(1),
                    ConstantInt::get(DL.getIntPtrType(CI->getContext()),
                                     FormatStr.size() + 1),
@@ -1682,7 +1682,7 @@ Value *LibCallSimplifier::optimizeSPrintFString(CallInst *CI, IRBuilder<> &B) {
   }
 
   if (FormatStr[1] == 's') {
-    // sprintf(dest, "%s", str) -> llvm.memcpy(dest, str, strlen(str)+1, 1)
+    // sprintf(dest, "%s", str) -> llvm37.memcpy(dest, str, strlen(str)+1, 1)
     if (!CI->getArgOperand(2)->getType()->isPointerTy())
       return nullptr;
 
@@ -1903,7 +1903,7 @@ Value *LibCallSimplifier::optimizeStringMemoryLibCall(CallInst *CI,
   if (TLI->getLibFunc(FuncName, Func) && TLI->has(Func)) {
     // Make sure we never change the calling convention.
     assert((ignoreCallingConv(Func) ||
-            CI->getCallingConv() == llvm::CallingConv::C) &&
+            CI->getCallingConv() == llvm37::CallingConv::C) &&
       "Optimizing string/memory libcall would change the calling convention");
     switch (Func) {
     case LibFunc::strcat:
@@ -1967,7 +1967,7 @@ Value *LibCallSimplifier::optimizeCall(CallInst *CI) {
   Function *Callee = CI->getCalledFunction();
   StringRef FuncName = Callee->getName();
   IRBuilder<> Builder(CI);
-  bool isCallingConvC = CI->getCallingConv() == llvm::CallingConv::C;
+  bool isCallingConvC = CI->getCallingConv() == llvm37::CallingConv::C;
 
   // Command-line parameter overrides function attribute.
   if (false) // HLSL Change - EnableUnsafeFPShrink.getNumOccurrences() > 0)
@@ -2343,7 +2343,7 @@ Value *FortifiedLibCallSimplifier::optimizeCall(CallInst *CI) {
   Function *Callee = CI->getCalledFunction();
   StringRef FuncName = Callee->getName();
   IRBuilder<> Builder(CI);
-  bool isCallingConvC = CI->getCallingConv() == llvm::CallingConv::C;
+  bool isCallingConvC = CI->getCallingConv() == llvm37::CallingConv::C;
 
   // First, check that this is a known library functions.
   if (!TLI->getLibFunc(FuncName, Func))

@@ -1,6 +1,6 @@
-//===- llvm/unittest/ADT/SmallPtrSetTest.cpp ------------------------------===//
+//===- llvm37/unittest/ADT/SmallPtrSetTest.cpp ------------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -12,9 +12,9 @@
 //===----------------------------------------------------------------------===//
 
 #include "gtest/gtest.h"
-#include "llvm/ADT/SmallPtrSet.h"
+#include "llvm37/ADT/SmallPtrSet.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 TEST(SmallPtrSetTest, Assignment) {
   int buf[8];

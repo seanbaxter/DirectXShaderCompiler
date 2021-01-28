@@ -11,7 +11,7 @@ entry:
   %conv2 = sext i32 %b to i64
   %add = add nsw i64 %conv2, %conv
   %add.off = add i64 %add, 2147483648
-; CHECK: llvm.sadd.with.overflow.i32
+; CHECK: llvm37.sadd.with.overflow.i32
   %0 = icmp ugt i64 %add.off, 4294967295
   br i1 %0, label %if.then, label %if.end
 
@@ -39,7 +39,7 @@ entry:
   
   store i64 %add.off, i64* %P
   
-; CHECK-NOT: llvm.sadd.with.overflow
+; CHECK-NOT: llvm37.sadd.with.overflow
   %0 = icmp ugt i64 %add.off, 4294967295
   br i1 %0, label %if.then, label %if.end
 
@@ -63,7 +63,7 @@ entry:
   %conv2 = sext i32 %b to i64
   %add = add nsw i64 %conv2, %conv
   %add.off = add i64 %add, 2147483648
-; CHECK-NOT: llvm.sadd.with.overflow
+; CHECK-NOT: llvm37.sadd.with.overflow
   %0 = icmp ugt i64 %add.off, 4294967295
   br i1 %0, label %if.then, label %if.end
 
@@ -86,7 +86,7 @@ entry:
   %add4 = add nsw i32 %add, 128
   %cmp = icmp ugt i32 %add4, 255
   br i1 %cmp, label %if.then, label %if.end
-; CHECK: llvm.sadd.with.overflow.i8
+; CHECK: llvm37.sadd.with.overflow.i8
 if.then:                                          ; preds = %entry
   tail call void @throwAnExceptionOrWhatever() nounwind
   unreachable
@@ -103,9 +103,9 @@ if.end:                                           ; preds = %entry
 ; we don't transform this case.
 define i32 @test8(i64 %a, i64 %b) nounwind ssp {
 entry:
-; CHECK-NOT: llvm.sadd
+; CHECK-NOT: llvm37.sadd
 ; CHECK: add i64 %a, %b
-; CHECK-NOT: llvm.sadd
+; CHECK-NOT: llvm37.sadd
 ; CHECK: ret
   %add = add i64 %a, %b
   %add.off = add i64 %add, 2147483648

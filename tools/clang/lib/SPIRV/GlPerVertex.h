@@ -1,21 +1,21 @@
 //===--- GlPerVertex.h - For handling gl_PerVertex members -------*- C++ -*-==//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_LIB_SPIRV_GLPERVERTEX_H
-#define LLVM_CLANG_LIB_SPIRV_GLPERVERTEX_H
+#ifndef LLVM37_CLANG_LIB_SPIRV_GLPERVERTEX_H
+#define LLVM37_CLANG_LIB_SPIRV_GLPERVERTEX_H
 
 #include "dxc/DXIL/DxilSemantic.h"
 #include "dxc/DXIL/DxilSigPoint.h"
 #include "clang/SPIRV/SpirvBuilder.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/Optional.h"
-#include "llvm/ADT/SmallVector.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/Optional.h"
+#include "llvm37/ADT/SmallVector.h"
 
 namespace clang {
 namespace spirv {
@@ -62,9 +62,9 @@ public:
   void generateVars(uint32_t inputArrayLength, uint32_t outputArrayLength);
 
   /// Returns the stage input variables.
-  llvm::SmallVector<SpirvVariable *, 2> getStageInVars() const;
+  llvm37::SmallVector<SpirvVariable *, 2> getStageInVars() const;
   /// Returns the stage output variables.
-  llvm::SmallVector<SpirvVariable *, 2> getStageOutVars() const;
+  llvm37::SmallVector<SpirvVariable *, 2> getStageOutVars() const;
 
   /// Tries to access the builtin translated from the given HLSL semantic of the
   /// given index.
@@ -74,7 +74,7 @@ public:
   /// the *value will be decomposed and writes to the builtins, unless
   /// noWriteBack is true, which means do not write back the value.
   ///
-  /// If invocation (should only be used for HS) is not llvm::None, only
+  /// If invocation (should only be used for HS) is not llvm37::None, only
   /// accesses the element at the invocation offset in the gl_PerVeterx array.
   ///
   /// Creates SPIR-V instructions and returns true if we are accessing builtins
@@ -82,7 +82,7 @@ public:
   /// accessing builtins for others. Returns false if errors occurs.
   bool tryToAccess(hlsl::SigPoint::Kind sigPoint, hlsl::Semantic::Kind,
                    uint32_t semanticIndex,
-                   llvm::Optional<SpirvInstruction *> invocation,
+                   llvm37::Optional<SpirvInstruction *> invocation,
                    SpirvInstruction **value, bool noWriteBack,
                    SpirvInstruction *vecComponent, SourceLocation loc);
 
@@ -113,13 +113,13 @@ private:
   /// fromValue, whose type is fromType. Necessary transformations will be
   /// generated to make sure type correctness.
   void
-  writeClipCullArrayFromType(llvm::Optional<SpirvInstruction *> invocationId,
+  writeClipCullArrayFromType(llvm37::Optional<SpirvInstruction *> invocationId,
                              bool isClip, SpirvInstruction *offset,
                              QualType fromType, SpirvInstruction *fromValue,
                              SourceLocation loc) const;
   /// Creates SPIR-V instructions to write a field in gl_PerVertex.
   bool writeField(hlsl::Semantic::Kind semanticKind, uint32_t semanticIndex,
-                  llvm::Optional<SpirvInstruction *> invocationId,
+                  llvm37::Optional<SpirvInstruction *> invocationId,
                   SpirvInstruction **value, SpirvInstruction *vecComponent,
                   SourceLocation loc);
 
@@ -128,8 +128,8 @@ private:
                           bool asInput);
 
 private:
-  using SemanticIndexToTypeMap = llvm::DenseMap<uint32_t, QualType>;
-  using SemanticIndexToArrayOffsetMap = llvm::DenseMap<uint32_t, uint32_t>;
+  using SemanticIndexToTypeMap = llvm37::DenseMap<uint32_t, QualType>;
+  using SemanticIndexToArrayOffsetMap = llvm37::DenseMap<uint32_t, uint32_t>;
 
   ASTContext &astContext;
   SpirvContext &spvContext;
@@ -168,8 +168,8 @@ private:
 
   /// Keeps track of the semantic strings provided in the source code for the
   /// builtins in gl_PerVertex.
-  llvm::SmallVector<std::string, kSemanticStrCount> inSemanticStrs;
-  llvm::SmallVector<std::string, kSemanticStrCount> outSemanticStrs;
+  llvm37::SmallVector<std::string, kSemanticStrCount> inSemanticStrs;
+  llvm37::SmallVector<std::string, kSemanticStrCount> outSemanticStrs;
 };
 
 } // end namespace spirv

@@ -1,4 +1,4 @@
-; RUN: not llvm-as < %s >/dev/null 2> %t
+; RUN: not llvm37-as < %s >/dev/null 2> %t
 ; RUN: FileCheck %s < %t
 ; Test that a vector pointer may be used with a scalar index.
 ; Test that a vector pointer and vector index should have the same vector width

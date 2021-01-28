@@ -1,6 +1,6 @@
 //===- InstCombineSimplifyDemanded.cpp ------------------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -13,12 +13,12 @@
 //===----------------------------------------------------------------------===//
 
 #include "InstCombineInternal.h"
-#include "llvm/Analysis/ValueTracking.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/IR/PatternMatch.h"
+#include "llvm37/Analysis/ValueTracking.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/IR/PatternMatch.h"
 
-using namespace llvm;
-using namespace llvm::PatternMatch;
+using namespace llvm37;
+using namespace llvm37::PatternMatch;
 
 #define DEBUG_TYPE "instcombine"
 
@@ -1126,7 +1126,7 @@ Value *InstCombiner::SimplifyDemandedVectorElts(Value *V, APInt DemandedElts,
 
     UndefElts = UndefElts2;
     if (VWidth > InVWidth) {
-      llvm_unreachable("Unimp");
+      llvm37_unreachable("Unimp");
       // If there are more elements in the result than there are in the source,
       // then an output element is undef if the corresponding input element is
       // undef.
@@ -1134,7 +1134,7 @@ Value *InstCombiner::SimplifyDemandedVectorElts(Value *V, APInt DemandedElts,
         if (UndefElts2[OutIdx/Ratio])
           UndefElts.setBit(OutIdx);
     } else if (VWidth < InVWidth) {
-      llvm_unreachable("Unimp");
+      llvm37_unreachable("Unimp");
       // If there are more elements in the source than there are in the result,
       // then a result element is undef if all of the corresponding input
       // elements are undef.
@@ -1213,7 +1213,7 @@ Value *InstCombiner::SimplifyDemandedVectorElts(Value *V, APInt DemandedElts,
             ConstantInt::get(Type::getInt32Ty(I->getContext()), 0U)), *II);
 
           switch (II->getIntrinsicID()) {
-          default: llvm_unreachable("Case stmts out of sync!");
+          default: llvm37_unreachable("Case stmts out of sync!");
           case Intrinsic::x86_sse_sub_ss:
           case Intrinsic::x86_sse2_sub_sd:
             TmpV = InsertNewInstWith(BinaryOperator::CreateFSub(LHS, RHS,

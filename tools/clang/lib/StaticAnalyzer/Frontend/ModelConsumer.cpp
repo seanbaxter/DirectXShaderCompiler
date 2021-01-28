@@ -1,6 +1,6 @@
 //===--- ModelConsumer.cpp - ASTConsumer for consuming model files --------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -26,14 +26,14 @@
 using namespace clang;
 using namespace ento;
 
-ModelConsumer::ModelConsumer(llvm::StringMap<Stmt *> &Bodies)
+ModelConsumer::ModelConsumer(llvm37::StringMap<Stmt *> &Bodies)
     : Bodies(Bodies) {}
 
 bool ModelConsumer::HandleTopLevelDecl(DeclGroupRef D) {
   for (DeclGroupRef::iterator I = D.begin(), E = D.end(); I != E; ++I) {
 
     // Only interested in definitions.
-    const FunctionDecl *func = llvm::dyn_cast<FunctionDecl>(*I);
+    const FunctionDecl *func = llvm37::dyn_cast<FunctionDecl>(*I);
     if (func && func->hasBody()) {
       Bodies.insert(std::make_pair(func->getName(), func->getBody()));
     }

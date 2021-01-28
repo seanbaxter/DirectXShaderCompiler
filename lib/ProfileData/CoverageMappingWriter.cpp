@@ -1,6 +1,6 @@
 //=-- CoverageMappingWriter.cpp - Code coverage mapping writer -------------=//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -12,10 +12,10 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/ProfileData/CoverageMappingWriter.h"
-#include "llvm/Support/LEB128.h"
+#include "llvm37/ProfileData/CoverageMappingWriter.h"
+#include "llvm37/Support/LEB128.h"
 
-using namespace llvm;
+using namespace llvm37;
 using namespace coverage;
 
 void CoverageFilenamesSectionWriter::write(raw_ostream &OS) {
@@ -31,7 +31,7 @@ namespace {
 /// regions in this function.
 class CounterExpressionsMinimizer {
   ArrayRef<CounterExpression> Expressions;
-  llvm::SmallVector<CounterExpression, 16> UsedExpressions;
+  llvm37::SmallVector<CounterExpression, 16> UsedExpressions;
   std::vector<unsigned> AdjustedExpressionIDs;
 
 public:

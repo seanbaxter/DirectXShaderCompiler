@@ -1,6 +1,6 @@
 //===--- Registry.cpp - Matcher registry -------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -15,9 +15,9 @@
 #include "clang/ASTMatchers/Dynamic/Registry.h"
 #include "Marshallers.h"
 #include "clang/ASTMatchers/ASTMatchers.h"
-#include "llvm/ADT/StringMap.h"
-#include "llvm/ADT/StringRef.h"
-#include "llvm/Support/ManagedStatic.h"
+#include "llvm37/ADT/StringMap.h"
+#include "llvm37/ADT/StringRef.h"
+#include "llvm37/Support/ManagedStatic.h"
 #include <set>
 #include <utility>
 
@@ -30,7 +30,7 @@ namespace {
 
 using internal::MatcherDescriptor;
 
-typedef llvm::StringMap<const MatcherDescriptor *> ConstructorMap;
+typedef llvm37::StringMap<const MatcherDescriptor *> ConstructorMap;
 class RegistryMaps {
 public:
   RegistryMaps();
@@ -357,22 +357,22 @@ RegistryMaps::~RegistryMaps() {
   }
 }
 
-static llvm::ManagedStatic<RegistryMaps> RegistryData;
+static llvm37::ManagedStatic<RegistryMaps> RegistryData;
 
 } // anonymous namespace
 
 // static
-llvm::Optional<MatcherCtor> Registry::lookupMatcherCtor(StringRef MatcherName) {
+llvm37::Optional<MatcherCtor> Registry::lookupMatcherCtor(StringRef MatcherName) {
   ConstructorMap::const_iterator it =
       RegistryData->constructors().find(MatcherName);
   return it == RegistryData->constructors().end()
-             ? llvm::Optional<MatcherCtor>()
+             ? llvm37::Optional<MatcherCtor>()
              : it->second;
 }
 
 namespace {
 
-llvm::raw_ostream &operator<<(llvm::raw_ostream &OS,
+llvm37::raw_ostream &operator<<(llvm37::raw_ostream &OS,
                               const std::set<ASTNodeKind> &KS) {
   unsigned Count = 0;
   for (std::set<ASTNodeKind>::const_iterator I = KS.begin(), E = KS.end();
@@ -452,7 +452,7 @@ Registry::getMatcherCompletions(ArrayRef<ArgKind> AcceptedTypes) {
 
     if (!RetKinds.empty() && MaxSpecificity > 0) {
       std::string Decl;
-      llvm::raw_string_ostream OS(Decl);
+      llvm37::raw_string_ostream OS(Decl);
 
       if (IsPolymorphic) {
         OS << "Matcher<T> " << I->first() << "(Matcher<T>";
@@ -515,9 +515,9 @@ VariantMatcher Registry::constructBoundMatcher(MatcherCtor Ctor,
   VariantMatcher Out = constructMatcher(Ctor, NameRange, Args, Error);
   if (Out.isNull()) return Out;
 
-  llvm::Optional<DynTypedMatcher> Result = Out.getSingleMatcher();
+  llvm37::Optional<DynTypedMatcher> Result = Out.getSingleMatcher();
   if (Result.hasValue()) {
-    llvm::Optional<DynTypedMatcher> Bound = Result->tryBind(BindID);
+    llvm37::Optional<DynTypedMatcher> Bound = Result->tryBind(BindID);
     if (Bound.hasValue()) {
       return VariantMatcher::SingleMatcher(*Bound);
     }

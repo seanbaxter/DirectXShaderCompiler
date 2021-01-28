@@ -1,4 +1,4 @@
-# RUN: llvm-objdump -macho -exports-trie -arch x86_64 \
+# RUN: llvm37-objdump -macho -exports-trie -arch x86_64 \
 # RUN:   %p/Inputs/exports-trie.macho-x86_64 2>/dev/null | FileCheck %s
 
 

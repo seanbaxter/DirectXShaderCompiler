@@ -1,6 +1,6 @@
 //===-- CallingConvLower.cpp - Calling Conventions ------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -12,21 +12,21 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/CodeGen/CallingConvLower.h"
-#include "llvm/CodeGen/MachineFrameInfo.h"
-#include "llvm/CodeGen/MachineRegisterInfo.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/SaveAndRestore.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Target/TargetLowering.h"
-#include "llvm/Target/TargetRegisterInfo.h"
-#include "llvm/Target/TargetSubtargetInfo.h"
-using namespace llvm;
+#include "llvm37/CodeGen/CallingConvLower.h"
+#include "llvm37/CodeGen/MachineFrameInfo.h"
+#include "llvm37/CodeGen/MachineRegisterInfo.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/SaveAndRestore.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Target/TargetLowering.h"
+#include "llvm37/Target/TargetRegisterInfo.h"
+#include "llvm37/Target/TargetSubtargetInfo.h"
+using namespace llvm37;
 
 CCState::CCState(CallingConv::ID CC, bool isVarArg, MachineFunction &mf,
-                 SmallVectorImpl<CCValAssign> &locs, LLVMContext &C)
+                 SmallVectorImpl<CCValAssign> &locs, LLVM37Context &C)
     : CallingConv(CC), IsVarArg(isVarArg), MF(mf),
       TRI(*MF.getSubtarget().getRegisterInfo()), Locs(locs), Context(C),
       CallOrPrologue(Unknown) {
@@ -78,7 +78,7 @@ CCState::AnalyzeFormalArguments(const SmallVectorImpl<ISD::InputArg> &Ins,
       dbgs() << "Formal argument #" << i << " has unhandled type "
              << EVT(ArgVT).getEVTString() << '\n';
 #endif
-      llvm_unreachable(nullptr);
+      llvm37_unreachable(nullptr);
     }
   }
 }
@@ -110,7 +110,7 @@ void CCState::AnalyzeReturn(const SmallVectorImpl<ISD::OutputArg> &Outs,
       dbgs() << "Return operand #" << i << " has unhandled type "
              << EVT(VT).getEVTString() << '\n';
 #endif
-      llvm_unreachable(nullptr);
+      llvm37_unreachable(nullptr);
     }
   }
 }
@@ -128,7 +128,7 @@ void CCState::AnalyzeCallOperands(const SmallVectorImpl<ISD::OutputArg> &Outs,
       dbgs() << "Call operand #" << i << " has unhandled type "
              << EVT(ArgVT).getEVTString() << '\n';
 #endif
-      llvm_unreachable(nullptr);
+      llvm37_unreachable(nullptr);
     }
   }
 }
@@ -146,7 +146,7 @@ void CCState::AnalyzeCallOperands(SmallVectorImpl<MVT> &ArgVTs,
       dbgs() << "Call operand #" << i << " has unhandled type "
              << EVT(ArgVT).getEVTString() << '\n';
 #endif
-      llvm_unreachable(nullptr);
+      llvm37_unreachable(nullptr);
     }
   }
 }
@@ -163,7 +163,7 @@ void CCState::AnalyzeCallResult(const SmallVectorImpl<ISD::InputArg> &Ins,
       dbgs() << "Call result #" << i << " has unhandled type "
              << EVT(VT).getEVTString() << '\n';
 #endif
-      llvm_unreachable(nullptr);
+      llvm37_unreachable(nullptr);
     }
   }
 }
@@ -175,7 +175,7 @@ void CCState::AnalyzeCallResult(MVT VT, CCAssignFn Fn) {
     dbgs() << "Call result has unhandled type "
            << EVT(VT).getEVTString() << '\n';
 #endif
-    llvm_unreachable(nullptr);
+    llvm37_unreachable(nullptr);
   }
 }
 
@@ -208,7 +208,7 @@ void CCState::getRemainingRegParmsForType(SmallVectorImpl<MCPhysReg> &Regs,
       dbgs() << "Call has unhandled type " << EVT(VT).getEVTString()
              << " while computing remaining regparms\n";
 #endif
-      llvm_unreachable(nullptr);
+      llvm37_unreachable(nullptr);
     }
     HaveRegParm = Locs.back().isRegLoc();
   }

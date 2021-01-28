@@ -1,6 +1,6 @@
 //===--- ASTImporter.h - Importing ASTs from other Contexts -----*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,15 +11,15 @@
 //  context into another context.
 //
 //===----------------------------------------------------------------------===//
-#ifndef LLVM_CLANG_AST_ASTIMPORTER_H
-#define LLVM_CLANG_AST_ASTIMPORTER_H
+#ifndef LLVM37_CLANG_AST_ASTIMPORTER_H
+#define LLVM37_CLANG_AST_ASTIMPORTER_H
 
 #include "clang/AST/DeclarationName.h"
 #include "clang/AST/Type.h"
 #include "clang/Basic/SourceLocation.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/DenseSet.h"
-#include "llvm/ADT/SmallVector.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/DenseSet.h"
+#include "llvm37/ADT/SmallVector.h"
 
 namespace clang {
   class ASTContext;
@@ -37,7 +37,7 @@ namespace clang {
   /// merging AST nodes where appropriate.
   class ASTImporter {
   public:
-    typedef llvm::DenseSet<std::pair<Decl *, Decl *> > NonEquivalentDeclSet;
+    typedef llvm37::DenseSet<std::pair<Decl *, Decl *> > NonEquivalentDeclSet;
     
   private:
     /// \brief The contexts we're importing to and from.
@@ -54,19 +54,19 @@ namespace clang {
     
     /// \brief Mapping from the already-imported types in the "from" context
     /// to the corresponding types in the "to" context.
-    llvm::DenseMap<const Type *, const Type *> ImportedTypes;
+    llvm37::DenseMap<const Type *, const Type *> ImportedTypes;
     
     /// \brief Mapping from the already-imported declarations in the "from"
     /// context to the corresponding declarations in the "to" context.
-    llvm::DenseMap<Decl *, Decl *> ImportedDecls;
+    llvm37::DenseMap<Decl *, Decl *> ImportedDecls;
 
     /// \brief Mapping from the already-imported statements in the "from"
     /// context to the corresponding statements in the "to" context.
-    llvm::DenseMap<Stmt *, Stmt *> ImportedStmts;
+    llvm37::DenseMap<Stmt *, Stmt *> ImportedStmts;
 
     /// \brief Mapping from the already-imported FileIDs in the "from" source
     /// manager to the corresponding FileIDs in the "to" source manager.
-    llvm::DenseMap<FileID, FileID> ImportedFileIDs;
+    llvm37::DenseMap<FileID, FileID> ImportedFileIDs;
     
     /// \brief Imported, anonymous tag declarations that are missing their 
     /// corresponding typedefs.
@@ -292,4 +292,4 @@ namespace clang {
   };
 }
 
-#endif // LLVM_CLANG_AST_ASTIMPORTER_H
+#endif // LLVM37_CLANG_AST_ASTIMPORTER_H

@@ -1,11 +1,11 @@
 // RUN: %dxc -E main -T cs_6_2 -Zi -Od %s | FileCheck %s
 // RUN: %dxc -E main -T cs_6_2 -Zi -Od %s -enable-16bit-types | FileCheck %s -check-prefix=CHECK16
 
-// CHECK-DAG: call void @llvm.dbg.value(metadata half 0xH3C00, i64 0, metadata !{{[0-9]+}}, metadata !{{[0-9]+}}), !dbg !{{[0-9]+}} ; var:"foo" !DIExpression(DW_OP_bit_piece, 0, 16)
-// CHECK-DAG: call void @llvm.dbg.value(metadata half 0xH4000, i64 0, metadata !{{[0-9]+}}, metadata !{{[0-9]+}}), !dbg !{{[0-9]+}} ; var:"foo" !DIExpression(DW_OP_bit_piece, 32, 16)
+// CHECK-DAG: call void @llvm37.dbg.value(metadata half 0xH3C00, i64 0, metadata !{{[0-9]+}}, metadata !{{[0-9]+}}), !dbg !{{[0-9]+}} ; var:"foo" !DIExpression(DW_OP_bit_piece, 0, 16)
+// CHECK-DAG: call void @llvm37.dbg.value(metadata half 0xH4000, i64 0, metadata !{{[0-9]+}}, metadata !{{[0-9]+}}), !dbg !{{[0-9]+}} ; var:"foo" !DIExpression(DW_OP_bit_piece, 32, 16)
 
-// CHECK16-DAG: call void @llvm.dbg.value(metadata half 0xH3C00, i64 0, metadata !{{[0-9]+}}, metadata !{{[0-9]+}}), !dbg !{{[0-9]+}} ; var:"foo" !DIExpression(DW_OP_bit_piece, 0, 16)
-// CHECK16-DAG: call void @llvm.dbg.value(metadata half 0xH4000, i64 0, metadata !{{[0-9]+}}, metadata !{{[0-9]+}}), !dbg !{{[0-9]+}} ; var:"foo" !DIExpression(DW_OP_bit_piece, 16, 16)
+// CHECK16-DAG: call void @llvm37.dbg.value(metadata half 0xH3C00, i64 0, metadata !{{[0-9]+}}, metadata !{{[0-9]+}}), !dbg !{{[0-9]+}} ; var:"foo" !DIExpression(DW_OP_bit_piece, 0, 16)
+// CHECK16-DAG: call void @llvm37.dbg.value(metadata half 0xH4000, i64 0, metadata !{{[0-9]+}}, metadata !{{[0-9]+}}), !dbg !{{[0-9]+}} ; var:"foo" !DIExpression(DW_OP_bit_piece, 16, 16)
 
 struct Foo
 {

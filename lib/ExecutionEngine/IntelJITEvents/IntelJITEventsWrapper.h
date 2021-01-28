@@ -1,6 +1,6 @@
 //===-- IntelJITEventsWrapper.h - Intel JIT Events API Wrapper --*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -20,7 +20,7 @@
 
 #include "jitprofiling.h"
 
-namespace llvm {
+namespace llvm37 {
 
 class IntelJITEventsWrapper {
   // Function pointer types for testing implementation of Intel jitprofiling
@@ -91,6 +91,6 @@ public:
   }
 };
 
-} //namespace llvm
+} //namespace llvm37
 
 #endif //INTEL_JIT_EVENTS_WRAPPER_H

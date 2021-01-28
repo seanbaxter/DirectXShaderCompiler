@@ -1,3 +1,3 @@
-add_llvm_utility(count
+add_llvm37_utility(count
   count.c
   )

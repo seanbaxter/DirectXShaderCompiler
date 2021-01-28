@@ -1,6 +1,6 @@
 //===--- GlPerVertex.cpp - GlPerVertex implementation ------------*- C++ -*-==//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -25,13 +25,13 @@ constexpr uint32_t gCullDistanceIndex = 1;
 /// \brief Returns true if the given decl has a semantic string attached and
 /// writes the info to *semanticStr, *semantic, and *semanticIndex.
 // TODO: duplication! Same as the one in DeclResultIdMapper.cpp
-bool getStageVarSemantic(const NamedDecl *decl, llvm::StringRef *semanticStr,
+bool getStageVarSemantic(const NamedDecl *decl, llvm37::StringRef *semanticStr,
                          const hlsl::Semantic **semantic,
                          uint32_t *semanticIndex) {
   for (auto *annotation : decl->getUnusualAnnotations()) {
     if (auto *sema = dyn_cast<hlsl::SemanticDecl>(annotation)) {
       *semanticStr = sema->SemanticName;
-      llvm::StringRef semanticName;
+      llvm37::StringRef semanticName;
       hlsl::Semantic::DecomposeNameAndIndex(*semanticStr, &semanticName,
                                             semanticIndex);
       *semantic = hlsl::Semantic::GetByName(semanticName);
@@ -88,8 +88,8 @@ void GlPerVertex::generateVars(uint32_t inArrayLen, uint32_t outArrayLen) {
                                            outCullArraySize, outCullPrecise);
 }
 
-llvm::SmallVector<SpirvVariable *, 2> GlPerVertex::getStageInVars() const {
-  llvm::SmallVector<SpirvVariable *, 2> vars;
+llvm37::SmallVector<SpirvVariable *, 2> GlPerVertex::getStageInVars() const {
+  llvm37::SmallVector<SpirvVariable *, 2> vars;
 
   if (inClipVar)
     vars.push_back(inClipVar);
@@ -99,8 +99,8 @@ llvm::SmallVector<SpirvVariable *, 2> GlPerVertex::getStageInVars() const {
   return vars;
 }
 
-llvm::SmallVector<SpirvVariable *, 2> GlPerVertex::getStageOutVars() const {
-  llvm::SmallVector<SpirvVariable *, 2> vars;
+llvm37::SmallVector<SpirvVariable *, 2> GlPerVertex::getStageOutVars() const {
+  llvm37::SmallVector<SpirvVariable *, 2> vars;
 
   if (outClipVar)
     vars.push_back(outClipVar);
@@ -129,7 +129,7 @@ bool GlPerVertex::recordGlPerVertexDeclFacts(const DeclaratorDecl *decl,
 bool GlPerVertex::doGlPerVertexFacts(const DeclaratorDecl *decl,
                                      QualType baseType, bool asInput) {
 
-  llvm::StringRef semanticStr;
+  llvm37::StringRef semanticStr;
   const hlsl::Semantic *semantic = {};
   uint32_t semanticIndex = {};
   bool isPrecise = decl->hasAttr<HLSLPreciseAttr>();
@@ -298,7 +298,7 @@ void GlPerVertex::calculateClipCullDistanceArraySize() {
     *totalSize = 0;
 
     // Collect all indices and sort them
-    llvm::SmallVector<uint32_t, 8> indices;
+    llvm37::SmallVector<uint32_t, 8> indices;
     for (const auto &kv : typeMap)
       indices.push_back(kv.first);
     std::sort(indices.begin(), indices.end(), std::less<uint32_t>());
@@ -314,7 +314,7 @@ void GlPerVertex::calculateClipCullDistanceArraySize() {
         (*offsetMap)[index] = *totalSize;
         *totalSize += count;
       } else {
-        llvm_unreachable("SV_ClipDistance/SV_CullDistance not float or "
+        llvm37_unreachable("SV_ClipDistance/SV_CullDistance not float or "
                          "vector of float case sneaked in");
       }
     }
@@ -330,14 +330,14 @@ SpirvVariable *GlPerVertex::createClipCullDistanceVar(bool asInput, bool isClip,
                                                       uint32_t arraySize,
                                                       bool isPrecise) {
   QualType type = astContext.getConstantArrayType(astContext.FloatTy,
-                                                  llvm::APInt(32, arraySize),
+                                                  llvm37::APInt(32, arraySize),
                                                   clang::ArrayType::Normal, 0);
 
   if (asInput && inArraySize != 0) {
-    type = astContext.getConstantArrayType(type, llvm::APInt(32, inArraySize),
+    type = astContext.getConstantArrayType(type, llvm37::APInt(32, inArraySize),
                                            clang::ArrayType::Normal, 0);
   } else if (!asInput && outArraySize != 0) {
-    type = astContext.getConstantArrayType(type, llvm::APInt(32, outArraySize),
+    type = astContext.getConstantArrayType(type, llvm37::APInt(32, outArraySize),
                                            clang::ArrayType::Normal, 0);
   }
 
@@ -358,7 +358,7 @@ SpirvVariable *GlPerVertex::createClipCullDistanceVar(bool asInput, bool isClip,
 bool GlPerVertex::tryToAccess(hlsl::SigPoint::Kind sigPointKind,
                               hlsl::Semantic::Kind semanticKind,
                               uint32_t semanticIndex,
-                              llvm::Optional<SpirvInstruction *> invocationId,
+                              llvm37::Optional<SpirvInstruction *> invocationId,
                               SpirvInstruction **value, bool noWriteBack,
                               SpirvInstruction *vecComponent,
                               SourceLocation loc) {
@@ -420,7 +420,7 @@ SpirvInstruction *GlPerVertex::readClipCullArrayAsType(
 
     if (isScalarType(asType)) {
       auto *spirvConstant = spvBuilder.getConstantInt(astContext.UnsignedIntTy,
-                                                      llvm::APInt(32, offset));
+                                                      llvm37::APInt(32, offset));
       auto *ptr = spvBuilder.createAccessChain(f32Type, clipCullVar,
                                                {spirvConstant}, loc);
       return spvBuilder.createLoad(f32Type, ptr, loc);
@@ -429,11 +429,11 @@ SpirvInstruction *GlPerVertex::readClipCullArrayAsType(
     if (isVectorType(asType, &elemType, &count)) {
       // The target SV_ClipDistance/SV_CullDistance variable is of vector
       // type, then we need to construct a vector out of float array elements.
-      llvm::SmallVector<SpirvInstruction *, 4> elements;
+      llvm37::SmallVector<SpirvInstruction *, 4> elements;
       for (uint32_t i = 0; i < count; ++i) {
         // Read elements sequentially from the float array
         auto *spirvConstant = spvBuilder.getConstantInt(
-            astContext.UnsignedIntTy, llvm::APInt(32, offset + i));
+            astContext.UnsignedIntTy, llvm37::APInt(32, offset + i));
         auto *ptr = spvBuilder.createAccessChain(f32Type, clipCullVar,
                                                  {spirvConstant}, loc);
         elements.push_back(spvBuilder.createLoad(f32Type, ptr, loc));
@@ -442,7 +442,7 @@ SpirvInstruction *GlPerVertex::readClipCullArrayAsType(
           astContext.getExtVectorType(f32Type, count), elements, loc);
     }
 
-    llvm_unreachable("SV_ClipDistance/SV_CullDistance not float or vector of "
+    llvm37_unreachable("SV_ClipDistance/SV_CullDistance not float or vector of "
                      "float case sneaked in");
   }
 
@@ -453,41 +453,41 @@ SpirvInstruction *GlPerVertex::readClipCullArrayAsType(
   // for indexing into the gl_PerVertex struct, and the third one for reading
   // the correct element in the float array for ClipDistance/CullDistance.
 
-  llvm::SmallVector<SpirvInstruction *, 8> arrayElements;
+  llvm37::SmallVector<SpirvInstruction *, 8> arrayElements;
   QualType elemType = {};
   uint32_t count = {};
   QualType arrayType = {};
 
   if (isScalarType(asType)) {
     arrayType = astContext.getConstantArrayType(
-        f32Type, llvm::APInt(32, inArraySize), clang::ArrayType::Normal, 0);
+        f32Type, llvm37::APInt(32, inArraySize), clang::ArrayType::Normal, 0);
     for (uint32_t i = 0; i < inArraySize; ++i) {
       auto *ptr = spvBuilder.createAccessChain(
           f32Type, clipCullVar,
           {spvBuilder.getConstantInt(astContext.UnsignedIntTy,
-                                     llvm::APInt(32, i)), // Block array index
+                                     llvm37::APInt(32, i)), // Block array index
            spvBuilder.getConstantInt(astContext.UnsignedIntTy,
-                                     llvm::APInt(32, offset))},
+                                     llvm37::APInt(32, offset))},
           loc);
       arrayElements.push_back(spvBuilder.createLoad(f32Type, ptr, loc));
     }
   } else if (isVectorType(asType, &elemType, &count)) {
     arrayType = astContext.getConstantArrayType(
         astContext.getExtVectorType(f32Type, count),
-        llvm::APInt(32, inArraySize), clang::ArrayType::Normal, 0);
+        llvm37::APInt(32, inArraySize), clang::ArrayType::Normal, 0);
 
     for (uint32_t i = 0; i < inArraySize; ++i) {
       // For each gl_PerVertex block, we need to read a vector from it.
-      llvm::SmallVector<SpirvInstruction *, 4> vecElements;
+      llvm37::SmallVector<SpirvInstruction *, 4> vecElements;
       for (uint32_t j = 0; j < count; ++j) {
         auto *ptr = spvBuilder.createAccessChain(
             f32Type, clipCullVar,
             // Block array index
             {spvBuilder.getConstantInt(astContext.UnsignedIntTy,
-                                       llvm::APInt(32, i)),
+                                       llvm37::APInt(32, i)),
              // Read elements sequentially from the float array
              spvBuilder.getConstantInt(astContext.UnsignedIntTy,
-                                       llvm::APInt(32, offset + j))},
+                                       llvm37::APInt(32, offset + j))},
             loc);
         vecElements.push_back(spvBuilder.createLoad(f32Type, ptr, loc));
       }
@@ -495,7 +495,7 @@ SpirvInstruction *GlPerVertex::readClipCullArrayAsType(
           astContext.getExtVectorType(f32Type, count), vecElements, loc));
     }
   } else {
-    llvm_unreachable("SV_ClipDistance/SV_CullDistance not float or vector of "
+    llvm37_unreachable("SV_ClipDistance/SV_CullDistance not float or vector of "
                      "float case sneaked in");
   }
 
@@ -535,7 +535,7 @@ bool GlPerVertex::readField(hlsl::Semantic::Kind semanticKind,
 }
 
 void GlPerVertex::writeClipCullArrayFromType(
-    llvm::Optional<SpirvInstruction *> invocationId, bool isClip,
+    llvm37::Optional<SpirvInstruction *> invocationId, bool isClip,
     SpirvInstruction *offset, QualType fromType, SpirvInstruction *fromValue,
     SourceLocation loc) const {
   auto *clipCullVar = isClip ? outClipVar : outCullVar;
@@ -564,7 +564,7 @@ void GlPerVertex::writeClipCullArrayFromType(
       for (uint32_t i = 0; i < count; ++i) {
         // Write elements sequentially into the float array
         auto *constant = spvBuilder.getConstantInt(astContext.UnsignedIntTy,
-                                                   llvm::APInt(32, i));
+                                                   llvm37::APInt(32, i));
         auto *ptr = spvBuilder.createAccessChain(
             f32Type, clipCullVar,
             {spvBuilder.createBinaryOp(spv::Op::OpIAdd,
@@ -578,7 +578,7 @@ void GlPerVertex::writeClipCullArrayFromType(
       return;
     }
 
-    llvm_unreachable("SV_ClipDistance/SV_CullDistance not float or vector of "
+    llvm37_unreachable("SV_ClipDistance/SV_CullDistance not float or vector of "
                      "float case sneaked in");
     return;
   }
@@ -617,7 +617,7 @@ void GlPerVertex::writeClipCullArrayFromType(
            spvBuilder.createBinaryOp(
                spv::Op::OpIAdd, astContext.UnsignedIntTy, offset,
                spvBuilder.getConstantInt(astContext.UnsignedIntTy,
-                                         llvm::APInt(32, i)),
+                                         llvm37::APInt(32, i)),
                loc)},
           loc);
 
@@ -628,13 +628,13 @@ void GlPerVertex::writeClipCullArrayFromType(
     return;
   }
 
-  llvm_unreachable("SV_ClipDistance/SV_CullDistance not float or vector of "
+  llvm37_unreachable("SV_ClipDistance/SV_CullDistance not float or vector of "
                    "float case sneaked in");
 }
 
 bool GlPerVertex::writeField(hlsl::Semantic::Kind semanticKind,
                              uint32_t semanticIndex,
-                             llvm::Optional<SpirvInstruction *> invocationId,
+                             llvm37::Optional<SpirvInstruction *> invocationId,
                              SpirvInstruction **value,
                              SpirvInstruction *vecComponent,
                              SourceLocation loc) {
@@ -665,7 +665,7 @@ bool GlPerVertex::writeField(hlsl::Semantic::Kind semanticKind,
     assert(offsetIter != outClipOffset.end());
     assert(typeIter != outClipType.end());
     offset = spvBuilder.getConstantInt(astContext.UnsignedIntTy,
-                                       llvm::APInt(32, offsetIter->second));
+                                       llvm37::APInt(32, offsetIter->second));
     type = typeIter->second;
     isClip = true;
     break;
@@ -677,7 +677,7 @@ bool GlPerVertex::writeField(hlsl::Semantic::Kind semanticKind,
     assert(offsetIter != outCullOffset.end());
     assert(typeIter != outCullType.end());
     offset = spvBuilder.getConstantInt(astContext.UnsignedIntTy,
-                                       llvm::APInt(32, offsetIter->second));
+                                       llvm37::APInt(32, offsetIter->second));
     type = typeIter->second;
     break;
   }

@@ -1,6 +1,6 @@
 //=-- ExplodedGraph.cpp - Local, Path-Sens. "Exploded Graph" -*- C++ -*------=//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -17,10 +17,10 @@
 #include "clang/AST/Stmt.h"
 #include "clang/StaticAnalyzer/Core/PathSensitive/CallEvent.h"
 #include "clang/StaticAnalyzer/Core/PathSensitive/ProgramState.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/DenseSet.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/ADT/Statistic.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/DenseSet.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/ADT/Statistic.h"
 #include <vector>
 
 using namespace clang;
@@ -213,7 +213,7 @@ void ExplodedGraph::reclaimRecentlyAllocatedNodes() {
 // 3. The group contains a single node.
 // 4. The group contains more than one node.
 typedef BumpVector<ExplodedNode *> ExplodedNodeVector;
-typedef llvm::PointerUnion<ExplodedNode *, ExplodedNodeVector *> GroupStorage;
+typedef llvm37::PointerUnion<ExplodedNode *, ExplodedNodeVector *> GroupStorage;
 
 void ExplodedNode::addPredecessor(ExplodedNode *V, ExplodedGraph &G) {
   assert (!V->isSink());
@@ -303,7 +303,7 @@ ExplodedNode *ExplodedGraph::getNode(const ProgramPoint &L,
                                      bool IsSink,
                                      bool* IsNew) {
   // Profile 'State' to determine if we already have an existing node.
-  llvm::FoldingSetNodeID profile;
+  llvm37::FoldingSetNodeID profile;
   void *InsertPos = nullptr;
 
   NodeTy::Profile(profile, L, State, IsSink);
@@ -344,7 +344,7 @@ ExplodedGraph::trim(ArrayRef<const NodeTy *> Sinks,
   if (Nodes.empty())
     return nullptr;
 
-  typedef llvm::DenseSet<const ExplodedNode*> Pass1Ty;
+  typedef llvm37::DenseSet<const ExplodedNode*> Pass1Ty;
   Pass1Ty Pass1;
 
   typedef InterExplodedGraphMap Pass2Ty;

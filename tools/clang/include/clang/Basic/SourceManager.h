@@ -1,6 +1,6 @@
 //===--- SourceManager.h - Track and cache source files ---------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -32,22 +32,22 @@
 ///
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_BASIC_SOURCEMANAGER_H
-#define LLVM_CLANG_BASIC_SOURCEMANAGER_H
+#ifndef LLVM37_CLANG_BASIC_SOURCEMANAGER_H
+#define LLVM37_CLANG_BASIC_SOURCEMANAGER_H
 
 #include "clang/Basic/FileManager.h"
 #include "clang/Basic/LLVM.h"
 #include "clang/Basic/SourceLocation.h"
-#include "llvm/ADT/ArrayRef.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/DenseSet.h"
-#include "llvm/ADT/IntrusiveRefCntPtr.h"
-#include "llvm/ADT/PointerIntPair.h"
-#include "llvm/ADT/PointerUnion.h"
-#include "llvm/Support/AlignOf.h"
-#include "llvm/Support/Allocator.h"
-#include "llvm/Support/DataTypes.h"
-#include "llvm/Support/MemoryBuffer.h"
+#include "llvm37/ADT/ArrayRef.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/DenseSet.h"
+#include "llvm37/ADT/IntrusiveRefCntPtr.h"
+#include "llvm37/ADT/PointerIntPair.h"
+#include "llvm37/ADT/PointerUnion.h"
+#include "llvm37/Support/AlignOf.h"
+#include "llvm37/Support/Allocator.h"
+#include "llvm37/Support/DataTypes.h"
+#include "llvm37/Support/MemoryBuffer.h"
 #include <cassert>
 #include <map>
 #include <memory>
@@ -82,7 +82,7 @@ namespace SrcMgr {
   /// \brief One instance of this struct is kept for every file loaded or used.
   ///
   /// This object owns the MemoryBuffer object.
-  class LLVM_ALIGNAS(8) ContentCache {
+  class LLVM37_ALIGNAS(8) ContentCache {
     enum CCFlags {
       /// \brief Whether the buffer is invalid.
       InvalidFlag = 0x01,
@@ -95,7 +95,7 @@ namespace SrcMgr {
     ///
     /// This is owned by the ContentCache object.  The bits indicate
     /// whether the buffer is invalid.
-    mutable llvm::PointerIntPair<llvm::MemoryBuffer *, 2> Buffer;
+    mutable llvm37::PointerIntPair<llvm37::MemoryBuffer *, 2> Buffer;
 
   public:
     /// \brief Reference to the file entry representing this ContentCache.
@@ -168,7 +168,7 @@ namespace SrcMgr {
     ///   will be emitted at.
     ///
     /// \param Invalid If non-NULL, will be set \c true if an error occurred.
-    llvm::MemoryBuffer *getBuffer(DiagnosticsEngine &Diag,
+    llvm37::MemoryBuffer *getBuffer(DiagnosticsEngine &Diag,
                                   const SourceManager &SM,
                                   SourceLocation Loc = SourceLocation(),
                                   bool *Invalid = nullptr) const;
@@ -189,9 +189,9 @@ namespace SrcMgr {
 
     /// Returns the kind of memory used to back the memory buffer for
     /// this content cache.  This is used for performance analysis.
-    llvm::MemoryBuffer::BufferKind getMemoryBufferKind() const;
+    llvm37::MemoryBuffer::BufferKind getMemoryBufferKind() const;
 
-    void setBuffer(std::unique_ptr<llvm::MemoryBuffer> B) {
+    void setBuffer(std::unique_ptr<llvm37::MemoryBuffer> B) {
       assert(!Buffer.getPointer() && "MemoryBuffer already set.");
       Buffer.setPointer(B.release());
       Buffer.setInt(0);
@@ -199,11 +199,11 @@ namespace SrcMgr {
 
     /// \brief Get the underlying buffer, returning NULL if the buffer is not
     /// yet available.
-    llvm::MemoryBuffer *getRawBuffer() const { return Buffer.getPointer(); }
+    llvm37::MemoryBuffer *getRawBuffer() const { return Buffer.getPointer(); }
 
     /// \brief Replace the existing buffer (which will be deleted)
     /// with the given buffer.
-    void replaceBuffer(llvm::MemoryBuffer *B, bool DoNotFree = false);
+    void replaceBuffer(llvm37::MemoryBuffer *B, bool DoNotFree = false);
 
     /// \brief Determine whether the buffer itself is invalid.
     bool isBufferInvalid() const {
@@ -222,7 +222,7 @@ namespace SrcMgr {
 
   // Assert that the \c ContentCache objects will always be 8-byte aligned so
   // that we can pack 3 bits of integer into pointers to such objects.
-  static_assert(llvm::AlignOf<ContentCache>::Alignment >= 8,
+  static_assert(llvm37::AlignOf<ContentCache>::Alignment >= 8,
                 "ContentCache must be 8-byte aligned.");
 
   /// \brief Information about a FileID, basically just the logical file
@@ -542,7 +542,7 @@ class SourceManager : public RefCountedBase<SourceManager> {
 
   FileManager &FileMgr;
 
-  mutable llvm::BumpPtrAllocator ContentCacheAlloc;
+  mutable llvm37::BumpPtrAllocator ContentCacheAlloc;
 
   /// \brief Memoized information about all of the files tracked by this
   /// SourceManager.
@@ -550,7 +550,7 @@ class SourceManager : public RefCountedBase<SourceManager> {
   /// This map allows us to merge ContentCache entries based
   /// on their FileEntry*.  All ContentCache objects will thus have unique,
   /// non-null, FileEntry pointers.
-  llvm::DenseMap<const FileEntry*, SrcMgr::ContentCache*> FileInfos;
+  llvm37::DenseMap<const FileEntry*, SrcMgr::ContentCache*> FileInfos;
 
   /// \brief True if the ContentCache for files that are overridden by other
   /// files, should report the original file name. Defaults to true.
@@ -563,9 +563,9 @@ class SourceManager : public RefCountedBase<SourceManager> {
   struct OverriddenFilesInfoTy {
     /// \brief Files that have been overridden with the contents from another
     /// file.
-    llvm::DenseMap<const FileEntry *, const FileEntry *> OverriddenFiles;
+    llvm37::DenseMap<const FileEntry *, const FileEntry *> OverriddenFiles;
     /// \brief Files that were overridden with a memory buffer.
-    llvm::DenseSet<const FileEntry *> OverriddenFilesWithBuffer;
+    llvm37::DenseSet<const FileEntry *> OverriddenFilesWithBuffer;
   };
 
   /// \brief Lazily create the object keeping overridden files info, since
@@ -652,14 +652,14 @@ class SourceManager : public RefCountedBase<SourceManager> {
   ///
   /// Used to cache results from and speed-up \c getDecomposedIncludedLoc
   /// function.
-  mutable llvm::DenseMap<FileID, std::pair<FileID, unsigned> > IncludedLocMap;
+  mutable llvm37::DenseMap<FileID, std::pair<FileID, unsigned> > IncludedLocMap;
 
   /// The key value into the IsBeforeInTUCache table.
   typedef std::pair<FileID, FileID> IsBeforeInTUCacheKey;
 
   /// The IsBeforeInTranslationUnitCache is a mapping from FileID pairs
   /// to cache results.
-  typedef llvm::DenseMap<IsBeforeInTUCacheKey, InBeforeInTUCacheEntry>
+  typedef llvm37::DenseMap<IsBeforeInTUCacheKey, InBeforeInTUCacheEntry>
           InBeforeInTUCache;
 
   /// Cache results for the isBeforeInTranslationUnit method.
@@ -671,7 +671,7 @@ class SourceManager : public RefCountedBase<SourceManager> {
   InBeforeInTUCacheEntry &getInBeforeInTUCache(FileID LFID, FileID RFID) const;
 
   // Cache for the "fake" buffer used for error-recovery purposes.
-  mutable std::unique_ptr<llvm::MemoryBuffer> FakeBufferForRecovery;
+  mutable std::unique_ptr<llvm37::MemoryBuffer> FakeBufferForRecovery;
 
   mutable std::unique_ptr<SrcMgr::ContentCache> FakeContentCacheForRecovery;
 
@@ -679,7 +679,7 @@ class SourceManager : public RefCountedBase<SourceManager> {
   /// source location.
   typedef std::map<unsigned, SourceLocation> MacroArgsMap;
 
-  mutable llvm::DenseMap<FileID, MacroArgsMap *> MacroArgsCacheMap;
+  mutable llvm37::DenseMap<FileID, MacroArgsMap *> MacroArgsCacheMap;
 
   /// \brief The stack of modules being built, which is used to detect
   /// cycles in the module dependency graph as modules are being built, as
@@ -774,7 +774,7 @@ public:
   ///
   /// This does no caching of the buffer and takes ownership of the
   /// MemoryBuffer, so only pass a MemoryBuffer to this once.
-  FileID createFileID(std::unique_ptr<llvm::MemoryBuffer> Buffer,
+  FileID createFileID(std::unique_ptr<llvm37::MemoryBuffer> Buffer,
                       SrcMgr::CharacteristicKind FileCharacter = SrcMgr::C_User,
                       int LoadedID = 0, unsigned LoadedOffset = 0,
                       SourceLocation IncludeLoc = SourceLocation()) {
@@ -804,7 +804,7 @@ public:
   ///
   /// \param Invalid If non-NULL, will be set \c true if an error
   /// occurs while retrieving the memory buffer.
-  llvm::MemoryBuffer *getMemoryBufferForFile(const FileEntry *File,
+  llvm37::MemoryBuffer *getMemoryBufferForFile(const FileEntry *File,
                                              bool *Invalid = nullptr);
 
   /// \brief Override the contents of the given source file by providing an
@@ -818,9 +818,9 @@ public:
   /// \param DoNotFree If true, then the buffer will not be freed when the
   /// source manager is destroyed.
   void overrideFileContents(const FileEntry *SourceFile,
-                            llvm::MemoryBuffer *Buffer, bool DoNotFree);
+                            llvm37::MemoryBuffer *Buffer, bool DoNotFree);
   void overrideFileContents(const FileEntry *SourceFile,
-                            std::unique_ptr<llvm::MemoryBuffer> Buffer) {
+                            std::unique_ptr<llvm37::MemoryBuffer> Buffer) {
     overrideFileContents(SourceFile, Buffer.release(), /*DoNotFree*/ false);
   }
 
@@ -859,7 +859,7 @@ public:
   ///
   /// If there is an error opening this buffer the first time, this
   /// manufactures a temporary buffer and returns a non-empty error string.
-  llvm::MemoryBuffer *getBuffer(FileID FID, SourceLocation Loc,
+  llvm37::MemoryBuffer *getBuffer(FileID FID, SourceLocation Loc,
                                 bool *Invalid = nullptr) const {
     bool MyInvalid = false;
     const SrcMgr::SLocEntry &Entry = getSLocEntry(FID, &MyInvalid);
@@ -874,7 +874,7 @@ public:
                                                         Invalid);
   }
 
-  llvm::MemoryBuffer *getBuffer(FileID FID, bool *Invalid = nullptr) const {
+  llvm37::MemoryBuffer *getBuffer(FileID FID, bool *Invalid = nullptr) const {
     bool MyInvalid = false;
     const SrcMgr::SLocEntry &Entry = getSLocEntry(FID, &MyInvalid);
     if (MyInvalid || !Entry.isFile()) {
@@ -1451,7 +1451,7 @@ public:
   }
 
   // Iterators over FileInfos.
-  typedef llvm::DenseMap<const FileEntry*, SrcMgr::ContentCache*>
+  typedef llvm37::DenseMap<const FileEntry*, SrcMgr::ContentCache*>
       ::const_iterator fileinfo_iterator;
   fileinfo_iterator fileinfo_begin() const { return FileInfos.begin(); }
   fileinfo_iterator fileinfo_end() const { return FileInfos.end(); }
@@ -1549,7 +1549,7 @@ public:
   }
 
 private:
-  llvm::MemoryBuffer *getFakeBufferForRecovery() const;
+  llvm37::MemoryBuffer *getFakeBufferForRecovery() const;
   const SrcMgr::ContentCache *getFakeContentCacheForRecovery() const;
 
   const SrcMgr::SLocEntry &loadSLocEntry(unsigned Index, bool *Invalid) const;
@@ -1619,7 +1619,7 @@ private:
 
   /// \brief Create a new ContentCache for the specified  memory buffer.
   const SrcMgr::ContentCache *
-  createMemBufferContentCache(std::unique_ptr<llvm::MemoryBuffer> Buf);
+  createMemBufferContentCache(std::unique_ptr<llvm37::MemoryBuffer> Buf);
 
   FileID getFileIDSlow(unsigned SLocOffset) const;
   FileID getFileIDLocal(unsigned SLocOffset) const;

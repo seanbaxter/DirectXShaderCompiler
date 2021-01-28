@@ -1,6 +1,6 @@
-//===---- llvm/MDBuilder.cpp - Builder for LLVM metadata ------------------===//
+//===---- llvm37/MDBuilder.cpp - Builder for LLVM37 metadata ------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -8,14 +8,14 @@
 //===----------------------------------------------------------------------===//
 //
 // This file defines the MDBuilder class, which is used as a convenient way to
-// create LLVM metadata with a consistent and simplified interface.
+// create LLVM37 metadata with a consistent and simplified interface.
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/IR/MDBuilder.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/Metadata.h"
-using namespace llvm;
+#include "llvm37/IR/MDBuilder.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/Metadata.h"
+using namespace llvm37;
 
 MDString *MDBuilder::createString(StringRef Str) {
   return MDString::get(Context, Str);

@@ -1,4 +1,4 @@
-; RUN: llvm-as < %s | llvm-dis -disable-output
+; RUN: llvm37-as < %s | llvm37-dis -disable-output
 ; RUN: verify-uselistorder < %s
 ; PR4373
 

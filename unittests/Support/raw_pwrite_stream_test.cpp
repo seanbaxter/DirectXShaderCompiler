@@ -1,6 +1,6 @@
 //===- raw_pwrite_stream_test.cpp - raw_pwrite_stream tests ---------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -8,11 +8,11 @@
 //===----------------------------------------------------------------------===//
 
 #include "gtest/gtest.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/Support/FileSystem.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/Support/FileSystem.h"
+#include "llvm37/Support/raw_ostream.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 namespace {
 
@@ -50,7 +50,7 @@ TEST(raw_pwrite_ostreamTest, TestFD) {
 #endif
 }
 
-#ifdef LLVM_ON_UNIX
+#ifdef LLVM37_ON_UNIX
 TEST(raw_pwrite_ostreamTest, TestDevNull) {
   int FD;
   sys::fs::openFileForWrite("/dev/null", FD, sys::fs::F_None);

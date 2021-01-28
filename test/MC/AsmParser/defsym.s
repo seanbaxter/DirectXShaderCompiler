@@ -1,4 +1,4 @@
-# RUN: llvm-mc -filetype=obj -triple=i386-unknown-elf -defsym a=7 -defsym b=11 %s | llvm-objdump -t - | FileCheck %s
+# RUN: llvm37-mc -filetype=obj -triple=i386-unknown-elf -defsym a=7 -defsym b=11 %s | llvm37-objdump -t - | FileCheck %s
 
 .ifndef a
 .err 

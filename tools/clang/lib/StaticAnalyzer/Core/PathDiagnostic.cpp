@@ -1,6 +1,6 @@
 //===--- PathDiagnostic.cpp - Path-Specific Diagnostic Handling -*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -21,9 +21,9 @@
 #include "clang/AST/StmtCXX.h"
 #include "clang/Basic/SourceManager.h"
 #include "clang/StaticAnalyzer/Core/PathSensitive/ExplodedGraph.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/ADT/StringExtras.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/ADT/StringExtras.h"
+#include "llvm37/Support/raw_ostream.h"
 
 using namespace clang;
 using namespace ento;
@@ -173,7 +173,7 @@ void PathDiagnostic::resetDiagnosticLocationToMainFile() {
       const NamedDecl *ND = dyn_cast<NamedDecl>(CP->getCallee());
       if (ND) {
         SmallString<200> buf;
-        llvm::raw_svector_ostream os(buf);
+        llvm37::raw_svector_ostream os(buf);
         os << " (within a call to '" << ND->getDeclName() << "')";
         appendToDesc(os.str());
       }
@@ -191,7 +191,7 @@ void PathDiagnosticConsumer::anchor() { }
 
 PathDiagnosticConsumer::~PathDiagnosticConsumer() {
   // Delete the contents of the FoldingSet if it isn't empty already.
-  for (llvm::FoldingSet<PathDiagnostic>::iterator it =
+  for (llvm37::FoldingSet<PathDiagnostic>::iterator it =
        Diags.begin(), et = Diags.end() ; it != et ; ++it) {
     delete &*it;
   }
@@ -257,7 +257,7 @@ void PathDiagnosticConsumer::HandlePathDiagnostic(
   }  
 
   // Profile the node to see if we already have something matching it
-  llvm::FoldingSetNodeID profile;
+  llvm37::FoldingSetNodeID profile;
   D->Profile(profile);
   void *InsertPos = nullptr;
 
@@ -357,7 +357,7 @@ static Optional<bool> comparePiece(const PathDiagnosticPiece &X,
       return compareCall(cast<PathDiagnosticCallPiece>(X),
                          cast<PathDiagnosticCallPiece>(Y));
   }
-  llvm_unreachable("all cases handled");
+  llvm37_unreachable("all cases handled");
 }
 
 static Optional<bool> comparePath(const PathPieces &X, const PathPieces &Y) {
@@ -424,7 +424,7 @@ void PathDiagnosticConsumer::FlushDiagnostics(
   flushed = true;
   
   std::vector<const PathDiagnostic *> BatchDiags;
-  for (llvm::FoldingSet<PathDiagnostic>::iterator it = Diags.begin(),
+  for (llvm37::FoldingSet<PathDiagnostic>::iterator it = Diags.begin(),
        et = Diags.end(); it != et; ++it) {
     const PathDiagnostic *D = &*it;
     BatchDiags.push_back(D);
@@ -463,7 +463,7 @@ PathDiagnosticConsumer::FilesMade::~FilesMade() {
 void PathDiagnosticConsumer::FilesMade::addDiagnostic(const PathDiagnostic &PD,
                                                       StringRef ConsumerName,
                                                       StringRef FileName) {
-  llvm::FoldingSetNodeID NodeID;
+  llvm37::FoldingSetNodeID NodeID;
   NodeID.Add(PD);
   void *InsertPos;
   PDFileEntry *Entry = Set.FindNodeOrInsertPos(NodeID, InsertPos);
@@ -484,7 +484,7 @@ void PathDiagnosticConsumer::FilesMade::addDiagnostic(const PathDiagnostic &PD,
 
 PathDiagnosticConsumer::PDFileEntry::ConsumerFiles *
 PathDiagnosticConsumer::FilesMade::getFiles(const PathDiagnostic &PD) {
-  llvm::FoldingSetNodeID NodeID;
+  llvm37::FoldingSetNodeID NodeID;
   NodeID.Add(PD);
   void *InsertPos;
   PDFileEntry *Entry = Set.FindNodeOrInsertPos(NodeID, InsertPos);
@@ -574,10 +574,10 @@ getLocationForCaller(const StackFrameContext *SFC,
   }
   case CFGElement::TemporaryDtor:
   case CFGElement::NewAllocator:
-    llvm_unreachable("not yet implemented!");
+    llvm37_unreachable("not yet implemented!");
   }
 
-  llvm_unreachable("Unknown CFGElement kind");
+  llvm37_unreachable("Unknown CFGElement kind");
 }
 
 
@@ -687,7 +687,7 @@ PathDiagnosticLocation
                                 CEE->getLocationContext(),
                                 SMng);
   } else {
-    llvm_unreachable("Unexpected ProgramPoint");
+    llvm37_unreachable("Unexpected ProgramPoint");
   }
 
   return PathDiagnosticLocation(S, SMng, P.getLocationContext());
@@ -987,7 +987,7 @@ PathDiagnosticCallPiece::getCallEnterEvent() const {
     return nullptr;
 
   SmallString<256> buf;
-  llvm::raw_svector_ostream Out(buf);
+  llvm37::raw_svector_ostream Out(buf);
 
   Out << "Calling ";
   describeCodeDecl(Out, Callee, /*ExtendedDescription=*/true);
@@ -1007,7 +1007,7 @@ PathDiagnosticCallPiece::getCallEnterWithinCallerEvent() const {
       return nullptr;
 
   SmallString<256> buf;
-  llvm::raw_svector_ostream Out(buf);
+  llvm37::raw_svector_ostream Out(buf);
 
   Out << "Entered call";
   describeCodeDecl(Out, Caller, /*ExtendedDescription=*/false, " from ");
@@ -1021,7 +1021,7 @@ PathDiagnosticCallPiece::getCallExitEvent() const {
     return nullptr;
 
   SmallString<256> buf;
-  llvm::raw_svector_ostream Out(buf);
+  llvm37::raw_svector_ostream Out(buf);
 
   if (!CallStackMessage.empty()) {
     Out << CallStackMessage;
@@ -1060,14 +1060,14 @@ unsigned PathDiagnostic::full_size() {
 // FoldingSet profiling methods.
 //===----------------------------------------------------------------------===//
 
-void PathDiagnosticLocation::Profile(llvm::FoldingSetNodeID &ID) const {
+void PathDiagnosticLocation::Profile(llvm37::FoldingSetNodeID &ID) const {
   ID.AddInteger(Range.getBegin().getRawEncoding());
   ID.AddInteger(Range.getEnd().getRawEncoding());
   ID.AddInteger(Loc.getRawEncoding());
   return;
 }
 
-void PathDiagnosticPiece::Profile(llvm::FoldingSetNodeID &ID) const {
+void PathDiagnosticPiece::Profile(llvm37::FoldingSetNodeID &ID) const {
   ID.AddInteger((unsigned) getKind());
   ID.AddString(str);
   // FIXME: Add profiling support for code hints.
@@ -1080,7 +1080,7 @@ void PathDiagnosticPiece::Profile(llvm::FoldingSetNodeID &ID) const {
   }  
 }
 
-void PathDiagnosticCallPiece::Profile(llvm::FoldingSetNodeID &ID) const {
+void PathDiagnosticCallPiece::Profile(llvm37::FoldingSetNodeID &ID) const {
   PathDiagnosticPiece::Profile(ID);
   for (PathPieces::const_iterator it = path.begin(), 
        et = path.end(); it != et; ++it) {
@@ -1088,32 +1088,32 @@ void PathDiagnosticCallPiece::Profile(llvm::FoldingSetNodeID &ID) const {
   }
 }
 
-void PathDiagnosticSpotPiece::Profile(llvm::FoldingSetNodeID &ID) const {
+void PathDiagnosticSpotPiece::Profile(llvm37::FoldingSetNodeID &ID) const {
   PathDiagnosticPiece::Profile(ID);
   ID.Add(Pos);
 }
 
-void PathDiagnosticControlFlowPiece::Profile(llvm::FoldingSetNodeID &ID) const {
+void PathDiagnosticControlFlowPiece::Profile(llvm37::FoldingSetNodeID &ID) const {
   PathDiagnosticPiece::Profile(ID);
   for (const_iterator I = begin(), E = end(); I != E; ++I)
     ID.Add(*I);
 }
 
-void PathDiagnosticMacroPiece::Profile(llvm::FoldingSetNodeID &ID) const {
+void PathDiagnosticMacroPiece::Profile(llvm37::FoldingSetNodeID &ID) const {
   PathDiagnosticSpotPiece::Profile(ID);
   for (PathPieces::const_iterator I = subPieces.begin(), E = subPieces.end();
        I != E; ++I)
     ID.Add(**I);
 }
 
-void PathDiagnostic::Profile(llvm::FoldingSetNodeID &ID) const {
+void PathDiagnostic::Profile(llvm37::FoldingSetNodeID &ID) const {
   ID.Add(getLocation());
   ID.AddString(BugType);
   ID.AddString(VerboseDesc);
   ID.AddString(Category);
 }
 
-void PathDiagnostic::FullProfile(llvm::FoldingSetNodeID &ID) const {
+void PathDiagnostic::FullProfile(llvm37::FoldingSetNodeID &ID) const {
   Profile(ID);
   for (PathPieces::const_iterator I = path.begin(), E = path.end(); I != E; ++I)
     ID.Add(**I);
@@ -1176,9 +1176,9 @@ std::string StackHintGeneratorForSymbol::getMessageForArg(const Expr *ArgE,
   ++ArgIndex;
 
   SmallString<200> buf;
-  llvm::raw_svector_ostream os(buf);
+  llvm37::raw_svector_ostream os(buf);
 
-  os << Msg << " via " << ArgIndex << llvm::getOrdinalSuffix(ArgIndex)
+  os << Msg << " via " << ArgIndex << llvm37::getOrdinalSuffix(ArgIndex)
      << " parameter";
 
   return os.str();

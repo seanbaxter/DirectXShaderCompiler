@@ -1,33 +1,33 @@
-llvm-cov - emit coverage information
+llvm37-cov - emit coverage information
 ====================================
 
 SYNOPSIS
 --------
 
-:program:`llvm-cov` *command* [*args...*]
+:program:`llvm37-cov` *command* [*args...*]
 
 DESCRIPTION
 -----------
 
-The :program:`llvm-cov` tool shows code coverage information for
+The :program:`llvm37-cov` tool shows code coverage information for
 programs that are instrumented to emit profile data. It can be used to
 work with ``gcov``\-style coverage or with ``clang``\'s instrumentation
 based profiling.
 
 If the program is invoked with a base name of ``gcov``, it will behave as if
-the :program:`llvm-cov gcov` command were called. Otherwise, a command should
+the :program:`llvm37-cov gcov` command were called. Otherwise, a command should
 be provided.
 
 COMMANDS
 --------
 
-* :ref:`gcov <llvm-cov-gcov>`
-* :ref:`show <llvm-cov-show>`
-* :ref:`report <llvm-cov-report>`
+* :ref:`gcov <llvm37-cov-gcov>`
+* :ref:`show <llvm37-cov-show>`
+* :ref:`report <llvm37-cov-report>`
 
-.. program:: llvm-cov gcov
+.. program:: llvm37-cov gcov
 
-.. _llvm-cov-gcov:
+.. _llvm37-cov-gcov:
 
 GCOV COMMAND
 ------------
@@ -35,17 +35,17 @@ GCOV COMMAND
 SYNOPSIS
 ^^^^^^^^
 
-:program:`llvm-cov gcov` [*options*] *SOURCEFILE*
+:program:`llvm37-cov gcov` [*options*] *SOURCEFILE*
 
 DESCRIPTION
 ^^^^^^^^^^^
 
-The :program:`llvm-cov gcov` tool reads code coverage data files and displays
+The :program:`llvm37-cov gcov` tool reads code coverage data files and displays
 the coverage information for a specified source file. It is compatible with the
 ``gcov`` tool from version 4.2 of ``GCC`` and may also be compatible with some
 later versions of ``gcov``.
 
-To use :program:`llvm-cov gcov`, you must first build an instrumented version
+To use :program:`llvm37-cov gcov`, you must first build an instrumented version
 of your application that collects coverage data as it runs. Compile with the
 ``-fprofile-arcs`` and ``-ftest-coverage`` options to add the
 instrumentation. (Alternatively, you can use the ``--coverage`` option, which
@@ -70,9 +70,9 @@ directories, the prefix from the ``GCOV_PREFIX`` variable is added. These
 environment variables allow you to run the instrumented program on a machine
 where the original object file directories are not accessible, but you will
 then need to copy the ``.gcda`` files back to the object file directories
-where :program:`llvm-cov gcov` expects to find them.
+where :program:`llvm37-cov gcov` expects to find them.
 
-Once you have generated the coverage data files, run :program:`llvm-cov gcov`
+Once you have generated the coverage data files, run :program:`llvm37-cov gcov`
 for each main source file where you want to examine the coverage results. This
 should be run from the same directory where you previously ran the
 compiler. The results for the specified source file are written to a file named
@@ -91,7 +91,7 @@ OPTIONS
 .. option:: -a, --all-blocks
 
  Display all basic blocks. If there are multiple blocks for a single line of
- source code, this option causes llvm-cov to show the count for each block
+ source code, this option causes llvm37-cov to show the count for each block
  instead of just one count for the entire line.
 
 .. option:: -b, --branch-probabilities
@@ -147,18 +147,18 @@ OPTIONS
 
 .. option:: -version
 
- Display the version of llvm-cov.
+ Display the version of llvm37-cov.
 
 EXIT STATUS
 ^^^^^^^^^^^
 
-:program:`llvm-cov gcov` returns 1 if it cannot read input files.  Otherwise,
+:program:`llvm37-cov gcov` returns 1 if it cannot read input files.  Otherwise,
 it exits with zero.
 
 
-.. program:: llvm-cov show
+.. program:: llvm37-cov show
 
-.. _llvm-cov-show:
+.. _llvm37-cov-show:
 
 SHOW COMMAND
 ------------
@@ -166,27 +166,27 @@ SHOW COMMAND
 SYNOPSIS
 ^^^^^^^^
 
-:program:`llvm-cov show` [*options*] -instr-profile *PROFILE* *BIN* [*SOURCES*]
+:program:`llvm37-cov show` [*options*] -instr-profile *PROFILE* *BIN* [*SOURCES*]
 
 DESCRIPTION
 ^^^^^^^^^^^
 
-The :program:`llvm-cov show` command shows line by line coverage of a binary
+The :program:`llvm37-cov show` command shows line by line coverage of a binary
 *BIN* using the profile data *PROFILE*. It can optionally be filtered to only
 show the coverage for the files listed in *SOURCES*.
 
-To use :program:`llvm-cov show`, you need a program that is compiled with
+To use :program:`llvm37-cov show`, you need a program that is compiled with
 instrumentation to emit profile and coverage data. To build such a program with
 ``clang`` use the ``-fprofile-instr-generate`` and ``-fcoverage-mapping``
 flags. If linking with the ``clang`` driver, pass ``-fprofile-instr-generate``
 to the link stage to make sure the necessary runtime libraries are linked in.
 
 The coverage information is stored in the built executable or library itself,
-and this is what you should pass to :program:`llvm-cov show` as the *BIN*
+and this is what you should pass to :program:`llvm37-cov show` as the *BIN*
 argument. The profile data is generated by running this instrumented program
 normally. When the program exits it will write out a raw profile file,
 typically called ``default.profraw``, which can be converted to a format that
-is suitable for the *PROFILE* argument using the :program:`llvm-profdata merge`
+is suitable for the *PROFILE* argument using the :program:`llvm37-profdata merge`
 tool.
 
 OPTIONS
@@ -256,9 +256,9 @@ OPTIONS
  Show code coverage only for functions with region coverage less than the given
  threshold.
 
-.. program:: llvm-cov report
+.. program:: llvm37-cov report
 
-.. _llvm-cov-report:
+.. _llvm37-cov-report:
 
 REPORT COMMAND
 --------------
@@ -266,12 +266,12 @@ REPORT COMMAND
 SYNOPSIS
 ^^^^^^^^
 
-:program:`llvm-cov report` [*options*] -instr-profile *PROFILE* *BIN* [*SOURCES*]
+:program:`llvm37-cov report` [*options*] -instr-profile *PROFILE* *BIN* [*SOURCES*]
 
 DESCRIPTION
 ^^^^^^^^^^^
 
-The :program:`llvm-cov report` command displays a summary of the coverage of a
+The :program:`llvm37-cov report` command displays a summary of the coverage of a
 binary *BIN* using the profile data *PROFILE*. It can optionally be filtered to
 only show the coverage for the files listed in *SOURCES*.
 
@@ -280,7 +280,7 @@ coverage data. If any files are provided, summaries are shown for each function
 in the listed files instead.
 
 For information on compiling programs for coverage and generating profile data,
-see :ref:`llvm-cov-show`.
+see :ref:`llvm37-cov-show`.
 
 OPTIONS
 ^^^^^^^

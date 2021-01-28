@@ -1,6 +1,6 @@
 //===-- RuntimeDyld.cpp - Run-time dynamic linker for MC-JIT ----*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,19 +11,19 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/ExecutionEngine/RuntimeDyld.h"
+#include "llvm37/ExecutionEngine/RuntimeDyld.h"
 #include "RuntimeDyldCheckerImpl.h"
 #include "RuntimeDyldCOFF.h"
 #include "RuntimeDyldELF.h"
 #include "RuntimeDyldImpl.h"
 #include "RuntimeDyldMachO.h"
-#include "llvm/Object/ELFObjectFile.h"
-#include "llvm/Object/COFF.h"
-#include "llvm/Support/MathExtras.h"
-#include "llvm/Support/MutexGuard.h"
+#include "llvm37/Object/ELFObjectFile.h"
+#include "llvm37/Object/COFF.h"
+#include "llvm37/Support/MathExtras.h"
+#include "llvm37/Support/MutexGuard.h"
 
-using namespace llvm;
-using namespace llvm::object;
+using namespace llvm37;
+using namespace llvm37::object;
 
 #define DEBUG_TYPE "dyld"
 
@@ -33,7 +33,7 @@ RuntimeDyldImpl::~RuntimeDyldImpl() {}
 // Pin LoadedObjectInfo's vtables to this file.
 void RuntimeDyld::LoadedObjectInfo::anchor() {}
 
-namespace llvm {
+namespace llvm37 {
 
 void RuntimeDyldImpl::registerEHFrames() {}
 
@@ -110,7 +110,7 @@ void RuntimeDyldImpl::mapSectionAddress(const void *LocalAddress,
       return;
     }
   }
-  llvm_unreachable("Attempting to remap address of unknown section!");
+  llvm37_unreachable("Attempting to remap address of unknown section!");
 }
 
 static std::error_code getOffset(const SymbolRef &Sym, SectionRef Sec,
@@ -938,4 +938,4 @@ void RuntimeDyld::deregisterEHFrames() {
     Dyld->deregisterEHFrames();
 }
 
-} // end namespace llvm
+} // end namespace llvm37

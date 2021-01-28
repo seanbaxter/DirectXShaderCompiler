@@ -1,6 +1,6 @@
 //===--- GlobalModuleIndex.h - Global Module Index --------------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -13,18 +13,18 @@
 // queries such as "do any modules know about this identifier?"
 //
 //===----------------------------------------------------------------------===//
-#ifndef LLVM_CLANG_SERIALIZATION_GLOBALMODULEINDEX_H
-#define LLVM_CLANG_SERIALIZATION_GLOBALMODULEINDEX_H
+#ifndef LLVM37_CLANG_SERIALIZATION_GLOBALMODULEINDEX_H
+#define LLVM37_CLANG_SERIALIZATION_GLOBALMODULEINDEX_H
 
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/SmallPtrSet.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/ADT/StringMap.h"
-#include "llvm/ADT/StringRef.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/SmallPtrSet.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/ADT/StringMap.h"
+#include "llvm37/ADT/StringRef.h"
 #include <memory>
 #include <utility>
 
-namespace llvm {
+namespace llvm37 {
 class BitstreamCursor;
 class MemoryBuffer;
 }
@@ -41,9 +41,9 @@ namespace serialization {
   class ModuleFile;
 }
 
-using llvm::SmallVector;
-using llvm::SmallVectorImpl;
-using llvm::StringRef;
+using llvm37::SmallVector;
+using llvm37::SmallVectorImpl;
+using llvm37::StringRef;
 using serialization::ModuleFile;
 
 /// \brief A global index for a set of module files, providing information about
@@ -60,7 +60,7 @@ using serialization::ModuleFile;
 class GlobalModuleIndex {
   /// \brief Buffer containing the index file, which is lazily accessed so long
   /// as the global module index is live.
-  std::unique_ptr<llvm::MemoryBuffer> Buffer;
+  std::unique_ptr<llvm37::MemoryBuffer> Buffer;
 
   /// \brief The hash table.
   ///
@@ -88,7 +88,7 @@ class GlobalModuleIndex {
 
     /// \brief The module IDs on which this module directly depends.
     /// FIXME: We don't really need a vector here.
-    llvm::SmallVector<unsigned, 4> Dependencies;
+    llvm37::SmallVector<unsigned, 4> Dependencies;
   };
 
   /// \brief A mapping from module IDs to information about each module.
@@ -96,17 +96,17 @@ class GlobalModuleIndex {
   /// This vector may have gaps, if module files have been removed or have
   /// been updated since the index was built. A gap is indicated by an empty
   /// file name.
-  llvm::SmallVector<ModuleInfo, 16> Modules;
+  llvm37::SmallVector<ModuleInfo, 16> Modules;
 
   /// \brief Lazily-populated mapping from module files to their
   /// corresponding index into the \c Modules vector.
-  llvm::DenseMap<ModuleFile *, unsigned> ModulesByFile;
+  llvm37::DenseMap<ModuleFile *, unsigned> ModulesByFile;
 
   /// \brief The set of modules that have not yet been resolved.
   ///
   /// The string is just the name of the module itself, which maps to the
   /// module ID.
-  llvm::StringMap<unsigned> UnresolvedModules;
+  llvm37::StringMap<unsigned> UnresolvedModules;
 
   /// \brief The number of identifier lookups we performed.
   unsigned NumIdentifierLookups;
@@ -116,8 +116,8 @@ class GlobalModuleIndex {
   unsigned NumIdentifierLookupHits;
   
   /// \brief Internal constructor. Use \c readIndex() to read an index.
-  explicit GlobalModuleIndex(std::unique_ptr<llvm::MemoryBuffer> Buffer,
-                             llvm::BitstreamCursor Cursor);
+  explicit GlobalModuleIndex(std::unique_ptr<llvm37::MemoryBuffer> Buffer,
+                             llvm37::BitstreamCursor Cursor);
 
   GlobalModuleIndex(const GlobalModuleIndex &) = delete;
   GlobalModuleIndex &operator=(const GlobalModuleIndex &) = delete;
@@ -165,7 +165,7 @@ public:
                              SmallVectorImpl<ModuleFile *> &Dependencies);
 
   /// \brief A set of module files in which we found a result.
-  typedef llvm::SmallPtrSet<ModuleFile *, 4> HitSet;
+  typedef llvm37::SmallPtrSet<ModuleFile *, 4> HitSet;
   
   /// \brief Look for all of the module files with information about the given
   /// identifier, e.g., a global function, variable, or type with that name.

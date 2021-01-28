@@ -1,6 +1,6 @@
 //===------- SemaTemplateInstantiate.cpp - C++ Template Instantiation ------===/
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -76,7 +76,7 @@ Sema::getTemplateInstantiationArgs(NamedDecl *D,
       // If this variable template specialization was instantiated from a
       // specialized member that is a variable template, we're done.
       assert(Spec->getSpecializedTemplate() && "No variable template?");
-      llvm::PointerUnion<VarTemplateDecl*,
+      llvm37::PointerUnion<VarTemplateDecl*,
                          VarTemplatePartialSpecializationDecl*> Specialized
                              = Spec->getSpecializedTemplateOrPartial();
       if (VarTemplatePartialSpecializationDecl *Partial =
@@ -169,7 +169,7 @@ Sema::getTemplateInstantiationArgs(NamedDecl *D,
         const TemplateSpecializationType *TST =
             cast<TemplateSpecializationType>(Context.getCanonicalType(T));
         Result.addOuterTemplateArguments(
-            llvm::makeArrayRef(TST->getArgs(), TST->getNumArgs()));
+            llvm37::makeArrayRef(TST->getArgs(), TST->getNumArgs()));
         if (ClassTemplate->isMemberSpecialization())
           break;
       }
@@ -197,7 +197,7 @@ bool Sema::ActiveTemplateInstantiation::isInstantiationRecord() const {
     return false;
   }
 
-  llvm_unreachable("Invalid InstantiationKind!");
+  llvm37_unreachable("Invalid InstantiationKind!");
 }
 
 Sema::InstantiatingTemplate::InstantiatingTemplate(
@@ -444,7 +444,7 @@ void Sema::PrintInstantiationStack() {
     case ActiveTemplateInstantiation::DefaultTemplateArgumentInstantiation: {
       TemplateDecl *Template = cast<TemplateDecl>(Active->Entity);
       SmallVector<char, 128> TemplateArgsStr;
-      llvm::raw_svector_ostream OS(TemplateArgsStr);
+      llvm37::raw_svector_ostream OS(TemplateArgsStr);
       Template->printName(OS);
       TemplateSpecializationType::PrintTemplateArgumentList(OS,
                                                          Active->TemplateArgs,
@@ -498,7 +498,7 @@ void Sema::PrintInstantiationStack() {
       FunctionDecl *FD = cast<FunctionDecl>(Param->getDeclContext());
 
       SmallVector<char, 128> TemplateArgsStr;
-      llvm::raw_svector_ostream OS(TemplateArgsStr);
+      llvm37::raw_svector_ostream OS(TemplateArgsStr);
       FD->printName(OS);
       TemplateSpecializationType::PrintTemplateArgumentList(OS,
                                                          Active->TemplateArgs,
@@ -1251,7 +1251,7 @@ ExprResult
 TemplateInstantiator::TransformFunctionParmPackRefExpr(DeclRefExpr *E,
                                                        ParmVarDecl *PD) {
   typedef LocalInstantiationScope::DeclArgumentPack DeclArgumentPack;
-  llvm::PointerUnion<Decl *, DeclArgumentPack *> *Found
+  llvm37::PointerUnion<Decl *, DeclArgumentPack *> *Found
     = getSema().CurrentInstantiationScope->findInstantiationOf(PD);
   assert(Found && "no instantiation for parameter pack");
 
@@ -2745,7 +2745,7 @@ static const Decl *getCanonicalParmVarDecl(const Decl *D) {
 }
 
 
-llvm::PointerUnion<Decl *, LocalInstantiationScope::DeclArgumentPack *> *
+llvm37::PointerUnion<Decl *, LocalInstantiationScope::DeclArgumentPack *> *
 LocalInstantiationScope::findInstantiationOf(const Decl *D) {
   D = getCanonicalParmVarDecl(D);
   for (LocalInstantiationScope *Current = this; Current;
@@ -2796,7 +2796,7 @@ LocalInstantiationScope::findInstantiationOf(const Decl *D) {
 
 void LocalInstantiationScope::InstantiatedLocal(const Decl *D, Decl *Inst) {
   D = getCanonicalParmVarDecl(D);
-  llvm::PointerUnion<Decl *, DeclArgumentPack *> &Stored = LocalDecls[D];
+  llvm37::PointerUnion<Decl *, DeclArgumentPack *> &Stored = LocalDecls[D];
   if (Stored.isNull()) {
 #ifndef NDEBUG
     // It should not be present in any surrounding scope either.
@@ -2832,7 +2832,7 @@ void LocalInstantiationScope::MakeInstantiatedLocalArgPack(const Decl *D) {
 #endif
 
   D = getCanonicalParmVarDecl(D);
-  llvm::PointerUnion<Decl *, DeclArgumentPack *> &Stored = LocalDecls[D];
+  llvm37::PointerUnion<Decl *, DeclArgumentPack *> &Stored = LocalDecls[D];
   DeclArgumentPack *Pack = new DeclArgumentPack;
   Stored = Pack;
   ArgumentPacks.push_back(Pack);

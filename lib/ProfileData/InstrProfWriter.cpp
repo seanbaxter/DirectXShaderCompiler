@@ -1,6 +1,6 @@
 //=-- InstrProfWriter.cpp - Instrumented profiling writer -------------------=//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -12,13 +12,13 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/ProfileData/InstrProfWriter.h"
+#include "llvm37/ProfileData/InstrProfWriter.h"
 #include "InstrProfIndexed.h"
-#include "llvm/ADT/StringExtras.h"
-#include "llvm/Support/EndianStream.h"
-#include "llvm/Support/OnDiskHashTable.h"
+#include "llvm37/ADT/StringExtras.h"
+#include "llvm37/Support/EndianStream.h"
+#include "llvm37/Support/OnDiskHashTable.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 namespace {
 class InstrProfRecordTrait {
@@ -38,7 +38,7 @@ public:
 
   static std::pair<offset_type, offset_type>
   EmitKeyDataLength(raw_ostream &Out, key_type_ref K, data_type_ref V) {
-    using namespace llvm::support;
+    using namespace llvm37::support;
     endian::Writer<little> LE(Out);
 
     offset_type N = K.size();
@@ -58,7 +58,7 @@ public:
 
   static void EmitData(raw_ostream &Out, key_type_ref, data_type_ref V,
                        offset_type) {
-    using namespace llvm::support;
+    using namespace llvm37::support;
     endian::Writer<little> LE(Out);
 
     for (const auto &Counts : *V) {
@@ -113,7 +113,7 @@ std::pair<uint64_t, uint64_t> InstrProfWriter::writeImpl(raw_ostream &OS) {
   for (const auto &I : FunctionData)
     Generator.insert(I.getKey(), &I.getValue());
 
-  using namespace llvm::support;
+  using namespace llvm37::support;
   endian::Writer<little> LE(OS);
 
   // Write the header.
@@ -143,7 +143,7 @@ void InstrProfWriter::write(raw_fd_ostream &OS) {
 
 std::unique_ptr<MemoryBuffer> InstrProfWriter::writeBuffer() {
   std::string Data;
-  llvm::raw_string_ostream OS(Data);
+  llvm37::raw_string_ostream OS(Data);
   // Write the hash table.
   auto TableStart = writeImpl(OS);
   OS.flush();

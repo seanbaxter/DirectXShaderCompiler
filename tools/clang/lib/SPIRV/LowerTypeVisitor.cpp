@@ -1,6 +1,6 @@
 //===--- LowerTypeVisitor.cpp - AST type to SPIR-V type impl -----*- C++ -*-==//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -19,7 +19,7 @@ namespace {
 /// the decl does not have one.
 hlsl::ConstantPacking *getPackOffset(const clang::NamedDecl *decl) {
   for (auto *annotation : decl->getUnusualAnnotations())
-    if (auto *packing = llvm::dyn_cast<hlsl::ConstantPacking>(annotation))
+    if (auto *packing = llvm37::dyn_cast<hlsl::ConstantPacking>(annotation))
       return packing;
   return nullptr;
 }
@@ -40,13 +40,13 @@ bool LowerTypeVisitor::visit(SpirvFunction *fn, Phase phase) {
     // Lower the function return type.
     const SpirvType *spirvReturnType =
         lowerType(fn->getAstReturnType(), SpirvLayoutRule::Void,
-                  /*isRowMajor*/ llvm::None,
+                  /*isRowMajor*/ llvm37::None,
                   /*SourceLocation*/ {});
     fn->setReturnType(spirvReturnType);
 
     // Lower the function parameter types.
     auto params = fn->getParameters();
-    llvm::SmallVector<const SpirvType *, 4> spirvParamTypes;
+    llvm37::SmallVector<const SpirvType *, 4> spirvParamTypes;
     for (auto *param : params) {
       spirvParamTypes.push_back(param->getResultType());
     }
@@ -63,7 +63,7 @@ bool LowerTypeVisitor::visitInstruction(SpirvInstruction *instr) {
   // Lower QualType to SpirvType
   if (astType != QualType({})) {
     const SpirvType *spirvType =
-        lowerType(astType, instr->getLayoutRule(), /*isRowMajor*/ llvm::None,
+        lowerType(astType, instr->getLayoutRule(), /*isRowMajor*/ llvm37::None,
                   instr->getSourceLocation());
     instr->setResultType(spirvType);
   }
@@ -85,7 +85,7 @@ bool LowerTypeVisitor::visitInstruction(SpirvInstruction *instr) {
              isa<SpirvDebugGlobalVariable>(debugInstruction));
       const SpirvType *spirvType =
           lowerType(debugQualType, instr->getLayoutRule(),
-                    /*isRowMajor*/ llvm::None, instr->getSourceLocation());
+                    /*isRowMajor*/ llvm37::None, instr->getSourceLocation());
       debugInstruction->setDebugSpirvType(spirvType);
     } else if (const auto *debugSpirvType =
                    debugInstruction->getDebugSpirvType()) {
@@ -175,14 +175,14 @@ const SpirvType *LowerTypeVisitor::lowerType(const SpirvType *type,
   if (const auto *hybridPointer = dyn_cast<HybridPointerType>(type)) {
     const QualType pointeeType = hybridPointer->getPointeeType();
     const SpirvType *pointeeSpirvType =
-        lowerType(pointeeType, rule, /*isRowMajor*/ llvm::None, loc);
+        lowerType(pointeeType, rule, /*isRowMajor*/ llvm37::None, loc);
     return spvContext.getPointerType(pointeeSpirvType,
                                      hybridPointer->getStorageClass());
   } else if (const auto *hybridSampledImage =
                  dyn_cast<HybridSampledImageType>(type)) {
     const QualType imageAstType = hybridSampledImage->getImageType();
     const SpirvType *imageSpirvType =
-        lowerType(imageAstType, rule, /*isRowMajor*/ llvm::None, loc);
+        lowerType(imageAstType, rule, /*isRowMajor*/ llvm37::None, loc);
     assert(isa<ImageType>(imageSpirvType));
     return spvContext.getSampledImageType(cast<ImageType>(imageSpirvType));
   } else if (const auto *hybridStruct = dyn_cast<HybridStructType>(type)) {
@@ -251,12 +251,12 @@ const SpirvType *LowerTypeVisitor::lowerType(const SpirvType *type,
                                      ptrType->getStorageClass());
   }
 
-  llvm_unreachable("lowering of hybrid type not implemented");
+  llvm37_unreachable("lowering of hybrid type not implemented");
 }
 
 const SpirvType *LowerTypeVisitor::lowerType(QualType type,
                                              SpirvLayoutRule rule,
-                                             llvm::Optional<bool> isRowMajor,
+                                             llvm37::Optional<bool> isRowMajor,
                                              SourceLocation srcLoc) {
   const auto desugaredType = desugarType(type, &isRowMajor);
 
@@ -380,7 +380,7 @@ const SpirvType *LowerTypeVisitor::lowerType(QualType type,
 
       // Non-float matrices are represented as an array of vectors.
       if (!elemType->isFloatingType()) {
-        llvm::Optional<uint32_t> arrayStride = llvm::None;
+        llvm37::Optional<uint32_t> arrayStride = llvm37::None;
         // If there is a layout rule, we need array stride information.
         if (rule != SpirvLayoutRule::Void) {
           uint32_t stride = 0;
@@ -410,7 +410,7 @@ const SpirvType *LowerTypeVisitor::lowerType(QualType type,
     }
 
     // Collect all fields' information.
-    llvm::SmallVector<HybridStructType::FieldInfo, 8> fields;
+    llvm37::SmallVector<HybridStructType::FieldInfo, 8> fields;
 
     // If this struct is derived from some other struct, place an implicit
     // field at the very beginning for the base struct.
@@ -443,7 +443,7 @@ const SpirvType *LowerTypeVisitor::lowerType(QualType type,
     const auto elemType = arrayType->getElementType();
     const auto *loweredElemType =
         lowerType(arrayType->getElementType(), rule, isRowMajor, srcLoc);
-    llvm::Optional<uint32_t> arrayStride = llvm::None;
+    llvm37::Optional<uint32_t> arrayStride = llvm37::None;
 
     if (rule != SpirvLayoutRule::Void &&
         // We won't have stride information for structured/byte buffers since
@@ -502,7 +502,7 @@ const SpirvType *LowerTypeVisitor::lowerResourceType(QualType type,
 
   const auto *recordType = type->getAs<RecordType>();
   assert(recordType);
-  const llvm::StringRef name = recordType->getDecl()->getName();
+  const llvm37::StringRef name = recordType->getDecl()->getName();
 
   // TODO: avoid string comparison once hlsl::IsHLSLResouceType() does that.
 
@@ -523,7 +523,7 @@ const SpirvType *LowerTypeVisitor::lowerResourceType(QualType type,
       const auto sampledType = hlsl::GetHLSLResourceResultType(type);
       return spvContext.getImageType(
           lowerType(getElementType(astContext, sampledType), rule,
-                    /*isRowMajor*/ llvm::None, srcLoc),
+                    /*isRowMajor*/ llvm37::None, srcLoc),
           dim, ImageType::WithDepth::Unknown, isArray, isMS,
           ImageType::WithSampler::Yes, spv::ImageFormat::Unknown);
     }
@@ -539,7 +539,7 @@ const SpirvType *LowerTypeVisitor::lowerResourceType(QualType type,
           translateSampledTypeToImageFormat(sampledType, srcLoc);
       return spvContext.getImageType(
           lowerType(getElementType(astContext, sampledType), rule,
-                    /*isRowMajor*/ llvm::None, srcLoc),
+                    /*isRowMajor*/ llvm37::None, srcLoc),
           dim, ImageType::WithDepth::Unknown, isArray,
           /*isMultiSampled=*/false, /*sampled=*/ImageType::WithSampler::No,
           format);
@@ -577,7 +577,7 @@ const SpirvType *LowerTypeVisitor::lowerResourceType(QualType type,
     const auto s = hlsl::GetHLSLResourceResultType(type);
 
     // If the underlying type is a matrix, check majorness.
-    llvm::Optional<bool> isRowMajor = llvm::None;
+    llvm37::Optional<bool> isRowMajor = llvm37::None;
     if (isMxNMatrix(s))
       isRowMajor = isRowMajorMatrix(spvOptions, type);
 
@@ -587,7 +587,7 @@ const SpirvType *LowerTypeVisitor::lowerResourceType(QualType type,
     // Calculate memory alignment for the resource.
     uint32_t arrayStride = 0;
     QualType sArray = astContext.getConstantArrayType(
-        s, llvm::APInt(32, 1), clang::ArrayType::Normal, 0);
+        s, llvm37::APInt(32, 1), clang::ArrayType::Normal, 0);
     alignmentCalc.getAlignmentAndSize(sArray, rule, isRowMajor, &arrayStride);
 
     // We have a runtime array of structures. So:
@@ -597,7 +597,7 @@ const SpirvType *LowerTypeVisitor::lowerResourceType(QualType type,
     const bool isReadOnly = (name == "StructuredBuffer");
 
     // Attach matrix stride decorations if this is a *StructuredBuffer<matrix>.
-    llvm::Optional<uint32_t> matrixStride = llvm::None;
+    llvm37::Optional<uint32_t> matrixStride = llvm37::None;
     if (isMxNMatrix(s)) {
       uint32_t stride = 0;
       alignmentCalc.getAlignmentAndSize(s, rule, isRowMajor, &stride);
@@ -654,7 +654,7 @@ const SpirvType *LowerTypeVisitor::lowerResourceType(QualType type,
     const auto format = translateSampledTypeToImageFormat(sampledType, srcLoc);
     return spvContext.getImageType(
         lowerType(getElementType(astContext, sampledType), rule,
-                  /*isRowMajor*/ llvm::None, srcLoc),
+                  /*isRowMajor*/ llvm37::None, srcLoc),
         spv::Dim::Buffer, ImageType::WithDepth::Unknown,
         /*isArrayed=*/false, /*isMultiSampled=*/false,
         /*sampled*/ name == "Buffer" ? ImageType::WithSampler::Yes
@@ -667,29 +667,29 @@ const SpirvType *LowerTypeVisitor::lowerResourceType(QualType type,
     const auto elemType = hlsl::GetHLSLInputPatchElementType(type);
     const auto elemCount = hlsl::GetHLSLInputPatchCount(type);
     return spvContext.getArrayType(
-        lowerType(elemType, rule, /*isRowMajor*/ llvm::None, srcLoc), elemCount,
-        /*ArrayStride*/ llvm::None);
+        lowerType(elemType, rule, /*isRowMajor*/ llvm37::None, srcLoc), elemCount,
+        /*ArrayStride*/ llvm37::None);
   }
   // OutputPatch
   if (name == "OutputPatch") {
     const auto elemType = hlsl::GetHLSLOutputPatchElementType(type);
     const auto elemCount = hlsl::GetHLSLOutputPatchCount(type);
     return spvContext.getArrayType(
-        lowerType(elemType, rule, /*isRowMajor*/ llvm::None, srcLoc), elemCount,
-        /*ArrayStride*/ llvm::None);
+        lowerType(elemType, rule, /*isRowMajor*/ llvm37::None, srcLoc), elemCount,
+        /*ArrayStride*/ llvm37::None);
   }
   // Output stream objects (TriangleStream, LineStream, and PointStream)
   if (name == "TriangleStream" || name == "LineStream" ||
       name == "PointStream") {
     return lowerType(hlsl::GetHLSLResourceResultType(type), rule,
-                     /*isRowMajor*/ llvm::None, srcLoc);
+                     /*isRowMajor*/ llvm37::None, srcLoc);
   }
 
   if (name == "SubpassInput" || name == "SubpassInputMS") {
     const auto sampledType = hlsl::GetHLSLResourceResultType(type);
     return spvContext.getImageType(
         lowerType(getElementType(astContext, sampledType), rule,
-                  /*isRowMajor*/ llvm::None, srcLoc),
+                  /*isRowMajor*/ llvm37::None, srcLoc),
         spv::Dim::SubpassData, ImageType::WithDepth::Unknown,
         /*isArrayed=*/false,
         /*isMultipleSampled=*/name == "SubpassInputMS",
@@ -736,13 +736,13 @@ LowerTypeVisitor::translateSampledTypeToImageFormat(QualType sampledType,
   return spv::ImageFormat::Unknown;
 }
 
-llvm::SmallVector<StructType::FieldInfo, 4>
+llvm37::SmallVector<StructType::FieldInfo, 4>
 LowerTypeVisitor::populateLayoutInformation(
-    llvm::ArrayRef<HybridStructType::FieldInfo> fields, SpirvLayoutRule rule) {
+    llvm37::ArrayRef<HybridStructType::FieldInfo> fields, SpirvLayoutRule rule) {
 
   // The resulting vector of fields with proper layout information.
-  llvm::SmallVector<StructType::FieldInfo, 4> loweredFields;
-  llvm::SmallVector<StructType::FieldInfo, 4> result;
+  llvm37::SmallVector<StructType::FieldInfo, 4> loweredFields;
+  llvm37::SmallVector<StructType::FieldInfo, 4> result;
 
   using RegisterFieldPair =
       std::pair<uint32_t, const HybridStructType::FieldInfo *>;
@@ -754,7 +754,7 @@ LowerTypeVisitor::populateLayoutInformation(
   };
   std::set<RegisterFieldPair, RegisterFieldPairLess> registerCSet;
   std::vector<const HybridStructType::FieldInfo *> sortedFields;
-  llvm::DenseMap<const HybridStructType::FieldInfo *, uint32_t> fieldToIndexMap;
+  llvm37::DenseMap<const HybridStructType::FieldInfo *, uint32_t> fieldToIndexMap;
 
   // First, check to see if any of the structure members had 'register(c#)'
   // location semantics. If so, members that do not have the 'register(c#)'
@@ -784,7 +784,7 @@ LowerTypeVisitor::populateLayoutInformation(
     // Lower the field type fist. This call will populate proper matrix
     // majorness information.
     StructType::FieldInfo loweredField(
-        lowerType(fieldType, rule, /*isRowMajor*/ llvm::None, {}), field.name);
+        lowerType(fieldType, rule, /*isRowMajor*/ llvm37::None, {}), field.name);
 
     // Set RelaxedPrecision information for the lowered field.
     if (isRelaxedPrecisionType(fieldType, spvOptions)) {
@@ -804,7 +804,7 @@ LowerTypeVisitor::populateLayoutInformation(
 
     uint32_t memberAlignment = 0, memberSize = 0, stride = 0;
     std::tie(memberAlignment, memberSize) = alignmentCalc.getAlignmentAndSize(
-        fieldType, rule, /*isRowMajor*/ llvm::None, &stride);
+        fieldType, rule, /*isRowMajor*/ llvm37::None, &stride);
 
     // The next avaiable location after laying out the previous members
     const uint32_t nextLoc = offset;
@@ -872,7 +872,7 @@ LowerTypeVisitor::populateLayoutInformation(
     if (isMxNMatrix(fieldType, &elemType) && elemType->isFloatingType()) {
       memberAlignment = memberSize = stride = 0;
       std::tie(memberAlignment, memberSize) = alignmentCalc.getAlignmentAndSize(
-          fieldType, rule, /*isRowMajor*/ llvm::None, &stride);
+          fieldType, rule, /*isRowMajor*/ llvm37::None, &stride);
 
       loweredField.matrixStride = stride;
       loweredField.isRowMajor = isRowMajorMatrix(spvOptions, fieldType);

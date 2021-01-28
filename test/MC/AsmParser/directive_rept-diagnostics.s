@@ -1,4 +1,4 @@
-# RUN: not llvm-mc -triple i686-elf -filetype asm -o /dev/null %s 2>&1 \
+# RUN: not llvm37-mc -triple i686-elf -filetype asm -o /dev/null %s 2>&1 \
 # RUN:   | FileCheck %s
 
 	.data

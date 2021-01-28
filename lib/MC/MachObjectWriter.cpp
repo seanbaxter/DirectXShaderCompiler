@@ -1,30 +1,30 @@
 //===- lib/MC/MachObjectWriter.cpp - Mach-O File Writer -------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/MC/MCMachObjectWriter.h"
-#include "llvm/ADT/StringMap.h"
-#include "llvm/ADT/Twine.h"
-#include "llvm/MC/MCAsmBackend.h"
-#include "llvm/MC/MCAsmLayout.h"
-#include "llvm/MC/MCAssembler.h"
-#include "llvm/MC/MCExpr.h"
-#include "llvm/MC/MCFixupKindInfo.h"
-#include "llvm/MC/MCObjectWriter.h"
-#include "llvm/MC/MCSectionMachO.h"
-#include "llvm/MC/MCSymbolMachO.h"
-#include "llvm/MC/MCValue.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/MachO.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/MC/MCMachObjectWriter.h"
+#include "llvm37/ADT/StringMap.h"
+#include "llvm37/ADT/Twine.h"
+#include "llvm37/MC/MCAsmBackend.h"
+#include "llvm37/MC/MCAsmLayout.h"
+#include "llvm37/MC/MCAssembler.h"
+#include "llvm37/MC/MCExpr.h"
+#include "llvm37/MC/MCFixupKindInfo.h"
+#include "llvm37/MC/MCObjectWriter.h"
+#include "llvm37/MC/MCSectionMachO.h"
+#include "llvm37/MC/MCSymbolMachO.h"
+#include "llvm37/MC/MCValue.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/MachO.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <vector>
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "mc"
 
@@ -946,7 +946,7 @@ void MachObjectWriter::writeObject(MCAssembler &Asm,
   }
 }
 
-MCObjectWriter *llvm::createMachObjectWriter(MCMachObjectTargetWriter *MOTW,
+MCObjectWriter *llvm37::createMachObjectWriter(MCMachObjectTargetWriter *MOTW,
                                              raw_pwrite_stream &OS,
                                              bool IsLittleEndian) {
   return new MachObjectWriter(MOTW, OS, IsLittleEndian);

@@ -1,6 +1,6 @@
 //===- Error.cpp - system_error extensions for Object -----------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,22 +11,22 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Object/Error.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/ManagedStatic.h"
+#include "llvm37/Object/Error.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/ManagedStatic.h"
 
-using namespace llvm;
+using namespace llvm37;
 using namespace object;
 
 namespace {
 class _object_error_category : public std::error_category {
 public:
-  const char* name() const LLVM_NOEXCEPT override;
+  const char* name() const LLVM37_NOEXCEPT override;
   std::string message(int ev) const override;
 };
 }
 
-const char *_object_error_category::name() const LLVM_NOEXCEPT {
+const char *_object_error_category::name() const LLVM37_NOEXCEPT {
   return "llvm.object";
 }
 
@@ -54,7 +54,7 @@ std::string _object_error_category::message(int EV) const {
   case object_error::macho_load_segment_too_small:
     return "Mach-O segment load command size is too small";
   }
-  llvm_unreachable("An enumerator of object_error does not have a message "
+  llvm37_unreachable("An enumerator of object_error does not have a message "
                    "defined.");
 }
 

@@ -1,4 +1,4 @@
-lli - directly execute programs from LLVM bitcode
+lli - directly execute programs from LLVM37 bitcode
 =================================================
 
 
@@ -13,13 +13,13 @@ DESCRIPTION
 -----------
 
 
-**lli** directly executes programs in LLVM bitcode format.  It takes a program
-in LLVM bitcode format and executes it using a just-in-time compiler, if one is
+**lli** directly executes programs in LLVM37 bitcode format.  It takes a program
+in LLVM37 bitcode format and executes it using a just-in-time compiler, if one is
 available for the current architecture, or an interpreter.  **lli** takes all of
 the same code generator options as llc|llc, but they are only effective when
 **lli** is using the just-in-time compiler.
 
-If *filename* is not specified, then **lli** reads the LLVM bitcode for the
+If *filename* is not specified, then **lli** reads the LLVM37 bitcode for the
 program from standard input.
 
 The optional *args* specified on the command line are passed to the program as
@@ -105,7 +105,7 @@ TARGET OPTIONS
  Specify a specific chip in the current architecture to generate code for.
  By default this is inferred from the target triple and autodetected to
  the current architecture.  For a list of available CPUs, use:
- **llvm-as < /dev/null | llc -march=xyz -mcpu=help**
+ **llvm37-as < /dev/null | llc -march=xyz -mcpu=help**
 
 
 
@@ -114,7 +114,7 @@ TARGET OPTIONS
  Override or control specific attributes of the target, such as whether SIMD
  operations are enabled or not.  The default set of attributes is set by the
  current CPU.  For a list of available attributes, use:
- **llvm-as < /dev/null | llc -march=xyz -mattr=help**
+ **llvm37-as < /dev/null | llc -march=xyz -mattr=help**
 
 
 

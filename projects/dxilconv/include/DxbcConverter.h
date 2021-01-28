@@ -42,7 +42,7 @@ IDxbcConverter : public IUnknown {
     _Out_ UINT32 *pDxilSize,
     _Outptr_result_maybenull_z_ LPWSTR *ppDiag) = 0;
 
-  /// Create DXIL LLVM module out of DXBC bytecode and DDI I/O signatures.
+  /// Create DXIL LLVM37 module out of DXBC bytecode and DDI I/O signatures.
   /// This is for driver consumption only.
   virtual HRESULT STDMETHODCALLTYPE ConvertInDriver(
     _In_reads_bytes_(pBytecode[1]) const UINT32 *pBytecode,

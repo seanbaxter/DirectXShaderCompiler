@@ -3,7 +3,7 @@
 
 // Test for absence of crash reported in PR 2923:
 //
-//  http://llvm.org/bugs/show_bug.cgi?id=2923
+//  http://llvm37.org/bugs/show_bug.cgi?id=2923
 //
 // Previously we had a crash when deallocating the FunctionDecl for 'bar'
 // because FunctionDecl::getNumParams() just used the type of foo to determine

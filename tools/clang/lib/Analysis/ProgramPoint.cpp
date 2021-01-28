@@ -1,6 +1,6 @@
 //==- ProgramPoint.cpp - Program Points for Path-Sensitive Analysis -*- C++ -*-/
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -23,7 +23,7 @@ ProgramPoint ProgramPoint::getProgramPoint(const Stmt *S, ProgramPoint::Kind K,
                                            const ProgramPointTag *tag){
   switch (K) {
     default:
-      llvm_unreachable("Unhandled ProgramPoint kind");
+      llvm37_unreachable("Unhandled ProgramPoint kind");
     case ProgramPoint::PreStmtKind:
       return PreStmt(S, LC, tag);
     case ProgramPoint::PostStmtKind:

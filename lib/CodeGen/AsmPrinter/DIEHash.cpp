@@ -1,6 +1,6 @@
-//===-- llvm/CodeGen/DIEHash.cpp - Dwarf Hashing Framework ----------------===//
+//===-- llvm37/CodeGen/DIEHash.cpp - Dwarf Hashing Framework ----------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -14,17 +14,17 @@
 #include "ByteStreamer.h"
 #include "DIEHash.h"
 #include "DwarfDebug.h"
-#include "llvm/ADT/ArrayRef.h"
-#include "llvm/ADT/StringRef.h"
-#include "llvm/CodeGen/AsmPrinter.h"
-#include "llvm/CodeGen/DIE.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/Dwarf.h"
-#include "llvm/Support/Endian.h"
-#include "llvm/Support/MD5.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/ArrayRef.h"
+#include "llvm37/ADT/StringRef.h"
+#include "llvm37/CodeGen/AsmPrinter.h"
+#include "llvm37/CodeGen/DIE.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/Dwarf.h"
+#include "llvm37/Support/Endian.h"
+#include "llvm37/Support/MD5.h"
+#include "llvm37/Support/raw_ostream.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "dwarfdebug"
 
@@ -222,7 +222,7 @@ void DIEHash::hashRepeatedTypeReference(dwarf::Attribute Attribute,
 
 void DIEHash::hashDIEEntry(dwarf::Attribute Attribute, dwarf::Tag Tag,
                            const DIE &Entry) {
-  assert(Tag != dwarf::DW_TAG_friend && "No current LLVM clients emit friend "
+  assert(Tag != dwarf::DW_TAG_friend && "No current LLVM37 clients emit friend "
                                         "tags. Add support here when there's "
                                         "a use case");
   // Step 5
@@ -291,7 +291,7 @@ void DIEHash::hashAttribute(DIEValue Value, dwarf::Tag Tag) {
 
   switch (Value.getType()) {
   case DIEValue::isNone:
-    llvm_unreachable("Expected valid DIEValue");
+    llvm37_unreachable("Expected valid DIEValue");
 
     // 7.27 Step 3
     // ... An attribute that refers to another type entry T is processed as
@@ -320,7 +320,7 @@ void DIEHash::hashAttribute(DIEValue Value, dwarf::Tag Tag) {
       addULEB128((int64_t)Value.getDIEInteger().getValue());
       break;
     default:
-      llvm_unreachable("Unknown integer form!");
+      llvm37_unreachable("Unknown integer form!");
     }
     break;
   }
@@ -354,7 +354,7 @@ void DIEHash::hashAttribute(DIEValue Value, dwarf::Tag Tag) {
   case DIEValue::isLabel:
   case DIEValue::isDelta:
   case DIEValue::isTypeSignature:
-    llvm_unreachable("Add support for additional value types.");
+    llvm37_unreachable("Add support for additional value types.");
   }
 }
 

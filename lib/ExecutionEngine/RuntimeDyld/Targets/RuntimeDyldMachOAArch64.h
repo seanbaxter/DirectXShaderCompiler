@@ -1,21 +1,21 @@
 //===-- RuntimeDyldMachOAArch64.h -- MachO/AArch64 specific code. -*- C++ -*-=//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_LIB_EXECUTIONENGINE_RUNTIMEDYLD_TARGETS_RUNTIMEDYLDMACHOAARCH64_H
-#define LLVM_LIB_EXECUTIONENGINE_RUNTIMEDYLD_TARGETS_RUNTIMEDYLDMACHOAARCH64_H
+#ifndef LLVM37_LIB_EXECUTIONENGINE_RUNTIMEDYLD_TARGETS_RUNTIMEDYLDMACHOAARCH64_H
+#define LLVM37_LIB_EXECUTIONENGINE_RUNTIMEDYLD_TARGETS_RUNTIMEDYLDMACHOAARCH64_H
 
 #include "../RuntimeDyldMachO.h"
-#include "llvm/Support/Endian.h"
+#include "llvm37/Support/Endian.h"
 
 #define DEBUG_TYPE "dyld"
 
-namespace llvm {
+namespace llvm37 {
 
 class RuntimeDyldMachOAArch64
     : public RuntimeDyldMachOCRTPBase<RuntimeDyldMachOAArch64> {
@@ -40,7 +40,7 @@ public:
     // Verify that the relocation has the correct size and alignment.
     switch (RE.RelType) {
     default:
-      llvm_unreachable("Unsupported relocation type!");
+      llvm37_unreachable("Unsupported relocation type!");
     case MachO::ARM64_RELOC_UNSIGNED:
       assert((NumBytes == 4 || NumBytes == 8) && "Invalid relocation size.");
       break;
@@ -57,7 +57,7 @@ public:
 
     switch (RE.RelType) {
     default:
-      llvm_unreachable("Unsupported relocation type!");
+      llvm37_unreachable("Unsupported relocation type!");
     case MachO::ARM64_RELOC_UNSIGNED:
       // This could be an unaligned memory location.
       if (NumBytes == 4)
@@ -135,7 +135,7 @@ public:
     // Verify that the relocation has the correct alignment.
     switch (RelType) {
     default:
-      llvm_unreachable("Unsupported relocation type!");
+      llvm37_unreachable("Unsupported relocation type!");
     case MachO::ARM64_RELOC_UNSIGNED:
       assert((NumBytes == 4 || NumBytes == 8) && "Invalid relocation size.");
       break;
@@ -152,7 +152,7 @@ public:
 
     switch (RelType) {
     default:
-      llvm_unreachable("Unsupported relocation type!");
+      llvm37_unreachable("Unsupported relocation type!");
     case MachO::ARM64_RELOC_UNSIGNED:
       // This could be an unaligned memory location.
       if (NumBytes == 4)
@@ -311,13 +311,13 @@ public:
 
     switch (RelType) {
     default:
-      llvm_unreachable("Invalid relocation type!");
+      llvm37_unreachable("Invalid relocation type!");
     case MachO::ARM64_RELOC_UNSIGNED: {
       assert(!RE.IsPCRel && "PCRel and ARM64_RELOC_UNSIGNED not supported");
       // Mask in the target value a byte at a time (we don't have an alignment
       // guarantee for the target address, so this is safest).
       if (RE.Size < 2)
-        llvm_unreachable("Invalid size for ARM64_RELOC_UNSIGNED");
+        llvm37_unreachable("Invalid size for ARM64_RELOC_UNSIGNED");
 
       encodeAddend(LocalAddress, 1 << RE.Size, RelType, Value + RE.Addend);
       break;
@@ -354,9 +354,9 @@ public:
     case MachO::ARM64_RELOC_POINTER_TO_GOT:
     case MachO::ARM64_RELOC_TLVP_LOAD_PAGE21:
     case MachO::ARM64_RELOC_TLVP_LOAD_PAGEOFF12:
-      llvm_unreachable("Relocation type not yet implemented!");
+      llvm37_unreachable("Relocation type not yet implemented!");
     case MachO::ARM64_RELOC_ADDEND:
-      llvm_unreachable("ARM64_RELOC_ADDEND should have been handeled by "
+      llvm37_unreachable("ARM64_RELOC_ADDEND should have been handeled by "
                        "processRelocationRef!");
     }
   }

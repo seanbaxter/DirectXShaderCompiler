@@ -1,6 +1,6 @@
 //===---- SemaAccess.cpp - C++ Access Control -------------------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -854,7 +854,7 @@ static AccessResult HasAccess(Sema &S,
     case AR_inaccessible: return OnFailure;
     case AR_dependent: return AR_dependent;
     }
-    llvm_unreachable("impossible friendship kind");
+    llvm37_unreachable("impossible friendship kind");
   }
 
   switch (GetFriendKind(S, EC, NamingClass)) {
@@ -864,7 +864,7 @@ static AccessResult HasAccess(Sema &S,
   }
 
   // Silence bogus warnings
-  llvm_unreachable("impossible friendship kind");
+  llvm37_unreachable("impossible friendship kind");
 }
 
 /// Finds the best path from the naming class to the declaring class,
@@ -1180,7 +1180,7 @@ static void DiagnoseAccessPath(Sema &S,
       break;
 
     case AR_dependent:
-      llvm_unreachable("cannot diagnose dependent access");
+      llvm37_unreachable("cannot diagnose dependent access");
     }
   }
 
@@ -1216,7 +1216,7 @@ static void DiagnoseAccessPath(Sema &S,
       constrainingBase = nullptr;
       break;
     case AR_dependent:
-      llvm_unreachable("cannot diagnose dependent access");
+      llvm37_unreachable("cannot diagnose dependent access");
     }
 
     // If this was private inheritance, but we don't have access to
@@ -1431,7 +1431,7 @@ static AccessResult CheckEffectiveAccess(Sema &S,
   }
 
   // silence unnecessary warning
-  llvm_unreachable("invalid access result");
+  llvm37_unreachable("invalid access result");
 }
 
 static Sema::AccessResult CheckAccess(Sema &S, SourceLocation Loc,
@@ -1462,7 +1462,7 @@ static Sema::AccessResult CheckAccess(Sema &S, SourceLocation Loc,
   case AR_inaccessible: return Sema::AR_inaccessible;
   case AR_dependent: return Sema::AR_dependent;
   }
-  llvm_unreachable("invalid access result");
+  llvm37_unreachable("invalid access result");
 }
 
 void Sema::HandleDelayedAccessCheck(DelayedDiagnostic &DD, Decl *D) {
@@ -1578,10 +1578,10 @@ bool Sema::isSpecialMemberAccessibleForDeletion(CXXMethodDecl *decl,
   switch (CheckAccess(*this, SourceLocation(), entity)) {
   case AR_accessible: return true;
   case AR_inaccessible: return false;
-  case AR_dependent: llvm_unreachable("dependent for =delete computation");
-  case AR_delayed: llvm_unreachable("cannot delay =delete computation");
+  case AR_dependent: llvm37_unreachable("dependent for =delete computation");
+  case AR_delayed: llvm37_unreachable("cannot delay =delete computation");
   }
-  llvm_unreachable("bad access result");
+  llvm37_unreachable("bad access result");
 }
 
 Sema::AccessResult Sema::CheckDestructorAccess(SourceLocation Loc,
@@ -1766,7 +1766,7 @@ Sema::AccessResult Sema::CheckFriendAccess(NamedDecl *target) {
   case ::AR_inaccessible: return Sema::AR_inaccessible; // HLSL Change - disambiguate enum
   case ::AR_dependent: return Sema::AR_dependent; // HLSL Change - disambiguate enum
   }
-  llvm_unreachable("falling off end");
+  llvm37_unreachable("falling off end");
 }
 
 Sema::AccessResult Sema::CheckAddressOfMemberAccess(Expr *OvlExpr,
@@ -1822,7 +1822,7 @@ Sema::AccessResult Sema::CheckBaseClassAccess(SourceLocation AccessLoc,
     case ::AR_inaccessible: return Sema::AR_inaccessible;
     case ::AR_dependent: return Sema::AR_dependent;
     }
-    llvm_unreachable("unexpected result from CheckEffectiveAccess");
+    llvm37_unreachable("unexpected result from CheckEffectiveAccess");
   }
   return CheckAccess(*this, AccessLoc, Entity);
 }

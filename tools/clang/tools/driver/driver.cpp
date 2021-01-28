@@ -1,6 +1,6 @@
 //===-- driver.cpp - Clang GCC-Compatible Driver --------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -23,42 +23,42 @@
 #include "clang/Frontend/SerializedDiagnosticPrinter.h"
 #include "clang/Frontend/TextDiagnosticPrinter.h"
 #include "clang/Frontend/Utils.h"
-#include "llvm/ADT/ArrayRef.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/Config/llvm-config.h"
-#include "llvm/Option/ArgList.h"
-#include "llvm/Option/OptTable.h"
-#include "llvm/Option/Option.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/FileSystem.h"
-#include "llvm/Support/Host.h"
-#include "llvm/Support/ManagedStatic.h"
-#include "llvm/Support/MemoryBuffer.h"
-#include "llvm/Support/Path.h"
-#include "llvm/Support/PrettyStackTrace.h"
-#include "llvm/Support/Process.h"
-#include "llvm/Support/Program.h"
-#include "llvm/Support/Regex.h"
-#include "llvm/Support/Signals.h"
-#include "llvm/Support/StringSaver.h"
-#include "llvm/Support/TargetRegistry.h"
-#include "llvm/Support/TargetSelect.h"
-#include "llvm/Support/Timer.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/ArrayRef.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/Config/llvm-config.h"
+#include "llvm37/Option/ArgList.h"
+#include "llvm37/Option/OptTable.h"
+#include "llvm37/Option/Option.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/FileSystem.h"
+#include "llvm37/Support/Host.h"
+#include "llvm37/Support/ManagedStatic.h"
+#include "llvm37/Support/MemoryBuffer.h"
+#include "llvm37/Support/Path.h"
+#include "llvm37/Support/PrettyStackTrace.h"
+#include "llvm37/Support/Process.h"
+#include "llvm37/Support/Program.h"
+#include "llvm37/Support/Regex.h"
+#include "llvm37/Support/Signals.h"
+#include "llvm37/Support/StringSaver.h"
+#include "llvm37/Support/TargetRegistry.h"
+#include "llvm37/Support/TargetSelect.h"
+#include "llvm37/Support/Timer.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <memory>
 #include <system_error>
 
 // HLSL Change Starts
 #include <windows.h>
-#include "llvm/Support/MSFileSystem.h"
+#include "llvm37/Support/MSFileSystem.h"
 // HLSL Change Ends
 
 using namespace clang;
 using namespace clang::driver;
-using namespace llvm::opt;
+using namespace llvm37::opt;
 
 std::string GetExecutablePath(const char *Argv0, bool CanonicalPrefixes) {
   if (!CanonicalPrefixes)
@@ -67,7 +67,7 @@ std::string GetExecutablePath(const char *Argv0, bool CanonicalPrefixes) {
   // This just needs to be some symbol in the binary; C++ doesn't
   // allow taking the address of ::main however.
   void *P = (void*) (intptr_t) GetExecutablePath;
-  return llvm::sys::fs::getMainExecutable(Argv0, P);
+  return llvm37::sys::fs::getMainExecutable(Argv0, P);
 }
 
 static const char *GetStableCStr(std::set<std::string> &SavedStrings,
@@ -128,7 +128,7 @@ static void ApplyOneQAOverride(raw_ostream &OS,
       // Ignore end-of-line response file markers
       if (Args[i] == nullptr)
         continue;
-      std::string Repl = llvm::Regex(MatchPattern).sub(ReplPattern, Args[i]);
+      std::string Repl = llvm37::Regex(MatchPattern).sub(ReplPattern, Args[i]);
 
       if (Repl != Args[i]) {
         OS << "### Replacing '" << Args[i] << "' with '" << Repl << "'\n";
@@ -178,11 +178,11 @@ static void ApplyOneQAOverride(raw_ostream &OS,
 static void ApplyQAOverride(SmallVectorImpl<const char*> &Args,
                             const char *OverrideStr,
                             std::set<std::string> &SavedStrings) {
-  raw_ostream *OS = &llvm::errs();
+  raw_ostream *OS = &llvm37::errs();
 
   if (OverrideStr[0] == '#') {
     ++OverrideStr;
-    OS = &llvm::nulls();
+    OS = &llvm37::nulls();
   }
 
   *OS << "### CCC_OVERRIDE_OPTIONS: " << OverrideStr << "\n";
@@ -231,7 +231,7 @@ static const DriverSuffix *FindDriverSuffix(StringRef ProgName) {
       {"++", "--driver-mode=g++"},
   };
 
-  for (size_t i = 0; i < llvm::array_lengthof(DriverSuffixes); ++i)
+  for (size_t i = 0; i < llvm37::array_lengthof(DriverSuffixes); ++i)
     if (ProgName.endswith(DriverSuffixes[i].Suffix))
       return &DriverSuffixes[i];
   return nullptr;
@@ -247,8 +247,8 @@ static void ParseProgName(SmallVectorImpl<const char *> &ArgVector,
   // prefix "x86_64-linux". If such a target prefix is found, is gets added via
   // -target as implicit first argument.
 
-  std::string ProgName =llvm::sys::path::stem(ArgVector[0]);
-#ifdef LLVM_ON_WIN32
+  std::string ProgName =llvm37::sys::path::stem(ArgVector[0]);
+#ifdef LLVM37_ON_WIN32
   // Transform to lowercase for case insensitive file systems.
   ProgName = StringRef(ProgName).lower();
 #endif
@@ -287,7 +287,7 @@ static void ParseProgName(SmallVectorImpl<const char *> &ArgVector,
     // Infer target from the prefix.
     StringRef Prefix = ProgNameRef.slice(0, LastComponent);
     std::string IgnoredError;
-    if (llvm::TargetRegistry::lookupTarget(Prefix, IgnoredError)) {
+    if (llvm37::TargetRegistry::lookupTarget(Prefix, IgnoredError)) {
       auto it = ArgVector.begin();
       if (it != ArgVector.end())
         ++it;
@@ -318,7 +318,7 @@ static void FixupDiagPrefixExeName(TextDiagnosticPrinter *DiagClient,
                                    const std::string &Path) {
   // If the clang binary happens to be named cl.exe for compatibility reasons,
   // use clang-cl.exe as the prefix to avoid confusion between clang and MSVC.
-  StringRef ExeBasename(llvm::sys::path::filename(Path));
+  StringRef ExeBasename(llvm37::sys::path::filename(Path));
   if (ExeBasename.equals_lower("cl.exe"))
     ExeBasename = "clang-cl.exe";
   DiagClient->setPrefix(ExeBasename);
@@ -348,13 +348,13 @@ static void SetInstallDir(SmallVectorImpl<const char *> &argv,
   SmallString<128> InstalledPath(argv[0]);
 
   // Do a PATH lookup, if there are no directory components.
-  if (llvm::sys::path::filename(InstalledPath) == InstalledPath)
-    if (llvm::ErrorOr<std::string> Tmp = llvm::sys::findProgramByName(
-            llvm::sys::path::filename(InstalledPath.str())))
+  if (llvm37::sys::path::filename(InstalledPath) == InstalledPath)
+    if (llvm37::ErrorOr<std::string> Tmp = llvm37::sys::findProgramByName(
+            llvm37::sys::path::filename(InstalledPath.str())))
       InstalledPath = *Tmp;
-  llvm::sys::fs::make_absolute(InstalledPath);
-  InstalledPath = llvm::sys::path::parent_path(InstalledPath);
-  if (llvm::sys::fs::exists(InstalledPath.c_str()))
+  llvm37::sys::fs::make_absolute(InstalledPath);
+  InstalledPath = llvm37::sys::path::parent_path(InstalledPath);
+  if (llvm37::sys::fs::exists(InstalledPath.c_str()))
     TheDriver.setInstalledDir(InstalledPath);
 }
 
@@ -366,49 +366,49 @@ static int ExecuteCC1Tool(ArrayRef<const char *> argv, StringRef Tool) {
     return cc1as_main(argv.slice(2), argv[0], GetExecutablePathVP);
 
   // Reject unknown tools.
-  llvm::errs() << "error: unknown integrated tool '" << Tool << "'\n";
+  llvm37::errs() << "error: unknown integrated tool '" << Tool << "'\n";
   return 1;
 }
 
 // HLSL Change: changed calling convention to __cdecl
 int __cdecl main(int argc_, const char **argv_) {
   // HLSL Change Starts
-  if (llvm::sys::fs::SetupPerThreadFileSystem())
+  if (llvm37::sys::fs::SetupPerThreadFileSystem())
     return 1;
-  llvm::sys::fs::AutoCleanupPerThreadFileSystem auto_cleanup_fs;
-  llvm::sys::fs::MSFileSystem* msfPtr;
+  llvm37::sys::fs::AutoCleanupPerThreadFileSystem auto_cleanup_fs;
+  llvm37::sys::fs::MSFileSystem* msfPtr;
   HRESULT hr;
   if (!SUCCEEDED(hr = CreateMSFileSystemForDisk(&msfPtr)))
     return 1;
-  std::unique_ptr<llvm::sys::fs::MSFileSystem> msf(msfPtr);
-  llvm::sys::fs::AutoPerThreadSystem pts(msf.get());
-  llvm::STDStreamCloser stdStreamCloser;
+  std::unique_ptr<llvm37::sys::fs::MSFileSystem> msf(msfPtr);
+  llvm37::sys::fs::AutoPerThreadSystem pts(msf.get());
+  llvm37::STDStreamCloser stdStreamCloser;
   // HLSL Change Ends
 
-  llvm::sys::PrintStackTraceOnErrorSignal();
-  llvm::PrettyStackTraceProgram X(argc_, argv_);
+  llvm37::sys::PrintStackTraceOnErrorSignal();
+  llvm37::PrettyStackTraceProgram X(argc_, argv_);
 
-  if (llvm::sys::Process::FixupStandardFileDescriptors())
+  if (llvm37::sys::Process::FixupStandardFileDescriptors())
     return 1;
 
   SmallVector<const char *, 256> argv;
-  llvm::SpecificBumpPtrAllocator<char> ArgAllocator;
-  std::error_code EC = llvm::sys::Process::GetArgumentVector(
-      argv, llvm::makeArrayRef(argv_, argc_), ArgAllocator);
+  llvm37::SpecificBumpPtrAllocator<char> ArgAllocator;
+  std::error_code EC = llvm37::sys::Process::GetArgumentVector(
+      argv, llvm37::makeArrayRef(argv_, argc_), ArgAllocator);
   if (EC) {
-    llvm::errs() << "error: couldn't get arguments: " << EC.message() << '\n';
+    llvm37::errs() << "error: couldn't get arguments: " << EC.message() << '\n';
     return 1;
   }
 
-  llvm::BumpPtrAllocator A;
-  llvm::BumpPtrStringSaver Saver(A);
+  llvm37::BumpPtrAllocator A;
+  llvm37::BumpPtrStringSaver Saver(A);
 
   // Determines whether we want nullptr markers in argv to indicate response
   // files end-of-lines. We only use this for the /LINK driver argument.
   bool MarkEOLs = true;
   if (argv.size() > 1 && StringRef(argv[1]).startswith("-cc1"))
     MarkEOLs = false;
-  llvm::cl::ExpandResponseFiles(Saver, llvm::cl::TokenizeGNUCommandLine, argv,
+  llvm37::cl::ExpandResponseFiles(Saver, llvm37::cl::TokenizeGNUCommandLine, argv,
                                 MarkEOLs);
 
   // Handle -cc1 integrated tools, even if -cc1 was expanded from a response
@@ -449,7 +449,7 @@ int __cdecl main(int argc_, const char **argv_) {
       CreateAndPopulateDiagOpts(argv);
 
   TextDiagnosticPrinter *DiagClient
-    = new TextDiagnosticPrinter(llvm::errs(), &*DiagOpts);
+    = new TextDiagnosticPrinter(llvm37::errs(), &*DiagOpts);
   FixupDiagPrefixExeName(DiagClient, Path);
 
   IntrusiveRefCntPtr<DiagnosticIDs> DiagID(new DiagnosticIDs());
@@ -466,10 +466,10 @@ int __cdecl main(int argc_, const char **argv_) {
 
   ProcessWarningOptions(Diags, *DiagOpts, /*ReportDiags=*/false);
 
-  Driver TheDriver(Path, llvm::sys::getDefaultTargetTriple(), Diags);
+  Driver TheDriver(Path, llvm37::sys::getDefaultTargetTriple(), Diags);
   SetInstallDir(argv, TheDriver);
 
-  llvm::InitializeAllTargets();
+  llvm37::InitializeAllTargets();
   ParseProgName(argv, SavedStrings);
 
   SetBackdoorDriverOutputsFromEnvVars(TheDriver);
@@ -502,7 +502,7 @@ int __cdecl main(int argc_, const char **argv_) {
     // On Windows, abort will return an exit code of 3.  In these cases,
     // generate additional diagnostic information if possible.
     bool DiagnoseCrash = CommandRes < 0 || CommandRes == 70;
-#ifdef LLVM_ON_WIN32
+#ifdef LLVM37_ON_WIN32
     DiagnoseCrash |= CommandRes == 3;
 #endif
     if (DiagnoseCrash) {
@@ -515,11 +515,11 @@ int __cdecl main(int argc_, const char **argv_) {
 
   // If any timers were active but haven't been destroyed yet, print their
   // results now.  This happens in -disable-free mode.
-  llvm::TimerGroup::printAll(llvm::errs());
+  llvm37::TimerGroup::printAll(llvm37::errs());
 
-  llvm::llvm_shutdown();
+  llvm37::llvm37_shutdown();
 
-#ifdef LLVM_ON_WIN32
+#ifdef LLVM37_ON_WIN32
   // Exit status should not be negative on Win32, unless abnormal termination.
   // Once abnormal termiation was caught, negative status should not be
   // propagated.

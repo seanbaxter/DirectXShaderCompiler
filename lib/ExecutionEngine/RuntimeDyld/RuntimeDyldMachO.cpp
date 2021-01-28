@@ -1,6 +1,6 @@
 //===-- RuntimeDyldMachO.cpp - Run-time dynamic linker for MC-JIT -*- C++ -*-=//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -16,11 +16,11 @@
 #include "Targets/RuntimeDyldMachOARM.h"
 #include "Targets/RuntimeDyldMachOI386.h"
 #include "Targets/RuntimeDyldMachOX86_64.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/StringRef.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/StringRef.h"
 
-using namespace llvm;
-using namespace llvm::object;
+using namespace llvm37;
+using namespace llvm37::object;
 
 #define DEBUG_TYPE "dyld"
 
@@ -41,7 +41,7 @@ public:
 
 }
 
-namespace llvm {
+namespace llvm37 {
 
 int64_t RuntimeDyldMachO::memcpyAddend(const RelocationEntry &RE) const {
   unsigned NumBytes = 1 << RE.Size;
@@ -283,7 +283,7 @@ RuntimeDyldMachO::create(Triple::ArchType Arch,
                          RuntimeDyld::SymbolResolver &Resolver) {
   switch (Arch) {
   default:
-    llvm_unreachable("Unsupported target for RuntimeDyldMachO.");
+    llvm37_unreachable("Unsupported target for RuntimeDyldMachO.");
     break;
   case Triple::arm:
     return make_unique<RuntimeDyldMachOARM>(MemMgr, Resolver);
@@ -300,8 +300,8 @@ std::unique_ptr<RuntimeDyld::LoadedObjectInfo>
 RuntimeDyldMachO::loadObject(const object::ObjectFile &O) {
   unsigned SectionStartIdx, SectionEndIdx;
   std::tie(SectionStartIdx, SectionEndIdx) = loadObjectImpl(O);
-  return llvm::make_unique<LoadedMachOObjectInfo>(*this, SectionStartIdx,
+  return llvm37::make_unique<LoadedMachOObjectInfo>(*this, SectionStartIdx,
                                                   SectionEndIdx);
 }
 
-} // end namespace llvm
+} // end namespace llvm37

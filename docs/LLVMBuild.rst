@@ -9,25 +9,25 @@ Introduction
 ============
 
 This document describes the ``LLVMBuild`` organization and files which
-we use to describe parts of the LLVM ecosystem. For description of
+we use to describe parts of the LLVM37 ecosystem. For description of
 specific LLVMBuild related tools, please see the command guide.
 
-LLVM is designed to be a modular set of libraries which can be flexibly
+LLVM37 is designed to be a modular set of libraries which can be flexibly
 mixed together in order to build a variety of tools, like compilers,
 JITs, custom code generators, optimization passes, interpreters, and so
-on. Related projects in the LLVM system like Clang and LLDB also tend to
+on. Related projects in the LLVM37 system like Clang and LLDB also tend to
 follow this philosophy.
 
-In order to support this usage style, LLVM has a fairly strict structure
+In order to support this usage style, LLVM37 has a fairly strict structure
 as to how the source code and various components are organized. The
 ``LLVMBuild.txt`` files are the explicit specification of that
 structure, and are used by the build systems and other tools in order to
-develop the LLVM project.
+develop the LLVM37 project.
 
 Project Organization
 ====================
 
-The source code for LLVM projects using the LLVMBuild system (LLVM,
+The source code for LLVM37 projects using the LLVMBuild system (LLVM37,
 Clang, and LLDB) is organized into *components*, which define the
 separate pieces of functionality that make up the project. These
 projects may consist of many libraries, associated tools, build tools,
@@ -48,7 +48,7 @@ Build Integration
 =================
 
 The LLVMBuild files themselves are just a declarative way to describe
-the project structure. The actual building of the LLVM project is
+the project structure. The actual building of the LLVM37 project is
 handled by another build system.
 
 The build system implementation will load the relevant contents of the
@@ -60,31 +60,31 @@ when the contents of the ``LLVMBuild.txt`` files change.
 
 Developers generally are not expected to need to be aware of the details
 of how the LLVMBuild system is integrated into their build. Ideally,
-LLVM developers who are not working on the build system would only ever
+LLVM37 developers who are not working on the build system would only ever
 need to modify the contents of the ``LLVMBuild.txt`` description files
 (although we have not reached this goal yet).
 
 Component Overview
 ==================
 
-As mentioned earlier, LLVM projects are organized into logical
+As mentioned earlier, LLVM37 projects are organized into logical
 *components*. Every component is typically grouped into its own
 subdirectory. Generally, a component is organized around a coherent
 group of sources which have some kind of clear API separation from other
 parts of the code.
 
-LLVM primarily uses the following types of components:
+LLVM37 primarily uses the following types of components:
 
 - *Libraries* - Library components define a distinct API which can be
-  independently linked into LLVM client applications. Libraries typically
+  independently linked into LLVM37 client applications. Libraries typically
   have private and public header files, and may specify a link of required
   libraries that they build on top of.
 - *Build Tools* - Build tools are applications which are designed to be run
   as part of the build process (typically to generate other source files).
-  Currently, LLVM uses one main build tool called :doc:`TableGen/index`
+  Currently, LLVM37 uses one main build tool called :doc:`TableGen/index`
   to generate a variety of source files.
-- *Tools* - Command line applications which are built using the LLVM
-  component libraries. Most LLVM tools are small and are primarily
+- *Tools* - Command line applications which are built using the LLVM37
+  component libraries. Most LLVM37 tools are small and are primarily
   frontends to the library interfaces.
 
 Components are described using ``LLVMBuild.txt`` files in the directories
@@ -257,7 +257,7 @@ the properties which are associated with that component.
 -  ``type = TargetGroup``
 
    ``TargetGroup`` components are an extension of ``LibraryGroup``\s,
-   specifically for defining LLVM targets (which are handled specially in a
+   specifically for defining LLVM37 targets (which are handled specially in a
    few places).
 
    The name of the component should always be the name of the target.

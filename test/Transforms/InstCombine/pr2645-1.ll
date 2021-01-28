@@ -31,9 +31,9 @@ define internal void @""(i8*, i32, i8*) {
         br label %4
 
 ; <label>:20            ; preds = %4
-        call void @llvm.x86.mmx.emms( )
+        call void @llvm37.x86.mmx.emms( )
         ret void
 }
 
 declare <2 x i64> @foo(<1 x i64>)
-declare void @llvm.x86.mmx.emms( )
+declare void @llvm37.x86.mmx.emms( )

@@ -364,7 +364,7 @@ attributes #1 = { nounwind readonly }
 attributes #2 = { nounwind }
 
 !pauseresume = !{!0}
-!llvm.ident = !{!1}
+!llvm37.ident = !{!1}
 !dx.version = !{!2}
 !dx.valver = !{!3}
 !dx.shaderModel = !{!4}

@@ -2,7 +2,7 @@
 
 """A shuffle vector fuzz tester.
 
-This is a python program to fuzz test the LLVM shufflevector instruction. It
+This is a python program to fuzz test the LLVM37 shufflevector instruction. It
 generates a function with a random sequnece of shufflevectors, maintaining the
 element mapping accumulated across the function. It then generates a main
 function which calls it with a different value in each element and checks that
@@ -236,7 +236,7 @@ die.%(i)d:
   call i32 (i8*, i8*, ...)* @sprintf(i8* %%str.ptr, i8* getelementptr inbounds ([128 x i8]* @error.%(i)d, i32 0, i32 0), i32 %%bad.%(i)d)
   %%length.%(i)d = call i32 @strlen(i8* %%str.ptr)
   call i32 @write(i32 2, i8* %%str.ptr, i32 %%length.%(i)d)
-  call void @llvm.trap()
+  call void @llvm37.trap()
   unreachable
 """ % dict(subst, i=i, next_i=i + 1, r=r)
 
@@ -248,7 +248,7 @@ test.%d:
 declare i32 @strlen(i8*)
 declare i32 @write(i32, i8*, i32)
 declare i32 @sprintf(i8*, i8*, ...)
-declare void @llvm.trap() noreturn nounwind
+declare void @llvm37.trap() noreturn nounwind
 """ % (len(result),)
 
 if __name__ == '__main__':

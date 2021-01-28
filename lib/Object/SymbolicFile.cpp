@@ -1,6 +1,6 @@
 //===- SymbolicFile.cpp - Interface that only provides symbols --*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,12 +11,12 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Object/IRObjectFile.h"
-#include "llvm/Object/ObjectFile.h"
-#include "llvm/Object/SymbolicFile.h"
-#include "llvm/Support/MemoryBuffer.h"
+#include "llvm37/Object/IRObjectFile.h"
+#include "llvm37/Object/ObjectFile.h"
+#include "llvm37/Object/SymbolicFile.h"
+#include "llvm37/Support/MemoryBuffer.h"
 
-using namespace llvm;
+using namespace llvm37;
 using namespace object;
 
 SymbolicFile::SymbolicFile(unsigned int Type, MemoryBufferRef Source)
@@ -25,7 +25,7 @@ SymbolicFile::SymbolicFile(unsigned int Type, MemoryBufferRef Source)
 SymbolicFile::~SymbolicFile() {}
 
 ErrorOr<std::unique_ptr<SymbolicFile>> SymbolicFile::createSymbolicFile(
-    MemoryBufferRef Object, sys::fs::file_magic Type, LLVMContext *Context) {
+    MemoryBufferRef Object, sys::fs::file_magic Type, LLVM37Context *Context) {
   StringRef Data = Object.getBuffer();
   if (Type == sys::fs::file_magic::unknown)
     Type = sys::fs::identify_magic(Data);
@@ -75,5 +75,5 @@ ErrorOr<std::unique_ptr<SymbolicFile>> SymbolicFile::createSymbolicFile(
         *Context);
   }
   }
-  llvm_unreachable("Unexpected Binary File Type");
+  llvm37_unreachable("Unexpected Binary File Type");
 }

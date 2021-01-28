@@ -21,24 +21,24 @@
 #include "dxc/HLSL/HLOperationLower.h"
 #include "dxc/HLSL/HLOperations.h"
 #include "dxc/Support/Global.h"
-#include "llvm/Pass.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/Analysis/AssumptionCache.h"
-#include "llvm/IR/DebugInfo.h"
-#include "llvm/IR/DebugInfoMetadata.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/Instruction.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/IRBuilder.h"
-#include "llvm/IR/Operator.h"
-#include "llvm/IR/Module.h"
-#include "llvm/Support/Casting.h"
-#include "llvm/Transforms/Utils/SSAUpdater.h"
+#include "llvm37/Pass.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/Analysis/AssumptionCache.h"
+#include "llvm37/IR/DebugInfo.h"
+#include "llvm37/IR/DebugInfoMetadata.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/Instruction.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/IRBuilder.h"
+#include "llvm37/IR/Operator.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/Support/Casting.h"
+#include "llvm37/Transforms/Utils/SSAUpdater.h"
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
 
-using namespace llvm;
+using namespace llvm37;
 using namespace hlsl;
 
 // TODO: use hlsl namespace for the most of this file.
@@ -110,37 +110,37 @@ void InitDxilModuleFromHLModule(HLModule &H, DxilModule &M, bool HasDebugInfo) {
     M.SetEntryFunctionName(H.GetEntryFunctionName());
   }
 
-  std::vector<GlobalVariable* > &LLVMUsed = M.GetLLVMUsed();
+  std::vector<GlobalVariable* > &LLVM37Used = M.GetLLVM37Used();
 
   // Resources
   for (auto && C : H.GetCBuffers()) {
-    auto b = llvm::make_unique<DxilCBuffer>();
+    auto b = llvm37::make_unique<DxilCBuffer>();
     InitResourceBase(C.get(), b.get());
     b->SetSize(C->GetSize());
     if (GlobalVariable *GV = dyn_cast<GlobalVariable>(b->GetGlobalSymbol()))
-      LLVMUsed.emplace_back(GV);
+      LLVM37Used.emplace_back(GV);
     M.AddCBuffer(std::move(b));
   }
   for (auto && C : H.GetUAVs()) {
-    auto b = llvm::make_unique<DxilResource>();
+    auto b = llvm37::make_unique<DxilResource>();
     InitResource(C.get(), b.get());
     if (GlobalVariable *GV = dyn_cast<GlobalVariable>(b->GetGlobalSymbol()))
-      LLVMUsed.emplace_back(GV);
+      LLVM37Used.emplace_back(GV);
     M.AddUAV(std::move(b));
   }
   for (auto && C : H.GetSRVs()) {
-    auto b = llvm::make_unique<DxilResource>();
+    auto b = llvm37::make_unique<DxilResource>();
     InitResource(C.get(), b.get());
     if (GlobalVariable *GV = dyn_cast<GlobalVariable>(b->GetGlobalSymbol()))
-      LLVMUsed.emplace_back(GV);
+      LLVM37Used.emplace_back(GV);
     M.AddSRV(std::move(b));
   }
   for (auto && C : H.GetSamplers()) {
-    auto b = llvm::make_unique<DxilSampler>();
+    auto b = llvm37::make_unique<DxilSampler>();
     InitResourceBase(C.get(), b.get());
     b->SetSamplerKind(C->GetSamplerKind());
     if (GlobalVariable *GV = dyn_cast<GlobalVariable>(b->GetGlobalSymbol()))
-      LLVMUsed.emplace_back(GV);
+      LLVM37Used.emplace_back(GV);
     M.AddSampler(std::move(b));
   }
 
@@ -168,8 +168,8 @@ void InitDxilModuleFromHLModule(HLModule &H, DxilModule &M, bool HasDebugInfo) {
   M.ResetTypeSystem(H.ReleaseTypeSystem());
   // Dxil OP.
   M.ResetOP(H.ReleaseOP());
-  // Keep llvm used.
-  M.EmitLLVMUsed();
+  // Keep llvm37 used.
+  M.EmitLLVM37Used();
 
   M.SetAllResourcesBound(H.GetHLOptions().bAllResourcesBound);
 
@@ -214,7 +214,7 @@ public:
       }
       DxilFunctionProps &props = m_pHLModule->GetDxilFunctionProps(EntryFn);
       std::unique_ptr<DxilEntryProps> pProps =
-          llvm::make_unique<DxilEntryProps>(
+          llvm37::make_unique<DxilEntryProps>(
               props, m_pHLModule->GetHLOptions().bUseMinPrecision);
       HLSignatureLower sigLower(m_pHLModule->GetEntryFunction(), *m_pHLModule,
                                 pProps->sig);
@@ -227,7 +227,7 @@ public:
         if (m_pHLModule->HasDxilFunctionProps(&F)) {
           DxilFunctionProps &props = m_pHLModule->GetDxilFunctionProps(&F);
           std::unique_ptr<DxilEntryProps> pProps =
-              llvm::make_unique<DxilEntryProps>(
+              llvm37::make_unique<DxilEntryProps>(
                   props, m_pHLModule->GetHLOptions().bUseMinPrecision);
           if (m_pHLModule->IsGraphicsShader(&F) ||
               m_pHLModule->IsComputeShader(&F)) {
@@ -505,7 +505,7 @@ void DxilGenerationPass::GenerateDxilCBufferHandles() {
   // For CBuffer, handle are mapped to HLCreateHandle.
   OP *hlslOP = m_pHLModule->GetOP();
   Value *opArg = hlslOP->GetU32Const((unsigned)OP::OpCode::CreateHandleForLib);
-  LLVMContext &Ctx = hlslOP->GetCtx();
+  LLVM37Context &Ctx = hlslOP->GetCtx();
   Value *zeroIdx = hlslOP->GetU32Const(0);
 
   for (size_t i = 0; i < m_pHLModule->GetCBuffers().size(); i++) {
@@ -832,7 +832,7 @@ void DxilGenerationPass::TranslateMinPrecisionRawBuffer(
     DxilModule &DM,
     std::unordered_map<CallInst *, Type *> &HandleToResTypeMap) {
   hlsl::OP *hlslOP = DM.GetOP();
-  LLVMContext &Ctx = DM.GetCtx();
+  LLVM37Context &Ctx = DM.GetCtx();
   Type *I32Ty = Type::getInt32Ty(Ctx);
   Type *I16Ty = Type::getInt16Ty(Ctx);
   Type *F32Ty = Type::getFloatTy(Ctx);
@@ -880,7 +880,7 @@ void DxilGenerationPass::TranslateMinPrecisionRawBuffer(
 
 char DxilGenerationPass::ID = 0;
 
-ModulePass *llvm::createDxilGenerationPass(bool NotOptimized, hlsl::HLSLExtensionsCodegenHelper *extensionsHelper) {
+ModulePass *llvm37::createDxilGenerationPass(bool NotOptimized, hlsl::HLSLExtensionsCodegenHelper *extensionsHelper) {
   DxilGenerationPass *dxilPass = new DxilGenerationPass(NotOptimized);
   dxilPass->SetExtensionsHelper(extensionsHelper);
   return dxilPass;

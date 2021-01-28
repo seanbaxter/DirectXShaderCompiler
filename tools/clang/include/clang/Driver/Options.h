@@ -1,16 +1,16 @@
 //===--- Options.h - Option info & table ------------------------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_DRIVER_OPTIONS_H
-#define LLVM_CLANG_DRIVER_OPTIONS_H
+#ifndef LLVM37_CLANG_DRIVER_OPTIONS_H
+#define LLVM37_CLANG_DRIVER_OPTIONS_H
 
-namespace llvm {
+namespace llvm37 {
 namespace opt {
 class OptTable;
 }
@@ -21,7 +21,7 @@ namespace driver {
 
 namespace options {
 /// Flags specifically for clang options.  Must not overlap with
-/// llvm::opt::DriverFlag.
+/// llvm37::opt::DriverFlag.
 enum ClangFlags {
   DriverOption = (1 << 4),
   LinkerInput = (1 << 5),
@@ -44,7 +44,7 @@ enum ID {
   };
 }
 
-llvm::opt::OptTable *createDriverOptTable();
+llvm37::opt::OptTable *createDriverOptTable();
 }
 }
 

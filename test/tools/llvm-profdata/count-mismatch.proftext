@@ -1,8 +1,8 @@
 # Make sure we don't try to combine counters with the same function
 # name and a matching hash if the number of counters differs
 
-# RUN: llvm-profdata merge %s -o %t.profdata 2>&1 | FileCheck -check-prefix=MERGE_ERRS %s
-# RUN: llvm-profdata show %t.profdata -all-functions -counts > %t.out
+# RUN: llvm37-profdata merge %s -o %t.profdata 2>&1 | FileCheck -check-prefix=MERGE_ERRS %s
+# RUN: llvm37-profdata show %t.profdata -all-functions -counts > %t.out
 # RUN: FileCheck %s -input-file %t.out
 foo
 1024

@@ -1,6 +1,6 @@
 //===- SearchForAddressOfSpecialSymbol.cpp - Function addresses -*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -51,8 +51,8 @@ static void *DoSearch(const char* symbolName) {
   return nullptr;
 }
 
-namespace llvm {
+namespace llvm37 {
 void *SearchForAddressOfSpecialSymbol(const char* symbolName) {
   return DoSearch(symbolName);
 }
-}  // namespace llvm
+}  // namespace llvm37

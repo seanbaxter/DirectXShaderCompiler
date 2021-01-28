@@ -1,6 +1,6 @@
-; RUN: llvm-as <%s >%t1
-; RUN: llvm-lto -exported-symbol=_uses_puts -exported-symbol=_uses_printf -o - %t1 | \
-; RUN: llvm-nm - | \
+; RUN: llvm37-as <%s >%t1
+; RUN: llvm37-lto -exported-symbol=_uses_puts -exported-symbol=_uses_printf -o - %t1 | \
+; RUN: llvm37-nm - | \
 ; RUN: FileCheck %s
 ; rdar://problem/16165191
 ; runtime library implementations should not be renamed

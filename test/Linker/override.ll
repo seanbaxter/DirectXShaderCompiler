@@ -1,5 +1,5 @@
-; RUN: llvm-link %s -override %S/Inputs/override.ll -S | FileCheck %s
-; RUN: llvm-link -override %S/Inputs/override.ll %s -S | FileCheck %s
+; RUN: llvm37-link %s -override %S/Inputs/override.ll -S | FileCheck %s
+; RUN: llvm37-link -override %S/Inputs/override.ll %s -S | FileCheck %s
 
 
 ; CHECK-LABEL: define i32 @foo

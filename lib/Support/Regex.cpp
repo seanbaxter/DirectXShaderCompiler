@@ -1,6 +1,6 @@
 //===-- Regex.cpp - Regular Expression matcher implementation -------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,17 +11,17 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Support/Regex.h"
+#include "llvm37/Support/Regex.h"
 #include "regex_impl.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/ADT/StringRef.h"
-#include "llvm/ADT/Twine.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/ADT/StringRef.h"
+#include "llvm37/ADT/Twine.h"
 #include <string>
-using namespace llvm;
+using namespace llvm37;
 
 Regex::Regex(StringRef regex, unsigned Flags) {
   unsigned flags = 0;
-  preg = new llvm_regex();
+  preg = new llvm37_regex();
   preg->re_endp = regex.end();
   if (Flags & IgnoreCase) 
     flags |= REG_ICASE;
@@ -29,12 +29,12 @@ Regex::Regex(StringRef regex, unsigned Flags) {
     flags |= REG_NEWLINE;
   if (!(Flags & BasicRegex))
     flags |= REG_EXTENDED;
-  error = llvm_regcomp(preg, regex.data(), flags|REG_PEND);
+  error = llvm37_regcomp(preg, regex.data(), flags|REG_PEND);
 }
 
 Regex::~Regex() {
   if (preg) {
-    llvm_regfree(preg);
+    llvm37_regfree(preg);
     delete preg;
   }
 }
@@ -43,10 +43,10 @@ bool Regex::isValid(std::string &Error) {
   if (!error)
     return true;
   
-  size_t len = llvm_regerror(error, preg, nullptr, 0);
+  size_t len = llvm37_regerror(error, preg, nullptr, 0);
   
   Error.resize(len - 1);
-  llvm_regerror(error, preg, &Error[0], len);
+  llvm37_regerror(error, preg, &Error[0], len);
   return false;
 }
 
@@ -60,12 +60,12 @@ bool Regex::match(StringRef String, SmallVectorImpl<StringRef> *Matches){
   unsigned nmatch = Matches ? preg->re_nsub+1 : 0;
 
   // pmatch needs to have at least one element.
-  SmallVector<llvm_regmatch_t, 8> pm;
+  SmallVector<llvm37_regmatch_t, 8> pm;
   pm.resize(nmatch > 0 ? nmatch : 1);
   pm[0].rm_so = 0;
   pm[0].rm_eo = String.size();
 
-  int rc = llvm_regexec(preg, String.data(), nmatch, pm.data(), REG_STARTEND);
+  int rc = llvm37_regexec(preg, String.data(), nmatch, pm.data(), REG_STARTEND);
 
   if (rc == REG_NOMATCH)
     return false;

@@ -1,4 +1,4 @@
-; RUN: not llvm-as < %s 2>&1 | FileCheck %s
+; RUN: not llvm37-as < %s 2>&1 | FileCheck %s
 
 ; CHECK: clause argument must be a constant
 

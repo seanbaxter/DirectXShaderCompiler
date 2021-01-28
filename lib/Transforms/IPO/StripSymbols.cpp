@@ -1,6 +1,6 @@
 //===- StripSymbols.cpp - Strip symbols and debug info from a module ------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -20,19 +20,19 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Transforms/IPO.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/SmallPtrSet.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/DebugInfo.h"
-#include "llvm/IR/DerivedTypes.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/TypeFinder.h"
-#include "llvm/IR/ValueSymbolTable.h"
-#include "llvm/Pass.h"
-#include "llvm/Transforms/Utils/Local.h"
-using namespace llvm;
+#include "llvm37/Transforms/IPO.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/SmallPtrSet.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/DebugInfo.h"
+#include "llvm37/IR/DerivedTypes.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/TypeFinder.h"
+#include "llvm37/IR/ValueSymbolTable.h"
+#include "llvm37/Pass.h"
+#include "llvm37/Transforms/Utils/Local.h"
+using namespace llvm37;
 
 namespace {
   class StripSymbols : public ModulePass {
@@ -101,7 +101,7 @@ char StripSymbols::ID = 0;
 INITIALIZE_PASS(StripSymbols, "strip",
                 "Strip all symbols from a module", false, false)
 
-ModulePass *llvm::createStripSymbolsPass(bool OnlyDebugInfo) {
+ModulePass *llvm37::createStripSymbolsPass(bool OnlyDebugInfo) {
   return new StripSymbols(OnlyDebugInfo);
 }
 
@@ -110,15 +110,15 @@ INITIALIZE_PASS(StripNonDebugSymbols, "strip-nondebug",
                 "Strip all symbols, except dbg symbols, from a module",
                 false, false)
 
-ModulePass *llvm::createStripNonDebugSymbolsPass() {
+ModulePass *llvm37::createStripNonDebugSymbolsPass() {
   return new StripNonDebugSymbols();
 }
 
 char StripDebugDeclare::ID = 0;
 INITIALIZE_PASS(StripDebugDeclare, "strip-debug-declare",
-                "Strip all llvm.dbg.declare intrinsics", false, false)
+                "Strip all llvm37.dbg.declare intrinsics", false, false)
 
-ModulePass *llvm::createStripDebugDeclarePass() {
+ModulePass *llvm37::createStripDebugDeclarePass() {
   return new StripDebugDeclare();
 }
 
@@ -126,7 +126,7 @@ char StripDeadDebugInfo::ID = 0;
 INITIALIZE_PASS(StripDeadDebugInfo, "strip-dead-debug-info",
                 "Strip debug info for unused symbols", false, false)
 
-ModulePass *llvm::createStripDeadDebugInfoPass() {
+ModulePass *llvm37::createStripDeadDebugInfoPass() {
   return new StripDeadDebugInfo();
 }
 
@@ -188,13 +188,13 @@ static void StripTypeNames(Module &M, bool PreserveDbgInfo) {
   }
 }
 
-/// Find values that are marked as llvm.used.
-static void findUsedValues(GlobalVariable *LLVMUsed,
+/// Find values that are marked as llvm37.used.
+static void findUsedValues(GlobalVariable *LLVM37Used,
                            SmallPtrSetImpl<const GlobalValue*> &UsedValues) {
-  if (!LLVMUsed) return;
-  UsedValues.insert(LLVMUsed);
+  if (!LLVM37Used) return;
+  UsedValues.insert(LLVM37Used);
 
-  ConstantArray *Inits = cast<ConstantArray>(LLVMUsed->getInitializer());
+  ConstantArray *Inits = cast<ConstantArray>(LLVM37Used->getInitializer());
 
   for (unsigned i = 0, e = Inits->getNumOperands(); i != e; ++i)
     if (GlobalValue *GV =
@@ -205,19 +205,19 @@ static void findUsedValues(GlobalVariable *LLVMUsed,
 /// StripSymbolNames - Strip symbol names.
 static bool StripSymbolNames(Module &M, bool PreserveDbgInfo) {
 
-  SmallPtrSet<const GlobalValue*, 8> llvmUsedValues;
-  findUsedValues(M.getGlobalVariable("llvm.used"), llvmUsedValues);
-  findUsedValues(M.getGlobalVariable("llvm.compiler.used"), llvmUsedValues);
+  SmallPtrSet<const GlobalValue*, 8> llvm37UsedValues;
+  findUsedValues(M.getGlobalVariable("llvm.used"), llvm37UsedValues);
+  findUsedValues(M.getGlobalVariable("llvm.compiler.used"), llvm37UsedValues);
 
   for (Module::global_iterator I = M.global_begin(), E = M.global_end();
        I != E; ++I) {
-    if (I->hasLocalLinkage() && llvmUsedValues.count(I) == 0)
+    if (I->hasLocalLinkage() && llvm37UsedValues.count(I) == 0)
       if (!PreserveDbgInfo || !I->getName().startswith("llvm.dbg"))
         I->setName("");     // Internal symbols can't participate in linkage
   }
 
   for (Module::iterator I = M.begin(), E = M.end(); I != E; ++I) {
-    if (I->hasLocalLinkage() && llvmUsedValues.count(I) == 0)
+    if (I->hasLocalLinkage() && llvm37UsedValues.count(I) == 0)
       if (!PreserveDbgInfo || !I->getName().startswith("llvm.dbg"))
         I->setName("");     // Internal symbols can't participate in linkage
     StripSymtab(I->getValueSymbolTable(), PreserveDbgInfo);
@@ -282,14 +282,14 @@ bool StripDebugDeclare::runOnModule(Module &M) {
 /// Remove any debug info for global variables/functions in the given module for
 /// which said global variable/function no longer exists (i.e. is null).
 ///
-/// Debugging information is encoded in llvm IR using metadata. This is designed
+/// Debugging information is encoded in llvm37 IR using metadata. This is designed
 /// such a way that debug info for symbols preserved even if symbols are
 /// optimized away by the optimizer. This special pass removes debug info for
 /// such symbols.
 bool StripDeadDebugInfo::runOnModule(Module &M) {
   bool Changed = false;
 
-  LLVMContext &C = M.getContext();
+  LLVM37Context &C = M.getContext();
 
   // Find all debug info in F. This is actually overkill in terms of what we
   // want to do, but we want to try and be as resilient as possible in the face

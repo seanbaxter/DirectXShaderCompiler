@@ -1,32 +1,32 @@
 //===- unittests/IR/MetadataTest.cpp - Metadata unit tests ----------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/DebugInfo.h"
-#include "llvm/IR/DebugInfoMetadata.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Metadata.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/ModuleSlotTracker.h"
-#include "llvm/IR/Type.h"
-#include "llvm/IR/Verifier.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/DebugInfo.h"
+#include "llvm37/IR/DebugInfoMetadata.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/Metadata.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/ModuleSlotTracker.h"
+#include "llvm37/IR/Type.h"
+#include "llvm37/IR/Verifier.h"
+#include "llvm37/Support/raw_ostream.h"
 #include "gtest/gtest.h"
-using namespace llvm;
+using namespace llvm37;
 
 namespace {
 
 TEST(ContextAndReplaceableUsesTest, FromContext) {
-  LLVMContext Context;
+  LLVM37Context Context;
   ContextAndReplaceableUses CRU(Context);
   EXPECT_EQ(&Context, &CRU.getContext());
   EXPECT_FALSE(CRU.hasReplaceableUses());
@@ -34,7 +34,7 @@ TEST(ContextAndReplaceableUsesTest, FromContext) {
 }
 
 TEST(ContextAndReplaceableUsesTest, FromReplaceableUses) {
-  LLVMContext Context;
+  LLVM37Context Context;
   ContextAndReplaceableUses CRU(make_unique<ReplaceableMetadataImpl>(Context));
   EXPECT_EQ(&Context, &CRU.getContext());
   EXPECT_TRUE(CRU.hasReplaceableUses());
@@ -42,7 +42,7 @@ TEST(ContextAndReplaceableUsesTest, FromReplaceableUses) {
 }
 
 TEST(ContextAndReplaceableUsesTest, makeReplaceable) {
-  LLVMContext Context;
+  LLVM37Context Context;
   ContextAndReplaceableUses CRU(Context);
   CRU.makeReplaceable(make_unique<ReplaceableMetadataImpl>(Context));
   EXPECT_EQ(&Context, &CRU.getContext());
@@ -51,7 +51,7 @@ TEST(ContextAndReplaceableUsesTest, makeReplaceable) {
 }
 
 TEST(ContextAndReplaceableUsesTest, takeReplaceableUses) {
-  LLVMContext Context;
+  LLVM37Context Context;
   auto ReplaceableUses = make_unique<ReplaceableMetadataImpl>(Context);
   auto *Ptr = ReplaceableUses.get();
   ContextAndReplaceableUses CRU(std::move(ReplaceableUses));
@@ -67,7 +67,7 @@ public:
   MetadataTest() : M("test", Context), Counter(0) {}
 
 protected:
-  LLVMContext Context;
+  LLVM37Context Context;
   Module M;
   int Counter;
 
@@ -1459,7 +1459,7 @@ TEST_F(DISubprogramTest, get) {
   unsigned VirtualIndex = 5;
   unsigned Flags = 6;
   bool IsOptimized = false;
-  llvm::Function *Function = getFunction("foo");
+  llvm37::Function *Function = getFunction("foo");
   MDTuple *TemplateParams = getTuple();
   DISubprogram *Declaration = getSubprogram();
   MDTuple *Variables = getTuple();
@@ -2182,7 +2182,7 @@ TEST_F(TrackingMDRefTest, UpdatesOnDeletion) {
 }
 
 TEST(NamedMDNodeTest, Search) {
-  LLVMContext Context;
+  LLVM37Context Context;
   ConstantAsMetadata *C =
       ConstantAsMetadata::get(ConstantInt::get(Type::getInt32Ty(Context), 1));
   ConstantAsMetadata *C2 =
@@ -2202,7 +2202,7 @@ TEST(NamedMDNodeTest, Search) {
   std::string Str;
   raw_string_ostream oss(Str);
   NMD->print(oss);
-  EXPECT_STREQ("!llvm.NMD1 = !{!0, !1}\n",
+  EXPECT_STREQ("!llvm37.NMD1 = !{!0, !1}\n",
                oss.str().c_str());
 }
 
@@ -2210,7 +2210,7 @@ typedef MetadataTest FunctionAttachmentTest;
 TEST_F(FunctionAttachmentTest, setMetadata) {
   Function *F = getFunction("foo");
   ASSERT_FALSE(F->hasMetadata());
-  EXPECT_EQ(nullptr, F->getMetadata(LLVMContext::MD_dbg));
+  EXPECT_EQ(nullptr, F->getMetadata(LLVM37Context::MD_dbg));
   EXPECT_EQ(nullptr, F->getMetadata("dbg"));
   EXPECT_EQ(nullptr, F->getMetadata("other"));
 
@@ -2220,19 +2220,19 @@ TEST_F(FunctionAttachmentTest, setMetadata) {
 
   F->setMetadata("dbg", SP1);
   EXPECT_TRUE(F->hasMetadata());
-  EXPECT_EQ(SP1, F->getMetadata(LLVMContext::MD_dbg));
+  EXPECT_EQ(SP1, F->getMetadata(LLVM37Context::MD_dbg));
   EXPECT_EQ(SP1, F->getMetadata("dbg"));
   EXPECT_EQ(nullptr, F->getMetadata("other"));
 
-  F->setMetadata(LLVMContext::MD_dbg, SP2);
+  F->setMetadata(LLVM37Context::MD_dbg, SP2);
   EXPECT_TRUE(F->hasMetadata());
-  EXPECT_EQ(SP2, F->getMetadata(LLVMContext::MD_dbg));
+  EXPECT_EQ(SP2, F->getMetadata(LLVM37Context::MD_dbg));
   EXPECT_EQ(SP2, F->getMetadata("dbg"));
   EXPECT_EQ(nullptr, F->getMetadata("other"));
 
   F->setMetadata("dbg", nullptr);
   EXPECT_FALSE(F->hasMetadata());
-  EXPECT_EQ(nullptr, F->getMetadata(LLVMContext::MD_dbg));
+  EXPECT_EQ(nullptr, F->getMetadata(LLVM37Context::MD_dbg));
   EXPECT_EQ(nullptr, F->getMetadata("dbg"));
   EXPECT_EQ(nullptr, F->getMetadata("other"));
 
@@ -2268,17 +2268,17 @@ TEST_F(FunctionAttachmentTest, getAll) {
   DISubprogram *SP = getSubprogram();
 
   F->setMetadata("other1", T2);
-  F->setMetadata(LLVMContext::MD_dbg, SP);
+  F->setMetadata(LLVM37Context::MD_dbg, SP);
   F->setMetadata("other2", T1);
-  F->setMetadata(LLVMContext::MD_prof, P);
+  F->setMetadata(LLVM37Context::MD_prof, P);
   F->setMetadata("other2", T2);
   F->setMetadata("other1", T1);
 
   SmallVector<std::pair<unsigned, MDNode *>, 4> MDs;
   F->getAllMetadata(MDs);
   ASSERT_EQ(4u, MDs.size());
-  EXPECT_EQ(LLVMContext::MD_dbg, MDs[0].first);
-  EXPECT_EQ(LLVMContext::MD_prof, MDs[1].first);
+  EXPECT_EQ(LLVM37Context::MD_dbg, MDs[0].first);
+  EXPECT_EQ(LLVM37Context::MD_prof, MDs[1].first);
   EXPECT_EQ(Context.getMDKindID("other1"), MDs[2].first);
   EXPECT_EQ(Context.getMDKindID("other2"), MDs[3].first);
   EXPECT_EQ(SP, MDs[0].second);
@@ -2296,20 +2296,20 @@ TEST_F(FunctionAttachmentTest, dropUnknownMetadata) {
   DISubprogram *SP = getSubprogram();
 
   F->setMetadata("other1", T1);
-  F->setMetadata(LLVMContext::MD_dbg, SP);
+  F->setMetadata(LLVM37Context::MD_dbg, SP);
   F->setMetadata("other2", T2);
-  F->setMetadata(LLVMContext::MD_prof, P);
+  F->setMetadata(LLVM37Context::MD_prof, P);
 
-  unsigned Known[] = {Context.getMDKindID("other2"), LLVMContext::MD_prof};
+  unsigned Known[] = {Context.getMDKindID("other2"), LLVM37Context::MD_prof};
   F->dropUnknownMetadata(Known);
 
   EXPECT_EQ(T2, F->getMetadata("other2"));
-  EXPECT_EQ(P, F->getMetadata(LLVMContext::MD_prof));
+  EXPECT_EQ(P, F->getMetadata(LLVM37Context::MD_prof));
   EXPECT_EQ(nullptr, F->getMetadata("other1"));
-  EXPECT_EQ(nullptr, F->getMetadata(LLVMContext::MD_dbg));
+  EXPECT_EQ(nullptr, F->getMetadata(LLVM37Context::MD_dbg));
 
   F->setMetadata("other2", nullptr);
-  F->setMetadata(LLVMContext::MD_prof, nullptr);
+  F->setMetadata(LLVM37Context::MD_prof, nullptr);
   EXPECT_FALSE(F->hasMetadata());
 }
 

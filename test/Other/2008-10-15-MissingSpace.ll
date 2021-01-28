@@ -1,4 +1,4 @@
-; RUN: llvm-as < %s | llvm-dis | FileCheck %s
+; RUN: llvm37-as < %s | llvm37-dis | FileCheck %s
 ; PR2894
 declare void @g()
 define void @f() personality i32 (...)* @__gxx_personality_v0 {

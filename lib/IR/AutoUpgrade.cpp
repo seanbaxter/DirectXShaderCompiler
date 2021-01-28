@@ -1,6 +1,6 @@
 //===-- AutoUpgrade.cpp - Implement auto-upgrade helper functions ---------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -13,22 +13,22 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/IR/AutoUpgrade.h"
-#include "llvm/IR/CFG.h"
-#include "llvm/IR/CallSite.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/DIBuilder.h"
-#include "llvm/IR/DebugInfo.h"
-#include "llvm/IR/DiagnosticInfo.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/IRBuilder.h"
-#include "llvm/IR/Instruction.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Module.h"
-#include "llvm/Support/ErrorHandling.h"
+#include "llvm37/IR/AutoUpgrade.h"
+#include "llvm37/IR/CFG.h"
+#include "llvm37/IR/CallSite.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/DIBuilder.h"
+#include "llvm37/IR/DebugInfo.h"
+#include "llvm37/IR/DiagnosticInfo.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/IRBuilder.h"
+#include "llvm37/IR/Instruction.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/Support/ErrorHandling.h"
 #include <cstring>
-using namespace llvm;
+using namespace llvm37;
 
 #if 0 // HLSL Change - remove platform intrinsics
 // Upgrade the declarations of the SSE4.1 functions whose arguments have
@@ -82,8 +82,8 @@ static bool UpgradeIntrinsicFunction1(Function *F, Function *&NewFn) {
         Type::getInt1Ty(F->getContext())
       };
       // Can't use Intrinsic::getDeclaration here as it adds a ".i1" to
-      // the end of the name. Change name from llvm.arm.neon.vclz.* to
-      //  llvm.ctlz.*
+      // the end of the name. Change name from llvm37.arm.neon.vclz.* to
+      //  llvm37.ctlz.*
       FunctionType* fType = FunctionType::get(F->getReturnType(), args, false);
       NewFn = Function::Create(fType, F->getLinkage(),
                                "llvm.ctlz." + Name.substr(14), F->getParent());
@@ -230,7 +230,7 @@ static bool UpgradeIntrinsicFunction1(Function *F, Function *&NewFn) {
   return false;
 }
 
-bool llvm::UpgradeIntrinsicFunction(Function *F, Function *&NewFn) {
+bool llvm37::UpgradeIntrinsicFunction(Function *F, Function *&NewFn) {
   NewFn = nullptr;
   bool Upgraded = UpgradeIntrinsicFunction1(F, NewFn);
   assert(F != NewFn && "Intrinsic function upgraded to the same function");
@@ -243,7 +243,7 @@ bool llvm::UpgradeIntrinsicFunction(Function *F, Function *&NewFn) {
   return Upgraded;
 }
 
-bool llvm::UpgradeGlobalVariable(GlobalVariable *GV) {
+bool llvm37::UpgradeGlobalVariable(GlobalVariable *GV) {
   // Nothing to do yet.
   return false;
 }
@@ -251,7 +251,7 @@ bool llvm::UpgradeGlobalVariable(GlobalVariable *GV) {
 #if 0 // HLSL Change - remove platform intrinsics
 // Handles upgrading SSE2 and AVX2 PSLLDQ intrinsics by converting them
 // to byte shuffles.
-static Value *UpgradeX86PSLLDQIntrinsics(IRBuilder<> &Builder, LLVMContext &C,
+static Value *UpgradeX86PSLLDQIntrinsics(IRBuilder<> &Builder, LLVM37Context &C,
                                          Value *Op, unsigned NumLanes,
                                          unsigned Shift) {
   // Each lane is 16 bytes.
@@ -288,7 +288,7 @@ static Value *UpgradeX86PSLLDQIntrinsics(IRBuilder<> &Builder, LLVMContext &C,
 
 // Handles upgrading SSE2 and AVX2 PSRLDQ intrinsics by converting them
 // to byte shuffles.
-static Value *UpgradeX86PSRLDQIntrinsics(IRBuilder<> &Builder, LLVMContext &C,
+static Value *UpgradeX86PSRLDQIntrinsics(IRBuilder<> &Builder, LLVM37Context &C,
                                          Value *Op, unsigned NumLanes,
                                          unsigned Shift) {
   // Each lane is 16 bytes.
@@ -327,9 +327,9 @@ static Value *UpgradeX86PSRLDQIntrinsics(IRBuilder<> &Builder, LLVMContext &C,
 // UpgradeIntrinsicCall - Upgrade a call to an old intrinsic to be a call the
 // upgraded intrinsic. All argument and return casting must be provided in
 // order to seamlessly integrate with existing context.
-void llvm::UpgradeIntrinsicCall(CallInst *CI, Function *NewFn) {
+void llvm37::UpgradeIntrinsicCall(CallInst *CI, Function *NewFn) {
   Function *F = CI->getCalledFunction();
-  LLVMContext &C = CI->getContext();
+  LLVM37Context &C = CI->getContext();
   IRBuilder<> Builder(C);
   Builder.SetInsertPoint(CI->getParent(), CI);
 
@@ -400,7 +400,7 @@ void llvm::UpgradeIntrinsicCall(CallInst *CI, Function *NewFn) {
       else if (Name.endswith("q"))
         intID = Intrinsic::x86_xop_vpcomq;
       else
-        llvm_unreachable("Unknown suffix");
+        llvm37_unreachable("Unknown suffix");
 
       Name = Name.substr(18); // strip off "llvm.x86.xop.vpcom"
       unsigned Imm;
@@ -421,7 +421,7 @@ void llvm::UpgradeIntrinsicCall(CallInst *CI, Function *NewFn) {
       else if (Name.startswith("true"))
         Imm = 7;
       else
-        llvm_unreachable("Unknown condition");
+        llvm37_unreachable("Unknown condition");
 
       Function *VPCOM = Intrinsic::getDeclaration(F->getParent(), intID);
       Rep =
@@ -614,11 +614,11 @@ void llvm::UpgradeIntrinsicCall(CallInst *CI, Function *NewFn) {
             for (unsigned i = 0; i != 4; ++i)
               Idxs.push_back(Builder.getInt32(((Imm >> (2 * i)) & 0x3) + l));
         else
-          llvm_unreachable("Unexpected function");
+          llvm37_unreachable("Unexpected function");
 
         Rep = Builder.CreateShuffleVector(Op0, Op0, ConstantVector::get(Idxs));
       } else {
-        llvm_unreachable("Unknown function for CallInst upgrade.");
+        llvm37_unreachable("Unknown function for CallInst upgrade.");
       }
     }
 
@@ -626,7 +626,7 @@ void llvm::UpgradeIntrinsicCall(CallInst *CI, Function *NewFn) {
     CI->eraseFromParent();
 
 #endif // HLSL Change - remove platform intrinsics
-    llvm_unreachable("HLSL - should not be upgrading platform intrinsics."); // HLSL Change - remove platform intrinsics
+    llvm37_unreachable("HLSL - should not be upgrading platform intrinsics."); // HLSL Change - remove platform intrinsics
 
     return;
   }
@@ -637,7 +637,7 @@ void llvm::UpgradeIntrinsicCall(CallInst *CI, Function *NewFn) {
 
   switch (NewFn->getIntrinsicID()) {
   default:
-    llvm_unreachable("Unknown function for CallInst upgrade.");
+    llvm37_unreachable("Unknown function for CallInst upgrade.");
 
   case Intrinsic::ctlz:
   case Intrinsic::cttz:
@@ -719,7 +719,7 @@ void llvm::UpgradeIntrinsicCall(CallInst *CI, Function *NewFn) {
 // This tests each Function to determine if it needs upgrading. When we find
 // one we are interested in, we then upgrade all calls to reflect the new
 // function.
-void llvm::UpgradeCallsToIntrinsic(Function* F) {
+void llvm37::UpgradeCallsToIntrinsic(Function* F) {
   assert(F && "Illegal attempt to upgrade a non-existent intrinsic.");
 
   // Upgrade the function and check if it is a totaly new function.
@@ -736,8 +736,8 @@ void llvm::UpgradeCallsToIntrinsic(Function* F) {
   }
 }
 
-void llvm::UpgradeInstWithTBAATag(Instruction *I) {
-  MDNode *MD = I->getMetadata(LLVMContext::MD_tbaa);
+void llvm37::UpgradeInstWithTBAATag(Instruction *I) {
+  MDNode *MD = I->getMetadata(LLVM37Context::MD_tbaa);
   assert(MD && "UpgradeInstWithTBAATag should have a TBAA tag");
   // Check if the tag uses struct-path aware TBAA format.
   if (isa<MDNode>(MD->getOperand(0)) && MD->getNumOperands() >= 3)
@@ -751,16 +751,16 @@ void llvm::UpgradeInstWithTBAATag(Instruction *I) {
                          ConstantAsMetadata::get(Constant::getNullValue(
                              Type::getInt64Ty(I->getContext()))),
                          MD->getOperand(2)};
-    I->setMetadata(LLVMContext::MD_tbaa, MDNode::get(I->getContext(), Elts2));
+    I->setMetadata(LLVM37Context::MD_tbaa, MDNode::get(I->getContext(), Elts2));
   } else {
     // Create a MDNode <MD, MD, offset 0>
     Metadata *Elts[] = {MD, MD, ConstantAsMetadata::get(Constant::getNullValue(
                                     Type::getInt64Ty(I->getContext())))};
-    I->setMetadata(LLVMContext::MD_tbaa, MDNode::get(I->getContext(), Elts));
+    I->setMetadata(LLVM37Context::MD_tbaa, MDNode::get(I->getContext(), Elts));
   }
 }
 
-Instruction *llvm::UpgradeBitCastInst(unsigned Opc, Value *V, Type *DestTy,
+Instruction *llvm37::UpgradeBitCastInst(unsigned Opc, Value *V, Type *DestTy,
                                       Instruction *&Temp) {
   if (Opc != Instruction::BitCast)
     return nullptr;
@@ -769,7 +769,7 @@ Instruction *llvm::UpgradeBitCastInst(unsigned Opc, Value *V, Type *DestTy,
   Type *SrcTy = V->getType();
   if (SrcTy->isPtrOrPtrVectorTy() && DestTy->isPtrOrPtrVectorTy() &&
       SrcTy->getPointerAddressSpace() != DestTy->getPointerAddressSpace()) {
-    LLVMContext &Context = V->getContext();
+    LLVM37Context &Context = V->getContext();
 
     // We have no information about target data layout, so we assume that
     // the maximum pointer size is 64bit.
@@ -782,14 +782,14 @@ Instruction *llvm::UpgradeBitCastInst(unsigned Opc, Value *V, Type *DestTy,
   return nullptr;
 }
 
-Value *llvm::UpgradeBitCastExpr(unsigned Opc, Constant *C, Type *DestTy) {
+Value *llvm37::UpgradeBitCastExpr(unsigned Opc, Constant *C, Type *DestTy) {
   if (Opc != Instruction::BitCast)
     return nullptr;
 
   Type *SrcTy = C->getType();
   if (SrcTy->isPtrOrPtrVectorTy() && DestTy->isPtrOrPtrVectorTy() &&
       SrcTy->getPointerAddressSpace() != DestTy->getPointerAddressSpace()) {
-    LLVMContext &Context = C->getContext();
+    LLVM37Context &Context = C->getContext();
 
     // We have no information about target data layout, so we assume that
     // the maximum pointer size is 64bit.
@@ -804,7 +804,7 @@ Value *llvm::UpgradeBitCastExpr(unsigned Opc, Constant *C, Type *DestTy) {
 
 /// Check the debug info version number, if it is out-dated, drop the debug
 /// info. Return true if module is modified.
-bool llvm::UpgradeDebugInfo(Module &M) {
+bool llvm37::UpgradeDebugInfo(Module &M) {
   unsigned Version = getDebugMetadataVersionFromModule(M);
   if (Version == DEBUG_METADATA_VERSION)
     return false;
@@ -817,7 +817,7 @@ bool llvm::UpgradeDebugInfo(Module &M) {
   return RetCode;
 }
 
-void llvm::UpgradeMDStringConstant(std::string &String) {
+void llvm37::UpgradeMDStringConstant(std::string &String) {
   const std::string OldPrefix = "llvm.vectorizer.";
   if (String == "llvm.vectorizer.unroll") {
     String = "llvm.loop.interleave.count";

@@ -13,20 +13,20 @@
 
 #include <utility>
 
-#include "llvm/IR/DebugInfoMetadata.h"
+#include "llvm37/IR/DebugInfoMetadata.h"
 
 #include "DxilDiaSession.h"
 
 dxil_dia::LineNumber::LineNumber(
   /* [in] */ IMalloc *pMalloc,
   /* [in] */ Session *pSession,
-  /* [in] */ const llvm::Instruction * inst)
+  /* [in] */ const llvm37::Instruction * inst)
   : m_pMalloc(pMalloc),
     m_pSession(pSession),
     m_inst(inst) {
 }
 
-const llvm::DebugLoc &dxil_dia::LineNumber::DL() const {
+const llvm37::DebugLoc &dxil_dia::LineNumber::DL() const {
   DXASSERT(bool(m_inst->getDebugLoc()), "Trying to read line info from invalid debug location");
   return m_inst->getDebugLoc();
 }
@@ -93,7 +93,7 @@ STDMETHODIMP dxil_dia::LineNumber::get_length(
   }
   *pRetVal = 1;
 
-  if (llvm::DebugLoc DL = m_inst->getDebugLoc()) {
+  if (llvm37::DebugLoc DL = m_inst->getDebugLoc()) {
     const auto &LineToColumn = m_pSession->LineToColumnStartMapRef();
     auto it = LineToColumn.find(DL.getLine());
     if (it != LineToColumn.end()) {
@@ -111,7 +111,7 @@ STDMETHODIMP dxil_dia::LineNumber::get_statement(
   }
   *pRetVal = FALSE;
 
-  if (llvm::DebugLoc DL = m_inst->getDebugLoc()) {
+  if (llvm37::DebugLoc DL = m_inst->getDebugLoc()) {
     const auto &LineToColumn = m_pSession->LineToColumnStartMapRef();
     auto it = LineToColumn.find(DL.getLine());
     if (it != LineToColumn.end()) {
@@ -124,12 +124,12 @@ STDMETHODIMP dxil_dia::LineNumber::get_statement(
 
 STDMETHODIMP dxil_dia::LineNumber::get_sourceFileId(
   /* [retval][out] */ DWORD *pRetVal) {
-  llvm::MDNode *pScope = DL().getScope();
-  auto *pBlock = llvm::dyn_cast_or_null<llvm::DILexicalBlock>(pScope);
+  llvm37::MDNode *pScope = DL().getScope();
+  auto *pBlock = llvm37::dyn_cast_or_null<llvm37::DILexicalBlock>(pScope);
   if (pBlock != nullptr) {
     return m_pSession->getSourceFileIdByName(pBlock->getFile()->getFilename(), pRetVal);
   }
-  auto *pSubProgram = llvm::dyn_cast_or_null<llvm::DISubprogram>(pScope);
+  auto *pSubProgram = llvm37::dyn_cast_or_null<llvm37::DISubprogram>(pScope);
   if (pSubProgram != nullptr) {
     return m_pSession->getSourceFileIdByName(pSubProgram->getFile()->getFilename(), pRetVal);
   }
@@ -151,7 +151,7 @@ dxil_dia::LineNumbersTable::LineNumbersTable(IMalloc *pMalloc, Session *pSession
   m_count = m_instructions.size();
 }
 
-dxil_dia::LineNumbersTable::LineNumbersTable(IMalloc *pMalloc, Session *pSession, std::vector<const llvm::Instruction*> &&instructions)
+dxil_dia::LineNumbersTable::LineNumbersTable(IMalloc *pMalloc, Session *pSession, std::vector<const llvm37::Instruction*> &&instructions)
   : impl::TableBase<IDiaEnumLineNumbers, IDiaLineNumber>(pMalloc, pSession, Table::Kind::LineNumbers)
   , m_instructions(m_instructionsStorage)
   , m_instructionsStorage(std::move(instructions))

@@ -1,22 +1,22 @@
-//===--- CGRecordLayout.h - LLVM Record Layout Information ------*- C++ -*-===//
+//===--- CGRecordLayout.h - LLVM37 Record Layout Information ------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_LIB_CODEGEN_CGRECORDLAYOUT_H
-#define LLVM_CLANG_LIB_CODEGEN_CGRECORDLAYOUT_H
+#ifndef LLVM37_CLANG_LIB_CODEGEN_CGRECORDLAYOUT_H
+#define LLVM37_CLANG_LIB_CODEGEN_CGRECORDLAYOUT_H
 
 #include "clang/AST/CharUnits.h"
 #include "clang/AST/Decl.h"
 #include "clang/Basic/LLVM.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/IR/DerivedTypes.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/IR/DerivedTypes.h"
 
-namespace llvm {
+namespace llvm37 {
   class StructType;
 }
 
@@ -26,7 +26,7 @@ namespace CodeGen {
 /// \brief Structure with information about how a bitfield should be accessed.
 ///
 /// Often we layout a sequence of bitfields as a contiguous sequence of bits.
-/// When the AST record layout does this, we represent it in the LLVM IR's type
+/// When the AST record layout does this, we represent it in the LLVM37 IR's type
 /// as either a sequence of i8 members or a byte array to reserve the number of
 /// bytes touched without forcing any particular alignment beyond the basic
 /// character alignment.
@@ -46,7 +46,7 @@ namespace CodeGen {
 ///     unsigned still_more_bits : 7;
 ///   };
 ///
-/// This will end up as the following LLVM type. The first array is the
+/// This will end up as the following LLVM37 type. The first array is the
 /// bitfield, and the second is the padding out to a 4-byte alignmnet.
 ///
 ///   %t = type { i8, i8, i8, i8, i8, [3 x i8] }
@@ -65,7 +65,7 @@ namespace CodeGen {
 ///
 struct CGBitFieldInfo {
   /// The offset within a contiguous run of bitfields that are represented as
-  /// a single "field" within the LLVM struct type. This offset is in bits.
+  /// a single "field" within the LLVM37 struct type. This offset is in bits.
   unsigned Offset : 16;
 
   /// The total size of the bit-field, in bits.
@@ -103,7 +103,7 @@ struct CGBitFieldInfo {
 };
 
 /// CGRecordLayout - This class handles struct and union layout info while
-/// lowering AST types to LLVM types.
+/// lowering AST types to LLVM37 types.
 ///
 /// These layout objects are only created on demand as IR generation requires.
 class CGRecordLayout {
@@ -113,28 +113,28 @@ class CGRecordLayout {
   void operator=(const CGRecordLayout &) = delete;
 
 private:
-  /// The LLVM type corresponding to this record layout; used when
+  /// The LLVM37 type corresponding to this record layout; used when
   /// laying it out as a complete object.
-  llvm::StructType *CompleteObjectType;
+  llvm37::StructType *CompleteObjectType;
 
-  /// The LLVM type for the non-virtual part of this record layout;
+  /// The LLVM37 type for the non-virtual part of this record layout;
   /// used when laying it out as a base subobject.
-  llvm::StructType *BaseSubobjectType;
+  llvm37::StructType *BaseSubobjectType;
 
-  /// Map from (non-bit-field) struct field to the corresponding llvm struct
+  /// Map from (non-bit-field) struct field to the corresponding llvm37 struct
   /// type field no. This info is populated by record builder.
-  llvm::DenseMap<const FieldDecl *, unsigned> FieldInfo;
+  llvm37::DenseMap<const FieldDecl *, unsigned> FieldInfo;
 
-  /// Map from (bit-field) struct field to the corresponding llvm struct type
+  /// Map from (bit-field) struct field to the corresponding llvm37 struct type
   /// field no. This info is populated by record builder.
-  llvm::DenseMap<const FieldDecl *, CGBitFieldInfo> BitFields;
+  llvm37::DenseMap<const FieldDecl *, CGBitFieldInfo> BitFields;
 
   // FIXME: Maybe we could use a CXXBaseSpecifier as the key and use a single
   // map for both virtual and non-virtual bases.
-  llvm::DenseMap<const CXXRecordDecl *, unsigned> NonVirtualBases;
+  llvm37::DenseMap<const CXXRecordDecl *, unsigned> NonVirtualBases;
 
   /// Map from virtual bases to their field index in the complete object.
-  llvm::DenseMap<const CXXRecordDecl *, unsigned> CompleteObjectVirtualBases;
+  llvm37::DenseMap<const CXXRecordDecl *, unsigned> CompleteObjectVirtualBases;
 
   /// False if any direct or indirect subobject of this class, when
   /// considered as a complete object, requires a non-zero bitpattern
@@ -147,8 +147,8 @@ private:
   bool IsZeroInitializableAsBase : 1;
 
 public:
-  CGRecordLayout(llvm::StructType *CompleteObjectType,
-                 llvm::StructType *BaseSubobjectType,
+  CGRecordLayout(llvm37::StructType *CompleteObjectType,
+                 llvm37::StructType *BaseSubobjectType,
                  bool IsZeroInitializable,
                  bool IsZeroInitializableAsBase)
     : CompleteObjectType(CompleteObjectType),
@@ -156,15 +156,15 @@ public:
       IsZeroInitializable(IsZeroInitializable),
       IsZeroInitializableAsBase(IsZeroInitializableAsBase) {}
 
-  /// \brief Return the "complete object" LLVM type associated with
+  /// \brief Return the "complete object" LLVM37 type associated with
   /// this record.
-  llvm::StructType *getLLVMType() const {
+  llvm37::StructType *getLLVM37Type() const {
     return CompleteObjectType;
   }
 
-  /// \brief Return the "base subobject" LLVM type associated with
+  /// \brief Return the "base subobject" LLVM37 type associated with
   /// this record.
-  llvm::StructType *getBaseSubobjectLLVMType() const {
+  llvm37::StructType *getBaseSubobjectLLVM37Type() const {
     return BaseSubobjectType;
   }
 
@@ -180,20 +180,20 @@ public:
     return IsZeroInitializableAsBase;
   }
 
-  /// \brief Return llvm::StructType element number that corresponds to the
+  /// \brief Return llvm37::StructType element number that corresponds to the
   /// field FD.
-  unsigned getLLVMFieldNo(const FieldDecl *FD) const {
+  unsigned getLLVM37FieldNo(const FieldDecl *FD) const {
     FD = FD->getCanonicalDecl();
     assert(FieldInfo.count(FD) && "Invalid field for record!");
     return FieldInfo.lookup(FD);
   }
 
-  unsigned getNonVirtualBaseLLVMFieldNo(const CXXRecordDecl *RD) const {
+  unsigned getNonVirtualBaseLLVM37FieldNo(const CXXRecordDecl *RD) const {
     assert(NonVirtualBases.count(RD) && "Invalid non-virtual base!");
     return NonVirtualBases.lookup(RD);
   }
 
-  /// \brief Return the LLVM field index corresponding to the given
+  /// \brief Return the LLVM37 field index corresponding to the given
   /// virtual base.  Only valid when operating on the complete object.
   unsigned getVirtualBaseIndex(const CXXRecordDecl *base) const {
     assert(CompleteObjectVirtualBases.count(base) && "Invalid virtual base!");
@@ -204,7 +204,7 @@ public:
   const CGBitFieldInfo &getBitFieldInfo(const FieldDecl *FD) const {
     FD = FD->getCanonicalDecl();
     assert(FD->isBitField() && "Invalid call for non-bit-field decl!");
-    llvm::DenseMap<const FieldDecl *, CGBitFieldInfo>::const_iterator
+    llvm37::DenseMap<const FieldDecl *, CGBitFieldInfo>::const_iterator
       it = BitFields.find(FD);
     assert(it != BitFields.end() && "Unable to find bitfield info");
     return it->second;

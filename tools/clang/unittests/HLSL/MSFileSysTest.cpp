@@ -14,8 +14,8 @@
 #include "WexTestClass.h"
 #include "dxc/Test/HlslTestUtils.h"
 
-#include "llvm/Support/MSFileSystem.h"
-#include "llvm/Support/Atomic.h"
+#include "llvm37/Support/MSFileSystem.h"
+#include "llvm37/Support/Atomic.h"
 
 #include <D3Dcommon.h>
 #include "dxc/dxcapi.internal.h"
@@ -24,14 +24,14 @@
 #include <vector>
 #include <memory>
 
-using namespace llvm;
-using namespace llvm::sys;
-using namespace llvm::sys::fs;
+using namespace llvm37;
+using namespace llvm37::sys;
+using namespace llvm37::sys::fs;
 
 const GUID DECLSPEC_SELECTANY GUID_NULL = { 0, 0, 0, { 0, 0, 0, 0, 0, 0, 0, 0 } };
 
 #define SIMPLE_IUNKNOWN_IMPL1(_IFACE_) \
-  private: volatile std::atomic<llvm::sys::cas_flag> m_dwRef; \
+  private: volatile std::atomic<llvm37::sys::cas_flag> m_dwRef; \
   public:\
   ULONG STDMETHODCALLTYPE AddRef() { return (ULONG)++m_dwRef; } \
   ULONG STDMETHODCALLTYPE Release() { \

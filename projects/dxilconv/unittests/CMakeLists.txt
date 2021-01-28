@@ -10,10 +10,10 @@ add_dxilconv_project_test_library(dxilconv-tests SHARED
 
 target_link_libraries(dxilconv-tests PRIVATE
   HLSLTestLib
-  LLVMDxcSupport
-  LLVMMSSupport
-  LLVMSupport
-  LLVMOption
+  LLVM37DxcSupport
+  LLVM37MSSupport
+  LLVM37Support
+  LLVM37Option
   ${TAEF_LIBRARIES}
   shlwapi
 )

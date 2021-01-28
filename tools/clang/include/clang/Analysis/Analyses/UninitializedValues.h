@@ -1,6 +1,6 @@
 //= UninitializedValues.h - Finding uses of uninitialized values -*- C++ -*-==//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -12,11 +12,11 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_ANALYSIS_ANALYSES_UNINITIALIZEDVALUES_H
-#define LLVM_CLANG_ANALYSIS_ANALYSES_UNINITIALIZEDVALUES_H
+#ifndef LLVM37_CLANG_ANALYSIS_ANALYSES_UNINITIALIZEDVALUES_H
+#define LLVM37_CLANG_ANALYSIS_ANALYSES_UNINITIALIZEDVALUES_H
 
 #include "clang/AST/Stmt.h"
-#include "llvm/ADT/SmallVector.h"
+#include "llvm37/ADT/SmallVector.h"
 
 namespace clang {
 

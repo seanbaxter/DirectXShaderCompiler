@@ -1,5 +1,5 @@
-set(LLVM_LINK_COMPONENTS
-  ${LLVM_TARGETS_TO_BUILD}
+set(LLVM37_LINK_COMPONENTS
+  ${LLVM37_TARGETS_TO_BUILD}
   AsmPrinter
   DebugInfoDWARF
   MC
@@ -8,7 +8,7 @@ set(LLVM_LINK_COMPONENTS
   Target
   )
 
-add_llvm_tool(llvm-dsymutil
+add_llvm37_tool(llvm37-dsymutil
   dsymutil.cpp
   BinaryHolder.cpp
   DebugMap.cpp

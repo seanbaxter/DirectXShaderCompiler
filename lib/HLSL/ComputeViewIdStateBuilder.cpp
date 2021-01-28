@@ -15,23 +15,23 @@
 #include "dxc/DXIL/DxilOperations.h"
 #include "dxc/DXIL/DxilInstructions.h"
 
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/Operator.h"
-#include "llvm/Pass.h"
-#include "llvm/IR/LegacyPassManager.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/IR/CFG.h"
-#include "llvm/Analysis/CallGraph.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/Operator.h"
+#include "llvm37/Pass.h"
+#include "llvm37/IR/LegacyPassManager.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/IR/CFG.h"
+#include "llvm37/Analysis/CallGraph.h"
 
 #include <algorithm>
 
-using namespace llvm;
-using namespace llvm::legacy;
+using namespace llvm37;
+using namespace llvm37::legacy;
 using namespace hlsl;
-using llvm::legacy::PassManager;
-using llvm::legacy::FunctionPassManager;
+using llvm37::legacy::PassManager;
+using llvm37::legacy::FunctionPassManager;
 using std::vector;
 using std::unordered_set;
 using std::unordered_map;
@@ -95,10 +95,10 @@ private:
   DynamicallyIndexedElemsType m_PCSigDynIdxElems;
 
   // Information per entry point.
-  using FunctionSetType = std::unordered_set<llvm::Function *>;
-  using InstructionSetType = std::unordered_set<llvm::Instruction *>;
+  using FunctionSetType = std::unordered_set<llvm37::Function *>;
+  using InstructionSetType = std::unordered_set<llvm37::Instruction *>;
   struct EntryInfo {
-    llvm::Function *pEntryFunc = nullptr;
+    llvm37::Function *pEntryFunc = nullptr;
     // Sets of functions that may be reachable from an entry.
     FunctionSetType Functions;
     // Outputs to analyze.
@@ -114,42 +114,42 @@ private:
   EntryInfo m_PCEntry;
 
   // Information per function.
-  using FunctionReturnSet = std::unordered_set<llvm::ReturnInst *>;
+  using FunctionReturnSet = std::unordered_set<llvm37::ReturnInst *>;
   struct FuncInfo {
     FunctionReturnSet Returns;
     ControlDependence CtrlDep;
-    std::unique_ptr<llvm::DominatorTreeBase<llvm::BasicBlock>> pDomTree;
+    std::unique_ptr<llvm37::DominatorTreeBase<llvm37::BasicBlock>> pDomTree;
     void Clear();
   };
 
-  std::unordered_map<llvm::Function *, std::unique_ptr<FuncInfo>> m_FuncInfo;
+  std::unordered_map<llvm37::Function *, std::unique_ptr<FuncInfo>> m_FuncInfo;
 
   // Cache of decls (global/alloca) reaching a pointer value.
-  using ValueSetType = std::unordered_set<llvm::Value *>;
-  std::unordered_map<llvm::Value *, ValueSetType> m_ReachingDeclsCache;
+  using ValueSetType = std::unordered_set<llvm37::Value *>;
+  std::unordered_map<llvm37::Value *, ValueSetType> m_ReachingDeclsCache;
   // Cache of stores for each decl.
-  std::unordered_map<llvm::Value *, ValueSetType> m_StoresPerDeclCache;
+  std::unordered_map<llvm37::Value *, ValueSetType> m_StoresPerDeclCache;
 
 
   void Clear();
   void DetermineMaxPackedLocation(DxilSignature &DxilSig, unsigned *pMaxSigLoc,
                                   unsigned NumStreams);
-  void ComputeReachableFunctionsRec(llvm::CallGraph &CG,
-                                    llvm::CallGraphNode *pNode,
+  void ComputeReachableFunctionsRec(llvm37::CallGraph &CG,
+                                    llvm37::CallGraphNode *pNode,
                                     FunctionSetType &FuncSet);
   void AnalyzeFunctions(EntryInfo &Entry);
   void CollectValuesContributingToOutputs(EntryInfo &Entry);
   void CollectValuesContributingToOutputRec(
-      EntryInfo &Entry, llvm::Value *pContributingValue,
+      EntryInfo &Entry, llvm37::Value *pContributingValue,
       InstructionSetType &ContributingInstructions);
   void CollectPhiCFValuesContributingToOutputRec(
-      llvm::PHINode *pPhi, EntryInfo &Entry,
+      llvm37::PHINode *pPhi, EntryInfo &Entry,
       InstructionSetType &ContributingInstructions);
-  const ValueSetType &CollectReachingDecls(llvm::Value *pValue);
-  void CollectReachingDeclsRec(llvm::Value *pValue, ValueSetType &ReachingDecls,
+  const ValueSetType &CollectReachingDecls(llvm37::Value *pValue);
+  void CollectReachingDeclsRec(llvm37::Value *pValue, ValueSetType &ReachingDecls,
                                ValueSetType &Visited);
-  const ValueSetType &CollectStores(llvm::Value *pValue);
-  void CollectStoresRec(llvm::Value *pValue, ValueSetType &Stores,
+  const ValueSetType &CollectStores(llvm37::Value *pValue);
+  void CollectStoresRec(llvm37::Value *pValue, ValueSetType &Stores,
                         ValueSetType &Visited);
   void UpdateDynamicIndexUsageState() const;
   void
@@ -716,7 +716,7 @@ void DxilViewIdStateBuilder::CollectReachingDeclsRec(Value *pValue, ValueSetType
   }
 }
 
-const DxilViewIdStateBuilder::ValueSetType &DxilViewIdStateBuilder::CollectStores(llvm::Value *pValue) {
+const DxilViewIdStateBuilder::ValueSetType &DxilViewIdStateBuilder::CollectStores(llvm37::Value *pValue) {
   auto it = m_StoresPerDeclCache.emplace(pValue, ValueSetType());
   if (it.second) {
     // We have not seen this value before.
@@ -726,7 +726,7 @@ const DxilViewIdStateBuilder::ValueSetType &DxilViewIdStateBuilder::CollectStore
   return it.first->second;
 }
 
-void DxilViewIdStateBuilder::CollectStoresRec(llvm::Value *pValue, ValueSetType &Stores, ValueSetType &Visited) {
+void DxilViewIdStateBuilder::CollectStoresRec(llvm37::Value *pValue, ValueSetType &Stores, ValueSetType &Visited) {
   if (Visited.find(pValue) != Visited.end())
     return;
 
@@ -918,10 +918,10 @@ void ComputeViewIdState::getAnalysisUsage(AnalysisUsage &AU) const {
 }
 
 
-namespace llvm {
+namespace llvm37 {
 
 ModulePass *createComputeViewIdStatePass() {
   return new ComputeViewIdState();
 }
 
-} // end of namespace llvm
+} // end of namespace llvm37

@@ -1,4 +1,4 @@
-; RUN: llvm-link -S -o - %p/pr22807.ll %p/Inputs/pr22807-1.ll %p/Inputs/pr22807-2.ll | FileCheck %s
+; RUN: llvm37-link -S -o - %p/pr22807.ll %p/Inputs/pr22807-1.ll %p/Inputs/pr22807-2.ll | FileCheck %s
 
 ; CHECK-NOT: type
 ; CHECK: %struct.B = type { %struct.A* }

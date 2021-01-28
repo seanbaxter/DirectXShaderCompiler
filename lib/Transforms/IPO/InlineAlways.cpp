@@ -1,6 +1,6 @@
 //===- InlineAlways.cpp - Code to inline always_inline functions ----------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -12,22 +12,22 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Transforms/IPO.h"
-#include "llvm/ADT/SmallPtrSet.h"
-#include "llvm/Analysis/AliasAnalysis.h"
-#include "llvm/Analysis/AssumptionCache.h"
-#include "llvm/Analysis/CallGraph.h"
-#include "llvm/Analysis/InlineCost.h"
-#include "llvm/IR/CallSite.h"
-#include "llvm/IR/CallingConv.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/Type.h"
-#include "llvm/Transforms/IPO/InlinerPass.h"
+#include "llvm37/Transforms/IPO.h"
+#include "llvm37/ADT/SmallPtrSet.h"
+#include "llvm37/Analysis/AliasAnalysis.h"
+#include "llvm37/Analysis/AssumptionCache.h"
+#include "llvm37/Analysis/CallGraph.h"
+#include "llvm37/Analysis/InlineCost.h"
+#include "llvm37/IR/CallSite.h"
+#include "llvm37/IR/CallingConv.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/Type.h"
+#include "llvm37/Transforms/IPO/InlinerPass.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "inline"
 
@@ -56,7 +56,7 @@ public:
   void getAnalysisUsage(AnalysisUsage &AU) const override;
   bool runOnSCC(CallGraphSCC &SCC) override;
 
-  using llvm::Pass::doFinalization;
+  using llvm37::Pass::doFinalization;
   bool doFinalization(CallGraph &CG) override {
     return removeDeadFunctions(CG, /*AlwaysInlineOnly=*/ true);
   }
@@ -74,9 +74,9 @@ INITIALIZE_PASS_DEPENDENCY(InlineCostAnalysis)
 INITIALIZE_PASS_END(AlwaysInliner, "always-inline",
                 "Inliner for always_inline functions", false, false)
 
-Pass *llvm::createAlwaysInlinerPass() { return new AlwaysInliner(); }
+Pass *llvm37::createAlwaysInlinerPass() { return new AlwaysInliner(); }
 
-Pass *llvm::createAlwaysInlinerPass(bool InsertLifetime) {
+Pass *llvm37::createAlwaysInlinerPass(bool InsertLifetime) {
   return new AlwaysInliner(InsertLifetime);
 }
 

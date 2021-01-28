@@ -1,7 +1,7 @@
-; RUN: not llvm-as -disable-output <%s 2>&1 | FileCheck %s
+; RUN: not llvm37-as -disable-output <%s 2>&1 | FileCheck %s
 ; Check that the debug info verifier gives nice errors for bad type refs
 ; (rather than crashing).
-!llvm.module.flags = !{!0}
+!llvm37.module.flags = !{!0}
 !0 = !{i32 2, !"Debug Info Version", i32 3}
 
 ; Make a bunch of type references.  Note that !4 references !"0.bad" (instead
@@ -13,7 +13,7 @@
 !4 = !DIDerivedType(tag: DW_TAG_pointer_type, size: 32, align: 32, baseType: !"0.bad")
 
 ; Add a minimal compile unit to resolve some of the type references.
-!llvm.dbg.cu = !{!5}
+!llvm37.dbg.cu = !{!5}
 !5 = !DICompileUnit(file: !6, language: DW_LANG_C99, retainedTypes: !7)
 !6 = !DIFile(filename: "file.c", directory: "/path/to/dir")
 !7 = !{!8, !9}

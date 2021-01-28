@@ -1,13 +1,13 @@
 set(HLSL_IGNORE_SOURCES BBVectorize.cpp LoopVectorize.cpp SLPVectorizer.cpp)
 
-add_llvm_library(LLVMVectorize
+add_llvm_library(LLVM37Vectorize
   Vectorize.cpp
 #  BBVectorize.cpp
 #  LoopVectorize.cpp
 #  SLPVectorizer.cpp
 
   ADDITIONAL_HEADER_DIRS
-  ${LLVM_MAIN_INCLUDE_DIR}/llvm/Transforms
+  ${LLVM37_MAIN_INCLUDE_DIR}/llvm37/Transforms
   )
 
-add_dependencies(LLVMVectorize intrinsics_gen)
+add_dependencies(LLVM37Vectorize intrinsics_gen)

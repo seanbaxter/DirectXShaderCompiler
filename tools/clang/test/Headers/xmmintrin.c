@@ -1,7 +1,7 @@
-// RUN: %clang_cc1 %s -ffreestanding -triple x86_64-apple-macosx10.9.0 -emit-llvm -o - | FileCheck %s
+// RUN: %clang_cc1 %s -ffreestanding -triple x86_64-apple-macosx10.9.0 -emit-llvm37 -o - | FileCheck %s
 //
 // RUN: rm -rf %t
-// RUN: %clang_cc1 %s -ffreestanding -triple x86_64-apple-macosx10.9.0 -emit-llvm -o - \
+// RUN: %clang_cc1 %s -ffreestanding -triple x86_64-apple-macosx10.9.0 -emit-llvm37 -o - \
 // RUN:     -fmodules -fimplicit-module-maps -fmodules-cache-path=%t -isystem %S/Inputs/include \
 // RUN:     | FileCheck %s
 // REQUIRES: x86-registered-target
@@ -11,7 +11,7 @@
 // checking that clang emits PACKSSDW instead of PACKSSWB.
 
 // CHECK: define i64 @test_mm_cvtps_pi16
-// CHECK: call x86_mmx @llvm.x86.mmx.packssdw
+// CHECK: call x86_mmx @llvm37.x86.mmx.packssdw
 
 __m64 test_mm_cvtps_pi16(__m128 a) {
   return _mm_cvtps_pi16(a);

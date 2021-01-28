@@ -1,6 +1,6 @@
 //===--- BlockReadableOrder.h - Visit blocks in human readable order ------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -25,11 +25,11 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_LIB_SPIRV_BLOCKREADABLEORDER_H
-#define LLVM_CLANG_LIB_SPIRV_BLOCKREADABLEORDER_H
+#ifndef LLVM37_CLANG_LIB_SPIRV_BLOCKREADABLEORDER_H
+#define LLVM37_CLANG_LIB_SPIRV_BLOCKREADABLEORDER_H
 
 #include "clang/SPIRV/SpirvBasicBlock.h"
-#include "llvm/ADT/DenseSet.h"
+#include "llvm37/ADT/DenseSet.h"
 
 namespace clang {
 namespace spirv {
@@ -49,8 +49,8 @@ public:
 private:
   std::function<void(SpirvBasicBlock *)> callback;
 
-  llvm::DenseSet<SpirvBasicBlock *> doneBlocks; ///< Blocks already visited
-  llvm::DenseSet<SpirvBasicBlock *> todoBlocks; ///< Blocks to be visited later
+  llvm37::DenseSet<SpirvBasicBlock *> doneBlocks; ///< Blocks already visited
+  llvm37::DenseSet<SpirvBasicBlock *> todoBlocks; ///< Blocks to be visited later
 };
 
 } // end namespace spirv

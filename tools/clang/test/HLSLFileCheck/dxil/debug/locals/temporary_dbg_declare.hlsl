@@ -3,9 +3,9 @@
 // Test that dbg.declares are emitted for temporaries.
 
 int main(int x : IN) : OUT {
-  // CHECK: call void @llvm.dbg.declare
+  // CHECK: call void @llvm37.dbg.declare
   int y = x;
-  // CHECK: call void @llvm.dbg.declare
+  // CHECK: call void @llvm37.dbg.declare
   int z = y;
   return y;
 }

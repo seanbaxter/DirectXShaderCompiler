@@ -75,7 +75,7 @@ magic defines the size of the following offsets. The rest of the data is the
 offsets in the corresponding binary/DSO that were executed during the run.
 
 A simple script
-``$LLVM/projects/compiler-rt/lib/sanitizer_common/scripts/sancov.py`` is
+``$LLVM37/projects/compiler-rt/lib/sanitizer_common/scripts/sancov.py`` is
 provided to dump these offsets.
 
 .. code-block:: console
@@ -88,12 +88,12 @@ provided to dump these offsets.
     0x4652a0
 
 You can then filter the output of ``sancov.py`` through ``addr2line --exe
-ObjectFile`` or ``llvm-symbolizer --obj ObjectFile`` to get file names and line
+ObjectFile`` or ``llvm37-symbolizer --obj ObjectFile`` to get file names and line
 numbers:
 
 .. code-block:: console
 
-    % sancov.py print a.out.22679.sancov a.out.22673.sancov 2> /dev/null | llvm-symbolizer --obj a.out
+    % sancov.py print a.out.22679.sancov a.out.22673.sancov 2> /dev/null | llvm37-symbolizer --obj a.out
     cov.cc:3
     cov.cc:5
 
@@ -312,8 +312,8 @@ If a fuzzer finds a bug in the ASan run, you will need to save the reproducer
 before exiting the process.  Use ``__asan_set_death_callback`` from
 ``<sanitizer/asan_interface.h>`` to do that.
 
-An example of such fuzzer can be found in `the LLVM tree
-<http://llvm.org/viewvc/llvm-project/llvm/trunk/lib/Fuzzer/README.txt?view=markup>`_.
+An example of such fuzzer can be found in `the LLVM37 tree
+<http://llvm37.org/viewvc/llvm37-project/llvm37/trunk/lib/Fuzzer/README.txt?view=markup>`_.
 
 Performance
 ===========
@@ -355,4 +355,4 @@ Why did we implement yet another code coverage?
     AddressSanitizer, and does not significantly increase the binary size.
   * Traditional coverage implementations based in global counters
     `suffer from contention on counters
-    <https://groups.google.com/forum/#!topic/llvm-dev/cDqYgnxNEhY>`_.
+    <https://groups.google.com/forum/#!topic/llvm37-dev/cDqYgnxNEhY>`_.

@@ -889,9 +889,9 @@ def main():
                 # Grrr, why can't doxygen write line number references.
                 lineReference = findClosestLineReference(root,doxyName,item.line)
                 if lineReference is not None:
-                    linkStr = 'http://clang.llvm.org/doxygen/%s#%s'%(doxyName,lineReference)
+                    linkStr = 'http://clang.llvm37.org/doxygen/%s#%s'%(doxyName,lineReference)
                 else:
-                    linkStr = 'http://clang.llvm.org/doxygen/%s'%(doxyName,)
+                    linkStr = 'http://clang.llvm37.org/doxygen/%s'%(doxyName,)
                 if item.section.paragraph is not None:
                     paraText = '&nbsp;(p%d)'%(item.section.paragraph,)
                 else:

@@ -1,24 +1,24 @@
 //===- PDBSymbolTypeFunctionSig.cpp - --------------------------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/DebugInfo/PDB/PDBSymbolTypeFunctionSig.h"
+#include "llvm37/DebugInfo/PDB/PDBSymbolTypeFunctionSig.h"
 
-#include "llvm/DebugInfo/PDB/ConcreteSymbolEnumerator.h"
-#include "llvm/DebugInfo/PDB/IPDBEnumChildren.h"
-#include "llvm/DebugInfo/PDB/IPDBSession.h"
-#include "llvm/DebugInfo/PDB/PDBSymbol.h"
-#include "llvm/DebugInfo/PDB/PDBSymbolTypeFunctionArg.h"
-#include "llvm/DebugInfo/PDB/PDBSymDumper.h"
+#include "llvm37/DebugInfo/PDB/ConcreteSymbolEnumerator.h"
+#include "llvm37/DebugInfo/PDB/IPDBEnumChildren.h"
+#include "llvm37/DebugInfo/PDB/IPDBSession.h"
+#include "llvm37/DebugInfo/PDB/PDBSymbol.h"
+#include "llvm37/DebugInfo/PDB/PDBSymbolTypeFunctionArg.h"
+#include "llvm37/DebugInfo/PDB/PDBSymDumper.h"
 
 #include <utility>
 
-using namespace llvm;
+using namespace llvm37;
 
 namespace {
 class FunctionArgEnumerator : public IPDBEnumSymbols {
@@ -75,7 +75,7 @@ std::unique_ptr<PDBSymbol> PDBSymbolTypeFunctionSig::getReturnType() const {
 
 std::unique_ptr<IPDBEnumSymbols>
 PDBSymbolTypeFunctionSig::getArguments() const {
-  return llvm::make_unique<FunctionArgEnumerator>(Session, *this);
+  return llvm37::make_unique<FunctionArgEnumerator>(Session, *this);
 }
 
 std::unique_ptr<PDBSymbol> PDBSymbolTypeFunctionSig::getClassParent() const {

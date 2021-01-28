@@ -2,14 +2,14 @@
 #
 #  findoptdiff
 #
-#      This script helps find the optimization difference between two llvm
+#      This script helps find the optimization difference between two llvm37
 #      builds. It is useful when you have a build that is known to work and
 #      one that exhibits an optimization problem. Identifying the difference
 #      between the two builds can lead to discovery of the source of a
 #      mis-optimization.
 #
-#      The script takes two llvm build paths as arguments. These specify the
-#      the two llvm builds to compare. It is generally expected that they
+#      The script takes two llvm37 build paths as arguments. These specify the
+#      the two llvm37 builds to compare. It is generally expected that they
 #      are "close cousins".  That is, they are the same except that the 
 #      second build contains some experimental optimization features that
 #      are suspected of producing a misoptimization.
@@ -31,24 +31,24 @@
 #      differences in the two builds. These filters are optional.
 #
 #   Usage:
-#      findoptdiff llvm1 llvm2 bc1 bc2 filter1 filter2
+#      findoptdiff llvm371 llvm372 bc1 bc2 filter1 filter2
 #
 #   Where:
-#      llvm1
-#          is the path to the first llvm build dir
-#      llvm2
-#          is the path to the second llvm build dir
+#      llvm371
+#          is the path to the first llvm37 build dir
+#      llvm372
+#          is the path to the second llvm37 build dir
 #      bc1
-#          is the bitcode file for the first llvm environment
+#          is the bitcode file for the first llvm37 environment
 #      bc2
-#          is the bitcode file for the second llvm environment
+#          is the bitcode file for the second llvm37 environment
 #      filter1
-#          is an optional filter for filtering the llvm1 generated assembly
+#          is an optional filter for filtering the llvm371 generated assembly
 #      filter2
-#          is an optional filter for filtering the llvm2 generated assembly
+#          is an optional filter for filtering the llvm372 generated assembly
 #       
-llvm1=$1
-llvm2=$2
+llvm371=$1
+llvm372=$2
 bc1=$3
 bc2=$4
 filt1=$5
@@ -65,10 +65,10 @@ ll1="${bc1}.ll"
 ll2="${bc2}.ll"
 opt1ll="${bc1}.opt.ll"
 opt2ll="${bc2}.opt.ll"
-dis1="$llvm1/Debug/bin/llvm-dis"
-dis2="$llvm2/Debug/bin/llvm-dis"
-opt1="$llvm1/Debug/bin/opt"
-opt2="$llvm2/Debug/bin/opt"
+dis1="$llvm371/Debug/bin/llvm37-dis"
+dis2="$llvm372/Debug/bin/llvm37-dis"
+opt1="$llvm371/Debug/bin/opt"
+opt2="$llvm372/Debug/bin/opt"
 
 all_switches="-verify -lowersetjmp -simplifycfg -mem2reg -globalopt -globaldce -ipconstprop -deadargelim -instcombine -simplifycfg -prune-eh -inline -simplify-libcalls -argpromotion -tailduplicate -simplifycfg -scalarrepl -instcombine -predsimplify -condprop -tailcallelim -simplifycfg -reassociate -licm -loop-unswitch -instcombine -indvars -loop-unroll -instcombine -load-vn -gcse -sccp -instcombine -condprop -dse -dce -simplifycfg -deadtypeelim -constmerge -internalize -ipsccp -globalopt -constmerge -deadargelim -inline -prune-eh -globalopt -globaldce -argpromotion -instcombine -predsimplify -scalarrepl -globalsmodref-aa -licm -load-vn -gcse -dse -instcombine -simplifycfg -verify"
 

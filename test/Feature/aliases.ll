@@ -1,8 +1,8 @@
-; RUN: llvm-as < %s | llvm-dis > %t1.ll
-; RUN: llvm-as %t1.ll -o - | llvm-dis > %t2.ll
+; RUN: llvm37-as < %s | llvm37-dis > %t1.ll
+; RUN: llvm37-as %t1.ll -o - | llvm37-dis > %t2.ll
 ; RUN: diff %t1.ll %t2.ll
 
-@llvm.used = appending global [1 x i8*] [i8* bitcast (i32* @foo1 to i8*)], section "llvm.metadata"
+@llvm37.used = appending global [1 x i8*] [i8* bitcast (i32* @foo1 to i8*)], section "llvm.metadata"
 
 @bar = global i32 0
 @foo1 = alias i32* @bar

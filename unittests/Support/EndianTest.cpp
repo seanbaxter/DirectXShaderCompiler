@@ -1,18 +1,18 @@
 //===- unittests/Support/EndianTest.cpp - Endian.h tests ------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Support/Endian.h"
-#include "llvm/Support/DataTypes.h"
+#include "llvm37/Support/Endian.h"
+#include "llvm37/Support/DataTypes.h"
 #include "gtest/gtest.h"
 #include <cstdlib>
 #include <ctime>
-using namespace llvm;
+using namespace llvm37;
 using namespace support;
 
 #undef max

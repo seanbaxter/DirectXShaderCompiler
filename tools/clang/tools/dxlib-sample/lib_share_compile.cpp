@@ -25,7 +25,7 @@
 
 using namespace libshare;
 using namespace hlsl;
-using namespace llvm;
+using namespace llvm37;
 
 HRESULT CreateLibrary(IDxcLibrary **pLibrary) {
   return DxcCreateInstance(CLSID_DxcLibrary, __uuidof(IDxcLibrary),
@@ -80,7 +80,7 @@ static void ReadOptsAndValidate(hlsl::options::MainArgs &mainArgs,
                                 AbstractMemoryStream *pOutputStream,
                                 _COM_Outptr_ IDxcOperationResult **ppResult,
                                 bool &finished) {
-  const llvm::opt::OptTable *table = ::options::getHlslOptTable();
+  const llvm37::opt::OptTable *table = ::options::getHlslOptTable();
   raw_stream_ostream outStream(pOutputStream);
   if (0 != hlsl::options::ReadDxcOpts(table, hlsl::options::CompilerFlags,
                                       mainArgs, opts, outStream)) {
@@ -135,7 +135,7 @@ HRESULT CompileFromBlob(IDxcBlobEncoding *pSource, LPCWSTR pSourceName,
         return E_FAIL;
       }
 
-      for (const llvm::opt::Arg *A : opts.Args.filtered(options::OPT_I)) {
+      for (const llvm37::opt::Arg *A : opts.Args.filtered(options::OPT_I)) {
         const bool IsFrameworkFalse = false;
         const bool IgnoreSysRoot = true;
         if (dxcutil::IsAbsoluteOrCurDirRelative(A->getValue())) {

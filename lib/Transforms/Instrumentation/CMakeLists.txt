@@ -1,4 +1,4 @@
-add_llvm_library(LLVMInstrumentation
+add_llvm_library(LLVM37Instrumentation
   AddressSanitizer.cpp
   BoundsChecking.cpp
   DataFlowSanitizer.cpp
@@ -11,7 +11,7 @@ add_llvm_library(LLVMInstrumentation
   ThreadSanitizer.cpp
 
   ADDITIONAL_HEADER_DIRS
-  ${LLVM_MAIN_INCLUDE_DIR}/llvm/Transforms
+  ${LLVM37_MAIN_INCLUDE_DIR}/llvm37/Transforms
   )
 
-add_dependencies(LLVMInstrumentation intrinsics_gen)
+add_dependencies(LLVM37Instrumentation intrinsics_gen)

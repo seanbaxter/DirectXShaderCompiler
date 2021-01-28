@@ -1,19 +1,19 @@
 //===--- TargetRegistry.cpp - Target registration -------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Support/TargetRegistry.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/StringRef.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/Support/TargetRegistry.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/StringRef.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <cassert>
 #include <vector>
-using namespace llvm;
+using namespace llvm37;
 
 // Clients are responsible for avoid race conditions in registration.
 static Target *FirstTarget = nullptr;
@@ -43,7 +43,7 @@ const Target *TargetRegistry::lookupTarget(const std::string &ArchName,
 
     // Adjust the triple to match (if known), otherwise stick with the
     // given triple.
-    Triple::ArchType Type = Triple::getArchTypeForLLVMName(ArchName);
+    Triple::ArchType Type = Triple::getArchTypeForLLVM37Name(ArchName);
     if (Type != Triple::UnknownArch)
       TheTriple.setArch(Type);
   } else {

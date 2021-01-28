@@ -22,24 +22,24 @@
 #include "dxc/DXIL/DxilUtil.h"
 #include "HLMatrixSubscriptUseReplacer.h"
 
-#include "llvm/IR/IRBuilder.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/DebugInfo.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/Transforms/Utils/Local.h"
-#include "llvm/Pass.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Analysis/ValueTracking.h"
+#include "llvm37/IR/IRBuilder.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/IR/DebugInfo.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/Transforms/Utils/Local.h"
+#include "llvm37/Pass.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Analysis/ValueTracking.h"
 #include <unordered_set>
 #include <vector>
 
-using namespace llvm;
+using namespace llvm37;
 using namespace hlsl;
 using namespace hlsl::HLMatrixLower;
 namespace hlsl {
 namespace HLMatrixLower {
 
-Value *BuildVector(Type *EltTy, ArrayRef<llvm::Value *> elts, IRBuilder<> &Builder) {
+Value *BuildVector(Type *EltTy, ArrayRef<llvm37::Value *> elts, IRBuilder<> &Builder) {
   Value *Vec = UndefValue::get(VectorType::get(EltTy, static_cast<unsigned>(elts.size())));
   for (unsigned i = 0; i < elts.size(); i++)
     Vec = Builder.CreateInsertElement(Vec, elts[i], i);
@@ -55,7 +55,7 @@ namespace {
 // and which should be destroyed when the pool gets out of scope.
 class TempOverloadPool {
 public:
-  TempOverloadPool(llvm::Module &Module, const char* BaseName)
+  TempOverloadPool(llvm37::Module &Module, const char* BaseName)
     : Module(Module), BaseName(BaseName) {}
   ~TempOverloadPool() { clear(); }
 
@@ -65,9 +65,9 @@ public:
   void clear();
 
 private:
-  llvm::Module &Module;
+  llvm37::Module &Module;
   const char* BaseName;
-  llvm::DenseMap<FunctionType*, Function*> Funcs;
+  llvm37::DenseMap<FunctionType*, Function*> Funcs;
 };
 
 Function *TempOverloadPool::get(FunctionType *Ty) {
@@ -185,7 +185,7 @@ private:
 
 char HLMatrixLowerPass::ID = 0;
 
-ModulePass *llvm::createHLMatrixLowerPass() { return new HLMatrixLowerPass(); }
+ModulePass *llvm37::createHLMatrixLowerPass() { return new HLMatrixLowerPass(); }
 
 INITIALIZE_PASS(HLMatrixLowerPass, "hlmatrixlower", "HLSL High-Level Matrix Lower", false, false)
 
@@ -507,7 +507,7 @@ void HLMatrixLowerPass::replaceAllVariableUses(Value* MatPtr, Value* LoweredPtr)
 void HLMatrixLowerPass::replaceAllVariableUses(
     SmallVectorImpl<Value*> &GEPIdxStack, Value *StackTopPtr, Value* LoweredPtr) {
   while (!StackTopPtr->use_empty()) {
-    llvm::Use &Use = *StackTopPtr->use_begin();
+    llvm37::Use &Use = *StackTopPtr->use_begin();
     if (GEPOperator *GEP = dyn_cast<GEPOperator>(Use.getUser())) {
       DXASSERT(GEP->getNumIndices() >= 1, "Unexpected degenerate GEP.");
       DXASSERT(cast<ConstantInt>(*GEP->idx_begin())->isZero(), "Unexpected non-zero first GEP index.");
@@ -652,8 +652,8 @@ AllocaInst *HLMatrixLowerPass::lowerAlloca(AllocaInst *MatAlloca) {
     LoweredAllocaTy->getElementType(), nullptr, MatAlloca->getName());
 
   // Update debug info.
-  if (DbgDeclareInst *DbgDeclare = llvm::FindAllocaDbgDeclare(MatAlloca)) {
-    LLVMContext &Context = MatAlloca->getContext();
+  if (DbgDeclareInst *DbgDeclare = llvm37::FindAllocaDbgDeclare(MatAlloca)) {
+    LLVM37Context &Context = MatAlloca->getContext();
     Value *DbgDeclareVar = MetadataAsValue::get(Context, DbgDeclare->getRawVariable());
     Value *DbgDeclareExpr = MetadataAsValue::get(Context, DbgDeclare->getRawExpression());
     Value *ValueMetadata = MetadataAsValue::get(Context, ValueAsMetadata::get(LoweredAlloca));
@@ -685,7 +685,7 @@ void HLMatrixLowerPass::lowerInstruction(Instruction* Inst) {
     lowerReturn(Return);
   }
   else
-    llvm_unreachable("Unexpected matrix instruction type.");
+    llvm37_unreachable("Unexpected matrix instruction type.");
 }
 
 void HLMatrixLowerPass::lowerReturn(ReturnInst* Return) {
@@ -822,7 +822,7 @@ Value *HLMatrixLowerPass::lowerHLOperation(CallInst *Call, HLOpcodeGroup OpcodeG
     return lowerHLSelect(Call);
 
   default:
-    llvm_unreachable("Unexpected matrix opcode");
+    llvm37_unreachable("Unexpected matrix opcode");
   }
 }
 
@@ -937,7 +937,7 @@ Value *HLMatrixLowerPass::lowerHLMulIntrinsic(Value* Lhs, Value *Rhs,
     RhsNumCols = RhsMatTy.getNumColumns();
   }
   else {
-    llvm_unreachable("mul intrinsic was identified as a matrix operation but neither operand is a matrix.");
+    llvm37_unreachable("mul intrinsic was identified as a matrix operation but neither operand is a matrix.");
   }
 
   DXASSERT(LhsNumCols == RhsNumRows, "Matrix mul intrinsic operands dimensions mismatch.");
@@ -1063,7 +1063,7 @@ Value *HLMatrixLowerPass::lowerHLDeterminantIntrinsic(Value* MatVal, IRBuilder<>
       Builder);
 
   default:
-    llvm_unreachable("Unexpected matrix dimensions.");
+    llvm37_unreachable("Unexpected matrix dimensions.");
   }
 }
 
@@ -1111,7 +1111,7 @@ Value *HLMatrixLowerPass::lowerHLUnaryOperation(Value *MatVal, HLUnaryOpcode Opc
     }
   }
   default:
-    llvm_unreachable("Unsupported unary matrix operator");
+    llvm37_unreachable("Unsupported unary matrix operator");
   }
 }
 
@@ -1232,7 +1232,7 @@ Value *HLMatrixLowerPass::lowerHLBinaryOperation(Value *Lhs, Value *Rhs, HLBinar
       : Builder.CreateAnd(LhsCmp, RhsCmp);
   }
   default:
-    llvm_unreachable("Unsupported binary matrix operator");
+    llvm37_unreachable("Unsupported binary matrix operator");
   }
 }
 
@@ -1253,7 +1253,7 @@ Value *HLMatrixLowerPass::lowerHLLoadStore(CallInst *Call, HLMatLoadStoreOpcode 
       /* Return */ !Call->getType()->isVoidTy(), Builder);
 
   default:
-    llvm_unreachable("Unsupported matrix load/store operation");
+    llvm37_unreachable("Unsupported matrix load/store operation");
   }
 }
 
@@ -1310,8 +1310,8 @@ static Value *convertScalarOrVector(Value *SrcVal, Type *DstTy, HLCastOpcode Opc
   if (DstTy->getScalarSizeInBits() == 1) {
     // fcmp une is what regular clang uses in C++ for (bool)f;
     return cast<Instruction>(SrcTy->isIntOrIntVectorTy()
-      ? Builder.CreateICmpNE(SrcVal, llvm::Constant::getNullValue(SrcTy), "tobool")
-      : Builder.CreateFCmpUNE(SrcVal, llvm::Constant::getNullValue(SrcTy), "tobool"));
+      ? Builder.CreateICmpNE(SrcVal, llvm37::Constant::getNullValue(SrcTy), "tobool")
+      : Builder.CreateFCmpUNE(SrcVal, llvm37::Constant::getNullValue(SrcTy), "tobool"));
   }
 
   // Cast necessary
@@ -1453,7 +1453,7 @@ Value *HLMatrixLowerPass::lowerHLSubscript(CallInst *Call, HLSubscriptOpcode Opc
     return nullptr;
 
   default:
-    llvm_unreachable("Unexpected matrix subscript opcode.");
+    llvm37_unreachable("Unexpected matrix subscript opcode.");
   }
 }
 

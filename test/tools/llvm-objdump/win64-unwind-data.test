@@ -1,7 +1,7 @@
-// This test checks that the unwind data is dumped by llvm-objdump.
-// RUN: llvm-objdump -u %p/Inputs/win64-unwind.exe.coff-x86_64.obj \
+// This test checks that the unwind data is dumped by llvm37-objdump.
+// RUN: llvm37-objdump -u %p/Inputs/win64-unwind.exe.coff-x86_64.obj \
 // RUN:   | FileCheck -check-prefix=OBJ %s
-// RUN: llvm-objdump -u %p/Inputs/win64-unwind.exe.coff-x86_64.exe \
+// RUN: llvm37-objdump -u %p/Inputs/win64-unwind.exe.coff-x86_64.exe \
 // RUN:   | FileCheck -check-prefix=EXE %s
 
 OBJ:      Unwind info:

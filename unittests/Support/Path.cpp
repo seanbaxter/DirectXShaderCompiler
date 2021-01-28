@@ -1,27 +1,27 @@
-//===- llvm/unittest/Support/Path.cpp - Path tests ------------------------===//
+//===- llvm37/unittest/Support/Path.cpp - Path tests ------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Support/Path.h"
-#include "llvm/Support/Errc.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/FileSystem.h"
-#include "llvm/Support/MemoryBuffer.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/Support/Path.h"
+#include "llvm37/Support/Errc.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/FileSystem.h"
+#include "llvm37/Support/MemoryBuffer.h"
+#include "llvm37/Support/raw_ostream.h"
 #include "gtest/gtest.h"
 
-#ifdef LLVM_ON_WIN32
+#ifdef LLVM37_ON_WIN32
 #include <windows.h>
 #include <winerror.h>
 #endif
 
-using namespace llvm;
-using namespace llvm::sys;
+using namespace llvm37;
+using namespace llvm37::sys;
 
 #define ASSERT_NO_ERROR(x)                                                     \
   if (std::error_code ASSERT_NO_ERROR_ec = x) {                                \
@@ -42,7 +42,7 @@ TEST(is_separator, Works) {
   EXPECT_FALSE(path::is_separator('-'));
   EXPECT_FALSE(path::is_separator(' '));
 
-#ifdef LLVM_ON_WIN32
+#ifdef LLVM37_ON_WIN32
   EXPECT_TRUE(path::is_separator('\\'));
 #else
   EXPECT_FALSE(path::is_separator('\\'));
@@ -234,7 +234,7 @@ TEST(Support, AbsolutePathDotIterator) {
   }
 }
 
-#ifdef LLVM_ON_WIN32
+#ifdef LLVM37_ON_WIN32
 TEST(Support, AbsolutePathIteratorWin32) {
   SmallString<64> Path(StringRef("c:\\c\\e\\foo.txt"));
   typedef SmallVector<StringRef, 4> PathComponents;
@@ -258,7 +258,7 @@ TEST(Support, AbsolutePathIteratorWin32) {
     EXPECT_EQ(ExpectedPathComponents[i].str(), ActualPathComponents[i].str());
   }
 }
-#endif // LLVM_ON_WIN32
+#endif // LLVM37_ON_WIN32
 
 TEST(Support, AbsolutePathIteratorEnd) {
   // Trailing slashes are converted to '.' unless they are part of the root path.
@@ -266,7 +266,7 @@ TEST(Support, AbsolutePathIteratorEnd) {
   Paths.push_back("/foo/");
   Paths.push_back("/foo//");
   Paths.push_back("//net//");
-#ifdef LLVM_ON_WIN32
+#ifdef LLVM37_ON_WIN32
   Paths.push_back("c:\\\\");
 #endif
 
@@ -278,7 +278,7 @@ TEST(Support, AbsolutePathIteratorEnd) {
   SmallVector<StringRef, 3> RootPaths;
   RootPaths.push_back("/");
   RootPaths.push_back("//net/");
-#ifdef LLVM_ON_WIN32
+#ifdef LLVM37_ON_WIN32
   RootPaths.push_back("c:\\");
 #endif
 
@@ -290,14 +290,14 @@ TEST(Support, AbsolutePathIteratorEnd) {
 }
 
 TEST(Support, HomeDirectory) {
-#ifdef LLVM_ON_UNIX
+#ifdef LLVM37_ON_UNIX
   // This test only makes sense on Unix if $HOME is set.
   if (::getenv("HOME")) {
 #endif
     SmallString<128> HomeDir;
     EXPECT_TRUE(path::home_directory(HomeDir));
     EXPECT_FALSE(HomeDir.empty());
-#ifdef LLVM_ON_UNIX
+#ifdef LLVM37_ON_UNIX
   }
 #endif
 }
@@ -430,7 +430,7 @@ TEST_F(FileSystemTest, TempFiles) {
   ASSERT_EQ(fs::access(Twine(TempPath), sys::fs::AccessMode::Exist),
             errc::no_such_file_or_directory);
 
-#ifdef LLVM_ON_WIN32
+#ifdef LLVM37_ON_WIN32
   // Path name > 260 chars should get an error.
   const char *Path270 =
     "abcdefghijklmnopqrstuvwxyz9abcdefghijklmnopqrstuvwxyz8"
@@ -458,7 +458,7 @@ TEST_F(FileSystemTest, CreateDir) {
             errc::file_exists);
   ASSERT_NO_ERROR(fs::remove(Twine(TestDirectory) + "foo"));
 
-#ifdef LLVM_ON_WIN32
+#ifdef LLVM37_ON_WIN32
   // Prove that create_directories() can handle a pathname > 248 characters,
   // which is the documented limit for CreateDirectory().
   // (248 is MAX_PATH subtracting room for an 8.3 filename.)
@@ -650,7 +650,7 @@ TEST_F(FileSystemTest, Magic) {
   }
 }
 
-#ifdef LLVM_ON_WIN32
+#ifdef LLVM37_ON_WIN32
 TEST_F(FileSystemTest, CarriageReturn) {
   SmallString<128> FilePathname(TestDirectory);
   std::error_code EC;
@@ -730,7 +730,7 @@ TEST_F(FileSystemTest, FileMapping) {
 }
 
 TEST(Support, NormalizePath) {
-#if defined(LLVM_ON_WIN32)
+#if defined(LLVM37_ON_WIN32)
 #define EXPECT_PATH_IS(path__, windows__, not_windows__)                        \
   EXPECT_EQ(path__, windows__);
 #else

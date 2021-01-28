@@ -1,21 +1,21 @@
 //===- unittest/Support/YAMLParserTest ------------------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/ADT/SmallString.h"
-#include "llvm/ADT/Twine.h"
-#include "llvm/Support/Casting.h"
-#include "llvm/Support/MemoryBuffer.h"
-#include "llvm/Support/SourceMgr.h"
-#include "llvm/Support/YAMLParser.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/ADT/Twine.h"
+#include "llvm37/Support/Casting.h"
+#include "llvm37/Support/MemoryBuffer.h"
+#include "llvm37/Support/SourceMgr.h"
+#include "llvm37/Support/YAMLParser.h"
 #include "gtest/gtest.h"
 
-namespace llvm {
+namespace llvm37 {
 
 static void SuppressDiagnosticsOutput(const SMDiagnostic &, void *) {
   // Prevent SourceMgr from writing errors to stderr
@@ -187,7 +187,7 @@ TEST(YAMLParser, HandlesNullValuesInKeyValueNodesGracefully) {
 // Checks that the given string can be parsed into an identical string inside
 // of an array.
 static void ExpectCanParseString(StringRef String) {
-  std::string StringInArray = (llvm::Twine("[\"") + String + "\"]").str();
+  std::string StringInArray = (llvm37::Twine("[\"") + String + "\"]").str();
   SourceMgr SM;
   yaml::Stream Stream(StringInArray, SM);
   yaml::SequenceNode *ParsedSequence
@@ -201,7 +201,7 @@ static void ExpectCanParseString(StringRef String) {
 
 // Checks that parsing the given string inside an array fails.
 static void ExpectCannotParseString(StringRef String) {
-  std::string StringInArray = (llvm::Twine("[\"") + String + "\"]").str();
+  std::string StringInArray = (llvm37::Twine("[\"") + String + "\"]").str();
   ExpectParseError((Twine("When parsing string \"") + String + "\"").str(),
                    StringInArray);
 }
@@ -260,4 +260,4 @@ TEST(YAMLParser, DiagnosticFilenameFromBufferID) {
   EXPECT_EQ("buffername.yaml", GeneratedDiag.getFilename());
 }
 
-} // end namespace llvm
+} // end namespace llvm37

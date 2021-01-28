@@ -1,14 +1,14 @@
 //===----- EditedSource.h - Collection of source edits ----------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_EDIT_EDITSRECEIVER_H
-#define LLVM_CLANG_EDIT_EDITSRECEIVER_H
+#ifndef LLVM37_CLANG_EDIT_EDITSRECEIVER_H
+#define LLVM37_CLANG_EDIT_EDITSRECEIVER_H
 
 #include "clang/Basic/LLVM.h"
 

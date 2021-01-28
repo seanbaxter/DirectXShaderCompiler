@@ -12,16 +12,16 @@
 #include "dxc/Support/WinIncludes.h"
 #include "dxc/Support/Global.h"
 #include "dxc/dxcapi.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/Hashing.h"
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/Hashing.h"
 #include <mutex>
 #include <shared_mutex>
 #include <unordered_map>
 #include "lib_share_helper.h"
-#include "llvm/ADT/STLExtras.h"
+#include "llvm37/ADT/STLExtras.h"
 #include "dxc/Support/FileIOHelper.h"
 
-using namespace llvm;
+using namespace llvm37;
 using namespace libshare;
 
 #include "dxc/Support/dxcapi.use.h"
@@ -189,7 +189,7 @@ bool LibCacheManagerImpl::GetLibBlob(std::string &processedHeader,
 
 LibCacheManager *GetLibCacheManagerPtr(bool bFree) {
   static std::unique_ptr<LibCacheManagerImpl> g_LibCache =
-      llvm::make_unique<LibCacheManagerImpl>();
+      llvm37::make_unique<LibCacheManagerImpl>();
   if (bFree)
     g_LibCache.reset();
   return g_LibCache.get();

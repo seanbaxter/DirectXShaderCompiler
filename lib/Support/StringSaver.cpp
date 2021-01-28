@@ -1,15 +1,15 @@
 //===-- StringSaver.cpp ---------------------------------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Support/StringSaver.h"
+#include "llvm37/Support/StringSaver.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 const char *StringSaver::saveImpl(StringRef S) {
   char *P = Alloc.Allocate<char>(S.size() + 1);

@@ -1,6 +1,6 @@
 //===--- ExprCXX.cpp - (C++) Expression AST Node Implementation -----------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -311,7 +311,7 @@ UnresolvedLookupExpr::CreateEmpty(const ASTContext &C,
   if (HasTemplateKWAndArgsInfo)
     size += ASTTemplateKWAndArgsInfo::sizeFor(NumTemplateArgs);
 
-  void *Mem = C.Allocate(size, llvm::alignOf<UnresolvedLookupExpr>());
+  void *Mem = C.Allocate(size, llvm37::alignOf<UnresolvedLookupExpr>());
   UnresolvedLookupExpr *E = new (Mem) UnresolvedLookupExpr(EmptyShell());
   E->HasTemplateKWAndArgsInfo = HasTemplateKWAndArgsInfo;
   return E;
@@ -356,7 +356,7 @@ OverloadExpr::OverloadExpr(StmtClass K, const ASTContext &C,
 
     Results = static_cast<DeclAccessPair *>(
                                 C.Allocate(sizeof(DeclAccessPair) * NumResults, 
-                                           llvm::alignOf<DeclAccessPair>()));
+                                           llvm37::alignOf<DeclAccessPair>()));
     memcpy(Results, Begin.I, NumResults * sizeof(DeclAccessPair));
   }
 
@@ -397,7 +397,7 @@ void OverloadExpr::initializeResults(const ASTContext &C,
      Results = static_cast<DeclAccessPair *>(
                                C.Allocate(sizeof(DeclAccessPair) * NumResults,
  
-                                          llvm::alignOf<DeclAccessPair>()));
+                                          llvm37::alignOf<DeclAccessPair>()));
      memcpy(Results, Begin.I, NumResults * sizeof(DeclAccessPair));
   }
 }
@@ -746,7 +746,7 @@ UserDefinedLiteral::getLiteralOperatorKind() const {
   if (ParamTy->isFloatingType())
     return LOK_Floating;
 
-  llvm_unreachable("unknown kind of literal operator");
+  llvm37_unreachable("unknown kind of literal operator");
 }
 
 Expr *UserDefinedLiteral::getCookedLiteral() {
@@ -1005,7 +1005,7 @@ LambdaExpr *LambdaExpr::Create(const ASTContext &Context,
   if (!ArrayIndexVars.empty()) {
     Size += sizeof(unsigned) * (Captures.size() + 1);
     // Realign for following VarDecl array.
-    Size = llvm::RoundUpToAlignment(Size, llvm::alignOf<VarDecl*>());
+    Size = llvm37::RoundUpToAlignment(Size, llvm37::alignOf<VarDecl*>());
     Size += sizeof(VarDecl *) * ArrayIndexVars.size();
   }
   void *Mem = Context.Allocate(Size);
@@ -1079,7 +1079,7 @@ LambdaExpr::getCaptureInitIndexVars(capture_init_iterator Iter) const {
          "Capture index out-of-range");
   VarDecl **IndexVars = getArrayIndexVars();
   unsigned *IndexStarts = getArrayIndexStarts();
-  return llvm::makeArrayRef(IndexVars + IndexStarts[Index],
+  return llvm37::makeArrayRef(IndexVars + IndexStarts[Index],
                             IndexVars + IndexStarts[Index + 1]);
 }
 
@@ -1126,7 +1126,7 @@ ExprWithCleanups *ExprWithCleanups::Create(const ASTContext &C, Expr *subexpr,
                                            ArrayRef<CleanupObject> objects) {
   size_t size = sizeof(ExprWithCleanups)
               + objects.size() * sizeof(CleanupObject);
-  void *buffer = C.Allocate(size, llvm::alignOf<ExprWithCleanups>());
+  void *buffer = C.Allocate(size, llvm37::alignOf<ExprWithCleanups>());
   return new (buffer) ExprWithCleanups(subexpr, objects);
 }
 
@@ -1139,7 +1139,7 @@ ExprWithCleanups *ExprWithCleanups::Create(const ASTContext &C,
                                            EmptyShell empty,
                                            unsigned numObjects) {
   size_t size = sizeof(ExprWithCleanups) + numObjects * sizeof(CleanupObject);
-  void *buffer = C.Allocate(size, llvm::alignOf<ExprWithCleanups>());
+  void *buffer = C.Allocate(size, llvm37::alignOf<ExprWithCleanups>());
   return new (buffer) ExprWithCleanups(empty, numObjects);
 }
 
@@ -1268,7 +1268,7 @@ CXXDependentScopeMemberExpr::Create(const ASTContext &C,
   std::size_t size = sizeof(CXXDependentScopeMemberExpr)
     + ASTTemplateKWAndArgsInfo::sizeFor(NumTemplateArgs);
 
-  void *Mem = C.Allocate(size, llvm::alignOf<CXXDependentScopeMemberExpr>());
+  void *Mem = C.Allocate(size, llvm37::alignOf<CXXDependentScopeMemberExpr>());
   return new (Mem) CXXDependentScopeMemberExpr(C, Base, BaseType,
                                                IsArrow, OperatorLoc,
                                                QualifierLoc,
@@ -1289,7 +1289,7 @@ CXXDependentScopeMemberExpr::CreateEmpty(const ASTContext &C,
 
   std::size_t size = sizeof(CXXDependentScopeMemberExpr) +
                      ASTTemplateKWAndArgsInfo::sizeFor(NumTemplateArgs);
-  void *Mem = C.Allocate(size, llvm::alignOf<CXXDependentScopeMemberExpr>());
+  void *Mem = C.Allocate(size, llvm37::alignOf<CXXDependentScopeMemberExpr>());
   CXXDependentScopeMemberExpr *E
     =  new (Mem) CXXDependentScopeMemberExpr(C, nullptr, QualType(),
                                              0, SourceLocation(),
@@ -1377,7 +1377,7 @@ UnresolvedMemberExpr::Create(const ASTContext &C, bool HasUnresolvedUsing,
   else if (TemplateKWLoc.isValid())
     size += ASTTemplateKWAndArgsInfo::sizeFor(0);
 
-  void *Mem = C.Allocate(size, llvm::alignOf<UnresolvedMemberExpr>());
+  void *Mem = C.Allocate(size, llvm37::alignOf<UnresolvedMemberExpr>());
   return new (Mem) UnresolvedMemberExpr(C, 
                              HasUnresolvedUsing, Base, BaseType,
                              IsArrow, OperatorLoc, QualifierLoc, TemplateKWLoc,
@@ -1392,7 +1392,7 @@ UnresolvedMemberExpr::CreateEmpty(const ASTContext &C,
   if (HasTemplateKWAndArgsInfo)
     size += ASTTemplateKWAndArgsInfo::sizeFor(NumTemplateArgs);
 
-  void *Mem = C.Allocate(size, llvm::alignOf<UnresolvedMemberExpr>());
+  void *Mem = C.Allocate(size, llvm37::alignOf<UnresolvedMemberExpr>());
   UnresolvedMemberExpr *E = new (Mem) UnresolvedMemberExpr(EmptyShell());
   E->HasTemplateKWAndArgsInfo = HasTemplateKWAndArgsInfo;
   return E;

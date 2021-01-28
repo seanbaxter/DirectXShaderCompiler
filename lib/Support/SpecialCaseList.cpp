@@ -1,6 +1,6 @@
 //===-- SpecialCaseList.cpp - special case list for sanitizers ------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -14,17 +14,17 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Support/SpecialCaseList.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/ADT/StringExtras.h"
-#include "llvm/ADT/StringSet.h"
-#include "llvm/Support/MemoryBuffer.h"
-#include "llvm/Support/Regex.h"
+#include "llvm37/Support/SpecialCaseList.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/ADT/StringExtras.h"
+#include "llvm37/ADT/StringSet.h"
+#include "llvm37/Support/MemoryBuffer.h"
+#include "llvm37/Support/Regex.h"
 #include <string>
 #include <system_error>
 #include <utility>
 
-namespace llvm {
+namespace llvm37 {
 
 /// Represents a set of regular expressions.  Regular expressions which are
 /// "literal" (i.e. no regex metacharacters) are stored in Strings, while all
@@ -165,4 +165,4 @@ bool SpecialCaseList::inSection(StringRef Section, StringRef Query,
   return II->getValue().match(Query);
 }
 
-}  // namespace llvm
+}  // namespace llvm37

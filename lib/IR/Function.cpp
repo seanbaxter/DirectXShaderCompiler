@@ -1,6 +1,6 @@
 //===-- Function.cpp - Implement the Global object classes ----------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -11,32 +11,32 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/IR/Function.h"
+#include "llvm37/IR/Function.h"
 #include "LLVMContextImpl.h"
 #include "SymbolTableListTraitsImpl.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/StringExtras.h"
-#include "llvm/CodeGen/ValueTypes.h"
-#include "llvm/IR/CallSite.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/DerivedTypes.h"
-#include "llvm/IR/InstIterator.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/MDBuilder.h"
-#include "llvm/IR/Metadata.h"
-#include "llvm/IR/Module.h"
-#include "llvm/Support/ManagedStatic.h"
-#include "llvm/Support/RWMutex.h"
-#include "llvm/Support/StringPool.h"
-#include "llvm/Support/Threading.h"
-using namespace llvm;
+#include "llvm37/ADT/DenseMap.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/StringExtras.h"
+#include "llvm37/CodeGen/ValueTypes.h"
+#include "llvm37/IR/CallSite.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/DerivedTypes.h"
+#include "llvm37/IR/InstIterator.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/MDBuilder.h"
+#include "llvm37/IR/Metadata.h"
+#include "llvm37/IR/Module.h"
+#include "llvm37/Support/ManagedStatic.h"
+#include "llvm37/Support/RWMutex.h"
+#include "llvm37/Support/StringPool.h"
+#include "llvm37/Support/Threading.h"
+using namespace llvm37;
 
 // Explicit instantiations of SymbolTableListTraits since some of the methods
 // are not in the public header file...
-template class llvm::SymbolTableListTraits<Argument, Function>;
-template class llvm::SymbolTableListTraits<BasicBlock, Function>;
+template class llvm37::SymbolTableListTraits<Argument, Function>;
+template class llvm37::SymbolTableListTraits<BasicBlock, Function>;
 
 //===----------------------------------------------------------------------===//
 // Argument Implementation
@@ -220,7 +220,7 @@ void Function::setIsMaterializable(bool V) {
   setGlobalObjectBit(IsMaterializableBit, V);
 }
 
-LLVMContext &Function::getContext() const {
+LLVM37Context &Function::getContext() const {
   return getType()->getContext();
 }
 
@@ -462,7 +462,7 @@ static Intrinsic::ID lookupIntrinsicID(const ValueName *ValName) {
   const char *Name = ValName->getKeyData();
 
 #define GET_FUNCTION_RECOGNIZER
-#include "llvm/IR/Intrinsics.gen"
+#include "llvm37/IR/Intrinsics.gen"
 #undef GET_FUNCTION_RECOGNIZER
 
   return Intrinsic::not_intrinsic;
@@ -494,10 +494,10 @@ void Function::recalculateIntrinsicID() {
 static std::string getMangledTypeStr(Type* Ty) {
   std::string Result;
   if (PointerType* PTyp = dyn_cast<PointerType>(Ty)) {
-    Result += "p" + llvm::utostr(PTyp->getAddressSpace()) +
+    Result += "p" + llvm37::utostr(PTyp->getAddressSpace()) +
       getMangledTypeStr(PTyp->getElementType());
   } else if (ArrayType* ATyp = dyn_cast<ArrayType>(Ty)) {
-    Result += "a" + llvm::utostr(ATyp->getNumElements()) +
+    Result += "a" + llvm37::utostr(ATyp->getNumElements()) +
       getMangledTypeStr(ATyp->getElementType());
   } else if (StructType* STyp = dyn_cast<StructType>(Ty)) {
     assert(!STyp->isLiteral() && "TODO: implement literal types");
@@ -520,7 +520,7 @@ std::string Intrinsic::getName(_In_range_(0, num_intrinsics-1) ID id, ArrayRef<T
   static const char * const Table[] = {
     "not_intrinsic",
 #define GET_INTRINSIC_NAME_TABLE
-#include "llvm/IR/Intrinsics.gen"
+#include "llvm37/IR/Intrinsics.gen"
 #undef GET_INTRINSIC_NAME_TABLE
   };
   if (Tys.empty())
@@ -716,12 +716,12 @@ static void DecodeIITType(unsigned &NextElt, ArrayRef<unsigned char> Infos,
     return;
   }
   }
-  llvm_unreachable("unhandled");
+  llvm37_unreachable("unhandled");
 }
 
 
 #define GET_INTRINSIC_GENERATOR_GLOBAL
-#include "llvm/IR/Intrinsics.gen"
+#include "llvm37/IR/Intrinsics.gen"
 #undef GET_INTRINSIC_GENERATOR_GLOBAL
 
 void Intrinsic::getIntrinsicInfoTableEntries(ID id,
@@ -759,7 +759,7 @@ void Intrinsic::getIntrinsicInfoTableEntries(ID id,
 
 
 static Type *DecodeFixedType(ArrayRef<Intrinsic::IITDescriptor> &Infos,
-                             ArrayRef<Type*> Tys, LLVMContext &Context) {
+                             ArrayRef<Type*> Tys, LLVM37Context &Context) {
   using namespace Intrinsic;
   IITDescriptor D = Infos.front();
   Infos = Infos.slice(1);
@@ -815,7 +815,7 @@ static Type *DecodeFixedType(ArrayRef<Intrinsic::IITDescriptor> &Infos,
     if (VectorType *VTy = dyn_cast<VectorType>(Ty)) {
       return VectorType::get(EltTy, VTy->getNumElements());
     }
-    llvm_unreachable("unhandled");
+    llvm37_unreachable("unhandled");
   }
   case IITDescriptor::PtrToArgument: {
     Type *Ty = Tys[D.getArgumentNumber()];
@@ -825,18 +825,18 @@ static Type *DecodeFixedType(ArrayRef<Intrinsic::IITDescriptor> &Infos,
     Type *Ty = Tys[D.getArgumentNumber()];
     VectorType *VTy = dyn_cast<VectorType>(Ty);
     if (!VTy)
-      llvm_unreachable("Expected an argument of Vector Type");
+      llvm37_unreachable("Expected an argument of Vector Type");
     Type *EltTy = VTy->getVectorElementType();
     return VectorType::get(PointerType::getUnqual(EltTy),
                            VTy->getNumElements());
   }
   }
-  llvm_unreachable("unhandled");
+  llvm37_unreachable("unhandled");
 }
 
 
 
-FunctionType *Intrinsic::getType(LLVMContext &Context,
+FunctionType *Intrinsic::getType(LLVM37Context &Context,
                                  ID id, ArrayRef<Type*> Tys) {
   SmallVector<IITDescriptor, 8> Table;
   getIntrinsicInfoTableEntries(id, Table);
@@ -859,7 +859,7 @@ FunctionType *Intrinsic::getType(LLVMContext &Context,
 
 bool Intrinsic::isOverloaded(ID id) {
 #define GET_INTRINSIC_OVERLOAD_TABLE
-#include "llvm/IR/Intrinsics.gen"
+#include "llvm37/IR/Intrinsics.gen"
 #undef GET_INTRINSIC_OVERLOAD_TABLE
 }
 
@@ -877,7 +877,7 @@ bool Intrinsic::isLeaf(ID id) {
 
 /// This defines the "Intrinsic::getAttributes(ID id)" method.
 #define GET_INTRINSIC_ATTRIBUTES
-#include "llvm/IR/Intrinsics.gen"
+#include "llvm37/IR/Intrinsics.gen"
 #undef GET_INTRINSIC_ATTRIBUTES
 
 Function *Intrinsic::getDeclaration(Module *M, ID id, ArrayRef<Type*> Tys) {
@@ -890,15 +890,15 @@ Function *Intrinsic::getDeclaration(Module *M, ID id, ArrayRef<Type*> Tys) {
 
 // This defines the "Intrinsic::getIntrinsicForGCCBuiltin()" method.
 //#pragma optimize("", off) // HLSL Change - comment out pragma optimize directive
-#define GET_LLVM_INTRINSIC_FOR_GCC_BUILTIN
-#include "llvm/IR/Intrinsics.gen"
-#undef GET_LLVM_INTRINSIC_FOR_GCC_BUILTIN
+#define GET_LLVM37_INTRINSIC_FOR_GCC_BUILTIN
+#include "llvm37/IR/Intrinsics.gen"
+#undef GET_LLVM37_INTRINSIC_FOR_GCC_BUILTIN
 //#pragma optimize("", on)  // HLSL Change - comment out pragma optimize directive
 
 // This defines the "Intrinsic::getIntrinsicForMSBuiltin()" method.
-#define GET_LLVM_INTRINSIC_FOR_MS_BUILTIN
-#include "llvm/IR/Intrinsics.gen"
-#undef GET_LLVM_INTRINSIC_FOR_MS_BUILTIN
+#define GET_LLVM37_INTRINSIC_FOR_MS_BUILTIN
+#include "llvm37/IR/Intrinsics.gen"
+#undef GET_LLVM37_INTRINSIC_FOR_MS_BUILTIN
 
 /// hasAddressTaken - returns true if there are any uses of this function
 /// other than direct calls or invokes to it.
@@ -945,7 +945,7 @@ bool Function::callsFunctionThatReturnsTwice() const {
 
 Constant *Function::getPrefixData() const {
   assert(hasPrefixData());
-  const LLVMContextImpl::PrefixDataMapTy &PDMap =
+  const LLVM37ContextImpl::PrefixDataMapTy &PDMap =
       getContext().pImpl->PrefixDataMap;
   assert(PDMap.find(this) != PDMap.end());
   return cast<Constant>(PDMap.find(this)->second->getReturnValue());
@@ -956,7 +956,7 @@ void Function::setPrefixData(Constant *PrefixData) {
     return;
 
   unsigned SCData = getSubclassDataFromValue();
-  LLVMContextImpl::PrefixDataMapTy &PDMap = getContext().pImpl->PrefixDataMap;
+  LLVM37ContextImpl::PrefixDataMapTy &PDMap = getContext().pImpl->PrefixDataMap;
   ReturnInst *&PDHolder = PDMap[this];
   if (PrefixData) {
     if (PDHolder)
@@ -974,7 +974,7 @@ void Function::setPrefixData(Constant *PrefixData) {
 
 Constant *Function::getPrologueData() const {
   assert(hasPrologueData());
-  const LLVMContextImpl::PrologueDataMapTy &SOMap =
+  const LLVM37ContextImpl::PrologueDataMapTy &SOMap =
       getContext().pImpl->PrologueDataMap;
   assert(SOMap.find(this) != SOMap.end());
   return cast<Constant>(SOMap.find(this)->second->getReturnValue());
@@ -985,7 +985,7 @@ void Function::setPrologueData(Constant *PrologueData) {
     return;
 
   unsigned PDData = getSubclassDataFromValue();
-  LLVMContextImpl::PrologueDataMapTy &PDMap = getContext().pImpl->PrologueDataMap;
+  LLVM37ContextImpl::PrologueDataMapTy &PDMap = getContext().pImpl->PrologueDataMap;
   ReturnInst *&PDHolder = PDMap[this];
   if (PrologueData) {
     if (PDHolder)
@@ -1003,11 +1003,11 @@ void Function::setPrologueData(Constant *PrologueData) {
 
 void Function::setEntryCount(uint64_t Count) {
   MDBuilder MDB(getContext());
-  setMetadata(LLVMContext::MD_prof, MDB.createFunctionEntryCount(Count));
+  setMetadata(LLVM37Context::MD_prof, MDB.createFunctionEntryCount(Count));
 }
 
 Optional<uint64_t> Function::getEntryCount() const {
-  MDNode *MD = getMetadata(LLVMContext::MD_prof);
+  MDNode *MD = getMetadata(LLVM37Context::MD_prof);
   if (MD && MD->getOperand(0))
     if (MDString *MDS = dyn_cast<MDString>(MD->getOperand(0)))
       if (MDS->getString().equals("function_entry_count")) {

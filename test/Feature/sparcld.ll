@@ -1,5 +1,5 @@
-; RUN: llvm-as < %s | llvm-dis > %t
-; RUN: llvm-as < %t | llvm-dis > %t2
+; RUN: llvm37-as < %s | llvm37-dis > %t
+; RUN: llvm37-as < %t | llvm37-dis > %t2
 ; RUN: diff %t %t2
 ; ModuleID = '<stdin>'
 @ld = external global fp128		; <fp128*> [#uses=1]

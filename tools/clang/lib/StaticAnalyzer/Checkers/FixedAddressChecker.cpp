@@ -1,6 +1,6 @@
 //=== FixedAddressChecker.cpp - Fixed address usage checker ----*- C++ -*--===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -57,7 +57,7 @@ void FixedAddressChecker::checkPreStmt(const BinaryOperator *B,
                          "Using a fixed address is not portable because that "
                          "address will probably not be valid in all "
                          "environments or platforms."));
-    auto R = llvm::make_unique<BugReport>(*BT, BT->getDescription(), N);
+    auto R = llvm37::make_unique<BugReport>(*BT, BT->getDescription(), N);
     R->addRange(B->getRHS()->getSourceRange());
     C.emitReport(std::move(R));
   }

@@ -1,18 +1,18 @@
 //===- lib/MC/MCObjectWriter.cpp - MCObjectWriter implementation ----------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/MC/MCAssembler.h"
-#include "llvm/MC/MCExpr.h"
-#include "llvm/MC/MCObjectWriter.h"
-#include "llvm/MC/MCSymbol.h"
+#include "llvm37/MC/MCAssembler.h"
+#include "llvm37/MC/MCExpr.h"
+#include "llvm37/MC/MCObjectWriter.h"
+#include "llvm37/MC/MCSymbol.h"
 
-using namespace llvm;
+using namespace llvm37;
 
 MCObjectWriter::~MCObjectWriter() {
 }

@@ -1,6 +1,6 @@
 //===- SROA.cpp - Scalar Replacement Of Aggregates ------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -23,39 +23,39 @@
 ///
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Transforms/Scalar.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/SetVector.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/Analysis/AssumptionCache.h"
-#include "llvm/Analysis/Loads.h"
-#include "llvm/Analysis/PtrUseVisitor.h"
-#include "llvm/Analysis/ValueTracking.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/DIBuilder.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/DebugInfo.h"
-#include "llvm/IR/DerivedTypes.h"
-#include "llvm/IR/Dominators.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/IRBuilder.h"
-#include "llvm/IR/InstVisitor.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/IntrinsicInst.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Operator.h"
-#include "llvm/Pass.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/Compiler.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/MathExtras.h"
-#include "llvm/Support/TimeValue.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Transforms/Utils/Local.h"
-#include "llvm/Transforms/Utils/PromoteMemToReg.h"
-#include "llvm/Transforms/Utils/SSAUpdater.h"
+#include "llvm37/Transforms/Scalar.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/SetVector.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/Analysis/AssumptionCache.h"
+#include "llvm37/Analysis/Loads.h"
+#include "llvm37/Analysis/PtrUseVisitor.h"
+#include "llvm37/Analysis/ValueTracking.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/DIBuilder.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/IR/DebugInfo.h"
+#include "llvm37/IR/DerivedTypes.h"
+#include "llvm37/IR/Dominators.h"
+#include "llvm37/IR/Function.h"
+#include "llvm37/IR/IRBuilder.h"
+#include "llvm37/IR/InstVisitor.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/IntrinsicInst.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/Operator.h"
+#include "llvm37/Pass.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/Compiler.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/MathExtras.h"
+#include "llvm37/Support/TimeValue.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Transforms/Utils/Local.h"
+#include "llvm37/Transforms/Utils/PromoteMemToReg.h"
+#include "llvm37/Transforms/Utils/SSAUpdater.h"
 #include "dxc/DXIL/DxilUtil.h"  // HLSL Change - don't sroa resource type.
 #include "dxc/DXIL/DxilMetadataHelper.h"  // HLSL Change - support strided debug variables
 #include "dxc/HLSL/HLMatrixType.h"  // HLSL Change - don't sroa matrix types.
@@ -65,7 +65,7 @@
 #include <random>
 #endif
 
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "sroa"
 
@@ -129,10 +129,10 @@ public:
 
 /// \brief Provide a typedef for IRBuilder that drops names in release builds.
 #ifndef NDEBUG
-typedef llvm::IRBuilder<true, ConstantFolder, IRBuilderPrefixedInserter<true>>
+typedef llvm37::IRBuilder<true, ConstantFolder, IRBuilderPrefixedInserter<true>>
     IRBuilderTy;
 #else
-typedef llvm::IRBuilder<false, ConstantFolder, IRBuilderPrefixedInserter<false>>
+typedef llvm37::IRBuilder<false, ConstantFolder, IRBuilderPrefixedInserter<false>>
     IRBuilderTy;
 #endif
 }
@@ -191,11 +191,11 @@ public:
   }
 
   /// \brief Support comparison with a single offset to allow binary searches.
-  friend LLVM_ATTRIBUTE_UNUSED bool operator<(const Slice &LHS,
+  friend LLVM37_ATTRIBUTE_UNUSED bool operator<(const Slice &LHS,
                                               uint64_t RHSOffset) {
     return LHS.beginOffset() < RHSOffset;
   }
-  friend LLVM_ATTRIBUTE_UNUSED bool operator<(uint64_t LHSOffset,
+  friend LLVM37_ATTRIBUTE_UNUSED bool operator<(uint64_t LHSOffset,
                                               const Slice &RHS) {
     return LHSOffset < RHS.beginOffset();
   }
@@ -208,7 +208,7 @@ public:
 };
 } // end anonymous namespace
 
-namespace llvm {
+namespace llvm37 {
 template <typename T> struct isPodLike;
 template <> struct isPodLike<Slice> { static const bool value = true; };
 }
@@ -549,7 +549,7 @@ public:
   /// need to replace with undef.
   ArrayRef<Use *> getDeadOperands() const { return DeadOperands; }
 
-#if !defined(NDEBUG) || defined(LLVM_ENABLE_DUMP)
+#if !defined(NDEBUG) || defined(LLVM37_ENABLE_DUMP)
   void print(raw_ostream &OS, const_iterator I, StringRef Indent = "  ") const;
   void printSlice(raw_ostream &OS, const_iterator I,
                   StringRef Indent = "  ") const;
@@ -565,7 +565,7 @@ private:
   class SliceBuilder;
   friend class AllocaSlices::SliceBuilder;
 
-#if !defined(NDEBUG) || defined(LLVM_ENABLE_DUMP)
+#if !defined(NDEBUG) || defined(LLVM37_ENABLE_DUMP)
   /// \brief Handle to alloca instruction to simplify method interfaces.
   AllocaInst &AI;
 #endif
@@ -1041,7 +1041,7 @@ AllocaSlices::AllocaSlices(
     const DataLayout &DL, AllocaInst &AI,
     const bool SkipHLSLMat) // HLSL Change - not sroa matrix type.
     :
-#if !defined(NDEBUG) || defined(LLVM_ENABLE_DUMP)
+#if !defined(NDEBUG) || defined(LLVM37_ENABLE_DUMP)
       AI(AI),
 #endif
       PointerEscapingInstr(nullptr) {
@@ -1076,7 +1076,7 @@ AllocaSlices::AllocaSlices(
   std::sort(Slices.begin(), Slices.end());
 }
 
-#if !defined(NDEBUG) || defined(LLVM_ENABLE_DUMP)
+#if !defined(NDEBUG) || defined(LLVM37_ENABLE_DUMP)
 
 void AllocaSlices::print(raw_ostream &OS, const_iterator I,
                          StringRef Indent) const {
@@ -1110,12 +1110,12 @@ void AllocaSlices::print(raw_ostream &OS) const {
     print(OS, I);
 }
 
-LLVM_DUMP_METHOD void AllocaSlices::dump(const_iterator I) const {
+LLVM37_DUMP_METHOD void AllocaSlices::dump(const_iterator I) const {
   print(dbgs(), I);
 }
-LLVM_DUMP_METHOD void AllocaSlices::dump() const { print(dbgs()); }
+LLVM37_DUMP_METHOD void AllocaSlices::dump() const { print(dbgs()); }
 
-#endif // !defined(NDEBUG) || defined(LLVM_ENABLE_DUMP)
+#endif // !defined(NDEBUG) || defined(LLVM37_ENABLE_DUMP)
 
 namespace {
 /// \brief Implementation of LoadAndStorePromoter for promoting allocas.
@@ -1243,7 +1243,7 @@ class SROA : public FunctionPass {
   const bool RequiresDomTree;
   const bool SkipHLSLMat; // HLSL Change - not sroa matrix type.
 
-  LLVMContext *C;
+  LLVM37Context *C;
   DominatorTree *DT;
   AssumptionCache *AC;
 
@@ -1319,7 +1319,7 @@ private:
 
 char SROA::ID = 0;
 
-FunctionPass *llvm::createSROAPass(bool RequiresDomTree, bool SkipHLSLMat) {
+FunctionPass *llvm37::createSROAPass(bool RequiresDomTree, bool SkipHLSLMat) {
   return new SROA(RequiresDomTree, SkipHLSLMat);
 }
 
@@ -1876,7 +1876,7 @@ static unsigned getAdjustedAlignment(Instruction *I, uint64_t Offset,
     Alignment = SI->getAlignment();
     Ty = SI->getValueOperand()->getType();
   } else {
-    llvm_unreachable("Only loads and stores are allowed!");
+    llvm37_unreachable("Only loads and stores are allowed!");
   }
 
   if (!Alignment)
@@ -2138,7 +2138,7 @@ static VectorType *isVectorPromotionViable(AllocaSlices::Partition &P,
   auto CheckVectorTypeForPromotion = [&](VectorType *VTy) {
     uint64_t ElementSize = DL.getTypeSizeInBits(VTy->getElementType());
 
-    // While the definition of LLVM vectors is bitpacked, we don't support sizes
+    // While the definition of LLVM37 vectors is bitpacked, we don't support sizes
     // that aren't byte sized.
     if (ElementSize % 8)
       return false;
@@ -2425,8 +2425,8 @@ namespace {
 /// lives here.
 class AllocaSliceRewriter : public InstVisitor<AllocaSliceRewriter, bool> {
   // Befriend the base class so it can delegate to private visit methods.
-  friend class llvm::InstVisitor<AllocaSliceRewriter, bool>;
-  typedef llvm::InstVisitor<AllocaSliceRewriter, bool> Base;
+  friend class llvm37::InstVisitor<AllocaSliceRewriter, bool>;
+  typedef llvm37::InstVisitor<AllocaSliceRewriter, bool> Base;
 
   const DataLayout &DL;
   AllocaSlices &AS;
@@ -2546,7 +2546,7 @@ private:
   // Every instruction which can end up as a user must have a rewrite rule.
   bool visitInstruction(Instruction &I) {
     DEBUG(dbgs() << "    !!!! Cannot rewrite: " << I << "\n");
-    llvm_unreachable("No rewrite rule for this instruction!");
+    llvm37_unreachable("No rewrite rule for this instruction!");
   }
 
   Value *getNewAllocaSlicePtr(IRBuilderTy &IRB, Type *PointerTy) {
@@ -3227,7 +3227,7 @@ namespace {
 /// with scalar loads and stores.
 class AggLoadStoreRewriter : public InstVisitor<AggLoadStoreRewriter, bool> {
   // Befriend the base class so it can delegate to private visit methods.
-  friend class llvm::InstVisitor<AggLoadStoreRewriter, bool>;
+  friend class llvm37::InstVisitor<AggLoadStoreRewriter, bool>;
 
   const DataLayout &DL;
   const bool SkipHLSLMat; // HLSL Change - not sroa matrix type.
@@ -3340,7 +3340,7 @@ private:
         return;
       }
 
-      llvm_unreachable("Only arrays and structs are aggregate loadable types");
+      llvm37_unreachable("Only arrays and structs are aggregate loadable types");
     }
   };
 

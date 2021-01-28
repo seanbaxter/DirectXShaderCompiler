@@ -1,4 +1,4 @@
-// RUN: llvm-tblgen %s
+// RUN: llvm37-tblgen %s
 
 // CHECK:      def One {
 // CHECK-NEXT:   list<string> names = ["Jeffrey Sinclair"];

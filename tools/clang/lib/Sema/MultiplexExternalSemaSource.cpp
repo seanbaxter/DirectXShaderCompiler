@@ -1,6 +1,6 @@
 //===--- MultiplexExternalSemaSource.cpp  ---------------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -166,9 +166,9 @@ void MultiplexExternalSemaSource::PrintStats() {
 bool MultiplexExternalSemaSource::layoutRecordType(const RecordDecl *Record,
                                                    uint64_t &Size, 
                                                    uint64_t &Alignment,
-                      llvm::DenseMap<const FieldDecl *, uint64_t> &FieldOffsets,
-                  llvm::DenseMap<const CXXRecordDecl *, CharUnits> &BaseOffsets,
-          llvm::DenseMap<const CXXRecordDecl *, CharUnits> &VirtualBaseOffsets){
+                      llvm37::DenseMap<const FieldDecl *, uint64_t> &FieldOffsets,
+                  llvm37::DenseMap<const CXXRecordDecl *, CharUnits> &BaseOffsets,
+          llvm37::DenseMap<const CXXRecordDecl *, CharUnits> &VirtualBaseOffsets){
   for(size_t i = 0; i < Sources.size(); ++i)
     if (Sources[i]->layoutRecordType(Record, Size, Alignment, FieldOffsets, 
                                      BaseOffsets, VirtualBaseOffsets))
@@ -210,14 +210,14 @@ void MultiplexExternalSemaSource::ReadKnownNamespaces(
 }
 
 void MultiplexExternalSemaSource::ReadUndefinedButUsed(
-                         llvm::DenseMap<NamedDecl*, SourceLocation> &Undefined){
+                         llvm37::DenseMap<NamedDecl*, SourceLocation> &Undefined){
   for(size_t i = 0; i < Sources.size(); ++i)
     Sources[i]->ReadUndefinedButUsed(Undefined);
 }
 
 void MultiplexExternalSemaSource::ReadMismatchingDeleteExpressions(
-    llvm::MapVector<FieldDecl *,
-                    llvm::SmallVector<std::pair<SourceLocation, bool>, 4>> &
+    llvm37::MapVector<FieldDecl *,
+                    llvm37::SmallVector<std::pair<SourceLocation, bool>, 4>> &
         Exprs) {
   for (auto &Source : Sources)
     Source->ReadMismatchingDeleteExpressions(Exprs);
@@ -255,7 +255,7 @@ void MultiplexExternalSemaSource::ReadExtVectorDecls(
 }
 
 void MultiplexExternalSemaSource::ReadUnusedLocalTypedefNameCandidates(
-    llvm::SmallSetVector<const TypedefNameDecl *, 4> &Decls) {
+    llvm37::SmallSetVector<const TypedefNameDecl *, 4> &Decls) {
   for(size_t i = 0; i < Sources.size(); ++i)
     Sources[i]->ReadUnusedLocalTypedefNameCandidates(Decls);
 }
@@ -286,7 +286,7 @@ void MultiplexExternalSemaSource::ReadPendingInstantiations(
 }
 
 void MultiplexExternalSemaSource::ReadLateParsedTemplates(
-    llvm::MapVector<const FunctionDecl *, LateParsedTemplate *> &LPTMap) {
+    llvm37::MapVector<const FunctionDecl *, LateParsedTemplate *> &LPTMap) {
   for (size_t i = 0; i < Sources.size(); ++i)
     Sources[i]->ReadLateParsedTemplates(LPTMap);
 }

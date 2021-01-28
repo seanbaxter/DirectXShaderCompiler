@@ -11,7 +11,7 @@
 
 #pragma once
 
-#include "llvm/ADT/StringRef.h"
+#include "llvm37/ADT/StringRef.h"
 #include "dxc/DXIL/DxilSemantic.h"
 #include "dxc/DXIL/DxilInterpolationMode.h"
 #include "dxc/DXIL/DxilCompType.h"
@@ -35,7 +35,7 @@ public:
   DxilSignatureElement(Kind K);
   virtual ~DxilSignatureElement();
 
-  void Initialize(llvm::StringRef Name, const CompType &ElementType, const InterpolationMode &InterpMode, 
+  void Initialize(llvm37::StringRef Name, const CompType &ElementType, const InterpolationMode &InterpMode, 
                   unsigned Rows, unsigned Cols, 
                   int StartRow = Semantic::kUndefinedRow, int StartCol = Semantic::kUndefinedCol,
                   unsigned ID = kUndefinedID, const std::vector<unsigned> &IndexVector = std::vector<unsigned>());
@@ -72,7 +72,7 @@ public:
   bool IsAnyDepth() const;
   DXIL::SemanticInterpretationKind GetInterpretation() const;
 
-  llvm::StringRef GetSemanticName() const;
+  llvm37::StringRef GetSemanticName() const;
   unsigned GetSemanticStartIndex() const;
 
   // Low-level properties.
@@ -97,7 +97,7 @@ protected:
   const Semantic *m_pSemantic;
   unsigned m_ID;
   std::string m_Name;
-  llvm::StringRef m_SemanticName;
+  llvm37::StringRef m_SemanticName;
   unsigned m_SemanticStartIndex;
   CompType m_CompType;
   InterpolationMode m_InterpMode;

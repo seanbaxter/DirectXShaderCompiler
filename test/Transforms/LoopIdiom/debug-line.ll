@@ -5,30 +5,30 @@ target triple = "x86_64-apple-darwin10.0.0"
 
 define void @foo(double* nocapture %a) nounwind ssp {
 entry:
-  tail call void @llvm.dbg.value(metadata double* %a, i64 0, metadata !5, metadata !DIExpression()), !dbg !8
-  tail call void @llvm.dbg.value(metadata i32 0, i64 0, metadata !10, metadata !DIExpression()), !dbg !14
+  tail call void @llvm37.dbg.value(metadata double* %a, i64 0, metadata !5, metadata !DIExpression()), !dbg !8
+  tail call void @llvm37.dbg.value(metadata i32 0, i64 0, metadata !10, metadata !DIExpression()), !dbg !14
   br label %for.body
 
 for.body:                                         ; preds = %entry, %for.body
   %indvar = phi i64 [ 0, %entry ], [ %indvar.next, %for.body ]
   %arrayidx = getelementptr double, double* %a, i64 %indvar
-; CHECK: call void @llvm.memset{{.+}} !dbg 
+; CHECK: call void @llvm37.memset{{.+}} !dbg 
   store double 0.000000e+00, double* %arrayidx, align 8, !dbg !15
   %indvar.next = add i64 %indvar, 1
   %exitcond = icmp ne i64 %indvar.next, 1000
   br i1 %exitcond, label %for.body, label %for.end, !dbg !14
 
 for.end:                                          ; preds = %for.body
-  tail call void @llvm.dbg.value(metadata !{null}, i64 0, metadata !10, metadata !DIExpression()), !dbg !16
+  tail call void @llvm37.dbg.value(metadata !{null}, i64 0, metadata !10, metadata !DIExpression()), !dbg !16
   ret void, !dbg !17
 }
 
-declare void @llvm.dbg.declare(metadata, metadata, metadata) nounwind readnone
+declare void @llvm37.dbg.declare(metadata, metadata, metadata) nounwind readnone
 
-declare void @llvm.dbg.value(metadata, i64, metadata, metadata) nounwind readnone
+declare void @llvm37.dbg.value(metadata, i64, metadata, metadata) nounwind readnone
 
-!llvm.module.flags = !{!19}
-!llvm.dbg.sp = !{!0}
+!llvm37.module.flags = !{!19}
+!llvm37.dbg.sp = !{!0}
 
 !0 = !DISubprogram(name: "foo", line: 2, isLocal: false, isDefinition: true, virtualIndex: 6, flags: DIFlagPrototyped, isOptimized: false, file: !18, scope: !1, type: !3, function: void (double*)* @foo)
 !1 = !DIFile(filename: "li.c", directory: "/private/tmp")

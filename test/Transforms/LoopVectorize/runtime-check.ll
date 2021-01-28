@@ -66,7 +66,7 @@ loopexit:
 
 ; CHECK: [[BODY_LOC]] = !DILocation(line: 101, column: 1, scope: !{{.*}})
 
-!llvm.module.flags = !{!0, !1}
+!llvm37.module.flags = !{!0, !1}
 !0 = !{i32 2, !"Dwarf Version", i32 4}
 !1 = !{i32 2, !"Debug Info Version", i32 3}
 

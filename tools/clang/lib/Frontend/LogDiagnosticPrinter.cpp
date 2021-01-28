@@ -1,6 +1,6 @@
 //===--- LogDiagnosticPrinter.cpp - Log Diagnostic Printer ----------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -12,9 +12,9 @@
 #include "clang/Basic/FileManager.h"
 #include "clang/Basic/PlistSupport.h"
 #include "clang/Basic/SourceManager.h"
-#include "llvm/ADT/SmallString.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/raw_ostream.h"
 using namespace clang;
 using namespace markup;
 
@@ -33,11 +33,11 @@ static StringRef getLevelName(DiagnosticsEngine::Level Level) {
   case DiagnosticsEngine::Error:   return "error";
   case DiagnosticsEngine::Fatal:   return "fatal error";
   }
-  llvm_unreachable("Invalid DiagnosticsEngine level!");
+  llvm37_unreachable("Invalid DiagnosticsEngine level!");
 }
 
 void
-LogDiagnosticPrinter::EmitDiagEntry(llvm::raw_ostream &OS,
+LogDiagnosticPrinter::EmitDiagEntry(llvm37::raw_ostream &OS,
                                     const LogDiagnosticPrinter::DiagEntry &DE) {
   OS << "    <dict>\n";
   OS << "      <key>level</key>\n"
@@ -86,7 +86,7 @@ void LogDiagnosticPrinter::EndSourceFile() {
 
   // Write to a temporary string to ensure atomic write of diagnostic object.
   SmallString<512> Msg;
-  llvm::raw_svector_ostream OS(Msg);
+  llvm37::raw_svector_ostream OS(Msg);
 
   OS << "<dict>\n";
   if (!MainFilename.empty()) {

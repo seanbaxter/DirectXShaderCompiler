@@ -1,6 +1,6 @@
 //===--- ParseObjC.cpp - Objective C Parsing ------------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -19,8 +19,8 @@
 #include "clang/Sema/DeclSpec.h"
 #include "clang/Sema/PrettyDeclStackTrace.h"
 #include "clang/Sema/Scope.h"
-#include "llvm/ADT/SmallVector.h"
-#include "llvm/ADT/StringExtras.h"
+#include "llvm37/ADT/SmallVector.h"
+#include "llvm37/ADT/StringExtras.h"
 using namespace clang;
 
 /// Skips attributes after an Objective-C @ directive. Emits a diagnostic.
@@ -1174,7 +1174,7 @@ void Parser::ParseObjCTypeQualifierList(ObjCDeclSpec &DS,
       ObjCDeclSpec::ObjCDeclQualifier Qual;
       NullabilityKind Nullability;
       switch (i) {
-      default: llvm_unreachable("Unknown decl qualifier");
+      default: llvm37_unreachable("Unknown decl qualifier");
       case objc_in:     Qual = ObjCDeclSpec::DQ_In; break;
       case objc_out:    Qual = ObjCDeclSpec::DQ_Out; break;
       case objc_inout:  Qual = ObjCDeclSpec::DQ_Inout; break;
@@ -2729,7 +2729,7 @@ ExprResult Parser::ParseObjCAtExpression(SourceLocation AtLoc) {
       switch (Kind) {
       case tok::minus: Symbol = "-"; break;
       case tok::plus: Symbol = "+"; break;
-      default: llvm_unreachable("missing unary operator case");
+      default: llvm37_unreachable("missing unary operator case");
       }
       Diag(Tok, diag::err_nsnumber_nonliteral_unary)
         << Symbol;

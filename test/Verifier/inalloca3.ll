@@ -1,4 +1,4 @@
-; RUN: not llvm-as %s -o /dev/null 2>&1 | FileCheck %s
+; RUN: not llvm37-as %s -o /dev/null 2>&1 | FileCheck %s
 
 
 declare void @doit(i64* inalloca %a)

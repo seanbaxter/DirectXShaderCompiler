@@ -8,12 +8,12 @@
 ///////////////////////////////////////////////////////////////////////////////
 #pragma once
 
-namespace llvm {
+namespace llvm37 {
   class Value;
   class Function;
 }
 
 namespace hlsl {
-  bool IsConvergentMarker(llvm::Value *V);
-  llvm::Value *GetConvergentSource(llvm::Value *V);
+  bool IsConvergentMarker(llvm37::Value *V);
+  llvm37::Value *GetConvergentSource(llvm37::Value *V);
 }

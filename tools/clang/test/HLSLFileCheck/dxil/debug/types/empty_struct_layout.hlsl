@@ -1,7 +1,7 @@
 // RUN: %dxc -E main -T vs_6_2 -enable-16bit-types -Zi %s | FileCheck %s
 
 // Check that the clang field offsets (as seen from debug type definitions)
-// and the LLVM field offsets (as seen from SROA'd offsets) are consistent
+// and the LLVM37 field offsets (as seen from SROA'd offsets) are consistent
 // when empty structs are involved.
 
 // Exclude quoted source file (see readme)

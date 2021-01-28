@@ -1,5 +1,5 @@
-# RUN: not llvm-mc -triple i386-unknown-unknown %s 2> /dev/null | FileCheck %s
-# RUN: not llvm-mc -triple i386-unknown-unknown %s 2>&1 > /dev/null| FileCheck %s --check-prefix=CHECK-ERROR
+# RUN: not llvm37-mc -triple i386-unknown-unknown %s 2> /dev/null | FileCheck %s
+# RUN: not llvm37-mc -triple i386-unknown-unknown %s 2>&1 > /dev/null| FileCheck %s --check-prefix=CHECK-ERROR
 
 # CHECK: .long	1067412619
 # CHECK: .long	1075000115

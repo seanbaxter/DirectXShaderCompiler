@@ -1,6 +1,6 @@
 //===--- Encoding.h - Format C++ code -------------------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -13,12 +13,12 @@
 ///
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_LIB_FORMAT_ENCODING_H
-#define LLVM_CLANG_LIB_FORMAT_ENCODING_H
+#ifndef LLVM37_CLANG_LIB_FORMAT_ENCODING_H
+#define LLVM37_CLANG_LIB_FORMAT_ENCODING_H
 
 #include "clang/Basic/LLVM.h"
-#include "llvm/Support/ConvertUTF.h"
-#include "llvm/Support/Unicode.h"
+#include "llvm37/Support/ConvertUTF.h"
+#include "llvm37/Support/Unicode.h"
 
 namespace clang {
 namespace format {
@@ -63,7 +63,7 @@ inline unsigned getCodePointCount(StringRef Text, Encoding Encoding) {
 /// \p Encoding.
 inline unsigned columnWidth(StringRef Text, Encoding Encoding) {
   if (Encoding == Encoding_UTF8) {
-    int ContentWidth = llvm::sys::unicode::columnWidthUTF8(Text);
+    int ContentWidth = llvm37::sys::unicode::columnWidthUTF8(Text);
     // FIXME: Figure out the correct way to handle this in the presence of both
     // printable and unprintable multi-byte UTF-8 characters. Falling back to
     // returning the number of bytes may cause problems, as columnWidth suddenly

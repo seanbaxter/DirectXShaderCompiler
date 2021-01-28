@@ -1,35 +1,35 @@
 //===- unittest/Support/YAMLIOTest.cpp ------------------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/ADT/SmallString.h"
-#include "llvm/ADT/Twine.h"
-#include "llvm/Support/Casting.h"
-#include "llvm/Support/Format.h"
-#include "llvm/Support/YAMLTraits.h"
+#include "llvm37/ADT/SmallString.h"
+#include "llvm37/ADT/Twine.h"
+#include "llvm37/Support/Casting.h"
+#include "llvm37/Support/Format.h"
+#include "llvm37/Support/YAMLTraits.h"
 #include "gtest/gtest.h"
 
 
-using llvm::yaml::Input;
-using llvm::yaml::Output;
-using llvm::yaml::IO;
-using llvm::yaml::MappingTraits;
-using llvm::yaml::MappingNormalization;
-using llvm::yaml::ScalarTraits;
-using llvm::yaml::Hex8;
-using llvm::yaml::Hex16;
-using llvm::yaml::Hex32;
-using llvm::yaml::Hex64;
+using llvm37::yaml::Input;
+using llvm37::yaml::Output;
+using llvm37::yaml::IO;
+using llvm37::yaml::MappingTraits;
+using llvm37::yaml::MappingNormalization;
+using llvm37::yaml::ScalarTraits;
+using llvm37::yaml::Hex8;
+using llvm37::yaml::Hex16;
+using llvm37::yaml::Hex32;
+using llvm37::yaml::Hex64;
 
 
 
 
-static void suppressErrorMessages(const llvm::SMDiagnostic &, void *) {
+static void suppressErrorMessages(const llvm37::SMDiagnostic &, void *) {
 }
 
 
@@ -44,13 +44,13 @@ struct FooBar {
 };
 typedef std::vector<FooBar> FooBarSequence;
 
-LLVM_YAML_IS_SEQUENCE_VECTOR(FooBar)
+LLVM37_YAML_IS_SEQUENCE_VECTOR(FooBar)
 
 struct FooBarContainer {
   FooBarSequence fbs;
 };
 
-namespace llvm {
+namespace llvm37 {
 namespace yaml {
   template <>
   struct MappingTraits<FooBar> {
@@ -212,7 +212,7 @@ TEST(YAMLIO, TestSequenceMapWriteAndRead) {
     seq.push_back(entry1);
     seq.push_back(entry2);
 
-    llvm::raw_string_ostream ostr(intermediate);
+    llvm37::raw_string_ostream ostr(intermediate);
     Output yout(ostr);
     yout << seq;
   }
@@ -239,7 +239,7 @@ TEST(YAMLIO, TestSequenceMapWriteAndRead) {
 //===----------------------------------------------------------------------===//
 
 struct BuiltInTypes {
-  llvm::StringRef str;
+  llvm37::StringRef str;
   std::string stdstr;
   uint64_t        u64;
   uint32_t        u32;
@@ -258,7 +258,7 @@ struct BuiltInTypes {
   Hex64           h64;
 };
 
-namespace llvm {
+namespace llvm37 {
 namespace yaml {
   template <>
   struct MappingTraits<BuiltInTypes> {
@@ -358,7 +358,7 @@ TEST(YAMLIO, TestReadWriteBuiltInTypes) {
     map.h32 = 3000000000U;
     map.h64 = 6000000000LL;
 
-    llvm::raw_string_ostream ostr(intermediate);
+    llvm37::raw_string_ostream ostr(intermediate);
     Output yout(ostr);
     yout << map;
   }
@@ -390,17 +390,17 @@ TEST(YAMLIO, TestReadWriteBuiltInTypes) {
 }
 
 struct StringTypes {
-  llvm::StringRef str1;
-  llvm::StringRef str2;
-  llvm::StringRef str3;
-  llvm::StringRef str4;
-  llvm::StringRef str5;
-  llvm::StringRef str6;
-  llvm::StringRef str7;
-  llvm::StringRef str8;
-  llvm::StringRef str9;
-  llvm::StringRef str10;
-  llvm::StringRef str11;
+  llvm37::StringRef str1;
+  llvm37::StringRef str2;
+  llvm37::StringRef str3;
+  llvm37::StringRef str4;
+  llvm37::StringRef str5;
+  llvm37::StringRef str6;
+  llvm37::StringRef str7;
+  llvm37::StringRef str8;
+  llvm37::StringRef str9;
+  llvm37::StringRef str10;
+  llvm37::StringRef str11;
   std::string stdstr1;
   std::string stdstr2;
   std::string stdstr3;
@@ -414,7 +414,7 @@ struct StringTypes {
   std::string stdstr11;
 };
 
-namespace llvm {
+namespace llvm37 {
 namespace yaml {
   template <>
   struct MappingTraits<StringTypes> {
@@ -473,23 +473,23 @@ TEST(YAMLIO, TestReadWriteStringTypes) {
     map.stdstr10 = "0.2e20";
     map.stdstr11 = "0x30";
 
-    llvm::raw_string_ostream ostr(intermediate);
+    llvm37::raw_string_ostream ostr(intermediate);
     Output yout(ostr);
     yout << map;
   }
 
-  llvm::StringRef flowOut(intermediate);
-  EXPECT_NE(llvm::StringRef::npos, flowOut.find("'''aaa"));
-  EXPECT_NE(llvm::StringRef::npos, flowOut.find("'\"bbb'"));
-  EXPECT_NE(llvm::StringRef::npos, flowOut.find("'`ccc'"));
-  EXPECT_NE(llvm::StringRef::npos, flowOut.find("'@ddd'"));
-  EXPECT_NE(llvm::StringRef::npos, flowOut.find("''\n"));
-  EXPECT_NE(llvm::StringRef::npos, flowOut.find("'0000000004000000'\n"));
-  EXPECT_NE(llvm::StringRef::npos, flowOut.find("'true'\n"));
-  EXPECT_NE(llvm::StringRef::npos, flowOut.find("'FALSE'\n"));
-  EXPECT_NE(llvm::StringRef::npos, flowOut.find("'~'\n"));
-  EXPECT_NE(llvm::StringRef::npos, flowOut.find("'0.2e20'\n"));
-  EXPECT_NE(llvm::StringRef::npos, flowOut.find("'0x30'\n"));
+  llvm37::StringRef flowOut(intermediate);
+  EXPECT_NE(llvm37::StringRef::npos, flowOut.find("'''aaa"));
+  EXPECT_NE(llvm37::StringRef::npos, flowOut.find("'\"bbb'"));
+  EXPECT_NE(llvm37::StringRef::npos, flowOut.find("'`ccc'"));
+  EXPECT_NE(llvm37::StringRef::npos, flowOut.find("'@ddd'"));
+  EXPECT_NE(llvm37::StringRef::npos, flowOut.find("''\n"));
+  EXPECT_NE(llvm37::StringRef::npos, flowOut.find("'0000000004000000'\n"));
+  EXPECT_NE(llvm37::StringRef::npos, flowOut.find("'true'\n"));
+  EXPECT_NE(llvm37::StringRef::npos, flowOut.find("'FALSE'\n"));
+  EXPECT_NE(llvm37::StringRef::npos, flowOut.find("'~'\n"));
+  EXPECT_NE(llvm37::StringRef::npos, flowOut.find("'0.2e20'\n"));
+  EXPECT_NE(llvm37::StringRef::npos, flowOut.find("'0x30'\n"));
   EXPECT_NE(std::string::npos, flowOut.find("'''eee"));
   EXPECT_NE(std::string::npos, flowOut.find("'\"fff'"));
   EXPECT_NE(std::string::npos, flowOut.find("'`ggg'"));
@@ -538,7 +538,7 @@ struct ColorMap {
   Colors      c6;
 };
 
-namespace llvm {
+namespace llvm37 {
 namespace yaml {
   template <>
   struct ScalarEnumerationTraits<Colors> {
@@ -612,7 +612,7 @@ struct FlagsMap {
 };
 
 
-namespace llvm {
+namespace llvm37 {
 namespace yaml {
   template <>
   struct ScalarBitSetTraits<MyFlags> {
@@ -668,7 +668,7 @@ TEST(YAMLIO, TestReadWriteFlags) {
     map.f3 = flagNone;
     map.f4 = flagNone;
 
-    llvm::raw_string_ostream ostr(intermediate);
+    llvm37::raw_string_ostream ostr(intermediate);
     Output yout(ostr);
     yout << map;
   }
@@ -704,7 +704,7 @@ struct MyCustomTypeMap {
 };
 
 
-namespace llvm {
+namespace llvm37 {
 namespace yaml {
   template <>
   struct MappingTraits<MyCustomTypeMap> {
@@ -718,8 +718,8 @@ namespace yaml {
   // {length=3, width=4} would be represented in yaml as "3 by 4".
   template<>
   struct ScalarTraits<MyCustomType> {
-    static void output(const MyCustomType &value, void* ctxt, llvm::raw_ostream &out) {
-      out << llvm::format("%d by %d", value.length, value.width);
+    static void output(const MyCustomType &value, void* ctxt, llvm37::raw_ostream &out) {
+      out << llvm37::format("%d by %d", value.length, value.width);
     }
     static StringRef input(StringRef scalar, void* ctxt, MyCustomType &value) {
       size_t byStart = scalar.find("by");
@@ -759,7 +759,7 @@ TEST(YAMLIO, TestReadWriteMyCustomType) {
     map.f2.width  = 400;
     map.f3 = 10;
 
-    llvm::raw_string_ostream ostr(intermediate);
+    llvm37::raw_string_ostream ostr(intermediate);
     Output yout(ostr);
     yout << map;
   }
@@ -797,7 +797,7 @@ struct MultilineStringTypeMap {
   int price;
 };
 
-namespace llvm {
+namespace llvm37 {
 namespace yaml {
   template <>
   struct MappingTraits<MultilineStringTypeMap> {
@@ -820,7 +820,7 @@ namespace yaml {
   template <>
   struct BlockScalarTraits<MultilineStringType> {
     static void output(const MultilineStringType &value, void *ctxt,
-                       llvm::raw_ostream &out) {
+                       llvm37::raw_ostream &out) {
       out << value.str;
     }
     static StringRef input(StringRef scalar, void *ctxt,
@@ -832,7 +832,7 @@ namespace yaml {
 }
 }
 
-LLVM_YAML_IS_DOCUMENT_LIST_VECTOR(MultilineStringType)
+LLVM37_YAML_IS_DOCUMENT_LIST_VECTOR(MultilineStringType)
 
 //
 // Test writing then reading back custom values
@@ -849,7 +849,7 @@ TEST(YAMLIO, TestReadWriteMultilineStringType) {
     map.documentation.str = "\n\n";
     map.price = 350;
 
-    llvm::raw_string_ostream ostr(intermediate);
+    llvm37::raw_string_ostream ostr(intermediate);
     Output yout(ostr);
     yout << map;
   }
@@ -880,13 +880,13 @@ TEST(YAMLIO, TestReadWriteBlockScalarDocuments) {
     doc.str = "Hello\nWorld";
     documents.push_back(doc);
 
-    llvm::raw_string_ostream ostr(intermediate);
+    llvm37::raw_string_ostream ostr(intermediate);
     Output yout(ostr);
     yout << documents;
 
     // Verify that the block scalar header was written out on the same line
     // as the document marker.
-    EXPECT_NE(llvm::StringRef::npos, llvm::StringRef(ostr.str()).find("--- |"));
+    EXPECT_NE(llvm37::StringRef::npos, llvm37::StringRef(ostr.str()).find("--- |"));
   }
   {
     Input yin(intermediate);
@@ -905,7 +905,7 @@ TEST(YAMLIO, TestReadWriteBlockScalarValue) {
     MultilineStringType doc;
     doc.str = "Just a block\nscalar doc";
 
-    llvm::raw_string_ostream ostr(intermediate);
+    llvm37::raw_string_ostream ostr(intermediate);
     Output yout(ostr);
     yout << doc;
   }
@@ -923,15 +923,15 @@ TEST(YAMLIO, TestReadWriteBlockScalarValue) {
 //  Test flow sequences
 //===----------------------------------------------------------------------===//
 
-LLVM_YAML_STRONG_TYPEDEF(int, MyNumber)
-LLVM_YAML_IS_FLOW_SEQUENCE_VECTOR(MyNumber)
-LLVM_YAML_IS_FLOW_SEQUENCE_VECTOR(llvm::StringRef)
+LLVM37_YAML_STRONG_TYPEDEF(int, MyNumber)
+LLVM37_YAML_IS_FLOW_SEQUENCE_VECTOR(MyNumber)
+LLVM37_YAML_IS_FLOW_SEQUENCE_VECTOR(llvm37::StringRef)
 
-namespace llvm {
+namespace llvm37 {
 namespace yaml {
   template<>
   struct ScalarTraits<MyNumber> {
-    static void output(const MyNumber &value, void *, llvm::raw_ostream &out) {
+    static void output(const MyNumber &value, void *, llvm37::raw_ostream &out) {
       out << value;
     }
 
@@ -949,13 +949,13 @@ namespace yaml {
 }
 
 struct NameAndNumbers {
-  llvm::StringRef               name;
-  std::vector<llvm::StringRef>  strings;
+  llvm37::StringRef               name;
+  std::vector<llvm37::StringRef>  strings;
   std::vector<MyNumber>         single;
   std::vector<MyNumber>         numbers;
 };
 
-namespace llvm {
+namespace llvm37 {
 namespace yaml {
   template <>
   struct MappingTraits<NameAndNumbers> {
@@ -971,14 +971,14 @@ namespace yaml {
 
 typedef std::vector<MyNumber> MyNumberFlowSequence;
 
-LLVM_YAML_IS_SEQUENCE_VECTOR(MyNumberFlowSequence)
+LLVM37_YAML_IS_SEQUENCE_VECTOR(MyNumberFlowSequence)
 
 struct NameAndNumbersFlow {
-  llvm::StringRef                    name;
+  llvm37::StringRef                    name;
   std::vector<MyNumberFlowSequence>  sequenceOfNumbers;
 };
 
-namespace llvm {
+namespace llvm37 {
 namespace yaml {
   template <>
   struct MappingTraits<NameAndNumbersFlow> {
@@ -998,22 +998,22 @@ TEST(YAMLIO, TestReadWriteMyFlowSequence) {
   {
     NameAndNumbers map;
     map.name  = "hello";
-    map.strings.push_back(llvm::StringRef("one"));
-    map.strings.push_back(llvm::StringRef("two"));
+    map.strings.push_back(llvm37::StringRef("one"));
+    map.strings.push_back(llvm37::StringRef("two"));
     map.single.push_back(1);
     map.numbers.push_back(10);
     map.numbers.push_back(-30);
     map.numbers.push_back(1024);
 
-    llvm::raw_string_ostream ostr(intermediate);
+    llvm37::raw_string_ostream ostr(intermediate);
     Output yout(ostr);
     yout << map;
 
     // Verify sequences were written in flow style
     ostr.flush();
-    llvm::StringRef flowOut(intermediate);
-    EXPECT_NE(llvm::StringRef::npos, flowOut.find("one, two"));
-    EXPECT_NE(llvm::StringRef::npos, flowOut.find("10, -30, 1024"));
+    llvm37::StringRef flowOut(intermediate);
+    EXPECT_NE(llvm37::StringRef::npos, flowOut.find("one, two"));
+    EXPECT_NE(llvm37::StringRef::npos, flowOut.find("10, -30, 1024"));
   }
 
   {
@@ -1050,17 +1050,17 @@ TEST(YAMLIO, TestReadWriteSequenceOfMyFlowSequence) {
     map.sequenceOfNumbers.push_back(numbers);
     map.sequenceOfNumbers.push_back(MyNumberFlowSequence());
 
-    llvm::raw_string_ostream ostr(intermediate);
+    llvm37::raw_string_ostream ostr(intermediate);
     Output yout(ostr);
     yout << map;
 
     // Verify sequences were written in flow style
     // and that the parent sequence used '-'.
     ostr.flush();
-    llvm::StringRef flowOut(intermediate);
-    EXPECT_NE(llvm::StringRef::npos, flowOut.find("- [ 0 ]"));
-    EXPECT_NE(llvm::StringRef::npos, flowOut.find("- [ 12, 1, -512 ]"));
-    EXPECT_NE(llvm::StringRef::npos, flowOut.find("- [  ]"));
+    llvm37::StringRef flowOut(intermediate);
+    EXPECT_NE(llvm37::StringRef::npos, flowOut.find("- [ 0 ]"));
+    EXPECT_NE(llvm37::StringRef::npos, flowOut.find("- [ 12, 1, -512 ]"));
+    EXPECT_NE(llvm37::StringRef::npos, flowOut.find("- [  ]"));
   }
 
   {
@@ -1085,14 +1085,14 @@ TEST(YAMLIO, TestReadWriteSequenceOfMyFlowSequence) {
 //  Test normalizing/denormalizing
 //===----------------------------------------------------------------------===//
 
-LLVM_YAML_STRONG_TYPEDEF(uint32_t, TotalSeconds)
+LLVM37_YAML_STRONG_TYPEDEF(uint32_t, TotalSeconds)
 
 typedef std::vector<TotalSeconds> SecondsSequence;
 
-LLVM_YAML_IS_SEQUENCE_VECTOR(TotalSeconds)
+LLVM37_YAML_IS_SEQUENCE_VECTOR(TotalSeconds)
 
 
-namespace llvm {
+namespace llvm37 {
 namespace yaml {
   template <>
   struct MappingTraits<TotalSeconds> {
@@ -1154,7 +1154,7 @@ TEST(YAMLIO, TestReadWriteMySecondsSequence) {
     seq.push_back(500);
     seq.push_back(59);
 
-    llvm::raw_string_ostream ostr(intermediate);
+    llvm37::raw_string_ostream ostr(intermediate);
     Output yout(ostr);
     yout << seq;
   }
@@ -1202,9 +1202,9 @@ struct KindAndFlags {
 
 typedef std::vector<KindAndFlags> KindAndFlagsSequence;
 
-LLVM_YAML_IS_SEQUENCE_VECTOR(KindAndFlags)
+LLVM37_YAML_IS_SEQUENCE_VECTOR(KindAndFlags)
 
-namespace llvm {
+namespace llvm37 {
 namespace yaml {
   template <>
   struct ScalarEnumerationTraits<AFlags> {
@@ -1279,7 +1279,7 @@ TEST(YAMLIO, TestReadWriteKindAndFlagsSequence) {
     seq.push_back(KindAndFlags(kindB,b2));
     seq.push_back(KindAndFlags(kindA,a3));
 
-    llvm::raw_string_ostream ostr(intermediate);
+    llvm37::raw_string_ostream ostr(intermediate);
     Output yout(ostr);
     yout << seq;
   }
@@ -1314,10 +1314,10 @@ struct FooBarMap {
 };
 typedef std::vector<FooBarMap> FooBarMapDocumentList;
 
-LLVM_YAML_IS_DOCUMENT_LIST_VECTOR(FooBarMap)
+LLVM37_YAML_IS_DOCUMENT_LIST_VECTOR(FooBarMap)
 
 
-namespace llvm {
+namespace llvm37 {
 namespace yaml {
   template <>
   struct MappingTraits<FooBarMap> {
@@ -1361,7 +1361,7 @@ TEST(YAMLIO, TestSequenceDocListWriteAndRead) {
     docList.push_back(doc1);
     docList.push_back(doc2);
 
-    llvm::raw_string_ostream ostr(intermediate);
+    llvm37::raw_string_ostream ostr(intermediate);
     Output yout(ostr);
     yout << docList;
   }
@@ -1393,10 +1393,10 @@ struct MyDouble {
   double value;
 };
 
-LLVM_YAML_IS_DOCUMENT_LIST_VECTOR(MyDouble)
+LLVM37_YAML_IS_DOCUMENT_LIST_VECTOR(MyDouble)
 
 
-namespace llvm {
+namespace llvm37 {
 namespace yaml {
   template <>
   struct MappingTraits<MyDouble> {
@@ -1450,7 +1450,7 @@ TEST(YAMLIO, TestTaggedDocumentsWriteAndRead) {
     docList.push_back(a);
     docList.push_back(b);
 
-    llvm::raw_string_ostream ostr(intermediate);
+    llvm37::raw_string_ostream ostr(intermediate);
     Output yout(ostr);
     yout << docList;
   }
@@ -1476,9 +1476,9 @@ struct MyValidation {
   double value;
 };
 
-LLVM_YAML_IS_DOCUMENT_LIST_VECTOR(MyValidation)
+LLVM37_YAML_IS_DOCUMENT_LIST_VECTOR(MyValidation)
 
-namespace llvm {
+namespace llvm37 {
 namespace yaml {
   template <>
   struct MappingTraits<MyValidation> {
@@ -1521,14 +1521,14 @@ struct FlowFooBar {
 
 typedef std::vector<FlowFooBar> FlowFooBarSequence;
 
-LLVM_YAML_IS_SEQUENCE_VECTOR(FlowFooBar)
+LLVM37_YAML_IS_SEQUENCE_VECTOR(FlowFooBar)
 
 struct FlowFooBarDoc {
   FlowFooBar attribute;
   FlowFooBarSequence seq;
 };
 
-namespace llvm {
+namespace llvm37 {
 namespace yaml {
   template <>
   struct MappingTraits<FlowFooBar> {
@@ -1562,17 +1562,17 @@ TEST(YAMLIO, TestReadWriteMyFlowMapping) {
     doc.seq.push_back(FlowFooBar(0, 0));
     doc.seq.push_back(FlowFooBar(-1, 1024));
 
-    llvm::raw_string_ostream ostr(intermediate);
+    llvm37::raw_string_ostream ostr(intermediate);
     Output yout(ostr);
     yout << doc;
 
     // Verify that mappings were written in flow style
     ostr.flush();
-    llvm::StringRef flowOut(intermediate);
-    EXPECT_NE(llvm::StringRef::npos, flowOut.find("{ foo: 42, bar: 907 }"));
-    EXPECT_NE(llvm::StringRef::npos, flowOut.find("- { foo: 1, bar: 2 }"));
-    EXPECT_NE(llvm::StringRef::npos, flowOut.find("- { foo: 0, bar: 0 }"));
-    EXPECT_NE(llvm::StringRef::npos, flowOut.find("- { foo: -1, bar: 1024 }"));
+    llvm37::StringRef flowOut(intermediate);
+    EXPECT_NE(llvm37::StringRef::npos, flowOut.find("{ foo: 42, bar: 907 }"));
+    EXPECT_NE(llvm37::StringRef::npos, flowOut.find("- { foo: 1, bar: 2 }"));
+    EXPECT_NE(llvm37::StringRef::npos, flowOut.find("- { foo: 0, bar: 0 }"));
+    EXPECT_NE(llvm37::StringRef::npos, flowOut.find("- { foo: -1, bar: 1024 }"));
   }
 
   {
@@ -1635,7 +1635,7 @@ TEST(YAMLIO, TestFlagsReadError) {
 //
 // Test error handling reading built-in uint8_t type
 //
-LLVM_YAML_IS_SEQUENCE_VECTOR(uint8_t)
+LLVM37_YAML_IS_SEQUENCE_VECTOR(uint8_t)
 TEST(YAMLIO, TestReadBuiltInTypesUint8Error) {
   std::vector<uint8_t> seq;
   Input yin("---\n"
@@ -1654,7 +1654,7 @@ TEST(YAMLIO, TestReadBuiltInTypesUint8Error) {
 //
 // Test error handling reading built-in uint16_t type
 //
-LLVM_YAML_IS_SEQUENCE_VECTOR(uint16_t)
+LLVM37_YAML_IS_SEQUENCE_VECTOR(uint16_t)
 TEST(YAMLIO, TestReadBuiltInTypesUint16Error) {
   std::vector<uint16_t> seq;
   Input yin("---\n"
@@ -1673,7 +1673,7 @@ TEST(YAMLIO, TestReadBuiltInTypesUint16Error) {
 //
 // Test error handling reading built-in uint32_t type
 //
-LLVM_YAML_IS_SEQUENCE_VECTOR(uint32_t)
+LLVM37_YAML_IS_SEQUENCE_VECTOR(uint32_t)
 TEST(YAMLIO, TestReadBuiltInTypesUint32Error) {
   std::vector<uint32_t> seq;
   Input yin("---\n"
@@ -1692,7 +1692,7 @@ TEST(YAMLIO, TestReadBuiltInTypesUint32Error) {
 //
 // Test error handling reading built-in uint64_t type
 //
-LLVM_YAML_IS_SEQUENCE_VECTOR(uint64_t)
+LLVM37_YAML_IS_SEQUENCE_VECTOR(uint64_t)
 TEST(YAMLIO, TestReadBuiltInTypesUint64Error) {
   std::vector<uint64_t> seq;
   Input yin("---\n"
@@ -1711,7 +1711,7 @@ TEST(YAMLIO, TestReadBuiltInTypesUint64Error) {
 //
 // Test error handling reading built-in int8_t type
 //
-LLVM_YAML_IS_SEQUENCE_VECTOR(int8_t)
+LLVM37_YAML_IS_SEQUENCE_VECTOR(int8_t)
 TEST(YAMLIO, TestReadBuiltInTypesint8OverError) {
   std::vector<int8_t> seq;
   Input yin("---\n"
@@ -1749,7 +1749,7 @@ TEST(YAMLIO, TestReadBuiltInTypesint8UnderError) {
 //
 // Test error handling reading built-in int16_t type
 //
-LLVM_YAML_IS_SEQUENCE_VECTOR(int16_t)
+LLVM37_YAML_IS_SEQUENCE_VECTOR(int16_t)
 TEST(YAMLIO, TestReadBuiltInTypesint16UnderError) {
   std::vector<int16_t> seq;
   Input yin("---\n"
@@ -1788,7 +1788,7 @@ TEST(YAMLIO, TestReadBuiltInTypesint16OverError) {
 //
 // Test error handling reading built-in int32_t type
 //
-LLVM_YAML_IS_SEQUENCE_VECTOR(int32_t)
+LLVM37_YAML_IS_SEQUENCE_VECTOR(int32_t)
 TEST(YAMLIO, TestReadBuiltInTypesint32UnderError) {
   std::vector<int32_t> seq;
   Input yin("---\n"
@@ -1826,7 +1826,7 @@ TEST(YAMLIO, TestReadBuiltInTypesint32OverError) {
 //
 // Test error handling reading built-in int64_t type
 //
-LLVM_YAML_IS_SEQUENCE_VECTOR(int64_t)
+LLVM37_YAML_IS_SEQUENCE_VECTOR(int64_t)
 TEST(YAMLIO, TestReadBuiltInTypesint64UnderError) {
   std::vector<int64_t> seq;
   Input yin("---\n"
@@ -1863,7 +1863,7 @@ TEST(YAMLIO, TestReadBuiltInTypesint64OverError) {
 //
 // Test error handling reading built-in float type
 //
-LLVM_YAML_IS_SEQUENCE_VECTOR(float)
+LLVM37_YAML_IS_SEQUENCE_VECTOR(float)
 TEST(YAMLIO, TestReadBuiltInTypesFloatError) {
   std::vector<float> seq;
   Input yin("---\n"
@@ -1882,7 +1882,7 @@ TEST(YAMLIO, TestReadBuiltInTypesFloatError) {
 //
 // Test error handling reading built-in float type
 //
-LLVM_YAML_IS_SEQUENCE_VECTOR(double)
+LLVM37_YAML_IS_SEQUENCE_VECTOR(double)
 TEST(YAMLIO, TestReadBuiltInTypesDoubleError) {
   std::vector<double> seq;
   Input yin("---\n"
@@ -1901,7 +1901,7 @@ TEST(YAMLIO, TestReadBuiltInTypesDoubleError) {
 //
 // Test error handling reading built-in Hex8 type
 //
-LLVM_YAML_IS_SEQUENCE_VECTOR(Hex8)
+LLVM37_YAML_IS_SEQUENCE_VECTOR(Hex8)
 TEST(YAMLIO, TestReadBuiltInTypesHex8Error) {
   std::vector<Hex8> seq;
   Input yin("---\n"
@@ -1920,7 +1920,7 @@ TEST(YAMLIO, TestReadBuiltInTypesHex8Error) {
 //
 // Test error handling reading built-in Hex16 type
 //
-LLVM_YAML_IS_SEQUENCE_VECTOR(Hex16)
+LLVM37_YAML_IS_SEQUENCE_VECTOR(Hex16)
 TEST(YAMLIO, TestReadBuiltInTypesHex16Error) {
   std::vector<Hex16> seq;
   Input yin("---\n"
@@ -1938,7 +1938,7 @@ TEST(YAMLIO, TestReadBuiltInTypesHex16Error) {
 //
 // Test error handling reading built-in Hex32 type
 //
-LLVM_YAML_IS_SEQUENCE_VECTOR(Hex32)
+LLVM37_YAML_IS_SEQUENCE_VECTOR(Hex32)
 TEST(YAMLIO, TestReadBuiltInTypesHex32Error) {
   std::vector<Hex32> seq;
   Input yin("---\n"
@@ -1956,7 +1956,7 @@ TEST(YAMLIO, TestReadBuiltInTypesHex32Error) {
 //
 // Test error handling reading built-in Hex64 type
 //
-LLVM_YAML_IS_SEQUENCE_VECTOR(Hex64)
+LLVM37_YAML_IS_SEQUENCE_VECTOR(Hex64)
 TEST(YAMLIO, TestReadBuiltInTypesHex64Error) {
   std::vector<Hex64> seq;
   Input yin("---\n"
@@ -1996,8 +1996,8 @@ struct OptionalTestSeq {
   std::vector<OptionalTest> Tests;
 };
 
-LLVM_YAML_IS_SEQUENCE_VECTOR(OptionalTest)
-namespace llvm {
+LLVM37_YAML_IS_SEQUENCE_VECTOR(OptionalTest)
+namespace llvm37 {
 namespace yaml {
   template <>
   struct MappingTraits<OptionalTest> {
@@ -2029,7 +2029,7 @@ TEST(YAMLIO, SequenceElideTest) {
 
   std::string intermediate;
   {
-    llvm::raw_string_ostream ostr(intermediate);
+    llvm37::raw_string_ostream ostr(intermediate);
     Output yout(ostr);
     yout << Seq;
   }
@@ -2076,18 +2076,18 @@ TEST(YAMLIO, TestEmptyStringSucceedsForSequence) {
 }
 
 struct FlowMap {
-  llvm::StringRef str1, str2, str3;
-  FlowMap(llvm::StringRef str1, llvm::StringRef str2, llvm::StringRef str3)
+  llvm37::StringRef str1, str2, str3;
+  FlowMap(llvm37::StringRef str1, llvm37::StringRef str2, llvm37::StringRef str3)
     : str1(str1), str2(str2), str3(str3) {}
 };
 
 struct FlowSeq {
-  llvm::StringRef str;
-  FlowSeq(llvm::StringRef S) : str(S) {}
+  llvm37::StringRef str;
+  FlowSeq(llvm37::StringRef S) : str(S) {}
   FlowSeq() = default;
 };
 
-namespace llvm {
+namespace llvm37 {
 namespace yaml {
   template <>
   struct MappingTraits<FlowMap> {
@@ -2102,7 +2102,7 @@ namespace yaml {
 
 template <>
 struct ScalarTraits<FlowSeq> {
-  static void output(const FlowSeq &value, void*, llvm::raw_ostream &out) {
+  static void output(const FlowSeq &value, void*, llvm37::raw_ostream &out) {
     out << value.str;
   }
   static StringRef input(StringRef scalar, void*, FlowSeq &value) {
@@ -2115,11 +2115,11 @@ struct ScalarTraits<FlowSeq> {
 }
 }
 
-LLVM_YAML_IS_FLOW_SEQUENCE_VECTOR(FlowSeq)
+LLVM37_YAML_IS_FLOW_SEQUENCE_VECTOR(FlowSeq)
 
 TEST(YAMLIO, TestWrapFlow) {
   std::string out;
-  llvm::raw_string_ostream ostr(out);
+  llvm37::raw_string_ostream ostr(out);
   FlowMap Map("This is str1", "This is str2", "This is str3");
   std::vector<FlowSeq> Seq;
   Seq.emplace_back("This is str1");

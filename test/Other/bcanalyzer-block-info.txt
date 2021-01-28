@@ -1,6 +1,6 @@
-RUN: llvm-bcanalyzer -dump %S/Inputs/has-block-info.bc | FileCheck -check-prefix=CHECK -check-prefix=DATA %s
-RUN: llvm-bcanalyzer -dump %S/Inputs/no-block-info.bc | FileCheck -check-prefix=UNKNOWN -check-prefix=DATA %s
-RUN: llvm-bcanalyzer -dump %S/Inputs/no-block-info.bc -block-info %S/Inputs/block-info-only.bc | FileCheck -check-prefix=CHECK -check-prefix=DATA %s
+RUN: llvm37-bcanalyzer -dump %S/Inputs/has-block-info.bc | FileCheck -check-prefix=CHECK -check-prefix=DATA %s
+RUN: llvm37-bcanalyzer -dump %S/Inputs/no-block-info.bc | FileCheck -check-prefix=UNKNOWN -check-prefix=DATA %s
+RUN: llvm37-bcanalyzer -dump %S/Inputs/no-block-info.bc -block-info %S/Inputs/block-info-only.bc | FileCheck -check-prefix=CHECK -check-prefix=DATA %s
 
   CHECK: <ABC
 UNKNOWN: <UnknownBlock8

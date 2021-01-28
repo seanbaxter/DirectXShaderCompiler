@@ -1,6 +1,6 @@
 //===-------- LegalizeTypesGeneric.cpp - Generic type legalization --------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -20,8 +20,8 @@
 //===----------------------------------------------------------------------===//
 
 #include "LegalizeTypes.h"
-#include "llvm/IR/DataLayout.h"
-using namespace llvm;
+#include "llvm37/IR/DataLayout.h"
+using namespace llvm37;
 
 #define DEBUG_TYPE "legalize-types"
 
@@ -51,7 +51,7 @@ void DAGTypeLegalizer::ExpandRes_BITCAST(SDNode *N, SDValue &Lo, SDValue &Hi) {
     case TargetLowering::TypePromoteInteger:
       break;
     case TargetLowering::TypePromoteFloat:
-      llvm_unreachable("Bitcast of a promotion-needing float should never need"
+      llvm37_unreachable("Bitcast of a promotion-needing float should never need"
                        "expansion");
     case TargetLowering::TypeSoftenFloat:
       // Convert the integer operand instead.

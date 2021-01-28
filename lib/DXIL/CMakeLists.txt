@@ -1,6 +1,6 @@
 # Copyright (C) Microsoft Corporation. All rights reserved.
 # This file is distributed under the University of Illinois Open Source License. See LICENSE.TXT for details.
-add_llvm_library(LLVMDXIL
+add_llvm_library(LLVM37DXIL
   DxilCBuffer.cpp
   DxilCompType.cpp
   DxilCounters.cpp
@@ -24,7 +24,7 @@ add_llvm_library(LLVMDXIL
   DxilPDB.cpp
 
   ADDITIONAL_HEADER_DIRS
-  ${LLVM_MAIN_INCLUDE_DIR}/llvm/IR
+  ${LLVM37_MAIN_INCLUDE_DIR}/llvm37/IR
 )
 
-add_dependencies(LLVMDXIL intrinsics_gen)
+add_dependencies(LLVM37DXIL intrinsics_gen)

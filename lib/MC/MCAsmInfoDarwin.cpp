@@ -1,6 +1,6 @@
 //===-- MCAsmInfoDarwin.cpp - Darwin asm properties -------------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -12,11 +12,11 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/MC/MCAsmInfoDarwin.h"
-#include "llvm/MC/MCContext.h"
-#include "llvm/MC/MCExpr.h"
-#include "llvm/MC/MCSectionMachO.h"
-using namespace llvm;
+#include "llvm37/MC/MCAsmInfoDarwin.h"
+#include "llvm37/MC/MCContext.h"
+#include "llvm37/MC/MCExpr.h"
+#include "llvm37/MC/MCSectionMachO.h"
+using namespace llvm37;
 
 bool MCAsmInfoDarwin::isSectionAtomizableBySymbols(
     const MCSection &Section) const {
@@ -95,7 +95,7 @@ MCAsmInfoDarwin::MCAsmInfoDarwin() {
   SetDirectiveSuppressesReloc = true;
 
   // FIXME: For now keep the previous behavior, AShr, matching the previous
-  // behavior of as(1) (both -q and -Q: resp. LLVM and gas v1.38).
+  // behavior of as(1) (both -q and -Q: resp. LLVM37 and gas v1.38).
   // If/when this changes, the AArch64 Darwin special case can go away.
   UseLogicalShr = false;
 }

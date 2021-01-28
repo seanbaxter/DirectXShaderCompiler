@@ -1,20 +1,20 @@
 //===---- RuntimeDyldMachOI386.h ---- MachO/I386 specific code. ---*- C++ -*-=//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_LIB_EXECUTIONENGINE_RUNTIMEDYLD_TARGETS_RUNTIMEDYLDMACHOI386_H
-#define LLVM_LIB_EXECUTIONENGINE_RUNTIMEDYLD_TARGETS_RUNTIMEDYLDMACHOI386_H
+#ifndef LLVM37_LIB_EXECUTIONENGINE_RUNTIMEDYLD_TARGETS_RUNTIMEDYLDMACHOI386_H
+#define LLVM37_LIB_EXECUTIONENGINE_RUNTIMEDYLD_TARGETS_RUNTIMEDYLDMACHOI386_H
 
 #include "../RuntimeDyldMachO.h"
 
 #define DEBUG_TYPE "dyld"
 
-namespace llvm {
+namespace llvm37 {
 
 class RuntimeDyldMachOI386
     : public RuntimeDyldMachOCRTPBase<RuntimeDyldMachOI386> {
@@ -49,7 +49,7 @@ public:
       else if (RelType == MachO::GENERIC_RELOC_VANILLA)
         return processI386ScatteredVANILLA(SectionID, RelI, Obj,
                                            ObjSectionToID);
-      llvm_unreachable("Unhandled scattered relocation.");
+      llvm37_unreachable("Unhandled scattered relocation.");
     }
 
     RelocationEntry RE(getRelocationEntry(SectionID, Obj, RelI));
@@ -93,7 +93,7 @@ public:
 
     switch (RE.RelType) {
     default:
-      llvm_unreachable("Invalid relocation type!");
+      llvm37_unreachable("Invalid relocation type!");
     case MachO::GENERIC_RELOC_VANILLA:
       writeBytesUnaligned(Value + RE.Addend, LocalAddress, 1 << RE.Size);
       break;

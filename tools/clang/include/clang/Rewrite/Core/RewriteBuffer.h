@@ -1,19 +1,19 @@
 //===--- RewriteBuffer.h - Buffer rewriting interface -----------*- C++ -*-===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_REWRITE_CORE_REWRITEBUFFER_H
-#define LLVM_CLANG_REWRITE_CORE_REWRITEBUFFER_H
+#ifndef LLVM37_CLANG_REWRITE_CORE_REWRITEBUFFER_H
+#define LLVM37_CLANG_REWRITE_CORE_REWRITEBUFFER_H
 
 #include "clang/Basic/LLVM.h"
 #include "clang/Rewrite/Core/DeltaTree.h"
 #include "clang/Rewrite/Core/RewriteRope.h"
-#include "llvm/ADT/StringRef.h"
+#include "llvm37/ADT/StringRef.h"
 
 namespace clang {
   class Rewriter;

@@ -1,6 +1,6 @@
 //===- ScalarEvolution.cpp - Scalar Evolution Analysis --------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -58,40 +58,40 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Analysis/ScalarEvolution.h"
-#include "llvm/ADT/Optional.h"
-#include "llvm/ADT/STLExtras.h"
-#include "llvm/ADT/SmallPtrSet.h"
-#include "llvm/ADT/Statistic.h"
-#include "llvm/Analysis/AssumptionCache.h"
-#include "llvm/Analysis/ConstantFolding.h"
-#include "llvm/Analysis/InstructionSimplify.h"
-#include "llvm/Analysis/LoopInfo.h"
-#include "llvm/Analysis/ScalarEvolutionExpressions.h"
-#include "llvm/Analysis/TargetLibraryInfo.h"
-#include "llvm/Analysis/ValueTracking.h"
-#include "llvm/IR/ConstantRange.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/DerivedTypes.h"
-#include "llvm/IR/Dominators.h"
-#include "llvm/IR/GetElementPtrTypeIterator.h"
-#include "llvm/IR/GlobalAlias.h"
-#include "llvm/IR/GlobalVariable.h"
-#include "llvm/IR/InstIterator.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Metadata.h"
-#include "llvm/IR/Operator.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/MathExtras.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Analysis/DxilValueCache.h" // HLSL Change
+#include "llvm37/Analysis/ScalarEvolution.h"
+#include "llvm37/ADT/Optional.h"
+#include "llvm37/ADT/STLExtras.h"
+#include "llvm37/ADT/SmallPtrSet.h"
+#include "llvm37/ADT/Statistic.h"
+#include "llvm37/Analysis/AssumptionCache.h"
+#include "llvm37/Analysis/ConstantFolding.h"
+#include "llvm37/Analysis/InstructionSimplify.h"
+#include "llvm37/Analysis/LoopInfo.h"
+#include "llvm37/Analysis/ScalarEvolutionExpressions.h"
+#include "llvm37/Analysis/TargetLibraryInfo.h"
+#include "llvm37/Analysis/ValueTracking.h"
+#include "llvm37/IR/ConstantRange.h"
+#include "llvm37/IR/Constants.h"
+#include "llvm37/IR/DataLayout.h"
+#include "llvm37/IR/DerivedTypes.h"
+#include "llvm37/IR/Dominators.h"
+#include "llvm37/IR/GetElementPtrTypeIterator.h"
+#include "llvm37/IR/GlobalAlias.h"
+#include "llvm37/IR/GlobalVariable.h"
+#include "llvm37/IR/InstIterator.h"
+#include "llvm37/IR/Instructions.h"
+#include "llvm37/IR/LLVMContext.h"
+#include "llvm37/IR/Metadata.h"
+#include "llvm37/IR/Operator.h"
+#include "llvm37/Support/CommandLine.h"
+#include "llvm37/Support/Debug.h"
+#include "llvm37/Support/ErrorHandling.h"
+#include "llvm37/Support/MathExtras.h"
+#include "llvm37/Support/raw_ostream.h"
+#include "llvm37/Analysis/DxilValueCache.h" // HLSL Change
 
 #include <algorithm>
-using namespace llvm;
+using namespace llvm37;
 
 #define DEBUG_TYPE "scalar-evolution"
 
@@ -140,7 +140,7 @@ char ScalarEvolution::ID = 0;
 // Implementation of the SCEV class.
 //
 
-#if !defined(NDEBUG) || defined(LLVM_ENABLE_DUMP)
+#if !defined(NDEBUG) || defined(LLVM37_ENABLE_DUMP)
 void SCEV::dump() const {
   print(dbgs());
   dbgs() << '\n';
@@ -254,7 +254,7 @@ void SCEV::print(raw_ostream &OS) const {
     OS << "***COULDNOTCOMPUTE***";
     return;
   }
-  llvm_unreachable("Unknown SCEV kind!");
+  llvm37_unreachable("Unknown SCEV kind!");
 }
 
 Type *SCEV::getType() const {
@@ -277,9 +277,9 @@ Type *SCEV::getType() const {
   case scUnknown:
     return cast<SCEVUnknown>(this)->getType();
   case scCouldNotCompute:
-    llvm_unreachable("Attempt to use a SCEVCouldNotCompute object!");
+    llvm37_unreachable("Attempt to use a SCEVCouldNotCompute object!");
   }
-  llvm_unreachable("Unknown SCEV kind!");
+  llvm37_unreachable("Unknown SCEV kind!");
 }
 
 bool SCEV::isZero() const {
@@ -630,9 +630,9 @@ namespace {
       }
 
       case scCouldNotCompute:
-        llvm_unreachable("Attempt to use a SCEVCouldNotCompute object!");
+        llvm37_unreachable("Attempt to use a SCEVCouldNotCompute object!");
       }
-      llvm_unreachable("Unknown SCEV kind!");
+      llvm37_unreachable("Unknown SCEV kind!");
     }
   };
 }
@@ -3855,7 +3855,7 @@ ScalarEvolution::GetMinTrailingZeros(const SCEV *S) {
 /// metadata present in the IR.
 static Optional<ConstantRange> GetRangeFromMetadata(Value *V) {
   if (Instruction *I = dyn_cast<Instruction>(V)) {
-    if (MDNode *MD = I->getMetadata(LLVMContext::MD_range)) {
+    if (MDNode *MD = I->getMetadata(LLVM37Context::MD_range)) {
       ConstantRange TotalRange(
           cast<IntegerType>(I->getType())->getBitWidth(), false);
 
@@ -4133,7 +4133,7 @@ const SCEV *ScalarEvolution::createSCEV(Value *V) {
     // bunch of things all added together, this can be quite inefficient,
     // because it leads to N-1 getAddExpr calls for N ultimate operands.
     // Instead, gather up all the operands and make a single getAddExpr call.
-    // LLVM IR canonical form means we need only traverse the left operands.
+    // LLVM37 IR canonical form means we need only traverse the left operands.
     //
     // Don't apply this instruction's NSW or NUW flags to the new
     // expression. The instruction may be guarded by control flow that the
@@ -5409,7 +5409,7 @@ getConstantEvolvingPHIOperands(Instruction *UseInst, const Loop *L,
   return PHI;
 }
 
-/// getConstantEvolvingPHI - Given an LLVM value and a loop, return a PHI node
+/// getConstantEvolvingPHI - Given an LLVM37 value and a loop, return a PHI node
 /// in the loop that V is derived from.  We allow arbitrary operations along the
 /// way, but the operands of an operation must either be constants or a value
 /// derived from a constant PHI.  If this expression does not fit with these
@@ -5932,7 +5932,7 @@ const SCEV *ScalarEvolution::computeSCEVAtScope(const SCEV *V, const Loop *L) {
           return getSMaxExpr(NewOps);
         if (isa<SCEVUMaxExpr>(Comm))
           return getUMaxExpr(NewOps);
-        llvm_unreachable("Unknown commutative SCEV type!");
+        llvm37_unreachable("Unknown commutative SCEV type!");
       }
     }
     // If we got here, all operands are loop invariant.
@@ -6014,7 +6014,7 @@ const SCEV *ScalarEvolution::computeSCEVAtScope(const SCEV *V, const Loop *L) {
     return getTruncateExpr(Op, Cast->getType());
   }
 
-  llvm_unreachable("Unknown SCEV type!");
+  llvm37_unreachable("Unknown SCEV type!");
 }
 
 /// getSCEVAtScope - This is a convenience function which does
@@ -6130,7 +6130,7 @@ SolveQuadraticEquation(const SCEVAddRecExpr *AddRec, ScalarEvolution &SE) {
       return std::make_pair(CNC, CNC);
     }
 
-    LLVMContext &Context = SE.getContext();
+    LLVM37Context &Context = SE.getContext();
 
     ConstantInt *Solution1 =
       ConstantInt::get(Context, (NegB + SqrtVal).sdiv(TwoA));
@@ -6393,7 +6393,7 @@ bool ScalarEvolution::SimplifyICmpOperands(ICmpInst::Predicate &Pred,
   if (const SCEVConstant *RC = dyn_cast<SCEVConstant>(RHS)) {
     const APInt &RA = RC->getValue()->getValue();
     switch (Pred) {
-    default: llvm_unreachable("Unexpected ICmpInst::Predicate value!");
+    default: llvm37_unreachable("Unexpected ICmpInst::Predicate value!");
     case ICmpInst::ICMP_EQ:
     case ICmpInst::ICMP_NE:
       // Fold ((-1) * %a) + %b == 0 (equivalent to %b-%a == 0) into %a == %b.
@@ -6693,7 +6693,7 @@ ScalarEvolution::isKnownPredicateWithRanges(ICmpInst::Predicate Pred,
   // within isLoopEntryGuardedByCond.
   switch (Pred) {
   default:
-    llvm_unreachable("Unexpected ICmpInst::Predicate value!");
+    llvm37_unreachable("Unexpected ICmpInst::Predicate value!");
   case ICmpInst::ICMP_SGT:
     std::swap(LHS, RHS);
   case ICmpInst::ICMP_SLT: {
@@ -6782,7 +6782,7 @@ ScalarEvolution::isLoopBackedgeGuardedByCond(const Loop *L,
                     LoopContinuePredicate->getSuccessor(0) != L->getHeader()))
     return true;
 
-  // Check conditions due to any @llvm.assume intrinsics.
+  // Check conditions due to any @llvm37.assume intrinsics.
   for (auto &AssumeVH : AC->assumptions()) {
     if (!AssumeVH)
       continue;
@@ -6889,7 +6889,7 @@ ScalarEvolution::isLoopEntryGuardedByCond(const Loop *L,
       return true;
   }
 
-  // Check conditions due to any @llvm.assume intrinsics.
+  // Check conditions due to any @llvm37.assume intrinsics.
   for (auto &AssumeVH : AC->assumptions()) {
     if (!AssumeVH)
       continue;
@@ -7182,7 +7182,7 @@ static bool IsKnownPredicateViaMinOrMax(ScalarEvolution &SE,
       IsMaxConsistingOf<SCEVUMaxExpr>(RHS, LHS);
   }
 
-  llvm_unreachable("covered switch fell through?!");
+  llvm37_unreachable("covered switch fell through?!");
 }
 
 /// isImpliedCondOperandsHelper - Test whether the condition described by
@@ -7200,7 +7200,7 @@ ScalarEvolution::isImpliedCondOperandsHelper(ICmpInst::Predicate Pred,
   };
 
   switch (Pred) {
-  default: llvm_unreachable("Unexpected ICmpInst::Predicate value!");
+  default: llvm37_unreachable("Unexpected ICmpInst::Predicate value!");
   case ICmpInst::ICMP_EQ:
   case ICmpInst::ICMP_NE:
     if (HasSameValue(LHS, FoundLHS) && HasSameValue(RHS, FoundRHS))
@@ -8372,9 +8372,9 @@ ScalarEvolution::computeLoopDisposition(const SCEV *S, const Loop *L) {
       return (L && !L->contains(I)) ? LoopInvariant : LoopVariant;
     return LoopInvariant;
   case scCouldNotCompute:
-    llvm_unreachable("Attempt to use a SCEVCouldNotCompute object!");
+    llvm37_unreachable("Attempt to use a SCEVCouldNotCompute object!");
   }
-  llvm_unreachable("Unknown SCEV kind!");
+  llvm37_unreachable("Unknown SCEV kind!");
 }
 
 bool ScalarEvolution::isLoopInvariant(const SCEV *S, const Loop *L) {
@@ -8462,9 +8462,9 @@ ScalarEvolution::computeBlockDisposition(const SCEV *S, const BasicBlock *BB) {
     }
     return ProperlyDominatesBlock;
   case scCouldNotCompute:
-    llvm_unreachable("Attempt to use a SCEVCouldNotCompute object!");
+    llvm37_unreachable("Attempt to use a SCEVCouldNotCompute object!");
   }
-  llvm_unreachable("Unknown SCEV kind!");
+  llvm37_unreachable("Unknown SCEV kind!");
 }
 
 bool ScalarEvolution::dominates(const SCEV *S, const BasicBlock *BB) {

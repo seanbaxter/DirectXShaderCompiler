@@ -1,6 +1,6 @@
 //===--- FileMatchTrie.cpp - ----------------------------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                     The LLVM37 Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -12,19 +12,19 @@
 //===----------------------------------------------------------------------===//
 
 #include "clang/Tooling/FileMatchTrie.h"
-#include "llvm/ADT/StringMap.h"
-#include "llvm/Support/FileSystem.h"
-#include "llvm/Support/Path.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm37/ADT/StringMap.h"
+#include "llvm37/Support/FileSystem.h"
+#include "llvm37/Support/Path.h"
+#include "llvm37/Support/raw_ostream.h"
 #include <sstream>
 using namespace clang;
 using namespace tooling;
 
 namespace {
-/// \brief Default \c PathComparator using \c llvm::sys::fs::equivalent().
+/// \brief Default \c PathComparator using \c llvm37::sys::fs::equivalent().
 struct DefaultPathComparator : public PathComparator {
   bool equivalent(StringRef FileA, StringRef FileB) const override {
-    return FileA == FileB || llvm::sys::fs::equivalent(FileA, FileB);
+    return FileA == FileB || llvm37::sys::fs::equivalent(FileA, FileB);
   }
 };
 }
@@ -54,7 +54,7 @@ public:
   void insert(StringRef NewPath, unsigned ConsumedLength = 0) {
     // We cannot put relative paths into the FileMatchTrie as then a path can be
     // a postfix of another path, violating a core assumption of the trie.
-    if (llvm::sys::path::is_relative(NewPath))
+    if (llvm37::sys::path::is_relative(NewPath))
       return;
     if (Path.empty()) {
       // This is an empty leaf. Store NewPath and return.
@@ -66,11 +66,11 @@ public:
       if (NewPath == Path)
           return;
       // Make this a node and create a child-leaf with 'Path'.
-      StringRef Element(llvm::sys::path::filename(
+      StringRef Element(llvm37::sys::path::filename(
           StringRef(Path).drop_back(ConsumedLength)));
       Children[Element].Path = Path;
     }
-    StringRef Element(llvm::sys::path::filename(
+    StringRef Element(llvm37::sys::path::filename(
           StringRef(NewPath).drop_back(ConsumedLength)));
     Children[Element].insert(NewPath, ConsumedLength + Element.size() + 1);
   }
@@ -105,9 +105,9 @@ public:
         return StringRef(Path);
       return StringRef();
     }
-    StringRef Element(llvm::sys::path::filename(FileName.drop_back(
+    StringRef Element(llvm37::sys::path::filename(FileName.drop_back(
         ConsumedLength)));
-    llvm::StringMap<FileMatchTrieNode>::const_iterator MatchingChild =
+    llvm37::StringMap<FileMatchTrieNode>::const_iterator MatchingChild =
         Children.find(Element);
     if (MatchingChild != Children.end()) {
       StringRef Result = MatchingChild->getValue().findEquivalent(
@@ -135,14 +135,14 @@ public:
 private:
   /// \brief Gets all paths under this FileMatchTrieNode.
   void getAll(std::vector<StringRef> &Results,
-              llvm::StringMap<FileMatchTrieNode>::const_iterator Except) const {
+              llvm37::StringMap<FileMatchTrieNode>::const_iterator Except) const {
     if (Path.empty())
       return;
     if (Children.empty()) {
       Results.push_back(StringRef(Path));
       return;
     }
-    for (llvm::StringMap<FileMatchTrieNode>::const_iterator
+    for (llvm37::StringMap<FileMatchTrieNode>::const_iterator
          It = Children.begin(), E = Children.end();
          It != E; ++It) {
       if (It == Except)
@@ -156,7 +156,7 @@ private:
   std::string Path;
 
   // The children of this node stored in a map based on the next path segment.
-  llvm::StringMap<FileMatchTrieNode> Children;
+  llvm37::StringMap<FileMatchTrieNode> Children;
 };
 } // end namespace tooling
 } // end namespace clang
@@ -177,7 +177,7 @@ void FileMatchTrie::insert(StringRef NewPath) {
 
 StringRef FileMatchTrie::findEquivalent(StringRef FileName,
                                         raw_ostream &Error) const {
-  if (llvm::sys::path::is_relative(FileName)) {
+  if (llvm37::sys::path::is_relative(FileName)) {
     Error << "Cannot resolve relative paths";
     return StringRef();
   }

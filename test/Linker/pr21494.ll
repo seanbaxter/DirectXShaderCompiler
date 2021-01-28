@@ -1,4 +1,4 @@
-; RUN: llvm-link %s -S -o - | FileCheck %s
+; RUN: llvm37-link %s -S -o - | FileCheck %s
 
 @g1 = private global i8 0
 ; CHECK-NOT: @g1

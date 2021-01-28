@@ -1,4 +1,4 @@
-// RUN: llvm-tblgen %s | FileCheck %s
+// RUN: llvm37-tblgen %s | FileCheck %s
 
 // CHECK: class Y<list<string> Y:S = ?> {
 // CHECK:   list<string> T1 = !listconcat(Y:S, ["foo"]);
