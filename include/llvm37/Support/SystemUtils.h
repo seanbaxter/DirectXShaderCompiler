@@ -1,0 +1,32 @@
+//===- SystemUtils.h - Utilities to do low-level system stuff ---*- C++ -*-===//
+//
+//                     The LLVM37 Compiler Infrastructure
+//
+// This file is distributed under the University of Illinois Open Source
+// License. See LICENSE.TXT for details.
+//
+//===----------------------------------------------------------------------===//
+//
+// This file contains functions used to do a variety of low-level, often
+// system-specific, tasks.
+//
+//===----------------------------------------------------------------------===//
+
+#ifndef LLVM37_SUPPORT_SYSTEMUTILS_H
+#define LLVM37_SUPPORT_SYSTEMUTILS_H
+
+namespace llvm37 {
+  class raw_ostream;
+
+/// Determine if the raw_ostream provided is connected to a terminal. If so,
+/// generate a warning message to errs() advising against display of bitcode
+/// and return true. Otherwise just return false.
+/// @brief Check for output written to a console
+bool CheckBitcodeOutputToConsole(
+  raw_ostream &stream_to_check, ///< The stream to be checked
+  bool print_warning = true     ///< Control whether warnings are printed
+);
+
+} // End llvm37 namespace
+
+#endif
