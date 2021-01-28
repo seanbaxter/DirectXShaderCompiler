@@ -227,9 +227,9 @@ static void addHLSLPasses(bool HLSLHighLevel, unsigned OptLevel, bool OnlyWarnOn
   MPM.add(createHLExpandStoreIntrinsicsPass());
 
   // Split struct and array of parameter.
-  MPM.add(createSROA_Parameter_HLSL());
+  if(HLSLHighLevel) MPM.add(createSROA_Parameter_HLSL());
 
-  MPM.add(createHLMatrixLowerPass());
+  if(HLSLHighLevel) MPM.add(createHLMatrixLowerPass());
   // DCE should after SROA to remove unused element.
   MPM.add(createDeadCodeEliminationPass());
   MPM.add(createGlobalDCEPass());
@@ -277,12 +277,12 @@ static void addHLSLPasses(bool HLSLHighLevel, unsigned OptLevel, bool OnlyWarnOn
     MPM.add(createCFGSimplificationPass());
 
   MPM.add(createDxilPromoteLocalResources());
-  MPM.add(createDxilPromoteStaticResources());
+  if(HLSLHighLevel) MPM.add(createDxilPromoteStaticResources());
 
   // Verify no undef resource again after promotion
   MPM.add(createInvalidateUndefResourcesPass());
 
-  MPM.add(createDxilGenerationPass(NoOpt, ExtHelper));
+  if(HLSLHighLevel) MPM.add(createDxilGenerationPass(NoOpt, ExtHelper));
 
   // Propagate precise attribute.
   MPM.add(createDxilPrecisePropagatePass());
@@ -328,7 +328,7 @@ void PassManagerBuilder::populateModulePassManager(
   // If all optimizations are disabled, just run the always-inline pass and,
   // if enabled, the function merging pass.
   if (OptLevel == 0) {
-    if (!HLSLHighLevel) {
+    if (HLSLHighLevel) {
       MPM.add(createHLEnsureMetadataPass()); // HLSL Change - rehydrate metadata from high-level codegen
     }
 
@@ -337,7 +337,7 @@ void PassManagerBuilder::populateModulePassManager(
     if (!HLSLHighLevel)
       MPM.add(createDxilInsertPreservesPass(HLSLAllowPreserveValues)); // HLSL Change - insert preserve instructions
 
-    if (Inliner) {
+    if (HLSLHighLevel && Inliner) {
       MPM.add(createHLLegalizeParameter()); // HLSL Change - legalize parameters
                                             // before inline.
       MPM.add(Inliner);
@@ -391,7 +391,7 @@ void PassManagerBuilder::populateModulePassManager(
     return;
   }
 
-  if (!HLSLHighLevel) {
+  if (HLSLHighLevel) {
     MPM.add(createHLEnsureMetadataPass()); // HLSL Change - rehydrate metadata from high-level codegen
   }
 
@@ -399,7 +399,7 @@ void PassManagerBuilder::populateModulePassManager(
 
   MPM.add(createDxilRewriteOutputArgDebugInfoPass()); // Fix output argument types.
 
-  MPM.add(createHLLegalizeParameter()); // legalize parameters before inline.
+  if(HLSLHighLevel) MPM.add(createHLLegalizeParameter()); // legalize parameters before inline.
   MPM.add(createAlwaysInlinerPass(/*InsertLifeTime*/this->HLSLEnableLifetimeMarkers));
   if (Inliner) {
     delete Inliner;
