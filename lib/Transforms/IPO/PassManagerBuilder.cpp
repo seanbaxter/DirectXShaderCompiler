@@ -196,12 +196,13 @@ void PassManagerBuilder::populateFunctionPassManager(
   FPM.add(createCFGSimplificationPass());
   // HLSL Change - don't run SROA. 
   // HLSL uses special SROA added in addHLSLPasses.
-  if (HLSLHighLevel) { // HLSL Change
-  if (UseNewSROA)
-    FPM.add(createSROAPass());
-  else
-    FPM.add(createScalarReplAggregatesPass());
-  }
+  // if (HLSLHighLevel) { // HLSL Change
+  // if (UseNewSROA)
+  //   FPM.add(createSROAPass());
+  // else
+  //   FPM.add(createScalarReplAggregatesPass());
+  // }
+   FPM.add(createSROAPass());
   // HLSL Change. FPM.add(createEarlyCSEPass());
   FPM.add(createLowerExpectIntrinsicPass());
 }
