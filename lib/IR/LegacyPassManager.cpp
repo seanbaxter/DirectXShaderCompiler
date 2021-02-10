@@ -11,6 +11,7 @@
 //
 //===----------------------------------------------------------------------===//
 
+#include "dxc/DXIL/DxilModule.h"
 #include "llvm37/IR/LLVMContext.h"
 #include "llvm37/IR/IRPrintingPasses.h"
 #include "llvm37/IR/LegacyPassManager.h"

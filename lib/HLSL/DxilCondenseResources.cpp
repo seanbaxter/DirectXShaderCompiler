@@ -523,7 +523,7 @@ public:
     ResourceRegisterAllocator.GatherReservedRegisters(DM);
 
     // Remove unused resources.
-    DM.RemoveResourcesWithUnusedSymbols();
+    // DM.RemoveResourcesWithUnusedSymbols();
 
     unsigned newResources = DM.GetCBuffers().size() + DM.GetUAVs().size() +
                             DM.GetSRVs().size() + DM.GetSamplers().size();
@@ -1970,7 +1970,7 @@ void DxilLowerCreateHandleForLib::TranslateDxilResourceUses(
   Value *isUniformRes = hlslOP->GetI1Const(0);
 
   Value *GV = res.GetGlobalSymbol();
-  DXASSERT(isa<GlobalValue>(GV), "DxilLowerCreateHandleForLib cannot deal with unused resources.");
+  // DXASSERT(isa<GlobalValue>(GV), "DxilLowerCreateHandleForLib cannot deal with unused resources.");
 
   Module *pM = m_DM->GetModule();
   // TODO: add debug info to create handle.
