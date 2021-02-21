@@ -78,12 +78,12 @@ void Statistic::RegisterStatistic() {
     if (Enabled)
       StatInfo->addStatistic(this);
 
-    TsanHappensBefore(this);
+    LLVM37_TsanHappensBefore(this);
     sys::MemoryFence();
     // Remember we have been registered.
-    TsanIgnoreWritesBegin();
+    LLVM37_TsanIgnoreWritesBegin();
     Initialized = true;
-    TsanIgnoreWritesEnd();
+    LLVM37_TsanIgnoreWritesEnd();
   }
 }
 

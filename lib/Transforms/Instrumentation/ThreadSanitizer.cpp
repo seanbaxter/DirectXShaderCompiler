@@ -72,8 +72,8 @@ STATISTIC(NumOmittedReadsFromConstantGlobals,
 STATISTIC(NumOmittedReadsFromVtable, "Number of vtable reads");
 STATISTIC(NumOmittedNonCaptured, "Number of accesses ignored due to capturing");
 
-static const char *const kTsanModuleCtorName = "tsan.module_ctor";
-static const char *const kTsanInitName = "__tsan_init";
+static const char *const kLLVM37_TsanModuleCtorName = "tsan.module_ctor";
+static const char *const kLLVM37_TsanInitName = "__tsan_init";
 
 namespace {
 
@@ -99,24 +99,24 @@ struct ThreadSanitizer : public FunctionPass {
   Type *IntptrTy;
   IntegerType *OrdTy;
   // Callbacks to run-time library are computed in doInitialization.
-  Function *TsanFuncEntry;
-  Function *TsanFuncExit;
+  Function *LLVM37_TsanFuncEntry;
+  Function *LLVM37_TsanFuncExit;
   // Accesses sizes are powers of two: 1, 2, 4, 8, 16.
   static const size_t kNumberOfAccessSizes = 5;
-  Function *TsanRead[kNumberOfAccessSizes];
-  Function *TsanWrite[kNumberOfAccessSizes];
-  Function *TsanUnalignedRead[kNumberOfAccessSizes];
-  Function *TsanUnalignedWrite[kNumberOfAccessSizes];
-  Function *TsanAtomicLoad[kNumberOfAccessSizes];
-  Function *TsanAtomicStore[kNumberOfAccessSizes];
-  Function *TsanAtomicRMW[AtomicRMWInst::LAST_BINOP + 1][kNumberOfAccessSizes];
-  Function *TsanAtomicCAS[kNumberOfAccessSizes];
-  Function *TsanAtomicThreadFence;
-  Function *TsanAtomicSignalFence;
-  Function *TsanVptrUpdate;
-  Function *TsanVptrLoad;
+  Function *LLVM37_TsanRead[kNumberOfAccessSizes];
+  Function *LLVM37_TsanWrite[kNumberOfAccessSizes];
+  Function *LLVM37_TsanUnalignedRead[kNumberOfAccessSizes];
+  Function *LLVM37_TsanUnalignedWrite[kNumberOfAccessSizes];
+  Function *LLVM37_TsanAtomicLoad[kNumberOfAccessSizes];
+  Function *LLVM37_TsanAtomicStore[kNumberOfAccessSizes];
+  Function *LLVM37_TsanAtomicRMW[AtomicRMWInst::LAST_BINOP + 1][kNumberOfAccessSizes];
+  Function *LLVM37_TsanAtomicCAS[kNumberOfAccessSizes];
+  Function *LLVM37_TsanAtomicThreadFence;
+  Function *LLVM37_TsanAtomicSignalFence;
+  Function *LLVM37_TsanVptrUpdate;
+  Function *LLVM37_TsanVptrLoad;
   Function *MemmoveFn, *MemcpyFn, *MemsetFn;
-  Function *TsanCtorFunction;
+  Function *LLVM37_TsanCtorFunction;
 };
 }  // namespace
 
@@ -136,31 +136,31 @@ FunctionPass *llvm37::createThreadSanitizerPass() {
 void ThreadSanitizer::initializeCallbacks(Module &M) {
   IRBuilder<> IRB(M.getContext());
   // Initialize the callbacks.
-  TsanFuncEntry = checkSanitizerInterfaceFunction(M.getOrInsertFunction(
+  LLVM37_TsanFuncEntry = checkSanitizerInterfaceFunction(M.getOrInsertFunction(
       "__tsan_func_entry", IRB.getVoidTy(), IRB.getInt8PtrTy(), nullptr));
-  TsanFuncExit = checkSanitizerInterfaceFunction(
+  LLVM37_TsanFuncExit = checkSanitizerInterfaceFunction(
       M.getOrInsertFunction("__tsan_func_exit", IRB.getVoidTy(), nullptr));
   OrdTy = IRB.getInt32Ty();
   for (size_t i = 0; i < kNumberOfAccessSizes; ++i) {
     const size_t ByteSize = 1 << i;
     const size_t BitSize = ByteSize * 8;
     SmallString<32> ReadName("__tsan_read" + itostr(ByteSize));
-    TsanRead[i] = checkSanitizerInterfaceFunction(M.getOrInsertFunction(
+    LLVM37_TsanRead[i] = checkSanitizerInterfaceFunction(M.getOrInsertFunction(
         ReadName, IRB.getVoidTy(), IRB.getInt8PtrTy(), nullptr));
 
     SmallString<32> WriteName("__tsan_write" + itostr(ByteSize));
-    TsanWrite[i] = checkSanitizerInterfaceFunction(M.getOrInsertFunction(
+    LLVM37_TsanWrite[i] = checkSanitizerInterfaceFunction(M.getOrInsertFunction(
         WriteName, IRB.getVoidTy(), IRB.getInt8PtrTy(), nullptr));
 
     SmallString<64> UnalignedReadName("__tsan_unaligned_read" +
         itostr(ByteSize));
-    TsanUnalignedRead[i] =
+    LLVM37_TsanUnalignedRead[i] =
         checkSanitizerInterfaceFunction(M.getOrInsertFunction(
             UnalignedReadName, IRB.getVoidTy(), IRB.getInt8PtrTy(), nullptr));
 
     SmallString<64> UnalignedWriteName("__tsan_unaligned_write" +
         itostr(ByteSize));
-    TsanUnalignedWrite[i] =
+    LLVM37_TsanUnalignedWrite[i] =
         checkSanitizerInterfaceFunction(M.getOrInsertFunction(
             UnalignedWriteName, IRB.getVoidTy(), IRB.getInt8PtrTy(), nullptr));
 
@@ -168,17 +168,17 @@ void ThreadSanitizer::initializeCallbacks(Module &M) {
     Type *PtrTy = Ty->getPointerTo();
     SmallString<32> AtomicLoadName("__tsan_atomic" + itostr(BitSize) +
                                    "_load");
-    TsanAtomicLoad[i] = checkSanitizerInterfaceFunction(
+    LLVM37_TsanAtomicLoad[i] = checkSanitizerInterfaceFunction(
         M.getOrInsertFunction(AtomicLoadName, Ty, PtrTy, OrdTy, nullptr));
 
     SmallString<32> AtomicStoreName("__tsan_atomic" + itostr(BitSize) +
                                     "_store");
-    TsanAtomicStore[i] = checkSanitizerInterfaceFunction(M.getOrInsertFunction(
+    LLVM37_TsanAtomicStore[i] = checkSanitizerInterfaceFunction(M.getOrInsertFunction(
         AtomicStoreName, IRB.getVoidTy(), PtrTy, Ty, OrdTy, nullptr));
 
     for (int op = AtomicRMWInst::FIRST_BINOP;
         op <= AtomicRMWInst::LAST_BINOP; ++op) {
-      TsanAtomicRMW[op][i] = nullptr;
+      LLVM37_TsanAtomicRMW[op][i] = nullptr;
       const char *NamePart = nullptr;
       if (op == AtomicRMWInst::Xchg)
         NamePart = "_exchange";
@@ -197,23 +197,23 @@ void ThreadSanitizer::initializeCallbacks(Module &M) {
       else
         continue;
       SmallString<32> RMWName("__tsan_atomic" + itostr(BitSize) + NamePart);
-      TsanAtomicRMW[op][i] = checkSanitizerInterfaceFunction(
+      LLVM37_TsanAtomicRMW[op][i] = checkSanitizerInterfaceFunction(
           M.getOrInsertFunction(RMWName, Ty, PtrTy, Ty, OrdTy, nullptr));
     }
 
     SmallString<32> AtomicCASName("__tsan_atomic" + itostr(BitSize) +
                                   "_compare_exchange_val");
-    TsanAtomicCAS[i] = checkSanitizerInterfaceFunction(M.getOrInsertFunction(
+    LLVM37_TsanAtomicCAS[i] = checkSanitizerInterfaceFunction(M.getOrInsertFunction(
         AtomicCASName, Ty, PtrTy, Ty, Ty, OrdTy, OrdTy, nullptr));
   }
-  TsanVptrUpdate = checkSanitizerInterfaceFunction(
+  LLVM37_TsanVptrUpdate = checkSanitizerInterfaceFunction(
       M.getOrInsertFunction("__tsan_vptr_update", IRB.getVoidTy(),
                             IRB.getInt8PtrTy(), IRB.getInt8PtrTy(), nullptr));
-  TsanVptrLoad = checkSanitizerInterfaceFunction(M.getOrInsertFunction(
+  LLVM37_TsanVptrLoad = checkSanitizerInterfaceFunction(M.getOrInsertFunction(
       "__tsan_vptr_read", IRB.getVoidTy(), IRB.getInt8PtrTy(), nullptr));
-  TsanAtomicThreadFence = checkSanitizerInterfaceFunction(M.getOrInsertFunction(
+  LLVM37_TsanAtomicThreadFence = checkSanitizerInterfaceFunction(M.getOrInsertFunction(
       "__tsan_atomic_thread_fence", IRB.getVoidTy(), OrdTy, nullptr));
-  TsanAtomicSignalFence = checkSanitizerInterfaceFunction(M.getOrInsertFunction(
+  LLVM37_TsanAtomicSignalFence = checkSanitizerInterfaceFunction(M.getOrInsertFunction(
       "__tsan_atomic_signal_fence", IRB.getVoidTy(), OrdTy, nullptr));
 
   MemmoveFn = checkSanitizerInterfaceFunction(
@@ -230,11 +230,11 @@ void ThreadSanitizer::initializeCallbacks(Module &M) {
 bool ThreadSanitizer::doInitialization(Module &M) {
   const DataLayout &DL = M.getDataLayout();
   IntptrTy = DL.getIntPtrType(M.getContext());
-  std::tie(TsanCtorFunction, std::ignore) = createSanitizerCtorAndInitFunctions(
-      M, kTsanModuleCtorName, kTsanInitName, /*InitArgTypes=*/{},
+  std::tie(LLVM37_TsanCtorFunction, std::ignore) = createSanitizerCtorAndInitFunctions(
+      M, kLLVM37_TsanModuleCtorName, kLLVM37_TsanInitName, /*InitArgTypes=*/{},
       /*InitArgs=*/{});
 
-  appendToGlobalCtors(M, TsanCtorFunction, 0);
+  appendToGlobalCtors(M, LLVM37_TsanCtorFunction, 0);
 
   return true;
 }
@@ -334,7 +334,7 @@ static bool isAtomic(Instruction *I) {
 bool ThreadSanitizer::runOnFunction(Function &F) {
   // This is required to prevent instrumenting call to __tsan_init from within
   // the module constructor.
-  if (&F == TsanCtorFunction)
+  if (&F == LLVM37_TsanCtorFunction)
     return false;
   initializeCallbacks(*F.getParent());
   SmallVector<Instruction*, 8> RetVec;
@@ -395,10 +395,10 @@ bool ThreadSanitizer::runOnFunction(Function &F) {
     Value *ReturnAddress = IRB.CreateCall(
         Intrinsic::getDeclaration(F.getParent(), Intrinsic::returnaddress),
         IRB.getInt32(0));
-    IRB.CreateCall(TsanFuncEntry, ReturnAddress);
+    IRB.CreateCall(LLVM37_TsanFuncEntry, ReturnAddress);
     for (auto RetInst : RetVec) {
       IRBuilder<> IRBRet(RetInst);
-      IRBRet.CreateCall(TsanFuncExit, {});
+      IRBRet.CreateCall(LLVM37_TsanFuncExit, {});
     }
     Res = true;
   }
@@ -426,15 +426,15 @@ bool ThreadSanitizer::instrumentLoadOrStore(Instruction *I,
           StoredValue, ConstantInt::get(IRB.getInt32Ty(), 0));
     if (StoredValue->getType()->isIntegerTy())
       StoredValue = IRB.CreateIntToPtr(StoredValue, IRB.getInt8PtrTy());
-    // Call TsanVptrUpdate.
-    IRB.CreateCall(TsanVptrUpdate,
+    // Call LLVM37_TsanVptrUpdate.
+    IRB.CreateCall(LLVM37_TsanVptrUpdate,
                    {IRB.CreatePointerCast(Addr, IRB.getInt8PtrTy()),
                     IRB.CreatePointerCast(StoredValue, IRB.getInt8PtrTy())});
     NumInstrumentedVtableWrites++;
     return true;
   }
   if (!IsWrite && isVtableAccess(I)) {
-    IRB.CreateCall(TsanVptrLoad,
+    IRB.CreateCall(LLVM37_TsanVptrLoad,
                    IRB.CreatePointerCast(Addr, IRB.getInt8PtrTy()));
     NumInstrumentedVtableReads++;
     return true;
@@ -446,9 +446,9 @@ bool ThreadSanitizer::instrumentLoadOrStore(Instruction *I,
   const uint32_t TypeSize = DL.getTypeStoreSizeInBits(OrigTy);
   Value *OnAccessFunc = nullptr;
   if (Alignment == 0 || Alignment >= 8 || (Alignment % (TypeSize / 8)) == 0)
-    OnAccessFunc = IsWrite ? TsanWrite[Idx] : TsanRead[Idx];
+    OnAccessFunc = IsWrite ? LLVM37_TsanWrite[Idx] : LLVM37_TsanRead[Idx];
   else
-    OnAccessFunc = IsWrite ? TsanUnalignedWrite[Idx] : TsanUnalignedRead[Idx];
+    OnAccessFunc = IsWrite ? LLVM37_TsanUnalignedWrite[Idx] : LLVM37_TsanUnalignedRead[Idx];
   IRB.CreateCall(OnAccessFunc, IRB.CreatePointerCast(Addr, IRB.getInt8PtrTy()));
   if (IsWrite) NumInstrumentedWrites++;
   else         NumInstrumentedReads++;
@@ -519,7 +519,7 @@ bool ThreadSanitizer::instrumentAtomic(Instruction *I, const DataLayout &DL) {
     Type *PtrTy = Ty->getPointerTo();
     Value *Args[] = {IRB.CreatePointerCast(Addr, PtrTy),
                      createOrdering(&IRB, LI->getOrdering())};
-    CallInst *C = CallInst::Create(TsanAtomicLoad[Idx], Args);
+    CallInst *C = CallInst::Create(LLVM37_TsanAtomicLoad[Idx], Args);
     ReplaceInstWithInst(I, C);
 
   } else if (StoreInst *SI = dyn_cast<StoreInst>(I)) {
@@ -534,14 +534,14 @@ bool ThreadSanitizer::instrumentAtomic(Instruction *I, const DataLayout &DL) {
     Value *Args[] = {IRB.CreatePointerCast(Addr, PtrTy),
                      IRB.CreateIntCast(SI->getValueOperand(), Ty, false),
                      createOrdering(&IRB, SI->getOrdering())};
-    CallInst *C = CallInst::Create(TsanAtomicStore[Idx], Args);
+    CallInst *C = CallInst::Create(LLVM37_TsanAtomicStore[Idx], Args);
     ReplaceInstWithInst(I, C);
   } else if (AtomicRMWInst *RMWI = dyn_cast<AtomicRMWInst>(I)) {
     Value *Addr = RMWI->getPointerOperand();
     int Idx = getMemoryAccessFuncIndex(Addr, DL);
     if (Idx < 0)
       return false;
-    Function *F = TsanAtomicRMW[RMWI->getOperation()][Idx];
+    Function *F = LLVM37_TsanAtomicRMW[RMWI->getOperation()][Idx];
     if (!F)
       return false;
     const size_t ByteSize = 1 << Idx;
@@ -567,7 +567,7 @@ bool ThreadSanitizer::instrumentAtomic(Instruction *I, const DataLayout &DL) {
                      IRB.CreateIntCast(CASI->getNewValOperand(), Ty, false),
                      createOrdering(&IRB, CASI->getSuccessOrdering()),
                      createOrdering(&IRB, CASI->getFailureOrdering())};
-    CallInst *C = IRB.CreateCall(TsanAtomicCAS[Idx], Args);
+    CallInst *C = IRB.CreateCall(LLVM37_TsanAtomicCAS[Idx], Args);
     Value *Success = IRB.CreateICmpEQ(C, CASI->getCompareOperand());
 
     Value *Res = IRB.CreateInsertValue(UndefValue::get(CASI->getType()), C, 0);
@@ -578,7 +578,7 @@ bool ThreadSanitizer::instrumentAtomic(Instruction *I, const DataLayout &DL) {
   } else if (FenceInst *FI = dyn_cast<FenceInst>(I)) {
     Value *Args[] = {createOrdering(&IRB, FI->getOrdering())};
     Function *F = FI->getSynchScope() == SingleThread ?
-        TsanAtomicSignalFence : TsanAtomicThreadFence;
+        LLVM37_TsanAtomicSignalFence : LLVM37_TsanAtomicThreadFence;
     CallInst *C = CallInst::Create(F, Args);
     ReplaceInstWithInst(I, C);
   }

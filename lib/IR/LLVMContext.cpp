@@ -225,6 +225,7 @@ static const char *getDiagnosticMessagePrefix(DiagnosticSeverity Severity) {
 
 void LLVM37Context::diagnose(const DiagnosticInfo &DI) {
   // If there is a report handler, use it.
+  /*
   if (pImpl->DiagnosticHandler) {
     if (!pImpl->RespectDiagnosticFilters || isDiagnosticEnabled(DI))
       pImpl->DiagnosticHandler(DI, pImpl->DiagnosticContext);
@@ -239,9 +240,21 @@ void LLVM37Context::diagnose(const DiagnosticInfo &DI) {
   errs() << getDiagnosticMessagePrefix(DI.getSeverity()) << ": ";
   DI.print(DP);
   errs() << "\n";
+*/  
+
+
+    std::string string;
+    raw_string_ostream os(string);
+    DiagnosticPrinterRawOStream DP(os);
+    DI.print(DP);
+    os.flush();
+
+    throw std::runtime_error(string);
+/*
   if (DI.getSeverity() == DS_Error)
     // exit(1); // HLSL Change - unwind if necessary, but don't terminate the process
     throw std::exception();
+  */
 }
 
 void LLVM37Context::emitError(unsigned LocCookie, const Twine &ErrorStr) {

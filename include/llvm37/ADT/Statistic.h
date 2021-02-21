@@ -153,7 +153,7 @@ protected:
     bool tmp = Initialized;
     sys::MemoryFence();
     if (!tmp) RegisterStatistic();
-    TsanHappensAfter(this);
+    LLVM37_TsanHappensAfter(this);
     return *this;
   }
   void RegisterStatistic();

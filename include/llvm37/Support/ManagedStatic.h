@@ -66,7 +66,7 @@ public:
     void* tmp = Ptr;
     if (llvm37_is_multithreaded()) sys::MemoryFence();
     if (!tmp) RegisterManagedStatic(object_creator<C>, object_deleter<C>::call);
-    TsanHappensAfter(this);
+    LLVM37_TsanHappensAfter(this);
 
     return *static_cast<C*>(Ptr);
   }
@@ -74,7 +74,7 @@ public:
     void* tmp = Ptr;
     if (llvm37_is_multithreaded()) sys::MemoryFence();
     if (!tmp) RegisterManagedStatic(object_creator<C>, object_deleter<C>::call);
-    TsanHappensAfter(this);
+    LLVM37_TsanHappensAfter(this);
 
     return static_cast<C*>(Ptr);
   }
@@ -82,7 +82,7 @@ public:
     void* tmp = Ptr;
     if (llvm37_is_multithreaded()) sys::MemoryFence();
     if (!tmp) RegisterManagedStatic(object_creator<C>, object_deleter<C>::call);
-    TsanHappensAfter(this);
+    LLVM37_TsanHappensAfter(this);
 
     return *static_cast<C*>(Ptr);
   }
@@ -90,7 +90,7 @@ public:
     void* tmp = Ptr;
     if (llvm37_is_multithreaded()) sys::MemoryFence();
     if (!tmp) RegisterManagedStatic(object_creator<C>, object_deleter<C>::call);
-    TsanHappensAfter(this);
+    LLVM37_TsanHappensAfter(this);
 
     return static_cast<C*>(Ptr);
   }

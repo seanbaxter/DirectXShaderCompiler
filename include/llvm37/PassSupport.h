@@ -39,10 +39,10 @@ class TargetMachine;
   if (old_val == 0) { \
     function(Registry); \
     sys::MemoryFence(); \
-    TsanIgnoreWritesBegin(); \
-    TsanHappensBefore(&initialized); \
+    LLVM37_TsanIgnoreWritesBegin(); \
+    LLVM37_TsanHappensBefore(&initialized); \
     initialized = 2; \
-    TsanIgnoreWritesEnd(); \
+    LLVM37_TsanIgnoreWritesEnd(); \
   } else { \
     sys::cas_flag tmp = initialized; \
     sys::MemoryFence(); \
@@ -51,7 +51,7 @@ class TargetMachine;
       sys::MemoryFence(); \
     } \
   } \
-  TsanHappensAfter(&initialized);
+  LLVM37_TsanHappensAfter(&initialized);
 
 #define INITIALIZELLVM37_PASS(passName, arg, name, cfg, analysis) \
   static void* initialize##passName##PassOnce(PassRegistry &Registry) { \

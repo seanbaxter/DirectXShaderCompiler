@@ -235,6 +235,7 @@ void llvm37::emitLoopInterleaveWarning(LLVM37Context &Ctx, const Function &Fn,
 // Slapdash printing of diagnostic information as a last resort
 // Used by validation and linker errors. Doesn't include source snippets.
 void DiagnosticInfoDxil::print(DiagnosticPrinter &DP) const {
+  /*
   if (DLoc) {
     DIScope *scope = cast<DIScope>(DLoc->getRawScope());
     DP << scope->getFilename() << ":" << DLoc->getLine() << ":";
@@ -242,19 +243,8 @@ void DiagnosticInfoDxil::print(DiagnosticPrinter &DP) const {
     if (Column > 0)
       DP << Column << ":";
     DP << " ";
-  } else if (Func) {
-    DP << "Function: " << Func->getName() << ": ";
-  }
+  }*/
 
-  bool ZiPrompt = true;
-  switch (getSeverity()) {
-  case DiagnosticSeverity::DS_Note:    DP << "note: "; ZiPrompt = false; break;
-  case DiagnosticSeverity::DS_Remark:  DP << "remark: "; ZiPrompt = false; break;
-  case DiagnosticSeverity::DS_Warning: DP << "warning: "; break;
-  case DiagnosticSeverity::DS_Error:   DP << "error: "; break;
-  }
   DP << getMsgStr();
-  if (!DLoc && ZiPrompt)
-    DP << " Use /Zi for source location.";
 }
 // HLSL Change end - Dxil Diagnostic Info reporter

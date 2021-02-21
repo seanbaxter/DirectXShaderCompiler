@@ -47,25 +47,25 @@ namespace sys {
   // This marker is used to define a happens-before arc. The race detector will
   // infer an arc from the begin to the end when they share the same pointer
   // argument.
-  #define TsanHappensBefore(cv) \
+  #define LLVM37_TsanHappensBefore(cv) \
     AnnotateHappensBefore(__FILE__, __LINE__, cv)
 
   // This marker defines the destination of a happens-before arc.
-  #define TsanHappensAfter(cv) \
+  #define LLVM37_TsanHappensAfter(cv) \
     AnnotateHappensAfter(__FILE__, __LINE__, cv)
 
-  // Ignore any races on writes between here and the next TsanIgnoreWritesEnd.
-  #define TsanIgnoreWritesBegin() \
+  // Ignore any races on writes between here and the next LLVM37_TsanIgnoreWritesEnd.
+  #define LLVM37_TsanIgnoreWritesBegin() \
     AnnotateIgnoreWritesBegin(__FILE__, __LINE__)
 
   // Resume checking for racy writes.
-  #define TsanIgnoreWritesEnd() \
+  #define LLVM37_TsanIgnoreWritesEnd() \
     AnnotateIgnoreWritesEnd(__FILE__, __LINE__)
 #else
-  #define TsanHappensBefore(cv)
-  #define TsanHappensAfter(cv)
-  #define TsanIgnoreWritesBegin()
-  #define TsanIgnoreWritesEnd()
+  #define LLVM37_TsanHappensBefore(cv)
+  #define LLVM37_TsanHappensAfter(cv)
+  #define LLVM37_TsanIgnoreWritesBegin()
+  #define LLVM37_TsanIgnoreWritesEnd()
 #endif
 }
 }
